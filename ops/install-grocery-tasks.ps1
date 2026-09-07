@@ -49,7 +49,12 @@ $XMLDIR = Join-Path $repo 'ops\scheduled-tasks'
 $OWNED = @(
   [pscustomobject]@{ Name = 'TC Grocery Ad Pulls 0700';         File = 'tc-grocery-ad-pulls-0700.xml' }
   [pscustomobject]@{ Name = 'TC Grocery Daily Capture 0800';    File = 'tc-grocery-daily-capture-0800.xml' }
-  [pscustomobject]@{ Name = 'TC Grocery Capture Watchdog 0930'; File = 'tc-grocery-capture-watchdog-0930.xml'; RenameTo = 'TC Grocery Capture Watchdog 1030' }
+  # RENAMED ON THE LIVE SCHEDULER 2026-09-07, so 1030 is the NAME now and not a target. Leaving
+  # 0930 as the primary with RenameTo pointing forward would have made a later -Install without
+  # -FixName register a SECOND watchdog under the old name, and -Verify would have passed because
+  # it falls back to RenameTo when the primary is missing. Legacy is kept so a machine that was
+  # never migrated is noticed rather than ignored.
+  [pscustomobject]@{ Name = 'TC Grocery Capture Watchdog 1030'; File = 'tc-grocery-capture-watchdog-0930.xml'; Legacy = 'TC Grocery Capture Watchdog 0930' }
 )
 
 function Get-XmlField {
@@ -145,7 +150,10 @@ if ($SelfTest) {
       $x = [IO.File]::ReadAllText($p)
       T ('the committed definition exists and carries Hidden: ' + $o.File) ($x -match '-WindowStyle\s+Hidden')
       T ('the committed definition carries NO account SID: ' + $o.File) ($x -notmatch 'S-1-5-21-')
-      T ('the committed definition declares the encoding its bytes actually are: ' + $o.File) ($x -notmatch 'encoding="UTF-16"')
+      # NOT "the declaration matches the bytes" - that was the assertion that pinned a definition
+      # Register-ScheduledTask could not parse. What matters is that the REGISTRATION PATH carries no
+      # encoding claim, because the call takes a UTF-16 .NET string whatever the file says.
+      T ('the registration path strips the XML declaration: ' + $o.File) ((([regex]::Replace($x, '^\s*<\?xml[^>]*\?>\s*', '')) -notmatch '<\?xml'))
     } else {
       Write-Output ('FAIL  missing committed definition: ' + $p); $fail++
     }
@@ -169,10 +177,21 @@ if ($Install -or $FixName) {
     $p = Join-Path $XMLDIR $o.File
     if (-not (Test-Path $p)) { Write-Output ("REFUSED: missing " + $p); Write-GuardComplete -Name 'grocery-tasks' -Summary 'refused=missing-xml'; exit 3 }
     $xml = [IO.File]::ReadAllText($p).Replace('__CURRENT_USER_SID__', [string]([Security.Principal.WindowsIdentity]::GetCurrent().User.Value))
-    $target = if ($FixName -and $o.RenameTo) { $o.RenameTo } else { $o.Name }
+    # STRIP THE XML DECLARATION (2026-09-07). Register-ScheduledTask -Xml takes a .NET string, which is
+    # UTF-16 in memory, and refuses one whose declaration claims anything else: "The task XML is
+    # malformed. (1,40)::ERROR: unable to switch the encoding". The export says UTF-16, the bytes on
+    # disk are UTF-8, and reconciling those two on disk is what broke this - so the call carries no
+    # encoding claim at all. Found by running it; the self-test, -Verify and the gate were all green on
+    # a definition that could not be registered.
+    $xml = [regex]::Replace($xml, '^\s*<\?xml[^>]*\?>\s*', '')
+    $target = $o.Name
     Write-Output ("  registering: " + $target)
-    if ($FixName -and $o.RenameTo) {
-      Unregister-ScheduledTask -TaskName $o.Name -Confirm:$false -ErrorAction SilentlyContinue
+    # -FixName removes a LEGACY name still sitting on this machine. The rename itself is done; what is
+    # left is cleaning up a box that has not caught up. Unregister-then-register is only ever run
+    # against the legacy name, never against the live one, so there is no window where the task the
+    # scheduler is about to fire does not exist.
+    if ($FixName -and $o.Legacy) {
+      Unregister-ScheduledTask -TaskName $o.Legacy -Confirm:$false -ErrorAction SilentlyContinue
     }
     Register-ScheduledTask -TaskName $target -Xml $xml -Force | Out-Null
   }
@@ -194,7 +213,10 @@ foreach ($o in $OWNED) {
   if (-not (Test-Path $p)) { $findings += ("no committed definition for '" + $o.Name + "'"); continue }
   $xml = [IO.File]::ReadAllText($p)
   $live = Get-ScheduledTask -TaskName $o.Name -ErrorAction SilentlyContinue
-  if (-not $live -and $o.RenameTo) { $live = Get-ScheduledTask -TaskName $o.RenameTo -ErrorAction SilentlyContinue }
+  if (-not $live -and $o.Legacy) {
+    $live = Get-ScheduledTask -TaskName $o.Legacy -ErrorAction SilentlyContinue
+    if ($live) { $findings += ("{0}: still registered under the LEGACY name; run -Install -FixName on this machine" -f $o.Legacy) }
+  }
   if (-not $live) {
     Write-Output ("GROCERY TASKS COULD NOT EVALUATE: '{0}' is not registered on this machine. That is not drift - a box without the task is not a box with a wrong one." -f $o.Name)
     Write-GuardComplete -Name 'grocery-tasks' -Summary 'blind=task-absent'

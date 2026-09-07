@@ -1002,6 +1002,25 @@ powershell -File ops\install-grocery-tasks.ps1 -Install -FixName
 powershell -File ops\install-grocery-tasks.ps1 -Verify
 ```
 
+**INSTALLED 2026-09-07 06:33.** All three registered from the committed definitions; the watchdog is
+now `TC Grocery Capture Watchdog 1030` and its trigger is untouched at 10:30. `-Verify` exits 0 with
+zero drift, and all three actions are byte-identical to what ran yesterday - same executable, same
+arguments, same `-WindowStyle Hidden`, same run-as. One watchdog, three tasks, no duplicates.
+
+**The first attempt FAILED, safely, on a defect I had introduced.** Redacting the SIDs the day before,
+I rewrote the XML declaration from UTF-16 to UTF-8 so it matched the bytes on disk. That broke the only
+path that consumes it: `Register-ScheduledTask -Xml` takes a .NET string, which is UTF-16 in memory,
+and refuses a declaration claiming otherwise. The self-test had ASSERTED the UTF-16 declaration was
+absent, pinning the broken shape. The registration path now strips the declaration entirely, and the
+self-test pins that instead. It failed before unregistering anything, so all three tasks were intact.
+
+**A second hazard was closed after the rename.** `$OWNED` still named 0930 as primary with 1030 as a
+rename target, so a later `-Install` without `-FixName` would have registered a SECOND watchdog under
+the old name - and `-Verify` would have passed, because it falls back to the rename target when the
+primary is missing. 1030 is now the name, 0930 is a legacy alias, and `-Verify` reports a machine
+still carrying it.
+
+
 **THE DURABLE HALF, PART TWO: the conventions have converged, and the gate this item said could not
 be built now exists.** `graph/pipeline/nightly.ps1` and `meal-prep/pipeline/harvest-crawl.ps1` now
 dot-source `run-log-lib`, so all five hidden tasks leave a run record with the exit code as the last
