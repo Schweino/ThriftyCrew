@@ -198,7 +198,7 @@ four-layer stack is format -> business rules -> self-prompted semantic -> human 
 confidence routed to review rather than rejection**. Applies to the ingredient queue and the
 capture readers.
 
-### E19 - No matcher in the estate has a scored test set `OPEN`
+### E19 - No matcher in the estate has a scored test set `PARTLY DONE - MATCHER SCORED, BLIND SPOT FOUND`
 *Source: Recommender Systems: Evaluation and Metrics (queue 2, course 1).* Every retrieval-shaped
 component here - the commodity matcher, the dedup pipeline, `sidecar/`'s recall-then-rerank pair,
 `knowledge-search` - is changed on the strength of "it fixed the case I was looking at". None has a
@@ -209,6 +209,65 @@ a script. **The two-stage point is the load-bearing one:** one end-to-end number
 the right answer was never retrieved or was retrieved and buried, and those need opposite fixes.
 Method in `rag-craft/evaluating-retrieval.md` sections 12 and 18. Sits directly under E4, which
 proposes a retrieval change with nothing to score it with.
+
+**BUILT FOR THE COMMODITY MATCHER 2026-09-06 - `sidecar/matcher_eval.py` - and it found a live blind
+spot on its first run.** Brad ruled this component first because its errors reach a price on a page.
+
+**The two-stage point paid immediately.** `hardeval.py` already scored the RERANK stage well, against
+GOLD - 45 pairs expanded from adjudicated `known-wrong` rulings, which is exactly the
+recorded-failure corpus E23 says this estate does not build. **Nothing scored RETRIEVAL**, and that
+is not a technicality: a true match scoring 0.54 against `sweep.py`'s `COVERAGE_COS_FLOOR` of 0.55 is
+gone before the cross-encoder is asked, so a recall failure upstream makes the downstream AUC look
+BETTER, not worse. The reranker's healthy numbers were computed on survivors.
+
+**Measured over all 2,816 accepted board pairs, 100% of them resolving to a definition:**
+
+| | |
+|---|---|
+| recall@1 | 2582 / 2816 (0.9169) |
+| recall@10 | 2798 / 2816 (0.9936) |
+| recall@25 | 2810 / 2816 (0.9979) |
+| MRR | 0.9481 |
+| **clearing `COVERAGE_COS_FLOOR` 0.55** | **2630 / 2816 (0.9339)** |
+
+**Ranking is excellent and the absolute floor is the problem.** The right commodity is in the top 25
+for 99.79% of pairs, so retrieval can find it - but **186 known-correct pairs score below an absolute
+cosine bar** and are dropped before anything else runs. The floor is not a rank cut; it is an
+absolute one, and a pair can rank first and still fail it.
+
+**What the 186 look like is the useful half:**
+
+| product | commodity | cosine |
+|---|---|---|
+| `Cantaloupe` | `cantaloupe` | 0.4290 |
+| `Dole Classic Romaine` | `lettuce` | 0.3684 |
+| `Wimmer's Wieners, Skinless 24 Oz` | `hot-dogs` | 0.3783 |
+| `Bush's Best Chick Peas` | `chickpeas` | 0.4360 |
+| `Our Family Mayo, Real 30 Fl Oz` | `mayonnaise` | 0.4444 |
+
+Synonyms, abbreviations, spelling variants and bare category names - and `sweep.py`'s own comment
+already says why: bge-m3 cosine ranks brand-and-format likeness, not food identity. This measures
+what that costs. It is also E4's antonym finding from the other direction: an embedding scores
+`Cantaloupe` against `cantaloupe` at 0.43 while scoring two unrelated seasonings at 0.81.
+
+**The consequence is a blind auditor, not a wrong board.** These pairs are already accepted, so no
+price is wrong today. What the floor costs is the COVERAGE sweep's ability to notice a MISSING one:
+if a store stops carrying cantaloupe, or a new plain-named product appears, the sweep will not
+propose it, because the correct pairing does not clear the bar. That is silence where an alert
+should be.
+
+**Nothing was tuned.** This commit scores and does not change the matcher, or the measurement would
+be a description of a decision already taken. The obvious candidate fix is visible in the data - a
+rank-based cut instead of an absolute cosine cut, since recall@25 is 0.9979 - and it is Brad's call,
+not a side effect of building the scorer.
+
+Only the `--selftest` is in `run-gates`. The live run needs torch and the model, which is not
+hermetic, and it currently exits 2 on this real finding. Its must-fire is the abstention case: an
+unranked row lowers MRR rather than vanishing from it, which is the trick that lets a matcher which
+gives up on its hard rows outscore one that attempts everything (E20).
+
+**Still open:** every other retrieval-shaped component - `knowledge-search`, the near-name shelf
+scorer, the ingredient mapper. The pattern is now demonstrated twice, on dedup and on the matcher.
 
 ### E20 - Match rates are reported without their abstention rate `PARTLY DONE` `82377028`
 *Source: same course, section 14 of the file above.* A matcher that returns `UNUSABLE`, `PENDING`

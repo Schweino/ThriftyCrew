@@ -80,6 +80,12 @@
 # negatives so dramatic (bath soap as coconut oil) that it answered a question nobody was asking.
 !/sidecar/out/hardeval-report.md
 !/sidecar/out/hardeval.json
+# The RETRIEVAL-stage scores, for the same reason and one more. hardeval measures the reranker
+# on pairs that SURVIVED the prefilter, so it cannot see a true match dropped at the cosine
+# floor - 186 of 2,816 accepted board pairs, measured 2026-09-06 (backlog E19). One row per
+# case is the evidence a later run is compared against, and E24's whole point is that it
+# cannot be reconstructed after the fact: the pool and the defs move underneath it.
+!/sidecar/out/matcher-eval-cases.jsonl
 # The TAGGED eval records too (backtest.py/hardeval.py --tag). These are baselines a fine-tune
 # is measured against months later; an evaluation record that does not outlive the machine that
 # produced it is not a record. Tens of KB each.

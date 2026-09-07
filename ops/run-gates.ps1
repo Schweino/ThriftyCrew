@@ -244,6 +244,13 @@ $pySuites = @(
   # agreement and retires a question that was never asked. Its must-fire is the unit rewrite
   # ('ounces' to 'oz') the extractor is forbidden to make.
   @{ f = 'meal-prep\pipeline\extractor_model_probe.py'; a = '--selftest'; n = 'the E9 transcription comparator still calls a rewritten unit a difference' }
+  # ONLY THE SELF-TEST, never the live run. matcher_eval's real pass needs torch and the model,
+  # which is not hermetic, and it currently exits 2 on a real finding - 186 of 2,816 known-
+  # correct pairs score under sweep.py's prefilter floor (2026-09-06, backlog E19). Its
+  # arithmetic is what belongs in the gate: the must-fire is that an ABSTENTION lowers MRR
+  # rather than vanishing from it, which is the trick that makes a matcher which gives up on
+  # its hard rows outscore one that attempts everything.
+  @{ f = 'sidecar\matcher_eval.py'; a = '--selftest'; n = 'the matcher scorer still counts an abstention against itself, and reads the live floor' }
 )
 # AN INTERPRETER IT CANNOT FIND IS A FAILURE, NEVER A SKIP. Bare `python` on this machine is the
 # Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly
