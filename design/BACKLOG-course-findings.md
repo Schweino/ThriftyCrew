@@ -6018,3 +6018,103 @@ needed before the next matcher comparison, not after it**, per E21.
 **Explicitly not claimed.** No matcher change has been proposed or measured on this run. This says
 the instrument has a blind spot, not that anything was mis-measured through it.
 
+
+### I97 - Ghost holds every member's signup date and status, and no code here has ever read either for analysis `NEEDS A RULING` `queue-5`
+
+**Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Every Ghost members call in the tree is transactional, not analytic:
+`worker/index.js:146,170` (find one member by filter, PUT labels), `worker/index.js:328,391`
+(read `member.status` at request time to gate paid content), `grocery/send-price-alerts.ps1:103`
+(filter members carrying label `alert-<id>`), `grocery/send-friday-digest.ps1` (email all members),
+`.claude/skills/lesson/grant-founder.ps1:42-48` (create/update one member),
+`.claude/skills/lesson/update-membership-tools.ps1:17`, and the client-side paywall checks in
+`grocery/build-deals-page.ps1:1441,2348`.
+
+**`created_at` is never read for a member anywhere.** The only `created_at` reads in the tree are on
+graph plan rows, review escalations, and a Ghost *post* query (`grocery/notify-item-added.ps1:59`).
+There is no member export, no cohort table, no retention curve, no churn figure and no LTV number in
+this repo.
+
+**Why it matters here.** This is a live paid membership. Two businesses acquiring identically diverge
+entirely on what fraction of each month's intake is still paying a year later, and that number is
+currently unknown. Every acquisition-side item in `BACKLOG-course-findings.md` and every SEO finding
+in `growth-craft/applies-here.md` sits on top of it: if month-1 retention is below the floor, the
+layer being worked on is above the broken one, which is exactly the failure
+`growth-craft/search-position-diagnosis.md` section 1 was written to prevent.
+
+**What it would touch.** One new read-only script - a Ghost Admin API pull of
+`id, created_at, status, labels` for all members, bucketed by signup month against current status.
+The Admin key already exists and is already used by `send-price-alerts.ps1` and the `lesson` skill,
+so no new credential. Method is `growth-craft/cohort-retention.md` sections 1 to 5.
+
+**The ruling needed.** Member emails have never been written to this repo and the export must not
+change that - the script must aggregate in memory and commit only the bucketed counts, or write
+nothing at all and print. Brad rules on whether a members pull happens at all, and if so whether any
+per-member row may touch disk.
+
+### I98 - A point-in-time member export cannot reconstruct WHEN anyone left, so the snapshot has to start before the analysis `OPEN` `queue-5`
+
+**Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Ghost's members API gives current status, not a status history. A pull today can say how many
+January signups are still paid, but cannot distinguish a member who cancelled in month 2 from one who
+cancelled in month 8 - so it yields one endpoint per cohort and not a curve. The curve shapes that
+carry all the diagnostic value (cliff drop against gradual churn, and the period the cliff lands in -
+`growth-craft/cohort-retention.md` section 4) are exactly what a single snapshot cannot produce.
+
+**This is time-sensitive in a way most backlog items are not.** The cheapest fix is a monthly
+committed snapshot of `(signup_month, status) -> count` starting now; every month it is deferred is a
+month of curve that can never be recovered. It is a few dozen bytes a month and needs no analysis
+built on top of it yet.
+
+**What it would touch.** One aggregate JSON under `graph/state/` or `grocery/out/`, appended monthly
+by the existing daily chain. Aggregate counts only, no member rows - which also settles the privacy
+half of the finding above.
+
+### I99 - `send-price-alerts.ps1`'s label subscriptions are an already-captured behavioural signal nobody has looked at `OPEN` `queue-5`
+
+**Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`grocery/send-price-alerts.ps1:7` documents that subscribers are Ghost members carrying the label
+`alert-<id>`, added by the Worker's `POST /alert` (`worker/index.js:146,170`). That is a per-member,
+timestamped-by-label opt-in action taken voluntarily after signup.
+
+**Why it matters.** `growth-craft/cohort-retention.md` section 6 calls this an aha-moment candidate:
+a specific early action that may separate members who stay from members who leave. The estate is
+already collecting the signal and paying nothing extra for it. The testable question is whether
+members who set at least one price alert in their first 30 days retain better than those who never
+do - and if the gap is large and consistent, prompting the alert during onboarding becomes a
+retention lever rather than a feature.
+
+**The rule that must travel with it.** The 30-day threshold and the alert-count cut have to be
+written down BEFORE the retention data is pulled. Choosing the split that produces the biggest gap is
+selection on noise - the same rule `meal-prep/pipeline/bm25_dedup_probe.py:309` already obeys and
+`.claude/rules/measurement.md` already states. This is that rule's third independent arrival.
+
+**Honest caveat.** With a single membership this small the comparison may have no power at all;
+report the counts with their denominators and be willing to say the question is unanswerable yet.
+
+### I100 - `cohort` means four different things within reach of one session here `OPEN` `queue-5`
+
+**Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+In this estate `cohort` means the peer group of products already holding a commodity's board cells:
+`grocery/build-arrivals-docket.ps1:27-31,56-57`, `grocery/check-ad-cycles.ps1:1791`,
+`grocery/adjudicate-discovery.ps1:23`, `grocery/aisle-test.ps1:35-36`, `sidecar/probe_peer.py:59-80`.
+In the skills store it is also a release cohort, `retention` is log retention, and `churn` is
+test-suite churn.
+
+**Why it matters.** A future session grepping `cohort` while working on members gets a page of
+grocery hits and reads them as coverage. This is the shape
+`identity-graph-commodity-is-namespaced` records: an agreeing answer that is about something else.
+
+**What it would touch.** Nothing in code. It is a documentation line - if any member-cohort work
+lands, it is written as `member cohort` in full, and the grocery sense keeps the bare word it has
+held for months. Filed so the collision is on record rather than discovered later.
+
+**One thing worth stealing in the other direction.** `build-arrivals-docket.ps1:56-57` already
+refuses to score a cohort it cannot form and reports it BLIND rather than passing it: scoring needs
+at least 2 other priced cells, and 41 of 492 commodities on the 2026-07-30 board could not reach
+that (22 with one priced cell, 19 with exactly two). That is the same small-cohort discipline the course
+teaches for retention tables, implemented here first.
