@@ -5000,7 +5000,22 @@ a predicted price to a reader: the course produces 80% and 95% intervals for eve
 forecast with no out-of-sample error estimate is a fabricated number, which the project's standing
 rules already forbid. If a fitted expectation is ever used here it is used to judge an observation
 we already have, never to publish one we do not.
-### I69 - the only forecast this estate makes has its answer stored next to it and has never been scored `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-5`
+### I69 - the only forecast this estate makes has its answer stored next to it and has never been scored `RUNG 1 SHIPPED 2026-09-08` `queue-5`
+
+**SHIPPED, same day.** `grocery/audit-ad-forecast.ps1` scores the prediction against the outcome and
+runs as watchdog check 5a. It is an INVERTED ratchet: a full-cycle miss is history and can never
+legitimately fall, so the count may only stay the same and any rise is a newly skipped cycle, failing
+the day it is detected. The two misses on record are the baseline and are silent, which is how the
+check exists without being red on day one. `-AcceptMiss` acknowledges a new one after the cause is
+dealt with, dated in the baseline file, because without it the gate would have been permanently red
+for something nobody can undo. Twelve frozen fixtures ship as its self-test.
+
+**Deliberately NOT built:** a second staleness alarm. `audit-ad-status.ps1` already owns that
+question, exits 1 on a closed ad, runs in the same watchdog, and was green on all seven stores.
+
+**What remains open** is the cadence half: `cadence_days` is a hand-set 7 for every store and the
+audit now flags an observed cadence that contradicts it, but nothing yet DERIVES the constant from
+history. Hy-Vee predicting consistently early (bias -0.29) is the case that would benefit.
 
 **Source.** `demand-prediction-using-time-series` (LearnQuest; queue-5 entry 2, worked 2026-09-08).
 Routed to `data-quality-craft/modelling-a-time-series.md` sections 3a, 7a and 7b, with the estate half
