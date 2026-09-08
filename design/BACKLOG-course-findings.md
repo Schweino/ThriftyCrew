@@ -5965,6 +5965,24 @@ chain considered and dropped; for the recall hook it is the top section under th
 only row that can ever show a floor belongs lower, and it cannot be backfilled - the same shape as
 `.claude/rules/measurement.md`'s E24 rule about writing one row per case per arm.
 
+**`[CORRECTED 2026-09-08, hours after filing, by this run's own review pass.]` THE ESTATE HAS
+ALREADY SOLVED THIS ONCE, FOR ONE THRESHOLD, AND IT WORKED.** `sidecar\derive_coverage_floor.py`
+refuses to let the matcher's coverage floor be chosen by hand and derives it from **2,816
+confirmed-correct labelled pairs** - evidence from outside the delivery loop, which is exactly the
+escape the finding above prescribes. What it found is what the finding predicts a self-measured
+threshold can never find: the hand-chosen `COVERAGE_COS_FLOOR = 0.55` was **too high**, with 186
+correct pairs beneath it, and the derived replacement is **0.3848** (`sidecar\out\coverage-floor.json`,
+deliberately not yet applied, backlog I13/I14 and E19).
+
+So this item is not "the estate is naive about its thresholds". It is **narrower and more
+actionable**: the estate has the pattern, has run it, and has been vindicated by it, on exactly one
+of its thresholds.
+
+**Why the alert bar cannot simply copy it.** The matcher had a labelled set to derive from. Alert
+conditions have no equivalent corpus and acquiring one would mean judging conditions nobody ever
+saw. That is why the near-miss row is the right instrument there rather than a second-best one: it
+is how a labelled set below the bar would get built in the first place.
+
 **What was NOT measured on this run.** Whether the daily chain currently computes a score for
 conditions it drops, or whether they never get scored at all. If it is the second, the item is bigger
 than a log line and the ruling is Brad's.
