@@ -63,6 +63,20 @@
       "why": "derived item->bid map (tools + top5 badges read it; regenerated daily)"
     }
   ],
+  "external_files": [
+    {
+      "path": "%USERPROFILE%\\.claude\\recall-log.jsonl",
+      "label": "recall-log.jsonl",
+      "max_age_hours": 72,
+      "why": "the automatic-recall hook's offer log. Added 2026-09-08 (backlog I78): the recall hooks are the estate's newest automated loop and appeared in NO watch list, so the whole loop could stop firing and nothing would go red. A heartbeat is written by the watched thing and cannot separate 'found nothing' from 'never invoked'; this is the watcher watching on its own schedule, which is the only shape that can say this should have run and did not. 72h not 30h because the hook only writes when a session runs, and Brad does not work every day - a 30h window would page every quiet weekend and teach him to ignore it."
+    },
+    {
+      "path": "%USERPROFILE%\\.claude\\recall-reflex-log.jsonl",
+      "label": "recall-reflex-log.jsonl",
+      "max_age_hours": 72,
+      "why": "the reflex hook's fire log. Watched SEPARATELY from recall-log.jsonl rather than trusting one to prove the other: they are two different hooks on two different events, and the estate has already paid for assuming one signal covers two loops. Same 72h reasoning."
+    }
+  ],
   "output_globs": [
     {
       "glob": "grocery/out/comparison-*.json",

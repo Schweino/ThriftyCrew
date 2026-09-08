@@ -264,6 +264,29 @@ foreach ($g in @($cfg.output_globs)) {
   else { Check-Age $newest.FullName $g.max_age_hours $g.why $newest.Name }
 }
 
+# EXTERNAL_FILES - outputs of automations that run on this box but write OUTSIDE the repo (2026-09-08,
+# backlog I78). The recall hooks are the case that forced it: they are the estate's newest automated
+# loop, they write only under %USERPROFILE%\.claude, and they appeared in no watch list at all, so the
+# whole loop could stop firing and nothing anywhere would go red.
+#
+# WHY A SEPARATE ARRAY RATHER THAN A PATH IN output_files. Every other row is resolved with
+# `Join-Path $repo`, and Join-Path against an absolute second argument produces `C:\repo\C:\Users\...`
+# - a path that never matches, so the row would read as a permanent MISSING and be muted within a week.
+# These rows are resolved with ExpandEnvironmentVariables and used as given.
+#
+# THEY ARE NOT COUNTED IN $declared ON PURPOSE. $declared refuses to grade an empty exam, and the exam
+# it is protecting is the repo's own chain; a registry that lost windows_tasks but kept these must
+# still report BLIND rather than grading two log files and calling the estate healthy.
+foreach ($x in @($cfg.external_files)) {
+  $xPath  = [Environment]::ExpandEnvironmentVariables([string]$x.path)
+  $xLabel = if ($x.label) { [string]$x.label } else { [IO.Path]::GetFileName($xPath) }
+  if (-not (Test-Path -LiteralPath $xPath)) {
+    $issues.Add(("EXTERNAL OUTPUT MISSING: {0} does not exist at {1} - {2}" -f $xLabel, $xPath, $x.why))
+    continue
+  }
+  Check-Age $xPath $x.max_age_hours $x.why $xLabel
+}
+
 # ---- report ----
 Write-Output ("health-heartbeat  " + $now.ToString('yyyy-MM-dd HH:mm'))
 $okLines | ForEach-Object { Write-Output ("  ok    " + $_) }

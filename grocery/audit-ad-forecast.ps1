@@ -90,6 +90,37 @@ if (Test-Path $gc) { . $gc }
 #     retrying never fixes a constant that is set wrong.
 $MAX_CADENCE_DRIFT_DAYS = 1
 
+function Get-ForecastScore {
+  <# SCORING, FACTORED OUT SO BOTH ARMS RUN THROUGH IT (2026-09-08, backlog I70).
+
+     An error number with no baseline beside it means nothing. "37 of 47 exact" is not a
+     verdict until something says what the DUMBEST predictor scores on the SAME pairs - and
+     on a random-walk-ish series the naive forecast is provably optimal, so "we beat the
+     naive forecast" is the only claim a forecaster can make that is worth anything.
+
+     The naive predictor here is exact, free, and already in the file: the next ad drops
+     `cadence_days` after the last one DID, read from history[i].from. The live rule is this
+     window's `to` plus one day.
+
+     This function exists so the two arms cannot differ by accident: same exact / full-miss /
+     bias logic, one input, the error list. Pure, so the fixtures drive it.
+
+     DEFINED ABOVE THE SELF-TEST ON PURPOSE. Placed below it, the fixtures throw
+     CommandNotFoundException, the terminating error leaves $LASTEXITCODE at whatever it was,
+     and the harness reads exit 0 off a suite that never ran a case. That happened once while
+     this was being written, which is exit-code-first-tally-second arriving in its own file. #>
+  param([int[]]$Errors, [int]$Cadence)
+  if (@($Errors).Count -eq 0) { return @{ pairs = 0; exact = 0; full = 0; bias = $null } }
+  return @{
+    pairs = @($Errors).Count
+    exact = @($Errors | Where-Object { $_ -eq 0 }).Count
+    # A FULL MISS is an error of a whole cadence or more, in either direction. Never averaged.
+    full  = @($Errors | Where-Object { [math]::Abs($_) -ge $Cadence }).Count
+    bias  = [math]::Round(((@($Errors) | Measure-Object -Sum).Sum / @($Errors).Count), 2)
+  }
+}
+
+
 if ($SelfTest) {
   # FROZEN FIXTURES. A gate nobody has seen go red is a gate nobody knows works,
   # and every one of these is a shape that actually occurred: the +7 skip is the
@@ -138,6 +169,29 @@ if ($SelfTest) {
   Remove-Item $bf -Force; _Sched $slip
   $r = _Run
   _Case 'MUST NOT FIRE' 'a one-day slip is NOT a full-cycle miss' ($r.code -eq 0 -and $r.out -match 'BASELINE WRITTEN at 0') $r.code
+
+  # ------- THE NAIVE BASELINE ARM (2026-09-08, backlog I70). The fixtures pin BOTH arms, or the
+  # second one rots quietly while the first keeps the suite green.
+  $sc0 = Get-ForecastScore -Errors ([int[]]@(0, 0, 0)) -Cadence 7
+  _Case 'MUST NOT FIRE' 'the shared scorer calls three zero errors 3 of 3, no full miss, bias 0' `
+    ($sc0.exact -eq 3 -and $sc0.pairs -eq 3 -and $sc0.full -eq 0 -and $sc0.bias -eq 0) "exact=$($sc0.exact) full=$($sc0.full)"
+  $sc1 = Get-ForecastScore -Errors ([int[]]@(0, 7, -7, 1)) -Cadence 7
+  _Case 'MUST FIRE' 'a whole-cadence error in EITHER direction is a full miss, and is not averaged in' `
+    ($sc1.full -eq 2 -and $sc1.exact -eq 1 -and $sc1.pairs -eq 4) "full=$($sc1.full) exact=$($sc1.exact)"
+  $sc2 = Get-ForecastScore -Errors ([int[]]@()) -Cadence 7
+  _Case 'MUST NOT FIRE' 'an EMPTY error list scores 0 of 0, never 1 of 1 - @($null).Count is 1 in PS 5.1' `
+    ($sc2.pairs -eq 0 -and $sc2.exact -eq 0 -and $null -eq $sc2.bias) "pairs=$($sc2.pairs)"
+
+  # On $clean the ad drops exactly cadence_days after the previous window OPENED and exactly one day
+  # after it CLOSED, so both arms are perfect. That is the case the item was filed about: when the
+  # arms tie, the live rule is buying nothing over a plain calendar, and the report must say so
+  # rather than letting the live figure read as a win.
+  Remove-Item $bf -Force; _Sched $clean
+  $r = _Run
+  _Case 'CLEAN TWIN' 'the report prints the naive arm with its OWN denominator beside the live one' `
+    ($r.out -match "NAIVE BASELINE: \d+/\d+ exact, against the live rule's \d+/\d+") 'no NAIVE BASELINE line'
+  _Case 'MUST FIRE' 'and it says out loud when the live rule is NOT beating the plain calendar' `
+    ($r.out -match 'NOT beating a plain calendar') 'no not-beating note on a fixture where the arms tie'
 
   Remove-Item $bf -Force; _Sched $clean; _Run | Out-Null; _Sched $missed
   $r = _Run @{ AcceptMiss = $true }
@@ -208,12 +262,14 @@ foreach ($s in $sched.stores) {
     [void]$rows.Add([pscustomobject]@{
       store = $store; scored = $false; reason = $(if ($null -eq $cadence) { 'no weekly ad cycle' } else { "only $($hist.Count) history entries" })
       pairs = 0; exact = 0; full_misses = 0; bias = $null
+      naive_pairs = 0; naive_exact = 0; naive_full_misses = 0; naive_bias = $null
       observed_cadence = $null; declared_cadence = $cadence; drift = $null
       recent_full_misses = 0; verdict = 'not scored' })
     continue
   }
 
   $errs = New-Object System.Collections.ArrayList
+  $naiveErrs = New-Object System.Collections.ArrayList
   $gaps = New-Object System.Collections.ArrayList
   for ($i = 0; $i -lt $hist.Count - 1; $i++) {
     $a = $hist[$i]; $b = $hist[$i + 1]
@@ -223,6 +279,10 @@ foreach ($s in $sched.stores) {
     $predicted = (DT ([string]$a.to)).AddDays(1)
     $actual    = DT ([string]$b.from)
     [void]$errs.Add([int]($actual - $predicted).TotalDays)
+    # THE NAIVE BASELINE over the SAME pair (I70): the next ad drops cadence_days after the
+    # last one DID. Skipped only when this window has no `from` to count from, so the two arms
+    # can legitimately differ in `pairs` - which is why the report prints BOTH denominators.
+    if ($a.from) { [void]$naiveErrs.Add([int]($actual - (DT ([string]$a.from)).AddDays($cadence)).TotalDays) }
     # The OBSERVED cadence, window start to window start.
     if ($a.from) { [void]$gaps.Add([int]((DT ([string]$b.from)) - (DT ([string]$a.from))).TotalDays) }
   }
@@ -231,16 +291,19 @@ foreach ($s in $sched.stores) {
     [void]$rows.Add([pscustomobject]@{
       store = $store; scored = $false; reason = 'no usable pairs'
       pairs = 0; exact = 0; full_misses = 0; bias = $null
+      naive_pairs = 0; naive_exact = 0; naive_full_misses = 0; naive_bias = $null
       observed_cadence = $null; declared_cadence = $cadence; drift = $null
       recent_full_misses = 0; verdict = 'not scored' })
     continue
   }
 
   $scored++
-  $exact = @($errs | Where-Object { $_ -eq 0 }).Count
-  # A FULL MISS is an error of a whole cadence or more, in either direction.
-  $full  = @($errs | Where-Object { [math]::Abs($_) -ge $cadence }).Count
-  $bias  = [math]::Round((($errs | Measure-Object -Sum).Sum / $errs.Count), 2)
+  # BOTH ARMS THROUGH THE SAME FUNCTION, so they cannot differ by accident (I70).
+  $live  = Get-ForecastScore -Errors ([int[]]@($errs))      -Cadence $cadence
+  $naive = Get-ForecastScore -Errors ([int[]]@($naiveErrs)) -Cadence $cadence
+  $exact = $live.exact
+  $full  = $live.full
+  $bias  = $live.bias
 
   # The observed cadence is the MEDIAN gap, not the mean: one skipped cycle
   # would drag a mean and invent a drift that is not there.
@@ -257,6 +320,7 @@ foreach ($s in $sched.stores) {
   [void]$rows.Add([pscustomobject]@{
     store = $store; scored = $true; reason = ''
     pairs = $errs.Count; exact = $exact; full_misses = $full; bias = $bias
+    naive_pairs = $naive.pairs; naive_exact = $naive.exact; naive_full_misses = $naive.full; naive_bias = $naive.bias
     observed_cadence = $obs; declared_cadence = $cadence; drift = $drift
     verdict = $(if ($bad.Count) { ($bad -join '; ') } else { 'ok' }) })
 }
@@ -272,24 +336,26 @@ if ($scored -eq 0) {
 
 Write-Output "AD FORECAST - is next_pull actually landing on the day the ad drops?"
 Write-Output ''
-Write-Output ("{0,-13} {1,6} {2,9} {3,11} {4,6} {5,9}" -f 'store', 'pairs', 'exact', 'FULL MISS', 'bias', 'cadence')
-Write-Output ('-' * 64)
+Write-Output ("{0,-13} {1,9} {2,11} {3,6} {4,12} {5,9}" -f 'store', 'exact', 'FULL MISS', 'bias', 'NAIVE exact', 'cadence')
+Write-Output ('-' * 70)
 foreach ($r in $rows) {
   if (-not $r.scored) {
     Write-Output ("{0,-13} {1}" -f $r.store, "not scored - $($r.reason)")
     continue
   }
   $cad = if ($null -eq $r.observed_cadence) { '-' } else { "$($r.observed_cadence)/$($r.declared_cadence)" }
-  Write-Output ("{0,-13} {1,6} {2,9} {3,11} {4,6} {5,9}" -f `
-    $r.store, $r.pairs, ("$($r.exact)/$($r.pairs)"), $r.full_misses, $r.bias, $cad)
+  Write-Output ("{0,-13} {1,9} {2,11} {3,6} {4,12} {5,9}" -f `
+    $r.store, ("$($r.exact)/$($r.pairs)"), $r.full_misses, $r.bias, ("$($r.naive_exact)/$($r.naive_pairs)"), $cad)
 }
 
 $sc = @($rows | Where-Object { $_.scored })
 $pairs = ($sc | Measure-Object -Property pairs -Sum).Sum
 $ex    = ($sc | Measure-Object -Property exact -Sum).Sum
 $fm    = ($sc | Measure-Object -Property full_misses -Sum).Sum
-Write-Output ('-' * 64)
-Write-Output ("{0,-13} {1,6} {2,9} {3,11}" -f 'ALL', $pairs, "$ex/$pairs", $fm)
+$nEx = ($sc | Measure-Object -Property naive_exact -Sum).Sum
+$nPr = ($sc | Measure-Object -Property naive_pairs -Sum).Sum
+Write-Output ('-' * 70)
+Write-Output ("{0,-13} {1,9} {2,11} {3,6} {4,12}" -f 'ALL', "$ex/$pairs", $fm, '', "$nEx/$nPr")
 Write-Output ''
 Write-Output "Every rate carries its denominator. `exact` is the honest headline;"
 Write-Output "FULL MISS counts errors of a whole cycle or more and is NEVER averaged"
@@ -298,6 +364,23 @@ Write-Output "and only one of them served a stale board for a week."
 Write-Output ''
 Write-Output "The horizon is ONE STEP AHEAD - each prediction is scored against the"
 Write-Output "very next window. It says nothing about two cycles out."
+Write-Output ''
+# THE BASELINE (2026-09-08, backlog I70). Both arms go through Get-ForecastScore, so the only
+# thing that differs between them is the prediction fed in.
+Write-Output ("NAIVE BASELINE: {0}/{1} exact, against the live rule's {2}/{3}." -f $nEx, $nPr, $ex, $pairs)
+Write-Output "The naive predictor is 'the next ad drops cadence_days after the last one"
+Write-Output "DID'. The live rule is 'this window's close, plus one day'. Same scorer, same"
+Write-Output "pairs, one column changed - which is the only way two arms cannot drift apart."
+if ($nPr -gt 0 -and $ex -le $nEx) {
+  Write-Output ''
+  Write-Output "READ THIS BEFORE QUOTING THE LIVE FIGURE: it is NOT beating a plain calendar"
+  Write-Output "on this data. That is a real finding about these feeds rather than a defect,"
+  Write-Output "but it means the live number is not evidence that the close-plus-one rule is"
+  Write-Output "buying anything over counting days."
+}
+Write-Output ''
+Write-Output "Any estate number of the form 'N of M correct' should ship with the same N of M"
+Write-Output "for the dumbest predictor that could have produced it, through the same code."
 Write-Output ''
 
 # ---- the cadence half: a constant set wrong stays wrong ------------------

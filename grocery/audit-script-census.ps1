@@ -227,6 +227,14 @@ $new  = @($uncalled | Where-Object { -not $KNOWN.Contains($_) })
 $gone = @($KNOWN.Keys | Where-Object { $uncalled -notcontains $_ })
 $fail = New-Object System.Collections.ArrayList
 
+# THE SCOPE LINE, EVERY RUN (2026-09-08, backlog I85). This report used to open with "273 script(s)
+# ... read against 632 executable file(s)" and both totals read as estate-wide. Only one of them is:
+# the POPULATION is $Root (which defaults to grocery\), while the SOURCE side is $ScanRoot (the whole
+# repo). That asymmetry is why the blind spot was invisible from the output - a reader had no way to
+# tell that 72 uncalled scripts under .claude\, meal-prep\, site\, ops\, media\ and sidecar\ had never
+# been examined by anything. A rate prints with its denominator; so does a census.
+Write-Output ("script-census SCOPE: population = *.ps1 under " + $Root + "  |  source side = executable files under " + $ScanRoot +
+              $(if ($Root -eq $ScanRoot) { '' } else { "   <- NOT THE SAME TREE. Scripts outside the population are NOT censused by this run." }))
 Write-Output ("script-census: " + $pop.Count + " script(s) + " + $inOut.Count + " under out\, read against " +
               $src.Count + " executable file(s); " + $uncalled.Count + " uncalled, " + $KNOWN.Count + " recorded as deliberate")
 # An exclusion nobody can see is its own blind spot: say what was pruned and where, every run.

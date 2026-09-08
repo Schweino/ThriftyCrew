@@ -5155,7 +5155,46 @@ is the only reason a score existed at all.
 unchanged: nothing here ships a predicted number to a reader. This item only asks that a prediction we
 already make gets marked against the answer we already store.
 
-### I70 - the ad forecast is scored and never baselined, so 37 of 47 is not yet a verdict `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I70 - the ad forecast is scored and never baselined, so 37 of 47 is not yet a verdict `DONE - THE BASELINE SHIPPED AND IT BEATS THE LIVE RULE, 2026-09-08` `queue-6`
+
+**`[CLOSED 2026-09-08, and the answer is the one the item said was possible and did not expect.]`**
+
+`grocery/audit-ad-forecast.ps1` now scores the naive predictor - *the next ad drops `cadence_days`
+after the last one DID* - beside the live rule, through the same `Get-ForecastScore` function, over
+the same pairs. One column changes; nothing else can drift.
+
+**Measured live, 2026-09-08, exit 0, `AD-FORECAST-COMPLETE pairs=48 exact=37 full=2 baseline=2`:**
+
+| arm | exact |
+|---|---|
+| live (`to` + 1 day) | **37 of 48** |
+| naive (`from` + `cadence_days`) | **40 of 48** |
+
+**The live rule is not beating a plain calendar. It is losing to one.** The item named that as one of
+two possible outcomes and called it *"a real finding about five stores' feeds, not a defect"* - it is
+sharper than that, because the whole difference is **one store**: Fareway scores **4 of 8** live
+against **7 of 8** naive, and every other store's two arms are identical. So the estate's headline
+"37 of 47" was never evidence that the close-plus-one rule buys anything; on the one store where the
+two rules disagree, it is the worse of the two. The report says so in its own output rather than
+leaving the reader to compare two numbers.
+
+(The denominator is **48**, not the 47 the item quotes. History gained a pair since it was filed.
+Said rather than quietly corrected, because a freshly-dated wrong number reads as verified - I88's
+finding.)
+
+**What this does NOT do, on purpose.** It adds a reported figure, not a failure condition. The
+inverted ratchet, the exit codes and the `-AcceptMiss` path are untouched, so it cannot turn the
+check red on day one. And it does not change `cadence_days`: that is I69's cadence half, which is
+closed separately and explicitly says not to replace the constant with a fitted one.
+
+**Verified:** self-test 17 of 17 (up from 12), including a must-fire that the report SAYS SO when the
+arms tie or the live rule loses, and a must-not-fire that an empty error list scores 0 of 0 rather
+than 1 of 1. `run-gates` exit 0, `pass=276 fail=0`.
+
+**The general rule this sets stands and is not yet applied elsewhere:** any estate number of the form
+"N of M correct" should ship with the same N of M for the dumbest predictor that could have produced
+it, through the same code path. `grocery/audit-alert-precision.ps1` and the matcher scorers are the
+named candidates and **neither was checked on this run.**
 
 **Source.** `packt-time-series-forecasting-with-facebook-prophet-in-python-7sw5w` (Packt, "the Lazy
 Programmer"; queue-6 group A entry 1, worked 2026-09-08). Routed to
@@ -5412,7 +5451,34 @@ re-ranking is the wrong one**, and the reason is now written down instead of ass
 zero-in-degree files are the control that makes it honest** - a case set drawn only from the linked
 61% would overstate the gain by construction.
 
-### I78 - the recall hooks are absent from the watch list that detects a silently dead automation `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I78 - the recall hooks are absent from the watch list that detects a silently dead automation `DONE - BOTH RECALL HOOKS ARE ON THE SILENT-DEATH WATCH, 2026-09-08` `queue-6`
+
+**`[CLOSED 2026-09-08.]`** `grocery/expected-automations.json` gained an `external_files` array
+with one row per hook - `recall-log.jsonl` and `recall-reflex-log.jsonl` - and
+`grocery/health-heartbeat.ps1` reads it.
+
+**It is a separate array rather than two more `output_files` rows, and that is not tidiness.** Every
+other row is resolved with `Join-Path $repo`, and `Join-Path` against an absolute second argument
+produces `C:\repo\C:\Users\...` - a path that never matches. The rows would have read as a permanent
+MISSING, and a check that is red every day is a check that gets muted inside a week. These resolve
+with `ExpandEnvironmentVariables` and are used as given.
+
+**They are deliberately NOT counted in `$declared`.** That counter exists to refuse to grade an empty
+exam, and the exam it protects is the repo's own chain; a registry that lost `windows_tasks` but kept
+these must still report BLIND rather than checking two log files and calling the estate healthy.
+
+**72 hours, not the 30 every other row uses.** The hook only writes when a session runs and Brad does
+not work every day, so a 30-hour window would page every quiet weekend - which is the
+red-on-day-one failure in its detective form.
+
+**Two hooks watched separately** rather than trusting one to prove the other: they are different
+hooks on different events, and this estate has already paid for assuming one signal covers two loops.
+
+**Verified, and the must-fire was OBSERVED rather than assumed.** Live run: exit 0, both rows
+`ok ... fresh`, `HEALTHY: 13 automation(s)/output(s)`. Then a third row pointing at a deliberately
+absent path was added, the run went to **exit 2** with `EXTERNAL OUTPUT MISSING`, and the registry was
+restored and confirmed identical by MD5 (`690E8363F89433C1AB1F8972EB6FC6D1` before and after), per the
+estate's own neuter-numbers rule. `run-gates` exit 0, `pass=276 fail=0`.
 
 **Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5604,7 +5670,31 @@ rather than a library boundary, even though the library shape exists and works. 
 organisation has no interface negotiation to force one.
 
 
-### I85 - the orphan census only ever examined grocery, and 72 scripts elsewhere have never been checked by anything `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I85 - the orphan census only ever examined grocery, and 72 scripts elsewhere have never been checked by anything `PARTLY DONE - THE SCOPE LINE SHIPPED; THE RATCHET OVER THE OTHER 72 HAS NOT` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**`[HALF SHIPPED 2026-09-08.]`** `grocery/audit-script-census.ps1` now opens every run with a
+SCOPE line naming both trees, and says out loud when they differ:
+
+```
+script-census SCOPE: population = *.ps1 under C:\Codex\ThriftyCrew\grocery  |  source side = executable files under C:\Codex\ThriftyCrew   <- NOT THE SAME TREE. Scripts outside the population are NOT censused by this run.
+script-census: 273 script(s) + 38 under out\, read against 633 executable file(s); 32 uncalled, 52 recorded as deliberate
+```
+
+That is the half the item said mattered most - a reader could previously see "273 scripts read against
+632 executable files" and take both totals for estate-wide, when only the source side is. **A rate
+prints with its denominator; so does a census.**
+
+**Verified:** live run exit 0, scope line read off the actual output rather than inferred.
+`run-gates` exit 0, `pass=276 fail=0`.
+
+**What is still open, and it is the larger half.** The 72 uncalled scripts under `.claude\`,
+`meal-prep\`, `site\`, `ops\`, `media\`, `sidecar\` and the repo root are still examined by nothing.
+The item is explicit about the shape - a ratchet seeded at 72 with a high-water mark that may only go
+DOWN, never a default `$Root` change that lands 72 findings on day one - and about the blocker: the
+`$KNOWN` register's keys are relative to `$Root`, so widening the population makes grocery's own 69
+recorded deliberates stop matching and come back as false orphans. **That re-keying is the actual
+work and it was not done here.** Also unresolved, and named in the item: `ops\merge-backlog-inbox.ps1`
+is uncalled on purpose and there is still nowhere to record that.
 
 **Merged from `design\backlog-inbox\lane-orchestrator-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5806,7 +5896,47 @@ be the command that yields *that* number.
 **Not fixed here** because `.claude/rules/grocery.md` is outside a course run's write scope; a course
 run may only write this inbox file.
 
-### I89 - a successful email send whose draft delete fails re-sends to a real person every day, forever `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I89 - a successful email send whose draft delete fails re-sends to a real person every day, forever `DONE - THE DUPLICATE IS BOUNDED AND THE DELETE FAILURE IS LOUD, 2026-09-08` `queue-6`
+
+**`[CLOSED 2026-09-08. The fix goes further than the item asked, and the reason is worth keeping.]`**
+
+The item proposed making the condition VISIBLE - a `try`/`catch` logging a distinct DELETE-FAILED
+line. That is now there, but it would not have stopped anything: a visible unbounded daily email to a
+member of the public is still a daily email to a member of the public. The harm needed bounding, not
+announcing.
+
+**The reason the loop was unbounded is that the only record of "already told" lived in the system that
+fails.** The Ghost draft was both the outbox row AND the processed stamp, so the one failure mode -
+the delete - destroyed the evidence that the send had happened. So the send is now recorded LOCALLY
+in `grocery/notify-sent-log.json`, written BEFORE the delete is attempted, and the suppression check
+reads that rather than the draft.
+
+What shipped in `grocery/notify-item-added.ps1`:
+
+- a `(postId, commodity)` key marked sent is **SUPPRESSED**, whatever state the draft is in. That is
+  the unbounded loop, closed.
+- the delete is now inside the `try` and its failure prints `DELETE-FAILED` with the reason. It used
+  to sit OUTSIDE the catch, so a throw aborted the whole run and left no record that the email had
+  already gone - the run then re-entered tomorrow with no memory of it.
+- a bounded retry: `delete_attempts` rises, and at 5 the pair goes terminal and Ghost stops being
+  asked about a draft that will not go.
+- rows pruned at 180 days, deliberately WIDER than the 120-day draft expiry, so nothing that could
+  still fire is forgotten.
+
+**No email address is stored.** The log keys on the Ghost post id and carries a 16-char SHA-256
+fingerprint of the address so a human can confirm a match. Requester addresses have never been
+committed to this repo and this change does not start. The file is tracked, so git is its undo log,
+which is E1's finding applied rather than a second undo layer built.
+
+**Verified:** new `-SelfTest`, exit 0, 10 cases - 2 must-fire led by the founding bug (a send whose
+delete failed must still suppress tomorrow), 4 must-not-fire including the empty log (`@($null).Count`
+is 1 in PS 5.1, which would have made every FIRST send read as a repeat and silenced the feature) and
+the pair-key boundary, 4 clean twins over pruning and the fingerprint. `-DryRun` against the live
+board and the real Ghost queue ran clean and wrote nothing. `run-gates` exit 0, `pass=276 fail=0` -
+up one from 275, which is this self-test being discovered.
+
+**Not done, and not proposed:** nothing yet measures whether an alert was sent twice across the rest
+of the estate. This closes the one path that had an unbounded repeat on it.
 
 **Merged from `design\backlog-inbox\lane-event-driven-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
