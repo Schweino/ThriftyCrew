@@ -154,6 +154,8 @@ class RecallSearchReq(BaseModel):
     floor: float = 0.0
     index_path: str | None = Field(
         None, description="defaults to ~/.claude/recall-embed-index.npz")
+    rerank: bool = Field(False, description="cross-encode the top `pool` and reorder by that")
+    pool: int = Field(24, description="how many cosine candidates the reranker sees")
 
 
 def _recall_index(path: str) -> dict | None:
@@ -203,7 +205,41 @@ def recall_search(req: RecallSearchReq) -> dict:
         qv = qv / norm
     sims = idx["mat"] @ qv
     k = max(1, min(int(req.k), int(sims.shape[0])))
-    top = _np.argsort(-sims)[:k]
-    hits = [dict(idx["meta"][int(i)], score=float(sims[int(i)])) for i in top
+
+    if not req.rerank:
+        top = _np.argsort(-sims)[:k]
+        hits = [dict(idx["meta"][int(i)], score=float(sims[int(i)])) for i in top
+                if float(sims[int(i)]) >= req.floor]
+        return {"ok": True, "n": int(sims.shape[0]), "hits": _strip(hits)}
+
+    # RERANK. The bi-encoder is a RECALL stage: it compares two vectors that never saw each
+    # other. The cross-encoder reads the query and the passage together, which is why it is
+    # the precision instrument and why it cannot be the first stage - it costs a forward pass
+    # per pair. So: cosine narrows the store to `pool`, the cross-encoder orders those.
+    #
+    # THIS IS THE ONLY OPTION WHOSE COST DOES NOT GROW WITH THE STORE. It scores `pool` pairs
+    # whether the index holds 1,300 sections or 130,000, which is the whole argument for
+    # reaching for it rather than for a smarter threshold.
+    #
+    # THE FLOOR IS NOT REUSED. A cosine floor and a cross-encoder score are different spaces
+    # and the estate has a register saying so (`sidecar/THRESHOLDS.md`). The floor still
+    # gates the POOL, on cosine, where it was derived; `ce` is returned beside `score` and
+    # the caller decides. Nothing here invents a threshold in a space nobody has calibrated.
+    pool = max(k, min(int(req.pool), int(sims.shape[0])))
+    cand = [int(i) for i in _np.argsort(-sims)[:pool]
             if float(sims[int(i)]) >= req.floor]
-    return {"ok": True, "n": int(sims.shape[0]), "hits": hits}
+    if not cand:
+        return {"ok": True, "n": int(sims.shape[0]), "hits": [], "reranked": 0}
+    pairs = [(req.query, (idx["meta"][i].get("t") or idx["meta"][i].get("heading") or ""))
+             for i in cand]
+    ce = matcher().rerank(pairs)
+    order = sorted(range(len(cand)), key=lambda j: -ce[j])[:k]
+    hits = [dict(idx["meta"][cand[j]], score=float(sims[cand[j]]), ce=float(ce[j]))
+            for j in order]
+    return {"ok": True, "n": int(sims.shape[0]), "hits": _strip(hits),
+            "reranked": len(cand)}
+
+
+def _strip(hits):
+    """The passage stays on this side. It is 2 KB a hit and the caller wants a pointer."""
+    return [{k: v for k, v in h.items() if k != "t"} for h in hits]
