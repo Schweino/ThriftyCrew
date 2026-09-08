@@ -22,6 +22,28 @@
   -Summary prints the board grouped by state and exits 0 whatever it finds. That is the point of the
   thing: "what is open for me" should be a command, not a reading exercise.
 
+  THE SECOND AND THIRD FIELDS (2026-09-08). The five states record WHOSE MOVE an item is. They record
+  nothing about what it costs to be wrong, and nothing about what its first step actually does - and
+  BOTH of those signals were living in the free text after the state, where they were miscounted
+  twice. `decision-craft/applies-here.md` 1 has the account: two careful readers scanning this same
+  file for "what is the first rung" got 16 of 33 and 17 of 30, and neither had stated its test. That
+  is I11's defect - one label, more than one meaning - two floors up, and prose is where it hides.
+
+  So every NOT-CLOSED heading now carries two more backticked tags, and this file reads them:
+
+    * REVERSIBILITY, of the FIRST RUNG, not of the whole item: `2-WAY` or `1-WAY`. A two-way door
+      produces a file that can be deleted and costs the time it took; it is never blocked on a
+      ruling. A one-way door spends money, GPU hours, a reader-facing change on a live paid site, a
+      remote write, a member-data pull, or sets a precedent that gets quoted afterwards.
+    * FIRST-RUNG TYPE: `RUNG1 <READ|MEASURE|DOC|BUILD|RULING|BLOCKED>`. READ reads bytes already on
+      disk or in git. MEASURE runs something to get a number and writes no tracked file. DOC is text
+      only - a comment, a header line, a convention. BUILD ships code. RULING means nothing proceeds
+      until Brad decides. BLOCKED waits on another item or an outside party.
+
+  A DONE or PARKED heading needs neither: the axes exist to sort a queue, and a closed item is not in
+  one. Requiring them there would have meant re-reading 62 finished items to fill in a field nobody
+  would ever sort on, which is the same make-work this audit exists to prevent.
+
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 clean, 2 hard finding, 3 could-not-evaluate.
   Read the verdict LINE, not the number (backlog E2).
 
@@ -40,6 +62,14 @@ $LEDGER = Join-Path $repo 'design\BACKLOG-course-findings.md'
 # before 'DONE' or every PARTLY DONE would read as a DONE with odd leading text.
 $STATES = @('DONE', 'PARKED', 'NEEDS A RULING', 'PARTLY DONE', 'OPEN')
 
+# The two states that are somebody's move, and therefore the ones that owe the sorting fields.
+$OPEN_STATES = @('NEEDS A RULING', 'PARTLY DONE', 'OPEN')
+
+# The two closed vocabularies for the sorting axes. Closed on purpose: a free-text reversibility is
+# the defect this change exists to remove, not a smaller version of it.
+$REVERSIBILITY = @('2-WAY', '1-WAY')
+$RUNG_TYPES    = @('READ', 'MEASURE', 'DOC', 'BUILD', 'RULING', 'BLOCKED')
+
 function Get-TcItemState {
   <# The state a heading declares, or a reason it declares none. Pure, so the fixtures drive it with
      synthetic headings rather than with today's ledger.
@@ -49,6 +79,14 @@ function Get-TcItemState {
   if ($Heading -notmatch '^###\s+([A-Z][0-9]+)\s+-\s') { return $null }   # not an item heading
   $id = $Matches[1]
   $tags = @([regex]::Matches($Heading, '`([^`]+)`') | ForEach-Object { $_.Groups[1].Value })
+
+  # THE SORTING AXES, read before the state so every return path carries them.
+  # WRAP THE PIPELINE ITSELF, do not assign first. `$x = $t | Where-Object {...}` with no match sets
+  # $x to $null, and `@($null).Count` is 1 - so a MISSING field would count as one PRESENT field and
+  # the must-fire below would never fire. [[ps-null-count-is-one]]
+  $revHits  = @($tags | Where-Object { $REVERSIBILITY -contains $_ })
+  $rungHits = @($tags | Where-Object { $_ -match '^RUNG1\s+(\S+)$' } | ForEach-Object { ($_ -split '\s+', 2)[1] })
+
   $found = @()
   foreach ($tag in $tags) {
     foreach ($s in ($STATES | Sort-Object { - $_.Length })) {
@@ -60,16 +98,32 @@ function Get-TcItemState {
       }
     }
   }
+  $rev  = if ($revHits.Count -eq 1) { $revHits[0] } else { '' }
+  $rung = if ($rungHits.Count -eq 1) { $rungHits[0] } else { '' }
+
   if ($found.Count -eq 0) {
-    return [pscustomobject]@{ Id = $id; State = ''; Detail = ''
+    return [pscustomobject]@{ Id = $id; State = ''; Detail = ''; Reversibility = $rev; Rung = $rung
       Problem = "declares no state. Give it one of: $($STATES -join ', ')" }
   }
   if ($found.Count -gt 1) {
-    return [pscustomobject]@{ Id = $id; State = ''; Detail = ''
+    return [pscustomobject]@{ Id = $id; State = ''; Detail = ''; Reversibility = $rev; Rung = $rung
       Problem = ("declares {0} states ({1}). One heading, one state." -f $found.Count, (($found | ForEach-Object { $_.State }) -join ' + ')) }
   }
-  $detail = $found[0].Tag.Substring($found[0].State.Length).TrimStart(' ', '-').Trim()
-  return [pscustomobject]@{ Id = $id; State = $found[0].State; Detail = $detail; Problem = '' }
+  $state  = $found[0].State
+  $detail = $found[0].Tag.Substring($state.Length).TrimStart(' ', '-').Trim()
+
+  # THE SORTING FIELDS ARE OWED BY THE OPEN STATES ONLY, and each is owed exactly once. Two
+  # reversibility tags is the same ambiguity as two states: one of them is a lie.
+  $axis = ''
+  if ($OPEN_STATES -contains $state) {
+    if     ($revHits.Count -eq 0)  { $axis = "declares no reversibility. Add one of: $($REVERSIBILITY -join ', ') - it is the FIRST RUNG that is being classified, not the whole item" }
+    elseif ($revHits.Count -gt 1)  { $axis = ("declares {0} reversibilities ({1}). One heading, one." -f $revHits.Count, ($revHits -join ' + ')) }
+    elseif ($rungHits.Count -eq 0) { $axis = "declares no first-rung type. Add ``RUNG1 <$($RUNG_TYPES -join '|')>``" }
+    elseif ($rungHits.Count -gt 1) { $axis = ("declares {0} first-rung types ({1}). One heading, one." -f $rungHits.Count, ($rungHits -join ' + ')) }
+    elseif ($RUNG_TYPES -notcontains $rung) { $axis = ("first-rung type '{0}' is not in the vocabulary ({1})." -f $rung, ($RUNG_TYPES -join ', ')) }
+  }
+  return [pscustomobject]@{ Id = $id; State = $state; Detail = $detail
+    Reversibility = $rev; Rung = $rung; Problem = $axis }
 }
 
 function Get-TcLedgerStates {
@@ -121,6 +175,50 @@ if ($SelfTest) {
   T 'MUST FIRE  a heading declaring two states is a finding, because one of them is a lie' `
     ($b2.Problem -like 'declares 2 states*') $b2.Problem
 
+  # ------- THE SORTING AXES (2026-09-08). Every fixture is a single-quoted literal, one argument.
+  $s1 = Get-TcItemState '### I33 - fifteen days of latency history `OPEN - RUNG 1 IS A READ` `queue-4` `2-WAY` `RUNG1 READ`'
+  T 'MUST NOT FIRE  an OPEN heading carrying both axes is clean, and both values come back' `
+    (($s1.Problem -eq '') -and ($s1.Reversibility -eq '2-WAY') -and ($s1.Rung -eq 'READ')) `
+    ($s1.Reversibility + '/' + $s1.Rung + ' problem=' + $s1.Problem)
+
+  $s2 = Get-TcItemState '### I37 - a self-test nobody mutated `OPEN` `queue-4`'
+  T 'MUST FIRE  THE FOUNDING BUG - an OPEN item with no reversibility is the untriaged shape this change exists to end' `
+    ($s2.Problem -like 'declares no reversibility*') ("problem='" + $s2.Problem + "'")
+
+  $s3 = Get-TcItemState '### I37 - a self-test nobody mutated `OPEN` `queue-4` `2-WAY`'
+  T 'MUST FIRE  reversibility alone is not enough; the first-rung type is owed too' `
+    ($s3.Problem -like 'declares no first-rung type*') ("problem='" + $s3.Problem + "'")
+
+  $s4 = Get-TcItemState '### I37 - a self-test nobody mutated `OPEN` `2-WAY` `1-WAY` `RUNG1 READ`'
+  T 'MUST FIRE  two reversibilities is the same ambiguity as two states - one of them is a lie' `
+    ($s4.Problem -like 'declares 2 reversibilities*') ("problem='" + $s4.Problem + "'")
+
+  $s5 = Get-TcItemState '### I37 - a self-test nobody mutated `OPEN` `2-WAY` `RUNG1 PONDER`'
+  T 'MUST FIRE  a first-rung type outside the closed vocabulary is a finding, not a new value' `
+    ($s5.Problem -like "*'PONDER' is not in the vocabulary*") ("problem='" + $s5.Problem + "'")
+
+  $s6 = Get-TcItemState '### I9 - The Python tree is not a package `PARKED - MEASUREMENT ONLY` `queue-2`'
+  T 'MUST NOT FIRE  a PARKED item owes NO axes - the fields sort a queue and a closed item is not in one' `
+    ($s6.Problem -eq '') ("problem='" + $s6.Problem + "'")
+
+  $s7 = Get-TcItemState '### E1 - the irreversible-write layer `DONE` `723be4ad`'
+  T 'MUST NOT FIRE  a DONE item owes no axes either' ($s7.Problem -eq '') ("problem='" + $s7.Problem + "'")
+
+  $s8 = Get-TcItemState '### I97 - Ghost holds every signup date `NEEDS A RULING` `queue-5` `1-WAY` `RUNG1 RULING`'
+  T 'MUST NOT FIRE  NEEDS A RULING owes the axes and a one-way ruling item satisfies them' `
+    (($s8.Problem -eq '') -and ($s8.Reversibility -eq '1-WAY') -and ($s8.Rung -eq 'RULING')) `
+    ($s8.Reversibility + '/' + $s8.Rung + ' problem=' + $s8.Problem)
+
+  $s9 = Get-TcItemState '### I71 - per-store pacing is static `OPEN - RUNG 1 IS A MEASUREMENT` `2-WAY` `RUNG1 MEASURE`'
+  T 'CLEAN TWIN a state whose free text contains the words RUNG 1 is still parsed as the state, and the RUNG1 tag is read separately' `
+    (($s9.State -eq 'OPEN') -and ($s9.Rung -eq 'MEASURE') -and ($s9.Problem -eq '')) `
+    ($s9.State + '/' + $s9.Rung + ' problem=' + $s9.Problem)
+
+  $s10 = Get-TcItemState '### I44 - the Recipe rich result `PARTLY DONE - ONLY GOOGLE''S VERDICT IS OUTSTANDING` `b3a35c7cf` `2-WAY` `RUNG1 BLOCKED`'
+  T 'CLEAN TWIN THE ONE THAT MADE THE STATE PARSER NECESSARY still works with the axes beside it - a commit hash is not a reversibility' `
+    (($s10.State -eq 'PARTLY DONE') -and ($s10.Reversibility -eq '2-WAY') -and ($s10.Problem -eq '')) `
+    ($s10.State + '/' + $s10.Reversibility + ' problem=' + $s10.Problem)
+
   # CLEAN TWIN - the scanner around the predicate still walks lines and keeps only the items.
   $all = Get-TcLedgerStates -Lines @('# Title', '### E1 - a `DONE`', 'prose', '### Triage of things', '### E2 - b `OPEN`')
   T 'CLEAN TWIN the scanner keeps the two items and drops the prose and the section heading' `
@@ -129,7 +227,7 @@ if ($SelfTest) {
   T 'CLEAN TWIN a single item comes back as an ARRAY, not unrolled to one object' ($one -is [array]) ($one.GetType().FullName)
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 5 must-fire cases including both malformed shapes, 4 must-not-fire cases led by the backticked-filename title that made the parser necessary, plus the scanner and its return arity'
+  Write-Output 'SELF-TEST PASS: 9 must-fire cases (both malformed state shapes, plus a missing reversibility, a missing first-rung type, a doubled reversibility and an out-of-vocabulary rung type), 8 must-not-fire cases led by the backticked-filename title that made the parser necessary and by the DONE/PARKED items that owe no axes, and 4 clean twins including the PARTLY DONE heading with a commit hash beside its axes'
   exit 0
 }
 
@@ -154,18 +252,41 @@ if ($Summary) {
     Write-Output ("{0}  ({1})" -f $s, $rows.Count)
     if ($s -eq 'DONE') { continue }   # the finished ones are a count, not a list
     foreach ($r in $rows) {
-      Write-Output ("  {0,-4} {1}" -f $r.Id, $(if ($r.Detail) { $r.Detail } else { '' }))
+      Write-Output ("  {0,-4} {1,-5} {2,-8} {3}" -f $r.Id, $r.Reversibility, $r.Rung, $(if ($r.Detail) { $r.Detail } else { '' }))
     }
   }
+
+  # THE REVERSIBILITY SORT, WITH ITS DENOMINATOR. A rate is printed with what it is over, always
+  # (.claude/rules/measurement.md). "82% are two-way" is a mood; "56 of 68 not-closed" is the sort.
+  $notClosed = @($items | Where-Object { $OPEN_STATES -contains $_.State })
   Write-Output ''
-  Write-GuardComplete -Name 'backlog-status' -Summary ("items={0}" -f $items.Count)
+  Write-Output ("REVERSIBILITY OF THE FIRST RUNG, over the {0} not-closed item(s) of {1} in the ledger:" -f $notClosed.Count, $items.Count)
+  foreach ($v in $REVERSIBILITY) {
+    $n = @($notClosed | Where-Object { $_.Reversibility -eq $v }).Count
+    Write-Output ("  {0,-6} {1,3} of {2}   {3}" -f $v, $n, $notClosed.Count,
+      $(if ($v -eq '2-WAY') { 'does NOT wait on a ruling; it waits on somebody having time' } else { 'spends money, GPU hours, a live reader-facing change, a remote write or a precedent' }))
+  }
+  $blank = @($notClosed | Where-Object { -not $_.Reversibility }).Count
+  if ($blank) { Write-Output ("  {0,-6} {1,3} of {2}   UNSORTED - these are the ones the audit is failing on" -f '(none)', $blank, $notClosed.Count) }
+
+  Write-Output ''
+  Write-Output ("FIRST RUNG, same {0} item(s):" -f $notClosed.Count)
+  foreach ($t in $RUNG_TYPES) {
+    $n = @($notClosed | Where-Object { $_.Rung -eq $t }).Count
+    Write-Output ("  {0,-8} {1,3} of {2}" -f $t, $n, $notClosed.Count)
+  }
+  Write-Output ''
+  Write-GuardComplete -Name 'backlog-status' -Summary ("items={0} notclosed={1} twoway={2} oneway={3}" -f `
+    $items.Count, $notClosed.Count,
+    @($notClosed | Where-Object { $_.Reversibility -eq '2-WAY' }).Count,
+    @($notClosed | Where-Object { $_.Reversibility -eq '1-WAY' }).Count)
   exit 0
 }
 
 $bad = @($items | Where-Object { $_.Problem })
 foreach ($b in $bad) { Write-Output ("  {0}: {1}" -f $b.Id, $b.Problem) }
 if ($bad.Count) {
-  Write-Output ("BACKLOG STATUS AUDIT FAILED: {0} item(s) of {1} do not declare exactly one state from the closed vocabulary ({2}). The legend at the head of design\BACKLOG-course-findings.md says what each one means and which wins when two could apply." -f $bad.Count, $items.Count, ($STATES -join ', '))
+  Write-Output ("BACKLOG STATUS AUDIT FAILED: {0} item(s) of {1} are malformed - each either does not declare exactly one state from the closed vocabulary ({2}), or is a not-closed item missing one of the two sorting fields (`2-WAY`/`1-WAY`, and ``RUNG1 <{3}>``). The legend at the head of design\BACKLOG-course-findings.md says what each one means and which wins when two could apply." -f $bad.Count, $items.Count, ($STATES -join ', '), ($RUNG_TYPES -join '|'))
   Write-GuardComplete -Name 'backlog-status' -Summary ("items={0} malformed={1}" -f $items.Count, $bad.Count)
   exit 2
 }

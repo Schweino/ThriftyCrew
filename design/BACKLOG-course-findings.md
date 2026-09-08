@@ -32,6 +32,39 @@ a closed vocabulary and `ops/audit-backlog-status.ps1` fails a heading that inve
 carries none. `ops/audit-backlog-status.ps1 -Summary` prints the board grouped by state, which is
 the answer to "what is open for me" without anyone reading 2,700 lines.
 
+## The two sorting fields, and why they are fields (2026-09-08)
+
+The five states say **whose move** an item is. They say nothing about **what it costs to be wrong**,
+or **what the first step actually does** - and both of those signals lived in the free text after
+the state, where they were miscounted twice. `decision-craft/applies-here.md` 1 has the account: two
+careful readers scanning this file for "what is the first rung" got **16 of 33** and **17 of 30**,
+and neither had stated its test. That is I11's defect - one label, more than one meaning - two floors
+up. So every **not-closed** heading now carries two more backticked tags, and the audit reads them:
+
+| Field | Values | What it means |
+|---|---|---|
+| reversibility | `2-WAY` / `1-WAY` | of the **FIRST RUNG**, not of the whole item |
+| first rung | `RUNG1 READ` `RUNG1 MEASURE` `RUNG1 DOC` `RUNG1 BUILD` `RUNG1 RULING` `RUNG1 BLOCKED` | what the cheapest next step IS |
+
+**`2-WAY`** means the first rung produces a file that can be deleted, and being wrong costs the time
+it took. **A `2-WAY` item is never blocked on a ruling** - it waits on somebody having time.
+**`1-WAY`** means it spends money or GPU hours, changes a reader-facing page on a live paid site,
+makes a remote write, pulls member data, or sets a precedent that gets quoted afterwards.
+
+`READ` reads bytes already on disk or in git. `MEASURE` runs something for a number and writes no
+tracked file. `DOC` is text only. `BUILD` ships code. `RULING` means nothing proceeds until Brad
+decides. `BLOCKED` waits on another item or an outside party.
+
+**Measured 2026-09-08 after the sort, by `ops/audit-backlog-status.ps1 -Summary`, exit 0,
+`items=130 notclosed=68 twoway=56 oneway=12`: 56 of 68 not-closed items are two-way.** The method
+that ordered the sort predicted "about half"; the real figure is **82%**, and the gap is itself the
+finding - the prose scan that produced "about half" was answering a narrower question (*does the item
+SAY its first step is cheap*) than the one that matters (*is the first step actually reversible*).
+Sixteen items were declaring it. Fifty-six were it.
+
+A `DONE` or `PARKED` heading owes neither field: the axes exist to sort a queue and a closed item is
+not in one. The audit enforces that split rather than demanding a retro-fit over 62 finished items.
+
 ---
 
 ## Shipped
@@ -3363,7 +3396,7 @@ rewritten `save_baseline` serialises the whole document before it opens anything
 line.
 
 
-### I31 - Every LLM run here is costed AFTER it finishes and none is budgeted or capped BEFORE it starts `OPEN - RUNGS 1 AND 2 ARE REPORTS; ONLY THE CAP NEEDS A RULING` `queue-3`
+### I31 - Every LLM run here is costed AFTER it finishes and none is budgeted or capped BEFORE it starts `OPEN - RUNGS 1 AND 2 ARE REPORTS; ONLY THE CAP NEEDS A RULING` `queue-3` `2-WAY` `RUNG1 BUILD`
 *Source: Optimize & Interface LLM Apps Effectively (queue-3, Starweaver), module 2.* The course's
 one genuinely new habit is trivial and this estate does not have it: **do the arithmetic before you
 build, not after the invoice** - expected tokens per call x price x expected calls, priced as two
@@ -3405,7 +3438,7 @@ truncates a hunt mid-wave could be worse than the overspend.
 **Deliberately not proposed: a gate.** Per the standing rule, a gate that is red on day one for a
 backlog nobody is about to clear teaches people to ignore red. Rungs 1 and 2 are reports.
 
-### I32 - No alert here can require a condition to PERSIST, and no alert ROUTE has been tested end to end `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+### I32 - No alert here can require a condition to PERSIST, and no alert ROUTE has been tested end to end `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
 **Source.** Queue-4 course 1, `observability-engineering-metrics-logs-traces` (Edureka), items 34,
 37 and 38. A vendor course with no measurements; what it supplied is a mechanism and a vocabulary,
@@ -3465,7 +3498,7 @@ backlog nobody is about to clear. Rung 1 is a report.
 **What it touches.** `grocery/alert-lib.ps1`, `grocery/alert-state.json`, `grocery/ALERTS.md`,
 `grocery/audit-alert-precision.ps1`. No board, no published page.
 
-### I33 - The estate has 15 days of latency history in git and has never read it `OPEN - RUNG 1 IS A READ, NOT A BUILD`
+### I33 - The estate has 15 days of latency history in git and has never read it `OPEN - RUNG 1 IS A READ, NOT A BUILD` `2-WAY` `RUNG1 READ`
 
 **Source.** Queue-4 course 2, `site-reliability-engineering-principles` (Edureka), items 7 to 12, 18,
 19, 23 and 44. Vendor course, no measurements; claims C69 to C72 in
@@ -3527,7 +3560,7 @@ changes, no agent changes, no data writes.
 
 ---
 
-### I34 - The estate wrote one exemplary postmortem and never wrote a second `OPEN - RUNG 1 IS A TEMPLATE, NOT A PROCESS` `queue-4`
+### I34 - The estate wrote one exemplary postmortem and never wrote a second `OPEN - RUNG 1 IS A TEMPLATE, NOT A PROCESS` `queue-4` `2-WAY` `RUNG1 DOC`
 
 **Source.** Queue-4 course 3, `foundations-of-site-reliability-engineering-training` (Simplilearn).
 The transferable piece is its three-way split of postmortem corrective actions - **preventive**
@@ -3584,7 +3617,7 @@ windows with a crash-safe restore. That is the chaos loop against the gate layer
 state is observable. Reasoning recorded in `reliability-craft/estate-inventory.md` so it is not
 re-derived as an open gap.
 
-### I35 - Every failure verdict here is reached on ONE observation, and synthetic monitoring's standard answer is to take a second `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+### I35 - Every failure verdict here is reached on ONE observation, and synthetic monitoring's standard answer is to take a second `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
 **Source.** `monitoring-and-observability-for-development-and-devops` (IBM/Coursera), item 15. The
 synthetic check loop it describes does not alert on a failing probe. When a checkpoint reports an
@@ -3625,7 +3658,7 @@ probes are the thing most likely to be broken needs the second one at least as m
 and the coverage ledger. Rungs 2 and 3 would touch the capture verdict paths and `send-alert.ps1`.
 No gate weakens either way: this makes a verdict harder to reach, not easier.
 
-### I36 - Nothing in this repo has a stated log retention, and the logs are committed, so they grow forever `OPEN - THE MEASUREMENT IS DONE; WHAT IS OPEN IS THE POLICY` `queue-4`
+### I36 - Nothing in this repo has a stated log retention, and the logs are committed, so they grow forever `OPEN - THE MEASUREMENT IS DONE; WHAT IS OPEN IS THE POLICY` `queue-4` `2-WAY` `RUNG1 DOC`
 
 **Source.** Same course, item 38, which sets a retention period from six analytical dimensions
 rather than one number: criticality, security, system maturity, run frequency, cost-effectiveness,
@@ -3675,7 +3708,7 @@ to justify code that deletes evidence, and deletion is the direction that cannot
 
 ---
 
-### I37 - 217 self-test files, and nothing has ever asked whether their cases would notice the detector being wrong `OPEN` `queue-4`
+### I37 - 217 self-test files, and nothing has ever asked whether their cases would notice the detector being wrong `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
 **Source.** `introduction-software-testing` (queue-4 course 5, worked 2026-09-07), items 30 and 28.
 Routed to `software-craft/test-design-and-oracles.md` 6 and cross-linked from
@@ -3713,7 +3746,7 @@ written to temp copies and the original is restored by hash, per the estate's ow
 
 ---
 
-### I38 - Every parser here has only ever seen inputs a person wrote, and randomness is refused estate-wide on reproducibility grounds that do not apply to it `NEEDS A RULING` `queue-4`
+### I38 - Every parser here has only ever seen inputs a person wrote, and randomness is refused estate-wide on reproducibility grounds that do not apply to it `NEEDS A RULING` `queue-4` `1-WAY` `RUNG1 RULING`
 
 **Source.** Same course, items 4 and 8, plus the queue-4 entry that chose it. Routed to
 `software-craft/test-design-and-oracles.md` 5, and recorded in that file's section 11 as a gap the
@@ -3784,7 +3817,7 @@ import it conditionally. There is no `hypothesis` package installed.
 
 ---
 
-### I39 - 217 self-test files assert on a target set none of them prints, so a vacuous pass is invisible `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+### I39 - 217 self-test files assert on a target set none of them prints, so a vacuous pass is invisible `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
 **Source.** `chaos-engineering` (KodeKloud, Nasia Ullas, queue-4 course 6, worked 2026-09-07), items
 15 to 17. Routed to `reliability-craft/rca-and-chaos.md` 3.2 and 3.3, and cross-linked from
@@ -3832,7 +3865,7 @@ which is a much smaller set than 217 and is what rung 1 should really be countin
 
 ----
 
-### I40 - the git-bus is an untyped producer/consumer contract with no schema and no version `OPEN - NEEDS A MEASUREMENT FIRST` `queue-4`
+### I40 - the git-bus is an untyped producer/consumer contract with no schema and no version `OPEN - NEEDS A MEASUREMENT FIRST` `queue-4` `2-WAY` `RUNG1 READ`
 
 **Source.** `automate-data-pipelines-schema-evolution` (Coursera, content credited to Jason Rand,
 queue-4 course 7, worked 2026-09-07), items 6 to 9. Routed to
@@ -3870,7 +3903,7 @@ is exactly what rung 1 is for.
 
 ----
 
-### I41 - a `graph.db` schema change today has no recorded procedure, and no rollback `OPEN - NEEDS A RULING ON SCOPE` `queue-4`
+### I41 - a `graph.db` schema change today has no recorded procedure, and no rollback `OPEN - NEEDS A RULING ON SCOPE` `queue-4` `1-WAY` `RUNG1 RULING`
 
 **Source.** Same course, sections 4 to 9 of `database-craft/changing-a-schema.md`. Registered as
 claims C84 and C85.
@@ -3896,7 +3929,7 @@ Recommending neither until Brad rules, because the second is much the larger bet
 
 ----
 
-### I42 - the estate runs ETL in `grocery/` and ELT in `graph/`, has never named which is which, and so never asks whether a transform's input is still obtainable `NEEDS A RULING` `queue-4`
+### I42 - the estate runs ETL in `grocery/` and ELT in `graph/`, has never named which is which, and so never asks whether a transform's input is still obtainable `NEEDS A RULING` `queue-4` `2-WAY` `RUNG1 READ`
 
 **Source.** `etl-and-data-pipelines-shell-airflow-kafka` (Coursera, IBM, Yan Luo, queue-4 course 8,
 worked 2026-09-07), module 1. Routed to `data-quality-craft/moving-data-in-flight.md` sections 1, 3
@@ -3930,7 +3963,7 @@ is a trade Brad decides, not one a course run decides.
 
 ----
 
-### I43 - the estate records per-stage latency for one chain, commits it daily, and has never read it to name a bottleneck `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-4`
+### I43 - the estate records per-stage latency for one chain, commits it daily, and has never read it to name a bottleneck `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 READ`
 
 **Source.** Same course, module 2 lectures 20 and 21. Routed to
 `reliability-craft/pipeline-throughput.md`. Claim C90.
@@ -3957,7 +3990,7 @@ candidate) or *variable* (a buffering candidate), which is the split recorded as
 timing to them is a rung 2 and should not be started before rung 1 says a bottleneck read is worth
 having.
 
-### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `PARTLY DONE - THE FIX IS SHIPPED AND VERIFIED LIVE 2026-09-07; ONLY GOOGLE'S RE-CRAWL VERDICT IS OUTSTANDING` `b3a35c7cf` `be797a371` `seo`
+### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `PARTLY DONE - THE FIX IS SHIPPED AND VERIFIED LIVE 2026-09-07; ONLY GOOGLE'S RE-CRAWL VERDICT IS OUTSTANDING` `b3a35c7cf` `be797a371` `seo` `2-WAY` `RUNG1 BLOCKED`
 
 **Found 2026-09-07 while chasing the impression decline I24 measured.** Read from Search Console
 directly, not inferred.
@@ -4116,7 +4149,7 @@ the same account as the confirmation above. Worth doing in the same sitting; not
 
 ---
 
-### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `OPEN - SMALL, AND IT HAS ALREADY BITTEN TWICE` `queue-4`
+### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `OPEN - SMALL, AND IT HAS ALREADY BITTEN TWICE` `queue-4` `2-WAY` `RUNG1 READ`
 
 **Source.** `source-systems-data-ingestion-and-pipelines` (Coursera, DeepLearning.AI with AWS, Joe
 Reis and Morgan Willis, queue-4 course 9, worked 2026-09-07), module 4 items 82 to 84. Routed to
@@ -4158,7 +4191,7 @@ all. Do that before proposing code.
 **Related.** I43 (per-stage latency already recorded and never read) is the measurement that would
 say how close each gap actually is; I40 is the same contract problem one layer down, on the git-bus.
 
-### I46 - every check reports on a whole artefact, so a failure names the file and never the slice `OPEN - NEEDS A MEASUREMENT FIRST` `queue-4`
+### I46 - every check reports on a whole artefact, so a failure names the file and never the slice `OPEN - NEEDS A MEASUREMENT FIRST` `queue-4` `2-WAY` `RUNG1 READ`
 
 **Source.** Same course, module 3 items 71 and 72 (Great Expectations). Routed to
 `data-quality-craft/checks-and-thresholds.md` 6a and `data-quality-craft/applies-here.md`.
@@ -4185,7 +4218,7 @@ is not worth building.
 **What it is not.** Not a proposal to adopt Great Expectations - it is a Python package over a Python
 data stack, and these checks are PowerShell over JSON. The component that ports is the batch key.
 
-### I47 - a recorded measurement can be voided later, and nothing in the estate re-checks one `OPEN - THE FIRST RUNG IS A READ` `queue-4`
+### I47 - a recorded measurement can be voided later, and nothing in the estate re-checks one `OPEN - THE FIRST RUNG IS A READ` `queue-4` `2-WAY` `RUNG1 READ`
 
 **Source.** `crash-course-in-causality` (UPenn, Roy), queue-4 course 10. Routed to
 `experiment-craft/is-the-difference-caused.md` 18-25 and `experiment-craft/applies-here.md` 1.
@@ -4220,7 +4253,7 @@ question is answerable without archaeology.
 **What it is not.** Not a proposal to adopt propensity scores or IPTW. This estate mostly compares
 two configurations it controls, where the repair is a paired design (I48), not an adjustment.
 
-### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `OPEN` `queue-4`
+### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
 **Source.** Same course. Routed to `experiment-craft/is-the-difference-caused.md` 22a and
 `experiment-craft/applies-here.md` 4 and 7.
@@ -4250,7 +4283,7 @@ dossiers ruled twice, with and without the neighbour block. Two decider calls on
 **Related.** I47 is the same subject from the other end - I47 asks whether an old number is still
 valid, I48 asks how to take the next one so the question does not arise.
 
-### I49 - one global similarity floor is a claim about the shape of a space nobody has ever grouped `OPEN` `queue-4`
+### I49 - one global similarity floor is a claim about the shape of a space nobody has ever grouped `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
 **Source.** Queue-4 course 11, CU Boulder "Introduction to Machine Learning: Unsupervised Learning",
 worked 2026-09-07. Routed to `rag-craft/grouping-a-vector-space.md` 33, 35 and 38, and
@@ -4285,7 +4318,7 @@ cross-encoder calls, which `derive_coverage_floor.py` already prices.
 **What it is not.** Not a proposal to change 0.55. The point is that the number is currently
 unqualified in a dimension nobody has looked at, and the look is an afternoon.
 
-### I50 - `serve.ps1`'s per-slot guard says it is set by the LARGEST caller, and it is not `OPEN` `queue-4`
+### I50 - `serve.ps1`'s per-slot guard says it is set by the LARGEST caller, and it is not `OPEN` `queue-4` `2-WAY` `RUNG1 DOC`
 
 **Source.** Queue-4 course 12, Coursera / Board Infinity "Deploying Deep Learning: Quantization,
 Serving, and Edge AI", worked 2026-09-07. Found while measuring the course's serving claims against
@@ -4323,7 +4356,7 @@ invocation throw, which is a behaviour change on a server Brad starts by hand.
 **Constraint acknowledged.** The queue's group-H rule forbids a course run from changing
 `serve.ps1`. Nothing was changed; this is the ledger entry the rule asks for.
 
-### I51 - two unrelated ~81 tok/s numbers, and nothing says which machine either is about `OPEN` `queue-4`
+### I51 - two unrelated ~81 tok/s numbers, and nothing says which machine either is about `OPEN` `queue-4` `2-WAY` `RUNG1 DOC`
 
 **Source.** Same course. Routed to `model-finetuning-craft/applies-here.md` 2.
 
@@ -4345,7 +4378,7 @@ one.
 **What it would touch.** One clarifying sentence in each of the two files naming the machine, and
 ideally the same in the memory `wall-clock-is-output-tokens`. No code, no gate, no board.
 
-### I52 - a reflex candidate this run could not write: the per-slot context floor `OPEN` `queue-4`
+### I52 - a reflex candidate this run could not write: the per-slot context floor `OPEN` `queue-4` `2-WAY` `RUNG1 DOC`
 
 **Source.** Same course, raised under procedure step 4.0 (can this finding be a reflex?).
 
@@ -4362,7 +4395,7 @@ run's write scope. The candidate is recorded here so the between-courses pass ca
 
 **What it would touch.** One memory file plus its `MEMORY.md` index line. Nothing in the repo.
 
-### I53 - the local model's "decode" bar measures the whole round trip `OPEN` `queue-4`
+### I53 - the local model's "decode" bar measures the whole round trip `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
 **Source.** Coursera, *Optimize AI Inference Speed & Accuracy* (Starweaver), queue-4 H2, module 1.
 Routed to `reliability-craft/pipeline-throughput.md` 7.5 and `reliability-craft/applies-here.md`
@@ -4404,7 +4437,7 @@ threshold or a model artefact. Nothing was changed. `graph/lib/llm.py` and `grap
 are outside that list but were left alone anyway, because a measurement change is exactly the thing
 a run that just read a course about measurement should not make unsupervised.
 
-### I54 - the quant format's dequantisation cost is named as a ceiling and never compared `OPEN` `queue-4`
+### I54 - the quant format's dequantisation cost is named as a ceiling and never compared `OPEN` `queue-4` `2-WAY` `RUNG1 BLOCKED`
 
 **Source.** Same course, module 3. Routed to
 `model-finetuning-craft/publishing-and-automation.md` 11.3 and that domain's `applies-here.md`.
@@ -4430,7 +4463,7 @@ what it says would produce two round-trip numbers and call them decode.
 
 **Constraint acknowledged.** Nothing in `serve.ps1`, `sidecar/` or any model artefact was changed.
 
-### I55 - two courses ruled "no motive for LoRA here" against the reranker, while a measured QLoRA plan for the local 27B sat unread `NEEDS A RULING` `queue-4`
+### I55 - two courses ruled "no motive for LoRA here" against the reranker, while a measured QLoRA plan for the local 27B sat unread `NEEDS A RULING` `queue-4` `1-WAY` `RUNG1 RULING`
 
 **Source.** Coursera, *Fine-tuning Text Models with PEFT*, queue-4 group H entry H3, modules 1 and
 2. Routed to `model-finetuning-craft/publishing-and-automation.md` 10.7 and 10.8, and that domain's
@@ -4466,7 +4499,7 @@ run.
 **Constraint acknowledged.** Nothing in `serve.ps1`, `sidecar/` or any model artefact was changed,
 and no probe was run. This is a reading of files already in the repo.
 
-### I56 - no rank, alpha or target-module set has ever been compared here, and the two probes disagree with each other `OPEN - SMALL, AND IT IS A PREREQUISITE FOR I55` `queue-4`
+### I56 - no rank, alpha or target-module set has ever been compared here, and the two probes disagree with each other `OPEN - SMALL, AND IT IS A PREREQUISITE FOR I55` `queue-4` `2-WAY` `RUNG1 BLOCKED`
 
 **Source.** Same course, modules 1 and 3. Routed to
 `model-finetuning-craft/training-and-evaluation.md` 11 and `publishing-and-automation.md` 10.7.
@@ -4490,7 +4523,7 @@ point sweeping a rank for a run nobody has decided to make.
 
 **Constraint acknowledged.** Nothing changed; no GPU work was done.
 
-### I57 - Jaccard runs in three first-party files, and none of them says which of its two properties it is buying `OPEN - SMALL, AND IT IS A COMMENT, NOT A REWRITE` `queue-4`
+### I57 - Jaccard runs in three first-party files, and none of them says which of its two properties it is buying `OPEN - SMALL, AND IT IS A COMMENT, NOT A REWRITE` `queue-4` `2-WAY` `RUNG1 DOC`
 
 **Source.** Queue-4 course 12, IBM "Unsupervised Machine Learning", worked 2026-09-07 as a partial
 run. Routed to `rag-craft/vector-space-foundations.md` 21a and `rag-craft/applies-here.md` 12.
@@ -4536,7 +4569,7 @@ No behaviour, no board, no gate. Rung 2 touches `THRESHOLDS.md` and possibly its
 
 **Constraint acknowledged.** Nothing was changed. This is a reading of files already in the repo.
 
-### I58 - `sidecar/requirements.txt` is wrong about two of its five pinned packages, and nothing in the estate compares it to the venv `OPEN - SMALL, AND IT IS A HERMETIC CHECK` `queue-4`
+### I58 - `sidecar/requirements.txt` is wrong about two of its five pinned packages, and nothing in the estate compares it to the venv `OPEN - SMALL, AND IT IS A HERMETIC CHECK` `queue-4` `2-WAY` `RUNG1 BUILD`
 
 **Source.** Queue-4 group E, worked 2026-09-07. **Both courses were dropped on outline evidence**
 without reading a lecture, so this finding is not routed course material - it comes from the estate
@@ -4599,7 +4632,7 @@ one edit to `sidecar/requirements.txt`. No board, no page, no published number, 
 **Constraint acknowledged.** Nothing was changed. Both versions above were read off the filesystem;
 no package was installed, upgraded or removed.
 
-### I59 - the standing "no em dashes" rule has no gate, and 3,151 em dashes sit in the lesson and Substack source `OPEN - THE MEASUREMENT IS DONE; ONE CHECK IS UNRESOLVED` `queue-4`
+### I59 - the standing "no em dashes" rule has no gate, and 3,151 em dashes sit in the lesson and Substack source `OPEN - THE MEASUREMENT IS DONE; ONE CHECK IS UNRESOLVED` `queue-4` `2-WAY` `RUNG1 BLOCKED`
 *Source: queue-4 group F, technical writing (2026-09-08).* `CLAUDE.md` line 57 states **"No em
 dashes"** under "Standing rules for anything that ships", and the workspace `CLAUDE.md` repeats it.
 Nothing mechanical enforces it. The rule is carried only inside five agent prompts
@@ -4634,7 +4667,7 @@ files and a republish of each, which is a real risk to live pages and should not
 **Constraint acknowledged.** Nothing was changed. Every figure above was read off the filesystem or
 off a public page.
 
-### I60 - three finance lessons make a quantified claim and give no quantity `OPEN - SMALL` `queue-4`
+### I60 - three finance lessons make a quantified claim and give no quantity `OPEN - SMALL` `queue-4` `1-WAY` `RUNG1 BUILD`
 *Source: queue-4 group F, Rice `engineering-writing`, the vague-to-specific ladder (2026-09-08).*
 On a paid finance site, a magnitude claim with no number is the defect that course teaches against,
 and it is a sharper instance of the estate's own "no fabricated numbers, and understating is exactly
@@ -4661,7 +4694,7 @@ up two savers ten years apart and then declines to finish the sum.
 
 **Constraint acknowledged.** Nothing was changed.
 
-### I61 - the local LLM server is a four-slot queue whose service time has only ever been measured as a mean `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+### I61 - the local LLM server is a four-slot queue whose service time has only ever been measured as a mean `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
 *Source: Simulation Models for Decision Making (course 18, Minnesota Carlson, Gupta).*
 
 Queueing writes a system as `arrival / service / servers`. `tools/local-llm/serve.ps1` line 107 sets
@@ -4694,7 +4727,7 @@ Only if the tail is heavy is there a build, and the build is a bounded wait rath
 **Constraint acknowledged.** Nothing was changed. Standing context is
 `~/.claude/skills/reliability-craft/applies-here.md` entry 4; the method is `pipeline-throughput.md` 8.
 
-### I62 - `MIN_SCORE`'s on-topic and off-topic score distributions now overlap completely, so the calibrator's suggested threshold cannot be right `OPEN - THE MEASUREMENT IS DONE; WHAT IS OPEN IS ONE COMMENT` `queue-4`
+### I62 - `MIN_SCORE`'s on-topic and off-topic score distributions now overlap completely, so the calibrator's suggested threshold cannot be right `OPEN - THE MEASUREMENT IS DONE; WHAT IS OPEN IS ONE COMMENT` `queue-4` `2-WAY` `RUNG1 DOC`
 *Source: Decision Making (course 17) and Simulation Models (course 18).*
 
 `~/.claude/skills/course/LEDGER.md` 4310 records a deliberate refusal: `recall-hook-calibrate.py`
@@ -4738,7 +4771,41 @@ the repo, like I1 and I3.
 recognition-floor half could not compare corpora from that cwd. The probe half ran and printed, and
 only the probe numbers are quoted here.
 
-### I63 - the backlog records whose move an item is and never how reversible it is, so 17 items that write nothing queue behind 3 that need a policy `OPEN - IT IS ONE COLUMN, NOT A PROCESS` `queue-4`
+### I63 - the backlog records whose move an item is and never how reversible it is, so 17 items that write nothing queue behind 3 that need a policy `DONE - THE TWO AXES ARE FIELDS AND THE AUDIT READS THEM, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08, and the closing measurement contradicts the item's own headline number, which is the more useful half.]`**
+
+This item proposed **one** column. Two shipped, because reversibility alone does not say what the
+cheapest next step *is*, and that was the other half of the signal living in prose. Every not-closed
+heading now carries `2-WAY`/`1-WAY` and `RUNG1 <READ|MEASURE|DOC|BUILD|RULING|BLOCKED>`; the legend
+is at the head of this file; `ops/audit-backlog-status.ps1` parses both, fails a not-closed heading
+missing either, and prints the split with its denominator. Ten new frozen fixtures, including the
+must-fire for the founding shape (an `OPEN` item with no reversibility) and the two must-not-fires
+that keep `DONE` and `PARKED` exempt.
+
+**What the sort actually found.** This item said *"17 items that write nothing queue behind 3 that
+need a policy"*, from a prose scan. Measured against fields instead, exit 0,
+`items=130 notclosed=68 twoway=56 oneway=12`: **56 of 68 not-closed items are two-way, 82%.** The
+method that ordered the sort predicted about half. Both earlier numbers were low for the same
+reason - **they counted items that DECLARED their first rung was cheap, not items whose first rung
+IS cheap.** Sixteen were declaring it; fifty-six were it. A count with no stated test cannot be
+checked, which is I82's finding arriving on the instrument that was supposed to settle I82.
+
+**And the sort found two items that were not on the board at all.** `I71` and `I72` were filed with
+headings of the shape `### I71 [ID ALLOCATED ...]` - no title, no state - which matched neither half
+of the audit's item pattern, so it skipped them as prose. Every board count taken since they merged
+said 128 items and 66 not closed. **It is 130 and 68.** Both headings were rewritten to the item
+shape and their allocation notes moved into their bodies. This is the exact defect the item was
+filed about, one level lower: a signal that lives in a shape nobody validates gets miscounted, and
+the miscount is invisible because the missing rows look like rows that were never written.
+
+**Verified:** `ops/audit-backlog-status.ps1 -SelfTest` exit 0, 21 cases; live run exit 0,
+`BACKLOG-STATUS-COMPLETE items=130 malformed=0`; `ops/run-gates.ps1` exit 0, `pass=275 fail=0`.
+
+**The MAP half of this item is NOT done and was not proposed as work.** It says so itself: nobody
+should build a scoring rubric until Brad decides he wants one. The eight `NEEDS A RULING` items are
+written up for him in `design/RULINGS-2026-09-08.md` in the shape MAP asks for - criteria first,
+assessments separately, global judgement last - which is that idea used once rather than installed.
 *Source: Decision Making (course 17, Nardy), lecture "When decisions are experiments" and the MAP
 lesson.*
 
@@ -4783,7 +4850,7 @@ the state table. No script, no gate.
 
 **Constraint acknowledged.** No heading was re-labelled by this run; the counts above are a read.
 
-### I64 - the Freezer Math tool decides a several-hundred-dollar purchase from three means, and its verdict flips inside their error bars `OPEN - RUNG 1 IS A COMPUTATION, NOT A BUILD` `queue-4`
+### I64 - the Freezer Math tool decides a several-hundred-dollar purchase from three means, and its verdict flips inside their error bars `OPEN - RUNG 1 IS A COMPUTATION, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
 *Source: Simulation Models for Decision Making (course 18, Gupta), module 3, models 1 versus 2; and
 Decision Making (course 17, Nardy), module 3 sensitivity analysis. Routed to
 `~/.claude/skills/decision-craft/decide-under-uncertainty.md` 6 and 8.*
@@ -4839,7 +4906,7 @@ looking.
 
 ---
 
-### I65 - every parser here has a previous version one `git show` away, and nothing has ever run old and new over the same input `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+### I65 - every parser here has a previous version one `git show` away, and nothing has ever run old and new over the same input `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
 **Source.** `automated-analysis` (University of Minnesota; queue-4 entry 20, raided 2026-09-08),
 item 37. Routed to `software-craft/test-design-and-oracles.md` 5.3. Registered as claim C139.
@@ -4882,7 +4949,7 @@ spec. Scope it to the transformation stages, not to anything that reads live dat
 
 ---
 
-### I66 - every static detector in `ops/` is unsound, none of them says so, and their clean reports are written as though they were proofs `OPEN - IT IS WORDING, NOT A REWRITE` `queue-4`
+### I66 - every static detector in `ops/` is unsound, none of them says so, and their clean reports are written as though they were proofs `OPEN - IT IS WORDING, NOT A REWRITE` `queue-4` `2-WAY` `RUNG1 DOC`
 
 **Source.** `automated-analysis` (queue-4 entry 20, raided 2026-09-08), items 3, 28, 31 and 45.
 Routed to `software-craft/test-design-and-oracles.md` 5b.
@@ -4920,7 +4987,7 @@ logic. **It changes what a report claims, not what it checks.**
 
 ---
 
-### I67 - the backlink plan is refuted a second time on a new axis, and the one instrument this estate could actually use has never been read `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-4`
+### I67 - the backlink plan is refuted a second time on a new axis, and the one instrument this estate could actually use has never been read `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 BLOCKED`
 
 **Source.** `seo-fundamentals` module 2 (UC Davis; queue-4 entry 21, raided 2026-09-08). Routed to
 `growth-craft/search-position-diagnosis.md` 4. Registered as claims C141 to C143.
@@ -4956,7 +5023,7 @@ live paid site. Not a trade worth making at any price.
 
 ---
 
-### I68 - the ad period is known, written down in seven places, and used by nothing that looks at a price `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-5`
+### I68 - the ad period is known, written down in seven places, and used by nothing that looks at a price `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-5` `2-WAY` `RUNG1 READ`
 
 **Source.** `practical-time-series-analysis` (SUNY Poly, Sadigov and Thistleton; queue-5 entry 1,
 worked 2026-09-08). Routed to `data-quality-craft/modelling-a-time-series.md`, with the estate half in
@@ -5000,7 +5067,7 @@ a predicted price to a reader: the course produces 80% and 95% intervals for eve
 forecast with no out-of-sample error estimate is a fabricated number, which the project's standing
 rules already forbid. If a fitted expectation is ever used here it is used to judge an observation
 we already have, never to publish one we do not.
-### I69 - the only forecast this estate makes has its answer stored next to it and has never been scored `PARTLY DONE - scorer shipped, cadence half open` `queue-5`
+### I69 - the only forecast this estate makes has its answer stored next to it and has never been scored `PARTLY DONE - scorer shipped, cadence half open` `queue-5` `2-WAY` `RUNG1 READ`
 
 **SHIPPED, same day.** `grocery/audit-ad-forecast.ps1` scores the prediction against the outcome and
 runs as watchdog check 5a. It is an INVERTED ratchet: a full-cycle miss is history and can never
@@ -5088,7 +5155,7 @@ is the only reason a score existed at all.
 unchanged: nothing here ships a predicted number to a reader. This item only asks that a prediction we
 already make gets marked against the answer we already store.
 
-### I70 - the ad forecast is scored and never baselined, so 37 of 47 is not yet a verdict `OPEN` `queue-6`
+### I70 - the ad forecast is scored and never baselined, so 37 of 47 is not yet a verdict `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Source.** `packt-time-series-forecasting-with-facebook-prophet-in-python-7sw5w` (Packt, "the Lazy
 Programmer"; queue-6 group A entry 1, worked 2026-09-08). Routed to
@@ -5139,7 +5206,9 @@ other candidates; nobody has checked whether they carry a baseline.
 
 ---
 
-### I71 [ID ALLOCATED 2026-09-08 by ops/merge-backlog-inbox.ps1's allocator, which is now the only writer of this file's ids. It was I-WS1, an explicitly unallocated placeholder, because four course agents ran concurrently and the I-series had no lock.]
+### I71 - per-store pacing is a static constant, and a closed loop on observed latency has never been costed `OPEN - RUNG 1 IS A MEASUREMENT THAT MAY CLOSE THIS WONTFIX` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+*[ID ALLOCATED 2026-09-08 by `ops/merge-backlog-inbox.ps1`'s allocator, which is now the only writer of this file's ids. It was I-WS1, an explicitly unallocated placeholder, because four course agents ran concurrently and the I-series had no lock. HEADING REWRITTEN 2026-09-08 to the `### <ID> - <title>` shape: as filed it matched neither the id nor the state pattern, so `ops/audit-backlog-status.ps1` skipped it as prose and this item was absent from every board count taken since.]*
 
 **OPEN.** Source: `packt-web-scraping-tutorial-with-scrapy-and-python-for-beginners-0edsw` (Packt,
 Coursera), worked 2026-09-08.
@@ -5187,7 +5256,9 @@ alongside each pull and check whether latency rises before a wall. If it does no
 
 ---
 
-### I72 [ID ALLOCATED 2026-09-08, was I-WS2. As above.]
+### I72 - a 200 with a correct selector and zero rows has four causes, and the estate's vocabulary names two `OPEN - RUNG 1 IS TWO WORDS OF VOCABULARY` `queue-6` `2-WAY` `RUNG1 DOC`
+
+*[ID ALLOCATED 2026-09-08, was I-WS2. HEADING REWRITTEN 2026-09-08 for the same reason as I71: it was invisible to the audit.]*
 
 **OPEN.** Same source course, worked 2026-09-08.
 
@@ -5245,7 +5316,7 @@ nobody has looked at its Network tab**. That check costs one person one hour per
 retire the 75-minute pull. It should be an item in its own right if this one is split.
 
 
-### I73 - the identity graph has 205 nodes joined to nothing and seven two-node islands, and no check looks `OPEN` `queue-6`
+### I73 - the identity graph has 205 nodes joined to nothing and seven two-node islands, and no check looks `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5270,7 +5341,7 @@ exclude patterns, not adjacency.
 zero or an explanation, which makes it ratchet-shaped rather than a gate that is red on day one -
 the standing rule this estate already applies to `audit-write-seam` and `audit-fact-claims`.
 
-### I74 - the nodes table has no cached degree, so every fan-out question is a full scan of 85,891 edges `OPEN` `queue-6`
+### I74 - the nodes table has no cached degree, so every fan-out question is a full scan of 85,891 edges `OPEN` `queue-6` `1-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5287,7 +5358,7 @@ the node, which is section 50.4's standard move for exactly this.
 notice that before running it. **Forward rule: enter from the SKU, or from a Commodity down through
 `instance_of`; never from a Store outward.**
 
-### I75 - retiring a commodity id is a graph cut, and both gates that guard it reason about names `OPEN` `queue-6`
+### I75 - retiring a commodity id is a graph cut, and both gates that guard it reason about names `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5303,7 +5374,7 @@ the estate's entire cross-store pricing premise as a measurable graph property r
 Neither counts what an id actually joins. The second-largest component in this graph is currently
 two nodes, so a cut is not hypothetical.
 
-### I76 - valence is rising and every check here counts rows `OPEN` `queue-6`
+### I76 - valence is rising and every check here counts rows `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5318,7 +5389,7 @@ distance between any two nodes is falling.
 them can see a query getting slower because a region densified rather than because it grew. One
 query answers it: edges per node, tracked over time.
 
-### I77 - the one-hop memory expansion experiment now has a design and, more importantly, a control group `OPEN` `queue-6`
+### I77 - the one-hop memory expansion experiment now has a design and, more importantly, a control group `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5341,7 +5412,7 @@ re-ranking is the wrong one**, and the reason is now written down instead of ass
 zero-in-degree files are the control that makes it honest** - a case set drawn only from the linked
 61% would overstate the gain by construction.
 
-### I78 - the recall hooks are absent from the watch list that detects a silently dead automation `OPEN` `queue-6`
+### I78 - the recall hooks are absent from the watch list that detects a silently dead automation `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5363,7 +5434,7 @@ verified 2026-09-08. So the whole recall loop can stop firing and nothing anywhe
 **The cheapest fix, and it is small.** One row per hook in `expected-automations.json` naming its log
 file and a staleness bound. Nothing new needs building.
 
-### I79 - the recall log has the wrong join key, so a subagent's rows fold into its parent's and look like a busy session `OPEN` `queue-6`
+### I79 - the recall log has the wrong join key, so a subagent's rows fold into its parent's and look like a busy session `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5384,7 +5455,7 @@ name for: an agreeing number.
 already uses, and any new log starts with both. There is no call stack in a hook to carry context
 implicitly, so it goes in the row deliberately or it is not there at all.
 
-### I80 - every threshold in the estate is an upper bound, so not one of them can fire on nothing happening `OPEN` `queue-6`
+### I80 - every threshold in the estate is an upper bound, so not one of them can fire on nothing happening `OPEN` `queue-6` `2-WAY` `RUNG1 DOC`
 
 **Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5407,7 +5478,7 @@ If the answer is "goes quiet, and the alert cannot fire", add the floor in the s
 on a rate is detective by construction, and a preventive gate cannot substitute for it, because the
 failure it catches is one where nothing ran to be gated.
 
-### I81 - if a hook ever records its own duration it must record the RAW value, and that has to be decided before any data exists `NEEDS A RULING` `queue-6`
+### I81 - if a hook ever records its own duration it must record the RAW value, and that has to be decided before any data exists `NEEDS A RULING` `queue-6` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5428,7 +5499,7 @@ case rule wearing a different coat.
 **What is being asked.** Whether to add the duration field at all. It is cheap, but it is the only
 one of the three that touches the hot path of every tool call.
 
-### I82 - seventeen files read compare-deals.ps1's SOURCE and twelve of them execute it, and both the rules file and the memory say three `OPEN` `queue-6`
+### I82 - seventeen files read compare-deals.ps1's SOURCE and twelve of them execute it, and both the rules file and the memory say three `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-software-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5482,7 +5553,7 @@ are dot-sourced libraries that work. This is not a new pattern to invent, it is 
 If the answer is "read its source", that is the finding. And any claim about how many things depend
 on X is measured with a grep and a date, never carried in prose or a filename.
 
-### I83 - no quality attribute is stated anywhere in the estate, so nothing can be evaluated against one `OPEN` `queue-6`
+### I83 - no quality attribute is stated anywhere in the estate, so nothing can be evaluated against one `OPEN` `queue-6` `2-WAY` `RUNG1 DOC`
 
 **Merged from `design\backlog-inbox\lane-software-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5508,7 +5579,7 @@ with priorities, per subsystem. What does not port is the meeting.
 lists independently and diff them. That is the same instrument as this estate's case-NAME set diff:
 two independent lists compared, where either alone looks complete.
 
-### I84 - the guards are an open control loop, and capture-watchdog exists because of it `OPEN` `queue-6`
+### I84 - the guards are an open control loop, and capture-watchdog exists because of it `OPEN` `queue-6` `2-WAY` `RUNG1 DOC`
 
 **Merged from `design\backlog-inbox\lane-software-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5533,7 +5604,7 @@ rather than a library boundary, even though the library shape exists and works. 
 organisation has no interface negotiation to force one.
 
 
-### I85 - the orphan census only ever examined grocery, and 72 scripts elsewhere have never been checked by anything `OPEN` `queue-6`
+### I85 - the orphan census only ever examined grocery, and 72 scripts elsewhere have never been checked by anything `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-orchestrator-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5588,7 +5659,7 @@ orchestrator at the end of a parallel course run, and it is now documented as su
 `$KNOWN` only holds `grocery\` entries. It is uncalled, on purpose, and unrecordable.
 
 
-### I86 - The guard-completion contract is a convention at 793 call sites, and PowerShell can make it structural `NEEDS A RULING` `queue-6`
+### I86 - The guard-completion contract is a convention at 793 call sites, and PowerShell can make it structural `NEEDS A RULING` `queue-6` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\lane-design-patterns-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5735,7 +5806,7 @@ be the command that yields *that* number.
 **Not fixed here** because `.claude/rules/grocery.md` is outside a course run's write scope; a course
 run may only write this inbox file.
 
-### I89 - a successful email send whose draft delete fails re-sends to a real person every day, forever `OPEN` `queue-6`
+### I89 - a successful email send whose draft delete fails re-sends to a real person every day, forever `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-event-driven-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5765,7 +5836,7 @@ at least make the condition visible, which it currently is not.
 **Why it matters here.** This is a live paid site and the recipient is a member of the public who
 asked once for one thing. A duplicate is a small harm; an unbounded daily duplicate is not.
 
-### I90 - `meal-prep` reads `grocery/out` directly in 36 scripts and nothing declares the dependency `OPEN` `queue-6`
+### I90 - `meal-prep` reads `grocery/out` directly in 36 scripts and nothing declares the dependency `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-event-driven-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5794,7 +5865,7 @@ path literals and ratchets a high-water mark downward, in the shape of `audit-wr
 `audit-fact-claims`. Deliberately a ratchet, not a hard gate: the number is 36 today and a gate that
 is red on day one teaches people to ignore red.
 
-### I91 - the Worker `/notify` shared secret is a deterministic function of the Ghost admin key, with no expiry or rotation path `NEEDS A RULING` `queue-6`
+### I91 - the Worker `/notify` shared secret is a deterministic function of the Ghost admin key, with no expiry or rotation path `NEEDS A RULING` `queue-6` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\lane-event-driven-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5819,7 +5890,7 @@ admin key is the cheap version. Nobody should build either until that is ruled.
 scoped to adversarial input against LLM systems and its own "does not own" section says so. This is
 reported to the orchestrator as a proposed domain and is NOT routed anywhere.
 
-### I92 - A promotion hold latches forever and does not record what it latched against `OPEN` `queue-6`
+### I92 - A promotion hold latches forever and does not record what it latched against `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-feedback-systems-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5863,7 +5934,7 @@ day nobody is watching. On-demand is safe but is the state we already have, beca
 
 ---
 
-### I93 - The estate's two one-directional actuators do not share their safety machinery `NEEDS A RULING` `queue-6`
+### I93 - The estate's two one-directional actuators do not share their safety machinery `NEEDS A RULING` `queue-6` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\lane-feedback-systems-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5895,7 +5966,7 @@ spaces rather than these.
 
 ---
 
-### I94 - Nothing records how a threshold in this estate was tuned `OPEN` `queue-6`
+### I94 - Nothing records how a threshold in this estate was tuned `OPEN` `queue-6` `2-WAY` `RUNG1 DOC`
 
 **Merged from `design\backlog-inbox\lane-feedback-systems-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5923,7 +5994,7 @@ probably not worth it.
 not checked - the file was not opened.
 
 
-### I95 - every threshold here is tuned on a sample the threshold itself selected `OPEN` `queue-6`
+### I95 - every threshold here is tuned on a sample the threshold itself selected `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-text-retrieval-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -5987,7 +6058,7 @@ is how a labelled set below the bar would get built in the first place.
 conditions it drops, or whether they never get scored at all. If it is the second, the item is bigger
 than a log line and the ruling is Brad's.
 
-### I96 - the estate's headline matcher number is arithmetic-mean and so is blind to its hardest cases `OPEN` `queue-6`
+### I96 - the estate's headline matcher number is arithmetic-mean and so is blind to its hardest cases `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\lane-text-retrieval-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -6019,7 +6090,7 @@ needed before the next matcher comparison, not after it**, per E21.
 the instrument has a blind spot, not that anything was mis-measured through it.
 
 
-### I97 - Ghost holds every member's signup date and status, and no code here has ever read either for analysis `NEEDS A RULING` `queue-5`
+### I97 - Ghost holds every member's signup date and status, and no code here has ever read either for analysis `NEEDS A RULING` `queue-5` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -6053,7 +6124,7 @@ change that - the script must aggregate in memory and commit only the bucketed c
 nothing at all and print. Brad rules on whether a members pull happens at all, and if so whether any
 per-member row may touch disk.
 
-### I98 - A point-in-time member export cannot reconstruct WHEN anyone left, so the snapshot has to start before the analysis `OPEN` `queue-5`
+### I98 - A point-in-time member export cannot reconstruct WHEN anyone left, so the snapshot has to start before the analysis `OPEN` `queue-5` `1-WAY` `RUNG1 BLOCKED`
 
 **Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -6072,7 +6143,7 @@ built on top of it yet.
 by the existing daily chain. Aggregate counts only, no member rows - which also settles the privacy
 half of the finding above.
 
-### I99 - `send-price-alerts.ps1`'s label subscriptions are an already-captured behavioural signal nobody has looked at `OPEN` `queue-5`
+### I99 - `send-price-alerts.ps1`'s label subscriptions are an already-captured behavioural signal nobody has looked at `OPEN` `queue-5` `1-WAY` `RUNG1 BLOCKED`
 
 **Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -6095,7 +6166,7 @@ selection on noise - the same rule `meal-prep/pipeline/bm25_dedup_probe.py:309` 
 **Honest caveat.** With a single membership this small the comparison may have no power at all;
 report the counts with their denominators and be willing to say the question is unanswerable yet.
 
-### I100 - `cohort` means four different things within reach of one session here `OPEN` `queue-5`
+### I100 - `cohort` means four different things within reach of one session here `OPEN` `queue-5` `2-WAY` `RUNG1 DOC`
 
 **Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
