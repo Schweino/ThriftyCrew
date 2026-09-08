@@ -65,6 +65,82 @@ Sixteen items were declaring it. Fifty-six were it.
 A `DONE` or `PARKED` heading owes neither field: the axes exist to sort a queue and a closed item is
 not in one. The audit enforces that split rather than demanding a retro-fit over 62 finished items.
 
+## The consequence table (2026-09-08)
+
+Built after the reversibility sort, over what survived it. **Objectives as rows, items as columns** -
+the point being that it terminates and an argument does not. Scored `++` strong, `+` some, `.` none,
+`-` a cost.
+
+**The objectives, and why these four.** *Reader-facing correctness* outranks everything because this
+is a live paid site. *Throughput* is Brad's own bottleneck. *Blast radius* is what a wrong answer
+costs to unwind. *Cost to run* is hours on one box.
+
+### The band that reaches a reader, and therefore goes first
+
+| Objective | I44 | I59 | I60 | I64 | I92 |
+|---|---|---|---|---|---|
+| reader-facing correctness | `++` rich results | `+` unproven | `++` three quantified claims with no quantity | `++` **wrong verdict, live, measured** | `+` via a weaker board |
+| throughput | `.` | `.` | `.` | `.` | `+` 15 aliases never learned |
+| blast radius if wrong | low | **high** - 125 files | medium - 3 published posts | medium - one tool | low |
+| cost to run | waiting | (a) minutes | hours | rung 1 **done** | hours |
+
+**I64 dominates this band and is the only one with a measured live defect.** Rung 1 ran: the page
+tells a paying reader `Decent, not instant` when 22 weeks of data say `good buy`. I59 is the one to be
+careful with - **its rung (a) costs minutes and may close the item outright**, while its rung (c)
+touches 125 published files, so doing (c) before (a) would be the most expensive possible order.
+
+### Test and measurement quality - the band where three items overlap and none is dominated
+
+| Objective | I37 mutation | I39 resolved-count | I65 consistency oracle | I95 near-miss row |
+|---|---|---|---|---|
+| reader-facing correctness | `+` indirect | `+` indirect | `++` catches real-input drift | `+` |
+| throughput | `.` | `.` | `+` before a refactor | `.` |
+| blast radius | none - temp copies | none | none - temp checkout | none |
+| cost to run | ~1 h for one detector | a scan | ~1 h for one parser | one log line |
+| **needs a ruling** | no | no | **no** | no |
+
+**I65 wins on the objectives and it is the one to do first**, which is what I38's own update says: it
+needs no ruling, its second version is whatever `git show` returns, and every git-bus stage boundary
+is the shape the oracle wants. **Nothing here is dominated** - a `-SelfTest` proves a detector still
+fires on one frozen fixture (I37 asks whether the fixtures would notice the detector being wrong), a
+resolved count asks whether the assertion ran at all (I39), and the oracle asks whether 4,000 real
+rows changed (I65). Three different questions.
+
+**I95 is the one that cannot be backfilled** and so is time-sensitive in the same way I98 is: the
+best-scoring candidate that did NOT clear the bar is the only row that can ever show a floor belongs
+lower, and it is not being written today.
+
+### Reliability - and the two that are NOT the same item
+
+| Objective | I32 duration window | I35 second observation | I45 stage input assertion | I80 (done) |
+|---|---|---|---|---|
+| what it filters | a transient real condition | **a broken instrument** | stale input to a stage | a producer that stopped |
+| cost to run | rung 1 is a count | rung 1 is a count | rung 1 is a read | shipped |
+
+**I32 and I35 must not be merged, and the table is why**: same observer watched longer, versus a
+different observer immediately. An estate whose probes are the thing most likely to be broken needs
+the second at least as much as the first. **I45 is the cheapest of the three** and has already bitten
+twice - the 08:30 job that ran inside its predecessor's window, and a watchdog named 0930 that fires
+at 10:30.
+
+### Deleted as dominated, or priced and found not worth commissioning
+
+**Pass 4 says: before commissioning any measurement, price the answer. If the result would change no
+action, that is a legitimate reason to close PARKED, and this file already has precedent.** Three
+were closed on that test this session, and each one names its trigger rather than being abandoned:
+
+- **I54** - a quant-format benchmark. **No quant change is proposed and none is pending**, so the
+  number changes no decision today; it is also blocked behind I53. PARKED with a trigger.
+- **I76** - edges per node over time. Real, cheap, and **has no consumer and no threshold**: nothing
+  would act differently at any value it could return. PARKED with a trigger.
+- **I84** - the guards as an open control loop. **Names a shape and proposes no rung**, and its
+  forward half is now inside I93's ruling. PARKED as absorbed.
+
+**Not deleted, and worth saying why:** I83 (quality attributes) looks like ceremony for a
+one-person estate and mostly is - but the one instrument in it that ports is *get two independent
+priority lists and diff them*, which is this estate's own case-NAME set diff wearing different
+clothes. It stays OPEN on the strength of that one line, not of the method.
+
 ---
 
 ## Shipped
@@ -4585,7 +4661,29 @@ threshold or a model artefact. Nothing was changed. `graph/lib/llm.py` and `grap
 are outside that list but were left alone anyway, because a measurement change is exactly the thing
 a run that just read a course about measurement should not make unsupervised.
 
-### I54 - the quant format's dequantisation cost is named as a ceiling and never compared `OPEN` `queue-4` `2-WAY` `RUNG1 BLOCKED`
+### I54 - the quant format's dequantisation cost is named as a ceiling and never compared `PARKED - PRICED 2026-09-08: NO QUANT CHANGE IS PROPOSED, SO THE NUMBER CHANGES NO DECISION` `queue-4`
+
+**`[PARKED 2026-09-08 under Pass 4 - price the measurement before commissioning it.]`**
+
+The finding is correct and stands: `serve.ps1` records that aggregate throughput goes 36.6 to 80.4
+tok/s from 1 to 8 slots and then **goes flat because Q3_K dequantisation compute becomes the
+ceiling** - a real measurement, better than any course supplied - and **no file in this estate
+benchmarks two quant formats against each other on this card.**
+
+**What the measurement would cost, and what it would change.** Fetching an alternative GGUF and
+benchmarking both is a real block of GPU time on the one box. **No quant change is proposed and none
+is pending.** So the number would be recorded and nothing would be decided differently by it. That is
+the legitimate reason to park a measurement rather than run it.
+
+It is also **blocked behind I53**: running it before the decode bar means what it says would produce
+two ROUND-TRIP numbers and label them decode, which is worse than having no comparison.
+
+**THE TRIGGER THAT REOPENS THIS, written now so the requirement is not rediscovered later:** anyone
+proposing a quant change. At that moment the standing rule (from H1) is *state the free-VRAM number
+you expect to be left with*, and this item adds the second column that the flat-past-8-slots
+measurement already implies - **a smaller file that dequantises more slowly can LOSE throughput while
+gaining headroom.** Until then, any quant proposal is arguing about file size and guessing about
+speed, and this item is the note saying so.
 
 **Source.** Same course, module 3. Routed to
 `model-finetuning-craft/publishing-and-automation.md` 11.3 and that domain's `applies-here.md`.
@@ -4937,7 +5035,40 @@ Only if the tail is heavy is there a build, and the build is a bounded wait rath
 **Constraint acknowledged.** Nothing was changed. Standing context is
 `~/.claude/skills/reliability-craft/applies-here.md` entry 4; the method is `pipeline-throughput.md` 8.
 
-### I62 - `MIN_SCORE`'s on-topic and off-topic score distributions now overlap completely, so the calibrator's suggested threshold cannot be right `OPEN - THE MEASUREMENT IS DONE; WHAT IS OPEN IS ONE COMMENT` `queue-4` `2-WAY` `RUNG1 DOC`
+### I62 - `MIN_SCORE`'s on-topic and off-topic score distributions now overlap completely, so the calibrator's suggested threshold cannot be right `DONE - THE CALIBRATOR NOW PRINTS THE OVERLAP INSTEAD OF LETTING A MARGIN STAND IN FOR IT, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08, and half of it was already closed before this session started.]`**
+
+The item proposed that the calibrator stop printing a *suggested MIN_SCORE* derived from a separation
+that no longer exists. **That print is already gone** - `recall-hook-calibrate.py` now mentions it
+only in its header, as the historical error it caused. What remained was the second half of the
+item's ask, and it is the half that still had teeth: the VERDICT line prints a **margin**, and a
+margin is one number standing in for two distributions.
+
+So the calibrator now prints, in its own output, whether the two sets separate at all - and says
+plainly what follows when they do not. **Run live 2026-09-08, exit 0:**
+
+```
+DO THE TWO SETS SEPARATE? on-topic 8.54-69.26 over 159 probe(s); off-topic 0.00-11.68 over 13.
+THEY OVERLAP: 5 of 13 off-topic prompt(s) score at or above the LOWEST on-topic probe.
+NO CUTOFF SEPARATES THESE SETS, so no suggested MIN_SCORE is meaningful and none is printed.
+```
+
+**The overlap is worse than the item measured** - 5 of 13 off-topic prompts sit at or above the
+lowest on-topic probe, against the 4 of 13 recorded when the item was filed. The 2026-09-06
+suggestion to raise `MIN_SCORE` from 9.0 to 11.2 rested on a margin of 0.79 between one pair of
+extremes; **11.2 would now sit above a great many on-topic probes.**
+
+**And where two sets overlap everywhere the question changes**, which the output now says: not *which
+cutoff separates them* but *which error is cheaper* - and that is already answered in the code.
+`recall-hook.py` calls the floor *deliberately permissive* and a wrong hit costs about 40 bytes of
+injected pointer. **A written asymmetric cost outranks an unwritten margin.**
+
+**NO THRESHOLD WAS CHANGED**, which the item required and which matters here for a second reason:
+`MIN_SCORE` governs the recall offers that feed a course run's own dedup, so a run proposing to move
+it is the interested party. This changes what the calibrator SAYS, never what the hook does.
+
+**Verified:** the calibrator ran to exit 0 with the new block, read off its real corpus of 159 probes.
 *Source: Decision Making (course 17) and Simulation Models (course 18).*
 
 `~/.claude/skills/course/LEDGER.md` 4310 records a deliberate refusal: `recall-hook-calibrate.py`
@@ -5792,7 +5923,26 @@ the estate's entire cross-store pricing premise as a measurable graph property r
 Neither counts what an id actually joins. The second-largest component in this graph is currently
 two nodes, so a cut is not hypothetical.
 
-### I76 - valence is rising and every check here counts rows `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I76 - valence is rising and every check here counts rows `PARKED - PRICED 2026-09-08: A REAL MEASUREMENT WITH NO CONSUMER AND NO THRESHOLD` `queue-6`
+
+**`[PARKED 2026-09-08 under Pass 4.]`** The measurement is real and stands:
+`database-craft/applies-here.md` recorded 84,748 edges over 47,319 nodes and on 2026-09-08 it is
+**85,891 over 48,043** - **+1,143 edges against +724 nodes**, so edges accumulate about **1.6 times
+faster than nodes**. That is rising valence, and it means the average distance between any two nodes
+is falling. Every freshness and volume check in the estate counts ROWS and none of them can see a
+query getting slower because a region densified rather than grew.
+
+**Priced: the query is one line and the answer changes no action.** There is no consumer for the
+series, no threshold anyone would set on it, and no decision that would go differently at any value
+it could return. Tracking edges-per-node over time would produce a second uninspected timing series -
+which is precisely the mistake I33 recorded about the FIRST one, and it would be worse to repeat it
+knowingly.
+
+**THE TRIGGER: a graph query that is measurably slower than it was, or the first cached-degree work
+(I74).** At that point edges-per-node is the number that says whether the cause was growth or
+densification, and the two have different fixes. **The forward rule from I74 is the cheap half and it
+is already recorded there: enter from the SKU, or from a Commodity down through `instance_of`, never
+from a Store outward** - `sold_at` is 54% of the graph and fans out 20,133 ways from `store:walmart`.
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -6043,7 +6193,30 @@ with priorities, per subsystem. What does not port is the meeting.
 lists independently and diff them. That is the same instrument as this estate's case-NAME set diff:
 two independent lists compared, where either alone looks complete.
 
-### I84 - the guards are an open control loop, and capture-watchdog exists because of it `OPEN` `queue-6` `2-WAY` `RUNG1 DOC`
+### I84 - the guards are an open control loop, and capture-watchdog exists because of it `PARKED - ABSORBED INTO I93'S RULING; IT NAMES A SHAPE AND PROPOSES NO RUNG` `queue-6`
+
+**`[PARKED 2026-09-08.]`** The analysis is good and is kept: `grocery/guards.ps1` and
+`lib/guard-contract.ps1` have the sensor and the controller and the **actuator is missing** - a guard
+senses, compares to a set point, reports the error, and nothing closes the loop. That is open-loop
+control, whose named cost is the one that bites here: **an open loop cannot check itself to see
+whether it is succeeding.** And `grocery/capture-watchdog.ps1` exists precisely because of that gap,
+which is the estate independently inventing a **second** loop rather than closing the first - the more
+expensive of the two ways out, taken without the tradeoff ever being stated.
+
+**It is parked because it proposes no rung.** There is no measurement, no build and no ruling in it;
+it is a name for something already built and already working. Naming it was the value and the name is
+now recorded.
+
+**Its live half has moved to where a decision can be made about it: I93**, which asks whether *a
+control constant that may only move one way needs a rate limit and a plausibility bar* is a shape
+worth naming, and which has the one instance with a real cost sitting under it (I92's fifteen
+permanently held aliases). Written up in `design/RULINGS-2026-09-08.md`.
+
+**The Conway reading is kept because it is the part nobody would re-derive:** one person plus many
+spawned agents produced 273 scripts, 32 of them uncalled, with the largest reuse mechanism being
+source-text LIFTING rather than a library boundary - even though the library shape exists here and
+works (`match-lib`, `known-wrong-lib`, `identity-lib`). **A single-writer organisation has no
+interface negotiation to force one.** That is I82's territory and I82 stays OPEN.
 
 **Merged from `design\backlog-inbox\lane-software-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
