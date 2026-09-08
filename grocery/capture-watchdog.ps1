@@ -16,6 +16,10 @@
     3. CAPTURED     is there a comparison board dated today?
     4. PUBLISHED    is public\board.json newer than that board?
     5. AD HEALTH    audit-ad-status: any store's ad closed or its pull overdue?
+    5a. AD FORECAST audit-ad-forecast: has next_pull been LANDING? A ratchet on
+        full-cycle misses - a store skipping a whole weekly ad means the board
+        carried a stale price for a week. Different question from 5: that one is
+        about today, this one is about the record.
     6. BROWSER      is a browser-capture flag still sitting unworked?
 
   Anything that fails is ONE email, not six. Exit 0 = healthy, 1 = findings.
@@ -684,6 +688,28 @@ if (Test-Path $adsc) {
   $adRc = $LASTEXITCODE
   $line = ($adOut | Where-Object { $_ -match 'stores needing a pull' } | Select-Object -First 1)
   if ($adRc -ne 0) { [void]$findings.Add("AD STALE: $line") } else { [void]$ok.Add(($line -replace '\s+', ' ').Trim()) }
+}
+
+# ---- 5a. ad FORECAST: is next_pull actually landing on the day? --------------
+# A DIFFERENT QUESTION FROM 5, and that is why it is its own check rather than
+# more output from audit-ad-status. Check 5 asks "is an ad closed RIGHT NOW",
+# which is about today. This asks "has the PREDICTION been right", which is about
+# the record - and until 2026-09-08 nothing asked it at all, though the answer had
+# been sitting one line from the question in ad-schedule.json since June.
+#
+# It is a RATCHET and it is silent on the two misses already on the record. A
+# rise means a store newly skipped an entire ad cycle, which means the board
+# carried a stale price for a week. Same no-2>&1 rule as check 5, for the same
+# reason: this script sets EAP=Stop and a redirected native stderr would kill the
+# watchdog here and silently skip checks 6 to 8.
+$adfc = Join-Path $root 'audit-ad-forecast.ps1'
+if (Test-Path $adfc) {
+  $afOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $adfc
+  $afRc = $LASTEXITCODE
+  $afLine = ($afOut | Where-Object { $_ -match 'AD FORECAST FAILED|CADENCE DRIFT|^PASSED|BASELINE WRITTEN|COULD NOT EVALUATE' } | Select-Object -First 1)
+  if ($afRc -eq 2) { [void]$findings.Add("AD FORECAST: $afLine") }
+  elseif ($afRc -eq 3) { [void]$findings.Add("AD FORECAST could not be evaluated: $afLine") }
+  else { [void]$ok.Add((($afLine -replace '\s+', ' ').Trim())) }
 }
 
 # ---- 5b. rollback / instant-savings windows about to expire ------------------

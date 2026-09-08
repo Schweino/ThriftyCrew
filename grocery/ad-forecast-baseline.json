@@ -1,0 +1,12 @@
+﻿{
+    "per_store":  {
+                      "Aldi":  1,
+                      "Fareway":  0,
+                      "Family Fare":  0,
+                      "Hy-Vee":  0,
+                      "Baker\u0027s":  1
+                  },
+    "note":  "BASELINE for full-cycle ad-forecast misses. A full miss is HISTORY and cannot be undone, so this number may only STAY THE SAME. A RISE is a newly skipped ad cycle and hard-fails. A FALL means history was rewritten or the reader broke, and is refused rather than recorded.",
+    "generated":  "2026-09-08T06:30:02",
+    "full_misses":  2
+}
