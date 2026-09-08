@@ -28,6 +28,20 @@ writes `NOTHING TO FILE` on a line of its own - that is a valid result and it is
 nothing" is told apart from "never landed". **Do not run the merge and do not edit
 `BACKLOG-course-findings.md`.** The backlog session merges and commits them.
 
+## The estate checkout is shared, which is why you commit none of it
+
+`[ADDED 2026-09-08.]` **15 live sessions share `C:\Codex\ThriftyCrew`**, one working tree and one
+current branch between them. One of them switched the branch mid-afternoon and another session's
+commit landed on it unnoticed.
+
+**This costs you nothing as long as you follow the rule above**, because you commit nothing in that
+repository - you only drop a file per lane into `design\backlog-inbox\` and leave it. A new file in
+a directory nobody else writes is safe on any branch, and the estate session merges it from wherever
+it lands.
+
+**It is a reason not to relax that rule under time pressure.** "I will just commit the inbox file
+myself" is how a course lane's commit ends up on somebody's half-finished triage branch.
+
 ## Your gates
 
 `check-skills.py` and `build-catalogue.py`, run **once, by you, after the last lane lands** - never

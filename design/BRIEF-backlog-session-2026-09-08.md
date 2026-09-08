@@ -30,6 +30,33 @@ that is a valid result, not an error.
 it touches no estate code. Do not run `check-skills.py` or `build-catalogue.py` - those judge the
 store while the other session is editing it, and a red you cannot attribute is worse than no gate.
 
+## FIRST, CHECK WHICH BRANCH YOU ARE ON, AND KEEP CHECKING
+
+`[ADDED 2026-09-08, an hour after this brief was written, because it happened to me.]`
+
+**15 live sessions share this working directory.** Measured that day. A git checkout has one
+working tree, one index and one current branch, so **any of those sessions can change the branch
+under you between one command and the next** - and one did: it created `triage/2026-09-08` at 10:32,
+and the commit carrying this brief landed on that branch instead of `main` because I never looked.
+
+```
+git branch --show-current
+```
+
+**Run it before every commit.** If you are not where you expect, do not switch the tree back - another
+session may be mid-task on it. Push your commit to where it belongs instead, which needs no checkout
+and disturbs nobody:
+
+```
+git push origin <current-branch>:main      # only when it is a true fast-forward
+git fetch origin && git branch -f main origin/main
+```
+
+**If this session is going to do sustained estate work, take a worktree rather than sharing this
+tree.** The estate already owns that path - `ops\seed-worktree.ps1` and `.worktreeinclude` exist
+because a fresh worktree lacks the gitignored boards and every data audit is blind without them.
+Ask Brad before doing it; it is his machine and his other sessions.
+
 ## Your first task is TRIAGE, and you change nothing until Brad approves the order
 
 **Do not start working items.** Read all of them, then come back with a proposed order.
