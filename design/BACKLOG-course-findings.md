@@ -5139,7 +5139,7 @@ other candidates; nobody has checked whether they carry a baseline.
 
 ---
 
-### I-WS1 [ID UNALLOCATED: assign at the between-courses pass; four course agents ran concurrently on 2026-09-08 and the I-series allocator has no lock]
+### I71 [ID ALLOCATED 2026-09-08 by ops/merge-backlog-inbox.ps1's allocator, which is now the only writer of this file's ids. It was I-WS1, an explicitly unallocated placeholder, because four course agents ran concurrently and the I-series had no lock.]
 
 **OPEN.** Source: `packt-web-scraping-tutorial-with-scrapy-and-python-for-beginners-0edsw` (Packt,
 Coursera), worked 2026-09-08.
@@ -5187,7 +5187,7 @@ alongside each pull and check whether latency rises before a wall. If it does no
 
 ---
 
-### I-WS2 [ID UNALLOCATED: as above]
+### I72 [ID ALLOCATED 2026-09-08, was I-WS2. As above.]
 
 **OPEN.** Same source course, worked 2026-09-08.
 
@@ -5243,4 +5243,322 @@ its example. Three of the seven feeds here are already server-side JSON; the ope
 written down is **whether any of the four browser-required stores is browser-required only because
 nobody has looked at its Network tab**. That check costs one person one hour per store and could
 retire the 75-minute pull. It should be an item in its own right if this one is split.
+
+
+### I73 - the identity graph has 205 nodes joined to nothing and seven two-node islands, and no check looks `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `big-data-graph-analytics` (UC San Diego, Amarnath Gupta), queue-6 group I entry 15,
+worked 2026-09-08. Routed to `rag-craft/graph-analytics.md`; estate half in that domain's
+`applies-here.md` entries 12 to 17.
+
+**Measured read-only against `graph\sqlite\graph.db` on 2026-09-08, and verified independently by
+the orchestrator: 48,043 nodes and 85,891 edges.** Degree histogram: **205 nodes at degree 0**,
+12,479 at 1, 31,168 at exactly 2, thinning to a maximum of 20,133 at `store:walmart`. **213 weakly
+connected components**, the largest holding 47,824 nodes, which is 99.5%; seven of the rest are two
+nodes.
+
+**Why no existing check can see it.** Nothing is wrong with any of those rows individually, so every
+row-level `data-quality-craft` check passes. A degree-0 node is only visible as a property of the
+graph, and no first-party code computes one: a grep for `networkx|centrality|betweenness|connected
+component|shortest path|in-degree|adjacency` over the tree returns no graph analytics at all. The
+`traversal` hits are directory-traversal security checks; `graph/learning/lint_adjacency.py` lints
+exclude patterns, not adjacency.
+
+**Why it is the right FIRST graph check.** It has no threshold to argue about. The correct value is
+zero or an explanation, which makes it ratchet-shaped rather than a gate that is red on day one -
+the standing rule this estate already applies to `audit-write-seam` and `audit-fact-claims`.
+
+### I74 - the nodes table has no cached degree, so every fan-out question is a full scan of 85,891 edges `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** As above.
+
+**What is missing.** `nodes` carries no degree column, so answering "how many edges touch this node"
+means scanning the edge table. The course's own remedy is one pass that stores the degree back onto
+the node, which is section 50.4's standard move for exactly this.
+
+**Why it matters beyond speed, and this is the real point.** `sold_at` is 46,708 of 85,891 edges,
+54% of the graph, and it is **directional in cost**: from a SKU it returns one row, from
+`store:walmart` it returns 20,133. Any query, join or expansion that enters at a `Store` and follows
+`sold_at` outward fans out twenty thousand ways. With no cached degree there is no cheap way to
+notice that before running it. **Forward rule: enter from the SKU, or from a Commodity down through
+`instance_of`; never from a Store outward.**
+
+### I75 - retiring a commodity id is a graph cut, and both gates that guard it reason about names `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** As above.
+
+**The measurement that makes it concrete.** Remove the seven `Store` nodes and the graph shatters
+into **12,343 components**. Remove the 708 `Commodity` nodes and the top seven surviving pieces are
+one per store. **Connectivity therefore rests on two node types totalling 715 rows**, and that states
+the estate's entire cross-store pricing premise as a measurable graph property rather than a belief.
+
+**What guards it today.** `meal-prep/pipeline/retire_food_db_row.py` greps zero for
+`edges|graph.db|degree|connect`, and the `commodity-registrar` agent rules on names and duplicates.
+Neither counts what an id actually joins. The second-largest component in this graph is currently
+two nodes, so a cut is not hypothetical.
+
+### I76 - valence is rising and every check here counts rows `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** As above.
+
+**Measured.** `database-craft/applies-here.md` recorded 84,748 edges over 47,319 nodes. On
+2026-09-08 it is **85,891 over 48,043**: **+1,143 edges against +724 nodes**, so edges are
+accumulating about 1.6 times faster than nodes. That is rising valence, and it means the average
+distance between any two nodes is falling.
+
+**Why nothing would notice.** Every freshness and volume check in the estate counts rows. None of
+them can see a query getting slower because a region densified rather than because it grew. One
+query answers it: edges per node, tracked over time.
+
+### I77 - the one-hop memory expansion experiment now has a design and, more importantly, a control group `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** As above, plus `rag-craft/applies-here.md` 15.
+
+**What was measured.** The memory store holds **228 `[[links]]` inside it across 87 distinct
+targets with 3 dangling**, and **270** counting the six `.claude/rules` files. `[CORRECTED
+2026-09-08: the orchestrator's brief said 252, which does not reproduce at either scope. The target
+and dangling counts DID reproduce, so the error was scope rather than counting.]`
+
+**The finding that changes the experiment.** In-degree histogram: **53 of 137 files, 39%, are cited
+by nothing**, six are isolated entirely, and the three most-cited are
+`an-agreeing-number-escapes-scrutiny` (16), `green-fixture-is-not-production-coverage` (12) and
+`rerun-gates-after-a-spawned-build` (9). **All three are general rules.** So in-degree here measures
+GENERALITY, not relevance - which means **one-hop expansion is the right experiment and centrality
+re-ranking is the wrong one**, and the reason is now written down instead of assumed.
+
+**What would settle it.** `graph-retrieval.md` 28's mechanism, scored per
+`evaluating-retrieval.md`: recall@k, a frozen case set, one row per case per arm. **The 53
+zero-in-degree files are the control that makes it honest** - a case set drawn only from the linked
+61% would overstate the gain by construction.
+
+### I78 - the recall hooks are absent from the watch list that detects a silently dead automation `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `observability-engineering-metrics-logs-traces` (Edureka), queue-6 entry 18, worked
+2026-09-08. Routed to `reliability-craft/metrics-storage-and-queries.md`; estate half in that
+domain's `applies-here.md` section 1.
+
+**The distinction that makes this a defect rather than a nice-to-have.** A **heartbeat** is written
+by the watched thing. It can separate "found nothing" from "died", but it cannot separate either
+from "never invoked", because an absent heartbeat row and absent traffic are the same bytes. A
+**liveness signal** is written by the watcher on the watcher's own schedule, and that is the only
+shape that can say *this should have run and did not*.
+
+**The estate already owns the second half and never pointed it at its newest loop.**
+`grocery/health-heartbeat.ps1` is a silent-death detector, run from `grocery/capture-watchdog.ps1`
+against `grocery/expected-automations.json`. **The recall hooks appear nowhere in that watch list**,
+verified 2026-09-08. So the whole recall loop can stop firing and nothing anywhere goes red.
+
+**The cheapest fix, and it is small.** One row per hook in `expected-automations.json` naming its log
+file and a staleness bound. Nothing new needs building.
+
+### I79 - the recall log has the wrong join key, so a subagent's rows fold into its parent's and look like a busy session `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** As above, `applies-here.md` section 4.
+
+**Measured 2026-09-08 by reading the last row of each file.** `recall-log.jsonl` rows carry
+`ev, heading, path, q, score, sid, t`. `recall-reflex-log.jsonl` rows carry
+`acted, agent, chash, id, kind, sid, t, tool, waived`. **The reflex log has `agent`; the recall log
+does not.**
+
+**Why `sid` alone cannot be the key.** `automatic-recall.md` already establishes, over 46 measured
+payloads, that a subagent's hook calls carry the parent's `session_id` byte for byte. So a join
+across the two logs on `sid` **silently folds a subagent's rows into its parent's**, and the result
+looks like a busy session rather than like a bug. That is the worst failure shape this estate has a
+name for: an agreeing number.
+
+**Fix.** Every log this loop writes carries `sid` **plus** `agent`, the same composite the dedup
+already uses, and any new log starts with both. There is no call stack in a hook to carry context
+implicitly, so it goes in the row deliberately or it is not there at all.
+
+### I80 - every threshold in the estate is an upper bound, so not one of them can fire on nothing happening `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** As above, `applies-here.md` section 3.
+
+**Measured.** The alert conditions in `grocery/` are staleness and band breaches. The ratchets in
+`ops/` carry a high-water mark that may only go DOWN. `ops/run-gates.ps1` answers a boolean. The only
+two that watch for absence are `grocery/health-heartbeat.ps1` and the cloud `heartbeat.yml`, and both
+watch **scheduled tasks**, never throughput. **No file in the estate records a lower-bound alert on a
+rate.**
+
+**Not the same as the volume check, and the boundary matters.** The standing volume check asks
+whether the expected ROWS arrived. This asks whether the STAGE is still running at its expected rate.
+A stage that runs and emits nothing fails the first and passes the second. A stage that stopped fails
+both, and only the second says which. Add the floor here and keep the row count there; do not fold
+one into the other.
+
+**Forward rule.** When adding any threshold, write down what the number does when the producer stops.
+If the answer is "goes quiet, and the alert cannot fire", add the floor in the same change. A floor
+on a rate is detective by construction, and a preventive gate cannot substitute for it, because the
+failure it catches is one where nothing ran to be gated.
+
+### I81 - if a hook ever records its own duration it must record the RAW value, and that has to be decided before any data exists `NEEDS A RULING` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** As above, `applies-here.md` section 2.
+
+**The state of things.** Every field in both hook logs is a fact or an identifier and **not one is a
+duration**, so "the estate has no metric with a unit" is a true description of the system rather than
+a gap in its reporting. Two of the three numbers worth having need no new instrumentation at all -
+offers per turn, and consulted over offered - because a rate can be derived from a log stream that is
+already being written. Only hook wall time needs a new field.
+
+**Why it needs a ruling before it needs code.** A histogram's resolution is fixed by its bucket
+boundaries **at instrumentation time**, and cannot be improved afterwards. In a per-event `.jsonl`
+there is no reason to pre-bucket, so the ruling is simply: **record the raw duration per row, never a
+mean.** A mean is the one shape that cannot be un-aggregated, which is the estate's own one-row-per-
+case rule wearing a different coat.
+
+**What is being asked.** Whether to add the duration field at all. It is cheap, but it is the only
+one of the three that touches the hot path of every tool call.
+
+### I82 - seventeen files read compare-deals.ps1's SOURCE and twelve of them execute it, and both the rules file and the memory say three `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-software-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `software-architecture` (queue-6 entry 6), worked 2026-09-08. Routed to
+`software-craft/architectural-styles.md` and `evaluating-an-architecture.md`; estate half in that
+domain's `applies-here.md`.
+
+**Measured 2026-09-08** by grep over `grocery/`, `ops/`, `meal-prep/`, `lib/` and `graph/` for
+`*.ps1`, worktrees excluded: **17 files read `compare-deals.ps1`'s own text with `Get-Content`, and
+12 of those 17 also call `Invoke-Expression`**, so they execute code lifted out of it by regex.
+Confirmed lifters include `grocery/build-walmart-deals.ps1:87`, `grocery/build-sams-deals.ps1:60`,
+`grocery/audit-match-contested.ps1:18` and `grocery/audit-household-in-food.ps1:16`.
+
+**The count in the estate's own documentation is 3.** `.claude/rules/grocery.md` says "Three scripts
+LIFT its functions" and cites a memory whose filename carries the number. Both live outside the
+skills store, so the course run corrected neither; that is what this item is for. **A count carried
+in prose, and worse in a FILENAME, cannot notice the twelfth caller arriving.**
+
+**What it is architecturally.** `compare-deals.ps1` is a component with a required interface and no
+provided one, so the socket has been jammed onto the source file. The estate already has the right
+shape elsewhere: `grocery/match-lib.ps1`, `grocery/known-wrong-lib.ps1` and `grocery/identity-lib.ps1`
+are dot-sourced libraries that work. This is not a new pattern to invent, it is an existing one
+`compare-deals.ps1` never got.
+
+**Forward rule.** Before adding a consumer to an existing script, ask what its provided interface is.
+If the answer is "read its source", that is the finding. And any claim about how many things depend
+on X is measured with a grep and a date, never carried in prose or a filename.
+
+### I83 - no quality attribute is stated anywhere in the estate, so nothing can be evaluated against one `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-software-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** As above.
+
+**Measured 2026-09-08.** A grep for `ATAM`, `architecture tradeoff`, `utility tree`,
+`quality attribute`, `Kruchten` and `Conway` over every `*.ps1`, `*.py` and `*.md` under the repo,
+with `.venv` and `site-packages` excluded, returns **zero matches**. The same six terms are a clean
+no-match over 1,251 sections of the skills store. There is also **no architecture diagram of any
+kind**: `UML`, `component-diagram`, `viewpoint`, `reference-architecture` and `4+1` in the
+architectural sense are absent from both.
+
+**What exists and why it is not this.** `docs/RUNTIME-MAP.md` is good and maps the runtimes and the
+git-bus, but it states no quality attribute, no priority and no scenario. `ops/run-gates.ps1`
+enforces correctness properties and says nothing about availability, modifiability, testability or
+performance **as requirements carrying targets**.
+
+**What to actually do, and what NOT to.** Do not open a nine-step ATAM here: there is one person and
+no stakeholder groups to convene. What ports is the **utility tree** - quality attributes, refined,
+with priorities, per subsystem. What does not port is the meeting.
+
+**The one method piece worth stealing outright.** When two parties both have priorities, get both
+lists independently and diff them. That is the same instrument as this estate's case-NAME set diff:
+two independent lists compared, where either alone looks complete.
+
+### I84 - the guards are an open control loop, and capture-watchdog exists because of it `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-software-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** As above.
+
+**The shape.** `grocery/guards.ps1` and `lib/guard-contract.ps1` have the sensor and the controller
+present and the **actuator missing**. A guard senses, compares to a set point and reports the error.
+Nothing closes the loop. That is textbook open-loop control, and the named cost is exactly the one
+that bites here: an open loop cannot check itself to see whether it is succeeding.
+
+**The evidence that this already cost something.** `grocery/capture-watchdog.ps1` exists precisely
+because of that gap. That is the estate independently inventing a **second** loop rather than closing
+the first, which is the more expensive of the two ways out and the one that was taken without the
+tradeoff ever being stated.
+
+**Related, and the same root.** Seven stores share one board pipeline with per-store
+`build-*-deals.ps1` scripts. That is domain engineering plus seven application engineerings, unnamed.
+The source-lifting item above is what a product line looks like with no declared reference
+architecture. Reading Conway's Law here is unusual but clean: one person plus many spawned agents
+produced 273 scripts, 32 of them uncalled, with the largest reuse mechanism being source-text lifting
+rather than a library boundary, even though the library shape exists and works. A single-writer
+organisation has no interface negotiation to force one.
+
+
+### I85 - the orphan census only ever examined grocery, and 72 scripts elsewhere have never been checked by anything `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-orchestrator-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Found 2026-09-08 by the orchestrator**, while trying to answer a much smaller question: does the
+new `ops\merge-backlog-inbox.ps1` get flagged as an orphan? It ran clean, and the reason it ran clean
+is the finding.
+
+**What the census actually covers.** `grocery/audit-script-census.ps1` defaults `$Root` to
+`$PSScriptRoot`, which is `grocery\`. So its POPULATION is the scripts in `grocery\` and nothing
+else. Its source side is wider, `Split-Path -Parent $Root`, so it reads the whole repo when deciding
+whether a grocery script has a caller. **That asymmetry is why the blind spot is invisible from the
+output**: the run reports "273 script(s) ... read against 632 executable file(s)" and both numbers
+look estate-wide. Only one of them is.
+
+**Sized 2026-09-08** by re-running it with `-Root` and `-ScanRoot` both set to the repo. It reports
+141 orphans. **That 141 is NOT the answer** and must not be quoted as one: the `$KNOWN` register's
+keys are relative to `$Root`, so at the repo root the 52 recorded deliberates stop matching and
+grocery's own 69 come back as false orphans. The honest number is the other side of the split:
+
+| Directory | Uncalled scripts no orphan check has ever examined |
+|---|---|
+| `.claude\` | 37 |
+| `meal-prep\` | 15 |
+| `site\` | 12 |
+| `ops\` | 4 |
+| `media\` | 2 |
+| `sidecar\` | 1 |
+| repo root | 1 |
+| **total** | **72** |
+
+Some of those 72 are certainly deliberate, run by hand or named only in a `.md` (`ops\seed-worktree.ps1`
+is one, cited in `CLAUDE.md`, and `.md` is not in the census's source extension list). **That is
+exactly the point.** The register that records "uncalled on purpose, and here is why" exists, works
+well, and covers one directory out of seven.
+
+**Why this is the shape the estate keeps paying for.** The census is a good gate with a scope nobody
+declared, and its own output states two totals that read as estate-wide. A count whose denominator is
+narrower than it looks is this estate's most expensive recurring defect, and the standing rule is
+that a rate prints with its denominator. **The gate should say which tree it examined, in its
+completion line, every run.**
+
+**What NOT to do, and this matters more than the fix.** Do not change the default `$Root` to the repo
+and land 72 findings on day one. The estate's own rule is that a gate red on day one for a backlog
+nobody is about to clear teaches people to ignore red. The shape that fits is the one already used by
+`audit-write-seam` and `audit-fact-claims`: a ratchet with a high-water mark that may only go DOWN,
+seeded at today's 72, plus the scope line in the output so the next reader is not misled the way this
+one was.
+
+**Immediate consequence, unresolved.** `ops\merge-backlog-inbox.ps1` is run by hand by the
+orchestrator at the end of a parallel course run, and it is now documented as such in
+`skills\course\orchestration.md`. There is nowhere to record that fact as a deliberate, because
+`$KNOWN` only holds `grocery\` entries. It is uncalled, on purpose, and unrecordable.
 
