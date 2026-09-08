@@ -181,6 +181,12 @@ if ($SelfTest) {
   Set-Content (Join-Path $inb 'lane-a.md') "## first finding`n``OPEN`` ``queue-6```n`nbody one`n" -Encoding UTF8
   Set-Content (Join-Path $inb 'lane-b.md') "## second finding`n``PARTLY DONE`` ``queue-6```n`nbody two`n" -Encoding UTF8
 
+  # Byte length BEFORE the merge, so the line-ending assertion below can look at the
+  # appended region alone. The seed above is written by Set-Content, which ends it with
+  # [Environment]::NewLine, so asserting over the whole file would fail on the fixture's
+  # own trailing CRLF and prove nothing about the writer under test.
+  $seedLen = ([IO.File]::ReadAllBytes($bl)).Length
+
   $out = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   $code = $LASTEXITCODE
   $after = Get-Content $bl -Raw -Encoding UTF8
@@ -188,6 +194,22 @@ if ($SelfTest) {
   _C 'MUST FIRE' 'ids are allocated sequentially from the existing maximum' ($after -match '### I41 - first finding' -and $after -match '### I42 - second finding') 'wrong ids'
   _C 'MUST FIRE' 'each item records which lane file it came from' ($after -match 'lane-a\.md' -and $after -match 'lane-b\.md') 'no provenance'
   _C 'MUST NOT FIRE' 'the inbox is emptied so a second run cannot double-file' (@(Get-ChildItem $inb -Filter *.md).Count -eq 0) 'inbox not cleared'
+
+  # MUST FIRE - the founding bug, 2026-09-08. The first real merge appended 75 CRLF into a
+  # 5,927-line LF file and all 22 cases here stayed green, because every one of them reads
+  # the result with Get-Content -Raw, which cannot see a line ending. Git said it, not this
+  # script - and git normalises on the way in, so the commit was clean and `git diff` showed
+  # nothing. THE ASSERTION HAS TO BE ON BYTES or it is not testing the thing that broke.
+  # Assign, THEN wrap - never @(expression) inline, per the estate's array-collapse rule.
+  $allBytes = [IO.File]::ReadAllBytes($bl)
+  $sliceRaw = $allBytes[$seedLen..($allBytes.Length - 1)]
+  $addedBytes = @($sliceRaw)
+  $crCount = @($addedBytes | Where-Object { $_ -eq 13 }).Count
+  _C 'MUST FIRE' 'the appended block is LF: no CR byte anywhere in it' ($crCount -eq 0) "$crCount CR byte(s)"
+  # CLEAN TWIN - the behaviour a line-ending change is most likely to break on its way past:
+  # the block must still be separated from what was already there, so the first appended
+  # byte is a newline and headings do not run onto the previous line.
+  _C 'CLEAN TWIN' 'the appended block still starts on a fresh line' ($addedBytes.Count -gt 0 -and $addedBytes[0] -eq 10) "first byte $($addedBytes[0])"
 
   $out2 = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   _C 'MUST NOT FIRE' 'an empty inbox is exit 0 and writes nothing' ($LASTEXITCODE -eq 0 -and (Get-Content $bl -Raw -Encoding UTF8) -eq $after) $LASTEXITCODE
@@ -382,12 +404,17 @@ $i = $next
 foreach ($f in $findings) {
   $tag = if ($f.Tag) { " ``$($f.Tag)``" } else { '' }
   Write-Output ("  I{0,-4} {1,-58} <- {2}" -f $i, $f.Title.Substring(0, [Math]::Min(58, $f.Title.Length)), $f.From)
-  [void]$block.AppendLine("")
-  [void]$block.AppendLine("### I$i - $($f.Title) ``$($f.State)``$tag")
-  [void]$block.AppendLine("")
-  [void]$block.AppendLine("**Merged from ``design\backlog-inbox\$($f.From)`` on $((Get-Date).ToString('yyyy-MM-dd')).** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.")
-  [void]$block.AppendLine("")
-  [void]$block.AppendLine($f.Body)
+  # LF EXPLICITLY, never AppendLine. `[FIXED 2026-09-08, measured.]` AppendLine emits
+  # [Environment]::NewLine, which is CRLF on this box, and the backlog is an LF file. The
+  # first real merge put 75 CRLF into 5,927 LF and NOTHING IN THIS SCRIPT NOTICED - git
+  # normalises on the way in, so the commit was clean and `git diff` showed nothing. That is
+  # the estate's own crlf-flip-is-invisible-in-git-diff trap, arriving through a writer.
+  [void]$block.Append("`n")
+  [void]$block.Append("### I$i - $($f.Title) ``$($f.State)``$tag`n")
+  [void]$block.Append("`n")
+  [void]$block.Append("**Merged from ``design\backlog-inbox\$($f.From)`` on $((Get-Date).ToString('yyyy-MM-dd')).** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.`n")
+  [void]$block.Append("`n")
+  [void]$block.Append("$($f.Body)`n")
   $i++
 }
 
@@ -398,7 +425,10 @@ if ($DryRun) {
   exit 0
 }
 
-Add-Content -LiteralPath $Backlog -Value $block.ToString() -Encoding UTF8
+# NOT Add-Content: it appends [Environment]::NewLine after the value on top of whatever the
+# value already ends with. AppendAllText writes exactly the bytes given, and the explicit
+# UTF8Encoding($false) is the no-BOM form the workspace CLAUDE.md prescribes.
+[IO.File]::AppendAllText($Backlog, $block.ToString(), (New-Object Text.UTF8Encoding($false)))
 # The inbox is emptied only after a successful append, so a crash re-runs cleanly
 # rather than losing the findings - the failure this whole script exists for.
 foreach ($f in $files) { Remove-Item -LiteralPath $f.FullName -Force }

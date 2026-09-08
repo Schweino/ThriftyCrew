@@ -5922,3 +5922,81 @@ probably not worth it.
 **Not measured on this run.** Whether `sidecar/THRESHOLDS.md`'s rows carry their variant counts was
 not checked - the file was not opened.
 
+
+### I95 - every threshold here is tuned on a sample the threshold itself selected `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-text-retrieval-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** "Text Retrieval and Search Engines" (ChengXiang Zhai, UIUC), week 6, routed to
+`rag-craft/thresholds-and-filtering.md` 53. The course states it about news filtering and it is a
+property of the training sample, not of the scorer, so it transfers to anything with a cutoff.
+
+**The finding.** A filter learns from what it delivered, because that is the only thing anybody
+judged. That history is not a random sample - it is exactly the set the current threshold let
+through - so optimising the threshold on it can only ever recover an **upper bound** on the true
+optimum. The threshold might belong lower, and no amount of data collected through the current
+threshold can show that, because the items below it were never delivered and never judged.
+
+**Where it lands here, and this one is exact.** `grocery/audit-alert-precision.ps1`'s own header says
+what it measures: "how often each alert, **when it fires**, is actually right." Its whole input is
+firings, by way of the dispositions `grocery/triage-close.ps1` records on closed items. That file is
+already careful about the two things it can see - it prints the denominator, and it refuses a
+precision under `-MinCases` rather than quoting a coin flip. **What it structurally cannot see is the
+near-miss**: the condition that scored just under the bar and never became an item. So every
+disposition this estate has ever recorded is evidence about whether the threshold is too LOW, and
+none of it is evidence about whether it is too HIGH.
+
+The same shape holds for `~/.claude/skills/recall-hook.py`'s `MIN_SCORE`/`MIN_COSINE`:
+`recall-log.jsonl` records offers, `recall-leg-log.jsonl` records which leg won, and neither records
+the top candidate that failed the floor.
+
+**Why it matters rather than being a curiosity.** It gives the drift a direction. A threshold
+measured only through itself does not wander; it **ratchets toward silence**, because every piece of
+evidence it can gather comes from firings, and the only failure it can observe is a false alarm.
+Nothing in the loop can ever argue for firing more.
+
+**It is not I94, and it sharpens I94.** I94 is that nothing records how many values were TRIED for a
+tuning constant. This is that even a full sweep of values, scored honestly, would find the wrong
+answer, because the scoring set is censored. Both want the same one-line fix in different places.
+
+**What it would touch.** One row: on every evaluation, log the best-scoring candidate that did NOT
+clear the bar, with its score. For the alert side that is the near-threshold condition the daily
+chain considered and dropped; for the recall hook it is the top section under the floor. It is the
+only row that can ever show a floor belongs lower, and it cannot be backfilled - the same shape as
+`.claude/rules/measurement.md`'s E24 rule about writing one row per case per arm.
+
+**What was NOT measured on this run.** Whether the daily chain currently computes a score for
+conditions it drops, or whether they never get scored at all. If it is the second, the item is bigger
+than a log line and the ruling is Brad's.
+
+### I96 - the estate's headline matcher number is arithmetic-mean and so is blind to its hardest cases `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-text-retrieval-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same course, week 4, routed to `rag-craft/evaluating-retrieval.md` 14b. MAP is an
+arithmetic mean over queries and is therefore dominated by its large values, which are the EASY
+queries. gMAP, the geometric mean, is dominated by the small ones. They can rank two systems
+differently and neither is correct in general.
+
+**Where it lands.** `sidecar/matcher_eval.py` is this estate's exemplar scorer and it chose its
+metrics well - recall@k and MRR, with an explicit must-fire case asserting that an unranked row
+lowers MRR rather than vanishing from it, which is the abstention trap handled correctly. Checked and
+did NOT find a P@k comparison anywhere, so 14c's insensitivity bug is not present.
+
+**The gap is narrower than that and still real.** `mrr(ranks)` is a plain arithmetic mean of `1/r`.
+Reciprocating already compresses the hard end hard: moving a case from rank 100 to rank 40 moves that
+case's contribution by 0.015. **So a change that helps only the hardest rows is close to invisible in
+the estate's headline matcher number**, and a change that helps the already-good rows is not. That is
+the same failure the estate has already written down about rates - `.claude/rules/measurement.md`'s
+"a number that moved is not a number that improved" - arriving through the averaging rather than
+through the delta.
+
+**What it would touch.** Nothing needs to change today; `matcher_eval.py` reports per-case ranks and
+already writes one row per case, so the hard-case view is derivable from data that exists. The ask is
+one extra printed line beside MRR - the geometric mean, or simply the count of cases still unranked
+at 25 - so that a run which improved only the tail can be told from one that did not. **A number is
+needed before the next matcher comparison, not after it**, per E21.
+
+**Explicitly not claimed.** No matcher change has been proposed or measured on this run. This says
+the instrument has a blind spot, not that anything was mis-measured through it.
+
