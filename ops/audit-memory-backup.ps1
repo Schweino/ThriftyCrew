@@ -19,7 +19,7 @@
   local, with NO REMOTE, and this guard exists as much to keep it out of the public repo as to keep it
   backed up. Those are the same job: "memory and git must not drift" cuts both ways.
 
-  Six checks:
+  Seven checks:
     1. HISTORY EXISTS   - the memory directory is a git repository at all
     2. NO REMOTE        - it has no push target, so it cannot leak to a public host
     3. NOT IN THIS REPO - no memory file is tracked by ThriftyCrew
@@ -27,8 +27,14 @@
     5. INDEX INTEGRITY  - MEMORY.md and the files on disk agree: no links to files that are gone, no
                           duplicate links, and every memo REACHABLE - named by MEMORY.md, or linked as
                           [[slug]] by a memo MEMORY.md names. Reachability, not flat listing: hub routing
-                          is the store's documented convention (2026-09-05, queue 2026-09-05-e42efd)
+                          is the store's documented convention (2026-09-05, queue 2026-09-05-e42efd).
+                          EVERY unreachable name is printed, because that list is the worklist
+                          (2026-09-08, queue 2026-09-08-231ef6)
     6. ENCODING INTACT  - no mojibake, the founding damage of this guard
+    7. REACHABILITY REGRESSION - a memo that was reachable at the previous commit and is not now, named,
+                          with the hub whose link disappeared. Added 2026-09-08 after a consolidation
+                          pass deleted 56 routing wikilinks from four hubs and orphaned 25 memos in one
+                          stroke, invisibly, because the only number that moved had no stored baseline
   Exit 0 clean, 2 a real finding, 3 BLIND (nothing to check - a pass that proves nothing).
   -Sync commits pending memory changes, then re-checks. -SelfTest runs frozen fixtures.
 #>
@@ -117,6 +123,100 @@ function Get-GitOut([string]$Dir, [string]$GitArgs) {
   $p = [System.Diagnostics.Process]::Start($psi)
   $out = $p.StandardOutput.ReadToEnd(); $null = $p.StandardError.ReadToEnd(); $p.WaitForExit()
   return [pscustomobject]@{ Text = $out; Code = $p.ExitCode }
+}
+
+function Get-MemoryReachability {
+  <#
+    WHICH MEMOS RECALL CAN REACH, and through what. Pure, and lifted out of check 5 on 2026-09-08
+    (queue 2026-09-08-231ef6) so the SAME rule can be run over a PAST commit as well as over the
+    files on disk. Two snapshots of one rule is what makes a regression arm possible; two copies of
+    the rule would have been the estate's own most-repeated root cause.
+
+    $GetText is a scriptblock rather than a directory read for the same reason: on disk it reads a
+    file, at a revision it reads `git grep` output, and neither the rule nor its fixture has to care.
+
+    Returns hub_of: child -> the indexed memos that link it. The regression arm needs to name the hub
+    whose link disappeared, and a bare reachable/not boolean cannot.
+
+    ONE HOP ONLY, unchanged: a memo reachable only from a memo that is itself unindexed is still
+    unreachable, because two hops is not recall, it is a chain nobody follows.
+  #>
+  param([string]$IndexText, $Names, [scriptblock]$GetText)
+  $nameSet = @{}
+  foreach ($n in @($Names)) { $nameSet[[string]$n] = $true }
+  $linked = New-Object System.Collections.Generic.List[string]
+  foreach ($l in ([string]$IndexText -split "`r?`n")) {
+    $m = [regex]::Match($l, '\]\(([^)]+\.md)\)')
+    if ($m.Success) { [void]$linked.Add($m.Groups[1].Value) }
+  }
+  $hubOf = @{}
+  $uniqueLinked = @(@($linked) | Sort-Object -Unique)
+  foreach ($lk in $uniqueLinked) {
+    if (-not $nameSet.ContainsKey([string]$lk)) { continue }
+    $t = ''
+    try { $t = [string](& $GetText ([string]$lk)) } catch { $t = '' }
+    if (-not $t) { continue }
+    # [[slug]], [[slug.md]] and [[slug|label]] all name the same memo. The alias and anchor forms are
+    # stripped rather than ignored, or a hub that labels its links would read as routing nothing.
+    foreach ($m in [regex]::Matches($t, '\[\[([^\]\|#]+?)(?:[|#][^\]]*)?\]\]')) {
+      $s = $m.Groups[1].Value.Trim()
+      if (-not $s) { continue }
+      if ($s -notmatch '(?i)\.md$') { $s = $s + '.md' }
+      if (-not $hubOf.ContainsKey($s)) { $hubOf[$s] = New-Object System.Collections.Generic.List[string] }
+      if (-not $hubOf[$s].Contains([string]$lk)) { [void]$hubOf[$s].Add([string]$lk) }
+    }
+  }
+  $direct = New-Object System.Collections.Generic.List[string]
+  $viaHub = New-Object System.Collections.Generic.List[string]
+  $unreach = New-Object System.Collections.Generic.List[string]
+  foreach ($n in @($Names)) {
+    $nn = [string]$n
+    if ($linked -contains $nn) { [void]$direct.Add($nn) }
+    elseif ($hubOf.ContainsKey($nn)) { [void]$viaHub.Add($nn) }
+    else { [void]$unreach.Add($nn) }
+  }
+  return [pscustomobject]@{ linked = @($linked); hub_of = $hubOf
+                            direct = @($direct); via_hub = @($viaHub); unreachable = @($unreach) }
+}
+
+function Get-ReachabilityRegressions {
+  <#
+    A MEMO THAT WAS REACHABLE AND IS NOT ANY MORE, named, with the hub whose link went missing.
+
+    2026-09-08, queue 2026-09-08-231ef6. On 2026-09-07 two consolidation commits faded four HUB memos
+    down to pointers and took 56 routing wikilinks with them. In this store a hub IS the only index
+    line its children have, so that orphaned 25 memos instantly - and nothing said so, because the
+    only number that moved was hub reachability falling from about 64 to 39, and no baseline for it
+    was stored anywhere. It surfaced a DAY LATER, as outright unreachability, in an alert that named
+    five of the twenty-five and prescribed -Sync.
+
+    A git repository already holds the baseline. So the question "did this edit orphan anybody" is
+    answerable at the moment of the edit, by name, and that is the only moment at which the person
+    holding the deleted text is still in the room.
+
+    Reports only memos that STILL EXIST and were reachable before: a deleted memo is check 5's job,
+    not a regression.
+  #>
+  param($Before, $After)
+  $out = New-Object System.Collections.Generic.List[object]
+  if (-not $Before -or -not $After) { return $out }
+  $wasReachable = @{}
+  foreach ($n in @($Before.direct))  { $wasReachable[[string]$n] = 'a line in MEMORY.md' }
+  foreach ($n in @($Before.via_hub)) { $wasReachable[[string]$n] = 'a hub memo' }
+  foreach ($n in @($After.unreachable)) {
+    $nn = [string]$n
+    if (-not $wasReachable.ContainsKey($nn)) { continue }
+    $lost = New-Object System.Collections.Generic.List[string]
+    if ($Before.hub_of.ContainsKey($nn)) {
+      foreach ($h in @($Before.hub_of[$nn])) {
+        $stillThere = $false
+        if ($After.hub_of.ContainsKey($nn)) { $stillThere = (@($After.hub_of[$nn]) -contains [string]$h) }
+        if (-not $stillThere) { [void]$lost.Add([string]$h) }
+      }
+    }
+    [void]$out.Add([pscustomobject]@{ name = $nn; was = [string]$wasReachable[$nn]; lost_hubs = @($lost) })
+  }
+  return $out
 }
 
 function Test-MemoryStore {
@@ -224,27 +324,69 @@ function Test-MemoryStore {
   # reported, and that is correct: two hops is not recall, it is a chain nobody follows.
   # The counts are reported SEPARATELY (direct / via a hub) so a hub that stops routing its children is
   # still visible - the number that would move is the hub count, and a reader can see it move.
-  $hubbed = @{}
-  foreach ($l in (@($linked | Sort-Object -Unique))) {
-    $p = Join-Path $Dir $l
-    if (-not (Test-Path $p)) { continue }
-    $t = [IO.File]::ReadAllText($p, [Text.Encoding]::UTF8)
-    # [[slug]], [[slug.md]] and [[slug|label]] all name the same memo. The alias and anchor forms are
-    # stripped rather than ignored, or a hub that labels its links would read as routing nothing.
-    foreach ($m in [regex]::Matches($t, '\[\[([^\]\|#]+?)(?:[|#][^\]]*)?\]\]')) {
-      $s = $m.Groups[1].Value.Trim()
-      if (-not $s) { continue }
-      if ($s -notmatch '(?i)\.md$') { $s = $s + '.md' }
-      $hubbed[$s] = $true
-    }
-  }
-  $directCount = @($names | Where-Object { $linked -contains $_ }).Count
-  $hubCount    = @($names | Where-Object { ($linked -notcontains $_) -and $hubbed.ContainsKey($_) }).Count
-  $unreachable = @($names | Where-Object { ($linked -notcontains $_) -and (-not $hubbed.ContainsKey($_)) })
+  $onDisk = { param($n) $p = Join-Path $Dir $n; if (Test-Path -LiteralPath $p) { return [IO.File]::ReadAllText($p, [Text.Encoding]::UTF8) } else { return '' } }
+  $reach = Get-MemoryReachability -IndexText ([IO.File]::ReadAllText($indexPath, [Text.Encoding]::UTF8)) -Names $names -GetText $onDisk
+  $directCount = @($reach.direct).Count
+  $hubCount    = @($reach.via_hub).Count
+  $unreachable = @($reach.unreachable)
 
   if ($orphans.Count)     { $issues.Add("MEMORY.md links $($orphans.Count) file(s) that do not exist: " + (($orphans | Select-Object -First 5) -join ', ')) }
-  if ($unreachable.Count) { $issues.Add("$($unreachable.Count) memory file(s) are in no index line and are linked from no indexed memo either, so recall will never surface them: " + (($unreachable | Select-Object -First 5) -join ', ')) }
+  # EVERY NAME, NOT THE FIRST FIVE (2026-09-08, queue 2026-09-08-231ef6). This list is not a sample of
+  # the problem, it IS the worklist: each name is one routing link somebody has to put back. The alert
+  # of 2026-09-08 named 5 of 25 and then prescribed -Sync, a remedy that does nothing for
+  # unreachability, which is how 25 accumulated instead of being cleared on the day the first appeared.
+  # An alert that publishes 20% of its own worklist and prescribes the wrong fix teaches people to
+  # ignore it. The remedy travels WITH the finding rather than in a shared Fix: line, because a
+  # multi-arm guard's shared footer is exactly where a wrong remedy hides.
+  if ($unreachable.Count) {
+    $issues.Add("$($unreachable.Count) memory file(s) are in no index line and are linked from no indexed memo either, so recall will never surface them. FIX: -Sync does nothing here. Give each one a line in MEMORY.md, or a [[wikilink]] from a hub memo MEMORY.md already names - in this store a hub IS the only index line its children have. All $($unreachable.Count): " + (($unreachable | Sort-Object) -join ', '))
+  }
   if ($dupes.Count)       { $issues.Add("MEMORY.md links the same file more than once: " + (($dupes | Select-Object -First 5) -join ', ')) }
+
+  # 7. REACHABILITY REGRESSION - did the last commit orphan anybody? -----------------------------------
+  # See Get-ReachabilityRegressions. Compares the files on disk against the PREVIOUS commit, so an
+  # orphaning edit is a finding at the moment it is made rather than a day later when it has crossed
+  # into outright unreachability. On-disk rather than HEAD on purpose: check 4 already requires a clean
+  # tree, so in the healthy case they are the same thing, and in the dirty case this one still looks.
+  # ONE `git grep` for the whole previous tree, not one `git show` per file: only lines carrying a
+  # wikilink matter to the rule, and 126 process spawns in a guard is a guard people switch off.
+  # A previous commit that cannot be read is a NOTE, never silence: a could-not-look is not a pass.
+  $checked++
+  $regressions = @()
+  $prevRev = Get-GitOut $Dir 'rev-parse HEAD~1'
+  $prevSha = (([string]$prevRev.Text) -split "`r?`n")[0].Trim()
+  if ($prevRev.Code -ne 0 -or -not $prevSha) {
+    $notes.Add('reachability regression: no previous commit to compare against, so this run proved nothing about regressions')
+  } else {
+    $prevIdx = Get-GitOut $Dir ('show ' + $prevSha + ':MEMORY.md')
+    $prevLs  = Get-GitOut $Dir ('ls-tree -r --name-only ' + $prevSha)
+    if ($prevIdx.Code -ne 0 -or $prevLs.Code -ne 0) {
+      $notes.Add('reachability regression: the previous commit could not be read, so this run proved nothing about regressions')
+    } else {
+      $prevNames = @((([string]$prevLs.Text) -split "`r?`n") | Where-Object { $_ -match '(?i)\.md$' -and $_ -notmatch '/' -and $_ -ne 'MEMORY.md' })
+      $gp = Get-GitOut $Dir ('grep -n -E "\[\[" ' + $prevSha)
+      $prevWiki = @{}
+      foreach ($gl in ((([string]$gp.Text) -split "`r?`n"))) {
+        $gm = [regex]::Match($gl, '^[0-9a-fA-F]+:([^:]+):\d+:(.*)$')
+        if (-not $gm.Success) { continue }
+        $gf = $gm.Groups[1].Value
+        if (-not $prevWiki.ContainsKey($gf)) { $prevWiki[$gf] = New-Object System.Text.StringBuilder }
+        [void]$prevWiki[$gf].AppendLine($gm.Groups[2].Value)
+      }
+      $getPrev = { param($n) if ($prevWiki.ContainsKey($n)) { return $prevWiki[$n].ToString() } else { return '' } }
+      $before = Get-MemoryReachability -IndexText ([string]$prevIdx.Text) -Names $prevNames -GetText $getPrev
+      $regressions = @(Get-ReachabilityRegressions $before $reach)
+      if ($regressions.Count) {
+        $lines = New-Object System.Collections.Generic.List[string]
+        foreach ($rg in $regressions) {
+          $viaTxt = 'its own index line was removed'
+          if (@($rg.lost_hubs).Count) { $viaTxt = 'the hub(s) that routed it stopped linking it: ' + ((@($rg.lost_hubs)) -join ', ') }
+          [void]$lines.Add($rg.name + ' (was reached through ' + $rg.was + '; ' + $viaTxt + ')')
+        }
+        $issues.Add("REACHABILITY REGRESSION: $($regressions.Count) memo(s) were reachable at $prevSha and are not now. FIX: put the routing back in the hub that lost it, or give the memo its own MEMORY.md line - do NOT delete the memo. " + ($lines -join ' | '))
+      }
+    }
+  }
 
   # 6. ENCODING INTACT - the founding damage
   $checked++
@@ -259,7 +401,8 @@ function Test-MemoryStore {
   # could not be shown to be right, 0 = everything was checked and holds.
   $rc = if ($issues.Count) { 2 } elseif ($blind.Count) { 3 } else { 0 }
   return @{ rc = $rc; issues = $issues; blind = $blind; notes = $notes; checked = $checked; files = $files.Count
-            direct = $directCount; hub = $hubCount; unreachable = $unreachable.Count }
+            direct = $directCount; hub = $hubCount; unreachable = $unreachable.Count
+            unreachable_names = @($unreachable); regressions = @($regressions) }
 }
 
 # ------------------------------------------------------------------ self-test
@@ -397,6 +540,70 @@ if ($SelfTest) {
   T 'CLEAN TWIN a store whose only unindexed memo is hub-routed reports ZERO findings (today it reports 1)' `
     (($r.rc -eq 0) -and ([int]$r.unreachable -eq 0)) ("rc=$($r.rc) " + ($r.issues -join '; '))
 
+  # ---- REACHABILITY REGRESSION + THE WHOLE WORKLIST (2026-09-08, queue 2026-09-08-231ef6) -------------
+  # FOUNDING BUG, frozen at minimum size: on 2026-09-07 two consolidation commits rewrote four HUB memos
+  # down to ~1.1KB pointers and deleted 56 routing wikilinks with them. In this store a hub IS the only
+  # index line its children have, so 25 memos were orphaned in one stroke - and the guard said nothing
+  # that day, because the only number that moved was hub reachability (about 64 -> 39) and no baseline
+  # for it existed. A day later it surfaced as unreachability, in an alert that named FIVE of the
+  # twenty-five and prescribed -Sync.
+  # SIX children on purpose: five would pass under the old Select-Object -First 5 truncation.
+  # NEVER REGENERATE FROM THE LIVE STORE: the routing was restored the same day, so a regenerated
+  # fixture would have nothing to find and this case would pass by finding nothing.
+  function NewRoutedStore {
+    param([string]$HubBody)
+    if (Test-Path $fx) { Remove-Item $fx -Recurse -Force }
+    New-Item -ItemType Directory -Force -Path $fx | Out-Null
+    Set-Content (Join-Path $fx 'MEMORY.md') "Hub memos route siblings that no longer hold their own line here.`n`n- [Hub](hub.md) - the family index" -Encoding UTF8
+    $routed = "Routed from the index:`n`n- [[c1]] - one`n- [[c2]] - two`n- [[c3]] - three`n- [[c4]] - four`n- [[c5]] - five`n- [[c6]] - six"
+    Set-Content (Join-Path $fx 'hub.md') $routed -Encoding UTF8
+    foreach ($c in @('c1', 'c2', 'c3', 'c4', 'c5', 'c6')) { Set-Content (Join-Path $fx ($c + '.md')) 'a routed sibling' -Encoding UTF8 }
+    $null = Get-GitOut $fx 'init'
+    $null = Get-GitOut $fx 'config user.name t'
+    $null = Get-GitOut $fx 'config user.email t@t'
+    $null = Get-GitOut $fx 'add -A'
+    $null = Get-GitOut $fx 'commit -m routed'
+    # the second commit is the edit under test
+    Set-Content (Join-Path $fx 'hub.md') $HubBody -Encoding UTF8
+    $null = Get-GitOut $fx 'add -A'
+    $null = Get-GitOut $fx 'commit -m edited'
+  }
+
+  # MUST FIRE: the hub is faded to a pointer and its six [[child]] links go with it.
+  NewRoutedStore "Consolidated: the lesson now lives in a skill. What follows is the episode."
+  $r = Test-MemoryStore $fx
+  $txt = ($r.issues -join ' ')
+  T 'MUST-FIRE a hub rewritten without its routing is a finding, not a quiet consolidation' ($r.rc -eq 2) ("rc=$($r.rc) " + $txt)
+  $allSix = $true
+  foreach ($c in @('c1.md', 'c2.md', 'c3.md', 'c4.md', 'c5.md', 'c6.md')) { if ($txt -notmatch [regex]::Escape($c)) { $allSix = $false } }
+  T 'MUST-FIRE with SIX orphans every single name is printed, not the first five - the list is the worklist' `
+    ($allSix -and ([int]$r.unreachable -eq 6)) ("unreachable=$($r.unreachable) " + $txt)
+  T 'MUST-FIRE it is reported as a REACHABILITY REGRESSION against the previous commit, naming the HUB that stopped linking them' `
+    ((@($r.regressions).Count -eq 6) -and ($txt -match 'REACHABILITY REGRESSION') -and ($txt -match 'hub\.md')) `
+    ("regressions=" + @($r.regressions).Count + ' ' + $txt)
+  T 'MUST-FIRE the unreachability finding carries a ROUTING remedy and says -Sync will not fix it' `
+    (($txt -match 'wikilink') -and ($txt -match '(?i)-Sync does nothing')) $txt
+
+  # CLEAN TWIN: the same consolidation, done correctly - the prose is rewritten and the routing is kept.
+  # Without this the arm would be flagging ordinary editing, which is the guard that gets switched off.
+  NewRoutedStore "Consolidated: the lesson now lives in a skill. What follows is the episode.`n`nRouted from the index:`n`n- [[c1]] - one`n- [[c2]] - two`n- [[c3]] - three`n- [[c4]] - four`n- [[c5]] - five`n- [[c6]] - six"
+  $r = Test-MemoryStore $fx
+  T 'CLEAN TWIN a hub whose PROSE is rewritten while its routing is preserved stays clean, with zero regressions' `
+    (($r.rc -eq 0) -and (@($r.regressions).Count -eq 0) -and ([int]$r.unreachable -eq 0)) `
+    ("rc=$($r.rc) regressions=" + @($r.regressions).Count + ' ' + ($r.issues -join '; '))
+  T 'CLEAN TWIN the six routed children still count as reached in one hop, so the hub convention is intact' `
+    (([int]$r.hub -eq 6) -and ([int]$r.direct -eq 1)) ("direct=$($r.direct) hub=$($r.hub)")
+
+  # MUST-NOT-FIRE: a memo DELETED outright is check 5's job (an index line pointing at nothing), never a
+  # reachability regression. A regression that also fires on deletion would double-report every tidy-up.
+  NewRoutedStore "Routed from the index:`n`n- [[c1]] - one`n- [[c2]] - two`n- [[c3]] - three`n- [[c4]] - four`n- [[c5]] - five"
+  Remove-Item (Join-Path $fx 'c6.md') -Force
+  $null = Get-GitOut $fx 'add -A'; $null = Get-GitOut $fx 'commit -m del'
+  $r = Test-MemoryStore $fx
+  T 'MUST-NOT-FIRE deleting a memo and its routing together is not a reachability REGRESSION - the memo is gone, not stranded' `
+    ((@($r.regressions).Count -eq 0) -and ($r.rc -eq 0)) `
+    ("rc=$($r.rc) regressions=" + @($r.regressions).Count + ' ' + ($r.issues -join '; '))
+
   # BLIND: an empty store must never read as clean
   if (Test-Path $fx) { Remove-Item $fx -Recurse -Force }
   New-Item -ItemType Directory -Force -Path $fx | Out-Null
@@ -430,6 +637,7 @@ Write-Output ("memory-backup: {0} memory file(s), {1} check(s) run against {2}" 
 # stopped routing its children, and a count nobody prints is a change nobody sees.
 if ($null -ne $res.direct) {
   Write-Output ("  index: {0} memo(s) named directly in MEMORY.md, {1} reached in one hop from a hub memo it names, {2} reachable by neither" -f [int]$res.direct, [int]$res.hub, [int]$res.unreachable)
+  Write-Output ("  reachability regression vs the previous commit: {0}" -f @($res.regressions).Count)
 }
 foreach ($nte in @($res.notes)) { Write-Output ('  ok - ' + $nte) }
 if ($res.rc -eq 3) {
@@ -444,6 +652,10 @@ if ($res.issues.Count -eq 0) {
   exit 0
 }
 foreach ($i in $res.issues) { Write-Output ('  ' + $i) }
-Write-Output '  Fix: run this with -Sync to commit pending memory changes. An UNREVIEWED remote, or a memory file tracked by ThriftyCrew, must be removed by hand - that repo is PUBLIC. A remote that is a deliberate private backup goes in ops\memory-remote-allowlist.json with its evidence, and is re-proven private on every run.'
+# THE FOOTER IS FOR THE ARMS IT ACTUALLY ADDRESSES. It used to prescribe -Sync, remote removal and
+# untracking for every finding this guard can produce, which meant the two INDEX arms - unreachability
+# and reachability regression - were told to run a command that does nothing for them. Those two carry
+# their own FIX sentence inside the finding.
+Write-Output '  Fix: run this with -Sync to commit pending memory changes. An UNREVIEWED remote, or a memory file tracked by ThriftyCrew, must be removed by hand - that repo is PUBLIC. A remote that is a deliberate private backup goes in ops\memory-remote-allowlist.json with its evidence, and is re-proven private on every run. An unreachability or REACHABILITY REGRESSION finding is a ROUTING problem and carries its own fix above: -Sync will not clear either one.'
 Write-GuardComplete -Name 'memory-backup' -Summary ("files={0} issues={1}" -f [int]$res.files, $res.issues.Count)
 exit 2
