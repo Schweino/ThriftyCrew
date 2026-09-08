@@ -4988,7 +4988,44 @@ one edit to `sidecar/requirements.txt`. No board, no page, no published number, 
 **Constraint acknowledged.** Nothing was changed. Both versions above were read off the filesystem;
 no package was installed, upgraded or removed.
 
-### I59 - the standing "no em dashes" rule has no gate, and 3,151 em dashes sit in the lesson and Substack source `OPEN - THE MEASUREMENT IS DONE; ONE CHECK IS UNRESOLVED` `queue-4` `2-WAY` `RUNG1 BLOCKED`
+### I59 - the standing "no em dashes" rule has no gate, and 3,151 em dashes sit in the lesson and Substack source `PARKED - C128 IS SETTLED BY MEASUREMENT: NO PUBLISHED BODY CARRIES AN EM DASH` `queue-4`
+
+**`[CLOSED PARKED 2026-09-08. Option (a) was the recommendation, it cost minutes, and it closed the
+item outright exactly as the item predicted it might.]`**
+
+The open question was C128: *source markdown is not published output, and nobody has ever read a
+published lesson body.* Read now, through the Ghost Admin API, which returns the post's own HTML -
+the body a paying member is served.
+
+**Measured 2026-09-08 over EVERY published post, not a sample:**
+
+| set | bodies read | with an em dash |
+|---|---|---|
+| the 52-week lessons | **52 of 52** | **0** |
+| every other published post | **1,013 of 1,013** | **0** |
+| **total** | **1,065** | **0** |
+
+No body was skipped, and a post with no HTML would have been counted as skipped rather than scored 0.
+
+**VERDICT: the 3,151 em dashes in 125 source files DO NOT REACH A READER.** The standing rule is
+unbroken where it matters, and the item's own expensive option (c) - sweeping 125 content files and
+republishing each - **would be a real risk to live pages for no reader-facing gain. Do not do it.**
+Option (b), a ratcheted detector over reader-facing source, is also not worth building: it would
+guard a corpus that demonstrably does not ship the character.
+
+**A defect in the reading, recorded because it produced a confident wrong zero first.** The first
+attempt used `limit=all` and got back **exactly 100 posts**, none of which was a lesson, and reported
+*"published lessons matching ^week-N: 0"*. `limit=all` is CAPPED at 100 here; the real total is
+**1,565 posts, 1,065 published, over 16 pages**. A round 100 that answers a question is the shape
+`[[a-negative-search-result-must-prove-itself]]` exists for, and only the pagination meta showed it.
+
+**One observation, not a finding:** 8 of the 52 lessons and 4 of the 1,013 other posts contain an EN
+dash. The standing rule names the em dash specifically, so this is not a violation and nothing is
+proposed. Recorded so the next reader does not re-derive it.
+
+**Also unchanged:** nothing mechanical enforces the em-dash rule, which is still carried only inside
+five agent prompts and one archived `DeDash` helper that does not run. That remains true and is now
+known to be costing nothing.
 *Source: queue-4 group F, technical writing (2026-09-08).* `CLAUDE.md` line 57 states **"No em
 dashes"** under "Standing rules for anything that ships", and the workspace `CLAUDE.md` repeats it.
 Nothing mechanical enforces it. The rule is carried only inside five agent prompts
@@ -6976,7 +7013,56 @@ needed before the next matcher comparison, not after it**, per E21.
 the instrument has a blind spot, not that anything was mis-measured through it.
 
 
-### I97 - Ghost holds every member's signup date and status, and no code here has ever read either for analysis `NEEDS A RULING` `queue-5` `1-WAY` `RUNG1 RULING`
+### I97 - Ghost holds every member's signup date and status, and no code here has ever read either for analysis `DONE - RULED AND RUN 2026-09-08, AGGREGATE ONLY; NO PER-MEMBER ROW EXISTS ANYWHERE` `queue-5`
+
+**`[RULED BY BRAD 2026-09-08: option B of three - an aggregate-only pull may happen. Per-member rows
+on disk were REFUSED at any price. Built, run, and this is the result.]`**
+
+`ops/member-cohorts.ps1` reads `created_at` and `status` off each member, aggregates **in memory**,
+and writes `ops/member-cohorts.json` containing counts only.
+
+**The privacy boundary is ENFORCED, not intended**, and the fixtures assert each rule:
+
+1. **Three permitted properties**, held as a list a self-test pins at three - *a fourth entry is a
+   privacy change and must read as one in a diff*. `email` is never referenced by name anywhere.
+2. **The output can structurally only hold month strings, status strings and integers.** The
+   founding must-fire feeds the aggregator a row that DOES carry an address and a name, and asserts
+   neither survives into the aggregate.
+3. **No temp file, ever.** There is no intermediate write of any kind.
+4. **The output path is asserted BEFORE the first API call** - outside the repo, non-`.json`, and
+   relative paths are all refused, each with its own must-fire. Fetching first and validating after
+   would mean a bad destination is discovered with the data already in hand.
+
+A last line of defence refuses to write anything matching an address shape even though the structure
+cannot produce one. `-WhatIf` asserts the path and fetches nothing; it was run first and did.
+
+**THE ANSWER, 2026-09-08, `MEMBER-COHORTS-COMPLETE members=18 cohorts=2 undated=0`:**
+
+| cohort | total | comped | free | paid |
+|---|---|---|---|---|
+| 2026-07 | 15 | 7 | 5 | 3 |
+| 2026-08 | 3 | 0 | 2 | 1 |
+| **all** | **18** | **7** | **7** | **4** |
+
+**The membership is 18 people and 4 of them are paying.** That is the number no file in this repo
+held, and it reframes the backlog rather than answering its question: **the constrained layer is
+acquisition, not retention.** A retention comparison over 18 members across 2 months has no power at
+all, and the script says so in its own output rather than leaving a reader to infer it.
+
+**WHAT THIS CANNOT SAY, and it is the shape of the result rather than a caveat.** Ghost gives CURRENT
+status, not a status history. These are **endpoints, not a curve** - a member who cancelled in month
+2 and one who cancelled in month 8 are indistinguishable. The shapes carrying the diagnostic value (a
+cliff drop against gradual churn, and which period the cliff lands in) cannot come from one snapshot.
+
+**I98 IS THE FIX AND WAS NOT AUTHORISED IN THE SAME RULING**, so it is not started and stays OPEN.
+It is a few dozen bytes a month and **every month it waits is a month of curve that cannot be
+recovered** - now more sharply, because 2026-07 and 2026-08 are the only two cohorts that exist and
+both are already collapsed to endpoints.
+
+**Verified:** self-test exit 0 over 10 cases; `-WhatIf` exit 0 fetching nothing; live run exit 0; and
+the written file grepped for an address shape - **zero matches**.
+
+**Run BY HAND.** Not in the daily chain, not in `run-gates`, no schedule.
 
 **Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
