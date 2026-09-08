@@ -1077,6 +1077,41 @@ if ($r.rc -eq 0) { Ok 'food-category clean twin: a real bacon, a real pita bread
 else { Bad ('food-category flagged REAL bread/meat products (rc=' + $r.rc + ') - cheese_carrier or cracker_carrier is too broad; the measured-and-rejected snack_carrier-on-Bread bake ejected exactly these: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxCc -Recurse -Force -ErrorAction SilentlyContinue
 
+# (d5b) MUST-FIRE for steam_bag_carrier (2026-09-08, queue 2026-09-08-2e59b3). TWO FOUNDING ROWS, frozen
+# verbatim off comparison-2026-09-08 and candidates-2026-09-08 - the board that was LIVE while it was wrong:
+#   * 'Fareway Steamables Green Beans' is a FROZEN 12 oz microwave bag. It held Fareway's fresh-green-beans
+#     cell at $1.44 / 0.75 lb = 1.92 per lb, over the fresh 'Pero Family Farms Snipped Green Beans' at 2.94.
+#     The crown was Walmart at 1.6201, so CROWN-BY-CONTEST could not see it, and the name was already in the
+#     accepted contested list where no run would ever flag it again.
+#   * 'Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans & Rosemary' routed to
+#     red-potatoes at $2.99 / 10 oz = 4.784 per lb. The sanity BAND kept it off the cell, not the rule, and
+#     a band is not a fix (Brad 2026-09-04: no hard-coded bands).
+# Fresh per-lb produce commodities refuse a form by literal word (\bfrozen\b, \bsteam\b, \bcanned\b) but a
+# branded steam-bag line carries NO form word, so it walked past every fence a Produce commodity had.
+# NEVER REGENERATE THESE ROWS FROM THE BOARD: the steam_bag_carrier bake removed them the same day, so a
+# regenerated fixture would encode the fix and pass by finding nothing ([[guard-fixture-rule]]).
+$fxSb = NewFxDir 'afc-steambag'
+$sbRow = '{"week_of":"2026-09-08","comparison":[{"commodity":"Green Beans (fresh)","id":"fresh-green-beans","unit":"lb","stores":[{"store":"Fareway","per_unit":1.92,"item":"Fareway Steamables Green Beans"}]},{"commodity":"Red Potatoes","id":"red-potatoes","unit":"lb","stores":[{"store":"Fareway","per_unit":4.784,"item":"Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans & Rosemary"}]}]}'
+Set-Content (Join-Path $fxSb 'comparison-2026-09-08.json') $sbRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSb)
+if ($r.rc -eq 2 -and $r.text -match 'steam_bag_carrier') {
+  Ok 'food-category MUST-FIRE: a frozen Steamables bag on fresh-green-beans and a Sauced Steamers bag on red-potatoes hard-fail, naming steam_bag_carrier (exit 2)'
+} else {
+  Bad ('food-category did NOT catch the frozen steam-bag rows on FRESH produce (rc=' + $r.rc + ') - steam_bag_carrier is gone from category-excludes.json, or it is no longer in the ^(Fruit|Vegetables)$ apply block, so a branded frozen bag with no form word in its name can hold a fresh per-lb cell again: ' + ($r.text -replace "`n", ' '))
+}
+# CLEAN TWIN: the same words on commodities they are RIGHT for. 'Kroger Steams in Bag Petite Carrots' is
+# FRESH produce (in band at carrots, 2.6533/lb) and is why 'steams? in bag' is deliberately NOT a token;
+# SteamCrisp White Shoepeg is a real CAN; and the frozen-* commodities are what a Steamfresh, a Steamables
+# and a Sauced bag actually ARE, which is why the class is scoped to Fruit and Vegetables and never reaches
+# the shared Dairy/Canned/.../Frozen block. Every per_unit here is read off the 2026-09-08 board or its
+# candidates file. If any of these fires, the scope has slipped and the release is eating real products.
+$sbTwin = '{"week_of":"2026-09-08","comparison":[{"commodity":"Carrots","id":"carrots","unit":"lb","stores":[{"store":"Baker''s","per_unit":2.6533,"item":"Kroger Steams in Bag Petite Carrots"}]},{"commodity":"Canned Corn","id":"canned-corn","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.2082,"item":"Green Giant SteamCrisp White Shoepeg Whole Kernel Corn"}]},{"commodity":"Frozen Peas","id":"frozen-peas","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.149,"item":"Birds Eye Steamfresh Sweet Peas, Frozen Vegetables"}]},{"commodity":"Frozen Corn","id":"frozen-corn","unit":"oz","stores":[{"store":"Family Fare","per_unit":0.2398,"item":"Birds Eye Sauced Butter Super Sweet Corn 10.8 Oz"},{"store":"Fareway","per_unit":0.12,"item":"Fareway Steamables Cut Corn"}]},{"commodity":"Green Beans (fresh)","id":"fresh-green-beans","unit":"lb","stores":[{"store":"Walmart","per_unit":1.6201,"item":"Fresh Green Beans, Bag"}]},{"commodity":"Red Potatoes","id":"red-potatoes","unit":"lb","stores":[{"store":"Fareway","per_unit":0.998,"item":"Red Potato"}]}]}'
+Set-Content (Join-Path $fxSb 'comparison-2026-09-08.json') $sbTwin -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSb)
+if ($r.rc -eq 0) { Ok 'food-category clean twin: Kroger Steams in Bag Petite Carrots on carrots, SteamCrisp White Shoepeg on canned-corn, Steamfresh and Sauced and Steamables on frozen-*, and the real fresh green bean and red potato rows all stay silent' }
+else { Bad ('food-category flagged products the steam-bag words are RIGHT for (rc=' + $r.rc + ') - steam_bag_carrier has escaped the ^(Fruit|Vegetables)$ scope into the shared Dairy/Canned/.../Frozen block, or a token grew to cover "steams in bag": ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxSb -Recurse -Force -ErrorAction SilentlyContinue
+
 # (d6) BAKE CURRENCY (2026-09-04, queue 2026-09-04-2cd17a). A library class ships INERT until someone runs
 # apply-category-excludes.ps1: audit-food-category reads the library, but the ENGINE reads each commodity's
 # own baked exclude list, so a class added to the library and never baked flags on the board while still

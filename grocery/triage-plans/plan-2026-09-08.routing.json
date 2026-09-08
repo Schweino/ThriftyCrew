@@ -1,0 +1,278 @@
+{
+    "generated":  "2026-09-08T10:14:40",
+    "plan":  "plan-2026-09-08.json",
+    "item":  "2026-09-08-2e59b3",
+    "board_week":  "comparison-2026-09-08 (built 08:07:22)",
+    "corpus":  {
+                   "description":  "EXACTLY audit-match-soundness.ps1 feed selection: newest out\\regular\\*-regular-*.json per store + newest ads-*.json + newest bakers/sams/fareway deals file; every section of this artifact reads this one list",
+                   "files":  [
+                                 "aldi-regular-2026-09-08.json",
+                                 "bakers-regular-2026-09-08.json",
+                                 "family-fare-regular-2026-09-08.json",
+                                 "fareway-regular-2026-09-08.json",
+                                 "hunter-aldi-regular-2026-08-16.json",
+                                 "hunter-bakers-regular-2026-08-16.json",
+                                 "hunter-familyfare-regular-2026-08-16.json",
+                                 "hunter-fareway-regular-2026-08-16.json",
+                                 "hunter-hyvee-regular-2026-08-16.json",
+                                 "hunter-samsclub-regular-2026-08-16.json",
+                                 "hunter-walmart-regular-2026-08-16.json",
+                                 "hyvee-regular-2026-09-08.json",
+                                 "sams-regular-2026-08-01.json",
+                                 "walmart-regular-2026-09-08.json",
+                                 "ads-2026-09-08.json",
+                                 "bakers-deals-2026-09-02.json",
+                                 "sams-deals-2026-09-08.json",
+                                 "fareway-deals-2026-09-06.json"
+                             ],
+                   "unique_names":  19099,
+                   "skipped_files":  [
+
+                                     ]
+               },
+    "proposed_rule":  {
+                          "produce_scope":  "category-excludes.json new class steam_bag_carrier applied in the ^(Fruit|Vegetables)$ block, baked by apply-category-excludes.ps1",
+                          "produce_tokens":  [
+                                                 "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                                                 "\\bsauced\\b"
+                                             ],
+                          "produce_commodities_in_scope":  116,
+                          "canned_scope":  "commodities.json direct exclude on canned-green-beans and canned-peas (the shared Canned apply block also covers Frozen, which must keep these names)",
+                          "canned_tokens":  [
+                                                "\\bsteam(?:ers?|ables?|fresh)\\b",
+                                                "\\bsauced\\b"
+                                            ],
+                          "canned_ids":  [
+                                             "canned-green-beans",
+                                             "canned-peas"
+                                         ],
+                          "deliberately_NOT_a_token":  "steams? in bag - Kroger Steams in Bag Petite Carrots is FRESH produce (in band at carrots, 2.6533/lb) and must keep routing to carrots"
+                      },
+    "measured_as":  "routing",
+    "token_matches_in_corpus":  66,
+    "routing_changes":  7,
+    "route_moved":  7,
+    "eligibility_only_changes":  0,
+    "changed":  [
+                    {
+                        "name":  "Green Giant SteamCrisp Mexicorn Whole Kernel Corn with Red \u0026 Green Bell Peppers",
+                        "store":  "Baker\u0027s",
+                        "before":  "bell-peppers",
+                        "after":  "canned-corn",
+                        "eligible_before":  "bell-peppers \u003e canned-corn",
+                        "eligible_after":  "canned-corn",
+                        "route_moved":  true
+                    },
+                    {
+                        "name":  "Birds Eye Steamfresh Roasted Red Potatoes \u0026 Green Beans",
+                        "store":  "Baker\u0027s",
+                        "before":  "red-potatoes",
+                        "after":  "\u003cunmatched\u003e",
+                        "eligible_before":  "red-potatoes \u003e fresh-green-beans",
+                        "eligible_after":  "",
+                        "route_moved":  true
+                    },
+                    {
+                        "name":  "Simple Truth Organic Steamable Peas and Carrots",
+                        "store":  "Baker\u0027s",
+                        "before":  "carrots",
+                        "after":  "frozen-vegetables",
+                        "eligible_before":  "carrots \u003e frozen-vegetables",
+                        "eligible_after":  "frozen-vegetables",
+                        "route_moved":  true
+                    },
+                    {
+                        "name":  "Our Family Green Beans, Cut, Steamable 10 Oz",
+                        "store":  "Family Fare",
+                        "before":  "canned-green-beans",
+                        "after":  "\u003cunmatched\u003e",
+                        "eligible_before":  "canned-green-beans",
+                        "eligible_after":  "",
+                        "route_moved":  true
+                    },
+                    {
+                        "name":  "Fareway Steamables Green Beans",
+                        "store":  "Fareway",
+                        "before":  "fresh-green-beans",
+                        "after":  "\u003cunmatched\u003e",
+                        "eligible_before":  "fresh-green-beans \u003e canned-green-beans",
+                        "eligible_after":  "",
+                        "route_moved":  true
+                    },
+                    {
+                        "name":  "Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans \u0026 Rosemary",
+                        "store":  "Fareway",
+                        "before":  "red-potatoes",
+                        "after":  "\u003cunmatched\u003e",
+                        "eligible_before":  "red-potatoes \u003e fresh-green-beans \u003e canned-green-beans",
+                        "eligible_after":  "",
+                        "route_moved":  true
+                    },
+                    {
+                        "name":  "Birds Eye Steamfresh Sweet Peas",
+                        "store":  "Hy-Vee",
+                        "before":  "canned-peas",
+                        "after":  "\u003cunmatched\u003e",
+                        "eligible_before":  "canned-peas",
+                        "eligible_after":  "",
+                        "route_moved":  true
+                    }
+                ],
+    "cells_held_by_changed_names":  [
+                                        {
+                                            "name":  "Fareway Steamables Green Beans",
+                                            "cell":  {
+                                                         "commodity":  "fresh-green-beans",
+                                                         "unit":  "lb",
+                                                         "store":  "Fareway",
+                                                         "per_unit":  1.92,
+                                                         "crown":  false
+                                                     },
+                                            "before_route":  "fresh-green-beans",
+                                            "after_route":  "\u003cunmatched\u003e"
+                                        }
+                                    ],
+    "candidate_verdicts_before":  [
+                                      {
+                                          "name":  "Green Giant SteamCrisp Mexicorn Whole Kernel Corn with Red \u0026 Green Bell Peppers",
+                                          "commodity":  "bell-peppers",
+                                          "store":  "Baker\u0027s",
+                                          "size_text":  "11 oz",
+                                          "price_text":  "$2.29",
+                                          "basis":  "UNPRICED",
+                                          "unit_price":  null
+                                      },
+                                      {
+                                          "name":  "Birds Eye Steamfresh Roasted Red Potatoes \u0026 Green Beans",
+                                          "commodity":  "red-potatoes",
+                                          "store":  "Baker\u0027s",
+                                          "size_text":  "10.8 oz",
+                                          "price_text":  "$2.99",
+                                          "basis":  "OUT-OF-BAND",
+                                          "unit_price":  null
+                                      },
+                                      {
+                                          "name":  "Simple Truth Organic Steamable Peas and Carrots",
+                                          "commodity":  "carrots",
+                                          "store":  "Baker\u0027s",
+                                          "size_text":  "12 oz",
+                                          "price_text":  "$2.59",
+                                          "basis":  "OUT-OF-BAND",
+                                          "unit_price":  null
+                                      },
+                                      {
+                                          "name":  "Our Family Green Beans, Cut, Steamable 10 Oz",
+                                          "commodity":  "canned-green-beans",
+                                          "store":  "Family Fare",
+                                          "size_text":  "10 oz",
+                                          "price_text":  "$1.39",
+                                          "basis":  "size 10 oz",
+                                          "unit_price":  0.139
+                                      },
+                                      {
+                                          "name":  "Fareway Steamables Green Beans",
+                                          "commodity":  "fresh-green-beans",
+                                          "store":  "Fareway",
+                                          "size_text":  "12 oz",
+                                          "price_text":  "$1.44",
+                                          "basis":  "size 0.75 lb",
+                                          "unit_price":  1.92
+                                      },
+                                      {
+                                          "name":  "Fareway Steamables Green Beans",
+                                          "commodity":  "fresh-green-beans",
+                                          "store":  "Fareway",
+                                          "size_text":  "12 oz",
+                                          "price_text":  "$2.19",
+                                          "basis":  "size 0.75 lb",
+                                          "unit_price":  2.92
+                                      },
+                                      {
+                                          "name":  "Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans \u0026 Rosemary",
+                                          "commodity":  "red-potatoes",
+                                          "store":  "Fareway",
+                                          "size_text":  "10 oz",
+                                          "price_text":  "$2.99",
+                                          "basis":  "OUT-OF-BAND",
+                                          "unit_price":  null
+                                      },
+                                      {
+                                          "name":  "Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans \u0026 Rosemary",
+                                          "commodity":  "red-potatoes",
+                                          "store":  "Fareway",
+                                          "size_text":  "10 oz",
+                                          "price_text":  "$3.49",
+                                          "basis":  "OUT-OF-BAND",
+                                          "unit_price":  null
+                                      },
+                                      {
+                                          "name":  "Birds Eye Steamfresh Sweet Peas",
+                                          "commodity":  "canned-peas",
+                                          "store":  "Hy-Vee",
+                                          "size_text":  "10 oz",
+                                          "price_text":  "$1.49",
+                                          "basis":  "size 10 oz",
+                                          "unit_price":  0.149
+                                      },
+                                      {
+                                          "name":  "Birds Eye Steamfresh Sweet Peas",
+                                          "commodity":  "canned-peas",
+                                          "store":  "Walmart",
+                                          "size_text":  "10.763 oz",
+                                          "price_text":  "$1.27",
+                                          "basis":  "size 10.763 oz",
+                                          "unit_price":  0.118
+                                      }
+                                  ],
+    "positive_control":  {
+                             "name":  "Fareway Steamables Green Beans",
+                             "before":  "fresh-green-beans",
+                             "expected":  "\u003cunmatched\u003e",
+                             "observed":  "\u003cunmatched\u003e"
+                         },
+    "must_stay_controls":  [
+                               {
+                                   "name":  "Kroger Steams in Bag Petite Carrots",
+                                   "must_stay":  "carrots",
+                                   "before":  "carrots",
+                                   "after":  "carrots",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Green Giant SteamCrisp White Shoepeg Whole Kernel Corn",
+                                   "must_stay":  "canned-corn",
+                                   "before":  "canned-corn",
+                                   "after":  "canned-corn",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Fresh Green Beans",
+                                   "must_stay":  "fresh-green-beans",
+                                   "before":  "fresh-green-beans",
+                                   "after":  "fresh-green-beans",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Red Potato",
+                                   "must_stay":  "red-potatoes",
+                                   "before":  "red-potatoes",
+                                   "after":  "red-potatoes",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Birds Eye Steamfresh Sweet Peas, Frozen Vegetables",
+                                   "must_stay":  "frozen-peas",
+                                   "before":  "frozen-peas",
+                                   "after":  "frozen-peas",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Birds Eye Sauced Butter Super Sweet Corn 10.8 Oz",
+                                   "must_stay":  "frozen-corn",
+                                   "before":  "frozen-corn",
+                                   "after":  "frozen-corn",
+                                   "ok":  true
+                               }
+                           ],
+    "sim_seconds":  178.8
+}

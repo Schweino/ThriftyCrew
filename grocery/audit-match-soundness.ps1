@@ -66,32 +66,217 @@ function Get-DriftRows {
 }
 
 
-function Get-CrownNames {
+function Get-CellNames {
   <#
-    The product NAME on every cheapest cell of a comparison, mapped to a readable description of the
-    cell it crowns. A PARAMETER rather than a file read, so the CROWN-BY-CONTEST case in -SelfTest can
-    be driven by a frozen board slice. The whole point of the class is a wrong product that HELD a
-    crown, and the exclude that shipped the same day removes that product from today's board - so a
-    check that could only read live data could never fire, which is the defect this estate keeps paying
-    for (see grocery\test-capture-builders.ps1's BLIND branch).
+    The product NAME on EVERY store cell of a comparison - not only the cheapest one - mapped to a
+    readable description of the cell it holds and whether that cell is the crown.
+
+    Was Get-CrownNames until 2026-09-08 (queue 2026-09-08-2e59b3), and the crown-only reader was SILENT
+    on the founding case of that round: 'Fareway Steamables Green Beans', a frozen 12 oz microwave bag,
+    held Fareway's fresh-green-beans cell at 1.92/lb while the CROWN sat at Walmart on 1.6201/lb. A
+    wrong product does not have to be the cheapest in Omaha to be wrong on the board; it only has to
+    hold a cell a reader will price a shop from. Reading cheapest_store made that half of the class
+    invisible, and it is the half that had already been accepted into the baseline.
+
+    A PARAMETER rather than a file read, so the CELL-BY-CONTEST cases in -SelfTest can be driven by a
+    frozen board slice. The whole point of the class is a wrong product that HELD a cell, and the
+    exclude that ships the same day removes that product from today's board - so a check that could
+    only read live data could never fire, which is the defect this estate keeps paying for (see
+    grocery\test-capture-builders.ps1's BLIND branch).
+
+    A CROWN WINS A TIE: one product name can sit on several rows or stores. If any of them is the
+    crown, the entry records the crown, because that is the more expensive finding and the one the
+    2026-09-07 BELVITA case is about.
   #>
   param($Comparison)
   $out = @{}
   foreach ($r in @($Comparison)) {
     $cs = [string]$r.cheapest_store
-    if (-not $cs) { continue }
     foreach ($s in @($r.stores)) {
-      if ([string]$s.store -ne $cs) { continue }
       $itm = [string]$s.item
-      if ($itm) { $out[$itm] = ([string]$r.id + ' @ ' + $cs + ' ' + [string]$s.per_unit + '/' + [string]$r.unit) }
+      if (-not $itm) { continue }
+      $isCrown = ([bool]$cs -and ([string]$s.store -eq $cs))
+      if ($out.ContainsKey($itm) -and $out[$itm].crown -and -not $isCrown) { continue }
+      $out[$itm] = [pscustomobject]@{
+        text  = ([string]$r.id + ' @ ' + [string]$s.store + ' ' + [string]$s.per_unit + '/' + [string]$r.unit)
+        crown = [bool]$isCrown
+      }
     }
   }
   return $out
 }
-function Select-CrownByContest {
+function Select-CellByContest {
   # The intersection, as its own function so both the fixture and the live path drive the SHIPPED rule.
-  param($NewContest, $CrownNames)
-  return @(@($NewContest) | Where-Object { $CrownNames.ContainsKey([string]$_) })
+  param($NewContest, $CellNames)
+  return @(@($NewContest) | Where-Object { $CellNames.ContainsKey([string]$_) })
+}
+
+function Get-ContestTag {
+  <#
+    A CONTESTED NAME THAT DESCRIBES ITSELF (2026-09-08, queue 2026-09-08-2e59b3).
+
+    A new-contested finding used to be a bare product name, so the reviewer had to open two other files
+    to learn what was even being claimed. This prints the contest chain with each commodity's UNIT and
+    tags the shape that has cost real money here: a FORM contest, where the rules disagree about what
+    KIND of thing the product is rather than which brand of it.
+
+    FORM = the winner's unit differs from a loser's (a per-lb fresh commodity beating a per-oz canned
+    one), OR a loser id is canned-* / frozen-* while the winner's is not. That is the exact shape of
+    'Fareway Steamables Green Beans' (fresh-green-beans lb > canned-green-beans oz) and of the Green
+    Giant Steamers bag (red-potatoes lb > fresh-green-beans lb > canned-green-beans oz).
+
+    NOT FORM is the ordinary multi-product ad-line class ('Hy-Vee rice, quinoa or Israeli-style
+    couscous'), where two same-unit commodities both read a word in one advertisement.
+  #>
+  param([string]$Chain, $Units)
+  $ids = @(@($Chain -split '\s*>\s*') | Where-Object { $_ })
+  $u = @{}
+  if ($Units) { foreach ($k in @($Units.Keys)) { $u[[string]$k] = [string]$Units[$k] } }
+  $parts = New-Object System.Collections.Generic.List[string]
+  foreach ($id in $ids) {
+    $un = [string]$u[[string]$id]
+    if ($un) { [void]$parts.Add([string]$id + ' (' + $un + ')') } else { [void]$parts.Add([string]$id) }
+  }
+  $form = $false
+  if ($ids.Count -gt 1) {
+    $wid = [string]$ids[0]
+    $wu = [string]$u[$wid]
+    $winnerIsFormId = ($wid -match '^(?:canned|frozen)-')
+    foreach ($lid in $ids[1..($ids.Count - 1)]) {
+      $lu = [string]$u[[string]$lid]
+      if ($wu -and $lu -and ($wu -ne $lu)) { $form = $true; break }
+      if ((-not $winnerIsFormId) -and ([string]$lid -match '^(?:canned|frozen)-')) { $form = $true; break }
+    }
+  }
+  return [pscustomobject]@{ chain = ($parts -join ' > '); form = $form }
+}
+
+function Get-CandidateBasis {
+  <#
+    THE ENGINE'S OWN VERDICT on a contested name, read out of the newest candidates-*.json rather than
+    recomputed: OUT-OF-BAND, UNPRICED, or 'size X' with the unit price the board would publish.
+
+    This is the discriminator that separates a latent wrong product from a live one. A frozen bag that
+    the sanity band censors costs nothing today and everything the day the fresh row behind it is
+    absent (Brad 2026-09-04: no hard-coded bands, so the band is not a fix). A frozen bag the engine
+    priced IN BAND is money that is wrong on the board right now.
+
+    A PARAMETER, not a file read, so the fixture can freeze a candidates slice.
+  #>
+  param([string]$Name, [string]$Commodity, $CandCommodities)
+  foreach ($cm in @($CandCommodities)) {
+    if ([string]$cm.id -ne $Commodity) { continue }
+    $seen = New-Object System.Collections.Generic.List[string]
+    foreach ($cd in @($cm.candidates)) {
+      if ([string]$cd.name -ne $Name) { continue }
+      $b = [string]$cd.basis
+      if (-not $b) { $b = 'UNPRICED' }
+      if ($null -ne $cd.unit_price -and ([string]$cd.unit_price) -ne '') { $b = $b + ' = ' + [string]$cd.unit_price + '/' + [string]$cm.unit }
+      if (-not $seen.Contains($b)) { [void]$seen.Add($b) }
+    }
+    if ($seen.Count) { return ($seen -join ' ; ') }
+  }
+  return 'not in the newest candidates file'
+}
+
+function New-SoundnessAlertBody {
+  <#
+    THE ALERT BODY, AS A FUNCTION (2026-09-08, queue 2026-09-08-2e59b3).
+
+    It was inline, and it built the email out of the dropped, moved and drift lines ONLY. The
+    new-contested NAMES printed to the console and never reached the reader: the 2026-09-08 alert said
+    'new-contested=1' and the only way to learn WHICH product was to open ad-cycle-log.txt or
+    match-sweep-cache.json. A finding whose subject is a product, delivered without the product, is a
+    notification that work exists rather than a description of it.
+
+    Pure and parameterised so -SelfTest can assert the name is in the body without sending mail.
+  #>
+  param($Report)
+  $L = New-Object System.Collections.Generic.List[string]
+  $nc = @($Report.new_contested)
+  [void]$L.Add('Matching soundness found changes:')
+  [void]$L.Add("MOVED=$(@($Report.moved).Count) DROPPED=$(@($Report.dropped).Count) new-contested=$($nc.Count) drift=$([int]$Report.drift_vs_engine)")
+  [void]$L.Add('')
+  foreach ($d in @($Report.dropped)) { [void]$L.Add("DROPPED $($d.from): $($d.name)") }
+  foreach ($mv in @($Report.moved)) { [void]$L.Add("MOVED $($mv.from)->$($mv.to): $($mv.name)") }
+  foreach ($dr in (@($Report.drift_products) | Select-Object -First 25)) { [void]$L.Add("DRIFT engine=$($dr.engine) matcher=$($dr.matcher): $($dr.name)") }
+  foreach ($n in $nc) {
+    $tag = ''
+    if ($n.form) { $tag = ' [FORM]' }
+    [void]$L.Add("NEW-CONTESTED$tag $($n.name)")
+    [void]$L.Add("    chain   : $($n.chain)")
+    [void]$L.Add("    engine  : $($n.verdict)")
+    if ([string]$n.cell) {
+      $lbl = 'CELL'
+      if ($n.crown) { $lbl = 'CROWN' }
+      [void]$L.Add("    holds a $lbl : $($n.cell)")
+    }
+  }
+  foreach ($cb in @($Report.cell_by_contest)) {
+    $lbl = 'CELL'
+    if ($cb.crown) { $lbl = 'CROWN' }
+    [void]$L.Add("$lbl-BY-CONTEST $($cb.name)  cell $($cb.cell)  claimed by: $($cb.claimed_by)")
+  }
+  [void]$L.Add('')
+  [void]$L.Add('Review, then accept with: audit-match-soundness.ps1 -Accept')
+  return ($L -join "`n")
+}
+
+function Merge-BaselineCarryForward {
+  <#
+    A NAME THE STORE DID NOT LIST TODAY IS NOT A NAME THE RULES STOPPED CLAIMING (2026-09-08, queue
+    2026-09-08-2e59b3).
+
+    -Accept used to snapshot exactly what today's sweep saw, so a product a store simply did not list
+    today fell out of the baseline entirely - and it fell out SILENTLY, because the MOVED/DROPPED diff
+    skips names absent from today's sweep. Both halves of that were paid for on 2026-09-07: 12 reviewed
+    CONTESTED entries were erased by ABSENCE (reviewed status lost, not reviewed away) and 750 names
+    lost their MOVED/DROPPED coverage, so a route change on any of them would have been invisible. One
+    of the 12 came back the next morning and fired as 'new-contested' - a reviewed contest re-firing as
+    new is a capture flicker wearing the costume of a finding, and it cost a whole triage round.
+
+    So a name the old baseline knew and today's sweep did not see is RETAINED, with a last_seen date.
+    Names seen today take today's route and today's date. An entry absent for more than MaxAbsentDays
+    expires, because this map is protection against a FLICKER and not a permanent archive.
+
+    An OLD-FORMAT baseline (no last_seen map) reads every entry as last seen on its own generated date.
+    An entry whose date cannot be parsed is KEPT, never expired: losing reviewed state is the failure
+    this function exists to prevent, so every uncertain case falls to retention.
+
+    Pure - the previous baseline arrives as an object and the reference date as a string - so -SelfTest
+    drives the shipped rule instead of a copy of it.
+  #>
+  param($TodayNames, $TodayContest, $PrevBaseline, [string]$Today, [int]$MaxAbsentDays = 30)
+  $outNames = @{}; foreach ($kv in $TodayNames.GetEnumerator()) { $outNames[[string]$kv.Key] = [string]$kv.Value }
+  $outContest = @{}; foreach ($kv in $TodayContest.GetEnumerator()) { $outContest[[string]$kv.Key] = $true }
+  $lastSeen = @{}; foreach ($k in @($outNames.Keys)) { $lastSeen[[string]$k] = $Today }
+  $carriedNames = 0; $carriedContest = 0; $expired = 0
+  $ref = [datetime]::MinValue
+  if (-not [datetime]::TryParse($Today, [ref]$ref)) { $ref = Get-Date }
+  $cutoff = $ref.AddDays(-1 * $MaxAbsentDays)
+  if ($PrevBaseline -and $PrevBaseline.names) {
+    $prevSeen = @{}
+    if ($PrevBaseline.PSObject.Properties.Match('last_seen').Count -and $PrevBaseline.last_seen) {
+      foreach ($p in $PrevBaseline.last_seen.PSObject.Properties) { $prevSeen[$p.Name] = [string]$p.Value }
+    }
+    $prevGen = [string]$PrevBaseline.generated
+    if ($prevGen.Length -gt 10) { $prevGen = $prevGen.Substring(0, 10) }
+    $prevContest = @{}; foreach ($x in @($PrevBaseline.contested)) { $prevContest[[string]$x] = $true }
+    foreach ($p in $PrevBaseline.names.PSObject.Properties) {
+      $nm = [string]$p.Name
+      if ($outNames.ContainsKey($nm)) { continue }   # seen today: today's route and today's date win
+      $ls = $prevGen
+      if ($prevSeen.ContainsKey($nm)) { $ls = [string]$prevSeen[$nm] }
+      $dt = [datetime]::MinValue
+      if ([datetime]::TryParse($ls, [ref]$dt) -and $dt -lt $cutoff) { $expired++; continue }
+      $outNames[$nm] = [string]$p.Value
+      $lastSeen[$nm] = $ls
+      $carriedNames++
+      if ($prevContest.ContainsKey($nm)) { $outContest[$nm] = $true; $carriedContest++ }
+    }
+  }
+  return [pscustomobject]@{ names = $outNames; contested = $outContest; last_seen = $lastSeen
+                            carried_names = $carriedNames; carried_contested = $carriedContest; expired = $expired }
 }
 if ($SelfTest) {
   $bad = 0
@@ -135,23 +320,127 @@ if ($SelfTest) {
     [pscustomobject]@{ id='raspberries'; unit='oz'; cheapest_store='Aldi'; stores=@(
       [pscustomobject]@{ store='Aldi';   per_unit=0.3113; item='Fresh Raspberries 6 Oz' },
       [pscustomobject]@{ store='Hy-Vee'; per_unit=0.6133; item='Fresh raspberries or blackberries, 6 oz. pkg., $3.68' }) })
-  $cbcCrowns = Get-CrownNames $cbcBoard
+  $cbcCrowns = Get-CellNames $cbcBoard
   $cbcContest = @('BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz',
                   'Fresh raspberries or blackberries, 6 oz. pkg., $3.68',
                   'Hy-Vee rice, quinoa or Israeli-style couscous,')
-  $cbcHit = @(Select-CrownByContest $cbcContest $cbcCrowns)
+  $cbcHit = @(Select-CellByContest $cbcContest $cbcCrowns)
   T 'MUST FIRE  a NEW contested name that HOLDS A CROWN is its own class (the BELVITA biscuit bar at 0.796/each, Fareway)' `
-    ($cbcHit.Count -eq 1 -and $cbcHit[0] -like 'BELVITA*') (($cbcHit -join ' | '))
+    (($cbcHit -contains 'BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz')) (($cbcHit -join ' | '))
   T 'MUST FIRE  the finding names the CELL it crowns, not just the product' `
-    ($cbcHit.Count -eq 1 -and $cbcCrowns[$cbcHit[0]] -eq 'breakfast-sandwiches @ Fareway 0.796/each') ([string]$cbcCrowns[[string]$cbcHit[0]])
-  T 'MUST NOT FIRE  a contested name holding a NON-crown cell stays a plain new-contested (the raspberries-or-blackberries line at Hy-Vee)' `
-    (-not ($cbcHit -contains 'Fresh raspberries or blackberries, 6 oz. pkg., $3.68')) (($cbcHit -join ' | '))
-  T 'MUST NOT FIRE  a contested name with no board cell at all is not a crown' `
+    ($cbcCrowns['BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz'].text -eq 'breakfast-sandwiches @ Fareway 0.796/each') `
+    ([string]$cbcCrowns['BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz'].text)
+  T 'CLEAN TWIN  the BELVITA crown case still reads as a CROWN under the generalised cell reader, not demoted to a plain cell' `
+    ($cbcCrowns['BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz'].crown -eq $true) `
+    ([string]$cbcCrowns['BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz'].crown)
+  T 'MUST FIRE  a contested name holding a NON-crown cell is reported too, flagged crown=false - the crown-only reader was SILENT here, and that is the 2026-09-08 founding gap' `
+    (($cbcHit -contains 'Fresh raspberries or blackberries, 6 oz. pkg., $3.68') -and $cbcCrowns['Fresh raspberries or blackberries, 6 oz. pkg., $3.68'].crown -eq $false) `
+    (($cbcHit -join ' | '))
+  T 'MUST NOT FIRE  a contested name with no board cell at all is neither a crown nor a cell' `
     (-not ($cbcHit -contains 'Hy-Vee rice, quinoa or Israeli-style couscous,')) (($cbcHit -join ' | '))
-  T 'CLEAN TWIN  the crown reader still finds the other commodity''s crown, so it reads the WHOLE board' `
-    ($cbcCrowns.ContainsKey('Fresh Raspberries 6 Oz') -and $cbcCrowns.Count -eq 2) ([string]$cbcCrowns.Count)
+  T 'CLEAN TWIN  the cell reader still finds the other commodity''s crown, so it reads the WHOLE board' `
+    ($cbcCrowns.ContainsKey('Fresh Raspberries 6 Oz') -and $cbcCrowns['Fresh Raspberries 6 Oz'].crown -eq $true -and $cbcCrowns.Count -eq 4) ([string]$cbcCrowns.Count)
   T 'CLEAN TWIN  an empty contested set yields 0 findings, not the PS 5.1 @($null) count of 1' `
-    ((@(Select-CrownByContest @() $cbcCrowns)).Count -eq 0) ([string](@(Select-CrownByContest @() $cbcCrowns)).Count)
+    ((@(Select-CellByContest @() $cbcCrowns)).Count -eq 0) ([string](@(Select-CellByContest @() $cbcCrowns)).Count)
+  # ---- CELL-BY-CONTEST, THE FOUNDING SLICE (2026-09-08, queue 2026-09-08-2e59b3) ---------------------
+  # FROZEN BOARD SLICE, transcribed from comparison-2026-09-08 - the board that was LIVE while it was
+  # wrong. 'Fareway Steamables Green Beans' is a FROZEN 12 oz microwave bag; it held Fareway's
+  # fresh-green-beans cell at $1.44 / 0.75 lb = 1.92 per lb, over the fresh 'Pero Family Farms Snipped
+  # Green Beans' at 2.94 per lb. The CROWN was Walmart at 1.6201, so CROWN-BY-CONTEST could not see it,
+  # and the name was already in the accepted contested list where no run would ever flag it again.
+  # NEVER REGENERATE THIS FROM THE LIVE BOARD: the steam_bag_carrier exclude that shipped the same day
+  # takes the row off the board, so a regenerated fixture would have nothing to find.
+  $fgbBoard = @(
+    [pscustomobject]@{ id='fresh-green-beans'; unit='lb'; cheapest_store='Walmart'; stores=@(
+      [pscustomobject]@{ store='Walmart'; per_unit=1.6201; item='Fresh Green Beans, Bag' },
+      [pscustomobject]@{ store='Fareway'; per_unit=1.92;   item='Fareway Steamables Green Beans' }) })
+  $fgbCells = Get-CellNames $fgbBoard
+  $fgbHit = @(Select-CellByContest @('Fareway Steamables Green Beans') $fgbCells)
+  T 'MUST FIRE  the frozen bag holding the FARE WAY cell is reported, with the cell it holds' `
+    ($fgbHit.Count -eq 1 -and $fgbCells['Fareway Steamables Green Beans'].text -eq 'fresh-green-beans @ Fareway 1.92/lb') `
+    ([string]$fgbCells['Fareway Steamables Green Beans'].text)
+  T 'MUST FIRE  it is reported as crown=false, which is exactly why the crown-only reader was silent on it' `
+    ($fgbCells['Fareway Steamables Green Beans'].crown -eq $false) ([string]$fgbCells['Fareway Steamables Green Beans'].crown)
+  # ---- FORM TAG + THE ENGINE'S OWN VERDICT ----------------------------------------------------------
+  $ftUnits = @{ 'red-potatoes'='lb'; 'fresh-green-beans'='lb'; 'canned-green-beans'='oz'; 'hot-sauce'='oz'
+                'taco-sauce'='oz'; 'sweet-potatoes'='lb'; 'frozen-sweet-potatoes'='lb' }
+  $ftA = Get-ContestTag 'red-potatoes > fresh-green-beans > canned-green-beans' $ftUnits
+  T 'MUST FIRE  a chain whose winner is per-lb and whose loser is per-oz is tagged FORM (the Green Giant Steamers bag)' `
+    ($ftA.form -eq $true) ([string]$ftA.form)
+  T 'MUST FIRE  the chain prints each commodity''s UNIT, so the reader is not sent to commodities.json to learn the shape' `
+    ($ftA.chain -eq 'red-potatoes (lb) > fresh-green-beans (lb) > canned-green-beans (oz)') ([string]$ftA.chain)
+  $ftB = Get-ContestTag 'sweet-potatoes > frozen-sweet-potatoes' $ftUnits
+  T 'MUST FIRE  a SAME-UNIT chain whose loser id is frozen-* while the winner is not is still FORM' `
+    ($ftB.form -eq $true) ([string]$ftB.form)
+  $ftC = Get-ContestTag 'hot-sauce > taco-sauce' $ftUnits
+  T 'MUST NOT FIRE  two same-unit commodities neither of which is canned-/frozen- is the ordinary ad-line class, NOT FORM' `
+    ($ftC.form -eq $false) ([string]$ftC.form)
+  T 'CLEAN TWIN  a single-commodity chain (no contest at all) is not FORM and still renders its unit' `
+    (((Get-ContestTag 'red-potatoes' $ftUnits).form -eq $false) -and ((Get-ContestTag 'red-potatoes' $ftUnits).chain -eq 'red-potatoes (lb)')) `
+    ([string](Get-ContestTag 'red-potatoes' $ftUnits).chain)
+  # FROZEN CANDIDATES SLICE, transcribed from candidates-2026-09-08.json. The band, not the rule, is
+  # what kept the Green Giant Steamers bag off the red-potatoes cell, and a reviewer cannot tell that
+  # from the name alone.
+  $ftCands = @(
+    [pscustomobject]@{ id='red-potatoes'; unit='lb'; candidates=@(
+      [pscustomobject]@{ store='Fareway'; name='Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans & Rosemary'; size_text='10 oz'; price_text='$2.99'; basis='OUT-OF-BAND'; unit_price=$null },
+      [pscustomobject]@{ store='Fareway'; name='Red Potato'; size_text='5 lb'; price_text='$4.99'; basis='size 5 lb'; unit_price=0.998 }) },
+    [pscustomobject]@{ id='fresh-green-beans'; unit='lb'; candidates=@(
+      [pscustomobject]@{ store='Fareway'; name='Fareway Steamables Green Beans'; size_text='12 oz'; price_text='$1.44'; basis='size 0.75 lb'; unit_price=1.92 }) })
+  T 'MUST FIRE  a censored row carries the engine''s OUT-OF-BAND verdict, so latent is distinguishable from live' `
+    ((Get-CandidateBasis 'Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans & Rosemary' 'red-potatoes' $ftCands) -eq 'OUT-OF-BAND') `
+    (Get-CandidateBasis 'Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans & Rosemary' 'red-potatoes' $ftCands)
+  T 'MUST FIRE  a row the engine PRICED carries its basis and unit price - that is money wrong on the board today' `
+    ((Get-CandidateBasis 'Fareway Steamables Green Beans' 'fresh-green-beans' $ftCands) -eq 'size 0.75 lb = 1.92/lb') `
+    (Get-CandidateBasis 'Fareway Steamables Green Beans' 'fresh-green-beans' $ftCands)
+  T 'CLEAN TWIN  a name the candidates file does not carry says so instead of inventing a verdict' `
+    ((Get-CandidateBasis 'Nothing Like This' 'red-potatoes' $ftCands) -eq 'not in the newest candidates file') `
+    (Get-CandidateBasis 'Nothing Like This' 'red-potatoes' $ftCands)
+  # ---- THE ALERT BODY CARRIES THE NAME --------------------------------------------------------------
+  $abReport = [ordered]@{ generated='2026-09-08 10:00'; drift_vs_engine=0; drift_products=@(); moved=@(); dropped=@()
+    new_contested=@([pscustomobject]@{ name='Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans & Rosemary'
+                                       chain='red-potatoes (lb) > fresh-green-beans (lb) > canned-green-beans (oz)'; form=$true
+                                       winner='red-potatoes'; verdict='OUT-OF-BAND'; cell=''; crown=$false })
+    cell_by_contest=@() }
+  $abBody = New-SoundnessAlertBody $abReport
+  T 'MUST FIRE  the alert body built for new-contested=1 CONTAINS the product name (the 2026-09-08 email carried only the count)' `
+    ($abBody -like '*Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans & Rosemary*') $abBody
+  T 'MUST FIRE  the alert body carries the FORM tag and the engine verdict beside the name' `
+    (($abBody -like '*[[]FORM]*') -and ($abBody -like '*OUT-OF-BAND*')) $abBody
+  # -cnotlike, CASE-SENSITIVELY: the counts line already says 'new-contested=0' in lower case, so a
+  # case-insensitive needle matches the summary and this twin can never fail. It is the entry LINES
+  # (upper case) whose absence is being asserted.
+  $abEmpty = New-SoundnessAlertBody ([ordered]@{ generated='x'; drift_vs_engine=0; drift_products=@(); moved=@(); dropped=@(); new_contested=@(); cell_by_contest=@() })
+  T 'CLEAN TWIN  a report with no new-contested produces no NEW-CONTESTED entry lines but still carries its counts line, so ordinary alerts are unchanged' `
+    (($abEmpty -cnotlike '*NEW-CONTESTED*') -and ($abEmpty -like '*new-contested=0*') -and ($abEmpty -like '*audit-match-soundness.ps1 -Accept*')) $abEmpty
+  # ---- BASELINE CARRY-FORWARD -----------------------------------------------------------------------
+  # Shapes match a real baseline read back through ConvertFrom-Json: names is an OBJECT, contested an array.
+  $cfPrev = [pscustomobject]@{ generated='2026-09-07 15:38'; rules_hash='abc'
+    names=[pscustomobject]@{ 'Kept Absent Product'='canned-peas'; 'Stale Absent Product'='honey'; 'Present Product'='honey' }
+    contested=@('Kept Absent Product') }
+  $cfToday = @{ 'Present Product'='honey'; 'New Product'='jam' }
+  $cfPrev | Add-Member -NotePropertyName last_seen -NotePropertyValue ([pscustomobject]@{ 'Stale Absent Product'='2026-08-08' })
+  $cf = Merge-BaselineCarryForward $cfToday @{} $cfPrev '2026-09-08' 30
+  T 'MUST FIRE  a name in the old baseline and absent from today''s sweep is RETAINED, not erased (11 reviewed entries were lost this way on 2026-09-07)' `
+    ($cf.names.ContainsKey('Kept Absent Product') -and $cf.names['Kept Absent Product'] -eq 'canned-peas') `
+    (($cf.names.Keys | Sort-Object) -join ',')
+  T 'MUST FIRE  its reviewed CONTESTED status is retained too, so a one-day capture flicker cannot re-fire it as new-contested' `
+    ($cf.contested.ContainsKey('Kept Absent Product') -and $cf.carried_contested -eq 1) ([string]$cf.carried_contested)
+  T 'MUST FIRE  an old-format entry with no last_seen inherits the baseline''s own generated date' `
+    ($cf.last_seen['Kept Absent Product'] -eq '2026-09-07') ([string]$cf.last_seen['Kept Absent Product'])
+  T 'MUST FIRE  an entry absent for 31 days EXPIRES - this is flicker protection, not a permanent archive' `
+    ((-not $cf.names.ContainsKey('Stale Absent Product')) -and $cf.expired -eq 1) ([string]$cf.expired)
+  T 'CLEAN TWIN  a name present today keeps TODAY''s route and today''s last_seen' `
+    ($cf.names['Present Product'] -eq 'honey' -and $cf.last_seen['Present Product'] -eq '2026-09-08') ([string]$cf.last_seen['Present Product'])
+  T 'CLEAN TWIN  a name new today is in the baseline with today''s date' `
+    ($cf.names['New Product'] -eq 'jam' -and $cf.last_seen['New Product'] -eq '2026-09-08') ([string]$cf.last_seen['New Product'])
+  $cf2 = Merge-BaselineCarryForward @{ 'A'='honey'; 'B'='jam' } @{ 'B'=$true } ([pscustomobject]@{ generated='2026-09-07 15:38'; names=[pscustomobject]@{ 'A'='honey'; 'B'='jam' }; contested=@('B') }) '2026-09-08' 30
+  T 'CLEAN TWIN  an -Accept with NO absent names writes names and contested identical to today''s sweep, so an ordinary accept is what it always was' `
+    ($cf2.names.Count -eq 2 -and $cf2.contested.Count -eq 1 -and $cf2.carried_names -eq 0 -and $cf2.expired -eq 0) `
+    ("names=$($cf2.names.Count) contested=$($cf2.contested.Count) carried=$($cf2.carried_names) expired=$($cf2.expired)")
+  T 'CLEAN TWIN  no previous baseline at all is not a crash and carries nothing' `
+    (((Merge-BaselineCarryForward @{ 'A'='honey' } @{} $null '2026-09-08' 30).names.Count -eq 1)) `
+    ([string](Merge-BaselineCarryForward @{ 'A'='honey' } @{} $null '2026-09-08' 30).names.Count)
   if ($bad -eq 0) { Write-Output 'match-soundness SELF-TEST PASS'; exit 0 }
   Write-Output ("match-soundness SELF-TEST FAIL: $bad case(s)"); exit 2
 }
@@ -278,12 +567,16 @@ $drift = 0
 # could act on it: naming them from outside would mean a second copy of Get-Eligible, which is the
 # rule this estate deliberately keeps in one file. The count is unchanged; only the legibility is.
 $driftRows = New-Object System.Collections.Generic.List[object]
+$candCommods = @()
 try {
   $candF = Get-ChildItem (Join-Path $OutDir 'candidates-*.json') | Sort-Object Name -Descending | Select-Object -First 1
   if ($candF) {
+    # READ ONCE. The same parsed candidates drive the drift check here and the per-new-contested band
+    # verdict below; this file is the largest thing this script opens.
+    $candCommods = @((ConvertFrom-Json ([IO.File]::ReadAllText($candF.FullName))).commodities)
     # WRAPPED AT THE CALL SITE. PowerShell unrolls a List returned from a function, so a single-row
     # result arrives as a bare PSCustomObject and .Count/.ToArray() are gone. Assign then wrap.
-    $driftRows = @(Get-DriftRows $names @((ConvertFrom-Json ([IO.File]::ReadAllText($candF.FullName))).commodities))
+    $driftRows = @(Get-DriftRows $names $candCommods)
     $drift = $driftRows.Count
   }
 } catch {}
@@ -391,9 +684,18 @@ if ($Accept -or $ForceAccept) {
   if (Test-Path -LiteralPath $idLib) {
     try { . $idLib; $rulesHash = Get-IdentityRulesHash -GroceryRoot $root } catch { $rulesHash = '' }
   }
-  $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); rules_hash = $rulesHash; names = $names; contested = @($contest.Keys | Sort-Object) }
+  # ---- CARRY THE ABSENT FORWARD (2026-09-08, queue 2026-09-08-2e59b3) ------------------------------
+  # See Merge-BaselineCarryForward. A snapshot of only what today's sweep saw erases the reviewed state
+  # of every product a store simply did not list today, and it erases it silently. Names seen today are
+  # unaffected; this only ADDS back what was already reviewed.
+  $prevBase = $null
+  if (Test-Path $baseF) { try { $prevBase = ConvertFrom-Json ([IO.File]::ReadAllText($baseF)) } catch { $prevBase = $null } }
+  $cf = Merge-BaselineCarryForward $names $contest $prevBase (Get-Date -Format 'yyyy-MM-dd') 30
+  $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); rules_hash = $rulesHash; names = $cf.names
+                     contested = @($cf.contested.Keys | Sort-Object); last_seen = $cf.last_seen }
   Set-Content $baseF -Value ($obj | ConvertTo-Json -Depth 4) -Encoding UTF8
-  Write-Output ("match-soundness: baseline ACCEPTED ($($names.Count) product names, $($contest.Count) contested) at rules_hash $rulesHash. drift-vs-engine=$drift")
+  Write-Output ("match-soundness: baseline ACCEPTED ($($cf.names.Count) product names, $($cf.contested.Count) contested) at rules_hash $rulesHash. drift-vs-engine=$drift")
+  Write-Output ("  of those, $($names.Count) names and $($contest.Count) contested were SEEN TODAY; $($cf.carried_names) name(s) and $($cf.carried_contested) contested entry(ies) were CARRIED FORWARD as absent-not-gone; $($cf.expired) expired after 30 days absent")
   Write-GuardComplete -Name 'match-soundness'; exit 0
 }
 
@@ -413,28 +715,63 @@ foreach ($nm in $baseNames.Keys) {
 }
 $newContest = @($contest.Keys | Where-Object { -not $baseContest.ContainsKey($_) } | Sort-Object)
 
-# ---- CROWN-BY-CONTEST (2026-09-07, queue 2026-09-07-0b232c) --------------------------------------------
+# ---- CELL-BY-CONTEST (2026-09-07 as CROWN, widened to any cell 2026-09-08) -----------------------------
+# queue 2026-09-07-0b232c, then 2026-09-08-2e59b3.
 # A CONTESTED name is a name two rules both admit, resolved by array position. That makes new-contested the
 # exact place a wrong product enters the estate - and on 2026-09-07 it did. 'BELVITA Breakfast Bar Biscuit
 # Sandwiches, Dark Chocolate Creme 8.8 oz' is a biscuit snack bar; breakfast-sandwiches' pattern reads
 # 'sandwiches' and nothing reads 'bar'. It took the breakfast-sandwiches CROWN at Fareway ($3.98 / 5 ct =
 # 0.796/each), was the cheapest breakfast sandwich in Omaha for a week, and rode the ordinary accept-all
 # review line the whole time, indistinguishable from nine harmless multi-product ad lines.
-# So a contested name that WINS A CROWN gets its own class. Everything else about new-contested is unchanged.
+# ONE DAY LATER the same class arrived NOT holding a crown: 'Fareway Steamables Green Beans', a frozen 12
+# oz microwave bag, held Fareway's fresh-green-beans cell at 1.92/lb while Walmart crowned it at 1.6201,
+# so a reader shopping Fareway priced green beans off a frozen bag and the crown-only reader was silent.
+# A wrong product only has to hold a CELL to cost a reader money, so the discriminator is any store's
+# item, with crown recorded as a flag rather than as the entry condition.
 # ADVISORY (exit 1) UNTIL BRAD RULES on promoting it to guards - the estate's standing rule is that a gate
 # which is red on day one is a gate people learn to ignore, and this one has not run a clean week yet.
-# The reader is the board itself, not a re-derivation: a name is crowned if it is the item on a cheapest
-# cell of the current comparison.
-# ONE implementation, driven by the frozen fixture in -SelfTest and by this live path - see Get-CrownNames.
-$crownNames = @{}
+# The reader is the board itself, not a re-derivation: a name holds a cell if it is the item on a store
+# column of the current comparison.
+# ONE implementation, driven by the frozen fixture in -SelfTest and by this live path - see Get-CellNames.
+$cellNames = @{}
 try {
   $msCmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue |
             Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
-  if ($msCmpF) { $crownNames = Get-CrownNames ((ConvertFrom-Json ([IO.File]::ReadAllText($msCmpF.FullName))).comparison) }
+  if ($msCmpF) { $cellNames = Get-CellNames ((ConvertFrom-Json ([IO.File]::ReadAllText($msCmpF.FullName))).comparison) }
 } catch { }
-$crownContest = @(Select-CrownByContest $newContest $crownNames)
-$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); drift_vs_engine = $drift; drift_products = $driftRows; moved = $moved; dropped = $dropped; new_contested = $newContest
-                      crown_by_contest = @($crownContest | ForEach-Object { [pscustomobject]@{ name = [string]$_; cell = [string]$crownNames[[string]$_]; claimed_by = [string]$contest[[string]$_] } }) }
+$cellContest = @(Select-CellByContest $newContest $cellNames)
+
+# ---- EVERY NEW-CONTESTED NAME DESCRIBES ITSELF (2026-09-08, queue 2026-09-08-2e59b3) -------------------
+# A bare name told the reviewer nothing, so 'accept them all' was the cheap read and a wrong product rode
+# it. Each name now carries its contest chain WITH UNITS, a FORM tag, the engine's own band verdict for the
+# winning commodity, and the cell it holds if it holds one. See Get-ContestTag / Get-CandidateBasis.
+$unitById = @{}
+foreach ($c in $commods) { $unitById[[string]$c.id] = [string]$c.unit }
+$newContestRows = New-Object System.Collections.Generic.List[object]
+foreach ($nc in $newContest) {
+  $chain = [string]$contest[[string]$nc]
+  $tag = Get-ContestTag $chain $unitById
+  $winner = [string](@(@($chain -split '\s*>\s*') | Where-Object { $_ })[0])
+  $cellTxt = ''; $isCrown = $false
+  if ($cellNames.ContainsKey([string]$nc)) { $cellTxt = [string]$cellNames[[string]$nc].text; $isCrown = [bool]$cellNames[[string]$nc].crown }
+  [void]$newContestRows.Add([pscustomobject]@{ name = [string]$nc; chain = $tag.chain; form = $tag.form; winner = $winner
+                                               verdict = (Get-CandidateBasis ([string]$nc) $winner $candCommods)
+                                               cell = $cellTxt; crown = $isCrown })
+}
+# ASSIGN, THEN WRAP - and one statement per row rather than a pipeline inside a hashtable literal, so a
+# failure names the row it happened on instead of the whole [ordered]@{} construction.
+$cellContestRows = New-Object System.Collections.Generic.List[object]
+foreach ($cbn in $cellContest) {
+  $ce = $cellNames[[string]$cbn]
+  [void]$cellContestRows.Add([pscustomobject]@{ name = [string]$cbn; cell = [string]$ce.text; crown = [bool]$ce.crown; claimed_by = [string]$contest[[string]$cbn] })
+}
+# BUILT AS ONE [ordered]@{} LITERAL, never key-by-key through $report['k'] = @(...). PS 5.1 binds that
+# indexer to OrderedDictionary's this[int] overload once the dictionary is non-empty and the value is an
+# object[], and throws "Argument types do not match" from Array.SetValue - a terminating error under
+# EAP=Stop that killed this script before it printed a single line, so it looked like a crash rather than
+# a typed-assignment fault. Reproduced standalone 2026-09-08; the literal form has always been fine.
+$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); drift_vs_engine = $drift; drift_products = $driftRows; moved = $moved; dropped = $dropped
+                      new_contested = $newContestRows; new_contested_names = $newContest; cell_by_contest = $cellContestRows }
 Set-Content (Join-Path $audDir 'soundness-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8
 
 $regr = $moved.Count + $dropped.Count
@@ -446,8 +783,26 @@ if ($drift -gt 0) {
 }
 foreach ($d in $dropped) { Write-Output ("  DROPPED  $($d.from)  ->  <unmatched>   '$($d.name)'") }
 foreach ($mv in $moved)  { Write-Output ("  MOVED    $($mv.from) -> $($mv.to)   '$($mv.name)'") }
-if ($newContest.Count) { Write-Output ("  new-contested (order-dependence to review): " + (($newContest | Select-Object -First 25) -join ' | ')) }
-foreach ($cbc in $crownContest) { Write-Output ("  CROWN-BY-CONTEST  a NEW contested name is holding a CROWN: '" + $cbc + "'  cell " + $crownNames[[string]$cbc] + "  claimed by: " + $contest[[string]$cbc] + " - two rules both admit this name and array order picked the winner; if the winner is the wrong product this is the cheapest price in Omaha for a week (the 2026-09-07 BELVITA case)") }
+if ($newContest.Count) {
+  Write-Output ("  new-contested (order-dependence to review): " + (($newContest | Select-Object -First 25) -join ' | '))
+  foreach ($ncr in ($newContestRows | Select-Object -First 25)) {
+    $ncTag = ''
+    if ($ncr.form) { $ncTag = '  [FORM]' }
+    Write-Output ("    NEW-CONTESTED$ncTag '" + $ncr.name + "'")
+    Write-Output ("      chain  : " + $ncr.chain)
+    Write-Output ("      engine : " + $ncr.verdict)
+    if ($ncr.cell) {
+      $ncLbl = 'CELL'
+      if ($ncr.crown) { $ncLbl = 'CROWN' }
+      Write-Output ("      holds a $ncLbl : " + $ncr.cell)
+    }
+  }
+}
+foreach ($cbc in $cellContest) {
+  $cbcLbl = 'CELL'
+  if ($cellNames[[string]$cbc].crown) { $cbcLbl = 'CROWN' }
+  Write-Output ("  $cbcLbl-BY-CONTEST  a NEW contested name is holding a $cbcLbl : '" + $cbc + "'  cell " + $cellNames[[string]$cbc].text + "  claimed by: " + $contest[[string]$cbc] + " - two rules both admit this name and array order picked the winner; if the winner is the wrong product then a reader prices a shop off it (the 2026-09-07 BELVITA crown, and the 2026-09-08 Fareway Steamables cell the crown-only reader could not see)")
+}
 
 if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   $sig = ([string]$drift + '|' + (($dropped | ForEach-Object { $_.name }) -join ';') + '|' + (($moved | ForEach-Object { $_.name }) -join ';') + '|' + ($newContest -join ';'))
@@ -455,14 +810,18 @@ if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   $sigF = Join-Path $audDir 'soundness-alert-sig.txt'
   $last = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
   if ($sigHash -ne $last) {
-    $body = "Matching soundness found changes:`nMOVED=$($moved.Count) DROPPED=$($dropped.Count) new-contested=$($newContest.Count) drift=$drift`n`n" + (($dropped | ForEach-Object { "DROPPED $($_.from): $($_.name)" }) -join "`n") + "`n" + (($moved | ForEach-Object { "MOVED $($_.from)->$($_.to): $($_.name)" }) -join "`n") + "`n" + (($driftRows | Select-Object -First 25 | ForEach-Object { "DRIFT engine=$($_.engine) matcher=$($_.matcher): $($_.name)" }) -join "`n") + "`nReview, then accept with: audit-match-soundness.ps1 -Accept"
+    # ONE body builder, driven by the report object, so the email and the console cannot disagree and
+    # -SelfTest can assert what the reader will actually receive. See New-SoundnessAlertBody.
+    $body = New-SoundnessAlertBody $report
     try { Send-Alert -Subject "Grocery matching soundness - review needed" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
 # regressions (moved/dropped of an existing product) HOLD the publish until reviewed+accepted
-# EXIT: 2 stays the REGRESSION verdict (a moved/dropped product holds the publish). CROWN-BY-CONTEST is
-# ADVISORY at 1 - a new class gets a clean week before it can hold a board, and the plan's do_not_touch
-# keeps it out of guards until Brad rules. The verdict line above is the thing to read either way.
+# EXIT: 2 stays the REGRESSION verdict (a moved/dropped product holds the publish). CELL-BY-CONTEST is
+# ADVISORY at 1 - a new class gets a clean week before it can hold a board, and the 2026-09-08 plan's
+# do_not_touch keeps it out of guards until Brad rules (open question 1: 7 contested names held cells on
+# 2026-09-08, 6 of them genuine fresh produce, so as a HOLD it would page on about six benign names per
+# full re-baseline). The verdict line above is the thing to read either way.
 if ($regr -gt 0) { Write-GuardComplete -Name 'match-soundness'; exit 2 }
-if ($crownContest.Count -gt 0) { Write-Output ('match-soundness: ' + $crownContest.Count + ' CROWN-BY-CONTEST finding(s) - ADVISORY, review the names above before accepting'); Write-GuardComplete -Name 'match-soundness'; exit 1 }
+if ($cellContest.Count -gt 0) { Write-Output ('match-soundness: ' + $cellContest.Count + ' CELL-BY-CONTEST finding(s) (CROWN or plain cell, tagged above) - ADVISORY, review the names above before accepting'); Write-GuardComplete -Name 'match-soundness'; exit 1 }
 Write-GuardComplete -Name 'match-soundness'; exit 0

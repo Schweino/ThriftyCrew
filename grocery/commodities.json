@@ -2574,7 +2574,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "protein\\s+bars?"
+                        "protein\\s+bars?",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -2806,7 +2808,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -3026,7 +3030,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -3240,7 +3246,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -3449,7 +3457,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -3663,7 +3673,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bmashed\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -3884,7 +3896,9 @@
                         "\\bsausages?\\b",
                         "\\bblack\\s+pepper\\b",
                         "\\ball[\\s-]purpose\\b",
-                        "\\bcomplete\\s+seasoning\\b"
+                        "\\bcomplete\\s+seasoning\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -4096,7 +4110,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bvinaigrette\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -4317,7 +4333,9 @@
                         "\\bbrandy\\b",
                         "\\bcognac\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -4547,7 +4565,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -4765,7 +4785,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -4991,7 +5013,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -5008,7 +5032,7 @@
                         "wheat\\s+loaf"
                     ],
         "exclude":  [
-                        "bread\\s*(?:&|and)\\s*butter",
+                        "bread\\s*(?:\u0026|and)\\s*butter",
                         "breadstick",
                         "cornbread",
                         "crumb",
@@ -7225,7 +7249,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -7453,7 +7479,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\btastykake\\b|dipp.?n|\\bdo(?:ugh)?nuts?\\b|\\bdanish\\b|\\bmuffins?\\b|\\bbrownies?\\b|snack\\s*cakes?",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -7684,7 +7712,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcoconut\\b"
+                        "\\bcoconut\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -7907,7 +7937,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -7915,7 +7947,7 @@
         "label":  "Lettuce (head)",
         "unit":  "each",
         "band_min":  0.2,
-        "band_min_set_under":  "Romaine Hearts 6 ct. Sam's Club $4.67 = 0.7783 per each 2026-09-06 (held clear of two 24 ct wholesale-case parse errors at 0.1038-0.1246)",
+        "band_min_set_under":  "Romaine Hearts 6 ct. Sam\u0027s Club $4.67 = 0.7783 per each 2026-09-06 (held clear of two 24 ct wholesale-case parse errors at 0.1038-0.1246)",
         "band_max":  4.5,
         "include":  [
                         "\\blettuce\\b",
@@ -8119,7 +8151,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -8334,7 +8368,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -8557,7 +8593,9 @@
                         "great\\s+value\\s+broccoli\\s+florets",
                         "stir[\\s-]*fry",
                         "\\bsalad\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -8767,7 +8805,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "yellow\\s+bell",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -8976,7 +9016,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -9184,7 +9226,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bmixed\\s+vegetables\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -9396,7 +9440,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -9627,7 +9673,9 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bbouillon\\b",
                         "\\btomatoes?\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -9843,7 +9891,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -10069,7 +10119,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bbowls?\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -10279,7 +10331,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -15839,7 +15893,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -16081,7 +16137,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -16288,7 +16346,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -16494,7 +16554,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -16687,7 +16749,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -16911,7 +16975,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "pineapple\\s+poblano",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -17130,7 +17196,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bspreads?\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -17341,7 +17409,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bspreads?\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -17589,7 +17659,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bbrats?\\b"
+                        "\\bbrats?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -17795,7 +17867,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -18003,7 +18077,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -18220,7 +18296,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -18426,7 +18504,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -18637,7 +18717,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -18848,7 +18930,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -19053,7 +19137,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -19260,7 +19346,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -19465,7 +19553,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -19669,7 +19759,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -19891,7 +19983,9 @@
                         "\\bcans?\\b",
                         "escabeche",
                         "\\btomatoes?\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -20101,7 +20195,10 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b",
+                        "\\bchili\\b"
                     ]
     },
     {
@@ -20323,7 +20420,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -20527,7 +20626,9 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bseeds?\\b",
-                        "\\bsprouting\\b"
+                        "\\bsprouting\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -20738,7 +20839,9 @@
                         "petite",
                         "creamer",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -20952,7 +21055,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -25787,7 +25892,7 @@
         "label":  "Donuts",
         "unit":  "each",
         "band_min":  0.08,
-        "band_min_set_under":  "Clyde's Donuts Glazed Cherry Lil' Smiles 12 ct Fareway $2.88 = 0.24 per each 2026-09-06 (the SAME product the cell already published at 0.3325 from a $3.99 capture)",
+        "band_min_set_under":  "Clyde\u0027s Donuts Glazed Cherry Lil\u0027 Smiles 12 ct Fareway $2.88 = 0.24 per each 2026-09-06 (the SAME product the cell already published at 0.3325 from a $3.99 capture)",
         "band_max":  2,
         "include":  [
                         "donuts?",
@@ -26254,7 +26359,7 @@
         "label":  "Syrup (pancake / maple)",
         "unit":  "floz",
         "band_min":  0.02,
-        "band_min_set_under":  "Country Kitchen Original Pancake Syrup 36 fl oz Walmart $2.92 = 0.0811 per floz 2026-09-06, Walmart's own unit price 8.1 c/fl oz agreeing. The 0.08 floor was a typed one-sig-fig number sitting 1.4% under the cheapest real row, so it is moved as a net - but it censors NOTHING today. PLAN-top5-2026-09-06 section 2.3 lists this as its headline pure-floor-error 'costing the reader money today'; that did not survive measurement. The refused 0.0789 row is the 2026-08-06/08-11 capture of the same product at $2.84, and Walmart RAISED the price to $2.92 on 08-31 (its own unit price reads 7.9 c/fl oz then, 8.1 c/fl oz now). The board is publishing today's shelf price; the cheaper number is a 26-day-old price nobody can pay. The plan's positive control for this cell was never achievable.",
+        "band_min_set_under":  "Country Kitchen Original Pancake Syrup 36 fl oz Walmart $2.92 = 0.0811 per floz 2026-09-06, Walmart\u0027s own unit price 8.1 c/fl oz agreeing. The 0.08 floor was a typed one-sig-fig number sitting 1.4% under the cheapest real row, so it is moved as a net - but it censors NOTHING today. PLAN-top5-2026-09-06 section 2.3 lists this as its headline pure-floor-error \u0027costing the reader money today\u0027; that did not survive measurement. The refused 0.0789 row is the 2026-08-06/08-11 capture of the same product at $2.84, and Walmart RAISED the price to $2.92 on 08-31 (its own unit price reads 7.9 c/fl oz then, 8.1 c/fl oz now). The board is publishing today\u0027s shelf price; the cheaper number is a 26-day-old price nobody can pay. The plan\u0027s positive control for this cell was never achievable.",
         "band_max":  1.2,
         "include":  [
                         "maple\\s+syrup",
@@ -29327,7 +29432,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -29447,7 +29554,9 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -37565,7 +37674,7 @@
         "label":  "Dryer Sheets",
         "unit":  "each",
         "band_min":  0.005,
-        "band_min_set_under":  "all Fabric Softener Dryer Sheets Free Clear 250 ct. Sam's Club $4.98 = 0.0199 per each 2026-09-06",
+        "band_min_set_under":  "all Fabric Softener Dryer Sheets Free Clear 250 ct. Sam\u0027s Club $4.98 = 0.0199 per each 2026-09-06",
         "band_max":  0.2,
         "include":  [
                         "dryer\\s+sheets?",
@@ -39147,7 +39256,9 @@
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -48746,7 +48857,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -52181,7 +52294,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -52385,7 +52500,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "pineapple\\s+poblano",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -52595,7 +52712,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -52804,7 +52923,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -53854,7 +53975,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -55050,7 +55173,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -56010,7 +56135,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -56224,7 +56351,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ],
         "pint_oz":  10
     },
@@ -57281,7 +57410,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -57497,7 +57628,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -57718,7 +57851,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -57932,7 +58067,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -58156,7 +58293,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -58364,7 +58503,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -58597,7 +58738,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\blimes?\\b"
+                        "\\blimes?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -58805,7 +58948,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -59015,7 +59160,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -59217,7 +59364,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -59420,7 +59569,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -59632,7 +59783,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -59838,7 +59991,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -60044,7 +60199,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -60248,7 +60405,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -60476,7 +60635,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -60694,7 +60855,9 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bsalad\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -60898,7 +61061,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -61100,7 +61265,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -61302,7 +61469,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -61504,7 +61673,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -61713,7 +61884,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -61917,7 +62090,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -62121,7 +62296,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -62322,7 +62499,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -62527,7 +62706,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -62733,7 +62914,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -62935,7 +63118,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -63138,7 +63323,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -63348,7 +63535,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -63552,7 +63741,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -63761,7 +63952,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -63972,7 +64165,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -64179,7 +64374,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -64398,7 +64595,9 @@
                         "\\btub\\b",
                         "\\bsausages?\\b",
                         "\\bpotato\\s+salad\\b",
-                        "\\bmacaroni\\s+salad\\b"
+                        "\\bmacaroni\\s+salad\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -64612,7 +64811,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -64818,7 +65019,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -65021,7 +65224,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -65228,7 +65433,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -65428,7 +65635,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -65637,7 +65846,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -65839,7 +66050,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -66045,7 +66258,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -66255,7 +66470,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -66462,7 +66679,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -66652,7 +66871,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -66861,7 +67082,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -67071,7 +67294,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -67281,7 +67506,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -67486,7 +67713,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -68727,7 +68956,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ],
         "band_min":  1.39,
         "band_max":  14.95
@@ -72104,7 +72335,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ],
         "band_min":  0.42,
         "band_max":  5.97
@@ -74228,7 +74461,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -75574,7 +75809,9 @@
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
+                        "\\bsauced\\b"
                     ]
     },
     {
