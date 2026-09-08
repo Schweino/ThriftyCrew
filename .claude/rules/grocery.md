@@ -22,15 +22,16 @@ is one copy of every rule and nothing here can drift from it.
   [[known-wrong-is-the-main-board-corrector]]
 - **`compare-deals.ps1` is not standalone.** A mid-day rebuild needs identity emission AND link repair.
   Never revert-to-isolate. **MANY scripts LIFT its functions**, against a `three` that stood in
-  this file for months. **A count here is meaningless without its TEST**, and four counts of this
-  same thing disagreed on 2026-09-08 because none of them stated one. Measured that day:
-  **53 `.ps1` files name it, 13 of those also call `Invoke-Expression`**, and on the tighter test
-  of a `Get-Content` actually pointed AT it, **18 read its source and 12 execute what they lifted**
-  (15 of the 18 outside `grocery\out\`). The 12 reproduces on two independent tests. Count it,
-  never quote it, and say which test you ran:
+  this file for months. **DO NOT QUOTE A NUMBER HERE. RUN THE SCRIPT.** This quantity was counted
+  SIX times on 2026-09-08 and produced six answers, and not one disagreement was about the code -
+  every one was about which test the writer meant:
   ```
-  grep -rl "compare-deals\.ps1" --include=*.ps1 grocery ops meal-prep lib graph | xargs grep -l "Invoke-Expression"
+  powershell -NoProfile -File ops\count-source-lifters.ps1 -Script compare-deals.ps1
   ```
+  It defines and prints all three tests - NAMES, READS, EXECUTES - splits one-off scratch out,
+  names the executing files, and carries nine frozen fixtures. On 2026-09-08 over 562 scanned
+  files: 54 name it, 18 read its source (15 outside `grocery\out\`), **12 execute what they
+  lifted**. Say which test you mean or the number means nothing.
   A lifted `$script:` constant does not
   travel - the lift needs functions, parens and a column-0 brace.
   [[compare-deals-is-not-standalone]], [[compare-deals-functions-are-lifted-by-many-scripts]]

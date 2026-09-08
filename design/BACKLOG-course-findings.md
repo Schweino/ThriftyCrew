@@ -5587,3 +5587,338 @@ orchestrator at the end of a parallel course run, and it is now documented as su
 `skills\course\orchestration.md`. There is nowhere to record that fact as a deliberate, because
 `$KNOWN` only holds `grocery\` entries. It is uncalled, on purpose, and unrecordable.
 
+
+### I86 - The guard-completion contract is a convention at 793 call sites, and PowerShell can make it structural `NEEDS A RULING` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-design-patterns-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**What is measured.** `lib/guard-contract.ps1` requires a detector's last line of stdout to be
+`<NAME>-COMPLETE <summary>`, because "no findings" and "died halfway" are otherwise identical - its
+own header records **five separate incidents** of that shape (ff-carry throwing on its report line
+for weeks, the cloud gate standing down 13 days reporting SUCCESS, reanchor-all crashing between
+halves, store-integrity and batch-ledger crashes indistinguishable from clean).
+
+Measured 2026-09-08 over `*.ps1` under `C:\Codex\ThriftyCrew`, worktrees excluded:
+
+- **793 `Write-GuardComplete` call sites** across **119 files** (counting lines that begin with the
+  call; 124 files mention the name at all).
+- `grep -rn "function Invoke-Guard\|function Invoke-Detector" --include=*.ps1` returns **zero**.
+
+So the completion guarantee is a **convention honoured independently at 793 sites**, backed by an
+audit that catches a violator after it has already shipped a silent detector.
+
+**What the course adds.** This is textbook Chain of Responsibility, and its named failure is exactly
+the estate's: a link that neither handles nor forwards ends the chain silently, and the symptom
+surfaces far from the cause. The prescribed fix is **not** a marker and an audit - it is to put the
+whole obligation in a **`final` template method** on the abstract handler, so a subclass structurally
+*cannot* write a link that drops it. The estate converted a silent failure into a detectable one;
+the pattern makes it unwritable.
+
+**PowerShell has the same move**, without `final` or abstract classes: a wrapper taking a
+`[scriptblock]`, running the guard's body, and emitting the marker itself on the normal path.
+Roughly:
+
+    function Invoke-Guard { param([string]$Name,[scriptblock]$Body)
+      $r = & $Body            # body returns its summary; exceptions propagate unmarked
+      Write-GuardComplete $Name $r
+    }
+
+**Why this is a ruling and not a task.** Three things need deciding and none of them is mine:
+
+1. **Is 793 sites worth touching at all?** The current design works and is audited. This is
+   `refactoring-judgment.md` 5's four-way call - refactor now, defer, leave alone, or communicate
+   the debt - and "leave alone" is a legitimate answer for a convention that has held.
+2. **A wrapper changes the failure mode rather than removing it.** A guard that forgets to *use*
+   `Invoke-Guard` is the same silent hole one level up, so the audit is still needed. The gain is
+   that the obligation moves from 793 sites to 119.
+3. **`Write-GuardComplete` must never fire inside a `-SelfTest` branch or before the work is done**,
+   and that file already documents a PS 5.1 dot-sourcing trap (`param()` running in the caller's
+   scope) that a wrapper would have to be checked against. A partial migration is worse than none.
+
+**A cheap first step if the answer is yes:** wrap the handful of guards that have actually thrown
+mid-run, leave the rest, and measure whether the wrapper survives contact with the self-test paths
+before proposing a sweep.
+
+---
+
+### I87 - `isReversible` is unnecessary today and becomes load-bearing at the SECOND remote write type `PARKED` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-design-patterns-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Trigger: a second irreversible remote write is hooked.** Until then there is nothing to do, and
+this item should stay parked rather than being worked.
+
+**What is measured.** Backlog E1 (`DONE - CLOSED 2026-09-07`) resolved the irreversible-write
+exposure correctly and for the right reason: every named local target is git-tracked, so *"git is
+already the undo log there and a second one would only have obscured it"*. What shipped hooks
+`lib/ghost-lib.ps1`'s **`Invoke-GhostApi`**, a single choke point every remote write passes through.
+
+`ls ops/revert-*.ps1 ops/undo-*.ps1` on 2026-09-08 returns **exactly one file**,
+`ops/revert-ghost-write.ps1`.
+
+**What the course adds.** `Invoke-GhostApi` is the Command pattern's **invoker** and
+`revert-ghost-write` is its `unexecute`, arrived at independently and without the vocabulary. The
+pattern's third method is **`isReversible`**, and it exists because *some commands genuinely cannot
+be undone* - you cannot unsave. Today the estate needs no such field: one command type, one inverse,
+reversibility is a constant.
+
+**The failure it prevents, stated now because it is silent when it arrives.** Add a second remote
+write type with no per-action reversibility verdict and the revert facility starts promising a
+rollback it cannot perform - **and a revert that finds no inverse looks exactly like a revert that
+had nothing to undo.** That is the same shape as the guard-completion hole in the item above:
+absence of an effect and absence of a cause, indistinguishable from outside.
+
+**What it would touch when the trigger fires:** whatever record `Invoke-GhostApi`'s hook writes, plus
+whatever dispatches `ops/revert-*.ps1`. It is a field and a lookup, not a redesign - which is the
+argument for writing the trigger down now rather than rediscovering the requirement later.
+
+---
+
+### I88 - the compare-deals lifter count moved out of prose into a script `DONE` `queue-6`
+
+**`[CLOSED 2026-09-08, the same day it was filed, and the resolution went further than the item
+asked.]` This item was filed against a state that no longer existed when it merged.** The lane read
+`.claude/rules/grocery.md` before that day's afternoon correction landed, so its quotation of
+"17 read and 14 execute" was accurate when read and stale when filed.
+
+**Then its own re-measurement produced a SEVENTH answer.** 54 / 17 / 12 over five named
+directories, differing from the sixth answer only in scope. Seven writers, seven numbers, one
+quantity, and not a single disagreement about the code - every one was about which test the writer
+meant, and no two used the same test.
+
+**So the number is not in prose any more, in either file.** `ops/count-source-lifters.ps1` defines
+and prints the three tests - NAMES, READS, EXECUTES - splits one-off scratch under `grocery\out\`
+into its own column, names the executing files, and carries ten frozen fixtures including the ones
+that keep the tests nested and stop a comment counting as a read. `run-gates` discovers it.
+Measured there over 562 scanned files, whole repo, worktrees and archive excluded:
+**54 name it, 18 read its source (15 outside `grocery\out\`), 12 execute what they lifted.**
+
+Both `.claude/rules/grocery.md` and `software-craft/code-smells.md` now cite the script and carry
+no digit. The estate's own rule was already "count it, never quote it" - this is the first version
+of that rule with something to run.
+
+**What the item got right and is worth keeping:** a freshly-dated wrong number is worse than an old
+one, because the date reads as verification.
+
+<!-- original heading: `.claude/rules/grocery.md` says 14 scripts execute what they lift from compare-deals; the number is 12 -->
+
+**Merged from `design\backlog-inbox\lane-design-patterns-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Small, and filed because the rules file was JUST corrected and the correction carries a wrong
+digit** - which is worse than the original error, since a freshly-dated number reads as verified.
+
+`.claude/rules/grocery.md` currently reads:
+
+> **MANY scripts LIFT its functions - 17 read its source and 14 execute what they lifted, measured
+> 2026-09-08, against a `three` that stood in this file for months.**
+
+It then gives the command to re-run - `grep -rl "compare-deals\.ps1" --include=*.ps1 grocery ops
+meal-prep lib graph` - and tells the reader to count it rather than quote it, which is the right
+instruction.
+
+**Re-measured 2026-09-08, same five directories, `*.ps1`, worktrees excluded:**
+
+| Test | Count |
+|---|---|
+| files that reference `compare-deals.ps1` at all (the command the rules file gives) | **54** |
+| of those, files that read its SOURCE via `Get-Content ... compare-deals.ps1` | **17** |
+| of those 17, files that also call `Invoke-Expression` | **12** |
+
+So **17 is right and 14 is wrong; the executing count is 12**. `software-craft/applies-here.md`'s
+2026-09-08 entry already records 17 and 12, so the two files currently disagree by two.
+
+**And the command in the rules file does not produce either number - it produces 54.** A reader
+following the instruction to count rather than quote gets a third figure, which is the failure mode
+the instruction was written to prevent. Whatever the fix, the command quoted beside a number should
+be the command that yields *that* number.
+
+**Not fixed here** because `.claude/rules/grocery.md` is outside a course run's write scope; a course
+run may only write this inbox file.
+
+### I89 - a successful email send whose draft delete fails re-sends to a real person every day, forever `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-event-driven-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `grocery/notify-item-added.ps1`, read in full 2026-09-08. It is a textbook transactional
+outbox: the Ghost DRAFT post tagged `#item-request-queue` is the outbox row, the Worker's
+`POST /notify` is the publish, and `Remove-QueueDraft $q.postId` at line 105 is the `processed_on`
+stamp. The stamp is per item and inside the loop, which is the right shape and better than the
+course's own implementation.
+
+**The residual.** The publish and the stamp are in two systems, so there is a window: the Worker
+returns `ok`, `Remove-QueueDraft` throws, the draft survives, and tomorrow's run matches the same
+queued request against the same board id and sends the same person the same email. There is
+**no attempt counter and no terminal state on the draft**, so a request whose delete can never
+succeed is retried daily with no upper bound. The `catch` around the send does not cover the delete.
+
+**Nothing would notice.** `grocery/audit-alert-precision.ps1` measures whether an alert was RIGHT.
+Nothing in the estate measures whether one was sent TWICE, and there is no dead-letter convention to
+fall back on: `dead letter` and `dead-letter`, case-insensitive, return **zero** hits across
+first-party `.ps1`, `.py` and `.md` under `grocery`, `meal-prep`, `graph`, `ops`, `lib` and `design`,
+worktrees excluded, measured 2026-09-08.
+
+**What it would touch.** `grocery/notify-item-added.ps1` only. The cheapest fix is an attempt count
+plus a terminal tag on the draft itself, because the draft already IS the durable row - no new store
+is needed. A `try`/`catch` around `Remove-QueueDraft` that logs a distinct DELETE-FAILED line would
+at least make the condition visible, which it currently is not.
+
+**Why it matters here.** This is a live paid site and the recipient is a member of the public who
+asked once for one thing. A duplicate is a small harm; an unbounded daily duplicate is not.
+
+### I90 - `meal-prep` reads `grocery/out` directly in 36 scripts and nothing declares the dependency `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-event-driven-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `grep -rl` over first-party `.ps1`, worktrees excluded, measured 2026-09-08:
+
+- **72 of 187** `meal-prep` scripts (38.5%) mention `grocery`
+- **36** `meal-prep` scripts reference `grocery/out` or `grocery\out` specifically
+- **35 of 383** `grocery` scripts (9.1%) mention `meal-prep`
+
+**What that means.** `docs/RUNTIME-MAP.md` describes these as producer and consumer over the git bus,
+but the dependency runs both directions and, more to the point, it reaches into a module's **working
+directory** rather than its published artefact. `public/board.json` is the published contract and
+`grocery/out/comparison-*.json` is the internals - and the internals are gitignored, which is exactly
+why a worktree, a CI runner or a clean checkout prices nothing and exits 0.
+
+**Nothing declares it, so no gate can see it.** A PowerShell script takes a dependency by writing a
+path string. There is no manifest, no reference list and no declared module boundary anywhere in the
+estate, so a new cross-module reach is invisible at review time and at gate time both.
+
+**The count is a floor, not a coupling metric.** A file-level `grep -rl` counts a mention in a comment
+the same as a read. It is enough to establish that the boundary is not enforced; it is not enough to
+say how much is real coupling, and no cheaper measurement of that exists today.
+
+**What it would touch.** A new detector under `ops/` that reads first-party `.ps1` for cross-module
+path literals and ratchets a high-water mark downward, in the shape of `audit-write-seam` and
+`audit-fact-claims`. Deliberately a ratchet, not a hard gate: the number is 36 today and a gate that
+is red on day one teaches people to ignore red.
+
+### I91 - the Worker `/notify` shared secret is a deterministic function of the Ghost admin key, with no expiry or rotation path `NEEDS A RULING` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-event-driven-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `grocery/notify-item-added.ps1` lines 33 to 36, read 2026-09-08. The auth header
+`X-Notify-Auth` is the SHA-256 hex of `GHOST_ADMIN_KEY`; the Worker recomputes the same value. The
+key itself never travels, which is the point of the design and is a real property.
+
+**What it does not have.** The derived credential has no expiry, no rotation procedure recorded
+anywhere, and no revocation independent of the admin key: rotating the secret means rotating the
+Ghost admin key, which is also what publishes every recipe card. So the blast radius of a rotation is
+the whole publish lane, and the practical consequence is that rotation never happens.
+
+**Why this is a ruling and not work.** The estate is one person and one machine, and there is a
+defensible position that a long-lived shared secret between two systems Brad owns is proportionate.
+The course's alternative - a client-credentials grant against an identity provider with short-lived
+tokens - is real but is a service Brad would have to run. **The decision is whether the estate wants
+a rotation procedure at all**, and if so whether a second, `/notify`-only secret independent of the
+admin key is the cheap version. Nobody should build either until that is ruled.
+
+**Related and unowned.** No skill in the store owns service identity and access control. `OAuth`,
+`OpenID` and `JWT` are clean no-matches over 1,350 sections, measured 2026-09-08; `security-craft` is
+scoped to adversarial input against LLM systems and its own "does not own" section says so. This is
+reported to the orchestrator as a proposed domain and is NOT routed anywhere.
+
+### I92 - A promotion hold latches forever and does not record what it latched against `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-feedback-systems-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`graph/learning/promote_aliases.py` `gated()` is a genuine closed feedback loop and the best-built
+corrector in the estate: promote aliases into the catalog, run the live guard suite as the sensor,
+withhold whatever the guards accuse as the actuator, repeat to `--max-rounds`, restore the tree from
+a backup at the start of every round, and promote nothing if it never converges. It refuses to start
+on a red baseline (line 150) and stops rather than guessing when the failure names nothing it
+promoted (line 215). Bound, fail-safe and sensor plausibility check are all present.
+
+The gap is the **actuator has no reset path**, and control theory has a name for that shape: a
+latching actuator, whose corrective action persists after the disturbance that justified it is gone.
+
+Two concrete halves:
+
+1. **The holds never expire and nothing re-tests them.** `graph/learning/promotion-holds.json` holds
+   patterns permanently. Its dated entries are `"held": "2026-08-21"` with reasons such as
+   *"guards 2026-08-21: 1.59x unit-basis outlier vs its own link (Alessi 12.75 Oz)"*. Those reasons
+   are statements about the state of the **comparison board on one day**, and the board is rebuilt
+   daily. Roughly eighteen rebuilds later the condition that produced the hold has almost certainly
+   changed, and nothing in `promote_aliases.py` re-evaluates it. There is no `--recheck-holds`, no
+   expiry field, and `held()` (line 78) only ever reads the file.
+
+2. **The gated run records holds with no diagnosable condition.** `record_holds` (line 251) writes
+   `"held": "gated-run"` and the generic reason *"the guard suite hard-failed naming this commodity,
+   and went green once it was withheld"*, then prints a NOTE asking a human to replace it, because
+   *"the gate said no" is not a diagnosis*. Nothing enforces that. A hold written by the automatic
+   path therefore cannot be re-evaluated even by hand, because it does not say what to re-check.
+
+**Why it matters here.** A held alias is an alias the board never learns, so the identity graph stays
+permanently weaker for a reason that may have expired weeks ago. `promote_aliases.py`'s own docstring
+says 141 promoted clean and 15 are held; those 15 are a standing, invisible loss.
+
+**What it would touch.** `graph/learning/promote_aliases.py` (`held`, `record_holds`, a new recheck
+path), `graph/learning/promotion-holds.json` (a schema addition), and its must-fire fixture.
+
+**The ruling inside this item, which is Brad's:** should a hold be re-tested automatically on some
+cadence, or only on an explicit `--recheck-holds` run? Automatic re-testing costs a full
+compare-deals plus guards cycle per hold batch and could re-admit an alias that breaks the board on a
+day nobody is watching. On-demand is safe but is the state we already have, because nobody runs it.
+
+---
+
+### I93 - The estate's two one-directional actuators do not share their safety machinery `NEEDS A RULING` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-feedback-systems-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`lib/ratchet.ps1` exists because four audits each lowered a high-water mark unconditionally, so a
+broken detector finding nothing would record 0 as a permanent ceiling and print "PASSED and
+TIGHTENED" forever. `Test-RatchetMove` now refuses a fall to zero and a fall larger than
+`-MaxDropPct` (default 60), keeps the old baseline, and reports. In control terms that is a **rate
+limit on a one-directional actuator plus a sensor plausibility check**, and it is exactly right.
+
+`promote_aliases.py`'s hold mechanism is the estate's *other* one-directional actuator - it can only
+ever withhold more - and it shares none of that machinery. It has a per-run baseline check, but no
+rate limit: a single degraded guard run that hard-fails naming many commodities would record a hold
+for each of them, permanently, in one pass. There is no equivalent of "a drop this large is
+extraordinary, keep the old state and report".
+
+**The ruling:** is there a general shape here worth naming - *a control constant that may only move
+one way needs a rate limit and a plausibility bar* - and if so, does it become a third caller of
+`lib/ratchet.ps1`, a documented convention, or a `run-gates` detector that finds one-directional
+state writes with neither guard? A detector is the cheapest and the most likely to go stale; a
+convention is free and unenforced. This is not obvious and it is a design call, not work.
+
+Adjacent, and part of the same question: the estate has no register of its **control constants**.
+`$script:BoardStaleHours = 26` and `$script:NeverRanGraceHours = 30` in
+`grocery/capture-watchdog.ps1`, `$REARM_DAYS = 14` in `grocery/check-ad-cycles.ps1`, and
+`-MaxDropPct 60.0` in `lib/ratchet.ps1` are all tuning parameters of correcting loops, each declared
+locally with a good comment and none of them listed anywhere together.
+`sidecar/THRESHOLDS.md` is the precedent for what such a register looks like, and it covers score
+spaces rather than these.
+
+---
+
+### I94 - Nothing records how a threshold in this estate was tuned `OPEN` `queue-6`
+
+**Merged from `design\backlog-inbox\lane-feedback-systems-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Course finding, module 5: an instructor showing three simulations at proportional gains 25, 13 and
+7.5 says explicitly that they do **not** establish the stable range - nothing rules out instability
+again at a much higher gain, or stability again below 7.5, and the stable set need not even be an
+interval. That is why an analytic criterion exists at all.
+
+The estate's control constants above each carry a comment saying what the value means and, in the
+best cases, which incident produced it. What none of them records is **how many values were tried**.
+`grocery/capture-watchdog.ps1:73` says `BoardStaleHours = 26` with a dated queue reference;
+`check-ad-cycles.ps1:2311` says `$REARM_DAYS = 14` with a reasoned comment. Neither says whether 26
+and 14 were the first plausible numbers, or the survivors of a sweep.
+
+This is `.claude/rules/measurement.md`'s existing rule - *a number that moved is not a number that
+improved: say how far, over how many cases, and how many variants were tried* - applied to tuning
+constants rather than to scores, and the rule does not currently reach them.
+
+**What it would touch.** A one-line convention for the comment beside any tuning constant: the value,
+what it means, and **what else was tried**. Retro-filling is not proposed; the ask is that the next
+constant added carries it. Whether that becomes a `run-gates` detector is a separate question and
+probably not worth it.
+
+**Not measured on this run.** Whether `sidecar/THRESHOLDS.md`'s rows carry their variant counts was
+not checked - the file was not opened.
+

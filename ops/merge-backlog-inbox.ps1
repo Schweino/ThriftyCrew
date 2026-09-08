@@ -71,6 +71,22 @@ function Get-NextId([string]$text) {
   return (($ids | Measure-Object -Maximum).Maximum + 1)
 }
 
+function Test-MislevelledFinding([string]$preamble) {
+  <# A `#` heading is a mis-levelled FINDING only when a STATE LINE follows it. With prose
+     under it, it is a document title - which is what every lane writes and what this
+     check used to refuse. Three of three lanes tripped it on 2026-09-08; a rule broken by
+     everyone who meets it is the defect. The state line is what makes a heading a finding,
+     which is already how `##` is judged, so this just applies the same test one level up. #>
+  $lines = $preamble -split "`r?`n"
+  for ($i = 0; $i -lt $lines.Count; $i++) {
+    if ($lines[$i] -match '^#\s+\S') {
+      $rest = @($lines | Select-Object -Skip ($i + 1) | Where-Object { $_.Trim() })
+      if ($rest.Count -gt 0 -and $rest[0] -match '^\s*`([^`]+)`\s*(?:`([^`]+)`)?\s*$') { return $true }
+    }
+  }
+  return $false
+}
+
 function Read-Inbox([string]$path) {
   <# [(title, state, body)] from one inbox file. Throws on a malformed finding. #>
   $raw = Get-Content -LiteralPath $path -Raw -Encoding UTF8
@@ -87,8 +103,37 @@ function Read-Inbox([string]$path) {
   # purpose is that nothing gets lost, refusing loudly is the correct direction.
   $parts = [regex]::Split($raw, '(?m)^##\s+')
   $preamble = [string]$parts[0]
-  if ($preamble -match '(?m)^#\s+\S') {
-    throw "in $([IO.Path]::GetFileName($path)): there is a '#' heading above the first finding. A finding is a '##' heading - use two hashes. If this file is documentation and not findings, name it README.md."
+  $hasFindings = (@($parts).Count -gt 1)
+
+  # A lane that measured nothing has a RESULT, not an absence, and must be able to say so.
+  # 2026-09-08: a course lane was blocked by a 403, reached the index and none of the
+  # material, and correctly filed nothing - and the merge refused every other lane's
+  # findings because of it. "Landed with nothing" and "never landed" are different facts.
+  #
+  # The declaration is EXPLICIT and never inferred. Zero findings with no marker is still
+  # a refusal, because a file empty by accident and a file empty on purpose are otherwise
+  # identical, and this tool exists so nothing is lost silently.
+  if (-not $hasFindings) {
+    if ($raw -match '(?m)^\s*NOTHING TO FILE\b') {
+      return @([pscustomobject]@{
+        Title = ''; State = ''; Tag = ''; Body = ''
+        From = [IO.Path]::GetFileName($path); Empty = $true
+      })
+    }
+    # The MORE SPECIFIC diagnosis first. A `#` heading here is almost always a finding
+    # written with one hash, and saying so sends the reader to the right fix; the generic
+    # message would send them to add a marker they do not want.
+    if (Test-MislevelledFinding $preamble) {
+      throw "in $([IO.Path]::GetFileName($path)): a '#' heading has a state line under it, so it is a finding written with ONE hash. A finding is a '##' heading - use two."
+    }
+    throw "in $([IO.Path]::GetFileName($path)): no findings, and no 'NOTHING TO FILE' line. If this lane measured nothing, say so on a line of its own - an empty file and a lost one look identical otherwise. If this is documentation, name it README.md."
+  }
+
+  # A TITLE above the findings is fine and is what every lane writes. Only a `#` heading
+  # with a STATE LINE under it is a finding somebody mis-levelled, and that is still
+  # refused, because a silently dropped finding is the failure this whole tool exists for.
+  if (Test-MislevelledFinding $preamble) {
+    throw "in $([IO.Path]::GetFileName($path)): a '#' heading above the first finding has a state line under it, so it is a finding written with ONE hash. A finding is a '##' heading - use two. A plain title with prose under it is fine and needs no change."
   }
   $parts = @($parts | Select-Object -Skip 1) | Where-Object { $_.Trim() }
   foreach ($p in $parts) {
@@ -116,6 +161,12 @@ function Read-Inbox([string]$path) {
 }
 
 if ($SelfTest) {
+  # FIXTURE RULE, learned twice on 2026-09-08: no case may depend on what an earlier case
+  # left in the inbox. A case that needs a clean inbox clears it wholesale; a case that
+  # needs a file writes that file; every removal by name is -ErrorAction SilentlyContinue.
+  # Both times this was violated, the failure was reported against the CODE UNDER TEST
+  # rather than the setup, and a suite that lies about which thing broke is worse than one
+  # that fails.
   $tmp = Join-Path $env:TEMP ('mbi-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
   $inb = Join-Path $tmp 'inbox'
   New-Item -ItemType Directory -Path $inb -Force | Out-Null
@@ -152,7 +203,7 @@ if ($SelfTest) {
   _C 'MUST NOT FIRE' 'and the good file is left in the inbox for a retry' ((Test-Path (Join-Path $inb 'lane-c.md'))) 'good file consumed'
 
   # A finding with no state line at all.
-  Remove-Item (Join-Path $inb 'lane-d.md') -Force
+  Remove-Item (Join-Path $inb 'lane-d.md') -Force -ErrorAction SilentlyContinue   # tolerant BY RULE: no case may depend on what an earlier case left behind
   Set-Content (Join-Path $inb 'lane-e.md') "## no state here`n`njust a body`n" -Encoding UTF8
   $out4 = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   _C 'MUST FIRE' 'a finding with no state line refuses the merge' ($LASTEXITCODE -eq 2 -and $out4 -match 'no state line') $LASTEXITCODE
@@ -173,11 +224,31 @@ if ($SelfTest) {
   Set-Content (Join-Path $inb 'lane-f.md') "# a finding written with one hash`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
   $outP = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   $cP = $LASTEXITCODE
-  _C 'MUST FIRE' 'a one-hash heading above the first finding refuses the merge' ($cP -eq 2 -and $outP -match 'two hashes') "$cP"
+  _C 'MUST FIRE' 'a one-hash heading WITH a state line under it refuses the merge' ($cP -eq 2 -and $outP -match 'ONE hash') "$cP"
+
+  # MUST NOT FIRE: a plain document TITLE is not a mis-levelled finding. Three of three
+  # lanes opened their file with one on 2026-09-08 and all three were refused; a rule
+  # broken by everyone who meets it is the defect, not the users.
+  Get-ChildItem $inb -Filter *.md | Remove-Item -Force
+  Set-Content (Join-Path $inb 'lane-t.md') "# Lane: something, 2026-09-08`n`nSome prose about the lane.`n`n## a real finding`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
+  $blT = Get-Content $bl -Raw -Encoding UTF8
+  $outT = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
+  $cT = $LASTEXITCODE
+  $blT2 = Get-Content $bl -Raw -Encoding UTF8
+  _C 'MUST NOT FIRE' 'a plain document TITLE above the findings is accepted' ($cT -eq 0) "$cT"
+  _C 'MUST NOT FIRE' 'and the title is not filed as a finding' ($blT2 -match 'a real finding' -and $blT2 -notmatch 'Lane: something') 'title was filed'
+
+  # CLEAN TWIN: a title on a NOTHING TO FILE lane, which is the exact shape a blocked
+  # course produced on 2026-09-08.
+  Get-ChildItem $inb -Filter *.md | Remove-Item -Force
+  Set-Content (Join-Path $inb 'lane-u.md') "# Lane: blocked, 2026-09-08`n`nNOTHING TO FILE`n`nthe course refused every supplement`n" -Encoding UTF8
+  $outU = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
+  $cU = $LASTEXITCODE
+  _C 'CLEAN TWIN' 'a titled NOTHING TO FILE lane is accepted and consumed' ($cU -eq 0 -and -not (Test-Path (Join-Path $inb 'lane-u.md'))) "$cU"
 
   # CLEAN TWIN: ordinary prose above the first finding still merges, and is not itself
   # filed. This is the behaviour the refusal above was most likely to have broken.
-  Remove-Item (Join-Path $inb 'lane-f.md') -Force
+  Remove-Item (Join-Path $inb 'lane-f.md') -Force -ErrorAction SilentlyContinue   # tolerant BY RULE: no case may depend on what an earlier case left behind
   Set-Content (Join-Path $inb 'lane-g.md') "a note from the lane, no heading`n`n## a real finding`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
   $outG = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   $cG = $LASTEXITCODE
@@ -185,6 +256,36 @@ if ($SelfTest) {
   _C 'CLEAN TWIN' 'prose above the first finding merges, and the prose is not filed' ($cG -eq 0 -and $blAfter -match 'a real finding' -and $blAfter -notmatch 'a note from the lane') "$cG"
 
   Remove-Item (Join-Path $inb 'README.md') -Force -ErrorAction SilentlyContinue
+  # MUST NOT FIRE: a lane that measured nothing can SAY so, and one lane reporting
+  # nothing must not refuse every other lane's findings. This is the 2026-09-08 defect:
+  # a course blocked by a 403 filed nothing, correctly, and the merge refused the batch.
+  Get-ChildItem $inb -Filter *.md | Remove-Item -Force
+  Set-Content (Join-Path $inb 'lane-h.md') "# Lane: blocked`n`nNOTHING TO FILE`n`nthe course 403'd, so nothing was measured`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-i.md') "## a real finding beside it`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
+  $blPre = Get-Content $bl -Raw -Encoding UTF8
+  $outN = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
+  $cN = $LASTEXITCODE
+  $blPost = Get-Content $bl -Raw -Encoding UTF8
+  _C 'MUST NOT FIRE' 'a declared NOTHING TO FILE lane does not refuse the batch' ($cN -eq 0) "$cN"
+  _C 'MUST FIRE' 'and the empty landing is REPORTED by name, not silently dropped' ($outN -match 'NOTHING TO FILE declared by lane-h') 'not reported'
+  _C 'MUST NOT FIRE' 'and it is NOT filed as a backlog item' ($blPost -notmatch 'Lane: blocked' -and $blPost -match 'a real finding beside it') 'empty landing was filed'
+
+  # MUST FIRE: zero findings with NO marker is still a refusal. A file empty by accident
+  # and a file empty on purpose are otherwise identical.
+  Get-ChildItem $inb -Filter *.md | Remove-Item -Force
+  Set-Content (Join-Path $inb 'lane-j.md') "some prose, no heading, no findings and no marker`n" -Encoding UTF8
+  $outS = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
+  $cS = $LASTEXITCODE
+  _C 'MUST FIRE' 'zero findings with NO marker is still refused' ($cS -eq 2 -and $outS -match 'NOTHING TO FILE') "$cS"
+
+  # CLEAN TWIN: a lane declaring nothing, alone in the inbox, is consumed rather than
+  # left to be re-reported on every future run.
+  Get-ChildItem $inb -Filter *.md | Remove-Item -Force
+  Set-Content (Join-Path $inb 'lane-k.md') "NOTHING TO FILE`n`nnothing measured this run`n" -Encoding UTF8
+  $outK = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
+  $cK = $LASTEXITCODE
+  _C 'CLEAN TWIN' 'a lone empty landing is consumed, not re-reported forever' ($cK -eq 0 -and -not (Test-Path (Join-Path $inb 'lane-k.md'))) "$cK"
+
   # CLEAN TWIN: -DryRun prints the plan and changes nothing.
   # THIS CASE OWNS ITS FIXTURE. It used to assert on `lane-c.md` surviving, where lane-c
   # had been created eight cases earlier for an unrelated purpose. Inserting cases between
@@ -251,8 +352,22 @@ try {
   exit 2
 }
 
+# An empty landing is a RESULT and is reported by name; it never becomes a backlog item,
+# because "this lane found nothing" is not a change anybody rules on. The two counts stay
+# separate in the output: a total that folds them together is how a number comes to mean
+# nothing.
+$empties  = @($findings | Where-Object { $_.Empty })
+$findings = @($findings | Where-Object { -not $_.Empty })
+foreach ($e in $empties) { Write-Output ("  NOTHING TO FILE declared by " + $e.From) }
+
 if (@($findings).Count -eq 0) {
-  Write-Output "inbox holds $(@($files).Count) file(s) and no findings. Nothing to merge."
+  if (@($empties).Count -gt 0 -and -not $DryRun) {
+    # Consume them, so a lane that landed with nothing is not re-reported forever.
+    foreach ($f in $files) { Remove-Item -LiteralPath $f.FullName -Force }
+    Write-Output ("no findings to merge; {0} lane(s) declared NOTHING TO FILE and were consumed." -f @($empties).Count)
+  } else {
+    Write-Output "inbox holds $(@($files).Count) file(s) and no findings. Nothing to merge."
+  }
   Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
   exit 0
 }
@@ -289,6 +404,7 @@ Add-Content -LiteralPath $Backlog -Value $block.ToString() -Encoding UTF8
 foreach ($f in $files) { Remove-Item -LiteralPath $f.FullName -Force }
 
 Write-Output ''
-Write-Output ("merged {0} finding(s); inbox emptied. Run ops\audit-backlog-status.ps1 to confirm the states." -f @($findings).Count)
+$emptyNote = if (@($empties).Count -gt 0) { ", plus {0} lane(s) declaring NOTHING TO FILE" -f @($empties).Count } else { '' }
+Write-Output ("merged {0} finding(s){1}; inbox emptied. Run ops\audit-backlog-status.ps1 to confirm the states." -f @($findings).Count, $emptyNote)
 Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
 exit 0
