@@ -21,9 +21,11 @@ is one copy of every rule and nothing here can drift from it.
   ruling reads as red until the next build. That is on purpose, not a bug to chase.
   [[known-wrong-is-the-main-board-corrector]]
 - **`compare-deals.ps1` is not standalone.** A mid-day rebuild needs identity emission AND link repair.
-  Never revert-to-isolate. Three scripts LIFT its functions, and a lifted `$script:` constant does not
+  Never revert-to-isolate. **MANY scripts LIFT its functions - 17 read its source and 14 execute what they lifted, measured 2026-09-08, against a `three` that stood in this file for months.** Count it, never quote it:
+  `grep -rl "compare-deals\.ps1" --include=*.ps1 grocery ops meal-prep lib graph`
+  A lifted `$script:` constant does not
   travel - the lift needs functions, parens and a column-0 brace.
-  [[compare-deals-is-not-standalone]], [[compare-deals-functions-are-lifted-by-three-scripts]]
+  [[compare-deals-is-not-standalone]], [[compare-deals-functions-are-lifted-by-many-scripts]]
 - **A wrong product is a SELLER SHAPE, not a brand.** Blocking the brand hands the cell to the next
   bulk seller. [[wrong-product-class-is-a-seller-shape]]
 - **One bad Walmart pull holds a ship-only cell for 90 days** once Marketplace rows enter the union.
