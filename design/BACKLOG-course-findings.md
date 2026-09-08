@@ -5136,3 +5136,111 @@ which this course does not close and which the note below explains it cannot.
 "N of M correct" should ship with the same N of M for the dumbest predictor that could have produced
 it, through the same code path. `grocery/audit-alert-precision.ps1` and the matcher scorers are the
 other candidates; nobody has checked whether they carry a baseline.
+
+---
+
+### I-WS1 [ID UNALLOCATED: assign at the between-courses pass; four course agents ran concurrently on 2026-09-08 and the I-series allocator has no lock]
+
+**OPEN.** Source: `packt-web-scraping-tutorial-with-scrapy-and-python-for-beginners-0edsw` (Packt,
+Coursera), worked 2026-09-08.
+
+**Per-store pacing here is a static constant. The alternative is a closed loop on observed latency,
+and nobody has costed it.**
+
+`grocery/stores.json` carries a fixed `delay_ms` per store: three stores at `null`, two at 900, one
+at 2600, one at 3500. `grocery/audit-pull-profiles.ps1` gates those numbers well: a pacing number
+with no `evidence` string fails, a server-fed store with no pacing is a legal input, and the header
+records that the 207-of-595 throttle incident happened because "the pacing that would have prevented
+it existed nowhere, not in a file, not in a script, only in whatever number was typed that day."
+That is a genuinely good design and this item does not propose weakening it.
+
+What it is not is adaptive. Scrapy's AutoThrottle extension (module 17 of this course) is a
+**feedback controller**: it measures the server's own response latency per request and treats a
+rising latency as evidence the server is loaded, then lengthens the delay; when latency falls it
+shortens it again. Its knobs are a start delay (5s default), a max delay (60s), a target concurrency
+and a debug flag, and it ships **disabled by default**. The mechanism, not the Scrapy
+implementation, is the finding: **the server tells you how hard you are allowed to push, and the
+signal is free because you are already timing the request.**
+
+**Why it matters here specifically.** A static 3500 ms is simultaneously too slow on a quiet morning
+and too fast on the day the store's own infrastructure is struggling, and only the second case
+produces a bot wall. The estate has recorded bot-wall incidents and a documented case
+(`design/PLAN-use-the-cores-2-2026-08-23.md`) of a fresh headless profile with no pacing walling a
+store. One store's pull already takes about 75 minutes, so a controller that speeds up when the
+server is healthy has real upside as well as the safety downside.
+
+**What it would touch.** `grocery/stores.json` (a new optional `pacing_mode` beside `delay_ms`,
+defaulting to the current static behaviour), the per-store pull scripts that currently sleep a
+constant, and `grocery/audit-pull-profiles.ps1`, whose evidence rule would need to say what evidence
+an adaptive profile owes. Nothing about this makes an existing check red on day one: an adaptive
+profile is opt-in per store and the static path stays the default.
+
+**The honest counter-argument, which should be settled before building.** `claude-api-craft/rate-limits-retries-and-cost.md`
+section 11 already records this estate's own measured conclusion that under a hard per-window quota
+the fix is **fewer requests per window (shard the term list across the day), not slower requests**,
+and that a "3 retries + backoff" Family Fare pull once ran ~45 minutes under a throttle and returned
+a partial catalogue. AutoThrottle is a rate controller, not a quota controller, so it addresses the
+politeness/overload case and does **nothing** for the quota case. If the estate's walls are quota
+walls rather than load walls, this item should be closed as WONTFIX rather than built. **The
+measurement that settles it is cheap and does not exist:** record the observed per-request latency
+alongside each pull and check whether latency rises before a wall. If it does not, close this.
+
+---
+
+### I-WS2 [ID UNALLOCATED: as above]
+
+**OPEN.** Same source course, worked 2026-09-08.
+
+**A 200 with a correct selector and zero rows has three causes, and the estate's vocabulary names
+only two of them.**
+
+The estate is already strong here by comparison with the course. `blocked` versus `not-carried` is a
+first-class distinction enforced in `.claude/agents/recipe-hunter-pricer.md` ("UNCHECKED IS NEVER
+NOT-CARRIED"; a bot wall, timeout, wrong-store session or unreached store leaves the ingredient
+PENDING), and the memory `a-could-not-look-must-not-settle-the-question` holds the rule. This item
+does not propose changing any of that.
+
+The gap is a **third** cause the course names and the estate's vocabulary does not: the page returned
+HTTP 200, the markup is genuinely present and correct, the selector is genuinely right, and the rows
+are still absent **because the content is injected by JavaScript that nothing executed**. Module 14
+item 68 is the worked case: a correct CSS selector returns nothing against a 200 response, and the
+diagnostic is that the data is sitting inside a `<script>` block waiting for a browser. A second
+shape in module 15 item 77: the element is present but **empty**, because it is populated after a
+loading screen the scraper did not wait for.
+
+So the honest taxonomy for an empty result is four-way, not three-way:
+
+1. **blocked** - a wall, a CAPTCHA, a challenge page. Already named.
+2. **genuinely absent** - the store does not carry it. Already named (`not-carried`).
+3. **unrendered** - 200, right selector, JS never ran. **Not named.**
+4. **unsettled** - the element exists but was still filling. **Not named**, and this is the one that
+   produces a *partial* result rather than an empty one, which is worse because it looks like a
+   success.
+
+Cause 4 is not hypothetical here: `fareway-capture-defects` records that a repeated exact 9 means
+unscrolled lazy-load, which is exactly this shape, and it was diagnosed by hand after the fact.
+
+**The mechanism the course supplies, and it is the useful half.** For an infinite-scroll page, do
+not sleep and hope. Issue the scroll, then **wait on a count-based selector** for an element that can
+only exist if the scroll actually produced more rows: the course uses
+`div.quote:nth-child(11)` when a page starts with 10. If the eleventh never appears the wait fails
+loudly, instead of the scrape quietly returning the first 10. **The assertion that the load worked is
+built into the wait condition rather than bolted on afterwards**, and that is the whole idea. A fixed
+`Start-Sleep` cannot do this: it cannot tell "the page finished and there were only 10" from "the
+page never loaded page 2".
+
+**What it would touch.** The browser-driven captures (the four stores that need a real Chrome), which
+would gain a per-store "expected next element" wait predicate instead of, or in front of, a fixed
+sleep. And an `unrendered` disposition beside `blocked` and `not-carried`, so that the wrong repair
+is not applied: a 200-with-no-rows currently reads as a selector bug and gets a selector fix, when
+the actual repair is to render the page or to find the underlying JSON call.
+
+**The cheaper repair the course also supplies, and it may make half of this moot.** Module 16: open
+the browser Network tab, filter to Fetch/XHR, and read the URL the page's own JavaScript calls. That
+call usually returns the data as JSON directly, with no browser needed. The course measures the same
+data at **about 9 seconds via the API call against about 19 seconds through a rendered browser** on
+its example. Three of the seven feeds here are already server-side JSON; the open question nobody has
+written down is **whether any of the four browser-required stores is browser-required only because
+nobody has looked at its Network tab**. That check costs one person one hour per store and could
+retire the 75-minute pull. It should be an item in its own right if this one is split.
+
