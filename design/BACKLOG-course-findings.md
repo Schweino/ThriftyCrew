@@ -4044,9 +4044,39 @@ crawled during the window in which they fell. A crawl-rate or site-quality expla
 evidence at least as well, and 3 web-search clicks in 28 days over 1,331 indexed pages points the
 same way. Treat the fix as correct-and-cheap, not as the known cause.
 
-**The confirmation the item asks for is still the right next move and is now the ONLY move that can
-settle it**: request indexing on one recipe, which forces the re-crawl, and read the enhancement
-result when it lands. That is an action on Brad's Search Console account and has not been taken.
+**THE CONFIRMATION WAS SUBMITTED 2026-09-07, on Brad's authorisation, and this is the record to
+check it against.** Request Indexing was clicked on five paid recipes, each of which had already
+been verified as serving the Recipe-node paywall claim live. Google returned "Indexing requested,
+URL was added to a priority crawl queue" on all five.
+
+| recipe requested | last crawl BEFORE the request | Recipes in the index at that crawl |
+|---|---|---|
+| `cheeseburger-pasta` | Jul 10, 2026 | 1 valid item detected |
+| `bbq-chicken-rice-bowls` | Aug 2, 2026 | 1 valid item detected |
+| `fajita-chicken-rice-bowl` | not read | 1 valid item detected |
+| `beef-burrito-bowls` | not read | 1 valid item detected |
+| `italian-sausage-penne` | not read | 1 valid item detected |
+
+Five were requested rather than one deliberately: a single page's result cannot separate "the fix
+worked" from "that page was re-crawled anyway".
+
+**WHAT WOULD SETTLE IT, WRITTEN BEFORE THE ANSWER ARRIVES so the reading cannot be fitted to
+whatever turns up.** Re-inspect these five in a few days and read the site-wide Recipes count:
+
+- **The fix mattered.** All five re-crawl, each still shows a valid Recipe item, and the site-wide
+  valid count rises from 1 toward the number of pages re-crawled. The paywall declaration is then
+  the thing that changed and the hypothesis is supported.
+- **The fix was correct but was not the cause.** All five re-crawl and still show valid per page,
+  and the site-wide count stays at 1. Then the enhancement report is measuring something other than
+  per-page validity, and the collapse needs a different explanation - crawl rate is the standing
+  candidate.
+- **Something else is wrong.** A re-crawled page reports its Recipe item INVALID, which would be a
+  new defect and not this one; read the reason it gives before touching anything.
+- **No verdict yet.** The pages have not been re-crawled. That is not evidence either way, and the
+  honest move is to wait rather than to read the unchanged number as a result.
+
+The site-wide baseline on the day of the request: **Recipes 1 valid, 0 invalid; Breadcrumbs 23
+valid, 0 invalid; 1,331 pages indexed; 3 web-search clicks in 28 days.**
 
 **ONE ADJACENT OBSERVATION, stated as an open question and not a finding.** On both a paid and a
 free page fetched as Googlebot, **none of the six declared `recipeInstructions` steps appears
