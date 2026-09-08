@@ -3932,7 +3932,7 @@ candidate) or *variable* (a buffering candidate), which is the split recorded as
 timing to them is a rung 2 and should not be started before rung 1 says a bottleneck read is worth
 having.
 
-### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `CONFIRMED AND SHIPPED 2026-09-07, VERIFIED LIVE; ONLY GOOGLE'S VERDICT IS OUTSTANDING` `b3a35c7cf` `be797a371` `seo`
+### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `PARTLY DONE - THE FIX IS SHIPPED AND VERIFIED LIVE 2026-09-07; ONLY GOOGLE'S RE-CRAWL VERDICT IS OUTSTANDING` `b3a35c7cf` `be797a371` `seo`
 
 **Found 2026-09-07 while chasing the impression decline I24 measured.** Read from Search Console
 directly, not inferred.
@@ -4014,6 +4014,39 @@ not by a rebuild, which is why live is ahead of `db/built` rather than behind it
 **What is still open is only Google's verdict**, and it is not ours to compute: the item's own
 cheapest confirmation is to request indexing on one recipe and watch whether Recipe rich results
 return to valid. That is an action on Brad's Search Console account.
+
+**READ FROM SEARCH CONSOLE 2026-09-07, and it weakens the hypothesis this item is built on.**
+Brad's own property, `https://www.thriftycrew.com/`, inspected in his browser:
+
+| what Search Console says | value |
+|---|---|
+| Recipes enhancement, site-wide | **1 valid, 0 invalid** (the number this item was opened on) |
+| Breadcrumbs enhancement, site-wide | 23 valid, 0 invalid, against 1,331 indexed pages |
+| `cheeseburger-pasta` (paid), URL Inspection | indexed; **Recipes: 1 valid item detected**; last crawl **Jul 10, 2026** |
+| `bbq-chicken-rice-bowls` (paid), URL Inspection | indexed; **Recipes: 1 valid item detected**; last crawl **Aug 2, 2026** |
+
+**Two of two sampled pages hold a VALID Recipe item in Google's own index.** The site-wide count of
+1 is therefore not a count of pages whose markup is currently broken; it does not agree with the
+per-page truth on either page sampled, and the honest reading is that the enhancement report counts
+what Google has recently re-processed rather than what it holds.
+
+**And Google is barely re-crawling this site.** The two pages were last crawled 10 July and 2
+August, five to eight weeks ago. The Recipe collapse this item measured is dated 18 to 30 August,
+AFTER both of those crawls, so neither page's indexed copy has ever contained the defect the item
+diagnosed, and neither can show the fix until Google returns. Nothing about today's change can
+appear in this report on its own schedule.
+
+**What that does and does not do to the diagnosis.** The measured facts stand: the Recipe node did
+lack `isAccessibleForFree` and `hasPart` while the page withheld a step, and putting the claim on
+the node Google reads is correct whether or not it caused anything. What is now doubtful is the
+CAUSAL half - that the mismatch is why valid results fell to 1 - because the pages sampled were not
+crawled during the window in which they fell. A crawl-rate or site-quality explanation fits the
+evidence at least as well, and 3 web-search clicks in 28 days over 1,331 indexed pages points the
+same way. Treat the fix as correct-and-cheap, not as the known cause.
+
+**The confirmation the item asks for is still the right next move and is now the ONLY move that can
+settle it**: request indexing on one recipe, which forces the re-crawl, and read the enhancement
+result when it lands. That is an action on Brad's Search Console account and has not been taken.
 
 **ONE ADJACENT OBSERVATION, stated as an open question and not a finding.** On both a paid and a
 free page fetched as Googlebot, **none of the six declared `recipeInstructions` steps appears

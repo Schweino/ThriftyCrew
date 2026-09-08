@@ -6,6 +6,12 @@
       "name": "aa-fare-watch-tys-oma",
       "reason": "personal flight-price watch, carries travel dates and alert recipients; ops\\prompt-backup is tracked in a PUBLIC repo",
       "added": "2026-09-04"
+    },
+    {
+      "kind": "scheduled-task",
+      "name": "recall-sleep",
+      "reason": "drives the knowledge store at C:\\Users\\Owner\\.claude and is already versioned and pushed in that store's own repository, so it is backed up; mirroring it here would publish internal absolute paths into a repo that loads without a login and buy no durability. Reversible: -Adopt it if that repo ever stops being its home",
+      "added": "2026-09-07"
     }
   ]
 }
