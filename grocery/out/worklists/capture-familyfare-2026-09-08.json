@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-12; next_pull 2026-09-13",
-    "cursor_start":  159,
-    "cursor_next":  166,
+    "cursor_start":  168,
+    "cursor_next":  175,
     "total_terms":  602,
     "rotation_terms":  [
-                           "collard greens",
-                           "sweetened condensed milk",
-                           "hair conditioner",
-                           "cooked jasmine rice",
-                           "cooked quinoa",
-                           "cooked shredded chicken",
-                           "chocolate chip cookies"
+                           "corn dogs",
+                           "corned beef brisket",
+                           "corned beef hash",
+                           "cornmeal",
+                           "corn muffin mix",
+                           "corn starch",
+                           "cottage cheese"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "collard greens",
-                  "sweetened condensed milk",
-                  "hair conditioner",
-                  "cooked jasmine rice",
-                  "cooked quinoa",
-                  "cooked shredded chicken",
-                  "chocolate chip cookies"
+                  "corn dogs",
+                  "corned beef brisket",
+                  "corned beef hash",
+                  "cornmeal",
+                  "corn muffin mix",
+                  "corn starch",
+                  "cottage cheese"
               ],
     "commodities":  [
-                        "collard-greens",
-                        "condensed-milk",
-                        "conditioner",
-                        "cooked-jasmine-rice",
-                        "cooked-quinoa",
-                        "cooked-shredded-chicken",
-                        "cookies"
+                        "corn-dogs",
+                        "corned-beef-brisket",
+                        "corned-beef-hash",
+                        "cornmeal",
+                        "corn-muffin-mix",
+                        "cornstarch",
+                        "cottage-cheese"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

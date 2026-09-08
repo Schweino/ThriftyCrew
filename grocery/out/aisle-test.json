@@ -45,6 +45,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "baby-potatoes",
+        "store":  "Family Fare",
+        "product":  "Our Family Potatoes Red Baby Dutch",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/potatoes",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
         "id":  "black-pepper",
         "store":  "Family Fare",
         "product":  "That\u0027s Smart! Ground Black Pepper",
@@ -108,6 +117,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
+        "id":  "canned-chicken",
+        "store":  "Family Fare",
+        "product":  "Swanson® White Premium Chunk Canned Chicken Breast In Water 25.000 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/chicken",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
         "id":  "canned-corn",
         "store":  "Family Fare",
         "product":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
@@ -115,6 +133,24 @@
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "diced-tomatoes",
+        "store":  "Family Fare",
+        "product":  "Our Family Tomatoes, With Lime Juice \u0026 Cilantro, Diced 14.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "canned-salmon",
+        "store":  "Family Fare",
+        "product":  "Deming\u0027s Pink Salmon, Wild Caught Alaskan 14.75 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/seafood_fish",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "canned-tuna",
@@ -151,6 +187,42 @@
         "aisle":  "fresh_fruits_vegetables/tomatoes",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "chicken-wings",
+        "store":  "Family Fare",
+        "product":  "Chicken Party Wings",
+        "dept":  "meat",
+        "aisle":  "meat/chicken",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
+        "id":  "chuck-roast",
+        "store":  "Family Fare",
+        "product":  "Fresh Beef Chuck Roast, Boneless",
+        "dept":  "meat",
+        "aisle":  "meat/beef",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
+        "id":  "cilantro",
+        "store":  "Family Fare",
+        "product":  "Cilantro (Chinese Parsley/Coriander)",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "cod",
+        "store":  "Family Fare",
+        "product":  "Cod Frozen Fillets Aqua Star",
+        "dept":  "meat",
+        "aisle":  "meat/seafood_fish",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "cucumbers",
@@ -243,6 +315,15 @@
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
+        "id":  "fresh-ginger",
+        "store":  "Family Fare",
+        "product":  "Ginger Root",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
         "id":  "granola",
         "store":  "Family Fare",
         "product":  "Blueberry Flax Granola Our Family",
@@ -333,6 +414,33 @@
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
+        "id":  "instant-mashed-potatoes",
+        "store":  "Family Fare",
+        "product":  "Idahoan Idahoan® Baby Reds® Brand Mashed Potatoes 8.2 Oz. Pouch",
+        "dept":  "pantry",
+        "aisle":  "pantry/dry_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
+    },
+    {
+        "id":  "jalapenos",
+        "store":  "Family Fare",
+        "product":  "Red/Mexican Red Jalapeno Peppers (Capsicums)",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/peppers",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "jarred-gravy",
+        "store":  "Family Fare",
+        "product":  "Heinz Home Style Turkey Gravy, 12 Oz Jar",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "jelly",
         "store":  "Family Fare",
         "product":  "Concord Grape Preserves Our Family",
@@ -349,6 +457,15 @@
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
+        "id":  "kielbasa",
+        "store":  "Family Fare",
+        "product":  "Eckrich Polska Kielbasa Skinless Smoked Sausage Rope 14 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/sausage",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "kiwi",
@@ -423,6 +540,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
+        "id":  "pickled-jalapenos",
+        "store":  "Family Fare",
+        "product":  "La Costena Jalapenos, Pickled Jalapeno Peppers 26 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "plums",
         "store":  "Family Fare",
         "product":  "Fresh Plums, Red",
@@ -439,6 +565,15 @@
         "aisle":  "pantry/chips_other_salty_snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "radishes",
+        "store":  "Family Fare",
+        "product":  "Red Radishes",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_prepared_fruits_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
         "id":  "ranch-dressing",
@@ -466,6 +601,33 @@
         "aisle":  "fresh_fruits_vegetables/berries",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
+        "id":  "red-potatoes",
+        "store":  "Family Fare",
+        "product":  "Our Family Potatoes North Dakota Red",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/potatoes",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "ribeye-steak",
+        "store":  "Family Fare",
+        "product":  "Fresh Ribeye, Whole",
+        "dept":  "meat",
+        "aisle":  "meat/beef",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
+        "id":  "rotisserie-chicken",
+        "store":  "Family Fare",
+        "product":  "Whole Rotisserie Chicken (No Pick Up/Delivery Before 11am)",
+        "dept":  "deli",
+        "aisle":  "deli/ready_to_go_hot",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "shower-cleaner",
@@ -540,6 +702,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "sweet-potatoes",
+        "store":  "Family Fare",
+        "product":  "Red/Orangy Red Flesh Sweet Potato/Yam/Kumara, Small",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/potatoes",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
         "id":  "salt",
         "store":  "Family Fare",
         "product":  "Iodized Salt Our Family",
@@ -547,6 +718,15 @@
         "aisle":  "pantry/mixes_spices_seasoning",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "tilapia",
+        "store":  "Family Fare",
+        "product":  "Our Family Fillets, Tilapia 16 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/seafood_fish",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "toaster-pastries",
@@ -619,6 +799,15 @@
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
+        "id":  "frozen-green-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Green Beans, Cut, Fresh Frozen 24 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
         "id":  "hot-honey",

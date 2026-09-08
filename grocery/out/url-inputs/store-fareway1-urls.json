@@ -359,8 +359,8 @@
     {
         "id":  "sweet-potatoes",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17626656-sweet-potato-yam-1-lb",
-        "price":  "1.12",
-        "size":  "$1.49 / lb",
+        "price":  "1.49",
+        "size":  "lb",
         "name":  "Sweet Potato (Yam)"
     },
     {
@@ -2164,10 +2164,10 @@
     },
     {
         "id":  "chili-powder",
-        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/253183-badia-spices-chili-powder-16-oz",
-        "price":  "7.99",
-        "size":  "16 oz",
-        "name":  "Badia Spices Chili Powder"
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73104-mccormick-chili-powder-4-5-oz",
+        "price":  "4.99",
+        "size":  "4.5 oz",
+        "name":  "McCormick Chili Powder"
     },
     {
         "id":  "ground-cumin",
@@ -2823,8 +2823,8 @@
     {
         "id":  "tomatillos",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16382470-tomatillo-1-lb",
-        "price":  "0.31",
-        "size":  "$2.49 / lb",
+        "price":  "2.49",
+        "size":  "lb",
         "name":  "Tomatillo"
     },
     {
@@ -2914,15 +2914,15 @@
     {
         "id":  "spaghetti-squash",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2686118-spaghetti-squash-1-lb",
-        "price":  "4.47",
-        "size":  "$1.49 / lb",
+        "price":  "1.49",
+        "size":  "lb",
         "name":  "Spaghetti Squash"
     },
     {
         "id":  "acorn-squash",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26392622-pexco-produce-sales-green-acorn-squash-per-lb",
-        "price":  "2.24",
-        "size":  "$1.49 / lb",
+        "price":  "1.49",
+        "size":  "lb",
         "name":  "Green Acorn Squash"
     },
     {
@@ -2949,8 +2949,8 @@
     {
         "id":  "serrano-peppers",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb",
-        "price":  "0.21",
-        "size":  "$4.99 / lb",
+        "price":  "4.99",
+        "size":  "lb",
         "name":  "Green Serrano Pepper"
     },
     {
@@ -2963,8 +2963,8 @@
     {
         "id":  "shallots",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16551293-shallot-1-lb",
-        "price":  "0.75",
-        "size":  "$4.99 / lb",
+        "price":  "4.99",
+        "size":  "lb",
         "name":  "Shallot"
     },
     {
@@ -3012,8 +3012,8 @@
     {
         "id":  "nectarines",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16383355-white-nectarine-1-lb",
-        "price":  "1.58",
-        "size":  "$3.88 / lb",
+        "price":  "3.88",
+        "size":  "lb",
         "name":  "White Nectarine"
     },
     {
@@ -3054,8 +3054,8 @@
     {
         "id":  "red-onion",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/304773-red-onion-1-lb",
-        "price":  "1.27",
-        "size":  "$1.69 / lb",
+        "price":  "1.69",
+        "size":  "lb",
         "name":  "Red Onion"
     },
     {
@@ -3192,32 +3192,11 @@
         "name":  "Mission Carb Balance Flour Tortillas, Burrito Size, 6 Count"
     },
     {
-        "id":  "watermelon",
-        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22589505-jonnypops-pops-organic-watermelon-dairy-free-8-ea",
-        "price":  "5.99",
-        "size":  "8 ct",
-        "name":  "JonnyPops Organic Watermelon"
-    },
-    {
         "id":  "plums",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24228451-fareway-jelly-red-plum-18-oz",
         "price":  "2.79",
         "size":  "18 oz",
         "name":  "Fareway Red Plum Jelly"
-    },
-    {
-        "id":  "cantaloupe",
-        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389253-cut-cantaloupe-pint",
-        "price":  "3.33",
-        "size":  "each",
-        "name":  "Cut Cantaloupe"
-    },
-    {
-        "id":  "eggplant",
-        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16865798-eggplant-1-lb",
-        "price":  "1.99",
-        "size":  "each",
-        "name":  "Eggplant"
     },
     {
         "id":  "avocado-oil",
@@ -3260,6 +3239,13 @@
         "price":  "4.99",
         "size":  "24 oz",
         "name":  "Bob\u0027s Red Mill Red Bulgur, Whole Grain"
+    },
+    {
+        "id":  "watermelon",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22589505-jonnypops-pops-organic-watermelon-dairy-free-8-ea",
+        "price":  "5.99",
+        "size":  "8 ct",
+        "name":  "JonnyPops Organic Watermelon"
     },
     {
         "id":  "canned-butter-beans",

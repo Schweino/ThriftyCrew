@@ -1,18 +1,18 @@
 ﻿{
-    "date":  "2026-09-07",
-    "written":  "2026-09-07T15:22:15",
-    "written_by":  "refresh-chain-verdict",
+    "date":  "2026-09-08",
+    "written":  "2026-09-08T08:12:49",
+    "written_by":  "check-ad-cycles",
     "guards_rc":  0,
     "guards_blocked":  false,
-    "inputs_fingerprint":  "c243cc5b400faa04",
+    "inputs_fingerprint":  "332ba363999423eb",
     "inputs":  {
-                   "grocery\\out\\comparison-2026-09-07.json":  "ff01cd7dfe080fd05338fcbc7f9d0ae62700c73dbfbee0e20295a3d1035ab88a",
-                   "grocery\\commodities.json":  "e59513a39eecace5fa097b4b0d0368a4f751af6989aaed4254766081e7df826b",
+                   "grocery\\out\\comparison-2026-09-08.json":  "adc87be9d360bcb631d41f3c504c6fa76b8f54dfabdc4c653130f5b927f48b3d",
+                   "grocery\\commodities.json":  "4a3682c73d55cf8ecdae3de64eb9cb29d7235a3e02acfe4e4f9cddf3022e2019",
                    "grocery\\known-wrong.json":  "5ab7d3f052dc5d8d33e43c8690b9f66adfa45cc3ec0a52aa5ab165de0265fd9a",
-                   "grocery\\board-price-overrides.json":  "dddd18ab1128e15773bef43076807bfb7f79febbb5235767d3458db9bd0663f4",
-                   "grocery\\product-urls.json":  "c938ece17d8019cfb9251182d18544cf4fb4dacc54b3cde00e67adcbc0bdf823",
-                   "grocery\\out\\recipe-board.json":  "e7f767f4fc590b6b0f532d5b3600209fd8d0e2577dd7903bda4d96459b9c67f7",
-                   "grocery\\out\\name-drift.json":  "e954d767464fb435957a18bfb662d6e48aa26eec16cda80f582bc308bd0bb414"
+                   "grocery\\board-price-overrides.json":  "10e3146814b1bbe56524ed8a5a9f56dd8690b28597a92d3789bbdce0edf81d82",
+                   "grocery\\product-urls.json":  "72d357025609adcd07975adac80cb66a81e55fcdd4d1b768d6a60ff2029a1d2e",
+                   "grocery\\out\\recipe-board.json":  "1f6123d4852f7edf9b748dc14e30462458fc4821703f448dfd9fad2db3c948cb",
+                   "grocery\\out\\name-drift.json":  "7bb511b05466783bb3294e96ce1f48d68663dd422bf0433b6ea117ba3416b67b"
                },
     "note":  "Written after guards ran. Readers must go through lib\\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\\** or meal-prep\\**."
 }

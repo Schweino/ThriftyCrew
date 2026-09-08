@@ -576,12 +576,6 @@
                                                               "size":  "lb",
                                                               "board_pu":  4.49
                                                           },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb",
-                                                          "price":  4.99,
-                                                          "size":  "lb",
-                                                          "name":  "green serrano pepper 1 lb"
-                                                      },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/37372/anaheim-peppers",
                                                          "price":  1.25,
@@ -596,6 +590,13 @@
                                                           "price":  "$2.94",
                                                           "size":  "16 oz",
                                                           "verified":  "2026-09-03 DERIVED from the price row (same record the board priced)"
+                                                      },
+                                          "Fareway":  {
+                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19141625-anaheim-pepper-1-lb",
+                                                          "name":  "Anaheim Pepper",
+                                                          "price":  "$4.99",
+                                                          "size":  "lb",
+                                                          "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "apple":  {
@@ -1492,7 +1493,20 @@
                                                       "price":  "$1.12",
                                                       "size":  "15 oz",
                                                       "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/29529506-saucy-spoon-baked-beans-applewood-smoked-bacon-28-oz",
+                                                      "name":  "Saucy Spoon Applewood Smoked Bacon Baked Beans",
+                                                      "price":  "$1.99",
+                                                      "size":  "28 oz",
+                                                      "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                  },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/our_family_original_baked_beans_28_oz/p/6786962",
+                                                          "name":  "Our Family Original Baked Beans 28 Oz",
+                                                          "price":  "$2.59",
+                                                          "size":  "28 oz"
+                                                      }
                                   },
                   "baking-powder":  {
                                         "commodity":  "baking-powder",
@@ -1610,14 +1624,6 @@
                                                         "recipe_pu":  0.1947,
                                                         "board_pu":  0.1769
                                                     },
-                                           "Baker\u0027s":  {
-                                                                "url":  "https://www.bakersplus.com/p/filippo-berio-balsamic-vinegar-of-modena/0004173600530",
-                                                                "name":  "Filippo Berio Balsamic Vinegar of Modena",
-                                                                "price":  3.99,
-                                                                "size":  "16.9 fl oz",
-                                                                "verified":  "2026-08-23",
-                                                                "board_pu":  0.2361
-                                                            },
                                            "Family Fare":  {
                                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/alessi_balsamic_vinegar_12_75_oz/p/38483",
                                                                "name":  "Alessi Balsamic Vinegar 12.75 Oz",
@@ -1645,7 +1651,14 @@
                                                            "size":  "16 fl oz",
                                                            "name":  "Pompeian Balsamic Vinegar - 16 fl oz",
                                                            "verified":  "2026-08-31 price-pull self-capture"
-                                                       }
+                                                       },
+                                           "Baker\u0027s":  {
+                                                                "url":  "https://www.bakersplus.com/p/pompeian-balsamic-vinegar/0007040400103",
+                                                                "name":  "Pompeian Balsamic Vinegar",
+                                                                "price":  "$3.99",
+                                                                "size":  "16 oz",
+                                                                "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                            }
                                        },
                   "banana-peppers":  {
                                          "commodity":  "Banana Peppers / Pepperoncini",
@@ -3571,7 +3584,14 @@
                                                  "size":  "lb",
                                                  "name":  "Green Cabbage",
                                                  "board_pu":  0.89
-                                             }
+                                             },
+                                  "Walmart":  {
+                                                  "url":  "https://www.walmart.com/ip/44391042",
+                                                  "name":  "Fresh Green Cabbage, Each",
+                                                  "price":  "$2.68",
+                                                  "size":  "3.045 lb",
+                                                  "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                              }
                               },
                   "caesar-dressing":  {
                                           "commodity":  "Caesar Dressing",
@@ -3893,12 +3913,6 @@
                                                                  "name":  "Member\u0027s Mark Premium Chunk Chicken Breast, 12.5 oz., 6 ct.",
                                                                  "board_pu":  0.1675
                                                              },
-                                         "Family Fare":  {
-                                                             "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/canned_chicken/swanson_25_less_sodium_white_premium_chunk_canned_chicken_breast_in_water_12_500_oz/p/1564405684710443097",
-                                                             "name":  "Swanson® 25% Less Sodium White Premium Chunk Canned Chicken Breast In Water 12.500 Oz",
-                                                             "price":  "$3.99",
-                                                             "size":  "12.500 oz"
-                                                         },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/10315929",
                                                          "name":  "Great Value Chunk Chicken Breast with Rib Meat in Water, 12.5 oz Can",
@@ -3912,7 +3926,14 @@
                                                          "price":  "$5.99",
                                                          "size":  "2 x 12.5 oz",
                                                          "verified":  "2026-09-07 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Family Fare":  {
+                                                             "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/canned_chicken/swanson_white_premium_chunk_canned_chicken_breast_in_water_25_000_oz/p/6127364",
+                                                             "name":  "Swanson® White Premium Chunk Canned Chicken Breast In Water 25.000 Oz",
+                                                             "price":  "$10.99",
+                                                             "size":  "25.000 oz",
+                                                             "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                         }
                                      },
                   "canned-chili":  {
                                        "commodity":  "canned-chili",
@@ -4986,20 +5007,20 @@
                                                            "name":  "Meow Mix, Original Choice Flavor Adult Dry Cat Food, Heart Healthy \u0026 Oral Care Formula, 32 lbs.",
                                                            "board_pu":  0.7962
                                                        },
-                                   "Baker\u0027s":  {
-                                                        "url":  "https://www.bakersplus.com/p/purina-friskies-gravy-swirlers-with-flavors-of-chicken-salmon-and-gravy-dry-cat-food/0005000016862",
-                                                        "name":  "Purina Friskies Gravy Swirlers With Flavors of Chicken, Salmon and Gravy Dry Cat Food",
-                                                        "price":  "$17.49",
-                                                        "size":  "16 lb",
-                                                        "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                    },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/580981627",
                                                    "name":  "Special Kitty Outdoor Formula Dry Cat Food, 44 lb Bag",
                                                    "price":  "$28.77",
                                                    "size":  "44 lb",
                                                    "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/friskies-dry-cat-food-seafood-sensations-with-salmon-tuna-and-shrimp-flavors/0005000057577",
+                                                        "name":  "Friskies Dry Cat Food Seafood Sensations With Salmon, Tuna, and Shrimp Flavors",
+                                                        "price":  "$17.49",
+                                                        "size":  "16 lb.",
+                                                        "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                    }
                                },
                   "cat-litter":  {
                                      "commodity":  "cat-litter",
@@ -5624,20 +5645,20 @@
                                                           "size":  "10 oz",
                                                           "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
                                                       },
-                                          "Sam\u0027s Club":  {
-                                                                  "url":  "https://www.samsclub.com/ip/13599513403",
-                                                                  "name":  "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
-                                                                  "price":  "$6.97",
-                                                                  "size":  "1.5 lb",
-                                                                  "verified":  "2026-09-07 DERIVED from the price row (same record the board priced)"
-                                                              },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/28263754-red-cherry-tomatoes-on-the-vine-12-oz",
                                                           "name":  "Red Cherry Tomatoes on the Vine",
                                                           "price":  "$3.99",
                                                           "size":  "12 oz",
                                                           "verified":  "2026-09-07 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                          "Sam\u0027s Club":  {
+                                                                  "url":  "https://www.samsclub.com/ip/15677963466",
+                                                                  "name":  "Grape Tomatoes, 2 lbs.",
+                                                                  "price":  "$5.67",
+                                                                  "size":  "2 lb",
+                                                                  "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                              }
                                       },
                   "chicken-breast":  {
                                          "commodity":  "Boneless Skinless Chicken Breast",
@@ -5871,20 +5892,20 @@
                                                          "size":  "$1.99 / lb",
                                                          "name":  "Bone-In Chicken Thighs"
                                                      },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/13597571365",
-                                                                 "name":  "Member\u0027s Mark Chicken Drumsticks, Case, priced per pound",
-                                                                 "price":  "$0.98",
-                                                                 "size":  "lb",
-                                                                 "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                             },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/14806857519",
                                                          "name":  "Tyson Fresh Chicken Drumstick, 10 lb Bag",
                                                          "price":  "$9.84",
                                                          "size":  "10 lb",
                                                          "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/13610718601",
+                                                                 "name":  "Member\u0027s Mark Chicken Drumsticks, priced per pound",
+                                                                 "price":  "$0.98",
+                                                                 "size":  "lb",
+                                                                 "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                             }
                                      },
                   "chicken-wings":  {
                                         "commodity":  "chicken-wings",
@@ -6079,12 +6100,6 @@
                                                            "board_pu":  0.6145,
                                                            "recipe_pu":  0.6145
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/253183-badia-spices-chili-powder-16-oz",
-                                                       "price":  7.99,
-                                                       "size":  "16 oz",
-                                                       "name":  "Badia Spices Chili Powder"
-                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13598100262",
                                                                "price":  9.98,
@@ -6105,6 +6120,13 @@
                                                        "size":  "3 oz",
                                                        "name":  "Great Value Chili Powder, 3 oz",
                                                        "verified":  "2026-08-31 price-pull self-capture"
+                                                   },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73104-mccormick-chili-powder-4-5-oz",
+                                                       "name":  "McCormick Chili Powder",
+                                                       "price":  "$4.99",
+                                                       "size":  "4.5 oz",
+                                                       "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "chipotle-adobo":  {
@@ -6915,7 +6937,14 @@
                                                                "price":  "$2.34",
                                                                "size":  "2 lb",
                                                                "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                           },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/39104763",
+                                                       "name":  "Marketside Angel Hair Cole Slaw, 10 oz Bag (Fresh)",
+                                                       "price":  "$2.00",
+                                                       "size":  "10 oz",
+                                                       "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "collard-greens":  {
                                          "commodity":  "Collard Greens (bunch)",
@@ -8457,13 +8486,6 @@
                                                               "size":  "28 oz",
                                                               "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                           },
-                                         "Family Fare":  {
-                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/diced_tomatoes_petite_w_sweet_onion_our_family/p/6787003",
-                                                             "name":  "Diced Tomatoes, Petite W/ Sweet Onion Our Family",
-                                                             "price":  "$0.99",
-                                                             "size":  "14.5 oz",
-                                                             "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                         },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/8-pack-Great-Value-Whole-Peeled-Tomatoes-28-oz/11240065062",
                                                          "name":  "(8 pack) Great Value Whole Peeled Tomatoes, 28 oz",
@@ -8477,7 +8499,14 @@
                                                          "price":  "$0.99",
                                                          "size":  "14.5 oz",
                                                          "verified":  "2026-09-07 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Family Fare":  {
+                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/our_family_tomatoes_with_lime_juice_cilantro_diced_14_5_oz/p/7081286",
+                                                             "name":  "Our Family Tomatoes, With Lime Juice \u0026 Cilantro, Diced 14.5 Oz",
+                                                             "price":  "$0.99",
+                                                             "size":  "14.5 oz",
+                                                             "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                         }
                                      },
                   "dijon-mustard":  {
                                         "commodity":  "Dijon Mustard",
@@ -13149,20 +13178,20 @@
                                                        "name":  "Jennie O Ground Turkey 85 Lean 15 Fat",
                                                        "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                    },
-                                        "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/13730411236",
-                                                                "price":  86.53,
-                                                                "size":  "20 lb",
-                                                                "name":  "Jennie-O Lean Ground Turkey, Case ( 20 lbs.)",
-                                                                "board_pu":  4.3265
-                                                            },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/44419698",
                                                         "name":  "Honeysuckle White 85% Lean / 15% Fat Ground Turkey Tray, Fresh, 1.25 lbs.",
                                                         "price":  "$4.96",
                                                         "size":  "1.298 lb",
                                                         "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/13857373193",
+                                                                "name":  "Jennie-O 93/7 Ground Turkey, 2.5 lbs., 2 pk.",
+                                                                "price":  "$22.77",
+                                                                "size":  "5 lb",
+                                                                "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                            }
                                     },
                   "ground-turmeric":  {
                                           "commodity":  "Ground Turmeric",
@@ -14467,14 +14496,6 @@
                                                                        "verified":  "2026-08-23",
                                                                        "board_pu":  0.1782
                                                                    },
-                                                  "Family Fare":  {
-                                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/potatoes/idahoan_baby_reds_mashed_potatoes_family_size_8_2_oz/p/6935",
-                                                                      "name":  "Idahoan Baby Reds Mashed Potatoes Family Size 8.2 Oz",
-                                                                      "price":  "$2.99",
-                                                                      "size":  "8.2 oz",
-                                                                      "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
-                                                                      "board_pu":  0.3646
-                                                                  },
                                                   "Fareway":  {
                                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36902-idahoan-baby-reds-w-roasted-garlic-parm-mashed-potatoes-4-1-oz",
                                                                   "price":  1.48,
@@ -14501,7 +14522,21 @@
                                                                   "size":  "26.7 oz",
                                                                   "name":  "Great Value Instant Mashed Potatoes, 26.7 oz, Box",
                                                                   "verified":  "2026-08-31 price-pull self-capture"
-                                                              }
+                                                              },
+                                                  "Family Fare":  {
+                                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/potatoes/idahoan_idahoan_baby_reds_brand_mashed_potatoes_8_2_oz_pouch/p/6935",
+                                                                      "name":  "Idahoan Idahoan® Baby Reds® Brand Mashed Potatoes 8.2 Oz. Pouch",
+                                                                      "price":  "$2.99",
+                                                                      "size":  "8.2 oz",
+                                                                      "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                                  },
+                                                  "Hy-Vee":  {
+                                                                 "url":  "https://www.hy-vee.com/aisles-online/p/43867/idahoan-four-cheese-mashed-potatoes",
+                                                                 "name":  "Idahoan Four Cheese Mashed Potatoes",
+                                                                 "price":  "$1.48",
+                                                                 "size":  "4 oz",
+                                                                 "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                             }
                                               },
                   "italian-dressing":  {
                                            "commodity":  "italian-dressing",
@@ -14708,14 +14743,6 @@
                                                          "verified":  "2026-08-23",
                                                          "board_pu":  1.99
                                                      },
-                                    "Family Fare":  {
-                                                        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/jalapeno_peppers/p/12548",
-                                                        "name":  "Jalapeno Peppers",
-                                                        "price":  "$2.49",
-                                                        "size":  "lb",
-                                                        "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
-                                                        "board_pu":  2.99
-                                                    },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/8832/jalapeno-pepper",
                                                    "name":  "Jalapeno Pepper",
@@ -14730,7 +14757,14 @@
                                                     "price":  "$0.44",
                                                     "size":  "0.25 lb",
                                                     "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                    "Family Fare":  {
+                                                        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/red_mexican_red_jalapeno_peppers_capsicums/p/606784",
+                                                        "name":  "Red/Mexican Red Jalapeno Peppers (Capsicums)",
+                                                        "price":  "$1.99",
+                                                        "size":  "lb",
+                                                        "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                    }
                                 },
                   "japanese-curry-roux":  {
                                               "commodity":  "Japanese Curry Roux",
@@ -14759,13 +14793,6 @@
                                                             "verified":  "2026-08-23",
                                                             "board_pu":  0.2658
                                                         },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/meat/turkey/prepared_turkey/hormel_square_table_sliced_roast_turkey_breast_and_gravy/p/26187",
-                                                           "name":  "Hormel Square Table Sliced Roast Turkey Breast And Gravy",
-                                                           "price":  "$11.49",
-                                                           "size":  "15 oz",
-                                                           "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                       },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/50157/campbell-s-turkey-gravy-10-5-oz-can",
                                                       "price":  1.62,
@@ -14793,7 +14820,14 @@
                                                        "price":  "$1.58",
                                                        "size":  "15 oz",
                                                        "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/gravy/heinz_home_style_turkey_gravy_12_oz_jar/p/14935",
+                                                           "name":  "Heinz Home Style Turkey Gravy, 12 Oz Jar",
+                                                           "price":  "$3.19",
+                                                           "size":  "12 oz",
+                                                           "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                       }
                                    },
                   "jasmine-rice":  {
                                        "commodity":  "Jasmine Rice (Dry)",
@@ -15919,7 +15953,7 @@
                                   "Family Fare":  {
                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tropical_fruits/red_mango_small/p/78514",
                                                       "name":  "Red Mango, Small",
-                                                      "price":  "$2.99",
+                                                      "price":  "$2.29",
                                                       "size":  "1 ct",
                                                       "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                       "board_pu":  2.99
@@ -17765,11 +17799,11 @@
                                                 "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
                                             },
                                 "Hy-Vee":  {
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/55914/hy-vee-rotini-pasta",
-                                               "name":  "Hy-Vee Rotini Pasta",
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/3771493/hy-vee-spaghetti",
+                                               "name":  "Hy-Vee Spaghetti",
                                                "price":  "$1.19",
-                                               "size":  "16 oz",
-                                               "verified":  "2026-09-07 DERIVED from the price row (same record the board priced)"
+                                               "size":  "15 oz",
+                                               "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
                                            }
                             },
                   "pasta-sauce":  {
@@ -18629,7 +18663,7 @@
                                 "Family Fare":  {
                                                     "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/pears_peaches_plums/fresh_plums_red/p/1564405684716713557",
                                                     "name":  "Fresh Plums, Red",
-                                                    "price":  "$3.49",
+                                                    "price":  "$3.99",
                                                     "size":  "lb",
                                                     "verified":  "2026-08-02 DERIVED from the price row (same record the board priced)"
                                                 },
@@ -18939,6 +18973,13 @@
                                                         "price":  "$19.49",
                                                         "size":  "8.701 lb",
                                                         "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388665-whole-boston-butt-1-each",
+                                                        "name":  "Whole Bone-In Pork Butt",
+                                                        "price":  "$2.99",
+                                                        "size":  "lb",
+                                                        "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "pork-tenderloin":  {
@@ -21555,6 +21596,13 @@
                                                    "size":  "16 oz",
                                                    "name":  "Fresh Whole Shallots 16oz Bag",
                                                    "verified":  "2026-08-31 price-pull self-capture"
+                                               },
+                                   "Fareway":  {
+                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16551293-shallot-1-lb",
+                                                   "name":  "Shallot",
+                                                   "price":  "$4.99",
+                                                   "size":  "lb",
+                                                   "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
                                                }
                                },
                   "shampoo":  {
@@ -23834,7 +23882,14 @@
                                                        "price":  "$11.67",
                                                        "size":  "12 ct",
                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/4223503/hy-vee-soft-and-strong-bath-tissue",
+                                                      "name":  "Hy-Vee Soft and Strong Bath Tissue",
+                                                      "price":  "$14.99",
+                                                      "size":  "12 ct",
+                                                      "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
+                                                  }
                                    },
                   "tomatillos":  {
                                      "commodity":  "Tomatillos (fresh)",
@@ -24752,13 +24807,6 @@
                                                         "price":  "$8.74",
                                                         "size":  "128 fl oz",
                                                         "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                    },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23958874-fareway-canola-oil-128-oz",
-                                                        "name":  "Fareway Canola Oil",
-                                                        "price":  "$9.48",
-                                                        "size":  "128 oz",
-                                                        "verified":  "2026-09-07 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "vegetable-soup":  {

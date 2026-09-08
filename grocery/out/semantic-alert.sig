@@ -1,1 +1,0 @@
-﻿frozen-burritos|Walmart|El Monterey Beef, Bean & Cheese Flavor Chimichangas, 30.4 oz, 8 Count (Frozen);ground-beef-8020|Walmart|80% Lean / 20% Fat Ground Beef and Pork Blend, 3 lb Roll, Fresh;laundry-pods|Baker's|ARM & HAMMER Power Sheets Laundry Detergent Fresh Breeze

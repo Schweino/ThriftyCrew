@@ -403,19 +403,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "canned-chicken",
-        "store":  "Aldi",
-        "unit":  "oz",
-        "board":  0.2072,
-        "link":  0.1992,
-        "ratio":  0.96,
-        "price":  2.49,
-        "size":  "12.5 oz",
-        "boardItem":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
-        "linkItem":  "Brookdale Chunk Chicken Breast",
-        "board_src":  "main"
-    },
-    {
         "id":  "canned-mushrooms",
         "store":  "Fareway",
         "unit":  "oz",
@@ -458,12 +445,12 @@
         "id":  "cat-litter",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
-        "board":  0.5141,
+        "board":  0.459,
         "link":  0.4232,
-        "ratio":  0.82,
+        "ratio":  0.92,
         "price":  18.62,
         "size":  "44 lb",
-        "boardItem":  "Fresh Step Total Control Scented Clumping Litter with Febreze Freshness, 44 lbs.",
+        "boardItem":  "Tidy Cat Super Jug Twin Pack Multi-Cat Clumping Litter With Glade Clear Springs Scent, 42 lbs. (2 Pack, 21 lb. Jugs)",
         "linkItem":  "Fresh Step Total Control Scented Clumping Litter with Febreze Freshness, 44 lbs.",
         "board_src":  "main"
     },
@@ -517,6 +504,19 @@
         "size":  "lb",
         "boardItem":  "Fresh Red Cherries",
         "linkItem":  "Fresh Red Cherries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chicken-wings",
+        "store":  "Family Fare",
+        "unit":  "lb",
+        "board":  2.99,
+        "link":  3.49,
+        "ratio":  1.17,
+        "price":  3.49,
+        "size":  "lb",
+        "boardItem":  "Chicken Party Wings",
+        "linkItem":  "Chicken Party Wings",
         "board_src":  "main"
     },
     {
@@ -608,6 +608,19 @@
         "size":  "43.1 oz",
         "boardItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
         "linkItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cooked-shredded-chicken",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.4369,
+        "link":  0.3744,
+        "ratio":  0.86,
+        "price":  5.99,
+        "size":  "16 oz",
+        "boardItem":  "Aldi Rotisserie Style Pulled Chicken 16 OZ",
+        "linkItem":  "Aldi Rotisserie Style Pulled Chicken 16 OZ",
         "board_src":  "main"
     },
     {
@@ -819,6 +832,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "floor-cleaner",
+        "store":  "Baker\u0027s",
+        "unit":  "floz",
+        "board":  0.1666,
+        "link":  0.1509,
+        "ratio":  0.91,
+        "price":  14.49,
+        "size":  "96 fl oz",
+        "boardItem":  "Bona Hardwood Floor Cleaner Refill",
+        "linkItem":  "Bona Hardwood Floor Cleaner Refill",
+        "board_src":  "main"
+    },
+    {
         "id":  "french-bread",
         "store":  "Walmart",
         "unit":  "each",
@@ -962,16 +988,16 @@
         "board_src":  "main"
     },
     {
-        "id":  "grapes",
+        "id":  "ground-turkey",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
-        "board":  1.6233,
-        "link":  1.9567,
-        "ratio":  1.21,
-        "price":  5.87,
-        "size":  "3 lb",
-        "boardItem":  "Green Seedless Grapes, 3 lbs.",
-        "linkItem":  "Green Seedless Grapes, 3 lbs.",
+        "board":  4.154,
+        "link":  4.554,
+        "ratio":  1.1,
+        "price":  22.77,
+        "size":  "5 lb",
+        "boardItem":  "Jennie-O 93/7 Ground Turkey, 2.5 lbs., 2 pk.",
+        "linkItem":  "Jennie-O 93/7 Ground Turkey, 2.5 lbs., 2 pk.",
         "board_src":  "main"
     },
     {
@@ -1089,19 +1115,6 @@
         "size":  "31 oz",
         "boardItem":  "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
         "linkItem":  "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "mangoes",
-        "store":  "Family Fare",
-        "unit":  "each",
-        "board":  2.29,
-        "link":  2.99,
-        "ratio":  1.31,
-        "price":  2.99,
-        "size":  "1 ct",
-        "boardItem":  "Red Mango, Small",
-        "linkItem":  "Red Mango, Small",
         "board_src":  "main"
     },
     {
@@ -1274,19 +1287,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "plums",
-        "store":  "Family Fare",
-        "unit":  "lb",
-        "board":  3.99,
-        "link":  3.49,
-        "ratio":  0.87,
-        "price":  3.49,
-        "size":  "lb",
-        "boardItem":  "Fresh Plums, Red",
-        "linkItem":  "Fresh Plums, Red",
-        "board_src":  "main"
-    },
-    {
         "id":  "popsicles",
         "store":  "Fareway",
         "unit":  "each",
@@ -1375,6 +1375,19 @@
         "size":  "52 ct",
         "boardItem":  "BIC Sensitive Men\u0027s Disposable Razor, Single Blade, 52 ct.",
         "linkItem":  "BIC Sensitive Men\u0027s Disposable Razor, Single Blade, 52 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "red-wine-vinegar",
+        "store":  "Baker\u0027s",
+        "unit":  "floz",
+        "board":  0.1869,
+        "link":  0.1681,
+        "ratio":  0.9,
+        "price":  2.69,
+        "size":  "16 fl oz",
+        "boardItem":  "Pompeian Gourmet Red Wine Vinegar",
+        "linkItem":  "Pompeian Gourmet Red Wine Vinegar",
         "board_src":  "main"
     },
     {
@@ -1713,19 +1726,6 @@
         "size":  "2 oz",
         "boardItem":  "Hy Vee Pure Vanilla Extract",
         "linkItem":  "Hy Vee Pure Vanilla Extract",
-        "board_src":  "main"
-    },
-    {
-        "id":  "vegetable-oil",
-        "store":  "Fareway",
-        "unit":  "floz",
-        "board":  0.0859,
-        "link":  0.0741,
-        "ratio":  0.86,
-        "price":  9.48,
-        "size":  "128 oz",
-        "boardItem":  "Fareway Canola Oil",
-        "linkItem":  "Fareway Canola Oil",
         "board_src":  "main"
     },
     {

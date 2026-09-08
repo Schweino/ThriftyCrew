@@ -1,6 +1,17 @@
 ﻿{
     "resolved":  [
                      {
+                         "id":  "baked-beans",
+                         "fault":  "NO-LINK",
+                         "board":  "Our Family Original Baked Beans 28 Oz",
+                         "board_pu":  0.0925,
+                         "name":  "Our Family Original Baked Beans 28 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/our_family_original_baked_beans_28_oz/p/6786962",
+                         "price":  "$2.59",
+                         "size":  "28 oz",
+                         "score":  1
+                     },
+                     {
                          "id":  "eggs",
                          "fault":  "NO-LINK",
                          "board":  "Large Grade A Eggs Our Family (30 Ct)",
@@ -9,6 +20,28 @@
                          "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
                          "price":  "$2.39",
                          "size":  "12 ct",
+                         "score":  1
+                     },
+                     {
+                         "id":  "mangoes",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Red Mango, Small",
+                         "board_pu":  2.29,
+                         "name":  "Red Mango, Small",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tropical_fruits/red_mango_small/p/78514",
+                         "price":  "$2.29",
+                         "size":  "1 ct",
+                         "score":  1
+                     },
+                     {
+                         "id":  "plums",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Fresh Plums, Red",
+                         "board_pu":  3.99,
+                         "name":  "Fresh Plums, Red",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/pears_peaches_plums/fresh_plums_red/p/1564405684716713557",
+                         "price":  "$3.99",
+                         "size":  "lb",
                          "score":  1
                      }
                  ],
@@ -66,6 +99,10 @@
                         "why":  "match found but per-unit disagrees: board $2.89 vs link $0.3612 (700%)"
                     },
                     {
+                        "id":  "jalapenos",
+                        "why":  "no confident match (best 0)"
+                    },
+                    {
                         "id":  "mac-and-cheese",
                         "why":  "match found but its size \"6 oz\" gives no per-unit in each"
                     },
@@ -75,22 +112,22 @@
                     },
                     {
                         "id":  "queso",
-                        "why":  "match found but its size \"23\" gives no per-unit in oz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "sports-drinks",
-                        "why":  "match found but its size \"8pk/20oz\" gives no per-unit in floz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "strawberries",
-                        "why":  "match found but per-unit disagrees: board $0.3119 vs link $0.4369 (28.6%)"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "yukon-gold-potatoes",
                         "why":  "match found but per-unit disagrees: board $0.798 vs link $1.398 (42.9%)"
                     }
                 ],
-    "worked":  20,
-    "generated":  "2026-09-07 08:12",
-    "board":  "comparison-2026-09-07.json"
+    "worked":  24,
+    "generated":  "2026-09-08 08:11",
+    "board":  "comparison-2026-09-08.json"
 }
