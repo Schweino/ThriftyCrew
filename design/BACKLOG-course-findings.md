@@ -5442,10 +5442,35 @@ domain's `applies-here.md`.
 Confirmed lifters include `grocery/build-walmart-deals.ps1:87`, `grocery/build-sams-deals.ps1:60`,
 `grocery/audit-match-contested.ps1:18` and `grocery/audit-household-in-food.ps1:16`.
 
-**The count in the estate's own documentation is 3.** `.claude/rules/grocery.md` says "Three scripts
-LIFT its functions" and cites a memory whose filename carries the number. Both live outside the
-skills store, so the course run corrected neither; that is what this item is for. **A count carried
-in prose, and worse in a FILENAME, cannot notice the twelfth caller arriving.**
+`[CORRECTED 2026-09-08, and the correction is the more useful half.]`
+
+**The premise as filed was already stale, and my own numbers did not reproduce.** The item said
+`.claude/rules/grocery.md` claims three lifters. It had said MANY since commit `ae6c4caf9` earlier
+that same day, and the memory had been renamed to
+`compare-deals-functions-are-lifted-by-many-scripts`. I merged a course agent's finding without
+checking whether the estate had moved underneath it, which is this estate's own rule about verifying
+against a moving main, applied to a backlog item instead of a branch.
+
+**Then four counts of the same quantity turned out to disagree, and none of them had stated its
+test:**
+
+| Source | Read | Execute |
+|---|---|---|
+| the course agent, 2026-09-08 | 17 | 12 |
+| `.claude/rules/grocery.md` as it then stood | 17 | 14 |
+| the command that file itself gave | 53 name it | 13 |
+| `Get-Content` pointed AT the file | 18 (15 outside `grocery\out\`) | 12 |
+
+**The 12 reproduces on two independent tests, so the EXECUTE count is solid.** The read count is 15,
+17, 18 or 53 depending entirely on whether "reads it" means names the filename or applies
+`Get-Content` to it, and on whether one-off scratch scripts count. Nobody said which.
+
+**So the finding is sharper than filed, not weaker.** The problem was never that the number was 3
+rather than 17. It is that **a count with no stated test cannot be checked, cannot be reproduced and
+cannot notice the next caller arriving** - and a rule that says "count it, never quote it" while
+quoting a number its own command does not produce teaches the opposite of what it says. The rules
+file now carries its test, a command whose output is the stated number, and the date. The remaining
+work is the architectural half below, which is untouched by any of this.
 
 **What it is architecturally.** `compare-deals.ps1` is a component with a required interface and no
 provided one, so the socket has been jammed onto the source file. The estate already has the right

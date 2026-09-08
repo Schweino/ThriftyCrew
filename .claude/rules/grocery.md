@@ -21,8 +21,16 @@ is one copy of every rule and nothing here can drift from it.
   ruling reads as red until the next build. That is on purpose, not a bug to chase.
   [[known-wrong-is-the-main-board-corrector]]
 - **`compare-deals.ps1` is not standalone.** A mid-day rebuild needs identity emission AND link repair.
-  Never revert-to-isolate. **MANY scripts LIFT its functions - 17 read its source and 14 execute what they lifted, measured 2026-09-08, against a `three` that stood in this file for months.** Count it, never quote it:
-  `grep -rl "compare-deals\.ps1" --include=*.ps1 grocery ops meal-prep lib graph`
+  Never revert-to-isolate. **MANY scripts LIFT its functions**, against a `three` that stood in
+  this file for months. **A count here is meaningless without its TEST**, and four counts of this
+  same thing disagreed on 2026-09-08 because none of them stated one. Measured that day:
+  **53 `.ps1` files name it, 13 of those also call `Invoke-Expression`**, and on the tighter test
+  of a `Get-Content` actually pointed AT it, **18 read its source and 12 execute what they lifted**
+  (15 of the 18 outside `grocery\out\`). The 12 reproduces on two independent tests. Count it,
+  never quote it, and say which test you ran:
+  ```
+  grep -rl "compare-deals\.ps1" --include=*.ps1 grocery ops meal-prep lib graph | xargs grep -l "Invoke-Expression"
+  ```
   A lifted `$script:` constant does not
   travel - the lift needs functions, parens and a column-0 brace.
   [[compare-deals-is-not-standalone]], [[compare-deals-functions-are-lifted-by-many-scripts]]
