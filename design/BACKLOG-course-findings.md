@@ -3498,7 +3498,35 @@ backlog nobody is about to clear. Rung 1 is a report.
 **What it touches.** `grocery/alert-lib.ps1`, `grocery/alert-state.json`, `grocery/ALERTS.md`,
 `grocery/audit-alert-precision.ps1`. No board, no published page.
 
-### I33 - The estate has 15 days of latency history in git and has never read it `OPEN - RUNG 1 IS A READ, NOT A BUILD` `2-WAY` `RUNG1 READ`
+### I33 - The estate has 15 days of latency history in git and has never read it `PARKED - RUNG 1 IS DONE AND RUNG 4 APPLIES: NO VARIANCE WORTH ACTING ON`
+
+**`[CLOSED PARKED 2026-09-08, by the item's own rung 4, which said to record this outcome so it does
+not become a standing invitation to build observability machinery for a one-box estate.]`**
+
+Rung 1 was re-run rather than quoted, over `git log` for
+`grocery/out/logs/graph-nightly-status.json`. **16 commits, all 16 parsed, 16 distinct nights,
+2026-08-23 to 2026-09-08:**
+
+| | item, as filed | re-read 2026-09-08 |
+|---|---|---|
+| observations | 15 | **16** |
+| range | 118-199 s | **118-223 s** |
+| mean / median | 161.7 / 161 s | **165.6 / 162 s** |
+| trend | none visible | **still none** |
+
+The range widened because 2026-09-08 ran 223 s, the slowest night on record. **One point is not a
+trend** and the median barely moved, so the verdict stands: nothing here varies enough to act on, and
+rung 2 (a band) should not be built. 16 points is thin, `no-hardcoded-bands` applies, and there is no
+decision a band would change.
+
+**A defect in the reader is worth recording, because it would have produced a confident wrong zero.**
+The committed file carries a **UTF-8 BOM**, so `json.loads` failed on **every one of the 16
+revisions** and the first run reported 0 parsed. A less careful reader would have printed "no history"
+and closed the item on an absence that was entirely the instrument -
+`[[a-negative-search-result-must-prove-itself]]`.
+
+**The per-STAGE half of this file was never the same question and it is now answered separately: see
+I43, which found the bottleneck.** That is the value that was actually sitting unread here.
 
 **Source.** Queue-4 course 2, `site-reliability-engineering-principles` (Edureka), items 7 to 12, 18,
 19, 23 and 44. Vendor course, no measurements; claims C69 to C72 in
@@ -4010,7 +4038,45 @@ is a trade Brad decides, not one a course run decides.
 
 ----
 
-### I43 - the estate records per-stage latency for one chain, commits it daily, and has never read it to name a bottleneck `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 READ`
+### I43 - the estate records per-stage latency for one chain, commits it daily, and has never read it to name a bottleneck `DONE - THE BOTTLENECK IS NAMED: `sweep`, 80.2% OF THE NIGHT, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08. Rung 1 ran and it answered both of the questions it was supposed to.]`**
+
+The `stages` array in `grocery/out/logs/graph-nightly-status.json` had never been read. Walked over
+**16 committed nights, 2026-08-23 to 2026-09-08**, denominators being nights that RECORDED each stage
+rather than nights (a stage absent from a night is absent, not zero):
+
+| stage | nights | median s | share of the 162 s median night | cv |
+|---|---|---|---|---|
+| **sweep** | 16/16 | **130.0** | **80.2%** | **0.14** |
+| ml-eval | 1/16 | 41.0 | - | - |
+| stage1 | 12/16 | 24.5 | 15.1% | 0.17 |
+| serve | 16/16 | 8.0 | 4.9% | 0.57 |
+| resolve | 12/16 | 2.0 | 1.2% | 0.13 |
+| emit | 16/16 | 2.0 | 1.2% | 0.20 |
+| defs | 16/16 | 1.0 | 0.6% | 0.88 |
+| stop / hunter / durability | 16, 14, 1 of 16 | 0.0 | 0.0% | - |
+
+**`sweep` IS the chain.** It is four fifths of a median night and everything else together is a
+rounding error - `stage1`, the second-largest, is a sixth of it. A staged pipeline's latency is owned
+by its slowest stage, so any work on this chain that is not `sweep` cannot move the total.
+
+**And the second question is answered too, which is what makes this more than a ranking.** `sweep`'s
+**cv is 0.14** - consistently slow, not erratic. That makes it a **parallelisation candidate, not a
+buffering candidate** (claim C90's split). The variable stages are `defs` (cv 0.88) and `serve`
+(0.57), and both have medians of 1 and 8 seconds, so their variance is worth nothing.
+
+**Two things stated rather than glossed.** `ml-eval` appears on **1 night of 16** at 41 s and
+`durability` on 1 - neither is part of the nightly shape and neither is scored as if it were. And the
+stage medians sum to **208 s against a 162 s median total**, which is not an error: medians do not
+add, and the stages that are absent on some nights inflate the sum. The share column is against the
+median total and is the honest figure.
+
+**Rung 2 is NOT started and should not be.** The `grocery/` capture lanes and the 243 gates record no
+duration at all, and adding a second uninspected timing series before anything acts on this one buys
+nothing - which is the exact mistake I33 recorded. **Nothing is proposed for `sweep` either**: naming
+a bottleneck is not the same as having a reason to make the nightly chain faster, and nobody has said
+the 162 s is a problem. This item asked which stage owns the latency. It is `sweep`.
 
 **Source.** Same course, module 2 lectures 20 and 21. Routed to
 `reliability-craft/pipeline-throughput.md`. Claim C90.
@@ -4677,7 +4743,43 @@ No behaviour, no board, no gate. Rung 2 touches `THRESHOLDS.md` and possibly its
 
 **Constraint acknowledged.** Nothing was changed. This is a reading of files already in the repo.
 
-### I58 - `sidecar/requirements.txt` is wrong about two of its five pinned packages, and nothing in the estate compares it to the venv `OPEN - SMALL, AND IT IS A HERMETIC CHECK` `queue-4` `2-WAY` `RUNG1 BUILD`
+### I58 - `sidecar/requirements.txt` is wrong about two of its five pinned packages, and nothing in the estate compares it to the venv `DONE - THE CHECK EXISTS, THE DECLARATION IS CORRECTED AND DATED, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08. The item's own recommendation was taken.]`**
+
+**The drift reproduced exactly as filed**, read off the filesystem: `sentence-transformers` declared
+**5.1.2** against an installed **5.6.1**, `fastapi` declared **0.121.2** against **0.141.1**; `torch`,
+`transformers` and `uvicorn` match. 5 pins, 49 installed distributions.
+
+**`ops/audit-python-pins.ps1`** parses the `==` pins out of `sidecar/requirements.txt`, reads the
+version out of each matching `*.dist-info` directory, and fails on a mismatch.
+**`sidecar/requirements.txt` is corrected to 5.6.1 and 0.141.1, with the correction DATED in a
+comment** so a later reader can see the declaration was retro-fitted to the install and not the other
+way round - and carrying the honest consequence the item asked for: **no AUC or threshold recorded
+before 2026-09-08 can be attributed to a specific `sentence-transformers` version, because the only
+written record of it was wrong.**
+
+**IT IS IN THE WATCHDOG, NOT IN `run-gates`, AND THE ITEM'S PLACEMENT WAS WRONG.** The item called
+the check hermetic and put it in `run-gates`. The SELF-TEST is hermetic - it drives pure functions
+with synthetic fixtures and run-gates discovers it like any other. **The LIVE run is hermetic only
+where `sidecar/.venv` exists**, and a CI runner, a worktree and a fresh checkout have none. It
+correctly reports BLIND at exit 3 there, and `run-gates` treats every nonzero exit from a `$static`
+entry as a FAIL - so registering it would have painted the gate red for a condition nobody can clear,
+which is the red-on-day-one shape wearing a different coat. It runs as watchdog check **5a2**, beside
+`audit-ad-forecast`, which already distinguishes exit 3 as could-not-evaluate.
+
+**And that placement was found by a gate, not by reasoning.** The first version had no caller and
+`audit-script-census` flagged it `DEAD: a detector that NOTHING in production calls`.
+
+**Verified, all three paths OBSERVED rather than assumed:** self-test exit 0 over 9 cases (led by a
+must-not-fire on the `dist-info` UNDERSCORE normalisation, without which every pin reads NOT INSTALLED
+and the whole check is vacuous); live run **exit 2** before the correction naming both drifted
+packages; live run **exit 0** after it; and a synthetic repo with no venv returning **exit 3 BLIND**.
+`run-gates` exit 0, `pass=277 fail=0`.
+
+**The item's other conclusion stands and is worth keeping:** this is NOT the problem containers solve.
+The drift is between a declaration and an install on one box, and an image rebuild would have carried
+it forward unchanged. What catches it is a comparison, not a runtime.
 
 **Source.** Queue-4 group E, worked 2026-09-07. **Both courses were dropped on outline evidence**
 without reading a lecture, so this finding is not routed course material - it comes from the estate
@@ -4958,7 +5060,49 @@ the state table. No script, no gate.
 
 **Constraint acknowledged.** No heading was re-labelled by this run; the counts above are a read.
 
-### I64 - the Freezer Math tool decides a several-hundred-dollar purchase from three means, and its verdict flips inside their error bars `OPEN - RUNG 1 IS A COMPUTATION, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I64 - the Freezer Math tool decides a several-hundred-dollar purchase from three means, and its verdict flips inside their error bars `PARTLY DONE - RUNG 1 IS DONE AND THE LIVE PAGE IS SUBSTANTIALLY OUT; RUNG 2 IS BRAD'S` `queue-4` `2-WAY` `RUNG1 MEASURE`
+
+**`[RUNG 1 RAN 2026-09-08 AND THE ANSWER IS NOT MARGINAL.]`** `grocery/build-freezer-data.ps1`
+re-run read-only against the current history. **Nothing was written to the page.**
+
+| | live page (`weeks:5`, `updated:'2026-07-10'`) | re-run (**22 weeks**, 2026-09-08) |
+|---|---|---|
+| stock-up spread | 6.12% | **13.34%** |
+| bulk spread | 17.19% | **22.57%** |
+| **combined** | **23.31%** | **35.91%** |
+| net saving at the page defaults | $12.78/mo | **$21.86/mo** |
+| payback | 16 months | **10 months** |
+| **verdict a reader sees** | **`Decent, not instant`** | **`good buy`** |
+
+**The flip point, computed rather than asserted:** at the page's defaults ($120/month, a $200
+freezer, `SHIFT` 0.60, $4/month electricity) the verdict becomes `good buy` at a combined spread of
+**28.70%**. The live page is at 23.31%, below it. The current data is at 35.91%, **well above it.**
+So this is not a rounding difference - **the live tool is giving a paying reader the wrong verdict
+about a several-hundred-dollar purchase, and it is wrong in the UNDERSTATING direction**, which this
+estate treats as exactly as wrong as overstating.
+
+**The item's second defect is confirmed exactly.** It argued that a stock-up spread of `0` over a
+five-week window means *we have not seen a sale yet*, not *this item never goes on sale*. **Zero
+spreads went from 3 of 9 to 0 of 9** (and sub-0.5% from 4 of 9 to 1 of 9). Every one of the nine
+freezables has now been seen on sale. The mean was biased downward for the reason predicted.
+
+**RUNG 2 IS NOT SHIPPED, AND THIS IS A DELIBERATE STOP RATHER THAN AN OMISSION.** Refreshing the
+`DATA` block is mechanical - the generator prints the paste-ready constants - but it changes what a
+live paid page tells a reader to DO, in the direction of spending $200+. Three things make it Brad's:
+
+1. The verdict flips **inside the error bars of its own inputs**, which is the finding. Shipping the
+   refresh WITHOUT the flip-point sentence would make the page newly wrong in the opposite direction -
+   a confident `good buy` built on `quantity x mean`, with no range, from a mean over 22 weeks.
+2. The flip-point sentence is authored reader-facing copy in Brad's voice, not a regeneration.
+3. `[[build-deals-page-clobbers-public-artifacts]]` and the publish path make this a live-site change,
+   not a file edit.
+
+**Recommendation: refresh the DATA and add the flip point IN THE SAME CHANGE, never the refresh
+alone.** The numbers above are everything that decision needs.
+
+**Scope stated honestly, unchanged from the item:** only this tool was examined. The other nine files
+under `site/tools/` were NOT audited for the same `quantity x mean` shape, and the absence of findings
+there is an absence of looking.
 *Source: Simulation Models for Decision Making (course 18, Gupta), module 3, models 1 versus 2; and
 Decision Making (course 17, Nardy), module 3 sensitivity analysis. Routed to
 `~/.claude/skills/decision-craft/decide-under-uncertainty.md` 6 and 8.*
@@ -5164,7 +5308,44 @@ live paid site. Not a trade worth making at any price.
 
 ---
 
-### I68 - the ad period is known, written down in seven places, and used by nothing that looks at a price `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-5` `2-WAY` `RUNG1 READ`
+### I68 - the ad period is known, written down in seven places, and used by nothing that looks at a price `PARKED - MEASURED AGAINST A BAR SET BEFORE THE RUN; THE WEEKDAY COMPONENT IS NOT THERE` `queue-5`
+
+**`[CLOSED PARKED 2026-09-08. The item said 'if it does not, this item closes'. It does not.]`**
+
+**The bar was written before the run** (E21, in the metric's own units): a check shows a day-of-week
+component if pooling its runs by weekday removes at least 20% of its spread (pooled within-weekday sd
+<= 0.80 x overall sd); a check is TESTABLE only with >= 14 runs over >= 4 weekdays, three of them
+carrying more than one run; and **the item is supported only if a MAJORITY of testable checks show
+it.**
+
+**`examined` is a DICT of per-check counts, not a scalar** - `guards/10-store-charges` runs ~29,542
+while `guards/6-collapse` runs ~6 - so summing them would have answered a question about the biggest
+check and called it an answer about the estate. The test runs **per check**.
+
+**Measured over `grocery/out/coverage-ledger-history.jsonl`: 582 runs, 39 distinct dates,
+2026-08-01 to 2026-09-08, 16 checks, all 16 testable, none excluded.**
+
+**2 of 16 (12%) clear the bar.** Against a majority. And both are weak on inspection:
+`guards/6-collapse` has an overall sd of **0.2** on a value of about 6, so its 0.633 ratio is noise
+about a near-constant; `build-rescue-worklist` is **0.794** against a bar of 0.800. The other fourteen
+sit between 0.805 and 0.940 - i.e. pooling by weekday removes 6% to 20% of the spread, which is what
+random grouping of 39 dates into 7 buckets does anyway.
+
+**VERDICT: NOT SUPPORTED.** Claim C148 - that `grocery/analyse_coverage_tolerances.py` is averaging a
+removable weekly effect into its 15-run rolling p95 - was *a prediction with a mechanism*, and this is
+the measurement that does not back it. **The tolerance work in I13 is unaffected**, which the item
+said would be the consequence.
+
+**THE ONE RESULT THAT STANDS WHATEVER THE VERDICT, and it is kept:** a multiplicative seasonal
+structure puts real autocorrelation at lags `s-1` and `s+1`, not only at `s` (C149, derived rather
+than asserted). On a 7-day cycle that is Sunday and Tuesday for a Monday rule. **Any comparison this
+estate ever writes that pins itself to "the same day last week" must look at the neighbouring days
+too**, or it will read a genuinely seasonal series as clean. That is a rule about a check nobody has
+written yet, so it is recorded here rather than in a file it does not apply to.
+
+**Also unchanged, and it was the item's other half:** `grocery/check-ad-cycles.ps1` detects no cycle -
+it reads each store's declared window and schedules the next pull. The period is a hand-written
+`cadence_days`. Nothing here proposes deriving it; see I69, which closes that question separately.
 
 **Source.** `practical-time-series-analysis` (SUNY Poly, Sadigov and Thistleton; queue-5 entry 1,
 worked 2026-09-08). Routed to `data-quality-craft/modelling-a-time-series.md`, with the estate half in
@@ -5208,7 +5389,31 @@ a predicted price to a reader: the course produces 80% and 95% intervals for eve
 forecast with no out-of-sample error estimate is a fabricated number, which the project's standing
 rules already forbid. If a fitted expectation is ever used here it is used to judge an observation
 we already have, never to publish one we do not.
-### I69 - the only forecast this estate makes has its answer stored next to it and has never been scored `PARTLY DONE - scorer shipped, cadence half open` `queue-5` `2-WAY` `RUNG1 READ`
+### I69 - the only forecast this estate makes has its answer stored next to it and has never been scored `DONE - THE SCORER SHIPPED AND THE CADENCE HALF IS CLOSED BY MEASUREMENT, NOT LEFT OPEN` `queue-5`
+
+**`[CLOSED 2026-09-08.]`** The scorer half shipped as `grocery/audit-ad-forecast.ps1` under an
+inverted ratchet with twelve frozen fixtures. **The cadence half is closed too, and it is closed by
+the queue-6 read already recorded in this item rather than by new work:**
+
+- **Three time-series courses in, neither the store nor any of them holds a period-DISCOVERY method.**
+  Prophet's seasonality periods are the calendar ones and its `'auto'` decides only whether to
+  *enable* a period, never what the period is; SARIMA's `s` is declared the same way. A periodogram
+  and an ACF peak scan are clean no-matches store-wide.
+- **The cadence you may infer must be coarser than your observation interval**, so 9 to 12 history
+  pairs per store can support "7, or not 7" and nothing finer - which is exactly what
+  `audit-ad-forecast.ps1` already tests.
+- **The forward rule stands and is the disposition:** `cadence_days` is a hard-coded constant under a
+  `no-hardcoded-bands` estate, and its exemption is that the audit FAILS when observation contradicts
+  it. Keep that check. **Do not replace the constant with a fitted one until something can score
+  both** - and I70 has now built the arm that would do the scoring.
+
+So nothing is proposed and nothing is blocked: `DONE` rather than `PARTLY DONE`, because the state
+records what is left and the answer is nothing.
+
+**And I70 changed what this item's own headline means.** I69 reported 37 of 47 exact. I70 added the
+naive baseline through the same scorer and it scores **40 of 48** against the live rule's **37 of
+48** - so the `to`+1 rule is LOSING to a plain calendar, entirely at Fareway. That does not reopen
+this item; it is why I70 existed.
 
 **SHIPPED, same day.** `grocery/audit-ad-forecast.ps1` scores the prediction against the outcome and
 runs as watchdog check 5a. It is an INVERTED ratchet: a full-cycle miss is history and can never
@@ -6401,7 +6606,36 @@ is how a labelled set below the bar would get built in the first place.
 conditions it drops, or whether they never get scored at all. If it is the second, the item is bigger
 than a log line and the ruling is Brad's.
 
-### I96 - the estate's headline matcher number is arithmetic-mean and so is blind to its hardest cases `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I96 - the estate's headline matcher number is arithmetic-mean and so is blind to its hardest cases `DONE - THE TAIL VIEW PRINTS BESIDE MRR, BEFORE THE NEXT COMPARISON, 2026-09-08` `queue-6`
+
+**`[CLOSED 2026-09-08.]`** `sidecar/matcher_eval.py` now prints three lines beside MRR: **gMRR**
+(the geometric mean of the reciprocal ranks), the **unranked count** with its denominator, and **how
+many cases are still past rank 10** - the population any tail improvement has to move.
+
+**Why the geometric mean specifically.** MRR is an arithmetic mean of `1/r` and is dominated by its
+LARGE values, which are the EASY cases; the geometric mean is dominated by the small ones. The
+fixture pins the exact blind spot: moving one case from **rank 100 to rank 40** moves MRR by under
+0.02 while moving gMRR by more than twice as much. **So a change that helps only the hardest rows was
+close to invisible in the estate's headline matcher number, and a change that helps the already-good
+rows was not.**
+
+**Neither statistic is claimed to be correct**, which is the honest position and is written into the
+docstring - MAP and gMAP can rank two systems differently and neither is right in general. They are
+printed together so that **MRR up with gMRR flat** reads as *the easy rows got easier*.
+
+**The abstention rule is NOT weakened, and a clean twin pins that.** An unranked case still
+contributes 0 to MRR, per E20. It is EXCLUDED from gMRR because one zero takes a geometric mean to
+zero - true and useless - so the unranked COUNT is printed beside it every time. gMRR is never shown
+without its denominator.
+
+**Verified:** `matcher_eval.py --selftest` exit 0, 21 cases, up from 16 - one must-fire (the
+rank-100-to-40 case), one must-not-fire (a perfect run scores 1.0 on both), three clean twins.
+`run-gates` exit 0, `pass=277 fail=0`.
+
+**Nothing about the matcher changed and no matcher comparison was run.** E21 requires the number to
+exist BEFORE the next comparison rather than after it, which is the only reason to do this now. The
+item's other check stands: no `P@k` comparison exists anywhere, so 14c's insensitivity bug is still
+not present.
 
 **Merged from `design\backlog-inbox\lane-text-retrieval-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

@@ -1,10 +1,25 @@
 ﻿# Reproduce with: uv venv --python 3.12 && uv pip install -r requirements.txt
 # torch MUST come from the cu128 index: this card is Blackwell sm_120 and older wheels will not run.
 #   uv pip install torch --index-url https://download.pytorch.org/whl/cu128
+#
+# CORRECTED 2026-09-08 (backlog I58), AND THE CORRECTION IS RETRO-FITTED TO THE INSTALL, not the
+# other way round. Two of the five pins had drifted and nothing in the estate had ever compared this
+# file to the venv - its only two references anywhere were prose:
+#     sentence-transformers  declared 5.1.2    installed 5.6.1
+#     fastapi                declared 0.121.2  installed 0.141.1
+# Both are now written to match what is on disk, because rolling the VENV back to the declaration is
+# the expensive answer and would need sidecar/freeze_eval.py re-run to show the score space did not
+# move. THE HONEST CONSEQUENCE, recorded rather than glossed: no AUC or threshold this estate
+# recorded BEFORE 2026-09-08 can be attributed to a specific sentence-transformers version, because
+# the only written record of it was wrong. sidecar/lib_match.py is the sole importer of that library
+# and every bi-encoder and cross-encoder number here comes through it.
+#
+# ops/audit-python-pins.ps1 now compares this file to sidecar/.venv on every push and fails on a
+# mismatch. It checks the `==` pins ONLY: an unpinned line below is not a claim about a version.
 torch==2.11.0+cu128
 numpy
-sentence-transformers==5.1.2
+sentence-transformers==5.6.1
 transformers==5.14.1
 duckdb
-fastapi==0.121.2
+fastapi==0.141.1
 uvicorn==0.52.0

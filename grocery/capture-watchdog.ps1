@@ -712,6 +712,29 @@ if (Test-Path $adfc) {
   else { [void]$ok.Add((($afLine -replace '\s+', ' ').Trim())) }
 }
 
+# ---- 5a2. the sidecar's declared package pins against what is actually installed --------------
+# WHY IT RUNS HERE AND NOT IN run-gates (2026-09-08, backlog I58). The check is hermetic - it reads
+# two things on disk - but only where sidecar\.venv EXISTS. A CI runner, a worktree and a fresh
+# checkout have none, and the check correctly reports BLIND at exit 3 there; run-gates treats every
+# nonzero exit from a $static entry as a FAIL, so registering it there would paint the gate red for a
+# condition nobody can clear, which is the red-on-day-one shape the estate already forbids. run-gates
+# discovers its -SelfTest, which IS hermetic everywhere. The LIVE half belongs on the box with the
+# venv, and this watchdog is that box. Same no-2>&1 rule as check 5.
+#
+# WHAT IT CATCHES: sentence-transformers is the only import path for the matcher's whole score space,
+# and on 2026-09-08 requirements.txt declared 5.1.2 against an installed 5.6.1. A minor-version move
+# there shifts a score space without shifting a number anybody watches, and nothing had ever compared
+# the file to the venv.
+$ppc = Join-Path (Split-Path $root -Parent) 'ops\audit-python-pins.ps1'
+if (Test-Path $ppc) {
+  $ppOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $ppc
+  $ppRc = $LASTEXITCODE
+  $ppLine = ($ppOut | Where-Object { $_ -match 'PYTHON PINS AUDIT FAILED|PYTHON PINS AUDIT BLIND|^python-pins: PASSED' } | Select-Object -First 1)
+  if ($ppRc -eq 2) { [void]$findings.Add("PYTHON PINS: $ppLine") }
+  elseif ($ppRc -eq 3) { [void]$findings.Add("PYTHON PINS could not be evaluated: $ppLine") }
+  else { [void]$ok.Add((($ppLine -replace '\s+', ' ').Trim())) }
+}
+
 # ---- 5b. rollback / instant-savings windows about to expire ------------------
 # THE OTHER HALF OF "STALE IS NOT A BAD THING". Everyday prices are allowed to be a quarter old;
 # a PROMO price is not. Walmart, Sam's Club and Fareway publish no end date for a rollback, so

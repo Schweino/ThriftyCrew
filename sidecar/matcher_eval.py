@@ -34,6 +34,7 @@ from __future__ import annotations
 import argparse
 import io
 import json
+import math
 import os
 import re
 import sys
@@ -113,6 +114,32 @@ def mrr(ranks):
     return sum((1.0 / r) if r else 0.0 for r in ranks) / len(ranks)
 
 
+def gmrr(ranks):
+    """GEOMETRIC mean of the reciprocal ranks - the tail-sensitive twin of mrr() (backlog I96).
+
+    MRR is an arithmetic mean of 1/r and is therefore dominated by its LARGE values, which are the
+    EASY cases. Reciprocating already compresses the hard end brutally: moving one case from rank 100
+    to rank 40 moves its contribution by 0.015, so a change that helps only the hardest rows is close
+    to invisible in the headline number, while a change that helps the already-good rows is not.
+    That is `.claude/rules/measurement.md`'s "a number that moved is not a number that improved"
+    arriving through the AVERAGING rather than through the delta.
+
+    The geometric mean is dominated by its SMALL values instead, so the two together bracket a
+    change: MRR up and gMRR flat means the easy rows got easier. Neither is correct in general and
+    this file does not claim one is - it prints both so a run that improved only the tail can be told
+    from one that did not.
+
+    An UNRANKED case contributes 0 to MRR. In a geometric mean a single zero would take the whole
+    statistic to zero, which is true but useless, so unranked cases are EXCLUDED here and their COUNT
+    is reported beside it. That is a denominator, not a quiet drop: gmrr() is never printed without
+    `unranked` next to it, and the arithmetic MRR - which does count them - is printed too.
+    """
+    scoreable = [r for r in ranks if r]
+    if not scoreable:
+        return 0.0
+    return math.exp(sum(math.log(1.0 / r) for r in scoreable) / len(scoreable))
+
+
 def verdict(recall25_frac, floor_frac):
     """The stated bars, applied. Returns (ok, lines) - the reasoning before the verdict, deliberately,
     because a verdict with its reasoning after it is decoration."""
@@ -155,6 +182,24 @@ def selftest():                                                # noqa: C901
     T("MUST FIRE  an unranked case lowers MRR rather than being dropped from it",
       abs(mrr([1, None]) - 0.5) < 1e-9, mrr([1, None]))
     T("CLEAN TWIN two ranked cases average normally", abs(mrr([1, 2]) - 0.75) < 1e-9, mrr([1, 2]))
+
+    # THE TAIL VIEW (backlog I96). The point is not that gMRR is better - it is that the two disagree
+    # in a knowable direction, so a change that only helped the easy rows can be told from one that
+    # helped the hard ones.
+    T("MUST FIRE  THE FOUNDING CASE - improving ONE HARD ROW from rank 100 to 40 barely moves MRR "
+      "(under 0.02) but moves gMRR by more than twice as much, which is the blind spot this exists for",
+      (abs(mrr([1, 2, 100]) - mrr([1, 2, 40])) < 0.02
+       and (gmrr([1, 2, 40]) - gmrr([1, 2, 100])) > 2 * abs(mrr([1, 2, 100]) - mrr([1, 2, 40]))),
+      "dMRR=%.4f dgMRR=%.4f" % (mrr([1, 2, 40]) - mrr([1, 2, 100]), gmrr([1, 2, 40]) - gmrr([1, 2, 100])))
+    T("MUST NOT FIRE  a perfect run scores 1.0 on both, so the new statistic agrees where it should",
+      abs(gmrr([1, 1, 1]) - 1.0) < 1e-9, gmrr([1, 1, 1]))
+    T("CLEAN TWIN gMRR EXCLUDES unranked cases rather than returning 0 for the whole run - a single "
+      "zero would sink a geometric mean, which is true and useless",
+      abs(gmrr([1, 4, None]) - 0.5) < 1e-9, gmrr([1, 4, None]))
+    T("CLEAN TWIN gMRR of an empty set is 0, not a domain error", gmrr([]) == 0.0, gmrr([]))
+    T("CLEAN TWIN MRR still counts the unranked case at 0 - the abstention rule is NOT weakened by "
+      "the new statistic sitting beside it",
+      abs(mrr([1, 4, None]) - 0.41666666) < 1e-6, mrr([1, 4, None]))
     T("MRR of an empty set is 0, not a division by zero", mrr([]) == 0.0)
 
     # THE FOUNDING CASE. A true match under the prefilter floor is invisible to every downstream
@@ -291,6 +336,22 @@ def main():
         if kk <= k:
             print("  recall@%-3d %5d / %d   (%.4f)" % (kk, recall_at(ranks, kk), n, recall_at(ranks, kk) / n))
     print("  MRR       %.4f" % mrr(ranks))
+    # THE TAIL VIEW (backlog I96). MRR is an arithmetic mean of 1/r, so it is dominated by the EASY
+    # cases and a change that helps only the hardest rows is close to invisible in it. These three
+    # lines are what let a run that improved the tail be told from one that did not, and E21 says the
+    # number has to exist BEFORE the next matcher comparison, not after it.
+    unranked = sum(1 for r in ranks if not r)
+    print("  gMRR      %.4f   (geometric, over the %d ranked case(s); dominated by the HARD end where"
+          % (gmrr(ranks), n - unranked))
+    print("                    MRR is dominated by the easy one. MRR up + gMRR flat = the easy rows")
+    print("                    got easier. Neither is correct in general; read them together.)")
+    print("  unranked  %d / %d   (excluded from gMRR - a single zero would sink a geometric mean."
+          % (unranked, n))
+    print("                    They ARE counted in MRR above, at 0 each, per E20's abstention rule.)")
+    if ranks:
+        deep = sorted([r for r in ranks if r and r > 10])
+        print("  still past rank 10: %d / %d   (%.4f)   - the population any tail improvement has to move"
+              % (len(deep), n, len(deep) / n))
     print("")
     print("  clearing COVERAGE_COS_FLOOR %.2f : %d / %d  (%.4f)   [%s]"
           % (COVERAGE_COS_FLOOR, floor_hits, n, floor_hits / n, COVERAGE_COS_FLOOR_SOURCE))
