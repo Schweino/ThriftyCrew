@@ -246,11 +246,11 @@ paraphrase-of-a-reference this pointer scheme exists to prevent.
 
 **The full account of every one of them is at:**
 
-    ~/.claude/projects/C--Codex-ThriftyCrew/memory/<filename>
+    C:\Users\Owner\.claude\projects\C--Codex\memory\<filename>
 
 so the index line `- [Recost aftercare](recost-needs-sync-recipesdb-cost-and-the-slugs-trap.md) - ...`
 resolves to
-`~/.claude/projects/C--Codex-ThriftyCrew/memory/recost-needs-sync-recipesdb-cost-and-the-slugs-trap.md`.
+`C:\Users\Owner\.claude\projects\C--Codex\memory\recost-needs-sync-recipesdb-cost-and-the-slugs-trap.md`.
 A `[[double-bracket]]` citation anywhere in this estate is the same filename without the `.md`.
 
 Until 2026-09-06 no agent definition said any of that, so the index was 130 hooks pointing at files
@@ -265,5 +265,16 @@ it looks like.
 you cannot see other sessions' concurrent edits, and a memory is not yours to change from inside a
 task. If a memory is WRONG, say so in your report.
 
-Regime: the path above is this machine's store for THIS project. `C--Codex` and `C--Codex-income` are
-different projects with their own stores, and nothing in them applies here.
+Regime: a store is named for the directory the SESSION WAS LAUNCHED FROM, not for the agent reading it -
+`C--` plus that path with the separators flattened. The triage chain is launched from `C:\Codex`, so its
+store is `C--Codex` and that is the path above. A session started inside `C:\Codex\ThriftyCrew` gets
+`C--Codex-ThriftyCrew` instead, which is why the recipe agents' definitions name that one and are right
+to. Derive it from the launch cwd rather than copying a path out of another agent's definition.
+`C--Codex-income` is a different project and nothing in it applies here.
+
+This wording was bought on 2026-09-08. Both triage definitions used to name `C--Codex-ThriftyCrew` and
+then declare `C--Codex` "a different project" whose contents "do not apply", which is exactly backwards
+for this chain: `C--Codex` holds the 191 memos these hooks resolve into, it is the store
+`ops\audit-memory-backup.ps1` audits, and queue item 2026-09-08-231ef6 was a repair TO it. The reviewer
+lost a note working around the contradiction and the developer had to adjudicate its own permissions
+mid-run.
