@@ -5000,7 +5000,7 @@ a predicted price to a reader: the course produces 80% and 95% intervals for eve
 forecast with no out-of-sample error estimate is a fabricated number, which the project's standing
 rules already forbid. If a fitted expectation is ever used here it is used to judge an observation
 we already have, never to publish one we do not.
-### I69 - the only forecast this estate makes has its answer stored next to it and has never been scored `RUNG 1 SHIPPED 2026-09-08` `queue-5`
+### I69 - the only forecast this estate makes has its answer stored next to it and has never been scored `PARTLY DONE - scorer shipped, cadence half open` `queue-5`
 
 **SHIPPED, same day.** `grocery/audit-ad-forecast.ps1` scores the prediction against the outcome and
 runs as watchdog check 5a. It is an INVERTED ratchet: a full-cycle miss is history and can never
@@ -5016,6 +5016,22 @@ question, exits 1 on a closed ad, runs in the same watchdog, and was green on al
 **What remains open** is the cadence half: `cadence_days` is a hand-set 7 for every store and the
 audit now flags an observed cadence that contradicts it, but nothing yet DERIVES the constant from
 history. Hy-Vee predicting consistently early (bias -0.29) is the case that would benefit.
+
+**`[CHECKED 2026-09-08 against queue-6 group A entry 1, the Prophet course, which was queued partly
+for this. It does NOT close the cadence half, and it says why.]`** Prophet's seasonality periods are
+the **calendar** ones - 7 for weekly, 365.25 for yearly - and its `'auto'` setting decides only
+whether to *enable* a period, never what the period is. SARIMA's `s` is declared the same way. **Three
+time-series courses in, neither the store nor any of them holds a period-DISCOVERY method**; the
+honest candidates, a periodogram or an ACF peak scan, are clean no-matches store-wide. **Stop queueing
+forecasting courses against this half.** Two things the course does give it: the reframing that a
+skipped cycle is a **dated changepoint** rather than a permanently wrong constant, which is what Aldi
+and Baker's actually did; and the constraint that **the cadence you may infer must be coarser than
+your observation interval**, so 9 to 12 history pairs per store can support "7, or not 7" and nothing
+finer - which is exactly what `audit-ad-forecast.ps1` already tests. **The forward rule: `cadence_days`
+is a hard-coded constant living under a no-hard-coded-bands estate, and its exemption is that the
+audit fails when observation contradicts it. Keep that check; do not replace the constant with a
+fitted one until something can score both.** The other half of I69 - the missing baseline - is now
+**I70**.
 
 **Source.** `demand-prediction-using-time-series` (LearnQuest; queue-5 entry 2, worked 2026-09-08).
 Routed to `data-quality-craft/modelling-a-time-series.md` sections 3a, 7a and 7b, with the estate half
@@ -5071,3 +5087,52 @@ is the only reason a score existed at all.
 **What it must not become.** Not a forecasting engine and not a new gate. I68's constraint stands
 unchanged: nothing here ships a predicted number to a reader. This item only asks that a prediction we
 already make gets marked against the answer we already store.
+
+### I70 - the ad forecast is scored and never baselined, so 37 of 47 is not yet a verdict `OPEN` `queue-6`
+
+**Source.** `packt-time-series-forecasting-with-facebook-prophet-in-python-7sw5w` (Packt, "the Lazy
+Programmer"; queue-6 group A entry 1, worked 2026-09-08). Routed to
+`data-quality-craft/modelling-a-time-series.md` sections 9 and 10, with the estate half in that
+domain's `applies-here.md`. Registered as claims C158 to C161. Direct sibling of I69, which shipped
+the scorer this item proposes to complete.
+
+**What is new.** The course's opening argument is that **an error number with no baseline beside it
+means nothing**, and its worked demonstration is the naive forecast - copy the last known value
+forward. It reports (uncounted, `[SINGLE-SOURCED]`) that every popular LSTM stock-prediction course
+and blog fails to beat it, and gives the checkable mechanism: they scored in sample. The theorem
+underneath is the part that transfers - on a random walk the naive forecast is **provably optimal**,
+so "we beat the naive forecast out of sample" is the only claim a forecaster can make that is worth
+anything.
+
+**Where the estate stands.** `grocery/audit-ad-forecast.ps1` shipped 2026-09-08 under I69 and scores
+`ad-schedule.json`'s `next_pull` against the following `history[].from`: **37 of 47 exact, MAE 0.47
+days, bias +0.30**, two full-cycle misses counted separately under an inverted ratchet against
+`grocery/ad-forecast-baseline.json`. Counting the full-cycle misses apart from the mean is better
+practice than the course teaches and should not change.
+
+**What is missing is one number.** Nothing says what the trivial predictor scores on the same 47
+pairs. The naive predictor here is exact, free, and already in the file: **"the next ad drops
+`cadence_days` after the last one did"**, derived from `history[i].from` rather than from
+`history[i].to` plus one day. Two outcomes and both are worth having:
+
+- it also scores about 37 of 47, and the current `to + 1` rule is buying **nothing** over a plain
+  calendar - which would be a real finding about five stores' feeds, not a defect;
+- it scores worse, and the 37 is finally a verdict rather than a number.
+
+**How, in one block.** The course's method is worth copying exactly: build the baseline as a **copy
+of the scored frame with the prediction column replaced**, so both arms run through the identical
+scoring code and cannot differ by accident. Same loop, same exact/MAE/bias/full-miss logic, one extra
+column in the report and in `-Json`.
+
+**What it would touch.** `grocery/audit-ad-forecast.ps1` only - a read-only script. No schema change,
+no new file, no new gate. The ratchet and the exit codes are untouched: this adds a reported figure,
+it does not add a failure condition, so it **cannot turn the check red on day one**. Its twelve
+frozen fixtures need one more assertion each.
+
+**Deliberately NOT proposed:** replacing `cadence_days` with a fitted period. See I69's cadence half,
+which this course does not close and which the note below explains it cannot.
+
+**The general rule this sets, and it is bigger than this script.** Any estate number of the form
+"N of M correct" should ship with the same N of M for the dumbest predictor that could have produced
+it, through the same code path. `grocery/audit-alert-precision.ps1` and the matcher scorers are the
+other candidates; nobody has checked whether they carry a baseline.
