@@ -3757,6 +3757,31 @@ stage earlier over the git-bus, where the input is not adversarial and a fuzzer 
 The value is concentrated at the boundary where outside bytes first arrive - the capture lanes and
 the feed readers - and an item that fuzzes everything would spend its budget on the wrong 200 files.
 
+**UPDATED 2026-09-08, by `automated-analysis` (queue-4 entry 20, raided). The ruling this item needs
+has not changed; three things about its COST have.** The source that filed this item named fuzzing
+and did not teach it. The next course in the same specialization does, and it makes the item
+cheaper in three specific ways. Full material: `software-craft/test-design-and-oracles.md` 5.
+
+1. **Crash-or-hang is the entire oracle at the boundary this item is scoped to.** The objection
+   "generated inputs need generated expected outputs" does not apply to a parser being fed hostile
+   bytes: an error is a pass, an assertion violation is a pass, and only a crash or a hang is a
+   finding. So the build is a generator and a `try/catch`, not a test suite.
+2. **A property-based test can pass having run nothing, and that is this estate's own worst shape.**
+   Guard clauses that reject out-of-envelope draws are mandatory, and under a random generator they
+   can reject nearly every draw while the run still reports success. **Whatever gets built must
+   print the number of draws that REACHED the assertion**, exactly as `lib/guard-contract.ps1`'s
+   `<NAME>-COMPLETE` marker exists so that "no findings" and "died halfway" are distinguishable.
+3. **There is a cheaper adjacent item that needs no ruling at all**, because it involves no
+   randomness whatsoever: the consistency oracle, filed below as **I65**. If the objection to this
+   item is the `Get-Random` question, I65 sidesteps it entirely and should go first.
+
+**Still not answered by the new course:** shrinking a failing input to a minimal one, which is the
+thing that makes a fuzz finding actionable rather than a 40 KB blob. Neither course teaches it.
+And no fuzzing or property-based tool exists for PowerShell here. **Checked 2026-09-08 and worth
+recording because the grep is misleading**: `hypothesis` matches under
+`sidecar/.venv/Lib/site-packages/` only inside numpy's and anyio's own vendored test files, which
+import it conditionally. There is no `hypothesis` package installed.
+
 ---
 
 ### I39 - 217 self-test files assert on a target set none of them prints, so a vacuous pass is invisible `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
@@ -4259,3 +4284,775 @@ cross-encoder calls, which `derive_coverage_floor.py` already prices.
 
 **What it is not.** Not a proposal to change 0.55. The point is that the number is currently
 unqualified in a dimension nobody has looked at, and the look is an afternoon.
+
+### I50 - `serve.ps1`'s per-slot guard says it is set by the LARGEST caller, and it is not `OPEN` `queue-4`
+
+**Source.** Queue-4 course 12, Coursera / Board Infinity "Deploying Deep Learning: Quantization,
+Serving, and Edge AI", worked 2026-09-07. Found while measuring the course's serving claims against
+what the estate runs; the course did not cause it.
+
+**What it is.** `tools/local-llm/serve.ps1` refuses to start when the per-slot context falls below a
+floor, and its comment states the rule plainly: *"The floor is set by the LARGEST caller, not the
+smallest."* The floor in the code is **3,300** tokens/slot, justified against Learning Stage 1's
+~1,000-token prompt plus 2,200 requested. But `meal-prep/pipeline/local_extract.py` sets
+`RUNG2_MIN_SLOT_CTX = int(4096 + 24000/3.5 + 512)` = **11,465**, and rung 2 is a larger caller than
+Learning Stage 1 by a factor of three and a half.
+
+**The arithmetic, verified 2026-09-07.** At the defaults `-Context 16384 -Slots 4`, per-slot is
+`16384/4 = 4096`. That clears `serve.ps1`'s 3,300 floor, so the server starts and reports READY.
+It does not clear 11,465, so the extract lane refuses.
+
+**Why it is not a live bug, and why it is still worth an item.** `local_extract.py` does the right
+thing: `slot_context()` reads the running server's real per-slot `n_ctx` from `/props` rather than
+assuming it, and a slot that is too small is a **named BLOCK, exit 2**, never a short read - the
+comment there explains that a truncated page would substring-verify cleanly and pass a recipe
+missing its last five ingredients. Its self-test even asserts the mismatch directly ("rung 2's slot
+requirement exceeds a 4-slot split of serve.ps1's default -c 16384"). So the failure is loud and
+already guarded.
+
+**What is actually wrong** is that `serve.ps1` carries a rule it no longer obeys. A reader who
+trusts that comment concludes a READY server is usable by every caller, which is false. The
+comment and the constant were correct when written and a caller grew past them.
+
+**What it would touch.** `tools/local-llm/serve.ps1` only - the floor constant and the comment
+around it. The obvious repair is to make the floor derive from the largest declared caller rather
+than restate it, so the next caller to grow cannot silently outrun it. **Do not just bump 3,300 to
+11,465**: that hard-codes the same failure one level up, and it would also make the default
+invocation throw, which is a behaviour change on a server Brad starts by hand.
+
+**Constraint acknowledged.** The queue's group-H rule forbids a course run from changing
+`serve.ps1`. Nothing was changed; this is the ledger entry the rule asks for.
+
+### I51 - two unrelated ~81 tok/s numbers, and nothing says which machine either is about `OPEN` `queue-4`
+
+**Source.** Same course. Routed to `model-finetuning-craft/applies-here.md` 2.
+
+**What it is.** The estate records two throughput figures that round to the same number and describe
+different machines:
+
+- `design/EVAL-hunter-wall-clock-2026-09-04.md` 2b: **~81 output tokens/sec**, measured over 148,111
+  output tokens of **cloud API agent** calls. This is what the memory `wall-clock-is-output-tokens`
+  is about and what the standing `MAP_BATCH = 2` ruling rests on.
+- `tools/local-llm/serve.ps1`: **80.4 tok/s aggregate** from the **local llama-server** at 8 slots
+  on the RTX 5070 Ti (up from 36.6 at one slot).
+
+**Why it matters.** Neither file mentions the other. The failure this sets up is an agreeing number:
+someone speeds up the local server, sees a rate near 81, and concludes the hunter's wall clock will
+move. It will not - the hunter's wall clock is Opus output over the API, and the local server is not
+in that path. This is the `an-agreeing-number-escapes-scrutiny` shape with two sources instead of
+one.
+
+**What it would touch.** One clarifying sentence in each of the two files naming the machine, and
+ideally the same in the memory `wall-clock-is-output-tokens`. No code, no gate, no board.
+
+### I52 - a reflex candidate this run could not write: the per-slot context floor `OPEN` `queue-4`
+
+**Source.** Same course, raised under procedure step 4.0 (can this finding be a reflex?).
+
+**What it is.** The cue is typed and rare: a session editing `-Slots`, `--parallel` or `-Context` in
+`tools/local-llm/serve.ps1`, or starting llama-server by hand with non-default values. The rule it
+would fire is I50's arithmetic - **`-c` is the TOTAL KV budget and llama.cpp divides it by
+`--parallel`, so the number that matters is `Context / Slots`, and the extract lane needs 11,465 of
+it.** MUST FIRE: a diff touching `-Slots` or `--parallel` in that file. MUST NOT FIRE: any other
+llama-server mention, or a read of the file without an edit.
+
+**Why it is an item rather than a row.** Writing a reflex means writing under
+`~/.claude/projects/C--Codex-ThriftyCrew/memory/`, which is outside the repo and outside a course
+run's write scope. The candidate is recorded here so the between-courses pass can rule on it.
+
+**What it would touch.** One memory file plus its `MEMORY.md` index line. Nothing in the repo.
+
+### I53 - the local model's "decode" bar measures the whole round trip `OPEN` `queue-4`
+
+**Source.** Coursera, *Optimize AI Inference Speed & Accuracy* (Starweaver), queue-4 H2, module 1.
+Routed to `reliability-craft/pipeline-throughput.md` 7.5 and `reliability-craft/applies-here.md`
+2026-09-07 entry 1.
+
+**What it is.** `graph/lib/llm.py` lines 56-59 defines
+
+    tokens_per_s = completion_tokens / elapsed_s
+
+where `elapsed_s` (lines 176-178) is a client-side stopwatch around the entire
+`/chat/completions` POST. `graph/bench/bench.py` consumes it at lines 125 and 270, gates on it at
+line 275 (`BARS["tok_s"] = 15.0`), prints it at line 341 as **"median decode ... tok/s"**, and writes
+it into `graph/prompts/model-selection.md` under the same label. The recorded 46.1 / 45.5 / 42.3
+tok/s per candidate model are therefore round-trip rates, not decode rates: prefill, queueing behind
+other slots, HTTP and JSON parsing are all charged to decode.
+
+**Why it matters.** The bias is downward and it is **not constant** - it grows with prompt length,
+so the same server scores differently for `resolve` (~312 tokens in) than for
+`meal-prep/pipeline/local_extract.py` (asking 4096 out). Two consequences: the figures are not
+comparable to `tools/local-llm/serve.ps1`'s 36.6 to 80.4 slot sweep or to any published decode
+number, and a future change that speeds up prefill only would show up as a "decode" improvement.
+Separately, `graph/bench/bench.py` has no warm-up discard (`warm`, `steady`, `discard` and
+`first call` return zero hits in the file); the median over N absorbs one slow first call but never
+measures the cold-start cost, which on this box means loading 12.2 GiB of weights.
+
+**The cheap part of the fix.** `LLMResult` already keeps the full response as `raw=data`
+(`graph/lib/llm.py` line 187), so if the llama.cpp OpenAI route returns a timings object the
+per-stage numbers are already in memory and merely unread. **This was not verified** - port 8080
+refused during the course run, so nobody looked at a live response. First step is one probe.
+
+**What it would touch.** `graph/lib/llm.py` (add prefill/decode properties beside the existing one,
+do not change it), `graph/bench/bench.py` (label the existing bar honestly, and add TTFT), and a
+note in `graph/prompts/model-selection.md` that the historical rows are round-trip.
+**Do NOT lower the 15 tok/s bar.** It gated real model choices against a consistent, if mislabelled,
+measure; re-deriving the bar means re-benchmarking every candidate, and that is a decision for Brad.
+
+**Constraint acknowledged.** Group H forbids a course run from changing `serve.ps1`, a sidecar
+threshold or a model artefact. Nothing was changed. `graph/lib/llm.py` and `graph/bench/bench.py`
+are outside that list but were left alone anyway, because a measurement change is exactly the thing
+a run that just read a course about measurement should not make unsupervised.
+
+### I54 - the quant format's dequantisation cost is named as a ceiling and never compared `OPEN` `queue-4`
+
+**Source.** Same course, module 3. Routed to
+`model-finetuning-craft/publishing-and-automation.md` 11.3 and that domain's `applies-here.md`.
+
+**What it is.** `tools/local-llm/serve.ps1` lines 45-67 record that aggregate throughput goes
+36.6 to 80.4 tok/s from 1 to 8 slots and then **goes flat, because once the weight reads are
+amortised Q3_K dequantisation compute becomes the ceiling**. That is a real measurement and it is
+better than anything the course supplies. What does not exist anywhere is a comparison: no file in
+this estate benchmarks two quant formats against each other on this card.
+`graph/prompts/model-selection.md` records per-MODEL decode figures for a fixed format, never
+per-FORMAT figures for a fixed model.
+
+**Why it matters.** The standing rule for a quant change here (from H1) is "state the free-VRAM
+number you expect to be left with". H2 adds a second column that the flat-past-8-slots measurement
+already implies: **a smaller file that dequantises more slowly can lose throughput while gaining
+headroom.** With no format-versus-format number on this box, any future quant proposal is arguing
+about file size and guessing about speed.
+
+**What it would touch.** A benchmark run only, no code change: fetch one alternative GGUF with
+`tools/local-llm/fetch-model.ps1`, run `graph/bench/bench.py` against each, record both in
+`graph/prompts/model-selection.md`. **Blocked behind I53** - running it before the decode bar means
+what it says would produce two round-trip numbers and call them decode.
+
+**Constraint acknowledged.** Nothing in `serve.ps1`, `sidecar/` or any model artefact was changed.
+
+### I55 - two courses ruled "no motive for LoRA here" against the reranker, while a measured QLoRA plan for the local 27B sat unread `NEEDS A RULING` `queue-4`
+
+**Source.** Coursera, *Fine-tuning Text Models with PEFT*, queue-4 group H entry H3, modules 1 and
+2. Routed to `model-finetuning-craft/publishing-and-automation.md` 10.7 and 10.8, and that domain's
+`applies-here.md` entry 1.
+
+**What it is.** H1 and H2 each asked "does this change what `finetune_reranker.py` should do?",
+answered no on sound reasoning, and recorded the verdict as if it covered the estate. It does not.
+`design/MEASURE-local-finetune-feasibility-2026-08-22.md` is a **measured** QLoRA study of the local
+27B on this box, with working probes in `tools/local-llm/finetune-probe/`: 57.3 tok/s, 8.31 h per
+epoch, peak 15.59 of 15.92 GiB, 58.4M trainable params at r=8, and a corpus builder that emits 3,198
+rows from `graph/gold/gold.jsonl`. Three separate course runs have now discussed LoRA in this estate
+and none of them cited it.
+
+**Why it matters.** The motive the two previous runs could not find is written down and quantified:
+26.9B parameters against a 15.92 GiB card, where PEFT is not a preference but the only arrangement
+that fits. The feasibility doc's section 10 also states plainly that **the work is unfinished** - the
+commodity-family holdout split does not exist, and without it a training run cannot report a
+cold-start false-MATCH rate against the stock-27B 29% baseline, which is the entire point of the
+exercise.
+
+**What needs a ruling, not a build.** Whether the 27B adjudication fine-tune is still wanted at all.
+It was costed at 17-25 h of continuous local GPU across nights (or ~1 h and ~$10 on a cloud A100),
+and it cannot overlap the 07:00 semantic sweep. That is a scheduling and money decision, not an
+engineering one.
+
+**What it would touch if ruled in.** `tools/local-llm/finetune-probe/build_corpus.py` (add the
+family holdout), a new eval that reports holdout false-MATCH against the 29% baseline, and the
+training venv `C:\Codex\llm\.venv-train` - deliberately not `sidecar/.venv`, which runs the sweep.
+Section 7's rulings stand and are not up for revisiting here: detached LoRA adapter never a merged
+GGUF, holdout by commodity family, reject-only kept afterward, and the thermal watchdog on any local
+run.
+
+**Constraint acknowledged.** Nothing in `serve.ps1`, `sidecar/` or any model artefact was changed,
+and no probe was run. This is a reading of files already in the repo.
+
+### I56 - no rank, alpha or target-module set has ever been compared here, and the two probes disagree with each other `OPEN - SMALL, AND IT IS A PREREQUISITE FOR I55` `queue-4`
+
+**Source.** Same course, modules 1 and 3. Routed to
+`model-finetuning-craft/training-and-evaluation.md` 11 and `publishing-and-automation.md` 10.7.
+
+**What it is.** `tools/local-llm/finetune-probe/step_probe.py:43` attaches LoRA at `r=16,
+lora_alpha=32` across twelve target modules; `train_probe2.py:23`, the arrangement that actually
+fits, defaults `R=8` with `lora_alpha=2*R`. Neither was chosen by comparison and the two were never scored against each other -
+`step_probe.py` is kept explicitly as documentation of an arrangement that does NOT fit, so the
+r=16 figure is not a rejected candidate, it is an untested one. Register claim C111 records the
+same gap in the store: the `q_proj/v_proj` default is copied everywhere and nobody has ablated it.
+
+**Why it matters.** Rank is the knob that decides how much VRAM is left for batch size, and this box
+has **0.33 GiB** of headroom. Picking r=8 because a probe used it is the same class of error as
+importing a threshold from a course reading - a number standing where a derived one belongs, in a
+codebase whose `sidecar/THRESHOLDS.md` derives every other threshold it has.
+
+**What it would touch.** Nothing in production. Short arms at r=8, 16 and 32 on a slice of the
+corpus, scored on the same frozen holdout, with the acceptance margin stated first the way
+`sidecar/checkpoint_selection.py` states its 0.0033. **Blocked behind I55's ruling** - there is no
+point sweeping a rank for a run nobody has decided to make.
+
+**Constraint acknowledged.** Nothing changed; no GPU work was done.
+
+### I57 - Jaccard runs in three first-party files, and none of them says which of its two properties it is buying `OPEN - SMALL, AND IT IS A COMMENT, NOT A REWRITE` `queue-4`
+
+**Source.** Queue-4 course 12, IBM "Unsupervised Machine Learning", worked 2026-09-07 as a partial
+run. Routed to `rag-craft/vector-space-foundations.md` 21a and `rag-craft/applies-here.md` 12.
+
+**Where it comes from.** Jaccard distance is `1 - |A intersect B| / |A union B|` on SETS, so it
+discards repetition and length before it counts anything. That has two consequences and they pull in
+opposite directions. Presence over frequency is often exactly right for short names. But **every
+pair sharing no token scores exactly 1**, so Jaccard has no gradient across non-overlapping
+candidates and cannot rank them at all.
+
+**What the estate has.** Three first-party uses, all verified 2026-09-07:
+
+- `grocery/ad-match-lib.ps1:166` computes it, and `:180` uses it as the third-rank tie-break behind
+  a price match and a raw shared-token count. **This use is correct** and the no-gradient hazard
+  cannot fire, because an overlap count has already ranked the candidates.
+- `grocery/resolve-hyvee-links.ps1:187`, as symmetric overlap so extra words in a candidate cost
+  something.
+- `sidecar/sweep.py:178` documents that `Resolver.prior_rulings` ranks precedent by bag-of-words
+  Jaccard over `[a-z]{3,}`, per commodity, **and records the no-gradient failure from the field**:
+  it retrieves nothing when the words do not overlap, the coconut-oil against Epsom-salt case where
+  two listings share no word and are the same mistake. That is the set-theoretic property observed
+  as a bug, and the fix already chosen for it is embeddings.
+
+So the estate hit both halves and wrote down neither as a property of the metric. `sidecar/THRESHOLDS.md`
+also has no row for a Jaccard space, although `ad-match-lib.ps1` compares its output against a
+`$bestJac`.
+
+**What rung 1 is.** A comment, not a rewrite. Beside each of the three, one line saying which
+property it is buying - presence over frequency, or frequency as evidence - and, for the two that
+rank, that the no-gradient case is handled by the overlap count in front of it. This is the cheapest
+possible fix and it is the one that stops a future scorer being written as a standalone Jaccard
+retriever by imitation, which is the failure mode `teach with examples` warns about: existing code
+is an instruction nobody wrote on purpose.
+
+**What rung 2 would be, and it needs a ruling.** Whether `$bestJac` earns a row in
+`sidecar/THRESHOLDS.md`. The register's stated subject is score spaces that do not share a scale,
+and a tie-break that is never compared against a bar is arguably not one. Ruling either way is
+better than the current silence, because `ops/audit-threshold-register.ps1` cannot see a number it
+was never told about.
+
+**What it would touch.** Comments in two `grocery/` scripts and one `sidecar/` docstring at rung 1.
+No behaviour, no board, no gate. Rung 2 touches `THRESHOLDS.md` and possibly its audit.
+
+**Constraint acknowledged.** Nothing was changed. This is a reading of files already in the repo.
+
+### I58 - `sidecar/requirements.txt` is wrong about two of its five pinned packages, and nothing in the estate compares it to the venv `OPEN - SMALL, AND IT IS A HERMETIC CHECK` `queue-4`
+
+**Source.** Queue-4 group E, worked 2026-09-07. **Both courses were dropped on outline evidence**
+without reading a lecture, so this finding is not routed course material - it comes from the estate
+check the run did instead. The standing containerise-or-not verdict is in
+`model-finetuning-craft/applies-here.md`, dated the same day.
+
+**What it is.** `sidecar/requirements.txt` declares seven packages, five of them with `==` pins.
+Measured against `sidecar/.venv/Lib/site-packages/*.dist-info` on 2026-09-07:
+
+| Declared | Installed | |
+|---|---|---|
+| `sentence-transformers==5.1.2` | **5.6.1** | DRIFTED |
+| `fastapi==0.121.2` | **0.141.1** | DRIFTED |
+| `torch==2.11.0+cu128` | 2.11.0+cu128 | matches |
+| `transformers==5.14.1` | 5.14.1 | matches |
+| `uvicorn==0.52.0` | 0.52.0 | matches |
+
+Nothing reads the file. Its only two references anywhere in the estate are prose: `sidecar/README.md`
+line 62 quotes the `uv pip install -r requirements.txt` command, and this backlog names it at lines
+1942 and 1959 as the estate's only requirements file. `grep -rn requirements ops/` exits 1 - no gate,
+audit or self-test touches it. There is no lockfile of any kind in the repo (`uv.lock`,
+`requirements.lock`, `poetry.lock`, `Pipfile.lock` all absent).
+
+**Why it matters.** `sentence-transformers` is the library the matcher's whole score space is built
+on: `sidecar/lib_match.py` line 41 imports `SentenceTransformer` and `CrossEncoder` from it and line
+99 constructs the embedder, and that is the only import of it in the tree, so every bi-encoder and
+cross-encoder number this estate produces comes through it. `sidecar/THRESHOLDS.md` registers three
+score spaces and `sidecar/freeze_eval.py` exists
+because a changed input moved holdout AUC from 0.9705 to 0.7921 - this estate already knows that the
+embedding side is the sensitive one. A minor-version move across `sentence-transformers` 5.1 to 5.6
+is exactly the kind of change that shifts a score space without shifting a number anybody watches,
+and every eval this estate has recorded since the drift was produced on 5.6.1 while the file on disk
+says 5.1.2. The wrong half is the DECLARATION, not necessarily the install: nobody can currently say
+which version any recorded AUC was measured on, because the only written record is wrong.
+
+This is also the answer to the question group E was queued to ask. The queue entry proposed
+`sidecar/` as "exactly the reproducibility problem containers exist for". It is not: the drift is
+between the declaration and the install on ONE box, and an image rebuild would have carried it
+forward unchanged. What catches it is a comparison, not a runtime.
+
+**What rung 1 is.** A hermetic self-test - it reads two files on disk and needs no board, so it
+belongs in `ops/run-gates.ps1` rather than the daily chain. Parse the `==` pins out of
+`sidecar/requirements.txt`, read the version out of each matching `*.dist-info` directory name under
+`sidecar/.venv/Lib/site-packages`, and fail on any mismatch. Its `MUST FIRE` fixture is the current
+state (a declared 5.1.2 against an installed 5.6.1); its `MUST NOT FIRE` is a pin that matches; its
+`CLEAN TWIN` is an unpinned line such as `numpy`, which must be skipped rather than flagged. It owes
+a `<NAME>-COMPLETE` marker as its last line per `lib/guard-contract.ps1`.
+
+**The ruling it needs first, and it is the whole decision.** Which side is authoritative. Either
+`requirements.txt` is corrected to 5.6.1 and 0.141.1 - cheap, and it makes the file true - or the
+venv is rolled back to the declared versions, which is not cheap and would need the frozen eval
+re-run to show the score space did not move. **Correcting the file is the recommendation**, with the
+correction dated in a comment so a later reader can see the declaration was retro-fitted to the
+install rather than the other way round, and with the honest note that no recorded AUC can be
+attributed to a specific `sentence-transformers` version before that date.
+
+**What it would touch.** One new `-SelfTest` under `ops/`, its registration in `run-gates.ps1`, and
+one edit to `sidecar/requirements.txt`. No board, no page, no published number, no GPU work.
+
+**Constraint acknowledged.** Nothing was changed. Both versions above were read off the filesystem;
+no package was installed, upgraded or removed.
+
+### I59 - the standing "no em dashes" rule has no gate, and 3,151 em dashes sit in the lesson and Substack source `OPEN - THE MEASUREMENT IS DONE; ONE CHECK IS UNRESOLVED` `queue-4`
+*Source: queue-4 group F, technical writing (2026-09-08).* `CLAUDE.md` line 57 states **"No em
+dashes"** under "Standing rules for anything that ships", and the workspace `CLAUDE.md` repeats it.
+Nothing mechanical enforces it. The rule is carried only inside five agent prompts
+(`.claude/agents/post-publish-reviewer.md` line 42, `recipe-batch-auditor.md` 89, `recipe-writer.md`
+38, `triage-developer.md` 147, `recipe-ingredient-mapper.md` 194) and by one `DeDash` helper in
+`archive/ghost-config/voice-rewrite/publish-rewrites.ps1` line 33, which is **archived and does not
+run**. A grep across `ops/`, `site/`, `meal-prep/` and `grocery/` finds no live stripper and no gate.
+
+**Measured 2026-09-08:** 3,151 em dashes in 125 files under `content/`, of which 1,038 sit in 54 of
+the 55 `content/lessons/*.md` and the rest in `content/substack/posts/`. `site/` and `public/` hold
+**zero**.
+
+**What is NOT established, and it decides the size of this item.** Source markdown is not published
+output. The Week-N lessons live at `https://www.thriftycrew.com/week-<n>-<slug>/` and their bodies
+are behind the paywall, so an anonymous fetch returns only the teaser; the one em dash visible there
+belongs to Ghost's own date-and-read-time byline, not to our copy. **Nobody has read a published
+lesson body.** So this item is not "the live site breaks the rule", it is "the rule is unchecked and
+the source corpus is full of the character". Claims-register row C128 holds the open question.
+
+**The ruling it needs.** Almost certainly the rule wants a stated regime rather than a corpus sweep.
+The 52-week series was written before the rule and there is no evidence a reader has ever seen a
+violation. Three options, cheapest first: (a) settle C128 by reading one lesson body as a subscriber,
+which costs minutes and may close the item outright; (b) add a detector over reader-facing SOURCE
+with a ratchet high-water mark that may only go down, per the estate's own do-not-add-a-red-gate rule;
+(c) sweep the corpus, which touches 125 published files and is the expensive answer to a question
+nobody has confirmed is a problem. **Recommend (a), then decide.**
+
+**What it would touch.** (a) nothing. (b) one new `ops/audit-em-dashes.ps1` with a must-fire and a
+must-not-fire fixture, its registration in `run-gates.ps1`, and a high-water file. (c) 125 content
+files and a republish of each, which is a real risk to live pages and should not be done casually.
+
+**Constraint acknowledged.** Nothing was changed. Every figure above was read off the filesystem or
+off a public page.
+
+### I60 - three finance lessons make a quantified claim and give no quantity `OPEN - SMALL` `queue-4`
+*Source: queue-4 group F, Rice `engineering-writing`, the vague-to-specific ladder (2026-09-08).*
+On a paid finance site, a magnitude claim with no number is the defect that course teaches against,
+and it is a sharper instance of the estate's own "no fabricated numbers, and understating is exactly
+as wrong as overstating".
+
+Measured over all 55 `content/lessons/*.md`: 16 sentences pair a magnitude word (`dramatically`,
+`significantly`, `substantially`, `much more`, `a lot more`) with **no digit anywhere in the
+sentence**, across 14 files. Most are rhetorical and correct as written ("teens are much more likely
+to buy into a system they helped shape"). **Three are quantifiable financial claims:**
+
+- `content/lessons/lesson-30-boring-wins-index-funds-101.md` - "stocks as a group have grown
+  significantly over long time periods".
+- `content/lessons/lesson-31-the-401k-and-free-money.md` line 51 - the early starter "can end up
+  with dramatically more money", in a lesson whose entire point is the size of that gap.
+- `content/lessons/lesson-37-student-loans-without-the-panic.md` - "can all dramatically reduce the
+  total borrowed", and separately "the payoff timeline shrinks dramatically".
+
+**The fix is not to invent a figure.** It is to show the arithmetic already implied, or to name the
+assumption and its source, or to cut the magnitude word. Lesson 31 is the clear case: it already sets
+up two savers ten years apart and then declines to finish the sum.
+
+**What it would touch.** Three lesson files and their three published Ghost posts, plus the mirrored
+`content/substack/posts/substack-week-30|31|37.md`. No board, no pricing engine, no gate.
+
+**Constraint acknowledged.** Nothing was changed.
+
+### I61 - the local LLM server is a four-slot queue whose service time has only ever been measured as a mean `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+*Source: Simulation Models for Decision Making (course 18, Minnesota Carlson, Gupta).*
+
+Queueing writes a system as `arrival / service / servers`. `tools/local-llm/serve.ps1` line 107 sets
+`-Slots 4`, so the server half is `n = 4`; `graph/pipeline/resolve.py` line 1295 sets `--jobs 4`, so
+the arrival half is deliberately coupled to it. The header at `serve.ps1` 61-66 already states both
+consequences correctly - *"more jobs than slots just queues inside the server and burns client
+timeouts"* and *"a sequential client against eight slots is exactly as fast as one slot"*.
+
+**What is missing is a distribution.** Everything recorded about service time here is a mean: 0.99
+q/s at 4 slots against 1.08 at 8 (`serve.ps1` 100-106), and the two ~81 tok/s figures I51 is already
+about. The course's strongest demonstration is that the mean does not predict the queue. Three runs,
+same arrival rate, one server: exponential service at 3.0 min queued 30-40 and climbing; exponential
+at 2.5 min queued 1 to 3; and an **empirical** service distribution whose mean was 2.9 - *better* than
+the first - queued **around 240**. Only the shape changed. So the estate cannot currently say what a
+burst does to it, and the failure mode the header names is a **client timeout**, which is the "drop"
+policy - the one that loses work silently.
+
+**Why it matters here.** The coupling `--jobs == -Slots` is the equal-rates case, which is not
+break-even; it is only safe because the caller is a closed loop that waits. The moment a second
+caller holds slots at the same time - a second agent, a browser-pull lane, a manual probe - nothing
+bounds arrivals and the drop policy is what catches it.
+
+**Rung 1, and it writes nothing.** Log per-request wall time for one existing `resolve.py` run, print
+the percentiles, and say whether the distribution is anywhere near exponential. That is a report.
+Only if the tail is heavy is there a build, and the build is a bounded wait rather than a timeout.
+
+**What it would touch.** Rung 1: nothing, one log file under `graph/out/`. A later rung would touch
+`resolve.py`'s client and `serve.ps1`'s guidance comment, not the board or any gate.
+
+**Constraint acknowledged.** Nothing was changed. Standing context is
+`~/.claude/skills/reliability-craft/applies-here.md` entry 4; the method is `pipeline-throughput.md` 8.
+
+### I62 - `MIN_SCORE`'s on-topic and off-topic score distributions now overlap completely, so the calibrator's suggested threshold cannot be right `OPEN - THE MEASUREMENT IS DONE; WHAT IS OPEN IS ONE COMMENT` `queue-4`
+*Source: Decision Making (course 17) and Simulation Models (course 18).*
+
+`~/.claude/skills/course/LEDGER.md` 4310 records a deliberate refusal: `recall-hook-calibrate.py`
+suggested raising `recall-hook.py`'s `MIN_SCORE` from 9.0 to 11.2, and it was declined because the
+suggestion rested on **a margin of 0.79** - lowest on-topic 11.59 against highest off-topic 10.80 -
+over a handful of probes. The refusal was correct. **Re-running the calibrator on 2026-09-08 shows it
+was correct for a stronger reason than was recorded, and that the suggestion's premise has since
+inverted.**
+
+Live numbers, from that run: corpus 1,064 sections, **148 probes** (140 harvested from `SKILL.md`
+trigger clauses plus 8 hand-written), floor now **8.5**, not the 9.0 the ledger entry was written
+against. Lowest clearing on-topic probe **8.54** (`claude-code-automation`, *"checking work from an
+unsupervised run"*). Highest off-topic prompt **11.00** (*"rename this variable to total_count"*), with
+**4 of 13** off-topic prompts clearing the floor and **3** on-topic probes baselined below it.
+
+**The two sets no longer separate at any cutoff.** A threshold of 11.2 would sit above almost every
+on-topic probe in the store. The single margin between one pair of extremes was never evidence about
+where a cutoff belongs, because it is one number standing in for two overlapping distributions -
+which is course 18's central point and course 17's sensitivity test in one: a recommendation that
+flips inside the spread of its own inputs has not been made.
+
+**Where they overlap everywhere, the question changes from "which cutoff separates them" to "which
+error is cheaper", and that is already answered in the code.** `recall-hook.py` 41 calls the floor
+*"deliberately permissive"*, and the calibrator's own off-topic block says a wrong hit costs about 40
+bytes of injected pointer. A written asymmetric cost outranks an unwritten margin.
+
+**What is proposed, and it is small.** The calibrator prints a "suggested `MIN_SCORE`" figure derived
+from a separation that no longer exists. Either it stops printing a single suggested value and prints
+the two distributions with their overlap, or its output says in one line that a suggestion is only
+meaningful while the sets separate. **No threshold is changed by this item.**
+
+**Explicitly out of scope for a course run.** `MIN_SCORE` governs the recall offers that feed a course
+run's own dedup, so a run proposing to move it is the interested party. `course/procedure.md` step 8's
+first hard exception covers exactly this, and it is why the measurement is reported and nothing is
+touched.
+
+**What it would touch.** `~/.claude/skills/recall-hook-calibrate.py`, its summary block only. Outside
+the repo, like I1 and I3.
+
+**Constraint acknowledged.** Nothing was changed. The calibrator run exited **3**, not 0: its
+recognition-floor half could not compare corpora from that cwd. The probe half ran and printed, and
+only the probe numbers are quoted here.
+
+### I63 - the backlog records whose move an item is and never how reversible it is, so 17 items that write nothing queue behind 3 that need a policy `OPEN - IT IS ONE COLUMN, NOT A PROCESS` `queue-4`
+*Source: Decision Making (course 17, Nardy), lecture "When decisions are experiments" and the MAP
+lesson.*
+
+This file's five states answer **whose move it is** - `NEEDS A RULING` is Brad's, `OPEN` is mine. They
+say nothing about **what it costs to be wrong**, and that is the axis the course adds. Bezos's split,
+quoted in the course: a **type 1** decision is a one-way door, made slowly with consultation; a
+**type 2** decision is a two-way door, and *"can and should be made quickly"*. The named failure is
+organisations applying the type 1 process to type 2 decisions as they grow, which reads as caution and
+costs throughput.
+
+**Measured on this file, 2026-09-08**, by `ops/audit-backlog-status.ps1` before these three items were
+added: **90 items** - 50 `DONE`, 10 `PARKED`, 3 `NEEDS A RULING`, 1 `PARTLY DONE`, 26 `OPEN`, exit 0.
+Of the 30 that are not closed, **17 already say in their own free text
+that the first step writes nothing or is small**: I31, I32, I33, I34, I35, I36, I39, I40, I43, I45,
+I46, I47, I56, I57, I58, I59, I60 - *"RUNG 1 IS A READ"*, *"RUNG 1 IS A MEASUREMENT, NOT A BUILD"*,
+*"RUNGS 1 AND 2 ARE REPORTS"*, *"SMALL, AND IT IS A COMMENT, NOT A REWRITE"*. Every one of those is a
+two-way door: it produces a file that can be deleted, and being wrong costs the time it took.
+
+**They are listed identically to the ones that are not.** I38 (whether randomness may enter the
+parsers) and I55 (whether to spend on a QLoRA run) change what the estate is tested against and what
+it spends; those are one-way enough to want a ruling. Reading the list, the two kinds are
+indistinguishable, and the effect is that a read nobody needs to authorise waits in the same line as a
+policy that genuinely does.
+
+**What is proposed, and it is one column.** Add a reversibility marker to each non-closed heading -
+two values, `2-WAY` and `1-WAY` - and state the standing rule that a `2-WAY` item does not wait on a
+ruling. The information is already in the free text; nothing new has to be judged to fill it in. The
+state vocabulary is unchanged, so `ops/audit-backlog-status.ps1` is unaffected unless someone chooses
+to make it count the new column too.
+
+**The second half, for the items that really are one-way.** The course's MAP (Mediating Assessment
+Protocol; Kahneman, Sibony and Lovallo, 2019) is the process for those: break the decision into
+independent intermediary assessments, fix fact-based criteria for each **before** the decision meeting,
+score each one on its own, and only then form a global judgement - deal-breakers first. This file
+already writes each item as *what, why, and what it would touch*, which is most of an assessment
+skeleton. What it does not do is score them separately before Brad forms a view on the whole item.
+**Proposed as a shape, not as work**: nobody should build a scoring rubric until Brad decides he
+wants one.
+
+**What it would touch.** `design/BACKLOG-course-findings.md` headings only, and the paragraph above
+the state table. No script, no gate.
+
+**Constraint acknowledged.** No heading was re-labelled by this run; the counts above are a read.
+
+### I64 - the Freezer Math tool decides a several-hundred-dollar purchase from three means, and its verdict flips inside their error bars `OPEN - RUNG 1 IS A COMPUTATION, NOT A BUILD` `queue-4`
+*Source: Simulation Models for Decision Making (course 18, Gupta), module 3, models 1 versus 2; and
+Decision Making (course 17, Nardy), module 3 sensitivity analysis. Routed to
+`~/.claude/skills/decision-craft/decide-under-uncertainty.md` 6 and 8.*
+
+`site\tools\freezer-math-tool.html` is a live, reader-facing tool that answers *"should I buy a chest
+freezer"*. Its whole arithmetic is one line, 148:
+
+    gross = spend * SHIFT * (DATA.stockup + DATA.bulk)
+
+Three constants, all of them means: `stockup` **0.0612** (mean across nine freezables of the gap
+between the mean weekly cheapest price and the record low), `bulk` **0.1719** (mean across the same
+nine of the Sam's Club spread against the mean regular-store price), and `SHIFT` **0.60**, a flat
+assumption about how much of a reader's buying actually moves. Generated by
+`grocery\build-freezer-data.ps1` from `grocery\price-history.json`. The page then reads a **verdict**
+off that product - `Skip it`, `good buy`, `Decent, not instant`, `not a slam dunk` - with a payback
+month count, a year-1 and a year-5 figure. It states a point estimate and never a range.
+
+**Two defects, and they compound.**
+
+**1. The verdict flips inside the error bars of its own inputs.** At the page's own defaults ($120 a
+month, a $200 freezer) net is $12.78/month and the verdict is `Decent, not instant` at 16 months. It
+becomes `good buy` at $148 of monthly spend, or equivalently if the combined spread rises from 23.3%
+to about 28.7%, or if `SHIFT` rises from 0.60 to about 0.74. **A 23% move in a mean estimated over
+five weeks changes what we tell a paying reader to do.** Nardy's rule is that the number to report is
+the breaking point, not the estimate.
+
+**2. The mean is biased downward, in the direction we call exactly as wrong as overstating.** Three
+of the nine stock-up spreads are exactly `0` (chicken thighs, pork chops, butter) and a fourth is
+`0.0030`. A zero there means the record low equals the mean, which over a five-week window means *we
+have not seen a sale yet*, not *this item never goes on sale*. Gupta's models 1 and 2 are the general
+form: a figure built as `quantity x mean` reads low in the bottom half of the distribution and high in
+the top half, and the error lands on the number the decision is made from.
+
+**And the data is stale.** The page is frozen at `weeks:5, updated:'2026-07-10'`.
+`grocery\price-history.json` carried **21 weeks** when this was measured on 2026-09-08. The generator
+was written to be re-run and its output pasted in; that has not happened in two months.
+
+**Rung 1 is a computation and writes nothing.** Re-run `grocery\build-freezer-data.ps1` against the
+21-week history and print, without editing the page: the new blended spreads, how many of the nine
+freezables still have a zero stock-up spread, and the spend at which each verdict band flips under
+both the old and the new numbers. That says how far the live page is out and whether the verdict a
+reader sees today is the one they should see. It is a two-way door.
+
+**Rung 2, only if rung 1 says the page is out**, is the refresh plus one sentence of flip point on
+the page beside the verdict, in the same register as the assumptions already listed there.
+
+**What it would touch.** `grocery\build-freezer-data.ps1` (a read at rung 1), then
+`site\tools\freezer-math-tool.html`'s `DATA` block and one note. No gate, no engine.
+
+**Scope stated honestly.** Only this tool was examined. The other nine files under `site\tools\` were
+not audited for the same `quantity x mean` shape, and the absence of findings there is an absence of
+looking.
+
+---
+
+### I65 - every parser here has a previous version one `git show` away, and nothing has ever run old and new over the same input `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4`
+
+**Source.** `automated-analysis` (University of Minnesota; queue-4 entry 20, raided 2026-09-08),
+item 37. Routed to `software-craft/test-design-and-oracles.md` 5.3. Registered as claim C139.
+
+**The idea, and it is one sentence.** Where behaviour is meant to be UNCHANGED, you do not need to
+write an oracle, because you already have one: **the previous version of the program**. Run both
+over the same inputs and require identical output. The course calls this the *consistency oracle*
+and rates it the strongest of the four that scale, precisely because nobody authors it.
+
+**Why this estate in particular, and why it is filed separately from I38.** I38 is blocked on a
+ruling about `Get-Random`. **This item involves no randomness at all** and therefore needs no
+ruling. Its inputs are files this estate already has on disk: the captures, the boards, the feeds,
+the specs. Its second version is whatever `git show` returns. The estate's whole architecture is a
+git-bus in which one runtime writes a file another reads, which means every stage boundary is a
+pure-ish function with a version history - the exact shape this oracle wants.
+
+**What it would catch that the current suite cannot.** A `-SelfTest` proves a detector still fires
+on the one frozen fixture it was written for. It says nothing about whether a refactor changed the
+output of the 4,000 real rows nobody froze. The estate has been bitten by exactly this: the price
+formatter had five copies, `compare-deals` functions are lifted by three scripts and a lifted
+`$script:` constant does not travel, and a norm regex without a word boundary turned "Garlic" into
+"arlic". Every one of those is a behaviour change on real input that a fixture suite did not see.
+
+**Rung 1 is a measurement and writes nothing.** Pick ONE parser with a recent commit - the
+suggestion is a `grocery/` capture reader or `sidecar/`'s normaliser - check out the previous
+revision to a temp path, run both over the same real input directory, and diff the outputs. Report
+three numbers: rows processed, rows differing, and whether any difference was intended. **A zero
+sizes the item down and a non-zero sizes it up**, and either answer is worth the hour.
+
+**What rung 2 would touch, if rung 1 justifies it.** A small runner that takes a script path, a
+commit-ish and an input directory, and reports a diff. **Not a gate.** A consistency check that has
+to be green on every push is a ratchet nobody asked for and would be red on day one, which
+`.claude/rules/ops-and-gates.md` forbids. It is a thing you run deliberately before a refactor
+lands. It must also never write to a tracked path: the old version runs from a temp checkout, per
+the estate's own `neuter-numbers-get-predicted-not-measured` rule.
+
+**The honest counter-argument.** The oracle is only valid where output is MEANT to be identical, and
+much of this estate is deliberately not: boards rebuild daily, prices move, `reanchor` rewrites every
+spec. Scope it to the transformation stages, not to anything that reads live data.
+
+---
+
+### I66 - every static detector in `ops/` is unsound, none of them says so, and their clean reports are written as though they were proofs `OPEN - IT IS WORDING, NOT A REWRITE` `queue-4`
+
+**Source.** `automated-analysis` (queue-4 entry 20, raided 2026-09-08), items 3, 28, 31 and 45.
+Routed to `software-craft/test-design-and-oracles.md` 5b.
+
+**The distinction the estate is missing a word for.** A static analysis must approximate, because
+non-trivial semantic properties are undecidable. The direction of the approximation decides what its
+verdicts MEAN. A **sound** (over-approximating) analyser never misses a real defect but raises false
+alarms, so a clean report is trustworthy. An **unsound** (under-approximating) one stays quiet, so a
+reported defect is real and **a clean report proves nothing**. Most real tools are deliberately
+unsound, because an analyser that buries findings under false alarms gets ignored - which is the
+same argument this estate already makes about gates that are red on day one.
+
+**Where it bites here.** `ops/run-gates.ps1`'s own header says it runs "the static-analysis
+detectors that read source rather than data". Every one of those detectors is a **pattern matcher
+over source text**, and therefore unsound by construction: it finds the spellings it knows and is
+blind to the same defect written differently. The estate has already been burned by exactly this and
+has a memory about it - `a-negative-search-result-must-prove-itself`. One detector already states
+its own unsoundness: `ops/audit-fixture-vocabulary.ps1` line 31 says it "stops the shape a new
+author actually writes, and it does not pretend to have swept the estate" (verified verbatim
+2026-09-08). **That honesty is the exception, not the pattern**, and rung 1 is to find out how far
+the exception extends.
+
+**Why it is worth an item rather than a shrug.** A clean report from an unsound detector is evidence
+about a spelling list. Read as a proof, it closes a question that is still open, and the estate's
+whole verification story rests on those reports. This is not a defect in any detector; it is a
+defect in how their output is worded and therefore read.
+
+**Rung 1, and it is small.** For each static detector in `ops/`, decide in one line whether its
+clean verdict means "this class of defect is absent" or "none of the patterns I carry matched", and
+put that line in the detector's header beside the `<NAME>-COMPLETE` convention. The output of rung 1
+is a count: how many detectors already state their scope, and how many read as proofs.
+
+**What it must not become.** Not a new gate, not a schema, and not a rewrite of any detector's
+logic. **It changes what a report claims, not what it checks.**
+
+---
+
+### I67 - the backlink plan is refuted a second time on a new axis, and the one instrument this estate could actually use has never been read `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-4`
+
+**Source.** `seo-fundamentals` module 2 (UC Davis; queue-4 entry 21, raided 2026-09-08). Routed to
+`growth-craft/search-position-diagnosis.md` 4. Registered as claims C141 to C143.
+
+**What is new.** `docs/seo-backlink-plan.md` is already marked `[REFUTED: 2026-08-31]` because its
+premise was wrong and it still targets the site's former domain. It is now wrong a second way, on an
+axis that would survive fixing the domain: **links are scored by the traffic they actually carry**
+(C141), so a plan whose target is a COUNT of acquired links is aimed at the wrong quantity. A link
+nobody clicks is worth close to nothing. The plan cannot be repaired by updating its URLs.
+
+**The honest scoping, and it is most of this item's value.** The off-page material splits about
+evenly into work a one-person site can do and work it cannot, and pretending otherwise is how an SEO
+plan becomes a list nobody executes. **Agency-scale, and the right answer is to decline:** digital
+PR, journalist relationships, editorial-calendar targeting, guest blogging at volume, syndication,
+and competitor backlink analysis behind a paid tool. **Executable alone:** reading brand queries in
+Search Console, a Google Alert on the brand name, reclaiming broken links that already pointed here,
+and converting unlinked brand mentions into links one email at a time.
+
+**Rung 1 is a read and it writes nothing.** In Search Console, sort queries for brand terms and
+answer one question: **is anyone searching for this brand at all, and with what wording?** The
+2026-08-31 baseline is 1,331 indexed pages drawing 3 web-search clicks in 28 days at average
+position 50.1, and a brand-query read has never been taken. It says whether there is any brand
+signal to build on or whether the honest answer is that off-page work is premature and the
+constrained layer is still crawl and content.
+
+**What rung 2 would touch, if rung 1 justifies it.** Retire or rewrite `docs/seo-backlink-plan.md`
+so it stops standing as a refuted plan, replacing it with the reclamation shortlist. No engine, no
+gate, no page change.
+
+**The prohibition, stated so it is not re-derived.** Buying links or using a brokerage is
+manipulation, link velocity and index-tier scoring exist to catch it, and the downside lands on a
+live paid site. Not a trade worth making at any price.
+
+---
+
+### I68 - the ad period is known, written down in seven places, and used by nothing that looks at a price `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-5`
+
+**Source.** `practical-time-series-analysis` (SUNY Poly, Sadigov and Thistleton; queue-5 entry 1,
+worked 2026-09-08). Routed to `data-quality-craft/modelling-a-time-series.md`, with the estate half in
+that domain's `applies-here.md`. Registered as claims C146 to C149.
+
+**What is new, and it is a correction to how we describe our own code.** `grocery/check-ad-cycles.ps1`
+gets called the cycle detector. It detects no cycle. It reads each store's declared ad window out of
+that store's own feed and schedules the next pull for the day after the window expires. The period
+itself is a hand-written constant: `cadence_days` in `grocery/ad-schedule.json`, `7` for Hy-Vee,
+Aldi, Family Fare, Baker's and Fareway and `null` for Sam's Club and Walmart. It is read by
+`grocery/audit-ad-status.ps1`, `grocery/capture-policy-lib.ps1` line 171, `graph/import/importers.py`
+and `graph/agentic/verifier.py`, and **every one of those reads it as a schedule. None tests it
+against a price.**
+
+**Why that is worth an item.** Knowing the period is the expensive half of seasonal modelling and we
+have it for free. What a schedule cannot do is say what a number *should* be. A seasonal expectation
+can, at every slot, with an interval, which is the only form a check can subtract. Today every price
+band treats the weekly structure as noise, which is `data-quality-craft/detecting-anomalies.md` 4
+arriving on our own board.
+
+**Rung 1 is a read of data already on disk and it writes nothing.**
+`grocery/out/coverage-ledger-history.jsonl` has carried one dated line per run since 2026-08-01.
+Group the `examined` counts by weekday and compare the within-weekday spread to the overall spread.
+That answers one question: **does this estate's daily history actually carry a day-of-week
+component, or does it not?** If it does not, this item closes and the tolerance work in I13 is
+unaffected. If it does, `grocery/analyse_coverage_tolerances.py` is currently averaging that
+structure into its 15-run rolling reference rather than removing it, and its p95 is inflated by a
+known, removable effect. **This is claim C148 and it is a prediction with a mechanism, not a
+finding.** Nobody has looked.
+
+**The one result that should change a check whatever rung 1 says.** A multiplicative seasonal
+structure puts real autocorrelation at lags `s - 1` and `s + 1`, not only at `s` - derived, not
+asserted (C149). On a 7-day cycle that is Sunday and Tuesday for a Monday rule. So **any comparison
+we ever write that pins itself to "the same day last week" must look at the neighbouring days too**,
+or it will read a genuinely seasonal series as clean.
+
+**What it must not become.** Not a forecasting engine, and not a new gate. Nothing here should ship
+a predicted price to a reader: the course produces 80% and 95% intervals for every forecast and
+**never scores one against held-back data anywhere in its 118 items** (`RMSE`, `MAPE`, `backtest`,
+`cross-validation` and `held-out` all count zero across its 375,521 characters of transcript). A
+forecast with no out-of-sample error estimate is a fabricated number, which the project's standing
+rules already forbid. If a fitted expectation is ever used here it is used to judge an observation
+we already have, never to publish one we do not.
+### I69 - the only forecast this estate makes has its answer stored next to it and has never been scored `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-5`
+
+**Source.** `demand-prediction-using-time-series` (LearnQuest; queue-5 entry 2, worked 2026-09-08).
+Routed to `data-quality-craft/modelling-a-time-series.md` sections 3a, 7a and 7b, with the estate half
+in that domain's `applies-here.md`. Registered as claims C155 to C157. Sibling of I68, which is about
+the period; this one is about whether anything we predict is ever checked.
+
+**What is new.** `grocery/ad-schedule.json` writes `next_pull` = the current window's `to` plus one
+day. That is a **dated prediction of when the next ad drops, recorded before the event**. The next
+`history` entry's `from` is the **observed answer**, read out of the store's own feed. Prediction and
+outcome have been sitting in the same file, one line apart, since 2026-06-29. **Nothing reads them
+together.** `history` under `grocery/*.ps1` resolves only to appends; `backtest` in first-party code
+returns two files and both are the identity matcher; `out.of.sample`, `walk.forward`,
+`rolling.origin` and `one.step.ahead` return nothing.
+
+**Scored during the course run, read-only, nothing written.** Differencing `history[i].to + 1` against
+`history[i+1].from` over every consecutive pair: **47 paired cases across the 5 stores that have an ad
+cycle** (Sam's and Walmart carry `cadence_days: null` and are excluded rather than scored zero).
+**37 of 47 exact (79%), MAE 0.47 days, bias +0.30.**
+
+| store | pairs | exact | MAE | range |
+|---|---|---|---|---|
+| Family Fare | 9 | 9 of 9 (100%) | 0.00 d | 0..0 |
+| Aldi | 8 | 7 of 8 (88%) | 0.88 d | 0..**+7** |
+| Baker's | 8 | 7 of 8 (88%) | 0.88 d | 0..**+7** |
+| Hy-Vee | 14 | 10 of 14 (71%) | 0.29 d | **-1**..0 |
+| Fareway | 8 | 4 of 8 (50%) | 0.50 d | 0..+1 |
+
+**Why that is worth an item, and it is not the headline number.** The errors are two populations. Two
+cases are a **full +7 days** - Aldi and Baker's each skipped an entire cycle, which on a weekly ad is
+a total miss, and an MAE of 0.47 hides both inside a reassuring decimal. **Fareway is the worst store
+at 50% exact while every one of its errors is small**, which is the opposite defect and is equally
+invisible. Hy-Vee is the only store that predicts **early** (bias -0.29), i.e. it schedules a pull for
+a drop that has not happened. Three different failure modes, one summary statistic, none of them
+surfaced anywhere today.
+
+**And the misses are not even logged as misses.** `check-ad-cycles.ps1`'s header documents an
+`AWAITING` state for "past its `to` but not reposted" - a forecast miss, in flight. The string
+`AWAITING` appears **0 times in the 6,346 lines of `grocery/ad-cycle-log.txt`**. Either the state is
+never reached under the wording the log uses, or it is reached and not written; both are worth one
+grep before anyone builds on the log.
+
+**Rung 1 is a read of data already on disk and it writes nothing.** Re-run the pairing above on a
+schedule and print `exact / pairs` plus the count of full-cycle misses per store. That answers one
+question: **is the ad schedule drifting, and at which store?** A store whose exact rate falls is a
+store whose feed or cadence changed, which today is only noticed when a board cell goes stale.
+
+**The rule it sets whatever rung 1 says, and this one is cheap and general.** *Any* prediction this
+estate writes down gets its outcome written beside it, in the same record, at the moment the outcome
+is known - and a date prediction is scored as **fraction exact plus count of full-cycle misses**,
+never as a mean error alone. `ad-schedule.json` got the first half right by accident and that accident
+is the only reason a score existed at all.
+
+**What it must not become.** Not a forecasting engine and not a new gate. I68's constraint stands
+unchanged: nothing here ships a predicted number to a reader. This item only asks that a prediction we
+already make gets marked against the answer we already store.
