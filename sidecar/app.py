@@ -114,3 +114,96 @@ def rank_commodity(req: MatchReq) -> dict:
             for r, i in enumerate(top)
         ],
     }
+
+
+# ---------------------------------------------------------------------------------------------
+# /recall-search - the knowledge store's semantic retrieval, moved off the hook process.
+#
+# WHY IT IS HERE AND NOT IN THE HOOK. `~/.claude/skills/recall-hook.py` runs as a FRESH PROCESS on
+# every prompt, and it was doing the cosine pass itself. Measured 2026-09-08 with `-X importtime`
+# over a real prompt: interpreter 20 ms, **numpy import 66 ms**, `http.client` 20 ms, `json` 10 ms,
+# `zipfile` 9 ms (np.load on the .npz), npz read 12 ms, the sidecar embed round trip 9 to 90 ms,
+# and the cosine itself **0.3 ms**. p95 for the whole hook was 226 ms against a 200 ms budget.
+#
+# So the expensive part was never the search. It was importing the library that does it, once per
+# prompt, forever - and that cost does not shrink when the corpus does. `PLAN-knowledge-at-scale`
+# 4e named two remedies, memory-mapping the .npz and moving the pass here; the measurement says
+# the .npz is 12 ms of the 226 and mmap could not have closed the gap. This is the other one.
+#
+# IT ALSO MAKES THE COST FLAT IN CORPUS SIZE, which is the plan's actual subject. The hook now
+# sends one query and receives ids; ten times the store changes what this process holds in RAM and
+# nothing about what the hook pays.
+#
+# THE CONTRACT AT THE TOP OF THIS FILE STILL HOLDS. Advisory only - it returns ranked ids and
+# writes nothing. Blind, never block - the hook keeps its own numpy path and falls back to it
+# silently if this endpoint is missing or errors, which is also what makes this deployable
+# without coordinating a restart.
+#
+# THE ONE THING THAT COULD MAKE IT RETURN CONFIDENT NONSENSE is embedding the query differently
+# from the way the index was built. `recall-embed-index.py` embeds with `clean=False` and L2
+# normalisation; `recall_semantic.search` normalises the query the same way. Both are reproduced
+# here EXACTLY, and `recall-scale-harness.py` was run over 191 cases with the endpoint on and off
+# to check the injected block came back identical before the hook was allowed to prefer it.
+
+_RECALL_IDX: dict | None = None
+
+
+class RecallSearchReq(BaseModel):
+    query: str
+    k: int = 8
+    floor: float = 0.0
+    index_path: str | None = Field(
+        None, description="defaults to ~/.claude/recall-embed-index.npz")
+
+
+def _recall_index(path: str) -> dict | None:
+    """{mat, meta, mtime} for the embedding index, re-read only when the file changes.
+
+    A long-lived process must not serve a stale index after a rebuild, and it must not re-read
+    5 MB on every prompt either. `(mtime, size)` is the same staleness key `recall_index.py`
+    uses on the lexical side, so the two agree about what "changed" means.
+    """
+    global _RECALL_IDX
+    import json as _json
+    import numpy as _np
+    try:
+        st = os.stat(path)
+    except OSError:
+        return None
+    key = (path, st.st_mtime_ns, st.st_size)
+    if _RECALL_IDX is not None and _RECALL_IDX.get("key") == key:
+        return _RECALL_IDX
+    try:
+        z = _np.load(path, allow_pickle=False)
+        mat = z["mat"]
+        meta = _json.loads(str(z["meta"].item()) if hasattr(z["meta"], "item") else str(z["meta"]))
+        if len(meta) != mat.shape[0]:
+            return None          # a torn index is a missing index, same rule as the client
+    except Exception:
+        return None
+    _RECALL_IDX = {"key": key, "mat": mat, "meta": meta}
+    return _RECALL_IDX
+
+
+@app.post("/recall-search")
+def recall_search(req: RecallSearchReq) -> dict:
+    """Top-k sections of the knowledge store for one query. Read-only; writes nothing."""
+    import numpy as _np
+    path = req.index_path or os.path.join(os.path.expanduser("~"), ".claude",
+                                          "recall-embed-index.npz")
+    idx = _recall_index(path)
+    if idx is None:
+        return {"ok": False, "why": "no usable index at %s" % path, "hits": []}
+    # clean=False, because the default strips grocery pack sizes and would mangle prose. This is
+    # the flag the index was built with and getting it wrong is the silent failure.
+    v = matcher().embed([req.query])[0]
+    qv = _np.asarray(v.cpu().tolist(), dtype=idx["mat"].dtype)
+    norm = float((qv * qv).sum()) ** 0.5
+    if norm:
+        qv = qv / norm
+    sims = idx["mat"] @ qv
+    k = max(1, min(int(req.k), int(sims.shape[0])))
+    top = _np.argsort(-sims)[:k]
+    hits = [dict(idx["meta"][int(i)], score=float(sims[int(i)])) for i in top
+            if float(sims[int(i)]) >= req.floor]
+    return {"ok": True, "n": int(sims.shape[0]), "hits": hits}
