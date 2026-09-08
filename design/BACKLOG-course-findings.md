@@ -4080,7 +4080,55 @@ Recommending neither until Brad rules, because the second is much the larger bet
 
 ----
 
-### I42 - the estate runs ETL in `grocery/` and ELT in `graph/`, has never named which is which, and so never asks whether a transform's input is still obtainable `NEEDS A RULING` `queue-4` `2-WAY` `RUNG1 READ`
+### I42 - the estate runs ETL in `grocery/` and ELT in `graph/`, has never named which is which, and so never asks whether a transform's input is still obtainable `PARKED - RUNG 1 RAN 2026-09-08 AND THE ANSWER IS 'MOSTLY YES', SO THIS IS A DOCUMENTATION ITEM` `queue-4`
+
+**`[RUNG 1 RAN 2026-09-08 on Brad's instruction - 'just do the free read'. Read-only; nothing was
+written.]`** The item predicted the answer might be *"mostly yes, by accident"*, which would shrink it
+to a documentation item. **It is, and it does.**
+
+**Does the raw source response survive the transform? 11 of 11 lanes: YES. 8 of 11 are also in git.**
+
+| lane | files | newest | in git |
+|---|---|---|---|
+| Hy-Vee | 57 | 2026-09-08 | yes |
+| Family Fare | 55 | 2026-09-08 | yes |
+| Baker's | 55 | 2026-09-08 | yes |
+| **Aldi** | 24 | 2026-09-08 | **NO - gitignored** |
+| **Walmart** | 30 | 2026-09-08 | **NO - gitignored** |
+| Sam's Club | 54 | 2026-09-08 | yes |
+| Fareway | 59 | 2026-09-08 | yes |
+| ads (all stores) | 24 | 2026-09-08 | yes |
+| **raw capture sink** | **1** | **2026-07-23** | **NO - gitignored** |
+| url-inputs | 19 | 2026-09-08 | NO - gitignored |
+| throttled / partial | 26 | 2026-09-08 | yes |
+
+**404 files across the eleven lanes.** So the ETL lane is not destroying evidence the way the item
+feared - the transform is re-run daily AND the inputs are kept.
+
+**The narrower finding that survives, and it is the actionable half.** **Aldi and Walmart raw survives
+ON DISK ONLY.** A machine loss, a `git clean`, or a fresh checkout takes them and they are **not
+re-acquirable at any price** - a shop's shelf price on a given morning is gone. Those are also the two
+stores whose pulls are hardest to repeat: Walmart's full pull is ~75 minutes and Aldi throws bot
+walls. And `grocery/out/captures/`, which the name says is the raw sink, **holds one file dated
+2026-07-23** - so whatever that directory was for, it is not carrying today's raw.
+
+**That is a real exposure and it is NOT being fixed here**, because it is a retention decision about
+disk in a repo the ~07:00 bot commits whole, and I36 just set the standing policy for exactly that
+class (keep forever, deliberately, with a ~10 MB trigger). **The question is now decidable in one
+line: should Aldi and Walmart's regular pulls be tracked like the other five?** Recorded here rather
+than opened as a new id.
+
+**HONEST LIMIT OF THIS READ, stated so the table is not over-claimed.** It establishes that a file of
+the right SHAPE exists and how fresh it is. **It does NOT prove the file is the store's response
+verbatim** rather than a normalised row this estate composed - `[[extractor-raw-is-not-verbatim]]`
+records exactly that trap on the recipe side. Proving verbatim-ness needs one file opened per lane
+against its pull script, and that was not done.
+
+**The ETL/ELT naming half stands as filed and is the documentation this item now is:** `grocery/` is
+ETL (transform re-run daily rather than the raw being kept - which is why `known-wrong.json` exists),
+`graph/` is ELT-ish (events ingested as they arrived, derivations computed from them, so a derivation
+change can be re-run over history). Neither word appears in any first-party file. **The axis worth
+keeping is neither: it is whether the source is RE-ACQUIRABLE**, and for a shelf price it is not.
 
 **Source.** `etl-and-data-pipelines-shell-airflow-kafka` (Coursera, IBM, Yan Luo, queue-4 course 8,
 worked 2026-09-07), module 1. Routed to `data-quality-craft/moving-data-in-flight.md` sections 1, 3
@@ -5191,7 +5239,60 @@ the state table. No script, no gate.
 
 **Constraint acknowledged.** No heading was re-labelled by this run; the counts above are a read.
 
-### I64 - the Freezer Math tool decides a several-hundred-dollar purchase from three means, and its verdict flips inside their error bars `PARTLY DONE - RUNG 1 IS DONE AND THE LIVE PAGE IS SUBSTANTIALLY OUT; RUNG 2 IS BRAD'S` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I64 - the Freezer Math tool decides a several-hundred-dollar purchase from three means, and its verdict flips inside their error bars `DONE - REFRESHED AND THE FLIP POINT IS ON THE PAGE, RULED BY BRAD 2026-09-08` `queue-4`
+
+**`[RUNG 2 SHIPPED 2026-09-08 on Brad's ruling: refresh AND flip point together, never the refresh
+alone.]`**
+
+**What a reader saw before, and sees now**, at the page's own defaults ($120/month, a $200 freezer):
+
+| | before (`weeks:5`, 2026-07-10) | now (`weeks:22`, 2026-09-08) |
+|---|---|---|
+| combined spread | 23.31% | **35.91%** |
+| net saving | $12.78/mo | **$21.86/mo** |
+| payback | 16 months | **10 months** |
+| verdict | `Decent, not instant` | **`good buy`** |
+
+The live page was **understating**, and this estate treats that as exactly as wrong as overstating.
+
+**The DATA block is the generator's own paste-ready output**, not hand-typed arithmetic:
+`grocery/build-freezer-data.ps1` re-run against the 22-week history, and
+`grocery/out/freezer-data.json` regenerated in the same pass so the artefact and the page cannot
+disagree (`weeks=22 stockup=0.1334 bulk=0.2257` on both sides, checked).
+
+**THE FLIP POINT IS COMPUTED PER READER, not stated as a constant.** `flipSpend` is the monthly spend
+at which THAT reader's verdict would change, and it renders in the same register as the rest:
+
+> *"At your numbers this is a good buy. Under a year to break even, then it just prints grocery
+> savings. **It stays a good buy down to about $96 a month of freezable spending; below that the
+> payback stretches past a year.**"*
+
+The `Decent, not instant` band gets the mirror sentence - *it would tip into "good buy" at about $X* -
+so the reader is always told how close they are to the line rather than only which side of it they are
+on. **That is the whole finding: the verdict flips inside the error bars of three means, so a point
+estimate alone was the wrong thing to publish.**
+
+**A SECOND DEFECT THE REFRESH CREATED AND THE LOOK CAUGHT.** The receipts caption is generated, and it
+hard-coded the words *"Five weeks is a short window"* - which, beside a freshly-updated *"based on 22
+weeks of history so far"*, was a contradiction on a live paid page. It is now conditional on
+`DATA.weeks`, and above 12 weeks it says the thing that is actually true and is this item's own second
+finding: **a short window UNDERSTATES these spreads, because an item we have not yet caught on sale
+looks like an item that never goes on sale.** That defect existed only because the numbers changed,
+and it was found by reading the rendered words rather than by checking the arithmetic -
+`[[a-measurement-is-not-a-look]]`.
+
+**The item's downward-bias prediction is confirmed exactly: zero stock-up spreads went 3 of 9 to 0 of
+9** (sub-0.5%: 4 of 9 to 1 of 9). Every one of the nine freezables has now been seen on sale.
+
+**Verified:** 375px mobile check done and READ, not just measured - **no horizontal scroll**
+(`scrollWidth` never exceeded `clientWidth`), the nine-row receipts table fits inside its own
+`overflow-x:auto` wrapper without needing to scroll, nothing crushed, and the verdict text was read
+off the rendered page at mobile width. Live values read back from the DOM: `10 months`, `$21.86`,
+`combined 35.9% (13.3% stock-up + 22.6% bulk)`. `run-gates` exit 0, `pass=277 fail=0`.
+
+**Scope unchanged and still honest:** only this tool was examined. The other nine under `site/tools/`
+were NOT audited for the same `quantity x mean` shape, and the absence of findings there is an
+absence of looking.
 
 **`[RUNG 1 RAN 2026-09-08 AND THE ANSWER IS NOT MARGINAL.]`** `grocery/build-freezer-data.ps1`
 re-run read-only against the current history. **Nothing was written to the page.**
@@ -6566,7 +6667,42 @@ path literals and ratchets a high-water mark downward, in the shape of `audit-wr
 `audit-fact-claims`. Deliberately a ratchet, not a hard gate: the number is 36 today and a gate that
 is red on day one teaches people to ignore red.
 
-### I91 - the Worker `/notify` shared secret is a deterministic function of the Ghost admin key, with no expiry or rotation path `NEEDS A RULING` `queue-6` `1-WAY` `RUNG1 RULING`
+### I91 - the Worker `/notify` shared secret is a deterministic function of the Ghost admin key, with no expiry or rotation path `PARKED - RULED BY BRAD 2026-09-08: OPTION A, ACCEPT IT, AND THIS IS THE RECORD` `queue-6`
+
+**`[RULED 2026-09-08. Brad chose A: accept the current arrangement, and record that it is a decision.]`**
+
+**What is accepted.** `grocery/notify-item-added.ps1` lines 33-36 derive the `X-Notify-Auth` header as
+the **SHA-256 hex of `GHOST_ADMIN_KEY`**, and the Worker recomputes the same value. The key itself
+never travels, which is the point of the design and is a real property worth keeping. The derived
+credential has **no expiry, no rotation procedure and no revocation independent of the admin key** -
+so rotating it means rotating the Ghost admin key, which is also what publishes every recipe card.
+
+**Why A is defensible, and it is the reasoning being ratified rather than the convenience.** One
+person, one machine, two systems Brad owns, one Worker route. The alternative that is genuinely
+better engineering - a client-credentials grant against an identity provider with short-lived tokens
+(option C) - is a **service Brad would have to run**, and that is disproportionate for this. Option B,
+a second `/notify`-only secret, was the recommendation and was declined; it is recorded here so the
+next reader sees it was considered rather than missed.
+
+**THE THING THIS RULING ACTUALLY CHANGES, and it is the whole reason to write it down.** Until today
+the arrangement was in force **by default rather than by decision** - which is the identical shape
+I36 just resolved for the logs. *A stated forever is a policy; an unstated forever is an accident
+that looks identical.* It is now stated.
+
+**THE TRIGGERS THAT REOPEN THIS**, written now because they are the part nobody re-derives:
+
+1. **Any suspicion the Ghost admin key has leaked.** `/notify` is compromised at the same instant and
+   there is no way to revoke one without the other. This is the accepted risk, and its bound is that
+   `/notify` reaches a member of the public by email.
+2. **A SECOND consumer of the derived secret.** One route sharing one secret is proportionate; two
+   routes sharing it means a compromise of either is a compromise of both, and B stops being
+   optional.
+3. **Any move off a single-operator estate.**
+
+**Related and still unowned, unchanged by this ruling:** no skill in the store owns service identity
+and access control. `OAuth`, `OpenID` and `JWT` are clean no-matches over 1,350 sections, and
+`security-craft` is scoped to adversarial input against LLM systems - its own "does not own" section
+says so. That gap is real and is not this item.
 
 **Merged from `design\backlog-inbox\lane-event-driven-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
