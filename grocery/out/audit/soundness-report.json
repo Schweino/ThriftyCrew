@@ -1,26 +1,85 @@
 ﻿{
-    "generated":  "2026-09-07 08:19",
-    "drift_vs_engine":  0,
+    "generated":  "2026-09-07 15:36",
+    "drift_vs_engine":  8,
     "drift_products":  [
-
+                           {
+                               "name":  "Van Camp\u0027s Pork And Beans, In Tomato Sauce 15 Oz",
+                               "engine":  "baked-beans",
+                               "matcher":  "\u003cunmatched\u003e"
+                           },
+                           {
+                               "name":  "Van Camp\u0027s Pork And Beans, In Tomato Sauce 53 Oz",
+                               "engine":  "baked-beans",
+                               "matcher":  "\u003cunmatched\u003e"
+                           },
+                           {
+                               "name":  "Van Camp\u0027s Pork And Beans, In Tomato Sauce 8 Oz",
+                               "engine":  "baked-beans",
+                               "matcher":  "\u003cunmatched\u003e"
+                           },
+                           {
+                               "name":  "Van Camp\u0027s Pork And Beans, In Tomato Sauce 28 Oz",
+                               "engine":  "baked-beans",
+                               "matcher":  "\u003cunmatched\u003e"
+                           },
+                           {
+                               "name":  "Our Family Pork \u0026 Beans, In Tomato Sauce 16 Oz",
+                               "engine":  "baked-beans",
+                               "matcher":  "\u003cunmatched\u003e"
+                           },
+                           {
+                               "name":  "Fareway Pork and Beans",
+                               "engine":  "baked-beans",
+                               "matcher":  "\u003cunmatched\u003e"
+                           },
+                           {
+                               "name":  "Fareway Pork and Beans",
+                               "engine":  "baked-beans",
+                               "matcher":  "\u003cunmatched\u003e"
+                           },
+                           {
+                               "name":  "Hy-Vee Pork \u0026 Beans in Tomato Sauce",
+                               "engine":  "baked-beans",
+                               "matcher":  "\u003cunmatched\u003e"
+                           }
                        ],
     "moved":  [
 
               ],
     "dropped":  [
-
+                    {
+                        "name":  "Hy-Vee Pork \u0026 Beans in Tomato Sauce",
+                        "from":  "baked-beans"
+                    },
+                    {
+                        "name":  "Fareway Pork and Beans",
+                        "from":  "baked-beans"
+                    },
+                    {
+                        "name":  "Van Camp\u0027s Pork And Beans, In Tomato Sauce 53 Oz",
+                        "from":  "baked-beans"
+                    },
+                    {
+                        "name":  "Van Camp\u0027s Pork And Beans, In Tomato Sauce 15 Oz",
+                        "from":  "baked-beans"
+                    },
+                    {
+                        "name":  "Van Camp\u0027s Pork And Beans, In Tomato Sauce 8 Oz",
+                        "from":  "baked-beans"
+                    },
+                    {
+                        "name":  "Van Camp\u0027s Pork And Beans, In Tomato Sauce 28 Oz",
+                        "from":  "baked-beans"
+                    },
+                    {
+                        "name":  "Our Family Pork \u0026 Beans, In Tomato Sauce 16 Oz",
+                        "from":  "baked-beans"
+                    }
                 ],
     "new_contested":  [
-                          "BELVITA Breakfast Bar Biscuit Sandwiches, Cinnamon Brown Sugar With Vanilla Creme 8.8 oz",
-                          "Cottonelle bath tissue 6 mega rolls or Viva paper towels 3 double rolls, $5.99",
-                          "Fresh raspberries or blackberries, 6 oz. pkg., $3.68",
-                          "HyChi dinner for 2, 2 pint entrees, 1 pint rice, 2 egg rolls, 2 crab Rangoon \u0026 2 fortune cookies, $19.99",
-                          "Hy-Vee heavy whipping cream 16 fl. oz. or half \u0026 half 32 fl. oz., $2.99",
-                          "Hy-Vee rice, quinoa or Israeli-style couscous, FUEL SAVER EARN 3¢ OFF PER GALLON,",
-                          "McCormick All Purpose Garlic Onion Black Pepper Sea Salt, 9.12 oz.",
-                          "Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $3.49",
-                          "On The Border tortilla chips or queso, 15 to 15.5 oz., $2.98",
-                          "Pace salsa, picante, queso or Late July salsa, 15 to 24 oz., $3.49",
-                          "Tidy Cat Super Jug Twin Pack Multi-Cat Clumping Litter With Glade Clear Springs Scent, 42 lbs. (2 Pack, 21 lb. Jugs)"
-                      ]
+
+                      ],
+    "crown_by_contest":  [
+
+                         ]
 }

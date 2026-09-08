@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-12; next_pull 2026-09-13",
-    "cursor_start":  145,
-    "cursor_next":  152,
+    "cursor_start":  152,
+    "cursor_next":  159,
     "total_terms":  602,
     "rotation_terms":  [
-                           "clam chowder canned",
-                           "mandarins clementines",
-                           "cocktail sauce",
-                           "baking cocoa powder",
-                           "whole coconut",
-                           "coconut aminos",
-                           "canned coconut milk"
+                           "coconut milk canned",
+                           "coconut oil",
+                           "cod fillets",
+                           "ground coffee",
+                           "coffee creamer",
+                           "coffee k cups",
+                           "coleslaw mix"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "clam chowder canned",
-                  "mandarins clementines",
-                  "cocktail sauce",
-                  "baking cocoa powder",
-                  "whole coconut",
-                  "coconut aminos",
-                  "canned coconut milk"
+                  "coconut milk canned",
+                  "coconut oil",
+                  "cod fillets",
+                  "ground coffee",
+                  "coffee creamer",
+                  "coffee k cups",
+                  "coleslaw mix"
               ],
     "commodities":  [
-                        "clam-chowder",
-                        "clementines",
-                        "cocktail-sauce",
-                        "cocoa-powder",
-                        "coconut",
-                        "coconut-aminos",
-                        "coconut-milk"
+                        "coconut-milk-canned",
+                        "coconut-oil",
+                        "cod",
+                        "coffee",
+                        "coffee-creamer",
+                        "coffee-pods",
+                        "coleslaw-mix"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

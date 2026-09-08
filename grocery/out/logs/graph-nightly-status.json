@@ -1,26 +1,26 @@
 ﻿{
-    "generated":  "2026-09-06T21:32:13",
-    "started":  "2026-09-06T21:30:01",
-    "deadline":  "2026-09-07T00:00:01",
+    "generated":  "2026-09-07T21:33:45",
+    "started":  "2026-09-07T21:30:02",
+    "deadline":  "2026-09-08T00:00:02",
     "hard_stop":  "06:30",
     "jobs":  4,
     "contested":  0,
-    "elapsed_sec":  132,
+    "elapsed_sec":  223,
     "card_free":  true,
-    "free_vram_mib":  13449,
-    "llama_started":  false,
+    "free_vram_mib":  15290,
+    "llama_started":  true,
     "stages":  [
                    {
                        "stage":  "emit",
                        "state":  "OK",
-                       "detail":  "contested: 0 question(s) of 20478 (20478 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 2.0s",
+                       "detail":  "contested: 0 question(s) of 20478 (20478 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 1.9s",
                        "sec":  2
                    },
                    {
                        "stage":  "defs",
                        "state":  "OK",
-                       "detail":  "[21:30:05] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
-                       "sec":  1
+                       "detail":  "[21:30:04] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "sec":  0
                    },
                    {
                        "stage":  "hunter",
@@ -29,16 +29,40 @@
                        "sec":  0
                    },
                    {
+                       "stage":  "durability",
+                       "state":  "OK",
+                       "detail":  "GRAPH-DURABILITY-COMPLETE findings=0",
+                       "sec":  0
+                   },
+                   {
                        "stage":  "sweep",
                        "state":  "OK",
                        "detail":  "",
-                       "sec":  128
+                       "sec":  136
                    },
                    {
                        "stage":  "serve",
-                       "state":  "BLIND",
-                       "detail":  "only 13449 MiB free; llama-server needs ~13500 MiB - something else holds the card",
-                       "sec":  0
+                       "state":  "OK",
+                       "detail":  "4 slots",
+                       "sec":  11
+                   },
+                   {
+                       "stage":  "resolve",
+                       "state":  "OK",
+                       "detail":  "resolved 22110 rows in 1.9s (20478 distinct questions, 0 model calls)",
+                       "sec":  2
+                   },
+                   {
+                       "stage":  "stage1",
+                       "state":  "OK",
+                       "detail":  "Next: python graph/learning/stage2_review.py --emit-packet",
+                       "sec":  26
+                   },
+                   {
+                       "stage":  "ml-eval",
+                       "state":  "OK",
+                       "detail":  "Loading weights: 100%|##########| 393/393 [00:00\u003c00:00, 4919.40it/s]",
+                       "sec":  41
                    },
                    {
                        "stage":  "stop",

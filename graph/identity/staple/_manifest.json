@@ -1,19 +1,19 @@
 {
     "readme":  "Product identity table, one current row per (store, product key) in this namespace. Truth is the .jsonl files beside this manifest; graph.db is a rebuildable index of them (graph/schema.md commitment 3). History is git: the files are tracked and sorted, so an assignment change is a commit diff. Written by compare-deals.ps1 -IdentityNamespace; never hand-edit.",
     "namespace":  "staple",
-    "rules_hash":  "ccf5c21e891ec0c505a40df6662d151fae9689ca4608460e2a8619174175756c",
+    "rules_hash":  "97caef3cef05b40718e490f75546ca454f1cd6774fc0cbb5ce749ccee45c32ef",
     "board_date":  "2026-09-07",
-    "built_at":  "2026-09-07T08:10:37",
-    "rows_total":  42730,
-    "rows_reused_from_previous":  41737,
-    "rows_rematched":  993,
-    "rows_contested":  804,
+    "built_at":  "2026-09-07T16:33:26",
+    "rows_total":  42773,
+    "rows_reused_from_previous":  0,
+    "rows_rematched":  42773,
+    "rows_contested":  801,
     "key_collisions_demoted_to_name":  719,
     "stores":  [
                    {
                        "store":  "Aldi",
-                       "rows":  3322,
-                       "changed":  false
+                       "rows":  3356,
+                       "changed":  true
                    },
                    {
                        "store":  "Baker\u0027s",
@@ -22,7 +22,7 @@
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  5442,
+                       "rows":  5443,
                        "changed":  true
                    },
                    {
@@ -42,8 +42,8 @@
                    },
                    {
                        "store":  "Walmart",
-                       "rows":  19650,
-                       "changed":  false
+                       "rows":  19658,
+                       "changed":  true
                    }
                ]
 }

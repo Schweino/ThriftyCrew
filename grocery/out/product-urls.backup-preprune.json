@@ -780,14 +780,6 @@
                                                      "size":  "lb",
                                                      "verified":  "2026-08-09 DERIVED from the price row (same record the board priced)"
                                                  },
-                                 "Hy-Vee":  {
-                                                "url":  "https://www.hy-vee.com/aisles-online/p/8665/pink-lady-apples",
-                                                "name":  "Pink Lady Apples",
-                                                "board_pu":  1.79,
-                                                "price":  1.99,
-                                                "size":  "lb",
-                                                "verified":  "2026-08-23 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                            },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/44390958",
                                                  "name":  "Fresh Gala Apples, 3 lb Bag",
@@ -1428,14 +1420,7 @@
                                                     "price":  "$3.99",
                                                     "size":  "12 oz",
                                                     "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
-                                                },
-                                "Fareway":  {
-                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2693854-farmland-bacon-rtc-16-oz",
-                                                "name":  "Farmland Hickory Smoked Classic Cut Bacon",
-                                                "price":  "$4.99",
-                                                "size":  "16 oz",
-                                                "verified":  "2026-09-06 DERIVED from the price row (same record the board priced)"
-                                            }
+                                                }
                             },
                   "bacon-bits":  {
                                      "commodity":  "Bacon Bits",
@@ -2982,14 +2967,7 @@
                                                                    "price":  "$13.99",
                                                                    "size":  "8 ct",
                                                                    "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
-                                                               },
-                                               "Fareway":  {
-                                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3250853-belvita-sandwich-dark-chocolate-creme-breakfast-biscuits-5-ct",
-                                                               "name":  "BELVITA Breakfast Bar Biscuit Sandwiches, Dark Chocolate Creme 8.8 oz",
-                                                               "price":  "$3.98",
-                                                               "size":  "5 ct",
-                                                               "verified":  "2026-09-06 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                               }
                                            },
                   "breakfast-sausage":  {
                                             "commodity":  "breakfast-sausage",
@@ -3607,14 +3585,7 @@
                                                  "size":  "lb",
                                                  "name":  "Green Cabbage",
                                                  "board_pu":  0.89
-                                             },
-                                  "Walmart":  {
-                                                  "url":  "https://www.walmart.com/ip/13424822",
-                                                  "name":  "Fresh Organic Green Cabbage, Each",
-                                                  "price":  "$4.20",
-                                                  "size":  "2.692 lb",
-                                                  "verified":  "2026-09-07 DERIVED from the price row (same record the board priced)"
-                                              }
+                                             }
                               },
                   "caesar-dressing":  {
                                           "commodity":  "Caesar Dressing",
@@ -3768,13 +3739,6 @@
                                       },
                   "cake-mix":  {
                                    "commodity":  "cake-mix",
-                                   "Hy-Vee":  {
-                                                  "url":  "https://www.hy-vee.com/aisles-online/p/2263913/hy-vee-extra-moist-classic-yellow-deluxe-cake-mix",
-                                                  "name":  "Hy-Vee Extra Moist Classic Yellow Deluxe Cake Mix",
-                                                  "price":  0.99,
-                                                  "size":  "13.25 oz",
-                                                  "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                              },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/76523-jiffy-cake-mix-golden-yellow-9-oz",
                                                    "name":  "Jiffy® Golden Yellow Cake Mix",
@@ -3988,13 +3952,6 @@
                                                            "size":  "15 oz",
                                                            "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                        },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/58206/hy-vee-chili-with-beans",
-                                                      "price":  2.38,
-                                                      "size":  "15 oz",
-                                                      "name":  "Hy-Vee Chili With Beans",
-                                                      "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                  },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36513-hormel-chili-with-beans-25-0-oz",
                                                        "name":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
@@ -4691,13 +4648,6 @@
                                                           "size":  "5 oz",
                                                           "board_pu":  0.598
                                                       },
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2402871/hy-vee-chunk-light-tuna-in-water-free-school-caught",
-                                                     "price":  0.95,
-                                                     "size":  "5 oz",
-                                                     "name":  "Hy-Vee Chunk Light Tuna in Water Free-School Caught",
-                                                     "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                 },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/13603854256",
                                                               "price":  9.98,
@@ -5050,13 +5000,6 @@
                                                            "name":  "Meow Mix, Original Choice Flavor Adult Dry Cat Food, Heart Healthy \u0026 Oral Care Formula, 32 lbs.",
                                                            "board_pu":  0.7962
                                                        },
-                                   "Hy-Vee":  {
-                                                  "url":  "https://www.hy-vee.com/aisles-online/p/36516/meow-mix-original-choice-dry-cat-food",
-                                                  "name":  "Meow Mix Original Choice Dry Cat Food",
-                                                  "price":  "$6.49",
-                                                  "size":  "3.15 lb",
-                                                  "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                              },
                                    "Baker\u0027s":  {
                                                         "url":  "https://www.bakersplus.com/p/purina-friskies-gravy-swirlers-with-flavors-of-chicken-salmon-and-gravy-dry-cat-food/0005000016862",
                                                         "name":  "Purina Friskies Gravy Swirlers With Flavors of Chicken, Salmon and Gravy Dry Cat Food",
@@ -5542,13 +5485,6 @@
                                                                   "name":  "Pepperidge Farm Goldfish Crackers, 22 oz., 3 pk.",
                                                                   "board_pu":  0.1791
                                                               },
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/914864/cheez-it-cheese-crackers-original",
-                                                         "name":  "Cheez-It Cheese Crackers Original",
-                                                         "price":  "$4.49",
-                                                         "size":  "12.4 oz",
-                                                         "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                     },
                                           "Aldi":  {
                                                        "url":  "https://www.aldi.us/store/aldi/products/20224774-savoritz-family-size-cheese-crackers-21-oz",
                                                        "name":  "Savoritz Family Size Cheese Crackers 21 OZ",
@@ -5602,13 +5538,6 @@
                                                             "size":  "19 oz",
                                                             "name":  "Louisa Four Cheese Tortellini"
                                                         },
-                                            "Hy-Vee":  {
-                                                           "url":  "https://www.hy-vee.com/aisles-online/p/1334638/hy-vee-select-cheese-tortellini",
-                                                           "price":  7.99,
-                                                           "size":  "42 oz",
-                                                           "name":  "Hy-Vee Select Cheese Tortellini",
-                                                           "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                       },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/13862021192",
                                                                     "price":  10.53,
@@ -5746,13 +5675,6 @@
                                                          "size":  "lb",
                                                          "name":  "Boneless Skinless Chicken Breast"
                                                      },
-                                         "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/65791/boneless-skinless-chicken-breast",
-                                                        "name":  "Boneless Skinless Chicken Breast",
-                                                        "price":  "$3.99",
-                                                        "size":  "lb",
-                                                        "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                    },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/13972015589",
                                                                  "name":  "Boneless Skinless Chicken Breast, Case, priced per pound",
@@ -6001,14 +5923,6 @@
                                                         "size":  "lb",
                                                         "name":  "Fresh Cut Chicken Wings"
                                                     },
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/65797/hy-vee-chicken-wings-family-pack",
-                                                       "name":  "Hy-Vee Chicken Wings Family Pack",
-                                                       "board_pu":  4.99,
-                                                       "price":  4.99,
-                                                       "size":  "lb",
-                                                       "verified":  "2026-08-18 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                                   },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/13581923232",
                                                                 "name":  "Member\u0027s Mark Bone-In Chicken Wings, Frozen, 10 lbs.",
@@ -7015,14 +6929,7 @@
                                                                "price":  "$2.34",
                                                                "size":  "2 lb",
                                                                "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/16785076",
-                                                       "name":  "Marketside Tri-Color Cole Slaw, 16 oz Bag (Fresh)",
-                                                       "price":  "$2.04",
-                                                       "size":  "16 oz",
-                                                       "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                           }
                                    },
                   "collard-greens":  {
                                          "commodity":  "Collard Greens (bunch)",
@@ -8796,13 +8703,6 @@
                                                              "size":  "35 ct",
                                                              "name":  "Clorox Disinfecting Wipes, Bleach Free Cleaning Wipes, Fresh Scent"
                                                          },
-                                             "Hy-Vee":  {
-                                                            "url":  "https://www.hy-vee.com/aisles-online/p/50222/clorox-disinfecting-bleach-free-crisp-lemon-cleaning-wipes-35-count",
-                                                            "price":  3.99,
-                                                            "size":  "35 ct",
-                                                            "name":  "Clorox Disinfecting Bleach Free Crisp Lemon Cleaning Wipes",
-                                                            "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                        },
                                              "Sam\u0027s Club":  {
                                                                      "url":  "https://www.samsclub.com/ip/13610418712",
                                                                      "price":  10.98,
@@ -8856,20 +8756,6 @@
                                                        "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                        "board_pu":  0.7198
                                                    },
-                                   "Fareway":  {
-                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/96642554-rachael-ray-nutrish-beef-brown-rice-dog-food-1-each",
-                                                   "name":  "Rachael Ray Nutrish Adult Dry Dog Food Real Beef, Pea \u0026 Brown Rice Recipe, 13 lb. Bag",
-                                                   "price":  "$19.99",
-                                                   "size":  "208 oz",
-                                                   "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                               },
-                                   "Hy-Vee":  {
-                                                  "url":  "https://www.hy-vee.com/aisles-online/p/231556/purina-dog-chow-complete-dog-food",
-                                                  "name":  "Purina Dog Chow Complete Dog Food",
-                                                  "price":  "$15.98",
-                                                  "size":  "18.5 lb",
-                                                  "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                              },
                                    "Sam\u0027s Club":  {
                                                            "url":  "https://www.samsclub.com/ip/14233259780",
                                                            "name":  "Purina Dog Chow Complete, Chicken Flavor, Adult Dry Dog Food, 48 lbs.",
@@ -9534,13 +9420,7 @@
                                                "price":  "$1.65",
                                                "size":  "dozen",
                                                "verified":  "2026-08-30 DERIVED from the price row (same record the board priced)"
-                                           },
-                               "Family Fare":  {
-                                                   "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
-                                                   "name":  "Large Eggs, Grade A Our Family",
-                                                   "price":  "$2.39",
-                                                   "size":  "12 ct"
-                                               }
+                                           }
                            },
                   "egg-whites":  {
                                      "commodity":  "egg-whites",
@@ -10958,13 +10838,7 @@
                                                                "price":  9.99,
                                                                "size":  "16 pk 4 oz",
                                                                "verified":  "2026-08-23"
-                                                           },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2133850-tina-s-burrito-beef-bean-green-chili-big-10-oz",
-                                                          "price":  1.67,
-                                                          "size":  "each",
-                                                          "name":  "Tina\u0027s Big Burrito Beef \u0026 Bean Green Chili, Quick Meal"
-                                                      }
+                                                           }
                                       },
                   "frozen-chopped-spinach":  {
                                                  "commodity":  "Frozen Chopped Spinach",
@@ -11147,13 +11021,6 @@
                                                        "price":  "$9.42",
                                                        "size":  "64 oz",
                                                        "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                   },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24278215-fareway-strawberries-sliced-unsweetened-16-oz",
-                                                       "name":  "Fareway Unsweetened Sliced Strawberries",
-                                                       "price":  "$4.49",
-                                                       "size":  "16 oz",
-                                                       "verified":  "2026-09-06 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "frozen-green-beans":  {
@@ -11317,13 +11184,6 @@
                                                                    "name":  "Casa Di Bertacchi Homestyle Meatballs, Frozen, 5 lbs.",
                                                                    "board_pu":  0.1996
                                                                },
-                                           "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/61428/hy-vee-beef-meatballs",
-                                                          "name":  "Hy-Vee Beef Meatballs",
-                                                          "price":  "$5.49",
-                                                          "size":  "12 oz",
-                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                      },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/181216824",
                                                            "name":  "Great Value Italian Style Meatballs, Family Size, 80 oz (Frozen)",
@@ -12230,13 +12090,6 @@
                                                   "size":  "14 oz",
                                                   "name":  "Fareway Classic Granola"
                                               },
-                                  "Hy-Vee":  {
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/287966/post-honey-bunches-of-oats-crunchy-honey-roasted-granola",
-                                                 "price":  3.99,
-                                                 "size":  "11 oz",
-                                                 "name":  "Post Honey Bunches of Oats Crunchy Honey Roasted Granola",
-                                                 "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                             },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/3000043607",
                                                           "price":  9.88,
@@ -14642,13 +14495,6 @@
                                                                   "size":  "4.1 oz",
                                                                   "name":  "Idahoan Baby Reds w/Roasted Garlic \u0026 Parm Mashed Potatoes"
                                                               },
-                                                  "Hy-Vee":  {
-                                                                 "url":  "https://www.hy-vee.com/aisles-online/p/43867/idahoan-four-cheese-mashed-potatoes",
-                                                                 "price":  0.99,
-                                                                 "size":  "4 oz",
-                                                                 "name":  "Idahoan Four Cheese Mashed Potatoes",
-                                                                 "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                             },
                                                   "Sam\u0027s Club":  {
                                                                           "url":  "https://www.samsclub.com/ip/2970052490",
                                                                           "price":  8.78,
@@ -14884,12 +14730,6 @@
                                                         "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                         "board_pu":  2.99
                                                     },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/232739-jalapeno-pepper-1-lb",
-                                                    "price":  2.99,
-                                                    "size":  "lb",
-                                                    "name":  "Jalapeno Pepper"
-                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/8832/jalapeno-pepper",
                                                    "name":  "Jalapeno Pepper",
@@ -15045,14 +14885,6 @@
                                                 "size":  "32 oz",
                                                 "name":  "Fareway Concord Grape Jelly"
                                             },
-                                "Hy-Vee":  {
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/2970353/that-s-smart-grape-jelly",
-                                               "name":  "That\u0027s Smart! Grape Jelly",
-                                               "board_pu":  0.0819,
-                                               "price":  2.79,
-                                               "size":  "32 oz",
-                                               "verified":  "2026-08-07 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                           },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/13612962795",
                                                         "price":  4.48,
@@ -15510,13 +15342,6 @@
                                                        "size":  "16 ct",
                                                        "name":  "Tide PODS Laundry Detergent Soap Pacs, Original Scent"
                                                    },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3786246/gain-flings-laundry-detergent-pacs-original-31-count",
-                                                      "price":  9.94,
-                                                      "size":  "31 ct",
-                                                      "name":  "Gain flings! Laundry Detergent Pacs, Original, 31 Count",
-                                                      "board_pu":  0.3206
-                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13632305107",
                                                                "price":  19.48,
@@ -16390,12 +16215,6 @@
                                                                  "verified":  "2026-08-23",
                                                                  "board_pu":  0.3883
                                                              },
-                                            "Fareway":  {
-                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/312210-orville-redenbacher-s-mini-movie-theater-butter-popcorn-17-989-oz",
-                                                            "price":  5.49,
-                                                            "size":  "each",
-                                                            "name":  "Orville Redenbacher Movie Theater Butter Popcorn, Microwave Popcorn"
-                                                        },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/13627121756",
                                                                     "name":  "Orville Redenbacher\u0027s Movie Butter Microwave Popcorn, Mini Bags, 1.5 oz., 36 pk.",
@@ -19113,12 +18932,6 @@
                                                             "name":  "Fresh Shoulder/Butt Pork Roast, Boneless",
                                                             "board_pu":  4.49
                                                         },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388665-whole-boston-butt-1-each",
-                                                        "price":  1.99,
-                                                        "size":  "lb",
-                                                        "name":  "Whole Bone-In Pork Butt"
-                                                    },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/31956/fresh-pork-shoulder-blade-boston-butt-roast",
                                                        "name":  "Fresh Pork Shoulder Blade Boston Butt Roast",
@@ -21293,13 +21106,6 @@
                                                         "name":  "Pace Chunky Salsa, Medium, 38 oz., 2 ct.",
                                                         "board_pu":  0.0984
                                                     },
-                                "Hy-Vee":  {
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/58174/hy-vee-mild-thick-chunky-salsa",
-                                               "name":  "Hy-Vee Mild Thick \u0026 Chunky Salsa",
-                                               "price":  "$2.69",
-                                               "size":  "16 oz",
-                                               "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                           },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/3302133555",
                                                 "name":  "Great Value Salsa Picante Mild, 16 oz",
@@ -21757,13 +21563,6 @@
                                                   "name":  "Shallots",
                                                   "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                               },
-                                   "Fareway":  {
-                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/27173330-spice-world-shallots-fresh-3-oz",
-                                                   "name":  "Spice World Shallots Fresh 3 Oz",
-                                                   "price":  "$2.49",
-                                                   "size":  "3 oz",
-                                                   "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                               },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/17358255648",
                                                    "price":  "2.88",
@@ -23325,13 +23124,6 @@
                                                      "size":  "each",
                                                      "name":  "Yellow Sweet Corn"
                                                  },
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/3228853/sweet-corn-4-count",
-                                                    "price":  4.99,
-                                                    "size":  "4 ct",
-                                                    "name":  "Sweet Corn 4 Count",
-                                                    "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/15389952544",
                                                              "price":  4.97,
@@ -23372,12 +23164,6 @@
                                                              "name":  "Red/Orangy Red Flesh Sweet Potato/Yam/Kumara, Small",
                                                              "board_pu":  1.79
                                                          },
-                                         "Fareway":  {
-                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17626656-sweet-potato-yam-1-lb",
-                                                         "price":  1.12,
-                                                         "size":  "$1.49 / lb",
-                                                         "name":  "Sweet Potato (Yam)"
-                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/16864967254",
                                                                  "price":  4.87,
@@ -24049,14 +23835,6 @@
                                                        "size":  "12 ct",
                                                        "name":  "Scott ComfortPlus Toilet Paper, 1-Ply"
                                                    },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/4223503/hy-vee-soft-and-strong-bath-tissue",
-                                                      "name":  "Hy-Vee Soft and Strong Bath Tissue",
-                                                      "board_pu":  0.7492,
-                                                      "price":  6.99,
-                                                      "size":  "12 ct",
-                                                      "verified":  "2026-08-18 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ultra-Premium-2-Ply-Toilet-Paper-45-rolls-235-sheets-roll/14179359401",
                                                                "price":  24.76,
@@ -24144,12 +23922,6 @@
                                                        "size":  "lb",
                                                        "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
                                                    },
-                                   "Fareway":  {
-                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17330187-roma-tomato-1-lb",
-                                                   "price":  1.99,
-                                                   "size":  "lb",
-                                                   "name":  "Roma Tomato"
-                                               },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8657/roma-tomatoes",
                                                   "name":  "Roma Tomatoes",
@@ -24488,13 +24260,6 @@
                                                              "name":  "Our Family Hint Of Lime Tortilla Chips 13 Oz",
                                                              "board_pu":  0.1915
                                                          },
-                                         "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/909300/hy-vee-white-corn-restaurant-style-tortilla-chips",
-                                                        "price":  2.69,
-                                                        "size":  "13 oz",
-                                                        "name":  "Hy-Vee White Corn Restaurant Style Tortilla Chips",
-                                                        "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
-                                                    },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/13623260074",
                                                                  "name":  "Shearer\u0027s Foods Round Tortilla Chips, 2 pk., 48 oz.",
