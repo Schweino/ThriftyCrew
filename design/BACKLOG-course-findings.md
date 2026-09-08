@@ -3932,7 +3932,7 @@ candidate) or *variable* (a buffering candidate), which is the split recorded as
 timing to them is a rung 2 and should not be started before rung 1 says a bottleneck read is worth
 having.
 
-### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `NEEDS A RULING - CONFIRM THE DIAGNOSIS, THEN IT IS A ONE-FIELD FIX` `seo`
+### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `CONFIRMED AND SHIPPED 2026-09-07, VERIFIED LIVE; ONLY GOOGLE'S VERDICT IS OUTSTANDING` `b3a35c7cf` `be797a371` `seo`
 
 **Found 2026-09-07 while chasing the impression decline I24 measured.** Read from Search Console
 directly, not inferred.
@@ -3993,4 +3993,206 @@ result outright regardless of the above. They now carry the same image the other
 better than empty, and no photography. It does NOT address the 584-share-one-image weakness, which
 remains genuinely blocked on being able to photograph the food.
 
+
+**CONFIRMED 2026-09-07 by an independent read, after the fix had shipped.** The diagnosis this item
+asked to confirm is correct, the two-field fix is in `build-card2.ps1` (`b3a35c7cf`) and the syncer
+handles both nodes (`be797a371`), and it is LIVE. Measured rather than assumed:
+
+| what was checked | result |
+|---|---|
+| paid pages fetched as Googlebot carrying `isAccessibleForFree=false` **and** `hasPart` on the **Recipe** node | **5 of 5 sampled** |
+| a free-rotation page as the control, which must claim nothing | correct: claim ABSENT on the Recipe node |
+| built heads under `db/built` carrying the Recipe claim | **142 of 584**, and every one of them written after the 12:23 fix |
+| built heads WITHOUT it that were written after the fix | 6, and all 6 are `visibility: public` in `recipes-db.json`, so claiming nothing is correct |
+
+**The stale built heads are not a regression, and that was checked rather than assumed.** 442 built
+heads still carry the pre-fix shape because they have not been rebuilt since. They cannot ship it:
+`propagate-recipes.ps1` runs `build-cards` at step 4 and `publish` at step 5, so any card that
+publishes is re-rendered from the fixed builder first. The live pages were corrected by the syncer,
+not by a rebuild, which is why live is ahead of `db/built` rather than behind it.
+
+**What is still open is only Google's verdict**, and it is not ours to compute: the item's own
+cheapest confirmation is to request indexing on one recipe and watch whether Recipe rich results
+return to valid. That is an action on Brad's Search Console account.
+
+**ONE ADJACENT OBSERVATION, stated as an open question and not a finding.** On both a paid and a
+free page fetched as Googlebot, **none of the six declared `recipeInstructions` steps appears
+anywhere outside a `<script>` tag** - the text is in the JSON-LD and in the card widget's data
+island, and the rendered steps a reader sees are produced by JavaScript. For the paid pages that is
+now declared, which is the whole point of this item. For the FREE pages nothing is declared and
+nothing needs to be, but it does mean the rich result depends on Google rendering the page rather
+than reading it. The first instrument used here said "0 of 6 steps visible" on a stripped copy of
+the HTML and that was the instrument being wrong, not the page - the text IS in the served bytes.
+Settling whether Google sees the rendered steps needs the URL Inspection tool's rendered HTML, on
+the same account as the confirmation above. Worth doing in the same sitting; not worth guessing at.
+
 ---
+
+### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `OPEN - SMALL, AND IT HAS ALREADY BITTEN TWICE` `queue-4`
+
+**Source.** `source-systems-data-ingestion-and-pipelines` (Coursera, DeepLearning.AI with AWS, Joe
+Reis and Morgan Willis, queue-4 course 9, worked 2026-09-07), module 4 items 82 to 84. Routed to
+`reliability-craft/pipeline-throughput.md` 6 and `reliability-craft/applies-here.md`.
+
+**Where it comes from.** The course's opening argument about orchestration is that a chain of
+clock-scheduled jobs encodes every dependency as **a guess about how long the previous stage takes**,
+and that nothing checks the guess: when a stage overruns, the next one starts anyway, consumes stale
+or half-written input, and **the chain reports success while the output is wrong.**
+
+**This estate is that chain, and it has the scars.** Five Windows scheduled tasks, all
+`CalendarTrigger`/`StartBoundary`, defined in `ops/scheduled-tasks/*.xml`. Two recorded instances:
+
+1. `grocery/chain-idle.ps1`'s own header: *"Measured 2026-08-22: the 0800 task's downstream chain ran
+   08:12-08:43, 31 minutes. Stage two was originally scheduled at 08:30 - squarely inside it - and
+   was moved to 09:00 because of this."*
+2. `TC Grocery Capture Watchdog 0930` fires at **10:30**. `ops/install-grocery-tasks.ps1` carries a
+   `-FixName` switch and deliberately refuses to move the time.
+
+**What exists already, and what it does not buy.** `chain-idle.ps1` takes a named mutex and prints
+FREE or HELD, with the right principle in its header - *"a fixed clock gap is an assumption while the
+mutex is a fact."* It prevents **overlap**. It does not sequence, it does not distinguish "stage one
+failed" from "stage one has not run", and a stage two that runs after a crashed stage one reads stale
+input and reports success.
+
+**The proposal, and it is deliberately not an orchestrator.** Adopting Airflow or Step Functions
+would add a fifth runtime to a box whose runtime count is already why `docs/RUNTIME-MAP.md` exists.
+The cheap version is **an input assertion per consuming stage**: before a stage reads a file another
+stage writes, assert that file's mtime is inside this run's window, and exit 3 (could-not-evaluate)
+rather than proceeding on a stale one. The estate already has the vocabulary
+(`lib/guard-contract.ps1`) and the freshness machinery (`grocery/audit-row-age.ps1`,
+`grocery/audit-asof-evidence.ps1`); this is applying it at a stage boundary rather than at the board.
+
+**What it would touch.** The consuming stages in `grocery/capture-run.ps1`'s downstream chain and
+`graph/pipeline/nightly.ps1`. Rung 1 is a **read**, not a build: list which scheduled stage consumes
+which other stage's output, and check how many of those edges are currently defended by anything at
+all. Do that before proposing code.
+
+**Related.** I43 (per-stage latency already recorded and never read) is the measurement that would
+say how close each gap actually is; I40 is the same contract problem one layer down, on the git-bus.
+
+### I46 - every check reports on a whole artefact, so a failure names the file and never the slice `OPEN - NEEDS A MEASUREMENT FIRST` `queue-4`
+
+**Source.** Same course, module 3 items 71 and 72 (Great Expectations). Routed to
+`data-quality-craft/checks-and-thresholds.md` 6a and `data-quality-craft/applies-here.md`.
+
+**Where it comes from.** Great Expectations splits a data asset into **batches** - by date part, or
+by a column value such as a store id - and runs the same expectation suite per batch. The failing
+batch is named. That is the one component of its model this estate has no equivalent of.
+
+**What the estate has.** `grocery/coverage-baseline.json` holds 16 declared checks with
+`examined` / `tolerance` / `max_age_days` / `min_ratio` / `phase` / `why`, interpreted generically by
+`grocery/audit-coverage-ledger.ps1`. `meal-prep/pipeline/audit-schema-constraints.ps1` declares PK,
+FK, type and cross-file constraints over eight live JSON files. Both run whole-artefact.
+
+**Why it matters here specifically.** The natural slices in this estate are exactly the ones a
+failure needs attributing to: **store** (seven of them, with genuinely different feed shapes),
+**week** (the ad cycle), and **commodity**. A tolerance breach that is one store's whole feed and one
+that is a thin smear across all seven are different defects with different owners, and today they
+produce the same finding.
+
+**What rung 1 is.** A read, not a build: take the last 30 days of `grocery/out/` audit outputs and
+count how many findings a reader had to open the artefact to attribute. If the answer is small, this
+is not worth building.
+
+**What it is not.** Not a proposal to adopt Great Expectations - it is a Python package over a Python
+data stack, and these checks are PowerShell over JSON. The component that ports is the batch key.
+
+### I47 - a recorded measurement can be voided later, and nothing in the estate re-checks one `OPEN - THE FIRST RUNG IS A READ` `queue-4`
+
+**Source.** `crash-course-in-causality` (UPenn, Roy), queue-4 course 10. Routed to
+`experiment-craft/is-the-difference-caused.md` 18-25 and `experiment-craft/applies-here.md` 1.
+
+**Where it comes from.** A difference can be real, reproducible and significant, and still be caused
+by something that differed between the arms and was not the intervention. The course's whole subject
+is that this is a *design* defect, not a precision one, and that more data makes it worse rather than
+better.
+
+**What the estate has, and it has already paid.** `grocery/check-ad-cycles.ps1` carries a block
+comment headed "THE MEASUREMENT WAS CONFOUNDED": a 2026-08-22 verdict of serial 30.9 min vs parallel
+41.7 min caused a working parallel path to be **reverted**, and `design/PLAN-use-the-cores-2026-08-23.md`
+218 shows the parallel arm ran through `Invoke-Bounded`, measured an hour later at 3.8 minutes per
+call for a 1-second script. `design/EVAL-hunter-wall-clock-2026-09-04.md` 46 is the second case and
+says it plainly: "arithmetically true and causally wrong". Both were caught by a human re-reading the
+commit clock, months later, by luck.
+
+**Why it matters here specifically.** Both defects have the same shape - a number was recorded, a
+decision was made on it, and the machinery it was measured through changed underneath it. Nothing
+re-opens a recorded measurement when that happens. `ops/run-gates.ps1` checks source properties and
+hermetic self-tests; there is no audit over `design/EVAL-*.md` or `design/MEASURE-*.md` at all.
+
+**What rung 1 is.** A read, not a build. Walk the `design/EVAL-*.md` and `design/MEASURE-*.md` files,
+and for each recorded verdict still being obeyed, write down what harness it was measured through and
+whether that harness has changed since. If the answer is "nothing has moved", this is not worth
+building.
+
+**What it would touch.** Nothing yet. If rung 2 is ever ordered, the cheapest form is a convention
+rather than a gate: every recorded measurement names its harness and the commit it ran at, so the
+question is answerable without archaeology.
+
+**What it is not.** Not a proposal to adopt propensity scores or IPTW. This estate mostly compares
+two configurations it controls, where the repair is a paired design (I48), not an adjustment.
+
+### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `OPEN` `queue-4`
+
+**Source.** Same course. Routed to `experiment-craft/is-the-difference-caused.md` 22a and
+`experiment-craft/applies-here.md` 4 and 7.
+
+**Where it comes from.** Matching and paired analysis exist to make two arms the same population. When
+you control both arms you do not need to *reconstruct* that - you can run the same units through both,
+which removes the confounding by construction instead of modelling it away.
+
+**What the estate has.** It already knows this and has written it down once:
+`design/EVAL-dedup-shortlist-2026-09-04.md` 387 found that "output tokens per candidate ruled" was
+confounded because the run selects its own denominator - the duplicate mix moved 32% to 53% when the
+band moved - and named the fix as "the SAME candidates ruled twice, once with the neighbour block and
+once without - a within-pairs design, not a between-runs one". **That experiment was never run.**
+`meal-prep/pipeline/extractor_model_probe.py` 18 is the estate's one worked example of the design,
+and its docstring gives the reason: scoring against stored August transcriptions "would confound a
+model difference with a page edit".
+
+**Why it matters here specifically.** Every model, prompt, effort-level and threshold comparison in
+this estate is a candidate, and the paired form is usually *cheaper* as well as more valid, because it
+needs fewer cases for the same power (`experiment-craft/effect-size-and-power.md` 9).
+
+**What rung 1 is.** Run the experiment `EVAL-dedup-shortlist` already specified: the same candidate
+dossiers ruled twice, with and without the neighbour block. Two decider calls on identical inputs.
+
+**What it would touch.** `sidecar/` and the decider prompt only; no board, no published page.
+
+**Related.** I47 is the same subject from the other end - I47 asks whether an old number is still
+valid, I48 asks how to take the next one so the question does not arise.
+
+### I49 - one global similarity floor is a claim about the shape of a space nobody has ever grouped `OPEN` `queue-4`
+
+**Source.** Queue-4 course 11, CU Boulder "Introduction to Machine Learning: Unsupervised Learning",
+worked 2026-09-07. Routed to `rag-craft/grouping-a-vector-space.md` 33, 35 and 38, and
+`rag-craft/applies-here.md` 1.
+
+**Where it comes from.** Similarity search answers "what is near this". It cannot answer whether the
+space has dense regions and empty ones, and a single cosine floor assumes the gap between a true pair
+and a false pair means the same thing everywhere in the space. That is an assumption about density,
+and it has never been tested here.
+
+**What the estate has.** `sidecar/sweep.py` line 62 sets `COVERAGE_COS_FLOOR = 0.55` for the whole
+corpus. `sidecar/derive_coverage_floor.py` already derives it from labelled data rather than choosing
+it, and `sidecar/matcher_eval.py` already measures recall@25 against a `RETRIEVAL_BAR` of 0.99. The
+memory `matcher-prefilter-drops-correct-pairs` records 186 of 2,816 correct pairs lost under that
+floor. Both existing tools ask where the known-good pairs sit; neither asks whether one number can be
+right across the whole space. A first-party grep over `sidecar`, `graph`, `meal-prep`, `grocery`,
+`ops` and `lib` finds **zero** clustering code of any kind - no k-means, no silhouette, no sklearn.
+
+**What rung 1 is, and it is cheap.** Not a clustering project. For a sample of product vectors,
+compute the ratio of the furthest to the nearest neighbour distance. If that ratio sits near 1, the
+ordering under the floor is close to noise and a single global cut is the wrong instrument; if it is
+comfortably above 1, the current design is sound and this item closes with a measurement instead of
+an opinion. Everything needed is already installed in `sidecar/.venv`.
+
+**What rung 2 would be.** Cluster the product embedding space, then compute the recall lost under the
+0.55 floor **per cluster** rather than in aggregate. If the 186 lost pairs concentrate in one region,
+the repair is a per-region floor, not a lower global one - and lowering the global floor costs
+cross-encoder calls, which `derive_coverage_floor.py` already prices.
+
+**What it would touch.** `sidecar/` only. No board, no published page, no gate.
+
+**What it is not.** Not a proposal to change 0.55. The point is that the number is currently
+unqualified in a dimension nobody has looked at, and the look is an afternoon.
