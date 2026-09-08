@@ -2,6 +2,10 @@
   audit-memory-backup.ps1 - the agent memory store is DATA THIS ESTATE REASONS FROM. Version it, prove the
   history is current, and prove it never reaches the public repo.
 
+  SCOPE OF A CLEAN REPORT: SOUND about currency, silent about content. It proves the backup
+    EXISTS and is current, which is a property it can fully decide. It says nothing about
+    whether what is in it is correct or complete.
+
   WHY (2026-09-03). Two things happened on the same day.
 
   FIRST, a memory file was destroyed by an ordinary edit. Repairing three mojibake characters, a string

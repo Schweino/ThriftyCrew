@@ -49,6 +49,33 @@ everything else honest, so a defect here is silent by construction.
   people to ignore red. Use a ratchet with a high-water mark that may only go DOWN
   (`audit-write-seam`, `audit-fact-claims`, `audit-band-censorship`).
 - **`git add` names what it owns.** `ops/audit-git-sweepers.ps1` fails a sweep.
+- **Every threshold here is an UPPER bound, so not one of them can fire on nothing happening**
+  (2026-09-08, backlog I80). The alert conditions are staleness and band breaches, the `ops/` ratchets
+  carry a high-water mark that may only go DOWN, and `run-gates` answers a boolean. The only two checks
+  that watch for ABSENCE are `grocery/health-heartbeat.ps1` and the cloud `heartbeat.yml`, and both
+  watch **scheduled tasks**, never throughput. **When adding any threshold, write down what the number
+  does when the producer STOPS.** If the answer is "goes quiet, and the alert cannot fire", add the
+  floor in the same change. A floor on a rate is detective by construction and a preventive gate cannot
+  substitute for it, because the failure it catches is one where nothing ran to be gated. This is NOT
+  the volume check: that asks whether the expected ROWS arrived, and a stage that runs and emits nothing
+  fails it while passing this one. Keep both; do not fold either into the other.
+- **A tuning constant records what ELSE was tried, not just what it means** (2026-09-08, backlog I94).
+  `measurement.md` already says a number that moved is not a number that improved - say how far, over
+  how many cases, and how many variants were tried. That rule did not reach the control constants.
+  `$script:BoardStaleHours = 26`, `$REARM_DAYS = 14` and `-MaxDropPct 60.0` each carry a good comment
+  saying what the value means and, at best, which incident produced it. **None says whether it was the
+  first plausible number or the survivor of a sweep**, and those are different claims. Retro-filling the
+  existing ones is NOT asked for; the ask is that the next constant added carries it. Three simulations
+  at gains 25, 13 and 7.5 do not establish a stable range - nothing rules out instability higher, or
+  stability lower, and the stable set need not even be an interval.
+- **A detector's header says what its CLEAN report MEANS** (2026-09-08, backlog I66). A static analysis
+  must approximate, and the direction decides what a verdict is worth: a **sound** one never misses a
+  real defect, so a clean report is trustworthy; an **unsound** one stays quiet, so a reported defect is
+  real and **a clean report proves nothing**. Almost every detector in `ops/` is a pattern matcher over
+  source text and is therefore unsound by construction - it finds the spellings it knows. That is not a
+  defect in any of them; reading their clean reports as proofs is. Every `ops/audit-*.ps1` now carries a
+  `SCOPE OF A CLEAN REPORT:` line saying which it is (7 of 22 already did, in their own words; 15 were
+  silent). **A new detector owes that line the way it owes its `<NAME>-COMPLETE` marker.**
 
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

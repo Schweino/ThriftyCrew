@@ -2,6 +2,11 @@
   audit-task-registry.ps1 - the file-only wrapper that puts install-grocery-tasks.ps1 -VerifyRegistry
   into ops\run-gates.ps1.
 
+  SCOPE OF A CLEAN REPORT: SOUND over the two lists it diffs - the registrar's $OWNED table
+    against windows_tasks in the registry. A clean report means those two agree. A task that is
+    in NEITHER is invisible to this check; health-heartbeat.ps1's REGISTRY DRIFT check is the
+    one that catches that, not this file.
+
   WHY A WRAPPER AND NOT AN ENTRY (2026-09-07, queue 2026-09-07-dc7460). run-gates' $static list invokes
   every detector as `powershell -File <path>` with NO arguments, and install-grocery-tasks.ps1's default
   mode is -Verify, which reads the LIVE Windows scheduler. A gate that needs Task Scheduler is not

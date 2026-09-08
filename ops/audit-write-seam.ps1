@@ -1,6 +1,11 @@
 <#
   audit-write-seam.ps1 - the E1 safety layer is only as good as its chokepoint being the ONLY door.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND, and it is a RATCHET rather than a proof for exactly that
+    reason. It finds the spellings of a remote write that bypass the chokepoint. A clean report
+    means the known spellings are absent; a new way of reaching the network is a hole this file
+    cannot see until somebody teaches it the shape.
+
   WHY THIS EXISTS (2026-09-06, backlog E1). The safety layer hooks lib\ghost-lib.ps1's Invoke-GhostApi,
   which 29 scripts dot-source, and that reads like coverage. It is not. Measured the day it shipped:
 

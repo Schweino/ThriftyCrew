@@ -47,6 +47,25 @@ leaves the ingredient PENDING. Aldi and the Chrome extension both threw bot wall
 not hypothetical. Recording `blocked` or `error` is the correct, honest outcome; recording `not-carried`
 because you could not look is how a good recipe gets thrown away.
 
+TWO MORE CAUSES OF AN EMPTY RESULT, AND THEY BOTH LOOK LIKE `not-carried` (2026-09-08, backlog I72).
+A page returning HTTP 200 with markup present and the right selector can STILL show no rows, for two
+reasons that are neither a wall nor an absence:
+
+  - `unrendered` - the content is injected by JavaScript that nothing executed. The data is usually
+    sitting inside a <script> block waiting for a browser. This reads as a selector bug and attracts a
+    selector fix, which cannot work: the repair is to render the page, or to find the underlying JSON
+    call the page's own JavaScript makes.
+  - `unsettled` - the element exists but was still filling behind a loading screen or a lazy-load.
+    THIS ONE IS WORSE, because it returns a PARTIAL result rather than an empty one and so reads as a
+    success. It is not hypothetical here: a repeated exact count of 9 from Fareway was an unscrolled
+    lazy-load, and it was diagnosed by hand long after the fact.
+
+Both are PENDING, never `not-carried`, for exactly the reason above: you did not look, the page did.
+And when you scroll, DO NOT SLEEP AND HOPE - wait for an element that can only exist if the scroll
+actually produced more rows (the 11th row when the page starts with 10). A fixed sleep cannot tell
+"the page finished and there were only 10" from "page 2 never loaded"; a count-based wait fails loudly
+instead of quietly returning the first 10.
+
 ## TWO ENTRY POINTS, ONE AGENT. Read this first, because it decides which half of this file applies.
 
 You are invoked one of two ways, and the difference is real rather than stylistic.

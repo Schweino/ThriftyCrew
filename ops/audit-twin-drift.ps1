@@ -1,6 +1,11 @@
 <#
   audit-twin-drift.ps1 - THE CHECK FOR RULES THIS ESTATE WROTE DOWN TWICE.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND, and the item it guards against is the reason to say so. It
+    compares the pairs of files it has been told are twins. A clean report means those pairs
+    still agree - it is NOT evidence that no rule in this estate is implemented twice, because
+    a twin nobody registered is not being compared to anything.
+
   A rule implemented in two files is the single most productive source of quiet bugs in this tree's
   history, and every instance was found by accident or by a bespoke check somebody happened to think
   of. The scoreboard, all of it real:

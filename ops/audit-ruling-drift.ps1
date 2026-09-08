@@ -2,6 +2,12 @@
   audit-ruling-drift.ps1 - a ruling document says what this estate does; a script does it. This checks
   they still agree.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND, and this is the one where it matters most. It compares a
+    ruling's stated numbers and names against what a script contains, by pattern. A clean
+    report means the pairs it was TOLD to compare still agree. A ruling nobody wired in here
+    has never been compared to anything, and looks identical from the outside to one that
+    agrees.
+
   WHY THIS EXISTS (2026-09-06, backlog E12). ops\audit-twin-drift.ps1 covers CODE-to-CODE duplication:
   one rule implemented in two files, with a scoreboard of five real bugs behind it. Nothing covered
   DOCUMENT-to-CODE, which is the shape E12 names - Brad's rulings, the band rules and the naming

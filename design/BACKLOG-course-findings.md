@@ -3560,7 +3560,30 @@ changes, no agent changes, no data writes.
 
 ---
 
-### I34 - The estate wrote one exemplary postmortem and never wrote a second `OPEN - RUNG 1 IS A TEMPLATE, NOT A PROCESS` `queue-4` `2-WAY` `RUNG1 DOC`
+### I34 - The estate wrote one exemplary postmortem and never wrote a second `DONE - THE TEMPLATE EXISTS AND IT PROMPTS FOR ALL THREE, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08. Rung 1 only, which is what the item asked for.]`**
+`docs/INCIDENT-TEMPLATE.md` ships with the three-way corrective-action split as its central section -
+**preventive** (stops the cause recurring), **detective** (finds it faster next time), **responsive**
+(responds better to this shape) - one row each, with the instruction that an empty row is written
+*"none needed, because ..."* rather than deleted, since an absent row and a considered nothing are
+indistinguishable afterwards.
+
+**The structural reason the template is needed is written into it**, because it is the whole finding:
+a must-fire fixture is a **preventive** artefact by construction, so a test philosophy built entirely
+out of them keeps prompting for prevention and never prompts for *would we notice this faster*. That
+is why the estate's one excellent postmortem
+(`grocery/INCIDENT-2026-07-23-walmart-flood.md`) contributed its preventive half to `CLAUDE.md` and
+lost the other two.
+
+It points at that incident as the standard rather than restating it, and carries the sections that
+earned their place there: the timeline gap between broke and noticed, *the class (this has happened
+before)*, `Verified:` on every action, accepted risks with bounds, and the independent re-review that
+corrected the original RCA's own attribution.
+
+**Rungs 2 and 3 are NOT done and rung 3 may well end PARKED**, which the item already argues: one
+incident in the repository's whole life, written two weeks in, six weeks of silence since. On that
+base rate a standing postmortem PROCESS is ceremony. The template is not - it cost nothing to keep.
 
 **Source.** Queue-4 course 3, `foundations-of-site-reliability-engineering-training` (Simplilearn).
 The transferable piece is its three-way split of postmortem corrective actions - **preventive**
@@ -3658,7 +3681,31 @@ probes are the thing most likely to be broken needs the second one at least as m
 and the coverage ledger. Rungs 2 and 3 would touch the capture verdict paths and `send-alert.ps1`.
 No gate weakens either way: this makes a verdict harder to reach, not easier.
 
-### I36 - Nothing in this repo has a stated log retention, and the logs are committed, so they grow forever `OPEN - THE MEASUREMENT IS DONE; WHAT IS OPEN IS THE POLICY` `queue-4` `2-WAY` `RUNG1 DOC`
+### I36 - Nothing in this repo has a stated log retention, and the logs are committed, so they grow forever `DONE - THE POLICY IS WRITTEN: KEEP FOREVER, DELIBERATELY, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08.]`** `docs/RUNTIME-MAP.md` now carries a **Log retention, stated** section
+naming all four committed logs, their measured sizes, why each is kept, and the answer: **keep
+forever, deliberately.**
+
+That is what the item asked for and the reasoning is recorded rather than asserted. **The dimension
+that computes rather than asserts is discovery-and-resolution time, and it sets a FLOOR:** retention
+must exceed how long this estate takes to notice a defect, and several here were found weeks later, so
+the floor is months. Cost-effectiveness is the only dimension pulling the other way and at roughly a
+megabyte in total it pulls very weakly.
+
+**Re-measured 2026-09-08 rather than copied from the item**, because the item's figures were two days
+old: `ad-cycle-log.txt` **862,179 B / 7,324 lines** (the item said 747,309), `coverage-ledger-history.jsonl`
+**263,741 B** (said 253,363), `capture-cursor-log.jsonl` **18,075 B**, `alert-log.txt` **9,726 B**.
+Growth is real but slow.
+
+**A trigger is recorded so "forever" does not become unexamined again**: any of these passing ~10 MB,
+or a new appender that writes per-ROW rather than per-run. At that point the question is rotation, not
+deletion.
+
+**Explicitly NOT built: a pruning job.** Nothing here is close to big enough to justify code that
+deletes evidence, and deletion is the one direction that cannot be undone. **A stated forever is a
+policy; an unstated forever is an accident that looks identical** until something starts appending a
+megabyte a run.
 
 **Source.** Same course, item 38, which sets a retention period from six analytical dimensions
 rather than one number: criticality, security, system maturity, run frequency, cost-effectiveness,
@@ -4318,7 +4365,23 @@ cross-encoder calls, which `derive_coverage_floor.py` already prices.
 **What it is not.** Not a proposal to change 0.55. The point is that the number is currently
 unqualified in a dimension nobody has looked at, and the look is an afternoon.
 
-### I50 - `serve.ps1`'s per-slot guard says it is set by the LARGEST caller, and it is not `OPEN` `queue-4` `2-WAY` `RUNG1 DOC`
+### I50 - `serve.ps1`'s per-slot guard says it is set by the LARGEST caller, and it is not `DONE - THE COMMENT NOW TELLS THE TRUTH; THE CONSTANT IS DELIBERATELY UNCHANGED, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08.]`** `tools/local-llm/serve.ps1`'s floor block now records that the rule it
+states - *the floor is set by the LARGEST caller* - stopped being true when a caller grew past it:
+`meal-prep/pipeline/local_extract.py`'s `RUNG2_MIN_SLOT_CTX` is **11,465** against this file's
+**3,300**, and at the defaults (`-Context 16384 -Slots 4` = 4,096/slot) a server that reports READY is
+not usable by the extract lane.
+
+**The constant was NOT touched, and the comment says why.** Bumping 3,300 to 11,465 hard-codes the
+identical failure one level up - the next caller to grow outruns it silently again - and it would make
+the default invocation throw on a server Brad starts by hand. The repair is to DERIVE the floor from
+the largest declared caller, which is a behaviour change to a file the queue's group-H rule keeps off
+limits. Filed in the comment, not made.
+
+The reflex I52 asked for is written: `[[per-slot-context-is-context-over-slots]]`.
+
+**Verified:** `run-gates` exit 0, `pass=276 fail=0`. No behaviour changed, which is the point.
 
 **Source.** Queue-4 course 12, Coursera / Board Infinity "Deploying Deep Learning: Quantization,
 Serving, and Edge AI", worked 2026-09-07. Found while measuring the course's serving claims against
@@ -4356,7 +4419,18 @@ invocation throw, which is a behaviour change on a server Brad starts by hand.
 **Constraint acknowledged.** The queue's group-H rule forbids a course run from changing
 `serve.ps1`. Nothing was changed; this is the ledger entry the rule asks for.
 
-### I51 - two unrelated ~81 tok/s numbers, and nothing says which machine either is about `OPEN` `queue-4` `2-WAY` `RUNG1 DOC`
+### I51 - two unrelated ~81 tok/s numbers, and nothing says which machine either is about `DONE - BOTH FILES NOW NAME THEIR MACHINE, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08.]`** Two throughput figures rounded to the same number and described
+different machines, in two files that never mentioned each other:
+`design/EVAL-hunter-wall-clock-2026-09-04.md`'s **~81 tok/s** is CLOUD API agent output (Opus, over
+the network, across 148,111 output tokens), and `tools/local-llm/serve.ps1`'s **80.4 tok/s** is the
+local llama-server at 8 slots on the RTX 5070 Ti. Both now say so, beside the number, with the
+failure named: speed up the local server, see a rate near 81, and conclude the hunter's wall clock
+will move - it will not, because the hunter's wall clock is Opus output and the local server is not
+in that path. `[[an-agreeing-number-escapes-scrutiny]]` with two sources instead of one.
+
+**Verified:** both edits read back; `run-gates` exit 0, `pass=276 fail=0`.
 
 **Source.** Same course. Routed to `model-finetuning-craft/applies-here.md` 2.
 
@@ -4378,7 +4452,15 @@ one.
 **What it would touch.** One clarifying sentence in each of the two files naming the machine, and
 ideally the same in the memory `wall-clock-is-output-tokens`. No code, no gate, no board.
 
-### I52 - a reflex candidate this run could not write: the per-slot context floor `OPEN` `queue-4` `2-WAY` `RUNG1 DOC`
+### I52 - a reflex candidate this run could not write: the per-slot context floor `DONE - THE REFLEX IS WRITTEN, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08.]`** `[[per-slot-context-is-context-over-slots]]`, indexed in `MEMORY.md`.
+It carries I50's arithmetic - `-c` is the TOTAL KV budget and llama.cpp divides it by `--parallel`,
+so the number that decides whether a caller works is `Context / Slots`, and the extract lane needs
+11,465 of it - plus the reason not to simply raise the constant.
+
+The item was filed as an item rather than written directly because a course run may not write outside
+the repo. This session can, so it did.
 
 **Source.** Same course, raised under procedure step 4.0 (can this finding be a reflex?).
 
@@ -4523,7 +4605,33 @@ point sweeping a rank for a run nobody has decided to make.
 
 **Constraint acknowledged.** Nothing changed; no GPU work was done.
 
-### I57 - Jaccard runs in three first-party files, and none of them says which of its two properties it is buying `OPEN - SMALL, AND IT IS A COMMENT, NOT A REWRITE` `queue-4` `2-WAY` `RUNG1 DOC`
+### I57 - Jaccard runs in three first-party files, and none of them says which of its two properties it is buying `DONE - ALL THREE SITES NAME THE PROPERTY THEY BUY, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08.]`** One tailored comment at each of the three first-party Jaccard uses,
+naming which of the metric's two consequences it is buying and, for the two that rank, why the
+no-gradient hazard cannot fire there:
+
+- `grocery/ad-match-lib.ps1:180` - presence over frequency, as the THIRD tie-break. The hazard cannot
+  fire because `$overlap -lt 1 -> continue` guarantees every surviving candidate shares a token and
+  the overlap COUNT has already ranked them. **This use is correct rather than lucky, and the comment
+  now says which.**
+- `grocery/resolve-hyvee-links.ps1:187` - presence over frequency over SETS, which is what makes it
+  symmetric and is why a long candidate pays for its extra words.
+- `sidecar/sweep.py:178` - the no-gradient half named as a PROPERTY OF THE METRIC rather than as a bug
+  in `prior_rulings`. Every pair sharing no token scores identically, so Jaccard cannot rank
+  non-overlapping candidates at all - which is disqualifying for a RETRIEVER and is why the
+  replacement there is embeddings rather than a better Jaccard.
+
+**The point is not documentation.** It is that a future scorer written by imitation would have copied
+the standalone-retriever shape, which is the failure `teach with examples` warns about: existing code
+is an instruction nobody wrote on purpose.
+
+**Rung 2 is NOT done and needs a ruling** - whether `$bestJac` earns a row in
+`sidecar/THRESHOLDS.md`. It is a tie-break never compared against a bar, so it is arguably not a score
+space at all. Left open deliberately rather than decided here; `ops/audit-threshold-register.ps1`
+cannot see a number it was never told about, so silence is the status quo either way.
+
+**Verified:** `run-gates` exit 0, `pass=276 fail=0`.
 
 **Source.** Queue-4 course 12, IBM "Unsupervised Machine Learning", worked 2026-09-07 as a partial
 run. Routed to `rag-craft/vector-space-foundations.md` 21a and `rag-craft/applies-here.md` 12.
@@ -4949,7 +5057,40 @@ spec. Scope it to the transformation stages, not to anything that reads live dat
 
 ---
 
-### I66 - every static detector in `ops/` is unsound, none of them says so, and their clean reports are written as though they were proofs `OPEN - IT IS WORDING, NOT A REWRITE` `queue-4` `2-WAY` `RUNG1 DOC`
+### I66 - every static detector in `ops/` is unsound, none of them says so, and their clean reports are written as though they were proofs `DONE - ALL 22 ops DETECTORS STATE WHAT A CLEAN REPORT MEANS, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08. Rung 1's number is better than the item predicted, and the work was done
+anyway.]`**
+
+**Rung 1, the count:** of 22 `ops/audit-*.ps1`, **7 already stated their own scope in their headers**
+- `audit-arg-binding`, `audit-fixture-vocabulary`, `audit-run-log-claims`, `audit-source-comment-strip`,
+`audit-source-control-bytes`, `audit-threshold-register`, `audit-write-only-reports`. The item expected
+the honesty to be a lone exception; it was already a third of them. **15 read as proofs.**
+
+All 15 now carry a `SCOPE OF A CLEAN REPORT:` line, **each written for its own file**. A boilerplate
+line repeated fifteen times would have been the thing this estate warns about - a copied disclaimer
+teaches a reader to skip it. The lines split three ways, and the split is the useful part:
+
+- **UNSOUND** (a clean report proves nothing beyond a spelling list): `audit-agent-tools`,
+  `audit-capture-ingest-reporting`, `audit-fixture-inputs`, `audit-git-sweepers`,
+  `audit-mustfire-census`, `audit-ruling-drift`, `audit-twin-drift`, `audit-write-seam`.
+- **SOUND OVER A DECLARED UNIVERSE** (clean means everything DECLARED agrees, and an undeclared thing
+  cannot be a finding): `audit-cloudflare-estate`, `audit-task-registry`, `audit-stray-root-artifacts`.
+- **SOUND ABOUT ONE PROPERTY, SILENT ABOUT ANOTHER**: `audit-memory-backup` and `audit-prompt-backup`
+  prove a backup is CURRENT and say nothing about whether its contents are right.
+
+**`audit-backlog-status.ps1`'s own line is the one that earned itself.** It says the check is sound
+over the heading LINE and blind to a heading that is not of that shape - *which is not hypothetical*,
+because I71 and I72 sat outside the pattern from the day they were filed and were absent from every
+board count until this session found them.
+
+**Nothing's logic changed.** It changes what a report CLAIMS, not what it checks, exactly as the item
+required. The forward rule is in `.claude/rules/ops-and-gates.md`: a new detector owes that line the
+way it owes its `<NAME>-COMPLETE` marker.
+
+**Verified:** `run-gates` exit 0, `pass=276 fail=0`. (An earlier pass of this edit landed the block
+mid-sentence in the six files whose title wraps over two lines; that was caught by reading all 15
+diffs, reverted with `git checkout`, and redone anchored on the end of the title paragraph.)
 
 **Source.** `automated-analysis` (queue-4 entry 20, raided 2026-09-08), items 3, 28, 31 and 45.
 Routed to `software-craft/test-design-and-oracles.md` 5b.
@@ -5295,7 +5436,40 @@ alongside each pull and check whether latency rises before a wall. If it does no
 
 ---
 
-### I72 - a 200 with a correct selector and zero rows has four causes, and the estate's vocabulary names two `OPEN - RUNG 1 IS TWO WORDS OF VOCABULARY` `queue-6` `2-WAY` `RUNG1 DOC`
+### I72 - a 200 with a correct selector and zero rows has four causes, and the estate's vocabulary names two `DONE - `unrendered` AND `unsettled` ARE NAMED WHERE THE VERDICT IS MADE, 2026-09-08` `queue-6`
+
+**`[CLOSED 2026-09-08. Rung 1 - the vocabulary - which the item says is the whole of the cheap
+half.]`**
+
+The two missing causes are now named in both places a capture verdict is actually reached:
+`.claude/rules/grocery.md` and `.claude/agents/recipe-hunter-pricer.md`, immediately after the
+standing *UNCHECKED IS NEVER NOT-CARRIED* block, with the rule that **both are PENDING, never
+`not-carried`** - you did not look, the page did.
+
+- **`unrendered`** - 200, markup present, selector right, content injected by JavaScript nothing
+  executed. It reads as a selector bug and attracts a selector fix, which can never work.
+- **`unsettled`** - the element exists but was still filling. **This is the worse one: it returns a
+  PARTIAL result rather than an empty one, so it looks like a success.** Not hypothetical -
+  `[[fareway-capture-defects]]`'s repeated exact 9 is this shape, diagnosed by hand after the fact.
+
+**The mechanism shipped with the vocabulary, because the vocabulary alone would not have changed a
+single capture:** after a scroll, WAIT ON A COUNT-BASED SELECTOR - an element that can only exist if
+the scroll produced more rows. The assertion that the load worked is built INTO the wait rather than
+bolted on after, and a fixed `Start-Sleep` can never do it: a sleep cannot tell *the page finished and
+there were only 10* from *page 2 never loaded*.
+
+Backed by `[[empty-result-has-four-causes-not-two]]`, indexed in `MEMORY.md`, so it reaches sessions
+that load neither file.
+
+**SPLIT OUT AND NOT DONE, exactly as the item asked**: whether any of the four browser-required
+stores is browser-required only because nobody has opened its Network tab. Three of seven feeds are
+already server-side JSON. That check is about an hour per store and **could retire the 75-minute
+Walmart pull**, which makes it the highest-value unstarted read in this whole backlog. It is recorded
+in the rules file and in the memory; it has NOT been opened as its own id, because nobody has
+confirmed it is worth an id and the pointer is where a session would look.
+
+**Verified:** `run-gates` exit 0, `pass=276 fail=0`, after refreshing `ops/prompt-backup` -
+`audit-prompt-backup` correctly went red on the edited agent prompt, which is the gate working.
 
 *[ID ALLOCATED 2026-09-08, was I-WS2. HEADING REWRITTEN 2026-09-08 for the same reason as I71: it was invisible to the audit.]*
 
@@ -5521,7 +5695,26 @@ name for: an agreeing number.
 already uses, and any new log starts with both. There is no call stack in a hook to carry context
 implicitly, so it goes in the row deliberately or it is not there at all.
 
-### I80 - every threshold in the estate is an upper bound, so not one of them can fire on nothing happening `OPEN` `queue-6` `2-WAY` `RUNG1 DOC`
+### I80 - every threshold in the estate is an upper bound, so not one of them can fire on nothing happening `DONE - THE FORWARD RULE IS IN THE RULES FILE, 2026-09-08` `queue-6`
+
+**`[CLOSED 2026-09-08.]`** `.claude/rules/ops-and-gates.md` now carries the rule: **when adding
+any threshold, write down what the number does when the PRODUCER STOPS.** If the answer is *goes
+quiet, and the alert cannot fire*, add the floor in the same change.
+
+The measurement stands as filed: every alert condition here is staleness or a band breach, every
+`ops/` ratchet is a high-water mark that may only go DOWN, `run-gates` answers a boolean, and the only
+two checks watching for absence (`health-heartbeat.ps1`, `heartbeat.yml`) watch **scheduled tasks**,
+never throughput. No file records a lower-bound alert on a rate.
+
+**The boundary against the volume check is stated in the rule rather than left to be re-derived**,
+because it is exactly the distinction that would get folded away: the volume check asks whether the
+expected ROWS arrived, this asks whether the STAGE is still running at its expected rate. **A stage
+that runs and emits nothing fails the first and passes the second.** Keep both.
+
+**No floor was added to anything on this run, and that is deliberate.** Choosing a rate floor is
+deriving a threshold, `no-hardcoded-bands` applies, and picking one here would be the thing the rule
+itself forbids. What shipped is the rule that stops the next threshold being written blind - which is
+what the item proposed.
 
 **Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -6096,7 +6289,27 @@ spaces rather than these.
 
 ---
 
-### I94 - Nothing records how a threshold in this estate was tuned `OPEN` `queue-6` `2-WAY` `RUNG1 DOC`
+### I94 - Nothing records how a threshold in this estate was tuned `DONE - THE CONVENTION IS IN THE RULES FILE, 2026-09-08` `queue-6`
+
+**`[CLOSED 2026-09-08.]`** `.claude/rules/ops-and-gates.md` now says a tuning constant records
+**what else was tried**, not just what it means. `measurement.md` already held that rule for scores -
+*a number that moved is not a number that improved: say how far, over how many cases, and how many
+variants were tried* - and it did not reach the control constants. It does now.
+
+The named cases stand: `$script:BoardStaleHours = 26`, `$REARM_DAYS = 14`, `-MaxDropPct 60.0`. Each
+carries a good comment saying what it means and, at best, which incident produced it. **None says
+whether it was the first plausible number or the survivor of a sweep, and those are different
+claims.** The course's own demonstration is recorded with it: three simulations at gains 25, 13 and
+7.5 do not establish a stable range - nothing rules out instability higher or stability lower, and
+the stable set need not even be an interval.
+
+**Retro-filling the existing constants is NOT proposed and was not done**, per the item. The ask is
+that the next one added carries it. **A `run-gates` detector for this was considered and rejected**:
+it would have to parse intent out of a comment, which is precisely the free-text-signal defect I63
+was about.
+
+**Still not measured, and the item says so:** whether `sidecar/THRESHOLDS.md`'s rows carry their
+variant counts. That file was not opened on this run either.
 
 **Merged from `design\backlog-inbox\lane-feedback-systems-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -6296,7 +6509,24 @@ selection on noise - the same rule `meal-prep/pipeline/bm25_dedup_probe.py:309` 
 **Honest caveat.** With a single membership this small the comparison may have no power at all;
 report the counts with their denominators and be willing to say the question is unanswerable yet.
 
-### I100 - `cohort` means four different things within reach of one session here `OPEN` `queue-5` `2-WAY` `RUNG1 DOC`
+### I100 - `cohort` means four different things within reach of one session here `DONE - THE COLLISION IS ON RECORD IN THE RULES FILE, 2026-09-08` `queue-5`
+
+**`[CLOSED 2026-09-08.]`** `.claude/rules/grocery.md` now states that `cohort` here means the
+**peer group of products holding a commodity's board cells**, names the five call sites that use it
+that way, records that the skills store also uses it for a release cohort (with `retention` meaning
+LOG retention and `churn` meaning TEST-SUITE churn), and sets the forward rule: **if member work ever
+lands it is written `member cohort` IN FULL, every time**, and the grocery sense keeps the bare word
+it has held for months.
+
+The failure it prevents is the one this estate has a name for: a future session greps `cohort` while
+working on members, gets a page of grocery hits, and reads them as coverage - an agreeing answer that
+is about something else, `[[identity-graph-commodity-is-namespaced]]`.
+
+**The thing worth stealing in the other direction is recorded with it**, because it is the more
+valuable half: `build-arrivals-docket.ps1:56-57` already **refuses to score a cohort it cannot form**
+and reports BLIND rather than passing it - scoring needs at least 2 other priced cells, and 41 of 492
+commodities on the 2026-07-30 board could not reach that. That is the small-cohort discipline the
+retention material teaches, implemented here first.
 
 **Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

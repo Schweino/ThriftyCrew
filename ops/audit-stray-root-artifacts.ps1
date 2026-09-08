@@ -2,6 +2,10 @@
   audit-stray-root-artifacts.ps1 - the repo root is a curated place, so anything new in it is either a
   decision someone defends in a diff or it is debris from a path-construction bug.
 
+  SCOPE OF A CLEAN REPORT: SOUND over the repo root. It enumerates what is actually there
+    against an allow-list, so a clean report really does mean the root holds nothing
+    unrecorded. Its scope is one directory, deliberately.
+
   WHY THIS EXISTS (2026-09-06, backlog I2). Two artifacts were found sitting at the repo root:
 
     "3 cups sliced, for topping"          7,094,631 bytes of scaler TSV. An ingredient BASE AMOUNT used

@@ -42,6 +42,40 @@ is one copy of every rule and nothing here can drift from it.
 - **No hard-coded bands** (Brad, 2026-09-04). [[no-hardcoded-bands]]
 - **The boards are gitignored**, so a worktree, a CI runner or a clean checkout is BLIND here and the
   engines exit 0 having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them.
+- **`cohort` here means the PEER GROUP OF PRODUCTS holding a commodity's board cells** - never a group
+  of members or a group of recipes (2026-09-08, backlog I100). `build-arrivals-docket.ps1:27-31,56-57`,
+  `check-ad-cycles.ps1:1791`, `adjudicate-discovery.ps1:23`, `aisle-test.ps1:35-36` and
+  `sidecar/probe_peer.py:59-80` all use it that way and keep the bare word. In the skills store it also
+  means a release cohort; `retention` there is LOG retention and `churn` is TEST-SUITE churn. **A future
+  session grepping `cohort` while working on members gets a page of grocery hits and reads them as
+  coverage** - the `identity-graph-commodity-is-namespaced` shape, an agreeing answer about something
+  else. **If member work ever lands it is written `member cohort` IN FULL, every time.**
+  Worth stealing in the other direction: `build-arrivals-docket.ps1:56-57` already **refuses to score a
+  cohort it cannot form** and reports it BLIND rather than passing it - scoring needs at least 2 other
+  priced cells, and 41 of 492 commodities on the 2026-07-30 board could not reach that.
+- **A 200 with a correct selector and ZERO ROWS has FOUR causes and only two have names**
+  (2026-09-08, backlog I72). `blocked` (a wall, a CAPTCHA, a challenge) and `not-carried` (the store
+  genuinely does not stock it) are first-class and enforced - *UNCHECKED IS NEVER NOT-CARRIED*,
+  `[[a-could-not-look-must-not-settle-the-question]]`. The two the vocabulary was missing:
+  - **`unrendered`** - HTTP 200, markup present, selector right, and the rows are absent because the
+    content is injected by JavaScript that nothing executed. It currently reads as a SELECTOR BUG and
+    gets a selector fix, when the repair is to render the page or find the underlying JSON call.
+  - **`unsettled`** - the element exists but was still filling behind a loading screen. **This is the
+    worse of the two, because it produces a PARTIAL result rather than an empty one and so looks like a
+    success.** Not hypothetical: `[[fareway-capture-defects]]`'s repeated exact 9 is this shape, and it
+    was diagnosed by hand weeks after the fact.
+
+  **The mechanism, and it is the useful half: do not sleep and hope - WAIT ON A COUNT-BASED SELECTOR.**
+  After a scroll, wait for an element that can only exist if the scroll actually produced more rows
+  (`div.row:nth-child(11)` when the page starts with 10). If the eleventh never appears the wait fails
+  LOUDLY. **The assertion that the load worked is built into the wait condition rather than bolted on
+  after**, which a fixed `Start-Sleep` can never do: a sleep cannot tell "the page finished and there
+  were only 10" from "page 2 never loaded".
+  **And the cheaper repair that may retire half of this:** open the Network tab, filter to Fetch/XHR,
+  and read the URL the page's own JavaScript calls - that call usually returns the data as JSON with no
+  browser needed. Three of the seven feeds here are already server-side JSON. **Nobody has checked
+  whether any of the four browser-required stores is browser-required only because nobody looked.**
+  That is one hour per store and it could retire the 75-minute Walmart pull.
 
 Regime: this holds for files under `grocery/`. It says nothing about `meal-prep/`, which has its own
 rules file and its own corrector.

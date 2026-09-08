@@ -173,6 +173,20 @@ function Find-AdForCell {
     # RANK: a price match beats any number of shared words (see the header); then more shared
     # words; then the tighter set (Jaccard), so a terse exact line beats a long line that merely
     # happens to contain the same words.
+    #
+    # WHICH JACCARD PROPERTY THIS IS BUYING (2026-09-08, backlog I57). Jaccard is
+    # 1 - |A n B| / |A u B| over SETS, so it discards repetition and length before it counts
+    # anything. Two consequences that pull opposite ways:
+    #   * PRESENCE OVER FREQUENCY, which is right for short product names - a word said twice is
+    #     not twice the evidence. That is the property being bought here.
+    #   * NO GRADIENT: every pair sharing no token scores exactly the same, so Jaccard cannot
+    #     RANK non-overlapping candidates at all. sidecar/sweep.py hit that in the field (the
+    #     coconut-oil against Epsom-salt case, two listings sharing no word and being the same
+    #     mistake) and the fix chosen there was embeddings.
+    # THE NO-GRADIENT HAZARD CANNOT FIRE HERE, and that is why this use is correct rather than
+    # lucky: `$overlap -lt 1 -> continue` above means every surviving candidate shares at least
+    # one token, and the overlap COUNT has already ranked them before Jaccard is consulted. It is
+    # the third tie-break, never the retriever. Do not lift this into a standalone Jaccard scorer.
     $better = $false
     if ($null -eq $best) { $better = $true }
     elseif ($priceHit -ne $bestPrice) { $better = $priceHit }

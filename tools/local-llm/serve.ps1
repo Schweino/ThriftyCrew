@@ -51,7 +51,21 @@
                        Decode is memory-BANDWIDTH bound at batch 1 (12.2 GiB of
                        weights read per step), and batching amortises that read
                        across eight sequences. MEASURED on this box, not
-                       predicted: 36.6 -> 80.4 tok/s aggregate, i.e. 2.2x, and
+                       predicted: 36.6 -> 80.4 tok/s aggregate ON THIS BOX'S
+                       RTX 5070 Ti, i.e. 2.2x, and
+                       [I51, 2026-09-08] THAT 80.4 IS NOT THE OTHER ~81. The
+                       estate records a second throughput figure that rounds to
+                       the same number and describes a DIFFERENT machine:
+                       design/EVAL-hunter-wall-clock-2026-09-04.md 2b measures
+                       ~81 output tok/s over 148,111 tokens of CLOUD API agent
+                       calls, and that is what the memory
+                       wall-clock-is-output-tokens and the standing MAP_BATCH=2
+                       ruling rest on. The two numbers share no hardware and no
+                       code path. Speeding up THIS server does not move the
+                       hunter's wall clock, because the hunter's wall clock is
+                       Opus output over the API and this server is not in that
+                       path. Two sources, one agreeing number, and an agreeing
+                       number escapes scrutiny.
                        it is flat past ~8 slots. It does NOT scale linearly --
                        once the weight reads are amortised, Q3_K dequantisation
                        compute becomes the ceiling. Verified not to be the JSON
@@ -146,6 +160,28 @@ $serverArgs = @(
 # back, so anything under ~3,300 per slot silently truncates IT while resolve
 # looks fine — which is exactly how 8 slots at 2,048 broke Stage 1 on
 # 2026-08-20 and presented as malformed JSON rather than as a config error.
+#
+# CORRECTION 2026-09-08 (backlog I50): THE SENTENCE ABOVE IS THE RULE, AND 3,300
+# NO LONGER OBEYS IT. A caller grew past this constant and nothing noticed.
+# meal-prep/pipeline/local_extract.py sets RUNG2_MIN_SLOT_CTX = 4096 + 24000/3.5
+# + 512 = 11,465, which is three and a half times this floor. So a server that
+# starts and reports READY is NOT usable by every caller, and a reader who
+# trusts the rule above concludes that it is.
+#
+# THE DEFAULTS MAKE THIS CONCRETE: -Context 16384 / -Slots 4 is 4,096 per slot.
+# That clears 3,300, so the server starts; it does not clear 11,465, so the
+# extract lane refuses. This is NOT a live bug - local_extract reads the running
+# server's real per-slot n_ctx from /props rather than assuming it, and a slot
+# too small is a named BLOCK at exit 2, never a short read. Its own self-test
+# asserts the mismatch. The defect is that this comment states a rule the
+# constant stopped following.
+#
+# DO NOT JUST BUMP 3,300 TO 11,465. That hard-codes the same failure one level
+# up - the next caller to grow outruns it silently again - and it would make the
+# default invocation throw, which is a behaviour change on a server Brad starts
+# by hand. The repair is to DERIVE the floor from the largest declared caller so
+# a growing caller cannot outrun it, and that is a change to a file the queue's
+# group-H rule keeps off-limits to a course run. Filed, not made.
 $perSlot = [math]::Floor($Context / $Slots)
 if ($perSlot -lt 3300) {
     throw "Context $Context split across $Slots slots is $perSlot tokens/slot. Learning Stage 1 needs ~3,300 (1,000-token prompt + 2,200 requested). Raise -Context or lower -Slots. resolve alone would fit in 1,024, which is the trap: it fits and Stage 1 does not."

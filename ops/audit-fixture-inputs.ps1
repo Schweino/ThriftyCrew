@@ -1,5 +1,10 @@
 # audit-fixture-inputs.ps1 - a self-test's verdict may not depend on a file the harness did not freeze.
 #
+# SCOPE OF A CLEAN REPORT: UNSOUND. It recognises the ways a self-test is known to reach
+#   outside its frozen inputs. A clean report means no known reach-out spelling was found, not
+#   that every suite is hermetic; a test that reads the tree through a helper this file does
+#   not follow passes silently.
+#
 # WHY THIS EXISTS (2026-09-06, PLAN-top5-2026-09-06 area 4). A guard reads its RULINGS - an allowlist, a
 # ledger, a channel-exception file - from a fixed path beside itself, and the harness drives it with a
 # fixture BOARD but the live rulings. The verdict then rests on two inputs and only one of them is frozen,

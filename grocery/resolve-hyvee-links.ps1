@@ -185,6 +185,12 @@ foreach ($t in $targets) {
     if ($neg) { continue }
 
     # symmetric overlap (Jaccard) - extra words in the candidate now cost something
+    # WHICH JACCARD PROPERTY (2026-09-08, backlog I57): PRESENCE OVER FREQUENCY, over SETS, which
+    # is what makes it symmetric and is the whole reason a long candidate is penalised for its
+    # extra words. The other half of the metric is the hazard: every pair sharing NO token scores
+    # identically, so Jaccard has no gradient across non-overlapping candidates and cannot rank
+    # them. That is survivable here because this is a scored shortlist and not the retriever;
+    # a candidate with zero overlap is not one this loop is trying to order.
     $inter = 0
     foreach ($w in $ourWords) { if ($theirWords -contains $w) { $inter++ } }
     $union = $ourWords.Count + $theirWords.Count - $inter

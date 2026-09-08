@@ -1,5 +1,10 @@
 # audit-mustfire-census.ps1 - a must-fire assertion may not quietly leave the tree.
 #
+# SCOPE OF A CLEAN REPORT: UNSOUND, and it is the more useful direction here. It counts
+#   assertions carrying the labels it knows, so a clean report means the LABELLED census did
+#   not shrink. A must-fire whose sense lives only in its prose is outside its reach - exactly
+#   the limit audit-fixture-vocabulary.ps1 states about itself.
+#
 # WHY THIS EXISTS (2026-09-06, PLAN-top5-2026-09-06 area 4). The estate's rule is that every guard ships
 # with two fixtures: one where it MUST FIRE - and that one is the bug that caused the guard to be written -
 # and one where it must stay silent. The whole scheme rests on those lines still being there.

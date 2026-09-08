@@ -2,6 +2,10 @@
   audit-prompt-backup.ps1 - the agent prompts and scheduled-task SKILLs are CODE. Back them up, and prove
   the backup is current.
 
+  SCOPE OF A CLEAN REPORT: SOUND about currency, silent about content, the same split as
+    audit-memory-backup.ps1. It proves the backup is current. Whether the prompts in it are the
+    right prompts is not a question it asks.
+
   WHY (2026-07-31): everything the triage agents depend on is versioned, self-tested and gated - and the
   agents' own instructions were not in git at all. They live in C:\Codex\ThriftyCrew\.claude\agents (project scope),
   C:\Users\Owner\.claude\agents (user scope) and C:\Users\Owner\.claude\scheduled-tasks\<task>\SKILL.md,

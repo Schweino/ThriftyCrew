@@ -1,5 +1,9 @@
 # audit-git-sweepers.ps1 - no tracked script may stage by SWEEP. `git add -A` needs a `--` pathspec.
 #
+# SCOPE OF A CLEAN REPORT: UNSOUND, though narrowly so. `git add -A` and its relatives are
+#   matched as text, so a clean report covers the spellings listed here. A sweep assembled at
+#   run time from a variable is not matched.
+#
 # WHY THIS EXISTS (2026-09-06, PLAN-top5-2026-09-06 area 3). Four incidents, one shape:
 #
 #   2026-07-23  the walmart flood

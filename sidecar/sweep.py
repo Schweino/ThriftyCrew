@@ -181,6 +181,17 @@ def memory_by_meaning(m, pairs: list[dict], rulings: list[dict], names: list[str
     coconut-oil / Epsom-salt case the plan names, where the two listings share no word and
     are the same mistake.
 
+    NAMING THE PROPERTY, because it was observed here as a bug and never written down as a
+    property of the metric (2026-09-08, backlog I57). Jaccard is 1 - |A n B| / |A u B| over
+    SETS. It buys PRESENCE OVER FREQUENCY, and it pays for that with NO GRADIENT: every pair
+    sharing no token scores exactly 1, so it cannot rank non-overlapping candidates at all.
+    The second half is not a defect in `prior_rulings`, it is what the metric IS - and it is
+    disqualifying for a RETRIEVER, which is why the replacement here is embeddings rather than
+    a better Jaccard. The estate's two other uses (grocery/ad-match-lib.ps1:180 and
+    grocery/resolve-hyvee-links.ps1:187) are safe from it because both rank an overlap COUNT
+    first, so nothing with zero overlap ever reaches the Jaccard comparison. Presence-over-
+    frequency behind an overlap count is sound; Jaccard alone as a retriever is not.
+
     WHY THIS RUNS HERE AND NOT IN resolve.py. §3.2 says the vectors are "searched from RAM at
     resolve time". They cannot be: the resolve lane runs under the graph's interpreter, which
     has no numpy, and adding it there would put the nightly matching chain's dependencies at

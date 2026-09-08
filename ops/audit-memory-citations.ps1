@@ -1,6 +1,11 @@
 <#
   audit-memory-citations.ps1 - every `[[memory]]` cited in this estate resolves to a real file.
 
+  SCOPE OF A CLEAN REPORT: SOUND over the citation SYNTAX. Every `[[name]]` it can lex is
+    resolved, so a clean report really does mean no lexed citation dangles. A pointer written
+    some other way - a bare filename in prose, a path in a sentence - is not a citation to this
+    file and is not checked.
+
   WHY THIS EXISTS (2026-09-06, backlog E13). The course's rule is "pass REFERENCES, not copies": a
   model can read far more than it can write, so a delegating agent physically cannot restate a large
   memory as a task description, and asking it to try produces paraphrase - the one failure a reference

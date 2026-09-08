@@ -107,6 +107,38 @@ Files written by one runtime and read by another **through the committed repo**.
   the triage agent on the SAME PC, so it never crosses the git-bus, and its bodies carry alert text. Listing
   it here as must-stay-tracked was an over-claim.
 
+## Log retention, stated (added 2026-09-08, backlog I36)
+
+Nothing in this estate had a stated retention anywhere except the R2 buckets. The append-only logs
+above are committed by the ~07:00 bot, so every byte is permanent and is carried by every clone and
+every worktree forever. **That is not wrong. It was simply never decided**, and an unstated forever
+is indistinguishable from a stated one right up until the day something starts appending a megabyte
+a run.
+
+**The policy is KEEP FOREVER, deliberately, for all four**, with the sizes measured 2026-09-08:
+
+| File | Size | Why it is kept |
+|---|---|---|
+| `grocery/ad-cycle-log.txt` | 862,179 B / 7,324 lines | the only record of what the ad chain decided while nobody was watching |
+| `grocery/out/coverage-ledger-history.jsonl` | 263,741 B | one dated line per run since 2026-08-01; it is the input to every tolerance question |
+| `grocery/out/capture-cursor-log.jsonl` | 18,075 B | which store was pulled when, across quarters |
+| `grocery/alert-log.txt` | 9,726 B | what fired, and whether anyone was told |
+
+**The dimension that computes rather than asserts is discovery-and-resolution time, and it sets a
+FLOOR, not a ceiling.** Retention must exceed the time this estate typically takes to notice and fix
+a defect - and several defects here were found *weeks* after they started. So the floor is months.
+Cost-effectiveness is the only dimension pulling the other way and at roughly one megabyte in total
+it is pulling very weakly.
+
+**Explicitly NOT proposed: a pruning job.** Nothing here is remotely big enough to justify code that
+deletes evidence, and deletion is the one direction that cannot be undone. **The trigger that would
+reopen this** is any of these files passing ~10 MB, or a new appender arriving that writes per-row
+rather than per-run - at which point the question is a rotation, not a delete.
+
+**Not to be confused with the separate finding that nothing READS these.** A file can have a
+perfectly good stated lifetime and still be a series nobody consumes; that is backlog I33 and I43,
+and it is about `graph-nightly-status.json` rather than about these four.
+
 ## OVERHAUL-4 classification
 
 - **UNTRACKED 2026-07-27 (provably safe):** `meal-prep/db/built/**` (1026 cards). Only build-cards (writes) + publish (reads) touch them, always paired and on-demand; no runtime reads them cross-run. Rebuildable from spec+costed. Repo 4692 -> 3668 files.

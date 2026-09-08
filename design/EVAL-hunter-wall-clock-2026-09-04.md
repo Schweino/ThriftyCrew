@@ -72,6 +72,20 @@ What actually predicts the wall clock is the OUTPUT VOLUME, and the rate is a co
 **wall clock = output tokens / ~81 per second.** It back-predicts the big run: 3.1M output tokens is
 10.7 hours against 12.18 h measured.
 
+> **WHICH MACHINE THIS NUMBER IS ABOUT (added 2026-09-08, backlog I51).** The ~81 above is
+> **CLOUD API agent output** - Opus generating over the network, measured across the 1,834 seconds
+> and 148,111 output tokens in the table. It is **not** the local box.
+>
+> `tools/local-llm/serve.ps1` records **80.4 tok/s aggregate** from the **local llama-server** at 8
+> slots on the RTX 5070 Ti. Two unrelated measurements that round to the same number, in two files
+> that never mentioned each other.
+>
+> **The failure that sets up:** somebody speeds up the local server, sees a rate near 81, and
+> concludes the hunter's wall clock will move. **It will not.** The hunter's wall clock is Opus
+> output over the API; the local server is not in that path. This is the
+> `an-agreeing-number-escapes-scrutiny` shape with two sources instead of one, and the only defence
+> is that each figure names its machine - which both now do.
+
 Round trips looked causal because they CORRELATE with output - more turns means more generated text.
 They are not the thing being paid for. Three consequences, each of which reverses a recommendation
 made earlier in this file:

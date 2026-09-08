@@ -1,6 +1,11 @@
 <#
   audit-capture-ingest-reporting.ps1 - a row dropped at ingest must be REPORTED by whoever read it.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND. It matches the spellings of a drop-and-report pair that it
+    knows. A clean report means none of the shapes it carries matched, not that no row is
+    dropped silently - a reader that discards a row by a construction this file has never seen
+    is invisible to it.
+
   WHY THIS EXISTS (2026-09-06, backlog E5). E5's rule is validate at source, with low confidence routed
   to REVIEW rather than rejection. Two of the three places it names already did that and the third did
   the hard half and dropped the easy one:

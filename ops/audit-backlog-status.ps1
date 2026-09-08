@@ -1,6 +1,12 @@
 <#
   audit-backlog-status.ps1 - every backlog item declares one state, from a closed vocabulary.
 
+  SCOPE OF A CLEAN REPORT: SOUND over the heading LINE, unsound over everything else. Every
+    `### <ID> - <title>` heading in the file is read, so a clean state report really does mean
+    no heading of that SHAPE is malformed. It is blind to a heading that is not of that shape -
+    which is not hypothetical: I71 and I72 sat outside the pattern from the day they were filed
+    and were absent from every board count until 2026-09-08.
+
   WHY THIS EXISTS (2026-09-07). Brad read the seventeen unfinished items in
   `design\BACKLOG-course-findings.md` and asked whether the ones deliberately not being worked should
   be marked closed. The ledger could not answer, because `OPEN` was carrying three situations at once:

@@ -2,6 +2,11 @@
   audit-agent-tools.ps1 - every agent declares its tools, and what a definition SAYS about its tools
   matches what it HAS.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND, and the direction is worth knowing. It compares a
+    definition's DECLARED tools list against what the harness gives it, so a clean report means
+    the declarations it could PARSE agreed. An agent whose front matter it cannot parse is not
+    checked, and says nothing about itself either way.
+
   WHY THIS EXISTS (2026-09-06, backlog E3). Course 6's finding: handed three well-named tools and no
   usage context, an agent decided the unnecessary one must be needed and INVENTED work to justify it.
   The fix was a block per agent naming which tools are situational - and a block like that is prose

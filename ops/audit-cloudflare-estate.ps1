@@ -1,6 +1,11 @@
 <#
   audit-cloudflare-estate.ps1 - the Cloudflare estate is CODE too. Declare it, and prove live still matches.
 
+  SCOPE OF A CLEAN REPORT: SOUND OVER THE DECLARATION, blind beyond it. It compares the live
+    estate against ops/cloudflare-estate.json, so a clean report means everything DECLARED
+    still matches. A resource nobody declared is not a finding here and cannot be - the file is
+    the whole universe this check has.
+
   WHY (2026-08-20). Four R2 buckets, a 4GB D1 database and three Workers were created 2026-08-09/10 by the
   V3 platform estate. V3's code was deleted from this repo on 2026-08-14 (commit f5e187a0). Its RUNTIME was
   not deleted, and nothing in this tree referenced any of it - not a bucket name, not a binding, not a
