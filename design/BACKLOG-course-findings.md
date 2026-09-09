@@ -4710,7 +4710,43 @@ the same account as the confirmation above. Worth doing in the same sitting; not
 
 ---
 
-### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `PARTLY DONE - RUNG 1 RAN AND SIZED IT: 97 OF 172 CONSUMING EDGES ARE UNDEFENDED` `queue-4` `2-WAY` `RUNG1 READ`
+### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `PARTLY DONE - THE ASSERTION EXISTS AND ONE STAGE USES IT; THE CAPTURE ENTRY POINTS WANT A WATCHED RUN` `queue-4` `2-WAY` `RUNG1 READ`
+
+**`[RUNG 2 BUILT 2026-09-09, at the size rung 1 narrowed it to - five entry points, not 172 files.]`**
+
+**Shipped: `lib/input-assert.ps1`.** THREE OUTCOMES, and collapsing any two of them is the bug it
+exists to prevent:
+
+| | |
+|---|---|
+| `FRESH` | exists and inside its window. Proceed. |
+| `STALE` | exists and older than its window - **the producer ran and then stopped, or failed quietly** |
+| `MISSING` | absent. **Not the same as stale, and never the same as fresh.** A worktree has no board, so this is routinely could-not-evaluate rather than a fault |
+
+**It returns 3, never 1.** A stage that cannot verify its input has not failed and has not passed. The
+window is passed by the caller and derived from the schedule, never invented at the call site.
+
+**Wired into `capture-watchdog` (check 5a2b), and the choice of first stage is deliberate.** It is the
+one scheduled stage whose entire job is REPORTING, so a could-not-evaluate there costs a line in a
+report rather than a board that never gets built. **Verified green on the live tree today: the capture
+status file is 21.8 h old against its 26 h window.**
+
+**A defect in my own library, caught by its own must-not-fire on the first run.** `Assert-TcInputs`
+used `Write-Output` for its report lines, so **the report became part of the function's return value**
+and the exit code arrived buried at the end of it - `$rc -eq 0` was false while every input was fresh.
+It uses `Write-Host` now, which still lands in stdout when a scheduled stage is redirected to a log,
+so nothing is lost. **The estate has a memory for exactly this shape** and it still caught me. Two
+fixtures now hold it: the return value is asserted to be an `[int]`.
+
+**Verified:** self-test **13 of 13**, led by the three-way distinction and by the window boundary
+tested in *both* directions - exactly at 26 h is FRESH, one second past is STALE - because a boundary
+asserted on one side only is half a test. `run-gates` exit 0, `pass=295 fail=0`.
+
+**WHAT IS DELIBERATELY NOT DONE: the two capture entry points.** Asserting inside `capture-run.ps1`
+means a wrong window **stops the day's capture on a live paid site**, and the item itself said that
+wants somebody watching the next run. The library is ready and the pattern is one call; adding it is a
+five-line change whenever there is a window to watch it. Doing it blind would not have been thorough,
+it would have been reckless.
 
 **`[RUNG 1 RAN 2026-09-09, which is exactly what the item asked for before any code.]`**
 

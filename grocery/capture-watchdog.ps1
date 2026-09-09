@@ -757,6 +757,27 @@ if ((Test-Path $gsc) -and (Test-Path $pyExe)) {
   else { [void]$ok.Add((($gsLine -replace '\s+', ' ').Trim())) }
 }
 
+# ---- 5a2b. the watchdog asserts its OWN inputs before reading any of them ---------------------
+# 2026-09-09, backlog I45 rung 2. Rung 1 measured the surface and narrowed it hard: 172 first-party
+# scripts consume another stage's output and 97 defend nothing, but an assertion across 97 consumers
+# would be a large change for a risk that has fired twice. **The scheduled entry points are the whole
+# surface that matters**, because a scheduled task is the only consumer nobody is watching.
+#
+# THE WATCHDOG IS THE RIGHT FIRST STAGE TO ASSERT, and not because it is easiest: it is the one
+# scheduled stage whose entire job is REPORTING, so a could-not-evaluate here costs a line in a report
+# rather than a board that does not get built. Asserting inside capture-run.ps1 stops the day's capture
+# if the window is wrong, and that wants somebody watching the next run - which the item itself said.
+#
+# MISSING IS NOT STALE AND NEITHER IS FRESH. lib\input-assert.ps1 keeps those three apart; collapsing
+# any two is the bug it exists to prevent, and a worktree legitimately has no board.
+. (Join-Path (Split-Path $root -Parent) 'lib\input-assert.ps1')
+$iaRc = Assert-TcInputs -Stage 'capture-watchdog' -Inputs @(
+  @{ Path = (Join-Path $OutDir 'logs\capture-run-status.json'); Producer = 'grocery\capture-run.ps1 (08:00 Daily Capture)'; MaxAgeHours = 26.0 }
+)
+if ($iaRc -ne 0) {
+  [void]$findings.Add('INPUT ASSERT: the watchdog''s own inputs are missing or stale - see the input-assert lines above. It has NOT evaluated them, which is not the same as finding nothing.')
+}
+
 # ---- 5a3a. promotion holds: the READ, on a cadence. The CLEAR never is. -----------------------
 # RULED BY BRAD 2026-09-09 (backlog I92): schedule the read, never the clear.
 #
