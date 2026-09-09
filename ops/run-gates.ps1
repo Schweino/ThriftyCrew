@@ -283,6 +283,7 @@ $static = @(
   # Hermetic: reads .ps1 source text, never a board, so it belongs here rather than in the daily chain.
   @{ f = 'ops\audit-cross-module-reach.ps1';   n = 'no NEW script reaches into another module''s internals directory - a ratchet on cross-module path literals, high-water mark may only go DOWN' }
   @{ f = 'ops\audit-lift-completeness.ps1';    n = 'every function lifted out of compare-deals.ps1 brings the engine functions it CALLS with it, so a hand-maintained lift list cannot fall behind and fail at run time' }
+  @{ f = 'ops\audit-one-way-actuators.ps1';    n = 'a control constant that may only move ONE WAY carries a rate limit and a plausibility bar - a REPORT, exit 0, because "one-directional" is a property of a design and no pattern matcher can be precise about it' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # ops\verify-commodities-gate.ps1 is deliberately NOT listed here. A $static entry passes no
   # arguments, which would run its LIVE check against a staged set that is empty during a gate run -

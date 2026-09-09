@@ -8008,7 +8008,61 @@ day nobody is watching. On-demand is safe but is the state we already have, beca
 
 ---
 
-### I93 - The estate's two one-directional actuators do not share their safety machinery `NEEDS A RULING` `queue-6` `1-WAY` `RUNG1 RULING`
+### I93 - The estate's two one-directional actuators do not share their safety machinery `DONE - ACTUATOR FIXED, SHAPE NAMED, REGISTER BUILT, DETECTOR SHIPPED` `queue-6` `1-WAY` `RUNG1 RULING`
+
+**`[CLOSED 2026-09-09. Brad ruled: all of it - the actuator, the rule, the register and the detector.]`**
+
+**1. The live hazard is closed.** `graph/learning/promote_aliases.py` now carries the rate limit and
+plausibility bar that `lib/ratchet.ps1` already had. It refuses a batch over
+`MAX_NEW_HOLDS_PER_RUN = 10`, **keeps the existing file**, and says so, with `--accept-holds` as the
+deliberate override. Before this, one degraded guard run naming many commodities would have latched a
+**permanent** hold for every one of them in a single pass, since holds never expire. **What else was
+tried: nothing.** 10 is the first plausible value, grounded on the live set of 16 holds across 10
+commodities - a batch bigger than that grows the whole hold set by more than half - and is explicitly
+not the survivor of a sweep. Self-test **15 of 15**.
+
+**2. The shape is named** in `.claude/rules/ops-and-gates.md`: *a control constant that may only move
+ONE WAY needs a rate limit and a plausibility bar.* With the half that gets forgotten: **refusing is
+not enough - the old state must be KEPT and the refusal SPOKEN**, or a run that declined to act is
+indistinguishable from a run with nothing to do.
+
+**3. The register exists:** `docs/CONTROL-CONSTANTS.md`, nine constants with their direction, what each
+does **when the producer stops**, and how each was tuned. **Most rows say "not recorded" and that is
+the honest state** - I94 established the convention going forward and explicitly did not ask for
+retro-fill, so only the constants added since carry it.
+
+**4. The detector ships as a REPORT:** `ops/audit-one-way-actuators.ps1`, in `run-gates` at exit 0.
+
+**IT FOUND ONE REAL DEFECT, AND I NARROWED IT TWICE BEFORE SHIPPING RATHER THAN SHIP NOISE.** The first
+sweep returned **32 findings over 63 files and nearly all were false**: it matched the bare word
+`ratchet`, so it flagged `grocery/audit-null-rate.ps1` **while that file explicitly says the ratchet
+asymmetry does not apply to it**, and flagged `ops/run-gates.ps1` for listing ratchet-shaped gates in
+its comments. A report that is mostly wrong is one people learn to skip, which is the same failure as a
+gate red on day one. Narrowing the latch words to phrases that assert a file's own state latches, and
+counting a call to the shared ratchet library as a guard, took it to **4**.
+
+**Of those 4, exactly 1 is real** - and I read all four rather than reporting the count:
+
+| file | verdict |
+|---|---|
+| `grocery/audit-json-readers.ps1` | **REAL.** A high-water mark that "may only go DOWN" whose tighten branch lowered the baseline **unconditionally** |
+| `grocery/audit-asof-evidence.ps1` | false positive: prose about a carry cap that "can never expire" a row |
+| `grocery/build-sale-windows.ps1` | false positive: everyday price chips "never expire" |
+| `meal-prep/pipeline/repair-basis-relabel.ps1` | false positive: a comment about a case that "can never expire" |
+
+**The real one is fixed.** `audit-json-readers.ps1` was the exact defect `lib/ratchet.ps1` exists for -
+its header records four audits that each lowered a mark unconditionally - and it had never adopted the
+library. A run that scanned fewer files, or whose pattern rotted, would have written its own blindness
+in as a permanent ceiling and printed a pass forever. It calls `Test-RatchetMove` now.
+
+**Verified by making it fire on the live file:** the baseline is 0 today so the branch cannot run, so a
+baseline of 10 was planted - the audit exited **2**, said *"found NOTHING where the baseline is 10"*,
+**left the baseline file byte-identical**, and the tree returned to exit 0 when restored.
+`run-gates` exit 0, `pass=293 fail=0`.
+
+**SCOPE OF THE DETECTOR'S CLEAN REPORT: UNSOUND, and stated in its header.** "One-directional" is a
+property of a design, not a spelling. **Its measured precision on this corpus is 1 in 4.** A finding is
+worth reading; silence proves nothing.
 
 **Merged from `design\backlog-inbox\lane-feedback-systems-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

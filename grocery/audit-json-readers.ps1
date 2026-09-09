@@ -37,7 +37,7 @@
 #   .\audit-json-readers.ps1 -SelfTest    frozen must-fire + clean twins
 # Exit 0 = at or below the baseline. Exit 2 = ratchet broken, or a self-test regression. Exit 3 = BLIND.
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([string]$Root = '', [string]$OutDir = '', [switch]$Baseline, [switch]$SelfTest)
+param([string]$Root = '', [string]$OutDir = '', [switch]$Baseline, [switch]$SelfTest, [switch]$AcceptDrop)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 # THIS GUARD READ ITS OWN BASELINE THROUGH A FUNCTION IT NEVER LOADED (found 2026-09-05). The baseline read
@@ -187,9 +187,21 @@ if ($verdict -eq 'break') {
   Exit-Guard -Name 'json-readers' -Summary "$count over a baseline of $base" -Code 2
 }
 if ($verdict -eq 'tighten') {
-  @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the bare-JSON-reader ratchet. This number may only go DOWN.' } |
+  # THE FALL IS THE DIRECTION THAT CANNOT BE TRUSTED ON ITS OWN (2026-09-09, backlog I93). This branch
+  # used to lower the high-water mark UNCONDITIONALLY, which is the exact defect lib\ratchet.ps1 was
+  # built for and which this file never adopted: a run that scanned fewer files, or matched nothing
+  # because the pattern rotted, would write its own blindness in as a permanent ceiling and print a
+  # pass forever afterwards. Found by ops\audit-one-way-actuators.ps1 on its first sweep.
+  . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ratchet.ps1')
+  $move = Test-RatchetMove -Name 'json-readers' -Count $count -Baseline ([int]$base) -AcceptDrop:$AcceptDrop
+  Write-Output ("  " + $move.Message)
+  if ($move.Verdict -eq 'implausible') {
+    Write-Output '  Baseline KEPT. Check the scan actually ran over the same tree before accepting this.'
+    Exit-Guard -Name 'json-readers' -Summary "implausible fall $count from $base, baseline kept" -Code 2
+  }
+  @{ generated = (Get-Date).ToString('s'); count = $move.NewBaseline; note = 'High-water mark for the bare-JSON-reader ratchet. This number may only go DOWN, and a fall to zero or over -MaxDropPct is refused rather than recorded (backlog I93).' } |
     ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
-  Write-Output ("  ratchet tightened: $count site(s), was $base. New baseline written.")
+  Write-Output ("  ratchet tightened: $($move.NewBaseline) site(s), was $base. New baseline written.")
 }
 Write-Output ("audit-json-readers: $count site(s) against a baseline of $base - the known backlog, not a regression. Convert them with Read-JsonFile (lib\json-io.ps1).")
 Exit-Guard -Name 'json-readers' -Summary "$count site(s), baseline $base" -Code 0

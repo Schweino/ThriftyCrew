@@ -83,6 +83,17 @@ everything else honest, so a defect here is silent by construction.
   **Worth running against a detector whose logic you have just rewritten** - that is when a survivor
   is most likely. Never a gate, and mutants run from a temp mirror with the original verified
   byte-identical by md5 afterwards.
+- **A control constant that may only move ONE WAY needs a RATE LIMIT and a PLAUSIBILITY BAR**
+  (2026-09-09, backlog I93). `lib/ratchet.ps1` has it: the audits' high-water mark may only fall, so it
+  refuses a fall to zero and a fall larger than `-MaxDropPct`, **keeps the old baseline**, and reports.
+  `graph/learning/promote_aliases.py`'s holds are the estate's other one-directional actuator - they
+  only accumulate and never expire - and had none of it, so one degraded guard run naming many
+  commodities would have latched a permanent hold for each of them in a single pass. It now refuses a
+  batch over `MAX_NEW_HOLDS_PER_RUN`, keeps the file, and reports, with `--accept-holds` as the
+  deliberate override. **Refusing is only half: the old state must be KEPT and the refusal SPOKEN**, or
+  a run that declined to act is indistinguishable from a run with nothing to do. The register of every
+  such constant, with its direction and what it does when the producer stops, is
+  `docs/CONTROL-CONSTANTS.md`.
 - **The `Get-Random` refusals cover WORK SELECTION, not TEST INPUT** (Brad, 2026-09-09, backlog I38).
   `Get-Random` appears in three files here and all three refuse it: a deterministic verification sample,
   a reproducible worklist, a retry jitter that uses the attempt index. **Each is right about what it

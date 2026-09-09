@@ -277,7 +277,7 @@ def blame(output: str, candidates: dict) -> set:
     return accused
 
 
-def gated(learned, holds, max_rounds: int) -> int:
+def gated(learned, holds, max_rounds: int, accept_batch: bool = False) -> int:
     """promote -> guard -> withhold the accused -> repeat, until the tree is green.
 
     This is the loop I ran by hand on 2026-08-21: promote all 156, watch guards go
@@ -334,7 +334,7 @@ def gated(learned, holds, max_rounds: int) -> int:
                 # verdicts it had just spent two guard cycles earning, and would have re-tested
                 # them identically on the next run forever. Caught by the must-fire fixture.
                 print("nothing left to promote once the withheld set is removed")
-                record_holds(skip, {}, learned)
+                record_holds(skip, {}, learned, accept_batch)
                 return 1
             with io.open(CATALOG, "w", encoding="utf-8", newline="\n") as fh:
                 json.dump(catalog, fh, indent=2, ensure_ascii=False)
@@ -346,7 +346,7 @@ def gated(learned, holds, max_rounds: int) -> int:
             rc, out = _ps("guards.ps1")
             if rc == 0:
                 print(f"  -> guards GREEN with {total} promoted, {len(skip)} withheld")
-                record_holds(skip, added, learned)
+                record_holds(skip, added, learned, accept_batch)
                 promoted_ok = True
                 return 0
 
@@ -377,7 +377,38 @@ def gated(learned, holds, max_rounds: int) -> int:
             os.remove(backup)
 
 
-def record_holds(skip: set, added: dict, learned: dict) -> None:
+# THE RATE LIMIT ON A ONE-DIRECTIONAL ACTUATOR (2026-09-09, backlog I93, ruled by Brad).
+#
+# `lib/ratchet.ps1` already carries this shape for the audits: a high-water mark that may only move
+# one way gets a RATE LIMIT plus a SENSOR PLAUSIBILITY CHECK - it refuses a fall to zero and a fall
+# larger than -MaxDropPct, KEEPS the old baseline, and reports. promotion-holds.json is the estate's
+# other one-directional actuator (it can only ever withhold more, and holds never expire) and it had
+# none of that. One degraded guard run that hard-failed naming many commodities would have written a
+# permanent hold for every one of them in a single pass, with nothing calling that extraordinary.
+#
+# WHAT ELSE WAS TRIED: nothing. 10 is the FIRST PLAUSIBLE VALUE, not the survivor of a sweep. It is
+# grounded on the live set - 16 held patterns across 10 commodities on 2026-09-08 - so a run adding
+# more than 10 at once would grow the entire hold set by more than half, which is the shape of a
+# broken guard rather than a normal batch. Nothing rules out 5 or 20 behaving as well.
+MAX_NEW_HOLDS_PER_RUN = 10
+
+
+def should_refuse_hold_batch(new_count: int, existing_count: int,
+                             limit: int = MAX_NEW_HOLDS_PER_RUN) -> str:
+    """'' when the batch is plausible, or the reason it is not. Pure, so the fixtures drive it.
+
+    The asymmetry is deliberate and mirrors the ratchet: this actuator's dangerous direction is UP,
+    because holds only accumulate. A small batch is always allowed; the check is on the jump.
+    """
+    if new_count <= limit:
+        return ""
+    return ("%d new hold(s) in one run, over the limit of %d, against %d already held. A jump this "
+            "large reads as a degraded guard run rather than %d genuinely bad patterns. Holds are "
+            "PERMANENT and nothing expires them, so the existing file is KEPT and nothing was "
+            "written." % (new_count, limit, existing_count, new_count))
+
+
+def record_holds(skip: set, added: dict, learned: dict, accept_batch: bool = False) -> None:
     """Write the withheld patterns to promotion-holds.json so a later run refuses them."""
     if not skip:
         return
@@ -386,6 +417,24 @@ def record_holds(skip: set, added: dict, learned: dict) -> None:
         with open(HOLDS, encoding="utf-8-sig") as fh:
             doc = json.load(fh)
     have = {(h["commodity"], h["pattern"]) for h in doc.get("holds", [])}
+
+    # COUNT THE BATCH BEFORE WRITING ANY OF IT. Checking as we go would leave the file half-written
+    # on refusal, which is worse than either outcome.
+    pending = []
+    for cid in sorted(skip):
+        for pat in learned.get(cid, []):
+            if (cid, pat) not in have:
+                pending.append((cid, pat))
+    why = should_refuse_hold_batch(len(pending), len(have))
+    if why and not accept_batch:
+        print("  PROMOTION HOLDS REFUSED: " + why)
+        print("  Re-run with --accept-holds if this batch is genuine. This is the same shape")
+        print("  lib/ratchet.ps1 applies to the audits: a one-directional actuator gets a rate")
+        print("  limit and a plausibility bar, keeps its old state, and reports.")
+        return
+    if why and accept_batch:
+        print("  --accept-holds: writing %d hold(s) despite the rate limit, on purpose." % len(pending))
+
     n = 0
     for cid in sorted(skip):
         for pat in learned.get(cid, []):
@@ -513,12 +562,40 @@ def _selftest() -> int:
     T("CLEAN TWIN None inputs are treated as empty rather than throwing - a commodity with no learned patterns is normal",
       (not still) and (not incat) and hits == [], f"{still}/{incat}/{hits}")
 
+    # ---- the rate limit on the hold actuator (2026-09-09, backlog I93) --------------------------
+    # MUST FIRE: the founding hazard. One degraded guard run naming many commodities would have
+    # written a permanent hold for every one of them in a single pass.
+    T("MUST FIRE  a batch over the limit is REFUSED, and the existing file is kept",
+      should_refuse_hold_batch(25, 16) != "", should_refuse_hold_batch(25, 16))
+    T("and the refusal says how many, against how many already held",
+      "25" in should_refuse_hold_batch(25, 16) and "16" in should_refuse_hold_batch(25, 16),
+      should_refuse_hold_batch(25, 16))
+
+    # MUST NOT FIRE: an ordinary batch is allowed, or the actuator stops working entirely.
+    T("MUST NOT FIRE  a small batch is allowed", should_refuse_hold_batch(3, 16) == "",
+      should_refuse_hold_batch(3, 16))
+    T("MUST NOT FIRE  a batch exactly AT the limit is allowed, not refused",
+      should_refuse_hold_batch(MAX_NEW_HOLDS_PER_RUN, 16) == "",
+      should_refuse_hold_batch(MAX_NEW_HOLDS_PER_RUN, 16))
+    T("MUST FIRE  one over the limit is refused, so the boundary is where it says it is",
+      should_refuse_hold_batch(MAX_NEW_HOLDS_PER_RUN + 1, 16) != "", "not refused")
+
+    # MUST NOT FIRE: the FIRST batch against an empty file is not special-cased into a refusal - a
+    # brand-new holds file legitimately starts at zero.
+    T("MUST NOT FIRE  a first small batch against an empty holds file is allowed",
+      should_refuse_hold_batch(2, 0) == "", should_refuse_hold_batch(2, 0))
+
+    # CLEAN TWIN: the limit is the one written in the source, not one derived from the data it sees.
+    T("CLEAN TWIN  the limit is the constant declared above the run, not inferred",
+      MAX_NEW_HOLDS_PER_RUN == 10, str(MAX_NEW_HOLDS_PER_RUN))
+
     if fails:
         print(f"SELF-TEST FAIL: {len(fails)} case(s)")
         return 1
-    print("SELF-TEST PASS: 4 must-fire cases led by the founding one (a hold whose cause is still on "
-          "the board keeps its evidence), 2 must-not-fire, and 3 clean twins over empty boards, "
-          "case-insensitivity and None inputs")
+    print("SELF-TEST PASS: 15 case(s) resolved - 5 must-fire, 5 must-not-fire, 4 clean twins. Led by "
+          "the founding one (a hold whose cause is still on the board keeps its evidence) and, since "
+          "backlog I93, by the rate limit that refuses an implausibly large hold batch rather than "
+          "latching every one of them permanently in a single pass")
     return 0
 
 
@@ -531,6 +608,8 @@ def main() -> int:
     ap.add_argument("--recheck-holds", action="store_true",
                     help="report which held patterns are still held against anything. Read-only: "
                          "promotes nothing, clears nothing, and does not run the guard suite.")
+    ap.add_argument("--accept-holds", action="store_true",
+                    help="write a hold batch that exceeds the rate limit, on purpose (I93)")
     ap.add_argument("--selftest", action="store_true")
     args = ap.parse_args()
 
@@ -545,7 +624,7 @@ def main() -> int:
     holds = held()
 
     if args.gated:
-        return gated(learned, holds, args.max_rounds)
+        return gated(learned, holds, args.max_rounds, args.accept_holds)
 
     with open(CATALOG, encoding="utf-8-sig") as fh:
         catalog = json.load(fh)
