@@ -9260,3 +9260,57 @@ relevance, or query targeting, and readings 2 and 3 above are untouched. The sam
 the honest caveat from rung 1 stands unchanged: 1 click over 28 days is a sample of one, so any
 intervention will look like it worked, and an acceptance bar wants writing in impressions before any
 change ships.
+
+**RUNG 2, READING 2 - ANSWERED 2026-09-09. POSITION is the binding constraint, not click-through.
+Titles and snippets are the wrong thing to touch.**
+
+Harness `ops/seo_reach_position.py`, run at commit `f4e0608c2`. Two windows, because the shorter one
+could not carry the reading.
+
+| window | impressions read | coverage of page-level | below position 10 | reading |
+|---|---:|---:|---:|---|
+| 28 days | 95 | 32% | 54 of 95 (57%) | **M - does not settle it** |
+| **90 days** | **656** | **61%** | **581 of 656 (89%)** | **P - POSITION-BOUND** |
+
+Over 90 days: **73% of impressions land at position 51 or worse**, page 6 and beyond. Only 75 of 656
+reach page 1, and even a pessimistic 2% click-through predicts 1.5 clicks there, which is under the
+3 this harness requires before it will judge click-through at all. **So zero clicks is arithmetic.
+The pages are indexed (reading 1), crawled, ranked, and ranked too deep to be seen.**
+
+**The 28-day window reads M and that is not a contradiction - it is the honest state of a thin
+sample.** Its apparent page-1 concentration is largely ONE page, `chicken tikka masala burrito` at
+position 9 with 25 of its 95 impressions. The 90-day window is better powered and better covered, and
+is the one to quote.
+
+**COVERAGE IS PRINTED BECAUSE IT IS NOT 100%.** Search Console anonymises low-volume queries, so the
+query dimension carries 656 of the 1,078 impressions the page dimension reports over 90 days, 61%.
+The missing 422 are real traffic this reading cannot see, and what remains skews toward COMMON
+queries. Every figure above is over that subset.
+
+**WHAT GOOGLE THINKS THESE PAGES ARE FOR**, top queries at 90 days, and it is not nothing:
+`chicken tikka masala burrito` (27 imp, position 9), `budget travel` (18, 45.6), `free budgeting
+apps` (18, 65.6), `travel on a budget` (13, 23.5), `is renters insurance worth it` (11, 64.5), `how
+to read your credit card statement` (10, 77.5). **The finance lessons are ranking on genuinely
+relevant queries and doing it at positions 45 to 99.** That is a relevance-and-authority problem on
+real intent, not a targeting mistake.
+
+**TWO DEFECTS IN THIS HARNESS, both found and both fixed before the numbers above were taken.**
+1. The power check ran BEFORE the position reading, so a distribution 94% below page 1 came back
+   "cannot distinguish" because its page-1 slice was thin. Where impressions LAND is observed, not
+   inferred. Caught by the file's own must-fire.
+2. **A bound was used in the WRONG DIRECTION.** `CTR_GENEROUS` is an upper bound - right for "could
+   we have expected even one click?", wrong for declaring pages seen-and-not-clicked, which needs a
+   pessimistic floor. On the 28-day window the generous bound wrongly fired READING C, claiming
+   search appearance was the work. **The fixtures could not catch it, because they encoded the same
+   asymmetry the code did. The live distribution is what showed it.** READING C now requires a
+   conservative rate to predict at least 3 clicks.
+
+**WHAT IS NOW RULED OUT, across both readings.** Reading 1 ruled out admission: sitemaps, indexing
+requests, internal-linking-for-discovery. Reading 2 rules out search appearance: titles, meta
+descriptions, rich snippets. **Neither is the work.** What remains is ranking on competitive queries,
+which is authority and relevance, and is a slower and more expensive road than either of the two
+things that have been eliminated. That elimination is the value here.
+
+**THE CAVEAT THAT STILL GOVERNS ANY ACTION.** Zero clicks in 90 days across 656 read impressions
+means there is no click signal to improve against yet. Any acceptance bar wants stating in
+IMPRESSIONS and in POSITION, never in clicks, until clicks exist at all.
