@@ -54,6 +54,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\bot-paths.ps1') # Get-BotInputPaths/-BotServedPaths: the ONE ownership list, also read by push-data and the pre-commit hook
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\chain-verdict-lib.ps1') # Read-ChainVerdictStatus: the ONE reading of the guard verdict, shared with push-data
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-blob-lib.ps1') # Invoke-GitCaptured/Format-GitRefusal: a refused commit must keep the hook's own stderr (2026-09-09-a95022). Loaded HERE, not at the edge check below, because the commit stage runs first
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
@@ -449,12 +450,37 @@ if ($browser.Count) {
 # than the old "all browser stores are outstanding". Written only when something really is left.
 if ($browserUndone.Count) {
   $flag = Join-Path $OutDir ("browser-capture-due-$todayS.flag")
+  # THE OWNERSHIP RECORD HAS TO SURVIVE THE NEXT RUN (2026-09-09, queue 2026-09-09-e60137). This is ONE
+  # FILE PER DATE and each run rewrites it with only its OWN outstanding set, so a store deferred by an
+  # earlier run vanishes from it. Measured on 09-09: the 07:02 ad run wrote this naming Baker's, the 08:06
+  # daily run overwrote it naming Aldi and Walmart, and at 08:35 the ad-coverage watchers paged Baker's as
+  # an unowned gap because the only record that it had an owner had been erased 29 minutes earlier.
+  # `stores` keeps its exact meaning - what THIS run could not do - and `owned` accumulates store -> when
+  # it was FIRST deferred today, which is also what the 24h expiry must be measured from: keying it on the
+  # file's mtime would let another store's deferral refresh a week-old one and hide a real gap forever.
+  $ownedMap = @{}
+  if (Test-Path $flag) {
+    try {
+      $prevFlag = (Get-Content $flag -Raw -Encoding UTF8) | ConvertFrom-Json
+      if ($prevFlag -and $prevFlag.PSObject.Properties['owned'] -and $prevFlag.owned) {
+        foreach ($p in $prevFlag.owned.PSObject.Properties) { $ownedMap[[string]$p.Name] = [string]$p.Value }
+      } elseif ($prevFlag -and $prevFlag.PSObject.Properties['stores']) {
+        # a flag from before this change: its stores were deferred no later than its own mtime
+        $stamp = (Get-Item $flag).LastWriteTime.ToString('s')
+        foreach ($s in @($prevFlag.stores)) { if ($s) { $ownedMap[[string]$s] = $stamp } }
+      }
+    } catch { }   # an unreadable previous flag loses history, never the current run's record
+  }
+  $nowStamp = (Get-Date).ToString('s')
+  foreach ($s in $browserUndone) { if (-not $ownedMap.ContainsKey([string]$s)) { $ownedMap[[string]$s] = $nowStamp } }
   $body = @{
-    date = $todayS; kind = $Kind; stores = $browserUndone
+    date = $todayS; kind = $Kind; stores = $browserUndone; owned = $ownedMap
     note = ('These stores could NOT be driven automatically. Open ONE CHROME TAB PER STORE and work ' +
             'each store worklist in out\worklists\capture-<store>-<date>.json. Advance the cursor ' +
             'with Save-CaptureCursor only AFTER the capture lands. (Aldi is here by design: its pull ' +
-            'agent walks product slugs, not search terms - see pull-browser-stores.py ALDI_NOTE.)')
+            'agent walks product slugs, not search terms - see pull-browser-stores.py ALDI_NOTE.) ' +
+            '`stores` is what THIS run could not do; `owned` is every store deferred today and when it ' +
+            'was first deferred, which is what the ad-coverage watchers measure their 24h against.')
   } | ConvertTo-Json -Depth 4
   Set-Content -Path $flag -Value $body -Encoding UTF8
   Write-Output ''
@@ -688,6 +714,13 @@ if ($runDownstream -and -not $shipServed) {
 $paths = @($inputPaths + $(if ($shipServed) { $servedPaths } else { @() })) | Where-Object { Test-Path (Join-Path $repo $_) }
 Write-RunStatus 'publishing'
 $pushed = $false
+# $botCommitted IS DECLARED HERE, NOT INSIDE THE COMMIT BRANCH (2026-09-09, queue 2026-09-09-f0b5f2).
+# It is assigned only on the path that actually calls `git commit`, so on the size-gate path and the
+# no-changes path it was UNASSIGNED - and the two watchers below now read it. An unassigned variable is
+# $null in PS 5.1, which is falsey, so those paths would have read as "the commit did not land" when one
+# of them means "there was nothing to land". Declaring it false here and setting it true where the commit
+# succeeds makes both watchers answer about the thing they name.
+$botCommitted = $false
 $tmpIndex = $null; $prevIndex = $null; $indexHeld = $false
 try {
   # ---- A PRIVATE INDEX FOR THE BOT COMMIT (2026-09-06, PLAN-top5 area 3) ---------------------------
@@ -852,20 +885,53 @@ try {
   } elseif ($LASTEXITCODE -eq 0) {
     Write-Output 'commit: no pipeline changes to commit'
     $pushed = $true      # nothing to ship is not a failed ship
+    # AND NOTHING TO COMMIT IS NOT A FAILED COMMIT (2026-09-09, queue 2026-09-09-f0b5f2). The served-dirty
+    # watcher below asks "is what the chain wrote actually in HEAD?", and on this path the answer is yes:
+    # the add staged the served paths and git found them identical to HEAD. Leaving this false would make
+    # the watcher report a refusal that never happened, which is the exact defect being repaired.
+    $botCommitted = $true
   } else {
     $msg = "Daily pipeline: refresh prices + feed ($today) [$Kind]"
-    & git -C $repo -c user.name="smp-pipeline-bot" -c user.email="actions@users.noreply.github.com" commit -m $msg |
-      ForEach-Object { Write-Output ("commit: " + $_) }
+    # THROUGH Invoke-GitCaptured, NOT A STDOUT-ONLY PIPE (2026-09-09, queue 2026-09-09-a95022). The
+    # pre-commit hook writes its ENTIRE diagnosis to stderr - every echo in it is `>&2` - and this line
+    # used to pipe stdout alone, so on 2026-09-09 BOTH scheduled runs (07:02 ad, 08:35 daily) reported
+    # nothing but "commit: REFUSED (git exit 1)". Five distinct refusal exits collapsed into one sentence,
+    # and finding the one offending file cost a full scratch-index reproduction. It was
+    # grocery/out/json-readers-baseline.json, whose BOM a session's 05:45 read-then-write-back had
+    # stripped; the hook was RIGHT and the log simply could not say so.
+    # NO `2>&1` AND NO `2>$null` ANYWHERE NEAR THIS: this file runs under EAP=Stop, where redirecting a
+    # native child's stderr makes its first line a TERMINATING error - the trap documented three times
+    # above. Invoke-GitCaptured reads the streams off a Process and touches neither pipeline.
+    $cRes = Invoke-GitCaptured -Repo $repo -GitArgs @(
+      '-c', 'user.name=smp-pipeline-bot', '-c', 'user.email=actions@users.noreply.github.com',
+      'commit', '-m', $msg)
+    foreach ($cl in @(($cRes.stdout -split "`r?`n") | Where-Object { $_.Trim().Length })) { Write-Output ("commit: " + $cl) }
     # THE COMMIT'S EXIT CODE IS NOT A DECORATION (2026-09-06, PLAN-top5 area 3). The pre-commit hook
     # installed on 2026-09-05 can REFUSE this commit, and until today nothing here read the code: the run
     # would go straight on to fetch, rebase and push, ship whatever was already on main, and report a
     # successful publish. push-data.ps1 had the identical defect and it is what made the 09-05 sweep look
     # like a clean run. A refused commit is a failed lane and it must not be followed by a push.
-    $botCommitted = ($LASTEXITCODE -eq 0)
+    $botCommitted = ($cRes.rc -eq 0)
     if (-not $botCommitted) {
-      Write-Output ("commit: REFUSED (git exit " + $LASTEXITCODE + ") - a hook or git itself rejected this commit. NOT pushing; the working tree is untouched.")
+      $refusal = Format-GitRefusal -Rc $cRes.rc -Stderr $cRes.stderr
+      Write-Output ("commit: REFUSED (git exit " + $cRes.rc + ") - a hook or git itself rejected this commit. NOT pushing; the working tree is untouched.")
+      foreach ($rl in $refusal.transcript) { Write-Output $rl }
+      Write-Output ("commit: " + $refusal.summary)
       $failed += 'commit-refused'
-      try { Send-Alert -Subject "Daily pipeline commit REFUSED - $today" -Body ("capture-run.ps1 [$Kind] staged today's refresh and the commit was REFUSED (see grocery\out\logs\capture-run-$Kind-$today.log). Nothing was pushed, so the live board and feed are STALE. The pre-commit hook refuses a bot commit that stages a path outside lib\bot-paths.ps1, or a staged file that fails a bulk-edit invariant.") | Out-Null } catch {}
+      # WHAT IS ACTUALLY STALE, said accurately (2026-09-09). The old body claimed "the live board and feed
+      # are STALE", and on 09-09 that was wrong for the Ghost page: publish-deals-page ships to Ghost
+      # directly rather than through git, so the page was FRESH all morning. What a refused commit really
+      # strands is what Cloudflare deploys FROM THE REPO - public\board.json (the per-store chips) and
+      # public\smp-feed.json, which 583 recipe pages price off. Overstating is its own defect.
+      try {
+        Send-Alert -Subject "Daily pipeline commit REFUSED - $today" -Body (
+          "capture-run.ps1 [$Kind] staged today's refresh and the commit was REFUSED (see grocery\out\logs\capture-run-$Kind-$today.log).`n`n" +
+          $refusal.summary + "`n`n" +
+          "The hook's own words:`n" + (($refusal.transcript) -join "`n") + "`n`n" +
+          "Nothing was pushed, so public\board.json (the board's per-store chips) and public\smp-feed.json are STALE at the edge until this lands; the Ghost page itself publishes directly and is not affected.`n" +
+          "The pre-commit hook refuses a bot commit that stages a path outside lib\bot-paths.ps1, a staged file that fails a bulk-edit invariant, or a matching-rule change with no accepted soundness baseline."
+        ) | Out-Null
+      } catch {}
     }
     # ---- RELEASE THE PRIVATE INDEX BEFORE ANY REBASE. rebase and push must run against the REAL index;
     # a rebase under a temp index would resolve conflicts against a tree nobody is looking at.
@@ -937,7 +1003,16 @@ finally {
 # It runs only when the chain actually shipped ($shipServed), so a guards-blocked run - which stages
 # inputs only, on purpose - cannot trip it. No stderr redirect: this file runs under EAP=Stop, where
 # redirecting a native child's stderr turns its first line into a terminating error.
-if ($shipServed) {
+# IT ALSO HAS TO READ THE COMMIT OUTCOME (2026-09-09, queue 2026-09-09-f0b5f2). This block gated on
+# $shipServed ALONE and its alert hard-coded "The chain ran, guards passed and the bot commit went out".
+# On 2026-09-09 the commit was REFUSED one line above (daily log :646) and this fired anyway at :647,
+# naming 16 files and prescribing "Add the writer's output to $servedPaths" - a repair that would have
+# been inert, because all 16 were already in Get-BotServedPaths and were dirty for one reason only: the
+# commit that staged them was refused. A watcher that manufactures a CONFIDENT WRONG diagnosis is worse
+# than one that stays quiet, and it did it on the morning the operator was already busy with a real
+# hard fail. So: the founding 2026-09-02 check keeps its behaviour when the commit landed, and the
+# refused case says what actually happened and pages nobody, because commit-refused is already a lane.
+if ($shipServed -and $botCommitted) {
   $servedDirty = @(& git -C $repo status --porcelain -- $servedPaths | Where-Object { $_ })
   if ($servedDirty.Count) {
     Write-Output ('served-dirty: ' + $servedDirty.Count + ' tracked served file(s) still dirty after the chain''s commit: ' + (($servedDirty | Select-Object -First 8) -join ' | '))
@@ -948,6 +1023,9 @@ if ($shipServed) {
   } else {
     Write-Output 'served-dirty: none - every tracked served path the chain wrote was committed'
   }
+} elseif ($shipServed -and -not $botCommitted) {
+  $servedDirty = @(& git -C $repo status --porcelain -- $servedPaths | Where-Object { $_ })
+  Write-Output ('served-dirty: ' + $servedDirty.Count + ' tracked served file(s) dirty because the commit was REFUSED (or was never made - see the commit line above); this is not a $servedPaths gap and no served-dirty alert is sent')
 }
 # <<< SERVED-DIRTY BLOCK <<<
 
@@ -1090,7 +1168,21 @@ if ($shipServed -and $pushed) {
   # THE 2026-09-03 CASE, said out loud instead of alerting: the chain ran but deliberately did not ship the
   # served files (guards blocked), so public\** was never in the commit and there is nothing for the edge to
   # have picked up. A dirty working-tree feed here is expected, not evidence of a failed deploy.
-  Write-Output ('edge check skipped: ' + (Test-EdgeServesPushed -ShipServed $shipServed -CommittedGenerated 'n/a' -LiveGenerated 'n/a') + ' - the chain staged INPUTS only (shipServed=false), so no served file was pushed to verify. Readers keep the last good board.')
+  #
+  # PRINT THE PREDICATE IT ACTUALLY EVALUATED (2026-09-09, queue 2026-09-09-f0b5f2). This line used to
+  # assert the literal "(shipServed=false)" and hand Test-EdgeServesPushed `-ShipServed $shipServed`. On
+  # 2026-09-09 $shipServed was TRUE and $pushed was false, so the branch was reached with the wrong name in
+  # its text - and worse, the pure function was handed ShipServed=$true with 'n/a' on BOTH sides, so it ran
+  # past its skipped arm, compared 'n/a' with 'n/a' and returned **ok**. The daily log :648 therefore reads
+  # "edge check skipped: ok" - a check that never happened, reporting a pass. Could-not-evaluate is never a
+  # pass. So: pass the predicate that means "there is something at the edge to verify", which requires the
+  # commit to have LANDED, and print all three flags rather than a guessed one.
+  $edgeVerifiable = ($shipServed -and $botCommitted -and $pushed)
+  $edgeWhy = if (-not $shipServed) { 'the chain staged INPUTS only, so no served file was pushed to verify' }
+             elseif (-not $botCommitted) { 'the bot commit was REFUSED, so public\** never reached HEAD and there is nothing at the edge to verify' }
+             else { 'the push did not land, so the edge cannot be serving this run yet' }
+  Write-Output ('edge check skipped: ' + (Test-EdgeServesPushed -ShipServed $edgeVerifiable -CommittedGenerated 'n/a' -LiveGenerated 'n/a') +
+                (' - shipServed={0} botCommitted={1} pushed={2}: {3}. Readers keep the last good board.' -f $shipServed, $botCommitted, $pushed, $edgeWhy))
 }
 
 # ---- ASSERT THE FEED TRULY REFRESHED (was run-daily-local's assert) ------------------------------------

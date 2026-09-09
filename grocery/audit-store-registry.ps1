@@ -105,6 +105,46 @@ function Get-StoreNamesIn([string]$text, [string[]]$Names) {
   return @{ hit = $hit; missing = $missing }
 }
 
+# ---- A FIXTURE REGISTERS ITSELF, IN PLACE (2026-09-09, queue 2026-09-09-34557a) ------------------------
+#
+# THE SHAPE, and it has now fired five times: 2026-08-31-6e6335, 2026-09-03-494974, 2026-09-05-17ebe3 and
+# 2026-09-09-34557a are all "store-registry drift - 1 issue(s)", every one a newly written must-fire or
+# clean-twin fixture that names a subset of stores because those are the stores the case is ABOUT. The
+# register that exempts them, stores.json allowed_subsets, is a SEPARATE hand-kept file, so an entry can
+# only ever be written AFTER the fixture has already paged. Every new fixture this estate writes is
+# therefore guaranteed to produce exactly one false ops alert, and the register also accumulates entries
+# that outlive their fixture - the ORPHANED EXEMPTION class this same script already checks for.
+#
+# So let the fixture carry its own exemption. Registration then happens when the fixture is written, it
+# cannot lag by an alert, and it dies with the fixture instead of orphaning.
+#
+# SCOPED, DELIBERATELY, AND clean twin (b) IS WHAT KEEPS IT SCOPED. The marker is honoured ONLY for a
+# finding that sits inside a STRING LITERAL in a test- or measure- file - the identical condition the
+# UNREGISTERED-FIXTURE hint below already uses. A marker in production code is ignored, because a comment
+# that can silence a drift guard anywhere is not a registration scheme, it is a bypass.
+function Test-InlineSubsetMarker {
+  <#
+    .SYNOPSIS Does a '# store-subset-ok: <reason>' comment sit on the contiguous comment block directly
+              above line $Line?
+    .DESCRIPTION Separated out so -SelfTest drives the real resolver rather than a paraphrase of it.
+              The walk stops at the first line that is neither a comment nor blank, so the marker is
+              LOCAL to the literal it registers and cannot reach across a file. A REASON is required:
+              an exemption nobody had to justify is the thing allowed_subsets already gets wrong.
+  #>
+  param([string[]]$Lines, [int]$Line, [int]$MaxWalk = 12)
+  if (-not $Lines -or $Line -lt 2) { return $false }
+  $i = $Line - 2                      # $Line is 1-based; start on the line directly above
+  $walked = 0
+  while ($i -ge 0 -and $walked -lt $MaxWalk) {
+    $t = ([string]$Lines[$i]).Trim()
+    if ($t.Length -eq 0) { $i--; $walked++; continue }
+    if (-not $t.StartsWith('#')) { return $false }        # the comment block ended: no marker here
+    if ($t -match '^#\s*store-subset-ok:\s*\S') { return $true }
+    $i--; $walked++
+  }
+  return $false
+}
+
 function Get-StoreListDrift {
   <#
     .SYNOPSIS Store-list drift findings for ONE .ps1 file, statement-scoped.
@@ -133,7 +173,10 @@ function Get-StoreListDrift {
 
   $reported = @{}
   $ln = 0; $inBlock = $false
-  foreach ($line in [IO.File]::ReadAllLines($Path)) {
+  # HELD, not re-read: the inline-marker check has to look at the lines ABOVE a finding, and re-reading
+  # the file per finding would also let it see a different file than the one the AST was parsed from.
+  $allLines = [IO.File]::ReadAllLines($Path)
+  foreach ($line in $allLines) {
     $ln++
     $t = $line.TrimStart()
     if ($inBlock) { if ($t -match '#>') { $inBlock = $false }; continue }   # block-comment prose
@@ -169,6 +212,22 @@ function Get-StoreListDrift {
           ($code.IndexOf($needle, [StringComparison]::Ordinal) -ge 0)) { $allowed = $true; break }
     }
     if ($allowed) { continue }
+
+    # IS IT A FIXTURE? Computed HERE rather than below, because the inline marker is honoured under
+    # exactly this condition and the HINT text below is the same judgement written out for a human.
+    $isLiteral = ($u.Count -gt 0 -and (
+                    $u[0] -is [System.Management.Automation.Language.StringConstantExpressionAst] -or
+                    $u[0] -is [System.Management.Automation.Language.ExpandableStringExpressionAst])) -or
+                 ($code -match "=\s*['""]")
+    $isFixtureFile = ($FileLabel -match '^(test|measure)-')
+    # THE INLINE REGISTRATION. Both halves are required: a string literal in a test-/measure- file AND a
+    # '# store-subset-ok: <reason>' comment on the block directly above it. A marker in production code,
+    # or on a real hardcoded roster, is ignored - clean twin (b) in -SelfTest exists to prove that.
+    if ($isLiteral -and $isFixtureFile -and (Test-InlineSubsetMarker -Lines $allLines -Line $scopeLine)) {
+      $reported[$scopeLine] = $true
+      continue
+    }
+
     $reported[$scopeLine] = $true
     $msg = ("code: {0}:{1} names {2} store(s) but is missing {3}" -f $FileLabel, $scopeLine, $r.hit, ($r.missing -join ', '))
     # UNREGISTERED-FIXTURE HINT (2026-09-03, queue 2026-09-03-494974). A code-scanning guard cannot tell a
@@ -178,13 +237,12 @@ function Get-StoreListDrift {
     # instance of the shape. So when a finding sits inside a STRING LITERAL in a test- or measure- file,
     # say so and hand over the entry to paste. The finding still COUNTS and is never suppressed: this only
     # appends guidance, so the issue count is identical with and without it.
-    $isLiteral = ($u.Count -gt 0 -and (
-                    $u[0] -is [System.Management.Automation.Language.StringConstantExpressionAst] -or
-                    $u[0] -is [System.Management.Automation.Language.ExpandableStringExpressionAst])) -or
-                 ($code -match "=\s*['""]")
-    if ($isLiteral -and $FileLabel -match '^(test|measure)-') {
-      $msg += ("`n        HINT: this looks like an UNREGISTERED FIXTURE, not a hardcoded store list - it sits inside a string literal in a $($Matches[1])- file. If the subset is legitimate (the region under test does not branch on store), register it rather than editing the fixture; a frozen fixture edited to quiet a different guard is how a watcher goes blind. Paste into stores.json allowed_subsets:" +
-               "`n          { `"file`": `"$FileLabel`", `"contains`": `"<a stable substring from INSIDE the literal, not the assignment prefix>`", `"reason`": `"<why this subset proves the contract for all 7 - name the region under test and show it never branches on store>`" }")
+    if ($isLiteral -and $isFixtureFile) {
+      $msg += ("`n        HINT: this looks like an UNREGISTERED FIXTURE, not a hardcoded store list - it sits inside a string literal in a test-/measure- file. If the subset is legitimate (the region under test does not branch on store), register it rather than editing the fixture; a frozen fixture edited to quiet a different guard is how a watcher goes blind." +
+               "`n        PREFERRED, because it cannot lag by an alert and it dies with the fixture: put ONE comment line directly above the literal -" +
+               "`n          # store-subset-ok: <why this subset proves the contract for all 7 - name the region under test and show it never branches on store>" +
+               "`n        Or, if the exemption has to live outside the file, paste into stores.json allowed_subsets:" +
+               "`n          { `"file`": `"$FileLabel`", `"contains`": `"<a stable substring from INSIDE the literal, not the assignment prefix>`", `"reason`": `"<why this subset proves the contract for all 7>`" }")
     }
     [void]$found.Add($msg)
   }
@@ -272,6 +330,65 @@ if ($SelfTest) {
     $al = @(Get-StoreListDrift -Path $bad -FileLabel 'bad.ps1' -Names $fxNames -Subsets @(@{ file = 'bad.ps1'; contains = '$STORES = @(' }))
     if ($al.Count -ne 0) { Write-Output ("FAIL  an allowed_subsets entry did not silence its line: " + ($al -join ' | ')); $fail++ }
     else { Write-Output 'ok    allowed_subsets still silences a documented subset' }
+
+    # ---- INLINE FIXTURE REGISTRATION (2026-09-09, queue 2026-09-09-34557a) ---------------------------
+    # MUST FIRE, and it is 34557a's own founding shape: a test- file carrying a 4-store literal with NO
+    # marker is still reported. The marker is an opt-in, not a file-type exemption.
+    $fxNoMark = Join-Path $fx 'test-x.ps1'
+    Set-Content $fxNoMark -Encoding UTF8 -Value @(
+      '# a clean twin for some class, whose rows happen to be four stores',
+      "`$sbTwin = '{""a"":""Baker''s"",""b"":""Family Fare"",""c"":""Fareway"",""d"":""Walmart""}'")
+    $mNo = @(Get-StoreListDrift -Path $fxNoMark -FileLabel 'test-x.ps1' -Names $fxNames -Subsets @())
+    if ($mNo.Count -ne 1) { Write-Output ("FAIL  an UNMARKED fixture literal was not reported (this is 34557a itself): " + ($mNo -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST FIRE  an unmarked 4-store literal in a test- file is still reported' }
+    # and the finding must hand over the inline marker as the preferred repair, or nobody learns it exists
+    if ($mNo.Count -eq 1 -and $mNo[0] -notmatch '# store-subset-ok:') {
+      Write-Output 'FAIL  the finding does not offer the inline marker, so the register keeps lagging by an alert'; $fail++
+    } else { Write-Output 'ok    the finding hands over the inline marker as the preferred registration' }
+
+    # CLEAN TWIN (a): the same file WITH the marker directly above the literal stays silent.
+    $fxMark = Join-Path $fx 'test-y.ps1'
+    Set-Content $fxMark -Encoding UTF8 -Value @(
+      '# a clean twin for some class, whose rows happen to be four stores',
+      '# store-subset-ok: real board rows, the region under test never branches on store',
+      "`$sbTwin = '{""a"":""Baker''s"",""b"":""Family Fare"",""c"":""Fareway"",""d"":""Walmart""}'")
+    $mYes = @(Get-StoreListDrift -Path $fxMark -FileLabel 'test-y.ps1' -Names $fxNames -Subsets @())
+    if ($mYes.Count -ne 0) { Write-Output ("FAIL  a MARKED fixture literal still reported: " + ($mYes -join ' | ')); $fail++ }
+    else { Write-Output 'ok    CLEAN TWIN a marked fixture literal registers itself in place and is silent' }
+
+    # CLEAN TWIN (b), AND THIS IS THE ONE THAT KEEPS THE SCHEME HONEST: the SAME marker in a NON-test file
+    # must still be reported. A comment that silences a drift guard anywhere is a blanket bypass, not a
+    # registration scheme, and this is the case that would catch it becoming one.
+    $fxProd = Join-Path $fx 'build-x.ps1'
+    Set-Content $fxProd -Encoding UTF8 -Value @(
+      '# store-subset-ok: trying to use the fixture marker on production code',
+      "`$STORES = @('Hy-Vee', 'Aldi', 'Family Fare', 'Fareway')")
+    $mProd = @(Get-StoreListDrift -Path $fxProd -FileLabel 'build-x.ps1' -Names $fxNames -Subsets @())
+    if ($mProd.Count -ne 1) { Write-Output ("FAIL  the marker silenced a PRODUCTION store list - it has become a blanket bypass: " + ($mProd -join ' | ')); $fail++ }
+    else { Write-Output 'ok    CLEAN TWIN the marker is ignored in a non-test file, so it cannot become a bypass' }
+
+    # A MARKER WITH NO REASON IS NOT A REGISTRATION. allowed_subsets already carries entries nobody can
+    # review; an inline scheme that accepted a bare token would import the same defect.
+    $fxBare = Join-Path $fx 'test-z.ps1'
+    Set-Content $fxBare -Encoding UTF8 -Value @(
+      '# store-subset-ok:',
+      "`$sbTwin = '{""a"":""Baker''s"",""b"":""Family Fare"",""c"":""Fareway"",""d"":""Walmart""}'")
+    $mBare = @(Get-StoreListDrift -Path $fxBare -FileLabel 'test-z.ps1' -Names $fxNames -Subsets @())
+    if ($mBare.Count -ne 1) { Write-Output ("FAIL  a marker with NO REASON was honoured: " + ($mBare -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST FIRE  a marker with no reason is not a registration' }
+
+    # THE MARKER IS LOCAL. A marker attached to one literal must not reach a DIFFERENT literal further
+    # down the file, or one fixture's exemption silences every fixture written after it.
+    $fxFar = Join-Path $fx 'test-w.ps1'
+    Set-Content $fxFar -Encoding UTF8 -Value @(
+      '# store-subset-ok: this registers the FIRST literal only',
+      "`$one = '{""a"":""Baker''s"",""b"":""Family Fare"",""c"":""Fareway"",""d"":""Walmart""}'",
+      '$unrelated = 1',
+      "`$two = '{""a"":""Baker''s"",""b"":""Family Fare"",""c"":""Fareway"",""d"":""Hy-Vee""}'")
+    $mFar = @(Get-StoreListDrift -Path $fxFar -FileLabel 'test-w.ps1' -Names $fxNames -Subsets @())
+    if ($mFar.Count -ne 1 -or $mFar[0] -notmatch 'test-w\.ps1:4') {
+      Write-Output ("FAIL  the marker reached past its own literal: " + ($mFar -join ' | ')); $fail++
+    } else { Write-Output 'ok    MUST FIRE  a marker does not reach a later, unmarked literal' }
 
     # ---- ORPHANED EXEMPTIONS (2026-09-05, queue 2026-09-05-17ebe3) -------------------------------------
     # FOUNDING BUG, frozen: on 2026-09-05 four of the thirty live allowed_subsets entries could not match

@@ -1,0 +1,427 @@
+{
+    "generated":  "2026-09-09T10:28:20",
+    "round":  1,
+    "board_week":  "comparison-2026-09-09 (built 08:11:04) - BUILT BEFORE bakers-deals-2026-09-09.json landed at 09:10:33, so its Baker\u0027s ad cells price off the EXPIRED 2026-09-02 ad falling back to everyday; a rebuild happens in this run and every Baker\u0027s-adjacent cell is re-measured after it, not assumed",
+    "queue_ids_seen":  [
+                           "2026-09-09-a95022",
+                           "2026-09-09-f0b5f2",
+                           "2026-09-09-9b1f92",
+                           "2026-09-09-e60137",
+                           "2026-09-09-04e0af",
+                           "2026-09-09-34557a"
+                       ],
+    "routing_artifact":  "plan-2026-09-09.routing.json",
+    "tree_state":  "HEAD 1ccdab0fd (09:44:50); working tree 116 modified + 35 untracked at 10:05, mostly the two refused pipeline runs\u0027 output plus other sessions\u0027 in-flight work (graph\\, sidecar\\, ops\\, meal-prep\\, site\\). Nothing here is corruption; nothing is reverted; every staging instruction below names explicit paths and never a sweep add.",
+    "items":  [
+                  {
+                      "queue_id":  "2026-09-09-a95022",
+                      "subject":  "Daily pipeline commit REFUSED - 2026-09-09",
+                      "classification":  "infra",
+                      "evidence":  [
+                                       "capture-run-ad-2026-09-09.log:63-67 (07:02:36 rc=1) and capture-run-daily-2026-09-09.log:646-653 (08:35:06 rc=1) both end \u0027commit: REFUSED (git exit 1) - a hook or git itself rejected this commit\u0027: BOTH scheduled runs were refused, not one, and neither transcript carries a single line of the hook\u0027s diagnosis - the log goes straight from \u0027prompt-sync rc=0\u0027 to \u0027commit: REFUSED\u0027.",
+                                       "REPRODUCED in a scratch index (GIT_INDEX_FILE under the scratchpad, git read-tree HEAD, then exactly capture-run\u0027s add set from lib\\bot-paths.ps1): the ad shape stages 118 paths (91 under grocery/out, 16 under graph/identity, the ledgers), the daily shape 134 (the same plus 16 served paths). In BOTH, the hook\u0027s first exit fires: ops\\verify-bulk-edit.ps1 -Staged rc=1 with exactly ONE finding, \u0027BOM CHANGED grocery/out/json-readers-baseline.json - a read/write pair stripped or added a byte-order mark\u0027. verify-bot-commit-scope rc=0 (\u0027all 118 / 134 staged path(s) are inside lib\\bot-paths.ps1\u0027), verify-commodities-gate rc=0 (\u0027not applicable\u0027). The hook itself, run through bash with stderr captured to a file: rc=1, \u0027pre-commit: BLOCKED. The staged set fails a bulk-edit invariant\u0027.",
+                                       "The file: HEAD (69516845e, 2026-09-05) begins EF BB BF, 160 bytes; the working tree begins 7B 0D 0A, 162 bytes, mtime 2026-09-09 05:45:24, content otherwise identical (generated still 2026-09-05T15:56:28, count 0; the +2 bytes are CRLF vs LF, which git normalises on add). Only grocery\\audit-json-readers.ps1:174 names this file, and both of its write paths (:180, :203) use Set-Content -Encoding UTF8, which under PS 5.1 writes a BOM and refreshes \u0027generated\u0027 - neither can produce this file. The only repo files written between 05:43 and 05:48:30 are ops\\audit-one-way-actuators.ps1 (05:44:04), this baseline (05:45:24) and grocery\\audit-json-readers.ps1 (05:47:41), committed as a45bc1008 at 05:48:02: a content-preserving, BOM-stripping read-then-write-back by that session.",
+                                       "Which reader surfaces are stale, per surface (all read 10:00-10:10 with cache-busting query strings): the Ghost page www.thriftycrew.com/omaha-grocery-prices/ is FRESH (\u0027updated Sep 9\u0027, Baby Back Ribs $3.14/lb Sam\u0027s = the 08:11 board; publish-deals-page ships to Ghost directly, not through git). feed.thriftycrew.com/smp-feed.json serves generated 2026-09-08T11:40:41 = HEAD:public/smp-feed.json (54326d19e) while the working tree holds 2026-09-09T08:13:19: STALE, and the 583 recipe pages price off it. feed.thriftycrew.com/board.json = HEAD bytes, whose baby-back-ribs chip is Baker\u0027s $2.99 from the 09-02 ad that EXPIRED 09-08, while the working-tree chip is Sam\u0027s $3.14: STALE and showing an expired sale. The alert\u0027s \u0027the live board and feed are STALE\u0027 is wrong for the page and right for the chips and the feed.",
+                                       "Verdict: the refusal is CORRECT at the invariant (a tracked JSON under out\\ lost its BOM, exactly the read/write-pair class verify-bulk-edit exists for) and MISATTRIBUTED (the pipeline did not write the file; it stages grocery/out as a whole directory and inherited a session\u0027s edit). The hook is not weakened. What was broken is that the artifact a human is sent to read could not say WHY, across five different refusal causes."
+                                   ],
+                      "surface_fix":  {
+                                          "what":  "restore the BOM on the one file the hook named; its content already equals HEAD",
+                                          "files":  [
+                                                        "grocery/out/json-readers-baseline.json"
+                                                    ],
+                                          "exact_change":  "git -C C:\\Codex\\ThriftyCrew checkout -- grocery/out/json-readers-baseline.json  (explicit path; working-tree content equals HEAD apart from the BOM and line endings, so nothing is lost). Then re-run the scratch-index reproduction: ops\\verify-bulk-edit.ps1 -Staged over the bot\u0027s add set must print \u00270 finding(s)\u0027. FIRST re-read the file\u0027s first three bytes: if a session already rewrote it with a BOM, this step is done."
+                                      },
+                      "root_cause":  "capture-run.ps1:857-866 runs `git commit` through a stdout-only pipe and reads $LASTEXITCODE; the pre-commit hook writes its ENTIRE diagnosis to stderr (every echo in .git/hooks/pre-commit is \u003e\u00262, and it discards the checkers\u0027 own stderr with 2\u003e/dev/null), and a -WindowStyle Hidden transcript never sees a native child\u0027s stderr. Five distinct refusal exits (two missing checkers, a bulk-edit invariant, a scope breach, an unreviewed rule change) plus git\u0027s own errors all collapse into one sentence, so a refusal costs a full reproduction instead of a glance; lib\\pipeline-commit.ps1:150 (`commit ... | Out-Null`) has the identical blind spot. One level up: the bot stages grocery/out as a whole directory, so any session\u0027s edit to any of the roughly 300 tracked entries under out\\ becomes the pipeline\u0027s refusal on every scheduled run until a human finds the file, and today nothing told the human which file.",
+                      "root_fix":  {
+                                       "what":  "capture the commit\u0027s stderr and put it in the transcript and the alert, without 2\u003e\u00261 and without an EAP=Stop redirect",
+                                       "files":  [
+                                                     "lib/git-blob-lib.ps1",
+                                                     "grocery/capture-run.ps1",
+                                                     "lib/pipeline-commit.ps1"
+                                                 ],
+                                       "exact_change":  "add Invoke-GitCaptured -Repo \u003cpath\u003e -GitArgs \u003cstring[]\u003e to lib\\git-blob-lib.ps1 using System.Diagnostics.ProcessStartInfo (FileName git; UseShellExecute $false; RedirectStandardOutput and RedirectStandardError $true; CreateNoWindow $true; the child inherits GIT_INDEX_FILE from the environment exactly as today) returning @{ rc; stdout; stderr }; read stderr via ReadToEndAsync (or BeginErrorReadLine) BEFORE WaitForExit so a long hook output cannot deadlock the pipe. capture-run.ps1:857 and lib\\pipeline-commit.ps1:150 call it for the commit; on rc -ne 0 they Write-Output every stderr line prefixed \u0027commit:hook\u003e \u0027 into the transcript, put the first 20 stderr lines in the REFUSED alert body, and extract the paths named on lines matching \u0027BOM CHANGED|PARSE FAIL|DEPENDENCY|FROZEN LITERAL|REFUSING|BLOCKED\u0027 into one \u0027files named by the hook:\u0027 line so the alert says WHICH FILE. No `2\u003e\u00261` and no `2\u003e$null` anywhere near it: under PS 5.1 with EAP=Stop the first stderr line becomes a terminating error, the trap capture-run documents three times."
+                                   },
+                      "blast_radius":  {
+                                           "measured_as":  "routing",
+                                           "measured_by":  "every `git ... commit` call site in the estate\u0027s committers: grocery/capture-run.ps1:857 and lib/pipeline-commit.ps1:150 (both pipe stdout only); the hook\u0027s five refusal exits enumerated from .git/hooks/pre-commit; scratch-index reproduction of both staging shapes (118 and 134 paths). No matching rule changes and no board cell moves.",
+                                           "affected_now":  2,
+                                           "names":  [
+                                                         "grocery/capture-run.ps1:857",
+                                                         "lib/pipeline-commit.ps1:150"
+                                                     ],
+                                           "risk":  "the helper changes how git\u0027s streams are READ, never what is staged or committed; the private-index pattern, the size gate, the resync loop and the push loop are untouched. The one real hazard is reading stderr after WaitForExit (pipe deadlock on a chatty hook) - read it asynchronously.",
+                                           "cell_effects":  [
+
+                                                            ]
+                                       },
+                      "claimed_by_earlier":  [
+
+                                             ],
+                      "freshness":  "measured 2026-09-09 10:00-10:25 against HEAD 1ccdab0fd with the tree dirty (116 modified / 35 untracked); the scratch staging set was 118 (ad) / 134 (daily) paths and WILL differ when re-run, because the tree moves under it (Family Fare sweep every 3 h). Re-read grocery\\out\\json-readers-baseline.json\u0027s first three bytes before acting.",
+                      "proof":  {
+                                    "guard_or_fixture":  "lib\\git-blob-lib.ps1 -SelfTest (two new cases) + grocery\\test-commit-size-gate.ps1 + ops\\verify-bulk-edit.ps1 -SelfTest (unchanged, must still fire its BOM must-fire)",
+                                    "must_fire_case":  "frozen: a throwaway repo whose .git/hooks/pre-commit writes \u0027HOOK-SAYS-NO grocery/out/x.json\u0027 to stderr and exits 1 - Invoke-GitCaptured returns rc=1 with that line in .stderr, the caller\u0027s transcript carries \u0027commit:hook\u003e HOOK-SAYS-NO grocery/out/x.json\u0027, and the composed alert body names grocery/out/x.json",
+                                    "clean_twin":  "the same throwaway repo with a hook that exits 0: rc=0, .stderr empty, HEAD advanced by exactly one commit, no alert composed; and ops\\verify-bulk-edit.ps1 -SelfTest still exits 0 with its BOM must-fire firing, proving the invariant was not weakened to get the commit through",
+                                    "commands":  [
+                                                     "powershell -File lib\\git-blob-lib.ps1 -SelfTest",
+                                                     "powershell -File grocery\\test-commit-size-gate.ps1",
+                                                     "powershell -File ops\\verify-bulk-edit.ps1 -SelfTest",
+                                                     "powershell -File ops\\run-gates.ps1  (exit 0, never 3)"
+                                                 ]
+                                },
+                      "rollback":  "revert the helper and the two call-site hunks; the BOM restore is a checkout of HEAD bytes and needs no undo",
+                      "do_not_touch":  [
+                                           ".git/hooks/pre-commit and ops/install-hooks.ps1",
+                                           "ops/verify-bulk-edit.ps1\u0027s BOM check or any of its finding classes",
+                                           "the whole-directory \u0027grocery/out\u0027 entry in lib\\bot-paths.ps1 (the 2026-08-23 measurement: an allowlist would silently untrack 269 things)",
+                                           "never a sweep add; stage explicit paths"
+                                       ],
+                      "resolution_note":  "Both scheduled runs were refused by the pre-commit hook\u0027s bulk-edit check on ONE file: grocery/out/json-readers-baseline.json lost its BOM in a session\u0027s 05:45 rewrite and the bot stages grocery/out wholesale. The hook was right; the log could not say so because the commit step captured no stderr. BOM restored from HEAD; git commit now runs through Invoke-GitCaptured in capture-run and pipeline-commit so a refusal logs the hook\u0027s own lines and the alert names the file. The Ghost page was never stale; smp-feed and board.json at the edge were (one build behind, with an expired Baker\u0027s chip) and re-ship on this run\u0027s rebuild.",
+                      "publish_batch":  1,
+                      "status":  "done",
+                      "premise_verified":  "TRUE, checked four ways. (1) The file: worktree bytes were 7b 0d 0a (no BOM, CRLF, 162 bytes), HEAD blob ef bb bf 7b 0a (BOM, LF, 160 bytes), and with the BOM and CRs stripped both sides hash identically (sha256 7fd65c10786ff7126bbad9f032d9ef327b71c9681e1ef985e4ad70c8476b90fe), so nothing was lost by restoring HEAD. Restored with git checkout -- and proved byte-identity by piping a FRESH git cat-file -p HEAD:grocery/out/json-readers-baseline.json into cmp, never against my own output. (2) Scratch-index reproduction re-run under GIT_INDEX_FILE: the ad shape staged 116 paths and the daily shape 132, and ops\\verify-bulk-edit.ps1 -Staged printed \"0 finding(s)\" with exit 0 on both. (3) Both transcripts confirm the refusal and its silence: capture-run-ad-2026-09-09.log:63 at 07:02:36 and capture-run-daily-2026-09-09.log:646 at 08:35:06 both read \"commit: REFUSED (git exit 1)\" and neither carries one line of the hook\u0027s diagnosis. (4) verify-bulk-edit -SelfTest still exits 0 with its BOM must-fire firing, so the invariant was not weakened to get the commit through.",
+                      "deviation":  "THE DISPATCH\u0027S DISCOVERED DEFECT IS A FALSE PREMISE, and no change was made for it. Claim: \"capture-run.ps1 cites a lib\\native-lib.ps1 that does not exist.\" Measured: capture-run.ps1 names 32 distinct .ps1 basenames and 31 resolve. native-lib.ps1 resolves to grocery\\native-lib.ps1, a sibling of capture-run.ps1, and the single mention at :753 is prose provenance rather than a dependency (capture-run calls no Invoke-Native at all). The strings \"lib\\native-lib\" and \"lib/native-lib\" do not occur anywhere in the main tree. The one basename that does not resolve is run-daily-local.ps1, retired 2026-08-22 to grocery\\archive\\retired-2026-08-22\\, and all five of its mentions in capture-run.ps1 state outright that it was retired and name where its jobs went, so they are deliberate history and not a stale reference. Editing correct prose to satisfy an unmeasured claim would have been the change nobody measured, so it was recorded instead.\n\nTWO ADDITIONS BEYOND THE PLAN, both forced by the work. (a) The REFUSED alert body said \"the live board and feed are STALE\", which the plan\u0027s own evidence shows was wrong for the Ghost page: publish-deals-page ships to Ghost directly rather than through git, so the page was fresh all morning. The body now names what a refused commit actually strands, public\\board.json and public\\smp-feed.json, and says the Ghost page is unaffected. (b) The frozen fixture strings in lib\\git-blob-lib.ps1 quote the hook\u0027s own stderr, which spells grocery/out paths, and ops\\audit-cross-module-reach.ps1 counted them as ten NEW cross-module reaches and its ratchet ROSE 133 -\u003e 143. Every one of the ten was mine and every one was fixture text, not a read. The ratchet was NOT raised. That detector had already been refined the same day for the same shape (\"AN ENTRY POINT IS NOT A DATA REACH\", 2026-09-09) rather than by moving the baseline, and its own line 191 already states the principle (\"a detector must never scan itself: its own fixtures are full of the literals it hunts\"). Following that precedent, a site whose line carries \"# reach-fixture-ok: \u003creason\u003e\" is no longer counted; the marker is opt-in, per line, requires a reason, and no line in the tree carried it when it was added, so the measured 133 is untouched. Four new self-test cases cover it, including a MUST FIRE that an unmarked fixture literal is still counted and a MUST FIRE that the marker does not reach the next line. The audit now reads code=133 base=133, exit 0.",
+                      "shipped_commit":  null
+                  },
+                  {
+                      "queue_id":  "2026-09-09-f0b5f2",
+                      "subject":  "Daily chain left served files uncommitted - 2026-09-09",
+                      "classification":  "infra",
+                      "evidence":  [
+                                       "capture-run.ps1:940 gates the served-dirty block on `if ($shipServed)` alone; $botCommitted (set at :864 from the commit\u0027s exit code) is never read by it, and the alert body at :946 hard-codes \u0027The chain ran, guards passed and the bot commit went out\u0027. On this run the commit was REFUSED - daily log :646, one line above the served-dirty line at :647.",
+                                       "All 16 files in the alert are inside Get-BotServedPaths (Test-BotPathOwned true for 16 of 16: meal-prep/cheapnow-data.js, db/costed.json, db/recipes/cowboy-pork-and-beans-biscuit-bake.json, dinner-data.js, free-rotation.json, ingredient-map.json, pipeline/v2-perserving.json, v2-perserving.prev.json, recipes-db.json, public/board.json, free-dinners.json, price-history.json, share/omaha-drops.png, smp-feed.json, site/tools/cheap-dinners-tool.html, dinner-tonight-tool.html), and the daily-shape staging reproduction stages every one of them. They are dirty because the commit that staged them was refused, not because a writer is missing from the list: the alert\u0027s prescribed repair (\u0027Add the writer\u0027s output to $servedPaths\u0027) would have been inert.",
+                                       "The edge line at :1093 is the same defect from the other end: it prints the literal \u0027shipServed=false\u0027 from the `elseif ($runDownstream)` branch, which is reached whenever `-not ($shipServed -and $pushed)`. On this run shipServed was TRUE (the served-dirty block, gated on it, ran) and $pushed was false; the line names the wrong variable, and Test-EdgeServesPushed printed \u0027ok\u0027 for a check that never happened because it was handed ShipServed=$true with \u0027n/a\u0027 on both sides. The two lines are not two views of one intended behaviour; they are two watchers that both assume the commit landed, one on each side of the REFUSED line that says it did not."
+                                   ],
+                      "surface_fix":  {
+                                          "what":  "nothing to stage; the 16 files ship on this run\u0027s rebuild once a95022\u0027s BOM restore lets the commit through",
+                                          "files":  [
+
+                                                    ],
+                                          "exact_change":  "none - no $servedPaths change"
+                                      },
+                      "root_cause":  "two post-commit watchers read $shipServed as if it implied the commit succeeded. Both were written the day their shape appeared (served-dirty 2026-09-02, edge decision 2026-09-03), both are fixtured only on runs where the commit landed (test-commit-size-gate drives $shipServed true and false and nothing else), and neither has a case where the commit was refused - so a refused commit turns two watchers into two confident wrong diagnoses, one of which prescribes an edit to the wrong file. A guard that manufactures a confident wrong answer is worse than one that stays quiet.",
+                      "root_fix":  {
+                                       "what":  "branch both watchers on the commit outcome and print the predicate they actually evaluated",
+                                       "files":  [
+                                                     "grocery/capture-run.ps1",
+                                                     "grocery/test-commit-size-gate.ps1"
+                                                 ],
+                                       "exact_change":  "(1) initialise `$botCommitted = $false` before the try at :692 (today it is unassigned on the size-gate and no-changes paths). (2) inside the \u003e\u003e\u003e SERVED-DIRTY BLOCK markers, so the lifted fixture still reaches it: `if ($shipServed -and $botCommitted)` keeps today\u0027s behaviour; add `elseif ($shipServed -and -not $botCommitted)` that writes \u0027served-dirty: N tracked served file(s) dirty because the commit was REFUSED - see commit-refused above; this is not a $servedPaths gap and no served-dirty alert is sent\u0027 and adds NO failed lane (commit-refused already is one). (3) the edge line :1093 prints the real values \u0027shipServed=\u003cv\u003e botCommitted=\u003cv\u003e pushed=\u003cv\u003e\u0027 with the reason chosen from them, and passes ShipServed ($shipServed -and $botCommitted -and $pushed) to Test-EdgeServesPushed so it returns \u0027skipped\u0027, never \u0027ok\u0027, for a check that did not run. (4) the alert body at :946 stays under the committed branch only, so its \u0027the bot commit went out\u0027 sentence is true whenever it is sent."
+                                   },
+                      "blast_radius":  {
+                                           "measured_as":  "routing",
+                                           "measured_by":  "the two reader sites of $shipServed after the commit stage (capture-run.ps1:940 and :1089-1093) and the one fixture that lifts the block (test-commit-size-gate.ps1:155-208, three cases, none with a refused commit); Get-BotServedPaths checked against all 16 named files. No matching rule and no cell moves.",
+                                           "affected_now":  2,
+                                           "names":  [
+                                                         "grocery/capture-run.ps1:940 served-dirty block",
+                                                         "grocery/capture-run.ps1:1093 edge-skipped line"
+                                                     ],
+                                           "risk":  "the block is dot-sourced by the fixture through the markers, so $botCommitted must be read from the caller\u0027s scope under that exact name; keep the markers and the `$failed +=` shape or the fixture goes BLIND (exit 3) rather than red",
+                                           "cell_effects":  [
+
+                                                            ]
+                                       },
+                      "claimed_by_earlier":  [
+
+                                             ],
+                      "freshness":  "read from capture-run.ps1 at HEAD 1ccdab0fd (the file is not dirty) and the daily log of 08:35:06; the 16-file dirty set was re-read at 10:20 and is unchanged",
+                      "proof":  {
+                                    "guard_or_fixture":  "grocery\\test-commit-size-gate.ps1 SERVED-DIRTY lifted block (Run-Served gains a [bool]$committed parameter, default $true) + the EDGE-DECISION pure function Test-EdgeServesPushed",
+                                    "must_fire_case":  "frozen, built from today\u0027s shape: shipServed TRUE, botCommitted FALSE, meal-prep/db/recipes/x.json rewritten - the block must print \u0027because the commit was REFUSED\u0027, must add NO \u0027served-dirty\u0027 lane and must compose NO alert; and Test-EdgeServesPushed handed ShipServed $false for the refused-commit case must return \u0027skipped\u0027, never \u0027ok\u0027",
+                                    "clean_twin":  "the existing case shipServed TRUE, botCommitted TRUE, x.json rewritten still fails the lane and composes the alert naming x.json (the watcher still catches the 2026-09-02 shape); shipServed FALSE still stays silent",
+                                    "commands":  [
+                                                     "powershell -File grocery\\test-commit-size-gate.ps1",
+                                                     "powershell -File ops\\run-gates.ps1"
+                                                 ]
+                                },
+                      "rollback":  "revert the marker-delimited hunk and the two edge lines; the fixture\u0027s new parameter defaults to $true so the existing three cases are byte-for-byte the same assertions",
+                      "do_not_touch":  [
+                                           "the \u003e\u003e\u003e SERVED-DIRTY BLOCK \u003c\u003c\u003c markers (the fixture finds the block by them)",
+                                           "lib\\bot-paths.ps1 Get-BotServedPaths - nothing is missing from it",
+                                           "the edge byte comparison against HEAD"
+                                       ],
+                      "resolution_note":  "False premise: the 16 \u0027uncommitted served files\u0027 were exactly the served set of a REFUSED commit (a95022), all already in Get-BotServedPaths; the served-dirty check never read the commit outcome and its alert hard-coded \u0027the bot commit went out\u0027, and the edge line printed \u0027shipServed=false\u0027 on a run where it was true. Both now branch on $botCommitted and print the predicate they evaluated. No $servedPaths change.",
+                      "publish_batch":  1,
+                      "status":  "done",
+                      "premise_verified":  "TRUE, and the edge half is SHARPER than the plan recorded. capture-run.ps1 gated the served-dirty block on $shipServed alone and its alert body hard-coded \"The chain ran, guards passed and the bot commit went out\"; both read in source. The daily log has the refusal at :646 and the served-dirty finding at :647, one line apart. All 16 named files are inside Get-BotServedPaths, which I confirmed by measurement rather than by reading the list: the daily-shape scratch staging staged every one of them (132 paths), so the alert\u0027s prescribed repair, adding them to $servedPaths, would have been inert. The edge line :1093 did print the literal \"(shipServed=false)\" while $shipServed was true, AND, not recorded in the plan, Test-EdgeServesPushed RETURNED \"ok\": it was handed ShipServed=$true with \u0027n/a\u0027 on both sides, so it walked past its skipped arm and compared \u0027n/a\u0027 with \u0027n/a\u0027. Daily log :648 reads \"edge check skipped: ok\" - a check that never ran, reporting a pass, which is the could-not-evaluate-as-pass shape.",
+                      "deviation":  "Three small departures, all additive. (1) $botCommitted is also set TRUE on the \"no pipeline changes to commit\" path. The plan only asked for the declaration before the try; without this the new elseif would announce a refusal on a run where there was simply nothing to commit, since an unassigned variable is $null and falsey. (2) test-capture-builders.ps1 asserted the served-dirty block was gated on \"^if ($shipServed) {\", which my change deliberately made stricter, so that assertion was updated to demand BOTH flags. It is strictly stronger than the one it replaces, not weaker, and a second assertion now pins the refused-commit arm. (3) test-auditors.ps1 pinned the test-capture-builders inventory as an exact \"SELFTEST: 28/28 pass\", so ADDING cases turned it red and printed the passing run\u0027s own output as the failure text. It now reads the CAPTURE-BUILDERS-COMPLETE marker and requires failed=0 with cases at or above a floor of 33, which still catches a silently dropped case, cannot be satisfied by a suite that died halfway, and sits higher than the 28 it replaces.",
+                      "shipped_commit":  null
+                  },
+                  {
+                      "queue_id":  "2026-09-09-9b1f92",
+                      "subject":  "Grocery: 2 NEW price flag(s) - 2026-09-09",
+                      "classification":  "wrong-product",
+                      "flags":  [
+                                    {
+                                        "flag":  "SANITY|Donuts|outlier|Fareway $0.17 is 47% below runner-up Aldi $0.31",
+                                        "classification":  "wrong-product",
+                                        "verdict":  "not a parse bug: donut HOLES priced per hole, and the runner-up is coffee pods"
+                                    },
+                                    {
+                                        "flag":  "SANITY|Baby Potatoes|wow|cheapest moved up 67% vs last week ($1.00 -\u003e $1.66)",
+                                        "classification":  "real-economics",
+                                        "verdict":  "a 30-day markdown TTL ended 2026-09-08; no code change"
+                                    }
+                                ],
+                      "evidence":  [
+                                       "DONUTS crown: Fareway | \u0027Clyde\u0027s Donuts Donuts, Powdered Lil’ Smiles, Classic\u0027 | $3.49 | size \u002721 ct\u0027 | basis per-21-pack | $0.1662/each | type sale (ad_basis ttl 2026-09-09 to 2026-10-09). The raw capture line (fareway-shop-2026-09-09.jsonl, id 316315, term \u0027glazed donuts\u0027) carries price 3.49, orig 3.99, size \u002721 ct\u0027 and the URL slug \u0027clydes-donut-holes-lil-smiles-classic-powdered-12-oz\u0027: a 12 oz bag of DONUT HOLES, 21 to the bag. The arithmetic is right ($3.49 / 21) and the count is Fareway\u0027s own, so this is not a parse bug; a 0.57 oz hole is being priced as one donut. The name never says \u0027holes\u0027, so the existing exclude \\bholes\\b cannot see it.",
+                                       "DONUTS runner-up: Aldi | \u002736 CT Donut Cups\u0027 | $11.25 | 12.6 oz | per-36-pack | $0.3125/each, found_by_term \u0027ground coffee\u0027 in aldi-regular-2026-09-09.json, 0.35 oz per cup, listed beside \u0027Barissimo ... Donut Store ... Single Serve Cups 0 37 OZ, 12 ct, $4.59\u0027: coffee pods. The name carries none of \u0027coffee\u0027, \u0027k-cup\u0027 or \u0027pod\u0027 - the three coffee excludes donuts has - and coffee-pods (index 257) admits only k-cup / coffee pods / coffee cups, so the name falls through to donuts (index 173).",
+                                       "DONUTS rows 3-4: Walmart \u0027Krispy Kreme® 12-Count Original Glazed® Doughnut Dots\u0027 4.509 oz $4.78 -\u003e $0.3983/each and Baker\u0027s \u0027Krispy Kreme Original Glazed Doughnut Dots\u0027 12 ct $4.79 -\u003e $0.3992/each are holes under another word (\u0027Dots\u0027). Rows 5-6, Family Fare \u0027Little Debbie Glazed Donut Sticks 6 Ea\u0027 10 oz $3.19 -\u003e $0.5317 and Sam\u0027s \u0027Duchess Mini Frosted Donuts, 3 oz, 12 pk.\u0027 $8.32 -\u003e $0.6933 are sticks and 3 oz bags of minis. Not one of the six rows in the cell is a donut. The real donuts in the corpus (Baker\u0027s \u0027Bakery Fresh Glazed Yeast Donuts 12 pk 2.5 oz\u0027 $5.00, Family Fare \u002712 Ct Glazed Yeast Ring Donuts\u0027 20 oz $10.99, Baker\u0027s \u0027Krispy Kreme Original Glazed Doughnuts 12 ct\u0027 $14.29) lose to them, and the Fareway and Aldi real donuts (Big Smile 12 oz $3.49, Bake Shop Chocolate Iced Donuts 15 oz $4.49) carry no count, price as one each, and are censored by the 0.08-2 band.",
+                                       "BABY POTATOES: last week (comparison-2026-09-02) Fareway \u0027Summertime Farms Baby Red Potatoes\u0027 $2.99 / 3 lb SALE -\u003e $0.9967/lb (sale-windows.json: sale_start 2026-08-09, sale_end 2026-09-08, refresh_on 2026-09-09; the 30-day TTL for a markdown with no printed end). This week the same row (fareway-regular-2026-09-09.json: as_of 2026-08-09, current_price 2.99, base_price 4.99, marked_down true) prices at its base $4.99 / 3 lb = $1.6633/lb because the TTL expired 09-08 and compare-deals refuses expired ads. +67% is the markdown ending, not a parse: real economics, no code change. Runner-up Baker\u0027s \u0027Private Selection Petite Gold Gourmet Potatoes\u0027 $6.00 / 3 lb = $2.00/lb, unchanged week over week.",
+                                       "BABY POTATOES refresh gap, noted and NOT fixed here: rescue-terms-fareway.txt (08:27) says \u0027# baby-potatoes UNTRACEABLE no capture on disk still carries this exact row\u0027 - the row has no found_by_term (it arrived through a product link), so the sale-expiry refresh sale-windows scheduled for 2026-09-09 cannot become a search term, and the $4.99 base is a month-old observation. The row has a link_url (products/84386881-baby-red-potatoes), so the Wednesday link check owns re-pricing it; if the developer wants it sooner, add \u0027baby red potatoes\u0027 to the Fareway worklist by hand."
+                                   ],
+                      "surface_fix":  {
+                                          "what":  "exclude the hole-by-other-name products and the coffee pods from donuts (the estate already excludes \\bholes\\b; this names the aliases that defeat it)",
+                                          "files":  [
+                                                        "grocery/commodities.json"
+                                                    ],
+                                          "exact_change":  "donuts (array index 173).exclude += \u0027\\bcups?\\b\u0027, \u0027\\blil.{0,5}smiles?\\b\u0027, \u0027\\bdots\\b\u0027, \u0027\\bpop\\W{0,2}ems?\\b\u0027, \u0027\\bmunchkins?\\b\u0027, \u0027\\bbites\\b\u0027  (the lil-smiles token tolerates the curly apostrophe and its cp1252 mojibake, both of which occur in today\u0027s captures). Then audit-match-soundness.ps1 -Accept against the new rules_hash - ops\\verify-commodities-gate.ps1 refuses the commit otherwise."
+                                      },
+                      "root_cause":  "the estate already decided holes are not donuts (\\bholes\\b is in the exclude), but the exclude is word-based on the raw name and four sellers name holes without the word (Lil\u0027 Smiles, Doughnut Dots, Pop\u0027ems, Munchkins) while one names coffee pods without \u0027coffee\u0027, \u0027k-cup\u0027 or \u0027pod\u0027 (\u002736 CT Donut Cups\u0027). The per-each basis then divides by whatever count the store printed, so a 0.57 oz hole or a 0.35 oz coffee pod prices as one donut, and the 0.08-2 band censors the real donuts that carry no count. Class: an each-commodity whose stores cannot all express a portion count, populated by exactly the rows that are not the commodity.",
+                      "root_fix_none_because":  "the six tokens ARE the class fix for \u0027a seller\u0027s naming defeats a word exclude\u0027 on this commodity - every hole and pod alias found in a 19,208-name corpus is now named and the artifact\u0027s must_stay controls pin what has to keep routing; the remaining class (per-each across holes, minis, sticks and dozens) is a ruling on what Donuts MEANS and is filed under open_questions_for_brad rather than decided by a rule.",
+                      "blast_radius":  {
+                                           "measured_as":  "routing",
+                                           "measured_by":  "before/after first-match-wins routing through grocery\\match-lib.ps1 (the engine\u0027s own compiled matcher, parity-tested against Match-Category) of 19,208 unique names from 21,127 rows across 18 files: newest out\\regular\\*-regular-*.json per store prefix (hunter-* included), ads-2026-09-09.json, bakers-deals-2026-09-09.json, sams-deals-2026-09-09.json, fareway-deals-2026-09-06.json - the audit-match-soundness feed selection; artifact plan-2026-09-09.routing.json, sim 13.7 s, positive control asserted before any other number was trusted",
+                                           "affected_now":  4,
+                                           "names":  [
+                                                         "Clyde\u0027s Donuts Donuts, Powdered Lil’ Smiles, Classic (Fareway)",
+                                                         "Clyde\u0027s Donuts, Glazed Cherry Lil\u0027 Smiles (Fareway)",
+                                                         "36 CT Donut Cups (Aldi)",
+                                                         "Krispy Kreme Original Glazed Doughnut Dots (Baker\u0027s; the Walmart twin with registered-marks routed individually as an out-of-corpus control)"
+                                                     ],
+                                           "token_matches_in_corpus":  319,
+                                           "risk":  "319 names match a token somewhere in the corpus and 315 do not move, because the tokens live only in donuts\u0027 exclude and those names are owned elsewhere (coffee-pods \u0027Coffee Cups 12 CT\u0027, applesauce cups, yogurt cups, muffins \u0027Little Bites\u0027); the change can only ever REMOVE names from donuts. Three cells drop (Fareway, Aldi, Walmart) because their remaining donut rows carry no count and price as a whole package outside the band; the commodity keeps three cells (Baker\u0027s, Family Fare, Sam\u0027s) and does not leave the board. Crown Fareway $0.1662 -\u003e Baker\u0027s $0.4167 (+151%) is the correction, not a regression.",
+                                           "cell_effects":  [
+                                                                {
+                                                                    "commodity":  "donuts",
+                                                                    "store":  "Fareway",
+                                                                    "before":  0.1662,
+                                                                    "after":  "none - cell drops (remaining rows price as whole packages, outside band 0.08-2)"
+                                                                },
+                                                                {
+                                                                    "commodity":  "donuts",
+                                                                    "store":  "Aldi",
+                                                                    "before":  0.3125,
+                                                                    "after":  "none - cell drops (Iced Mini Donuts 8 oz $3.95 as one each, outside the band)"
+                                                                },
+                                                                {
+                                                                    "commodity":  "donuts",
+                                                                    "store":  "Walmart",
+                                                                    "before":  0.3983,
+                                                                    "after":  "none - cell drops (Dots excluded; Wonder Pumpkin minis already excluded by artificially flavoured)"
+                                                                },
+                                                                {
+                                                                    "commodity":  "donuts",
+                                                                    "store":  "Baker\u0027s",
+                                                                    "before":  0.3992,
+                                                                    "after":  0.4167
+                                                                },
+                                                                {
+                                                                    "commodity":  "donuts",
+                                                                    "store":  "Family Fare",
+                                                                    "before":  0.5317,
+                                                                    "after":  0.5317
+                                                                },
+                                                                {
+                                                                    "commodity":  "donuts",
+                                                                    "store":  "Sam\u0027s Club",
+                                                                    "before":  0.6933,
+                                                                    "after":  0.6933
+                                                                }
+                                                            ]
+                                       },
+                      "claimed_by_earlier":  [
+
+                                             ],
+                      "freshness":  "routing measured 2026-09-09 10:20-10:30 against a corpus that INCLUDES bakers-deals-2026-09-09.json (landed 09:10:33), which the pinned board comparison-2026-09-09 (built 08:11:04) did NOT have. Cell effects are computed by the artifact\u0027s stated rule (price / count read from the size or the name, band 0.08-2, min per store), not by compare-deals, so the developer re-measures on the rebuilt board. Expected after the rebuild: donuts crown Baker\u0027s \u0027Bakery Fresh Glazed Yeast Donuts\u0027 about $0.4167/each with Family Fare $0.5317 runner-up; the new Baker\u0027s ad\u0027s only donut line (\u0027Pudding Cake, 30 oz or Cake Donuts, 12 ct, In the Bakery\u0027 $6.99) routes \u003cunmatched\u003e and its only potato line (\u0027Kroger Russet Potatoes 10 lb $5.00\u0027) routes russet-potatoes, so neither flagged cell is expected to move on the Baker\u0027s ad. If either does, stop and re-measure before -Accept.",
+                      "proof":  {
+                                    "guard_or_fixture":  "plan-2026-09-09.routing.json positive_control + must_stay_controls (7) + out_of_corpus_controls (3); grocery\\compare-deals.ps1 -Explain donuts (read-only); grocery\\test-match-lib.ps1 parity; audit-match-soundness.ps1 -Accept",
+                                    "must_fire_case":  "frozen: \u0027Clyde\u0027s Donuts Donuts, Powdered Lil’ Smiles, Classic\u0027 (and its mojibake twin), \u0027Clyde\u0027s Donuts, Glazed Cherry Lil\u0027 Smiles\u0027, \u002736 CT Donut Cups\u0027 and \u0027Krispy Kreme® 12-Count Original Glazed® Doughnut Dots\u0027 must resolve to \u003cunmatched\u003e through match-lib under the new rules, and -Explain donuts must list them as excluded",
+                                    "clean_twin":  "\u0027Bakery Fresh Glazed Yeast Donuts\u0027, \u0027Little Debbie Glazed Donut Sticks 6 Ea\u0027 and \u0027Duchess Mini Frosted Donuts, 3 oz, 12 pk.\u0027 still resolve to donuts; \u0027Barissimo Donut Store Medium Roast 100% Arabica Blend Ground Coffee\u0027 still to coffee; \u0027Barissimo Fair Trade Breakfast Blend Coffee Cups 12 CT\u0027 still to coffee-pods; \u0027Little Bites Blueberry Muffins 5 Ea\u0027 still to muffins - a token that eats any of these is too broad",
+                                    "commands":  [
+                                                     "powershell -File grocery\\compare-deals.ps1 -Explain donuts",
+                                                     "powershell -File grocery\\test-match-lib.ps1",
+                                                     "powershell -File grocery\\audit-match-soundness.ps1  (review the drops line by line, then -Accept)",
+                                                     "powershell -File grocery\\guards.ps1  (MUST be 0)"
+                                                 ]
+                                },
+                      "rollback":  "revert the six-token hunk in commodities.json and re-run audit-match-soundness -Accept for the old rules_hash; no data migration",
+                      "do_not_touch":  [
+                                           "the donuts include patterns",
+                                           "band_min 0.08 / band_max 2 (no hard-coded band changes; Brad 2026-09-04)",
+                                           "the existing \\bholes\\b, \\bshop\\b, coffee, k-?cup and \\bpods?\\b excludes",
+                                           "baby-potatoes: nothing - the +67% is a TTL ending"
+                                       ],
+                      "resolution_note":  "Donuts: not a parse bug. Fareway\u0027s $0.17 was a 21-count bag of donut HOLES (Clyde\u0027s Lil\u0027 Smiles), the Aldi runner-up was 36 coffee pods (\u0027Donut Cups\u0027), and the Walmart/Baker\u0027s rows were Doughnut Dots; six hole/pod aliases added to the donuts exclude, measured over 19,208 names (4 route changes, all of them the defect rows). Crown moves to Baker\u0027s Bakery Fresh Glazed Yeast Donuts, about $0.42/each. Baby Potatoes: Fareway\u0027s $2.99 / 3 lb markdown hit its 30-day TTL on 09-08 and the cell fell back to the $4.99 base; real economics, no change; the row cannot be re-verified by rescue (no search term) and is left to the link check.",
+                      "publish_batch":  1,
+                      "status":  "deviated",
+                      "premise_verified":  "TRUE for both flags. DONUTS: donuts is array index 173 and coffee-pods 257, read from the live file; \"36 CT Donut Cups\" matches none of coffee-pods\u0027 four include patterns, so it falls through to donuts exactly as the plan says. The 08:11 board\u0027s own chips confirm every before-number: Fareway 0.1662 on a sale whose See-item link is .../clydes-donut-holes-lil-smiles-classic-powdered-12-oz, Aldi 0.3125 at .../36-ct-donut-cups, Walmart 0.3983, Baker\u0027s 0.3992, Family Fare 0.5317, Sam\u0027s 0.6933, Hy-Vee no price. BABY POTATOES: Fareway 1.6633/lb before and after, with Baker\u0027s Private Selection Petite Gold at 2.00/lb, exactly as recorded; no code change, as planned.\nARTIFACT FRESHNESS, checked rather than assumed: one of the routing artifact\u0027s 18 corpus files moved after it was generated (family-fare-regular-2026-09-09.json at 10:33:56 against the artifact\u0027s 10:10:56, the 3-hourly FF sweep). Rather than rebuild 19,208 names I routed that ONE file under the old and the new rules: 5,389 unique names examined, ZERO additional routing changes, so the artifact\u0027s 4-name list still covers the corpus and its freshness holds. All 21 frozen controls (positive control, the 4 changed, 7 must_stay, 3 out_of_corpus and the 6 clean twins the plan names by hand) then routed exactly as recorded against the live commodities.json. audit-match-soundness reported MOVED=0 and DROPPED=3, and all three drops are in the artifact\u0027s changed list with nothing new; the fourth changed name is outside that audit\u0027s narrower feed and was confirmed \u003cunmatched\u003e through match-lib.",
+                      "deviation":  "TWO ground-truth differences on the rebuilt board, both instances of classes this plan already understands rather than new mechanisms.\n(a) THE CELL EFFECTS ARE NOT THE PLAN\u0027S. Walmart does NOT lose its donuts cell. It keeps one at $0.5033 with \"Little Debbie Glazed Donut Sticks, 10.21 oz (6 count)\" - the same product the plan\u0027s own must_stay controls require to keep routing to donuts - which backfilled the cell the excluded Doughnut Dots row vacated. So donuts keeps FOUR cells, not three: Baker\u0027s 0.4167, Walmart 0.5033, Family Fare 0.5317, Sam\u0027s Club 0.6933. Fareway and Aldi drop as predicted, and the crown is Baker\u0027s \"Bakery Fresh Glazed Yeast Donuts\" 12 pk 2.5 oz at $0.4167/each, exactly as predicted. The runner-up is Walmart, not Family Fare, which is why the open question for Brad has been amended with the measured numbers instead of the naive ones.\n(b) A SECOND WRONG CELL WAS BEHIND THE FIRST, and it blocked the publish. The Baker\u0027s 2026-09-09 ad line \"Simply Orange Juice, 46 fl oz or Post Large Size Cereal, 13.5-20.5 oz\" at $4.49 took the CEREAL crown at $0.0976/oz, because the engine took the ORANGE JUICE\u0027s 46 fl oz as the size and divided by it on a row priced by WEIGHT. The cereal on that line is 13.5 to 20.5 oz, so the honest figure is $0.219 to $0.333/oz, above every other store. audit-unit-basis-outlier reported it as CROWN ON A VOLUME ROW (label volume, engine divided by weight, agrees_with_engine_divisor=False) and guards.ps1 hard-failed the publish. It is the same multi-product ad-line class as the 12 NEW-CONTESTED entries reviewed at the rule gate. Ruled wrong-basis in known-wrong.json through add-known-wrong.ps1, with the arithmetic in the evidence; compare-deals then dropped the row and Baker\u0027s fell through to \"Kroger Bite Size Frosted Shredded Wheat Cereal\" at $0.1111/oz, restoring the Sam\u0027s Club crown at $0.1069/oz that the 08:11 board also had.\nNo rule change was made for either: (a) is correct under the shipped rules and (b) is a bad data row, not a bad rule.",
+                      "shipped_commit":  null
+                  },
+                  {
+                      "queue_id":  "2026-09-09-e60137",
+                      "subject":  "Baker\u0027s ad window advanced with no capture behind it",
+                      "classification":  "capture-gap",
+                      "evidence":  [
+                                       "grocery\\out\\bakers\\bakers-deals-2026-09-09.json exists on disk, written 09:10:33, ad_from 2026-09-09 ad_to 2026-09-15, pages_read 14 of 14, 146 deal rows, window taken from the ad\u0027s own printed footer and agreeing with ad-schedule.json - so the alert\u0027s premise \u0027the newest ad capture on disk is bakers-deals-2026-09-02.json\u0027 was true when it fired at 08:35 and false by 09:10.",
+                                       "capture depth ROSE, it did not thin: 146 rows this generation vs 83 in bakers-deals-2026-09-02.json, so no thin capture was admitted and the eviction risk that would justify a full consequence audit is absent.",
+                                       "capture-run-ad-2026-09-09.log deferred this store by design: \u0027BROWSER  Baker\u0027s  17 term(s) queued - needs a Chrome tab\u0027 and \u0027BROWSER WORK OUTSTANDING: Baker\u0027s\u0027, and the run wrote grocery\\out\\browser-capture-due-2026-09-09.flag at 08:06:39 naming the pending work."
+                                   ],
+                      "surface_fix":  {
+                                          "what":  "carry the 146-row ad to the cells: the board must be rebuilt with the 09-09 file, in this run",
+                                          "files":  [
+                                                        "grocery/out/comparison-2026-09-09.json (rebuilt)",
+                                                        "public/board.json",
+                                                        "public/smp-feed.json"
+                                                    ],
+                                          "exact_change":  "compare-deals.ps1 -MinStores 1 -BakersFile grocery\\out\\bakers\\bakers-deals-2026-09-09.json -FarewayFile \u003cnewest fareway-deals\u003e and the gated chain after it (ship_sequence)"
+                                      },
+                      "root_cause":  "the ad-coverage alerts decide \u0027no capture behind this window\u0027 from the newest ad file on disk alone, and never read the pending-browser-work flag that the SAME run wrote 29 minutes earlier. A store the pipeline has explicitly handed to another owner therefore pages the ops queue as an unowned gap, in the window between the deferral and that owner\u0027s capture.",
+                      "root_fix":  {
+                                       "what":  "route by PROVEN ownership with an expiry, the 2026-09-03 sale-fallback shape",
+                                       "files":  [
+                                                     "grocery/check-ad-cycles.ps1",
+                                                     "grocery/audit-row-age.ps1"
+                                                 ],
+                                       "exact_change":  "the ad-coverage path and audit-row-age\u0027s AD COVERAGE GONE line must downgrade to a log line when browser-capture-due-\u003ctoday\u003e.flag names that store and the flag is under 24h old, and must escalate normally once it is older - so a genuinely abandoned gap still pages and only an owned, in-flight one is quiet."
+                                   },
+                      "blast_radius":  {
+                                           "measured_as":  "routing",
+                                           "measured_by":  "the two emitters that decide \u0027no capture behind this window\u0027 from the newest ad file alone (check-ad-cycles\u0027 REVIEW line, daily log :612, and audit-row-age\u0027s AD COVERAGE GONE line, item 04e0af) and the one flag writer they must read (capture-run\u0027s browser-capture-due-\u003cdate\u003e.flag, ad log :33). No matching rule; the cells that move are the Baker\u0027s ad cells the rebuild refreshes, which is the point.",
+                                           "affected_now":  2,
+                                           "names":  [
+                                                         "check-ad-cycles ad-coverage REVIEW line",
+                                                         "audit-row-age AD COVERAGE GONE line"
+                                                     ],
+                                           "risk":  "an ownership flag older than 24h must NOT silence the alert, or a browser agent that never ran hides a real gap for a week (the Fareway $1.99/lb pork chops shape)",
+                                           "cell_effects":  [
+
+                                                            ]
+                                       },
+                      "claimed_by_earlier":  [
+
+                                             ],
+                      "freshness":  "bakers-deals-2026-09-09.json read at 10:15 (146 rows, written 09:10:33); the pinned board comparison-2026-09-09 (08:11:04) predates it; the rebuild in this run is what carries the ad to the cells, and every Baker\u0027s-adjacent cell is re-measured after it",
+                      "proof":  {
+                                    "guard_or_fixture":  "grocery\\test-auditors.ps1 (audit-row-age section) + check-ad-cycles ad-coverage fixture",
+                                    "must_fire_case":  "frozen: newest Baker\u0027s ad file closed yesterday and NO browser-due flag names Baker\u0027s (or the flag is over 24h old) - must still alert.",
+                                    "clean_twin":  "frozen: the same expired ad file WITH a same-day browser-due flag naming Baker\u0027s - must stay silent.",
+                                    "commands":  [
+                                                     "powershell -File grocery\\test-auditors.ps1",
+                                                     "powershell -File grocery\\audit-row-age.ps1"
+                                                 ]
+                                },
+                      "rollback":  "revert the ownership branch in both emitters; they fall back to file-date-only paging",
+                      "do_not_touch":  [
+                                           "the 24h expiry on the ownership flag",
+                                           "bakers-deals-2026-09-09.json"
+                                       ],
+                      "resolution_note":  "Baker\u0027s 2026-09-09 ad (146 rows) landed at 09:10:33, 35 minutes after the alert; the alert\u0027s premise was true at 08:35 and false by 09:10. The board needs a rebuild for the 146-row ad to reach the cells, and the rebuild happens in this run. Root fix: the ad-coverage emitters now read browser-capture-due-\u003ctoday\u003e.flag and stay quiet for an owned, in-flight store under 24h, paging normally after.",
+                      "publish_batch":  1,
+                      "status":  "deviated",
+                      "premise_verified":  "TRUE for the premise, and the surface fix is confirmed with a number. bakers-deals-2026-09-09.json is on disk with 146 deal rows, written 09:10:33, ad_from 2026-09-09 ad_to 2026-09-15. The rebuild carried it into the cells: 17 Baker\u0027s cells now price off an ad window opening 2026-09-09 (15 on the ad\u0027s own 2026-09-09..2026-09-15 window and 2 on 2026-09-09..2026-09-16), where the 08:11 board had ZERO on that window; Baker\u0027s live-ad cells went 52 -\u003e 67. audit-row-age now reports \"row-age: 0 hard finding(s) across 7 store(s)\" with no AD COVERAGE GONE line at all, because the 09-09 ad is now the newest and its window is live.",
+                      "deviation":  "THE ROOT FIX AS SPECIFIED WOULD NOT HAVE SILENCED TODAY\u0027S ALERT, and the measurement says why. The plan has both emitters read browser-capture-due-\u003ctoday\u003e.flag and stay quiet when it names the store. That flag is ONE FILE PER DATE and every run REWRITES it with only its own outstanding set: the 07:02 ad run wrote it naming Baker\u0027s (ad log :32, \"BROWSER WORK OUTSTANDING: Baker\u0027s\") and the 08:06 daily run overwrote the same file naming Aldi and Walmart (daily log :591, flag mtime 08:06:39). By 08:35, when the alert fired, the only record that Baker\u0027s had an owner had been gone for 29 minutes. Keying the 24h expiry on the file\u0027s mtime is wrong for the same reason in the other direction: any later store\u0027s deferral refreshes the timestamp, so a store abandoned a week ago would look freshly owned every morning - the exact hiding the plan\u0027s own risk line forbids. The per-store worklists are not a substitute either: all seven stores have a capture-\u003cstore\u003e-2026-09-09.json, including the three that WERE driven, so gating on them would silence every store permanently.\nSo the reader side ships as the plan describes, and the ownership record was made durable to match: the flag now also carries an `owned` map of store -\u003e when it was FIRST deferred today, accumulated across same-date runs, and Test-BrowserCaptureOwned measures the 24h from that stamp. A flag written before this change has no `owned` map and still confers ownership from its mtime, so nothing goes blind in the meantime. Eight frozen cases in audit-row-age -SelfTest cover it: no flag still pages, a same-day deferral is owned, ownership is per store, the same deferral 25h later pages again, a later run rewriting the flag for OTHER stores does NOT erase Baker\u0027s, an old-format flag still counts, and an unparseable flag confers nothing.\nSEPARATELY, the hand-run chain: the plan\u0027s ship_sequence omits two -Apply steps the shipped chain runs before compare-deals (repair-multipack-sizes and stamp-ad-as-of, check-ad-cycles:627 and :644) and does not say that audit-name-drift runs AGAIN after prune-bad-links (check-ad-cycles:1041). Both omissions produced real guard failures on the first pass: prune-bad-links rewrites product-urls.json, which made name-drift.json stale and audit-tile-integrity HELD (could-not-evaluate, correctly refusing to grade today\u0027s links against older verdicts), and the unrepaired Aldi row \u0027Lacroix Peach Strawberry Sparkling Water 12 Pack\u0027 size=[12 fl oz] hard-failed the multipack guard. Running the chain in its real order cleared both: repair-multipack-sizes rewrote that size to [12 pk 12 fl oz] from a reviewed hint with 0 refusals.",
+                      "shipped_commit":  null
+                  },
+                  {
+                      "queue_id":  "2026-09-09-04e0af",
+                      "subject":  "Board prices aging inside a fresh file",
+                      "classification":  "superseded",
+                      "superseded_by":  "2026-09-09-e60137",
+                      "evidence":  [
+                                       "its entire body is audit-row-age\u0027s \u0027AD COVERAGE GONE: Baker\u0027s\u0027s newest ad file bakers-deals-2026-09-02.json closed 2026-09-08\u0027 line - the same condition 2026-09-09-e60137 describes from the consequence end, resolved by the 146-row bakers-deals-2026-09-09.json that landed at 09:10:33 and the rebuild in this run"
+                                   ],
+                      "root_cause":  "same condition as 2026-09-09-e60137 (the Baker\u0027s ad window advanced before the deferred browser capture landed), seen from the consequence end",
+                      "resolution_note":  "Superseded by 2026-09-09-e60137: one condition, two emitters. Closed with it once the rebuild carries the 09-09 Baker\u0027s ad.",
+                      "publish_batch":  1,
+                      "status":  "superseded",
+                      "premise_verified":  "TRUE. Its whole body is audit-row-age\u0027s \"AD COVERAGE GONE: Baker\u0027s\" line, which is 2026-09-09-e60137 seen from the consequence end. After the rebuild carried the 146-row 09-09 ad into the cells, audit-row-age reports 0 hard findings and emits no AD COVERAGE line for any store. Closed with e60137; not reported as separate work.",
+                      "deviation":  null,
+                      "shipped_commit":  null
+                  },
+                  {
+                      "queue_id":  "2026-09-09-34557a",
+                      "subject":  "Grocery: store-registry drift - 1 issue(s)",
+                      "classification":  "infra",
+                      "evidence":  [
+                                       "grocery\\test-auditors.ps1:1129 is $sbTwin, the CLEAN TWIN fixture for the steam_bag_carrier class: a one-line JSON string literal naming Baker\u0027s, Family Fare, Fareway and Walmart. It is test DATA, not a store roster - lines 1123-1128 state each row is a real board row chosen because those words are RIGHT for that commodity.",
+                                       "audit-store-registry.ps1:177 already names the cause in its own comment: allowed_subsets \u0027is maintained by hand, and it therefore lags each new fixture by exactly one alert - this was the fifth instance of the shape\u0027.",
+                                       "the queue confirms the repeat count: 2026-08-31-6e6335, 2026-09-03-494974, 2026-09-05-17ebe3 and now 2026-09-09-34557a are all \u0027store-registry drift - 1 issue(s)\u0027, every one resolved by hand; stores.json now carries 27 allowed_subsets entries, 5 of them for test-auditors.ps1 alone."
+                                   ],
+                      "surface_fix":  {
+                                          "what":  "register the fixture in place with the inline marker, on its own comment line ABOVE the literal",
+                                          "files":  [
+                                                        "grocery/test-auditors.ps1"
+                                                    ],
+                                          "exact_change":  "insert one line above test-auditors.ps1:1129: \u0027# store-subset-ok: clean-twin fixture for steam_bag_carrier - real 2026-09-08 board rows, the region under test never branches on store\u0027. The $sbTwin literal itself is NOT edited, byte for byte."
+                                      },
+                      "root_cause":  "the exemption register is a SEPARATE hand-maintained file, so an entry can only ever be written AFTER a fixture exists and has already paged. Every new must-fire or clean-twin fixture this estate writes is guaranteed to produce exactly one false ops alert, and the register also accumulates entries that outlive their fixture - the ORPHANED EXEMPTION class the same script already checks for.",
+                      "root_fix":  {
+                                       "what":  "let a fixture register itself in place",
+                                       "files":  [
+                                                     "grocery/audit-store-registry.ps1",
+                                                     "grocery/test-auditors.ps1"
+                                                 ],
+                                       "exact_change":  "audit-store-registry recognizes an inline marker comment (e.g. \u0027# store-subset-ok: \u003creason\u003e\u0027) attached to the offending literal, scoped to string literals in test-/measure- files, which is the SAME condition its existing UNREGISTERED-FIXTURE hint already uses. Registration then happens when the fixture is written, cannot lag by an alert, and dies with the fixture instead of orphaning."
+                                   },
+                      "blast_radius":  {
+                                           "measured_as":  "routing",
+                                           "measured_by":  "the register as it stands (stores.json allowed_subsets: 27 entries, 5 for test-auditors.ps1), the four queue items with this exact subject (2026-08-31-6e6335, 2026-09-03-494974, 2026-09-05-17ebe3, 2026-09-09-34557a) and today\u0027s single finding line (test-auditors.ps1:1129). The marker is honoured ONLY inside string literals in test-/measure- files, so production code cannot use it. No matching rule and no cell moves.",
+                                           "affected_now":  1,
+                                           "names":  [
+                                                         "grocery/test-auditors.ps1:1129 $sbTwin"
+                                                     ],
+                                           "risk":  "a marker honoured outside test-/measure- files would be a blanket bypass; clean twin (b) exists to prove it is not",
+                                           "cell_effects":  [
+
+                                                            ]
+                                       },
+                      "claimed_by_earlier":  [
+
+                                             ],
+                      "freshness":  "test-auditors.ps1:1129 and audit-store-registry.ps1:174-180 read at HEAD 1ccdab0fd, 10:25; the $sbTwin literal verified as the six-commodity JSON string",
+                      "proof":  {
+                                    "guard_or_fixture":  "grocery\\audit-store-registry.ps1 -SelfTest (new cases) + grocery\\test-auditors.ps1 (the $sbTwin fixture must keep passing unchanged)",
+                                    "must_fire_case":  "frozen: a test-x.ps1 carrying a 4-store literal and NO marker must still be reported - this is 34557a\u0027s own founding shape.",
+                                    "clean_twin":  "TWO twins, both required: (a) the same test-x.ps1 WITH the marker stays silent; (b) a NON-test file, e.g. build-x.ps1, carrying a 4-store literal WITH the marker present must STILL be reported - proving the marker cannot become a blanket bypass for production code.",
+                                    "commands":  [
+                                                     "powershell -File grocery\\audit-store-registry.ps1 -SelfTest",
+                                                     "powershell -File grocery\\audit-store-registry.ps1  (expect 0 issues)",
+                                                     "powershell -File grocery\\test-auditors.ps1"
+                                                 ]
+                                },
+                      "rollback":  "remove the marker line and the marker branch; the hand register still works exactly as before",
+                      "do_not_touch":  [
+                                           "the $sbTwin literal at test-auditors.ps1:1129, byte for byte - the marker goes on its own comment line above it; editing a frozen fixture to quiet a guard is how a watcher goes blind",
+                                           "stores.json\u0027s 7-store registry"
+                                       ],
+                      "resolution_note":  "Fifth false alert of one shape: a new clean-twin fixture ($sbTwin, test-auditors.ps1:1129) paged store-registry drift because allowed_subsets is a separate hand-kept file that can only be written after the fixture has paged. Fixtures now register themselves with an inline \u0027# store-subset-ok:\u0027 marker honoured only inside string literals in test-/measure- files; the marker sits on its own line above $sbTwin, which is untouched.",
+                      "publish_batch":  1,
+                      "status":  "deviated",
+                      "premise_verified":  "TRUE, observed before and after. Before the change audit-store-registry.ps1 printed exactly \"store-registry: 1 drift issue(s)\" naming \"test-auditors.ps1:1129 names 4 store(s) but is missing Hy-Vee, Aldi, Sam\u0027s Club\", exit 2. After it prints \"store-registry: OK  7 stores; board, files, schedule and live scripts all agree\", exit 0. THE FROZEN LITERAL WAS NOT TOUCHED: the sha256 of the $sbTwin line is 3262133b18976b20d986f290f7a80140a964309375ec2fde1d3810feb9bdf1b2 both before (as line 1129) and after (as line 1130), and git diff --numstat reports exactly 1 added line and 0 removed for the whole file.",
+                      "deviation":  "THE MARKER\u0027S MEASURED SCOPE CLOSES ONLY PART OF THE CLASS, and the run demonstrated it within the hour. The marker is honoured only inside string literals in test- or measure- FILES, which is the scope the blast radius was measured over and which clean twin (b) exists to hold. But most of this estate keeps its fixtures inside a GUARD\u0027s own -SelfTest block, not in a test- file: the moment I added the e60137 ownership fixture to audit-row-age.ps1, audit-store-registry reported the identical finding against it (audit-row-age.ps1:243, 3 stores named), which is the fifth-instance shape reproducing itself in real time. Rather than widen a scope the reviewer measured, I registered that one the documented way, as a stores.json allowed_subsets entry whose reason says why the subset proves the contract for all seven and why the inline marker does not reach it. Brad should know the register will keep accruing entries for guard-internal fixtures until the marker\u0027s scope is deliberately re-measured.\nFive self-test cases ship with the branch: an unmarked fixture literal in a test- file is still reported, a marked one is silent, THE SAME MARKER IN A NON-TEST FILE IS STILL REPORTED (the anti-bypass twin), a marker with no reason exempts nothing, and a marker does not reach a later unmarked literal. The finding text now offers the inline marker as the preferred registration, so the register stops lagging by an alert.",
+                      "shipped_commit":  null
+                  }
+              ],
+    "ship_sequence":  [
+                          "PRE-FLIGHT: read the first three bytes of grocery\\out\\json-readers-baseline.json; if not EF BB BF run `git -C C:\\Codex\\ThriftyCrew checkout -- grocery/out/json-readers-baseline.json` (explicit path). Re-run the scratch-index reproduction from a95022 and confirm ops\\verify-bulk-edit.ps1 -Staged prints 0 finding(s) over the bot\u0027s add set.",
+                          "BATCH 1 code, on a branch: lib\\git-blob-lib.ps1 Invoke-GitCaptured + capture-run.ps1:857 and lib\\pipeline-commit.ps1:150 (a95022); capture-run.ps1 $botCommitted init, served-dirty branch, edge line + test-commit-size-gate cases (f0b5f2); check-ad-cycles + audit-row-age ownership-flag branch (e60137); audit-store-registry marker branch + the one comment line above test-auditors.ps1:1129 (34557a); commodities.json donuts.exclude += six tokens (9b1f92).",
+                          "SELF-TESTS: lib\\git-blob-lib.ps1 -SelfTest; grocery\\test-commit-size-gate.ps1; ops\\verify-bulk-edit.ps1 -SelfTest; grocery\\audit-store-registry.ps1 -SelfTest then live (0 issues); grocery\\test-match-lib.ps1; grocery\\test-auditors.ps1 (MUST be 0); ops\\run-gates.ps1 (exit 0 - 3 is BLIND, never a pass).",
+                          "REBUILD: compare-deals.ps1 -MinStores 1 -BakersFile grocery\\out\\bakers\\bakers-deals-2026-09-09.json -FarewayFile \u003cnewest fareway-deals\u003e (this is the rebuild that carries the 146-row Baker\u0027s ad; compare-deals is not standalone - identity emission and link repair follow it).",
+                          "RULE GATE: audit-match-soundness.ps1 -\u003e review every drop line by line against plan-2026-09-09.routing.json (expect the four donuts names and nothing else new) -\u003e -Accept (verify-commodities-gate refuses the commit without the new rules_hash in match-baseline.json).",
+                          "audit-food-category.ps1 (0) -\u003e audit-name-drift / prune-bad-links / generate-board-overrides / build-deals-page -\u003e guards.ps1 (MUST be 0) -\u003e audit-basis-reconcile + audit-pack-basis -\u003e audit-row-age (the AD COVERAGE GONE line must be gone now that the 09-09 ad is in).",
+                          "VERIFY THE TWO FLAGGED CELLS ON THE REBUILT BOARD before publishing: donuts crown expected Baker\u0027s \u0027Bakery Fresh Glazed Yeast Donuts\u0027 about $0.4167/each, Family Fare $0.5317 runner-up, Fareway/Aldi/Walmart absent; baby-potatoes unchanged at Fareway $1.6633/lb; if the Baker\u0027s 09-09 ad moved either, stop and re-measure (freshness lines).",
+                          "publish-deals-page.ps1, then restore public\\ from git only for artifacts build-deals-page clobbers that are NOT the feed/board (site-and-publish rule).",
+                          "COMMIT with explicit paths, never a sweep add: the source files above, grocery/commodities.json, grocery/out/audit/match-baseline.json, grocery/triage-plans/plan-2026-09-09.json + plan-2026-09-09.routing.json, grocery/out/json-readers-baseline.json, then the served set (public/board.json, public/smp-feed.json, public/free-dinners.json, public/price-history.json, public/share/omaha-drops.png, the meal-prep and site/tools served files from f0b5f2\u0027s list) and grocery/out. Message in a file, -F, WriteAllText UTF8 no BOM. The pre-commit hook must pass on its own; if it refuses, the new commit:hook\u003e lines say why - do not --no-verify.",
+                          "PUSH (the push is the deploy), then LIVE VERIFICATION with fresh cache-busters: feed.thriftycrew.com/smp-feed.json?deploycheck=\u003cguid\u003e generated = today\u0027s stamp; board.json bytes = HEAD; the Ghost page\u0027s Donuts row shows the Baker\u0027s crown and Baby Back Ribs no longer shows an expired Baker\u0027s $2.99 chip.",
+                          "CLOSE the six queue items with the resolution notes above (triage-close.ps1); 04e0af closes as superseded by e60137."
+                      ],
+    "open_questions_for_brad":  [
+                                    {
+                                        "id":  "donuts-basis",
+                                        "item":  "2026-09-09-9b1f92",
+                                        "question":  "Donuts is priced per each, and a store can print a count for a hole, a mini, a stick or a dozen. MEASURED ON THE REBUILT AND PUBLISHED BOARD, not on the reviewer\u0027s naive model: with holes and pods excluded (shipped today) the crown is Baker\u0027s \"Bakery Fresh Glazed Yeast Donuts\", 12 pk 2.5 oz, at $0.4167/each, and the cell keeps FOUR stores - Baker\u0027s $0.4167, Walmart $0.5033 (\"Little Debbie Glazed Donut Sticks, 10.21 oz (6 count)\"), Family Fare $0.5317 (the same Little Debbie sticks) and Sam\u0027s Club $0.6933 (3 oz bags of minis). Fareway and Aldi lose their cells because their real donuts carry only ounces and price as whole packages, outside the 0.08-2 band. So the runner-up is Walmart, not Family Fare as the plan first estimated, and TWO of the four surviving cells are donut STICKS rather than donuts. Which should Donuts mean? (A) keep per each and also exclude minis and sticks - the cell becomes Baker\u0027s only, since Walmart, Family Fare and Sam\u0027s all hold sticks or minis, and a one-store cell is close to no cell; (B) price Donuts per oz - every store\u0027s real donuts price (Baker\u0027s dozen $0.167/oz, Fareway Big Smile $0.29/oz, Aldi Bake Shop $0.30/oz) and holes, sticks and minis compete by weight instead of by an arbitrary printed count; (C) leave it as shipped, four cells with two of them sticks. The frozen routing is in plan-2026-09-09.routing.json; the cell outcomes above were read off comparison-2026-09-09.json after the rebuild. This is a ruling on what the commodity means, not a defect."
+                                    }
+                                ]
+}

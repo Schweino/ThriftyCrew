@@ -41,6 +41,13 @@
 #>
 $__pcSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
+# Invoke-GitCaptured / Format-GitRefusal (2026-09-09, queue 2026-09-09-a95022). The commit below piped
+# STDOUT ONLY, and the pre-commit hook writes its entire diagnosis to STDERR, so a refusal here reported
+# an exit code and nothing else - the identical blind spot capture-run.ps1:857 had, found the day both
+# scheduled runs were refused over one file nobody could name. Sourced from THIS file's own directory so
+# it resolves wherever the repo is checked out, worktree included.
+. (Join-Path $PSScriptRoot 'git-blob-lib.ps1')
+
 # Anything that is CODE or CONFIG, in the broadest reading. Deliberately over-inclusive: the cost of a
 # false refusal is that a human commits a data file by hand, and the cost of a false accept is
 # 2026-09-05. Those are not remotely the same price.
@@ -147,9 +154,19 @@ function Invoke-PipelineCommit {
     if ($badStaged.Count) {
       return ("REFUSED: {0} staged source under a data path and will not commit it: {1}" -f $Name, (($badStaged | Select-Object -First 6) -join ', '))
     }
-    & git -C $Repo -c user.name="smp-pipeline-bot" -c user.email="actions@users.noreply.github.com" commit -m $Message -- $present | Out-Null
-    $rc = $LASTEXITCODE
-    if ($rc -ne 0) { return ("{0}: commit refused (git exit {1}) - a hook or git itself rejected it; the tree is untouched" -f $Name, $rc) }
+    # CAPTURE BOTH STREAMS (2026-09-09, queue 2026-09-09-a95022). `| Out-Null` discarded stdout and the
+    # hook's stderr never entered this process at all, so this lane's refusal string could only ever say
+    # "a hook rejected it" - which is the sentence that cost a full reproduction on 09-09. No `2>&1` and no
+    # `2>$null`: under EAP=Stop a native child's redirected stderr becomes a terminating error.
+    $cRes = Invoke-GitCaptured -Repo $Repo -GitArgs (@(
+      '-c', 'user.name=smp-pipeline-bot', '-c', 'user.email=actions@users.noreply.github.com',
+      'commit', '-m', $Message, '--') + @($present))
+    $rc = $cRes.rc
+    if ($rc -ne 0) {
+      $refusal = Format-GitRefusal -Rc $rc -Stderr $cRes.stderr
+      return ("{0}: commit refused (git exit {1}) - a hook or git itself rejected it; the tree is untouched. {2}`n{3}" -f `
+              $Name, $rc, $refusal.summary, (($refusal.transcript) -join "`n"))
+    }
   } catch {
     return ("{0}: committer threw and was swallowed (the lane's work is not lost, only uncommitted): {1}" -f $Name, $_.Exception.Message)
   } finally {

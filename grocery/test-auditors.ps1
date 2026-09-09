@@ -1126,6 +1126,7 @@ if ($r.rc -eq 2 -and $r.text -match 'steam_bag_carrier') {
 # and a Sauced bag actually ARE, which is why the class is scoped to Fruit and Vegetables and never reaches
 # the shared Dairy/Canned/.../Frozen block. Every per_unit here is read off the 2026-09-08 board or its
 # candidates file. If any of these fires, the scope has slipped and the release is eating real products.
+# store-subset-ok: clean-twin fixture for steam_bag_carrier - real 2026-09-08 board rows, the region under test never branches on store
 $sbTwin = '{"week_of":"2026-09-08","comparison":[{"commodity":"Carrots","id":"carrots","unit":"lb","stores":[{"store":"Baker''s","per_unit":2.6533,"item":"Kroger Steams in Bag Petite Carrots"}]},{"commodity":"Canned Corn","id":"canned-corn","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.2082,"item":"Green Giant SteamCrisp White Shoepeg Whole Kernel Corn"}]},{"commodity":"Frozen Peas","id":"frozen-peas","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.149,"item":"Birds Eye Steamfresh Sweet Peas, Frozen Vegetables"}]},{"commodity":"Frozen Corn","id":"frozen-corn","unit":"oz","stores":[{"store":"Family Fare","per_unit":0.2398,"item":"Birds Eye Sauced Butter Super Sweet Corn 10.8 Oz"},{"store":"Fareway","per_unit":0.12,"item":"Fareway Steamables Cut Corn"}]},{"commodity":"Green Beans (fresh)","id":"fresh-green-beans","unit":"lb","stores":[{"store":"Walmart","per_unit":1.6201,"item":"Fresh Green Beans, Bag"}]},{"commodity":"Red Potatoes","id":"red-potatoes","unit":"lb","stores":[{"store":"Fareway","per_unit":0.998,"item":"Red Potato"}]}]}'
 Set-Content (Join-Path $fxSb 'comparison-2026-09-08.json') $sbTwin -Encoding UTF8
 $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSb)
@@ -1747,6 +1748,10 @@ if ($saSrc -match "New-Object System\.Threading\.Mutex\(\`$false, 'Global\\smp-g
 # capture the estate takes and a wrong answer here loses a whole morning's prices.
 # test-capture-builders.ps1 extracts the SHIPPED block out of capture-run.ps1 by marker and runs it against
 # fake captures and fake builders. Exit 3 means it could not find the block - BLIND, not clean.
+# THE FIXTURE INVENTORY FLOOR, in one place because three assertions below read it (the live run, and the
+# LF and CRLF regime copies). A floor may only be RAISED: it exists so a silently dropped case fails here
+# rather than passing by finding nothing.
+$TCB_MIN_CASES = 33
 $tcb = Join-Path $root 'test-capture-builders.ps1'
 if (-not (Test-Path $tcb)) {
   Bad 'grocery\test-capture-builders.ps1 is missing - the browser-store builder block is unfixtured, and it is the last mile of every capture'
@@ -1755,7 +1760,7 @@ if (-not (Test-Path $tcb)) {
   $tcbRc = $LASTEXITCODE
   if ($tcbRc -eq 3) {
     Bad ('test-capture-builders is BLIND - it could not find the builder block in capture-run.ps1, so nothing about the builders was proven: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | '))
-  } elseif ($tcbRc -eq 0 -and $r -match 'SELFTEST: 28/28 pass') {
+  } elseif ($tcbRc -eq 0 -and $r -match 'CAPTURE-BUILDERS-COMPLETE cases=(\d+) failed=0' -and [int]$Matches[1] -ge $TCB_MIN_CASES) {
     # The COUNT is part of the assertion, not decoration: it pins the fixture inventory so a case that is
     # silently dropped fails here instead of passing by finding nothing. 10 -> 19 on 2026-09-03 when queue
     # 2026-09-03-58057b added the edge read-after-write cases (Test-EdgeServesPushed: the skipped/stale/ok/
@@ -1765,8 +1770,17 @@ if (-not (Test-Path $tcb)) {
     # byte-comparison arms (stale on one changed price digit, ok on identical bytes carrying non-ASCII, the
     # three BLIND arms, the empty-hash reachability check, the frozen reconstruction of the founding
     # two-decodings bug, and the assertion that no committed blob is read through the TEXT pipeline).
-    Ok 'capture-run builder block: a missing capture stays outstanding, a failed builder is named, a failed stage 1 skips stage 2, stage 2 is still judged on evidence, and the edge read-after-write is gated on $shipServed and compares COMMITTED BYTES against git (test-capture-builders 28/28)'
-  } else { Bad ('test-capture-builders failed (rc=' + $tcbRc + '): ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
+    # 28 -> 33 on 2026-09-09 (queue 2026-09-09-f0b5f2): the served-dirty gate and the edge-skipped line both
+    # now read $botCommitted, because on 09-09 the commit was REFUSED and both watchers reported as though
+    # it had landed - one naming 16 files and prescribing an inert repair, the other printing "skipped: ok".
+    #
+    # A FLOOR, NOT AN EQUALITY (2026-09-09). It was `-match 'SELFTEST: 28/28 pass'`, so ADDING a case turned
+    # this red and the failure text was the passing run's own output, which is a confusing way to learn that
+    # a suite grew. A floor still catches the thing the count is for - a silently dropped case - and it
+    # reads the tool's COMPLETION MARKER, so a suite that died halfway cannot satisfy it either. The bar is
+    # higher than the equality it replaces, not lower.
+    Ok ('capture-run builder block: a missing capture stays outstanding, a failed builder is named, a failed stage 1 skips stage 2, stage 2 is still judged on evidence, the edge read-after-write compares COMMITTED BYTES against git, and both post-commit watchers read $botCommitted (test-capture-builders ' + $Matches[1] + ' cases, floor ' + $TCB_MIN_CASES + ')')
+  } else { Bad ('test-capture-builders failed (rc=' + $tcbRc + ', floor ' + $TCB_MIN_CASES + ' cases): ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST|CAPTURE-BUILDERS-COMPLETE' }) -join ' | ')) }
 }
 
 # ---- THE FIXTURE MUST NOT CARE WHAT A LINE ENDING IS (2026-09-07, queue 2026-09-07-76ec7f) -------------
@@ -1788,7 +1802,16 @@ $crLf   = $crRaw -replace "`r`n", "`n"
 $crCrLf = $crLf  -replace "`n", "`r`n"
 $fxLeLf   = Join-Path $fxLe 'lf';   New-Item -ItemType Directory -Force $fxLeLf   | Out-Null
 $fxLeCrLf = Join-Path $fxLe 'crlf'; New-Item -ItemType Directory -Force $fxLeCrLf | Out-Null
-foreach ($d in @($fxLeLf, $fxLeCrLf)) { Copy-Item (Join-Path $root 'test-capture-builders.ps1') (Join-Path $d 'test-capture-builders.ps1') -Force }
+foreach ($d in @($fxLeLf, $fxLeCrLf)) {
+  Copy-Item (Join-Path $root 'test-capture-builders.ps1') (Join-Path $d 'test-capture-builders.ps1') -Force
+  # AND ITS GROCERY-LEVEL DEPENDENCY (2026-09-09). The fixture dot-sources fanout-lib.ps1 from its OWN
+  # directory. That line used to be the absolute 'C:\Codex\ThriftyCrew\grocery\fanout-lib.ps1', which made
+  # a copy work by reaching back into the main checkout - and made a WORKTREE run load main's library and
+  # report green about code it had not opened. Making the fixture repo-relative is right, and it means the
+  # copy must now carry the dependency, exactly as the lib\ copy above already does for ps-source and
+  # git-blob-lib. This is defect 4 of the 2026-09-05 sweep: a copied script does NOT keep its dependencies.
+  Copy-Item (Join-Path $root 'fanout-lib.ps1') (Join-Path $d 'fanout-lib.ps1') -Force
+}
 [IO.File]::WriteAllText((Join-Path $fxLeLf   'capture-run.ps1'), $crLf,   (New-Object Text.UTF8Encoding $true))
 [IO.File]::WriteAllText((Join-Path $fxLeCrLf 'capture-run.ps1'), $crCrLf, (New-Object Text.UTF8Encoding $true))
 # fixture integrity: the two copies really do differ in line endings and in nothing else. Without this a
@@ -1799,13 +1822,13 @@ if ($nLf -eq 0 -and $nCrLf -gt 1000 -and (($crCrLf -replace "`r`n", "`n") -eq $c
   Ok ('line-ending fixture integrity: the LF copy carries 0 CR and the CRLF copy carries ' + $nCrLf + ', and the two fold to identical text - the two runs below really are the same subject under two regimes')
 } else { Bad ('line-ending fixture integrity FAILED (CR counts ' + $nLf + ' / ' + $nCrLf + ') - the two copies are not the same bytes under two regimes, so neither run below means anything') }
 $rLf = RunPSAt $fxLeLf 'test-capture-builders.ps1' @()
-if ($rLf.rc -eq 0 -and $rLf.text -match 'SELFTEST: 28/28 pass') { Ok 'capture-run builder block under LF (today''s regime): test-capture-builders finds its subject and passes 28/28' }
+if ($rLf.rc -eq 0 -and $rLf.text -match 'CAPTURE-BUILDERS-COMPLETE cases=(\d+) failed=0' -and [int]$Matches[1] -ge $TCB_MIN_CASES) { Ok ('capture-run builder block under LF (today''s regime): test-capture-builders finds its subject and passes ' + $Matches[1] + ' cases') }
 elseif ($rLf.text -match 'BLIND') { Bad ('test-capture-builders is BLIND against an LF capture-run.ps1 (rc=' + $rLf.rc + ') - this is the 2026-09-07 defect returning: ' + (($rLf.text -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | ')) }
 else { Bad ('test-capture-builders failed against an LF capture-run.ps1 (rc=' + $rLf.rc + '): ' + (($rLf.text -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 # CLEAN TWIN: the regime the fixture was written under. The fix folds CRLF to LF, and the thing that fold
 # was most likely to break is the case it used to handle. The builders' behaviour is not a line ending.
 $rCrLf = RunPSAt $fxLeCrLf 'test-capture-builders.ps1' @()
-if ($rCrLf.rc -eq 0 -and $rCrLf.text -match 'SELFTEST: 28/28 pass') { Ok 'CLEAN TWIN: capture-run builder block under CRLF (a fresh checkout''s regime) still passes 28/28 - the fold did not trade one regime for the other' }
+if ($rCrLf.rc -eq 0 -and $rCrLf.text -match 'CAPTURE-BUILDERS-COMPLETE cases=(\d+) failed=0' -and [int]$Matches[1] -ge $TCB_MIN_CASES) { Ok ('CLEAN TWIN: capture-run builder block under CRLF (a fresh checkout''s regime) still passes ' + $Matches[1] + ' cases - the fold did not trade one regime for the other') }
 elseif ($rCrLf.text -match 'BLIND') { Bad ('test-capture-builders is BLIND against a CRLF capture-run.ps1 (rc=' + $rCrLf.rc + ') - the fix traded the old blindness for a new one, and every fresh worktree is CRLF: ' + (($rCrLf.text -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | ')) }
 else { Bad ('test-capture-builders failed against a CRLF capture-run.ps1 (rc=' + $rCrLf.rc + '): ' + (($rCrLf.text -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 # MUST FIRE (the founding bug, frozen). The OLD locate logic, reconstructed here so it cannot be edited

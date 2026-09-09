@@ -1,53 +1,173 @@
 ﻿{
-    "generated":  "2026-07-16 09:14",
-    "count":  6,
+    "generated":  "2026-09-09 07:09",
+    "count":  21,
     "rows":  [
                  {
-                     "commodity":  "bagels",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Pre-Sliced Original Bagels",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "bagels",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "fresh-ginger",
-                     "store":  "Family Fare",
-                     "candidate":  "Swanson® Sipping Chicken Bone Broth With Ginger And Turmeric 10.750 Oz",
-                     "cause":  "STOLEN",
-                     "owner":  "chicken-broth",
-                     "detail":  "chicken-broth"
-                 },
-                 {
-                     "commodity":  "ribeye-steak",
-                     "store":  "Fareway",
-                     "candidate":  "USDA Choice Thick Cut Ribeye Steak",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "ribeye-steak",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "whipped-cream",
+                     "commodity":  "toilet-paper",
                      "store":  "Aldi",
-                     "candidate":  "Friendly Farms Whipped Topping",
+                     "candidate":  "Willow Roll Soft Strong Bath Tissue 12 CT",
                      "cause":  "OUT-OF-BAND",
-                     "owner":  "whipped-cream",
+                     "owner":  "toilet-paper",
                      "detail":  ""
                  },
                  {
-                     "commodity":  "pudding-cups",
-                     "store":  "Fareway",
-                     "candidate":  "Snack Pack Butterscotch Flavored Pudding",
+                     "commodity":  "aluminum-foil",
+                     "store":  "Aldi",
+                     "candidate":  "Boulder 75 Regular Aluminum Foil Each",
+                     "cause":  "UNPRICED",
+                     "owner":  "aluminum-foil",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "aluminum-foil",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Reynolds Wrap Heavy Duty 18 Inch Aluminum Foil, 2 pk",
+                     "cause":  "UNPRICED",
+                     "owner":  "aluminum-foil",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "kale",
+                     "store":  "Family Fare",
+                     "candidate":  "Kale",
+                     "cause":  "UNPRICED",
+                     "owner":  "kale",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "kale",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Mediterranean Kale Pasta Salad, priced per pound",
+                     "cause":  "UNPRICED",
+                     "owner":  "kale",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "ground-pork",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Fresh ground pork, SAVE! 1.00, $2.99",
+                     "cause":  "UNPRICED",
+                     "owner":  "ground-pork",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "string-cheese",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy Vee Natural Mozzarella String Cheese",
+                     "cause":  "UNPRICED",
+                     "owner":  "string-cheese",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "chocolate-milk",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee 1% lowfat chocolate milk, FUEL SAVER EARN 3¢ OFF PER GALLON, $2.98",
+                     "cause":  "UNPRICED",
+                     "owner":  "chocolate-milk",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "pita-bread",
+                     "store":  "Aldi",
+                     "candidate":  "Bremer Angus Cheeseburger Pita Melt 13.5 OZ",
+                     "cause":  "UNPRICED",
+                     "owner":  "pita-bread",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "brown-rice",
+                     "store":  "Aldi",
+                     "candidate":  "Livegfree Sweet Chili Brown Rice Crisps 7 OZ",
                      "cause":  "OUT-OF-BAND",
-                     "owner":  "pudding-cups",
+                     "owner":  "brown-rice",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "frozen-lasagna",
+                     "store":  "Family Fare",
+                     "candidate":  "Rao\u0027s® Meat Lasagna Frozen Meal 27.000 Oz",
+                     "cause":  "OUT-OF-BAND",
+                     "owner":  "frozen-lasagna",
                      "detail":  ""
                  },
                  {
                      "commodity":  "tater-tots",
-                     "store":  "Family Fare",
-                     "candidate":  "Alexia Sweet Potato Bite Sized Tots 20 Oz",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Ore-Ida Star Tater Tots Core Frozen Potatoes 28 oz",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "tater-tots",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "bar-soap",
+                     "store":  "Fareway",
+                     "candidate":  "Irish Spring Men\u0027s Bar Soap, Original Clean",
+                     "cause":  "OUT-OF-BAND",
+                     "owner":  "bar-soap",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "facial-tissues",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee facial tissue, FUEL SAVER EARN 3¢ OFF PER GALLON, $2.29",
+                     "cause":  "UNPRICED",
+                     "owner":  "facial-tissues",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "ground-sumac",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Morton \u0026 Bassett All Natural Sumac",
+                     "cause":  "OUT-OF-BAND",
+                     "owner":  "ground-sumac",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "chicken-livers",
+                     "store":  "Fareway",
+                     "candidate":  "Chicken Liver",
+                     "cause":  "UNPRICED",
+                     "owner":  "chicken-livers",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "cooked-quinoa",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Cole\u0027s Ready To Eat Patagonian Smoked Salmon Fillet with Quinoa",
+                     "cause":  "OUT-OF-BAND",
+                     "owner":  "cooked-quinoa",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "red-wine",
+                     "store":  "Fareway",
+                     "candidate":  "The Drunken Goat Red Wine Cheese Wedge",
+                     "cause":  "OUT-OF-BAND",
+                     "owner":  "red-wine",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "pistachios",
+                     "store":  "Fareway",
+                     "candidate":  "Wonderful Pistachios",
+                     "cause":  "UNPRICED",
+                     "owner":  "pistachios",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "avocado-oil",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee avocado oil, 8.5 fl. oz., $5.79",
+                     "cause":  "UNPRICED",
+                     "owner":  "avocado-oil",
+                     "detail":  ""
+                 },
+                 {
+                     "commodity":  "phyllo-dough",
+                     "store":  "Family Fare",
+                     "candidate":  "Athens Easy To Use Phyllo Dough 2 Ea",
+                     "cause":  "UNPRICED",
+                     "owner":  "phyllo-dough",
                      "detail":  ""
                  }
              ]

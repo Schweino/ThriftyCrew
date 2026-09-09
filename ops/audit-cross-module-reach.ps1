@@ -97,6 +97,22 @@ function Get-ReachSites {
           $rest = $lines[$i].Substring($m.Index + $m.Length)
           $tail = [regex]::Match($rest, '^[\\/][A-Za-z0-9_.\-]+')
           if ($tail.Success -and $tail.Value -match '\.(ps1|py)$') { continue }
+          # A QUOTED FIXTURE LITERAL IS NOT A DATA REACH (2026-09-09, queue 2026-09-09-a95022). Same shape
+          # as the entry-point rule directly above, and the same reason the scan already refuses to read
+          # this file: a fixture is FULL of the literals the detector hunts, and quoting a path is not
+          # opening one. The 09-09 case: lib\git-blob-lib.ps1's frozen must-fire reproduces the pre-commit
+          # hook's own stderr, 'BOM CHANGED grocery/out/json-readers-baseline.json', and the throwaway
+          # repo in its clean twin is seeded with 'grocery/out/x.json'. Neither line reads grocery's
+          # internals - one is a string the hook printed, the other a file inside a %TEMP% repo - and the
+          # ratchet counted both as new coupling.
+          #
+          # OPT-IN, PER LINE, AND IT MUST CARRY A REASON. Not a file-type exemption: excusing every
+          # test-*.ps1 would have dropped 20 sites in ops\test-precommit-hook.ps1 alone out of the
+          # measurement, which is lowering the baseline by changing what is counted rather than by
+          # removing coupling. Nothing in the tree carried this marker when it was added, so the 133
+          # high-water mark it was measured against is untouched - it can only ever exclude a line an
+          # author wrote it on, in a diff a reviewer reads.
+          if ($lines[$i] -match 'reach-fixture-ok:\s*\S') { continue }
           $out += @{ target = $int; module = $owner; line = ($i + 1)
                      comment = (Test-IsCommentSite -Line $lines[$i] -MatchIndex $m.Index) }
         }
@@ -128,6 +144,23 @@ if ($runSelfTest) {
   # MUST NOT FIRE - invoking another module's SCRIPT is using its front door, not reaching past it.
   $sE = @(Get-ReachSites -Text '$p = Join-Path $root ''graph\learning\promote_aliases.py''' -OwnModule 'grocery')
   T 'MUST NOT FIRE  invoking another module''s script is an ENTRY POINT, not a data reach' ($sE.Count -eq 0) ([string]$sE.Count)
+
+  # ---- THE FIXTURE MARKER (2026-09-09, queue 2026-09-09-a95022) ------------------------------------
+  # MUST FIRE first, so the marker is proved to be doing the work rather than the line being uncounted
+  # anyway. This is the exact line lib\git-blob-lib.ps1's frozen must-fire carries.
+  $sF0 = @(Get-ReachSites -Text '$f = ''grocery/out/json-readers-baseline.json''' -OwnModule 'lib')
+  T 'MUST FIRE  an UNMARKED fixture literal is still counted (the marker, not the file, does the work)' ($sF0.Count -eq 1 -and -not $sF0[0].comment) ([string]$sF0.Count)
+  # MUST NOT FIRE with the marker and a reason.
+  $sF1 = @(Get-ReachSites -Text '$f = ''grocery/out/json-readers-baseline.json''   # reach-fixture-ok: frozen hook stderr, nothing here opens it' -OwnModule 'lib')
+  T 'MUST NOT FIRE  a marked fixture literal with a reason is not a data reach' ($sF1.Count -eq 0) ([string]$sF1.Count)
+  # A MARKER WITH NO REASON IS NOT AN EXEMPTION - the same rule stores.json allowed_subsets gets wrong.
+  $sF2 = @(Get-ReachSites -Text '$f = ''grocery/out/json-readers-baseline.json''   # reach-fixture-ok:' -OwnModule 'lib')
+  T 'MUST FIRE  a marker with no reason exempts nothing' ($sF2.Count -eq 1) ([string]$sF2.Count)
+  # AND IT IS PER LINE. A marker on one line must not excuse the next, or one fixture silences a file.
+  $sF3 = @(Get-ReachSites -Text (@(
+      '$a = ''grocery/out/x.json''   # reach-fixture-ok: throwaway repo seed',
+      '$b = ''grocery/out/comparison-2026-09-08.json''') -join "`n") -OwnModule 'lib')
+  T 'MUST FIRE  the marker is per LINE - the unmarked line below it is still counted' ($sF3.Count -eq 1 -and $sF3[0].line -eq 2) ([string]$sF3.Count)
 
   # MUST FIRE - the same directory prefix, but a DATA file behind it, is still a reach. This is the
   # pair that proves the entry-point rule did not just switch the check off.

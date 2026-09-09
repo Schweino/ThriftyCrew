@@ -54,7 +54,10 @@ $sandbox = Join-Path $env:TEMP ('p4-' + [guid]::NewGuid().ToString('N').Substrin
 New-Item -ItemType Directory (Join-Path $sandbox 'out\captures') -Force | Out-Null
 New-Item -ItemType Directory (Join-Path $sandbox 'out\fareway')  -Force | Out-Null
 New-Item -ItemType Directory (Join-Path $sandbox 'out\regular')  -Force | Out-Null
-. 'C:\Codex\ThriftyCrew\grocery\fanout-lib.ps1'
+# RESOLVED RELATIVE TO THIS FILE (2026-09-09). Was the absolute 'C:\Codex\ThriftyCrew\grocery\
+# fanout-lib.ps1', so a run in a WORKTREE loaded MAIN's library and reported green about code it had not
+# opened. $root is this fixture's own directory, which is what the block above already uses for capture-run.
+. (Join-Path $root 'fanout-lib.ps1')
 
 $todayS = '2026-08-23'
 $MaxParallel = 8
@@ -166,7 +169,30 @@ T 'E  could-not-read-the-committed-blob is BLIND, not stale - it must not alert'
 # THE TWO ADJACENT BLOCKS MUST STAY IN STEP. The served-dirty block was already gated on $shipServed and is
 # the reason it stayed correctly quiet on 2026-09-03; the edge check was written before it and never picked
 # up the same predicate. If a future editor un-syncs them, this is where it shows.
-T 'E  the served-dirty block is still gated on $shipServed' ($src -match '(?m)^if \(\$shipServed\) \{\r?\n\s*\$servedDirty')
+# THE PREDICATE GOT STRICTER, NOT LOOSER (2026-09-09, queue 2026-09-09-f0b5f2). $shipServed alone says the
+# chain INTENDED to ship; it says nothing about whether the commit landed. On 2026-09-09 guards passed, the
+# hook refused the commit, and this block fired anyway with an alert whose first sentence was "the bot
+# commit went out". The assertion now demands BOTH flags, so it is strictly stronger than the one it
+# replaces and a future editor cannot drop either half without turning this red.
+T 'E  the served-dirty block is gated on $shipServed AND $botCommitted' ($src -match '(?m)^if \(\$shipServed -and \$botCommitted\) \{\r?\n\s*\$servedDirty')
+T 'E  and a refused commit takes its own arm rather than the founding watcher''s' ($src -match '(?m)^\} elseif \(\$shipServed -and -not \$botCommitted\) \{')
+# THE 2026-09-09 EDGE DEFECT ITSELF: the skipped line handed the pure function ShipServed=$true with 'n/a'
+# on both sides, so it walked past the skipped arm, compared 'n/a' with 'n/a' and returned **ok**. The daily
+# log reads "edge check skipped: ok" - a check that never ran, reporting a pass. Could-not-evaluate is never
+# a pass, and this is the shape that has to stay dead.
+T 'E  MUST-FIRE (2026-09-09): a REFUSED commit is skipped, never ok - the predicate must include botCommitted' `
+  ((Test-EdgeServesPushed -ShipServed ($true -and $false -and $false) -CommittedGenerated 'n/a' -LiveGenerated 'n/a') -eq 'skipped')
+T 'E  MUST-FIRE (2026-09-09): the OLD predicate on that same run returned ok, which is the bug being fixed' `
+  ((Test-EdgeServesPushed -ShipServed $true -CommittedGenerated 'n/a' -LiveGenerated 'n/a') -eq 'ok')
+T 'E  the skipped line passes the three-flag predicate and prints all three values, not a guessed literal' `
+  (($src -match '\$edgeVerifiable = \(\$shipServed -and \$botCommitted -and \$pushed\)') -and
+   ($src -match 'Test-EdgeServesPushed -ShipServed \$edgeVerifiable') -and
+   ($src -match 'shipServed=\{0\} botCommitted=\{1\} pushed=\{2\}'))
+# AGAINST CODE, NOT PROSE. The first cut of this case grepped $src and matched the COMMENT that explains
+# the retired literal, so it went red over its own documentation - the selftest-greps-its-own-source shape.
+# Get-PsCodeOnly is already loaded at the top of this file for exactly this reason.
+T 'E  and the retired literal "(shipServed=false)" is gone from the CODE (the comment explaining it may stay)' `
+  ((Get-PsCodeOnly -Text $src) -notmatch '\(shipServed=false\)')
 T 'E  the edge read-after-write is now gated on $shipServed too, NOT on $runDownstream' ($src -match '(?m)^if \(\$shipServed -and \$pushed\) \{')
 # SAME INVARIANT, NEW SPELLING (2026-09-04, queue 2026-09-04-4ec26c). The property asserted here has not
 # moved an inch - both read-after-writes still read the COMMITTED blob and never the working tree - but the

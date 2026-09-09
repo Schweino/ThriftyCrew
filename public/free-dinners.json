@@ -1,6 +1,6 @@
 {
-    "week_of":  "2026-09-08",
-    "updated":  "2026-09-08T08:16:20",
+    "week_of":  "2026-09-09",
+    "updated":  "2026-09-09T08:18:43",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
@@ -8,35 +8,35 @@
                      "protein":  "chicken",
                      "rank":  1,
                      "name":  "Chicken Pot Pie Casserole with Biscuits",
-                     "per_serving":  1.84
-                 },
-                 {
-                     "slug":  "buffalo-chicken-pasta-bake",
-                     "protein":  "chicken",
-                     "rank":  2,
-                     "name":  "Buffalo Chicken Pasta Bake",
-                     "per_serving":  1.98
+                     "per_serving":  1.81
                  },
                  {
                      "slug":  "poppy-seed-chicken-and-rice-casserole",
                      "protein":  "chicken",
-                     "rank":  3,
+                     "rank":  2,
                      "name":  "Poppy Seed Chicken and Rice Casserole",
+                     "per_serving":  1.95
+                 },
+                 {
+                     "slug":  "buffalo-chicken-pasta-bake",
+                     "protein":  "chicken",
+                     "rank":  3,
+                     "name":  "Buffalo Chicken Pasta Bake",
+                     "per_serving":  1.98
+                 },
+                 {
+                     "slug":  "chicken-bulgogi-rice-bowls",
+                     "protein":  "chicken",
+                     "rank":  4,
+                     "name":  "Chicken Bulgogi Rice Bowls",
                      "per_serving":  1.99
                  },
                  {
                      "slug":  "chicken-fried-rice-skillet",
                      "protein":  "chicken",
-                     "rank":  4,
+                     "rank":  5,
                      "name":  "Chicken Fried Rice",
                      "per_serving":  2
-                 },
-                 {
-                     "slug":  "chicken-bulgogi-rice-bowls",
-                     "protein":  "chicken",
-                     "rank":  5,
-                     "name":  "Chicken Bulgogi Rice Bowls",
-                     "per_serving":  2.02
                  },
                  {
                      "slug":  "turkey-biscuit-pot-pie-casserole",
@@ -67,11 +67,11 @@
                      "per_serving":  2.06
                  },
                  {
-                     "slug":  "scalloped-potato-turkey-casserole",
+                     "slug":  "turkey-maqluba-upside-down-rice-bake",
                      "protein":  "turkey",
                      "rank":  5,
-                     "name":  "Scalloped Potato Turkey Casserole",
-                     "per_serving":  2.1
+                     "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
+                     "per_serving":  2.09
                  },
                  {
                      "slug":  "low-carb-taco-cabbage-beef-skillet",
@@ -85,28 +85,28 @@
                      "protein":  "beef",
                      "rank":  2,
                      "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
-                     "per_serving":  2.32
-                 },
-                 {
-                     "slug":  "million-dollar-baked-spaghetti",
-                     "protein":  "beef",
-                     "rank":  3,
-                     "name":  "Million Dollar Baked Spaghetti",
-                     "per_serving":  2.41
+                     "per_serving":  2.29
                  },
                  {
                      "slug":  "lebanese-hashweh",
                      "protein":  "beef",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.42
+                     "per_serving":  2.36
+                 },
+                 {
+                     "slug":  "million-dollar-baked-spaghetti",
+                     "protein":  "beef",
+                     "rank":  4,
+                     "name":  "Million Dollar Baked Spaghetti",
+                     "per_serving":  2.41
                  },
                  {
                      "slug":  "keto-cheeseburger-skillet",
                      "protein":  "beef",
                      "rank":  5,
                      "name":  "Keto Cheeseburger Casserole Skillet",
-                     "per_serving":  2.45
+                     "per_serving":  2.42
                  },
                  {
                      "slug":  "orecchiette-italian-sausage-broccoli",

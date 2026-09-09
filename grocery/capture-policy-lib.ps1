@@ -1070,6 +1070,78 @@ function Write-CaptureWorklist {
   return $file
 }
 
+# ---- WHO OWNS THIS STORE'S CAPTURE RIGHT NOW (2026-09-09, queue 2026-09-09-e60137) ---------------------
+#
+# THE SHAPE. At 07:02 the ad run found Baker's ad window had rolled over, queued 17 terms for it and
+# DEFERRED the store to a browser owner, writing out\browser-capture-due-2026-09-09.flag. At 08:35
+# audit-row-age paged "AD COVERAGE GONE: Baker's" for a store the pipeline had explicitly handed to
+# someone else 93 minutes earlier, and at 09:10 that owner's 146-row capture landed. The alert was true
+# when it fired and false 35 minutes later. A store with a named owner and work in flight is not an
+# unowned gap, and paging it as one is how an ops queue teaches people to skim.
+#
+# THE EXPIRY IS THE WHOLE SAFETY PROPERTY. An ownership record that never ages out would hide a browser
+# agent that simply never ran - the Fareway $1.99/lb pork chops shape, a real gap invisible for a week.
+# So ownership is worth exactly 24 hours from the moment the store was FIRST deferred, and after that
+# the emitters page normally. Refusing to alert is a loan against attention, not a write-off.
+#
+# WHY FIRST-DEFERRED AND NOT THE FILE'S MTIME, which is the half the plan could not have known: the flag
+# is ONE FILE PER DATE and every run REWRITES it with only its own outstanding set. Measured on 09-09:
+# the 07:02 ad run wrote it naming Baker's; the 08:06 daily run overwrote the same file naming Aldi and
+# Walmart, and Baker's ownership record was gone 29 minutes before the alert that needed it. Keying the
+# expiry on the file's mtime would also mean a store deferred a week ago looks freshly owned every
+# morning, because some other store's deferral keeps refreshing the timestamp. So the writer now carries
+# an `owned` map of store -> when it was first deferred TODAY, and this reads that. A flag with no
+# `owned` map (every flag written before this change) falls back to the file's mtime, which is the best
+# evidence those files carry and is never treated as newer than it is.
+function Test-BrowserCaptureOwned {
+  <# .SYNOPSIS  Is <Store> currently deferred to a browser owner, with the deferral still inside its
+                expiry window? .DESCRIPTION Reads out\browser-capture-due-*.flag. Returns $false for
+                anything it cannot prove - an unreadable flag is not ownership, and could-not-look must
+                never settle the question in the quiet direction. #>
+  param(
+    [Parameter(Mandatory=$true)][string]$Store,
+    [Parameter(Mandatory=$true)][string]$OutDir,
+    [datetime]$Now = (Get-Date),
+    [double]$MaxAgeHours = 24
+  )
+  if (-not $Store -or -not $OutDir -or -not (Test-Path $OutDir)) { return $false }
+  # "Baker's" / "Bakers" / "BAKER'S" are one store. The flag is written by one script and read by two
+  # others, and an apostrophe has already cost this estate a guard that was permanently red.
+  $key = ($Store -replace '[^A-Za-z0-9]', '').ToLowerInvariant()
+  if (-not $key) { return $false }
+  $flags = @(Get-ChildItem (Join-Path $OutDir 'browser-capture-due-*.flag') -ErrorAction SilentlyContinue)
+  foreach ($f in $flags) {
+    $doc = $null
+    try { $doc = (Get-Content $f.FullName -Raw -Encoding UTF8) | ConvertFrom-Json } catch { continue }
+    if (-not $doc) { continue }
+    $deferredAt = $null
+    # Preferred: the per-store stamp, which survives another run rewriting the file for a different store.
+    if ($doc.PSObject.Properties['owned'] -and $doc.owned) {
+      foreach ($p in $doc.owned.PSObject.Properties) {
+        if ((([string]$p.Name) -replace '[^A-Za-z0-9]', '').ToLowerInvariant() -ne $key) { continue }
+        try { $deferredAt = [datetime]::Parse([string]$p.Value) } catch { $deferredAt = $f.LastWriteTime }
+        break
+      }
+    }
+    # Fallback for a flag written before the `owned` map existed: the store list plus the file's mtime.
+    if (-not $deferredAt -and $doc.PSObject.Properties['stores']) {
+      foreach ($s in @($doc.stores)) {
+        if ((([string]$s) -replace '[^A-Za-z0-9]', '').ToLowerInvariant() -eq $key) { $deferredAt = $f.LastWriteTime; break }
+      }
+    }
+    if (-not $deferredAt) { continue }
+    if (($Now - $deferredAt).TotalHours -lt $MaxAgeHours) { return $true }
+  }
+  return $false
+}
+
+# The line an emitter prints INSTEAD of paging, so a downgraded alert is still visible in the transcript.
+# Silence and "somebody else is on it" must not look the same in a log.
+function Get-BrowserOwnedNote {
+  param([Parameter(Mandatory=$true)][string]$Store)
+  return ("$Store is deferred to a browser capture owner (out\browser-capture-due-<date>.flag) and the deferral is under 24h old, so this is an OWNED gap in flight, not an unowned one. It escalates normally once the deferral passes 24h.")
+}
+
 # ---------------------------------------------------------------------------
 
 

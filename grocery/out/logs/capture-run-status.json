@@ -1,20 +1,20 @@
 ﻿{
     "daily":  {
-                  "date":  "2026-09-08",
-                  "pid":  492,
-                  "started":  "2026-09-08T08:00:02",
-                  "updated":  "2026-09-08T08:33:12",
-                  "stage":  "publishing",
-                  "exit_code":  null,
-                  "log":  "--- run-log: capture-run-daily | 2026-09-08T08:00:02 | pid 492 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-08.log"
+                  "date":  "2026-09-09",
+                  "pid":  37252,
+                  "started":  "2026-09-09T08:00:02",
+                  "updated":  "2026-09-09T08:35:06",
+                  "stage":  "complete",
+                  "exit_code":  1,
+                  "log":  "--- run-log: capture-run-daily | 2026-09-09T08:00:02 | pid 37252 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-09.log"
               },
     "ad":  {
-               "date":  "2026-09-08",
-               "pid":  40864,
-               "started":  "2026-09-08T07:00:02",
-               "updated":  "2026-09-08T07:02:56",
+               "date":  "2026-09-09",
+               "pid":  40468,
+               "started":  "2026-09-09T07:00:02",
+               "updated":  "2026-09-09T07:02:36",
                "stage":  "complete",
-               "exit_code":  0,
-               "log":  "--- run-log: capture-run-ad | 2026-09-08T07:00:02 | pid 40864 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-08.log"
+               "exit_code":  1,
+               "log":  "--- run-log: capture-run-ad | 2026-09-09T07:00:02 | pid 40468 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-09.log"
            }
 }

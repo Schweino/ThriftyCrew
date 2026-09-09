@@ -29,8 +29,12 @@
 param([switch]$SelfTest,[switch]$Baseline,[int]$MaxDays=0,[double]$Tolerance=2.0,[string]$OutDir)
 # MaxDays defaults to the capture policy's carry (90) - Brad 2026-08-22: no 14-day window anywhere. The
 # self-test passes 14 explicitly because it tests the profiler's arithmetic, not the policy.
+# UNCONDITIONAL NOW (2026-09-09): the AD COVERAGE GONE branch below needs Test-BrowserCaptureOwned, and
+# this used to load the policy library only when -MaxDays was absent. Loading it on one path and not the
+# other is how a function is present in production and missing under -SelfTest. It declares no param()
+# block, so dot-sourcing it cannot reset this script's own switches.
+. (Join-Path $PSScriptRoot 'capture-policy-lib.ps1')
 if (-not $MaxDays) {
-  . (Join-Path $PSScriptRoot 'capture-policy-lib.ps1')
   $MaxDays = [int](Get-PolicyMaxCarryDays)
   if (-not $MaxDays) { throw 'audit-row-age: capture policy carry window unreadable' }
 }
@@ -206,6 +210,61 @@ if($SelfTest){
   # the day the ad OPENS it is live, not future - an off-by-one here re-arms the alert on the wrong day
   T 'CLEAN TWIN on 2026-09-07 the same ad is live, not not-yet-open (boundary is > not >=)' `
     (-not (Test-AdWindowNotYetOpen $farewayNext ([datetime]'2026-09-07'))) 'the opening day read as future'
+  # ---- AN OWNED GAP IS NOT AN UNOWNED ONE (2026-09-09, queue 2026-09-09-e60137) --------------------
+  # FROZEN from the real 2026-09-09 morning. Baker's ad window rolled over; the 07:02 ad run queued 17
+  # terms for it, deferred it to a browser owner and wrote out\browser-capture-due-2026-09-09.flag naming
+  # Baker's; audit-row-age paged AD COVERAGE GONE at 08:35; the owner's 146-row capture landed at 09:10.
+  # Fixture directories, never the live out\ - a case built from whatever flags happen to be on disk this
+  # morning would pass by finding nothing tomorrow.
+  $ownFx = Join-Path $env:TEMP ('rowage-own-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+  New-Item -ItemType Directory $ownFx -Force | Out-Null
+  $ownNow = [datetime]'2026-09-09 08:35:00'
+  # MUST FIRE: an expired window and NO flag at all. This is a genuinely unowned gap and must still page.
+  T 'MUST FIRE  an expired ad window with NO browser-due flag is an UNOWNED gap and still pages' `
+    (-not (Test-BrowserCaptureOwned -Store "Baker's" -OutDir $ownFx -Now $ownNow)) 'a store with no flag read as owned'
+  # CLEAN TWIN: the same expired window WITH a same-day deferral naming the store - silent.
+  [IO.File]::WriteAllText((Join-Path $ownFx 'browser-capture-due-2026-09-09.flag'),
+    '{"date":"2026-09-09","kind":"ad","stores":["Baker''s"],"owned":{"Baker''s":"2026-09-09T07:02:36"}}',
+    (New-Object Text.UTF8Encoding($false)))
+  T 'CLEAN TWIN the same store deferred to a browser owner at 07:02 reads as OWNED at 08:35' `
+    (Test-BrowserCaptureOwned -Store "Baker's" -OutDir $ownFx -Now $ownNow) 'the deferral was not honoured'
+  # MUST NOT FIRE: ownership is per store, not per flag. Aldi is not owned by Baker's deferral.
+  T 'MUST NOT FIRE ownership is per STORE - a flag naming Baker''s does not silence Aldi' `
+    (-not (Test-BrowserCaptureOwned -Store 'Aldi' -OutDir $ownFx -Now $ownNow)) 'one store''s deferral silenced another'
+  # MUST FIRE, and this is the safety property: 24h later the SAME record must page. An ownership flag
+  # that never expires hides a browser agent that never ran - the Fareway $1.99/lb pork chops shape.
+  T 'MUST FIRE  the same deferral 25h later has EXPIRED and pages again (a never-run agent cannot hide)' `
+    (-not (Test-BrowserCaptureOwned -Store "Baker's" -OutDir $ownFx -Now ([datetime]'2026-09-10 08:35:00'))) 'an expired deferral still silenced the alert'
+  # THE MEASURED DEVIATION (2026-09-09): the flag is ONE FILE PER DATE and every run REWRITES it with its
+  # own outstanding set. At 08:06 the daily run overwrote the 07:02 flag with Aldi and Walmart, so by 08:35
+  # the only record that Baker's had an owner was gone. Reading the store list alone would therefore NOT
+  # have silenced the alert this fix exists for; the `owned` map is what survives the rewrite.
+  [IO.File]::WriteAllText((Join-Path $ownFx 'browser-capture-due-2026-09-09.flag'),
+    '{"date":"2026-09-09","kind":"daily","stores":["Aldi","Walmart"],"owned":{"Baker''s":"2026-09-09T07:02:36","Aldi":"2026-09-09T08:06:39","Walmart":"2026-09-09T08:06:39"}}',
+    (New-Object Text.UTF8Encoding($false)))
+  T 'MUST FIRE  a later run rewriting the flag for OTHER stores does not erase Baker''s ownership' `
+    (Test-BrowserCaptureOwned -Store "Baker's" -OutDir $ownFx -Now $ownNow) 'the same-date rewrite erased the earlier deferral - this is the 09-09 defect'
+  # BACKWARD COMPATIBILITY: every flag written before this change has no `owned` map. Its store list plus
+  # the file's mtime is the best evidence it carries, and it must still be honoured rather than ignored.
+  [IO.File]::WriteAllText((Join-Path $ownFx 'browser-capture-due-2026-09-09.flag'),
+    '{"date":"2026-09-09","kind":"ad","stores":["Baker''s"]}', (New-Object Text.UTF8Encoding($false)))
+  (Get-Item (Join-Path $ownFx 'browser-capture-due-2026-09-09.flag')).LastWriteTime = [datetime]'2026-09-09 07:02:36'
+  T 'CLEAN TWIN a pre-existing flag with no `owned` map still confers ownership from its mtime' `
+    (Test-BrowserCaptureOwned -Store "Baker's" -OutDir $ownFx -Now $ownNow) 'an old-format flag was ignored'
+  # AN UNREADABLE FLAG IS NOT OWNERSHIP. Could-not-look must never settle the question in the quiet
+  # direction: a truncated flag has to page, not silence.
+  [IO.File]::WriteAllText((Join-Path $ownFx 'browser-capture-due-2026-09-09.flag'),
+    '{"date":"2026-09-09","stores":["Baker', (New-Object Text.UTF8Encoding($false)))
+  T 'MUST FIRE  an UNPARSEABLE flag confers no ownership (could-not-look is not a quiet answer)' `
+    (-not (Test-BrowserCaptureOwned -Store "Baker's" -OutDir $ownFx -Now $ownNow)) 'a broken flag became a skeleton key'
+  Remove-Item $ownFx -Recurse -Force -ErrorAction SilentlyContinue
+  # AND THE OTHER EMITTER STAYS IN STEP. check-ad-cycles' REVIEW line is the same condition seen from the
+  # consequence end; if a future editor wires one and not the other, half the alerts come back.
+  $cacSrc = ''
+  try { $cacSrc = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'check-ad-cycles.ps1')) } catch {}
+  T 'check-ad-cycles'' ad-coverage REVIEW line reads the same ownership predicate' `
+    ($cacSrc -match 'Test-BrowserCaptureOwned -Store \(\[string\]\$rec\.store\) -OutDir \$OutDir') 'the two ad-coverage emitters are out of step'
+
   # ---- WINDOW-DATED ROWS (2026-08-30, queue 2026-08-30-fec3dc) --------------------------------------
   # MUST FIRE, unchanged: the founding Walmart shape above still reports 5 undated. Re-asserted here
   # explicitly because it is the case the new WindowDated parameter could most easily break.
@@ -385,6 +444,17 @@ foreach($x in $expired){
   # coverage is GONE until a pull lands: its {rows} sale rows are excluded, those cells fall back to
   # everyday prices or to other stores, and the store looks less competitive than it is. Overstating the
   # risk would be its own defect, because a guard that cries louder than the facts is one people stop reading.
+  #
+  # AN OWNED GAP IS NOT AN UNOWNED ONE (2026-09-09, queue 2026-09-09-e60137). This decided "nobody has
+  # captured this window" from the newest ad file alone and never read the pending-browser-work flag that
+  # the SAME morning's run had written 29 minutes earlier. On 09-09 it paged Baker's at 08:35 for a store
+  # deferred to a browser owner at 07:02, whose 146-row capture landed at 09:10. Ownership expires after
+  # 24h and then this pages exactly as before - see Test-BrowserCaptureOwned for why that expiry is
+  # measured from the first deferral rather than from the flag file's mtime.
+  if(Test-BrowserCaptureOwned -Store $x.store -OutDir $OutDir){
+    $info.Add(("  AD COVERAGE GONE (OWNED, not paged): {0}'s newest ad file {1} closed {2} ({3} day(s) ago) and its {4} sale row(s) are excluded from the board. " -f $x.store,$x.file,$x.to,$x.days,$x.rows) + (Get-BrowserOwnedNote -Store $x.store))
+    continue
+  }
   $hard.Add(("AD COVERAGE GONE: {0}'s newest ad file {1} closed {2} ({3} day(s) ago), so its {4} sale row(s) are now excluded from the board (compare-deals refuses expired ads). Its ad cells fall back to everyday prices until a fresh pull lands." -f $x.store,$x.file,$x.to,$x.days,$x.rows))
 }
 foreach($x in $inHand){

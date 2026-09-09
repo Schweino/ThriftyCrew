@@ -361,6 +361,12 @@
       "contains": "$refused = @(",
       "reason": "clean-twin half of the same fixture - the four stores that must be REFUSED a TTL because they publish their own dates or have no ruling. Confirmed 2026-08-30.",
       "reviewed": "2026-08-30"
+    },
+    {
+      "file": "audit-row-age.ps1",
+      "contains": "\"stores\":[\"Aldi\",\"Walmart\"],\"owned\"",
+      "reason": "FROZEN reproduction of the real out\\browser-capture-due-2026-09-09.flag as the 08:06 daily run left it, used by the ownership-expiry fixture for queue 2026-09-09-e60137. It names three stores because those are the three the 09-09 defect involved: the 07:02 ad run deferred Baker's, the 08:06 daily run overwrote the same file with Aldi and Walmart, and Baker's ownership record was erased 29 minutes before the alert that needed it. Test-BrowserCaptureOwned never branches on store - it normalises the name and compares - so the subset proves the contract for all seven. Registered HERE rather than with the new inline '# store-subset-ok:' marker because that marker is deliberately scoped to test-/measure- FILES and this fixture lives inside a guard's own -SelfTest block. Confirmed 2026-09-09.",
+      "reviewed": "2026-09-09"
     }
   ],
   "promoted_prefixes_readme": "out\\regular files whose prefix is NOT a store's regular_prefix because they are not a store PULL. They are one-shot promoted captures written by another lane, and check 3 of audit-store-registry.ps1 accepts them. Registered rather than deleted (2026-08-30, queue 2026-08-22-2c3e88): input-usage.json shows hunter-walmart-regular-2026-08-16.json first_used 08-21, last_used the 2026-08-26 build, uses=5, so deleting them would silently drop adjudicated cells from live builds. NOTE what registering here does NOT do: guard 6 in guards.ps1 enumerates prefixes from the FILES it finds, not from this registry, so its 'could NOT evaluate' warn for these seven stands - correctly. Each prefix holds exactly one capture, so there genuinely is no history to compare a thin file against, and silencing that warn from here would be dressing up an unwatched store as a watched one.",

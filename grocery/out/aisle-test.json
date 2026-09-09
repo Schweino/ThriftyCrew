@@ -18,6 +18,15 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "almond-milk",
+        "store":  "Family Fare",
+        "product":  "Unsweetened Almond Milk",
+        "dept":  "dairy",
+        "aisle":  "dairy/milk",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
         "id":  "aluminum-foil",
         "store":  "Family Fare",
         "product":  "Our Family Aluminum Foil, 200 Square Feet 1 Ea",
@@ -88,6 +97,15 @@
         "aisle":  "fresh_fruits_vegetables/lettuce_cabbage_greens",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "buttermilk",
+        "store":  "Family Fare",
+        "product":  "Kemps Cultured Lowfat Buttermilk 1 Qt",
+        "dept":  "dairy",
+        "aisle":  "dairy/milk",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
         "id":  "cabbage",
@@ -198,6 +216,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "chocolate-milk",
+        "store":  "Family Fare",
+        "product":  "Our Family Milk, Lowfat, 1% Milkfat, Chocolate 1 Gal",
+        "dept":  "dairy",
+        "aisle":  "dairy/milk",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
         "id":  "chuck-roast",
         "store":  "Family Fare",
         "product":  "Fresh Beef Chuck Roast, Boneless",
@@ -225,6 +252,24 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "coffee-creamer",
+        "store":  "Family Fare",
+        "product":  "International Delight Caramel Macchiato Liquid Coffee Creamer 64 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/coffee",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027coffee-creamer\u0027"
+    },
+    {
+        "id":  "croissants",
+        "store":  "Family Fare",
+        "product":  "4 Ct Butter Croissants",
+        "dept":  "bakery",
+        "aisle":  "bakery/breakfast_sweet_breads",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
         "id":  "cucumbers",
         "store":  "Family Fare",
         "product":  "Fresh Cucumbers",
@@ -232,6 +277,15 @@
         "aisle":  "fresh_fruits_vegetables/other_vegetables",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "dinner-rolls",
+        "store":  "Family Fare",
+        "product":  "Fresh \u0026 Finest 12 Ct Golden Dinner Rolls",
+        "dept":  "bakery",
+        "aisle":  "bakery/rolls",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
     },
     {
         "id":  "dish-soap",
@@ -261,6 +315,33 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "dog-treats",
+        "store":  "Family Fare",
+        "product":  "Milk Bone Beef, Chicken, Turkey, Bacon \u0026 Sausage Flavors Dog Treat 60 Oz",
+        "dept":  "pets_wildlife",
+        "aisle":  "pets_wildlife/dog",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pets_wildlife\u0027 is an allowed department for category \u0027pet\u0027"
+    },
+    {
+        "id":  "donuts",
+        "store":  "Family Fare",
+        "product":  "Little Debbie Glazed Donut Sticks 6 Ea",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "english-muffins",
+        "store":  "Family Fare",
+        "product":  "Country Hearth English Muffins, Light, Valu Pack 12 Ea",
+        "dept":  "bakery",
+        "aisle":  "bakery/english_muffins_biscuits_croissants",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
         "id":  "storage-bags",
         "store":  "Family Fare",
         "product":  "Our Family Freezer Bags, Resealable, Gallon Size 30 Ea",
@@ -277,6 +358,24 @@
         "aisle":  "household/food_storage",
         "verdict":  "ALLOW",
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "french-bread",
+        "store":  "Family Fare",
+        "product":  "Fresh \u0026 Finest French Bread",
+        "dept":  "bakery",
+        "aisle":  "bakery/french_bread_baguettes",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "breakfast-sandwiches",
+        "store":  "Family Fare",
+        "product":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_meals_more",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
         "id":  "frozen-brussels-sprouts",
@@ -311,6 +410,15 @@
         "product":  "Our Family Mixed Vegetables, Fresh Frozen 24 Oz",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
+        "id":  "frozen-waffles",
+        "store":  "Family Fare",
+        "product":  "Our Family Buttermilk Waffles 24 Ea",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_meals_more",
         "verdict":  "ALLOW",
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
@@ -369,6 +477,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "half-and-half",
+        "store":  "Family Fare",
+        "product":  "Our Family Half And Half 32 Fl Oz",
+        "dept":  "dairy",
+        "aisle":  "dairy/cream_half_half",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
         "id":  "deli-ham",
         "store":  "Family Fare",
         "product":  "Hatfield Sliced Boneless Sweet Brown Sugar Ham With Natural Juices 44 Oz",
@@ -387,6 +504,15 @@
         "reason":  "\u0027health_beauty\u0027 is a reviewed exception department for \u0027hand-soap\u0027"
     },
     {
+        "id":  "heavy-cream",
+        "store":  "Family Fare",
+        "product":  "Our Family Heavy Whipping Cream 32 Fl Oz",
+        "dept":  "dairy",
+        "aisle":  "dairy/whipped_toppings_whipping_creams",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
         "id":  "honey",
         "store":  "Family Fare",
         "product":  "Our Family Honey, Pure 48 Oz",
@@ -403,6 +529,24 @@
         "aisle":  "fresh_fruits_vegetables/melons",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
+        "id":  "hot-dog-buns",
+        "store":  "Family Fare",
+        "product":  "Pepperidge Farm® Top Sliced White Hot Dog Buns 14.000 Oz",
+        "dept":  "bakery",
+        "aisle":  "bakery/buns_sandwich_rolls",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "hot-dogs",
+        "store":  "Family Fare",
+        "product":  "Bar S Classic Bun Length Franks 16 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/hot_dogs",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "ice-cream",
@@ -513,9 +657,27 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "muffins",
+        "store":  "Family Fare",
+        "product":  "Little Bites Blueberry Muffins 5 Ea",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
         "id":  "oatmeal",
         "store":  "Family Fare",
         "product":  "Maple \u0026 Brown Sugar Instant Oatmeal",
+        "dept":  "pantry",
+        "aisle":  "pantry/breakfast",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
+    },
+    {
+        "id":  "pancake-mix",
+        "store":  "Family Fare",
+        "product":  "Our Family Buttermilk Complete Pancake \u0026 Waffle Mix 32 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/breakfast",
         "verdict":  "ALLOW",
@@ -529,6 +691,15 @@
         "aisle":  "household/paper_towels",
         "verdict":  "ALLOW",
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "parmesan",
+        "store":  "Family Fare",
+        "product":  "Our Family Grated Cheese, Parmesan 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/crackers",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is a reviewed exception department for \u0027parmesan\u0027"
     },
     {
         "id":  "peanut-butter",
@@ -547,6 +718,15 @@
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
+        "id":  "pita-bread",
+        "store":  "Family Fare",
+        "product":  "Joseph\u0027s Low Fat Whole Wheat Pita Bread 4 Ea",
+        "dept":  "bakery",
+        "aisle":  "bakery/wraps_pitas_flatbreads",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
     },
     {
         "id":  "plums",
@@ -612,6 +792,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "refrigerated-biscuits",
+        "store":  "Family Fare",
+        "product":  "Pillsbury Southern Homestyle Buttermilk Biscuits 8 Ea",
+        "dept":  "dairy",
+        "aisle":  "dairy/refrigerated_doughs_batters",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
         "id":  "ribeye-steak",
         "store":  "Family Fare",
         "product":  "Fresh Ribeye, Whole",
@@ -646,15 +835,6 @@
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
-    },
-    {
-        "id":  "soda",
-        "store":  "Family Fare",
-        "product":  "Jarritos Soda, Natural Flavor, Grapefruit 1.58 Qt",
-        "dept":  "beverages",
-        "aisle":  "beverages/soda_other_carbonated_beverages",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "sparkling-water",
@@ -756,6 +936,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "turkey-bacon",
+        "store":  "Family Fare",
+        "product":  "Jennie O Turkey Bacon 12 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/bacon",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
         "id":  "vegetable-oil",
         "store":  "Family Fare",
         "product":  "Our Family Vegetable Oil, 100% Pure 1 Gal",
@@ -763,6 +952,15 @@
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
+        "id":  "whipped-cream",
+        "store":  "Family Fare",
+        "product":  "Our Family Extra Creamy Whipped Topping 8 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/sweet_stuff",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is a reviewed exception department for \u0027whipped-cream\u0027"
     },
     {
         "id":  "watermelon",

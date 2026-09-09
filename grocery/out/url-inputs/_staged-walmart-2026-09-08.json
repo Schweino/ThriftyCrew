@@ -1,0 +1,224 @@
+{
+ "generated": "2026-09-08 09:45",
+ "store": "Walmart",
+ "status": "STAGED - exact name match only; per-unit price agreement NOT yet confirmed",
+ "dropped_marketplace": [
+  {
+   "id": "artichokes",
+   "url": "https://www.walmart.com/ip/Reese-Medium-Artichoke-Hearts-14-oz-Pack-of-12/19476034",
+   "price": 42.7,
+   "size": "",
+   "name": "REESE ARTICHOKE HRTS 6-8 CT-14 OZ -Pack of 12",
+   "seller": "UnbeatableSale Local",
+   "ff": "MARKETPLACE"
+  }
+ ],
+ "misses": [
+  {
+   "id": "aluminum-foil",
+   "why": "no exact name match among 12"
+  },
+  {
+   "id": "berbere-seasoning",
+   "why": "matched but no price"
+  },
+  {
+   "id": "brownie-mix",
+   "why": "no exact name match among 46"
+  }
+ ],
+ "rows": [
+  {
+   "id": "bagels",
+   "url": "https://www.walmart.com/ip/Great-Value-Pre-Sliced-Cinnamon-Raisin-Bagels-RTE-20-oz-6-Count/588263237",
+   "price": 2.14,
+   "size": "",
+   "name": "Great Value Pre-Sliced Cinnamon Raisin Bagels, 20 oz, 6 Count",
+   "board_price_per_unit": 0.3567,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "bar-soap",
+   "url": "https://www.walmart.com/ip/Ivory-Bar-Orig-4-12-3-17oz/17546363447",
+   "price": 7.97,
+   "size": "",
+   "name": "Ivory Gentle Bar Soap, Original Scent 3.17 oz, 12 Count",
+   "board_price_per_unit": 0.6642,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "bell-peppers",
+   "url": "https://www.walmart.com/ip/Organic-Green-Bell-Pepper/720640702",
+   "price": 2.96,
+   "size": "",
+   "name": "Marketside Organic Green Bell Pepper, 8 oz, 2 Count",
+   "board_price_per_unit": 1.48,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "bread",
+   "url": "https://www.walmart.com/ip/Great-Value-White-Round-Top-Bread-Loaf-20-oz/10315355",
+   "price": 1.48,
+   "size": "",
+   "name": "Great Value White Round Top Bread Loaf, 20 oz",
+   "board_price_per_unit": 1.48,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "cake-mix",
+   "url": "https://www.walmart.com/ip/JIFFY-Golden-Yellow-Cake-Mix-9-OZ-Box/10448139",
+   "price": 0.98,
+   "size": "",
+   "name": "\"JIFFY\" Golden Yellow Cake Mix, 9 oz Box",
+   "board_price_per_unit": 0.98,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "coffee-pods",
+   "url": "https://www.walmart.com/ip/Great-Value-100-Arabica-Colombian-Medium-Dark-Roast-Ground-Coffee-Pods-33-1-oz-100-Count/5369836552",
+   "price": 33.54,
+   "size": "",
+   "name": "Great Value 100% Arabica Colombian Medium Dark Roast Ground Coffee Pods, 33.1 oz, 100 Count",
+   "board_price_per_unit": 0.3347,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "corn-dogs",
+   "url": "https://www.walmart.com/ip/Bar-S-Classic-Honey-Batter-Wrapped-Corn-Dogs-43-oz-16-Count-Box-Frozen/54593972",
+   "price": 6.97,
+   "size": "",
+   "name": "Bar-S Classic Corn Dogs, 16-Count",
+   "board_price_per_unit": 0.4356,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "croissants",
+   "url": "https://www.walmart.com/ip/Marketside-All-Butter-Baked-Mini-Croissants-10-9-oz-11-Count/114137259",
+   "price": 4.98,
+   "size": "",
+   "name": "Marketside All Butter Baked Mini Croissants, 10.9 oz, 11 Count",
+   "board_price_per_unit": 0.4527,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "dinner-rolls",
+   "url": "https://www.walmart.com/ip/Freshness-Guaranteed-Yeasty-Dinner-Rolls/15521623330",
+   "price": 2.46,
+   "size": "",
+   "name": "Freshness Guaranteed Yeasty Dinner Rolls, 12 oz, 12 Count",
+   "board_price_per_unit": 0.205,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "dishwasher-detergent",
+   "url": "https://www.walmart.com/ip/Great-Value-Automatic-Dishwasher-Pacs-Fresh-Scent-115-Count/16759055075",
+   "price": 13.94,
+   "size": "",
+   "name": "Great Value Original Dishwasher Pacs, Fresh Scent, 115 Count",
+   "board_price_per_unit": 0.1212,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "donuts",
+   "url": "https://www.walmart.com/ip/Krispy-Kreme-12-Count-Original-Glazed-Doughnut-Dots/6677202728",
+   "price": 4.78,
+   "size": "",
+   "name": "Krispy Kreme 12-Count Original Glazed Doughnut Dots",
+   "board_price_per_unit": 0.3983,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "french-bread",
+   "url": "https://www.walmart.com/ip/Freshness-Guaranteed-Wheat-Bakery-French-Bread-Loaf-13-oz-1-Count/974725266",
+   "price": 1.47,
+   "size": "",
+   "name": "Freshness Guaranteed Wheat Bakery French Bread Loaf, 13 oz, 1 Loaf",
+   "board_price_per_unit": 1.47,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "breakfast-sandwiches",
+   "url": "https://www.walmart.com/ip/Great-Value-Sausage-Egg-and-Cheese-Croissant-Sandwiches-35-2-Oz-8-Count-Frozen/2886275225",
+   "price": 9.97,
+   "size": "",
+   "name": "Great Value Sausage Egg and Cheese Croissant Sandwiches, 4.4 oz, 8 Count (Frozen)",
+   "board_price_per_unit": 1.2462,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "frozen-burritos",
+   "url": "https://www.walmart.com/ip/Great-Value-Bean-Cheese-Burritos-32-Ounces-8-Count-Frozen/853214073",
+   "price": 3.82,
+   "size": "",
+   "name": "Great Value Bean & Cheese Burritos, 32 oz, 8 Count (Frozen)",
+   "board_price_per_unit": 0.4775,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "frozen-waffles",
+   "url": "https://www.walmart.com/ip/Great-Value-Buttermilk-Waffles-24-Count/16382427",
+   "price": 4.14,
+   "size": "",
+   "name": "Great Value Buttermilk Waffles, 29.6 oz, 24 Count (Frozen)",
+   "board_price_per_unit": 0.1725,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  },
+  {
+   "id": "fruit-cups",
+   "url": "https://www.walmart.com/ip/Great-Value-Mandarin-Oranges-in-Juice-4-oz-4-Count/575434393",
+   "price": 2.37,
+   "size": "",
+   "name": "Great Value Mandarin Oranges in 100% Juice, 4 oz, 4 Count",
+   "board_price_per_unit": 0.5925,
+   "board_unit": "each",
+   "price_confirmed": false,
+   "seller": "Walmart.com",
+   "fulfillment": "STORE"
+  }
+ ]
+}

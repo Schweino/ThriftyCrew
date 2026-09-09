@@ -29,7 +29,14 @@ try {
   'seed' | Set-Content (Join-Path $d 'grocery\out\seed.txt'); & git add -A; & git commit -q -m seed
 
   # the block under test, lifted verbatim from capture-run.ps1 by marker
-  $src = [IO.File]::ReadAllText('C:\Codex\ThriftyCrew\grocery\capture-run.ps1')
+  # RESOLVED RELATIVE TO THIS FILE (2026-09-09). This was the absolute 'C:\Codex\ThriftyCrew\grocery\
+  # capture-run.ps1', so a run in a WORKTREE lifted MAIN's block, tested it, and reported green about a
+  # file it had not opened - a could-not-look laundered into a pass, in a fixture. Push-Location above
+  # moves the process into %TEMP%, so a bare relative path would not do; $PSScriptRoot is what this file
+  # knows about itself.
+  $capRunPath = Join-Path $PSScriptRoot 'capture-run.ps1'
+  if (-not (Test-Path $capRunPath)) { Write-Output ('BLIND: capture-run.ps1 not found beside this fixture (' + $capRunPath + ') - nothing was proven'); exit 3 }
+  $src = [IO.File]::ReadAllText($capRunPath)
   $i = $src.IndexOf('  $newDirs = @()')
   $j = $src.IndexOf('  & git -C $repo diff --cached --quiet', $i)
   if ($i -lt 0 -or $j -lt 0) { Write-Output 'BLIND: could not find the gate markers in capture-run.ps1 - nothing was proven'; exit 3 }
@@ -166,7 +173,10 @@ try {
   # CommandNotFound into its own catch and the alert BODY - which interpolates $servedDirty and $today -
   # would never be composed, so a typo in it would ship unproven.
   function Send-Alert { param($Subject, $Body) $script:alertSubject = $Subject; $script:alertBody = $Body }
-  function Run-Served([bool]$ship, [scriptblock]$Setup) {
+  # $committed DEFAULTS TO $true (2026-09-09, queue 2026-09-09-f0b5f2), so the three cases below are
+  # byte-for-byte the same assertions they were: they were all written for runs where the commit landed,
+  # which is precisely why nothing caught the block reading $shipServed as if it implied that.
+  function Run-Served([bool]$ship, [scriptblock]$Setup, [bool]$committed = $true) {
     $c = Join-Path $env:TEMP ('served-' + [guid]::NewGuid().ToString('N').Substring(0,8))
     New-Item -ItemType Directory $c -Force | Out-Null
     & git -C $c init -q .
@@ -177,8 +187,12 @@ try {
     'board' | Set-Content (Join-Path $c 'public/board.json')
     & git -C $c add -A | Out-Null; & git -C $c commit -q -m seed | Out-Null
     & $Setup $c
-    # the four variables the block reads, exactly as capture-run holds them at that point
+    # the variables the block reads, exactly as capture-run holds them at that point
     $repo = $c; $today = '2026-09-02'; $shipServed = $ship
+    # $botCommitted MUST be spelled exactly as capture-run holds it: the block is DOT-SOURCED into this
+    # scope, so a rename here would silently feed the branch $null and the case would pass by taking the
+    # wrong arm. That is the risk the plan names, and it is why this is asserted rather than assumed.
+    $botCommitted = $committed
     $servedPaths = @('public', 'meal-prep/db/recipes')
     $failed = @()
     $script:alertSubject = ''; $script:alertBody = ''
@@ -206,6 +220,33 @@ try {
   $sBlocked = Run-Served $false { param($c) '{"slug":"x","cost_ps":2.34}' | Set-Content (Join-Path $c 'meal-prep/db/recipes/x.json') }
   T 'CLEAN TWIN a guards-blocked run (shipServed false) does not report served files as dirty' `
     (($sBlocked.failed -eq '') -and ($sBlocked.text -eq '')) ("failed=$($sBlocked.failed) text=$($sBlocked.text)")
+
+  # ---- THE REFUSED COMMIT (2026-09-09, queue 2026-09-09-f0b5f2) -----------------------------------
+  # FROZEN, built from what actually happened at 08:35 on 2026-09-09: guards PASSED, so $shipServed was
+  # true and the chain intended to ship - and then the pre-commit hook REFUSED the commit over one file's
+  # BOM. The three cases above all drive a run where the commit landed, so nothing in this estate had ever
+  # asked what this block does when it did not. The answer was: it fired, named 16 files, and told the
+  # operator to "Add the writer's output to $servedPaths" - a repair that would have been inert, because
+  # every one of the 16 was already in Get-BotServedPaths. A confidently wrong diagnosis, on the morning
+  # its reader was already dealing with a real hard fail.
+  # Named once, because three of the lines below need it and one of them ends in a continuation backtick
+  # where a trailing comment cannot go.
+  $fxServedFile = 'meal-prep/db/recipes/x.json'   # reach-fixture-ok: a seed file inside a %TEMP% throwaway repo, never this repo's meal-prep
+  $sRefused = Run-Served $true { param($c) '{"slug":"x","cost_ps":2.34}' | Set-Content (Join-Path $c $fxServedFile) } $false
+  T 'MUST FIRE  a REFUSED commit is reported as a refusal, not as a $servedPaths gap' `
+    ($sRefused.text -match 'because the commit was REFUSED') ("text=$($sRefused.text)")
+  T 'MUST NOT FIRE and a refused commit adds NO served-dirty lane (commit-refused already is one)' `
+    ($sRefused.failed -eq '') ("failed=$($sRefused.failed)")
+  T 'MUST NOT FIRE and a refused commit composes NO alert (the old body asserted the commit went out)' `
+    (($sRefused.subject -eq '') -and ($sRefused.body -eq '')) ("subject=$($sRefused.subject) body=$($sRefused.body)")
+
+  # CLEAN TWIN, the adjacent behaviour this branch was most likely to break: the 2026-09-02 watcher must
+  # still catch its founding bug when the commit DID land. Asserted again here, explicitly against the
+  # committed flag, so a future edit that inverts the predicate cannot pass by only running the old cases.
+  $sStillCatches = Run-Served $true { param($c) '{"slug":"x","cost_ps":9.99}' | Set-Content (Join-Path $c $fxServedFile) } $true
+  T 'CLEAN TWIN with the commit LANDED the 2026-09-02 watcher still fails the lane and still alerts' `
+    (($sStillCatches.failed -match 'served-dirty') -and ($sStillCatches.body -match [regex]::Escape($fxServedFile))) `
+    ("failed=$($sStillCatches.failed) body=$($sStillCatches.body)")
 
   Write-Output ''
   Write-Output ("SELFTEST: {0}/{1} pass" -f ($n-$bad), $n)

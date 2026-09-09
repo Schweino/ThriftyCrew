@@ -25900,6 +25900,12 @@
                     ],
         "exclude":  [
                         "\\bholes\\b",
+                        "\\bcups?\\b",
+                        "\\blil.{0,5}smiles?\\b",
+                        "\\bdots\\b",
+                        "\\bpop\\W{0,2}ems?\\b",
+                        "\\bmunchkins?\\b",
+                        "\\bbites\\b",
                         "\\bshop\\b",
                         "cereal",
                         "\\bmix\\b",

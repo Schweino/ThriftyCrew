@@ -46,20 +46,6 @@
                               "id":  "almond-milk",
                               "commodity":  "Almond Milk",
                               "unit":  "floz",
-                              "store":  "Hy-Vee",
-                              "per_unit":  0.0467,
-                              "size":  "64 oz",
-                              "item":  "Hy Vee Almondmilk Original Unsweetened",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
-                              "id":  "almond-milk",
-                              "commodity":  "Almond Milk",
-                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.131,
                               "size":  "48 oz",
@@ -307,20 +293,6 @@
                               "holds_crown":  false,
                               "unit_kind":  "volume",
                               "agrees_with_engine_divisor":  true
-                          },
-                          {
-                              "id":  "chocolate-milk",
-                              "commodity":  "Chocolate Milk",
-                              "unit":  "floz",
-                              "store":  "Fareway",
-                              "per_unit":  0.0778,
-                              "size":  "32 oz",
-                              "item":  "Kemps Reduced Fat Chocolate Milk",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
                           },
                           {
                               "id":  "clam-chowder",
@@ -831,7 +803,7 @@
                               "commodity":  "Liquid Egg Whites",
                               "unit":  "floz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.23,
+                              "per_unit":  0.2369,
                               "size":  "16 fl oz",
                               "item":  "Hy-Vee 100% Egg Whites",
                               "kind":  "volume",
@@ -1167,7 +1139,7 @@
                               "commodity":  "Syrup (pancake / maple)",
                               "unit":  "floz",
                               "store":  "Fareway",
-                              "per_unit":  0.1242,
+                              "per_unit":  0.1454,
                               "size":  "24 oz",
                               "item":  "Fareway Pancake Syrup",
                               "kind":  "weight",
@@ -1317,7 +1289,7 @@
                               "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-08.json",
+    "compare_file":  "comparison-2026-09-09.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -1503,20 +1475,6 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
-                                                     "id":  "almond-milk",
-                                                     "commodity":  "Almond Milk",
-                                                     "unit":  "floz",
-                                                     "store":  "Hy-Vee",
-                                                     "per_unit":  0.0467,
-                                                     "size":  "64 oz",
-                                                     "item":  "Hy Vee Almondmilk Original Unsweetened",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
                                                      "id":  "apple-cider-vinegar",
                                                      "commodity":  "Apple Cider Vinegar",
                                                      "unit":  "floz",
@@ -1668,20 +1626,6 @@
                                                      "row_kind":  "weight",
                                                      "holds_crown":  false,
                                                      "unit_kind":  "weight",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "chocolate-milk",
-                                                     "commodity":  "Chocolate Milk",
-                                                     "unit":  "floz",
-                                                     "store":  "Fareway",
-                                                     "per_unit":  0.0778,
-                                                     "size":  "32 oz",
-                                                     "item":  "Kemps Reduced Fat Chocolate Milk",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
@@ -2249,7 +2193,7 @@
                                                      "commodity":  "Syrup (pancake / maple)",
                                                      "unit":  "floz",
                                                      "store":  "Fareway",
-                                                     "per_unit":  0.1242,
+                                                     "per_unit":  0.1454,
                                                      "size":  "24 oz",
                                                      "item":  "Fareway Pancake Syrup",
                                                      "kind":  "weight",
@@ -2385,6 +2329,19 @@
                          "size_shape_mismatch":  false
                      },
                      {
+                         "id":  "razors",
+                         "commodity":  "Razors (disposable)",
+                         "unit":  "each",
+                         "store":  "Fareway",
+                         "per_unit":  2.6633,
+                         "median":  0.3317,
+                         "mult":  8.03,
+                         "size":  "3 ct",
+                         "item":  "Venus Tropical Women\u0027s Disposable Razor",
+                         "peers_packed":  "5 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
                          "id":  "soda",
                          "commodity":  "Soda (12-pack)",
                          "unit":  "floz",
@@ -2395,19 +2352,6 @@
                          "size":  "20 fl oz",
                          "item":  "Coca-Cola Soda Bottle",
                          "peers_packed":  "0 of 6",
-                         "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "razors",
-                         "commodity":  "Razors (disposable)",
-                         "unit":  "each",
-                         "store":  "Fareway",
-                         "per_unit":  2.3233,
-                         "median":  0.3317,
-                         "mult":  7,
-                         "size":  "3 ct",
-                         "item":  "Venus Tropical Women\u0027s Disposable Razor",
-                         "peers_packed":  "5 of 6",
                          "size_shape_mismatch":  false
                      },
                      {
@@ -2506,7 +2450,7 @@
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-08T08:11:53",
+    "generated":  "2026-09-09T11:51:58",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",
@@ -2695,7 +2639,7 @@
                                                        "commodity":  "Liquid Egg Whites",
                                                        "unit":  "floz",
                                                        "store":  "Hy-Vee",
-                                                       "per_unit":  0.23,
+                                                       "per_unit":  0.2369,
                                                        "size":  "16 fl oz",
                                                        "item":  "Hy-Vee 100% Egg Whites",
                                                        "kind":  "volume",

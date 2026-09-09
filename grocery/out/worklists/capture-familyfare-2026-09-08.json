@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-12; next_pull 2026-09-13",
-    "cursor_start":  168,
-    "cursor_next":  175,
+    "cursor_start":  177,
+    "cursor_next":  184,
     "total_terms":  602,
     "rotation_terms":  [
-                           "corn dogs",
-                           "corned beef brisket",
-                           "corned beef hash",
-                           "cornmeal",
-                           "corn muffin mix",
-                           "corn starch",
-                           "cottage cheese"
+                           "saltine crackers",
+                           "cranberry juice",
+                           "cranberry sauce",
+                           "cream cheese",
+                           "cream of chicken soup",
+                           "cream of mushroom soup",
+                           "creamy cilantro lime dressing"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "corn dogs",
-                  "corned beef brisket",
-                  "corned beef hash",
-                  "cornmeal",
-                  "corn muffin mix",
-                  "corn starch",
-                  "cottage cheese"
+                  "saltine crackers",
+                  "cranberry juice",
+                  "cranberry sauce",
+                  "cream cheese",
+                  "cream of chicken soup",
+                  "cream of mushroom soup",
+                  "creamy cilantro lime dressing"
               ],
     "commodities":  [
-                        "corn-dogs",
-                        "corned-beef-brisket",
-                        "corned-beef-hash",
-                        "cornmeal",
-                        "corn-muffin-mix",
-                        "cornstarch",
-                        "cottage-cheese"
+                        "crackers",
+                        "cranberry-juice",
+                        "cranberry-sauce",
+                        "cream-cheese",
+                        "cream-of-chicken-soup",
+                        "cream-of-mushroom-soup",
+                        "creamy-cilantro-lime-dressing"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

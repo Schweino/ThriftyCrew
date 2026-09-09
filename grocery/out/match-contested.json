@@ -2,15 +2,21 @@
     "contested":  [
                       {
                           "store":  "Aldi",
-                          "item":  "Mama Cozzi S Pizza Kitchen Chocolate Pizza Cookie 9 OZ",
-                          "winner":  "frozen-pizza",
-                          "losers":  "cookies"
+                          "item":  "Happy Harvest Mixed Vegetables 15 OZ",
+                          "winner":  "frozen-vegetables",
+                          "losers":  "canned-mixed-vegetables"
                       },
                       {
                           "store":  "Aldi",
-                          "item":  "Earth Grown Butter Chickpea 10.05 OZ",
-                          "winner":  "butter",
-                          "losers":  "chickpeas"
+                          "item":  "Season S Choice Steamed Mixed Vegetables 12 OZ",
+                          "winner":  "frozen-vegetables",
+                          "losers":  "canned-mixed-vegetables"
+                      },
+                      {
+                          "store":  "Aldi",
+                          "item":  "Great Gherkins Sweet Bread Butter Sliced Pickles 24 OZ",
+                          "winner":  "bread",
+                          "losers":  "pickles"
                       },
                       {
                           "store":  "Aldi",
@@ -26,9 +32,27 @@
                       },
                       {
                           "store":  "Aldi",
-                          "item":  "Earthly Grains Cheddar Broccoli Rice 5.7 OZ",
-                          "winner":  "broccoli",
-                          "losers":  "rice"
+                          "item":  "Bon Italia Spaghetti Rings With Meatballs 15 OZ",
+                          "winner":  "pasta",
+                          "losers":  "frozen-meatballs"
+                      },
+                      {
+                          "store":  "Aldi",
+                          "item":  "Gourmet Peaches With Ginger Flavor 19.5 OZ",
+                          "winner":  "peaches",
+                          "losers":  "fresh-ginger"
+                      },
+                      {
+                          "store":  "Aldi",
+                          "item":  "Lunch Buddies Mandarin Oranges IN 100 Fruit Juice From Concentrate 4 OZ",
+                          "winner":  "fruit-cups",
+                          "losers":  "mandarin-oranges"
+                      },
+                      {
+                          "store":  "Aldi",
+                          "item":  "Panko Chicken Nuggets",
+                          "winner":  "chicken-nuggets",
+                          "losers":  "bread-crumbs"
                       },
                       {
                           "store":  "Aldi",
@@ -38,15 +62,27 @@
                       },
                       {
                           "store":  "Aldi",
-                          "item":  "Season S Choice Steamed Mixed Vegetables 12 OZ",
-                          "winner":  "frozen-vegetables",
-                          "losers":  "canned-mixed-vegetables"
+                          "item":  "Earthly Grains Cheddar Broccoli Rice 5.7 OZ",
+                          "winner":  "broccoli",
+                          "losers":  "rice"
+                      },
+                      {
+                          "store":  "Aldi",
+                          "item":  "Tuscan Garden Sliced Almonds Dried Cranberries 3 OZ",
+                          "winner":  "almonds",
+                          "losers":  "dried-cranberries"
                       },
                       {
                           "store":  "Aldi",
                           "item":  "Butterhead Boston Butter Bibb Lettuce Each",
                           "winner":  "lettuce",
                           "losers":  "pork-shoulder"
+                      },
+                      {
+                          "store":  "Aldi",
+                          "item":  "Mama Cozzi S Pizza Kitchen Chocolate Pizza Cookie 9 OZ",
+                          "winner":  "frozen-pizza",
+                          "losers":  "cookies"
                       },
                       {
                           "store":  "Aldi",
@@ -68,18 +104,6 @@
                       },
                       {
                           "store":  "Aldi",
-                          "item":  "Great Gherkins Sweet Bread Butter Sliced Pickles 24 OZ",
-                          "winner":  "bread",
-                          "losers":  "pickles"
-                      },
-                      {
-                          "store":  "Aldi",
-                          "item":  "Happy Harvest Mixed Vegetables 15 OZ",
-                          "winner":  "frozen-vegetables",
-                          "losers":  "canned-mixed-vegetables"
-                      },
-                      {
-                          "store":  "Aldi",
                           "item":  "Emporium Selection Tomato Basil Feta Cheese Block 8 OZ",
                           "winner":  "tomatoes",
                           "losers":  "feta"
@@ -98,18 +122,6 @@
                       },
                       {
                           "store":  "Aldi",
-                          "item":  "Lunch Buddies Mandarin Oranges IN 100 Fruit Juice From Concentrate 4 OZ",
-                          "winner":  "fruit-cups",
-                          "losers":  "mandarin-oranges"
-                      },
-                      {
-                          "store":  "Aldi",
-                          "item":  "Gourmet Peaches With Ginger Flavor 19.5 OZ",
-                          "winner":  "peaches",
-                          "losers":  "fresh-ginger"
-                      },
-                      {
-                          "store":  "Aldi",
                           "item":  "Park Street Deli Sharp White Cheddar Dried Cranberries Sea Salted Roasted Almonds 4.5 OZ",
                           "winner":  "almonds",
                           "losers":  "dried-cranberries"
@@ -119,12 +131,6 @@
                           "item":  "Park Street Deli Pepper Jack Raisins Honey Roasted Peanuts 4.5 OZ",
                           "winner":  "peanuts",
                           "losers":  "raisins"
-                      },
-                      {
-                          "store":  "Aldi",
-                          "item":  "Bon Italia Spaghetti Rings With Meatballs 15 OZ",
-                          "winner":  "pasta",
-                          "losers":  "frozen-meatballs"
                       },
                       {
                           "store":  "Aldi",
@@ -257,12 +263,6 @@
                           "item":  "Friendly Farms Plain Low Sugar Greek Yogurt 32 OZ",
                           "winner":  "yogurt",
                           "losers":  "sugar"
-                      },
-                      {
-                          "store":  "Aldi",
-                          "item":  "Tuscan Garden Sliced Almonds Dried Cranberries 3 OZ",
-                          "winner":  "almonds",
-                          "losers":  "dried-cranberries"
                       },
                       {
                           "store":  "Aldi",
@@ -404,9 +404,69 @@
                       },
                       {
                           "store":  "Baker\u0027s",
-                          "item":  "Green Giant SteamCrisp Mexicorn Whole Kernel Corn with Red \u0026 Green Bell Peppers",
-                          "winner":  "bell-peppers",
-                          "losers":  "canned-corn"
+                          "item":  "Triscuit Balsamic Vinegar \u0026 Basil Whole Grain Wheat Crackers",
+                          "winner":  "crackers",
+                          "losers":  "balsamic-vinegar"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Kevin\u0027s Natural Foods Parmesan Basil Chicken with Cauliflower Pasta 24 oz",
+                          "winner":  "pasta",
+                          "losers":  "cauliflower"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Kevin\u0027s Natural Foods Pesto Garlic Chicken with Cauliflower Pasta 24n oz",
+                          "winner":  "pasta",
+                          "losers":  "cauliflower,pesto"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Celery And Carrot Sticks Fresh Cut In Store Daily",
+                          "winner":  "carrots",
+                          "losers":  "celery"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Chopped Onion and Celery Fresh Cut In Store Daily",
+                          "winner":  "onions",
+                          "losers":  "celery"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Fresh Cut Peas Carrot Celery Ranch",
+                          "winner":  "carrots",
+                          "losers":  "celery"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Kroger Sweet Peas \u0026 Carrots - 15oz can",
+                          "winner":  "carrots",
+                          "losers":  "canned-peas"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Kroger Sweet Peas \u0026 Carrots - 8.5oz can",
+                          "winner":  "carrots",
+                          "losers":  "canned-peas"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Del Monte Peas \u0026 Carrots",
+                          "winner":  "carrots",
+                          "losers":  "frozen-vegetables"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Chicken of the Sea Wild Caught Alaskan Pink Salmon in Spring Water Packet",
+                          "winner":  "bottled-water",
+                          "losers":  "canned-salmon"
+                      },
+                      {
+                          "store":  "Baker\u0027s",
+                          "item":  "Chicken of the Sea Wild Caught Alaskan Pink Salmon in Spring Water Packet",
+                          "winner":  "bottled-water",
+                          "losers":  "canned-salmon"
                       },
                       {
                           "store":  "Baker\u0027s",
@@ -431,12 +491,6 @@
                           "item":  "Bronco Turkey Bacon, Egg \u0026 Cheese on Plain Bagel",
                           "winner":  "bagels",
                           "losers":  "turkey-bacon"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Triscuit Balsamic Vinegar \u0026 Basil Whole Grain Wheat Crackers",
-                          "winner":  "crackers",
-                          "losers":  "balsamic-vinegar"
                       },
                       {
                           "store":  "Baker\u0027s",
@@ -542,12 +596,6 @@
                       },
                       {
                           "store":  "Baker\u0027s",
-                          "item":  "StarKist Chunk Light Tuna in Vegetable Oil Can",
-                          "winner":  "canned-tuna",
-                          "losers":  "vegetable-oil"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
                           "item":  "Private Selection Grilled Beef Sirloin Steak with Mushrooms and Herb Butter",
                           "winner":  "butter",
                           "losers":  "sirloin-steak,mushrooms"
@@ -557,24 +605,6 @@
                           "item":  "Private Selection Sugar Gem Extra Sweet Navel Oranges",
                           "winner":  "oranges",
                           "losers":  "sugar"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Celery And Carrot Sticks Fresh Cut In Store Daily",
-                          "winner":  "carrots",
-                          "losers":  "celery"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Chopped Onion and Celery Fresh Cut In Store Daily",
-                          "winner":  "onions",
-                          "losers":  "celery"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Fresh Cut Peas Carrot Celery Ranch",
-                          "winner":  "carrots",
-                          "losers":  "celery"
                       },
                       {
                           "store":  "Baker\u0027s",
@@ -692,18 +722,6 @@
                       },
                       {
                           "store":  "Baker\u0027s",
-                          "item":  "Kevin\u0027s Natural Foods Parmesan Basil Chicken with Cauliflower Pasta 24 oz",
-                          "winner":  "pasta",
-                          "losers":  "cauliflower"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Kevin\u0027s Natural Foods Pesto Garlic Chicken with Cauliflower Pasta 24n oz",
-                          "winner":  "pasta",
-                          "losers":  "cauliflower,pesto"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
                           "item":  "Private Selection Jalapeno Pepper Jack Thick Cut Shredded Cheese",
                           "winner":  "shredded-cheese",
                           "losers":  "jalapenos"
@@ -719,12 +737,6 @@
                           "item":  "Private Selection Petite Red Potatoes with Smoked Gouda Onion and Thyme Seasoning Blend",
                           "winner":  "baby-potatoes",
                           "losers":  "onions"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Birds Eye Steamfresh Roasted Red Potatoes \u0026 Green Beans",
-                          "winner":  "red-potatoes",
-                          "losers":  "fresh-green-beans"
                       },
                       {
                           "store":  "Baker\u0027s",
@@ -755,18 +767,6 @@
                           "item":  "Impossible Plant-Based Italian Sausage Links",
                           "winner":  "italian-sausage",
                           "losers":  "veggie-sausages"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Chicken of the Sea Wild Caught Alaskan Pink Salmon in Spring Water Packet",
-                          "winner":  "bottled-water",
-                          "losers":  "canned-salmon"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Chicken of the Sea Wild Caught Alaskan Pink Salmon in Spring Water Packet",
-                          "winner":  "bottled-water",
-                          "losers":  "canned-salmon"
                       },
                       {
                           "store":  "Baker\u0027s",
@@ -809,36 +809,6 @@
                           "item":  "Mt. Olive Sweet Relish made with Sea Salt",
                           "winner":  "relish",
                           "losers":  "sea-salt"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Mt. Olive Bread \u0026 Butter Chips Old-Fashioned Sweet Pickles",
-                          "winner":  "bread",
-                          "losers":  "pickles"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Mt. Olive Sweet Heat Petites Bread \u0026 Butter Pickles",
-                          "winner":  "bread",
-                          "losers":  "pickles"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Kroger Sweet Peas \u0026 Carrots - 15oz can",
-                          "winner":  "carrots",
-                          "losers":  "canned-peas"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Kroger Sweet Peas \u0026 Carrots - 8.5oz can",
-                          "winner":  "carrots",
-                          "losers":  "canned-peas"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Del Monte Peas \u0026 Carrots",
-                          "winner":  "carrots",
-                          "losers":  "frozen-vegetables"
                       },
                       {
                           "store":  "Baker\u0027s",
@@ -920,12 +890,6 @@
                       },
                       {
                           "store":  "Baker\u0027s",
-                          "item":  "Simple Truth Organic Steamable Peas and Carrots",
-                          "winner":  "carrots",
-                          "losers":  "frozen-vegetables"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
                           "item":  "Private Selection Italian Sausage and Meat Lasagna Family Size",
                           "winner":  "italian-sausage",
                           "losers":  "frozen-lasagna"
@@ -938,27 +902,9 @@
                       },
                       {
                           "store":  "Baker\u0027s",
-                          "item":  "Scrubbing Bubbles Bathroom Grime Fighter Bathroom Cleaner, Aerosol Disinfectant Spray, Rainshower",
-                          "winner":  "disinfectant-spray",
-                          "losers":  "shower-cleaner"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Scrubbing Bubbles Bathroom Grime Fighter Bathroom Cleaner, Aerosol Disinfectant Spray, Citrus, 20 oz",
-                          "winner":  "disinfectant-spray",
-                          "losers":  "shower-cleaner"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
                           "item":  "Windex Disinfectant Cleaner Multi-Surface Citrus Fresh, Spray Bottle, 23 fl oz",
                           "winner":  "all-purpose-cleaner",
                           "losers":  "glass-cleaner,disinfectant-spray"
-                      },
-                      {
-                          "store":  "Baker\u0027s",
-                          "item":  "Scrubbing Bubbles Disinfectant Bathroom Grime Fighter Spray, Petal Paradise, 32 fl oz",
-                          "winner":  "disinfectant-spray",
-                          "losers":  "shower-cleaner"
                       },
                       {
                           "store":  "Baker\u0027s",
@@ -1190,15 +1136,231 @@
                       },
                       {
                           "store":  "Family Fare",
+                          "item":  "Chicken Of The Sea Wild Caught Alaskan Pink Salmon In Spring Water Packet 2.5 Oz",
+                          "winner":  "bottled-water",
+                          "losers":  "canned-salmon"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Chicken Of The Sea Wild Caught Alaskan Pink Salmon In Spring Water Packet, Low Sodium 2.5 Oz",
+                          "winner":  "bottled-water",
+                          "losers":  "canned-salmon"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Safe Catch Salmon, Pacific Pink, Skinless \u0026 Boneless, Wild 5 Oz",
+                          "winner":  "salmon",
+                          "losers":  "canned-salmon"
+                      },
+                      {
+                          "store":  "Family Fare",
                           "item":  "Red/Orangy Red Flesh Sweet Potato/Yam/Kumara, Small",
                           "winner":  "sweet-potatoes",
                           "losers":  "canned-yams"
                       },
                       {
                           "store":  "Family Fare",
+                          "item":  "Organic Yams, Red, Small",
+                          "winner":  "sweet-potatoes",
+                          "losers":  "canned-yams"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Mt Olive Pickles, Mild Jalapeno Slices, Tamed 12 Fl Oz",
+                          "winner":  "pickles",
+                          "losers":  "pickled-jalapenos"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "La Preferida Pickles, Jalapeno Nacho Slices, Hot 11.5 Oz",
+                          "winner":  "pickles",
+                          "losers":  "pickled-jalapenos"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Our Family Tomatoes, With Lime Juice \u0026 Cilantro, Diced 14.5 Oz",
+                          "winner":  "diced-tomatoes",
+                          "losers":  "lime-juice"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Ro Tel Mexican Style Lime \u0026 Cilantro Diced Tomatoes With Lime Juice \u0026 Cilantro 10 Oz",
+                          "winner":  "diced-tomatoes",
+                          "losers":  "lime-juice"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Method Hand Wash, Foaming, Pink Grapefruit 10 Fl Oz",
+                          "winner":  "hand-soap",
+                          "losers":  "grapefruit"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Birds Eye Gold \u0026 White Corn, Carrots \u0026 Asparagus 10.8 Oz",
+                          "winner":  "carrots",
+                          "losers":  "asparagus"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Chobani Zero Added Sugar Greek Yogurt Mango Protein Drink 14 Fl Oz",
+                          "winner":  "yogurt",
+                          "losers":  "sugar"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Lysol Multi Purpose Cleaner, Bleach 32 Oz",
+                          "winner":  "all-purpose-cleaner",
+                          "losers":  "bleach"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Gain Ultra Liquid Dish Soap, Bleach Alternative Honey Berry Hula, 21.6 Fl Oz 24.3 Fl Oz",
+                          "winner":  "dish-soap",
+                          "losers":  "bleach"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Scott One Ply Unscented Bathroom Tissue 4 Ea",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Quilted Northern 3 Ply Unscented Mega Rolls Bathroom Tissue 12 Ea",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Quilted Northern 3 Ply Unscented Mega Rolls Bathroom Tissue 6 Ea",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Scott One Ply Unscented Bathroom Tissue 12 Ea",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Angel Soft 2 Ply Mega Rolls Unscented Mega Rolls Bathroom Tissue 24 Ea",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Angel Soft 2 Ply Unscented Mega Rolls Bathroom Tissue 16 Ea",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Charmin 2 Ply Unscented Mega Rolls Bathroom Tissue 9 Ea",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Premium Quilted Bathroom Tissue Double Rolls, Unscented",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Angel Soft Bathroom Tissue Unscented Mega Rolls 2 Ply",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Angel Soft Bathroom Tissue, 2 Ply, Unscented, Super Mega 6 Ea",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Angel Soft Bathroom Tissue Fresh Lavender Scented Tube Mega Rolls 2 Ply",
+                          "winner":  "toilet-paper",
+                          "losers":  "facial-tissues"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Ruffles Queso Cheese Potato Chips 8 Oz",
+                          "winner":  "potato-chips",
+                          "losers":  "queso"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Barrel O\u0027 Fun Dill Pickle Potato Chips 7 Oz",
+                          "winner":  "potato-chips",
+                          "losers":  "pickles"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Lay\u0027s Dill Pickle Potato Chips 7.75 Oz",
+                          "winner":  "potato-chips",
+                          "losers":  "pickles"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Diet Coke Retro Lime Fridge Pack Cans 12 Fl Oz",
+                          "winner":  "limes",
+                          "losers":  "soda"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Del Monte Whole Kernel Southwest Style Corn With Poblano \u0026 Red Peppers 15.25 Oz",
+                          "winner":  "canned-corn",
+                          "losers":  "poblano-peppers"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Fresh Strawberries \u0026 Blueberries Fresh Divide",
+                          "winner":  "strawberries",
+                          "losers":  "blueberries"
+                      },
+                      {
+                          "store":  "Family Fare",
                           "item":  "Pumpkin Tree Fruit \u0026 Vegetable Puree, Apple, Sweet Potato \u0026 Corn, Organic 4.4 Oz",
                           "winner":  "apples",
                           "losers":  "sweet-potatoes"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Eggo Thick \u0026 Fluffy Cinnamon Brown Sugar Waffles 6 Ea",
+                          "winner":  "brown-sugar",
+                          "losers":  "frozen-waffles"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Dolores Chunk Light Yellowfin Tuna In Vegetable Oil 5 Oz",
+                          "winner":  "canned-tuna",
+                          "losers":  "vegetable-oil"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Birds Eye White Rice, With Mixed Vegetables, Long Grain 10 Oz",
+                          "winner":  "rice",
+                          "losers":  "frozen-vegetables,canned-mixed-vegetables"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Cracker Barrel Sharp White Cheddar Macaroni \u0026 Cheese Dinner 14 Oz",
+                          "winner":  "mac-and-cheese",
+                          "losers":  "crackers"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Cracker Barrel Sharp Cheddar Macaroni \u0026 Cheese Dinner 14 Oz",
+                          "winner":  "mac-and-cheese",
+                          "losers":  "crackers"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Cracker Barrel Cheddar Havarti Macaroni \u0026 Cheese Dinner 14 Oz",
+                          "winner":  "mac-and-cheese",
+                          "losers":  "crackers"
                       },
                       {
                           "store":  "Family Fare",
@@ -1226,12 +1388,6 @@
                       },
                       {
                           "store":  "Family Fare",
-                          "item":  "Birds Eye Gold \u0026 White Corn, Carrots \u0026 Asparagus 10.8 Oz",
-                          "winner":  "carrots",
-                          "losers":  "asparagus"
-                      },
-                      {
-                          "store":  "Family Fare",
                           "item":  "Del Monte Peas \u0026 Carrots 14.5 Oz",
                           "winner":  "carrots",
                           "losers":  "frozen-vegetables"
@@ -1253,12 +1409,6 @@
                           "item":  "Ro Tel Hot Diced Tomatoes With Habaneros 10 Oz",
                           "winner":  "diced-tomatoes",
                           "losers":  "tomatoes-green-chilies"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Ro Tel Mexican Style Lime \u0026 Cilantro Diced Tomatoes With Lime Juice \u0026 Cilantro 10 Oz",
-                          "winner":  "diced-tomatoes",
-                          "losers":  "lime-juice"
                       },
                       {
                           "store":  "Family Fare",
@@ -1310,12 +1460,6 @@
                       },
                       {
                           "store":  "Family Fare",
-                          "item":  "Fresh Strawberries \u0026 Blueberries Fresh Divide",
-                          "winner":  "strawberries",
-                          "losers":  "blueberries"
-                      },
-                      {
-                          "store":  "Family Fare",
                           "item":  "Daisy 4% Milkfat With Crushed Pineapples Cottage Cheese 6 Oz",
                           "winner":  "cottage-cheese",
                           "losers":  "canned-pineapple"
@@ -1361,24 +1505,6 @@
                           "item":  "Pineapple Teriyaki Brats 4 Ct.",
                           "winner":  "bratwurst",
                           "losers":  "teriyaki-sauce"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Chicken Of The Sea Wild Caught Alaskan Pink Salmon In Spring Water Packet 2.5 Oz",
-                          "winner":  "bottled-water",
-                          "losers":  "canned-salmon"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Chicken Of The Sea Wild Caught Alaskan Pink Salmon In Spring Water Packet, Low Sodium 2.5 Oz",
-                          "winner":  "bottled-water",
-                          "losers":  "canned-salmon"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Safe Catch Salmon, Pacific Pink, Skinless \u0026 Boneless, Wild 5 Oz",
-                          "winner":  "salmon",
-                          "losers":  "canned-salmon"
                       },
                       {
                           "store":  "Family Fare",
@@ -1436,12 +1562,6 @@
                       },
                       {
                           "store":  "Family Fare",
-                          "item":  "Del Monte Whole Kernel Southwest Style Corn With Poblano \u0026 Red Peppers 15.25 Oz",
-                          "winner":  "canned-corn",
-                          "losers":  "poblano-peppers"
-                      },
-                      {
-                          "store":  "Family Fare",
                           "item":  "Raisins, Dates \u0026 Walnuts Instant Oatmeal",
                           "winner":  "oatmeal",
                           "losers":  "walnuts"
@@ -1454,153 +1574,9 @@
                       },
                       {
                           "store":  "Family Fare",
-                          "item":  "Ruffles Queso Cheese Potato Chips 8 Oz",
-                          "winner":  "potato-chips",
-                          "losers":  "queso"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Barrel O\u0027 Fun Dill Pickle Potato Chips 7 Oz",
-                          "winner":  "potato-chips",
-                          "losers":  "pickles"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Diet Coke Retro Lime Fridge Pack Cans 12 Fl Oz",
-                          "winner":  "limes",
-                          "losers":  "soda"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Scott One Ply Unscented Bathroom Tissue 4 Ea",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Quilted Northern 3 Ply Unscented Mega Rolls Bathroom Tissue 6 Ea",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Quilted Northern 3 Ply Unscented Mega Rolls Bathroom Tissue 12 Ea",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Scott One Ply Unscented Bathroom Tissue 12 Ea",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Angel Soft 2 Ply Mega Rolls Unscented Mega Rolls Bathroom Tissue 24 Ea",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Angel Soft 2 Ply Unscented Mega Rolls Bathroom Tissue 16 Ea",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Charmin 2 Ply Unscented Mega Rolls Bathroom Tissue 9 Ea",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Premium Quilted Bathroom Tissue Double Rolls, Unscented",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Angel Soft Bathroom Tissue Unscented Mega Rolls 2 Ply",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Angel Soft Bathroom Tissue, 2 Ply, Unscented, Super Mega 6 Ea",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Angel Soft Bathroom Tissue Fresh Lavender Scented Tube Mega Rolls 2 Ply",
-                          "winner":  "toilet-paper",
-                          "losers":  "facial-tissues"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Gain Ultra Liquid Dish Soap, Bleach Alternative Honey Berry Hula, 21.6 Fl Oz 24.3 Fl Oz",
-                          "winner":  "dish-soap",
-                          "losers":  "bleach"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Lysol Multi Purpose Cleaner, Bleach 32 Oz",
-                          "winner":  "all-purpose-cleaner",
-                          "losers":  "bleach"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Mt Olive Pickles, Mild Jalapeno Slices, Tamed 12 Fl Oz",
-                          "winner":  "pickles",
-                          "losers":  "pickled-jalapenos"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Our Family Tomatoes, With Lime Juice \u0026 Cilantro, Diced 14.5 Oz",
-                          "winner":  "diced-tomatoes",
-                          "losers":  "lime-juice"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Organic Yams, Red, Small",
-                          "winner":  "sweet-potatoes",
-                          "losers":  "canned-yams"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Cracker Barrel Sharp White Cheddar Macaroni \u0026 Cheese Dinner 14 Oz",
-                          "winner":  "mac-and-cheese",
-                          "losers":  "crackers"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Cracker Barrel Sharp Cheddar Macaroni \u0026 Cheese Dinner 14 Oz",
-                          "winner":  "mac-and-cheese",
-                          "losers":  "crackers"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Cracker Barrel Cheddar Havarti Macaroni \u0026 Cheese Dinner 14 Oz",
-                          "winner":  "mac-and-cheese",
-                          "losers":  "crackers"
-                      },
-                      {
-                          "store":  "Family Fare",
                           "item":  "Kraft Deluxe Creamy Alfredo Macaroni \u0026 Cheese Dinner 11.9 Oz",
                           "winner":  "mac-and-cheese",
                           "losers":  "alfredo-sauce"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Eggo Thick \u0026 Fluffy Cinnamon Brown Sugar Waffles 6 Ea",
-                          "winner":  "brown-sugar",
-                          "losers":  "frozen-waffles"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Dolores Chunk Light Yellowfin Tuna In Vegetable Oil 5 Oz",
-                          "winner":  "canned-tuna",
-                          "losers":  "vegetable-oil"
                       },
                       {
                           "store":  "Family Fare",
@@ -1634,51 +1610,15 @@
                       },
                       {
                           "store":  "Family Fare",
-                          "item":  "Method Hand Wash, Foaming, Pink Grapefruit 10 Fl Oz",
-                          "winner":  "hand-soap",
-                          "losers":  "grapefruit"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Chobani Zero Added Sugar Greek Yogurt Mango Protein Drink 14 Fl Oz",
-                          "winner":  "yogurt",
-                          "losers":  "sugar"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "La Preferida Pickles, Jalapeno Nacho Slices, Hot 11.5 Oz",
-                          "winner":  "pickles",
-                          "losers":  "pickled-jalapenos"
-                      },
-                      {
-                          "store":  "Family Fare",
                           "item":  "Campbell\u0027s® Shaped Pasta With Chicken In Chicken Broth 10.500 Oz",
                           "winner":  "pasta",
                           "losers":  "chicken-broth"
                       },
                       {
                           "store":  "Family Fare",
-                          "item":  "Birds Eye White Rice, With Mixed Vegetables, Long Grain 10 Oz",
-                          "winner":  "rice",
-                          "losers":  "frozen-vegetables,canned-mixed-vegetables"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Tidy Cats With Glade Clear Springs Non Clumping Litter 20 Lb",
-                          "winner":  "air-freshener",
-                          "losers":  "cat-litter"
-                      },
-                      {
-                          "store":  "Family Fare",
                           "item":  "Fresh \u0026 Finest Herbed Tomato Bisque",
                           "winner":  "tomatoes",
                           "losers":  "tomato-soup"
-                      },
-                      {
-                          "store":  "Family Fare",
-                          "item":  "Lay\u0027s Dill Pickle Potato Chips 7.75 Oz",
-                          "winner":  "potato-chips",
-                          "losers":  "pickles"
                       },
                       {
                           "store":  "Family Fare",
@@ -1700,27 +1640,9 @@
                       },
                       {
                           "store":  "Fareway",
-                          "item":  "Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans \u0026 Rosemary",
-                          "winner":  "red-potatoes",
-                          "losers":  "fresh-green-beans,canned-green-beans"
-                      },
-                      {
-                          "store":  "Fareway",
-                          "item":  "Fareway Steamables Green Beans",
-                          "winner":  "fresh-green-beans",
-                          "losers":  "canned-green-beans"
-                      },
-                      {
-                          "store":  "Fareway",
                           "item":  "Fareway Mandarin Oranges in 100% Juice",
                           "winner":  "fruit-cups",
                           "losers":  "mandarin-oranges"
-                      },
-                      {
-                          "store":  "Fareway",
-                          "item":  "BELVITA Breakfast Bar Biscuit Sandwiches, Cinnamon Brown Sugar With Vanilla Creme 8.8 oz",
-                          "winner":  "brown-sugar",
-                          "losers":  "breakfast-sandwiches"
                       },
                       {
                           "store":  "Fareway",
@@ -2090,15 +2012,9 @@
                       },
                       {
                           "store":  "Walmart",
-                          "item":  "Pasta de Aji amarillo, Yellow Hot Pepper Paste. 8 oz",
-                          "winner":  "pasta",
-                          "losers":  "aji-amarillo-paste"
-                      },
-                      {
-                          "store":  "Walmart",
-                          "item":  "The Bacon Jam Classic Bacon Jam 9oz",
-                          "winner":  "bacon",
-                          "losers":  "jelly"
+                          "item":  "Great Value Baby Lima Beans, 1 lb",
+                          "winner":  "frozen-lima-beans",
+                          "losers":  "canned-butter-beans"
                       }
                   ],
     "pairs":  {
@@ -2119,7 +2035,6 @@
                   "peanut-butter \u003e\u003e jelly":  5,
                   "peaches \u003e\u003e mangoes":  2,
                   "strawberries \u003e\u003e kiwi":  2,
-                  "maple-syrup \u003e\u003e frozen-waffles":  2,
                   "rice \u003e\u003e potato-gnocchi":  1,
                   "parmesan \u003e\u003e garlic-bread":  1,
                   "ranch-dressing \u003e\u003e caesar-dressing":  1,
@@ -2144,8 +2059,8 @@
                   "tortillas \u003e\u003e frozen-burritos":  1,
                   "oranges \u003e\u003e paper-napkins":  3,
                   "canned-corn \u003e\u003e poblano-peppers":  2,
-                  "carrots \u003e\u003e frozen-vegetables":  5,
-                  "canned-tuna \u003e\u003e vegetable-oil":  2,
+                  "carrots \u003e\u003e frozen-vegetables":  4,
+                  "canned-tuna \u003e\u003e vegetable-oil":  1,
                   "garlic \u003e\u003e minced-garlic":  3,
                   "canned-peaches \u003e\u003e fruit-cups":  1,
                   "popsicles \u003e\u003e sponges":  1,
@@ -2168,7 +2083,7 @@
                   "apple-cider-vinegar \u003e\u003e cayenne-pepper":  1,
                   "onions \u003e\u003e butternut-squash":  1,
                   "parmesan \u003e\u003e red-pepper-flakes":  1,
-                  "brown-sugar \u003e\u003e breakfast-sandwiches":  1,
+                  "pasta \u003e\u003e pesto":  1,
                   "butter \u003e\u003e shallots":  1,
                   "onions \u003e\u003e brussels-sprouts":  1,
                   "whipped-cream \u003e\u003e coconut-milk-canned":  1,
@@ -2190,8 +2105,7 @@
                   "tomatoes \u003e\u003e feta":  3,
                   "jalapenos \u003e\u003e feta":  1,
                   "tahini \u003e\u003e toasted-sesame-seeds":  1,
-                  "baby-potatoes \u003e\u003e avocado-oil":  1,
-                  "bread \u003e\u003e pickles":  3,
+                  "bread \u003e\u003e pickles":  1,
                   "all-purpose-cleaner \u003e\u003e bleach":  1,
                   "garlic \u003e\u003e frozen-vegetables":  1,
                   "frozen-burritos \u003e\u003e chili-crisp":  1,
@@ -2202,22 +2116,20 @@
                   "pickles \u003e\u003e pistachios":  1,
                   "sour-cream \u003e\u003e instant-mashed-potatoes":  2,
                   "all-purpose-cleaner \u003e\u003e glass-cleaner":  1,
-                  "chicken-nuggets \u003e\u003e bread-crumbs":  1,
+                  "chicken-nuggets \u003e\u003e bread-crumbs":  2,
                   "tahini \u003e\u003e harissa-paste":  1,
                   "sour-cream \u003e\u003e red-lentils":  1,
                   "apples \u003e\u003e ground-cinnamon":  1,
                   "carrots \u003e\u003e celery":  3,
-                  "red-potatoes \u003e\u003e canned-green-beans":  1,
                   "crackers \u003e\u003e dried-thyme":  1,
                   "fruit-cups \u003e\u003e mandarin-oranges":  11,
                   "italian-sausage \u003e\u003e frozen-lasagna":  1,
-                  "pasta \u003e\u003e pesto":  1,
+                  "pineapple \u003e\u003e apple-cider-vinegar":  1,
                   "toilet-paper \u003e\u003e facial-tissues":  11,
                   "pepperoni \u003e\u003e turkey-lunchmeat":  3,
-                  "air-freshener \u003e\u003e cat-litter":  1,
                   "energy-drinks \u003e\u003e tea-bags":  1,
                   "canned-peaches \u003e\u003e grape-juice":  1,
-                  "mac-and-cheese \u003e\u003e parmesan":  2,
+                  "baby-potatoes \u003e\u003e avocado-oil":  1,
                   "jalapenos \u003e\u003e cheddar-cheese-curds":  1,
                   "cream-cheese \u003e\u003e croissants":  1,
                   "potato-chips \u003e\u003e queso":  1,
@@ -2242,20 +2154,18 @@
                   "onions \u003e\u003e red-onion":  1,
                   "italian-sausage \u003e\u003e veggie-sausages":  1,
                   "shredded-cheese \u003e\u003e frozen-vegetables":  1,
-                  "bell-peppers \u003e\u003e canned-corn":  1,
                   "strawberries \u003e\u003e clementines":  1,
                   "tortillas \u003e\u003e sun-dried-tomatoes":  1,
                   "all-purpose-cleaner \u003e\u003e disinfectant-spray":  5,
                   "jalapenos \u003e\u003e hummus":  1,
                   "bread \u003e\u003e cornmeal":  1,
-                  "fresh-green-beans \u003e\u003e canned-green-beans":  7,
+                  "fresh-green-beans \u003e\u003e canned-green-beans":  6,
                   "rice \u003e\u003e canned-mixed-vegetables":  1,
                   "garlic \u003e\u003e feta":  1,
                   "apple-cider-vinegar \u003e\u003e tea-bags":  1,
                   "yogurt \u003e\u003e sugar":  4,
                   "spinach \u003e\u003e ricotta":  1,
                   "mac-and-cheese \u003e\u003e alfredo-sauce":  1,
-                  "pasta \u003e\u003e aji-amarillo-paste":  1,
                   "walnuts \u003e\u003e fresh-cranberries":  1,
                   "lemons \u003e\u003e raspberries":  1,
                   "butter \u003e\u003e garlic-herb-seasoning":  1,
@@ -2266,20 +2176,18 @@
                   "mac-and-cheese \u003e\u003e pesto":  1,
                   "strawberries \u003e\u003e zucchini":  1,
                   "sugar \u003e\u003e sugar-snap-peas":  1,
-                  "pineapple \u003e\u003e apple-cider-vinegar":  1,
                   "diced-tomatoes \u003e\u003e tomatoes-green-chilies":  4,
                   "bleach \u003e\u003e stain-remover":  1,
                   "olive-oil \u003e\u003e ground-beef-9010":  1,
                   "spinach \u003e\u003e potato-gnocchi":  1,
                   "tomatoes \u003e\u003e pasta":  2,
                   "strawberries \u003e\u003e blueberries":  1,
-                  "red-potatoes \u003e\u003e fresh-green-beans":  2,
+                  "mac-and-cheese \u003e\u003e parmesan":  2,
                   "canned-mixed-vegetables \u003e\u003e canned-butter-beans":  1,
                   "spinach \u003e\u003e kale":  1,
                   "bottled-marinade \u003e\u003e papaya":  1,
                   "bagels \u003e\u003e sea-salt":  1,
                   "apple-juice \u003e\u003e grape-juice":  1,
-                  "bacon \u003e\u003e jelly":  1,
                   "frozen-fries \u003e\u003e canned-beets":  1,
                   "bratwurst \u003e\u003e teriyaki-sauce":  1,
                   "garlic \u003e\u003e garlic-herb-seasoning":  1,
@@ -2317,13 +2225,13 @@
                   "chicken-broth \u003e\u003e fresh-ginger":  1,
                   "salmon \u003e\u003e canned-salmon":  1,
                   "cucumbers \u003e\u003e garlic":  1,
+                  "frozen-lima-beans \u003e\u003e canned-butter-beans":  1,
                   "salsa \u003e\u003e refried-beans":  1,
                   "pasta \u003e\u003e pasta-sauce":  1,
                   "deodorant \u003e\u003e dried-thyme":  1,
                   "rice \u003e\u003e frozen-vegetables":  1,
                   "clementines \u003e\u003e mandarin-oranges":  1,
-                  "disinfectant-spray \u003e\u003e shower-cleaner":  3,
-                  "butter \u003e\u003e chickpeas":  1,
+                  "maple-syrup \u003e\u003e frozen-waffles":  2,
                   "bacon \u003e\u003e mayonnaise":  1,
                   "avocados \u003e\u003e coconut":  1,
                   "mushrooms \u003e\u003e fresh-stir-fry-blend":  1,
@@ -2343,5 +2251,5 @@
                   "apples \u003e\u003e rice-cakes":  2,
                   "tortilla-chips \u003e\u003e queso":  1
               },
-    "scanned":  18566
+    "scanned":  18641
 }

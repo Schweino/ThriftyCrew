@@ -1,14 +1,14 @@
 ﻿{
     "resolved":  [
                      {
-                         "id":  "baked-beans",
-                         "fault":  "NO-LINK",
-                         "board":  "Our Family Original Baked Beans 28 Oz",
-                         "board_pu":  0.0925,
-                         "name":  "Our Family Original Baked Beans 28 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/our_family_original_baked_beans_28_oz/p/6786962",
-                         "price":  "$2.59",
-                         "size":  "28 oz",
+                         "id":  "chicken-wings",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Chicken Party Wings",
+                         "board_pu":  2.99,
+                         "name":  "Chicken Party Wings",
+                         "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/chicken_party_wings/p/1564405684714631448",
+                         "price":  "$2.99",
+                         "size":  "lb",
                          "score":  1
                      },
                      {
@@ -23,25 +23,14 @@
                          "score":  1
                      },
                      {
-                         "id":  "mangoes",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Red Mango, Small",
-                         "board_pu":  2.29,
-                         "name":  "Red Mango, Small",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tropical_fruits/red_mango_small/p/78514",
-                         "price":  "$2.29",
-                         "size":  "1 ct",
-                         "score":  1
-                     },
-                     {
-                         "id":  "plums",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Fresh Plums, Red",
-                         "board_pu":  3.99,
-                         "name":  "Fresh Plums, Red",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/pears_peaches_plums/fresh_plums_red/p/1564405684716713557",
-                         "price":  "$3.99",
-                         "size":  "lb",
+                         "id":  "mac-and-cheese",
+                         "fault":  "NO-LINK",
+                         "board":  "Annie\u0027s Shells \u0026 White Cheddar Macaroni \u0026 Cheese 4 Ea",
+                         "board_pu":  1.5475,
+                         "name":  "Annie\u0027s Shells \u0026 White Cheddar Macaroni \u0026 Cheese 4 Ea",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/annie_s_shells_white_cheddar_macaroni_cheese_4_ea/p/8201473",
+                         "price":  "$6.19",
+                         "size":  "4 ea",
                          "score":  1
                      }
                  ],
@@ -99,35 +88,27 @@
                         "why":  "match found but per-unit disagrees: board $2.89 vs link $0.3612 (700%)"
                     },
                     {
-                        "id":  "jalapenos",
-                        "why":  "no confident match (best 0)"
-                    },
-                    {
-                        "id":  "mac-and-cheese",
-                        "why":  "match found but its size \"6 oz\" gives no per-unit in each"
-                    },
-                    {
                         "id":  "orange-juice",
                         "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
                     },
                     {
                         "id":  "queso",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"23\" gives no per-unit in oz"
                     },
                     {
                         "id":  "sports-drinks",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"8pk/20oz\" gives no per-unit in floz"
                     },
                     {
                         "id":  "strawberries",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but per-unit disagrees: board $0.3119 vs link $0.4369 (28.6%)"
                     },
                     {
                         "id":  "yukon-gold-potatoes",
                         "why":  "match found but per-unit disagrees: board $0.798 vs link $1.398 (42.9%)"
                     }
                 ],
-    "worked":  24,
-    "generated":  "2026-09-08 08:11",
-    "board":  "comparison-2026-09-08.json"
+    "worked":  21,
+    "generated":  "2026-09-09 08:14",
+    "board":  "comparison-2026-09-09.json"
 }

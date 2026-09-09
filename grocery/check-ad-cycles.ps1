@@ -123,6 +123,7 @@ try {
 . (Join-Path (Split-Path $root -Parent) 'lib\chain-verdict-lib.ps1')   # Write-ChainVerdict: THE guard-verdict document, shared with capture-run and push-data
 . (Join-Path $root 'alert-lib.ps1')
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
+. (Join-Path $root 'capture-policy-lib.ps1')   # Test-BrowserCaptureOwned: a store deferred to a browser owner under 24h ago is an OWNED gap, not an unowned one (2026-09-09-e60137). Declares no param() block, so it cannot reset this script's switches
 . (Join-Path $root 'fanout-lib.ps1')   # Invoke-Fanout / Get-FanoutRecord / Test-FanoutComplete: the inspect fan-out
 
 # ---- THE CADENCE GATE, WHICH WAS CALLED EIGHT TIMES AND NEVER EXISTED (2026-08-23) --------------------
@@ -583,6 +584,16 @@ foreach ($rec in $newStores) {
   if (-not $schedTo) { continue }
   if ((-not $newest) -or ($fileTo -and $fileTo -lt $schedTo)) {
     $have = if ($newest) { $newest.Name + ' (window ends ' + $(if($fileTo){$fileTo.ToString('yyyy-MM-dd')}else{'undeclared'}) + ')' } else { 'no deals file at all' }
+    # AN OWNED GAP IS NOT AN UNOWNED ONE (2026-09-09, queue 2026-09-09-e60137). This decided "the window
+    # advanced without the data" from the newest ad file alone, never reading the pending-browser-work flag
+    # that capture-run had written 29 minutes earlier in the SAME morning's run. On 09-09 it paged Baker's
+    # at 08:35 for a store the pipeline had itself handed to a browser owner at 07:02, and that owner's
+    # 146-row capture landed at 09:10. It still logs, so an owned gap is visible rather than silent, and it
+    # still pages once the deferral passes 24h - a browser agent that never ran must not hide behind this.
+    if (Test-BrowserCaptureOwned -Store ([string]$rec.store) -OutDir $OutDir) {
+      Log ("SCHEDULE-AHEAD-OF-DATA $($rec.store) NOT PAGED - " + (Get-BrowserOwnedNote -Store ([string]$rec.store)) + " capture on disk: $have")
+      continue
+    }
     $summary += ("REVIEW    {0}'s schedule says its ad runs to {1}, but the newest ad capture is {2} - the window advanced without the data. Its board prices come from the OLD ad until a pull lands." -f $rec.store, $rec.current.to, $have)
     Log ("SCHEDULE-AHEAD-OF-DATA $($rec.store): current.to=$($rec.current.to) but capture is $have")
     if (-not $NoAlert) { try { Send-Alert -Subject ("$($rec.store) ad window advanced with no capture behind it") -Body ("ad-schedule.json records $($rec.store)'s current ad window ending $($rec.current.to), but the newest ad capture on disk is $have.`n`nThese are written by two different steps and only one ran. The ad supplement OVERRIDES the everyday storefront price whenever it is cheaper, so until a pull lands the board keeps pricing cells from the PREVIOUS ad - a sale that is over. That is how Fareway published `$1.99/lb pork chops for six days after the sale ended.`n`nFix: run the browser agent for this store so the ad capture catches up.") | Out-Null } catch {} }

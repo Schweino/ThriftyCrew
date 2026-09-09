@@ -1,0 +1,2826 @@
+{
+    "generated":  "2026-09-09T10:10:56",
+    "plan":  "plan-2026-09-09.json",
+    "item":  "2026-09-09-9b1f92",
+    "board_week":  "comparison-2026-09-09 (built 08:11:04) - built BEFORE bakers-deals-2026-09-09.json landed at 09:10:33; this corpus INCLUDES that new ad file",
+    "corpus":  {
+                   "description":  "audit-match-soundness feed selection shape: newest out\\regular\\*-regular-*.json per store prefix (hunter-* included) + newest ads-*.json + newest bakers/sams/fareway deals file; every section of this artifact reads this one list",
+                   "files":  [
+                                 "aldi-regular-2026-09-09.json",
+                                 "bakers-regular-2026-09-09.json",
+                                 "family-fare-regular-2026-09-09.json",
+                                 "fareway-regular-2026-09-09.json",
+                                 "hunter-aldi-regular-2026-08-16.json",
+                                 "hunter-bakers-regular-2026-08-16.json",
+                                 "hunter-familyfare-regular-2026-08-16.json",
+                                 "hunter-fareway-regular-2026-08-16.json",
+                                 "hunter-hyvee-regular-2026-08-16.json",
+                                 "hunter-samsclub-regular-2026-08-16.json",
+                                 "hunter-walmart-regular-2026-08-16.json",
+                                 "hyvee-regular-2026-09-09.json",
+                                 "sams-regular-2026-08-01.json",
+                                 "walmart-regular-2026-09-09.json",
+                                 "ads-2026-09-09.json",
+                                 "bakers-deals-2026-09-09.json",
+                                 "sams-deals-2026-09-09.json",
+                                 "fareway-deals-2026-09-06.json"
+                             ],
+                   "rows":  21127,
+                   "unique_names":  19208,
+                   "skipped_files":  [
+
+                                     ]
+               },
+    "corpus_gap":  "the engine also reads the Sam\u0027s and Walmart capture files this corpus does not (out\\captures\\sams-capture-*.csv feeds sams-deals; the Walmart Doughnut Dots row is in a walmart file outside the newest-regular selection). The two names that hold cells from those sources were routed individually and are recorded in out_of_corpus_controls, so the hole is a lookup, not a hunt.",
+    "proposed_rule":  {
+                          "target":  "commodities.json donuts (array index 173) exclude +=",
+                          "tokens":  [
+                                         "\\bcups?\\b",
+                                         "\\blil.{0,5}smiles?\\b",
+                                         "\\bdots\\b",
+                                         "\\bpop\\W{0,2}ems?\\b",
+                                         "\\bmunchkins?\\b",
+                                         "\\bbites\\b"
+                                     ],
+                          "not_a_token":  "mini, sticks, donettes - whether a mini donut or a donut stick IS a donut per each is the ruling put to Brad, not decided here"
+                      },
+    "measured_as":  "routing",
+    "token_matches_in_corpus":  319,
+    "routing_changes":  4,
+    "route_moved":  4,
+    "changed":  [
+                    {
+                        "name":  "36 CT Donut Cups",
+                        "before":  "donuts",
+                        "after":  "\u003cunmatched\u003e",
+                        "stores":  "Aldi"
+                    },
+                    {
+                        "name":  "Clyde\u0027s Donuts Donuts, Powdered Lil’ Smiles, Classic",
+                        "before":  "donuts",
+                        "after":  "\u003cunmatched\u003e",
+                        "stores":  "Fareway"
+                    },
+                    {
+                        "name":  "Clyde\u0027s Donuts, Glazed Cherry Lil\u0027 Smiles",
+                        "before":  "donuts",
+                        "after":  "\u003cunmatched\u003e",
+                        "stores":  "Fareway"
+                    },
+                    {
+                        "name":  "Krispy Kreme Original Glazed Doughnut Dots",
+                        "before":  "donuts",
+                        "after":  "\u003cunmatched\u003e",
+                        "stores":  "Baker\u0027s"
+                    }
+                ],
+    "token_hits_not_moving_note":  "every token hit that does not change route is a name owned by another commodity whose exclude list does not carry the token (coffee-pods, applesauce, yogurt, muffins, paper cups); the tokens are added ONLY to donuts.exclude, so they can only remove names from donuts and can never move a name elsewhere",
+    "token_hits":  [
+                       {
+                           "name":  "10 Ct Strawberry Cheese Strudel Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Activia Peach Probiotic Low Fat Yogurt Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Activia Strawberry Probiotic Low Fat Yogurt Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Activia Vanilla Probiotic Low Fat Yogurt Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Appetitos Mac Cheese Bites 8 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Applegate Naturals Chicken Sausage, Red Pepper, Onions and Spinach Frittata Bites, 19g of Protein",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Bake Shop Apple Cider Cake Bites 10 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Bakery Fresh Cream Cheese Blueberry Coffee Cake Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Barissimo Fair Trade Certified Decaf Donut Store Medium Roast Arabica Coffee Single Serve Cups 0 37 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Boulder Party Cups 50 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Brazi Bites Gluten Free Frozen Garlic Asiago Cheese Bread",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Campbell’s® Butternut Squash And Sweet Potato Soup 11.1 Oz Microwavable Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Campbell\u0027s Sipping Soup Butternut Squash and Sweet Potato Soup 11.1 oz Microwavable Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Checkers/Rally\u0027s Potato Bites, Cheesy, Seasoned 16 Oz",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Choceur Peanut Butter Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Choceur Peanut Butter Cups 12 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Cup Noodles Protein, Hot and Spicy Chicken, 12 pk.",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Cup Noodles Protein, Rich \u0026 Savory Chicken, 2.54 oz., 12 pk.",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Danimals Disney Pixar Incredibles 2 Variety Cups Smoothie 3.1 FL OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Dole Fruit Bowls Mandarins in Orange Flavored Gel Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "DOLE Fruit Bowls No Sugar Added Mixed Fruit in Cherry Flavored Gel Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dole Fruit Bowls Peaches in Strawberry Flavored Gel Fruit Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dots Watermelon Dots",
+                           "tokens":  "\\bdots\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Drizzilicious Salted Caramel Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Edward Marc Girl Scout snappers or bites, 5.5 or 6 oz., $6.99",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Entenmann\u0027s Little BItes Blueberry Mini Muffins",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Entenmann\u0027s Little Bites Pumpkin Mini Muffins",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Entenmann\u0027s Pop \u0027ems Pumpkin Donut Holes",
+                           "tokens":  "\\bpop\\W{0,2}ems?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Entenmann\u0027s Pop\u0027ems Glazed Donut Holes",
+                           "tokens":  "\\bpop\\W{0,2}ems?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Farm Rich Spinach Artichoke Dip Bites 14 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Green Giant Mexican Style Corn Cob Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Hy Vee Donut Shop Blend Single Cup Coffee 12 Ct",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Hy-Vee 8-12 cup basket style coffee filters, 200 ct., $1.99",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Hy-Vee red party cups, FUEL SAVE EARN 5¢ OFF PER GALLON, $4.99",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Hy-Vee tinted or translucent plastic cups, 24 or 50 ct., $3.49",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Jell-O Black Cherry Sugar Free Jello Cups Gelatin Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Lemon-Lime Sugar Free Jello Cups Gelatin Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Original Orange Jello Cups Gelatin Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Original Strawberry Jello Cups Gelatin Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Original Strawberry Jello Cups Gelatin Snack Value Pack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Strawberry Sugar Free Jello Cups Gelatin Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Strawberry Sugar Free Jello Cups Gelatin Snack Value Pack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Just Bare Fully Cooked Lightly Breaded Chicken Breast Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Just Bare Fully Cooked Roasted Chicken Breast Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Just Bare Just Bare Fully Cooked Lightly Breaded Chicken Breast Bites Family Pack",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Just Bare Lightly Breaded Chicken Breast Original Bites, Frozen, 3 lbs.",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Kirkwood Gluten Free Chicken Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Kroger Frozen Fully Cooked Crispy Chicken Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Frozen Tater Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Frozen Tater Bites BIG DEAL!",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Gelatin Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Zero Sugar Gelatin Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Zero Sugar Parfait Gelatin Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Litte Journey Mixed Berry Yogurt Bites Baby Snack Food 1 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Lunch Buddies Strawberry Flavored Applesauce Cups 4 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Malt-O-Meal Cocoa Dyno Bites Chocolate Cereal Bag",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Malt-O-Meal Fruity Dyno Bites Super Size Cereal Bag",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Malt-O-Meal Fruity Dyno Bites with Marshmallows Super Size Cereal Bag",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Member\u0027s Mark Breaded and Boneless Homestyle Chicken Bites, Frozen, 4 lbs.",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Member\u0027s Mark Breaded and Boneless Honey Barbecue Chicken Bites, Frozen, 3.5 lbs.",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Member\u0027s Mark Fully Cooked Lightly Breaded Chicken Breast Bites, Frozen, 3 lbs.",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Member\u0027s Mark Grilled Chicken Bites, Frozen, 3 lbs.",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Member\u0027s Mark Rotisserie Chicken Bites, 2 lbs.",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Member\u0027s Mark Southern Style Chicken Bites, Frozen, 3 lbs.",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Mini Dino Nuggets Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Nature Raised Farms chicken strips, nuggets or bites, 22 or 28 oz., $10.49",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Nissin Cup Noodles Bistro Korean Gochujang Beef Noodles",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Nissin Cup Noodles, Chicken Flavor 2.25 oz., 24 ct.",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Sam\u0027s Club"
+                       },
+                       {
+                           "name":  "Nongshim Noodle Soup Shin Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Noosa Strawberry Rhubarb Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "OH Snap Pickling CO Dilly Bites 6pk 6 EA",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "OH SNAP! Chil-Lime Bites Fresh Dill Pickle Snack Pack",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Oh Snap! Dilly Bites Fresh Dill Pickle Snack Pack",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "OH Snap! Pickling Co. Dilly Bites - 6 Pack",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Oh Snap! Pickling Co. Hottie Bites Pickle Cuts Snack Pack",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Oh Snap! Sassy Bites Sweet N\u0027 Spicy Pickle Snack Pack",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Old Wisconsin Naturally Slow Smoked Turkey Sausage Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Old Wisconsin Smoked Sausage Turkey Bites 6 Oz",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Our Family Paper Cups, Coated, Designer, 3 Oz 200 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Our Family Paper Cups, Designer, 9 Ounce 54 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Panera Bread Ready-to-Heat Gluten Free Creamy Chicken \u0026 Wild Rice Soup Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Park Street Deli Beef Bites With Mild Cheddar 4.5 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Park Street Deli Chicken Bites With Sauce Bbq 3.99 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Park Street Deli Chicken Bites With Sauce Buffalo 3.99 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Park Street Deli Sous-Vide Egg Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Peanut Butter Cup Bar",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Pilgrim\u0027s x Flamin\u0027 Hot Fully Cooked Boneless Chicken Bites Breaded Chicken Breast Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Pure Organic bars or bites, 8 or 12 ct., $5.19",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Redd\u0027s Wicked Apple Bites Mini Beer 12 Ea",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "REESE\u0027S Marshmallow Milk Chocolate Snack Size Peanut Butter Cups Candy Bag",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Strawberry Flavored Juicy Gels Cups, 3.25 oz., 4-Count",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Solo Assorted Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Starbucks Caramel Flavored K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Starbucks Coffee, Ground, Creme Brulee Flavored, K Cup Pods 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Starbucks Creme Brulee Flavored K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Starbucks K Cup Coffee Pods, Flavored Hot Or Iced Coffee, Vanilla Lavender, 10 Keurig Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Tyson Any\u0027tizers Frozen Buffalo Style Boneless Chicken Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Tyson Any\u0027tizers Frozen Crispy Boneless Chicken Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Tyson Any\u0027tizers Frozen Sweet BBQ Flavored Boneless Chicken Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Tyson Lightly Breaded Boneless Chicken Bites 5 2 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Whollly Wholly Guacamole® Spicy Guacamole Minis 4 2 Oz. Cups 8 Oz",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "\u003cunmatched\u003e",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Fareway Applesauce Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "applesauce",
+                           "after":  "applesauce",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Kroger Cinnamon Applesauce Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "applesauce",
+                           "after":  "applesauce",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Classic Apple Applesauce Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "applesauce",
+                           "after":  "applesauce",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger No Sugar Added Classic Apple Applesauce Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "applesauce",
+                           "after":  "applesauce",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Lunch Buddies Cinnamon Applesauce Cups 4 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "applesauce",
+                           "after":  "applesauce",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Mott\u0027s Applesauce, 4 oz cups, 6 count",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "applesauce",
+                           "after":  "applesauce",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Mott\u0027s Cinnamon Applesauce, 4 oz cups, 6 count",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "applesauce",
+                           "after":  "applesauce",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Mott\u0027s No Sugar Added Applesauce, 3.9 oz cups, 6 count",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "applesauce",
+                           "after":  "applesauce",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Little Journey Strawberry Yogurt Bites 1 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "baby-food",
+                           "after":  "baby-food",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Park Street Deli Brown Sugar Turkey Bites With Sharp Cheddar 4.5 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "brown-sugar",
+                           "after":  "brown-sugar",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Dunkin\u0027 K Cup Pods Butter Pecan Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "butter",
+                           "after":  "butter",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Green Giant Butter with Salt \u0026 Pepper Corn Cob Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "butter",
+                           "after":  "butter",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Whole Kernel Super Sweet Golden Corn Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "canned-corn",
+                           "after":  "canned-corn",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Libby\u0027s Whole Kernel Sweet Corn Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "canned-corn",
+                           "after":  "canned-corn",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Cut Green Bean Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "canned-green-beans",
+                           "after":  "canned-green-beans",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Libby\u0027s Cut Green Beans Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "canned-green-beans",
+                           "after":  "canned-green-beans",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dole Fruit Bowls Yellow Cling Diced Peaches In 100% Fruit Juice Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "canned-peaches",
+                           "after":  "canned-peaches",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Garden Variety Sweet Peas Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "canned-peas",
+                           "after":  "canned-peas",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Libby\u0027s Sweet Peas Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "canned-peas",
+                           "after":  "canned-peas",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dole Fruit Bowls Pineapple Tidbits In 100% Fruit Juice Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "canned-pineapple",
+                           "after":  "canned-pineapple",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Pineapple Tidbits Cups in 100% Pineapple Juice",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "canned-pineapple",
+                           "after":  "canned-pineapple",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Celery Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "celery",
+                           "after":  "celery",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "General Mills Lucky Charms with Marshmallows Cereal Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "cereal",
+                           "after":  "cereal",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kellogg\u0027s Raisin Bran Crunch Cereal Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "cereal",
+                           "after":  "cereal",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Chicken Liver Cups Gold N Plump",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "chicken-livers",
+                           "after":  "chicken-livers",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Panera Bread Ready-to-Heat Chicken Noodle Soup Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "chicken-noodle-soup",
+                           "after":  "chicken-noodle-soup",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Land O\u0027 Lakes Mini Moo\u0027s Half And Half Creamer Singles Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-creamer",
+                           "after":  "coffee-creamer",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Barissimo Decaf Breakfast Blend Coffee Cups 12 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Barissimo Fair Trade Breakfast Blend Coffee Cups 12 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Barissimo Fair Trade Certified Dark Roast Coffee Cups 12 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Barissimo Fair Trade Certified Hazelnut Coffee Cups 12 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Barissimo Fair Trade Colombian Coffee Cups 12 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Barissimo Fair Trade Midnight Blend Coffee Cups 12 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Barissimo French Roast Coffee Cups 12 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Barissimo Maple Pecan Coffee Cups 12 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Barissimo Pumpkin Spice Coffee Cups 12 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Black Rifle Coffee Company K Cup Pods Ground Just Black Medium Coffee 12 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Black Rifle Coffee Company K Cup Pods Ground Medium Hazelnut Coffee 12 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Black Rifle Coffee Company K Cup Pods Ground Medium Vanilla Bomb Coffee 12 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Black Rifle Coffee Company Tactisquatch Dark Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "BLK \u0026 Bold Coffee or K-Cup Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Caribou Coffee Caribou Blend Medium Roast Coffee K-Cup Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Caribou Coffee Coffee, Light Roast, Daybreak Blend, K Cup Pods 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Caribou Coffee Coffee, Medium Roast, Caribou Blend, K Cup Pods 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Caribou Coffee Coffee, Medium Roast, Caribou Blend, K Cup Pods 32 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Dunkin\u0027 Decaf K Cup Pods Medium Roast Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Dunkin\u0027 Donuts Original Blend K-Cup 10 Count",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Dunkin\u0027 K Cup Pods Mint Chip Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Dunkin\u0027 K Cup Pods Vanilla Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Dunkin\u0027 Original Blend Medium Roast Coffee, K-Cup Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Eight O\u0027clock Coffee K Cup Pods Dark Roast Dark Italian Espresso Coffee Value Pack 32 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Eight O\u0027clock Coffee K Cup Pods Decaffeinated Medium Roast The Original Decaf Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Folgers Coffee, Dark, Black Silk, K Cup Pods 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Folgers Coffee, Medium, Colombian, K Cup Pods 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Folgers Coffee, Mild, Breakfast Blend, K Cup Pods 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Folgers K Cup Pods Classic Roast Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Folgers K Cup Pods Medium Classic Roast Coffee 32 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Gevalia K Cup Pods Medium Roast Colombia Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Green Mountain Coffee Roasters Caramel Vanilla Cream Light Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Green Mountain Coffee Roasters Decaf K Cup Pods Dark Roast Dark Magic Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Green Mountain Coffee Roasters French Vanilla K-Cup Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Green Mountain Coffee Roasters Hazelnut Light Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Green Mountain Coffee Roasters K Cup Pods Breakfast Blend Decaf Light Roast 100% Arabica Coffee 32 Ea Box",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Green Mountain Coffee Roasters K Cup Pods Dark Roast Dark Magic Coffee Value Pack 32 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Green Mountain Coffee Roasters K Cup Pods Wild Mountain Blueberry Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Green Mountain or McCafe K-Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Green Mountain, The Original Donut Shop or Caribou K-Cup Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Kroger 100% Colombian Medium Dark Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Breakfast Blend Mild Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Donut Shop Blend Medium Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Donut Shop Medium Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger French Vanilla Light Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Original Medium Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Maxwell House K Cup Pods Medium House Blend Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Mc Cafe Premium Roast Decaf Coffee, Single Serve Keurig K Cup Pods, Decaffeinated, 10 Count",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "McCafe Premium Roast Coffee, Single Serve Keurig K-Cup Pods, Medium Roast, 32 Count",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Seattle\u0027s Best Coffee Breakfast Blend Medium Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Seattle\u0027s Best Coffee House Blend Medium Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Seattle\u0027s Best Coffee Portside Medium Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Starbucks Breakfast Blend Medium Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Starbucks Coffee, 10-12 oz Bag or K-Cups, 10 ct",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Starbucks Coffee, Ground, Brown Sugar Cinnamon, K Cup Pods 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Starbucks French Roast Dark Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Starbucks Ground K Cup Pods Dark Roast French Roast Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Starbucks House Blend Medium Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Starbucks K Cup Pods Ground Cinnamon Dolce Coffee 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Swiss Miss Milk Chocolate Hot Cocoa K-Cup 10 CT",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "The Original Donut Shop Regular Keurig Single Serve K Cup Pods, Medium Roast Coffee, 32 Count",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "The Original Donut Shop Regular Keurig Single-Serve K-Cup Pods, Medium Roast Coffee, 32 Count",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "The Original Donut Shop Regular Medium Roast K-Cup Coffee Pods",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "coffee-pods",
+                           "after":  "coffee-pods",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Fat Free Small Curd Cottage Cheese Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "cottage-cheese",
+                           "after":  "cottage-cheese",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Freshpet Small Bites Chicken Recipe With Carrots \u0026 Cranberries Dog Food Larger Size 2 Lb",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "dog-food",
+                           "after":  "dog-food",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Pet Pride Adult Small Bites Dry Dog Food Chicken Flavor",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "dog-food",
+                           "after":  "dog-food",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Abound Grain Free All Size Dogs Jerky Bites Dog Treats Salmon and Sweet Potato",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "dog-treats",
+                           "after":  "dog-treats",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Milk-Bone Peanut Buttery Bites, Soft Dog Treats With Jif Peanut Butter",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "dog-treats",
+                           "after":  "dog-treats",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "36 CT Donut Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "donuts",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Clyde\u0027s Donuts Donuts, Powdered Lil’ Smiles, Classic",
+                           "tokens":  "\\blil.{0,5}smiles?\\b",
+                           "before":  "donuts",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Clyde\u0027s Donuts, Glazed Cherry Lil\u0027 Smiles",
+                           "tokens":  "\\blil.{0,5}smiles?\\b",
+                           "before":  "donuts",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Krispy Kreme Original Glazed Doughnut Dots",
+                           "tokens":  "\\bdots\\b",
+                           "before":  "donuts",
+                           "after":  "\u003cunmatched\u003e",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Del Monte Fruit Cup Snacks Mandarin Oranges In 100% Juice Family Pack 12 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Del Monte Fruit Cup Snacks No Sugar Added Diced Peaches Family Pack 12 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Dole Assorted Fruit Bowls Snacks Variety Pack 12 - 4 oz Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dole Fruit Bowls Cherry Mixed Fruit In 100% Juice Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dole Fruit Bowls Diced Pears In 100% Fruit Juice Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dole Fruit Bowls in 100% Juice Cups Variety Pack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dole Fruit Bowls Mandarin Oranges In 100% Fruit Juice Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dole Fruit Bowls Mandarin Oranges With No Sugar Added Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dole Mandarin Oranges in 100% Fruit Juice 12 - 4 oz Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Hy-Vee fruit cups, 4 ct., $2.68",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Kroger Cherry Mixed Fruit Cups in Juice",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Diced Mango Cups in 100% Juice",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Diced Pear Cups in 100% Juice",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Mandarin Orange Cups in 100% Juice",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Mandarin Orange Cups in 100% Juice BIG DEAL!",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Mandarin Orange Cups No Sugar Added",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Mandarin Orange in Fruit Juice From Concentrate Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Red Grapefruit Cup in Extra Light Syrup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Tropical Fruit Cups in 100% Juice",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger Yellow Cling Diced Peach Cups in 100% Juice",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Tropical Gel Pineapple \u0026 Mango Fruit Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "fruit-cups",
+                           "after":  "fruit-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Farm Rich Loaded Hashbrown Bites., 13.6 oz",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "hash-browns",
+                           "after":  "hash-browns",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Swiss Miss K Cup Pods Milk Chocolate Hot Cocoa Mix 10 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "hot-cocoa",
+                           "after":  "hot-cocoa",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Frank\u0027s RedHot Buffalo Dipping Sauce Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "hot-sauce",
+                           "after":  "hot-sauce",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Park Street Deli Classic Hummus Mini Cups 12 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "hummus",
+                           "after":  "hummus",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Park Street Deli Roasted Red Pepper Hummus Mini Cups 2 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "hummus",
+                           "after":  "hummus",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Haagen Dazs Vanilla Ice Cream Cup 3.6 Oz",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "ice-cream",
+                           "after":  "ice-cream",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Idahoan Buttery Homestyle Mashed Potatoes Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "instant-mashed-potatoes",
+                           "after":  "instant-mashed-potatoes",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Idahoan Four Cheese Mashed Potatoes Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "instant-mashed-potatoes",
+                           "after":  "instant-mashed-potatoes",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Tostitos Hint of Lime Mild Guacamole Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "limes",
+                           "after":  "limes",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Annie\u0027s Gluten Free Real Aged Cheddar Mac N Cheese Microwave Macaroni and Cheese Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "mac-and-cheese",
+                           "after":  "mac-and-cheese",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Cheese Club Express Mac Cheese Cups 8 2 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "mac-and-cheese",
+                           "after":  "mac-and-cheese",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Cheese Club Express Mac Cheese Cups 8.2 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "mac-and-cheese",
+                           "after":  "mac-and-cheese",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Goodles Macaroni \u0026 Cheese Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "mac-and-cheese",
+                           "after":  "mac-and-cheese",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Hy-Vee macaroni \u0026 cheese cups, 4 ct., $3.99",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "mac-and-cheese",
+                           "after":  "mac-and-cheese",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Kroger Deluxe Shells Macaroni and Cheese Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "mac-and-cheese",
+                           "after":  "mac-and-cheese",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Entenmann\u0027s Little Bites muffins, 5 ct., $3.29",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "muffins",
+                           "after":  "muffins",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Kodiak Muffin Blueberry Power Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "muffins",
+                           "after":  "muffins",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Little Bites Blueberry Muffins 5 Ea",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "muffins",
+                           "after":  "muffins",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "American Greetings 20-Count All Occasion Beverage Napkins, Polka Dots",
+                           "tokens":  "\\bdots\\b",
+                           "before":  "paper-napkins",
+                           "after":  "paper-napkins",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Paper Chef Large Culinary Parchment Baking Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "parchment-paper",
+                           "after":  "parchment-paper",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Private Selection Grated Parmesan Cheese Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "parmesan",
+                           "after":  "parmesan",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Private Selection Shaved Parmesan Cheese Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "parmesan",
+                           "after":  "parmesan",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Private Selection Shredded Parmesan Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "parmesan",
+                           "after":  "parmesan",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "OH SNAP! Dilly Bites Pickle Pouches",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "pickles",
+                           "after":  "pickles",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Pickle Sassy Bites IW",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "pickles",
+                           "after":  "pickles",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Appetitos Cheddar Pretzel Bites 10 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "pretzels",
+                           "after":  "pretzels",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "King\u0027s Hawaiian Pretzel Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "pretzels",
+                           "after":  "pretzels",
+                           "stores":  "Fareway"
+                       },
+                       {
+                           "name":  "Built Peanut Butter Cup Protein Bars 4 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "protein-bars",
+                           "after":  "protein-bars",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Built Puff Peanut Butter Cup Protein Bar 1.41 Oz",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "protein-bars",
+                           "after":  "protein-bars",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Hershey\u0027s Pudding, Snack Cups Chocolate 15.5 Oz",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Hy-Vee Chocolate Pudding 4-3.25 oz Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Jell-O Chocolate Sugar Free Pudding Cups Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Chocolate Vanilla Swirls Sugar Free Pudding Cups Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Chocolate Vanilla Swirls Sugar Free Pudding Cups Snack Value Pack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Dark Chocolate Sugar Free Pudding Cups Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Original Chocolate Pudding Cups Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Original Chocolate Vanilla Swirls Pudding Cups Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Tapioca Fat Free Pudding Cups Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Temptations Lemon Meringue Pie Pudding Cups Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Vanilla Sugar Free Pudding Cups Snack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Jell-O Zero Sugar Churro Delicioso with Other Natural Flavors Ready-to-Eat Pudding Snack Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kozy Shack Chocolate Pudding Snack Cups, Gluten Free Dessert",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kozy Shack Rice Pudding Snack Cups, Gluten Free Dessert",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kozy Shack Tapioca Pudding Snack Cups, Gluten Free Dessert",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Lunch Buddies Chocolate Pudding Cups 3 2 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Our Family Pudding Cups, Banana 4 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Our Family Pudding Cups, Butterscotch 4 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Our Family Pudding Cups, Chocolate 4 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Our Family Pudding Cups, Chocolate Fudge 4 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Our Family Pudding Cups, Tapioca 4 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Our Family Vanilla Pudding Cups 4 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Senor Rico Rice Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Banana Cream Pie Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Butterscotch Flavored Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Chocolate And Vanilla Flavored Pudding Cups Family Pack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Chocolate Fudge Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Chocolate Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Chocolate Pudding Cups Variety Pack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Chocolate Vanilla Flavored Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack DOVE Dark Chocolate Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Family Pack Milk Chocolate And Chocolate Fudge/Milk Chocolate Swirl Pudding Cups 12 Ea",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Snack Pack Lemon Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Tapioca Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Vanilla Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Snack Pack Zero Sugar Chocolate Pudding Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "pudding-cups",
+                           "after":  "pudding-cups",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Chef\u0027s Cupboard Protein Ramen Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "ramen",
+                           "after":  "ramen",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Maruchan Instant Lunch Ramen Noodles, Chicken Flavor, 2.25 oz Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "ramen",
+                           "after":  "ramen",
+                           "stores":  "Walmart"
+                       },
+                       {
+                           "name":  "Nissin Cup Noodles Beef Flavor Ramen Noodle Soup Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "ramen",
+                           "after":  "ramen",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Nissin Cup Noodles Chicken Flavor Ramen Noodle Soup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "ramen",
+                           "after":  "ramen",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Old El Paso or Totino\u0027s ramen cups, 2.5 oz., 2/ $3.00",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "ramen",
+                           "after":  "ramen",
+                           "stores":  "Hy-Vee"
+                       },
+                       {
+                           "name":  "Raspberry/Blueberry Cup Fresh Divide",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "raspberries",
+                           "after":  "raspberries",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Earthly Grains Jasmine Rice Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "rice",
+                           "after":  "rice",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Earthly Grains Long Grain White Ready TO Serve Rice Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "rice",
+                           "after":  "rice",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Earthly Grains Long Grain White Rice Cups 8.8 OZ",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "rice",
+                           "after":  "rice",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Kroger Microwavable Cilantro Lime Rice Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "rice",
+                           "after":  "rice",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Drizzilicious Cinammon Swirl Mini Rice Cake Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "rice-cakes",
+                           "after":  "rice-cakes",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Drizzilicious French Toast Bites Mini Rice Cakes 4 Oz",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "rice-cakes",
+                           "after":  "rice-cakes",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Nutter Butter Bites Peanut Butter Sandwich Cookies 10 Ea",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "sandwich-cookies",
+                           "after":  "sandwich-cookies",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Drizzilicious Strawberry Chocolaty Bites",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "strawberries",
+                           "after":  "strawberries",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Park Street Deli Chicken Bites With Sauce Teriyaki 3.99 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "teriyaki-sauce",
+                           "after":  "teriyaki-sauce",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Campbell\u0027s Sipping Soup Classic Tomato Soup 11.1 Oz Microwavable Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "tomato-soup",
+                           "after":  "tomato-soup",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Park Street Deli Turkey Bites With Colby Jack 4.5 OZ",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "turkey-lunchmeat",
+                           "after":  "turkey-lunchmeat",
+                           "stores":  "Aldi"
+                       },
+                       {
+                           "name":  "Chobani Vanilla with Mixed Berry Low Fat Greek Yogurt Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Dannon Light + Fit Blueberry Greek Fat Free Yogurt Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Kroger CARBmaster Cherry Lactose Free Lowfat Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Noosa Honey Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Oikos Pro 20g Protein Mixed Berry Yogurt-Cultured Ultra-Filtered Milk Product Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Oikos REMIX Salted Caramel High Protein Nonfat Greek Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Stonyfield Organic Kids Blueberry \u0026 Strawberry Vanilla Lowfat Yogurt Cups Variety Pack",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Tippy Toes Yogurt Bites, Banana 1 Oz",
+                           "tokens":  "\\bbites\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Family Fare"
+                       },
+                       {
+                           "name":  "Yoplait Original Low Fat Cherry Orchard Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Yoplait Original Low Fat French Vanilla Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Yoplait Original Low Fat Harvest Peach Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Yoplait Original Low Fat Mixed Berry Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Yoplait Original Low Fat Mountain Blueberry Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Yoplait Original Low Fat Strawberry and Harvest Peach Yogurt Cups",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Yoplait Original Low Fat Strawberry Banana Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       },
+                       {
+                           "name":  "Yoplait Original Low Fat Strawberry Yogurt Cup",
+                           "tokens":  "\\bcups?\\b",
+                           "before":  "yogurt",
+                           "after":  "yogurt",
+                           "stores":  "Baker\u0027s"
+                       }
+                   ],
+    "positive_control":  {
+                             "name":  "Clyde\u0027s Donuts Donuts, Powdered Lil’ Smiles, Classic",
+                             "before":  "donuts",
+                             "expected":  "\u003cunmatched\u003e",
+                             "observed":  "\u003cunmatched\u003e"
+                         },
+    "must_stay_controls":  [
+                               {
+                                   "name":  "Bakery Fresh Glazed Yeast Donuts",
+                                   "must_be_after":  "donuts",
+                                   "before":  "donuts",
+                                   "after":  "donuts",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "36 CT Donut Cups",
+                                   "must_be_after":  "\u003cunmatched\u003e",
+                                   "before":  "donuts",
+                                   "after":  "\u003cunmatched\u003e",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Barissimo Donut Store Medium Roast 100% Arabica Blend Ground Coffee",
+                                   "must_be_after":  "coffee",
+                                   "before":  "coffee",
+                                   "after":  "coffee",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Little Debbie Glazed Donut Sticks 6 Ea",
+                                   "must_be_after":  "donuts",
+                                   "before":  "donuts",
+                                   "after":  "donuts",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Krispy Kreme Original Glazed Doughnut Dots",
+                                   "must_be_after":  "\u003cunmatched\u003e",
+                                   "before":  "donuts",
+                                   "after":  "\u003cunmatched\u003e",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Entenmann\u0027s Pop\u0027ems Glazed Donut Holes",
+                                   "must_be_after":  "\u003cunmatched\u003e",
+                                   "before":  "\u003cunmatched\u003e",
+                                   "after":  "\u003cunmatched\u003e",
+                                   "ok":  true
+                               },
+                               {
+                                   "name":  "Duchess Mini Frosted Donuts, 3 oz, 12 pk.",
+                                   "must_be_after":  "donuts",
+                                   "before":  "donuts",
+                                   "after":  "donuts",
+                                   "ok":  true
+                               }
+                           ],
+    "out_of_corpus_controls":  [
+                                   {
+                                       "name":  "Krispy Kreme® 12-Count Original Glazed® Doughnut Dots",
+                                       "store":  "Walmart",
+                                       "before":  "donuts",
+                                       "after":  "\u003cunmatched\u003e",
+                                       "expected":  "\u003cunmatched\u003e",
+                                       "ok":  true
+                                   },
+                                   {
+                                       "name":  "Duchess Mini Frosted Donuts, 3 oz, 12 pk.",
+                                       "store":  "Sam\u0027s Club",
+                                       "before":  "donuts",
+                                       "after":  "donuts",
+                                       "expected":  "donuts",
+                                       "ok":  true
+                                   },
+                                   {
+                                       "name":  "Clyde\u0027s Donuts Donuts, Powdered Lilâ€™ Smiles, Classic",
+                                       "store":  "Fareway (mojibake variant as written in fareway-shop-2026-09-09.json)",
+                                       "before":  "donuts",
+                                       "after":  "\u003cunmatched\u003e",
+                                       "expected":  "\u003cunmatched\u003e",
+                                       "ok":  true
+                                   }
+                               ],
+    "cell_effects":  [
+                         {
+                             "commodity":  "donuts",
+                             "store":  "Fareway",
+                             "before":  0.1662,
+                             "after":  "none - cell drops: the remaining Fareway donut rows carry no count (Big Smile 12 oz $3.49, Old Fashioned 14 oz $3.49, Apple Fritters each $3.99, Little Debbie Mini each $3.00) so each prices as one whole package, outside band 0.08-2"
+                         },
+                         {
+                             "commodity":  "donuts",
+                             "store":  "Aldi",
+                             "before":  0.3125,
+                             "after":  "none - cell drops: Iced Mini Donuts 8 oz $3.95 prices as one each, outside the band; the other Bake Shop rows do not route to donuts today"
+                         },
+                         {
+                             "commodity":  "donuts",
+                             "store":  "Walmart",
+                             "before":  0.3983,
+                             "after":  "none - cell drops: the Doughnut Dots row is excluded and Wonder Pumpkin Mini Donuts 10 oz is already excluded by artificially flavoured"
+                         },
+                         {
+                             "commodity":  "donuts",
+                             "store":  "Baker\u0027s",
+                             "before":  0.3992,
+                             "after":  0.4167,
+                             "after_row":  "Bakery Fresh Glazed Yeast Donuts | 12 pk 2.5 oz | $5.00 (bakers-regular-2026-09-09.json, as_of 2026-08-22)"
+                         },
+                         {
+                             "commodity":  "donuts",
+                             "store":  "Family Fare",
+                             "before":  0.5317,
+                             "after":  0.5317
+                         },
+                         {
+                             "commodity":  "donuts",
+                             "store":  "Sam\u0027s Club",
+                             "before":  0.6933,
+                             "after":  0.6933
+                         }
+                     ],
+    "crown_before":  "Fareway 0.1662 (donut holes)",
+    "crown_after":  "Baker\u0027s 0.4167 (Bakery Fresh Glazed Yeast Donuts, 12 pk 2.5 oz)",
+    "runner_up_before":  "Aldi 0.3125 (coffee pods)",
+    "runner_up_after":  "Family Fare 0.5317 (donut sticks)",
+    "commodity_keeps_a_cell":  true,
+    "donuts_cell_before_naive":  [
+                                     {
+                                         "store":  "Fareway",
+                                         "per_each":  0.1662,
+                                         "name":  "Clyde\u0027s Donuts Donuts, Powdered Lil’ Smiles, Classic",
+                                         "size":  "21 ct",
+                                         "price":  "$3.49",
+                                         "file":  "fareway-regular-2026-09-09.json"
+                                     },
+                                     {
+                                         "store":  "Baker\u0027s",
+                                         "per_each":  0.3992,
+                                         "name":  "Krispy Kreme Original Glazed Doughnut Dots",
+                                         "size":  "12 ct",
+                                         "price":  "$4.79",
+                                         "file":  "bakers-regular-2026-09-09.json"
+                                     }
+                                 ],
+    "donuts_cell_after_naive":  [
+                                    {
+                                        "store":  "Baker\u0027s",
+                                        "per_each":  0.4167,
+                                        "name":  "Bakery Fresh Glazed Yeast Donuts",
+                                        "size":  "12 pk 2.5 oz",
+                                        "price":  "$5.00",
+                                        "file":  "bakers-regular-2026-09-09.json"
+                                    }
+                                ],
+    "donuts_rows_before":  [
+                               {
+                                   "store":  "Aldi",
+                                   "name":  "36 CT Donut Cups",
+                                   "size":  "12.6 oz",
+                                   "price":  "$11.25",
+                                   "naive_each":  11.25,
+                                   "file":  "aldi-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Aldi",
+                                   "name":  "Iced Mini Donuts",
+                                   "size":  "8 oz",
+                                   "price":  "$3.95",
+                                   "naive_each":  3.95,
+                                   "file":  "aldi-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Bakery Fresh Glazed Yeast Donuts",
+                                   "size":  "12 pk 2.5 oz",
+                                   "price":  "$5.00",
+                                   "naive_each":  0.4167,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Bakery Fresh Goodness Glazed Donuts",
+                                   "size":  "12 ct",
+                                   "price":  "$8.99",
+                                   "naive_each":  0.7492,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Drumroll Chocolate Glazed Mini Protein Donuts",
+                                   "size":  "2.6 oz",
+                                   "price":  "$3.99",
+                                   "naive_each":  3.99,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Drumroll Vanilla Glazed Mini Protein Donuts",
+                                   "size":  "3 pk 0.87 oz",
+                                   "price":  "$3.99",
+                                   "naive_each":  1.33,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Krispy Kreme Original Glazed Doughnut Dots",
+                                   "size":  "12 ct",
+                                   "price":  "$4.79",
+                                   "naive_each":  0.3992,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Krispy Kreme Original Glazed Doughnuts",
+                                   "size":  "12 ct",
+                                   "price":  "$14.29",
+                                   "naive_each":  1.1908,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Krispy Kreme Original Glazed Doughnuts",
+                                   "size":  "6 ct",
+                                   "price":  "$8.99",
+                                   "naive_each":  1.4983,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Krispy Kreme Pumpkin Spice Old-Fashioned Doughnuts",
+                                   "size":  "6 ct",
+                                   "price":  "$10.99",
+                                   "naive_each":  1.8317,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Little Debbie Apple Cinnamon Donut Sticks Multipack",
+                                   "size":  "6 pk 1.63 oz",
+                                   "price":  "$3.19",
+                                   "naive_each":  0.5317,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Little Debbie Glazed Donut Sticks",
+                                   "size":  "2.75 oz",
+                                   "price":  "$1.67",
+                                   "naive_each":  1.67,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Little Debbie Glazed Donut Sticks Multipack",
+                                   "size":  "6 pk 1.7 oz",
+                                   "price":  "$3.19",
+                                   "naive_each":  0.5317,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Little Debbie Glazed Donuts",
+                                   "size":  "3 oz",
+                                   "price":  "$1.67",
+                                   "naive_each":  1.67,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Baker\u0027s",
+                                   "name":  "Private Selection Fresh Donut Peaches in Clamshell",
+                                   "size":  "4 ct",
+                                   "price":  "$4.99",
+                                   "naive_each":  1.2475,
+                                   "file":  "bakers-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Family Fare",
+                                   "name":  "12 Ct Glazed Yeast Ring Donuts   Fresh \u0026 Finest",
+                                   "size":  "20 oz",
+                                   "price":  "$10.99",
+                                   "naive_each":  10.99,
+                                   "file":  "family-fare-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Family Fare",
+                                   "name":  "Katz Donuts, Gluten Free, Glazed, Chocolate 10.5 Oz",
+                                   "size":  "10.5 oz",
+                                   "price":  "$6.49",
+                                   "naive_each":  6.49,
+                                   "file":  "family-fare-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Family Fare",
+                                   "name":  "Little Debbie Glazed Donut Sticks 6 Ea",
+                                   "size":  "10 oz",
+                                   "price":  "$3.19",
+                                   "naive_each":  3.19,
+                                   "file":  "family-fare-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Family Fare",
+                                   "name":  "Little Debbie Glazed Mini Donuts 10.5 Oz",
+                                   "size":  "10.5 oz",
+                                   "price":  "$2.89",
+                                   "naive_each":  2.89,
+                                   "file":  "family-fare-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Fareway",
+                                   "name":  "Clyde\u0027s Donuts Donuts, Powdered Lil’ Smiles, Classic",
+                                   "size":  "21 ct",
+                                   "price":  "$3.49",
+                                   "naive_each":  0.1662,
+                                   "file":  "fareway-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Fareway",
+                                   "name":  "Clyde\u0027s Donuts, Glazed Cherry Lil\u0027 Smiles",
+                                   "size":  "12 ct",
+                                   "price":  "$2.88",
+                                   "naive_each":  0.24,
+                                   "file":  "fareway-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Fareway",
+                                   "name":  "Clyde\u0027s Donuts, Glazed, Apple Fritters",
+                                   "size":  "each",
+                                   "price":  "$3.99",
+                                   "naive_each":  3.99,
+                                   "file":  "fareway-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Fareway",
+                                   "name":  "Little Debbie Donuts, Glazed, Mini",
+                                   "size":  "each",
+                                   "price":  "$3.00",
+                                   "naive_each":  3,
+                                   "file":  "fareway-regular-2026-09-09.json"
+                               },
+                               {
+                                   "store":  "Hy-Vee",
+                                   "name":  "Little Debbie Mini Glazed Donuts",
+                                   "size":  "10.5 oz",
+                                   "price":  "$2.79",
+                                   "naive_each":  2.79,
+                                   "file":  "hyvee-regular-2026-09-09.json"
+                               }
+                           ],
+    "donuts_rows_after":  [
+                              {
+                                  "store":  "Aldi",
+                                  "name":  "Iced Mini Donuts",
+                                  "size":  "8 oz",
+                                  "price":  "$3.95",
+                                  "naive_each":  3.95,
+                                  "file":  "aldi-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Bakery Fresh Glazed Yeast Donuts",
+                                  "size":  "12 pk 2.5 oz",
+                                  "price":  "$5.00",
+                                  "naive_each":  0.4167,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Bakery Fresh Goodness Glazed Donuts",
+                                  "size":  "12 ct",
+                                  "price":  "$8.99",
+                                  "naive_each":  0.7492,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Drumroll Chocolate Glazed Mini Protein Donuts",
+                                  "size":  "2.6 oz",
+                                  "price":  "$3.99",
+                                  "naive_each":  3.99,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Drumroll Vanilla Glazed Mini Protein Donuts",
+                                  "size":  "3 pk 0.87 oz",
+                                  "price":  "$3.99",
+                                  "naive_each":  1.33,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Krispy Kreme Original Glazed Doughnuts",
+                                  "size":  "12 ct",
+                                  "price":  "$14.29",
+                                  "naive_each":  1.1908,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Krispy Kreme Original Glazed Doughnuts",
+                                  "size":  "6 ct",
+                                  "price":  "$8.99",
+                                  "naive_each":  1.4983,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Krispy Kreme Pumpkin Spice Old-Fashioned Doughnuts",
+                                  "size":  "6 ct",
+                                  "price":  "$10.99",
+                                  "naive_each":  1.8317,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Little Debbie Apple Cinnamon Donut Sticks Multipack",
+                                  "size":  "6 pk 1.63 oz",
+                                  "price":  "$3.19",
+                                  "naive_each":  0.5317,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Little Debbie Glazed Donut Sticks",
+                                  "size":  "2.75 oz",
+                                  "price":  "$1.67",
+                                  "naive_each":  1.67,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Little Debbie Glazed Donut Sticks Multipack",
+                                  "size":  "6 pk 1.7 oz",
+                                  "price":  "$3.19",
+                                  "naive_each":  0.5317,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Little Debbie Glazed Donuts",
+                                  "size":  "3 oz",
+                                  "price":  "$1.67",
+                                  "naive_each":  1.67,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Baker\u0027s",
+                                  "name":  "Private Selection Fresh Donut Peaches in Clamshell",
+                                  "size":  "4 ct",
+                                  "price":  "$4.99",
+                                  "naive_each":  1.2475,
+                                  "file":  "bakers-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Family Fare",
+                                  "name":  "12 Ct Glazed Yeast Ring Donuts   Fresh \u0026 Finest",
+                                  "size":  "20 oz",
+                                  "price":  "$10.99",
+                                  "naive_each":  10.99,
+                                  "file":  "family-fare-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Family Fare",
+                                  "name":  "Katz Donuts, Gluten Free, Glazed, Chocolate 10.5 Oz",
+                                  "size":  "10.5 oz",
+                                  "price":  "$6.49",
+                                  "naive_each":  6.49,
+                                  "file":  "family-fare-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Family Fare",
+                                  "name":  "Little Debbie Glazed Donut Sticks 6 Ea",
+                                  "size":  "10 oz",
+                                  "price":  "$3.19",
+                                  "naive_each":  3.19,
+                                  "file":  "family-fare-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Family Fare",
+                                  "name":  "Little Debbie Glazed Mini Donuts 10.5 Oz",
+                                  "size":  "10.5 oz",
+                                  "price":  "$2.89",
+                                  "naive_each":  2.89,
+                                  "file":  "family-fare-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Fareway",
+                                  "name":  "Clyde\u0027s Donuts, Glazed, Apple Fritters",
+                                  "size":  "each",
+                                  "price":  "$3.99",
+                                  "naive_each":  3.99,
+                                  "file":  "fareway-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Fareway",
+                                  "name":  "Little Debbie Donuts, Glazed, Mini",
+                                  "size":  "each",
+                                  "price":  "$3.00",
+                                  "naive_each":  3,
+                                  "file":  "fareway-regular-2026-09-09.json"
+                              },
+                              {
+                                  "store":  "Hy-Vee",
+                                  "name":  "Little Debbie Mini Glazed Donuts",
+                                  "size":  "10.5 oz",
+                                  "price":  "$2.79",
+                                  "naive_each":  2.79,
+                                  "file":  "hyvee-regular-2026-09-09.json"
+                              }
+                          ],
+    "cell_method":  "naive: each-price = price / (N from \"N ct|pk|pack|count|ea\" in the size string, else 1), band 0.08-2 applied, min per store; the developer re-measures with compare-deals in scratch because the engine also applies per-oz sanity, sale TTLs and capture-selection (Select-FreshestCaptureRows); the name-aware recount (count read from the NAME when the size string has none, e.g. \"6 Ea\", \"12-Count\", \"12 pk.\") is what the cell_effects above use",
+    "sim_seconds":  13.7
+}

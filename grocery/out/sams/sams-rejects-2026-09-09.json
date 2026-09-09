@@ -1,0 +1,32 @@
+﻿[
+    {
+        "name":  "Jennie-O 93/7 Ground Turkey, 2 lbs., 2 pk.",
+        "lp":  "$20.77",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Nongshim Premium Udon Noodle Soup, 9.73 oz., 6 pk.",
+        "lp":  "$18.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Jennie-O 93/7 Ground Turkey, 2 lbs., 2 pk.",
+        "lp":  "$20.77",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Crescent Foods Halal Premium Chicken Curated Box, Frozen, 12 lbs.",
+        "lp":  "$74.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    }
+]

@@ -4318,6 +4318,21 @@
                         "ruled_on":  "2026-09-07",
                         "ruled_by":  "triage-2026-09-07",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cereal|Bakers|simply-orange-juice-46-fl-oz-or-post-large-size",
+                        "commodity":  "cereal",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Simply Orange Juice, 46 fl oz or Post Large Size Cereal, 13.5-20.5 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Baker\u0027s 2026-09-09 ad line advertises TWO products in one row at one price, and the engine sized it from the wrong one. Row: \u0027Simply Orange Juice, 46 fl oz or Post Large Size Cereal, 13.5-20.5 oz\u0027 at 4.49. The engine took the ORANGE JUICE\u0027s 46 fl oz as the size, divided by it, published 0.0976/oz and took the cereal crown from Sam\u0027s Club at 0.1069/oz. Cereal is priced by WEIGHT and the cereal on this line is 13.5 to 20.5 oz, so the honest per-oz is 0.219 to 0.333, above every other store on the board. audit-unit-basis-outlier reported CROWN ON A VOLUME ROW (label volume, engine divided by weight, agrees_with_engine_divisor=False) and guards.ps1 hard-failed the publish. Landed with bakers-deals-2026-09-09.json (09:10:33); the 08:11 board did not have it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-09",
+                        "ruled_by":  "triage-developer 2026-09-09-9b1f92",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
