@@ -120,19 +120,20 @@ function Get-IdentityRulesHash {
     $parts.AddRange([Text.Encoding]::UTF8.GetBytes($f + ':' + $bytes.Length + ':'))
     $parts.AddRange($bytes)
   }
-  $cdPath = Join-Path $GroceryRoot 'compare-deals.ps1'
-  $src = [IO.File]::ReadAllText($cdPath)
-  # the same two anchors test-match-lib.ps1 extracts between, so the two cannot disagree about where the
-  # global list starts and ends
-  $a = $src.IndexOf('$GLOBAL_EXCLUDE = @(')
-  $b = $src.IndexOf('# ---------------------------------------------------------------- -Explain')
-  if ($a -lt 0 -or $b -le $a) {
-    throw 'identity-lib: could not locate the $GLOBAL_EXCLUDE block in compare-deals.ps1. The rules hash would be computed over an incomplete rule set, which would mark stale rows fresh. Fix the anchors (test-match-lib.ps1 uses the same two) rather than letting this pass.'
+  # THE GLOBAL LIST IS A FILE NOW (2026-09-09, backlog I82), so the hash covers the WHOLE FILE and there
+  # are no anchors left to drift. This used to substring compare-deals.ps1 between '$GLOBAL_EXCLUDE = @('
+  # and the -Explain banner, and it shared those two anchors with test-match-lib.ps1 so the pair could not
+  # disagree about where the list ended - a coupling that only existed because the list had no file of its
+  # own. An absent library is still a THROW rather than an empty contribution: a rules hash computed over
+  # an incomplete rule set marks stale rows FRESH, which is the direction that loses data quietly.
+  $gexPath = Join-Path $GroceryRoot 'global-exclude-lib.ps1'
+  if (-not (Test-Path $gexPath)) {
+    throw 'identity-lib: global-exclude-lib.ps1 is missing, so the rules hash would be computed over an incomplete rule set and would mark stale rows fresh. Restore the library rather than letting this pass.'
   }
   $parts.AddRange([Text.Encoding]::UTF8.GetBytes('global_exclude:'))
   # the extra parens are load-bearing: a bare command call is not an expression, so it cannot sit
   # directly in a method argument list
-  $gexBytes = LfBytes ([Text.Encoding]::UTF8.GetBytes($src.Substring($a, $b - $a)))
+  $gexBytes = LfBytes ([IO.File]::ReadAllBytes($gexPath))
   $parts.AddRange([byte[]]$gexBytes)
   return [BitConverter]::ToString($sha.ComputeHash($parts.ToArray())).Replace('-', '').ToLower()
 }

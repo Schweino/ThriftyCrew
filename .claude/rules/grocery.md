@@ -32,8 +32,13 @@ is one copy of every rule and nothing here can drift from it.
   names the executing files, and carries nine frozen fixtures. On 2026-09-08 over 562 scanned
   files: 54 name it, 18 read its source (15 outside `grocery\out\`), **12 execute what they
   lifted**. Say which test you mean or the number means nothing.
+  **Backlog I82 shipped both halves on 2026-09-09** - the pricing math is `pricing-math-lib.ps1` and
+  the exclude list is `global-exclude-lib.ps1` - and the same command over 573 files then read
+  58 NAME it, 7 READ its source, and **1 EXECUTES what it lifted**, that one being `test-auditors`,
+  which lifts on purpose. **Still run the script rather than quoting either set of numbers.**
   A lifted `$script:` constant does not
-  travel - the lift needs functions, parens and a column-0 brace.
+  travel - the lift needs functions, parens and a column-0 brace, which is why the exclude list is
+  exported as `Get-TcGlobalExclude` and not as a variable.
   [[compare-deals-is-not-standalone]], [[compare-deals-functions-are-lifted-by-many-scripts]]
 - **A wrong product is a SELLER SHAPE, not a brand.** Blocking the brand hands the cell to the next
   bulk seller. [[wrong-product-class-is-a-seller-shape]]

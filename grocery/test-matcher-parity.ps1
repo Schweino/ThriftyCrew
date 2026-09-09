@@ -6,8 +6,10 @@
 
       audit-household-in-food.ps1:26     (guard 2 - a cleaning product in an EDIBLE commodity)
       validate-fills.ps1:33
-      audit-match-contested.ps1          (All-Owners; it scrapes $GLOBAL_EXCLUDE from the engine but
-                                          re-implements the matching loop around it)
+      audit-match-contested.ps1          (All-Owners; it loads the engine's exclude list from
+                                          global-exclude-lib.ps1 but re-implements the matching loop
+                                          around it. Before 2026-09-09 it scraped that list out of the
+                                          engine's source text - backlog I82.)
 
   They are not identical to the engine and never have been. The engine runs Get-MatchTexts and tests each
   include against TWO strings - the raw lowercased name, and a variant with Sam's ", priced per pound"
@@ -68,13 +70,24 @@ $auditSrc = Extract 'audit-household-in-food.ps1' '(?sm)^function Match-Category
 $auditSrc = $auditSrc -replace 'function Match-Category', 'function Auditor-MatchCategory'
 
 # Both need the same inputs the real scripts give them.
-$cdSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-$gm = [regex]::Match($cdSrc, '\$GLOBAL_EXCLUDE\s*=\s*@\((?<body>[\s\S]*?)\r?\n\)')
-if (-not $gm.Success) {
-  Write-Output 'FATAL: cannot parse $GLOBAL_EXCLUDE from compare-deals.ps1'
-  Exit-Guard -Name 'matcher-parity' -Summary 'BLIND: could not parse GLOBAL_EXCLUDE from the engine' -Code 2
+# THE EXCLUDE LIST IS A LIBRARY NOW (2026-09-09, backlog I82). Both arms get it from the same file the
+# engine and the auditor load, which is the whole point of this parity check: a list lifted by regex could
+# differ from the list either arm actually ran on, and neither arm would say so.
+$gexLibPath = Join-Path $root 'global-exclude-lib.ps1'
+if (-not (Test-Path $gexLibPath)) {
+  Write-Output 'FATAL: global-exclude-lib.ps1 is missing, so neither arm can be given the engine list'
+  Exit-Guard -Name 'matcher-parity' -Summary 'BLIND: the exclude library is missing' -Code 2
 }
-$GLOBAL_EXCLUDE = Invoke-Expression ('@(' + $gm.Groups['body'].Value + ')')
+. $gexLibPath
+$gexList = Get-TcGlobalExclude
+$GLOBAL_EXCLUDE = @($gexList)
+# NULL OR EMPTY, NOT 'FEWER THAN TWO'. @($null).Count is 1 in PowerShell, which is why this used
+# to read -lt 2 - and that also refused the one-token lists the match-soundness fixtures drive on
+# purpose. Name the two states being rejected rather than using a count as a proxy for them.
+if ($null -eq $gexList -or $GLOBAL_EXCLUDE.Count -lt 1) {
+  Write-Output 'FATAL: the global exclude list is empty or unreadable'
+  Exit-Guard -Name 'matcher-parity' -Summary 'BLIND: the exclude list came back empty' -Code 2
+}
 $commodities = Read-JsonFile (Join-Path $root 'commodities.json')
 
 Invoke-Expression $engineSrc

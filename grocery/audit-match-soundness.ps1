@@ -452,9 +452,23 @@ $baseF = Join-Path $audDir 'match-baseline.json'
 
 # ---- faithful matcher (mirrors compare-deals Match-Category) ----
 $tmp = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodities.json'))); $commods = @($tmp)
-$cdtxt = [IO.File]::ReadAllText((Join-Path $root 'compare-deals.ps1'))
-$m = [regex]::Match($cdtxt, '\$GLOBAL_EXCLUDE = @\((?<b>[\s\S]*?)\r?\n\)')
-$GLOBAL = @(); foreach ($line in ($m.Groups['b'].Value -split "`n")) { if ($line -match '^\s*#') { continue }; foreach ($mm in [regex]::Matches($line, "'([^']*)'")) { $GLOBAL += $mm.Groups[1].Value } }
+# THE EXCLUDE LIST IS A LIBRARY NOW (2026-09-09, backlog I82). This used to cut the array literal out of
+# compare-deals.ps1's source with a regex and scrape the quoted tokens back out of it line by line. That
+# lift had NO failure branch: a reformat of the engine would have left $GLOBAL empty and this audit would
+# have gone on comparing itself to an engine it no longer mirrors, at exit 0. The refusal below is the half
+# that was missing, and it is kept now that the parse itself is gone.
+. (Join-Path $root 'global-exclude-lib.ps1')
+$gexList = Get-TcGlobalExclude
+$GLOBAL = @($gexList)
+# NULL OR EMPTY, NOT 'FEWER THAN TWO'. @($null).Count is 1 in PowerShell, which is why this used
+# to read -lt 2 - and that also refused the one-token lists the match-soundness fixtures drive on
+# purpose. Name the two states being rejected rather than using a count as a proxy for them.
+if ($null -eq $gexList -or $GLOBAL.Count -lt 1) {
+  # Exit-Guard, NOT a bare exit: a verdict that leaves without the completion marker is indistinguishable
+  # from a crash, and audit-guard-contract caught this exact line as HALF-COVERED the run it was written.
+  Write-Output 'match-soundness: FATAL - the global exclude list is empty or unreadable, so this audit cannot mirror the engine'
+  Exit-Guard -Name 'match-soundness' -Summary 'BLIND: the exclude list came back empty' -Code 2
+}
 function Get-Eligible([string]$name) {
   $n = $name.ToLower(); $gh = @(); foreach ($g in $GLOBAL) { try { if ($n -match $g) { $gh += $g } } catch {} }
   $elig = @()
@@ -499,8 +513,10 @@ foreach ($pat in @('bakers\bakers-deals-*.json', 'sams\sams-deals-*.json', 'fare
 # The hash covers every file that can change $names/$contest:
 #   * THIS SCRIPT and the lib it dot-sources. A cache keyed on data but not on code is a gate that can never
 #     arm after a logic change: edit the matcher, get yesterday's answer back.
-#   * commodities.json and compare-deals.ps1. Only the $GLOBAL_EXCLUDE block of compare-deals is parsed, but
-#     the WHOLE file is hashed: over-keying costs at most an extra miss, under-keying returns a WRONG answer.
+#   * commodities.json, compare-deals.ps1 and global-exclude-lib.ps1. The exclude list moved out of the
+#     engine on 2026-09-09 (backlog I82), so the library is hashed too; compare-deals stays in the key
+#     because the matcher above mirrors ITS Match-Category, and over-keying costs at most an extra miss
+#     while under-keying returns a WRONG answer.
 #   * every feed file actually selected above (not a re-listed guess at them).
 # Deliberately NOT in the key, because they are never served from cache: candidates-*.json (the self-check
 # below always re-runs live, so the matcher-vs-engine assertion can never be skipped) and match-baseline.json
@@ -508,7 +524,7 @@ foreach ($pat in @('bakers\bakers-deals-*.json', 'sams\sams-deals-*.json', 'fare
 $msCacheF = Join-Path $audDir 'match-sweep-cache.json'
 $fpFiles = New-Object System.Collections.Generic.List[string]
 $selfF = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $root 'audit-match-soundness.ps1' }
-foreach ($sf in @($selfF, (Join-Path $root 'verdict-lib.ps1'), (Join-Path $root 'commodities.json'), (Join-Path $root 'compare-deals.ps1'))) { [void]$fpFiles.Add([string]$sf) }
+foreach ($sf in @($selfF, (Join-Path $root 'verdict-lib.ps1'), (Join-Path $root 'commodities.json'), (Join-Path $root 'compare-deals.ps1'), (Join-Path $root 'global-exclude-lib.ps1'))) { [void]$fpFiles.Add([string]$sf) }
 foreach ($ffi in $feedFiles) { [void]$fpFiles.Add([string]$ffi.FullName) }
 $fp = ''
 try {

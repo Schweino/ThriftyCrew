@@ -39,9 +39,18 @@
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 function Get-EngineUnitVocabulary([string]$Root) {
-  $f = Join-Path $Root 'compare-deals.ps1'
-  if (-not (Test-Path $f)) { return $null }
-  $src = Get-Content $f -Raw
+  # CONVERT-TOUNIT MOVED (2026-09-09, backlog I82): the pricing math is `pricing-math-lib.ps1` now, and
+  # this reader still pointed at the engine, so it returned $null and the live arm went BLIND without
+  # anything failing - the exact "could not evaluate reads as clean" shape it is written to avoid. Both
+  # files are searched, library first, so this keeps working whichever side the function sits on next.
+  $src = ''
+  foreach ($cand in @('pricing-math-lib.ps1', 'compare-deals.ps1')) {
+    $f = Join-Path $Root $cand
+    if (-not (Test-Path $f)) { continue }
+    $txt = Get-Content $f -Raw
+    if ($txt -match '(?m)^function Convert-ToUnit\(') { $src = $txt; break }
+  }
+  if (-not $src) { return $null }
   # the function body, from its declaration to the first line that closes at column 0
   $m = [regex]::Match($src, '(?m)^function Convert-ToUnit\([^\r\n]*\r?\n(?<b>[\s\S]*?)\r?\n\}')
   if (-not $m.Success) { return $null }

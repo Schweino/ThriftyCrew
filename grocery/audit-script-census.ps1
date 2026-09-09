@@ -34,7 +34,18 @@ param(
   [string]$Root,                  # dir whose .ps1 are the population   (default: this script's dir)
   [string]$ScanRoot,              # dir whose exec files are searched    (default: the repo above $Root)
   [int]$OutBaseline = -1,         # max .ps1 allowed under $Root\out\    (default: the frozen baseline below)
-  [switch]$WideBaseline           # record the wide tier's high-water mark (I85 rung 2); refuses to RAISE it
+  [switch]$WideBaseline,          # record the wide tier's high-water mark (I85 rung 2); refuses to RAISE it
+  # A TREE WITH NO GATED SUBTREE (2026-09-09). The two-tier split below is a property of THIS repo -
+  # grocery\ is hard-gated, everything else is ratcheted - and it is applied to paths relative to -Root.
+  # A scoped run over any OTHER tree therefore has no strict tier at all, and three frozen must-fire
+  # fixtures had been silently unable to fire ever since the wide tier was added: their orphan landed in
+  # the WIDE tier, one against a high-water mark of 73, and one is not more than 73.
+  #
+  # A SWITCH RATHER THAN A -StrictPrefix '' STRING, and that is not taste. AN EMPTY STRING ARGUMENT DOES
+  # NOT SURVIVE THE NATIVE-EXE BOUNDARY: powershell.exe -File drops it, the next token binds to the
+  # parameter instead, and the child exits 1 on a binding error. Measured here before shipping, which is
+  # the only reason this is a switch.
+  [switch]$WholeTreeIsStrict
 )
 $ErrorActionPreference = 'Stop'
 # THE POPULATION IS THE WHOLE REPO SINCE 2026-09-09 (backlog I85 rung 2). It defaulted to this script's
@@ -201,7 +212,11 @@ $pop  = @($all | Where-Object { $_.FullName.Substring($ScanRoot.Length + 1) -not
 # silently redefine a frozen baseline of 38 to mean something else, and the first symptom was this
 # check failing at 39 for a file in another module's out\ - a number moving because its definition
 # moved, which is the one way a baseline can lie.
-$inOut= @($all | Where-Object { $_.FullName.Substring($ScanRoot.Length + 1) -match  '(^|\\)grocery\\out\\' })
+# AND IT IS THE SAME REPO-SPECIFIC LITERAL THE TIERING USES, so it needs the same escape hatch. A tree
+# with no grocery\ has no grocery\out\ either, so this matched nothing in a fixture and the out\ ratchet's
+# must-fire could not fire - dead since the same change that killed the orphan must-fire above.
+$outPattern = if ($WholeTreeIsStrict) { '(^|\\)out\\' } else { '(^|\\)grocery\\out\\' }
+$inOut= @($all | Where-Object { $_.FullName.Substring($ScanRoot.Length + 1) -match $outPattern })
 
 $exts = '.ps1','.psm1','.js','.yml','.yaml','.vbs','.bat','.cmd'
 # THIS FILE MUST NOT BE A SOURCE. $KNOWN quotes every recorded script name; counting it would make every one
@@ -258,8 +273,16 @@ foreach ($p in $pop) {
 # everything outside grocery\ is a RATCHET seeded at today's count, with a high-water mark that may
 # only go DOWN. A new orphan outside grocery cannot raise it without failing; recording or wiring one
 # lowers it and the ground is held. Neither tier can be satisfied by looking away.
-$STRICT_PREFIX = 'grocery\'
-$censusBaselineFile = Join-Path $PSScriptRoot 'out\script-census-wide-baseline.json'
+$STRICT_PREFIX = if ($WholeTreeIsStrict) { '' } else { 'grocery' + [IO.Path]::DirectorySeparatorChar }
+# THE MARK FOLLOWS -Root, and that is not tidiness. This was Join-Path $PSScriptRoot, so a run scoped to
+# ANY other tree wrote the estate's live high-water mark from a population that was not the estate - and
+# because a ratchet accepts going DOWN, it did so silently. Hit while reproducing the fixture failure
+# above: one command took the mark from 73 to 1, and it was restored from HEAD.
+$censusBaselineFile = if ($Root -eq $PSScriptRoot -or $Root -eq (Split-Path $PSScriptRoot -Parent)) {
+  Join-Path $PSScriptRoot 'out\script-census-wide-baseline.json'
+} else {
+  Join-Path $Root 'script-census-wide-baseline.json'
+}
 
 $strictUncalled = @($uncalled | Where-Object { $_.StartsWith($STRICT_PREFIX, [StringComparison]::OrdinalIgnoreCase) })
 $wideUncalled   = @($uncalled | Where-Object { -not $_.StartsWith($STRICT_PREFIX, [StringComparison]::OrdinalIgnoreCase) })

@@ -43,12 +43,15 @@ $repo = Split-Path $here -Parent
 # a rule input that this gate does not watch is a rule change that commits unreviewed.
 $script:CG_RULE_FILES = @('grocery/commodities.json', 'grocery/recipe-commodities.json',
                           'grocery/category-excludes.json', 'grocery/product-classes.json',
-                          'grocery/compare-deals.ps1')
+                          'grocery/compare-deals.ps1', 'grocery/global-exclude-lib.ps1')
 
 function Test-StagedTouchesRules {
   <# Pure over a list of staged paths, so the fixture drives the live rule.
-     compare-deals.ps1 is in the list because $GLOBAL_EXCLUDE lives in its SOURCE and is hashed as
-     block text - an edit there changes every assignment exactly as a commodities.json edit does. #>
+     compare-deals.ps1 is in the list because Match-Category lives there, and global-exclude-lib.ps1
+     because the term list does - an edit to either changes every assignment exactly as a
+     commodities.json edit does. The list used to be block text inside the engine and was hashed from
+     there; it moved on 2026-09-09 (backlog I82), and the gate REFUSED rather than waving the commit
+     through, because the hash it could no longer compute came back empty. #>
   param([string[]]$Staged)
   $hit = @()
   foreach ($s in @($Staged)) {
@@ -98,7 +101,9 @@ if ($SelfTest) {
   $s = Test-StagedTouchesRules @('grocery/commodities.json', 'grocery/guards.ps1')
   T 'MUST FIRE  a staged commodities.json is in scope (the b28788fa shape)' (@($s).Count -eq 1) ([string]@($s).Count)
   $s = Test-StagedTouchesRules @('grocery/compare-deals.ps1')
-  T 'MUST FIRE  compare-deals.ps1 is in scope - $GLOBAL_EXCLUDE lives in its source and is hashed as block text' (@($s).Count -eq 1) ([string]@($s).Count)
+  T 'MUST FIRE  compare-deals.ps1 is in scope - Match-Category lives in its source' (@($s).Count -eq 1) ([string]@($s).Count)
+  $s = Test-StagedTouchesRules @('grocery/global-exclude-lib.ps1')
+  T 'MUST FIRE  global-exclude-lib.ps1 is in scope - the term list moved there and a rule change must still be gated' (@($s).Count -eq 1) ([string]@($s).Count)
   $s = Test-StagedTouchesRules @('grocery\commodities.json')
   T 'MUST FIRE  a Windows-separator path is the same file (git reports forward slashes, humans type back)' (@($s).Count -eq 1) ([string]@($s).Count)
   $s = Test-StagedTouchesRules @('grocery/known-wrong.json', 'ops/run-gates.ps1', 'public/board.json')

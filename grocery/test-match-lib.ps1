@@ -47,8 +47,25 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $isShard = [bool]$ChunkFile
 
 # ---- 1. the ORIGINAL, verbatim, from compare-deals.ps1 -------------------------------------------
+# THE START ANCHOR MOVED WITH THE LIST (2026-09-09, backlog I82). The exclude list used to be an array
+# literal opening this very block, so `$GLOBAL_EXCLUDE = @(` marked where the extraction began; it is a
+# library now and the engine's first line about it is the CALL. The library is dot-sourced here rather
+# than lifted, because the extracted block below is run through [scriptblock]::Create, where $PSScriptRoot
+# is empty and the engine's own dot-source line could not resolve.
+$gexLibPath = Join-Path $root 'global-exclude-lib.ps1'
+if (-not (Test-Path $gexLibPath)) {
+  Write-Output 'match-lib: BLIND - global-exclude-lib.ps1 is missing, so the original matcher cannot be reconstructed; nothing proven'
+  if (-not $isShard) { Write-GuardComplete -Name 'match-lib' -Summary 'BLIND: exclude library missing' }
+  exit 3
+}
+. $gexLibPath
 $src = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-$a = $src.IndexOf('$GLOBAL_EXCLUDE = @(')
+# THE NEWLINE IN THE ANCHOR IS LOAD-BEARING. The engine's self-test block ALSO calls Get-TcGlobalExclude,
+# indented, six hundred lines earlier, so a bare IndexOf finds that one first and the extraction starts in
+# the middle of a brace block: PowerShell then fails to parse it with "Unexpected token '}'". Anchoring on
+# a newline pins the extraction to the column-0 assignment, which is the one that opens the matcher.
+$a = $src.IndexOf("`n" + '$GLOBAL_EXCLUDE = Get-TcGlobalExclude')
+if ($a -ge 0) { $a = $a + 1 }
 $b = $src.IndexOf('# ---------------------------------------------------------------- -Explain')
 if ($a -lt 0 -or $b -lt 0 -or $b -le $a) {
   Write-Output 'match-lib: BLIND - could not locate GLOBAL_EXCLUDE..Match-Category in compare-deals.ps1; nothing proven'

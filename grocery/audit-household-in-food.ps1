@@ -13,9 +13,11 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 
-$src = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-$m = [regex]::Match($src, '\$GLOBAL_EXCLUDE\s*=\s*@\((?<body>[\s\S]*?)\r?\n\)')
-$GLOBAL_EXCLUDE = Invoke-Expression ('@(' + $m.Groups['body'].Value + ')')
+# THE EXCLUDE LIST IS A LIBRARY NOW (2026-09-09, backlog I82). This used to regex an array
+# literal out of compare-deals.ps1's source and Invoke-Expression it. Same list, same rule -
+# no copy, no drift - but a dot-source cannot pick up a partial block or a renamed variable.
+. (Join-Path $root 'global-exclude-lib.ps1')
+$GLOBAL_EXCLUDE = Get-TcGlobalExclude
 $commodities = Read-JsonFile (Join-Path $root 'commodities.json')
 $cats = (Read-JsonFile (Join-Path $root 'categories.json')).categories
 # A cleaning product legitimately belongs in ANY non-edible category, not just Household

@@ -123,15 +123,15 @@ $stores = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walm
 # prepared/different-form words that legitimately are NOT the plain commodity (so a match on them is not a gap)
 $GLOBAL = @('seasoning','marinade','\bsauce\b','\brub\b','\bkit\b','bundle','\bmeal\b','wrapped','breaded','\bnugget','\bjerky\b','flavored','\bdip\b','helper','lunchable','\bsoup\b','gravy','stuffing')
 # ...and the ENGINE's own global exclusions (pet food, baby food, cleaning supplies, personal care), which
-# live in compare-deals.ps1 and were never read here. Without them this audit reports candidates the engine
-# deliberately refuses and can never accept - a Happy Tot baby-food pouch was filed as "Baker's is missing
-# from spinach" every day (2026-07-28). An auditor that disagrees with the engine is a permanent false alarm,
-# so read the real list (same parse audit-match-contested.ps1 uses) instead of keeping a second opinion.
+# were never read here. Without them this audit reports candidates the engine deliberately refuses and can
+# never accept - a Happy Tot baby-food pouch was filed as "Baker's is missing from spinach" every day
+# (2026-07-28). An auditor that disagrees with the engine is a permanent false alarm, so load the real list
+# (global-exclude-lib.ps1, the one home; audit-match-contested and the engine load the same file) instead of
+# keeping a second opinion.
 $ENGINE_GLOBAL = @()
 try {
-  $cdtxt = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-  $mg = [regex]::Match($cdtxt, '\$GLOBAL_EXCLUDE = @\((?<b>[\s\S]*?)\r?\n\)')
-  if ($mg.Success) { $ENGINE_GLOBAL = @(Invoke-Expression ('@(' + $mg.Groups['b'].Value + ')')) }
+  . (Join-Path $root 'global-exclude-lib.ps1')   # I82: the list is a library, not a regex over source
+  $ENGINE_GLOBAL = @(Get-TcGlobalExclude)
 } catch { Write-Output ('WARN could not read the engine GLOBAL_EXCLUDE (' + $_.Exception.Message + ') - gaps may include engine-excluded products') }
 # ...and the engine's IN-STORE gate, for the same reason (see instore-lib.ps1).
 . (Join-Path $root 'instore-lib.ps1')

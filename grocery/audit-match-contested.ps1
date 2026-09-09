@@ -15,10 +15,15 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 
-$src = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-$m = [regex]::Match($src, '\$GLOBAL_EXCLUDE\s*=\s*@\((?<body>[\s\S]*?)\r?\n\)')
-if (-not $m.Success) { Write-Output 'FATAL: cannot parse $GLOBAL_EXCLUDE'; exit 2 }
-$GLOBAL_EXCLUDE = Invoke-Expression ('@(' + $m.Groups['body'].Value + ')')
+# THE EXCLUDE LIST IS A LIBRARY NOW (2026-09-09, backlog I82). This used to regex an array
+# literal out of compare-deals.ps1's source and Invoke-Expression it. Same list, same rule -
+# no copy, no drift - but a dot-source cannot pick up a partial block or a renamed variable.
+. (Join-Path $root 'global-exclude-lib.ps1')
+$GLOBAL_EXCLUDE = Get-TcGlobalExclude
+# NULL OR EMPTY, NOT 'FEWER THAN TWO'. @($null).Count is 1 in PowerShell, which is why this used
+# to read -lt 2 - and that also refused the one-token lists the match-soundness fixtures drive on
+# purpose. Name the two states being rejected rather than using a count as a proxy for them.
+if ($null -eq $GLOBAL_EXCLUDE -or @($GLOBAL_EXCLUDE).Count -lt 1) { Write-Output 'FATAL: the global exclude list is empty or unreadable'; exit 2 }
 $commodities = Read-JsonFile (Join-Path $root 'commodities.json')
 $cats = (Read-JsonFile (Join-Path $root 'categories.json')).categories
 $catOf = @{}

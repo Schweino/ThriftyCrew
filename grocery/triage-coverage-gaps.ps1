@@ -36,9 +36,11 @@ if (@($commods).Count -lt 2) { throw "commodities.json did not deserialize to a 
 $gaps = @((Read-JsonFile (Join-Path $OutDir 'coverage-gaps.json')).gaps)
 
 # --- mirror the engine EXACTLY (same list, same order, same normalization) -------------------------------
-$src = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-$m = [regex]::Match($src, '\$GLOBAL_EXCLUDE\s*=\s*@\((?<body>[\s\S]*?)\r?\n\)')
-$GLOBAL_EXCLUDE = Invoke-Expression ('@(' + $m.Groups['body'].Value + ')')
+# THE EXCLUDE LIST IS A LIBRARY NOW (2026-09-09, backlog I82). This used to regex an array
+# literal out of compare-deals.ps1's source and Invoke-Expression it. Same list, same rule -
+# no copy, no drift - but a dot-source cannot pick up a partial block or a renamed variable.
+. (Join-Path $root 'global-exclude-lib.ps1')
+$GLOBAL_EXCLUDE = Get-TcGlobalExclude
 function Get-MatchTexts([string]$name) {
   $n = $name.ToLower()
   $v = $n -replace ',?\s*priced per\s+\w+', ''

@@ -501,17 +501,30 @@ else { Bad 'alert-lib lost its ALERT FAILED TO SEND line - a page that never wen
 
 # ---------------------------------------------------------------- 6. coverage-gaps must share the engine's exclusions
 # It kept its own opinion of what is not-food and reported engine-refused products as gaps forever.
+# THE LIST IS A LIBRARY NOW (2026-09-09, backlog I82). It used to be an array literal cut out of
+# compare-deals.ps1 by regex and run through Invoke-Expression, and this block asserted that the PARSE still
+# worked. The property being defended never was the parse - it is that the auditor and the engine read the
+# SAME list - so the assertion moves with the mechanism rather than being deleted with it.
 $cg = Get-Content (Join-Path $root 'audit-coverage-gaps.ps1') -Raw
-if ($cg -match 'GLOBAL_EXCLUDE') { Ok 'coverage-gaps reads the engine GLOBAL_EXCLUDE' }
+if ($cg -match 'Get-TcGlobalExclude') { Ok 'coverage-gaps reads the engine GLOBAL_EXCLUDE through the library' }
 else { Bad 'coverage-gaps no longer reads the engine GLOBAL_EXCLUDE - engine-refused products will be reported as gaps' }
-# and prove the parse still yields the real list rather than silently returning empty
+# and prove the library still yields the real list rather than silently returning empty
+$gexLib = Join-Path $root 'global-exclude-lib.ps1'
+if (Test-Path $gexLib) {
+  . $gexLib
+  $ge = @(Get-TcGlobalExclude)
+  if ($ge.Count -ge 20 -and ($ge -contains 'happy\s*tot')) { Ok ("the GLOBAL_EXCLUDE library yields the real list (" + $ge.Count + " tokens)") }
+  else { Bad ("the GLOBAL_EXCLUDE library returned " + $ge.Count + " tokens - every auditor that reads it is now running on a different list than the engine") }
+  # MUST NOT be a bare variable: a lifted $script: constant does not travel, so a library that exported
+  # $GLOBAL_EXCLUDE instead of a function would work here and hand back nothing to a lifting caller.
+  $gexSrc = Get-Content $gexLib -Raw
+  if ($gexSrc -match '(?m)^function\s+Get-TcGlobalExclude') { Ok 'the exclude list is exported as a FUNCTION, so it survives being lifted' }
+  else { Bad 'global-exclude-lib no longer exports a function - a bare $script: constant does not travel to a lifting caller' }
+} else { Bad 'global-exclude-lib.ps1 is missing - every auditor that shares the engine exclusions is now blind' }
+# and the engine must not have grown a second copy back
 $cdtxt = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-$mg = [regex]::Match($cdtxt, '\$GLOBAL_EXCLUDE = @\((?<b>[\s\S]*?)\r?\n\)')
-if ($mg.Success) {
-  $ge = @(Invoke-Expression ('@(' + $mg.Groups['b'].Value + ')'))
-  if ($ge.Count -ge 20 -and ($ge -contains 'happy\s*tot')) { Ok ("the GLOBAL_EXCLUDE parse yields the real list (" + $ge.Count + " tokens)") }
-  else { Bad ("the GLOBAL_EXCLUDE parse returned " + $ge.Count + " tokens - a reformat has broken every auditor that reads it") }
-} else { Bad 'the GLOBAL_EXCLUDE block can no longer be parsed out of compare-deals.ps1' }
+if ($cdtxt -match '(?m)^\s*\$GLOBAL_EXCLUDE\s*=\s*@\(') { Bad 'compare-deals.ps1 has an array literal for $GLOBAL_EXCLUDE again - there are two copies of the list and they will drift' }
+else { Ok 'compare-deals.ps1 holds no second copy of the exclude list' }
 
 # ---------------------------------------------------------------- 7. a locked log must not kill the pipeline
 # 2026-07-28: a `tail -f` on ad-cycle-log.txt held the file open, Add-Content threw under EAP=Stop, and
@@ -837,6 +850,12 @@ function NewFxDir([string]$tag) {
   $srcLib = Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1'
   $dstLib = Join-Path $fxLib 'json-io.ps1'
   if ((Test-Path $srcLib) -and ((-not (Test-Path $dstLib)) -or ((Get-Item $srcLib).LastWriteTimeUtc -gt (Get-Item $dstLib).LastWriteTimeUtc))) { Copy-Item $srcLib $dstLib -Force }
+  # global-exclude-lib.ps1 IS NOT COPIED HERE, and the first cut of backlog I82 did copy it here for the
+  # same reason json-io is copied - then five script-census cases went red, because that suite counts the
+  # `.ps1` files under its own fixture root and an extra one is a new orphan. A dependency injected into
+  # EVERY fixture is not free when a fixture's subject IS the file set. The three fixtures that need the
+  # exclude library copy it in their own lists; their failure without it is a named FATAL at exit 2, not
+  # a silent pass, which is what makes the targeted copy safe where json-io's would not have been.
   return $d
 }
 function RunPSAt([string]$dir, [string]$script, $argList) {
@@ -939,7 +958,9 @@ Remove-Item $fxPct -Recurse -Force -ErrorAction SilentlyContinue
 # (c) audit-household-in-food: BLIND at zero rows scanned (an existing-but-empty out\regular used to print
 # "scanned 0 rows" + AUDIT OK + exit 0). Copy-to-temp because the script has no dir param.
 $fxHif = NewFxDir 'hif-blind'
-foreach ($cf in @('audit-household-in-food.ps1','compare-deals.ps1','commodities.json','categories.json')) { Copy-Item (Join-Path $root $cf) (Join-Path $fxHif $cf) }
+# compare-deals.ps1 left this list on 2026-09-09 (backlog I82) and global-exclude-lib.ps1 replaced it:
+# the audit no longer reads the engine's source at all, it dot-sources the exclude library instead.
+foreach ($cf in @('audit-household-in-food.ps1','global-exclude-lib.ps1','commodities.json','categories.json')) { Copy-Item (Join-Path $root $cf) (Join-Path $fxHif $cf) }
 New-Item -ItemType Directory -Force (Join-Path $fxHif 'out\regular') | Out-Null
 $r = RunPSAt $fxHif 'audit-household-in-food.ps1' @()
 if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'household-in-food goes BLIND (exit 3) at zero rows scanned' }
@@ -2344,7 +2365,9 @@ else { Bad ('audit-board-mojibake -SelfTest failed or lost its founding-bug fixt
 $abmSrc = Get-Content (Join-Path $root 'audit-board-mojibake.ps1') -Raw
 if ($abmSrc -match '0x0043,0x0061,0x006D,0x0070,0x0062,0x0065,0x006C,0x006C') { Ok 'the frozen 5-generation Campbell row is still in audit-board-mojibake''s fixtures' }
 else { Bad 'audit-board-mojibake lost the frozen Campbell fixture - the bug it encodes is being healed out of the live board, so without the frozen copy a green run cannot be told from a blind one' }
-if ($abmSrc -match 'exit 3') { Ok 'audit-board-mojibake reports BLIND rather than clean on a board it could not read' }
+# BOTH SPELLINGS (2026-09-09). Backlog I86 turned `exit 3` into `Exit-Guard -Code 3` estate-wide, and
+# this assertion still spelled the old one - so it reported a lost BLIND path on a guard that has three.
+if ($abmSrc -match 'exit 3' -or $abmSrc -match '-Code 3') { Ok 'audit-board-mojibake reports BLIND rather than clean on a board it could not read' }
 else { Bad 'audit-board-mojibake no longer has a BLIND path - a zero-row board would read as zero findings' }
 
 # audit-band-censorship (2026-09-05). The band floor cannot tell a parse error from a real price drop, and
@@ -2363,12 +2386,12 @@ else { Bad 'audit-band-censorship lost its frozen lettuce fixture - regenerated 
 # The parse-bug twin is the half that keeps it honest. Without it the guard passes by flagging everything.
 if ($abcSrc -match '0\.0009') { Ok 'the per-sheet toilet-paper parse bug (0.0009 against a 0.30 floor) is still armed as the clean twin' }
 else { Bad 'audit-band-censorship lost its parse-bug clean twin - a guard that reports every below-floor row is a copy of the band, not a check on it' }
-if ($abcSrc -match 'exit 3') { Ok 'audit-band-censorship reports BLIND rather than clean when nothing can express the defect' }
+if ($abcSrc -match 'exit 3' -or $abcSrc -match '-Code 3') { Ok 'audit-band-censorship reports BLIND rather than clean when nothing can express the defect' }
 else { Bad 'audit-band-censorship no longer has a BLIND path - a flagged file with no banded rejection would read as a clean board' }
 # THE RATCHET, asserted at the SOURCE as well as through -SelfTest. The guard shipped for an hour exiting 0
 # with 50 real findings, so guards.ps1 printed "ok" on an invariant fifty cells were violating. If this
 # ever loses its exit 2 it is silently advisory again, and an advisory report is not in the publish path.
-if ($abcSrc -match 'Get-RatchetVerdict' -and $abcSrc -match "'break'" -and $abcSrc -match 'exit 2') {
+if ($abcSrc -match 'Get-RatchetVerdict' -and $abcSrc -match "'break'" -and ($abcSrc -match 'exit 2' -or $abcSrc -match '-Code 2')) {
   Ok 'audit-band-censorship still HARD FAILS (exit 2) when the ratchet breaks - a new censored cell is not filed as backlog'
 } else { Bad 'audit-band-censorship lost its ratchet break - it is advisory again, and guards.ps1 will print ok over real findings' }
 # And the guards.ps1 invariant text must keep saying NEW, or the line claims more than the check proves.
@@ -3047,7 +3070,11 @@ Copy-Item (Join-Path $root 'audit-match-soundness.ps1') (Join-Path $fxMs 'audit-
 Copy-Item (Join-Path $root 'verdict-lib.ps1') (Join-Path $fxMs 'verdict-lib.ps1')
 Copy-Item (Join-Path $root 'alert-lib.ps1') (Join-Path $fxMs 'alert-lib.ps1')      # dot-sourced for Send-Alert, same as verdict-lib
 Set-Content (Join-Path $fxMs 'commodities.json') '[{"id":"lemons","include":["lemon"],"exclude":[]},{"id":"limes","include":["lime"],"exclude":[]}]' -Encoding UTF8
-Set-Content (Join-Path $fxMs 'compare-deals.ps1') "`$GLOBAL_EXCLUDE = @(`n  'scented candle'`n)`n" -Encoding UTF8
+# The fixture's exclude list is a LIBRARY now (backlog I82), not an array literal inside a stub engine.
+# compare-deals.ps1 stays here because it is still part of the cache fingerprint below; it just no
+# longer carries the list, so a fixture that forgot to update would go BLIND loudly rather than quietly.
+Set-Content (Join-Path $fxMs 'global-exclude-lib.ps1') "function Get-TcGlobalExclude { @(`n  'scented candle'`n) }`n" -Encoding UTF8
+Set-Content (Join-Path $fxMs 'compare-deals.ps1') "# fixture engine stub`n" -Encoding UTF8
 Set-Content (Join-Path $fxMs 'out\regular\hyvee-regular-2026-01-01.json') '{"deals":[{"item":"Fresh Lemon 1 ct"},{"item":"Fresh Lime 1 ct"}]}' -Encoding UTF8
 $msBaseJson = '{"generated":"2026-01-01 00:00","names":{"Fresh Lemon 1 ct":"lemons","Fresh Lime 1 ct":"limes"},"contested":[]}'
 Set-Content (Join-Path $fxMs 'out\audit\match-baseline.json') $msBaseJson -Encoding UTF8
@@ -3074,6 +3101,7 @@ else {
       @{ n = 'the script itself'; f = (Join-Path $fxMs 'audit-match-soundness.ps1'); add = "`n# fixture byte`n" },
       @{ n = 'commodities.json';  f = (Join-Path $fxMs 'commodities.json');          add = ' ' },
       @{ n = 'compare-deals.ps1'; f = (Join-Path $fxMs 'compare-deals.ps1');         add = "`n# fixture byte`n" },
+      @{ n = 'global-exclude-lib.ps1'; f = (Join-Path $fxMs 'global-exclude-lib.ps1'); add = "`n# fixture byte`n" },
       @{ n = 'verdict-lib.ps1';   f = (Join-Path $fxMs 'verdict-lib.ps1');           add = "`n# fixture byte`n" },
       @{ n = 'a store feed file'; f = (Join-Path $fxMs 'out\regular\hyvee-regular-2026-01-01.json'); add = ' ' })) {
     $keep = [IO.File]::ReadAllBytes($inp.f)
@@ -3147,7 +3175,8 @@ $viLegacy = '{"week_of":"2026-07-17","verdicts":[{"id":"pinto-beans","entries":[
   '"reason":"''Member''s Mark Pinto Beans 12 lbs.'' is a 12-lb bag of DRY pinto beans, not the canned commodity."}]}]}'
 Set-Content (Join-Path $fxVi 'out\verify-verdicts-2026-07-17.json') $viLegacy -Encoding UTF8
 Set-Content (Join-Path $fxVi 'out\verify-verdicts-2026-08-15.json') $viVerdict -Encoding UTF8
-Set-Content (Join-Path $fxVi 'compare-deals.ps1') "`$GLOBAL_EXCLUDE = @(`n  'scented candle'`n)`n" -Encoding UTF8
+Set-Content (Join-Path $fxVi 'global-exclude-lib.ps1') "function Get-TcGlobalExclude { @(`n  'scented candle'`n) }`n" -Encoding UTF8
+Set-Content (Join-Path $fxVi 'compare-deals.ps1') "# fixture engine stub`n" -Encoding UTF8
 $r = RunPSAt $fxVi 'audit-match-soundness.ps1' @('-Accept')
 if ($r.rc -eq 2 -and $r.text -match "ACCEPT REFUSED" -and $r.text -match "\[garlic\] 'Marketside Tandoori Style Garlic Naan Bites, 7\.05 oz, 15 Count'") {
   Ok 'verdict identity MUST-FIRE: the gate blocks the NAAN BITES the verdict actually judged (item field wins over the quoted flavour word)'
@@ -3158,7 +3187,7 @@ if ($r.text -match "\[pinto-beans\] 'Member's Mark Pinto Beans 12 lbs\.'") { Ok 
 else { Bad 'an entry with no item field no longer blocks - hoisting identity to the item field silently disarmed every legacy verdict file: ' + $r.text }
 # CLEAN TWIN: the live 2026-08-15 situation - the naan is GLOBAL_EXCLUDEd (so the drop was already honoured)
 # and only the real Garlic remains. Nothing outstanding, so -Accept must go through at exit 0.
-Set-Content (Join-Path $fxVi 'compare-deals.ps1') "`$GLOBAL_EXCLUDE = @(`n  'naan'`n)`n" -Encoding UTF8
+Set-Content (Join-Path $fxVi 'global-exclude-lib.ps1') "function Get-TcGlobalExclude { @(`n  'naan'`n) }`n" -Encoding UTF8
 Remove-Item (Join-Path $fxVi 'out\verify-verdicts-2026-07-17.json') -Force
 $r = RunPSAt $fxVi 'audit-match-soundness.ps1' @('-Accept')
 if ($r.rc -eq 0 -and $r.text -match 'baseline ACCEPTED' -and $r.text -notmatch 'ACCEPT REFUSED') { Ok 'verdict identity CLEAN TWIN: with the judged naan item unmatched, -Accept passes and the real Garlic is baselined normally' }
@@ -3257,23 +3286,27 @@ Set-Content (Join-Path $fxSc 'zzz-new-thing.ps1') 'Write-Output "new"' -Encoding
 Set-Content (Join-Path $fxSc 'zzz-caller.ps1') '& (Join-Path $PSScriptRoot "zzz-helper.ps1")' -Encoding UTF8
 Set-Content (Join-Path $fxSc 'zzz-helper.ps1') 'Write-Output "helper"' -Encoding UTF8
 Set-Content (Join-Path $fxSc 'zzz-wire.js') '// nightly: zzz-caller.ps1' -Encoding UTF8
-$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc)
+# -StrictPrefix '' BECAUSE A FIXTURE TREE HAS NO grocery\ (2026-09-09). Without it every fixture orphan
+# fell into the WIDE tier and was measured against the LIVE high-water mark of 73, so this must-fire and
+# the two below could not fire at all. They had been reporting FAIL correctly and the fixture was the
+# thing that was broken.
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc, '-WholeTreeIsStrict')
 if ($r.rc -eq 2 -and $r.text -match 'ORPHAN zzz-new-thing\.ps1') { Ok 'script-census FIRES on a script no executable file names' }
 else { Bad ('script-census missed a brand-new orphan (rc=' + $r.rc + '): ' + $r.text) }
 Set-Content (Join-Path $fxSc 'zzz-run.cmd') 'powershell -File zzz-new-thing.ps1' -Encoding UTF8
-$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc)
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc, '-WholeTreeIsStrict')
 if ($r.rc -eq 0 -and $r.text -match '0 uncalled') { Ok 'script-census SILENT once that script is wired in (a .cmd launcher counts as a caller)' }
 else { Bad ('script-census still fires after the orphan was wired in (rc=' + $r.rc + '): ' + $r.text) }
 New-Item -ItemType Directory -Force (Join-Path $fxSc 'out') | Out-Null
 Set-Content (Join-Path $fxSc 'out\zzz-oneoff.ps1') 'Write-Output "one-off"' -Encoding UTF8
-$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc, '-OutBaseline', '0')
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc, '-OutBaseline', '0', '-WholeTreeIsStrict')
 if ($r.rc -eq 2 -and $r.text -match 'OUTPUT directory') { Ok 'script-census ratchet FIRES when a one-off is written into out\' }
 else { Bad ('script-census let out\ grow past its recorded baseline (rc=' + $r.rc + '): ' + $r.text) }
-$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc, '-OutBaseline', '1')
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc, '-OutBaseline', '1', '-WholeTreeIsStrict')
 if ($r.rc -eq 0) { Ok 'script-census ratchet SILENT at the recorded baseline (a ratchet, not a hard zero)' }
 else { Bad ('script-census ratchet fires at its own recorded baseline (rc=' + $r.rc + ') - it would fail from day one') }
 $fxScB = NewFxDir 'sc-blind'
-$r = RunPS 'audit-script-census.ps1' @('-Root', $fxScB, '-ScanRoot', $fxScB)
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxScB, '-ScanRoot', $fxScB, '-WholeTreeIsStrict')
 if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'script-census goes BLIND (exit 3) with nothing to examine instead of reporting a clean zero' }
 else { Bad ('script-census reported a result from an empty tree (rc=' + $r.rc + ') - "0 orphans" from zero examination is back') }
 
@@ -3296,11 +3329,11 @@ Set-Content (Join-Path $fxWtTwin '.git') 'gitdir: C:/nowhere/.git/worktrees/zzz-
 Set-Content (Join-Path $fxWtTwin 'zzz-copied-oneoff.ps1') 'Write-Output "a transient copy"' -Encoding UTF8
 # the masking half: the ONLY file that names the orphan added below lives inside the pruned checkout
 Set-Content (Join-Path $fxWtTwin 'zzz-vouch.js') '// zzz-orphan-for-real.ps1' -Encoding UTF8
-$r = RunPS 'audit-script-census.ps1' @('-Root', $fxWt, '-ScanRoot', $fxWt)
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxWt, '-ScanRoot', $fxWt, '-WholeTreeIsStrict')
 if ($r.rc -eq 0 -and $r.text -match 'skipped nested checkout' -and $r.text -notmatch 'zzz-copied-oneoff') { Ok 'script-census CLEAN TWIN: a sibling git worktree in the tree is pruned whole, not counted as 1 more orphan' }
 else { Bad ('script-census counts a sibling worktree''s copies as scripts (rc=' + $r.rc + ') - the 2026-08-03 four-day red is back: ' + $r.text) }
 Set-Content (Join-Path $fxWt 'zzz-orphan-for-real.ps1') 'Write-Output "new"' -Encoding UTF8
-$r = RunPS 'audit-script-census.ps1' @('-Root', $fxWt, '-ScanRoot', $fxWt)
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxWt, '-ScanRoot', $fxWt, '-WholeTreeIsStrict')
 if ($r.rc -eq 2 -and $r.text -match 'ORPHAN zzz-orphan-for-real\.ps1' -and $r.text -notmatch 'zzz-copied-oneoff') { Ok 'script-census MUST-FIRE with that sibling still present: a real new orphan is still caught, and a file inside the pruned checkout cannot vouch for it' }
 else { Bad ('script-census went blind to a real orphan while a sibling worktree was present (rc=' + $r.rc + ') - the prune is swallowing the tree it is meant to census, or a copy of the repo is being read as a caller: ' + $r.text) }
 

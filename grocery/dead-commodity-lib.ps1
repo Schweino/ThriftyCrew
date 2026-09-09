@@ -88,8 +88,14 @@ function Test-CommodityIsDead($commodity, [string[]]$globalExclude) {
 # the house convention (audit-match-contested, audit-match-soundness, audit-household-in-food and
 # audit-coverage-gaps all do the same); retyping the 83 tokens here would be a second copy that drifts.
 function Get-EngineGlobalExclude([string]$Root) {
-  $src = Get-Content (Join-Path $Root 'compare-deals.ps1') -Raw
-  $m = [regex]::Match($src, '\$GLOBAL_EXCLUDE = @\((?<b>[\s\S]*?)\r?\n\)')
-  if (-not $m.Success) { return $null }
-  return @(Invoke-Expression ('@(' + $m.Groups['b'].Value + ')'))
+  # THE LIST IS A LIBRARY NOW (2026-09-09, backlog I82). Same rule as before - no copy, no drift - but
+  # it arrives through a dot-source instead of a regex over the engine's source text, so it cannot pick
+  # up a partial block or miss a renamed variable. Returns $null when the library is absent, exactly as
+  # the parse failure used to, because the CALLER treats null as "could not read it" and must keep that.
+  $lib = Join-Path $Root 'global-exclude-lib.ps1'
+  if (-not (Test-Path $lib)) { return $null }
+  . $lib
+  $list = Get-TcGlobalExclude
+  if (-not $list) { return $null }
+  return @($list)
 }

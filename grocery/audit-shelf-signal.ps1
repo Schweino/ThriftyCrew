@@ -99,8 +99,9 @@ if ($SelfTest) {
   # self-test's own failure exit, which is legitimate. A check that fails on itself teaches nothing.
   $src = Get-Content $PSCommandPath -Raw
   $reportHalf = ($src -split '(?m)^# -+ the board')[-1]
-  T ($reportHalf -notmatch 'exit 2') 'the REPORT path has no exit-2 - it is advisory and cannot gate a publish'
-  T ($reportHalf -match 'exit 3') 'the report path CAN exit 3 (blind), because "could not measure" must not read as "clean"'
+  # BOTH SPELLINGS (2026-09-09, backlog I86 turned `exit N` into `Exit-Guard -Code N` estate-wide).
+  T (($reportHalf -notmatch 'exit 2') -and ($reportHalf -notmatch '-Code 2')) 'the REPORT path has no exit-2 - it is advisory and cannot gate a publish'
+  T (($reportHalf -match 'exit 3') -or ($reportHalf -match '-Code 3')) 'the report path CAN exit 3 (blind), because "could not measure" must not read as "clean"'
   if ($fail -gt 0) { Say ("audit-shelf-signal SELFTEST: $fail FAILED"); exit 2 }
   Say ("audit-shelf-signal SELFTEST: all $pass passed"); exit 0
 }
