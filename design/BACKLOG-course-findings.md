@@ -7888,7 +7888,64 @@ admin key is the cheap version. Nobody should build either until that is ruled.
 scoped to adversarial input against LLM systems and its own "does not own" section says so. This is
 reported to the orchestrator as a proposed domain and is NOT routed anywhere.
 
-### I92 - A promotion hold latches forever and does not record what it latched against `PARTLY DONE - THE HOLDS ARE RE-TESTABLE AND MEASURED; THE CADENCE IS STILL BRAD'S` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I92 - A promotion hold latches forever and does not record what it latched against `DONE - CADENCE RULED, AND THE RE-TEST PROVED THE HOLDS RIGHT` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**`[CLOSED 2026-09-09. Brad ruled: schedule the READ, never the clear; and re-test both live board-class holds.]`**
+
+## The cadence, and what it is NOT
+
+**`--recheck-holds` now runs daily** from `capture-watchdog` check 5a3a. It is read-only - promotes
+nothing, clears nothing, runs no guard suite - so a daily run costs one board read and can change no
+state. **The CLEAR never runs on a timer.** Sixteen holds sat unexamined for nineteen days and thirteen
+turned out to be inert; nobody could have known that without looking, and the recheck existing was not
+the same as the recheck being run.
+
+## The distinction that decides whether a hold can EVER expire, and age is not it
+
+The report now classifies every hold by **reason class**:
+
+| class | means | can it expire? |
+|---|---|---|
+| `identity` | the pattern claims the **wrong product** - a cross-claim, a wrong FORM, a measure-kind mismatch | **never.** No board rebuild makes it true |
+| `board` | it disagreed with its own link **on one board**, weeks ago | yes - these are the only real candidates |
+| `unclassed` | the reason cannot be read | reported as such, **never guessed into a bucket** |
+
+Live: **identity 3, board 13, unclassed 0 of 16.** `kosher-salt` is the identity case that decided the
+whole ruling - its pattern matches "Sea Salt, Coarse, Kosher" and always will, so **a timer-based
+expiry would have re-armed a known-wrong claim on a live board.**
+
+## The re-test, and it returned a result nobody predicted
+
+Brad approved re-testing the two live `board`-class holds. Both were released, `--gated` promoted
+exactly those two, rebuilt the board and ran the guard suite. **Both FAILED, with the same factors as
+19 days and roughly 19 board rebuilds earlier:**
+
+| commodity | 2026-08-21 | 2026-09-09 re-test |
+|---|---|---|
+| `balsamic-vinegar` / Family Fare | 1.59x unit-basis outlier | **1.59x**, board=0.2465 link=0.3914 [Alessi Balsamic Vinegar 12.75 Oz] |
+| `green-olives` / Aldi | 0.54x unit-basis outlier | **0.54x**, board=0.4271 link=0.229 [Tuscan Garden Manzanilla Olives] |
+
+**So "re-testable" did not mean "transient".** The classification was right about the KIND of claim
+and the evidence now says these particular two are **stable defects, not board accidents** - which is
+exactly the sort of thing that can only be learned by running it. The generic auto-hold reasons were
+replaced with the measured causes, as `record_holds` itself instructs.
+
+**The tree came back clean:** `commodities.json` is **byte-identical** to its pre-test md5, the holds
+file is back to 16 with the two re-recorded carrying today's date and `board_week`, and
+`guards.ps1` on the live board is **exit 0, hard=0, "Safe to publish."**
+
+**Verified:** self-test **24 of 24** (10 must-fire, 8 must-not-fire, 5 clean twins). `run-gates` exit 0,
+`pass=293 fail=0`.
+
+**A limitation worth stating: the classifier reads PROSE.** Wording moved a hold between classes twice
+in one session - once because two identity reasons said "wrong FORM" and "measure-kind mismatch"
+rather than "cross-claim", and once because my own re-test reason said "1.59x factor" rather than
+"outlier". Both are fixtures now, but it is only ever as good as the vocabulary the guards happen to
+use, and a new guard phrasing will land in `unclassed` until someone teaches it.
+
+**Also still open, and unchanged:** nobody has adjudicated whether the *other* held patterns should
+ever be learned. Thirteen are inert today, which means promoting them could not move a cell - not that
+they are right.
 
 **`[RUNG 1 SHIPPED 2026-09-08. The latch now has an inspection port. Whether it also gets an
 automatic reset is the ruling inside this item and it is untouched.]`**

@@ -87,6 +87,16 @@ function Get-ReachSites {
       $pat = [regex]::Escape($int) -replace '/', '[\\/]'
       for ($i = 0; $i -lt $lines.Count; $i++) {
         foreach ($m in [regex]::Matches($lines[$i], $pat)) {
+          # AN ENTRY POINT IS NOT A DATA REACH (2026-09-09). This audit exists to separate a module's
+          # published contract from its internals, and a script's command line IS an interface: calling
+          # `graph\learning\promote_aliases.py --recheck-holds` is using graph's front door, while
+          # reading `graph\learning\promotion-holds.json` is reaching past it. Both spell the same
+          # directory prefix, so only what FOLLOWS the prefix can tell them apart. Found when the
+          # watchdog started invoking that script and this ratchet - correctly, by its old rule -
+          # called it a new reach.
+          $rest = $lines[$i].Substring($m.Index + $m.Length)
+          $tail = [regex]::Match($rest, '^[\\/][A-Za-z0-9_.\-]+')
+          if ($tail.Success -and $tail.Value -match '\.(ps1|py)$') { continue }
           $out += @{ target = $int; module = $owner; line = ($i + 1)
                      comment = (Test-IsCommentSite -Line $lines[$i] -MatchIndex $m.Index) }
         }
@@ -114,6 +124,15 @@ if ($runSelfTest) {
   # MUST NOT FIRE - reading the PUBLISHED artefact is the contract working, not a finding.
   $s3 = @(Get-ReachSites -Text '$b = Get-Content "public/board.json"' -OwnModule 'meal-prep')
   T 'MUST NOT FIRE  reading the published board.json is not a reach' ($s3.Count -eq 0) ([string]$s3.Count)
+
+  # MUST NOT FIRE - invoking another module's SCRIPT is using its front door, not reaching past it.
+  $sE = @(Get-ReachSites -Text '$p = Join-Path $root ''graph\learning\promote_aliases.py''' -OwnModule 'grocery')
+  T 'MUST NOT FIRE  invoking another module''s script is an ENTRY POINT, not a data reach' ($sE.Count -eq 0) ([string]$sE.Count)
+
+  # MUST FIRE - the same directory prefix, but a DATA file behind it, is still a reach. This is the
+  # pair that proves the entry-point rule did not just switch the check off.
+  $sD = @(Get-ReachSites -Text '$h = Get-Content ''graph\learning\promotion-holds.json''' -OwnModule 'grocery')
+  T 'MUST FIRE  reading a DATA file under the same directory is still a reach' ($sD.Count -eq 1) ([string]$sD.Count)
 
   # MUST NOT FIRE - a module touching its OWN internals is not a cross-module reach.
   $s4 = @(Get-ReachSites -Text '$b = "grocery/out/comparison.json"' -OwnModule 'grocery')

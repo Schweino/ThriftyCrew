@@ -108,6 +108,46 @@ def classify_hold(pattern: str, learned_pats, catalog_pats, board_items):
     return still, incat, [it for it in (board_items or []) if it and rx.search(it)]
 
 
+def classify_reason(reason: str) -> str:
+    """Which KIND of claim is this hold's reason making? (2026-09-09, backlog I92, ruled by Brad.)
+
+    THE DISTINCTION THAT DECIDES WHETHER A HOLD CAN EVER EXPIRE, and age does not:
+
+      'identity'   - the pattern claims the WRONG PRODUCT. A cross-claim on another commodity's cell
+                     is a statement about what the pattern MEANS, and no amount of board rebuilding
+                     makes it true. kosher-salt's `salt,...kosher` matches "Sea Salt, Coarse, Kosher"
+                     and always will. These must never be cleared by a timer or by inertness.
+      'board'      - the pattern produced a number that disagreed with its own link ON ONE BOARD.
+                     A unit-basis outlier is a statement about the products present that week, and
+                     the board is rebuilt daily. These are the re-testable ones.
+      'unclassed'  - anything else, including the generic auto-hold reason. Reported as unclassed
+                     rather than guessed into a bucket: a hold whose reason cannot be read is not
+                     evidence of anything, and calling it re-testable would be inventing permission.
+
+    Pure, so the fixtures drive it.
+    """
+    r = (reason or "").lower()
+    # Identity signals. All of these say the pattern pulls in the WRONG KIND of thing, which is a
+    # property of the pattern and not of any week's products. `wrong form` and `measure-kind mismatch`
+    # were added 2026-09-09 after the first live run filed shredded-cheese ("a MELTING cheese, name
+    # never says shredded") and honey-mustard ("crowned a 128 fl oz cell on a weight-priced row") as
+    # unclassed. Both are identity claims, and leaving them unclassed UNDERSTATED how many holds can
+    # never expire - which is the direction that matters, since the cost of a wrong 'board' label is
+    # re-arming a bad alias.
+    for sig in ("cross-claim", "cross claim", "claims the", "wrong form", "measure-kind",
+                "measure kind", "crowned a"):
+        if sig in r:
+            return "identity"
+    # Board signals. `x factor` is the GUARD'S OWN wording for the same finding - audit-tile-integrity
+    # prints "1.59x factor  balsamic-vinegar / Family Fare  board=... link=..." - and omitting it left
+    # the two holds re-recorded on 2026-09-09 reading as unclassed. That is the second time wording
+    # alone moved a hold between classes, which is this classifier's real limitation: it reads prose,
+    # so it is only ever as good as the vocabulary the guards happen to use.
+    if "unit-basis" in r or "unit basis" in r or "outlier" in r or "x factor" in r:
+        return "board"
+    return "unclassed"
+
+
 def _board_week() -> str:
     """The board a hold was recorded against, so a later re-check knows what its reason was true OF.
     Returns '' when there is no board - a worktree or a clean checkout has none, and an empty string
@@ -184,10 +224,11 @@ def recheck_holds(learned: dict, catalog) -> int:
         print("BOARD IS ABSENT (grocery/out/comparison-*.json is gitignored) - the board column below")
         print("is BLIND, not zero. Do not read 'inert' off this run.")
     print()
-    print(f"{'commodity':<22} {'age':>5}  {'learned':<8} {'in-cat':<7} {'board':<6} pattern")
+    print(f"{'commodity':<22} {'age':>5}  {'why':<10} {'learned':<8} {'in-cat':<7} {'board':<6} pattern")
     print("-" * 104)
 
     moot = contradicted = inert = 0
+    by_class = {"identity": 0, "board": 0, "unclassed": 0}
     for h in holds:
         cid, pat = h.get("commodity"), h.get("pattern")
         try:
@@ -205,7 +246,9 @@ def recheck_holds(learned: dict, catalog) -> int:
         if board_rows and hits is not None and not hits:
             inert += 1
         hit_s = "n/a" if not board_rows else ("BADRX" if hits is None else str(len(hits)))
-        print(f"{cid:<22} {age_s:>5}  {str(still):<8} {str(incat):<7} {hit_s:<6} {pat[:44]}")
+        klass = classify_reason(h.get("reason"))
+        by_class[klass] = by_class.get(klass, 0) + 1
+        print(f"{cid:<22} {age_s:>5}  {klass:<10} {str(still):<8} {str(incat):<7} {hit_s:<6} {pat[:44]}")
         if hits:
             print(f"{'':<22} {'':>5}  would newly claim e.g. {hits[0][:64]!r}")
 
@@ -218,10 +261,21 @@ def recheck_holds(learned: dict, catalog) -> int:
     else:
         print(f"INERT TODAY  : NOT MEASURED - no board in this checkout")
     print()
+    print(f"REASON CLASS - identity {by_class['identity']}, board {by_class['board']}, "
+          f"unclassed {by_class['unclassed']}, of {n}")
+    print("  identity  = the pattern claims the WRONG PRODUCT. No amount of board rebuilding makes")
+    print("              that true, so these can NEVER expire and must not be cleared by a timer.")
+    print("  board     = it disagreed with its own link on ONE board, weeks ago. The board is rebuilt")
+    print("              daily, so these are the re-testable ones - the only real candidates here.")
+    print("  unclassed = the reason could not be read. Reported as such rather than guessed into a")
+    print("              bucket, because calling it re-testable would be inventing permission.")
+    print()
     print("NOTHING WAS CLEARED AND NOTHING WAS PROMOTED. A hold that is moot, contradicted or inert")
     print("is a CANDIDATE for review, not a verdict: clearing one still means re-running the full")
-    print("guard suite, which is what the file's own note has always said. Whether that re-test")
-    print("should happen on a cadence or only on demand is a ruling nobody has made (backlog I92).")
+    print("guard suite, which is what the file's own note has always said.")
+    print("RULED 2026-09-09 (backlog I92): this READ runs on a cadence from the daily chain; the")
+    print("CLEAR never does. A hold that ages out on a timer would have re-armed the kosher-salt")
+    print("cross-claim on a live board, which is why the dangerous half stays human.")
     return 0
 
 
@@ -562,6 +616,49 @@ def _selftest() -> int:
     T("CLEAN TWIN None inputs are treated as empty rather than throwing - a commodity with no learned patterns is normal",
       (not still) and (not incat) and hits == [], f"{still}/{incat}/{hits}")
 
+    # ---- reason class (2026-09-09, backlog I92) --------------------------------------------------
+    # MUST FIRE: the kosher-salt hold, verbatim. A cross-claim is about what the pattern MEANS, so it
+    # can never expire, and a timer that cleared it would have re-armed a known-wrong claim on a live
+    # board. This is the case that decided the whole ruling.
+    T("MUST FIRE  a cross-claim reason is 'identity' - it can never expire",
+      classify_reason('guards 2026-08-21: cross-claims the sea-salt cell ("Sea Salt, Coarse, Kosher")')
+      == "identity", classify_reason("cross-claims the sea-salt cell"))
+
+    # MUST FIRE: a unit-basis outlier is a statement about ONE board, and the board is rebuilt daily.
+    T("MUST FIRE  a unit-basis outlier is 'board' - re-testable, because the board moved",
+      classify_reason("guards 2026-08-21: 1.59x unit-basis outlier vs its own link (Alessi 12.75 Oz)")
+      == "board", classify_reason("1.59x unit-basis outlier"))
+
+    # MUST NOT FIRE: the generic auto-hold reason must NOT be read as re-testable. Guessing it into
+    # the 'board' bucket would invent permission to clear a hold nobody diagnosed.
+    T("MUST NOT FIRE  the generic auto-hold reason is 'unclassed', never 'board'",
+      classify_reason("promote_aliases --gated: the guard suite hard-failed naming this commodity, "
+                      "and went green once it was withheld") == "unclassed",
+      classify_reason("promote_aliases --gated: the guard suite hard-failed"))
+    T("MUST NOT FIRE  an empty reason is unclassed, not identity", classify_reason("") == "unclassed",
+      classify_reason(""))
+
+    # MUST FIRE: the two real reasons that came back unclassed on the first live run. Both say the
+    # pattern pulls in the wrong KIND of thing, which no board rebuild can fix.
+    T("MUST FIRE  'wrong FORM' is identity - a melting cheese is not a shredded one on any board",
+      classify_reason("match-soundness 2026-08-21: pulled La Morenita Queso Quesadilla (a MELTING "
+                      "cheese, name never says shredded) into the shredded row - wrong FORM")
+      == "identity", classify_reason("wrong FORM"))
+    T("MUST FIRE  a measure-kind mismatch is identity, not a board accident",
+      classify_reason("guards 2026-08-21: crowned a 128 fl oz cell on a weight-priced row "
+                      "(measure-kind mismatch)") == "identity", classify_reason("measure-kind mismatch"))
+    T("MUST NOT FIRE  a None reason does not throw", classify_reason(None) == "unclassed", "threw")
+
+    # MUST FIRE: the guard's own wording for the same finding. Frozen from the 2026-09-09 re-test,
+    # which recorded "1.59x factor" and was read as unclassed until this signal was added.
+    T("MUST FIRE  the guard's own 'x factor' wording is a board reason too",
+      classify_reason("guards 2026-09-09 RE-TEST: 1.59x factor, balsamic-vinegar / Family Fare, "
+                      "board=0.2465 link=0.3914") == "board", classify_reason("1.59x factor"))
+
+    # CLEAN TWIN: classification is case-insensitive, so a reason written in caps is not unclassed.
+    T("CLEAN TWIN  the match is case-insensitive",
+      classify_reason("1.59X UNIT-BASIS OUTLIER") == "board", classify_reason("1.59X UNIT-BASIS OUTLIER"))
+
     # ---- the rate limit on the hold actuator (2026-09-09, backlog I93) --------------------------
     # MUST FIRE: the founding hazard. One degraded guard run naming many commodities would have
     # written a permanent hold for every one of them in a single pass.
@@ -592,7 +689,7 @@ def _selftest() -> int:
     if fails:
         print(f"SELF-TEST FAIL: {len(fails)} case(s)")
         return 1
-    print("SELF-TEST PASS: 15 case(s) resolved - 5 must-fire, 5 must-not-fire, 4 clean twins. Led by "
+    print("SELF-TEST PASS: 24 case(s) resolved - 10 must-fire, 8 must-not-fire, 5 clean twins. Led by "
           "the founding one (a hold whose cause is still on the board keeps its evidence) and, since "
           "backlog I93, by the rate limit that refuses an implausibly large hold batch rather than "
           "latching every one of them permanently in a single pass")

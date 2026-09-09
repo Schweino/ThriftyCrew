@@ -3,12 +3,6 @@
   "holds": [
     {
       "commodity": "balsamic-vinegar",
-      "pattern": "balsamic\\b.{0,20}vinegar",
-      "held": "2026-08-21",
-      "reason": "guards 2026-08-21: 1.59x unit-basis outlier vs its own link (Alessi 12.75 Oz)"
-    },
-    {
-      "commodity": "balsamic-vinegar",
       "pattern": "vinegar,\\s*(?:[^,]*,\\s*)?balsamic",
       "held": "2026-08-21",
       "reason": "guards 2026-08-21: 1.59x unit-basis outlier vs its own link (Alessi 12.75 Oz)"
@@ -34,12 +28,6 @@
     {
       "commodity": "green-olives",
       "pattern": "\\bsalad\\s+olives\\b",
-      "held": "2026-08-21",
-      "reason": "guards 2026-08-21: 0.54x unit-basis outlier vs its own link (Tuscan Garden Manzanilla)"
-    },
-    {
-      "commodity": "green-olives",
-      "pattern": "\\bstuffed\\b.{0,20}olives\\b",
       "held": "2026-08-21",
       "reason": "guards 2026-08-21: 0.54x unit-basis outlier vs its own link (Tuscan Garden Manzanilla)"
     },
@@ -96,6 +84,22 @@
       "pattern": "queso\\s+quesadilla",
       "held": "2026-08-21",
       "reason": "match-soundness 2026-08-21: pulled La Morenita Queso Quesadilla (a MELTING cheese, name never says shredded) into the shredded row - wrong FORM, same class as the packet-means-packet ruling"
+    },
+    {
+      "commodity": "balsamic-vinegar",
+      "pattern": "balsamic\\b.{0,20}vinegar",
+      "held": "2026-09-09",
+      "held_by": "promote_aliases --gated",
+      "board_week": "2026-09-08",
+      "reason": "guards 2026-09-09 RE-TEST: 1.59x factor, balsamic-vinegar / Family Fare, board=0.2465 link=0.3914 [Alessi Balsamic Vinegar 12.75 Oz]. THE SAME 1.59x AS 2026-08-21, reproduced 19 days and ~19 board rebuilds later - this is a stable defect, not a board accident."
+    },
+    {
+      "commodity": "green-olives",
+      "pattern": "\\bstuffed\\b.{0,20}olives\\b",
+      "held": "2026-09-09",
+      "held_by": "promote_aliases --gated",
+      "board_week": "2026-09-08",
+      "reason": "guards 2026-09-09 RE-TEST: 0.54x factor, green-olives / Aldi, board=0.4271 link=0.229 [Tuscan Garden Manzanilla Olives]. THE SAME 0.54x AS 2026-08-21, reproduced 19 days later - a stable defect, not a board accident."
     }
   ]
 }

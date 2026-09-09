@@ -757,6 +757,32 @@ if ((Test-Path $gsc) -and (Test-Path $pyExe)) {
   else { [void]$ok.Add((($gsLine -replace '\s+', ' ').Trim())) }
 }
 
+# ---- 5a3a. promotion holds: the READ, on a cadence. The CLEAR never is. -----------------------
+# RULED BY BRAD 2026-09-09 (backlog I92): schedule the read, never the clear.
+#
+# `--recheck-holds` is READ-ONLY - it promotes nothing, clears nothing, and does not run the guard
+# suite - so a daily run costs one board read and can change no state. What it buys is that the
+# information arrives without anyone remembering to ask: sixteen holds sat unexamined for nineteen
+# days, and thirteen of them turned out to be inert, which nobody could have known without looking.
+#
+# WHY THE CLEAR STAYS HUMAN, and it is not caution for its own sake. The kosher-salt hold exists
+# because its pattern CROSS-CLAIMS the sea-salt cell, and the one row it still matches today is that
+# exact cell. A hold that aged out on a timer would have re-armed a known-wrong claim on a live board.
+# The report now separates `identity` reasons (about what a pattern MEANS - these can never expire)
+# from `board` reasons (about one week's products - these are the re-testable ones).
+#
+# Reported as a heads-up, never a finding: nothing here is broken, and a chain entry that cries wolf
+# on a healthy state is one people learn to skip.
+$rhs = Join-Path (Split-Path $root -Parent) 'graph\learning\promote_aliases.py'
+$pyExe3 = 'C:\Codex\Python312\python.exe'
+if ((Test-Path $rhs) -and (Test-Path $pyExe3)) {
+  $rhOut = & $pyExe3 $rhs --recheck-holds
+  $rhRc = $LASTEXITCODE
+  $rhLine = ($rhOut | Where-Object { $_ -match '^REASON CLASS|^PROMOTION HOLDS|BOARD IS ABSENT' } | Select-Object -First 1)
+  if ($rhRc -ne 0) { [void]$findings.Add("PROMOTION HOLDS could not be re-checked: $rhLine") }
+  else { [void]$ok.Add((($rhLine -replace '\s+', ' ').Trim())) }
+}
+
 # ---- 5a3b. a graph.db SCHEMA change that left no record --------------------------------------
 # RULED BY BRAD 2026-09-09 (backlog I41): a written record plus a detector, and NOT a staged-migration
 # capability - nothing here knows how to do expand-contract, backfill or rollback.
