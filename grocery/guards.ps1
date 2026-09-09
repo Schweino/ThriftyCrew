@@ -77,6 +77,16 @@ function InEngineSet([string]$fullName) { return $script:ENGINE_FILES.ContainsKe
   and the remaining eleven 8.1s between them. Serially that is 33.2s of a 42.5s gate; run concurrently the
   batch costs whatever its LONGEST member costs.
 
+  RE-READ 2026-09-09, and the profile above is OBSOLETE - see design\MEASURE-daily-chain-cost-2026-09-09.md.
+  The numbers in this header are honest about 2026-08-22 and this file has changed since, which by this
+  estate's own rule makes them unqualified rather than wrong. Measured at commit 47150b330 against the
+  2026-09-09 board: guards.ps1 is 49.3s wall, exit 0. The child this tuning was aimed at, audit-known-wrong,
+  has fallen 15.7s -> 3.4s and is now the FOURTH CHEAPEST. In its place audit-capture-encoding, which is not
+  in the list above at all, is 22.0s - 42% of all child work, and since the batch costs its longest member,
+  it alone sets the floor, with the next longest child at 6.3s. Any future work on this chain's cost is that
+  one audit and nothing else. The LAUNCH-EARLY-HARVEST-LATE shape below was checked the same day and is
+  right; run-gates.ps1 had four sequential pools and this file never did.
+
   WHY NOT dot-source their decision functions into this process (the other obvious idea): EVERY child audit
   in this tree declares param() AT FILE SCOPE. Dot-sourcing one therefore executes its param block in THIS
   scope and clobbers the caller's variables - the trap capture-policy-lib.ps1's header and browser-feeds-lib's
