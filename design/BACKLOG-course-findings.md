@@ -7444,7 +7444,44 @@ rather than a library boundary, even though the library shape exists and works. 
 organisation has no interface negotiation to force one.
 
 
-### I85 - the orphan census only ever examined grocery, and 72 scripts elsewhere have never been checked by anything `PARTLY DONE - THE SCOPE LINE SHIPPED; THE RATCHET OVER THE OTHER 72 HAS NOT` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I85 - the orphan census only ever examined grocery, and 72 scripts elsewhere have never been checked by anything `DONE - THE POPULATION IS THE WHOLE REPO NOW, ON A TWO-TIER DESIGN` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**`[CLOSED 2026-09-09. Rung 2 done: the re-keying, the widening and the ratchet.]`**
+
+**The blocker the item named is cleared.** `$KNOWN`'s 52 keys were relative to `$Root`, so widening
+the population made every one of them stop matching and come back as a false orphan. They are
+**repo-relative now** (`grocery\<name>`), and the uncalled list is keyed off `$ScanRoot` rather than
+`$Root`, so **the same `$KNOWN` line means the same file whatever the population is set to.**
+
+**TWO TIERS, and the split is the whole design.** `grocery\` keeps the hard rule it has always had -
+a new unrecorded orphan there is a FAIL. Everything outside it is a **ratchet** whose high-water mark
+may only go DOWN. Neither tier can be satisfied by looking away: widening it as a plain gate would
+have landed 74 findings on day one, and leaving it out is what hid them.
+
+**Measured after widening: population 273 -> 530 scripts (plus 38 under `out\`), against 640
+executable files. 106 uncalled, of which 74 sit outside `grocery\`.** The item predicted 72; it is 74.
+
+**Verified by making the ratchet fire, not by trusting it:** a one-line script dropped under `ops\`
+took the count to 75 and the census exited **2** naming both numbers; `-WideBaseline` then **REFUSED**
+to raise the mark; removing the probe returned exit 0. Recording `ops\merge-backlog-inbox.ps1` as a
+deliberate lowered the mark 74 -> 73, which is the ratchet working in the direction it is supposed to.
+
+**`ops\merge-backlog-inbox.ps1` now has somewhere to be recorded**, which the item listed as
+unresolved - it is uncalled on purpose because id allocation is a one-writer operation and the merge
+is a judgement. **It is also the script whose orphan status could not be recorded anywhere, which is
+how this item was found in the first place.**
+
+**A regression I caused and caught in the same run, worth recording because the shape recurs.**
+Widening `$Root` silently broke two things that were correct only while `$Root` was `grocery\`:
+the `out\` exclusion was anchored at `^out\`, so 38 one-off scripts under `grocery\out\` stopped
+matching and came back as ORPHANs - **a day-one wall of red produced entirely by the widening**; and
+the frozen `OutBaseline` of 38 briefly counted every `out\` directory in the repo and failed at 39.
+**A number moving because its definition moved is the one way a baseline can lie**, so the population
+test is now `(^|\)out\` anywhere while the baseline check stays scoped to `grocery\out\`.
+
+**Not a regression, checked before assuming: the "20 recorded entries are no longer uncalled" note
+predates this change** - the last committed run reported 52 recorded against 32 uncalled, which is the
+same 20. `run-gates` exit 0, `pass=294 fail=0`.
 
 **`[HALF SHIPPED 2026-09-08.]`** `grocery/audit-script-census.ps1` now opens every run with a
 SCOPE line naming both trees, and says out loud when they differ:
