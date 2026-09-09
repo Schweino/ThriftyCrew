@@ -27,9 +27,11 @@
               AND checks that the watcher's registry names the same tasks this file registers.
               Changes nothing. This is the mode that can run in a gate or unattended.
     -VerifyRegistry
-              read-only and HERMETIC: compares the $OWNED table below against
-              grocery\expected-automations.json and touches no scheduler at all, so it runs on a bare
-              checkout and in ops\run-gates.ps1. See the essay on Test-RegistryAgrees for why.
+              read-only and HERMETIC: compares the $OWNED table below - AND every task name with a
+              committed definition in ops\scheduled-tasks\*.xml, whoever registers it - against
+              grocery\expected-automations.json, touching no scheduler at all, so it runs on a bare
+              checkout and in ops\run-gates.ps1. See the essay on Test-RegistryAgrees for why, and
+              Get-CommittedTaskNames for why $OWNED alone covered the wrong three of the five.
     -Install  registers/updates the three TC Grocery tasks from the XML. CHANGES SYSTEM STATE.
     -FixName  additionally renames "TC Grocery Capture Watchdog 0930" to ...1030 to match the time it
               actually runs. SEPARATE SWITCH ON PURPOSE: a rename is an unregister followed by a
@@ -114,6 +116,51 @@ function Test-NameMatchesTime {
 
 $REGISTRY = Join-Path $repo 'grocery\expected-automations.json'
 
+function Get-CommittedTaskNames {
+  <# Every task NAME that has a committed definition in ops\scheduled-tasks\*.xml, read from <URI>.
+
+     WHY THIS WIDENS THE GATE (2026-09-09, queue 2026-09-09-d3e937). Test-RegistryAgrees was fed
+     $OWNED, which is the THREE TC Grocery tasks this file registers - so it covered three of the five
+     live tasks, and the two it did not cover are precisely the two that were registered by other
+     lanes and left unwatched from birth (TC Graph Nightly Matching 08-22, added to the registry
+     08-25; TC Recipe Harvest Crawl 08-24, likewise hand-added later). A gate that only checks the
+     tasks whose registrar already remembered to check them is a gate aimed at the wrong half.
+
+     OWNERSHIP IS UNCHANGED. This is read-only over committed files and feeds the CHECK only; the
+     -Install path still walks $OWNED alone, so this file never fights the other registrars for the
+     tasks it does not own.
+
+     Pure over its argument so the fixtures can drive it. #>
+  param([Parameter(Mandatory=$true)][string]$Dir)
+  $names = @()
+  if (-not (Test-Path $Dir)) { return ,$names }
+  $files = @(Get-ChildItem -Path $Dir -Filter '*.xml' -File -ErrorAction SilentlyContinue)
+  foreach ($f in $files) {
+    $uri = Get-XmlField -Xml ([IO.File]::ReadAllText($f.FullName)) -Tag 'URI'
+    if ($uri) { $names += ([string]$uri).TrimStart('\') }
+  }
+  return ,$names
+}
+
+function Get-RegistryAuditSet {
+  <# The set Test-RegistryAgrees is judged over: $OWNED, plus every committed definition not already
+     in it. The extra rows carry Source='a committed definition' so the finding says which table the
+     task came from, and no Legacy field, because a rename this file did not perform is not its call.
+
+     Pure over its arguments. #>
+  param([Parameter(Mandatory=$true)]$Owned, [Parameter(Mandatory=$true)]$CommittedNames)
+  $set = @()
+  $seen = @()
+  foreach ($o in @($Owned)) { $set += $o; $seen += [string]$o.Name }
+  foreach ($n in @($CommittedNames)) {
+    if ($seen -notcontains [string]$n) {
+      $set += [pscustomobject]@{ Name = [string]$n; File = ''; Source = 'a committed definition in ops\scheduled-tasks' }
+      $seen += [string]$n
+    }
+  }
+  return ,$set
+}
+
 function Test-RegistryAgrees {
   <# Do the registrar and the WATCHER'S registry name the same tasks? Returns a list of findings.
 
@@ -137,7 +184,9 @@ function Test-RegistryAgrees {
   foreach ($row in @($Registry.windows_tasks)) { if ($row -and $row.name) { $names += [string]$row.name } }
   foreach ($o in @($Owned)) {
     if ($names -notcontains [string]$o.Name) {
-      $findings += ("registrar registers '{0}' and grocery\expected-automations.json does not name it - the task is UNWATCHED, so health-heartbeat cannot notice if it stops firing" -f $o.Name)
+      $src = 'registrar registers'
+      if ($o.PSObject.Properties['Source'] -and [string]$o.Source) { $src = [string]$o.Source + ' exists for' }
+      $findings += ("{0} '{1}' and grocery\expected-automations.json does not name it - the task is UNWATCHED, so health-heartbeat cannot notice if it stops firing" -f $src, $o.Name)
     }
     $legacy = ''
     if ($o.PSObject.Properties['Legacy']) { $legacy = [string]$o.Legacy }
@@ -266,8 +315,55 @@ if ($SelfTest) {
     Write-Output ('FAIL  the registry is missing: ' + $REGISTRY); $fail++
   }
 
+  # ---- the WIDENED set: every committed definition, not only the three this file owns -------------
+  # (2026-09-09, queue 2026-09-09-d3e937)
+  #
+  # MUST FIRE, AND IT IS THE ESTATE'S REAL 2026-08-22..08-25 STATE, FROZEN. Five definitions are
+  # committed; the registry does not name TC Graph Nightly Matching. For three mornings that was
+  # exactly true of this tree, and the ONLY thing that noticed was health-heartbeat printing TASK
+  # UNWATCHED the next day - an alarm whose only follower is a human typing an entry. The old
+  # $OWNED-only check could not see it at all, because that task has a different registrar.
+  $wNames = @('TC Grocery Ad Pulls 0700', 'TC Grocery Daily Capture 0800',
+              'TC Grocery Capture Watchdog 1030', 'TC Graph Nightly Matching', 'TC Recipe Harvest Crawl')
+  $wOwned = @(
+    [pscustomobject]@{ Name = 'TC Grocery Ad Pulls 0700';         File = 'a.xml' }
+    [pscustomobject]@{ Name = 'TC Grocery Daily Capture 0800';    File = 'b.xml' }
+    [pscustomobject]@{ Name = 'TC Grocery Capture Watchdog 1030'; File = 'c.xml' }
+  )
+  $wSet = Get-RegistryAuditSet -Owned $wOwned -CommittedNames $wNames
+  T 'the widened set is the three owned tasks plus the two other registrars'' definitions' ($wSet.Count -eq 5) ([string]$wSet.Count)
+  $wStale = [pscustomobject]@{ windows_tasks = @(
+    [pscustomobject]@{ name = 'TC Grocery Ad Pulls 0700' }
+    [pscustomobject]@{ name = 'TC Grocery Daily Capture 0800' }
+    [pscustomobject]@{ name = 'TC Grocery Capture Watchdog 1030' }
+    [pscustomobject]@{ name = 'TC Recipe Harvest Crawl' }
+  ) }
+  $wf = Test-RegistryAgrees -Owned $wSet -Registry $wStale
+  T 'MUST FIRE  a committed definition absent from the registry is UNWATCHED, even though this file does not own it' `
+    ($wf.Count -eq 1 -and (($wf -join ' ') -like '*UNWATCHED*') -and (($wf -join ' ') -like '*TC Graph Nightly Matching*')) ($wf -join '; ')
+  T 'MUST FIRE  and the finding says the task came from a committed definition, not from this registrar' `
+    ((($wf -join ' ') -like '*committed definition*')) ($wf -join '; ')
+
+  # MUST NOT FIRE: the same five names against a registry that carries all five. Zero findings, or the
+  # gate is red on day one and gets switched off.
+  $wGood = [pscustomobject]@{ windows_tasks = @($wNames | ForEach-Object { [pscustomobject]@{ name = $_ } }) }
+  $wg = Test-RegistryAgrees -Owned $wSet -Registry $wGood
+  T 'MUST NOT FIRE a registry naming every committed definition is silent' ($wg.Count -eq 0) ($wg -join '; ')
+
+  # MUST NOT FIRE, against the REAL committed XML directory and the REAL registry on disk. This is the
+  # half a frozen fixture cannot prove: that the five definitions shipped in this tree and the five
+  # registry rows shipped in this tree agree TODAY.
+  $liveNames = Get-CommittedTaskNames -Dir $XMLDIR
+  T 'the committed definitions on disk yield five task names through <URI>' ($liveNames.Count -eq 5) (($liveNames -join ', ') + " [n=" + $liveNames.Count + "]")
+  if (Test-Path $REGISTRY) {
+    $rLive2 = [IO.File]::ReadAllText($REGISTRY) | ConvertFrom-Json
+    $liveSet = Get-RegistryAuditSet -Owned $OWNED -CommittedNames $liveNames
+    $lf = Test-RegistryAgrees -Owned $liveSet -Registry $rLive2
+    T 'MUST NOT FIRE every committed definition in this tree is named in expected-automations.json' ($lf.Count -eq 0) ($lf -join '; ')
+  }
+
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); Write-GuardComplete -Name 'grocery-tasks' -Summary ("selftest-fail={0}" -f $fail); exit 2 }
-  Write-Output 'SELF-TEST PASS: drift on arguments and on time, the lost-Hidden case, the 0930 name lie and its twins, the committed definitions, and the registrar-vs-registry agreement (frozen half-applied rename + the live tables)'
+  Write-Output 'SELF-TEST PASS: drift on arguments and on time, the lost-Hidden case, the 0930 name lie and its twins, the committed definitions, the registrar-vs-registry agreement (frozen half-applied rename + the live tables), and the WIDENED set - a committed definition from another lane''s registrar that the registry does not name, frozen from the estate''s real 2026-08-22..08-25 state'
   Exit-Guard -Name 'grocery-tasks' -Summary 'selftest=pass' -Code 0
 }
 
@@ -291,14 +387,23 @@ if ($VerifyRegistry) {
     Write-Output 'GROCERY TASKS REGISTRY COULD NOT EVALUATE: expected-automations.json carries ZERO windows_tasks rows, so agreement is unprovable rather than clean.'
     Exit-Guard -Name 'grocery-tasks' -Summary 'blind=no-rows' -Code 3
   }
-  $regFindings = Test-RegistryAgrees -Owned $OWNED -Registry $regDoc
+  # EVERY COMMITTED DEFINITION, not only the three this file owns (2026-09-09, queue
+  # 2026-09-09-d3e937). See Get-CommittedTaskNames for why the old $OWNED-only scope was aimed at the
+  # wrong half of the estate's tasks.
+  $committed = Get-CommittedTaskNames -Dir $XMLDIR
+  if (-not $committed.Count) {
+    Write-Output ("GROCERY TASKS REGISTRY COULD NOT EVALUATE: {0} yielded ZERO task names, so 'every committed definition is watched' is unprovable rather than clean. Discovery broken, NOT a clean tree." -f $XMLDIR)
+    Exit-Guard -Name 'grocery-tasks' -Summary 'blind=no-committed-definitions' -Code 3
+  }
+  $auditSet = Get-RegistryAuditSet -Owned $OWNED -CommittedNames $committed
+  $regFindings = Test-RegistryAgrees -Owned $auditSet -Registry $regDoc
   foreach ($f in $regFindings) { Write-Output ('  ' + $f) }
   if ($regFindings.Count -gt 0) {
-    Write-Output ("GROCERY TASKS REGISTRY DISAGREES: {0} finding(s) over {1} registrar-owned task(s) against {2} registry row(s). A task name is a foreign key in two hand-maintained tables and nothing compared them at change time, so a rename applied to the scheduler and to this registrar shipped while the watcher still named the old key. Fix the row in grocery\expected-automations.json (keep its allow_nonzero_exit and max_age_hours), not this table." -f $regFindings.Count, @($OWNED).Count, $regRows.Count)
-    Exit-Guard -Name 'grocery-tasks' -Summary ("registry-owned={0} rows={1} findings={2}" -f @($OWNED).Count, $regRows.Count, $regFindings.Count) -Code 2
+    Write-Output ("GROCERY TASKS REGISTRY DISAGREES: {0} finding(s) over {1} task(s) ({2} registrar-owned + {3} committed definition(s)) against {4} registry row(s). A task name is a foreign key in two hand-maintained tables and nothing compared them at change time, so a rename applied to the scheduler and to this registrar shipped while the watcher still named the old key, and two tasks registered by other lanes were unwatched from birth. Fix the row in grocery\expected-automations.json (keep its allow_nonzero_exit and max_age_hours), not this table." -f $regFindings.Count, $auditSet.Count, @($OWNED).Count, $committed.Count, $regRows.Count)
+    Exit-Guard -Name 'grocery-tasks' -Summary ("registry-judged={0} owned={1} committed={2} rows={3} findings={4}" -f $auditSet.Count, @($OWNED).Count, $committed.Count, $regRows.Count, $regFindings.Count) -Code 2
   }
-  Write-Output ("grocery-tasks registry: PASSED - all {0} registrar-owned task(s) are named in expected-automations.json and no legacy name survives there ({1} registry row(s) read)." -f @($OWNED).Count, $regRows.Count)
-  Exit-Guard -Name 'grocery-tasks' -Summary ("registry-owned={0} rows={1} findings=0" -f @($OWNED).Count, $regRows.Count) -Code 0
+  Write-Output ("grocery-tasks registry: PASSED - all {0} task(s) ({1} registrar-owned + {2} committed definition(s)) are named in expected-automations.json and no legacy name survives there ({3} registry row(s) read)." -f $auditSet.Count, @($OWNED).Count, $committed.Count, $regRows.Count)
+  Exit-Guard -Name 'grocery-tasks' -Summary ("registry-judged={0} owned={1} committed={2} rows={3} findings=0" -f $auditSet.Count, @($OWNED).Count, $committed.Count, $regRows.Count) -Code 0
 }
 
 if ($Install -or $FixName) {
@@ -370,7 +475,12 @@ foreach ($o in $OWNED) {
 if (Test-Path $REGISTRY) {
   $regDoc2 = $null
   try { $regDoc2 = [IO.File]::ReadAllText($REGISTRY) | ConvertFrom-Json } catch { $regDoc2 = $null }
-  if ($regDoc2) { foreach ($rf2 in (Test-RegistryAgrees -Owned $OWNED -Registry $regDoc2)) { $findings += $rf2 } }
+  if ($regDoc2) {
+    $committed2 = Get-CommittedTaskNames -Dir $XMLDIR
+    $auditSet2 = Get-RegistryAuditSet -Owned $OWNED -CommittedNames $committed2
+    $rf2list = Test-RegistryAgrees -Owned $auditSet2 -Registry $regDoc2
+    foreach ($rf2 in $rf2list) { $findings += $rf2 }
+  }
   else { $findings += 'grocery\expected-automations.json did not parse, so whether these tasks are watched at all is UNKNOWN this run' }
 } else {
   $findings += 'grocery\expected-automations.json is missing, so nothing is watching these tasks for silent death'

@@ -26,7 +26,11 @@
   </Settings>
   <Triggers>
     <CalendarTrigger>
-      <StartBoundary>2026-08-22T21:30:00-05:00</StartBoundary>
+      <StartBoundary>2026-09-09T21:30:00-05:00</StartBoundary>
+      <Repetition>
+        <Interval>PT1H</Interval>
+        <Duration>PT8H</Duration>
+      </Repetition>
       <ScheduleByDay>
         <DaysInterval>1</DaysInterval>
       </ScheduleByDay>

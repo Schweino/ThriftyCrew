@@ -1,11 +1,25 @@
 {
-  "note": "I73/I75/I76 ratchet. orphans and components may only go DOWN or stay; a RISE is a new island nobody explained. valence is REPORTED, never gated - it is expected to rise, and the number exists so a slower query can be attributed to densification rather than to growth.",
+  "note": "I73/I75/I76 ratchet. structural_orphans and structural_components may only go DOWN or stay; a RISE is a new island nobody explained, and the verdict NAMES the node. `orphans`, `components`, `nodes`, `edges` and `largest` are the RAW figures - measured and reported, never gated, because CategoryExclude is degree 0 by construction and a new exclude pattern is not a new island (queue 2026-09-09-c2c10b). valence is REPORTED too - it is expected to rise, and the number exists so a slower query can be attributed to densification rather than to growth.",
   "recorded": {
-    "nodes": 48138,
-    "edges": 86054,
-    "orphans": 205,
-    "components": 213,
-    "largest": 47919,
-    "valence": 1.7877
+    "nodes": 48312,
+    "edges": 86332,
+    "orphans": 207,
+    "components": 215,
+    "largest": 48091,
+    "valence": 1.787,
+    "structural_orphans": 6,
+    "structural_components": 14,
+    "structural_orphan_ids": [
+      "commodity:recipe:colby-jack-cheese",
+      "commodity:recipe:fat-free-mozzarella",
+      "ingmap:310c6469154d4983769f",
+      "ingmap:648e7dc851fb4ffe2447",
+      "ingmap:6b4cc6ad6d397e2cd4e0",
+      "ingmap:ada1dd054ef795e7ec2b"
+    ],
+    "by_construction_orphans": 201,
+    "by_construction_edged": {
+      "CategoryExclude": 0
+    }
   }
 }

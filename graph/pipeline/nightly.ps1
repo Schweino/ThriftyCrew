@@ -109,16 +109,18 @@ $statusF  = Join-Path $grocery 'out\logs\graph-nightly-status.json'
 # output was the status JSON written at the very END - so a run that died before that line left
 # nothing at all, which is indistinguishable from a run that never started. graph-nightly-status.json
 # is KEPT; the transcript is the half that was missing, and Done() stamps the exit code last.
-# NOT STARTED UNDER -SelfTest: that branch has its own PASS/FAIL line, and starting a transcript for
-# it would leave a log behind on every run-gates run.
+#
+# THE CALL ITSELF LIVES BELOW THE -StopOnly AND -WhatIfOnly BRANCHES, and it used to live here
+# (2026-09-09, queue 2026-09-09-d3e937). Start-RunLog ran for EVERY verb except -SelfTest, so a
+# hand-typed `-StopOnly` or `-WhatIfOnly` wrote a today-dated graph-nightly-<date>.log for a job that
+# did no work - and neither branch reaches Done(), so the file carried no `rc=` stamp either. On
+# 2026-09-09 that is exactly what happened: two transcripts, 07:31 and 08:03, on the morning after
+# the 09-08 21:30 occurrence was lost to a Windows Update reboot. Anyone triaging by "is there a log
+# dated today" read green over a 37-hour gap. A log that makes a non-run look like a run is how that
+# gap survived triage, so only the chain may write under the chain's name. The rule generalises: if
+# a verb wants a record, it gets its OWN name and its own rc stamp, never the run's.
 . (Join-Path $grocery 'run-log-lib.ps1')
 $runLog = $null
-if (-not $SelfTest) {
-  # Start-RunLog appends 'logs' to OutDir itself, so this passes grocery\out and NOT grocery\out\logs -
-  # the latter would file the transcript under out\logs\logs and hide it from the one directory a
-  # human already opens.
-  $runLog = Start-RunLog -Name 'graph-nightly' -OutDir (Join-Path $grocery 'out')
-}
 function Done {
   param([int]$Rc = 0)
   Stop-RunLog -ExitCode $Rc -Path $runLog
@@ -170,6 +172,68 @@ function Test-WindowUsable {
     return ("only {0} min to the deadline ({1}); the chain needs at least {2}" -f $left, $Deadline.ToString('HH:mm'), $MinMinutes)
   }
   return ''
+}
+
+function Get-NightWindowStart {
+  <#
+    .SYNOPSIS Which night is $Now in? Returns the datetime of that night's first occurrence.
+    .DESCRIPTION A night SPANS MIDNIGHT, so "today" is the wrong unit. 23:30 on the 9th and 03:30 on
+                 the 10th belong to the same night, whose start is the 9th at 21:30. Before 21:30 the
+                 night that is running is YESTERDAY's. Pure.
+  #>
+  param([datetime]$Now, [string]$WindowStart = '21:30')
+  $t = [datetime]::ParseExact($WindowStart, 'HH:mm', $null)
+  $s = $Now.Date.AddHours($t.Hour).AddMinutes($t.Minute)
+  if ($Now -lt $s) { $s = $s.AddDays(-1) }
+  return $s
+}
+
+function Test-AlreadyRanThisWindow {
+  <#
+    .SYNOPSIS Has the chain already done this night's work? Returns '' to run, or the skip reason.
+    .DESCRIPTION THE GUARD ON THE CATCH-UP (2026-09-09, queue 2026-09-09-d3e937). The task now has
+                 hourly occurrences from 21:30 to 05:30 so a night lost to a Windows Update reboot
+                 can still be picked up at the next sign-in. That only works if the SECOND occurrence
+                 after a good run is a no-op, and the shape of the no-op decides whether the catch-up
+                 exists at all.
+
+                 IT KEYS ON THE STATUS STAMP, and specifically on `started` plus a resolve stage that
+                 reached OK or PARTIAL. The two obvious alternatives are both wrong in the same
+                 direction and would silently retire the feature:
+
+                   * LastRunTime - the scheduler advances it for an occurrence that STARTED, so a
+                     window the chain refused (Test-WindowUsable) or a crash before resolve would
+                     read as "ran" and nothing would ever retry.
+                   * the transcript - written the moment the chain starts, so it says a run began and
+                     nothing about whether it finished.
+
+                 A refused or crashed earlier occurrence therefore does NOT count as ran, on purpose:
+                 that is the case the repetition exists for. PARTIAL counts because a resolve run
+                 stopped at the deadline has banked its verdicts and is checkpointed - re-running it
+                 would spend the card re-deciding what it already decided.
+
+                 Pure over its arguments. $Status is the parsed graph-nightly-status.json, or $null.
+  #>
+  param([datetime]$Now, [string]$WindowStart = '21:30', $Status)
+  if (-not $Status) { return '' }
+  $startedRaw = ''
+  try { $startedRaw = [string]$Status.started } catch { $startedRaw = '' }
+  if (-not $startedRaw) { return '' }
+  $started = [datetime]::MinValue
+  if (-not [datetime]::TryParse($startedRaw, [ref]$started)) { return '' }
+  $windowOpened = Get-NightWindowStart -Now $Now -WindowStart $WindowStart
+  if ($started -lt $windowOpened) { return '' }        # a stamp from an earlier night proves nothing
+  $resolved = $false
+  foreach ($s in @($Status.stages)) {
+    if (-not $s) { continue }
+    if ([string]$s.stage -eq 'resolve' -and (@('OK', 'PARTIAL') -contains [string]$s.state)) { $resolved = $true }
+  }
+  if (-not $resolved) { return '' }                    # refused or died before resolve: retry it
+  # PARENTHESISED, not `"a" + "b" -f x`: + and -f sit in different precedence groups and this estate
+  # has already paid for a concatenated format string binding in the order nobody expected.
+  $fmt = ('already ran this night at {0} (window opened {1}); the resolve stage completed, ' +
+          'so this repetition is a no-op')
+  return ($fmt -f $started.ToString('yyyy-MM-ddTHH:mm:ss'), $windowOpened.ToString('yyyy-MM-ddTHH:mm'))
 }
 
 function Test-LlamaStartable {
@@ -431,6 +495,78 @@ if ($SelfTest) {
   $nCiAsk = 'Get-CiBlock' + 'Detail -Since $serveStart'
   if (-not $src.Contains($nCiAsk)) { Write-Output '  X MUST-FIRE: the serve stage must check Code Integrity before recording BLIND'; $bad++ }
 
+  # ---- the in-night catch-up guard (2026-09-09, queue 2026-09-09-d3e937) ------------------------
+  # -- which night is it? A night spans midnight, so this is the unit the guard reasons in.
+  if ((Get-NightWindowStart -Now ([datetime]'2026-09-09 23:30') -WindowStart '21:30') -ne [datetime]'2026-09-09 21:30') {
+    Write-Output '  X MUST-FIRE: 23:30 belongs to tonight, whose window opened at 21:30'; $bad++ }
+  if ((Get-NightWindowStart -Now ([datetime]'2026-09-10 03:30') -WindowStart '21:30') -ne [datetime]'2026-09-09 21:30') {
+    Write-Output '  X MUST-FIRE: 03:30 belongs to YESTERDAY''s night, not to a window that has not opened'; $bad++ }
+
+  # MUST-FIRE: a repetition that follows a good night is a no-op. Frozen from the real stamp shape -
+  # grocery\out\logs\graph-nightly-status.json of 2026-09-07 carried started 21:30:02 and all ten
+  # stages OK, and the 22:30 occurrence must not re-run that.
+  $stRan = [pscustomobject]@{ started = '2026-09-09T21:30:02'; stages = @(
+    [pscustomobject]@{ stage = 'window';  state = 'OK' }
+    [pscustomobject]@{ stage = 'resolve'; state = 'OK' }
+    [pscustomobject]@{ stage = 'stop';    state = 'OK' }) }
+  $sk = Test-AlreadyRanThisWindow -Now ([datetime]'2026-09-09 23:30') -WindowStart '21:30' -Status $stRan
+  if (-not $sk) { Write-Output '  X MUST-FIRE: a repetition after a completed resolve must skip'; $bad++ }
+  elseif ($sk -notmatch '2026-09-09T21:30:02') { Write-Output "  X the skip reason must quote the run it found: $sk"; $bad++ }
+
+  # MUST-NOT-FIRE, THE FOUNDING CASE: the 09-08 night that was LOST. The newest stamp is from 09-07,
+  # the box came back at 03:29 on 09-09, and the catch-up occurrence must RUN. If the guard keyed on
+  # LastRunTime or on the transcript instead of the stamp, this is the case that would silently
+  # retire the whole feature.
+  $stOld = [pscustomobject]@{ started = '2026-09-07T21:30:02'; stages = @(
+    [pscustomobject]@{ stage = 'resolve'; state = 'OK' }) }
+  if (Test-AlreadyRanThisWindow -Now ([datetime]'2026-09-09 03:30') -WindowStart '21:30' -Status $stOld) {
+    Write-Output '  X MUST-NOT-FIRE: a stamp from an EARLIER night must never skip tonight'; $bad++ }
+
+  # MUST-NOT-FIRE: an occurrence that REFUSED its window (or died before resolve) has done no work,
+  # so the next repetition retries. This is the other half of the catch-up.
+  $stRefused = [pscustomobject]@{ started = '2026-09-09T21:30:05'; stages = @(
+    [pscustomobject]@{ stage = 'window'; state = 'REFUSED'; detail = 'only 4 min to the deadline' }
+    [pscustomobject]@{ stage = 'stop';   state = 'OK' }) }
+  if (Test-AlreadyRanThisWindow -Now ([datetime]'2026-09-09 22:30') -WindowStart '21:30' -Status $stRefused) {
+    Write-Output '  X MUST-NOT-FIRE: a REFUSED window is not a run - the next repetition must retry'; $bad++ }
+  # CLEAN TWIN: a resolve stopped at the deadline HAS banked its verdicts and is checkpointed, so it
+  # counts as ran. Re-running it would spend the card re-deciding what it already decided.
+  $stPartial = [pscustomobject]@{ started = '2026-09-09T21:30:02'; stages = @(
+    [pscustomobject]@{ stage = 'resolve'; state = 'PARTIAL'; detail = 'stopped at the deadline' }) }
+  if (-not (Test-AlreadyRanThisWindow -Now ([datetime]'2026-09-10 01:30') -WindowStart '21:30' -Status $stPartial)) {
+    Write-Output '  X CLEAN TWIN: a PARTIAL resolve is banked work and must count as ran'; $bad++ }
+  # CLEAN TWIN: no stamp at all is a reason to RUN. A first-ever night, or a deleted status file,
+  # must never read as "already done".
+  if (Test-AlreadyRanThisWindow -Now ([datetime]'2026-09-09 23:30') -WindowStart '21:30' -Status $null) {
+    Write-Output '  X CLEAN TWIN: a missing status stamp must not skip the run'; $bad++ }
+
+  # MUST-FIRE, SOURCE ASSERTION: the run transcript must start BELOW both non-run verbs, or a
+  # hand-typed -StopOnly writes a today-dated graph-nightly-<date>.log for a job that did nothing and
+  # anyone triaging by "is there a log dated today" reads green over a lost night. NEEDLES BUILT BY
+  # CONCATENATION, or these three check lines would be their own matches.
+  $nStart  = "Start-Run" + "Log -Name 'graph-nightly' -OutDir"
+  $nStop   = 'if ($Stop' + 'Only) {'
+  $nWhatIf = 'if ($What' + 'IfOnly) {'
+  $iStart  = $src.IndexOf($nStart)
+  $iStop   = $src.IndexOf($nStop)
+  $iWhatIf = $src.IndexOf($nWhatIf)
+  if ($iStart -lt 0) { Write-Output '  X MUST-FIRE: the run transcript call is gone entirely'; $bad++ }
+  if ($iStop -lt 0 -or $iWhatIf -lt 0) { Write-Output '  X MUST-FIRE: a non-run verb branch vanished, so the ordering below proves nothing'; $bad++ }
+  if ($iStart -ge 0 -and $iStop -ge 0 -and $iStart -lt $iStop) {
+    Write-Output '  X MUST-FIRE: the run transcript must start BELOW the -StopOnly branch'; $bad++ }
+  if ($iStart -ge 0 -and $iWhatIf -ge 0 -and $iStart -lt $iWhatIf) {
+    Write-Output '  X MUST-FIRE: the run transcript must start BELOW the -WhatIfOnly branch'; $bad++ }
+  # MUST-FIRE: exactly ONE transcript under the run's name. A second call anywhere would re-open the
+  # hole from the other end, and IndexOf alone cannot see it - the same neuter that came back green
+  # against the hunter-slot check on 2026-08-25.
+  $nRunNames = @([regex]::Matches($src, [regex]::Escape($nStart)) | ForEach-Object { $_.Index })
+  if ($nRunNames.Count -ne 1) {
+    Write-Output ("  X MUST-FIRE: exactly ONE transcript may be opened under the run's name, found " + $nRunNames.Count); $bad++ }
+  # CLEAN TWIN: the skip path still leaves a record, under its OWN name and through Stop-RunLog so it
+  # carries an rc stamp. A silent skip would be a different false green.
+  $nSkipName = "Start-Run" + "Log -Name 'graph-nightly-skipped'"
+  if (-not $src.Contains($nSkipName)) { Write-Output '  X CLEAN TWIN: a skipped occurrence must still leave a record, under its own name'; $bad++ }
+
   if ($bad) { Write-Output "SELF-TEST FAILED ($bad)"; exit 2 }
   Write-Output 'self-test OK'
   exit 0
@@ -455,10 +591,13 @@ if (-not $py) {
 }
 $sidecarPy = Join-Path $sidecar '.venv\Scripts\python.exe'
 
-Log ("nightly matching chain: now {0}, deadline {1} ({2} min), jobs {3}" -f `
-     $started.ToString('HH:mm'), $deadline.ToString('yyyy-MM-dd HH:mm'), [int]($deadline - $started).TotalMinutes, $Jobs)
-
+# THE WINDOW HEADER IS PRINTED TWICE, ONCE PER PATH, AND NOT ONCE ABOVE BOTH. It used to sit here,
+# above the -WhatIfOnly branch and above Start-RunLog, so the run's own header line was the one line
+# the run transcript did NOT contain. Printing it inside each path costs a duplicated format string
+# and buys a transcript that opens by saying what window it is working in.
 if ($WhatIfOnly) {
+  Log ("nightly matching chain: now {0}, deadline {1} ({2} min), jobs {3}" -f `
+       $started.ToString('HH:mm'), $deadline.ToString('yyyy-MM-dd HH:mm'), [int]($deadline - $started).TotalMinutes, $Jobs)
   Log 'plan only:'
   Write-Output "  1 emit     $py graph\pipeline\resolve.py --emit-contested sidecar\data\contested-pairs.json"
   Write-Output "  1b defs    $py graph\pipeline\emit_commodity_defs.py --out sidecar\data\commodity-defs-graph.json"
@@ -471,6 +610,39 @@ if ($WhatIfOnly) {
   if ($refuse) { Write-Output "  REFUSED: $refuse" }
   exit 0
 }
+
+# ---------------------------------------------------------------- has this night already been done?
+# THE OTHER HALF OF THE CATCH-UP (2026-09-09, queue 2026-09-09-d3e937). The task fires hourly from
+# 21:30 to 05:30 so a night lost to a Windows Update reboot is picked up at the next sign-in; without
+# this the same night would be re-run eight times, each holding 13 GB of card for nothing.
+#
+# IT MUST NOT REWRITE THE STAMP. graph-nightly-status.json is written by the chain's finally block and
+# carries the real run's figures - contested count, elapsed, per-stage states - and it is what this
+# guard READS. A skipped occurrence that rewrote it would erase the evidence it just consulted and,
+# worse, would hand health-heartbeat a fresh stamp for a night that did no work: the exact false-green
+# shape this item exists to close. So the skip records itself under its OWN log name and exits.
+$skipWhy = ''
+try {
+  if (Test-Path $statusF) {
+    $skipWhy = Test-AlreadyRanThisWindow -Now $started -WindowStart '21:30' `
+                 -Status ([IO.File]::ReadAllText($statusF) | ConvertFrom-Json)
+  }
+} catch { $skipWhy = '' }   # an unreadable stamp is a reason to RUN, never a reason to skip
+if ($skipWhy) {
+  $skipLog = Start-RunLog -Name 'graph-nightly-skipped' -OutDir (Join-Path $grocery 'out')
+  Log ("window: SKIPPED - " + $skipWhy)
+  Stop-RunLog -ExitCode 0 -Path $skipLog
+  exit 0
+}
+
+# ---------------------------------------------------------------- the run transcript starts HERE
+# BELOW BOTH NON-RUN VERBS, DELIBERATELY - see the header comment beside the run-log dot-source.
+# Start-RunLog appends 'logs' to OutDir itself, so this passes grocery\out and NOT grocery\out\logs -
+# the latter would file the transcript under out\logs\logs and hide it from the one directory a human
+# already opens.
+$runLog = Start-RunLog -Name 'graph-nightly' -OutDir (Join-Path $grocery 'out')
+Log ("nightly matching chain: now {0}, deadline {1} ({2} min), jobs {3}" -f `
+     $started.ToString('HH:mm'), $deadline.ToString('yyyy-MM-dd HH:mm'), [int]($deadline - $started).TotalMinutes, $Jobs)
 
 $stages = New-Object System.Collections.Generic.List[object]
 function Record([string]$name, [string]$state, [string]$detail, [int]$sec) {

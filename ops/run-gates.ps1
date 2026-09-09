@@ -279,6 +279,18 @@ $static = @(
   # no Get-ScheduledTask), which is why it is a wrapper rather than install-grocery-tasks itself: that
   # file's default mode reads the live scheduler and this list passes no arguments.
   @{ f = 'ops\audit-task-registry.ps1';        n = 'every task the registrar registers is watched under the same name, and no legacy name survives in the registry' }
+  # THE OTHER END OF THAT SAME JOIN (2026-09-09, queue 2026-09-09-d3e937). The entry above asks whether
+  # the tables AGREE; this asks whether a REGISTRAR can create a task that is in neither, which is the
+  # state TC Graph Nightly Matching was in for three mornings from 2026-08-22 and TC Recipe Harvest
+  # Crawl from 08-24. Both were noticed only by health-heartbeat's TASK UNWATCHED line the following
+  # morning - an alarm whose only follower is a human typing an entry. Widening the entry above was not
+  # enough on its own: it reads the committed tables, so a registrar that never got a definition
+  # committed is still invisible to it.
+  # LISTED HERE RATHER THAN LEFT TO DISCOVERY, for the reason audit-write-only-reports records: the
+  # discovery pass runs the FIXTURE and this entry runs the DETECTOR over the real tree, and only the
+  # second one can see a registrar somebody adds tomorrow. Hermetic - it reads .ps1 source, the
+  # committed task XML and expected-automations.json, all tracked, so it is green on a bare checkout.
+  @{ f = 'ops\audit-task-registration.ps1';    n = 'no registrar can register a scheduled task that has no committed definition and no watch entry - a task must be impossible to leave unwatched at CHANGE time, not reported unwatched the next morning' }
   @{ f = 'ops\audit-arg-binding.ps1';          n = 'every audit/verify/test/check script REFUSES an argument it does not declare, so a scoped check cannot silently run unscoped and report clean' }
   # Hermetic: reads .ps1 source text, never a board, so it belongs here rather than in the daily chain.
   @{ f = 'ops\audit-cross-module-reach.ps1';   n = 'no NEW script reaches into another module''s internals directory - a ratchet on cross-module path literals, high-water mark may only go DOWN' }
