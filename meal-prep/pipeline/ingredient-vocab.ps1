@@ -349,8 +349,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("ingredient-vocab SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'ingredient-vocab SELF-TEST PASS'
-  Write-GuardComplete -Name 'ingredient-vocab' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'ingredient-vocab' -Summary 'selftest pass' -Code 0
 }
 
 $rows = if ($RowsFile) { Read-Rows $RowsFile } else { Read-Vocab $VocabFile $runAllowSmall }

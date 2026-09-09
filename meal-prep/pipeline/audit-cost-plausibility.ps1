@@ -128,5 +128,4 @@ foreach ($f in ($findings | Sort-Object class, slug)) {
   Write-Output ("  {0,-14} {1,-48} {2}" -f $f.class, $f.slug, $f.detail)
 }
 Write-Output '  A cost that excludes an ingredient is a false claim on a card readers budget from.'
-Write-GuardComplete -Name 'audit-cost-plausibility' -Summary ("findings={0}" -f @($findings).Count)
-exit 1
+Exit-Guard -Name 'audit-cost-plausibility' -Summary ("findings={0}" -f @($findings).Count) -Code 1

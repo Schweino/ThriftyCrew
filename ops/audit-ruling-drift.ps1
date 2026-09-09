@@ -125,27 +125,23 @@ if ($SelfTest) {
 # ------------------------------------------------------------------------------------- live run
 if (-not (Test-Path -LiteralPath $REGISTRY)) {
   Write-Output ("RULING-DRIFT AUDIT BLIND: the registry is missing ({0}). Nothing was checked, so nothing was proven." -f $REGISTRY)
-  Write-GuardComplete -Name 'ruling-drift' -Summary 'blind=no-registry'
-  exit 3
+  Exit-Guard -Name 'ruling-drift' -Summary 'blind=no-registry' -Code 3
 }
 try { $doc = (Get-Content $REGISTRY -Raw -Encoding UTF8 | ConvertFrom-Json) } catch {
   Write-Output ("RULING-DRIFT AUDIT BLIND: the registry will not parse ({0})." -f $_.Exception.Message)
-  Write-GuardComplete -Name 'ruling-drift' -Summary 'blind=registry-unparseable'
-  exit 3
+  Exit-Guard -Name 'ruling-drift' -Summary 'blind=registry-unparseable' -Code 3
 }
 $rulings = @($doc.rulings)
 if (-not $rulings.Count) {
   Write-Output 'RULING-DRIFT AUDIT BLIND: the registry declares zero rulings. An empty registry proves nothing and must not read as clean.'
-  Write-GuardComplete -Name 'ruling-drift' -Summary 'blind=empty-registry'
-  exit 3
+  Exit-Guard -Name 'ruling-drift' -Summary 'blind=empty-registry' -Code 3
 }
 # A ruling whose DOCUMENT has gone is worse than one whose code drifted: nothing states the rule at all.
 $missingDocs = @()
 foreach ($r in $rulings) { if (-not (Test-Path -LiteralPath (Join-Path $repo ($r.document -replace '/', '\')))) { $missingDocs += $r.id } }
 if ($missingDocs.Count) {
   Write-Output ("RULING-DRIFT AUDIT FAILED: {0} ruling(s) cite a document that no longer exists: {1}. The rule is now stated nowhere." -f $missingDocs.Count, ($missingDocs -join ', '))
-  Write-GuardComplete -Name 'ruling-drift' -Summary ("missing-docs={0}" -f $missingDocs.Count)
-  exit 2
+  Exit-Guard -Name 'ruling-drift' -Summary ("missing-docs={0}" -f $missingDocs.Count) -Code 2
 }
 
 $violations = Get-TcRulingViolations -Rulings $rulings -Reader {
@@ -169,14 +165,12 @@ if (-not (Test-Path -LiteralPath $BASELINE)) {
      note = 'HIGH-WATER MARK for ratified rulings the code does not implement. May only go DOWN.' } |
     ConvertTo-Json -Depth 3 | Set-Content $BASELINE -Encoding UTF8
   Write-Output ("ruling-drift: baseline written at {0} unimplemented ruling(s). From here the number may only go DOWN." -f $count)
-  Write-GuardComplete -Name 'ruling-drift' -Summary ("baseline={0}" -f $count)
-  exit 0
+  Exit-Guard -Name 'ruling-drift' -Summary ("baseline={0}" -f $count) -Code 0
 }
 $base = [int]((Get-Content $BASELINE -Raw -Encoding UTF8 | ConvertFrom-Json).violations)
 if ($count -gt $base) {
   Write-Output ("RULING-DRIFT AUDIT FAILED: {0} ratified ruling(s) the code does not implement, against a baseline of {1}. A ruling was contradicted that was not contradicted before - either the code moved away from the document or a new pair was declared and is already broken." -f $count, $base)
-  Write-GuardComplete -Name 'ruling-drift' -Summary ("violations={0} baseline={1}" -f $count, $base)
-  exit 2
+  Exit-Guard -Name 'ruling-drift' -Summary ("violations={0} baseline={1}" -f $count, $base) -Code 2
 }
 # THE FALL IS THE DIRECTION THAT CANNOT BE TRUSTED (2026-09-07, backlog I15). This block used to
 # lower the baseline unconditionally, so a detector that broke and found NOTHING recorded 0 as the
@@ -186,8 +180,7 @@ if ($count -gt $base) {
 $move = Test-RatchetMove -Name 'ruling-drift' -Count $count -Baseline $base -AcceptDrop:$AcceptDrop
 if ($move.Verdict -eq 'implausible') {
   Write-Output $move.Message
-  Write-GuardComplete -Name 'ruling-drift' -Summary ("violations={0} baseline={1} refused-to-lower" -f $count, $base)
-  exit 2
+  Exit-Guard -Name 'ruling-drift' -Summary ("violations={0} baseline={1} refused-to-lower" -f $count, $base) -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
   $doc = $null
@@ -200,9 +193,7 @@ if ($move.Verdict -eq 'tightened') {
   # The library message already names the guard; prefixing it again read as "x: ... x: ...".
   Write-Output ("PASSED and TIGHTENED - " + $move.Message)
   Write-Output ("  " + (Get-RatchetTrend -History $hist))
-  Write-GuardComplete -Name 'ruling-drift' -Summary ("violations={0} tightened-from={1}" -f $count, $base)
-  exit 0
+  Exit-Guard -Name 'ruling-drift' -Summary ("violations={0} tightened-from={1}" -f $count, $base) -Code 0
 }
 Write-Output ("ruling-drift: PASSED - {0} ratified ruling(s) still unimplemented, unchanged from the baseline. These are decisions Brad made that the code does not yet honour; each one implemented lowers the mark permanently." -f $count)
-Write-GuardComplete -Name 'ruling-drift' -Summary ("violations={0} baseline={1}" -f $count, $base)
-exit 0
+Exit-Guard -Name 'ruling-drift' -Summary ("violations={0} baseline={1}" -f $count, $base) -Code 0

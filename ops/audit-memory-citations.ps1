@@ -115,15 +115,13 @@ if ($SelfTest) {
 # ------------------------------------------------------------------------------------- live run
 if (-not (Test-Path -LiteralPath $MEM)) {
   Write-Output ("MEMORY-CITATIONS AUDIT BLIND: the memory store is missing ({0}). Every citation would look dangling, which is a broken read and not 200 findings." -f $MEM)
-  Write-GuardComplete -Name 'memory-citations' -Summary 'blind=no-store'
-  exit 3
+  Exit-Guard -Name 'memory-citations' -Summary 'blind=no-store' -Code 3
 }
 $known = @(Get-ChildItem $MEM -Filter *.md -File -ErrorAction SilentlyContinue |
   Where-Object { $_.Name -ne 'MEMORY.md' } | ForEach-Object { $_.BaseName })
 if (-not $known.Count) {
   Write-Output 'MEMORY-CITATIONS AUDIT BLIND: the memory store holds zero files. Unknown is not a finding and it is not a pass.'
-  Write-GuardComplete -Name 'memory-citations' -Summary 'blind=empty-store'
-  exit 3
+  Exit-Guard -Name 'memory-citations' -Summary 'blind=empty-store' -Code 3
 }
 
 $problems = @(); $files = 0; $cites = 0
@@ -153,9 +151,7 @@ $problems = @($problems)
 if ($problems.Count) {
   Write-Output ("MEMORY-CITATIONS AUDIT FAILED: {0} problem(s). A citation that does not resolve reads as authority - the reader believes an account exists, cannot reach it, and proceeds on the summary with MORE confidence than if nothing had been cited." -f $problems.Count)
   foreach ($p in $problems) { Write-Output ("  {0,-46} {1,-20} {2}" -f $p.File, $p.Kind, $p.Detail) }
-  Write-GuardComplete -Name 'memory-citations' -Summary ("problems={0}" -f $problems.Count)
-  exit 2
+  Exit-Guard -Name 'memory-citations' -Summary ("problems={0}" -f $problems.Count) -Code 2
 }
 Write-Output ("memory-citations: PASSED - {0} citation(s) across {1} file(s) all resolve against {2} memories, and every agent carries the resolver block." -f $cites, $files, $known.Count)
-Write-GuardComplete -Name 'memory-citations' -Summary ("cites={0} memories={1}" -f $cites, $known.Count)
-exit 0
+Exit-Guard -Name 'memory-citations' -Summary ("cites={0} memories={1}" -f $cites, $known.Count) -Code 0

@@ -98,8 +98,7 @@ if ($SelfTest) {
   } finally { Remove-Item -LiteralPath $fx -Recurse -Force -ErrorAction SilentlyContinue }
   if ($bad) { Write-Output "TILE-INTEGRITY SELF-TEST FAILED ($bad)"; exit 2 }
   Write-Output 'TILE-INTEGRITY SELF-TEST PASS - the staleness precondition fires on the founding case and stays silent on both twins'
-  Write-GuardComplete -Name 'tile-integrity' -Summary 'selftest ok'
-  exit 0
+  Exit-Guard -Name 'tile-integrity' -Summary 'selftest ok' -Code 0
 }
 
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
@@ -141,8 +140,7 @@ if (Test-Path $ndF) {
     # grade today's links against yesterday's drift flags - and then left without the marker, so a
     # caller saw exit 2 with no completion and could not tell a deliberate HELD from a crash. The
     # refusal is the audit working, and it should be able to say so.
-    Write-GuardComplete -Name 'tile-integrity' -Summary 'HELD: name-drift.json is stale'
-    exit 2
+    Exit-Guard -Name 'tile-integrity' -Summary 'HELD: name-drift.json is stale' -Code 2
   }
   foreach ($d in (Read-JsonFile $ndF).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason }
 }

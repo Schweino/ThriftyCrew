@@ -3311,8 +3311,7 @@ $r = @([pscustomobject]@{ term='a'; tier='MAPPED'; commodity='rice'; resolved_by
 
   if ($bad -gt 0) { Write-Output ("map-preresolve SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'map-preresolve SELF-TEST PASS'
-  Write-GuardComplete -Name 'map-preresolve' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'map-preresolve' -Summary 'selftest pass' -Code 0
 }
 
 # ---------------------------------------------------------------------------------------------------
@@ -3435,8 +3434,7 @@ if ($runAssemble) {
     foreach ($f in @($res.findings)) { Write-Output ("    FINDING  " + $f) }
     # SCANNED, NOT JUST FOUND (backlog E20). "3 finding(s)" is unreadable without the population -
     # three findings in four lines and three in four hundred are different events.
-    Write-GuardComplete -Name 'map-preresolve' -Summary ("assemble {0}: scanned={1} findings={2}" -f $Slug, @($res.doc.ingredients).Count, @($res.findings).Count)
-    exit 1
+    Exit-Guard -Name 'map-preresolve' -Summary ("assemble {0}: scanned={1} findings={2}" -f $Slug, @($res.doc.ingredients).Count, @($res.findings).Count) -Code 1
   }
   $outMapped = Join-Path $RunDir 'mapped'
   if (-not (Test-Path $outMapped)) { New-Item -ItemType Directory -Path $outMapped -Force | Out-Null }
@@ -3448,8 +3446,7 @@ if ($runAssemble) {
   Write-Output ("map-preresolve -Assemble: {0} -> {1} line(s) ({2} optional, {3} not purchased), {4} servings x{5} = {6}" -f `
     $Slug, $n, $opt, $notp, $res.doc.source_servings, $res.doc.scale_factor, $res.doc.target_servings)
   Write-Output ("    wrote {0}" -f $target)
-  Write-GuardComplete -Name 'map-preresolve' -Summary ("assembled {0}: {1} line(s)" -f $Slug, $n)
-  exit 0
+  Exit-Guard -Name 'map-preresolve' -Summary ("assembled {0}: {1} line(s)" -f $Slug, $n) -Code 0
 }
 
 # ---------------------------------------------------------------------------------------------------

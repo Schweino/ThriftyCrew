@@ -279,8 +279,7 @@ if ($CompareFile) {
   if ($findings.Count -eq 0) { Write-Output 'CLEAN: snapshot matches ops\cloudflare-estate.json'; Write-GuardComplete -Name 'cloudflare-estate' -Summary 'snapshot findings=0'; exit 0 }
   foreach ($f in $findings) { Write-Output "  DRIFT  $f" }
   Write-Output "DRIFT: $($findings.Count) finding(s)"
-Write-GuardComplete -Name 'cloudflare-estate' -Summary "findings=$($findings.Count)"
-  exit 2
+Exit-Guard -Name 'cloudflare-estate' -Summary "findings=$($findings.Count)" -Code 2
 }
 
 $token = $env:CLOUDFLARE_API_TOKEN
@@ -343,5 +342,4 @@ if (-not $Quiet) {
 if ($findings.Count -eq 0) { Write-Output 'CLEAN: live matches ops\cloudflare-estate.json'; Write-GuardComplete -Name 'cloudflare-estate' -Summary 'live findings=0'; exit 0 }
 foreach ($f in $findings) { Write-Output "  DRIFT  $f" }
 Write-Output "DRIFT: $($findings.Count) finding(s)"
-Write-GuardComplete -Name 'cloudflare-estate' -Summary "findings=$($findings.Count)"
-exit 2
+Exit-Guard -Name 'cloudflare-estate' -Summary "findings=$($findings.Count)" -Code 2

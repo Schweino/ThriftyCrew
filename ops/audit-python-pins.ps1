@@ -164,21 +164,18 @@ if ($SelfTest) {
 # ------------------------------------------------------------------------------------- live run
 if (-not (Test-Path -LiteralPath $REQ)) {
   Write-Output ("PYTHON PINS AUDIT BLIND: {0} does not exist, so nothing was compared." -f $REQ)
-  Write-GuardComplete -Name 'python-pins' -Summary 'blind=no-requirements'
-  exit 3
+  Exit-Guard -Name 'python-pins' -Summary 'blind=no-requirements' -Code 3
 }
 if (-not (Test-Path -LiteralPath $SITE)) {
   Write-Output ("PYTHON PINS AUDIT BLIND: {0} does not exist. A worktree, a CI runner and a fresh checkout all look like this, and reporting a clean pass here would be an assertion that ran against nothing." -f $SITE)
-  Write-GuardComplete -Name 'python-pins' -Summary 'blind=no-venv'
-  exit 3
+  Exit-Guard -Name 'python-pins' -Summary 'blind=no-venv' -Code 3
 }
 
 $pins = Get-TcPinnedRequirements -Lines ([IO.File]::ReadAllLines($REQ))
 $pins = @($pins)
 if (-not $pins.Count) {
   Write-Output ("PYTHON PINS AUDIT BLIND: {0} declares no `==` pins, which means the file's shape moved rather than the pins being satisfied." -f $REQ)
-  Write-GuardComplete -Name 'python-pins' -Summary 'blind=no-pins'
-  exit 3
+  Exit-Guard -Name 'python-pins' -Summary 'blind=no-pins' -Code 3
 }
 $dists = @(Get-ChildItem -LiteralPath $SITE -Directory -Filter '*.dist-info' -ErrorAction SilentlyContinue | ForEach-Object { $_.Name })
 $rows = Compare-TcPins -Pins $pins -Installed (Get-TcInstalledVersions -DistInfoNames $dists)
@@ -190,9 +187,7 @@ foreach ($r in $rows) {
 $bad = @($rows | Where-Object { $_.Status -ne 'match' })
 if ($bad.Count) {
   Write-Output ("PYTHON PINS AUDIT FAILED: {0} of {1} pinned package(s) in sidecar\requirements.txt do not match sidecar\.venv, against {2} installed distribution(s). Either the declaration is stale - correct it, and DATE the correction so a later reader can see it was retro-fitted to the install - or the venv is wrong, which is the expensive answer and needs sidecar\freeze_eval.py re-run to show the score space did not move." -f $bad.Count, $rows.Count, $dists.Count)
-  Write-GuardComplete -Name 'python-pins' -Summary ("pins={0} mismatched={1} dists={2}" -f $rows.Count, $bad.Count, $dists.Count)
-  exit 2
+  Exit-Guard -Name 'python-pins' -Summary ("pins={0} mismatched={1} dists={2}" -f $rows.Count, $bad.Count, $dists.Count) -Code 2
 }
 Write-Output ("python-pins: PASSED - all {0} pinned package(s) match the venv, read against {1} installed distribution(s). Unpinned lines are not claims and are not checked." -f $rows.Count, $dists.Count)
-Write-GuardComplete -Name 'python-pins' -Summary ("pins={0} mismatched=0 dists={1}" -f $rows.Count, $dists.Count)
-exit 0
+Exit-Guard -Name 'python-pins' -Summary ("pins={0} mismatched=0 dists={1}" -f $rows.Count, $dists.Count) -Code 0

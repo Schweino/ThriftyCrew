@@ -219,14 +219,12 @@ $tWall = $swAll.Elapsed.TotalSeconds
 # extraction: exit 3, and the caller treats match-lib as unverified.
 if ($null -ne $shardErr) {
   Write-Output ('match-lib: BLIND - part of the corpus was never compared: ' + $shardErr)
-  Write-GuardComplete -Name 'match-lib' -Summary 'BLIND: shard failed'
-  exit 3
+  Exit-Guard -Name 'match-lib' -Summary 'BLIND: shard failed' -Code 3
 }
 $seen = 0; foreach ($r in $results) { $seen += [int]$r.names }
 if ($seen -ne $list.Count) {
   Write-Output ('match-lib: BLIND - the shards between them compared {0} of {1} names' -f $seen, $list.Count)
-  Write-GuardComplete -Name 'match-lib' -Summary 'BLIND: corpus not covered'
-  exit 3
+  Exit-Guard -Name 'match-lib' -Summary 'BLIND: corpus not covered' -Code 3
 }
 # EVERY SHARD MUST HAVE HAD THE SAME MATCHER AS THIS PROCESS. If one of them failed to Add-Type, its
 # "compiled" pass was actually the interpreted one: the run would still go green while leaving the path
@@ -234,8 +232,7 @@ if ($seen -ne $list.Count) {
 $badCore = @($results | Where-Object { [bool]$_.core -ne $hasCore })
 if ($badCore.Count) {
   Write-Output ('match-lib: BLIND - {0} of {1} shards disagreed with this process about the compiled core (hasCore={2})' -f $badCore.Count, $results.Count, $hasCore)
-  Write-GuardComplete -Name 'match-lib' -Summary 'BLIND: shard core mismatch'
-  exit 3
+  Exit-Guard -Name 'match-lib' -Summary 'BLIND: shard core mismatch' -Code 3
 }
 # The four phase timings are the SUM of the shards' own stopwatches - the same CPU seconds the
 # single-threaded version reported, so the speedup ratio below still compares the two matchers against
@@ -273,9 +270,7 @@ if (-not $Quiet) {
 if ($diff.Count -or $detailDiff.Count -or $detailNoHit.Count) {
   $total = $diff.Count + $detailDiff.Count + $detailNoHit.Count
   Write-Output ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit) - match-lib must not be used by the engine until it decides identically" -f $total, $diff.Count, $detailDiff.Count, $detailNoHit.Count)
-  Write-GuardComplete -Name 'match-lib' -Summary "names=$($list.Count) divergences=$total"
-  exit 1
+  Exit-Guard -Name 'match-lib' -Summary "names=$($list.Count) divergences=$total" -Code 1
 }
 Write-Output 'MATCH-LIB PASSED'
-Write-GuardComplete -Name 'match-lib' -Summary ("names=" + $list.Count + " divergences=0 detail=0 speedup=" + [math]::Round($(if ($tN -gt 0) { $tO / $tN } else { 0 }), 1) + "x")
-exit 0
+Exit-Guard -Name 'match-lib' -Summary ("names=" + $list.Count + " divergences=0 detail=0 speedup=" + [math]::Round($(if ($tN -gt 0) { $tO / $tN } else { 0 }), 1) + "x") -Code 0

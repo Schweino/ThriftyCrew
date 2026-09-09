@@ -162,8 +162,7 @@ if ($SelfTest) {
 foreach ($p in @('Script', 'OldRev', 'InputFile', 'OutputRelPath', 'ArrayKey')) {
   if (-not (Get-Variable $p -ValueOnly)) {
     Write-Output ("CONSISTENCY ORACLE COULD NOT EVALUATE: -{0} is required. See the header for a worked example." -f $p)
-    Write-GuardComplete -Name 'consistency-oracle' -Summary 'blind=missing-argument'
-    exit 3
+    Exit-Guard -Name 'consistency-oracle' -Summary 'blind=missing-argument' -Code 3
   }
 }
 $scriptRel = $Script -replace '\\', '/'
@@ -173,8 +172,7 @@ $leaf = Split-Path $Script -Leaf
 $inFull = if ([IO.Path]::IsPathRooted($InputFile)) { $InputFile } else { Join-Path $repo $InputFile }
 if (-not (Test-Path $inFull)) {
   Write-Output ("CONSISTENCY ORACLE BLIND: the input {0} does not exist, so nothing was compared. That is not 'no difference'." -f $inFull)
-  Write-GuardComplete -Name 'consistency-oracle' -Summary 'blind=no-input'
-  exit 3
+  Exit-Guard -Name 'consistency-oracle' -Summary 'blind=no-input' -Code 3
 }
 
 function New-TcSandbox([string]$rev) {
@@ -234,8 +232,7 @@ if (-not $A.Exists -or -not $B.Exists) {
   if (Test-Path $bad.Log) { Get-Content $bad.Log -Tail 10 | ForEach-Object { Write-Output ('    ' + $_) } }
   Write-Output '  If the old arm died on a missing function, try -Mode World: a stage that LIFTS functions out of'
   Write-Output '  another script cannot run its old self against today''s library (backlog I82).'
-  Write-GuardComplete -Name 'consistency-oracle' -Summary 'failed=arm-produced-no-output'
-  exit 2
+  Exit-Guard -Name 'consistency-oracle' -Summary 'failed=arm-produced-no-output' -Code 2
 }
 
 $r = Compare-TcRowSets -RowsA $A.Rows -RowsB $B.Rows -Fields $KeyFields

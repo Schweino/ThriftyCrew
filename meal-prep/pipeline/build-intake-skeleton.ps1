@@ -724,8 +724,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("build-intake-skeleton SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'build-intake-skeleton SELF-TEST PASS'
-  Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'build-intake-skeleton' -Summary 'selftest pass' -Code 0
 }
 
 # ---------------------------------------------------------------------------------------------------
@@ -769,12 +768,10 @@ if ($runVerify) {
   if ($drift.Count) {
     Write-Output ("build-intake-skeleton: {0} LOCKED FIELD(S) DRIFTED in {1}" -f $drift.Count, [string]$intake.slug)
     foreach ($d in $drift) { Write-Output ("    " + $d) }
-    Write-GuardComplete -Name 'build-intake-skeleton' -Summary ("{0} locked field(s) drifted" -f $drift.Count)
-    exit 1
+    Exit-Guard -Name 'build-intake-skeleton' -Summary ("{0} locked field(s) drifted" -f $drift.Count) -Code 1
   }
   Write-Output ("build-intake-skeleton: {0} - every locked field is as issued" -f [string]$intake.slug)
-  Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'verify clean'
-  exit 0
+  Exit-Guard -Name 'build-intake-skeleton' -Summary 'verify clean' -Code 0
 }
 
 if (-not $RunDir) { Write-Output 'build-intake-skeleton: -RunDir is required'; exit 2 }

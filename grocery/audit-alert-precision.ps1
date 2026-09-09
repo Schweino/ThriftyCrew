@@ -39,23 +39,20 @@ if (-not $QueueFile) { $QueueFile = Join-Path $here 'triage-queue.json' }
 
 if (-not (Test-Path -LiteralPath $QueueFile)) {
   Write-Output ("ALERT PRECISION BLIND: {0} does not exist, so nothing was checked. That is the expected state in a worktree - the queue is gitignored - and it is NOT evidence that every close was judged." -f $QueueFile)
-  Write-GuardComplete -Name 'alert-precision' -Summary 'blind=no-queue'
-  exit 3
+  Exit-Guard -Name 'alert-precision' -Summary 'blind=no-queue' -Code 3
 }
 $raw = Get-Content $QueueFile -Raw -Encoding UTF8
 $q = $null
 if ($raw -and $raw.Trim()) { try { $q = $raw | ConvertFrom-Json } catch { } }
 if (-not $q) {
   Write-Output 'ALERT PRECISION BLIND: the queue did not parse. An unreadable queue is not a clean one.'
-  Write-GuardComplete -Name 'alert-precision' -Summary 'blind=unparseable'
-  exit 3
+  Exit-Guard -Name 'alert-precision' -Summary 'blind=unparseable' -Code 3
 }
 # ASSIGN, THEN WRAP - never @(Get-Thing ...) inline. [[ps-json-array-collapse]]
 $items = @($q.items)
 if (-not $items.Count) {
   Write-Output 'ALERT PRECISION BLIND: the queue parsed and holds zero items, which means the shape moved rather than the backlog being clear.'
-  Write-GuardComplete -Name 'alert-precision' -Summary 'blind=no-items'
-  exit 3
+  Exit-Guard -Name 'alert-precision' -Summary 'blind=no-items' -Code 3
 }
 
 $rows = Get-TcPrecision -Items $items -MinCases $MinCases
@@ -78,9 +75,7 @@ foreach ($m in $missing) {
 }
 if ($missing.Count) {
   Write-Output ("ALERT PRECISION AUDIT FAILED: {0} item(s) of {1} were closed without saying what the alert turned out to MEAN. Close through grocery\triage-close.ps1, which requires it. Without that field the queue records that somebody dealt with an alert and loses whether the alert was right, which is the only thing a live precision can be computed from." -f $missing.Count, $items.Count)
-  Write-GuardComplete -Name 'alert-precision' -Summary ("items={0} undispositioned={1}" -f $items.Count, $missing.Count)
-  exit 2
+  Exit-Guard -Name 'alert-precision' -Summary ("items={0} undispositioned={1}" -f $items.Count, $missing.Count) -Code 2
 }
 Write-Output ("alert-precision: PASSED - every close on or after {0} says what the alert meant. {1} type(s) have judged closes; a rate is stated only where there are at least {2} of them." -f (Get-TcDispositionCutoff), $rows.Count, $MinCases)
-Write-GuardComplete -Name 'alert-precision' -Summary ("items={0} judged={1} undispositioned=0" -f $items.Count, $judged)
-exit 0
+Exit-Guard -Name 'alert-precision' -Summary ("items={0} judged={1} undispositioned=0" -f $items.Count, $judged) -Code 0

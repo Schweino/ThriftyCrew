@@ -192,14 +192,12 @@ if ($SelfTest) {
 if (-not $Queue) { $Queue = $(if ($env:TC_STAGE_WRITES) { $env:TC_STAGE_WRITES } else { Join-Path $repo 'ops\staged-writes.jsonl' }) }
 if (-not (Test-Path -LiteralPath $Queue)) {
   Write-Output ("review-staged: nothing queued ({0} does not exist). Staging is armed by setting TC_STAGE_WRITES before a run; an empty queue after an ARMED run means nothing tried to write." -f $Queue)
-  Write-GuardComplete -Name 'review-staged' -Summary 'queued=0'
-  exit 0
+  Exit-Guard -Name 'review-staged' -Summary 'queued=0' -Code 0
 }
 $parsed = Read-TcQueue -Lines ([IO.File]::ReadAllLines($Queue))
 if ($parsed.Bad.Count) {
   Write-Output ("REVIEW-STAGED COULD NOT EVALUATE: {0} queue line(s) will not parse ({1}). Some intended write is invisible to this review, so applying now would send an unknown subset." -f $parsed.Bad.Count, ($parsed.Bad -join ', '))
-  Write-GuardComplete -Name 'review-staged' -Summary ("blind=badlines-" + $parsed.Bad.Count)
-  exit 3
+  Exit-Guard -Name 'review-staged' -Summary ("blind=badlines-" + $parsed.Bad.Count) -Code 3
 }
 $entries = @($parsed.Entries)
 Write-Output ("review-staged: {0} call(s) queued in {1}" -f $entries.Count, $Queue)
@@ -222,8 +220,7 @@ if ($concerns.Count) {
 if ($Discard) {
   Remove-Item -LiteralPath $Queue -Force
   Write-Output ("review-staged: DISCARDED - {0} call(s) thrown away, nothing was sent." -f $entries.Count)
-  Write-GuardComplete -Name 'review-staged' -Summary ("discarded=" + $entries.Count)
-  exit 0
+  Exit-Guard -Name 'review-staged' -Summary ("discarded=" + $entries.Count) -Code 0
 }
 if (-not $Apply) {
   Write-Output ''
@@ -257,10 +254,8 @@ foreach ($e in $entries) {
 }
 if ($failed.Count) {
   Write-Output ("review-staged: FAILED - {0} of {1} call(s) sent, {2} failed ({3}). The queue is LEFT IN PLACE so nothing is lost; re-running -Apply would resend the ones that already succeeded, so edit the queue before retrying." -f $sent, $entries.Count, $failed.Count, ($failed -join ', '))
-  Write-GuardComplete -Name 'review-staged' -Summary ("sent={0} failed={1}" -f $sent, $failed.Count)
-  exit 2
+  Exit-Guard -Name 'review-staged' -Summary ("sent={0} failed={1}" -f $sent, $failed.Count) -Code 2
 }
 Remove-Item -LiteralPath $Queue -Force
 Write-Output ("review-staged: APPLIED - all {0} call(s) sent, queue cleared." -f $sent)
-Write-GuardComplete -Name 'review-staged' -Summary ("sent=" + $sent)
-exit 0
+Exit-Guard -Name 'review-staged' -Summary ("sent=" + $sent) -Code 0

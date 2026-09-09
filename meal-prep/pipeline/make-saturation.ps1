@@ -142,5 +142,4 @@ Write-Output ("saturation.json: {0} regions over {1} recipes, {2} crowded (>= {3
 foreach ($r in @($doc.regions | Where-Object { $_.count -ge $CrowdedAt } | Select-Object -First 8)) {
   Write-Output ("  {0,-22} {1,3} live" -f ($r.protein + ' / ' + $r.family), $r.count)
 }
-Write-GuardComplete -Name 'make-saturation' -Summary ("regions={0} crowded={1}" -f @($doc.regions).Count, $crowdedN)
-exit 0
+Exit-Guard -Name 'make-saturation' -Summary ("regions={0} crowded={1}" -f @($doc.regions).Count, $crowdedN) -Code 0

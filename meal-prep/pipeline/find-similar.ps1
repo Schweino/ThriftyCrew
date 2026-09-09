@@ -276,8 +276,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("find-similar SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'find-similar SELF-TEST PASS'
-  Write-GuardComplete -Name 'find-similar' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'find-similar' -Summary 'selftest pass' -Code 0
 }
 
 # ---- query -----------------------------------------------------------------------------------------

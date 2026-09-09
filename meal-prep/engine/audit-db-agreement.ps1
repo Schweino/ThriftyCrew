@@ -350,8 +350,7 @@ if($issues.Count -eq 0){
     Write-Output ("db-agreement: {0} spec(s) built but never published - in flight, not drift: {1}" -f $inFlight.Count, (($inFlight | Sort-Object) -join ', '))
   }
   Write-Output ("db-agreement: CLEAN ({0} recipes, index==specs)" -f $specSlugs.Count)
-  Write-GuardComplete -Name 'db-agreement' -Summary ("recipes={0} issues=0" -f $specSlugs.Count)
-  exit 0
+  Exit-Guard -Name 'db-agreement' -Summary ("recipes={0} issues=0" -f $specSlugs.Count) -Code 0
 }
 # The headline used to count only what SURVIVED the category caps, so a default run reported 44 when the
 # real total was 48. The caps are a display convenience; the count must not inherit them.
@@ -370,5 +369,4 @@ Write-Output ("db-agreement: {0} drift issue(s){1}" -f ($issues.Count + $suppres
 $cap = if($ShowAll){ $issues.Count } else { 25 }
 $issues | Select-Object -First $cap | ForEach-Object { Write-Output ("  ! " + $_) }
 if($issues.Count -gt $cap){ Write-Output ("  ... {0} more not shown - rerun with -ShowAll" -f ($issues.Count - $cap)) }
-Write-GuardComplete -Name 'db-agreement' -Summary ("issues=" + $issues.Count)
-exit 1
+Exit-Guard -Name 'db-agreement' -Summary ("issues=" + $issues.Count) -Code 1

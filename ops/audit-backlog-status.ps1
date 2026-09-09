@@ -251,15 +251,13 @@ if ($SelfTest) {
 # ------------------------------------------------------------------------------------- live run
 if (-not (Test-Path -LiteralPath $LEDGER)) {
   Write-Output ("BACKLOG STATUS AUDIT BLIND: {0} does not exist, so nothing was checked." -f $LEDGER)
-  Write-GuardComplete -Name 'backlog-status' -Summary 'blind=no-ledger'
-  exit 3
+  Exit-Guard -Name 'backlog-status' -Summary 'blind=no-ledger' -Code 3
 }
 $items = Get-TcLedgerStates -Lines ([IO.File]::ReadAllLines($LEDGER))
 $items = @($items)
 if (-not $items.Count) {
   Write-Output 'BACKLOG STATUS AUDIT BLIND: parsed zero item headings, which means the heading format moved rather than the ledger being empty.'
-  Write-GuardComplete -Name 'backlog-status' -Summary 'blind=no-items'
-  exit 3
+  Exit-Guard -Name 'backlog-status' -Summary 'blind=no-items' -Code 3
 }
 
 if ($Summary) {
@@ -304,10 +302,8 @@ $bad = @($items | Where-Object { $_.Problem })
 foreach ($b in $bad) { Write-Output ("  {0}: {1}" -f $b.Id, $b.Problem) }
 if ($bad.Count) {
   Write-Output ("BACKLOG STATUS AUDIT FAILED: {0} item(s) of {1} are malformed - each either does not declare exactly one state from the closed vocabulary ({2}), or is a not-closed item missing one of the two sorting fields (`2-WAY`/`1-WAY`, and ``RUNG1 <{3}>``). The legend at the head of design\BACKLOG-course-findings.md says what each one means and which wins when two could apply." -f $bad.Count, $items.Count, ($STATES -join ', '), ($RUNG_TYPES -join '|'))
-  Write-GuardComplete -Name 'backlog-status' -Summary ("items={0} malformed={1}" -f $items.Count, $bad.Count)
-  exit 2
+  Exit-Guard -Name 'backlog-status' -Summary ("items={0} malformed={1}" -f $items.Count, $bad.Count) -Code 2
 }
 $byState = ($STATES | ForEach-Object { $s = $_; ("{0} {1}" -f @($items | Where-Object { $_.State -eq $s }).Count, $s) }) -join ', '
 Write-Output ("backlog-status: PASSED - all {0} item(s) declare exactly one state. {1}. Run with -Summary for the board." -f $items.Count, $byState)
-Write-GuardComplete -Name 'backlog-status' -Summary ("items={0} malformed=0" -f $items.Count)
-exit 0
+Exit-Guard -Name 'backlog-status' -Summary ("items={0} malformed=0" -f $items.Count) -Code 0

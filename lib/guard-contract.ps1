@@ -56,6 +56,54 @@ function Write-GuardComplete {
   Write-Output ("{0}-COMPLETE {1}" -f $Name.ToUpper(), $Summary).TrimEnd()
 }
 
+$script:TcGuardMarkerWritten = $false
+
+function Exit-Guard {
+  <# The ONLY way a wrapped guard should leave: write the marker, then exit with the code.
+
+     WHY THIS EXISTS (2026-09-09, backlog I86, ruled by Brad: sweep it). `Write-GuardComplete` is a
+     convention honoured independently at 793 call sites across 119 files, and its own header records
+     FIVE separate incidents of a guard dying without one - which is indistinguishable from a clean
+     run. The Chain-of-Responsibility fix is a template method a link structurally cannot skip.
+
+     MEASURED 2026-09-09, and it is the fact the whole design turns on: `exit` inside a scriptblock
+     DOES run an enclosing `finally`, but it does NOT run the statements after the call. So a wrapper
+     that wrote the marker after invoking the body would silently drop it for every guard that exits
+     with a finding - which is most of them. The marker therefore travels WITH the exit. #>
+  param([Parameter(Mandatory=$true)][string]$Name, [int]$Code = 0, [string]$Summary = '')
+  Write-GuardComplete -Name $Name -Summary $Summary
+  $script:TcGuardMarkerWritten = $true
+  exit $Code
+}
+
+function Invoke-Guard {
+  <# Run a guard body so the completion marker cannot be forgotten.
+
+     THREE PATHS, AND THE THIRD IS THE POINT:
+       * the body returns normally  -> the marker is written here, from its return value
+       * the body calls Exit-Guard  -> the marker was already written, and this does not double it
+       * the body THROWS            -> NO marker, deliberately. A crash must never look complete;
+                                       that is the entire failure this contract exists to catch.
+
+     A raw `exit N` inside the body writes no marker and that is left LOUD on purpose: the guard-
+     contract audit then reports the guard as unfinished, which is a visible failure rather than a
+     silent one. The wrapper moves the obligation from 793 sites to 119; it does not remove the audit,
+     because forgetting to USE the wrapper is the same hole one level up. #>
+  param([Parameter(Mandatory=$true)][string]$Name, [Parameter(Mandatory=$true)][scriptblock]$Body)
+  $script:TcGuardMarkerWritten = $false
+  $ok = $false
+  $summary = ''
+  try {
+    $summary = & $Body
+    $ok = $true
+  } finally {
+    if ($ok -and -not $script:TcGuardMarkerWritten) {
+      Write-GuardComplete -Name $Name -Summary ([string]$summary)
+      $script:TcGuardMarkerWritten = $true
+    }
+  }
+}
+
 function Test-GuardComplete {
   <# Caller side: did this child finish? $Output is everything the child wrote to stdout. #>
   param($Output, [Parameter(Mandatory=$true)][string]$Name)
@@ -107,6 +155,52 @@ if ($__gcSelfTest) {
   Remove-Item $probe -Force -ErrorAction SilentlyContinue
   T 'MUST FIRE  dot-sourcing this must not clobber a caller''s own -SelfTest switch' `
     ($probeOut -match 'SelfTest=True') $probeOut
+
+  # ---- Invoke-Guard / Exit-Guard (2026-09-09, backlog I86) -------------------------------------
+  # These run OUT OF PROCESS because the behaviour under test IS process exit: `exit` inside a
+  # scriptblock cannot be observed from inside the same runspace without ending this suite.
+  $gp = Join-Path $env:TEMP 'gc-invoke-probe.ps1'
+  $body = @(
+    'param([string]$Mode)',
+    (". '" + $PSCommandPath + "'"),
+    'Invoke-Guard -Name ''probe'' -Body {',
+    '  if ($Mode -eq ''normal'') { ''scanned=10 findings=0'' }',
+    '  elseif ($Mode -eq ''exitguard'') { Exit-Guard -Name ''probe'' -Code 2 -Summary ''scanned=10 findings=3'' }',
+    '  elseif ($Mode -eq ''throws'') { throw ''boom'' }',
+    '  elseif ($Mode -eq ''rawexit'') { Write-Output ''did work''; exit 3 }',
+    '}'
+  ) -join "`r`n"
+  Set-Content -LiteralPath $gp -Value $body -Encoding UTF8
+
+  function RunProbe([string]$mode) {
+    $o = Join-Path $env:TEMP ("gc-probe-out-" + $mode + ".txt")
+    & powershell -NoProfile -ExecutionPolicy Bypass -File $gp $mode > $o 2>$null
+    $code = $LASTEXITCODE
+    $lines = @(Get-Content $o -ErrorAction SilentlyContinue)
+    Remove-Item $o -Force -ErrorAction SilentlyContinue
+    return @{ Code = $code; Lines = $lines }
+  }
+
+  $r1 = RunProbe 'normal'
+  T 'Invoke-Guard writes the marker when the body returns normally' `
+    (Test-GuardComplete $r1.Lines 'probe') (($r1.Lines -join '|'))
+  T 'and the body''s return value becomes the summary' `
+    (($r1.Lines -join ' ') -match 'PROBE-COMPLETE scanned=10 findings=0') (($r1.Lines -join '|'))
+
+  $r2 = RunProbe 'exitguard'
+  T 'MUST FIRE  Exit-Guard writes the marker AND preserves the exit code - `exit` skips the statements after the body, so the marker has to travel with it' `
+    ((Test-GuardComplete $r2.Lines 'probe') -and $r2.Code -eq 2) ("code=" + $r2.Code + " " + ($r2.Lines -join '|'))
+  T 'MUST NOT FIRE  the marker is not written twice' `
+    (@($r2.Lines | Where-Object { $_ -match 'PROBE-COMPLETE' }).Count -eq 1) (($r2.Lines -join '|'))
+
+  $r3 = RunProbe 'throws'
+  T 'MUST FIRE  a body that THROWS writes NO marker - a crash must never look complete' `
+    (-not (Test-GuardComplete $r3.Lines 'probe')) (($r3.Lines -join '|'))
+
+  $r4 = RunProbe 'rawexit'
+  T 'MUST FIRE  a raw `exit` inside the body writes no marker, so the audit sees an unfinished guard rather than a silent pass' `
+    ((-not (Test-GuardComplete $r4.Lines 'probe')) -and $r4.Code -eq 3) ("code=" + $r4.Code + " " + ($r4.Lines -join '|'))
+  Remove-Item $gp -Force -ErrorAction SilentlyContinue
 
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }

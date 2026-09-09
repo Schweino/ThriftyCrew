@@ -190,8 +190,7 @@ if ($SelfTest) {
 
   if ($bad -gt 0) { Write-Output "audit-surface-staleness SELF-TEST FAIL ($bad)"; exit 2 }
   Write-Output 'audit-surface-staleness SELF-TEST PASS'
-  Write-GuardComplete -Name 'surface-staleness' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'surface-staleness' -Summary 'selftest pass' -Code 0
 }
 
 # ---- live sweep --------------------------------------------------------------------------------------
@@ -199,8 +198,7 @@ $manPath = Join-Path $mp 'pipeline\v2-perserving.json'
 $dbPath  = Join-Path $mp 'recipes-db.json'
 if (-not (Test-Path $manPath) -or -not (Test-Path $dbPath)) {
   Write-Output 'audit-surface-staleness: manifest or recipes-db missing - CANNOT EVALUATE'
-  Write-GuardComplete -Name 'surface-staleness' -Summary 'could-not-evaluate no-manifest'
-  exit 3
+  Exit-Guard -Name 'surface-staleness' -Summary 'could-not-evaluate no-manifest' -Code 3
 }
 $manifest = @{}
 foreach ($r in @((Get-Content $manPath -Raw -Encoding utf8 | ConvertFrom-Json))) { $manifest[[string]$r.slug] = [double]$r.cheapest_ps }
@@ -209,8 +207,7 @@ $doc = (Get-Content $dbPath -Raw -Encoding utf8).TrimStart([char]0xFEFF) | Conve
 foreach ($r in @($doc.recipes)) { $catalog[[string]$r.slug] = [string]$r.name }
 if ($manifest.Count -eq 0 -or $catalog.Count -eq 0) {
   Write-Output 'audit-surface-staleness: manifest or catalog read as empty - CANNOT EVALUATE'
-  Write-GuardComplete -Name 'surface-staleness' -Summary 'could-not-evaluate empty-inputs'
-  exit 3
+  Exit-Guard -Name 'surface-staleness' -Summary 'could-not-evaluate empty-inputs' -Code 3
 }
 
 # EACH SURFACE IS COMPARED AGAINST THE SOURCE IT IS BUILT FROM, WHICH IS NOT THE SAME SOURCE FOR ALL FOUR.
@@ -264,21 +261,18 @@ $summary | ForEach-Object { Write-Output $_ }
 if ($unevaluated.Count) {
   $unevaluated | ForEach-Object { Write-Output ('  ! ' + $_) }
   Write-Output ("audit-surface-staleness: {0} surface(s) COULD NOT BE EVALUATED" -f $unevaluated.Count)
-  Write-GuardComplete -Name 'surface-staleness' -Summary ("could-not-evaluate " + $unevaluated.Count)
-  exit 3
+  Exit-Guard -Name 'surface-staleness' -Summary ("could-not-evaluate " + $unevaluated.Count) -Code 3
 }
 if ($findings.Count) {
   $show = if ($ShowAll) { $findings } else { $findings | Select-Object -First 25 }
   $show | ForEach-Object { Write-Output ('  ! ' + $_) }
   if (-not $ShowAll -and $findings.Count -gt 25) { Write-Output ("  ... and {0} more (-ShowAll for the list)" -f ($findings.Count - 25)) }
   Write-Output ("audit-surface-staleness: {0} finding(s) - a reader-facing price surface disagrees with the manifest" -f $findings.Count)
-  Write-GuardComplete -Name 'surface-staleness' -Summary ("findings " + $findings.Count)
-  exit 1
+  Exit-Guard -Name 'surface-staleness' -Summary ("findings " + $findings.Count) -Code 1
 }
 Write-Output 'audit-surface-staleness: all four price surfaces agree with the source they are built from'
 Write-Output '  note: payday-stretcher is compared on the EVERYDAY basis (recipes-db.cost_batch_true), which is'
 Write-Output '        what its builder emits. The live tool then hydrates week_cost from the feed, which is the'
 Write-Output '        CHEAPEST basis, so its baked fallback and its hydrated value are on different bases. That is'
 Write-Output '        a pre-existing basis question for a human, not staleness, and this guard does not rule on it.'
-Write-GuardComplete -Name 'surface-staleness' -Summary 'clean'
-exit 0
+Exit-Guard -Name 'surface-staleness' -Summary 'clean' -Code 0

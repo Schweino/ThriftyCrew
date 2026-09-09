@@ -200,8 +200,7 @@ if (-not (Test-Path $mapFile)) { $mapFile = Join-Path $root 'recipe-floor-id-map
 $res = Get-ReconciliationFindings -Dir $OutDir -MapFile $mapFile
 if ($null -eq $res) {
   Write-Output 'board-reconciliation: COULD NOT EVALUATE - need both comparison-*.json and recipe-board.json'
-  Write-GuardComplete -Name 'board-reconciliation' -Summary 'blind=no-boards'
-  exit 3
+  Exit-Guard -Name 'board-reconciliation' -Summary 'blind=no-boards' -Code 3
 }
 
 Write-Output ("weekly rows {0}   recipe rows {1} (examined {2})" -f $res.WeeklyRows, $res.Eligible, $res.Examined)
@@ -220,8 +219,7 @@ try {
 
 if ($res.Eligible -gt 0 -and $res.Examined -eq 0) {
   Write-Output 'board-reconciliation: COULD NOT EVALUATE - the recipe board had rows and none were examined'
-  Write-GuardComplete -Name 'board-reconciliation' -Summary 'blind=examined-zero'
-  exit 3
+  Exit-Guard -Name 'board-reconciliation' -Summary 'blind=examined-zero' -Code 3
 }
 
 Write-Output ("COMMODITIES PUBLISHED ON BOTH BOARDS: {0}" -f $res.Duplicates.Count)

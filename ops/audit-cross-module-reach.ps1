@@ -148,8 +148,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("cross-module-reach SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'cross-module-reach SELF-TEST PASS'
-  Write-GuardComplete -Name 'cross-module-reach' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'cross-module-reach' -Summary 'selftest pass' -Code 0
 }
 
 # ---- sweep -----------------------------------------------------------------------------------------
@@ -210,8 +209,7 @@ if ($runUpdate) {
   }
   [IO.File]::WriteAllText($BASELINE, ($obj | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
   Write-Output ("cross-module-reach: baseline set to {0}" -f $codeSites)
-  Write-GuardComplete -Name 'cross-module-reach' -Summary ("baseline={0}" -f $codeSites)
-  exit 0
+  Exit-Guard -Name 'cross-module-reach' -Summary ("baseline={0}" -f $codeSites) -Code 0
 }
 
 if (-not (Test-Path $BASELINE)) {
@@ -222,11 +220,9 @@ $base = [int]((Get-Content $BASELINE -Raw | ConvertFrom-Json).code_sites)
 if ($codeSites -gt $base) {
   Write-Output ("cross-module-reach: RATCHET ROSE. baseline {0}, now {1}. A new cross-module reach was added." -f $base, $codeSites)
   Write-Output '  Read the published artefact (public/board.json) instead, or lower the baseline deliberately with a reason.'
-  Write-GuardComplete -Name 'cross-module-reach' -Summary ("ROSE base={0} now={1}" -f $base, $codeSites)
-  exit 2
+  Exit-Guard -Name 'cross-module-reach' -Summary ("ROSE base={0} now={1}" -f $base, $codeSites) -Code 2
 }
 if ($codeSites -lt $base) {
   Write-Output ("cross-module-reach: below the high-water mark ({0} < {1}). Lower it with -UpdateBaseline." -f $codeSites, $base)
 }
-Write-GuardComplete -Name 'cross-module-reach' -Summary ("code={0} comment={1} base={2}" -f $codeSites, $commentSites, $base)
-exit 0
+Exit-Guard -Name 'cross-module-reach' -Summary ("code={0} comment={1} base={2}" -f $codeSites, $commentSites, $base) -Code 0

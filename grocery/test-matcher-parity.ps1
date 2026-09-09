@@ -48,8 +48,7 @@ function Extract([string]$file, [string]$pattern, [string]$what) {
   if (-not $m.Success) {
     Write-Output ("FATAL: could not extract $what from $file - this test cannot prove anything, so it fails rather than passing quietly.")
     Write-Output "       (the function was renamed or reshaped; update the pattern, do not delete the test)"
-    Write-GuardComplete -Name 'matcher-parity' -Summary 'BLIND: zero names loaded'
-    exit 2
+    Exit-Guard -Name 'matcher-parity' -Summary 'BLIND: zero names loaded' -Code 2
   }
   return $m.Value
 }
@@ -73,8 +72,7 @@ $cdSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
 $gm = [regex]::Match($cdSrc, '\$GLOBAL_EXCLUDE\s*=\s*@\((?<body>[\s\S]*?)\r?\n\)')
 if (-not $gm.Success) {
   Write-Output 'FATAL: cannot parse $GLOBAL_EXCLUDE from compare-deals.ps1'
-  Write-GuardComplete -Name 'matcher-parity' -Summary 'BLIND: could not parse GLOBAL_EXCLUDE from the engine'
-  exit 2
+  Exit-Guard -Name 'matcher-parity' -Summary 'BLIND: could not parse GLOBAL_EXCLUDE from the engine' -Code 2
 }
 $GLOBAL_EXCLUDE = Invoke-Expression ('@(' + $gm.Groups['body'].Value + ')')
 $commodities = Read-JsonFile (Join-Path $root 'commodities.json')
@@ -121,8 +119,7 @@ if ($Sample -gt 0 -and $total -gt $Sample) {
 }
 if ($all.Count -eq 0) {
   Write-Output 'FATAL: zero product names loaded - a parity test over nothing would report agreement it never checked.'
-  Write-GuardComplete -Name 'matcher-parity' -Summary ("compared=" + $all.Count + " disagreements=" + $n)
-  exit 2
+  Exit-Guard -Name 'matcher-parity' -Summary ("compared=" + $all.Count + " disagreements=" + $n) -Code 2
 }
 
 $diff = New-Object System.Collections.Generic.List[string]
@@ -145,8 +142,7 @@ if ($diff.Count) {
   Write-Output ''
   Write-Output 'Fix by making the copies match the engine - or, better, extract match-lib.ps1 the way'
   Write-Output 'pu-lib.ps1 and known-wrong-lib.ps1 already are, so the question cannot be asked again.'
-  Write-GuardComplete -Name 'matcher-parity' -Summary ("compared=" + $all.Count + " disagreements=" + $n)
-  exit 2
+  Exit-Guard -Name 'matcher-parity' -Summary ("compared=" + $all.Count + " disagreements=" + $n) -Code 2
 }
 Write-Output 'MATCHER-PARITY OK - every copy assigns every product name exactly as the engine does.'
 Write-GuardComplete -Name 'matcher-parity' -Summary ("compared=" + $all.Count + " disagreements=0")

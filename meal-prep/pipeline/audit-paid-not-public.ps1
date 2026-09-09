@@ -132,8 +132,11 @@ if ($SelfTest) {
   $noKey = [regex]::Match($self, '(?ms)^if \(-not \$adminKey\) \{.*?^\}')
   T 'MUST FIRE  the no-key path exists and is guarded' ($noKey.Success) 'no-key branch not found'
   if ($noKey.Success) {
+    # BOTH SPELLINGS ARE ACCEPTED SINCE 2026-09-09 (backlog I86): `exit 3` and `Exit-Guard -Code 3`
+    # mean the same thing, and the sweep to Exit-Guard changed the letters without changing the
+    # claim. The assertion is unchanged - three, and never zero.
     T 'MUST FIRE  a missing Ghost key exits 3 (could-not-evaluate), never 0 (clean)' `
-      ($noKey.Value -match 'exit 3' -and $noKey.Value -notmatch 'exit 0') $noKey.Value
+      (($noKey.Value -match 'exit 3|-Code 3') -and ($noKey.Value -notmatch 'exit 0|-Code 0')) $noKey.Value
     T '  ...and it says so out loud rather than exiting quietly' `
       ($noKey.Value -match 'CANNOT EVALUATE') 'no spoken reason'
   }
@@ -157,8 +160,7 @@ if ($SelfTest) {
 
   if ($bad -gt 0) { Write-Output "audit-paid-not-public SELF-TEST FAIL ($bad)"; exit 2 }
   Write-Output 'audit-paid-not-public SELF-TEST PASS'
-  Write-GuardComplete -Name 'audit-paid-not-public' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'audit-paid-not-public' -Summary 'selftest pass' -Code 0
 }
 
 # ---- live sweep ------------------------------------------------------------------------------------
@@ -168,8 +170,7 @@ $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
 if (-not $adminKey) {
   # COULD-NOT-EVALUATE IS ITS OWN EXIT CODE. A missing credential must never read as "no leaks".
   Write-Output 'audit-paid-not-public: no Ghost admin key (GHOST_ADMIN_KEY or meal-prep\.ghostkey) - CANNOT EVALUATE'
-  Write-GuardComplete -Name 'audit-paid-not-public' -Summary 'could-not-evaluate no-key'
-  exit 3
+  Exit-Guard -Name 'audit-paid-not-public' -Summary 'could-not-evaluate no-key' -Code 3
 }
 . (Join-Path $repo 'lib\ghost-lib.ps1')
 $apiUrl = 'https://map-to-success.ghost.io'

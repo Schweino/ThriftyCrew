@@ -34,8 +34,7 @@ $fn = $ast.Find({ param($n) $n -is [System.Management.Automation.Language.Functi
 if (-not $fn) {
   Bad 'Test-HyVeeTagAgreement is GONE from pull-regular-hyvee.ps1 - the shelf-tag cross-check has been removed and a price below the store tag can publish again'
   Write-Output 'HYVEE-TAG-CHECK FAILED (1)'
-  Write-GuardComplete -Name 'hyvee-tag-check' -Summary 'failed=1 (function missing)'
-  exit 1
+  Exit-Guard -Name 'hyvee-tag-check' -Summary 'failed=1 (function missing)' -Code 1
 }
 . ([scriptblock]::Create($fn.Extent.Text))
 

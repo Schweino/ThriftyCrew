@@ -160,8 +160,7 @@ foreach ($f in $files) {
 if ($unscanned.Count) {
   Write-Output ("BLIND: " + $unscanned.Count + " of " + $files.Count + " script(s) could not be scanned, so this count is a floor, not a measurement:")
   $unscanned | Select-Object -First 10 | ForEach-Object { Write-Output ('  ' + $_) }
-  Write-GuardComplete -Name 'json-readers' -Summary ('BLIND on ' + $unscanned.Count + ' file(s)')
-  exit 3
+  Exit-Guard -Name 'json-readers' -Summary ('BLIND on ' + $unscanned.Count + ' file(s)') -Code 3
 }
 $count = $findings.Count
 $byFile = $findings | Group-Object file | Sort-Object Count -Descending
@@ -180,14 +179,12 @@ if ($Baseline -or $verdict -eq 'first') {
   @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the bare-JSON-reader ratchet, set 2026-09-05 when PS 5.1 codepage decoding was found corrupting live board names. This number may only go DOWN. A run above it is a NEW bare reader and hard-fails.' } |
     ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
   Write-Output ("  baseline written: $count site(s). From here the number may only go DOWN.")
-  Write-GuardComplete -Name 'json-readers' -Summary "baseline $count"
-  exit 0
+  Exit-Guard -Name 'json-readers' -Summary "baseline $count" -Code 0
 }
 @{ generated = (Get-Date).ToString('s'); count = $count; findings = @($findings) } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'json-readers.json') -Encoding UTF8
 if ($verdict -eq 'break') {
   Write-Output ("audit-json-readers: RATCHET BROKEN - $count site(s) now, baseline $base. A NEW bare JSON read has been added. On a BOM-less file it will silently mangle every non-ASCII character and bake the damage into the bytes. Use Read-JsonFile from lib\json-io.ps1.")
-  Write-GuardComplete -Name 'json-readers' -Summary "$count over a baseline of $base"
-  exit 2
+  Exit-Guard -Name 'json-readers' -Summary "$count over a baseline of $base" -Code 2
 }
 if ($verdict -eq 'tighten') {
   @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the bare-JSON-reader ratchet. This number may only go DOWN.' } |
@@ -195,5 +192,4 @@ if ($verdict -eq 'tighten') {
   Write-Output ("  ratchet tightened: $count site(s), was $base. New baseline written.")
 }
 Write-Output ("audit-json-readers: $count site(s) against a baseline of $base - the known backlog, not a regression. Convert them with Read-JsonFile (lib\json-io.ps1).")
-Write-GuardComplete -Name 'json-readers' -Summary "$count site(s), baseline $base"
-exit 0
+Exit-Guard -Name 'json-readers' -Summary "$count site(s), baseline $base" -Code 0

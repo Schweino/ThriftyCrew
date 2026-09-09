@@ -206,8 +206,7 @@ foreach ($f in $findings) {
 Write-Output ("  report: " + $rep)
 if ($confirmedCount -gt 0) {
   Write-Output ("PACK-BASIS BLOCKED: " + $confirmedCount + " cell(s) carry the arithmetic fingerprint of a pack TOTAL read as an each-size. That is not a judgement call, it is stated-size/count reproducing a size other stores sell, so the published per-unit is wrong by a factor of the count. Correct the size at capture, or rule the row wrong with add-known-wrong.ps1, then rebuild. Do NOT publish over this.")
-  Write-GuardComplete -Name 'pack-basis'
-  exit 2
+  Exit-Guard -Name 'pack-basis' -Code 2
 }
 # above the -Strict branch, not below it: all three of these are completed runs and only differ in verdict
 Write-GuardComplete -Name 'pack-basis' -Summary ''

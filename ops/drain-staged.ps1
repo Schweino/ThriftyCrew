@@ -117,8 +117,7 @@ if ($SelfTest) {
 if (-not $Queue) { $Queue = $(if ($env:TC_STAGE_WRITES) { $env:TC_STAGE_WRITES } else { Join-Path $repo 'ops\staged-writes.jsonl' }) }
 if (-not (Test-Path -LiteralPath $Queue)) {
   Write-Output ("drain-staged: nothing queued ({0}). An armed run that wrote nothing is a normal result." -f $Queue)
-  Write-GuardComplete -Name 'drain-staged' -Summary 'queued=0'
-  exit 0
+  Exit-Guard -Name 'drain-staged' -Summary 'queued=0' -Code 0
 }
 $lines = @([IO.File]::ReadAllLines($Queue))
 $entries = @(); $bad = 0
@@ -126,14 +125,12 @@ $n = 0
 foreach ($l in $lines) { $n++; if (-not $l.Trim()) { continue }; try { $entries += ($l | ConvertFrom-Json) } catch { $bad++ } }
 if ($bad) {
   Write-Output ("DRAIN-STAGED COULD NOT RUN: {0} queue line(s) will not parse. Some intended write is invisible to the reviewer, so approving now would send an unknown subset." -f $bad)
-  Write-GuardComplete -Name 'drain-staged' -Summary ("blind=badlines-" + $bad)
-  exit 3
+  Exit-Guard -Name 'drain-staged' -Summary ("blind=badlines-" + $bad) -Code 3
 }
 $entries = @($entries)
 if (-not $entries.Count) {
   Write-Output 'drain-staged: the queue file exists but holds no calls.'
-  Write-GuardComplete -Name 'drain-staged' -Summary 'queued=0'
-  exit 0
+  Exit-Guard -Name 'drain-staged' -Summary 'queued=0' -Code 0
 }
 
 $concerns = Get-TcQueueConcerns -Entries $entries
@@ -155,20 +152,17 @@ try {
   $reply = (@($reply) -join "`n")
 } catch {
   Write-Output ("DRAIN-STAGED COULD NOT RUN: the reviewer dispatch failed ({0}). The queue is untouched." -f $_.Exception.Message)
-  Write-GuardComplete -Name 'drain-staged' -Summary 'blind=dispatch-failed'
-  exit 3
+  Exit-Guard -Name 'drain-staged' -Summary 'blind=dispatch-failed' -Code 3
 } finally { if (Test-Path -LiteralPath $briefFile) { Remove-Item -LiteralPath $briefFile -Force } }
 
 $v = Get-TcDrainVerdict $reply
 if (-not $v.Go) {
   Write-Output ("drain-staged: HELD - {0}. The queue is LEFT IN PLACE and nothing was sent; read it with ops\review-staged.ps1 and apply or discard by hand." -f $v.Why)
-  Write-GuardComplete -Name 'drain-staged' -Summary ("held=" + $entries.Count)
-  exit 2
+  Exit-Guard -Name 'drain-staged' -Summary ("held=" + $entries.Count) -Code 2
 }
 if ($WhatIf) {
   Write-Output ("drain-staged: WOULD APPLY {0} call(s) - the reviewer returned GO, and -WhatIf means nothing was sent." -f $entries.Count)
-  Write-GuardComplete -Name 'drain-staged' -Summary 'whatif=1'
-  exit 0
+  Exit-Guard -Name 'drain-staged' -Summary 'whatif=1' -Code 0
 }
 Write-Output 'drain-staged: GO - applying the queue.'
 & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo 'ops\review-staged.ps1') -Queue $Queue -Apply

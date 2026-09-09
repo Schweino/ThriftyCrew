@@ -458,6 +458,5 @@ foreach ($r in ($out | Sort-Object verdict, id)) {
 if (-not $OutFile) { $OutFile = Join-Path $root 'out\aisle-test.json' }
 ($out.ToArray() | ConvertTo-Json -Depth 4) | Set-Content $OutFile -Encoding UTF8
 Write-Output "-> $OutFile"
-Write-GuardComplete -Name 'aisle-test' -Summary ''
-exit 0
+Exit-Guard -Name 'aisle-test' -Summary '' -Code 0
 

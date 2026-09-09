@@ -160,8 +160,7 @@ if($runSelfTest){
 
   if($bad -gt 0){ Write-Output ("audit-unbid-ingredients SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'audit-unbid-ingredients SELF-TEST PASS'
-  Write-GuardComplete -Name 'audit-unbid-ingredients' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'audit-unbid-ingredients' -Summary 'selftest pass' -Code 0
 }
 
 # ---- sweep -----------------------------------------------------------------------------------------
@@ -192,8 +191,7 @@ $files = if(@($slugList).Count -gt 0){
 # A named slug with no spec is a finding, not a silent skip: "swept 0 of 2" must never read as clean.
 if(@($missingSpecs).Count -gt 0){
   Write-Output ("audit-unbid-ingredients: {0} named slug(s) have NO spec in {1}: {2}" -f @($missingSpecs).Count, $RecipesDir, (@($missingSpecs) -join ', '))
-  Write-GuardComplete -Name 'audit-unbid-ingredients' -Summary ("missing-specs={0}" -f @($missingSpecs).Count)
-  exit 1
+  Exit-Guard -Name 'audit-unbid-ingredients' -Summary ("missing-specs={0}" -f @($missingSpecs).Count) -Code 1
 }
 
 $findings = @()
@@ -228,8 +226,7 @@ if($runJson){
 Write-Output ("audit-unbid-ingredients: swept {0} spec(s)" -f @($files).Count)
 if(@($findings).Count -eq 0){
   Write-Output '  ok - every scaler ingredient carries a bid (or is allowlisted as not price-tracked)'
-  Write-GuardComplete -Name 'audit-unbid-ingredients' -Summary ("clean n={0}" -f @($files).Count)
-  exit 0
+  Exit-Guard -Name 'audit-unbid-ingredients' -Summary ("clean n={0}" -f @($files).Count) -Code 0
 }
 Write-Output ("  {0} spec(s) carry an ingredient the browser cannot price (the card's live scaler reads 'Unavailable'):" -f @($findings).Count)
 foreach($f in ($findings | Sort-Object count -Descending)){
@@ -238,5 +235,4 @@ foreach($f in ($findings | Sort-Object count -Descending)){
 Write-Output '  The per-serving number beside it is NOT wrong: cost-recipes resolves the bid from db\ingredients.json, not from the spec.'
 Write-Output '  Fix: pipeline\repair-missing-scaler-bid.ps1 -Apply heals any block whose vocabulary row already knows the bid, then recost,'
 Write-Output '       reanchor and rebuild the card. A vocabulary row that is deliberately bid-less needs a product-class ruling, not a repair.'
-Write-GuardComplete -Name 'audit-unbid-ingredients' -Summary ("findings={0}" -f @($findings).Count)
-exit 1
+Exit-Guard -Name 'audit-unbid-ingredients' -Summary ("findings={0}" -f @($findings).Count) -Code 1

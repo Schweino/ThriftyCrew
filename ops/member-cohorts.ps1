@@ -434,34 +434,29 @@ if ($CheckFresh) {
   $rowCount = @($h.Rows).Count
   if (-not $h.Exists -or $rowCount -eq 0) {
     Write-Output ("member-cohorts: no snapshot series at {0}. BLIND, not clean - run with -AppendHistory." -f $historyPath)
-    Write-GuardComplete -Name 'member-cohorts' -Summary 'blind=no-history'
-    exit 3
+    Exit-Guard -Name 'member-cohorts' -Summary 'blind=no-history' -Code 3
   }
   $snapCount = @(@($h.Rows) | ForEach-Object { [string]$_.snapshot } | Sort-Object -Unique).Count
   if ($reason) {
     Write-Output ("member-cohorts: THE MONTHLY SERIES HAS STOPPED - {0}." -f $reason)
     Write-Output '  Nothing else in this estate would have noticed: every other threshold is an upper bound'
     Write-Output '  and cannot fire on nothing happening. A month not snapshotted cannot be recovered later.'
-    Write-GuardComplete -Name 'member-cohorts' -Summary ("stale rows={0} snapshots={1}" -f $rowCount, $snapCount)
-    exit 2
+    Exit-Guard -Name 'member-cohorts' -Summary ("stale rows={0} snapshots={1}" -f $rowCount, $snapCount) -Code 2
   }
   Write-Output ("member-cohorts: series fresh - {0} row(s) over {1} snapshot(s), newest within {2} days." -f $rowCount, $snapCount, $HISTORY_MAX_AGE_DAYS)
-  Write-GuardComplete -Name 'member-cohorts' -Summary ("fresh rows={0} snapshots={1}" -f $rowCount, $snapCount)
-  exit 0
+  Exit-Guard -Name 'member-cohorts' -Summary ("fresh rows={0} snapshots={1}" -f $rowCount, $snapCount) -Code 0
 }
 
 # RULE 4: ASSERT THE DESTINATION BEFORE ANYTHING IS FETCHED.
 $why = Test-TcOutputPathSafe -Path $OutFile -Repo $repo
 if ($why) {
   Write-Output ("MEMBER COHORTS REFUSED: {0}. Nothing was fetched - the path is checked BEFORE the first API call, on purpose." -f $why)
-  Write-GuardComplete -Name 'member-cohorts' -Summary 'refused=bad-output-path'
-  exit 2
+  Exit-Guard -Name 'member-cohorts' -Summary 'refused=bad-output-path' -Code 2
 }
 Write-Output ("output path asserted safe BEFORE any fetch: {0}" -f $OutFile)
 if ($WhatIf) {
   Write-Output 'WHATIF: the path is valid and NOTHING was fetched. Re-run without -WhatIf to pull.'
-  Write-GuardComplete -Name 'member-cohorts' -Summary 'whatif=path-ok'
-  exit 0
+  Exit-Guard -Name 'member-cohorts' -Summary 'whatif=path-ok' -Code 0
 }
 
 $adminKey = $env:GHOST_ADMIN_KEY
@@ -471,8 +466,7 @@ if (-not $adminKey) {
 }
 if (-not $adminKey) {
   Write-Output 'MEMBER COHORTS BLIND: no GHOST_ADMIN_KEY and no meal-prep\.ghostkey, so nothing was read. That is could-not-evaluate, never "no members".'
-  Write-GuardComplete -Name 'member-cohorts' -Summary 'blind=no-key'
-  exit 3
+  Exit-Guard -Name 'member-cohorts' -Summary 'blind=no-key' -Code 3
 }
 . (Join-Path $repo 'lib\ghost-lib.ps1')
 $apiUrl = 'https://map-to-success.ghost.io'
@@ -505,15 +499,13 @@ try {
   }
 } catch {
   Write-Output ("MEMBER COHORTS BLIND: the members read failed ({0}). Nothing was written." -f $_.Exception.Message)
-  Write-GuardComplete -Name 'member-cohorts' -Summary 'blind=read-failed'
-  exit 3
+  Exit-Guard -Name 'member-cohorts' -Summary 'blind=read-failed' -Code 3
 }
 
 $t = Get-TcCohortTable -Pairs $pairs.ToArray()
 if ($t.Total -eq 0) {
   Write-Output 'MEMBER COHORTS BLIND: the API returned zero members. That is not "nobody signed up" - it is a read that produced nothing, and no file was written.'
-  Write-GuardComplete -Name 'member-cohorts' -Summary 'blind=zero-members'
-  exit 3
+  Exit-Guard -Name 'member-cohorts' -Summary 'blind=zero-members' -Code 3
 }
 
 # ---- report. Every rate prints with its denominator (.claude\rules\measurement.md). ----
@@ -570,8 +562,7 @@ $json = $out | ConvertTo-Json -Depth 6
 if ($json -match '@' -and $json -notmatch '^[^@]*$') {
   if ($json -match '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}') {
     Write-Output 'MEMBER COHORTS REFUSED TO WRITE: the aggregate contains something shaped like an email address. That should be structurally impossible; investigate before re-running. Nothing was written.'
-    Write-GuardComplete -Name 'member-cohorts' -Summary 'refused=address-shaped-content'
-    exit 2
+    Exit-Guard -Name 'member-cohorts' -Summary 'refused=address-shaped-content' -Code 2
   }
 }
 Set-Content -LiteralPath $OutFile -Value $json -Encoding UTF8
@@ -597,8 +588,7 @@ if ($AppendHistory) {
     $joined = ($lines -join "`n")
     if ($joined -match '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}') {
       Write-Output 'MEMBER COHORTS REFUSED TO APPEND: a history row looks like it contains an email address. That should be structurally impossible; investigate. Nothing was appended.'
-      Write-GuardComplete -Name 'member-cohorts' -Summary 'refused=address-shaped-history'
-      exit 2
+      Exit-Guard -Name 'member-cohorts' -Summary 'refused=address-shaped-history' -Code 2
     }
     Add-Content -LiteralPath $historyPath -Value $lines -Encoding UTF8
     Write-Output ("  history: appended {0} row(s) for snapshot {1} to {2}" -f $lines.Count, $snapshot, (Split-Path $historyPath -Leaf))
@@ -622,8 +612,7 @@ if ($AppendHistory) {
     $aJoined = ($aLines -join "`n")
     if ($aJoined -match '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' -or $aJoined -match 'alert-') {
       Write-Output 'MEMBER COHORTS REFUSED TO APPEND the alert series: a row contains an address or a LABEL STRING. Only buckets and counts may be written. Investigate.'
-      Write-GuardComplete -Name 'member-cohorts' -Summary 'refused=label-string-in-alert-series'
-      exit 2
+      Exit-Guard -Name 'member-cohorts' -Summary 'refused=label-string-in-alert-series' -Code 2
     }
     Add-Content -LiteralPath $alertHistoryPath -Value $aLines -Encoding UTF8
     Write-Output ("  alerts:  appended {0} row(s) - {1} of {2} member(s) carry at least one price alert." -f $aLines.Count, $at.Exposed, $at.Total)
@@ -634,5 +623,4 @@ if ($AppendHistory) {
   Write-Output '  history, so a month that is not snapshotted is a month that cannot be reconstructed.'
 }
 
-Write-GuardComplete -Name 'member-cohorts' -Summary ("members={0} cohorts={1} undated={2}" -f $t.Total, $months.Count, $t.Undated)
-exit 0
+Exit-Guard -Name 'member-cohorts' -Summary ("members={0} cohorts={1} undated={2}" -f $t.Total, $months.Count, $t.Undated) -Code 0

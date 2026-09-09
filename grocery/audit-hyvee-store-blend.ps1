@@ -38,8 +38,7 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $f = Get-ChildItem (Join-Path $OutDir 'regular\hyvee-regular-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $f) {
   Write-Output 'hyvee-store-blend: no Hy-Vee everyday file found'
-  Write-GuardComplete -Name 'hyvee-store-blend' -Summary 'BLIND: no file'
-  exit 3
+  Exit-Guard -Name 'hyvee-store-blend' -Summary 'BLIND: no file' -Code 3
 }
 $doc = Read-JsonFile $f.FullName
 $rows = @($doc.deals)
@@ -88,5 +87,4 @@ if (-not $Quiet) {
   }
   Write-Output ("  -> " + $out)
 }
-Write-GuardComplete -Name 'hyvee-store-blend' -Summary "rows=$total on=$onTarget off=$offTarget pct=$pct"
-exit 0
+Exit-Guard -Name 'hyvee-store-blend' -Summary "rows=$total on=$onTarget off=$offTarget pct=$pct" -Code 0

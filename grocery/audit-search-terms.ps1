@@ -162,8 +162,7 @@ if ($drift.Count) {
 if (-not $suspect.Count) {
   Write-Output '  ok  no term returns rows while its food is absent from the whole corpus'
   . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
-  Write-GuardComplete -Name 'search-terms' -Summary ("0 suspect, {0} drift, {1} untestable" -f @($drift).Count, @($untestable).Count)
-  exit 0
+  Exit-Guard -Name 'search-terms' -Summary ("0 suspect, {0} drift, {1} untestable" -f @($drift).Count, @($untestable).Count) -Code 0
 }
 Write-Output ("SEARCHTERMS: {0} term(s) return rows but the food they name appears NOWHERE in the corpus:" -f $suspect.Count)
 foreach ($s in $suspect) { Write-Output ("  ? {0,-26} term '{1}' -> {2} rows, e.g. '{3}'" -f $s.commodity, $s.term, $s.rows, $s.example) }
@@ -175,5 +174,4 @@ Write-Output '     Fix the term in commodity-search.json and re-capture BEFORE p
 # matters more here than most: this is a fan-out lane now, and a lane that dies quietly in a pool is
 # harder to notice than one that dies in a serial chain.
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
-Write-GuardComplete -Name 'search-terms' -Summary ("{0} suspect, {1} drift, {2} untestable" -f @($suspect).Count, @($drift).Count, @($untestable).Count)
-exit 0
+Exit-Guard -Name 'search-terms' -Summary ("{0} suspect, {1} drift, {2} untestable" -f @($suspect).Count, @($drift).Count, @($untestable).Count) -Code 0

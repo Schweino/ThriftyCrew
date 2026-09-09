@@ -183,15 +183,13 @@ if (-not $BoardFile) {
 }
 if (-not $BoardFile -or -not (Test-Path -LiteralPath $BoardFile)) {
   Write-Output 'PRICE-CLAIMS AUDIT BLIND: no comparison board on disk, so no claim was checked. That is the expected state in a worktree - the boards are gitignored - and it is NOT evidence that the claims still hold.'
-  Write-GuardComplete -Name 'price-claims' -Summary 'blind=no-board'
-  exit 3
+  Exit-Guard -Name 'price-claims' -Summary 'blind=no-board' -Code 3
 }
 $board = Get-Content $BoardFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $prices = Get-TcBoardPrices $board
 if (-not $prices.Keys.Count) {
   Write-Output 'PRICE-CLAIMS AUDIT BLIND: the board parsed and priced nothing, which is a read failure rather than an empty board.'
-  Write-GuardComplete -Name 'price-claims' -Summary 'blind=no-prices'
-  exit 3
+  Exit-Guard -Name 'price-claims' -Summary 'blind=no-prices' -Code 3
 }
 
 $specs = @(Get-ChildItem $SPEC_DIR -Filter *.json -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
@@ -219,13 +217,11 @@ Write-Output ("  board {0}, {1} commodity price(s)" -f (Split-Path $BoardFile -L
 
 if ($bad.Count) {
   Write-Output ("PRICE-CLAIMS AUDIT FAILED: {0} of {1} declared price claim(s) are now CONTRADICTED by the board. A comparison that was true when it was written and is false today is a wrong number on a live paid page, and it is the failure no declaration can catch - a declaration is a one-time act and the board is rebuilt daily." -f $bad.Count, $results.Count)
-  Write-GuardComplete -Name 'price-claims' -Summary ("claims={0} contradicted={1} unpriceable={2}" -f $results.Count, $bad.Count, $unpriceable.Count)
-  exit 2
+  Exit-Guard -Name 'price-claims' -Summary ("claims={0} contradicted={1} unpriceable={2}" -f $results.Count, $bad.Count, $unpriceable.Count) -Code 2
 }
 if (-not $results.Count) {
   Write-Output 'price-claims: PASSED - no spec declares a price_claims entry yet, so there is nothing to contradict. That is the honest state on the day this shipped, not a clean bill: the 332 comparisons already in the prose are undeclared and therefore unchecked. The FIRST declaration is worth more than all of them, because it is the only one anybody can verify.'
 } else {
   Write-Output ("price-claims: PASSED - {0} declared claim(s) still hold on today's board, {1} could not be priced (reported, never counted as agreement)." -f ($results.Count - $unpriceable.Count), $unpriceable.Count)
 }
-Write-GuardComplete -Name 'price-claims' -Summary ("claims={0} contradicted=0 unpriceable={1}" -f $results.Count, $unpriceable.Count)
-exit 0
+Exit-Guard -Name 'price-claims' -Summary ("claims={0} contradicted=0 unpriceable={1}" -f $results.Count, $unpriceable.Count) -Code 0

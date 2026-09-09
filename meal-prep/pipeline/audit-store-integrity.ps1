@@ -383,8 +383,7 @@ $ingm=@{}; $ingm = Add-PriceNames $ing $ingm   # item names AND adjudicated alia
 # completion so a real crash here still reads as a crash.
 if($ingm.Count -lt 200){
   Write-Output ("  ! audit-store-integrity: indexed only $($ingm.Count) price names - implausible; parse error, not data.")
-  Write-GuardComplete -Name 'store-integrity' -Summary 'BLIND: price-name index implausibly small'
-  exit 1
+  Exit-Guard -Name 'store-integrity' -Summary 'BLIND: price-name index implausibly small' -Code 1
 }
 $fdb = Get-Content (Join-Path $mp 'food-macros-db.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $fdbm=@{}; foreach($g in $fdb.PSObject.Properties){ if($g.Value -is [array]){ foreach($x in $g.Value){ if($x.item -and -not $fdbm.ContainsKey($x.item)){ $fdbm[$x.item]=$x } } } }

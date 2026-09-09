@@ -22,8 +22,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if (-not (Get-Command Test-PriceSplitSelf -ErrorAction SilentlyContinue)) {
   Write-Output 'FAIL  Test-PriceSplitSelf is GONE from price-split-lib - the everyday/ad separation has no fixtures at all'
   Write-Output 'PRICE-SPLIT FAILED (1)'
-  Write-GuardComplete -Name 'price-split' -Summary 'failed=1 (fixtures missing)'
-  exit 1
+  Exit-Guard -Name 'price-split' -Summary 'failed=1 (fixtures missing)' -Code 1
 }
 
 # CAPTURE THE WHOLE STREAM, THEN TAKE THE COUNT OFF THE END. Test-PriceSplitSelf both Write-Outputs

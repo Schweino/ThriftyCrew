@@ -259,14 +259,12 @@ if ($SelfTest) {
 # ------------------------------------------------------------------------------------- live run
 if (-not (Test-Path -LiteralPath $AGENT_DIR)) {
   Write-Output ("AGENT-TOOLS AUDIT BLIND: {0} does not exist. Nothing was checked." -f $AGENT_DIR)
-  Write-GuardComplete -Name 'agent-tools' -Summary 'blind=no-agent-dir'
-  exit 3
+  Exit-Guard -Name 'agent-tools' -Summary 'blind=no-agent-dir' -Code 3
 }
 $files = @(Get-ChildItem $AGENT_DIR -Filter *.md -File -ErrorAction SilentlyContinue)
 if (-not $files.Count) {
   Write-Output 'AGENT-TOOLS AUDIT BLIND: found zero agent definitions, which means the discovery is broken rather than there being none.'
-  Write-GuardComplete -Name 'agent-tools' -Summary 'blind=no-agents'
-  exit 3
+  Exit-Guard -Name 'agent-tools' -Summary 'blind=no-agents' -Code 3
 }
 $problems = @()
 foreach ($fl in $files) {
@@ -277,8 +275,7 @@ $problems = @($problems)
 if ($problems.Count) {
   Write-Output ("AGENT-TOOLS AUDIT FAILED: {0} problem(s) across {1} agent definition(s):" -f $problems.Count, $files.Count)
   foreach ($p in $problems) { Write-Output ("  {0,-28} {1,-22} {2}" -f $p.Agent, $p.Kind, $p.Detail) }
-  Write-GuardComplete -Name 'agent-tools' -Summary ("problems={0}" -f $problems.Count)
-  exit 2
+  Exit-Guard -Name 'agent-tools' -Summary ("problems={0}" -f $problems.Count) -Code 2
 }
 $writers = @($files | Where-Object {
   $d = Get-TcDeclaredTools -Lines ([IO.File]::ReadAllLines($_.FullName))
@@ -297,5 +294,4 @@ Write-Output ("agent-tools: PASSED - all {0} agent(s) declare a tools: line and 
 # this does is make the spend visible on every gate run, so an upgrade is noticed rather than billed.
 Write-Output '  model / effort pins:'
 foreach ($k in ($matrix.Keys | Sort-Object)) { Write-Output ("    {0,-28} {1} agent(s)" -f $k, $matrix[$k]) }
-Write-GuardComplete -Name 'agent-tools' -Summary ("agents={0} writers={1}" -f $files.Count, $writers.Count)
-exit 0
+Exit-Guard -Name 'agent-tools' -Summary ("agents={0} writers={1}" -f $files.Count, $writers.Count) -Code 0

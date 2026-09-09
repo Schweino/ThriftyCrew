@@ -150,15 +150,13 @@ if ($Recipes) {
   $hashPath = Join-Path $mpRoot 'db\published-hashes.json'
   if (-not (Test-Path $hashPath)) {
     Write-Output "ghost-drift/recipes: COULD NOT EVALUATE - no publish ledger at $hashPath"
-    Write-GuardComplete -Name 'ghost-drift' -Summary 'recipes blind=no-ledger'
-    exit 3
+    Exit-Guard -Name 'ghost-drift' -Summary 'recipes blind=no-ledger' -Code 3
   }
   $ledger = @{}
   foreach ($p in ((Read-JsonFile $hashPath).PSObject.Properties)) { $ledger[$p.Name] = [string]$p.Value }
   if (-not $ledger.Count) {
     Write-Output 'ghost-drift/recipes: COULD NOT EVALUATE - the publish ledger records zero slugs, so a clean result would prove nothing'
-    Write-GuardComplete -Name 'ghost-drift' -Summary 'recipes blind=empty-ledger'
-    exit 3
+    Exit-Guard -Name 'ghost-drift' -Summary 'recipes blind=empty-ledger' -Code 3
   }
 
   $slugs = @($ledger.Keys | Sort-Object)
@@ -264,8 +262,7 @@ if ($Discover) {
   (@{ generated = (Get-Date -Format 'yyyy-MM-dd'); note = 'slug<->local source for the tool posts; rebuild with -Discover'; tools = $map } |
     ConvertTo-Json -Depth 5) | Out-File $manifestPath -Encoding utf8
   Write-Output ("manifest written: {0} tool(s) -> {1}" -f $map.Count, $manifestPath)
-  Write-GuardComplete -Name 'ghost-drift' -Summary ("discover mapped={0}" -f $map.Count)
-  exit 0
+  Exit-Guard -Name 'ghost-drift' -Summary ("discover mapped={0}" -f $map.Count) -Code 0
 }
 
 if (-not (Test-Path $manifestPath)) {
@@ -340,8 +337,7 @@ if ($Accept) {
                                           reason = 'REPLACE ME: why the live body is allowed to differ' })
   (@{ allow = $new } | ConvertTo-Json -Depth 5) | Out-File $allowPath -Encoding utf8
   Write-Output ("recorded {0} @ {1} in the allowlist - now write the reason field, an unexplained silence is not a review" -f $Accept, $hit[0].hash)
-  Write-GuardComplete -Name 'ghost-drift' -Summary ("accepted={0}" -f $Accept)
-  exit 0
+  Exit-Guard -Name 'ghost-drift' -Summary ("accepted={0}" -f $Accept) -Code 0
 }
 
 # ---- HOW OLD IS THE LIVE PAGE (2026-09-07, queue 2026-09-07-e7286e) ----------------------------------

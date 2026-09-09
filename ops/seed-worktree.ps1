@@ -125,19 +125,16 @@ if ($SelfTest) {
 # ------------------------------------------------------------------------------------- live run
 if (-not $Target) {
   Write-Output 'SEED-WORKTREE COULD NOT EVALUATE: -Target is required and names the worktree to seed. Nothing was copied and nothing was proven.'
-  Write-GuardComplete -Name 'seed-worktree' -Summary 'blind=no-target'
-  exit 3
+  Exit-Guard -Name 'seed-worktree' -Summary 'blind=no-target' -Code 3
 }
 if (-not (Test-Path -LiteralPath $Target)) {
   Write-Output ("SEED-WORKTREE COULD NOT EVALUATE: -Target does not exist ({0})." -f $Target)
-  Write-GuardComplete -Name 'seed-worktree' -Summary 'blind=no-target-dir'
-  exit 3
+  Exit-Guard -Name 'seed-worktree' -Summary 'blind=no-target-dir' -Code 3
 }
 $targetFull = (Resolve-Path -LiteralPath $Target).Path
 if ($targetFull -eq $repo) {
   Write-Output ("SEED-WORKTREE COULD NOT EVALUATE: -Target is the source checkout itself ({0}). Seeding a tree from itself proves nothing and would be a no-op wearing a success line." -f $repo)
-  Write-GuardComplete -Name 'seed-worktree' -Summary 'blind=target-is-source'
-  exit 3
+  Exit-Guard -Name 'seed-worktree' -Summary 'blind=target-is-source' -Code 3
 }
 
 $plan = Get-SeedPlan -Seeds $SEED_DIRS -SourceRoot $repo -TargetRoot $targetFull -Exists { param($x) Test-Path -LiteralPath $x }
@@ -171,11 +168,9 @@ foreach ($row in $plan) {
 
 if ($problems.Count) {
   Write-Output ("seed-worktree: FAILED - {0} seed path(s) are missing from the source checkout, so the target is still blind on them. Do not read a green gate in that worktree as coverage." -f $problems.Count)
-  Write-GuardComplete -Name 'seed-worktree' -Summary ("copied={0} missing={1}" -f $copied, $problems.Count)
-  exit 2
+  Exit-Guard -Name 'seed-worktree' -Summary ("copied={0} missing={1}" -f $copied, $problems.Count) -Code 2
 }
 $verb = if ($WhatIf) { 'WOULD COPY' } else { 'copied' }
 Write-Output ("seed-worktree: DONE - {0} {1} path(s), {2} already present. .worktreeinclude carries the individual files; this carries the directories it cannot." -f $verb, $copied, $skipped)
 Write-Output '  Still not fixed by any copy: golden-test and ghost-drift go red in a fresh checkout over CRLF, not over data.'
-Write-GuardComplete -Name 'seed-worktree' -Summary ("copied={0} present={1}" -f $copied, $skipped)
-exit 0
+Exit-Guard -Name 'seed-worktree' -Summary ("copied={0} present={1}" -f $copied, $skipped) -Code 0

@@ -273,8 +273,7 @@ $rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $OutDir }) 'basis-recon
 Write-Output ("basis-reconcile: checked $checked cell(s) against the store's own unit price ($scanned indexed, $allowed allowlisted)")
 if ($findings.Count -eq 0) {
   Write-Output '  ok - every checkable cell agrees with the store within the factor rail'
-  Write-GuardComplete -Name 'basis-reconcile' -Summary ("checked={0} findings=0" -f $checked)
-  exit 0
+  Exit-Guard -Name 'basis-reconcile' -Summary ("checked={0} findings=0" -f $checked) -Code 0
 }
 Write-Output ("  " + $findings.Count + " cell(s) disagree with the STORE'S OWN unit price by a factor - one of the two is wrong:")
 foreach ($f in ($findings | Sort-Object { -[math]::Abs([math]::Log($_.factor)) })) {

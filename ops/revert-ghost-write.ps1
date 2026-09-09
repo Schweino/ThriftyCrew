@@ -195,14 +195,12 @@ if ($SelfTest) {
 if (-not $Journal) { $Journal = $(if ($env:TC_WRITE_JOURNAL) { $env:TC_WRITE_JOURNAL } else { Join-Path $repo 'ops\ghost-journal.jsonl' }) }
 if (-not (Test-Path -LiteralPath $Journal)) {
   Write-Output ("revert-ghost-write: no journal at {0}. Journalling is armed by setting TC_WRITE_JOURNAL before a run; nothing can be reverted that was not journalled." -f $Journal)
-  Write-GuardComplete -Name 'revert-ghost-write' -Summary 'entries=0'
-  exit 0
+  Exit-Guard -Name 'revert-ghost-write' -Summary 'entries=0' -Code 0
 }
 $parsed = Read-TcJournal -Lines ([IO.File]::ReadAllLines($Journal))
 if ($parsed.Bad.Count) {
   Write-Output ("REVERT-GHOST-WRITE COULD NOT EVALUATE: {0} journal line(s) will not parse ({1}). Some write is invisible here, so the journal cannot be trusted to be complete." -f $parsed.Bad.Count, ($parsed.Bad -join ', '))
-  Write-GuardComplete -Name 'revert-ghost-write' -Summary ("blind=badlines-" + $parsed.Bad.Count)
-  exit 3
+  Exit-Guard -Name 'revert-ghost-write' -Summary ("blind=badlines-" + $parsed.Bad.Count) -Code 3
 }
 $entries = @($parsed.Entries)
 
@@ -218,19 +216,16 @@ if (-not $Id) {
   Write-Output ''
   if ($refusals) {
     Write-Output ("revert-ghost-write: {0} of {1} entr(ies) have NO SAFE INVERSE and would be refused. Those writes are not recoverable by this tool; that is the honest limit of an undo log, not a bug in it." -f $refusals, $entries.Count)
-    Write-GuardComplete -Name 'revert-ghost-write' -Summary ("entries={0} unrevertable={1}" -f $entries.Count, $refusals)
-    exit 2
+    Exit-Guard -Name 'revert-ghost-write' -Summary ("entries={0} unrevertable={1}" -f $entries.Count, $refusals) -Code 2
   }
   Write-Output ("revert-ghost-write: all {0} entr(ies) have a computable inverse. Re-run with -Id <id> to apply one." -f $entries.Count)
-  Write-GuardComplete -Name 'revert-ghost-write' -Summary ("entries={0} unrevertable=0" -f $entries.Count)
-  exit 0
+  Exit-Guard -Name 'revert-ghost-write' -Summary ("entries={0} unrevertable=0" -f $entries.Count) -Code 0
 }
 
 $entry = @($entries | Where-Object { $_.id -eq $Id })
 if (-not $entry.Count) {
   Write-Output ("REVERT-GHOST-WRITE COULD NOT EVALUATE: no journal entry with id '{0}'." -f $Id)
-  Write-GuardComplete -Name 'revert-ghost-write' -Summary 'blind=no-such-id'
-  exit 3
+  Exit-Guard -Name 'revert-ghost-write' -Summary 'blind=no-such-id' -Code 3
 }
 $entry = $entry[0]
 $inv = Get-TcInverse -Entry $entry
@@ -238,13 +233,11 @@ Write-Output ("revert-ghost-write: [{0}] {1} {2}" -f $entry.id, $entry.method, $
 Write-Output ("  inverse: {0} - {1}" -f $inv.Action, $inv.Why)
 if ($inv.Action -eq 'REFUSE') {
   Write-Output '  REFUSED. Nothing was sent. Restore this one by hand, from the Ghost admin UI or a backup.'
-  Write-GuardComplete -Name 'revert-ghost-write' -Summary 'refused=1'
-  exit 2
+  Exit-Guard -Name 'revert-ghost-write' -Summary 'refused=1' -Code 2
 }
 if ($WhatIf) {
   Write-Output ("  WOULD send {0} to {1}" -f $inv.Method, $entry.uri)
-  Write-GuardComplete -Name 'revert-ghost-write' -Summary 'whatif=1'
-  exit 0
+  Exit-Guard -Name 'revert-ghost-write' -Summary 'whatif=1' -Code 0
 }
 # The journal stores no credential, so the token is minted here.
 $h = @{ Authorization = ('Ghost ' + (Get-GhostJWT -Key (Get-GhostKey -Root $repo))); 'Content-Type' = 'application/json' }
@@ -259,8 +252,7 @@ if ($inv.Method -ne 'DELETE') {
     if (-not $Force) {
       Write-Output ("revert-ghost-write: REFUSED - {0}." -f $safe.Reason)
       Write-Output '  Nothing was sent. Re-run with -Force ONLY if you have looked at the live page and decided the before-image is still the right content.'
-      Write-GuardComplete -Name 'revert-ghost-write' -Summary 'refused=stale'
-      exit 2
+      Exit-Guard -Name 'revert-ghost-write' -Summary 'refused=stale' -Code 2
     }
     Write-Output ("revert-ghost-write: -Force OVERRIDE - {0}. Sending anyway on your say-so." -f $safe.Reason)
   }
@@ -272,10 +264,8 @@ $env:TC_WRITE_JOURNAL = $null
 try {
   $null = Invoke-GhostApi -Method $inv.Method -Uri $entry.uri -Headers $h -Body $inv.Body
   Write-Output ("revert-ghost-write: REVERTED - {0} sent to {1}. The resource is back to its pre-write state; it was live and wrong for the interval in between, which this design cannot undo." -f $inv.Method, $entry.uri)
-  Write-GuardComplete -Name 'revert-ghost-write' -Summary ("reverted=" + $entry.id)
-  exit 0
+  Exit-Guard -Name 'revert-ghost-write' -Summary ("reverted=" + $entry.id) -Code 0
 } catch {
   Write-Output ("revert-ghost-write: FAILED - the inverse could not be sent: {0}. The resource is still in its post-write state." -f $_.Exception.Message)
-  Write-GuardComplete -Name 'revert-ghost-write' -Summary 'revert-failed=1'
-  exit 2
+  Exit-Guard -Name 'revert-ghost-write' -Summary 'revert-failed=1' -Code 2
 } finally { $env:TC_WRITE_JOURNAL = $savedJ }

@@ -268,8 +268,7 @@ if ($SelfTest) {
 
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); Write-GuardComplete -Name 'grocery-tasks' -Summary ("selftest-fail={0}" -f $fail); exit 2 }
   Write-Output 'SELF-TEST PASS: drift on arguments and on time, the lost-Hidden case, the 0930 name lie and its twins, the committed definitions, and the registrar-vs-registry agreement (frozen half-applied rename + the live tables)'
-  Write-GuardComplete -Name 'grocery-tasks' -Summary 'selftest=pass'
-  exit 0
+  Exit-Guard -Name 'grocery-tasks' -Summary 'selftest=pass' -Code 0
 }
 
 if ($VerifyRegistry) {
@@ -279,32 +278,27 @@ if ($VerifyRegistry) {
   # wrapper run-gates calls, because that list passes no arguments.)
   if (-not (Test-Path $REGISTRY)) {
     Write-Output ("GROCERY TASKS REGISTRY COULD NOT EVALUATE: {0} does not exist. Discovery broken, NOT a clean tree." -f $REGISTRY)
-    Write-GuardComplete -Name 'grocery-tasks' -Summary 'blind=no-registry'
-    exit 3
+    Exit-Guard -Name 'grocery-tasks' -Summary 'blind=no-registry' -Code 3
   }
   $regDoc = $null
   try { $regDoc = [IO.File]::ReadAllText($REGISTRY) | ConvertFrom-Json } catch { $regDoc = $null }
   if (-not $regDoc) {
     Write-Output ("GROCERY TASKS REGISTRY COULD NOT EVALUATE: {0} did not parse as JSON. Unreadable is not clean." -f $REGISTRY)
-    Write-GuardComplete -Name 'grocery-tasks' -Summary 'blind=registry-unparseable'
-    exit 3
+    Exit-Guard -Name 'grocery-tasks' -Summary 'blind=registry-unparseable' -Code 3
   }
   $regRows = @($regDoc.windows_tasks)
   if (-not $regRows.Count) {
     Write-Output 'GROCERY TASKS REGISTRY COULD NOT EVALUATE: expected-automations.json carries ZERO windows_tasks rows, so agreement is unprovable rather than clean.'
-    Write-GuardComplete -Name 'grocery-tasks' -Summary 'blind=no-rows'
-    exit 3
+    Exit-Guard -Name 'grocery-tasks' -Summary 'blind=no-rows' -Code 3
   }
   $regFindings = Test-RegistryAgrees -Owned $OWNED -Registry $regDoc
   foreach ($f in $regFindings) { Write-Output ('  ' + $f) }
   if ($regFindings.Count -gt 0) {
     Write-Output ("GROCERY TASKS REGISTRY DISAGREES: {0} finding(s) over {1} registrar-owned task(s) against {2} registry row(s). A task name is a foreign key in two hand-maintained tables and nothing compared them at change time, so a rename applied to the scheduler and to this registrar shipped while the watcher still named the old key. Fix the row in grocery\expected-automations.json (keep its allow_nonzero_exit and max_age_hours), not this table." -f $regFindings.Count, @($OWNED).Count, $regRows.Count)
-    Write-GuardComplete -Name 'grocery-tasks' -Summary ("registry-owned={0} rows={1} findings={2}" -f @($OWNED).Count, $regRows.Count, $regFindings.Count)
-    exit 2
+    Exit-Guard -Name 'grocery-tasks' -Summary ("registry-owned={0} rows={1} findings={2}" -f @($OWNED).Count, $regRows.Count, $regFindings.Count) -Code 2
   }
   Write-Output ("grocery-tasks registry: PASSED - all {0} registrar-owned task(s) are named in expected-automations.json and no legacy name survives there ({1} registry row(s) read)." -f @($OWNED).Count, $regRows.Count)
-  Write-GuardComplete -Name 'grocery-tasks' -Summary ("registry-owned={0} rows={1} findings=0" -f @($OWNED).Count, $regRows.Count)
-  exit 0
+  Exit-Guard -Name 'grocery-tasks' -Summary ("registry-owned={0} rows={1} findings=0" -f @($OWNED).Count, $regRows.Count) -Code 0
 }
 
 if ($Install -or $FixName) {
@@ -338,15 +332,13 @@ if ($Install -or $FixName) {
     Register-ScheduledTask -TaskName $target -Xml $xml -Force | Out-Null
   }
   Write-Output 'Registered. Run -Verify now.'
-  Write-GuardComplete -Name 'grocery-tasks' -Summary 'installed=3'
-  exit 0
+  Exit-Guard -Name 'grocery-tasks' -Summary 'installed=3' -Code 0
 }
 
 # -Verify is the default and the only mode that runs unattended.
 if (-not (Test-Path $XMLDIR)) {
   Write-Output ("GROCERY TASKS COULD NOT EVALUATE: {0} does not exist. Discovery broken, NOT a clean tree." -f $XMLDIR)
-  Write-GuardComplete -Name 'grocery-tasks' -Summary 'blind=no-xmldir'
-  exit 3
+  Exit-Guard -Name 'grocery-tasks' -Summary 'blind=no-xmldir' -Code 3
 }
 $findings = @()
 $checked = 0
@@ -361,8 +353,7 @@ foreach ($o in $OWNED) {
   }
   if (-not $live) {
     Write-Output ("GROCERY TASKS COULD NOT EVALUATE: '{0}' is not registered on this machine. That is not drift - a box without the task is not a box with a wrong one." -f $o.Name)
-    Write-GuardComplete -Name 'grocery-tasks' -Summary 'blind=task-absent'
-    exit 3
+    Exit-Guard -Name 'grocery-tasks' -Summary 'blind=task-absent' -Code 3
   }
   $checked++
   foreach ($d in (Compare-TaskToXml $live $xml)) { $findings += ("{0}: {1}" -f $live.TaskName, $d) }
@@ -388,9 +379,7 @@ if (Test-Path $REGISTRY) {
 foreach ($f in $findings) { Write-Output ("  " + $f) }
 if ($findings.Count -gt 0) {
   Write-Output ("GROCERY TASKS AUDIT FAILED: {0} finding(s) across {1} task(s) checked. A scheduled task that has drifted from the definition in this repo is running something nobody committed, and until 2026-09-06 there was no definition in this repo to drift from." -f $findings.Count, $checked)
-  Write-GuardComplete -Name 'grocery-tasks' -Summary ("checked={0} findings={1}" -f $checked, $findings.Count)
-  exit 2
+  Exit-Guard -Name 'grocery-tasks' -Summary ("checked={0} findings={1}" -f $checked, $findings.Count) -Code 2
 }
 Write-Output ("grocery-tasks: PASSED - all {0} task(s) match the committed definitions, and every name agrees with the hour it runs." -f $checked)
-Write-GuardComplete -Name 'grocery-tasks' -Summary ("checked={0} findings=0" -f $checked)
-exit 0
+Exit-Guard -Name 'grocery-tasks' -Summary ("checked={0} findings=0" -f $checked) -Code 0

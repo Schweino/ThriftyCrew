@@ -224,8 +224,7 @@ foreach ($p in $walked) {
 }
 if ($srcs.Count -eq 0) {
   Write-Output 'write-only-reports: BLIND - zero source files reached the scan, so a clean result would prove nothing'
-  Write-GuardComplete -Name 'write-only-reports' -Summary 'blind'
-  exit 3
+  Exit-Guard -Name 'write-only-reports' -Summary 'blind' -Code 3
 }
 $res = Find-WriteOnlyFamilies $srcs
 $n = @($res.write_only).Count
@@ -243,13 +242,11 @@ if ($Accept -or $null -eq $base) {
      note = 'High-water mark for the write-only-report ratchet (queue 2026-09-07-72756b). This number may only go DOWN. A run above it means a NEW report family was written with no consumer.' } |
     ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
   Write-Output ("  baseline written: $n family(ies). From here the number may only go DOWN.")
-  Write-GuardComplete -Name 'write-only-reports' -Summary "families=$n baseline=$n"
-  exit 0
+  Exit-Guard -Name 'write-only-reports' -Summary "families=$n baseline=$n" -Code 0
 }
 if ($n -gt $base) {
   Write-Output ("write-only-reports: RATCHET BROKEN - $n write-only family(ies) now, baseline $base. A report family was added with a writer and no reader; if its alert promises a consumer, that promise is empty.")
-  Write-GuardComplete -Name 'write-only-reports' -Summary "families=$n baseline=$base"
-  exit 2
+  Exit-Guard -Name 'write-only-reports' -Summary "families=$n baseline=$base" -Code 2
 }
 if ($n -lt $base) {
   @{ generated = (Get-Date).ToString('s'); families = $n; names = $res.write_only
@@ -258,5 +255,4 @@ if ($n -lt $base) {
   Write-Output ("  ratchet tightened: $n family(ies), was $base. New baseline written.")
 }
 Write-Output ("write-only-reports: $n family(ies) against a baseline of $base - the known backlog, not a regression.")
-Write-GuardComplete -Name 'write-only-reports' -Summary "families=$n baseline=$base"
-exit 0
+Exit-Guard -Name 'write-only-reports' -Summary "families=$n baseline=$base" -Code 0

@@ -216,8 +216,7 @@ foreach ($sub in @('ops', 'grocery')) {
 }
 if ($scanned -eq 0) {
   Write-Output 'arg-binding: BLIND - zero checking scripts reached the scan, so a clean result would prove nothing'
-  Write-GuardComplete -Name 'arg-binding' -Summary 'blind=nothing-scanned'
-  exit 3
+  Exit-Guard -Name 'arg-binding' -Summary 'blind=nothing-scanned' -Code 3
 }
 $n = @($findings).Count
 # THE DENOMINATOR, ALWAYS. "0 findings" is a mood; "0 of 99 examined" is a measurement.
@@ -228,8 +227,7 @@ Write-Output ("arg-binding: {0} of the same {1} carry [CmdletBinding()] AND an a
 foreach ($w in $broken) { Write-Output ('  DEAD-AT-BIND  ' + $w + '  (resolve the default below the param block)') }
 if ($nBroken -gt 0) {
   Write-Output 'arg-binding: HARD FAIL - a script in this state throws before its first statement, and the symptom surfaces somewhere else entirely (on 2026-09-07 it read as a guards coverage-regression HARD FAIL).'
-  Write-GuardComplete -Name 'arg-binding' -Summary "unbound=$n dead_at_bind=$nBroken examined=$scanned"
-  exit 2
+  Exit-Guard -Name 'arg-binding' -Summary "unbound=$n dead_at_bind=$nBroken examined=$scanned" -Code 2
 }
 
 $blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'out\arg-binding-baseline.json' }
@@ -245,14 +243,12 @@ function Write-AbBaseline([int]$Count) {
 if ($Accept -or $null -eq $base) {
   Write-AbBaseline $n
   Write-Output ("  baseline written: $n unbound of $scanned examined. From here the number may only go DOWN.")
-  Write-GuardComplete -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$n"
-  exit 0
+  Exit-Guard -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$n" -Code 0
 }
 $move = Test-RatchetMove -Name 'arg-binding' -Count $n -Baseline $base
 if ($move.Verdict -eq 'rose') {
   Write-Output ("arg-binding: RATCHET BROKEN - $n unbound of $scanned examined, baseline $base. A checking script was added or edited so that an argument it does not declare is silently discarded, and its PASS then answers a question nobody asked.")
-  Write-GuardComplete -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$base"
-  exit 2
+  Exit-Guard -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$base" -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
   Write-AbBaseline $n
@@ -261,5 +257,4 @@ if ($move.Verdict -eq 'tightened') {
   Write-Output ('  ' + $move.Message + ' - baseline kept at ' + $base)
 }
 Write-Output ("arg-binding: $n of $scanned examined are unbound, against a baseline of $base.")
-Write-GuardComplete -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$base"
-exit 0
+Exit-Guard -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$base" -Code 0

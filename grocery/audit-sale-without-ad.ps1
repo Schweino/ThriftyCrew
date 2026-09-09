@@ -141,6 +141,5 @@ if (-not $Quiet) {
   }
   Write-Output ("  -> " + $ledgerFile)
 }
-Write-GuardComplete -Name 'sale-without-ad' -Summary "sale=$saleCells traced=$traced untraceable=$($found.Count)"
-exit 0
+Exit-Guard -Name 'sale-without-ad' -Summary "sale=$saleCells traced=$traced untraceable=$($found.Count)" -Code 0
 

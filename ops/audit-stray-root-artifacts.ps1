@@ -181,8 +181,7 @@ if ($SelfTest) {
 $entries = @(Get-ChildItem -LiteralPath $repo -Force -ErrorAction SilentlyContinue | ForEach-Object { $_.Name })
 if (-not $entries.Count) {
   Write-Output 'STRAY-ROOT AUDIT BLIND: enumerated zero entries at the repo root, which means this enumeration is broken rather than the root being empty. Nothing was checked, so nothing was proven.'
-  Write-GuardComplete -Name 'stray-root' -Summary 'blind=no-entries'
-  exit 3
+  Exit-Guard -Name 'stray-root' -Summary 'blind=no-entries' -Code 3
 }
 
 # NO 2>&1 on a native exe: merging git's stderr under EAP=Stop turns its first stderr line into a
@@ -191,14 +190,12 @@ $lsOut = & git -C $repo ls-files
 $rc = $LASTEXITCODE
 if ($rc -ne 0) {
   Write-Output ("STRAY-ROOT AUDIT BLIND: git ls-files exited {0}, so the set of tracked entries is unknown and every root entry would look stray. Unknown is not a finding and it is not a pass." -f $rc)
-  Write-GuardComplete -Name 'stray-root' -Summary ("blind=git-rc-$rc")
-  exit 3
+  Exit-Guard -Name 'stray-root' -Summary ("blind=git-rc-$rc") -Code 3
 }
 $lsFiles = @($lsOut | ForEach-Object { [string]$_ } | Where-Object { $_.Trim() -ne '' })
 if (-not $lsFiles.Count) {
   Write-Output 'STRAY-ROOT AUDIT BLIND: git reported zero tracked files. In a repo with thousands that is a broken read, not a clean tree.'
-  Write-GuardComplete -Name 'stray-root' -Summary 'blind=no-tracked-files'
-  exit 3
+  Exit-Guard -Name 'stray-root' -Summary 'blind=no-tracked-files' -Code 3
 }
 # A tracked root file contributes its own name; a tracked file deeper in contributes its first segment,
 # which is how a directory earns its place without being listed by hand.
@@ -226,10 +223,8 @@ if ($stray.Count) {
   }
   Write-Output '  Find the WRITER before deleting any of these - the artifact is the only evidence of the bug that made it.'
   Write-Output '  If an entry belongs at the root, add it to $ALLOW in this file with the reason, which is a line someone defends in a diff.'
-  Write-GuardComplete -Name 'stray-root' -Summary ("stray={0}" -f $stray.Count)
-  exit 2
+  Exit-Guard -Name 'stray-root' -Summary ("stray={0}" -f $stray.Count) -Code 2
 }
 
 Write-Output ("stray-root: PASSED - all {0} root entr(ies) are tracked, hold tracked files, or are allow-listed." -f $entries.Count)
-Write-GuardComplete -Name 'stray-root' -Summary ("entries={0} stray=0" -f $entries.Count)
-exit 0
+Exit-Guard -Name 'stray-root' -Summary ("entries={0} stray=0" -f $entries.Count) -Code 0

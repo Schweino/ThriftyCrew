@@ -97,8 +97,7 @@ if ($SelfTest) {
 $guardsPath = Join-Path $PSScriptRoot 'guards.ps1'
 if (-not (Test-Path -LiteralPath $guardsPath)) {
   Write-Output 'BLIND: guards.ps1 not found, so no verdict can be measured'
-  Write-GuardComplete -Name 'refresh-chain-verdict' -Summary 'blind=no-guards'
-  exit 3
+  Exit-Guard -Name 'refresh-chain-verdict' -Summary 'blind=no-guards' -Code 3
 }
 $before = Read-ChainVerdictStatus -Repo $repo -OutDir $OutDir
 Write-Output ('before: ' + $before.status + ' - ' + $before.why)

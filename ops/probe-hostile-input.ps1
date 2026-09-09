@@ -173,8 +173,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("hostile-input SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'hostile-input SELF-TEST PASS: 10 case(s) resolved'
-  Write-GuardComplete -Name 'hostile-input' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'hostile-input' -Summary 'selftest pass' -Code 0
 }
 
 # ---- the probe -------------------------------------------------------------------------------------

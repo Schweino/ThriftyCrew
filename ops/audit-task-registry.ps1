@@ -42,8 +42,7 @@ $repo = Split-Path $here -Parent
 $target = Join-Path $here 'install-grocery-tasks.ps1'
 if (-not (Test-Path $target)) {
   Write-Output ("TASK REGISTRY COULD NOT EVALUATE: {0} does not exist, so the registrar's own table cannot be read. Discovery broken, NOT a clean tree." -f $target)
-  Write-GuardComplete -Name 'task-registry' -Summary 'blind=no-registrar'
-  exit 3
+  Exit-Guard -Name 'task-registry' -Summary 'blind=no-registrar' -Code 3
 }
 
 # NO 2>&1 on the child: this file sets EAP='Stop' and in PS 5.1 redirecting a native child's stderr turns
@@ -56,14 +55,11 @@ foreach ($l in @($out)) { if ([string]$l -notmatch '^GROCERY-TASKS-COMPLETE') { 
 
 if ($rc -eq 0) {
   Write-Output 'task-registry: PASSED - the registrar and the heartbeat registry name the same scheduled tasks.'
-  Write-GuardComplete -Name 'task-registry' -Summary 'agree=yes'
-  exit 0
+  Exit-Guard -Name 'task-registry' -Summary 'agree=yes' -Code 0
 }
 if ($rc -eq 2) {
   Write-Output 'TASK REGISTRY FAILED: the registrar and grocery\expected-automations.json do not name the same tasks. A half-applied rename leaves a phantom row the heartbeat pages about and a live task nobody watches. Fix the registry row, keeping its allow_nonzero_exit and max_age_hours.'
-  Write-GuardComplete -Name 'task-registry' -Summary 'agree=no'
-  exit 2
+  Exit-Guard -Name 'task-registry' -Summary 'agree=no' -Code 2
 }
 Write-Output ("TASK REGISTRY COULD NOT EVALUATE: install-grocery-tasks.ps1 -VerifyRegistry exited {0}, which is neither clean nor a finding. Could-not-evaluate is never a pass." -f $rc)
-Write-GuardComplete -Name 'task-registry' -Summary ("blind=child-rc-{0}" -f $rc)
-exit 3
+Exit-Guard -Name 'task-registry' -Summary ("blind=child-rc-{0}" -f $rc) -Code 3

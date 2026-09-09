@@ -63,8 +63,7 @@ $dst = Join-Path $env:TEMP 'tc-precedence-fixture'
 robocopy $root $dst /MIR /NFL /NDL /NJH /NJS /XD (Join-Path $root 'out') (Join-Path $root 'archive') /R:1 /W:1 | Out-Null
 if ($LASTEXITCODE -ge 8) {
   Write-Output ("test-precedence-ladders: hermetic copy FAILED (robocopy rc=" + $LASTEXITCODE + ") - nothing was proven")
-  Write-GuardComplete -Name 'precedence-ladders' -Summary 'BLIND: fixture tree could not be built'
-  exit 3
+  Exit-Guard -Name 'precedence-ladders' -Summary 'BLIND: fixture tree could not be built' -Code 3
 }
 $fxOut = Join-Path $dst 'out'
 New-Item -ItemType Directory -Force (Join-Path $fxOut 'regular') | Out-Null

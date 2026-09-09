@@ -1627,11 +1627,9 @@ if ($fail.Count -gt 0) {
   foreach ($f in $fail) { Write-Output ("  " + $f) }
   Write-Output ''
   Write-Output ("GUARDS FAILED: " + $fail.Count + " hard invariant(s) violated. Board NOT safe to publish.")
-  Write-GuardComplete -Name 'guards' -Summary ("hard=" + $fail.Count + " warn=" + $warn.Count)
-  exit 2
+  Exit-Guard -Name 'guards' -Summary ("hard=" + $fail.Count + " warn=" + $warn.Count) -Code 2
 }
 Write-Output 'GUARDS OK: every hard invariant holds. Safe to publish.'
 # COMPLETION MARKER: the exit code says whether the board may publish; this line says the guard reached the
 # end. A crash partway through 40+ invariants would otherwise exit 1 and read like an ordinary verdict.
-Write-GuardComplete -Name 'guards' -Summary ("hard=0 warn=" + $warn.Count)
-exit 0
+Exit-Guard -Name 'guards' -Summary ("hard=0 warn=" + $warn.Count) -Code 0

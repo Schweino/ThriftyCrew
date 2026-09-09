@@ -105,14 +105,11 @@ if (Test-Path -LiteralPath $feedFile) {
 $v = Test-TcFeedWeekParity -BoardWeek $boardWeek -FeedWeek $feedWeek
 if ($v.Blind) {
   Write-Output ("FEED-WEEK-PARITY BLIND: {0}. Unknown is not a pass." -f $v.Detail)
-  Write-GuardComplete -Name 'feed-week-parity' -Summary 'blind=1'
-  exit 3
+  Exit-Guard -Name 'feed-week-parity' -Summary 'blind=1' -Code 3
 }
 if (-not $v.Ok) {
   Write-Output ("FEED-WEEK-PARITY FAILED: {0}" -f $v.Detail)
-  Write-GuardComplete -Name 'feed-week-parity' -Summary ("board={0} feed={1}" -f $boardWeek, $feedWeek)
-  exit 2
+  Exit-Guard -Name 'feed-week-parity' -Summary ("board={0} feed={1}" -f $boardWeek, $feedWeek) -Code 2
 }
 Write-Output ("feed-week-parity: PASSED - {0}." -f $v.Detail)
-Write-GuardComplete -Name 'feed-week-parity' -Summary ("week={0}" -f $boardWeek)
-exit 0
+Exit-Guard -Name 'feed-week-parity' -Summary ("week={0}" -f $boardWeek) -Code 0

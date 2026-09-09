@@ -855,8 +855,7 @@ function Block { param([string]$M) Write-Output ("wave-preaudit: BLOCKED - " + $
 
 if (-not $RunDir -or $Wave -le 0) {
   Block 'usage: -RunDir <run folder> -Wave <k>   (or -SelfTest)'
-  Write-GuardComplete -Name 'wave-preaudit' -Summary 'blocked: no run dir or wave'
-  exit 2
+  Exit-Guard -Name 'wave-preaudit' -Summary 'blocked: no run dir or wave' -Code 2
 }
 if (-not (Test-Path $RunDir)) { Block ("run dir not found: " + $RunDir); Write-GuardComplete -Name 'wave-preaudit' -Summary 'blocked: no run dir'; exit 2 }
 
@@ -878,8 +877,7 @@ $RunDir = (Resolve-Path -LiteralPath $RunDir).ProviderPath
 $manPath = Join-Path $RunDir ("waves\wave-{0}.json" -f $Wave)
 if (-not (Test-Path $manPath)) {
   Block ("no wave manifest at {0} - close the wave first (hunt-run.ps1 -WaveClose)" -f $manPath)
-  Write-GuardComplete -Name 'wave-preaudit' -Summary 'blocked: no manifest'
-  exit 2
+  Exit-Guard -Name 'wave-preaudit' -Summary 'blocked: no manifest' -Code 2
 }
 $man = $null
 try { $man = Read-JsonFile $manPath } catch { Block ("the wave manifest does not parse: " + $_.Exception.Message) }
@@ -897,8 +895,7 @@ if ($Slugs -and @($Slugs).Count) {
     # A scope this wave does not contain is a could-not-run, not a narrow pass. Certifying a slug the
     # manifest never listed is exactly the mislabel that cost the wave-2 audit its verification time.
     Block ("these slugs are not in wave {0}: {1}" -f $Wave, ($foreign -join ', '))
-    Write-GuardComplete -Name 'wave-preaudit' -Summary 'blocked: scope outside the wave'
-    exit 2
+    Exit-Guard -Name 'wave-preaudit' -Summary 'blocked: scope outside the wave' -Code 2
   }
   $target = $asked
   $scope = ('scoped: ' + ($asked -join ', '))

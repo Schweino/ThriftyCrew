@@ -390,5 +390,4 @@ $rp = Join-Path $OutDir 'semantic-findings.json'
 ($report | ConvertTo-Json -Depth 6) | Set-Content $rp -Encoding UTF8
 Write-Output ''
 Write-Output ("  -> $rp   ADVISORY ONLY: nothing here changes a price, a crown, a rule or a link.")
-Write-GuardComplete -Name 'semantic-identity' -Summary ''
-exit 0
+Exit-Guard -Name 'semantic-identity' -Summary '' -Code 0

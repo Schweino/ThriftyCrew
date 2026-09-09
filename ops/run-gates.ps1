@@ -85,8 +85,7 @@ if ($ListOnly) {
 
 if (-not $withSelfTest.Count) {
   Write-Output 'run-gates: COULD NOT EVALUATE - discovered zero self-tests, which means this discovery is broken, not that the tree is clean'
-  Write-GuardComplete -Name 'run-gates' -Summary 'blind=no-selftests'
-  exit 3
+  Exit-Guard -Name 'run-gates' -Summary 'blind=no-selftests' -Code 3
 }
 # A FLOOR, NOT JUST A ZERO CHECK (2026-09-07). The test above only catches discovery collapsing to
 # nothing; a walk that lost most of the tree - a moved directory, a broken exclusion, a regex that
@@ -96,8 +95,7 @@ if (-not $withSelfTest.Count) {
 # enrolled by their own headers, so 150 is a wide margin that still notices a collapse.
 if ($withSelfTest.Count -lt 150) {
   Write-Output ("run-gates: COULD NOT EVALUATE - PowerShell self-test DISCOVERY found only {0} suite(s); it found 201 on 2026-09-07. That is the walk broken, not the tree clean." -f $withSelfTest.Count)
-  Write-GuardComplete -Name 'run-gates' -Summary ("blind=selftest-discovery-collapsed n=" + $withSelfTest.Count)
-  exit 3
+  Exit-Guard -Name 'run-gates' -Summary ("blind=selftest-discovery-collapsed n=" + $withSelfTest.Count) -Code 3
 }
 
 $pass = 0; # WHERE THE WALL CLOCK GOES (2026-09-07). Every gate below is a fresh process - `powershell -File`

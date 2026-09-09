@@ -148,15 +148,13 @@ if ($SelfTest) {
 
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); Write-GuardComplete -Name 'null-rate' -Summary ("selftest-fail={0}" -f $fail); exit 2 }
   Write-Output 'SELF-TEST PASS: the founding case where the key stays and the value goes, the vanished field a rate comparison cannot see, and the wobble that must not fire'
-  Write-GuardComplete -Name 'null-rate' -Summary 'selftest=pass'
-  exit 0
+  Exit-Guard -Name 'null-rate' -Summary 'selftest=pass' -Code 0
 }
 
 $outRoot = if ($OutDir) { $OutDir } else { Join-Path $here 'out' }
 if (-not (Test-Path $outRoot)) {
   Write-Output ("NULL-RATE COULD NOT EVALUATE: no output directory at {0}. Discovery broken, NOT a clean tree." -f $outRoot)
-  Write-GuardComplete -Name 'null-rate' -Summary 'blind=no-outdir'
-  exit 3
+  Exit-Guard -Name 'null-rate' -Summary 'blind=no-outdir' -Code 3
 }
 
 # Newest file per store, taken from the files themselves rather than from a duplicated glob table.
@@ -178,8 +176,7 @@ foreach ($g in $globs) {
 
 if (-not $byStore.Count) {
   Write-Output ("NULL-RATE COULD NOT EVALUATE: no engine file under {0} carries at least {1} rows. That is discovery broken or an empty checkout, NOT a clean tree - and this estate's boards are gitignored, so a worktree lands here." -f $outRoot, $MIN_ROWS)
-  Write-GuardComplete -Name 'null-rate' -Summary 'blind=no-rows'
-  exit 3
+  Exit-Guard -Name 'null-rate' -Summary 'blind=no-rows' -Code 3
 }
 
 $now = @{}
@@ -204,8 +201,7 @@ if ($Update -or -not (Test-Path $BASELINE)) {
   }
   ($doc | ConvertTo-Json -Depth 6) | Set-Content $BASELINE -Encoding UTF8
   Write-Output ("null-rate: baseline written for {0} store/source pair(s). From here a field's blank rate rising more than {1} points, or a field vanishing, is a finding." -f $now.Count, $RISE_PCT)
-  Write-GuardComplete -Name 'null-rate' -Summary ("baseline=$($now.Count)")
-  exit 0
+  Exit-Guard -Name 'null-rate' -Summary ("baseline=$($now.Count)") -Code 0
 }
 
 $base = Get-Content $BASELINE -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -220,9 +216,7 @@ foreach ($k in ($now.Keys | Sort-Object)) {
 foreach ($f in $findings) { Write-Output ("  " + $f) }
 if ($findings.Count -gt 0) {
   Write-Output ("NULL-RATE AUDIT FAILED: {0} field(s) across {1} store/source pair(s) stopped carrying values while their rows kept arriving. Freshness and volume both pass on this shape, and the board prices from what is left." -f $findings.Count, $now.Count)
-  Write-GuardComplete -Name 'null-rate' -Summary ("pairs={0} findings={1}" -f $now.Count, $findings.Count)
-  exit 2
+  Exit-Guard -Name 'null-rate' -Summary ("pairs={0} findings={1}" -f $now.Count, $findings.Count) -Code 2
 }
 Write-Output ("null-rate: PASSED - {0} store/source pair(s) checked, no field's blank rate climbed more than {1} points and none vanished." -f $now.Count, $RISE_PCT)
-Write-GuardComplete -Name 'null-rate' -Summary ("pairs={0} findings=0" -f $now.Count)
-exit 0
+Exit-Guard -Name 'null-rate' -Summary ("pairs={0} findings=0" -f $now.Count) -Code 0

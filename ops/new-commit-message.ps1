@@ -71,8 +71,7 @@ if ($SelfTest) {
   } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($bad) { Write-Output "NEW-COMMIT-MESSAGE SELF-TEST FAILED ($bad)"; exit 2 }
   Write-Output 'NEW-COMMIT-MESSAGE SELF-TEST PASS'
-  Write-GuardComplete -Name 'new-commit-message' -Summary 'selftest ok'
-  exit 0
+  Exit-Guard -Name 'new-commit-message' -Summary 'selftest ok' -Code 0
 }
 
 if (-not $Body) {

@@ -94,8 +94,7 @@ if ($SelfTest) {
 
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); Write-GuardComplete -Name 'recost-freshness' -Summary ("selftest-fail={0}" -f $fail); exit 2 }
   Write-Output 'SELF-TEST PASS: the founding case where the same filename holds a different build, the absent stamp that must not read as a pass, and the partial recost that must not launder the catalog'
-  Write-GuardComplete -Name 'recost-freshness' -Summary 'selftest=pass'
-  exit 0
+  Exit-Guard -Name 'recost-freshness' -Summary 'selftest=pass' -Code 0
 }
 
 $db = if ($DbRoot) { $DbRoot } else { Join-Path $mp 'db' }
@@ -105,13 +104,11 @@ $boardFile = Get-ChildItem (Join-Path $gout 'comparison-*.json') -File -ErrorAct
   Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $boardFile) {
   Write-Output ("RECOST FRESHNESS COULD NOT EVALUATE: no comparison board under {0}. The boards are gitignored, so a worktree, a CI runner or a clean checkout lands here - that is blindness, NOT a clean tree." -f $gout)
-  Write-GuardComplete -Name 'recost-freshness' -Summary 'blind=no-board'
-  exit 3
+  Exit-Guard -Name 'recost-freshness' -Summary 'blind=no-board' -Code 3
 }
 try { $boardDoc = Get-Content $boardFile.FullName -Raw -Encoding UTF8 | ConvertFrom-Json } catch {
   Write-Output ("RECOST FRESHNESS COULD NOT EVALUATE: {0} did not parse: {1}" -f $boardFile.Name, $_.Exception.Message)
-  Write-GuardComplete -Name 'recost-freshness' -Summary 'blind=board-unparsed'
-  exit 3
+  Exit-Guard -Name 'recost-freshness' -Summary 'blind=board-unparsed' -Code 3
 }
 
 $stampPath = Join-Path $db 'costed.stamp.json'
@@ -122,14 +119,11 @@ $verdict, $msg = Test-RecostFresh $stamp ([string]$boardDoc.built_at) $boardFile
 
 if ($verdict -eq 'stale') {
   Write-Output ("RECOST FRESHNESS AUDIT FAILED: " + $msg)
-  Write-GuardComplete -Name 'recost-freshness' -Summary ("stale board_now={0}" -f $boardDoc.built_at)
-  exit 2
+  Exit-Guard -Name 'recost-freshness' -Summary ("stale board_now={0}" -f $boardDoc.built_at) -Code 2
 }
 if ($verdict -eq 'unknown') {
   Write-Output ("RECOST FRESHNESS COULD NOT EVALUATE: " + $msg)
-  Write-GuardComplete -Name 'recost-freshness' -Summary 'blind=no-stamp'
-  exit 3
+  Exit-Guard -Name 'recost-freshness' -Summary 'blind=no-stamp' -Code 3
 }
 Write-Output ("recost-freshness: PASSED - " + $msg)
-Write-GuardComplete -Name 'recost-freshness' -Summary ("fresh built_at={0}" -f $boardDoc.built_at)
-exit 0
+Exit-Guard -Name 'recost-freshness' -Summary ("fresh built_at={0}" -f $boardDoc.built_at) -Code 0

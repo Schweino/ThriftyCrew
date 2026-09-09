@@ -142,24 +142,20 @@ if ($SelfTest) {
 
   if ($fail -gt 0) {
     Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail)
-    Write-GuardComplete -Name 'run-log-claims' -Summary ("selftest-fail={0}" -f $fail)
-    exit 2
+    Exit-Guard -Name 'run-log-claims' -Summary ("selftest-fail={0}" -f $fail) -Code 2
   }
   Write-Output 'SELF-TEST PASS: the founding false claim, its clean twin, the code-is-not-documentation case, and the live header'
-  Write-GuardComplete -Name 'run-log-claims' -Summary 'selftest=pass'
-  exit 0
+  Exit-Guard -Name 'run-log-claims' -Summary 'selftest=pass' -Code 0
 }
 
 if (-not (Test-Path $LIB)) {
   Write-Output ("RUN-LOG CLAIMS COULD NOT EVALUATE: {0} does not exist. Discovery broken, NOT a clean tree." -f $LIB)
-  Write-GuardComplete -Name 'run-log-claims' -Summary 'blind=no-lib'
-  exit 3
+  Exit-Guard -Name 'run-log-claims' -Summary 'blind=no-lib' -Code 3
 }
 $hdr = Get-Header $LIB
 if ([string]::IsNullOrWhiteSpace($hdr)) {
   Write-Output 'RUN-LOG CLAIMS COULD NOT EVALUATE: run-log-lib.ps1 has no readable comment header, so there is no claim to check.'
-  Write-GuardComplete -Name 'run-log-claims' -Summary 'blind=no-header'
-  exit 3
+  Exit-Guard -Name 'run-log-claims' -Summary 'blind=no-header' -Code 3
 }
 
 $targets = Get-HiddenTaskTargets $repo
@@ -168,21 +164,17 @@ $missing = @($targets | Where-Object { -not $_.Exists })
 
 if ((Get-ClaimLine $LIB) -match 'ONE copy of the') {
   Write-Output 'RUN-LOG CLAIMS AUDIT FAILED: grocery\run-log-lib.ps1 opens by calling itself the ONE copy of the run-record rule while other conventions exist in the tree. A file that claims to be the single copy of a rule and is not is worse than no claim - the next person to add a hidden task reads it, sees a library, and cannot learn that other tasks route around it.'
-  Write-GuardComplete -Name 'run-log-claims' -Summary 'false-one-copy-claim'
-  exit 2
+  Exit-Guard -Name 'run-log-claims' -Summary 'false-one-copy-claim' -Code 2
 }
 if ($targets.Count -eq 0) {
   Write-Output ('RUN-LOG CLAIMS COULD NOT EVALUATE: no hidden scheduled-task definition was readable from ops\scheduled-tasks. Discovery broken, NOT a clean tree.')
-  Write-GuardComplete -Name 'run-log-claims' -Summary 'blind=no-task-xml'
-  exit 3
+  Exit-Guard -Name 'run-log-claims' -Summary 'blind=no-task-xml' -Code 3
 }
 foreach ($m in $missing) { Write-Output ("  target missing  {0}  ->  {1}" -f $m.Task, $m.Script) }
 foreach ($u in $unnamed) { Write-Output ("  no run record   {0}  ->  {1}" -f $u.Task, $u.Script) }
 if ($missing.Count -gt 0 -or $unnamed.Count -gt 0) {
   Write-Output ("RUN-LOG CLAIMS AUDIT FAILED: of {0} hidden scheduled task(s), {1} target a script that does not exist and {2} run hidden without dot-sourcing run-log-lib. A task that runs with no console and no run record can only ever say its exit code, and this estate has already spent a day unable to learn why three jobs returned 1." -f $targets.Count, $missing.Count, $unnamed.Count)
-  Write-GuardComplete -Name 'run-log-claims' -Summary ("tasks={0} missing={1} norunlog={2}" -f $targets.Count, $missing.Count, $unnamed.Count)
-  exit 2
+  Exit-Guard -Name 'run-log-claims' -Summary ("tasks={0} missing={1} norunlog={2}" -f $targets.Count, $missing.Count, $unnamed.Count) -Code 2
 }
 Write-Output ("run-log-claims: PASSED - all {0} hidden scheduled task(s) leave a run record through run-log-lib, checked from the committed task definitions rather than the registry." -f $targets.Count)
-Write-GuardComplete -Name 'run-log-claims' -Summary ("tasks={0} norunlog=0" -f $targets.Count)
-exit 0
+Exit-Guard -Name 'run-log-claims' -Summary ("tasks={0} norunlog=0" -f $targets.Count) -Code 0

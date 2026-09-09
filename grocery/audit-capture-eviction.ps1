@@ -246,6 +246,5 @@ $outFile = Join-Path $OutDir 'capture-evictions.json'
 @{ generated = (Get-Date).ToString('s'); candidates_file = (Split-Path $CandidatesFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; findings = $ranked } |
   ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 Write-Output ("  -> $outFile")
-Write-GuardComplete -Name 'capture-eviction' -Summary ''
-exit 0
+Exit-Guard -Name 'capture-eviction' -Summary '' -Code 0
 

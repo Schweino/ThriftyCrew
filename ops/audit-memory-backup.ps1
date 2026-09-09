@@ -647,13 +647,11 @@ foreach ($nte in @($res.notes)) { Write-Output ('  ok - ' + $nte) }
 if ($res.rc -eq 3) {
   foreach ($i in $res.issues) { Write-Output ('  BLIND  ' + $i) }
   foreach ($i in @($res.blind)) { Write-Output ('  BLIND  ' + $i) }
-  Write-GuardComplete -Name 'memory-backup' -Summary 'blind'
-  exit 3
+  Exit-Guard -Name 'memory-backup' -Summary 'blind' -Code 3
 }
 if ($res.issues.Count -eq 0) {
   Write-Output '  ok - the memory store is versioned locally, has no remote this run could not account for, is absent from the public repo, is fully committed, its index agrees with the files on disk, and nothing is mojibaked'
-  Write-GuardComplete -Name 'memory-backup' -Summary ("files={0} clean" -f [int]$res.files)
-  exit 0
+  Exit-Guard -Name 'memory-backup' -Summary ("files={0} clean" -f [int]$res.files) -Code 0
 }
 foreach ($i in $res.issues) { Write-Output ('  ' + $i) }
 # THE FOOTER IS FOR THE ARMS IT ACTUALLY ADDRESSES. It used to prescribe -Sync, remote removal and
@@ -661,5 +659,4 @@ foreach ($i in $res.issues) { Write-Output ('  ' + $i) }
 # and reachability regression - were told to run a command that does nothing for them. Those two carry
 # their own FIX sentence inside the finding.
 Write-Output '  Fix: run this with -Sync to commit pending memory changes. An UNREVIEWED remote, or a memory file tracked by ThriftyCrew, must be removed by hand - that repo is PUBLIC. A remote that is a deliberate private backup goes in ops\memory-remote-allowlist.json with its evidence, and is re-proven private on every run. An unreachability or REACHABILITY REGRESSION finding is a ROUTING problem and carries its own fix above: -Sync will not clear either one.'
-Write-GuardComplete -Name 'memory-backup' -Summary ("files={0} issues={1}" -f [int]$res.files, $res.issues.Count)
-exit 2
+Exit-Guard -Name 'memory-backup' -Summary ("files={0} issues={1}" -f [int]$res.files, $res.issues.Count) -Code 2

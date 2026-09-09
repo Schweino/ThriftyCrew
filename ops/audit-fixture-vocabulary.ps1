@@ -138,8 +138,7 @@ $files = @(Get-ChildItem $repo -Recurse -File -ErrorAction SilentlyContinue -Inc
   Where-Object { $_.FullName -notmatch $EXCLUDE -and $_.FullName -ne $PSCommandPath } | ForEach-Object { $_.FullName })
 if (-not $files.Count) {
   Write-Output 'FIXTURE-VOCABULARY AUDIT BLIND: found zero .ps1/.py files to scan, which means the discovery is broken rather than the tree being clean.'
-  Write-GuardComplete -Name 'fixture-vocabulary' -Summary 'blind=no-files'
-  exit 3
+  Exit-Guard -Name 'fixture-vocabulary' -Summary 'blind=no-files' -Code 3
 }
 $hits = Get-TcMislabelledTwins -Files $files -ReadLines { param($p) [IO.File]::ReadAllLines($p) }
 $hits = @($hits)
@@ -149,9 +148,7 @@ foreach ($h in ($hits | Sort-Object File, Line)) {
 }
 if ($hits.Count) {
   Write-Output ("FIXTURE-VOCABULARY AUDIT FAILED: {0} case(s) labelled CLEAN TWIN assert that a detector found NOTHING. That is a MUST NOT FIRE case. CLEAN TWIN is reserved for an adjacent behaviour that STILL WORKS - a positive assertion - so that 'add a must-fire and a clean twin' cannot be read two opposite ways. Rename the label; the assertion is already right." -f $hits.Count)
-  Write-GuardComplete -Name 'fixture-vocabulary' -Summary ("mislabelled={0}" -f $hits.Count)
-  exit 2
+  Exit-Guard -Name 'fixture-vocabulary' -Summary ("mislabelled={0}" -f $hits.Count) -Code 2
 }
 Write-Output ("fixture-vocabulary: PASSED - every CLEAN TWIN label whose assertion is legible asserts a VALUE, not an absence, across {0} file(s). The labels whose sense lives only in their wording are out of this gate's reach and are not claimed." -f $files.Count)
-Write-GuardComplete -Name 'fixture-vocabulary' -Summary ("files={0} mislabelled=0" -f $files.Count)
-exit 0
+Exit-Guard -Name 'fixture-vocabulary' -Summary ("files={0} mislabelled=0" -f $files.Count) -Code 0

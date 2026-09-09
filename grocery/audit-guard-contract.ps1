@@ -35,7 +35,15 @@ function Test-IsDetector { param([string]$Name)
 }
 function Test-EmitsMarker { param([string]$Text)
   # it must CALL the shared helper, or write a literal <NAME>-COMPLETE line itself
-  return ([regex]::IsMatch($Text, 'Write-GuardComplete') -or [regex]::IsMatch($Text, "['`"][A-Z0-9-]+-COMPLETE"))
+  # THREE SPELLINGS SINCE 2026-09-09 (backlog I86). `Exit-Guard` writes the marker AND exits in one
+  # call - that is the whole point of it, and lib/guard-contract.ps1 carries the out-of-process
+  # fixtures proving it on the normal, deliberate-exit and throwing paths. A detector that uses it is
+  # MORE strongly covered than one that calls the helper by hand, not less, because the marker and the
+  # exit can no longer be separated. Not teaching this audit the new spelling would have made the
+  # safer construction look like a regression.
+  return ([regex]::IsMatch($Text, 'Write-GuardComplete') -or
+          [regex]::IsMatch($Text, 'Exit-Guard') -or
+          [regex]::IsMatch($Text, "['`"][A-Z0-9-]+-COMPLETE"))
 }
 
 # CONTAINING the helper is not the same as EMITTING it. The 2026-08-08 retrofit patched 6 files that all
@@ -72,7 +80,8 @@ function Get-BareVerdictExits { param([string]$Text)
     # learns the HALF list contains noise and stops reading the entries that are real. Same predicate as
     # Test-EmitsMarker, so the two questions can never drift apart again.
     $before = $lines[[Math]::Max(0, $ln - 4)..($ln - 1)] -join "`n"
-    if ($before -match 'Write-GuardComplete' -or $before -match "['`"][A-Z0-9-]+-COMPLETE") { continue }
+    if ($before -match 'Write-GuardComplete' -or $before -match 'Exit-Guard' -or
+        $before -match "['`"][A-Z0-9-]+-COMPLETE") { continue }
     $bare += $ln
   }
   return @($bare)
@@ -129,6 +138,12 @@ if ($SelfTest) {
   T 'guards.ps1 and golden-test are detectors'                               ((Test-IsDetector 'guards.ps1') -and (Test-IsDetector 'golden-test.ps1')) 'missed'
   T 'this auditor excludes itself'                                           (-not (Test-IsDetector 'audit-guard-contract.ps1')) 'self-included'
   T 'a script calling the helper counts as covered'                          (Test-EmitsMarker 'Write-GuardComplete -Name x') 'missed'
+  # I86: Exit-Guard writes the marker and exits in ONE call, so the two cannot be separated. A
+  # detector using it is more strongly covered, and this audit must not read the safer construction
+  # as a regression - it did exactly that on 2026-09-09 across 11 files until taught.
+  T 'MUST FIRE  Exit-Guard counts as covered - it emits the marker and exits together' `
+    (Test-EmitsMarker "Exit-Guard -Name 'x' -Summary 'scanned=10 findings=0' -Code 0") 'missed'
+  T 'MUST NOT FIRE  a bare exit is still not coverage' (-not (Test-EmitsMarker 'exit 0')) 'false cover'
   T 'a literal marker also counts (reanchor-all predates the helper)'        (Test-EmitsMarker '"REANCHOR-COMPLETE stale={0}"') 'missed'
   T 'MUST FIRE  a detector with neither is uncovered'                        (-not (Test-EmitsMarker 'Write-Output "all clear"')) 'false cover'
 

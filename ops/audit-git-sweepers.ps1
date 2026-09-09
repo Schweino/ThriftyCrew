@@ -147,8 +147,7 @@ $files = @(Get-ChildItem $repo -Recurse -File -ErrorAction SilentlyContinue |
   Sort-Object FullName)
 if (-not $files.Count) {
   Write-Output 'audit-git-sweepers: BLIND - found no scripts to scan, which means this discovery is broken, not that the tree is clean'
-  Write-GuardComplete -Name 'audit-git-sweepers' -Summary 'blind=no-scripts'
-  exit 3
+  Exit-Guard -Name 'audit-git-sweepers' -Summary 'blind=no-scripts' -Code 3
 }
 
 $findings = New-Object System.Collections.ArrayList

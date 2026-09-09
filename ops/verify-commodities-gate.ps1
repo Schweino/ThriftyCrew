@@ -153,8 +153,7 @@ try { $staged = @(& git -C $repo diff --cached --name-only --diff-filter=ACM 2>$
 $inScope = Test-StagedTouchesRules $staged
 if (@($inScope).Count -eq 0) {
   Write-Output 'commodities-gate: no matching-rule input is staged - not applicable to this commit'
-  Write-GuardComplete -Name 'commodities-gate' -Summary 'not-applicable'
-  exit 0
+  Exit-Guard -Name 'commodities-gate' -Summary 'not-applicable' -Code 0
 }
 Write-Output ("commodities-gate: {0} matching-rule input(s) staged: {1}" -f @($inScope).Count, (@($inScope) -join ', '))
 
@@ -194,8 +193,7 @@ Write-Output ("  baseline rules_hash : $bh")
 
 if (Test-BaselineCoversRules $stagedHash $baseHash) {
   Write-Output '  ok - the soundness baseline was accepted against exactly these rules'
-  Write-GuardComplete -Name 'commodities-gate' -Summary "staged=$sh baseline=$bh ok"
-  exit 0
+  Exit-Guard -Name 'commodities-gate' -Summary "staged=$sh baseline=$bh ok" -Code 0
 }
 Write-Output ''
 Write-Output 'commodities-gate: BLOCKED. These matching rules have not been reviewed.'
@@ -205,5 +203,4 @@ Write-Output '    powershell -File grocery\audit-match-soundness.ps1            
 Write-Output '    powershell -File grocery\audit-match-soundness.ps1 -Accept    (only once you agree with them)'
 Write-Output '    powershell -File grocery\guards.ps1                           (must exit 0)'
 Write-Output '    git add grocery\out\audit\match-baseline.json'
-Write-GuardComplete -Name 'commodities-gate' -Summary "staged=$sh baseline=$bh BLOCKED"
-exit 1
+Exit-Guard -Name 'commodities-gate' -Summary "staged=$sh baseline=$bh BLOCKED" -Code 1

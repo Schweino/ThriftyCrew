@@ -397,8 +397,7 @@ if ($verdict -eq 'first') {
 }
 if ($verdict -eq 'break') {
   Write-Output ("band-censorship: RATCHET BROKEN - $cells cell(s) now, baseline $base. A cell that was not being censored yesterday is being censored today, which is a live regression rather than the known backlog.")
-  Write-GuardComplete -Name 'band-censorship' -Summary ("$cells cell(s) over a baseline of $base")
-  exit 2
+  Exit-Guard -Name 'band-censorship' -Summary ("$cells cell(s) over a baseline of $base") -Code 2
 }
 if ($verdict -eq 'tighten') {
   @{ generated = (Get-Date).ToString('s'); cells = $cells; note = 'High-water mark for the band-censorship ratchet. This number may only go DOWN. A run above it is a NEW censored cell and hard-fails.' } |
@@ -406,5 +405,4 @@ if ($verdict -eq 'tighten') {
   Write-Output ("  ratchet tightened: $cells cell(s), was $base. New baseline written.")
 }
 Write-Output ("band-censorship: $cells cell(s) against a baseline of $base - the known backlog, not a regression. Work it from $outFile (ranked: nearest the floor is likeliest to be a real price).")
-Write-GuardComplete -Name 'band-censorship' -Summary ("$($findings.Count) finding(s) across $cells cell(s), baseline $base")
-exit 0
+Exit-Guard -Name 'band-censorship' -Summary ("$($findings.Count) finding(s) across $cells cell(s), baseline $base") -Code 0

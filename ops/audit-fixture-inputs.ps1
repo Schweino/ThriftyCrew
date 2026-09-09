@@ -169,8 +169,7 @@ foreach ($s in $scripts) {
 }
 if (-not $withSelfTest) {
   Write-Output 'audit-fixture-inputs: BLIND - found no -SelfTest blocks at all, which means this discovery is broken, not that the tree is clean'
-  Write-GuardComplete -Name 'audit-fixture-inputs' -Summary 'blind=no-selftests'
-  exit 3
+  Exit-Guard -Name 'audit-fixture-inputs' -Summary 'blind=no-selftests' -Code 3
 }
 $now = @($found.ToArray() | Sort-Object -Unique)
 

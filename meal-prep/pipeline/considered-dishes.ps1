@@ -212,8 +212,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("considered-dishes SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'considered-dishes SELF-TEST PASS'
-  Write-GuardComplete -Name 'considered-dishes' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'considered-dishes' -Summary 'selftest pass' -Code 0
 }
 
 $dishes = @(Read-Store $Store)

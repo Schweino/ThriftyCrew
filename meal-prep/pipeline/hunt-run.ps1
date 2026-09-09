@@ -2172,8 +2172,7 @@ if ($runLaneSummary) {
     Write-Output ("  NOTE {0} row(s) carry no token figures - treat every number above as a LOWER BOUND." -f $unmeasured)
   }
 
-  Write-GuardComplete -Name 'hunt-run' -Summary ("lane-summary lanes={0} tokens={1}" -f $agg.Count, $tot)
-  exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("lane-summary lanes={0} tokens={1}" -f $agg.Count, $tot) -Code 0
 }
 
 if ($runLane) {
@@ -2258,8 +2257,7 @@ if ($runRevive) {
   $e.history = @(@($e.history) + [pscustomobject]@{ state = 'qa-passed'; at = (Get-Stamp); by = $By; detail = $detail })
   Write-JsonAtomic -Path $sp -Obj $e
   Write-Output ("hunt-run: {0}  rejected-audit -> qa-passed  ({1})" -f $Slug, $detail)
-  Write-GuardComplete -Name 'hunt-run' -Summary ("revive {0}" -f $Slug)
-  exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("revive {0}" -f $Slug) -Code 0
 }
 
 # ---- -Recertify: the rejection the wave's own RE-AUDIT has since cleared ----------------------------
@@ -2336,8 +2334,7 @@ if ($runRecertify) {
   $e.history = @(@($e.history) + [pscustomobject]@{ state = 'waved'; at = (Get-Stamp); by = $By; detail = $detail })
   Write-JsonAtomic -Path $sp -Obj $e
   Write-Output ("hunt-run: {0}  rejected-audit -> waved  (stays in wave {1})  ({2})" -f $Slug, $wk, $detail)
-  Write-GuardComplete -Name 'hunt-run' -Summary ("recertify {0}" -f $Slug)
-  exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("recertify {0}" -f $Slug) -Code 0
 }
 
 # ---- -Reband: undoing a rejection that only ever recorded a RULE ------------------------------------
@@ -2387,8 +2384,7 @@ if ($runReband) {
   $e.history = @(@($e.history) + [pscustomobject]@{ state = 'written'; at = (Get-Stamp); by = $By; detail = $detail })
   Write-JsonAtomic -Path $sp -Obj $e
   Write-Output ("hunt-run: {0}  {1} -> written  ({2})" -f $Slug, $from, $detail)
-  Write-GuardComplete -Name 'hunt-run' -Summary ("reband {0}" -f $Slug)
-  exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("reband {0}" -f $Slug) -Code 0
 }
 
 # ---- -Repair: a defect that WAS this recipe's own, ruled on, and now allowed to be fixed -------------
@@ -2434,8 +2430,7 @@ if ($runRepair) {
   $e.history = @(@($e.history) + [pscustomobject]@{ state = 'written'; at = (Get-Stamp); by = $By; detail = $detail })
   Write-JsonAtomic -Path $sp -Obj $e
   Write-Output ("hunt-run: {0}  rejected-audit -> written  ({1})" -f $Slug, $detail)
-  Write-GuardComplete -Name 'hunt-run' -Summary ("repair {0}" -f $Slug)
-  exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("repair {0}" -f $Slug) -Code 0
 }
 
 if ($runAdvance) {
@@ -2587,8 +2582,7 @@ if ($runWaveSync) {
     $dropped | ForEach-Object { Write-Output "  - $_" }
   }
   else { Write-Output ("hunt-run: wave {0} manifest already matches state - nothing dropped" -f $Wave) }
-  Write-GuardComplete 'hunt-run' ("wave-sync {0} dropped={1}" -f $Wave, $dropped.Count)
-  exit 0
+  Exit-Guard 'hunt-run' ("wave-sync {0} dropped={1}" -f $Wave, $dropped.Count) -Code 0
 }
 
 if ($runWaveClose) {
@@ -2747,5 +2741,4 @@ if ($waves.Count) {
     Write-Output ("    {0,-16} {1}" -f $w.BaseName, $verdict)
   }
 }
-Write-GuardComplete -Name 'hunt-run' -Summary ("status n={0} published={1} parked={2} rejected={3}" -f $entries.Count, $published.Count, $parked.Count, $rejectedRows.Count)
-exit 0
+Exit-Guard -Name 'hunt-run' -Summary ("status n={0} published={1} parked={2} rejected={3}" -f $entries.Count, $published.Count, $parked.Count, $rejectedRows.Count) -Code 0

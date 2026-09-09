@@ -149,8 +149,7 @@ if ($SelfTest) {
 $ptFile = Get-ChildItem (Join-Path $OutDir 'price-table-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $ptFile) {
   Write-Output 'price-capture-reach: no price table found - cannot tell whether anything reaches it'
-  Write-GuardComplete -Name 'price-capture-reach' -Summary 'BLIND: no price table'
-  exit 3
+  Exit-Guard -Name 'price-capture-reach' -Summary 'BLIND: no price table' -Code 3
 }
 $pt = Read-JsonFile $ptFile.FullName
 $keys = New-Object 'System.Collections.Generic.HashSet[string]'
@@ -213,5 +212,4 @@ if (-not $Quiet) {
   }
   Write-Output ("  -> " + $outF)
 }
-Write-GuardComplete -Name 'price-capture-reach' -Summary ("stores=" + $report.Count + " missing=" + (($report | Measure-Object missing -Sum).Sum))
-exit 0
+Exit-Guard -Name 'price-capture-reach' -Summary ("stores=" + $report.Count + " missing=" + (($report | Measure-Object missing -Sum).Sum)) -Code 0

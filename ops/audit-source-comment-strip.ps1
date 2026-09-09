@@ -118,8 +118,7 @@ foreach ($sub in @('ops', 'grocery', 'lib', 'meal-prep')) {
 }
 if ($scanned -eq 0) {
   Write-Output 'source-comment-strip: BLIND - zero .ps1 files reached the scan, so a clean result would prove nothing'
-  Write-GuardComplete -Name 'source-comment-strip' -Summary 'blind=nothing-scanned'
-  exit 3
+  Exit-Guard -Name 'source-comment-strip' -Summary 'blind=nothing-scanned' -Code 3
 }
 $n = @($findings).Count
 Write-Output ("source-comment-strip: examined {0} .ps1 file(s); {1} reduce source by dropping LINE comments only, so a block header still reaches whatever they match" -f $scanned, $n)
@@ -138,14 +137,12 @@ function Write-ScsBaseline([int]$Count) {
 if ($Accept -or $null -eq $base) {
   Write-ScsBaseline $n
   Write-Output ("  baseline written: $n of $scanned examined. From here the number may only go DOWN.")
-  Write-GuardComplete -Name 'source-comment-strip' -Summary "line_only=$n examined=$scanned baseline=$n"
-  exit 0
+  Exit-Guard -Name 'source-comment-strip' -Summary "line_only=$n examined=$scanned baseline=$n" -Code 0
 }
 $move = Test-RatchetMove -Name 'source-comment-strip' -Count $n -Baseline $base
 if ($move.Verdict -eq 'rose') {
   Write-Output ("source-comment-strip: RATCHET BROKEN - $n of $scanned examined, baseline $base. A new source scanner reduces PowerShell by line comments only, so a block header can be matched as code.")
-  Write-GuardComplete -Name 'source-comment-strip' -Summary "line_only=$n examined=$scanned baseline=$base"
-  exit 2
+  Exit-Guard -Name 'source-comment-strip' -Summary "line_only=$n examined=$scanned baseline=$base" -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
   Write-ScsBaseline $n
@@ -154,5 +151,4 @@ if ($move.Verdict -eq 'tightened') {
   Write-Output ('  ' + $move.Message + ' - baseline kept at ' + $base)
 }
 Write-Output ("source-comment-strip: $n of $scanned examined, against a baseline of $base.")
-Write-GuardComplete -Name 'source-comment-strip' -Summary "line_only=$n examined=$scanned baseline=$base"
-exit 0
+Exit-Guard -Name 'source-comment-strip' -Summary "line_only=$n examined=$scanned baseline=$base" -Code 0

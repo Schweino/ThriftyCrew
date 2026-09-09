@@ -192,8 +192,7 @@ function Test-NameOffersTwoSizes (`$a) { return `$false }
 
   if ($bad -gt 0) { Write-Output ("lift-completeness SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'lift-completeness SELF-TEST PASS'
-  Write-GuardComplete -Name 'lift-completeness' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'lift-completeness' -Summary 'selftest pass' -Code 0
 }
 
 # ---- sweep -----------------------------------------------------------------------------------------
@@ -224,9 +223,7 @@ if ($findings.Count -gt 0) {
     Write-Output ("    {0,-32} lifts {1} which calls {2}, NOT in its list" -f $x.file, $x.fn, $x.callee)
   }
   Write-Output '  Add the callee to that list, or the lifted function fails at RUN time with "not recognized".'
-  Write-GuardComplete -Name 'lift-completeness' -Summary ("scanned={0} findings={1}" -f $scanned, $findings.Count)
-  exit 2
+  Exit-Guard -Name 'lift-completeness' -Summary ("scanned={0} findings={1}" -f $scanned, $findings.Count) -Code 2
 }
 Write-Output '  every lifted function has every engine callee it needs'
-Write-GuardComplete -Name 'lift-completeness' -Summary ("scanned={0} findings=0" -f $scanned)
-exit 0
+Exit-Guard -Name 'lift-completeness' -Summary ("scanned={0} findings=0" -f $scanned) -Code 0

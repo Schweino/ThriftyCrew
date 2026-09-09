@@ -140,8 +140,7 @@ $files = @(Get-ChildItem $repo -Recurse -File -Filter *.ps1 -ErrorAction Silentl
   Where-Object { $_.FullName -notmatch $EXCLUDE -and $_.FullName -ne $PSCommandPath } | ForEach-Object { $_.FullName })
 if (-not $files.Count) {
   Write-Output 'WRITE-SEAM AUDIT BLIND: found zero .ps1 files to scan, which means the discovery is broken rather than the tree being clean.'
-  Write-GuardComplete -Name 'write-seam' -Summary 'blind=no-files'
-  exit 3
+  Exit-Guard -Name 'write-seam' -Summary 'blind=no-files' -Code 3
 }
 $hits = Get-TcSeamBypasses -Files $files -ReadLines { param($p) [IO.File]::ReadAllLines($p) }
 $hits = @($hits)
@@ -152,8 +151,7 @@ if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
      note = 'HIGH-WATER MARK for mutating calls to our own surfaces that bypass Invoke-GhostApi. This number may only go DOWN. A run above it is a NEW bypass and hard-fails.' } |
     ConvertTo-Json -Depth 3 | Set-Content $BASELINE_FILE -Encoding UTF8
   Write-Output ("write-seam: baseline written at {0} site(s). From here the number may only go DOWN." -f $count)
-  Write-GuardComplete -Name 'write-seam' -Summary ("baseline={0}" -f $count)
-  exit 0
+  Exit-Guard -Name 'write-seam' -Summary ("baseline={0}" -f $count) -Code 0
 }
 $base = [int]((Get-Content $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json).sites)
 
@@ -162,8 +160,7 @@ foreach ($h in ($hits | Sort-Object File, Line)) {
 }
 if ($count -gt $base) {
   Write-Output ("WRITE-SEAM AUDIT FAILED: {0} mutating call(s) to our own surfaces now bypass Invoke-GhostApi, against a baseline of {1}. A NEW irreversible write was added outside the E1 safety layer - the staging gate and the journal cannot see it. Route it through Invoke-GhostApi." -f $count, $base)
-  Write-GuardComplete -Name 'write-seam' -Summary ("sites={0} baseline={1}" -f $count, $base)
-  exit 2
+  Exit-Guard -Name 'write-seam' -Summary ("sites={0} baseline={1}" -f $count, $base) -Code 2
 }
 # THE FALL IS THE DIRECTION THAT CANNOT BE TRUSTED (2026-09-07, backlog I15). This block used to
 # lower the baseline unconditionally, so a detector that broke and found NOTHING recorded 0 as the
@@ -173,8 +170,7 @@ if ($count -gt $base) {
 $move = Test-RatchetMove -Name 'write-seam' -Count $count -Baseline $base -AcceptDrop:$AcceptDrop
 if ($move.Verdict -eq 'implausible') {
   Write-Output $move.Message
-  Write-GuardComplete -Name 'write-seam' -Summary ("sites={0} baseline={1} refused-to-lower" -f $count, $base)
-  exit 2
+  Exit-Guard -Name 'write-seam' -Summary ("sites={0} baseline={1} refused-to-lower" -f $count, $base) -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
   $doc = $null
@@ -187,9 +183,7 @@ if ($move.Verdict -eq 'tightened') {
   # The library message already names the guard; prefixing it again read as "x: ... x: ...".
   Write-Output ("PASSED and TIGHTENED - " + $move.Message)
   Write-Output ("  " + (Get-RatchetTrend -History $hist))
-  Write-GuardComplete -Name 'write-seam' -Summary ("sites={0} tightened-from={1}" -f $count, $base)
-  exit 0
+  Exit-Guard -Name 'write-seam' -Summary ("sites={0} tightened-from={1}" -f $count, $base) -Code 0
 }
 Write-Output ("write-seam: PASSED - {0} known bypass(es), unchanged from the baseline. These are irreversible writes the E1 safety layer does NOT cover; each one migrated to Invoke-GhostApi lowers the mark permanently." -f $count)
-Write-GuardComplete -Name 'write-seam' -Summary ("sites={0} baseline={1}" -f $count, $base)
-exit 0
+Exit-Guard -Name 'write-seam' -Summary ("sites={0} baseline={1}" -f $count, $base) -Code 0

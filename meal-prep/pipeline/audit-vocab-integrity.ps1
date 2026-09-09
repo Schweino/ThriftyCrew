@@ -160,5 +160,4 @@ foreach ($f in $findings) {
 }
 Write-Output '  UNKNOWN NAME = the name is wrong, the price is probably fine. Rename, alias (adjudicated), or register a row.'
 Write-Output '  NO BID       = the name is right, the row genuinely lacks a bid. Wire it, or allowlist in not-price-tracked-ok.json.'
-Write-GuardComplete -Name 'audit-vocab-integrity' -Summary ("findings={0}" -f @($findings).Count)
-exit 1
+Exit-Guard -Name 'audit-vocab-integrity' -Summary ("findings={0}" -f @($findings).Count) -Code 1

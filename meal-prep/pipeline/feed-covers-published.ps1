@@ -412,8 +412,7 @@ try {
   $feed = Get-Content $feedSrc -Raw -Encoding utf8 | ConvertFrom-Json
 } catch {
   Write-Output ("FEEDCOV: the feed could not be read or parsed: " + $_.Exception.Message)
-  Write-GuardComplete -Name 'FEEDCOV' -Summary 'could not evaluate: feed unreadable'
-  exit 3
+  Exit-Guard -Name 'FEEDCOV' -Summary 'could not evaluate: feed unreadable' -Code 3
 }
 
 $hashFile = Join-Path $mp 'db\published-hashes.json'
@@ -480,9 +479,7 @@ foreach ($f in $findings) { Write-Output ("  X {0}  [{1}]  {2}" -f $f.slug, $f.v
 
 if ($findings.Count) {
   Write-Output ("FEEDCOV: {0} published recipe(s) the cards' own feed cannot fully price. Each one renders a broken cost section to readers right now." -f $findings.Count)
-  Write-GuardComplete -Name 'FEEDCOV' -Summary ("{0} finding(s) over {1} published recipe(s)" -f $findings.Count, $published.Count)
-  exit 1
+  Exit-Guard -Name 'FEEDCOV' -Summary ("{0} finding(s) over {1} published recipe(s)" -f $findings.Count, $published.Count) -Code 1
 }
 Write-Output 'FEEDCOV: every published recipe resolves in the feed its card fetches, and every bid on every card is priceable.'
-Write-GuardComplete -Name 'FEEDCOV' -Summary ("clean over {0} published recipe(s)" -f $published.Count)
-exit 0
+Exit-Guard -Name 'FEEDCOV' -Summary ("clean over {0} published recipe(s)" -f $published.Count) -Code 0

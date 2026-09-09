@@ -196,8 +196,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("scorecard SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'scorecard SELF-TEST PASS'
-  Write-GuardComplete -Name 'scorecard' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'scorecard' -Summary 'selftest pass' -Code 0
 }
 
 # ---- window ----------------------------------------------------------------------------------------
@@ -296,8 +295,7 @@ $card = [ordered]@{
 
 if ($runJson) {
   ($card | ConvertTo-Json -Depth 6)
-  Write-GuardComplete -Name 'scorecard' -Summary ("window={0}..{1} rulings={2}" -f $Since, $Until, $rulings)
-  exit 0
+  Exit-Guard -Name 'scorecard' -Summary ("window={0}..{1} rulings={2}" -f $Since, $Until, $rulings) -Code 0
 }
 
 $det = [int]$g.settled_by.deterministic; $l5 = [int]$g.settled_by.layer5
@@ -419,5 +417,4 @@ if ($rulings -eq 0) {
   Write-Output ''
   Write-Output '  NOTE no Claude rulings in this window, so tokens-per-ruling is n/a rather than 0.'
 }
-Write-GuardComplete -Name 'scorecard' -Summary ("window={0}..{1} questions={2} rulings={3} tokens={4}(session)/{5}(stretch)" -f $Since, $Until, $g.questions_asked, $rulings, $tokSession, $tokStretch)
-exit 0
+Exit-Guard -Name 'scorecard' -Summary ("window={0}..{1} questions={2} rulings={3} tokens={4}(session)/{5}(stretch)" -f $Since, $Until, $g.questions_asked, $rulings, $tokSession, $tokStretch) -Code 0

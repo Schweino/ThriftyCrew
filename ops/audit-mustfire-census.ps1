@@ -105,8 +105,7 @@ foreach ($s in $scripts) {
 }
 if (-not $now.Count) {
   Write-Output 'audit-mustfire-census: BLIND - found no must-fire assertions anywhere, which means this discovery is broken, not that the estate has none'
-  Write-GuardComplete -Name 'audit-mustfire-census' -Summary 'blind=no-mustfires'
-  exit 3
+  Exit-Guard -Name 'audit-mustfire-census' -Summary 'blind=no-mustfires' -Code 3
 }
 
 $baseFile = Join-Path $PSScriptRoot 'mustfire-census-baseline.json'
@@ -125,8 +124,7 @@ $base = $null
 if (Test-Path -LiteralPath $baseFile) { try { $base = (Read-JsonFile $baseFile).files } catch { $base = $null } }
 if ($null -eq $base) {
   Write-Output ("audit-mustfire-census: no baseline at {0} - run with -Update once to record today's census. {1} file(s), {2} assertion(s) counted." -f $baseFile, $now.Count, $total)
-  Write-GuardComplete -Name 'audit-mustfire-census' -Summary 'no baseline'
-  exit 3
+  Exit-Guard -Name 'audit-mustfire-census' -Summary 'no baseline' -Code 3
 }
 
 $lost = New-Object System.Collections.ArrayList

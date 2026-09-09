@@ -122,8 +122,7 @@ $files = @(Get-ChildItem (Join-Path $repo 'grocery') -Filter *.ps1 -File -Recurs
   ForEach-Object { @{ Name = $_.Name; Lines = [IO.File]::ReadAllLines($_.FullName) } })
 if (-not $files.Count) {
   Write-Output 'CAPTURE-INGEST-REPORTING AUDIT BLIND: found zero grocery scripts, which means the discovery is broken rather than the tree being clean.'
-  Write-GuardComplete -Name 'capture-ingest-reporting' -Summary 'blind=no-files'
-  exit 3
+  Exit-Guard -Name 'capture-ingest-reporting' -Summary 'blind=no-files' -Code 3
 }
 $problems = Get-TcIngestReportingProblems -Files $files -Reader $READER -MustReport $MUST_REPORT
 $problems = @($problems)
@@ -132,9 +131,7 @@ $callers = @($files | Where-Object { $_.Name -ne 'capture-lib.ps1' -and (@(Get-P
 if ($problems.Count) {
   Write-Output ("CAPTURE-INGEST-REPORTING AUDIT FAILED: {0} caller(s) of {1} drop rows at ingest without reporting it. A drop that nobody reads is a clean bill - a feed returning mostly placeholders would produce a small, confident board and a success line." -f $problems.Count, $READER)
   foreach ($p in $problems) { Write-Output ("  {0,-34} never reports {1}" -f $p.File, $p.Missing) }
-  Write-GuardComplete -Name 'capture-ingest-reporting' -Summary ("problems={0}" -f $problems.Count)
-  exit 2
+  Exit-Guard -Name 'capture-ingest-reporting' -Summary ("problems={0}" -f $problems.Count) -Code 2
 }
 Write-Output ("capture-ingest-reporting: PASSED - all {0} caller(s) of {1} report both the placeholder drop count and the review warning." -f $callers, $READER)
-Write-GuardComplete -Name 'capture-ingest-reporting' -Summary ("callers={0}" -f $callers)
-exit 0
+Exit-Guard -Name 'capture-ingest-reporting' -Summary ("callers={0}" -f $callers) -Code 0

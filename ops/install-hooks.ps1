@@ -54,9 +54,7 @@ if ($bad.Count) {
   Write-Output ("install-hooks: " + $bad.Count + " hook(s) not live:")
   $bad | ForEach-Object { Write-Output ('  ' + $_) }
   Write-Output '  Fix: powershell -File ops\install-hooks.ps1'
-  Write-GuardComplete -Name 'install-hooks' -Summary ($bad.Count.ToString() + ' not live')
-  exit 1
+  Exit-Guard -Name 'install-hooks' -Summary ($bad.Count.ToString() + ' not live') -Code 1
 }
 Write-Output ("install-hooks: $ok hook(s) live in " + $dstDir + " and byte-identical to ops\hooks")
-Write-GuardComplete -Name 'install-hooks' -Summary "$ok live"
-exit 0
+Exit-Guard -Name 'install-hooks' -Summary "$ok live" -Code 0

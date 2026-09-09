@@ -183,8 +183,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("lane-tokens SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'lane-tokens SELF-TEST PASS'
-  Write-GuardComplete -Name 'lane-tokens' -Summary 'selftest pass'
-  exit 0
+  Exit-Guard -Name 'lane-tokens' -Summary 'selftest pass' -Code 0
 }
 
 # ---- report ----------------------------------------------------------------------------------------
@@ -270,5 +269,4 @@ if ($unpricedTokens -gt 0) {
 if ($agg.ContainsKey('unknown')) {
   Write-Output ("  NOTE {0} transcript(s) could not be attributed to a lane - their tokens are real and counted under `unknown`." -f $agg['unknown'].agents)
 }
-Write-GuardComplete -Name 'lane-tokens' -Summary ("lanes={0} tokens={1}" -f $agg.Count, $tot)
-exit 0
+Exit-Guard -Name 'lane-tokens' -Summary ("lanes={0} tokens={1}" -f $agg.Count, $tot) -Code 0

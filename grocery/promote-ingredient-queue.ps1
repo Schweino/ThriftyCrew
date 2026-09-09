@@ -139,8 +139,7 @@ if ($res.skipped.Count) { Write-Output ("  held pending a new commodity id: " + 
 
 if (-not $Apply) {
   Write-Output '  REPORT ONLY - re-run with -Apply to write the per-store files.'
-  Write-GuardComplete -Name 'promote-ingredient-queue' -Summary "promotable=$($res.rows.Count) applied=0"
-  exit 0
+  Exit-Guard -Name 'promote-ingredient-queue' -Summary "promotable=$($res.rows.Count) applied=0" -Code 0
 }
 
 $regDir = Join-Path $OutDir 'regular'
@@ -175,5 +174,4 @@ foreach ($g in $byStore) {
   Write-Output ("  wrote {0} ({1} row(s))" -f (Split-Path $f -Leaf), $deals.Count)
 }
 Write-Output ("promote-queue: wrote {0} store file(s) into out\regular" -f $written)
-Write-GuardComplete -Name 'promote-ingredient-queue' -Summary "promotable=$($res.rows.Count) applied=$written"
-exit 0
+Exit-Guard -Name 'promote-ingredient-queue' -Summary "promotable=$($res.rows.Count) applied=$written" -Code 0

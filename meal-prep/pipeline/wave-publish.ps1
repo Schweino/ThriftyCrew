@@ -781,8 +781,7 @@ if ($runDryRun) {
   Write-Output ''
   Write-Output '  Would publish:'
   foreach ($s in $slugs) { Write-Output ("    https://www.thriftycrew.com/{0}/" -f $s) }
-  Write-GuardComplete -Name 'wave-publish' -Summary ("dry-run wave {0} n={1} all gates green" -f $Wave, $slugs.Count)
-  exit 0
+  Exit-Guard -Name 'wave-publish' -Summary ("dry-run wave {0} n={1} all gates green" -f $Wave, $slugs.Count) -Code 0
 }
 
 # ===================================================================================================
@@ -1109,8 +1108,7 @@ try {
   Write-Output '      Run: meal-prep\top5-weekly.ps1 -NoPublish ; grocery\export-feed.ps1 ; then re-run this script.'
   Stamp 'serveability' 'FEED REBUILD FAILED - wave is live and unverified'
   Save-LedgerState ("recipes: {0} wave {1} is live, feed rebuild failed (states + ledger)" -f $batch, $Wave)
-  Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} published but feed rebuild failed" -f $Wave)
-  exit 1
+  Exit-Guard -Name 'wave-publish' -Summary ("wave {0} published but feed rebuild failed" -f $Wave) -Code 1
 }
 
 # THE VERIFICATION ITSELF is feed-covers-published, scoped to this wave. It is the guard that already owns
@@ -1191,8 +1189,7 @@ if (-not $rollback.Count) {
   Write-Output '  The recipes are not lost - they are drafts in `held`. Fix what the feed cannot price,'
   Write-Output ("  then hunt-run.ps1 -Advance -To published and re-run: wave-publish.ps1 -RunDir {0} -Wave {1}" -f $RunDir, $Wave)
   Save-LedgerState ("recipes: {0} wave {1} rolled back {2} slug(s) to held (states + ledger)" -f $batch, $Wave, $rollback.Count)
-  Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} ROLLED BACK n={1}" -f $Wave, $rollback.Count)
-  exit 1
+  Exit-Guard -Name 'wave-publish' -Summary ("wave {0} ROLLED BACK n={1}" -f $Wave, $rollback.Count) -Code 1
 }
 
 # ---- E7. push the rebuilt feed. The push is the deploy for public\.
@@ -1230,5 +1227,4 @@ Write-Output ("    AND tell it the collateral: propagate carried {0} spec(s) out
 Write-Output  '    so the review samples what shipped, not just the wave. Then:'
 Write-Output ("    batch-ledger.ps1 -Stamp -Batch {0} -Stage post-publish-review -Detail '<verdict>'" -f $batch)
 Write-Output ("    batch-ledger.ps1 -Close -Batch {0} -Detail '<verdict>'" -f $batch)
-Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} published n={1} serveability verified" -f $Wave, $slugs.Count)
-exit 0
+Exit-Guard -Name 'wave-publish' -Summary ("wave {0} published n={1} serveability verified" -f $Wave, $slugs.Count) -Code 0

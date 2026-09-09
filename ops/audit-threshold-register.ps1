@@ -134,33 +134,27 @@ TIMEOUT_SEC = 30
 
   if ($fail -gt 0) {
     Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail)
-    Write-GuardComplete -Name 'threshold-register' -Summary ("selftest-fail={0}" -f $fail)
-    exit 2
+    Exit-Guard -Name 'threshold-register' -Summary ("selftest-fail={0}" -f $fail) -Code 2
   }
   Write-Output 'SELF-TEST PASS: scope, comments, the must-fire for an unregistered threshold, and the live tree against the register on disk'
-  Write-GuardComplete -Name 'threshold-register' -Summary 'selftest=pass'
-  exit 0
+  Exit-Guard -Name 'threshold-register' -Summary 'selftest=pass' -Code 0
 }
 
 if (-not (Test-Path $REGISTER)) {
   Write-Output ("THRESHOLD REGISTER COULD NOT EVALUATE: {0} does not exist. This is discovery broken, NOT a clean tree." -f $REGISTER)
-  Write-GuardComplete -Name 'threshold-register' -Summary 'blind=no-register'
-  exit 3
+  Exit-Guard -Name 'threshold-register' -Summary 'blind=no-register' -Code 3
 }
 $reg = [IO.File]::ReadAllText($REGISTER)
 $live = Get-Thresholds $repo
 if ($live.Count -eq 0) {
   Write-Output 'THRESHOLD REGISTER COULD NOT EVALUATE: the scan found no thresholds at all in files that are known to contain them. The scan is broken, not the tree clean.'
-  Write-GuardComplete -Name 'threshold-register' -Summary 'blind=no-hits'
-  exit 3
+  Exit-Guard -Name 'threshold-register' -Summary 'blind=no-hits' -Code 3
 }
 $missing = @($live | Where-Object { -not (Test-Registered $_.Name $reg) })
 if ($missing.Count -gt 0) {
   foreach ($m in $missing) { Write-Output ("  unregistered  {0}  ({1}:{2})" -f $m.Name, $m.File, $m.Line) }
   Write-Output ("THRESHOLD REGISTER AUDIT FAILED: {0} similarity threshold(s) are not named in sidecar\THRESHOLDS.md. Add a row saying which of the three spaces it was tuned in - bi-encoder cosine, cross-encoder probability, or BM25 - because a number carried between them is wrong by a large fraction of the range and fails by admitting or refusing rows rather than by erroring." -f $missing.Count)
-  Write-GuardComplete -Name 'threshold-register' -Summary ("unregistered={0} scanned={1}" -f $missing.Count, $live.Count)
-  exit 2
+  Exit-Guard -Name 'threshold-register' -Summary ("unregistered={0} scanned={1}" -f $missing.Count, $live.Count) -Code 2
 }
 Write-Output ("threshold-register: PASSED - all {0} similarity threshold(s) in scope are named in sidecar\THRESHOLDS.md with the space they were tuned in." -f $live.Count)
-Write-GuardComplete -Name 'threshold-register' -Summary ("scanned={0} unregistered=0" -f $live.Count)
-exit 0
+Exit-Guard -Name 'threshold-register' -Summary ("scanned={0} unregistered=0" -f $live.Count) -Code 0

@@ -216,14 +216,12 @@ if ($SelfTest) {
 # ------------------------------------------------------------------------------------- live run
 if (-not (Test-Path -LiteralPath $SPEC_DIR)) {
   Write-Output ("FACT-CLAIMS AUDIT BLIND: the spec directory is missing ({0}). Nothing was checked, so nothing was proven." -f $SPEC_DIR)
-  Write-GuardComplete -Name 'fact-claims' -Summary 'blind=no-spec-dir'
-  exit 3
+  Exit-Guard -Name 'fact-claims' -Summary 'blind=no-spec-dir' -Code 3
 }
 $specs = @(Get-ChildItem $SPEC_DIR -Filter *.json -File -ErrorAction SilentlyContinue)
 if (-not $specs.Count) {
   Write-Output 'FACT-CLAIMS AUDIT BLIND: found zero specs, which means the discovery is broken rather than the catalogue being empty.'
-  Write-GuardComplete -Name 'fact-claims' -Summary 'blind=no-specs'
-  exit 3
+  Exit-Guard -Name 'fact-claims' -Summary 'blind=no-specs' -Code 3
 }
 
 $problems = @(); $withClaims = 0; $unreadable = 0
@@ -275,8 +273,7 @@ if (-not $All -and $undeclared.Count -gt 15) { Write-Output ("  ... and {0} more
 if ($decorative.Count) {
   Write-Output ("FACT-CLAIMS AUDIT FAILED: {0} declared claim(s) appear nowhere in their card's prose. A fact_claims list that does not match the prose is decoration, and it is worse than none - it reads as a check that happened." -f $decorative.Count)
   foreach ($d in ($decorative | Select-Object -First 10)) { Write-Output ("  {0,-22} {1}" -f $d.Slug, $d.Detail) }
-  Write-GuardComplete -Name 'fact-claims' -Summary ("decorative={0} undeclared={1}" -f $decorative.Count, $count)
-  exit 2
+  Exit-Guard -Name 'fact-claims' -Summary ("decorative={0} undeclared={1}" -f $decorative.Count, $count) -Code 2
 }
 
 if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
@@ -284,14 +281,12 @@ if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
      note = 'HIGH-WATER MARK for prose risk assertions no fact_claims list declares. May only go DOWN.' } |
     ConvertTo-Json -Depth 3 | Set-Content $BASELINE_FILE -Encoding UTF8
   Write-Output ("fact-claims: baseline written at {0} undeclared assertion(s). From here the number may only go DOWN." -f $count)
-  Write-GuardComplete -Name 'fact-claims' -Summary ("baseline={0}" -f $count)
-  exit 0
+  Exit-Guard -Name 'fact-claims' -Summary ("baseline={0}" -f $count) -Code 0
 }
 $base = [int]((Get-Content $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json).undeclared)
 if ($count -gt $base) {
   Write-Output ("FACT-CLAIMS AUDIT FAILED: {0} undeclared risk assertion(s) in card prose, against a baseline of {1}. A NEW claim was published that the writer did not declare and nothing verified - storage durations, store carriage and price comparisons are the three the estate has no other check for." -f $count, $base)
-  Write-GuardComplete -Name 'fact-claims' -Summary ("undeclared={0} baseline={1}" -f $count, $base)
-  exit 2
+  Exit-Guard -Name 'fact-claims' -Summary ("undeclared={0} baseline={1}" -f $count, $base) -Code 2
 }
 # THE FALL IS THE DIRECTION THAT CANNOT BE TRUSTED (2026-09-07, backlog I15). This block used to
 # lower the baseline unconditionally, so a detector that broke and found NOTHING recorded 0 as the
@@ -301,8 +296,7 @@ if ($count -gt $base) {
 $move = Test-RatchetMove -Name 'fact-claims' -Count $count -Baseline $base -AcceptDrop:$AcceptDrop
 if ($move.Verdict -eq 'implausible') {
   Write-Output $move.Message
-  Write-GuardComplete -Name 'fact-claims' -Summary ("undeclared={0} baseline={1} refused-to-lower" -f $count, $base)
-  exit 2
+  Exit-Guard -Name 'fact-claims' -Summary ("undeclared={0} baseline={1} refused-to-lower" -f $count, $base) -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
   $doc = $null
@@ -315,9 +309,7 @@ if ($move.Verdict -eq 'tightened') {
   # The library message already names the guard; prefixing it again read as "x: ... x: ...".
   Write-Output ("PASSED and TIGHTENED - " + $move.Message)
   Write-Output ("  " + (Get-RatchetTrend -History $hist))
-  Write-GuardComplete -Name 'fact-claims' -Summary ("undeclared={0} tightened-from={1}" -f $count, $base)
-  exit 0
+  Exit-Guard -Name 'fact-claims' -Summary ("undeclared={0} tightened-from={1}" -f $count, $base) -Code 0
 }
 Write-Output ("fact-claims: PASSED - {0} undeclared assertion(s), unchanged from the baseline. These are claims on live cards that no audit verifies; each one declared or removed lowers the mark permanently." -f $count)
-Write-GuardComplete -Name 'fact-claims' -Summary ("undeclared={0} baseline={1}" -f $count, $base)
-exit 0
+Exit-Guard -Name 'fact-claims' -Summary ("undeclared={0} baseline={1}" -f $count, $base) -Code 0

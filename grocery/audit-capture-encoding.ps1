@@ -180,8 +180,7 @@ foreach ($lane in $script:CAPTURE_LANES) {
 }
 if (-not $files.Count) {
   Write-Output ("BLIND: no capture .json under " + $Root + "\{" + ($script:CAPTURE_LANES -join ',') + "} - nothing was judged, which is not the same as nothing being wrong")
-  Write-GuardComplete -Name 'capture-encoding' -Summary 'BLIND - no capture files in scope'
-  exit 3
+  Exit-Guard -Name 'capture-encoding' -Summary 'BLIND - no capture files in scope' -Code 3
 }
 
 $findings = New-Object System.Collections.ArrayList
@@ -208,14 +207,12 @@ foreach ($f in $files) {
 if ($unreadable.Count) {
   Write-Output ("BLIND: " + $unreadable.Count + " of " + $files.Count + " capture file(s) could not be read, so this count is a floor, not a measurement:")
   $unreadable | Select-Object -First 10 | ForEach-Object { Write-Output ('  ' + $_) }
-  Write-GuardComplete -Name 'capture-encoding' -Summary ('BLIND on ' + $unreadable.Count + ' file(s)')
-  exit 3
+  Exit-Guard -Name 'capture-encoding' -Summary ('BLIND on ' + $unreadable.Count + ' file(s)') -Code 3
 }
 
 if ($Fix) {
   Write-Output ("audit-capture-encoding: $($files.Count) capture file(s); $fixed rewritten with a UTF-8 BOM (content unchanged)")
-  Write-GuardComplete -Name 'capture-encoding' -Summary "$fixed file(s) normalised over $($files.Count)"
-  exit 0
+  Exit-Guard -Name 'capture-encoding' -Summary "$fixed file(s) normalised over $($files.Count)" -Code 0
 }
 
 Write-Output ("audit-capture-encoding: $($files.Count) capture file(s) across " + ($script:CAPTURE_LANES -join ', ') + "; $($findings.Count) that no two readers need agree on")
@@ -224,8 +221,6 @@ foreach ($x in ($findings | Sort-Object name)) {
 }
 if ($findings.Count) {
   Write-Output ("audit-capture-encoding: the file name identifies the WRITER - fix the producer, then run this with -Fix to normalise what is already on disk. See lib\json-io.ps1 for why the reader side alone is not enough.")
-  Write-GuardComplete -Name 'capture-encoding' -Summary "$($findings.Count) ambiguous file(s) of $($files.Count)"
-  exit 2
+  Exit-Guard -Name 'capture-encoding' -Summary "$($findings.Count) ambiguous file(s) of $($files.Count)" -Code 2
 }
-Write-GuardComplete -Name 'capture-encoding' -Summary "0 ambiguous of $($files.Count) capture file(s)"
-exit 0
+Exit-Guard -Name 'capture-encoding' -Summary "0 ambiguous of $($files.Count) capture file(s)" -Code 0

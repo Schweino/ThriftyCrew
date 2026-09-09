@@ -168,8 +168,7 @@ if ($SelfTest) {
     (Test-TermsWereAttempted -CaptureTerms $ctNotAsked -Terms @('some term nobody planned')) 'an unlisted term silenced the gap'
   if ($sfBad) { Write-Output "SALE-FALLBACK SELF-TEST FAILED ($sfBad)"; exit 2 }
   Write-Output 'SALE-FALLBACK SELF-TEST PASS - 1 must-fire, 2 must-not-fire, 3 clean twins'
-  Write-GuardComplete -Name 'sale-fallback'
-  exit 0
+  Exit-Guard -Name 'sale-fallback' -Code 0
 }
 
 function HasEveryday([string]$store, $c) {

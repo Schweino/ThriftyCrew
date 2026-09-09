@@ -68,5 +68,4 @@ if ($Alert) {
     try { Send-Alert -Subject "Grocery: a commodity is in no category (no filter) - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
-Write-GuardComplete -Name 'category-coverage'
-exit 2
+Exit-Guard -Name 'category-coverage' -Code 2

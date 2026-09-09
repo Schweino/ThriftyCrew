@@ -120,14 +120,12 @@ if ($SelfTest) {
 # ---- BLIND checks first. Each one publishes the board and says why it could not look. -------------
 if (-not (Test-Path $graphDir)) {
   Write-Output "graph-gates: BLIND - no graph\ directory. Nothing to check; the board is unaffected."
-  Write-GuardComplete -Name 'graph-gates' -Summary 'BLIND: no graph dir'
-  exit 3
+  Exit-Guard -Name 'graph-gates' -Summary 'BLIND: no graph dir' -Code 3
 }
 $py = Get-GraphPython -Explicit $Python
 if (-not $py) {
   Write-Output "graph-gates: BLIND - no Python interpreter found (registry, known paths, PATH all checked). The board is unaffected."
-  Write-GuardComplete -Name 'graph-gates' -Summary 'BLIND: no python'
-  exit 3
+  Exit-Guard -Name 'graph-gates' -Summary 'BLIND: no python' -Code 3
 }
 
 # REFRESH FIRST, or the gates judge a board that no longer exists. Measured at ~1s. This is the same
@@ -141,13 +139,11 @@ if (-not $SkipImport) {
     if ($impRc -ne 0) {
       Write-Output ("graph-gates: BLIND - import failed (exit $LASTEXITCODE). The board is unaffected.")
       Write-Output ("  " + (($impOut | Select-Object -Last 3) -join ' | '))
-      Write-GuardComplete -Name 'graph-gates' -Summary "BLIND: import exit $LASTEXITCODE"
-      exit 3
+      Exit-Guard -Name 'graph-gates' -Summary "BLIND: import exit $LASTEXITCODE" -Code 3
     }
   } catch {
     Write-Output ("graph-gates: BLIND - import threw: " + $_.Exception.Message + ". The board is unaffected.")
-    Write-GuardComplete -Name 'graph-gates' -Summary 'BLIND: import threw'
-    exit 3
+    Exit-Guard -Name 'graph-gates' -Summary 'BLIND: import threw' -Code 3
   }
 }
 
@@ -155,16 +151,14 @@ $statusOut = ''
 try { $statusOut = ((@((Invoke-Native $py (Join-Path $graphDir 'eval\status.py')).Lines)) | Out-String) }
 catch {
   Write-Output ("graph-gates: BLIND - status threw: " + $_.Exception.Message + ". The board is unaffected.")
-  Write-GuardComplete -Name 'graph-gates' -Summary 'BLIND: status threw'
-  exit 3
+  Exit-Guard -Name 'graph-gates' -Summary 'BLIND: status threw' -Code 3
 }
 # NOTE: status.py exits non-zero when a gate fails, which is a FINDING, not blindness. Only an absent
 # gate block means we could not look - conflating the two would turn every real finding into a shrug.
 $gates = @(Get-GateVerdicts -Text $statusOut)
 if (-not $gates.Count) {
   Write-Output 'graph-gates: BLIND - status produced no gate block (its output shape may have moved). The board is unaffected.'
-  Write-GuardComplete -Name 'graph-gates' -Summary 'BLIND: no gate block'
-  exit 3
+  Exit-Guard -Name 'graph-gates' -Summary 'BLIND: no gate block' -Code 3
 }
 
 $failing = @($gates | Where-Object { $_.verdict -ne 'PASS' })
@@ -187,5 +181,4 @@ if (-not $Quiet) {
   }
   Write-Output ("  -> " + $outF)
 }
-Write-GuardComplete -Name 'graph-gates' -Summary "gates=$($gates.Count) failing=$($failing.Count) advisory=yes"
-exit 0
+Exit-Guard -Name 'graph-gates' -Summary "gates=$($gates.Count) failing=$($failing.Count) advisory=yes" -Code 0
