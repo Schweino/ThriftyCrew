@@ -5427,7 +5427,109 @@ looking.
 
 ---
 
-### I65 - every parser here has a previous version one `git show` away, and nothing has ever run old and new over the same input `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I65 - every parser here has a previous version one `git show` away, and nothing has ever run old and new over the same input `DONE - RUNG 1 RAN AND RUNG 2 SHIPPED BECAUSE THE RESULT JUSTIFIED IT, 2026-09-08` `queue-4`
+
+**`[CLOSED 2026-09-08. The item said a zero sizes it down and a non-zero sizes it up. It is a
+non-zero, every difference is accounted for, and the headline is the one nobody could previously
+state.]`**
+
+**SUBJECT:** `grocery/build-walmart-deals.ps1` - a pure file-to-file transform with ten commits since
+2026-08-21, several touching parse and price behaviour. Old revision `d81391efa` (2026-08-21) against
+HEAD, both over the same real capture, `walmart-capture-2026-09-08.csv`, 488 raw rows.
+
+**NOT `sidecar/lib_match.py`'s `clean_product`, which was the item's own first suggestion.** Its
+`_UNIT_TAIL` regex and function body are **byte-identical across all three of its revisions**, so a
+run there returns a guaranteed zero that proves nothing about the parser and everything about the
+choice of subject - a vacuous pass, which is I39's shape. Recorded because the next person will reach
+for the same file.
+
+## THE HEADLINE: 0 of 190 price fields moved
+
+`ad_price`, `current_price`, `price`, `per_unit`, `unit_price` - **not one differs on any row both
+arms emitted.** Ten commits of parser churn changed no price. **Nobody could make that claim before,
+and no `-SelfTest` in the estate could have produced it**, because they prove a detector still fires
+on its own frozen fixture and say nothing about the 4,000 real rows nobody froze.
+
+## The full diff, and every part of it is intended
+
+| | HEAD | old |
+|---|---|---|
+| rows emitted | **193** | **198** |
+| in both | 193 | |
+| only in old | | **5** |
+
+| field | rows moved | what it is |
+|---|---|---|
+| `seller` | 193 of 193 | **new field**, old side empty. Additive. |
+| `fulfillment` | 191 of 193 | **new field**. Additive. |
+| `ad_basis` | 14 of 193 | **prose only** - the explanation string gained *"(the capture's as_of)"*. No semantic change. |
+| `qty_basis` | 11 of 193 | **prose only** - gained *"; a pack count in the name explains the multiple"*. |
+| `ad_from` / `ad_to` | 6 of 193 | **a real, intended behaviour change** |
+
+**The `ad_from`/`ad_to` change is the rollback TTL being anchored to FIRST DETECTION rather than to
+the capture date.** Old: `2026-09-08 -> 2026-10-08` for everything. New: `2026-08-31 -> 2026-09-30`,
+and Monster Energy at `2026-08-22 -> 2026-09-21`. The new windows **expire sooner**, so the change
+makes the board more conservative about promo prices - the safe direction.
+
+## THE FIVE ROWS HEAD DROPS, AND THIS IS THE PART WORTH READING
+
+They are not a filter tightening on brand or seller. HEAD added a **REFUSED** reject class that did
+not exist at the old revision, and it catches rows where **Walmart's own stated unit price
+contradicts the pack size in its own product name**:
+
+| row | line price | Walmart's unit price | the contradiction |
+|---|---|---|---|
+| Great Value Black Beans, 4 lb | $4.98 | **$1.25/oz** | name says 64 oz, Walmart's own arithmetic derives **3.984 oz** |
+| Kirkland Signature Chicken Breast, 12.5 Oz, 6 Ct | $24.99 | **$416.50/lb** | derives **0.06 lb** |
+| (2 pack) La Preferida Black Beans, 30 oz | $3.50 | 3.5 c/oz | derives **100 oz** |
+| GOYA Black Beans, 7.5 oz Bag | $8.00 | 57.1 c/oz | derives **14.011 oz** |
+| Bob's Red Mill Yellow Cake Mix 15.5 oz | $5.69 | $5.99/oz | derives **0.95 oz** |
+
+**The old pipeline PUBLISHED all five.** Each would have carried a per-unit price wrong by one to
+three orders of magnitude onto a live board. The reject tallies confirm it: old `314 priced, 184
+rejected` with no REFUSED class at all; HEAD `307 priced, 189 rejected` including **7x REFUSED**.
+
+**So the oracle's first real run independently verified a fix rather than finding a regression**, and
+it did it without anybody authoring a single expected value.
+
+## A SECOND FINDING, from an arm that could not run
+
+Pinning **only the script** and leaving its libraries at HEAD **failed outright**:
+`Get-TcWholePurchaseTokens : The term ... is not recognized`. The old `build-walmart-deals` lifts a
+**hand-maintained list of function names** out of `compare-deals.ps1`, and against today's
+`compare-deals` it lifted a function whose callee did not exist at that revision. That is exactly the
+run-time failure `build-walmart-deals.ps1`'s own comment warns about, and it is **I82's coupling
+measured from the outside**: a component whose provided interface is its source text cannot be run
+against a different version of what it lifts from. Recorded in the tool, which tells you to switch
+modes when it happens.
+
+## Rung 2 shipped, because rung 1 justified it
+
+`ops/consistency-oracle.ps1` - takes a script, a commit-ish, an input and an output key, runs both
+arms in **their own temp sandboxes** and reports the keyed diff. Sandboxes are not optional: this
+subject writes its output, a rejects file **and mutates the rollback ledger**, so running an old
+revision in place would have written all three to tracked paths.
+
+**It is NOT a gate and the header says so twice.** Output is MEANT to change when a fix lands; a
+consistency check that must be green on every push is a ratchet nobody asked for, red on day one.
+Run it deliberately, before a refactor lands.
+
+**A real defect its own fixtures caught before it shipped:** a bare `@{}` in PowerShell is a
+**case-insensitive** hashtable, so `"Great Value BLACK BEANS"` and `"Great Value Black Beans"` would
+collide into one key and a name that changed **only in case would read as the same row** - the oracle
+silently missing the exact class of string change it exists to catch, and the family the estate
+already paid for when a norm regex turned "Garlic" into "arlic". Both sides are `StringComparer::Ordinal`
+now, pinned by a composite-key clean twin.
+
+**Verified:** self-test exit 0 over 8 cases - led by the must-fire that keeps an emitted-versus-dropped
+row APART from a changed value, because folding them together is how a filter change hides inside a
+value change. The shipped tool reproduces the founding run exactly (193 / 198 / 5, same field
+tallies). `run-gates` exit 0, `pass=279 fail=0`. **Nothing tracked was written by any arm.**
+
+**Scope stated honestly:** ONE parser, ONE input, ONE revision pair. It says nothing about the other
+transformation stages, and the item's own caution stands - the oracle is only valid where output is
+MEANT to be identical, so it must never be pointed at boards that rebuild daily or at `reanchor`,
+which rewrites every spec.
 
 **Source.** `automated-analysis` (University of Minnesota; queue-4 entry 20, raided 2026-09-08),
 item 37. Routed to `software-craft/test-design-and-oracles.md` 5.3. Registered as claim C139.
