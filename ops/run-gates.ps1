@@ -121,30 +121,6 @@ foreach ($s in $withSelfTest) {
   [void]$selfKeys.Add([string]$s.FullName)
   [void]$selfJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $s.FullName, '-SelfTest') })
 }
-$selfRes = Invoke-TcParallel -Jobs $selfJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
-$selfBy = @{}; for ($i = 0; $i -lt $selfKeys.Count; $i++) { $selfBy[$selfKeys[$i]] = $selfRes[$i] }
-foreach ($s in $withSelfTest) {
-  $rel = $s.FullName.Replace($repo, '').TrimStart('\')
-  # NO 2>&1: merging a child's stderr under EAP=Stop makes its first stderr line a terminating throw in THIS
-  # script. That trap has bitten test-auditors, guards and check-ad-cycles in this estate already.
-  $gr = $selfBy[[string]$s.FullName]
-  $out = $gr.Out
-  Add-TcGateTiming -Name ($s.FullName.Replace($repo, '')) -Ms $gr.Ms -SpawnMs 209
-  $rc = $gr.ExitCode
-  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}" -f $rel) }
-  else {
-    $fail += $rel
-    Write-Output ("  FAIL  {0}  (exit {1})" -f $rel, $rc)
-    # THE EXCERPT MUST SHOW THE FAILURES (2026-08-08). This was `-match '(?i)fail|X '` capped at 5 lines, and
-    # '(?i)...x ' matches the "x " inside words - "mutex + atomic swap" scored as a hit. On gates run #2 that
-    # spent 3 of the 5 slots on PASSING lines and hid 3 of test-auditors' 4 failures from the log entirely,
-    # so the run read as one broken watcher when it was four. Anchored to the FAIL/X markers, and 12 lines.
-    @($out) | Where-Object { $_ -match '^\s*(FAIL|X)\b' -or $_ -match '(?-i)SELF-TEST FAIL' } |
-      Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
-    if (@($out).Count -gt 0) { Write-Output ('          ...' + (@($out).Count) + ' line(s) of output in total') }
-  }
-}
-
 # ---- static-analysis detectors: they read SOURCE, so they work on a bare checkout ----
 $static = @(
   @{ f = 'grocery\audit-guard-contract.ps1';   n = 'every chain detector can prove it ran, none are dead or half-covered' }
@@ -311,23 +287,6 @@ foreach ($g in $static) {
   [void]$staticKeys.Add([string]$g.f)
   [void]$staticJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $pp) })
 }
-$staticRes = Invoke-TcParallel -Jobs $staticJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
-$staticBy = @{}; for ($i = 0; $i -lt $staticKeys.Count; $i++) { $staticBy[$staticKeys[$i]] = $staticRes[$i] }
-foreach ($g in $static) {
-  $p = Join-Path $repo $g.f
-  if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
-  $gr = $staticBy[[string]$g.f]
-  $out = $gr.Out
-  Add-TcGateTiming -Name ($g.f) -Ms $gr.Ms -SpawnMs 209
-  $rc = $gr.ExitCode
-  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
-  else {
-    $fail += $g.f
-    Write-Output ("  FAIL  {0}  (exit {1}) - {2}" -f $g.f, $rc, $g.n)
-    @($out) | Where-Object { $_ -match '!|FAIL' } | Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
-  }
-}
-
 # ---- PYTHON self-tests -----------------------------------------------------------------------------
 # THE DISCOVERY ABOVE READS *.ps1 AND NOTHING ELSE, so every Python suite in this estate was ungated.
 # coverage_check.py carries the recipe QA battery - coverage, scaling ratios, prose numbers, and the
@@ -407,7 +366,103 @@ foreach ($g in $pyStatic) {
   [void]$pyStaticKeys.Add([string]$g.f)
   [void]$pyStaticJobs.Add([pscustomobject]@{ Exe = $pyExe; ArgList = @($pp) })
 }
-$pyStaticRes = Invoke-TcParallel -Jobs $pyStaticJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
+# KEYED ON FILE PLUS ARGUMENT: a battery can appear twice in $pySuites with different arguments, and a
+# bare filename key would collapse both onto one result and score one of them against the other's output.
+$pySuiteJobs = [Collections.Generic.List[object]]::new(); $pySuiteKeys = [Collections.Generic.List[string]]::new()
+foreach ($g in $pySuites) {
+  $pp = Join-Path $repo $g.f
+  if (-not (Test-Path $pp) -or -not $pyExe) { continue }
+  [void]$pySuiteKeys.Add([string]$g.f + '|' + [string]$g.a)
+  [void]$pySuiteJobs.Add([pscustomobject]@{ Exe = $pyExe; ArgList = @($pp, [string]$g.a) })
+}
+# ---- ONE POOL, NOT FOUR (2026-09-09). ----------------------------------------------------------
+# This was four Invoke-TcParallel calls - self-tests, PS static, Python static, Python suites - and
+# each one returns an array indexed by job, so each had to DRAIN FULLY before the next began. Three
+# hard barriers, and at the end of every batch the workers that had finished sat idle waiting on that
+# batch's longest straggler. MEASURED at the four-pool shape: 516s of gate work inside 78s of wall is
+# 6.6x effective parallelism against 16 dispatched workers, about 41%, where perfect packing of 516s
+# at width 16 is 32s. The width curve was flat - 78s, 76s, 75s at width 16, 24, 32 - and that was
+# read as the pool saturating. It was not saturated, it was waiting: widening a barrier does not
+# remove it, because each batch's tail is set by its longest single gate however many workers idle
+# behind it. `design\MEASURE-gate-cost-2026-09-09.md` is the measurement and its correction.
+#
+# WHAT THIS DOES NOT CHANGE: every gate still runs, still in its own process, still judged by the same
+# four loops below in the same order, and their lines are byte identical. This is the DISPATCH, not
+# the assertions - which is exactly why it is safe where running only the gates a change can affect
+# would not be, that being the "no gate matched" / "the gates found nothing" shape ops-and-gates.md
+# warns about.
+#
+# SAFE BECAUSE THE GATES DO NOT WRITE, and that was measured rather than assumed: two full runs over
+# 108,129 files changed ZERO repo files, against a zero background-churn floor in the same window. So
+# there is no file-system channel by which a later batch could have depended on an earlier one.
+#
+# ONE BEHAVIOUR CHANGE, deliberately: the `$pySuites.Count -lt 15` and interpreter-probe guards now
+# run BEFORE any gate verdict prints rather than after the self-test block, so a could-not-evaluate
+# aborts with no results above it instead of some. That is fail-fast and it is the honest shape, but
+# it IS different from what a reader of the old log would expect.
+$allJobs = [Collections.Generic.List[object]]::new()
+$offSelf = $allJobs.Count;     foreach ($j in $selfJobs)     { [void]$allJobs.Add($j) }
+$offStatic = $allJobs.Count;   foreach ($j in $staticJobs)   { [void]$allJobs.Add($j) }
+$offPyStatic = $allJobs.Count; foreach ($j in $pyStaticJobs) { [void]$allJobs.Add($j) }
+$offPySuite = $allJobs.Count;  foreach ($j in $pySuiteJobs)  { [void]$allJobs.Add($j) }
+Write-Output ("run-gates: {0} gate(s) dispatched into ONE pool at width {1}" -f $allJobs.Count, $Jobs)
+$allRes = Invoke-TcParallel -Jobs $allJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
+# EXPLICIT INDEX COPIES, never `@(Get-Slice ...)` or a range expression. A function returning an array
+# UNROLLS, so a one-element slice - $pyStatic is exactly one job - would come back a SCALAR and index
+# into the object instead of the array, and an empty slice would need $a[0..-1] which is not empty.
+# This estate has a memory for the family: assign, then wrap. These loops cannot do either.
+$selfRes = New-Object object[] $selfJobs.Count
+for ($i = 0; $i -lt $selfJobs.Count; $i++) { $selfRes[$i] = $allRes[$offSelf + $i] }
+$staticRes = New-Object object[] $staticJobs.Count
+for ($i = 0; $i -lt $staticJobs.Count; $i++) { $staticRes[$i] = $allRes[$offStatic + $i] }
+$pyStaticRes = New-Object object[] $pyStaticJobs.Count
+for ($i = 0; $i -lt $pyStaticJobs.Count; $i++) { $pyStaticRes[$i] = $allRes[$offPyStatic + $i] }
+$pySuiteRes = New-Object object[] $pySuiteJobs.Count
+for ($i = 0; $i -lt $pySuiteJobs.Count; $i++) { $pySuiteRes[$i] = $allRes[$offPySuite + $i] }
+if ($allRes.Count -ne $allJobs.Count) {
+  Write-Output ("run-gates: COULD NOT EVALUATE - dispatched {0} job(s) and the pool returned {1}. Refusing to judge a set that does not line up with what was run." -f $allJobs.Count, $allRes.Count)
+  exit 3
+}
+
+$selfBy = @{}; for ($i = 0; $i -lt $selfKeys.Count; $i++) { $selfBy[$selfKeys[$i]] = $selfRes[$i] }
+foreach ($s in $withSelfTest) {
+  $rel = $s.FullName.Replace($repo, '').TrimStart('\')
+  # NO 2>&1: merging a child's stderr under EAP=Stop makes its first stderr line a terminating throw in THIS
+  # script. That trap has bitten test-auditors, guards and check-ad-cycles in this estate already.
+  $gr = $selfBy[[string]$s.FullName]
+  $out = $gr.Out
+  Add-TcGateTiming -Name ($s.FullName.Replace($repo, '')) -Ms $gr.Ms -SpawnMs 209
+  $rc = $gr.ExitCode
+  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}" -f $rel) }
+  else {
+    $fail += $rel
+    Write-Output ("  FAIL  {0}  (exit {1})" -f $rel, $rc)
+    # THE EXCERPT MUST SHOW THE FAILURES (2026-08-08). This was `-match '(?i)fail|X '` capped at 5 lines, and
+    # '(?i)...x ' matches the "x " inside words - "mutex + atomic swap" scored as a hit. On gates run #2 that
+    # spent 3 of the 5 slots on PASSING lines and hid 3 of test-auditors' 4 failures from the log entirely,
+    # so the run read as one broken watcher when it was four. Anchored to the FAIL/X markers, and 12 lines.
+    @($out) | Where-Object { $_ -match '^\s*(FAIL|X)\b' -or $_ -match '(?-i)SELF-TEST FAIL' } |
+      Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
+    if (@($out).Count -gt 0) { Write-Output ('          ...' + (@($out).Count) + ' line(s) of output in total') }
+  }
+}
+
+$staticBy = @{}; for ($i = 0; $i -lt $staticKeys.Count; $i++) { $staticBy[$staticKeys[$i]] = $staticRes[$i] }
+foreach ($g in $static) {
+  $p = Join-Path $repo $g.f
+  if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
+  $gr = $staticBy[[string]$g.f]
+  $out = $gr.Out
+  Add-TcGateTiming -Name ($g.f) -Ms $gr.Ms -SpawnMs 209
+  $rc = $gr.ExitCode
+  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
+  else {
+    $fail += $g.f
+    Write-Output ("  FAIL  {0}  (exit {1}) - {2}" -f $g.f, $rc, $g.n)
+    @($out) | Where-Object { $_ -match '!|FAIL' } | Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
+  }
+}
+
 $pyStaticBy = @{}; for ($i = 0; $i -lt $pyStaticKeys.Count; $i++) { $pyStaticBy[$pyStaticKeys[$i]] = $pyStaticRes[$i] }
 foreach ($g in $pyStatic) {
   $p = Join-Path $repo $g.f
@@ -426,16 +481,6 @@ foreach ($g in $pyStatic) {
   }
 }
 
-# KEYED ON FILE PLUS ARGUMENT: a battery can appear twice in $pySuites with different arguments, and a
-# bare filename key would collapse both onto one result and score one of them against the other's output.
-$pySuiteJobs = [Collections.Generic.List[object]]::new(); $pySuiteKeys = [Collections.Generic.List[string]]::new()
-foreach ($g in $pySuites) {
-  $pp = Join-Path $repo $g.f
-  if (-not (Test-Path $pp) -or -not $pyExe) { continue }
-  [void]$pySuiteKeys.Add([string]$g.f + '|' + [string]$g.a)
-  [void]$pySuiteJobs.Add([pscustomobject]@{ Exe = $pyExe; ArgList = @($pp, [string]$g.a) })
-}
-$pySuiteRes = Invoke-TcParallel -Jobs $pySuiteJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
 $pySuiteBy = @{}; for ($i = 0; $i -lt $pySuiteKeys.Count; $i++) { $pySuiteBy[$pySuiteKeys[$i]] = $pySuiteRes[$i] }
 foreach ($g in $pySuites) {
   $p = Join-Path $repo $g.f

@@ -166,3 +166,42 @@ reproduce exactly the shape `ops-and-gates.md` warns about, where "no gate match
 
 The eight-runs-in-a-day cost noted above is real but is downstream of this: at 45s the same eight
 runs cost six minutes instead of ten, and the case for a change-scoped fast lane weakens accordingly.
+
+## RESULT: one pool, measured
+
+**Harness after the change:** same `ops/run-gates.ps1`, one `Invoke-TcParallel` call.
+**Commit the change was measured at:** the `gate-single-pool` branch, merged as recorded below.
+
+**The bar was registered before the run**, in the correction above: "45-55s rather than the arithmetic
+32s". That was written before the change was applied, so it is a prediction and not a description of
+a result already seen.
+
+| | four pools | one pool | serial (`-Jobs 1`) |
+|---|---:|---:|---:|
+| wall clock | 78s | **51s** | 372s |
+| gate work inside it | 516s | 580s | 370s |
+| effective parallelism | 6.6x | **11.4x** | 1.0x |
+| verdict | 304 pass, 0 fail | 304 pass, 0 fail | 304 pass, 0 fail |
+
+**51s, and it landed inside the pre-registered band.** Three consecutive runs at width 16 measured
+51s, 51s, 51s, so the figure is not a single sample. The saving is 27 seconds a run, 35%.
+
+**Verdicts were diffed BY NAME, not by count** - a suite that silently runs a subset still prints a
+large number. All three configurations produced 304 verdict lines and the sorted name-plus-verdict
+sets are **identical**: four-pool against one-pool, and four-pool against serial. No gate changed its
+answer, and none went missing.
+
+**The `-Jobs 1` contract still holds.** The file promises that width 1 restores the old behaviour
+exactly; it runs 304 gates serially in 372s and passes.
+
+**A number worth keeping from the serial run:** uncontended, the gates are 370s of work. At width 16
+that same work measures 580s, so **contention inflates gate work by about 55%**, and every "gate work"
+figure in this document is a function of the width it was measured at. The 78s and 51s wall clocks are
+the comparable numbers; the work totals are not.
+
+**What was NOT done, deliberately.** Longest-processing-time-first ordering was designed and then not
+built. One pool alone recovers the barriers, and at 51s against an arithmetic floor of 370/16 = 23s
+the remaining gap is contention rather than tail, which reordering does not touch. Building the
+refinement before measuring whether it was needed would have been the same mistake as the three dead
+explanations above, one layer up. It stays available if the gate count grows enough to make the tail
+matter again.
