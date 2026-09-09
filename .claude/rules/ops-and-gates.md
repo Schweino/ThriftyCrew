@@ -68,6 +68,21 @@ everything else honest, so a defect here is silent by construction.
   existing ones is NOT asked for; the ask is that the next constant added carries it. Three simulations
   at gains 25, 13 and 7.5 do not establish a stable range - nothing rules out instability higher, or
   stability lower, and the stable set need not even be an interval.
+- **A suite whose target set is DISCOVERED prints what it RESOLVED** (2026-09-09, backlog I39). A
+  detector whose cases are a literal list in the same file cannot resolve empty; one that globs the
+  tree, filters a board or queries a pool can, and then *"no findings"* and *"the glob matched
+  nothing"* are the same bytes - the shape that has bitten this estate at least five separate times.
+  **Measured 2026-09-09: 180 `.ps1` carry a real `if ($SelfTest)` branch (not the 217 that merely
+  mention it - different test, stated), 151 of 180 already print a case count, and of the 143 whose
+  target set is discovered only 23 print nothing.** So this is a line for the next suite, not a
+  sweep, and **never a threshold**: a bar on resolved counts would be red on day one.
+- **A survivor from a mutation probe names the exact missing case** (2026-09-09, backlog I37). Eight
+  single compiling mutations across three detectors killed 7 times; the survivor was
+  `audit-backlog-status.ps1`'s heading regex losing its `^` anchor, which left twenty-one cases green
+  while every heading quoted mid-line or inside a fenced code block would have parsed as a real item.
+  **Worth running against a detector whose logic you have just rewritten** - that is when a survivor
+  is most likely. Never a gate, and mutants run from a temp mirror with the original verified
+  byte-identical by md5 afterwards.
 - **A detector's header says what its CLEAN report MEANS** (2026-09-08, backlog I66). A static analysis
   must approximate, and the direction decides what a verdict is worth: a **sound** one never misses a
   real defect, so a clean report is trustworthy; an **unsound** one stays quiet, so a reported defect is

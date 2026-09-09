@@ -51,6 +51,23 @@ carries all four rules in one file, and copying it is faster than re-deriving th
   corpora that carry no `source` at all.
 - **Record an INPUT FINGERPRINT** with the result. The dedup probe disagreed with itself across two
   runs because its inputs moved underneath it and it recorded nothing about what it had read.
+- **NAME THE HARNESS AND THE COMMIT IT RAN AT** (2026-09-09, backlog I47). A difference can be real,
+  reproducible and significant and still be caused by something that differed between the arms and
+  was not the intervention - and that is a DESIGN defect, so more data makes it worse rather than
+  better. This estate has paid twice: `grocery/check-ad-cycles.ps1` carries a block headed *"THE
+  MEASUREMENT WAS CONFOUNDED"* where a 30.9-vs-41.7-minute verdict **reverted a working parallel
+  path**, the parallel arm having run through a wrapper measured an hour later at 3.8 minutes per
+  call for a 1-second script; `design/EVAL-hunter-wall-clock-2026-09-04.md` 46 is the second and says
+  it plainly - *"arithmetically true and causally wrong"*. **Both were caught by a human re-reading
+  the commit clock months later, by luck.**
+  **Measured 2026-09-09: 8 of the 9 `design/EVAL-*.md` and `MEASURE-*.md` documents name a harness
+  that has CHANGED since the document was written**, and the ninth only reads current because it was
+  edited for an unrelated item the day before - so the honest figure is nearer 9 of 9. A moved harness
+  does not make a verdict wrong; **it makes it UNQUALIFIED until somebody re-reads it**, and today
+  answering that costs archaeology. So a recorded measurement states the script it ran through and
+  the commit hash it ran at. Retro-filling the nine is NOT asked for, and a gate over them would be
+  red on day one against every single one - which the ops rules already forbid. The ask is that the
+  next one carries it.
 
 Two more that live elsewhere and bite here:
 

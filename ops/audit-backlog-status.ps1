@@ -170,6 +170,17 @@ if ($SelfTest) {
     (($r5.State -eq 'DONE') -and ($r5.Problem -eq '')) ($r5.State + ' problem=' + $r5.Problem)
   T 'MUST NOT FIRE  a section heading that is not an item is skipped entirely, not reported stateless' `
     ($null -eq (Get-TcItemState '### Triage of I8-I27, 2026-09-07')) 'a prose heading was treated as an item'
+  # ADDED 2026-09-09 BY A MUTATION PROBE (backlog I37), which is the only reason this gap was found.
+  # Dropping the `^` anchor from the heading pattern left the whole suite GREEN: no case asserted that
+  # a `###` has to start the LINE. Prose and code blocks in this ledger quote item headings inline all
+  # the time, and every one of them would have been parsed as a real item - inflating the board and,
+  # worse, reporting a quoted heading as declaring no state.
+  T 'MUST NOT FIRE  a heading quoted MID-LINE is not an item - the pattern is anchored at line start' `
+    ($null -eq (Get-TcItemState 'see ### I31 - the LLM cost item `OPEN` for the shape')) `
+    'an inline mention of a heading was parsed as a real item'
+  T 'MUST NOT FIRE  and the same inside a fenced code block, which this ledger uses for commands' `
+    ($null -eq (Get-TcItemState '    ### I82 - lifted functions `OPEN` `2-WAY` `RUNG1 BUILD`')) `
+    'an indented code-block line was parsed as a real item'
   $r6 = Get-TcItemState '### E5 - Validate at source `PARKED - SEE done-notes.md FOR WHY` `queue-2`'
   T 'MUST NOT FIRE  a filename containing a state word inside the SAME tag does not add a second state' `
     (($r6.State -eq 'PARKED') -and ($r6.Problem -eq '')) ($r6.State + ' problem=' + $r6.Problem)
@@ -233,7 +244,7 @@ if ($SelfTest) {
   T 'CLEAN TWIN a single item comes back as an ARRAY, not unrolled to one object' ($one -is [array]) ($one.GetType().FullName)
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 9 must-fire cases (both malformed state shapes, plus a missing reversibility, a missing first-rung type, a doubled reversibility and an out-of-vocabulary rung type), 8 must-not-fire cases led by the backticked-filename title that made the parser necessary and by the DONE/PARKED items that owe no axes, and 4 clean twins including the PARTLY DONE heading with a commit hash beside its axes'
+  Write-Output 'SELF-TEST PASS: 9 must-fire cases (both malformed state shapes, plus a missing reversibility, a missing first-rung type, a doubled reversibility and an out-of-vocabulary rung type), 10 must-not-fire cases led by the backticked-filename title that made the parser necessary, by the DONE/PARKED items that owe no axes, and by the two line-anchor cases a 2026-09-09 mutation probe proved were missing, and 4 clean twins including the PARTLY DONE heading with a commit hash beside its axes'
   exit 0
 }
 

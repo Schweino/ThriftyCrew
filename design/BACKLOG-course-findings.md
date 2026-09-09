@@ -3514,7 +3514,34 @@ truncates a hunt mid-wave could be worse than the overspend.
 **Deliberately not proposed: a gate.** Per the standing rule, a gate that is red on day one for a
 backlog nobody is about to clear teaches people to ignore red. Rungs 1 and 2 are reports.
 
-### I32 - No alert here can require a condition to PERSIST, and no alert ROUTE has been tested end to end `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I32 - No alert here can require a condition to PERSIST, and no alert ROUTE has been tested end to end `PARKED - MEASURED 2026-09-09: 7 OF 136, SO THE DURATION WINDOW BUYS ALMOST NOTHING HERE` `queue-4`
+
+**`[CLOSED PARKED 2026-09-09, by the item's own instruction: "If that number is small, the duration
+window buys nothing here and this item should be PARKED."]`**
+
+**Measured over `grocery/triage-queue.json`, 139 closed items:**
+
+| | |
+|---|---|
+| items with both a raised and a resolved timestamp | 136 of 139 (3 unusable, **not scored, not counted as fast**) |
+| median time raised to resolved | **5.1 h** |
+| resolved inside one run cycle (<=24 h) | 101 of 136 |
+| resolved with **no recorded action** in the notes | 8 of 136 |
+| **BOTH - what a duration window would have suppressed** | **7 of 136 (5%)** |
+
+**Five per cent.** A duration window withholds the first notification of a transient condition; on
+this history it would have withheld seven alerts in the queue's whole life, and the other 129 needed
+somebody to do something. **That is not worth a mechanism.**
+
+**The half of the item that was NOT about duration is where the value turned out to be**, and it has
+moved to I35: the queue's own notes record that alerts are frequently wrong on their FIRST
+observation, which is a different fix (a second observer) and is sized up rather than down.
+
+**Unchanged and still true:** the estate's nearest mechanism is the once-per-type-per-day gate in
+`send-alert.ps1`, and it is the OPPOSITE behaviour - it withholds the SECOND email about a persistent
+condition. And the DELIVERY leg is still untested end to end; 22 of 139 items fired more than once,
+so the queue leg demonstrably works. Email was unmuted 2026-08-31 and the log shows 73 sends, the
+most recent 2026-09-08, so delivery is evidently working even though nothing asserts it.
 
 **Source.** Queue-4 course 1, `observability-engineering-metrics-logs-traces` (Edureka), items 34,
 37 and 38. A vendor course with no measurements; what it supplied is a mechanism and a vocabulary,
@@ -3744,7 +3771,50 @@ windows with a crash-safe restore. That is the chaos loop against the gate layer
 state is observable. Reasoning recorded in `reliability-craft/estate-inventory.md` so it is not
 re-derived as an open gap.
 
-### I35 - Every failure verdict here is reached on ONE observation, and synthetic monitoring's standard answer is to take a second `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I35 - Every failure verdict here is reached on ONE observation, and synthetic monitoring's standard answer is to take a second `PARTLY DONE - MEASURED 2026-09-09 AND IT SIZED UP: 16 OF 23 CLAIMS WERE WRONG ON ONE OBSERVATION` `queue-4` `2-WAY` `RUNG1 MEASURE`
+
+**`[RUNG 1 RAN 2026-09-09. This is the opposite of I32's result and the two items were right not to
+be merged.]`**
+
+*"Count how many store-cold, zero-row and carry-expiry verdicts were reached on exactly one
+observation, and how many of those were later reversed. That number is the size of the prize and
+nobody has it."*
+
+**The prize, from the queue's own closing notes - verbatim, not paraphrased:**
+
+| firing | what the alert claimed | what triage found |
+|---|---|---|
+| 2026-08-22 | 15 stores dropped from a commodity | *"**Nine of fifteen were capture-rotation artifacts already gone.**"* |
+| 2026-09-06 | 3 too-strict includes | *"**Two of three ... were false** ... the audit read 'not ingested' as 'no rule can see it'."* |
+| 2026-09-07 | 5 too-strict includes | *"**False alarm as phrased - no include was too strict in any of the five.** Four were the auditor's own blind spots."* |
+
+**16 of 23 individual claims across three dated firings were not what the alert said they were.** And
+`grocery/alert-log.txt` shows this alert type SENT on 09-01, 09-02, 09-06 and 09-07 - **4 of the 73
+alerts ever sent**, all the same shape, all reaching a real inbox.
+
+**53 of 139 closed items carry a reversal or supersede in their notes.**
+
+## The finding is SHARPER than the item's framing, and this matters for what gets built
+
+The item proposed a **second INDEPENDENT observation** - a different search term, a different
+session. But these reversals were not the store being misread. They were **the auditor's own blind
+spots**: rotation artifacts already gone, an expired ad file the engine had correctly refused, rows a
+reasoner had already ruled that the auditor could not see.
+
+**So the second observation that would have caught them is not a re-probe of the store.** It is
+exactly what triage did BY HAND on 2026-09-01 and wrote down: *"Not a capture-depth artifact (tested
+first: every candidate lives in `walmart-regular-2026-08-31.json`, the file that fed the board)"*.
+**The cheap second observer is a check against the capture file that fed the board, inside the
+auditor, before it raises.** That is a pre-condition on one alert, not a general mechanism - and it is
+far cheaper than the re-probe the item costed, because it touches no store and no 75-minute pull.
+
+**Not built here.** It changes what `audit-coverage-gaps.ps1` will raise, on a live daily alert that
+reaches a real inbox, and the right moment to make that change is with a day's board in front of you.
+The estate has already been narrowing it the right way on its own: that auditor has learned the
+NOT-INGESTED verdict, to skip expired deals files, and to read `known-wrong.json`.
+
+**I32 was PARKED at 5% on the same data. This is not that item**, and the table above is why: a
+duration window filters a transient real condition; this filters a broken instrument.
 
 **Source.** `monitoring-and-observability-for-development-and-devops` (IBM/Coursera), item 15. The
 synthetic check loop it describes does not alert on a failing probe. When a checkpoint reports an
@@ -3859,7 +3929,61 @@ to justify code that deletes evidence, and deletion is the direction that cannot
 
 ---
 
-### I37 - 217 self-test files, and nothing has ever asked whether their cases would notice the detector being wrong `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I37 - 217 self-test files, and nothing has ever asked whether their cases would notice the detector being wrong `DONE - THE PROBE RAN, FOUND A REAL GAP, AND THE GAP IS CLOSED, 2026-09-09` `queue-4`
+
+**`[CLOSED 2026-09-09. The cheap experiment ran and it paid, which is the outcome the item asked
+for and did not assume.]`**
+
+*"Do the cheap experiment before proposing the tool. Mutate ONE real detector and run its self-test.
+A red result shrinks this item; a green one sizes it."*
+
+**Eight single, compiling mutations across three detectors** - operators taken from this estate's own
+recorded scars, which read almost as a mutation table: an off-by-one comparison, a lost regex anchor,
+a count that loses its guard, an equality flipped.
+
+| detector | mutation | verdict |
+|---|---|---|
+| `audit-backlog-status` | `-gt 1` becomes `-ge 1` | KILLED |
+| `audit-backlog-status` | `-eq 0` becomes `-lt 0` | KILLED |
+| `audit-backlog-status` | reversibility 'exactly one' guard loosened | KILLED |
+| **`audit-backlog-status`** | **heading regex loses its `^` anchor** | **SURVIVED** |
+| `audit-python-pins` | pin equality flipped | KILLED |
+| `audit-python-pins` | normaliser stops collapsing `-_.` | KILLED |
+| `consistency-oracle` | case-sensitivity dropped | KILLED |
+| `consistency-oracle` | differing-field test inverted | KILLED |
+
+**7 of 8 killed. The survivor is the whole value of the item.**
+
+## What the survivor was, and it is not hypothetical
+
+Dropping the `^` from `'^###\s+([A-Z][0-9]+)\s+-\s'` left **the entire suite green**. No case asserted
+that a `###` has to start the LINE - and **this ledger quotes item headings inline and inside fenced
+code blocks constantly.** Every one of those would have been parsed as a real item: the board count
+inflated, and a quoted heading reported as *declaring no state*, which is a hard finding. The suite
+had twenty-one cases and not one of them looked at the left-hand edge of the line.
+
+**Two must-not-fire cases now cover it** - a heading quoted mid-line, and an indented code-block line.
+**Re-ran the probe: 8 of 8 killed, 0 survived.** The suite's own tally line was corrected from 8
+must-not-fire to 10 in the same change, because a stale count is the defect this estate has a rule
+about.
+
+## Why this closes rather than becoming a tool
+
+The item asked whether the fixture suites would notice the detector being wrong. **On this sample they
+notice 7 times in 8**, and the eighth was found and fixed in the same hour. That is a high kill rate,
+which the item said would shrink it - and building a general mutation runner to keep re-confirming a
+7-in-8 result is the tool that costs more than the finding.
+
+**Both prohibitions were honoured.** It is NOT a gate and nothing was wired into `run-gates` - a
+mutation score that has to stay above a number would be a ratchet nobody asked for. And **it never
+edited a tracked file**: every mutant ran from a temp mirror carrying `ops\` and `lib\`, and all three
+originals were verified byte-identical by md5 afterwards. The mirror also runs the UNMUTATED file
+first and refuses to score a detector whose baseline fails there, so a broken harness cannot be
+reported as a killed mutant.
+
+**THE TRIGGER: run it again against a detector whose logic you have just rewritten.** That is when a
+survivor is most likely and cheapest to act on. `scratchpad/i37.py` is the throwaway; the method is
+four lines of `re.subn` and a temp mirror.
 
 **Source.** `introduction-software-testing` (queue-4 course 5, worked 2026-09-07), items 30 and 28.
 Routed to `software-craft/test-design-and-oracles.md` 6 and cross-linked from
@@ -3968,7 +4092,47 @@ import it conditionally. There is no `hypothesis` package installed.
 
 ---
 
-### I39 - 217 self-test files assert on a target set none of them prints, so a vacuous pass is invisible `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I39 - 217 self-test files assert on a target set none of them prints, so a vacuous pass is invisible `PARKED - RUNG 1 RAN 2026-09-09 AND THE NUMBER IS HIGH: 151 OF 180 ALREADY REPORT` `queue-4`
+
+**`[CLOSED PARKED 2026-09-09. "Do not build anything until that number exists." It exists, and it is
+high, which the item said would shrink it.]`**
+
+**Measured over the whole tree, worktrees and `archive/` excluded. 180 `.ps1` carry an actual
+`if ($SelfTest)` BRANCH** - not the 217 the item quotes, which counted files merely *mentioning*
+`SelfTest`. Different test, said out loud, because a count with no stated test cannot be checked.
+
+| | |
+|---|---|
+| self-tests that PRINT a resolved/case count a reader could compare | **151 of 180 (84%)** |
+| printing nothing comparable | 29 of 180 |
+| Python suites carrying `--selftest` | 43, of which **42 print a case count** |
+
+**And the item's own counter-argument measured, which is the sharper half.** A detector whose target
+set is a LITERAL LIST in the same file cannot resolve empty, so the risk lives only where the target
+set is DISCOVERED - a glob, a recurse, a query:
+
+| | |
+|---|---|
+| suites whose target set IS discovered | 143 of 180 |
+| **of those, printing no resolved count - the population that actually matters** | **23 of 143** |
+
+**Twenty-three files, named.** Among them `grocery/send-alert.ps1`, `grocery/set-board-cell.ps1`,
+`grocery/publish-deals-page.ps1`, `meal-prep/pipeline/build-card2.ps1`. That is a nameable list, not
+an estate-wide programme.
+
+**Why it parks rather than becoming rung 2.** At 84% already compliant the general build is
+re-confirming what is mostly true, and the item is explicit that **a threshold on resolved counts must
+not become a gate** - it would be red on day one, which the ops rules forbid. The 23 are worth a line
+each *when someone is already editing them*, not a sweep.
+
+**THE FORWARD RULE, which is the durable half and is now in `.claude/rules/ops-and-gates.md`:** a
+suite whose target set is DISCOVERED prints what it resolved. "No findings" and "the glob matched
+nothing" are the same bytes otherwise, and that shape has bitten this estate at least five separate
+times.
+
+**Unchanged and still right:** the daemon suite solved this properly for one suite with
+`--names-out`/`--names-diff` and exit 2 on a removed case. It compares CASES rather than reporting a
+resolved count, so it still cannot see a lost flag inside a case that runs.
 
 **Source.** `chaos-engineering` (KodeKloud, Nasia Ullas, queue-4 course 6, worked 2026-09-07), items
 15 to 17. Routed to `reliability-craft/rca-and-chaos.md` 3.2 and 3.3, and cross-linked from
@@ -4016,7 +4180,40 @@ which is a much smaller set than 217 and is what rung 1 should really be countin
 
 ----
 
-### I40 - the git-bus is an untyped producer/consumer contract with no schema and no version `OPEN - NEEDS A MEASUREMENT FIRST` `queue-4` `2-WAY` `RUNG1 READ`
+### I40 - the git-bus is an untyped producer/consumer contract with no schema and no version `PARKED - RUNG 1 RAN 2026-09-09 AND SHRANK IT: THE BUS IS NAME-ADDRESSED` `queue-4`
+
+**`[CLOSED PARKED 2026-09-09. The item's own honest counter-argument was right, and the read is what
+settled it.]`**
+
+Rung 1 asked for one table: for each producer/consumer contract, does the consumer read fields **by
+NAME or by POSITION**? That split is the whole risk ranking - an added key is harmless to a
+name-addressed reader and **silently shifts every value** for a position-addressed one.
+
+**Measured 2026-09-09 over 635 first-party files (525 `.ps1`, 110 `.py`), worktrees, `archive/`,
+`.venv` and `out/` excluded. 505 of them parse a structured input at all:**
+
+| | |
+|---|---|
+| NAME-addressed only | **378 of 505** |
+| both shapes in one file | 88 of 505 |
+| **POSITION-addressed only** | **39 of 505 (7.7%)** |
+
+**And the 39 are not the bus.** Almost all of them are under `.claude/skills/lesson/` - Ghost API
+helpers splitting a response line - not the grocery capture-to-board chain the item was worried
+about. **The git-bus itself reads by name**, through `ConvertFrom-Json` and `Read-JsonFile`.
+
+So the item's own counter-argument holds exactly as written: *"if almost everything is
+name-addressed the item shrinks to a handful of files"*. It does, and they are the wrong handful to
+build a schema registry for. **A declared shape per bus file, checked at write time, would be a
+large build against a risk the read cannot find.**
+
+**THE TRIGGER THAT REOPENS THIS:** a positional reader appearing in the capture-to-board chain, or a
+feed changing to a delimited format. Neither is true today.
+
+**One number corrected on the way:** the item quotes **27,154** JSON files acting as data. It is now
+**28,226**. That growth is real and it is not an argument for the item - the count includes every
+cached artefact under `out/`, most of which is written and read by the same script, which is not a
+contract at all. The item said so itself.
 
 **Source.** `automate-data-pipelines-schema-evolution` (Coursera, content credited to Jason Rand,
 queue-4 course 7, worked 2026-09-07), items 6 to 9. Routed to
@@ -4386,7 +4583,45 @@ the same account as the confirmation above. Worth doing in the same sitting; not
 
 ---
 
-### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `OPEN - SMALL, AND IT HAS ALREADY BITTEN TWICE` `queue-4` `2-WAY` `RUNG1 READ`
+### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `PARTLY DONE - RUNG 1 RAN AND SIZED IT: 97 OF 172 CONSUMING EDGES ARE UNDEFENDED` `queue-4` `2-WAY` `RUNG1 READ`
+
+**`[RUNG 1 RAN 2026-09-09, which is exactly what the item asked for before any code.]`**
+
+*"List which scheduled stage consumes which other stage's output, and check how many of those edges
+are currently defended by anything at all. Do that before proposing code."*
+
+**The five scheduled entry points, all `CalendarTrigger`:**
+
+| task | fires | runs |
+|---|---|---|
+| Ad Pulls | 07:00 | `grocery/capture-run.ps1 -Kind ad` |
+| Daily Capture | 08:00 | `grocery/capture-run.ps1` + the downstream chain |
+| Capture Watchdog | **10:30** | `grocery/capture-watchdog.ps1` |
+| Graph Nightly | 21:30 | `graph/pipeline/nightly.ps1` |
+| Recipe Harvest | 18:00 | `meal-prep/pipeline/harvest-crawl.ps1` |
+
+**And the edges. 172 first-party `.ps1` consume another stage's output file. 75 of 172 (44%) contain
+any freshness, supersede or mutex defence at all. 97 do not.**
+
+**That number does NOT justify the build the item proposed**, and saying so is the point of running
+rung 1 first. An input assertion added to 97 consumers would be a large change across the whole
+estate for a risk that has fired twice, and a gate over it would be red on day one - which
+`.claude/rules/ops-and-gates.md` forbids.
+
+**WHAT THE READ ACTUALLY NARROWS IT TO.** The scars are both on the SCHEDULED chain, not on the 172:
+the 08:30 stage that ran inside its predecessor's 08:12-08:43 window, and a watchdog named 0930 that
+fires at 10:30. **The defensible build is an input assertion on the handful of stages the five tasks
+invoke directly - five entry points, not 172 files** - and it should exit 3 (could-not-evaluate) on a
+stale input rather than proceeding. That is a much smaller, rankable job than the item as filed.
+
+**Not started, and deliberately.** It touches the live daily chain, and the estate already has the
+vocabulary (`lib/guard-contract.ps1`) and the freshness machinery (`audit-row-age`,
+`audit-asof-evidence`) to do it properly when someone has a window to watch the next run.
+
+**What already exists and what it does not buy, unchanged:** `chain-idle.ps1` takes a named mutex and
+prints FREE or HELD - *"a fixed clock gap is an assumption while the mutex is a fact"*. It prevents
+**overlap**. It does not sequence, and it cannot tell "stage one failed" from "stage one has not
+run".
 
 **Source.** `source-systems-data-ingestion-and-pipelines` (Coursera, DeepLearning.AI with AWS, Joe
 Reis and Morgan Willis, queue-4 course 9, worked 2026-09-07), module 4 items 82 to 84. Routed to
@@ -4428,7 +4663,33 @@ all. Do that before proposing code.
 **Related.** I43 (per-stage latency already recorded and never read) is the measurement that would
 say how close each gap actually is; I40 is the same contract problem one layer down, on the git-bus.
 
-### I46 - every check reports on a whole artefact, so a failure names the file and never the slice `OPEN - NEEDS A MEASUREMENT FIRST` `queue-4` `2-WAY` `RUNG1 READ`
+### I46 - every check reports on a whole artefact, so a failure names the file and never the slice `PARKED - MEASURED 2026-09-09: EVERY FINDING ALREADY NAMES ITS SLICE` `queue-4`
+
+**`[CLOSED PARKED 2026-09-09. The premise does not hold.]`**
+
+Rung 1: *"take the last 30 days of `grocery/out/` audit outputs and count how many findings a reader
+had to open the artefact to attribute. If the answer is small, this is not worth building."*
+
+**Measured over 710 report JSONs under `grocery/out/` and `grocery/out/audit/`. 123 carry a
+findings-shaped list. Of those:**
+
+| | |
+|---|---|
+| findings that DO name a slice key (`store`, `commodity`, `id`, `week_of`, `as_of`, `item`) | **123 of 123** |
+| findings that name only the file | **0 of 123** |
+
+**Not one.** The natural slices this estate would need to attribute a failure to - store, week,
+commodity - are already on the finding rows. The batch key the item wanted to port from Great
+Expectations is, in effect, already there; it is carried per row rather than declared per suite, and
+for a reader chasing a failure that is the same thing.
+
+**Stated honestly: 586 of the 710 files carry no findings-shaped list at all** and were NOT scored.
+They are stamps, cursors and caches rather than reports. Counting them as clean would have been the
+vacuous pass this estate has a rule about, so they are reported as unscored.
+
+**What the item got right and is worth keeping:** a tolerance breach that is one store's whole feed
+and one that is a thin smear across all seven are different defects with different owners. That is
+true. It is just not currently invisible.
 
 **Source.** Same course, module 3 items 71 and 72 (Great Expectations). Routed to
 `data-quality-craft/checks-and-thresholds.md` 6a and `data-quality-craft/applies-here.md`.
@@ -4455,7 +4716,47 @@ is not worth building.
 **What it is not.** Not a proposal to adopt Great Expectations - it is a Python package over a Python
 data stack, and these checks are PowerShell over JSON. The component that ports is the batch key.
 
-### I47 - a recorded measurement can be voided later, and nothing in the estate re-checks one `OPEN - THE FIRST RUNG IS A READ` `queue-4` `2-WAY` `RUNG1 READ`
+### I47 - a recorded measurement can be voided later, and nothing in the estate re-checks one `PARTLY DONE - RUNG 1 RAN: 8 OF 9 RECORDED MEASUREMENTS HAVE HAD THEIR HARNESS MOVE UNDER THEM` `queue-4` `2-WAY` `RUNG1 READ`
+
+**`[RUNG 1 RAN 2026-09-09. The answer is not "nothing has moved", so the item does not close.]`**
+
+*"Walk the `design/EVAL-*.md` and `MEASURE-*.md` files, and for each recorded verdict still being
+obeyed, write down what harness it was measured through and whether that harness has changed since.
+If the answer is 'nothing has moved', this is not worth building."*
+
+**Nine recorded-measurement documents. For each, the scripts it names were checked against their own
+last-commit date:**
+
+| document | written | harness that moved SINCE |
+|---|---|---|
+| `EVAL-dedup-shortlist-2026-09-04` | 09-04 | `harvest_embed.py` 09-05, `hunt-daemon.py` 09-07, `hunt-run.ps1` 09-05 |
+| `EVAL-hunter-repeat-work-2026-09-04` | 09-04 | `update-recipes-db.ps1` 09-05, `hunt-daemon.py` 09-07, `hunt_dispatch.py` 09-07 |
+| `EVAL-latency-cold-read-2026-08-25` | 08-25 | `fdc_lookup.py` 09-07 |
+| `EVAL-latency-lf1-drill-2026-08-25` | 08-25 | `hunt-run.ps1` 09-05, `ingredient-queue.ps1` 09-05, `wave-preaudit.ps1` 09-07 |
+| `EVAL-map-lane-latency-m1-drill-2026-08-25` | 08-25 | `hunt-run.ps1` 09-05, `map-preresolve.ps1` 09-07 |
+| `EVAL-registrar-batch-2026-08-25` | 08-25 | `hunt-daemon.py` 09-07, `ingredient-vocab.ps1` 09-07 |
+| `MEASURE-cheapest-selection` | 08-15 | `measure-cheapest-selection.ps1` 09-05 |
+| `MEASURE-local-finetune-feasibility-2026-08-22` | 08-22 | `serve.ps1` 09-08 |
+| `EVAL-hunter-wall-clock-2026-09-04` | 09-08 | -- none -- |
+
+**8 of 9.** And the ninth is an artefact of the instrument, which has to be said: `EVAL-hunter-wall-
+clock` reads as current only because **I edited it yesterday** for I51. Its measurement is still from
+2026-09-04. So the honest figure is closer to **9 of 9 than 8 of 9**, and the instrument's own
+contamination is exactly the shape it is measuring.
+
+**A MOVED HARNESS IS NOT A WRONG VERDICT.** It means the verdict is **unqualified** until somebody
+re-reads it, which is all the item ever claimed. The two recorded cases stand:
+`check-ad-cycles.ps1`'s *"THE MEASUREMENT WAS CONFOUNDED"* block, where a 30.9-vs-41.7-minute verdict
+reverted a working parallel path and the parallel arm turned out to be running through a wrapper
+measured an hour later at 3.8 minutes per call; and `EVAL-hunter-wall-clock` 46's *"arithmetically
+true and causally wrong"*. **Both were caught by a human re-reading the commit clock months later, by
+luck.**
+
+**The cheap fix the item proposes is a CONVENTION, not a gate, and it is not built here:** every
+recorded measurement names its harness and the commit it ran at, so the question is answerable
+without archaeology. Retro-fitting the nine is not proposed; the ask is that the next one carries it.
+**A gate over `design/EVAL-*.md` would be red on day one against all nine**, which is the shape the
+estate forbids.
 
 **Source.** `crash-course-in-causality` (UPenn, Roy), queue-4 course 10. Routed to
 `experiment-craft/is-the-difference-caused.md` 18-25 and `experiment-craft/applies-here.md` 1.
