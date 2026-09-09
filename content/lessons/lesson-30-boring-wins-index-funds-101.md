@@ -30,7 +30,9 @@ A **stock** is a small ownership stake in one company. If you buy one share of a
 
 An **index fund** is different. Instead of one company, it holds a slice of many companies — sometimes hundreds — all at once. The most common example is an **S&P 500 index fund**, which tracks the 500 largest publicly traded companies in the United States. When you buy into an S&P 500 index fund, you're buying a tiny piece of all 500 of those companies simultaneously.
 
-Some of those companies will have a bad year. Some will have a great year. But you're not betting on any single one — you own all of them. The overall performance of the group is what matters, and historically, large-company U.S. stocks as a group have grown significantly over long time periods.
+Some of those companies will have a bad year. Some will have a great year. But you're not betting on any single one — you own all of them. The overall performance of the group is what matters. Historically, large-company U.S. stocks as a group have returned about 10% a year on average since 1928 with dividends reinvested, or closer to 7% a year after inflation is taken out.
+
+That average is worth reading carefully, because it is not what any single year looks like. Of the 98 calendar years since 1928, about a third finished down. The 10% is what showed up across decades, not what shows up on a Tuesday.
 
 Here's the part that's easy to miss: index funds are also usually very cheap to own. Many have extremely low expense ratios — the fee the fund charges — because they're not paying a team of analysts to make picks. They just automatically mirror the index. Fewer fees mean more of the return stays with the investor.
 

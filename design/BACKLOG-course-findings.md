@@ -5511,7 +5511,48 @@ files and a republish of each, which is a real risk to live pages and should not
 **Constraint acknowledged.** Nothing was changed. Every figure above was read off the filesystem or
 off a public page.
 
-### I60 - three finance lessons make a quantified claim and give no quantity `OPEN - SMALL` `queue-4` `1-WAY` `RUNG1 BUILD`
+### I60 - three finance lessons make a quantified claim and give no quantity `PARTLY DONE - SOURCE FIXED AND VERIFIED; THE LIVE POSTS ARE NOT REPUBLISHED` `queue-4` `1-WAY` `RUNG1 BUILD`
+
+**`[2026-09-09. Brad ruled: worked example with stated assumptions.]`**
+
+**All four claims are fixed in `content/lessons/` and mirrored into `content/substack/posts/`.**
+
+**Lesson 31 was the clear case and it now finishes its own sum.** Two savers, $3,000 a year, 7%
+average annual return, both stopping at 65: the one who starts at 22 reaches about **$743,000**, the
+one who starts at 32 about **$357,000**. **She contributed $30,000 more over her life and ended with
+$386,000 more.** The paragraph names every assumption inline and says plainly that a steady 7% every
+year is not what a real market does.
+
+**Lesson 30 needed an external fact, so it was verified externally rather than written from memory:**
+large-company U.S. stocks have returned **about 10% a year on average since 1928 with dividends
+reinvested, closer to 7% after inflation**. The rewrite also says what the average hides - **about a
+third of the 98 calendar years since 1928 finished down** - because a bare 10% on a paid finance page
+is its own kind of overstatement.
+
+**Lesson 37 gets the arithmetic the claim was gesturing at:** $27,000 at 6.5% left unpaid through four
+years of school starts repayment at roughly **$34,700**, and at $300 a month that is about **15 years
+versus 10 years 4 months**, nearly five years shorter and about **$17,700 less paid in total**, bought
+with $4,800 of interest payments during school.
+
+**The fourth claim was NOT given a number, deliberately.** *"Scholarships, grants, community college
+... can all dramatically reduce the total borrowed"* has no arithmetic implied anywhere on the page,
+and inventing tuition figures to finish it would be the exact fabrication the standing rule forbids.
+The magnitude word is cut and the sentence now tells the reader to price their own combination.
+
+**Re-measured after the edit: sentences pairing a magnitude word with no digit fell from 16 across 14
+files to 10 across 10 files.** All ten survivors were read and every one is behavioural rather than
+financial (*"teens are much more likely to buy into a system they helped shape"*), which confirms the
+original triage rather than assuming it.
+
+**`run-gates` exit 0, `pass=288 fail=0`.**
+
+**WHAT IS NOT DONE: the three live Ghost posts are unchanged.** The repo and the live site now
+disagree on these three lessons. Republishing is an outward-facing change to paid content and is
+Brad's call, not a side effect of a copy fix.
+
+**Noticed in passing, not acted on:** the sentences I rewrote sit among em dashes, which the standing
+rule forbids in anything that reaches a reader. My new text uses hyphens; the rest of those files
+still carry em dashes from before that rule, and sweeping them is its own item.
 *Source: queue-4 group F, Rice `engineering-writing`, the vague-to-specific ladder (2026-09-08).*
 On a paid finance site, a magnitude claim with no number is the defect that course teaches against,
 and it is a sharper instance of the estate's own "no fabricated numbers, and understating is exactly

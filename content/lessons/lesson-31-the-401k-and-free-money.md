@@ -48,7 +48,11 @@ That sentence — delivered calmly, memorably, without a lecture — is what thi
 
 We've talked about how time is the superpower in compounding. The 401(k) makes this even more dramatic.
 
-Consider two people. One starts contributing to a 401(k) at 22 and never increases her contributions beyond what captures the full match. The other waits until 32 to start. By retirement, the early starter — despite contributing the same annual amount — can end up with dramatically more money, simply because she started 10 years sooner. That extra decade of compound growth does a lot of heavy lifting.
+Consider two people who each put $3,000 a year into a 401(k) and never increase it. One starts at 22. The other waits until 32. Assume a 7% average annual return and both stop at 65.
+
+The early starter ends up with about $743,000. The late starter ends up with about $357,000. Same yearly contribution, same finish line, and a gap of roughly $386,000 - the early starter has more than double. She contributed $30,000 more over her life and ended up with $386,000 more. That extra decade of compound growth did the rest.
+
+(Those numbers assume a steady 7% every single year, which no real market delivers. They show the shape of the gap, not a promise about your account.)
 
 Your kid starting at 22 instead of 32 is not a small edge. Over a 40-year working life, it can mean the difference between financial comfort and financial stress in retirement. And they don't have to sacrifice anything to get it — just start early, grab the match, and let time work.
 

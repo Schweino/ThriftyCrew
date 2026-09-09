@@ -50,7 +50,11 @@ Here is the single most actionable thing in this entire lesson.
 
 If your kid works at all during school — a part-time job, a summer gig, anything — and they put even a modest amount toward their loan interest while they're still in school, they graduate in a fundamentally different position than their peers.
 
-Not making full payments. Not heroic sacrifice. Just paying the interest as it accrues — or more when possible — so the balance doesn't silently balloon. Even $50 or $100 a month during the school years keeps the original borrowed amount from ballooning. It's the compounding principle in reverse: stop the interest from stacking, and the payoff timeline shrinks dramatically.
+Not making full payments. Not heroic sacrifice. Just paying the interest as it accrues — or more when possible — so the balance doesn't silently balloon. Even $50 or $100 a month during the school years keeps the original borrowed amount from ballooning. Here is what that is worth. Take $27,000 borrowed at 6.5%, sitting unpaid through four years of school: about $7,700 of interest gets added before the first real payment is due, so repayment starts on roughly $34,700 instead of $27,000.
+
+Now pay it off at $300 a month. From $34,700 that takes about 15 years. From $27,000 it takes about 10 years and 4 months. That is nearly five years shorter, and about $17,700 less paid in total, for $4,800 of interest payments made during school.
+
+It's the compounding principle in reverse: stop the interest from stacking, and the payoff timeline shortens.
 
 This is the kind of move that Future You will thank you for. The twenty-two-year-old who graduates with roughly what they borrowed, rather than $5,000–$10,000 more, has a head start that matters.
 
@@ -62,7 +66,7 @@ This is not a cold, purely financial calculation. There are real reasons to atte
 
 A rough rule of thumb that many financial educators suggest: total student loan debt at graduation should ideally stay below the first year's expected salary in that field. So if a field typically pays $40,000 to start, borrowing $80,000 for school is a very different conversation than borrowing $35,000. That's not a hard line — it's a thinking tool. Use it.
 
-Scholarships, grants, community college for the first two years, in-state tuition, and living at home can all dramatically reduce the total borrowed. These options aren't consolation prizes. They're smart moves that Future You will appreciate enormously.
+Scholarships, grants, community college for the first two years, in-state tuition, and living at home each cut the amount that has to be borrowed in the first place. How much depends entirely on the schools in front of you, so price the specific combination rather than trusting a rule of thumb. These options aren't consolation prizes. They're smart moves that Future You will appreciate enormously.
 
 ## Try this together
 
