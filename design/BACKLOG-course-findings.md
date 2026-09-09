@@ -7351,7 +7351,58 @@ at least make the condition visible, which it currently is not.
 **Why it matters here.** This is a live paid site and the recipient is a member of the public who
 asked once for one thing. A duplicate is a small harm; an unbounded daily duplicate is not.
 
-### I90 - `meal-prep` reads `grocery/out` directly in 36 scripts and nothing declares the dependency `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I90 - `meal-prep` reads `grocery/out` directly in 36 scripts and nothing declares the dependency `DONE - THE RATCHET EXISTS AND IT FIRES` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**`[CLOSED 2026-09-09. `ops/audit-cross-module-reach.ps1`, a ratchet in `run-gates`, baseline 136.]`**
+
+**The detector draws the line the founding grep could not:** `public/board.json` and `content/` are the
+PUBLISHED contract and reading one is the contract working; `grocery/out`, `meal-prep/db`,
+`graph/state`, `graph/learning` and `sidecar/out` are INTERNALS, and reaching into one from another
+module is the finding. That is the distinction that matters, because the internals are gitignored,
+which is exactly why a worktree or a CI runner prices nothing and exits 0.
+
+**Measured 2026-09-09 over 528 first-party `.ps1` files (worktrees, `archive/` and `grocery/out`
+excluded): 136 code sites in 45 files, plus 18 comment sites.**
+
+| direction | code sites |
+|---|---|
+| `meal-prep` -> `grocery` | 65 |
+| `ops` -> `grocery` | 41 |
+| `grocery` -> `meal-prep` | 24 |
+| `lib` -> `grocery` | 15 |
+| `lib` -> `meal-prep` | 14 |
+| `ops` -> `meal-prep` | 6 |
+| `lib` -> `graph`, `graph` -> `grocery`, `graph` -> `sidecar` | 2, 1, 1 |
+
+**Two improvements on the founding measurement, and they change the number's meaning.** It counts
+**sites, not files** - the founding `grep -rl` counted a file once however many times it reached, and
+`lib\pipeline-commit.ps1` alone holds 16. And it **splits code from comment**: only code is ratcheted,
+because a comment naming a path is documentation, and gating it would push people to delete the
+explanation rather than the coupling.
+
+**Confirmed: the dependency runs both directions**, which `RUNTIME-MAP.md` describes as producer and
+consumer. `grocery` reaches into `meal-prep/db` 24 times.
+
+**A ratchet, not a gate, deliberately.** 136 is what it is today and a gate red on day one teaches
+people to ignore red. The high-water mark may only go DOWN, and `-UpdateBaseline` **refuses to raise
+it** rather than quietly recording a regression.
+
+**Verified by making it fire, not by assuming it would:** self-test 11 of 11 exit 0; a one-line probe
+script added under `meal-prep/` moved it to 137 and the audit exited **2** naming both numbers,
+`-UpdateBaseline` then **refused** the raise, and removing the probe returned exit 0. `run-gates` exit
+0, `pass=283 fail=0`, up from 281 - the self-test and the static entry are both discovered.
+
+**Three of my own defects, all caught by this estate's existing gates rather than by me.** The
+dead-detector check refused a detector nothing in production calls, which is how it ended up wired into
+`run-gates` instead of sitting inert; `audit-fixture-vocabulary` caught a case I had labelled `CLEAN
+TWIN` that asserted an **absence** (that is `MUST NOT FIRE`, and a real clean twin was written in its
+place); and `audit-arg-binding` caught the missing `[CmdletBinding()]`.
+
+**SCOPE OF A CLEAN REPORT: UNSOUND, so a clean report proves nothing.** It matches literal paths in
+both slash directions and cannot see a path assembled at run time (`Join-Path $mp $sub`), read from
+config, or reached through a variable set three files away. **136 is a floor**, exactly as the founding
+36 was. **What it still does not do is declare the dependency** - there is no manifest, and a module
+boundary that is only ratcheted is still not one that anything can read.
 
 **Merged from `design\backlog-inbox\lane-event-driven-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

@@ -282,6 +282,8 @@ $static = @(
   # file's default mode reads the live scheduler and this list passes no arguments.
   @{ f = 'ops\audit-task-registry.ps1';        n = 'every task the registrar registers is watched under the same name, and no legacy name survives in the registry' }
   @{ f = 'ops\audit-arg-binding.ps1';          n = 'every audit/verify/test/check script REFUSES an argument it does not declare, so a scoped check cannot silently run unscoped and report clean' }
+  # Hermetic: reads .ps1 source text, never a board, so it belongs here rather than in the daily chain.
+  @{ f = 'ops\audit-cross-module-reach.ps1';   n = 'no NEW script reaches into another module''s internals directory - a ratchet on cross-module path literals, high-water mark may only go DOWN' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # ops\verify-commodities-gate.ps1 is deliberately NOT listed here. A $static entry passes no
   # arguments, which would run its LIVE check against a staged set that is empty during a gate run -
