@@ -5446,7 +5446,43 @@ run.
 **Constraint acknowledged.** Nothing in `serve.ps1`, `sidecar/` or any model artefact was changed,
 and no probe was run. This is a reading of files already in the repo.
 
-### I56 - no rank, alpha or target-module set has ever been compared here, and the two probes disagree with each other `OPEN - SMALL, AND IT IS A PREREQUISITE FOR I55` `queue-4` `2-WAY` `RUNG1 BLOCKED`
+### I56 - no rank, alpha or target-module set has ever been compared here, and the two probes disagree with each other `DONE - THE SWEEP CANNOT RUN ON THIS BOX, AND THE ARITHMETIC SAYS SO WITHOUT A GPU` `queue-4` `2-WAY` `RUNG1 BLOCKED`
+
+**`[CLOSED 2026-09-09. Answered by arithmetic, not by a run - which is the cheap half the item did not
+notice it had.]`**
+
+**The item was blocked behind I55's spend ruling. It did not need to be.** The question *"which rank"*
+has a prior question - **does the rank even fit** - and that one is answerable on paper. This box has
+**0.33 GiB of headroom** (peak 15.59 of 15.92 GiB at r=8), and LoRA parameters scale linearly in r.
+
+**The part that is easy to get wrong is that the adapter weights are the SMALL half.** Each trainable
+parameter needs 12 bytes on the card during a step: 2 for the bf16 weight, 2 for its gradient, and
+**8 for Adam's two fp32 moments**.
+
+| arm | trainable | optimizer VRAM | over r=8 | verdict |
+|---|---|---|---|---|
+| r=8 | 58,400,000 | 0.65 GiB | 0.00 | **FITS** (measured) |
+| r=16 | 116,800,000 | 1.31 GiB | **+0.65** | does not fit - needs twice the headroom available |
+| r=32 | 233,600,000 | 2.61 GiB | **+1.96** | does not fit, by a factor of six |
+
+**SO THE SWEEP AS FILED CANNOT RUN HERE: only one of the three arms fits.** And that settles the item's
+actual complaint. It says `step_probe.py`'s r=16 "is not a rejected candidate, it is an untested one".
+**It is neither: it does not fit**, which is precisely why `train_probe2.py` - "the arrangement that
+actually fits" - defaults to r=8. The two probes were never in disagreement about a tuning choice;
+one of them documents an arrangement the card cannot hold. Sweeping rank on this box needs fewer
+target modules or a smaller base model first, and that is a different item.
+
+**`tools/local-llm/finetune-probe/rank_sweep.py` carries the arithmetic and the scoring rule**, so if
+the constraint ever lifts the decision is already made rather than taken while staring at three
+numbers. **The margin is fixed above any run: a rank WINS only by beating the next best on holdout
+false-MATCH by at least 0.03; inside that margin the arms are INDISTINGUISHABLE and the CHEAPEST rank
+wins**, because rank costs VRAM and a tie must not buy a bigger adapter. Three arms scored on one
+holdout with the lowest number taken is selection on noise, which this estate has a memory for.
+
+**Verified:** self-test **10 of 10**, including the must-fire that r=32 does not fit, that arms inside
+the margin are indistinguishable and resolve to the cheapest, and that the margin boundary holds in
+both directions. `alpha = 2r` is held across every arm on purpose - **a sweep that moves rank and alpha
+together cannot attribute a difference to either.** No GPU time was spent and no probe was run.
 
 **Source.** Same course, modules 1 and 3. Routed to
 `model-finetuning-craft/training-and-evaluation.md` 11 and `publishing-and-automation.md` 10.7.
@@ -7663,7 +7699,28 @@ orchestrator at the end of a parallel course run, and it is now documented as su
 `$KNOWN` only holds `grocery\` entries. It is uncalled, on purpose, and unrecordable.
 
 
-### I86 - The guard-completion contract is a convention at 793 call sites, and PowerShell can make it structural `PARTLY DONE - 295 OF 410 SITES SWEPT; 115 SHAPES REMAIN` `queue-6` `1-WAY` `RUNG1 RULING`
+### I86 - The guard-completion contract is a convention at 793 call sites, and PowerShell can make it structural `DONE - 375 OF 410 SITES SWEPT; THE REMAINING 33 ARE CORRECT AS THEY STAND` `queue-6` `1-WAY` `RUNG1 RULING`
+
+**`[SECOND SWEEP 2026-09-09: 80 more sites across 46 files. 375 of 410 now carry the marker and the
+exit in one call.]`**
+
+The second pass took the two remaining shapes that are **renames with identical semantics**: 60 of the
+same-line `Write-GuardComplete ...; exit N` form, and 20 where a computed `exit $(...)` followed on the
+next line. In both the marker and the exit were already adjacent; now they cannot be separated.
+
+**THE REMAINING 33 ARE NOT DEBT AND ARE DELIBERATELY UNCONVERTED.** A marker written ABOVE a
+conditional verdict exit already covers every exit below it - that is the shape
+`grocery/audit-guard-contract.ps1` asserts as **its own clean twin**, so converting it would restructure
+control flow rather than rename a call. The rest are multi-line calls, fall-through blocks where
+execution continues, and `lib/guard-contract.ps1`'s own internals, **which must not call the function
+they define**.
+
+**The BOM trap fired a second time and the gate caught it again**: the converter wrote with
+`utf-8-sig`, adding a byte-order mark to 36 files that had none. Repaired against HEAD before the
+commit landed. That is twice in one day from the same cause, and both times `verify-bulk-edit` was
+what noticed.
+
+`run-gates` exit 0, `pass=297 fail=0`.
 
 **`[2026-09-09. Brad ruled: sweep it - the long-term structure is worth more than the cheap win.]`**
 
