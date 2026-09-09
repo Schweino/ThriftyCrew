@@ -83,6 +83,22 @@ everything else honest, so a defect here is silent by construction.
   **Worth running against a detector whose logic you have just rewritten** - that is when a survivor
   is most likely. Never a gate, and mutants run from a temp mirror with the original verified
   byte-identical by md5 afterwards.
+- **The `Get-Random` refusals cover WORK SELECTION, not TEST INPUT** (Brad, 2026-09-09, backlog I38).
+  `Get-Random` appears in three files here and all three refuse it: a deterministic verification sample,
+  a reproducible worklist, a retry jitter that uses the attempt index. **Each is right about what it
+  refuses** - work that cannot be replayed. **None of them is an argument against a seeded test-input
+  generator**, because a seeded generator is reproducible by construction: print the seed, re-feed it,
+  and every case replays byte for byte, which is the exact property the deterministic-sample rule was
+  protecting. `ops/probe-hostile-input.ps1` is the exemplar. It is a REPORT, not a gate.
+- **PowerShell's `-ne` on strings is CULTURE-SENSITIVE, and culture-sensitive comparison IGNORES NUL**
+  (2026-09-09, found by `probe-hostile-input.ps1`'s own must-fire). `('Bana' + [char]0 + 'nas') -ne
+  'Bananas'` is **`$false`**, though the two differ in length. So the default operator is blind to
+  exactly the corruption class a parser probe exists to find, and the first version of that probe
+  reported two real malformations as no-ops because of it. **Compare with
+  `[string]::Equals($a,$b,[StringComparison]::Ordinal)` anywhere the text might carry damage.** This is
+  the same family as the `[StringComparer]::Ordinal` hashtable trap in `ops/consistency-oracle.ps1`: a
+  bare `@{}` is case-insensitive and a bare `-ne` is culture-sensitive, and both defaults are wrong for
+  data that arrived from outside.
 - **A detector's header says what its CLEAN report MEANS** (2026-09-08, backlog I66). A static analysis
   must approximate, and the direction decides what a verdict is worth: a **sound** one never misses a
   real defect, so a clean report is trustworthy; an **unsound** one stays quiet, so a reported defect is

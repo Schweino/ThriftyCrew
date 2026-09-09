@@ -4063,7 +4063,56 @@ written to temp copies and the original is restored by hash, per the estate's ow
 
 ---
 
-### I38 - Every parser here has only ever seen inputs a person wrote, and randomness is refused estate-wide on reproducibility grounds that do not apply to it `NEEDS A RULING` `queue-4` `1-WAY` `RUNG1 RULING`
+### I38 - Every parser here has only ever seen inputs a person wrote, and randomness is refused estate-wide on reproducibility grounds that do not apply to it `DONE - RULED IN, BUILT FOR ONE PARSER, AND IT FOUND TWELVE` `queue-4` `1-WAY` `RUNG1 RULING`
+
+**`[CLOSED 2026-09-09. Brad ruled: the refusals do not extend to a seeded generator. Build it for one parser.]`**
+
+**The ruling is recorded in `.claude/rules/ops-and-gates.md`** so the next session is not blocked by
+the same ambiguity: the three `Get-Random` refusals cover **work selection**, not test input, because a
+seeded generator is reproducible by construction.
+
+**Shipped: `ops/probe-hostile-input.ps1`**, pointed at `Import-CaptureCsv` - the first target because
+**every builder reads captures through it** and a capture is the input we author least.
+
+**IT FOUND REAL DAMAGE ON THE FIRST RUN. 60 seeded cases: 17 refused, 31 survived, and 12 ACCEPTED
+CORRUPT INPUT** (seed 20260909, replayable). Two classes:
+
+| what got through | cases |
+|---|---|
+| a **NUL byte** surviving into a parsed field | 3 |
+| a **20,000-character** field passing through intact | 9 |
+
+**`ACCEPTED-CORRUPT` is the outcome the vocabulary was missing.** Refusing is fine and surviving is
+fine. Returning rows that carry damage looks exactly like success to every builder downstream, and
+those rows get priced.
+
+**A THIRD RESULT WORTH READING, which the probe does NOT flag:** `number-to-text` **survived with 3
+rows** - replacing a price with `not-a-price` parses cleanly, because validating a price is not this
+parser's job. That is arguably the most dangerous of the three for a pricing estate, and it is a
+finding about where the validation boundary sits rather than a defect in `Import-CaptureCsv`.
+
+**THE PROBE FOUND A DEFECT IN ITSELF FIRST, and it is the better finding.** Its own must-fire
+(*"every malformation kind actually changes the input"*) failed at 10 of 12. Both apparent no-ops had
+one cause: **PowerShell's `-ne` on strings is culture-sensitive, and culture-sensitive comparison
+IGNORES NUL characters.** `('Bana' + [char]0 + 'nas') -ne 'Bananas'` evaluates to **`$false`** despite
+a length difference. **The default operator is blind to precisely the corruption class the probe exists
+to find.** Every comparison in the file is `[StringComparison]::Ordinal` now, both cases are fixtures,
+and the trap is written into the rules file beside the `[StringComparer]::Ordinal` hashtable trap it
+rhymes with.
+
+**A REPORT, NOT A GATE**, per the standing rule and per the ruling: it exits 0 and only exits 2 under
+`-Strict`. Twelve findings on day one is exactly the backlog a red gate would train people to ignore.
+
+**Verified:** self-test **10 of 10**, exit 0, led by the two must-fires above and a clean twin that an
+unmodified capture still parses to 3 rows **through the real parser**. `run-gates` exit 0.
+
+**SCOPE OF A CLEAN REPORT: UNSOUND, emphatically.** It tries the malformations it knows how to make,
+against **one** parser of the 255 files that mention `ConvertFrom-Json`. A clean report is not evidence
+of robustness.
+
+**NOT DONE, and it is a separate decision: hardening `Import-CaptureCsv` itself.** Refusing a NUL or a
+20,000-character field changes what **every builder** accepts, so it could drop rows that pass today.
+That is a change to the shared capture path and wants its own ruling.
 
 **Source.** Same course, items 4 and 8, plus the queue-4 entry that chose it. Routed to
 `software-craft/test-design-and-oracles.md` 5, and recorded in that file's section 11 as a gap the
