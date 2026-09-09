@@ -4863,7 +4863,46 @@ dossiers ruled twice, with and without the neighbour block. Two decider calls on
 **Related.** I47 is the same subject from the other end - I47 asks whether an old number is still
 valid, I48 asks how to take the next one so the question does not arise.
 
-### I49 - one global similarity floor is a claim about the shape of a space nobody has ever grouped `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I49 - one global similarity floor is a claim about the shape of a space nobody has ever grouped `DONE - MEASURED, AND THE SHAPE HOLDS` `queue-4` `2-WAY` `RUNG1 MEASURE`
+
+**`[CLOSED 2026-09-09 with a measurement instead of an opinion, which is what the item asked for.]`**
+
+`sidecar/probe_distance_concentration.py`. The question was never whether 0.55 is the right value - it
+was whether a SINGLE GLOBAL value is the right shape of answer, which in high dimension can fail
+silently through distance concentration: nearest and furthest neighbours drift toward the same
+distance, the ordering under a fixed cut becomes close to noise, and the floor keeps returning
+confident numbers throughout.
+
+**THE BAR WAS WRITTEN ABOVE THE RUN, in the metric's own units:** median relative contrast
+(`d_far / d_near`, cosine) **>= 1.50 SOUND**, **< 1.20 CONCENTRATED**, in between reported as
+**AMBIGUOUS** rather than rounded toward a verdict.
+
+**Measured over 2,000 of 16,839 product vectors (11.9%), dimension 1,024:**
+
+| | |
+|---|---|
+| median relative contrast | **2.702** |
+| p10 | **1.928** |
+| p90 | 6.551 |
+| points below the concentration bar | **0 of 2,000 (0.0%)** |
+
+**VERDICT: SOUND.** Not marginally - the **tenth percentile** is 1.928, well clear of the 1.50 bar, so
+this is not a healthy median hiding a concentrated region. A single global cut is the right instrument
+for this space.
+
+**What that does and does not settle.** It settles the SHAPE and closes this item. It says nothing
+about the VALUE: `derive_coverage_floor.py` already showed the hand-chosen 0.55 is too high, with 186
+correct pairs beneath it, and that finding is untouched by this one. **Rung 2 as filed (cluster the
+space, compute recall lost per cluster) was conditional on the space being concentrated. It is not, so
+rung 2 is not owed** - if the 186 lost pairs concentrate anywhere, it is not because the metric has
+stopped discriminating.
+
+**Verified:** self-test 8 of 8, exit 0, led by two must-fires - a clustered space scores above 5 and is
+called SOUND, and **uniform 1,024-dimensional noise concentrates and is refused**, which is the failure
+this probe exists to be able to see. A duplicate nearest neighbour makes RC undefined and those rows are
+**excluded, not clipped**, because clipping would inflate the median toward the answer one would prefer.
+One row per sampled point is written to `sidecar/out/distance-concentration.jsonl` with the input
+fingerprint and seed, so the totals derive from the file and the run can be re-asked without re-running.
 
 **Source.** Queue-4 course 11, CU Boulder "Introduction to Machine Learning: Unsupervised Learning",
 worked 2026-09-07. Routed to `rag-craft/grouping-a-vector-space.md` 33, 35 and 38, and
