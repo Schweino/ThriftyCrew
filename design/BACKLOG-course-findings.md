@@ -7474,7 +7474,64 @@ orchestrator at the end of a parallel course run, and it is now documented as su
 `$KNOWN` only holds `grocery\` entries. It is uncalled, on purpose, and unrecordable.
 
 
-### I86 - The guard-completion contract is a convention at 793 call sites, and PowerShell can make it structural `NEEDS A RULING` `queue-6` `1-WAY` `RUNG1 RULING`
+### I86 - The guard-completion contract is a convention at 793 call sites, and PowerShell can make it structural `PARTLY DONE - 295 OF 410 SITES SWEPT; 115 SHAPES REMAIN` `queue-6` `1-WAY` `RUNG1 RULING`
+
+**`[2026-09-09. Brad ruled: sweep it - the long-term structure is worth more than the cheap win.]`**
+
+**THE MEASUREMENT IN THIS ITEM DOES NOT REPRODUCE.** It says 793 call sites across 119 files.
+Measured 2026-09-09 over 530 first-party `.ps1` (worktrees, `archive/`, `grocery/out` excluded):
+**410 call sites across 126 files.** 793 counted something broader, most likely every mention
+including comments and multi-line continuations.
+
+**Shipped in `lib/guard-contract.ps1`: `Exit-Guard` and `Invoke-Guard`.**
+
+**The design turns on one measured fact, and getting it wrong would have been silent.** `exit` inside
+a scriptblock **does** run an enclosing `finally`, but it does **not** run the statements after the
+call. So the obvious wrapper - invoke the body, then write the marker - **would have dropped the
+marker for every guard that exits with a finding**, which is most of them. It was checked with a
+three-way probe before a line of the sweep was written. **The marker therefore travels WITH the
+exit**: `Exit-Guard -Name x -Summary s -Code n` writes it and exits in one call, so the two cannot be
+separated.
+
+**Three paths, fixtured OUT OF PROCESS** because the behaviour under test is process exit and cannot
+be observed from inside the suite that would die with it:
+
+| body | marker | exit code |
+|---|---|---|
+| returns normally | written, from its return value | 0 |
+| calls `Exit-Guard` | written **once**, not twice | preserved |
+| **throws** | **none, deliberately** | 1 |
+
+A crash writing no marker is the entire point: **a crash must never look complete.** A raw `exit N`
+also writes none, which is left loud on purpose - the guard-contract audit then reports an unfinished
+guard, a visible failure rather than a silent one.
+
+**Swept: 295 sites across 86 files**, converted mechanically from `Write-GuardComplete ...` + `exit N`
+to a single `Exit-Guard`. **115 sites are other shapes** - `; exit 0` on one line, conditional exits,
+computed exit codes - and were left untouched because each needs reading. The converter refused
+anything with unbalanced quotes or parens and reported what it skipped.
+
+**THE GATE CAUGHT TWO REAL REGRESSIONS FROM THE SWEEP, and both were fixed at the cause:**
+
+1. `meal-prep/pipeline/audit-paid-not-public.ps1` greps **its own source** for `exit 3` to prove the
+   no-key path is could-not-evaluate. The claim was still true, spelled `-Code 3`. The fixture now
+   accepts both spellings and still asserts three-and-never-zero.
+2. `grocery/audit-guard-contract.ps1` decides coverage by grepping for `Write-GuardComplete`, so it
+   read **11 files as having LOST their marker**. It knows `Exit-Guard` now, with its own fixture,
+   because **a detector that cannot separate its marker from its exit is more strongly covered, not
+   less** - and leaving it untaught would have made the safer construction look like a regression.
+
+**And the pre-commit bulk-edit gate blocked the commit over BOM state**, correctly: reading with
+`utf-8-sig` strips a BOM and writing back as `utf-8` does not restore it, so **10 files silently lost
+theirs**. Restored byte-for-byte against HEAD before the commit landed. That gate paid for itself here.
+
+**Verified:** `guard-contract -SelfTest` all cases including the four new out-of-process ones;
+`run-gates` exit 0, `pass=291 fail=0`.
+
+**NOT DONE: the 115 remaining shapes, and wrapping bodies in `Invoke-Guard`.** `Invoke-Guard` exists
+and is fixtured but nothing uses it yet: wrapping a whole script body means running it through `&`,
+which is a **child scope**, and a guard that relies on script-scope state would change behaviour
+silently. That needs per-file reading, not a sweep.
 
 **Merged from `design\backlog-inbox\lane-design-patterns-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
