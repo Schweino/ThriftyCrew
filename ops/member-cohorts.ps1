@@ -147,6 +147,69 @@ function Test-TcOutputPathSafe {
 # nothing here establishes that 30 or 50 would behave worse.
 $HISTORY_MAX_AGE_DAYS = 40
 
+# ---- I99: the price-alert exposure signal, pre-registered in design/EVAL-alert-retention-2026-09-09.md
+# Ruled by Brad 2026-09-09: pre-register the design and snapshot the counts monthly.
+#
+# WHAT IS READ AND WHAT IS KEPT. The members read adds `include=labels` - labels are a RELATION and do
+# not come back through `fields`. What is derived per member is a SINGLE INTEGER, how many `alert-*`
+# labels they carry, and it is bucketed immediately. NO LABEL STRING IS EVER KEPT: the label names a
+# commodity, so pairing it with a member would be behavioural data about a person, and the pre-
+# registered question does not need it.
+$ALLOWED_MEMBER_INCLUDES = @('labels')
+
+function Get-TcAlertCount {
+  <# How many alert-* labels a member object carries. The ONLY thing derived from labels. Pure. #>
+  param([object]$Member)
+  $n = 0
+  foreach ($l in @($Member.labels)) {
+    if ($null -eq $l) { continue }
+    if (([string]$l.name -match '^alert-') -or ([string]$l.slug -match '^alert-')) { $n++ }
+  }
+  return $n
+}
+
+function Get-TcAlertBucket {
+  <# The pre-registered cut, and it is NOT tunable: >= 1 alert, or none. Choosing the cut that produces
+     the biggest gap is selection on noise, so the cut is fixed here and in the pre-registration. #>
+  param([int]$Count)
+  if ($Count -ge 1) { return '1+' }
+  return '0'
+}
+
+function Get-TcAlertTable {
+  <# signup month -> bucket -> count, over (created_at, alerts) pairs. Pure, and it can only emit month
+     strings, the two bucket strings, and integers. #>
+  param([object[]]$Pairs)
+  $buckets = @{}
+  $exposed = 0; $total = 0
+  foreach ($p in @($Pairs)) {
+    if ($null -eq $p) { continue }
+    $total++
+    $b = Get-TcAlertBucket -Count ([int]$p.alerts)
+    if ($b -eq '1+') { $exposed++ }
+    $k = Get-TcCohortKey ([string]$p.created_at)
+    if (-not $k) { $k = '(undated)' }
+    if (-not $buckets.ContainsKey($k)) { $buckets[$k] = @{} }
+    if (-not $buckets[$k].ContainsKey($b)) { $buckets[$k][$b] = 0 }
+    $buckets[$k][$b]++
+  }
+  return @{ Buckets = $buckets; Exposed = $exposed; Total = $total }
+}
+
+function New-TcAlertHistoryRows {
+  param([hashtable]$Table, [string]$Snapshot, [string]$Generated)
+  $rows = @()
+  $monthKeys = $Table.Buckets.Keys | Sort-Object
+  foreach ($m in $monthKeys) {
+    $bkeys = $Table.Buckets[$m].Keys | Sort-Object
+    foreach ($b in $bkeys) {
+      $rows += [ordered]@{ snapshot = $Snapshot; generated = $Generated; signup_month = $m
+                           alert_bucket = [string]$b; count = [int]$Table.Buckets[$m][$b] }
+    }
+  }
+  return $rows
+}
+
 function Get-TcSnapshotMonth {
   <# The calendar month a snapshot belongs to. Pure. #>
   param([datetime]$When)
@@ -309,6 +372,41 @@ if ($SelfTest) {
     ((Test-TcHistoryStale -Rows @() -Now ([datetime]'2026-09-20') -MaxAgeDays 40) -like '*has ever been taken*') `
     (Test-TcHistoryStale -Rows @() -Now ([datetime]'2026-09-20') -MaxAgeDays 40)
 
+  # ---------------------------------------------------------------- I99, the alert exposure signal
+  $withLabels = [pscustomobject]@{
+    created_at = '2026-01-05T00:00:00Z'; status = 'paid'; email = 'person@example.com'
+    labels = @([pscustomobject]@{ name = 'alert-eggs-large'; slug = 'alert-eggs-large' },
+               [pscustomobject]@{ name = 'newsletter'; slug = 'newsletter' })
+  }
+  T 'MUST FIRE  only alert-* labels are counted, so an unrelated label does not inflate exposure' `
+    ((Get-TcAlertCount -Member $withLabels) -eq 1) ([string](Get-TcAlertCount -Member $withLabels))
+  $noLabels = [pscustomobject]@{ created_at = '2026-01-06T00:00:00Z'; status = 'free'; labels = @() }
+  T 'MUST NOT FIRE  a member with no labels counts 0, not 1 - @($null).Count is 1 in PS 5.1 and would have exposed everybody' `
+    ((Get-TcAlertCount -Member $noLabels) -eq 0) ([string](Get-TcAlertCount -Member $noLabels))
+  T 'MUST FIRE  the pre-registered cut is >= 1 and is not tunable' `
+    (((Get-TcAlertBucket -Count 0) -eq '0') -and ((Get-TcAlertBucket -Count 1) -eq '1+') -and ((Get-TcAlertBucket -Count 9) -eq '1+')) `
+    'the bucket boundary moved'
+  $apairs = @(
+    [pscustomobject]@{ created_at = '2026-01-05T00:00:00Z'; alerts = 1 },
+    [pscustomobject]@{ created_at = '2026-01-09T00:00:00Z'; alerts = 0 },
+    [pscustomobject]@{ created_at = '2026-02-02T00:00:00Z'; alerts = 0 }
+  )
+  $at = Get-TcAlertTable -Pairs $apairs
+  T 'MUST NOT FIRE  exposure buckets by signup month: January is 1 exposed and 1 not' `
+    (($at.Buckets['2026-01']['1+'] -eq 1) -and ($at.Buckets['2026-01']['0'] -eq 1)) `
+    ("jan 1+=" + $at.Buckets['2026-01']['1+'])
+  $arows = New-TcAlertHistoryRows -Table $at -Snapshot '2026-09' -Generated '2026-09-09'
+  $ajson = ($arows | ConvertTo-Json -Depth 6)
+  T 'MUST FIRE  THE BOUNDARY - no label STRING reaches a history row, only a bucket and a count, so a commodity is never paired with a person' `
+    (($ajson -notmatch 'alert-eggs') -and ($ajson -notmatch '@') -and ($ajson -match '"alert_bucket"')) `
+    'a label string or address reached an alert history row'
+  T 'CLEAN TWIN  the alert rows still sum to the same member total the alert table counted' `
+    ((($arows | ForEach-Object { [int]$_.count }) | Measure-Object -Sum).Sum -eq $at.Total) `
+    ("rows sum vs total=" + $at.Total)
+  T 'MUST NOT FIRE  the include list stays at labels alone' `
+    (($ALLOWED_MEMBER_INCLUDES.Count -eq 1) -and ($ALLOWED_MEMBER_INCLUDES[0] -eq 'labels')) `
+    ($ALLOWED_MEMBER_INCLUDES -join ',')
+
   # CLEAN TWIN - the adjacent behaviour the flattening was most likely to break: the counts in the rows
   # must still add up to the same membership the table counted. A POSITIVE assertion.
   $rowSum = 0
@@ -317,13 +415,14 @@ if ($SelfTest) {
     ($rowSum -eq $t.Total) ("rows sum=" + $rowSum + " table total=" + $t.Total)
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 21 case(s) resolved. 9 must-fire led by the founding privacy constraint (an input row carrying an email produces an aggregate that cannot contain one), the undated-signup count, the monthly idempotence guard and the series-has-stopped absence check; 8 must-not-fire including the empty membership and the empty history; 2 clean twins pinning the permitted-field list at three and the history rows summing to the table total'
+  Write-Output 'SELF-TEST PASS: 27 case(s) resolved - 13 must-fire, 11 must-not-fire, 3 clean twins. Led by the founding privacy constraint (an input row carrying an email produces an aggregate that cannot contain one), the undated-signup count, the monthly idempotence guard, the series-has-stopped absence check, and the I99 boundary that no LABEL STRING reaches a history row. The must-not-fires include the empty membership, the empty history, and a member with no labels counting 0 rather than 1'
   exit 0
 }
 
 # ------------------------------------------------------------------------------- the live run
 if (-not $OutFile) { $OutFile = Join-Path $repo 'ops\member-cohorts.json' }
 $historyPath = if ($HistoryFile) { $HistoryFile } else { Join-Path $repo 'ops\member-cohorts-history.jsonl' }
+$alertHistoryPath = Join-Path $repo 'ops\member-alert-history.jsonl'
 
 # ---- I98: the freshness check, which touches NO network and is safe to run anywhere ----
 # SCOPE OF A CLEAN REPORT for THIS mode: SOUND over the history file. It reads dates and nothing else,
@@ -387,12 +486,16 @@ try {
     $jwt = Get-GhostJWT -Key $adminKey
     $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
     $uri = ($apiUrl + '/ghost/api/admin/members/?limit=' + $limit + '&page=' + $page +
-            '&fields=' + ($ALLOWED_MEMBER_FIELDS -join ','))
+            '&fields=' + ($ALLOWED_MEMBER_FIELDS -join ',') +
+            '&include=' + ($ALLOWED_MEMBER_INCLUDES -join ','))
     $res = Invoke-RestMethod -Uri $uri -Headers $hdr -TimeoutSec 60
     $batch = @($res.members)
     foreach ($m in $batch) {
-      # THE ONLY TWO PROPERTIES EVER READ. Nothing else on $m is touched, and $m is not retained.
-      [void]$pairs.Add([pscustomobject]@{ created_at = [string]$m.created_at; status = [string]$m.status })
+      # THE ONLY THREE THINGS EVER READ off a member: signup date, current status, and an INTEGER count
+      # of alert-* labels. Nothing else on $m is touched, no label string is kept, and $m is not
+      # retained past this line.
+      [void]$pairs.Add([pscustomobject]@{ created_at = [string]$m.created_at; status = [string]$m.status
+                                          alerts = (Get-TcAlertCount -Member $m) })
     }
     $pagesRead++
     if ($res.meta -and $res.meta.pagination) { $lastPages = $res.meta.pagination.pages }
@@ -499,9 +602,36 @@ if ($AppendHistory) {
     }
     Add-Content -LiteralPath $historyPath -Value $lines -Encoding UTF8
     Write-Output ("  history: appended {0} row(s) for snapshot {1} to {2}" -f $lines.Count, $snapshot, (Split-Path $historyPath -Leaf))
-    Write-Output '  These rows are the ONLY way the retention curve can ever exist: Ghost holds no status'
-    Write-Output '  history, so a month that is not snapshotted is a month that cannot be reconstructed.'
+
   }
+
+  # ---- I99: the alert-exposure series, same snapshot, same boundary, separate file so the I98 rows
+  # keep one stable schema. Pre-registered in design/EVAL-alert-retention-2026-09-09.md.
+  # ITS OWN IDEMPOTENCE CHECK, on its own file. Sharing the cohort series' check would mean the alert
+  # series could never start in a month whose cohort snapshot was already taken - which is exactly the
+  # month it was introduced, so the bug would have shipped looking like success.
+  $ah = Get-TcHistoryRows -Path $alertHistoryPath
+  $aAlready = Test-TcSnapshotAlreadyTaken -Rows $ah.Rows -Snapshot $snapshot
+  if ($aAlready -and -not $Force) {
+    Write-Output ("  alerts:  {0} already has a snapshot, nothing appended." -f $snapshot)
+  } else {
+    $at = Get-TcAlertTable -Pairs $pairs.ToArray()
+    $aRows = New-TcAlertHistoryRows -Table $at -Snapshot $snapshot -Generated (Get-Date -Format 'yyyy-MM-dd')
+    $aLines = @()
+    foreach ($r in $aRows) { $aLines += ($r | ConvertTo-Json -Depth 4 -Compress) }
+    $aJoined = ($aLines -join "`n")
+    if ($aJoined -match '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' -or $aJoined -match 'alert-') {
+      Write-Output 'MEMBER COHORTS REFUSED TO APPEND the alert series: a row contains an address or a LABEL STRING. Only buckets and counts may be written. Investigate.'
+      Write-GuardComplete -Name 'member-cohorts' -Summary 'refused=label-string-in-alert-series'
+      exit 2
+    }
+    Add-Content -LiteralPath $alertHistoryPath -Value $aLines -Encoding UTF8
+    Write-Output ("  alerts:  appended {0} row(s) - {1} of {2} member(s) carry at least one price alert." -f $aLines.Count, $at.Exposed, $at.Total)
+    Write-Output '  THE PRE-REGISTERED BAR IS 91 PER ARM (design/EVAL-alert-retention-2026-09-09.md). Below'
+    Write-Output '  that the only permitted output is the counts with denominators and "not answerable yet".'
+  }
+  Write-Output '  These rows are the ONLY way the retention curve can ever exist: Ghost holds no status'
+  Write-Output '  history, so a month that is not snapshotted is a month that cannot be reconstructed.'
 }
 
 Write-GuardComplete -Name 'member-cohorts' -Summary ("members={0} cohorts={1} undated={2}" -f $t.Total, $months.Count, $t.Undated)

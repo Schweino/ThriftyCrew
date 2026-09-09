@@ -8127,7 +8127,59 @@ built on top of it yet.
 by the existing daily chain. Aggregate counts only, no member rows - which also settles the privacy
 half of the finding above.
 
-### I99 - `send-price-alerts.ps1`'s label subscriptions are an already-captured behavioural signal nobody has looked at `OPEN` `queue-5` `1-WAY` `RUNG1 BLOCKED`
+### I99 - `send-price-alerts.ps1`'s label subscriptions are an already-captured behavioural signal nobody has looked at `DONE - PRE-REGISTERED AND SNAPSHOTTING; THE TEST IS YEARS OFF AND THAT IS THE FINDING` `queue-5` `1-WAY` `RUNG1 BLOCKED`
+
+**`[CLOSED 2026-09-09. Brad ruled: pre-register it and snapshot the counts monthly.]`**
+
+**THE ITEM'S PREMISE IS WRONG IN A WAY THAT CHANGES THE DESIGN.** It describes the label as *"a
+per-member, timestamped-by-label opt-in action"*. **A Ghost label carries no per-member timestamp** -
+the member either has `alert-<id>` now or does not. So *"set an alert within 30 days of signup"*
+**cannot be recovered retrospectively from any pull, ever.** It becomes measurable only going forward,
+and only because the monthly series exists, at a resolution of **one month rather than 30 days**. That
+is a direct argument for the ruling: the signal was decaying silently.
+
+**Pre-registered in `design/EVAL-alert-retention-2026-09-09.md`, written before any data existed.** The
+exposure window, the `>= 1` cut and the bar are fixed there, so a later analysis cannot choose the
+split that produces the biggest gap - the third independent arrival of that rule in this estate.
+
+**THE BAR IS 91 MEMBERS PER ARM**, derived rather than asserted: two-proportion test, alpha 0.05,
+power 0.80, to detect 50% against 30% retention needs `(1.96 + 0.84)^2 x (0.25 + 0.21) / 0.04 = 91`.
+
+**Measured live 2026-09-09, and it settles the question of whether to analyse now:**
+
+| | |
+|---|---|
+| members carrying at least one `alert-*` label | **1 of 18** |
+| total `alert-*` labels across the membership | **1** |
+| exposed arm | **n = 1**, against a bar of 91 |
+
+**So this is not "underpowered", it is a single member.** The honest output is the counts with their
+denominators and *"not answerable yet"*, and the script prints exactly that. The reason to snapshot
+anyway is that the signal decays if nobody records it.
+
+**Shipped:** `ops/member-alert-history.jsonl`, appended by the same monthly snapshot. Snapshot
+`2026-09` is 3 rows: July 14 unexposed / 1 exposed, August 3 unexposed.
+
+**The privacy boundary is tighter here than for I98, deliberately.** A label names a COMMODITY, so
+pairing it with a member would be behavioural data about a person. What is derived per member is a
+**single integer** and it is bucketed immediately; **no label string is ever kept**, and the append
+path refuses outright if one appears in a row. A fixture asserts that a member object carrying both an
+email and an `alert-eggs-large` label produces rows containing neither.
+
+**A defect caught before it shipped, and it would have looked like success.** The alert append was
+first written inside the cohort snapshot's idempotence branch, so it would have been skipped in any
+month whose cohort snapshot was already taken - which is the month it was introduced. The series would
+simply never have started, and the run would still have reported exit 0. It has its own check against
+its own file now, **verified by watching the alert series start while the cohort series correctly
+declined to append a second time.**
+
+**Verified:** self-test **27 of 27** (13 must-fire, 11 must-not-fire, 3 clean twins); the written file
+re-read and confirmed to contain no label string and no address; a re-run appended nothing to either
+series. `run-gates` exit 0, `pass=287 fail=0`.
+
+**Named for the next reader: confounding is not controlled.** A member who sets an alert is plausibly
+more engaged already, so a gap would establish association, not cause. That is written into the
+pre-registration rather than left to be rediscovered.
 
 **Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
