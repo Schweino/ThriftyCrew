@@ -4833,7 +4833,13 @@ question is answerable without archaeology.
 **What it is not.** Not a proposal to adopt propensity scores or IPTW. This estate mostly compares
 two configurations it controls, where the repair is a paired design (I48), not an adjustment.
 
-### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `OPEN - BLOCKED ON A RUN, NOT ON A DECISION` `queue-4` `2-WAY` `RUNG1 MEASURE`
+
+**`[NOT REACHED 2026-09-09, and the reason is stated rather than implied.]`** Rung 1 is the
+`EVAL-dedup-shortlist` experiment: the same candidate dossiers ruled **twice**, with and without the
+neighbour block, two decider calls on identical inputs. That needs live decider calls over a real
+dossier batch - a dispatched run, not a script I can execute and read in a session. Nothing about it is
+undecided; it is waiting on the run. **No part of it was faked or estimated.**
 
 **Source.** Same course. Routed to `experiment-craft/is-the-difference-caused.md` 22a and
 `experiment-craft/applies-here.md` 4 and 7.
@@ -5496,7 +5502,37 @@ up two savers ten years apart and then declines to finish the sum.
 
 **Constraint acknowledged.** Nothing was changed.
 
-### I61 - the local LLM server is a four-slot queue whose service time has only ever been measured as a mean `OPEN - RUNG 1 IS A MEASUREMENT, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I61 - the local LLM server is a four-slot queue whose service time has only ever been measured as a mean `PARTLY DONE - INSTRUMENTED; THE RUN NEEDS A SERVER THAT IS DOWN` `queue-4` `2-WAY` `RUNG1 MEASURE`
+
+**`[2026-09-09. The half that does not need the GPU is shipped. The half that does is blocked, and the block is real.]`**
+
+**The premise is confirmed, not assumed.** `graph/pipeline/resolve.py:1213` writes exactly one
+`elapsed_sec` for a whole run and nothing per request. There is no per-request timing anywhere on disk
+to compute percentiles from, so this could not be answered out of history.
+
+**SHIPPED: `graph/lib/service_time.py`, and the timing it needs was already being thrown away.**
+`LLMResult.elapsed_s` is measured on every call and discarded; both `resolve.py` call sites
+(`resolve-adjudicate` and `resolve-challenge`) now record one row per request with wall time and both
+token counts. Nothing new is timed and no extra call is made.
+
+**THE BAR IS WRITTEN BEFORE ANY DATA EXISTS**, which is the only time it can honestly be written. For an
+exponential distribution the coefficient of variation is exactly 1, so: **CV <= 1.20 near-exponential**
+(an M/M/c model is a fair description, no build owed); **CV > 1.20 heavy-tailed** (the wait is dominated
+by a minority of slow requests and rung 2, a **bounded wait rather than a timeout**, is owed).
+
+**`record()` swallows every one of its own failures on purpose.** A measurement that can break the
+pipeline it measures gets deleted the first time it does, and then the pipeline is unmeasured again.
+
+**Verified:** self-test 11 of 11, exit 0. The founding case is a fixture: **one request 50x slower than
+the other fifty is HEAVY-TAILED while the mean stays near 2 seconds** - which is precisely the tail a
+mean hides. A deterministic exponential sample is a must-not-fire, so the bar cannot simply call
+everything heavy. `--report` with no rows exits **3 and says BLIND**, never 0.
+
+**BLOCKED, and this is the honest part: no numbers yet.** Port 8080 refused on 2026-09-09 and no
+`llama-server` process is running, so not one request has been recorded. **There are no percentiles in
+this note because there is no data, and a percentile I could not observe is not one I will write down.**
+The instrument is in place; the first `resolve.py` run against a live server fills it, and
+`python graph/lib/service_time.py --report` then answers the item in one command.
 *Source: Simulation Models for Decision Making (course 18, Minnesota Carlson, Gupta).*
 
 Queueing writes a system as `arrival / service / servers`. `tools/local-llm/serve.ps1` line 107 sets
@@ -6761,7 +6797,11 @@ distance between any two nodes is falling.
 them can see a query getting slower because a region densified rather than because it grew. One
 query answers it: edges per node, tracked over time.
 
-### I77 - the one-hop memory expansion experiment now has a design and, more importantly, a control group `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I77 - the one-hop memory expansion experiment now has a design and, more importantly, a control group `OPEN - BLOCKED ON A RUN, NOT ON A DECISION` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+**`[NOT REACHED 2026-09-09.]`** The design and its control group are the valuable half and they are
+already written here. Executing it needs live recall runs across both arms, which is a dispatched
+experiment rather than a session task. **Nothing was estimated in place of running it.**
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

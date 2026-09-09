@@ -103,6 +103,7 @@ from ids import hash_obj, norm_text                # noqa: E402
 from authority import (authority_tier, CITABLE_AS_PRECEDENT,   # noqa: E402
                        CITABLE_AS_TENTATIVE)
 from llm import LocalLLM, should_escalate          # noqa: E402
+from service_time import record as _record_service_time   # noqa: E402  (backlog I61)
 
 PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "prompts")
 
@@ -529,6 +530,10 @@ class Resolver:
             parsed, res = self.llm.json_call(system, user, schema=RESOLVE_SCHEMA, max_tokens=400)
         except Exception as e:                                  # noqa: BLE001
             return Verdict("escalated", f"llm error: {e}", 0.0, escalate=True)
+        # PER-REQUEST service time (backlog I61). The elapsed time was already measured and thrown
+        # away; only the whole-run mean survived, and a mean cannot describe a queue's tail.
+        _record_service_time("resolve-adjudicate", res.elapsed_s,
+                             res.prompt_tokens, res.completion_tokens)
 
         verdict = str(parsed.get("verdict", "UNSURE")).upper()
         conf = float(parsed.get("confidence", 0.0) or 0.0)
@@ -583,9 +588,11 @@ class Resolver:
         system, user = build_adversarial_prompt(
             cc, name, evidence=evidence, examples=self.prior_rulings(cc, name))
         try:
-            parsed, _ = self.llm.json_call(system, user, schema=RESOLVE_SCHEMA, max_tokens=400)
+            parsed, _res = self.llm.json_call(system, user, schema=RESOLVE_SCHEMA, max_tokens=400)
         except Exception as e:                                  # noqa: BLE001
             return None, f"challenge unavailable: {e}"[:200]
+        _record_service_time("resolve-challenge", _res.elapsed_s,
+                             _res.prompt_tokens, _res.completion_tokens)
         v = str(parsed.get("verdict", "UNSURE")).upper()
         # UNSURE counts as survival: the challenge was asked to make a case and could not.
         return v != "NO_MATCH", f"{v}: {str(parsed.get('evidence',''))[:200]}"
