@@ -32,6 +32,7 @@ tuning one can see the others, and that a constant with no stated direction stan
 | `MAX_NEW_HOLDS_PER_RUN = 10` | `graph/learning/promote_aliases.py` | the largest plausible batch of new promotion holds in one run | **one-way actuator** (holds only accumulate and never expire) | goes quiet | **first plausible value**, grounded on the live set of 16 holds across 10 commodities; NOT a sweep |
 | `HISTORY_MAX_AGE_DAYS = 40` | `ops/member-cohorts.ps1` | how stale the monthly member snapshot series may get | a **floor**, watching for absence | **fires** - that is its whole job | **first plausible value**, 31 days plus a week of slack; NOT a sweep |
 | `MIN_SCORE = 8.5` | `~/.claude/skills/recall-hook.py` | the recall floor | two-way | goes quiet | derived; see the file's own note on the 9.0 -> 8.5 move |
+| `FANOUT_WARN = 1000` | `graph/lib/fanout.py` | the traversal width that refuses an entry point | two-way, an upper bound | goes quiet | **first plausible value**, grounded on the live shape: max out-degree 4, max in-degree 20,146, so nothing sits near the bar; NOT a sweep |
 
 **Most rows say "not recorded" and that is the honest state.** `I94` established the convention that a
 constant records what ELSE was tried; retro-filling the existing ones was explicitly not asked for, so

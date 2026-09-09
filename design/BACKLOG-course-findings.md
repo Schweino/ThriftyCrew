@@ -6878,7 +6878,56 @@ exclude patterns, not adjacency.
 zero or an explanation, which makes it ratchet-shaped rather than a gate that is red on day one -
 the standing rule this estate already applies to `audit-write-seam` and `audit-fact-claims`.
 
-### I74 - the nodes table has no cached degree, so every fan-out question is a full scan of 85,891 edges `OPEN` `queue-6` `1-WAY` `RUNG1 BUILD`
+### I74 - the nodes table has no cached degree, so every fan-out question is a full scan of 85,891 edges `DONE - THE PREMISE IS REFUTED; THE USEFUL HALF SHIPPED WITHOUT A CACHE` `queue-6` `1-WAY` `RUNG1 BUILD`
+
+**`[CLOSED 2026-09-09. The remedy was DECLINED after measuring, and the measurement is the finding.]`**
+
+**THE PREMISE DOES NOT HOLD, on both of its claims.** Measured against the live database before
+building anything:
+
+```
+select count(*) from edges where source_id = ?  -> SEARCH edges USING COVERING INDEX ix_edges_src
+select count(*) from edges where target_id = ?  -> SEARCH edges USING COVERING INDEX ix_edges_tgt
+```
+
+| question | measured |
+|---|---|
+| worst case, `store:walmart` at 20,146 edges | **0.365 ms** |
+| a SKU's degree | 0.003 ms |
+| the whole graph's degree table, grouped | 0.004 ms |
+
+**It is not a full scan** - `ix_edges_src` and `ix_edges_tgt` already exist and are COVERING for this
+question - **and it is not slow.** A cached degree column would buy roughly nothing and would add a
+**staleness hazard**: a denormalised count that silently diverges from the edges as they are written.
+In an estate whose whole discipline is that a confident wrong number is worse than a slow right one,
+that is a bad trade. **So the proposed remedy was declined, and 1-WAY it may have been, but the
+irreversible change is the one that did not happen.**
+
+**AND THE DIRECTION IS BACKWARDS, which matters more than the speed claim.** The item says a query
+"from `store:walmart`" returns 20,133 rows outward. Measured: **`store:walmart` has out-degree 0 and
+in-degree 20,146.** Edges run SKU -> store via `sold_at`, so a store is a TARGET and never a source.
+**The highest out-degree in the entire graph is 4.** A guard written against out-degree, as the item
+implies, would have watched the one direction that is always cheap and missed the only expensive one.
+
+| widest IN-degree (the expensive direction) | |
+|---|---|
+| `store:walmart` | 20,146 |
+| `store:bakers` | 7,832 |
+| `store:family-fare` | 5,641 |
+| `store:hyvee` | 3,875 |
+| `store:aldi` | 3,819 |
+
+**What shipped instead: `graph/lib/fanout.py`** - the pre-flight check the item actually wanted, with
+nothing to go stale. `fanout()` reports both directions and which one is wide; **`assert_cheap_entry()`
+is the forward rule as CODE rather than as prose in a comment.** *"Enter from the SKU, or from a
+Commodity down through `instance_of`; never from a Store outward"* had been written down twice and
+enforced zero times. It now raises, naming the direction and the count so the caller learns why.
+
+**Verified:** self-test **10 of 10**, hermetic against an in-memory graph shaped like the real one, so
+it needs no `graph.db` and runs anywhere. Led by the must-fire that a store's cost is its IN-degree
+with out-degree 0 - the case that would have caught the item's inversion - and a clean twin asserting
+the query **still uses the index**, because that is the fact the no-cache decision rests on and it
+should fail loudly if it ever stops being true.
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
