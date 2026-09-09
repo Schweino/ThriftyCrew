@@ -4293,7 +4293,43 @@ is exactly what rung 1 is for.
 
 ----
 
-### I41 - a `graph.db` schema change today has no recorded procedure, and no rollback `OPEN - NEEDS A RULING ON SCOPE` `queue-4` `1-WAY` `RUNG1 RULING`
+### I41 - a `graph.db` schema change today has no recorded procedure, and no rollback `DONE - RULED: RECORD PLUS DETECTOR, AND NOT A MIGRATION CAPABILITY` `queue-4` `1-WAY` `RUNG1 RULING`
+
+**`[CLOSED 2026-09-09. Brad ruled: a written record plus a schema detector. NOT staged migration.]`**
+
+**A COUNT IN THIS ITEM WAS WRONG AND IS CORRECTED HERE.** It says *"the 18 live SQLite tables"*.
+Measured 2026-09-09 from `sqlite_master` on the live database, and cross-checked against
+`graph/sqlite/schema.sql`: **11 tables, 4 views, 24 authored indexes** (36 total indexes less 12
+SQLite `sqlite_autoindex` entries, which are not authored schema). `schema.sql` declares the same 11
+by name, so the two agree and there is no third source. **18 reproduces from nothing.**
+
+**Shipped: `graph/audit_schema_change.py`**, live half on `capture-watchdog` check 5a3b, `--selftest`
+discovered by `run-gates`. Founding baseline recorded at fingerprint `014da3370767862b`.
+
+**THE DETECTOR IS WHAT MAKES THE RECORD REAL, and that is the whole design.** A written procedure
+nobody is forced to follow is an intention, and **an intention has no exit code**. So the only way to
+clear the detector is `--accept`, and **`--accept` is the call that appends to
+`docs/SCHEMA-CHANGES.md`**. The record cannot be skipped, because skipping it leaves the check red.
+
+**Two refusals on the accept path, both verified:** `--accept` without `--note` refuses; `--accept`
+without either `--backup <path>` or `--no-backup-reason "..."` refuses. `graph.db` has no undo layer,
+so **skipping the pre-change copy has to be a stated decision rather than an omission**.
+
+**The baseline is a FILE, not a `schema_version` table, deliberately.** Adding a version table to the
+live 127 MB database is itself a schema change against the thing with no undo, which is the exact risk
+this item is about.
+
+**Verified by making it fire against a real database, not a fixture:** `graph.db` was copied to a
+scratch path, `ALTER TABLE nodes ADD COLUMN retired_at TEXT` applied **to the copy**, and the audit
+exited **2** naming `table:nodes`. The live database was opened read-only throughout and its
+fingerprint is unchanged. Self-test **9 of 9**, led by a must-fire on an added column and a must-not-fire
+that a pure reformat is **not** a schema change - whitespace is collapsed on purpose so it cannot cry
+wolf over layout. `run-gates` exit 0, `pass=288 fail=0`.
+
+**WHAT IS DELIBERATELY ABSENT: staged migration.** No expand-contract, no backfill, no rollback. All
+four terms are absent from this estate and from 819 sections of the skill store, and building a
+capability nobody here knows how to do would have been the larger bet the item warned about. **This
+records what changed and why. It does not help you undo it**, and the file says so in its own header.
 
 **Source.** Same course, sections 4 to 9 of `database-craft/changing-a-schema.md`. Registered as
 claims C84 and C85.

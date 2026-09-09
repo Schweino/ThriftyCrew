@@ -757,6 +757,28 @@ if ((Test-Path $gsc) -and (Test-Path $pyExe)) {
   else { [void]$ok.Add((($gsLine -replace '\s+', ' ').Trim())) }
 }
 
+# ---- 5a3b. a graph.db SCHEMA change that left no record --------------------------------------
+# RULED BY BRAD 2026-09-09 (backlog I41): a written record plus a detector, and NOT a staged-migration
+# capability - nothing here knows how to do expand-contract, backfill or rollback.
+#
+# WHY THE DETECTOR IS THE HALF THAT MAKES THE RECORD REAL. A written procedure nobody is forced to
+# follow is an intention, and an intention has no exit code. The ONLY way to clear this is --accept,
+# and --accept is what appends to docs/SCHEMA-CHANGES.md - so the record cannot be skipped.
+#
+# WHY HERE AND NOT run-gates: it needs graph\sqlite\graph.db, which a worktree and a CI runner do not
+# have, so it reports BLIND at exit 3 there and would paint the gate red for a condition nobody can
+# clear. run-gates discovers its --selftest, which is pure.
+$scc = Join-Path (Split-Path $root -Parent) 'graph\audit_schema_change.py'
+$pyExe2 = 'C:\Codex\Python312\python.exe'
+if ((Test-Path $scc) -and (Test-Path $pyExe2)) {
+  $scOut = & $pyExe2 $scc
+  $scRc = $LASTEXITCODE
+  $scLine = ($scOut | Where-Object { $_ -match 'THE SCHEMA MOVED|schema unchanged|BLIND' } | Select-Object -First 1)
+  if ($scRc -eq 2) { [void]$findings.Add("GRAPH SCHEMA: $scLine") }
+  elseif ($scRc -eq 3) { [void]$findings.Add("GRAPH SCHEMA could not be evaluated: $scLine") }
+  else { [void]$ok.Add((($scLine -replace '\s+', ' ').Trim())) }
+}
+
 # ---- 5a4. the monthly member cohort snapshot -------------------------------------------------
 # RULED BY BRAD 2026-09-09 (backlog I98): start it now, automated, AGGREGATE COUNTS ONLY.
 #
