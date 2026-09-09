@@ -8,6 +8,10 @@ executes captures, rebuilds boards and ships, so it is read from its log rather 
 
 ## The map
 
+> **SUPERSEDED, same day. Nine of the ten rows below are WRONG** - they credit each gap to the stage
+> that logged last before it, and those stages turn out to cost seconds, not minutes. Read the
+> CORRECTION section at the foot before using any number here except `test-auditors`.
+
 Span in the log 1,522s. Each gap is attributed to the stage whose line preceded it.
 
 | seconds | share | stage |
@@ -79,3 +83,74 @@ One run, one machine, one day, read from a log rather than instrumented. Stage b
 log lines, so a stage that logs nothing while working is invisible and its time lands on its
 predecessor - which is exactly the correction noted above, caught only because the suite printed its
 own figure. Treat every row but `test-auditors` as approximate.
+
+## CORRECTION, same day: the table above is WRONG except for its first row
+
+**Everything below supersedes the stage table.** The caveat at the foot of this document said a stage
+that logs nothing while working is invisible and its time lands on its predecessor. That is not a
+footnote here - **it is what happened to nine of the ten rows**, and publishing the table without
+testing it was the error.
+
+**How it was caught.** The three largest non-test-auditors rows were run standalone, safely: the audit
+as the chain runs it, `repair-multipack-sizes.ps1` WITHOUT `-Apply` (a dry run), and
+`build-share-image.ps1` with `-OutPath` redirected to a temp file so `public/` could not be clobbered
+(verified unchanged afterwards).
+
+| stage, as the table credited it | table said | measured standalone |
+|---|---:|---:|
+| `surface-staleness` | 190s | **1.3s** |
+| `multipack-repair` | 139s | **5.7s** (dry run) |
+| `share` | 159s | **0.5s** |
+
+**7.5 seconds against 488.** The gaps never belonged to those scripts; they belonged to whatever ran
+after those lines were logged and before the next label appeared.
+
+## What actually consumes the time, read from the line on BOTH sides of each gap
+
+| seconds | what is really running |
+|---:|---|
+| **421** | `test-auditors` (self-reported, the one row that was right) |
+| **190** | **`INSPECT AUDITS (fan-out x8): 35 of 35 lane(s) ran in 189 s wall (849 s if run one after another)`** |
+| **161** | `publish-deals-page` - **3 Ghost calls, 30 s timeout each, no retries** |
+| ~139 | between `multipack-repair` and `history banked from the raw board` |
+| **118** | `paywall-leak` |
+| 98 | `instore-channel` |
+| 68 | `sale-windows refreshed` to `recipe-overlay applied` |
+| 63 | `price-alerts` |
+
+## The finding that reverses the section below
+
+**The 190s block is ALREADY PARALLEL and already works.** The chain's own line says it: 35 lanes at
+width 8, **189 seconds wall against 849 seconds if run one after another**. That is `fanout-lib`
+saving 660 seconds a day, today, and it is the single largest efficiency win already banked in this
+estate.
+
+So the "unprofiled 488 seconds" this document offered as the next lever **does not exist**. One third
+of it is a solved problem reporting its own success, and the rest is spread across `publish-deals-page`,
+`paywall-leak` and `instore-channel` in pieces of 100 to 160 seconds.
+
+It also settles the design question the section below raises. `Invoke-Fanout` is not a redundant fourth
+mechanism sitting unused - **it is the one carrying the biggest measured win in the estate.** Any
+consolidation argument has to start from that, not from counting copies.
+
+## The one thing here that looks like a real defect rather than real work
+
+`publish-deals-page: 161 s (rc=0) - 3 Ghost calls, 30 s timeout each, no retries`.
+
+**Three API calls should not cost 161 seconds**, and the line says there are no retries, so this is not
+retry backoff - it is three calls averaging ~54s each against a 30s stated timeout. Either the timeout
+is not bounding what it appears to bound, or the calls are doing far more than three round trips.
+**NOT DIAGNOSED HERE**, and it is a network-latency question against a live Ghost instance rather than
+a concurrency one, so it does not belong to the concurrency plan.
+
+## What this correction does not change
+
+`test-auditors` at 421s is still the largest single stage and still 27.7%, so
+`design/PLAN-test-auditors-concurrency-2026-09-09.md` is still aimed at the right thing, and the 17%
+chain-level bound stated above still holds. That row was right because the suite printed its own
+figure rather than because the attribution method worked.
+
+**The method lesson, and it is the second time in one day.** The flat width curve was read as physics
+when it was four barriers; this gap table was read as stage costs when it was label lag. Both times a
+number was believed because it was measured, when what mattered was whether the thing measured was the
+thing named. **A gap between two log lines is evidence about the log, not about the stage.**
