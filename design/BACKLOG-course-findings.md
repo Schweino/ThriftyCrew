@@ -9164,7 +9164,7 @@ at least 2 other priced cells, and 41 of 492 commodities on the 2026-07-30 board
 that (22 with one priced cell, 19 with exactly two). That is the same small-cohort discipline the course
 teaches for retention tables, implemented here first.
 
-### I101 - 639 published pages earn 300 impressions and 1 click a month, and nothing in the estate measures it `OPEN` `queue-reach` `2-WAY` `RUNG1 MEASURE`
+### I101 - 639 published pages earn 300 impressions and 1 click a month, and nothing in the estate measures it `PARTLY DONE` `queue-reach` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\reach-2026-09-09.md` on 2026-09-09.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9216,3 +9216,47 @@ measures beats a rung 2 that guesses.
 intervention will look like it worked against a baseline that low, and this estate has a rule about
 selection on noise. Whatever rung 2 turns out to be, its acceptance bar wants writing before the run
 and wants to be stated in impressions rather than clicks, because clicks here have no signal yet.
+
+**RUNG 2, READING 1 - ANSWERED 2026-09-09. The silent pages are INDEXED. Admission is not the
+problem, and any work aimed at it would be wasted.**
+
+Harness `ops/seo_reach_diagnosis.py`, run at commit `8b0946947`, window 2026-08-10 to 2026-09-06,
+input fingerprint 104 Search Console page rows.
+
+| arm | sampled | coverageState | indexed |
+|---|---:|---|---:|
+| **silent** (zero impressions) | 30 of 534 | `Submitted and indexed`, all 30 | **30 of 30 (100%)** |
+| **earning** (>=1 impression) | 15 of 49 | `Submitted and indexed`, all 15 | **15 of 15 (100%)** |
+
+Last crawl dates run 2026-07-11 to 2026-09-08 on the silent arm, so Google is **actively crawling and
+re-crawling these pages and choosing not to rank them.** They are not forgotten, not excluded, not
+blocked, not thin-content-dropped, not missing from the sitemap.
+
+**The four readings were PRE-REGISTERED in the harness before the run** and READING B fired:
+*both arms largely indexed, so indexing is not the differentiator.* There was a CONTROL ARM for
+exactly this reason - "100% of the silent pages are indexed" is unqualified alone, and only the
+comparison against pages that DO earn impressions makes it mean anything. Both are 100%, so the
+difference between earning and silent is not admission.
+
+**A correction to rung 1's arithmetic, from this run.** Rung 1 said 104 pages earn an impression out
+of 639, and inferred 535 silent. That 104 is every page-row Search Console returned, INCLUDING lessons
+and non-recipe pages. Against the published recipe manifest specifically: **49 of 583 recipes earn an
+impression and 534 are silent.** The shape of the finding is unchanged; the denominator was mixing two
+universes.
+
+**The universe is the published manifest, not the built directory** - `published-hashes.json` carries
+583 slugs against 584 built files, so one built recipe was never published and would have inspected as
+"not indexed" while really being "not published". One row, but it is the exact confound that would
+have made a clean number wrong.
+
+**WHAT THIS RULES OUT, which is the point of a negative result.** Sitemap work, indexing requests,
+internal-linking-for-discovery, and thin-content consolidation are all aimed at admission, and
+admission is already at 100%. That is the most commonly recommended SEO work and it is the wrong work
+here. **Not doing it is the finding.**
+
+**WHAT IT DOES NOT ANSWER.** It does not say why indexed pages do not rank - that is competition,
+relevance, or query targeting, and readings 2 and 3 above are untouched. The sample is 30 of 534, so
+30 of 30 supports "at least about 88% indexed" at conventional confidence, not literally all 534. And
+the honest caveat from rung 1 stands unchanged: 1 click over 28 days is a sample of one, so any
+intervention will look like it worked, and an acceptance bar wants writing in impressions before any
+change ships.
