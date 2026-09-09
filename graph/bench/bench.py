@@ -338,8 +338,17 @@ def main() -> int:
     say(f"  resolution agree    {rs['agreement_rate']:.3f}  (n={rs['n']}, "
         f"abstain {rs['abstain_rate']:.2f})   bar >= {BARS['agreement']}   "
         f"{'PASS' if passed['agreement'] else 'FAIL'}")
-    say(f"  median decode       {ex['median_tok_s']:.1f} tok/s   "
+    # ROUND TRIP, NOT DECODE (2026-09-09, backlog I53). elapsed_s is a client-side stopwatch
+    # around the whole POST, so prefill, slot queueing, HTTP and JSON parsing are all charged
+    # to it. THE BAR IS UNCHANGED AT 15.0 ON PURPOSE: it gated real model choices against a
+    # consistent, if mislabelled, measure, and re-deriving it means re-benchmarking every
+    # candidate - a decision for Brad, not a side effect of fixing a label.
+    say(f"  median round-trip   {ex['median_tok_s']:.1f} tok/s   "
         f"bar >= {BARS['tok_s']}   {'PASS' if passed['tok_s'] else 'FAIL'}")
+    say("    round-trip, not decode: the bias is downward and GROWS WITH PROMPT LENGTH,")
+    say("    so this is not comparable to serve.ps1's 36.6-80.4 slot sweep nor to any")
+    say("    published decode figure. No warm-up is discarded either, so cold start is")
+    say("    absorbed by the median rather than measured. See graph/lib/llm.py.")
     say(f"  context headroom    {ctx.get('prompt_tokens','?')} prompt tokens   "
         f"{'PASS' if passed['context'] else 'FAIL'}")
     gate = "PASS" if all_pass else ("NOT A GATE RUN" if ex.get("skipped") else "FAIL")

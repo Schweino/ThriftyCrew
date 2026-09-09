@@ -3472,7 +3472,49 @@ rewritten `save_baseline` serialises the whole document before it opens anything
 line.
 
 
-### I31 - Every LLM run here is costed AFTER it finishes and none is budgeted or capped BEFORE it starts `OPEN - RUNGS 1 AND 2 ARE REPORTS; ONLY THE CAP NEEDS A RULING` `queue-3` `2-WAY` `RUNG1 BUILD`
+### I31 - Every LLM run here is costed AFTER it finishes and none is budgeted or capped BEFORE it starts `DONE - RUNG 1 SHIPPED; THE CAP IS STILL BRAD'S` `queue-3` `2-WAY` `RUNG1 BUILD`
+
+**`[RUNG 1 CLOSED 2026-09-09. No gate was added, per the item's own instruction.]`**
+
+`meal-prep/pipeline/lane-tokens.ps1` now prints money beside tokens: a per-lane USD column, a per-recipe
+dollar figure, and the model mix behind both.
+
+**The price table is read, not remembered.** Rates come from the `claude-api` skill's model table
+(cached there 2026-06-24, read 2026-09-09). They are Anthropic first-party list prices and the header
+says so, because a run dispatched through Bedrock or Vertex is priced differently and **this script
+cannot detect that**.
+
+**The finding that made this more than a multiplication.** `Get-UsageFromLine` folded fresh input,
+cache reads and cache writes into one `in` number. That is right for tokens and wrong for money by
+close to an order of magnitude: a cache read costs a **tenth** of fresh input and a cache write costs a
+**quarter more**, and this estate's transcripts are overwhelmingly cache reads - a sampled session ran
+**40,153 cache-read tokens against 2 fresh input tokens**. Pricing the collapsed `in` at the input rate
+would have overstated the bill roughly 10x and made repeated context look like the dominant cost when
+it is not. The three buckets are now priced separately; `in` is unchanged, so the token report did not
+move.
+
+**Priced per line against that line's own model**, because the roster is deliberately mixed - some
+agents are Fable-pinned and some Opus-pinned, a 2x difference in input rate - so one assumed model for
+a whole run would be wrong for most of it. Every usage line in a transcript carries its own `model`,
+verified over 172 usage records in a real session file.
+
+**An unknown model is NAMED, never billed at zero.** `Get-CostUsd` returns `priced=$false`, the lane is
+flagged, the model is listed, and the report says in words that **the total is a floor, not a bill**. A
+silent zero here is the agreeing-zero shape: the report would read as complete while omitting a whole
+model's spend.
+
+**Verified:** self-test 20 of 20, exit 0, `LANE-TOKENS-COMPLETE`. Driven on a synthetic transcript
+directory and the output READ, not just tallied - which caught a stray backtick rendering literally in
+the FLOOR warning (a single-quoted PowerShell string does not consume one), now fixed.
+Worked example from that run: an Opus-5 price lane at 254,801 tokens is **$0.36**, a Fable-5.1 write
+lane at 99,010 tokens is **$0.29** - a lane a quarter the size costing four fifths as much, which is
+exactly the comparison a token-only report could never show.
+
+**NOT run against a real hunt, and it cannot be yet:** there are no `agent-*.jsonl` transcripts on disk
+anywhere in the tree. The first real run produces the first real number.
+
+**Still open and still Brad's: rung 3, the cap.** A budget that refuses to dispatch is a policy
+decision about what a run is allowed to spend, not a report, and nothing here pre-empts it.
 *Source: Optimize & Interface LLM Apps Effectively (queue-3, Starweaver), module 2.* The course's
 one genuinely new habit is trivial and this estate does not have it: **do the arithmetic before you
 build, not after the invoice** - expected tokens per call x price x expected calls, priced as two
@@ -4968,7 +5010,34 @@ run's write scope. The candidate is recorded here so the between-courses pass ca
 
 **What it would touch.** One memory file plus its `MEMORY.md` index line. Nothing in the repo.
 
-### I53 - the local model's "decode" bar measures the whole round trip `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I53 - the local model's "decode" bar measures the whole round trip `DONE - RELABELLED; THE BAR IS DELIBERATELY UNCHANGED` `queue-4` `2-WAY` `RUNG1 MEASURE`
+
+**`[CLOSED 2026-09-09 as a relabel. The re-derivation it invites is a separate decision.]`**
+
+`elapsed_s` is a client-side stopwatch around the whole `/chat/completions` POST, so prefill, queueing
+behind other slots, HTTP and JSON parsing are all charged to what the bench printed as **decode**.
+
+Three files now say what the number is: `graph/lib/llm.py`'s `tokens_per_s` docstring, `graph/bench/bench.py`
+(the row reads `median round-trip`, with four lines under the verdict explaining the bias), and a note in
+`graph/prompts/model-selection.md` marking **every historical `median decode` row in that file as a
+round-trip rate**.
+
+**The bias is downward and it is NOT constant - it grows with prompt length**, so the same server scores
+differently for a ~312-token `resolve` call than for a caller asking 4,096 out. Two consequences are
+written down beside the number: these figures are **not comparable** to `tools/local-llm/serve.ps1`'s
+36.6-to-80.4 slot sweep or to any published decode figure; and **a change that speeds up prefill only
+would appear here as a decode improvement**, which is the shape that gets banked without being
+investigated.
+
+**THE BAR IS LEFT AT 15.0 ON PURPOSE.** It gated real model choices against a consistent, if
+mislabelled, measure. Re-deriving it means re-benchmarking every candidate, which is a decision for
+Brad, not a side effect of fixing a label. Moving it quietly would also have been the exact error
+`measurement.md` names: a threshold chosen after seeing the number.
+
+**What was NOT done, and it is one request.** A true decode rate needs the server's own timings object.
+llama.cpp's OpenAI route may return one and `LLMResult.raw` already keeps the full response, so nobody
+has to instrument anything - **nobody has looked**. Port 8080 refused during the course run and was
+still refusing on 2026-09-09, so this could not be probed today.
 
 **Source.** Coursera, *Optimize AI Inference Speed & Accuracy* (Starweaver), queue-4 H2, module 1.
 Routed to `reliability-craft/pipeline-throughput.md` 7.5 and `reliability-craft/applies-here.md`
@@ -6885,7 +6954,34 @@ are dot-sourced libraries that work. This is not a new pattern to invent, it is 
 If the answer is "read its source", that is the finding. And any claim about how many things depend
 on X is measured with a grep and a date, never carried in prose or a filename.
 
-### I83 - no quality attribute is stated anywhere in the estate, so nothing can be evaluated against one `OPEN` `queue-6` `2-WAY` `RUNG1 DOC`
+### I83 - no quality attribute is stated anywhere in the estate, so nothing can be evaluated against one `DONE - THE UTILITY TREE EXISTS; THE MEETING DOES NOT` `queue-6` `2-WAY` `RUNG1 DOC`
+
+**`[CLOSED 2026-09-09 in docs/QUALITY-ATTRIBUTES.md.]`**
+
+**The gap was real and it was checked before it was filled:** `ATAM`, `architecture tradeoff`,
+`utility tree`, `quality attribute`, `Kruchten` and `Conway` return **zero matches** across every
+`.ps1`, `.py` and `.md` in the repo, and are a clean no-match over 1,251 sections of the skills store.
+`docs/RUNTIME-MAP.md` maps the runtimes and the git-bus well but states **no attribute, no priority and
+no scenario**, so every design argument had to be re-derived from taste.
+
+**What ported is the utility tree; what did not port is the meeting.** There is one person here and no
+stakeholder groups to convene, so a nine-step ATAM is theatre. Attributes are stated per subsystem with
+two letters: importance to the business, then difficulty here.
+
+**One attribute outranks the rest and is written as the constraint the others optimise inside:**
+correctness of a published number, `H/H`, where understating is exactly as wrong as overstating.
+
+**The document earns its place by naming two things nobody had written down.** First, a tradeoff:
+refusal-under-uncertainty is **bought with throughput** - every BLIND verdict is a cell that stays empty
+until someone looks, and the estate has consistently chosen the empty cell. That is the right call and
+it should stay a conscious one. Second, the weakest seam: **modifiability of the pricing math is `M/H`
+and nothing holds it up** - a helper added to the lifted `compare-deals` functions breaks 12 executing
+scripts at call time. That is backlog I82, and this is the first document that says so as a property of
+the architecture rather than as an incident.
+
+**Deliberately not a design authority.** `RUNTIME-MAP.md` still outranks it on what actually runs. The
+file's own closing rule is the one that keeps it honest: **a priority no scenario supports is a priority
+nobody has tested, and should be deleted rather than defended.**
 
 **Merged from `design\backlog-inbox\lane-software-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

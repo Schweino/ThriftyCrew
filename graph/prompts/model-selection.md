@@ -4,6 +4,24 @@ Appended by `graph/bench/bench.py`. Each block is one candidate
 measured on this box against the plan's acceptance bars.
 The chosen primary model is whichever most recently PASSED.
 
+> **EVERY `median decode` ROW BELOW IS A ROUND-TRIP RATE, NOT A DECODE RATE**
+> (recorded 2026-09-09, backlog I53; the label in `bench.py` is corrected from that date and the
+> historical rows keep their original wording because rewriting them would erase what was actually
+> printed). `graph/lib/llm.py` computes `completion_tokens / elapsed_s`, and `elapsed_s` is a
+> **client-side stopwatch around the whole `/chat/completions` POST** - so prefill, queueing behind
+> other slots, HTTP and JSON parsing are all charged to it.
+>
+> Two things follow, and both matter when these rows are used to choose a model:
+> - **The bias is downward and NOT constant** - it grows with prompt length, so a model benched on
+>   short prompts flatters itself against one benched on long ones.
+> - **These are not comparable** to `tools/local-llm/serve.ps1`'s 36.6-to-80.4 tok/s slot sweep, nor
+>   to any published decode figure. There is also **no warm-up discard**, so a cold start (12.2 GiB
+>   of weights) is absorbed by the median rather than measured.
+>
+> **The 15 tok/s bar is deliberately UNCHANGED.** It gated real model choices against a consistent,
+> if mislabelled, measure; re-deriving it means re-benchmarking every candidate, and that is a
+> decision for Brad rather than a side effect of fixing a label.
+
 ## Qwen3.8-27B UD-Q3_K_XL (llama.cpp b10509, CUDA 13.3) — 2026-08-20 04:50
 
 - verdict: **PASS** (295s)

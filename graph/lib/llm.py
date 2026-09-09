@@ -56,6 +56,26 @@ class LLMResult:
 
     @property
     def tokens_per_s(self) -> float:
+        """ROUND-TRIP tokens per second, NOT decode. Renamed in the reports 2026-09-09 (backlog I53).
+
+        `elapsed_s` is a CLIENT-SIDE stopwatch around the whole `/chat/completions` POST, so
+        prefill, queueing behind other slots, HTTP and JSON parsing are all charged to what the
+        bench prints as "decode". The bias is downward and it is NOT CONSTANT - it grows with
+        prompt length, so the same server scores differently for `resolve` (~312 tokens in) than
+        for a caller asking 4096 out.
+
+        Two consequences worth carrying:
+          * these figures are NOT comparable to tools/local-llm/serve.ps1's 36.6-to-80.4 slot
+            sweep, or to any published decode number;
+          * a future change that speeds up PREFILL ONLY would show up here as a "decode"
+            improvement, which is the shape that gets banked without being investigated.
+
+        The name is kept because callers depend on it and the VALUE is unchanged and still useful
+        - what changes is what the reports claim it is. A real decode rate needs the server's own
+        timings object; llama.cpp's OpenAI route may return one, `raw` already keeps the full
+        response, and NOBODY HAS LOOKED - port 8080 refused during the course run and was still
+        down on 2026-09-09. That probe is the honest next step and it is one request.
+        """
         return self.completion_tokens / self.elapsed_s if self.elapsed_s else 0.0
 
     @property
