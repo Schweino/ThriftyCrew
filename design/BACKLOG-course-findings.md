@@ -5035,13 +5035,50 @@ question is answerable without archaeology.
 **What it is not.** Not a proposal to adopt propensity scores or IPTW. This estate mostly compares
 two configurations it controls, where the repair is a paired design (I48), not an adjustment.
 
-### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `OPEN - BLOCKED ON A RUN, NOT ON A DECISION` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `PARTLY DONE - THE HARNESS AND BOTH ARMS ARE BUILT; ONLY THE DECIDER CALLS NEED A DISPATCH` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
-**`[NOT REACHED 2026-09-09, and the reason is stated rather than implied.]`** Rung 1 is the
-`EVAL-dedup-shortlist` experiment: the same candidate dossiers ruled **twice**, with and without the
-neighbour block, two decider calls on identical inputs. That needs live decider calls over a real
-dossier batch - a dispatched run, not a script I can execute and read in a session. Nothing about it is
-undecided; it is waiting on the run. **No part of it was faked or estimated.**
+**`[THE HARNESS SHIPPED 2026-09-09: `meal-prep/pipeline/dedup_paired_probe.py`. Only the decider calls
+are outstanding, and they are the one part of this that needs a dispatch.]`**
+
+**The case set is frozen and both arms are on disk**: 20 pairs, drawn in `harvest.dossier_rank` order
+so the population is the one the daemon actually pops, fingerprinted `34be0270169e593c`. Arm `with`
+carries 15 neighbours per dossier; arm `without` carries 0. Emitting them is `--emit`, reading the
+returned verdicts back is `--score`, and **`--score` with nothing to read exits 3 and says BLIND**
+rather than reporting a clean zero. Verified: self-test **11 of 11**, emit and score both exercised
+against the live pool.
+
+**"WITHOUT THE NEIGHBOUR BLOCK" HAS TWO HONEST READINGS AND THE FILE SAYS WHICH IT USES.** Arm B
+removes `catalog_checked` as well as `neighbours`, because `harvest.py`'s own comment is that an empty
+neighbour block without it makes *"no neighbours"* and *"nobody looked"* the same bytes - and a decider
+that cannot tell those apart goes and reads the corpus itself, which is what it did. So removing both
+is the state the estate was actually in, and it is what the 152 recorded dupe rejections were ruled
+from. `--keep-catalog-checked` runs the other contrast, isolating the evidence from the
+did-anyone-look signal. **A flag, not a silent choice.**
+
+**TWO BARS, IN A FIXED ORDER, WRITTEN INTO THE SOURCE BEFORE ANY DECIDER HAS RUN.**
+
+- **BAR 1, safety, read FIRST: verdict agreement at or above 0.90.** Derived from this estate's own
+  record rather than taste - every one of the 152 dupe rejections it has ever made was of a candidate
+  carrying NO neighbour evidence, so the evidence has never been observed to change a verdict, only
+  the cost of reaching one. A design whose premise is *same answer, cheaper* should sit far above 0.90.
+- **BAR 2, cost, read ONLY if bar 1 holds: median paired reduction in decider output tokens at or
+  above 20%.** Derived from the 2026-09-04 numbers - roughly 1,000 output tokens per candidate, roughly
+  8,000 on a dupe rejection derived from scratch, on a pool 32% to 53% duplicates.
+
+**If the arms rule differently, bar 2 is not computed at all**, and the code enforces that rather than
+leaving it to whoever reads the output: **a cheaper arm that reaches different answers is not cheaper,
+it is different**, and comparing its token count to the other's compares two different jobs. That would
+be a finding about ACCURACY, and a bigger one than any token count.
+
+**Why the paired design and not more data.** The 2026-09-04 comparison was confounded because the run
+selects its own denominator: the duplicate mix moved 32% to 53% when the band moved, so per candidate
+the second arm got dearer while per dupe rejection it got cheaper. **That is a DESIGN defect, so more
+runs of the same shape make it worse rather than better.** Running the same units through both arms
+removes the confounding by construction instead of modelling it away.
+
+**Still outstanding, and it is exactly one thing: the decider calls.** Two dispatched Opus runs over
+`cases.jsonl`, one arm each, writing `{case, arm, verdict, output_tokens}` per row. **No part of this
+was faked or estimated**, and nothing in the file will report a number it does not have.
 
 **Source.** Same course. Routed to `experiment-craft/is-the-difference-caused.md` 22a and
 `experiment-craft/applies-here.md` 4 and 7.
