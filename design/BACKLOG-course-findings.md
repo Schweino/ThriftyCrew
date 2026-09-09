@@ -4664,6 +4664,34 @@ heads still carry the pre-fix shape because they have not been rebuilt since. Th
 publishes is re-rendered from the fixed builder first. The live pages were corrected by the syncer,
 not by a rebuild, which is why live is ahead of `db/built` rather than behind it.
 
+**`[2026-09-09. THE PER-URL HALF WAS NEVER BRAD'S, AND THIS IS THE THIRD BLOCK TODAY THAT WAS STALE.]`**
+
+**`ops/seo_url_inspect.py`.** The site-wide enhancement report has no public API, which is what put
+this on Brad's list - but the **URL Inspection API** returns `richResultsResult` per URL and it ANSWERS
+for the credential this estate already holds. That is exactly the shape of the item's own cheapest
+confirmation: fix a recipe, request indexing, watch whether the Recipe rich result comes back on it.
+Verified: self-test **9 of 9**, and a live run over a deterministic stride of 14 built recipes.
+
+**THE FIRST NUMBER TO READ IS THE CRAWL DATE, and it is the answer.** Of 14 sampled URLs, 13 carry a
+crawl date, and they run **2026-07-19 to 2026-09-08** - **exactly one postdates the 2026-09-07 fix.**
+So twelve of the thirteen verdicts describe the PRE-FIX page. **The pre-registered branch that fires
+today is the fourth one: not re-crawled, therefore no verdict, and waiting is the honest move.** The
+criteria were written before the answer arrived, and this is the one they select.
+
+**And a finding the item did not have.** On Google's own live evaluation, **12 of 14 sampled recipes
+PASS with a Recipes item detected**, one is unknown to Google entirely, and one FAILs. That sits
+awkwardly beside the site-wide **VALID = 1** read from the UI on 2026-09-07, and **the tension is
+recorded rather than resolved**: the two reports are computed differently and nothing here has measured
+which one lags. Neither number refutes the other until somebody does.
+
+**The one ERROR is stale, not live**, and checking cost one grep.
+`low-carb-taco-cabbage-beef-skillet` FAILs on a missing `image` field from a **2026-08-17** crawl, and
+its built head carries the same `"image"` value as a page that PASSES. Google is reporting what it saw
+three weeks before the fix shipped. The other **94 issues are all WARNINGs** - `aggregateRating`,
+`video`, and *either image or video should be specified* - which are optional fields, not failures.
+
+**The site-wide Recipe count is still UI-only** and this file does not pretend otherwise.
+
 **What is still open is only Google's verdict**, and it is not ours to compute: the item's own
 cheapest confirmation is to request indexing on one recipe and watch whether Recipe rich results
 return to valid. That is an action on Brad's Search Console account.
