@@ -6954,7 +6954,83 @@ admin key is the cheap version. Nobody should build either until that is ruled.
 scoped to adversarial input against LLM systems and its own "does not own" section says so. This is
 reported to the orchestrator as a proposed domain and is NOT routed anywhere.
 
-### I92 - A promotion hold latches forever and does not record what it latched against `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I92 - A promotion hold latches forever and does not record what it latched against `PARTLY DONE - THE HOLDS ARE RE-TESTABLE AND MEASURED; THE CADENCE IS STILL BRAD'S` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**`[RUNG 1 SHIPPED 2026-09-08. The latch now has an inspection port. Whether it also gets an
+automatic reset is the ruling inside this item and it is untouched.]`**
+
+## What was actually held, measured rather than quoted
+
+`--recheck-holds` on the live board: **16 patterns across 10 commodities, every one held
+2026-08-21 - 18 days, against a board rebuilt daily ever since.**
+
+**The item's own docstring says "141 promoted clean and 15 are held". It is 16.** And the repeats
+are NOT duplicates: 16 rows, **16 distinct (commodity, pattern) pairs** - `green-olives` and
+`insect-spray` each hold three different patterns under one shared reason. Checked rather than
+assumed, because a de-dupe of legitimate rows would have silently re-armed three aliases.
+
+## The answer, over 3,177 store rows on `comparison-2026-09-08.json`
+
+| | |
+|---|---|
+| MOOT - the learner no longer proposes it | **0 of 16** |
+| CONTRADICTED - already in `commodities.json` | **0 of 16** |
+| **INERT TODAY - matches no row on today's board** | **13 of 16** |
+
+**Thirteen of the sixteen could not move a single cell if they were promoted this morning.** They
+are not costing the board anything today, which is the opposite of what "a standing, invisible loss"
+implied - and it is only knowable because somebody looked.
+
+**Three are live, and one of them visibly proves itself STILL RIGHT:**
+
+| commodity | board rows | what it would newly claim |
+|---|---|---|
+| `balsamic-vinegar` | 6 | `Fareway Balsamic Vinegar` |
+| `green-olives` (stuffed) | 4 | `Member's Mark Pimento Stuffed Manzanilla Olives, 2 pk.` |
+| `kosher-salt` | 1 | `Our Family Sea Salt, Coarse, Kosher 16 Oz` |
+
+**The kosher-salt hold was recorded because its pattern *cross-claims the sea-salt cell*, and the one
+row it still matches is that exact cell.** The hold is 18 days old and still correct. That single row
+is the argument against any automatic expiry: a hold that ages out on a timer would have re-armed a
+known-wrong claim on a live board.
+
+## What shipped
+
+- **`--recheck-holds`**, read-only. Promotes nothing, clears nothing, **does not run the guard
+  suite**. Four independent signals per hold, each with its denominator: age, still-learned,
+  in-catalog, and board matches with an example. It turns *"16 permanently held, nobody knows"* into
+  *"3 need a human, 13 are inert, and here is which."*
+- **An absent board reports BLIND, never inert.** `grocery/out/comparison-*.json` is gitignored, so a
+  worktree has none, and reporting every hold as harmless there is the confident wrong zero this
+  estate keeps paying for.
+- **The auto-hold path now records what it latched against.** `record_holds` wrote the literal string
+  `"gated-run"` into the `held` field, so an automatic hold **could never be aged** - a recheck could
+  not tell one written this morning from one written in August. It now writes a real ISO date, keeps
+  the provenance in `held_by`, and adds **`board_week`**, the board its reason was true of. A hold
+  that records neither a cause nor a board is unfalsifiable, and that is exactly what the automatic
+  path used to write.
+
+**Verified:** new `--selftest`, exit 0 over 9 cases, discovered by `run-gates` as a Python suite -
+led by the must-fire that a hold whose stated cause is still on the board keeps its evidence (so a
+correct hold is not cleared), and by the one separating an UNPARSEABLE pattern (returns `None`) from
+one that matches nothing (returns `[]`), because a hold retired for a rotted regex is a different
+failure from one retired for being inert. `run-gates` exit 0, `pass=280 fail=0`, up one. The live
+recheck and the normal `--dry-run` both ran and **wrote nothing** - `promotion-holds.json` and
+`commodities.json` unchanged.
+
+## What is NOT done, and it is the ruling
+
+**Nothing was cleared and no hold was re-tested against the guard suite.** Clearing one still means a
+full compare-deals plus guards cycle, exactly as the file's own note has always said. **The question
+Brad has not answered: should holds be re-tested on a cadence, or only on an explicit run?** The
+evidence now available to answer it: on-demand costs nothing and is what exists; a cadence costs a
+full cycle per batch and **could re-admit an alias that breaks the board on a day nobody is watching**
+- and the kosher-salt row shows that is not hypothetical. Written up beside the other rulings in
+`design/RULINGS-2026-09-08.md`'s sibling I93.
+
+**Also unresolved:** the three live holds are candidates for a human, not verdicts. Nobody has
+adjudicated whether `Fareway Balsamic Vinegar` or the Member's Mark stuffed olives should now be
+learned.
 
 **Merged from `design\backlog-inbox\lane-feedback-systems-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
