@@ -72,6 +72,12 @@ describe them as a safety net: on a day the PC is off, nothing runs unless a hum
   missed local run, it full-checks-out, runs the SAME `check-ad-cycles.ps1`, and `git add -A` commits
   everything back. It cannot replace local fully because the weekly browser captures need a real Chrome.
 - **heartbeat.yml**: alerts if no pipeline commit landed recently. Alerting only, writes no data.
+- **gates.yml**: THE CHANGE-TIME GATE, and it is dispatch-only too - which the line above said "Both"
+  about while there are three. Corrected 2026-09-09. It ran `on: push` to main plus pull_request until
+  2026-08-11 (`b8b5ac1c9`), and its own header and `concurrency:` block still describe push behaviour.
+  **Nothing else replaced it**: the installed git hooks are `pre-commit` and `commit-msg`, and no
+  scheduled task runs `ops/run-gates.ps1`. So the estate has had NO automatic change-time gate since
+  2026-08-11, and CLAUDE.md claimed it did until this was found.
 
 ### 3. Cloudflare Worker — SERVE + INGEST
 - Serves `public/` statically with per-path CORS (`public/_headers`): `smp-feed.json`, `board.json`, `free-dinners.json`, `planner-data.json`, `price-history.json`, `share/`.

@@ -28,7 +28,12 @@ beats reassurance: understating is exactly as wrong as overstating.
 
 ## The gate
 
-`ops/run-gates.ps1` is the change-time gate and runs on every push.
+`ops/run-gates.ps1` is the change-time gate. **NOTHING RUNS IT AUTOMATICALLY - not a hook, not
+CI, not a scheduled task.** It said "runs on every push" here until 2026-09-09 and that was false:
+`gates.yml` went `workflow_dispatch`-only on 2026-08-11 when GitHub Actions minutes were exhausted
+(`docs/RUNTIME-MAP.md` section 2), the installed hooks are `pre-commit` and `commit-msg` only, and no
+scheduled task calls it. **So a push is gated exactly as much as the person pushing chose to gate it.**
+Run it before you push. If it did not run, the tree is unverified, however green it was this morning.
 
 **Exit 0 = passed. 1 = at least one gate failed. 3 = could not evaluate**, which means discovery is
 broken, not that the tree is clean. Never read 3 as a pass. (The recipe battery uses exit 2 for its
