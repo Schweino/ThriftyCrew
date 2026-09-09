@@ -38,16 +38,15 @@ $outRootDir = if ($OutRoot) { $OutRoot } else { $root }
 $regDir = Join-Path $outRootDir 'out\regular'
 
 # ---- lift the REAL pricing math + the REAL row builder (one rule, one home - the importer borrows, never forks) ----
-$engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+. (Join-Path $root 'pricing-math-lib.ps1')   # I82: the pricing math is a LIBRARY now, not a
+# regex cut out of compare-deals.ps1's source. The hand-maintained name list this replaced had
+# one failure mode that had already fired: add a function Get-UnitPrice calls, forget to list it
+# here, and the lifted copy calls something that does not exist - at RUN time. A dot-source
+# cannot have that bug, because the file arrives whole.
 # One of THREE hand-maintained copies of this list (build-walmart-deals.ps1, build-sams-deals.ps1 carry the
 # others). A helper that a lifted function calls must be named here too, or the lift silently produces a
 # function whose callee is undefined and it dies at CALL time, not load time. See the note in
 # build-sams-deals.ps1; compare-deals.ps1 -SelfTest proves all three lists are closed.
-foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Test-NameOffersTwoSizes','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit','Get-TcEachCountTokens','Get-TcWholePurchaseTokens')) {
-  $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
-  if (-not $m.Success) { throw "import-walmart-batch: could not lift $fn from compare-deals.ps1" }
-  Invoke-Expression $m.Value
-}
 $builderSrc = Get-Content (Join-Path $root 'build-walmart-deals.ps1') -Raw
 # Get-NamePackMultipliers joined this list 2026-09-05, with Build-Row's refusal branch. It is a HAND-MAINTAINED
 # copy of Build-Row's dependency set, so adding a helper to the builder without adding it here leaves the lift

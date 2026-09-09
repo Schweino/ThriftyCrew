@@ -13,18 +13,20 @@
 param([switch]$Quiet)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
-$src = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-
-# pull the pricing functions out of the engine verbatim
+# THE PRICING MATH IS A LIBRARY NOW (2026-09-09, backlog I82). This used to Get-Content the engine and
+# cut eight function bodies out of it with a regex. The functions have not changed; only where they
+# live has. The list is kept and ASSERTED below rather than deleted, because a test that silently
+# stopped covering a function would be worse than one that fails loudly when a name goes missing.
+. (Join-Path $root 'pricing-math-lib.ps1')
 $want = @('ConvertTo-DigitNumerals', 'Get-PackCount', 'Get-SizeAmount', 'Convert-ToUnit', 'Get-ItemPrice', 'Get-UnitPrice', 'Test-Bulk', 'Test-IsMultibuy')
 $got = @()
 foreach ($fn in $want) {
-  $m = [regex]::Match($src, '(?ms)^function\s+' + [regex]::Escape($fn) + '\s*\(.*?^\}')
-  if (-not $m.Success) { Write-Warning ("could not extract " + $fn); continue }
-  Invoke-Expression $m.Value
+  if (-not (Get-Command $fn -CommandType Function -ErrorAction SilentlyContinue)) {
+    throw ("test-unitprice: " + $fn + " is not defined after dot-sourcing pricing-math-lib.ps1 - the library lost a function this suite covers")
+  }
   $got += $fn
 }
-if (-not $Quiet) { Write-Output ('extracted from compare-deals.ps1: ' + ($got -join ', ')) }
+if (-not $Quiet) { Write-Output ('loaded from pricing-math-lib.ps1: ' + ($got -join ', ')) }
 
 $cases = @(
   @{ n = 'Hy-Vee facial tissues (DIVIDES today)'; price = '$2.29'; size = '30 ct'; name = 'Kleenex Everyday Facial Tissues Slim Pack 3-Ply'; unit = 'each' }

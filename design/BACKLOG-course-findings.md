@@ -7388,7 +7388,57 @@ case rule wearing a different coat.
 **What is being asked.** Whether to add the duration field at all. It is cheap, but it is the only
 one of the three that touches the hot path of every tool call.
 
-### I82 - seventeen files read compare-deals.ps1's SOURCE and twelve of them execute it, and both the rules file and the memory say three `PARTLY DONE - THE FAILURE MODE IS GATED; THE REFACTOR IS PLANNED, NOT BUILT` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I82 - seventeen files read compare-deals.ps1's SOURCE and twelve of them execute it, and both the rules file and the memory say three `DONE - THE PRICING MATH IS A LIBRARY, AND THE BOARD IS IDENTICAL` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**`[REFACTOR SHIPPED 2026-09-09. `grocery/pricing-math-lib.ps1`. The acceptance test passed on the
+live board.]`**
+
+**THE OBSTACLE WAS NEVER TRUE OF THE FUNCTIONS.** `build-walmart-deals.ps1`'s own comment says it:
+*"it runs a pipeline on load, so we can't dot-source it"*. That is true of the ENGINE and was never
+true of the pricing math. Measured before moving anything: the eleven lifted functions are **closed
+under calling** (none calls an engine function outside the set) and reference **no `$script:` or
+`$global:` state at all** - the one apparent hit was the string `TC_WholePurchaseTokens` inside a
+COMMENT, the only occurrence in the whole tree. So the entire obstacle was that they shared a file
+with a pipeline.
+
+**11 functions, 647 lines, moved VERBATIM.** Not one character of any body changed; only where they
+are defined. `compare-deals.ps1` dot-sources the library, and the three builders plus
+`test-unitprice.ps1` dot-source it instead of cutting bodies out with a regex and `Invoke-Expression`.
+
+**THE ACCEPTANCE TEST, AND MY OWN PLAN HAD IT WRONG.** The plan said "a rebuilt board byte-identical
+to one built before". **That is unachievable** - the board carries a `built_at` timestamp, so no two
+rebuilds are ever byte-identical. The substantive test is the `comparison` payload, and determinism
+was established first by rebuilding twice with no change:
+
+| | comparison hash | rows |
+|---|---|---|
+| before the extraction | `6d129e5d8ab9ac45` | 572 |
+| after the extraction | **`6d129e5d8ab9ac45`** | 572 |
+
+**Identical across 572 commodities.** `guards.ps1` exit 0, hard=0, *"Safe to publish"*.
+`audit-lift-completeness.ps1` now reports **0 lifting scripts**, which is the correct end state for
+the detector it was written to serve.
+
+**THREE THINGS BROKE ON THE WAY AND ALL THREE WERE CAUGHT BY GUARDS, NOT BY ME:**
+
+1. **`compare-deals -SelfTest` had a `lift-closure` fixture** asserting each builder carried a lift
+   list. The lists are gone, so it failed. **Replaced rather than deleted**, with the strictly stronger
+   equivalent: the library must be **closed under calling**, because a dot-source brings the whole file
+   and the only way to reach a missing callee is for the library to call outward. One check instead of
+   three, and it passes over 12 functions.
+2. **`audit-json-readers` ratcheted from 0 to 1** - and the new bare read was **mine, from I85 earlier
+   today**: `Get-Content $censusBaselineFile -Raw | ConvertFrom-Json` with no `-Encoding`. Fixed.
+3. **`audit-tile-integrity` HELD**, correctly, because `name-drift.json` was older than the rebuilt
+   board and it refuses to grade today's links against yesterday's verdicts. **That is the documented
+   trap: a mid-day rebuild needs the link repair too**, and I ran `compare-deals` alone. Running
+   `audit-name-drift.ps1` cleared it.
+
+**`run-gates` exit 0, `pass=298 fail=0`.**
+
+**STILL NOT DONE, and it is the smaller half: `$GLOBAL_EXCLUDE`.** Five-plus files still regex the
+array literal out of the engine's source and `Invoke-Expression` it, and `compare-deals.ps1` lifts it
+from **its own** `$PSCommandPath` because its self-test block runs before the definition. That is a
+data-shaped problem rather than a function-shaped one and wants its own change.
 
 **`[2026-09-09. What shipped, and what deliberately did not.]`**
 

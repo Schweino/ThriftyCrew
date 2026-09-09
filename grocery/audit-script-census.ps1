@@ -293,7 +293,9 @@ if ($inOut.Count -gt $OutBaseline) {
 # ---- the wide tier: a ratchet, never a day-one gate ------------------------------------------------
 $wideBase = $null
 if (Test-Path $censusBaselineFile) {
-  try { $wideBase = [int]((Get-Content $censusBaselineFile -Raw | ConvertFrom-Json).uncalled) } catch { $wideBase = $null }
+  # -Encoding UTF8 is not optional: PS 5.1 decodes a BOM-less file with the ANSI codepage, and
+  # audit-json-readers.ps1 ratchets exactly this. Caught by that ratchet the same day this was written.
+  try { $wideBase = [int]((Get-Content $censusBaselineFile -Raw -Encoding UTF8 | ConvertFrom-Json).uncalled) } catch { $wideBase = $null }
 }
 Write-Output ("  wide tier: " + $wideUncalled.Count + " uncalled outside " + $STRICT_PREFIX + " (" +
               $wideNew.Count + " not yet recorded in KNOWN)" +

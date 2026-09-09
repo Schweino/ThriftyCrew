@@ -57,7 +57,11 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocer
 # their non-ASCII regex literals have to survive the read. compare-deals.ps1 carries a BOM today and
 # Get-Content would honour it - but that leaves the whole pricing engine depending on a byte order
 # mark nothing asserts. Name the encoding and the dependency is gone.
-$engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw -Encoding UTF8
+. (Join-Path $root 'pricing-math-lib.ps1')   # I82: the pricing math is a LIBRARY now, not a
+# regex cut out of compare-deals.ps1's source. The hand-maintained name list this replaced had
+# one failure mode that had already fired: add a function Get-UnitPrice calls, forget to list it
+# here, and the lifted copy calls something that does not exist - at RUN time. A dot-source
+# cannot have that bug, because the file arrives whole.
 # THIS LIST IS A DEPENDENCY GRAPH (2026-08-29). It is one of THREE hand-maintained copies of the same
 # list - build-walmart-deals.ps1 and import-walmart-batch.ps1 carry the others - and adding a helper that
 # a lifted function CALLS, without naming it here, lifts a function whose callee does not exist. The lift
@@ -65,11 +69,6 @@ $engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw -Encoding UT
 # cmdlet". That is exactly what happened when Test-NameOffersTwoSizes was added to compare-deals.ps1 and
 # only the walmart list was updated. compare-deals.ps1 -SelfTest now proves every one of these three lists
 # is closed under the calls its own lifted functions make.
-foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Test-NameOffersTwoSizes','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit','Get-TcEachCountTokens','Get-TcWholePurchaseTokens')) {
-  $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
-  if (-not $m.Success) { throw "build-sams-deals: could not lift $fn from compare-deals.ps1" }
-  Invoke-Expression $m.Value
-}
 
 # unit token as Sam's prints it -> (engine size token, engine category unit for the invariant check)
 # Sam's abbreviates FLUID OUNCE as "foz" ("$0.16/foz"). Missing that silently drops every liquid in the

@@ -84,18 +84,17 @@ if (-not $script:CaptureDate) { $script:CaptureDate = (Get-Date).ToString('yyyy-
 # their non-ASCII regex literals have to survive the read. compare-deals.ps1 carries a BOM today and
 # Get-Content would honour it - but that leaves the whole pricing engine depending on a byte order
 # mark nothing asserts. Name the encoding and the dependency is gone.
-$engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw -Encoding UTF8
+. (Join-Path $root 'pricing-math-lib.ps1')   # I82: the pricing math is a LIBRARY now, not a
+# regex cut out of compare-deals.ps1's source. The hand-maintained name list this replaced had
+# one failure mode that had already fired: add a function Get-UnitPrice calls, forget to list it
+# here, and the lifted copy calls something that does not exist - at RUN time. A dot-source
+# cannot have that bug, because the file arrives whole.
 # THIS LIST IS A DEPENDENCY GRAPH, AND IT IS HAND-MAINTAINED (2026-08-29). Adding a helper that
 # Get-UnitPrice calls without naming it here lifts a function whose callee does not exist, and the failure
 # lands at RUN time as "not recognized as the name of a cmdlet" - which is what happened the day
 # Test-NameOffersTwoSizes was added to refuse either/or ad rows. The guard caught it (the walmart-deals
 # self-test is a hard invariant), so nothing shipped, but the trap is worth naming: if you add a function
 # to compare-deals.ps1 and any lifted function calls it, it belongs in this list too.
-foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Test-NameOffersTwoSizes','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit','Get-TcEachCountTokens','Get-TcWholePurchaseTokens')) {
-  $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
-  if (-not $m.Success) { throw "${Me}: could not lift $fn from compare-deals.ps1" }
-  Invoke-Expression $m.Value
-}
 
 # unit token as Sam's prints it -> (engine size token, engine category unit for the invariant check)
 # Sam's abbreviates FLUID OUNCE as "foz" ("$0.16/foz"). Missing that silently drops every liquid in the
