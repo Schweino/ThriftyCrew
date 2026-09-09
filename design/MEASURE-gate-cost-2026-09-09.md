@@ -72,8 +72,9 @@ Each of these would have given a fix that keeps every assertion. None survived.
    (`ps5-static-regex-lock` already says runspaces make `-match` slower and only separate processes
    parallelise, so the intra-detector lever was closed before this.)
 
-**So 78 seconds is the floor for this gate on this machine.** The only remaining way to make it
-faster is to remove assertions.
+**So 78 seconds looked like the floor for this gate on this machine, and the only remaining way to
+make it faster looked like removing assertions. THAT CONCLUSION IS WRONG - see the CORRECTION below.**
+All three explanations above are dead as measured; the fourth was the scheduler, which I had not read.
 
 ## Do the fifteen earn their share
 
@@ -104,15 +105,64 @@ is still the only thing standing between the estate and that bug.
 It also measured one machine on one day at one commit, and the CI runner is a different machine
 where the boards are absent.
 
-## Recommendation
+## CORRECTION, same day: the fourth explanation was the right one
 
-**Retire nothing, and stop trying to make the gate faster.** Three structural fixes were tested and
-all three are dead, so the remaining levers all cost assertions, and this estate's rule is that a
-gate is never weakened to buy something else.
+Everything above stands as measured. **The recommendation that followed it was wrong**, and it was
+wrong because I tested three fixes to the gates and never looked at the SCHEDULER that runs them.
 
-78 seconds is the honest price of 304 gates. The cost that was actually felt on 2026-09-09 was not
-the 78 seconds - it was **running the full gate eight times in one day**, ten minutes of waiting, when
-most of those runs were re-checking a tree whose changed file did not touch 300 of the 304 gates.
-If anything here is worth building later, it is running the gates a change can actually affect
-during iteration and the full 304 once before the push - and that is a change to how the gate is
-*invoked*, not to what it asserts.
+Two structural facts, read in `ops/run-gates.ps1` rather than inferred:
+
+1. **There are four sequential pools, not one.** `Invoke-TcParallel` is called at lines 124, 314, 410
+   and 438 - PowerShell self-tests, PowerShell static detectors, Python static, Python suites. Each
+   returns an array indexed by job, so each pool must **fully drain before the next begins**. Three
+   hard barriers. At the end of every batch, the workers that finished sit idle waiting on that
+   batch's longest straggler.
+
+2. **Dispatch order is alphabetical** - `Sort-Object FullName`, line 53 - not longest-first. The
+   single most expensive gate in the estate, `meal-prep/pipeline/map-preresolve.ps1` at 24.5s, sorts
+   under "m" and is therefore dispatched near the END of its batch, which is the worst possible
+   position for the longest job.
+
+**The number that gives it away was already in this document, undivided:** 516s of work inside 78s of
+wall is **6.6x effective parallelism against 16 dispatched workers, about 41% efficiency**. Perfect
+packing of 516s at width 16 is 32s.
+
+That also re-reads the width curve above. I recorded "the pool saturates at 16" and treated it as
+physics. **Widening a barrier does not remove it** - each batch's tail is set by its longest single
+gate no matter how many workers are idle behind it, so a flat curve is exactly what four barriers
+produce. The machine was not full. It was waiting.
+
+**The corrected finding: the architecture issue is not the 304 gates and not the slowest fifteen.
+It is that the gate is scheduled as four alphabetical batches instead of one longest-first pool.**
+
+The fix is contained and costs no assertion: build all four job lists, make ONE `Invoke-TcParallel`
+call ordered longest-processing-time-first, then slice the result array by index range so each
+judging loop stays byte-identical. Every gate still runs, still in its own process, still judged the
+same way. `lib/parallel-run.ps1` already carries fixtures asserting that concurrency 1 and the pool
+agree, which is the net under the change.
+
+**Two things this correction does NOT claim.**
+
+- **The size of the win is an estimate, not a measurement.** The floor is bounded below by the 24.5s
+  longest gate, and the contention measured above is real, so the honest expectation is somewhere
+  near 45-55s rather than the arithmetic 32s. That is a prediction. It gets measured before it gets
+  quoted, per this estate's own rule that a number that moved is not a number that improved.
+- **Cross-batch independence is unverified.** `run-gates.ps1` asserts the gates are independent by
+  construction, but that comment sits over the self-test batch. Merging the pools assumes the four
+  batches do not depend on each other's completion, and **verifying that is part of the work, not a
+  footnote to it.** A Python suite that reads something a PowerShell gate writes would be invisible
+  today, because the barrier is currently hiding it.
+
+## Recommendation, corrected
+
+**Retire nothing** - that half stands, and every one of the fifteen carries a founding bug.
+
+**Do not conclude that 78 seconds is the floor.** It is the price of the current schedule, not of the
+assertions. One pool, longest-first, is the durable fix: it is a change to how the gates are
+DISPATCHED, touching neither what they assert nor which of them run, which is the property that makes
+it safe in a way that selecting a subset by changed file would not be. Selecting a subset would
+reproduce exactly the shape `ops-and-gates.md` warns about, where "no gate matched your change" and
+"the gates found nothing" are the same bytes.
+
+The eight-runs-in-a-day cost noted above is real but is downstream of this: at 45s the same eight
+runs cost six minutes instead of ten, and the case for a change-scoped fast lane weakens accordingly.
