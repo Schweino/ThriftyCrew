@@ -7134,7 +7134,52 @@ If the answer is "goes quiet, and the alert cannot fire", add the floor in the s
 on a rate is detective by construction, and a preventive gate cannot substitute for it, because the
 failure it catches is one where nothing ran to be gated.
 
-### I81 - if a hook ever records its own duration it must record the RAW value, and that has to be decided before any data exists `NEEDS A RULING` `queue-6` `1-WAY` `RUNG1 RULING`
+### I81 - if a hook ever records its own duration it must record the RAW value, and that has to be decided before any data exists `DONE - INSTRUMENTED, AND THE FIRST NUMBER IS 3.2 SECONDS` `queue-6` `1-WAY` `RUNG1 RULING`
+
+**`[CLOSED 2026-09-09. Brad ruled: yes, raw value on every row.]`**
+
+`~/.claude/skills/recall-hook.py` writes one `ev: "timing"` row per invocation carrying a raw `ms`,
+the return code, and `sid` + `agent` beside them.
+
+**The ruling was taken before the data existed, which is the only time it could be.** Raw value per
+row, never a mean and never a pre-bucketed histogram: a histogram's resolution is fixed by its bucket
+boundaries **at instrumentation time** and cannot be improved afterwards, and a mean is the one shape
+that cannot be un-aggregated. This is the estate's one-row-per-case rule wearing a different coat.
+
+**IT IS A WRAPPER AROUND EVERY RETURN PATH, and that is not a detail.** There are five returns, and
+the offer rows are only written when something was picked - so hanging the duration off them would
+have recorded time only for turns that already succeeded. **That is precisely the censored sample
+backlog I95 exists to fix, reproduced inside the fix for something else.** A turn that offered nothing
+still spent the time, and a slow empty turn is the row most worth having.
+
+**THE FIRST MEASUREMENT, and it is bigger than anyone assumed:**
+
+| path | wall time |
+|---|---|
+| a real prompt, full search | **3,186 ms** (and 3,201 ms on a second run) |
+| an empty prompt, early return before the search | **9 ms** |
+
+**So process start, payload read and state save cost about 9 ms, and the search leg costs about 3.2
+seconds.** That refines the standing memory *"the recall hook pays for numpy, not the search - 66 ms
+import against a 0.3 ms cosine pass"*: that memory is about the **semantic** leg, and it does not
+account for this. The 3.18 seconds sits somewhere in the retrieval path, most likely the lexical index
+build over the skills tree.
+
+**Stated honestly: this is TWO observations on one machine, and nothing has been attributed yet.** It
+is enough to say the number is large and worth chasing; it is not enough to name the cause, and I have
+not. The instrument now exists to answer it, which is what the ruling bought.
+
+**Verified:** hook self-test **15 of 15**; driven twice through a real payload file and the rows read
+back, carrying `sid` and `agent`.
+
+**A defect in my own verification, not in the code, worth recording because it wastes a session every
+time:** the first test piped JSON to the hook through PowerShell, which **strips double quotes for a
+native exe**, so `read_payload` fell back to treating the whole string as the prompt and the rows came
+back with no `sid`. The instrumentation was correct and the harness was lying. The payload goes
+through a file.
+
+**The other two numbers the item named need no instrumentation** and remain derivable from the log
+stream as it stands: offers per turn, and consulted over offered.
 
 **Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
