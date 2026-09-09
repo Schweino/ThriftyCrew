@@ -6494,7 +6494,46 @@ nobody has looked at its Network tab**. That check costs one person one hour per
 retire the 75-minute pull. It should be an item in its own right if this one is split.
 
 
-### I73 - the identity graph has 205 nodes joined to nothing and seven two-node islands, and no check looks `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I73 - the identity graph has 205 nodes joined to nothing and seven two-node islands, and no check looks `DONE - THE FIRST GRAPH CHECK EXISTS AND IT IS A RATCHET, 2026-09-09` `queue-6`
+
+**`[CLOSED 2026-09-09.]`** `graph/audit_graph_shape.py` answers I73, I75 and I76 in one read-only
+pass over `graph.db`, and runs from `capture-watchdog` as check 5a3.
+
+**Why it was the right FIRST graph check, unchanged: it has no threshold to argue about.** The correct
+value is zero or an explanation, which makes it ratchet-shaped rather than a gate red on day one.
+
+**Measured live: 48,138 nodes, 86,054 edges.**
+
+| | |
+|---|---|
+| nodes at degree 0 | **205** |
+| weakly connected components | **213** |
+| largest component | 47,919 of 48,138 (**99.5%**) |
+| components of 2+ apart from the largest | **7, every one of size 2** |
+
+That reproduces the item's figures. **But the orphan breakdown is new, and it changes what the number
+means:**
+
+| orphan node type | count |
+|---|---|
+| `CategoryExclude` | **199** |
+| `IngredientMapping` | 4 |
+| `Commodity` | **2** |
+
+**199 of the 205 are exclusion rules, which join nothing BY CONSTRUCTION** - an exclude is a
+statement about what must not match, not a thing with edges. So *"205 nodes joined to nothing"* is
+mostly a category error, and the genuinely unexplained orphans are **six**: four ingredient mappings
+and **two commodities**. Two orphaned Commodity nodes is a small, real, nameable thing; 205 was not.
+
+**Verified:** self-test exit 0 over 8 cases - led by the must-fire that a node touched by no edge
+scores 0 rather than being absent from the table, and including a 5,000-node chain that proves the
+flood fill is iterative (a recursive one blows the stack at this size, and finding that out from a
+RecursionError inside a gate is a worse way to learn it). Ratchet proved by lowering the baseline to
+force a rise: **exit 2, naming both counts**, then restored and green again. `run-gates` exit 0,
+`pass=281 fail=0` - the self-test is discovered.
+
+**BLIND, never clean, without a database:** a worktree and a CI runner have no `graph.db` and get exit
+3, which is why the live half runs from the watchdog rather than from `run-gates`.
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -6536,7 +6575,35 @@ the node, which is section 50.4's standard move for exactly this.
 notice that before running it. **Forward rule: enter from the SKU, or from a Commodity down through
 `instance_of`; never from a Store outward.**
 
-### I75 - retiring a commodity id is a graph cut, and both gates that guard it reason about names `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I75 - retiring a commodity id is a graph cut, and both gates that guard it reason about names `DONE - THE CUT IS MEASURED AND THE FORWARD RULE IS IN THE AUDIT, 2026-09-09` `queue-6`
+
+**`[CLOSED 2026-09-09, in `graph/audit_graph_shape.py` alongside I73.]`**
+
+**Retiring a commodity id is a GRAPH CUT, and both gates that guard it reason about NAMES:**
+`meal-prep/pipeline/retire_food_db_row.py` greps zero for `edges|graph.db|degree|connect`, and the
+`commodity-registrar` agent rules on names and duplicates. **Neither counts what an id actually
+joins.**
+
+**Measured live, and it states the estate's cross-store pricing premise as a property rather than a
+belief:**
+
+| remove | components go from | to |
+|---|---|---|
+| the **7** `Store` nodes | 213 | **12,382** |
+| the **708** `Commodity` nodes | 213 | **575** |
+
+**Connectivity rests on 715 rows out of 48,138.** The audit prints this every run, so the next person
+proposing to retire a commodity id sees what it joins before they do it, which is the thing neither
+guard could tell them.
+
+**The forward rule ships in the audit's own output, because it is free and it is the half that
+prevents a slow query rather than diagnosing one:** *enter from the SKU, or from a Commodity down
+through `instance_of`; never from a Store outward.* `sold_at` is 54% of the graph and fans out
+20,133 ways from `store:walmart`.
+
+**What is NOT done:** the retirement gates themselves still reason about names. Teaching
+`retire_food_db_row.py` to refuse a cut that would orphan nodes is a change to a gated merge path,
+and the audit now gives it the number it would need. That is a follow-on, not this item.
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -6658,7 +6725,29 @@ verified 2026-09-08. So the whole recall loop can stop firing and nothing anywhe
 **The cheapest fix, and it is small.** One row per hook in `expected-automations.json` naming its log
 file and a staleness bound. Nothing new needs building.
 
-### I79 - the recall log has the wrong join key, so a subagent's rows fold into its parent's and look like a busy session `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I79 - the recall log has the wrong join key, so a subagent's rows fold into its parent's and look like a busy session `DONE - EVERY RECALL ROW CARRIES `agent` NOW, 2026-09-09` `queue-6`
+
+**`[CLOSED 2026-09-09, in the same change as I95 because it is the same row.]`**
+
+`recall-log.jsonl` rows carried `ev, heading, path, q, score, sid, t`. `recall-reflex-log.jsonl` rows
+carried `acted, agent, chash, id, kind, sid, t, tool, waived`. **The reflex log had `agent`; the
+recall log did not.**
+
+**Why `sid` alone cannot be the key:** a subagent's hook calls carry the parent's `session_id` **byte
+for byte** - established over 46 measured payloads - so a join across the two logs on `sid` silently
+folds a subagent's rows into its parent's, and the result **looks like a busy session rather than
+like a bug**. That is the worst failure shape this estate has a name for.
+
+Every row `recall-hook.py` writes - offers and near misses alike - now carries `agent` beside `sid`.
+**There is no call stack in a hook to carry context implicitly**, so it goes in the row deliberately
+or it is not there at all.
+
+**Verified by driving the hook with an explicit `agent_id` and reading the rows back:** both `sid`
+and `agent` present on every row written.
+
+**Not backfilled, and it cannot be.** Rows written before today carry no `agent`, so any join over
+historic data still has the old ambiguity - a reader must treat pre-2026-09-09 rows as
+session-level only.
 
 **Merged from `design\backlog-inbox\lane-observability-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -7455,7 +7544,61 @@ probably not worth it.
 not checked - the file was not opened.
 
 
-### I95 - every threshold here is tuned on a sample the threshold itself selected `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I95 - every threshold here is tuned on a sample the threshold itself selected `DONE - THE NEAR-MISS ROW IS BEING WRITTEN, 2026-09-09` `queue-6`
+
+**`[CLOSED 2026-09-09 for the half that could be built. The alert half is measured and is Brad's,
+exactly as the item predicted.]`**
+
+**The finding, restated because it is the reason this could not wait:** a filter learns from what it
+DELIVERED, because that is the only thing anybody judged. That history is not a random sample - it is
+exactly the set the current threshold let through - so optimising on it recovers only an **upper
+bound**. The threshold does not wander; it **ratchets toward silence**, because the only failure it
+can ever observe is a false alarm.
+
+## Shipped: the recall side
+
+`~/.claude/skills/recall-hook.py` now writes an `ev: "nearmiss"` row carrying the best candidate that
+did NOT clear the bar, per leg, with `score`, `floor`, `margin`, `offered`, `sid` and `agent`.
+
+**Two design points that are the whole difference between this working and not:**
+
+1. **The row is written ABOVE the `if not picked: return 0` early return.** A turn where NOTHING
+   cleared the floor is the turn whose near miss matters most - it is the one case that can argue the
+   floor is too HIGH - and the offer-logging block is never reached on that path. Writing it beside
+   the offers would have recorded near misses only for turns that already succeeded: **the censored
+   sample this item is about, reproduced inside the fix for it.**
+2. **The semantic leg now asks with `floor=0` and applies the cut in the hook.** Same top-k, same
+   single round trip - the cut is a filter on the result, not a different query - and it is the only
+   way the hook can see a candidate the sidecar already discarded. The *empty-means-nothing* signal
+   is preserved, so a leg that reached the index and found nothing close enough still stops instead
+   of falling through to the weaker lexical retriever, which was a real bug fixed 2026-09-08.
+
+**A defect of my own, caught by reading the first rows it wrote.** I filed the BM25 index leg and the
+cosine semantic leg under one leg name, so the collector kept the **max across two scales that do not
+share one** - the exact defect `sidecar/THRESHOLDS.md` exists to prevent. They are `lexical-index`,
+`lexical-fallback` and `semantic` now, each carrying its own floor on the row.
+
+**Verified:** self-test 15 of 15; driven on three real prompts; rows read back. **The first real near
+miss recorded is worth quoting**: *"what should I make for dinner tonight"* scored **8.42 against a
+floor of 8.5 - margin 0.08**. That is the off-topic prompt the floor was derived to reject, and it
+came within a tenth of clearing. Nothing in the estate could previously have known that.
+
+## The alert side: measured, and it is bigger than a log line
+
+The item's own open question was *"whether the daily chain currently computes a score for conditions
+it drops, or whether they never get scored at all. If it is the second, the item is bigger than a log
+line and the ruling is Brad's."*
+
+**It is the second.** `grocery/send-alert.ps1` carries no scoring of any kind - alerts are raised by
+audits that either find something or do not, and a condition that is not raised is never given a
+number. So there is no near-threshold value to log; **building one means giving the audits a score
+they do not currently have**, which is a design change to the daily chain rather than a row.
+
+`grocery/audit-alert-precision.ps1` remains structurally unable to see the near miss, and that is now
+recorded rather than latent. **The estate's one escape from this trap still stands as the model:**
+`sidecar/derive_coverage_floor.py` derived the matcher's floor from 2,816 labelled pairs - evidence
+from OUTSIDE the delivery loop - and found the hand-chosen 0.55 was **too high**, with 186 correct
+pairs beneath it.
 
 **Merged from `design\backlog-inbox\lane-text-retrieval-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

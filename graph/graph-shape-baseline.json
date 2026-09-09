@@ -1,0 +1,11 @@
+{
+  "note": "I73/I75/I76 ratchet. orphans and components may only go DOWN or stay; a RISE is a new island nobody explained. valence is REPORTED, never gated - it is expected to rise, and the number exists so a slower query can be attributed to densification rather than to growth.",
+  "recorded": {
+    "nodes": 48138,
+    "edges": 86054,
+    "orphans": 205,
+    "components": 213,
+    "largest": 47919,
+    "valence": 1.7877
+  }
+}

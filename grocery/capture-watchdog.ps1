@@ -735,6 +735,28 @@ if (Test-Path $ppc) {
   else { [void]$ok.Add((($ppLine -replace '\s+', ' ').Trim())) }
 }
 
+# ---- 5a3. the identity graph's SHAPE, which no row-level check can see -----------------------
+# WHY HERE AND NOT IN run-gates (2026-09-09, backlog I73/I75/I76). It needs graph\sqlite\graph.db,
+# which a CI runner and a worktree do not have - it reports BLIND at exit 3 there, and run-gates
+# fails any nonzero from a $static entry, so registering it would paint the gate red for a
+# condition nobody can clear. run-gates discovers its --selftest, which is pure. The LIVE half
+# belongs on the box with the database, which is this one.
+#
+# WHAT IT CATCHES: a node the graph stopped being able to reach. Nothing is wrong with any
+# individual row, so every row-level data-quality check passes on exactly the rows it finds.
+# An INVERTED ratchet is not needed - orphans and components may legitimately fall - so it is the
+# ordinary shape: a RISE fails, and --accept records a deliberate one.
+$gsc = Join-Path (Split-Path $root -Parent) 'graph\audit_graph_shape.py'
+$pyExe = 'C:\Codex\Python312\python.exe'
+if ((Test-Path $gsc) -and (Test-Path $pyExe)) {
+  $gsOut = & $pyExe $gsc
+  $gsRc = $LASTEXITCODE
+  $gsLine = ($gsOut | Where-Object { $_ -match 'GRAPH SHAPE AUDIT FAILED|GRAPH SHAPE AUDIT BLIND|^graph-shape: PASSED|^BASELINE WRITTEN' } | Select-Object -First 1)
+  if ($gsRc -eq 2) { [void]$findings.Add("GRAPH SHAPE: $gsLine") }
+  elseif ($gsRc -eq 3) { [void]$findings.Add("GRAPH SHAPE could not be evaluated: $gsLine") }
+  else { [void]$ok.Add((($gsLine -replace '\s+', ' ').Trim())) }
+}
+
 # ---- 5b. rollback / instant-savings windows about to expire ------------------
 # THE OTHER HALF OF "STALE IS NOT A BAD THING". Everyday prices are allowed to be a quarter old;
 # a PROMO price is not. Walmart, Sam's Club and Fareway publish no end date for a rollback, so
