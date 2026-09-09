@@ -6900,7 +6900,47 @@ case rule wearing a different coat.
 **What is being asked.** Whether to add the duration field at all. It is cheap, but it is the only
 one of the three that touches the hot path of every tool call.
 
-### I82 - seventeen files read compare-deals.ps1's SOURCE and twelve of them execute it, and both the rules file and the memory say three `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+### I82 - seventeen files read compare-deals.ps1's SOURCE and twelve of them execute it, and both the rules file and the memory say three `PARTLY DONE - THE FAILURE MODE IS GATED; THE REFACTOR IS PLANNED, NOT BUILT` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**`[2026-09-09. What shipped, and what deliberately did not.]`**
+
+**SHIPPED: `ops/audit-lift-completeness.ps1`, in `run-gates`, green at 0 findings over 3 lifting
+scripts and 31 engine functions.** The hand-maintained lift lists have exactly one failure mode and it
+is recorded in `build-walmart-deals.ps1`'s own comment: the day `Test-NameOffersTwoSizes` was added and
+`Get-UnitPrice` began calling it, the lift produced a function whose callee did not exist and it failed
+at **run** time as "not recognized as the name of a cmdlet". The audit extracts each list's functions
+with the same regex the lifters use and reports any call to an engine function the list did not bring.
+
+**Verified by reproducing that incident against the real engine, not a fixture:** deleting
+`Test-NameOffersTwoSizes` from `build-walmart-deals.ps1`'s live list made the audit exit **2** and name
+the function, and restoring it returned exit 0. Self-test 9 of 9.
+
+**It was red on day one and that was MY defect, caught by looking rather than by trusting it.** The
+first sweep reported 6 findings across three builders that have been building daily for months. Both
+"callees" - `Add-Norm` and `Get-MatchTexts` - are **prose inside `Get-UnitPrice`'s own explanatory
+comments**. A name in a comment is not a call. It strips comments now, **block comments first and line
+comments second**, because reducing PowerShell by line comments alone leaves a `<#` header readable as
+code, which this estate has a separate audit about. Both cases are now fixtures.
+
+**NOT SHIPPED: the provided interface itself. Planned in
+`design/PLAN-compare-deals-interface-2026-09-09.md`.**
+
+**The root cause is named in the code** and it is not that anyone was lazy:
+`build-walmart-deals.ps1:82` says *"it runs a pipeline on load, so we can't dot-source it."* A 3,566
+line file mixes pure pricing math, a data constant and a board build that executes on import, so the
+only reachable interface was the source text.
+
+**There are TWO lifted interfaces, not one**, which the item did not separate: the pricing functions
+(regex-extracted bodies, driven by a hand-maintained name list) and **`$GLOBAL_EXCLUDE`**, whose array
+literal is regex-lifted and `Invoke-Expression`d by 5+ files. **`compare-deals.ps1` lifts from itself**
+at lines 1653 and 2076, because its self-test block runs before those definitions exist.
+
+**Why it was not attempted in this session, stated plainly rather than implied.** It is one atomic
+change across 13+ files on the code that decides what a shopper is told a thing costs, and it cannot be
+staged: the moment the functions leave the file, every lifter's regex finds nothing. The evidence that
+would justify shipping it is **a board rebuilt after the change being byte-identical to one rebuilt
+before**, and a passing test suite is not a substitute for that. Scaling that down to fit a session was
+not mine to decide.
 
 **Merged from `design\backlog-inbox\lane-software-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
