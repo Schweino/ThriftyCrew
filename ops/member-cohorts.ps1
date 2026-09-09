@@ -50,7 +50,8 @@
            powershell -File ops\member-cohorts.ps1 -SelfTest  (pure, touches no network)
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
-param([switch]$SelfTest, [switch]$WhatIf, [string]$OutFile = '')
+param([switch]$SelfTest, [switch]$WhatIf, [string]$OutFile = '',
+      [switch]$AppendHistory, [switch]$CheckFresh, [switch]$Force, [string]$HistoryFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
@@ -123,6 +124,105 @@ function Test-TcOutputPathSafe {
   return ''
 }
 
+# ============================================================================== I98: the MONTHLY SERIES
+# Ruled by Brad 2026-09-09: start it now, automated, aggregate counts only.
+#
+# WHY A SERIES AND NOT A BETTER QUERY. Ghost returns CURRENT status and no status history, so a single
+# pull can say how many January signups are still paid but cannot tell someone who cancelled in month 2
+# from someone who cancelled in month 8. That is one endpoint per cohort and never a curve. Taking the
+# same aggregate every month and keeping the old ones is the ONLY way to recover the shape, and it is
+# strictly forward-looking: a month not snapshotted is a month of curve that cannot be reconstructed
+# later from anything Ghost holds.
+#
+# THE PRIVACY BOUNDARY IS UNCHANGED AND IS THE SAME ONE BRAD RULED ON FOR I97. The history rows are
+# built from the SAME aggregate table, so they can hold only month strings, status strings and integers.
+# No member id, no address, no per-member row - here or anywhere.
+#
+# ONE ROW PER CASE (backlog E24): a row is (snapshot, signup_month, status, count), so every total is
+# derived from the file and a question nobody has asked yet can still be asked of the same data.
+
+# The snapshot is monthly, so a run is stale once a whole month plus slack has passed without one.
+# WHAT ELSE WAS TRIED: nothing. 40 is the FIRST PLAUSIBLE VALUE - 31 days plus about a week of slack so
+# a chain that misses a day or a long weekend does not cry wolf. It is not the survivor of a sweep, and
+# nothing here establishes that 30 or 50 would behave worse.
+$HISTORY_MAX_AGE_DAYS = 40
+
+function Get-TcSnapshotMonth {
+  <# The calendar month a snapshot belongs to. Pure. #>
+  param([datetime]$When)
+  return $When.ToString('yyyy-MM')
+}
+
+function New-TcHistoryRows {
+  <# The aggregate table, flattened to one row per (signup_month, status). Pure, and it can only emit
+     strings and integers - the privacy boundary expressed as a type, exactly as Get-TcCohortTable is. #>
+  param([hashtable]$Table, [string]$Snapshot, [string]$Generated)
+  $rows = @()
+  $monthKeys = $Table.Buckets.Keys | Sort-Object
+  foreach ($m in $monthKeys) {
+    $statusKeys = $Table.Buckets[$m].Keys | Sort-Object
+    foreach ($s in $statusKeys) {
+      $rows += [ordered]@{ snapshot = $Snapshot; generated = $Generated; signup_month = $m
+                           status = [string]$s; count = [int]$Table.Buckets[$m][$s] }
+    }
+  }
+  # A member with an unreadable signup date belongs to no month bucket, so without this row the series
+  # would silently under-count the membership and nothing in the file would say so.
+  if ([int]$Table.Undated -gt 0) {
+    $rows += [ordered]@{ snapshot = $Snapshot; generated = $Generated; signup_month = '(undated)'
+                         status = 'any'; count = [int]$Table.Undated }
+  }
+  return $rows
+}
+
+function Get-TcHistoryRows {
+  <# Reads the .jsonl. A line that does not parse is SKIPPED AND COUNTED, never silently dropped. #>
+  param([string]$Path)
+  $rows = @(); $badLines = 0
+  if (-not (Test-Path -LiteralPath $Path)) { return @{ Rows = $rows; Bad = 0; Exists = $false } }
+  foreach ($line in [IO.File]::ReadAllLines($Path)) {
+    $l = $line.Trim()
+    if (-not $l) { continue }
+    try { $rows += ($l | ConvertFrom-Json) } catch { $badLines++ }
+  }
+  return @{ Rows = $rows; Bad = $badLines; Exists = $true }
+}
+
+function Test-TcSnapshotAlreadyTaken {
+  <# IDEMPOTENCE. The daily chain runs every day and this is a MONTHLY snapshot, so a run that appended
+     unconditionally would write ~30 duplicate sets a month and turn the series into noise that still
+     looks like data. Pure. #>
+  param([object[]]$Rows, [string]$Snapshot)
+  foreach ($r in @($Rows)) {
+    if ($null -eq $r) { continue }
+    if ([string]$r.snapshot -eq $Snapshot) { return $true }
+  }
+  return $false
+}
+
+function Test-TcHistoryStale {
+  <# THE ABSENCE CHECK, and it is the whole reason this is safe to automate. Every other threshold in
+     this estate is an UPPER bound and cannot fire on nothing happening; the failure mode HERE is the
+     producer going quiet, in which case the series just stops and no upper bound would ever notice.
+     Returns '' when fresh, or the reason it is not. Pure. #>
+  param([object[]]$Rows, [datetime]$Now, [int]$MaxAgeDays)
+  $snaps = @(@($Rows) | Where-Object { $null -ne $_ -and $_.generated } | ForEach-Object { [string]$_.generated })
+  if (-not $snaps.Count) { return 'no snapshot has ever been taken' }
+  $newest = $null
+  foreach ($g in $snaps) {
+    $d = [datetime]::MinValue
+    if ([datetime]::TryParse($g, [ref]$d)) {
+      if ($null -eq $newest -or $d -gt $newest) { $newest = $d }
+    }
+  }
+  if ($null -eq $newest) { return 'no snapshot carries a readable date' }
+  $age = ($Now - $newest).TotalDays
+  if ($age -gt $MaxAgeDays) {
+    return ("the newest snapshot is {0:N0} day(s) old, over the {1}-day bar - the monthly series has STOPPED" -f $age, $MaxAgeDays)
+  }
+  return ''
+}
+
 # ------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {
   $f = 0
@@ -176,13 +276,80 @@ if ($SelfTest) {
     ((Test-TcOutputPathSafe -Path (Join-Path $r 'ops\member-cohorts.json') -Repo $r) -eq '') `
     (Test-TcOutputPathSafe -Path (Join-Path $r 'ops\member-cohorts.json') -Repo $r)
 
+  # ---------------------------------------------------------------- I98, the monthly series
+  $hrows = New-TcHistoryRows -Table $t -Snapshot '2026-09' -Generated '2026-09-09'
+  $hjson = ($hrows | ConvertTo-Json -Depth 6)
+  T 'MUST FIRE  THE PRIVACY BOUNDARY HOLDS IN THE HISTORY TOO - a history row built from a table whose input carried an email contains no address, no name and no id' `
+    ((($New = New-TcHistoryRows -Table $t2 -Snapshot '2026-09' -Generated '2026-09-09') | ConvertTo-Json -Depth 6) -notmatch '@') `
+    'an address reached a history row'
+  T 'MUST NOT FIRE  a history row carries only month, status and an integer count' `
+    (($hjson -match '"signup_month"') -and ($hjson -match '"count"') -and ($hjson -notmatch '"id"')) `
+    'a history row carried an unexpected field'
+  $undatedRow = @($hrows | Where-Object { $_.signup_month -eq '(undated)' })
+  T 'MUST FIRE  the undated member gets its OWN row, so the series cannot silently under-count the membership' `
+    (($undatedRow.Count -eq 1) -and ([int]$undatedRow[0].count -eq 1)) `
+    ("undated rows=" + $undatedRow.Count)
+
+  # IDEMPOTENCE. This is the founding bug for a MONTHLY job on a DAILY chain.
+  T 'MUST FIRE  a snapshot already taken this month is detected, so a daily chain cannot append 30 duplicate sets' `
+    (Test-TcSnapshotAlreadyTaken -Rows $hrows -Snapshot '2026-09') 'the duplicate was not detected'
+  T 'MUST NOT FIRE  a NEW month is not mistaken for one already taken' `
+    (-not (Test-TcSnapshotAlreadyTaken -Rows $hrows -Snapshot '2026-10')) 'a new month read as already taken'
+  T 'MUST NOT FIRE  an empty history is not read as already taken - @($null).Count is 1 in PS 5.1 and would have refused the very first snapshot' `
+    (-not (Test-TcSnapshotAlreadyTaken -Rows @() -Snapshot '2026-09')) 'an empty history read as already taken'
+
+  # THE ABSENCE CHECK. Every other threshold here is an upper bound and cannot fire on nothing happening.
+  T 'MUST FIRE  a series that STOPPED is reported stale - the producer going quiet is the failure mode no upper bound can see' `
+    ((Test-TcHistoryStale -Rows $hrows -Now ([datetime]'2026-12-01') -MaxAgeDays 40) -like '*STOPPED*') `
+    (Test-TcHistoryStale -Rows $hrows -Now ([datetime]'2026-12-01') -MaxAgeDays 40)
+  T 'MUST NOT FIRE  a snapshot taken this month is fresh' `
+    ((Test-TcHistoryStale -Rows $hrows -Now ([datetime]'2026-09-20') -MaxAgeDays 40) -eq '') `
+    (Test-TcHistoryStale -Rows $hrows -Now ([datetime]'2026-09-20') -MaxAgeDays 40)
+  T 'MUST FIRE  a history that has never been written says so, rather than reading as fresh' `
+    ((Test-TcHistoryStale -Rows @() -Now ([datetime]'2026-09-20') -MaxAgeDays 40) -like '*has ever been taken*') `
+    (Test-TcHistoryStale -Rows @() -Now ([datetime]'2026-09-20') -MaxAgeDays 40)
+
+  # CLEAN TWIN - the adjacent behaviour the flattening was most likely to break: the counts in the rows
+  # must still add up to the same membership the table counted. A POSITIVE assertion.
+  $rowSum = 0
+  foreach ($r in $hrows) { $rowSum += [int]$r.count }
+  T 'CLEAN TWIN  the history rows still sum to the same member total the table reported' `
+    ($rowSum -eq $t.Total) ("rows sum=" + $rowSum + " table total=" + $t.Total)
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 5 must-fire cases led by the founding privacy constraint (an input row carrying an email produces an aggregate that cannot contain one) and the undated-signup count, 4 must-not-fire cases including the empty membership, and 1 clean twin pinning the permitted-field list at three'
+  Write-Output 'SELF-TEST PASS: 21 case(s) resolved. 9 must-fire led by the founding privacy constraint (an input row carrying an email produces an aggregate that cannot contain one), the undated-signup count, the monthly idempotence guard and the series-has-stopped absence check; 8 must-not-fire including the empty membership and the empty history; 2 clean twins pinning the permitted-field list at three and the history rows summing to the table total'
   exit 0
 }
 
 # ------------------------------------------------------------------------------- the live run
 if (-not $OutFile) { $OutFile = Join-Path $repo 'ops\member-cohorts.json' }
+$historyPath = if ($HistoryFile) { $HistoryFile } else { Join-Path $repo 'ops\member-cohorts-history.jsonl' }
+
+# ---- I98: the freshness check, which touches NO network and is safe to run anywhere ----
+# SCOPE OF A CLEAN REPORT for THIS mode: SOUND over the history file. It reads dates and nothing else,
+# so a clean report here means the series really has a recent snapshot. It says nothing about whether
+# that snapshot is CORRECT - only that one was taken.
+if ($CheckFresh) {
+  $h = Get-TcHistoryRows -Path $historyPath
+  $reason = Test-TcHistoryStale -Rows $h.Rows -Now (Get-Date) -MaxAgeDays $HISTORY_MAX_AGE_DAYS
+  $rowCount = @($h.Rows).Count
+  if (-not $h.Exists -or $rowCount -eq 0) {
+    Write-Output ("member-cohorts: no snapshot series at {0}. BLIND, not clean - run with -AppendHistory." -f $historyPath)
+    Write-GuardComplete -Name 'member-cohorts' -Summary 'blind=no-history'
+    exit 3
+  }
+  $snapCount = @(@($h.Rows) | ForEach-Object { [string]$_.snapshot } | Sort-Object -Unique).Count
+  if ($reason) {
+    Write-Output ("member-cohorts: THE MONTHLY SERIES HAS STOPPED - {0}." -f $reason)
+    Write-Output '  Nothing else in this estate would have noticed: every other threshold is an upper bound'
+    Write-Output '  and cannot fire on nothing happening. A month not snapshotted cannot be recovered later.'
+    Write-GuardComplete -Name 'member-cohorts' -Summary ("stale rows={0} snapshots={1}" -f $rowCount, $snapCount)
+    exit 2
+  }
+  Write-Output ("member-cohorts: series fresh - {0} row(s) over {1} snapshot(s), newest within {2} days." -f $rowCount, $snapCount, $HISTORY_MAX_AGE_DAYS)
+  Write-GuardComplete -Name 'member-cohorts' -Summary ("fresh rows={0} snapshots={1}" -f $rowCount, $snapCount)
+  exit 0
+}
 
 # RULE 4: ASSERT THE DESTINATION BEFORE ANYTHING IS FETCHED.
 $why = Test-TcOutputPathSafe -Path $OutFile -Repo $repo
@@ -267,8 +434,10 @@ Write-Output 'READ THIS BEFORE READING THE TABLE. These are ENDPOINTS, not a cur
 Write-Output 'status and not a status history, so a member who cancelled in month 2 and one who cancelled'
 Write-Output 'in month 8 are indistinguishable here. The shapes that carry the diagnostic value - a cliff'
 Write-Output 'drop against gradual churn, and which period the cliff lands in - CANNOT be produced from a'
-Write-Output 'single snapshot. Backlog I98 is the fix and it is NOT started: a monthly committed snapshot,'
-Write-Output 'a few dozen bytes, and every month it waits is a month of curve that cannot be recovered.'
+Write-Output 'single snapshot. Backlog I98 IS NOW RUNNING (ruled by Brad 2026-09-09): a monthly committed'
+Write-Output 'snapshot in ops\member-cohorts-history.jsonl. The curve builds forward from the first'
+Write-Output 'snapshot and cannot be backfilled, so the table below is still endpoints until enough'
+Write-Output 'months have accumulated. Read the series, not this table, once it has more than one month.'
 if ($months.Count -lt 6) {
   Write-Output ''
   Write-Output ("AND THE SAMPLE IS SMALL: {0} cohort month(s). With a membership this size a difference" -f $months.Count)
@@ -278,7 +447,7 @@ if ($months.Count -lt 6) {
 
 # ---- write ONLY the bucketed counts ----
 $out = [ordered]@{
-  readme = 'Aggregate member cohorts: signup month against CURRENT status, counts only. NO PER-MEMBER ROW AND NO EMAIL ADDRESS IS STORED HERE OR ANYWHERE - ruled by Brad 2026-09-08, backlog I97, and enforced by ops/member-cohorts.ps1, which reads only created_at and status off a member and builds this from month strings, status strings and integers. These are ENDPOINTS, not a retention curve: Ghost gives current status and not a status history, so this cannot say WHEN anyone left. Backlog I98 is the monthly snapshot that would fix that and it is not started.'
+  readme = 'Aggregate member cohorts: signup month against CURRENT status, counts only. NO PER-MEMBER ROW AND NO EMAIL ADDRESS IS STORED HERE OR ANYWHERE - ruled by Brad 2026-09-08, backlog I97, and enforced by ops/member-cohorts.ps1, which reads only created_at and status off a member and builds this from month strings, status strings and integers. These are ENDPOINTS, not a retention curve: Ghost gives current status and not a status history, so this cannot say WHEN anyone left. Backlog I98 is the monthly snapshot that fixes that and it IS RUNNING as of 2026-09-09 - the series is ops/member-cohorts-history.jsonl, appended once per calendar month. It builds forward and cannot be backfilled, so read the series rather than this file once more than one month has accumulated.'
   generated = (Get-Date -Format 'yyyy-MM-dd HH:mm')
   members_counted = $t.Total
   members_with_unreadable_signup_date = $t.Undated
@@ -305,5 +474,35 @@ if ($json -match '@' -and $json -notmatch '^[^@]*$') {
 Set-Content -LiteralPath $OutFile -Value $json -Encoding UTF8
 Write-Output ''
 Write-Output ("wrote {0} - {1} cohort month(s), counts only." -f $OutFile, $months.Count)
+
+# ---- I98: append this month's snapshot to the series ----
+if ($AppendHistory) {
+  $snapshot = Get-TcSnapshotMonth -When (Get-Date)
+  $h = Get-TcHistoryRows -Path $historyPath
+  if ($h.Bad -gt 0) {
+    Write-Output ("  NOTE {0} unparseable line(s) in the history were skipped and NOT counted." -f $h.Bad)
+  }
+  $already = Test-TcSnapshotAlreadyTaken -Rows $h.Rows -Snapshot $snapshot
+  if ($already -and -not $Force) {
+    Write-Output ("  history: {0} already has a snapshot, nothing appended. The chain runs daily; this is monthly." -f $snapshot)
+  } else {
+    $newRows = New-TcHistoryRows -Table $t -Snapshot $snapshot -Generated (Get-Date -Format 'yyyy-MM-dd')
+    $lines = @()
+    foreach ($r in $newRows) { $lines += ($r | ConvertTo-Json -Depth 4 -Compress) }
+    # A LAST-LINE ADDRESS CHECK ON THE SERIES TOO. The structure cannot produce one; this asserts it
+    # rather than trusting it, because an append is harder to notice than a rewrite.
+    $joined = ($lines -join "`n")
+    if ($joined -match '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}') {
+      Write-Output 'MEMBER COHORTS REFUSED TO APPEND: a history row looks like it contains an email address. That should be structurally impossible; investigate. Nothing was appended.'
+      Write-GuardComplete -Name 'member-cohorts' -Summary 'refused=address-shaped-history'
+      exit 2
+    }
+    Add-Content -LiteralPath $historyPath -Value $lines -Encoding UTF8
+    Write-Output ("  history: appended {0} row(s) for snapshot {1} to {2}" -f $lines.Count, $snapshot, (Split-Path $historyPath -Leaf))
+    Write-Output '  These rows are the ONLY way the retention curve can ever exist: Ghost holds no status'
+    Write-Output '  history, so a month that is not snapshotted is a month that cannot be reconstructed.'
+  }
+}
+
 Write-GuardComplete -Name 'member-cohorts' -Summary ("members={0} cohorts={1} undated={2}" -f $t.Total, $months.Count, $t.Undated)
 exit 0

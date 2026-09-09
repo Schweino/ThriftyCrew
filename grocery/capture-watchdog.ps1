@@ -757,6 +757,41 @@ if ((Test-Path $gsc) -and (Test-Path $pyExe)) {
   else { [void]$ok.Add((($gsLine -replace '\s+', ' ').Trim())) }
 }
 
+# ---- 5a4. the monthly member cohort snapshot -------------------------------------------------
+# RULED BY BRAD 2026-09-09 (backlog I98): start it now, automated, AGGREGATE COUNTS ONLY.
+#
+# WHY IT LIVES ON A DAILY CHAIN WHEN IT IS MONTHLY. There is no monthly chain, and the snapshot is
+# idempotent per calendar month - it checks the series before appending - so a daily attempt costs one
+# Ghost read and writes nothing on the other twenty-nine days.
+#
+# WHY IT IS WORTH AUTOMATING AT ALL. Ghost holds CURRENT status and no status history, so a member who
+# cancelled in month 2 and one who cancelled in month 8 are indistinguishable in any single pull. The
+# series is the only way the retention curve can ever exist, it builds strictly forward, and a month
+# that is not snapshotted cannot be reconstructed later from anything Ghost holds.
+#
+# THE PRIVACY BOUNDARY: aggregate only. No member row, no id, no address, here or anywhere - the same
+# boundary Brad ruled on for I97, enforced in the script by a structure that can hold only month
+# strings, status strings and integers.
+#
+# THE FRESHNESS CHECK IS THE POINT OF THE SECOND CALL. Every other threshold in this estate is an upper
+# bound and cannot fire on nothing happening; the failure mode here is the producer going QUIET, which
+# would silently cost a month of curve. -CheckFresh is the floor that watches for that absence.
+$mcs = Join-Path (Split-Path $root -Parent) 'ops\member-cohorts.ps1'
+if (Test-Path $mcs) {
+  $mcOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $mcs -AppendHistory
+  $mcRc = $LASTEXITCODE
+  $mcLine = ($mcOut | Where-Object { $_ -match 'history:|REFUSED|BLIND' } | Select-Object -First 1)
+  if ($mcRc -eq 2) { [void]$findings.Add("MEMBER COHORTS refused to write: $mcLine") }
+  elseif ($mcRc -eq 3) { [void]$ok.Add('member cohorts: BLIND (no Ghost key on this box) - no snapshot taken') }
+  else {
+    $mcFresh = & powershell -NoProfile -ExecutionPolicy Bypass -File $mcs -CheckFresh
+    $mcFreshRc = $LASTEXITCODE
+    $mcFreshLine = ($mcFresh | Where-Object { $_ -match 'series fresh|HAS STOPPED|BLIND' } | Select-Object -First 1)
+    if ($mcFreshRc -eq 2) { [void]$findings.Add("MEMBER COHORT SERIES: $mcFreshLine") }
+    else { [void]$ok.Add((($mcLine -replace '\s+', ' ').Trim())) }
+  }
+}
+
 # ---- 5b. rollback / instant-savings windows about to expire ------------------
 # THE OTHER HALF OF "STALE IS NOT A BAD THING". Everyday prices are allowed to be a quarter old;
 # a PROMO price is not. Walmart, Sam's Club and Fareway publish no end date for a rollback, so

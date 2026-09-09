@@ -8072,7 +8072,43 @@ change that - the script must aggregate in memory and commit only the bucketed c
 nothing at all and print. Brad rules on whether a members pull happens at all, and if so whether any
 per-member row may touch disk.
 
-### I98 - A point-in-time member export cannot reconstruct WHEN anyone left, so the snapshot has to start before the analysis `OPEN` `queue-5` `1-WAY` `RUNG1 BLOCKED`
+### I98 - A point-in-time member export cannot reconstruct WHEN anyone left, so the snapshot has to start before the analysis `DONE - RULED AND RUNNING; THE SERIES STARTED 2026-09-09` `queue-5` `1-WAY` `RUNG1 BLOCKED`
+
+**`[CLOSED 2026-09-09. Brad ruled: start it now, automated, aggregate counts only.]`**
+
+**The first snapshot is taken and committed.** `ops/member-cohorts-history.jsonl`, appended by
+`capture-watchdog` check 5a4. Snapshot `2026-09` is **5 rows over 18 members**: July is 7 comped, 5
+free, 3 paid; August is 2 free, 1 paid. The rows sum to 18, which is the whole membership.
+
+**Why this had to start before any analysis, restated because it is the entire item:** Ghost holds
+CURRENT status and no status history, so a member who cancelled in month 2 and one who cancelled in
+month 8 are indistinguishable in any single pull. **The series builds strictly forward and cannot be
+backfilled from anything Ghost holds.**
+
+**The privacy boundary is the one Brad ruled for I97 and it is unchanged.** History rows are built from
+the same aggregate table, so the structure can hold only month strings, status strings and integers -
+no member row, no id, no address, here or anywhere. There is an address-shaped-content refusal on the
+append path as well as the rewrite path, because **an append is harder to notice than a rewrite**.
+Verified by reading the written file: no address-shaped content, and no `id`, `email` or `name` field.
+
+**Idempotence, and it is the founding bug for a monthly job on a daily chain.** The chain runs every
+day; without a guard it would append ~30 duplicate sets a month and turn the series into noise that
+still looks like data. **Verified live: a second run on the same day appended nothing and the file
+stayed at 5 rows.**
+
+**THE ABSENCE CHECK IS THE HALF THAT MAKES AUTOMATING THIS SAFE.** Per the standing rule, every other
+threshold in this estate is an UPPER bound and cannot fire on nothing happening - and the failure mode
+here is precisely the producer going quiet, which costs a month of curve silently. `-CheckFresh` fails
+at 2 once the newest snapshot passes **40 days**. **What else was tried: nothing. 40 is the first
+plausible value** - 31 days plus about a week of slack - not the survivor of a sweep.
+
+**Verified by making it fire rather than assuming:** self-test **21 of 21**; `-CheckFresh` on a
+backdated real file exits **2** naming 131 days; on the live series exits **0**; and before the series
+existed it exited **3 BLIND**, never 0. `run-gates` exit 0, `pass=287 fail=0`.
+
+**Honest limit: one snapshot is not a curve.** With 2 cohort months and 4 paying members, nothing about
+retention is answerable yet, and the script says so in its own output. What changed today is only that
+the clock started.
 
 **Merged from `design\backlog-inbox\cohort-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
