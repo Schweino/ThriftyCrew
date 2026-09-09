@@ -191,6 +191,90 @@ function RunPSMany {
   return $out
 }
 
+# ---- TIER 1: THE FIVE LONGEST CHILDREN, LAUNCHED EARLY (2026-09-09) ---------------------------------
+# MEASURED, not guessed. PSChild was instrumented for one run (then restored and verified byte-identical
+# by md5): 271 child spawns, 268.8s of child time, 69% of the run. These five are 116.3s of that 268.8s -
+# test-matcher-parity 34.9s, audit-spec-contradictions 32.3s, test-match-lib 24.9s, audit-script-census
+# 13.6s, fanout-lib 10.6s - and every other child is under 6s. Run one after another they are two
+# minutes of this suite doing nothing but waiting.
+#
+# WHY THESE FIVE AND NOT THE OTHER 148 SITES. None of them passes -ReportDir, -OutDir or -OutFile. That
+# matters more than their size: 82 of the 101 children that DO pass an output path share it with another
+# child, so batching those needs each one given its own directory first. These five write nowhere, so
+# they are the tranche that needs no collision work at all. The rest is Tier 2/3 in the plan.
+#
+# THE PATTERN IS guards.ps1's Register-Kid/Wait-Kid, and the property that makes it safe is stated there:
+# harvest at the ORIGINAL call site, so every assertion keeps its text AND its position in the report.
+# Same process boundary, same arguments, same exit code, same artifacts. Only the waiting overlaps.
+#
+# GET-EARLY SETS $LASTEXITCODE, for the same reason Wait-Kid does: two of the five call sites read
+# $LASTEXITCODE rather than an rc property, and their conditionals stay the exact text they were.
+#
+# NOT LAUNCHED DEGRADES TO THE OLD BEHAVIOUR. Get-Early takes the path and args too, so a key that was
+# never started - a typo, a file that did not exist at launch time - runs synchronously right there,
+# exactly as before. A missing early launch can cost time; it can never change an answer or return
+# nothing. That is the fail-open direction that is safe here, and it is safe ONLY because the fallback
+# runs the identical child.
+$script:EarlyPool = $null
+$script:EarlyJobs = @{}
+$script:EarlyDone = @{}
+
+function Start-Early([string]$Key, [string]$Path, [object[]]$Argv) {
+  # A file that is not there is left entirely to the call site's own missing-file path.
+  if (-not (Test-Path $Path)) { return }
+  if (-not $script:EarlyPool) {
+    $script:EarlyPool = [runspacefactory]::CreateRunspacePool(1, 5)
+    $script:EarlyPool.Open()
+  }
+  # THE STDERR RULE, UNCHANGED. Each runspace dot-sources native-lib and calls Invoke-NativeScript
+  # exactly as PSChild does, so a child's stderr is merged inside a call that has forced
+  # EAP='Continue' - never by a redirect written here. Same shape RunPSMany already uses.
+  $sb = {
+    param([string]$Lib, [string]$P, [object[]]$A)
+    $ErrorActionPreference = 'Continue'
+    . $Lib
+    $res = Invoke-NativeScript $P @A
+    [pscustomobject]@{ rc = $res.ExitCode; text = ((@($res.Lines) | ForEach-Object { [string]$_ }) -join "`n") }
+  }
+  $ps = [powershell]::Create()
+  $ps.RunspacePool = $script:EarlyPool
+  [void]$ps.AddScript([string]$sb).AddArgument((Join-Path $root 'native-lib.ps1')).AddArgument($Path).AddArgument([object[]]@($Argv))
+  $script:EarlyJobs[$Key] = [pscustomobject]@{ ps = $ps; handle = $ps.BeginInvoke() }
+}
+
+function Get-Early([string]$Key, [string]$Path, [object[]]$Argv) {
+  $r = $null
+  if ($script:EarlyDone.ContainsKey($Key)) {
+    $r = $script:EarlyDone[$Key]
+  } elseif ($script:EarlyJobs.ContainsKey($Key)) {
+    $j = $script:EarlyJobs[$Key]
+    # A WORKER THAT DIES BECOMES A FAILED CASE, NOT A MISSING ONE - the same rule RunPSMany states.
+    # EndInvoke rethrows here, and an escaping throw under EAP='Stop' would end the suite mid-run with
+    # a cheerful PASS as its last line, which is the exact shape this harness exists to catch.
+    try { $r = @($j.ps.EndInvoke($j.handle))[0] }
+    catch { $r = [pscustomobject]@{ rc = -1; text = ('early worker failed: ' + $_.Exception.Message) } }
+    finally { $j.ps.Dispose() }
+    [void]$script:EarlyJobs.Remove($Key)
+    $script:EarlyDone[$Key] = $r
+  } else {
+    $prev = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try { $out = PSChild $Path @Argv | ForEach-Object { [string]$_ } }
+    finally { $ErrorActionPreference = $prev }
+    $r = [pscustomobject]@{ rc = $LASTEXITCODE; text = ((@($out) -join "`n")) }
+    $script:EarlyDone[$Key] = $r
+  }
+  $global:LASTEXITCODE = $r.rc
+  return $r
+}
+
+$script:MpPipeEarly = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
+Start-Early 'early:matcher-parity'  (Join-Path $root 'test-matcher-parity.ps1')                  @('-Sample', '400')
+Start-Early 'early:spec-live'       (Join-Path $script:MpPipeEarly 'audit-spec-contradictions.ps1') @('-Quiet')
+Start-Early 'early:match-lib'       (Join-Path $root 'test-match-lib.ps1')                       @('-Quiet')
+Start-Early 'early:census-live'     (Join-Path $root 'audit-script-census.ps1')                  @()
+Start-Early 'early:fanout-selftest' (Join-Path $root 'fanout-lib.ps1')                           @('-SelfTest')
+
 Write-Output 'test-auditors: can each watcher still see the bug it was written for?'
 
 # A FIXTURE RUN MUST NOT WRITE WHERE THE LIVE RUN WRITES (2026-07-31).
@@ -1560,7 +1644,7 @@ if (-not (Test-Path $foLib)) {
   # that exits 0 without its declared completion marker, and a lane killed at its budget must each come
   # back BLIND rather than clean. Plus a CONCURRENCY case, because every other assertion in that file
   # would still pass if the pool had quietly become a serial loop.
-  $r = PSChild $foLib -SelfTest | Out-String
+  $r = (Get-Early 'early:fanout-selftest' $foLib @('-SelfTest')).text
   if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 17/17 pass') {
     Ok 'fanout-lib -SelfTest passes (a missing lane, a timeout, and a marker present-but-not-LAST each report BLIND; a child that warns on stderr does not; -Sequential agrees lane-for-lane; the pool is provably concurrent)'
   } else { Bad ('fanout-lib -SelfTest failed or lost its fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
@@ -3295,7 +3379,7 @@ else { Ok 'weekly-post-capture never hands the tree back mid-run (the lock expir
 # DO NOT NAME A GROCERY SCRIPT IN THIS COMMENT. The census greps filenames across executable files, so a
 # mention here is indistinguishable from a call and would silently retire that script from the census (it
 # already happened once while this block was being written). Fixtures are synthetic zzz-* trees only.
-$r = RunPS 'audit-script-census.ps1' @()
+$r = Get-Early 'early:census-live' (Join-Path $root 'audit-script-census.ps1') @()
 # The live twin asserts TWO things, because "clean" alone is exactly what a self-defeated census reports.
 # The census must not count ITSELF as a source: its own KNOWN table quotes every recorded name, so the day
 # that exclusion is dropped the census reports 0 uncalled, prints "no unrecorded orphan", and exits 0
@@ -5615,7 +5699,7 @@ else {
     else { Bad ('repair-bulk-buy-line -SelfTest failed - the buy sentence can drift from the package the recipe actually needs: ' + ($r -replace "`n", ' ')) }
   }
 
-  $r = PSChild $asc -Quiet | Out-String
+  $r = (Get-Early 'early:spec-live' $asc @('-Quiet')).text
   if ($LASTEXITCODE -eq 0) { Ok 'no recipe spec contradicts itself worse than the recorded baseline (stat-vs-prose, stale money, head quantities, buy coverage all at ZERO)' }
   else { Bad ('a spec-contradiction class got WORSE: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL' }) -join ' ')) }
 
@@ -5901,7 +5985,7 @@ else { Bad ('pull-regular-hyvee -SelfTest failed (rc=' + $r.rc + ') - the Hy-Vee
 # which product owns a cell is only tolerable because this harness extracts the original verbatim from
 # compare-deals.ps1 on every run and demands identical answers over every distinct name in the live
 # pool - both the compiled path and the PowerShell fallback. Zero divergences or the suite goes red.
-$r = RunPS 'test-match-lib.ps1' @('-Quiet')
+$r = Get-Early 'early:match-lib' (Join-Path $root 'test-match-lib.ps1') @('-Quiet')
 if ($r.rc -eq 0 -and $r.text -match 'MATCH-LIB PASSED') { Ok 'match-lib decides identically to the original Match-Category on every distinct product name (compiled path and fallback)' }
 else { Bad ('test-match-lib FAILED (rc=' + $r.rc + ') - the fast matcher has drifted from the reference, so the board may be assigning products to the wrong commodity: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL|diverg' } | Select-Object -First 4) -join ' | ')) }
 
@@ -6449,7 +6533,7 @@ if (-not $hbM.Success) {
 # SAMPLED, not exhaustive: the estate holds ~28.5k product names and the full sweep is minutes. 400 is
 # enough to catch a systematic divergence (the failure mode is a copy drifting for a WHOLE rule, not for
 # one unlucky name) while keeping this suite quick enough that people keep running it.
-$r = RunPS 'test-matcher-parity.ps1' @('-Sample','400')
+$r = Get-Early 'early:matcher-parity' (Join-Path $root 'test-matcher-parity.ps1') @('-Sample','400')
 if ($r.rc -eq 0 -and $r.text -match 'MATCHER-PARITY OK') { Ok 'matcher parity: every auditor copy of Match-Category still assigns names exactly as the engine does' }
 elseif ($r.rc -eq 3 -or $r.text -match 'FATAL') { Bad ('matcher parity could not evaluate (rc=' + $r.rc + ') - it proved nothing, which is not the same as agreement') }
 else { Bad ('matcher parity FAILED (rc=' + $r.rc + ') - an auditor no longer describes the engine that builds the board; audit-household-in-food is a HARD guard, so it may be judging cells under the wrong commodity') }
