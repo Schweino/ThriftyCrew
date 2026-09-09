@@ -5257,7 +5257,57 @@ what it says would produce two round-trip numbers and call them decode.
 
 **Constraint acknowledged.** Nothing in `serve.ps1`, `sidecar/` or any model artefact was changed.
 
-### I55 - two courses ruled "no motive for LoRA here" against the reranker, while a measured QLoRA plan for the local 27B sat unread `NEEDS A RULING` `queue-4` `1-WAY` `RUNG1 RULING`
+### I55 - two courses ruled "no motive for LoRA here" against the reranker, while a measured QLoRA plan for the local 27B sat unread `PARTLY DONE - THE QUESTION IS ANSWERABLE NOW; THE SPEND DECISION IS STILL BRAD'S` `queue-4` `1-WAY` `RUNG1 RULING`
+
+**`[2026-09-09. Brad ruled: build the holdout and the eval first, decide after. No GPU time was spent.]`**
+
+**Why that was the right order, and it is the sharpest fact in this item:** the feasibility doc's own
+section 10 says the holdout split does not exist. Without it a training run **cannot be scored** -
+per-example loss during training is noise, not a learning signal - so committing 17 to 25 hours of GPU
+today would have bought an answer to a different question.
+
+**Shipped, both pure and both GPU-free:**
+
+- **`tools/local-llm/finetune-probe/split_holdout.py`** - the split. **The unit is the whole COMMODITY,
+  never the row**, so a held-out commodity is cold by construction. Live over the real corpus:
+  **101 holdout commodities of 505 (20.0%), 704 rows of 3,305 (21.3%)**, seeded and reproducible.
+- **`tools/local-llm/finetune-probe/eval_holdout.py`** - the scorer that did not exist, with the bar
+  **written above any run**: false-MATCH at or below **20%** against the stock-27B **29%** baseline
+  earns the hours; between 20% and 29% is reported as **"MOVED, NOT EARNED"**; and it refuses to score
+  at all under 100 cases. Abstention is counted, so a model that answers UNSURE on everything hard
+  cannot post a flattering rate.
+
+**THE FEASIBILITY DOC SAID "SPLIT BY COMMODITY FAMILY" AND THERE IS NO FAMILY TAXONOMY HERE.** The 516
+gold commodity ids are slugs and every cheap heuristic is wrong somewhere: first-token grouping pairs
+`laundry-detergent` with `laundry-pods` correctly and then files `zero-sugar-soda-2l` under `zero`;
+last-token grouping separates the laundry pair. Rather than invent one, the split does the
+unambiguous, strictly stronger thing and then **measures the residual risk instead of asserting it
+away**.
+
+**And the residual risk is large, which is exactly why measuring it mattered:**
+
+| leak test | result |
+|---|---|
+| holdout commodities sharing a slug token with a training one (loose) | **73 of 101** |
+| **containment pairs** - one slug is a superset of the other (tight) | **42** |
+
+Containment is the one worth acting on: `asparagus` in training against `canned-asparagus` held out,
+`milk` against `chocolate-milk` and `evaporated-milk`, `bread` against `bread-crumbs`. **A holdout
+number computed today would be optimistic**, and now that is a printed figure rather than a hope. Token
+sharing is deliberately over-cautious and says so (`black-pepper` shares `black` with `black-olives`
+and that is not a leak).
+
+**Verified:** `split_holdout` self-test 9 of 9 led by the must-fire that no commodity may appear on both
+sides; `eval_holdout` 10 of 10 led by the must-fire that false-MATCH is scored over gold NON-match rows
+only, and that a model abstaining on everything is UNSCOREABLE rather than a winner. `run-gates` exit 0,
+`pass=291 fail=0`, both discovered. The corpora are gitignored, per the doc's reproducible-from-script
+rule.
+
+**STILL BRAD'S, and unchanged by any of this: whether to spend the hours.** 17 to 25 h of local GPU
+across nights, or roughly 1 h and about $10 on a cloud A100. What changed is that the result would now
+be scoreable, and that the 42 containment pairs should be read before trusting it. Section 7's standing
+rulings are untouched: detached LoRA adapter, never a merged GGUF; reject-only kept afterward; thermal
+watchdog on any local run.
 
 **Source.** Coursera, *Fine-tuning Text Models with PEFT*, queue-4 group H entry H3, modules 1 and
 2. Routed to `model-finetuning-craft/publishing-and-automation.md` 10.7 and 10.8, and that domain's

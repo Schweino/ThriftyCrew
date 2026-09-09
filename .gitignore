@@ -467,3 +467,11 @@ design/canvas-*/thrifty-crew-redesign.html
 # also why the two switches are env vars rather than files in the tree (2026-09-06, backlog E1).
 /ops/ghost-journal.jsonl
 /ops/staged-writes.jsonl
+
+# The fine-tune corpus and its holdout split (2026-09-09, backlog I55). Reproducible from
+# build_corpus.py + split_holdout.py against graph.db and the gold set, which is why the feasibility
+# doc says they are not committed. Both scripts are seeded, so a rebuild is byte-identical given the
+# same inputs; committing 3,305 rows of prompt text would add megabytes the daily bot then sweeps.
+/tools/local-llm/finetune-probe/corpus.jsonl
+/tools/local-llm/finetune-probe/corpus-train.jsonl
+/tools/local-llm/finetune-probe/corpus-holdout.jsonl
