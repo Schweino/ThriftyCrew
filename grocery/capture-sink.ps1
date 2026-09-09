@@ -289,18 +289,32 @@ if ($SelfTest) {
     # MUST FIRE on the real collapsed string, which is the directory name that turned up at the repo
     # root; MUST NOT FIRE on the rooted paths this parameter legitimately receives, including the
     # default. Built by concatenation so this block cannot pass by matching its own source text.
+    # THE COLLAPSE SIGNATURE, frozen against the real artifact - the directory name that turned up at
+    # the repo root. Built by concatenation so this block cannot pass by matching its own source text.
+    $collapseRe = '^[A-Za-z][A-Za-z0-9_]{15,}$'
     $mangled = 'C' + 'CodexThriftyCrewgroceryoutcaptures_sink'
-    if ([System.IO.Path]::IsPathRooted($mangled)) {
-        Write-Output 'FAIL  the collapsed path reads as ROOTED, so the refusal below can never fire'; $fail++
+    if ($mangled -match $collapseRe) {
+        Write-Output 'ok    MUST FIRE   the real collapsed path is recognised and refused'
     } else {
-        Write-Output 'ok    MUST FIRE   a Windows path that lost its separators is not rooted, so it is refused'
+        Write-Output 'FAIL  the collapsed path is no longer recognised - the refusal can never fire'; $fail++
     }
-    $rootedCases = @("C:\Codex\ThriftyCrew\grocery\out\captures\_sink", $OutDir, '\\server\share\sink')
-    $badRooted = @($rootedCases | Where-Object { -not [System.IO.Path]::IsPathRooted($_) })
-    if ($badRooted.Count) {
-        Write-Output ('FAIL  a legitimate rooted path was refused: ' + ($badRooted -join ', ')); $fail++
+    # MUST NOT FIRE, and this half is the one the first cut of this guard got wrong: it refused every
+    # unrooted path, which would have cost a capture the first morning the scheduled task passed the
+    # relative directory its own SKILL.md documents.
+    $legit = @("C:\Codex\ThriftyCrew\grocery\out\captures\_sink", $OutDir, '\\server\share\sink',
+               'out\captures\_sink', 'out/captures/_sink', '..\out\_sink', 'sink', '_sink')
+    $wrongly = @($legit | Where-Object { $_ -match $collapseRe })
+    if ($wrongly.Count) {
+        Write-Output ('FAIL  a legitimate path was read as collapsed: ' + ($wrongly -join ', ')); $fail++
     } else {
-        Write-Output ('ok    MUST NOT FIRE  ' + $rootedCases.Count + ' real rooted path(s) pass, the default and a UNC among them')
+        Write-Output ('ok    MUST NOT FIRE  ' + $legit.Count + ' real path(s) pass - absolute, UNC, relative with separators, and a bare name')
+    }
+    # CLEAN TWIN: a relative path is anchored to THIS script, never to whatever the caller's CWD is.
+    $anchored = Join-Path $PSScriptRoot 'out\captures\_sink'
+    if ([System.IO.Path]::IsPathRooted($anchored) -and $anchored -like "*grocery*") {
+        Write-Output 'ok    CLEAN TWIN  a relative -OutDir resolves under grocery\, not under the current directory'
+    } else {
+        Write-Output ('FAIL  a relative -OutDir no longer anchors to the script: ' + $anchored); $fail++
     }
 
     if ($fail) { Write-Output "$fail FAILED"; exit 1 }
@@ -319,18 +333,33 @@ if ($SelfTest) {
 # scheduled run is the repo root. Nothing fails, nothing is logged, and the sink then writes captures
 # into a directory nobody meant to exist.
 #
-# The collapse itself is this estate's most-recorded trap - a Windows path crossing a shell or a native
-# exe boundary and losing its backslashes - and the durable answer is not to chase every caller but to
-# make the ONE place that materialises the directory refuse a path that cannot be right. A rooted path
-# is the only kind this parameter can legitimately receive; anything else is a collapse, and a loud
-# stop beats silent debris at the root of a live repo.
-if (-not [System.IO.Path]::IsPathRooted($OutDir)) {
-    Write-Output ("capture-sink: REFUSING -OutDir '" + $OutDir + "' - it is not a rooted path.")
-    Write-Output '  A Windows path that lost its separators arrives looking exactly like this, and'
-    Write-Output '  New-Item -Force would create it as one directory under the current directory'
-    Write-Output '  rather than fail. Pass an absolute path, or check the layer that mangled it.'
+# `[CORRECTED 2026-09-09, hours later, before it ever ran unattended. The first cut of this fix
+# REFUSED every unrooted path, and that was the wrong trade.]`
+#
+# The scheduled task's own SKILL.md documents the call as `-OutDir <dir>`, and a relative `<dir>` is
+# legitimate usage that has worked for months. Refusing it would have cost the 07:00 or 08:00 capture
+# on a live paid board the first morning an agent filled that placeholder in the ordinary way.
+# **Weigh the two failures rather than the two tidinesses**: the bug being fixed leaves an EMPTY
+# directory that an audit catches the same day, and the over-strict guard loses a day of prices. A
+# guard must not be more expensive than the defect.
+#
+# So this does two narrower things instead:
+#   1. A RELATIVE path resolves against THIS SCRIPT'S directory, never the current one. That is the
+#      actual defect - `New-Item -Force` resolved it against whatever the CWD happened to be, which
+#      for a scheduled run is the repo root. Anchored here, a relative path lands where the caller
+#      plainly meant and a collapsed one lands under grocery\ rather than at the top of the repo.
+#   2. Only the COLLAPSE SIGNATURE is refused: a long run of path characters carrying no separator at
+#      all, which is what `C:\Codex\ThriftyCrew\grocery\out\captures` becomes when a shell or a native
+#      exe boundary eats its backslashes. A real relative path has separators; a real single-segment
+#      name is short. That is a narrow, checkable shape rather than a proxy for one.
+if ($OutDir -match '^[A-Za-z][A-Za-z0-9_]{15,}$') {
+    Write-Output ("capture-sink: REFUSING -OutDir '" + $OutDir + "' - that is a path with its separators eaten.")
+    Write-Output '  A Windows path crossing a shell or a native exe boundary arrives looking exactly'
+    Write-Output '  like this, and New-Item -Force would create the whole mangled string as ONE'
+    Write-Output '  directory. Check the layer that mangled it; do not pass this through.'
     exit 2
 }
+if (-not [System.IO.Path]::IsPathRooted($OutDir)) { $OutDir = Join-Path $PSScriptRoot $OutDir }
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 $listener = New-Object System.Net.HttpListener
