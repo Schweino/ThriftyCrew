@@ -121,5 +121,4 @@ else { Bad "the anchor advanced to $($r10.ad_from) on re-observation - the TTL i
 
 Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
 Write-Output ("ROLLBACK-TTL " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
-Write-GuardComplete -Name 'rollback-ttl' -Summary "failed=$fail"
-exit $(if ($fail) { 1 } else { 0 })
+Exit-Guard -Name 'rollback-ttl' -Summary "failed=$fail" -Code $(if ($fail) { 1 } else { 0 })

@@ -607,8 +607,7 @@ if ($runJson) {
     run = (Split-Path $RunDir -Leaf); invocations = (Get-InvocationCount $log); recipes = $entries.Count
     lanes = @($lanes); findings = @($findings); warnings = @($warnings)
   } | ConvertTo-Json -Depth 10)
-  Write-GuardComplete -Name 'lane-shape' -Summary ("findings={0} warnings={1}" -f $findings.Count, $warnings.Count)
-  exit $(if ($findings.Count) { 1 } else { 0 })
+  Exit-Guard -Name 'lane-shape' -Summary ("findings={0} warnings={1}" -f $findings.Count, $warnings.Count) -Code $(if ($findings.Count) { 1 } else { 0 })
 }
 
 Write-Output ("audit-lane-shape: {0}   {1} lane invocation(s) over {2} recipe(s)" -f (Split-Path $RunDir -Leaf), (Get-InvocationCount $log), $entries.Count)
@@ -635,5 +634,4 @@ if ($warnings.Count) {
   Write-Output ''
 }
 if (-not $findings.Count) { Write-Output '  lane shape matches the design.' }
-Write-GuardComplete -Name 'lane-shape' -Summary ("findings={0} warnings={1}" -f $findings.Count, $warnings.Count)
-exit $(if ($findings.Count) { 1 } else { 0 })
+Exit-Guard -Name 'lane-shape' -Summary ("findings={0} warnings={1}" -f $findings.Count, $warnings.Count) -Code $(if ($findings.Count) { 1 } else { 0 })

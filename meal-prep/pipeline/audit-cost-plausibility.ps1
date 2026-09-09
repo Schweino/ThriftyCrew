@@ -92,7 +92,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("audit-cost-plausibility SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'audit-cost-plausibility SELF-TEST PASS'
-  Write-GuardComplete -Name 'audit-cost-plausibility' -Summary 'selftest pass'; exit 0
+  Exit-Guard -Name 'audit-cost-plausibility' -Summary 'selftest pass' -Code 0
 }
 
 $parsed = Get-Content $CostedFile -Raw -Encoding utf8 | ConvertFrom-Json
@@ -122,7 +122,7 @@ if ($runJson) { ([pscustomobject]@{ swept=@($rows).Count; findings=@($findings) 
 Write-Output ("audit-cost-plausibility: swept {0} costed recipe(s)" -f @($rows).Count)
 if (-not @($findings).Count) {
   Write-Output '  ok - every recipe prices every line, and no total is implausible'
-  Write-GuardComplete -Name 'audit-cost-plausibility' -Summary ("clean n={0}" -f @($rows).Count); exit 0
+  Exit-Guard -Name 'audit-cost-plausibility' -Summary ("clean n={0}" -f @($rows).Count) -Code 0
 }
 foreach ($f in ($findings | Sort-Object class, slug)) {
   Write-Output ("  {0,-14} {1,-48} {2}" -f $f.class, $f.slug, $f.detail)

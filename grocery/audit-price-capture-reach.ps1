@@ -142,8 +142,7 @@ if ($SelfTest) {
   T ($m3.missing.Count -eq 1 -and $m3.missing[0].commodity_known) 'reach is measured per CELL - a known commodity at an unpriced store still counts as missing'
 
   Write-Output ("PRICE-CAPTURE-REACH " + $(if ($f) { "SELF-TEST FAILED ($f)" } else { 'SELF-TEST PASS' }))
-  Write-GuardComplete -Name 'price-capture-reach' -Summary "selftest failed=$f"
-  exit $(if ($f) { 2 } else { 0 })
+  Exit-Guard -Name 'price-capture-reach' -Summary "selftest failed=$f" -Code $(if ($f) { 2 } else { 0 })
 }
 
 $ptFile = Get-ChildItem (Join-Path $OutDir 'price-table-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1

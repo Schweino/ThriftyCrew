@@ -102,7 +102,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("audit-vocab-integrity SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'audit-vocab-integrity SELF-TEST PASS'
-  Write-GuardComplete -Name 'audit-vocab-integrity' -Summary 'selftest pass'; exit 0
+  Exit-Guard -Name 'audit-vocab-integrity' -Summary 'selftest pass' -Code 0
 }
 
 $maps = Read-VocabMaps $VocabFile
@@ -152,7 +152,7 @@ if ($runJson) { ([pscustomobject]@{ swept=@($files).Count; vocabulary=$maps.coun
 Write-Output ("audit-vocab-integrity: swept {0} spec(s) against {1} vocabulary rows" -f @($files).Count, $maps.count)
 if (-not @($findings).Count) {
   Write-Output '  ok - every canon name resolves to a row, and every resolved row carries a bid'
-  Write-GuardComplete -Name 'audit-vocab-integrity' -Summary ("clean n={0}" -f @($files).Count); exit 0
+  Exit-Guard -Name 'audit-vocab-integrity' -Summary ("clean n={0}" -f @($files).Count) -Code 0
 }
 foreach ($f in $findings) {
   if (@($f.unknown_names).Count) { Write-Output ("  UNKNOWN NAME  {0,-46} {1}" -f $f.slug, (@($f.unknown_names) -join ', ')) }

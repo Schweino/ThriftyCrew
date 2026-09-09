@@ -389,5 +389,4 @@ if ($drift.Count) {
 }
 # BLIND anywhere means the run cannot claim a clean sweep, even if everything it DID reach matched.
 if ($blind.Count) { Write-GuardComplete -Name 'ghost-drift' -Summary ("clean={0} drift={1} unpublished={2} blind={3}" -f $clean.Count, $drift.Count, $unpublished.Count, $blind.Count); exit 3 }
-Write-GuardComplete -Name 'ghost-drift' -Summary ("clean={0} drift={1} unpublished={2}" -f $clean.Count, $drift.Count, $unpublished.Count)
-exit $(if ($drift.Count) { 1 } else { 0 })
+Exit-Guard -Name 'ghost-drift' -Summary ("clean={0} drift={1} unpublished={2}" -f $clean.Count, $drift.Count, $unpublished.Count) -Code $(if ($drift.Count) { 1 } else { 0 })

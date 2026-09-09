@@ -35,5 +35,4 @@ foreach ($line in $out[0..([Math]::Max(0, $out.Count - 2))]) { Write-Output $lin
 $fail = 0
 if ($out.Count) { [void][int]::TryParse([string]$out[-1], [ref]$fail) }
 Write-Output ("PRICE-SPLIT " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
-Write-GuardComplete -Name 'price-split' -Summary "failed=$fail"
-exit $(if ($fail) { 1 } else { 0 })
+Exit-Guard -Name 'price-split' -Summary "failed=$fail" -Code $(if ($fail) { 1 } else { 0 })

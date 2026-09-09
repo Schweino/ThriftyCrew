@@ -221,5 +221,4 @@ if ($runJson) {
     Write-Output '  (orchestration) - or, for a report that is history, record it in db\blocker-heading-baseline.json.'
   }
 }
-Write-GuardComplete -Name 'wave-blocker-headings' -Summary ("reports={0} findings={1}" -f $reports.Count, $findings.Count)
-exit $(if ($findings.Count) { 1 } else { 0 })
+Exit-Guard -Name 'wave-blocker-headings' -Summary ("reports={0} findings={1}" -f $reports.Count, $findings.Count) -Code $(if ($findings.Count) { 1 } else { 0 })

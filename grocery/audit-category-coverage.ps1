@@ -47,7 +47,7 @@ Set-Content (Join-Path $OutDir 'category-coverage-report.json') -Value ($report 
 $bad = $uncategorized.Count + $multi.Count + $orphanRefs.Count
 if ($bad -eq 0) {
   Write-Output ("category-coverage: OK  all " + $ids.Count + " commodities are in exactly one of " + @($cats).Count + " categories")
-  Write-GuardComplete -Name 'category-coverage'; exit 0
+  Exit-Guard -Name 'category-coverage' -Code 0
 }
 Write-Output ("category-coverage: FAIL  uncategorized=" + $uncategorized.Count + "  multi-category=" + $multi.Count + "  orphan-refs=" + $orphanRefs.Count)
 if ($uncategorized.Count) { Write-Output ("  NOT IN ANY CATEGORY (would be invisible / in no filter): " + ($uncategorized -join ', ')) }

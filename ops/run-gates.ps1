@@ -482,5 +482,4 @@ if ($timings.Count) {
     Write-Output ("   {0,7:N0}ms  {1}" -f $r.Ms, $r.Name)
   }
 }
-Write-GuardComplete -Name 'run-gates' -Summary ("pass={0} fail={1}" -f $pass, $fail.Count)
-exit $(if ($fail.Count) { 1 } else { 0 })
+Exit-Guard -Name 'run-gates' -Summary ("pass={0} fail={1}" -f $pass, $fail.Count) -Code $(if ($fail.Count) { 1 } else { 0 })

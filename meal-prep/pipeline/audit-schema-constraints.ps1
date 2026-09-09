@@ -390,5 +390,4 @@ foreach ($g in $byCls) {
 }
 foreach ($h in ($hard | Select-Object -First 10)) { Write-Output ("  ! " + $h.detail) }
 if (-not (Test-Path $baselinePath)) { Write-Output '  (no baseline recorded yet - run -Baseline once to arm the value-class ratchet)' }
-Write-GuardComplete -Name 'schema-constraints' -Summary ("violations={0} hard={1}" -f $violations.Count, $hard.Count)
-exit $(if ($hard.Count) { 1 } else { 0 })
+Exit-Guard -Name 'schema-constraints' -Summary ("violations={0} hard={1}" -f $violations.Count, $hard.Count) -Code $(if ($hard.Count) { 1 } else { 0 })

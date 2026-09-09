@@ -266,7 +266,7 @@ if ($Baseline) {
   (@{ set = (Get-Date -Format 'yyyy-MM-dd HH:mm'); by_store = $report.by_store } | ConvertTo-Json -Depth 5) | Set-Content $blF -Encoding UTF8
   Write-Output ''
   Write-Output ("baseline written: " + $rows.Count + " violation(s). From here the number may only go DOWN.")
-  Write-GuardComplete -Name 'tile-integrity'; exit 0
+  Exit-Guard -Name 'tile-integrity' -Code 0
 }
 # ---- ACCURACY: a hard gate, always. Not baselined, not ratcheted, not -Strict-gated. -----------------------
 # A shipped link that opens the wrong product/price is never acceptable and never needs a browser to fix:
@@ -298,7 +298,7 @@ if ($Strict) {
   if ($fail2) { Write-Output 'tile-integrity: STRICT - accuracy violations above.'; Write-GuardComplete -Name 'tile-integrity'; exit 2 }
   if ($linked -le 0 -or $graded -le 0) { Write-Output ('tile-integrity: STRICT - BLIND (' + $linked + ' linked tiles, ' + $graded + ' graded); the every-tile-linked claim is vacuous, not achieved.'); exit 3 }
   Write-Output 'tile-integrity: STRICT - every priced tile also has a verified link.'
-  Write-GuardComplete -Name 'tile-integrity'; exit 0
+  Exit-Guard -Name 'tile-integrity' -Code 0
 }
 if (Test-Path $blF) {
   $bl = (Read-JsonFile $blF).by_store

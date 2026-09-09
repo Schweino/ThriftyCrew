@@ -140,5 +140,4 @@ if ($runJson) {
     Write-Output '  and a hand call to the Ghost API to diagnose. Shorten the field in the spec and rebuild the card.'
   }
 }
-Write-GuardComplete -Name 'ghost-field-limits' -Summary ("specs={0} findings={1}" -f $files.Count, $findings.Count)
-exit $(if ($findings.Count) { 1 } else { 0 })
+Exit-Guard -Name 'ghost-field-limits' -Summary ("specs={0} findings={1}" -f $files.Count, $findings.Count) -Code $(if ($findings.Count) { 1 } else { 0 })

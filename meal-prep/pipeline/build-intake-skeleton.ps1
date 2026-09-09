@@ -733,23 +733,23 @@ if ($runSelfTest) {
 if ($runVerify) {
   if (-not $InFile -or -not (Test-Path $InFile)) {
     Write-Output ("build-intake-skeleton: BLOCKED - no intake at {0}" -f $InFile)
-    Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'blocked: no intake'; exit 2
+    Exit-Guard -Name 'build-intake-skeleton' -Summary 'blocked: no intake' -Code 2
   }
   if (-not $Skeleton -or -not (Test-Path $Skeleton)) {
     # A DIFF WITH NOTHING TO DIFF AGAINST IS NOT A PASS. Without the snapshot there is no claim about
     # what was issued, and reporting clean here would be reporting that nobody looked.
     Write-Output ("build-intake-skeleton: BLOCKED - no skeleton snapshot at {0}" -f $Skeleton)
-    Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'blocked: no snapshot'; exit 2
+    Exit-Guard -Name 'build-intake-skeleton' -Summary 'blocked: no snapshot' -Code 2
   }
   $intake = $null; $snap = $null
   try { $intake = Read-Json $InFile; $snap = Read-Json $Skeleton }
   catch {
     Write-Output ("build-intake-skeleton: BLOCKED - could not parse: {0}" -f $_.Exception.Message)
-    Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'blocked: parse'; exit 2
+    Exit-Guard -Name 'build-intake-skeleton' -Summary 'blocked: parse' -Code 2
   }
   if (-not $intake -or -not $snap) {
     Write-Output 'build-intake-skeleton: BLOCKED - the intake or the snapshot is empty'
-    Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'blocked: empty'; exit 2
+    Exit-Guard -Name 'build-intake-skeleton' -Summary 'blocked: empty' -Code 2
   }
   # ASSIGN, DO NOT WRAP. Get-LockedDrift returns `,@(...)` so a single drift cannot unroll on the
   # way out; `@(Get-LockedDrift ...)` then collects ONE output object holding that array and .Count
@@ -781,7 +781,7 @@ $extPath    = Join-Path $RunDir ("extracted\{0}.json" -f $Slug)
 foreach ($need in @($mappedPath, $extPath)) {
   if (-not (Test-Path $need)) {
     Write-Output ("build-intake-skeleton: BLOCKED - required input missing: {0}" -f $need)
-    Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'blocked: missing input'; exit 2
+    Exit-Guard -Name 'build-intake-skeleton' -Summary 'blocked: missing input' -Code 2
   }
 }
 $mappedDoc = $null; $extDoc = $null; $foodDb = @{}
@@ -792,11 +792,11 @@ try {
   foreach ($i in (As-Array $fRoot.items)) { if ($i.item) { $foodDb[[string]$i.item] = $i } }
 } catch {
   Write-Output ("build-intake-skeleton: BLOCKED - {0}" -f $_.Exception.Message)
-  Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'blocked: parse'; exit 2
+  Exit-Guard -Name 'build-intake-skeleton' -Summary 'blocked: parse' -Code 2
 }
 if (-not $mappedDoc -or -not $extDoc) {
   Write-Output 'build-intake-skeleton: BLOCKED - the mapper decision file or the extraction is empty'
-  Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'blocked: empty input'; exit 2
+  Exit-Guard -Name 'build-intake-skeleton' -Summary 'blocked: empty input' -Code 2
 }
 
 $outDir = Join-Path $RunDir 'intake'
@@ -812,7 +812,7 @@ if ((Test-Path $intakePath) -and -not $runForce) {
   try { $existing = Read-Json $intakePath } catch { $existing = $null }
   if (Test-HasProse $existing) {
     Write-Output ("build-intake-skeleton: BLOCKED - {0} already carries writer prose. Rebuilding would erase it; pass -Force if that is what you mean." -f $intakePath)
-    Write-GuardComplete -Name 'build-intake-skeleton' -Summary 'blocked: would erase prose'; exit 2
+    Exit-Guard -Name 'build-intake-skeleton' -Summary 'blocked: would erase prose' -Code 2
   }
 }
 

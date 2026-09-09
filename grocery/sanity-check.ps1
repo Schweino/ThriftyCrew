@@ -153,9 +153,9 @@ $nVerified = @($flags.ToArray() | Where-Object { $_.type -eq 'outlier-verified' 
 Write-Output ("sanity: store-published unit price - $nVerified outlier(s) verified against the store's own arithmetic, $script:notComparable row(s) priced in a unit that is not comparable with their commodity's (reported, not flagged)")
 if ($flags.Count -eq 0) {
   Write-Output ("SANITY OK  -  week ${week}: no outliers, no big week-over-week moves.")
-  Write-GuardComplete -Name 'sanity-check'; exit 0
+  Exit-Guard -Name 'sanity-check' -Code 0
 } else {
   Write-Output ("SANITY: " + $flags.Count + " item(s) to review before publishing (week $week):")
   foreach ($f in $flags.ToArray()) { Write-Output ("  [" + $f.type + "] " + $f.commodity + " - " + $f.detail) }
-  Write-GuardComplete -Name 'sanity-check'; exit 1
+  Exit-Guard -Name 'sanity-check' -Code 1
 }

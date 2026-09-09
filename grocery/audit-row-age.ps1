@@ -401,5 +401,4 @@ Write-Output ("row-age: {0} hard finding(s) across {1} store(s)" -f $hard.Count,
 $info | ForEach-Object { Write-Output $_ }
 $hard | ForEach-Object { Write-Output ("  ! " + $_) }
 if(-not $base){ Write-Output '  (no baseline recorded yet - run -Baseline once to arm the ratchet)' }
-Write-GuardComplete -Name 'row-age' -Summary ("stores={0} hard={1}" -f $profiles.Count, $hard.Count)
-exit $(if($hard.Count){ 1 } else { 0 })
+Exit-Guard -Name 'row-age' -Summary ("stores={0} hard={1}" -f $profiles.Count, $hard.Count) -Code $(if($hard.Count){ 1 } else { 0 })

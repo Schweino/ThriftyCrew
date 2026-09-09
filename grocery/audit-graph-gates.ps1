@@ -113,8 +113,7 @@ if ($SelfTest) {
   T (-not (Get-GraphPython -Explicit 'C:\nope\python.exe')) 'a bad explicit interpreter resolves to empty, so the caller can report BLIND'
 
   Write-Output ("GRAPH-GATES " + $(if ($f) { "SELF-TEST FAILED ($f)" } else { 'SELF-TEST PASS' }))
-  Write-GuardComplete -Name 'graph-gates' -Summary "selftest failed=$f"
-  exit $(if ($f) { 2 } else { 0 })
+  Exit-Guard -Name 'graph-gates' -Summary "selftest failed=$f" -Code $(if ($f) { 2 } else { 0 })
 }
 
 # ---- BLIND checks first. Each one publishes the board and says why it could not look. -------------

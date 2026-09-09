@@ -298,7 +298,7 @@ if ($provable.Count -eq 0) {
 }
 if ($issues.Count -eq 0) {
   Write-Output ("search-links: OK  " + $provable.Count + " of " + $rows.Count + " template(s) resolve for '" + $Query + "'" + $(if ($unprov.Count -gt 0) { "; " + $unprov.Count + " unprovable (listed above)" } else { '' }))
-  Write-GuardComplete -Name 'search-links'; exit 0
+  Exit-Guard -Name 'search-links' -Code 0
 }
 
 Write-Output ("search-links: " + $issues.Count + " finding(s):")
@@ -318,4 +318,4 @@ if ($Alert) {
     } catch {}
   }
 }
-Write-GuardComplete -Name 'search-links'; exit 2
+Exit-Guard -Name 'search-links' -Code 2

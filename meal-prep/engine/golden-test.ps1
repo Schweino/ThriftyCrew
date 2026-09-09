@@ -294,4 +294,4 @@ Write-Output ''
 if($Rebaseline -and $failed -eq 0){ Write-Output 'GOLDEN: baseline accepted.'; Write-GuardComplete -Name 'golden-test'; exit 0 }
 Write-Output ("GOLDEN: {0} passed, {1} failed" -f $pass, $failed)
 if($failed -gt 0){ Write-GuardComplete -Name 'golden-test'; exit 2 }
-Write-GuardComplete -Name 'golden-test'; exit 0
+Exit-Guard -Name 'golden-test' -Code 0

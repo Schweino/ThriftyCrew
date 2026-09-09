@@ -375,5 +375,5 @@ if ($judged -eq 0) {
   exit 3
 }
 if ($FailOnFlag -and (($cellFlags.Count + $candFlags.Count) -gt 0)) { Write-GuardComplete -Name 'store-taxonomy'; exit 2 }
-Write-GuardComplete -Name 'store-taxonomy'; exit 0
+Exit-Guard -Name 'store-taxonomy' -Code 0
 

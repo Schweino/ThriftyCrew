@@ -596,4 +596,4 @@ Write-Output '  Fix: -SyncScopes (project -> user, local only) and -SyncMirror (
 if (($res.issues -join ' ') -match 'NO BACKUP') {
   Write-Output '       A NO BACKUP line is a DECISION, not a chore: adopting publishes that file into a repo that loads without a login. Adopt it deliberately (-Adopt <name>, e.g. -Adopt recipe-writer.md or -Adopt skill|recipe-hunter) or exempt it in ops\prompt-backup-exempt.json.'
 }
-Write-GuardComplete -Name 'prompt-backup'; exit 2
+Exit-Guard -Name 'prompt-backup' -Code 2

@@ -325,4 +325,4 @@ if ($Alert) {
     try { Send-Alert -Subject "Grocery: Family Fare pull dropped a carried item - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
-Write-GuardComplete -Name 'ff-carry'; exit 0
+Exit-Guard -Name 'ff-carry' -Code 0

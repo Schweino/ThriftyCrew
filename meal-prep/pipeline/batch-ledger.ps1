@@ -407,7 +407,7 @@ if($Reconcile){
   $dropped = @($plan.dropped)
   if(-not $dropped.Count){
     Write-Output ("{0}: already matches - nothing dropped" -f $Batch)
-    Write-GuardComplete -Name 'batch-ledger'; exit 0
+    Exit-Guard -Name 'batch-ledger' -Code 0
   }
   $row.slugs = @($want)
   $row.stages = @($row.stages) + @([pscustomobject]@{ stage='reconcile'; at=$now
@@ -415,7 +415,7 @@ if($Reconcile){
   $row.last_activity = $now
   Save-Ledger $ledger
   Write-Output ("{0}: reconciled to {1} slug(s); dropped {2}: {3}" -f $Batch, $want.Count, $dropped.Count, ($dropped -join ', '))
-  Write-GuardComplete -Name 'batch-ledger'; exit 0
+  Exit-Guard -Name 'batch-ledger' -Code 0
 }
 # ABANDON. A wave can stop for reasons that are not failures - superseded by a re-run, sourcing dried
 # up, Brad called it off - and until now the only ways to silence the row were -Close (which claims it
@@ -459,7 +459,7 @@ if($Abandon){
   Write-Output ("{0}: ABANDONED - {1}" -f $Batch, $Detail)
   Write-Output ("  it still owed: " + ($miss -join ', '))
   Write-Output '  (recorded as abandoned, NOT closed - it did not ship, and -Verify will stop reporting it)'
-  Write-GuardComplete -Name 'batch-ledger'; exit 0
+  Exit-Guard -Name 'batch-ledger' -Code 0
 }
 if($Stamp -or $Close){
   if(-not $Batch){ throw '-Batch required' }
@@ -483,9 +483,9 @@ if($Stamp -or $Close){
   if($Close -and $miss.Count){
     Write-Output ("  WARNING closed with unstamped stage(s): " + ($miss -join ', '))
     Write-Output '  (recorded, but this is NOT a clean close - -Verify will keep reporting it)'
-    Write-GuardComplete -Name 'batch-ledger'; exit 1
+    Exit-Guard -Name 'batch-ledger' -Code 1
   }
-  Write-GuardComplete -Name 'batch-ledger'; exit 0
+  Exit-Guard -Name 'batch-ledger' -Code 0
 }
 if($Verify){
   $now2 = Get-Date; $findings = @(); $abandoned = @()

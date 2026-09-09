@@ -743,7 +743,7 @@ if ($Baseline) {
   foreach ($k in ($byClass.Keys | Sort-Object)) { $nb[$k] = [int]$byClass[$k] }
   $nb | ConvertTo-Json -Depth 3 | Set-Content $basePath -Encoding UTF8
   Write-Output ('baseline written: ' + (($byClass.Keys | Sort-Object | ForEach-Object { "$_=$($byClass[$_])" }) -join ' '))
-  Write-GuardComplete -Name 'spec-contradictions'; exit 0
+  Exit-Guard -Name 'spec-contradictions' -Code 0
 }
 $base = @{}
 if (Test-Path $basePath) { try { $bd = Read-JsonFile $basePath; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [int]$p.Value } } catch {} }
@@ -756,9 +756,9 @@ foreach ($k in @('STAT-PROSE','UNMEASURABLE-QTY','STALE-MONEY','ABSURD-UNIT','HE
 if ($worse.Count -gt 0) {
   Write-Output ('spec-contradictions FAIL - a class got WORSE than out\spec-contradictions-baseline.json: ' + ($worse -join ' | '))
   Write-Output '  A spec that states the same fact twice and disagrees with itself is wrong no matter what the source recipe says - one of the two numbers is on a live card.'
-  Write-GuardComplete -Name 'spec-contradictions'; exit 1
+  Exit-Guard -Name 'spec-contradictions' -Code 1
 }
-Write-GuardComplete -Name 'spec-contradictions'; exit 0
+Exit-Guard -Name 'spec-contradictions' -Code 0
 
 
 

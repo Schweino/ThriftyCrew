@@ -331,4 +331,4 @@ if ($Alert) {
     } catch {}
   }
 }
-Write-GuardComplete -Name 'store-registry'; exit 2
+Exit-Guard -Name 'store-registry' -Code 2

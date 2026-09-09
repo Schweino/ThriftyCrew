@@ -118,5 +118,4 @@ if (-not $stale.Count) { Ok 'no production script still hard-codes the retired O
 else { foreach ($x in $stale) { Bad ("still pinned to the RETIRED Omaha #01 identity - " + $x) } }
 
 Write-Output ("HYVEE-TAG-CHECK " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
-Write-GuardComplete -Name 'hyvee-tag-check' -Summary "failed=$fail"
-exit $(if ($fail) { 1 } else { 0 })
+Exit-Guard -Name 'hyvee-tag-check' -Summary "failed=$fail" -Code $(if ($fail) { 1 } else { 0 })

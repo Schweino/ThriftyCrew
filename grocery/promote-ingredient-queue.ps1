@@ -111,8 +111,7 @@ if ($SelfTest) {
   # MUST FIRE: no size means no per-unit price, so the cell could never be compared.
   T (-not (@($r.rows | Where-Object { $_.term -eq 'fennel' })).Count) 'a price with no SIZE is refused - it cannot be made per-unit'
   Write-Output ("PROMOTE-QUEUE " + $(if ($f) { "SELF-TEST FAILED ($f)" } else { 'SELF-TEST PASS' }))
-  Write-GuardComplete -Name 'promote-ingredient-queue' -Summary "selftest failed=$f"
-  exit $(if ($f) { 2 } else { 0 })
+  Exit-Guard -Name 'promote-ingredient-queue' -Summary "selftest failed=$f" -Code $(if ($f) { 2 } else { 0 })
 }
 
 if (-not (Test-Path $QueueFile)) { Write-Output 'promote-queue: no ingredient-queue.json'; Write-GuardComplete -Name 'promote-ingredient-queue' -Summary 'no queue'; exit 0 }

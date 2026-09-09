@@ -266,5 +266,4 @@ if ($runJson) {
     Write-Output '  end a label on a unit abbreviation or an already-plural word.'
   }
 }
-Write-GuardComplete -Name 'buy-label-plurals' -Summary ("labels={0} findings={1}" -f $vocabRows.Count, $findings.Count)
-exit $(if ($findings.Count) { 1 } else { 0 })
+Exit-Guard -Name 'buy-label-plurals' -Summary ("labels={0} findings={1}" -f $vocabRows.Count, $findings.Count) -Code $(if ($findings.Count) { 1 } else { 0 })

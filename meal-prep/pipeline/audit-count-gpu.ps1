@@ -273,4 +273,4 @@ if(-not $Quiet){
   if($hard.Count -eq 0 -and $warn.Count -eq 0){ Write-Output '  clean' }
 }
 if($hard.Count -gt 0){ Write-GuardComplete -Name 'count-gpu'; exit 1 }
-Write-GuardComplete -Name 'count-gpu'; exit 0
+Exit-Guard -Name 'count-gpu' -Code 0

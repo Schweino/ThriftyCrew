@@ -606,7 +606,7 @@ if ($gaps.Count) {
   if ($actionable.Count) { Write-GuardComplete -Name 'coverage-gaps'; exit 2 }
   Write-Output ''
   Write-Output 'coverage-gaps: no ACTIONABLE gap - every absent store above is absent for a reason the engine states itself (basis it cannot express, or a sanity band). Not paging.'
-  Write-GuardComplete -Name 'coverage-gaps'; exit 0
+  Exit-Guard -Name 'coverage-gaps' -Code 0
 } else {
   if ($noRaw.Count -eq $stores.Count) {
     Write-Output 'coverage-gaps: BLIND - ZERO raw products parsed for EVERY store (no ads/regular/deals source yielded a name). Nothing was checked; a no-gaps verdict would be an empty claim.'
@@ -617,5 +617,5 @@ if ($gaps.Count) {
   } else {
     Write-Output 'coverage-gaps: none - every store that carries a tracked item is on the board'
   }
-  Write-GuardComplete -Name 'coverage-gaps'; exit 0
+  Exit-Guard -Name 'coverage-gaps' -Code 0
 }

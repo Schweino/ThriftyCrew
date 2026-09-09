@@ -1826,7 +1826,7 @@ if ($runInit) {
   if (-not $digestDate) { Write-Output '  WARNING no pipeline\catalog-digest.json - run make-catalog-digest.ps1 before sourcing' }
   if (-not $board.Count) { Write-Output '  WARNING no grocery\out\comparison-*.json - pricing reads it' }
   else { Write-Output ("  board: {0} (written {1})" -f $board[0].Name, $board[0].LastWriteTime.ToString('yyyy-MM-dd HH:mm')) }
-  Write-GuardComplete -Name 'hunt-run' -Summary ("init {0}" -f $runId); exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("init {0}" -f $runId) -Code 0
 }
 
 # ---- -Lane ----------------------------------------------------------------------------------------
@@ -1948,7 +1948,7 @@ if ($runRecipeSummary) {
                   $noHist.Count, ((@($noHist | ForEach-Object { $_.slug })) -join ', '))
   }
   Write-Output '  `shared` is a batched dispatch DIVIDED BY ITS BATCH SIZE - an estimate, not a measurement.'
-  Write-GuardComplete -Name 'hunt-run' -Summary ("recipe-summary recipes={0}" -f $out.Count); exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("recipe-summary recipes={0}" -f $out.Count) -Code 0
 }
 
 # ---- -LaneSummary ---------------------------------------------------------------------------------
@@ -2039,7 +2039,7 @@ if ($runLaneSummary) {
   if ($runStageSummary) {
     if (-not $stageSecs.Count) {
       Write-Output 'hunt-run stage summary: no start/end pair in this lane log - nothing is timed yet'
-      Write-GuardComplete -Name 'hunt-run' -Summary 'stage-summary stages=0'; exit 0
+      Exit-Guard -Name 'hunt-run' -Summary 'stage-summary stages=0' -Code 0
     }
     $stageRows = @(foreach ($k in $stageSecs.Keys) {
       $secs = @($stageSecs[$k]); $parts = $k -split '\|', 2
@@ -2088,7 +2088,7 @@ if ($runLaneSummary) {
       Write-Output ("  {0} stage(s) logged a start with no end - still running, or died: {1}" -f $unf.Count, (($unf | Select-Object -First 4) -join ', '))
     }
     Write-Output ("  measured {0:N1} min across {1} stage(s). Lanes OVERLAP, so this exceeds wall clock - it ranks, it does not budget." -f ($grand / 60.0), $stageRows.Count)
-    Write-GuardComplete -Name 'hunt-run' -Summary ("stage-summary stages={0} measured_min={1:N1}" -f $stageRows.Count, ($grand / 60.0)); exit 0
+    Exit-Guard -Name 'hunt-run' -Summary ("stage-summary stages={0} measured_min={1:N1}" -f $stageRows.Count, ($grand / 60.0)) -Code 0
   }
 
 
@@ -2195,7 +2195,7 @@ if ($runLane) {
   if ($line.count -eq 0) {
     Write-Output '  NOTE no items recorded. An invocation with no item list cannot be audited for batch shape.'
   }
-  Write-GuardComplete -Name 'hunt-run' -Summary ("lane {0} n={1}" -f $ln, $line.count); exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("lane {0} n={1}" -f $ln, $line.count) -Code 0
 }
 
 # ---- -Advance -------------------------------------------------------------------------------------
@@ -2453,13 +2453,13 @@ if ($runAdvance) {
                             history = @([pscustomobject]@{ state = 'sourced'; at = (Get-Stamp); by = $By; detail = $Detail }) }
     Write-JsonAtomic -Path $sp -Obj $e
     Write-Output ("hunt-run: {0}  ->  sourced" -f $Slug)
-    Write-GuardComplete -Name 'hunt-run' -Summary ("advance {0} sourced" -f $Slug); exit 0
+    Exit-Guard -Name 'hunt-run' -Summary ("advance {0} sourced" -f $Slug) -Code 0
   }
   $e = Read-Json $sp
   $from = [string]$e.state
   if ($from -eq $To -and $To -ne 'written' -and $To -ne 'parked' -and $To -ne 'spec-built') {
     Write-Output ("hunt-run: {0} is already {1}  (no-op)" -f $Slug, $To)
-    Write-GuardComplete -Name 'hunt-run' -Summary 'advance noop'; exit 0
+    Exit-Guard -Name 'hunt-run' -Summary 'advance noop' -Code 0
   }
   if (-not (Test-LegalTransition $from $To)) {
     Write-Output ("hunt-run: REFUSED {0}: {1} -> {2}. Legal from '{1}': {3}" -f $Slug, $from, $To, $(if (@($script:NEXT[$from]).Count) { @($script:NEXT[$from]) -join ', ' } else { '(terminal)' }))
@@ -2517,7 +2517,7 @@ if ($runAdvance) {
   $e.history = @(@($e.history) + @([pscustomobject]@{ state = $To; at = (Get-Stamp); by = $By; detail = $Detail }))
   Write-JsonAtomic -Path $sp -Obj $e
   Write-Output ("hunt-run: {0}  {1}  ->  {2}{3}" -f $Slug, $from, $To, $(if ($Detail) { "   ($Detail)" } else { '' }))
-  Write-GuardComplete -Name 'hunt-run' -Summary ("advance {0} {1}" -f $Slug, $To); exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("advance {0} {1}" -f $Slug, $To) -Code 0
 }
 
 # ---- -Derive --------------------------------------------------------------------------------------
@@ -2570,7 +2570,7 @@ if ($runDerive) {
     Write-Output  '           Such a term is scored PENDING forever, so the recipe parks silently however well it priced.'
     Write-Output  "           Repair: re-advance the recipe with each term as its own quoted string (-Terms 'a','b')."
   }
-  Write-GuardComplete -Name 'hunt-run' -Summary ("derive moved={0}" -f $moved); exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("derive moved={0}" -f $moved) -Code 0
 }
 
 # ---- -WaveClose -----------------------------------------------------------------------------------
@@ -2646,7 +2646,7 @@ if ($runWaveClose) {
   Write-Output ("hunt-run: wave {0} closed with {1} recipe(s)  [batch {2}]" -f $k, $slugs.Count, $batch)
   $slugs | ForEach-Object { Write-Output ("  " + $_) }
   Write-Output ("  next: recipe-batch-auditor -> waves\wave-{0}.audit.md (first line GO or NO-GO), then wave-publish.ps1 -RunDir <p> -Wave {0}" -f $k)
-  Write-GuardComplete -Name 'hunt-run' -Summary ("wave {0} closed n={1}" -f $k, $slugs.Count); exit 0
+  Exit-Guard -Name 'hunt-run' -Summary ("wave {0} closed n={1}" -f $k, $slugs.Count) -Code 0
 }
 
 # ---- -Status (also the resume entry point) --------------------------------------------------------

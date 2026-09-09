@@ -225,8 +225,7 @@ if ($Discard) {
 if (-not $Apply) {
   Write-Output ''
   Write-Output ("review-staged: {0} call(s) are WAITING and nothing has been sent. Re-run with -Apply to send them, or -Discard to throw them away." -f $entries.Count)
-  Write-GuardComplete -Name 'review-staged' -Summary ("queued={0} concerns={1}" -f $entries.Count, $concerns.Count)
-  exit $(if ($concerns.Count) { 2 } else { 0 })
+  Exit-Guard -Name 'review-staged' -Summary ("queued={0} concerns={1}" -f $entries.Count, $concerns.Count) -Code $(if ($concerns.Count) { 2 } else { 0 })
 }
 
 # --- apply. The queue is drained oldest first, and the JWT is re-minted here rather than replayed:

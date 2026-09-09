@@ -239,7 +239,7 @@ if ($runRecord) {
   ($doc | ConvertTo-Json -Depth 6) | Set-Content -Path $tmpf -Encoding utf8
   Move-Item -Path $tmpf -Destination $Store -Force
   Write-Output ("considered-dishes: recorded {0}  [{1}]  {2}" -f $Slug, $key, $Verdict)
-  Write-GuardComplete -Name 'considered-dishes' -Summary ("record {0}" -f $Slug); exit 0
+  Exit-Guard -Name 'considered-dishes' -Summary ("record {0}" -f $Slug) -Code 0
 }
 
 # ---- -Query ----------------------------------------------------------------------------------------

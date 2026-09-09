@@ -539,5 +539,4 @@ $warn | Select-Object -First $cap | ForEach-Object { Write-Output ("  ~ " + $_) 
 if($warn.Count -gt $cap){ Write-Output ("  ... {0} more WARN not shown - rerun with -ShowAll" -f ($warn.Count-$cap)) }
 if($hard.Count -eq 0 -and $warn.Count -eq 0){ Write-Output 'store-integrity: CLEAN (ingredient stores agree, cards match their specs)' }
 if($exUsed -gt 0){ Write-Output ("store-integrity: {0} finding(s) held at WARN by a dated reviewed exception in db\store-integrity-exceptions.json - each is still true and each names the measurement that retires it" -f $exUsed) }
-Write-GuardComplete -Name 'store-integrity' -Summary ("hard={0} warn={1} reviewed={2}" -f $hard.Count, $warn.Count, $exUsed)
-exit $(if($hard.Count){ 1 } else { 0 })
+Exit-Guard -Name 'store-integrity' -Summary ("hard={0} warn={1} reviewed={2}" -f $hard.Count, $warn.Count, $exUsed) -Code $(if($hard.Count){ 1 } else { 0 })

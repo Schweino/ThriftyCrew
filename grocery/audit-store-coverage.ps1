@@ -86,8 +86,8 @@ $warn = if ($absent.Count) { "  (WARN " + $absent.Count + " staple not on board:
 if ($violations.Count) {
   Write-Output ("store-coverage: FAIL  " + $violations.Count + " staple commodity(ies) with a store missing from the row:" )
   foreach ($v in $violations) { Write-Output ("  {0,-20} missing=[{1}] dupes=[{2}]" -f $v.commodity, $v.missing, $v.dupes) }
-  Write-GuardComplete -Name 'store-coverage'; exit 2
+  Exit-Guard -Name 'store-coverage' -Code 2
 } else {
   Write-Output ("store-coverage: OK  all " + $ok + " on-board staples show every one of the " + $stores.Count + " stores" + $warn)
-  Write-GuardComplete -Name 'store-coverage'; exit 0
+  Exit-Guard -Name 'store-coverage' -Code 0
 }

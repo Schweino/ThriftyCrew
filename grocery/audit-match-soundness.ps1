@@ -663,7 +663,7 @@ if ($Accept -or $ForceAccept) {
     Write-Output ("match-soundness: ACCEPT REFUSED - $($blocked.Count) mapping(s) an outstanding DROP verdict already judged WRONG would be blessed into the baseline and become invisible to this audit:")
     foreach ($b in ($blocked | Sort-Object commodity)) { Write-Output ("  [{0}] '{1}'  (dropped {2}, {3})" -f $b.commodity, $b.item, $b.week, $b.store) }
     Write-Output 'Fix the rules so these products stop matching (add an exclude), or re-review the verdict. If the VERDICT is the thing that is wrong, -ForceAccept overrides - loudly and on your judgment.'
-    Write-GuardComplete -Name 'match-soundness'; exit 2
+    Exit-Guard -Name 'match-soundness' -Code 2
   }
   if ($blocked.Count -gt 0) {
     Write-Output ("match-soundness: FORCE-ACCEPT overriding $($blocked.Count) outstanding DROP verdict(s):")
@@ -696,7 +696,7 @@ if ($Accept -or $ForceAccept) {
   Set-Content $baseF -Value ($obj | ConvertTo-Json -Depth 4) -Encoding UTF8
   Write-Output ("match-soundness: baseline ACCEPTED ($($cf.names.Count) product names, $($cf.contested.Count) contested) at rules_hash $rulesHash. drift-vs-engine=$drift")
   Write-Output ("  of those, $($names.Count) names and $($contest.Count) contested were SEEN TODAY; $($cf.carried_names) name(s) and $($cf.carried_contested) contested entry(ies) were CARRIED FORWARD as absent-not-gone; $($cf.expired) expired after 30 days absent")
-  Write-GuardComplete -Name 'match-soundness'; exit 0
+  Exit-Guard -Name 'match-soundness' -Code 0
 }
 
 if (-not (Test-Path $baseF)) { Write-Output 'match-soundness: NO baseline yet - run with -Accept to establish one. (skipping gate)'; Write-GuardComplete -Name 'match-soundness'; exit 0 }
@@ -824,4 +824,4 @@ if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
 # full re-baseline). The verdict line above is the thing to read either way.
 if ($regr -gt 0) { Write-GuardComplete -Name 'match-soundness'; exit 2 }
 if ($cellContest.Count -gt 0) { Write-Output ('match-soundness: ' + $cellContest.Count + ' CELL-BY-CONTEST finding(s) (CROWN or plain cell, tagged above) - ADVISORY, review the names above before accepting'); Write-GuardComplete -Name 'match-soundness'; exit 1 }
-Write-GuardComplete -Name 'match-soundness'; exit 0
+Exit-Guard -Name 'match-soundness' -Code 0

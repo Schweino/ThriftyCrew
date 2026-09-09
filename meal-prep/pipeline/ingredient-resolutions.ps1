@@ -176,7 +176,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("ingredient-resolutions SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'ingredient-resolutions SELF-TEST PASS'
-  Write-GuardComplete -Name 'ingredient-resolutions' -Summary 'selftest pass'; exit 0
+  Exit-Guard -Name 'ingredient-resolutions' -Summary 'selftest pass' -Code 0
 }
 
 $rows = @(Read-Store $Store)

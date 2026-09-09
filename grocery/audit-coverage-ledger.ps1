@@ -406,7 +406,7 @@ if ($Accept) {
   [IO.File]::WriteAllText($BaselineFile, ($doc | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
   Write-Output ''
   Write-Output ("coverage-ledger: baseline written to " + $BaselineFile + " (" + $merged.Count + " check(s)). From here each check's examined count may only go DOWN by its tolerance.")
-  Write-GuardComplete -Name 'coverage-ledger'; exit 0
+  Exit-Guard -Name 'coverage-ledger' -Code 0
 }
 
 # ---- HISTORY: the evidence a future narrowing needs (F4, 2026-08-01) ----------------------------------
@@ -443,12 +443,12 @@ if ($findings.Count -gt 0) {
   # "found coverage findings and finished" from "crashed part-way", which is the one distinction the
   # completion contract exists to make, missing from the one mode that acts on it.
   if ($Gate) { Write-GuardComplete -Name 'coverage-ledger' -Summary ("{0} finding(s), gate" -f $findings.Count); exit 2 }
-  Write-GuardComplete -Name 'coverage-ledger'; exit 1
+  Exit-Guard -Name 'coverage-ledger' -Code 1
 }
 if ($evaluated -eq 0) {
   Write-Output ("coverage-ledger: COULD NOT EVALUATE - " + $blRows.Count + " check(s) are rostered but NONE of them was evaluated in phase '" + $Phase + "'. Reporting ok here would be the exact failure this file watches for.")
   exit 3
 }
 Write-Output ("coverage-ledger: ok - " + $evaluated + " check(s) still examine at least their baseline coverage (phase '" + $Phase + "', tolerance " + [math]::Round($Tolerance * 100) + "% unless overridden).")
-Write-GuardComplete -Name 'coverage-ledger'; exit 0
+Exit-Guard -Name 'coverage-ledger' -Code 0
 

@@ -97,7 +97,7 @@ if ($runSelfTest) {
   T 'MUST FIRE  a huge `plain` region is NOT briefed as saturated' (@($vis).Count -eq 1 -and $vis[0].family -eq 'curry') (@($vis | ForEach-Object { $_.family }) -join ',')
   if ($bad -gt 0) { Write-Output ("make-saturation SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'make-saturation SELF-TEST PASS'
-  Write-GuardComplete -Name 'make-saturation' -Summary 'selftest pass'; exit 0
+  Exit-Guard -Name 'make-saturation' -Summary 'selftest pass' -Code 0
 }
 
 if ($runBrief -and (Test-Path $OutFile)) {

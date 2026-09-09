@@ -109,7 +109,7 @@ if ($runSelfTest) {
 
   if ($bad -gt 0) { Write-Output ("fetch-recipe SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'fetch-recipe SELF-TEST PASS'
-  Write-GuardComplete -Name 'fetch-recipe' -Summary 'selftest pass'; exit 0
+  Exit-Guard -Name 'fetch-recipe' -Summary 'selftest pass' -Code 0
 }
 
 if ($runStats) {

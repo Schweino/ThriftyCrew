@@ -211,5 +211,4 @@ if ($undeclared.Count -and -not $Quiet) {
 
 Write-Output ''
 Write-Output ("twin-drift: {0} declared twin(s) compared, {1} drifted, {2} undeclared duplicate literal(s)" -f $checked, $drifted, $undeclared.Count)
-Write-GuardComplete -Name 'audit-twin-drift' -Summary ("twins={0} drift={1} undeclared={2}" -f $checked, $drifted, $undeclared.Count)
-exit $(if ($drifted) { 1 } else { 0 })
+Exit-Guard -Name 'audit-twin-drift' -Summary ("twins={0} drift={1} undeclared={2}" -f $checked, $drifted, $undeclared.Count) -Code $(if ($drifted) { 1 } else { 0 })

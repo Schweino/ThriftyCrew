@@ -343,5 +343,5 @@ if ($gaps.Count) {
   Write-Output ("sale-fallback: $($gaps.Count) on-sale cell(s) have NO everyday fallback (would vanish when the sale ends):")
   foreach ($gp in $gaps) { Write-Output ("  {0,-18} {1,-14} owner={2} age={3}d/{4}d{5}" -f $gp.commodity, $gp.store, $gp.owner, $gp.age_days, $gp.grace_days, $(if ($gp.unproven) { ' UNPROVEN - the capture rotation never asked this store about it, so its absence means nothing' } elseif ($gp.escalated) { ' ESCALATED' } else { '' })) }
   Write-Output ("sale-fallback: $($owned.Count) owned and being worked, $($escalated.Count) ESCALATED (no owner, or the owner has not cleared it in its grace window), $($unprovenGaps.Count) UNPROVEN (the rotation has not asked)")
-  Write-GuardComplete -Name 'sale-fallback'; exit 2
+  Exit-Guard -Name 'sale-fallback' -Code 2
 } else { Write-Output 'sale-fallback: none - every on-sale cell has an everyday item to revert to'; Write-GuardComplete -Name 'sale-fallback'; exit 0 }

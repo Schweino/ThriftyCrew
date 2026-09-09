@@ -157,5 +157,4 @@ if ($dataLine -eq 'rice,Rice,lb,0.42,,,,0.42') { Ok 'the CSV renders a null ad a
 else { Bad "the CSV row is not what it should be: '$dataLine'" }
 
 Write-Output ("PRICE-TABLE " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
-Write-GuardComplete -Name 'price-table' -Summary "failed=$fail"
-exit $(if ($fail) { 1 } else { 0 })
+Exit-Guard -Name 'price-table' -Summary "failed=$fail" -Code $(if ($fail) { 1 } else { 0 })

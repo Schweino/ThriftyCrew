@@ -1265,4 +1265,4 @@ Check 'restored: guards pass again after every mutation is reverted' 0
 Write-Output ''
 Write-Output ("negative tests: $pass passed, $failed failed")
 if ($failed -gt 0) { Write-GuardComplete -Name 'guards'; exit 1 }
-Write-GuardComplete -Name 'guards'; exit 0
+Exit-Guard -Name 'guards' -Code 0
