@@ -49,6 +49,16 @@ for. Data-dependent audits stay in the daily chain against a real board.
   files. Only rebase when `origin/main` actually moved; autostash restores content, not the index.
 - **Spawned agents run in worktrees** and must write through repo-relative paths only. Writing to an
   absolute `C:\Codex\ThriftyCrew` path corrupts the main tree under a concurrent session.
+- **UNPUSHED IS NOT PRIVATE. A commit you are not ready to push does not go on `main`** - put it on a
+  branch or leave it uncommitted. `git push` sends the WHOLE BRANCH, and this checkout is worked by
+  several sessions and scheduled tasks at once, so the next one to push ships your commits with theirs,
+  without reading why you kept them back and without re-running the gate on your behalf. **Measured
+  2026-09-09**: two commits were held because `run-gates` was red, the hold was written down, and
+  another session's push at 12:04 shipped both - and it would have shipped them identically if the
+  change had been the wrong one. The state is one command, `git log origin/main..HEAD --oneline`, and
+  it wants no script: I wrote one, and `audit-guard-contract` called it DEAD while `audit-script-census`
+  called it uncensused, both correctly - a detector with no production caller is one nobody runs.
+  **The habit is the whole prevention. There is nothing here to automate.**
 - Comparison boards are rebuilt daily, so a fresh correction in `known-wrong.json` is red on purpose
   until the next build.
 
