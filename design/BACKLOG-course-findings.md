@@ -4879,7 +4879,40 @@ is not worth building.
 **What it is not.** Not a proposal to adopt Great Expectations - it is a Python package over a Python
 data stack, and these checks are PowerShell over JSON. The component that ports is the batch key.
 
-### I47 - a recorded measurement can be voided later, and nothing in the estate re-checks one `PARTLY DONE - RUNG 1 RAN: 8 OF 9 RECORDED MEASUREMENTS HAVE HAD THEIR HARNESS MOVE UNDER THEM` `queue-4` `2-WAY` `RUNG1 READ`
+### I47 - a recorded measurement can be voided later, and nothing in the estate re-checks one `DONE - THE CONVENTION IS ENFORCED BY A RATCHET, NOT LEFT AS AN INTENTION` `queue-4` `2-WAY` `RUNG1 READ`
+
+**`[RUNG 2 SHIPPED 2026-09-09: `ops/audit-measurement-provenance.ps1`, in `run-gates`, ratchet at 8.]`**
+
+The convention went into `.claude/rules/measurement.md` on 2026-09-09. **A convention with no detector
+is an intention, and an intention has no exit code** - the same principle I41 turned on - so this is
+what notices when a new recorded measurement does not say what it was measured through.
+
+**A RATCHET, NEVER A GATE.** The item was explicit that retro-filling the existing nine was not asked
+for, and a bar over them would be red on day one against almost all of them. The high-water mark may
+only go DOWN: a new document without provenance raises it and fails; filling one in lowers it.
+
+**Live: 10 documents, 2 compliant, 8 not.** Baseline armed at 8.
+
+**THE AUDIT'S FIRST RUN FAILED THE ONE DOCUMENT WRITTEN TO THE CONVENTION, and it was right to.**
+`EVAL-alert-retention-2026-09-09.md` named its harness and then said *"the commit that introduced both
+is the one carrying this file"* - **because a document cannot contain the hash of the commit that adds
+it.** The convention as first written was unsatisfiable for the introducing commit. It accepts a
+harness plus **a commit hash OR an ISO date** now, since `git log --before=<date> -- <harness>` answers
+the same question, and the hash is backfilled once it exists - which that document now carries
+(`60e944660`). **That is a real design hole found by building the detector rather than by reasoning
+about it.**
+
+**Both half-done shapes are must-fires, because each looks finished:** a harness named with no commit
+(which is exactly where all nine already were - you know which file to look at and still cannot tell
+whether it moved), and a date with no harness (**every one of the nine carries a date**, so if a date
+sufficed this audit would have gone green on day one having changed nothing).
+
+**Verified by making it fire:** a provenance-free probe document took it to 9 and the audit exited **2**
+naming both numbers; removing it returned exit 0. Self-test **9 of 9**. `run-gates` exit 0,
+`pass=297 fail=0`.
+
+**SCOPE OF A CLEAN REPORT: UNSOUND.** It checks that the question was ANSWERED, never that the answer
+is true - a document naming a harness it did not use counts as compliant.
 
 **`[RUNG 1 RAN 2026-09-09. The answer is not "nothing has moved", so the item does not close.]`**
 

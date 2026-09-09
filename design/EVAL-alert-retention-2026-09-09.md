@@ -5,8 +5,10 @@ exists.** Ruled by Brad 2026-09-09: pre-register it and snapshot the counts mont
 
 **Harness and commit** (per `.claude/rules/measurement.md`): the snapshot producer is
 `ops/member-cohorts.ps1 -AppendHistory`, run from `grocery/capture-watchdog.ps1` check 5a4. The series
-this analysis will read is `ops/member-alert-history.jsonl`. The commit that introduced both is the one
-carrying this file. Anything that reads the series later states the commit it read at.
+this analysis will read is `ops/member-alert-history.jsonl`. The commit that introduced both is
+**`60e944660`**, dated 2026-09-09 - backfilled here once it existed, because a document cannot contain
+the hash of the commit that adds it. That is why the convention accepts a harness plus a date and asks
+for the hash afterwards. Anything that reads the series later states the commit it read at.
 
 ## Why this document exists before the data
 
