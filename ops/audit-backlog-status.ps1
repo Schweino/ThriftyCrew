@@ -144,10 +144,60 @@ function Get-TcLedgerStates {
   return ,@($out)
 }
 
+function Get-TcBlockRecheck {
+  <# Does an externally-blocked item say how to re-test its block? Pure over one item's body, so the
+     fixtures drive it with synthetic text rather than with today's ledger.
+
+     Returns '' when the item is fine, or the reason it is not.
+
+     A BLOCK IS A CLAIM ABOUT THE OUTSIDE WORLD, AND THE OUTSIDE WORLD MOVES. Measured 2026-09-09:
+     three items recorded as blocked on an external system had all quietly unblocked - a server that
+     only needed starting, a console that had been readable for two days, an API the estate already
+     held a credential for. Every one was found by ATTEMPTING the thing, and the note is what the next
+     session reads instead.
+
+     NOT A TIMER, and that is deliberate: all three were written that same morning, so any age-based
+     expiry would have passed them. The property that is actually checkable is whether the item names
+     the one command or observation that settles it.
+
+     WAITING ON BRAD IS OUT OF SCOPE. A ruling is not re-testable by running anything, so RUNG1 RULING
+     items are exempt - and that exemption is what stops this being red on items nobody can unblock. #>
+  param([string]$State, [string]$Detail, [string]$Rung, [string]$Body)
+  if ($OPEN_STATES -notcontains $State) { return '' }
+  if ($Rung -eq 'RULING') { return '' }
+  $waits = ($Rung -eq 'BLOCKED') -or ($Detail -match '(?i)\bBLOCKED\b|\bWAIT(S|ING)?\b|NEEDS A RUN|OUTSTANDING|IS DOWN|DISPATCH')
+  if (-not $waits) { return '' }
+  if ($Body -match '(?m)^\s*\*\*RE-CHECK:\*\*') { return '' }
+  return ("waits on something outside this machine but states no RE-CHECK. Add a line beginning " +
+          "'**RE-CHECK:**' naming the one command or observation that settles whether the block still " +
+          "holds - a block written once and never re-tested is how three of these went stale on " +
+          "2026-09-09 without anyone noticing.")
+}
+
 # ------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {
   $f = 0
   function T($m, $cond, $got) { if ($cond) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $got); $script:f++ } }
+
+  # ---- A BLOCK MUST SAY HOW TO RE-TEST ITSELF (2026-09-09) ----------------------------------------
+  # MUST FIRE: the founding shape. I44 as it stood this morning - blocked on Google, no way stated to
+  # ask Google, so "is it still blocked?" cost archaeology every time somebody wondered.
+  T 'MUST FIRE  an externally blocked item with no RE-CHECK is flagged' `
+    ((Get-TcBlockRecheck 'PARTLY DONE' 'ONLY GOOGLE''S RE-CRAWL VERDICT IS OUTSTANDING' 'BLOCKED' 'body with no marker') -ne '') 'passed'
+  T 'MUST FIRE  the wait can be in the DETAIL rather than the rung - I61 said THE RUN NEEDS A SERVER THAT IS DOWN' `
+    ((Get-TcBlockRecheck 'PARTLY DONE' 'INSTRUMENTED; THE RUN NEEDS A SERVER THAT IS DOWN' 'MEASURE' 'no marker') -ne '') 'passed'
+  # MUST NOT FIRE: the same item once it states the command that settles it.
+  T 'MUST NOT FIRE  a stated RE-CHECK satisfies it' `
+    ((Get-TcBlockRecheck 'PARTLY DONE' 'ONLY GOOGLE''S VERDICT IS OUTSTANDING' 'BLOCKED' ("x`n**RE-CHECK:** run the inspector`ny")) -eq '') 'flagged'
+  # MUST NOT FIRE: waiting on BRAD is a ruling, not a block - no command re-tests a decision.
+  T 'MUST NOT FIRE  a RULING waiting on Brad owes no re-check' `
+    ((Get-TcBlockRecheck 'PARTLY DONE' 'THE SPEND DECISION IS STILL BRAD''S' 'RULING' 'no marker') -eq '') 'flagged'
+  # MUST NOT FIRE: an item that waits on nothing.
+  T 'MUST NOT FIRE  an ordinary open item owes no re-check' `
+    ((Get-TcBlockRecheck 'OPEN' 'RUNG 1 IS A MEASUREMENT' 'MEASURE' 'no marker') -eq '') 'flagged'
+  # MUST NOT FIRE: a CLOSED item keeps its history without owing anything.
+  T 'MUST NOT FIRE  a DONE item that once said BLOCKED is not re-flagged' `
+    ((Get-TcBlockRecheck 'DONE' 'WAS BLOCKED, NOW MEASURED' 'BLOCKED' 'no marker') -eq '') 'flagged'
 
   # EVERY FIXTURE IS A SINGLE-QUOTED LITERAL with doubled inner quotes. Built by concatenation they
   # would be three positional arguments, not one string - the trap that let two of
@@ -296,6 +346,35 @@ if ($Summary) {
     @($notClosed | Where-Object { $_.Reversibility -eq '2-WAY' }).Count,
     @($notClosed | Where-Object { $_.Reversibility -eq '1-WAY' }).Count)
   exit 0
+}
+
+# ---- THE LIVE ARM OF THE RE-CHECK RULE. A helper with fixtures and no caller is a helper that
+# never runs, which is what audit-guard-contract calls DEAD and what this estate has a frozen fixture
+# about. The bodies are sliced here because the heading carries the state and the rung while the
+# RE-CHECK lives in the prose underneath it, and the parser above only ever read headings.
+$allLines = [IO.File]::ReadAllLines($LEDGER)
+$bodies = @{}
+$curId = ''
+$buf = New-Object System.Collections.Generic.List[string]
+foreach ($ln in $allLines) {
+  if ($ln -match '^###\s+([A-Z][0-9]+)\s+-\s') {
+    if ($curId) { $bodies[$curId] = ($buf -join "`n") }
+    $curId = $Matches[1]
+    $buf = New-Object System.Collections.Generic.List[string]
+  } elseif ($curId) { [void]$buf.Add($ln) }
+}
+if ($curId) { $bodies[$curId] = ($buf -join "`n") }
+
+$noRecheck = @()
+foreach ($it in $items) {
+  $body = if ($bodies.ContainsKey($it.Id)) { [string]$bodies[$it.Id] } else { '' }
+  $why = Get-TcBlockRecheck $it.State $it.Detail $it.Rung $body
+  if ($why) { $noRecheck += [pscustomobject]@{ Id = $it.Id; Why = $why } }
+}
+if ($noRecheck.Count) {
+  foreach ($n in $noRecheck) { Write-Output ("  {0}: {1}" -f $n.Id, $n.Why) }
+  Write-Output ("BACKLOG STATUS AUDIT FAILED: {0} item(s) wait on the outside world and do not say how to re-test that. Three blocks went stale on 2026-09-09 unnoticed; a stated RE-CHECK is what turns 'is it still blocked?' into one command." -f $noRecheck.Count)
+  Exit-Guard -Name 'backlog-status' -Summary ("items={0} norecheck={1}" -f $items.Count, $noRecheck.Count) -Code 2
 }
 
 $bad = @($items | Where-Object { $_.Problem })

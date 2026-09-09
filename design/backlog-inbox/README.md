@@ -25,10 +25,16 @@ the body:
 ```
 ## the title, one line, lower case, says what is wrong
 
-`OPEN` `queue-6`
+`OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
 
 **Source.** ...
 ```
+
+**An OPEN, PARTLY DONE or NEEDS A RULING finding owes two more tags on that line**: a reversibility
+(`2-WAY` or `1-WAY`) and a first-rung type (`RUNG1 <READ|MEASURE|DOC|BUILD|RULING|BLOCKED>`). Both
+classify the FIRST RUNG, not the whole item. `ops/audit-backlog-status.ps1` fails a heading without
+them, so the merge refuses rather than writing one - added 2026-09-09, after it wrote exactly such a
+heading for I101 and that gate went red on the next run. A closed state owes neither.
 
 **Claim no id number.** Ids belong to the merge, which is the only process that allocates them, which
 is the entire reason they are safe there and were not safe in four agents.

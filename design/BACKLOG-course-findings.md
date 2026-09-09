@@ -4587,6 +4587,8 @@ having.
 
 ### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `PARTLY DONE - THE FIX IS SHIPPED AND VERIFIED LIVE 2026-09-07; ONLY GOOGLE'S RE-CRAWL VERDICT IS OUTSTANDING` `b3a35c7cf` `be797a371` `seo` `2-WAY` `RUNG1 BLOCKED`
 
+**RE-CHECK:** `python ops/seo_url_inspect.py` - it prints the last-crawl date per URL. **The block lifts the moment any sampled crawl date postdates 2026-09-07**, because only then is Google reporting on the fixed page rather than the old one. Until then the fourth pre-registered branch holds: not re-crawled, so no verdict.
+
 **Found 2026-09-07 while chasing the impression decline I24 measured.** Read from Search Console
 directly, not inferred.
 
@@ -5064,6 +5066,8 @@ question is answerable without archaeology.
 two configurations it controls, where the repair is a paired design (I48), not an adjustment.
 
 ### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `PARTLY DONE - THE HARNESS AND BOTH ARMS ARE BUILT; ONLY THE DECIDER CALLS NEED A DISPATCH` `queue-4` `2-WAY` `RUNG1 MEASURE`
+
+**RE-CHECK:** `python meal-prep/pipeline/dedup_paired_probe.py --score` - it exits 3 and says BLIND while the decider verdicts are missing. **The block lifts when it exits 0 or 2**, which is the moment both arms have been dispatched and their rows written back.
 
 **`[THE HARNESS SHIPPED 2026-09-09: `meal-prep/pipeline/dedup_paired_probe.py`. Only the decider calls
 are outstanding, and they are the one part of this that needs a dispatch.]`**
@@ -7308,6 +7312,8 @@ query answers it: edges per node, tracked over time.
 
 ### I77 - the one-hop memory expansion experiment now has a design and, more importantly, a control group `OPEN - BLOCKED ON A RUN, NOT ON A DECISION` `queue-6` `2-WAY` `RUNG1 MEASURE`
 
+**RE-CHECK:** count the rows carrying a `turn` in `~/.claude/recall-log.jsonl`, and the open rows among them. **The block lifts when enough turns have accumulated to draw a case set from real queries** - the join only exists from 2026-09-09 forward, so this is a question about elapsed use, not about anything anyone can run today.
+
 **`[NOT REACHED 2026-09-09, and the block is now stated PRECISELY, which it was not before.]`** The
 design and its control group are the valuable half and they are already written here. **Nothing was
 estimated in place of running it.**
@@ -9157,3 +9163,56 @@ refuses to score a cohort it cannot form and reports it BLIND rather than passin
 at least 2 other priced cells, and 41 of 492 commodities on the 2026-07-30 board could not reach
 that (22 with one priced cell, 19 with exactly two). That is the same small-cohort discipline the course
 teaches for retention tables, implemented here first.
+
+### I101 - 639 published pages earn 300 impressions and 1 click a month, and nothing in the estate measures it `OPEN` `queue-reach` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\reach-2026-09-09.md` on 2026-09-09.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**RE-CHECK:** `python ops/seo_url_inspect.py` for the per-URL half, and the page-level Search Console
+read below for the reach half. **This item is blocked on nothing** - it is the first rung of a
+measurement anyone can take today, and it is filed because the queue has no item scored this way.
+
+**Source.** Measured 2026-09-09 while answering a different question, using the Search Console
+credential the estate already holds. Not inferred, not modelled: Google's own page rows over
+2026-08-10 to 2026-09-06.
+
+**THE MEASUREMENT.**
+
+| | |
+|---|---|
+| published pages (584 built recipes + 55 lessons) | **639** |
+| pages earning ANY impression in 28 days | **104** (16.3%) |
+| total impressions | **300** |
+| total clicks | **1** |
+| pages with impressions and ZERO clicks | **103 of 104** |
+| best single page | `/chicken-tikka-masala-burrito/` at 37 impressions, 0 clicks, position 19.5 |
+
+**WHY THIS IS FILED, and it is not an SEO item.** Every other item on this ledger is scored in
+CORRECTNESS - a gate that fires, a price that reconciles, a fixture that holds. That is the right
+scoring for most of them and this estate is genuinely excellent at it: 304 gates, 130 items, 100
+closed. **But a queue scored entirely in correctness produces correctness, and nothing else.** Of the
+100 closed items, essentially none changed what a reader sees. This item exists so the queue has one
+entry that is scored in REACH, and so the next person to ask "what should we do next" has a number
+pulling the other way.
+
+**WHAT IT DOES NOT CLAIM.** It does not claim the accuracy machinery is waste - a wrong price on a
+paid board is a real cost to a real person and that work is justified on its own terms. It does not
+claim to know WHY the reach is what it is: 16% of pages indexed-and-impressed is a fact, and the
+cause could be crawl, content, competition, or simply that the site is young. **Diagnosing that is
+rung 2 and is deliberately not attempted here**, because the estate's own rule is that a rung 1 which
+measures beats a rung 2 that guesses.
+
+**WHAT WOULD MAKE IT ACTIONABLE.** Three readings, none of which needs a build:
+1. Whether the 535 pages earning NOTHING are indexed at all, or absent from Google's index entirely -
+   `ops/seo_url_inspect.py` answers this per URL and the two causes want opposite fixes.
+2. Whether position or click-through is the binding constraint. One click on 300 impressions at a
+   mean position in the 20s to 90s says position; a good position with no clicks would say title and
+   snippet.
+3. What the 18 members (4 paying) actually came from, at AGGREGATE level only. **The privacy boundary
+   holds: per-member rows have never entered this repo and this item does not propose that they
+   start.** `ops/member-cohorts.ps1` is the aggregate reader.
+
+**THE HONEST CAVEAT ON ACTING AT ALL.** 1 click over 28 days is a sample of one. Almost any
+intervention will look like it worked against a baseline that low, and this estate has a rule about
+selection on noise. Whatever rung 2 turns out to be, its acceptance bar wants writing before the run
+and wants to be stated in impressions rather than clicks, because clicks here have no signal yet.

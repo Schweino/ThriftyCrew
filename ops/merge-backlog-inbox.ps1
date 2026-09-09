@@ -71,6 +71,12 @@ function Get-NextId([string]$text) {
   return (($ids | Measure-Object -Maximum).Maximum + 1)
 }
 
+# A STATE LINE, DEFINED ONCE. `[2026-09-09.]` This pattern lived in two places - the finding parser
+# and Test-MislevelledFinding - and widening one to carry the reversibility and first-rung axes left
+# the other refusing to recognise its own fixture's input. A rule implemented twice diverges the
+# moment one copy moves, which this estate has a memory about. One constant, two readers.
+$STATE_LINE_RE = '^\s*(`[^`]+`\s*)+$'
+
 function Test-MislevelledFinding([string]$preamble) {
   <# A `#` heading is a mis-levelled FINDING only when a STATE LINE follows it. With prose
      under it, it is a document title - which is what every lane writes and what this
@@ -81,7 +87,7 @@ function Test-MislevelledFinding([string]$preamble) {
   for ($i = 0; $i -lt $lines.Count; $i++) {
     if ($lines[$i] -match '^#\s+\S') {
       $rest = @($lines | Select-Object -Skip ($i + 1) | Where-Object { $_.Trim() })
-      if ($rest.Count -gt 0 -and $rest[0] -match '^\s*`([^`]+)`\s*(?:`([^`]+)`)?\s*$') { return $true }
+      if ($rest.Count -gt 0 -and $rest[0] -match $STATE_LINE_RE) { return $true }
     }
   }
   return $false
@@ -141,14 +147,31 @@ function Read-Inbox([string]$path) {
     $title = $lines[0].Trim()
     if (-not $title) { continue }
     $stateLine = ($lines | Select-Object -Skip 1 | Where-Object { $_.Trim() } | Select-Object -First 1)
-    $m = [regex]::Match([string]$stateLine, '^\s*`([^`]+)`\s*(?:`([^`]+)`)?\s*$')
-    if (-not $m.Success) {
-      throw "in $([IO.Path]::GetFileName($path)): finding '$title' has no state line. Expected a line of the form ``OPEN`` ``queue-6``."
+    # EVERY backticked tag on the line, not the first two. `[WIDENED 2026-09-09, measured.]` The old
+    # pattern took a state and at most ONE tag, so an OPEN finding could not carry the reversibility
+    # and first-rung type that audit-backlog-status REQUIRES of it - and the merge duly wrote
+    # `### I101 - ... ``OPEN`` ``queue-reach``, which that gate failed on the next run. The header
+    # above promises this script refuses rather than writing a heading the gate rejects; it checked
+    # the state vocabulary and nothing else, so it kept the half of the promise it could parse.
+    $tags = @([regex]::Matches([string]$stateLine, '`([^`]+)`') | ForEach-Object { $_.Groups[1].Value.Trim() })
+    if (-not $tags.Count -or ([string]$stateLine) -notmatch $STATE_LINE_RE) {
+      throw "in $([IO.Path]::GetFileName($path)): finding '$title' has no state line. Expected a line of the form ``OPEN`` ``queue-6``, and for an open state also ``2-WAY``/``1-WAY`` and ``RUNG1 <TYPE>``."
     }
-    $state = $m.Groups[1].Value.Trim()
-    $tag = $m.Groups[2].Value.Trim()
+    $state = $tags[0]
+    $rest = @($tags | Select-Object -Skip 1)
+    $tag = ($rest -join '` `')
     if (-not (Test-State $state)) {
       throw "in $([IO.Path]::GetFileName($path)): finding '$title' declares state '$state', which is not in the closed vocabulary ($($STATES -join ', ')). audit-backlog-status.ps1 would fail on it."
+    }
+    # AND THE AXES, for the same reason and from the same gate. An open item owes both; a closed one
+    # owes neither. Refusing here is the whole point of a single writer: the alternative is a heading
+    # that lands and turns run-gates red for whoever next touches the ledger.
+    if (@('NEEDS A RULING', 'PARTLY DONE', 'OPEN') -contains $state) {
+      $hasRev = @($rest | Where-Object { $_ -eq '2-WAY' -or $_ -eq '1-WAY' }).Count
+      $hasRung = @($rest | Where-Object { $_ -match '^RUNG1\s+\S+$' }).Count
+      if ($hasRev -ne 1 -or $hasRung -ne 1) {
+        throw ("in $([IO.Path]::GetFileName($path)): finding '$title' is state '$state', so its state line owes exactly one of ``2-WAY``/``1-WAY`` (it has $hasRev) and exactly one ``RUNG1 <TYPE>`` (it has $hasRung). audit-backlog-status.ps1 fails the heading without them, which is what happened to I101 on 2026-09-09.")
+      }
     }
     $bodyLines = @($lines | Select-Object -Skip 1) | Where-Object { $_ -ne $stateLine }
     $out += [pscustomobject]@{
@@ -178,8 +201,8 @@ if ($SelfTest) {
   }
 
   Set-Content $bl "# Backlog`n`n### I40 - an old one ``DONE```n`nbody`n" -Encoding UTF8
-  Set-Content (Join-Path $inb 'lane-a.md') "## first finding`n``OPEN`` ``queue-6```n`nbody one`n" -Encoding UTF8
-  Set-Content (Join-Path $inb 'lane-b.md') "## second finding`n``PARTLY DONE`` ``queue-6```n`nbody two`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-a.md') "## first finding`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody one`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-b.md') "## second finding`n``PARTLY DONE`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody two`n" -Encoding UTF8
 
   # Byte length BEFORE the merge, so the line-ending assertion below can look at the
   # appended region alone. The seed above is written by Set-Content, which ends it with
@@ -215,7 +238,7 @@ if ($SelfTest) {
   _C 'MUST NOT FIRE' 'an empty inbox is exit 0 and writes nothing' ($LASTEXITCODE -eq 0 -and (Get-Content $bl -Raw -Encoding UTF8) -eq $after) $LASTEXITCODE
 
   # A bad state must refuse the WHOLE merge, not write half of it.
-  Set-Content (Join-Path $inb 'lane-c.md') "## good one`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-c.md') "## good one`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
   Set-Content (Join-Path $inb 'lane-d.md') "## bad one`n``SHIPPED`` ``queue-6```n`nbody`n" -Encoding UTF8
   $before = Get-Content $bl -Raw -Encoding UTF8
   $out3 = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
@@ -243,7 +266,7 @@ if ($SelfTest) {
   # MUST FIRE: the preamble above the first `##` is not a finding, but a `#` heading there
   # is very likely one written with the wrong number of hashes. Refuse loudly rather than
   # drop it, because a silent loss is worse than a wrong refusal in THIS tool.
-  Set-Content (Join-Path $inb 'lane-f.md') "# a finding written with one hash`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-f.md') "# a finding written with one hash`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
   $outP = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   $cP = $LASTEXITCODE
   _C 'MUST FIRE' 'a one-hash heading WITH a state line under it refuses the merge' ($cP -eq 2 -and $outP -match 'ONE hash') "$cP"
@@ -252,7 +275,7 @@ if ($SelfTest) {
   # lanes opened their file with one on 2026-09-08 and all three were refused; a rule
   # broken by everyone who meets it is the defect, not the users.
   Get-ChildItem $inb -Filter *.md | Remove-Item -Force
-  Set-Content (Join-Path $inb 'lane-t.md') "# Lane: something, 2026-09-08`n`nSome prose about the lane.`n`n## a real finding`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-t.md') "# Lane: something, 2026-09-08`n`nSome prose about the lane.`n`n## a real finding`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
   $blT = Get-Content $bl -Raw -Encoding UTF8
   $outT = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   $cT = $LASTEXITCODE
@@ -271,7 +294,7 @@ if ($SelfTest) {
   # CLEAN TWIN: ordinary prose above the first finding still merges, and is not itself
   # filed. This is the behaviour the refusal above was most likely to have broken.
   Remove-Item (Join-Path $inb 'lane-f.md') -Force -ErrorAction SilentlyContinue   # tolerant BY RULE: no case may depend on what an earlier case left behind
-  Set-Content (Join-Path $inb 'lane-g.md') "a note from the lane, no heading`n`n## a real finding`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-g.md') "a note from the lane, no heading`n`n## a real finding`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
   $outG = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   $cG = $LASTEXITCODE
   $blAfter = Get-Content $bl -Raw -Encoding UTF8
@@ -283,7 +306,7 @@ if ($SelfTest) {
   # a course blocked by a 403 filed nothing, correctly, and the merge refused the batch.
   Get-ChildItem $inb -Filter *.md | Remove-Item -Force
   Set-Content (Join-Path $inb 'lane-h.md') "# Lane: blocked`n`nNOTHING TO FILE`n`nthe course 403'd, so nothing was measured`n" -Encoding UTF8
-  Set-Content (Join-Path $inb 'lane-i.md') "## a real finding beside it`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-i.md') "## a real finding beside it`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
   $blPre = Get-Content $bl -Raw -Encoding UTF8
   $outN = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   $cN = $LASTEXITCODE
@@ -315,7 +338,7 @@ if ($SelfTest) {
   # under test and was FALSE - the file was simply gone. A fixture that lies about which
   # thing failed is worse than one that fails, so it now writes what it asserts on.
   Get-ChildItem $inb -Filter *.md | Remove-Item -Force
-  Set-Content (Join-Path $inb 'lane-dry.md') "## a finding for the dry run`n``OPEN`` ``queue-6```n`nbody`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-dry.md') "## a finding for the dry run`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
   $before2 = Get-Content $bl -Raw -Encoding UTF8
   $out5 = & $PSCommandPath -InboxDir $inb -Backlog $bl -DryRun 2>&1 | Out-String
   $c5 = $LASTEXITCODE
