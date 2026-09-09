@@ -5962,7 +5962,95 @@ other candidates; nobody has checked whether they carry a baseline.
 
 ---
 
-### I71 - per-store pacing is a static constant, and a closed loop on observed latency has never been costed `OPEN - RUNG 1 IS A MEASUREMENT THAT MAY CLOSE THIS WONTFIX` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I71 - per-store pacing is a static constant, and a closed loop on observed latency has never been costed `PARKED - MEASURED 2026-09-08: THE WALLS ARE NOT A RENDERING PROBLEM AND THE COST IS PACING, SO ADAPTIVE RATE CONTROL IS THE WRONG LEVER` `queue-6`
+
+**`[CLOSED PARKED 2026-09-08. The item said: 'if the estate's walls are quota walls rather than load
+walls, this item should be closed as WONTFIX rather than built. The measurement that settles it is
+cheap and does not exist.' It exists now.]`**
+
+This was run as the split-out I72 asked for - *is any of the four browser-required stores
+browser-required only because nobody has looked at its Network tab?* - and it answered I71 on the
+way, because both rest on the same premise.
+
+## 1. The Instacart stores are genuinely client-rendered. Nobody missed an endpoint.
+
+Measured live in a browser on the Aldi/Instacart storefront, running **the exact same-origin fetch
+and the exact regex `pull-aldi-instore.js` and `pull-fareway-instore.js` use**:
+
+| | |
+|---|---|
+| HTTP | **200** |
+| response | **498,331 bytes** in 1,356 ms |
+| `"priceString"` | **0** |
+| `"viewSection"` | **0** |
+| `__NEXT_DATA__` | **0** |
+| `__APOLLO_STATE__` | **0** |
+| rows the agents' regex matches | **0** |
+
+That is a half-megabyte shell with **no product JSON in it at all** - and it extends to **Aldi** the
+condition `pull-fareway-instore.js` already documents for Fareway. So the browser is not there out of
+habit or ignorance; the storefront genuinely does not ship the catalog in its HTML.
+
+## 2. There IS a JSON API, and it is not the free win the item hoped for
+
+Instacart is a **GraphQL app using PERSISTED QUERIES**: every data call is
+`GET /graphql?operationName=<Op>&variables=<json>&extensions={"persistedQuery":{"version":1,"sha256Hash":"<hash>"}}`.
+The live parameters were captured (`retailerId` 12 = Aldi, `retailerSlug` aldi, `shopId` 43147,
+`postalCode` 68144, `zoneId` 917).
+
+**Using it means pinning an operation name AND a sha256 hash per query, both of which the vendor
+rotates on deploy.** That is a standing maintenance cost against a shape that breaks silently - the
+exact class this estate keeps paying for - traded for a page fetch that already works. **Not
+recommended**, and the reason is now written down rather than left to be re-litigated.
+
+## 3. WALMART WAS NEVER A RENDERING PROBLEM, AND THE 75 MINUTES IS PACING
+
+`pull-walmart-instore.js` fetches `/search?q=<term>` and parses `<script id="__NEXT_DATA__">` out of
+the response. **It has always been an API pull wearing a browser.** The browser is there for
+`credentials: 'include'` - the session - not for rendering.
+
+So what costs 75 minutes? `stores.json` -> Walmart -> `pull_profile`: **`delay_ms` 3500, `jitter_ms`
+2000**, a mean of **4.5 s of deliberate waiting per term**:
+
+| terms | pacing alone |
+|---|---|
+| 100 | 7.5 min |
+| 300 | 22.5 min |
+| **596** | **44.7 min** |
+
+**Roughly 45 of the ~75 minutes is the estate choosing to wait.** No JSON endpoint can retire that,
+because it is not request time. **This is the item's own honest counter-argument, confirmed:**
+`claude-api-craft/rate-limits-retries-and-cost.md` 11 already concluded that under a quota the fix is
+**fewer requests per window - shard the term list across the day - not slower requests.** AutoThrottle
+is a rate controller, not a quota controller. **So: WONTFIX, as the item itself prescribed.**
+
+## 4. THE FINDING THAT IS WORTH MORE THAN THE ITEM WAS, and it is in the config's own words
+
+Walmart's `pull_profile.evidence` reads:
+
+> *"2026-08-15: hit a Robot or human? wall during the weekly refresh. **THE RATE THAT TRIGGERED IT WAS
+> NEVER RECORDED** - the sweep was an ad-hoc snippet with no instrumentation, so there is no
+> before-number to compare against."*
+
+**So the most expensive constant in the estate - 45 minutes a pull - was set from a trigger rate
+nobody measured.** That is `I94`'s rule (a tuning constant records what else was tried) landing on the
+single place it costs the most.
+
+**And the estate already knows how to do better, at another store.** Sam's Club's evidence is
+*measured*: two full 388-term sweeps back to back at 2600+/-1400 ms with **zero walls**,
+`observedMeanIntervalMs` 5430 and 5198, `timing.verdict CLEAN` both times. Sam's records its observed
+interval. **Walmart does not.** Fareway is explicit that a 144-term sweep saw no wall but that
+*never-observed is not measured-safe*.
+
+**THE ONE THING WORTH DOING, and it is not this item:** give the Walmart sweep the instrumentation
+Sam's already has - record the observed interval and the per-request latency - so the next wall has a
+before-number. Until then nobody can say whether 3500 ms is twice what is needed or half.
+
+**Scope stated honestly.** Sam's Club and Walmart were NOT probed live in this session: Sam's is
+CAPTCHA-walled and Walmart bot-walls a fresh browser, and driving Brad's own Chrome is the 09:00
+agent's job, not this session's. Their halves rest on reading `pull-walmart-instore.js`,
+`pull-sams-instore.js` and `stores.json`, which is enough for the rendering question and for the
+arithmetic, and is not enough to claim anything about their live wall behaviour today.
 
 *[ID ALLOCATED 2026-09-08 by `ops/merge-backlog-inbox.ps1`'s allocator, which is now the only writer of this file's ids. It was I-WS1, an explicitly unallocated placeholder, because four course agents ran concurrently and the I-series had no lock. HEADING REWRITTEN 2026-09-08 to the `### <ID> - <title>` shape: as filed it matched neither the id nor the state pattern, so `ops/audit-backlog-status.ps1` skipped it as prose and this item was absent from every board count taken since.]*
 
