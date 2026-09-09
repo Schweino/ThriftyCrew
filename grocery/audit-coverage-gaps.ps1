@@ -149,14 +149,48 @@ if ($adsF) { foreach ($d in (Read-JsonFile $adsF.FullName).deals) { AddP ([strin
 # newest file is real), and a file past the freshness cliff counts at all (a Family Fare row from
 # 21 days ago). Both then read as "the store carries it but a too-strict regex dropped it", which
 # is the opposite of what happened. Every other source below already takes -First 1.
+# THE CAPTURE THAT FED THE BOARD, NOT THE NEWEST CAPTURE NOW (2026-09-09, backlog I35 rung 2).
+#
+# THE MEASURED PROBLEM. 16 of 23 individual claims across three dated firings were not what the alert
+# said they were, and the reversals were NOT the store being misread - they were THIS AUDITOR'S OWN
+# BLIND SPOTS. Triage wrote the check that would have caught them by hand on 2026-09-01: *"Not a
+# capture-depth artifact (tested first: every candidate lives in walmart-regular-2026-08-31.json, the
+# file that fed the board)"*.
+#
+# THE ASYMMETRY THAT MANUFACTURES THE FALSE CLAIM. This audit picks the NEWEST regular file; the board
+# was built from whichever file was newest AT BUILD TIME. A capture that landed after the board was
+# built contains products the engine never saw - and every one of them then reads as "the store
+# carries it and a too-strict regex dropped it", which is a rule finding for a row no rule was ever
+# offered. Bounding the selection by the BOARD'S OWN DATE is the cheap second observation the item
+# asked for: it touches no store, costs no 75-minute pull, and is a pre-condition rather than a
+# general re-probe mechanism.
+$script:cgBoardStamp = ''
+$__cgBoardFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue |
+                  Sort-Object Name -Descending | Select-Object -First 1)
+if ($__cgBoardFile) {
+  $__mb = [regex]::Match($__cgBoardFile.BaseName, '(\d{4}-\d{2}-\d{2})')
+  if ($__mb.Success) { $script:cgBoardStamp = $__mb.Groups[1].Value }
+}
+
 $regNewest = @{}
+$__cgAfterBoard = @()
 foreach ($rf in (Get-ChildItem (Join-Path $OutDir 'regular\*.json') -ErrorAction SilentlyContinue)) {
   $m = [regex]::Match($rf.BaseName, '^(.+)-regular-(\d{4}-\d{2}-\d{2})$')
   if (-not $m.Success) { continue }                     # stray file: guard 12 owns that failure
   $pfx = $m.Groups[1].Value; $stamp = $m.Groups[2].Value
+  # A capture NEWER than the board is one the engine never read. Skipped, and SAID SO - an exclusion
+  # nobody can see is its own blind spot, which is the mistake this whole change is about.
+  if ($script:cgBoardStamp -and $stamp -gt $script:cgBoardStamp) { $__cgAfterBoard += $rf.Name; continue }
   if (-not $regNewest.ContainsKey($pfx) -or $stamp -gt $regNewest[$pfx].stamp) {
     $regNewest[$pfx] = [pscustomobject]@{ stamp = $stamp; file = $rf }
   }
+}
+if ($__cgAfterBoard.Count -gt 0) {
+  Write-Output ("coverage-gaps: SKIPPED {0} regular capture(s) NEWER than the board ({1}) - the engine never read them, so a name found only there is not a rule gap: {2}" -f `
+    $__cgAfterBoard.Count, $script:cgBoardStamp, (($__cgAfterBoard | Select-Object -First 4) -join ', '))
+}
+if (-not $script:cgBoardStamp) {
+  Write-Output 'coverage-gaps: no comparison board found, so the capture set could NOT be bounded to what fed it. Findings below may include rows the engine never saw.'
 }
 # The floor is ASKED FOR, not restated. The comment above says 'the same window the engine itself
 # honours' - it said 14 while the engine moved to the 90-day quarter, so this manufactured exactly

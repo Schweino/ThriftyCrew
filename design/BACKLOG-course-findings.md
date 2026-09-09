@@ -3813,7 +3813,41 @@ windows with a crash-safe restore. That is the chaos loop against the gate layer
 state is observable. Reasoning recorded in `reliability-craft/estate-inventory.md` so it is not
 re-derived as an open gap.
 
-### I35 - Every failure verdict here is reached on ONE observation, and synthetic monitoring's standard answer is to take a second `PARTLY DONE - MEASURED 2026-09-09 AND IT SIZED UP: 16 OF 23 CLAIMS WERE WRONG ON ONE OBSERVATION` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I35 - Every failure verdict here is reached on ONE observation, and synthetic monitoring's standard answer is to take a second `DONE - THE SECOND OBSERVATION IS BUILT, AND IT IS A PRE-CONDITION RATHER THAN A RE-PROBE` `queue-4` `2-WAY` `RUNG1 MEASURE`
+
+**`[RUNG 2 BUILT 2026-09-09, in the form rung 1 argued for rather than the form the item proposed.]`**
+
+**The item proposed a second INDEPENDENT observation** - a different search term, a different session.
+Rung 1 showed that would have caught none of it: the reversals were not the store being misread, they
+were **this auditor's own blind spots**. So what shipped is the check triage did by hand on 2026-09-01
+and wrote down: *"every candidate lives in `walmart-regular-2026-08-31.json`, the file that fed the
+board"*.
+
+**THE ASYMMETRY THAT MANUFACTURED THE FALSE CLAIMS.** `audit-coverage-gaps.ps1` selected the **newest**
+regular capture per store; the board was built from whichever was newest **at build time**. Any capture
+landing after the board contains products the engine never saw, and every one of them then read as
+*"the store carries it and a too-strict regex dropped it"* - **a rule finding raised for a row no rule
+was ever offered.** The capture set is bounded by the board's own date now, and skipped files are
+NAMED in the output, because an exclusion nobody can see is its own blind spot - which is the mistake
+this whole change is about.
+
+**It is a pre-condition on one alert, not a general mechanism**, and it touches no store and costs no
+75-minute pull - which is why it is affordable where the re-probe the item costed was not.
+
+**HONEST RESULT: it changed nothing today, and that is the correct behaviour rather than a
+disappointment.** Before and after are identical on the live board - 21 gaps, 0 actionable, 21
+explained by the engine's own basis and band gates - because no regular capture is currently newer
+than the board. **A guard that fires on a healthy day is a guard that gets ignored.**
+
+**So it was proved by CONSTRUCTING the condition instead:** a capture dated after the board made the
+audit print *"SKIPPED 1 regular capture(s) NEWER than the board (2026-09-08) - the engine never read
+them"*, and removing it returned the audit to silence on that line. **Unproven against a live false
+alarm**, and it will stay that way until a day when a capture lands late - which is exactly the
+2026-09-01 shape.
+
+**The prize this defends, unchanged:** 16 of 23 individual claims across three dated firings were not
+what the alert said they were, and this alert type has SENT four times - 4 of the 73 alerts ever sent,
+all the same shape, all reaching a real inbox.
 
 **`[RUNG 1 RAN 2026-09-09. This is the opposite of I32's result and the two items were right not to
 be merged.]`**
