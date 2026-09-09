@@ -285,11 +285,52 @@ if ($SelfTest) {
         Write-Output 'ok    a MISMATCH names the side to look at, and the sign decides which'
     }
 
+    # ---- THE ROOTED-PATH REFUSAL, frozen against the artifact that found it (2026-09-09).
+    # MUST FIRE on the real collapsed string, which is the directory name that turned up at the repo
+    # root; MUST NOT FIRE on the rooted paths this parameter legitimately receives, including the
+    # default. Built by concatenation so this block cannot pass by matching its own source text.
+    $mangled = 'C' + 'CodexThriftyCrewgroceryoutcaptures_sink'
+    if ([System.IO.Path]::IsPathRooted($mangled)) {
+        Write-Output 'FAIL  the collapsed path reads as ROOTED, so the refusal below can never fire'; $fail++
+    } else {
+        Write-Output 'ok    MUST FIRE   a Windows path that lost its separators is not rooted, so it is refused'
+    }
+    $rootedCases = @("C:\Codex\ThriftyCrew\grocery\out\captures\_sink", $OutDir, '\\server\share\sink')
+    $badRooted = @($rootedCases | Where-Object { -not [System.IO.Path]::IsPathRooted($_) })
+    if ($badRooted.Count) {
+        Write-Output ('FAIL  a legitimate rooted path was refused: ' + ($badRooted -join ', ')); $fail++
+    } else {
+        Write-Output ('ok    MUST NOT FIRE  ' + $rootedCases.Count + ' real rooted path(s) pass, the default and a UNC among them')
+    }
+
     if ($fail) { Write-Output "$fail FAILED"; exit 1 }
     Write-Output 'capture-sink: all self-tests pass'
     exit 0
 }
 
+# AN UNROOTED -OutDir IS REFUSED, NOT CREATED (2026-09-09).
+#
+# THE ARTIFACT THAT FOUND THIS was an empty directory at the repo root literally named
+# `CodexThriftyCrewgroceryoutcaptures` - a Windows path with its colon and every separator gone. It
+# turned `ops\audit-stray-root-artifacts.ps1` red, and that audit's instruction is to find the WRITER
+# before deleting anything, because the artifact is the only evidence of the bug that made it. This is
+# the writer. `New-Item -Force` does not object to a path that lost its separators: it treats the whole
+# mangled string as ONE directory name and creates it relative to the current directory, which for a
+# scheduled run is the repo root. Nothing fails, nothing is logged, and the sink then writes captures
+# into a directory nobody meant to exist.
+#
+# The collapse itself is this estate's most-recorded trap - a Windows path crossing a shell or a native
+# exe boundary and losing its backslashes - and the durable answer is not to chase every caller but to
+# make the ONE place that materialises the directory refuse a path that cannot be right. A rooted path
+# is the only kind this parameter can legitimately receive; anything else is a collapse, and a loud
+# stop beats silent debris at the root of a live repo.
+if (-not [System.IO.Path]::IsPathRooted($OutDir)) {
+    Write-Output ("capture-sink: REFUSING -OutDir '" + $OutDir + "' - it is not a rooted path.")
+    Write-Output '  A Windows path that lost its separators arrives looking exactly like this, and'
+    Write-Output '  New-Item -Force would create it as one directory under the current directory'
+    Write-Output '  rather than fail. Pass an absolute path, or check the layer that mangled it.'
+    exit 2
+}
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 $listener = New-Object System.Net.HttpListener

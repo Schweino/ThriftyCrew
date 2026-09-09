@@ -144,6 +144,27 @@ function Get-Size([string]$name, [string]$cardSize, [string]$unit) {
     }
   }
 
+  # 1b-ii) THE CARD STATES THE MULTIPLICATION ITSELF: "12 x 12 fl oz", "6 x 4 oz", "4 x 4.3 oz".
+  # 1b only fires when the pack count is in the NAME. This storefront also prints the pack on the CARD in
+  # multiplication form, and nothing here understood it: the scan below finds the trailing "12 fl oz" and
+  # the "12 x" is simply dropped, so a twelve-pack is recorded as one can and priced TWELVE TIMES too dear.
+  #
+  # MEASURED 2026-09-09 on that morning's own capture: 19 rows carried this form, 9 of them reached the
+  # built file, and every one of the 9 lost its multiplier - applesauce cups at 4x and 6x, iced tea at 6x,
+  # LaCroix at 12x. guards.ps1 hard-failed exactly ONE of them, because its multipack check keys on a pack
+  # count in the NAME and only the LaCroix name says "12 Pack"; the other eight were invisible to it. None
+  # reached the board that day - the sanity bands refused them all - so the cost was zero and the exposure
+  # was the first day one of them landed inside its band.
+  #
+  # It emits the same "N pk M unit" form 1b does, because that is the spelling the engine multiplies back
+  # into a pack total. The unit must be a real measure, so "12 x 8 inch" is not mistaken for a pack.
+  $cx = [regex]::Match($cardSize, '(?i)^\s*(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lb|lbs|ml|liter|litre|qt|pt|gal)\b')
+  if ($cx.Success -and [int]$cx.Groups[1].Value -gt 1) {
+    $ux = ($cx.Groups[3].Value.ToLower() -replace '\s+', ' ') -replace '^floz$', 'fl oz'
+    if ($ux -eq 'lbs') { $ux = 'lb' }
+    return ($cx.Groups[1].Value + ' pk ' + $cx.Groups[2].Value + ' ' + $ux)
+  }
+
   # The card size wins ONLY if it actually states a measure. A wrapped record leaves junk in this field (the
   # split price text: "449" + newline + "L"), and a bare `if ($cardSize)` handed that junk to every scan below,
   # which found no unit and returned '' - so the NAME, which says "14 oz" right there, was never consulted.
@@ -367,6 +388,17 @@ if ($SelfTest) {
     @{ n = 'gatorade thirst quencher 18 pack 12 fl oz';       s = '12 fl oz'; u = ''; want = '18 pk 12 fl oz' }
     @{ n = 'breakfast best breakfast pizza 2pk 11.2 oz';      s = '11.2 oz';  u = ''; want = '2 pk 11.2 oz' }
     @{ n = 'single item 1 pk 16 oz';                          s = '16 oz';    u = ''; want = '16 oz' }
+    # 2026-09-09: the CARD states the multiplication and the name need not mention a pack at all. Frozen
+    # verbatim from that morning's capture - the LaCroix is the row guards caught, the two below it are
+    # rows guards could NOT see, because its check keys on a pack count in the NAME.
+    @{ n = 'lacroix peach strawberry sparkling water 12 pack'; s = '12 x 12 fl oz'; u = ''; want = '12 pk 12 fl oz' }
+    @{ n = 'lunch buddies diced peaches in juice bowls 4 oz';  s = '4 x 4 oz';      u = ''; want = '4 pk 4 oz' }
+    @{ n = 'benner peach iced tea 16 fl oz';                   s = '6 x 16 fl oz';  u = ''; want = '6 pk 16 fl oz' }
+    @{ n = 'lunch buddies mandarin in orange gel bowls';       s = '4 x 4.3 oz';    u = ''; want = '4 pk 4.3 oz' }
+    # MUST NOT FIRE: a multiplication whose right side is not a MEASURE is not a pack count.
+    @{ n = 'parchment sheets';                                 s = '12 x 8 inch';   u = ''; want = '' }
+    # MUST NOT FIRE: "1 x" is not a multipack, and the row keeps its plain size.
+    @{ n = 'single tub';                                       s = '1 x 16 oz';     u = ''; want = '16 oz' }
     # a wrapped record leaves junk with no measure in the card-size field; the NAME must still be read
     @{ n = 'l oven fresh keto friendly white bread 14 oz';     s = '449 L';    u = ''; want = '14 oz' }
     @{ n = 'l oven fresh artisanal style bread 20 oz';         s = '329 L';    u = ''; want = '20 oz' }
