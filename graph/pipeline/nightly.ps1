@@ -485,6 +485,23 @@ try {
   if ($refuse) { Record 'window' 'REFUSED' $refuse 0; throw 'WINDOW' }
   if (-not $py) { Record 'python' 'BLIND' 'no interpreter for graph\ (see grocery\python-lib.ps1)' 0; throw 'WINDOW' }
 
+  # -- 0. ASSERT THIS CHAIN'S INPUT (2026-09-09, backlog I45). Every stage below reads graph.db, and
+  #       graph.db is written by the 08:00 daily capture chain's identity emission - a different
+  #       scheduled task, on a different trigger, that can fail quietly. Without this line a nightly
+  #       run against a graph that stopped updating three days ago produces verdicts that look
+  #       exactly like healthy ones, which is the whole 08:30 shape the item is named for.
+  #
+  #       IT RECORDS AND CONTINUES; IT DOES NOT REFUSE, and that is deliberate. This script owns the
+  #       GPU window and must reach its teardown, so an early exit here is the one failure mode worse
+  #       than a stale input. 26 hours is the daily chain's own cadence plus an hour, the same window
+  #       capture-watchdog uses on the capture status file.
+  . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\input-assert.ps1')
+  $iaRc = Assert-TcInputs -Stage 'graph-nightly' -Inputs @(
+    @{ Path = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sqlite\graph.db'); Producer = 'the 08:00 Daily Capture chain (compare-deals identity emission -> graph import)'; MaxAgeHours = 26.0 }
+  )
+  if ($iaRc -eq 0) { Record 'inputs' 'OK' 'graph.db is inside its 26h window' 0 }
+  else { Record 'inputs' 'BLIND' 'graph.db is missing or stale - every verdict below is computed on an input nobody refreshed. NOT a failure and NOT a pass.' 0 }
+
   # -- 1. emit the contested set. Read-only; a failure here costs the sweep its contested lane and
   #       nothing else, so it is BLIND, not fatal.
   $contestedF = Join-Path $sidecar 'data\contested-pairs.json'

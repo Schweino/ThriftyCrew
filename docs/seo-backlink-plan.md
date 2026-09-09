@@ -1,94 +1,66 @@
-# Thrifty Crew — Backlink & Outreach Plan
+# Thrifty Crew - Backlink & Outreach Plan `[RETIRED 2026-09-09]`
 
-> **DOMAIN AND ACCOUNT CORRECTED 2026-09-07 (backlog I25, I26).** This plan was written 2026-07-02
-> against `simplemoneyplaybook.com` and every target URL still pointed there, so anyone following it
-> would have pitched the previous domain. All four promoted tool pages were checked on the live domain
-> before rewriting and each returns 200 at `www.thriftycrew.com`.
+> **THIS PLAN IS RETIRED. Do not execute it. Read the two sections below instead, and if you want the
+> original text it is in git history at any commit before 2026-09-09 (backlog I67).**
 >
-> It also claimed the search properties were "already set up" under an `admin@` address. They were
-> not. The memory `seo-baseline-2026-08-31` is the authority: the property is
-> `https://www.thriftycrew.com/` (URL-prefix) under **schweino68@gmail.com**, and it had **never been
-> verified** until 2026-08-31 - the `google-site-verification` tag already on the site belonged to
-> something else and never took, so a SECOND tag was added. Three files named three different owning
-> accounts and at most one could be right.
-
-
-_Created 2026-07-02. The goal: earn the one thing the site can't build on its own — authority (links) — because on-page/technical SEO is already A-grade. Finance is a YMYL niche, so **editorial, relevant links win; spammy volume gets penalized.**_
-
-## The strategy in one line
-**Your paid lessons won't earn links. Your FREE interactive tools will.** Point almost every outreach at a tool (or a free lesson/recipe) — those are the genuinely useful, embeddable, link-worthy assets. Your flagship link magnet is **"Where Do You Stand?"** (net worth by age, real Fed data): data-backed interactive tools are the single most-linked format in personal finance.
-
-Target pages to promote:
-- https://www.thriftycrew.com/where-do-you-stand/  (flagship)
-- https://www.thriftycrew.com/true-cost-calculator/
-- https://www.thriftycrew.com/can-i-afford-this/
-- https://www.thriftycrew.com/need-or-want/
-- Free lessons + recipes + the /about/ story (for author/E-E-A-T links)
-
----
-
-## Priority 1 — Quick wins (do this month)
-
-1. **Get into "best free money tools/calculators" roundups.** Many finance blogs keep lists like "17 free budgeting tools" or "best net worth calculators." Find them and ask to be added.
-   - Search strings: `"best free" "net worth calculator"` · `"free budgeting tools" 2026` · `intitle:"free financial calculators"` · `"net worth by age" calculator` · `"free" "money tools" roundup`
-   - Pitch = one genuinely useful, free, no-signup tool. (Template A below.)
-
-2. **Launch on Product Hunt.** Launch "Where Do You Stand?" (or bundle all four as "Free money tools"). Gets a link, traffic, and newsletter pickups. Free. Prep a good tagline + the preview image we already made.
-
-3. **Free indie/tool directories.** AlternativeTo (list as a free alternative to paid net-worth trackers like Personal Capital/Empower), SaaSHub, BetaList, Toolfinder-style sites, and finance-tool directories. Low effort, real links.
-
-4. **Reddit / forums — carefully, or it backfires.** r/personalfinance bans self-promo; don't blast links. Instead: genuinely answer questions where a tool actually helps and link naturally. Friendlier spots: r/financialindependence, r/povertyfinance, r/personalfinance weekly threads, Bogleheads forum, MMM forum. One helpful comment > ten spammy ones.
-
----
-
-## Priority 2 — Editorial & relationship links (1–3 months, highest authority)
-
-5. **HARO / Connectively / Qwoted / Featured.com.** Free. Reporters post queries daily on budgeting, saving, teaching kids money, debt. Reply with a real quote + cite Brad's experience and a tool. Lands links on actual news/magazine sites (huge authority). **Brad's comeback story is a standout hook** editors remember.
-
-6. **"Net worth by age" resource-link outreach** (best-fit, highest-conversion play). Find articles already ranking for "average/median net worth by age" — they all cite the same Fed SCF data you use. Email: _"You cite the SCF net-worth-by-age numbers — here's a free interactive tool that lets readers see where they personally land against those figures. Might be a useful resource link."_ (Template B.) Highly relevant = high acceptance.
-
-7. **Financial-literacy / teacher / parent orgs** (the unique angle — .org/.edu-adjacent links are gold). The "use it yourself OR teach a teen" framing is your edge here.
-   - Next Gen Personal Finance (NGPF), Jump$tart Coalition, financial-literacy teacher blogs, homeschool resource sites, parenting/PTA sites, library resource lists.
-   - Offer the free tools + free lessons as classroom/family resources.
-
-8. **Podcast guest spots.** Brad's story (rock bottom → rebuilt → wrote the book) is exactly what these shows want. Each appearance = show-notes backlink + audience + E-E-A-T. Pitch small/mid personal-finance shows, "teach your kids money" shows, and comeback/second-chance shows (keep it values-based, not faith-preachy). (Template C.)
-
----
-
-## Priority 3 — Content-driven (ongoing)
-
-9. **Guest posts** on reputable finance/parenting blogs, with one natural link to a tool.
-10. **Data-story digital PR.** The tool runs on real Fed data — publish a short "where does the typical [age] American actually stand?" post and pitch it to journalists as a data story (data + free interactive tool earns the best links).
-11. **Book + About page mentions** — anywhere Brad's story is told, link /about/ and the book page.
-
----
-
-## Do NOT do (hurts you, especially in finance/YMYL)
-Buying links · PBNs · mass directory blasts · comment/forum spam · large-scale link exchanges · Fiverr "1,000 backlinks" · guest posts on junk sites. Google discounts or penalizes these, and finance is scrutinized hardest.
-
----
-
-## Pitch templates (copy/paste, keep them short + personal)
-
-**A) Roundup inclusion**
-> Subject: A free tool for your [net worth calculators] roundup
+> It was refuted three separate times and each refutation survived fixing the previous one:
 >
-> Hi [name] — really liked your piece on [title]. I built a free, no-signup tool that [does X, using real Fed data]. If you ever refresh the list it'd be a natural fit: [URL]. Either way, great resource. — Brad, Thrifty Crew
+> 1. **`[2026-08-31]`** its premise was wrong.
+> 2. **`[2026-09-07, backlog I25/I26]`** every target URL pointed at the site's FORMER domain,
+>    `simplemoneyplaybook.com`, and it claimed search properties that had never been verified.
+>    That was repaired, which is what let the third refutation be seen clearly.
+> 3. **`[2026-09-08, backlog I67]`** links are scored by the traffic they actually carry, so a plan
+>    whose target is a COUNT of acquired links is aimed at the wrong quantity. **A link nobody clicks
+>    is worth close to nothing.** This one cannot be repaired by updating URLs, because it is about
+>    what the plan was trying to maximise.
 
-**B) Resource-link (net worth by age)**
-> Subject: Interactive version of the SCF net-worth-by-age data
->
-> Hi [name] — your article cites the Fed's net-worth-by-age figures. I made a free interactive tool that lets readers see where they personally land against those numbers (real 2022 SCF data, private, no signup): https://www.thriftycrew.com/where-do-you-stand/ . Might be a useful resource link for readers. — Brad
+## The measurement that closed it, taken 2026-09-09
 
-**C) Podcast pitch**
-> Subject: Guest idea — from a jail cell + $20k debt to rebuilt: the small-choices money playbook
->
-> Hi [name] — I'm Brad, founder of Thrifty Crew. Ten years ago I hit bottom [1–2 honest lines]. I climbed out with small, boring money habits and now teach them. Happy to share the exact playbook plus a couple of free tools your audience can use. Would this fit [show]? — Brad
+The item's rung 1 was a read, not a build: *is anyone searching for this brand at all, and with what
+wording?*
 
----
+Over the 28-day window **2026-08-10 to 2026-09-06**, Google Search Console returned **55 distinct
+queries carrying 95 impressions and 0 clicks**, and **not one of them contains any spelling of the
+brand** - `thrifty`, `thriftycrew`, `thrifty crew`, or the near-misses a typing reader produces.
+Site totals for the same window are **1 click and 289 impressions at impression-weighted position
+40.02**.
 
-## How to measure it
-- **Social/shares:** Ghost Admin → Analytics → Sources (the `?ref=share-*` tags on the share buttons show up here).
-- **Backlinks:** Google Search Console → Links (populates as Google discovers them) and Bing Webmaster Tools → Backlinks. Both already set up under schweino68@gmail.com.
+**The gap between 95 and 289 is not a discrepancy, it is Google withholding rare queries.** Search
+Console anonymises them, so roughly two thirds of the impressions are in rows nobody can read. **That
+means this measurement cannot prove there is NO brand query** - one with a single impression could be
+sitting in the anonymised tail. What it can say, and does, is that **there is no brand signal large
+enough to be visible at all**, over four weeks, on a site with 1,331 indexed pages.
 
-**Realistic expectation:** a handful of good, relevant links + a few podcast/roundup placements over the next 2–3 months will do more than 100 junk links — and will start moving the free tools up for their target keywords. Patience + relevance beats volume every time in this niche.
+Harness: `ops/seo_search_console.py` (its own token exchange and query body, asked for the full query
+list rather than the 25 rows the history file keeps). Baseline for comparison:
+`ops/seo-search-console-history.jsonl` and the `seo-baseline-2026-08-31` memory.
+
+## So the honest conclusion, and it is a decline
+
+**Off-page work is premature here.** Backlink acquisition is how a site that people already look for
+turns interest into authority. Nobody is looking for this one by name yet, and the constrained layer
+is still crawl and content: an average position of 40 means the pages that DO rank are on page four,
+where no link count rescues them.
+
+**What is agency-scale, and the right answer is to decline it:** digital PR, journalist
+relationships, editorial-calendar targeting, guest blogging at volume, syndication, and competitor
+backlink analysis behind a paid tool. A one-person site does not execute these, and a plan that lists
+them is a plan nobody runs.
+
+**What is executable alone, kept as the shortlist for whenever this becomes worth doing:**
+
+- read brand queries in Search Console on the cadence `ops/seo_search_console.py` already records
+- a Google Alert on the brand name
+- reclaim broken links that already pointed here
+- convert unlinked brand mentions into links, one email at a time
+
+**The prohibition, stated so it is not re-derived by somebody reading only this file.** Buying links
+or using a brokerage is manipulation. Link velocity and index-tier scoring exist to catch it, and the
+downside lands on a live paid site. Not a trade worth making at any price.
+
+## When to reopen this
+
+When a Search Console read shows brand queries with impressions in the double digits, or when average
+position for the free tool pages moves inside the top 20. Either is a signal that there is something
+for a link to amplify. Until then the same hour spent on content or on crawl is worth more, and this
+file exists to stop the question being re-litigated from scratch a fourth time.

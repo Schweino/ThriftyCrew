@@ -24,6 +24,7 @@ from __future__ import annotations
 import json
 import re
 import os
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -31,6 +32,22 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from ids import hash_obj, sha256
+from service_time import record as _record_service_time    # backlog I61
+
+
+def _caller_kind() -> str:
+    """A label for whoever is making this call, with nothing asked of the caller.
+
+    THE POINT IS THAT IT NEEDS NO COOPERATION. The first cut of I61 recorded at resolve.py's two call
+    sites, and on 2026-09-09 those sites made zero calls all day while three other scripts talked to
+    the same server - so the log was empty and the server looked unused. A default taken from
+    sys.argv[0] cannot be forgotten by a caller that did not know the instrument existed.
+    """
+    try:
+        base = os.path.basename(sys.argv[0] or "")
+        return os.path.splitext(base)[0] or "unlabelled"
+    except Exception:                                            # noqa: BLE001
+        return "unlabelled"
 
 DEFAULT_ENDPOINT = os.environ.get("TC_LLM_ENDPOINT", "http://127.0.0.1:8080/v1")
 DEFAULT_MODEL = os.environ.get("TC_LLM_MODEL", "local-primary")
@@ -168,7 +185,7 @@ class LocalLLM:
     def chat(self, messages: list[dict], *, max_tokens: int = 2048,
              temperature: float = 0.1, think: bool = False,
              schema: dict | None = None, json_mode: bool = False,
-             retries: int = 2) -> LLMResult:
+             retries: int = 2, kind: str = "") -> LLMResult:
         """One chat completion.
 
         think=False is the DEFAULT and is deliberate — see the module docstring.
@@ -197,6 +214,12 @@ class LocalLLM:
                 elapsed = time.time() - t0
                 msg = (data.get("choices") or [{}])[0].get("message", {}) or {}
                 usage = data.get("usage", {}) or {}
+                # backlog I61. record() swallows every one of its own failures on purpose: a
+                # measurement that can break the pipeline it measures gets deleted the first time it
+                # does, and then the pipeline is unmeasured again.
+                _record_service_time(kind or _caller_kind(), elapsed,
+                                     usage.get("prompt_tokens", 0),
+                                     usage.get("completion_tokens", 0))
                 return LLMResult(
                     content=msg.get("content") or "",
                     model=data.get("model", self.model),
@@ -208,6 +231,11 @@ class LocalLLM:
                 )
             except LLMError as e:
                 last = e
+                # A FAILED CALL IS STILL SERVICE TIME, and it is the expensive end of it (backlog
+                # I61). Recording only the successes would drop the timeouts and the deaths from the
+                # sample, which is precisely the tail this instrument exists to see; the kind carries
+                # a `-failed` suffix so a report can separate the two rather than pool them blindly.
+                _record_service_time((kind or _caller_kind()) + "-failed", time.time() - t0)
                 if attempt < retries:
                     time.sleep(1.5 * (attempt + 1))
                     continue
@@ -215,13 +243,14 @@ class LocalLLM:
         raise LLMError(str(last))
 
     def json_call(self, system: str, user: str, schema: dict | None = None,
-                  *, max_tokens: int = 2048, retries: int = 2) -> tuple[Any, LLMResult]:
+                  *, max_tokens: int = 2048, retries: int = 2,
+                  kind: str = "") -> tuple[Any, LLMResult]:
         """Structured call returning (parsed, result). Retries a parse failure once
         with an explicit repair instruction before giving up."""
         messages = [{"role": "system", "content": system},
                     {"role": "user", "content": user}]
         res = self.chat(messages, schema=schema, json_mode=schema is None,
-                        max_tokens=max_tokens, retries=retries)
+                        max_tokens=max_tokens, retries=retries, kind=kind)
         try:
             return res.json(), res
         except (json.JSONDecodeError, LLMError):
@@ -232,7 +261,8 @@ class LocalLLM:
                     "no prose and no markdown fence."},
             ]
             res2 = self.chat(repair, schema=schema, json_mode=schema is None,
-                             max_tokens=max_tokens, retries=1)
+                             max_tokens=max_tokens, retries=1,
+                             kind=(kind + "-repair") if kind else "")
             return res2.json(), res2
 
 

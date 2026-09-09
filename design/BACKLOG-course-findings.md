@@ -4744,7 +4744,7 @@ the same account as the confirmation above. Worth doing in the same sitting; not
 
 ---
 
-### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `PARTLY DONE - THE ASSERTION EXISTS AND ONE STAGE USES IT; THE CAPTURE ENTRY POINTS WANT A WATCHED RUN` `queue-4` `2-WAY` `RUNG1 READ`
+### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `PARTLY DONE - TWO OF THE FIVE SCHEDULED STAGES ASSERT NOW; THE CAPTURE ENTRY POINTS WANT A WATCHED RUN` `queue-4` `2-WAY` `RUNG1 READ`
 
 **`[RUNG 2 BUILT 2026-09-09, at the size rung 1 narrowed it to - five entry points, not 172 files.]`**
 
@@ -4775,6 +4775,20 @@ fixtures now hold it: the return value is asserted to be an `[int]`.
 **Verified:** self-test **13 of 13**, led by the three-way distinction and by the window boundary
 tested in *both* directions - exactly at 26 h is FRESH, one second past is STALE - because a boundary
 asserted on one side only is half a test. `run-gates` exit 0, `pass=295 fail=0`.
+
+**`[SECOND STAGE WIRED 2026-09-09: Graph Nightly.]`** `graph/pipeline/nightly.ps1` now asserts
+`graph/sqlite/graph.db` against a 26 h window before stage 1, naming the 08:00 Daily Capture chain as
+its producer. That edge is the item's own shape: every stage in the nightly reads the graph, the graph
+is written by a DIFFERENT scheduled task on a DIFFERENT trigger, and a nightly run against a graph that
+stopped updating three days ago produces verdicts indistinguishable from healthy ones.
+
+**IT RECORDS AND CONTINUES; IT DOES NOT REFUSE**, and the reason is specific to this script rather than
+general caution: `nightly.ps1` owns the GPU window and stops `llama-server` in a `finally`, so an early
+exit added here would be the one failure mode worse than a stale input - a card left held through the
+07:00 ad pull, which is exactly the BLIND day the chain exists to prevent. The verdict lands in the run
+log as `inputs OK` or `inputs BLIND`, beside every other stage. Verified: `-SelfTest` exit 0,
+`-WhatIfOnly` exit 0, and the assertion itself returns `0` as an `[int]` against today's live
+`graph.db` (0 h old of a 26 h window).
 
 **WHAT IS DELIBERATELY NOT DONE: the two capture entry points.** Asserting inside `capture-run.ps1`
 means a wrong window **stops the day's capture on a live paid site**, and the item itself said that
@@ -5817,7 +5831,7 @@ up two savers ten years apart and then declines to finish the sum.
 
 **Constraint acknowledged.** Nothing was changed.
 
-### I61 - the local LLM server is a four-slot queue whose service time has only ever been measured as a mean `PARTLY DONE - INSTRUMENTED; THE RUN NEEDS A SERVER THAT IS DOWN` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I61 - the local LLM server is a four-slot queue whose service time has only ever been measured as a mean `DONE - MEASURED 2026-09-09: CV 0.436 OVER 122 REQUESTS, NEAR-EXPONENTIAL, NO BUILD OWED` `queue-4` `2-WAY` `RUNG1 MEASURE`
 
 **`[2026-09-09. The half that does not need the GPU is shipped. The half that does is blocked, and the block is real.]`**
 
@@ -5842,6 +5856,38 @@ pipeline it measures gets deleted the first time it does, and then the pipeline 
 the other fifty is HEAVY-TAILED while the mean stays near 2 seconds** - which is precisely the tail a
 mean hides. A deterministic exponential sample is a must-not-fire, so the bar cannot simply call
 everything heavy. `--report` with no rows exits **3 and says BLIND**, never 0.
+
+**`[ANSWERED 2026-09-09, later the same day, and the block was not the one I named.]`**
+
+**THE VERDICT: NEAR-EXPONENTIAL, so no bounded-wait build is owed.** Over **122 requests**,
+`mean 5.24s / p50 4.72s / p90 7.05s / p99 15.36s / max 16.50s`, **coefficient of variation 0.436**
+against a bar of `CV <= 1.20` that was written into the source before any row existed. An M/M/c model
+is a fair description of this queue. Harness `graph/bench/service_time_drive.py`, read back with
+`python graph/lib/service_time.py --report`, at commit `cf2766fee`.
+
+**WHAT ACTUALLY BLOCKED IT WAS NOT THE SERVER.** Starting `llama-server` took one command and it came
+up healthy. With it up, `resolve.py --emit-contested` reported **0 questions of 20,478** - the
+deterministic layers settle every row - so the two instrumented call sites make ZERO model calls and
+the log stays empty however healthy the server is. **"The server is down" was a true statement that
+was not the reason**, and believing it would have left the item waiting on a fix that had already
+happened.
+
+**SO THE INSTRUMENT MOVED DOWN A LAYER, and that is the durable half.** `record()` now fires inside
+`LocalLLM.chat` in `graph/lib/llm.py`, which is the one place every local call passes through, with the
+`kind` defaulting to the running script's own name. A future caller is measured without being told the
+instrument exists, and `resolve.py` keeps its two labels by passing `kind=` rather than recording
+itself - recording in both places would have double-counted invisibly inside a percentile. **A FAILED
+call is recorded too**, under a `-failed` suffix: a service-time distribution that silently drops the
+calls that timed out or died is one that hides the exact tail this item exists to find.
+
+**WHAT THE NUMBER IS NOT.** The 122 rows come from a closed-loop driver replaying gold-set cases
+through the same prompt builder, the same client and the same `--jobs 4` the pipeline uses. That
+measures SERVICE time, which is what the item asked for. It says **nothing** about queue WAIT under the
+pipeline's real arrivals, because the driver keeps four workers busy by construction. Four of the 122
+are `-repair` rows, the second attempt after a JSON parse failure, and they are slower (p50 5.79s), which
+is why the report separates kinds instead of pooling them.
+
+*The pre-answer note is kept below, because it is what the state honestly looked like this morning.*
 
 **BLOCKED, and this is the honest part: no numbers yet.** Port 8080 refused on 2026-09-09 and no
 `llama-server` process is running, so not one request has been recorded. **There are no percentiles in
@@ -6403,7 +6449,41 @@ logic. **It changes what a report claims, not what it checks.**
 
 ---
 
-### I67 - the backlink plan is refuted a second time on a new axis, and the one instrument this estate could actually use has never been read `OPEN - RUNG 1 IS A READ, NOT A BUILD` `queue-4` `2-WAY` `RUNG1 BLOCKED`
+### I67 - the backlink plan is refuted a second time on a new axis, and the one instrument this estate could actually use has never been read `DONE - READ 2026-09-09: ZERO BRAND QUERIES IN 28 DAYS, SO THE PLAN IS RETIRED RATHER THAN REPAIRED` `queue-4` `2-WAY` `RUNG1 BLOCKED`
+
+**`[BOTH RUNGS RAN 2026-09-09, and the item was never blocked - I had recorded it as blocked.]`**
+
+**The instrument was already built and already credentialled.** `ops/seo_search_console.py` has
+been pulling this property since 2026-09-07 and its history file carries a `top_queries` block,
+so "Search Console has never been read" stopped being true two days before this item said it
+was. **Marking something blocked on an external system is a claim that goes stale silently**, and
+this one had. Checking cost one `ls`.
+
+**RUNG 1, THE READ. Window 2026-08-10 to 2026-09-06: 55 distinct queries carrying 95 impressions
+and 0 clicks, and NOT ONE contains any spelling of the brand** - `thrifty`, `thriftycrew`,
+`thrifty crew`, or the near-misses a typing reader produces. Site totals for the same window are
+**1 click, 289 impressions, impression-weighted position 40.02**.
+
+**The denominator matters and it is not the flattering one.** The 55 query rows carry 95 of the
+289 impressions; the other 194 are in rows Google ANONYMISES because the queries are rare. So the
+read cannot prove there is no brand query at all - one with a single impression could be sitting
+in that tail. What it establishes is that **there is no brand signal large enough to be visible**,
+over four weeks, on a site with 1,331 indexed pages. Stated this way because the opposite phrasing
+- "zero brand searches" - is a stronger claim than the data supports and would have been the easy
+one to write.
+
+**RUNG 2, WHICH RUNG 1 JUSTIFIES: `docs/seo-backlink-plan.md` is RETIRED**, not repaired. It now
+carries the measurement, the three refutations in order, the decline of the agency-scale half, the
+four-item reclamation shortlist that a one-person site can actually execute, the standing
+prohibition on bought links, and - deliberately - **a stated condition for reopening it**: brand
+queries in the double digits, or the free tool pages moving inside the top 20. A refuted plan with
+no reopening condition gets re-litigated from scratch, which is how this one reached three
+refutations.
+
+**The conclusion is a DECLINE and that is the useful output.** Off-page work is how a site people
+already look for converts interest into authority. Nobody looks for this one by name yet, and an
+average position of 40 puts the ranking pages on page four, where no link count rescues them. The
+constrained layer is still crawl and content.
 
 **Source.** `seo-fundamentals` module 2 (UC Davis; queue-4 entry 21, raided 2026-09-08). Routed to
 `growth-craft/search-position-diagnosis.md` 4. Registered as claims C141 to C143.
@@ -7163,9 +7243,32 @@ query answers it: edges per node, tracked over time.
 
 ### I77 - the one-hop memory expansion experiment now has a design and, more importantly, a control group `OPEN - BLOCKED ON A RUN, NOT ON A DECISION` `queue-6` `2-WAY` `RUNG1 MEASURE`
 
-**`[NOT REACHED 2026-09-09.]`** The design and its control group are the valuable half and they are
-already written here. Executing it needs live recall runs across both arms, which is a dispatched
-experiment rather than a session task. **Nothing was estimated in place of running it.**
+**`[NOT REACHED 2026-09-09, and the block is now stated PRECISELY, which it was not before.]`** The
+design and its control group are the valuable half and they are already written here. **Nothing was
+estimated in place of running it.**
+
+**THE RUNNER IS NOT THE BLOCKER, and saying "needs live recall runs" hid that.** Checked 2026-09-09:
+`~/.claude/skills/knowledge-search/recall_index.py` exposes `search(conn, query, corpora, limit)`
+directly, over a real BM25 index that already holds this project's memory corpus one chunk per file.
+Both arms are callable from a local script with no model, no network and no dispatch. **What is
+missing is the CASE SET**, and it is missing for a reason that matters rather than for want of time:
+
+- the obvious mechanical case set is *query = each memory's `description:` line, gold = that file*,
+  and it is **worthless here**, because `recall_index` indexes the description AS THE CHUNK HEADING.
+  Both arms would retrieve the gold at rank 1 and the experiment could not discriminate.
+- one-hop expansion can only show a gain on a case whose relevant answer is **not** the file that
+  matches lexically. A case set with that property has to be judged, not derived, and a case set I
+  derive to make the mechanism look good is the failure this estate has a whole rules file about.
+
+So the honest scoping: **rung 1 is now a CASE-SET build, not a run**, and the obvious source for one
+turns out not to exist yet. **`~/.claude/recall-log.jsonl` holds 2,182 rows and every one records what
+was OFFERED - path, heading, score - and none records what was ASKED.** Checked, not assumed. So it
+cannot serve as a held-out query set, and the cheapest thing that would unblock this item is **adding
+the query text to that hook's log line** and waiting. That is a change to a GLOBAL hook shared by every
+project on this machine, so it is Brad's call rather than one to make unattended; it is a few lines.
+
+**The 53 zero-in-degree files remain the control** and any case set that cannot place gold in them is
+overstating the gain by construction.
 
 **Merged from `design\backlog-inbox\lane-graphs-2026-09-08.md` on 2026-09-08.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -7435,10 +7538,35 @@ the detector it was written to serve.
 
 **`run-gates` exit 0, `pass=298 fail=0`.**
 
-**STILL NOT DONE, and it is the smaller half: `$GLOBAL_EXCLUDE`.** Five-plus files still regex the
-array literal out of the engine's source and `Invoke-Expression` it, and `compare-deals.ps1` lifts it
-from **its own** `$PSCommandPath` because its self-test block runs before the definition. That is a
-data-shaped problem rather than a function-shaped one and wants its own change.
+**`[THE SECOND HALF SHIPPED 2026-09-09: `grocery/global-exclude-lib.ps1`. Same acceptance test, same
+result.]`** The list is now `Get-TcGlobalExclude`, **a function and not a variable**, for the reason
+the rules file already states: a lifted `$script:` constant does not travel, so a library that exported
+a bare `$GLOBAL_EXCLUDE` would work in a dot-source and silently return nothing to anything that ever
+lifted it again. Six consumers moved off the regex-and-`Invoke-Expression` lift -
+`audit-coverage-gaps`, `audit-household-in-food`, `audit-match-contested`, `triage-coverage-gaps`,
+`dead-commodity-lib` and `validate-fills` - and `compare-deals.ps1`'s two self-test sites, which used
+to lift the array out of its **own** `$PSCommandPath` because the self-test block runs before the
+definition exists. Each of the four scripted rewires also dropped a now-orphaned `Get-Content` of the
+engine's source: the read existed only to feed the regex, and leaving it in would have kept the file
+counted by `count-source-lifters`' READS test for no reason.
+
+**Two things the change refuses to weaken.** `dead-commodity-lib`'s `Get-EngineGlobalExclude` still
+returns `$null` when the list cannot be read, because its CALLER treats null as *could not read it* and
+that distinction is the whole point of the function; and `validate-fills` and `audit-match-contested`
+still refuse to run on a list of fewer than two tokens, which is what the parse failure used to give
+them. The header promise in `validate-fills` is unchanged and better kept: **there is still exactly one
+copy of the list**, it just arrives through a dot-source rather than a regex over source text, so it
+cannot pick up a partial block or miss a renamed variable.
+
+**Acceptance, and the trap inside it.** The bar was written first: the board's `comparison` payload
+hash, over 572 commodities, identical before and after. The first read said it had CHANGED -
+`6d129e5d8ab9ac45` to `337b7e01d47ebc25` - and that was not the change, it was the board DATE rolling
+to 2026-09-09 between the two builds. The honest test was to restore all seven files to `HEAD`, move
+the library aside, rebuild, and hash **the same day's board**: HEAD gives `337b7e01d47ebc25` over 572
+rows and the library build gives `337b7e01d47ebc25` over 572 rows. **A comparison against yesterday's
+artifact would have read as a real regression, and had the numbers happened to agree it would have read
+as a clean pass while proving nothing at all** - the `an-agreeing-number-escapes-scrutiny` shape, in
+the direction where it is louder than usual.
 
 **`[2026-09-09. What shipped, and what deliberately did not.]`**
 
