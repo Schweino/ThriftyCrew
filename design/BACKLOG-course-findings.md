@@ -7261,11 +7261,48 @@ missing is the CASE SET**, and it is missing for a reason that matters rather th
   derive to make the mechanism look good is the failure this estate has a whole rules file about.
 
 So the honest scoping: **rung 1 is now a CASE-SET build, not a run**, and the obvious source for one
-turns out not to exist yet. **`~/.claude/recall-log.jsonl` holds 2,182 rows and every one records what
-was OFFERED - path, heading, score - and none records what was ASKED.** Checked, not assumed. So it
-cannot serve as a held-out query set, and the cheapest thing that would unblock this item is **adding
-the query text to that hook's log line** and waiting. That is a change to a GLOBAL hook shared by every
-project on this machine, so it is Brad's call rather than one to make unattended; it is a few lines.
+turns out not to exist yet.
+
+`[CORRECTED 2026-09-09, hours later, and the correction is the useful half.]` **I wrote here that the
+log "records what was OFFERED and none records what was ASKED", and that is WRONG.** Counted rather
+than skimmed: of 2,302 rows, **1,010 carry `q`** - the prompt's deduplicated tokens - and have since
+2026-09-07, put there deliberately for the per-cue weight. For a bag-of-words retriever those tokens
+ARE the query. **I had read one line of the file, and it happened to be an older row.** A negative
+claim about a file needs the same counting as a positive one.
+
+**THE REAL GAP WAS ONE LAYER IN, and it is worse than the one I named.** The cue sits on the OFFER
+row; the outcome - which section somebody actually opened - lands from a DIFFERENT hook, later, and
+**0 of 476 open rows carry `q`**. The only thing joining them is `sid`, the whole session, which
+holds many prompts. So nothing said WHICH question led to which open, and a retrieval case set is
+exactly *(query, the thing that turned out to be relevant)*. No amount of accumulated logging fixes
+that after the fact.
+
+**`[RULED BY BRAD 2026-09-09: log it. SHIPPED.]`** `recall-hook.py` mints one turn id per prompt,
+stamps it on every offer row of that prompt, and leaves it in a per-session sidecar;
+`recall-log-open.py` reads the sidecar and stamps the same id on every open row. The join is now
+exact, and the first real case it produced reads *"query tokens ... -> opened CATALOGUE.md"*.
+
+**The sidecar is a file rather than a key in the session state, and that is not a preference.**
+`recall_core.load_state` is an ALLOW-LIST: a key it does not name is dropped on the next load, and a
+counter put there once read zero live while passing every test. The account is already written at the
+leg-log write site in the same file. It lives under `STATE_DIR`, so `RECALL_STATE_DIR` redirects it
+and a self-test can never reach the real record - the same rule the log itself follows, after a proof
+run once put four fake rows into it.
+
+**Verified: `recall-hook` 17 of 17, `recall-log-open` 26 of 26, both exit 0**, with four new fixtures -
+every offer row of one prompt shares one turn, the sidecar carries it, an open row picks it up, and
+**with no sidecar the open row still lands without a turn** rather than being dropped or guessed,
+because an open with no offer behind it is a real read and dropping it would hole the denominator every
+rate divides by. **And a fifth check that neither self-test could make**, because each owns one half:
+`~/.claude/skills/recall-join-probe.py` drives BOTH hooks in one redirected session and asserts the
+key the writer used is the key the reader looks under. That is the one way a two-file protocol fails
+silently while both halves pass.
+
+**What is still owed before the experiment runs: TIME, and a filter.** The join only exists from now
+on. And a caution found while reading the log: many prompts here are task notifications rather than
+questions - the newest `q` at the time of writing was `uuid appdata output-file background capture` -
+so a case set drawn from raw turns would be scoring retrieval against machine noise. The filter
+belongs at READ time, never at write time: a row not written cannot be reconsidered.
 
 **The 53 zero-in-degree files remain the control** and any case set that cannot place gold in them is
 overstating the gain by construction.
