@@ -804,6 +804,23 @@ if ((Test-Path $rhs) -and (Test-Path $pyExe3)) {
   else { [void]$ok.Add((($rhLine -replace '\s+', ' ').Trim())) }
 }
 
+# ---- 5a3a2. the git hooks that run the change-time gate are still live (WS 10d, 2026-09-10) -----
+# Five files in this tree cited ops\audit-hook-installed.ps1 as asserting this, and it did not exist.
+# It lives HERE rather than in run-gates because run-gates is invoked BY the pre-push hook - a hook
+# check inside it can only prove the hook it is running in - and because a worktree has no hooks
+# directory, so every spawned agent's gate would go red. Once a day on the main checkout, a missing or
+# edited hook is a real finding: it means pushes are silently ungated again, which CLAUDE.md records
+# happening for a month.
+$hookAudit = Join-Path (Split-Path $root -Parent) 'ops\audit-hook-installed.ps1'
+if (Test-Path $hookAudit) {
+  $haOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $hookAudit
+  $haRc = $LASTEXITCODE
+  $haLine = ($haOut | Where-Object { $_ -match '^hook-installed:' } | Select-Object -Last 1)
+  if ($haRc -eq 2) { [void]$findings.Add("GIT HOOKS NOT LIVE - pushes are ungated: $haLine") }
+  elseif ($haRc -ne 0) { [void]$findings.Add("GIT HOOKS could not be checked (exit $haRc): $haLine") }
+  else { [void]$ok.Add((("git hooks " + $haLine) -replace '\s+', ' ').Trim()) }
+}
+
 # ---- 5a3b. a graph.db SCHEMA change that left no record --------------------------------------
 # RULED BY BRAD 2026-09-09 (backlog I41): a written record plus a detector, and NOT a staged-migration
 # capability - nothing here knows how to do expand-contract, backfill or rollback.

@@ -33,7 +33,7 @@ was measured, what was refuted and what waits. This plan does not restate them; 
 | 3 | Metacognition: a claim of absence is refused without a search | **DONE** 2026-09-09 | (this branch) | absence cues fire on **28 of 1,022** assistant turns (2.74%, cap 6%); second Stop rung shares all three loop brakes; 3b scores it and refuses a rate under 20 events |
 | 4 | Plasticity per cue | NOT STARTED | | |
 | 5 | Sleep v2: an OS clock, a red that pages, a dream, a morning digest | **5a 5b 5d DONE** 2026-09-10; 5c pending | (this branch) | TC Recall Sleep 0435 and TC Brain Digest 0645 registered and verified live; the Claude agent disabled. Digest's first live finding: **60 proposals 20 days old**, over a 14-day floor. Six defects found by running it, incl. `-UFormat %s` being **18,000 s** off UTC |
-| 6 | Encoding at write time: memory lint, cost, index integrity | NOT STARTED | | |
+| 6 | Encoding at write time: memory lint, cost, index integrity | **6a DONE** 2026-09-10; **6b REFUTED**; 6c pending | (this branch) | cost band carried by **1 of 156** ThriftyCrew and **0 of 190** workspace memories. New memories with a structural defect are now DENIED at write time, proved on live payloads; existing ones ratcheted per store. Near-duplicates remind only: the one pair over 0.9 (0.967) is two different facts. **6b refuted** by `recall-consolidate.py` TIER1_REFUSAL, a sound existing ruling, and the ledger holds 1 deferral, not 7 |
 | 7 | Forgetting v2: memories, verdicts, holds, conclusions all expire on evidence | NOT STARTED | | |
 | 8 | Generalisation: across projects, across domains, across negatives | NOT STARTED | | |
 | 9 | Efficiency-seeking: an effort ledger and habits mined from success | NOT STARTED | | |
