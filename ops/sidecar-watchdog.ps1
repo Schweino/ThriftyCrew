@@ -22,10 +22,18 @@
   0200 would be taking the card from the job that was promised it. So inside the window this
   reports DEFERRED and starts nothing, and the recall hook stays on its lexical fallback for
   those hours by design. Ruling R1 of the plan; the default was ruled here, not assumed silently.
+  THIS FILE IS ONLY HALF OF R1. Refusing to START in the window does not take down a service this
+  file restored at 06:30, and until 2026-09-10 nothing did, so the nightly's `serve` stage would find
+  it resident at 21:30 and go BLIND. The other half is the nightly's `handoff` stage, which calls
+  sidecar\stop-sidecar.ps1 before its sweep. The watchdog does not stop anything itself: at 21:30 it
+  and the nightly fire on the same minute, and only the nightly knows when it needs the card.
 
-  THE WINDOW END IS READ, NEVER HARD-CODED. `hard_stop` comes out of the nightly's own status
-  file when it is there, for the same reason the ad-timing window is read from capture-policy:
-  two copies of a schedule is one schedule and one stale comment.
+  THE WINDOW END IS READ, NEVER HARD-CODED. It comes out of nightly.ps1's own `-HardStop`
+  default, for the same reason the ad-timing window is read from capture-policy: two copies of a
+  schedule is one schedule and one stale comment. `[CORRECTED 2026-09-10]` Until this date it was
+  NOT read on any real run - see Resolve-GpuWindowEnd - and the two copies agreed at 06:30, so
+  nothing showed it. KNOWN LIMIT: the registered nightly task passes `-HardStop 06:30` on its
+  command line, which is a third copy this does not read.
 
   SCOPE OF A CLEAN REPORT: SOUND about reachability, UNSOUND about usefulness. A 200 from
   /health means the process is listening; it does not mean the models load, that the GPU has
@@ -106,6 +114,22 @@ function Get-NightlyHardStop {
     }
   } catch { }
   return @{ Value = $Fallback; Source = 'parameter default (nightly.ps1 unreadable)' }
+}
+
+function Resolve-GpuWindowEnd {
+  <# The window end the RUN uses. One call site, and the self-test drives this same function.
+
+     WHY THIS EXISTS, MEASURED 2026-09-10. Both callers of Get-NightlyHardStop passed
+     `$script:StatusPath`, a variable nothing in this file ever assigned (the path variable is
+     `$script:NightlyScript`). An unset variable binds an empty string, Test-Path threw inside the
+     reader's try, and every scheduled run from WS 0b's first night took the parameter default
+     while its transcript said "end read from parameter default (nightly.ps1 unreadable)". The
+     self-test passed throughout, because its case called the reader the same broken way and
+     asserted only that SOME value with SOME source came back - which the fallback supplies. A
+     reader tested through its own call and not through production's cannot see production's
+     call site. #>
+  param([string]$Fallback)
+  return (Get-NightlyHardStop -Path $script:NightlyScript -Fallback $Fallback)
 }
 
 function Start-Sidecar {
@@ -191,10 +215,28 @@ if ($SelfTest) {
   Case 'CLEAN TWIN' 'an unreachable port is $false, never an exception' `
     ((Get-SidecarHealth -Url 'http://127.0.0.1:9' -TimeoutSec 2) -eq $false)
 
-  # CLEAN TWIN: the window end is READ, and the reader says which source it used.
-  $hs = Get-NightlyHardStop -Path $script:StatusPath -Fallback '06:30'
-  Case 'CLEAN TWIN' 'the hard stop is read and names its source' `
-    ($hs.Value -match '^\d{2}:\d{2}$' -and $hs.Source.Length -gt 0) "got $($hs.Value) from $($hs.Source)"
+  # MUST FIRE: the founding bug of 2026-09-10. The window end the RUN resolves comes out of
+  # nightly.ps1, not out of the fallback. THE FALLBACK IS AN IMPOSSIBLE TIME ON PURPOSE: the
+  # nightly's default and this file's parameter both say 06:30, so a fallback of 06:30 would let
+  # a missed read pass as an agreeing number, which is exactly how the unset variable survived.
+  $hs = Resolve-GpuWindowEnd -Fallback '99:99'
+  Case 'MUST FIRE' 'the run reads its window end from nightly.ps1, not the fallback' `
+    ($hs.Value -match '^\d{2}:\d{2}$' -and $hs.Value -ne '99:99' -and
+     $hs.Source -eq 'nightly.ps1 -HardStop default') "got $($hs.Value) from $($hs.Source)"
+
+  # CLEAN TWIN: the reader returns the value a copy DECLARES, so a pass above means nightly.ps1
+  # was read, not that 06:30 happens to be what the regex falls through to.
+  $tmpNightly = Join-Path $env:TEMP ("sidecar-wd-nightly-{0}.ps1" -f $PID)
+  [IO.File]::WriteAllText($tmpNightly, "param(`n  [string]`$HardStop = '05:45'`n)`n",
+    (New-Object Text.UTF8Encoding($false)))
+  try {
+    $hsCopy = Get-NightlyHardStop -Path $tmpNightly -Fallback '06:30'
+    Case 'CLEAN TWIN' 'a hard stop that disagrees with the fallback is read at its own value' `
+      ($hsCopy.Value -eq '05:45' -and $hsCopy.Source -eq 'nightly.ps1 -HardStop default') `
+      "got $($hsCopy.Value) from $($hsCopy.Source)"
+  } finally {
+    Remove-Item -LiteralPath $tmpNightly -ErrorAction SilentlyContinue
+  }
   $hs2 = Get-NightlyHardStop -Path (Join-Path $env:TEMP 'no-such-status-file.json') -Fallback '05:15'
   Case 'CLEAN TWIN' 'a missing status file falls back and SAYS it fell back' `
     ($hs2.Value -eq '05:15' -and $hs2.Source -like '*parameter default*')
@@ -270,7 +312,7 @@ $script:RunLog = Start-RunLog -Name 'sidecar-watchdog' -OutDir (Join-Path $RepoR
 try {
 Invoke-Guard -Name 'SIDECAR-WATCHDOG' -Body {
   $now = Get-Date
-  $hs = Get-NightlyHardStop -Path $script:StatusPath -Fallback $GpuWindowEnd
+  $hs = Resolve-GpuWindowEnd -Fallback $GpuWindowEnd
   $windowEnd = $hs.Value
   $inWindow = Test-InGpuWindow -Now $now -Start $GpuWindowStart -End $windowEnd
 

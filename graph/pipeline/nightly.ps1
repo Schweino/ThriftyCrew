@@ -488,6 +488,28 @@ if ($SelfTest) {
   # CLEAN TWIN: the plan line names it too, or -WhatIfOnly describes a chain that is not the chain.
   if (-not $src.Contains($nPlan)) { Write-Output '  X CLEAN TWIN: -WhatIfOnly must print the hunter stage'; $bad++ }
 
+  # ---- the card handoff (2026-09-10, ruling R1's missing half) -----------------------------------
+  # The founding case: the watchdog restored the sidecar service at 06:30, nothing stopped it, and
+  # Test-SidecarUp turned `serve` BLIND at 21:30. Same three placement rules as the hunter slot, and
+  # the same built needles, for the same measured reason.
+  $handoffs = @([regex]::Matches($src, [regex]::Escape("Invoke-Stage " + "'handoff'")) |
+                ForEach-Object { $_.Index })
+  if ($handoffs.Count -ne 1) { Write-Output ("  X MUST-FIRE: the chain must hold EXACTLY ONE card handoff stage, found " + $handoffs.Count); $bad++ }
+  foreach ($h in $handoffs) {
+    # MUST-FIRE: before the sweep's branch opens, which also puts it OUTSIDE -SkipSweep.
+    if ($iSweep -ge 0 -and $h -gt $iSweep) { Write-Output '  X MUST-FIRE: the sidecar handoff must run BEFORE the sweep branch (and outside -SkipSweep)'; $bad++ }
+    if ($iServe -ge 0 -and $h -gt $iServe) { Write-Output '  X MUST-FIRE: the sidecar handoff must run before llama-server takes the card'; $bad++ }
+    if ($iFinal -ge 0 -and $h -gt $iFinal) { Write-Output '  X MUST-FIRE: the sidecar handoff must not run in the teardown block'; $bad++ }
+  }
+  $nHoDoor  = "'stop-" + "sidecar.ps1'"
+  $nHoBlind = "Record 'handoff' " + "'BLIND'"
+  $nHoPlan  = '1d' + ' handoff'
+  if (-not $src.Contains($nHoDoor)) { Write-Output '  X MUST-FIRE: the handoff must call the sidecar module''s own front door'; $bad++ }
+  if (-not $src.Contains($nHoBlind)) { Write-Output '  X MUST-FIRE: a failed handoff must record BLIND rather than vanish'; $bad++ }
+  # CLEAN TWIN: the front door it calls is really there, and the plan line names the stage.
+  if (-not (Test-Path -LiteralPath (Join-Path $sidecar ('stop-' + 'sidecar.ps1')))) { Write-Output '  X CLEAN TWIN: sidecar\stop-sidecar.ps1 must exist for the handoff to call'; $bad++ }
+  if (-not $src.Contains($nHoPlan)) { Write-Output '  X CLEAN TWIN: -WhatIfOnly must print the handoff stage'; $bad++ }
+
   # MUST-FIRE: the serve stage must ASK Windows why, not just report that it did not come up. The
   # Code Integrity block that killed 2026-08-25 is absent from the Application log, from
   # llama.cpp's own log and from the process output, so a stage that does not read the
@@ -622,6 +644,7 @@ if ($WhatIfOnly) {
   Write-Output "  1 emit     $py graph\pipeline\resolve.py --emit-contested sidecar\data\contested-pairs.json"
   Write-Output "  1b defs    $py graph\pipeline\emit_commodity_defs.py --out sidecar\data\commodity-defs-graph.json"
   Write-Output "  1c hunter  $py graph\learning\ingest_hunter_events.py   (CPU only, read-mostly, before the card changes hands)"
+  Write-Output "  1d handoff sidecar\stop-sidecar.ps1   (the daytime sidecar SERVICE leaves the card; ruling R1)"
   Write-Output "  2 sweep    grocery\audit-semantic-identity.ps1        (sidecar takes and releases the card)"
   Write-Output "  3 serve    tools\local-llm\serve.ps1 -Slots $Jobs"
   Write-Output "  4 resolve  $py graph\pipeline\resolve.py --llm --jobs $Jobs --adversarial --helper-scores sidecar\out\contested-scores.json --helper-threshold $HelperThreshold"
@@ -797,6 +820,20 @@ try {
   if ($r.Ok) { Record 'durability' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
   elseif ($r.ExitCode -eq 3) { Record 'durability' 'BLIND' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
   else { Record 'durability' 'FAILED' ("rc=" + $r.ExitCode + ' ' + (($r.Tail | Where-Object { $_ -match 'FINDING|FAILED' } | Select-Object -First 1))) $r.Elapsed }
+
+  # -- 1d. the card is handed over (2026-09-10, the missing half of ruling R1 in
+  #        design\PLAN-brain-v2-2026-09-09.md: the semantic sidecar SERVICE does not run in this window).
+  #        ops\sidecar-watchdog.ps1 will not START it in here, and until this stage nothing STOPPED it:
+  #        a service the watchdog restored at 06:30 was still resident at 21:30, Test-SidecarUp is true
+  #        for it, and `serve` recorded BLIND and threw before resolve - every night, with the watchdog
+  #        working as designed. The same class as the leftover llama-server stopped below. HOW the
+  #        service is found belongs to sidecar\, so this calls its front door; it matches only
+  #        `uvicorn app:app`, so it cannot take down the sweep's own interpreter. BLIND rather than
+  #        FAILED on a non-zero exit: `serve` re-checks the card itself and names what it found.
+  #        OUTSIDE the -SkipSweep branch, because `serve` needs the card whether or not the sweep ran.
+  $r = Invoke-Stage 'handoff' 'powershell' @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $sidecar 'stop-sidecar.ps1')) 120
+  if ($r.Ok) { Record 'handoff' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
+  else { Record 'handoff' 'BLIND' ("rc=" + $r.ExitCode + ' ' + (($r.Tail | Select-Object -Last 1))) $r.Elapsed }
 
   # -- 2. the sweep. The chain must not OOM its own sidecar, so llama-server goes down FIRST even
   #       though this script has not started it yet: a leftover from a human session is exactly the
