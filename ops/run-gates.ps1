@@ -290,6 +290,10 @@ $static = @(
   @{ f = 'ops\audit-rule-currency.ps1';        n = 'every .claude\rules globs entry matches a tracked file; stale dated claims are reported (WS 7e)' }
   @{ f = 'ops\audit-measurement-provenance.ps1'; n = 'a recorded measurement names the harness it ran through and the commit or date it ran at - a RATCHET at 8, because retro-filling the existing set was explicitly not asked for and a bar over them would be red on day one' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
+  # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half
+  # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
+  # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.
+  @{ f = 'grocery\audit-alert-registry.ps1';   n = 'every Send-Alert call site whose subject can be read maps to exactly one class in grocery\alert-registry.json' }
   # ops\verify-commodities-gate.ps1 is deliberately NOT listed here. A $static entry passes no
   # arguments, which would run its LIVE check against a staged set that is empty during a gate run -
   # a confident "not applicable" that proves nothing. It declares [switch]$SelfTest, so the discovery

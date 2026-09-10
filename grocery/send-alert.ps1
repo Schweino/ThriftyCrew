@@ -82,11 +82,18 @@ function Log($m) {
 # the bug. So the alert TYPE (the subject with its date/counts/rc-codes stripped) may email at most once a day.
 # A stable, ongoing condition alerts once and then stays quiet until it either clears or a new day starts.
 $today = (Get-Date -Format 'yyyy-MM-dd')
-$typeKey = ($Subject.ToLower() `
-    -replace '\d{4}-\d{2}-\d{2}', '' `
-    -replace 'rc\s*=\s*\d+', '' `
-    -replace '\d+(\.\d+)?', '' `
-    -replace '[^a-z]+', ' ').Trim()
+# One function (2026-09-10) so -SelfTest can assert that grocery\alert-registry-lib.ps1's Get-AlertTypeKey derives
+# the SAME key: the registry is keyed on it, and a lib that drifted would let the registry check read green over
+# keys this mailer never makes. It stays here as well as in the lib so an alert still gets a key, a queue item and
+# a mail on a day the lib cannot load.
+function ConvertTo-AlertTypeKey([string]$s) {
+  return (([string]$s).ToLower() `
+      -replace '\d{4}-\d{2}-\d{2}', '' `
+      -replace 'rc\s*=\s*\d+', '' `
+      -replace '\d+(\.\d+)?', '' `
+      -replace '[^a-z]+', ' ').Trim()
+}
+$typeKey = ConvertTo-AlertTypeKey $Subject
 
 # ---- WHERE DOES THIS ALERT GO IN THE QUEUE? (2026-07-31) ------------------------------------------------
 # One function, so the rule is testable (-SelfTest below) instead of buried in the write block.
@@ -272,11 +279,99 @@ if ($SelfTest) {
   _T 'an alert passing -Lane daily carries no lane' ([bool]($null -eq (Get-BirthLane 'daily'))) 'True'
   # CLEAN TWIN: the escalation park beside it still parks.
   _T 'CLEAN TWIN an escalation is still born needs-brad beside the lane stamp' (Get-BirthDisposition '2026-09-07-4f672e').status 'needs-brad'
+  # ---- THE ALERT REGISTRY (2026-09-10, Brad ruling 1) ----
+  # The lib's key derivation must be this script's, or audit-alert-registry reads green over keys the mailer never makes.
+  . (Join-Path $PSScriptRoot 'alert-registry-lib.ps1')
+  foreach ($ks in @('Grocery: GUARDS FAILED - board not published - 2026-09-10', 'Grocery publish FAILED (rc=2) - 2026-09-10', "smp-feed edge did not pick up today's push - 2026-09-10", 'Grocery: 7 NEW price flag(s) - 2026-09-10')) {
+    _T ('the registry lib derives the same type key as this script for: ' + $ks) (Get-AlertTypeKey $ks) (ConvertTo-AlertTypeKey $ks)
+  }
+  # END TO END, out of process, in a temp tree: the REAL send-alert.ps1 against a frozen registry and a frozen queue.
+  # The mute file is ON, so no case can reach Gmail. Reaching the MUTED branch is the proof the mail leg was taken,
+  # and it prints the subject the mail would have carried.
+  $saDir = Join-Path $env:TEMP ('smp-sa-registry-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  $saG = Join-Path $saDir 'grocery'
+  $saL = Join-Path $saDir 'lib'
+  New-Item -ItemType Directory -Force -Path $saG, $saL, (Join-Path $saG 'out') | Out-Null
+  $utf8 = New-Object Text.UTF8Encoding($false)
+  try {
+    Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $saG 'send-alert.ps1')
+    foreach ($n in @('alert-registry-lib.ps1', 'mute-lib.ps1')) { Copy-Item -LiteralPath (Join-Path $PSScriptRoot $n) -Destination (Join-Path $saG $n) }
+    foreach ($n in @('json-io.ps1', 'chain-verdict-lib.ps1')) { Copy-Item -LiteralPath (Join-Path (Split-Path -Parent $PSScriptRoot) ('lib\' + $n)) -Destination (Join-Path $saL $n) }
+    $saReg = Join-Path $saG 'alert-registry.json'
+    $saRegJson = '{ "readme": "frozen fixture", "entries": [' +
+      '{ "id": "held", "match": "exact", "key": "grocery page held coverage", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
+      '{ "id": "soundness", "match": "exact", "key": "grocery matching soundness review needed", "class": "review", "condition": "review intake", "emitter": "x" },' +
+      '{ "id": "digest", "match": "exact", "key": "brain digest the night", "class": "digest", "condition": "information", "emitter": "x" } ] }'
+    [IO.File]::WriteAllText($saReg, $saRegJson, $utf8)
+    [IO.File]::WriteAllText((Join-Path $saG 'alerts-muted.json'), '{ "muted": true, "since": "2026-09-10", "until": null }', $utf8)
+    $saQ = Join-Path $saG 'triage-queue.json'
+    $saBody = Join-Path $saDir 'body.txt'
+    [IO.File]::WriteAllText($saBody, 'Frozen fixture body: Hy-Vee canned-mushrooms, 3 rows, enough store and number evidence that the body is not thin.', $utf8)
+    function _SA([string]$subj, [string[]]$extra = @()) {
+      $o = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $saG 'send-alert.ps1') -Subject $subj -BodyFile $saBody @extra
+      $rc = $LASTEXITCODE
+      $its = @()
+      if (Test-Path -LiteralPath $saQ) { $qd = Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json; $its = @($qd.items) }
+      return [pscustomobject]@{ out = ((@($o) | ForEach-Object { [string]$_ }) -join ' | '); rc = $rc; items = $its }
+    }
+    # CLEAN TWIN: a registered page-class alert behaves exactly as before - one queue item, the mail leg, its own subject.
+    $c1 = _SA 'Grocery page HELD (coverage) - 2026-09-10'
+    _T 'CLEAN TWIN a registered page alert still queues one item AND takes the mail leg under its own subject' ([bool]($c1.items.Count -eq 1 -and $c1.out -match 'alert MUTED' -and $c1.out -match [regex]::Escape("mail subject 'Grocery page HELD (coverage) - 2026-09-10'"))) 'True'
+    _T 'MUST NOT FIRE and a registered page alert carries no unregistered stamp' ([bool]($c1.items.Count -eq 1 -and -not $c1.items[0].PSObject.Properties['unregistered'])) 'True'
+    # MUST FIRE: an unregistered subject is never dropped - it queues, stamped, AND mails with the marker.
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $c2 = _SA 'Grocery: a type nobody registered - 2026-09-10'
+    _T 'MUST FIRE an unregistered subject is queued with unregistered=true' ([bool]($c2.items.Count -eq 1 -and $c2.items[0].unregistered -eq $true)) 'True'
+    _T 'MUST FIRE and it takes the mail leg with UNREGISTERED ALERT TYPE on its subject' ([bool]($c2.out -match 'alert MUTED' -and $c2.out -match [regex]::Escape("mail subject 'UNREGISTERED ALERT TYPE: Grocery: a type nobody registered - 2026-09-10'"))) 'True'
+    # MUST NOT FIRE: a review-class subject sends no mail, but still queues.
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $c3 = _SA 'Grocery matching soundness - review needed'
+    _T 'MUST NOT FIRE a review-class alert never reaches the mail leg' ([bool]($c3.out -notmatch 'alert MUTED' -and $c3.out -match 'queued as REVIEW')) 'True'
+    _T 'and it still queues its one item' $c3.items.Count 1
+    # MUST NOT FIRE: a digest-class subject writes no queue item, but still mails.
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $c4 = _SA 'Brain digest: the night'
+    _T 'MUST NOT FIRE a digest-class alert writes no queue item' ([bool](-not (Test-Path -LiteralPath $saQ))) 'True'
+    _T 'and it still takes the mail leg' ([bool]($c4.out -match 'alert MUTED')) 'True'
+    # MUST FIRE: no registry at all fails toward PAGE - the review-class subject from above is now queued AND mailed.
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $saReg -Force
+    $c5 = _SA 'Grocery matching soundness - review needed'
+    $saLog = Join-Path $saG 'alert-log.txt'
+    _T 'MUST FIRE with the registry missing, a review-class subject fails toward page: queued AND mailed' ([bool]($c5.items.Count -eq 1 -and $c5.out -match 'alert MUTED')) 'True'
+    _T 'and the log says the registry could not be read' ([bool]((Test-Path -LiteralPath $saLog) -and ((Get-Content -LiteralPath $saLog -Raw) -match 'ALERT REGISTRY UNREADABLE'))) 'True'
+    [IO.File]::WriteAllText($saReg, $saRegJson, $utf8)
+    # CLEAN TWIN: -Lane and -Escalates keep working - the lane is still stamped, and the park is still written.
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $c6 = _SA 'Triage residual: a frozen residual' @('-Lane', 'weekly')
+    _T 'CLEAN TWIN -Lane weekly still stamps its lane and lands as review (queued, not mailed)' ([bool]($c6.items.Count -eq 1 -and $c6.items[0].lane -eq 'weekly' -and $c6.out -match 'queued as REVIEW')) 'True'
+    Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
+    $c7 = _SA 'Grocery matching soundness - review needed' @('-Escalates', '2026-09-10-abcdef')
+    _T 'CLEAN TWIN -Escalates still parks the item at needs-brad and always takes the mail leg' ([bool]($c7.items.Count -eq 1 -and $c7.items[0].status -eq 'needs-brad' -and $c7.out -match 'alert MUTED')) 'True'
+  } finally { Remove-Item -LiteralPath $saDir -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ""
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (queue routing + body-thin + emitter path + mute switch + birth lane)'
+  Write-Output 'SELF-TEST PASS (queue routing + body-thin + emitter path + mute switch + birth lane + alert registry)'
   exit 0
 }
+
+# ---- WHICH CLASS IS THIS ALERT? (2026-09-10, Brad ruling 1) ------------------------------------------------
+# page = emailed and queued; review = queued, never emailed; digest = emailed, never queued. The class comes from
+# grocery\alert-registry.json through alert-registry-lib.ps1. EVERY failure here fails toward PAGE: a lib that will
+# not load, a registry that is missing or unparseable, or a type no entry matches all leave $delivery as page, and
+# the last of those also marks the mail subject so the registry gap is visible in the inbox. The default below IS
+# the behaviour this script had before the registry existed.
+$delivery = [pscustomobject]@{ class = 'page'; queue = $true; mail = $true; mail_subject = $Subject; unregistered = $false; entry_id = ''; note = '' }
+$regLibOk = $false
+try { . (Join-Path $root 'alert-registry-lib.ps1'); $regLibOk = $true } catch { Log ("ALERT REGISTRY LIB DID NOT LOAD (" + $_.Exception.Message + ") - failing toward PAGE for '" + $Subject + "'") }
+if ($regLibOk) {
+  try {
+    $regState = Read-AlertRegistry (Join-Path $root 'alert-registry.json')
+    if (-not $regState.ok) { Log ("ALERT REGISTRY UNREADABLE: " + $regState.why + " - failing toward PAGE for '" + $Subject + "' [type: " + $typeKey + "]") }
+    $delivery = Get-AlertDelivery -Resolution (Resolve-AlertClass $regState.registry $typeKey) -Subject $Subject -Escalates $Escalates -Lane $Lane
+  } catch { Log ("ALERT REGISTRY could not be applied (" + $_.Exception.Message + ") - failing toward PAGE for '" + $Subject + "'") }
+}
+if ($delivery.unregistered) { Log ("UNREGISTERED ALERT TYPE '" + $Subject + "' [type: " + $typeKey + "] - no entry in grocery\alert-registry.json matches, so it queues AND pages as a registry defect. Register it and run grocery\audit-alert-registry.ps1.") }
 
 $sentFile = Join-Path $root ("alert-sent-$today.txt")
 # purge prior days' sent-files: yesterday's suppressions are irrelevant, and the cloud job's `git add -A`
@@ -296,6 +391,11 @@ Get-ChildItem (Join-Path $root 'alert-sent-*.txt') -ErrorAction SilentlyContinue
 # triage tick silently skipped, which is exactly how 4 real alerts sat unworked this morning), and a CONCURRENT
 # send-alert.ps1 reads the same empty file and rebuilds the queue from scratch, dropping every prior item.
 # Fix: serialize writers on a named mutex, and swap the file in atomically so a reader sees only whole JSON.
+# A DIGEST-CLASS ALERT IS NEVER QUEUED (ruling 1). The queue block below runs only when the class queues; it keeps
+# its old indentation so the change reads as the one condition it is.
+$queued = $false
+if (-not $delivery.queue) { Log ("DIGEST '" + $Subject + "' [type: " + $typeKey + "] - registry entry " + $delivery.entry_id + " is digest class, so it is mailed and NOT queued") }
+if ($delivery.queue) {
 $qMutex = New-Object System.Threading.Mutex($false, 'Global\smp-grocery-triage-queue')
 $qHeld = $false
 try { $qHeld = $qMutex.WaitOne(10000) } catch [System.Threading.AbandonedMutexException] { $qHeld = $true }
@@ -392,6 +492,10 @@ try {
       # -Lane weekly (a triage-created residual or finding): stamped on NEW items only, like the emitter.
       $birthLane = Get-BirthLane $Lane
       if ($birthLane) { $newItem | Add-Member -NotePropertyName lane -NotePropertyValue $birthLane }
+      # ruling 1: an unregistered type says so on its record, and a review item records that it was not mailed.
+      # A registered page item stamps neither, so its record is the one it always was.
+      if ($delivery.unregistered) { $newItem | Add-Member -NotePropertyName unregistered -NotePropertyValue $true }
+      if ($delivery.class -eq 'review') { $newItem | Add-Member -NotePropertyName alert_class -NotePropertyValue 'review' }
       # an alert nobody can classify from its own body is a bug in the ALERT - say so on the record
       if ($thin) {
         $newItem | Add-Member -NotePropertyName body_thin -NotePropertyValue $true
@@ -409,6 +513,7 @@ try {
   $qTmp = $qFile + '.tmp'
   $q | ConvertTo-Json -Depth 4 | Set-Content $qTmp -Encoding UTF8
   Move-Item -Path $qTmp -Destination $qFile -Force
+  $queued = $true
 } catch {
   Log ("triage-queue write failed (email still goes out): " + $_.Exception.Message)
   # NEVER lose the entry: Brad's rule is that an alert must not wait for a human, and an alert that never
@@ -422,14 +527,30 @@ try {
   if ($qHeld) { try { $qMutex.ReleaseMutex() } catch {} }
   try { $qMutex.Dispose() } catch {}
 }
+}   # if ($delivery.queue)
+
+# A REVIEW-CLASS ALERT IS NEVER MAILED (ruling 1), once it is durable in the queue. When the queue write FAILED it is
+# mailed instead: the spool may hold it, but an alert this script could not record must page, never vanish.
+if (-not $delivery.mail) {
+  $revWhy = $delivery.note
+  if ($delivery.entry_id) { $revWhy = ('registry entry ' + $delivery.entry_id) }
+  if ($queued) {
+    Log ("REVIEW '" + $Subject + "' [type: " + $typeKey + "] - queued, NOT emailed (" + $revWhy + ")")
+    Write-Output ("alert queued as REVIEW - not emailed, by ruling 1 (" + $revWhy + ")")
+    exit 0
+  }
+  Log ("REVIEW '" + $Subject + "' could not reach the queue, so it is EMAILED instead - a review alert this script could not record must page, never vanish")
+}
 
 # MUTED? The queue entry is already durable at this point, so triage still sees and works this alert; we
 # just do not mail it. -Force does NOT punch through: -Force exists to beat the once-a-day gate for a new
 # incident, and "stop all email alerts" outranks "this one is urgent enough to repeat today".
 $mute = Get-MuteState (Join-Path $root 'alerts-muted.json') $today
 if ($mute.muted) {
-  Log ("MUTED (" + $mute.why + ") - queued but NOT emailed: '$Subject' [type: $typeKey]")
-  Write-Output ("alert MUTED (" + $mute.why + ") - queued to triage-queue.json, no email sent. Delete grocery\alerts-muted.json to resume email.")
+  $mQ = 'NOT queued'
+  if ($queued) { $mQ = 'queued to triage-queue.json' }
+  Log ("MUTED (" + $mute.why + ") - " + $mQ + " but NOT emailed: '$Subject' [type: $typeKey] [mail subject '" + $delivery.mail_subject + "']")
+  Write-Output ("alert MUTED (" + $mute.why + ") - " + $mQ + ", no email sent [mail subject '" + $delivery.mail_subject + "']. Delete grocery\alerts-muted.json to resume email.")
   exit 0
 }
 
@@ -469,12 +590,12 @@ try {
   # its parent.
   . (Join-Path (Split-Path -Parent $PSScriptRoot) '.claude\skills\lesson\google-token.ps1')
   $token = Get-GoogleAccessToken
-  $raw = "To: $To`r`nSubject: $Subject`r`nContent-Type: text/plain; charset=UTF-8`r`n`r`n$Body`r`n`r`n(Automated alert from the Omaha grocery pipeline.)"
+  $raw = "To: $To`r`nSubject: $($delivery.mail_subject)`r`nContent-Type: text/plain; charset=UTF-8`r`n`r`n$Body`r`n`r`n(Automated alert from the Omaha grocery pipeline.)"
   $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($raw)).Replace('+','-').Replace('/','_').TrimEnd('=')
   $resp = Invoke-RestMethod -Uri "https://gmail.googleapis.com/gmail/v1/users/me/messages/send" -Method Post `
             -Headers @{ Authorization = "Bearer $token" } -ContentType "application/json" -Body (@{ raw = $b64 } | ConvertTo-Json) -TimeoutSec 30
   Add-Content -Path $sentFile -Value $typeKey   # record the type so the rest of today's runs stay quiet
-  Log ("SENT '$Subject' -> $To (id " + $resp.id + ")")
+  Log ("SENT '" + $delivery.mail_subject + "' -> $To (id " + $resp.id + ")")
   Write-Output ("alert emailed to $To (id " + $resp.id + ")")
 } catch {
   $msg = $_.Exception.Message

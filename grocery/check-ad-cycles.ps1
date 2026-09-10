@@ -1472,6 +1472,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         # the zero-alert-days scoreboard (design\PLAN-zero-alert-days-2026-09-10.md, Phase 0): a measurement,
         # never an alert. Run here so quiet days are counted even when the Claude app, and so triage, is closed.
         New-FanoutLane -Name 'alert-census'        -File (Join-Path $root 'audit-alert-census.ps1') -Marker 'ALERT-CENSUS-COMPLETE'
+        # ruling 1 (2026-09-10): every alert type that reached the queue maps to exactly one registry class. The
+        # source half also runs in ops\run-gates.ps1; this lane adds the 30-day queue, which only data can answer.
+        New-FanoutLane -Name 'alert-registry'      -File (Join-Path $root 'audit-alert-registry.ps1') -Arguments @('-Queue') -Marker 'ALERT-REGISTRY-COMPLETE'
         New-FanoutLane -Name 'golden-test'         -File (Join-Path $mealPrep 'engine\golden-test.ps1')         -TimeoutSec 600 -Marker 'GOLDEN-TEST-COMPLETE'
         New-FanoutLane -Name 'scaler-pricing'      -File (Join-Path $mealPrep 'pipeline\run-scaler-pricing-test.ps1') -TimeoutSec 600 -Arguments @('-Quiet')
         New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1') -Marker 'DB-AGREEMENT-COMPLETE'
@@ -2229,6 +2232,21 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Board prices aging inside a fresh file" -Body ("audit-row-age.ps1 found rows aging past the window, or a store that stopped stamping as_of. The FILE dates look fine either way, which is why guard 9 stays quiet. These prices are what 542 live recipe pages quote.`n`n" + ($raBad -join "`n")) | Out-Null } catch {} }
         } else { Log ('row-age: no findings (' + (@($ra | Where-Object { $_ -match 'rows' }).Count) + ' store(s) profiled)') }
       } catch { Log ('audit-row-age threw: ' + $_.Exception.Message) }
+      # ---- THE ALERT REGISTRY IS COMPLETE (2026-09-10, Brad ruling 1) --------------------------------------------
+      # No mail from here, deliberately: a type with no entry already paged on its own as UNREGISTERED ALERT TYPE
+      # when it fired, so this is the daily record of the gap, carried in the summary until someone registers it.
+      try {
+        $arR   = Get-FanoutRecord 'alert-registry' $fanRecs
+        $arRc  = $arR.ExitCode
+        $arOut = @($arR.Output)
+        $arLine = [string](@($arOut | Where-Object { $_ -match '^alert-registry: (PASSED|FAILED|COULD NOT EVALUATE)' }) | Select-Object -Last 1)
+        if ($arRc -eq 0 -and $arLine) { Log ('alert-registry: ' + $arLine) }
+        else {
+          if (-not $arLine) { $arLine = 'no verdict line (the lane did not finish)' }
+          Log ('alert-registry rc=' + $arRc + ': ' + $arLine + ' | ' + ((@($arOut | Where-Object { $_ -match '^\s*!' }) | Select-Object -First 4) -join ' | '))
+          $summary += "REVIEW    alert-registry exit $arRc - an alert type or call site maps to no class, or the check could not evaluate (grocery\audit-alert-registry.ps1): $arLine"
+        }
+      } catch { Log ('alert-registry threw: ' + $_.Exception.Message) }
       # price alerts: email label:alert-<id> subscribers when an item hits a tracked low (self-gates via alert-state.json)
       try { $paOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-price-alerts.ps1'); Log ('price-alerts: ' + (@($paOut)[-1])) } catch { Log ('send-price-alerts threw: ' + $_.Exception.Message) }
 
