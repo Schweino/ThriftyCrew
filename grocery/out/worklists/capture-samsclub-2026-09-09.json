@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "no weekly ad cycle",
-    "cursor_start":  126,
-    "cursor_next":  133,
+    "cursor_start":  133,
+    "cursor_next":  140,
     "total_terms":  602,
     "rotation_terms":  [
-                           "chicken broth",
-                           "chicken livers",
-                           "chicken noodle soup",
-                           "frozen chicken nuggets",
-                           "chicken thighs",
-                           "chicken wings",
-                           "garbanzo beans"
+                           "chili beans",
+                           "chili crisp",
+                           "chili garlic sauce",
+                           "chili powder",
+                           "chipotle peppers in adobo",
+                           "chipotle peppers in adobo sauce",
+                           "chipotle powder"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "chicken broth",
-                  "chicken livers",
-                  "chicken noodle soup",
-                  "frozen chicken nuggets",
-                  "chicken thighs",
-                  "chicken wings",
-                  "garbanzo beans"
+                  "chili beans",
+                  "chili crisp",
+                  "chili garlic sauce",
+                  "chili powder",
+                  "chipotle peppers in adobo",
+                  "chipotle peppers in adobo sauce",
+                  "chipotle powder"
               ],
     "commodities":  [
-                        "chicken-broth",
-                        "chicken-livers",
-                        "chicken-noodle-soup",
-                        "chicken-nuggets",
-                        "chicken-thighs",
-                        "chicken-wings",
-                        "chickpeas"
+                        "chili-beans",
+                        "chili-crisp",
+                        "chili-garlic-sauce",
+                        "chili-powder",
+                        "chipotle-adobo",
+                        "chipotle-in-adobo",
+                        "chipotle-powder"
                     ],
     "call_cap":  30,
     "expiry_deferred":  0,

@@ -1,15 +1,21 @@
 ﻿{
-    "generated":  "2026-09-07T21:33:45",
-    "started":  "2026-09-07T21:30:02",
-    "deadline":  "2026-09-08T00:00:02",
+    "generated":  "2026-09-09T21:33:03",
+    "started":  "2026-09-09T21:30:01",
+    "deadline":  "2026-09-10T00:00:01",
     "hard_stop":  "06:30",
     "jobs":  4,
     "contested":  0,
-    "elapsed_sec":  223,
+    "elapsed_sec":  182,
     "card_free":  true,
-    "free_vram_mib":  15290,
+    "free_vram_mib":  14348,
     "llama_started":  true,
     "stages":  [
+                   {
+                       "stage":  "inputs",
+                       "state":  "OK",
+                       "detail":  "graph.db is inside its 26h window",
+                       "sec":  0
+                   },
                    {
                        "stage":  "emit",
                        "state":  "OK",
@@ -19,7 +25,7 @@
                    {
                        "stage":  "defs",
                        "state":  "OK",
-                       "detail":  "[21:30:04] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "detail":  "[21:30:03] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
                        "sec":  0
                    },
                    {
@@ -44,12 +50,12 @@
                        "stage":  "serve",
                        "state":  "OK",
                        "detail":  "4 slots",
-                       "sec":  11
+                       "sec":  12
                    },
                    {
                        "stage":  "resolve",
                        "state":  "OK",
-                       "detail":  "resolved 22110 rows in 1.9s (20478 distinct questions, 0 model calls)",
+                       "detail":  "resolved 22110 rows in 2.0s (20478 distinct questions, 0 model calls)",
                        "sec":  2
                    },
                    {
@@ -60,9 +66,9 @@
                    },
                    {
                        "stage":  "ml-eval",
-                       "state":  "OK",
-                       "detail":  "Loading weights: 100%|##########| 393/393 [00:00\u003c00:00, 4919.40it/s]",
-                       "sec":  41
+                       "state":  "SKIP",
+                       "detail":  "ran within the last 7 days",
+                       "sec":  0
                    },
                    {
                        "stage":  "stop",
