@@ -126,8 +126,23 @@ def status(root=None, now=None):
         hages = [a for a in (_age(h.get("held"), now) for h in hs) if a is not None]
         out["holds"] = len(hs)
         out["holds_oldest_days"] = max(hages) if hages else None
+        # WS 7c: the rechecks the watchdog records, and the clear proposals they add up to. Computed by
+        # promote_aliases' own functions, so there is one rule for what a streak is, not two.
+        try:
+            if HERE not in sys.path:
+                sys.path.insert(0, HERE)
+            from promote_aliases import clear_proposals, consecutive_inert, load_rechecks
+            hist = load_rechecks(os.path.join(graph, "learning", "hold-rechecks.jsonl"))
+            out["holds_recheck_days"] = len({r.get("date") for r in hist})
+            out["holds_clear_proposed"] = len(clear_proposals(hs, hist))
+            out["holds_longest_inert_streak"] = max(
+                [consecutive_inert(hist, h.get("commodity"), h.get("pattern"))[0] for h in hs] or [0])
+        except Exception:                                    # noqa: BLE001
+            out.update(holds_recheck_days=None, holds_clear_proposed=None, holds_longest_inert_streak=None)
+            unknown.append("learning/hold-rechecks.jsonl")
     else:
-        out.update(holds=None, holds_oldest_days=None)
+        out.update(holds=None, holds_oldest_days=None, holds_recheck_days=None,
+                   holds_clear_proposed=None, holds_longest_inert_streak=None)
         unknown.append("learning/promotion-holds.json")
 
     runs, ok = _load(os.path.join(graph, "eval", "eval-runs.json"))
@@ -185,6 +200,8 @@ def render(s):
                                                                      v("patches_last_applied_age_days", "d"),
                                                                      v("patches_unapplied")),
         "  promotion holds           : %s, oldest %s" % (v("holds"), v("holds_oldest_days", "d")),
+        "  hold rechecks recorded    : %s day(s), longest inert streak %s, clear proposals %s"
+        % (v("holds_recheck_days"), v("holds_longest_inert_streak"), v("holds_clear_proposed")),
         "  gold scoreboard last run  : %s (%s old), %s stale against its inputs"
         % (v("eval_last_run_at"), v("eval_age_days", "d"), v("eval_days_stale_vs_inputs", "d")),
         "",
@@ -229,7 +246,14 @@ def selftest():
         ])
         w("learning/review-packet.json", {"generated_at": "2026-08-21T01:01:21", "proposals": [1, 2]})
         w("learning/approved-patches.json", [{"applied_at": "2026-08-20T18:22:55"}, {"applied_at": None}])
-        w("learning/promotion-holds.json", {"holds": [{"held": "2026-08-21"}, {"held": "2026-09-09"}]})
+        w("learning/promotion-holds.json", {"holds": [
+            {"held": "2026-08-21", "commodity": "a", "pattern": "p",
+             "reason": "guards 2026-08-21: 1.59x unit-basis outlier vs its own link"},
+            {"held": "2026-09-09"}]})
+        with open(os.path.join(tmp, "learning", "hold-rechecks.jsonl"), "w", encoding="utf-8") as fh:
+            for d in range(1, 31):
+                fh.write(json.dumps({"date": "2026-09-%02d" % d, "board": "b", "commodity": "a",
+                                     "pattern": "p", "hits": 0, "inert": True}) + "\n")
         w("eval/eval-runs.json", [{"run_at": "2026-08-21T01:04:51"}])
         with open(os.path.join(tmp, "gold", "gold.jsonl"), "w", encoding="utf-8") as fh:
             fh.write("{}\n")
@@ -248,6 +272,9 @@ def selftest():
         case("MUST FIRE", "the scoreboard is stale against a gold edit that postdates it",
              s["eval_days_stale_vs_inputs"] == 11.0, s["eval_days_stale_vs_inputs"])
         case("MUST FIRE", "the oldest hold is found", s["holds_oldest_days"] == 20.5, s["holds_oldest_days"])
+        case("MUST FIRE", "a board hold inert for 30 recorded rechecks counts as one clear proposal",
+             s["holds_clear_proposed"] == 1 and s["holds_longest_inert_streak"] == 30
+             and s["holds_recheck_days"] == 30, s)
 
         # MUST NOT FIRE: the founding confusion of this whole plan, frozen.
         os.remove(os.path.join(tmp, "learning", "proposals.json"))

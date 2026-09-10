@@ -199,6 +199,21 @@ def build_cell_state(db, ts: str) -> dict:
             "with_ad": sum(1 for v in best.values() if "ad" in v)}
 
 
+def carried_decided_at(prior: dict, key: tuple, status: str, ts: str) -> str:
+    """The day a verdict was DECIDED, not the day the bank was rebuilt. PURE.
+
+    `[ADDED 2026-09-10, WS 7b of design/PLAN-brain-v2-2026-09-09.md]` This table is rebuilt with DELETE
+    and every row used to be stamped with the rebuild's own `ts`. Measured that day: all 4,141 rows
+    carried one decided_at, 2026-08-21T01:37:15, so no verdict could ever expire on evidence - they
+    would all have lapsed on one night, and a rebuild the day before would have reset every one.
+    An unchanged verdict keeps its date; a CHANGED status is a new decision and takes `ts`.
+    """
+    p = prior.get(key)
+    if p and p[0] == status and p[1]:
+        return p[1]
+    return ts
+
+
 def build_question_verdicts(db, ts: str) -> dict:
     """Bank each adjudication once, keyed by the question it answers.
 
@@ -238,6 +253,14 @@ def build_question_verdicts(db, ts: str) -> dict:
         if cur is None or rank.get(r["match_status"], 9) < rank.get(cur["match_status"], 9):
             picked[key] = dict(r)
 
+    prior: dict[tuple[str, str], tuple[str, str]] = {}
+    try:
+        for pr in db.conn.execute(
+                "SELECT commodity_id, product_key, status, decided_at FROM question_verdicts"):
+            prior[(pr["commodity_id"], pr["product_key"])] = (pr["status"], pr["decided_at"])
+    except Exception:                                        # noqa: BLE001
+        prior = {}      # a table that is not there yet has no dates to carry
+
     db.conn.execute("DELETE FROM question_verdicts")
     db.conn.executemany(
         """INSERT INTO question_verdicts
@@ -256,7 +279,7 @@ def build_question_verdicts(db, ts: str) -> dict:
           # the resolver re-derives the tier from `reason` at retrieval time, so
           # a bank written before this fix is stale, never wrong.
           decided_by_stamp(v["match_status"], v["match_reason"]),
-          None, ts)
+          None, carried_decided_at(prior, (cid, pk), v["match_status"], ts))
          for (cid, pk), v in picked.items()])
     db.conn.commit()
     by = {}

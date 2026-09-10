@@ -118,6 +118,14 @@ def emit_packet(db) -> str:
                            "graph/learning/alias_blast_radius.py before ruling on it"}
         proposals.append(entry)
 
+    # WS 7c (2026-09-10): hold-clear PROPOSALS ride the same packet, so a hold inert for a month reaches the
+    # person who reads this. The packet never clears one - see the instruction below.
+    try:
+        from promote_aliases import clear_proposals, held_rows, load_rechecks
+        hold_clears = clear_proposals(held_rows(), load_rechecks())
+    except Exception as e:                                   # noqa: BLE001
+        hold_clears = [{"missing": f"hold-clear proposals could not be computed: {e!r}"}]
+
     packet = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "reviewer": "claude-fable-medium",
@@ -136,7 +144,11 @@ def emit_packet(db) -> str:
             "cross_commodity hit needs a written reason why the collision is "
             "benign, or a `modify` payload that tightens the pattern. "
             "absorbs_review + intended_capture are what the alias BUYS; a "
-            "proposal with none of either is noise."
+            "proposal with none of either is noise. "
+            "hold_clears are NOT proposals to rule on here: each names a promotion hold that has "
+            "matched nothing on the board for 30 consecutive daily rechecks, with its readings. "
+            "Clearing one means re-running the full guard suite (promote_aliases.py --gated) and "
+            "stays with a person (ruling 2026-09-09, backlog I92)."
         ),
         "gates": {
             "false_merge_rate_max": GATE_FALSE_MERGE,
@@ -146,6 +158,7 @@ def emit_packet(db) -> str:
                      "dropped regardless of this review's verdict"),
         },
         "proposals": proposals,
+        "hold_clears": hold_clears,
     }
     os.makedirs(os.path.dirname(PACKET), exist_ok=True)
     with open(PACKET, "w", encoding="utf-8", newline="\n") as fh:

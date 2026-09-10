@@ -111,6 +111,35 @@ PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "prompt
 # exact prompt and policy that produced it. Bump on ANY change to either.
 PROMPT_VERSION = "resolve-v5-reject-only-adjudicated-priors"
 
+
+def _load_reask(path: str | None = None, now=None) -> set:
+    """Tonight's expired-verdict re-ask list (WS 7b), as {(commodity_id, product_key)}. EMPTY on doubt.
+
+    graph/learning/verdict_expiry.py --emit writes it at nightly stage 0b, capped at its
+    MAX_REASKS_PER_NIGHT. An absent, stale, malformed or unreadable list is an EMPTY set, which is
+    exactly this file's behaviour before expiry existed: the only way to re-ask a question is a list
+    written tonight. Freshness is judged by verdict_expiry.reask_keys, so there is one rule, not two.
+
+    ONLY main() and _emit_contested() call this. The gold scorer and the benches build a Resolver too,
+    and one that silently dropped banked answers on a re-ask night would score a different resolver.
+    """
+    try:
+        learning = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "learning")
+        if learning not in sys.path:
+            sys.path.insert(0, learning)
+        import datetime as _d
+        import json as _j
+        import verdict_expiry as _ve
+        p = path or _ve.REASK_FILE
+        if not os.path.exists(p):
+            return set()
+        with open(p, encoding="utf-8-sig") as fh:
+            doc = _j.load(fh)
+        return _ve.reask_keys(doc, now or _d.datetime.now())
+    except Exception as e:                                   # noqa: BLE001
+        print(f"verdict re-ask list unreadable ({e!r}) - re-asking nothing", file=sys.stderr)
+        return set()
+
 # Verdicts are banked to SQLite every this many questions during the LLM pass,
 # so a long run is interruptible and resumable rather than all-or-nothing.
 CHECKPOINT_EVERY = 200
@@ -214,7 +243,8 @@ def _compile_all(patterns: list[str]) -> list[re.Pattern]:
 class Resolver:
     def __init__(self, db: GraphDB, llm: LocalLLM | None = None,
                  use_llm: bool = True, escalate_below: float = 0.75,
-                 use_bank: bool = True, adversarial: bool = False):
+                 use_bank: bool = True, adversarial: bool = False,
+                 reask: set | None = None):
         self.db = db
         self.llm = llm
         self.use_llm = use_llm
@@ -246,6 +276,15 @@ class Resolver:
             except Exception:                                # noqa: BLE001
                 self.bank = {}
 
+        # 4.5a AN EXPIRED VERDICT IS ABSENT - tonight's, and only when the caller passes the list.
+        # `[ADDED 2026-09-10, WS 7b]` Dropping the bank row is half of it: pending_questions also has to
+        # SELECT the question again, because it never re-selects an observation already at llm_*, and a
+        # question nobody selects is never asked. Both halves read this one set.
+        self.reask: set[tuple[str, str]] = set(reask or ()) if use_bank else set()
+        self._reasked_keys: set[tuple[str, str]] = set()
+        for k in self.reask:
+            self.bank.pop(k, None)
+
         # Prior-ruling index for few-shot retrieval: commodity -> [(name, words,
         # kind, tier)]. Built once; the model is otherwise asked to judge blind
         # while the human review packet for the same question gets all of this.
@@ -274,6 +313,11 @@ class Resolver:
                 for r in rows:
                     nm = r[1]
                     if not nm:
+                        continue
+                    # A question on tonight's re-ask list is not shown its own expired answer as a
+                    # precedent: that would ask the model to agree with itself and call it a re-ask.
+                    if self.reask and r[2] in ("llm_rejected", "llm_confirmed") \
+                            and (r[0], norm_text(nm)) in self.reask:
                         continue
                     kind = "confirm" if r[2] == "llm_confirmed" else "reject"
                     tier = authority_tier(r[2], r[3], r[4])
@@ -615,6 +659,10 @@ class Resolver:
                 "confidence=? WHERE id=?",
                 [(v.status, v.reason, v.confidence, i) for i in ids])
             self.stats[v.status] = self.stats.get(v.status, 0) + len(ids)
+            if self.reask:
+                pk = norm_text(name or "")
+                if (cid, pk) in self.reask:
+                    self._rebank(cid, pk, v, ts)
             # Every MODEL judgment gets its own decision-log row. The aggregate
             # event says what a run did; only per-judgment rows with the model
             # id and prompt version let a bad verdict be attributed to the exact
@@ -655,6 +703,25 @@ class Resolver:
         self.db.conn.commit()
         return n
 
+    def _rebank(self, cid: str, pk: str, v, ts: str) -> None:
+        """A re-asked question's new answer REPLACES its expired bank row, dated today. (WS 7b.)
+
+        Without this the row keeps its old date, verdict_expiry lists it again tomorrow, and the same
+        question is re-asked every night forever. A deterministic answer DELETES the row instead: a
+        rule changed since the model ruled, and deterministic verdicts are never banked (state.py).
+        """
+        from authority import decided_by_stamp
+        if v.status in ("llm_rejected", "llm_confirmed", "llm_match_unverified", "escalated",
+                        "helper_rejected"):
+            self.db.conn.execute(
+                "UPDATE question_verdicts SET status=?, reason=?, confidence=?, decided_by=?, "
+                "decided_at=? WHERE commodity_id=? AND product_key=?",
+                (v.status, v.reason, v.confidence, decided_by_stamp(v.status, v.reason), ts, cid, pk))
+        else:
+            self.db.conn.execute(
+                "DELETE FROM question_verdicts WHERE commodity_id=? AND product_key=?", (cid, pk))
+        self._reasked_keys.add((cid, pk))
+
     # -- bulk application --------------------------------------------------
     def pending_questions(self, limit: int | None = None,
                           split_contested: bool = True):
@@ -692,6 +759,17 @@ class Resolver:
         if limit:
             q += f" LIMIT {int(limit)}"
         rows = self.db.conn.execute(q, pending).fetchall()
+        # WS 7b: tonight's expired verdicts are pending again. Selected by commodity in SQL and matched on
+        # the NORMALISED name here, because product_key is norm_text(product_name) and SQL cannot norm.
+        # Not under --limit, which is a test knob, so a limited run stays exactly what it was.
+        if self.reask and not limit:
+            cids = sorted({c for c, _ in self.reask})
+            extra = self.db.conn.execute(
+                "SELECT id, commodity_id, product_name FROM price_observations "
+                "WHERE match_status IN ('llm_rejected','llm_confirmed') "
+                f"AND commodity_id IN ({','.join('?' * len(cids))})", cids).fetchall()
+            rows = list(rows) + [r for r in extra
+                                 if (r["commodity_id"], norm_text(r["product_name"] or "")) in self.reask]
 
         # -- group identical questions ------------------------------------
         groups: dict[tuple[str, str], list[str]] = {}
@@ -1199,7 +1277,7 @@ def _emit_contested(path: str, limit: int | None = None) -> int:
         # this runs at the top of the nightly chain, potentially alongside a
         # publish or a Claude session reading the same file.
         db.conn.execute("PRAGMA query_only = ON")
-        r = Resolver(db, llm=None, use_llm=False)
+        r = Resolver(db, llm=None, use_llm=False, reask=_load_reask())
         groups, verdicts, contested = r.pending_questions(limit=limit,
                                                           split_contested=True)
         labels: dict[str, str] = {}
@@ -1359,7 +1437,8 @@ def main() -> int:
             db.conn.execute("UPDATE price_observations SET match_status='unadjudicated', "
                             "match_reason=NULL, confidence=NULL")
             db.conn.commit()
-        r = Resolver(db, llm=llm, use_llm=bool(llm), adversarial=args.adversarial)
+        r = Resolver(db, llm=llm, use_llm=bool(llm), adversarial=args.adversarial,
+                     reask=_load_reask())
         if args.helper_scores:
             try:
                 k = r.load_helper_scores(args.helper_scores, args.helper_threshold)
@@ -1382,6 +1461,9 @@ def main() -> int:
                   f"({out['helper_model']})")
         for k, v in sorted(out["by_status"].items(), key=lambda x: -x[1]):
             print(f"   {k:<20} {v}")
+        if r.reask:
+            print(f"   expired verdicts re-asked: {len(r._reasked_keys)} re-banked of "
+                  f"{len(r.reask)} on tonight's list")
         if out["escalations"]:
             confirm = sum(1 for e in out["escalations"] if e.get("kind") == "confirm_match")
             print(f"\n   {len(out['escalations'])} rows escalated for Claude review "

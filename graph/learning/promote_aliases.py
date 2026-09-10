@@ -71,6 +71,12 @@ from graphdb import REPO_ROOT                              # noqa: E402
 CATALOG = os.path.join(REPO_ROOT, "grocery", "commodities.json")
 DB = os.path.join(REPO_ROOT, "graph", "sqlite", "graph.db")
 HOLDS = os.path.join(HERE, "promotion-holds.json")
+# WS 7c of design/PLAN-brain-v2-2026-09-09.md (2026-09-10). One row per hold per DAY, written only by
+# `--recheck-holds --record`, which is the watchdog's call. `--recheck-holds` alone still writes nothing.
+RECHECKS = os.path.join(HERE, "hold-rechecks.jsonl")
+# A FIRST PLAUSIBLE VALUE, NOT A SWEEP - the plan's number. The watchdog rechecks once a day, so 30 is a
+# month of rebuilt boards on which the pattern had nothing to hold against.
+INERT_RECHECKS_TO_PROPOSE = 30
 
 
 def held() -> dict[tuple[str, str], str]:
@@ -160,7 +166,85 @@ def _board_week() -> str:
     return m.group(1) if m else ""
 
 
-def recheck_holds(learned: dict, catalog) -> int:
+def held_rows() -> list[dict]:
+    """The holds as rows, for callers that need the reason and the date and not just the key."""
+    if not os.path.exists(HOLDS):
+        return []
+    with open(HOLDS, encoding="utf-8-sig") as fh:
+        return [h for h in (json.load(fh).get("holds") or []) if isinstance(h, dict)]
+
+
+def recheck_rows(results, board_name, day) -> list[dict]:
+    """Rows for hold-rechecks.jsonl. PURE. A BLIND run - no board - yields NONE: it is not a recheck,
+    and recording it as inert would build a month-long streak out of a checkout with no board in it."""
+    if not board_name:
+        return []
+    return [{"date": day, "board": board_name, "commodity": r["commodity"], "pattern": r["pattern"],
+             "hits": r["hits"], "inert": r["hits"] == 0}
+            for r in results if r.get("hits") is not None]
+
+
+def merge_recheck_rows(existing, new) -> list[dict]:
+    """The new rows not already recorded for that (date, commodity, pattern). PURE."""
+    seen = {(e.get("date"), e.get("commodity"), e.get("pattern")) for e in existing}
+    return [n for n in new if (n["date"], n["commodity"], n["pattern"]) not in seen]
+
+
+def consecutive_inert(history, commodity, pattern) -> tuple[int, list[dict]]:
+    """(streak, readings): the trailing run of days this hold matched nothing on the board. PURE.
+
+    One day with a match ends it. Rows are per day, so a second run on one day is not a second recheck.
+    """
+    rows = sorted((h for h in history if h.get("commodity") == commodity and h.get("pattern") == pattern),
+                  key=lambda h: h.get("date") or "")
+    streak = []
+    for h in reversed(rows):
+        if h.get("inert") is True:
+            streak.append(h)
+        else:
+            break
+    return len(streak), list(reversed(streak))
+
+
+def clear_proposals(holds, history, n: int = INERT_RECHECKS_TO_PROPOSE) -> list[dict]:
+    """Board-class holds inert for n consecutive rechecks, as PROPOSALS. PURE.
+
+    NEVER an identity hold and never an unclassed one, per the 2026-09-09 ruling (backlog I92): an
+    identity hold is about what the pattern MEANS, and a timer that cleared the kosher-salt cross-claim
+    would have re-armed it on a live board. And never a clear: the proposal carries its 30 readings to
+    a person, and clearing still means re-running the full guard suite.
+    """
+    out = []
+    for h in holds:
+        if classify_reason(h.get("reason")) != "board":
+            continue
+        k, readings = consecutive_inert(history, h.get("commodity"), h.get("pattern"))
+        if k >= n:
+            out.append({"kind": "clear_hold", "commodity": h.get("commodity"), "pattern": h.get("pattern"),
+                        "held": h.get("held"), "reason": h.get("reason"), "inert_rechecks": k,
+                        "readings": [{"date": r.get("date"), "board": r.get("board"), "hits": r.get("hits")}
+                                     for r in readings[-n:]]})
+    return out
+
+
+def load_rechecks(path: str | None = None) -> list[dict]:
+    out = []
+    try:
+        with open(path or RECHECKS, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    out.append(json.loads(line))
+                except Exception:                            # noqa: BLE001
+                    continue
+    except OSError:
+        pass
+    return out
+
+
+def recheck_holds(learned: dict, catalog, record: bool = False) -> int:
     """--recheck-holds: WHICH HELD PATTERNS ARE STILL HELD AGAINST SOMETHING? (backlog I92.)
 
     THE SHAPE THIS FIXES. promotion-holds.json is a LATCHING ACTUATOR: it can only ever withhold
@@ -228,6 +312,7 @@ def recheck_holds(learned: dict, catalog) -> int:
     print("-" * 104)
 
     moot = contradicted = inert = 0
+    results = []
     by_class = {"identity": 0, "board": 0, "unclassed": 0}
     for h in holds:
         cid, pat = h.get("commodity"), h.get("pattern")
@@ -246,6 +331,8 @@ def recheck_holds(learned: dict, catalog) -> int:
         if board_rows and hits is not None and not hits:
             inert += 1
         hit_s = "n/a" if not board_rows else ("BADRX" if hits is None else str(len(hits)))
+        results.append({"commodity": cid, "pattern": pat,
+                        "hits": None if (not board_rows or hits is None) else len(hits)})
         klass = classify_reason(h.get("reason"))
         by_class[klass] = by_class.get(klass, 0) + 1
         print(f"{cid:<22} {age_s:>5}  {klass:<10} {str(still):<8} {str(incat):<7} {hit_s:<6} {pat[:44]}")
@@ -269,6 +356,22 @@ def recheck_holds(learned: dict, catalog) -> int:
     print("              daily, so these are the re-testable ones - the only real candidates here.")
     print("  unclassed = the reason could not be read. Reported as such rather than guessed into a")
     print("              bucket, because calling it re-testable would be inventing permission.")
+    print()
+    history = load_rechecks()
+    if record:
+        new = merge_recheck_rows(history, recheck_rows(results, board_name, today.isoformat()))
+        if new:
+            with open(RECHECKS, "a", encoding="utf-8", newline="\n") as fh:
+                for row in new:
+                    fh.write(json.dumps(row, sort_keys=True) + "\n")
+        history += new
+        print(f"RECHECKS RECORDED: {len(new)} row(s) to {os.path.basename(RECHECKS)}"
+              + ("" if board_name else " - none: the board is absent, and a blind run is not a recheck"))
+    props = clear_proposals(holds, history)
+    streaks = [consecutive_inert(history, h.get("commodity"), h.get("pattern"))[0] for h in holds]
+    print(f"CLEAR PROPOSALS (board-class, inert {INERT_RECHECKS_TO_PROPOSE} consecutive daily rechecks): "
+          f"{len(props)} of {n}; longest inert streak on record {max(streaks) if streaks else 0} "
+          f"over {len({r.get('date') for r in history})} recorded day(s)")
     print()
     print("NOTHING WAS CLEARED AND NOTHING WAS PROMOTED. A hold that is moot, contradicted or inert")
     print("is a CANDIDATE for review, not a verdict: clearing one still means re-running the full")
@@ -566,8 +669,10 @@ def _selftest() -> int:
     Every case is a real shape from promotion-holds.json as it stood 2026-09-08.
     """
     fails = []
+    ran = []
 
     def T(name, cond, got=""):
+        ran.append(name)
         print(("  ok    " if cond else "  X     ") + name + ("" if cond else f"   got: {got}"))
         if not cond:
             fails.append(name)
@@ -686,10 +791,40 @@ def _selftest() -> int:
     T("CLEAN TWIN  the limit is the constant declared above the run, not inferred",
       MAX_NEW_HOLDS_PER_RUN == 10, str(MAX_NEW_HOLDS_PER_RUN))
 
+    # ---- hold expiry on evidence (WS 7c, 2026-09-10) -------------------------------------------
+    res = [{"commodity": "a", "pattern": "p", "hits": 0}, {"commodity": "b", "pattern": "q", "hits": 3},
+           {"commodity": "c", "pattern": "r(", "hits": None}]
+    rows = recheck_rows(res, "comparison-2026-09-10.json", "2026-09-10")
+    T("MUST FIRE  a recheck on a board records one row per parseable hold, inert when it matched nothing",
+      [(r["commodity"], r["inert"]) for r in rows] == [("a", True), ("b", False)], rows)
+    T("MUST NOT FIRE  a BLIND recheck (no board) records NOTHING - it is not a recheck",
+      recheck_rows(res, None, "2026-09-10") == [], "wrote rows")
+    T("MUST NOT FIRE  a second run on the same day adds no second row",
+      merge_recheck_rows(rows, rows) == [], "duplicated")
+    hist = [{"date": "2026-09-%02d" % d, "board": "b", "commodity": "a", "pattern": "p", "hits": 0,
+             "inert": True} for d in range(1, 31)]
+    T("MUST FIRE  30 consecutive inert rechecks is a streak of 30",
+      consecutive_inert(hist, "a", "p")[0] == 30, consecutive_inert(hist, "a", "p")[0])
+    broken = hist[:10] + [dict(hist[10], hits=2, inert=False)] + hist[11:]
+    T("MUST NOT FIRE  one day with a match resets the streak to the days after it",
+      consecutive_inert(broken, "a", "p")[0] == 19, consecutive_inert(broken, "a", "p")[0])
+    board_hold = {"commodity": "a", "pattern": "p", "held": "2026-08-21",
+                  "reason": "guards 2026-08-21: 1.59x unit-basis outlier vs its own link (Alessi 12.75 Oz)"}
+    ident_hold = dict(board_hold, reason='guards 2026-08-21: cross-claims the sea-salt cell ("Sea Salt, Coarse, Kosher")')
+    props = clear_proposals([board_hold], hist)
+    T("MUST FIRE  a board-class hold inert for 30 rechecks becomes a clear PROPOSAL with its 30 readings",
+      len(props) == 1 and props[0]["kind"] == "clear_hold" and len(props[0]["readings"]) == 30, props[:1])
+    T("MUST NOT FIRE  an IDENTITY hold is never proposed, however long it has been inert",
+      clear_proposals([ident_hold], hist) == [], "proposed")
+    T("MUST NOT FIRE  29 inert rechecks is not yet a proposal",
+      clear_proposals([board_hold], hist[1:]) == [], "proposed")
+    T("CLEAN TWIN  a proposal carries the hold's own reason and date, so the reviewer reads the original cause",
+      bool(props) and props[0]["reason"] == board_hold["reason"] and props[0]["held"] == "2026-08-21", props[:1])
+
     if fails:
         print(f"SELF-TEST FAIL: {len(fails)} case(s)")
         return 1
-    print("SELF-TEST PASS: 24 case(s) resolved - 10 must-fire, 8 must-not-fire, 5 clean twins. Led by "
+    print(f"SELF-TEST PASS: {len(ran)} case(s) resolved. Led by "
           "the founding one (a hold whose cause is still on the board keeps its evidence) and, since "
           "backlog I93, by the rate limit that refuses an implausibly large hold batch rather than "
           "latching every one of them permanently in a single pass")
@@ -705,6 +840,9 @@ def main() -> int:
     ap.add_argument("--recheck-holds", action="store_true",
                     help="report which held patterns are still held against anything. Read-only: "
                          "promotes nothing, clears nothing, and does not run the guard suite.")
+    ap.add_argument("--record", action="store_true",
+                    help="with --recheck-holds: append today's readings to hold-rechecks.jsonl (the "
+                         "watchdog's call). Still clears nothing; 30 inert days make a PROPOSAL only.")
     ap.add_argument("--accept-holds", action="store_true",
                     help="write a hold batch that exceeds the rate limit, on purpose (I93)")
     ap.add_argument("--selftest", action="store_true")
@@ -727,7 +865,7 @@ def main() -> int:
         catalog = json.load(fh)
 
     if args.recheck_holds:
-        return recheck_holds(learned, catalog)
+        return recheck_holds(learned, catalog, record=args.record)
 
     added, refused, n_seen = promote_into(catalog, learned, holds, set())
     total = sum(len(v) for v in added.values())

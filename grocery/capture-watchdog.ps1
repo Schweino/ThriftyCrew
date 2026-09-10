@@ -797,11 +797,17 @@ if ($iaRc -ne 0) {
 $rhs = Join-Path (Split-Path $root -Parent) 'graph\learning\promote_aliases.py'
 $pyExe3 = 'C:\Codex\Python312\python.exe'
 if ((Test-Path $rhs) -and (Test-Path $pyExe3)) {
-  $rhOut = & $pyExe3 $rhs --recheck-holds
+  # --record (WS 7c, 2026-09-10): today's readings go to graph\learning\hold-rechecks.jsonl, one row per
+  # hold per day, so 30 inert days can become a clear PROPOSAL in the review packet. It still clears nothing.
+  $rhOut = & $pyExe3 $rhs --recheck-holds --record
   $rhRc = $LASTEXITCODE
   $rhLine = ($rhOut | Where-Object { $_ -match '^REASON CLASS|^PROMOTION HOLDS|BOARD IS ABSENT' } | Select-Object -First 1)
   if ($rhRc -ne 0) { [void]$findings.Add("PROMOTION HOLDS could not be re-checked: $rhLine") }
-  else { [void]$ok.Add((($rhLine -replace '\s+', ' ').Trim())) }
+  else {
+    [void]$ok.Add((($rhLine -replace '\s+', ' ').Trim()))
+    $rhProp = ($rhOut | Where-Object { $_ -match '^CLEAR PROPOSALS' } | Select-Object -Last 1)
+    if ($rhProp) { [void]$ok.Add((($rhProp -replace '\s+', ' ').Trim())) }
+  }
 }
 
 # ---- 5a3a2. the git hooks that run the change-time gate are still live (WS 10d, 2026-09-10) -----

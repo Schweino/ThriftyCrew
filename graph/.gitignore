@@ -12,3 +12,9 @@ runs/
 # Python noise
 __pycache__/
 *.pyc
+# WS 7b (2026-09-10): verdict_expiry.py's per-night state. The re-ask list is rewritten every night
+# and means nothing tomorrow. The gold fingerprints degrade SAFELY when lost: every commodity reads as
+# a baseline again, so nothing is re-asked on a gold change nobody saw.
+sqlite/verdict-reask.json
+sqlite/verdict-reask.json.tmp
+sqlite/gold-fingerprints.json

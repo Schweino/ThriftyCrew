@@ -599,6 +599,7 @@ if ($WhatIfOnly) {
   Log ("nightly matching chain: now {0}, deadline {1} ({2} min), jobs {3}" -f `
        $started.ToString('HH:mm'), $deadline.ToString('yyyy-MM-dd HH:mm'), [int]($deadline - $started).TotalMinutes, $Jobs)
   Log 'plan only:'
+  Write-Output "  0b expiry  $py graph\learning\verdict_expiry.py --emit   (tonight's re-ask list, capped; resolve ignores a stale one)"
   Write-Output "  1 emit     $py graph\pipeline\resolve.py --emit-contested sidecar\data\contested-pairs.json"
   Write-Output "  1b defs    $py graph\pipeline\emit_commodity_defs.py --out sidecar\data\commodity-defs-graph.json"
   Write-Output "  1c hunter  $py graph\learning\ingest_hunter_events.py   (CPU only, read-mostly, before the card changes hands)"
@@ -678,6 +679,22 @@ try {
   )
   if ($iaRc -eq 0) { Record 'inputs' 'OK' 'graph.db is inside its 26h window' 0 }
   else { Record 'inputs' 'BLIND' 'graph.db is missing or stale - every verdict below is computed on an input nobody refreshed. NOT a failure and NOT a pass.' 0 }
+
+  # -- 0b. VERDICT EXPIRY (WS 7b, design\PLAN-brain-v2-2026-09-09.md). BEFORE the emit, because the
+  #        contested preview and the helper sweep must see tonight's re-ask questions too, or the helper
+  #        never scores them. It writes graph\sqlite\verdict-reask.json, capped at MAX_REASKS_PER_NIGHT,
+  #        and resolve.py ignores any list not written tonight - so a BLIND stage here re-asks NOTHING,
+  #        rather than repeating yesterday's questions. No verdict can expire before 2026-11-19, so until
+  #        then this stage writes an empty list and says when the first one will.
+  $r = Invoke-Stage 'verdict-expiry' $py @('graph\learning\verdict_expiry.py', '--emit') 180
+  $veSum = [string]($r.Tail | Where-Object { $_ -match '^VERDICT-EXPIRY-COMPLETE' } | Select-Object -Last 1)
+  $veLand = @($r.Tail | Where-Object { $_ -match 'DID NOT FULLY LAND' }).Count
+  if ($r.Ok) {
+    $veDetail = ($veSum -replace '^VERDICT-EXPIRY-COMPLETE\s*', '')
+    if ($veLand -gt 0) { $veDetail += " - LAST NIGHT'S RE-ASK DID NOT FULLY LAND" }
+    Record 'verdict-expiry' 'OK' $veDetail $r.Elapsed
+  }
+  else { Record 'verdict-expiry' 'BLIND' ("rc=" + $r.ExitCode + ' - never fatal: no list tonight, so resolve re-asks nothing') $r.Elapsed }
 
   # -- 1. emit the contested set. Read-only; a failure here costs the sweep its contested lane and
   #       nothing else, so it is BLIND, not fatal.
