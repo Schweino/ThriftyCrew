@@ -2885,18 +2885,70 @@ try {
   Set-CadenceRan 'test-auditors'
 }
 
+# ---- THE WEEKLY GUARD PROOF: RUN, DEFER, STAMP (2026-09-10, queue 2026-09-10-267ba6) ----
+# The weekly slot used to be spent on whatever the baseline was that morning, and stamped regardless: rc=3
+# (guards already red, nothing proven) on 2026-08-27, 2026-09-03 and 2026-09-10 - three of the last four
+# slots - each wrote test-guards-weekly-stamp.txt and closed the week. That stamp recorded when we last TRIED
+# and never when we last PROVED, so no staleness check keyed on it could ever fire (queue 2026-09-03-eb3bce
+# wrote exactly that down; nothing shipped it). Three pure functions, lifted and driven by test-cadence.ps1
+# against THIS source:
+#   Get-TestGuardsWeeklyPlan  due? if due, RUN only on today's green verdict, otherwise DEFER and stamp nothing.
+#   Get-TestGuardsStampPlan   the weekly stamp only on an EVALUATED run (rc 0 or 1); the proved stamp on rc 0.
+#   Get-TestGuardsSubject     the alert subject per rc, wording unchanged.
+# THE VERDICT IS READ AS RECORDED - today's guards_rc - and not through Read-ChainVerdictStatus's fingerprint
+# test. This block runs after the relink tail rewrites product-urls.json, which moves the fingerprint on a
+# green day and reads STALE-INPUTS: the proof would defer on exactly the days it can run. The runner scores
+# its own hermetic copy of the unmutated board anyway; the verdict only answers "is the baseline green".
+# UnprovenDays = 14 is eb3bce's suggestion, not swept; at most one unproven alert per 14 days.
+function Get-TestGuardsWeeklyPlan {
+  param($Verdict, [string]$Today, [datetime]$WeeklyLast, [datetime]$ProvedLast, [datetime]$UnprovenAlertLast, [datetime]$Now, [int]$EveryDays = 7, [int]$UnprovenDays = 14)
+  $neverProved = ($ProvedLast.Year -le 2000)
+  $daysUnproven = [int][math]::Floor(($Now - $ProvedLast).TotalDays)
+  $plan = [ordered]@{ action = 'not-due'; why = ''; days_unproven = $daysUnproven; never_proved = $neverProved; alert_unproven = $false }
+  if ((($Now - $WeeklyLast).TotalDays) -ge $EveryDays) {
+    if ($null -eq $Verdict) { $plan.action = 'defer'; $plan.why = 'no chain verdict on disk' }
+    elseif ([string]$Verdict.date -ne $Today) { $plan.action = 'defer'; $plan.why = ('the chain verdict is for ' + [string]$Verdict.date + ', not ' + $Today) }
+    elseif (-not ($Verdict.PSObject.Properties.Name -contains 'guards_rc')) { $plan.action = 'defer'; $plan.why = 'the chain verdict records no guards_rc' }
+    elseif ([int]$Verdict.guards_rc -ne 0) { $plan.action = 'defer'; $plan.why = ('guards_rc=' + [int]$Verdict.guards_rc + ' today') }
+    else { $plan.action = 'run'; $plan.why = 'due, and today''s guards verdict is green' }
+  }
+  if (($daysUnproven -gt $UnprovenDays) -and ((($Now - $UnprovenAlertLast).TotalDays) -ge $UnprovenDays)) { $plan.alert_unproven = $true }
+  return [pscustomobject]$plan
+}
+function Get-TestGuardsStampPlan {
+  param([int]$Rc)
+  return [pscustomobject]@{ weekly = (($Rc -eq 0) -or ($Rc -eq 1)); proved = ($Rc -eq 0) }
+}
+function Get-TestGuardsSubject {
+  param([int]$Rc)
+  if ($Rc -eq 3) { return 'Grocery: test-guards could not evaluate (guards already red on the unmutated board)' }
+  if ($Rc -eq 4) { return 'Grocery: test-guards weekly did not run (hermetic copy failed)' }
+  return 'Grocery: a BLOCKING invariant can no longer fail (test-guards weekly)'
+}
+
 # ---- WEEKLY: prove each BLOCKING invariant can still FAIL (test-guards, hermetically) ----
 # test-auditors above proves the watchers fire on frozen fixtures; test-guards proves guards.ps1 itself
 # still exits 2 when an invariant is broken on purpose. It mutates live data to do it (16 windows, 9
 # git-tracked files; measured 2026-07-30: a hard kill runs neither finally nor PowerShell.Exiting, and a
 # foreign commit landed DURING the measured run), so it must never run against production. The runner
 # copies the whole tree to %TEMP% (1.1s for 658 MB; every script roots at $PSScriptRoot) and runs there.
-# Stamp-gated on >=7 days, not a weekday, so a missed week self-heals on the next daily run.
+# Stamp-gated on >=7 days, not a weekday, so a missed week self-heals on the next daily run - and since
+# 2026-09-10 the stamp means EVALUATED, and a red baseline DEFERS the run instead of spending the week on it.
 try {
   $tgStampF = Join-Path $root 'test-guards-weekly-stamp.txt'
+  $tgProvedF = Join-Path $root 'test-guards-proved-stamp.txt'
+  $tgUnprovenF = Join-Path $root 'test-guards-unproven-alert-stamp.txt'
   $tgLast = [datetime]'2000-01-01'
   if (Test-Path $tgStampF) { try { $tgLast = [datetime](Get-Content $tgStampF -TotalCount 1) } catch {} }
-  if (((Get-Date) - $tgLast).TotalDays -ge 7) {
+  $tgProved = [datetime]'2000-01-01'
+  if (Test-Path $tgProvedF) { try { $tgProved = [datetime](Get-Content $tgProvedF -TotalCount 1) } catch {} }
+  $tgUnprovenLast = [datetime]'2000-01-01'
+  if (Test-Path $tgUnprovenF) { try { $tgUnprovenLast = [datetime](Get-Content $tgUnprovenF -TotalCount 1) } catch {} }
+  $tgVerdict = $null
+  try { $tgVerdict = Read-ChainVerdictRecord -Repo (Split-Path $root -Parent) -OutDir $OutDir } catch { $tgVerdict = $null }
+  $tgPlan = Get-TestGuardsWeeklyPlan -Verdict $tgVerdict -Today $asofS -WeeklyLast $tgLast -ProvedLast $tgProved -UnprovenAlertLast $tgUnprovenLast -Now (Get-Date)
+  if ($tgPlan.action -eq 'defer') { Log ('test-guards weekly DEFERRED: baseline red, retries next run (' + $tgPlan.why + ')') }
+  if ($tgPlan.action -eq 'run') {
     # NO 2>&1: this script runs under EAP=Stop, and in PS 5.1 redirecting a native child's stderr wraps the
     # first line in an ErrorRecord that THROWS - jumping past $tgRc, past the stamp, past the alert, into the
     # catch. The crash case (the runner or its grandchildren dying with a stderr record) is EXACTLY the case
@@ -2905,15 +2957,31 @@ try {
     # here - caught by the post-batch review. Everything the alert body needs is stdout.
     $tg = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'run-test-guards-weekly.ps1') | ForEach-Object { [string]$_ }) -join "`n"
     $tgRc = $LASTEXITCODE
-    (Get-Date -Format 'yyyy-MM-dd') | Set-Content $tgStampF -Encoding ascii   # stamp even on failure: one alert per week, not one per day
+    # THE WEEKLY STAMP MEANS EVALUATED (2026-09-10, queue 2026-09-10-267ba6): rc 0 or 1 closes the week (rc 1
+    # still alerts below); rc 3 or 4 proved nothing, so the week stays open and the next daily run retries.
+    # rc 0 is also a PROOF, and only a proof moves test-guards-proved-stamp.txt.
+    $tgStamps = Get-TestGuardsStampPlan -Rc $tgRc
+    if ($tgStamps.weekly) { (Get-Date -Format 'yyyy-MM-dd') | Set-Content $tgStampF -Encoding ascii }
+    if ($tgStamps.proved) { (Get-Date -Format 'yyyy-MM-dd') | Set-Content $tgProvedF -Encoding ascii }
     if ($tgRc -eq 0) { Log 'test-guards weekly: every hard invariant can still fail (hermetic run passed)' }
     else {
       Log ('test-guards weekly rc=' + $tgRc)
       $summary += 'INVARIANTS a blocking guard may no longer be able to fire - see test-guards weekly alert'
       if (-not $NoAlert) {
-        $tgSubject = if ($tgRc -eq 3) { 'Grocery: test-guards could not evaluate (guards already red on the unmutated board)' } elseif ($tgRc -eq 4) { 'Grocery: test-guards weekly did not run (hermetic copy failed)' } else { 'Grocery: a BLOCKING invariant can no longer fail (test-guards weekly)' }
+        $tgSubject = Get-TestGuardsSubject -Rc $tgRc
         Send-Alert -Subject $tgSubject -Body ("run-test-guards-weekly.ps1 breaks each hard invariant inside a scratch COPY of the grocery tree and asserts guards.ps1 exits 2 with that guard's own failure text. Exit " + $tgRc + ": 1 = a broken invariant did NOT fail guards (that guard is decorative until fixed - do not trust a quiet board on it); 3 = baseline already red, nothing proven (the daily run is already alerting on the real failure); 4 = the hermetic copy failed. Production files are never touched by this job.`n`n" + $tg) | Out-Null
       }
+    }
+  }
+  # THE PROOF'S OWN AGE PAGES (2026-09-10, queue 2026-09-10-267ba6). A board that stays red defers every weekly
+  # slot, and without this the silence would read as "nothing to report". At most one mail per 14 days.
+  if ($tgPlan.alert_unproven) {
+    $tgAge = if ($tgPlan.never_proved) { 'no proof has ever been recorded in test-guards-proved-stamp.txt' } else { ('the last proof was ' + $tgPlan.days_unproven + ' days ago (' + $tgProved.ToString('yyyy-MM-dd') + ')') }
+    Log ('test-guards weekly UNPROVEN: ' + $tgAge)
+    $summary += ('INVARIANTS no blocking guard invariant has been proven able to fail in over 14 days - ' + $tgAge)
+    if (-not $NoAlert) {
+      Send-Alert -Subject 'Grocery: no blocking guard invariant proven in over 14 days (test-guards weekly)' -Body ('run-test-guards-weekly.ps1 is the only proof that each blocking invariant in guards.ps1 can still FAIL, and since 2026-09-10 it defers whenever the day''s guards verdict is red, so a board that stays red keeps the proof from running at all. ' + $tgAge + '. Weekly plan today: ' + $tgPlan.action + ' (' + $tgPlan.why + '). Get guards green and run grocery\run-test-guards-weekly.ps1 by hand; rc 0 writes test-guards-proved-stamp.txt.') | Out-Null
+      (Get-Date -Format 'yyyy-MM-dd') | Set-Content $tgUnprovenF -Encoding ascii
     }
   }
 } catch { Log ('test-guards weekly threw: ' + $_.Exception.Message) }

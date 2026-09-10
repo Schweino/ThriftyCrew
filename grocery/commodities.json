@@ -14857,7 +14857,8 @@
                              "flavored"
                          ],
         "include":  [
-                        "ice\\s*cream"
+                        "ice\\s*cream",
+                        "we\\s+all\\s+scream"
                     ],
         "exclude":  [
                         "sandwich",
@@ -25769,7 +25770,7 @@
         "id":  "muffins",
         "label":  "Muffins (bakery)",
         "unit":  "each",
-        "band_min":  0.4,
+        "band_min":  0.25,
         "band_max":  2.5,
         "relax_global":  [
                              "muffin",

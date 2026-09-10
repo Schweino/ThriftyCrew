@@ -109,6 +109,78 @@ function Get-StalenessFindings {
   return $out
 }
 
+# ---- WHICH MANIFEST IS THE HUB'S HONEST REFERENCE TODAY (2026-09-10, queue 2026-09-10-1fa212) --------------
+# THE FOUNDING ALARM. guards blocked the 2026-09-10 board (chain-verdict guards_rc=2), so check-ad-cycles held
+# build-hub-grid -Publish and the live hub kept the last SHIPPED manifest (HEAD, 5ac18a836: baked ziti 3.61,
+# cheeseburger pasta 2.30). The same chain rebuilt the three tool pages from the held working tree (3.52, 2.25)
+# and then ran this audit, which graded the hub against that working tree and paged 23 findings with nothing
+# wrong on any page. On a held day the hub's honest reference is what was last shipped; on a green day it is
+# the working tree it was just rebuilt from. The tool pages are rebuilt every run, so their reference never
+# moves. A genuinely stale hub still fires on either day.
+. (Join-Path $repo 'lib\json-io.ps1')          # Read-JsonFile: chain-verdict.json is written with a BOM under PS 5.1
+. (Join-Path $repo 'lib\chain-verdict-lib.ps1') # Read-ChainVerdictStatus: printed beside the decision, for legibility
+. (Join-Path $repo 'lib\git-blob-lib.ps1')     # Invoke-GitCaptured: the SHIPPED manifest, never through a stdout pipe
+
+function Test-HeldDay {
+  <# PURE. Did today's chain HOLD the hub? check-ad-cycles publishes it only when guards passed in the same run
+     and records that decision as guards_blocked in out\chain-verdict.json.
+     READ AS RECORDED, NOT THROUGH THE FINGERPRINT TEST. Read-ChainVerdictStatus also asks whether the inputs
+     guards scored have moved since, and on a green day they do: the relink tail rewrites product-urls.json after
+     the verdict is written and the status reads STALE-INPUTS, while the hub really was published from the
+     working tree that morning. That is the publish-safety question, and it is the lib's; "which manifest did the
+     hub come from" is this one. HELD UNLESS PROVEN GREEN: no verdict, a verdict for another day, or one without
+     a guards_blocked field is a held day. #>
+  param($Verdict, [string]$Today)
+  if ($null -eq $Verdict) { return $true }
+  if ([string]$Verdict.date -ne $Today) { return $true }
+  if (-not ($Verdict.PSObject.Properties.Name -contains 'guards_blocked')) { return $true }
+  return [bool]$Verdict.guards_blocked
+}
+
+function Get-HubReference {
+  <# PURE. The hub's reference and its name. A held day whose shipped manifest could not be read returns
+     ref = $null and the caller reports could-not-evaluate: it never falls back to the working tree, which is
+     exactly the false alarm this exists to stop. #>
+  param($Verdict, [string]$Today, $WorkingTree, $Shipped)
+  if (-not (Test-HeldDay -Verdict $Verdict -Today $Today)) { return @{ held = $false; name = 'working-tree'; ref = $WorkingTree } }
+  if (($null -eq $Shipped) -or ($Shipped.Count -eq 0)) { return @{ held = $true; name = 'shipped-unreadable'; ref = $null } }
+  return @{ held = $true; name = 'shipped'; ref = $Shipped }
+}
+
+function ConvertTo-ManifestMap {
+  <# PURE. v2-perserving.json TEXT -> slug -> cheapest_ps. Assigned before it is wrapped, because
+     @(text | ConvertFrom-Json) reads a whole top-level array as ONE row under PS 5.1. #>
+  param([string]$Text)
+  $map = @{}
+  if ([string]::IsNullOrWhiteSpace($Text)) { return $map }
+  $parsed = ($Text.TrimStart([char]0xFEFF) | ConvertFrom-Json)
+  foreach ($r in @($parsed)) { if ($r.slug) { $map[[string]$r.slug] = [double]$r.cheapest_ps } }
+  return $map
+}
+
+function ConvertTo-CatalogMap {
+  <# PURE. recipes-db.json TEXT -> slug -> name. On a held day the hub's catalog is the SHIPPED one too: a recipe
+     added in the held working tree is not on the hub because the hold never published it, not because it is
+     missing. #>
+  param([string]$Text)
+  $map = @{}
+  if ([string]::IsNullOrWhiteSpace($Text)) { return $map }
+  $doc = ($Text.TrimStart([char]0xFEFF) | ConvertFrom-Json)
+  foreach ($r in @($doc.recipes)) { if ($r.slug) { $map[[string]$r.slug] = [string]$r.name } }
+  return $map
+}
+
+function Get-ToolSurfaceRefs {
+  <# PURE. The three tool pages and the reference each is graded against. check-ad-cycles rebuilds them from the
+     WORKING TREE on every run, held or not, so a held day does not change their reference. #>
+  param($Manifest, $BatchRef, [string]$Repo)
+  return @(
+    @{ label = 'cheap-dinners';    kind = 'CN';  ref = $Manifest; ref_name = 'working-tree'; path = (Join-Path $Repo 'site\tools\cheap-dinners-tool.html') },
+    @{ label = 'dinner-tonight';   kind = 'DIN'; ref = $Manifest; ref_name = 'working-tree'; path = (Join-Path $Repo 'site\tools\dinner-tonight-tool.html') },
+    @{ label = 'payday-stretcher'; kind = 'PSD'; ref = $BatchRef; ref_name = 'everyday';     path = (Join-Path $Repo 'site\tools\payday-stretcher-tool.html') }
+  )
+}
+
 # =====================================================================================================
 if ($SelfTest) {
   $bad = 0
@@ -188,6 +260,56 @@ if ($SelfTest) {
       ($src.Contains($pair[1])) 'no splice - the live tool will drift again'
   }
 
+  # ---- THE HELD DAY (2026-09-10, queue 2026-09-10-1fa212) ------------------------------------------------
+  # FROZEN from the founding alert: the live hub showed baked-ziti-with-ground-beef at 3.61, which is HEAD's
+  # manifest (5ac18a836, the last SHIPPED one), while the working tree the guard block held back said 3.52, and
+  # chain-verdict.json said guards_rc=2. Grading the hub against that working tree paged with nothing wrong.
+  $vRed   = [pscustomobject]@{ date = '2026-09-10'; guards_rc = 2; guards_blocked = $true }
+  $vGreen = [pscustomobject]@{ date = '2026-09-10'; guards_rc = 0; guards_blocked = $false }
+  $zCat = @{ 'baked-ziti-with-ground-beef' = 'Baked Ziti with Ground Beef' }
+  $zWt  = @{ 'baked-ziti-with-ground-beef' = 3.52 }
+  $zSh  = @{ 'baked-ziti-with-ground-beef' = 3.61 }
+  $zHub = '<a class="mpr-card" data-protein="beef" data-cal="700" data-cost="3.61" data-ppd="10.1" data-cuisine="Italian" href="https://www.thriftycrew.com/baked-ziti-with-ground-beef/">x</a>'
+  $rHeld = Get-HubReference -Verdict $vRed -Today '2026-09-10' -WorkingTree $zWt -Shipped $zSh
+  T 'MUST NOT FIRE  on a guards-blocked day the hub (3.61) is graded against the SHIPPED manifest (3.61), not the held working tree (3.52)' `
+    (($rHeld.name -eq 'shipped') -and ((@(Get-StalenessFindings (Get-SurfaceRows $zHub 'HUB') $rHeld.ref $zCat 'hub')).Count -eq 0)) ($rHeld.name)
+  T 'MUST FIRE  the working-tree reference that paged on 2026-09-10 does fire on the same frozen row (the founding bug is still reachable)' `
+    ((@(Get-StalenessFindings (Get-SurfaceRows $zHub 'HUB') $zWt $zCat 'hub')).Count -eq 1) 'the fixture no longer reproduces the founding alarm'
+  $zStale = $zHub.Replace('data-cost="3.61"', 'data-cost="3.70"')
+  T 'MUST FIRE  a hub 9 cents off the SHIPPED manifest on a held day is still a STALE finding' `
+    ((@(Get-StalenessFindings (Get-SurfaceRows $zStale 'HUB') $rHeld.ref $zCat 'hub')).Count -eq 1) 'a real stale hub went quiet on a held day'
+  $rGreen = Get-HubReference -Verdict $vGreen -Today '2026-09-10' -WorkingTree $MAN -Shipped @{ 'slow-cooker-tuscan-chicken-pasta' = 2.92 }
+  T 'MUST FIRE  on a green day the hub is graded against the working tree, so the founding 2.92-vs-3.39 hub row stays red' `
+    (($rGreen.name -eq 'working-tree') -and ((@(Get-StalenessFindings (Get-SurfaceRows $hub 'HUB') $rGreen.ref $CAT 'hub')).Count -eq 1)) ($rGreen.name)
+  T 'CLEAN TWIN  a MISSING verdict is a held day, never a green one' ((Get-HubReference -Verdict $null -Today '2026-09-10' -WorkingTree $zWt -Shipped $zSh).name -eq 'shipped') 'an absent verdict read as green'
+  T 'CLEAN TWIN  a verdict for ANOTHER day is a held day' ((Get-HubReference -Verdict ([pscustomobject]@{ date = '2026-09-09'; guards_rc = 0; guards_blocked = $false }) -Today '2026-09-10' -WorkingTree $zWt -Shipped $zSh).name -eq 'shipped') 'yesterday''s green verdict graded today''s hub'
+  T 'MUST FIRE  a held day whose shipped manifest cannot be read yields NO reference, so the caller reports could-not-evaluate' ($null -eq (Get-HubReference -Verdict $vRed -Today '2026-09-10' -WorkingTree $zWt -Shipped $null).ref) 'fell back to the working tree'
+  $tsr = Get-ToolSurfaceRefs -Manifest $zWt -BatchRef $zSh -Repo $repo
+  $tsrA = @($tsr)
+  T 'CLEAN TWIN  the three tool pages keep the WORKING-TREE manifest (and the stretcher its everyday batch) on any day' `
+    (($tsrA.Count -eq 3) -and [object]::ReferenceEquals($tsrA[0].ref, $zWt) -and [object]::ReferenceEquals($tsrA[1].ref, $zWt) -and [object]::ReferenceEquals($tsrA[2].ref, $zSh)) ($tsrA.Count)
+  $mm2 = ConvertTo-ManifestMap '[{"slug":"a","cheapest_ps":3.61},{"slug":"b","cheapest_ps":2.30}]'
+  $mm1 = ConvertTo-ManifestMap '[{"slug":"a","cheapest_ps":3.61}]'
+  T 'CLEAN TWIN  a committed manifest blob parses to one entry per row, for two rows and for one' `
+    (($mm2.Count -eq 2) -and ($mm2['b'] -eq 2.30) -and ($mm1.Count -eq 1) -and ($mm1['a'] -eq 3.61)) ('' + $mm2.Count + '/' + $mm1.Count)
+  $cm = ConvertTo-CatalogMap '{"recipes":[{"slug":"a","name":"A"},{"slug":"b","name":"B"}]}'
+  T 'CLEAN TWIN  a committed recipes-db blob parses to its catalog' (($cm.Count -eq 2) -and ($cm['b'] -eq 'B')) ('' + $cm.Count)
+  # THE LIVE PATH READS THE VERDICT THROUGH lib\chain-verdict-lib.ps1 (Read-ChainVerdictRecord), so the
+  # library's reader is driven here against a throwaway directory - never the real verdict file.
+  $vTmp = Join-Path $env:TEMP ('ss-verdict-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  [void](New-Item -ItemType Directory -Path $vTmp -Force)
+  try {
+    T 'MUST FIRE  an absent verdict file reads as NO record (the caller then treats the day as held)' ($null -eq (Read-ChainVerdictRecord -Repo $repo -OutDir $vTmp)) 'a record appeared from nowhere'
+    [IO.File]::WriteAllText((Join-Path $vTmp 'chain-verdict.json'), '{"date":"2026-09-10","written":"2026-09-10T08:11:12","guards_rc":2,"guards_blocked":true}', (New-Object Text.UTF8Encoding($false)))
+    $rec = Read-ChainVerdictRecord -Repo $repo -OutDir $vTmp
+    T 'CLEAN TWIN  a written verdict reads back as recorded, and it makes the hub reference the shipped one' `
+      (($null -ne $rec) -and ([int]$rec.guards_rc -eq 2) -and ((Get-HubReference -Verdict $rec -Today '2026-09-10' -WorkingTree $zWt -Shipped $zSh).name -eq 'shipped')) ('' + $rec.guards_rc)
+    [IO.File]::WriteAllText((Join-Path $vTmp 'chain-verdict.json'), '{"date":"2026-09-10","guards_r', (New-Object Text.UTF8Encoding($false)))
+    T 'MUST FIRE  a truncated verdict file is NO record, never a green one' ($null -eq (Read-ChainVerdictRecord -Repo $repo -OutDir $vTmp)) 'a half-written file parsed'
+  } finally { Remove-Item -LiteralPath $vTmp -Recurse -Force -ErrorAction SilentlyContinue }
+  $vDirWant = Join-Path (Join-Path 'C:\repo-root' 'grocery') 'out'
+  T 'CLEAN TWIN  the library, not this module, composes where the verdict lives' ((Get-ChainVerdictDir -Repo 'C:\repo-root') -eq $vDirWant) (Get-ChainVerdictDir -Repo 'C:\repo-root')
+
   if ($bad -gt 0) { Write-Output "audit-surface-staleness SELF-TEST FAIL ($bad)"; exit 2 }
   Write-Output 'audit-surface-staleness SELF-TEST PASS'
   Exit-Guard -Name 'surface-staleness' -Summary 'selftest pass' -Code 0
@@ -225,13 +347,11 @@ foreach ($r in @($doc.recipes)) {
     $batchRef[[string]$r.slug] = [double]$r.cost_batch_true / $sv
   }
 }
-$surfaces = @(
-  @{ label = 'cheap-dinners';   kind = 'CN';  ref = $manifest; path = (Join-Path $repo 'site\tools\cheap-dinners-tool.html') },
-  @{ label = 'dinner-tonight';  kind = 'DIN'; ref = $manifest; path = (Join-Path $repo 'site\tools\dinner-tonight-tool.html') },
-  @{ label = 'payday-stretcher';kind = 'PSD'; ref = $batchRef; path = (Join-Path $repo 'site\tools\payday-stretcher-tool.html') }
-)
-$findings = @(); $unevaluated = @(); $summary = @()
+$toolRefs = Get-ToolSurfaceRefs -Manifest $manifest -BatchRef $batchRef -Repo $repo
+$surfaces = @($toolRefs)
+$findings = @(); $unevaluated = @(); $summary = @(); $refNames = @()
 foreach ($s in $surfaces) {
+  $refNames += ($s.label + '=' + $s.ref_name)
   if (-not (Test-Path $s.path)) { $unevaluated += ("{0}: source missing at {1}" -f $s.label, $s.path); continue }
   $rows = Get-SurfaceRows ([IO.File]::ReadAllText($s.path)) $s.kind
   if ($rows.Count -eq 0) { $unevaluated += ("{0}: parsed ZERO rows - the payload shape has changed and this surface is UNWATCHED" -f $s.label); continue }
@@ -242,37 +362,64 @@ foreach ($s in $surfaces) {
 
 # THE HUB HAS NO LOCAL ARTIFACT. Its price lives only on the published page, and it is the one surface a
 # reader actually reads a stale number off, so it is checked where it lives. Unreachable is exit 3.
+# ITS REFERENCE FOLLOWS TODAY'S VERDICT (2026-09-10, queue 2026-09-10-1fa212) - see Get-HubReference. On a held
+# day the manifest AND the catalog come from HEAD, the last shipped state, read through Invoke-GitCaptured.
 if (-not $SkipHub) {
-  try {
-    $hubHtml = (Invoke-WebRequest -Uri 'https://www.thriftycrew.com/meal-prep-recipes/' -UseBasicParsing -TimeoutSec 45 -Headers @{'Cache-Control'='no-cache'}).Content
-    $hubRows = Get-SurfaceRows $hubHtml 'HUB'
-    if ($hubRows.Count -eq 0) { $unevaluated += 'hub: parsed ZERO cards off the live page - the card markup has changed and this surface is UNWATCHED' }
-    else {
-      $hf = @(Get-StalenessFindings $hubRows $manifest $catalog 'hub')
-      $findings += $hf
-      $summary += ("  {0,-18} rows={1,-4} findings={2}" -f 'hub (live)', $hubRows.Count, $hf.Count)
-    }
-  } catch {
-    $unevaluated += ('hub: could not fetch the live page (' + $_.Exception.Message + ')')
+  $today = (Get-Date).ToString('yyyy-MM-dd')
+  # THROUGH THE VERDICT'S OWN LIBRARY, which owns where the file lives: this module never spells the other
+  # module's internals path (ops\audit-cross-module-reach.ps1 ratchets exactly that coupling).
+  $verdict = $null
+  try { $verdict = Read-ChainVerdictRecord -Repo $repo } catch { $verdict = $null }
+  $vStatus = 'unread'
+  try { $vStatus = [string](Read-ChainVerdictStatus -Repo $repo -OutDir (Get-ChainVerdictDir -Repo $repo) -Today $today).status } catch { $vStatus = 'unread' }
+  $grc = if (($null -ne $verdict) -and ($verdict.PSObject.Properties.Name -contains 'guards_rc')) { [string]$verdict.guards_rc } else { 'none' }
+  $shipped = $null; $shippedCatalog = $null
+  if (Test-HeldDay -Verdict $verdict -Today $today) {
+    $gm = Invoke-GitCaptured -Repo $repo -GitArgs @('show', 'HEAD:meal-prep/pipeline/v2-perserving.json')
+    if ($gm.rc -eq 0) { try { $shipped = ConvertTo-ManifestMap $gm.stdout } catch { $shipped = $null } }
+    $gc = Invoke-GitCaptured -Repo $repo -GitArgs @('show', 'HEAD:meal-prep/recipes-db.json')
+    if ($gc.rc -eq 0) { try { $shippedCatalog = ConvertTo-CatalogMap $gc.stdout } catch { $shippedCatalog = $null } }
   }
-}
+  $hubRef = Get-HubReference -Verdict $verdict -Today $today -WorkingTree $manifest -Shipped $shipped
+  $hubCatalog = if ($hubRef.held) { $shippedCatalog } else { $catalog }
+  $refNames += ('hub=' + $hubRef.name)
+  if ($hubRef.held) { Write-Output ('hub compared against the last SHIPPED manifest (held day: guards_rc=' + $grc + ', verdict status ' + $vStatus + ')') }
+  else { Write-Output ('hub compared against the working-tree manifest (guards passed today: guards_rc=' + $grc + ', verdict status ' + $vStatus + ')') }
+  if (($null -eq $hubRef.ref) -or ($null -eq $hubCatalog) -or ($hubCatalog.Count -eq 0)) {
+    $unevaluated += 'hub: a held day, but the last SHIPPED manifest or catalog (HEAD:meal-prep/pipeline/v2-perserving.json, HEAD:meal-prep/recipes-db.json) could not be read - grading the hub against the held working tree is the false alarm this guard must not raise'
+  } else {
+    try {
+      $hubHtml = (Invoke-WebRequest -Uri 'https://www.thriftycrew.com/meal-prep-recipes/' -UseBasicParsing -TimeoutSec 45 -Headers @{'Cache-Control'='no-cache'}).Content
+      $hubRows = Get-SurfaceRows $hubHtml 'HUB'
+      if ($hubRows.Count -eq 0) { $unevaluated += 'hub: parsed ZERO cards off the live page - the card markup has changed and this surface is UNWATCHED' }
+      else {
+        $hf = @(Get-StalenessFindings $hubRows $hubRef.ref $hubCatalog 'hub')
+        $findings += $hf
+        $summary += ("  {0,-18} rows={1,-4} findings={2}" -f ('hub (live, ' + $hubRef.name + ')'), $hubRows.Count, $hf.Count)
+      }
+    } catch {
+      $unevaluated += ('hub: could not fetch the live page (' + $_.Exception.Message + ')')
+    }
+  }
+} else { $refNames += 'hub=skipped' }
+$refLine = 'refs ' + ($refNames -join ' ')
 
 $summary | ForEach-Object { Write-Output $_ }
 if ($unevaluated.Count) {
   $unevaluated | ForEach-Object { Write-Output ('  ! ' + $_) }
   Write-Output ("audit-surface-staleness: {0} surface(s) COULD NOT BE EVALUATED" -f $unevaluated.Count)
-  Exit-Guard -Name 'surface-staleness' -Summary ("could-not-evaluate " + $unevaluated.Count) -Code 3
+  Exit-Guard -Name 'surface-staleness' -Summary ("could-not-evaluate " + $unevaluated.Count + ' ' + $refLine) -Code 3
 }
 if ($findings.Count) {
   $show = if ($ShowAll) { $findings } else { $findings | Select-Object -First 25 }
   $show | ForEach-Object { Write-Output ('  ! ' + $_) }
   if (-not $ShowAll -and $findings.Count -gt 25) { Write-Output ("  ... and {0} more (-ShowAll for the list)" -f ($findings.Count - 25)) }
   Write-Output ("audit-surface-staleness: {0} finding(s) - a reader-facing price surface disagrees with the manifest" -f $findings.Count)
-  Exit-Guard -Name 'surface-staleness' -Summary ("findings " + $findings.Count) -Code 1
+  Exit-Guard -Name 'surface-staleness' -Summary ("findings " + $findings.Count + ' ' + $refLine) -Code 1
 }
 Write-Output 'audit-surface-staleness: all four price surfaces agree with the source they are built from'
 Write-Output '  note: payday-stretcher is compared on the EVERYDAY basis (recipes-db.cost_batch_true), which is'
 Write-Output '        what its builder emits. The live tool then hydrates week_cost from the feed, which is the'
 Write-Output '        CHEAPEST basis, so its baked fallback and its hydrated value are on different bases. That is'
 Write-Output '        a pre-existing basis question for a human, not staleness, and this guard does not rule on it.'
-Exit-Guard -Name 'surface-staleness' -Summary 'clean' -Code 0
+Exit-Guard -Name 'surface-staleness' -Summary ('clean ' + $refLine) -Code 0

@@ -161,3 +161,28 @@ function Read-ChainVerdictStatus {
   $res.ship_ok = $true
   return $res
 }
+
+function Get-ChainVerdictDir {
+  # WHERE THE VERDICT LIVES, owned HERE (2026-09-10, queue 2026-09-10-1fa212). A reader in another module
+  # asks this library rather than spelling grocery's internals path itself, which is the coupling
+  # ops\audit-cross-module-reach.ps1 ratchets. The location is this file's knowledge - the writer above
+  # already takes it as an argument from the one caller that owns the directory - so this is the place
+  # allowed to know it.
+  param([Parameter(Mandatory = $true)][string]$Repo)
+  return (Join-Path (Join-Path $Repo 'grocery') 'out')
+}
+
+function Read-ChainVerdictRecord {
+  # THE VERDICT AS RECORDED, NOT A SHIP DECISION (2026-09-10, queues 2026-09-10-1fa212 and 2026-09-10-267ba6).
+  # Returns the parsed chain-verdict.json (date, written, guards_rc, guards_blocked, ...) or $null when it is
+  # absent or unreadable. Read-ChainVerdictStatus above stays the only reader that may decide whether served
+  # paths SHIP. This answers the narrower question two readers need - what did guards say today - where the
+  # fingerprint test is the wrong instrument: the relink tail rewrites product-urls.json after the verdict is
+  # written, so on a green day that status reads STALE-INPUTS while guards really did pass and the hub really
+  # was republished. Callers decide what an absent record means; both current callers treat it as held.
+  param([Parameter(Mandatory = $true)][string]$Repo, [string]$OutDir = '')
+  if (-not $OutDir) { $OutDir = Get-ChainVerdictDir -Repo $Repo }
+  $vf = Join-Path $OutDir 'chain-verdict.json'
+  if (-not (Test-Path -LiteralPath $vf)) { return $null }
+  try { return (Read-JsonFile $vf) } catch { return $null }
+}

@@ -652,6 +652,39 @@ if ($SelfTest) {
   _Near '2X-marketing not a pack count'     (Get-UnitPrice (_D '$4.24' 'cleaner' $null 'fabuloso multi-purpose cleaner, 2x concentrated formula, lavender, 33.8 fl oz') (_C 'floz')).unit_price 0.1254 0.001
   _Near 'leading-dot ".98 oz" + name pack' (Get-UnitPrice (_D '$10.28' 'Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.' $null '46 ct') (_C 'oz')).unit_price 0.228 0.001
   _Near 'leading-dot ".5 Gal." via name'   (Get-UnitPrice (_D '$4.49' 'Kemps 100% Pure Orange Juice From Concentrate .5 Gal. Jug' $null '0.5 gll') (_C 'floz')).unit_price 0.0702 0.001
+  # ---- NAME VOLUME ON A FL-OZ COMMODITY WHOSE SIZE FIELD IS A BARE WEIGHT LABEL (2026-09-10, queue 2026-09-10-d9e085) ----
+  # THE FOUNDING ROW, verbatim from out\sams\sams-deals-2026-09-10.json (sams_item_id 2RM6ZTFLHABN): Sam's printed
+  # $0.09/oz, the capture derived size '122 oz' = 10.98 / 0.09, and the fl-oz commodity divided by that quotient.
+  # Before the fix this priced 0.0900 with basis 'size 122 floz' and left a WEIGHT-kind size on a volume cell,
+  # which is the one kind_mismatch_crown that held the 2026-09-10 board.
+  $nvfRanch = Get-UnitPrice (_D '$10.98' "Member's Mark Ranch Dressing, 1 gal." $null '122 oz') (_C 'floz')
+  _Near 'MUST FIRE  ranch 1 gal. with a 122 oz quotient size prices from the NAME volume (10.98 / 128)' $nvfRanch.unit_price 0.0858 0.0001
+  if (($nvfRanch -is [hashtable]) -and ([string]$nvfRanch.basis -match 'NAME volume') -and ([string]$nvfRanch.size_override -eq '128 fl oz')) { Write-Output ('ok    MUST FIRE  ...its basis names the NAME volume and the cell size becomes ''' + $nvfRanch.size_override + '''') }
+  else { Write-Output ('FAIL  MUST FIRE  ranch basis/size_override: basis=''' + $nvfRanch.basis + ''' size_override=''' + $nvfRanch.size_override + ''''); $script:fail++ }
+  _Near 'MUST FIRE  the 09-02 capture of the same jug (135.25 oz = 10.82 / 0.08) lands on 128 as well' (Get-UnitPrice (_D '$10.82' "Member's Mark Ranch Dressing, 1 gal." $null '135.25 oz') (_C 'floz')).unit_price 0.08453 0.0001
+  _Near 'MUST FIRE  Frank''s RedHot 1 gal. at a 129 oz quotient prices 15.48 / 128' (Get-UnitPrice (_D '$15.48' "Frank's RedHot Original Cayenne Pepper Hot Sauce, 1 gal." $null '129 oz') (_C 'floz')).unit_price 0.1209 0.0001
+  $nvfBbq = Get-UnitPrice (_D '$11.98' "Sweet Baby Ray's Original Barbecue Sauce, 1 gal." $null '171.143 oz') (_C 'oz')
+  _Near 'CLEAN TWIN  the same gallon shape on an OZ commodity keeps its 171.143 oz size (a 1.3 g/ml sauce really weighs that)' $nvfBbq.unit_price 0.0700 0.0001
+  $nvfMilk = Get-UnitPrice (_D '$2.39' 'Our Family Milk, Lowfat, Chocolate 0.5 Gal' $null '64 oz') (_C 'floz')
+  _Near 'CLEAN TWIN  Family Fare 0.5 Gal at 64 oz prices 2.39 / 64 before and after' $nvfMilk.unit_price 0.03734 0.0001
+  if (($nvfMilk -is [hashtable]) -and ([string]$nvfMilk.size_override -eq '64 fl oz')) { Write-Output 'ok    CLEAN TWIN  ...and its emitted size flips to the truthful kind, 64 fl oz' }
+  else { Write-Output ('FAIL  CLEAN TWIN  Family Fare 0.5 Gal size_override=''' + $nvfMilk.size_override + ''''); $script:fail++ }
+  # The name parser on its own, because the bar below would mask a misread: ".5 Gal" read as 5 gal is 10x the size
+  # and is refused by the bar either way, so only a direct assertion proves the fraction and the leading dot.
+  _Near 'MUST NOT FIRE  a name ".5 Gal." is 64 fl oz, never 640' (Get-NameVolumeFloz 'Kemps Orange Juice .5 Gal. Jug') 64 0.0001
+  _Near 'MUST NOT FIRE  a name "1/2 Gal" is 64 fl oz, never 256' (Get-NameVolumeFloz 'Hy-Vee Orange Juice 1/2 Gal') 64 0.0001
+  _Near 'CLEAN TWIN  a name "1 L (33.8 Fl Oz)" is 33.814 fl oz' (Get-NameVolumeFloz 'Crest Mouthwash Pro Health, Clean Mint, 1 L (33.8 Fl Oz) 33.8 Oz') 33.814 0.0001
+  if ($null -eq (Get-NameVolumeFloz 'Brand A Juice 1 gal or Brand B Juice 2 qt')) { Write-Output 'ok    MUST NOT FIRE  a name stating TWO volumes states no single one' }
+  else { Write-Output 'FAIL  MUST NOT FIRE  a two-volume name returned a volume'; $script:fail++ }
+  $nvfPack = Get-UnitPrice (_D '$6.00' 'Cola 2 L, 6 pk' $null '405.6 oz') (_C 'floz')
+  _Near 'MUST NOT FIRE  a 6-pack of 2 L bottles keeps its 405.6 oz pack size (6.0x one bottle is outside the bar)' $nvfPack.unit_price 0.01479 0.0001
+  $nvfFl = Get-UnitPrice (_D '$10.98' "Member's Mark Ranch Dressing, 1 gal." $null '128 fl oz') (_C 'floz')
+  _Near 'CLEAN TWIN  a size already stated in fl oz is the store''s own volume and is untouched' $nvfFl.unit_price 0.0858 0.0001
+  if (($nvfPack -is [hashtable]) -and ($nvfBbq -is [hashtable]) -and ($nvfFl -is [hashtable]) -and -not $nvfPack.ContainsKey('size_override') -and -not $nvfBbq.ContainsKey('size_override') -and -not $nvfFl.ContainsKey('size_override')) { Write-Output 'ok    MUST NOT FIRE  no size_override on the multipack, the OZ commodity, or a size already in fl oz' }
+  else { Write-Output 'FAIL  MUST NOT FIRE  a size_override appeared where the size field was already the right quantity'; $script:fail++ }
+  # THE EMISSION compare-deals runs at its matched-row add, through the same function.
+  if (((Resolve-CellSizeText '122 oz' $nvfRanch) -eq '128 fl oz') -and ((Resolve-CellSizeText '171.143 oz' $nvfBbq) -eq '171.143 oz') -and ((Resolve-CellSizeText '12 oz' $null) -eq '12 oz')) { Write-Output 'ok    MUST FIRE  the cell carries 128 fl oz for the ranch jug; CLEAN TWIN every other row keeps its store size' }
+  else { Write-Output ('FAIL  Resolve-CellSizeText: ranch=''' + (Resolve-CellSizeText '122 oz' $nvfRanch) + ''' bbq=''' + (Resolve-CellSizeText '171.143 oz' $nvfBbq) + ''''); $script:fail++ }
   # --- 11d2: PACK COUNT BEATS THE PER-EACH MARKER (2026-08-22) ----------------------------------------------
   # MUST-FIRE: "Bottled Water 24 Pack, $3.87 each" on an each-commodity is 24 bottles at $0.161, not one at
   # $3.87 - the marker used to return before Get-PackCount ran. Both orderings (count in the name, count in
@@ -2434,7 +2467,10 @@ foreach ($d in $deals) {
   $memLabel = if ($perks) { 'Perks membership required' } elseif (Test-Membership $d.store) { 'membership' } else { '' }
   $matched.Add([pscustomobject]@{
     id=$c.id; label=$c.label; unit=$c.unit; store=$d.store; name=$d.name; price_type=$d.price_type;
-    price_text=$d.price_text; size_text=$d.size_text; regular=$d.regular; bulk=(Test-Bulk $d.size_text $d.name); membership=((Test-Membership $d.store) -or $perks); member_label=$memLabel;
+    # size_text through Resolve-CellSizeText (2026-09-10, queue 2026-09-10-d9e085): when Get-UnitPrice priced
+    # the row from the NAME's volume it says so in size_override, and the cell must name the quantity it was
+    # divided by. bulk still reads the store's own size_text, which is unchanged by this.
+    price_text=$d.price_text; size_text=(Resolve-CellSizeText $d.size_text $up); regular=$d.regular; bulk=(Test-Bulk $d.size_text $d.name); membership=((Test-Membership $d.store) -or $perks); member_label=$memLabel;
     # Carry the SOURCE through to the page. Without it build-deals-page cannot tell an ad-backed sale from a
     # one-off price snapshot, so it stamped every sale chip with the store's ad-cycle end date - dressing an
     # undated Aisles Online markdown up as "Sale thru Jul 19". A date we invented is worse than no date.

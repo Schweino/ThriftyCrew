@@ -284,6 +284,16 @@ function Build-Row($raw) {
   # is off by hundreds of percent and is still caught.)
   $tol = [math]::Max(0.02, $roundErr + 0.005)
 
+  # THE NAME'S VOLUME, DECLARED AT INGEST (2026-09-10, queue 2026-09-10-d9e085). A derived row whose name
+  # states a gallon / quart / pint / litre that Sam's did not price by ("Member's Mark Ranch Dressing, 1 gal."
+  # at "$0.09/oz") carries size = lp/up, a quotient with Sam's cent rounding in it. size and qty_basis stay
+  # exactly as they are - they are what reproduces Sam's own unit price, which is this builder's invariant -
+  # and the name's volume rides beside them so the engine's preference for it is declared here rather than
+  # only re-parsed downstream. Gated on the oz / fl oz tokens: a count-priced row ("Hefty ... 13 Gallon"
+  # trash bags at $/ea) names a bag CAPACITY, not contents, and must never gain the field.
+  $nameVolFloz = $null
+  if ($basis -eq 'derived lp/up' -and -not $cands.Count -and (@('oz', 'fl oz') -contains [string]$u.tok)) { $nameVolFloz = Get-NameVolumeFloz ([string]$raw.n) }
+
   # TWO CANDIDATE SHAPES, in preference order:
   #  1. PACKAGE  - ad_price = linePrice, size = the pack quantity. Unit-agnostic; what every other feed means.
   #  2. PER-UNIT - ad_price = unitPrice,  size = the bare unit. Required when the NAME carries a per-lb /
@@ -333,7 +343,7 @@ function Build-Row($raw) {
       taxonomy_path   = [string]$raw.taxonomy_path
       link_url        = [string]$raw.url
       image_url       = [string]$raw.image_url
-    } }
+    } | ForEach-Object { if ($null -ne $nameVolFloz) { Add-Member -InputObject $_ -NotePropertyName 'name_volume_floz' -NotePropertyValue ([math]::Round([double]$nameVolFloz, 3)) }; $_ } }   # name_volume_floz: see THE NAME'S VOLUME above
   }
   return @{ err=("INVARIANT: no shape reproduces Sam's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
 }
@@ -438,6 +448,20 @@ if ($SelfTest) {
   $r8c = Build-Row (_R 'Hefty Ultra Strong 13 Gallon Kitchen Drawstring Trash Bags' '$18.98' '$0.09/ea')
   if ($r8c.row -and $r8c.row.size -eq '211 ct' -and $r8c.row.qty_basis -match 'derived lp/up') { Write-Output "ok    keep-side: name silent in priced unit -> derived 211 ct kept ($($r8c.row.qty_basis))" }
   else { Write-Output "FAIL  keep-side fallback lost: $($r8c.err)$($r8c.row.size)"; $fail++ }
+  # 8d. THE NAME'S VOLUME RIDES BESIDE A DERIVED SIZE (2026-09-10, queue 2026-09-10-d9e085). The founding row,
+  #     verbatim from out\sams\sams-deals-2026-09-10.json: Sam's priced the 1-gal. jug per OZ, so the name's
+  #     gallon is not a candidate in Sam's unit family and the size is derived (10.98 / 0.09 = 122). The size and
+  #     qty_basis must NOT change - they are what reproduces Sam's unit price - and the name's 128 fl oz rides along.
+  $r8d = Build-Row (_R "Member's Mark Ranch Dressing, 1 gal." '$10.98' '$0.09/oz')
+  if ($r8d.row -and $r8d.row.size -eq '122 oz' -and $r8d.row.qty_basis -match 'derived lp/up' -and $r8d.row.PSObject.Properties['name_volume_floz'] -and ([double]$r8d.row.name_volume_floz -eq 128)) { Write-Output ("ok    MUST FIRE  ranch 1 gal. keeps size '122 oz' and gains name_volume_floz " + $r8d.row.name_volume_floz) }
+  else { Write-Output ("FAIL  ranch name volume: err='" + $r8d.err + "' size='" + $r8d.row.size + "' name_volume_floz='" + $r8d.row.name_volume_floz + "'"); $fail++ }
+  #     CLEAN TWIN: the Hefty 13 Gallon bags are priced per EACH, so '13 Gallon' is a bag capacity and the field never appears.
+  if ($r8c.row -and ($r8c.row.size -eq '211 ct') -and -not $r8c.row.PSObject.Properties['name_volume_floz']) { Write-Output 'ok    CLEAN TWIN  the per-each Hefty 13 Gallon row keeps 211 ct and carries no name_volume_floz' }
+  else { Write-Output 'FAIL  a count-priced row gained name_volume_floz from a bag capacity'; $fail++ }
+  #     CLEAN TWIN: a name that REPRODUCES Sam's unit price (milk 1 gal. per foz) is name-based, not derived, and carries no field.
+  $r8e = Build-Row (_R "Member's Mark 2% Reduced Fat Milk 1 gal." '$3.72' '$0.03/foz')
+  if ($r8e.row -and ($r8e.row.size -eq '128 fl oz') -and -not $r8e.row.PSObject.Properties['name_volume_floz']) { Write-Output 'ok    CLEAN TWIN  the milk gallon priced per foz snaps to 128 fl oz from the name and needs no extra field' }
+  else { Write-Output ("FAIL  milk 1 gal. size='" + $r8e.row.size + "'"); $fail++ }
   # CLEAN TWIN of build-walmart-deals.ps1's wrong-store assertion (2026-07-30). The Walmart fork inherited this
   # file's store noun into its published qty_basis; the fix there was to name Walmart. This proves the correction
   # is store-specific rather than a blanket scrub - THIS builder must go on crediting Sam's. $r7f (above) is the

@@ -235,6 +235,51 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   if ($m2.Success -and ($unit -eq 'each' -or $unit -eq 'dozen')) { return (Convert-ToUnit ([double]$m2.Groups[1].Value) 'ct' $unit) }
   return $null
 }
+# THE VOLUME A NAME STATES, IN FLUID OUNCES (2026-09-10, queue 2026-09-10-d9e085).
+# Sam's prices a gallon jug of ranch dressing "$0.09/oz", and build-sams-deals derives the pack size as
+# linePrice / unitPrice because the name's "1 gal." is not in the ounce family Sam's priced by. So the
+# capture's size '122 oz' is 10.98 / 0.09, a PRICE QUOTIENT carrying the cent rounding of Sam's unit price
+# (+/- 0.005 / 0.09 = 5.6%), and the previous capture of the same jug derived '135.25 oz' from $10.82 / $0.08.
+# The name is the only party stating the quantity, and it says one gallon. Get-UnitPrice asks this function
+# only for a fl-oz commodity whose size field is a bare 'oz' label; see the branch there for the bar.
+#
+# RETURNS $null UNLESS THE NAME STATES EXACTLY ONE VOLUME. Zero is nothing to say; two is an either/or or a
+# multi-size name, which is the biased coin flip Test-NameOffersTwoSizes exists to refuse.
+# READS FRACTIONS AND LEADING-DOT DECIMALS WHOLE. A bare '\d+' scan reads ".5 Gal." as FIVE gallons (10x) and
+# "1/2 Gal" as TWO (4x); the lookbehind stops a match starting inside either, and the fraction is honoured only
+# when it is a real one (numerator smaller than denominator), the same test Get-SizeAmount applies.
+# LITRE SPELLINGS ARE MAPPED HERE rather than through Convert-ToUnit, whose floz arm has no 'litre'.
+function Get-NameVolumeFloz([string]$name) {
+  if (-not $name) { return $null }
+  $t = ('' + $name).ToLower()
+  $vm = [regex]::Matches($t, '(?<![\d./])(\d+\s*/\s*\d+|\d+(?:\.\d+)?|\.\d+)\s*-?\s*(gallons?|gal|quarts?|qt|pints?|pt|liters?|litres?|ltr|l)\b')
+  if ($vm.Count -ne 1) { return $null }
+  $q = ($vm[0].Groups[1].Value -replace '\s', '')
+  $n = 0.0
+  $fm = [regex]::Match($q, '^(\d+)/(\d+)$')
+  if ($fm.Success) {
+    $fa = [double]$fm.Groups[1].Value; $fb = [double]$fm.Groups[2].Value
+    if ($fb -le 0 -or $fa -ge $fb) { return $null }
+    $n = $fa / $fb
+  } elseif (-not [double]::TryParse($q, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$n)) {
+    return $null
+  }
+  if ($n -le 0) { return $null }
+  $tok = $vm[0].Groups[2].Value
+  if ($tok -match '^gal')             { return ($n * 128.0) }
+  if ($tok -match '^(qt|quart)')      { return ($n * 32.0) }
+  if ($tok -match '^(pt|pint)')       { return ($n * 16.0) }
+  return ($n * 33.814)
+}
+# WHICH SIZE A PRICED ROW CARRIES ONTO THE BOARD CELL (2026-09-10, queue 2026-09-10-d9e085). Pure, so
+# compare-deals -SelfTest reaches the exact emission the engine runs at its matched-row add. The store's
+# size_text stays the answer unless Get-UnitPrice priced the row from a different quantity and said so in
+# size_override - otherwise audit-unit-basis-outlier reads the KIND off a label the arithmetic never used
+# ('122 oz', a weight, on a cell divided by 128 fl oz).
+function Resolve-CellSizeText([string]$sizeText, $priced) {
+  if (($priced -is [hashtable]) -and $priced.ContainsKey('size_override') -and $priced['size_override']) { return [string]$priced['size_override'] }
+  return $sizeText
+}
 function ConvertTo-DigitNumerals([string]$t) {
   if (-not $t) { return $t }
   return ($t -replace '(?i)\bone\b','1' -replace '(?i)\btwo\b','2' -replace '(?i)\bthree\b','3' -replace '(?i)\bfour\b','4' -replace '(?i)\bfive\b','5' -replace '(?i)\bsix\b','6' -replace '(?i)\bseven\b','7' -replace '(?i)\beight\b','8' -replace '(?i)\bnine\b','9' -replace '(?i)\bten\b','10')
@@ -544,6 +589,30 @@ function Get-UnitPrice($deal, $cat) {
         $pnM = [regex]::Match($sl, '(\d+(?:\.\d+)?)\s*(?:pt|pint)s?\b')
         $pn = if ($pnM.Success) { [double]$pnM.Groups[1].Value } else { 1 }
         $sizeForAmt = ('{0} oz' -f ($pn * [double]$cat.pint_oz))
+      }
+    }
+    # A GALLON JUG IS A GALLON, WHATEVER A QUOTIENT SIZE SAYS (2026-09-10, queue 2026-09-10-d9e085).
+    # On a fl-oz commodity Get-SizeAmount reads a bare 'oz' label as fluid ounces, which is right for the
+    # near-water rows that print "16 oz" on a bottle - and wrong when the label is not a measurement at all.
+    # Sam's "Member's Mark Ranch Dressing, 1 gal." carries size '122 oz' = $10.98 / $0.09, its own cent-rounded
+    # unit price turned back into a quantity, so the cell published 0.09/fl oz for a jug the name calls 128 fl oz
+    # (true 0.0858, 4.9% over), and the size string re-keyed basis-kind-allowlist on every cent Sam's moved.
+    # When the size is a BARE oz label and the name states exactly ONE volume, the name's volume is the divisor
+    # and size_override tells compare-deals to put that quantity on the cell (Resolve-CellSizeText).
+    # SCOPE: fl-oz commodities ONLY. On an oz/lb commodity Sam's derived weight is the right KIND - Sweet Baby
+    # Ray's '1 gal.' at 171.143 oz is a 1.3 g/ml sauce and must not become 128.
+    # THE PLAUSIBILITY BAR, 0.8x to 1.25x of the name's volume: the size must be a noisy statement of the SAME
+    # quantity. It brackets the measured population (plan-2026-09-10.routing.json s5: the 11 rows on fl-oz
+    # commodities sit at 0.953 to 1.008 of their name volume) and refuses a multipack, whose size is the pack
+    # total ("Cola 2 L, 6 pk" at 405.6 oz is 6.0x one bottle). First plausible bar, not swept; a row outside it
+    # keeps today's size-based price, never a guessed one. An either/or name is refused outright, exactly as the
+    # name fallback below refuses it.
+    if ($unit -eq 'floz' -and $deal.name -and [regex]::IsMatch($sizeForAmt, '^\s*\d+(?:\.\d+)?\s*oz\.?\s*$', 'IgnoreCase') -and -not (Test-NameOffersTwoSizes ([string]$deal.name))) {
+      $nvFloz = Get-NameVolumeFloz ([string]$deal.name)
+      $szFloz = Get-SizeAmount $sizeForAmt $unit
+      if ($nvFloz -and $szFloz -and ($szFloz -gt 0) -and (($szFloz / $nvFloz) -ge 0.8) -and (($szFloz / $nvFloz) -le 1.25)) {
+        $nvR = [math]::Round($nvFloz, 3)
+        return @{ unit_price=($pr.per_item/$nvFloz); basis=("size $nvR floz from the NAME volume (size field '" + $sizeForAmt + "' is a bare-oz label on a fl-oz commodity)"); size_override=($nvR.ToString([Globalization.CultureInfo]::InvariantCulture) + ' fl oz'); note=$pr.note }
       }
     }
     $amt = Get-SizeAmount $sizeForAmt $unit

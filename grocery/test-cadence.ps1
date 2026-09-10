@@ -49,5 +49,39 @@ T (Test-CadenceDue -Name 'old' -EveryDays 7 -InputGlobs @()) '8 days since last 
 Set-Content (Join-Path $script:CadenceDir 'cadence-bad.txt') -Value 'not-a-date'
 T (Test-CadenceDue -Name 'bad' -EveryDays 7 -InputGlobs @()) 'unreadable stamp -> DUE (fails OPEN, never silently skips)'
 T ((Get-CadenceLast 'nope') -eq 'never') 'a never-run check reports "never", not a fake date'
+
+# ---- THE WEEKLY GUARD PROOF (2026-09-10, queue 2026-09-10-267ba6), lifted from the SHIPPED source like the helpers above ----
+# Frozen from the founding morning: chain-verdict.json guards_rc=2 at 08:11:12, the weekly stamp last written
+# 2026-09-03, and the runner rc=3 at 08:26:38 that stamped the week closed anyway.
+$m2 = [regex]::Match($src, '(?s)function Get-TestGuardsWeeklyPlan \{.*?\n\}\r?\nfunction Get-TestGuardsStampPlan \{.*?\n\}\r?\nfunction Get-TestGuardsSubject \{.*?\n\}')
+if (-not $m2.Success) { T $false 'could not extract the test-guards weekly helpers from check-ad-cycles.ps1' }
+else {
+  Invoke-Expression $m2.Value
+  $now = [datetime]'2026-09-10T08:26:38'
+  $red   = [pscustomobject]@{ date = '2026-09-10'; guards_rc = 2; guards_blocked = $true }
+  $green = [pscustomobject]@{ date = '2026-09-10'; guards_rc = 0; guards_blocked = $false }
+  $p1 = Get-TestGuardsWeeklyPlan -Verdict $red -Today '2026-09-10' -WeeklyLast $now.AddDays(-7.2) -ProvedLast $now.AddDays(-3) -UnprovenAlertLast ([datetime]'2000-01-01') -Now $now
+  T ($p1.action -eq 'defer') 'MUST FIRE  guards_rc=2 with the weekly stamp over 7 days old -> DEFER (the 2026-09-10 slot was spent on a red baseline)'
+  $st3 = Get-TestGuardsStampPlan -Rc 3
+  T ((-not $st3.weekly) -and (-not $st3.proved)) 'MUST FIRE  an unevaluable run (rc 3) writes NEITHER stamp, so the week stays open'
+  $p2 = Get-TestGuardsWeeklyPlan -Verdict $red -Today '2026-09-10' -WeeklyLast $now.AddDays(-8) -ProvedLast $now.AddDays(-15) -UnprovenAlertLast ([datetime]'2000-01-01') -Now $now
+  T ($p2.alert_unproven) 'MUST FIRE  a proved stamp 15 days old pages the unproven alert'
+  $p3 = Get-TestGuardsWeeklyPlan -Verdict $green -Today '2026-09-10' -WeeklyLast $now.AddDays(-8) -ProvedLast $now.AddDays(-8) -UnprovenAlertLast ([datetime]'2000-01-01') -Now $now
+  T (($p3.action -eq 'run') -and (-not $p3.alert_unproven)) 'CLEAN TWIN  guards_rc=0 with the weekly stamp 8 days old -> RUN, and an 8-day-old proof does not page'
+  $st0 = Get-TestGuardsStampPlan -Rc 0
+  $st1 = Get-TestGuardsStampPlan -Rc 1
+  T ($st0.weekly -and $st0.proved) 'CLEAN TWIN  runner rc=0 writes both stamps'
+  T ($st1.weekly -and (-not $st1.proved) -and ((Get-TestGuardsSubject -Rc 1) -match 'BLOCKING invariant can no longer fail')) 'CLEAN TWIN  runner rc=1 writes the weekly stamp only and still sends "a BLOCKING invariant can no longer fail"'
+  $p5 = Get-TestGuardsWeeklyPlan -Verdict $null -Today '2026-09-10' -WeeklyLast $now.AddDays(-8) -ProvedLast $now -UnprovenAlertLast $now -Now $now
+  T ($p5.action -eq 'defer') 'MUST FIRE  no verdict on disk is a DEFER, never a run on an unknown baseline'
+  $p6 = Get-TestGuardsWeeklyPlan -Verdict ([pscustomobject]@{ date = '2026-09-09'; guards_rc = 0 }) -Today '2026-09-10' -WeeklyLast $now.AddDays(-8) -ProvedLast $now -UnprovenAlertLast $now -Now $now
+  T ($p6.action -eq 'defer') 'MUST FIRE  yesterday''s green verdict does not green-light today''s run'
+  $p7 = Get-TestGuardsWeeklyPlan -Verdict $green -Today '2026-09-10' -WeeklyLast $now.AddDays(-2) -ProvedLast $now -UnprovenAlertLast $now -Now $now
+  T ($p7.action -eq 'not-due') 'CLEAN TWIN  a week not yet due stays not-due on a green day'
+  $p8 = Get-TestGuardsWeeklyPlan -Verdict $red -Today '2026-09-10' -WeeklyLast $now.AddDays(-8) -ProvedLast $now.AddDays(-20) -UnprovenAlertLast $now.AddDays(-3) -Now $now
+  T (-not $p8.alert_unproven) 'MUST NOT FIRE  the unproven alert does not repeat within 14 days of the last one'
+  # AND THE CHAIN CALLS THEM - a helper nothing invokes is decoration.
+  T (($src -match 'Get-TestGuardsWeeklyPlan -Verdict \$tgVerdict') -and ($src -match 'Get-TestGuardsStampPlan -Rc \$tgRc') -and ($src -match 'Get-TestGuardsSubject -Rc \$tgRc') -and ($src -match 'test-guards weekly DEFERRED')) 'MUST FIRE  check-ad-cycles.ps1 drives its weekly block through these three functions'
+}
 Remove-Item $sandbox -Recurse -Force -ErrorAction SilentlyContinue
 if ($fail) { "CADENCE SELF-TEST FAILED ($fail)"; exit 1 } else { 'CADENCE SELF-TEST PASS'; exit 0 }

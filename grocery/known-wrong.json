@@ -4333,6 +4333,51 @@
                         "ruled_on":  "2026-09-09",
                         "ruled_by":  "triage-developer 2026-09-09-9b1f92",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coconut|Fareway|kind-almond-coconut",
+                        "commodity":  "coconut",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "KIND Almond \u0026 Coconut"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "KIND Almond \u0026 Coconut 6 ct $7.98 is a KIND snack bar (URL slug kind-bars-almond-coconut-6-ea; size 6 x 1.4 oz) priced as a whole coconut at $1.33/each; the real Fareway coconut is Coconut 1 each $3.99 in the same file",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-10",
+                        "ruled_by":  "triage 2026-09-10 b91a0a",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-shoulder|Walmart|prairie-fresh-natural-fresh-pork-spareribs-bone",
+                        "commodity":  "pork-shoulder",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "different-product",
+                        "evidence":  "Spareribs are a rib cut from the belly side, not pork shoulder or butt; the commodity rule does not include spareribs on purpose, and the semantic sweep re-finds this row daily with no ruling on file",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-10",
+                        "ruled_by":  "triage 2026-09-10 20430e",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Aldi|80-lean-ground-beef-patties-per-lb",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "80 Lean Ground Beef Patties Per LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "different-product",
+                        "evidence":  "Formed 80/20 patties are a different product from bulk 80/20 ground beef and are excluded by rule (patty, patties) since the commodity was written; the Aldi cell is the bulk Ground Beef 80 20 1 Per LB row",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-10",
+                        "ruled_by":  "triage 2026-09-10 20430e",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
