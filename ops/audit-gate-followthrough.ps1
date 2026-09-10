@@ -132,7 +132,10 @@ if ($SelfTest) {
     (($c2.Count -eq 1) -and (@($c2[0].Followups) -contains 'abc1234'))
   Case 'CLEAN TWIN' 'the first-red time renders as UTC with a Z' ($cand[0].FirstIso -match 'Z$') $cand[0].FirstIso
   $emptyRaw = Get-GateReds -Events @() -NowEpoch $now -WindowDays 14
-  Case 'CLEAN TWIN' 'an empty bus yields no reds, never a crash' ($emptyRaw.Count -eq 0)
+  # MUST NOT FIRE, not CLEAN TWIN: it asserts that nothing was found. Mislabelled on the first write and
+  # caught by ops\audit-fixture-vocabulary.ps1 at the pre-push gate - CLEAN TWIN is reserved for an
+  # adjacent behaviour that still WORKS, a positive assertion.
+  Case 'MUST NOT FIRE' 'an empty bus yields no reds, never a crash' ($emptyRaw.Count -eq 0)
   ''
   if ($fails.Count) {
     "audit-gate-followthrough selftest: $($fails.Count) FAILED of $($ran.Count)"
