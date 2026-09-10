@@ -114,10 +114,15 @@ session to apply it; a phone page is a later surface.
 **J3 - the digest points at it.** The morning mail gains one line: how many items wait in the inbox, oldest
 first, and the command.
 
-**J4 - the digest's misleading error line.** Every run-log transcript records a "System error" terminating
-record because the run-log library stops a transcript that is not running before it starts its own. The run
-is clean and the line says otherwise; anyone grepping a log for errors reads a failure. Stop only a running
-transcript.
+**J4 - the digest's native calls, and a banner nobody saw.** `[CORRECTED 2026-09-10]` This section first
+said the "System error" record in the digest's transcript came from the run-log library stopping a transcript
+that was not running. A probe of the library alone produced no such record, so that was wrong. What the probes
+DID prove: (1) `& $PY script 2>$null` under `$ErrorActionPreference = 'Stop'` turns any stderr line from the
+child into a terminating error in PS 5.1 - the digest made four such calls, so one warning would silently read a
+queue as UNKNOWN - and the digest now routes them through a helper that discards stderr without throwing;
+(2) `Start-RunLog` wrote its banner with Write-Output, so all six callers captured banner plus path, no
+transcript ever showed its start line, and capture-run.ps1 recorded the glued string as its log path - it now
+writes the banner to the host. The exact "System error" wording is still unexplained and is recorded as such.
 
 **Bars for J.** J1: the first night after it lands writes a model packet with a proposal on at least one item
 of each kind present, or states why per kind; resolve's questions settled that night are reported beside the

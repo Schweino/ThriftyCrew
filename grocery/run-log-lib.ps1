@@ -83,7 +83,12 @@ function Start-RunLog {
     try { Stop-Transcript -ErrorAction SilentlyContinue | Out-Null } catch { }
 
     Start-Transcript -Path $path -Append -Force -ErrorAction Stop | Out-Null
-    Write-Output ("--- run-log: {0} | {1} | pid {2} ---" -f $Name, (Get-Date).ToString('s'), $PID)
+    # WRITE-HOST, NOT WRITE-OUTPUT (2026-09-10). Write-Output put this banner into the PIPELINE, so every
+    # caller's `$runLog = Start-RunLog ...` captured the banner AND the path as a two-element array: no
+    # transcript ever showed its start line (0 in brain-digest's log of 2026-09-10), and capture-run.ps1
+    # wrote `log = [string]$runLog` into its status file as the banner glued to the path. The host stream
+    # still lands in the transcript, and the function now returns the path alone.
+    Write-Host ("--- run-log: {0} | {1} | pid {2} ---" -f $Name, (Get-Date).ToString('s'), $PID)
     return $path
   } catch {
     Write-Warning ("run-log: could not start logging ({0}) - continuing without a log." -f $_.Exception.Message)

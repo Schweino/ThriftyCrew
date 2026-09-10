@@ -48,6 +48,26 @@ $SKILLS = Join-Path $env:USERPROFILE '.claude\skills'
 $CLAUDE = Join-Path $env:USERPROFILE '.claude'
 $PY = 'C:\Codex\Python312\python.exe'
 
+function Invoke-DigestPython {
+  <# The child's stdout as an array. A line on its stderr is DISCARDED, never thrown.
+
+     `[ADDED 2026-09-10]` Every call here was `& $PY script 2>$null` under $ErrorActionPreference = 'Stop', and in
+     PS 5.1 that combination turns ANY stderr line from the child into a terminating error - proved that day in a
+     throwaway transcript: a Python child that printed one warning to stderr and its answer to stdout was CAUGHT,
+     and its answer lost. Inside Get-QueueRow that reads as UNKNOWN; for the weakest link it reads as "could not
+     run". The 06:45 digest was lucky, not safe. Continue is scoped to the call and restored in finally. #>
+  param([Parameter(Mandatory=$true)][string]$Exe, [string[]]$ArgList = @())
+  $old = $ErrorActionPreference
+  try {
+    $ErrorActionPreference = 'Continue'
+    $o = & $Exe @ArgList 2>$null
+    $arr = @($o)
+    return ,$arr
+  } finally {
+    $ErrorActionPreference = $old
+  }
+}
+
 function Get-QueueRow {
   <# One queue's state. Returns @{ Name; Count; AgeDays; Floor; Cost; Known }.
      `Known=$false` means the counter could not run, which is NOT the same as zero. #>
@@ -237,6 +257,26 @@ if ($SelfTest) {
   Case 'CLEAN TWIN' 'the estate half renders its stages in the digest' `
     (($estTxt -match 'THE ESTATE HALF OF THE LOOP') -and ($estTxt -match 'perceive\s+RED')) $estTxt
 
+  # MUST FIRE: a child that writes to stderr under EAP=Stop still returns its stdout, and nothing throws.
+  $ErrorActionPreference = 'Stop'
+  $nThrew = $false; $nOut = @()
+  try {
+    $nR = Invoke-DigestPython -Exe $PY -ArgList @('-c', 'import sys; sys.stderr.write(''a warning\n''); print(''the answer'')')
+    $nOut = @($nR)
+  } catch { $nThrew = $true }
+  Case 'MUST FIRE' 'a stderr line from a child is discarded, not thrown, and its stdout survives' `
+    ((-not $nThrew) -and ($nOut -contains 'the answer')) ("threw=$nThrew out=$($nOut -join '|')")
+  Case 'CLEAN TWIN' 'the caller''s error preference is restored after the call' ($ErrorActionPreference -eq 'Stop') $ErrorActionPreference
+
+  # MUST FIRE: Start-RunLog returns the log PATH alone, not the banner with it.
+  $rlDir = Join-Path $env:TEMP ("digest-runlog-selftest-{0}" -f $PID)
+  $rlR = Start-RunLog -Name 'digest-selftest' -OutDir $rlDir
+  $rl = @($rlR)
+  Stop-RunLog -ExitCode 0 -Path $rlR
+  Case 'MUST FIRE' 'Start-RunLog returns one string, an existing log path, and no banner' `
+    (($rl.Count -eq 1) -and (Test-Path -LiteralPath ([string]$rl[0]))) ("count=$($rl.Count) first=$($rl[0])")
+  Remove-Item -LiteralPath $rlDir -Recurse -Force -ErrorAction SilentlyContinue
+
   # CLEAN TWIN: the jsonl reader tells absent from fresh.
   $tmp = Join-Path $env:TEMP ("digest-selftest-{0}.jsonl" -f $PID)
   Remove-Item -LiteralPath $tmp -ErrorAction SilentlyContinue
@@ -275,7 +315,8 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   try {
     # --with-estate (WS 11): one weakest link across the personal store AND the estate, where a RED floor
     # outranks a quiet stage. recall-brain.py owns that ranking; this reads its line.
-    $b = & $PY (Join-Path $SKILLS 'recall-brain.py') --with-estate 2>$null
+    $bR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $SKILLS 'recall-brain.py'), '--with-estate')
+    $b = @($bR)
     $line = @($b | Where-Object { "$_" -match '^WEAKEST LINK' })
     if ($line.Count) { $weakest = ("$($line[0])" -replace '^WEAKEST LINK:\s*', '') }
   } catch { }
@@ -285,7 +326,8 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   $queues += Get-QueueRow -Name 'forgetting candidates' -Floor 7 `
     -Cost 'every unretired section competes in every search. BM25 at 1,118 sections measured 3 points worse at right-domain than at 1,043 - more sections retrieve WORSE.' `
     -Count {
-      $o = & $PY (Join-Path $SKILLS 'recall-forget.py') 2>$null
+      $oR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $SKILLS 'recall-forget.py'))
+      $o = @($oR)
       $m = [regex]::Match(($o -join "`n"), 'UNRULED (\d+)')
       if (-not $m.Success) { return $null }
       @{ Count = [int]$m.Groups[1].Value; AgeDays = 0 }
@@ -297,7 +339,8 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       # prints. The first draft of this matched `(\d+) unruled`, which appears nowhere
       # in that output, so the queue read UNKNOWN and the digest correctly refused to
       # call it empty. That refusal is why the bug was visible at all.
-      $o = & $PY (Join-Path $SKILLS 'recall-consolidate.py') 2>$null
+      $oR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $SKILLS 'recall-consolidate.py'))
+      $o = @($oR)
       $m = [regex]::Match(($o -join "`n"), 'UNRULED\s+(\d+)')
       if (-not $m.Success) { return $null }
       @{ Count = [int]$m.Groups[1].Value; AgeDays = 0 }
@@ -311,8 +354,9 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       # @($null).Count being 1 on the way and reported 0 waiting while 60 had waited
       # since 2026-08-21. A script graph owns now does the counting, returns NULL for a
       # file it could not read, and this treats null as UNKNOWN rather than as empty.
-      $js = & $PY (Join-Path $repo 'graph\learning\learning_status.py') --json 2>$null
-      if ($LASTEXITCODE -ne 0 -or -not $js) { return $null }
+      $jsR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $repo 'graph\learning\learning_status.py'), '--json')
+      $js = @($jsR)
+      if ($LASTEXITCODE -ne 0 -or -not $js.Count) { return $null }
       $st = ($js -join "`n") | ConvertFrom-Json
       if ($null -eq $st.proposals_pending) { return $null }
       $age = if ($null -eq $st.proposals_oldest_days) { -1 } else { [double]$st.proposals_oldest_days }
