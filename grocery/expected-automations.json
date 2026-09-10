@@ -37,6 +37,18 @@
       "max_age_hours": 2,
       "why": "every 15 min: is the semantic sidecar on 127.0.0.1:8077 alive. It was down for the whole of 2026-09-09 and nothing noticed, because the recall hook falls back to lexical in silence - 723 semantic offers on 09-08, 0 on 09-09 - while every prompt paid two 1.5s timeouts (p50 3195ms against a 200ms bar). Defers inside the 21:30-06:30 GPU window rather than taking the card from the nightly, so a deferred run is a normal run and still stamps.",
       "proves": "ops/out/sidecar-watchdog-stamp.json"
+    },
+    {
+      "name": "TC Recall Sleep 0435",
+      "max_age_hours": 30,
+      "why": "the knowledge store's nightly offline pass: harvest, join reflex outcomes from the transcripts, re-derive floors and weights, refresh drafts and failure classes, run the forgetting and clustering queues, finish with the gate. It ran as a Claude scheduled AGENT until 2026-09-09, against Brad's 2026-08-22 rule that Windows tasks are the only routines that fire - one more failure mode between the schedule and the work. The pass now stamps on every path, red or green, because a stamp written only on success reads as 'never ran' on exactly the mornings somebody needs to know it did.",
+      "proves": "ops/out/recall-sleep-stamp.json"
+    },
+    {
+      "name": "TC Brain Digest 0645",
+      "max_age_hours": 30,
+      "why": "one morning page: what the night moved, what went red, which stage of the loop is starving, and every judgement queue with the age of its oldest unruled item against a floor. It exists because the queues drain only when somebody sits down at them - measured 2026-09-09, 60 graph alias proposals had waited 19.9 days with nothing anywhere saying so.",
+      "proves": "ops/out/brain-digest-body.txt"
     }
   ],
   "startup_entries": [],

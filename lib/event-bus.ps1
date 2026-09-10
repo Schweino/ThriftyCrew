@@ -65,9 +65,17 @@ function Write-TcEvent {
     if ($dir -and -not (Test-Path -LiteralPath $dir)) {
       $null = New-Item -ItemType Directory -Force -Path $dir -ErrorAction Stop
     }
+    # EPOCH FROM [DateTimeOffset]::UtcNow, NEVER FROM `Get-Date -UFormat %s`.
+    # `[CORRECTED 2026-09-10]` The first version used -UFormat %s and PowerShell 5.1
+    # returns LOCAL wall-clock seconds from it, not UTC: measured against two independent
+    # clocks it read 1789004941 while [DateTimeOffset] and Python's time.time() both read
+    # 1789022941 - exactly 18,000 s, the CDT offset. Every Python writer in the recall
+    # store stamps real UTC epoch, so a reader comparing the two was 5 hours wrong in a
+    # direction that makes fresh evidence look stale. `iso` is UTC with a Z for the same
+    # reason: an offset-less local time cannot be joined to anything.
     $row = [ordered]@{
-      t        = [int][double]::Parse((Get-Date -UFormat %s))
-      iso      = (Get-Date).ToString('s')
+      t        = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+      iso      = [DateTime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ssZ')
       kind     = $Kind
       producer = $Producer
     }

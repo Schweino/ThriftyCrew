@@ -309,8 +309,14 @@ Invoke-Guard -Name 'SIDECAR-WATCHDOG' -Body {
     try {
       $alert = Join-Path $RepoRoot 'grocery\send-alert.ps1'
       if (Test-Path -LiteralPath $alert) {
-        & $alert -Type 'sidecar-down' -Subject 'Semantic sidecar is down and would not restart' `
-          -Body "Probe of $Url failed and the restart did not answer /health: $($r.Why)"
+        # NO -Type PARAMETER EXISTS. send-alert.ps1 derives its once-per-day suppression
+        # key from the SUBJECT with digits and dates stripped, so the subject must be
+        # stable across runs and the varying detail belongs in the body. Passing -Type
+        # would have been refused outright by ops\audit-arg-binding.ps1, which is the
+        # right outcome - a scoped call must never silently run unscoped.
+        & $alert -Subject 'Semantic sidecar is down and would not restart' `
+          -Body "Probe of $Url failed and the restart did not answer /health: $($r.Why)" `
+          -Emitter 'ops\sidecar-watchdog.ps1'
       }
     } catch { }
   }
@@ -319,9 +325,12 @@ Invoke-Guard -Name 'SIDECAR-WATCHDOG' -Body {
   Exit-Guard -Name 'SIDECAR-WATCHDOG' -Code 1 -Summary 'state=down acted=yes-failed'
 }
 } finally {
-  # $LASTEXITCODE is not the exit code of THIS script on the Exit-Guard path, so the run
-  # record carries what it can see rather than inventing a number. Stop-RunLog tolerates a
-  # $null path: logging must never be the reason a run fails, which is the library's own
-  # first rule.
-  Stop-RunLog -ExitCode 0 -Path $script:RunLog
+  # A CRASH MUST NOT BE RECORDED AS rc=0. `[CORRECTED 2026-09-10]` This passed a literal 0,
+  # and the sibling digest proved what that costs: its body threw, the transcript closed with
+  # "finished rc=0", and the one record whose job is to say a hidden run died said it was
+  # fine. lib\guard-contract.ps1 sets $script:TcGuardMarkerWritten only when Exit-Guard writes
+  # the completion marker, so its absence here means the body never finished. Stop-RunLog
+  # tolerates a $null path: logging must never be the reason a run fails.
+  $rcLog = if ($script:TcGuardMarkerWritten) { 0 } else { 1 }
+  Stop-RunLog -ExitCode $rcLog -Path $script:RunLog
 }

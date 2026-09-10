@@ -94,7 +94,7 @@ function Get-BusAge {
   if ($rows.Count -eq 0) { return @{ Rows = 0; NewestEpoch = 0; AgeDays = -1 } }
   $newest = 0
   foreach ($r in $rows) { if ([int]$r.t -gt $newest) { $newest = [int]$r.t } }
-  $now = [int][double]::Parse((Get-Date -UFormat %s))
+  $now = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
   return @{ Rows = $rows.Count; NewestEpoch = $newest
             AgeDays = [math]::Round(($now - $newest) / 86400.0, 2) }
 }

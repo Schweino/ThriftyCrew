@@ -28,11 +28,11 @@ was measured, what was refuted and what waits. This plan does not restate them; 
 | WS | Name | Status | Commit | Measured |
 |---|---|---|---|---|
 | 0 | Repair the starved stages | **DONE** 2026-09-09 | (this branch) | outcome join resolves 153 of 589 events, **66 burned / 87 fine** against a bar of 30 burned or a stated reason per unresolved fire; ladder produced its first REVIEW. Hook p50 **3,323 ms to 177 ms** with the sidecar still down. Sleep pass **18 of 18 steps exit 0**, against 14 and RED. `run-gates` 309 pass 0 fail; `check-skills` PASS |
-| 1 | Sense organs that do not depend on phrasing | NOT STARTED | | |
-| 2 | Learn from a mistake the moment it happens | NOT STARTED | | |
-| 3 | Metacognition: a claim of absence is refused without a search | NOT STARTED | | |
+| 1 | Sense organs that do not depend on phrasing | **DONE** 2026-09-09 | (this branch) | 1a structural corrections fire on **12 of 1,536** user turns (0.78%, cap 12%); repeat-request false positives cut **47 to 3** by three fixes, each frozen. 1b event bus live, three producers incl. a heartbeat; its first real row was a `gate-red`. 1c **400 sessions** digested from transcripts - DEPARTS from the plan: no `SessionEnd` event exists, so derived rather than hooked |
+| 2 | Learn from a mistake the moment it happens | **DONE** 2026-09-09 (2c awaits R2) | (this branch) | 2a shadow mode on all traffic, not just the 4% where a live row fires (the first wiring had that bug); **673 live / 1 shadow**, no leak. 2b session promotion at `remind` only, rung forced. 2d **75 class cards**: 56 covered, 15 store-only, 4 unknown |
+| 3 | Metacognition: a claim of absence is refused without a search | **DONE** 2026-09-09 | (this branch) | absence cues fire on **28 of 1,022** assistant turns (2.74%, cap 6%); second Stop rung shares all three loop brakes; 3b scores it and refuses a rate under 20 events |
 | 4 | Plasticity per cue | NOT STARTED | | |
-| 5 | Sleep v2: an OS clock, a red that pages, a dream, a morning digest | NOT STARTED | | |
+| 5 | Sleep v2: an OS clock, a red that pages, a dream, a morning digest | **5a 5b 5d DONE** 2026-09-10; 5c pending | (this branch) | TC Recall Sleep 0435 and TC Brain Digest 0645 registered and verified live; the Claude agent disabled. Digest's first live finding: **60 proposals 20 days old**, over a 14-day floor. Six defects found by running it, incl. `-UFormat %s` being **18,000 s** off UTC |
 | 6 | Encoding at write time: memory lint, cost, index integrity | NOT STARTED | | |
 | 7 | Forgetting v2: memories, verdicts, holds, conclusions all expire on evidence | NOT STARTED | | |
 | 8 | Generalisation: across projects, across domains, across negatives | NOT STARTED | | |

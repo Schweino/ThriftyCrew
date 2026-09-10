@@ -36,7 +36,9 @@ $XMLDIR = Join-Path $repo 'ops\scheduled-tasks'
 
 # The tasks this file OWNS. One row per task; the XML is the truth about what it runs.
 $OWNED = @(
-  [pscustomobject]@{ Name = 'TC Sidecar Watchdog'; File = 'tc-sidecar-watchdog.xml' }
+  [pscustomobject]@{ Name = 'TC Sidecar Watchdog';   File = 'tc-sidecar-watchdog.xml' }
+  [pscustomobject]@{ Name = 'TC Recall Sleep 0435';  File = 'tc-recall-sleep-0435.xml' }
+  [pscustomobject]@{ Name = 'TC Brain Digest 0645';  File = 'tc-brain-digest-0645.xml' }
 )
 
 function Test-TaskWatched {

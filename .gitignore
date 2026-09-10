@@ -480,3 +480,7 @@ design/canvas-*/thrifty-crew-redesign.html
 # rather than source. Committing it would put a write in every gate run diff.
 ops/out/events.jsonl
 ops/out/logs/
+# Proof-of-life stamps for the ops-lane Windows tasks (WS 0b, 5a, 5d). Per-machine, rewritten every run.
+ops/out/sidecar-watchdog-stamp.json
+ops/out/recall-sleep-stamp.json
+ops/out/brain-digest-body.txt
