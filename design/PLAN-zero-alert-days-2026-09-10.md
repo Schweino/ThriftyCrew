@@ -239,3 +239,18 @@ will say which part of it.
     muffins row routes to exactly one of the two commodities, no row is lost, guards exit 0, and both cells read
     correctly on the live board.
 11. **Phase 3, review intake as a packet,** after the registry exists. Bar as in section 4.
+
+### Ruling 7 result: the store probes (`design/PROBE-store-direct-data-2026-09-10.md`)
+
+- **Family Fare: DIRECT DATA FOUND.**
+  - A search-free catalog browse returned 18,557 products with price, size and in-stock status for store 6401. At 200 a page that is about 93 requests, against 602 search terms today.
+  - **Unknown:** whether browse pages spend the same per-window allowance as search.
+  - **Next (build step 3b, ops lane, no ruling needed):** one paced trial window. It records the catalog total against rows received, and whether the next search in that window still succeeds. The quarterly rotation ruling is untouched.
+- **Aldi and Fareway: PARTIAL.**
+  - Both pages load prices from the same Instacart JSON, with sale, regular and per-unit price as separate fields. At Fareway that would retire four known silent capture defects.
+  - **Unproven:** that the In-Store shelf price comes through it, and anything outside the browser session.
+  - **Both sites' robots.txt bars every unnamed agent from the whole site.** The browser sweep we run today is already automation against that same line.
+  - **Needs a ruling (R11)** before any trial.
+- **Sam's Club: NONE FOUND.** The data is already inside the page our capture reads. Keep the current method.
+- **Walmart: NOT PROBED, on purpose.** It shares Sam's bot defence, and a cold probe risks the next 08:00 capture for both stores.
+  - **Optional ruling (R12):** allow one headed load in the seeded browser profile right after a successful 08:00 run, or leave the question closed.
