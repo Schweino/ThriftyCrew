@@ -325,19 +325,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "blackberries",
-        "store":  "Aldi",
-        "unit":  "oz",
-        "board":  0.415,
-        "link":  0.3583,
-        "ratio":  0.86,
-        "price":  2.15,
-        "size":  "6 oz",
-        "boardItem":  "Blackberries 6 OZ",
-        "linkItem":  "Blackberries, Package",
-        "board_src":  "main"
-    },
-    {
         "id":  "blueberries",
         "store":  "Baker\u0027s",
         "unit":  "oz",
@@ -689,19 +676,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "chicken-wings",
-        "store":  "Sam\u0027s Club",
-        "unit":  "lb",
-        "board":  2.497,
-        "link":  1.997,
-        "ratio":  0.8,
-        "price":  19.97,
-        "size":  "10 lb",
-        "boardItem":  "Member\u0027s Mark Bone-In Chicken Wings, Frozen, 10 lbs.",
-        "linkItem":  "Member\u0027s Mark Bone-In Chicken Wings, Frozen, 10 lbs.",
-        "board_src":  "main"
-    },
-    {
         "id":  "chocolate-chips",
         "store":  "Fareway",
         "unit":  "oz",
@@ -744,9 +718,9 @@
         "id":  "clementines",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
-        "board":  1.524,
+        "board":  1.514,
         "link":  1.572,
-        "ratio":  1.03,
+        "ratio":  1.04,
         "price":  7.86,
         "size":  "5 lb",
         "boardItem":  "Clementine Mandarins, 5 lbs.",
@@ -1836,9 +1810,9 @@
         "id":  "ranch-dressing",
         "store":  "Sam\u0027s Club",
         "unit":  "floz",
-        "board":  0.09,
+        "board":  0.0858,
         "link":  0.08,
-        "ratio":  0.89,
+        "ratio":  0.93,
         "price":  10.82,
         "size":  "135.25 oz",
         "boardItem":  "Member\u0027s Mark Ranch Dressing, 1 gal.",
@@ -2340,6 +2314,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "watermelon",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  6.97,
+        "link":  5.97,
+        "ratio":  0.86,
+        "price":  5.97,
+        "size":  "each",
+        "boardItem":  "Whole Seedless Watermelon",
+        "linkItem":  "Whole Seedless Watermelon",
+        "board_src":  "main"
+    },
+    {
         "id":  "worcestershire",
         "store":  "Fareway",
         "unit":  "floz",
@@ -2363,6 +2350,19 @@
         "size":  "4 oz",
         "boardItem":  "Red Star Active Dry Yeast",
         "linkItem":  "Red Star Active Dry Yeast",
+        "board_src":  "main"
+    },
+    {
+        "id":  "onions",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  1.044,
+        "link":  0.984,
+        "ratio":  0.94,
+        "price":  4.92,
+        "size":  "5 lb",
+        "boardItem":  "Organic Yellow Onions, 5 lbs.",
+        "linkItem":  "Organic Yellow Onions, 5 lbs.",
         "board_src":  "main"
     },
     {

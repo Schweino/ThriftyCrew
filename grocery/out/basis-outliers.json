@@ -676,20 +676,6 @@
                               "id":  "hot-sauce",
                               "commodity":  "Hot Sauce",
                               "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.12,
-                              "size":  "129 oz",
-                              "item":  "Frank\u0027s RedHot Original Cayenne Pepper Hot Sauce, 1 gal.",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "commodity":  "Hot Sauce",
-                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.1658,
                               "size":  "12 oz",
@@ -965,20 +951,6 @@
                               "holds_crown":  false,
                               "unit_kind":  "weight",
                               "agrees_with_engine_divisor":  true
-                          },
-                          {
-                              "id":  "ranch-dressing",
-                              "commodity":  "Ranch Dressing",
-                              "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.09,
-                              "size":  "122 oz",
-                              "item":  "Member\u0027s Mark Ranch Dressing, 1 gal.",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  true,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
                           },
                           {
                               "id":  "ranch-dressing",
@@ -1384,20 +1356,6 @@
                                                      "per_unit":  0.0467,
                                                      "size":  "128 oz",
                                                      "item":  "Fareway Orange Juice, from Concentrate",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  true,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "ranch-dressing",
-                                                     "commodity":  "Ranch Dressing",
-                                                     "unit":  "floz",
-                                                     "store":  "Sam\u0027s Club",
-                                                     "per_unit":  0.09,
-                                                     "size":  "122 oz",
-                                                     "item":  "Member\u0027s Mark Ranch Dressing, 1 gal.",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  true,
@@ -1937,20 +1895,6 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
-                                                     "id":  "hot-sauce",
-                                                     "commodity":  "Hot Sauce",
-                                                     "unit":  "floz",
-                                                     "store":  "Sam\u0027s Club",
-                                                     "per_unit":  0.12,
-                                                     "size":  "129 oz",
-                                                     "item":  "Frank\u0027s RedHot Original Cayenne Pepper Hot Sauce, 1 gal.",
-                                                     "kind":  "weight",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
                                                      "id":  "ice-cream",
                                                      "commodity":  "Ice Cream",
                                                      "unit":  "floz",
@@ -2475,23 +2419,10 @@
                      }
                  ],
     "kind_mismatch_crown":  [
-                                {
-                                    "id":  "ranch-dressing",
-                                    "commodity":  "Ranch Dressing",
-                                    "unit":  "floz",
-                                    "store":  "Sam\u0027s Club",
-                                    "per_unit":  0.09,
-                                    "size":  "122 oz",
-                                    "item":  "Member\u0027s Mark Ranch Dressing, 1 gal.",
-                                    "kind":  "weight",
-                                    "row_kind":  "volume",
-                                    "holds_crown":  true,
-                                    "unit_kind":  "volume",
-                                    "agrees_with_engine_divisor":  false
-                                }
+
                             ],
     "ratio":  4,
-    "generated":  "2026-09-10T08:10:23",
+    "generated":  "2026-09-10T11:36:10",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",

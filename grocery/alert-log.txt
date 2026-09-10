@@ -89,3 +89,10 @@
 [2026-09-10T08:16:33] SENT 'Grocery: semantic sweep found 3 product(s) no rule can see - 2026-09-10' -> schweino68@gmail.com (id 1a08b7676b74fa58)
 [2026-09-10T08:19:31] SENT 'Grocery: 7 NEW price flag(s) - 2026-09-10' -> schweino68@gmail.com (id 1a08b792d10e8eac)
 [2026-09-10T08:26:40] SENT 'Grocery: test-guards could not evaluate (guards already red on the unmutated board)' -> schweino68@gmail.com (id 1a08b7fb7ee25c87)
+[2026-09-10T09:29:18] SENT 'Triage residual: a foreign edit anywhere under grocery/out still refuses the whole pipeline commit' -> schweino68@gmail.com (id 1a08bb918d15371e)
+[2026-09-10T09:29:20] SENT 'Triage residual: 6 of 8 TC scheduled tasks are one-shot Interactive, the reboot-window miss is still open' -> schweino68@gmail.com (id 1a08bb91eb214346)
+[2026-09-10T09:29:21] SENT 'Triage residual: two-product ad lines have no engine handler, 40 of 146 Baker's rows match the shape' -> schweino68@gmail.com (id 1a08bb92285d2b09)
+[2026-09-10T09:29:22] SENT 'Triage residual: the fixture-register marker cannot reach guard -SelfTest fixtures' -> schweino68@gmail.com (id 1a08bb92991ff302)
+[2026-09-10T10:34:01] SENT 'Grocery capture watchdog: 1 issue(s) 2026-09-10' -> schweino68@gmail.com (id 1a08bf457e2ffeea)
+[2026-09-10T11:31:02] SUPPRESSED (already sent this type today) 'Grocery: Family Fare pull dropped a carried item - review' [type: grocery family fare pull dropped a carried item review]
+[2026-09-10T11:51:37] SENT 'Triage residual: Sam's gallon jugs on weight-priced commodities still price off a cent-rounded quotient size' -> schweino68@gmail.com (id 1a08c3b60c070b05)

@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-12; next_pull 2026-09-13",
-    "cursor_start":  212,
-    "cursor_next":  219,
+    "cursor_start":  219,
+    "cursor_next":  226,
     "total_terms":  602,
     "rotation_terms":  [
-                           "dill weed",
-                           "guajillo chiles",
-                           "oregano leaves",
-                           "parsley flakes",
-                           "dried thyme",
-                           "dryer sheets",
-                           "dry green lentils"
+                           "egg noodles",
+                           "eggplant",
+                           "large eggs",
+                           "liquid egg whites",
+                           "red enchilada sauce",
+                           "energy drink",
+                           "english muffins"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "dill weed",
-                  "guajillo chiles",
-                  "oregano leaves",
-                  "parsley flakes",
-                  "dried thyme",
-                  "dryer sheets",
-                  "dry green lentils"
+                  "egg noodles",
+                  "eggplant",
+                  "large eggs",
+                  "liquid egg whites",
+                  "red enchilada sauce",
+                  "energy drink",
+                  "english muffins"
               ],
     "commodities":  [
-                        "dried-dill",
-                        "dried-guajillo-chiles",
-                        "dried-oregano",
-                        "dried-parsley",
-                        "dried-thyme",
-                        "dryer-sheets",
-                        "dry-green-lentils"
+                        "egg-noodles",
+                        "eggplant",
+                        "eggs",
+                        "egg-whites",
+                        "enchilada-sauce",
+                        "energy-drinks",
+                        "english-muffins"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

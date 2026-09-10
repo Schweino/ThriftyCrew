@@ -63,6 +63,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "baby-food",
+        "store":  "Family Fare",
+        "product":  "Gerber Sitter 2nd Foods (6+ Months) Veggie Blends Carrot Sweet Potato Pea 2 Ea",
+        "dept":  "health_beauty",
+        "aisle":  "health_beauty/baby_child",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027baby\u0027"
+    },
+    {
         "id":  "baby-potatoes",
         "store":  "Family Fare",
         "product":  "Our Family Potatoes Red Baby Dutch",
@@ -70,6 +79,15 @@
         "aisle":  "fresh_fruits_vegetables/potatoes",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "baked-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Baked Beans, Country Style 28 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "baking-powder",
@@ -198,6 +216,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "canned-chili",
+        "store":  "Family Fare",
+        "product":  "Chili, W/Beans Our Family",
+        "dept":  "pantry",
+        "aisle":  "pantry/broth_soups_stews_chili",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "canned-corn",
         "store":  "Family Fare",
         "product":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
@@ -210,6 +237,33 @@
         "id":  "diced-tomatoes",
         "store":  "Family Fare",
         "product":  "Our Family Tomatoes, With Lime Juice \u0026 Cilantro, Diced 14.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "canned-green-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Cut Green Beans 14.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "canned-peas",
+        "store":  "Family Fare",
+        "product":  "Our Family No Salt Added Sweet Peas 15 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "canned-pinto-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Beans, No Salt Added, Pinto 15.5 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -268,6 +322,15 @@
         "aisle":  "meat/chicken",
         "verdict":  "ALLOW",
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
+        "id":  "chili-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Chili Beans, In Mild Chili Sauce 15.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "chocolate-chips",
@@ -516,6 +579,15 @@
         "id":  "frozen-vegetables",
         "store":  "Family Fare",
         "product":  "Our Family Mixed Vegetables, Fresh Frozen 24 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
+        "id":  "frozen-peas",
+        "store":  "Family Fare",
+        "product":  "Our Family Green Peas, Sweet, Fresh Frozen 24 Oz",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_vegetables",
         "verdict":  "ALLOW",
@@ -828,6 +900,15 @@
         "reason":  "\u0027pantry\u0027 is a reviewed exception department for \u0027parmesan\u0027"
     },
     {
+        "id":  "parsnips",
+        "store":  "Family Fare",
+        "product":  "Fresh Parsnips, Michigan",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/other_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
         "id":  "peanut-butter",
         "store":  "Family Fare",
         "product":  "Creamy No Stir Peanut Butter Spread",
@@ -936,6 +1017,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "refried-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Refried Beans, Traditional 31 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "refrigerated-biscuits",
         "store":  "Family Fare",
         "product":  "Pillsbury Southern Homestyle Buttermilk Biscuits 8 Ea",
@@ -1033,6 +1123,15 @@
         "aisle":  "fresh_fruits_vegetables/potatoes",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "relish",
+        "store":  "Family Fare",
+        "product":  "Our Family Sweet Relish 10 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
         "id":  "condensed-milk",

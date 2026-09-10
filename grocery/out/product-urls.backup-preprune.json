@@ -1206,13 +1206,6 @@
                                                          "size":  "12 pk 4 oz",
                                                          "verified":  "2026-08-23"
                                                      },
-                                    "Family Fare":  {
-                                                        "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_prune_apple_sitter_2nd_foods_2_packs_2_ea/p/2468378",
-                                                        "name":  "Gerber Prune Apple, Sitter 2nd Foods, 2 Packs 2 Ea",
-                                                        "price":  "$2.19",
-                                                        "size":  "2pk 4oz",
-                                                        "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                    },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/1500093654",
                                                             "price":  23.98,
@@ -1233,7 +1226,14 @@
                                                     "price":  "$7.42",
                                                     "size":  "48 oz",
                                                     "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                    "Family Fare":  {
+                                                        "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_sitter_2nd_foods_6_months_veggie_blends_carrot_sweet_potato_pea_2_ea/p/2050464",
+                                                        "name":  "Gerber Sitter 2nd Foods (6+ Months) Veggie Blends Carrot Sweet Potato Pea 2 Ea",
+                                                        "price":  "$2.19",
+                                                        "size":  "2pk 4oz",
+                                                        "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                    }
                                 },
                   "baby-formula":  {
                                        "commodity":  "baby-formula",
@@ -1458,19 +1458,20 @@
                                                       "size":  "28 oz",
                                                       "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
                                                   },
-                                      "Family Fare":  {
-                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/our_family_original_baked_beans_28_oz/p/6786962",
-                                                          "name":  "Our Family Original Baked Beans 28 Oz",
-                                                          "price":  "$2.59",
-                                                          "size":  "28 oz"
-                                                      },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/17091908879",
                                                       "name":  "(12 pack) Great Value Original Baked Beans, 28 oz",
                                                       "price":  "$22.08",
                                                       "size":  "336 oz",
                                                       "verified":  "2026-09-09 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/our_family_baked_beans_country_style_28_oz/p/6786963",
+                                                          "name":  "Our Family Baked Beans, Country Style 28 Oz",
+                                                          "price":  "$2.59",
+                                                          "size":  "28 oz",
+                                                          "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                      }
                                   },
                   "baking-powder":  {
                                         "commodity":  "baking-powder",
@@ -4020,12 +4021,6 @@
                                                                      "name":  "Del Monte Fancy Cut Green Beans, 101 oz.",
                                                                      "board_pu":  0.0572
                                                                  },
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_no_salt_added_cut_green_beans_14_5_oz/p/7081231",
-                                                                 "name":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
-                                                                 "price":  "$0.99",
-                                                                 "size":  "14.5 oz"
-                                                             },
                                              "Fareway":  {
                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24228669-fareway-green-beans-cut-145-oz",
                                                              "name":  "Fareway Cut Green Beans",
@@ -4034,12 +4029,19 @@
                                                              "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
                                                          },
                                              "Walmart":  {
-                                                             "url":  "https://www.walmart.com/ip/14854671589",
-                                                             "name":  "(6 pack) Great Value Cut Green Beans, Gluten-Free, 28 oz Can",
-                                                             "price":  "$8.88",
-                                                             "size":  "168 oz",
+                                                             "url":  "https://www.walmart.com/ip/Great-Value-Cut-Green-Beans-Gluten-Free-28-oz-Can/15544056",
+                                                             "name":  "Great Value Cut Green Beans, Gluten-Free, 28 oz Can",
+                                                             "price":  "$1.48",
+                                                             "size":  "28 oz",
                                                              "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                         },
+                                             "Family Fare":  {
+                                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_cut_green_beans_14_5_oz/p/6786949",
+                                                                 "name":  "Our Family Cut Green Beans 14.5 Oz",
+                                                                 "price":  "$0.99",
+                                                                 "size":  "14.5 oz",
+                                                                 "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                             }
                                          },
                   "canned-green-chilies":  {
                                                "commodity":  "Canned Diced Green Chilies",
@@ -4331,11 +4333,11 @@
                                                               "board_pu":  0.0678
                                                           },
                                       "Walmart":  {
-                                                      "url":  "https://www.walmart.com/ip/10451509",
-                                                      "name":  "Great Value Sweet Peas, 15 oz Can",
-                                                      "price":  "$0.82",
-                                                      "size":  "15 oz",
-                                                      "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
+                                                      "url":  "https://www.walmart.com/ip/13346615566",
+                                                      "name":  "(12 pack) Great Value Sweet Peas, 15 oz Can",
+                                                      "price":  "$9.84",
+                                                      "size":  "180 oz",
+                                                      "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                                   }
                                   },
                   "canned-pineapple":  {
@@ -4400,14 +4402,6 @@
                                                                   "verified":  "2026-08-23",
                                                                   "board_pu":  0.0627
                                                               },
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_pinto_beans_15_5_oz/p/7081223",
-                                                                 "name":  "Our Family Pinto Beans 15.5 Oz",
-                                                                 "price":  "$0.99",
-                                                                 "size":  "15.5 oz",
-                                                                 "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
-                                                                 "board_pu":  0.0639
-                                                             },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/24686/hy-vee-pinto-beans",
                                                             "price":  0.88,
@@ -4428,7 +4422,14 @@
                                                              "price":  "$0.99",
                                                              "size":  "15.5 oz",
                                                              "verified":  "2026-09-06 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                         },
+                                             "Family Fare":  {
+                                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_beans_no_salt_added_pinto_15_5_oz/p/7081230",
+                                                                 "name":  "Our Family Beans, No Salt Added, Pinto 15.5 Oz",
+                                                                 "price":  "$0.99",
+                                                                 "size":  "15.5 oz",
+                                                                 "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                             }
                                          },
                   "canned-potatoes":  {
                                           "commodity":  "Canned Potatoes",
@@ -5967,19 +5968,19 @@
                                                               "name":  "Bush\u0027s Mild Red Chili Beans 16 oz., 6 pk.",
                                                               "board_pu":  0.0883
                                                           },
-                                      "Walmart":  {
-                                                      "url":  "https://www.walmart.com/ip/10534044",
-                                                      "name":  "Great Value Chili Beans, 15.5 oz",
-                                                      "price":  "$0.92",
-                                                      "size":  "15.5 oz",
-                                                      "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                  },
                                       "Family Fare":  {
                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_chili_beans_in_mild_chili_sauce_15_5_oz/p/6786953",
                                                           "name":  "Our Family Chili Beans, In Mild Chili Sauce 15.5 Oz",
                                                           "price":  "$0.99",
                                                           "size":  "15.5 oz"
-                                                      }
+                                                      },
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/20720651817",
+                                                      "name":  "(7 pack) Joan of Arc Spicy Chili Beans, Gluten-Free, 30 oz Can",
+                                                      "price":  "$10.36",
+                                                      "size":  "210 oz",
+                                                      "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                  }
                                   },
                   "chili-crisp":  {
                                       "commodity":  "Chili Crisp / Chili Oil",
@@ -6542,10 +6543,10 @@
                   "coconut":  {
                                   "commodity":  "coconut",
                                   "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20002358-kind-bars-almond-coconut-6-ea",
-                                                  "name":  "KIND Almond \u0026 Coconut",
-                                                  "price":  "$7.98",
-                                                  "size":  "6 ct",
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3402271-coconut-each",
+                                                  "name":  "Coconut",
+                                                  "price":  "$3.99",
+                                                  "size":  "each",
                                                   "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                               }
                               },
@@ -12215,13 +12216,6 @@
                                                  "size":  "lb",
                                                  "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
                                              },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13773419692",
-                                                         "name":  "Green Seedless Grapes, 3 lbs.",
-                                                         "price":  "$5.87",
-                                                         "size":  "3 lb",
-                                                         "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/fresh-california-seedless-red-grapes/0001111061376",
                                                       "name":  "Fresh California Seedless Red Grapes",
@@ -12242,7 +12236,14 @@
                                                  "price":  "$3.76",
                                                  "size":  "2.25 lb",
                                                  "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                             }
+                                             },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/13741557139",
+                                                         "name":  "Black Seedless Grapes, 3 lbs.",
+                                                         "price":  "$4.87",
+                                                         "size":  "3 lb",
+                                                         "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                     }
                              },
                   "greek-yogurt":  {
                                        "commodity":  "Greek Yogurt",
@@ -16342,11 +16343,11 @@
                                                           "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                       },
                                              "Walmart":  {
-                                                             "url":  "https://www.walmart.com/ip/111146370",
-                                                             "name":  "Fresh Organic Mini Sweet Peppers, 8 oz",
-                                                             "price":  "$3.46",
-                                                             "size":  "8 oz",
-                                                             "verified":  "2026-09-04 DERIVED from the price row (same record the board priced)"
+                                                             "url":  "https://www.walmart.com/ip/5657933143",
+                                                             "name":  "Fresh Mini Sweet Peppers, 16 oz",
+                                                             "price":  "$3.28",
+                                                             "size":  "16 oz",
+                                                             "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                                          }
                                          },
                   "miracle-whip":  {
@@ -17045,13 +17046,6 @@
                                                       "size":  "lb",
                                                       "verified":  "2026-08-23"
                                                   },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13604862865",
-                                                         "name":  "Sweet Onions, 6 lbs.",
-                                                         "price":  "$4.96",
-                                                         "size":  "6 lb",
-                                                         "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16502119-vidalia-onion-3-lbs",
                                                  "name":  "Vidalia Onion",
@@ -17079,7 +17073,14 @@
                                                  "price":  "$2.96",
                                                  "size":  "48 oz",
                                                  "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                             }
+                                             },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/15299767129",
+                                                         "name":  "Organic Yellow Onions, 5 lbs.",
+                                                         "price":  "$4.92",
+                                                         "size":  "5 lb",
+                                                         "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                     }
                              },
                   "onion-soup-mix":  {
                                          "commodity":  "Onion Soup Mix (dry packets)",
@@ -17701,7 +17702,14 @@
                                                    "price":  "$4.22",
                                                    "size":  "16 oz",
                                                    "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                                   "Family Fare":  {
+                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/fresh_parsnips_michigan/p/5989579",
+                                                       "name":  "Fresh Parsnips, Michigan",
+                                                       "price":  "$4.49",
+                                                       "size":  "1 lb",
+                                                       "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                   }
                                },
                   "pasta":  {
                                 "commodity":  "pasta",

@@ -14,7 +14,7 @@
   "protein": 41,
   "carbs": 69,
   "fat": 23,
-  "cost_ps": "3.30"
+  "cost_ps": "3.27"
  },
  "intro_html": "This is proper marinara baked ziti with a lighter build: lean ground turkey simmered in tomato sauce, folded through pasta with fresh basil, dolloped with ricotta, and capped with a mozzarella top that browns like a champ. Each serving carries <strong>{{protein}} grams of protein</strong> at {{cal}} calories for about <strong>${{cost_ps}}</strong> (at everyday cost). Comfort food, minus the food coma pricing.",
  "ingredients_display": [
@@ -159,7 +159,7 @@
   "prepTime": "PT15M",
   "cookTime": "PT40M",
   "totalTime": "PT55M",
-  "costPerServing": 3.30,
+  "costPerServing": 3.27,
   "recipeIngredient": [
    "Olive Oil, 2.25 tbsp (32 g)",
    "93/7 Ground Turkey, 2.25 lb (1058 g)",

@@ -1,29 +1,22 @@
 ﻿[
     {
-        "id":  "cod",
+        "id":  "ground-beef-8020",
+        "store":  "Aldi",
+        "product":  "80 Lean Ground Beef Patties Per LB",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u002780\\s*%?\\s*lean[^.]*ground\\s+beef\u0027 matched, exclude \u0027patties\u0027 killed it"
+    },
+    {
+        "id":  "pork-shoulder",
         "store":  "Walmart",
-        "product":  "Great Value Wild Caught Flounder Skinless Fillets, 2 lb Bag (Frozen)",
+        "product":  "Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
     {
-        "id":  "french-bread",
-        "store":  "Baker\u0027s",
-        "product":  "Private Selection French Loaf Sliced",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "cod",
-        "store":  "Walmart",
-        "product":  "Great Value Frozen Catfish Skinless Fillets, 2 lb Bag",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "taco-sauce",
-        "store":  "Walmart",
-        "product":  "Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+        "id":  "ice-cream",
+        "store":  "Hy-Vee",
+        "product":  "Hy Vee We All Scream Vanilla",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     }
