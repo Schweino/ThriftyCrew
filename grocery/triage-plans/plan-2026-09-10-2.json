@@ -1,0 +1,33 @@
+{
+  "generated": "2026-09-10T14:05:00",
+  "round": 2,
+  "round_note": "STEP 4.5 mid-run drain: the one alert that arrived during round 1 (10:34), re-measured against the current board and handled inline by the orchestrator as a superseded one-liner. Not a bounce round; round 1 produced no bounces.",
+  "board_week": "2026-09-09",
+  "queue_ids_seen": ["2026-09-10-3b35cb"],
+  "routing_artifact": null,
+  "items": [
+    {
+      "queue_id": "2026-09-10-3b35cb",
+      "subject": "Grocery capture watchdog: 1 issue(s) 2026-09-10",
+      "classification": "superseded",
+      "superseded_by": "2026-09-10-d9e085",
+      "evidence": [
+        "alert 10:34:00 body: 'HELD BY GUARDS: check-ad-cycles refused the 08:11 board (guards_rc 2) and nothing has been rebuilt and shipped since ... the GUARDS FAILED alert owns it'; its four sub-findings (capture-run daily exit 1, public\\board.json 1213 min behind the comparison, TC Grocery Daily Capture 0800 exited 1, public/smp-feed.json computed but not shipped) are that one hold",
+        "re-measured after round 1: d9e085 closed in plan-2026-09-10.json; guards.ps1 11:36:56 'GUARDS OK: every hard invariant holds'; comparison-2026-09-09 rebuilt 11:32:34 and shipped in a3952ca0f and 98abb732f (12:05); HEAD == origin/main == bfe7540d0; git status --porcelain -- public is empty",
+        "live https://feed.thriftycrew.com/board.json?v=<ticks> read by the orchestrator: HTTP 200, 2,982,064 bytes, muffins Walmart data-pu 0.3725 and coconut Fareway 3.99, which are plan-2026-09-10's post-fix values, so the live page carries the rebuilt board"
+      ],
+      "root_cause": "one guard hold surfaces twice: through GUARDS FAILED (d9e085) and through the capture watchdog, which attributes the hold to that owner inside its own body",
+      "leaves_open": "nothing",
+      "resolution_note": "Superseded by 2026-09-10-d9e085. Every sub-finding was the 08:11 guard hold. Guards went green at 11:36:56, the board shipped at 12:05 (a3952ca0f, 98abb732f), and the live board.json re-read with a cache-busting query carries the fixed cells (muffins Walmart 0.3725). Re-measured after the alert: already resolved, no change made.",
+      "publish_batch": 0,
+      "status": "superseded",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "no edits: close 2026-09-10-3b35cb with triage-close.ps1 using the resolution_note above"
+  ],
+  "open_questions_for_brad": []
+}
