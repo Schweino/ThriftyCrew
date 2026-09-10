@@ -11,18 +11,38 @@
   Usage:  powershell -ExecutionPolicy Bypass -File pull-grocery-ads.ps1
   Output: .\out\ads-YYYY-MM-DD.json + a verification table.
 #>
-param([string]$OutDir = "$PSScriptRoot\out")
+param([string]$OutDir = "$PSScriptRoot\out", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $UA = @{ 'User-Agent' = 'Mozilla/5.0' }
 $TODAY = (Get-Date).Date
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force $OutDir | Out-Null }
 
 $EXPECT = @{
-  hyvee       = @{ collection = '1465'; zip = '68106' }
+  hyvee       = @{ collection = '' }   # the store's own id, set below from hyvee-store-lib (HY-VEE STORE)
   aldi        = @{ merchant_store_code = '446-048'; token = '29d9bfdcf546dc601c10c64ed1e932f5' }
   family_fare = @{ app_key = 'family_fare'; store_id = '6401' }
 }
 function Test-OmahaZip([string]$zip) { return ($zip -match '^68[01]\d\d$') }
+
+# HY-VEE STORE, FROM THE ONE PLACE THAT KNOWS IT (2026-09-10). This file requested flyer collection 1465 as a
+# literal, and hyvee-store-lib recorded as an ASSUMPTION whether a flyer collection id is a Hy-Vee storeId.
+# PROVEN read-only that day: each id returns its own store's postal code (1465 -> 68106, 1466 -> 68137, 1467 ->
+# 68164, 1470 -> 68114), stores in other markets return different flyers (1464 -> 66061 Olathe, 1400 -> 56258
+# Marshall, 1600 -> 61282 Silvis) and invalid ids return none. So the flyer follows the storeId the board speaks
+# for. Every Omaha id returned the SAME two flyers that day, so nothing on the board moved; what this removes is
+# the day Hy-Vee splits Omaha ads and a literal quietly pairs Omaha #01's ad with Omaha #02's shelf prices.
+# The Omaha gate below still accepts any 68xxx flyer zip, so it cannot tell two Omaha stores apart on its own;
+# asking for the right store's id is what does.
+. (Join-Path $PSScriptRoot 'hyvee-store-lib.ps1')
+function Resolve-HyVeeFlyerCollection([string]$Root) {
+  # @(collection, label, error). A registry that disagrees with the library blocks Hy-Vee, never the other stores.
+  $drift = Test-HyVeeStoreDrift -Root $Root
+  if ($drift) { return @('', '', [string]$drift) }
+  $s = Get-HyVeeStore -Root $Root
+  return @([string]$s.store_id, [string]$s.label, '')
+}
+$HVFLYER = Resolve-HyVeeFlyerCollection $PSScriptRoot
+$EXPECT.hyvee.collection = [string]$HVFLYER[0]
 function Test-Current($from, $to) {
   try { $f = ([DateTimeOffset]::Parse([string]$from)).Date; $t = ([DateTimeOffset]::Parse([string]$to)).Date; return ($TODAY -ge $f -and $TODAY -le $t) } catch { return $false }
 }
@@ -61,6 +81,10 @@ function Get-FlippSize($id) {
 
 # ============================ HY-VEE (Flipp SFML) ============================
 function Pull-HyVee {
+  if (-not $EXPECT.hyvee.collection) {
+    $report.Add([ordered]@{ store='Hy-Vee'; identity='STORE'; zip=''; ad_from=''; ad_to=''; omaha=$false; current=$false; deals=0; status=('BLOCKED: '+[string]$HVFLYER[2]) })
+    return
+  }
   try {
     $list = Invoke-RestMethod -Uri "https://www.hy-vee.com/deals/api/digital-flyers/$($EXPECT.hyvee.collection)" -Headers $UA -TimeoutSec 30
     foreach ($f in $list) {
@@ -157,6 +181,34 @@ function Pull-FamilyFare {
     $from = if ($cur) { $cur.start_date } else { '' }; $to = if ($cur) { $cur.finish_date } else { '' }
     Add-Result 'Family Fare' ("store_id=$sid $city") $zip ($from -replace 'T.*','') ($to -replace 'T.*','') $okOmaha $okCurrent $deals
   } catch { $report.Add([ordered]@{ store='Family Fare'; identity='ERROR'; zip=''; ad_from=''; ad_to=''; omaha=$false; current=$false; deals=0; status=('ERROR: '+$_.Exception.Message) }) }
+}
+
+if ($SelfTest) {
+  # Pure: no network and no store writes. The flyer store must come from hyvee-store-lib, and a registry that
+  # disagrees with the library must block Hy-Vee alone. Registries under test are written to a temp folder.
+  $fail = 0; $n = 0
+  function _T([string]$label, [bool]$cond) { $script:n++; if ($cond) { Write-Output "ok    $label" } else { Write-Output "FAIL  $label"; $script:fail++ } }
+  $s = Get-HyVeeStore -Root $PSScriptRoot
+  _T 'MUST FIRE  the Hy-Vee flyer collection is the store hyvee-store-lib names, a positive id' (([string]$EXPECT.hyvee.collection -eq [string]$s.store_id) -and ([int]$EXPECT.hyvee.collection -gt 0))
+  $src = [IO.File]::ReadAllText($PSCommandPath)
+  $retired = 'digital-flyers/' + '14' + '65'
+  $literal = "collection = '" + '14' + "65'"
+  _T 'MUST NOT FIRE  no flyer request in this file names the retired Omaha #01 id' ((-not $src.Contains($retired)) -and (-not $src.Contains($literal)))
+  $tmp = Join-Path ([IO.Path]::GetTempPath()) ('pga-selftest-' + [guid]::NewGuid().ToString('N'))
+  $split = Join-Path $tmp 'split'; $agree = Join-Path $tmp 'agree'
+  New-Item -ItemType Directory -Force $split, $agree | Out-Null
+  try {
+    $utf8 = New-Object Text.UTF8Encoding($false)
+    [IO.File]::WriteAllText((Join-Path $split 'stores.json'), '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":1465,"location_id":"adcb2ae1-f440-4512-bfe8-9624832c72a9","label":"Omaha #01"}}]}', $utf8)
+    [IO.File]::WriteAllText((Join-Path $agree 'stores.json'), '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":1466,"location_id":"09e8f4f0-e614-4b86-9285-c9c3dbff0d85","label":"Omaha #02"}}]}', $utf8)
+    $r = Resolve-HyVeeFlyerCollection $split
+    _T 'MUST FIRE  a registry that disagrees with hyvee-store-lib yields no collection and names the disagreement' (([string]$r[0] -eq '') -and ([string]$r[2] -match 'DISAGREES'))
+    $r2 = Resolve-HyVeeFlyerCollection $agree
+    _T 'CLEAN TWIN  a registry that agrees resolves its store id (1466) and label with no error' (([string]$r2[0] -eq '1466') -and ([string]$r2[1] -eq 'Omaha #02') -and ([string]$r2[2] -eq ''))
+  } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
+  _T "CLEAN TWIN  the Omaha gate still passes Omaha #02's flyer zip (68137)" (Test-OmahaZip '68137')
+  _T 'MUST NOT FIRE  the Omaha gate refuses a flyer zip from another market (66061, Olathe KS)' (-not (Test-OmahaZip '66061'))
+  if ($fail -eq 0) { Write-Output "SELF-TEST PASS: $n case(s)"; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }
 }
 
 Write-Output ("Today: "+$TODAY.ToString('yyyy-MM-dd')+"  -  pulling current Omaha weekly ads...")

@@ -34,11 +34,14 @@
   $9.99 tag. Brad's own Omaha #01 product page showed $9.99. Those two cells published a number no
   shopper could pay. At Omaha #02 the same sample disagreed on 0 of 21.
 
-  ADS ARE STORE-SPECIFIC TOO. pull-grocery-ads.ps1 keys the Hy-Vee flyer on a Flipp collection id that
-  happens to read '1465'. Whether Flipp's collection id equals Hy-Vee's storeId is an ASSUMPTION, not
-  a fact, so it is recorded here as unverified and pull-grocery-ads is NOT switched off it until
-  somebody proves the mapping. Guessing it would silently pair Omaha #02 shelf prices with Omaha #01's
-  weekly ad, which is the exact blend this file exists to prevent.
+  ADS ARE STORE-SPECIFIC TOO, AND THE FLYER NOW FOLLOWS THE STORE. pull-grocery-ads.ps1 keyed the Hy-Vee
+  flyer on a collection id that read '1465', and whether that id is a Hy-Vee storeId was recorded here as
+  an assumption. PROVEN 2026-09-10, read-only: each digital-flyers id returns its own store's postal code
+  (1465 -> 68106, 1466 -> 68137, 1467 -> 68164, 1470 -> 68114), stores in other markets return different
+  flyers (1464 Olathe KS, 1400 Marshall MN, 1600 Silvis IL) and invalid ids return none. So
+  pull-grocery-ads now requests the flyer for Get-HyVeeStore's store_id. Every Omaha id returned the same
+  two flyers that day, so the switch moved nothing on the board; it removes the day Omaha ads split by
+  store and a literal pairs Omaha #02 shelf prices with Omaha #01's weekly ad.
 
   Usage:
       . hyvee-store-lib.ps1
@@ -58,8 +61,6 @@ $script:HyVeeStoreFallback = [ordered]@{
   label       = 'Omaha #02'
   # Kept so a future switch has the prior identity written down rather than reconstructed from git.
   previous    = [ordered]@{ store_id = 1465; location_id = 'adcb2ae1-f440-4512-bfe8-9624832c72a9'; label = 'Omaha #01'; retired = '2026-08-21' }
-  # UNVERIFIED. See the header. Do not wire this into pull-grocery-ads without proving the mapping.
-  ads_collection_unverified = '1465'
 }
 
 function Get-HyVeeStore {
