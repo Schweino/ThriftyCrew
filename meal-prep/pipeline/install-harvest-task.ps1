@@ -187,6 +187,11 @@ $trigger = New-ScheduledTaskTrigger -Daily -At $At
 # is lifted off a throwaway -Once trigger, the only way PowerShell 5.1 exposes it on a daily trigger - the same
 # construction the nightly matching registrar uses.
 $trigger.Repetition = (New-ScheduledTaskTrigger -Once -At $At -RepetitionInterval (New-TimeSpan -Hours 1) -RepetitionDuration (New-TimeSpan -Hours 6)).Repetition
+# StopAtDurationEnd STAYS FALSE, as graph\pipeline\install-nightly-task.ps1 sets it and for the same reason: it does not
+# decide whether occurrences fire (the duration does), it decides whether Task Scheduler KILLS a crawl still running when
+# the window closes, and a kill skips the crawl's own commit at the bottom. The lifted -Once repetition defaults it to
+# true, which is what the first export of this change showed (2026-09-10).
+$trigger.Repetition.StopAtDurationEnd = $false
 $set     = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd -ExecutionTimeLimit (New-TimeSpan -Hours 2) -MultipleInstances IgnoreNew
 Register-ScheduledTask -TaskName $TASK -Action $action -Trigger $trigger -Settings $set -Force | Out-Null
 
