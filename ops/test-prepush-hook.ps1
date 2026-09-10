@@ -1,5 +1,6 @@
 <#
-  Does a push from a LINKED worktree run the gate without handing it the repository?
+  Does a push from a LINKED worktree run the gate without handing it the repository? And does the hook
+  run test-auditors before a guard-touching push, and only then?
 
   WHY IT EXISTS, MEASURED 2026-09-10. Git exports GIT_DIR to a hook when the push comes from a linked
   worktree and exports none from the main checkout. Verified in a sandbox with git 2.54: the same hook
@@ -15,16 +16,26 @@
   `git rev-parse --show-toplevel` failed and its `[ -z "$repo" ] && exit 0` let a sibling session's push
   out at 05:28:19 with no gate run and no gate log. A hook that cannot find a tree must refuse.
 
-  WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, and a stub
-  gate that does the one thing that did the damage (`git init` of a temp directory) and records the
-  GIT_DIR it saw. Then a real `git push` to a sandbox bare remote. No network, nothing outside the
-  sandbox. THIS FILE SCRUBS ITS OWN REPOSITORY ENVIRONMENT FIRST: run by an unfixed hook, a copy that
-  did not would recreate the very damage it exists to detect, on the real repository.
+  THE THIRD, SAME DAY (plan step 5). Queue item 2026-09-10-4ac6ae was a commit that broke
+  grocery\test-auditors.ps1 getting past a clean run-gates, which cannot reach that suite. The hook now
+  runs ops\prepush-test-auditors.ps1 after the gate. The sandbox drives it through REAL pushes with the
+  REAL script and a stub test-auditors whose failing cases this file chooses: a push touching no guard
+  input must not run the suite, a push adding a failing case must be refused by name, a failure already
+  in the known-failures record must not refuse and must still be printed, a stale record must refuse,
+  and a checkout with no boards must refuse as could-not-evaluate.
+
+  WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
+  ops\prepush-test-auditors.ps1 and lib\guard-contract.ps1, and stubs for the gate and for test-auditors.
+  Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
+  SCRUBS ITS OWN REPOSITORY ENVIRONMENT FIRST: run by an unfixed hook, a copy that did not would recreate
+  the very damage it exists to detect, on the real repository.
 
   Exit 0 pass, 1 a case failed, 3 could not evaluate (the sandbox could not be built).
 
   SCOPE OF A CLEAN REPORT: SOUND for the variables the hook's unset line names on the git version this
-  box runs; UNSOUND for a future git that exports a variable that line does not name.
+  box runs; UNSOUND for a future git that exports a variable that line does not name. For the test-auditors
+  check it proves the hook's wiring and the script's decisions against a stub suite; it does not prove the
+  real suite's input set, which the script's own -SelfTest pins live.
 #>
 [CmdletBinding()]
 param([switch]$SelfTest)   # accepted so ops\run-gates.ps1 discovers this file; the cases run either way
@@ -53,20 +64,41 @@ function GOut {
   $o = & git @args 2>$null
   return (@($o) -join "`n").Trim()
 }
+function PushOut {
+  # A push whose hook output is kept: the refusal has to NAME the case, so stderr is the evidence here.
+  param([string]$Dir, [string]$Ref)
+  $o = @(& git -C $Dir -c ("core.hooksPath=" + $script:HooksPath) push origin ("HEAD:refs/heads/" + $Ref) 2>&1 | ForEach-Object { [string]$_ })
+  $rcP = $LASTEXITCODE
+  return [pscustomobject]@{ rc = $rcP; text = ($o -join "`n"); remote = (GOut --git-dir $script:Remote rev-parse --verify -q ("refs/heads/" + $Ref)); head = (GOut -C $Dir rev-parse HEAD) }
+}
+function CommitFile {
+  param([string]$Dir, [string]$Rel, [string]$Text)
+  $p = Join-Path $Dir $Rel
+  $null = New-Item -ItemType Directory -Force (Split-Path -Parent $p)
+  [IO.File]::WriteAllText($p, $Text, (New-Object Text.UTF8Encoding($false)))
+  $null = G -C $Dir add -- $Rel
+  $null = G -C $Dir commit -q -m ("edit " + $Rel)
+}
 
 $hookSrc = Join-Path $RepoRoot 'ops\hooks\pre-push'
 $gatesSrc = Join-Path $RepoRoot 'ops\run-gates.ps1'
-if (-not (Test-Path -LiteralPath $hookSrc)) {
-  'BLIND: ops\hooks\pre-push is missing - nothing to drive'
-  Exit-Guard -Name 'TEST-PREPUSH-HOOK' -Code 3 -Summary 'blind=no-hook'
+$taCheckSrc = Join-Path $RepoRoot 'ops\prepush-test-auditors.ps1'
+$contractSrc = Join-Path $RepoRoot 'lib\guard-contract.ps1'
+foreach ($need in @($hookSrc, $taCheckSrc, $contractSrc)) {
+  if (-not (Test-Path -LiteralPath $need)) {
+    "BLIND: $need is missing - nothing to drive"
+    Exit-Guard -Name 'TEST-PREPUSH-HOOK' -Code 3 -Summary 'blind=missing-source'
+  }
 }
 
 $sb = Join-Path $env:TEMP ('tc-prepush-selftest-{0}-{1}' -f $PID, [guid]::NewGuid().ToString('N').Substring(0, 8))
 $main = Join-Path $sb 'main'
 $linked = Join-Path $sb 'linked'
 $remote = Join-Path $sb 'remote.git'
+$script:Remote = $remote
 $probe = Join-Path $sb 'probe'
 $built = $false
+$utf8 = New-Object Text.UTF8Encoding($false)
 try {
   $null = New-Item -ItemType Directory -Force $sb, $probe
   $steps = @(
@@ -82,7 +114,7 @@ try {
     # differs from production in the one setting the bug depends on proves nothing about production.
     (G -C $main config extensions.worktreeConfig true)
   )
-  $null = New-Item -ItemType Directory -Force (Join-Path $main 'ops')
+  foreach ($d in @('ops', 'lib', 'grocery', 'design')) { $null = New-Item -ItemType Directory -Force (Join-Path $main $d) }
   # THE STUB GATE does the damaging act and records what it inherited. Single-quoted: nothing expands
   # until the stub itself runs inside the hook.
   $stub = @'
@@ -91,14 +123,41 @@ $p = $env:TC_PREPUSH_PROBE
 $null = & git init -q (Join-Path $p ('initprobe-' + [guid]::NewGuid().ToString('N'))) 2>$null
 exit ([int]$env:TC_PREPUSH_PROBE_EXIT)
 '@
-  [IO.File]::WriteAllText((Join-Path $main 'ops\run-gates.ps1'), $stub, (New-Object Text.UTF8Encoding($false)))
+  [IO.File]::WriteAllText((Join-Path $main 'ops\run-gates.ps1'), $stub, $utf8)
+  # THE STUB test-auditors. It names guards.ps1 and a fixture root the way the real one does, so the REAL
+  # check derives a real input set from it, and it fails exactly the cases TC_PREPUSH_TA_FAILS lists.
+  $taStub = @'
+$root = $PSScriptRoot
+$fix  = Join-Path $root 'regression-inputs\guard-fixtures'
+$HasBoard = (@(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue).Count -gt 0) -or
+            (Test-Path (Join-Path $root 'out\recipe-board.json'))
+$guard = Join-Path $root 'guards.ps1'
+[IO.File]::WriteAllText((Join-Path $env:TC_PREPUSH_PROBE 'auditors-ran.txt'), 'ran')
+$cases = @(([string]$env:TC_PREPUSH_TA_FAILS) -split '\|' | Where-Object { $_ })
+Write-Output '  PASS  stub watcher'
+foreach ($c in $cases) { Write-Output ('  FAIL  ' + $c) }
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+Write-GuardComplete -Name 'test-auditors' -Summary ('failed=' + $cases.Count)
+exit $(if ($cases.Count -gt 0) { 2 } else { 0 })
+'@
+  [IO.File]::WriteAllText((Join-Path $main 'grocery\test-auditors.ps1'), $taStub, $utf8)
+  [IO.File]::WriteAllText((Join-Path $main 'grocery\guards.ps1'), "# guard v1`n", $utf8)
+  [IO.File]::WriteAllText((Join-Path $main 'design\note.md'), "v1`n", $utf8)
+  [IO.File]::WriteAllText((Join-Path $main '.gitignore'), "grocery/out/`n", $utf8)   # reach-fixture-ok: the %TEMP% sandbox repo's own .gitignore, not the real module
+  Copy-Item -LiteralPath $taCheckSrc -Destination (Join-Path $main 'ops\prepush-test-auditors.ps1')
+  Copy-Item -LiteralPath $contractSrc -Destination (Join-Path $main 'lib\guard-contract.ps1')
+  $botPathsSrc = Join-Path $RepoRoot 'lib\bot-paths.ps1'
+  if (Test-Path -LiteralPath $botPathsSrc) { Copy-Item -LiteralPath $botPathsSrc -Destination (Join-Path $main 'lib\bot-paths.ps1') }
   $steps += (G -C $main add -A)
   $steps += (G -C $main commit -q -m seed)
   $steps += (G init -q --bare $remote)
   $steps += (G -C $main remote add origin $remote)
+  # The seed goes to the remote BEFORE the hook is installed, so origin/main exists and each case below
+  # pushes only the commit it made - the way a real push is measured against what the remote already has.
+  $steps += (G -C $main push -q origin HEAD:refs/heads/main)
   # The REAL hook, as LF: sh reads a CR as part of the command name.
   $hookText = [IO.File]::ReadAllText($hookSrc).Replace("`r`n", "`n")
-  [IO.File]::WriteAllText((Join-Path $main '.git\hooks\pre-push'), $hookText, (New-Object Text.UTF8Encoding($false)))
+  [IO.File]::WriteAllText((Join-Path $main '.git\hooks\pre-push'), $hookText, $utf8)
   $steps += (G -C $main worktree add -q --detach $linked)
   $bad = @($steps | Where-Object { $_ -ne 0 })
   if ($bad.Count -gt 0 -or -not (Test-Path -LiteralPath (Join-Path $linked 'ops\run-gates.ps1'))) {
@@ -107,6 +166,7 @@ exit ([int]$env:TC_PREPUSH_PROBE_EXIT)
   }
   $built = $true
   $hooksPath = Join-Path $main '.git\hooks'
+  $script:HooksPath = $hooksPath
   # The hook writes its gate log to ${TMPDIR:-/tmp}. Pointed into the sandbox, the log is removed with it
   # instead of accumulating in the real temp directory one refused push at a time.
   $env:TMPDIR = $sb.Replace('\', '/')
@@ -153,19 +213,87 @@ exit ([int]$env:TC_PREPUSH_PROBE_EXIT)
   Case 'MUST FIRE' 'a push whose working tree cannot be resolved is refused, not waved through' `
     (($rcBare -ne 0) -and ($unres -eq '')) "rc=$rcBare ref=$unres"
 
+  # ---- test-auditors before a guard-touching push (plan step 5) ----
+  $ranFile = Join-Path $probe 'auditors-ran.txt'
+  $hyLine = 'Hy-Vee tag/identity fixtures FAILED (rc=1) - either a price the till will not honour can publish again'
+  $newLine = 'guards lost OkUnlessBlind - a guard that examines zero rows can print ok again'
+  $null = New-Item -ItemType Directory -Force (Join-Path $main 'grocery\out')   # reach-fixture-ok: a board directory inside the %TEMP% sandbox repo
+  [IO.File]::WriteAllText((Join-Path $main 'grocery\out\comparison-2026-01-01.json'), '{"comparison":[]}', $utf8)   # reach-fixture-ok: a stub board inside the %TEMP% sandbox repo
+  # The daily chain's side, through the REAL -Record: yesterday's run already failed the Hy-Vee case.
+  $recIn = Join-Path $sb 'chain-run.txt'
+  [IO.File]::WriteAllText($recIn, ("  PASS  stub watcher`n  FAIL  " + $hyLine + "`ntest-auditors FAIL  (1 failed, 1 passed)`nTEST-AUDITORS-COMPLETE pass=1 failed=1`n"), $utf8)
+  $recFile = Join-Path $main '.git\tc-test-auditors-known-failures.json'
+  # MUST FIRE: a run taken over an uncommitted guard edit is somebody's in-flight change, not a baseline,
+  # and recording it would let that change out as "already failing".
+  [IO.File]::WriteAllText((Join-Path $main 'grocery\guards.ps1'), "# guard mid-edit`n", $utf8)
+  $null = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $main 'ops\prepush-test-auditors.ps1') -Record -OutputFile $recIn -ExitCode 2)
+  $recRcInflight = $LASTEXITCODE
+  $null = G -C $main checkout -- grocery/guards.ps1
+  Case 'MUST FIRE' 'the chain does not record a run taken over an in-flight guard edit' `
+    ($recRcInflight -eq 3 -and -not (Test-Path -LiteralPath $recFile)) "rc=$recRcInflight"
+  $recOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $main 'ops\prepush-test-auditors.ps1') -Record -OutputFile $recIn -ExitCode 2)
+  $recRc = $LASTEXITCODE
+  $recFile = Join-Path $main '.git\tc-test-auditors-known-failures.json'
+  Case 'CLEAN TWIN' 'the daily chain records a known failure in the shared git directory' `
+    ($recRc -eq 0 -and (Test-Path -LiteralPath $recFile) -and ([IO.File]::ReadAllText($recFile)).Contains('Hy-Vee tag/identity')) "rc=$recRc $(@($recOut) -join ' ')"
+
+  # MUST NOT FIRE: a push touching no guard input does not run the suite, even one that would fail.
+  CommitFile $main 'design\note.md' "v2`n"
+  Remove-Item -LiteralPath $ranFile -ErrorAction SilentlyContinue
+  $env:TC_PREPUSH_TA_FAILS = $newLine
+  $p = PushOut $main 'docs'
+  Case 'MUST NOT FIRE' 'a push touching no guard input never starts test-auditors' `
+    ($p.rc -eq 0 -and -not (Test-Path -LiteralPath $ranFile) -and $p.text -match 'NOT NEEDED') "rc=$($p.rc) $($p.text)"
+
+  # MUST FIRE: a guard edit that adds a failing case is refused, and the refusal names the case.
+  CommitFile $main 'grocery\guards.ps1' "# guard v2`n"
+  Remove-Item -LiteralPath $ranFile -ErrorAction SilentlyContinue
+  $env:TC_PREPUSH_TA_FAILS = $hyLine + '|' + $newLine
+  $p = PushOut $main 'guard'
+  Case 'MUST FIRE' 'a guard push that adds a failing test-auditors case is refused by name' `
+    ($p.rc -ne 0 -and $p.remote -eq '' -and (Test-Path -LiteralPath $ranFile) -and $p.text -match 'NEW FAILING CASE\s+guards lost OkUnlessBlind') "rc=$($p.rc) remote=$($p.remote) $($p.text)"
+
+  # CLEAN TWIN: the same guard push with only the recorded Hy-Vee failure goes through, and says so.
+  $env:TC_PREPUSH_TA_FAILS = $hyLine
+  $p = PushOut $main 'guard'
+  Case 'CLEAN TWIN' 'a failure recorded before the push allows it and is still printed' `
+    ($p.rc -eq 0 -and $p.remote -eq $p.head -and $p.text -match 'ALREADY FAILING\s+Hy-Vee tag/identity') "rc=$($p.rc) $($p.text)"
+
+  # MUST FIRE: the record goes stale, and the same recorded failure no longer lets a guard push through.
+  $recText = [IO.File]::ReadAllText($recFile)
+  $old = [datetime]::UtcNow.AddDays(-10).ToString('o')
+  [IO.File]::WriteAllText($recFile, ([regex]::Replace($recText, '"recorded_at":\s*"[^"]*"', ('"recorded_at": "' + $old + '"'))), $utf8)
+  CommitFile $main 'grocery\guards.ps1' "# guard v3`n"
+  $p = PushOut $main 'guard'
+  Case 'MUST FIRE' 'a stale known-failures record refuses even a recorded failure' `
+    ($p.rc -ne 0 -and $p.head -ne $p.remote -and $p.text -match 'record is stale') "rc=$($p.rc) $($p.text)"
+
+  # CLEAN TWIN: a guard push with no failing case at all still passes, stale record or not.
+  $env:TC_PREPUSH_TA_FAILS = ''
+  $p = PushOut $main 'guard'
+  Case 'CLEAN TWIN' 'a guard push with no failing case passes' ($p.rc -eq 0 -and $p.remote -eq $p.head -and $p.text -match 'PASS after') "rc=$($p.rc) $($p.text)"
+
+  # MUST FIRE: a checkout with no boards cannot evaluate, is refused, and says nothing that reads as a pass.
+  CommitFile $linked 'grocery\guards.ps1' "# guard from a worktree`n"
+  Remove-Item -LiteralPath $ranFile -ErrorAction SilentlyContinue
+  $p = PushOut $linked 'wt-guard'
+  Case 'MUST FIRE' 'a guard push from a checkout without boards is refused as could-not-evaluate' `
+    ($p.rc -ne 0 -and $p.remote -eq '' -and $p.text -match 'COULD NOT EVALUATE' -and $p.text -notmatch '(?m)^prepush-test-auditors: (PASS|ALLOWED)|test-auditors PASS' -and -not (Test-Path -LiteralPath $ranFile)) "rc=$($p.rc) $($p.text)"
+
   # MUST FIRE, STATIC: run-gates scrubs the same environment for EVERY caller, not only this hook - a
   # session shell or a scheduled task spawned from inside a git hook inherits it just the same.
   # NEEDLES BUILT BY CONCATENATION, so this line is not its own match.
   $gatesText = if (Test-Path -LiteralPath $gatesSrc) { [IO.File]::ReadAllText($gatesSrc) } else { '' }
   Case 'MUST FIRE' 'run-gates removes GIT_DIR from its own environment' `
     ($gatesText.Contains("'GIT_" + "DIR'") -and $gatesText.Contains('Remove-Item -LiteralPath ("Env:' + '\"'))
-  # MUST FIRE, STATIC: the hook unsets BEFORE it runs the gate, not after.
+  # MUST FIRE, STATIC: the hook unsets BEFORE it runs the gate or the test-auditors check, not after.
   $iUnset = $hookText.IndexOf('unset GIT_' + 'DIR')
   $iRun = $hookText.IndexOf('powershell -NoProfile' + ' -ExecutionPolicy Bypass -File "$gate"')
-  Case 'MUST FIRE' 'the hook unsets the repository environment before invoking the gate' `
-    ($iUnset -ge 0 -and $iRun -gt $iUnset) "unset@$iUnset run@$iRun"
+  $iTa = $hookText.IndexOf('powershell -NoProfile' + ' -ExecutionPolicy Bypass -File "$ta"')
+  Case 'MUST FIRE' 'the hook unsets the repository environment before invoking the gate and the check' `
+    ($iUnset -ge 0 -and $iRun -gt $iUnset -and $iTa -gt $iUnset) "unset@$iUnset run@$iRun ta@$iTa"
 } finally {
-  Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TMPDIR' -ErrorAction SilentlyContinue
+  Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TMPDIR', 'Env:\TC_PREPUSH_TA_FAILS' -ErrorAction SilentlyContinue
   if (Test-Path -LiteralPath $sb) {
     # The sandbox's own worktree first, through git, then the directory. No junctions are ever made here.
     if ($built) { $null = G -C $main worktree remove --force $linked }

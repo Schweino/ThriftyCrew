@@ -2864,6 +2864,19 @@ try {
   $taJ = Invoke-Bounded 'test-auditors' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'test-auditors.ps1')) 1200
   $ta = ($taJ.Output -join "`n")
   $taRc = $taJ.ExitCode
+  # THE KNOWN-FAILURES RECORD THE PRE-PUSH CHECK READS (2026-09-10, plan step 5). ops\hooks\pre-push runs
+  # test-auditors before a push that touches one of its inputs and refuses only a failing case this record
+  # does not already hold. This run is the ONLY writer allowed to add a case (a push-time run may only
+  # confirm or shrink it), and it records from the output captured above; nothing re-runs. A run that did
+  # not complete is not recorded, the old record ages out after 192h, and the check then refuses on any
+  # failing case rather than passing quietly.
+  try {
+    $taRecIn = Join-Path $env:TEMP ('tc-ta-record-' + $PID + '.txt')
+    [IO.File]::WriteAllText($taRecIn, [string]$ta, (New-Object Text.UTF8Encoding($false)))
+    $taRecOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'ops\prepush-test-auditors.ps1') -Record -OutputFile $taRecIn -ExitCode $taRc)
+    Log ('test-auditors known-failures record: ' + (@($taRecOut | Where-Object { [string]$_ -match '^prepush-test-auditors:' }) -join ' '))
+    Remove-Item -LiteralPath $taRecIn -ErrorAction SilentlyContinue
+  } catch { Log ('test-auditors known-failures record could not be written: ' + $_.Exception.Message) }
   if ($taRc -ne 0) {
     # <<WATCHERS-DECISION-BEGIN>> test-auditors.ps1 extracts this region and runs it against frozen rc values.
     # THREE OUTCOMES, NOT TWO (2026-09-04, queue 2026-09-04-0b63d3). This branch used to be `-ne 0`, so a
