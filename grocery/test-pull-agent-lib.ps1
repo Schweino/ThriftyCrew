@@ -14,6 +14,9 @@
   blip and a store-wide block read identically. That cost a false "Walmart is walled" report on
   2026-08-31 over a capture that had in fact completed all 592 terms.
 
+  AND SINCE 2026-09-10: the Aldi capture carries the store line it was read at, per row and in a
+  #tc-store line at the top of the CSV, because build-aldi-regular now refuses a capture without one.
+
   AND SINCE 2026-09-02: the Walmart price extractor, against a fixture for each of the three payload
   shapes Walmart has served. Every one of those moves was discovered in production, by a capture that
   reported healthy stores as carrying nothing - the last one dropped all 127 item nodes on a live
@@ -240,6 +243,82 @@ try {
   & $node $tmpW $lib $wal
   if ($LASTEXITCODE -ne 0) { $bad++ }
 } finally { Remove-Item $tmpW -Force -ErrorAction SilentlyContinue }
+
+# --- 5. the Aldi capture must carry the store it was READ at ----------------------------------------
+# 2026-09-10. assertInStore() read the store line on every term and nothing kept it, so the capture had
+# no store and build-aldi-regular wrote `source` from a literal: OLA 42 on every file for six weeks,
+# including a fortnight the session was reading OLA 48. The probe now puts the store and mode on each
+# row and aldiSearchToCsv opens the capture with a #tc-store line; the builder refuses a capture without
+# one. The agent file loads UNTOUCHED; only the page (document, window, location), its storage, and a
+# setTimeout that fires at once are supplied, so the probe's settle loops cost nothing.
+$jsA = @'
+const fs = require('fs');
+const src = fs.readFileSync(process.argv[2], 'utf8');
+let bad = 0;
+function T(n, ok, got) { if (ok) console.log('  ok    ' + n); else { console.log('  X     ' + n + '   got: ' + got); bad++; } }
+
+function makePage(bodyText, tiles) {
+  const loc = { search: '' };
+  let mounted = [];
+  const doc = { body: { innerText: bodyText }, documentElement: { scrollHeight: 1000 }, querySelectorAll: () => mounted };
+  const win = { scrollTo: () => {}, __do_not_use_me_history: { push: p => { loc.search = p.slice(p.indexOf('?')); mounted = tiles; } } };
+  return { doc, win, loc };
+}
+const tile = (id, slug, text) => ({ getAttribute: k => (k === 'href' ? '/store/aldi/products/' + id + '-' + slug : null), innerText: text });
+const load = (page, kv) => new Function('document', 'window', 'location', 'localStorage', 'setTimeout',
+  src + '\nreturn { assertInStore, aldiSearchProbe, aldiSearchToCsv };')(
+  page.doc, page.win, page.loc,
+  { getItem: k => (k in kv ? kv[k] : null), setItem: (k, v) => { kv[k] = String(v); } },
+  fn => { Promise.resolve().then(fn); return 0; });
+
+(async () => {
+  const HEAD = 'In-Store \u00b7 open 9am - 8pm\nALDI - OLA 42 - Omaha\nSearch';
+  const tiles = [
+    tile('1', 'goldhen-grade-a-large-eggs-12-ct', 'Goldhen Eggs\nCurrent price: $1.65\n12 ct'),
+    tile('2', 'friendly-farms-whole-milk-1-gal', 'Whole Milk\nCurrent price: $2.19\n1 gal'),
+  ];
+  const agent = load(makePage(HEAD, tiles), {});
+  const who = agent.assertInStore();
+  T('assertInStore reads the store line off the page', who.store === 'ALDI - OLA 42 - Omaha' && who.mode === 'In-Store', JSON.stringify(who));
+
+  const r = await agent.aldiSearchProbe('goldhen eggs');
+  T('every row the probe keeps carries the store line it read (st)', r.state === 'MATCHES' && r.rows.length === 2 && r.rows.every(x => x.st === 'ALDI - OLA 42 - Omaha'), r.state + ' ' + JSON.stringify(r.rows));
+  T('...and the mode it read (md)', r.rows.every(x => x.md === 'In-Store'), JSON.stringify(r.rows.map(x => x.md)));
+
+  const rDel = await load(makePage('Delivery \u00b7 by 3pm\nALDI - OLA 42 - Omaha', tiles), {}).aldiSearchProbe('goldhen eggs');
+  T('MUST FIRE  a Delivery session keeps no rows at all', rDel.state === 'UNUSABLE' && rDel.rows.length === 0, rDel.state);
+
+  // The emitter, over what runPacedSweep persists: { term: { v, why, rows } }.
+  const KEY = 'TC_ALDI_SEARCH';
+  const kv = {};
+  kv[KEY] = JSON.stringify({ 'goldhen eggs': { v: 'MATCHES', why: null, rows: r.rows }, kale: { v: 'EMPTY', why: 'no results', rows: [] } });
+  const csv = load(makePage(HEAD, []), kv).aldiSearchToCsv({ 'goldhen eggs': 'eggs' }).split('\n');
+  T('CLEAN TWIN  the capture OPENS with the store line, counted', csv[0] === '#tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=2', csv[0]);
+  T('...then the column header, so the driver prepends nothing', csv[1] === 'id|term|name|prices|unit|size|href', csv[1]);
+  T('...then exactly the rows, commodity id first', csv.length === 4 && csv[2].indexOf('eggs|goldhen eggs|') === 0, csv.join(' / '));
+  T('the store line carries no pipe, so the pipe-splitting capture readers skip it', csv[0].indexOf('|') < 0, csv[0]);
+
+  const mixed = {};
+  mixed[KEY] = JSON.stringify({ 'goldhen eggs': { v: 'MATCHES', rows: [r.rows[0], { name: 'old row', prices: '$1.00', unit: '', size: '1 ct', href: '/x' }] } });
+  const m = load(makePage(HEAD, []), mixed).aldiSearchToCsv({}).split('\n');
+  T('MUST FIRE  a row with no store read gets its own UNRECORDED line, never folded into its neighbour',
+    m[0] === '#tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=1' && m[1] === '#tc-store store="UNRECORDED" mode="UNRECORDED" rows=1', m.slice(0, 2).join(' / '));
+
+  const hostile = {};
+  hostile[KEY] = JSON.stringify({ t: { v: 'MATCHES', rows: [Object.assign({}, r.rows[0], { st: 'ALDI - "OLA|42"\n- Omaha' })] } });
+  const h = load(makePage(HEAD, []), hostile).aldiSearchToCsv({}).split('\n');
+  T('a store string carrying a quote, pipe or newline cannot break its line', h[0] === '#tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=1', h[0]);
+
+  process.exit(bad === 0 ? 0 : 1);
+})().catch(e => { console.log('  X     the Aldi capture test threw: ' + (e && e.stack)); process.exit(1); });
+'@
+$ald = Join-Path $here 'pull-aldi-instore.js'
+$tmpA = Join-Path ([IO.Path]::GetTempPath()) ('aldistore-' + [guid]::NewGuid().ToString('N') + '.js')
+[IO.File]::WriteAllText($tmpA, $jsA, (New-Object System.Text.UTF8Encoding($false)))
+try {
+  & $node $tmpA $ald
+  if ($LASTEXITCODE -ne 0) { $bad++ }
+} finally { Remove-Item $tmpA -Force -ErrorAction SilentlyContinue }
 
 if ($bad -eq 0) { Write-Output 'test-pull-agent-lib SELF-TEST PASS'; exit 0 }
 Write-Output ("test-pull-agent-lib SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1

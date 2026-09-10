@@ -219,7 +219,10 @@ async function aldiSearchProbe(term) {
   // ASSERTED PER TERM, not once per run. A session can be flipped back to Delivery mid-sweep - by a
   // background tab, or by Aldi itself - and every row captured after that is ~10% marked up while
   // looking perfectly normal. Cheap to re-ask; the 2026-07-12 file is what not re-asking costs.
-  try { assertInStore(); }
+  // AND KEPT (2026-09-10): the store line and mode this read returns ride on every row of this term as
+  // st / md, so the capture can say which Aldi it read. See aldiSearchToCsv for why that matters.
+  let where;
+  try { where = assertInStore(); }
   catch (e) { return { state: 'UNUSABLE', rows: [], why: e.message }; }
 
   const tiles = () => [...document.querySelectorAll('a[href*="/products/"]')]
@@ -285,6 +288,8 @@ async function aldiSearchProbe(term) {
     const id = (a.getAttribute('href').match(ALDI_PRODUCT_HREF_RX) || [])[1];
     if (seen.has(id)) continue;
     seen.add(id);
+    r.st = where.store;
+    r.md = where.mode;
     rows.push(r);
   }
   if (rows.length) return { state: 'MATCHES', rows: rows };
@@ -318,18 +323,46 @@ const pullAldiSearch = (worklist, opts) => runPacedSweep(aldiSearchAgent, workli
 
 /* build-aldi-regular.ps1 reads `id|term|name|prices|unit|size|href` and the FIRST column is the
    COMMODITY id the term came from, not the product id - so this cannot use the lib's sweepToCsv,
-   which puts the term first. Pass the worklist's own term -> commodity id map. */
+   which puts the term first. Pass the worklist's own term -> commodity id map.
+
+   THE STORE TRAVELS WITH THE CAPTURE (2026-09-10). assertInStore() has always READ the store line
+   and returned it, and nothing kept it. The CSV carried no store at all, so build-aldi-regular wrote
+   its `source` from a literal, 'ALDI - OLA 42 - Omaha', added 2026-07-29. Every aldi-regular file
+   from then to 2026-09-10 names OLA 42, including 2026-08-15 to 08-29, when live reads recorded
+   OLA 48. The feed named a store it never read, and nothing on disk could say which Aldi a price
+   came from.
+
+   So the output now OPENS with one line per distinct store and mode the sweep actually read, counted
+   off the st / md that aldiSearchProbe put on each row, and then the column header:
+       #tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=812
+       id|term|name|prices|unit|size|href
+   A row with no st (persisted by an agent older than this) is counted as store="UNRECORDED" and is
+   never folded into a store it was not read at. The builder refuses a capture with no store line,
+   an UNRECORDED one, a non-Omaha or non-In-Store one, or more than one store. The line carries no
+   '|', so the pipe-splitting readers of these files (audit-asof-evidence, repair-asof-evidence)
+   skip it as a short line. Post this output UNCHANGED: it already has its header. */
+const ALDI_CAPTURE_COLUMNS = 'id|term|name|prices|unit|size|href';
+const aldiStoreField = s => String(s == null ? '' : s).replace(/["|\r\n]/g, ' ').replace(/\s+/g, ' ').trim();
+
 const aldiSearchToCsv = (idByTerm) => {
   const raw = (typeof tcGet === 'function') ? tcGet(ALDI_SEARCH_STORAGE_KEY) : localStorage.getItem(ALDI_SEARCH_STORAGE_KEY);
   const res = JSON.parse(raw || '{}');
   const out = [];
+  const stores = new Map();          // store + NUL + mode -> row count, in the order first read
   for (const entry of Object.entries(res)) {
     const term = entry[0], r = entry[1];
     if (r.v !== 'MATCHES') continue;
     for (const p of r.rows) {
+      const k = (aldiStoreField(p.st) || 'UNRECORDED') + '\u0000' + (aldiStoreField(p.md) || 'UNRECORDED');
+      stores.set(k, (stores.get(k) || 0) + 1);
       out.push([(idByTerm && idByTerm[term]) || '', term, p.name, p.prices, p.unit, p.size, p.href].join('|'));
     }
   }
-  return out.join('\n');
+  const head = [];
+  for (const entry of stores.entries()) {
+    const parts = entry[0].split('\u0000');
+    head.push('#tc-store store="' + parts[0] + '" mode="' + parts[1] + '" rows=' + entry[1]);
+  }
+  return head.concat([ALDI_CAPTURE_COLUMNS], out).join('\n');
 };
 const aldiSearchVerdicts = () => sweepVerdicts(ALDI_SEARCH_STORAGE_KEY);

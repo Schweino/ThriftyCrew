@@ -16,6 +16,10 @@
      prices = every "$n.nn" the card rendered, space-joined. FIRST is the price you pay.
      unit   = a "$n.nn/lb"-style unit price when the card showed one (weighted goods), else blank
      size   = the size token the card printed, else blank -> fall back to the name
+  The capture OPENS with the store it was read at, one line per distinct store and mode, written by
+  aldiSearchToCsv in pull-aldi-instore.js:   #tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=812
+  The file's `source` and every row's store_location come from that line, and a capture without exactly one
+  In-Store Omaha store line is REFUSED. See Split-CaptureStore (2026-09-10).
 
   UNIT BASIS (the rule every feed must agree on, from the SKILL):
      weighted (unit carries /lb)  -> ad_price = the per-lb dollar, size = bare "lb"
@@ -39,6 +43,9 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocer
 # Words that mean "this tile is not the plain commodity". Kept deliberately small: compare-deals owns the real
 # include/exclude per commodity. This only drops things that are never the base item at any store.
 $SKIP_NAME = '(?i)\b(gift ?card|recipe|bundle|subscription)\b'
+
+# The column header aldiSearchToCsv writes under its store line.
+$CAPTURE_COLUMNS = 'id|term|name|prices|unit|size|href'
 
 function Convert-Name([string]$slug) {
   $s = ($slug -replace '\s+', ' ').Trim()
@@ -260,7 +267,7 @@ function Get-Size([string]$name, [string]$cardSize, [string]$unit) {
   return ''
 }
 
-function Invoke-Build([object[]]$raw, [string]$date) {
+function Invoke-Build([object[]]$raw, [string]$date, [string]$storeLocation = '') {
   $rows = New-Object System.Collections.ArrayList
   $seen = @{}
   $rejects = New-Object System.Collections.ArrayList
@@ -330,6 +337,10 @@ function Invoke-Build([object[]]$raw, [string]$date) {
     $u = [string]$r.href
     if ($u -match '^https?://') { $row['link_url'] = $u }
     if ($r.taxonomy_path) { $row['taxonomy_path'] = [string]$r.taxonomy_path }
+    # PER ROW, not only in the file's `source`: carry-forward-regular copies older rows into this file with
+    # their own fields and their own as_of, so a file-level source would name TODAY's store for a row read at
+    # another one weeks ago. The row is the only thing that travels, so the store travels on it.
+    if ($storeLocation) { $row['store_location'] = $storeLocation }
     [void]$rows.Add([pscustomobject]$row)
   }
   return @{ rows = $rows.ToArray(); rejects = $rejects.ToArray() }
@@ -372,6 +383,120 @@ function Join-WrappedRecords {
   }
   if ($null -ne $buf) { [void]$out.Add($buf); $orphans++ }
   return @{ lines = $out.ToArray(); rejoined = $rejoined; orphans = $orphans }
+}
+
+# THE STORE A CAPTURE WAS READ AT, TAKEN FROM THE CAPTURE ITSELF (2026-09-10).
+#
+# `source` used to be a LITERAL here, 'ALDI - OLA 42 - Omaha', added 2026-07-29 in 8f1e80500, and the capture
+# carried no store string at all (checked 2026-09-04 to 09-10: zero "ALDI - ", "OLA" or "Omaha").
+# assertInStore() in pull-aldi-instore.js READ the store line on every term and returned it, and nothing kept
+# it. So every aldi-regular file from 2026-07-29 to 2026-09-10 names OLA 42, including 2026-08-15 to 08-29,
+# when live reads recorded OLA 48 (design\PLAN-live-price-state-2026-08-21.md, and the pricer evidence in
+# ingredient-queue.json). The feed claimed a store it never read, and nothing on disk could say which Aldi a
+# price came from.
+#
+# aldiSearchToCsv now opens the capture with one line per distinct store and mode it read:
+#     #tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=812
+# and this is the one place that line is ruled on. The capture is REFUSED, and nothing is written, when it has:
+#   no store line                 it cannot say which Aldi it read
+#   a store line that won't parse a store we cannot read is a store we did not read
+#   store="UNRECORDED"            some rows were persisted by an agent that did not keep the store
+#   a mode other than In-Store    Delivery and Pickup prices are marked up (the agent's own header)
+#   a store without "Omaha"       another city's shelf
+#   more than one store           one file names one store, and a sweep that straddled two cannot
+# THE OLA NUMBER IS NEVER PINNED. The session has read OLA 48 and OLA 42 at different times, and an identity
+# assertion copied from prose refuses a correct capture while reading as a store problem
+# ([[aldi-store-is-ola-42]]). The number is RECORDED, which is the whole point, and never required.
+#
+# WHY REFUSE RATHER THAN BUILD AND FLAG: Aldi is a carry-forward store, so with no new file the newest
+# aldi-regular stands and the board shows the last good read for another day. A file written anyway carries a
+# store it cannot name into every carry-forward after it.
+function Split-CaptureStore {
+  param([string[]]$Lines)
+  $kept   = New-Object System.Collections.ArrayList
+  $stores = New-Object System.Collections.ArrayList
+  $bad    = New-Object System.Collections.ArrayList
+  $sawColumns = $false
+  foreach ($ln in $Lines) {
+    $s = [string]$ln
+    if ($s -match '^\s*#tc-store\b') {
+      $m = [regex]::Match($s, '^\s*#tc-store\s+store="([^"]*)"\s+mode="([^"]*)"\s+rows=(\d+)\s*$')
+      if ($m.Success) {
+        [void]$stores.Add([pscustomobject]@{ store = $m.Groups[1].Value.Trim(); mode = $m.Groups[2].Value.Trim(); rows = [int]$m.Groups[3].Value })
+      } else { [void]$bad.Add($s.Trim()) }
+      continue
+    }
+    # A driver still following the old runbook prepends a column header to output that already has one. The
+    # second copy is not a record.
+    if ([string]::Equals($s.Trim(), $CAPTURE_COLUMNS, [StringComparison]::Ordinal)) {
+      if ($sawColumns) { continue }
+      $sawColumns = $true
+    }
+    [void]$kept.Add($s)
+  }
+
+  # ORDINAL throughout: this text arrived from a web page, and PowerShell's default comparisons are
+  # case-insensitive or culture-sensitive (see ops-and-gates.md on -ne ignoring NUL).
+  $distinct = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $total = 0
+  $unrec = New-Object System.Collections.ArrayList
+  $notIn = New-Object System.Collections.ArrayList
+  $notOmaha = New-Object System.Collections.ArrayList
+  foreach ($x in $stores) {
+    [void]$distinct.Add($x.store)
+    $total += $x.rows
+    if (-not $x.store -or [string]::Equals($x.store, 'UNRECORDED', [StringComparison]::Ordinal)) { [void]$unrec.Add($x) }
+    if (-not [string]::Equals($x.mode, 'In-Store', [StringComparison]::Ordinal)) { [void]$notIn.Add($x) }
+    if ($x.store -notmatch '(?i)\bOmaha\b') { [void]$notOmaha.Add($x) }
+  }
+
+  $why = ''
+  if ($bad.Count) {
+    $why = ('a store line does not parse: [' + $bad[0] + '] - a store we cannot read is a store we did not read.')
+  } elseif ($stores.Count -eq 0) {
+    $why = 'the capture carries no #tc-store line, so it cannot say which Aldi it read. Re-capture through aldiSearchToCsv in pull-aldi-instore.js, which writes one; never hand-assemble this file.'
+  } elseif ($unrec.Count) {
+    $n = 0; foreach ($x in $unrec) { $n += $x.rows }
+    $why = ('{0} row(s) were captured with no store read (store="UNRECORDED"), so they cannot be attributed to any Aldi.' -f $n)
+  } elseif ($notIn.Count) {
+    $why = ('mode "{0}" is not In-Store - Delivery and Pickup prices are marked up.' -f $notIn[0].mode)
+  } elseif ($notOmaha.Count) {
+    $why = ('store "{0}" is not an Omaha store.' -f $notOmaha[0].store)
+  } elseif ($distinct.Count -gt 1) {
+    $why = ('the sweep straddles {0} stores ({1}) - one file names one store.' -f $distinct.Count, (@($distinct) -join '; '))
+  }
+
+  $store = ''; $mode = ''
+  if (-not $why) { $store = $stores[0].store; $mode = $stores[0].mode }
+  return @{ lines = $kept.ToArray(); store = $store; mode = $mode; rows = $total; refuse = $why }
+}
+
+function Get-AldiSource([string]$store, [string]$mode) {
+  # The wording the literal always carried, so the old files and the new ones read as one shape. The only
+  # difference is that the store named in it was read.
+  return ('aldi.us storefront search ({0}, {1} fulfillment)' -f $store, $mode)
+}
+
+function Read-AldiCapture {
+  <#
+    The capture exactly as the build consumes it: the store line split off and ruled on FIRST, then wrapped
+    records rejoined, then the rows read through capture-lib. One function, so the self-test drives the path
+    the build runs rather than a copy of it. Returns data and prints NOTHING (Import-CaptureCsv's rule, for
+    the same reason); the caller reports. A refusal comes back in .refuse with no row read.
+  #>
+  param([string]$Path, [string]$Date)
+  $lines = Get-Content $Path -Encoding UTF8
+  $cs = Split-CaptureStore $lines
+  if ($cs.refuse) { return @{ refuse = $cs.refuse; cs = $cs; jr = $null; raw = @() } }
+  $jr = Join-WrappedRecords $cs.lines
+  $tmp = Join-Path $env:TEMP ('aldi-capture-clean-' + $Date + '-' + [guid]::NewGuid().ToString('N') + '.csv')
+  try {
+    Set-Content -Path $tmp -Value $jr.lines -Encoding UTF8
+    $read = Import-CaptureCsv -Path $tmp -Delimiter '|'
+  } finally { Remove-Item $tmp -Force -ErrorAction SilentlyContinue }
+  # assign, THEN wrap: an empty read comes back $null, and @($null) is one row ([[ps-null-count-is-one]])
+  $raw = if ($null -eq $read) { @() } else { @($read) }
+  return @{ refuse = ''; cs = $cs; jr = $jr; raw = $raw }
 }
 
 if ($SelfTest) {
@@ -493,6 +618,69 @@ if ($SelfTest) {
   if ($j3.lines.Count -eq 2 -and $j3.rejoined -eq 0 -and $j3.orphans -eq 0) { Write-Output 'ok    rejoin: a clean file is untouched' }
   else { Write-Output 'FAIL  rejoin clean-file no-op'; $fail++ }
 
+  # ---- THE STORE COMES FROM THE CAPTURE (2026-09-10) - see Split-CaptureStore -----------------------------
+  $COLS = 'id|term|name|prices|unit|size|href'
+  $R1 = 'eggs|eggs|goldhen grade a large eggs 12 ct|$1.65||12 ct|https://www.aldi.us/store/aldi/products/1-goldhen-grade-a-large-eggs-12-ct'
+  $R2 = 'milk|milk gallon|friendly farms whole milk 1 gal|$2.19||1 gal|https://www.aldi.us/store/aldi/products/2-friendly-farms-whole-milk-1-gal'
+  $S42 = '#tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=2'
+  $scases = @(
+    # MUST FIRE, the founding shape: every aldi-capture from 2026-07-29 to 2026-09-10 looked exactly like this
+    @{ label = 'MUST FIRE  a capture with NO store line is refused'
+       lines = @($COLS, $R1, $R2); want = 'no #tc-store line' }
+    @{ label = 'MUST FIRE  a non-Omaha store is refused'
+       lines = @('#tc-store store="ALDI - OLA 12 - Lincoln" mode="In-Store" rows=2', $COLS, $R1, $R2); want = 'not an Omaha store' }
+    @{ label = 'MUST FIRE  a Delivery session is refused, even in Omaha'
+       lines = @('#tc-store store="ALDI - OLA 42 - Omaha" mode="Delivery" rows=2', $COLS, $R1, $R2); want = 'not In-Store' }
+    @{ label = 'MUST FIRE  rows with no store read are refused, never folded into the store beside them'
+       lines = @('#tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=1', '#tc-store store="UNRECORDED" mode="UNRECORDED" rows=1', $COLS, $R1, $R2); want = '1 row(s) were captured with no store read' }
+    @{ label = 'MUST FIRE  a sweep that straddled two Omaha stores is refused'
+       lines = @('#tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=1', '#tc-store store="ALDI - OLA 48 - Omaha" mode="In-Store" rows=1', $COLS, $R1, $R2); want = 'straddles 2 stores' }
+    @{ label = 'MUST FIRE  a store line that does not parse is refused'
+       lines = @('#tc-store ALDI - OLA 42 - Omaha', $COLS, $R1, $R2); want = 'does not parse' }
+    # MUST NOT FIRE: the OLA number is recorded, never pinned - the 2026-08-15 store builds as readily as today's
+    @{ label = 'MUST NOT FIRE  OLA 48 in Omaha is accepted - the store number is never pinned'
+       lines = @('#tc-store store="ALDI - OLA 48 - Omaha" mode="In-Store" rows=2', $COLS, $R1, $R2); want = '' }
+  )
+  foreach ($c in $scases) {
+    $cs = Split-CaptureStore $c.lines
+    $ok = if ($c.want) { [bool]$cs.refuse -and $cs.refuse.Contains($c.want) } else { -not $cs.refuse }
+    if ($ok) { Write-Output ('ok    ' + $c.label) }
+    else { Write-Output ('FAIL  ' + $c.label + ' - refusal was: ' + $(if ($cs.refuse) { $cs.refuse } else { '<none>' })); $fail++ }
+  }
+
+  # Both of these go through Read-AldiCapture, the function the build itself calls, on a real file.
+  $capFile = Join-Path ([IO.Path]::GetTempPath()) ('aldi-capture-selftest-' + [guid]::NewGuid().ToString('N') + '.csv')
+  $utf8 = New-Object Text.UTF8Encoding($false)
+  try {
+    # MUST FIRE through the build's own read path: a store-less capture is refused before a single row is read
+    [IO.File]::WriteAllText($capFile, (@($COLS, $R1, $R2) -join "`n"), $utf8)
+    $capNo = Read-AldiCapture -Path $capFile -Date '2026-01-01'
+    if ($capNo.refuse -and $capNo.raw.Count -eq 0) {
+      Write-Output 'ok    MUST FIRE  the build path refuses a store-less capture before reading a single row'
+    } else { Write-Output ('FAIL  the build path read a store-less capture: {0} row(s), refusal [{1}]' -f $capNo.raw.Count, $capNo.refuse); $fail++ }
+
+    # CLEAN TWIN: a normal Omaha capture still BUILDS - with the duplicate column header a driver on the old
+    # runbook prepends - into two rows, the store line never becomes a row, and the store it READ reaches both
+    # the file's source and every row.
+    [IO.File]::WriteAllText($capFile, (@($COLS, $S42, $COLS, $R1, $R2) -join "`n"), $utf8)
+    $cap = Read-AldiCapture -Path $capFile -Date '2026-01-01'
+    $nRows = 0; $stamped = 0; $src = ''
+    if (-not $cap.refuse) {
+      $b = Invoke-Build $cap.raw '2026-01-01' $cap.cs.store
+      $nRows = $b.rows.Count
+      foreach ($row in $b.rows) {
+        if ([string]::Equals([string]$row.store_location, 'ALDI - OLA 42 - Omaha', [StringComparison]::Ordinal)) { $stamped++ }
+      }
+      $src = Get-AldiSource $cap.cs.store $cap.cs.mode
+    }
+    if (-not $cap.refuse -and $nRows -eq 2 -and $stamped -eq 2 -and $cap.cs.rows -eq 2 -and
+        [string]::Equals($src, 'aldi.us storefront search (ALDI - OLA 42 - Omaha, In-Store fulfillment)', [StringComparison]::Ordinal)) {
+      Write-Output 'ok    CLEAN TWIN  an In-Store Omaha capture builds 2 rows, and the source and every row name the store it READ'
+    } else {
+      Write-Output ('FAIL  CLEAN TWIN  Omaha capture: refusal [{0}] rows={1} stamped={2} source [{3}]' -f $cap.refuse, $nRows, $stamped, $src); $fail++
+    }
+  } finally { Remove-Item $capFile -Force -ErrorAction SilentlyContinue }
+
   if ($fail) { Write-Output "$fail FAILED"; exit 1 } else { Write-Output "all self-tests pass"; exit 0 }
 }
 
@@ -501,19 +689,29 @@ if (-not $Date) { $Date = (Get-Date -Format 'yyyy-MM-dd') }
 $inPath = if ([IO.Path]::IsPathRooted($In)) { $In } else { Join-Path $root $In }
 if (-not (Test-Path $inPath)) { throw "build-aldi-regular: no such capture $inPath" }
 
-# REJOIN WRAPPED RECORDS BEFORE PARSING - see Join-WrappedRecords above for the algorithm and the trap.
-$rawLines = Get-Content $inPath -Encoding UTF8
-$jr = Join-WrappedRecords $rawLines
+# THE STORE LINE IS RULED ON FIRST, then wrapped records are rejoined and the rows read through capture-lib,
+# all inside Read-AldiCapture so the self-test drives this exact path. Split-CaptureStore says why a capture
+# that cannot name its store is refused; Join-WrappedRecords holds the rejoin algorithm and its trap.
+$cap = Read-AldiCapture -Path $inPath -Date $Date
+if ($cap.refuse) {
+  throw ('build-aldi-regular: REFUSING ' + (Split-Path $inPath -Leaf) + ' - ' + $cap.refuse + ' Nothing was written, so the newest aldi-regular file stands.')
+}
+$jr = $cap.jr
 if ($jr.rejoined) { Write-Output ("build-aldi-regular: rejoined {0} line-wrapped record(s) before parsing" -f $jr.rejoined) }
 if ($jr.orphans)  { Write-Output ("build-aldi-regular: {0} incomplete fragment(s) kept as-is (capture dropped a piece)" -f $jr.orphans) }
-$tmp = Join-Path $env:TEMP ("aldi-capture-clean-" + $Date + ".csv")
-Set-Content -Path $tmp -Value $jr.lines -Encoding UTF8
+Write-Output ("build-aldi-regular: store READ at capture: {0}, {1}" -f $cap.cs.store, $cap.cs.mode)
 
-$raw = Import-CaptureCsv -Path $tmp -Delimiter '|'
+$raw = $cap.raw
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled field(s) on ingest (UTF-8 read as ANSI upstream)") }
 if ($script:CapturePlaceholderCount -gt 0) { Write-Output ("  dropped $($script:CapturePlaceholderCount) vendor placeholder row(s) at ingest ($($script:CapturePlaceholderPct)% of what was read)") }
 if ($script:CaptureIngestWarning) { Write-Output ("  " + $script:CaptureIngestWarning) }
-$res = Invoke-Build $raw $Date
+# FLAGGED, NOT REFUSED: the store line counts the rows the page wrote under it. A different count means rows
+# were added to or lost from the file after the page wrote it - a hand edit, a truncated post, or an orphaned
+# wrap fragment (which is ordinary, and why this does not refuse).
+if ($cap.cs.rows -ne $script:CaptureRowsRead) {
+  Write-Warning ("build-aldi-regular: the store line accounts for {0} row(s) and the capture holds {1}. Rows were added to or lost from the file after the page wrote it; the store named is still the one the page read." -f $cap.cs.rows, $script:CaptureRowsRead)
+}
+$res = Invoke-Build $raw $Date $cap.cs.store
 $rows = $res.rows
 if ($rows.Count -lt 1) { throw 'build-aldi-regular: capture produced ZERO priced rows - do not write an empty file over a good one' }
 
@@ -525,9 +723,11 @@ $doc = [ordered]@{
   store         = 'Aldi'
   week_of       = $Date
   price_type    = 'everyday'
+  # PROVEN, not assumed: Read-AldiCapture refuses a capture whose store line is not In-Store.
   price_mode    = 'in-store'
   mode_verified = $Date
-  source        = 'aldi.us storefront search (ALDI - OLA 42 - Omaha, In-Store fulfillment)'
+  # The store the page READ, from the capture's own store line. Never a literal (see Split-CaptureStore).
+  source        = (Get-AldiSource $cap.cs.store $cap.cs.mode)
   pull_terms    = @($raw | ForEach-Object { $_.term } | Sort-Object -Unique).Count
   deal_count    = $rows.Count
   deals         = $rows
