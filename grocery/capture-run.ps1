@@ -1208,7 +1208,7 @@ if ($shipServed -and $pushed) {
     } elseif ($verdict -eq 'stale') {
       $m = "The edge is serving smp-feed.json generated '$($live.generated)'. The COMMITTED copy at HEAD ($feedSha) is generated '$($repoFeed.generated)'. Those differ, so the bytes the edge serves are not the bytes in the commit. This compared the edge against git, not against the working tree, and it only runs when the chain actually shipped the served files. Live recipe prices are stale until the deploy lands. Check the CF dashboard build log."
       Write-Output ("EDGE STALE: " + $m)
-      try { Send-Alert -Subject "smp-feed edge did not pick up today's push - $today" -Body $m | Out-Null } catch {}
+      try { Send-Alert -Subject "smp-feed edge did not pick up today's push - $today" -Body $m -CausedBy 'guards-hold' | Out-Null } catch {}
     } else {
       Write-Output ("edge verified: serving generated $($live.generated), $($live.recipe_count) recipes")
       # ...AND THE SAME BYTE QUESTION FOR smp-feed (2026-09-04). `generated` catching up proves the deploy
@@ -1220,7 +1220,7 @@ if ($shipServed -and $pushed) {
       } elseif ($fv -eq 'stale') {
         $fm = 'The edge is serving an smp-feed.json whose BYTES differ from the COMMITTED copy at HEAD (' + $feedSha + '), even though its generated stamp matches. Committed SHA256 ' + $repoFeedHash + ' (' + $repoFeedBytes.Length + ' bytes); live SHA256 ' + $liveFeedHash + ' (' + $liveFeedBytes.Length + ' bytes). Compared as bytes, against git, never against the working tree.'
         Write-Output ('EDGE STALE (smp-feed bytes): ' + $fm)
-        try { Send-Alert -Subject "smp-feed edge bytes do not match the push - $today" -Body $fm | Out-Null } catch {}
+        try { Send-Alert -Subject "smp-feed edge bytes do not match the push - $today" -Body $fm -CausedBy 'guards-hold' | Out-Null } catch {}
       } else { Write-Output ("edge verified: smp-feed.json is byte-identical to HEAD " + $feedSha + " (SHA256 " + $repoFeedHash + ", " + $repoFeedBytes.Length + " bytes)") }
       # board.json is 2.5 MB of store chips - every price a shopper reads on the board page - and had no
       # read-after-write at all. Same question, second file.

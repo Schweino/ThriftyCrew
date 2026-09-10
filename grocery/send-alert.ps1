@@ -51,6 +51,13 @@ param(
   # lane 'weekly', triage-due.ps1 still lists it every day, and it makes the run DUE only when the weekly
   # lane is. The default writes no field at all, so no other alert in the estate changes.
   [ValidateSet('daily', 'weekly')][string]$Lane = 'daily',
+  # ONE INCIDENT, ONE ALERT (2026-09-10, design\PLAN-zero-alert-days-2026-09-10.md Phase 1). An alert that is a
+  # CONSEQUENCE of an open incident passes that incident's key and is absorbed as a recurrence of the incident's
+  # open queue item: no new id, no mail. The only key so far is 'guards-hold': today's chain verdict says guards
+  # blocked AND an open GUARDS FAILED item exists. When either is false, the key is unknown or the verdict cannot
+  # be read, the alert goes out exactly as if -CausedBy had not been passed. An alert is never dropped because its
+  # incident could not be found.
+  [string]$CausedBy = '',
   # exercises the queue-routing decision against temp fixtures and exits. Sends nothing, touches no live file.
   [switch]$SelfTest
 )
@@ -148,6 +155,31 @@ function Get-BirthDisposition([string]$Escalates) {
 function Get-BirthLane([string]$Lane) {
   if ($Lane -eq 'weekly') { return 'weekly' }
   return $null
+}
+
+# ---- IS THIS ALERT A CONSEQUENCE OF AN OPEN INCIDENT? (2026-09-10, plan Phase 1) ---------------------------------
+# Pure, so -SelfTest drives it with frozen verdicts. On 2026-09-10 one guard hold produced four queue items: GUARDS
+# FAILED, then the capture watchdog, board prices aging and the feed edge, each describing the same held board from
+# its own end. Returns the item to absorb into, or $null with the reason - and $null means "send normally".
+function Get-IncidentAbsorbTarget {
+  param($Items, [string]$CausedBy, $Verdict, [string]$Today)
+  $r = [pscustomobject]@{ target = $null; why = '' }
+  if (-not $CausedBy) { $r.why = 'no -CausedBy'; return $r }
+  if ($CausedBy -ne 'guards-hold') { $r.why = ("unknown incident key '" + $CausedBy + "'"); return $r }
+  if ($null -eq $Verdict) { $r.why = 'no chain verdict could be read'; return $r }
+  if ([string]$Verdict.date -ne $Today) { $r.why = ('the chain verdict is for ' + [string]$Verdict.date + ', not today'); return $r }
+  if (-not [bool]$Verdict.guards_blocked) { $r.why = 'guards are not blocked today'; return $r }
+  $best = $null
+  foreach ($i in @($Items)) {
+    if (-not $i) { continue }
+    if ([string]$i.status -ne 'open') { continue }
+    if (-not ([string]$i.type).StartsWith('grocery guards failed', [StringComparison]::Ordinal)) { continue }
+    if ($null -eq $best -or [string]$i.ts -gt [string]$best.ts) { $best = $i }
+  }
+  if ($null -eq $best) { $r.why = 'no open GUARDS FAILED item'; return $r }
+  $r.target = $best
+  $r.why = 'absorbed'
+  return $r
 }
 
 # ---- CAN A HUMAN (OR AN AGENT) JUDGE THIS ALERT FROM ITS OWN BODY? (2026-07-31) -------------------------
@@ -348,6 +380,59 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     $c7 = _SA 'Grocery matching soundness - review needed' @('-Escalates', '2026-09-10-abcdef')
     _T 'CLEAN TWIN -Escalates still parks the item at needs-brad and always takes the mail leg' ([bool]($c7.items.Count -eq 1 -and $c7.items[0].status -eq 'needs-brad' -and $c7.out -match 'alert MUTED')) 'True'
+    # ---- ONE INCIDENT, ONE ALERT (2026-09-10, plan Phase 1) ----
+    $tdy = Get-Date -Format 'yyyy-MM-dd'
+    $saRegInc = '{ "readme": "frozen fixture", "entries": [' +
+      '{ "id": "guards-failed", "match": "exact", "key": "grocery guards failed board not published", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
+      '{ "id": "watchdog", "match": "exact", "key": "grocery capture watchdog issue s", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x" },' +
+      '{ "id": "watchdog-held", "match": "exact", "key": "grocery capture watchdog held by guards", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
+      '{ "id": "aging", "match": "exact", "key": "board prices aging inside a fresh file", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
+      '{ "id": "feed-edge", "match": "exact", "key": "smp feed edge did not pick up today s push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" } ] }'
+    [IO.File]::WriteAllText($saReg, $saRegInc, $utf8)
+    $saVerdict = Join-Path $saG 'out\chain-verdict.json'
+    $gfId = $tdy + '-gf0001'
+    $gfQueue = '{ "readme": "frozen fixture", "items": [ { "id": "' + $gfId + '", "date": "' + $tdy + '", "ts": "' + $tdy + 'T08:15:00", "type": "grocery guards failed board not published", "subject": "Grocery: GUARDS FAILED - board not published - ' + $tdy + '", "body": "guards.ps1 hard fail: Ranch dressing at Sam''s priced from a list-price quotient size.", "status": "open", "count": 1, "resolved_ts": null, "notes": null } ] }'
+    function _Verdict([bool]$blocked) {
+      $rcTxt = '0'; $blTxt = 'false'
+      if ($blocked) { $rcTxt = '2'; $blTxt = 'true' }
+      [IO.File]::WriteAllText($saVerdict, ('{ "date": "' + $tdy + '", "written": "' + $tdy + 'T08:14:24", "written_by": "fixture", "guards_rc": ' + $rcTxt + ', "guards_blocked": ' + $blTxt + ' }'), $utf8)
+    }
+    # MUST FIRE, the 2026-09-10 morning replayed: guards blocked, GUARDS FAILED open, then the watchdog's four hold
+    # lines and the two other consequence emitters. Four queue items that morning; one now.
+    _Verdict $true
+    [IO.File]::WriteAllText($saQ, $gfQueue, $utf8)
+    [IO.File]::WriteAllText($saBody, ("HELD BY GUARDS: check-ad-cycles refused the 08:14 board (guards_rc 2).`n" +
+      " . RUN RECORD: capture-run [daily] completed with exit 1`n" +
+      " . NOT PUBLISHED: public\board.json is 1213 min older than today's comparison.`n" +
+      " . FAILED: 'TC Grocery Daily Capture 0800' last run exited 1, and no board has been rebuilt and published since.`n" +
+      " . COMPUTED BUT NOT SHIPPED: public/smp-feed.json is modified in the working tree after today's run."), $utf8)
+    $i1 = _SA ('Grocery capture watchdog: held by guards ' + $tdy) @('-CausedBy', 'guards-hold')
+    $i2 = _SA 'Board prices aging inside a fresh file' @('-CausedBy', 'guards-hold')
+    $i3 = _SA ("smp-feed edge did not pick up today's push - " + $tdy) @('-CausedBy', 'guards-hold')
+    $gf = @($i3.items | Where-Object { $_.id -eq $gfId })
+    _T 'MUST FIRE the 2026-09-10 morning replayed: three hold-caused alerts leave ONE queue item' $i3.items.Count 1
+    _T 'MUST FIRE and each was absorbed into the open GUARDS FAILED item (count 1 -> 4, three recurrences name the cause)' ([bool]($gf.Count -eq 1 -and [int]$gf[0].count -eq 4 -and @($gf[0].recurrences | Where-Object { $_.caused_by -eq 'guards-hold' }).Count -eq 3)) 'True'
+    _T 'MUST NOT FIRE no absorbed alert takes the mail leg' ([bool]((($i1.out + $i2.out + $i3.out) -notmatch 'alert MUTED') -and $i1.out -match 'absorbed by incident guards-hold')) 'True'
+    # MUST FIRE: a watchdog finding the hold did NOT cause still mints its own item on the same red morning.
+    [IO.File]::WriteAllText($saBody, 'VISIBILITY SWEEP DID NOT COMPLETE: set-recipe-visibility -Audit produced no verdict line, so whether a paid recipe is served free is UNKNOWN this run.', $utf8)
+    $i4 = _SA ('Grocery capture watchdog: 1 issue(s) ' + $tdy)
+    _T 'MUST FIRE an independent watchdog finding on the hold morning mints its own item and takes the mail leg' ([bool]($i4.items.Count -eq 2 -and $i4.out -match 'alert MUTED')) 'True'
+    # CLEAN TWIN: guards green, the same hold-caused lines mint normally.
+    _Verdict $false
+    [IO.File]::WriteAllText($saQ, $gfQueue, $utf8)
+    $i5 = _SA ('Grocery capture watchdog: held by guards ' + $tdy) @('-CausedBy', 'guards-hold')
+    _T 'CLEAN TWIN with guards green the same watchdog alert mints its own item and takes the mail leg' ([bool]($i5.items.Count -eq 2 -and $i5.out -match 'alert MUTED')) 'True'
+    # MUST FIRE: an unknown incident key never drops an alert.
+    _Verdict $true
+    [IO.File]::WriteAllText($saQ, $gfQueue, $utf8)
+    $i6 = _SA 'Board prices aging inside a fresh file' @('-CausedBy', 'no-such-incident')
+    _T 'MUST FIRE an unknown incident key falls back to normal: it mints and takes the mail leg' ([bool]($i6.items.Count -eq 2 -and $i6.out -match 'alert MUTED')) 'True'
+    # MUST NOT FIRE (pure): a blocked verdict with no OPEN GUARDS FAILED item, or a verdict from another day, absorbs nothing.
+    $blk = [pscustomobject]@{ date = '2026-09-10'; guards_blocked = $true }
+    $gfRes = [pscustomobject]@{ id = 'r'; type = 'grocery guards failed board not published'; status = 'resolved'; ts = '2026-09-10T08:15:00' }
+    $gfOpen = [pscustomobject]@{ id = 'o'; type = 'grocery guards failed board not published'; status = 'open'; ts = '2026-09-10T08:15:00' }
+    _T 'MUST NOT FIRE a blocked verdict with no open GUARDS FAILED item absorbs nothing' ([bool]($null -eq (Get-IncidentAbsorbTarget -Items @($gfRes) -CausedBy 'guards-hold' -Verdict $blk -Today '2026-09-10').target)) 'True'
+    _T 'MUST NOT FIRE a blocked verdict from another day absorbs nothing' ([bool]($null -eq (Get-IncidentAbsorbTarget -Items @($gfOpen) -CausedBy 'guards-hold' -Verdict $blk -Today '2026-09-11').target)) 'True'
   } finally { Remove-Item -LiteralPath $saDir -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ""
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
@@ -372,6 +457,17 @@ if ($regLibOk) {
   } catch { Log ("ALERT REGISTRY could not be applied (" + $_.Exception.Message + ") - failing toward PAGE for '" + $Subject + "'") }
 }
 if ($delivery.unregistered) { Log ("UNREGISTERED ALERT TYPE '" + $Subject + "' [type: " + $typeKey + "] - no entry in grocery\alert-registry.json matches, so it queues AND pages as a registry defect. Register it and run grocery\audit-alert-registry.ps1.") }
+
+# -CausedBy: read the incident's evidence now, outside the queue lock. An unreadable verdict is $null, and a $null
+# verdict absorbs nothing, so every failure here sends the alert normally.
+$incVerdict = $null
+if ($CausedBy) {
+  try {
+    . (Join-Path (Split-Path -Parent $root) 'lib\chain-verdict-lib.ps1')
+    $incVerdict = Read-ChainVerdictRecord -Repo (Split-Path -Parent $root)
+  } catch { $incVerdict = $null; Log ("-CausedBy " + $CausedBy + ": the chain verdict could not be read (" + $_.Exception.Message + "), so '" + $Subject + "' is NOT absorbed") }
+}
+$absorbedBy = ''
 
 $sentFile = Join-Path $root ("alert-sent-$today.txt")
 # purge prior days' sent-files: yesterday's suppressions are irrelevant, and the cloud job's `git add -A`
@@ -418,6 +514,22 @@ try {
   $items = @($q.items)
   $bodyStored = $(if ($Body.Length -gt 1500) { $Body.Substring(0,1500) + ' ...[truncated - full context in ad-cycle-log.txt / the source audit json]' } else { $Body })
   $thin = Test-BodyThin $Body
+  $incident = Get-IncidentAbsorbTarget -Items $items -CausedBy $CausedBy -Verdict $incVerdict -Today $today
+  if ($incident.target) {
+    # A CONSEQUENCE OF AN OPEN INCIDENT: one incident, one id. Written on the incident's item as a dated recurrence
+    # that names its cause, so triage still reads every symptom without a second item to open and close.
+    $t = $incident.target
+    $t.count = [int]$t.count + 1
+    if ($t.PSObject.Properties['last_seen']) { $t.last_seen = (Get-Date).ToString('s') } else { $t | Add-Member -NotePropertyName last_seen -NotePropertyValue (Get-Date).ToString('s') }
+    $rec = @()
+    if ($t.PSObject.Properties['recurrences']) { $rec = @($t.recurrences) }
+    $rec += [pscustomobject]@{ date = $today; subject = $Subject; caused_by = $CausedBy; body = $(if ($bodyStored.Length -gt 400) { $bodyStored.Substring(0,400) + ' ...' } else { $bodyStored }) }
+    if ($rec.Count -gt 5) { $rec = @($rec[($rec.Count-5)..($rec.Count-1)]) }
+    if ($t.PSObject.Properties['recurrences']) { $t.recurrences = $rec } else { $t | Add-Member -NotePropertyName recurrences -NotePropertyValue $rec }
+    $absorbedBy = [string]$t.id
+    Log ("QUEUE ABSORBED BY INCIDENT " + $CausedBy + " into " + $t.id + " (count now " + $t.count + "): '" + $Subject + "' - no new id, no mail")
+  } else {
+  if ($CausedBy) { Log ("-CausedBy " + $CausedBy + " did not absorb '" + $Subject + "': " + $incident.why + " - it goes out as a normal alert") }
   $route = Get-QueueAction $items $typeKey $today
   switch ($route.action) {
     'same-day' {
@@ -504,6 +616,7 @@ try {
       $items += $newItem
     }
   }
+  }   # else: not absorbed by an incident
   # keep resolved history 30 days so triage can see recurrences; open items never age out
   $cut = (Get-Date).AddDays(-30)
   $items = @($items | Where-Object { $_.status -eq 'open' -or ([datetime]$_.ts) -ge $cut })
@@ -528,6 +641,13 @@ try {
   try { $qMutex.Dispose() } catch {}
 }
 }   # if ($delivery.queue)
+
+# ABSORBED BY AN INCIDENT: durable on the incident's item, so no mail. When the queue write failed $queued is false
+# and this falls through to the normal path below - a consequence nobody recorded must still page.
+if ($absorbedBy -and $queued) {
+  Write-Output ("alert absorbed by incident " + $CausedBy + " into open item " + $absorbedBy + " - no new id, no email")
+  exit 0
+}
 
 # A REVIEW-CLASS ALERT IS NEVER MAILED (ruling 1), once it is durable in the queue. When the queue write FAILED it is
 # mailed instead: the spool may hold it, but an alert this script could not record must page, never vanish.

@@ -60,7 +60,10 @@ function Send-Alert {
     # short tag for the log line, e.g. 'WATCHERS'. Defaults to the subject.
     [string]$What = '',
     # passed straight through to send-alert.ps1 for callers that run their own signature de-dup
-    [switch]$Force
+    [switch]$Force,
+    # passed straight through to send-alert.ps1 -CausedBy (2026-09-10, plan Phase 1): the open incident this alert
+    # is a consequence of. Unknown, absent or not-currently-open incidents send normally.
+    [string]$CausedBy = ''
   )
   $tag = if ($What) { $What } else { $Subject }
   $tmp = $null
@@ -89,8 +92,10 @@ function Send-Alert {
       if ($frames.Count) { $emitter = [string]$frames[0].ScriptName }
     } catch { $emitter = '' }
     $sa = Join-Path $script:ALERT_LIB_DIR 'send-alert.ps1'
-    if ($Force) { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Emitter $emitter -Force | Out-Null }
-    else        { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Emitter $emitter | Out-Null }
+    $incArgs = @()
+    if ($CausedBy) { $incArgs = @('-CausedBy', $CausedBy) }
+    if ($Force) { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Emitter $emitter -Force @incArgs | Out-Null }
+    else        { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Emitter $emitter @incArgs | Out-Null }
     $rc = $LASTEXITCODE
     if ($rc -ne 0) {
       Write-AlertLog ('ALERT FAILED TO SEND [' + $tag + '] "' + $Subject + '" - send-alert.ps1 exited ' + $rc + '. See alert-log.txt. The condition it describes is real and UNPAGED.')

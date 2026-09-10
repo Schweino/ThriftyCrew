@@ -177,6 +177,25 @@ function Merge-HeldFindings {
   return [pscustomobject]@{ findings = $outF; sub = $outS }
 }
 
+function Get-WatchdogAlertPlan {
+  <#
+    .SYNOPSIS Which alerts one watchdog run sends (2026-09-10, design\PLAN-zero-alert-days-2026-09-10.md Phase 1).
+    .DESCRIPTION
+      Pure. Merge-HeldFindings already makes a guards hold ONE finding; this separates that finding from everything
+      the hold did not cause. The hold goes out on its own subject with -CausedBy guards-hold, so send-alert absorbs
+      it into the open GUARDS FAILED item, or mints it normally when there is none. Every other finding goes out as
+      the watchdog alert it always was, so an independent failure on a red morning still mints its own item. Not
+      held: one alert carrying every finding, exactly as before.
+  #>
+  param($Findings, [bool]$Held, [string]$HeldText)
+  $ind = New-Object System.Collections.Generic.List[string]
+  $hold = $false
+  foreach ($f in $Findings) {
+    if ($Held -and $HeldText -and [string]$f -eq $HeldText) { $hold = $true } else { [void]$ind.Add([string]$f) }
+  }
+  return [pscustomobject]@{ hold = $hold; independent = $ind }
+}
+
 function Test-FlagStoreCold {
   <#
     .SYNOPSIS Is a store named on a capture flag actually still uncaptured?
@@ -454,6 +473,21 @@ if ($SelfTest) {
   if ($fPlain.findings.Count -eq 5 -and $fPlain.sub.Count -eq 0) {
     Write-Output 'ok    on a day with no hold the findings list is untouched (5 in, 5 out, 0 folded)'
   } else { Write-Output ("FAIL  the fold ran on a day with no guards hold: findings=" + $fPlain.findings.Count + " sub=" + $fPlain.sub.Count); $fail++ }
+
+  # ---- ONE INCIDENT, ONE ALERT (2026-09-10, plan Phase 1): which alerts a run sends ----
+  $hFx = 'HELD BY GUARDS: check-ad-cycles refused the 08:14 board (guards_rc 2) and nothing has shipped since.'
+  # MUST FIRE: the founding four fold to the hold alone, sent caused by the hold, with no watchdog alert beside it.
+  $plan1 = Get-WatchdogAlertPlan -Findings $fHeld.findings -Held $true -HeldText $hFx
+  if ($plan1.hold -and $plan1.independent.Count -eq 0) { Write-Output 'ok    a morning of only hold symptoms plans ONE hold-caused alert and no independent watchdog alert' }
+  else { Write-Output ("FAIL  the hold-only morning did not plan one hold alert: hold=" + $plan1.hold + " independent=" + $plan1.independent.Count); $fail++ }
+  # MUST FIRE: a finding the hold did NOT cause still goes out as its own watchdog alert on the same morning.
+  $plan2 = Get-WatchdogAlertPlan -Findings $fHeld2.findings -Held $true -HeldText $hFx
+  if ($plan2.hold -and $plan2.independent.Count -eq 1 -and $plan2.independent[0] -match 'PAID CONTENT SERVED FREE') { Write-Output 'ok    an independent finding on a hold morning still goes out as its own watchdog alert' }
+  else { Write-Output ("FAIL  an independent finding was folded into the hold alert: hold=" + $plan2.hold + " independent=" + $plan2.independent.Count); $fail++ }
+  # CLEAN TWIN: no hold, so the run still sends the one watchdog alert carrying every finding.
+  $plan3 = Get-WatchdogAlertPlan -Findings $fPlain.findings -Held $false -HeldText ''
+  if ((-not $plan3.hold) -and $plan3.independent.Count -eq 5) { Write-Output 'ok    on a day with no hold every finding still goes out in the one watchdog alert (5 of 5)' }
+  else { Write-Output ("FAIL  a no-hold day did not send every finding in one alert: hold=" + $plan3.hold + " independent=" + $plan3.independent.Count); $fail++ }
 
   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
   exit $(if ($fail) { 1 } else { 0 })
@@ -1316,11 +1350,21 @@ foreach ($f in $findings) { Write-Output "  FIND  $f" }
 foreach ($s in $heldSub) { Write-Output "          - $s" }
 
 if ($findings.Count -and $Alert) {
-  $subLines = if ($heldSub.Count) { "`n" + (($heldSub | ForEach-Object { "     . $_" }) -join "`n") } else { '' }
-  $body = "Capture watchdog found $($findings.Count) issue(s) on $todayS.`n`n" +
-          (($findings | ForEach-Object { " - $_" }) -join "`n") + $subLines +
-          "`n`nHealthy checks:`n" + (($ok | ForEach-Object { " - $_" }) -join "`n")
-  try { Send-Alert -Subject "Grocery capture watchdog: $($findings.Count) issue(s) $todayS" -Body $body | Out-Null } catch { }
+  $okLines = "`n`nHealthy checks:`n" + (($ok | ForEach-Object { " - $_" }) -join "`n")
+  $hTextNow = ''
+  if ($heldNow) { $hTextNow = $hText }
+  $plan = Get-WatchdogAlertPlan -Findings $findings -Held ([bool]$heldNow) -HeldText $hTextNow
+  if ($plan.hold) {
+    # ONE INCIDENT, ONE ALERT (2026-09-10): the hold and its symptoms belong to the open GUARDS FAILED item.
+    $subLines = if ($heldSub.Count) { "`n" + (($heldSub | ForEach-Object { "     . $_" }) -join "`n") } else { '' }
+    $holdBody = "Capture watchdog on ${todayS}: the board is held by guards.`n`n - $hTextNow" + $subLines + $okLines
+    try { Send-Alert -Subject "Grocery capture watchdog: held by guards $todayS" -Body $holdBody -CausedBy 'guards-hold' | Out-Null } catch { }
+  }
+  if ($plan.independent.Count) {
+    $body = "Capture watchdog found $($plan.independent.Count) issue(s) on $todayS.`n`n" +
+            (($plan.independent | ForEach-Object { " - $_" }) -join "`n") + $okLines
+    try { Send-Alert -Subject "Grocery capture watchdog: $($plan.independent.Count) issue(s) $todayS" -Body $body | Out-Null } catch { }
+  }
 }
 
 Write-Output ("CAPTURE-WATCHDOG-COMPLETE findings={0}" -f $findings.Count)

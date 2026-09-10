@@ -2229,7 +2229,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         elseif ($raBad.Count) {
           Log ('row-age: ' + (($raBad | Select-Object -First 4) -join ' | '))
           $summary += "REVIEW    $($raBad.Count) per-row staleness finding(s) - prices are aging faster than a puller refreshes them, or a store stopped dating its rows (grocery\audit-row-age.ps1)"
-          if (-not $NoAlert) { try { Send-Alert -Subject "Board prices aging inside a fresh file" -Body ("audit-row-age.ps1 found rows aging past the window, or a store that stopped stamping as_of. The FILE dates look fine either way, which is why guard 9 stays quiet. These prices are what 542 live recipe pages quote.`n`n" + ($raBad -join "`n")) | Out-Null } catch {} }
+          if (-not $NoAlert) { try { Send-Alert -Subject "Board prices aging inside a fresh file" -CausedBy 'guards-hold' -Body ("audit-row-age.ps1 found rows aging past the window, or a store that stopped stamping as_of. The FILE dates look fine either way, which is why guard 9 stays quiet. These prices are what 542 live recipe pages quote.`n`n" + ($raBad -join "`n")) | Out-Null } catch {} }
         } else { Log ('row-age: no findings (' + (@($ra | Where-Object { $_ -match 'rows' }).Count) + ' store(s) profiled)') }
       } catch { Log ('audit-row-age threw: ' + $_.Exception.Message) }
       # ---- THE ZERO-ALERT-DAYS SCOREBOARD (2026-09-10, plan Phase 0) -------------------------------------------
