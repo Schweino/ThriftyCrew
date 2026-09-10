@@ -118,6 +118,16 @@ everything else honest, so a defect here is silent by construction.
   defect in any of them; reading their clean reports as proofs is. Every `ops/audit-*.ps1` now carries a
   `SCOPE OF A CLEAN REPORT:` line saying which it is (7 of 22 already did, in their own words; 15 were
   silent). **A new detector owes that line the way it owes its `<NAME>-COMPLETE` marker.**
+- **A git hook in a LINKED worktree exports `GIT_DIR`, and everything it spawns inherits it**
+  (2026-09-10). From the main checkout it exports none, which is why nothing showed until the first push
+  from a detached gate-check checkout: `run-gates`' hermetic git self-tests then ran their temp-repo
+  `git init` and `git config` against the SHARED `.git`, set `core.bare=true` and a test identity, and
+  `git status` failed in every checkout on the box. While it was bare, `pre-push` could not resolve a
+  working tree and exited 0, so a sibling session's push went out ungated. `ops/hooks/pre-push` and
+  `ops/run-gates.ps1` now clear the repository environment, the hook refuses when it cannot find a tree,
+  and `ops/test-prepush-hook.ps1` drives both from a sandbox linked worktree. **A new hook that spawns
+  tests, or a fixture that builds a temp repo, clears `GIT_DIR` first** - but check what a `pre-commit`
+  checker needs before stripping anything there: git points `GIT_INDEX_FILE` at the index being committed.
 
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

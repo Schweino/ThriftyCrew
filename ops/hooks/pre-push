@@ -40,7 +40,17 @@
 # Install:  powershell -File ops\install-hooks.ps1
 
 repo="$(git rev-parse --show-toplevel 2>/dev/null)"
-[ -z "$repo" ] && exit 0
+# NO WORKING TREE IS A REFUSAL, NOT A PASS (2026-09-10). This line used to `exit 0`. While the shared
+# repository was turned bare by the incident described below the unset line, --show-toplevel failed in
+# every checkout, and a sibling session's push at 05:28:19 went out through this hook with no gate run
+# and no log. A hook that cannot find the tree it is meant to gate has verified nothing - the same rule
+# this file already applies to a missing gate.
+if [ -z "$repo" ]; then
+  echo "pre-push: REFUSING - git could not resolve this checkout's working tree, so nothing gated this push." >&2
+  echo "          If 'git config core.bare' says true in a checkout, the shared config is damaged: repair that first." >&2
+  echo "          Bypass with: git push --no-verify" >&2
+  exit 1
+fi
 gate="$repo/ops/run-gates.ps1"
 
 # A MISSING GATE MUST NOT READ AS A PASS. That is the fail-open-reads-as-empty class, and it is exactly
@@ -63,6 +73,17 @@ done
 if [ "$have_work" -eq 0 ]; then
   exit 0
 fi
+
+# THE GATE RUNS WITH NO REPOSITORY ENVIRONMENT (2026-09-10). A push from a LINKED worktree makes git
+# export GIT_DIR=<common .git>/worktrees/<name> to this hook; a push from the main checkout exports
+# none, which is why nobody had seen this. run-gates inherited it, and so did its hermetic git
+# self-tests: their temp-repo `git init` and `git config user.name` landed on the SHARED repository.
+# Measured on the first push from a detached gate-check checkout: core.bare=true, user.name=Session,
+# user.email=t@t, core.autocrlf=false and commit.gpgsign=false written into the common .git/config,
+# and every checkout on the box then refused `git status` until it was repaired by hand. The gate
+# needs none of these - run-gates finds the repo from its own path - and `repo` above is already
+# resolved. ops/test-prepush-hook.ps1 drives this hook from a linked worktree in a sandbox.
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_PREFIX GIT_NAMESPACE
 
 echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not once per commit." >&2
 

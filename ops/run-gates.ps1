@@ -28,6 +28,18 @@
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$ListOnly, [int]$Jobs = 0)
 $ErrorActionPreference = 'Stop'
+# NO REPOSITORY ENVIRONMENT IS INHERITED (2026-09-10). Called from a git hook in a LINKED worktree, this
+# process arrives with GIT_DIR pointing at that worktree's gitdir, and every hermetic git self-test below
+# inherits it: their temp-repo `git init` and `git config` then write the SHARED repository. On the first
+# push from a detached gate-check checkout that set core.bare=true and a test identity in the common
+# .git\config, and `git status` failed in every checkout on the box until it was repaired by hand.
+# ops\hooks\pre-push unsets these too; this covers every other caller, since a shell or a task spawned
+# from inside a hook inherits them the same way. This file finds the repo from its own path and needs none
+# of them. Fixtured in ops\test-prepush-hook.ps1.
+foreach ($v in @('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_COMMON_DIR', 'GIT_OBJECT_DIRECTORY',
+                 'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_PREFIX', 'GIT_NAMESPACE')) {
+  Remove-Item -LiteralPath ("Env:\" + $v) -ErrorAction SilentlyContinue
+}
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
