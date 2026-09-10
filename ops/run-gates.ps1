@@ -58,10 +58,15 @@ $SKIP = @{
   'test-auditors.ps1'   = 'data-dependent: needs a real board, which a clean checkout does not have (out\comparison-*.json is gitignored). Runs daily in the chain instead.'
 }
 
-$scripts = @(Get-ChildItem $repo -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
+$repoFull = (Resolve-Path -LiteralPath $repo).ProviderPath.TrimEnd('\')
+$scripts = @(Get-ChildItem $repoFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
   # \out\ is the pipeline's OUTPUT directory. Scripts that land there are one-offs and debris (the script
   # census counts 37 of them); running their self-tests would gate every push on abandoned scratch work.
-  Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
+  # MATCHED BELOW THE REPO ROOT, NOT ON THE FULL PATH (2026-09-10). A linked worktree lives under
+  # .claude\worktrees\, so the full-path form excluded every file in it: discovery found zero and exited 3
+  # from every spawned session, which pre-push then BLOCKS. Recorded 2026-08-26 and left standing until
+  # ops\count-source-lifters.ps1 was found blind the same way. Sibling worktrees below the root stay excluded.
+  Where-Object { $_.FullName.Substring($repoFull.Length) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
   Sort-Object FullName)
 
 $withSelfTest = @()
@@ -282,7 +287,7 @@ $static = @(
   @{ f = 'ops\audit-arg-binding.ps1';          n = 'every audit/verify/test/check script REFUSES an argument it does not declare, so a scoped check cannot silently run unscoped and report clean' }
   # Hermetic: reads .ps1 source text, never a board, so it belongs here rather than in the daily chain.
   @{ f = 'ops\audit-cross-module-reach.ps1';   n = 'no NEW script reaches into another module''s internals directory - a ratchet on cross-module path literals, high-water mark may only go DOWN' }
-  @{ f = 'ops\audit-lift-completeness.ps1';    n = 'every function lifted out of compare-deals.ps1 brings the engine functions it CALLS with it, so a hand-maintained lift list cannot fall behind and fail at run time' }
+  @{ f = 'ops\audit-lift-completeness.ps1';    n = 'every function a grocery script lifts out of another script''s source brings the functions it CALLS with it, so a hand-maintained lift list cannot fall behind and fail at run time' }
   @{ f = 'ops\audit-one-way-actuators.ps1';    n = 'a control constant that may only move ONE WAY carries a rate limit and a plausibility bar - a REPORT, exit 0, because "one-directional" is a property of a design and no pattern matcher can be precise about it' }
   @{ f = 'ops\audit-event-bus.ps1';            n = 'every declared producer of an estate event still writes one, and the bus is not silently dead - the wiring half is static, and the FLOOR half is one of the estate''s only checks that fires on nothing happening' }
   @{ f = 'ops\audit-phantom-paths.ps1';        n = 'a script path named in standing guidance (CLAUDE.md, rules, agents, docs, hooks, rulings) exists in the tree - the founding phantom was ops\audit-hook-installed.ps1, cited five times as a running guard and never written' }

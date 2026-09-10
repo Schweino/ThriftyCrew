@@ -275,17 +275,15 @@ function Test-Membership([string]$store) { return ($store -eq "Sam's Club") }
 #     in the self-test pins it. Putting pkg in the whole-purchase list prices a package as one item.
 # Convert-ToUnit's 'each' arm takes BOTH, because there it is always converting a STATED number ("2 pkg" is
 # two packages); the two bare-size gates take the whole-purchase list only.
-# THESE ARE FUNCTIONS, NOT $script: VARIABLES, AND THAT IS LOAD-BEARING. build-walmart-deals.ps1,
-# build-sams-deals.ps1 and import-walmart-batch.ps1 do not dot-source this file - they lift individual
-# FUNCTION BODIES out of it by regex and Invoke-Expression them. A top-level constant is not a function, so
-# it would not travel with the lift, and the regex interpolating it would become an empty alternation in
-# the lifter: a bare "each" would match nothing and every each-row would price null. Measured, not feared -
-# the first cut of this change used variables and turned both build-*-deals suites red on
-# "watermelon each -> engine returned null (size='each')". Written as functions they are CALLS, so the
-# lift-closure check (section 30 of the self-test) already requires every lifter to carry them.
-# WRITTEN IN THE SHAPE THE LIFTERS' REGEX MATCHES: a parameter list, and the closing brace at column 0.
-# Their lift is `^function\s+NAME\s*\(.*?^\}`, so a one-line `function F { ... }` is invisible to it and
-# throws "could not lift" at load. Do not compact these onto one line.
+# THESE ARE FUNCTIONS, NOT $script: VARIABLES (2026-09-06). They were made functions while three builders
+# lifted function BODIES out of this file by regex, because a top-level constant does not travel with a
+# lift: the first cut used variables and turned both build-*-deals suites red on "watermelon each ->
+# engine returned null (size='each')". Since I82 (2026-09-09) they live in pricing-math-lib.ps1, every
+# builder dot-sources it, and that reason is history. Keep them functions anyway - the library's header
+# promises it holds no $script: state.
+# WRITTEN WITH A PARAMETER LIST AND THE CLOSING BRACE AT COLUMN 0. Section 30's library closure check
+# extracts bodies with `^function\s+NAME\s*\(.*?^\}`, and it SKIPS a function that shape does not match
+# without saying so - a one-line `function F { ... }` would simply go unchecked. Do not compact these.
 # canonical amount = how many <category unit> are in "$num $token"
 # ---------------------------------------------------------------- size parsing
 # returns canonical amount (in category unit) from a size string, or $null if not derivable
@@ -1703,15 +1701,14 @@ if ($SelfTest) {
   # CLEAN TWIN: an unambiguous name in the same shape still prices off its name, so the fallback survives.
   _Near 'single-size name still prices from the name' (Get-UnitPrice (_D '$1.99' 'Kroger Ice Cream 48 fl oz' $null 'each') (_C 'floz')).unit_price 0.0415 0.0005
 
-  # ---- 30. THE LIFT LISTS MUST BE CLOSED (2026-08-29). Three scripts - build-walmart-deals.ps1,
-  # build-sams-deals.ps1, import-walmart-batch.ps1 - do not dot-source this file (it runs a pipeline on
-  # load). They pull named functions out of it AS SOURCE TEXT and Invoke-Expression them, each from its own
-  # hand-maintained list. Nothing checked that a lifted function's own callees were also on the list, so
-  # adding Test-NameOffersTwoSizes and updating only ONE list left the other two lifting a Get-UnitPrice
-  # whose helper does not exist. The lift succeeds, load is clean, and it dies at CALL time. Two other
-  # sessions measured that as a pre-existing failure in build-sams-deals rather than as my edit.
-  # So: read each list, take the bodies of the functions it names, and assert every OTHER function defined
-  # in this file that those bodies call is on the list too.
+  # ---- 30. THE LIFT MUST BE CLOSED (2026-08-29; mechanism changed 2026-09-09, backlog I82). Three
+  # scripts - build-walmart-deals.ps1, build-sams-deals.ps1, import-walmart-batch.ps1 - used to pull named
+  # functions out of this file AS SOURCE TEXT and Invoke-Expression them, each from its own hand-maintained
+  # list. Adding Test-NameOffersTwoSizes and updating only ONE list left the other two lifting a
+  # Get-UnitPrice whose helper did not exist: the lift succeeded, load was clean, and it died at CALL time.
+  # The functions live in pricing-math-lib.ps1 now and all three dot-source it, so this section asserts
+  # that they do and that the library is closed under calling. The lift still live - import-walmart-batch
+  # cutting Build-Row out of build-walmart-deals - is checked by ops\audit-lift-completeness.ps1.
   # A NAME IN A COMMENT IS NOT A CALL. The first version of this check flagged all three lifters because
   # Get-UnitPrice's prose mentions Get-MatchTexts ("the engine strips it in Get-MatchTexts for exactly...").
   # A checker that cannot tell a call from a sentence would have had three files edited to satisfy it, so

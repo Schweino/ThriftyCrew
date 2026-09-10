@@ -36,7 +36,7 @@
 
   *** THE INVARIANT ***
   Because ad_price = lp and size = lp/up, the engine MUST compute lp/(lp/up) = up. So every emitted row is
-  checked against the REAL Get-UnitPrice lifted out of compare-deals.ps1: engine(row) must equal Sam's own
+  checked against the REAL Get-UnitPrice, from the pricing-math-lib.ps1 the engine itself dot-sources: engine(row) must equal Sam's own
   unitPrice. A row that fails is NOT published - it is written to the .rejects.json beside the output. This is
   what the quarantined capture had no way to detect.
 
@@ -79,22 +79,19 @@ if (-not $script:CaptureDate -and $In) { $m = [regex]::Match($In, '\d{4}-\d{2}-\
 if (-not $script:CaptureDate) { $script:CaptureDate = (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
 
-# ---- lift the REAL pricing math out of the engine (it runs a pipeline on load, so we can't dot-source it) ----
-# -Encoding UTF8 is NOT optional here. These functions are lifted as SOURCE TEXT and re-parsed, so
-# their non-ASCII regex literals have to survive the read. compare-deals.ps1 carries a BOM today and
-# Get-Content would honour it - but that leaves the whole pricing engine depending on a byte order
-# mark nothing asserts. Name the encoding and the dependency is gone.
+# ---- the REAL pricing math: the same library compare-deals.ps1 dot-sources ----
 . (Join-Path $root 'pricing-math-lib.ps1')   # I82: the pricing math is a LIBRARY now, not a
 # regex cut out of compare-deals.ps1's source. The hand-maintained name list this replaced had
 # one failure mode that had already fired: add a function Get-UnitPrice calls, forget to list it
 # here, and the lifted copy calls something that does not exist - at RUN time. A dot-source
-# cannot have that bug, because the file arrives whole.
-# THIS LIST IS A DEPENDENCY GRAPH, AND IT IS HAND-MAINTAINED (2026-08-29). Adding a helper that
-# Get-UnitPrice calls without naming it here lifts a function whose callee does not exist, and the failure
-# lands at RUN time as "not recognized as the name of a cmdlet" - which is what happened the day
-# Test-NameOffersTwoSizes was added to refuse either/or ad rows. The guard caught it (the walmart-deals
-# self-test is a hard invariant), so nothing shipped, but the trap is worth naming: if you add a function
-# to compare-deals.ps1 and any lifted function calls it, it belongs in this list too.
+# cannot have that bug, because the file arrives whole. compare-deals.ps1 -SelfTest (section 30)
+# asserts this file dot-sources the library and that the library calls nothing outside itself.
+# ENCODING: PS 5.1 decodes a BOM-less script as the ANSI codepage. The library is pure ASCII
+# (0 non-ASCII bytes on 2026-09-10), so that costs nothing today; a non-ASCII literal added to it
+# needs a BOM or a code-point escape.
+# THIS FILE IS STILL A LIFT SOURCE. import-walmart-batch.ps1 cuts Build-Row and the helpers above it out
+# of this file by regex, off its own hand-maintained name list. A helper Build-Row starts calling belongs
+# on that list too; ops\audit-lift-completeness.ps1 (in run-gates) reports the one that is missing.
 
 # unit token as Sam's prints it -> (engine size token, engine category unit for the invariant check)
 # Sam's abbreviates FLUID OUNCE as "foz" ("$0.16/foz"). Missing that silently drops every liquid in the
@@ -235,7 +232,7 @@ function Get-NamePackMultipliers([string]$name) {
 # means the name says nothing about the priced dimension, and there is nothing to refuse.
 function Get-SameFamilyNameQty([string]$name, [string]$tok) {
   # The unit lists and the pattern live INSIDE the function on purpose. import-walmart-batch.ps1 lifts this
-  # file's functions by AST and separately lifts $script:UnitFamily by name, so any new script-scope variable
+  # file's functions by regex and separately lifts $script:UnitFamily by name, so any new script-scope variable
   # a lifted function reads is a second thing to remember - and the failure is a function that quietly reads
   # $null and returns an empty result rather than throwing. Keeping them local means the lift carries
   # everything the function needs. .NET caches compiled patterns, so the literal costs nothing per call.

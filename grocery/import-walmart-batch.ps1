@@ -8,7 +8,7 @@
   walmart-regular-2026-07-25.json: 6 of 23 failed build-walmart-deals' engine-reproduces-the-unit-price
   invariant (3.3-7.1% off), and one of them was CROWNED cheapest on the 2026-07-29 board
   (brown-gravy-mix at $0.5333/oz vs Walmart's real $0.552/oz). So now the importer LIFTS Build-Row out of
-  build-walmart-deals.ps1 - the same AST extraction the builder itself uses on compare-deals.ps1 - and every
+  build-walmart-deals.ps1 (a regex cut of each function's source, run through Invoke-Expression) - and every
   batch row must pass:
     1. Build-Row: exact size from Walmart's own arithmetic (lp/up), name-snap when the name reproduces the
        unit price, package-vs-per-unit shape decided by the REAL engine, and the emit invariant:
@@ -43,10 +43,9 @@ $regDir = Join-Path $outRootDir 'out\regular'
 # one failure mode that had already fired: add a function Get-UnitPrice calls, forget to list it
 # here, and the lifted copy calls something that does not exist - at RUN time. A dot-source
 # cannot have that bug, because the file arrives whole.
-# One of THREE hand-maintained copies of this list (build-walmart-deals.ps1, build-sams-deals.ps1 carry the
-# others). A helper that a lifted function calls must be named here too, or the lift silently produces a
-# function whose callee is undefined and it dies at CALL time, not load time. See the note in
-# build-sams-deals.ps1; compare-deals.ps1 -SelfTest proves all three lists are closed.
+# THE LIFT BELOW IS THE ONE STILL LIVE, and it is out of build-walmart-deals.ps1, not compare-deals.ps1.
+# ops\audit-lift-completeness.ps1 (in run-gates) checks the list is closed under the calls its functions
+# make; it cannot see $script:UnitFamily, which is lifted separately below.
 $builderSrc = Get-Content (Join-Path $root 'build-walmart-deals.ps1') -Raw
 # Get-NamePackMultipliers joined this list 2026-09-05, with Build-Row's refusal branch. It is a HAND-MAINTAINED
 # copy of Build-Row's dependency set, so adding a helper to the builder without adding it here leaves the lift

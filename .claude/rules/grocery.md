@@ -29,13 +29,23 @@ is one copy of every rule and nothing here can drift from it.
   powershell -NoProfile -File ops\count-source-lifters.ps1 -Script compare-deals.ps1
   ```
   It defines and prints all three tests - NAMES, READS, EXECUTES - splits one-off scratch out,
-  names the executing files, and carries nine frozen fixtures. On 2026-09-08 over 562 scanned
-  files: 54 name it, 18 read its source (15 outside `grocery\out\`), **12 execute what they
-  lifted**. Say which test you mean or the number means nothing.
+  names each executing file with the line that runs the lifted text, and carries frozen fixtures.
+  On 2026-09-08 over 562 scanned files: 54 name it, 18 read its source (15 outside
+  `grocery\out\`), and 12 executed by the OLD test below. Say which test you mean or the number
+  means nothing.
   **Backlog I82 shipped both halves on 2026-09-09** - the pricing math is `pricing-math-lib.ps1` and
-  the exclude list is `global-exclude-lib.ps1` - and the same command over 573 files then read
-  58 NAME it, 7 READ its source, and **1 EXECUTES what it lifted**, that one being `test-auditors`,
-  which lifts on purpose. **Still run the script rather than quoting either set of numbers.**
+  the exclude list is `global-exclude-lib.ps1`.
+  **EXECUTES was a co-occurrence until 2026-09-10** - a read plus an Invoke-Expression ANYWHERE in the
+  same file - so it named `test-auditors`, which only `-match`es compare-deals' text and runs text cut
+  from OTHER files, and it could not see a `[scriptblock]::Create` at all. It now follows the text from
+  the read to the call that runs it. Over 596 files on 2026-09-11 it read 57 NAME it, 8 READ its
+  source, and **1 EXECUTES: `test-match-lib.ps1:78`**, which runs the original matcher cut out of
+  compare-deals so it can prove match-lib decides identically. That one is on purpose.
+  **The live production lift is not from compare-deals at all.** `-Script build-walmart-deals.ps1`
+  names `import-walmart-batch.ps1:58` (Build-Row, six helpers and `$script:UnitFamily`), and
+  `-Script import-walmart-batch.ps1` names `import-instacart-batch.ps1:68` (Merge-IwbRows).
+  `ops/audit-lift-completeness.ps1` checks both lists are closed. **Still run the script rather than
+  quoting any of these numbers.**
   A lifted `$script:` constant does not
   travel - the lift needs functions, parens and a column-0 brace, which is why the exclude list is
   exported as `Get-TcGlobalExclude` and not as a variable.
