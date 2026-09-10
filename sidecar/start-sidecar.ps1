@@ -57,14 +57,72 @@ function Test-SidecarHealth {
   }
 }
 
+function Test-SidecarReady {
+  <# Is the service USABLE, not merely listening? Pure over a parsed /health body.
+
+     WHY, MEASURED LIVE 2026-09-10. The watchdog's first daytime restart reported OK at 06:30:18
+     because /health answered, and the first prompt after it, at 06:30:36, paid 3,205 ms and fell
+     back to lexical: /recall-search and then /embed each hit the recall hook's 1.5 s timeout while
+     the models loaded inside that very request (/health afterwards: load_seconds 11.7), two
+     failures opened the breaker for 60 s, and the next session's prompt skipped the leg as well.
+     /health answers BEFORE any model is loaded, by design (app.py loads lazily so that importing
+     the module stays cheap), so "answers /health" was the wrong definition of started. #>
+  param($Health)
+  if ($null -eq $Health) { return $false }
+  try { return ([bool]$Health.ok -and [bool]$Health.models_loaded) } catch { return $false }
+}
+
+function Get-SidecarHealthBody {
+  <# The parsed /health body, or $null. Never throws. #>
+  param([string]$Url, [int]$TimeoutSec = 3)
+  try {
+    $r = Invoke-WebRequest -Uri ("$Url/health") -TimeoutSec $TimeoutSec -UseBasicParsing
+    if ($r.StatusCode -ne 200) { return $null }
+    return ($r.Content | ConvertFrom-Json)
+  } catch {
+    return $null
+  }
+}
+
+function Invoke-SidecarWarm {
+  <# One real request, so the models load NOW, on the launcher's clock, instead of inside the first
+     prompt's 1.5 s budget. clean=false is the flag the recall hook sends. $true when it answered. #>
+  param([string]$Url, [int]$TimeoutSec)
+  try {
+    $body = '{"texts":["warm"],"clean":false}'
+    $r = Invoke-WebRequest -Uri ("$Url/embed") -Method Post -ContentType 'application/json' -Body $body `
+      -TimeoutSec ([math]::Max(5, $TimeoutSec)) -UseBasicParsing
+    return ($r.StatusCode -eq 200)
+  } catch {
+    return $false
+  }
+}
+
+function Complete-SidecarWarm {
+  <# Warm a service that already answers /health, then report whether it is READY. The verdict is
+     read back from /health, never inferred from the warm call's return: a warm request that timed
+     out while another thread finished the load is still a ready service. #>
+  param([string]$Url, [datetime]$Deadline, [int]$ProcId, [string]$Prefix)
+  if (-not (Test-SidecarReady (Get-SidecarHealthBody -Url $Url))) {
+    $left = [int][math]::Max(5, ($Deadline - (Get-Date)).TotalSeconds)
+    $null = Invoke-SidecarWarm -Url $Url -TimeoutSec $left
+  }
+  $h = Get-SidecarHealthBody -Url $Url
+  if (Test-SidecarReady $h) {
+    return @{ Started = $true; Why = ("$Prefix and loaded its models (load_seconds {0})" -f $h.load_seconds); Pid = $ProcId }
+  }
+  return @{ Started = $false; Why = "$Prefix but its models did not load before the deadline"; Pid = $ProcId }
+}
+
 function Start-SidecarProcess {
-  <# Launch and wait. Returns @{ Started=<bool>; Why=<string>; Pid=<int or 0> }.
+  <# Launch, wait for /health, then warm. Returns @{ Started=<bool>; Why=<string>; Pid=<int or 0> }.
+     STARTED MEANS READY: /health answers AND the models are loaded (Test-SidecarReady).
      Never throws: every caller wants a verdict, and an exception here would make a watchdog
      page about itself rather than about the service. #>
   param([string]$SidecarDir, [string]$BindHost, [int]$Port, [int]$WaitSec)
   $url = "http://${BindHost}:$Port"
   if (Test-SidecarHealth -Url $url) {
-    return @{ Started = $true; Why = 'already answering /health'; Pid = 0 }
+    return (Complete-SidecarWarm -Url $url -Deadline ((Get-Date).AddSeconds($WaitSec)) -ProcId 0 -Prefix 'already answering /health')
   }
   $py = Get-SidecarPython -SidecarDir $SidecarDir
   if (-not $py) {
@@ -83,7 +141,7 @@ function Start-SidecarProcess {
   while ((Get-Date) -lt $deadline) {
     Start-Sleep -Seconds 3
     if (Test-SidecarHealth -Url $url) {
-      return @{ Started = $true; Why = 'answered /health'; Pid = $procId }
+      return (Complete-SidecarWarm -Url $url -Deadline $deadline -ProcId $procId -Prefix 'answered /health')
     }
   }
   return @{ Started = $false; Why = "launched but no /health inside ${WaitSec}s"; Pid = $procId }
@@ -131,6 +189,29 @@ if ($SelfTest) {
   } finally {
     Remove-Item -Recurse -Force $tmpDir -ErrorAction SilentlyContinue
   }
+
+  # MUST FIRE, THE FOUNDING CASE OF 2026-09-10 06:30: /health answered with the models NOT loaded,
+  # the launcher called that started, and the first prompt paid the load and fell back to lexical.
+  Case 'MUST FIRE' 'a service answering /health with its models unloaded is NOT ready' `
+    (-not (Test-SidecarReady ([pscustomobject]@{ ok = $true; models_loaded = $false; load_seconds = $null })))
+  Case 'MUST FIRE' 'no /health body at all is not ready, and never an exception' `
+    (-not (Test-SidecarReady $null))
+  # CLEAN TWIN: a loaded service is ready - the positive half, so the case above is not passing
+  # because the function refuses everything.
+  Case 'CLEAN TWIN' 'a service with its models loaded IS ready' `
+    (Test-SidecarReady ([pscustomobject]@{ ok = $true; models_loaded = $true; load_seconds = 11.7 }))
+  # MUST FIRE, STATIC: both success paths go through the warm-then-read-back step, and the warm call
+  # sends clean=false. NEEDLES BUILT BY CONCATENATION, and the scan is scoped to the function bodies.
+  $fnS = $mySrc.IndexOf('function Start-Sidecar' + 'Process')
+  $fnE = $mySrc.IndexOf('# ------------------------------------------' + '---------------------------------')
+  $spBody = if ($fnS -ge 0 -and $fnE -gt $fnS) { $mySrc.Substring($fnS, $fnE - $fnS) } else { '' }
+  $nComplete = 'Complete-Sidecar' + 'Warm -Url $url'
+  $nOldOk = "Why = 'answered " + "/health'; Pid"
+  Case 'MUST FIRE' 'both started paths warm and read readiness back, and none returns on /health alone' `
+    (($spBody.Length -gt 200) -and (([regex]::Matches($spBody, [regex]::Escape($nComplete))).Count -eq 2) -and
+     (-not $spBody.Contains($nOldOk)) -and (-not $spBody.Contains("Started = `$true; Why = 'already " + "answering")))
+  $nClean = '"clean"' + ':false'
+  Case 'MUST FIRE' 'the warm request sends clean=false, the flag the recall hook uses' ($mySrc.Contains($nClean))
 
   # CLEAN TWIN: the health probe still answers False on a dead port rather than throwing.
   Case 'CLEAN TWIN' 'an unreachable port is $false, never an exception' `
