@@ -606,6 +606,11 @@ if ($WhatIfOnly) {
   Write-Output "  3 serve    tools\local-llm\serve.ps1 -Slots $Jobs"
   Write-Output "  4 resolve  $py graph\pipeline\resolve.py --llm --jobs $Jobs --adversarial --helper-scores sidecar\out\contested-scores.json --helper-threshold $HelperThreshold"
   Write-Output "  5 stage1   $py graph\learning\stage1_analyze.py"
+  Write-Output "  5b packet  $py graph\learning\stage2_review.py --emit-packet   (writes the review packet; ingest and apply stay human)"
+  Write-Output "  5c gold    $py graph\gold\seed_gold.py   (rebuilds gold from human and agent rulings only)"
+  Write-Output "  5d score   $py graph\eval\score.py --context nightly   (ONLY when an input is newer than the last run)"
+  Write-Output "  5e lint    $py graph\learning\lint_adjacency.py   (report: excludes word order and plurals defeat)"
+  Write-Output "  5f family  $py graph\learning\local_triage.py --cluster-rejections --limit 600   (WEEKLY, needs 20 min with the model up)"
   Write-Output "  6 stop     llama-server down, verified"
   if ($refuse) { Write-Output "  REFUSED: $refuse" }
   exit 0
@@ -804,6 +809,99 @@ try {
     if ($r.Ok) { Record 'stage1' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
     elseif ($r.TimedOut) { Record 'stage1' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
     else { Record 'stage1' 'FAILED' ("rc=" + $r.ExitCode) $r.Elapsed }
+
+  # -- 5b-5d. THE LOOP CONSUMES WHAT IT PRODUCES (WS 10c, design\PLAN-brain-v2-2026-09-09.md) -------
+  # Measured 2026-09-10 by graph\learning\learning_status.py: Stage 1 ran here every night and nothing
+  # downstream of it ran on any schedule. 60 proposals had waited since 2026-08-21, the review packet
+  # was frozen at 2026-08-21T01:01, and the gold scoreboard's newest run was 2026-08-21 - 19.1 days
+  # stale AGAINST ITS INPUTS. A learning loop that produces nightly and consumes never is a queue.
+  #
+  # ONLY THE MECHANICAL HALF IS SCHEDULED. --emit-packet only WRITES the review packet from the proposals
+  # table; --ingest and --apply stay human, because a verdict is a judgement and an applied alias moves a
+  # live board. seed_gold.py rebuilds gold ONLY from human and agent rulings (known-wrong, verified links,
+  # the dupe allowlist, the escalation review) and never from a model's output, so "a model may not edit
+  # the thing it is graded against" still holds. score.py runs DETERMINISTIC-ONLY and only when an input
+  # is newer than the last run, so eval-runs.json grows when there is something new to measure and not
+  # once a night regardless.
+  #
+  # EVERY ONE IS BLIND-NOT-FATAL, like every stage in this chain: a report stage that could take down the
+  # nightly matching run is the worse trade, and a failure here costs a stale packet, not a board.
+  if ((Remaining) -lt 120) { Record 'stage2-packet' 'SKIPPED' 'no window left' 0 }
+  else {
+    $r = Invoke-Stage 'stage2-packet' $py @('graph\learning\stage2_review.py', '--emit-packet') ([math]::Max(60, [math]::Min(300, (Remaining) - 60)))
+    if ($r.Ok) { Record 'stage2-packet' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
+    elseif ($r.TimedOut) { Record 'stage2-packet' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
+    else { Record 'stage2-packet' 'BLIND' ("rc=" + $r.ExitCode + ' - never fatal: the packet stays at its last version') $r.Elapsed }
+  }
+
+  if ((Remaining) -lt 120) { Record 'gold-seed' 'SKIPPED' 'no window left' 0 }
+  else {
+    $r = Invoke-Stage 'gold-seed' $py @('graph\gold\seed_gold.py') ([math]::Max(60, [math]::Min(300, (Remaining) - 60)))
+    if ($r.Ok) { Record 'gold-seed' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
+    elseif ($r.TimedOut) { Record 'gold-seed' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
+    else { Record 'gold-seed' 'BLIND' ("rc=" + $r.ExitCode + ' - never fatal: gold stays at its last build') $r.Elapsed }
+  }
+
+  # Is the scoreboard stale against its inputs? Asked of graph's own front door, through Invoke-Stage
+  # rather than `& $py ... 2>$null`: under EAP=Stop a native child's stderr line is a terminating throw in
+  # PS 5.1, which is the trap Invoke-Stage's own header records costing an audit.
+  $stale = $null
+  if ((Remaining) -ge 300) {
+    $ls = Invoke-Stage 'learning-status' $py @('graph\learning\learning_status.py', '--json') 60
+    if ($ls.Ok) {
+      try { $stale = (($ls.Tail | Select-Object -Last 1) | ConvertFrom-Json).eval_days_stale_vs_inputs } catch { $stale = $null }
+    }
+  }
+  if ((Remaining) -lt 300) { Record 'gold-score' 'SKIPPED' 'no window left' 0 }
+  elseif ($null -eq $stale) { Record 'gold-score' 'BLIND' 'learning_status.py could not say whether the scoreboard is stale, so it is not re-scored blind' 0 }
+  elseif ([double]$stale -le 0) { Record 'gold-score' 'SKIP' 'the scoreboard is newer than every input' 0 }
+  else {
+    $r = Invoke-Stage 'gold-score' $py @('graph\eval\score.py', '--context', 'nightly') ([math]::Max(120, [math]::Min(900, (Remaining) - 60)))
+    if ($r.Ok) { Record 'gold-score' 'OK' ("re-scored, inputs were " + $stale + " day(s) newer; " + (($r.Tail | Where-Object { $_ -match 'false|missed|recall' } | Select-Object -Last 1))) $r.Elapsed }
+    elseif ($r.TimedOut) { Record 'gold-score' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
+    else { Record 'gold-score' 'BLIND' ("rc=" + $r.ExitCode + ' - never fatal') $r.Elapsed }
+  }
+
+  # -- 5e-5f. THE TWO GENERALISATION ENGINES THAT HAD NO CALLER (WS 8c, 2026-09-10) ------------------
+  # graph\learning\lint_adjacency.py finds excludes that word order and plurals defeat - the class behind
+  # four wrong prices in two days - and graph\learning\local_triage.py --cluster-rejections turns banked
+  # model rejections into candidate category-exclude families. Both were built, both self-described as
+  # the generalisation half of the loop, and neither had a single caller anywhere in the estate. Both are
+  # REPORTS: they propose families and near-misses for a person, and change nothing on a board.
+  if ((Remaining) -lt 120) { Record 'lint-adjacency' 'SKIPPED' 'no window left' 0 }
+  else {
+    $r = Invoke-Stage 'lint-adjacency' $py @('graph\learning\lint_adjacency.py') ([math]::Max(60, [math]::Min(600, (Remaining) - 60)))
+    # The summary is printed LAST by the script for exactly this reason: Invoke-Stage keeps 14 lines.
+    $lintSum = [string]($r.Tail | Where-Object { $_ -match '^LINT-ADJACENCY-SUMMARY' } | Select-Object -Last 1)
+    if ($r.Ok) { Record 'lint-adjacency' 'OK' ($lintSum -replace '^LINT-ADJACENCY-SUMMARY\s*', '') $r.Elapsed }
+    elseif ($r.TimedOut) { Record 'lint-adjacency' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
+    else { Record 'lint-adjacency' 'BLIND' ("rc=" + $r.ExitCode + ' - never fatal') $r.Elapsed }
+  }
+
+  # WEEKLY, and only with 20 minutes of window left, because it spends model calls on the card this chain
+  # already shares with the resolve lane - the same trade the ML suite below makes, for the same reason.
+  # llama-server is up at this point (stage 3 started it; the finally block stops it), so an endpoint that
+  # did not come up makes the script exit non-zero and the stage record BLIND rather than fail the chain.
+  $famStamp = Join-Path $grocery 'out\logs\rejection-families-last.txt'
+  $famDue = $true
+  try {
+    if (Test-Path $famStamp) {
+      $famLast = [datetime]((Get-Content $famStamp -Raw -Encoding UTF8).Trim())
+      $famDue = ((Get-Date) - $famLast).TotalDays -ge 7
+    }
+  } catch { $famDue = $true }
+  if (-not $famDue) { Record 'rejection-families' 'SKIP' 'ran within the last 7 days' 0 }
+  elseif ((Remaining) -lt 1200) { Record 'rejection-families' 'SKIPPED' 'needs 20 min of window with the model up' 0 }
+  else {
+    $famOut = Join-Path $grocery 'out\logs\rejection-families.json'
+    $r = Invoke-Stage 'rejection-families' $py @('graph\learning\local_triage.py', '--cluster-rejections', '--limit', '600', '--jobs', "$Jobs", '--out', $famOut) ([math]::Max(300, [math]::Min(1800, (Remaining) - 120)))
+    if ($r.Ok) {
+      Record 'rejection-families' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed
+      try { (Get-Date).ToString('s') | Set-Content $famStamp -Encoding UTF8 } catch { }
+    }
+    elseif ($r.TimedOut) { Record 'rejection-families' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
+    else { Record 'rejection-families' 'BLIND' ("rc=" + $r.ExitCode + ' - tracked, never fatal') $r.Elapsed }
+  }
 
   # -- 6. THE ML REGRESSION SUITE, ON A SCHEDULE (2026-09-07, backlog I18) ---------------------------
   # Nothing ran hardeval, backtest or seed_sweep on any schedule; they ran when a human remembered.

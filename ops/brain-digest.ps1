@@ -314,6 +314,23 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       if ($a.Count -eq 0 -and -not (Test-Path -LiteralPath $p)) { return $null }
       @{ Count = $a.Count; AgeDays = 0 }
     }
+  # WS 10a: a gate that keeps going red with nothing durable following it. A REPORT that never fails
+  # anything - see ops\audit-gate-followthrough.ps1 for why a ratchet on this proxy would have been red
+  # on day one against a gate working correctly. The digest is where a candidate reaches a person.
+  $queues += Get-QueueRow -Name 'recurring red gates' -Floor 7 `
+    -Cost 'CLAUDE.md says a recurring defect earns a memory, a gate or a command rather than another repair. A gate red again and again with nothing committed that names it is that rule going unkept, visibly.' `
+    -Count {
+      $fo = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo 'ops\audit-gate-followthrough.ps1') -Json
+      $jl = @($fo | Where-Object { "$_" -match '^followthrough-json: ' })
+      if (-not $jl.Count) { return $null }
+      $fj = ("$($jl[0])" -replace '^followthrough-json: ', '') | ConvertFrom-Json
+      if (-not $fj.known) { return $null }
+      $age = -1
+      if ($fj.oldest_first_red) {
+        try { $age = [math]::Round(([DateTime]::UtcNow - [DateTime]::Parse($fj.oldest_first_red).ToUniversalTime()).TotalDays, 1) } catch { $age = -1 }
+      }
+      @{ Count = [int]$fj.candidates; AgeDays = $age }
+    }
   $queues += Get-QueueRow -Name 'open triage items' -Floor 4 `
     -Cost 'an alert nobody has judged cannot feed the precision that decides re-arm timing. 14 alert types sat at "too few to state a precision".' `
     -Count {

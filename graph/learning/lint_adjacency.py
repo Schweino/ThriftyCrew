@@ -234,6 +234,10 @@ def main() -> int:
     print("product it was never meant to catch is correct behaviour. Start with the LIVE")
     print("rows - those are prices a shopper can see today.")
     print("Widening a pattern re-homes products; measure where they land before fixing.")
+    # THE COUNT AGAIN, LAST, on purpose (2026-09-10, WS 8c). graph\pipeline\nightly.ps1 keeps only the last
+    # 14 lines of a stage's output, and the count line above is followed by the whole findings list, so a
+    # nightly stage recording this script would have recorded the advice paragraph and lost the number.
+    print(f"LINT-ADJACENCY-SUMMARY {len(findings)} near-miss(es); {live_n} on a product the board publishes")
     return 0
 
 
