@@ -109,6 +109,73 @@ function Get-JsonlAge {
   return @{ Count = $n; AgeDays = $age }
 }
 
+function Get-UnruledSum {
+  <# The sum of EVERY `UNRULED n` in an owner's report, or $null when there is none. PURE.
+     recall-forget prints one for sections and one for reflexes; recall-consolidate prints one for same-store and
+     one for cross-project clusters. Until 2026-09-10 this digest read only the FIRST, so 13 unruled cross-project
+     clusters showed as `memory clusters 0 empty`. #>
+  param([string]$Text)
+  $ms = [regex]::Matches("$Text", 'UNRULED\s+(\d+)')
+  if ($ms.Count -eq 0) { return $null }
+  $n = 0
+  foreach ($m in $ms) { $n += [int]$m.Groups[1].Value }
+  return $n
+}
+
+function Get-CurrentClassCount {
+  <# @{ Count; AgeDays } of UNKNOWN failure classes in the NEWEST derivation, once per id; $null for an absent file.
+     recall-classes.py APPENDS each run's cards, so counting every UNKNOWN row counted a class once per run: 7 on
+     2026-09-10 where the newest run held 3. The same read as recall-dream.current_classes, which the inbox uses. #>
+  param([string]$Path)
+  if (-not (Test-Path -LiteralPath $Path)) { return $null }
+  $rows = New-Object Collections.Generic.List[object]
+  foreach ($line in [IO.File]::ReadAllLines($Path)) {
+    if (-not "$line".Trim()) { continue }
+    $d = $null
+    try { $d = $line | ConvertFrom-Json } catch { continue }
+    if ($d) { $rows.Add($d) }
+  }
+  $newest = ''
+  foreach ($r in $rows) { if ([string]::CompareOrdinal([string]$r.derived, $newest) -gt 0) { $newest = [string]$r.derived } }
+  $last = New-Object 'System.Collections.Generic.Dictionary[string,object]'
+  foreach ($r in $rows) { if ([string]::Equals([string]$r.derived, $newest, [StringComparison]::Ordinal)) { $last[[string]$r.id] = $r } }
+  $n = 0
+  foreach ($r in $last.Values) { if ($r.status -eq 'UNKNOWN-TO-THE-ESTATE') { $n++ } }
+  return @{ Count = $n; AgeDays = 0 }
+}
+
+# J3 of design\PLAN-brain-v3-2026-09-10.md: the queues skills\recall-inbox.py gathers and rules. Its READY reflex
+# drafts have no row here, so the line below can read lower than the inbox by those, and never higher.
+$script:InboxQueues = @('forgetting candidates', 'memory clusters', 'graph alias proposals', 'failure classes UNKNOWN',
+  'memory drafts waiting')
+
+function Format-InboxLine {
+  <# The inbox lines: how much waits in the queues the ruling inbox walks, oldest first, and its command. PURE.
+     Built from this page's own queue rows, so the line and the table cannot disagree. A queue whose counter
+     could not run makes the total a floor, and the line says so rather than printing a smaller number. #>
+  param($Queues, [string]$Command = 'recall-inbox.py')
+  $mine = @(@($Queues) | Where-Object { $script:InboxQueues -contains $_.Name })
+  if (-not $mine.Count) { return ,@() }
+  $known = @($mine | Where-Object { $_.Known })
+  $n = 0
+  foreach ($q in $known) { $n += [int]$q.Count }
+  $blind = $mine.Count - $known.Count
+  $parts = @($known | Where-Object { $_.Count -gt 0 } |
+      Sort-Object -Property @{ Expression = { [double]$_.AgeDays }; Descending = $true } |
+      ForEach-Object { if ([double]$_.AgeDays -gt 0) { "$($_.Name) $($_.Count), $($_.AgeDays)d" } else { "$($_.Name) $($_.Count)" } })
+  $lines = New-Object Collections.Generic.List[string]
+  $lines.Add('RULING INBOX')
+  if ($n -eq 0 -and $blind -eq 0) {
+    $lines.Add('  nothing waits in the queues the inbox rules.')
+  } else {
+    $total = if ($blind -gt 0) { "at least $n item(s) wait - $blind of its queue(s) could not be counted" } else { "$n item(s) wait" }
+    $tail = if ($parts.Count) { ', oldest first: ' + ($parts -join '; ') } else { '' }
+    $lines.Add("  $total$tail")
+  }
+  $lines.Add("  rule them in one sitting, nothing runs until you type yes:  $Command")
+  return ,$lines.ToArray()
+}
+
 function Get-SleepNight {
   <# What last night's pass did. @{ When; Red; Failed; Steps; Text } #>
   param([string]$Path)
@@ -128,7 +195,7 @@ function Get-SleepNight {
 function Format-Digest {
   <# The page, as text. PURE - takes the gathered state, returns the string, so the
      fixtures can drive the wording without a filesystem or a mailer. #>
-  param($Night, $Queues, [string]$Weakest, $Events, [string[]]$Estate = @())
+  param($Night, $Queues, [string]$Weakest, $Events, [string[]]$Estate = @(), [string]$InboxCommand = 'recall-inbox.py')
   $out = New-Object Collections.Generic.List[string]
   $out.Add("BRAIN DIGEST - $(Get-Date -Format 'yyyy-MM-dd HH:mm')")
   $out.Add('')
@@ -171,6 +238,12 @@ function Format-Digest {
   }
   if ($over -eq 0) { $out.Add('  Nothing is over its floor.') }
   $out.Add('')
+  $inboxR = Format-InboxLine -Queues $Queues -Command $InboxCommand
+  $inbox = @($inboxR)
+  if ($inbox.Count) {
+    foreach ($l in $inbox) { $out.Add($l) }
+    $out.Add('')
+  }
   $out.Add("EVENTS IN THE LAST DAY")
   if (-not $Events -or $Events.Count -eq 0) {
     $out.Add('  none on the bus')
@@ -277,6 +350,49 @@ if ($SelfTest) {
     (($rl.Count -eq 1) -and (Test-Path -LiteralPath ([string]$rl[0]))) ("count=$($rl.Count) first=$($rl[0])")
   Remove-Item -LiteralPath $rlDir -Recurse -Force -ErrorAction SilentlyContinue
 
+  # PLAN-brain-v3 J2 bar (2026-09-10): the digest's counts match the ruling inbox's.
+  Case 'MUST FIRE' 'every UNRULED count in a report is summed, not only the first' `
+    ((Get-UnruledSum -Text "CLUSTERS: 4, of which UNRULED 0`nCROSS-PROJECT CLUSTERS: 13, of which UNRULED 13") -eq 13)
+  Case 'MUST FIRE' 'a report with no UNRULED line reads unknown, never zero' `
+    ($null -eq (Get-UnruledSum -Text 'Traceback (most recent call last)'))
+  Case 'CLEAN TWIN' 'a report with one UNRULED line still counts it' `
+    ((Get-UnruledSum -Text 'SECTIONS never opened: 16, of which UNRULED 2') -eq 2)
+  $ctmp = Join-Path $env:TEMP ("digest-classes-selftest-{0}.jsonl" -f $PID)
+  $crows = @('{"id": "class:a", "derived": "2026-09-09", "status": "UNKNOWN-TO-THE-ESTATE"}',
+    '{"id": "class:b", "derived": "2026-09-09", "status": "UNKNOWN-TO-THE-ESTATE"}',
+    '{"id": "class:a", "derived": "2026-09-10", "status": "UNKNOWN-TO-THE-ESTATE"}',
+    '{"id": "class:a", "derived": "2026-09-10", "status": "UNKNOWN-TO-THE-ESTATE"}',
+    '{"id": "class:c", "derived": "2026-09-10", "status": "covered-by-reflex"}')
+  [IO.File]::WriteAllText($ctmp, (($crows -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
+  $cc = Get-CurrentClassCount -Path $ctmp
+  Case 'MUST FIRE' 'unknown failure classes count once per id, in the newest derivation only' `
+    ($cc.Count -eq 1) ("n=$($cc.Count)")
+  Case 'MUST FIRE' 'a missing classes file reads unknown, never zero' `
+    ($null -eq (Get-CurrentClassCount -Path ($ctmp + '.absent')))
+  Remove-Item -LiteralPath $ctmp -ErrorAction SilentlyContinue
+
+  # J3: the inbox line.
+  $iq = @(
+    @{ Name = 'graph alias proposals'; Count = 60; AgeDays = 20.3; Floor = 14; Cost = 'aliases wait'; Known = $true }
+    @{ Name = 'memory clusters'; Count = 13; AgeDays = 0; Floor = 14; Cost = 'x'; Known = $true }
+    @{ Name = 'failure classes UNKNOWN'; Count = 3; AgeDays = 0; Floor = 7; Cost = 'x'; Known = $true }
+    @{ Name = 'open triage items'; Count = 9; AgeDays = 30; Floor = 4; Cost = 'x'; Known = $true }
+  )
+  $ilR = Format-InboxLine -Queues $iq -Command 'py recall-inbox.py'
+  $il = @($ilR) -join "`n"
+  Case 'MUST FIRE' 'the inbox line counts what waits in its queues, oldest first, and names the command' `
+    (($il -match '76 item\(s\) wait, oldest first: graph alias proposals 60, 20.3d; ') -and ($il -match 'memory clusters 13') -and ($il -match 'py recall-inbox\.py')) $il
+  Case 'MUST NOT FIRE' 'a queue the inbox does not rule is not counted into it' (-not ($il -match 'triage')) $il
+  $iuR = Format-InboxLine -Queues @(@{ Name = 'memory clusters'; Count = 2; AgeDays = 0; Floor = 14; Cost = 'x'; Known = $true },
+    @{ Name = 'forgetting candidates'; Count = 0; AgeDays = -1; Floor = 7; Cost = 'x'; Known = $false }) -Command 'c'
+  $iu = @($iuR) -join ' '
+  Case 'MUST FIRE' 'an inbox queue that could not be counted makes the total a floor, and says so' ($iu -match 'at least 2 item') $iu
+  $noneR = Format-InboxLine -Queues @(@{ Name = 'open triage items'; Count = 1; AgeDays = 0; Floor = 4; Cost = 'x'; Known = $true }) -Command 'c'
+  Case 'MUST NOT FIRE' 'a page with none of the inbox queues prints no inbox block' (@($noneR).Count -eq 0) "n=$(@($noneR).Count)"
+  $pageTxt = Format-Digest -Night $night -Queues $iq -Weakest 'x' -Events @() -InboxCommand 'py recall-inbox.py'
+  Case 'CLEAN TWIN' 'the page carries the inbox block, and the queue table above it still marks overdue' `
+    (($pageTxt -match 'RULING INBOX') -and ($pageTxt -match 'OVERDUE: graph alias proposals - aliases wait')) $pageTxt
+
   # CLEAN TWIN: the jsonl reader tells absent from fresh.
   $tmp = Join-Path $env:TEMP ("digest-selftest-{0}.jsonl" -f $PID)
   Remove-Item -LiteralPath $tmp -ErrorAction SilentlyContinue
@@ -328,9 +444,9 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
     -Count {
       $oR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $SKILLS 'recall-forget.py'))
       $o = @($oR)
-      $m = [regex]::Match(($o -join "`n"), 'UNRULED (\d+)')
-      if (-not $m.Success) { return $null }
-      @{ Count = [int]$m.Groups[1].Value; AgeDays = 0 }
+      $un = Get-UnruledSum -Text ($o -join "`n")
+      if ($null -eq $un) { return $null }
+      @{ Count = $un; AgeDays = 0 }
     }
   $queues += Get-QueueRow -Name 'memory clusters' -Floor 14 `
     -Cost 'the memory store stays 156 dated incidents. Five separate CRLF memories remain five memories forever instead of one paragraph plus four pointers.' `
@@ -339,11 +455,12 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       # prints. The first draft of this matched `(\d+) unruled`, which appears nowhere
       # in that output, so the queue read UNKNOWN and the digest correctly refused to
       # call it empty. That refusal is why the bug was visible at all.
+      # Same-store AND cross-project: every UNRULED on the page, summed (Get-UnruledSum, 2026-09-10).
       $oR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $SKILLS 'recall-consolidate.py'))
       $o = @($oR)
-      $m = [regex]::Match(($o -join "`n"), 'UNRULED\s+(\d+)')
-      if (-not $m.Success) { return $null }
-      @{ Count = [int]$m.Groups[1].Value; AgeDays = 0 }
+      $un = Get-UnruledSum -Text ($o -join "`n")
+      if ($null -eq $un) { return $null }
+      @{ Count = $un; AgeDays = 0 }
     }
   $queues += Get-QueueRow -Name 'graph alias proposals' -Floor 14 `
     -Cost 'Stage 1 produces nightly and Stage 2 has no scheduler. 60 proposals have waited since 2026-08-21; every one is an alias the board is not using.' `
@@ -365,10 +482,7 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   $queues += Get-QueueRow -Name 'failure classes UNKNOWN' -Floor 7 `
     -Cost 'a signature recurring across sessions that no reflex, no draft and nothing in the store names. Nobody is even able to ask about it yet.' `
     -Count {
-      $p = Join-Path $CLAUDE 'recall-classes.jsonl'
-      $a = Get-JsonlAge -Path $p -Where { param($d) $d.status -eq 'UNKNOWN-TO-THE-ESTATE' }
-      if ($a.Count -eq 0 -and -not (Test-Path -LiteralPath $p)) { return $null }
-      @{ Count = $a.Count; AgeDays = 0 }
+      Get-CurrentClassCount -Path (Join-Path $CLAUDE 'recall-classes.jsonl')
     }
   # WS 10a: a gate that keeps going red with nothing durable following it. A REPORT that never fails
   # anything - see ops\audit-gate-followthrough.ps1 for why a ratchet on this proxy would have been red
@@ -466,7 +580,8 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   $evRaw = Read-TcEvents -SinceEpoch $since
   $events = @($evRaw)
 
-  $text = Format-Digest -Night $night -Queues $queues -Weakest $weakest -Events $events -Estate $estatePage
+  $inboxCmd = "$PY " + (Join-Path $SKILLS 'recall-inbox.py')
+  $text = Format-Digest -Night $night -Queues $queues -Weakest $weakest -Events $events -Estate $estatePage -InboxCommand $inboxCmd
   if (-not $Quiet) { $text }
 
   if ($Alert) {

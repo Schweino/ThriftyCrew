@@ -8,9 +8,9 @@ schedule - so this file comes before the code, and every bar below is written be
 
 | Build | Name | Status | Commit | Measured |
 |---|---|---|---|---|
-| E | One turn-keyed episode record | NOT STARTED | | |
-| M | Memory recall with a precision layer | NOT STARTED (needs E's cases) | | |
-| J | A judgement lane that runs, and a ruling inbox | NOT STARTED | | |
+| E | One turn-keyed episode record | E1, E2, E3 SHIPPED 2026-09-10. E4 NOT READY: it needs 30 turns whose footer names what was used | skills 54e1a1e, 552c857, 7f429e0, 0f0baf5 | 139 episodes on the first build. Rows carrying a turn: prompt 616 of 3,126, reflex 4 of 884, outcome 1 of 551, consulted 1 of 192, structural 12 of 12 - the old rows predate the stamp, so E1's 95% bar is re-read on 2026-09-13 over rows written since |
+| M | Memory recall with a precision layer | NOT STARTED (needs E's cases: 30 labelled pairs across 10 sessions) | | |
+| J | A judgement lane that runs, and a ruling inbox | J2, J3, J4 SHIPPED 2026-09-10. J1 waits for tonight's nightly baseline | skills 8d326b8 (J2); estate 22c2402e9 (J4), J3 in the commit that adds this line | Inbox and digest agree on the live queues: 76 waiting (60 graph aliases, 13 cross-project clusters, 3 failure classes), unknown 0 |
 
 ---
 
@@ -25,7 +25,9 @@ schedule - so this file comes before the code, and every bar below is written be
 - **Memory never reaches a prompt by relevance.** The prompt hook's lexical path searches the skills corpus only.
   Adding memory corpora as-is cost a consult hit and raised off-topic firing (proxy) from 5 to 7 of 13.
 - **Every judgement queue drains only when a person sits down.** 60 alias proposals 20 days old, 27 approved
-  patches unapplied, 13 cross-project clusters and 7 failure classes unruled. The dream skipped its model pass
+  patches unapplied, 13 cross-project clusters and 3 failure classes unruled (`[CORRECTED 2026-09-10]` first written as 7, which
+  counted each class once per daily run of an append-only log; the digest and the dream both read it that way, and
+  both now read the newest run once per class). The dream skipped its model pass
   because none was up at 04:35, and none can be: the card is an RTX 5070 Ti with 16,303 MiB, 10,688 MiB in use
   by day, and the local model's weights are 12.2 GiB. **The model only fits inside the nightly window.**
 
@@ -104,8 +106,10 @@ reserve is a trade with graph adjudication and comes back to Brad with the numbe
 
 **J2 - one ruling inbox.** `recall-inbox.py`, a terminal walk through every item across both halves:
 forgetting candidates and memory clusters (their owners' ruling commands), failure classes, shadow-proven
-reflex drafts, memory drafts (accept = move into the store plus a MEMORY.md line; delete), and the graph's
-alias proposals (verdicts collected into the file `stage2_review.py --ingest` reads; `--apply` stays gated by
+reflex drafts, memory drafts (accept = move into the store plus a MEMORY.md line; reject = `[CORRECTED 2026-09-10]` moved
+to `_drafts/_rejected`, not deleted, which is the same ruling and can be undone), and the graph's
+alias proposals (every `proposed` row of proposals.json - the review packet holds a 10-of-60 sample, so the
+inbox reads the table and uses the packet only for blast radius; verdicts collected into the file `stage2_review.py --ingest` reads; `--apply` stays gated by
 its shadow evaluation). Each item shows its evidence and the model's proposal if any. **Nothing runs until the
 end**: the inbox prints the exact commands it will run, asks once, runs them, and logs every ruling with who
 confirmed it. A terminal first, because a page cannot run local commands and a click on one would still need a
