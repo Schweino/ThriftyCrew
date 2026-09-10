@@ -165,8 +165,12 @@ through the live compiler, its fixtures hold under the live scope check, it fire
 no row or draft already carries it; it reports, and never requires, the recorded failures the cue matches. It writes
 drafts only, and an author's near misses are never written as the must_not_fire a person owes before a row goes live.
 Batch 1: 22 memories, 22 through the checks, into the shadow ladder; the Get-Content-without-Encoding write-back cue
-already matches 14 recorded failures over 8 sessions. R judges each once promoted; the next batch waits on which of
-these the ladder and the inbox actually promote.
+already matches 14 recorded failures over 8 sessions. R judges each once promoted.
+Batch 2 (skills 734414d, Brad asked for it before batch 1 had evidence): 19 more of the 302 uncovered memories, the ones
+whose trap shows up as a command, a file edit or a URL; the rest are rulings, history and design lessons with nothing a
+pattern could catch. The check refused one cue as loud (a CRLF cue on 4.69% of real commands) and it was rewritten to the
+memory's exact shape (0.19%). The strongest new cue, a standalone compare-deals rebuild, matches 33 recorded failures over
+9 sessions. 41 authored drafts in all; batch 3 waits on what the ladder and the inbox promote from these.
 
 ## 4. Order
 
