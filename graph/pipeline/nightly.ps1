@@ -567,6 +567,24 @@ if ($SelfTest) {
   $nSkipName = "Start-Run" + "Log -Name 'graph-nightly-skipped'"
   if (-not $src.Contains($nSkipName)) { Write-Output '  X CLEAN TWIN: a skipped occurrence must still leave a record, under its own name'; $bad++ }
 
+  # ---- the input stage reads the CONTENT clock (2026-09-10) -------------------------------------
+  # The founding case is a graph.db whose mtime moved every day while its newest observation stayed at
+  # 2026-08-21. The DECISION is fixtured in lib\input-assert.ps1 -SelfTest and the READER in
+  # graph\pipeline\newest_observation.py --selftest; what belongs HERE is that this stage actually
+  # hands the one to the other. NEEDLES BUILT BY CONCATENATION, or each check line is its own match.
+  $nClockStage = "Invoke-Stage " + "'observations-clock'"
+  $nClockWhat  = 'NewestRecord' + 'What  = '
+  $nClockStamp = 'NewestRecord      = ' + '$obsStamp'
+  $nOldOk      = 'is inside its ' + '26h window'
+  # MUST FIRE: the reader must run, or there is no stamp to judge.
+  if (-not $src.Contains($nClockStage)) { Write-Output '  X MUST-FIRE: the inputs stage must run the newest-observation reader'; $bad++ }
+  # MUST FIRE: the content clock must be DECLARED, or the assertion quietly checks the file mtime alone.
+  if (-not $src.Contains($nClockWhat)) { Write-Output '  X MUST-FIRE: the inputs stage must declare the content clock (NewestRecordWhat)'; $bad++ }
+  # MUST FIRE: the stamp the reader printed must be the one handed over.
+  if (-not $src.Contains($nClockStamp)) { Write-Output '  X MUST-FIRE: the reader''s stamp must reach the assertion'; $bad++ }
+  # MUST FIRE: the fixed OK text that judged graph.db on its mtime alone must not come back.
+  if ($src.Contains($nOldOk)) { Write-Output '  X MUST-FIRE: the fixed mtime-only OK text is back in the inputs stage'; $bad++ }
+
   if ($bad) { Write-Output "SELF-TEST FAILED ($bad)"; exit 2 }
   Write-Output 'self-test OK'
   exit 0
@@ -599,6 +617,7 @@ if ($WhatIfOnly) {
   Log ("nightly matching chain: now {0}, deadline {1} ({2} min), jobs {3}" -f `
        $started.ToString('HH:mm'), $deadline.ToString('yyyy-MM-dd HH:mm'), [int]($deadline - $started).TotalMinutes, $Jobs)
   Log 'plan only:'
+  Write-Output "  0 inputs   $py graph\pipeline\newest_observation.py, then lib\input-assert.ps1   (the file clock AND the newest observed_at)"
   Write-Output "  0b expiry  $py graph\learning\verdict_expiry.py --emit   (tonight's re-ask list, capped; resolve ignores a stale one)"
   Write-Output "  1 emit     $py graph\pipeline\resolve.py --emit-contested sidecar\data\contested-pairs.json"
   Write-Output "  1b defs    $py graph\pipeline\emit_commodity_defs.py --out sidecar\data\commodity-defs-graph.json"
@@ -673,12 +692,38 @@ try {
   #       GPU window and must reach its teardown, so an early exit here is the one failure mode worse
   #       than a stale input. 26 hours is the daily chain's own cadence plus an hour, the same window
   #       capture-watchdog uses on the capture status file.
+  #
+  #       THE FILE CLOCK READ GREEN FOR 20 NIGHTS (2026-09-10). graph.db's mtime moved every morning,
+  #       because grocery\audit-graph-gates.ps1 ran a STRUCTURE-ONLY import, while price_observations
+  #       held 26,740 rows dated 2026-07-14 to 2026-08-21 and nothing newer. This stage recorded OK on
+  #       every one of those nights, and emit said "contested: 0 question(s) of 20478" on every one,
+  #       re-settling the same frozen set. The file only ever said something opened the database; the
+  #       newest observed_at is what says a price arrived. Both clocks are asserted now, either one
+  #       past its window is BLIND, and the record says which.
+  #
+  #       THE RECORD WINDOW IS 36 h, DERIVED AND NOT SWEPT. observed_at is a capture DATE, read as the
+  #       end of its day (lib\input-assert.ps1). The import runs once a day at ~08:15, before that
+  #       day's regular captures land (09:17 to 11:39 on 2026-09-09), so on a healthy day the newest
+  #       regular observation is YESTERDAY's, and the latest this chain reads it is the 05:30 catch-up,
+  #       29.5 h after the end of yesterday. 36 h is that plus 6.5 h. Considered and not used: 26 h, the
+  #       file's window, which would false-fire on every catch-up after 02:00; and 48 h, which lets one
+  #       whole missed import day through unspoken. WHEN THE PRODUCER STOPS the age only grows, so this
+  #       fires within a day and a half of the last import - it watches for absence, not only excess.
   . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\input-assert.ps1')
-  $iaRc = Assert-TcInputs -Stage 'graph-nightly' -Inputs @(
-    @{ Path = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sqlite\graph.db'); Producer = 'the 08:00 Daily Capture chain (compare-deals identity emission -> graph import)'; MaxAgeHours = 26.0 }
-  )
-  if ($iaRc -eq 0) { Record 'inputs' 'OK' 'graph.db is inside its 26h window' 0 }
-  else { Record 'inputs' 'BLIND' 'graph.db is missing or stale - every verdict below is computed on an input nobody refreshed. NOT a failure and NOT a pass.' 0 }
+  $clk = Invoke-Stage 'observations-clock' $py @('graph\pipeline\newest_observation.py') 120
+  $obsStamp = Get-TcStampFromLines -Lines $clk.Tail -Marker 'NEWEST-OBSERVATION' -Key 'observed_at'
+  $iaIn = @{
+    Path              = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sqlite\graph.db')
+    Producer          = 'the daily chain''s graph-gates lane (grocery\audit-graph-gates.ps1 -> graph\import\import_all.py --observations)'
+    MaxAgeHours       = 26.0
+    NewestRecord      = $obsStamp
+    NewestRecordWhat  = 'newest price_observations.observed_at'
+    RecordMaxAgeHours = 36.0
+  }
+  $iaRc  = Assert-TcInputs -Stage 'graph-nightly' -Inputs @($iaIn)
+  $iaRep = Test-TcInput @iaIn
+  if ($iaRc -eq 0) { Record 'inputs' 'OK' $iaRep.Message 0 }
+  else { Record 'inputs' 'BLIND' ($iaRep.State + ' - ' + $iaRep.Message + ' Every verdict below is computed on that input. NOT a failure and NOT a pass.') 0 }
 
   # -- 0b. VERDICT EXPIRY (WS 7b, design\PLAN-brain-v2-2026-09-09.md). BEFORE the emit, because the
   #        contested preview and the helper sweep must see tonight's re-ask questions too, or the helper

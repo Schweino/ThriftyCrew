@@ -31,6 +31,35 @@
   `fallback tests absence, not function` are both this estate's own lessons; the sibling check
   audit-semantic-identity already follows exactly this convention.
 
+  THE OBSERVATION IMPORT, AND THE 20 DAYS IT DID NOT HAPPEN (2026-09-10). This lane is the one scheduled
+  caller of graph\import\import_all.py, and from its first commit (c096c779b, 2026-08-21 16:39) it ran
+  the STRUCTURE-ONLY form. Price observations had only ever been imported by hand: graph.db's own
+  decision_log records the --observations setting on every import_start, and all 16 that carried it ran
+  between 2026-08-20 19:02 and 2026-08-21 01:37:15, inside the build sessions. Every import after 16:19
+  that day, including this lane's one a day at ~08:15 from 2026-08-24, carried observations=false. So
+  nothing STOPPED: the backfill was never wired, and design\PLAN-use-the-cores-2026-08-23.md recorded
+  that it had no caller. The file kept being written, which is why graph\pipeline\nightly.ps1 read
+  graph.db as fresh for 20 nights while price_observations stayed at 2026-08-21.
+
+  It runs with --observations now. Measured 2026-09-10 on a snapshot copy of the live graph.db, through
+  graph\import\import_all.py --observations at c18472a70: rc=0 in 38 s against this lane's 600 s budget;
+  324 capture files; price_observations 26,740 -> 41,824 after the supersede-prune; question_verdicts
+  4,141 -> 4,442, with 4,136 keeping their 2026-08-21 decided_at (state.py carries an unchanged verdict's
+  date); the state gate PASS. The contested set the nightly model half reads went from 0 of 20,478 to
+  6,222 of 35,406. resolve.py is checkpointed and deadline-bounded, so a night that does not finish them
+  records PARTIAL and the next resumes.
+
+  AND IT CHECKS WHAT IT IMPORTED. After the import this lane reads the newest observed_at
+  (graph\pipeline\newest_observation.py) and judges it with lib\input-assert.ps1 - the same rule and the
+  same 36 h window nightly.ps1 derives for its own input - as an eighth advisory verdict,
+  observations_fresh. A structure-only import, or an importer that stops adding rows, leaves graph.db's
+  file fresh and its content old, and that now reads FAIL instead of reading nothing.
+
+  SCOPE OF A CLEAN REPORT: UNSOUND. The seven status.py gates each check what they were written to check,
+  and observations_fresh reads the newest date across every capture lane, so one lane that stopped while
+  another kept flowing still reads PASS. A clean report says graph found none of those defects in what it
+  imported, never that the board has none.
+
   Usage: audit-graph-gates.ps1 [-Quiet] [-Python <path>] [-SkipImport] [-SelfTest]
   Exit 0 = ran (findings are advisory). Exit 2 = self-test regression. Exit 3 = BLIND.
 #>
@@ -42,6 +71,7 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
 . (Join-Path $root 'python-lib.ps1')
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is a TERMINATING error, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
+. (Join-Path (Split-Path $root -Parent) 'lib\input-assert.ps1')   # the file clock AND the content clock, one rule shared with graph\pipeline\nightly.ps1
 
 $graphDir = Join-Path (Split-Path $root -Parent) 'graph'
 
@@ -74,6 +104,21 @@ function Get-GateVerdicts {
     if ($line -match '^\s{0,4}\S' -and $line -notmatch '^\s*(PASS|FAIL|SKIP|ERROR)\b') { $inBlock = $false }
   }
   return $out
+}
+
+function ConvertTo-FreshnessVerdict {
+  <#
+    .SYNOPSIS lib\input-assert.ps1's state for graph.db, in this report's verdict vocabulary. PURE.
+    .DESCRIPTION FRESH is PASS and STALE is FAIL, a finding. MISSING and UNREADABLE are ERROR: this lane
+                 could not read the clock, and Get-GateVerdicts' own rule is that an unrecognised shape
+                 is surfaced rather than assumed good.
+  #>
+  param([string]$State)
+  switch ($State) {
+    'FRESH' { return 'PASS' }
+    'STALE' { return 'FAIL' }
+    default { return 'ERROR' }
+  }
 }
 
 if ($SelfTest) {
@@ -112,6 +157,40 @@ if ($SelfTest) {
   # BLIND behaviour: a bogus interpreter path must resolve to nothing, not to the Store stub.
   T (-not (Get-GraphPython -Explicit 'C:\nope\python.exe')) 'a bad explicit interpreter resolves to empty, so the caller can report BLIND'
 
+  # ---- the observation import (2026-09-10) ------------------------------------------------------------
+  # MUST FIRE, SOURCE ASSERTION, THE FOUNDING BUG: this lane called import_all.py with no flags from its
+  # first commit, so the prices it exists to check stopped reaching graph.db on 2026-08-21 and nothing
+  # said so for 20 days. NEEDLES BUILT BY CONCATENATION, or these check lines would be their own matches.
+  $src = [IO.File]::ReadAllText($PSCommandPath)
+  # $nImportObs is built FROM $nImportAny and never written out whole: the first version of this line
+  # spelled the call in one literal, and the count below found that literal as a second import call.
+  $nImportAny = "'import\import_" + "all.py')"
+  $nImportObs = $nImportAny + " '--" + "observations'"
+  T ($src.Contains($nImportObs)) 'MUST FIRE  the scheduled import passes --observations, or no price reaches graph.db'
+  $nImports = ([regex]::Matches($src, [regex]::Escape($nImportAny))).Count
+  T ($nImports -eq 1) "MUST FIRE  exactly ONE import call, so no structure-only call can sit beside the real one (found $nImports)"
+
+  # MUST FIRE, THE FOUNDING CASE THROUGH THE LIVE PATH: a graph.db written seconds ago whose newest
+  # observation is 20 days old is FAIL, not PASS. Test-TcInput reads the real file's mtime.
+  $tmpDb = Join-Path $env:TEMP ('graph-gates-selftest-' + [guid]::NewGuid().ToString('N') + '.db')
+  try {
+    [IO.File]::WriteAllText($tmpDb, 'x')
+    $what = 'newest price_observations.observed_at'
+    $old = (Get-Date).AddDays(-20).ToString('yyyy-MM-dd')
+    $rep = Test-TcInput -Path $tmpDb -Producer 'self-test' -MaxAgeHours 26.0 -NewestRecord $old -NewestRecordWhat $what -RecordMaxAgeHours 36.0
+    T ((ConvertTo-FreshnessVerdict -State $rep.State) -eq 'FAIL') "MUST FIRE  a fresh graph.db over a 20-day-old newest observation reads FAIL (got $($rep.State))"
+    $rep = Test-TcInput -Path $tmpDb -Producer 'self-test' -MaxAgeHours 26.0 -NewestRecord ((Get-Date).ToString('yyyy-MM-dd')) -NewestRecordWhat $what -RecordMaxAgeHours 36.0
+    T ((ConvertTo-FreshnessVerdict -State $rep.State) -eq 'PASS') "CLEAN TWIN  the same file with an observation dated today reads PASS (got $($rep.State))"
+    $rep = Test-TcInput -Path $tmpDb -Producer 'self-test' -MaxAgeHours 26.0 -NewestRecord '' -NewestRecordWhat $what -RecordMaxAgeHours 36.0
+    T ((ConvertTo-FreshnessVerdict -State $rep.State) -eq 'ERROR') "MUST FIRE  a clock the reader could not read is ERROR, never PASS (got $($rep.State))"
+  } finally {
+    Remove-Item $tmpDb -Force -ErrorAction SilentlyContinue
+  }
+  # The reader's real output shape parses to its date, not to the COMPLETE marker printed after it.
+  $readerOut = @('lane regular newest=2026-08-21 rows=26740', 'NEWEST-OBSERVATION observed_at=2026-08-21 rows=26740 future_rows=0', 'NEWEST-OBSERVATION-COMPLETE rc=0')
+  $stamp = Get-TcStampFromLines -Lines $readerOut -Marker 'NEWEST-OBSERVATION' -Key 'observed_at'
+  T ($stamp -eq '2026-08-21') "CLEAN TWIN  the newest-observation line parses to its date (got '$stamp')"
+
   Write-Output ("GRAPH-GATES " + $(if ($f) { "SELF-TEST FAILED ($f)" } else { 'SELF-TEST PASS' }))
   Exit-Guard -Name 'graph-gates' -Summary "selftest failed=$f" -Code $(if ($f) { 2 } else { 0 })
 }
@@ -132,13 +211,16 @@ if (-not $py) {
 # today: a derived verdict must name the generation it was computed against.
 if (-not $SkipImport) {
   try {
-    $impR = Invoke-Native $py (Join-Path $graphDir 'import\import_all.py')
+    # --observations IS THE WHOLE REFRESH (header, 2026-09-10): captures -> price_observations ->
+    # resolve -> cell_state + question_verdicts -> state gate -> supersede-prune -> graph\state export.
+    # Without it this call refreshes structure only and graph.db's content stays wherever it last was.
+    $impR = Invoke-Native $py (Join-Path $graphDir 'import\import_all.py') '--observations'
     $impOut = @($impR.Lines)
     $impRc = $impR.ExitCode
     if ($impRc -ne 0) {
-      Write-Output ("graph-gates: BLIND - import failed (exit $LASTEXITCODE). The board is unaffected.")
+      Write-Output ("graph-gates: BLIND - import failed (exit $impRc). The board is unaffected.")
       Write-Output ("  " + (($impOut | Select-Object -Last 3) -join ' | '))
-      Exit-Guard -Name 'graph-gates' -Summary "BLIND: import exit $LASTEXITCODE" -Code 3
+      Exit-Guard -Name 'graph-gates' -Summary "BLIND: import exit $impRc" -Code 3
     }
   } catch {
     Write-Output ("graph-gates: BLIND - import threw: " + $_.Exception.Message + ". The board is unaffected.")
@@ -158,6 +240,22 @@ $gates = @(Get-GateVerdicts -Text $statusOut)
 if (-not $gates.Count) {
   Write-Output 'graph-gates: BLIND - status produced no gate block (its output shape may have moved). The board is unaffected.'
   Exit-Guard -Name 'graph-gates' -Summary 'BLIND: no gate block' -Code 3
+}
+
+# ---- WHAT THE IMPORT BROUGHT IN (2026-09-10): the file clock is not the content clock. -------------
+# Read AFTER the import, and also under -SkipImport, because a content clock that stopped is exactly
+# what a skipped or structure-only import leaves behind. 36 h is nightly.ps1's derived window for the
+# same input; this lane reads it ~08:15, hours after the end of the newest healthy capture day.
+$obsLines = @()
+try { $obsLines = @((Invoke-Native $py (Join-Path $graphDir 'pipeline\newest_observation.py')).Lines) } catch { $obsLines = @() }
+$obsStamp = Get-TcStampFromLines -Lines $obsLines -Marker 'NEWEST-OBSERVATION' -Key 'observed_at'
+$fresh = Test-TcInput -Path (Join-Path $graphDir 'sqlite\graph.db') -Producer 'this lane''s import (graph\import\import_all.py --observations)' `
+           -MaxAgeHours 26.0 -NewestRecord $obsStamp -NewestRecordWhat 'newest price_observations.observed_at' -RecordMaxAgeHours 36.0
+$gates += [pscustomobject]@{
+  gate    = 'observations_fresh'
+  verdict = (ConvertTo-FreshnessVerdict -State $fresh.State)
+  detail  = ("{0}: newest observed_at '{1}', {2} h old against a {3} h window; graph.db written {4} h ago" -f `
+             $fresh.State, $obsStamp, $fresh.RecordAgeHours, $fresh.RecordMaxAgeHours, $fresh.AgeHours)
 }
 
 $failing = @($gates | Where-Object { $_.verdict -ne 'PASS' })
