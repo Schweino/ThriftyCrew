@@ -365,6 +365,25 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       $ij = ("$($jl[0])" -replace '^incident-json: ', '') | ConvertFrom-Json
       @{ Count = [int]$ij.drafts_open; AgeDays = 0 }
     }
+  # WS 6c (2026-09-10): memory DRAFTS the dream wrote wait in each store's _drafts folder. They are not indexed
+  # and not in MEMORY.md, so this row is the only place a person sees them - accepting one is a file move and
+  # an index line, deleting one is the other answer. Age is the oldest draft's file time.
+  $queues += Get-QueueRow -Name 'memory drafts waiting' -Floor 7 `
+    -Cost 'a draft nobody reads is a lesson the dream extracted from a hard session and then lost. Unaccepted, it never reaches recall; undeleted, the next dream cannot draft that lesson again under the same name.' `
+    -Count {
+      $projects = Join-Path $CLAUDE 'projects'
+      if (-not (Test-Path -LiteralPath $projects)) { return $null }
+      $files = @(Get-ChildItem -LiteralPath $projects -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+          $d = Join-Path $_.FullName 'memory\_drafts'
+          if (Test-Path -LiteralPath $d) { Get-ChildItem -LiteralPath $d -File -Filter '*.md' -ErrorAction SilentlyContinue }
+        })
+      $age = 0
+      if ($files.Count) {
+        $oldest = ($files | Sort-Object LastWriteTime | Select-Object -First 1).LastWriteTime
+        $age = [math]::Round(((Get-Date) - $oldest).TotalDays, 1)
+      }
+      @{ Count = $files.Count; AgeDays = $age }
+    }
   # WS 10e (2026-09-10): a detector reading the same non-zero mark for 30 days may have stopped looking.
   $queues += Get-QueueRow -Name 'detectors flat 30 days' -Floor 7 `
     -Cost 'a detector returning the same non-zero number every day for a month has a backlog nobody works or has stopped finding new cases, and both read as health.' `
