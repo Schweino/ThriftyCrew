@@ -73,6 +73,8 @@ $script:ALLOW_NO_DEFINITION = @{
 $script:ALLOW_NO_REFUSAL = @{
   'ops\install-grocery-tasks.ps1' =
     'registers from committed XML under the names in its own $OWNED table, so it names no task literally. Its Test-RegistryAgrees checks every one of those names - and now every committed definition - against grocery\expected-automations.json on every push, which is a stronger guarantee than a refusal at install time.'
+  'ops\install-ops-tasks.ps1' =
+    'the ops-lane registrar, added 2026-09-09 for TC Sidecar Watchdog. Same shape as the grocery one directly above - it registers from committed XML under the names in its own $OWNED table, so this parser cannot resolve $o.Name to a literal - but it is held to MORE than that file, not less: it DOES carry Test-TaskWatched and calls it for every owned task BEFORE any scheduler call, so a partial install cannot leave one task registered and unwatched. Its own self-test additionally asserts each owned name against the committed XML <URI>, which is the mismatch a refusal keyed on the table would miss. This entry exempts the unresolvable NAME, never the refusal.'
   'media\reels\install-daily-task.ps1' =
     'the retired SMP registrar above. Adding a refusal to a script nobody should run is work spent on a file that is going away.'
 }
@@ -296,8 +298,25 @@ if ($SelfTest) {
     $rd = [IO.File]::ReadAllText($REGISTRY) | ConvertFrom-Json
     foreach ($row in @($rd.windows_tasks)) { if ($row -and $row.name) { $liveRegs += [string]$row.name } }
   }
-  T 'the tree yields five committed definitions and five registry rows' `
-    ($liveDefs.Count -eq 5 -and $liveRegs.Count -eq 5) ("defs=" + $liveDefs.Count + " regs=" + $liveRegs.Count)
+  # THE ASSERTION IS THAT THE TWO TABLES AGREE, NOT THAT THERE ARE FIVE OF THEM.
+  # `[CORRECTED 2026-09-09]` This read `-eq 5 -and -eq 5` and went red the first time a
+  # sixth task was legitimately added (TC Sidecar Watchdog, ops lane). A frozen count is
+  # the weaker assertion in both directions: it fails on correct work, which teaches
+  # people to edit the fixture, and it would PASS a tree with five definitions and five
+  # watch rows naming five different tasks - which is precisely the unwatched-task state
+  # this whole file exists to make impossible. Set equality cannot be satisfied that way,
+  # and it never needs editing when a task is added properly.
+  $onlyDefs = @($liveDefs | Where-Object { $liveRegs -notcontains $_ })
+  $onlyRegs = @($liveRegs | Where-Object { $liveDefs -notcontains $_ })
+  T 'every committed definition is watched, and every watched task has a definition' `
+    ($liveDefs.Count -gt 0 -and $onlyDefs.Count -eq 0 -and $onlyRegs.Count -eq 0) `
+    ("defs=" + $liveDefs.Count + " regs=" + $liveRegs.Count +
+     " unwatched=[" + ($onlyDefs -join ',') + "] undefined=[" + ($onlyRegs -join ',') + "]")
+  # AND THE FLOOR, because the check above is vacuously true over two empty lists: a
+  # discovery glob that matches nothing reads exactly like a tree in perfect order.
+  T 'the discovery actually resolved some definitions and some rows' `
+    ($liveDefs.Count -ge 5 -and $liveRegs.Count -ge 5) `
+    ("defs=" + $liveDefs.Count + " regs=" + $liveRegs.Count)
 
   $liveFindings = @()
   $scanned = 0

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>Every 15 minutes: is the semantic sidecar on 127.0.0.1:8077 alive? If it is down and the nightly does not own the GPU, start it through sidecar\start-sidecar.ps1. Defers inside the 21:30-06:30 window rather than taking the card.</Description>
+    <URI>\TC Sidecar Watchdog</URI>
+  </RegistrationInfo>
+  <Principals>
+    <Principal id="Author">
+      <UserId>__CURRENT_USER_SID__</UserId>
+      <LogonType>InteractiveToken</LogonType>
+    </Principal>
+  </Principals>
+  <Settings>
+    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
+    <ExecutionTimeLimit>PT10M</ExecutionTimeLimit>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <IdleSettings>
+      <Duration>PT10M</Duration>
+      <WaitTimeout>PT1H</WaitTimeout>
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
+  </Settings>
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2026-09-09T06:45:00-05:00</StartBoundary>
+      <Repetition>
+        <Interval>PT15M</Interval>
+        <Duration>P1D</Duration>
+        <StopAtDurationEnd>false</StopAtDurationEnd>
+      </Repetition>
+      <ScheduleByDay>
+        <DaysInterval>1</DaysInterval>
+      </ScheduleByDay>
+    </CalendarTrigger>
+  </Triggers>
+  <Actions Context="Author">
+    <Exec>
+      <Command>C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\sidecar-watchdog.ps1" -Alert</Arguments>
+    </Exec>
+  </Actions>
+</Task>

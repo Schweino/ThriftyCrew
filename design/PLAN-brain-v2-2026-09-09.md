@@ -27,7 +27,7 @@ was measured, what was refuted and what waits. This plan does not restate them; 
 
 | WS | Name | Status | Commit | Measured |
 |---|---|---|---|---|
-| 0 | Repair the starved stages | NOT STARTED | | |
+| 0 | Repair the starved stages | **DONE** 2026-09-09 | (this branch) | outcome join resolves 153 of 589 events, **66 burned / 87 fine** against a bar of 30 burned or a stated reason per unresolved fire; ladder produced its first REVIEW. Hook p50 **3,323 ms to 177 ms** with the sidecar still down. Sleep pass **18 of 18 steps exit 0**, against 14 and RED. `run-gates` 309 pass 0 fail; `check-skills` PASS |
 | 1 | Sense organs that do not depend on phrasing | NOT STARTED | | |
 | 2 | Learn from a mistake the moment it happens | NOT STARTED | | |
 | 3 | Metacognition: a claim of absence is refused without a search | NOT STARTED | | |

@@ -31,6 +31,12 @@
       "max_age_hours": 30,
       "why": "18:00 daily recipe candidate crawl (meal-prep/pipeline/harvest-crawl.ps1). Registered 2026-08-24 and likewise never added here. proves = the dated crawl log, which is appended on every run including one that finds no new candidates; candidate-pool.json would have been the wrong proof because a legitimately empty crawl never touches it, and a proof that only exists on a good day pages on the ordinary ones.",
       "proves": "meal-prep/runs/_harvest-log/crawl-*.log"
+    },
+    {
+      "name": "TC Sidecar Watchdog",
+      "max_age_hours": 2,
+      "why": "every 15 min: is the semantic sidecar on 127.0.0.1:8077 alive. It was down for the whole of 2026-09-09 and nothing noticed, because the recall hook falls back to lexical in silence - 723 semantic offers on 09-08, 0 on 09-09 - while every prompt paid two 1.5s timeouts (p50 3195ms against a 200ms bar). Defers inside the 21:30-06:30 GPU window rather than taking the card from the nightly, so a deferred run is a normal run and still stamps.",
+      "proves": "ops/out/sidecar-watchdog-stamp.json"
     }
   ],
   "startup_entries": [],

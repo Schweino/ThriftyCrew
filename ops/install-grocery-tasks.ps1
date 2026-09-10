@@ -354,7 +354,16 @@ if ($SelfTest) {
   # half a frozen fixture cannot prove: that the five definitions shipped in this tree and the five
   # registry rows shipped in this tree agree TODAY.
   $liveNames = Get-CommittedTaskNames -Dir $XMLDIR
-  T 'the committed definitions on disk yield five task names through <URI>' ($liveNames.Count -eq 5) (($liveNames -join ', ') + " [n=" + $liveNames.Count + "]")
+  # A FLOOR, NOT A FROZEN COUNT. `[CORRECTED 2026-09-09]` This asserted exactly five and
+  # went red the day a sixth task was added properly (TC Sidecar Watchdog, ops lane, with
+  # its definition, its watch row and its own registrar). The property worth holding is
+  # that the reader RESOLVED something - a glob that matches nothing yields zero names and
+  # every set comparison below it then passes vacuously - and that every name it found
+  # parses. Growth is what a healthy estate does; a frozen count treats it as a defect and
+  # trains the next person to edit the fixture instead of reading it.
+  T 'the committed definitions on disk resolve to task names through <URI>' `
+    ($liveNames.Count -ge 5 -and -not ($liveNames | Where-Object { -not "$_".Trim() })) `
+    (($liveNames -join ', ') + " [n=" + $liveNames.Count + "]")
   if (Test-Path $REGISTRY) {
     $rLive2 = [IO.File]::ReadAllText($REGISTRY) | ConvertFrom-Json
     $liveSet = Get-RegistryAuditSet -Owned $OWNED -CommittedNames $liveNames
