@@ -9,7 +9,8 @@ schedule - so this file comes before the code, and every bar below is written be
 | Build | Name | Status | Commit | Measured |
 |---|---|---|---|---|
 | E | One turn-keyed episode record | E1, E2, E3 SHIPPED 2026-09-10. E4 NOT READY: it needs 30 turns whose footer names what was used | skills 54e1a1e, 552c857, 7f429e0, 0f0baf5 | 139 episodes on the first build. Rows carrying a turn: prompt 616 of 3,126, reflex 4 of 884, outcome 1 of 551, consulted 1 of 192, structural 12 of 12 - the old rows predate the stamp, so E1's 95% bar is re-read on 2026-09-13 over rows written since |
-| M | Memory recall with a precision layer | M1 SHIPPED 2026-09-10: cases rebuild nightly after episodes and read NOT READY until 30 pairs across 10 sessions. M2 and M3 wait on that bar | skills 6205fb9 (M1) | First live build: 7 cases, 10 (turn, memory) pairs, 2 sessions, 13 off-topic negatives; 3 turns begun by background-task notifications skipped (the rule that catches them was added after reading the first rows, and says so). Read on the rows, and written down BEFORE any M3 run so it cannot explain a result afterwards: several prompts are generic ("what's next?") beside a memory opened during the work, so M3's hit@3 is judged against labels that include turns no retrieval could answer from the prompt alone |
+| M | Memory recall with a precision layer | M1 SHIPPED 2026-09-10: cases rebuild nightly after episodes and read NOT READY until 30 pairs across 10 sessions. M2 was probed early at Brad's ask and NOT BUILT (see the R row and section 3a); M3 waits on the bar | skills 6205fb9 (M1) | First live build: 7 cases, 10 (turn, memory) pairs, 2 sessions, 13 off-topic negatives; 3 turns begun by background-task notifications skipped (the rule that catches them was added after reading the first rows, and says so). Read on the rows, and written down BEFORE any M3 run so it cannot explain a result afterwards: several prompts are generic ("what's next?") beside a memory opened during the work, so M3's hit@3 is judged against labels that include turns no retrieval could answer from the prompt alone |
+| R | Does a lesson stop a mistake | R SHIPPED 2026-09-10: nightly after the failure classes, a block in the morning digest | skills 1a08822 (R); estate digest in the commit that adds this row | First build over 181,066 tool calls: reflexes judged 9 - stopped 2 (both block rungs, which stop by blocking), fewer 5 (three of them remind rungs), not fewer 2, too new 6; memories alone judged 8 - fewer 3, not fewer 5, too new 3. Reflex after-windows are 3 days (11,599 calls), and a memory's after-window overlaps its reflex, so a memory's FEWER can be the reflex's |
 | J | A judgement lane that runs, and a ruling inbox | J2, J3, J4 SHIPPED 2026-09-10. J1 waits for tonight's nightly baseline | skills 8d326b8 (J2); estate 22c2402e9 (J4), J3 in the commit that adds this line | Inbox and digest agree on the live queues: 76 waiting (60 graph aliases, 13 cross-project clusters, 3 failure classes), unknown 0 |
 
 ---
@@ -133,6 +134,29 @@ of each kind present, or states why per kind; resolve's questions settled that n
 2026-09-10 baseline. J2: its self-test drives every ruling kind against temp stores and a temp packet, proves
 no command runs without the final confirmation, and proves every applied ruling is logged; a live dry run
 lists the real queues with counts matching the digest's.
+
+## 3a. Build R - does a lesson stop a mistake (added 2026-09-10, after M2 measured unbuildable)
+
+**Why it replaced M2 for now.** Brad asked for the memory pointer on before M3's bars. Probed first, three arms
+(whole-text BM25, description-only BM25, description embeddings), each floor fixed above the best off-topic score
+before the run. At prompt time the right memory ranked first on **0 of 7** real cases in every arm; the BM25 arms
+would have put a mostly unrelated memory on 30 and 14 of 62 real prompts, and embeddings fired on 1. At failure
+time, over 237 failures whose covering reflex names its memory, **no arm reached 80% precision** (best 46%). The
+open counter was not the cause: every real memory read since 2026-09-09 was recorded. A memory here is a lesson
+about a trap; a prompt rarely names the trap and an error's words overlap many lessons. Recorded as memory
+`similarity-recall-of-memories-fails`. Brad then asked for the smartest route to the goal, and the goal is not
+memory opens: it is that a mistake stops recurring once its lesson exists.
+
+**What R measures.** `~/.claude/skills/recall-recurrence.py`: for every shipped reflex, the failed commands its own
+cue matches (the live hook's matcher and scope), per 1,000 tool calls, over the 14 days before its lesson and since -
+at the reflex's first commit and at its source memory's birth. STOPPED / FEWER / NOT FEWER / TOO NEW, with a
+one-sided binomial on the exposure split. The first build linked through recall-classes' covered_by and paired
+bare-python with FileNotFoundError; it printed 26 of 29 NOT FEWER and was corrected to the cue before any commit.
+
+**Bar for R, and what would change a decision.** A lesson kind earns more investment when its judged rows show
+STOPPED or FEWER on most of them once the after-windows reach 14 days (2026-09-21 for the 2026-09-07 reflexes).
+The first build points one way - reflexes cut their failures on 7 of 9, memories alone on 3 of 8 - but it is 3 days
+old for reflexes and confounded for memories, so it is a direction, not the verdict.
 
 ## 4. Order
 

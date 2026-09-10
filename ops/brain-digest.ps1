@@ -195,7 +195,8 @@ function Get-SleepNight {
 function Format-Digest {
   <# The page, as text. PURE - takes the gathered state, returns the string, so the
      fixtures can drive the wording without a filesystem or a mailer. #>
-  param($Night, $Queues, [string]$Weakest, $Events, [string[]]$Estate = @(), [string]$InboxCommand = 'recall-inbox.py')
+  param($Night, $Queues, [string]$Weakest, $Events, [string[]]$Estate = @(), [string]$InboxCommand = 'recall-inbox.py',
+    [string[]]$Learning = @())
   $out = New-Object Collections.Generic.List[string]
   $out.Add("BRAIN DIGEST - $(Get-Date -Format 'yyyy-MM-dd HH:mm')")
   $out.Add('')
@@ -214,6 +215,12 @@ function Format-Digest {
   # WS 11 (2026-09-10): the estate half of the loop, every stage with its floor, from ops\brain-report.ps1.
   if (@($Estate).Count) {
     foreach ($l in @($Estate)) { $out.Add("  $l") }
+    $out.Add('')
+  }
+  # PLAN-brain-v3 R (2026-09-10): whether a lesson stopped the failure it was written for. The lines come already
+  # shaped from skills\recall-recurrence.py --digest, which reads the nightly build and computes nothing.
+  if (@($Learning).Count) {
+    foreach ($l in @($Learning)) { $out.Add($l) }
     $out.Add('')
   }
   $out.Add("WAITING FOR A RULING")
@@ -349,6 +356,15 @@ if ($SelfTest) {
   Case 'MUST FIRE' 'Start-RunLog returns one string, an existing log path, and no banner' `
     (($rl.Count -eq 1) -and (Test-Path -LiteralPath ([string]$rl[0]))) ("count=$($rl.Count) first=$($rl[0])")
   Remove-Item -LiteralPath $rlDir -Recurse -Force -ErrorAction SilentlyContinue
+
+  # PLAN-brain-v3 R: the learning block renders where a person reads the page.
+  $lnTxt = Format-Digest -Night $night -Queues @() -Weakest 'x' -Events @() -Learning @(
+    'LEARNING FROM MISTAKES (built 2026-09-11, over 181014 tool calls)',
+    '  reflexes  judged 3: stopped 1, fewer 1, not fewer 1; too new to judge 9')
+  Case 'CLEAN TWIN' 'the learning block renders its verdict counts in the digest' `
+    (($lnTxt -match 'LEARNING FROM MISTAKES') -and ($lnTxt -match 'stopped 1, fewer 1, not fewer 1')) $lnTxt
+  $noLnTxt = Format-Digest -Night $night -Queues @() -Weakest 'x' -Events @()
+  Case 'MUST NOT FIRE' 'a page given no learning lines prints no learning block' (-not ($noLnTxt -match 'LEARNING FROM MISTAKES')) $noLnTxt
 
   # PLAN-brain-v3 J2 bar (2026-09-10): the digest's counts match the ruling inbox's.
   Case 'MUST FIRE' 'every UNRULED count in a report is summed, not only the first' `
@@ -580,8 +596,16 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   $evRaw = Read-TcEvents -SinceEpoch $since
   $events = @($evRaw)
 
+  $learning = @()
+  try {
+    $lnR = Invoke-DigestPython -Exe $PY -ArgList @((Join-Path $SKILLS 'recall-recurrence.py'), '--digest')
+    $learning = @(@($lnR) | Where-Object { "$_".Trim() })
+  } catch { }
+  if (-not $learning.Count) {
+    $learning = @('LEARNING FROM MISTAKES', '  UNKNOWN - recall-recurrence.py could not run, which is not a brain that stopped nothing')
+  }
   $inboxCmd = "$PY " + (Join-Path $SKILLS 'recall-inbox.py')
-  $text = Format-Digest -Night $night -Queues $queues -Weakest $weakest -Events $events -Estate $estatePage -InboxCommand $inboxCmd
+  $text = Format-Digest -Night $night -Queues $queues -Weakest $weakest -Events $events -Estate $estatePage -InboxCommand $inboxCmd -Learning $learning
   if (-not $Quiet) { $text }
 
   if ($Alert) {
