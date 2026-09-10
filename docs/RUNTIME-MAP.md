@@ -78,6 +78,10 @@ describe them as a safety net: on a day the PC is off, nothing runs unless a hum
   **Nothing else replaced it**: the installed git hooks are `pre-commit` and `commit-msg`, and no
   scheduled task runs `ops/run-gates.ps1`. So the estate has had NO automatic change-time gate since
   2026-08-11, and CLAUDE.md claimed it did until this was found.
+  **RESTORED 2026-09-09 LOCALLY, not in the cloud**: `ops/hooks/pre-push` now runs `run-gates` on
+  every push, once per push rather than once per commit, installed by `ops/install-hooks.ps1`. The
+  workflow above stays dispatch-only because the Actions minutes have not come back; the hook costs
+  nothing and needs no runner. `git push --no-verify` is the deliberate bypass.
 
 ### 3. Cloudflare Worker — SERVE + INGEST
 - Serves `public/` statically with per-path CORS (`public/_headers`): `smp-feed.json`, `board.json`, `free-dinners.json`, `planner-data.json`, `price-history.json`, `share/`.

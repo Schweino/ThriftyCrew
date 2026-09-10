@@ -28,12 +28,14 @@ beats reassurance: understating is exactly as wrong as overstating.
 
 ## The gate
 
-`ops/run-gates.ps1` is the change-time gate. **NOTHING RUNS IT AUTOMATICALLY - not a hook, not
-CI, not a scheduled task.** It said "runs on every push" here until 2026-09-09 and that was false:
-`gates.yml` went `workflow_dispatch`-only on 2026-08-11 when GitHub Actions minutes were exhausted
-(`docs/RUNTIME-MAP.md` section 2), the installed hooks are `pre-commit` and `commit-msg` only, and no
-scheduled task calls it. **So a push is gated exactly as much as the person pushing chose to gate it.**
-Run it before you push. If it did not run, the tree is unverified, however green it was this morning.
+`ops/run-gates.ps1` is the change-time gate, and **a `pre-push` hook runs it on every push**
+(installed by `ops/install-hooks.ps1`, asserted live by `ops/audit-hook-installed.ps1`). It runs ONCE
+per push, not once per commit. **`git push --no-verify` is the deliberate, loud bypass.**
+
+**This was NOT true between 2026-08-11 and 2026-09-09**, and this file asserted it anyway. `gates.yml`
+went `workflow_dispatch`-only when Actions minutes were exhausted, no hook existed, and no task called
+it - so for a month a push was gated exactly as much as the person pushing chose to gate it. The cloud
+workflow is still dispatch-only; the hook is what restored the property, locally and for free.
 
 **Exit 0 = passed. 1 = at least one gate failed. 3 = could not evaluate**, which means discovery is
 broken, not that the tree is clean. Never read 3 as a pass. (The recipe battery uses exit 2 for its
