@@ -1,6 +1,10 @@
 # Plan: make test-auditors' 271 child spawns overlap, without changing one verdict
 
-**Status: A PLAN, NOT A CHANGE. Nothing in this document has been built.** Brad asked for it to a
+**Status: TIER 1 IS BUILT AND SHIPPED (2026-09-09). Tiers 2 and 3 are NOT built.** See the
+POST-TIER-1 section at the foot for what they are actually worth, which is ~133s and NOT the ~20s a
+careless reading of the Tier 3 row gives.
+
+**Originally: a plan, not a change.** Brad asked for it to a
 file before any code moved, because the target is 6,468 lines with ~148 call sites.
 
 **Harness measured:** `grocery/test-auditors.ps1 -SelfTest`, run at commit `f9badfb1e` against the
@@ -148,3 +152,60 @@ Also required before shipping:
 `ops/run-gates.ps1`'s `$SKIP` entry says test-auditors' *"418 checks"*. It is **702** - up 68% since
 that comment was written, which is most of why the suite feels slower than it used to. Worth correcting
 whether or not any of this is built.
+
+## POST-TIER-1, MEASURED 2026-09-09: what Tiers 2 and 3 are actually worth
+
+**Tier 1 shipped** (commit `21226854c`, merged `8f414ea82`). Five call sites, verified by diffing all
+702 verdicts by name.
+
+| | |
+|---|---:|
+| suite before, two samples | 391.3s and **389.7s** |
+| suite after Tier 1, two samples | 292.7s and **290.4s** |
+| saving | **~99s, 25%** |
+
+The first timing of the day was 459.2s and would have made this a 36% win. Two later baseline runs
+agreed within 1.6s at ~390s, so **459.2 was an outlier and 390s is the baseline.** The prediction
+written above before the build - 391s to roughly 280s - held.
+
+### Correcting a summary this document's tiering invited
+
+The Tier 3 row says it is "only about 20s better than Tier 2". That is TIER 3 BEYOND TIER 2, and it was
+twice restated verbally as though Tiers 2 and 3 TOGETHER were worth about 20 seconds. **They are worth
+about 133.** The tier table was right; the summary of it was not.
+
+| | seconds |
+|---|---:|
+| total child time | 268.8 |
+| removed by Tier 1 | 116.4 |
+| **still serial after Tier 1** | **152.4 across 266 spawns** |
+| longest remaining single call | **5.2** |
+| that 152.4s batched at width 8 | ~19 wall |
+| **so the suite could go 291s -> ~158s** | **another ~133** |
+
+### The ratio that still says do not build it yet
+
+**Tier 1: 116.4s across 5 call sites = 23 seconds per site touched.
+Tiers 2/3: 152.4s across 266 spawns = 0.57 seconds per site. A 40x worse return.**
+
+And that gap is STRUCTURAL, not incidental: every long child is now in Tier 1, so the longest thing
+left is 5.2s. There is no second cheap tranche. The win is close to proportional to how many of the 266
+are converted, so it cannot be bought in a small, low-risk slice the way Tier 1 could.
+
+What the remaining 152.4s is made of:
+
+| seconds | share | what it is |
+|---:|---:|---|
+| 26.8 | 18% | `-SelfTest` runs, hermetic by construction - safe the way Tier 1 was |
+| 58.8 | 39% | pass an output path, and 82 of 101 such children SHARE one - the collision work |
+| 66.8 | 44% | pass neither, so each must be judged individually |
+
+A **Tier 2a** of only the hermetic self-tests is available and carries Tier 1's risk profile, but it is
+worth about 24 seconds. It is recorded as available, not recommended.
+
+### What would change the recommendation
+
+**The suite growing again.** It went from 418 checks to 702 between the August comment in
+`run-gates.ps1`'s `$SKIP` and today - a 68% rise. The 152.4s grows with the check count while the risk
+per call site stays flat, so the ratio above improves on its own. Re-read this section when the suite
+next crosses a round number, rather than treating "do not build it yet" as settled.
