@@ -240,6 +240,30 @@ will say which part of it.
     correctly on the live board.
 11. **Phase 3, review intake as a packet,** after the registry exists. Bar as in section 4.
 
+### Progress against the build order (updated 2026-09-10)
+
+- **Step 1, the scoreboard: DONE** (263006cea). It reproduces section 2 exactly and runs daily as a lane in
+  `check-ad-cycles.ps1`, plus at the start and end of every triage run.
+- **Step 2, the digest: DONE** (263006cea). An all-green estate sends nothing.
+- **Step 3, the store probes: DONE** (d94ec7776). See the next section; rulings R11 and R12 are open.
+- **Step 4, the registry and one incident per alert: DONE** (9eee1e34b, 7dad4b07a, and 94f80972b for the census
+  lane's consumer).
+  - `grocery/alert-registry.json` has 96 entries: 65 page, 30 review, 1 digest. The full page list with each one's
+    condition is in the file.
+  - The check maps 78 readable call-site subjects and 69 queue types over 30 days to exactly one entry each.
+  - `send-alert.ps1 -CausedBy guards-hold` folds the watchdog's held-by-guards lines, the board-aging alert and
+    the smp-feed edge alerts into the open GUARDS FAILED item. Its fixture replays the 2026-09-10 morning and
+    leaves one queue item where there were four.
+  - The first live review-class alert, queue 2026-09-10-c069fa, queued with no mail.
+  - **Leaves open:**
+    - The board.json edge alert in `capture-run.ps1` is not wired to `-CausedBy`; 0 occurrences measured.
+    - Four page-class types still fire on 10 or more of 20 days with close notes that mostly say echo, false
+      alarm or by design: the capture watchdog, Family Fare catalog degrading, board prices aging, and recipe
+      batch stalled. The watchdog's echoes are what 4b folds; the other three are Phase 2's starting set.
+  - **Found on the way and filed:** `meal-prep/pipeline/source-domains.ps1`'s concurrency self-test lost 1 of 8
+    writes under load and refused a push (1 failure in 4 runs). Weekly-lane queue item 2026-09-10-c069fa.
+- **Next: step 5** (test-auditors before a guard-touching push), then step 6 (returns are failures).
+
 ### Ruling 7 result: the store probes (`design/PROBE-store-direct-data-2026-09-10.md`)
 
 - **Family Fare: DIRECT DATA FOUND.**
