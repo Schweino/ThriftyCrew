@@ -274,6 +274,8 @@ $static = @(
   @{ f = 'ops\audit-one-way-actuators.ps1';    n = 'a control constant that may only move ONE WAY carries a rate limit and a plausibility bar - a REPORT, exit 0, because "one-directional" is a property of a design and no pattern matcher can be precise about it' }
   @{ f = 'ops\audit-event-bus.ps1';            n = 'every declared producer of an estate event still writes one, and the bus is not silently dead - the wiring half is static, and the FLOOR half is one of the estate''s only checks that fires on nothing happening' }
   @{ f = 'ops\audit-phantom-paths.ps1';        n = 'a script path named in standing guidance (CLAUDE.md, rules, agents, docs, hooks, rulings) exists in the tree - the founding phantom was ops\audit-hook-installed.ps1, cited five times as a running guard and never written' }
+  @{ f = 'ops\audit-conclusion-currency.ps1'; n = 'a recorded conclusion that was current does not name a harness changed after it (WS 7d ratchet)' }
+  @{ f = 'ops\audit-rule-currency.ps1';        n = 'every .claude\rules globs entry matches a tracked file; stale dated claims are reported (WS 7e)' }
   @{ f = 'ops\audit-measurement-provenance.ps1'; n = 'a recorded measurement names the harness it ran through and the commit or date it ran at - a RATCHET at 8, because retro-filling the existing set was explicitly not asked for and a bar over them would be red on day one' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # ops\verify-commodities-gate.ps1 is deliberately NOT listed here. A $static entry passes no
@@ -450,6 +452,10 @@ foreach ($s in $withSelfTest) {
 }
 
 $staticBy = @{}; for ($i = 0; $i -lt $staticKeys.Count; $i++) { $staticBy[$staticKeys[$i]] = $staticRes[$i] }
+# WS 10e (2026-09-10): each static detector's COMPLETE line, kept per run in ops\out\gate-readings.jsonl
+# (gitignored). lib\ratchet.ps1 only wrote history when a mark TIGHTENED, so a detector returning the same
+# number for six weeks - the case its own header names - left no trace. ops\report-ratchet-trends.ps1 reads it.
+$gateReadings = [Collections.Generic.List[object]]::new()
 foreach ($g in $static) {
   $p = Join-Path $repo $g.f
   if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
@@ -457,6 +463,8 @@ foreach ($g in $static) {
   $out = $gr.Out
   Add-TcGateTiming -Name ($g.f) -Ms $gr.Ms -SpawnMs 209
   $rc = $gr.ExitCode
+  $gMarks = @(@($out) | Where-Object { "$_" -match '^[A-Z0-9][A-Z0-9-]*-COMPLETE\b' })
+  if ($gMarks.Count) { [void]$gateReadings.Add([pscustomobject]@{ gate = [string]$g.f; rc = $rc; marker = [string]$gMarks[$gMarks.Count - 1] }) }
   if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
     $fail += $g.f
@@ -464,6 +472,19 @@ foreach ($g in $static) {
     @($out) | Where-Object { $_ -match '!|FAIL' } | Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
   }
 }
+
+try {
+  if ($gateReadings.Count) {
+    $grF = Join-Path $repo 'ops\out\gate-readings.jsonl'
+    $grDir = Split-Path $grF -Parent
+    if (-not (Test-Path $grDir)) { $null = New-Item -ItemType Directory -Force $grDir }
+    $grNow = [DateTimeOffset]::UtcNow
+    $grLines = foreach ($x in $gateReadings) {
+      ([ordered]@{ t = $grNow.ToUnixTimeSeconds(); date = $grNow.ToString('yyyy-MM-dd'); gate = $x.gate; rc = $x.rc; marker = $x.marker } | ConvertTo-Json -Compress)
+    }
+    [IO.File]::AppendAllText($grF, ((@($grLines) -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
+  }
+} catch { }   # a reading that cannot be kept must never fail the gate
 
 $pyStaticBy = @{}; for ($i = 0; $i -lt $pyStaticKeys.Count; $i++) { $pyStaticBy[$pyStaticKeys[$i]] = $pyStaticRes[$i] }
 foreach ($g in $pyStatic) {

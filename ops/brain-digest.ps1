@@ -340,6 +340,30 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       $open = @(@($d.items) | Where-Object { $_.status -ne 'resolved' })
       @{ Count = $open.Count; AgeDays = 0 }
     }
+  # WS 10f (2026-09-10): an INCIDENT draft waits for a person to write its root cause. The trigger WRITES
+  # only in -Alert mode - the 06:45 task - so a digest run by hand opens nothing and only counts.
+  $queues += Get-QueueRow -Name 'incident drafts open' -Floor 7 `
+    -Cost 'the estate wrote one postmortem in its whole life. A draft nobody finishes is a timeline with no root cause, and the next recurrence opens the same draft again.' `
+    -Count {
+      $itArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $repo 'ops\incident-trigger.ps1'), '-Json')
+      if ($Alert) { $itArgs += '-Write' }
+      $io = & powershell @itArgs
+      $jl = @($io | Where-Object { "$_" -match '^incident-json: ' })
+      if (-not $jl.Count) { return $null }
+      $ij = ("$($jl[0])" -replace '^incident-json: ', '') | ConvertFrom-Json
+      @{ Count = [int]$ij.drafts_open; AgeDays = 0 }
+    }
+  # WS 10e (2026-09-10): a detector reading the same non-zero mark for 30 days may have stopped looking.
+  $queues += Get-QueueRow -Name 'detectors flat 30 days' -Floor 7 `
+    -Cost 'a detector returning the same non-zero number every day for a month has a backlog nobody works or has stopped finding new cases, and both read as health.' `
+    -Count {
+      $ro = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo 'ops\report-ratchet-trends.ps1') -Json
+      $jl = @($ro | Where-Object { "$_" -match '^ratchet-trends-json: ' })
+      if (-not $jl.Count) { return $null }
+      $rj = ("$($jl[0])" -replace '^ratchet-trends-json: ', '') | ConvertFrom-Json
+      if (-not $rj.known) { return $null }
+      @{ Count = [int]$rj.stopped_looking; AgeDays = 0 }
+    }
 
   $since = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds() - 86400
   $evRaw = Read-TcEvents -SinceEpoch $since

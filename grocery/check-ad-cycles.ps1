@@ -785,6 +785,15 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           }
         }
       } catch { Log ('alert-precision threw: ' + $_.Exception.Message) }
+      # THE ACTUATOR ON THAT PRECISION (WS 10b, 2026-09-10). Bounded, logged, never blocking: it may move
+      # an alert's re-arm window, refuses a second move inside 14 days, and says so either way.
+      try {
+        $tar = Join-Path $root 'tune-alert-rearm.ps1'
+        if (Test-Path $tar) {
+          $tarOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $tar
+          foreach ($l in @($tarOut)) { Log ('alert-tuning: ' + [string]$l) }
+        }
+      } catch { Log ('alert-tuning threw: ' + $_.Exception.Message) }
       # WHAT GOOGLE DID WITH OUR PAGES (2026-09-07, backlog I24). ops\audit-seo-surface.py measures the
       # surface we CONTROL - one distinct recipe image across 584 recipes, 49 of them empty - and can
       # say nothing about whether it costs us a reader. This records the response, so a future "we
@@ -2338,6 +2347,17 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # checks stayed green - measured by the post-batch review. $REARM_DAYS lives in here for the same
       # reason: the harness hard-coded 14, so changing production's window was equally invisible.
       $REARM_DAYS = 14
+      # TUNED FROM LIVE PRECISION (WS 10b, 2026-09-10). grocery\tune-alert-rearm.ps1 writes alert-tuning.json:
+      # doubled for an alert that is mostly wrong, halved for one that is right, clamped 7..56, one move per
+      # 14 days. Read HERE, inside the extracted region, so test-auditors.ps1 runs the real read. An absent,
+      # unreadable or out-of-range row leaves 14 - a tuning file is advice, never a reason to stop paging.
+      try {
+        $tuneF = Join-Path (Split-Path $OutDir -Parent) 'alert-tuning.json'
+        if (Test-Path $tuneF) {
+          $tuneRow = (Read-JsonFile $tuneF).types.'grocery new price flag s'
+          if ($tuneRow -and [int]$tuneRow.rearm_days -ge 7 -and [int]$tuneRow.rearm_days -le 56) { $REARM_DAYS = [int]$tuneRow.rearm_days }
+        }
+      } catch { }
       $ackOpen = @{}; $ackUntil = @{}; $ackExpired = 0; $ackHit = 0; $reArmed = 0; $ackReArmed = 0
       $ackFile = Join-Path $OutDir 'review-ack.json'
       if (Test-Path $ackFile) {

@@ -827,6 +827,16 @@ if (Test-Path $hookAudit) {
   else { [void]$ok.Add((("git hooks " + $haLine) -replace '\s+', ' ').Trim()) }
 }
 
+# ---- 5a3a3. ratchet trends: a detector flat for 30 days at a non-zero mark may have stopped looking -----
+# WS 10e (2026-09-10). A REPORT: its lines ride the healthy-checks block of this mail and the brain digest.
+$rtr = Join-Path (Split-Path $root -Parent) 'ops\report-ratchet-trends.ps1'
+if (Test-Path $rtr) {
+  $rtOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $rtr
+  foreach ($l in @($rtOut | Where-Object { "$_" -match '^\s*(STOPPED LOOKING|ratchet trends:)' })) {
+    [void]$ok.Add((("$l") -replace '\s+', ' ').Trim())
+  }
+}
+
 # ---- 5a3b. a graph.db SCHEMA change that left no record --------------------------------------
 # RULED BY BRAD 2026-09-09 (backlog I41): a written record plus a detector, and NOT a staged-migration
 # capability - nothing here knows how to do expand-contract, backfill or rollback.

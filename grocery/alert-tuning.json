@@ -1,0 +1,6 @@
+{
+    "note":  "Written by grocery\\tune-alert-rearm.ps1 (WS 10b). Per alert type: the re-arm window moved by live precision - doubled under 40% at 5 judged, halved over 80% at 10, clamped 7..56, one move per 14 days. check-ad-cycles.ps1 reads the price-flag row only; a missing or out-of-range row means 14. Edit by hand only to reverse a move, and say so in the move list.",
+    "types":  {
+
+              }
+}

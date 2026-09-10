@@ -484,3 +484,5 @@ ops/out/logs/
 ops/out/sidecar-watchdog-stamp.json
 ops/out/recall-sleep-stamp.json
 ops/out/brain-digest-body.txt
+# WS 10e: every static detector's COMPLETE line per run-gates run. Per machine and per run, like the bus.
+ops/out/gate-readings.jsonl
