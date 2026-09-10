@@ -77,7 +77,8 @@ real one, which is both fuller and more restricted.
      through the tool output either: it truncates around 1 KB, so a 40-60 KB sweep would need ~60
      round trips per store and still risk a partial read. That is what the sink is for.
 Also: sweepToCsv does not emit a header row and every builder needs one - q|n|lp|up|id|was|rb|sel|ff for
-Walmart, q|n|lp|up|id|was for Sam's, id|term|name|prices|unit|size|href for Aldi.
+Walmart, q|n|lp|up|id|was for Sam's. ALDI IS THE EXCEPTION: aldiSearchToCsv writes its own header, with the
+#tc-store store line above it. Post its output UNCHANGED and prepend nothing.
 
 STEP ZERO - MAKE SURE THE 0800 CHAIN HAS FINISHED. You run at 09:00, and the 0800 task's downstream
 chain (compare -> guards -> publish -> commit) measured 08:12-08:43 on 2026-08-22 - 31 minutes. It
@@ -211,9 +212,17 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     (the slug cannot hold a decimal: "15.5 oz" arrives as "15 5 oz" - the builders Repair-SlugDecimals
     fixes it FROM THE SIZE COLUMN, which is why size must come off the card). Price ONLY from
     "Current price: $X.XX" - the card also carries a glued "$249" for a $2.49 item.
-    Assert: header says In-Store AND "ALDI - OLA 48 - Omaha". Asserted PER TERM, not once per run: a
-    session flipped back to Delivery mid-sweep marks every later row up ~10% while looking normal.
-    Emit id|term|name|prices|unit|size|href -> out\captures\aldi-capture-<date>.csv
+    Assert: header says In-Store AND the store line ends in Omaha ("ALDI - OLA <n> - Omaha"). NEVER
+    assert the OLA number: the session has read OLA 48 and OLA 42 at different times, and a pinned
+    number refuses a correct capture while reading as a store problem. Asserted PER TERM, not once per
+    run: a session flipped back to Delivery mid-sweep marks every later row up ~10% while looking normal.
+    Emit aldiSearchToCsv(idByTerm) UNCHANGED -> out\captures\aldi-capture-<date>.csv. Its first line is
+    #tc-store store="ALDI - OLA <n> - Omaha" mode="In-Store" rows=<n> - the store each row was READ at -
+    then the id|term|name|prices|unit|size|href header. build-aldi-regular writes `source` and each row's
+    store_location from that line, and REFUSES a capture with no store line, a non-Omaha or non-In-Store
+    one, or one that straddles two stores (2026-09-10: every file since 07-29 had claimed OLA 42 from a
+    literal, including the fortnight the session read OLA 48). Never hand-assemble this file or strip
+    that line.
     Then: build-aldi-regular.ps1 -In <that> -Date <date>
 
   WALMART (everyday). fetch('/search?q=<term>') from a walmart.com tab, parse <script id="__NEXT_DATA__">.

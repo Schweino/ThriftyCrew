@@ -272,7 +272,10 @@ defaulted to Des Moines once, with plausible-looking wrong prices.
   re-verifies known product ids one request each, and 89.3% of the store's catalogue can never enter that
   way), so a term the board has never carried is browser work every single time.
   https://www.hy-vee.com/aisles-online/search?search=<term> . First-party, NOT Instacart.
-  - Store selector button must read "Omaha #1, NE".
+  - Store selector button must name **Omaha #02** (expect "Omaha #02, NE" or "Omaha #2, NE"). Brad ruled on 2026-08-21
+    that the board speaks for Omaha #02 (storeId 1466, `grocery/hyvee-store-lib.ps1`). If the selector names Omaha #1 or
+    #01, the retired store, switch it before reading any price: a #01 price is the wrong store's. This line said
+    "Omaha #1, NE" until 2026-09-10, and grocery/ingredient-queue.json holds 43 evidence strings naming #1 or #01.
   - An in-page fetch returns a client-rendered shell with zero product hrefs. Use get_page_text / read_page
     on the RENDERED page.
   - Roughly 100s per term. Fine for one ingredient; never attempt a sweep.
