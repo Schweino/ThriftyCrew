@@ -158,5 +158,25 @@ if ($why) {
 }
 $q.items = $items
 $q | ConvertTo-Json -Depth 12 | Set-Content $QueueFile -Encoding UTF8
+
+# THE CLOSE IS AN EVENT (WS 1b), written AFTER the queue is saved so the bus never claims a
+# close that did not land. `audit-alert-precision.ps1` already computes precision per type
+# from the queue and prints it into an 8,000-line log that nothing joins to anything; the bus
+# is what lets the alert-tuning actuator, the incident trigger and the morning digest see a
+# disposition without re-reading the queue and re-deriving what a close meant.
+#
+# It cannot fail this script: Write-TcEvent swallows every error and returns a boolean. A
+# close that succeeded must not be reported as failed because a log was locked.
+$busLib = Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\event-bus.ps1'
+if (Test-Path -LiteralPath $busLib) {
+  . $busLib
+  $closed = $null
+  foreach ($it in $items) { if ("$($it.id)" -eq "$Id") { $closed = $it } }
+  $null = Write-TcEvent -Kind 'alert-closed' -Producer 'grocery\triage-close.ps1' -Data @{
+    id          = "$Id"
+    disposition = "$Disposition"
+    type        = "$(if ($closed) { $closed.type } else { '' })"
+  }
+}
 Write-Output ("triage-close: {0} closed as {1}. What it meant is now countable, which is what makes a live precision knowable at all." -f $Id, $Disposition)
 exit 0

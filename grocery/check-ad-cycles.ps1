@@ -3112,6 +3112,25 @@ $totalSecs = [int]((Get-Date) - $script:ShipStart).TotalSeconds
 $shipNote = if ($script:DownstreamRan) { "ship=" + $shipSecs + "s" } else { "ship=not reached" }
 Log ("run complete; flips=" + (@($flips).Count) + "; pull=" + $pullNote.Trim() + "; " + $shipNote + "; total=" + $totalSecs + "s")
 
+# THE BUS HEARTBEAT (WS 1b), and it is here for a reason worth stating. The event bus's other
+# two producers - a red gate and a closed alert - both fire only on TROUBLE, so a healthy
+# estate would write nothing and an empty bus could not be told apart from a dead one. A floor
+# over failure-only producers is not a floor at all. This is the one event that fires when
+# things go RIGHT, so `ops\audit-event-bus.ps1` can say "the daily chain has not reported for
+# three days" and mean it. Cost: one line a day.
+try {
+  $busLib = Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\event-bus.ps1'
+  if (Test-Path -LiteralPath $busLib) {
+    . $busLib
+    $null = Write-TcEvent -Kind 'chain-complete' -Producer 'grocery\check-ad-cycles.ps1' -Data @{
+      flips     = (@($flips).Count)
+      total_s   = $totalSecs
+      ship_s    = $shipSecs
+      findings  = (@($summary).Count)
+    }
+  }
+} catch { }   # a heartbeat must never be the reason the daily chain reports failure
+
 # *** THIS FILE'S EXIT CODE WAS AN ACCIDENT UNTIL NOW (2026-08-23). *** There was no `exit` statement
 # anywhere in 2,467 lines, so `powershell -File check-ad-cycles.ps1` returned 0 on a normal finish and 1
 # on any terminating error - and every caller (capture-run's FAILED LANES, daily.yml) reads that code as

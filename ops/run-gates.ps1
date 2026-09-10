@@ -272,6 +272,7 @@ $static = @(
   @{ f = 'ops\audit-cross-module-reach.ps1';   n = 'no NEW script reaches into another module''s internals directory - a ratchet on cross-module path literals, high-water mark may only go DOWN' }
   @{ f = 'ops\audit-lift-completeness.ps1';    n = 'every function lifted out of compare-deals.ps1 brings the engine functions it CALLS with it, so a hand-maintained lift list cannot fall behind and fail at run time' }
   @{ f = 'ops\audit-one-way-actuators.ps1';    n = 'a control constant that may only move ONE WAY carries a rate limit and a plausibility bar - a REPORT, exit 0, because "one-directional" is a property of a design and no pattern matcher can be precise about it' }
+  @{ f = 'ops\audit-event-bus.ps1';            n = 'every declared producer of an estate event still writes one, and the bus is not silently dead - the wiring half is static, and the FLOOR half is one of the estate''s only checks that fires on nothing happening' }
   @{ f = 'ops\audit-measurement-provenance.ps1'; n = 'a recorded measurement names the harness it ran through and the commit or date it ran at - a RATCHET at 8, because retro-filling the existing set was explicitly not asked for and a bar over them would be red on day one' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # ops\verify-commodities-gate.ps1 is deliberately NOT listed here. A $static entry passes no
@@ -537,6 +538,33 @@ if ($timings.Count) {
   Write-Output 'timing: slowest 15 -'
   foreach ($r in ($timings | Sort-Object Ms -Descending | Select-Object -First 15)) {
     Write-Output ("   {0,7:N0}ms  {1}" -f $r.Ms, $r.Name)
+  }
+}
+# A RED GATE LEAVES A RECORD (WS 1b). Until 2026-09-09 a failure here printed to a terminal
+# and to a temp file the pre-push hook wrote, and that was the whole of it: no queue entry, no
+# alert, no history. So "which gate fails most", "did this failure ever produce a fixture" and
+# "has this gate been red twice in a fortnight" were all unanswerable, while CLAUDE.md states
+# as a habit that a recurring defect earns a memory, a gate or a command. A habit with no
+# record cannot be audited. `ops\audit-gate-followthrough.ps1` reads these rows.
+#
+# IT WRITES ONLY ON RED, and it cannot fail the run: Write-TcEvent swallows everything. A bus
+# that could take down the gate would cost more than every signal it carries.
+if ($fail.Count) {
+  . (Join-Path $repo 'lib\event-bus.ps1')
+  # NO `Select-Object -First` ON A NATIVE EXE. It stops the upstream pipeline, which sends
+  # the child a broken pipe mid-write; harmless for a one-line rev-parse and a bad habit to
+  # spread into a gate. The output is captured and indexed instead.
+  $head = @(@($fail | ForEach-Object { "$_" })[0..([Math]::Min(11, $fail.Count - 1))])
+  $commit = ''
+  try { $c = @(& git -C $repo rev-parse --short HEAD 2>$null); if ($c.Count) { $commit = "$($c[0])" } } catch { }
+  $branch = ''
+  try { $b = @(& git -C $repo rev-parse --abbrev-ref HEAD 2>$null); if ($b.Count) { $branch = "$($b[0])" } } catch { }
+  $null = Write-TcEvent -Kind 'gate-red' -Producer 'ops\run-gates.ps1' -Data @{
+    failed  = $fail.Count
+    passed  = $pass
+    gates   = $head
+    commit  = "$commit"
+    branch  = "$branch"
   }
 }
 Exit-Guard -Name 'run-gates' -Summary ("pass={0} fail={1}" -f $pass, $fail.Count) -Code $(if ($fail.Count) { 1 } else { 0 })

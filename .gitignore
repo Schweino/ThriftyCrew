@@ -475,3 +475,8 @@ design/canvas-*/thrifty-crew-redesign.html
 /tools/local-llm/finetune-probe/corpus.jsonl
 /tools/local-llm/finetune-probe/corpus-train.jsonl
 /tools/local-llm/finetune-probe/corpus-holdout.jsonl
+
+# The event bus (WS 1b): one row per estate event, high churn, evidence about THIS machine
+# rather than source. Committing it would put a write in every gate run diff.
+ops/out/events.jsonl
+ops/out/logs/
