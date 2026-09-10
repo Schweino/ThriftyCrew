@@ -1,7 +1,7 @@
 # PLAN: days with no alerts, and triage that prevents instead of repairs
 
-**Status: PROPOSED 2026-09-10. Nothing below is built.** Three rulings in section 1 gate most of it.
-Phases 0, 1 and 5 need no ruling and can start on "go".
+**Status: RULED 2026-09-10, building in the order of section 7.** Brad's answers to every open question are
+recorded in section 7, which supersedes the options in section 1 wherever they differ.
 
 Brad's goal, 2026-09-10: "get to a place where we have days with no alerts and triage agent is planning
 fixes to future proof and not just immediate fix."
@@ -193,3 +193,49 @@ will say which part of it.
 - Guards stay blocking and fail closed.
 - No threshold is loosened to buy a quiet day. A quiet day bought by silencing a real positive is this plan failing, which is why every recalibration replays its real positives.
 - Triage still fixes today's instance today. Prevention is added to that, never swapped for it.
+
+## 7. Brad's rulings, 2026-09-10, and the build order they set
+
+| # | Question | Ruling |
+|---|---|---|
+| 1 | What may page | **Enforced alert registry.** Every alert type is `page`, `review` or `digest`. An unregistered type is never dropped: it still queues, and it pages as a registry defect until someone registers it |
+| 2 | Where bad data is stopped | **A row contract at capture, all 7 stores**, shadow first, enforced store by store |
+| 3 | Product identity | **Two independent signals must agree** for a crown; 2 weeks in shadow before it refuses anything |
+| 4 | Success | **Zero returns within 30 days** for any class that shipped a prevention fix; **3 quiet days a week by 2026-10-08, 5 by 2026-11-05** |
+| 5 | A returned problem | **The plan gate demands a fix at the source**, every prior close named, a fixture from every occurrence |
+| 6 | Weekly lane | **Prevention first, then leftovers**; every new store, feed or large commodity batch is checked against the row contract before it goes live |
+| 7 | Capture limits | **Probe each browser-only store for the data its own page loads**, and Family Fare's term budget; recalibrate only where nothing is found |
+| 8 | Muffins | **Two commodities, muffins and mini muffins**, each with an explicit piece-size definition |
+| 8b | Brain digest | **Mail only when a stage is red** (an estate half that could not be read counts as red, because unknown is not green) |
+| 9 | Start | After all answers, which is now |
+
+### Build order, each with its bar written before it is built
+
+1. **Phase 0, the scoreboard.** `grocery/audit-alert-census.ps1`. Bar: reproduces section 2 from the
+   2026-09-10 queue (0 of 20 quiet days, 249 alerts, 25 types on 3+ days, all 25 back after a close), and
+   prints progress against ruling 4 with its denominators.
+2. **Ruling 8b, the digest.** Bar: an all-green estate sends nothing and queues nothing; a red or unreadable
+   stage still sends.
+3. **Ruling 7, the store probes** (read-only research, runs beside the rest). Bar: a verdict per store backed
+   by a captured network request, or a recorded wall; a CAPTCHA is a hard stop and a verdict, never a bypass.
+4. **Ruling 1, the alert registry, with Phase 1's incident key.** Bar: every type in the 30-day queue and every
+   `Send-Alert` call site maps to exactly one registry entry; an unregistered subject queues and pages as a
+   registry defect (must fire); a registered `page` alert is unchanged (clean twin); a `review` alert lands in
+   the review packet with no queue item; the next guard-red morning yields one queue item, not four.
+5. **Phase 5, test-auditors before a guard-touching push.** Bar as in section 4.
+6. **Ruling 5, returns are failures.** Bar: a RETURN item with no `prevention`, or whose `prior_closes` misses
+   a close in the queue history, fails the handoff gate; a first-time item is unaffected.
+7. **Ruling 6, the weekly lane re-aimed.** Bar: the lane's first plan names the census's top recurring class
+   and states its days-fired for the prior 14 days before any fix.
+8. **Ruling 2, the row contract.** Written as a contract document first, then one validator the seven builders
+   share, run in shadow for 7 days per store, then enforced store by store in the census's order of returns.
+   Bar per store: after enforcement, 0 basis-class guard hard fails from that store over 14 days, and every
+   cell the contract empties is one the shadow report already named.
+9. **Ruling 3, two-signal identity.** First measure what share of each store's rows carries a usable category.
+   Then 14 days of shadow on crowns. Enforce only if a hand-checked sample of at least 30 disagreements is at
+   least 80% real wrong products, and enforcement would empty no more than 2% of live cells. Both numbers are
+   first guesses, recorded as such, to be revisited against the shadow data.
+10. **Ruling 8, muffins.** Through the commodity registrar and the money lane's gated chain. Bar: every current
+    muffins row routes to exactly one of the two commodities, no row is lost, guards exit 0, and both cells read
+    correctly on the live board.
+11. **Phase 3, review intake as a packet,** after the registry exists. Bar as in section 4.

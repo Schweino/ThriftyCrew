@@ -275,6 +275,14 @@ function Format-Digest {
 }
 
 # ---------------------------------------------------------------------------
+function Test-DigestShouldSend {
+  <# RULING 8b (Brad, 2026-09-10). Every digest mail also opens a triage item, so on 2026-09-10 the digest
+     made triage work every morning whatever it said. It now sends only when a stage floor is RED or the
+     estate half could not be read at all, because an unreadable estate is not a green one. Pure. #>
+  param([int]$RedStages, [bool]$EstateRead)
+  return ($RedStages -gt 0 -or -not $EstateRead)
+}
+
 if ($SelfTest) {
   $fails = @(); $ran = @()
   function Case {
@@ -305,6 +313,11 @@ if ($SelfTest) {
   # MUST NOT FIRE: the three ways this could mislead.
   Case 'MUST NOT FIRE' 'a queue INSIDE its floor is not overdue' `
     (-not ($txt -match 'OVERDUE: proposals'))
+
+  # RULING 8b (2026-09-10): the digest mails only when there is something red to read.
+  Case 'MUST FIRE' 'a RED stage floor sends the digest' (Test-DigestShouldSend -RedStages 1 -EstateRead $true)
+  Case 'MUST FIRE' 'an estate half that could not be read sends it (unknown is not green)' (Test-DigestShouldSend -RedStages 0 -EstateRead $false)
+  Case 'MUST NOT FIRE' 'an all-green estate sends nothing and so queues nothing' (-not (Test-DigestShouldSend -RedStages 0 -EstateRead $true))
   Case 'MUST NOT FIRE' 'an EMPTY queue is empty, never overdue' `
     ($txt -match 'clusters\s+0\s+-\s+14d\s+empty')
   Case 'MUST FIRE' 'a counter that could not run reads UNKNOWN, never empty' `
@@ -574,6 +587,7 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   # in the scheduled -Alert run, and only here - a digest run by hand reports and writes nothing.
   $estatePage = @()
   $estateRed = @()
+  $estateRead = $false   # set only once brain-report's JSON actually parsed (ruling 8b)
   try {
     $erOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo 'ops\brain-report.ps1') -Json
     $erLines = @($erOut)
@@ -584,6 +598,7 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
     if ($ej.Count) {
       $ed = ("$($ej[$ej.Count - 1])".Substring('brain-report-json: '.Length)) | ConvertFrom-Json
       $estateRed = @(@($ed.stages) | Where-Object { $_.floor -eq 'RED' })
+      $estateRead = $true
     }
   } catch { $estatePage = @('ESTATE HALF UNKNOWN - ops\brain-report.ps1 could not run, which is not an estate with nothing wrong') }
   if ($Alert) {
@@ -608,7 +623,9 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   $text = Format-Digest -Night $night -Queues $queues -Weakest $weakest -Events $events -Estate $estatePage -InboxCommand $inboxCmd -Learning $learning
   if (-not $Quiet) { $text }
 
-  if ($Alert) {
+  $digestSends = Test-DigestShouldSend -RedStages (@($estateRed | Where-Object { $_ }).Count) -EstateRead $estateRead
+  if ($Alert -and -not $digestSends -and -not $Quiet) { 'brain-digest: every stage floor is green, so no mail and no triage item (ruling 8b, 2026-09-10)' }
+  if ($Alert -and $digestSends) {
     # ONE MAIL, THROUGH THE ESTATE'S OWN CHANNEL, so its once-per-day suppression and its
     # queue both apply. The subject is STABLE - send-alert derives the suppression key
     # from it with digits stripped - so a varying count must not appear in it.

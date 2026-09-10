@@ -1469,6 +1469,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         New-FanoutLane -Name 'discover-hyvee'      -File (Join-Path $root 'discover-hyvee.ps1')             -TimeoutSec 900 -Arguments @('-Slice','40')
         New-FanoutLane -Name 'store-taxonomy'      -File (Join-Path $root 'audit-store-taxonomy.ps1')       -Arguments @('-OutDir', $OutDir) -Marker 'STORE-TAXONOMY-COMPLETE'
         New-FanoutLane -Name 'sale-fallback'       -File (Join-Path $root 'audit-sale-fallback.ps1') -Marker 'SALE-FALLBACK-COMPLETE'
+        # the zero-alert-days scoreboard (design\PLAN-zero-alert-days-2026-09-10.md, Phase 0): a measurement,
+        # never an alert. Run here so quiet days are counted even when the Claude app, and so triage, is closed.
+        New-FanoutLane -Name 'alert-census'        -File (Join-Path $root 'audit-alert-census.ps1') -Marker 'ALERT-CENSUS-COMPLETE'
         New-FanoutLane -Name 'golden-test'         -File (Join-Path $mealPrep 'engine\golden-test.ps1')         -TimeoutSec 600 -Marker 'GOLDEN-TEST-COMPLETE'
         New-FanoutLane -Name 'scaler-pricing'      -File (Join-Path $mealPrep 'pipeline\run-scaler-pricing-test.ps1') -TimeoutSec 600 -Arguments @('-Quiet')
         New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1') -Marker 'DB-AGREEMENT-COMPLETE'

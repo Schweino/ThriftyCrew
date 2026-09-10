@@ -105,6 +105,11 @@ plan: they are committed with their fixes and are the record of why a rule exist
 
 STEP 0 - GUARD: run
   powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\triage-due.ps1
+FIRST, EVERY RUN, INCLUDING AN IDLE ONE: run
+  powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\audit-alert-census.ps1
+It takes seconds and spawns nothing. Put its QUIET DAYS, TARGET and RETURNS lines in the report. A quiet day
+is exactly what it measures, so skipping it on IDLE days would blind the scoreboard on the days that matter
+(design\PLAN-zero-alert-days-2026-09-10.md, ruling 4). Exit 3 means it could not read the queue: say so.
 IDLE means report one line and STOP (no agents, no plan, no cost). DUE means proceed. Items with status
 'needs-brad' are PARKED - never re-triage them.
 TWO LANES (2026-09-10). The guard lists the daily lane under `DUE` and weekly-lane items under `WEEKLY LANE`.
@@ -273,6 +278,10 @@ STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
   an item the run dropped, and the report names it rather than closing quiet.
 - `grocery\triage-plans\cost-ledger.jsonl` has one row per agent this run spawned, committed with the plan,
   and the report gives the run's total tokens and tool calls against the ceilings.
+- Re-run `grocery\audit-alert-census.ps1` so its numbers include this run's closes, quote its QUIET DAYS,
+  TARGET and RETURNS lines, and commit `grocery\out\alert-census.jsonl` by explicit path with the plan. That
+  file is the only history of alerts older than the queue's 30 days, so a copy that lives on one disk is not
+  a scoreboard.
 - `git -C C:\Codex\ThriftyCrew status --porcelain`: no .ps1, commodities.json, categories.json,
   commodity-search.json, allowlist/config json, SKILL or plan file left uncommitted. Regenerated pipeline
   output (out\*, board.json, feed, logs) is the pipeline's, not ours.
