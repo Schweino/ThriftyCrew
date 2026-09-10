@@ -170,7 +170,13 @@ Batch 2 (skills 734414d, Brad asked for it before batch 1 had evidence): 19 more
 whose trap shows up as a command, a file edit or a URL; the rest are rulings, history and design lessons with nothing a
 pattern could catch. The check refused one cue as loud (a CRLF cue on 4.69% of real commands) and it was rewritten to the
 memory's exact shape (0.19%). The strongest new cue, a standalone compare-deals rebuild, matches 33 recorded failures over
-9 sessions. 41 authored drafts in all; batch 3 waits on what the ladder and the inbox promote from these.
+9 sessions. 41 authored drafts after batch 2.
+Batches 3 and 4 (skills c7819d1, Brad asked for all batches): every remaining memory with an action shape, 32 from full
+reads and 12 from trap sentences in procedure memories, 44 through the checks after one fixture fix; 85 authored drafts
+in all. Batch 2's lifter draft was corrected when ops/count-source-lifters.ps1 showed only grocery/test-auditors.ps1
+still executes a compare-deals lift. Memories left without a cue are rulings, history, preferences, product notes and
+lessons whose trap is a line of reasoning, plus browser-tool work the reflex hook cannot see. What remains is the
+ladder's and the inbox's: which drafts earn promotion; R then says whether each promoted one cut its mistake.
 
 ## 4. Order
 
