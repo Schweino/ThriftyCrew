@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-09-09T08:11:04",
+    "updated":  "2026-09-10T08:06:45",
     "ttl_days":  30,
     "note":  "When each Walmart / Sam\u0027s / Fareway rollback was FIRST observed. first_seen is the as_of of the capture that first showed the cut price (detection = the capture, not the day this ledger met the row - Brad, 2026-08-22) and is NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite; it may move EARLIER when a capture proves the price was already there. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store\u0027s own item id, never the name, so a re-listing cannot restart the clock.",
     "entries":  [
@@ -909,6 +909,15 @@
                         "item_id":  "19867574",
                         "price":  7.99,
                         "first_seen":  "2026-08-03",
+                        "last_seen":  "2026-09-09",
+                        "price_changed":  0
+                    },
+                    {
+                        "key":  "Fareway|20002358",
+                        "store":  "Fareway",
+                        "item_id":  "20002358",
+                        "price":  7.98,
+                        "first_seen":  "2026-09-09",
                         "last_seen":  "2026-09-09",
                         "price_changed":  0
                     },
@@ -4711,6 +4720,15 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Sam\u0027s Club|0XK9DXWBON5G",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "0XK9DXWBON5G",
+                        "price":  7.48,
+                        "first_seen":  "2026-09-10",
+                        "last_seen":  "2026-09-10",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Sam\u0027s Club|0Y3T1FF0O3IH",
                         "store":  "Sam\u0027s Club",
                         "item_id":  "0Y3T1FF0O3IH",
@@ -4824,7 +4842,7 @@
                         "item_id":  "16IVHV5FVSXT",
                         "price":  5.98,
                         "first_seen":  "2026-08-30",
-                        "last_seen":  "2026-08-30",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -4869,7 +4887,7 @@
                         "item_id":  "1AB5E66KCVSM",
                         "price":  9.98,
                         "first_seen":  "2026-08-29",
-                        "last_seen":  "2026-09-02",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -4932,7 +4950,7 @@
                         "item_id":  "1JLKB5QCW4TR",
                         "price":  7.48,
                         "first_seen":  "2026-09-05",
-                        "last_seen":  "2026-09-09",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5094,7 +5112,7 @@
                         "item_id":  "22XKUFRC241L",
                         "price":  9.98,
                         "first_seen":  "2026-08-29",
-                        "last_seen":  "2026-09-02",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5125,12 +5143,21 @@
                         "price_changed":  0
                     },
                     {
+                        "key":  "Sam\u0027s Club|26C97ENIP1FX",
+                        "store":  "Sam\u0027s Club",
+                        "item_id":  "26C97ENIP1FX",
+                        "price":  4.91,
+                        "first_seen":  "2026-09-10",
+                        "last_seen":  "2026-09-10",
+                        "price_changed":  0
+                    },
+                    {
                         "key":  "Sam\u0027s Club|275FRN340YP4",
                         "store":  "Sam\u0027s Club",
                         "item_id":  "275FRN340YP4",
                         "price":  8.98,
                         "first_seen":  "2026-08-28",
-                        "last_seen":  "2026-09-09",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5166,7 +5193,7 @@
                         "item_id":  "2CH49RPILGAO",
                         "price":  6.98,
                         "first_seen":  "2026-08-29",
-                        "last_seen":  "2026-09-02",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5193,7 +5220,7 @@
                         "item_id":  "2F5HWL3HLPC9",
                         "price":  6.98,
                         "first_seen":  "2026-08-27",
-                        "last_seen":  "2026-09-01",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5292,7 +5319,7 @@
                         "item_id":  "2SWARWV0EJZP",
                         "price":  7.78,
                         "first_seen":  "2026-08-27",
-                        "last_seen":  "2026-09-07",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5337,7 +5364,7 @@
                         "item_id":  "2Z6S0T7JV2I8",
                         "price":  5.98,
                         "first_seen":  "2026-08-27",
-                        "last_seen":  "2026-09-07",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5382,7 +5409,7 @@
                         "item_id":  "372YUOQZYJ52",
                         "price":  12.98,
                         "first_seen":  "2026-08-27",
-                        "last_seen":  "2026-09-07",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5706,7 +5733,7 @@
                         "item_id":  "4NC1O4LLPTI8",
                         "price":  5.97,
                         "first_seen":  "2026-08-22",
-                        "last_seen":  "2026-09-08",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5742,7 +5769,7 @@
                         "item_id":  "4P0AL8KH8MXL",
                         "price":  7.76,
                         "first_seen":  "2026-08-30",
-                        "last_seen":  "2026-09-01",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -5994,7 +6021,7 @@
                         "item_id":  "5FYSIA3YHB03",
                         "price":  9.99,
                         "first_seen":  "2026-09-09",
-                        "last_seen":  "2026-09-09",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -6030,7 +6057,7 @@
                         "item_id":  "5KN8PVD1QYFA",
                         "price":  34.48,
                         "first_seen":  "2026-08-30",
-                        "last_seen":  "2026-08-30",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {
@@ -6237,7 +6264,7 @@
                         "item_id":  "6AX2T543NPSY",
                         "price":  4.98,
                         "first_seen":  "2026-08-26",
-                        "last_seen":  "2026-09-07",
+                        "last_seen":  "2026-09-10",
                         "price_changed":  0
                     },
                     {

@@ -52,6 +52,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "alfredo-sauce",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1676,
+        "link":  0.1453,
+        "ratio":  0.87,
+        "price":  6.54,
+        "size":  "45 oz",
+        "boardItem":  "Bertolli Alfredo Sauce with Aged Parmesan Cheese, 15 oz., 3 pk.",
+        "linkItem":  "Bertolli Alfredo Sauce with Aged Parmesan Cheese, 15 oz., 3 pk.",
+        "board_src":  "main"
+    },
+    {
         "id":  "all-purpose-cleaner",
         "store":  "Hy-Vee",
         "unit":  "floz",
@@ -257,6 +270,19 @@
         "size":  "18 oz",
         "boardItem":  "Hy-Vee Honey BBQ Sauce",
         "linkItem":  "Hy-Vee Honey BBQ Sauce",
+        "board_src":  "main"
+    },
+    {
+        "id":  "beef-broth",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.056,
+        "link":  0.0623,
+        "ratio":  1.11,
+        "price":  5.98,
+        "size":  "96 fl oz",
+        "boardItem":  "Swanson Beef Broth, 32 oz., 3 pk.",
+        "linkItem":  "Swanson Beef Broth, 32 oz., 3 pk.",
         "board_src":  "main"
     },
     {
@@ -494,6 +520,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "canned-mushrooms",
+        "store":  "Walmart",
+        "unit":  "oz",
+        "board":  0.2338,
+        "link":  0.2262,
+        "ratio":  0.97,
+        "price":  1.47,
+        "size":  "6.5 oz",
+        "boardItem":  "Great Value White Mushrooms Pieces and Stems, 6.5 oz",
+        "linkItem":  "Great Value White Mushrooms Pieces and Stems, 6.5 oz",
+        "board_src":  "main"
+    },
+    {
         "id":  "canned-pinto-beans",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -504,6 +543,19 @@
         "size":  "15 oz",
         "boardItem":  "Hy-Vee Pinto Beans",
         "linkItem":  "Hy-Vee Pinto Beans",
+        "board_src":  "main"
+    },
+    {
+        "id":  "canned-salmon",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.2637,
+        "link":  0.2298,
+        "ratio":  0.87,
+        "price":  3.39,
+        "size":  "14.75 oz",
+        "boardItem":  "Northern Catch Pink Salmon 14.75 OZ",
+        "linkItem":  "Northern Catch Pink Salmon",
         "board_src":  "main"
     },
     {
@@ -621,6 +673,19 @@
         "size":  "lb",
         "boardItem":  "Fresh Red Cherries",
         "linkItem":  "Fresh Red Cherries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chicken-noodle-soup",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.081,
+        "link":  0.0752,
+        "ratio":  0.93,
+        "price":  0.79,
+        "size":  "10.5 oz",
+        "boardItem":  "Kroger Condensed Chicken Noodle Soup",
+        "linkItem":  "Kroger Condensed Chicken Noodle Soup",
         "board_src":  "main"
     },
     {
@@ -963,6 +1028,19 @@
     },
     {
         "id":  "energy-drinks",
+        "store":  "Baker\u0027s",
+        "unit":  "floz",
+        "board":  0.1248,
+        "link":  0.104,
+        "ratio":  0.83,
+        "price":  4.99,
+        "size":  "6 pk 8 fl oz",
+        "boardItem":  "V8 Energy Strawberry Banana Energy Drink Cans",
+        "linkItem":  "V8 Energy Strawberry Banana Energy Drink Cans",
+        "board_src":  "main"
+    },
+    {
+        "id":  "energy-drinks",
         "store":  "Hy-Vee",
         "unit":  "floz",
         "board":  0.1744,
@@ -972,6 +1050,19 @@
         "size":  "16 fl oz",
         "boardItem":  "Ghost Zero Sugar Energy Drink, Welch\u0027s Grape, 16 fl oz can",
         "linkItem":  "Ghost Zero Sugar Energy Drink, Welch\u0027s Grape, 16 fl oz can",
+        "board_src":  "main"
+    },
+    {
+        "id":  "english-muffins",
+        "store":  "Hy-Vee",
+        "unit":  "each",
+        "board":  0.38,
+        "link":  0.3317,
+        "ratio":  0.87,
+        "price":  1.99,
+        "size":  "6 ct",
+        "boardItem":  "Hy Vee Pre Sliced Original English Muffins 6Ct",
+        "linkItem":  "Hy-Vee Pre-Sliced Original English Muffins - 6 Muffins",
         "board_src":  "main"
     },
     {
@@ -1131,6 +1222,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "chicken-nuggets",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.1873,
+        "link":  0.1717,
+        "ratio":  0.92,
+        "price":  10.99,
+        "size":  "64 oz",
+        "boardItem":  "Kroger Frozen Fully Cooked Crispy Chicken Nuggets BIG DEAL!",
+        "linkItem":  "Kroger Frozen Fully Cooked Crispy Chicken Nuggets BIG DEAL!",
+        "board_src":  "main"
+    },
+    {
         "id":  "frozen-fries",
         "store":  "Baker\u0027s",
         "unit":  "oz",
@@ -1193,6 +1297,19 @@
         "size":  "14.4 oz",
         "boardItem":  "Hy-Vee Graham Crackers With Honey",
         "linkItem":  "Hy-Vee Graham Crackers With Honey",
+        "board_src":  "main"
+    },
+    {
+        "id":  "granola",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.2718,
+        "link":  0.2273,
+        "ratio":  0.84,
+        "price":  2.5,
+        "size":  "11 oz",
+        "boardItem":  "Kroger French Vanilla Almond Granola",
+        "linkItem":  "Kroger French Vanilla Almond Granola",
         "board_src":  "main"
     },
     {
@@ -1600,6 +1717,19 @@
     },
     {
         "id":  "pita-bread",
+        "store":  "Hy-Vee",
+        "unit":  "each",
+        "board":  0.4983,
+        "link":  0.615,
+        "ratio":  1.23,
+        "price":  3.69,
+        "size":  "6 ct",
+        "boardItem":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each",
+        "linkItem":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each",
+        "board_src":  "main"
+    },
+    {
+        "id":  "pita-bread",
         "store":  "Baker\u0027s",
         "unit":  "each",
         "board":  0.4983,
@@ -1703,6 +1833,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "ranch-dressing",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.09,
+        "link":  0.08,
+        "ratio":  0.89,
+        "price":  10.82,
+        "size":  "135.25 oz",
+        "boardItem":  "Member\u0027s Mark Ranch Dressing, 1 gal.",
+        "linkItem":  "Member\u0027s Mark Ranch Dressing, 1 gal.",
+        "board_src":  "main"
+    },
+    {
         "id":  "razors",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
@@ -1797,9 +1940,9 @@
         "id":  "salmon",
         "store":  "Aldi",
         "unit":  "lb",
-        "board":  5.425,
+        "board":  5.725,
         "link":  5.175,
-        "ratio":  0.95,
+        "ratio":  0.9,
         "price":  10.35,
         "size":  "32 oz",
         "boardItem":  "Fremont Fish Market Value Pack Wild Caught Salmon 32 OZ",
@@ -2012,19 +2155,6 @@
         "size":  "8 oz",
         "boardItem":  "Tuscan Garden Sundried Tomatoes 8 OZ",
         "linkItem":  "Tuscan Garden Sundried Tomatoes 8 OZ",
-        "board_src":  "main"
-    },
-    {
-        "id":  "sweet-corn",
-        "store":  "Aldi",
-        "unit":  "each",
-        "board":  0.5975,
-        "link":  0.7375,
-        "ratio":  1.23,
-        "price":  2.95,
-        "size":  "4 ct",
-        "boardItem":  "Yellow Sweet Corn Package Each",
-        "linkItem":  "Yellow Sweet Corn Package 4 CT",
         "board_src":  "main"
     },
     {
@@ -2298,19 +2428,6 @@
         "size":  "3 lb",
         "boardItem":  "Freshness Guaranteed Boneless Skinless Chicken Thighs Family Pack, 2.6 - 6.9 lb Tray",
         "linkItem":  "Great Value All Natural Boneless Skinless Chicken Thighs, 3 lb",
-        "board_src":  "recipe"
-    },
-    {
-        "id":  "boneless-skinless-chicken-thigh",
-        "store":  "Baker\u0027s",
-        "unit":  "lb",
-        "board":  3.6633,
-        "link":  3.99,
-        "ratio":  1.09,
-        "price":  3.99,
-        "size":  "lb",
-        "boardItem":  "Kroger Frozen Raw Boneless Skinless Chicken Thighs",
-        "linkItem":  "Heritage Farm Boneless Skinless Chicken Thighs",
         "board_src":  "recipe"
     },
     {

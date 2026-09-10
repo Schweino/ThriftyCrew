@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-12; next_pull 2026-09-13",
-    "cursor_start":  205,
-    "cursor_next":  212,
+    "cursor_start":  212,
+    "cursor_next":  219,
     "total_terms":  602,
     "rotation_terms":  [
-                           "glazed donuts",
-                           "chili bean sauce",
-                           "drain cleaner",
-                           "ancho chiles",
-                           "chile de arbol",
-                           "dried basil",
-                           "dried cranberries"
+                           "dill weed",
+                           "guajillo chiles",
+                           "oregano leaves",
+                           "parsley flakes",
+                           "dried thyme",
+                           "dryer sheets",
+                           "dry green lentils"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "glazed donuts",
-                  "chili bean sauce",
-                  "drain cleaner",
-                  "ancho chiles",
-                  "chile de arbol",
-                  "dried basil",
-                  "dried cranberries"
+                  "dill weed",
+                  "guajillo chiles",
+                  "oregano leaves",
+                  "parsley flakes",
+                  "dried thyme",
+                  "dryer sheets",
+                  "dry green lentils"
               ],
     "commodities":  [
-                        "donuts",
-                        "doubanjiang",
-                        "drain-cleaner",
-                        "dried-ancho-chiles",
-                        "dried-arbol-chiles",
-                        "dried-basil",
-                        "dried-cranberries"
+                        "dried-dill",
+                        "dried-guajillo-chiles",
+                        "dried-oregano",
+                        "dried-parsley",
+                        "dried-thyme",
+                        "dryer-sheets",
+                        "dry-green-lentils"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

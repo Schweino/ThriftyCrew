@@ -1,18 +1,18 @@
 ﻿{
-    "date":  "2026-09-09",
-    "written":  "2026-09-09T11:52:43",
-    "written_by":  "refresh-chain-verdict",
-    "guards_rc":  0,
-    "guards_blocked":  false,
-    "inputs_fingerprint":  "711c520e2eab7085",
+    "date":  "2026-09-10",
+    "written":  "2026-09-10T08:11:12",
+    "written_by":  "check-ad-cycles",
+    "guards_rc":  2,
+    "guards_blocked":  true,
+    "inputs_fingerprint":  "5504f51e0006de72",
     "inputs":  {
-                   "grocery\\out\\comparison-2026-09-09.json":  "3403d85a8b8aea5d16597b7ca0f9a1e1545bc3e9baeadd026f23b5a1538f7989",
+                   "grocery\\out\\comparison-2026-09-09.json":  "2b1abda04c2b5365c0756a9216f26a223bd30ea0c748960efbf35772f4bdeac2",
                    "grocery\\commodities.json":  "3fb1b3ccfd8a76a31f29ee406a6f66ab7f725655b574e564c9b434a2421ae3fe",
                    "grocery\\known-wrong.json":  "e085b559a32f1e6c7402670f2ba1d777ed3c34ab626448d5c79cdd5b479cdf91",
-                   "grocery\\board-price-overrides.json":  "d4f10dabb3361ae8ca62ada94f3809e6b7fb64752ed7597d4899cc5bc561b3b5",
-                   "grocery\\product-urls.json":  "a7bbc63fe2c07614bfe45fd3ec2abeec8bb9f9f554f344bd4f164a53d107bfc8",
-                   "grocery\\out\\recipe-board.json":  "4efe21a8814fd21f82cf3165f37ee43110e07dbbfb5e98e935f41271169e9d4a",
-                   "grocery\\out\\name-drift.json":  "fd7d3f2b03416d40512e169a8b9b0d207c08d94b09eff401458eac9edd4acb09"
+                   "grocery\\board-price-overrides.json":  "7656a6ad3b5053281441d7ef7ba0697ad089eebc3b2904eaa485a2d2d1c97638",
+                   "grocery\\product-urls.json":  "db662ba054a662bfe947eda18c479350911735d59b405b91db6000a2b0923e04",
+                   "grocery\\out\\recipe-board.json":  "c5ccbb66d34fcc2dc1b78a2ce1368cd318d6279a73c8e5d8cb87157cbc795d92",
+                   "grocery\\out\\name-drift.json":  "6e14a2a3edbdc89c7dd1b4da046e499ba34f5471c03c54be1d48b53628b32ca2"
                },
     "note":  "Written after guards ran. Readers must go through lib\\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\\** or meal-prep\\**."
 }

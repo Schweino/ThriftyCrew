@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-09 21:32",
+    "generated":  "2026-09-10 08:16",
     "board":  "comparison-2026-09-09.json",
-    "sidecar_generated":  "2026-09-09 21:32:18",
+    "sidecar_generated":  "2026-09-10 08:16:22",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -10,11 +10,11 @@
                    },
     "examined":  {
                      "board_pairs":  3174,
-                     "corpus":  41384,
-                     "rule_invisible":  7831
+                     "corpus":  41412,
+                     "rule_invisible":  7841
                  },
     "identity_count":  0,
-    "coverage_count":  2,
+    "coverage_count":  3,
     "identity":  [
 
                  ],
@@ -37,6 +37,16 @@
                          "product":  "Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving",
                          "cos":  0.7422,
                          "score":  0.919544,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ice-cream",
+                         "commodity":  "Ice Cream",
+                         "store":  "Hy-Vee",
+                         "product":  "Hy Vee We All Scream Vanilla",
+                         "cos":  0.5628,
+                         "score":  0.903033,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

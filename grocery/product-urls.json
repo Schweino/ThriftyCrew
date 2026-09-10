@@ -1634,13 +1634,6 @@
                                                       "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                                       "board_pu":  0.1556
                                                   },
-                                         "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/mezzetta-hot-banana-pepper-rings/0007321400171",
-                                                              "name":  "Mezzetta Hot Banana Pepper Rings",
-                                                              "price":  "$2.99",
-                                                              "size":  "16 fl oz",
-                                                              "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
-                                                          },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/51692/vlasic-hot-banana-pepper-rings-12-fl-oz",
                                                         "price":  2.99,
@@ -1668,7 +1661,14 @@
                                                          "price":  "$4.72",
                                                          "size":  "32 fl oz",
                                                          "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/mezzetta-mild-banana-pepper-rings/0007321400463",
+                                                              "name":  "Mezzetta Mild Banana Pepper Rings",
+                                                              "price":  "$5.99",
+                                                              "size":  "32 fl oz",
+                                                              "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                          }
                                      },
                   "bananas":  {
                                   "commodity":  "Bananas",
@@ -4026,19 +4026,19 @@
                                                                  "price":  "$0.99",
                                                                  "size":  "14.5 oz"
                                                              },
-                                             "Walmart":  {
-                                                             "url":  "https://www.walmart.com/ip/Great-Value-Cut-Green-Beans-Gluten-Free-28-oz-Can/15544056",
-                                                             "name":  "Great Value Cut Green Beans, Gluten-Free, 28 oz Can",
-                                                             "price":  "$1.48",
-                                                             "size":  "28 oz",
-                                                             "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                         },
                                              "Fareway":  {
                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24228669-fareway-green-beans-cut-145-oz",
                                                              "name":  "Fareway Cut Green Beans",
                                                              "price":  "$0.68",
                                                              "size":  "14.5 oz",
                                                              "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
+                                                         },
+                                             "Walmart":  {
+                                                             "url":  "https://www.walmart.com/ip/14854671589",
+                                                             "name":  "(6 pack) Great Value Cut Green Beans, Gluten-Free, 28 oz Can",
+                                                             "price":  "$8.88",
+                                                             "size":  "168 oz",
+                                                             "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                                          }
                                          },
                   "canned-green-chilies":  {
@@ -4238,11 +4238,11 @@
                                                               "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                           },
                                          "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/10451004",
-                                                         "name":  "Great Value Sliced Peaches in Heavy Syrup, 29 oz",
+                                                         "url":  "https://www.walmart.com/ip/10415385",
+                                                         "name":  "Great Value Sliced Peaches in Juice, 29 oz",
                                                          "price":  "$2.78",
                                                          "size":  "29 oz",
-                                                         "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
+                                                         "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                                      }
                                      },
                   "canned-pears":  {
@@ -5244,7 +5244,14 @@
                                                  "price":  "$2.26",
                                                  "size":  "15.6 oz",
                                                  "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                             }
+                                             },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/kroger-bite-size-frosted-shredded-wheat-cereal/0001111086705",
+                                                      "name":  "Kroger Bite Size Frosted Shredded Wheat Cereal",
+                                                      "price":  "$2.00",
+                                                      "size":  "18 oz",
+                                                      "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                  }
                              },
                   "charcoal":  {
                                    "commodity":  "charcoal",
@@ -5683,14 +5690,6 @@
                                     },
                   "chicken-livers":  {
                                          "commodity":  "Chicken Livers",
-                                         "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/heritage-farm-chicken-livers/0001111063602",
-                                                              "name":  "Heritage Farm Chicken Livers",
-                                                              "price":  2.49,
-                                                              "size":  "20 oz",
-                                                              "verified":  "2026-08-23",
-                                                              "board_pu":  1.992
-                                                          },
                                          "Family Fare":  {
                                                              "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/chicken_liver_cups_gold_n_plump/p/1564405684714638114",
                                                              "name":  "Chicken Liver Cups Gold N Plump",
@@ -5717,7 +5716,14 @@
                                                          "price":  "$1.96",
                                                          "size":  "1.298 lb",
                                                          "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/heritage-farm-natural-chicken-livers/0001111063602",
+                                                              "name":  "Heritage Farm Natural Chicken Livers",
+                                                              "price":  "$2.49",
+                                                              "size":  "20 oz",
+                                                              "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                          }
                                      },
                   "chicken-noodle-soup":  {
                                               "commodity":  "chicken-noodle-soup",
@@ -6536,11 +6542,11 @@
                   "coconut":  {
                                   "commodity":  "coconut",
                                   "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3402271-coconut-each",
-                                                  "name":  "Coconut",
-                                                  "price":  "$3.99",
-                                                  "size":  "each",
-                                                  "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20002358-kind-bars-almond-coconut-6-ea",
+                                                  "name":  "KIND Almond \u0026 Coconut",
+                                                  "price":  "$7.98",
+                                                  "size":  "6 ct",
+                                                  "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                               }
                               },
                   "coconut-milk":  {
@@ -8789,14 +8795,6 @@
                                               "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                               "board_pu":  0.3125
                                           },
-                                 "Baker\u0027s":  {
-                                                      "url":  "https://www.bakersplus.com/p/krispy-kreme-original-glazed-doughnut-dots/0007247000577",
-                                                      "name":  "Krispy Kreme Original Glazed Doughnut Dots",
-                                                      "price":  4.79,
-                                                      "size":  "12 ct",
-                                                      "verified":  "2026-08-23",
-                                                      "board_pu":  0.3992
-                                                  },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/298147/little-debbie-mini-glazed-donuts",
                                                 "price":  2.79,
@@ -8809,7 +8807,14 @@
                                                  "price":  "$3.49",
                                                  "size":  "21 ct",
                                                  "verified":  "2026-09-09 DERIVED from the price row (same record the board priced)"
-                                             }
+                                             },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/bakery-fresh-glazed-yeast-donuts/0001111026433",
+                                                      "name":  "Bakery Fresh Glazed Yeast Donuts",
+                                                      "price":  "$5.00",
+                                                      "size":  "12 pk 2.5 oz",
+                                                      "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                  }
                              },
                   "drain-cleaner":  {
                                         "commodity":  "Drain Cleaner",
@@ -9804,14 +9809,6 @@
                                     },
                   "feta":  {
                                "commodity":  "feta",
-                               "Baker\u0027s":  {
-                                                    "url":  "https://www.bakersplus.com/p/president-feta-crumbles/0007790100770",
-                                                    "name":  "President Feta Crumbles",
-                                                    "price":  8.49,
-                                                    "size":  "12 oz",
-                                                    "verified":  "2026-08-23",
-                                                    "board_pu":  0.7075
-                                                },
                                "Fareway":  {
                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1658850-crystal-farms-feta-cheese-113-0-g",
                                                "price":  2.98,
@@ -9838,7 +9835,14 @@
                                                    "price":  "$8.99",
                                                    "size":  "8 oz",
                                                    "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                               "Baker\u0027s":  {
+                                                    "url":  "https://www.bakersplus.com/p/private-selection-traditional-feta-crumbles/0001111062856",
+                                                    "name":  "Private Selection Traditional Feta Crumbles",
+                                                    "price":  "$4.99",
+                                                    "size":  "6 oz",
+                                                    "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                }
                            },
                   "feta-cheese":  {
                                       "commodity":  "Feta Cheese",
@@ -10856,13 +10860,6 @@
                                                      "name":  "That\u0027s Smart! Cut Golden Corn",
                                                      "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                  },
-                                      "Walmart":  {
-                                                      "url":  "https://www.walmart.com/ip/571358544",
-                                                      "name":  "Great Value Whole Kernel Corn, 32 oz Steamable Bag (Frozen)",
-                                                      "price":  "$2.48",
-                                                      "size":  "32 oz",
-                                                      "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                  },
                                       "Family Fare":  {
                                                           "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/corn/our_family_sweet_corn_super_steamable_10_oz/p/1564405684703626578",
                                                           "name":  "Our Family Sweet Corn, Super, Steamable 10 Oz",
@@ -10876,6 +10873,13 @@
                                                       "price":  "$2.94",
                                                       "size":  "32 oz",
                                                       "verified":  "2026-09-09 DERIVED from the price row (same record the board priced)"
+                                                  },
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/10315053",
+                                                      "name":  "Great Value Frozen Whole Kernel Golden Corn, 16 oz",
+                                                      "price":  "$0.98",
+                                                      "size":  "16 oz",
+                                                      "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                                   }
                                   },
                   "frozen-fries":  {
@@ -11667,13 +11671,6 @@
                                    },
                   "garlic-herb-seasoning":  {
                                                 "commodity":  "Garlic Herb Seasoning",
-                                                "Baker\u0027s":  {
-                                                                     "url":  "https://www.bakersplus.com/p/weber-roasted-garlic-herb-seasoning-kosher-gluten-free/0004760001136",
-                                                                     "name":  "Weber Roasted Garlic \u0026 Herb Seasoning, Kosher, Gluten Free",
-                                                                     "price":  4.99,
-                                                                     "size":  "5.5 oz",
-                                                                     "verified":  "2026-08-23"
-                                                                 },
                                                 "Family Fare":  {
                                                                     "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/mc_cormick_roasted_garlic_herb_seasoning_2_75_oz/p/34641",
                                                                     "name":  "Mc Cormick Roasted Garlic \u0026 Herb Seasoning 2.75 Oz",
@@ -11694,7 +11691,14 @@
                                                                 "price":  "$3.88",
                                                                 "size":  "5.64 oz",
                                                                 "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                            }
+                                                            },
+                                                "Baker\u0027s":  {
+                                                                     "url":  "https://www.bakersplus.com/p/mccormick-grill-mates-roasted-garlic-herb-seasoning/0005210000208",
+                                                                     "name":  "McCormick GRILL MATES Roasted Garlic \u0026 Herb Seasoning",
+                                                                     "price":  "$2.29",
+                                                                     "size":  "2.75 oz",
+                                                                     "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                                 }
                                             },
                   "garlic-powder":  {
                                         "commodity":  "Garlic Powder",
@@ -14247,14 +14251,6 @@
                                                  "size":  "128 fl oz",
                                                  "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
                                              },
-                                    "Baker\u0027s":  {
-                                                         "url":  "https://www.bakersplus.com/p/kroger-1883-vanilla-ice-cream-party-pail-big-deal-/0001111010960",
-                                                         "name":  "Kroger 1883 Vanilla Ice Cream Party Pail BIG DEAL!",
-                                                         "price":  6.99,
-                                                         "size":  "1 gal",
-                                                         "verified":  "2026-08-23",
-                                                         "board_pu":  0.0546
-                                                     },
                                     "Family Fare":  {
                                                         "url":  "https://www.shopfamilyfare.com/shop/freezer/sweet_stuff/party_size_ice_cream_more/vanilla_ice_cream_our_family/p/1564405684703678200",
                                                         "price":  8.49,
@@ -14288,7 +14284,14 @@
                                                     "price":  "$7.24",
                                                     "size":  "128 fl oz",
                                                     "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                    "Baker\u0027s":  {
+                                                         "url":  "https://www.bakersplus.com/p/kroger-1883-vanilla-ice-cream-tub/0001111050729",
+                                                         "name":  "Kroger 1883 Vanilla Ice Cream Tub",
+                                                         "price":  "$2.99",
+                                                         "size":  "48 oz",
+                                                         "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                     }
                                 },
                   "iced-tea":  {
                                    "commodity":  "iced-tea",
@@ -16555,13 +16558,6 @@
                                         },
                   "muffins":  {
                                   "commodity":  "muffins",
-                                  "Baker\u0027s":  {
-                                                       "url":  "https://www.bakersplus.com/p/veggies-made-great-blueberry-oat-muffins/0070486302813",
-                                                       "name":  "Veggies Made Great Blueberry Oat Muffins",
-                                                       "price":  5.99,
-                                                       "size":  "6 pk 2 oz",
-                                                       "verified":  "2026-08-23"
-                                                   },
                                   "Family Fare":  {
                                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/cakes_pies/little_bites_blueberry_muffins_5_ea/p/1764405684715924172",
                                                       "name":  "Little Bites Blueberry Muffins 5 Ea",
@@ -16576,7 +16572,14 @@
                                                   "price":  "$0.99",
                                                   "size":  "each",
                                                   "verified":  "2026-09-06 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                  "Baker\u0027s":  {
+                                                       "url":  "https://www.bakersplus.com/p/bakery-fresh-lemon-blueberry-muffins/0001111026808",
+                                                       "name":  "Bakery Fresh Lemon Blueberry Muffins",
+                                                       "price":  "$2.50",
+                                                       "size":  "4 ct",
+                                                       "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                   }
                               },
                   "mushrooms":  {
                                     "commodity":  "mushrooms",
@@ -18195,6 +18198,13 @@
                                                             "price":  "$2.99",
                                                             "size":  "12 oz",
                                                             "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                        },
+                                            "Walmart":  {
+                                                            "url":  "https://www.walmart.com/ip/San-Marcos-Sliced-Jalapeno-Peppers-26-oz/10449459",
+                                                            "name":  "San Marcos Shelf Stable  Sliced Jalapenos, 26 oz Can",
+                                                            "price":  "$2.28",
+                                                            "size":  "26 oz",
+                                                            "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                                         }
                                         },
                   "pickles":  {
@@ -19661,11 +19671,11 @@
                                                      "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
                                                  },
                                 "Sam\u0027s Club":  {
-                                                        "url":  "https://www.samsclub.com/ip/18385815807",
-                                                        "name":  "Nongshim Shin Ramyun Spicy Beef Ramen Noodle Soup, 4.23 oz., 10 pk.",
-                                                        "price":  "$9.98",
-                                                        "size":  "10 ct 4.23 oz",
-                                                        "verified":  "2026-09-09 DERIVED from the price row (same record the board priced)"
+                                                        "url":  "https://www.samsclub.com/ip/18239212180",
+                                                        "name":  "Nissin Top Ramen, Chicken, 24 pk.",
+                                                        "price":  "$6.98",
+                                                        "size":  "24 ct",
+                                                        "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                                     }
                             },
                   "ranch-dressing":  {
@@ -23236,20 +23246,20 @@
                                                      "size":  "16 oz",
                                                      "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
                                                  },
-                                     "Baker\u0027s":  {
-                                                          "url":  "https://www.bakersplus.com/p/ortega-original-thick-and-smooth-medium-taco-sauce-kosher/0003900001894",
-                                                          "name":  "Ortega Original Thick and Smooth Medium Taco Sauce, Kosher",
-                                                          "price":  "$3.49",
-                                                          "size":  "16 oz",
-                                                          "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                      },
                                      "Walmart":  {
                                                      "url":  "https://www.walmart.com/ip/305067061",
                                                      "name":  "Great Value Taco Sauce Mild Gluten Free Paleo Keto Bottle, 16 oz",
                                                      "price":  "$1.78",
                                                      "size":  "16 oz",
                                                      "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/kroger-medium-taco-sauce/0001111014594",
+                                                          "name":  "Kroger Medium Taco Sauce",
+                                                          "price":  "$2.99",
+                                                          "size":  "12 oz",
+                                                          "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
+                                                      }
                                  },
                   "taco-seasoning":  {
                                          "commodity":  "Taco Seasoning (packet)",
@@ -23936,6 +23946,13 @@
                                                                  "price":  "$0.99",
                                                                  "size":  "14.5 oz",
                                                                  "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
+                                                             },
+                                                 "Walmart":  {
+                                                                 "url":  "https://www.walmart.com/ip/Great-Value-Original-Diced-Tomatoes-with-Green-Chilies-10-oz/10315170",
+                                                                 "name":  "Great Value Original Diced Tomatoes with Green Chilies, 10 oz",
+                                                                 "price":  "$0.87",
+                                                                 "size":  "10 oz",
+                                                                 "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
                                                              }
                                              },
                   "tomato-paste":  {

@@ -36,6 +36,15 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "apple-cider-vinegar",
+        "store":  "Family Fare",
+        "product":  "Heinz Vinegar, Flavored Distilled, Apple Cider 64 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
         "id":  "asparagus",
         "store":  "Family Fare",
         "product":  "Fresh Green Asparagus",
@@ -61,6 +70,33 @@
         "aisle":  "fresh_fruits_vegetables/potatoes",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "baking-powder",
+        "store":  "Family Fare",
+        "product":  "Baking Powder Our Family",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "baking-soda",
+        "store":  "Family Fare",
+        "product":  "Arm \u0026 Hammer White Pure Baking Soda 4 Lb",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "bbq-sauce",
+        "store":  "Family Fare",
+        "product":  "Our Family Thick \u0026 Hearty Original Barbecue Sauce 18 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
         "id":  "black-pepper",
@@ -90,6 +126,15 @@
         "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "brownie-mix",
+        "store":  "Family Fare",
+        "product":  "Betty Crocker Fudge Brownie Mix 10.25 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "brussels-sprouts",
         "store":  "Family Fare",
         "product":  "Brussels Sprouts",
@@ -115,6 +160,15 @@
         "aisle":  "fresh_fruits_vegetables/lettuce_cabbage_greens",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "cake-mix",
+        "store":  "Family Fare",
+        "product":  "Jiffy Cake Mix, Golden Yellow 9 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "canned-asparagus",
@@ -216,6 +270,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "chocolate-chips",
+        "store":  "Family Fare",
+        "product":  "Our Family Morsels, Semi Sweet Chocolate 24 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "chocolate-milk",
         "store":  "Family Fare",
         "product":  "Our Family Milk, Lowfat, 1% Milkfat, Chocolate 1 Gal",
@@ -243,6 +306,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "coconut-oil",
+        "store":  "Family Fare",
+        "product":  "Refined Coconut Oil Our Family",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
         "id":  "cod",
         "store":  "Family Fare",
         "product":  "Cod Frozen Fillets Aqua Star",
@@ -261,6 +333,15 @@
         "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027coffee-creamer\u0027"
     },
     {
+        "id":  "cooking-spray",
+        "store":  "Family Fare",
+        "product":  "Our Family Cooking Spray, No Stick, Canola Oil 6 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
         "id":  "croissants",
         "store":  "Family Fare",
         "product":  "4 Ct Butter Croissants",
@@ -277,6 +358,15 @@
         "aisle":  "fresh_fruits_vegetables/other_vegetables",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "curry-powder",
+        "store":  "Family Fare",
+        "product":  "Sugar N Spice Curry Powder Pp",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027curry-powder\u0027"
     },
     {
         "id":  "dinner-rolls",
@@ -342,6 +432,15 @@
         "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
     },
     {
+        "id":  "evaporated-milk",
+        "store":  "Family Fare",
+        "product":  "Evaporated Milk Our Family",
+        "dept":  "dairy",
+        "aisle":  "dairy/milk",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is a reviewed exception department for \u0027evaporated-milk\u0027"
+    },
+    {
         "id":  "storage-bags",
         "store":  "Family Fare",
         "product":  "Our Family Freezer Bags, Resealable, Gallon Size 30 Ea",
@@ -367,6 +466,15 @@
         "aisle":  "bakery/french_bread_baguettes",
         "verdict":  "ALLOW",
         "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "frosting",
+        "store":  "Family Fare",
+        "product":  "Pillsbury Frosting, Vanilla, Creamy Supreme 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "breakfast-sandwiches",
@@ -477,6 +585,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "conditioner",
+        "store":  "Family Fare",
+        "product":  "Suave Conditioner Coconut Oil Infsn",
+        "dept":  "health_beauty",
+        "aisle":  "health_beauty/grooming_hygiene",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027personal\u0027"
+    },
+    {
         "id":  "half-and-half",
         "store":  "Family Fare",
         "product":  "Our Family Half And Half 32 Fl Oz",
@@ -565,6 +682,15 @@
         "aisle":  "pantry/dry_goods",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
+    },
+    {
+        "id":  "italian-dressing",
+        "store":  "Family Fare",
+        "product":  "Our Family Dressing, Traditional Italian 24 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
         "id":  "jalapenos",
@@ -720,6 +846,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "pickles",
+        "store":  "Family Fare",
+        "product":  "Our Family Reduced Sodium Kosher Dill Pickle Spears 24 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "pita-bread",
         "store":  "Family Fare",
         "product":  "Joseph\u0027s Low Fat Whole Wheat Pita Bread 4 Ea",
@@ -745,6 +880,15 @@
         "aisle":  "pantry/chips_other_salty_snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "powdered-sugar",
+        "store":  "Family Fare",
+        "product":  "Crystal Sugar Sugar, Confectioners Powdered 2 Lb",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "radishes",
@@ -891,6 +1035,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "condensed-milk",
+        "store":  "Family Fare",
+        "product":  "Sweetened Condensed Milk Our Family",
+        "dept":  "dairy",
+        "aisle":  "dairy/milk",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is a reviewed exception department for \u0027condensed-milk\u0027"
+    },
+    {
         "id":  "salt",
         "store":  "Family Fare",
         "product":  "Iodized Salt Our Family",
@@ -945,6 +1098,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "vanilla-extract",
+        "store":  "Family Fare",
+        "product":  "Finest Reserve Vanilla Extract 2 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "vegetable-oil",
         "store":  "Family Fare",
         "product":  "Our Family Vegetable Oil, 100% Pure 1 Gal",
@@ -970,6 +1132,24 @@
         "aisle":  "fresh_fruits_vegetables/melons",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
+        "id":  "worcestershire",
+        "store":  "Family Fare",
+        "product":  "Our Family Worcestershire Sauce 10 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
+        "id":  "yeast",
+        "store":  "Family Fare",
+        "product":  "Our Family Yeast, Active Dry 4 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "mustard",

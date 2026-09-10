@@ -1,0 +1,1 @@
+﻿ground-beef-8020|Aldi|80 Lean Ground Beef Patties Per LB;ice-cream|Hy-Vee|Hy Vee We All Scream Vanilla;pork-shoulder|Walmart|Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving
