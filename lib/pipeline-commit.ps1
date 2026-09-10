@@ -114,6 +114,69 @@ function Assert-NoSourcePaths {
   return $bad
 }
 
+# ---- FOREIGN-HELD FILES: a session's dirty file is not the run's to commit (2026-09-10, queue 2026-09-10-3a9de4) ----
+# THE CLASS. Both committers stage their owned paths WHOLE - grocery/out is 1,342 tracked files and a run writes
+# a few hundred of them - so any session's uncommitted edit under an owned path rode into the bot commit, and the
+# pre-commit hook, judging the STAGED set, refused the ENTIRE commit. On 2026-09-09 one BOM-stripped
+# json-readers-baseline.json refused both scheduled commits and the edge served a stale feed all day. a95022
+# made the refusal NAME the file; it did not stop the refusal.
+# THE RULE. Snapshot the owned files that are already dirty when the run STARTS; at commit time, a snapshot file
+# whose LastWriteTime is still before the run started was not rewritten by the run, so it is unstaged and named.
+# Everything the run wrote is committed, and the hook stays fail-closed over what remains staged.
+# WHAT IT CANNOT DO, stated so nobody reads it as more: an edit a session makes DURING the run to a file the run
+# never writes has an mtime after the start and cannot be attributed, so it is still staged. A snapshot that
+# cannot be taken holds NOTHING back and says so - it never silently stages less.
+function Get-DirtyOwnedSnapshot {
+  <# The tracked files under $Paths that are MODIFIED in the working tree now, each with its LastWriteTime.
+     Returns [pscustomobject]@{ ok; files = [pscustomobject]@{ path; mtime }[]; why }. #>
+  param([Parameter(Mandatory = $true)][string]$Repo, [Parameter(Mandatory = $true)][string[]]$Paths)
+  $present = @($Paths | Where-Object { $_ -and (Test-Path -LiteralPath (Join-Path $Repo $_)) })
+  if (-not $present.Count) { return [pscustomobject]@{ ok = $true; files = @(); why = 'no owned path exists' } }
+  $g = Invoke-GitCaptured -Repo $Repo -GitArgs (@('status', '--porcelain', '--untracked-files=no', '--') + $present)
+  if ($g.rc -ne 0) { return [pscustomobject]@{ ok = $false; files = @(); why = ('git status exited ' + $g.rc + ': ' + ([string]$g.stderr).Trim()) } }
+  $files = New-Object System.Collections.Generic.List[object]
+  foreach ($line in @(([string]$g.stdout) -split "`r?`n")) {
+    if ($line.Length -lt 4) { continue }
+    # The WORKTREE column: ' M' and 'MM'. A staged-only change, a rename or a deletion is not a file the run
+    # could have been handed dirty and then hold back unchanged.
+    if ($line[1] -ne 'M') { continue }
+    $rel = $line.Substring(3).Trim()
+    if ($rel.Length -ge 2 -and $rel.StartsWith('"') -and $rel.EndsWith('"')) { $rel = $rel.Substring(1, $rel.Length - 2) }
+    $full = Join-Path $Repo $rel
+    if (-not (Test-Path -LiteralPath $full)) { continue }
+    $files.Add([pscustomobject]@{ path = $rel; mtime = (Get-Item -LiteralPath $full).LastWriteTime })
+  }
+  return [pscustomobject]@{ ok = $true; files = $files.ToArray(); why = '' }
+}
+
+function Get-PathMtimes {
+  <# path -> LastWriteTime for each path that still exists. A path missing from the map is not held. #>
+  param([Parameter(Mandatory = $true)][string]$Repo, [string[]]$Paths)
+  $map = @{}
+  foreach ($p in @($Paths)) {
+    if (-not $p) { continue }
+    $full = Join-Path $Repo $p
+    if (Test-Path -LiteralPath $full) { $map[[string]$p] = (Get-Item -LiteralPath $full).LastWriteTime }
+  }
+  return $map
+}
+
+function Get-ForeignHeldPaths {
+  <# PURE. From a start-of-run snapshot, the files the run did NOT rewrite: dirty before it started and with an
+     mtime still before $RunStart. A file rewritten by the run (mtime at or after the start) is the run's own.
+     An unusable snapshot holds nothing back. Comma-returned, so a caller assigns it and reads .Count. #>
+  param($Snapshot, [datetime]$RunStart, $CurrentMtimes)
+  $held = New-Object System.Collections.Generic.List[string]
+  if ($null -eq $Snapshot -or -not $Snapshot.ok -or $null -eq $CurrentMtimes) { return ,$held.ToArray() }
+  foreach ($f in @($Snapshot.files)) {
+    if ($null -eq $f) { continue }
+    $p = [string]$f.path
+    if (-not $CurrentMtimes.ContainsKey($p)) { continue }
+    if ([datetime]$CurrentMtimes[$p] -lt $RunStart) { $held.Add($p) }
+  }
+  return ,$held.ToArray()
+}
+
 function Invoke-PipelineCommit {
   <# Commit exactly $Paths under a private index. Returns a verdict string.
 
@@ -124,7 +187,12 @@ function Invoke-PipelineCommit {
     [Parameter(Mandatory=$true)][string[]]$Paths,
     [Parameter(Mandatory=$true)][string]$Message,
     [Parameter(Mandatory=$true)][string]$Name,
-    [switch]$Push
+    [switch]$Push,
+    # THE CALLER'S START-OF-RUN SNAPSHOT (2026-09-10, queue 2026-09-10-3a9de4) - pass both or neither. With them,
+    # an owned file that was already dirty when the caller's run started and has not been rewritten since is
+    # unstaged and named instead of refusing the whole commit. Without them this behaves exactly as before.
+    $DirtyAtStart = $null,
+    [datetime]$RunStart = [datetime]::MinValue
   )
   $bad = Assert-NoSourcePaths $Paths
   if ($bad.Count) {
@@ -145,8 +213,25 @@ function Invoke-PipelineCommit {
     & git -C $Repo read-tree HEAD | Out-Null
     & git -C $Repo add -A -- $present | Out-Null
     $staged = @(& git -C $Repo diff --cached --name-only | Where-Object { $_ })
+    # FOREIGN-HELD (2026-09-10, queue 2026-09-10-3a9de4): unstage what another session dirtied before this run
+    # started and the run did not rewrite. See Get-ForeignHeldPaths above.
+    $foreignHeld = @()
+    $foreignNote = ''
+    if (($null -ne $DirtyAtStart) -and ($RunStart -gt [datetime]::MinValue)) {
+      if (-not $DirtyAtStart.ok) {
+        $foreignNote = ('; foreign-held: the start-of-run snapshot is unavailable (' + [string]$DirtyAtStart.why + '), so nothing was held back')
+      } else {
+        $fhNow = Get-PathMtimes -Repo $Repo -Paths @($DirtyAtStart.files | ForEach-Object { [string]$_.path })
+        $foreignHeld = Get-ForeignHeldPaths -Snapshot $DirtyAtStart -RunStart $RunStart -CurrentMtimes $fhNow
+        foreach ($fh in $foreignHeld) { & git -C $Repo reset -q -- $fh | Out-Null }
+        if ($foreignHeld.Count) {
+          $foreignNote = ('; foreign-held: ' + $foreignHeld.Count + ' tracked owned file(s) another session dirtied before this run started, left uncommitted: ' + ($foreignHeld -join ', '))
+          $staged = @(& git -C $Repo diff --cached --name-only | Where-Object { $_ })
+        }
+      }
+    }
     if (-not $staged.Count) {
-      return ("{0}: nothing changed under its owned paths" -f $Name)
+      return ("{0}: nothing changed under its owned paths{1}" -f $Name, $foreignNote)
     }
     # BELT AND BRACES. The list was asserted above; this asserts what git ACTUALLY staged, because a
     # directory path like grocery/out could in principle acquire a script.
@@ -158,14 +243,18 @@ function Invoke-PipelineCommit {
     # hook's stderr never entered this process at all, so this lane's refusal string could only ever say
     # "a hook rejected it" - which is the sentence that cost a full reproduction on 09-09. No `2>&1` and no
     # `2>$null`: under EAP=Stop a native child's redirected stderr becomes a terminating error.
+    # WITH A FILE HELD BACK THE COMMIT TAKES THE INDEX, NOT THE PATHSPEC (2026-09-10, queue 2026-09-10-3a9de4):
+    # `git commit -- <paths>` commits the WORKING TREE of everything under those paths, which would put the held
+    # file straight back into the commit. With nothing held, the call is exactly what it was.
+    $commitTail = if ($foreignHeld.Count) { @() } else { @('--') + @($present) }
     $cRes = Invoke-GitCaptured -Repo $Repo -GitArgs (@(
       '-c', 'user.name=smp-pipeline-bot', '-c', 'user.email=actions@users.noreply.github.com',
-      'commit', '-m', $Message, '--') + @($present))
+      'commit', '-m', $Message) + $commitTail)
     $rc = $cRes.rc
     if ($rc -ne 0) {
       $refusal = Format-GitRefusal -Rc $rc -Stderr $cRes.stderr
-      return ("{0}: commit refused (git exit {1}) - a hook or git itself rejected it; the tree is untouched. {2}`n{3}" -f `
-              $Name, $rc, $refusal.summary, (($refusal.transcript) -join "`n"))
+      return ("{0}: commit refused (git exit {1}) - a hook or git itself rejected it; the tree is untouched{4}. {2}`n{3}" -f `
+              $Name, $rc, $refusal.summary, (($refusal.transcript) -join "`n"), $foreignNote)
     }
   } catch {
     return ("{0}: committer threw and was swallowed (the lane's work is not lost, only uncommitted): {1}" -f $Name, $_.Exception.Message)
@@ -174,7 +263,7 @@ function Invoke-PipelineCommit {
     if ($tmpIndex -and (Test-Path $tmpIndex)) { Remove-Item $tmpIndex -Force -ErrorAction SilentlyContinue }
   }
 
-  $msg = ("{0}: committed {1} file(s)" -f $Name, $staged.Count)
+  $msg = ("{0}: committed {1} file(s){2}" -f $Name, $staged.Count, $foreignNote)
   if ($Push) {
     try {
       & git -C $Repo push origin HEAD:main | Out-Null
@@ -220,6 +309,65 @@ if ($__pcSelfTest) {
 
   $v2 = Invoke-PipelineCommit -Repo 'C:\nope' -Paths @('grocery/out/definitely-not-here.json') -Message 'x' -Name 'probe'
   T 'a path that does not exist is nothing to commit, not an error' ($v2 -like '*nothing to commit*') $v2
+
+  # ---- FOREIGN-HELD (2026-09-10, queue 2026-09-10-3a9de4) ----------------------------------------------------------
+  # PURE: the rule itself, with frozen times.
+  $t0 = [datetime]'2026-09-10T07:00:00'
+  # A NEUTRAL fixture directory, lane/out. The rule is path-agnostic, and spelling another module's internals from lib\
+  # is a cross-module reach (ops\audit-cross-module-reach.ps1 caught the first cut of these fixtures at 147 against 133).
+  $snapOk = [pscustomobject]@{ ok = $true; why = ''; files = @(
+    [pscustomobject]@{ path = 'lane/out/json-readers-baseline.json'; mtime = $t0.AddHours(-2) },
+    [pscustomobject]@{ path = 'lane/out/capture-cursor.json'; mtime = $t0.AddHours(-2) }) }
+  $now1 = @{ 'lane/out/json-readers-baseline.json' = $t0.AddHours(-2); 'lane/out/capture-cursor.json' = $t0.AddMinutes(5) }
+  $h1 = Get-ForeignHeldPaths -Snapshot $snapOk -RunStart $t0 -CurrentMtimes $now1
+  T 'MUST FIRE  a file dirty before the run and untouched since is held; the one the run rewrote is not' (($h1.Count -eq 1) -and ($h1[0] -eq 'lane/out/json-readers-baseline.json')) ($h1 -join ', ')
+  $h2 = Get-ForeignHeldPaths -Snapshot ([pscustomobject]@{ ok = $false; files = @(); why = 'git status failed' }) -RunStart $t0 -CurrentMtimes $now1
+  T 'MUST FIRE  a snapshot that could not be taken holds NOTHING back' ($h2.Count -eq 0) ($h2 -join ', ')
+  $h3 = Get-ForeignHeldPaths -Snapshot $snapOk -RunStart $t0 -CurrentMtimes @{ 'lane/out/capture-cursor.json' = $t0.AddMinutes(5) }
+  T 'MUST NOT FIRE a snapshot file that has since disappeared is not held' ($h3.Count -eq 0) ($h3 -join ', ')
+
+  # END TO END in a throwaway repo, repository environment cleared first (ops rule: a fixture that builds a temp repo
+  # must not inherit GIT_DIR or GIT_INDEX_FILE from a hook). FROZEN from the founding case: a session stripped the BOM
+  # from a pipeline-written baseline (grocery's json-readers-baseline.json, 2026-09-09) before the run started, and the
+  # run never rewrote it. Same neutral lane/out directory; the run's own output is a .txt, so the fixture writes no
+  # out\*.json report family that nothing reads (ops\audit-write-only-reports.ps1).
+  $savedGitEnv = @{}
+  foreach ($ev in @('GIT_DIR', 'GIT_INDEX_FILE', 'GIT_WORK_TREE')) { $savedGitEnv[$ev] = [Environment]::GetEnvironmentVariable($ev); [Environment]::SetEnvironmentVariable($ev, $null) }
+  $tr = Join-Path $env:TEMP ('pc-fh-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $tr 'lane\out') -Force | Out-Null
+    & git -C $tr init -q . | Out-Null
+    & git -C $tr config user.email t@t | Out-Null
+    & git -C $tr config user.name t | Out-Null
+    $fA = Join-Path $tr 'lane\out\json-readers-baseline.json'
+    $fB = Join-Path $tr 'lane\out\run-output.txt'
+    [IO.File]::WriteAllBytes($fA, ([byte[]](0xEF, 0xBB, 0xBF) + [Text.Encoding]::UTF8.GetBytes('{"n":1}')))
+    [IO.File]::WriteAllText($fB, 'v1')
+    & git -C $tr add -A -- lane/out | Out-Null
+    & git -C $tr commit -q -m seed | Out-Null
+    [IO.File]::WriteAllBytes($fA, [Text.Encoding]::UTF8.GetBytes('{"n":1}'))
+    (Get-Item $fA).LastWriteTime = (Get-Date).AddHours(-2)
+    $snapE = Get-DirtyOwnedSnapshot -Repo $tr -Paths @('lane/out')
+    T 'the start snapshot sees exactly the foreign dirty file' (($snapE.ok) -and (@($snapE.files).Count -eq 1)) ('' + @($snapE.files).Count)
+    $rs = (Get-Date).AddMinutes(-30)
+    [IO.File]::WriteAllText($fB, 'v2')
+    $ve = Invoke-PipelineCommit -Repo $tr -Paths @('lane/out') -Message 'run' -Name 'probe' -DirtyAtStart $snapE -RunStart $rs
+    $inHead = @(& git -C $tr show --name-only --pretty=format: HEAD | Where-Object { $_ })
+    $stillDirty = @(& git -C $tr status --porcelain | Where-Object { $_ })
+    T 'MUST FIRE  the commit carries only the run''s file, names the held one, and leaves it dirty in the worktree (today''s code refused the whole commit here)' `
+      (($ve -match 'committed 1 file') -and ($ve -match 'foreign-held: 1 .*json-readers-baseline\.json') -and (($inHead -join ',') -eq 'lane/out/run-output.txt') -and (($stillDirty -join ',') -match 'json-readers-baseline\.json')) ($ve + ' | head=' + ($inHead -join ',') + ' | dirty=' + ($stillDirty -join ','))
+    # CLEAN TWIN: the same foreign file, dirty at start AND rewritten by the run, is committed as the run's own.
+    [IO.File]::WriteAllText($fB, 'v3')
+    $snapT = Get-DirtyOwnedSnapshot -Repo $tr -Paths @('lane/out')
+    $rs2 = (Get-Date).AddMinutes(-1)
+    [IO.File]::WriteAllBytes($fA, ([byte[]](0xEF, 0xBB, 0xBF) + [Text.Encoding]::UTF8.GetBytes('{"n":2}')))
+    [IO.File]::WriteAllText($fB, 'v4')
+    $vt = Invoke-PipelineCommit -Repo $tr -Paths @('lane/out') -Message 'run2' -Name 'probe' -DirtyAtStart $snapT -RunStart $rs2
+    T 'CLEAN TWIN  a foreign file the run rewrote is committed as the run''s own (2 files, nothing held)' (($vt -match 'committed 2 file') -and ($vt -notmatch 'foreign-held')) $vt
+  } finally {
+    Remove-Item -LiteralPath $tr -Recurse -Force -ErrorAction SilentlyContinue
+    foreach ($ev in @($savedGitEnv.Keys)) { [Environment]::SetEnvironmentVariable($ev, $savedGitEnv[$ev]) }
+  }
 
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }
   Write-Output 'SELF-TEST PASS: the source-path refusal in eight shapes, every real path list proved data-only and non-empty, no path owned twice, and the committer refusing before it touches git'

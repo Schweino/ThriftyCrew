@@ -47,6 +47,9 @@ param(
   # The stated way past the commit-size gate below. Named, because a guard that refuses without
   # telling you how to proceed just gets worked around.
   [switch]$ForceBigCommit,
+  # -Force runs even when out\logs\capture-run-status.json says this kind already COMPLETED today. The
+  # scheduled catch-up occurrences never pass it; a deliberate same-day re-run by hand does (see below).
+  [switch]$Force,
   [switch]$WhatIf
 )
 
@@ -62,6 +65,43 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'run-log-lib.ps1')
 . (Join-Path $root 'alert-lib.ps1')   # Send-Alert: the ONLY way this file may page (32 KB command-line trap)
 . (Join-Path $root 'fanout-lib.ps1')  # Invoke-Fanout: the browser-store builders, side by side
+
+# ---- ALREADY RAN TODAY? (2026-09-10, queue 2026-09-10-2b79d3) --------------------------------------------
+# The TC capture tasks gained hourly catch-up occurrences inside a per-task window, so a Windows Update
+# restart before a sign-in no longer loses the day (the one-shot trigger's occurrence was refused for want
+# of a session and StartWhenAvailable does not re-queue that). Every occurrence after the first must then be
+# a no-op, and "ran" is keyed on this script's OWN record, out\logs\capture-run-status.json - never on Task
+# Scheduler's LastRunTime and never on a transcript:
+#   date == today AND stage == 'complete'  -> SKIP, whatever the exit code. A guards-blocked morning exits 1,
+#       and re-running it every hour would re-pull every store's regular feed and spend the Kroger API and
+#       Family Fare term budgets on a board the guards would block again.
+#   anything else -> RUN: no record, a record for another day, or a stage other than complete. A run that died
+#       mid-stage left 'capturing' or 'downstream' behind and must be retried; a genuinely concurrent run is
+#       still refused by the named mutex below, which is the existing lock path.
+#   -Force -> RUN regardless: a deliberate same-day re-run by hand.
+# CHECKED BEFORE THE TRANSCRIPT AND BEFORE ANY STATUS WRITE, on purpose: a no-op occurrence that rewrote the
+# status record would replace 'complete' with its own stage, and the NEXT occurrence would then run for real.
+# Pure over its arguments so test-cadence.ps1 lifts it out of this file and drives the shipped code.
+function Test-AlreadyRanToday {
+  param($Status, [string]$Kind, [string]$Today)
+  if ($null -eq $Status) { return '' }
+  if (-not ($Status.PSObject.Properties.Name -contains $Kind)) { return '' }
+  $rec = $Status.$Kind
+  if ($null -eq $rec) { return '' }
+  if ([string]$rec.date -ne $Today) { return '' }
+  if ([string]$rec.stage -ne 'complete') { return '' }
+  return ('already ran today at ' + [string]$rec.started + ' (rc ' + [string]$rec.exit_code + '); this repetition is a no-op')
+}
+if (-not $Force) {
+  $arStatusFile = Join-Path (Join-Path $OutDir 'logs') 'capture-run-status.json'
+  $arStatus = $null
+  if (Test-Path $arStatusFile) { try { $arStatus = Read-JsonFile $arStatusFile } catch { $arStatus = $null } }
+  $arWhy = Test-AlreadyRanToday -Status $arStatus -Kind $Kind -Today $todayS
+  if ($arWhy) {
+    Write-Output ('SKIP: capture-run [' + $Kind + '] ' + $arWhy + '. Pass -Force to re-run by hand.')
+    exit 0
+  }
+}
 
 # The scheduled task runs this hidden with no redirect, so without a transcript
 # the exit code is the ONLY thing that survives a run. Guarded: never fatal.
@@ -87,6 +127,9 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
     $doc[$Kind] = [ordered]@{
       date = $todayS; pid = $PID; started = $script:RunStart.ToString('s'); updated = (Get-Date).ToString('s')
       stage = $Stage; exit_code = $ExitCode; log = [string]$runLog
+      # WHAT WAS ALREADY DIRTY WHEN THIS RUN STARTED (2026-09-10, queue 2026-09-10-3a9de4), recorded here so a
+      # run that dies before its commit still leaves the foreign-held set legible. $null = no snapshot taken.
+      dirty_at_start = $(if ($script:DirtyAtStart -and $script:DirtyAtStart.ok) { @($script:DirtyAtStart.files | ForEach-Object { [string]$_.path }) } else { $null })
     }
     $dir = Split-Path $script:StatusFile -Parent
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
@@ -115,6 +158,20 @@ if (-not $script:HoldsMutex) {
   exit 0
 }
 
+# ---- WHAT IS ALREADY DIRTY UNDER THE OWNED PATHS AS THIS RUN STARTS (2026-09-10, queue 2026-09-10-3a9de4) ----
+# The commit stage stages grocery\out WHOLE (1,342 tracked files, of which a run writes a few hundred), so a
+# session's dirty file under it rode into the bot commit and the pre-commit hook - correctly - refused the
+# whole commit (2026-09-09: json-readers-baseline.json, its BOM stripped by a session at 05:45). This names what
+# was dirty BEFORE the run touched anything; the commit stage then unstages the ones the run did not rewrite.
+# Taken AFTER the mutex, so a refused second instance never snapshots. A snapshot that cannot be taken holds
+# NOTHING back and says so - see Get-DirtyOwnedSnapshot and Get-ForeignHeldPaths in lib\pipeline-commit.ps1.
+$script:DirtyAtStart = $null
+try {
+  . (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')
+  $script:DirtyAtStart = Get-DirtyOwnedSnapshot -Repo (Split-Path $root -Parent) -Paths @((Get-BotInputPaths) + (Get-BotServedPaths))
+} catch {
+  $script:DirtyAtStart = [pscustomobject]@{ ok = $false; files = @(); why = ('the snapshot threw: ' + $_.Exception.Message) }
+}
 Write-RunStatus 'started'
 
 # ---- 1st-OF-MONTH HOUSEKEEPING (moved here 2026-08-22 from the retired run-daily-local.ps1) ----------
@@ -744,6 +801,30 @@ try {
   $alertSent = @(& git -C $repo status --porcelain --untracked-files=all -- 'grocery/alert-sent-*.txt' | Where-Object { $_ })
   if ($alertSent.Count) { & git -C $repo add -A -- 'grocery/alert-sent-*.txt' | ForEach-Object { Write-Output ("add: " + $_) } }
   & git -C $repo add -A -- $paths | ForEach-Object { Write-Output ("add: " + $_) }
+  # >>> FOREIGN-HELD BLOCK >>>  test-commit-size-gate.ps1 lifts everything between these two markers and runs it
+  # against a throwaway repo. Do not rename the markers.
+  # (2026-09-10, queue 2026-09-10-3a9de4) An owned file that was ALREADY dirty when this run started
+  # ($script:DirtyAtStart, taken right after the mutex) and has not been rewritten since belongs to another
+  # session: it is unstaged here and named, so the pre-commit hook judges only what this run wrote instead of
+  # refusing the whole day's commit over it (2026-09-09: one BOM-stripped json-readers-baseline.json refused both
+  # scheduled commits). The commit below takes the INDEX, so an unstaged file stays out of it.
+  $foreignHeld = @()
+  # $foreignHeldLine is also what the refusal alert below carries, so a commit that is STILL refused says what was held.
+  $foreignHeldLine = ''
+  if ($null -eq $script:DirtyAtStart -or -not $script:DirtyAtStart.ok) {
+    $fhWhy = if ($null -eq $script:DirtyAtStart) { 'no snapshot was taken' } else { [string]$script:DirtyAtStart.why }
+    $foreignHeldLine = ('foreign-held: the start-of-run snapshot is unavailable (' + $fhWhy + ') - holding NOTHING back; every owned change is staged as before')
+    Write-Output $foreignHeldLine
+  } else {
+    $fhNow = Get-PathMtimes -Repo $repo -Paths @($script:DirtyAtStart.files | ForEach-Object { [string]$_.path })
+    $foreignHeld = Get-ForeignHeldPaths -Snapshot $script:DirtyAtStart -RunStart $script:RunStart -CurrentMtimes $fhNow
+    foreach ($fh in $foreignHeld) { & git -C $repo reset -q -- $fh | Out-Null }
+    if ($foreignHeld.Count) {
+      $foreignHeldLine = ('foreign-held: ' + $foreignHeld.Count + ' tracked owned file(s) another session dirtied before this run started, left uncommitted: ' + ($foreignHeld -join ', '))
+      Write-Output $foreignHeldLine
+    }
+  }
+  # <<< FOREIGN-HELD BLOCK <<<
   # ---- HOW BIG IS THIS COMMIT? (2026-08-23) --------------------------------------------------------
   # $inputPaths stages 'grocery/out' as a WHOLE DIRECTORY, so .gitignore is the only thing standing
   # between a new subdirectory and the repo - and .gitignore is an exclusion list, which means
@@ -927,6 +1008,7 @@ try {
         Send-Alert -Subject "Daily pipeline commit REFUSED - $today" -Body (
           "capture-run.ps1 [$Kind] staged today's refresh and the commit was REFUSED (see grocery\out\logs\capture-run-$Kind-$today.log).`n`n" +
           $refusal.summary + "`n`n" +
+          $(if ($foreignHeldLine) { $foreignHeldLine + "`n`n" } else { '' }) +
           "The hook's own words:`n" + (($refusal.transcript) -join "`n") + "`n`n" +
           "Nothing was pushed, so public\board.json (the board's per-store chips) and public\smp-feed.json are STALE at the edge until this lands; the Ghost page itself publishes directly and is not affected.`n" +
           "The pre-commit hook refuses a bot commit that stages a path outside lib\bot-paths.ps1, a staged file that fails a bulk-edit invariant, or a matching-rule change with no accepted soundness baseline."

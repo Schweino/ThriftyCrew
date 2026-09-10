@@ -121,6 +121,19 @@ try {
 # out. The helper sends the body BY FILE and makes a failed send its own loud log line. Full account, and
 # the reason every caller goes through it even when today's body looks short, in alert-lib.ps1.
 . (Join-Path (Split-Path $root -Parent) 'lib\chain-verdict-lib.ps1')   # Write-ChainVerdict: THE guard-verdict document, shared with capture-run and push-data
+# THE START-OF-RUN SNAPSHOT FOR THIS CHAIN'S OWN COMMIT (2026-09-10, queue 2026-09-10-3a9de4). The commit at the end
+# stages the pricing paths whole; an owned file another session dirtied BEFORE this chain started, and that the
+# chain never rewrites, is held back and named there instead of refusing the whole commit. Taken here, before
+# any stage writes, so the mtime test at commit time can tell the chain's own writes from a session's. A snapshot
+# that cannot be taken holds nothing back (lib\pipeline-commit.ps1, Get-ForeignHeldPaths).
+$script:ChainStart = Get-Date
+$script:ChainDirtyAtStart = $null
+if (-not $NoCommit) {
+  try {
+    . (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')
+    $script:ChainDirtyAtStart = Get-DirtyOwnedSnapshot -Repo (Split-Path $root -Parent) -Paths (Get-PipelinePaths -Kind pricing)
+  } catch { $script:ChainDirtyAtStart = [pscustomobject]@{ ok = $false; files = @(); why = ('the snapshot threw: ' + $_.Exception.Message) } }
+}
 . (Join-Path $root 'alert-lib.ps1')
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
 . (Join-Path $root 'capture-policy-lib.ps1')   # Test-BrowserCaptureOwned: a store deferred to a browser owner under 24h ago is an OWNED gap, not an unowned one (2026-09-09-e60137). Declares no param() block, so it cannot reset this script's switches
@@ -2980,7 +2993,7 @@ try {
     Log ('test-guards weekly UNPROVEN: ' + $tgAge)
     $summary += ('INVARIANTS no blocking guard invariant has been proven able to fail in over 14 days - ' + $tgAge)
     if (-not $NoAlert) {
-      Send-Alert -Subject 'Grocery: no blocking guard invariant proven in over 14 days (test-guards weekly)' -Body ('run-test-guards-weekly.ps1 is the only proof that each blocking invariant in guards.ps1 can still FAIL, and since 2026-09-10 it defers whenever the day''s guards verdict is red, so a board that stays red keeps the proof from running at all. ' + $tgAge + '. Weekly plan today: ' + $tgPlan.action + ' (' + $tgPlan.why + '). Get guards green and run grocery\run-test-guards-weekly.ps1 by hand; rc 0 writes test-guards-proved-stamp.txt.') | Out-Null
+      Send-Alert -Subject 'Grocery: no blocking guard invariant proven in over 14 days (test-guards weekly)' -Body ('run-test-guards-weekly.ps1 is the only proof that each blocking invariant in guards.ps1 can still FAIL, and since 2026-09-10 it defers whenever the day''s guards verdict is red, so a board that stays red keeps the proof from running at all. ' + $tgAge + '. Weekly plan today: ' + $tgPlan.action + ' (' + $tgPlan.why + '). Get guards green and the next daily run proves it: a deferred week runs on the first green verdict, and its rc 0 writes test-guards-proved-stamp.txt. A by-hand rc 0 from grocery\run-test-guards-weekly.ps1 is the same proof but writes no stamp, so put that date in test-guards-proved-stamp.txt.') | Out-Null
       (Get-Date -Format 'yyyy-MM-dd') | Set-Content $tgUnprovenF -Encoding ascii
     }
   }
@@ -3246,7 +3259,7 @@ if (-not $NoCommit) {
     . (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')
     $msg = Invoke-PipelineCommit -Repo (Split-Path $root -Parent) -Paths (Get-PipelinePaths -Kind pricing) `
              -Message ("Pricing chain: board, recost and audits (" + (Get-Date).ToString('yyyy-MM-dd') + ") [pricing]") `
-             -Name 'check-ad-cycles' -Push
+             -Name 'check-ad-cycles' -Push -DirtyAtStart $script:ChainDirtyAtStart -RunStart $script:ChainStart
     Log $msg
   } catch { Log ('pricing committer threw and was swallowed: ' + $_.Exception.Message) }
 }

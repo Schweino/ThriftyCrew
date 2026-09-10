@@ -27,6 +27,10 @@
   <Triggers>
     <CalendarTrigger>
       <StartBoundary>2026-09-10T06:45:00-05:00</StartBoundary>
+      <Repetition>
+        <Interval>PT1H</Interval>
+        <Duration>PT6H</Duration>
+      </Repetition>
       <ScheduleByDay>
         <DaysInterval>1</DaysInterval>
       </ScheduleByDay>
@@ -35,7 +39,7 @@
   <Actions Context="Author">
     <Exec>
       <Command>C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
-      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\brain-digest.ps1" -Alert -Quiet</Arguments>
+      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key brain-digest -Exe "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgLine "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"C:\Codex\ThriftyCrew\ops\brain-digest.ps1\" -Alert -Quiet"</Arguments>
     </Exec>
   </Actions>
 </Task>

@@ -145,6 +145,31 @@ function Test-InlineSubsetMarker {
   return $false
 }
 
+# ---- A GUARD'S OWN -SelfTest BLOCK IS A FIXTURE HOME TOO (2026-09-10, queue 2026-09-10-483a9c) ----------
+# The marker above decided fixture-ness by FILE NAME (test-/measure-), a proxy: guards keep their frozen
+# fixtures inside their own `if ($SelfTest) { ... }` branch in production-named files, so every new guard
+# fixture that names a store subset still paged once and got hand-registered in stores.json. Measured
+# 2026-09-10 by AST over the 19 production-file allowed_subsets entries: 2 sit inside such a body
+# (capture-watchdog.ps1's $nbs table, audit-row-age.ps1's e60137 flag fixture), 17 do not.
+# BOTH EXISTING REQUIREMENTS STILL APPLY: a string literal, and a marker on the directly-adjacent comment block.
+# ONLY THE BODY OF A CLAUSE WHOSE CONDITION IS EXACTLY THE SWITCH counts. `if (-not $SelfTest)` is PRODUCTION -
+# capture-watchdog.ps1 runs its Family Fare shard window under exactly that condition - so a condition that
+# merely MENTIONS $SelfTest must not qualify, and neither does an else branch or any line outside the clause.
+function Test-InsideSelfTestClause {
+  param($Ast, [int]$Line)
+  if ($null -eq $Ast -or $Line -lt 1) { return $false }
+  $ifs = @($Ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.IfStatementAst] }, $true))
+  foreach ($ifAst in $ifs) {
+    foreach ($clause in $ifAst.Clauses) {
+      $cond = $clause.Item1; $body = $clause.Item2
+      if ($null -eq $cond -or $null -eq $body) { continue }
+      if ($cond.Extent.Text -notmatch '^\s*\$(script:)?SelfTest\s*$') { continue }
+      if ($Line -ge $body.Extent.StartLineNumber -and $Line -le $body.Extent.EndLineNumber) { return $true }
+    }
+  }
+  return $false
+}
+
 function Get-StoreListDrift {
   <#
     .SYNOPSIS Store-list drift findings for ONE .ps1 file, statement-scoped.
@@ -220,10 +245,15 @@ function Get-StoreListDrift {
                     $u[0] -is [System.Management.Automation.Language.ExpandableStringExpressionAst])) -or
                  ($code -match "=\s*['""]")
     $isFixtureFile = ($FileLabel -match '^(test|measure)-')
-    # THE INLINE REGISTRATION. Both halves are required: a string literal in a test-/measure- file AND a
-    # '# store-subset-ok: <reason>' comment on the block directly above it. A marker in production code,
-    # or on a real hardcoded roster, is ignored - clean twin (b) in -SelfTest exists to prove that.
-    if ($isLiteral -and $isFixtureFile -and (Test-InlineSubsetMarker -Lines $allLines -Line $scopeLine)) {
+    # ...or the literal sits inside a guard's own `if ($SelfTest) { }` body, in ANY file (2026-09-10, queue
+    # 2026-09-10-483a9c; see Test-InsideSelfTestClause for why a condition that merely mentions the switch
+    # does not count).
+    $isFixtureHome = $isFixtureFile -or (Test-InsideSelfTestClause -Ast $ast -Line $scopeLine)
+    # THE INLINE REGISTRATION. Both halves are required: a string literal in a fixture home (a test-/measure-
+    # file, or a guard's own -SelfTest body) AND a '# store-subset-ok: <reason>' comment on the block directly
+    # above it. A marker in production code, or on a real hardcoded roster, is ignored - clean twin (b) in
+    # -SelfTest exists to prove that.
+    if ($isLiteral -and $isFixtureHome -and (Test-InlineSubsetMarker -Lines $allLines -Line $scopeLine)) {
       $reported[$scopeLine] = $true
       continue
     }
@@ -237,8 +267,8 @@ function Get-StoreListDrift {
     # instance of the shape. So when a finding sits inside a STRING LITERAL in a test- or measure- file,
     # say so and hand over the entry to paste. The finding still COUNTS and is never suppressed: this only
     # appends guidance, so the issue count is identical with and without it.
-    if ($isLiteral -and $isFixtureFile) {
-      $msg += ("`n        HINT: this looks like an UNREGISTERED FIXTURE, not a hardcoded store list - it sits inside a string literal in a test-/measure- file. If the subset is legitimate (the region under test does not branch on store), register it rather than editing the fixture; a frozen fixture edited to quiet a different guard is how a watcher goes blind." +
+    if ($isLiteral -and $isFixtureHome) {
+      $msg += ("`n        HINT: this looks like an UNREGISTERED FIXTURE, not a hardcoded store list - it sits inside a string literal in a test-/measure- file or a guard's own -SelfTest body. If the subset is legitimate (the region under test does not branch on store), register it rather than editing the fixture; a frozen fixture edited to quiet a different guard is how a watcher goes blind." +
                "`n        PREFERRED, because it cannot lag by an alert and it dies with the fixture: put ONE comment line directly above the literal -" +
                "`n          # store-subset-ok: <why this subset proves the contract for all 7 - name the region under test and show it never branches on store>" +
                "`n        Or, if the exemption has to live outside the file, paste into stores.json allowed_subsets:" +
@@ -389,6 +419,55 @@ if ($SelfTest) {
     if ($mFar.Count -ne 1 -or $mFar[0] -notmatch 'test-w\.ps1:4') {
       Write-Output ("FAIL  the marker reached past its own literal: " + ($mFar -join ' | ')); $fail++
     } else { Write-Output 'ok    MUST FIRE  a marker does not reach a later, unmarked literal' }
+
+    # ---- A GUARD'S OWN -SelfTest BODY IS A FIXTURE HOME (2026-09-10, queue 2026-09-10-483a9c) ----------------
+    # MUST NOT FIRE, and it is the founding shape: capture-watchdog.ps1's $nbs table - a frozen, MARKED, 3-store
+    # literal inside `if ($SelfTest) { }` in a PRODUCTION-named file - registers itself without a stores.json row.
+    $fxGuard = Join-Path $fx 'capture-thing.ps1'
+    Set-Content $fxGuard -Encoding UTF8 -Value @(
+      'param([switch]$SelfTest)',
+      'if ($SelfTest) {',
+      '  # store-subset-ok: a frozen newest-capture table; the flag arithmetic never branches on which store',
+      "  `$nbs = @{ 'Walmart' = '2026-08-30'; 'Aldi' = '2026-08-29'; 'Fareway' = '2026-08-30' }",
+      '}')
+    $gIn = @(Get-StoreListDrift -Path $fxGuard -FileLabel 'capture-thing.ps1' -Names $fxNames -Subsets @())
+    if ($gIn.Count -ne 0) { Write-Output ("FAIL  a marked literal inside if (`$SelfTest) in a production file was still reported: " + ($gIn -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST NOT FIRE  a marked fixture literal inside a guard''s own if ($SelfTest) body is honoured in a production file' }
+    # MUST FIRE: the same marked literal in the ELSE branch of if ($SelfTest) is production code.
+    $fxElse = Join-Path $fx 'capture-else.ps1'
+    Set-Content $fxElse -Encoding UTF8 -Value @(
+      'param([switch]$SelfTest)',
+      'if ($SelfTest) {',
+      '  $x = 1',
+      '} else {',
+      '  # store-subset-ok: trying to reach the else branch',
+      "  `$nbs = @{ 'Walmart' = '2026-08-30'; 'Aldi' = '2026-08-29'; 'Fareway' = '2026-08-30' }",
+      '}')
+    $gElse = @(Get-StoreListDrift -Path $fxElse -FileLabel 'capture-else.ps1' -Names $fxNames -Subsets @())
+    if ($gElse.Count -ne 1) { Write-Output ("FAIL  a marked literal in the ELSE branch of if (`$SelfTest) was honoured: " + ($gElse -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST FIRE  the marker is ignored in the else branch of if ($SelfTest)' }
+    # MUST FIRE: `if (-not $SelfTest)` is PRODUCTION - capture-watchdog.ps1 runs its Family Fare shard window under
+    # exactly that condition - so a condition that merely mentions the switch must not become a fixture home.
+    $fxNot = Join-Path $fx 'capture-not.ps1'
+    Set-Content $fxNot -Encoding UTF8 -Value @(
+      'param([switch]$SelfTest)',
+      'if (-not $SelfTest) {',
+      '  # store-subset-ok: trying to reach production code through the negated switch',
+      "  `$nbs = @{ 'Walmart' = '2026-08-30'; 'Aldi' = '2026-08-29'; 'Fareway' = '2026-08-30' }",
+      '}')
+    $gNot = @(Get-StoreListDrift -Path $fxNot -FileLabel 'capture-not.ps1' -Names $fxNames -Subsets @())
+    if ($gNot.Count -ne 1) { Write-Output ("FAIL  a marked literal under if (-not `$SelfTest) was honoured - the negated switch became a bypass: " + ($gNot -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST FIRE  the marker is ignored under if (-not $SelfTest), which is production code' }
+    # MUST FIRE: an UNMARKED literal inside if ($SelfTest) in a production file is still reported, and now offers the marker.
+    $fxUnmarked = Join-Path $fx 'capture-unmarked.ps1'
+    Set-Content $fxUnmarked -Encoding UTF8 -Value @(
+      'param([switch]$SelfTest)',
+      'if ($SelfTest) {',
+      "  `$nbs = @{ 'Walmart' = '2026-08-30'; 'Aldi' = '2026-08-29'; 'Fareway' = '2026-08-30' }",
+      '}')
+    $gUn = @(Get-StoreListDrift -Path $fxUnmarked -FileLabel 'capture-unmarked.ps1' -Names $fxNames -Subsets @())
+    if ($gUn.Count -ne 1 -or $gUn[0] -notmatch '# store-subset-ok:') { Write-Output ("FAIL  an UNMARKED literal inside if (`$SelfTest) was not reported with the marker offered: " + ($gUn -join ' | ')); $fail++ }
+    else { Write-Output 'ok    MUST FIRE  an unmarked literal inside if ($SelfTest) is still reported, and the finding offers the inline marker' }
 
     # ---- ORPHANED EXEMPTIONS (2026-09-05, queue 2026-09-05-17ebe3) -------------------------------------
     # FOUNDING BUG, frozen: on 2026-09-05 four of the thirty live allowed_subsets entries could not match

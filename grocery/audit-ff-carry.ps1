@@ -138,7 +138,7 @@ function Pick-Cheapest($items) {
 # Reading the cursor and the term list from script scope would make this untestable, which is how the
 # remedy sentence it replaces survived for as long as it did - nothing could assert on what the guard said.
 function Get-FfRotationDistance {
-  param([string]$Term, [string[]]$AllTerms, [int]$Cursor, [int]$RotationTerms, [int]$WindowsPerDay = 3, [datetime]$Now = (Get-Date))
+  param([string]$Term, [string[]]$AllTerms, [int]$Cursor, [int]$RotationTerms, [int]$WindowsPerDay = 3, [datetime]$Now = (Get-Date), [switch]$ConfirmedVictim)
   if ($Cursor -lt 0 -or -not @($AllTerms).Count -or $RotationTerms -le 0) { return '' }
   $idx = [Array]::IndexOf(@($AllTerms), $Term)
   if ($idx -lt 0) { return '  (term not in the current rotation list)' }
@@ -146,6 +146,12 @@ function Get-FfRotationDistance {
   $ahead = ($idx - $Cursor) % $total
   if ($ahead -lt 0) { $ahead += $total }
   $head = '  index ' + $idx + ' of ' + $total + ', cursor ' + $Cursor
+  # A CONFIRMED VICTIM DOES NOT WAIT ON THE ROTATION (2026-09-10, queue 2026-09-10-4de393). Since 2026-09-07
+  # pull-regular-familyfare reads out\ff-carry-report.json and moves every confirmed victim to the FRONT of the
+  # next window's slice (Get-FfVictimTerms, 48h freshness). Printing the rotation distance as a due date for
+  # one told the 2026-09-10 reader that parsnips was due ~2026-09-24, while the 10:33 window asked for it first
+  # and a row landed. The index stays, as context; the date goes.
+  if ($ConfirmedVictim) { return ($head + ' - leads the next Family Fare window (victim-first promotion from ff-carry-report.json, 48h freshness); the rotation position is context, not a due date') }
   if ($ahead -lt $RotationTerms) { return ($head + ' - DUE NEXT WINDOW') }
   $w = [int][math]::Ceiling($ahead / [double]$RotationTerms)
   $d = [int][math]::Ceiling($w / [double]$WindowsPerDay)
@@ -190,6 +196,20 @@ if ($SelfTest) {
   # CLEAN TWIN: a victim whose term is AT the cursor is due next window, not most of a rotation away.
   $due2 = Get-FfRotationDistance -Term 'at the cursor' -AllTerms $rotFix -Cursor 89 -RotationTerms 7
   if ($due2 -notmatch 'DUE NEXT WINDOW') { $fails.Add("CLEAN-TWIN: a term at the cursor must read DUE NEXT WINDOW, got '" + $due2 + "'") }
+  # ---- A CONFIRMED VICTIM LEADS THE NEXT WINDOW (2026-09-10, queue 2026-09-10-4de393). Frozen from the founding
+  # alert's shape: a confirmed victim far from the cursor (index 501 of 602, cursor 219, 7 terms a window) was
+  # printed as "due in 41 window(s)" with a date two weeks out, while pull-regular-familyfare promotes every
+  # confirmed victim to the FRONT of the very next window.
+  $vicFix = @(0..601 | ForEach-Object { 't' + $_ }); $vicFix[501] = 'parsnips'
+  $vicDue = Get-FfRotationDistance -Term 'parsnips' -AllTerms $vicFix -Cursor 219 -RotationTerms 7 -WindowsPerDay 3 -Now ([datetime]'2026-09-10T08:05:00') -ConfirmedVictim
+  if (($vicDue -notmatch 'leads the next Family Fare window') -or ($vicDue -match 'due in \d+ window')) { $fails.Add("MUST-FIRE: a confirmed victim at index 501 with the cursor at 219 must read 'leads the next Family Fare window' with no due-in-N-windows date, got '" + $vicDue + "'") }
+  if ($vicDue -notmatch 'index 501 of 602, cursor 219') { $fails.Add("CLEAN-TWIN: the victim line must keep its rotation position as context, got '" + $vicDue + "'") }
+  $nonVic = Get-FfRotationDistance -Term 'parsnips' -AllTerms $vicFix -Cursor 219 -RotationTerms 7 -WindowsPerDay 3 -Now ([datetime]'2026-09-10T08:05:00')
+  if ($nonVic -notmatch 'due in 41 window') { $fails.Add("CLEAN-TWIN: the same term WITHOUT -ConfirmedVictim must still read due in 41 window(s), got '" + $nonVic + "'") }
+  # AND THE REPORT ACTUALLY PASSES IT: every term this guard prints is a confirmed victim. Needle assembled so the
+  # assertion cannot match its own source line.
+  $vicCall = 'Get-FfRotationDistance -Term $Term -AllTerms $ffAllTerms -Cursor $ffCursor -RotationTerms $ffRot -WindowsPerDay $ffWindowsPerDay' + ' -ConfirmedVictim'
+  if (-not ([IO.File]::ReadAllText($PSCommandPath)).Contains($vicCall)) { $fails.Add('MUST-FIRE: the victim report still prints the rotation distance without -ConfirmedVictim') }
   # CLEAN TWIN: the alert body must no longer carry the remedy that cannot reach a term 37 windows away.
   # The needle is assembled here so this assertion does not match itself in the source it is reading.
   $badRemedy = 'Re-run pull-regular-familyfare' + '.ps1 (recovery should catch them)'
@@ -302,7 +322,10 @@ try {
 # Three landed windows a day is the current schedule (TC Grocery Ad Pulls 0700, Daily Capture 0800,
 # Capture Watchdog 0930/1030). Used only to turn windows into an approximate DATE, never into a threshold.
 $ffWindowsPerDay = 3
-function Get-FfTermDue([string]$Term) { return (Get-FfRotationDistance -Term $Term -AllTerms $ffAllTerms -Cursor $ffCursor -RotationTerms $ffRot -WindowsPerDay $ffWindowsPerDay) }
+# EVERY TERM THIS GUARD PRINTS IS A CONFIRMED VICTIM (it is what ff-carry-report.json's confirmed_victims holds), so
+# each line says it leads the next window rather than printing the rotation distance as a due date (2026-09-10,
+# queue 2026-09-10-4de393). The -SelfTest asserts this call carries the switch.
+function Get-FfTermDue([string]$Term) { return (Get-FfRotationDistance -Term $Term -AllTerms $ffAllTerms -Cursor $ffCursor -RotationTerms $ffRot -WindowsPerDay $ffWindowsPerDay -ConfirmedVictim) }
 Write-Output ("ff-carry: FOUND " + $victims.Count + " uncovered term(s) - FF carries these and this pull has no priced row for them" + $probeStat + ":")
 foreach ($v in $victims) {
   Write-Output ("  " + $v.commodity.PadRight(20) + " <- '" + $v.product + "' " + $v.size + " " + $v.price)

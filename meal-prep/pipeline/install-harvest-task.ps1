@@ -180,7 +180,14 @@ Write-Output ("install-harvest-task: watch entry OK for '{0}'" -f $TASK)
 $action  = New-ScheduledTaskAction -Execute 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe' `
                                    -Argument ('-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}"' -f $script)
 $trigger = New-ScheduledTaskTrigger -Daily -At $At
-$set     = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd -ExecutionTimeLimit (New-TimeSpan -Hours 2)
+# HOURLY CATCH-UP INSIDE A 6-HOUR WINDOW (2026-09-10, queue 2026-09-10-2b79d3). A one-occurrence daily trigger on an
+# Interactive task is unrunnable when a Windows Update restart lands before a sign-in, and StartWhenAvailable does not
+# re-queue that occurrence. A repeat of THIS task is already a no-op by harvest.py's own per-publisher daily budget
+# (the header above: "a second run in the same day finds no room and fetches nothing"), so it needs no run-once wrapper. Repetition
+# is lifted off a throwaway -Once trigger, the only way PowerShell 5.1 exposes it on a daily trigger - the same
+# construction the nightly matching registrar uses.
+$trigger.Repetition = (New-ScheduledTaskTrigger -Once -At $At -RepetitionInterval (New-TimeSpan -Hours 1) -RepetitionDuration (New-TimeSpan -Hours 6)).Repetition
+$set     = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd -ExecutionTimeLimit (New-TimeSpan -Hours 2) -MultipleInstances IgnoreNew
 Register-ScheduledTask -TaskName $TASK -Action $action -Trigger $trigger -Settings $set -Force | Out-Null
 
 # EXPORT THE DEFINITION THIS REGISTRAR JUST CREATED, so three gates read a file that matches the live

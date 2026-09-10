@@ -169,6 +169,16 @@ $args = @($harvest, '--crawl', '--limit', $Limit, '--per-domain', $PerDomain)
 if ($DryRun) { $args += '--dry-run' }
 
 Say ("harvest-crawl: {0}  limit {1}, {2}/publisher" -f (Get-Date).ToString('HH:mm:ss'), $Limit, $PerDomain)
+# FOREIGN-HELD (2026-09-10, queue 2026-09-10-3a9de4). The committer at the bottom unstages an owned file that was
+# already dirty when THIS crawl started and that the crawl never rewrote, naming it, so a session's edit is judged by
+# nobody but that session. The snapshot is taken HERE, at run start: taken at commit time, every file the crawl wrote
+# would read as dirty-before-start and be held back. A snapshot that throws holds nothing back, as before.
+$crawlStart = Get-Date
+$crawlDirtyAtStart = $null
+try {
+  . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\pipeline-commit.ps1')
+  $crawlDirtyAtStart = Get-DirtyOwnedSnapshot -Repo (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -Paths (Get-PipelinePaths -Kind harvest)
+} catch { $crawlDirtyAtStart = [pscustomobject]@{ ok = $false; files = @(); why = ('the snapshot threw: ' + $_.Exception.Message) } }
 $out = & $py @args
 $rc = $LASTEXITCODE
 $out | Out-File -FilePath $log -Append -Encoding utf8
@@ -246,7 +256,7 @@ try {
   $repoRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
   $msg = Invoke-PipelineCommit -Repo $repoRoot -Paths (Get-PipelinePaths -Kind harvest) `
            -Message ("Harvest crawl: pool and harvest state (" + (Get-Date).ToString('yyyy-MM-dd') + ") [harvest]") `
-           -Name 'harvest-crawl' -Push
+           -Name 'harvest-crawl' -Push -DirtyAtStart $crawlDirtyAtStart -RunStart $crawlStart
   Say ('  ' + $msg)
 } catch { Say ('  harvest-crawl: committer threw and was swallowed: ' + $_.Exception.Message) }
 

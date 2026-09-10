@@ -356,6 +356,7 @@ if ($SelfTest) {
   } else { Write-Output 'ok    a store captured after the flag is worked' }
 
   # COMPLETION: every store newer than the flag = a finished todo, and only then is the flag deleted.
+  # store-subset-ok: a frozen newest-capture table for Test-FlagWorked inside this guard's own -SelfTest; the flag arithmetic compares dates per named store and never branches on which store, so three sample stores (one deliberately stale) prove it for all seven
   $nbs = @{ 'Walmart' = '2026-08-30'; 'Aldi' = '2026-08-29'; 'Fareway' = '2026-08-30' }
   if (-not (Test-FlagWorked -Stores @('Walmart', 'Fareway') -NewestByStore $nbs -FlagWritten ([datetime]'2026-08-29 09:00'))) {
     Write-Output 'FAIL  a flag whose every store was captured after it was written did not read as finished - flags never die'; $fail++

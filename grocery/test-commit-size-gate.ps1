@@ -248,6 +248,56 @@ try {
     (($sStillCatches.failed -match 'served-dirty') -and ($sStillCatches.body -match [regex]::Escape($fxServedFile))) `
     ("failed=$($sStillCatches.failed) body=$($sStillCatches.body)")
 
+  # ---- FOREIGN-HELD: a session's dirty owned file stays out of the bot commit (2026-09-10, queue 2026-09-10-3a9de4) ----
+  # Third shipped block, same harness: lifted by marker out of capture-run.ps1 and run against a throwaway repo, never
+  # this one. FROZEN from the founding case: a session stripped the BOM from a pipeline-written baseline under
+  # grocery/out BEFORE the run started, the run never rewrote it, and the hook then refused the whole day's commit.
+  $fi = $src.IndexOf('  # >>> FOREIGN-HELD BLOCK >>>')
+  $fj = $src.IndexOf('  # <<< FOREIGN-HELD BLOCK <<<', [Math]::Max($fi, 0))
+  if ($fi -lt 0 -or $fj -lt 0) { Write-Output 'BLIND: could not find the foreign-held markers in capture-run.ps1 - nothing was proven'; exit 3 }
+  $fhBlock = $src.Substring($fi, $fj - $fi)
+  . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-blob-lib.ps1')
+  . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\pipeline-commit.ps1')
+  function Run-ForeignHeld([bool]$rewriteForeign, [bool]$snapshotOk) {
+    $c = Join-Path $env:TEMP ('fh-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+    New-Item -ItemType Directory $c -Force | Out-Null
+    & git -C $c init -q .
+    & git -C $c config user.email t@t; & git -C $c config user.name t
+    New-Item -ItemType Directory (Join-Path $c 'grocery/out') -Force | Out-Null
+    $foreign = Join-Path $c 'grocery/out/json-readers-baseline.json'
+    [IO.File]::WriteAllBytes($foreign, ([byte[]](0xEF, 0xBB, 0xBF) + [Text.Encoding]::UTF8.GetBytes('{"n":1}')))
+    [IO.File]::WriteAllText((Join-Path $c 'grocery/out/run-output.txt'), 'v1')
+    & git -C $c add -A | Out-Null; & git -C $c commit -q -m seed | Out-Null
+    # THE SESSION'S EDIT, BEFORE THE RUN: the BOM stripped, and the file's mtime well before the run start.
+    [IO.File]::WriteAllBytes($foreign, [Text.Encoding]::UTF8.GetBytes('{"n":1}'))
+    (Get-Item $foreign).LastWriteTime = (Get-Date).AddHours(-2)
+    $snap = if ($snapshotOk) { Get-DirtyOwnedSnapshot -Repo $c -Paths @('grocery/out') } else { [pscustomobject]@{ ok = $false; files = @(); why = 'fixture: git status failed' } }
+    $runStart = (Get-Date).AddMinutes(-30)
+    # THE RUN writes its own file; in the clean twin it also rewrites the foreign one.
+    [IO.File]::WriteAllText((Join-Path $c 'grocery/out/run-output.txt'), 'v2')
+    if ($rewriteForeign) { [IO.File]::WriteAllBytes($foreign, ([byte[]](0xEF, 0xBB, 0xBF) + [Text.Encoding]::UTF8.GetBytes('{"n":2}'))) }
+    & git -C $c add -A -- 'grocery/out' | Out-Null
+    $repo = $c
+    $script:DirtyAtStart = $snap; $script:RunStart = $runStart
+    $out = . ([scriptblock]::Create($fhBlock))
+    $stagedNames = @(& git -C $c diff --cached --name-only | Where-Object { $_ })
+    $dirtyNames = @(& git -C $c status --porcelain | Where-Object { $_ })
+    Remove-Item $c -Recurse -Force -ErrorAction SilentlyContinue
+    return [pscustomobject]@{ staged = ($stagedNames -join ','); dirty = ($dirtyNames -join ','); text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n"); line = [string]$foreignHeldLine }
+  }
+  $fh1 = Run-ForeignHeld $false $true
+  T 'MUST FIRE  a foreign dirty file the run never rewrote is unstaged and named, and the run''s own file stays staged' `
+    (($fh1.staged -eq 'grocery/out/run-output.txt') -and ($fh1.text -match 'foreign-held: 1 tracked owned file.*json-readers-baseline\.json') -and ($fh1.dirty -match 'json-readers-baseline\.json')) ("staged=$($fh1.staged) text=$($fh1.text)")
+  T 'MUST FIRE  and the line a still-refused commit''s alert carries names the same held file' `
+    ($fh1.line -match 'foreign-held: 1 tracked owned file.*json-readers-baseline\.json') ("line=$($fh1.line)")
+  $fh2 = Run-ForeignHeld $true $true
+  T 'CLEAN TWIN a file dirty at start AND rewritten by the run is committed as the run''s own' `
+    (($fh2.staged -match 'json-readers-baseline\.json') -and ($fh2.staged -match 'run-output\.txt')) ("staged=$($fh2.staged)")
+  T 'MUST NOT FIRE a run that held nothing adds no held-list line to a refusal alert' ($fh2.line -eq '') ("line=$($fh2.line)")
+  $fh3 = Run-ForeignHeld $false $false
+  T 'MUST FIRE  a snapshot that could not be taken holds NOTHING back, and says so' `
+    (($fh3.staged -match 'json-readers-baseline\.json') -and ($fh3.text -match 'holding NOTHING back')) ("staged=$($fh3.staged) text=$($fh3.text)")
+
   Write-Output ''
   Write-Output ("SELFTEST: {0}/{1} pass" -f ($n-$bad), $n)
   Write-Output ("COMMIT-SIZE-GATE-COMPLETE cases={0} failed={1}" -f $n, $bad)

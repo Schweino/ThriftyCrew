@@ -83,5 +83,31 @@ else {
   # AND THE CHAIN CALLS THEM - a helper nothing invokes is decoration.
   T (($src -match 'Get-TestGuardsWeeklyPlan -Verdict \$tgVerdict') -and ($src -match 'Get-TestGuardsStampPlan -Rc \$tgRc') -and ($src -match 'Get-TestGuardsSubject -Rc \$tgRc') -and ($src -match 'test-guards weekly DEFERRED')) 'MUST FIRE  check-ad-cycles.ps1 drives its weekly block through these three functions'
 }
+
+# ---- ALREADY RAN TODAY (2026-09-10, queue 2026-09-10-2b79d3), lifted from capture-run.ps1's SHIPPED source ----
+# The TC capture tasks gain hourly catch-up occurrences, which is only safe if every occurrence after the first
+# is a no-op. Frozen from the founding morning's own status record: the daily run started 08:00:01, reached
+# stage 'complete' and exited 1 (guards blocked).
+$crSrc = Get-Content (Join-Path $PSScriptRoot 'capture-run.ps1') -Raw
+$m3 = [regex]::Match($crSrc, '(?s)function Test-AlreadyRanToday \{.*?\n\}')
+if (-not $m3.Success) { T $false 'could not extract Test-AlreadyRanToday from capture-run.ps1' }
+else {
+  Invoke-Expression $m3.Value
+  $stBlocked = [pscustomobject]@{ daily = [pscustomobject]@{ date = '2026-09-10'; pid = 37912; started = '2026-09-10T08:00:01'; stage = 'complete'; exit_code = 1 } }
+  T ((Test-AlreadyRanToday -Status $stBlocked -Kind 'daily' -Today '2026-09-10') -match 'already ran today') 'MUST FIRE  a guards-blocked morning (stage complete, rc 1) SKIPS the repetition - it must not re-pull seven stores every hour'
+  $stYesterday = [pscustomobject]@{ daily = [pscustomobject]@{ date = '2026-09-09'; started = '2026-09-09T08:00:01'; stage = 'complete'; exit_code = 0 } }
+  T ((Test-AlreadyRanToday -Status $stYesterday -Kind 'daily' -Today '2026-09-10') -eq '') 'CLEAN TWIN  a record for yesterday -> RUN'
+  $stDied = [pscustomobject]@{ daily = [pscustomobject]@{ date = '2026-09-10'; pid = 99999; started = '2026-09-10T08:00:01'; stage = 'capturing'; exit_code = $null } }
+  T ((Test-AlreadyRanToday -Status $stDied -Kind 'daily' -Today '2026-09-10') -eq '') 'CLEAN TWIN  today''s run that died mid-stage (capturing) -> RUN, it must be retried'
+  $stOtherKind = [pscustomobject]@{ ad = [pscustomobject]@{ date = '2026-09-10'; started = '2026-09-10T07:00:01'; stage = 'complete'; exit_code = 0 } }
+  T ((Test-AlreadyRanToday -Status $stOtherKind -Kind 'daily' -Today '2026-09-10') -eq '') 'CLEAN TWIN  the ad run completing does not skip the daily run'
+  T ((Test-AlreadyRanToday -Status $null -Kind 'daily' -Today '2026-09-10') -eq '') 'CLEAN TWIN  no status record at all -> RUN'
+  # AND THE SCRIPT ASKS IT BEFORE ITS TRANSCRIPT AND BEFORE ANY STATUS WRITE, with -Force as the way past. A no-op
+  # occurrence that rewrote the record would replace 'complete' with its own stage and the NEXT one would run.
+  $iAsk = $crSrc.IndexOf('$arWhy = Test-AlreadyRanToday')
+  $iLog = $crSrc.IndexOf('$runLog = Start-RunLog')
+  $iStatus = $crSrc.IndexOf("Write-RunStatus 'skipped-locked'")
+  T (($iAsk -gt 0) -and ($iAsk -lt $iLog) -and ($iAsk -lt $iStatus) -and ($crSrc -match 'if \(-not \$Force\) \{')) 'MUST FIRE  capture-run checks already-ran before its transcript and before any status write, and -Force bypasses it'
+}
 Remove-Item $sandbox -Recurse -Force -ErrorAction SilentlyContinue
 if ($fail) { "CADENCE SELF-TEST FAILED ($fail)"; exit 1 } else { 'CADENCE SELF-TEST PASS'; exit 0 }

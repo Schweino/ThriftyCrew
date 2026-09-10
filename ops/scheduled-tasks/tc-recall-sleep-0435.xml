@@ -27,6 +27,10 @@
   <Triggers>
     <CalendarTrigger>
       <StartBoundary>2026-09-10T04:35:00-05:00</StartBoundary>
+      <Repetition>
+        <Interval>PT1H</Interval>
+        <Duration>PT8H</Duration>
+      </Repetition>
       <ScheduleByDay>
         <DaysInterval>1</DaysInterval>
       </ScheduleByDay>
@@ -34,8 +38,8 @@
   </Triggers>
   <Actions Context="Author">
     <Exec>
-      <Command>C:\Codex\Python312\python.exe</Command>
-      <Arguments>"C:\Users\Owner\.claude\skills\recall-sleep.py" --cwd "C:\Codex\ThriftyCrew" --commit --push</Arguments>
+      <Command>C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key recall-sleep -Exe "C:\Codex\Python312\python.exe" -ArgLine "\"C:\Users\Owner\.claude\skills\recall-sleep.py\" --cwd \"C:\Codex\ThriftyCrew\" --commit --push"</Arguments>
     </Exec>
   </Actions>
 </Task>
