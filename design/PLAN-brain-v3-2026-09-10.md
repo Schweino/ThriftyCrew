@@ -158,6 +158,16 @@ STOPPED or FEWER on most of them once the after-windows reach 14 days (2026-09-2
 The first build points one way - reflexes cut their failures on 7 of 9, memories alone on 3 of 8 - but it is 3 days
 old for reflexes and confounded for memories, so it is a direction, not the verdict.
 
+**Acting on that direction: memories into reflexes (2026-09-10, Brad's pick).** Of 348 memories, 12 had a reflex and
+23 a draft, and the proposer can only mine the 60 that quote a usable span. `recall-reflex-author.py` (skills 67578d8)
+takes a cue a session writes from a memory's own text and refuses it unless the memory exists, the pattern compiles
+through the live compiler, its fixtures hold under the live scope check, it fires on at most 2% of real commands, and
+no row or draft already carries it; it reports, and never requires, the recorded failures the cue matches. It writes
+drafts only, and an author's near misses are never written as the must_not_fire a person owes before a row goes live.
+Batch 1: 22 memories, 22 through the checks, into the shadow ladder; the Get-Content-without-Encoding write-back cue
+already matches 14 recorded failures over 8 sessions. R judges each once promoted; the next batch waits on which of
+these the ladder and the inbox actually promote.
+
 ## 4. Order
 
 1. **E** now, and **J2 to J4** alongside it - neither depends on the other.
