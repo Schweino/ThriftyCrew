@@ -176,7 +176,8 @@ STEP 3 - IMPLEMENT: spawn the developer, synchronously, with subagent_type "tria
 plan file path, the routing artifact, the foreign-dirty file list, the same per-item effort ceiling, and
 the fact that the plan has already passed the gate so it should implement rather than re-diagnose. It owns
 the edits, the gated chain, the publish, the commit/push, and the queue statuses. Tell it to publish once
-per `publish_batch`, not once per item.
+per `publish_batch`, not once per item. Tell it that every residual in `leaves_open` gets an owner that resolves before it
+closes a single queue item, and that `validate-triage-plan.ps1 -Plan <plan> -Closing` must exit 0 first.
 
 STEP 4 - ONE BOUNCE ROUND, MAX. If the developer reports items with status "bounced" (a genuinely NEW
 failure class it found while implementing, not a detail), spawn the reviewer again for round 2 with ONLY
@@ -214,6 +215,13 @@ STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
   commodity-search.json, allowlist/config json, SKILL or plan file left uncommitted. Regenerated pipeline
   output (out\*, board.json, feed, logs) is the pipeline's, not ours.
 - HEAD == origin/main.
+- `powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -Closing`
+  exits 0 for EVERY plan this run wrote, and its LEAVES OPEN lines go into the report VERBATIM with their
+  owners. Never summarise them, and never write "nothing else is waiting" over them. Founding case
+  2026-09-09: four items shipped a root fix covering a slice of their own root cause, the residuals sat in
+  `deviation` prose, and this orchestrator's report called all eight closed. Brad found it by asking.
+  Residual queue items the developer created in this run are NOT STEP 4.5 mid-run arrivals: leave them
+  open for the next scheduled run, where they are tiered like any other item.
 - If the board was republished, one fixed cell verified on the LIVE page, fetched with a fresh
   cache-busting query parameter (the chip data sits behind a ~30 minute edge cache keyed on a `?v=` hash,
   and a pre-push fetch of the new key serves stale bytes back).

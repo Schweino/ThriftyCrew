@@ -184,6 +184,12 @@ whenever any item changes a matching rule. Requirements:
   its corpus, `claimed_by_earlier` if it widens an include, a proof, a rollback, a `freshness` line saying
   what the measurement was taken against, a `publish_batch`, and the resolution note the developer will
   paste into the queue.
+- Every code-changing item carries `leaves_open`, measured against its OWN `root_cause`. When the root
+  cause names a class ("any tracked file under grocery/out", "every scheduled task", "any ad line of this
+  shape") and the root fix covers part of it, say which part is left and how many. "nothing" is a claim you
+  are signing, and so is `root_fix_none_because`, which does not exempt the item. On 2026-09-09 four items
+  passed the gate with a root fix covering a slice of the class their own root cause named, because no
+  field asked. The gate asks now. It cannot judge the answer; only you can, so measure it.
 - `ship_sequence` is ordered and complete, including the gated chain and the live verification, and groups
   items into as few publishes as the dependencies allow.
 - Anything needing Brad (a purchase, a wall, a "what should this commodity MEAN" call) goes in

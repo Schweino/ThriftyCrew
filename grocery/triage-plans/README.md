@@ -98,6 +98,25 @@ with the change and a future reader can see why a rule exists.
         "exact_change": "beverage += mini cans / lemon-lime / starry / cola / seltzer"
       },
 
+      // WHAT THE ROOT FIX DOES NOT CLOSE. GATED SINCE 2026-09-10 on every code item, root_fix_none_because
+      // items included, because "none needed" is a claim about coverage too. The gate can see that a root_fix
+      // EXISTS; it cannot see whether it covers the root_cause beside it. On 2026-09-09 four items passed clean
+      // covering a slice of their own class: a root_cause naming any session's edit to any tracked file under
+      // grocery/out shipped a fix that made the refusal legible without making it stop; one naming every
+      // scheduled task repeated one of eight; one row of an ad-line shape that 40 of that week's 146 Baker's
+      // rows match was blocklisted; a fixture marker was scoped away from the guard -SelfTest blocks where the
+      // next fixture turned up within the hour. Each residual was written down (a root_cause, a deviation) and
+      // none was READ, so each became a sentence for Brad instead of work. Say what is left in one line with its
+      // count, or write "nothing". The reviewer states it; the DEVELOPER rewrites it whenever a deviation
+      // narrows what shipped.
+      "leaves_open": "nothing",
+
+      // WHO OWNS THE RESIDUAL. Required at CLOSE (validate-triage-plan.ps1 -Closing) whenever leaves_open is
+      // not "nothing": an id that exists in triage-queue.json, or the id of a ruling in open_questions_for_brad
+      // (which is why those carry an id). Not required at handoff, because the reviewer is read-only and
+      // cannot mint a queue item.
+      "leaves_open_followup": null,
+
       // WHAT ELSE THE CHANGE TOUCHES, MEASURED, not guessed. This is the anti-regression core:
       // run the proposed regex over every product name in the newest comparison AND out\regular\*.json
       // AND out\sams|bakers|fareway captures, and report what gains or loses a match.
@@ -182,11 +201,17 @@ with the change and a future reader can see why a rule exists.
 
   // The exact order the developer should ship in, including the gated chain. The reviewer owns the
   // sequence because it is the one who knows which changes interact.
+  // COPY THE CHAIN FROM check-ad-cycles.ps1, NOT FROM MEMORY (2026-09-10). A plan on 2026-09-09 omitted the
+  // two -Apply repairs the real chain runs BEFORE compare-deals and the name-drift pass it re-runs AFTER
+  // prune-bad-links. The hand-run chain then hard-failed guard 5 on an unrepaired Aldi multipack and HELD
+  // audit-tile-integrity on a name-drift.json older than the links it grades, which are the exact two
+  // failures check-ad-cycles.ps1's own comments give as the reason it runs those steps.
   "ship_sequence": [
     "edit commodities.json + category-excludes.json",
+    "repair-multipack-sizes.ps1 -Apply, then stamp-ad-as-of.ps1 -Apply (both BEFORE compare-deals)",
     "compare-deals.ps1 -MinStores 1 -BakersFile <newest> -FarewayFile <newest>",
     "audit-food-category.ps1 (expect 0)",
-    "audit-name-drift / prune-bad-links / generate-board-overrides / build-deals-page",
+    "audit-name-drift / prune-bad-links / audit-name-drift AGAIN when prune-bad-links rewrote product-urls.json / generate-board-overrides / build-deals-page",
     "audit-match-soundness.ps1 -> review drops line by line -> -Accept",
     "guards.ps1 (MUST be 0) + audit-basis-reconcile + audit-pack-basis",
     "publish-deals-page.ps1",
@@ -226,6 +251,13 @@ zero items). It has its own `-SelfTest` with frozen good and bad fixtures, inclu
 the two mistakes this estate actually made: a blast radius `measured_as` anything other than `routing`, and
 a widened include with no `claimed_by_earlier`. The orchestrator runs it instead of eyeballing the plan,
 because an unversioned check nobody can re-run is a habit, not a gate.
+
+**`validate-triage-plan.ps1 -Plan <path> -Closing` is the second gate (2026-09-10)**, run after the
+developer and before a run reports itself done. It reads the same plan against `triage-queue.json` and
+refuses an item still `planned` (dropped, not finished) and a `done` or `deviated` item whose `leaves_open`
+is not "nothing" but names no owner that resolves. It prints every residual verbatim so the report copies
+them instead of summarising them. The handoff gate stops a bad plan reaching the developer; this one stops
+a partial fix being reported as a whole one, which is what the 2026-09-09 report did.
 
 ## Housekeeping
 

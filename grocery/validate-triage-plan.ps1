@@ -32,17 +32,28 @@
                                                             branch instead of a judgment call
     * the routing artifact exists when one is referenced  - the developer verifies against it instead of
                                                             re-deriving 26,000 names
+    * leaves_open on every code item                      - what the root_fix does NOT close, or 'nothing'.
+                                                            A gate can see that a root_fix exists, not that
+                                                            it covers its root_cause: four partial class
+                                                            fixes passed clean on 2026-09-09 because nothing
+                                                            asked (the LEAVES_OPEN block below)
+    * -Closing: every item has an outcome, and every      - a residual owned by nobody is the to-Brad list
+                                                            of discovered defects ruled out on 2026-09-07
 
   Exit codes:  0 = plan is complete and may be handed over
                2 = plan is incomplete (message says exactly what is missing)
                3 = BLIND: no plan file, unreadable, or zero items - proved nothing, do not hand over
+  -Closing re-reads the plan AFTER the developer, against grocery\triage-queue.json (or -QueueFile), with
+  the same exit codes. Run it before a triage run reports itself done.
   -SelfTest runs frozen good/bad fixtures through the rules and exits (0 pass, 1 fail).
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Plan = "",
   [string[]]$OpenIds = @(),
-  [switch]$SelfTest
+  [switch]$SelfTest,
+  [switch]$Closing,
+  [string]$QueueFile = ''
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
@@ -76,7 +87,12 @@ function Test-TouchesMatchingRule($Item) {
 }
 
 function Test-Plan {
-  param($Doc, [string[]]$Expect, [string]$PlanDir)
+  param($Doc, [string[]]$Expect, [string]$PlanDir, [switch]$Closing, $QueueIds = @())
+  # -Closing resolves a residual's owner against these. A ruling is owned by its id in open_questions_for_brad;
+  # an older plan wrote those as bare strings, which carry no id and so can own nothing.
+  $ruleIds = @()
+  foreach ($qb in @($Doc.open_questions_for_brad)) { if ($qb -and -not ($qb -is [string]) -and [string]$qb.id) { $ruleIds += [string]$qb.id } }
+  $END_STATES = @('done','deviated','blocked','bounced','superseded','needs-more-time','needs-brad')
   $problems = New-Object System.Collections.Generic.List[string]
   $items = @($Doc.items)
   if ($items.Count -eq 0) { return @{ rc = 3; problems = @('plan carries ZERO items - it proved nothing') } }
@@ -100,6 +116,12 @@ function Test-Plan {
     if (-not @($i.evidence).Count) { $problems.Add("$id has no evidence rows") }
     if (-not [string]$i.root_cause) { $problems.Add("$id has no root_cause") }
     if (-not [string]$i.resolution_note) { $problems.Add("$id has no resolution_note") }
+    # -Closing: README rule 4, every item ends in an outcome. An item still 'planned' after the developer is
+    # an item nobody finished, and until now the only thing that could notice was the orchestrator reading.
+    if ($Closing -and ($END_STATES -notcontains [string]$i.status)) {
+      $st0 = if ([string]$i.status) { [string]$i.status } else { 'no status' }
+      $problems.Add("$id is still '$st0' at close - every item ends done, deviated, blocked, bounced, superseded, needs-more-time or needs-brad")
+    }
     if ($NO_CODE -contains $cls) { continue }
 
     # --- code-changing items carry the anti-regression apparatus ---
@@ -137,6 +159,33 @@ function Test-Plan {
     $hasRootFix = ($i.root_fix -and ([string]$i.root_fix.what))
     if (-not $hasRootFix -and -not [string]$i.root_fix_none_because) {
       $problems.Add("$id names a root_cause but carries no root_fix and no root_fix_none_because - say what stops the CLASS recurring, or say in one line why the surface fix already is that")
+    }
+    # --- A ROOT FIX SAYS WHAT IT LEAVES OPEN (2026-09-10, Brad: fix it so it never happens again) --------
+    # The block above sees that a root_fix EXISTS. It cannot see whether it covers the root_cause beside it,
+    # and on 2026-09-09 four items passed clean covering a slice: a95022's root_cause named any session's
+    # edit to any tracked entry under out\ and its fix made the refusal legible without making it stop;
+    # d3e937's named every scheduled task and repeated one of eight; 9b1f92 blocklisted one row of an
+    # ad-line shape that 40 of that week's 146 Baker's rows match; 34557a's marker was scoped away from the
+    # guard -SelfTest blocks where the next fixture turned up within the hour. Every residual was written
+    # down, in a root_cause or a deviation, and nothing READ it, so each became a sentence for Brad instead
+    # of work. A gate cannot judge coverage. It can refuse silence about it, so the item says what is left
+    # in its own words, and 'nothing' is a claim with a name on it. root_fix_none_because is a coverage
+    # claim too, so it does not exempt the statement.
+    $lo = ([string]$i.leaves_open).Trim()
+    if (-not $lo) {
+      $problems.Add("$id has no leaves_open - say what part of the root_cause this fix does NOT close, with the count, or write 'nothing' (2026-09-09: four partial class fixes passed this gate because nothing asked)")
+    }
+    # -Closing: AN OPEN RESIDUAL HAS AN OWNER THAT RESOLVES. The reviewer is read-only and cannot mint a queue
+    # item, so at handoff an honest residual is enough. By close the developer has had every tool, and a
+    # residual owned by nobody is the list of discovered defects Brad ruled out on 2026-09-07. The id must
+    # RESOLVE, because a plausible id nobody can find owns the work the way an unread stamp checks it.
+    if ($Closing -and $lo -and ($lo -notmatch '^nothing\b') -and (@('done','deviated') -contains [string]$i.status)) {
+      $fu = ([string]$i.leaves_open_followup).Trim()
+      if (-not $fu) {
+        $problems.Add("$id is $([string]$i.status) with an open residual and no leaves_open_followup - enqueue it through send-alert.ps1, or file it as a ruling in open_questions_for_brad, and name that id. The residual: $lo")
+      } elseif ((@($QueueIds) -notcontains $fu) -and ($ruleIds -notcontains $fu)) {
+        $problems.Add("$id leaves_open_followup '$fu' resolves to nothing - it is neither an id in the triage queue nor an id in open_questions_for_brad")
+      }
     }
     # --- AND THE PROOF MUST REPRODUCE THE BUG --------------------------------------------------------
     # Naming a harness is not a proof. A fixture that does not FIRE on the founding bug is decorative (the
@@ -235,7 +284,7 @@ if ($SelfTest) {
       blast_radius=[pscustomobject]@{ measured_as='routing'; measured_by='25,939 names'; affected_now=2
         cell_effects=@([pscustomobject]@{ commodity='lemons'; store="Sam's Club"; before=0.5413; after=0.4200 }) }
       proof=[pscustomobject]@{ guard_or_fixture='test-auditors case d2'; must_fire_case='the frozen soda row on lemons makes audit-food-category exit 2'; clean_twin="'Fresh Lemon' keeps it at exit 0" }; rollback='revert the hunk'
-      freshness='measured against comparison-2026-07-30'; resolution_note='fixed'
+      freshness='measured against comparison-2026-07-30'; resolution_note='fixed'; leaves_open='nothing'
       surface_fix=[pscustomobject]@{ what='exclude the soda'; exact_change='lemons.exclude += ...' }
       root_fix=[pscustomobject]@{ what='add the beverage tokens to the food-class library so the guard hard-fails the class estate-wide'; exact_change='category-excludes.json beverage += ...'; files=@('grocery/category-excludes.json') }
     })
@@ -250,7 +299,7 @@ if ($SelfTest) {
       queue_id='q1'; classification='infra'; evidence=@('check-ad-cycles logged: cost-flag alert threw'); root_cause='[string]$null is $null so .Trim() throws on a zero-byte file'
       blast_radius=[pscustomobject]@{ measured_as='callers'; measured_by='grep of all live .ps1 for the idiom'; affected_now=11 }
       proof=[pscustomobject]@{ guard_or_fixture='test-guards case 0'; must_fire_case='a zero-byte cost-flag file makes the old idiom throw in the harness'; clean_twin='a populated file still parses and alerts normally' }; rollback='revert the hunks'
-      freshness='measured against the working tree at 2026-07-31T07:00'; resolution_note='fixed'
+      freshness='measured against the working tree at 2026-07-31T07:00'; resolution_note='fixed'; leaves_open='nothing'
       surface_fix=[pscustomobject]@{ what='use the null-safe idiom'; exact_change='((Get-Content $f -Raw) + $emptyString).Trim()'; files=@('grocery/check-ad-cycles.ps1') }
       root_fix=[pscustomobject]@{ what='sweep the idiom estate-wide so no other caller can throw on an empty file'; exact_change='11 call sites moved to the null-safe form'; files=@('grocery/*.ps1') } }) }
   _Case 'an infra item measured as callers passes (routing would be meaningless)' $infra 0 $null
@@ -312,6 +361,58 @@ if ($SelfTest) {
   $noTwin.items[0].proof.PSObject.Properties.Remove('clean_twin')
   _Case 'a proof with no clean_twin is rejected' $noTwin 2 'clean_twin'
 
+  # --- LEAVES_OPEN AND -Closing (2026-09-10) ---------------------------------------------------------
+  # MUST FIRE: the founding shape, 2026-09-09 a95022 exactly as written. A root_fix present, a root_cause
+  # naming a wider class than it covers, and no word about the difference. It passed this gate clean.
+  $noLeft = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $noLeft.items[0].PSObject.Properties.Remove('leaves_open')
+  _Case 'a code item with a root_fix and no leaves_open is rejected' $noLeft 2 'no leaves_open'
+  # MUST FIRE: root_fix_none_because is a claim about coverage too, so it does not buy an exemption.
+  $saidNoLeft = $saidSo | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $saidNoLeft.items[0].PSObject.Properties.Remove('leaves_open')
+  _Case 'root_fix_none_because does not exempt an item from saying what it leaves open' $saidNoLeft 2 'no leaves_open'
+  # MUST NOT FIRE: an honest residual at HANDOFF needs no owner yet, because the reviewer cannot mint one.
+  $honest = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $honest.items[0].leaves_open = 'the same soda shape on the other 11 produce commodities'
+  _Case 'a residual stated at handoff passes without an owner' $honest 0 $null
+  # CLEAN TWIN: a no-code item is still never asked for leaves_open. The adjacent behaviour this change was
+  # most likely to break, since the new rule sits right beside the no-code exit.
+  _Case 'a no-code item still passes with no leaves_open at all' $ok2 0 $null
+
+  function _CaseClose($label, $doc, $queue, $expectRc, $expectMatch) {
+    $script:ran++
+    $r = Test-Plan $doc @() $env:TEMP -Closing -QueueIds $queue
+    $txt = ($r.problems -join ' | ')
+    if ($r.rc -eq $expectRc -and ((-not $expectMatch) -or ($txt -match $expectMatch))) { Write-Output "ok    $label" }
+    else { Write-Output ("FAIL  $label  rc=" + $r.rc + " want $expectRc; problems: " + $txt); $script:fail++ }
+  }
+  $closed = $honest | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $closed.items[0] | Add-Member -NotePropertyName status -NotePropertyValue 'deviated' -Force
+  # MUST FIRE: the 2026-09-09 shape at close. Marked deviated, residual left in prose, no owner.
+  _CaseClose 'at close, a deviated item with an open residual and no followup is rejected' $closed @('2026-09-10-aaaaaa') 2 'no leaves_open_followup'
+  # MUST FIRE: an owner that resolves to nothing is not an owner.
+  $ghost = $closed | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $ghost.items[0] | Add-Member -NotePropertyName leaves_open_followup -NotePropertyValue '2026-09-10-ffffff' -Force
+  _CaseClose 'at close, a followup id found in neither the queue nor the rulings is rejected' $ghost @('2026-09-10-aaaaaa') 2 'resolves to nothing'
+  # MUST FIRE: README rule 4. An item still planned after the developer was dropped, not finished.
+  $dropped = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $dropped.items[0] | Add-Member -NotePropertyName status -NotePropertyValue 'planned' -Force
+  _CaseClose 'at close, an item still planned is reported as dropped' $dropped @() 2 'still .planned. at close'
+  # MUST NOT FIRE: a residual owned by a real queue item.
+  $owned = $closed | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $owned.items[0] | Add-Member -NotePropertyName leaves_open_followup -NotePropertyValue '2026-09-10-aaaaaa' -Force
+  _CaseClose 'at close, a residual owned by a real queue item passes' $owned @('2026-09-10-aaaaaa') 0 $null
+  # MUST NOT FIRE: a residual owned by a ruling carried on the plan itself.
+  $ruled = $closed | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $ruled.items[0] | Add-Member -NotePropertyName leaves_open_followup -NotePropertyValue 'donuts-basis' -Force
+  $ruled | Add-Member -NotePropertyName open_questions_for_brad -NotePropertyValue @([pscustomobject]@{ id = 'donuts-basis'; question = 'per each or per oz' }) -Force
+  _CaseClose 'at close, a residual owned by a ruling in open_questions_for_brad passes' $ruled @() 0 $null
+  # CLEAN TWIN: 'nothing' still closes with no followup at all. An honest full fix must not be made to
+  # invent an owner, or every clean item pays for the partial ones.
+  $nothingLeft = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $nothingLeft.items[0] | Add-Member -NotePropertyName status -NotePropertyValue 'done' -Force
+  _CaseClose 'at close, a done item whose leaves_open is nothing passes with no followup' $nothingLeft @() 0 $null
+
   # --- routing artifact positive control (2026-08-06 case-insensitive $b/$B) ----------------------------
   # These need a real file on disk, because the check reads the artifact rather than trusting the plan.
   $artDir = Join-Path $env:TEMP ('vtp-selftest-' + $PID); New-Item -ItemType Directory -Force -Path $artDir | Out-Null
@@ -358,16 +459,46 @@ $doc = $null
 try { $doc = Read-JsonFile $Plan } catch { Write-Output ("validate-triage-plan: BLIND - plan does not parse: " + $_.Exception.Message); exit 3 }
 if (-not $doc) { Write-Output 'validate-triage-plan: BLIND - plan read back empty'; exit 3 }
 
-$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent)
+# -Closing resolves each residual's owner against the live queue, so the queue has to be READ, not assumed:
+# an unreadable queue would make every followup id resolve to nothing and fail a plan that is fine, or,
+# written the other way, pass one that is not. Either is a confident wrong answer, so it is BLIND instead.
+$queueIds = @()
+if ($Closing) {
+  if (-not $QueueFile) { $QueueFile = Join-Path $root 'triage-queue.json' }
+  if (-not (Test-Path $QueueFile)) { Write-Output ("validate-triage-plan: BLIND - -Closing resolves owners against the queue and there is none at " + $QueueFile); exit 3 }
+  $qDoc = $null
+  try { $qDoc = Read-JsonFile $QueueFile } catch { $qDoc = $null }
+  if (-not $qDoc -or -not $qDoc.PSObject.Properties['items']) { Write-Output ("validate-triage-plan: BLIND - the queue at " + $QueueFile + " reads back empty, unparseable or with no items array"); exit 3 }
+  foreach ($qi in @($qDoc.items)) { if ($qi -and [string]$qi.id) { $queueIds += [string]$qi.id } }
+}
+
+$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds
 $items = @($doc.items)
+$mode = if ($Closing) { 'closing' } else { 'handoff' }
 Write-Output ("validate-triage-plan: " + $Plan)
-Write-Output ("  round=" + $doc.round + "  items=" + $items.Count + "  ship_sequence=" + @($doc.ship_sequence).Count + "  expected ids=" + @($OpenIds).Count)
+Write-Output ("  mode=" + $mode + "  round=" + $doc.round + "  items=" + $items.Count + "  ship_sequence=" + @($doc.ship_sequence).Count + "  expected ids=" + @($OpenIds).Count)
 foreach ($i in $items) {
   $cls = [string]$i.classification
   $ma  = if ($i.blast_radius) { [string]$i.blast_radius.measured_as } else { '-' }
-  Write-Output ("  {0,-20} {1,-16} evidence={2,-3} measured_as={3}" -f $i.queue_id, $cls, @($i.evidence).Count, $ma)
+  $lo  = ([string]$i.leaves_open).Trim()
+  $loTag = if (-not $lo) { '-' } elseif ($lo -match '^nothing\b') { 'nothing' } else { 'OPEN' }
+  Write-Output ("  {0,-20} {1,-16} evidence={2,-3} measured_as={3,-8} leaves_open={4}" -f $i.queue_id, $cls, @($i.evidence).Count, $ma, $loTag)
 }
-if ($res.rc -eq 0) { Write-Output '  PLAN OK - complete, hand it to the developer'; exit 0 }
-Write-Output ("  INCOMPLETE (" + @($res.problems).Count + " problem(s)) - send it back, do not hand a bad plan downstream:")
+# EVERY RESIDUAL, VERBATIM. These lines are what the orchestrator's report copies. A summary of them is how
+# the 2026-09-09 report called eight items closed when four had left part of their own class open.
+$residuals = @($items | Where-Object { $_ -and ([string]$_.leaves_open).Trim() -and (([string]$_.leaves_open).Trim() -notmatch '^nothing\b') })
+if ($residuals.Count) {
+  Write-Output ("  LEAVES OPEN: " + $residuals.Count + " of " + $items.Count + " item(s) - copy these into the report as written, never summarised:")
+  foreach ($o in $residuals) {
+    $owner = if (([string]$o.leaves_open_followup).Trim()) { ([string]$o.leaves_open_followup).Trim() } else { 'NO OWNER YET' }
+    Write-Output ("    " + $o.queue_id + "  owner=" + $owner + "  " + ([string]$o.leaves_open).Trim())
+  }
+}
+if ($res.rc -eq 0) {
+  if ($Closing) { Write-Output '  PLAN CLOSED OK - every item has an outcome and every open residual has an owner that resolves'; exit 0 }
+  Write-Output '  PLAN OK - complete, hand it to the developer'; exit 0
+}
+if ($Closing) { Write-Output ("  NOT CLOSED (" + @($res.problems).Count + " problem(s)) - do not report this run done until each is answered:") }
+else { Write-Output ("  INCOMPLETE (" + @($res.problems).Count + " problem(s)) - send it back, do not hand a bad plan downstream:") }
 foreach ($p in $res.problems) { Write-Output ("    - " + $p) }
 exit $res.rc

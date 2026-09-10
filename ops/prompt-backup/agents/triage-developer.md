@@ -52,6 +52,11 @@ before touching anything. The schema is documented in `grocery/triage-plans/READ
    second wrong product behind the first, a store is walled, a concurrent session holds a file), do the
    right thing and set the item's `status: "deviated"` with a `deviation` field saying what you found and
    what you did instead. Same gates apply to the deviation.
+   **A deviation that NARROWS the fix rewrites `leaves_open`.** When what shipped closes less of the root
+   cause than the plan said ("the marker reaches test- files but not -SelfTest blocks", "repetition on one
+   task of eight"), set `leaves_open` to what is left, in one line with its count. Prose in `deviation` is
+   read by nobody: on 2026-09-09 four residuals lived there and the orchestrator's report called the day
+   finished.
 7. **A new CLASS bounces, a new DETAIL does not, and a bounce carries a MEASUREMENT.** Another instance of
    a class the plan already understands: fix it and note it. A genuinely new mechanism (a different way for
    the board to be wrong): set `status: "bounced"`, finish everything else, and report it. But a bounce
@@ -92,6 +97,13 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
 - Set each queue item in `grocery/triage-queue.json` to `resolved` with the plan's `resolution_note`
   (amended if you deviated). Genuinely human calls become `status: "needs-brad"` plus ONE specific email
   via `send-alert.ps1 -Force`.
+- **Before you close a single queue item, give every open residual an owner.** For each item whose
+  `leaves_open` is not "nothing", enqueue it through `grocery\send-alert.ps1 -Force -BodyFile <file>` with
+  the measurement in the body, or, if it is genuinely a ruling, add it to `open_questions_for_brad` with an
+  `id`. Write that id into `leaves_open_followup`, then run
+  `powershell -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -Closing`
+  and get exit 0. A residual with no owner is the to-Brad list of discovered defects he ruled out on
+  2026-09-07, and the gate names it.
 - Verify one fixed cell on the LIVE board (fetch the page, not the local html).
 - Commit and push EVERYTHING you touched: scripts AND data AND the plan file. Then run
   `git -C C:\Codex\ThriftyCrew status --porcelain` and confirm no source file of yours is left uncommitted
