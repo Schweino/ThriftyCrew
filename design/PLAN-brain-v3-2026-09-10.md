@@ -9,7 +9,7 @@ schedule - so this file comes before the code, and every bar below is written be
 | Build | Name | Status | Commit | Measured |
 |---|---|---|---|---|
 | E | One turn-keyed episode record | E1, E2, E3 SHIPPED 2026-09-10. E4 NOT READY: it needs 30 turns whose footer names what was used | skills 54e1a1e, 552c857, 7f429e0, 0f0baf5 | 139 episodes on the first build. Rows carrying a turn: prompt 616 of 3,126, reflex 4 of 884, outcome 1 of 551, consulted 1 of 192, structural 12 of 12 - the old rows predate the stamp, so E1's 95% bar is re-read on 2026-09-13 over rows written since |
-| M | Memory recall with a precision layer | NOT STARTED (needs E's cases: 30 labelled pairs across 10 sessions) | | |
+| M | Memory recall with a precision layer | M1 SHIPPED 2026-09-10: cases rebuild nightly after episodes and read NOT READY until 30 pairs across 10 sessions. M2 and M3 wait on that bar | skills 6205fb9 (M1) | First live build: 7 cases, 10 (turn, memory) pairs, 2 sessions, 13 off-topic negatives; 3 turns begun by background-task notifications skipped (the rule that catches them was added after reading the first rows, and says so). Read on the rows, and written down BEFORE any M3 run so it cannot explain a result afterwards: several prompts are generic ("what's next?") beside a memory opened during the work, so M3's hit@3 is judged against labels that include turns no retrieval could answer from the prompt alone |
 | J | A judgement lane that runs, and a ruling inbox | J2, J3, J4 SHIPPED 2026-09-10. J1 waits for tonight's nightly baseline | skills 8d326b8 (J2); estate 22c2402e9 (J4), J3 in the commit that adds this line | Inbox and digest agree on the live queues: 76 waiting (60 graph aliases, 13 cross-project clusters, 3 failure classes), unknown 0 |
 
 ---
