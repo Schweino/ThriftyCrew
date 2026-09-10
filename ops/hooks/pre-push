@@ -1,0 +1,92 @@
+#!/bin/sh
+# pre-push - run ops\run-gates.ps1 and refuse the push unless it passes.
+#
+# WHY THIS EXISTS (2026-09-09). ThriftyCrew's own CLAUDE.md said "ops/run-gates.ps1 is the change-time
+# gate and runs on every push". It did not, and had not since 2026-08-11. gates.yml ran `on: push` to
+# main plus pull_request until commit b8b5ac1c9, when GitHub-hosted Actions minutes were exhausted and
+# all three workflows went `workflow_dispatch`-only together. RUNTIME-MAP recorded that for daily.yml
+# and heartbeat.yml and never named gates.yml, so the CHANGE-TIME gate went quiet as collateral of a
+# cost decision about scheduled jobs. No pre-push hook existed. No scheduled task calls run-gates.
+#
+# So for a month a push was gated exactly as much as the person pushing chose to gate it, while the
+# instructions every session reads asserted otherwise. This restores the property at zero money cost.
+#
+# ONCE PER PUSH, NOT ONCE PER COMMIT. That is the point and it is why this is cheaper than the habit it
+# replaces: a session that makes four commits and pushes once now runs the full 306 gates ONCE. On
+# 2026-09-09 the gate went from 78s to 51s by dispatching into one pool instead of four, so the price
+# of this hook is about 51 seconds of a manual push.
+#
+# WHY NOT RUN ONLY THE GATES A CHANGE CAN AFFECT. Measured, not assumed: the longest single gate is
+# ~31s inside a 51s wall, and the expensive static detectors - audit-guard-contract, audit-write-only-
+# reports, audit-source-control-bytes, audit-script-census - all scan the WHOLE TREE, so no file-based
+# selection can skip them. A perfect selector would save about 20 seconds, in exchange for making "no
+# gate matched your change" and "the gates found nothing" the same bytes. That is the shape
+# .claude/rules/ops-and-gates.md warns about and how a gate goes quietly unfirable. Not worth 20s.
+#
+# THE EXIT CODE IS READ, NEVER THE TALLY. run-gates: 0 = passed, 1 = at least one gate failed,
+# 3 = COULD NOT EVALUATE, which means discovery is broken rather than the tree being clean. A 3 is
+# NEVER a pass and is refused here as loudly as a 1.
+#
+# IT STANDS IN FRONT OF THE AUTOMATED PUSHES TOO, deliberately, and that is worth knowing before it
+# surprises somebody: the ~07:00 bot and wave-publish both push. run-gates is HERMETIC - it reads
+# source and frozen fixtures, never a board - so ordinary daily data churn CANNOT fail it. An automated
+# push is blocked only when the SOURCE is genuinely broken, which is exactly when it should be. The
+# refusal goes to stderr and lands in the caller's log.
+#
+# BYPASS IS DELIBERATE AND LOUD: `git push --no-verify`. A gate with no escape hatch is a gate somebody
+# uninstalls. ops\audit-hook-installed.ps1 asserts this file is live, so skipping it is a choice
+# somebody made rather than a state nobody noticed.
+#
+# Install:  powershell -File ops\install-hooks.ps1
+
+repo="$(git rev-parse --show-toplevel 2>/dev/null)"
+[ -z "$repo" ] && exit 0
+gate="$repo/ops/run-gates.ps1"
+
+# A MISSING GATE MUST NOT READ AS A PASS. That is the fail-open-reads-as-empty class, and it is exactly
+# how a guard stops guarding without anyone editing it. Same rule the pre-commit hook states.
+if [ ! -f "$gate" ]; then
+  echo "pre-push: REFUSING - ops/run-gates.ps1 is missing, so nothing verified this push." >&2
+  echo "          Restore it, or push with --no-verify if you have decided that is right." >&2
+  exit 1
+fi
+
+# A push that only DELETES refs introduces no new code to gate. stdin carries one line per ref as
+# "<local ref> <local sha> <remote ref> <remote sha>", and an all-zero local sha is a deletion.
+have_work=0
+while read -r lref lsha rref rsha; do
+  [ -z "$lsha" ] && continue
+  case "$lsha" in
+    *[!0]*) have_work=1 ;;
+  esac
+done
+if [ "$have_work" -eq 0 ]; then
+  exit 0
+fi
+
+echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not once per commit." >&2
+
+# REDIRECT, THEN READ THE STATUS, THEN GREP THE FILE. Reading a status through a pipe gives the LAST
+# stage's, not the gate's, which this estate has a memory about.
+log="${TMPDIR:-/tmp}/tc-prepush-$$.log"
+powershell -NoProfile -ExecutionPolicy Bypass -File "$gate" > "$log" 2>/dev/null
+rc=$?
+
+if [ "$rc" -eq 0 ]; then
+  tail -n 1 "$log" >&2
+  rm -f "$log"
+  exit 0
+fi
+
+echo "" >&2
+if [ "$rc" -eq 3 ]; then
+  echo "pre-push: BLOCKED - run-gates COULD NOT EVALUATE (exit 3)." >&2
+  echo "          That means gate discovery is broken, NOT that the tree is clean. A 3 is never a pass." >&2
+else
+  echo "pre-push: BLOCKED - run-gates exited $rc. This tree must not be pushed until it passes." >&2
+  echo "          Fix the cause, never the gate." >&2
+fi
+grep -E "^  FAIL|^run-gates: (FAILED|COULD NOT)" "$log" 2>/dev/null | head -12 >&2
+echo "          full gate output kept at: $log" >&2
+echo "          Bypass with: git push --no-verify" >&2
+exit 1
