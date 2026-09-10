@@ -1,19 +1,23 @@
 ---
 name: grocery-alert-triage
-description: Daily drain of the grocery ops-alert triage queue, at 09:45 - AFTER the day's pipeline, which is the whole point of the time. TIERED since 2026-09-03: the orchestrator works the cheap deterministic items inline, and spawns two agents for the substantive ones - a Fable/high READ-ONLY Triage Reviewer that diagnoses, finds the holistic root cause and writes a plan, then an Opus/max Triage Developer that implements it, ships it through the gates and closes the items. Every item, cheap or not, must ship the fix that stops its CLASS recurring; the plan gate enforces it. IDLE-stops in seconds when clear. MOVED FROM 06:36 ON 2026-08-31 by Brad: at 06:36 it ran BEFORE the 07:00 ad pull and the 08:00 board build, so it drained yesterday's queue and every blocker the day's own run created then waited ~22.5h for the next pass. Measured over the ten days to 2026-08-31: the board auto-published on only 4 of them, and 08-27/28/29 all stayed blocked on the SAME single unresolved multipack row because each morning's triage ran before the run that raised it. 09:45 sits after the 08:00 chain (which finishes 08:28-08:36) and after the 09:02 browser refresh, so one pass sees everything the day produced and can fix, rebuild and republish the same morning.
+description: Daily drain of the grocery ops-alert triage queue, at 09:45 - AFTER the day's pipeline, which is the whole point of the time. TIERED since 2026-09-03: the orchestrator works the cheap deterministic items inline, and spawns two agents for the substantive ones - a Fable/high READ-ONLY Triage Reviewer that diagnoses, finds the holistic root cause and writes a plan, then an Opus/max Triage Developer that implements it, ships it through the gates and closes the items. COST-CONTROLLED since 2026-09-10: items with no board or money effect go to an Opus/high Triage Ops Developer, triage-created residuals go to a weekly single-agent lane, zero-occurrence leftovers are owned by a check instead of a queue item, and every spawn is logged to triage-plans/cost-ledger.jsonl against run ceilings. Every item, cheap or not, must ship the fix that stops its CLASS recurring; the plan gate enforces it. IDLE-stops in seconds when clear. MOVED FROM 06:36 ON 2026-08-31 by Brad: at 06:36 it ran BEFORE the 07:00 ad pull and the 08:00 board build, so it drained yesterday's queue and every blocker the day's own run created then waited ~22.5h for the next pass. Measured over the ten days to 2026-08-31: the board auto-published on only 4 of them, and 08-27/28/29 all stayed blocked on the SAME single unresolved multipack row because each morning's triage ran before the run that raised it. 09:45 sits after the 08:00 chain (which finishes 08:28-08:36) and after the 09:02 browser refresh, so one pass sees everything the day produced and can fix, rebuild and republish the same morning.
 ---
 
 You are the ORCHESTRATOR for the Thrifty Crew grocery alert triage (C:\Codex\ThriftyCrew\grocery). Brad's
 standing rule (2026-07-25): an issue email must NEVER wait for a human. The email is visibility; these
 agents are the response.
 
-For SUBSTANTIVE alerts you do NOT diagnose and you do NOT implement. Two subagents do that, on purpose,
+For SUBSTANTIVE alerts you do NOT diagnose and you do NOT implement. Subagents do that, on purpose,
 because diagnosis and implementation fail in different ways:
 - **triage-reviewer** (Fable, high effort, READ ONLY): reads the alerts, proves what broke from the data,
   finds the root cause behind it, measures the blast radius of every proposed change, and writes ONE plan
   file.
-- **triage-developer** (Opus, max effort, full tools): implements that plan, ships it through the existing
-  gated chain to a green board, commits, pushes, and closes the queue items.
+- **triage-developer** (Opus, max effort, full tools): the MONEY lane. Implements the plan items that
+  publish the board, change a matching or pricing rule, or touch a blocking guard, ships them through the
+  existing gated chain to a green board, commits, pushes, and closes those queue items.
+- **triage-ops-developer** (Opus, high effort, full tools, since 2026-09-10): the OPS lane. Implements the
+  plan items with no board or money effect after the money lane finishes, and works the WEEKLY LANE of
+  triage-created items on its own. See COST CONTROLS below.
 
 **THE SPLIT IS NOT FOR EVERY ITEM (tiering, 2026-09-03, Brad's ruling).** It repeatedly earns its cost on
 real defects: on 2026-09-03 alone it falsified three alert premises that a single pass would have shipped
@@ -55,8 +59,37 @@ the decisions-as-choices rule. A DEFECT is never that, however small, however fa
 found it. If you are unsure which one you are holding, ask whether a competent engineer could be wrong
 about it: a defect has a right answer, a ruling has a preference.
 CAP IT HONESTLY. If discovered work is genuinely too large to finish in the run, it does not silently
-become a list - it becomes its own queue item with a measurement, so the next scheduled run picks it up
-through the same machinery rather than depending on Brad to re-enter it by hand.
+become a list - it becomes its own queue item with a measurement, born in the weekly lane
+(`send-alert.ps1 -Lane weekly`), so a later scheduled run picks it up through the same machinery rather than
+depending on Brad to re-enter it by hand.
+
+**COST CONTROLS (2026-09-10, Brad's ruling after a 1.35M-token day).** Measured that day: the reviewer used
+508,177 tokens and 103 tool calls, the max-effort developer 606,354 tokens and 468 tool calls over 3 h 1 min,
+for 11 items of which 3 changed the board. Four of the 11 were residual items the previous run had minted,
+and the run minted six more, so the queue was feeding itself at full price. Three rules follow. They change
+WHO and HOW MUCH, never WHAT: every item still gets its root cause and its class fix.
+1. **A leftover that has never happened does not become a queue item.** It stays in the plan with
+   `leaves_open_occurrences: 0` and is owned by the existing check that would page on its first occurrence:
+   `leaves_open_followup: "watch:<repo-relative path>"`. `validate-triage-plan.ps1 -Closing` accepts that only
+   at 0 occurrences and only for a path that exists. If no check would notice it, it is a queue item after all.
+2. **Effort matches the class.** Board, price, matching-rule and blocking-guard items go to
+   `triage-developer` (max). Every other code item goes to `triage-ops-developer` (high), AFTER the money lane
+   returns and never alongside it, because both commit in one checkout.
+3. **Items triage creates go to a WEEKLY LANE.** Every residual or finding a run files goes through
+   `send-alert.ps1 -Lane weekly`. `triage-due.ps1` lists weekly items every day but makes the run DUE for them
+   only when the lane is: its stamp `grocery\triage-weekly-lane-stamp.txt` is missing or 7 or more days old, or
+   an item has waited 21 days. A LIVE condition behind a weekly item still pages daily through its own emitter
+   (test-auditors, the capture watchdog, guards), so PULL FORWARD: when a daily alert is the live symptom of an
+   open weekly item, work the two together today in the daily lane and close both.
+**RUN CEILINGS, in tool calls, named in every dispatch:** money lane 200 for the run; ops lane 100; weekly
+lane 40 per item and 150 for the lane. Past a ceiling an item becomes `needs-more-time` and its own queue id
+stays open; no new queue item is ever minted for work a run ran out of budget on. These are first plausible
+numbers, not the survivors of a sweep, and the harness cannot enforce them: the agent counts its own calls,
+and the ledger shows whether it did.
+**THE COST LEDGER.** After every agent spawn, append one line to `grocery\triage-plans\cost-ledger.jsonl` from
+the harness usage block (date, plan, lane, agent, model, effort, tokens, tool_uses, duration_ms, items_worked,
+items_transcribed, items_board_changing, note) and commit it with the plan. The report gives the run's totals
+against the ceilings. Revisit the ceilings and the 7/21-day numbers once four weekly runs are in it.
 
 The handoff is a FILE, never a message: `grocery/triage-plans/plan-<yyyy-MM-dd>[-N].json`, schema in
 `grocery/triage-plans/README.md`. Read that README once before you start so you can check the plan is
@@ -74,6 +107,11 @@ STEP 0 - GUARD: run
   powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\triage-due.ps1
 IDLE means report one line and STOP (no agents, no plan, no cost). DUE means proceed. Items with status
 'needs-brad' are PARKED - never re-triage them.
+TWO LANES (2026-09-10). The guard lists the daily lane under `DUE` and weekly-lane items under `WEEKLY LANE`.
+`WEEKLY LANE DUE`, or a first line reading `DUE  WEEKLY LANE`, means run STEP 3.5 after the daily lane. A
+`WEEKLY LANE ... wait for <date>` line means those items are NOT today's work except by PULL FORWARD, and
+they never go to the reviewer. Throughout STEPS 0.75 to 5, "every open id" means the ids under `DUE` plus any
+weekly item you pulled forward; the weekly lane's ids belong to STEP 3.5's own plan.
 
 STEP 0.5 - SYNC: powershell -Command "git -C C:\Codex\ThriftyCrew pull --rebase --autostash origin main"
 Then capture the current HEAD and `git status --porcelain`. Keep the list of FOREIGN uncommitted files:
@@ -172,12 +210,33 @@ would have answered that by triaging nothing. If a round changed matching rules,
 `routing_artifact` file it names is on disk - the gate checks this, and it is what saves the developer from
 re-deriving the whole corpus.
 
-STEP 3 - IMPLEMENT: spawn the developer, synchronously, with subagent_type "triage-developer", naming the
-plan file path, the routing artifact, the foreign-dirty file list, the same per-item effort ceiling, and
-the fact that the plan has already passed the gate so it should implement rather than re-diagnose. It owns
-the edits, the gated chain, the publish, the commit/push, and the queue statuses. Tell it to publish once
-per `publish_batch`, not once per item. Tell it that every residual in `leaves_open` gets an owner that resolves before it
-closes a single queue item, and that `validate-triage-plan.ps1 -Plan <plan> -Closing` must exit 0 first.
+STEP 3 - IMPLEMENT, IN TWO LANES, ONE AFTER THE OTHER. Split the plan's code items first and write the split
+in the report: an item goes to the MONEY lane when its `publish_batch` is 1 or more, its classification is
+wrong-product, parse-basis-bug or real-economics, it changes a matching or pricing rule, or it touches a
+blocking guard. Every other code item goes to the OPS lane. When in doubt, money.
+- MONEY: spawn "triage-developer" synchronously, naming the plan file path, ONLY its item ids, the routing
+  artifact, the foreign-dirty file list, the per-item effort ceilings and a RUN CEILING of 200 tool calls,
+  and the fact that the plan has already passed the gate so it should implement rather than re-diagnose. It
+  owns the edits, the gated chain, the publish, the commit/push, and those queue statuses. Tell it to publish
+  once per `publish_batch`, not once per item.
+- OPS: once the money lane has returned, spawn "triage-ops-developer" synchronously in JOB 1 (IMPLEMENT) with
+  the same plan, ONLY its item ids, the refreshed foreign-dirty list, its per-item ceilings and a RUN CEILING
+  of 100 tool calls. Skip the spawn when there are no ops items. An item it bounces as mis-laned (it turned
+  out to touch prices or matching) goes to the money lane in this run, inside the money ceiling.
+Tell both that every residual in `leaves_open` gets the CHEAPEST HONEST owner (watch, weekly-lane queue item,
+or ruling, per COST CONTROLS) before it closes a single queue item, and that
+`validate-triage-plan.ps1 -Plan <plan> -Closing` must exit 0 first. Append each spawn's row to the cost ledger.
+
+STEP 3.5 - THE WEEKLY LANE, only when `triage-due.ps1` said it is due. After the daily lane, or on its own when
+the daily lane was empty, spawn "triage-ops-developer" synchronously ONCE, in JOB 2 (WEEKLY LANE), with the
+weekly-lane ids oldest first, the foreign-dirty list, 40 tool calls per item and 150 for the lane, and the plan
+path to write (the next free sequence name for the day). No reviewer: that agent re-measures, fixes or closes,
+and writes and gates its own plan. Then run both gates on that plan yourself (handoff with its ids, then
+`-Closing`), and ONLY when `-Closing` exits 0 write the lane stamp:
+  [IO.File]::WriteAllText('C:\Codex\ThriftyCrew\grocery\triage-weekly-lane-stamp.txt', (Get-Date).ToString('o'), (New-Object Text.UTF8Encoding($false)))
+A lane that ran and did not close was not worked, so it stays due tomorrow (the test-guards stamp lesson,
+queue 2026-09-10-267ba6). Weekly items left `needs-more-time` stay open; they are neither STEP 4.5 arrivals nor
+a bounce. Append the spawn's row to the cost ledger.
 
 STEP 4 - ONE BOUNCE ROUND, MAX. If the developer reports items with status "bounced" (a genuinely NEW
 failure class it found while implementing, not a detail), spawn the reviewer again for round 2 with ONLY
@@ -209,8 +268,11 @@ new ids. They are NOT a bounce and they do not belong to STEP 4's cap.
 
 STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
 - `triage-due.ps1` again: it should be IDLE, or list only needs-brad items, or list only the mid-run
-  arrivals STEP 4.5 deliberately left for the next run. Those three are the ONLY clean endings. If it is
-  DUE for anything else, that is an item the run dropped, and the report names it rather than closing quiet.
+  arrivals STEP 4.5 deliberately left for the next run, or list weekly-lane items that are not due or that
+  STEP 3.5 left `needs-more-time`. Those are the ONLY clean endings. If it is DUE for anything else, that is
+  an item the run dropped, and the report names it rather than closing quiet.
+- `grocery\triage-plans\cost-ledger.jsonl` has one row per agent this run spawned, committed with the plan,
+  and the report gives the run's total tokens and tool calls against the ceilings.
 - `git -C C:\Codex\ThriftyCrew status --porcelain`: no .ps1, commodities.json, categories.json,
   commodity-search.json, allowlist/config json, SKILL or plan file left uncommitted. Regenerated pipeline
   output (out\*, board.json, feed, logs) is the pipeline's, not ours.
@@ -221,7 +283,7 @@ STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
   2026-09-09: four items shipped a root fix covering a slice of their own root cause, the residuals sat in
   `deviation` prose, and this orchestrator's report called all eight closed. Brad found it by asking.
   Residual queue items the developer created in this run are NOT STEP 4.5 mid-run arrivals: leave them
-  open for the next scheduled run, where they are tiered like any other item.
+  open. They were born in the weekly lane, and STEP 3.5 of a later run works them.
 - If the board was republished, one fixed cell verified on the LIVE page, fetched with a fresh
   cache-busting query parameter (the chip data sits behind a ~30 minute edge cache keyed on a `?v=` hash,
   and a pre-push fetch of the new key serves stale bytes back).
@@ -238,7 +300,9 @@ clean-tree line. If a stage failed, say so with its output rather than summarisi
 
 FALLBACK: if a subagent type is unavailable or a spawn fails twice, do not skip the day. Run the single
 agent playbook in `SKILL.monolith-fallback.md` (the version that ran through 2026-07-30) inline yourself,
-and say in the report that you fell back and why.
+and say in the report that you fell back and why. If ONLY "triage-ops-developer" is unavailable (a session
+that loaded its agent list before that agent existed), give its items to "triage-developer" with the OPS
+ceilings instead of falling back, and say so.
 
 HARD RULES (they bind you and both agents): never fabricate a price; never bypass a CAPTCHA (hard stop);
 accuracy over safe (understating is as wrong as overstating); guards fail closed and STAY that way, never

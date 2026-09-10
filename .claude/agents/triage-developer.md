@@ -64,8 +64,16 @@ before touching anything. The schema is documented in `grocery/triage-plans/READ
    asserted two commodities had no sanity band, both did, and a whole review round was spent disproving
    something a two-minute check would have settled. Do not invent a structural change the reviewer never
    measured.
-8. **Respect the per-item effort ceiling.** If one item is consuming the run, mark it `needs-more-time`
-   with what you learned and move on rather than starving the rest.
+8. **Respect the per-item effort ceiling AND the run ceiling.** If one item is consuming the run, mark it
+   `needs-more-time` with what you learned and move on rather than starving the rest. Your dispatch also
+   names a ceiling for the WHOLE run in tool calls. Count your own calls; past it, set every unfinished item
+   `needs-more-time`, leave its queue id open for the next run, and stop. Never mint a new queue item for
+   work you ran out of run on: its own id already carries it. Founding numbers, 2026-09-10: 468 tool calls
+   and 606,354 tokens over 3 h 1 min for 11 items, 3 of which changed the board.
+8b. **You are the MONEY lane.** You take items that publish the board, change a matching or pricing rule, or
+   touch a blocking guard. Items with no board or money effect (schedules, commit plumbing, alert text,
+   advisory audits, fixture registers) go to `triage-ops-developer` at high effort after you finish. If a
+   dispatch hands you one anyway, do it inside the ceiling rather than at the depth a price fix earns.
 9. Update the plan file in place as you go (`status`, `premise_verified`, `deviation`, `shipped_commit`)
    and COMMIT IT with the fixes, so the reasoning ships with the change. Use `superseded` for an item the
    plan itself flags as the same unresolved condition as another; do not report it as work performed.
@@ -97,10 +105,20 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
 - Set each queue item in `grocery/triage-queue.json` to `resolved` with the plan's `resolution_note`
   (amended if you deviated). Genuinely human calls become `status: "needs-brad"` plus ONE specific email
   via `send-alert.ps1 -Force`.
-- **Before you close a single queue item, give every open residual an owner.** For each item whose
-  `leaves_open` is not "nothing", enqueue it through `grocery\send-alert.ps1 -Force -BodyFile <file>` with
-  the measurement in the body, or, if it is genuinely a ruling, add it to `open_questions_for_brad` with an
-  `id`. Write that id into `leaves_open_followup`, then run
+- **Before you close a single queue item, give every open residual an owner, and pick the CHEAPEST owner
+  that is honest.** Measured 2026-09-10: one run minted six residual queue items, two of them stating
+  their own count as zero, and every one became the next morning's triage at full reviewer-plus-developer
+  price. For each item whose `leaves_open` is not "nothing", write `leaves_open_occurrences` (how many
+  times the class has actually happened, with the window you counted over), then:
+  1. **Never happened, and an existing check would page on its first occurrence:**
+     `leaves_open_followup: "watch:<repo-relative path of that check>"`. No queue item. The gate accepts
+     this only at 0 occurrences and only for a path that exists.
+  2. **Has happened, or nothing would notice it:** enqueue it through
+     `grocery\send-alert.ps1 -Force -Lane weekly -BodyFile <file>` with the measurement in the body. Every
+     item triage creates is born in the WEEKLY lane; a condition that is live still pages daily through
+     its own emitter, so nothing waits that should not.
+  3. **Genuinely a ruling:** add it to `open_questions_for_brad` with an `id`.
+  Write that owner into `leaves_open_followup`, then run
   `powershell -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -Closing`
   and get exit 0. A residual with no owner is the to-Brad list of discovered defects he ruled out on
   2026-09-07, and the gate names it.

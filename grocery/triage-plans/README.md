@@ -111,10 +111,20 @@ with the change and a future reader can see why a rule exists.
       // narrows what shipped.
       "leaves_open": "nothing",
 
+      // HOW OFTEN THE RESIDUAL CLASS HAS ACTUALLY HAPPENED, and over what window (2026-09-10). It decides the
+      // cheapest honest owner below. A count nobody wrote is not zero.
+      "leaves_open_occurrences": 0,
+
       // WHO OWNS THE RESIDUAL. Required at CLOSE (validate-triage-plan.ps1 -Closing) whenever leaves_open is
-      // not "nothing": an id that exists in triage-queue.json, or the id of a ruling in open_questions_for_brad
-      // (which is why those carry an id). Not required at handoff, because the reviewer is read-only and
-      // cannot mint a queue item.
+      // not "nothing". The cheapest one that is true:
+      //   - "watch:<repo-relative path>": ONLY when leaves_open_occurrences is 0 and that existing check would
+      //     page on the first occurrence. No queue item. The gate checks the count and that the path exists.
+      //   - an id that exists in triage-queue.json, minted with send-alert.ps1 -Lane weekly. Every item a
+      //     triage run creates is born in the WEEKLY lane (see triage-due.ps1), because a condition that is
+      //     live still pages daily through its own emitter. Measured 2026-09-10: 4 of 11 alerts were the
+      //     previous run's residuals and that run minted 6 more, so the queue was feeding itself at full price.
+      //   - the id of a ruling in open_questions_for_brad (which is why those carry an id).
+      // Not required at handoff, because the reviewer is read-only and cannot mint a queue item.
       "leaves_open_followup": null,
 
       // WHAT ELSE THE CHANGE TOUCHES, MEASURED, not guessed. This is the anti-regression core:
@@ -261,5 +271,13 @@ a partial fix being reported as a whole one, which is what the 2026-09-09 report
 
 ## Housekeeping
 
-Plans accumulate one per day and are rotated monthly by `run-daily-local.ps1` into `grocery/logs-archive/`
-alongside the pipeline logs. Git history keeps the content either way.
+Plans accumulate one per day and are rotated monthly by `capture-run.ps1` into `grocery/logs-archive/`
+alongside the pipeline logs. Git history keeps the content either way. (This line named
+`run-daily-local.ps1` until 2026-09-10; that script no longer exists, and the rotation lives in
+`capture-run.ps1`, which moves `plan-*.json` only.)
+
+`cost-ledger.jsonl` (2026-09-10) is one line per agent a triage run spawns, copied from the harness usage
+block: date, plan, lane, agent, model, effort, tokens, tool_uses, duration_ms, items_worked,
+items_transcribed, items_board_changing, note. The rotation does not touch it. It is what the run ceilings
+and the weekly-lane cadence in the triage SKILL get revisited from. Its founding rows: the two agents of
+2026-09-10 cost 1,114,531 tokens and 571 tool calls for 11 items, 3 of which changed the board.

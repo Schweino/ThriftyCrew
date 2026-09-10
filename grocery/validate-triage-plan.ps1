@@ -44,7 +44,9 @@
                2 = plan is incomplete (message says exactly what is missing)
                3 = BLIND: no plan file, unreadable, or zero items - proved nothing, do not hand over
   -Closing re-reads the plan AFTER the developer, against grocery\triage-queue.json (or -QueueFile), with
-  the same exit codes. Run it before a triage run reports itself done.
+  the same exit codes. Run it before a triage run reports itself done. A residual's owner is a queue id, a
+  ruling id in open_questions_for_brad, or watch:<repo-relative path> for a residual whose
+  leaves_open_occurrences is 0 (2026-09-10).
   -SelfTest runs frozen good/bad fixtures through the rules and exits (0 pass, 1 fail).
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
@@ -87,7 +89,9 @@ function Test-TouchesMatchingRule($Item) {
 }
 
 function Test-Plan {
-  param($Doc, [string[]]$Expect, [string]$PlanDir, [switch]$Closing, $QueueIds = @())
+  param($Doc, [string[]]$Expect, [string]$PlanDir, [switch]$Closing, $QueueIds = @(), [string]$RepoRoot = '')
+  # a watch:<path> owner resolves against the repo this gate lives in unless a caller (the self-test) names one
+  if (-not $RepoRoot) { $RepoRoot = Split-Path $root -Parent }
   # -Closing resolves a residual's owner against these. A ruling is owned by its id in open_questions_for_brad;
   # an older plan wrote those as bare strings, which carry no id and so can own nothing.
   $ruleIds = @()
@@ -182,9 +186,34 @@ function Test-Plan {
     if ($Closing -and $lo -and ($lo -notmatch '^nothing\b') -and (@('done','deviated') -contains [string]$i.status)) {
       $fu = ([string]$i.leaves_open_followup).Trim()
       if (-not $fu) {
-        $problems.Add("$id is $([string]$i.status) with an open residual and no leaves_open_followup - enqueue it through send-alert.ps1, or file it as a ruling in open_questions_for_brad, and name that id. The residual: $lo")
+        $problems.Add("$id is $([string]$i.status) with an open residual and no leaves_open_followup - enqueue it through send-alert.ps1 -Lane weekly, file it as a ruling in open_questions_for_brad, or, if it has NEVER happened, name the check that pages on its first occurrence as watch:<repo-relative path>. The residual: $lo")
+      } elseif ($fu -match '^watch:\s*(.+)$') {
+        # A WATCH OWNS ONLY WHAT HAS NEVER HAPPENED (2026-09-10, Brad, after a 1.35M-token triage day). That
+        # day's run minted six residual queue items to satisfy the owner rule above, two of them stating
+        # their own count as zero ("0 known occurrences", "0 occurrences in the 20 logged days"), and every
+        # one became tomorrow's triage work at full price. A class that has never happened needs something
+        # that NOTICES its first occurrence, not a queue item that re-reads the design every morning. So a
+        # residual may be owned by an existing check, named by repo-relative path, but only when the item
+        # records leaves_open_occurrences = 0. A count nobody wrote is not zero, and a class that has already
+        # happened is live work that goes to the queue. The gate can see that the check EXISTS; it cannot
+        # see that the check would fire on this class, so that claim is the plan author's to sign.
+        $wPath = $Matches[1].Trim()
+        $occN = -1
+        if ($i.PSObject.Properties['leaves_open_occurrences'] -and ([string]$i.leaves_open_occurrences) -match '^\s*\d+\s*$') {
+          $occN = [int]([string]$i.leaves_open_occurrences)
+        }
+        if ($occN -lt 0) {
+          $problems.Add("$id is owned by '$fu' but carries no leaves_open_occurrences count - a watch owns only a residual measured at 0 occurrences, and a count nobody wrote is not zero")
+        } elseif ($occN -gt 0) {
+          $problems.Add("$id is owned by '$fu' but records $occN occurrence(s) - a class that has already happened needs a queue item (send-alert.ps1 -Lane weekly) or a ruling, not a watch")
+        }
+        if ([IO.Path]::IsPathRooted($wPath)) {
+          $problems.Add("$id leaves_open_followup '$fu' must name a repo-relative path, so the check it trusts is one the repo versions")
+        } elseif (-not $RepoRoot -or -not (Test-Path -LiteralPath (Join-Path $RepoRoot $wPath) -PathType Leaf)) {
+          $problems.Add("$id leaves_open_followup '$fu' resolves to nothing - no check exists at that repo path")
+        }
       } elseif ((@($QueueIds) -notcontains $fu) -and ($ruleIds -notcontains $fu)) {
-        $problems.Add("$id leaves_open_followup '$fu' resolves to nothing - it is neither an id in the triage queue nor an id in open_questions_for_brad")
+        $problems.Add("$id leaves_open_followup '$fu' resolves to nothing - it is neither an id in the triage queue, an id in open_questions_for_brad, nor a watch:<repo-relative path>")
       }
     }
     # --- AND THE PROOF MUST REPRODUCE THE BUG --------------------------------------------------------
@@ -412,6 +441,44 @@ if ($SelfTest) {
   $nothingLeft = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
   $nothingLeft.items[0] | Add-Member -NotePropertyName status -NotePropertyValue 'done' -Force
   _CaseClose 'at close, a done item whose leaves_open is nothing passes with no followup' $nothingLeft @() 0 $null
+
+  # --- A WATCH OWNS ONLY WHAT HAS NEVER HAPPENED (2026-09-10) -------------------------------------------
+  # A sandbox repo holding one real check, so the path test reads a file instead of trusting the plan.
+  $wRoot = Join-Path $env:TEMP ('vtp-watch-' + $PID)
+  New-Item -ItemType Directory -Force -Path (Join-Path $wRoot 'grocery') | Out-Null
+  Set-Content -LiteralPath (Join-Path $wRoot 'grocery\audit-watch-fixture.ps1') -Value '# a check that pages on the first occurrence' -Encoding UTF8
+  function _CaseWatch($label, $doc, $expectRc, $expectMatch) {
+    $script:ran++
+    $r = Test-Plan $doc @() $env:TEMP -Closing -QueueIds @('2026-09-10-aaaaaa') -RepoRoot $wRoot
+    $txt = ($r.problems -join ' | ')
+    if ($r.rc -eq $expectRc -and ((-not $expectMatch) -or ($txt -match $expectMatch))) { Write-Output "ok    $label" }
+    else { Write-Output ("FAIL  $label  rc=" + $r.rc + " want $expectRc; problems: " + $txt); $script:fail++ }
+  }
+  try {
+    $watched = $closed | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $watched.items[0] | Add-Member -NotePropertyName leaves_open_followup -NotePropertyValue 'watch:grocery/audit-watch-fixture.ps1' -Force
+    $watched.items[0] | Add-Member -NotePropertyName leaves_open_occurrences -NotePropertyValue 0 -Force
+    # MUST NOT FIRE: a residual measured at 0 occurrences, owned by a check that exists, needs no queue item.
+    _CaseWatch 'at close, a zero-occurrence residual owned by an existing check passes' $watched 0 $null
+    # MUST FIRE: the class has already happened, so it is live work and a watch is the wrong owner.
+    $happened = $watched | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $happened.items[0].leaves_open_occurrences = 2
+    _CaseWatch 'at close, a watch over a residual that has happened twice is rejected' $happened 2 'records 2 occurrence'
+    # MUST FIRE: no count at all. A count nobody wrote is not zero.
+    $uncounted = $watched | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $uncounted.items[0].PSObject.Properties.Remove('leaves_open_occurrences')
+    _CaseWatch 'at close, a watch with no leaves_open_occurrences is rejected' $uncounted 2 'no leaves_open_occurrences'
+    # MUST FIRE: a watch naming a check that does not exist owns nothing.
+    $ghostWatch = $watched | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $ghostWatch.items[0].leaves_open_followup = 'watch:grocery/no-such-check.ps1'
+    _CaseWatch 'at close, a watch naming a check that does not exist is rejected' $ghostWatch 2 'no check exists'
+    # MUST FIRE: an absolute path points at a check the repo does not version.
+    $rootedWatch = $watched | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $rootedWatch.items[0].leaves_open_followup = 'watch:' + (Join-Path $wRoot 'grocery\audit-watch-fixture.ps1')
+    _CaseWatch 'at close, a watch naming an absolute path is rejected' $rootedWatch 2 'repo-relative'
+    # CLEAN TWIN: a queue-id owner still resolves exactly as before, beside the new watch branch.
+    _CaseWatch 'CLEAN TWIN at close, a residual owned by a real queue item still passes' $owned 0 $null
+  } finally { Remove-Item -LiteralPath $wRoot -Recurse -Force -ErrorAction SilentlyContinue }
 
   # --- routing artifact positive control (2026-08-06 case-insensitive $b/$B) ----------------------------
   # These need a real file on disk, because the check reads the artifact rather than trusting the plan.

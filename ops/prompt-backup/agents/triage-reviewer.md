@@ -190,6 +190,10 @@ whenever any item changes a matching rule. Requirements:
   are signing, and so is `root_fix_none_because`, which does not exempt the item. On 2026-09-09 four items
   passed the gate with a root fix covering a slice of the class their own root cause named, because no
   field asked. The gate asks now. It cannot judge the answer; only you can, so measure it.
+  When `leaves_open` is not "nothing", also write `leaves_open_occurrences`: how many times that residual
+  class has ACTUALLY happened, and over what window. It decides the owner the developer may give it: a
+  residual at 0 occurrences that an existing check would catch is owned by that check (`watch:<path>`) and
+  costs nothing tomorrow, while one that has happened becomes a weekly-lane queue item (2026-09-10).
 - `ship_sequence` is ordered and complete, including the gated chain and the live verification, and groups
   items into as few publishes as the dependencies allow.
 - Anything needing Brad (a purchase, a wall, a "what should this commodity MEAN" call) goes in

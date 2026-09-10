@@ -46,6 +46,11 @@ param(
   # question. The mail still goes out unchanged, the once-a-day gate and -Force are untouched, and
   # triage-due (which lists only status open, and counts needs-brad as parked) stops reporting it as work.
   [string]$Escalates = "",
+  # A TRIAGE-CREATED ITEM IS BORN IN THE WEEKLY LANE (2026-09-10, Brad, after a 1.35M-token triage day).
+  # Pass -Lane weekly when a triage run files a residual or a finding about a class. The item is stamped
+  # lane 'weekly', triage-due.ps1 still lists it every day, and it makes the run DUE only when the weekly
+  # lane is. The default writes no field at all, so no other alert in the estate changes.
+  [ValidateSet('daily', 'weekly')][string]$Lane = 'daily',
   # exercises the queue-routing decision against temp fixtures and exits. Sends nothing, touches no live file.
   [switch]$SelfTest
 )
@@ -127,6 +132,15 @@ function Get-BirthDisposition([string]$Escalates) {
     }
   }
   return [pscustomobject]@{ status = 'open'; notes = $null }
+}
+
+# ---- A TRIAGE-CREATED ITEM IS BORN IN THE WEEKLY LANE (2026-09-10) ----------------------------------------
+# The lane an item is born with. 'weekly' is stamped; 'daily' (the default) and anything else stamp NOTHING,
+# so every other alert in the estate writes a byte-identical queue item to the one it wrote before this.
+# triage-due.ps1 reads the field; the account of why the lane exists is there.
+function Get-BirthLane([string]$Lane) {
+  if ($Lane -eq 'weekly') { return 'weekly' }
+  return $null
 }
 
 # ---- CAN A HUMAN (OR AN AGENT) JUDGE THIS ALERT FROM ITS OWN BODY? (2026-07-31) -------------------------
@@ -250,9 +264,17 @@ if ($SelfTest) {
     '{ "muted": true, "until": "whenever" }' | Set-Content $mF -Encoding UTF8
     _T 'unparseable until -> mute EXPIRES rather than lasting forever' (Get-MuteState $mF '2026-08-14').muted 'False'
   } finally { Remove-Item $mDir -Recurse -Force -ErrorAction SilentlyContinue }
+  # ---- A TRIAGE-CREATED ITEM IS BORN IN THE WEEKLY LANE (2026-09-10) ----
+  # MUST FIRE: a residual filed with -Lane weekly carries the lane triage-due.ps1 reads.
+  _T 'a -Lane weekly alert is born in the weekly lane' (Get-BirthLane 'weekly') 'weekly'
+  # MUST NOT FIRE: an ordinary alert, and one that names the default, carry no lane field at all.
+  _T 'an ordinary alert with no -Lane carries no lane' ([bool]($null -eq (Get-BirthLane ''))) 'True'
+  _T 'an alert passing -Lane daily carries no lane' ([bool]($null -eq (Get-BirthLane 'daily'))) 'True'
+  # CLEAN TWIN: the escalation park beside it still parks.
+  _T 'CLEAN TWIN an escalation is still born needs-brad beside the lane stamp' (Get-BirthDisposition '2026-09-07-4f672e').status 'needs-brad'
   Write-Output ""
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (queue routing + body-thin + emitter path + mute switch)'
+  Write-Output 'SELF-TEST PASS (queue routing + body-thin + emitter path + mute switch + birth lane)'
   exit 0
 }
 
@@ -367,6 +389,9 @@ try {
         $emitterRel = ConvertTo-RepoRelative $emSrc (Split-Path -Parent $root)
       } catch { $emitterRel = '' }
       if ($emitterRel) { $newItem | Add-Member -NotePropertyName emitter -NotePropertyValue $emitterRel }
+      # -Lane weekly (a triage-created residual or finding): stamped on NEW items only, like the emitter.
+      $birthLane = Get-BirthLane $Lane
+      if ($birthLane) { $newItem | Add-Member -NotePropertyName lane -NotePropertyValue $birthLane }
       # an alert nobody can classify from its own body is a bug in the ALERT - say so on the record
       if ($thin) {
         $newItem | Add-Member -NotePropertyName body_thin -NotePropertyValue $true

@@ -233,6 +233,9 @@ __pycache__/
 # local ops-alert triage queue + its drain state: machine-local by design (the cloud runner's copy would be
 # ephemeral anyway, and tracking it would rebase-conflict every day). Cloud failures reach Brad via /ops-alert.
 /grocery/triage-queue.json
+# the weekly triage lane's last-WORKED stamp (2026-09-10): read by triage-due.ps1 beside the queue it gates,
+# machine-local for the same reason as the queue.
+/grocery/triage-weekly-lane-stamp.txt
 # the graph's learning + escalation queues: same class as triage-queue.json above. Producer (the daily
 # pipeline / resolver) and consumer (the learning loop, the Claude review agent) are on the SAME PC, so
 # these never cross the git-bus, and their bodies carry raw store product text. Durable learning records

@@ -3,6 +3,8 @@
   Prints IDLE (nothing open) or DUE with a compact list of open queue items. The agent runs hourly while
   the Claude app is open precisely so that a queue written while the app was CLOSED gets drained on the
   first tick after Brad opens it - the guard is what makes that cheap.
+  Since 2026-09-10 open items sit in two lanes: an item with lane 'weekly' (send-alert.ps1 -Lane weekly,
+  used for triage-created residuals) is always listed but makes the run DUE only when the weekly lane is.
   -SelfTest runs the RE-MEASURE FIRST fixtures against a temp git repo and exits, touching no live file.
 #>
 # [CmdletBinding()] so -SelfTest cannot fall into $args and run the LIVE report instead ([[arg-silently-ignored]]).
@@ -64,6 +66,55 @@ function Get-RemeasureLines {
   return $lines
 }
 
+# ---- TWO LANES (2026-09-10, Brad, after a 1.35M-token triage day) -----------------------------------------
+# FOUNDING CASE: 4 of that day's 11 open items were "Triage residual" items minted by the PREVIOUS day's
+# triage, and the run minted 6 more, so every morning paid the reviewer-plus-developer price to re-work the
+# last morning's leftovers and the queue fed itself. A leftover a triage run writes down is design work about
+# a class, not a live condition: when the condition IS live it re-pages through its own emitter (test-auditors,
+# the capture watchdog, guards) and lands in the daily lane anyway. So an item born with lane 'weekly'
+# (send-alert.ps1 -Lane weekly) is always LISTED, never hidden, and makes the run DUE only when its lane is:
+# the lane stamp is 7 or more days old, missing or unreadable, or any weekly item has waited 21 days.
+# The orchestrator writes the stamp only after a weekly-lane run passes its closing gate, so it records a lane
+# that was WORKED, never one that was merely tried (the test-guards stamp lesson, queue 2026-09-10-267ba6).
+# 7 and 21 are the first plausible numbers, not the survivors of a sweep. Revisit them from
+# triage-plans\cost-ledger.jsonl once four weekly runs exist.
+$script:WeeklyEveryDays = 7
+$script:WeeklyOverdueDays = 21
+function Get-LaneSplit {
+  <# .SYNOPSIS Split open items into the daily and weekly lanes and decide whether the weekly lane is due. Pure. #>
+  param($Items, $StampTime, [datetime]$Now)
+  $daily = New-Object System.Collections.Generic.List[object]
+  $weekly = New-Object System.Collections.Generic.List[object]
+  $overdue = New-Object System.Collections.Generic.List[object]
+  foreach ($i in @($Items)) {
+    if (-not $i) { continue }
+    $lane = ''
+    if ($i.PSObject.Properties['lane']) { $lane = ([string]$i.lane).Trim() }
+    if ($lane -ne 'weekly') { [void]$daily.Add($i); continue }   # no lane field = every item written before 2026-09-10
+    [void]$weekly.Add($i)
+    $its = $null
+    try { $its = [datetime]([string]$i.ts) } catch { $its = $null }
+    if ($null -ne $its -and ($Now - $its).TotalDays -ge $script:WeeklyOverdueDays) { [void]$overdue.Add($i) }
+  }
+  $stampOld = ($null -eq $StampTime) -or (($Now - [datetime]$StampTime).TotalDays -ge $script:WeeklyEveryDays)
+  $nextDue = if ($null -eq $StampTime) { $Now } else { ([datetime]$StampTime).AddDays($script:WeeklyEveryDays) }
+  return [pscustomobject]@{
+    Daily = $daily.ToArray(); Weekly = $weekly.ToArray(); Overdue = $overdue.ToArray()
+    WeeklyDue = ($weekly.Count -gt 0 -and ($stampOld -or $overdue.Count -gt 0))
+    NextDue = $nextDue
+  }
+}
+function Read-LaneStamp {
+  <# .SYNOPSIS The weekly lane's last WORKED time, or $null when missing or unreadable. Both read as due. #>
+  param([string]$Path)
+  if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { return $null }
+  try {
+    $raw = ([string](Get-Content -LiteralPath $Path -Raw -ErrorAction Stop)).Trim()
+    if (-not $raw) { return $null }
+    return [datetime]::Parse($raw, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind)
+  } catch { return $null }
+}
+
 if ($SelfTest) {
   $fail = 0; $cases = 0
   function _T([string]$label, [bool]$cond, [string]$detail) {
@@ -120,6 +171,36 @@ if ($SelfTest) {
     $ErrorActionPreference = $prevEap
     Remove-Item $fx -Recurse -Force -ErrorAction SilentlyContinue
   }
+
+  # ---- TWO LANES (2026-09-10) -----------------------------------------------------------------------------
+  $now = [datetime]'2026-09-17T09:45:00'
+  $wk = [pscustomobject]@{ id = '2026-09-10-272117'; ts = '2026-09-10T12:56:56'; lane = 'weekly'; count = 1; subject = 'Triage residual: a day with no sign-in' }
+  $aged = [pscustomobject]@{ id = '2026-08-20-dddddd'; ts = '2026-08-20T09:00:00'; lane = 'weekly'; count = 1; subject = 'Triage residual: aged' }
+  $plain = [pscustomobject]@{ id = '2026-09-17-eeeeee'; ts = '2026-09-17T08:11:12'; count = 1; subject = 'Grocery: GUARDS FAILED' }
+  # MUST FIRE: the lane was last worked 7 days ago, so its items are today's work.
+  $s1 = Get-LaneSplit @($wk) ([datetime]'2026-09-10T09:00:00') $now   # 7 days 45 min before $now
+  _T 'MUST-FIRE a weekly item whose lane was last worked 7 days ago makes the weekly lane DUE' ($s1.WeeklyDue -eq $true) "WeeklyDue=$($s1.WeeklyDue)"
+  # MUST FIRE: a lane that has never been worked is due. A missing stamp is not a recent one.
+  $s2 = Get-LaneSplit @($wk) $null $now
+  _T 'MUST-FIRE a weekly item with NO lane stamp is DUE' ($s2.WeeklyDue -eq $true) "WeeklyDue=$($s2.WeeklyDue)"
+  # MUST FIRE: the floor. An item that has waited 21 days is due even the day after a lane run.
+  $s3 = Get-LaneSplit @($aged) ([datetime]'2026-09-16T10:00:00') $now
+  _T 'MUST-FIRE a weekly item open 21+ days is DUE even when the lane ran yesterday' ($s3.WeeklyDue -eq $true -and @($s3.Overdue).Count -eq 1) "WeeklyDue=$($s3.WeeklyDue) overdue=$(@($s3.Overdue).Count)"
+  # MUST NOT FIRE: lane worked 2 days ago, item fresh. Listed as weekly, not due, and NOT counted as daily work.
+  $s4 = Get-LaneSplit @($wk) ([datetime]'2026-09-15T10:00:00') $now
+  _T 'MUST-NOT-FIRE a fresh weekly item two days after a lane run is not due and not daily work' ($s4.WeeklyDue -eq $false -and @($s4.Daily).Count -eq 0 -and @($s4.Weekly).Count -eq 1) "due=$($s4.WeeklyDue) daily=$(@($s4.Daily).Count) weekly=$(@($s4.Weekly).Count)"
+  # CLEAN TWIN: every item written before this change has no lane field and is still daily work.
+  $s5 = Get-LaneSplit @($plain, $wk) ([datetime]'2026-09-15T10:00:00') $now
+  _T 'CLEAN TWIN an item with no lane field is still daily work beside a weekly one' (@($s5.Daily).Count -eq 1 -and [string]@($s5.Daily)[0].id -eq '2026-09-17-eeeeee') "daily=$(@($s5.Daily).Count)"
+  $stF = Join-Path $env:TEMP ('triagedue-stamp-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.txt')
+  try {
+    # MUST FIRE: an unreadable stamp reads as never worked, never as "just ran".
+    Set-Content -LiteralPath $stF -Value 'not a date' -Encoding ascii
+    _T 'MUST-FIRE an unreadable lane stamp reads as never worked' ($null -eq (Read-LaneStamp $stF)) 'a time was parsed'
+    # CLEAN TWIN: a real stamp round-trips to the time that was written.
+    Set-Content -LiteralPath $stF -Value '2026-09-15T10:00:00.0000000' -Encoding ascii
+    _T 'CLEAN TWIN a real lane stamp round-trips' ((Read-LaneStamp $stF) -eq [datetime]'2026-09-15T10:00:00') 'did not round-trip'
+  } finally { Remove-Item -LiteralPath $stF -Force -ErrorAction SilentlyContinue }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
   Write-Output "SELF-TEST PASS ($cases triage-due cases)"
@@ -167,13 +248,35 @@ if ($spools.Count -gt 0) {
   foreach ($s in $spools) { Write-Output ('  ' + $s.Name) }
 }
 $needsBrad = @($q.items | Where-Object { $_.status -eq 'needs-brad' })
-if ($open.Count -eq 0 -and $spools.Count -gt 0) { exit 0 }   # spool lines above already said DUE
-if ($open.Count -eq 0) {
+$laneStampFile = Join-Path $root 'triage-weekly-lane-stamp.txt'
+$laneStamp = Read-LaneStamp $laneStampFile
+$split = Get-LaneSplit $open $laneStamp (Get-Date)
+$daily = @($split.Daily)
+$weekly = @($split.Weekly)
+$overdueIds = @($split.Overdue | ForEach-Object { [string]$_.id })
+if ($daily.Count -eq 0 -and -not $split.WeeklyDue) {
+  if ($spools.Count -gt 0) { exit 0 }   # spool lines above already said DUE
   $nb = ''; if ($needsBrad.Count) { $nb = ' (' + $needsBrad.Count + ' item(s) parked needs-brad - do not re-triage, they are his)' }
-  Write-Output ('IDLE  triage queue clear' + $nb); exit 0
+  $wl = ''; if ($weekly.Count) { $wl = ' (' + $weekly.Count + ' weekly-lane item(s) wait for ' + $split.NextDue.ToString('yyyy-MM-dd') + ')' }
+  Write-Output ('IDLE  triage queue clear' + $wl + $nb); exit 0
 }
-Write-Output ("DUE  " + $open.Count + " open alert(s) to triage:")
-foreach ($i in $open) { Write-Output ('  [' + $i.id + '] x' + $i.count + '  ' + $i.subject) }
+if ($daily.Count) {
+  Write-Output ("DUE  " + $daily.Count + " open alert(s) to triage:")
+  foreach ($i in $daily) { Write-Output ('  [' + $i.id + '] x' + $i.count + '  ' + $i.subject) }
+}
+if ($weekly.Count) {
+  $lastTxt = if ($null -eq $laneStamp) { 'never' } else { $laneStamp.ToString('yyyy-MM-dd HH:mm') }
+  if ($split.WeeklyDue) {
+    $lead = if ($daily.Count) { 'WEEKLY LANE DUE' } else { 'DUE  WEEKLY LANE' }
+    Write-Output ($lead + '  ' + $weekly.Count + ' triage-created item(s), last lane run ' + $lastTxt + ' - worked after the daily lane, by the SKILL''s WEEKLY LANE step:')
+  } else {
+    Write-Output ('WEEKLY LANE  ' + $weekly.Count + ' item(s) wait for ' + $split.NextDue.ToString('yyyy-MM-dd') + ' (last lane run ' + $lastTxt + '). Listed for PULL-FORWARD only: work one today only when a daily alert above is its live symptom:')
+  }
+  foreach ($i in $weekly) {
+    $ov = if ($overdueIds -contains [string]$i.id) { '  OVERDUE (open 21+ days)' } else { '' }
+    Write-Output ('  [' + $i.id + '] x' + $i.count + '  ' + $i.subject + $ov)
+  }
+}
 # An item whose emitter was committed after the alert fired may be describing code that no longer exists.
 # Wrapped: this is provenance, and provenance must never cost a triage tick.
 try { foreach ($l in (Get-RemeasureLines $open (Split-Path -Parent $root))) { Write-Output $l } } catch { }
