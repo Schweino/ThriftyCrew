@@ -31,15 +31,20 @@ function Test-OmahaZip([string]$zip) { return ($zip -match '^68[01]\d\d$') }
 # Marshall, 1600 -> 61282 Silvis) and invalid ids return none. So the flyer follows the storeId the board speaks
 # for. Every Omaha id returned the SAME two flyers that day, so nothing on the board moved; what this removes is
 # the day Hy-Vee splits Omaha ads and a literal quietly pairs Omaha #01's ad with Omaha #02's shelf prices.
-# The Omaha gate below still accepts any 68xxx flyer zip, so it cannot tell two Omaha stores apart on its own;
-# asking for the right store's id is what does.
+# The Hy-Vee gate also requires the flyer's postal_code to equal the identity's flyer_postal_code (stores.json), so
+# another Omaha store's flyer is refused rather than passed by the any-68xxx Omaha check.
 . (Join-Path $PSScriptRoot 'hyvee-store-lib.ps1')
 function Resolve-HyVeeFlyerCollection([string]$Root) {
-  # @(collection, label, error). A registry that disagrees with the library blocks Hy-Vee, never the other stores.
+  # @(collection, label, error, flyer postal code). A registry that disagrees with the library blocks Hy-Vee, never the other stores.
   $drift = Test-HyVeeStoreDrift -Root $Root
-  if ($drift) { return @('', '', [string]$drift) }
+  if ($drift) { return @('', '', [string]$drift, '') }
   $s = Get-HyVeeStore -Root $Root
-  return @([string]$s.store_id, [string]$s.label, '')
+  return @([string]$s.store_id, [string]$s.label, '', [string]$s.flyer_postal_code)
+}
+function Test-HyVeeFlyerStore([string]$zip, [string]$expected) {
+  # The flyer must be THIS store's. An identity with no code refuses: an open gate is the defect this closes.
+  if (-not $expected) { return $false }
+  return [string]::Equals(([string]$zip).Trim(), $expected.Trim(), [StringComparison]::Ordinal)
 }
 $HVFLYER = Resolve-HyVeeFlyerCollection $PSScriptRoot
 $EXPECT.hyvee.collection = [string]$HVFLYER[0]
@@ -89,7 +94,7 @@ function Pull-HyVee {
     $list = Invoke-RestMethod -Uri "https://www.hy-vee.com/deals/api/digital-flyers/$($EXPECT.hyvee.collection)" -Headers $UA -TimeoutSec 30
     foreach ($f in $list) {
       $zip = [string]$f.postal_code
-      $okOmaha = (Test-OmahaZip $zip)
+      $okOmaha = (Test-OmahaZip $zip) -and (Test-HyVeeFlyerStore $zip ([string]$HVFLYER[3]))
       $okCurrent = (Test-Current $f.valid_from $f.valid_to)
       $deals = @()
       if ($okOmaha -and $okCurrent -and $f.storefront_payload_url) {
@@ -200,14 +205,22 @@ if ($SelfTest) {
   try {
     $utf8 = New-Object Text.UTF8Encoding($false)
     [IO.File]::WriteAllText((Join-Path $split 'stores.json'), '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":1465,"location_id":"adcb2ae1-f440-4512-bfe8-9624832c72a9","label":"Omaha #01"}}]}', $utf8)
-    [IO.File]::WriteAllText((Join-Path $agree 'stores.json'), '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":1466,"location_id":"09e8f4f0-e614-4b86-9285-c9c3dbff0d85","label":"Omaha #02"}}]}', $utf8)
+    [IO.File]::WriteAllText((Join-Path $agree 'stores.json'), '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":1466,"location_id":"09e8f4f0-e614-4b86-9285-c9c3dbff0d85","label":"Omaha #02","flyer_postal_code":"68137"}}]}', $utf8)
+    $postal = Join-Path $tmp 'postal'; New-Item -ItemType Directory -Force $postal | Out-Null
+    [IO.File]::WriteAllText((Join-Path $postal 'stores.json'), '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":1466,"location_id":"09e8f4f0-e614-4b86-9285-c9c3dbff0d85","label":"Omaha #02","flyer_postal_code":"68106"}}]}', $utf8)
     $r = Resolve-HyVeeFlyerCollection $split
     _T 'MUST FIRE  a registry that disagrees with hyvee-store-lib yields no collection and names the disagreement' (([string]$r[0] -eq '') -and ([string]$r[2] -match 'DISAGREES'))
     $r2 = Resolve-HyVeeFlyerCollection $agree
-    _T 'CLEAN TWIN  a registry that agrees resolves its store id (1466) and label with no error' (([string]$r2[0] -eq '1466') -and ([string]$r2[1] -eq 'Omaha #02') -and ([string]$r2[2] -eq ''))
+    _T 'CLEAN TWIN  a registry that agrees resolves its store id (1466), label and flyer postal code (68137) with no error' (([string]$r2[0] -eq '1466') -and ([string]$r2[1] -eq 'Omaha #02') -and ([string]$r2[2] -eq '') -and ([string]$r2[3] -eq '68137'))
+    $r3 = Resolve-HyVeeFlyerCollection $postal
+    _T 'MUST FIRE  a registry that disagrees on flyer_postal_code yields no collection and names the field' (([string]$r3[0] -eq '') -and ([string]$r3[2] -match 'flyer_postal_code'))
   } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
   _T "CLEAN TWIN  the Omaha gate still passes Omaha #02's flyer zip (68137)" (Test-OmahaZip '68137')
   _T 'MUST NOT FIRE  the Omaha gate refuses a flyer zip from another market (66061, Olathe KS)' (-not (Test-OmahaZip '66061'))
+  _T 'MUST FIRE  the Hy-Vee gate refuses a flyer from another Omaha store (68106) under Omaha #02 (68137)' (-not (Test-HyVeeFlyerStore '68106' '68137'))
+  _T 'CLEAN TWIN  the Hy-Vee gate passes the flyer from the store it asked for (68137)' (Test-HyVeeFlyerStore '68137' '68137')
+  _T 'MUST FIRE  with no expected postal code the Hy-Vee gate refuses rather than passing every Omaha flyer' (-not (Test-HyVeeFlyerStore '68137' ''))
+  _T 'MUST FIRE  the live identity carries a flyer postal code, so the Hy-Vee gate cannot run open' ([string]$HVFLYER[3] -match '^68\d{3}$')
   if ($fail -eq 0) { Write-Output "SELF-TEST PASS: $n case(s)"; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }
 }
 

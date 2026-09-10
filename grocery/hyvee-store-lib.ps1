@@ -41,7 +41,9 @@
   flyers (1464 Olathe KS, 1400 Marshall MN, 1600 Silvis IL) and invalid ids return none. So
   pull-grocery-ads now requests the flyer for Get-HyVeeStore's store_id. Every Omaha id returned the same
   two flyers that day, so the switch moved nothing on the board; it removes the day Omaha ads split by
-  store and a literal pairs Omaha #02 shelf prices with Omaha #01's weekly ad.
+  store and a literal pairs Omaha #02 shelf prices with Omaha #01's weekly ad. flyer_postal_code is the
+  postal_code each store's own collection reports (1466 -> 68137, 1465 -> 68106, 2026-09-10), and
+  pull-grocery-ads refuses a Hy-Vee flyer carrying any other, so another Omaha store's ad cannot pass as ours.
 
   Usage:
       . hyvee-store-lib.ps1
@@ -59,8 +61,9 @@ $script:HyVeeStoreFallback = [ordered]@{
   store_id    = 1466
   location_id = '09e8f4f0-e614-4b86-9285-c9c3dbff0d85'
   label       = 'Omaha #02'
+  flyer_postal_code = '68137'   # the postal_code this store's own digital-flyers collection reports, not an address
   # Kept so a future switch has the prior identity written down rather than reconstructed from git.
-  previous    = [ordered]@{ store_id = 1465; location_id = 'adcb2ae1-f440-4512-bfe8-9624832c72a9'; label = 'Omaha #01'; retired = '2026-08-21' }
+  previous    = [ordered]@{ store_id = 1465; location_id = 'adcb2ae1-f440-4512-bfe8-9624832c72a9'; label = 'Omaha #01'; flyer_postal_code = '68106'; retired = '2026-08-21' }
 }
 
 function Get-HyVeeStore {
@@ -82,6 +85,7 @@ function Get-HyVeeStore {
           store_id    = [int]$hv.store_identity.store_id
           location_id = [string]$hv.store_identity.location_id
           label       = [string]$hv.store_identity.label
+          flyer_postal_code = [string]$(if ($hv.store_identity.flyer_postal_code) { $hv.store_identity.flyer_postal_code } else { $script:HyVeeStoreFallback.flyer_postal_code })
         }
       }
     } catch { }
@@ -90,6 +94,7 @@ function Get-HyVeeStore {
     store_id    = [int]$script:HyVeeStoreFallback.store_id
     location_id = [string]$script:HyVeeStoreFallback.location_id
     label       = [string]$script:HyVeeStoreFallback.label
+    flyer_postal_code = [string]$script:HyVeeStoreFallback.flyer_postal_code
   }
 }
 
@@ -125,6 +130,10 @@ function Test-HyVeeStoreDrift {
   }
   if ([string]$hv.store_identity.location_id -ne [string]$script:HyVeeStoreFallback.location_id) {
     $bad += "location_id: registry says '$($hv.store_identity.location_id)', hyvee-store-lib says '$($script:HyVeeStoreFallback.location_id)'"
+  }
+  $regPostal = [string]$hv.store_identity.flyer_postal_code
+  if ($regPostal -and -not [string]::Equals($regPostal, [string]$script:HyVeeStoreFallback.flyer_postal_code, [StringComparison]::Ordinal)) {
+    $bad += "flyer_postal_code: registry says '$regPostal', hyvee-store-lib says '$($script:HyVeeStoreFallback.flyer_postal_code)'"
   }
   if (-not $bad.Count) { return $null }
   return ("Hy-Vee store identity DISAGREES between stores.json and hyvee-store-lib.ps1 - " + ($bad -join '; ') +
