@@ -55,6 +55,10 @@ $PRODUCERS = @(
     Cost = 'alert precision would keep being computed from a file nobody joins to anything. 14 alert types sat at "too few to state a precision" with no way to see the queue draining.'
   }
   [pscustomobject]@{
+    File = 'ops\brain-digest.ps1'; Kind = 'learning-stage-red'
+    Cost = 'a learning stage whose producer STOPPED would be a line in one morning mail and then gone. The bus is the only place "which stage keeps going red" can be counted later, and every threshold elsewhere is an upper bound that cannot fire on nothing happening.'
+  }
+  [pscustomobject]@{
     File = 'grocery\check-ad-cycles.ps1'; Kind = 'chain-complete'
     Cost = 'THE HEARTBEAT, and without it the floor below is not a floor. The other two producers fire only on TROUBLE - a red gate, a closed alert - so a healthy estate would write nothing and an empty bus could not be told apart from a dead one. This is the event that fires when things go right.'
   }

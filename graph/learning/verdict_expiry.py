@@ -244,6 +244,7 @@ def read_state(db_path, now, qdays):
         # DATE-granular: observed_at is stored as a bare date ('2026-08-20'), and a string comparison
         # against '2026-08-21T02:00:00' would drop that whole first day of the quarter.
         since = (now - _dt.timedelta(days=qdays)).date().isoformat()
+        newest = (con.execute("SELECT max(observed_at) FROM price_observations").fetchone() or [None])[0]
         captured = set()
         for r in con.execute("SELECT DISTINCT commodity_id, product_name FROM price_observations "
                              "WHERE observed_at >= ? AND match_status IN ('llm_rejected','llm_confirmed')",
@@ -251,12 +252,12 @@ def read_state(db_path, now, qdays):
             captured.add((r["commodity_id"], norm_text(r["product_name"] or "")))
     finally:
         con.close()
-    return rows, captured
+    return rows, captured, newest
 
 
 def run(db_path, now, emit, reask_file, fp_file):
     qdays = quarter_days()
-    rows, captured = read_state(db_path, now, qdays)
+    rows, captured, newest = read_state(db_path, now, qdays)
     gold_rows = []
     try:
         with open(GOLD, encoding="utf-8") as fh:
@@ -270,6 +271,11 @@ def run(db_path, now, emit, reask_file, fp_file):
     p["quarter_days"] = qdays
     p["cap"] = MAX_REASKS_PER_NIGHT
     p["last_night"] = landed(_load_json(reask_file), rows)
+    # WS 11: "still captured" is only as current as this. A graph whose newest observation is weeks old cannot
+    # tell a listing nobody sells from a listing nobody imported, and the report must say which it is judging.
+    p["observations_newest"] = newest
+    nd = _parse(newest) if newest else None
+    p["observations_newest_age_days"] = (now.date() - nd.date()).days if nd else None
     if emit:
         # Fingerprints first and the list LAST: a crash between them leaves no list, and no list is
         # "re-ask nothing", which is the safe reading of a failed stage.
@@ -300,6 +306,8 @@ def render(p, emitted):
         % (p["skipped_not_captured"], p["skipped_gold_unchanged"]),
         "  re-asked tonight            : %d of %d eligible, cap %d, %d deferred to later nights"
         % (len(p["reask"]), p["eligible"], p["cap"], p["deferred_by_cap"]),
+        "  graph observations newest   : %s (%s day(s) old) - 'still captured' is judged against these"
+        % (p.get("observations_newest") or "none", p.get("observations_newest_age_days")),
     ]
     ln = p.get("last_night")
     if ln is not None:

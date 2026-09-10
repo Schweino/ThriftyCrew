@@ -108,7 +108,7 @@ function Get-SleepNight {
 function Format-Digest {
   <# The page, as text. PURE - takes the gathered state, returns the string, so the
      fixtures can drive the wording without a filesystem or a mailer. #>
-  param($Night, $Queues, [string]$Weakest, $Events)
+  param($Night, $Queues, [string]$Weakest, $Events, [string[]]$Estate = @())
   $out = New-Object Collections.Generic.List[string]
   $out.Add("BRAIN DIGEST - $(Get-Date -Format 'yyyy-MM-dd HH:mm')")
   $out.Add('')
@@ -124,6 +124,11 @@ function Format-Digest {
   $out.Add("WEAKEST LINK")
   $out.Add("  $Weakest")
   $out.Add('')
+  # WS 11 (2026-09-10): the estate half of the loop, every stage with its floor, from ops\brain-report.ps1.
+  if (@($Estate).Count) {
+    foreach ($l in @($Estate)) { $out.Add("  $l") }
+    $out.Add('')
+  }
   $out.Add("WAITING FOR A RULING")
   $out.Add('  ' + ('{0,-26} {1,6} {2,9} {3,7}  {4}' -f 'queue', 'items', 'oldest', 'floor', 'state'))
   $over = 0
@@ -227,6 +232,11 @@ if ($SelfTest) {
   Case 'MUST FIRE' 'each event kind is counted on its own line' `
     (($evTxt -match 'gate-red\s+2') -and ($evTxt -match 'chain-complete\s+1')) $evTxt
 
+  # CLEAN TWIN (WS 11): the estate page renders in the digest under the weakest link.
+  $estTxt = Format-Digest -Night $night -Queues @() -Weakest 'x' -Events @() -Estate @('THE ESTATE HALF OF THE LOOP', 'perceive    RED    0 bus event(s)')
+  Case 'CLEAN TWIN' 'the estate half renders its stages in the digest' `
+    (($estTxt -match 'THE ESTATE HALF OF THE LOOP') -and ($estTxt -match 'perceive\s+RED')) $estTxt
+
   # CLEAN TWIN: the jsonl reader tells absent from fresh.
   $tmp = Join-Path $env:TEMP ("digest-selftest-{0}.jsonl" -f $PID)
   Remove-Item -LiteralPath $tmp -ErrorAction SilentlyContinue
@@ -263,7 +273,9 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   # of them being wrong the day the other changes.
   $weakest = 'UNKNOWN - recall-brain.py could not run, which is not "nothing is starving"'
   try {
-    $b = & $PY (Join-Path $SKILLS 'recall-brain.py') 2>$null
+    # --with-estate (WS 11): one weakest link across the personal store AND the estate, where a RED floor
+    # outranks a quiet stage. recall-brain.py owns that ranking; this reads its line.
+    $b = & $PY (Join-Path $SKILLS 'recall-brain.py') --with-estate 2>$null
     $line = @($b | Where-Object { "$_" -match '^WEAKEST LINK' })
     if ($line.Count) { $weakest = ("$($line[0])" -replace '^WEAKEST LINK:\s*', '') }
   } catch { }
@@ -365,11 +377,33 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
       @{ Count = [int]$rj.stopped_looking; AgeDays = 0 }
     }
 
+  # THE ESTATE HALF (WS 11). ops\brain-report.ps1 reads and never writes, so a RED floor becomes an event HERE,
+  # in the scheduled -Alert run, and only here - a digest run by hand reports and writes nothing.
+  $estatePage = @()
+  $estateRed = @()
+  try {
+    $erOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo 'ops\brain-report.ps1') -Json
+    $erLines = @($erOut)
+    $cut = -1
+    for ($i = 0; $i -lt $erLines.Count; $i++) { if ("$($erLines[$i])" -like 'SCOPE OF A CLEAN REPORT*') { $cut = $i; break } }
+    if ($cut -gt 0) { $estatePage = @($erLines[0..($cut - 1)] | Where-Object { "$_".Trim() }) }
+    $ej = @($erLines | Where-Object { "$_" -like 'brain-report-json: *' })
+    if ($ej.Count) {
+      $ed = ("$($ej[$ej.Count - 1])".Substring('brain-report-json: '.Length)) | ConvertFrom-Json
+      $estateRed = @(@($ed.stages) | Where-Object { $_.floor -eq 'RED' })
+    }
+  } catch { $estatePage = @('ESTATE HALF UNKNOWN - ops\brain-report.ps1 could not run, which is not an estate with nothing wrong') }
+  if ($Alert) {
+    foreach ($rs in $estateRed) {
+      $null = Write-TcEvent -Kind 'learning-stage-red' -Producer 'ops\brain-digest.ps1' -Data @{ stage = [string]$rs.stage; why = [string]$rs.why }
+    }
+  }
+
   $since = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds() - 86400
   $evRaw = Read-TcEvents -SinceEpoch $since
   $events = @($evRaw)
 
-  $text = Format-Digest -Night $night -Queues $queues -Weakest $weakest -Events $events
+  $text = Format-Digest -Night $night -Queues $queues -Weakest $weakest -Events $events -Estate $estatePage
   if (-not $Quiet) { $text }
 
   if ($Alert) {

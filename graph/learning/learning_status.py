@@ -84,7 +84,14 @@ def status(root=None, now=None):
         out["proposals_oldest_days"] = max(ages) if ages else None
         out["proposals_held_for_human"] = sum(1 for p in props if isinstance(p, dict)
                                              and p.get("status") == "held_for_human")
+        # WS 11: FLOW, not backlog. A queue that is not draining and a producer that has STOPPED both show
+        # a large pending count; only the age of the NEWEST proposal tells them apart.
+        made = [a for a in (_age(p.get("created_at"), now) for p in props if isinstance(p, dict)) if a is not None]
+        out["proposals_newest_days"] = min(made) if made else None
+        out["proposals_new_7d"] = sum(1 for a in made if a <= 7)
     else:
+        out["proposals_newest_days"] = None
+        out["proposals_new_7d"] = None
         for k in ("proposals_total", "proposals_pending", "proposals_oldest_days",
                   "proposals_held_for_human"):
             out[k] = None
@@ -115,9 +122,10 @@ def status(root=None, now=None):
         out["patches_unapplied"] = len(patches) - len(applied)
         out["patches_last_applied_at"] = max(applied) if applied else None
         out["patches_last_applied_age_days"] = _age(max(applied), now) if applied else None
+        out["patches_applied_30d"] = sum(1 for a in applied if (_age(a, now) is not None and _age(a, now) <= 30))
     else:
         out.update(patches_total=None, patches_unapplied=None, patches_last_applied_at=None,
-                   patches_last_applied_age_days=None)
+                   patches_last_applied_age_days=None, patches_applied_30d=None)
         unknown.append("learning/approved-patches.json")
 
     holds, ok = _load(os.path.join(graph, "learning", "promotion-holds.json"))
@@ -134,15 +142,18 @@ def status(root=None, now=None):
             from promote_aliases import clear_proposals, consecutive_inert, load_rechecks
             hist = load_rechecks(os.path.join(graph, "learning", "hold-rechecks.jsonl"))
             out["holds_recheck_days"] = len({r.get("date") for r in hist})
+            rages = [a for a in (_age(r.get("date"), now) for r in hist) if a is not None]
+            out["holds_recheck_newest_days"] = min(rages) if rages else None
             out["holds_clear_proposed"] = len(clear_proposals(hs, hist))
             out["holds_longest_inert_streak"] = max(
                 [consecutive_inert(hist, h.get("commodity"), h.get("pattern"))[0] for h in hs] or [0])
         except Exception:                                    # noqa: BLE001
-            out.update(holds_recheck_days=None, holds_clear_proposed=None, holds_longest_inert_streak=None)
+            out.update(holds_recheck_days=None, holds_clear_proposed=None, holds_longest_inert_streak=None,
+                       holds_recheck_newest_days=None)
             unknown.append("learning/hold-rechecks.jsonl")
     else:
         out.update(holds=None, holds_oldest_days=None, holds_recheck_days=None,
-                   holds_clear_proposed=None, holds_longest_inert_streak=None)
+                   holds_clear_proposed=None, holds_longest_inert_streak=None, holds_recheck_newest_days=None)
         unknown.append("learning/promotion-holds.json")
 
     runs, ok = _load(os.path.join(graph, "eval", "eval-runs.json"))
@@ -151,6 +162,8 @@ def status(root=None, now=None):
         out["eval_runs"] = len(runs)
         out["eval_last_run_at"] = last or None
         out["eval_age_days"] = _age(last, now)
+        out["eval_runs_7d"] = sum(1 for r in runs if isinstance(r, dict)
+                                  and _age(r.get("run_at"), now) is not None and _age(r.get("run_at"), now) <= 7)
         # STALE AGAINST ITS INPUTS, not merely old. graph/README.md says re-score the gold set after
         # any prompt, model or resolver change; an old run with unchanged inputs is fine, and a
         # recent run that predates a gold edit is not. So the newest input mtime is the comparison.
@@ -173,7 +186,7 @@ def status(root=None, now=None):
             out["eval_inputs_newest_at"] = None
             out["eval_days_stale_vs_inputs"] = None
     else:
-        out.update(eval_runs=None, eval_last_run_at=None, eval_age_days=None,
+        out.update(eval_runs=None, eval_last_run_at=None, eval_age_days=None, eval_runs_7d=None,
                    eval_inputs_newest_at=None, eval_days_stale_vs_inputs=None)
         unknown.append("eval/eval-runs.json")
 
@@ -252,7 +265,7 @@ def selftest():
             {"held": "2026-09-09"}]})
         with open(os.path.join(tmp, "learning", "hold-rechecks.jsonl"), "w", encoding="utf-8") as fh:
             for d in range(1, 31):
-                fh.write(json.dumps({"date": "2026-09-%02d" % d, "board": "b", "commodity": "a",
+                fh.write(json.dumps({"date": "2026-08-%02d" % d, "board": "b", "commodity": "a",
                                      "pattern": "p", "hits": 0, "inert": True}) + "\n")
         w("eval/eval-runs.json", [{"run_at": "2026-08-21T01:04:51"}])
         with open(os.path.join(tmp, "gold", "gold.jsonl"), "w", encoding="utf-8") as fh:
@@ -272,6 +285,15 @@ def selftest():
         case("MUST FIRE", "the scoreboard is stale against a gold edit that postdates it",
              s["eval_days_stale_vs_inputs"] == 11.0, s["eval_days_stale_vs_inputs"])
         case("MUST FIRE", "the oldest hold is found", s["holds_oldest_days"] == 20.5, s["holds_oldest_days"])
+        # 3.0, derived by hand: the newest proposal is 2026-09-07T12:00:00 and now is 2026-09-10T12:00:00.
+        # The first draft of this case said 2.5, which was my subtraction, not the code.
+        case("MUST FIRE", "FLOW is counted beside backlog: one proposal in 7 days, the newest 3.0 days old",
+             s["proposals_new_7d"] == 1 and s["proposals_newest_days"] == 3.0,
+             {k: s.get(k) for k in ("proposals_new_7d", "proposals_newest_days")})
+        case("MUST FIRE", "a patch applied inside 30 days counts, and no eval ran inside 7",
+             s["patches_applied_30d"] == 1 and s["eval_runs_7d"] == 0, s)
+        case("CLEAN TWIN", "the newest hold recheck is aged, so a stopped recorder can be seen",
+             s["holds_recheck_newest_days"] == 11.5, s.get("holds_recheck_newest_days"))
         case("MUST FIRE", "a board hold inert for 30 recorded rechecks counts as one clear proposal",
              s["holds_clear_proposed"] == 1 and s["holds_longest_inert_streak"] == 30
              and s["holds_recheck_days"] == 30, s)

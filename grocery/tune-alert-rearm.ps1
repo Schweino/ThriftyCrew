@@ -218,6 +218,13 @@ foreach ($r in $prec) {
     }
   }
 }
+# WS 11: the FLOW the brain report floors on. A queue nobody closes produces no precision at all.
+$closes7 = 0
+foreach ($it in $items) {
+  if (-not ($it.PSObject.Properties['disposition'] -and $it.disposition)) { continue }
+  try { if (($now - [datetime]([string]$it.resolved_ts)).TotalDays -le 7) { $closes7++ } } catch { }
+}
+$atBar = @($prec | Where-Object { $_.Judged -ge $script:LOW_MIN_CASES }).Count
 $moves30 = 0
 foreach ($k in $doc.types.Keys) {
   foreach ($m in @($doc.types[$k].moves)) {
@@ -226,6 +233,7 @@ foreach ($k in $doc.types.Keys) {
 }
 Write-Output ''
 Write-Output ("  {0} type(s) with dispositions: {1} moved, {2} refused by the rate limit, {3} stale; {4} move(s) on record in 30 days" -f $prec.Count, $moved, $refused, $stale, $moves30)
+Write-Output ("  {0} judged close(s) in the last 7 days; {1} type(s) at the {2}-case bar" -f $closes7, $atBar, $script:LOW_MIN_CASES)
 
 $absent = -not (Test-Path -LiteralPath $TuningFile)
 if (-not $DryRun -and ($changed -or $absent)) {
@@ -237,12 +245,13 @@ if (-not $DryRun -and ($changed -or $absent)) {
     note = 'Written by grocery\tune-alert-rearm.ps1 (WS 10b). Per alert type: the re-arm window moved by live precision - doubled under 40% at 5 judged, halved over 80% at 10, clamped 7..56, one move per 14 days. check-ad-cycles.ps1 reads the price-flag row only; a missing or out-of-range row means 14. Edit by hand only to reverse a move, and say so in the move list.'
     types = $types
   }
-  [IO.File]::WriteAllText($TuningFile, ($out | ConvertTo-Json -Depth 6) + "`n", (New-Object Text.UTF8Encoding($false)))
+  # LF, not ConvertTo-Json's CRLF: main is LF, and a CRLF rewrite reads as a change to every line.
+  [IO.File]::WriteAllText($TuningFile, ((($out | ConvertTo-Json -Depth 6) -replace "`r`n", "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
   Write-Output ("  written: {0}" -f $TuningFile)
 } elseif ($DryRun) { Write-Output '  -DryRun: nothing written' }
 
 if ($Json) {
-  'alert-tuning-json: ' + (([ordered]@{ known = $true; types = $prec.Count; moved = $moved; refused = $refused; stale = $stale; moves_30d = $moves30 }) | ConvertTo-Json -Compress)
+  'alert-tuning-json: ' + (([ordered]@{ known = $true; types = $prec.Count; moved = $moved; refused = $refused; stale = $stale; moves_30d = $moves30; closes_7d = $closes7; types_at_bar = $atBar }) | ConvertTo-Json -Compress)
 }
 Write-Output 'SCOPE OF A CLEAN REPORT: whether each alert has been RIGHT, never whether it is useful. A refusal is printed, not hidden.'
 Exit-Guard -Name 'ALERT-TUNING' -Code 0 -Summary ("types={0} moved={1} refused={2} stale={3}" -f $prec.Count, $moved, $refused, $stale)

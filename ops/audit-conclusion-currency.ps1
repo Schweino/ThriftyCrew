@@ -33,7 +33,7 @@
   EXIT: 0 held or tightened, 2 the count rose, 3 could not evaluate (no documents, or no git).
 #>
 [CmdletBinding()]
-param([switch]$SelfTest, [switch]$Json, [switch]$Accept)
+param([switch]$SelfTest, [switch]$Json, [switch]$Accept, [switch]$ReportOnly)
 
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
@@ -228,10 +228,15 @@ if (Test-Path $blF) { try { $base = [int]([IO.File]::ReadAllText($blF) | Convert
 function Write-CcBaseline([int]$Count) {
   $o = [ordered]@{ unqualified = $Count; examined = $docs.Count; recorded = (Get-Date).ToString('yyyy-MM-dd')
                    note = 'High-water mark for the conclusion-currency ratchet (WS 7d, 2026-09-10). May only go DOWN; a re-read lowers it.' }
-  [IO.File]::WriteAllText($blF, ($o | ConvertTo-Json) + "`n", (New-Object Text.UTF8Encoding($false)))
+  [IO.File]::WriteAllText($blF, ((($o | ConvertTo-Json) -replace "`r`n", "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
 }
 if ($Json) {
   'conclusion-currency-json: ' + (([ordered]@{ known = $true; docs = $docs.Count; unqualified = $unq; current = $cur; not_qualifiable = $nq }) | ConvertTo-Json -Compress)
+}
+if ($ReportOnly) {
+  # ops\brain-report.ps1 reads and never writes. The ratchet's verdict is run-gates' to give, and a report that
+  # could tighten a baseline as a side effect of being read would be a writer by accident.
+  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq report-only=1"
 }
 if ($Accept -or $null -eq $base) {
   Write-CcBaseline $unq
