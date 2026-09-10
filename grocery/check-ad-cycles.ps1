@@ -2232,6 +2232,21 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Board prices aging inside a fresh file" -Body ("audit-row-age.ps1 found rows aging past the window, or a store that stopped stamping as_of. The FILE dates look fine either way, which is why guard 9 stays quiet. These prices are what 542 live recipe pages quote.`n`n" + ($raBad -join "`n")) | Out-Null } catch {} }
         } else { Log ('row-age: no findings (' + (@($ra | Where-Object { $_ -match 'rows' }).Count) + ' store(s) profiled)') }
       } catch { Log ('audit-row-age threw: ' + $_.Exception.Message) }
+      # ---- THE ZERO-ALERT-DAYS SCOREBOARD (2026-09-10, plan Phase 0) -------------------------------------------
+      # A measurement, never an alert: its numbers go to the log every day, and only a census that could not
+      # read the queue reaches the summary, because a blind scoreboard would report quiet days that never happened.
+      try {
+        $acR   = Get-FanoutRecord 'alert-census' $fanRecs
+        $acRc  = $acR.ExitCode
+        $acOut = @($acR.Output)
+        foreach ($acL in @($acOut | Where-Object { $_ -match '^\s*(QUIET DAYS|ALERTS|TARGET|RETURNS)\s' })) { Log ('alert-census: ' + ([string]$acL).Trim()) }
+        if ($acRc -ne 0) {
+          $acLine = [string](@($acOut | Where-Object { $_ -match '^alert-census: BLIND' }) | Select-Object -Last 1)
+          if (-not $acLine) { $acLine = 'no verdict line (the lane did not finish)' }
+          Log ('alert-census rc=' + $acRc + ': ' + $acLine)
+          $summary += "REVIEW    alert-census exit $acRc - the scoreboard could not read the triage queue, so today's quiet-day count is unknown (grocery\audit-alert-census.ps1): $acLine"
+        }
+      } catch { Log ('alert-census threw: ' + $_.Exception.Message) }
       # ---- THE ALERT REGISTRY IS COMPLETE (2026-09-10, Brad ruling 1) --------------------------------------------
       # No mail from here, deliberately: a type with no entry already paged on its own as UNREGISTERED ALERT TYPE
       # when it fired, so this is the daily record of the gap, carried in the summary until someone registers it.
