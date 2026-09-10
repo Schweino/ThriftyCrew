@@ -1113,11 +1113,29 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         # So stop inferring it. One elapsed number, on the line that already reports the outcome, and
         # the next person asking "is the publish slow?" reads an answer instead of subtracting
         # timestamps and getting a different question's answer.
+        # AND ITS OWN STOPWATCH WAS BEING THROWN AWAY (2026-09-09). The line below used to end in
+        # `| Out-Null`. That stdout is the per-stage timing table publish-deals-page has printed since
+        # 2026-08-23, built with Invoke-Timed for exactly this question and closing with "tomorrow's
+        # run answers the question for the two publishers that cannot be timed by hand". It has been
+        # answering into a null sink every day since. The elapsed line below says HOW LONG; the table
+        # says WHERE, and without it the only way to ask again is to subtract log timestamps - the
+        # method whose answer the comment above already had to correct once.
+        #
+        # ASSIGN, THEN WRAP. `@(& powershell ...)` inline is the shape this estate has a memory about;
+        # the capture and the @() are separate statements so a single output line cannot collapse.
+        # NO `2>&1`: merging a native child's stderr under EAP='Stop' fakes a failure at exit 0, and
+        # stderr is not what is wanted here anyway.
         $pubSw = [Diagnostics.Stopwatch]::StartNew()
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1') | Out-Null
+        $pubOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')
         $pubrc = $LASTEXITCODE
+        $pubOut = @($pubOut)
         $pubSw.Stop(); $pubSecs = [int]$pubSw.Elapsed.TotalSeconds
         Log ("publish-deals-page: {0} s (rc={1}) - 3 Ghost calls, 30 s timeout each, no retries" -f $pubSecs, $pubrc)
+        # The table, or a loud note that there was not one - a stopwatch that printed nothing is the
+        # same class of silence this whole block exists to end.
+        $pubStages = @($pubOut | Where-Object { $_ -match 'publish-deals-page timings' -or $_ -match '^\s{4}\S.*\ss$' })
+        if ($pubStages.Count) { $pubStages | ForEach-Object { Log ('publish-stage: ' + ([string]$_).Trim()) } }
+        else { Log 'publish-stage: publish-deals-page printed NO timing table - it ran, but where its time went is unrecorded' }
         if ($pubrc -eq 0)     { Set-Content -Path $sigFile -Value $sigAfter -Encoding ASCII; Log ('AUTO-PUBLISH: live page updated (price change' + $(if (@($flips).Count -gt 0) { '/new ad' } else { ' mid-cycle' }) + ')'); $summary += 'PUBLISHED live page updated (price change detected)' }
         elseif ($pubrc -eq 2) {
           Log 'AUTO-PUBLISH HELD: coverage gate failed - live page NOT updated'
