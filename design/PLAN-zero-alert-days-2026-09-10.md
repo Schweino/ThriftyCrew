@@ -240,6 +240,24 @@ will say which part of it.
     correctly on the live board.
 11. **Phase 3, review intake as a packet,** after the registry exists. Bar as in section 4.
 
+### Brad's second set of rulings, 2026-09-10 evening
+
+| # | Question | Ruling |
+|---|---|---|
+| R11 | Aldi and Fareway JSON | **Trial reading the page's own JSON inside today's sweep.** Assert the Omaha In-Store shop on every read |
+| R12 | Walmart probe | **One headed load after a successful 08:00 run**, in Brad's own Chrome |
+| R13 | New price flags | Review list |
+| R14 | Paywall leak (paid recipe served free) | **Review list** (Brad's choice over the recommendation to email) |
+| R15 | Family Fare catalog degrading | Review list until Phase 2 recalibrates it |
+| R16 | A memory-store finding that could put private notes in the public repo | **Email** |
+| R17 | Pace | Continue in build order, report after each step |
+| R18 | Brad's note | **Walmart and Sam's capture must use Brad's own Chrome tabs, never new windows**, to help with bot walls, and that must be enforced in the code, not left to habit |
+
+Build order after step 4: **5** test-auditors before a guard-touching push; **6** returns are failures; **R18**
+own-tabs enforcement for Walmart and Sam's; **R11** the in-page JSON trial for Aldi and Fareway; **3b** the Family
+Fare catalog-walk trial; then 7 to 11 as listed above. R12 is scheduled for the morning of 2026-09-11 and waits on
+that day's 08:00 run succeeding.
+
 ### Progress against the build order (updated 2026-09-10)
 
 - **Step 1, the scoreboard: DONE** (263006cea). It reproduces section 2 exactly and runs daily as a lane in

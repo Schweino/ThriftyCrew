@@ -3147,7 +3147,12 @@ try {
   else {
     Log ('memory-backup rc=' + $memRc)
     $summary += 'REVIEW    the agent memory store has a finding (history, index, encoding, or it has reached this PUBLIC repo)'
-    if (-not $NoAlert) { Send-Alert -Subject 'Ops: the agent memory store has a finding' -Body ("ops\audit-memory-backup.ps1 checks that memory is versioned locally, has NO git remote, is NOT tracked by this PUBLIC repo, is fully committed, that MEMORY.md agrees with the files on disk, and that nothing is mojibaked.`n`nA REMOTE or a tracked memory file is the serious one: this repo is public and memory carries cost, revenue and account notes. Neither is fixed by -Sync; remove it by hand.`n`n" + $mem) | Out-Null }
+    # BRAD RULING R16 (2026-09-10): memory that can leave this machine, or already has, EMAILS; the hygiene
+    # findings stay on the review list. audit-memory-backup tags those findings 'EXPOSURE: ' where it creates
+    # them, so this routes on the tag and never on the wording (its fix footer says PUBLIC on every failure).
+    $memExposed = ($mem -cmatch '(?m)^\s*EXPOSURE: ')
+    if ($memExposed -and -not $NoAlert) { Send-Alert -Subject 'Ops: private memory notes reached the public repo' -Body ("ops\audit-memory-backup.ps1 found memory that can leave this machine or already has: a git remote nobody reviewed, a reviewed remote that answers anonymously, or a memory file tracked by the PUBLIC ThriftyCrew repo. Memory carries cost, revenue and account notes. -Sync does not fix this; remove it by hand.`n`n" + $mem) | Out-Null }
+    if (-not $memExposed -and -not $NoAlert) { Send-Alert -Subject 'Ops: the agent memory store has a finding' -Body ("ops\audit-memory-backup.ps1 checks that memory is versioned locally, has NO git remote, is NOT tracked by this PUBLIC repo, is fully committed, that MEMORY.md agrees with the files on disk, and that nothing is mojibaked.`n`nA REMOTE or a tracked memory file is the serious one: this repo is public and memory carries cost, revenue and account notes. Neither is fixed by -Sync; remove it by hand.`n`n" + $mem) | Out-Null }
   }
 } catch { Log ('memory-backup threw: ' + $_.Exception.Message) }
 

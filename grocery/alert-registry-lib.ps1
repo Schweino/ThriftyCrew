@@ -22,7 +22,9 @@
 
 $script:AlertClasses = @('page', 'review', 'digest')
 $script:AlertMatchModes = @('exact', 'prefix', 'regex')
-$script:AlertPageConditions = @('1 board-or-feed-wrong-or-held', '2 watcher-cannot-see', '3 scheduled-work-did-not-run-or-land', '4 live-cell-moved-unexplained', 'escalation')
+# Brad's page contract (ruling 1), plus condition 5 by ruling R16 (2026-09-10): memory that can leave this machine.
+# The registry file's page_conditions says the same thing for a human; Get-AlertRegistryEntryProblems fails if they differ.
+$script:AlertPageConditions = @('1 board-or-feed-wrong-or-held', '2 watcher-cannot-see', '3 scheduled-work-did-not-run-or-land', '4 live-cell-moved-unexplained', '5 private-data-exposure', 'escalation')
 $script:AlertClassRank = @{ page = 3; review = 2; digest = 1 }
 $script:AlertUnregisteredMarker = 'UNREGISTERED ALERT TYPE: '
 
@@ -132,6 +134,17 @@ function Get-AlertRegistryEntryProblems {
      not compile, no condition or emitter, a page condition outside the five, a duplicate id. #>
   param($Registry)
   $p = New-Object System.Collections.Generic.List[string]
+  # THE CONTRACT IS WRITTEN TWICE, SO THE COPIES MUST AGREE (2026-09-10). The file's page_conditions is what a
+  # person reads and this lib's list is what gets enforced. Found the day ruling R16 added a condition to the
+  # file and this check refused it: a condition added to one copy and not the other now fails by name here.
+  if ($null -ne $Registry.page_conditions) {
+    $fileConds = @($Registry.page_conditions | Where-Object { $_ } | ForEach-Object { [string]$_ })
+    $onlyFile = @($fileConds | Where-Object { $script:AlertPageConditions -notcontains $_ })
+    $onlyLib = @($script:AlertPageConditions | Where-Object { $fileConds -notcontains $_ })
+    if ($onlyFile.Count -gt 0 -or $onlyLib.Count -gt 0) {
+      [void]$p.Add('page_conditions: the registry file and alert-registry-lib.ps1 disagree (only in the file: ' + ($onlyFile -join ', ') + '; only in the lib: ' + ($onlyLib -join ', ') + ')')
+    }
+  }
   $seen = @{}
   $i = 0
   foreach ($e in @($Registry.entries)) {
@@ -145,7 +158,7 @@ function Get-AlertRegistryEntryProblems {
     if (-not [string]$e.key) { [void]$p.Add($tag + ': no key') }
     elseif ([string]$e.match -eq 'regex') { try { $null = [regex]::new([string]$e.key) } catch { [void]$p.Add($tag + ': the regex does not compile') } }
     if (-not [string]$e.condition) { [void]$p.Add($tag + ': no condition') }
-    elseif ([string]$e.class -eq 'page' -and $script:AlertPageConditions -notcontains [string]$e.condition) { [void]$p.Add($tag + ": page condition '" + [string]$e.condition + "' is not one of the five") }
+    elseif ([string]$e.class -eq 'page' -and $script:AlertPageConditions -notcontains [string]$e.condition) { [void]$p.Add($tag + ": page condition '" + [string]$e.condition + "' is not one of the page conditions") }
     if (-not [string]$e.emitter) { [void]$p.Add($tag + ': no emitter') }
   }
   return ,$p

@@ -346,6 +346,16 @@ param([string]$Title = '')
   _T 'MUST FIRE an entry with a class outside page, review, digest is INVALID' ($v10.findings.Count -ge 1 -and $v10.findings[0] -match 'INVALID ENTRY') ($v10.findings -join ' | ')
   _T 'and that entry resolves to page' ((Resolve-AlertClass $fxBad 'x y').class -eq 'page') 'not page'
 
+  # THE TWO COPIES OF THE PAGE CONTRACT (2026-09-10, ruling R16).
+  $fxDrift = [pscustomobject]@{ page_conditions = @('1 board-or-feed-wrong-or-held', 'escalation'); entries = @() }
+  $dpRaw = Get-AlertRegistryEntryProblems $fxDrift   # assign, then wrap: a comma-returned list inside @() counts as one element
+  $dp = @($dpRaw)
+  _T 'MUST FIRE a registry file whose page_conditions differ from the lib is reported by name' (@($dp | Where-Object { $_ -match 'page_conditions: .*disagree' }).Count -eq 1) ($dp -join ' | ')
+  $fxAgree = [pscustomobject]@{ page_conditions = @($script:AlertPageConditions); entries = @([pscustomobject]@{ id = 'mem'; match = 'exact'; key = 'ops private memory notes reached the public repo'; class = 'page'; condition = '5 private-data-exposure'; emitter = 'grocery/check-ad-cycles.ps1' }) }
+  $apRaw = Get-AlertRegistryEntryProblems $fxAgree
+  $ap = @($apRaw)
+  _T 'CLEAN TWIN a page entry under condition 5 with agreeing lists is valid' ($ap.Count -eq 0) ($ap -join ' | ')
+
   # MUST FIRE: a registry that is not there is not a registry; the check is blind and the mailer pages everything.
   $st = Read-AlertRegistry (Join-Path $env:TEMP ('no-such-alert-registry-' + [guid]::NewGuid().ToString('N') + '.json'))
   _T 'MUST FIRE a missing registry reads as not ok, and resolves every type to page' ((-not $st.ok) -and (Resolve-AlertClass $st.registry 'grocery matching soundness review needed').class -eq 'page' -and -not (Resolve-AlertClass $st.registry 'x').registry_ok) $st.why

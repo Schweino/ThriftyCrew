@@ -273,13 +273,16 @@ function Test-MemoryStore {
   }
   foreach ($u in @($seenUrls.Keys)) {
     $entry = Get-AllowedRemote -Url $u
+    # 'EXPOSURE: ' TAGS A FINDING WHERE IT IS BORN (Brad ruling R16, 2026-09-10): memory that can leave this
+    # machine, or already has, emails; the hygiene findings do not. check-ad-cycles routes on this tag rather
+    # than re-matching the wording, so the rule and the text it keys on cannot drift apart.
     if (-not $entry) {
-      $issues.Add('the memory store has an UNREVIEWED git REMOTE configured, so it can be pushed off this machine: ' + $u + ' - memory carries cost, revenue and account notes. Remove it, or add it to ops\memory-remote-allowlist.json with evidence that it is private.')
+      $issues.Add('EXPOSURE: the memory store has an UNREVIEWED git REMOTE configured, so it can be pushed off this machine: ' + $u + ' - memory carries cost, revenue and account notes. Remove it, or add it to ops\memory-remote-allowlist.json with evidence that it is private.')
       continue
     }
     $vis = Test-RemoteIsPrivate -Url $u
     if ($vis.State -eq 'public') {
-      $issues.Add('the memory store pushes to ' + $u + ', which is REVIEWED but is answering anonymously (' + $vis.Detail + '). It is PUBLIC. Memory carries cost, revenue and account notes - remove the remote or make the repository private now.')
+      $issues.Add('EXPOSURE: the memory store pushes to ' + $u + ', which is REVIEWED but is answering anonymously (' + $vis.Detail + '). It is PUBLIC. Memory carries cost, revenue and account notes - remove the remote or make the repository private now.')
     } elseif ($vis.State -eq 'unverified') {
       $blind.Add('the memory store pushes to the reviewed remote ' + $u + ' and its visibility COULD NOT BE PROVEN this run (' + $vis.Detail + '). That is not a pass: nothing here has shown the backup is still private.')
     } else {
@@ -292,7 +295,7 @@ function Test-MemoryStore {
   if (Test-Path (Join-Path $REPO '.git')) {
     $tracked = Get-GitOut $REPO 'ls-files'
     $leak = @(($tracked.Text -split "`r?`n") | Where-Object { $_ -match 'projects/C--Codex/memory/' })
-    if ($leak.Count) { $issues.Add(("$($leak.Count) memory file(s) are TRACKED BY THE PUBLIC ThriftyCrew REPO, e.g. " + ($leak[0]))) }
+    if ($leak.Count) { $issues.Add(("EXPOSURE: $($leak.Count) memory file(s) are TRACKED BY THE PUBLIC ThriftyCrew REPO, e.g. " + ($leak[0]))) }
   }
 
   # 4. HISTORY CURRENT
@@ -448,6 +451,9 @@ if ($SelfTest) {
   NewStore; $null = Get-GitOut $fx 'remote add origin https://github.com/someone/public.git'
   $r = Test-MemoryStore $fx
   T 'MUST-FIRE an unreviewed remote is reported as a leak path' (($r.rc -eq 2) -and (($r.issues -join ' ') -match 'UNREVIEWED git REMOTE')) ("rc=$($r.rc)")
+  # MUST-FIRE (ruling R16): the leak path carries the EXPOSURE tag, which is what makes it email.
+  $expTagged = @($r.issues | Where-Object { ([string]$_).StartsWith('EXPOSURE: ') })
+  T 'MUST-FIRE an unreviewed remote is tagged EXPOSURE, so it emails (ruling R16)' ($expTagged.Count -eq 1) ("tagged=" + $expTagged.Count)
 
   # ---- THE REVIEWED-REMOTE PATH (Brad's ruling 2, 2026-09-07) --------------------------------------
   # These drive the two pure helpers directly. The visibility probe is NETWORK, and a fixture that
@@ -490,6 +496,9 @@ if ($SelfTest) {
   NewStore; Add-Content (Join-Path $fx 'alpha.md') 'edited after the commit'
   $r = Test-MemoryStore $fx
   T 'MUST-FIRE an uncommitted memory edit is reported' (($r.rc -eq 2) -and (($r.issues -join ' ') -match 'uncommitted')) ("rc=$($r.rc)")
+  # MUST-NOT-FIRE (ruling R16): a hygiene finding is not tagged EXPOSURE, so it stays on the review list.
+  $hygTagged = @($r.issues | Where-Object { ([string]$_).StartsWith('EXPOSURE: ') })
+  T 'MUST-NOT-FIRE an uncommitted edit is not tagged EXPOSURE (it stays review)' ($hygTagged.Count -eq 0) ("tagged=" + $hygTagged.Count)
 
   # MUST-FIRE 4: an unindexed file - present on disk, invisible to recall
   NewStore; Set-Content (Join-Path $fx 'gamma.md') 'x' -Encoding UTF8; $null = Get-GitOut $fx 'add -A'; $null = Get-GitOut $fx 'commit -m g'
