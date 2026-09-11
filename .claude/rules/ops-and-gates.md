@@ -308,7 +308,13 @@ everything else honest, so a defect here is silent by construction.
   It is now defined as `TC Daemon Battery 0230` (`ops/run-daemon-battery.ps1`: exit code first, `--names-diff`
   against the committed `hunt_daemon_selftest.names.txt`, red on any `git status` line in a throwaway checkout), so
   these bars redden the nightly run as well as whoever runs it by hand. **A definition is not a registration**:
-  check `Get-ScheduledTask` before saying it runs. **Not every red under load is a
+  check `Get-ScheduledTask` before saying it runs. **So is a sample taken "during" a subject that ends on its
+  own clock:** `ops/cpu-load.ps1`'s clean twin sampled a 4 s load and read it already finished when its process
+  query came back late; a 6 s delay injected before the sample reproduced the gate's exact got line in 2 of 2.
+  **Hold the subject open on a CONDITION the test controls (a stop file), sample, then read it STILL RUNNING
+  before releasing it.** The tool had the production twin: a burner's own deadline could land before the hold
+  loop's last alive check and read as "a burner exited early". A check that reads the subject BEFORE the clock
+  cannot mistake one for the other. **Not every red under load is a
   clock:** the two concurrency-fixture reds the same day were lost writes, the mutex rule above.
 - **A timed lock wait is a BRANCH, and an append is not a locked write** (2026-09-11). `grocery/send-alert.ps1`
   stored `WaitOne(10000)`'s answer and never read it, so a timeout rewrote the whole triage queue UNLOCKED over
