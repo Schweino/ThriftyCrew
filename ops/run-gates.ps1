@@ -483,11 +483,18 @@ $offPySuite = $allJobs.Count;  foreach ($j in $pySuiteJobs)  { [void]$allJobs.Ad
 # them any longer would make other runs wait on work that uses no worker. A run that cannot get one slot
 # in 20 minutes REFUSES with 3 rather than running over the budget - running anyway is the pile-up.
 $askedJobs = $Jobs
+# IN TURN (2026-09-11). A waiting run holds a ticket in a machine-wide queue and takes a slot only when no run
+# that began waiting before it is still queued, so a push is never passed by one that arrived after it. The
+# count ahead is printed because it says which failure a refusal was: a long line is the box overloaded, and a
+# refusal with nobody ahead is the budget held by runs that were not queueing.
 $lease = Enter-TcGateSlots -Want $askedJobs -OnWait {
-  Write-Output ("run-gates: all {0} machine-wide gate worker slots are held by other gate runs - waiting for one (up to 20 min)" -f $script:TcGateSlotTotal)
+  Write-Output ("run-gates: all {0} machine-wide gate worker slots are held by other gate runs - waiting for one (up to 20 min), in turn behind {1} run(s) already queued" -f $script:TcGateSlotTotal, $args[0])
+}
+if ($lease.QueueError) {
+  Write-Output ("run-gates: could not take a place in the gate slot queue ({0}), so this run waited out of turn. The budget still held." -f $lease.QueueError)
 }
 if ($lease.TimedOut) {
-  Write-Output ("run-gates: COULD NOT EVALUATE - waited {0:N0}s and every one of the {1} machine-wide gate worker slots stayed held by other gate runs. Nothing was run; that is not a pass." -f ($lease.WaitedMs / 1000), $script:TcGateSlotTotal)
+  Write-Output ("run-gates: COULD NOT EVALUATE - waited {0:N0}s and every one of the {1} machine-wide gate worker slots stayed held by other gate runs, with {2} run(s) still queued ahead of this one. Nothing was run; that is not a pass." -f ($lease.WaitedMs / 1000), $script:TcGateSlotTotal, $lease.Ahead)
   Exit-Guard -Name 'run-gates' -Summary 'blind=no-gate-worker-slot' -Code 3
 }
 $Jobs = $lease.Count

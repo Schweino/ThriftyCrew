@@ -244,6 +244,17 @@ everything else honest, so a defect here is silent by construction.
   1,200. Other concurrent appenders were NOT swept; `lib/event-bus.ps1`'s `StreamWriter` opens with the same
   writer-denying share and was not measured.
 
+- **A mutex poll is not a queue** (2026-09-11). `lib/gate-slots.ps1` waiters each retried `WaitOne(0)` every 500 ms
+  and running pools topped themselves up the same way, so a freed slot went to whoever looked next: with about 20
+  pushes queued, 26 kept hook logs read exactly 1,200 s refused while other runs were granted after 6 s. The queue
+  never ran out of budget, it ran out of ORDER. **Anything several processes WAIT for needs an explicit turn**: a
+  ticket named by the moment the wait began, alive while a named kernel object its owner holds exists (a killed
+  owner's ticket dies with its handles, and no pid can be reused into it), with a heartbeat that bounds how long a
+  hung owner holds the line. `Get-TcGateQueueAhead` is the exemplar. **Prove ORDER without a clock**: stand a waiter
+  in line with a ten-minute poll, free a slot, and ask a newcomer to take it - under the old polling it takes it on
+  its first try, every time. And a variable named `$pS` IS `$PS`: names ignore case, so that fixture overwrote the
+  powershell.exe path and one case silently never ran while the suite printed PASS. A suite whose cases are a literal
+  list asserts how many ran.
 - **A self-test names every temp path PER RUN, never by a fixed name under `%TEMP%`** (2026-09-11). `run-gates`
   runs every `-SelfTest` and `pre-push` runs `run-gates`, so pushes from concurrent sessions run the SAME suite
   over each other in one `%TEMP%`. `lib/guard-contract.ps1` wrote `gc-clobber-probe.ps1`, `gc-invoke-probe.ps1`

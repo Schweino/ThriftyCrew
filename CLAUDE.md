@@ -39,7 +39,9 @@ workflow is still dispatch-only; the hook is what restored the property, locally
 
 **Exit 0 = passed. 1 = at least one gate failed. 3 = could not evaluate**, which means discovery is
 broken, not that the tree is clean. Never read 3 as a pass. (The recipe battery uses exit 2 for its
-own could-not-run - check which tool you actually ran.)
+own could-not-run - check which tool you actually ran.) A 3 is also a run that got no gate worker slot in 20
+minutes (`lib/gate-slots.ps1`, 10 across the machine). Runs wait IN TURN and the line says how many were queued
+ahead, so retrying at once rejoins the queue at the back.
 
 It deliberately runs only what is hermetic: every `-SelfTest` in the tree, plus the static-analysis
 detectors that read source rather than data. Each self-test drives a frozen must-fire fixture of a
