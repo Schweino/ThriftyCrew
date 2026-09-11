@@ -1,0 +1,548 @@
+MUST FIRE  a write dispatch that never answered marks the recipe STUCK, not rejected
+MUST FIRE  a qa dispatch that never answered marks the recipe STUCK, not rejected
+MUST FIRE  and the state machine was never touched for it - a STUCK recipe's state file is exactly where it was
+CLEAN TWIN an explicit rejection IS a verdict and is recorded as one
+MUST FIRE  a slug gets exactly MAX_STAGE_RETRIES retries and then STUCK, never an unbounded loop
+MUST FIRE  a run-wide wall trips the breaker rather than burning every slug's budget against it (657 failed calls, 16.1M tokens, zero progress on 2026-08-16)
+  and every recipe caught by the open breaker is STUCK and resumable, not rejected
+MUST FIRE  verdict 'pass'             -> passes with no repair cycle
+MUST FIRE  verdict 'PASS'             -> passes with no repair cycle
+MUST FIRE  verdict 'PASS (with notes)' -> passes with no repair cycle
+CLEAN TWIN verdict 'FAIL'             -> buys its one repair cycle
+MUST FIRE  -Terms carries a LIST of 3, not one comma-joined string (B8 parked two recipes forever on 2026-08-16)
+MUST FIRE  and a term that CONTAINS a comma survives as one element rather than splitting
+  the optional terms ride their own flag
+MUST FIRE  each absent term is enqueued as its own -Term, by the DAEMON - the mapper never runs shell, so an agent-side marshalling bug is impossible rather than warned against
+MUST FIRE  the mapper's own prompt tells it NOT to enqueue or advance
+CLEAN TWIN and ps_invoke really does bind that list as a PowerShell array (the transport half)
+MUST FIRE  a NO-GO naming nobody blocks the WHOLE wave - it is not a licence to publish any of it
+MUST FIRE  clean recipes are trimmed back to qa-passed, never rejected for a neighbour's defect (two were held hostage on 2026-08-16)
+MUST FIRE  a repair that changed NOTHING does not buy a re-audit
+CLEAN TWIN a repair that really touched a spec does buy its re-audit
+MUST FIRE  a wave closes MID-RUN the moment the pool reaches wave_size, while other lanes still run - v2's waveChain, ported, not an end-of-run sweep
+MUST FIRE  two write-lane completions landing together produce SERIALIZED cost passes and a costed.json that parses
+MUST FIRE  the decide dispatch after the first carries the run's accepted-so-far list (the single decider became N deciders without it, and accepted two chicken salads)
+MUST FIRE  candidates are marked taken:<run-id> at POP, BEFORE the dispatch goes out
+MUST FIRE  a candidate another run already took is DROPPED from the batch rather than dispatched twice
+MUST FIRE  the in-flight dedup side is read from runs\*\state and reaches the dossier (the jalapeno-popper collision, S1's open gap)
+MUST FIRE  a stop list it cannot read makes the daemon say UNKNOWN, never claim an empty neighbour list - blind is not clean
+  every PowerShell call the daemon makes goes through ps_invoke and nothing else
+MUST FIRE  the preflight starts serve.ps1 with -Slots 1, or a server it started itself runs at 4096 tokens/slot and the extract lane loses rung 2 for the whole run
+MUST FIRE  ps_spawn_detached puts scalar args on the command line in order
+CLEAN TWIN a spawn with no args is byte-identical to the old one
+MUST FIRE  a --target 3 run accepts THREE - the count the pool gate reads is stale by everything already buffered in the decide channel, so the bound has to live where the counter is written (--target 10 accepted 20 on 2026-08-26)
+MUST FIRE  ...and decide_apply - which advances the state machine, records the ruling and appends accepted-slugs.json - was HANDED three acceptances, not handed twelve and corrected afterwards
+MUST FIRE  ...and only three recipes were released downstream, which is where an acceptance actually costs money
+MUST FIRE  the acceptances past the target are DEFERRED, never rejected - the decider looked and its ruling was overruled by arithmetic, so the candidate goes back on the shelf rather than into the ledger as unfit
+MUST FIRE  ...and the second buffered batch is never dispatched at all, so the run stops paying a decider once it has bought what it asked for
+MUST FIRE  ...and those undispatched candidates were never marked taken - they stay `available` for the next run instead of being stranded by a run that declined to rule on them
+MUST FIRE  the capped payload is still a LEGAL decide verdict - a deferral the validator would reject is a payload apply_verdict must never be handed
+  and a deferred decision carries no `record` block - DECIDE_RECORDS_RULING says nothing reads it, and a decision that says deferred while recording `accepted` lies about itself
+  and each deferral carries the ruling it overruled, so the reason the candidate is back on the shelf is legible without the run log
+CLEAN TWIN a run with NO target is not throttled by the same road - 0 means no limit, and a bound that fired there would silently halve every untargeted run
+MUST FIRE  a batch that CROSSES the target mid-verdict keeps the room it has and defers the rest - the run's fourth and fifth acceptances are the expensive ones
+  and the rest of the payload rides through untouched - the note, and the slug on every ruling
+MUST FIRE  a target already met touches NO ruling but an acceptance - rejections are free, and losing one would cost the next run the memory of it
+CLEAN TWIN a target of 0 is NO target - the payload comes back exactly as the decider wrote it, however many acceptances the run already holds
+MUST FIRE  a near-miss rung-1 escalation is re-rolled ONCE and settles
+MUST FIRE  a second identical failure escalates - one retry, never a loop
+MUST FIRE  a low-coverage mangle is never re-rolled; it goes straight down the ladder
+MUST FIRE  the daemon never starts or stops llama-server
+MUST FIRE  a server shape that cannot fit rung 2 accumulates escalations and NAMES the pending narrow pass in --status
+MUST FIRE  a BLOCKED page (no cached page, server down) is STUCK - never an escalation to Claude and never a pass
+MUST FIRE  rung 3's verification is computed over page_text_from_html, never raw markup
+MUST FIRE  rung 3 deletes the escalation file on settle, or the lane double-dispatches a settled page
+MUST FIRE  a low rung-3 verified rate is RECORDED as a concern, not escalated to nowhere
+MUST FIRE  the prompt carries the near-miss ROWS off the three commodity namespaces, so the registrar does not pay a turn to grep what the daemon already read
+MUST FIRE  ...and it is handed ROWS, never a conclusion - the block says in as many words that it is not exhaustive, so a food priced under an unrelated NAME is still the registrar's to find
+MUST FIRE  an include-pattern match is surfaced too - that is how the board absorbs a food under another id, and it is the thing the gate exists to catch
+MUST FIRE  F2: three proposals are ONE dispatch carrying all three, and three rulings come back - the decider's shape, one dossier in and one verdict array out
+MUST FIRE  F2: the dossier carries the LIVE FEED's own price cell, the declared-same-thing rows and the label greps - the three reads the registrar's definition orders beyond the sweep
+CLEAN TWIN F2: an unreadable feed or floor map is ANNOUNCED as unreadable, never rendered as 'no price cell exists' - which a registrar would read as evidence FOR a new id
+MUST FIRE  F2: a malformed item names its INDEX in the problem, and the WHOLE payload is refused - the good ruling beside it does not land either
+MUST FIRE  a lane that raises is CONTAINED - the exception does not escape and kill the run (an unreachable llama-server took the whole 6b resume down, pricer included)
+MUST FIRE  ...and it is recorded as a FINDING, so a run that lost a lane can never exit clean
+MUST FIRE  ...and the status report NAMES it - containment must not make the death quiet
+MUST FIRE  a dead lane still CLOSES the channel it feeds - containment that leaves the next lane waiting forever is worse than the crash it replaced
+CLEAN TWIN a lane that finishes normally returns its value and records no death
+MUST FIRE  the daemon will NOT start a model inside the nightly chain's window (21:30-06:30) - competing for the card is how the 07:00 ad pull goes blind
+MUST FIRE  nor in the 06:30-07:00 changeover, which a run could not clear before the ad pull
+CLEAN TWIN and the card IS free in the working day, or the preflight would never start anything at all
+MUST FIRE  two proposals that normalise to the SAME commodity are re-adjudicated serially - concurrency must not let one food be minted twice
+MUST FIRE  ...and the re-adjudication prompt NAMES the sibling, so the second ruling is made knowing what the first could not see
+MUST FIRE  ...and the re-check's verdict REPLACES the pass-1 approval, so exactly one id is born
+CLEAN TWIN two genuinely different foods are ruled in ONE batch dispatch and never re-litigated - the re-check must not tax the common case
+CLEAN TWIN two ALIASES onto the same existing id are correct, not a collision - only `approve` mints anything
+MUST FIRE  collision_key folds separators, case and one trailing plural together
+CLEAN TWIN and it does NOT fold two genuinely different foods together
+MUST FIRE  the pop offers the decider ONLY candidates that meet THIS RUN's band - `available` means it passed harvest's ingest constants, never that it passes the run's band
+MUST FIRE  ...and the protein FLOOR filters too, which is the half no code had at all
+MUST FIRE  a candidate whose nutrition is UNVERIFIED cannot confirm the band, so it waits - an inferred number is not evidence a dish clears a 50 g floor
+MUST FIRE  popping a candidate with NO neighbour evidence appends a finding naming the count - a decider call spent deriving a duplicate from scratch is measurable waste, and all 152 dupe rejections this estate ever made were of exactly this kind
+CLEAN TWIN a candidate that arrives WITH its neighbour evidence appends nothing
+MUST FIRE  the status report carries the pool reading - counts of blind rows and the state of the embedding index. A could-not-look that nobody reads is a clean bill
+MUST FIRE  a run dir stating NO band runs with NO limits - an unstated edge is unbounded, not a refusal, because the absence of a constraint cannot wrongly reject anything
+MUST FIRE  ...and each edge is optional SEPARATELY - a protein floor alone is a protein floor with no calorie or carb limit
+CLEAN TWIN the band comes off run.json, and a flag overrides one field for a drill
+MUST FIRE  a floor above its own ceiling is refused, not run - it admits nothing and would source zero recipes without saying why
+CLEAN TWIN -ProteinMin 0 means NO FLOOR, said out loud, and reads the same as an absent one
+MUST FIRE  a band that constrains NOTHING admits an UNVERIFIED candidate - the verification requirement is about trusting a number we rely on, and a no-limit run relies on none
+CLEAN TWIN ...and the moment ANY limit is stated, verification is required again
+MUST FIRE  every judgment dispatch writes a start AND an end line
+MUST FIRE  the end line carries the REAL token stamp, which harvest-lane-tokens used to have to backfill
+MUST FIRE  a page settled by the LOCAL ladder is lane-logged too, -By local with tokens 0 - work done, not work skipped
+MUST FIRE  C1: the end stamp carries TURNS and the CACHE SPLIT, and the subagent-inclusive totals off modelUsage - so no future run needs transcript archaeology
+MUST FIRE  C1: a dispatch that DELEGATED is reported as a finding, because the phase-5 mapper's 21-turn subagent appeared in no ledger at all
+MUST FIRE  settled pages queued back-to-back are released to the map lane TOGETHER - the two singleton mapper batches of the 6b run cost 436,685 and 577,141 tokens FOR ONE RECIPE EACH
+MUST FIRE  ...and a LONE recipe is released the instant it settles, never held for company that cannot come - this is the B3 deadlock, and holding it would be that bug rebuilt
+MUST FIRE  every settled recipe reaches the map lane, whatever the grouping - a held recipe stranded at drain is the failure mode this whole design is shaped around
+CLEAN TWIN the group never exceeds MAP_BATCH, so this cannot quietly widen the mapper's batch
+MUST FIRE  a recipe held in the group when the lane EXITS EARLY (breaker) is still released - this is the only path that reaches the drain flush, and without it that recipe strands
+MUST FIRE  map-preresolve runs BEFORE the mapper dispatch, through ps_invoke, with the batch's slugs as a REAL LIST (never a second invocation style, never a comma-joined string)
+MUST FIRE  exit 2 BLOCKS the batch: no mapper dispatch, every slug STUCK and resumable - could-not-look is never a clean bill
+CLEAN TWIN exit 0 (zero residual) STILL dispatches the mapper - the macro cross-check is its job on every recipe, so a full table shrinks the dispatch, it never skips the judge
+MUST FIRE  the dispatch carries the RESIDUAL lines and their evidence, not the vocabulary lecture the table has already answered
+MUST FIRE  an UNBID line holds the recipe at `mapped`: never priced, never queued, never pushed to the writer, and NAMED on the held list
+CLEAN TWIN with no unbid line the same batch routes to pricing exactly as before
+MUST FIRE  THE UNHOLD, against the REAL state machine and the REAL map-preresolve: the bid is wired between two seeds, and the second seed advances the recipe with ZERO dispatches
+MUST FIRE  the mapper's two arrays are written to a rulings file and handed to map-preresolve -Assemble, per slug, through ps_invoke
+MUST FIRE  an assembly that finds anything unsettled STUCKS the recipe with the lines NAMED, and it never reaches pricing or the writer
+MUST FIRE  a NEW commodity id is dispatched to the commodity-registrar BY THE DAEMON, on its own schema, and the verdict rides into the rulings file
+CLEAN TWIN a batch proposing no new id dispatches no registrar at all
+MUST FIRE  a registrar that returns NO VERDICT is not an approval - no ruling is recorded and the finding says so
+MUST FIRE  the map prompt inlines the table's NEAR-MISS evidence whole, forbids estate re-reads except label lookups, and states the two-array contract
+MUST FIRE  the skeleton is built BEFORE the writer is dispatched, per slug, through ps_invoke
+MUST FIRE  an OUT-OF-BAND skeleton retires at `priced -> rejected-macros` with ZERO writer dispatches - v2 paid for the prose first and checked the band after
+CLEAN TWIN an in-band skeleton dispatches the writer exactly once
+MUST FIRE  an INCOMPLETE skeleton (exit 1) is STUCK - the band may not be ruled on a macro figure computed over part of the dish, and it is not a pass either
+MUST FIRE  a BLOCKED skeleton (exit 2) is STUCK and never reaches the writer
+MUST FIRE  the write prompt hands the writer its CONTENT INLINE and asks for `fields` - no file to read, no file to write, and the old in-place language gone
+MUST FIRE  a `fields` payload patches EXACTLY those fields and every other byte of the intake is identical to the skeleton it was issued from
+CLEAN TWIN dotted keys nest one level, splitting on the FIRST dot only, and arrays survive as arrays
+MUST FIRE  a key outside the fillable set is refused by the DISPATCH validator with the key named, and the intake is untouched
+MUST FIRE  ...and the patcher refuses it too, so the belt holds if the brace is ever removed
+MUST FIRE  a post-patch locked-field difference is a DAEMON BUG: the recipe is STUCK with the detail, state None, and there is NO second writer dispatch - the redrift road is gone
+MUST FIRE  the redrift road is DELETED from the daemon's source - no redrift_prompt, no `drifted twice` branch, so nobody rebuilds the re-ask this change made impossible
+CLEAN TWIN a clean prose-only fill passes with exactly one dispatch and one verify
+MUST FIRE  a -Verify that could not RUN is STUCK, never a pass and never a drift
+MUST FIRE  a scratch cost ledger reaches build-v2-spec as -CostedFile, and the live run still gets -RunCost (the drill that wrote the live batch ledger is why this is a flag, not a habit)
+MUST FIRE  --status NAMES every stuck recipe and its reason - the gate run's header counted nine and said which of none
+MUST FIRE  a spec build that REFUSES is STUCK with the guard's own sentence - never `written`, and never an in-band pass over a spec that does not exist
+MUST FIRE  a build that claims success but leaves no readable spec is STUCK too - `not reported` is in_band's v2 answer and it is not a verdict this lane may accept
+CLEAN TWIN a spec that builds and reads in band advances to written and reaches QA
+MUST FIRE  a band ruling that RETIRES a recipe records the pair - beef-back-ribs advertised 57 g protein and computed to 41.6, and 6b threw that evidence away
+MUST FIRE  ...and a PASSING ruling records one too - the passes are the recipes the pre-filter got RIGHT, which is the half of the calibration data a failures-only log would lose
+CLEAN TWIN the pair carries BOTH sides with their serving counts, or it calibrates nothing
+MUST FIRE  a band REJECTION over macros resting on a needs_verify food-DB row PARKS the recipe for verification instead of killing it - beef-back-ribs died on an estimated 0.45 edible yield
+CLEAN TWIN ...and a rejection over VERIFIED rows still retires, exactly as before
+MUST FIRE  a spec outside the band is retired and never reaches QA, in ONE advance (priced -> rejected-macros, since D8 gave `priced` that exit)
+MUST FIRE  and against the REAL state machine the rejection LANDS on disk - the first build's direct priced->rejected-qa advance would have been refused and nobody would have seen it
+CLEAN TWIN a spec inside the band advances to written and reaches QA
+MUST FIRE  the WIP limit gates pool pops
+MUST FIRE  a probe transport ERROR lands in the evidence as UNUSABLE with the exception text, and NEVER as EMPTY - probe carries TWO state-like fields and the ladder one is `verdict`
+MUST FIRE  an UNUSABLE store reaches the evidence file as UNUSABLE and the pricer is STILL dispatched - degrade, never block (the OPPOSITE of map-preresolve's exit 2)
+CLEAN TWIN every gatherable store answers: two server stores and two driver stores land MATCHES/EMPTY, and only the tiers no pre-pass reaches stay UNUSABLE
+MUST FIRE  ONE probe call for the whole batch, -Term bound as a REAL LIST and NAMED - a comma-joined term list is B8 with a Python accent
+MUST FIRE  the driver lookup goes down the PYTHON road (sys.executable), never ps_invoke, and carries --lookup-terms-file/--lookup-out for exactly one --store
+MUST FIRE  the daemon writes NO queue record from evidence - search states and queue states never mix - while -Derive still runs, because that stays the orchestrator's
+MUST FIRE  the pricer dispatch carries NO schema, so the adapter appends no return contract and its free-text report stays legal
+MUST FIRE  the evidence is INLINE in the prompt and the file is batch-<n>.json under the run dir, with n the lane's own invocation counter
+MUST FIRE  the prompt states UNCONDITIONALLY that no browser exists, names Hy-Vee/Walmart/Aldi as blocked in the same batch, and asks for none of what the session cannot do
+MUST FIRE  a store the evidence marks UNUSABLE at the server or driver tier is NAMED as not-to-be-re-probed - a transport refusal is not an empty shelf
+MUST FIRE  the prompt asks for ONE -RecordBatch call, not one -Record per store per term, and says the batch is all-or-nothing
+MUST FIRE  `selected` seeds the EXTRACT lane, `extracted` the MAP lane, `priced` the WRITE lane, `written` the QA lane, `qa-passed` the wave pool (section 4.5's table, not a re-derivation)
+MUST FIRE  a seeded recipe carries its source_url from the STATE FILE, because -Status -Json does not carry one - the extract lane cannot fetch a stub
+CLEAN TWIN and the title and protein ride along with it, so nothing downstream has to re-open the same file
+MUST FIRE  `mapped` with open holds goes to the HELD LIST and is NOT dispatched
+MUST FIRE  the seed counts every in-flight recipe against the WIP limit, so a resume does not read as an empty building
+the status surface names the held list rather than burying it
+MUST FIRE  a resumed run repopulates absent_terms from the QUEUE - exactly the two pending terms its own pricing recipes wait on, in queue order
+MUST FIRE  ...and the seed SAYS how many it put back, so a resume that repopulated nothing is visible rather than silent
+CLEAN TWIN a RESOLVED term is never re-dispatched - an answered question is not asked again, and re-pricing it would spend a whole pricer session
+CLEAN TWIN a pending term wanted only by SOMEBODY ELSE'S recipe is not ours to price - the queue dedupes by term across runs, so the intersection is the filter
+the reseed read the queue through -List -Status pending -Json, which is verified to bind and to carry `recipes` per item
+MUST FIRE  ...and the RESUMED PRICE LANE actually dispatches the pricer on those terms. Without this the lane wakes, drains nothing, and parks every pricing recipe - which is what the phase-5 drill measured
+CLEAN TWIN and the term nobody in this run waits on never reaches the pricer's prompt
+MUST FIRE  the audit dispatch CONTAINS the battery's numbers - cost_per_serving, the macro recompute vs stat, the protein derivation - and the authority language is verbatim
+CLEAN TWIN an unreadable battery report is ANNOUNCED as unreadable, never rendered as an empty block an auditor would read as nothing to say
+MUST FIRE  a block over the cap says so and says to read the file - a quietly cut dossier would have the auditor believe it saw every check
+MUST FIRE  blocker_kind routes: recipe-local to the patch road, shared-data and anything unrecognised to the agent road
+MUST FIRE  a recipe-local NO-GO takes the PATCH road - the field prompt, the intake actually patched, and the spec rebuilt for exactly the blocked slug
+MUST FIRE  a shared-data NO-GO takes the UNCHANGED road - the old prompt, the full agent, and the daemon patches nothing itself
+MUST FIRE  F4: the SCOPED RE-AUDIT names the fields the repair actually patched, and the FIRST audit of the same wave carries no delta block at all
+MUST FIRE  F4: a repair that changed nothing says so in the delta WITH its reason - evidence for the auditor, never a verdict, and the mtime guard still runs independently
+CLEAN TWIN a missing blocker_kind defaults to the SHARED road - the expensive-but-safe direction, because a patch road cannot fix what it cannot reach
+MUST FIRE  a patch-road `no_change: true` still hits the changed-nothing guard: no re-audit is paid for, no spec is rebuilt, and the reason is a finding
+MUST FIRE  a QA failure owned by the WRITER is a field patch, and the one-repair rule is untouched - one repair, exactly one re-QA
+MUST FIRE  the QA dispatch carries the transcription's lines, the BUILT recipe's buy strings and the battery's numbers - and the anchor, blocked-domain and verdict-only language verbatim
+CLEAN TWIN a missing battery report is ANNOUNCED as unreadable, never rendered as an empty section a QA would read as nothing to say
+MUST FIRE  the DAEMON writes qa\<slug>.json from the payload and it carries exactly the schema's fields - the agent's Write is retired
+MUST FIRE  a payload with NO verdict writes NOTHING and the recipe is STUCK - a file saying nothing is worse than no file, because it looks like a ruling
+CLEAN TWIN a QA failure owned by the MAPPER keeps its owner and never reaches the field patch - and with no pre-resolve table its re-map is REFUSED with a finding, not dispatched blind
+MUST FIRE  a payload carrying food_db_rows makes the DAEMON write them, and the file keeps its {readme, items:[...]} shape - items is a LIST, not a dict keyed by name
+MUST FIRE  a row failing the Atwater check is NOT written and the finding names it - a fabricated label is the worse-than-no-gate case
+MUST FIRE  an item that already exists with DIFFERENT macros is not written, BOTH rows are quoted in the finding, and the existing row stands untouched
+CLEAN TWIN an identical existing row is skipped silently - no write, no finding, no noise
+MUST FIRE  H1: same serving basis and macros a ROUNDING apart is the identical-row case - silent skip, no finding, the existing row stands (jc1 filed 2 of 5 conflicts on this noise)
+CLEAN TWIN H1/H2: the Pork Chops save survives normalisation - 155 cal per 112 g is 138 per 100 g against a stated 155, so the two rows still disagree once put on one basis
+MUST FIRE  H2: a per-100 g row and the DB's HOUSEHOLD row for the same food are not in conflict - Dried Basil 233/100 g IS 2 cal per 1 g tsp, and 10 of 13 findings on run hunt-2026-08-26-ten were this false alarm burying the real ones
+MUST FIRE  H2: ...and a REAL disagreement across two bases is still a conflict - Beef Broth at 0.83 g protein per 100 g against 1.97 is more than double, and normalising is what proves it rather than forgiving it
+CLEAN TWIN H2: two bases can only be compared when BOTH carry a weight - a row with no usable serving_grams stays a conflict, because nobody could check is not the same as they agree
+MUST FIRE  a row citing neither an FDC id nor a URL is refused - Atwater proves four numbers agree with each other, never that they are this food's numbers
+MUST FIRE  RUNG 3: the Great Value tortellini refusal SURVIVES the reporting change - the mapper's 307 cal / 13.5 g protein per 100 g is still refused against a row a photographed label proved exactly right, and nothing is written
+MUST FIRE  RUNG 3: a refusal is readable a week later - it lands in the food-DB conflict ledger beside the DB, with both rows and the verdict, not only in a run's findings
+MUST FIRE  RUNG 3: the finding puts BOTH rows on per 100 g before asking anyone to judge them - 2 cal per 1 g tsp against 233 per 100 g printed raw reads as a 116x error and is not one
+CLEAN TWIN RUNG 3: agreement writes NOTHING to the ledger - a ledger that also collects the cases the rule cleared is a ledger nobody reads
+MUST FIRE  RUNG 3: the ledger follows the food_db_path SEAM, so a drill can never append to the live one - the same rule that keeps a drill out of the DB itself
+MUST FIRE  H3: a row landing beside a name that differs only by plural or punctuation is NAMED - the exact-name check is why this DB holds Apple/Apples, Lemon/Lemons, Green Bell Pepper(s) and Fresh Thyme twice
+MUST FIRE  H3: ...and the key is the PRECISE one, not the head-noun scoring - it keeps digits so 93/7 and 90/10 Ground Beef stay apart, and keeps noise words so Hot Sauce and Alfredo Sauce do too
+CLEAN TWIN H3: both halves of a collision can be NEW in one payload - an index built only from what was already on disk would miss it. Agreeing halves REUSE (one row, a rename, a note); disagreeing halves both write and the finding fires
+CLEAN TWIN H3: a real new variant says NOTHING - a check that questioned every ground-beef ratio would be trained out of existence inside a week
+LOCKSTEP  the LIVE food DB still holds exactly the four known name collisions - a fifth is a real find and this is where it surfaces
+the key's 'ss' guard is DORMANT and says so - no live name ends in ss, its neuter fires nothing, and inventing a fixture to hide that would prove only the fixture
+MUST FIRE  two concurrent map workers each carrying three rows leave SIX rows in the file
+MUST FIRE  ...and the neuter is REPRODUCED here: with a no-op lock the same two writers lose rows, so the case above is proving the lock and not the scheduler
+MUST FIRE  the mapped artifact records what the DAEMON WROTE (db_entries_written), the old self-report key is gone, and a refused row is a finding on the artifact AND on the run
+MUST FIRE  MAPPED retired db_entries_added and carries food_db_rows with the label fields required
+MUST FIRE  map_prompt tells the mapper it has no file access to the DB, names the Atwater and conflict rules, and prefers the FDC shelf
+MUST FIRE  the foods the pre-resolve table asked for and the mapper never mentioned are NAMED at map time - on hunt-2026-08-26-ten the mapper returned zero rows for 12 of 22 recipes and each was discovered a whole lane later as a STUCK nobody had predicted
+CLEAN TWIN a batch where every asked-for row came back says nothing at all
+MUST FIRE  a row that came back and was REFUSED is not counted as absent - it was ruled on, and its own finding already says why
+CLEAN TWIN a term ruled not-purchased needs no nutrition label - charcoal is on a real ingredient line and demanding a row for it is a finding nobody can ever clear
+MUST FIRE  end to end: an EMPTY food_db_rows against a table asking for two lands on the mapped artifact AND the run findings, which is the exact payload that shipped nothing
+MUST FIRE  a payload answering for NEITHER a row nor an absence is refused, and every food it stayed silent about is NAMED - a re-ask nobody can act on is not a re-ask
+CLEAN TWIN a row that came back IS the answer and the payload passes untouched
+MUST FIRE  a declared `food_db_absent` is the OTHER legal answer - two label reads that found nothing is a report, and a report is not silence
+MUST FIRE  a name appearing only in `detail` does NOT clear the postcondition - the ten-run's payload claimed four rows in prose against an EMPTY array, so prose cannot be the answer
+CLEAN TWIN a REJECTED recipe owes no rows at all - it is not being built, so no row it lacks can block it
+MUST FIRE  ...and the CALL SITE hands the map dispatch that predicate, fed by the daemon's OWN debt sweep off the pre-resolve table - validate_map is the scar this case exists for
+MUST FIRE  a row that never LANDED holds the recipe AT MAP with the food named, instead of travelling a whole lane to die of it - salisbury-steak-burgers, 2026-08-26
+MUST FIRE  a DECLARED absence still blocks and the block carries the mapper's own sentence - the row is gone either way, and only the reason differs
+MUST FIRE  a row REFUSED by the Atwater check blocks too, though it is deliberately NOT a shortfall - judging the mapper and judging the recipe are two questions
+CLEAN TWIN the row lands and the recipe routes on exactly as before - a gate that fires on everything is not a gate
+MUST FIRE  the block is the LAST thing assemble_mapped does: the rulings still became events and ledger rows, so a missing label costs the run no identity work
+MUST FIRE  map_prompt names `food_db_absent`, says a payload answering for neither is re-asked, and says a food carrying no macros is a ROW OF ZEROES rather than an absence
+MUST FIRE  every ingredient-queue call the daemon makes carries -QueueFile and -CarriagePath, and the base arguments are untouched
+CLEAN TWIN with no seams set the call is byte-identical to what it always was - a seam that leaks a flag into a real run is its own defect
+MUST FIRE  end to end: a mapper's absent terms are enqueued through the SCRATCH queue, and not one -Add reaches the live one
+MUST FIRE  the decider's ruling goes to the SCRATCH dish ledger - decide_apply already had the seam and the daemon was passing an empty string, so every drill wrote the real prior-art memory
+MUST FIRE  the PRICER is TOLD the seams, because it holds the -Record/-Verdict/-Promote pen itself and no daemon-side threading can reach those calls
+MUST FIRE  exactly the unresolved / food-DB-missing terms reach cache_fill, deduped through fdc_lookup's own key function - a settled line with a DB row is never asked about
+MUST FIRE  the order is preresolve, FILL, preresolve, dispatch - and the DISPATCHED table is the second pass's, because only the re-run carries the warm shelf
+CLEAN TWIN a fill that added nothing and failed nothing skips the second mechanical pass - that batch is already as warm as it can get
+MUST FIRE  a fill that THROWS degrades and never blocks: one finding naming the count, and the mapper is dispatched exactly as it was before F1 existed
+MUST FIRE  two map workers filling overlapping term lists leave the UNION in the cache - cache_write is a whole-file write and this is the ingredient-resolutions lesson a third time
+MUST FIRE  ...and the neuter is REPRODUCED here: with a no-op fdc_lock the same two fills lose terms, so the case above is proving the lock and not the scheduler
+MUST FIRE  the shelf-coverage line reports X of Y and names the terms FDC LACKS - which are the mapper's licensed web reads, not findings
+MUST FIRE  the prompt BANS the direct FDC query and names DEMO_KEY as the throttling lie - lf1 round 1 made 6 of them for foods the shelf had already covered
+MUST FIRE  the prompt caps the hunt at ONE fetch and ONE fallback per food, and says a missing row is a finding - lf1 round 2 spent 9 web calls on 2 foods
+MUST FIRE  the cap counts LABEL READS and says a WebSearch is not one - on m1 batch A two searches burned the whole allowance, no label was read, and the write lane refused the recipe
+MUST FIRE  a SEAMED run names the scratch food DB in the prompt, the way queue_seam_note names the scratch queue
+CLEAN TWIN an UNSEAMED daemon renders no drill sentence at all - food_db_seam_note is empty and the prompt is what it always was
+MUST FIRE  the prompt says the precheck is rendered WHOLE, so there is nothing to go and read in mapped-pre\<slug>.json - that read cost lf1 round 2 four turns
+MUST FIRE  the REGISTRAR's prompt names both harness behaviours - the root-anchored brace that returns a false empty, and the minified feed's omitted line - which cost it 7 of 12 turns
+MUST FIRE  the MAPPER's prompt carries the same note
+MUST FIRE  source-QA's prompt carries the same note
+MUST FIRE  the AUDITOR's prompt carries the same note
+MUST FIRE  the note distrusts the empty RESULT and never the sweep, and F2's authority language stands untouched beside it - the sweep is where every decisive ruling came from
+CLEAN TWIN it does NOT leak into the pricer or the decider, neither of which sweeps a namespace - prompt weight buys nothing where nobody greps
+MUST FIRE  a fooddb_known food's OWN numbers ride in the prompt, read through the --food-db SEAM - lf1 round 2 read the LIVE DB four times while pointed at a scratch copy
+MUST FIRE  the precheck rides WHOLE: every tuning line, the uncovered lines and the missing DB rows, verbatim - one tuning line was the entire explanation for a 591-vs-468 disagreement
+MUST FIRE  the extraction's servings, title and source_url arrive, and the raw ingredient lines are NOT rendered a second time - the table already carries them
+CLEAN TWIN an unreadable food DB and a missing extraction are both ANNOUNCED, and the rest of the prompt still builds - a quietly shorter dossier reads as a complete one
+MUST FIRE  the cap ANNOUNCES itself when it bites, naming how many lines are not shown
+MUST FIRE  a mapper result with ZERO absent terms lands on the WRITE channel at `priced` even though the mapper called its own state `mapped` - the terms decide the route, and no -Add reaches the queue
+MUST FIRE  ...and the disagreement is LOGGED, naming the slug and the state it claimed
+CLEAN TWIN three absent terms still route to `pricing`, still enqueue all three and still wake the price lane - byte for byte as before M3
+CLEAN TWIN a table with unbid HOLDS still holds at `mapped` and never reaches either branch - the hold returns first and M3 does not touch it
+MUST FIRE  zero absent WITH an optional_absent term advances to `priced` AND the optional term still reaches the queue - optional never blocked and does not start blocking here
+MUST FIRE  after the map lane routes a recipe to `pricing`, EVERY non-optional term on its state file exists in the ingredient queue - the postcondition, over the real scripts
+MUST FIRE  a term the CARRIAGE UNION added and the mapper never claimed is enqueued too - the 8 stranded terms on hunt-2026-08-26-ten were every one of them this shape
+MUST FIRE  NET 1: a line the mapper ruled `optional-note` is RECORDED on the recipe as optional and never reaches the queue - it cannot block, and it must not vanish either
+MUST FIRE  NET 2: a tap line the mapper MISLABELLED as a real purchase is still stopped, by the stoplist - the two nets are tested apart because together they hide each other
+MUST FIRE  a derived item holding three spices is SPLIT - no comma survives onto the state file and all three parts are on the queue
+CLEAN TWIN a recipe with nothing derived, nothing composite and nothing un-buyable queues EXACTLY the mapper's claim - the fix does not turn the queue into a dumping ground
+MUST FIRE  a mapper result with ZERO absent terms over an artifact whose real-bid ingredient the carriage union does NOT report CARRIED is REFUSED `priced` - it lands at `pricing` with the derived term blocking, on the queue, and no writer paid
+CLEAN TWIN a recipe whose every line the union agrees is CARRIED still reaches `priced` in the same pass, enqueues nothing and still reaches the writer - M3's purpose, kept whole
+MUST FIRE  and the BYPASS ITSELF is gone: the real hunt-run.ps1 refuses `mapped` -> `priced` outright and leaves the state file where it was, so no future caller can route around the union the way these two did
+MUST FIRE  THE SECOND ROAD: the UNHOLD advances on a ruling that reported nothing absent, and it is carriage-checked too - a recipe held for an unbid line and later repaired lands at `pricing` with its derived term queued, not on a paid page
+MUST FIRE  a mapper rejection carrying NO terminal state is STUCK, never a rejection under a state the daemon picked for it - and the state file is untouched
+MUST FIRE  THE LIVE SHAPE: `rejected-not-carried` from `extracted` is refused by the real state machine, so NO rejection is recorded - the record and the disk agree it is stuck
+CLEAN TWIN a rejection that IS legal from `extracted` (`rejected-macros`) is still recorded and still LANDS on disk - the mapper can reject, it just cannot invent a route
+MUST FIRE  THE PROMPT HALF: hunt_lib.MAPPER_REJECTION_STATES - which is what TELLS the mapper which verdicts `extracted` can take, and is the one line of Python restating hunt-run's table - is exactly the set the real hunt-run.ps1 accepts, asked of it rather than copied from it
+MUST FIRE  a source stating NO SERVINGS is refused AT PICK-UP, before a mapper dispatch is paid for - it cost the T-shakedown a 7.8 min batch to learn this
+MUST FIRE  a candidate with no PROTEIN is STUCK and resumable, never rejected - that is our bookkeeping missing, not a defect in the source page
+CLEAN TWIN a COMPLETE candidate still dispatches, and the gate refuses nothing
+MUST FIRE  an UNDECLARED new bid still reaches the registrar - the mapper ruled `ground-chicken` and declared nothing, and the gate that adjudicates had become a gate that silently stalls
+MUST FIRE  ...and the CALL SITE uses it: assemble_mapped dispatches the registrar for an id the mapper never declared. Pinning only the function passes with the bug restored
+CLEAN TWIN a BLOCKED sweep falls back to the declared proposals and ANNOUNCES it - today's behaviour, with the assembler still refusing any id nothing approved
+MUST FIRE  assemble_mapped LEARNS: two clean rulings become two events and two ledger rows, and it is the CALL SITE that does it - pinning apply_learn alone passes with the hook deleted
+MUST FIRE  a FAILED assemble teaches NOTHING - no event, no ledger. The run refused to build a decision file over that ruling, so it must not become an identity
+MUST FIRE  a writer that drops one of two rulings trips the 44-class postcondition AT THE CALL SITE, naming both counts
+CLEAN TWIN the same road with an honest writer trips nothing
+MUST FIRE  a registrar ruling gets its OWN event (the estate's first registrar ledger) and the REJECTED id is held rather than cached
+MUST FIRE  a reuse writes the vocabulary row and INHERITS unit and gpu from the row that already carries that bid - the basis belongs to the commodity, not the name
+MUST FIRE  a bid NO existing row carries has no basis to inherit, so nothing is written and no gpu is invented - that case is a mint
+MUST FIRE  ...and the REUSE ROAD actually calls that fallback - a live id no row names yet gets its row, which tearing the fallback out came back 0 red without
+MUST FIRE  ...unless the COMMODITY itself yields one: an id no vocabulary row names yet is a live priced id, not a mint - and `cheddar-cheese` only resolves through the floor map
+MUST FIRE  a commodity priced per EACH yields NO basis, because grams-per-item is a fact about the food that no unit name supplies - and neither does an id that does not exist
+CLEAN TWIN a name the vocabulary already resolves gets no second row - and ALIASES count, or the duplicate the registrar exists to prevent gets written here instead
+CLEAN TWIN a `mapped-null` ruling has no id to point a row at and is left alone
+MUST FIRE  ...and the CALL SITE runs it from assemble_mapped - the wiring every fixture above passes without, and the exact gap that stuck four finished recipes
+MUST FIRE  an APPROVED ruling with a prescription and carried evidence runs all three sanctioned tools in dependency order - the hand between the registrar and a priced row is gone
+MUST FIRE  the include and exclude patterns reach new-commodity as REAL LISTS, not flattened into the arg list - flattened, the second pattern lands on BandMin and PowerShell refuses the call while still exiting 0
+MUST FIRE  only CARRIED rows that carry BOTH a price and a size become board cells - 'blocked' and 'not-carried' are verdicts about a store, not prices
+MUST FIRE  a SHARED-DATA blocker does not spend this recipe's one repair - it goes back to qa-passed to be re-waved, never to rejected-audit, which nothing can leave
+CLEAN TWIN a RECIPE-LOCAL blocker already repaired once is still terminal - the one-repair rule keeps its teeth
+MUST FIRE  an audit that named NO blocker kind keeps the old rule - the exemption is granted on evidence, never on silence
+CLEAN TWIN a recipe the auditor did not name still goes back to the pool, whatever the blocker kind was
+MUST FIRE  a packaging noun is STRIPPED, not guessed at - Walmart's '1.5 lb bag', '5 lb bag' and '12 oz bag (frozen)' blocked three approved mints over a word that cannot move a magnitude
+MUST FIRE  a parenthesised TOTAL survives the stripper - eating '(32 oz)' off '16 oz x 2 pk (32 oz)' hands the board half the package and a per_unit twice too high
+MUST FIRE  a multipack with NO stated total is refused and NAMED - multiplying 12 oz x 4 pk invents $0.1402/oz, which would out-crown Aldi on a number nobody printed
+MUST FIRE  a per-weight marker is rewritten ONLY when the row proves it - right unit AND the dollars matching the recorded price; 1.29 is DOLLARS, and that cell is the cheapest on baby-potatoes
+CLEAN TWIN a size the capture already printed correctly travels byte-identical - a second resolver that disagrees with export-feed is the divergence, not the fix
+MUST FIRE  ...and queue_store_evidence actually normalises the cell it emits and reports what it dropped - export-feed re-derives the basis from the STORED size and reads '12 oz bag (frozen)' as 0.0
+MUST FIRE  ...and the MINT hands it the prescription's own unit, or the per-weight rule is unarmed and Hy-Vee's $1.29/lb leaves the board in silence
+MUST FIRE  the vocabulary row is named after the ruling's TERM, not its proposed_bid - the lookup is NAME-KEYED and proposed_bid is routinely a slug, so the slug builds a row no recipe will ever ask for
+MUST FIRE  a name the vocabulary ALREADY claims is a REPOINT, not an add - the id and its board row go live, add-ingredient-row is never called, and the rebid is named; this is the Reduced Fat Cheddar case exactly
+MUST FIRE  the vocabulary row records WHY the id exists - the justification is the RULING's reason, not the prescription's, and a row that ships 'Reason on record:' followed by nothing is permanent
+MUST FIRE  an approve with NO prescription mints nothing and says so - a silent skip is the hand-typing era with nobody watching
+MUST FIRE  an approve with no CARRIED store row mints nothing and names the capture pass it needs - the Reduced Fat Cheddar case, refusing to invent a cell
+MUST FIRE  a prescription with no board category, or one naming a section that does not exist, mints nothing - the field decides board placement and there is no sane default
+CLEAN TWIN a REJECTED or unruled id runs no tool at all - the automation moved the typing, not the judgement
+MUST FIRE  a tool refusal stops the chain there - no board cell may name an id that new-commodity declined to create
+MUST FIRE  ...and the CALL SITE executes it: assemble_mapped mints off the registrar's own approval, the wiring every fixture above passes without
+MUST FIRE  a recipe that rules ONE raw line twice, identically, still learns every ruling - smoke3's meatballs learned 13 events and projected NONE over a duplicated 'cumin' line
+MUST FIRE  two rulings on one raw line that DISAGREE are both held with a stated reason, and the ruling beside them still learns - the rule keeps its teeth, not its blast radius
+MUST FIRE  a QA fail owned by the MAPPER writes exactly one slug-level event carrying the slug's residual keys
+CLEAN TWIN a QA fail owned by the WRITER writes none - the raw owner field decides, not owner_agent(), which maps everything it does not recognise to recipe-writer
+MUST FIRE  the suite's memory seams are never the live estate files (H2's lesson, applied with the writer instead of after it)
+MUST FIRE  the neighbours reach the DOSSIER, each carrying the phrase it was ruled for, its id, its decision and its date - and a term with none says so
+MUST FIRE  the retrieval runs under the SIDECAR interpreter, on a 120 s budget - bge-m3 lives in sidecar\.venv and C:\Codex\Python312 has no torch
+MUST FIRE  a retrieval that could not run renders BLIND and says absent evidence is not absence of precedent - an empty list pretending it looked is the one thing this may not do
+CLEAN TWIN an EMPTY corpus is not BLIND: the retriever ran, and the shelf says so per term
+MUST FIRE  a REJECTED and a MAPPED-NULL neighbour render with their decision words - the estate's transfer asymmetry is for the judge to weigh, not a filter to apply here
+MUST FIRE  only RESIDUAL terms are asked about - a settled line is not a question
+MUST FIRE  map_prompt NAMES the new field. A prompt that said `unchanged contract` without naming one field broke a clean batch on 2026-08-24
+CLEAN TWIN a BLIND shelf costs the batch a channel and nothing else - the dossier still carries its settled lines and the recipe still maps
+MUST FIRE  logging ONE lane line spawns exactly ONE call - lane() must not be timed, or every line spawns two more, forever
+a timed mechanical stage emits a start AND an end, so its duration is measurable
+MUST FIRE  the end line reports 0 in EVERY token field, never -1 - a mechanical stage burned nothing, which is not the same as nobody having looked
+MUST FIRE  py_timed's end line stamps 0 in every token field too - the python mechanical road is not exempt from the contract
+MUST FIRE  every end line outside the judgment dispatch goes through lane_free_end - one road, so the zero-stamp contract cannot fork across call sites
+CLEAN TWIN  a JUDGMENT dispatch still stamps its real usage - the free road did not swallow the road that carries the money
+MUST FIRE  a stage that THREW still closes its start/end pair, and the throw still reaches the caller
+MUST FIRE  T6: the preaudit battery reads the SEAMED spec store, and an unseamed run passes no flag at all - lf1's auditor graded a file the run never wrote
+MUST FIRE  T6: the QA battery and the staleness mtimes follow the seam too - three readers of the live store, not one
+MUST FIRE  T6: the AUDITOR is told which spec store is this run's, and an unseamed prompt carries no drill sentence
+MUST FIRE  T2: the run's narrative is written to a file and every line is UTC stamped - it used to exist only in scrollback
+MUST FIRE  T2: an unwritable log path and a U+FFFD line both fail SILENTLY - a log line must not be able to end a run, which is how the 6a gate drill died
+CLEAN TWIN T2: a QUIET daemon writes no narrative, so no fixture grows a side effect from being constructed
+MUST FIRE  the 45-minute browser store lookup emits a timed pair per store - it is the longest block a run can execute and it used to log nothing
+MUST FIRE  a caller can BACKDATE its start line, and one that does not is stamped by hunt-run exactly as before
+MUST FIRE  the backdated stamp is hunt-run's own format and never lands in the future - an unpairable start reads as a stage that never finished
+CLEAN TWIN an empty evidence dir gives the counter back unchanged
+MUST FIRE  a restarted counter does NOT land on an existing batch - this is the overwrite that destroyed a CARRIED verdict's evidence
+MUST FIRE  a number whose PER-STORE companion exists is skipped too, so a set is never half-overwritten
+  and it keeps walking until it finds a genuinely free number
+CLEAN TWIN a missing evidence dir is not an error - the caller creates it
+MUST FIRE  an intake carrying prose whose mapper file has NOT moved is KEPT - the lane used to stick on it forever and no re-run could clear it
+  and its macros are read straight off it, so the band gate cannot tell the two roads apart
+MUST FIRE  a mapper file rewritten with the SAME BYTES and a NEWER mtime is still current - this is the git-rebase case that stranded all six recipes of hunt-2026-08-27-highprotein, and mtime alone cannot tell it from a real edit
+CLEAN TWIN a mapper file whose CONTENT really changed means the ingredients moved under the prose, so the intake is NOT kept - the hash must not become a licence to ship a recipe whose numbers have changed
+CLEAN TWIN a mapper file edited by ONE character (100 g -> 200 g) is caught - a same-length edit is exactly what a re-map produces
+CLEAN TWIN an intake with no writer prose is NOT kept - nothing is at risk from rebuilding it, and the skeleton is the cheaper truth
+CLEAN TWIN a recipe with no intake at all still builds one
+MUST FIRE  an intake with prose and NO stamp is kept, and says that it is keeping it unverified - an unanswerable question must not erase the most expensive stage in the run
+the stamp records the mapper file's own sha256, so the two sides of the comparison cannot drift apart
+CLEAN TWIN a slug with no mapper file at all stamps nothing rather than recording an empty hash that would later read as a match
+MUST FIRE  build_skeleton STAMPS the mapper file it built from - the predicate fixtures above all stamp by hand and would not notice if the live path stopped doing it
+  and the intake it just built therefore reads as CURRENT on the next run, which is the whole point - an unstamped intake takes the unverified road forever
+MUST FIRE  two rows with identical macros on the same basis AGREE - this is the Lime/Limes pair that was merged by hand and came back the next day
+MUST FIRE  the same food stated on a 28 g household serving still agrees with the 100 g row - a basis difference is not a macro difference
+CLEAN TWIN a twin that disagrees on calories is NOT reused - it still gets its row and still gets the finding
+CLEAN TWIN a twin that disagrees on protein_g is NOT reused - it still gets its row and still gets the finding
+CLEAN TWIN a twin that disagrees on carbs_g is NOT reused - it still gets its row and still gets the finding
+CLEAN TWIN a twin that disagrees on fat_g is NOT reused - it still gets its row and still gets the finding
+CLEAN TWIN a zero serving basis is not agreement - it is unreadable, and the safe answer to unreadable is to write the row
+CLEAN TWIN a missing counterpart row is not agreement
+CLEAN TWIN a non-numeric macro is not agreement
+CLEAN TWIN a rounding hair on a 0.2 g fat row still agrees - the tolerance has an absolute floor so a tiny field is not judged on noise
+MUST FIRE  the rename points every food NAME at the row that will exist - declining to mint without this kills the recipe at the skeleton instead
+MUST FIRE  the SOURCE PAGE'S own words are never rewritten - raw and term are the evidence that the line said what it said
+CLEAN TWIN a name nobody renamed is untouched
+the drill really cached both identities before the audit ran
+MUST FIRE  every audit finding becomes an EVENT, notes included - a passing check is calibration data the same way the band gate's passes are
+MUST FIRE  a finding that REJECTS an identity invalidates its cached resolution - the mapper's ruling projected in seconds and the refusal never came back
+CLEAN TWIN a finding that merely NAMES a bid leaves it cached - most findings are prices that moved, and invalidating on those throws away good identities
+  the events are `audit_finding`, and the REJECT is distinguishable from the notes - 'the auditor disagreed' and 'the auditor remarked' are different facts
+  ...and they are stamped `auditor`, so the nightly can tell which stage learned what
+CLEAN TWIN an audit with no structured findings writes nothing and SAYS so - 'found nothing' and 'dropped them' look identical from here
+CLEAN TWIN ...and a GO with no findings is NOT a run finding - a genuinely clean wave is allowed to have nothing to say
+MUST FIRE  an audit that BLOCKED but returned no structured findings raises a run finding - it refused a wave and taught the estate nothing
+the drill really parked the recipe at waved before seeding
+...and the wave manifest really CLAIMS it before seeding, or the claim half of this fixture proves nothing
+MUST FIRE  seed MOVES THE STATE FILE back to qa-passed, not just its own pool - hunt-run's closer reads the file, and an in-memory-only pool closed nothing
+  ...and the slug really is in the pool a wave forms from
+  ...and the seed SAYS how many it returned, so a silent recovery is visible
+MUST FIRE  the old wave manifest no longer CLAIMS the returned slug - the state move alone left it claimed, and the closer refuses a claimed pool
+MUST FIRE  a manifest claiming a recipe that is ALREADY back at qa-passed is reconciled too - no re-wave happens for it, so nothing else would ever free it
+CLEAN TWIN a PUBLISHED manifest is left alone and raises no finding - it is the shipping record, and a finding per published wave per resume trains the reader to skip findings
+MUST FIRE  a waved recipe whose batch never CLOSED goes back to the wave pool - publish refused, and nothing else in the estate would ever pick it up again
+CLEAN TWIN a waved recipe whose batch DID close stays put - re-waving a live recipe would re-publish it and re-dispatch its post-publish review
+  the wave number is read from the STATE FILE, because status_json's in_flight rows carry slug and state but not the wave that names the batch
+CLEAN TWIN a record with no wave at all reads as unclosed rather than throwing - the safe error is to re-wave, never to strand
+CLEAN TWIN an unreadable ledger reads as unclosed for the same reason
+MUST FIRE  a failed assembly never advances the recipe to `mapped` - it is left at `extracted`, the one state seed() hands BACK to the map lane
+  and it really did fail to assemble, so this is not a case that quietly stopped testing its own subject
+  and seed() really does route `extracted` to the map lane while `mapped` goes to the unhold list - the routing that made the old ordering fatal
+MUST FIRE  a rejection carrying NO basis is STUCK, not terminal - it costs a re-ask instead of a recipe
+  and the STUCK says what was missing, so the next reader knows it was the BASIS and not the verdict that was absent
+CLEAN TWIN a rejection that STATES its basis is still terminal, and keeps its own sentence - this must not become a licence to ignore the mapper
+MUST FIRE  the run dir's OWN conditions are used, not the built-in default - a run minted at one band told every agent a different one in prose
+  and the built-in default really would have contradicted it, so this is not a distinction without a difference
+CLEAN TWIN an explicit --conditions still overrides the run dir, for a drill
+MUST FIRE  a run dir stating NOTHING falls back to the default and SAYS so - silence is what let this hide for a whole run
+MUST FIRE  a Daemon built the way main() builds it - conditions unpassed - carries the RUN DIR's conditions, so there is no wiring left to revert
+CLEAN TWIN an explicit string to the constructor still wins, for a fixture
+MUST FIRE  the audit prompt states the band as NUMBERS from the run dir, so prose can never be the only statement of them
+  and the audit prompt carries NO trace of the built-in default's band
+MUST FIRE  the map prompt states the band as NUMBERS from the run dir, so prose can never be the only statement of them
+  and the map prompt carries NO trace of the built-in default's band
+MUST FIRE  the write prompt states the band as NUMBERS from the run dir, so prose can never be the only statement of them
+  and the write prompt carries NO trace of the built-in default's band
+MUST FIRE  the map prompt DEFINES what a `[split: <food>]` raw is - it used to render the suffix and explain it nowhere
+MUST FIRE  and it says the answer is keyed on the raw EXACTLY as printed, which is the join the mapper actually broke
+MUST FIRE  and that each part's buy string covers THAT FOOD ALONE - the combined string is the exact thing that came back
+MUST FIRE  the SETTLED split part is marked at its own line, not only in the paragraph - a settled row is where the buy string is owed
+MUST FIRE  the RESIDUAL split part is marked at its own line too
+  and both parts name the line they were split FROM, so the mapper can see the pair it must not answer once
+MUST FIRE  the map prompt tells the mapper what a `to taste` line is worth - every included line needs grams and nothing said so
+  and it cites the LIVE catalog's own convention rather than inventing one - 53 weighed to-taste lines across 574 specs, none at zero
+  and it says which SCALE that precedent is in - those figures are the finished batch and `grams_source` is the source recipe, which is a 10x error unstated
+  and it names the one legal way out for a food the shopper really does not buy, so `not-purchased` is not mistaken for a zero weight
+CLEAN TWIN a table with NO split rows carries no split marker on any line
+MUST FIRE  the heartbeat emits a status report while the lanes drain
+MUST NOT FIRE  a SHORT quiet stretch is reported as quiet and NOT as a stall - ordinary slow work reaches nearly six intervals, and a stall warning that fires on normal work is one nobody reads
+MUST FIRE  a quiet stretch PAST the longest legitimate one measured is called out as NO PROGRESS, because a hung lane looks exactly like a slow one
+CLEAN TWIN the stall line names the boundary it passed, so the reader can judge it instead of trusting it
+MUST FIRE  the heartbeat is cancellable - a reporting task that outlives the run would hold the event loop open
+MUST FIRE  a status_report that raises is REPORTED and the heartbeat survives - a heartbeat must never kill the run it reports on
+MUST FIRE  a CURRENT intake whose prose is complete does NOT dispatch the writer - the spec build runs straight off the prose on disk (62 of 95 writer calls on 2026-08-27 were this)
+  and the prose on disk is the prose that ships - nothing rewrote it
+MUST FIRE  a spec-build refusal is STAMPED against the two inputs it depends on - the mapper file's hash and db\ingredients.json's hash - with the refusal named
+MUST FIRE  the same recipe over the same mapper file and the same vocabulary is STUCK at once - no writer, no spec build - naming the refusal it already earned (15 writer calls and 12 identical refusals per recipe across 17 restarts on 2026-08-27)
+CLEAN TWIN  the moment db\ingredients.json changes the build is re-bought - and only the build, because the prose is still current
+  and a build that SUCCEEDS clears the stamp, so the next refusal is its own
+CLEAN TWIN  a current intake whose prose is INCOMPLETE still pays the writer, once
+CLEAN TWIN  a stamp whose vocabulary hash can no longer be computed reads as CHANGED - the lane runs rather than freezing a recipe on a hash it cannot see
+MUST FIRE  with a map batch IN FLIGHT the price lane holds its short batch, and the term that batch adds rides in the SAME pricer call (62 terms took 30 calls at 2.1 per call on 2026-08-27)
+CLEAN TWIN  with NOTHING upstream the lane drains at once - a lone term is priced immediately and the later one gets its own call, exactly the pre-hold behaviour
+MUST FIRE  a hold with upstream still 'busy' releases the moment the wake channel closes - the lane closing is the third flush condition, and it makes a stranded term impossible
+MUST FIRE  a hold that never gets its wake re-checks upstream on its own timer and releases when upstream is idle - the belt behind the wake
+CLEAN TWIN  a batch already at PRICE_BATCH is dispatched without waiting on anyone
+CLEAN TWIN  the hold's own wait ENDS with no wake at all - the recheck timer the belt rides on, read off the TimeoutError it raises and never timed
+MUST FIRE  a mapper-owned QA fail is repaired through a ONE-SLUG MAP DISPATCH - the findings on top, the map dossier underneath, the MAPPED schema - not a tool-holding agent handed a file pointer (25.5M tokens for four repairs on 2026-08-27)
+MUST FIRE  the skeleton is rebuilt over the NEW decision file with -Force - the one road that may pass it
+MUST FIRE  ...and the writer's prose SURVIVES the rebuild - saved before, re-applied after - so the most expensive per-recipe stage is neither erased nor re-bought
+  and the spec is rebuilt on the qa lane, through the cost-engine road
+  and the daemon reassembled the decision file from the re-ruling - the mapper held no pen
+  and the re-QA ran once and passed, so the recipe reached qa-passed
+CLEAN TWIN  an EXTRACTOR-owned fail still takes the full-agent road it always had - only the mapper's road changed
+MUST FIRE  the QA dossier renders a V2 spec's ingredient lines from ingredients_grams and ingredients_display - it read a key v2 specs do not carry and showed all 34 QA sessions on 2026-08-27 'the 0 ingredient lines'
+CLEAN TWIN  a legacy spec carrying `ingredients` still renders those lines, buy strings included
+MUST FIRE  the audit prompt carries the wave's MAPPED DECISIONS - bid, grams, decision, buy string - and the food-DB rows behind them, so checklist items 1 and 3 are answered on the page rather than by re-parsing recipes-db and the food DB in PowerShell three times each
+MUST FIRE  ...and it names where the specs, the cards and the decisions ARE, and which scripts the battery already ran (six globbing turns and a re-run of update-recipes-db -DryRun per audit on 2026-08-27)
+MUST FIRE  the dossier cap no longer truncates a 6-slug wave (7.3-7.6k chars against a cap of 6000 cut waves 4, 5 and 9 on 2026-08-27, each ending 'read the report file')
+CLEAN TWIN  a wave whose decision file cannot be read says so, in place, rather than rendering an empty block
+MUST FIRE  the price prompt names the id each term maps to, from the mapper's own rulings, so -Promote needs no commodities.json parse (3-4 per session on 2026-08-27)
+  and it says the server-tier probe is DONE - the pricer re-ran it 46 times across 30 sessions
+MUST FIRE  the map prompt no longer invites a Read of every extraction file for 'full context' - the raw lines are declared complete (every mapper session on 2026-08-27 opened by Reading all five)
+MUST FIRE  the registrar is told its dossier IS the sweep of the four files, and that a grep is for a spelling the dossier did not try (commodities.json Read whole in 12 of 17 sessions on 2026-08-27)
+MUST FIRE  a red P5 gate buys the shared repair BEFORE the audit, not a 3.8M auditor session that returns NO-GO citing the gate the battery already flagged - waves 1, 2, 9, 10 and 11 of hunt-2026-08-27-highprotein, 21.8M tokens
+MUST FIRE  exactly ONE repair dispatch and exactly ONE auditor dispatch - the precheck must not double either
+MUST FIRE  the repair is dispatched on the AUDIT lane under the label wave-<k>:p5-repair, so the lane log distinguishes it from a post-NO-GO repair and audit-lane-shape.ps1 can tell the two roads apart
+MUST FIRE  the repair prompt names the red gate and carries the battery's own detail VERBATIM, so the agent does not re-run the gate to learn what it said
+MUST FIRE  the cleared wave then publishes - the precheck is a reorder, not a new refusal
+MUST FIRE  the battery was re-run after the repair, so the verdict that lets the audit proceed is a FRESH one and not the agent's word for it
+MUST FIRE  a repair that does not clear the gate does NOT then buy the auditor - an audit on a wave wave-publish will refuse is the whole measured waste
+MUST FIRE  wave-publish.ps1 is never called for a wave held on a red P5 gate
+MUST FIRE  the hold is on DISK, naming the red gate and the owner that was tried, so --status on a finished run can still say why nothing published
+MUST FIRE  every recipe in a held wave goes back to the pool at qa-passed with the held detail - NOT rejected, because no recipe is at fault for a shared gate
+MUST FIRE  ...and the advance DETAIL says which wave and which gate held them, so the state file explains itself without the run log
+MUST FIRE  the wave manifest is reconciled on the hold road, or Get-ClaimedSlugs answers 'already claimed by an open wave' and the next close refuses outright
+MUST FIRE  a finding says the wave was HELD and that no auditor was paid
+MUST FIRE  a SECOND wave close over the same red gate spends NO repair and NO auditor - the first repair either cleared it or could not, and re-buying the same agent to be told the same thing is the shape this precheck removes
+CLEAN TWIN the first close DID spend exactly one repair, so the cap is a cap and not a switch that was never on
+CLEAN TWIN recipes-db-dryrun and the p8-* checks failing ALONE are not P5 gates: the auditor is dispatched exactly as before, no repair and no hold - waves 3, 4 and 8 published with the dry run red
+CLEAN TWIN ...and the precheck stamps no lane pair when it does not refuse
+CLEAN TWIN a clean battery report takes the unchanged road: the auditor is the FIRST agent dispatched and wave-publish runs, with no repair spent and nothing the precheck added in between
+CLEAN TWIN a clean precheck adds no lane line and no finding of its own
+CLEAN TWIN an unreadable battery report dispatches the auditor as before and holds nothing - could-not-look is not a refusal
+CLEAN TWIN ...and it SAYS SO in a finding, because a check that could not run must never read the same as a check that passed
+MUST FIRE  hunt_lib.P5_GATES is EXACTLY the first six labels in wave-publish.ps1's $gates array - a gate added, removed or reordered there turns this red rather than letting the daemon's copy drift into blocking or waving through the wrong wave
+MUST FIRE  ...and the gates BELOW those six are still the three the BATTERY does not run (so no report can carry a verdict for them). A new gate inserted into P5 turns this red and forces the ruling to be made rather than inherited
+MUST FIRE  recipes-db-dryrun is NOT in P5_GATES, and neither is any p8 check - the one discipline the measurement demanded
+MUST FIRE  every P5 gate has an owner in the daemon's P5_OWNERS map, so no red gate can route to the default by accident
+MUST FIRE  p5_red_gates treats an ABSENT check as not-red and a non-dict as no verdict at all - the battery not running a gate is announced elsewhere, never refused here
+MUST FIRE  the lane log carries a p5-precheck start/end PAIR on the audit lane when the precheck refuses, so the run's own instrument explains why no auditor session appears against this wave
+MUST FIRE  ...and the end line names the red gates and says the auditor was not dispatched - a free pair with an empty detail would be a silence with a timestamp on it
+MUST FIRE  the end line goes through lane_free_end, so the stage is stamped 0 tokens rather than -1 'not reported' - a free stage is measured work
+MUST FIRE  the P5 owner is read from the gate, not fixed: a store-integrity red goes to the PRICER, where a store question actually lives
+CLEAN TWIN no hold file, no HELD WAVES line - the section appears only when it has something to report
+MUST FIRE  status_report grows a HELD WAVES line naming the wave, its recipe count and the gate that held it, read off the hold FILE so a --status on a finished run reports it too
+MUST FIRE  the dossier names the COMMIT RANGE this publish produced, so the reviewer reads the real diffs instead of guessing which commits were its own
+MUST FIRE  ...and it lists the triage items that were ALREADY pending, which is the one fact that cannot be reconstructed after the publish - it is how a new item is told from a pre-existing one, and it cost 6 queue re-reads without it
+MUST FIRE  ...and an item that appeared DURING the publish is NOT in that list, or the diff the reviewer is told to take would hide the very thing it is for
+MUST FIRE  the rows recipes-db GAINED are named, with the before and after counts - the reviewer's own 'row counts moved implausibly' check
+MUST FIRE  every published slug gets its LIVE url, cache-bust instruction included - the pages are what the reviewer exists to check
+MUST FIRE  and the dossier SAYS what it is: pointers and pre-publish facts, never evidence that anything is correct - a dossier a reviewer mistakes for a clean bill has replaced the review rather than fed it
+MUST FIRE  the dossier carries NO row CONTENTS - not a per-serving macro, not a batch cost - because the reviewer must verify the live page against the ARTIFACT, and a number quoted here would be the daemon's transcription of it
+MUST FIRE  ...and it says so in words, so the next person to extend it knows which side of the line the new field falls on
+CLEAN TWIN an unreadable triage queue SAYS SO and tells the reviewer to treat every item as possibly new - rendering it as 'the queue was empty' would make every pre-existing item look like this run's fault
+CLEAN TWIN an EMPTY queue and an UNREADABLE one do not render the same - the empty one is a fact and says so
+CLEAN TWIN a queue that really was EMPTY renders as empty, not as unreadable - the twin of the case above, so neither reading can quietly absorb the other
+CLEAN TWIN git that cannot answer produces NO range at all and says to establish one - a fabricated sha would send the reviewer at the wrong diff
+MUST FIRE  a publish that moved HEAD not at all is called out as a finding rather than rendered as an empty range the reviewer might read as 'nothing to check' - the push-scripts-to-repo lesson wearing a different hat
+MUST FIRE  a row that DISAPPEARED from recipes-db across a publish is named and called a finding - a publish adds rows and removes none, so a shrink is the shape of a clobbered file
+MUST FIRE  run_wave actually HANDS the reviewer the dossier - the predicate being right while the call site passes nothing is the trap this estate has a scar from, and every dossier case above would still read green
+MUST FIRE  the SNAPSHOT is taken before wave-publish runs and the second git read after it - a snapshot taken afterwards would record the world the publish already changed, which is the same as having no snapshot
+CLEAN TWIN the reviewer's existing prompt is intact underneath it - the wave slugs, the collateral count and the batch stamp all still there
+MUST FIRE  triage_ids reads ids off the queue's real shape and returns EMPTY for a doc it does not recognise - an unreadable queue must reach the dossier as could-not-look, never as a queue that had nothing in it
+MUST FIRE  db_slugs reads slugs off recipes-db's real shape and tolerates a row without one, so a malformed row cannot make the whole count read as zero
+MUST FIRE  the terms this run sent the pricer are written to disk - the set was per-PROCESS, and one term was dispatched 19 times across 17 restarts because of it (54% of the price lane's turns)
+CLEAN TWIN a fresh daemon starts with an EMPTY set, so nothing is inherited by accident - the load is a deliberate act, not a constructor side effect
+MUST FIRE  ...and loading it back gives the restart what the previous process knew, so a PENDING term is not re-adjudicated to the same PENDING forever
+MUST FIRE  seed() actually CALLS load_priced_terms - the resume road is the only place the persistence can matter, and a loader nobody calls is a fix that passes every test it has and does nothing (measured: it shipped inert for one suite run)
+MUST FIRE  the price lane PERSISTS the set in the same breath as it updates it - a save nobody calls leaves the restart reading a file that never grew
+CLEAN TWIN an unreadable file leaves the set EMPTY rather than raising - that is today's behaviour exactly, and it can only ever cause a term to be priced twice, never to be skipped wrongly
+CLEAN TWIN nothing qa-passed means nothing to drain, whatever else is true
+MUST FIRE  a PART wave is NOT force-closed when a process stops - two recipes would buy a whole auditor session, and seed() re-waves them on the next start anyway, which is the road trim_wave's clean branch already relies on
+CLEAN TWIN a FULL wave is closed - holding a wave that is ready buys nothing
+MUST FIRE  a run that MET ITS TARGET drains its remainder even when the wave is short - that is a run genuinely finishing, and its recipes must not be stranded
+MUST FIRE  a HALTED run drains too - a halt is a deliberate stop and its recipes should not sit in limbo waiting for a resume that may never come
+MUST FIRE  run()'s drain actually consults should_force_drain - the predicate being right while the drain still force-closes unconditionally is the same trap the priced-terms loader fell into on this very date
+MUST FIRE  published_slugs reads the run's own wave results and DEDUPES - a slug republished as collateral must not count twice toward the target
+CLEAN TWIN a run that has published nothing reports an empty list, never a count it cannot support
+MUST FIRE  probe-ingredient hands the pricer more than 8 hits per store - at 8 the cap BOUND on 21 of 30 measured results and hid the ladder the pricer then paid 16 turns to re-derive
+MUST FIRE  the writer is NOT on an opus tier - it cannot introduce a number (apply_writer_fields patches the intake from its payload) and it is the only stage with two independent fable gates behind it, source-qa per recipe and the auditor per wave
+MUST FIRE  the map lane runs MORE calls at once - the one lever that changes no quality decision at all, since each call keeps its model, effort and prompt and only the number in flight moves; the map lane was 22.6 of 23.0 covered minutes
+MUST FIRE  the mapper's batch stays under the output-token cliff - a batch whose payload crosses the 32,000 ceiling is cut mid-JSON and regenerated in full, which cost the 4-recipe call 6.6 of its 14 minutes on text nothing read
+CLEAN TWIN the batch is not zero or negative - take_batch would starve the lane
+MUST FIRE  recipe-writer runs at effort MEDIUM - extended thinking IS generated output and output is the wall clock; a 1.8-turn prose stage that cannot introduce a number and has two independent gates behind it
+MUST FIRE  recipe-ingredient-mapper runs at effort MEDIUM - extended thinking IS generated output and output is the wall clock; 73.8% of its output was thinking, and it is the biggest lane in the run
+MUST FIRE  a run takes back at START-UP what an earlier process of ITSELF was holding - this process has taken nothing yet, so every take under its own name is a dead process's
+MUST FIRE  ...and where the LEDGER already ruled, the ruling lands instead of the candidate going back on the shelf to be re-offered
+CLEAN TWIN another run's take is untouched - the reclaim is of its OWN name only, which is the whole reason it is safe to do without asking who is alive
+MUST FIRE  ...and it SAYS how many it took back - a silent reclaim of a candidate a decider may have been ruling on is the failure class in the other direction
+CLEAN TWIN a run holding nothing reclaims nothing and says nothing
+MUST FIRE  the window built at DISPATCH replaces the nightly key-match list, and the dossier says `shown` of `in_region` of `in_ledger`
+MUST FIRE  the region's ruling MIX rides along as counts that sum to their own total
+MUST FIRE  a BLIND window keeps the nightly list, says `blind` with a reason, and still dispatches - a could-not-look is never an empty list
+MUST FIRE  the prompt TELLS the decider it is a window - one it is not told about is a cut
+MUST FIRE  the window is asked for AFTER the take and BEFORE the prompt, in that order
+MUST FIRE  a case name that VANISHED exits 2 even though every case that ran passed - a deleted case leaves the suite green at exit 0, measured
+CLEAN TWIN an ADDED case is a new fixture, not a regression - exit 0, and it is named
+CLEAN TWIN a case name INDENTED to read as a continuation is the same case - indentation is layout, not identity, and comparing it made 31 unchanged cases read as 31 removals
+MUST FIRE  a MISSING reference is a could-not-look, never a clean diff
+MUST FIRE  ...and so is an EMPTY reference - it can never see a removal, so it may not report one

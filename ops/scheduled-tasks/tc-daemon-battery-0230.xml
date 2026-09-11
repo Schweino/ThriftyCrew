@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>02:30 nightly: the Recipe Hunter daemon's full self-test battery, which run-gates skips because it runs for minutes. ops\run-daemon-battery.ps1 runs it in a throwaway detached checkout of origin/main with one slot from the machine-wide gate budget, diffs its case names against the pinned reference, and fails if the checkout is dirty afterwards. Hourly catch-up occurrences until 10:30 go through run-once-a-day, so the battery runs at most once a day.</Description>
+    <URI>\TC Daemon Battery 0230</URI>
+  </RegistrationInfo>
+  <Principals>
+    <Principal id="Author">
+      <UserId>__CURRENT_USER_SID__</UserId>
+      <LogonType>InteractiveToken</LogonType>
+    </Principal>
+  </Principals>
+  <Settings>
+    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
+    <ExecutionTimeLimit>PT2H</ExecutionTimeLimit>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <IdleSettings>
+      <Duration>PT10M</Duration>
+      <WaitTimeout>PT1H</WaitTimeout>
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
+  </Settings>
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2026-09-12T02:30:00-05:00</StartBoundary>
+      <Repetition>
+        <Interval>PT1H</Interval>
+        <Duration>PT8H</Duration>
+      </Repetition>
+      <ScheduleByDay>
+        <DaysInterval>1</DaysInterval>
+      </ScheduleByDay>
+    </CalendarTrigger>
+  </Triggers>
+  <Actions Context="Author">
+    <Exec>
+      <Command>C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key daemon-battery -Exe "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgLine "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"C:\Codex\ThriftyCrew\ops\run-daemon-battery.ps1\""</Arguments>
+    </Exec>
+  </Actions>
+</Task>

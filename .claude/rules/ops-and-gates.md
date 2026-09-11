@@ -259,8 +259,11 @@ everything else honest, so a defect here is silent by construction.
   none hung; paired under 10 `cpu-load` burners, both arms passed 200 of 200 on every case, so the flake did
   not reproduce and the change rests on the mechanism and the mutants. Still standing, found and not fixed:
   `_hb_heartbeat_reports_and_names_a_stall`, whose NO PROGRESS case needs about four event-loop ticks inside a
-  0.25 s sleep. **That battery is NOT scheduled anywhere**, whatever `run-gates`' skip reason used to say, so
-  these bars redden whoever runs it by hand after a daemon change. **Not every red under load is a
+  0.25 s sleep. **That battery ran on no schedule until 2026-09-11**, whatever `run-gates`' skip reason used to say.
+  It is now defined as `TC Daemon Battery 0230` (`ops/run-daemon-battery.ps1`: exit code first, `--names-diff`
+  against the committed `hunt_daemon_selftest.names.txt`, red on any `git status` line in a throwaway checkout), so
+  these bars redden the nightly run as well as whoever runs it by hand. **A definition is not a registration**:
+  check `Get-ScheduledTask` before saying it runs. **Not every red under load is a
   clock:** the two concurrency-fixture reds the same day were lost writes, the mutex rule above.
 - **A timed lock wait is a BRANCH, and an append is not a locked write** (2026-09-11). `grocery/send-alert.ps1`
   stored `WaitOne(10000)`'s answer and never read it, so a timeout rewrote the whole triage queue UNLOCKED over

@@ -49,6 +49,12 @@
       "max_age_hours": 30,
       "why": "one morning page: what the night moved, what went red, which stage of the loop is starving, and every judgement queue with the age of its oldest unruled item against a floor. It exists because the queues drain only when somebody sits down at them - measured 2026-09-09, 60 graph alias proposals had waited 19.9 days with nothing anywhere saying so.",
       "proves": "ops/out/brain-digest-body.txt"
+    },
+    {
+      "name": "TC Daemon Battery 0230",
+      "max_age_hours": 30,
+      "why": "02:30 nightly: the Recipe Hunter daemon's full self-test battery (548 cases, 388-677 s of wall on 2026-09-11), run by ops/run-daemon-battery.ps1 in a throwaway detached checkout of origin/main. run-gates skips it because it runs for minutes, and its skip reason said 'exercised nightly' while nothing ran it; the same day it was found rewriting the tracked meal-prep/db/fdc-cache.json 36 times per run. Exit 2 is a red case, a case name missing against meal-prep/pipeline/hunt_daemon_selftest.names.txt, or any git status line in that checkout afterwards; exit 3 is could-not-run. proves = a stamp written ONLY on a green verdict, never on every path: a red battery must page, and a stamp written on a red run would excuse its own nonzero exit as work that landed.",
+      "proves": "ops/out/logs/daemon-battery-green.json"
     }
   ],
   "startup_entries": [],

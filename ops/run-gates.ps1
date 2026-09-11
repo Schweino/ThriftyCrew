@@ -387,11 +387,14 @@ $pySkip = @{
   'meal-prep\pipeline\resolution_embed.py'  = 'needs numpy - sidecar venv; it says so itself and stops'
   'sidecar\sweep.py'                        = 'needs torch - sidecar venv'
   # The daemon and its full battery run for minutes, and the gate has to stay fast enough that people
-  # run it. NOTHING RUNS THEM ON A SCHEDULE: this said "exercised in the nightly chain" until 2026-09-11,
-  # when none of the box's 193 scheduled tasks and no .ps1, .cmd, .xml or .yml in the tree invoked either.
-  # They run when someone runs them by hand after a daemon change, which is what the design briefs ask.
-  'meal-prep\pipeline\hunt-daemon.py'       = 'the daemon itself - runs for minutes; run by hand, not scheduled'
-  'meal-prep\pipeline\hunt_daemon_selftest.py' = 'the full daemon battery - ~270 s; run by hand, not scheduled'
+  # run it. This said "exercised in the nightly chain" until 2026-09-11, when none of the box's 193 scheduled
+  # tasks and no .ps1, .cmd, .xml or .yml in the tree invoked either. The battery (hunt-daemon.py --selftest
+  # runs exactly this file) is now defined as TC Daemon Battery 0230 - ops\scheduled-tasks\tc-daemon-battery-0230.xml,
+  # which runs ops\run-daemon-battery.ps1: exit code first, --names-diff against a committed reference, and red on
+  # any git status line in its throwaway checkout. A definition is not a registration; health-heartbeat pages
+  # TASK MISSING while the task is not on the scheduler.
+  'meal-prep\pipeline\hunt-daemon.py'       = 'the daemon itself - its --selftest IS the battery below; runs for minutes'
+  'meal-prep\pipeline\hunt_daemon_selftest.py' = 'the full daemon battery - 250-680 s; nightly as TC Daemon Battery 0230 (ops\run-daemon-battery.ps1), not at push time'
 }
 $pySuites = @()
 # MATCHED BELOW THE ROOT (2026-09-11, lib\tree-walk.ps1), the same fix as the PowerShell discovery above. On the full

@@ -14,6 +14,9 @@
                                   (capture-watchdog.ps1:1257-1271; measured 2026-09-10, the 10:30 run moved the
                                   Family Fare cursor 219 -> 227 at 10:33:59), so an hourly repeat would buy
                                   Family Fare terms every hour against a deliberate daily budget.
+    TC Daemon Battery 0230        ops\run-daemon-battery.ps1 runs the daemon's 548-case battery, 388-677 s of wall
+                                  on 2026-09-11, on a box every session shares; an hourly repeat would run it up to
+                                  nine times a day. Born wrapped on 2026-09-11, never unwrapped.
 
   THE ARGUMENT SHAPE IS -Exe AND -ArgLine, NOT '-- <exe> <args...>'. Measured 2026-09-10 on this estate's
   PowerShell 5.1: `powershell.exe -File <script> -Key x -- exe --flag` fails parameter binding before the
@@ -198,7 +201,10 @@ if ($SelfTest) {
     # script's path swapped for an echo of the same param block, so the binding is Windows' and PowerShell's own
     # rather than a regex's. $preWrap is FROZEN from those three definitions as committed before they were
     # wrapped (a3952ca0f). A new wrapped task fails the resolved-set case until it adds its own frozen row.
+    # daemon-battery was BORN wrapped (2026-09-11), so it has no pre-wrap command: its row is the command its
+    # definition was committed to hand the child, frozen here so a later edit to the XML must edit this too.
     $preWrap = @{
+      'daemon-battery'   = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-daemon-battery.ps1"' }
       'brain-digest'     = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\brain-digest.ps1" -Alert -Quiet' }
       'recall-sleep'     = @{ Exe = 'C:\Codex\Python312\python.exe'; ArgLine = '"C:\Users\Owner\.claude\skills\recall-sleep.py" --cwd "C:\Codex\ThriftyCrew" --commit --push' }
       'capture-watchdog' = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-watchdog.ps1" -Alert' }
