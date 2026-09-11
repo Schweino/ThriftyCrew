@@ -1,0 +1,11 @@
+{
+    "generated":  "2026-09-11T16:10:18",
+    "sites":  20,
+    "history":  [
+                    {
+                        "date":  "2026-09-11T16:10:18",
+                        "count":  20
+                    }
+                ],
+    "note":  "HIGH-WATER MARK for Move-Item -Force commands outside lib\\atomic-write.ps1. This number may only go DOWN. A run above it is a NEW bare replace and hard-fails."
+}

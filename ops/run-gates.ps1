@@ -220,6 +220,10 @@ $static = @(
   # around it entirely, ten of them in .claude\skills\lesson. A ratchet, so the number can only fall
   # (2026-09-06, backlog E1).
   @{ f = 'ops\audit-write-seam.ps1';           n = 'no NEW irreversible write bypasses the E1 safety layer' }
+  # A HELD READER REFUSES A TEMP-THEN-RENAME, and under the default ErrorActionPreference the refusal does not even
+  # throw: the write is lost and the script carries on (measured 2026-09-11). lib\atomic-write.ps1 waits the reader
+  # out. A ratchet, so a NEW bare Move-Item -Force fails the push and the known ones may only fall.
+  @{ f = 'ops\audit-bare-replace.ps1';         n = 'no NEW Move-Item -Force replace bypasses lib\atomic-write.ps1, where a held reader would lose the write' }
   # AN AUDITOR THAT REPORTS INTO A FILE NOBODY OPENS IS A MEASUREMENT WITH NO CONSEQUENCE, and one whose
   # ALERT describes a consumer that does not exist is worse: it suppresses the manual repair that would
   # otherwise have happened. audit-ff-carry told its reader that confirmed victims "lead the next window's

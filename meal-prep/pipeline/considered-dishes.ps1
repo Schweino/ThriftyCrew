@@ -211,6 +211,44 @@ if ($runSelfTest) {
       ) ([string]@((Get-Rulings $fakeDishes 'Moroccan Lamb Tagine' 'any' 'any').exact).Count)
   } finally { if (Test-Path $tmp) { Remove-Item $tmp -Force } }
 
+  # MUST FIRE (2026-09-11): A -Record MADE WHILE ANOTHER PROCESS HOLDS THE LEDGER OPEN LANDS. The decider writes
+  # this file while the 18:00 harvest crawl can be reading it (harvest.py load_methods and batch_prior_rulings,
+  # Python open(), no FILE_SHARE_DELETE). The parent holds the ledger that way until the child has written its
+  # .tmp - so the child's replace is attempted UNDER the hold, never before it - and lets go 400 ms later. A bare
+  # Move-Item refused that replace, and the child exited non-zero with the ruling gone.
+  $hcStore = Join-Path $env:TEMP ('cd-held-' + [guid]::NewGuid().ToString('N') + '.json')
+  $hcOut = [IO.Path]::GetTempFileName(); $hcErr = [IO.Path]::GetTempFileName()
+  try {
+    ([pscustomobject]@{ _doc = 'held fixture'; dishes = @(
+        [pscustomobject]@{ key = 'beef|skillet|soy';   slug = 'held-seed-1'; verdict = 'accepted' },
+        [pscustomobject]@{ key = 'pork|skillet|cream'; slug = 'held-seed-2'; verdict = 'rejected-dupe' }) } |
+      ConvertTo-Json -Depth 6) | Set-Content -Path $hcStore -Encoding utf8
+    $hcHold = New-Object IO.FileStream($hcStore, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
+    $hcSawTmp = $false
+    try {
+      # ONE-TOKEN ARGUMENT VALUES ONLY: Start-Process joins -ArgumentList with spaces and quotes nothing.
+      $hcProc = Start-Process -FilePath 'powershell' -PassThru -NoNewWindow -RedirectStandardOutput $hcOut -RedirectStandardError $hcErr `
+                -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',$PSCommandPath,'-Record','-Slug','held-dish','-Verdict','accepted','-Name','Held','-Protein','chicken','-Method','skillet','-By','fixture','-Store',$hcStore)
+      $null = $hcProc.Handle   # cache the handle now, or ExitCode reads empty once the process is gone
+      $hcSw = [Diagnostics.Stopwatch]::StartNew()
+      while (-not (Test-Path -LiteralPath ($hcStore + '.tmp')) -and -not $hcProc.HasExited -and $hcSw.Elapsed.TotalSeconds -lt 120) { Start-Sleep -Milliseconds 5 }
+      $hcSawTmp = Test-Path -LiteralPath ($hcStore + '.tmp')
+      Start-Sleep -Milliseconds 400
+    } finally { $hcHold.Dispose() }
+    # A CHILD STILL RUNNING IS A NAMED FAILURE, NOT A CRASH: reading ExitCode off a live process throws.
+    if ($hcProc.WaitForExit(120000)) { $hcCode = $hcProc.ExitCode } else { try { $hcProc.Kill() } catch { }; $hcCode = 'still running after 120 s, killed' }
+    $hcSaid = [string](Get-Content $hcOut -Raw); if ($null -eq $hcSaid) { $hcSaid = '' }
+    $hcRows = @(Read-Store $hcStore)
+    $hcSlugs = @($hcRows | ForEach-Object { [string]$_.slug })
+    T 'the held-ledger case really overlapped: the child wrote its temp file while the parent still held the ledger' `
+      $hcSawTmp ("no temp file seen; child exited=" + $hcProc.HasExited + " said: " + $hcSaid.Trim())
+    T 'MUST FIRE  a -Record made while the harvest crawl holds the ledger open LANDS once it lets go (a bare Move-Item lost the ruling)' `
+      ($hcCode -eq 0 -and ($hcSlugs -contains 'held-dish') -and $hcSlugs.Count -eq 3) `
+      ("exit " + $hcCode + ", slugs: " + ($hcSlugs -join ',') + " | child said: " + $hcSaid.Trim())
+  } finally {
+    Remove-Item -LiteralPath $hcStore, ($hcStore + '.tmp'), $hcOut, $hcErr -Force -ErrorAction SilentlyContinue
+  }
+
   if ($bad -gt 0) { Write-Output ("considered-dishes SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'considered-dishes SELF-TEST PASS'
   Exit-Guard -Name 'considered-dishes' -Summary 'selftest pass' -Code 0

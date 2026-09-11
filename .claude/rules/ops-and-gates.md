@@ -193,7 +193,12 @@ everything else honest, so a defect here is silent by construction.
   capture-run's status, hunt-run state, considered-dishes, saturation). The 12 left are written by one serial chain
   step with no concurrent reader, already retry, or are run by hand. **A new replace of a file something else reads
   uses `Write-TcAtomicFile`**, and a site that wrote with `WriteAllText` and no BOM passes `-NoBom -NoNewline` so its
-  bytes do not change.
+  bytes do not change. **Under the default ErrorActionPreference a bare refusal is SILENT**: `Move-Item -Force` over a
+  held file prints an error and the script carries on as if the write landed, so a writer without `EAP=Stop` loses
+  it with no throw. The lib moves with `-ErrorAction Stop`, fails fast on what waiting cannot fix (a missing temp file
+  or directory), takes `-UniqueTemp` where writers share no mutex, and runs `-OnRefusal` so a test can PROVE a replace
+  met a reader instead of timing it. `ops/audit-bare-replace.ps1` ratchets the bare form in `run-gates`: run it for
+  the count, and mark a deliberate exception `# atomic-replace:allow <reason>` on the command's own line.
 - **A lock around the SAVE is not a lock around the read-modify-write when the ledger was loaded earlier**
   (2026-09-11). `grocery/sale-windows.json`, `grocery/out/capture-cursor.json` and
   `grocery/rollback-first-seen.json` were read-modify-written by concurrent lanes and builders with no lock at

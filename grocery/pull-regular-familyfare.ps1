@@ -7,6 +7,7 @@
 param([string]$OutDir = "", [int]$MaxMinutes = 9, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: the temp-then-rename every ledger here shares
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'omaha-time.ps1')
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
@@ -73,8 +74,11 @@ function Write-FfJsonAtomic([string]$path, [string]$text, [int]$Attempts = 5, [i
   $tmp = $path + '.tmp'
   for ($a = 1; $a -le $Attempts; $a++) {
     try {
-      $text | Set-Content -LiteralPath $tmp -Encoding UTF8 -ErrorAction Stop
-      Move-Item -LiteralPath $tmp -Destination $path -Force -ErrorAction Stop
+      # ONE LIB ATTEMPT PER OUTER ATTEMPT (2026-09-11). lib\atomic-write.ps1 now carries the temp file, the bytes
+      # Set-Content -Encoding UTF8 wrote here and the cleanup of a refused temp. THE RETRY STAYS OUT HERE: 5 attempts
+      # with a 2 s backoff is this lane's incident-born budget and test-auditors pins it, while -SelfTest passes a 0
+      # backoff to stay fast - the lib's own ~7 s wait inside every attempt would hold that fixture for half a minute.
+      [void](Write-TcAtomicFile -Path $path -Text $text -MaxAttempts 1)
       return $true
     } catch {
       if ($a -lt $Attempts) { Start-Sleep -Seconds $BackoffSec }

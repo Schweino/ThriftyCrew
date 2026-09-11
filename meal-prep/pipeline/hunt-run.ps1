@@ -911,6 +911,20 @@ if ($runSelfTest) {
     # a one-element array must stay an array through PS 5.1 round-tripping - the collapse that made a
     # one-row ledger unreadable by the very stamp that wrote it
     T 'MUST FIRE  a single-element array does not collapse to a scalar' (@($back.terms).Count -eq 1 -and $null -ne @($back.terms)[0].term) 'collapsed'
+    # MUST FIRE (2026-09-11): a state write made while ANOTHER handle holds the file the way the daemon's Python
+    # open() and Read-Entries do (read, shared ReadWrite, no Delete) lands once that reader lets go. PROVEN BY
+    # RENDEZVOUS, NOT A CLOCK (ops-and-gates.md): the hold is open before the write starts and lets go only
+    # 400 ms after the write's own temp file has appeared, so the replace is attempted under it. Load can make
+    # this slower and never red; a writer that cannot wait out the hold throws, and that is the red.
+    $e.state = 'priced'
+    $hold = Start-TcFileHold -Path $p -UntilFile ($p + '.tmp') -GraceMs 400
+    $hErr = ''
+    try { Write-JsonAtomic -Path $p -Obj $e } catch { $hErr = $_.Exception.Message }
+    Stop-TcFileHold $hold
+    $hBack = Read-Json $p
+    T 'MUST FIRE  a state write made while a reader holds the file LANDS once it lets go (a single Move-Item loses it)' `
+      ($hold.Opened -and $hold.Saw -and -not $hErr -and [string]$hBack.state -eq 'priced') `
+      ("opened=" + $hold.Opened + " saw_temp=" + $hold.Saw + " state=" + $hBack.state + " err=" + $hErr)
   } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
   # ---- FIXTURE 6. THE LEDGER MARSHALLING BUG, frozen. WaveClose opens the batch-ledger row that records

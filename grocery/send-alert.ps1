@@ -692,7 +692,7 @@ try {
   else {
     $qTmp = $qFile + '.tmp'
     $qJson | Set-Content $qTmp -Encoding UTF8
-    Move-Item -Path $qTmp -Destination $qFile -Force
+    Move-Item -Path $qTmp -Destination $qFile -Force   # atomic-replace:allow the fallback used only when lib\atomic-write.ps1 did not load; the log line above says so
   }
   $queued = $true
 } catch {

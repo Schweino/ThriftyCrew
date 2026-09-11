@@ -789,6 +789,31 @@ if ($SelfTest) {
   B '-Full (every term asked): the catalogue is restated wholesale and NOTHING is carried' (
       (@($mFull.Rows).Count -eq $POP) -and ($mFull.Carried -eq 0))
 
+  # --- the ad-schedule write waits out a sibling lane's read (2026-09-11) --------------------------------
+  # MUST-FIRE: the Hy-Vee and Family Fare lanes read ad-schedule.json while this lane replaces it. A reader that
+  # holds the file (read, shared ReadWrite, no Delete) must cost nothing. PROVEN BY RENDEZVOUS, NOT A CLOCK
+  # (ops-and-gates.md): the hold is open before the write and lets go only 400 ms after the write's own temp
+  # file has appeared, so the replace is attempted under it. Load makes this slower, never red.
+  $asTmp = Join-Path ([IO.Path]::GetTempPath()) ('bkas-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $asTmp -Force | Out-Null
+  try {
+    $asFile = Join-Path $asTmp 'ad-schedule.json'
+    ([pscustomobject]@{ updated = '2026-08-01'; stores = @(
+        [pscustomobject]@{ store = "Baker's"; method = 'agent'; current = $null; next_pull = ''; history = @() },
+        [pscustomobject]@{ store = 'Hy-Vee';  method = 'server'; current = $null; next_pull = ''; history = @() }) } |
+      ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $asFile -Encoding UTF8
+    $asHold = Start-TcFileHold -Path $asFile -UntilFile ($asFile + '.tmp') -GraceMs 400
+    $asErr = ''
+    try { [void](Update-BakersAdSchedule $asFile '2026-08-13') } catch { $asErr = $_.Exception.Message }
+    Stop-TcFileHold $asHold
+    $asDoc = [IO.File]::ReadAllText($asFile) | ConvertFrom-Json
+    $asRec = @($asDoc.stores | Where-Object { [string]$_.store -eq "Baker's" })[0]
+    B ('(f) MUST-FIRE: the ad-schedule write made while a lane reads the file LANDS once the reader lets go (saw_temp=' + $asHold.Saw + $(if ($asErr) { '; ' + $asErr } else { '' }) + ')') (
+        $asHold.Opened -and $asHold.Saw -and (-not $asErr) -and ([string]$asRec.current.from -eq '2026-08-12'))
+    $asLeft = @(Get-ChildItem -LiteralPath $asTmp -File | Where-Object { $_.Name -like '*.tmp' })
+    B '(f) and it leaves no temp file behind' ($asLeft.Count -eq 0)
+  } finally { Remove-Item -LiteralPath $asTmp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output ("SELF-TEST FAIL: " + $fail + " case(s)"); exit 1 }
 }
 

@@ -136,7 +136,9 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
     # Retried, not a bare Move-Item (2026-09-11): capture-watchdog (hourly from 10:30) and the hourly re-fires of
     # both capture tasks read this file with no lock, and a replace over a file they hold open fails outright.
-    [void](Write-TcAtomicFile -Path $script:StatusFile -Text ($doc | ConvertTo-Json -Depth 5))
+    # -UniqueTemp (2026-09-11): a skipped-locked occurrence writes this file while the lock holder runs, with no
+    # mutex between them, and two writers sharing <file>.tmp collide on the temp file itself.
+    [void](Write-TcAtomicFile -Path $script:StatusFile -Text ($doc | ConvertTo-Json -Depth 5) -UniqueTemp)
   } catch { }
 }
 function Release-RunMutex {
