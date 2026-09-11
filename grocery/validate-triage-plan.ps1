@@ -53,6 +53,14 @@
   (every prior id), prevention.source/what/exact_change, and proof.fixture_occurrences (every prior id plus
   its own); twice returned, a source made only of rule or exclusion data is refused. An unreadable queue is
   BLIND (exit 3) in handoff mode exactly as in -Closing. The rule itself is grocery\triage-return-lib.ps1.
+  THE WEEKLY LANE PLANS AHEAD (2026-09-10, Brad's ruling 6, prevention first, then leftovers). A plan with
+  "lane": "weekly" carries prevention_target (type, window_days of at least 14, days_fired, rank, and why_not_top
+  when rank is above 1), new_source_check (until build step 8's row contract exists: a record that none exists
+  yet), and one item whose queue_id is prevention:<type>, holding the full code-item fields and prevention.source.
+  The gate RECOMPUTES days_fired and rank from grocery\out\alert-census.jsonl (or -CensusFile) over the window
+  ending on the plan's generated date, through Get-AlertCensusTypeDays in triage-return-lib.ps1, and names any
+  mismatch. A weekly plan whose census is missing or unreadable is BLIND (exit 3) in both modes. A plan with no
+  lane, or any other lane, is asked for none of it.
   -SelfTest runs frozen good/bad fixtures through the rules and exits (0 pass, 1 fail).
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
@@ -61,7 +69,8 @@ param(
   [string[]]$OpenIds = @(),
   [switch]$SelfTest,
   [switch]$Closing,
-  [string]$QueueFile = ''
+  [string]$QueueFile = '',
+  [string]$CensusFile = ''
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
@@ -113,9 +122,10 @@ function Read-GateQueue {
 
 function Test-Plan {
   param($Doc, [string[]]$Expect, [string]$PlanDir, [switch]$Closing, $QueueIds = @(), [string]$RepoRoot = '',
-        $QueueItems = $null, [datetime]$Now = [datetime]::MinValue)
+        $QueueItems = $null, [datetime]$Now = [datetime]::MinValue, $Census = $null)
   if ($Now -eq [datetime]::MinValue) { $Now = Get-Date }
   $returns = New-Object System.Collections.Generic.List[string]
+  $prevInfo = $null
   # a watch:<path> owner resolves against the repo this gate lives in unless a caller (the self-test) names one
   if (-not $RepoRoot) { $RepoRoot = Split-Path $root -Parent }
   # -Closing resolves a residual's owner against these. A ruling is owned by its id in open_questions_for_brad;
@@ -126,6 +136,71 @@ function Test-Plan {
   $problems = New-Object System.Collections.Generic.List[string]
   $items = @($Doc.items)
   if ($items.Count -eq 0) { return @{ rc = 3; problems = @('plan carries ZERO items - it proved nothing') } }
+
+  # --- THE WEEKLY LANE PLANS AHEAD (2026-09-10, Brad's ruling 6: prevention first, then leftovers) -----------------
+  # FOUNDING MEASUREMENT: all 25 types that fired on 3 or more days over 2026-08-22 to 09-10 came back after a close,
+  # and the weekly lane existed only to work residuals, so nothing was ever assigned the class that fires most. A
+  # weekly plan now names the census's top recurring type and its days fired BEFORE any fix, and the gate recomputes
+  # both from the census instead of trusting the plan's arithmetic about itself: a number a plan writes about its own
+  # target is the written-not-measured shape. The count is the census's, through the one shared function.
+  $isWeekly = (([string]$Doc.lane).Trim() -eq 'weekly')
+  if ($isWeekly) {
+    if (-not $Census -or -not $Census.ok) {
+      $cWhy = if ($Census) { [string]$Census.why } else { 'no census was read' }
+      return @{ rc = 3; problems = @("BLIND: a weekly plan is checked against grocery/out/alert-census.jsonl (ruling 6) and $cWhy - run grocery\audit-alert-census.ps1, then re-run this gate"); returns = $returns; prevention = $null }
+    }
+    $wMin = $script:PreventionWindowDaysMin
+    $genOk = $false; $genDate = [datetime]::MinValue
+    try { if (([string]$Doc.generated).Trim()) { $genDate = [datetime]::Parse(([string]$Doc.generated).Trim(), [Globalization.CultureInfo]::InvariantCulture).Date; $genOk = $true } } catch { $genOk = $false }
+    $genK = if ($genOk) { $genDate.ToString('yyyy-MM-dd') } else { '?' }
+    if (-not $genOk) { $problems.Add("weekly plan has no parseable generated date, so the census window its prevention_target counts over cannot be placed") }
+    $pt = $Doc.prevention_target
+    $hasPt = ($pt -and -not ($pt -is [string]))
+    $ptType = ''; $wd = -1; $df = -1; $rk = -1; $wnt = ''
+    if ($hasPt) {
+      $ptType = ([string]$pt.type).Trim()
+      if ($pt.PSObject.Properties['window_days'] -and ([string]$pt.window_days) -match '^\s*\d+\s*$') { $wd = [int]([string]$pt.window_days) }
+      if ($pt.PSObject.Properties['days_fired'] -and ([string]$pt.days_fired) -match '^\s*\d+\s*$') { $df = [int]([string]$pt.days_fired) }
+      if ($pt.PSObject.Properties['rank'] -and ([string]$pt.rank) -match '^\s*\d+\s*$') { $rk = [int]([string]$pt.rank) }
+      if ($pt.PSObject.Properties['why_not_top']) { $wnt = ([string]$pt.why_not_top).Trim() }
+    }
+    $wTop = if ($wd -ge $wMin) { $wd } else { $wMin }
+    $ranked = @()
+    if ($genOk) { $rk0 = Get-AlertCensusTypeDays $Census.rows $genDate $wTop; $ranked = @($rk0) }
+    $topTxt = if ($ranked.Count) { "'" + [string]$ranked[0].type + "' on " + $ranked[0].days + " of the " + $wTop + " days ending " + $genK } else { "no type fired in the $wTop days ending $genK" }
+    if (-not $hasPt) {
+      $problems.Add("weekly plan carries no prevention_target - ruling 6 (2026-09-10): the weekly lane works prevention first, so it names the census's top recurring type with type, window_days (at least $wMin), days_fired and rank before any leftover. The census's top: $topTxt")
+    } else {
+      if (-not $ptType) { $problems.Add("prevention_target has no type - the census type key from grocery/out/alert-census.jsonl") }
+      if ($wd -lt 0) { $problems.Add("prevention_target has no window_days - the days of census it counts over, at least $wMin") }
+      elseif ($wd -lt $wMin) { $problems.Add("prevention_target.window_days is $wd - ruling 6 counts days fired over at least the prior $wMin days") }
+      if ($df -lt 0) { $problems.Add("prevention_target has no days_fired - the target type's days fired in the window, stated before any fix") }
+      if ($rk -lt 1) { $problems.Add("prevention_target has no rank - 1 is the type that fired on the most days in the window") }
+      $hit = $null
+      if ($ptType -and $genOk -and $wd -ge $wMin) {
+        foreach ($x in $ranked) { if ([string]::Equals([string]$x.type, $ptType, [StringComparison]::Ordinal)) { $hit = $x; break } }
+        if (-not $hit) {
+          $problems.Add("prevention_target.type '$ptType' fired on 0 days in the $wd days ending $genK by the census, so it is not a recurring class in that window - the census's top: $topTxt")
+        } else {
+          if ($df -ge 0 -and $df -ne [int]$hit.days) { $problems.Add("prevention_target.days_fired is $df but the census shows '$ptType' on $($hit.days) day(s) in the $wd days ending $genK (grocery/out/alert-census.jsonl, rows with alerts > 0)") }
+          if ($rk -ge 1 -and $rk -ne [int]$hit.rank) { $problems.Add("prevention_target.rank is $rk but the census ranks '$ptType' $($hit.rank) of $($ranked.Count) type(s) by days fired in the $wd days ending $genK - the top: $topTxt") }
+          $prevInfo = @{ type = $ptType; days = [int]$hit.days; rank = [int]$hit.rank; window_days = $wd; end = $genK; types = $ranked.Count; top = $topTxt }
+        }
+      }
+      $effRank = if ($hit) { [int]$hit.rank } else { $rk }
+      if (($rk -gt 1 -or $effRank -gt 1) -and -not $wnt) { $problems.Add("prevention_target is rank $effRank and carries no why_not_top - say why the lane is not working the top type ($topTxt), for example that it already has a prevention item shipped or open, naming that plan") }
+    }
+    if (-not ([string]$Doc.new_source_check).Trim()) {
+      $problems.Add("weekly plan carries no new_source_check - ruling 6 checks every new store, feed or large commodity batch against the row contract before it goes live; that contract is build step 8 and does not exist yet, so write 'no row contract exists yet (build step 8)' and name what went live since the last lane run, or none")
+    }
+    $pvIds = @($items | Where-Object { $_ -and ([string]$_.queue_id) -like 'prevention:*' } | ForEach-Object { [string]$_.queue_id })
+    $wantPv = if ($ptType) { 'prevention:' + $ptType } else { 'prevention:<type>' }
+    if ($pvIds.Count -eq 0) {
+      $problems.Add("weekly plan has no prevention item - one item's queue_id is '$wantPv', the upstream fix for the target class, with the full code-item fields (root_fix, blast_radius, proof with must_fire_case and clean_twin, rollback, freshness, leaves_open, prevention.source), ahead of the leftovers")
+    } elseif ($ptType -and ($pvIds -notcontains $wantPv)) {
+      $problems.Add("weekly plan's prevention item(s) " + ($pvIds -join ', ') + " do not name the prevention_target type - its queue_id is '$wantPv'")
+    }
+  }
 
   $ids = @($items | ForEach-Object { [string]$_.queue_id })
   foreach ($e in @($Expect)) {
@@ -209,6 +284,15 @@ function Test-Plan {
           if ($missFo.Count) { $problems.Add("$id proof.fixture_occurrences does not cover " + ($missFo -join ', ') + " - the fixture reproduces every prior close plus this one") }
         }
       }
+    }
+    # A prevention:<type> item is the weekly lane's upstream fix for the census's top class (ruling 6), so whatever it
+    # is classed it carries the code-item apparatus below and names its producer. Out of budget is a STATUS, never a class.
+    if ($isWeekly -and $id -like 'prevention:*') {
+      if ($NO_CODE -contains $cls) { $problems.Add("$id is the weekly lane's prevention item and is classed '$cls', which skips the code-item fields - it carries root_fix, blast_radius, proof with must_fire_case and clean_twin, rollback, freshness and leaves_open (ruling 6); a lane out of budget sets status needs-more-time instead") }
+      $pvS = $i.prevention
+      $pvSrc = @()
+      if ($pvS -and -not ($pvS -is [string])) { $pvSrc = @(@($pvS.source) | Where-Object { $_ } | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ }) }
+      if ($pvSrc.Count -eq 0) { $problems.Add("$id is a prevention item with no prevention.source - name the repo path(s) of the upstream producer of the class (a capture builder, the ingest parser, the rule schema, the emitting check), with what and exact_change") }
     }
     if ($NO_CODE -contains $cls) { continue }
 
@@ -372,8 +456,8 @@ function Test-Plan {
     }
   }
 
-  if ($problems.Count) { return @{ rc = 2; problems = $problems; returns = $returns } }
-  return @{ rc = 0; problems = @(); returns = $returns }
+  if ($problems.Count) { return @{ rc = 2; problems = $problems; returns = $returns; prevention = $prevInfo } }
+  return @{ rc = 0; problems = @(); returns = $returns; prevention = $prevInfo }
 }
 
 if ($SelfTest) {
@@ -647,6 +731,117 @@ if ($SelfTest) {
     if ($gqO.ok -and @($gqO.items).Count -eq 1 -and [string]@($gqO.items)[0].id -eq 'q1') { Write-Output 'ok    CLEAN TWIN a readable queue returns its one item' } else { Write-Output ("FAIL  a readable queue did not return its item: ok=" + $gqO.ok); $script:fail++ }
   } finally { Remove-Item -LiteralPath $bDir -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # --- THE WEEKLY LANE PLANS AHEAD (2026-09-10, Brad's ruling 6) -----------------------------------------------------
+  # A FROZEN CENSUS, written to a temp file so the reader is reached too. Over the 14 days ending 2026-09-10:
+  # 'grocery board prices aging' fired on 5 days, and its 08-20 row lies outside the window and must not count;
+  # 'grocery capture watchdog issue s' fired on 3, and its 09-06 row carries only a close (alerts 0), which is not a
+  # day fired; 'grocery family fare catalog degrading' fired on 1. A counter that forgets either bound says 6 or 4.
+  $cenLines = @(
+    '{"date":"2026-08-20","type":"grocery board prices aging","subject":"Board prices aging","alerts":2,"new_ids":1,"recurrences":1,"closes":0,"dispositions":{},"returns":0}',
+    '{"date":"2026-09-01","type":"grocery board prices aging","subject":"Board prices aging","alerts":1,"new_ids":1,"recurrences":0,"closes":0,"dispositions":{},"returns":1}',
+    '{"date":"2026-09-02","type":"grocery capture watchdog issue s","subject":"Capture watchdog","alerts":1,"new_ids":1,"recurrences":0,"closes":0,"dispositions":{},"returns":0}',
+    '{"date":"2026-09-03","type":"grocery board prices aging","subject":"Board prices aging","alerts":1,"new_ids":0,"recurrences":1,"closes":0,"dispositions":{},"returns":0}',
+    '{"date":"2026-09-04","type":"grocery capture watchdog issue s","subject":"Capture watchdog","alerts":2,"new_ids":1,"recurrences":1,"closes":0,"dispositions":{},"returns":0}',
+    '{"date":"2026-09-05","type":"grocery board prices aging","subject":"Board prices aging","alerts":1,"new_ids":1,"recurrences":0,"closes":0,"dispositions":{},"returns":1}',
+    '{"date":"2026-09-06","type":"grocery capture watchdog issue s","subject":"Capture watchdog","alerts":0,"new_ids":0,"recurrences":0,"closes":1,"dispositions":{"by-design":1},"returns":0}',
+    '{"date":"2026-09-07","type":"grocery family fare catalog degrading","subject":"Family Fare catalog","alerts":1,"new_ids":1,"recurrences":0,"closes":0,"dispositions":{},"returns":0}',
+    '{"date":"2026-09-08","type":"grocery board prices aging","subject":"Board prices aging","alerts":1,"new_ids":0,"recurrences":1,"closes":0,"dispositions":{},"returns":0}',
+    '{"date":"2026-09-09","type":"grocery capture watchdog issue s","subject":"Capture watchdog","alerts":1,"new_ids":1,"recurrences":0,"closes":0,"dispositions":{},"returns":1}',
+    '{"date":"2026-09-10","type":"grocery board prices aging","subject":"Board prices aging","alerts":3,"new_ids":1,"recurrences":2,"closes":0,"dispositions":{},"returns":1}'
+  )
+  function _CaseWeekly($label, $doc, $cen, $expectRc, $expectMatch, $expectDays, $expectRank) {
+    $script:ran++
+    $r = Test-Plan $doc @('q1') $env:TEMP -Census $cen
+    $txt = ($r.problems -join ' | ')
+    $numOk = $true
+    if ($null -ne $expectDays) { $numOk = ($null -ne $r.prevention -and [int]$r.prevention.days -eq $expectDays -and [int]$r.prevention.rank -eq $expectRank) }
+    if ($r.rc -eq $expectRc -and $numOk -and ((-not $expectMatch) -or ($txt -match $expectMatch))) { Write-Output "ok    $label" }
+    else {
+      $pvTxt = if ($r.prevention) { 'days=' + $r.prevention.days + ' rank=' + $r.prevention.rank } else { 'none' }
+      Write-Output ("FAIL  $label  rc=" + $r.rc + " want $expectRc; recomputed " + $pvTxt + "; problems: " + $txt); $script:fail++
+    }
+  }
+  $cDir = Join-Path $env:TEMP ('vtp-census-' + $PID)
+  New-Item -ItemType Directory -Force -Path $cDir | Out-Null
+  try {
+    $u8w = New-Object Text.UTF8Encoding($false)
+    $cFile = Join-Path $cDir 'alert-census.jsonl'
+    [IO.File]::WriteAllText($cFile, (($cenLines -join "`n") + "`n"), $u8w)
+    $cOk = Read-AlertCensusFile $cFile
+    $cMissing = Read-AlertCensusFile (Join-Path $cDir 'no-such-census.jsonl')
+    $aging = 'grocery board prices aging'
+    $pvItem = $infra.items[0] | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $pvItem.queue_id = 'prevention:' + $aging
+    $pvItem | Add-Member -NotePropertyName prevention -NotePropertyValue ([pscustomobject]@{ source = @('grocery/check-ad-cycles.ps1'); what = 'the aging check reads each row''s own as_of instead of the file time'; exact_change = 'the board-age check keys on the newest row as_of' }) -Force
+    $weekly = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $weekly | Add-Member -NotePropertyName lane -NotePropertyValue 'weekly' -Force
+    $weekly | Add-Member -NotePropertyName generated -NotePropertyValue '2026-09-10T09:00:00' -Force
+    $weekly | Add-Member -NotePropertyName new_source_check -NotePropertyValue 'no row contract exists yet (build step 8); went live since the last lane run: none' -Force
+    $weekly | Add-Member -NotePropertyName prevention_target -NotePropertyValue ([pscustomobject]@{ type = $aging; window_days = 14; days_fired = 5; rank = 1 }) -Force
+    $weekly.items = @($weekly.items[0], $pvItem)
+    $weekly = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    # CLEAN TWIN: the complete weekly plan passes, and the numbers it reports are the gate's own recomputation.
+    _CaseWeekly 'CLEAN TWIN a complete weekly plan passes with the census numbers the gate recomputed, 5 days and rank 1' $weekly $cOk 0 $null 5 1
+    # MUST FIRE: no prevention_target at all, and the message names the census's top type.
+    $wNoTarget = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $wNoTarget.PSObject.Properties.Remove('prevention_target')
+    _CaseWeekly 'MUST FIRE a weekly plan with no prevention_target is rejected and told the top type' $wNoTarget $cOk 2 "no prevention_target.*'grocery board prices aging' on 5 of the 14 days ending 2026-09-10" $null $null
+    # MUST FIRE: days_fired counted with the out-of-window 08-20 row; the census's 5 is named.
+    $wDays = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $wDays.prevention_target.days_fired = 6
+    _CaseWeekly 'MUST FIRE days_fired that disagrees with the census is rejected, naming the census count' $wDays $cOk 2 'days_fired is 6 but the census shows .grocery board prices aging. on 5 day' 5 1
+    # MUST FIRE: a rank 2 target with no why_not_top. The watchdog really is rank 2 (3 days), so only the reason fires.
+    $wRank2 = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $wRank2.prevention_target.type = 'grocery capture watchdog issue s'; $wRank2.prevention_target.days_fired = 3; $wRank2.prevention_target.rank = 2
+    $wRank2.items[1].queue_id = 'prevention:grocery capture watchdog issue s'
+    _CaseWeekly 'MUST FIRE a rank 2 target with no why_not_top is rejected' $wRank2 $cOk 2 'rank 2 and carries no why_not_top' 3 2
+    # MUST NOT FIRE: the same rank 2 target with its reason written.
+    $wRank2Why = $wRank2 | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $wRank2Why.prevention_target | Add-Member -NotePropertyName why_not_top -NotePropertyValue 'rank 1 already has prevention:grocery board prices aging open in plan-2026-09-03.json' -Force
+    _CaseWeekly 'MUST NOT FIRE a rank 2 target that says why it is not the top passes' $wRank2Why $cOk 0 $null 3 2
+    # MUST FIRE: a weekly plan holding only its leftovers, with no prevention: item.
+    $wNoItem = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $wNoItem.items = @($wNoItem.items[0])
+    _CaseWeekly 'MUST FIRE a weekly plan with no prevention: item is rejected' $wNoItem $cOk 2 'has no prevention item' 5 1
+    # MUST FIRE: a prevention item classed no-code-change would skip every code-item field.
+    $wNoCode = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $wNoCode.items[1].classification = 'no-code-change'
+    _CaseWeekly 'MUST FIRE a prevention item classed no-code-change is rejected' $wNoCode $cOk 2 'skips the code-item fields' 5 1
+    # MUST FIRE: no new_source_check. The row contract does not exist yet, and the plan has to say so.
+    $wNoSrc = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $wNoSrc.PSObject.Properties.Remove('new_source_check')
+    _CaseWeekly 'MUST FIRE a weekly plan with no new_source_check is rejected, naming build step 8' $wNoSrc $cOk 2 'no new_source_check.*build step 8' 5 1
+    # MUST FIRE, BLIND: the census is missing, so nothing about the target can be checked.
+    _CaseWeekly 'MUST FIRE a weekly plan whose census is missing is BLIND (rc 3)' $weekly $cMissing 3 'BLIND.*no alert census' $null $null
+    # MUST NOT FIRE: a daily plan, with no lane and no census, is asked for none of it.
+    _CaseWeekly 'MUST NOT FIRE a plan with no lane and no census is asked for no prevention_target' $good $null 0 $null $null $null
+    $dailyPlan = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    $dailyPlan | Add-Member -NotePropertyName lane -NotePropertyValue 'daily' -Force
+    _CaseWeekly 'MUST NOT FIRE a plan marked lane daily is asked for none of it' $dailyPlan $null 0 $null $null $null
+    # MUST FIRE at close: the prevention item resolves like any item, so done with an open residual and no owner fails.
+    $script:ran++
+    $wOpen = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+    foreach ($wi in @($wOpen.items)) { $wi | Add-Member -NotePropertyName status -NotePropertyValue 'done' -Force }
+    $wOpen.items[1].leaves_open = 'days fired over the 14 days after the fix are not measured until 2026-09-24'
+    $rCl = Test-Plan $wOpen @() $env:TEMP -Closing -QueueIds @() -Census $cOk
+    if ($rCl.rc -eq 2 -and (($rCl.problems -join ' | ') -match 'prevention:grocery board prices aging is done with an open residual and no leaves_open_followup')) { Write-Output 'ok    MUST FIRE at close, a done prevention item with an open residual and no owner is rejected' }
+    else { Write-Output ("FAIL  MUST FIRE at close, a done prevention item with an open residual and no owner  rc=" + $rCl.rc + "; " + ($rCl.problems -join ' | ')); $script:fail++ }
+    # The script's own path, end to end: -CensusFile reaches Test-Plan, a missing one is exit 3, a real one prints the target.
+    $wPlanF = Join-Path $cDir 'plan-weekly.json'; $wQueueF = Join-Path $cDir 'queue.json'
+    [IO.File]::WriteAllText($wPlanF, ($weekly | ConvertTo-Json -Depth 9), $u8w)
+    [IO.File]::WriteAllText($wQueueF, '{ "items": [ { "id": "q1", "type": "t", "ts": "2026-09-10T08:15:00", "status": "open" } ] }', $u8w)
+    $script:ran++
+    $wOutB = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Plan $wPlanF -QueueFile $wQueueF -CensusFile (Join-Path $cDir 'no-such-census.jsonl')
+    $wRcB = $LASTEXITCODE
+    if ($wRcB -eq 3 -and (($wOutB -join ' ') -match 'BLIND')) { Write-Output 'ok    MUST FIRE the gate run on a weekly plan with a missing -CensusFile exits 3 BLIND' }
+    else { Write-Output ("FAIL  MUST FIRE a weekly plan with a missing -CensusFile  rc=$wRcB; " + ($wOutB -join ' ')); $script:fail++ }
+    $script:ran++
+    $wOutG = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Plan $wPlanF -QueueFile $wQueueF -CensusFile $cFile
+    $wRcG = $LASTEXITCODE
+    if ($wRcG -eq 0 -and (($wOutG -join ' ') -match "PREVENTION TARGET: 'grocery board prices aging' fired on 5 of the 14 days ending 2026-09-10, rank 1 of 3")) { Write-Output 'ok    CLEAN TWIN the gate run on a complete weekly plan exits 0 and prints the recomputed target' }
+    else { Write-Output ("FAIL  CLEAN TWIN the gate run on a complete weekly plan  rc=$wRcG; " + ($wOutG -join ' ')); $script:fail++ }
+  } finally { Remove-Item -LiteralPath $cDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   # --- routing artifact positive control (2026-08-06 case-insensitive $b/$B) ----------------------------
   # These need a real file on disk, because the check reads the artifact rather than trusting the plan.
   $artDir = Join-Path $env:TEMP ('vtp-selftest-' + $PID); New-Item -ItemType Directory -Force -Path $artDir | Out-Null
@@ -705,7 +900,16 @@ $queueItems = @($gq.items)
 $queueIds = @()
 foreach ($qi in $queueItems) { if ($qi -and [string]$qi.id) { $queueIds += [string]$qi.id } }
 
-$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds -QueueItems $queueItems -Now (Get-Date)
+# RULING 6: a weekly plan's prevention_target is recomputed from the alert census, so the census is READ, never
+# assumed, exactly as the queue is. A plan with no lane, or any other lane, never opens it.
+$census = $null
+if (([string]$doc.lane).Trim() -eq 'weekly') {
+  if (-not $CensusFile) { $CensusFile = Join-Path $root 'out\alert-census.jsonl' }
+  $census = Read-AlertCensusFile $CensusFile
+  if (-not $census.ok) { Write-Output ("validate-triage-plan: BLIND - a weekly plan's prevention_target is recomputed from the alert census (ruling 6) and " + $census.why + " - run grocery\audit-alert-census.ps1 first"); exit 3 }
+}
+
+$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds -QueueItems $queueItems -Now (Get-Date) -Census $census
 $items = @($doc.items)
 $mode = if ($Closing) { 'closing' } else { 'handoff' }
 Write-Output ("validate-triage-plan: " + $Plan)
@@ -720,6 +924,10 @@ foreach ($i in $items) {
 $retIds = @($res.returns | Where-Object { $_ })
 if ($retIds.Count) {
   Write-Output ("  RETURNS: " + $retIds.Count + " of " + $items.Count + " item(s) are a type triage already closed in the last 30 days, read from the queue (ruling 5): " + ($retIds -join ', '))
+}
+if ($res.prevention) {
+  $pvR = $res.prevention
+  Write-Output ("  PREVENTION TARGET: '" + $pvR.type + "' fired on " + $pvR.days + " of the " + $pvR.window_days + " days ending " + $pvR.end + ", rank " + $pvR.rank + " of " + $pvR.types + " type(s), recomputed from the alert census (ruling 6)")
 }
 # EVERY RESIDUAL, VERBATIM. These lines are what the orchestrator's report copies. A summary of them is how
 # the 2026-09-09 report called eight items closed when four had left part of their own class open.

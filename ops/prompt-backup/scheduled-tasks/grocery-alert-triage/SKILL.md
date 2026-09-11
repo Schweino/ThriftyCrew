@@ -242,7 +242,14 @@ STEP 3.5 - THE WEEKLY LANE, only when `triage-due.ps1` said it is due. After the
 the daily lane was empty, spawn "triage-ops-developer" synchronously ONCE, in JOB 2 (WEEKLY LANE), with the
 weekly-lane ids oldest first, the foreign-dirty list, 40 tool calls per item and 150 for the lane, and the plan
 path to write (the next free sequence name for the day). No reviewer: that agent re-measures, fixes or closes,
-and writes and gates its own plan. Then run both gates on that plan yourself (handoff with its ids, then
+and writes and gates its own plan. PREVENTION FIRST, THEN LEFTOVERS (Brad's ruling 6, 2026-09-10): the agent runs
+`grocery\audit-alert-census.ps1`, takes the top type by days fired over the prior 14 days that has no
+`prevention:<type>` item already shipped or open, and its plan carries `"lane": "weekly"`, `prevention_target` (type,
+window_days, days_fired, rank, why_not_top above rank 1), a `prevention:<type>` code item aimed at that class's upstream
+source, and `new_source_check`. That last line is the new-source check WAITING ON THE ROW CONTRACT: every new store,
+feed or large commodity batch is checked against the contract before it goes live, and until build step 8 exists the
+line records that no contract exists yet. The gate recomputes days_fired and rank from the census and is BLIND without
+it. Leftovers come after, inside the same ceilings. Then run both gates on that plan yourself (handoff with its ids, then
 `-Closing`), and ONLY when `-Closing` exits 0 write the lane stamp:
   [IO.File]::WriteAllText('C:\Codex\ThriftyCrew\grocery\triage-weekly-lane-stamp.txt', (Get-Date).ToString('o'), (New-Object Text.UTF8Encoding($false)))
 A lane that ran and did not close was not worked, so it stays due tomorrow (the test-guards stamp lesson,

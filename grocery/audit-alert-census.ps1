@@ -31,6 +31,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $repo = Split-Path $root -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\json-io.ps1')
+. (Join-Path $root 'triage-return-lib.ps1')   # Get-AlertCensusTypeDays: the one copy of days fired per type (ruling 6)
 
 # Ruling 4, 2026-09-10. Dates and counts are Brad's; kept here once so the report and the plan cannot disagree.
 $script:Targets = @(
@@ -114,15 +115,11 @@ function Get-CensusSummary {
   $w7 = & $win 7
   $w30 = & $win 30
   $in30 = @($rowsA | Where-Object { [string]$_.date -ge $w30.start })
-  $types = foreach ($g in ($in30 | Where-Object { [int]$_.alerts -gt 0 } | Group-Object { [string]$_.type })) {
-    [pscustomobject]@{
-      type = $g.Name; days = @($g.Group | ForEach-Object { [string]$_.date } | Select-Object -Unique).Count
-      alerts = [int](($g.Group | Measure-Object -Property alerts -Sum).Sum)
-      returns = [int](($g.Group | Measure-Object -Property returns -Sum).Sum)
-      subject = [string](@($g.Group | Sort-Object { [string]$_.date })[-1].subject)
-    }
-  }
-  $typesA = @($types)
+  # ONE copy of days fired per type (triage-return-lib.ps1), shared with validate-triage-plan.ps1's weekly
+  # prevention_target (ruling 6, 2026-09-10), so the scoreboard and the gate cannot count a day differently. The window
+  # is the 30 days ending today; no row predates $first, so $w30's clamp to it changes nothing here.
+  $typesR = Get-AlertCensusTypeDays $rowsA $Today 30
+  $typesA = @($typesR)
   $disp = @{}
   foreach ($r in $in30) {
     if (-not $r.dispositions) { continue }

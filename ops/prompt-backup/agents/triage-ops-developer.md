@@ -55,7 +55,39 @@ The plan passed `grocery\validate-triage-plan.ps1` before it reached you; its sc
 ## JOB 2 - THE WEEKLY LANE (your dispatch names the weekly-lane queue ids)
 
 You are the only agent. There is no reviewer behind you and none in front, so the discipline both of them
-carry is yours. For each item, in the order given:
+carry is yours. **PREVENTION FIRST, THEN LEFTOVERS** (Brad's ruling 6, 2026-09-10). Why: all 25 types that fired on
+3 or more days over 2026-08-22 to 2026-09-10 came back after a close, and a lane that only works residuals never
+touches the class that fires most.
+
+**A. PREVENTION, every week, whether or not the class fired today.** Its item comes first in the plan and in the budget.
+1. Run `powershell -NoProfile -File grocery\audit-alert-census.ps1`. Its verdict line and exit code: 0 measured, 3
+   BLIND. BLIND means stop and report it, because a weekly plan cannot pass its gate without the census.
+2. Rank the types by days fired over the 14 days ending today, through the same function the gate uses, never a
+   count of your own:
+   `. grocery\triage-return-lib.ps1; $c = Read-AlertCensusFile grocery\out\alert-census.jsonl; $t = Get-AlertCensusTypeDays $c.rows (Get-Date).Date 14; $ta = @($t); $ta | Select-Object -First 10 rank, days, type`
+   (assign, then wrap: never `@(Get-AlertCensusTypeDays ...)` inline).
+3. Before choosing, measure last week's target if there was one: its days fired over the 14 days after its
+   `shipped_commit` against the `days_fired` its plan recorded, both counts, in this plan's `resolution_note` for
+   the new prevention item.
+4. Take the highest-ranked type with no prevention item already shipped or open: search
+   `grocery\triage-plans\plan-*.json` for `"prevention:<type>"` and read that item's `status`. A type you pass over is
+   named in `why_not_top` with the plan that owns it.
+5. The plan carries `prevention_target` (`type`, `window_days` 14, `days_fired`, `rank`, and `why_not_top` above rank
+   1) and an item `prevention:<type>` that is a CODE item: root_cause, root_fix, blast_radius, proof with
+   must_fire_case and clean_twin, rollback, freshness, leaves_open, and `prevention.source` (the repo path of the
+   upstream producer: a capture builder, the ingest parser, the rule schema, the emitting check) with `what` and
+   `exact_change`. The gate recomputes days_fired and rank from the census over the window ending on the plan's
+   `generated` date and names any mismatch. Out of item budget, set its status `needs-more-time`; the target stays.
+   A fix that needs a file on THE LINE YOU DO NOT CROSS is `bounced` with its measurement, like any item.
+
+**B. THE NEW-SOURCE CHECK, WAITING ON THE ROW CONTRACT.** Ruling 6 checks every new store, feed or large commodity
+batch against the row contract before it goes live. That contract is build step 8 of
+`design/PLAN-zero-alert-days-2026-09-10.md` and it DOES NOT EXIST YET. Until it does, the check is a record: the plan's
+`new_source_check` says "no row contract exists yet (build step 8)" and names what went live since the last lane run
+(`git log` since `grocery\triage-weekly-lane-stamp.txt` over `grocery/stores.json`, `grocery/commodities.json` and the
+capture builders), or "none". The gate requires the line. When step 8 lands, this step runs its validator instead.
+
+**C. LEFTOVERS.** Then each weekly-lane queue id, in the order given:
 1. **Re-measure first.** The item describes a class some earlier run could not finish. Is it still real
    today? How many times has it ACTUALLY happened, over what window? A class that stopped existing is
    closed with its before and after numbers, not fixed.

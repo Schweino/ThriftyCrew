@@ -303,6 +303,53 @@ not name only rule or exclusion data files as its source. A RETURN no-code-chang
 `prevention_none_because` instead; superseded, needs-brad and needs-more-time are exempt. The gate prints a
 `RETURNS:` line naming every RETURN item it found.
 
+## The weekly lane's plan (2026-09-10, Brad's ruling 6: prevention first, then leftovers)
+
+`triage-ops-developer` in JOB 2 writes its own plan with no reviewer and marks it `"lane": "weekly"`. A plan with no
+`lane`, or any other lane, is asked for none of this. Why: all 25 types that fired on 3 or more days over 2026-08-22 to
+2026-09-10 came back after a close, and until now the weekly lane only worked residuals, so nothing was ever assigned
+the class that fires most. A weekly plan carries three things more:
+
+```jsonc
+{
+  "lane": "weekly",
+  "generated": "2026-09-17T09:10:00",   // the census window ENDS on this date
+  // THE TOP RECURRING CLASS, named before any fix, whether or not it fired today. The gate RECOMPUTES days_fired
+  // and rank from grocery/out/alert-census.jsonl over the window_days ending on `generated`, through
+  // Get-AlertCensusTypeDays in grocery/triage-return-lib.ps1 (the census's own count: a day on which the type minted
+  // a new queue id or absorbed a recurrence), and names the census's number when the plan's disagrees.
+  "prevention_target": {
+    "type": "board prices aging inside a fresh file",   // the census type key
+    "window_days": 14,                                   // at least 14
+    "days_fired": 9,
+    "rank": 1,                                           // 1 = the most days fired in the window; tied types share a rank
+    "why_not_top": null                                  // REQUIRED above rank 1, e.g. "rank 1 already has prevention:<type> open in plan-2026-09-17.json"
+  },
+  // THE NEW-SOURCE CHECK, WAITING ON THE ROW CONTRACT. Ruling 6 checks every new store, feed or large commodity
+  // batch against the row contract before it goes live. That contract is build step 8 of
+  // design/PLAN-zero-alert-days-2026-09-10.md and DOES NOT EXIST YET, so until it does this line records that,
+  // and names what went live since the last lane. The gate requires the line, not its wording.
+  "new_source_check": "no row contract exists yet (build step 8); went live since the last lane run: none (git log since the lane stamp over grocery/stores.json, grocery/commodities.json and the capture builders)",
+  "items": [
+    {
+      "queue_id": "prevention:board prices aging inside a fresh file",
+      // A CODE ITEM, always. Its classification may not be no-code-change, needs-brad, superseded or needs-more-time
+      // (a lane out of budget sets STATUS needs-more-time instead, and the target stays named for next week). It
+      // carries root_cause, root_fix, blast_radius, proof with must_fire_case and clean_twin, rollback, freshness,
+      // resolution_note and leaves_open, plus prevention.source (the repo path of the upstream producer), what and
+      // exact_change. At -Closing it resolves like any item: an end status, and an open leaves_open with an owner.
+      "prevention": { "source": ["<the producer>"], "what": "...", "exact_change": "..." }
+    }
+    // ... then one item per weekly-lane queue id: the leftovers
+  ]
+}
+```
+
+A weekly plan whose census is missing, empty, or carries a line that is not a day/type row is BLIND (exit 3) in both
+modes; `-CensusFile` points the gate at another census. The gate prints a `PREVENTION TARGET:` line with the recomputed
+numbers. Success for a target is its days fired over the 14 days after the fix shipped against the 14 before, both
+counts stated; the next weekly lane measures it before choosing its own target.
+
 ## Housekeeping
 
 Plans accumulate one per day and are rotated monthly by `capture-run.ps1` into `grocery/logs-archive/`
