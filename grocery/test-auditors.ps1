@@ -89,17 +89,32 @@ function Sweep-FxPaths {
 
 try {
 
-# FIXTURES RUN COPIES OF DETECTORS OUT OF $env:TEMP, and every detector carrying the completion contract
-# dot-sources lib\guard-contract.ps1 from its PARENT directory. For a fixture copy that parent is $env:TEMP,
-# which has no lib\ - so the copy died on its second line and every tile-integrity, name-drift,
-# coverage-ledger and match-soundness assertion failed with "the term ...\Temp\lib\guard-contract.ps1 is not
-# recognized". The harness already ships SIBLING libs into fixture dirs (verdict-lib, alert-lib,
-# coverage-lib); this is the same convention one level up, done once for all 50 fixture directories.
-# NOT Register-Fx'd, deliberately: this one has a FIXED name, so it does not accumulate, and two
-# concurrent runs of this harness share it - a sweep would pull it out from under the other run.
-$fxLibDir = Join-Path $env:TEMP 'lib'
-if (-not (Test-Path $fxLibDir)) { New-Item -ItemType Directory -Force $fxLibDir | Out-Null }
-Copy-Item (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1') (Join-Path $fxLibDir 'guard-contract.ps1') -Force
+# FIXTURES RUN COPIES OF DETECTORS, and every detector carrying the completion contract dot-sources
+# lib\guard-contract.ps1 (and most lib\json-io.ps1) from its PARENT directory. For a fixture copy that parent
+# is the directory holding the fixture directory, and with no lib\ there the copy died on its second line and
+# every tile-integrity, name-drift, coverage-ledger and match-soundness assertion failed with "the term
+# ...\lib\guard-contract.ps1 is not recognized". The harness already ships SIBLING libs into fixture dirs
+# (verdict-lib, alert-lib, coverage-lib); this is the same convention one level up, done once for all of them.
+#
+# ONE ROOT PER RUN, AND EVERY LIBRARY IN IT (2026-09-11). Until then that lib\ was ONE FIXED %TEMP%\lib, shared
+# by every run of this harness from every checkout on the box and filled from a HAND LIST: guard-contract here
+# with -Force, and json-io in NewFxDir only when the source was NEWER by mtime. Two consequences. A library
+# dropped from the list could not go red on a box that had run this harness before, because the copy an earlier
+# run left behind answered the dot-source. And a run could load a library another checkout had copied there,
+# because a -Force copy from a concurrent run, or an older-mtime source, left the other bytes in place. The same
+# hand-list shape blinded ops\test-prepush-hook.ps1 until c17cc59a7. Now each run allocates its own root under
+# %TEMP%, copies every lib\*.ps1 into <root>\lib, and NewFxDir makes every fixture directory inside that root,
+# so a fixture copy's parent lib\ is this run's and this checkout's. The root is created with -ErrorAction Stop,
+# so a clash refuses rather than shares, and it is Register-Fx'd, so the finally at the end sweeps it.
+# Unit u142 proves the copy is complete and that a missing or stale library is named.
+$script:FxRoot = Register-Fx (Join-Path $env:TEMP ('tarun-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
+New-Item -ItemType Directory -Path $script:FxRoot -ErrorAction Stop | Out-Null
+$script:FxLibSource = Join-Path (Split-Path $root -Parent) 'lib'
+$fxLibDir = Join-Path $script:FxRoot 'lib'
+New-Item -ItemType Directory -Path $fxLibDir -ErrorAction Stop | Out-Null
+foreach ($fxLibFile in @(Get-ChildItem -LiteralPath $script:FxLibSource -Filter '*.ps1' -File)) {
+  Copy-Item -LiteralPath $fxLibFile.FullName -Destination (Join-Path $fxLibDir $fxLibFile.Name) -ErrorAction Stop
+}
 # THE LIVE-DATA CASES (2026-08-08). Most of this harness drives frozen fixtures, but a handful of cases
 # assert against the REAL board (out\comparison-*.json / out\recipe-board.json) or the REAL .claude prompt
 # tree. Both are gitignored, so on the change-time gate's bare checkout those cases were not failing - they
@@ -1029,22 +1044,17 @@ else { Bad 'import-walmart-batch reads build-walmart-deals.ps1 as text again - a
 # from the live board (the two live clean-twins below are deliberate: a machine where they fail is itself
 # page-worthy).
 function NewFxDir([string]$tag) {
-  $d = Register-Fx (Join-Path $env:TEMP ($tag + '-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
+  $d = Register-Fx (Join-Path $script:FxRoot ($tag + '-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
   New-Item -ItemType Directory -Force $d | Out-Null
-  # EVERY FIXTURE NEEDS lib\json-io.ps1 WITHIN REACH (2026-09-05). A guard copied in here resolves its
-  # dependency as (Split-Path $PSScriptRoot -Parent)\lib\json-io.ps1, and $PSScriptRoot is this temp dir, so
-  # the parent is $env:TEMP. Without the copy the dot-source throws at STARTUP and the guard exits 1 before
-  # printing anything - indistinguishable from 'found nothing' to a caller reading only the exit code, and it
-  # turned 32 BLIND-path assertions red at once the first time the estate-wide reader sweep ran.
-  # Done here rather than in each fixture's own copy list because there are dozens of those lists, and a
-  # dependency that must be remembered in dozens of places is one that will be forgotten in one of them.
-  $fxLib = Join-Path $env:TEMP 'lib'
-  New-Item -ItemType Directory -Force $fxLib | Out-Null
-  $srcLib = Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1'
-  $dstLib = Join-Path $fxLib 'json-io.ps1'
-  if ((Test-Path $srcLib) -and ((-not (Test-Path $dstLib)) -or ((Get-Item $srcLib).LastWriteTimeUtc -gt (Get-Item $dstLib).LastWriteTimeUtc))) { Copy-Item $srcLib $dstLib -Force }
+  # EVERY FIXTURE NEEDS lib\ WITHIN REACH (2026-09-05). A guard copied in here resolves its dependencies as
+  # (Split-Path $PSScriptRoot -Parent)\lib\<name>.ps1, and $PSScriptRoot is this directory, so the parent is
+  # $script:FxRoot. Without a lib\ there the dot-source throws at STARTUP and the guard exits 1 before printing
+  # anything - indistinguishable from 'found nothing' to a caller reading only the exit code, and it turned 32
+  # BLIND-path assertions red at once the first time the estate-wide reader sweep ran. This function used to
+  # copy json-io into the shared %TEMP%\lib itself; since 2026-09-11 every library is copied once, at start-up,
+  # into this run's root (see $script:FxRoot at the top), so a directory made here needs nothing more.
   # global-exclude-lib.ps1 IS NOT COPIED HERE, and the first cut of backlog I82 did copy it here for the
-  # same reason json-io is copied - then five script-census cases went red, because that suite counts the
+  # same reason json-io was - then five script-census cases went red, because that suite counts the
   # `.ps1` files under its own fixture root and an extra one is a new orphan. A dependency injected into
   # EVERY fixture is not free when a fixture's subject IS the file set. The three fixtures that need the
   # exclude library copy it in their own lists; their failure without it is a named FATAL at exit 2, not
@@ -1059,6 +1069,66 @@ function RunPSAt([string]$dir, [string]$script, $argList) {
   finally { $ErrorActionPreference = $prev }
   return [pscustomobject]@{ rc = $LASTEXITCODE; text = ($out -join "`n") }
 }
+# IS THE FIXTURE lib\ COMPLETE, AND IS IT THIS CHECKOUT'S? (2026-09-11). Pure, so u142 can drive it against a
+# lib\ it breaks on purpose. One line per lib\*.ps1 of the source that the sandbox lacks ('<name> missing') or
+# holds other bytes for ('<name> differs'); empty means every library a fixture copy could dot-source is there
+# and current. Bytes, compared ordinally: a copy another checkout left behind can differ by one line.
+function Get-FxLibGaps([string]$SourceLib, [string]$SandboxLib) {
+  $gaps = New-Object System.Collections.ArrayList
+  foreach ($srcLibFile in @(Get-ChildItem -LiteralPath $SourceLib -Filter '*.ps1' -File)) {
+    $dstLibFile = Join-Path $SandboxLib $srcLibFile.Name
+    if (-not (Test-Path -LiteralPath $dstLibFile)) { [void]$gaps.Add($srcLibFile.Name + ' missing'); continue }
+    $srcB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($srcLibFile.FullName))
+    $dstB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($dstLibFile))
+    if (-not [string]::Equals($srcB64, $dstB64, [StringComparison]::Ordinal)) { [void]$gaps.Add($srcLibFile.Name + ' differs') }
+  }
+  return ,$gaps.ToArray()
+}
+
+# (u142) THE FIXTURE SANDBOX CARRIES EVERY LIBRARY, AND A MISSING OR STALE ONE IS NAMED (2026-09-11). The founding
+# shape is a hand list: grocery\send-alert.ps1's sandbox copied four named libraries, and with atomic-write or
+# append-line dropped every one of its 60 cases still passed. This harness copied two, into a lib\ shared by every
+# run, where a dropped one could not go red at all. -Reads lib/*.ps1 so a push that adds or edits a library
+# re-proves the copy.
+if (Use-Unit 'u142-the-fixture-sandbox-carries-every-lib' -Reads 'lib/*.ps1') {
+$u142Src = @(Get-ChildItem -LiteralPath $script:FxLibSource -Filter '*.ps1' -File)
+$u142Gaps = Get-FxLibGaps $script:FxLibSource $fxLibDir
+if ($u142Src.Count -gt 0 -and @($u142Gaps).Count -eq 0) { Ok ('MUST NOT FIRE this run''s fixture lib\ holds all ' + $u142Src.Count + ' lib\*.ps1 of this checkout, byte-identical') }
+else { Bad ('the fixture lib\ is not this checkout''s lib\ (' + $u142Src.Count + ' source libraries): ' + (@($u142Gaps) -join '; ')) }
+$u142Reach = NewFxDir 'lib-reach'
+$u142ReachLib = Join-Path (Split-Path $u142Reach -Parent) 'lib'
+if ([string]::Equals($u142ReachLib, $fxLibDir, [StringComparison]::OrdinalIgnoreCase)) { Ok ('CLEAN TWIN a NewFxDir directory resolves its parent lib\ to this run''s own ' + $fxLibDir) }
+else { Bad ('a NewFxDir directory resolves its parent lib\ to ' + $u142ReachLib + ', not this run''s ' + $fxLibDir + ' - a fixture copy there loads whatever library that directory holds') }
+Remove-Item -LiteralPath $u142Reach -Recurse -Force -ErrorAction SilentlyContinue
+# A sandbox of its own, laid out the way the shared one is: <root>\lib beside <root>\fx.
+$u142Root = NewFxDir 'lib-gap'
+$u142Lib = Join-Path $u142Root 'lib'
+$u142Fx = Join-Path $u142Root 'fx'
+New-Item -ItemType Directory -Path $u142Lib, (Join-Path $u142Fx 'out') -ErrorAction Stop | Out-Null
+foreach ($u142File in $u142Src) { if ($u142File.Name -ne 'json-io.ps1') { Copy-Item -LiteralPath $u142File.FullName -Destination (Join-Path $u142Lib $u142File.Name) } }
+# MUST FIRE, the hand-list shape: one library dropped from the copy is named.
+$u142G1 = Get-FxLibGaps $script:FxLibSource $u142Lib
+if (@($u142G1).Count -eq 1 -and [string]@($u142G1)[0] -eq 'json-io.ps1 missing') { Ok 'MUST FIRE a fixture lib\ with json-io.ps1 dropped from the copy is named: json-io.ps1 missing' }
+else { Bad ('a fixture lib\ with json-io.ps1 dropped was not named exactly once (' + (@($u142G1) -join '; ') + ')') }
+# MUST FIRE end to end: a real guard copied into that sandbox goes red on the dropped library instead of passing.
+Copy-Item -LiteralPath (Join-Path $root 'audit-cell-drops.ps1') -Destination (Join-Path $u142Fx 'audit-cell-drops.ps1')
+Set-Content (Join-Path $u142Fx 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"eggs","stores":[{"store":"Hy-Vee","type":"everyday","per_unit":2.50}]}]}' -Encoding UTF8
+Set-Content (Join-Path $u142Fx 'out\comparison-2026-01-08.json') '{"comparison":[{"id":"eggs","stores":[{"store":"Hy-Vee","type":"everyday","per_unit":2.50}]}]}' -Encoding UTF8
+$r = RunPSAt $u142Fx 'audit-cell-drops.ps1' @()
+if ($r.rc -ne 0 -and $r.text -match 'json-io\.ps1') { Ok ('MUST FIRE audit-cell-drops copied beside a lib\ missing json-io.ps1 fails naming it (rc=' + $r.rc + ')') }
+else { Bad ('audit-cell-drops beside a lib\ missing json-io.ps1 did not fail on it (rc=' + $r.rc + ') - a dropped library can pass silently') }
+# CLEAN TWIN: the library restored, the same guard over the same boards reads ok with its examined count.
+Copy-Item -LiteralPath (Join-Path $script:FxLibSource 'json-io.ps1') -Destination (Join-Path $u142Lib 'json-io.ps1')
+$r = RunPSAt $u142Fx 'audit-cell-drops.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match '\(1 cells compared\)') { Ok 'CLEAN TWIN with json-io.ps1 restored the same copied guard reads ok with the examined count' }
+else { Bad ('audit-cell-drops beside a complete lib\ did not read ok (rc=' + $r.rc + ') - the sandbox shape itself is broken, so the MUST FIRE above proves nothing') }
+# MUST FIRE, the leftover shape: the library is present but holds bytes this checkout does not.
+[IO.File]::AppendAllText((Join-Path $u142Lib 'json-io.ps1'), "`n# a copy another checkout left behind`n")
+$u142G2 = Get-FxLibGaps $script:FxLibSource $u142Lib
+if (@($u142G2).Count -eq 1 -and [string]@($u142G2)[0] -eq 'json-io.ps1 differs') { Ok 'MUST FIRE a fixture lib\ holding other bytes for json-io.ps1 is named: json-io.ps1 differs' }
+else { Bad ('a fixture lib\ holding other bytes for json-io.ps1 was not named exactly once (' + (@($u142G2) -join '; ') + ')') }
+Remove-Item -LiteralPath $u142Root -Recurse -Force -ErrorAction SilentlyContinue
+} # u142-the-fixture-sandbox-carries-every-lib
 
 # (a) audit-price-mode: BLIND when no mode-sensitive store file reaches the strict check (the state that
 # shipped 249 delivery-priced Aldi rows on 2026-07-14), and the anchored glob ignores a non-canonical twin.

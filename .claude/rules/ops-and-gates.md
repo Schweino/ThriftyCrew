@@ -288,9 +288,17 @@ everything else honest, so a defect here is silent by construction.
   the hook sends that script's stderr to `/dev/null`, and all 26 cases passed while its `Clear-TcGitRepoEnv` never
   ran. The sandbox now copies every `lib\*.ps1`, and the check loads each library under `Stop` inside a try that
   exits 3. try alone catches a missing file, a parse error and a throw; an error WRITTEN while loading needs `Stop`.
-  Hand-listed library copies still standing, not swept: `grocery/send-alert.ps1`, `grocery/triage-close.ps1`,
-  `grocery/test-auditors.ps1` and `meal-prep/pipeline/wave-preaudit.ps1`. Unguarded dot-sources elsewhere were
-  not counted.
+  **The four hand-listed copies it left standing were swept the same day**, each probed from a temp mirror with one
+  library dropped. `grocery/send-alert.ps1` WAS blind: two of its library loads sit in a try that logs and falls
+  back, so without `atomic-write` or without `append-line` all 60 cases passed. It now copies every `lib\*.ps1` and
+  fails a run whose sandbox log names a library that did not load. `grocery/test-auditors.ps1` WAS blind another way:
+  its two libraries went into ONE fixed `%TEMP%\lib` shared by every run, so a dropped copy was answered by an earlier
+  run's leftover (exit 0, 6 of 6). Each run now has its own root holding every library, and unit u142 names a missing
+  or stale one. `grocery/triage-close.ps1` and `meal-prep/pipeline/wave-preaudit.ps1` were already LOUD, because the
+  dot-source runs under `Stop` and exits 1, and were left alone. **A fallback that logs is the blind kind: when a
+  load failure is caught, the only case that can see it is one that reads the log.** A fifth sandbox with no `lib\`
+  at all, `ops/consistency-oracle.ps1`'s flat `%TEMP%` one, was given the repo's shape the same day (5e5b09e62).
+  Unguarded dot-sources elsewhere were not counted.
 - **Under PS 5.1 `VariablePath.UnqualifiedPath` is INTERNAL and reads as `$null`** (2026-09-11). An AST walk
   that used it as a hashtable key threw, which is the lucky case; the same value in a `-match` matches nothing, so
   a walk that collects variable names finds none and returns an agreeing empty. Strip the scope from `UserPath`
@@ -390,10 +398,12 @@ everything else honest, so a defect here is silent by construction.
   `Set-Content` on the contended path throws *"Stream was not readable."* or *"cannot access the file ... used by
   another process"*, and under a suite's `EAP='Stop'` that is TERMINATING: the suite dies mid-run and reaches
   run-gates as a bare `exit 1` with a line count and no case. **So a self-test red that names no case is a
-  concurrency suspect, not a mystery.** Of the four fixed names left, the two robocopy `/MIR` fixture trees
+  concurrency suspect, not a mystery.** Of the three fixed names left, the two robocopy `/MIR` fixture trees
   (`test-precedence-ladders`, `run-test-guards-weekly`) are the same shape at tree scale - `/MIR` deletes what the
-  source lacks, and real scripts execute from inside - while `%TEMP%\lib` and the oracle's arm logs share the
-  write collision but nothing deletes or executes a fixed-name file.
+  source lacks, and real scripts execute from inside - while the oracle's arm logs share the
+  write collision but nothing deletes or executes a fixed-name file. `test-auditors`' shared `%TEMP%\lib` left
+  that list the same day: each run copies every `lib\*.ps1` into its own root, and unit u142 names a missing or
+  stale one.
 - **A child a gate spawns must not write a TRACKED path, and a tracked file written under PS 5.1 must be
   written LF** (2026-09-11). `test-auditors`' early `spec-live` child ran `audit-spec-contradictions`, which
   wrote the committed `meal-prep\out\spec-contradictions.json` through `ConvertTo-Json | Set-Content -Encoding

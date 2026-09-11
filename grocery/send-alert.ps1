@@ -334,7 +334,13 @@ if ($SelfTest) {
   try {
     Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $saG 'send-alert.ps1')
     foreach ($n in @('alert-registry-lib.ps1', 'mute-lib.ps1')) { Copy-Item -LiteralPath (Join-Path $PSScriptRoot $n) -Destination (Join-Path $saG $n) }
-    foreach ($n in @('json-io.ps1', 'chain-verdict-lib.ps1', 'atomic-write.ps1', 'append-line.ps1')) { Copy-Item -LiteralPath (Join-Path (Split-Path -Parent $PSScriptRoot) ('lib\' + $n)) -Destination (Join-Path $saL $n) }
+    # EVERY lib\*.ps1, NEVER A HAND LIST (2026-09-11). This sandbox copied four named libraries, and two of the real
+    # script's four library loads sit inside a try whose catch LOGS and falls back: atomic-write to a bare Move-Item,
+    # append-line to a bare Add-Content. Measured from a temp mirror at c17cc59a7, one library dropped per run: without
+    # json-io 10 cases failed and without chain-verdict-lib 4, but without atomic-write or without append-line all 60
+    # passed, because on an uncontended fixture the fallback writes the same queue and the same spool. So the sandbox
+    # carries every library, and the lib-load cases at the end read the sandbox log for a library that did not load.
+    foreach ($saLibFile in @(Get-ChildItem -LiteralPath (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib') -Filter '*.ps1' -File)) { Copy-Item -LiteralPath $saLibFile.FullName -Destination (Join-Path $saL $saLibFile.Name) }
     $saReg = Join-Path $saG 'alert-registry.json'
     $saRegJson = '{ "readme": "frozen fixture", "entries": [' +
       '{ "id": "held", "match": "exact", "key": "grocery page held coverage", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
@@ -472,13 +478,39 @@ if ($SelfTest) {
     $sp2 = _Spooled
     _T 'CLEAN TWIN with the lock free the same send is written to the queue (1 item -> 2) and says so' ([bool]($lk2.items.Count -eq 2 -and $lk2.out -match 'queued to triage-queue.json')) 'True'
     _T 'MUST NOT FIRE and it adds nothing to the spool' $sp2.Count 1
+    # ---- EVERY LIBRARY THE REAL SCRIPT LOADS DID LOAD (2026-09-11) ----
+    # Read from the sandbox's own log, because nothing else can see it: a guarded load that fails logs and falls back,
+    # and the fallback writes exactly what every case above asserts. The guarded loads log "DID NOT LOAD"; the
+    # chain-verdict load logs the dot-source's own "is not recognized".
+    function _LibLoadFailures([string]$logText) {
+      return ,@(([string]$logText -split "`r?`n") | Where-Object { $_ -match 'DID NOT LOAD|is not recognized' })
+    }
+    $saLibCount = @(Get-ChildItem -LiteralPath $saL -Filter '*.ps1' -File).Count
+    Write-Output ('      the sandbox carries ' + $saLibCount + ' lib\*.ps1; its log holds every run above')
+    $saLogText = ''
+    if (Test-Path -LiteralPath $saLog) { $saLogText = [IO.File]::ReadAllText($saLog) }
+    _T 'the sandbox carries libraries and its log was written, so the case below reads something' ([bool]($saLibCount -gt 0 -and $saLogText.Length -gt 0)) 'True'
+    $saLibMiss = _LibLoadFailures $saLogText
+    # Named by library, once each: a missing library logs one line per send, and fifteen copies of it bury the name.
+    $saLibMissNames = @($saLibMiss | ForEach-Object { if ($_ -match '(lib\\[\w.-]+\.ps1)') { $Matches[1] } else { 'an unparsed log line: ' + $_ } } | Sort-Object -Unique)
+    _T 'MUST NOT FIRE no run in the sandbox logged a library it could not load' ($saLibMissNames -join ', ') ''
+    # MUST FIRE, the hand-list shape: lib\atomic-write.ps1 gone from the sandbox. The send still lands in the queue
+    # through the fallback, so only the log can say it happened.
+    Remove-Item -LiteralPath (Join-Path $saL 'atomic-write.ps1') -Force -ErrorAction SilentlyContinue
+    $qBeforeMf = [Convert]::ToBase64String([IO.File]::ReadAllBytes($saQ))
+    $mf = _SA $lkSubj @('-QueueLockTimeoutMs', '1500')
+    $mfLogText = ''
+    if (Test-Path -LiteralPath $saLog) { $mfLogText = [IO.File]::ReadAllText($saLog) }
+    $mfMiss = _LibLoadFailures ($mfLogText.Substring([Math]::Min($saLogText.Length, $mfLogText.Length)))
+    _T 'MUST FIRE with lib\atomic-write.ps1 missing from the sandbox, the run logs that library, and only it, as not loaded' ([bool](@($mfMiss).Count -eq 1 -and [string]@($mfMiss)[0] -match 'atomic-write\.ps1 DID NOT LOAD')) 'True'
+    _T 'CLEAN TWIN and that send still reaches the queue through the fallback, which is why no other case sees it' ([bool]($null -ne $mf -and [Convert]::ToBase64String([IO.File]::ReadAllBytes($saQ)) -ne $qBeforeMf)) 'True'
   } finally {
     Stop-TcMutexHold
     Remove-Item -LiteralPath $saDir -Recurse -Force -ErrorAction SilentlyContinue
   }
   Write-Output ""
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (queue routing + body-thin + emitter path + mute switch + birth lane + alert registry + queue lock refusal)'
+  Write-Output 'SELF-TEST PASS (queue routing + body-thin + emitter path + mute switch + birth lane + alert registry + queue lock refusal + sandbox library load)'
   exit 0
 }
 

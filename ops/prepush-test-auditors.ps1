@@ -699,9 +699,14 @@ function Get-UnitModel([string]$Text, [string]$SelfRel) {
     }
   }
   if ($m.ids.Count -eq 0) { $m.why = 'test-auditors has no Use-Unit wrappers'; return $m }
-  # the harness: this file's path, the auditors file, bot-paths, and every script the setup dot-sources or copies
+  # the harness: this file's path, the auditors file, bot-paths, guard-contract, and every script the setup dot-sources or copies
+  # GUARD-CONTRACT BY NAME (2026-09-11). It reached this set through a literal `Copy-Item ... 'lib\guard-contract.ps1'`
+  # in the setup, which test-auditors replaced that day with a loop copying every lib\*.ps1 into a per-run root - a
+  # spelling the regex below cannot read. Measured with -PathsFile: a push touching only lib/guard-contract.ps1 went
+  # from a full run to a selective 71 of 141 units. It belongs here on its own merits: every run writes its completion
+  # marker through it, outside every unit, and this file refuses a run without that marker.
   $h = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
-  foreach ($x in @($SelfRel, $script:SelfRel, 'lib/bot-paths.ps1')) { [void]$h.Add($x) }
+  foreach ($x in @($SelfRel, $script:SelfRel, 'lib/bot-paths.ps1', 'lib/guard-contract.ps1')) { [void]$h.Add($x) }
   foreach ($hm in [regex]::Matches($setupText, "(?m)^\s*(?:\.\s+|Copy-Item\s+)\(Join-Path\s+(?<b>\`$root|\`$PSScriptRoot|\(Split-Path\s+(?:\`$root|\`$PSScriptRoot)\s+-Parent\))\s+'(?<l>[^']+\.ps1)'\)")) {
     $base = if ($hm.Groups['b'].Value -match 'Split-Path') { '' } else { $selfDir }
     [void]$h.Add($base + $hm.Groups['l'].Value.Replace('\', '/'))
