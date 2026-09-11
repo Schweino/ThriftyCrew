@@ -719,7 +719,12 @@ if ($SelfTest) {
     Chk 'MUST FIRE  the founding writer (ConvertTo-Json | Set-Content -Encoding UTF8) still puts CR bytes on disk, so a zero-CR check can fail' `
       ($__oldCr -gt 0) ("CR=$__oldCr - PS 5.1 no longer writes CRLF here; re-derive what the checks below prove")
     # $__q above ran -Root $__scratch -Quiet, which is the real write of the report.
-    $__rep = Join-Path $__scratch 'out\spec-contradictions.json'
+    # THE NAME IS BUILT BY CONCATENATION, never spelled as one literal. ops\audit-write-only-reports.ps1
+    # reads SOURCE TEXT, and a literal out\<family>.json beside a Test-Path here made this fixture read of a
+    # scratch copy count as a READER of the live report: the ratchet dropped spec-contradictions, 41 -> 40,
+    # though nothing reads that report. Same rule as [[selftest-greps-its-own-source]].
+    $__repName = 'spec-contradictions' + '.json'
+    $__rep = Join-Path (Join-Path $__scratch 'out') $__repName
     $__repCr = if (Test-Path -LiteralPath $__rep) { __CrCount $__rep } else { -1 }
     Chk 'MUST FIRE  the report the real entry point writes carries ZERO CR bytes (the founding run left 10 in a 134-byte file)' `
       ($__repCr -eq 0) ("CR=$__repCr (-1 = no report written) at $__rep")
@@ -737,9 +742,9 @@ if ($SelfTest) {
     New-Item -ItemType Directory -Force -Path $__rdRoot | Out-Null
     $__rd = __Run @('-Root', $__rdRoot, '-Quiet', '-ReportDir', $__rdOut)
     Chk 'MUST FIRE  -ReportDir keeps a gate run OUT of the tracked out\ path' `
-      ($__rd.rc -eq 0 -and -not (Test-Path -LiteralPath (Join-Path $__rdRoot 'out\spec-contradictions.json'))) ("exit $($__rd.rc) :: " + $__rd.text.Trim())
+      ($__rd.rc -eq 0 -and -not (Test-Path -LiteralPath (Join-Path (Join-Path $__rdRoot 'out') $__repName))) ("exit $($__rd.rc) :: " + $__rd.text.Trim())
     Chk 'CLEAN TWIN ...and the report still lands, in the directory it was given' `
-      (Test-Path -LiteralPath (Join-Path $__rdOut 'spec-contradictions.json')) ("no report under $__rdOut :: " + $__rd.text.Trim())
+      (Test-Path -LiteralPath (Join-Path $__rdOut $__repName)) ("no report under $__rdOut :: " + $__rd.text.Trim())
     # The skip. An unchanged run must not touch the file; a changed one must still write it.
     $__wr = Join-Path $__scratch 'write-report.json'
     $__t0 = New-Object DateTime(2020, 1, 1, 0, 0, 0, [DateTimeKind]::Utc)
@@ -803,9 +808,12 @@ foreach ($p in $parsed) {
     $rows.Add([pscustomobject]@{ run = $p.run; slug = $p.slug; cls = $f.cls; why = $f.why })
   }
 }
-$reportRoot = if ($ReportDir) { $ReportDir } else { Join-Path $mp 'out' }
-$outPath = Join-Path $reportRoot 'spec-contradictions.json'
-New-Item -ItemType Directory -Force -Path $reportRoot | Out-Null
+# $ReportDir IS REASSIGNED, NOT COPIED to a new name. ops\audit-write-only-reports.ps1 recognises a report
+# family from `Join-Path $ReportDir '<family>.json'`, and a private name here hid this report from it: the
+# ratchet read 41 -> 40 and wrote that as an improvement, while the report still has no reader.
+if (-not $ReportDir) { $ReportDir = Join-Path $mp 'out' }
+$outPath = Join-Path $ReportDir 'spec-contradictions.json'
+New-Item -ItemType Directory -Force -Path $ReportDir | Out-Null
 $null = Write-ReportJson $outPath @{ generated = 'see git'; specs = $specs.Count; by_class = $byClass; findings = @($rows.ToArray()) } 5
 
 if (-not $Quiet) {

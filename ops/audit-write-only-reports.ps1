@@ -68,7 +68,13 @@ function Get-ReportFamilies {
   return $out
 }
 function Test-WriteVerb { param([string]$Line)
-  return ($Line -match '(?i)(Set-Content|Add-Content|Out-File|WriteAllText|WriteAllBytes|WriteAllLines|Write-JsonFile|Export-Csv)')
+  # A WRITE HELPER IS A WRITE (2026-09-11). The verb list named Write-JsonFile and nothing else of that
+  # kind, so when audit-spec-contradictions moved its report write into Write-ReportJson (to write LF
+  # bytes) the family vanished from the scan and the ratchet read 41 -> 40 and recorded it as an
+  # improvement, though the report still had no reader. Any Write-<something>Json / Write-<something>File
+  # command now counts: that covers Write-JsonFile, Write-ReportJson and Write-TcAtomicFile, and still
+  # excludes Write-Output, Write-Host and Write-GuardComplete, which name a path without writing it.
+  return ($Line -match '(?i)(Set-Content|Add-Content|Out-File|WriteAllText|WriteAllBytes|WriteAllLines|Write-\w*(Json|File)\b|Export-Csv)')
 }
 function Test-ReadVerb { param([string]$Line)
   # Test-Path counts: asking whether a report exists is a consumer of it.
@@ -172,6 +178,21 @@ if ($SelfTest) {
   $r2 = Find-WriteOnlyFamilies $fx2
   T 'CLEAN TWIN  a write-then-read-back checkpoint in one file is NOT write-only' `
     ((@($r2.write_only)).Count -eq 0) (($r2.write_only -join ', '))
+  # MUST FIRE (2026-09-11): a report written through a Write-*Json helper is still WRITTEN. The founding
+  # shape is audit-spec-contradictions as it shipped that day: the family is named on a Join-Path against
+  # $ReportDir and written on the next line by Write-ReportJson. The old verb list could not see it, so a
+  # write-only report left the count and the ratchet recorded a false improvement.
+  $fx6 = @{ 'helper.ps1' = @('$outPath = Join-Path $ReportDir ' + "'spec-contradictions.json'",
+                             '$null = Write-ReportJson $outPath @{ specs = 1 } 5') }
+  $r6 = Find-WriteOnlyFamilies $fx6
+  T 'MUST FIRE  a family written by a Write-*Json helper (Write-ReportJson) is still a write-only family' `
+    ($r6.write_only -contains 'spec-contradictions') ("written=$($r6.written) write_only=" + ($r6.write_only -join ', '))
+  # MUST NOT FIRE: widening the verb must not make every Write- command a write. Write-Output naming the
+  # path in a message writes nothing.
+  $fx7 = @{ 'message.ps1' = @('$outPath = Join-Path $ReportDir ' + "'noisy-report.json'",
+                              'Write-Output ("full list in " + $outPath)') }
+  $r7 = Find-WriteOnlyFamilies $fx7
+  T 'MUST NOT FIRE  Write-Output naming a report path is not a write' ($r7.written -eq 0) ("written=$($r7.written)")
   # MUST FIRE: an empty corpus must report BLIND-shaped zero, never a confident clean.
   $r3 = Find-WriteOnlyFamilies @{}
   T 'an empty corpus writes zero families, so the live path can tell "nothing scanned" from "nothing found"' `

@@ -226,6 +226,10 @@ everything else honest, so a defect here is silent by construction.
   passes `-ReportDir` to a temp directory, because LF bytes cannot stop a run over a DIFFERENT catalogue from
   rewriting real content. **Verify by bytes: `git status --short` empty and a CR count of 0.** Other
   `Set-Content` writers of tracked `out\` files were not swept.
+  **Moving a write into a helper can hide it from a source-text ratchet, which then records a FALSE
+  improvement.** Here `audit-write-only-reports` read 41 -> 40 twice, once for the helper verb and once
+  because the new self-test spelled the report path next to a `Test-Path`, and each time it wrote the lower
+  baseline. Compare the family NAMES against the committed baseline, not the count.
 
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.
