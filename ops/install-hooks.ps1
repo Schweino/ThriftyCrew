@@ -15,6 +15,7 @@ param([switch]$Check)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-repo-env.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile - a hook is replaced, never overwritten under a running shell
 $repo = Split-Path $PSScriptRoot -Parent
 $src  = Join-Path $PSScriptRoot 'hooks'
 
@@ -55,7 +56,16 @@ foreach ($h in @(Get-ChildItem $src -File)) {
     if ($Check) { [void]$bad.Add(($h.Name + $(if ($null -eq $have) { ' NOT INSTALLED' } else { ' STALE - differs from ops\hooks' }))); continue }
     # LF endings: git runs hooks through sh, and a CRLF shebang line makes it fail with a bare
     # "not found" that names nothing useful.
-    [IO.File]::WriteAllText($dst, ($want -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
+    #
+    # REPLACED, NEVER OVERWRITTEN IN PLACE (2026-09-11). sh reads a hook AS IT RUNS IT, so overwriting the bytes
+    # under a push that is already executing this file hands that shell the tail of a different script. Measured
+    # here that afternoon: a push at 18:26 died with "C:\Codex\ThriftyCrew\.git\hooks/pre-push: line 112: s:
+    # command not found" while another session installed its own pre-push change - the running shell read one file
+    # before the write and another after it. A temp-then-move leaves the running shell on the old inode and gives
+    # the next push the new one whole, and Write-TcAtomicFile retries the move when a reader still holds the name
+    # (lib\atomic-write.ps1, the rule in .claude\rules\ops-and-gates.md). -NoBom -NoNewline so the bytes written
+    # are exactly the bytes this line wrote before: a hook is compared byte for byte by the check below.
+    $null = Write-TcAtomicFile -Path $dst -Text ($want -replace "`r`n", "`n") -NoBom -NoNewline
     $have = [IO.File]::ReadAllText($dst)
   }
   # MEASURE, do not assume the copy worked
