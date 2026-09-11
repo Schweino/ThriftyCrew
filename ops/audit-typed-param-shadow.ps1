@@ -485,8 +485,12 @@ if ($SelfTest) {
     TpsT 'MUST FIRE  a site swapped for a new one at the SAME count is still a new site' (@($cmp.New).Count -eq 1 -and @($cmp.New)[0] -eq 'c' -and @($cmp.Gone)[0] -eq 'b') ("new={0} gone={1}" -f (@($cmp.New) -join ','), (@($cmp.Gone) -join ','))
     $cmp = Compare-TpsSites -Now @('a', 'a') -Known @('a')
     TpsT 'MUST FIRE  a second copy of a known site is new' (@($cmp.New).Count -eq 1) ("new=" + @($cmp.New).Count)
+    # TWO LABELS, because the two halves are different assertions (ops\audit-fixture-vocabulary.ps1 caught this
+    # file carrying them as one CLEAN TWIN): that nothing is reported is a MUST NOT FIRE, and that the fall NAMES
+    # what went is the positive one.
     $cmp = Compare-TpsSites -Now @('a') -Known @('a', 'b')
-    TpsT 'CLEAN TWIN  a fall names the site that went' (@($cmp.New).Count -eq 0 -and @($cmp.Gone).Count -eq 1 -and @($cmp.Gone)[0] -eq 'b') ("gone=" + (@($cmp.Gone) -join ','))
+    TpsT 'MUST NOT FIRE  a pure fall reports no new site' (@($cmp.New).Count -eq 0) ("new=" + (@($cmp.New) -join ','))
+    TpsT 'CLEAN TWIN  the fall NAMES the site that went, so a tightening says what it is lowering' (@($cmp.Gone).Count -eq 1 -and @($cmp.Gone)[0] -eq 'b') ("gone=" + (@($cmp.Gone) -join ','))
 
     # ---- THE WALK, FROM A WORKTREE ROOT (lib\tree-walk.ps1) ------------------------------------------------------
     $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'grocery\b.ps1' = 'Write-Output 2'
