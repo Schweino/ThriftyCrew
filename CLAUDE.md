@@ -41,6 +41,13 @@ workflow is still dispatch-only; the hook is what restored the property, locally
 broken, not that the tree is clean. Never read 3 as a pass. (The recipe battery uses exit 2 for its
 own could-not-run - check which tool you actually ran.)
 
+**The 10 machine-wide gate worker slots are a QUEUE, served in arrival order** (`lib/gate-slots.ps1`, since
+2026-09-11): a refusal with 3 means the queue itself stopped moving for 20 minutes, never that your run lost a
+race. A run that exits 0 records its verdict for the exact content it judged, so **a manual `run-gates` followed
+by a push no longer pays twice** - the hook prints the recorded pass and dispatches nothing (`-NoReuse` runs them
+anyway, and a red run over that same content withdraws the pass). And a push the remote will reject anyway,
+because main moved while it waited, is refused in seconds instead of after the whole run: rebase and push again.
+
 It deliberately runs only what is hermetic: every `-SelfTest` in the tree, plus the static-analysis
 detectors that read source rather than data. Each self-test drives a frozen must-fire fixture of a
 founding bug and its clean twin, so it fails loudly when a fix stops detecting the thing it exists
