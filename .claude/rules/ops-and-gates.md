@@ -291,9 +291,14 @@ everything else honest, so a defect here is silent by construction.
   and PS 5.1 stops at 260. A name deliberately shared ACROSS runs, like the journal a killed run's successor must
   find, stays fixed on the production path and is redirected inside the self-test. **To measure it, isolate
   `TEMP` per batch directly under the real `%TEMP%`**: a root inside the session scratchpad put the fixed probe
-  at exactly 260 characters and every arm went red for the harness's reason, not the code's. Fixed names still
-  standing and not swept: `test-auditors`' shared `%TEMP%\lib` (which `pre-push` reaches through
-  `prepush-test-auditors`), `test-precedence-ladders`, `run-test-guards-weekly`, and `consistency-oracle`'s arm logs.
+  at exactly 260 characters and every arm went red for the harness's reason, not the code's.
+  **A rule in a file is not a block**, so `ops/audit-fixed-temp-names.ps1` holds this at push time: a ratchet over
+  the PowerShell AST, wired into `run-gates`, counting a `Join-Path`, `[IO.Path]::Combine`, `"$env:TEMP\..."` or
+  `+` chain under a temp root whose leaf spells text and holds no `[guid]::NewGuid()`, `$PID` or
+  `New-TemporaryFile`. An absence probe passed straight to a Get-, Read- or Test- command is LISTED and not
+  counted, because two runs that only read an absence cannot collide. Its first run listed five fixed names that
+  no rule had named, among them `meal-prep/pipeline/feed-freshness.ps1`'s `ff-clobber-probe.ps1`, the
+  guard-contract shape copied into another suite. Run it for the list rather than quoting one.
 - **A child a gate spawns must not write a TRACKED path, and a tracked file written under PS 5.1 must be
   written LF** (2026-09-11). `test-auditors`' early `spec-live` child ran `audit-spec-contradictions`, which
   wrote the committed `meal-prep\out\spec-contradictions.json` through `ConvertTo-Json | Set-Content -Encoding

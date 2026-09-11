@@ -343,6 +343,8 @@ $static = @(
   @{ f = 'ops\audit-keyword-arguments.ps1';    n = 'no tracked .ps1 carries if, else, elseif, foreach, while, exit or return as a bare command ARGUMENT - a statement glued onto a command line never runs as one; a gate at zero, hermetic, reads source only' }
   # 2026-09-11: this watcher ran only inside test-auditors, which this file skips, and walked grocery\ only; wave-preaudit's drill died mid-suite on the class it watches.
   @{ f = 'grocery\test-native-stderr-eap.ps1'; n = 'no NEW native child redirects its stderr under EAP=Stop anywhere in the repo - the shell fixtures of the 2026-08-22 bug, plus an AST scan ratcheted by named site; hermetic, reads source only' }
+  # Concurrent pushes run the same self-tests over each other in ONE %TEMP%, so a fixed name there is shared; c3a686290 moved guard-contract and test-guards to a per-run directory and this blocks the next fixed name.
+  @{ f = 'ops\audit-fixed-temp-names.ps1';     n = 'no NEW path under %TEMP% is built from a FIXED leaf that concurrent runs of one suite would share - a ratchet, hermetic, reads source only' }
   # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half
   # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
   # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.
