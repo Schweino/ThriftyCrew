@@ -508,9 +508,10 @@ if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expec
 
 ''
 if ($fails.Count -gt 0) {
-  "test-prepush-hook: $($fails.Count) FAILED of $($ran.Count)"
+  "test-prepush-hook selftest: $($fails.Count) FAILED of $($ran.Count)"
   $fails | ForEach-Object { "  $_" }
   Exit-Guard -Name 'TEST-PREPUSH-HOOK' -Code 1 -Summary "failed=$($fails.Count) of $($ran.Count)"
 }
-"test-prepush-hook: $($ran.Count) of $($ran.Count) cases pass"
+# The verdict names the self-test: run-gates reads it before believing exit 0 (lib\selftest-verdict.ps1).
+"test-prepush-hook selftest: $($ran.Count) of $($ran.Count) cases pass"
 Exit-Guard -Name 'TEST-PREPUSH-HOOK' -Code 0 -Summary "cases=$($ran.Count)"

@@ -735,7 +735,9 @@ def selftest():
         import shutil                                              # noqa: PLC0415
         shutil.rmtree(tmp3, ignore_errors=True)
 
-    print("%d assertion(s) failed" % len(bad) if bad else "all assertions passed")
+    # The verdict names the self-test: run-gates reads it before believing exit 0 (lib/selftest-verdict.ps1).
+    print("food_source_backfill self-test: %d assertion(s) failed" % len(bad) if bad
+          else "food_source_backfill self-test: all assertions passed")
     return 1 if bad else 0
 
 

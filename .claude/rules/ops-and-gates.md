@@ -209,6 +209,19 @@ everything else honest, so a defect here is silent by construction.
   for `Invoke-History` before the function, every case line errored non-terminating, and the suite printed PASS
   over nothing. Aliases beat functions, so never name a helper `r`, `h`, `gc`, `ls` or any other alias; and run
   the cases under `$ErrorActionPreference = 'Stop'` inside a try whose catch is a counted failure.
+- **A self-test's exit 0 is not its verdict** (2026-09-11). 8253ded82 glued pull-grocery-ads' closing `if/else`
+  onto its last case line, so the `-SelfTest` branch never exited, fell through to the LIVE three-store pull and
+  exited 0, and run-gates scored it ok on every push for hours. run-gates now reads each self-test's stdout through
+  `lib\selftest-verdict.ps1`: after skipping trailing `<NAME>-COMPLETE` markers that do not name the self-test, the
+  last line must name the self-test (`self-test`, `selftest`, `-SelfTest`) and carry a result word (`pass`, `ok`,
+  `green`, `fail`), or a marker must name it (`X-SELFTEST-COMPLETE`, `selftest=pass`). Exit 0 without that is scored
+  3, never ok, for PowerShell and Python suites alike. **A new suite's last line is its verdict and says it is a
+  self-test**: `failures: 0`, `all assertions passed` and a bare `VERDICT: PASS` are tallies, not verdicts. Measured at
+  2c0d9c45c over run-gates' own discovery: 6 of 316 suites had none, and all six got one in the same change. **What a
+  suite SAYS outweighs its exit 0 too:** a case-sensitive `SELF-TEST FAIL` or a line starting `FAIL` scores fail (exit
+  1) - a lost exit after a failing verdict read ok before. 0 of 314 exit-0 suites printed either that day. So never
+  echo a captured child's `FAIL` lines as your own at exit 0. It cannot see a passing fall-through into a path that
+  prints nothing.
 - **A sandbox that runs a real script copies the WHOLE `lib\`, and a library the script cannot load is exit 3**
   (2026-09-11). `ops/test-prepush-hook.ps1` copied `prepush-test-auditors.ps1` with a hand list of two libraries
   older than `lib/git-repo-env.ps1`. Under `Continue` the dot-source printed "is not recognized" and carried on,

@@ -24,7 +24,8 @@
   "did this change break the machinery?", not "is today's board correct".
 
   Exit 0 = every gate passed. 1 = at least one failed. 3 = could not evaluate (found no self-tests at all,
-  which would mean the discovery is broken rather than the tree being clean).
+  which would mean the discovery is broken rather than the tree being clean, or a self-test exited 0 without
+  its own verdict as its last words - lib\selftest-verdict.ps1 is that rule, since 2026-09-11).
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$ListOnly, [int]$Jobs = 0, [switch]$NoReuse, [string]$PushRefsFile = '', [string]$PushRemote = '')
@@ -45,6 +46,7 @@ Clear-TcGitRepoEnv
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\selftest-discovery.ps1')   # Get-TcSelfTestSwitch - no param() block, so it cannot reset ours
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot - discovery excludes below the root, so a worktree root is scanned
+. (Join-Path $repo 'lib\selftest-verdict.ps1')   # Get-TcSelfTestScore - no param() block, so it cannot reset ours
 
 # Self-tests that cannot run hermetically, with the reason. Keyed by file name, same standard as every other
 # allowlist here: a line is a decision someone defends in a diff, not a way to make the gate quiet.
@@ -159,6 +161,7 @@ if (-not $Jobs -or $Jobs -lt 1) { $Jobs = [Math]::Max(1, [Math]::Min($script:TcG
 . (Join-Path $repo 'lib\parallel-run.ps1')   # Invoke-TcParallel - no param() block, so it cannot reset ours
 $PSEXE = (Get-Command powershell).Source
 $fail = @()
+$noVerdict = @()   # self-tests that exited 0 without their own verdict line - scored 3, never ok (lib\selftest-verdict.ps1)
 $blindGates = @()
 Write-Output ("run-gates: {0} self-test(s) discovered" -f $withSelfTest.Count)
 # A DISCOVERED SET PRINTS WHAT IT RESOLVED (2026-09-11). The renamed-switch suites are named with the switch each
@@ -593,7 +596,18 @@ foreach ($s in $withSelfTest) {
   $out = $gr.Out
   Add-TcGateTiming -Name ($s.FullName.Replace($repo, '')) -Ms $gr.Ms -SpawnMs 209
   $rc = $gr.ExitCode
-  if ($rc -eq 0) {
+  # EXIT 0 IS NOT A VERDICT (2026-09-11). On that day 8253ded82 glued pull-grocery-ads' closing if/else onto its last
+  # case line: the -SelfTest branch never exited, fell through to the LIVE three-store pull, wrote out\ads-<today>.json
+  # and exited 0, and this loop scored it ok on every push for hours. A self-test's last words must now be its OWN
+  # verdict (lib\selftest-verdict.ps1 is the rule and its fixtures). Exit 0 without one is COULD NOT EVALUATE, never
+  # ok. Measured the same day at 2c0d9c45c over run-gates' own discovery: 6 of 316 suites exited 0 with no verdict
+  # line, all six named a tally or a bare VERDICT instead, and all six were given one in the same change.
+  $score = Get-TcSelfTestScore -ExitCode $rc -Lines $out
+  if ($score.Score -ceq 'no-verdict') {
+    $noVerdict += $rel
+    Write-Output ("  NO VERDICT  {0}  (exit 0, scored 3 - {1}; last line: {2})" -f $rel, $score.Verdict.Reason, $score.Verdict.Line)
+  }
+  elseif ($score.Score -ceq 'ok') {
     $pass++
     # A PASS THAT COULD NOT LOOK IS NAMED (2026-09-11). A self-test may report a case BLIND - it could not
     # look, so it neither passed nor failed - and exit 0; sidecar\start-sidecar.ps1 does for its venv in a
@@ -609,7 +623,8 @@ foreach ($s in $withSelfTest) {
   }
   else {
     $fail += $rel
-    Write-Output ("  FAIL  {0}  (exit {1})" -f $rel, $rc)
+    $said = if ($rc -eq 0) { ' - it exited 0, but its own output says it failed' } else { '' }
+    Write-Output ("  FAIL  {0}  (exit {1}{2})" -f $rel, $rc, $said)
     # THE EXCERPT MUST SHOW THE FAILURES (2026-08-08). This was `-match '(?i)fail|X '` capped at 5 lines, and
     # '(?i)...x ' matches the "x " inside words - "mutex + atomic swap" scored as a hit. On gates run #2 that
     # spent 3 of the 5 slots on PASSING lines and hid 3 of test-auditors' 4 failures from the log entirely,
@@ -693,17 +708,26 @@ foreach ($g in $pySuites) {
   $out = $gr.Out
   Add-TcGateTiming -Name (($g.f + ' ' + [string]$g.a)) -Ms $gr.Ms -SpawnMs 68
   $rc = $gr.ExitCode
-  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
+  # EXIT 0 IS NOT A VERDICT here either: the same rule and the same lib as the PowerShell self-test loop above. A
+  # `--selftest` branch that forgets its sys.exit falls into main() exactly the way pull-grocery-ads fell into its pull.
+  $score = Get-TcSelfTestScore -ExitCode $rc -Lines $out
+  if ($score.Score -ceq 'no-verdict') {
+    $noVerdict += $g.f
+    Write-Output ("  NO VERDICT  {0}  (exit 0, scored 3 - {1}; last line: {2})" -f $g.f, $score.Verdict.Reason, $score.Verdict.Line)
+  }
+  elseif ($score.Score -ceq 'ok') { $pass++; Write-Output ("  ok    {0}  ({1})" -f $g.f, $g.n) }
   else {
     $fail += $g.f
-    Write-Output ("  FAIL  {0}  (exit {1}) - {2}" -f $g.f, $rc, $g.n)
-    @($out) | Where-Object { $_ -match '^FAIL|SELF-TEST FAIL' } | Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
+    $said = if ($rc -eq 0) { ' - it exited 0, but its own output says it failed' } else { '' }
+    Write-Output ("  FAIL  {0}  (exit {1}{2}) - {3}" -f $g.f, $rc, $said, $g.n)
+    @($out) | Where-Object { $_ -match '^\s*FAIL\b|SELF-TEST FAIL' } | Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
   }
 }
 
 Write-Output ''
-Write-Output ("run-gates: {0} passed, {1} failed" -f $pass, $fail.Count)
+Write-Output ("run-gates: {0} passed, {1} failed, {2} could not evaluate (exit 0 with no self-test verdict)" -f $pass, $fail.Count, $noVerdict.Count)
 foreach ($f in $fail) { Write-Output ("  failed: " + $f) }
+foreach ($f in $noVerdict) { Write-Output ("  no verdict: " + $f) }
 # Counted as passes, and listed so that is never mistaken for having looked. Not a failure: a gate-check
 # checkout without the sidecar venv is not a broken tree. See the self-test loop above.
 if ($blindGates.Count) {
@@ -717,7 +741,11 @@ if ($blindGates.Count) {
 # audits reserve 2 for a hard finding and 3 for could-not-evaluate. Three live vocabularies, so the number
 # is not a channel an agent can decode without knowing which tool it ran. The words are.
 if ($fail.Count) {
-  Write-Output ("run-gates: FAILED - {0} gate(s) did not pass. This tree must not be pushed until they do; fix the cause, never the gate." -f $fail.Count)
+  $nvNote = if ($noVerdict.Count) { ', and ' + $noVerdict.Count + ' self-test(s) exited 0 with no verdict of their own' } else { '' }
+  Write-Output ("run-gates: FAILED - {0} gate(s) did not pass{1}. This tree must not be pushed until they do; fix the cause, never the gate." -f $fail.Count, $nvNote)
+} elseif ($noVerdict.Count) {
+  # The names ride on this line because it is the one the pre-push hook prints back.
+  Write-Output ("run-gates: COULD NOT EVALUATE - {0} self-test(s) exited 0 without printing their own verdict, so code past the verdict ran or the verdict never did: {1}. Scored 3, never ok. Each suite's last line must name its self-test with a result word (lib\selftest-verdict.ps1)." -f $noVerdict.Count, ($noVerdict -join ', '))
 } else {
   Write-Output ("run-gates: PASSED - all {0} gate(s) passed." -f $pass)
 }
@@ -746,12 +774,14 @@ if ($timings.Count) {
 #
 # IT WRITES ONLY ON RED, and it cannot fail the run: Write-TcEvent swallows everything. A bus
 # that could take down the gate would cost more than every signal it carries.
-if ($fail.Count) {
+# A self-test with no verdict is red too: it blocks the push, so it leaves the same record, named in `gates`.
+if ($fail.Count -or $noVerdict.Count) {
   . (Join-Path $repo 'lib\event-bus.ps1')
   # NO `Select-Object -First` ON A NATIVE EXE. It stops the upstream pipeline, which sends
   # the child a broken pipe mid-write; harmless for a one-line rev-parse and a bad habit to
   # spread into a gate. The output is captured and indexed instead.
-  $head = @(@($fail | ForEach-Object { "$_" })[0..([Math]::Min(11, $fail.Count - 1))])
+  $red = @($fail) + @($noVerdict)
+  $head = @(@($red | ForEach-Object { "$_" })[0..([Math]::Min(11, $red.Count - 1))])
   # 'Continue' AROUND THE REDIRECT, NOT A CATCH ALONE (2026-09-11). Under this file's 'Stop' a git stderr line is a
   # terminating throw; the catch kept the gate alive and threw git's answer away, so one warning recorded an empty
   # commit. grocery\test-native-stderr-eap.ps1 watches the shape repo-wide. The catch stays for a missing git.
@@ -763,11 +793,12 @@ if ($fail.Count) {
     $b = @(& git -C $repo rev-parse --abbrev-ref HEAD 2>$null); if ($b.Count) { $branch = "$($b[0])" }
   } catch { } finally { $ErrorActionPreference = $prevEap }
   $null = Write-TcEvent -Kind 'gate-red' -Producer 'ops\run-gates.ps1' -Data @{
-    failed  = $fail.Count
-    passed  = $pass
-    gates   = $head
-    commit  = "$commit"
-    branch  = "$branch"
+    failed     = $fail.Count
+    no_verdict = $noVerdict.Count
+    passed     = $pass
+    gates      = $head
+    commit     = "$commit"
+    branch     = "$branch"
   }
 }
 # THE VERDICT IS RECORDED FOR THE CONTENT IT JUDGED (2026-09-11), and only when this run exits 0 AND the checkout is
@@ -775,7 +806,10 @@ if ($fail.Count) {
 # describes neither version. A red or could-not-evaluate run over content a recorded pass names WITHDRAWS that pass,
 # because gates that disagree with themselves over one tree have given no verdict to reuse. This can never fail the
 # run: a verdict that could not be kept is a lost saving, not a defect in the tree.
-$gateCode = $(if ($fail.Count) { 1 } else { 0 })
+# 1 when anything failed; otherwise 3 when a self-test exited 0 with no verdict of its own, because that suite was NOT
+# evaluated - and a 3 reaches Save-TcGateVerdict below, which records nothing and withdraws any pass over this same
+# content. A suite nobody evaluated must never stand in for one that passed.
+$gateCode = $(if ($fail.Count) { 1 } elseif ($noVerdict.Count) { 3 } else { 0 })
 try {
   if (-not $fpBefore.Fingerprint) {
     Write-Output ("run-gates: this run's verdict is NOT recorded for reuse - {0}" -f $fpBefore.Reason)
@@ -792,4 +826,4 @@ try {
     elseif ($kept -eq 'withdrawn') { Write-Output 'run-gates: the recorded pass for this content is WITHDRAWN - the same content has now failed here' }
   }
 } catch { }
-Exit-Guard -Name 'run-gates' -Summary ("pass={0} fail={1}" -f $pass, $fail.Count) -Code $gateCode
+Exit-Guard -Name 'run-gates' -Summary ("pass={0} fail={1} noverdict={2}" -f $pass, $fail.Count, $noVerdict.Count) -Code $gateCode

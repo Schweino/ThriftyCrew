@@ -235,8 +235,9 @@ if($SelfTest){
   Check "CLEAN TWIN: keto-bun '8ct pack' reads n=8, 400 / 8 = 50 = gpu" ((NFind $bunFix $emptyDen $emptyMac $null $null) -eq 0)
 
   Write-Output ''
-  if($fail -gt 0){ Write-Output "SELF-TEST: $fail predicate(s) regressed"; exit 1 }
-  Write-Output 'SELF-TEST: all predicates hold'
+  # The verdict carries a result word: run-gates reads it before believing exit 0 (lib\selftest-verdict.ps1).
+  if($fail -gt 0){ Write-Output "SELF-TEST FAIL: $fail predicate(s) regressed"; exit 1 }
+  Write-Output 'SELF-TEST PASS: all predicates hold'
   exit 0
 }
 

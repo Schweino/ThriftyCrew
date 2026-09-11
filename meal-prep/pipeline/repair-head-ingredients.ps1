@@ -261,7 +261,8 @@ if ($SelfTest) {
       @($after.head.recipeIngredient)[1] -eq 'Penne Pasta, 10 cups (1050 g)'
     ) (@($after.head.recipeIngredient)[1])
   }
-  Write-Output ("failures: " + $fails)
+  # A named verdict, not a bare tally: run-gates reads it before believing exit 0 (lib\selftest-verdict.ps1).
+  Write-Output ("repair-head-ingredients self-test: " + $(if ($fails) { 'FAIL' } else { 'PASS' }) + ", failures: " + $fails)
   if ($fails) { exit 1 }
   return
 }

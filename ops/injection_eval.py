@@ -159,10 +159,11 @@ def selftest() -> int:
     for f in fails:
         print("FAIL  " + f)
     print("%d rate(s) checked, %d failed" % (len(RATES), len(fails)))
+    # The verdict names the self-test: run-gates reads it before believing exit 0 (lib/selftest-verdict.ps1).
     if fails:
-        print("VERDICT: FAIL - a measured defence got weaker, or the harness broke.")
+        print("VERDICT: SELF-TEST FAIL - a measured defence got weaker, or the harness broke.")
     else:
-        print("VERDICT: PASS - no measured rate fell below its frozen baseline. "
+        print("VERDICT: SELF-TEST PASS - no measured rate fell below its frozen baseline. "
               "indirect_block_rate is 0.00 BY RECORD: the transcription layer does not "
               "defend against on-page injection, and the depth is downstream at "
               "resolve.py's never-mint-a-price rule.")

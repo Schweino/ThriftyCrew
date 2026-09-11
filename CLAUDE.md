@@ -38,7 +38,9 @@ it - so for a month a push was gated exactly as much as the person pushing chose
 workflow is still dispatch-only; the hook is what restored the property, locally and for free.
 
 **Exit 0 = passed. 1 = at least one gate failed. 3 = could not evaluate**, which means discovery is
-broken, not that the tree is clean. Never read 3 as a pass. (The recipe battery uses exit 2 for its
+broken, not that the tree is clean, or that a self-test exited 0 without printing its OWN verdict as its
+last words (2026-09-11: a verdict glued onto a case line let pull-grocery-ads fall through to a live
+pull and score ok for hours). Never read 3 as a pass. (The recipe battery uses exit 2 for its
 own could-not-run - check which tool you actually ran.)
 
 **The 10 machine-wide gate worker slots are a QUEUE, served in arrival order** (`lib/gate-slots.ps1`, since
