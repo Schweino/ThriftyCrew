@@ -56,6 +56,11 @@ everything else honest, so a defect here is silent by construction.
   element, so an empty result counts 1 and a real result binds the whole array to your loop variable.
   Assign, then wrap. Hit four times in one session on 2026-09-06.
   [[ps-json-array-collapse]], [[ps-null-count-is-one]]
+- **Under `powershell -File`, `-Count 1,2,4,8` into an `[int[]]` binds as the ONE number 1248.** The list
+  arrives as one string and the number conversion reads its commas as thousands separators. A measurement
+  harness launched 1,168 child processes on the shared box that way on 2026-09-11. A script meant to be run
+  with `-File` takes a list as a `[string]` and splits it itself, into a NEW variable (assigning the array back
+  to the `[string]` parameter coerces it to `"1 2 4 8"`), and caps anything that launches processes.
 - **Do not add a gate that is red on day one** for a backlog nobody is about to clear - it teaches
   people to ignore red. Use a ratchet with a high-water mark that may only go DOWN
   (`audit-write-seam`, `audit-fact-claims`, `audit-band-censorship`).
@@ -348,8 +353,12 @@ everything else honest, so a defect here is silent by construction.
   hole: **a bare `Add-Content` loses lines to a concurrent appender** - 13 of 200 landed with two processes, 5 of
   1,200 with four, every failure *"Stream was not readable."* A file several processes append to goes through
   `lib/append-line.ps1` (`Add-TcLine`: append-only rights, shared ReadWrite, one write), which landed 1,200 of
-  1,200. Other concurrent appenders were NOT swept; `lib/event-bus.ps1`'s `StreamWriter` opens with the same
-  writer-denying share and was not measured.
+  1,200. **The event bus had the same hole, and nobody could see it** (measured and fixed the same day):
+  `Write-TcEvent`'s `StreamWriter` landed 1,878 of 2,000 events with two processes and 4,792 of 8,000 with
+  eight, every loss a `$false` that every producer discards with `$null =`. Through `Add-TcLine` it landed
+  15,000 of 15,000 (`design/MEASURE-event-bus-concurrent-append-2026-09-11.md`). That doc also lists the
+  appenders still standing, NOT fixed: `grocery/alert-log.txt` and `grocery/out/capture-cursor-log.jsonl`
+  have writers shown running at once, and the cursor log swallows a failure silently.
 
 - **A self-test names every temp path PER RUN, never by a fixed name under `%TEMP%`** (2026-09-11). `run-gates`
   runs every `-SelfTest` and `pre-push` runs `run-gates`, so pushes from concurrent sessions run the SAME suite

@@ -24,6 +24,22 @@
   `.claude\rules\measurement.md` E24: a pair of totals cannot be un-aggregated, and the
   comparison you did not keep is gone forever.
 
+  SEVERAL PROCESSES WRITE IT AT ONCE, SO THE APPEND GOES THROUGH lib\append-line.ps1 (2026-09-11).
+  Refusals from lib\ledger-lock.ps1 and
+  meal-prep\pipeline\source-domains.ps1 are written exactly when writers contend, harvest's pool runs
+  source-domains eight wide, and several sessions' run-gates share this box. Until that day the append was a
+  StreamWriter, which opens sharing Read only, so a process appending at the same moment as another was
+  refused and its event dropped behind a $false that every producer discards. Measured through the real
+  Write-TcEvent, W processes x 200 events, overlap proven by rendezvous, 5 trials a cell
+  (design\MEASURE-event-bus-concurrent-append-2026-09-11.md): 1 writer landed 1,000 of 1,000, 2 writers
+  1,878 of 2,000, 4 writers 3,205 of 4,000, 8 writers 4,792 of 8,000. Every lost event returned $false;
+  none returned $true. Through Add-TcLine, alternated trial by trial with the old code in a second run: 15,000 of
+  15,000 over all 20 trials, while the old code lost events in 15 of its 15 multi-writer trials.
+  THE COST: where a StreamWriter returned $false at once, Add-TcLine retries the OPEN for about 7.3 s when a
+  handle that denies writers holds the bus, so a producer can now stall that long before it gets its $false.
+  Read-TcEvents below is such a handle for the length of one read ([IO.File]::ReadAllLines shares Read only).
+  The MUST FIRE for concurrent producers is in ops\audit-event-bus.ps1's self-test.
+
   IT IS GITIGNORED, like every other high-churn local log. The bus is evidence about this
   machine, not source, and committing it would put a write in every gate run's diff.
 
@@ -33,6 +49,10 @@
 #>
 
 $script:TcEventBusPath = $null
+
+# Add-TcLine. Loaded inside a try because a bus that cannot find its appender must still not break the
+# producer that dot-sourced it: Write-TcEvent then fails its own try and returns $false.
+try { . (Join-Path $(if ($PSScriptRoot) { $PSScriptRoot } else { Join-Path 'C:\Codex\ThriftyCrew' 'lib' }) 'append-line.ps1') } catch { }
 
 function Get-TcEventBusPath {
   <# The bus for this repo. Resolved from THIS file's location, never from the caller's
@@ -86,10 +106,13 @@ function Write-TcEvent {
       $row[$k] = $Data[$k]
     }
     $json = ($row | ConvertTo-Json -Depth 4 -Compress)
-    # UTF-8 with NO BOM, and one line. Add-Content under $ErrorActionPreference='Stop'
-    # would throw on a locked file, which is exactly what must not happen here.
-    $sw = New-Object IO.StreamWriter($p, $true, (New-Object Text.UTF8Encoding($false)))
-    try { $sw.WriteLine($json) } finally { $sw.Dispose() }
+    # ONE LINE, UTF-8 with NO BOM, CRLF - the same bytes the StreamWriter wrote - appended as ONE write through an
+    # append-only open that shares ReadWrite, so a concurrent producer's append can neither refuse this one nor be
+    # refused by it. NOT a StreamWriter: that opens sharing Read only, and a second process appending at the same
+    # moment was refused and its event silently dropped (the header has the counts). Add-TcLine retries only the
+    # OPEN, and throws when a writer-denying handle outlasts its budget; the catch below turns that into $false.
+    # -Compress escapes any line break inside a value, so one event is always one line.
+    $null = Add-TcLine -Path $p -Text $json
     return $true
   } catch {
     return $false

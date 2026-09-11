@@ -155,10 +155,119 @@ $null = Write-TcEvent -Kind 'gate-red' -Producer 'ops\run-gates.ps1' -Data @{ ga
   # MUST NOT FIRE: the writer never throws, whatever it is handed. This is the property
   # that makes it safe to put inside a gate and a publish chain.
   $threw = $false
+  $unwritable = $null
   try {
-    $null = Write-TcEvent -Kind 'x' -Producer 'y' -Data @{ a = 1 } -Path 'Q:\no\such\place\x.jsonl'
+    $unwritable = Write-TcEvent -Kind 'x' -Producer 'y' -Data @{ a = 1 } -Path 'Q:\no\such\place\x.jsonl'
   } catch { $threw = $true }
   Case 'MUST NOT FIRE' 'an unwritable path returns false and does NOT throw' (-not $threw)
+  # MUST FIRE: the refusal is SAID. A writer that swallowed the error and still returned $true would pass the
+  # case above, and a producer that ever reads the boolean would be told an event landed that did not.
+  Case 'MUST FIRE' 'an event that could not land returns $false, never $true' ($unwritable -eq $false) ("returned=" + $unwritable)
+
+  # MUST NOT FIRE: THE APPENDER IS A DEPENDENCY NOW, so a bus that cannot load it must still not break the
+  # producer that dot-sourced it. A copy of event-bus.ps1 with no append-line.ps1 beside it, dot-sourced in a
+  # fresh runspace: the dot-source itself, and the write, must both come back without a throw.
+  $lone = Join-Path ([IO.Path]::GetTempPath()) ('tc-ebl-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  try {
+    [void][IO.Directory]::CreateDirectory($lone)
+    Copy-Item -LiteralPath (Join-Path $repo 'lib\event-bus.ps1') -Destination $lone -ErrorAction Stop
+    $rs = [powershell]::Create()
+    try {
+      [void]$rs.AddScript({
+        param($lib, $bus)
+        $loadThrew = $false; $writeThrew = $false; $ret = $null
+        try { . $lib } catch { $loadThrew = $true }
+        try { $ret = Write-TcEvent -Kind 'x' -Producer 'y' -Path $bus } catch { $writeThrew = $true }
+        [pscustomobject]@{ LoadThrew = $loadThrew; WriteThrew = $writeThrew; Ret = $ret; Landed = [IO.File]::Exists($bus) }
+      }).AddArgument((Join-Path $lone 'event-bus.ps1')).AddArgument((Join-Path $lone 'bus.jsonl'))
+      $loneOut = @($rs.Invoke())
+    } finally { $rs.Dispose() }
+    $lo = if ($loneOut.Count) { $loneOut[-1] } else { $null }
+    Case 'MUST NOT FIRE' 'a bus with no append-line.ps1 beside it loads and writes without a throw, and returns $false' `
+      ($null -ne $lo -and -not $lo.LoadThrew -and -not $lo.WriteThrew -and $lo.Ret -eq $false -and -not $lo.Landed) `
+      $(if ($lo) { "load_threw=$($lo.LoadThrew) write_threw=$($lo.WriteThrew) returned=$($lo.Ret) landed=$($lo.Landed)" } else { 'the runspace returned nothing' })
+  } finally {
+    Remove-Item -LiteralPath $lone -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
+  # MUST FIRE: SEVERAL PROCESSES EMITTING AT ONCE ALL LAND (2026-09-11). Until that day Write-TcEvent appended
+  # through a StreamWriter, which opens sharing Read only, so a process appending at the same moment as another
+  # was refused and its event dropped behind a $false that every producer discards: 4 writers x 200 events
+  # landed 618 to 652 of 800 in each of 10 trials (design\MEASURE-event-bus-concurrent-append-2026-09-11.md).
+  # Mutation-probed from a temp mirror on 2026-09-11: this case goes red with the append put back through a
+  # StreamWriter (635 of 800) or a bare Add-Content (22 of 800). It stays green with Add-TcLine held to ONE open
+  # attempt, so it proves the shared open, not the retry; lib\append-line.ps1's own self-test covers the retry.
+  # THE OVERLAP IS PROVEN BY RENDEZVOUS, NEVER BY A CLOCK (lib\concurrency-probe.ps1). Each child waits until
+  # all W are ready before its first write, and until all W have MADE their first write before its last, so
+  # when every child saw all W first-write markers, every child was inside its write loop at the instant the
+  # last one began. Load makes that slower, never green: a run that did not overlap fails this case and says
+  # so, rather than passing on writers that happened to take turns. The 180 s waits are hang guards.
+  $W = 4; $E = 200
+  $cdir = Join-Path ([IO.Path]::GetTempPath()) ('tc-ebc-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  $procs = @()
+  try {
+    foreach ($sub in 'ready', 'first', 'result', 'log') { [void][IO.Directory]::CreateDirectory((Join-Path $cdir $sub)) }
+    $cbus = Join-Path $cdir 'bus.jsonl'
+    $childPs1 = Join-Path $cdir 'child.ps1'
+    $childSrc = @'
+param([string]$Lib, [string]$Bus, [string]$Root, [string]$Tag, [int]$W, [int]$E)
+$ErrorActionPreference = 'Continue'
+. $Lib
+$ready = [IO.Path]::Combine($Root, 'ready'); $first = [IO.Path]::Combine($Root, 'first')
+[IO.File]::WriteAllText([IO.Path]::Combine($ready, $Tag), 'x')
+$sw = [Diagnostics.Stopwatch]::StartNew()
+while ([IO.Directory]::GetFiles($ready).Length -lt $W -and $sw.Elapsed.TotalSeconds -lt 180) { Start-Sleep -Milliseconds 5 }
+$ok = 0; $refused = 0; $threw = 0; $sawAll = 0
+$pad = 'x' * 150
+for ($i = 0; $i -lt $E; $i++) {
+  if ($i -eq ($E - 1)) {
+    $sw = [Diagnostics.Stopwatch]::StartNew()
+    while ([IO.Directory]::GetFiles($first).Length -lt $W -and $sw.Elapsed.TotalSeconds -lt 180) { Start-Sleep -Milliseconds 5 }
+    if ([IO.Directory]::GetFiles($first).Length -ge $W) { $sawAll = 1 }
+  }
+  try {
+    if ((Write-TcEvent -Kind 'selftest-concurrent' -Producer 'ops\audit-event-bus.ps1' -Data @{ tag = $Tag; i = $i; pad = $pad } -Path $Bus) -eq $true) { $ok++ } else { $refused++ }
+  } catch { $threw++ }
+  if ($i -eq 0) { [IO.File]::WriteAllText([IO.Path]::Combine($first, $Tag), 'x') }
+}
+[IO.File]::WriteAllText([IO.Path]::Combine($Root, 'result', $Tag), ('{0} {1} {2} {3}' -f $ok, $refused, $threw, $sawAll))
+'@
+    [IO.File]::WriteAllText($childPs1, $childSrc, (New-Object Text.UTF8Encoding($false)))
+    $psExe = (Get-Command powershell).Source
+    $busLib = Join-Path $repo 'lib\event-bus.ps1'
+    foreach ($k in 1..$W) {
+      $tag = 'c' + $k
+      $p = Start-Process -FilePath $psExe -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $childPs1 + '"'),
+        '-Lib', ('"' + $busLib + '"'), '-Bus', ('"' + $cbus + '"'), '-Root', ('"' + $cdir + '"'), '-Tag', $tag, '-W', $W, '-E', $E) `
+        -PassThru -NoNewWindow -RedirectStandardOutput (Join-Path $cdir "log\$tag.out") -RedirectStandardError (Join-Path $cdir "log\$tag.err")
+      $null = $p.Handle
+      $procs += $p
+    }
+    foreach ($p in $procs) { [void]$p.WaitForExit(300000) }   # a HANG GUARD, never a bar
+    $okN = 0; $refusedN = 0; $threwN = 0; $sawAllN = 0; $reported = 0
+    foreach ($f in [IO.Directory]::GetFiles((Join-Path $cdir 'result'))) {
+      $parts = ([IO.File]::ReadAllText($f)).Trim() -split ' '
+      if ($parts.Count -ne 4) { continue }
+      $reported++; $okN += [int]$parts[0]; $refusedN += [int]$parts[1]; $threwN += [int]$parts[2]; $sawAllN += [int]$parts[3]
+    }
+    $keys = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+    $lineN = 0; $torn = 0
+    if (Test-Path -LiteralPath $cbus) {
+      foreach ($ln in [IO.File]::ReadAllLines($cbus)) {
+        if (-not $ln.Trim()) { continue }
+        $lineN++
+        try { $ev = $ln | ConvertFrom-Json } catch { $torn++; continue }
+        [void]$keys.Add(([string]$ev.tag) + '|' + ([string]$ev.i))
+      }
+    }
+    $sent = $W * $E
+    Case 'MUST FIRE' ("{0} processes emitting {1} events each at once land all {2}, each call returning true (a StreamWriter landed 618 to 652 of 800)" -f $W, $E, $sent) `
+      ($reported -eq $W -and $sawAllN -eq $W -and $keys.Count -eq $sent -and $lineN -eq $sent -and $torn -eq 0 -and $okN -eq $sent -and $refusedN -eq 0 -and $threwN -eq 0) `
+      ("reported $reported of $W, overlapped $sawAllN of $W, landed $($keys.Count) of $sent distinct over $lineN line(s), torn $torn, returned true $okN, false $refusedN, threw $threwN")
+  } finally {
+    foreach ($p in $procs) { try { if (-not $p.HasExited) { $p.Kill() } } catch { } }
+    Remove-Item -LiteralPath $cdir -Recurse -Force -ErrorAction SilentlyContinue
+  }
 
   # CLEAN TWIN: an absent bus reads as zero rows and age -1, never as fresh.
   $age = Get-BusAge -Path (Join-Path $env:TEMP ("no-such-bus-{0}.jsonl" -f $PID))
