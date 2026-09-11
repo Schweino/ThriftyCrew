@@ -4438,6 +4438,126 @@
                         "ruled_on":  "2026-09-11",
                         "ruled_by":  "triage-developer 2026-09-11",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "lemons|FamilyFare|cascade-ap-comp-lemon",
+                        "commodity":  "lemons",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Cascade Ap Comp Lemon"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Cascade dishwasher detergent pacs, not lemons: Cascade Ap Comp Lemon, a Family Fare Weekly Ad row with no shelf path, held the FF lemons cell at 0.4244 on comparison-2026-09-11. Found implementing queue 2026-09-10-fa6ad6, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "raspberries|FamilyFare|nutri-grain-breakfast-bars-raspberry-10-4-oz",
+                        "commodity":  "raspberries",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Nutri Grain Breakfast Bars, Raspberry 10.4 Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Cereal bars, not raspberries: Nutri Grain Breakfast Bars, Raspberry 10.4 Oz from the Family Fare Weekly Ad held the FF raspberries cell at 0.2885 on comparison-2026-09-11. Found implementing queue 2026-09-10-fa6ad6, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|FamilyFare|nutri-grain-breakfast-bars-strawberry-10-4-oz",
+                        "commodity":  "strawberries",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Nutri Grain Breakfast Bars, Strawberry 10.4 Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Cereal bars, not strawberries: Nutri Grain Breakfast Bars, Strawberry 10.4 Oz from the Family Fare Weekly Ad held the FF strawberries cell at 0.2885 on comparison-2026-09-11. Found implementing queue 2026-09-10-fa6ad6, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cherries|FamilyFare|nutri-grain-breakfast-bars-cherry-10-4-oz",
+                        "commodity":  "cherries",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Nutri Grain Breakfast Bars, Cherry 10.4 Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Cereal bars, not cherries: Nutri Grain Breakfast Bars, Cherry 10.4 Oz from the Family Fare Weekly Ad opened a FF cherries cell at 4.6154 on comparison-2026-09-11. Found implementing queue 2026-09-10-fa6ad6, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "alfredo-sauce|FamilyFare|birds-eye-alfredo-chicken-family-size-42-oz",
+                        "commodity":  "alfredo-sauce",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Birds Eye Alfredo Chicken Family Size 42 Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A frozen chicken alfredo meal, not alfredo sauce: Birds Eye Alfredo Chicken Family Size 42 Oz from the Family Fare Weekly Ad held the FF alfredo-sauce cell at 0.1426 on comparison-2026-09-11. Found implementing queue 2026-09-10-fa6ad6, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cream-cheese|FamilyFare|fresh-finest-4-ct-cream-cheese-iced-cinnamon-rol",
+                        "commodity":  "cream-cheese",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Fresh \u0026 Finest 4 Ct Cream Cheese Iced Cinnamon Rolls"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Cinnamon rolls, not cream cheese: Fresh \u0026 Finest 4 Ct Cream Cheese Iced Cinnamon Rolls from the Family Fare Weekly Ad held the FF cream-cheese cell at 0.2217 on comparison-2026-09-11 (the cell before it was also cinnamon rolls). Found implementing queue 2026-09-10-fa6ad6, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-meatballs|FamilyFare|stouffers-swedish-meatballs-11-5-oz",
+                        "commodity":  "frozen-meatballs",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Stouffer\u0027s Swedish Meatballs 11.5 Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A frozen Swedish meatball ENTREE, not a bag of meatballs: Stouffer\u0027s Swedish Meatballs 11.5 Oz from the Family Fare Weekly Ad held the FF frozen-meatballs cell at 0.2313 on comparison-2026-09-11. Found implementing queue 2026-09-10-fa6ad6, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "snow-peas|FamilyFare|taylor-farms-snap-peas",
+                        "commodity":  "snow-peas",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Taylor Farms Snap Peas"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Snap peas, not snow peas: Taylor Farms Snap Peas from the Family Fare Weekly Ad opened a FF snow-peas cell at 0.4362 on comparison-2026-09-11. Found implementing queue 2026-09-10-fa6ad6, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

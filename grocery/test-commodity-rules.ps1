@@ -339,6 +339,72 @@ $cases = @(
      why='CLEAN TWIN released from fresh, it lands on the canned commodity it is' }
   @{ id='sweet-potatoes'; name='Kroger Baker Sweet Potatoes'; expect='included'
      why='CLEAN TWIN a real fresh sweet potato is untouched by the candied fence' }
+
+  # ---- the whole Family Fare circular, 2026-09-11 (queue fa6ad6) ------------------------------------------
+  # Reading all 1,045 weekly-ad rows instead of the same 100 put ad rows with NO shelf path in front of the
+  # matcher, and names with no type word took cells. Measured before the fences: 1,337 corpus names carry a
+  # proposed token and 20 change route, every one a wrong product or a frozen meal. Names from ads-2026-09-11
+  # unless noted; the clean twins are the cells those commodities held on the 12:19 board.
+  @{ id='lemons'; name='Cascade Ap Comp Lemon'; expect='excluded'
+     why='FOUNDING CASE dishwasher detergent pacs held the Family Fare lemons cell at 0.4244 (household class gains cascade)' }
+  @{ id='lemons'; name='Fresh Lemons, Large'; expect='included'
+     why='CLEAN TWIN a real lemon is untouched' }
+  @{ id='raspberries'; name='Nutri Grain Breakfast Bars, Raspberry 10.4 Oz'; expect='excluded'
+     why='FOUNDING CASE cereal bars held the Family Fare raspberries cell at 0.2885 (snack_carrier gains breakfast bars and Nutri-Grain)' }
+  @{ id='strawberries'; name='Nutri Grain Breakfast Bars, Strawberry 10.4 Oz'; expect='excluded'
+     why='the same bar held the Family Fare strawberries cell at 0.2885' }
+  @{ id='cherries'; name='Nutri Grain Breakfast Bars, Cherry 10.4 Oz'; expect='excluded'
+     why='and opened a Family Fare cherries cell at 4.6154' }
+  @{ id='raspberries'; name='Fresh Red Raspberry'; expect='included'
+     why='CLEAN TWIN real raspberries are untouched' }
+  @{ id='strawberries'; name='Fresh Strawberries'; expect='included'
+     why='CLEAN TWIN real strawberries are untouched' }
+  @{ id='alfredo-sauce'; name='Birds Eye Alfredo Chicken Family Size 42 Oz'; expect='excluded'
+     why='FOUNDING CASE a frozen chicken alfredo meal held the Family Fare alfredo-sauce cell at 0.1426; the fence also releases Stouffer''s, Lean Cuisine, Aldi and Member''s Mark chicken alfredo meals' }
+  @{ id='alfredo-sauce'; name='Ragu Sauce, Classic Alfredo 16 Oz'; expect='included'
+     why='CLEAN TWIN a real jar of alfredo sauce is untouched' }
+  @{ id='cream-cheese'; name='Fresh & Finest 4 Ct Cream Cheese Iced Cinnamon Rolls'; expect='excluded'
+     why='FOUNDING CASE cinnamon rolls held the Family Fare cream-cheese cell at 0.2217' }
+  @{ id='cream-cheese'; name='Our Family Cinnamon Rolls, With Cream Cheese Icing, Cream Cheese 8 Ea'; expect='excluded'
+     why='and the roll that held the same cell on the 08:11 and 12:19 boards (family-fare-regular-2026-09-11)' }
+  @{ id='frozen-meatballs'; name='Stouffer''s Swedish Meatballs 11.5 Oz'; expect='excluded'
+     why='FOUNDING CASE a frozen meatball ENTREE held the Family Fare frozen-meatballs cell at 0.2313' }
+  @{ id='frozen-meatballs'; name='Marie Callender''s Swedish Meatballs Bowl Frozen Meal 11.5 Oz'; expect='excluded'
+     why='and the bowl meal that held the same cell before it (family-fare-regular-2026-09-11)' }
+  @{ id='snow-peas'; name='Taylor Farms Snap Peas'; expect='excluded'
+     why='FOUNDING CASE snap peas are a different pea and opened a Family Fare snow-peas cell at 0.4362' }
+
+  # ---- the same circular, the contests match-soundness raised (queue fa6ad6) -----------------------------
+  # 13 NEW-CONTESTED names arrived with the whole circular; 10 were won by the wrong commodity. Accepting the
+  # baseline would have blessed them, so each loser-by-rule is fenced and the right commodity wins or none does.
+  @{ id='broccoli'; name='Lean Cuisine Classic Alfredo Pasta With Chicken & Broccoli 10 Oz'; expect='excluded'
+     why='FOUNDING CASE a frozen meal won fresh broccoli and priced in band at 4.0427/lb' }
+  @{ id='broccoli'; name='Pasta Roni Chicken & Broccoli Flavor Linguine 4.7 Oz'; expect='excluded'
+     why='a boxed pasta side won fresh broccoli' }
+  @{ id='pasta'; name='Lean Cuisine Signature Swedish Meatballs With Pasta In Gravy 9.125 Oz'; expect='excluded'
+     why='FOUNDING CASE a frozen meal won dry pasta and priced at 0.2915/oz' }
+  @{ id='pasta'; name='Pasta Roni Fettuccine Alfredo 4.7 Oz'; expect='excluded'
+     why='a seasoned pasta side mix is not plain dry pasta' }
+  @{ id='butter'; name='Pasta Roni Butter & Garlic Flavor Pasta 4.7 Oz'; expect='excluded'
+     why='FOUNDING CASE a pasta side won butter and priced at 5.1064/lb' }
+  @{ id='apples'; name='Quaker Apples & Cinnamon Instant Oatmeal 8 Ea'; expect='excluded'
+     why='FOUNDING CASE instant oatmeal won fresh apples' }
+  @{ id='oatmeal'; name='Quaker Apples & Cinnamon Instant Oatmeal 8 Ea'; expect='included'
+     why='CLEAN TWIN released from apples, it lands on oatmeal, the commodity it is' }
+  @{ id='peaches'; name='Quaker Peaches & Cream Instant Oatmeal 8 Ea'; expect='excluded'
+     why='the same oatmeal shape won fresh peaches' }
+  @{ id='olive-oil'; name='Triscuit Crackers, Cracked Pepper & Olive Oil, Party Pack 12.5 Oz'; expect='excluded'
+     why='FOUNDING CASE crackers won olive-oil and priced at 0.4392/floz' }
+  @{ id='crackers'; name='Triscuit Crackers, Cracked Pepper & Olive Oil, Party Pack 12.5 Oz'; expect='included'
+     why='CLEAN TWIN released from olive-oil, it lands on crackers' }
+  @{ id='chicken-breast'; name='Kretschmar Pulled Chicken Breast'; expect='excluded'
+     why='FOUNDING CASE cooked pulled deli chicken won RAW chicken-breast' }
+  @{ id='cooked-shredded-chicken'; name='Kretschmar Pulled Chicken Breast'; expect='included'
+     why='CLEAN TWIN released from raw, it lands on cooked-shredded-chicken' }
+  @{ id='frozen-meatballs'; name='Lean Cuisine Signature Swedish Meatballs With Pasta In Gravy 9.125 Oz'; expect='excluded'
+     why='THE SECOND LANDING released from pasta, the frozen meal fell onto frozen-meatballs; measured and refused before the write' }
+  @{ id='alfredo-sauce'; name='Pasta Roni Fettuccine Alfredo 4.7 Oz'; expect='excluded'
+     why='THE SECOND LANDING released from pasta, the side mix fell onto alfredo-sauce; measured and refused before the write' }
 )
 
 $bad = 0
