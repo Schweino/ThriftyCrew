@@ -24,6 +24,13 @@
   in the known-failures record must not refuse and must still be printed, a stale record must refuse,
   and a checkout with no boards must refuse as could-not-evaluate.
 
+  THE FOURTH (ruling R19, 2026-09-10): the check now runs only the test-auditors units a push can reach. The
+  stub is unit-wrapped like the real harness, and real pushes prove that a changed fixture runs only the unit
+  reading it and says how many cases ran, that a regression in that unit is still refused by name, that a
+  shared file runs every unit reading it, that code outside every unit still runs, and that the full run the
+  daily chain makes (no skip file) still runs every unit. A docs-only push running nothing is the NOT NEEDED
+  case above.
+
   WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
   ops\prepush-test-auditors.ps1 and lib\guard-contract.ps1, and stubs for the gate and for test-auditors.
   Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
@@ -126,22 +133,54 @@ exit ([int]$env:TC_PREPUSH_PROBE_EXIT)
   [IO.File]::WriteAllText((Join-Path $main 'ops\run-gates.ps1'), $stub, $utf8)
   # THE STUB test-auditors. It names guards.ps1 and a fixture root the way the real one does, so the REAL
   # check derives a real input set from it, and it fails exactly the cases TC_PREPUSH_TA_FAILS lists.
+  # SINCE R19 (2026-09-10) THE STUB IS UNIT-WRAPPED the way the real one is: u001 reads guards.ps1, u002 reads
+  # a fixture and a shared rule file, u003 reads only the shared rule file, and one statement sits outside
+  # every unit. Each unit that runs appends its id to units-ran.txt, so a case can see exactly what ran.
   $taStub = @'
+[CmdletBinding()]
+param([string]$SkipUnitsFile = '')
 $root = $PSScriptRoot
 $fix  = Join-Path $root 'regression-inputs\guard-fixtures'
 $HasBoard = (@(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue).Count -gt 0) -or
             (Test-Path (Join-Path $root 'out\recipe-board.json'))
-$guard = Join-Path $root 'guards.ps1'
+$script:SkipIds = @(); if ($SkipUnitsFile) { $script:SkipIds = @([IO.File]::ReadAllLines($SkipUnitsFile) | ForEach-Object { $_.Trim() } | Where-Object { $_ }) }
+$script:URan = 0; $script:USkipped = 0
+function Use-Unit {
+  param([Parameter(Mandatory = $true, Position = 0)][string]$Id, [string[]]$Reads = @(), [string]$Always = '')
+  if ($script:SkipIds -contains $Id) { $script:USkipped++; return $false }
+  $script:URan++; Add-Content -LiteralPath (Join-Path $env:TC_PREPUSH_PROBE 'units-ran.txt') -Value $Id
+  return $true
+}
 [IO.File]::WriteAllText((Join-Path $env:TC_PREPUSH_PROBE 'auditors-ran.txt'), 'ran')
-$cases = @(([string]$env:TC_PREPUSH_TA_FAILS) -split '\|' | Where-Object { $_ })
-Write-Output '  PASS  stub watcher'
-foreach ($c in $cases) { Write-Output ('  FAIL  ' + $c) }
+$pass = 0; $failed = 0
+try {
+if (Use-Unit 'u001-guards') {
+$guardText = Get-Content (Join-Path $root 'guards.ps1') -Raw
+Write-Output '  PASS  stub watcher'; $pass++
+foreach ($c in @(([string]$env:TC_PREPUSH_TA_FAILS) -split '\|' | Where-Object { $_ })) { Write-Output ('  FAIL  ' + $c); $failed++ }
+} # u001-guards
+if (Use-Unit 'u002-beta') {
+$betaBoard = Get-Content (Join-Path $fix 'beta-board.json') -Raw
+$betaRules = Get-Content (Join-Path $root 'shared-rules.json') -Raw
+Write-Output '  PASS  beta watcher'; $pass++
+foreach ($c in @(([string]$env:TC_PREPUSH_TA_FAILS_BETA) -split '\|' | Where-Object { $_ })) { Write-Output ('  FAIL  ' + $c); $failed++ }
+} # u002-beta
+[IO.File]::WriteAllText((Join-Path $env:TC_PREPUSH_PROBE 'undeclared-ran.txt'), 'ran')
+if (Use-Unit 'u003-gamma') {
+$gammaRules = Get-Content (Join-Path $root 'shared-rules.json') -Raw
+Write-Output '  PASS  gamma watcher'; $pass++
+} # u003-gamma
+} finally { }
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
-Write-GuardComplete -Name 'test-auditors' -Summary ('failed=' + $cases.Count)
-exit $(if ($cases.Count -gt 0) { 2 } else { 0 })
+$note = if ($script:USkipped -gt 0) { ' selective=1 units_ran=' + $script:URan + ' units_skipped=' + $script:USkipped } else { '' }
+Write-GuardComplete -Name 'test-auditors' -Summary ('pass=' + $pass + ' failed=' + $failed + ' hygiene=0 skipped=0' + $note)
+exit $(if ($failed -gt 0) { 2 } else { 0 })
 '@
   [IO.File]::WriteAllText((Join-Path $main 'grocery\test-auditors.ps1'), $taStub, $utf8)
   [IO.File]::WriteAllText((Join-Path $main 'grocery\guards.ps1'), "# guard v1`n", $utf8)
+  $null = New-Item -ItemType Directory -Force (Join-Path $main 'grocery\regression-inputs\guard-fixtures')
+  [IO.File]::WriteAllText((Join-Path $main 'grocery\regression-inputs\guard-fixtures\beta-board.json'), "{`"v`":1}`n", $utf8)
+  [IO.File]::WriteAllText((Join-Path $main 'grocery\shared-rules.json'), "{`"v`":1}`n", $utf8)
   [IO.File]::WriteAllText((Join-Path $main 'design\note.md'), "v1`n", $utf8)
   [IO.File]::WriteAllText((Join-Path $main '.gitignore'), "grocery/out/`n", $utf8)   # reach-fixture-ok: the %TEMP% sandbox repo's own .gitignore, not the real module
   Copy-Item -LiteralPath $taCheckSrc -Destination (Join-Path $main 'ops\prepush-test-auditors.ps1')
@@ -271,7 +310,7 @@ exit $(if ($cases.Count -gt 0) { 2 } else { 0 })
   # CLEAN TWIN: a guard push with no failing case at all still passes, stale record or not.
   $env:TC_PREPUSH_TA_FAILS = ''
   $p = PushOut $main 'guard'
-  Case 'CLEAN TWIN' 'a guard push with no failing case passes' ($p.rc -eq 0 -and $p.remote -eq $p.head -and $p.text -match 'PASS after') "rc=$($p.rc) $($p.text)"
+  Case 'CLEAN TWIN' 'a guard push with no failing case passes' ($p.rc -eq 0 -and $p.remote -eq $p.head -and $p.text -match '(PASS|SELECTED CASES PASSED) after') "rc=$($p.rc) $($p.text)"
 
   # MUST FIRE: a checkout with no boards cannot evaluate, is refused, and says nothing that reads as a pass.
   CommitFile $linked 'grocery\guards.ps1' "# guard from a worktree`n"
@@ -279,6 +318,40 @@ exit $(if ($cases.Count -gt 0) { 2 } else { 0 })
   $p = PushOut $linked 'wt-guard'
   Case 'MUST FIRE' 'a guard push from a checkout without boards is refused as could-not-evaluate' `
     ($p.rc -ne 0 -and $p.remote -eq '' -and $p.text -match 'COULD NOT EVALUATE' -and $p.text -notmatch '(?m)^prepush-test-auditors: (PASS|ALLOWED)|test-auditors PASS' -and -not (Test-Path -LiteralPath $ranFile)) "rc=$($p.rc) $($p.text)"
+
+  # ---- R19: a push runs only the units it can reach (real pushes, the REAL selector, the unit-wrapped stub) ----
+  $unitsFile = Join-Path $probe 'units-ran.txt'
+  $undeclFile = Join-Path $probe 'undeclared-ran.txt'
+  $env:TC_PREPUSH_TA_FAILS = ''; $env:TC_PREPUSH_TA_FAILS_BETA = ''
+  # MUST FIRE: changing a declared input (a fixture u002 reads) runs u002 and not the units that never read it.
+  CommitFile $main 'grocery\regression-inputs\guard-fixtures\beta-board.json' "{`"v`":2}`n"
+  Remove-Item -LiteralPath $unitsFile, $undeclFile -ErrorAction SilentlyContinue
+  $p = PushOut $main 'sel-fixture'
+  $ranU = @(if (Test-Path -LiteralPath $unitsFile) { [IO.File]::ReadAllLines($unitsFile) })
+  Case 'MUST FIRE' 'a changed fixture runs only the unit that reads it, and says how many cases ran' `
+    ($p.rc -eq 0 -and $p.remote -eq $p.head -and ($ranU -join ',') -eq 'u002-beta' -and $p.text -match 'ran \d+ of .+ cases \(1 of 3 units\), selected by 1 pushed path' -and $p.text -notmatch '(?m)^prepush-test-auditors: PASS after') "rc=$($p.rc) ran=$($ranU -join ',') $($p.text)"
+  # MUST FIRE: code that sits in no unit ran on that selective push.
+  Case 'MUST FIRE' 'code outside every unit runs on a selective push' (Test-Path -LiteralPath $undeclFile)
+  # MUST FIRE: a regression in the selected unit refuses the push, by name.
+  $env:TC_PREPUSH_TA_FAILS_BETA = 'beta watcher lost its founding bug - the fixture reads clean'
+  CommitFile $main 'grocery\regression-inputs\guard-fixtures\beta-board.json' "{`"v`":3}`n"
+  $p = PushOut $main 'sel-fixture'
+  Case 'MUST FIRE' 'a regression in a selected unit refuses the push by name' `
+    ($p.rc -ne 0 -and $p.remote -ne $p.head -and $p.text -match 'NEW FAILING CASE\s+beta watcher lost its founding bug') "rc=$($p.rc) $($p.text)"
+  $env:TC_PREPUSH_TA_FAILS_BETA = ''
+  # MUST FIRE: a file two units read selects both of them, and not the unit that never reads it.
+  CommitFile $main 'grocery\shared-rules.json' "{`"v`":2}`n"
+  Remove-Item -LiteralPath $unitsFile -ErrorAction SilentlyContinue
+  $p = PushOut $main 'sel-shared'
+  $ranU = @(if (Test-Path -LiteralPath $unitsFile) { [IO.File]::ReadAllLines($unitsFile) })
+  Case 'MUST FIRE' 'a push touching a shared file runs every unit that reads it' `
+    ($p.rc -eq 0 -and ($ranU -contains 'u002-beta') -and ($ranU -contains 'u003-gamma') -and ($ranU -notcontains 'u001-guards')) "rc=$($p.rc) ran=$($ranU -join ',') $($p.text)"
+  # CLEAN TWIN: the daily chain's call (no skip file) still runs every unit, and does not call itself selective.
+  Remove-Item -LiteralPath $unitsFile -ErrorAction SilentlyContinue
+  $fullOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $main 'grocery\test-auditors.ps1'))
+  $ranU = @(if (Test-Path -LiteralPath $unitsFile) { [IO.File]::ReadAllLines($unitsFile) })
+  Case 'CLEAN TWIN' 'the full run (no skip file) still runs every unit' `
+    ((($ranU | Sort-Object) -join ',') -eq 'u001-guards,u002-beta,u003-gamma' -and (($fullOut -join "`n") -notmatch 'selective=1')) "ran=$($ranU -join ',') out=$($fullOut -join ' | ')"
 
   # MUST FIRE, STATIC: run-gates scrubs the same environment for EVERY caller, not only this hook - a
   # session shell or a scheduled task spawned from inside a git hook inherits it just the same.
@@ -293,7 +366,7 @@ exit $(if ($cases.Count -gt 0) { 2 } else { 0 })
   Case 'MUST FIRE' 'the hook unsets the repository environment before invoking the gate and the check' `
     ($iUnset -ge 0 -and $iRun -gt $iUnset -and $iTa -gt $iUnset) "unset@$iUnset run@$iRun ta@$iTa"
 } finally {
-  Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TMPDIR', 'Env:\TC_PREPUSH_TA_FAILS' -ErrorAction SilentlyContinue
+  Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TMPDIR', 'Env:\TC_PREPUSH_TA_FAILS', 'Env:\TC_PREPUSH_TA_FAILS_BETA' -ErrorAction SilentlyContinue
   if (Test-Path -LiteralPath $sb) {
     # The sandbox's own worktree first, through git, then the directory. No junctions are ever made here.
     if ($built) { $null = G -C $main worktree remove --force $linked }

@@ -20,6 +20,12 @@
 
   Usage: test-auditors.ps1        (exit 0 = all pass, 2 = at least one watcher cannot see its own bug)
 #>
+[CmdletBinding()]
+param(
+  # SELECTIVE RUNS (2026-09-10, ruling R19). A file naming the units to SKIP, one id per line, written by
+  # ops\prepush-test-auditors.ps1. The daily chain passes nothing, so every unit runs. See Use-Unit below.
+  [string]$SkipUnitsFile = ''
+)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
@@ -112,6 +118,37 @@ function Skip($m) { Write-Output ("  SKIP  " + $m); $script:skipped++ }
 # uncommitted artefact. A check that cannot SEE stays Bad: "the backup is out of date" and "the backup
 # checker went blind" are opposite findings.
 function Hygiene($m) { Write-Output ("  HYGIENE  " + $m); $script:hygiene++ }
+# UNITS AND SELECTIVE RUNS (2026-09-10, design\PLAN-zero-alert-days-2026-09-10.md, ruling R19).
+# Every case below sits inside `if (Use-Unit '<id>' ...) { ... }`. A push that touches one guard input used to
+# run all of them for five minutes; ops\prepush-test-auditors.ps1 now derives, from each unit's own code, what
+# it reads and runs, and hands this file the units a push CANNOT reach. Three rules keep that honest:
+#   * THE LIST IS OF UNITS TO SKIP, NOT UNITS TO RUN. An id nobody named runs, so a unit the selector could
+#     not read, or a unit added after it looked, fails toward running rather than toward silence.
+#   * FUNCTION DEFINITIONS, DOT-SOURCES AND Add-Type STAY OUTSIDE THE WRAPPERS, so a helper defined in one
+#     unit still exists when that unit is skipped. A unit that reads a VARIABLE another unit assigns is kept
+#     together with it by the selector's def-use pass, never by this file.
+#   * A SELECTIVE RUN NEVER READS AS A PASS. It prints how many units it ran and names itself SELECTIVE, and
+#     its exit code keeps the full run's meaning (2 = a case it ran failed).
+# -Reads and -Always are declarations for the selector, for what a unit's code cannot show: a child that scans
+# the live tree. The harness ignores them. The daily chain passes no -SkipUnitsFile, so it runs every unit.
+# A skip file that was named and cannot be read runs EVERY unit and says so.
+$script:SkipUnits    = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+$script:UnitsRan     = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+$script:UnitsSkipped = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+if ($SkipUnitsFile) {
+  try {
+    foreach ($suLine in [IO.File]::ReadAllLines($SkipUnitsFile)) { $suId = $suLine.Trim(); if ($suId -and -not $suId.StartsWith('#')) { [void]$script:SkipUnits.Add($suId) } }
+  } catch {
+    $script:SkipUnits.Clear()
+    Write-Output ("test-auditors: the skip file '" + $SkipUnitsFile + "' could not be read (" + $_.Exception.Message + "), so EVERY unit runs")
+  }
+}
+function Use-Unit {
+  param([Parameter(Mandatory = $true, Position = 0)][string]$Id, [string[]]$Reads = @(), [string]$Always = '')
+  if ($script:SkipUnits.Contains($Id)) { [void]$script:UnitsSkipped.Add($Id); return $false }
+  [void]$script:UnitsRan.Add($Id)
+  return $true
+}
 # THE VERDICT, AS A PURE FUNCTION so the two cases below can drive it without running a 600-check suite.
 # rc 2 = a watcher has gone blind (BLIND-class, publish-holding, the loudest page in the estate)
 # rc 1 = every watcher still fires; ops hygiene drift was found (guard-contract's "findings")
@@ -269,11 +306,11 @@ function Get-Early([string]$Key, [string]$Path, [object[]]$Argv) {
 }
 
 $script:MpPipeEarly = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
-Start-Early 'early:matcher-parity'  (Join-Path $root 'test-matcher-parity.ps1')                  @('-Sample', '400')
-Start-Early 'early:spec-live'       (Join-Path $script:MpPipeEarly 'audit-spec-contradictions.ps1') @('-Quiet')
-Start-Early 'early:match-lib'       (Join-Path $root 'test-match-lib.ps1')                       @('-Quiet')
-Start-Early 'early:census-live'     (Join-Path $root 'audit-script-census.ps1')                  @()
-Start-Early 'early:fanout-selftest' (Join-Path $root 'fanout-lib.ps1')                           @('-SelfTest')
+if (-not $script:SkipUnits.Contains('u139-matcher-parity-wired-2026-08-21')) { Start-Early 'early:matcher-parity'  (Join-Path $root 'test-matcher-parity.ps1')                  @('-Sample', '400') }
+if (-not $script:SkipUnits.Contains('u122-specs-prose-re-sync')) { Start-Early 'early:spec-live'       (Join-Path $script:MpPipeEarly 'audit-spec-contradictions.ps1') @('-Quiet') }
+if (-not $script:SkipUnits.Contains('u128-the-precompiled-matcher')) { Start-Early 'early:match-lib'       (Join-Path $root 'test-match-lib.ps1')                       @('-Quiet') }
+if (-not $script:SkipUnits.Contains('u079-n-6-script-census-is-every-file-in')) { Start-Early 'early:census-live'     (Join-Path $root 'audit-script-census.ps1')                  @() }
+if (-not $script:SkipUnits.Contains('u049-the-inspect-fan-out')) { Start-Early 'early:fanout-selftest' (Join-Path $root 'fanout-lib.ps1')                           @('-SelfTest') }
 
 Write-Output 'test-auditors: can each watcher still see the bug it was written for?'
 
@@ -297,6 +334,7 @@ $null = New-Item -ItemType Directory -Path $fixRep -Force
 # always writes basis-reconcile.json, and three simultaneous children in one directory would be three
 # writers on one file. Nothing reads these reports (that is the whole point of -ReportDir, section 97),
 # but a harness that races on a file it does not even read would look like a flaky auditor.
+if (Use-Unit 'u001-1-basis-reconciler') {
 $brCases = @(
   # MUST FIRE: Hy-Vee published $3.15/lb for corned beef brisket while the store's own size text printed
   # "($8.99/lb)" right there on the same row.
@@ -318,11 +356,13 @@ else { Bad ('basis-reconcile false-positived on a clean board: ' + $r.text) }
 $r = $br[2]
 if ($r.text -match 'ok - every checkable cell agrees') { Ok 'basis-reconcile ignores whole-cent rounding noise' }
 else { Bad ('basis-reconcile tripped on cent rounding: ' + $r.text) }
+} # u001-1-basis-reconciler
 
 # ---------------------------------------------------------------- 1b. Baker's netWeight source
 # Kroger returns NO unit price, so netWeight (the store's own package weight) is the only independent
 # statement available for the estate's largest store. MUST FIRE on the 2026-07-24 Kerrygold class: reading
 # "4 ct / 16 oz" as 16 oz PER STICK priced the pack 4x under and no band blinked.
+if (Use-Unit 'u002-1b-baker-s-netweight-source') {
 $rawFx = Join-Path $fix 'bakers-raw'
 $r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'bakers-netweight-conflict-board.json'), '-RawDir', $rawFx, '-ReportDir', $fixRep)
 if ($r.text -match 'butter' -and $r.text -match 'netWeight') { Ok "basis-reconcile FIRES when Baker's size disagrees with Kroger's own netWeight" }
@@ -335,6 +375,7 @@ else { Bad ('basis-reconcile false-positived on a correct netWeight board: ' + $
 # Both fixtures carry that row; "checked 1 cell" proves it was skipped rather than silently agreeing.
 if ($r.text -match 'checked 1 cell' -and $r2.text -match 'checked 1 cell') { Ok 'basis-reconcile ignores a per-pound (soldBy=WEIGHT) row, whose netWeight is a tray weight' }
 else { Bad 'basis-reconcile is reading netWeight on a soldBy=WEIGHT row - that is the random tray weight, not a package size' }
+} # u002-1b-baker-s-netweight-source
 
 # ---------------------------------------------------------------- 1c. one NAME, two products
 # 2026-07-28: the join keyed on store+item name and kept the first match, so a multipack cell was compared
@@ -342,13 +383,16 @@ else { Bad 'basis-reconcile is reading netWeight on a soldBy=WEIGHT row - that i
 # ("Kroger Original Cream Cheese" is both an 8 oz brick and a 2 ct / 8 oz pack; Sam's listed one Pledge
 # 3-pack twice). The cell here is CORRECT at $3.29/16 oz, so silence proves the join picked the right row -
 # a name-only join would compare it to the 8 oz single at $0.411/oz and flag.
+if (Use-Unit 'u003-1c-one-name-two-products') {
 $r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'bakers-namecollision-board.json'), '-RawDir', (Join-Path $fix 'bakers-raw-collision'), '-ReportDir', $fixRep)
 if ($r.text -match 'ok - every checkable cell agrees' -and $r.text -match 'checked 1 cell') { Ok 'basis-reconcile picks the right row when two products share one name' }
 else { Bad ('basis-reconcile cross-matched two products sharing a name: ' + $r.text) }
+} # u003-1c-one-name-two-products
 
 # ---------------------------------------------------------------- 2. pack-basis heuristic
 # MUST FIRE: Sam's Pledge 3-pack whose 29 oz TOTAL was multiplied into an 87 oz each-size, making it the
 # cheapest furniture polish in Omaha at a third of its real price.
+if (Use-Unit 'u004-2-pack-basis-heuristic') {
 $r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-board.json'), '-ReportDir', $fixRep)
 if ($r.text -match 'furniture-polish' -and $r.text -match 'multiplied') { Ok 'pack-basis FIRES on the Pledge pack-total bug' }
 else { Bad ('pack-basis MISSED its founding bug: ' + $r.text) }
@@ -356,6 +400,7 @@ else { Bad ('pack-basis MISSED its founding bug: ' + $r.text) }
 $r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-legit-bulk-board.json'), '-ReportDir', $fixRep)
 if ($r.text -match 'ok - no multipack cell') { Ok 'pack-basis SILENT on legitimate bulk multipacks' }
 else { Bad ('pack-basis false-positived on real bulk: ' + $r.text) }
+} # u004-2-pack-basis-heuristic
 
 # ---------------------------------------------------------------- 2b. pack-basis BLOCKS the decidable case
 # 2026-08-02: the audit above named the Pledge row at 09:03 and the board published the wrong crown at 09:11
@@ -365,6 +410,7 @@ else { Bad ('pack-basis false-positived on real bulk: ' + $r.text) }
 # stores), so the printed number can only have been the pack TOTAL.
 # The exit code is the assertion. A run that merely PRINTS the words while exiting 0 would leave the board
 # publishable, which is the exact failure this test exists to prevent, so rc is checked separately from text.
+if (Use-Unit 'u005-2b-pack-basis-blocks-the-decidable') {
 $r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-board.json'), '-ReportDir', $fixRep)
 if ($r.rc -eq 2 -and $r.text -match 'CONFIRMED PACK TOTAL' -and $r.text -match 'furniture-polish') { Ok 'pack-basis BLOCKS (exit 2) on the peer-size fingerprint of a pack total' }
 else { Bad ("pack-basis did not block its own founding bug (rc=$($r.rc)): " + $r.text) }
@@ -377,6 +423,7 @@ else { Bad ("pack-basis did not block its own founding bug (rc=$($r.rc)): " + $r
 $r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-hummus-clean-board.json'), '-ReportDir', $fixRep, '-AllowFile', (Join-Path $fix 'no-such-allowlist.json'))
 if ($r.rc -eq 0 -and $r.text -match 'hummus' -and $r.text -notmatch 'CONFIRMED PACK TOTAL') { Ok 'pack-basis fingerprint stays SILENT on a real per-item pack (hummus clean twin, still advisory)' }
 else { Bad ("pack-basis fingerprint condemned a CORRECT per-item pack (rc=$($r.rc)): " + $r.text) }
+} # u005-2b-pack-basis-blocks-the-decidable
 
 # ---------------------------------------------------------------- 2c. coverage-gaps says WHY, not just WHAT
 # 2026-08-02: audit-coverage-gaps validated candidates against include/exclude regexes only, while the engine
@@ -387,6 +434,7 @@ else { Bad ("pack-basis fingerprint condemned a CORRECT per-item pack (rc=$($r.r
 # Four frozen fixtures, one per reason, driven entirely off the fixture dir so no live file can move under
 # them. The berbere fixture uses PRE-FIX rules on purpose: it must keep proving the classifier can SEE a
 # first-match hijack after today's release exclude has made this particular one go away.
+if (Use-Unit 'u006-2c-coverage-gaps-says-why-not-just') {
 $cgFix = Join-Path $fix 'coverage-classify'
 $cgArgs = @('-OutDir', $cgFix, '-ReportDir', $fixRep,
             '-CompareFile',    (Join-Path $cgFix 'comparison-fixture.json'),
@@ -409,6 +457,7 @@ else { Bad ("coverage-gaps paged on the wrong set (rc=$($r.rc)): " + $r.text) }
 $r = RunPS 'audit-coverage-gaps.ps1' ($cgArgs + @('-CommoditiesFile', (Join-Path $cgFix 'commodities-quiet.json')))
 if ($r.rc -eq 0 -and $r.text -match 'no ACTIONABLE gap' -and $r.text -match 'BASIS-NULL' -and $r.text -match 'BAND-DROPPED') { Ok 'coverage-gaps stays QUIET (exit 0) when every gap is basis/band, while still reporting them' }
 else { Bad ("coverage-gaps paged on gaps the engine itself explains (rc=$($r.rc)): " + $r.text) }
+} # u006-2c-coverage-gaps-says-why-not-just
 
 # ---- 2c-bis. THE AUDITOR'S OWN TWO BLIND SPOTS (2026-09-07, queue 2026-09-07-0e9482) -------------------
 # Four of the five gaps on 2026-09-07 were not rule problems at all; they were this audit reporting things
@@ -424,6 +473,7 @@ else { Bad ("coverage-gaps paged on gaps the engine itself explains (rc=$($r.rc)
 #                 because the line carries no size and NO commodity can price it whoever owns it.
 # The fixture is frozen from the real rows and lives in its own directory, so none of the five assertions
 # in 2c above can move under it.
+if (Use-Unit 'u007-2c-bis-the-auditor-s-own-two-blind') {
 $cg2Fix  = Join-Path $fix 'coverage-classify-0e9482'
 $cg2Args = @('-OutDir', $cg2Fix, '-ReportDir', $fixRep,
              '-CompareFile',     (Join-Path $cg2Fix 'comparison-fixture.json'),
@@ -449,9 +499,11 @@ else { Bad ("coverage-gaps paged on the wrong set with the new classes (rc=$($r.
 $r = RunPS 'audit-coverage-gaps.ps1' ($cg2Args + @('-LedgerFile', (Join-Path $cg2Fix 'known-wrong-empty.json')))
 if ($r.text -match 'baked-beans\s+Hy-Vee\s+\[PRICED\]' -and $r.text -match '4 actionable, 3 explained') { Ok 'FIXTURE INTEGRITY: with the ruling removed the same row is PRICED and pages again, so RULED-WRONG is the ledger being read and not the row going missing' }
 else { Bad ('the RULED-WRONG case proves nothing: with an EMPTY ledger the pork & beans row does not come back as PRICED (rc=' + $r.rc + '): ' + $r.text) }
+} # u007-2c-bis-the-auditor-s-own-two-blind
 
 # ---------------------------------------------------------------- 3. triage-due must FAIL CLOSED
 # Run a COPY of the guard in a temp dir so the live queue is never touched ($PSScriptRoot decides its paths).
+if (Use-Unit 'u008-3-triage-due-must-fail-closed') {
 $tmp = Register-Fx (Join-Path $env:TEMP ('triage-fixture-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
 New-Item -ItemType Directory -Force $tmp | Out-Null
 Copy-Item (Join-Path $root 'triage-due.ps1') (Join-Path $tmp 'triage-due.ps1')
@@ -467,6 +519,7 @@ foreach ($m in [regex]::Matches((Get-Content (Join-Path $root 'triage-due.ps1') 
   if (Test-Path $dep) { Copy-Item $dep (Join-Path $tmp $m.Groups['f'].Value) -Force }
   else { Bad ('triage-due dot-sources ' + $m.Groups['f'].Value + ' which is not in grocery\ - the fixture cannot carry it and the guard cannot start') }
 }
+} # u008-3-triage-due-must-fail-closed
 function RunTriage($content) {
   $qf = Join-Path $tmp 'triage-queue.json'
   if ($null -eq $content) { Remove-Item $qf -ErrorAction SilentlyContinue }
@@ -476,6 +529,7 @@ function RunTriage($content) {
 }
 # the exact 2026-07-28 failure: a queue file caught mid-rewrite reads as an empty string, and in PS 5.1
 # '' | ConvertFrom-Json returns $null WITHOUT throwing - the catch never fires and IDLE gets printed.
+if (Use-Unit 'u008-3-triage-due-must-fail-closed') {
 $t = RunTriage ''
 if ($t -match '^DUE') { Ok 'triage-due says DUE on an empty (mid-write) queue file' }
 else { Bad ('triage-due FAILED OPEN on an empty queue - it said: ' + $t) }
@@ -489,6 +543,7 @@ $t = RunTriage '{"items":[{"id":"a","status":"resolved","count":1,"subject":"don
 if ($t -match '^IDLE') { Ok 'triage-due says IDLE only when the queue is really clear' }
 else { Bad ('triage-due cried wolf on a clear queue - it said: ' + $t) }
 Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
+} # u008-3-triage-due-must-fail-closed
 
 # ---------------------------------------------------------------- 4. the PS 5.1 array-wrap trap, repo-wide
 # @(Get-Content x | ConvertFrom-Json) does NOT unroll a JSON array in 5.1: it yields ONE element holding the
@@ -502,6 +557,7 @@ Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
 # Cost of the gap: the cloud backup's stand-down gate read @(Invoke-RestMethod ...).Count -gt 0, which is
 # always true, so runs #22 (07-24) through #34 (08-05) all stood down - 13 days with no backup, all green.
 # A class check that only knows the one shape the class first appeared in is a site check wearing a costume.
+if (Use-Unit 'u009-4-the-ps-5-1-array-wrap-trap-repo') {
 $skipSelf = @('test-auditors.ps1', 'test-gate-count.ps1')   # these quote the pattern to describe and probe it
 $scan = @(Get-ChildItem (Join-Path $root '*.ps1')) +
         @(Get-ChildItem (Join-Path (Split-Path $root -Parent) '.github\workflows\*.yml') -ErrorAction SilentlyContinue)
@@ -532,15 +588,18 @@ Remove-Item $probe -Force -ErrorAction SilentlyContinue
 if ($wrapped.Count -eq 1 -and @($assigned).Count -eq 3) { Ok 'the no-unroll trap still behaves as documented (wrapped=1, assigned-then-wrapped=3)' }
 elseif ($wrapped.Count -eq 3) { Ok 'this PowerShell unrolls ConvertFrom-Json (newer host) - the class check above is belt-and-braces' }
 else { Bad 'the array-wrap probe behaved unexpectedly - re-read the ps51-json-array-traps note' }
+} # u009-4-the-ps-5-1-array-wrap-trap-repo
 
 # ---------------------------------------------------------------- 5. send-alert must write the queue atomically
 # The queue is read-modify-written by several processes; Set-Content truncates before it fills, which is the
 # window that produced the empty read above. Assert the atomic swap + mutex are still in place.
+if (Use-Unit 'u010-5-send-alert-must-write-the-queue') {
 $sa = Get-Content (Join-Path $root 'send-alert.ps1') -Raw
 if ($sa -match 'Move-Item[^\r\n]*\$qFile' -and $sa -match 'System\.Threading\.Mutex') { Ok 'send-alert still writes the queue via mutex + atomic swap' }
 else { Bad 'send-alert lost its mutex or atomic swap - a concurrent read can see a truncated queue again' }
 if ($sa -match 'refusing to overwrite') { Ok 'send-alert still refuses to overwrite a queue that reads back empty' }
 else { Bad 'send-alert lost the refuse-to-overwrite-empty guard - a bad read can wipe the backlog' }
+} # u010-5-send-alert-must-write-the-queue
 
 # ---------------------------------------------------------------- 5b. an alert body must never ride the command line
 # FOUNDING BUG (2026-08-06). Every alerting script mailed like this:
@@ -556,6 +615,7 @@ else { Bad 'send-alert lost the refuse-to-overwrite-empty guard - a bad read can
 # meant to deliver.
 # THE RULE NOW: alert-lib.ps1's Send-Alert is the only thing that may spawn send-alert.ps1, and it hands the
 # body over as -BodyFile. The defect IS the call shape, so the call shape is what gets pinned.
+if (Use-Unit 'u011-5b-an-alert-body-must-never-ride-the') {
 $abBad = @()
 $abDirs = @((Join-Path $root '*.ps1'), (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\*.ps1'))
 foreach ($abG in $abDirs) {
@@ -582,6 +642,7 @@ if ($abLib -match '-BodyFile \$bf') { Ok 'alert-lib still passes the body as -Bo
 else { Bad 'alert-lib no longer sends the body by file - an oversized alert can silently fail to send again' }
 if ($abLib -match 'ALERT FAILED TO SEND') { Ok 'alert-lib still logs a failed send loudly (a dead page cannot read as a crashed check)' }
 else { Bad 'alert-lib lost its ALERT FAILED TO SEND line - a page that never went out is indistinguishable from the check itself dying again' }
+} # u011-5b-an-alert-body-must-never-ride-the
 
 # ---------------------------------------------------------------- 6. coverage-gaps must share the engine's exclusions
 # It kept its own opinion of what is not-food and reported engine-refused products as gaps forever.
@@ -589,6 +650,7 @@ else { Bad 'alert-lib lost its ALERT FAILED TO SEND line - a page that never wen
 # compare-deals.ps1 by regex and run through Invoke-Expression, and this block asserted that the PARSE still
 # worked. The property being defended never was the parse - it is that the auditor and the engine read the
 # SAME list - so the assertion moves with the mechanism rather than being deleted with it.
+if (Use-Unit 'u012-6-coverage-gaps-must-share-the') {
 $cg = Get-Content (Join-Path $root 'audit-coverage-gaps.ps1') -Raw
 if ($cg -match 'Get-TcGlobalExclude') { Ok 'coverage-gaps reads the engine GLOBAL_EXCLUDE through the library' }
 else { Bad 'coverage-gaps no longer reads the engine GLOBAL_EXCLUDE - engine-refused products will be reported as gaps' }
@@ -609,12 +671,14 @@ if (Test-Path $gexLib) {
 $cdtxt = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
 if ($cdtxt -match '(?m)^\s*\$GLOBAL_EXCLUDE\s*=\s*@\(') { Bad 'compare-deals.ps1 has an array literal for $GLOBAL_EXCLUDE again - there are two copies of the list and they will drift' }
 else { Ok 'compare-deals.ps1 holds no second copy of the exclude list' }
+} # u012-6-coverage-gaps-must-share-the
 
 # ---------------------------------------------------------------- 7. a locked log must not kill the pipeline
 # 2026-07-28: a `tail -f` on ad-cycle-log.txt held the file open, Add-Content threw under EAP=Stop, and
 # check-ad-cycles died mid-run TWICE - with no log line explaining it, because logging WAS the failure. An
 # editor with the log open, a backup or an antivirus scan does the same. Reproduce the exact condition:
 # hold an exclusive handle on a log file and assert the Log pattern survives it.
+if (Use-Unit 'u013-7-a-locked-log-must-not-kill-the') {
 $logProbe = Register-Fx (Join-Path $env:TEMP ('logprobe-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.txt'))
 'seed' | Set-Content $logProbe -Encoding UTF8
 $fs = [IO.File]::Open($logProbe, 'Open', 'ReadWrite', 'None')   # 'None' = no sharing, exactly like a lock
@@ -650,6 +714,7 @@ foreach ($n in 'check-ad-cycles.ps1','run-daily-local.ps1','send-alert.ps1','bak
 }
 if ($bare.Count -eq 0) { Ok 'every pipeline logger retries instead of dying on a locked file' }
 else { Bad ('these loggers still die on a locked log file: ' + ($bare -join ', ')) }
+} # u013-7-a-locked-log-must-not-kill-the
 
 # ---- the golden regression guard itself (added 2026-07-29) --------------------------------------------
 # It sat RED for weeks and nobody noticed, because it was not hermetic: the harness froze the DATA but let
@@ -657,6 +722,7 @@ else { Bad ('these loggers still die on a locked log file: ' + ($bare -join ', '
 # "drift". On 2026-07-29 it reported 66 differences and not one was a code bug. Now that the rules are
 # pinned it can only fail on a CODE change - which makes it safe to run daily, and makes red mean something.
 # Three checks: the guard is green, its founding-bug fixture still exists, and the hermetic seal is intact.
+if (Use-Unit 'u014-the-golden-regression-guard-itself') {
 $rt = PSChild (Join-Path $root 'regression-test.ps1') | ForEach-Object { [string]$_ }
 if ($LASTEXITCODE -eq 0) { Ok 'golden regression guard is GREEN on the hermetic frozen inputs' }
 else { Bad ('golden regression guard is RED - the engine changed a known-good number: ' + (($rt | Select-Object -Last 3) -join ' | ')) }
@@ -670,12 +736,14 @@ if ($rtSrc -match 'CommoditiesFile' -and $rtSrc -match 'BandsFile') { Ok 'regres
 else { Bad 'regression-test.ps1 no longer passes -CommoditiesFile/-BandsFile from regression-inputs - the hermetic seal is broken and the guard will drift red on ordinary rule edits again, which is how it stopped being read the first time' }
 
 Write-Output ''
+} # u014-the-golden-regression-guard-itself
 # ---------------------------------------------------------------- N. the ZERO-ROWS rule must stay armed
 # guards.ps1 guard 11 printed "ok ... (0 rows checked)" for five days after Baker's moved to the Kroger API and
 # its row filter stopped matching anything. "No violations found" and "no rows examined" are the same zero, so
 # the estate's cheapest anti-blindness rule is: a check that examined nothing must WARN. OkUnlessBlind enforces
 # it. If that helper is deleted, loses its warn branch, or stops being CALLED, every converted guard silently
 # reverts to passing on an empty examination - so this fixture is the watcher over the anti-blindness rule.
+if (Use-Unit 'u015-n-the-zero-rows-rule-must-stay-armed') {
 $gs = Get-Content (Join-Path $root 'guards.ps1') -Raw
 if ($gs -match 'function OkUnlessBlind') { Ok 'guards.ps1 still defines OkUnlessBlind (the zero-rows rule)' }
 else { Bad 'guards.ps1 LOST OkUnlessBlind - a guard that examines zero rows can print ok again (the guard-11 class)' }
@@ -711,6 +779,7 @@ $oubProof = & {
 if ($oubProof.nonZero -eq 0 -and $oubProof.zero -eq 1 -and $oubProof.msg -eq 'BLIND-0') {
   Ok 'zero-rows fixture: a non-zero count stays silent, a zero count raises exactly the blind warning'
 } else { Bad ("zero-rows fixture FAILED: nonZero-warns=$($oubProof.nonZero) zero-warns=$($oubProof.zero) msg='$($oubProof.msg)'") }
+} # u015-n-the-zero-rows-rule-must-stay-armed
 
 # ---------------------------------------------------------------- Nb. guards must iterate the ENGINE's file set
 # Item 9 (2026-07-30): compare-deals unions Walmart across 14 days; guards.ps1 answered "which files does the
@@ -720,12 +789,14 @@ if ($oubProof.nonZero -eq 0 -and $oubProof.zero -eq 1 -and $oubProof.msg -eq 'BL
 # engine resolves it against $ads.today (measured 2026-07-30 08:19: walmart-regular-2026-07-15.json, 711 rows,
 # was priced into comparison-2026-07-29 and skipped by both guards). compare-deals -SelfTest proves the
 # BEHAVIOUR; what can still rot is the WIRING, so check that here, the same way the zero-rows rule is checked.
+if (Use-Unit 'u016-nb-guards-must-iterate-the-engine-s') {
 $gsFs = Get-Content (Join-Path $root 'guards.ps1') -Raw
 if ($gsFs -match 'Select-EngineRegularFiles') { Ok 'guards.ps1 still resolves its file set through the shared engine definition' }
 else { Bad 'guards.ps1 no longer calls Select-EngineRegularFiles - guards 5 and 10 are back to guarding a different file set than the board was priced from (item 9, and its one-day-wide reopening)' }
 $mEfs = [regex]::Match($gsFs, 'function EngineFileSet[\s\S]{0,1500}?\r?\n\}')
 if ($mEfs.Success -and $mEfs.Value -notmatch 'Select-RegularFileSet') { Ok 'EngineFileSet does not re-derive the file set or its as-of locally' }
 else { Bad 'EngineFileSet builds its own file set again instead of calling the shared definition - that is exactly how the engine''s 14-day union and the guards'' window drifted apart in the first place' }
+} # u016-nb-guards-must-iterate-the-engine-s
 
 # ---------------------------------------------------------------- N+1. batch importers must read UTF-8
 # The four batch importers used a bare Get-Content, which in PS 5.1 decodes a UTF-8 capture as Windows-1252
@@ -737,6 +808,7 @@ else { Bad 'EngineFileSet builds its own file set again instead of calling the s
 # importer and demanding it here would fail from the day it was archived. import-aldi-batch is now a SHIM
 # that forwards to import-instacart-batch, so it holds no capture read of its own - the read it must be
 # checked for lives in the file it forwards to, which is on this list in its own right.
+if (Use-Unit 'u017-n-1-batch-importers-must-read-utf-8') {
 foreach ($imp in @('import-walmart-batch.ps1','import-instacart-batch.ps1')) {
   $ip = Join-Path $root $imp
   if (-not (Test-Path $ip)) { Bad ("$imp is missing - it was a live staples-expansion importer"); continue }
@@ -760,11 +832,13 @@ try {
   } else { Bad 'utf8 fixture: -Encoding UTF8 did not round-trip an umlaut - the importer fix does not actually work here' }
 } catch { Bad ('utf8 fixture threw: ' + $_.Exception.Message) }
 finally { if (Test-Path $tmpU) { Remove-Item -LiteralPath $tmpU -Force -ErrorAction SilentlyContinue } }
+} # u017-n-1-batch-importers-must-read-utf-8
 
 # ---------------------------------------------------------------- N+2. allowlist-rot must cover ALL allowlists
 # basis-reconcile-allowlist.json was omitted from guards' hygiene loop, and it is the one that suppresses
 # FACTOR-level basis conflicts - the class that decides which store the board calls cheapest. It was therefore
 # the only allowlist entries could age in forever with no expiry pressure at all.
+if (Use-Unit 'u018-n-2-allowlist-rot-must-cover-all') {
 $gtxt = Get-Content (Join-Path $root 'guards.ps1') -Raw
 foreach ($al in @('multipack-allowlist.json','coverage-gap-allowlist.json','basis-reconcile-allowlist.json')) {
   if ($gtxt -match [regex]::Escape($al)) { Ok "allowlist-rot check still covers $al" }
@@ -781,6 +855,7 @@ foreach ($al in @('multipack-allowlist.json','coverage-gap-allowlist.json','basi
     else { Bad "$al exposes neither .allow nor .gaps - guards' rot check is scanning ZERO entries from it" }
   } catch { Bad "$al does not parse: $($_.Exception.Message)" }
 }
+} # u018-n-2-allowlist-rot-must-cover-all
 
 # ---------------------------------------------------------------- N+2b. guard 6 must NAME the stores it skipped
 # FOUNDING BUG (found 2026-07-30): guard 6 ("a store's data collapsed") opened with `if ($files.Count -lt 2)
@@ -791,6 +866,7 @@ foreach ($al in @('multipack-allowlist.json','coverage-gap-allowlist.json','basi
 # carrying unrefreshable prices, and its own ok line said so to nobody. Same zero-rows collapse as guard 11:
 # "no collapse found" and "no store examined" read identically.
 # The decision now lives in Get-CollapseVerdict so it can be exercised directly. Frozen synthetic inputs only.
+if (Use-Unit 'u019-n-2b-guard-6-must-name-the-stores-it') {
 if ($gtxt -match 'function Get-CollapseVerdict') { Ok 'guards.ps1 defines Get-CollapseVerdict (guard 6''s decision is testable)' }
 else { Bad 'guards.ps1 LOST Get-CollapseVerdict - guard 6''s <2-capture skip is unfixtured again' }
 if (([regex]::Matches($gtxt, 'Get-CollapseVerdict\s+\$')).Count -ge 2) { Ok 'Get-CollapseVerdict is wired into guard 6 for BOTH the skip and the collapse decision' }
@@ -819,6 +895,7 @@ else {
     Bad ("guard-6 fixture FAILED: noHistory='$($cv.noHistory)' collapsed='$($cv.collapsed)' healthy='$($cv.healthy)' belowFloor='$($cv.belowFloor)'")
   }
 }
+} # u019-n-2b-guard-6-must-name-the-stores-it
 
 # ---------------------------------------------------------------- N+2c. guard 9 must not let an ALT FEED mask a live capture's age
 # FOUNDING BUG (found 2026-07-30): guard 9 redirects a store's freshness to its alt feed when that feed is
@@ -831,6 +908,7 @@ else {
 # Measured on the 2026-07-29 AND 2026-07-30 boards alike: 29 published Sam's cells name a product that exists
 # in that capture and nowhere in the 2,475-row live out\sams feed, and 9 of those commodities crown Sam's
 # CHEAPEST - so the rows are load-bearing and the masked age was a real, published staleness.
+if (Use-Unit 'u020-n-2c-guard-9-must-not-let-an-alt') {
 if ($gtxt -match 'function Test-MaskedStaleCapture') { Ok 'guards.ps1 defines Test-MaskedStaleCapture (the masked-age rule)' }
 else { Bad 'guards.ps1 LOST Test-MaskedStaleCapture - a live out\regular capture can be aged by its alt feed again' }
 if ($gtxt -match 'Test-MaskedStaleCapture \$') { Ok 'the masked-age rule is CALLED from guard 9''s redirect branch' }
@@ -860,11 +938,13 @@ else {
     Bad ("guard-9 masked-age fixture FAILED: founding=$($ms2.founding) trueOrphan=$($ms2.trueOrphan) noRedirect=$($ms2.noRedirect) withinCliff=$($ms2.withinCliff)")
   }
 }
+} # u020-n-2c-guard-9-must-not-let-an-alt
 
 # ---------------------------------------------------------------- N+3. -Accept must respect DROP verdicts
 # audit-match-soundness -Accept used to bless the current name->commodity map wholesale, converting "judged
 # wrong last week" into "reviewed and correct" - which is how bacon/Sam's and broccoli/Sam's, each dropped by
 # the verify pass in THREE separate weeks, got baselined and published as crowns on 2026-07-29.
+if (Use-Unit 'u021-n-3-accept-must-respect-drop') {
 $ms = Get-Content (Join-Path $root 'audit-match-soundness.ps1') -Raw
 if ($ms -match 'ACCEPT REFUSED' -and $ms -match 'verify-verdicts-\*\.json') { Ok '-Accept still carries the DROP-verdict gate' }
 else { Bad 'audit-match-soundness -Accept lost its DROP-verdict gate - it is a rubber stamp again' }
@@ -886,6 +966,7 @@ else {
   if ($ms -match 'verdict-lib\.ps1') { Ok 'the -Accept gate sources verdict-lib (one definition of item identity)' }
   else { Bad 'audit-match-soundness no longer sources verdict-lib - the gate and verify-apply can disagree on what "the same item" means' }
 }
+} # u021-n-3-accept-must-respect-drop
 # The END-TO-END half of this section (does the gate block the item the verdict actually JUDGED?) runs as
 # fixture case (m) further down, because NewFxDir/RunPSAt are not defined until line ~621. Search
 # 'verdict identity MUST-FIRE'.
@@ -898,6 +979,7 @@ else {
 # real $0.552/oz). Its -SelfTest now carries the frozen founding-bug row (the shipped 0.9-oz shape MUST fail
 # the engine tolerance), the 2026-07-27 fish-sauce override, and the guard-5 multipack lockstep. Prove the
 # fixture still fires, and that the importer still LIFTS the builder's Build-Row instead of re-forking it.
+if (Use-Unit 'u022-n-4-the-walmart-batch-importer-s') {
 $r = RunPS 'import-walmart-batch.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'SELF-TEST PASS') { Ok 'import-walmart-batch verifies every batch row through the builder invariants (founding-bug fixture fires)' }
 else { Bad ('import-walmart-batch -SelfTest failed or lost its founding-bug fixture: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
@@ -908,6 +990,7 @@ $iwSrc = Get-Content (Join-Path $root 'import-walmart-batch.ps1') -Raw
 # grows a helper. A missing helper is not silent either way: the lift throws by name at :53.
 if ($iwSrc -match "'Resolve-Unit','Get-NameQtyCandidates'" -and $iwSrc -match "'Format-Qty','Build-Row'\)") { Ok 'import-walmart-batch still lifts Build-Row from build-walmart-deals (one home, no fork)' }
 else { Bad 'import-walmart-batch no longer lifts Build-Row - the second Walmart writer has re-forked the size math (the 2026-07-25 class)' }
+} # u022-n-4-the-walmart-batch-importer-s
 
 # ---------------------------------------------------------------- N+5. delegated audits must say BLIND (exit 3), never a false OK
 # Item 6 remainder (2026-07-30): every delegated/advisory audit used to print its OK line having examined
@@ -953,6 +1036,7 @@ function RunPSAt([string]$dir, [string]$script, $argList) {
 
 # (a) audit-price-mode: BLIND when no mode-sensitive store file reaches the strict check (the state that
 # shipped 249 delivery-priced Aldi rows on 2026-07-14), and the anchored glob ignores a non-canonical twin.
+if (Use-Unit 'u024-a-audit-price-mode-blind-when-no') {
 $fxApm = NewFxDir 'apm-blind'
 $r = RunPS 'audit-price-mode.ps1' @('-RegularDir', $fxApm)
 if ($r.rc -eq 3 -and $r.text -match 'BLIND' -and $r.text -match 'Aldi, Fareway') { Ok 'price-mode goes BLIND (exit 3) when zero mode-sensitive files reach it' }
@@ -971,9 +1055,11 @@ $r = RunPS 'audit-price-mode.ps1' @('-RegularDir', $fxApmT)
 if ($r.rc -eq 0 -and $r.text -match 'OK\s+Aldi: in-store') { Ok 'price-mode anchored glob: a .PARTIAL twin cannot shadow the real capture (rc 0 AND the Aldi OK line present)' }
 else { Bad ('price-mode read the non-canonical twin or went blind past it (rc=' + $r.rc + ') - the family-fare PARTIAL incident class') }
 Remove-Item $fxApm, $fxApmT -Recurse -Force -ErrorAction SilentlyContinue
+} # u024-a-audit-price-mode-blind-when-no
 
 # (b) audit-walmart-fullpull: BLIND when a union store has ZERO captures in its window (used to exit 0 and
 # guards printed "  ok    fullpull [Walmart]: no captures...").
+if (Use-Unit 'u025-b-audit-walmart-fullpull-blind-when') {
 $fxWfp = NewFxDir 'wfp-blind'
 New-Item -ItemType Directory -Force (Join-Path $fxWfp 'out\regular') | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $fxWfp 'out\sams') | Out-Null
@@ -982,6 +1068,7 @@ if ($r.rc -eq 3 -and $r.text -match '\[Walmart\]: BLIND' -and $r.text -match "\[
 else { Bad ('walmart-fullpull did NOT go blind on empty windows (rc=' + $r.rc + ')') }
 $fxD   = [datetime]::Today.ToString('yyyy-MM-dd')
 $fxD11 = [datetime]::Today.AddDays(-11).ToString('yyyy-MM-dd')
+} # u025-b-audit-walmart-fullpull-blind-when
 # The clean twin needs a BOARD as well as captures: since 2026-07-30 this auditor also runs a per-CELL
 # expiry watch, and a tree with no comparison-*.json is a tree where that watch can prove nothing - which
 # it must say out loud (exit 1), never swallow. So the healthy fixture is captures AND a board whose every
@@ -992,6 +1079,7 @@ function _WfpSeed([string]$dir, [string]$wmToday, [string]$wmOld, [string]$cmpRo
   Set-Content (Join-Path $dir ('out\sams\sams-deals-' + $fxD + '.json')) '{"pull_terms":300,"deals":[{"item":"Sams Row","ad_price":"$5.00"}]}' -Encoding UTF8
   Set-Content (Join-Path $dir ('out\comparison-' + $fxD + '.json')) ('{"comparison":[' + $cmpRows + ']}') -Encoding UTF8
 }
+if (Use-Unit 'u025-b-audit-walmart-fullpull-blind-when') {
 $fxSams  = '{"id":"sams-thing","cheapest_store":"Sam''s Club","stores":[{"store":"Sam''s Club","item":"Sams Row","ad":"$5.00"}]}'
 $fxFresh = '{"id":"fresh-thing","cheapest_store":"Walmart","stores":[{"store":"Walmart","item":"Fresh Row","ad":"$9.99"}]}'
 $fxOld   = '{"id":"old-thing","cheapest_store":"Walmart","stores":[{"store":"Walmart","item":"Old Row","ad":"$1.00"}]}'
@@ -1000,12 +1088,14 @@ $r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxWfp)
 if ($r.rc -eq 0 -and ([regex]::Matches($r.text, 'ok - newest comprehensive capture')).Count -eq 2 -and ([regex]::Matches($r.text, 'cells: ok')).Count -eq 2) { Ok 'walmart-fullpull clean twin: fresh comprehensive captures AND a board whose cells all come from them read ok for both stores' }
 else { Bad ('walmart-fullpull clean twin failed (rc=' + $r.rc + '): ' + $r.text) }
 Remove-Item $fxWfp -Recurse -Force -ErrorAction SilentlyContinue
+} # u025-b-audit-walmart-fullpull-blind-when
 
 # (b2) MUST FIRE - the 2026-07-30 bug this watch was written for. Watch 1 said "ok - newest comprehensive
 # capture ... is 0 day(s) old" while 207 of 432 live Walmart cells (47.9%, 58 CROWNS) hung off
 # walmart-regular-2026-07-18.json, 2 days from leaving the union. Frozen small, same shape: a fresh
 # comprehensive capture that does NOT carry Old Row, and an 11-day-old capture that is its only source.
 # The assertion names the CELLS line and requires watch 1 to still read ok, so it cannot pass on watch 1.
+if (Use-Unit 'u026-b2-must-fire-the-2026-07-30-bug-this') {
 $fxCell = NewFxDir 'wfp-cellexpiry'
 New-Item -ItemType Directory -Force (Join-Path $fxCell 'out\regular') | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $fxCell 'out\sams') | Out-Null
@@ -1019,10 +1109,12 @@ $r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxCell, '-WindowDays'
 if ($r.rc -eq 1 -and $r.text -match '\[Walmart\] cells: WARNING - 1 of 2' -and $r.text -match 'CROWNS' -and $r.text -match 'ok - newest comprehensive capture walmart') { Ok 'walmart-fullpull FIRES on a board cell whose only source is about to leave the union window, while watch 1 still reads ok' }
 else { Bad ('walmart-fullpull cell-expiry watch MISSED its founding bug (rc=' + $r.rc + '): ' + $r.text) }
 Remove-Item $fxCell -Recurse -Force -ErrorAction SilentlyContinue
+} # u026-b2-must-fire-the-2026-07-30-bug-this
 
 # (b3) CLEAN TWIN for the percent floor. A few trailing cells are normal (a product out of stock, a term
 # that returned nothing that morning) - Sam's carried 11 of them on 2026-07-29 with nothing wrong. One
 # aging cell in 40 (2.5%) must stay SILENT, or the watch becomes a permanent alarm and gets ignored.
+if (Use-Unit 'u027-b3-clean-twin-for-the-percent-floor') {
 $fxPct = NewFxDir 'wfp-cellpct'
 New-Item -ItemType Directory -Force (Join-Path $fxPct 'out\regular') | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $fxPct 'out\sams') | Out-Null
@@ -1038,9 +1130,11 @@ $r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxPct, '-WindowDays',
 if ($r.rc -eq 0 -and $r.text -match '\[Walmart\] cells: ok - 1 of 40') { Ok 'walmart-fullpull cell watch stays SILENT at 1 aging cell in 40 (2.5%, under the 5% floor) - the trailing-cell noise floor' }
 else { Bad ('walmart-fullpull cell watch cried wolf on the 2.5% noise floor (rc=' + $r.rc + '): ' + $r.text) }
 Remove-Item $fxPct -Recurse -Force -ErrorAction SilentlyContinue
+} # u027-b3-clean-twin-for-the-percent-floor
 
 # (c) audit-household-in-food: BLIND at zero rows scanned (an existing-but-empty out\regular used to print
 # "scanned 0 rows" + AUDIT OK + exit 0). Copy-to-temp because the script has no dir param.
+if (Use-Unit 'u028-c-audit-household-in-food-blind-at') {
 $fxHif = NewFxDir 'hif-blind'
 # compare-deals.ps1 left this list on 2026-09-09 (backlog I82) and global-exclude-lib.ps1 replaced it:
 # the audit no longer reads the engine's source at all, it dot-sources the exclude library instead.
@@ -1054,9 +1148,11 @@ $r = RunPSAt $fxHif 'audit-household-in-food.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'scanned 1 rows' -and $r.text -match 'AUDIT OK') { Ok 'household-in-food clean twin: one seeded row scans and passes' }
 else { Bad ('household-in-food clean twin failed (rc=' + $r.rc + ')') }
 Remove-Item $fxHif -Recurse -Force -ErrorAction SilentlyContinue
+} # u028-c-audit-household-in-food-blind-at
 
 # (d) audit-food-category: BLIND at zero priced cells (an empty -OutDir used to print "ok - ... (0 priced
 # cells scanned)" with exit 0 - reproduced by execution before the fix).
+if (Use-Unit 'u029-d-audit-food-category-blind-at-zero') {
 $fxAfc = NewFxDir 'afc-blind'
 $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxAfc)
 if ($r.rc -eq 3 -and $r.text -match 'FOOD-CLASS AUDIT BLIND') { Ok 'food-category goes BLIND (exit 3) at zero priced cells' }
@@ -1073,6 +1169,7 @@ else {
   else { Bad ('LIVE-TWIN food-category failed (rc=' + $r.rc + ') - this case reads the LIVE board, so open the board before the code: either a live cell is miscategorised (page-worthy) or the edit broke the healthy path') }
 }
 Remove-Item $fxAfc -Recurse -Force -ErrorAction SilentlyContinue
+} # u029-d-audit-food-category-blind-at-zero
 
 # (d2) MUST-FIRE for the 2026-07-30 additions to category-excludes.json: the snack_carrier class and the
 # beverage class's mini-cans / lemon-lime tokens. Both are founding bugs, measured live on that day's board:
@@ -1080,6 +1177,7 @@ Remove-Item $fxAfc -Recurse -Force -ErrorAction SilentlyContinue
 # Lemon Lime" (a soda). Neither name carries a token the old library knew, so the blocking guard passed them.
 # The rows are frozen literals here, NOT read from the board - regenerate them from live data and the bug
 # they encode disappears, which is the whole [[guard-fixture-rule]] failure mode.
+if (Use-Unit 'u030-d2-must-fire-for-the-2026-07-30') {
 $fxSnk = NewFxDir 'afc-snack'
 $snackRow = '{"week_of":"2026-07-29","comparison":[{"commodity":"Lemons","id":"lemons","unit":"each","stores":[{"store":"Sam''s Club","per_unit":0.5413,"item":"Lulu Platanitios Lemon Plantain Chips, 2.5 oz., 30 pk."}]},{"commodity":"Limes","id":"limes","unit":"each","stores":[{"store":"Sam''s Club","per_unit":0.5327,"item":"Starry Mini Cans Lemon Lime, 7.5 fl. oz., 30 pk."}]}]}'
 Set-Content (Join-Path $fxSnk 'comparison-2026-07-29.json') $snackRow -Encoding UTF8
@@ -1097,6 +1195,7 @@ $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSnk)
 if ($r.rc -eq 0) { Ok 'food-category clean twin: fresh lemon/lime rows stay silent under the new classes' }
 else { Bad ('food-category flagged REAL produce (rc=' + $r.rc + ') - a new token is too broad: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxSnk -Recurse -Force -ErrorAction SilentlyContinue
+} # u030-d2-must-fire-for-the-2026-07-30
 
 # (d3) MUST-FIRE for the frozen_dessert_brand class (2026-08-30, queue 2026-08-30-2611d3). THE FOUNDING ROW,
 # frozen verbatim off the live board it was crowning: Family Fare pistachios read $0.1248/oz because the
@@ -1106,6 +1205,7 @@ Remove-Item $fxSnk -Recurse -Force -ErrorAction SilentlyContinue
 # nothing. That is why the class token is a BRAND: all 40 Blue Bunny strings in the capture corpus are
 # frozen desserts. Never regenerate this row from the board - the fix removed it, so a regenerated fixture
 # would encode the fix and pass by finding nothing ([[guard-fixture-rule]]).
+if (Use-Unit 'u031-d3-must-fire-for-the-frozen-dessert') {
 $fxBb = NewFxDir 'afc-bluebunny'
 $bbRow = '{"week_of":"2026-08-30","comparison":[{"commodity":"Pistachios","id":"pistachios","unit":"oz","stores":[{"store":"Family Fare","per_unit":0.1248,"item":"Blue Bunny Premium Pistachio Almond 48 Oz"}]}]}'
 Set-Content (Join-Path $fxBb 'comparison-2026-08-30.json') $bbRow -Encoding UTF8
@@ -1123,6 +1223,7 @@ $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxBb)
 if ($r.rc -eq 0) { Ok 'food-category clean twin: Blue Bunny on ice-cream and popsicles stays silent - the brand class is exempt where the brand IS the commodity' }
 else { Bad ('food-category flagged Blue Bunny on its OWN commodities (rc=' + $r.rc + ') - the frozen_dessert_brand exempt regex is missing ice-cream/popsicles: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxBb -Recurse -Force -ErrorAction SilentlyContinue
+} # u031-d3-must-fire-for-the-frozen-dessert
 
 # (d4) MUST-FIRE for the sausage_carrier class (2026-09-02, queue 2026-09-02-1527d2). THE FOUNDING ROW,
 # frozen verbatim off the live board it was holding: Family Fare's gruyere cell read $0.5825/oz because
@@ -1133,6 +1234,7 @@ Remove-Item $fxBb -Recurse -Force -ErrorAction SilentlyContinue
 # are not sausage - apples five times over - and the gap had been closed one per-product ruling at a time
 # since 2026-08-01. Never regenerate this row from the board: the fix removed it, so a regenerated fixture
 # would encode the fix and pass by finding nothing ([[guard-fixture-rule]]).
+if (Use-Unit 'u032-d4-must-fire-for-the-sausage-carrier') {
 $fxSc = NewFxDir 'afc-sausage'
 $scRow = '{"week_of":"2026-09-02","comparison":[{"commodity":"Gruyere Cheese","id":"gruyere","unit":"oz","stores":[{"store":"Family Fare","per_unit":0.5825,"item":"Aidells Smoked Roasted Garlic & Gruyere Cheese Chicken Sausage 12 Oz"}]}]}'
 Set-Content (Join-Path $fxSc 'comparison-2026-09-02.json') $scRow -Encoding UTF8
@@ -1150,6 +1252,7 @@ $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSc)
 if ($r.rc -eq 0) { Ok 'food-category clean twin: Johnsonville on breakfast-sausage, Eckrich on kielbasa and a real Smoked Gruyere all stay silent - sausage_carrier is exempt where the commodity IS a sausage' }
 else { Bad ('food-category flagged sausages on SAUSAGE commodities (rc=' + $r.rc + ') - the sausage_carrier exempt regex has lost breakfast-sausage/kielbasa: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxSc -Recurse -Force -ErrorAction SilentlyContinue
+} # u032-d4-must-fire-for-the-sausage-carrier
 
 # (d5) MUST-FIRE for cheese_carrier and cracker_carrier (2026-09-04, queue 2026-09-04-2cd17a). TWO FOUNDING
 # ROWS, frozen verbatim off the 09-04 Aldi capture that produced them:
@@ -1163,6 +1266,7 @@ Remove-Item $fxSc -Recurse -Force -ErrorAction SilentlyContinue
 # Both were one `audit-match-soundness -Accept` away from being baselined as reviewed.
 # NEVER REGENERATE THESE ROWS FROM THE BOARD: the fix removed them, so a regenerated fixture would encode
 # the fix and pass by finding nothing ([[guard-fixture-rule]]).
+if (Use-Unit 'u033-d5-must-fire-for-cheese-carrier-and') {
 $fxCc = NewFxDir 'afc-carrier'
 $ccRow = '{"week_of":"2026-09-02","comparison":[{"commodity":"Bacon","id":"bacon","unit":"oz","stores":[{"store":"Aldi","per_unit":0.3317,"item":"Emporium Selection Bacon Bread Cheese 6 OZ"}]},{"commodity":"Pita Bread","id":"pita-bread","unit":"oz","stores":[{"store":"Aldi","per_unit":0.498,"item":"Savoritz Sea Salt Sourdough Pita Cracker 5 OZ"}]}]}'
 Set-Content (Join-Path $fxCc 'comparison-2026-09-02.json') $ccRow -Encoding UTF8
@@ -1181,6 +1285,7 @@ $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxCc)
 if ($r.rc -eq 0) { Ok 'food-category clean twin: a real bacon, a real pita bread, a real bagel and the live Sam''s muffins crown all stay silent under the two new carrier classes' }
 else { Bad ('food-category flagged REAL bread/meat products (rc=' + $r.rc + ') - cheese_carrier or cracker_carrier is too broad; the measured-and-rejected snack_carrier-on-Bread bake ejected exactly these: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxCc -Recurse -Force -ErrorAction SilentlyContinue
+} # u033-d5-must-fire-for-cheese-carrier-and
 
 # (d5b) MUST-FIRE for steam_bag_carrier (2026-09-08, queue 2026-09-08-2e59b3). TWO FOUNDING ROWS, frozen
 # verbatim off comparison-2026-09-08 and candidates-2026-09-08 - the board that was LIVE while it was wrong:
@@ -1195,6 +1300,7 @@ Remove-Item $fxCc -Recurse -Force -ErrorAction SilentlyContinue
 # branded steam-bag line carries NO form word, so it walked past every fence a Produce commodity had.
 # NEVER REGENERATE THESE ROWS FROM THE BOARD: the steam_bag_carrier bake removed them the same day, so a
 # regenerated fixture would encode the fix and pass by finding nothing ([[guard-fixture-rule]]).
+if (Use-Unit 'u034-d5b-must-fire-for-steam-bag-carrier') {
 $fxSb = NewFxDir 'afc-steambag'
 $sbRow = '{"week_of":"2026-09-08","comparison":[{"commodity":"Green Beans (fresh)","id":"fresh-green-beans","unit":"lb","stores":[{"store":"Fareway","per_unit":1.92,"item":"Fareway Steamables Green Beans"}]},{"commodity":"Red Potatoes","id":"red-potatoes","unit":"lb","stores":[{"store":"Fareway","per_unit":4.784,"item":"Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans & Rosemary"}]}]}'
 Set-Content (Join-Path $fxSb 'comparison-2026-09-08.json') $sbRow -Encoding UTF8
@@ -1217,6 +1323,7 @@ $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSb)
 if ($r.rc -eq 0) { Ok 'food-category clean twin: Kroger Steams in Bag Petite Carrots on carrots, SteamCrisp White Shoepeg on canned-corn, Steamfresh and Sauced and Steamables on frozen-*, and the real fresh green bean and red potato rows all stay silent' }
 else { Bad ('food-category flagged products the steam-bag words are RIGHT for (rc=' + $r.rc + ') - steam_bag_carrier has escaped the ^(Fruit|Vegetables)$ scope into the shared Dairy/Canned/.../Frozen block, or a token grew to cover "steams in bag": ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxSb -Recurse -Force -ErrorAction SilentlyContinue
+} # u034-d5b-must-fire-for-steam-bag-carrier
 
 # (d6) BAKE CURRENCY (2026-09-04, queue 2026-09-04-2cd17a). A library class ships INERT until someone runs
 # apply-category-excludes.ps1: audit-food-category reads the library, but the ENGINE reads each commodity's
@@ -1224,6 +1331,7 @@ Remove-Item $fxSb -Recurse -Force -ErrorAction SilentlyContinue
 # letting the product win the cell. This case asserts the LIVE commodities.json is CURRENT with the library
 # - i.e. a bake right now would add nothing.
 # It is the same shape as the token-added-sweep-and-gate-not class, applied to the bake.
+if (Use-Unit 'u035-d6-bake-currency-a-library-class') {
 $fxBk = NewFxDir 'catex-currency'
 Copy-Item (Join-Path $root 'commodities.json')      (Join-Path $fxBk 'commodities.json')
 Copy-Item (Join-Path $root 'categories.json')       (Join-Path $fxBk 'categories.json')
@@ -1261,6 +1369,7 @@ if ($r.rc -eq 0 -and $r.text -notmatch 'library:\s*\+0 patterns') {
   Bad 'bake-currency check cannot detect drift - it would report CURRENT over a rule file that never got the class, which is the whole failure it exists to catch'
 }
 Remove-Item $fxBk -Recurse -Force -ErrorAction SilentlyContinue
+} # u035-d6-bake-currency-a-library-class
 
 # (ce1) THE BAKE MUST NOT UN-PIN THE RULE FILE'S ENCODING (2026-09-02, found while shipping 1527d2).
 # commodities.json expresses every non-ASCII character as a JSON \uXXXX escape and carries no BOM, and
@@ -1274,6 +1383,7 @@ Remove-Item $fxBk -Recurse -Force -ErrorAction SilentlyContinue
 # fixed this script's READ and left its WRITE, so the guard and the tool that violates it shipped together.
 # MUST-FIRE is the pre-fix writer, run over a fixture whose rule really does carry an n-tilde escape.
 # The needle is built by concatenation, never written as a literal this file could match against itself.
+if (Use-Unit 'u036-ce1-the-bake-must-not-un-pin-the') {
 $fxCe = NewFxDir 'catex-ascii'
 $ceEnye = '\u' + '00f1'   # the escape, as six ASCII characters on disk
 $ceCommod = '[{"id":"pickled-jalapenos","label":"Pickled Jalapenos","unit":"oz","include":["jalape[n' + $ceEnye + ']o\\s+peppers"],"exclude":[]}]'
@@ -1303,10 +1413,12 @@ else {
   else { Bad 'MUST-FIRE inert: the pre-fix writer left the fixture pure ASCII, so the clean case above is not testing anything - re-check the fixture carries a \uXXXX escape' }
 }
 Remove-Item $fxCe -Recurse -Force -ErrorAction SilentlyContinue
+} # u036-ce1-the-bake-must-not-un-pin-the
 
 # (e) audit-tile-integrity: ACCURACY BLIND + exit 3 when zero links were graded (an empty product-urls used
 # to certify "ACCURACY OK - every link that ships..." having examined nothing; prune-bad-links can empty the
 # set on a live daily path, which is exactly when the certificate would lie).
+if (Use-Unit 'u037-e-audit-tile-integrity-accuracy') {
 $fxTi = NewFxDir 'ti-blind'
 foreach ($cf in @('audit-tile-integrity.ps1','pu-lib.ps1')) { Copy-Item (Join-Path $root $cf) (Join-Path $fxTi $cf) }
 New-Item -ItemType Directory -Force (Join-Path $fxTi 'out') | Out-Null
@@ -1336,9 +1448,11 @@ $r = RunPSAt $fxTi 'audit-tile-integrity.ps1' @('-OutDir', (Join-Path $fxTi 'out
 if ($r.rc -eq 3) { Ok 'tile-integrity -Strict reports BLIND (rc 3) on an empty board instead of a vacuous every-tile-linked pass' }
 else { Bad ('tile-integrity -Strict returned rc=' + $r.rc + ' on a blind run - the end-state claim is vacuously satisfiable again') }
 Remove-Item $fxTi -Recurse -Force -ErrorAction SilentlyContinue
+} # u037-e-audit-tile-integrity-accuracy
 
 # (f) audit-cell-drops: BLIND on both silent paths - fewer than 2 dated boards, and a baseline board that
 # parses to zero everyday cells (which used to print the POSITIVE "no everyday cell lost" ok line).
+if (Use-Unit 'u038-f-audit-cell-drops-blind-on-both') {
 $fxCd = NewFxDir 'cd-blind'
 Copy-Item (Join-Path $root 'audit-cell-drops.ps1') (Join-Path $fxCd 'audit-cell-drops.ps1')
 New-Item -ItemType Directory -Force (Join-Path $fxCd 'out') | Out-Null
@@ -1359,9 +1473,11 @@ $r = RunPSAt $fxCd 'audit-cell-drops.ps1' @()
 if ($r.rc -eq 1) { Ok 'cell-drops still detects a real drop (exit 1) - the founding Fareway-chicken shape' }
 else { Bad ('cell-drops lost its drop detection (rc=' + $r.rc + ')') }
 Remove-Item $fxCd -Recurse -Force -ErrorAction SilentlyContinue
+} # u038-f-audit-cell-drops-blind-on-both
 
 # (g) audit-name-drift: BLIND at zero cells tested; three consumers read its count=0 JSON as a positive
 # clean result, so a blind write must at least page.
+if (Use-Unit 'u039-g-audit-name-drift-blind-at-zero') {
 $fxNd = NewFxDir 'nd-blind'
 Copy-Item (Join-Path $root 'audit-name-drift.ps1') (Join-Path $fxNd 'audit-name-drift.ps1')
 New-Item -ItemType Directory -Force (Join-Path $fxNd 'out') | Out-Null
@@ -1383,6 +1499,7 @@ $ndJson = try { Read-JsonFile (Join-Path $fxNd 'out\name-drift.json') } catch { 
 if ($r.rc -eq 0 -and $r.text -match '0 of 1 cells tested' -and $ndJson -and [int]$ndJson.examined -eq 1) { Ok 'name-drift clean twin: one matching link is examined and reported' }
 else { Bad ('name-drift clean twin failed (rc=' + $r.rc + ')') }
 Remove-Item $fxNd -Recurse -Force -ErrorAction SilentlyContinue
+} # u039-g-audit-name-drift-blind-at-zero
 
 # (g2) audit-name-drift MUST be able to see a RECIPE-BOARD cell. Founding bug (2026-07-30): it read
 # out\comparison-*.json only, so guards.ps1 guard 3's WRONG-PRODUCT clause - which looks a pin up in
@@ -1392,6 +1509,7 @@ Remove-Item $fxNd -Recurse -Force -ErrorAction SilentlyContinue
 # silent while the cell is still IN scope - the union must add coverage, not noise. Third assertion: an id on
 # BOTH boards is scanned ONCE (the staple row wins), because the two boards carry different unit bases and one
 # link cannot be judged against both. Frozen synthetic data - never regenerated from the live board.
+if (Use-Unit 'u040-g2-audit-name-drift-must-be-able-to') {
 $fxNdU = NewFxDir 'nd-union'
 Copy-Item (Join-Path $root 'audit-name-drift.ps1') (Join-Path $fxNdU 'audit-name-drift.ps1')
 New-Item -ItemType Directory -Force (Join-Path $fxNdU 'out') | Out-Null
@@ -1423,6 +1541,7 @@ if ($r.rc -eq 0 -and $ndU -and [int]$ndU.count -eq 0 -and (@($ndU.examined_cells
   Bad ('name-drift clean twin failed (rc=' + $r.rc + ', count=' + [int]$ndU.count + ') - the union is manufacturing flags')
 }
 Remove-Item $fxNdU -Recurse -Force -ErrorAction SilentlyContinue
+} # u040-g2-audit-name-drift-must-be-able-to
 
 # (g3) audit-name-drift MUST catch SAME BRAND, DIFFERENT PRODUCT. Founding bug (2026-08-30): the Sam's
 # frozen-fruit cell. The board priced "Member's Mark Natural Sliced Strawberries, Frozen, 4 lbs." at
@@ -1441,6 +1560,7 @@ Remove-Item $fxNdU -Recurse -Force -ErrorAction SilentlyContinue
 # CLEAN TWIN: the same cell with a link naming the same product stays silent, because a false flag here is not
 # free - generate-board-overrides refuses to pin any cell name-drift flags, so noise silently blocks good
 # corrections. Frozen synthetic data - never regenerated from the live board.
+if (Use-Unit 'u041-g3-audit-name-drift-must-catch-same') {
 $fxNdP = NewFxDir 'nd-product'
 Copy-Item (Join-Path $root 'audit-name-drift.ps1') (Join-Path $fxNdP 'audit-name-drift.ps1')
 New-Item -ItemType Directory -Force (Join-Path $fxNdP 'out\regular') | Out-Null
@@ -1479,6 +1599,7 @@ if ($r.rc -eq 0 -and $ndP -and [int]$ndP.count -eq 0 -and [int]$ndP.examined -eq
   Bad ('name-drift product-identity clean twin failed (rc=' + $r.rc + ', count=' + [int]$ndP.count + ', examined=' + [int]$ndP.examined + ') - the identity rule is manufacturing flags, which silently blocks legitimate price corrections')
 }
 Remove-Item $fxNdP -Recurse -Force -ErrorAction SilentlyContinue
+} # u041-g3-audit-name-drift-must-catch-same
 
 # (g4) generate-board-overrides' BOARD-CONFIRMED-FRESH gate must read the files the ENGINE priced from.
 # Founding bug (2026-08-30): the gate kept a private store -> filename map sending Sam's to
@@ -1492,6 +1613,7 @@ Remove-Item $fxNdP -Recurse -Force -ErrorAction SilentlyContinue
 # would open and the pin would be written. CLEAN TWIN: the same board cell with the item ABSENT from the Sam's
 # feed is a genuinely stale number, and the pin must still be written - a gate that refuses everything is as
 # broken as one that refuses nothing, it just fails in the quiet direction. Frozen synthetic data.
+if (Use-Unit 'u042-g4-generate-board-overrides-board') {
 $fxGbo = NewFxDir 'gbo-samsfeed'
 foreach ($gboDep in @('generate-board-overrides.ps1','pu-lib.ps1','regular-fileset-lib.ps1')) { Copy-Item (Join-Path $root $gboDep) (Join-Path $fxGbo $gboDep) }
 New-Item -ItemType Directory -Force (Join-Path $fxGbo 'out\sams') | Out-Null
@@ -1522,9 +1644,11 @@ if ($gbo -and [int]$gbo.count -eq 1 -and [math]::Abs([double](@($gbo.cells)[0].p
   Bad ('board-confirmed-fresh clean twin failed (count=' + [int]$gbo.count + ') - the gate has stopped letting legitimate stale-board corrections through')
 }
 Remove-Item $fxGbo -Recurse -Force -ErrorAction SilentlyContinue
+} # u042-g4-generate-board-overrides-board
 
 # (h) audit-links: BLIND when zero of the stored links matched a board id/store (a schema break in either
 # input used to print "audited N links: 0 price-match, 0 MISMATCH, 0 uncomputable" - flag-free JSON included).
+if (Use-Unit 'u043-h-audit-links-blind-when-zero-of-the') {
 $fxAl = NewFxDir 'al-blind'
 Copy-Item (Join-Path $root 'audit-links.ps1') (Join-Path $fxAl 'audit-links.ps1')
 New-Item -ItemType Directory -Force (Join-Path $fxAl 'out') | Out-Null
@@ -1538,9 +1662,11 @@ $r = RunPSAt $fxAl 'audit-links.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'audited 1 of 1 links') { Ok 'audit-links clean twin: one computable link audits with the honest of-total summary' }
 else { Bad ('audit-links clean twin failed (rc=' + $r.rc + ')') }
 Remove-Item $fxAl -Recurse -Force -ErrorAction SilentlyContinue
+} # u043-h-audit-links-blind-when-zero-of-the
 
 # (i) audit-coverage-gaps: BLIND only at TOTAL blindness (zero raw products for EVERY store); a partial
 # blind day is reported per-store in the JSON + qualified line but keeps exit 0/2 (a real finding must win).
+if (Use-Unit 'u044-i-audit-coverage-gaps-blind-only-at') {
 $fxCg = NewFxDir 'cg-blind'
 $fxCgBoard = Join-Path $fxCg 'fix-board.json'
 Set-Content $fxCgBoard '{"comparison":[{"id":"bananas","stores":[]}]}' -Encoding UTF8
@@ -1553,10 +1679,12 @@ $r = RunPS 'audit-coverage-gaps.ps1' @('-OutDir', $fxCg, '-CompareFile', $fxCgBo
 if ($r.rc -eq 0 -and $r.text -match 'coverage-gaps: none - every store') { Ok 'coverage-gaps clean twin: all 7 stores seeded reads the plain none line' }
 else { Bad ('coverage-gaps clean twin failed (rc=' + $r.rc + ')') }
 Remove-Item $fxCg -Recurse -Force -ErrorAction SilentlyContinue
+} # u044-i-audit-coverage-gaps-blind-only-at
 
 # (j) guards' advisory wrappers: a child exiting non-0/non-1 must land in WARN, never in the ok Say line
 # (the bare else used to relabel any unrecognised exit - including the new exit 3 - as "  ok"). The chain
 # below is a copy of the post-edit wrapper shape; the source asserts pin guards.ps1 to it.
+if (Use-Unit 'u045-j-guards-advisory-wrappers-a-child') {
 $fxGw = NewFxDir 'gw-child'
 Set-Content (Join-Path $fxGw 'exit5.ps1') 'exit 5' -Encoding UTF8
 Set-Content (Join-Path $fxGw 'exit0.ps1') 'Write-Output "fine"; exit 0' -Encoding UTF8
@@ -1576,10 +1704,13 @@ Remove-Item $fxGw -Recurse -Force -ErrorAction SilentlyContinue
 $gSrc = Get-Content (Join-Path $root 'guards.ps1') -Raw
 if (([regex]::Matches($gSrc, 'elseif \(\$LASTEXITCODE -eq 3\)')).Count -ge 2 -and $gSrc -match 'is MISSING - the allowlist-rot check scanned ZERO entries') { Ok 'guards.ps1 keeps both advisory-wrapper exit-3 branches and the missing-allowlist warn' }
 else { Bad 'guards.ps1 lost an advisory-wrapper exit-3 branch or the missing-allowlist warn - a blind child prints ok again' }
+} # u045-j-guards-advisory-wrappers-a-child
 
 # (k) the direct callers keep their blind branches (source asserts - house precedent for caller plumbing;
 # the behavioral exit-3s are covered by the producer fixtures above).
+if (Use-Unit 'u046-k-the-direct-callers-keep-their') {
 $cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+} # u046-k-the-direct-callers-keep-their
 
 # ---- THE LAST MILE: what the pipeline computes must reach a reader, and only if it passed ------------
 # Two founding bugs, both 2026-08-22, both invisible to every other check in this file.
@@ -1591,7 +1722,9 @@ $cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
 #     session had left mid-edit in meal-prep\.
 # These are source asserts because the plumbing is the bug: the behaviour only appears on a real run,
 # and by then it is a live wrong price. Same precedent as the guard-caller asserts above.
+if (Use-Unit 'u047-the-last-mile-what-the-pipeline') {
 $crSrc = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
+} # u047-the-last-mile-what-the-pipeline
 
 # ---- THE CADENCE MUST NOT BECOME A SILENT NO-OP, IN EITHER DIRECTION -----------------------------------
 # Gating the heavy audits (test-auditors itself, the embedding sweep, commodity-dupes, the static source
@@ -1599,6 +1732,7 @@ $crSrc = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
 # is exactly the kind of change that can quietly turn a guard estate into decoration. Two properties, both
 # fixtured in test-cadence.ps1 and asserted here so the wiring cannot rot:
 #   a skip is never a pass (missing/unreadable stamp -> run), and an input edit is due TODAY (not in 7 days).
+if (Use-Unit 'u048-the-cadence-must-not-become-a-silent') {
 $tcOut = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'test-cadence.ps1') | ForEach-Object { [string]$_ }) -join "`n"
 if ($tcOut -match 'CADENCE SELF-TEST PASS') { Ok 'cadence gate: skips only when the clock AND its inputs both say so (test-cadence.ps1)' }
 else { Bad ('cadence gate self-test FAILED - a gated audit may be skipping while its inputs move, or running every day for nothing: ' + ($tcOut -replace "`n", ' | ')) }
@@ -1628,12 +1762,14 @@ else { Bad ('check-ad-cycles has ' + $cadBare.Count + ' cadence gate(s) whose th
 $cacTail = @(($cacSrc -replace "`r", '') -split "`n" | Where-Object { $_.Trim() -ne '' -and $_.Trim() -notmatch '^#' })
 if ($cacTail.Count -and $cacTail[-1].Trim() -match '^exit\s+\d+$') { Ok 'check-ad-cycles ends with an explicit exit - the chain verdict its callers read is stated, not inferred' }
 else { Bad ('check-ad-cycles has no explicit terminal exit, so its exit code is whatever PowerShell infers - a crash and a clean run are told apart only by luck; last statement: ' + $(if ($cacTail.Count) { $cacTail[-1].Trim() } else { '<none>' })) }
+} # u048-the-cadence-must-not-become-a-silent
 
 # ---- THE INSPECT FAN-OUT (2026-08-23, PLAN-use-the-cores phase 1) --------------------------------------
 # The advisory audits below the ship boundary now run side by side through grocery\fanout-lib.ps1.
 # Concurrency is where a watcher goes quiet without anyone noticing: a lane that dies returns nothing, and
 # "nothing" and "no findings" are the same shape unless something counts. So the count is asserted, and
 # these cases assert that the counting works.
+if (Use-Unit 'u049-the-inspect-fan-out' -Always 'enumerates the whole tracked tree with git ls-files, so any added or removed path can move it') {
 $foLib = Join-Path $root 'fanout-lib.ps1'
 if (-not (Test-Path $foLib)) {
   Bad 'grocery\fanout-lib.ps1 is missing - the inspect fan-out has no helper, so either the chain is broken or every advisory audit quietly went back to running one at a time with nobody counting them'
@@ -1823,6 +1959,7 @@ $saSrc = Get-Content (Join-Path $root 'send-alert.ps1') -Raw
 if ($saSrc -match "New-Object System\.Threading\.Mutex\(\`$false, 'Global\\smp-grocery-alert-sent'\)") {
   Ok 'send-alert holds a machine-wide lock across its once-per-type-per-day gate (concurrent lanes cannot double-send or silently suppress)'
 } else { Bad 'send-alert LOST the lock around its sent-file gate - with audits running side by side, two alerts of one type can both email, or one can be suppressed by an append that never landed' }
+} # u049-the-inspect-fan-out
 
 # ---- THE BROWSER-STORE BUILDERS (2026-08-23, PLAN-use-the-cores phase 4) --------------------------------
 # capture-run's builder block stopped being one loop and became three passes: a serial pass that decides
@@ -1835,6 +1972,7 @@ if ($saSrc -match "New-Object System\.Threading\.Mutex\(\`$false, 'Global\\smp-g
 # THE FIXTURE INVENTORY FLOOR, in one place because three assertions below read it (the live run, and the
 # LF and CRLF regime copies). A floor may only be RAISED: it exists so a silently dropped case fails here
 # rather than passing by finding nothing.
+if (Use-Unit 'u050-the-browser-store-builders') {
 $TCB_MIN_CASES = 33
 $tcb = Join-Path $root 'test-capture-builders.ps1'
 if (-not (Test-Path $tcb)) {
@@ -1866,6 +2004,7 @@ if (-not (Test-Path $tcb)) {
     Ok ('capture-run builder block: a missing capture stays outstanding, a failed builder is named, a failed stage 1 skips stage 2, stage 2 is still judged on evidence, the edge read-after-write compares COMMITTED BYTES against git, and both post-commit watchers read $botCommitted (test-capture-builders ' + $Matches[1] + ' cases, floor ' + $TCB_MIN_CASES + ')')
   } else { Bad ('test-capture-builders failed (rc=' + $tcbRc + ', floor ' + $TCB_MIN_CASES + ' cases): ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST|CAPTURE-BUILDERS-COMPLETE' }) -join ' | ')) }
 }
+} # u050-the-browser-store-builders
 
 # ---- THE FIXTURE MUST NOT CARE WHAT A LINE ENDING IS (2026-09-07, queue 2026-09-07-76ec7f) -------------
 # On 2026-09-07 the block above reported BLIND and proved nothing about the last mile of every capture.
@@ -1876,6 +2015,7 @@ if (-not (Test-Path $tcb)) {
 # regime as an unstated assumption goes blind the day the regime moves, and the only reason anyone could
 # tell is that its author hand-wrote a BLIND branch. So the fixture is now run under BOTH regimes here, and
 # the founding bug is frozen below so the LF regime cannot blind a marker again without saying so.
+if (Use-Unit 'u051-the-fixture-must-not-care-what-a') {
 $fxLe = NewFxDir 'tcb-lineending'
 # the fixture dot-sources lib\git-blob-lib.ps1 from its PARENT dir, and for the copies below that parent
 # is $fxLe. Without this the copy throws at startup and exits 1 before printing anything, which reads as
@@ -2007,6 +2147,7 @@ else { Bad 'check-ad-cycles blind email body regressed - a blackout would email 
 # missed stamp re-opened the gate into a silent daily 658 MB crash loop (post-batch review 2026-07-30).
 if ($cacSrc -match "run-test-guards-weekly\.ps1'\)\s*2>&1") { Bad 'check-ad-cycles captures run-test-guards-weekly with 2>&1 under EAP=Stop again - a crashing suite throws past the stamp and alert into a silent daily retry loop' }
 else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected (crash still reaches the alert path)' }
+} # u051-the-fixture-must-not-care-what-a
 # (k0) THE SAME RULE, AT THE SCHEDULED ENTRY POINTS (2026-08-22). The check above pins ONE call site.
 # The rule is general, and on 2026-08-22 it was being broken at two others that this file never looked at:
 # capture-run.ps1's downstream call and capture-watchdog.ps1's audit-ad-status call. Both are reached by the
@@ -2015,6 +2156,7 @@ else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected
 # down here, and the two newest callers never inherited it. test-native-stderr-eap.ps1 proves the shell
 # behaviour empirically (a must-fire founding case plus a clean twin) AND scans those entry points, so this
 # check is a real invocation rather than another hand-maintained regex.
+if (Use-Unit 'u052-k0-the-same-rule-at-the-scheduled' -Reads 'grocery/**.ps1') {
 try {
   $eapT = Join-Path $root 'test-native-stderr-eap.ps1'
   if (Test-Path $eapT) {
@@ -2029,6 +2171,7 @@ try {
     Bad 'test-native-stderr-eap.ps1 is MISSING - the 2026-08-22 exit-1 class has no fixture any more'
   }
 } catch { Bad ('native-stderr/EAP fixture threw: ' + $_.Exception.Message) }
+} # u052-k0-the-same-rule-at-the-scheduled
 # (k1e) THE DRIFT SCANNER COULD NOT READ THE LANGUAGE IT SCANS (2026-07-30). audit-store-registry hunts
 # hardcoded store lists in live .ps1 source. It recognised a store name written plainly, as &#39; and as
 # &rsquo; - but NOT as '', which is how an apostrophe is actually written inside a single-quoted PowerShell
@@ -2036,6 +2179,7 @@ try {
 # the guard reported "names 5 store(s) but is missing Baker's, Sam's Club" against a line naming every one.
 # Permanently red on correct code, which is how a drift guard gets ignored. The variant list is read out of
 # the real file and EXERCISED below, so this tracks behaviour rather than a spelling.
+if (Use-Unit 'u053-k1e-the-drift-scanner-could-not-read') {
 $asrSrc = Get-Content (Join-Path $root 'audit-store-registry.ps1') -Raw
 $asrM = [regex]::Match($asrSrc, '\$variants\s*=\s*@\((.+?)\)\r?\n')
 if (-not $asrM.Success) { Bad 'audit-store-registry: cannot find its $variants list to check' }
@@ -2061,11 +2205,13 @@ else {
   if ($asrFire.flags) { Ok 'store-registry scan still FIRES on a genuine 5-store hardcoded list (not blinded by the escaping fix)' }
   else { Bad 'store-registry scan no longer flags a real 5-store list - the escaping fix blinded it' }
 }
+} # u053-k1e-the-drift-scanner-could-not-read
 # (k1f) A CONSISTENCY GUARD THAT COULD SCORE PERFECT FROM AN EMPTY REGEX (2026-07-30). Every audit-board-
 # consistency finding comes from one regex over rendered chip markup, and nothing checked the regex matched
 # anything: a missing feed or a one-attribute markup drift would print "no-link=0", exit 0, and be logged by
 # check-ad-cycles as "consistency OK" - the blindest state wearing the healthiest label. 3,164 chips are
 # examined on a healthy run, so the new exit-3 branch is 3,164 away from arming.
+if (Use-Unit 'u054-k1f-a-consistency-guard-that-could') {
 $abcSrc = Get-Content (Join-Path $root 'audit-board-consistency.ps1') -Raw
 if ($abcSrc -match 'chips_examined\s*=\s*\$chipsSeen') { Ok 'board-consistency records chips_examined in its report' }
 else { Bad 'board-consistency no longer records chips_examined - a blind run is indistinguishable from a clean one' }
@@ -2073,6 +2219,7 @@ if ($abcSrc -match '(?s)if\s*\(\s*\$chipsSeen\s*-eq\s*0\s*\)\s*\{[^}]*exit 3') {
 else { Bad 'board-consistency no longer exits 3 from zero chips - "no-link=0 out of 0" would read as a pass' }
 if ($cacSrc -match 'consistency BLIND') { Ok 'check-ad-cycles has the matching exit-3 branch (a blind run is not logged as OK)' }
 else { Bad 'check-ad-cycles lost its consistency exit-3 branch - an exit 3 falls into the else and is logged "consistency OK"' }
+} # u054-k1f-a-consistency-guard-that-could
 # (k1d) AN AUDIT THAT DIED ON ITS OWN FIRST FINDING (2026-07-30). audit-everyday-mismatch built each bug
 # record with price=[double]$e.price. 579 of the 2,987 stored link prices are strings like "$1.88", [double]
 # on one of those throws, and it threw INSIDE the record for the first mismatch found - under EAP=Stop, so the
@@ -2081,6 +2228,7 @@ else { Bad 'check-ad-cycles lost its consistency exit-3 branch - an exit 3 falls
 # finds 43 real mismatches (brand-swapped links inside the 0.32 factor tolerance, which name-drift's token test
 # passes because board and link share the commodity word). Deliberately NOT wired into any gate: 43 findings on
 # a green board is a backlog to work, not a daily warn.
+if (Use-Unit 'u055-k1d-an-audit-that-died-on-its-own') {
 $aemSrc = Get-Content (Join-Path $root 'audit-everyday-mismatch.ps1') -Raw
 $aemThrows = $false
 try { $null = [double]'$1.88' } catch { $aemThrows = $true }
@@ -2107,6 +2255,7 @@ else { Bad 'audit-everyday-mismatch did NOT find the recipe-board-only mismatch 
 if ($aemR.text -match 'recipe=') { Ok 'audit-everyday-mismatch still reports its per-board checked counts' }
 else { Bad 'audit-everyday-mismatch stopped reporting per-board counts - a silently empty second board would look identical to a healthy one' }
 Remove-Item $aemFx -Recurse -Force -ErrorAction SilentlyContinue
+} # u055-k1d-an-audit-that-died-on-its-own
 # (k1a) A GUARD THAT CANNOT FINISH, AND A CALLER THAT CANNOT NOTICE (2026-07-30). audit-ff-carry.ps1 wrapped a
 # System.Collections.Generic.List[object] in @( ) to build its report - which throws "ArgumentException:
 # Argument types do not match" in Windows PowerShell 5.1 (it is fine around a List[string], and fine around the
@@ -2116,6 +2265,7 @@ Remove-Item $aemFx -Recurse -Force -ErrorAction SilentlyContinue
 # first Write-Output logs nothing: 'ff-carry' appears 0 times in 2,716 lines of ad-cycle-log.txt. Two failures,
 # two checks - the crash itself, and the caller's inability to see a crash. The @( ) case is executed for real
 # against a live List[object], not pattern-matched, so it tracks the language rather than the spelling.
+if (Use-Unit 'u056-k1a-a-guard-that-cannot-finish-and-a') {
 $ffcSrc = Get-Content (Join-Path $root 'audit-ff-carry.ps1') -Raw
 $ffcList = New-Object System.Collections.Generic.List[object]
 $ffcList.Add([pscustomobject]@{ term = 't' })
@@ -2127,6 +2277,7 @@ if ($ffcSrc -match 'confirmed_victims\s*=\s*@\(\$victims\)') { Bad 'audit-ff-car
 else { Ok 'audit-ff-carry builds its report without @(List[object]) (it can reach its own report line)' }
 if ($ffcSrc -notmatch 'confirmed_victims\s*=\s*\$victims\.ToArray\(\)') { Bad 'audit-ff-carry no longer uses .ToArray() - check the JSON shape stays [] at zero and [ {..} ] at one' }
 else { Ok 'audit-ff-carry serialises its victims with .ToArray() (array shape holds at 0, 1 and many)' }
+} # u056-k1a-a-guard-that-cannot-finish-and-a
 # The CALLER must capture and check, not pipe-and-hope. Decision extracted from the real region.
 function Test-FfCarryCallerSees([string]$src) {
   $i = $src.IndexOf('$fcArgs')
@@ -2138,6 +2289,7 @@ function Test-FfCarryCallerSees([string]$src) {
   if ($seg -match '@fcArgs\s*2>&1') { $bad.Add('ff-carry child is captured with 2>&1 under EAP=Stop - first stderr line throws past the check') }
   return $bad
 }
+if (Use-Unit 'u056-k1a-a-guard-that-cannot-finish-and-a') {
 $ffcReal = Test-FfCarryCallerSees $cacSrc
 if ($ffcReal.Count -eq 0) { Ok 'check-ad-cycles captures ff-carry, logs its output, and reads its exit code' }
 else { Bad ('ff-carry caller is blind again: ' + ($ffcReal -join '; ')) }
@@ -2147,6 +2299,7 @@ else { Bad 'ff-carry-caller fixture went blind - piping with no exit-code check 
 $ffcClean = Test-FfCarryCallerSees '$fcArgs = @(1); $o = & powershell @fcArgs; $rc = $LASTEXITCODE; foreach($l in @($o)){ Log $l }'
 if ($ffcClean.Count -eq 0) { Ok 'ff-carry-caller fixture stays silent on capture-then-check (clean twin)' }
 else { Bad ('ff-carry-caller fixture false-positives on correct form: ' + ($ffcClean -join '; ')) }
+} # u056-k1a-a-guard-that-cannot-finish-and-a
 # (k1c) A HEAL MUST REFRESH THE GATE'S IDENTITY INPUT (2026-07-30). In check-ad-cycles' consistency
 # auto-repair, prune-bad-links + sync-browser-links rewrite the links, then generate-board-overrides and
 # guards' tile-integrity WRONG-PRODUCT gate both read name-drift.json - which still described the PRE-heal
@@ -2166,6 +2319,7 @@ function Test-RepairRefreshesDrift([string]$src) {
   if ($iGuard -ge 0 -and $iDrift -gt $iGuard) { $bad.Add('name-drift refresh runs AFTER guards - the hard gate reads pre-heal identity') }
   return $bad
 }
+if (Use-Unit 'u057-k1c-a-heal-must-refresh-the-gate-s') {
 $cacRepair = $cacSrc.Substring([Math]::Max(0, $cacSrc.IndexOf('consistency BREACH')))
 $rrReal = Test-RepairRefreshesDrift $cacRepair
 if ($rrReal.Count -eq 0) { Ok 'consistency auto-repair refreshes name-drift after the heal, before pins and guards' }
@@ -2178,6 +2332,7 @@ else { Bad 'repair-refresh fixture went blind - a repair path with no identity r
 $rrClean = Test-RepairRefreshesDrift "sync-browser-links.ps1 ... audit-name-drift.ps1 ... generate-board-overrides.ps1 ... guards.ps1"
 if ($rrClean.Count -eq 0) { Ok 'repair-refresh fixture stays silent on correct ordering (clean twin)' }
 else { Bad ('repair-refresh fixture false-positives on correct ordering: ' + ($rrClean -join '; ')) }
+} # u057-k1c-a-heal-must-refresh-the-gate-s
 # (k1b) THE PRUNE DEFAULT MUST MATCH THE CALL SITES (2026-07-30). prune-bad-links defaulted to -Tol 0.02 while
 # every automated caller passed 0.32, and audit-tile-integrity's failure text told a HUMAN to "run
 # prune-bad-links.ps1" with no arguments. Following the printed instruction therefore ran the 2% rule and
@@ -2195,6 +2350,7 @@ function Test-PruneTolContract([string]$pruneSrc, [string]$tileSrc) {
   if ($tileSrc -notmatch 'prune-bad-links\.ps1 -Tol 0\.32') { $bad.Add('audit-tile-integrity failure advice does not name -Tol 0.32') }
   return $bad
 }
+if (Use-Unit 'u058-k1b-the-prune-default-must-match-the') {
 $pruneSrc = Get-Content (Join-Path $root 'prune-bad-links.ps1') -Raw
 $tileSrc  = Get-Content (Join-Path $root 'audit-tile-integrity.ps1') -Raw
 $ptReal = Test-PruneTolContract $pruneSrc $tileSrc
@@ -2211,6 +2367,7 @@ else { Bad ('prune-tolerance fixture false-positives on correct source: ' + ($pt
 $wpcSrc = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw
 if ($wpcSrc -match 'tiPost -eq 3' -and $wpcSrc -match 'was BLIND on the live board' -and $wpcSrc -match 'prune-bad-links -Tol 0\.32 and re-run -Phase links NOW') { Ok 'weekly-post-capture separates BLIND from FAILED (prune advice stays on the real failure only)' }
 else { Bad 'weekly-post-capture lost the blind/FAILED split - a blind post-publish check would advise pruning harder' }
+} # u058-k1b-the-prune-default-must-match-the
 # (k2) THE PHASE WIRING (2026-07-30). audit-coverage-gaps + audit-sale-fallback ran in -Phase compare ONLY, so
 # the weekly run graded coverage on a comparison the daily job then rewrote before -Phase publish shipped it:
 # on 2026-07-29 gap_count=0 was written at 09:10, out\regular\aldi-regular-2026-07-29.json was rebuilt at 12:24,
@@ -2234,6 +2391,7 @@ function Test-WpcPhaseAudits([string]$src) {
   return $bad
 }
 # CLEAN TWIN: the live file must have nothing to report.
+if (Use-Unit 'u059-k2-the-phase-wiring-audit-coverage') {
 $wpcLive = @(Test-WpcPhaseAudits $wpcSrc)
 if ($wpcLive.Count -eq 0) { Ok 'weekly-post-capture runs coverage-gaps + sale-fallback in BOTH -Phase compare and -Phase publish, pinned to an explicit -CompareFile' }
 else { Bad ('weekly-post-capture phase wiring broken - the publish phase would ship an unaudited board: ' + ($wpcLive -join '; ')) }
@@ -2248,6 +2406,7 @@ else { Bad ('phase-wiring check did NOT fire correctly on the stripped-publish f
 $pdpSrc = Get-Content (Join-Path $root 'publish-deals-page.ps1') -Raw
 if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND' -and $pdpSrc -match 'match-soundness: BLIND') { Ok 'publish-deals-page surfaces exit 3 from all three of its direct audit calls' }
 else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls through silently during publish' }
+} # u059-k2-the-phase-wiring-audit-coverage
 
 # ---- A HELD BOARD MUST HOLD THE THINGS COSTED OFF IT (2026-09-07, queue 2026-09-07-e9edb9) -------------
 # On 2026-09-07 guards correctly refused the board at 08:13:34 and the publish of public/** honoured that.
@@ -2258,7 +2417,9 @@ else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls t
 # A SOURCE ASSERTION, deliberately: these three shell out to Ghost-publishing children, and a fixture that
 # actually ran them would either publish to the live site or prove nothing about the live wiring. The
 # checker below is exercised against a source with the gate REMOVED, so it cannot pass while blind.
+if (Use-Unit 'u060-a-held-board-must-hold-the-things') {
 $cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+} # u060-a-held-board-must-hold-the-things
 function Test-CacInspectGating([string]$src) {
   $bad = New-Object System.Collections.Generic.List[string]
   $lines = @($src -split "`r?`n")
@@ -2285,6 +2446,7 @@ function Test-CacInspectGating([string]$src) {
   if ($src -notmatch 'SHIP PATH COMPLETE[^\n]*HELD \(guards blocked it\)') { $bad.Add('the SHIP PATH COMPLETE log has no held-board wording') }
   return $bad
 }
+if (Use-Unit 'u060-a-held-board-must-hold-the-things') {
 $cacLive = @(Test-CacInspectGating $cacSrc)
 if ($cacLive.Count -eq 0) { Ok 'check-ad-cycles gates the three Ghost-publishing INSPECT stages on the guard verdict, and the ship-path log says so when the board is held' }
 else { Bad ('a refused board can still reach readers through the INSPECT path: ' + ($cacLive -join '; ')) }
@@ -2296,6 +2458,7 @@ $cacFired = @(Test-CacInspectGating $cacBroke)
 if ($cacFired.Count -eq 3 -and ($cacFired -join ' ') -match 'top5-weekly' -and ($cacFired -join ' ') -match 'rotate-free-dinners' -and ($cacFired -join ' ') -match 'build-hub-grid') {
   Ok 'the INSPECT-gating check FIRES on a source with the guard verdict stripped, and names all three Ghost publishers'
 } else { Bad ('the INSPECT-gating check did NOT fire correctly on the stripped fixture (' + $cacFired.Count + ' finding(s)): [' + ($cacFired -join '; ') + '] - it would not have caught the 2026-09-07 defect') }
+} # u060-a-held-board-must-hold-the-things
 
 # ---------------------------------------------------------------- (k3) sale-fallback reads the ENGINE's
 # fileset, not its own newest-file-per-store (2026-09-02, queue 2026-09-02-5df03f).
@@ -2310,6 +2473,7 @@ if ($cacFired.Count -eq 3 -and ($cacFired -join ' ') -match 'top5-weekly' -and (
 # newest file (09-01) was a rotation slice that did not carry it. NEVER regenerate these two files from the
 # live out\regular tree: the whole point is that the newer file does NOT hold the twin, and a regenerated
 # pair would encode whatever the cursor happens to be that day and pass by finding nothing.
+if (Use-Unit 'u061-k3-sale-fallback-reads-the-engine-s') {
 $fxSf = NewFxDir 'sale-fallback-union'
 New-Item -ItemType Directory -Force (Join-Path $fxSf 'regular') | Out-Null
 $sfBoard = '{"week_of":"2026-09-02","comparison":[{"commodity":"Ground Beef 80/20","id":"ground-beef-8020","unit":"lb","stores":[{"store":"Walmart","type":"sale","per_unit":4.943,"item":"80% Lean / 20% Fat Ground Beef Chuck, 10 lb Roll, Fresh, All Natural"}]}]}'
@@ -2331,6 +2495,7 @@ else { Bad ('sale-fallback still flags a cell whose everyday twin sits in an old
 # and the auditor must SAY what it read - a pool built from zero files answers "no twin" for every cell.
 if ($r.text -match 'everyday pool from the engine fileset' -and $r.text -match 'Walmart=2f/') { Ok 'sale-fallback reports its per-store pool size, so an empty pool is visible on the run that produces it' }
 else { Bad ('sale-fallback no longer reports the per-store everyday pool it built (expected Walmart=2f/ from the union) - an empty pool is indistinguishable from a store with no twins: ' + ($r.text -replace "`n", ' ')) }
+} # u061-k3-sale-fallback-reads-the-engine-s
 
 # ---------------------------------------------------------------- (k3b) sale-fallback alerts by OWNERSHIP,
 # and that ownership EXPIRES (2026-09-03, queue 2026-09-03-b844ab).
@@ -2341,6 +2506,7 @@ else { Bad ('sale-fallback no longer reports the per-store everyday pool it buil
 # The DANGER of that fix is that it is one line away from being a permanent mute, so these three cases pin
 # the escape hatch rather than the silence: a fresh gap is quiet, an ABANDONED one is loud, and a ledger we
 # cannot read makes everything loud. Delete any of them and the mute becomes unconditional.
+if (Use-Unit 'u062-k3b-sale-fallback-alerts-by') {
 $sfLedger = Join-Path $fxSf 'sale-fallback-ownership.json'
 Set-Content (Join-Path $fxSf 'regular\walmart-regular-2026-08-31.json') '{"store":"Walmart","deals":[{"name":"Great Value Whole Milk, 1 Gallon"},{"name":"Marketside Rotisserie Chicken"}]}' -Encoding UTF8
 # CLEAN TWIN: a gap seen for the FIRST time is owned and inside its grace window, so it must NOT escalate.
@@ -2365,6 +2531,7 @@ $sfg = try { Read-JsonFile (Join-Path $fxSf 'sale-fallback-gaps.json') } catch {
 if ($sfg -and [int]$sfg.escalated_count -eq 1 -and [bool]$sfg.ledger_unreadable) { Ok 'sale-fallback MUST-FIRE: a corrupt ownership ledger escalates every gap and says so, instead of silently restarting the clocks' }
 else { Bad ('sale-fallback did not fail closed on an unreadable ownership ledger (escalated=' + [int]$sfg.escalated_count + ' flag=' + [bool]$sfg.ledger_unreadable + ') - a deleted or corrupt ledger would now mute every gap forever: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxSf -Recurse -Force -ErrorAction SilentlyContinue
+} # u062-k3b-sale-fallback-alerts-by
 
 # ---------------------------------------------------------------- (k3c) an OWNER must be a job that EXISTS
 # (2026-09-06, queue 2026-09-06-22b4dd). The 09-03 fix above gave ownership an EXPIRY but not PROOF:
@@ -2375,6 +2542,7 @@ Remove-Item $fxSf -Recurse -Force -ErrorAction SilentlyContinue
 # THE OVER-BROAD FIX IS THE REAL HAZARD, so the clean twin below is the load-bearing case: role names are
 # NOT task names. 'weekly-browser-agent' is also absent from the registry, and a literal owner-string
 # lookup would collapse the two HEALTHY rows to NONE and page them too.
+if (Use-Unit 'u063-k3c-an-owner-must-be-a-job-that') {
 $fxOwn = Join-Path $env:TEMP ('tafxown-' + [guid]::NewGuid().ToString('N').Substring(0,8))
 New-Item -ItemType Directory -Force (Join-Path $fxOwn 'regular') | Out-Null
 # FROZEN registry: the five task names really registered, as of 2026-09-07 (the watchdog row was
@@ -2417,6 +2585,7 @@ $ofg = try { Read-JsonFile (Join-Path $fxOwn 'sale-fallback-gaps.json') } catch 
 if ($ofg -and [int]$ofg.escalated_count -eq 2 -and $r.text -match 'AUTOMATION REGISTRY UNREADABLE') { Ok 'sale-fallback MUST-FIRE: an unreadable automation registry proves no owner, so every gap escalates and says why' }
 else { Bad ('sale-fallback did not fail closed on an unreadable automation registry (escalated=' + [int]$ofg.escalated_count + ') - a deleted or corrupt registry would silently re-grant grace to every owner: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxOwn -Recurse -Force -ErrorAction SilentlyContinue
+} # u063-k3c-an-owner-must-be-a-job-that
 
 # ---------------------------------------------------------------- N+6. the verdict-driven record-low purge
 # 2026-07-30: purge-bad-lows.ps1 is a RATIO test (>=2x under the next-lowest week) and structurally cannot
@@ -2432,6 +2601,7 @@ Remove-Item $fxOwn -Recurse -Force -ErrorAction SilentlyContinue
 # human-overturn rule (lose it and it deletes history for a product a later keep verdict re-reviewed and KEPT,
 # which is chocolate-milk/Walmart today). The two wiring checks below exist because a green self-test cannot
 # tell you the tool is still being CALLED.
+if (Use-Unit 'u064-n-6-the-verdict-driven-record-low') {
 $r = RunPS 'purge-verdict-lows.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'SELF-TEST PASS') { Ok 'purge-verdict-lows -SelfTest passes with its founding-bug fixtures armed' }
 else { Bad ('purge-verdict-lows -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
@@ -2456,6 +2626,7 @@ if ($mpuSrc -match 'replay bug is live again') { Ok 'the consume-once must-fire 
 else { Bad 'merge-product-urls lost the consume-once fixture - a stale capture could silently replay over corrected links again' }
 if ($mpuSrc -match 'url-inputs-archive') { Ok 'merge-product-urls still archives consumed inputs' }
 else { Bad 'merge-product-urls no longer archives consumed inputs - every past capture will replay on the next run' }
+} # u064-n-6-the-verdict-driven-record-low
 
 # (bm) THE BOARD'S OWN NAMES (2026-09-05, queue 2026-09-05-18d67c). Every encoding defence in this estate
 # watched an INPUT - guards check 0d pins commodities.json, capture-lib repairs on ingest, heal-mojibake
@@ -2466,6 +2637,7 @@ else { Bad 'merge-product-urls no longer archives consumed inputs - every past c
 # An input-only guard is structurally incapable of finding that one. Its fixtures are the real 117-character
 # Campbell row and the real 148-character Craisins row stored as CODEPOINTS, so re-encoding that file cannot
 # alter them, plus the same five products spelled correctly as clean twins.
+if (Use-Unit 'u065-bm-the-board-s-own-names-every') {
 $r = RunPS 'audit-board-mojibake.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS' -and $r.text -match 'MUST FIRE') { Ok 'audit-board-mojibake -SelfTest passes with its founding-bug fixtures armed' }
 else { Bad ('audit-board-mojibake -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
@@ -2536,6 +2708,7 @@ else { Bad ("$copies caller(s) still stamp marked_down inline - a second impleme
 if ($iwbSrcRb -match 'wasPrice' -and $iwbSrcRb -match '\$f\[6\]') {
   Ok 'the Walmart batch raw format still carries a 7th was-price field (without it no markdown is knowable)'
 } else { Bad 'the Walmart batch raw format lost its was-price field - markdowns become indistinguishable from everyday prices again' }
+} # u065-bm-the-board-s-own-names-every
 
 # ---- THE ENCODING PAIR (2026-09-05) ---------------------------------------------------------------------
 # PS 5.1's Get-Content decodes a BOM-less file with the ANSI codepage. A BOM-less UTF-8 capture plus a
@@ -2543,6 +2716,7 @@ if ($iwbSrcRb -match 'wasPrice' -and $iwbSrcRb -match '\$f\[6\]') {
 # each round trip bakes in another generation. Five live board cells were corrupted this way while every
 # guard was green, and the worst offender's input file is CLEAN ON DISK - the engine did it at read time.
 # RunPS resolves against grocery\, so the lib is invoked directly rather than through it.
+if (Use-Unit 'u066-the-encoding-pair') {
 $jioPath = Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1'
 $jioOut  = (& powershell -NoProfile -ExecutionPolicy Bypass -File $jioPath -SelfTest 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
 if ($LASTEXITCODE -eq 0 -and $jioOut -match 'MUST FIRE' -and $jioOut -match 'SELF-TEST PASSED') {
@@ -2669,6 +2843,7 @@ else { Bad 'weekly-post-capture no longer runs purge-verdict-lows - a late DROP 
 $cacSrc2 = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
 if ($cacSrc2 -match "purge-verdict-lows\.ps1'\) -Apply") { Ok 'the daily history bank is swept for verdict-rejected entries' }
 else { Bad 'check-ad-cycles no longer purges after banking - the raw branch skips verify-apply, so every standing DROP is inert there and can bank a fresh record low' }
+} # u066-the-encoding-pair
 
 # ---------------------------------------------------------------- (l) review-flag re-arm + ack expiry
 # The block in check-ad-cycles.ps1 that decides whether a price flag pages has no entry point of its own,
@@ -2681,6 +2856,7 @@ else { Bad 'check-ad-cycles no longer purges after banking - the raw branch skip
 #      shorter than 14 days was silently rounded up (the 7 MULTIBUY acks expired 08-06 and paged 08-13).
 #   3. -NoAlert stamped last_alerted on flags it never mailed; the GitHub Actions backup runs -NoAlert and
 #      commits the tracked state file back, so it consumed re-arms nobody was ever told about.
+if (Use-Unit 'u067-l-review-flag-re-arm-ack-expiry') {
 $rfSrc = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
 # [regex]::Match into a LOCAL - $Matches is global and gets clobbered.
 $rfD = [regex]::Match($rfSrc, '(?s)<<REVIEW-DECISION-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<REVIEW-DECISION-END>>')
@@ -2776,6 +2952,7 @@ if (-not $rfD.Success -or -not $rfS.Success -or -not $rfA.Success) {
   if (@($rfSt.Keys | Where-Object { $rfSt[$_].last_alerted -eq $rfT0.ToString('s') }).Count -eq 0) { Ok 'review flags: a FAILED send stamps nothing (existing guard still intact)' }
   else { Bad 'review flags: a failed send stamped last_alerted - the alert is lost' }
 }
+} # u067-l-review-flag-re-arm-ack-expiry
 
 # ---------------------------------------------------------------- (k2b) THE STORE'S OWN UNIT PRICE
 # 2026-09-04, queue 2026-09-04-def37c. sanity-check has carried a native_unit_price cross-check since it was
@@ -2787,15 +2964,18 @@ if (-not $rfD.Success -or -not $rfS.Success -or -not $rfA.Success) {
 # Sam's Quaker Old Fashioned Oats 160 oz (a 10 lb sack) at $7.98 = $0.0499/oz against Aldi's 42 oz at
 # $3.99 = $0.0950/oz, and Sam's own shelf publishes $0.05/oz. Paged 2026-07-29, acked as real, ack expired
 # 2026-08-13, paged again 2026-09-04.
+if (Use-Unit 'u068-k2b-the-store-s-own-unit-price') {
 $fxSv = NewFxDir 'sanity-native'
 $svOats = '{"week_of":"2026-09-02","comparison":[{"commodity":"Oats / Oatmeal","id":"oatmeal","unit":"oz","cheapest_price":0.0499,"stores":[{"store":"Sam''s Club","per_unit":0.0499,"unit":"oz","item":"Quaker Old Fashioned Oats, 160 oz.","native_unit_price":0.05,"native_unit":"oz"},{"store":"Aldi","per_unit":0.095,"unit":"oz","item":"Millville Hearty 100 Whole Grain Old Fashioned Rolled Oats 42 OZ"}]}]}'
 Set-Content (Join-Path $fxSv 'comparison-2026-09-02.json') $svOats -Encoding UTF8
+} # u068-k2b-the-store-s-own-unit-price
 # ASSIGN, THEN WRAP. PS 5.1's ConvertFrom-Json writes a JSON ARRAY to the pipeline as ONE object, so
 # `@(Get-Content | ConvertFrom-Json)` is a 1-element array CONTAINING the array. Reading .type off that
 # then member-enumerates and stringifies to "outlier native-mismatch", and every -contains test silently
 # answers the wrong question. Same trap check-ad-cycles documents at the review-flag loader.
 # the comma keeps the array from unrolling on the way out, so a ONE-flag result is still an array
 function SvRead([string]$p) { $d = Read-JsonFile $p; return , @($d) }
+if (Use-Unit 'u068-k2b-the-store-s-own-unit-price') {
 $r = RunPS 'sanity-check.ps1' @('-CompareFile', (Join-Path $fxSv 'comparison-2026-09-02.json'), '-OutDir', $fxSv)
 $svJ = SvRead (Join-Path $fxSv 'guards-2026-09-02.json')
 $svOat = @($svJ | Where-Object { $_.commodity -eq 'Oats / Oatmeal' -and $_.type -eq 'outlier-verified' })
@@ -2842,6 +3022,7 @@ foreach ($e in $svEdges) {
 }
 if ($svEdgeBad -eq 0) { Ok 'sanity native: CLEAN TWIN - all three cent-rounding edges read as agreement and a real 20% gap still does not' }
 Remove-Item $fxSv -Recurse -Force -ErrorAction SilentlyContinue
+} # u068-k2b-the-store-s-own-unit-price
 
 # ---- the week-over-week detector must not compare across a UNIT CHANGE ---------------------------
 # (2026-09-06, queue 2026-09-06-24ac66) THE FOUNDING ROW, frozen: aluminum-foil was priced per EACH
@@ -2850,8 +3031,10 @@ Remove-Item $fxSv -Recurse -Force -ErrorAction SilentlyContinue
 # EACH against 0.0624 PER SQUARE FOOT and paged 'cheapest moved down 97%'. Both numbers were right.
 # Until this change sanity-check read $root\price-history.json unconditionally, so NO fixture could
 # reach this branch at all - that is why -HistoryFile exists and why these cases can exist.
+if (Use-Unit 'u069-the-week-over-week-detector-must-not') {
 $fxU = NewFxDir 'sanity-unit'
 $uHistPath = Join-Path $fxU 'price-history.json'
+} # u069-the-week-over-week-detector-must-not
 function UWrite($boardJson, $histJson) {
   Set-Content (Join-Path $fxU 'comparison-2026-09-06.json') $boardJson -Encoding UTF8
   Set-Content $uHistPath $histJson -Encoding UTF8
@@ -2861,6 +3044,7 @@ function URun {
   $d = Read-JsonFile (Join-Path $fxU 'guards-2026-09-06.json'); return , @($d)
 }
 # MUST-FIRE: the real 2026-09-06 foil row. each -> sq_ft must produce 'unit-changed' and NEVER 'wow'.
+if (Use-Unit 'u069-the-week-over-week-detector-must-not') {
 $uFoilBoard = '{"week_of":"2026-09-06","comparison":[{"commodity":"Aluminum Foil","id":"aluminum-foil","unit":"sq_ft","cheapest_price":0.0624,"stores":[{"store":"Hy-Vee","per_unit":0.0624,"unit":"sq_ft","item":"Hy-Vee aluminum foil, 50 or 75 sq. ft."},{"store":"Walmart","per_unit":0.0644,"unit":"sq_ft","item":"Great Value Aluminum Foil 75 sq ft Roll"}]}]}'
 UWrite $uFoilBoard '{"commodities":[{"id":"aluminum-foil","history":[{"week_of":"2026-08-10","cheapest_price":1.79,"cheapest_store":"Family Fare","unit":"each"}]}]}'
 $uJ = URun
@@ -2894,10 +3078,12 @@ Remove-Item $fxU -Recurse -Force -ErrorAction SilentlyContinue
 $uhSrc = Get-Content (Join-Path $root 'update-history.ps1') -Raw
 if ($uhSrc -match '\$thisWeek\s*=\s*\[ordered\]@\{[^}]*unit\s*=') { Ok 'sanity wow: update-history banks the commodity unit into every new history entry (the reader above has something to read)' }
 else { Bad 'sanity wow: update-history no longer writes a unit into the history entry - the unit-changed detector will read every future week as legacy and never fire again' }
+} # u069-the-week-over-week-detector-must-not
 
 # ---- and the PAGER: a verified outlier is recorded but not paged, while an UNKNOWN type still pages ----
 # Extracted and run, never transcribed. FAIL CLOSED is the property under test: the quiet list is an
 # ALLOWLIST of one, so a type this code has never heard of pages by construction.
+if (Use-Unit 'u070-and-the-pager-a-verified-outlier-is') {
 $spSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
 $spM = [regex]::Match($spSrc, '(?s)<<SANITY-PAGER-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<SANITY-PAGER-END>>')
 if (-not $spM.Success) {
@@ -2918,6 +3104,7 @@ if (-not $spM.Success) {
   } else { Bad ('sanity pager: FAIL-CLOSED broken - an unrecognised flag type went quiet. keys=' + ($flagKeys -join ' ; ')) }
   Remove-Item $fxSp -Recurse -Force -ErrorAction SilentlyContinue
 }
+} # u070-and-the-pager-a-verified-outlier-is
 
 # ---------------------------------------------------------------- (k3) THIS HARNESS'S OWN VERDICT
 # 2026-09-04, queue 2026-09-04-0b63d3. On 2026-09-04 this suite ran 601 fixtures, every one fired, and it
@@ -2930,6 +3117,7 @@ if (-not $spM.Success) {
 # Both halves of the fix are asserted here: the VERDICT function in this file, and the DECISION region in
 # check-ad-cycles that reads it. The region is extracted and run, never transcribed - a copy of a decision
 # is a decision that can drift.
+if (Use-Unit 'u071-k3-this-harness-s-own-verdict') {
 $av = Get-AuditorsVerdict 1 1 601 0
 if ($av.rc -eq 2 -and $av.line -match 'gone blind') { Ok 'auditors verdict: MUST FIRE - a failed fixture is rc 2 and says "gone blind", even with hygiene findings alongside it' }
 else { Bad ('auditors verdict: a failed fixture did not produce rc 2 + "gone blind" (rc=' + $av.rc + ', line=' + $av.line + ') - a blind watcher would page as ordinary housekeeping') }
@@ -2945,7 +3133,9 @@ else { Bad 'auditors verdict: the skip note vanished from the FAIL line' }
 # The tier is only worth having if the HYGIENE function actually exists and increments its own tally.
 if ((Get-Command Hygiene -ErrorAction SilentlyContinue) -and (Get-Command Get-AuditorsVerdict -ErrorAction SilentlyContinue)) { Ok 'auditors verdict: the HYGIENE tier and the verdict function are both present in this harness' }
 else { Bad 'auditors verdict: the HYGIENE tier is missing - every ops-hygiene finding is a BLIND page again' }
+} # u071-k3-this-harness-s-own-verdict
 # ---- the OTHER half: check-ad-cycles must route the two tiers differently ----
+if (Use-Unit 'u072-the-other-half-check-ad-cycles-must') {
 $wdSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
 $wdM = [regex]::Match($wdSrc, '(?s)<<WATCHERS-DECISION-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<WATCHERS-DECISION-END>>')
 if (-not $wdM.Success) {
@@ -2987,6 +3177,7 @@ if (-not $wdM.Success) {
   if ($w.subject -and $w.summary) { Ok 'watchers routing: a hygiene run still produces a subject and a summary line - it is routed, never silenced' }
   else { Bad 'watchers routing: the hygiene tier produced no subject or no summary - the finding would be silently dropped' }
 }
+} # u072-the-other-half-check-ad-cycles-must
 
 # ---------------------------------------------------------------- (l2) coverage-gap alert: ACTIONABLE only
 # 2026-08-06 (triage plan-2026-08-06 item 2026-08-03-f4fb91). The coverage-gap alert counted and signatured
@@ -2998,6 +3189,7 @@ if (-not $wdM.Success) {
 # Runs THE REAL REGION out of check-ad-cycles.ps1 against a FROZEN 5-gap file (2 actionable + 3 quiet),
 # never a transcription and never regenerated from out\coverage-gaps.json - the bug is in which rows the
 # region selects, and a fixture rebuilt from today's live file would encode whatever it does now.
+if (Use-Unit 'u073-l2-coverage-gap-alert-actionable') {
 $cgSrc = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
 $cgR = [regex]::Match($cgSrc, '(?s)<<COVERAGE-GAP-ALERT-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<COVERAGE-GAP-ALERT-END>>')
 if (-not $cgR.Success) {
@@ -3058,6 +3250,7 @@ if (-not $cgR.Success) {
   if ($cgFx4.act -eq 5) { Ok 'coverage-gap alert: a gaps file with no actionable field FAILS OPEN (alerts on all 5)' }
   else { Bad ('coverage-gap alert: an actionable-less gaps file selected ' + $cgFx4.act + ' of 5 - the alert would go silent on a format change') }
 }
+} # u073-l2-coverage-gap-alert-actionable
 
 # ---------------------------------------------------------------- publish-deals-page CHANGE GATE
 # The MUST-FIRE / CLEAN-TWIN pair lives in that script's own -SelfTest (frozen synthetic signatures, never
@@ -3070,6 +3263,7 @@ if (-not $cgR.Success) {
 # its -SelfTest handler would make this daily fixture suite perform a REAL Ghost publish. Prove the hermetic
 # handler exists AND sits ahead of the first live step (the admin-key resolution) before running it; if it
 # does not, fail loudly and invoke nothing.
+if (Use-Unit 'u074-publish-deals-page-change-gate') {
 $pdpSelfIdx = $pdpSrc.IndexOf('if ($SelfTest) {')
 $pdpKeyIdx  = $pdpSrc.IndexOf('Ghost admin key missing')
 if (($pdpSrc -notmatch '\[switch\]\$SelfTest') -or $pdpSelfIdx -lt 0 -or $pdpKeyIdx -lt 0 -or $pdpSelfIdx -gt $pdpKeyIdx) {
@@ -3085,6 +3279,7 @@ if ($prtSrc -match 'CURRENT omaha-grocery-prices') { Ok 'publish-retry-until-liv
 else { Bad 'publish-retry-until-live accepts only PUBLISHED - against the change gate it would retry every 20 min forever on a board that is already live' }
 if ($pdpSrc -match 'guide unchanged') { Ok 'publish-deals-page tells a store-guide upsert apart from a store-guide skip' }
 else { Bad 'publish-deals-page prints "store guide republished" on any rc=0 again - publish-store-guide also exits 0 when it skips, which is how the 07-29 audit counted 12 phantom guide upserts' }
+} # u074-publish-deals-page-change-gate
 
 # ---------------------------------------------------------------- N+6. no script may sign another script's name
 # 2026-07-30: build-walmart-deals.ps1 is a fork of build-sams-deals.ps1 (capture-lib.ps1:14-19) and inherited
@@ -3140,6 +3335,7 @@ function Get-MisnamedEmitters([string]$scanDir) {
 # the bug they encode cannot evaporate the way a regenerated fixture does. The honest twin carries BOTH silence
 # conditions at once (it signs its own name AND labels a child it really invokes), which is the exact shape of
 # the legitimate sites in the estate.
+if (Use-Unit 'u075-n-6-no-script-may-sign-another' -Reads 'grocery/*.ps1') {
 $fxSg = Register-Fx (Join-Path $env:TEMP ('ta-signs-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
 New-Item -ItemType Directory -Path $fxSg -Force | Out-Null
 Set-Content (Join-Path $fxSg 'fx-sams-twin.ps1') "Write-Output 'fx-sams-twin: 1 raw -> 1 priced'" -Encoding UTF8
@@ -3160,6 +3356,7 @@ Remove-Item $fxSg -Recurse -Force -ErrorAction SilentlyContinue
 $sgLive = @(Get-MisnamedEmitters $root)
 if ($sgLive.Count -eq 0) { Ok 'no grocery script signs another script''s name (the build-walmart-deals/build-sams-deals fork class)' }
 else { Bad ('a script emits under another script''s name - a failure sends the operator to the wrong script and the wrong capture file: ' + ($sgLive -join '; ')) }
+} # u075-n-6-no-script-may-sign-another
 
 # ---------------------------------------------------------------- N+9. the match-soundness sweep cache
 # audit-match-soundness re-derived its whole name->commodity sweep on every invocation: 51.5s of a 53.0s run,
@@ -3170,6 +3367,7 @@ else { Bad ('a script emits under another script''s name - a failure sends the o
 # reports last run's answer, and it is the gate that decides whether the publish HOLDs.
 # The fixture never re-implements the hash - it takes the fingerprint the script itself wrote and corrupts
 # only the ANSWER under it, so "the cache was consulted" and "the cache was rejected" are visible in stdout.
+if (Use-Unit 'u076-n-9-the-match-soundness-sweep-cache') {
 $fxMs = NewFxDir 'ms-cache'
 New-Item -ItemType Directory -Force (Join-Path $fxMs 'out\audit') | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $fxMs 'out\regular') | Out-Null
@@ -3186,6 +3384,7 @@ Set-Content (Join-Path $fxMs 'out\regular\hyvee-regular-2026-01-01.json') '{"dea
 $msBaseJson = '{"generated":"2026-01-01 00:00","names":{"Fresh Lemon 1 ct":"lemons","Fresh Lime 1 ct":"limes"},"contested":[]}'
 Set-Content (Join-Path $fxMs 'out\audit\match-baseline.json') $msBaseJson -Encoding UTF8
 $msCache = Join-Path $fxMs 'out\audit\match-sweep-cache.json'
+} # u076-n-9-the-match-soundness-sweep-cache
 function MsPoison() {
   $cj = ConvertFrom-Json ([IO.File]::ReadAllText($script:msCache))
   $nk = @($cj.names_k); $nv = @($cj.names_v)
@@ -3193,6 +3392,7 @@ function MsPoison() {
   for ($i = 0; $i -lt $nk.Count; $i++) { if ([string]$nk[$i] -eq 'Fresh Lemon 1 ct') { [void]$pv.Add('limes') } else { [void]$pv.Add([string]$nv[$i]) } }
   Set-Content $script:msCache -Value ([ordered]@{ fp = [string]$cj.fp; count = [int]$cj.count; names_k = $nk; names_v = $pv.ToArray(); contest_k = @($cj.contest_k); contest_v = @($cj.contest_v) } | ConvertTo-Json -Depth 4 -Compress) -Encoding UTF8
 }
+if (Use-Unit 'u076-n-9-the-match-soundness-sweep-cache') {
 $r = RunPSAt $fxMs 'audit-match-soundness.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'MOVED=0  DROPPED=0') { Ok 'match-soundness cold run agrees with its frozen baseline' }
 else { Bad ('match-soundness cold run did not match the frozen baseline (rc=' + $r.rc + '): ' + $r.text) }
@@ -3254,6 +3454,7 @@ else {
   else { Bad ('-Accept baselined an EMPTY sweep (rc=' + $r.rc + ', baseline now ' + (Get-Item (Join-Path $fxMs 'out\audit\match-baseline.json')).Length + ' bytes) - this audit is blinded permanently and the empty map is a TRACKED file') }
 }
 Remove-Item $fxMs -Recurse -Force -ErrorAction SilentlyContinue
+} # u076-n-9-the-match-soundness-sweep-cache
 
 # ---- (m) verdict IDENTITY: which item did the verdict judge? (the N+3 behavioural half) ----------------
 # FOUNDING BUG (2026-08-16, queue 2026-08-07-79b768), frozen from the real 2026-08-15 verdict row and never
@@ -3266,6 +3467,7 @@ Remove-Item $fxMs -Recurse -Force -ErrorAction SilentlyContinue
 # Both directions live here: it must block the NAAN, and it must NOT block Garlic. The legacy no-item-field
 # entry is the third case, because hoisting identity to a field that older files do not have is exactly how a
 # fix like this silently disarms every pre-2026-08-05 verdict.
+if (Use-Unit 'u077-m-verdict-identity-which-item-did') {
 $fxVi = NewFxDir 'verdict-identity'
 New-Item -ItemType Directory -Force (Join-Path $fxVi 'out\audit') | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $fxVi 'out\regular') | Out-Null
@@ -3300,6 +3502,7 @@ $r = RunPSAt $fxVi 'audit-match-soundness.ps1' @('-Accept')
 if ($r.rc -eq 0 -and $r.text -match 'baseline ACCEPTED' -and $r.text -notmatch 'ACCEPT REFUSED') { Ok 'verdict identity CLEAN TWIN: with the judged naan item unmatched, -Accept passes and the real Garlic is baselined normally' }
 else { Bad ('the clean twin was REFUSED (rc=' + $r.rc + ') - the gate now blocks on a verdict whose product no longer routes there: ' + $r.text) }
 Remove-Item $fxVi -Recurse -Force -ErrorAction SilentlyContinue
+} # u077-m-verdict-identity-which-item-did
 
 # ---- (l) the weekly-run lock (added 2026-07-30) --------------------------------------------------------
 # FOUNDING BUG: on 2026-07-29 the 8:30 daily job ran a full 46m42s cycle (ad-cycle-log 08:31:06 ->
@@ -3310,6 +3513,7 @@ Remove-Item $fxVi -Recurse -Force -ErrorAction SilentlyContinue
 # the daily forever is strictly worse than the waste it prevents. Locks here are written by the REAL
 # -Acquire path at the REAL phase timestamps; a hand-written fixture lock would pass whether or not the
 # writer still stamps an expiry, and - worse - would pass on a weekly that hands the tree back mid-run.
+if (Use-Unit 'u078-l-the-weekly-run-lock-added-2026-07') {
 $fxWl = NewFxDir 'weekly-lock'
 $wlF  = Join-Path $fxWl 'weekly-run.lock'
 # MUST STAND DOWN: the founding run, replayed. These are the actual phase START times of 2026-07-29 from
@@ -3369,6 +3573,7 @@ if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Acquire'") { Ok 'weekly-post-cap
 else { Bad 'weekly-post-capture stopped taking the weekly lock - the daily has nothing to stand down for' }
 if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Release'") { Bad 'weekly-post-capture releases the lock mid-run again - on 2026-07-29 a links phase finished at 08:01:34 and the next phase was 08:46:24, so releasing hands grocery\out back 28 min before the 08:30 daily fires. The lock expires on its own TTL; nothing in the weekly may hand it back.' }
 else { Ok 'weekly-post-capture never hands the tree back mid-run (the lock expires on its own TTL)' }
+} # u078-l-the-weekly-run-lock-added-2026-07
 
 # ---------------------------------------------------------------- N+6. script census: is every file in this
 # directory still reachable? 2026-07-30: 33 of the 144 .ps1 in grocery\ (out\ and archive\ aside) were named
@@ -3379,6 +3584,7 @@ else { Ok 'weekly-post-capture never hands the tree back mid-run (the lock expir
 # DO NOT NAME A GROCERY SCRIPT IN THIS COMMENT. The census greps filenames across executable files, so a
 # mention here is indistinguishable from a call and would silently retire that script from the census (it
 # already happened once while this block was being written). Fixtures are synthetic zzz-* trees only.
+if (Use-Unit 'u079-n-6-script-census-is-every-file-in' -Always 'audit-script-census scans every file under the repository root for callers') {
 $r = Get-Early 'early:census-live' (Join-Path $root 'audit-script-census.ps1') @()
 # The live twin asserts TWO things, because "clean" alone is exactly what a self-defeated census reports.
 # The census must not count ITSELF as a source: its own KNOWN table quotes every recorded name, so the day
@@ -3445,6 +3651,7 @@ if ($r.rc -eq 2 -and $r.text -match 'ORPHAN zzz-orphan-for-real\.ps1' -and $r.te
 else { Bad ('script-census went blind to a real orphan while a sibling worktree was present (rc=' + $r.rc + ') - the prune is swallowing the tree it is meant to census, or a copy of the repo is being read as a caller: ' + $r.text) }
 
 Remove-Item $fxSc, $fxScB, $fxWt -Recurse -Force -ErrorAction SilentlyContinue
+} # u079-n-6-script-census-is-every-file-in
 
 # ---------------------------------------------------------------- N. arrivals desk (build-arrivals-docket)
 # MUST FIRE: 2026-07-28. "Dr Teal's Foaming Bath with Pure Epsom Salt, Nourish & Protect with Coconut Oil"
@@ -3455,6 +3662,7 @@ Remove-Item $fxSc, $fxScB, $fxWt -Recurse -Force -ErrorAction SilentlyContinue
 # and the bath soap scores a PERFECT 0.00 divergence - measured, along with the cat-food-as-salmon case
 # falling off the docket entirely. If someone "simplifies" Get-ArrivalHead to score the whole name, this test
 # is what stops it, so do not relax it to a rank or a substring of the item text.
+if (Use-Unit 'u080-n-arrivals-desk-build-arrivals') {
 $r = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Register-Fx (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))))
 if ($r.text -match 'FLAG#1' -and $r.text -match 'coconut-oil' -and $r.text -match 'div=1\.00' -and $r.text -match 'CROWN') { Ok 'arrivals-docket RANKS the bath-soap-as-coconut-oil crown arrival FIRST' }
 else { Bad ('arrivals-docket MISSED its founding bug (head cut broken, or crowns no longer ranked first): ' + $r.text) }
@@ -3474,6 +3682,7 @@ else { Bad 'arrivals-docket dropped its BLIND report on a clean board - BLIND mu
 $r3 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Register-Fx (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))), '-N', '0')
 if ($r3.rc -eq 3 -and $r3.text -match 'ZERO baseline boards') { Ok 'arrivals-docket exits 3 when it has NO baseline to diff against' }
 else { Bad ('arrivals-docket claimed a usable delta with zero baseline (rc=' + $r3.rc + ')') }
+} # u080-n-arrivals-desk-build-arrivals
 
 # ---------------------------------------------------------------- N2. the PROSPECTS section (F1 adjudication)
 # discover-hyvee.ps1 writes a docket of products that are NOT on the board and would beat what we hold. It had
@@ -3482,6 +3691,7 @@ else { Bad ('arrivals-docket claimed a usable delta with zero baseline (rc=' + $
 # search response exposes is SILENTLY IGNORED when passed back as a filter (three request shapes tried, all
 # returned the identical unfiltered results with a cat litter still in "baking soda"). Measured on the first
 # live run: ~14% of candidates are WRONG PRODUCTS. So the section must rank and explain, never pass.
+if (Use-Unit 'u081-n2-the-prospects-section-f1') {
 $proArgs = @('-CompareFile', (Join-Path $fix 'arrivals-clean-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'),
   '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-DiscoveryFile', (Join-Path $fix 'arrivals-prospects.json'),
   '-VerdictsFile', (Join-Path $fix 'arrivals-prospect-verdicts.json'),
@@ -3555,6 +3765,7 @@ else { Bad 'check-ad-cycles builds the arrivals docket before discovery writes i
 $r = RunPS 'adjudicate-discovery.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: all') { Ok ('adjudicate-discovery self-test: ' + (($r.text -split "`n" | Where-Object { $_ -match 'SELFTEST: all' }) -join '')) }
 else { Bad ('adjudicate-discovery self-test FAILED: ' + $r.text) }
+} # u081-n2-the-prospects-section-f1
 
 # ---------------------------------------------------------------- N3. recipe-board product identity
 # MUST FIRE: recipe-board store rows carried {store, per_unit, type, bulk} and nothing else. derive-recipe-
@@ -3564,16 +3775,19 @@ else { Bad ('adjudicate-discovery self-test FAILED: ' + $r.text) }
 # the link opened 4.5 oz) - and guard 3 reported 10 pins whose board cell has no product name to check.
 # The fixture is COPIED to a temp dir first: this script writes its proposal and report into -OutDir, and a
 # fixture run must never write where the live run writes.
+if (Use-Unit 'u082-n3-recipe-board-product-identity') {
 $fxRf = Register-Fx (Join-Path $env:TEMP ('taudit-rf-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 New-Item -ItemType Directory -Path $fxRf -Force | Out-Null
 Copy-Item (Join-Path $fix 'recipe-floors\*.json') $fxRf -Force
 $r = RunPS 'derive-recipe-floors.ps1' @('-Root', $fxRf, '-OutDir', $fxRf)
 $rfProp = $null
 try { $rfProp = ((Read-TextFile (Join-Path $fxRf 'recipe-floors-proposed.json')) + '').Trim() | ConvertFrom-Json } catch {}
+} # u082-n3-recipe-board-product-identity
 function RfCell($id, $store) {
   foreach ($row in @($rfProp.comparison)) { if ([string]$row.id -eq $id) { foreach ($s in @($row.stores)) { if ([string]$s.store -eq $store) { return $s } } } }
   return $null
 }
+if (Use-Unit 'u082-n3-recipe-board-product-identity') {
 $mg = RfCell 'minced-garlic' 'Hy-Vee'
 # The cheapest everyday candidate is the 32 oz jar at the SAME per-unit the row already held, so this also
 # pins that identity is stamped when the PRICE DOES NOT MOVE - 313 live cells sat at an unchanged price with
@@ -3618,6 +3832,7 @@ if ($wu -and [double]$wu.per_unit -eq 1.49 -and -not ($wu.PSObject.Properties.Na
   Ok 'recipe floors: a pool entry in a different unit is REFUSED, price and identity both untouched'
 } else { Bad ('the fallback took a price across an unreconciled unit - a real number on a false basis: ' + ($wu | ConvertTo-Json -Compress)) }
 Remove-Item $fxRf -Recurse -Force -ErrorAction SilentlyContinue
+} # u082-n3-recipe-board-product-identity
 
 # ---------------------------------------------------------------- N4. multipack SIZE REPAIR
 # The repair half of guard 5. Its 8 hermetic cases include the two that decide whether it is safe at all:
@@ -3626,17 +3841,21 @@ Remove-Item $fxRf -Recurse -Force -ErrorAction SilentlyContinue
 # size "48 fl oz", no per-unit weight in the name) - inventing a total there is guessing at the exact point
 # the guard exists to stop guessing. It also round-trips through Test-MpClassify, so a repair that does not
 # actually satisfy the gate it was written for cannot pass.
+if (Use-Unit 'u083-n4-multipack-size-repair') {
 $r = RunPS 'repair-multipack-sizes.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: all') { Ok ('multipack size repair self-test: ' + (($r.text -split "`n" | Where-Object { $_ -match 'SELFTEST: all' }) -join '')) }
 else { Bad ('multipack size repair self-test FAILED: ' + $r.text) }
+} # u083-n4-multipack-size-repair
 # MUST FIRE: a repair that writes a size guard 5 still rejects is decoration. Pinned as a pair here as well
 # as inside the self-test, because THIS suite is what runs daily.
 . (Join-Path $root 'multipack-lib.ps1')
+if (Use-Unit 'u083-n4-multipack-size-repair') {
 $mpBad = 'Heinz Tomato Ketchup, 2 Pack 50.5 Oz'
 $mpFix = Get-MpRepairedSize $mpBad '50.5 oz'
 if ((Test-MpClassify 'Family Fare' $mpBad '50.5 oz' @()) -eq 'reject' -and $mpFix -eq '2 pk 50.5 oz' -and (Test-MpClassify 'Family Fare' $mpBad $mpFix @()) -ne 'reject') {
   Ok 'multipack repair and guard 5 agree: the rejected row repairs, and the repaired row passes'
 } else { Bad ('the repair and the guard have drifted apart - repaired size was [' + $mpFix + ']') }
+} # u083-n4-multipack-size-repair
 
 # ---------------------------------------------------------------- N5. rule-batch gate (apply-coverage-batch)
 # MUST FIRE, and it is a source scan because the bug is an ORDERING one that a unit test cannot see.
@@ -3649,6 +3868,7 @@ if ((Test-MpClassify 'Family Fare' $mpBad '50.5 oz' @()) -eq 'reject' -and $mpFi
 # cannot move pepperoni. It is invisible at crown level too - none of the six held a crown - so a crown diff
 # reports "0 changed" and looks clean. Any batch run in that window was auto-reverted on merit it never
 # lacked, which is the same shape as the visibility gate that had to be rebuilt twice.
+if (Use-Unit 'u084-n5-rule-batch-gate-apply-coverage') {
 $acbSrc = Get-Content (Join-Path $root 'apply-coverage-batch.ps1') -Raw
 $acbRebuildAt = $acbSrc.IndexOf('rebuilding the board under the CURRENT rules')
 $acbFreezeAt  = $acbSrc.IndexOf('$baseCmp = Join-Path $OutDir ''_baseline-batch.json''')
@@ -3674,6 +3894,7 @@ else { Bad ('apply-coverage-batch accepted a non-existent commodity id: ' + $acb
 $acbSrcHv = [regex]::Match($acbSrc, "resolve-hyvee-links\.ps1'\)\s*@hvArgs")
 if ($acbSrcHv.Success -and $acbSrc -match '\$hvArgs = @\{ Ids = @\(\$TouchedIds\) \}') { Ok 'rule-batch link repair calls resolve-hyvee-links SCOPED to the batch, not in bulk' }
 else { Bad 'apply-coverage-batch runs a BULK resolve-hyvee-links in its repair chain again - a one-commodity edit will rewrite every Hy-Vee link' }
+} # u084-n5-rule-batch-gate-apply-coverage
 
 # ---------------------------------------------------------------- N10. sample scope (C3)
 # MUST FIRE: a STORE-SCOPED verification draw and a WHOLE-BOARD draw sample different populations, and
@@ -3681,6 +3902,7 @@ else { Bad 'apply-coverage-batch runs a BULK resolve-hyvee-links in its repair c
 # (Aldi+Fareway, 2026-08-01): it pooled straight into the previous whole-board run and reported 14 defects -
 # Sam's Club, Hy-Vee, Family Fare and Walmart cells among them - against a 760-cell Aldi+Fareway
 # denominator. A numerator drawn from outside its own denominator is not a rate.
+if (Use-Unit 'u085-n10-sample-scope-c3') {
 $vsSrc = Get-Content (Join-Path $root 'build-verification-sample.ps1') -Raw
 if ($vsSrc -match 'store_scope\s*=') { Ok 'verification sample records WHICH population it estimates (store scope)' }
 else { Bad 'build-verification-sample no longer records store_scope - a scoped draw will pool into a whole-board one and quote a rate for neither' }
@@ -3696,6 +3918,7 @@ if (Test-Path $vhP) {
   if ($noScope.Count -eq 0) { Ok 'every banked verification run declares the population it estimates' }
   else { Bad ('verification history holds ' + $noScope.Count + ' run(s) with no store_scope - they will pool with anything') }
 }
+} # u085-n10-sample-scope-c3
 
 # ---------------------------------------------------------------- N9. public feeds are BOM-less (L7)
 # Set-Content -Encoding UTF8 emits a UTF-8 BOM in PS 5.1. Browsers strip it per spec, so the live page was
@@ -3703,6 +3926,7 @@ if (Test-Path $vhP) {
 # the public feed "malformed" when it was fine and spent the morning on a non-bug. Our own tooling must be
 # able to read what we publish. Source-scanned because the live files only lose their BOM on the next
 # publish, so a file check would fail for a day and then pass for the wrong reason.
+if (Use-Unit 'u086-n9-public-feeds-are-bom-less-l7') {
 foreach ($bw in @(
     @{ f = 'grocery\build-deals-page.ps1'; n = 'price-history.json'; pat = '\[IO\.File\]::WriteAllText\(\$histOut' }
     @{ f = 'grocery\build-deals-page.ps1'; n = 'board.json'; pat = '\[IO\.File\]::WriteAllText\(\$boardOut' }
@@ -3713,6 +3937,7 @@ foreach ($bw in @(
   if ($bwTxt -match $bw.pat) { Ok ('public feed ' + $bw.n + ' is written BOM-less (PS 5.1 cannot parse its own BOM)') }
   else { Bad ('public feed ' + $bw.n + ' is back on Set-Content -Encoding UTF8, which writes a BOM our own ConvertFrom-Json cannot read') }
 }
+} # u086-n9-public-feeds-are-bom-less-l7
 
 # ---------------------------------------------------------------- N8. multi-term search (F3)
 # 210 of 429 commodities have a Family Fare product name that does not contain our single search term, so
@@ -3721,6 +3946,7 @@ foreach ($bw in @(
 # ["popsicles","ice pops"] into the one search "popsicles ice pops", which matches nothing while looking
 # exactly like an ordinary term that found nothing - and 23 scripts read that file.
 . (Join-Path $root 'search-terms-lib.ps1')
+if (Use-Unit 'u087-n8-multi-term-search-f3') {
 $stFix = [pscustomobject]@{ 'popsicles' = @('popsicles', 'ice pops'); 'apples' = 'apples'; 'empty-one' = ''; 'dead-array' = @('', '  ') }
 $stPairs = @(Get-SearchTermPairs $stFix)
 if (@($stPairs | Where-Object { $_.id -eq 'popsicles' }).Count -eq 2 -and @($stPairs | Where-Object { $_.id -eq 'apples' }).Count -eq 1) {
@@ -3756,11 +3982,13 @@ $stLive = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 $stLiveFindings = @(Test-SearchTermShape $stLive)
 if ($stLiveFindings.Count -eq 0) { Ok 'search terms: the live commodity-search.json has no empty terms and no degenerate arrays' }
 else { Bad ('commodity-search.json shape findings: ' + ($stLiveFindings -join ' | ')) }
+} # u087-n8-multi-term-search-f3
 
 # ---------------------------------------------------------------- N7. the coverage ratchet's own config
 # F4 asked for tolerances narrowed "from the week's accumulated ledger data" and there WAS none - the ledger
 # is a single overwritten snapshot, so every tolerance had been hand-seeded from one green run with no
 # reason recorded. These pin the three defects that turned up while looking.
+if (Use-Unit 'u088-n7-the-coverage-ratchet-s-own-config') {
 $fxCl = Register-Fx (Join-Path $env:TEMP ('taudit-cl-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 New-Item -ItemType Directory -Path $fxCl -Force | Out-Null
 Copy-Item (Join-Path $fix 'coverage-ledger\coverage-ledger.json') $fxCl -Force
@@ -3787,6 +4015,7 @@ $r3 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCl, '-BaselineFile', $cl
 $clAfter2 = ((Read-TextFile $clBase) + '').Trim() | ConvertFrom-Json
 if ([int]$clAfter2.checks.'shrunk-check'.examined -eq 40 -and $r3.text -match 'LOWERED') { Ok '-AcceptLower lowers the ratchet deliberately and says which rows it moved down' }
 else { Bad '-AcceptLower did not lower the baseline, so a real permanent drop can never be accepted' }
+} # u088-n7-the-coverage-ratchet-s-own-config
 
 # ---- -Check: lowering ONE row by name (2026-09-01) -------------------------------------------------
 # WHY THIS EXISTS. audit-everyday-mismatch's floor sat 12.5% above its real population for ten days
@@ -3795,6 +4024,7 @@ else { Bad '-AcceptLower did not lower the baseline, so a real permanent drop ca
 # own note said "Accept it the day the tool can lower ONE check by name." A SECOND dropped row is
 # injected here on purpose - the shipped fixture has only one, and a scope test with nothing to spare
 # cannot tell scoping from a plain accept.
+if (Use-Unit 'u089-check-lowering-one-row-by-name') {
 $fxCk = Register-Fx (Join-Path $env:TEMP ('taudit-ck-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 New-Item -ItemType Directory -Path $fxCk -Force | Out-Null
 Copy-Item (Join-Path $fix 'coverage-ledger\coverage-ledger.json') $fxCk -Force
@@ -3837,6 +4067,7 @@ if ($rc3.text -match 'HELD\s+other-shrunk' -and $rc3.text -notmatch 'LOWERED\s+o
 } else { Bad 'the scoped accept labelled a row it did not touch as LOWERED' }
 Remove-Item $fxCk -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item $fxCl -Recurse -Force -ErrorAction SilentlyContinue
+} # u089-check-lowering-one-row-by-name
 
 # ---------------------------------------------------------------- N6. Hy-Vee link price provenance
 # MUST FIRE: the link's stored price must be the one the BOARD priced, never the search endpoint's.
@@ -3848,10 +4079,12 @@ Remove-Item $fxCl -Recurse -Force -ErrorAction SilentlyContinue
 # 5.81/2.1 = $2.7667/oz, and guard 1 hard-failed the publish at 1.72x. Nothing was wrong with the MATCH.
 # It survived because the match gate accepts price agreement OR an overwhelming name match, so an identical
 # name lets a disagreeing price straight through unchecked.
+if (Use-Unit 'u090-n6-hy-vee-link-price-provenance') {
 $rhvSrc = Get-Content (Join-Path $root 'resolve-hyvee-links.ps1') -Raw
 if ($rhvSrc -match '\$price = if \(\$ourPrice -gt 0\) \{ \$ourPrice \}' -and $rhvSrc -notmatch '(?m)^\s*\$price = \[double\]\$best\.pricing\.tagPriceValue\s*$') {
   Ok 'resolve-hyvee-links stores the price the BOARD priced, not the search endpoint''s (the poultry-seasoning root cause)'
 } else { Bad 'resolve-hyvee-links is stamping the search API price beside a link again - that is the wrong one of Hy-Vee''s several prices and it hard-fails the factor guard' }
+} # u090-n6-hy-vee-link-price-provenance
 
 # ---------------------------------------------------------------- (u) store-taxonomy: the second opinion
 # The ONLY watcher that does not inherit the include regex's premise. Its founding bug is the class that
@@ -3859,6 +4092,7 @@ if ($rhvSrc -match '\$price = if \(\$ourPrice -gt 0\) \{ \$ourPrice \}' -and $rh
 # Puppy Chicken And Brown Rice Recipe Food For Puppies" under pets_wildlife/dog/dry_dog_food while our
 # brown-rice include claims it is brown rice. Its fixtures are frozen strings from 2026-07-30 and must never
 # be regenerated from a later board.
+if (Use-Unit 'u091-u-store-taxonomy-the-second-opinion') {
 $r = RunPS 'audit-store-taxonomy.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'SELF-TEST PASS') { Ok 'store-taxonomy -SelfTest passes with its founding-bug fixtures armed' }
 else { Bad ('store-taxonomy -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
@@ -3867,6 +4101,7 @@ if ($stSrc -match 'blue_buffalo_natural_puppy') { Ok 'the Blue Buffalo dog-food-
 else { Bad 'store-taxonomy lost its Blue Buffalo fixture - the wrong-product class it was written for is no longer proven catchable' }
 if ($stSrc -match 'kraft_grated_cheese_parmesan_cheese_8_oz') { Ok 'the taxonomy-less-URL trap (3 live rows) is still pinned - a slug must never be read as a department' }
 else { Bad 'store-taxonomy lost the taxonomy-less-URL fixture - it can invent a department for a row that carries none' }
+} # u091-u-store-taxonomy-the-second-opinion
 
 # ---------------------------------------------------------------- (u2) ff-carry: the fixtures nobody could reach
 # 2026-07-31. audit-ff-carry got a full frozen fixture block (own-feed-coverage MUST-FIRE/CLEAN-TWIN, plus the
@@ -3878,6 +4113,7 @@ else { Bad 'store-taxonomy lost the taxonomy-less-URL fixture - it can invent a 
 # HEALTHY state - printed SKIP/OK and exited 0 having executed zero fixtures.
 # Both halves are checked structurally BEFORE invoking, because the invocation alone cannot tell the
 # difference between "fixtures passed" and "fixtures were skipped" if the script regresses to exiting early.
+if (Use-Unit 'u092-u2-ff-carry-the-fixtures-nobody') {
 $ffcS = Get-Content (Join-Path $root 'audit-ff-carry.ps1') -Raw
 if ($ffcS -match '\[switch\]\$SelfTest') { Ok 'audit-ff-carry declares [switch]$SelfTest (its fixture block is reachable at all)' }
 else { Bad 'audit-ff-carry has an if ($SelfTest) block with no [switch]$SelfTest on param() - the fixtures are dead code again, and -SelfTest silently runs the LIVE audit instead of erroring' }
@@ -3913,6 +4149,7 @@ if ($ffcS -match '\$attempted\s*=\s*\$emptyTerms\.Count\s*-\s*\$suppressed') { O
 else { Bad 'ff-carry blindness is no longer keyed on $emptyTerms.Count - $suppressed - a pull that legitimately suppressed every term will now be reported blind (cry-wolf) or a real blind run missed' }
 if ($cacSrc -match '\$fcRc -eq 3') { Ok 'check-ad-cycles reports an ff-carry could-not-evaluate separately from a crash' }
 else { Bad 'check-ad-cycles has no $fcRc -eq 3 branch - a blind-but-healthy ff-carry is logged as "DID NOT RUN ... see stderr" and points the reader at an empty stderr' }
+} # u092-u2-ff-carry-the-fixtures-nobody
 
 # ---------------------------------------------------------------- (u3) ff-carry: REACHABLE from the
 # path the schedule actually takes (2026-09-02, queue 2026-09-02-c9c140).
@@ -3934,6 +4171,7 @@ function Test-FfCarryReachable([string]$cacText) {
   if ($fcIx -lt 0) { return [pscustomobject]@{ ok = $false; why = 'audit-ff-carry is not invoked from check-ad-cycles at all any more' } }
   return [pscustomobject]@{ ok = ($fcIx -gt $closeIx); why = ('$fcArgs at line ' + ($fcIx + 1) + '; the -NoPull block closes at line ' + ($closeIx + 1)); fc = $fcIx; close = $closeIx }
 }
+if (Use-Unit 'u093-u2-above-proves-ff-carry-s-own') {
 $ffcReach = Test-FfCarryReachable $cacSrc
 if ($ffcReach.ok) { Ok ('audit-ff-carry is invoked OUTSIDE the -NoPull block, so the scheduled chain runs it (' + $ffcReach.why + ')') }
 else { Bad ('audit-ff-carry is only reachable on the pull path every scheduled caller skips - ' + $ffcReach.why) }
@@ -3950,6 +4188,7 @@ if ($ffcBs -lt 0 -or $ffcBe -lt $ffcBs -or $ffcReach.close -lt 0 -or $ffcReach.c
   if (-not $ffcMutR.ok) { Ok 'MUST-FIRE: the pre-fix layout (ff-carry back inside the pull block) fails the reachability case' }
   else { Bad ('MUST-FIRE inert: the reachability case passes even with ff-carry back inside the -NoPull block - ' + $ffcMutR.why) }
 }
+} # u093-u2-above-proves-ff-carry-s-own
 
 # ---------------------------------------------------------------- (sp1) the chain stages what it rewrites
 # 2026-09-02, queue 2026-09-02-reanch1. capture-run's $servedPaths was enumerated from "the exact set real
@@ -3958,6 +4197,7 @@ if ($ffcBs -lt 0 -or $ffcBe -lt $ffcBs -or $ffcReach.close -lt 0 -or $ffcReach.c
 # and spliced three tool pages, all after guards - and 536 of those files sat dirty until a human swept them
 # by hand as 26c2b0e0 while the bot commit 91f895ef shipped graph/, grocery/ and out/ only. The runtime
 # served-dirty check lives in test-commit-size-gate; this is the cheap structural half: the paths are named.
+if (Use-Unit 'u094-sp1-the-chain-stages-what-it') {
 $crSrc = Get-Content (Join-Path (Split-Path $root -Parent) 'lib\bot-paths.ps1') -Raw
 $spI = $crSrc.IndexOf('function Get-BotServedPaths')
 $spJ = $crSrc.IndexOf('function Get-BotGlobPaths', [Math]::Max($spI, 0))
@@ -3971,6 +4211,7 @@ else {
   if ($spMissing.Count -eq 0) { Ok 'Get-BotServedPaths stages the specs and the three data files the chain rewrites after guards' }
   else { Bad ('Get-BotServedPaths no longer names: ' + ($spMissing -join ', ') + ' - the chain rewrites them after guards and the bot commit will leave them dirty on the tree again (2026-09-02, 536 files)') }
 }
+} # u094-sp1-the-chain-stages-what-it
 
 # ------------------------------------------- (u3) ff-pull: the alert that could never be false, and the write that could
 # 2026-08-02 (triage plan item 2026-08-02-91d877). pull-regular-familyfare.ps1 HAS had a -SelfTest since
@@ -3987,6 +4228,7 @@ else {
 # Checked STRUCTURALLY before invoking, because an invocation alone cannot tell "fixtures passed" from
 # "fixtures were skipped" - and because under -File an undeclared -SelfTest lands in $args and would run a
 # REAL Freshop pull, spending a scheduled sweep's request budget from inside the test harness.
+if (Use-Unit 'u095-u3-ff-pull-the-alert-that-could') {
 $ffpS = Get-Content (Join-Path $root 'pull-regular-familyfare.ps1') -Raw
 if ($ffpS -match '\[switch\]\$SelfTest') { Ok 'pull-regular-familyfare declares [switch]$SelfTest (its fixture block is reachable, and -SelfTest cannot fall through to a live pull)' }
 else { Bad 'pull-regular-familyfare has no [switch]$SelfTest on param() - -SelfTest would land in $args and run a REAL Freshop pull, burning a scheduled sweep budget and looking like a passing test' }
@@ -4071,6 +4313,7 @@ if ($ffpS -match 'Attempts = 5' -and $ffpS -match 'BackoffSec = 2') { Ok 'the at
 else { Bad 'Write-FfJsonAtomic no longer defaults to 5 attempts / 2s - the fixture passes 0 backoff for speed, so the live retry budget is only pinned here' }
 if ($ffpS -match '\$commitIdx = Get-FfCursorCommit \$nextIdx \$mergedOk') { Ok 'the cursor write is gated on the merged catalog having landed' }
 else { Bad 'the cursor write is no longer behind Get-FfCursorCommit - a failed merged write can advance the cursor again, which is exactly how 686 rows were discarded on 2026-08-02' }
+} # u095-u3-ff-pull-the-alert-that-could
 
 # ---------------------------------------------------------------- (v) everyday-mismatch: the orphan, now wired
 # 2026-07-31. audit-everyday-mismatch.ps1 is the only check that asks whether the number we PUBLISHED agrees
@@ -4081,9 +4324,11 @@ else { Bad 'the cursor write is no longer behind Get-FfCursorCommit - a failed m
 # The three fixtures below are FROZEN and SYNTHETIC (invented product names and prices, never regenerated
 # from a board) and they run from a COPY in TEMP, because the audit writes everyday-mismatches.json and a
 # coverage row into its -OutDir and a fixture that mutates itself is not frozen.
+if (Use-Unit 'u096-v-everyday-mismatch-the-orphan-now') {
 $emFxSrc = Join-Path $root 'regression-inputs\guard-fixtures'
 $emTmp = Register-Fx (Join-Path $env:TEMP ('emfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 $null = New-Item -ItemType Directory -Path $emTmp -Force
+} # u096-v-everyday-mismatch-the-orphan-now
 function EmFixture([string]$name) {
   $d = Join-Path $emTmp $name
   Copy-Item (Join-Path $emFxSrc $name) $d -Recurse -Force
@@ -4094,6 +4339,7 @@ function EmFixture([string]$name) {
 # MUST FIRE: the board says 2.49, its own link says 1.99. Exactly one finding - the other two everyday rows
 # in the same fixture are a string-priced link and a half-cent rounding case that must BOTH stay silent, so
 # this single assertion also proves the audit is not simply reporting everything it looks at.
+if (Use-Unit 'u096-v-everyday-mismatch-the-orphan-now') {
 $emA = EmFixture 'everyday-mustfire'
 if ($emA.rc -eq 1 -and $emA.n -eq 1) { Ok 'everyday-mismatch FIRES on a board cell that disagrees with its own linked product (exit 1, advisory)' }
 else { Bad ('everyday-mismatch missed its founding disagreement: rc=' + $emA.rc + ' findings=' + $emA.n + ' (expected rc 1, exactly 1)') }
@@ -4119,6 +4365,7 @@ if ($cacSrc -match '\$emRc\s*-eq\s*1') { Ok 'check-ad-cycles treats an everyday-
 else { Bad 'check-ad-cycles no longer has an $emRc -eq 1 branch - findings are being read as a crash, and this audit must stay advisory (on a 43-finding day only 3 were wrong NUMBERS; the other 40 were stale LINKS over a correct board)' }
 if ($cacSrc -match 'audit-coverage-ledger\.ps1[\s\S]{0,400}?-Phase cycle') { Ok 'check-ad-cycles runs the coverage ratchet for the CYCLE phase' }
 else { Bad 'nothing runs audit-coverage-ledger with -Phase cycle - every cycle-phase coverage row is written and never compared, which is a gate that cannot arm (coverage-baseline.json carried this as a known TODO for exactly that reason)' }
+} # u096-v-everyday-mismatch-the-orphan-now
 
 # ---------------------------------------------------------------- (v2) the Hy-Vee pull's own numbers
 # 2026-07-31. The wall-clock cap ($MAXMIN) warned once PER REMAINING PRODUCT and counted nothing, and $stale
@@ -4130,6 +4377,7 @@ else { Bad 'nothing runs audit-coverage-ledger with -Phase cycle - every cycle-p
 # These are SOURCE checks. The behavioural cases need either a 14-minute run against the live GraphQL or a
 # collapsed pull, neither of which can be summoned in a fixture suite, and -Quick deliberately bypasses the
 # wipeout guard. Each names the exact mutation that makes it fire.
+if (Use-Unit 'u097-v2-the-hy-vee-pull-s-own-numbers') {
 $hvSrc = Get-Content (Join-Path $root 'pull-regular-hyvee.ps1') -Raw
 if ($hvSrc -match '\$capSkipped\+\+') { Ok 'pull-regular-hyvee counts cap-skipped products separately from $stale' }
 else { Bad 'pull-regular-hyvee no longer counts cap-skipped products - a run truncated by the wall-clock cap is indistinguishable from a healthy one again' }
@@ -4171,6 +4419,7 @@ Remove-Item $fxTx -Recurse -Force -ErrorAction SilentlyContinue
 $cacTx = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
 if ($cacTx -match 'audit-store-taxonomy\.ps1') { Ok 'the daily job still runs the store-taxonomy second opinion' }
 else { Bad 'check-ad-cycles no longer calls audit-store-taxonomy - the only check that does not inherit the include regex is dark, and the script census will call it an orphan' }
+} # u097-v2-the-hy-vee-pull-s-own-numbers
 
 # ---------------------------------------------------------------- (v3) the walled-store rescue worklist
 # 2026-07-31. The four walled stores are captured by hand through a browser, and compare-deals hands each
@@ -4195,9 +4444,11 @@ else { Bad 'check-ad-cycles no longer calls audit-store-taxonomy - the only chec
 # The board publishes the carried $23.40. An audit that attributes a cell to the newest row of that name
 # reads the row the engine REJECTED and reports nothing, so the fixture prices fx-curry at $23.40 on
 # purpose: if anyone re-simplifies the attribution back to newest-wins, this case goes red.
+if (Use-Unit 'u098-audit-instore-channel-channel-doubt') {
 $icFxSrc = Join-Path $root 'regression-inputs\guard-fixtures'
 $icTmp = Register-Fx (Join-Path $env:TEMP ('icfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 $null = New-Item -ItemType Directory -Path $icTmp -Force
+} # u098-audit-instore-channel-channel-doubt
 function IcFixture([string]$name) {
   $d = Join-Path $icTmp $name
   Copy-Item (Join-Path $icFxSrc $name) $d -Recurse -Force
@@ -4207,6 +4458,7 @@ function IcFixture([string]$name) {
   if (Test-Path $wl) { $wlText = [IO.File]::ReadAllText($wl, [Text.Encoding]::UTF8) }
   return @{ rc = $r.rc; text = $r.text; worklist = $wlText }
 }
+if (Use-Unit 'u098-audit-instore-channel-channel-doubt') {
 $icA = IcFixture 'instore-channel-mustfire'
 if ($icA.text -match 'PRE-FIELD-ROW-OUTLIVING-A-REFUSAL' -or $icA.text -match 'prices from the PRE-FIELD row') {
   Ok 'instore-channel FIRES on a pre-field row still pricing the board while the same item id is refused as FC in a fresher capture (the red-curry founding pair)'
@@ -4230,6 +4482,7 @@ if ($icB.text -match 'every published cell traces to a row that either records a
 $rwFxSrc = Join-Path $root 'regression-inputs\guard-fixtures'
 $rwTmp = Register-Fx (Join-Path $env:TEMP ('rwfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 $null = New-Item -ItemType Directory -Path $rwTmp -Force
+} # u098-audit-instore-channel-channel-doubt
 function RwFixture([string]$name) {
   $d = Join-Path $rwTmp $name
   Copy-Item (Join-Path $rwFxSrc $name) $d -Recurse -Force
@@ -4247,6 +4500,7 @@ function RwFixture([string]$name) {
 # older board and gone today (the Aldi class), fx-toast is on the board with no capture on disk carrying it
 # (unknown provenance = capture it), fx-milk traces to a 9-day-old capture with 5 of 14 window days left
 # (the Walmart silent countdown).
+if (Use-Unit 'u098-audit-instore-channel-channel-doubt') {
 $rwA = RwFixture 'rescue-mustfire'
 if ($rwA.rc -eq 1 -and $rwA.list -match '(?m)^fixture eggs\t+fx-eggs\tDROPPED') { Ok 'rescue-worklist FIRES on a cell that was priced a week ago and is gone today (the Aldi 7-staple drop class)' }
 else { Bad ('rescue-worklist missed its DROPPED founding case: rc=' + $rwA.rc + ' - a board cell lost to a narrower re-capture produces no re-search term again') }
@@ -4262,9 +4516,12 @@ else { Bad 'the emitted worklist lost the DEEP CAPTURE header - a shallow rescue
 # engine prices from counts down to the wrong day, which is the silent-countdown bug wearing a new hat.
 $rwSrc = [IO.File]::ReadAllText((Join-Path $root 'build-rescue-worklist.ps1'))
 $rwDefault = ([regex]::Match($rwSrc, '\[int\]\$WindowDays\s*=\s*(\d+)')).Groups[1].Value
+} # u098-audit-instore-channel-channel-doubt
 . (Join-Path $root 'regular-fileset-lib.ps1')
+if (Use-Unit 'u098-audit-instore-channel-channel-doubt') {
 if ($rwDefault -and [int]$rwDefault -eq (Get-RegularUnionDays)) { Ok "build-rescue-worklist's window default still equals the engine's union window ($rwDefault d)" }
 else { Bad "build-rescue-worklist -WindowDays default is '$rwDefault' but the engine unions over $(Get-RegularUnionDays) - the rescue list would count down to the wrong day" }
+} # u098-audit-instore-channel-channel-doubt
 
 # ---- EVERY CONSUMER OF THE EVERYDAY-PRICE WINDOW AGREES WITH THE POLICY -------------------------------
 # 2026-08-20: capture-policy.ps1 moved everyday prices to a 90-day quarter, and SEVEN files still held a
@@ -4278,6 +4535,7 @@ else { Bad "build-rescue-worklist -WindowDays default is '$rwDefault' but the en
 # the next person to move the quarter cannot leave a consumer behind - and a NEW consumer that hardcodes a
 # window will not be covered here, which is why the -ListOnly sweep below names what it checked.
 . (Join-Path $root 'regular-fileset-lib.ps1')
+if (Use-Unit 'u099-every-consumer-of-the-everyday-price') {
 $winPolicy = Get-PolicyCarryDaysFromText
 $winUnion  = Get-RegularUnionDays
 if ($null -ne $winPolicy -and $winUnion -eq $winPolicy) { Ok "the union window equals capture-policy MaxCarryDays ($winUnion d)" }
@@ -4347,6 +4605,7 @@ else { Bad ('stores.json marks ' + $rwWalled.Count + ' walled store(s), not 4 - 
 # child wrote to stderr was reported as "could not run" instead of its real finding.
 if ($gSrc -match "audit-cell-drops\.ps1'\)\s*2>") { Bad 'guards.ps1 redirects the cell-drops child stderr again - under EAP=Stop the first stderr line throws, and a real cell leak is reported as plumbing failure' }
 else { Ok 'guards.ps1 delegates cell-drops without a stderr redirect (a real finding reaches the warn line, not the catch)' }
+} # u099-every-consumer-of-the-everyday-price
 
 # ---------------------------------------------------------------- 23b. store SEARCH templates resolve
 # FOUNDING BUG (2026-08-02): the Family Fare "Find at store" template was
@@ -4357,16 +4616,19 @@ else { Ok 'guards.ps1 delegates cell-drops without a stderr redirect (a real fin
 # The fixtures are frozen CANNED RESPONSES (url -> {status,title}) captured from the real stores that day,
 # so this replays over the network without touching it. -ReportDir keeps a fixture run from overwriting the
 # live report (the audit-basis-reconcile lesson).
+if (Use-Unit 'u100-23b-store-search-templates-resolve') {
 $slFx  = Join-Path $fix 'searchlinks-mustfire'
 $slCl  = Join-Path $fix 'searchlinks-clean'
 $slBl  = Join-Path $fix 'searchlinks-blind'
 $slRep = NewFxDir 'searchlinks-rep'
+} # u100-23b-store-search-templates-resolve
 function SlRun($tplDir, $respFile, $baseFile) {
   $a = @('-ResponsesFile', $respFile, '-ReportDir', $slRep)
   if ($tplDir)   { $a = @('-TemplatesFile', (Join-Path $tplDir 'templates.json')) + $a }
   if ($baseFile) { $a += @('-BaselineFile', $baseFile) }
   return (RunPS 'audit-search-links.ps1' $a)
 }
+if (Use-Unit 'u100-23b-store-search-templates-resolve') {
 $sl = SlRun $slFx (Join-Path $slFx 'responses.json')
 if ($sl.rc -eq 2 -and $sl.text -match 'Family Fare search template does not resolve' -and $sl.text -match '404') { Ok 'search-links FIRES on the dead Family Fare search template (its founding bug)' }
 else { Bad ('search-links MISSED its founding bug - a 404ing store search link ships unnoticed again: rc=' + $sl.rc + ' ' + $sl.text) }
@@ -4415,6 +4677,7 @@ else { Bad 'the dead Family Fare search template is back in build-deals-page.ps1
 # ORPHAN CHECK: a probe nothing calls is a probe nobody reads (the audit-everyday-mismatch lesson).
 if ($cacSrc -match 'audit-search-links\.ps1') { Ok 'check-ad-cycles still invokes audit-search-links (an uncalled probe never checks a template)' }
 else { Bad 'audit-search-links is an ORPHAN - nothing invokes it, so a store can re-route its storefront and the fallback links die silently again' }
+} # u100-23b-store-search-templates-resolve
 
 # ---------------------------------------------------------------- 24. known-wrong blocklist (Component 2)
 # MUST FIRE: an adjudicated-wrong product is priced on the board again. FOUNDING BUG - audit findings lived
@@ -4422,6 +4685,7 @@ else { Bad 'audit-search-links is an ORPHAN - nothing invokes it, so a store can
 # still the published crown the next morning, and Blue Buffalo cat food held the salmon crown at 20.8% under
 # the runner-up with every guard green. Fixtures are SYNTHETIC and frozen here: the product names are the
 # bug, so they must never be re-read from the live board.
+if (Use-Unit 'u101-24-known-wrong-blocklist-component-2') {
 $fxKw = NewFxDir 'kw'
 New-Item -ItemType Directory -Force (Join-Path $fxKw 'out\regular') | Out-Null
 Set-Content (Join-Path $fxKw 'commodities.json') '[{"id":"salmon","label":"Salmon","unit":"lb"},{"id":"parmesan","label":"Parmesan","unit":"oz"},{"id":"coffee","label":"Coffee","unit":"oz"},{"id":"strawberries","label":"Strawberries","unit":"oz"}]' -Encoding UTF8
@@ -4548,6 +4812,7 @@ else {
   if ($r.rc -eq 0 -and $r.text -match 'KNOWN-WRONG AUDIT OK') { Ok 'known-wrong live clean twin: the real blocklist is green on the real board' }
   else { Bad ('known-wrong is RED on the live board (rc=' + $r.rc + ') - an adjudicated-wrong product is published again: ' + $r.text) }
 }
+} # u101-24-known-wrong-blocklist-component-2
 # ---- UNFIRABLE vs KEY-COLLISION: two shapes of the SAME 48-char key, needing OPPOSITE actions ---------
 # The key is the product name slugged and truncated to 48 chars, so two names that agree for 48 characters
 # produce ONE key and TWO different match targets. That fact has two completely different causes and until
@@ -4567,6 +4832,7 @@ else {
 #   cell. Understating is as wrong as overstating.
 #
 # Both rows are FROZEN from the real ones and are never re-read from the live board: the collision IS the bug.
+if (Use-Unit 'u102-unfirable-vs-key-collision-two') {
 $fxKwU = NewFxDir 'kw-unfirable'
 New-Item -ItemType Directory -Force (Join-Path $fxKwU 'out') | Out-Null
 Set-Content (Join-Path $fxKwU 'commodities.json') '[{"id":"bay-leaves","label":"Bay Leaves","unit":"oz"},{"id":"ready-to-serve-long-grain-wild-rice-pouch","label":"RTS Long Grain & Wild Rice Pouch","unit":"oz"}]' -Encoding UTF8
@@ -4611,6 +4877,7 @@ else { Bad ('known-wrong gated the publish on a key-shape finding (rc=' + $r.rc 
 Remove-Item $fxKwU -Recurse -Force -ErrorAction SilentlyContinue
 
 Remove-Item $fxKw, $fxKwB, $fxKwS -Recurse -Force -ErrorAction SilentlyContinue
+} # u102-unfirable-vs-key-collision-two
 
 # ---------------------------------------------------------------- (m) the COVERAGE LEDGER
 # FOUNDING BUGS, all three measured, all three the same shape: a check that examined nothing, or stopped
@@ -4628,6 +4895,7 @@ Remove-Item $fxKw, $fxKwB, $fxKwS -Recurse -Force -ErrorAction SilentlyContinue
 # Everything below runs THE REAL SCRIPTS (a copy of audit-coverage-ledger.ps1 + coverage-lib.ps1 in a temp
 # dir, so $PSScriptRoot points at the fixture) against FROZEN synthetic state. Never regenerated from the
 # live board: the bug lives in these numbers.
+if (Use-Unit 'u103-m-the-coverage-ledger') {
 $covSrcG = Get-Content (Join-Path $root 'guards.ps1') -Raw
 foreach ($k in @('guards/11-bakers-provenance', 'guards/3-pin-identity', 'guards/4-factor', 'guards/10-store-charges')) {
   if ($covSrcG -match ([regex]::Escape("Write-CoverageRecord -Check '" + $k + "'"))) { Ok ("guards.ps1 still records coverage for " + $k) }
@@ -4662,6 +4930,7 @@ $covEnc = New-Object Text.UTF8Encoding($false)
 # as_of is stamped with TODAY on purpose: STALE is measured against the clock, so a frozen calendar date
 # would make every non-stale case fail as soon as the fixture aged. The BUG is in the counts, not the date.
 $covNow = (Get-Date -Format 'yyyy-MM-dd') + ' 09:00:00'
+} # u103-m-the-coverage-ledger
 function CovLedger([hashtable]$rows) {
   $c = [ordered]@{}
   foreach ($k in ($rows.Keys | Sort-Object)) {
@@ -4671,6 +4940,7 @@ function CovLedger([hashtable]$rows) {
   [IO.File]::WriteAllText((Join-Path $fxCov 'out\coverage-ledger.json'), (([ordered]@{ schema = 1; updated = $covNow; checks = $c }) | ConvertTo-Json -Depth 6), $covEnc)
 }
 # FROZEN baseline: guard 11 at its pre-API row count, guard 3 at the 16 pins it had the day it went blind.
+if (Use-Unit 'u103-m-the-coverage-ledger') {
 [IO.File]::WriteAllText((Join-Path $fxCov 'coverage-baseline.json'), (@'
 {"schema":1,"set":"frozen fixture - do not regenerate","checks":{
  "guards/11-bakers-provenance":{"examined":6960,"tolerance":0.25,"max_age_days":2,"phase":"publish"},
@@ -4754,12 +5024,14 @@ $h = $covHealthy.Clone(); $h['audit-ff-carry'] = @(12, 12); CovLedger $h
 $r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
 if ($r.rc -eq 0) { Ok 'coverage-ledger does NOT punish ff-carry for having fewer empty terms to re-probe' }
 else { Bad ('coverage-ledger fired when the FF pull IMPROVED (rc=' + $r.rc + ') - the tolerance-1.0 exemption was lost') }
+} # u103-m-the-coverage-ledger
 # ---- THE BUDGETED LANE (min_ratio), 2026-08-22 ------------------------------------------------------
 # CLEAN TWIN 5 - THE ONE THIS RAIL EXISTS FOR. pull-regular-hyvee asks about a rotating slice of ~18
 # products a day; on a median day only 3 of them carry a link. Full coverage of that slice is a HEALTHY
 # day and must be silent. Against the old fixed baseline (1,010, measured when the lane re-verified
 # everything daily) the identical run was REGRESSED every single morning - a permanent finding nobody
 # could act on, which is the surest way to teach people to ignore the whole ledger.
+if (Use-Unit 'u104-the-budgeted-lane-min-ratio-2026-08') {
 $h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(2, 2); CovLedger $h
 $r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
 if ($r.rc -eq 0) { Ok 'coverage-ledger is SILENT on a budgeted lane that fully covered its (small) daily slice' }
@@ -4855,6 +5127,7 @@ $covNoise = & { . (Join-Path $fxCov 'coverage-lib.ps1'); Write-CoverageRecord -C
 if ($null -eq $covNoise -or @($covNoise).Count -eq 0) { Ok 'coverage-lib emits nothing to the output stream (it cannot pollute a caller''s stdout)' }
 else { Bad ('coverage-lib wrote ' + @($covNoise).Count + ' object(s) to the output stream - it will corrupt the stdout of every script that calls it') }
 Remove-Item $fxCov -Recurse -Force -ErrorAction SilentlyContinue
+} # u104-the-budgeted-lane-min-ratio-2026-08
 
 # ---------------------------------------------------------------- N+10. the OUT-OF-BAND verification sample
 # FOUNDING BUG (2026-07-30): every accuracy number this estate prints is written by the code that wrote the
@@ -4866,6 +5139,7 @@ Remove-Item $fxCov -Recurse -Force -ErrorAction SilentlyContinue
 # fact when 3-of-30 is equally consistent with 2% and with 27%).
 # Both regions are extracted from the REAL scripts and executed against frozen synthetic input - a
 # transcribed copy would drift out of the shipping code the way the Lysol negative test did.
+if (Use-Unit 'u105-n-10-the-out-of-band-verification') {
 $bvsPath = Join-Path $root 'build-verification-sample.ps1'
 $rsvPath = Join-Path $root 'record-sample-verdict.ps1'
 if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
@@ -5075,6 +5349,7 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
   }
   Remove-Item $fxVs, $fxVsE -Recurse -Force -ErrorAction SilentlyContinue
 }
+} # u105-n-10-the-out-of-band-verification
 
 # ---------------------------------------------------------------- BAKE CURRENCY (2026-07-31, triage round 2)
 # FOUNDING BUG: category-excludes.json is the LIBRARY; apply-category-excludes.ps1 BAKES it into every
@@ -5086,6 +5361,7 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
 # Two things have to stay true, and they are different claims:
 #   (1) the LIVE tree is current - a -WhatIf that wants to add nothing;
 #   (2) the detector can still SEE drift - the frozen fixture pair, so (1) passing means something.
+if (Use-Unit 'u106-bake-currency') {
 $r = RunPS 'apply-category-excludes.ps1' @('-WhatIf')
 if ($r.rc -eq 0 -and $r.text -match '\+0 patterns across 0 commodities') { Ok 'bake-currency: the live commodities.json is CURRENT with category-excludes.json (nothing left to bake)' }
 else { Bad ('bake-currency: the LIVE bake has DRIFTED behind the library - run apply-category-excludes.ps1, then re-run compare-deals and diff the board. It reports: ' + (($r.text -split "`n") | Select-Object -First 1)) }
@@ -5107,6 +5383,7 @@ else { Bad ('bake-currency false-positived on an already-baked fixture (rc=' + $
 # finding nothing - the [[guard-fixture-rule]] failure mode, one careless argument away.
 if ((Get-Content (Join-Path $fxBakeD 'commodities.json') -Raw) -notmatch 'jerky') { Ok 'bake-currency fixture is still frozen (the drifted tree was not written to)' }
 else { Bad 'the bake-drifted FIXTURE has been baked - it no longer encodes the drift, so its must-fire proves nothing. Restore it from git.' }
+} # u106-bake-currency
 
 # ---------------------------------------------------------------- (d3) food-category: the round-2 classes
 # MUST-FIRE for the 2026-07-31 library additions (household tampons/lip-balm, candy marshmallows, beverage
@@ -5117,6 +5394,7 @@ else { Bad 'the bake-drifted FIXTURE has been baked - it no longer encodes the d
 # a sanity band, not the class library, which could not express any of these classes at all.
 # FROZEN LITERALS. Never regenerate from the board: the products rotate out of Baker's catalog weekly, and
 # a fixture rebuilt from live data would encode nothing.
+if (Use-Unit 'u107-d3-food-category-the-round-2-classes') {
 $fxR2 = NewFxDir 'afc-round2'
 $r2Bug = '{"week_of":"2026-07-31","comparison":[' +
   '{"commodity":"Honey","id":"honey","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.4994,"item":"Honey Pot 100% Organic Cotton Core Duo Pack Tampons, 18 Count"}]},' +
@@ -5140,6 +5418,7 @@ $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxR2)
 if ($r.rc -eq 0) { Ok 'food-category clean twin: the real honey / strawberries / lemons cells stay silent under the round-2 classes' }
 else { Bad ('food-category flagged REAL cells (rc=' + $r.rc + ') - a round-2 token is too broad: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxR2 -Recurse -Force -ErrorAction SilentlyContinue
+} # u107-d3-food-category-the-round-2-classes
 
 # ---- (f) THE TRIAGE PIPELINE'S OWN WATCHERS (2026-07-31) -----------------------------------------------
 # Two pieces of the alert-to-fix loop carry their own frozen self-tests. They are only worth having if
@@ -5150,6 +5429,7 @@ Remove-Item $fxR2 -Recurse -Force -ErrorAction SilentlyContinue
 #   * validate-triage-plan: the handoff gate between the reviewer and the developer. Its must-fire cases
 #     are the two mistakes this estate actually made - a blast radius measured as token matches instead of
 #     routing outcomes, and a widened include with no claimed_by_earlier.
+if (Use-Unit 'u108-f-the-triage-pipeline-s-own-watchers') {
 $r = RunPS 'send-alert.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'send-alert: queue routing (cross-day absorb, resolved-mints-new) + body-thin detection' }
 else { Bad ('send-alert -SelfTest failed (rc=' + $r.rc + ') - the triage queue may be minting a new id per day for one condition, or absorbing one it should not: ' + ($r.text -replace "`n", ' ')) }
@@ -5236,6 +5516,7 @@ if ($ceCmps.Count -eq 0) {
     Ok ('capture-eviction roster is ARMED: capture-evictions.json (' + $ceGen.ToString('s') + ') post-dates the newest board ' + $ceCmps[0].Name + ' (built_at ' + $ceBuilt.ToString('s') + ')')
   }
 }
+} # u108-f-the-triage-pipeline-s-own-watchers
 
 # ---- (g) THE PROMPTS THEMSELVES ARE CODE (2026-07-31) --------------------------------------------------
 # The agents and scheduled-task SKILLs that drive all of this were the only unversioned thing left, and on
@@ -5243,6 +5524,7 @@ if ($ceCmps.Count -eq 0) {
 # user scope - same name, two files, quietly disagreeing, and which one runs depends on the session's
 # working directory. Same two-copies-of-one-truth trap as pu-lib and the category-exclude bake.
 # The audit lives outside grocery\ (it is estate-wide), so call it by path.
+if (Use-Unit 'u109-g-the-prompts-themselves-are-code' -Always 'audit-prompt-backup reads the live .claude prompt tree, which no path pattern here names') {
 $pb = Join-Path (Split-Path $root -Parent) 'ops\audit-prompt-backup.ps1'
 if (Test-Path $pb) {
   $out = PSChild $pb | ForEach-Object { [string]$_ }
@@ -5272,6 +5554,7 @@ if (Test-Path $pb) {
   # 'Ops: an agent prompt is not backed up'.
   else { Hygiene ('prompt-backup drift (rc=' + $rc + ') - a MIRROR is stale, no watcher is blind. Do NOT reflexively -Sync: it writes live user-scope prompts and mirrors scheduled-task SKILLs into a public repo. Reconcile the named files deliberately (or add an exemption to ops\prompt-backup-exempt.json), then commit ops\prompt-backup: ' + ($txt -replace "`n", ' ')) }
 } else { Bad 'prompt-backup audit is MISSING from ops\ - the agent prompts have no backup check' }
+} # u109-g-the-prompts-themselves-are-code
 
 # ---- (h) THE DISPLAY FORMATTER (2026-07-31) ------------------------------------------------------------
 # Two wrong numbers reached shoppers through the formatter, not the pipeline: "356&cent;/oz" on Mint (fresh)
@@ -5279,15 +5562,18 @@ if (Test-Path $pb) {
 # a real $0.0043-per-swab price has no second decimal to land in. Both were invisible to every existing
 # guard, which all watch prices and none watched the printing of them. fmt-lib carries the frozen
 # founding cases plus clean twins; this is what runs them daily.
+if (Use-Unit 'u110-h-the-display-formatter') {
 $r = RunPS 'fmt-lib.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'fmt-lib: per-unit display still rolls over at a dollar and still shows a real sub-cent price' }
 else { Bad ('fmt-lib -SelfTest failed (rc=' + $r.rc + ') - the board can print a three-digit cent price or a $0.00 record again: ' + ($r.text -replace "`n", ' ')) }
+} # u110-h-the-display-formatter
 
 # ---- (i) THE TWO ACCURACY WATCHERS ADDED 2026-08-01 ---------------------------------------------------
 # basis-outlier: catches a wrong BASIS by arithmetic when nothing in the row declares one - the Aldi
 # multipack shape, where the name, the size and the price are internally consistent and completely wrong.
 # consistency chip-kind: the ad-pill branch is a SKIP, and a skip with no must-fire behind it is how a
 # guard stops being able to see its own bug. Its fixture proves a priced chip with NO link still breaches.
+if (Use-Unit 'u111-i-the-two-accuracy-watchers-added') {
 $r = RunPS 'audit-unit-basis-outlier.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'basis-outlier: still catches a pack price on a single-unit size, and still stays silent on an ordinary premium spread' }
 else { Bad ('audit-unit-basis-outlier -SelfTest failed (rc=' + $r.rc + ') - a wrong-basis cell can reach the board unremarked: ' + ($r.text -replace "`n", ' ')) }
@@ -5295,15 +5581,18 @@ else { Bad ('audit-unit-basis-outlier -SelfTest failed (rc=' + $r.rc + ') - a wr
 $r = RunPS 'audit-board-consistency.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'board-consistency: a flyer-only ad pill is not a breach, and a priced chip with no link still is' }
 else { Bad ('audit-board-consistency -SelfTest failed (rc=' + $r.rc + ') - the ad-pill skip may now be swallowing genuinely linkless prices: ' + ($r.text -replace "`n", ' ')) }
+} # u111-i-the-two-accuracy-watchers-added
 # ---- (j) THE SEMANTIC SIDECAR'S ESTATE-SIDE PLUMBING (2026-08-01) --------------------------------------
 # The GPU sweep itself is not run here (it needs a card, and a watcher that needs hardware is a watcher
 # that goes BLIND on the cloud runner). What IS asserted daily is the part that decides whether a finding
 # reaches a human: a fresh finding must be actionable, an ALREADY-ADJUDICATED cell must not be re-reported
 # as new, and a malformed finding must be rejected. If that filter inverts, the advisory feed either spams
 # the arrivals desk with settled rulings or silently swallows real ones.
+if (Use-Unit 'u112-j-the-semantic-sidecar-s-estate-side') {
 $r = RunPS 'audit-semantic-identity.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'semantic-identity: the actionable filter still admits fresh findings and still suppresses settled rulings' }
 else { Bad ('audit-semantic-identity -SelfTest failed (rc=' + $r.rc + ') - the semantic advisory feed may be re-reporting adjudicated cells or dropping real ones: ' + ($r.text -replace "`n", ' ')) }
+} # u112-j-the-semantic-sidecar-s-estate-side
 # ---- (j2) THE ONE PROCESS THAT OWNS THE GPU WINDOW (2026-08-22, PLAN-local-matching phase 2) ----------
 # graph\pipeline\nightly.ps1 is the only scheduled thing allowed to start llama-server, and the only
 # reason that is safe is the ordering rule: the sidecar sweep takes the card first and must have given
@@ -5312,9 +5601,11 @@ else { Bad ('audit-semantic-identity -SelfTest failed (rc=' + $r.rc + ') - the s
 # semantic sweep at 07:00 the NEXT morning, attributed to "the GPU was busy" and never traced back.
 # Also fixtured: Log must not leak into any function's return value, which this script shipped wrong
 # once and which silently turned the run-status file's card_free flag into an array of log lines.
+if (Use-Unit 'u113-j2-the-one-process-that-owns-the-gpu') {
 $r = RunPSAt (Join-Path (Split-Path $root -Parent) 'graph\pipeline') 'nightly.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'self-test OK') { Ok 'nightly: the sweep/llama-server ordering rule, the deadline maths and the log-leak guard all hold' }
 else { Bad ('nightly.ps1 -SelfTest failed (rc=' + $r.rc + ') - the GPU handover rule is unproven, and its failure mode is a BLIND semantic sweep tomorrow morning: ' + ($r.text -replace "`n", ' ')) }
+} # u113-j2-the-one-process-that-owns-the-gpu
 # ---- (j3) WHICH COMMODITY DID THE HELPER JUST SCORE? (2026-08-22) -------------------------------
 # 33 bare commodity ids exist in BOTH namespaces - milk, butter, brown-sugar, carrots. The sweep's
 # contested lane used to key on the bare id, so a RECIPE question could be scored against the
@@ -5323,6 +5614,7 @@ else { Bad ('nightly.ps1 -SelfTest failed (rc=' + $r.rc + ') - the GPU handover 
 # is never questioned. Asserted here daily so the refusal cannot quietly become a lookup again.
 # SKIPPED, never failed, without the sidecar venv - it carries torch, and a watcher that needs a GPU
 # stack is a watcher that goes BLIND on the cloud runner.
+if (Use-Unit 'u114-j3-which-commodity-did-the-helper') {
 $sidecarPy = Join-Path (Split-Path $root -Parent) 'sidecar\.venv\Scripts\python.exe'
 if (-not (Test-Path $sidecarPy)) {
   Skip 'sweep -Selftest: no sidecar venv on this machine, so the namespace-collision fixture did not run'
@@ -5334,6 +5626,7 @@ if (-not (Test-Path $sidecarPy)) {
   if ($swRc -eq 0 -and (($swOut -join "`n") -match 'sweep SELF-TEST PASS')) { Ok 'sweep: a recipe question cannot be scored against a staple commodity that shares its bare id' }
   else { Bad ('sweep.py --selftest failed (rc=' + $swRc + ') - the contested lane may be scoring questions against the WRONG namespace''s commodity, which reads as a plausible number: ' + (($swOut -join ' '))) }
 }
+} # u114-j3-which-commodity-did-the-helper
 # ---- (k) THE FAREWAY SIZE SURFACE (2026-08-01, triage 2026-08-01-9da3a8) -------------------------------
 # Fareway's storefront DOM often omits the pack size, so the builder now reads it from the catalog slug.
 # That surface is unreliable in four proven ways (dropped decimal, leading zero, per-unit size on a
@@ -5341,6 +5634,7 @@ if (-not (Test-Path $sidecarPy)) {
 # or dropped for "disagreeing" with itself. Both directions are silent on a healthy board - a wrong size
 # just looks like a price, and a quarantined row just looks like a store that does not carry the item -
 # so the fixtures are the only thing that can see them. They are frozen from the real 2026-07-31 rows.
+if (Use-Unit 'u115-k-the-fareway-size-surface') {
 $r = RunPS 'build-fareway-regular.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'fareway slug sizes: counts still recovered, the four slug defects still refused, and the milk/eggs basis relabel still cannot eat a real size' }
 else { Bad ('build-fareway-regular -SelfTest failed (rc=' + $r.rc + ') - Fareway can publish a pack price as a unit price again, or quarantine correct rows: ' + ($r.text -replace "`n", ' ')) }
@@ -5348,6 +5642,7 @@ else { Bad ('build-fareway-regular -SelfTest failed (rc=' + $r.rc + ') - Fareway
 $r = RunPS 'heal-degraded-sizes.ps1' @('-Store','fareway','-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'size-heal: still heals across a store RENAME on the catalog product id, and still refuses when the price moved' }
 else { Bad ('heal-degraded-sizes -SelfTest failed (rc=' + $r.rc + ') - a renamed product loses its pack size again and the band drops the store: ' + ($r.text -replace "`n", ' ')) }
+} # u115-k-the-fareway-size-surface
 
 # ---------------------------------------------------------------- as_of laundering (2026-08-02, C3 sample)
 # THE ONLY BUG CLASS WHERE THE DETECTOR ITSELF IS THE VICTIM. build-fareway-regular merges every extract on
@@ -5358,6 +5653,7 @@ else { Bad ('heal-degraded-sizes -SelfTest failed (rc=' + $r.rc + ') - a renamed
 # ranch dressing published at $0.99 as_of today, last actually captured 07-23, real shelf price $2.48.
 # THREE watchers, and all three have to keep working: the builder must date from the extract, the guard must
 # fail when something re-launders, and the repair must undo dates inherited from pre-fix files.
+if (Use-Unit 'u116-as-of-laundering') {
 $r = RunPS 'audit-asof-evidence.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'as_of evidence: a row dated fresher than any capture that holds it still fires, and a carried OLDER date still does not' }
 else { Bad ('audit-asof-evidence -SelfTest failed (rc=' + $r.rc + ') - the freshness guards can be fed an invented date again: ' + ($r.text -replace "`n", ' ')) }
@@ -5374,6 +5670,7 @@ if ($bfrSrc -match '\$MaxExtractDays' -and $bfrSrc -match 'as_of=\$srcAsOf') { O
 else { Bad 'build-fareway-regular no longer stamps as_of from the source extract ($srcAsOf) - the laundering is back and guard 9 will read 100% freshness on a stale file' }
 if ($bfrSrc -match 'repair-asof-evidence\.ps1') { Ok 'fareway builder still runs the as_of repair after carry-forward' }
 else { Bad 'build-fareway-regular no longer calls repair-asof-evidence - carried rows keep whatever date a pre-fix file gave them' }
+} # u116-as-of-laundering
 
 # ---------------------------------------------------------------- Sam's verified-row refresh (2026-08-02)
 # build-sams-deals refuses any row it cannot check with qty = linePrice / unitPrice, which is correct and
@@ -5381,9 +5678,11 @@ else { Bad 'build-fareway-regular no longer calls repair-asof-evidence - carried
 # no-unitPrice goods (cauliflower, pineapple, rotisserie chicken, 20 more) unbuildable forever. This takes
 # the store's current price and keeps the size that was already hand-verified. Every refusal in its fixture
 # is a way that move can go wrong, and each one publishes a wrong PRICE if it stops firing.
+if (Use-Unit 'u117-sam-s-verified-row-refresh') {
 $r = RunPS 'refresh-sams-verified.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok "Sam's verified refresh: still re-prices sft/no-unitPrice rows, and still refuses an ambiguous price, a changed pack, a per-unit size and a size that is a price" }
 else { Bad ('refresh-sams-verified -SelfTest failed (rc=' + $r.rc + ") - Sam's hand-verified rows either stay stale or get re-priced against the wrong pack: " + ($r.text -replace "`n", ' ')) }
+} # u117-sam-s-verified-row-refresh
 
 # ---------------------------------------------------------------- mixed-vegetable medleys (2026-08-02)
 # A PRODUCT THAT NAMES A SECOND VEGETABLE IS NOT THE FIRST ONE. Walmart carries seven broccoli/cauliflower/
@@ -5396,7 +5695,9 @@ else { Bad ('refresh-sams-verified -SelfTest failed (rc=' + $r.rc + ") - Sam's h
 # from two commodities just moves it to the third. Adding \bcarrots?\b was not in the plan either - it came
 # from watching 'Birds Eye Shredded Carrots & Broccoli Florets' hop OFF carrots and ONTO broccoli in the
 # match-soundness report. So this pins the whole family at once, in both directions.
+if (Use-Unit 'u118-mixed-vegetable-medleys') {
 $cmMed = Read-JsonFile (Join-Path $root 'commodities.json')
+} # u118-mixed-vegetable-medleys
 function Get-MatchingCommodities([string]$name, $catalog) {
   $hits = New-Object System.Collections.Generic.List[string]
   foreach ($cm in $catalog) {
@@ -5411,6 +5712,7 @@ function Get-MatchingCommodities([string]$name, $catalog) {
   return $hits
 }
 # FROZEN: every name below is verbatim from out\regular\walmart-regular-2026-08-01.json.
+if (Use-Unit 'u118-mixed-vegetable-medleys') {
 $SINGLE_VEG = @('broccoli', 'cauliflower', 'frozen-broccoli', 'carrots')
 $medleyMust = @(
   'Marketside Fresh Broccoli and Cauliflower Medley, 12 oz',
@@ -5452,6 +5754,7 @@ $twinMiss = @()
 foreach ($t in $medleyTwin) { if (-not (@(Get-MatchingCommodities $t.n $cmMed) -contains $t.want)) { $twinMiss += ($t.want + ' NO LONGER matches ' + $t.n) } }
 if ($twinMiss.Count -eq 0) { Ok 'medley rules CLEAN TWIN: plain broccoli/cauliflower/carrots and "Fresh Frozen" mixed veg still match their own commodity' }
 else { Bad ('the medley excludes have eaten a real product - a missing cell is the cost of an exclude written too wide: ' + ($twinMiss -join ' | ')) }
+} # u118-mixed-vegetable-medleys
 
 # ------------------------------------------------- product-FORM and one-word-include ownership (2026-08-06, plan-3)
 # FOUR mechanisms, one fixture, all four measured on the 2026-08-06 board and frozen here verbatim from the
@@ -5468,6 +5771,7 @@ else { Bad ('the medley excludes have eaten a real product - a missing cell is t
 #       shower-cleaner 305) can ever see it.
 #   (4) A brand-scoped exclude that was silently doing first-match-wins protection for a LATER commodity, so it
 #       could only be narrowed, never deleted. The canned twin below is what proves the narrowing held.
+if (Use-Unit 'u119-product-form-and-one-word-include') {
 $mojiN = [string][char]0xC3 + [string][char]0xB1        # the store's UTF-8-read-as-latin1 n-tilde
 $formMust = @(
   # name                                                                                     # first-match-wins owner (null = must not be claimed by 'reject')
@@ -5510,6 +5814,7 @@ foreach ($t in $formTwin) {
 }
 if ($formTwinMiss.Count -eq 0) { Ok 'product-form CLEAN TWIN: the canned 15 oz mixed-veg SKU stays home behind the NARROWED brand exclude, and real basil / stir-fry / pizza / bleach / jalapenos / canned chicken / croissant sandwiches all keep their commodities' }
 else { Bad ('a form or ownership exclude has eaten a real product, or a widened include did not land: ' + ($formTwinMiss -join ' | ')) }
+} # u119-product-form-and-one-word-include
 
 # ---------------------------------------------------------------- stale price feed (2026-08-15)
 # THE WATCHER FOR THE FEED A PRICING STAGE COMPUTES ON. compute-v2-perserving.ps1 downloaded the feed only
@@ -5520,6 +5825,7 @@ else { Bad ('a form or ownership exclude has eaten a real product, or a widened 
 # grid, planner, Top 5, free-dinner rotation and the daily reel all read.
 # A present-but-old file is indistinguishable from a fresh one by inspection and the output is a plausible
 # dollar figure either way, so this is the class that only a fixture can hold down.
+if (Use-Unit 'u120-stale-price-feed') {
 $mpPipe = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
 $ffs = Join-Path $mpPipe 'feed-freshness.ps1'
 if (-not (Test-Path $ffs)) { Bad 'meal-prep\pipeline\feed-freshness.ps1 is missing - nothing decides which feed a pricing stage may compute on, and the download-once-forever bug has nothing stopping it coming back' }
@@ -5568,6 +5874,7 @@ else {
     Bad 'the founding "download the feed only if the file is missing" branch is back in compute-v2-perserving.ps1 - that is the exact code that froze the catalog on a July snapshot for nineteen days'
   } else { Ok 'the founding download-only-if-missing branch has not returned to compute-v2-perserving' }
 }
+} # u120-stale-price-feed
 
 # ------------------------------------------------- feed COVERAGE of what is published (2026-08-15)
 # Sibling to the freshness gate above and a different question: freshness asks whether the feed a pricing
@@ -5583,6 +5890,7 @@ else {
 # goulash-pasta showed "Price unavailable in this release" on its two biggest lines and a grand total of
 # "Unavailable". 231 of 544 cards use an alias-spelling bid. Nothing failed at publish time; the pages were
 # simply wrong once a reader opened them, and it was found at post-publish review instead of at publish.
+if (Use-Unit 'u121-feed-coverage-of-what-is-published') {
 $fcp = Join-Path $mpPipe 'feed-covers-published.ps1'
 if (-not (Test-Path $fcp)) { Bad 'meal-prep\pipeline\feed-covers-published.ps1 is missing - nothing checks that the feed a published card FETCHES can actually price it, and a recipe can go live with an empty cost section again' }
 else {
@@ -5637,6 +5945,7 @@ else {
     finally { Remove-Item $fcTmp -Force -ErrorAction SilentlyContinue }
   } else { Skip 'feed-covers-published end-to-end refusal (no grocery\out\smp-feed.json on this machine)' }
 }
+} # u121-feed-coverage-of-what-is-published
 
 # ---------------------------------------------------------------- specs\prose re-sync (2026-08-02, L4)
 # THE ONE WATCHER WHOSE FAILURE IS A REVERT RATHER THAN A WRONG NUMBER. spec-guards.ps1 full mode does not
@@ -5646,6 +5955,7 @@ else {
 # ALL 400 slugs holding both files would have been overwritten by ONE full run - 400 upsell_html, 400
 # cost_closing_html, 362 head.description, 325 intro_html - and three of them would have had their deleted
 # shop_smart dollar figures put back. There is no partial version of that failure.
+if (Use-Unit 'u122-specs-prose-re-sync' -Reads 'meal-prep/db/recipes/*.json') { # reach-fixture-ok: a selection pattern matched against pushed paths; nothing here opens a meal-prep file
 $mpPipe = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
 $sps = Join-Path $mpPipe 'sync-prose-from-spec.ps1'
 if (-not (Test-Path $sps)) { Bad 'sync-prose-from-spec.ps1 is missing - nothing keeps specs\prose in step with the specs, and a full spec-guards run silently reverts the cost redesign' }
@@ -5834,6 +6144,7 @@ else {
     } else { Bad 'spec-guards no longer calls the coherence gates - the checks exist but nothing runs them before publish' }
   }
 }
+} # u122-specs-prose-re-sync
 
 # ---------------------------------------------------------------- identity eval set (2026-08-02, L1)
 # The sidecar's identity lane stays OFF until it beats a HARD eval, and Phase 1's eval was not hard: all
@@ -5843,6 +6154,7 @@ else {
 # own regex REJECTS the product. A rule-accepted product is contested, not clean, and labelling it either
 # way teaches the eval a lie. The regex verdict stays in PowerShell for the same reason the sweep does:
 # Python must never re-implement the corpus rules.
+if (Use-Unit 'u123-identity-eval-set') {
 $eie = Join-Path $root 'export-identity-eval.ps1'
 if (-not (Test-Path $eie)) { Bad 'export-identity-eval.ps1 is missing - the identity lane has no hard eval to be measured against, and the only remaining evidence is the AUC 0.985 that was measured on dramatic errors' }
 else {
@@ -5850,6 +6162,7 @@ else {
   if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'identity eval: an EXCLUDE still overrides an include, and a rule-ACCEPTED product still cannot be mined as a clean negative' }
   else { Bad ('export-identity-eval -SelfTest failed (rc=' + $r.rc + ') - the hard-negative labelling rule is broken, so any AUC measured with it is meaningless: ' + ($r.text -replace "`n", ' ')) }
 }
+} # u123-identity-eval-set
 # ---------------------------------------------------------------- ad-page install contract (2026-08-09)
 # FOUNDING BUG: pull-fareway-ads.ps1 downloaded flyer pages straight into out\fareway\weekly\ and never
 # cleared it. The 2026-08-02..08 ad had 24 pages, the 2026-08-09..15 ad has 22, so weekly-23.jpg and
@@ -5860,6 +6173,7 @@ else {
 # The self-test drives regression-inputs\guard-fixtures\adpages-shrink.json (frozen at 24 -> 22).
 # MUTATION-PROVEN 2026-08-09: deleting the clear step took 3 cases red, blinding the orphan check took the
 # must-fire case red, and restoring the library went green again.
+if (Use-Unit 'u124-ad-page-install-contract') {
 $r = RunPS 'pull-fareway-ads.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELFTEST PASS') {
   Ok 'ad-page install: a 22-page ad over a 24-page one leaves NO orphan pages, and a partial download refuses to half-swap'
@@ -5898,6 +6212,7 @@ foreach ($p in @('pull-fareway-ads.ps1', 'pull-bakers.ps1')) {
     Bad ($p + ' has been unsealed - ' + ($why -join '; ') + ' - the shrinking-ad orphan bug is reachable again')
   }
 }
+} # u124-ad-page-install-contract
 
 # (k1f) PULL PACING IS VERSIONED DATA, NOT A NUMBER IN A CONSOLE SNIPPET (2026-08-15). The Sam's sweep ran
 # unpaced and tripped the bot wall after 207 of 595 (id,term) pairs; the rate that would have prevented it
@@ -5907,6 +6222,7 @@ foreach ($p in @('pull-fareway-ads.ps1', 'pull-bakers.ps1')) {
 # unmirrored 900ms the first time it ran. It also blocks the dangerous shape: a profile must record HOW to
 # pull and never WHAT a store carries, because a term learned "empty" during a wall would stop being
 # checked forever, and unchecked is never not-carried.
+if (Use-Unit 'u125-k1f-pull-pacing-is-versioned-data') {
 $r = RunPS 'audit-pull-profiles.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'all self-tests pass') {
   Ok 'audit-pull-profiles -SelfTest passes with its drift + carriage fixtures armed'
@@ -5919,19 +6235,23 @@ if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'all self-te
 $r = RunPS 'audit-pull-profiles.ps1' @()
 if ($r.rc -eq 0) { Ok 'LIVE-TWIN pull-profiles: every store pull_profile agrees with its agent module' }
 else { Bad ('LIVE-TWIN pull-profiles: drift, or a profile encoding carriage - this reads the LIVE registry and the LIVE modules: ' + ((($r.text -split "`n") | Select-Object -First 6) -join ' | ')) }
+} # u125-k1f-pull-pacing-is-versioned-data
 
 # ---------------------------------------------------------------- rollback TTL ledger (2026-08-21)
 # Brad: "for walmart and sams, a rollback price we just stick with a 30 day TTL from when we first
 # detect". The whole difficulty is in FIRST. A rollback is re-observed on every capture covering its
 # term, so an anchor that re-stamps on each sighting makes the TTL infinite while reading as governed.
 # test-rollback-ttl.ps1 carries the must-fire fixture for exactly that.
+if (Use-Unit 'u126-rollback-ttl-ledger') {
 $r = RunPS 'test-rollback-ttl.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'ROLLBACK-TTL PASSED') { Ok 'rollback TTL: first_seen anchors once and never re-anchors on re-sighting' }
 else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window that re-anchors never expires') }
+} # u126-rollback-ttl-ledger
 
 # ---------------------------------------------------------------- the 2026-08-22 engine-review fixes
 # Each of these carries a MUST-FIRE that fails on the pre-fix code (verified against HEAD~ copies on the day
 # they shipped) and clean twins for what had to keep working. Wired here so a quiet suite proves they still run.
+if (Use-Unit 'u127-the-2026-08-22-engine-review-fixes') {
 $r = RunPS 'test-ad-match.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'AD-MATCH PASSED') { Ok 'ad-match: same-price candidates are scored, a cell cannot inherit another product''s window, the terse butter line still traces' }
 else { Bad ('test-ad-match FAILED (rc=' + $r.rc + ') - a sale cell can again take the window of whichever same-price ad line comes first: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
@@ -5944,6 +6264,7 @@ else { Bad ('test-pu-lib FAILED (rc=' + $r.rc + ') - the shared per-unit math re
 $r = RunPS 'pull-regular-hyvee.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'pull-regular-hyvee -SelfTest: a carried markdown keeps its discount fields; an ended sale reverts to everyday at base_price' }
 else { Bad ('pull-regular-hyvee -SelfTest failed (rc=' + $r.rc + ') - the Hy-Vee carry can launder a markdown into an everyday price again: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+} # u127-the-2026-08-22-engine-review-fixes
 
 # ---------------------------------------------------------------- Hy-Vee shelf tag + store identity (2026-08-21)
 # Brad checked four Hy-Vee cells against his own screen and all four disagreed. Two causes, and the
@@ -5985,6 +6306,7 @@ else { Bad ('pull-regular-hyvee -SelfTest failed (rc=' + $r.rc + ') - the Hy-Vee
 # which product owns a cell is only tolerable because this harness extracts the original verbatim from
 # compare-deals.ps1 on every run and demands identical answers over every distinct name in the live
 # pool - both the compiled path and the PowerShell fallback. Zero divergences or the suite goes red.
+if (Use-Unit 'u128-the-precompiled-matcher') {
 $r = Get-Early 'early:match-lib' (Join-Path $root 'test-match-lib.ps1') @('-Quiet')
 if ($r.rc -eq 0 -and $r.text -match 'MATCH-LIB PASSED') { Ok 'match-lib decides identically to the original Match-Category on every distinct product name (compiled path and fallback)' }
 else { Bad ('test-match-lib FAILED (rc=' + $r.rc + ') - the fast matcher has drifted from the reference, so the board may be assigning products to the wrong commodity: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL|diverg' } | Select-Object -First 4) -join ' | ')) }
@@ -5996,6 +6318,7 @@ else { Bad ('price-split fixtures FAILED (rc=' + $r.rc + ') - the everyday/ad se
 $r = RunPS 'audit-graph-gates.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'graph-gates: a failing gate survives parsing, a later section is not read as a gate, and an unknown verdict is not a pass' }
 else { Bad ('audit-graph-gates -SelfTest failed (rc=' + $r.rc + ') - graph could report every board clean regardless of what its gates said: ' + ($r.text -replace "`n", ' ')) }
+} # u128-the-precompiled-matcher
 
 # ---------------------------------------------------------------- promoting queued prices (2026-08-21)
 # The Recipe Hunter's agent had 99 adjudicated store prices in ingredient-queue.json reaching nothing.
@@ -6004,6 +6327,7 @@ else { Bad ('audit-graph-gates -SelfTest failed (rc=' + $r.rc + ') - graph could
 # the one that matters: an UNRULED term must be skipped, never slugified into an id. "gruyere"
 # slugifies to a perfectly plausible commodity id, which is exactly why inferring would be dangerous -
 # a careless id splits a commodity already priced under another name.
+if (Use-Unit 'u129-promoting-queued-prices' -Reads 'grocery/*.ps1') {
 $r = RunPS 'promote-ingredient-queue.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'promote-queue: only RULED terms promote; an unruled term is skipped rather than guessed, and a price with no size is refused' }
 else { Bad ('promote-ingredient-queue -SelfTest failed (rc=' + $r.rc + ') - queued prices could enter the board under a guessed commodity id: ' + ($r.text -replace "`n", ' ')) }
@@ -6019,6 +6343,7 @@ else { Bad ('price-table fixtures FAILED (rc=' + $r.rc + ') - the everyday/ad se
 $r = RunPS 'test-hyvee-tag-check.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'HYVEE-TAG-CHECK PASSED') { Ok 'Hy-Vee: a price below the store shelf tag is still refused, a real promotion still is not, and no script is pinned to the retired store' }
 else { Bad ('Hy-Vee tag/identity fixtures FAILED (rc=' + $r.rc + ') - either a price the till will not honour can publish again, or a caller is still pulling the retired Omaha #01: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+} # u129-promoting-queued-prices
 # ---------------------------------------------------------------- commodity rules (wired 2026-08-25)
 # THE SAME ORPHAN STORY AS test-matcher-parity BELOW, and caught the same way. test-commodity-rules.ps1
 # was written on 2026-08-24 - the day the Recipe Hunter's 6b run found that chicken-thighs carried
@@ -6028,9 +6353,11 @@ else { Bad ('Hy-Vee tag/identity fixtures FAILED (rc=' + $r.rc + ') - either a p
 # cannot: not 'do the two matcher implementations agree' but 'does this rule do what its own label says'.
 # A frozen regression fixture nobody runs protects nothing, so it is called from here - the same home,
 # and for the same reason, as every other fixture suite in this file.
+if (Use-Unit 'u130-commodity-rules-wired-2026-08-25') {
 $r = RunPS 'test-commodity-rules.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'test-commodity-rules: PASS') { Ok 'commodity rules: every frozen case still resolves the way its label says - the drumsticks-under-thighs class stays closed' }
 else { Bad ('commodity-rule fixtures FAILED (rc=' + $r.rc + ') - a commodity include/exclude rule no longer does what its label claims, which is how the board served THIGHS for drumsticks: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+} # u130-commodity-rules-wired-2026-08-25
 
 # ---------------------------------------------------------------- dead commodities (2026-08-30, queue 2026-08-22-51a5b6)
 # A commodity whose every include requires a word GLOBAL_EXCLUDE blocks, with no relax_global to release
@@ -6043,6 +6370,7 @@ else { Bad ('commodity-rule fixtures FAILED (rc=' + $r.rc + ') - a commodity inc
 # MUST FIRE - the frozen PRE-FIX rulesets, verbatim as they stood before this triage round. Never
 # regenerated from the live commodities.json: both commodities were REPAIRED today, so a fixture read
 # from the tree would encode the fix and the case would pass by finding nothing.
+if (Use-Unit 'u131-dead-commodities') {
 $dcGexFx = @('\bsauce\b', '\bfrozen\b', '\bcanned\b', '\bmeal\b', '\bcake\b', '\bwater\b')
 $dcCgs = [pscustomobject]@{ id = 'chili-garlic-sauce'
   include = @('\b(?:chili|chilli|chile)\s+garlic\s+sauce\b', '\bgarlic\s+(?:chili|chilli|chile)\s+sauce\b') }
@@ -6099,6 +6427,7 @@ if ($null -eq $dcGexLive) {
     Bad ("dead-commodity: " + $dcDead.Count + " commodit(y/ies) can NEVER match - every include requires a word GLOBAL_EXCLUDE blocks and relax_global does not release: " + ($dcDead -join '; ') + ". Add that token to the commodity's relax_global, or narrow its includes. Do NOT remove the global exclude.")
   }
 }
+} # u131-dead-commodities
 
 # ---------------------------------------------------------------- unit vocabulary (2026-08-30, queue 2026-08-22-51a5b6)
 # The SIBLING of the dead-commodity class above, and the reason that round bounced. There the matcher can
@@ -6114,6 +6443,7 @@ if ($null -eq $dcGexLive) {
 # MUST FIRE - the frozen PRE-FIX unit values, verbatim as they stood before this round. Never regenerated
 # from the live commodities.json: all seven were repaired today, so a fixture read from the tree would
 # encode the fix and the case would pass by finding nothing.
+if (Use-Unit 'u132-unit-vocabulary') {
 $uvVocabFx = @('lb', 'oz', 'floz', 'gallon', 'each', 'dozen')
 foreach ($uvFx in @(
     @{ id = 'coconut-aminos';    unit = 'fl_oz' },   # 5 commodities spelled it this way, 0 cells between them
@@ -6134,6 +6464,7 @@ foreach ($uvOk in @('lb', 'oz', 'floz', 'gallon', 'each', 'dozen')) {
   if ((Test-CommodityUnitIsPriceable ([pscustomobject]@{ id = 'twin-' + $uvOk; unit = $uvOk }) $uvVocabFx) -eq '') { Ok ("unit-vocabulary: '" + $uvOk + "' stays silent - it is an arm of Convert-ToUnit's switch") }
   else { Bad ("unit-vocabulary: '" + $uvOk + "' was called unpriceable, but Convert-ToUnit converts it - the check is too eager") }
 }
+} # u132-unit-vocabulary
 
 # ---- THE DOCUMENTED-EXCEPTION VALVE (2026-08-30, plan-2026-08-30-2 item 2026-08-22-51a5b6) ----------
 # aluminum-foil declares sq_ft ON PURPOSE. Pricing it per 'each' was tried on the live board this morning
@@ -6144,6 +6475,7 @@ foreach ($uvOk in @('lb', 'oz', 'floz', 'gallon', 'each', 'dozen')) {
 # whether the valve can be made to excuse something it was never given: the same unit somewhere else, a
 # different unit here, or an entry nobody finished writing. If any of them ever passes, the valve has
 # become a blanket and the check is decorative.
+if (Use-Unit 'u133-the-documented-exception-valve') {
 $uvExcFx = @(
   [pscustomobject]@{ id = 'aluminum-foil'; unit = 'sq_ft'; reason = 'measured: per-roll crowns the worst value per sq ft'; review_by = '2026-10-01' }
 )
@@ -6217,6 +6549,7 @@ if ($null -eq $uvVocab) {
     Bad ("unit-vocabulary: " + $uvBad.Count + " commodit(y/ies) declare a unit Convert-ToUnit cannot convert, so they can NEVER hold a board cell however well their rules match: " + ($uvBad -join '; ') + ". Correct the unit to one the engine converts (" + (($uvVocab | Sort-Object) -join ', ') + "), or add an arm to Convert-ToUnit - never leave the two disagreeing.")
   }
 }
+} # u133-the-documented-exception-valve
 
 # ---------------------------------------------------------------- derived size density (2026-08-30)
 # THE CROSS-MEASURE HALF OF THE SAZON RULE. build-sams-deals' Build-Row back-computes a package size as
@@ -6233,7 +6566,9 @@ if ($null -eq $uvVocab) {
 . (Join-Path $PSScriptRoot 'derived-size-density-lib.ps1')
 
 # The marker every fixture is judged against, frozen. The live arm reads the real one out of the builder.
+if (Use-Unit 'u134-derived-size-density') {
 $dsMk = 'derived lp/up'
+} # u134-derived-size-density
 function New-DsRow($item, $size, $ad, $up, $store) {
   [pscustomobject]@{ store = $store; item = $item; size = $size; ad_price = $ad; sams_unit_price = $up; qty_basis = ('package; qty ' + $dsMk) }
 }
@@ -6241,6 +6576,7 @@ function New-DsRow($item, $size, $ad, $up, $store) {
 # MUST FIRE - the founding row, frozen verbatim as it stands in sams-deals-2026-08-15.json and
 # 2026-08-25.json. Never regenerated from the capture tree: the row is RULED today, and a fixture read
 # through the ruling valve would encode the ruling and the case would pass by finding nothing.
+if (Use-Unit 'u134-derived-size-density') {
 $dsFx = New-DsRow "Member's Mark Peanut Oil, 35 lbs." '799.429 fl oz' '$55.96' '$0.07/foz' "Sam's Club"
 $dsV = Test-DerivedSizeDensity $dsFx $dsMk
 if ($dsV.Status -eq 'flag' -and [math]::Abs([double]$dsV.Density - 0.672) -lt 0.002) {
@@ -6277,10 +6613,12 @@ else { Bad ("derived-size-density: the floor has been widened to " + $dsBand.Flo
 $dsV = Test-DerivedSizeDensity (New-DsRow "Member's Mark Clear Frying Oil 35 lbs." '571.143 fl oz' '$39.98' '$0.07/foz' "Sam's Club") $dsMk
 if ($dsV.Status -eq 'ok') { Ok ("derived-size-density: the correctly-sized 35 lb frying oil jug stays silent at " + [math]::Round([double]$dsV.Density, 3) + " g/mL - the control for the two flagged jugs is in the same store on the same day") }
 else { Bad ("derived-size-density: the CORRECT 35 lb frying oil row was called " + $dsV.Status + " (" + $dsV.Why + ") - the check is too eager and would condemn real rows") }
+} # u134-derived-size-density
 
 # ---- THE ABSTENTIONS, which are what stop this check from being a false-positive machine -------------
 # A multipack whose name states ONE unit's size looks exactly like a bad derivation. The discriminator is
 # arithmetic, not vocabulary: a multipack's derived size is a whole-number multiple of the named size.
+if (Use-Unit 'u135-the-abstentions-which-are-what-stop') {
 foreach ($dsP in @(
     @{ n = 'Capri Sun 100% Juice Blend from Concentrate Juice Boxes, 10 Pouches, for School Lunches and On-the-Go Hydration, Berry with Added Ingredients and Other Natural Flavor, All Natural Ingredients, 6 oz'; z = '60.303 fl oz'; a = '$3.98'; u = '$0.066/foz'; k = 10 },
     @{ n = 'Knorr Professional Ultimate Liquid Concentrated Chicken Base, Shelf Stable, 32oz';                                  z = '127.853 fl oz'; a = '$24.42'; u = '$0.191/foz'; k = 4 },
@@ -6333,12 +6671,14 @@ else { Bad ('derived-size-density: a fluid-ounce measure was read as a weight ('
 $dsW = Get-NameStatedWeights "Member's Mark Peanut Oil, 35 lbs."
 if (@($dsW).Count -eq 1 -and [math]::Abs([double]$dsW[0].NominalOz - 560) -lt 0.001) { Ok 'derived-size-density: "35 lbs." reads as exactly one weight of 560 nominal oz - the fluid-ounce case above is a real discrimination, not a dead parser' }
 else { Bad ('derived-size-density: "35 lbs." did not read as one 560-oz weight (' + @($dsW).Count + ' found) - the weight parser is broken, so every clean verdict above is vacuous') }
+} # u135-the-abstentions-which-are-what-stop
 
 # ---- THE RULING VALVE -------------------------------------------------------------------------------
 # A flagged row is wrong DATA and cannot be repaired where it sits (a capture records what the store
 # said). So the valve is a ledger of adjudicated rows, and it pins the SIZE. These cases exist because
 # the danger of any allowlist is that it stops being narrow: each asks whether the valve can be made to
 # excuse something it was never given.
+if (Use-Unit 'u136-the-ruling-valve') {
 $dsRuleFx = @([pscustomobject]@{ store = "Sam's Club"; name = "Member's Mark Peanut Oil, 35 lbs."; size = '799.429 fl oz'; reason = 'measured: 35 lb of peanut oil is 587.3 fl oz, not 799.429'; ruled_by = 'claude'; review_by = '2026-10-01' })
 $dsR = Test-DerivedSizeRuling "Sam's Club" "Member's Mark Peanut Oil, 35 lbs." '799.429 fl oz' $dsRuleFx
 if ($dsR.Ruled) { Ok 'derived-size-density ruling: the complete peanut oil entry covers exactly its own (store, name, size)' }
@@ -6360,12 +6700,14 @@ foreach ($dsH in @(
   if (-not $dsR.Ruled) { Ok ("derived-size-density ruling: an entry with " + $dsH.what + " covers nothing - a half-written ledger row cannot silence the check it annotates") }
   else { Bad ("derived-size-density ruling: an entry with " + $dsH.what + " was allowed to cover a row - the valve accepts undocumented rulings") }
 }
+} # u136-the-ruling-valve
 
 # ---- THE PRODUCTION ARM, run daily from check-ad-cycles' test-auditors call -------------------------
 # THE MARKER READER FIRST. Reading it out of build-sams-deals is the point; a silent parse failure would
 # take the sweep down with it and every row would read as not-derived, which is indistinguishable from
 # clean. (Measured while writing this: the pattern was first written in a double-quoted string, where
 # "\$basis" is a backslash plus an EMPTY variable expansion, and it matched nothing.)
+if (Use-Unit 'u137-the-production-arm-run-daily-from') {
 $dsMkLive = Get-DerivedQtyMarker $PSScriptRoot
 if (-not $dsMkLive) {
   Bad 'derived-size-density: could not read the derived-quantity marker out of build-sams-deals.ps1 - the live arm did not run, which is not the same as a clean result'
@@ -6415,6 +6757,7 @@ if (-not $dsMkLive) {
     Bad ("derived-size-density: " + $dsBad.Count + " capture row(s) hold a back-computed size the product cannot physically have, so any per-unit price built from them is wrong by that factor: " + ($dsBad -join '; ') + ". Verify the real package size at the store, then either rule the row in derived-size-density-rulings.json with the arithmetic, or block its cell in known-wrong.json if it reaches the board. Do NOT edit the capture - it is the record of what the store said.")
   }
 }
+} # u137-the-production-arm-run-daily-from
 
 # ---------------------------------------------------------------- heartbeat CONTENT-CURRENCY (2026-09-04, queue 2026-09-04-2feb5c)
 # AN OUTPUT THAT IS REWRITTEN ONLY WHEN IT CHANGES HAS NO mtime LIVENESS SIGNAL AT ALL. health-heartbeat
@@ -6426,6 +6769,7 @@ if (-not $dsMkLive) {
 # The decision is EXTRACTED AND RUN, never transcribed - a copy of a decision is a decision that can drift.
 # The two cases below are opposites and both are frozen. Do NOT regenerate them from public\free-dinners.json:
 # the next time the rotation flips, the shape they encode disappears and both would pass by finding nothing.
+if (Use-Unit 'u138-heartbeat-content-currency') {
 $hbSrc = Get-Content (Join-Path $root 'health-heartbeat.ps1') -Raw
 # AN EMPTY REGISTRY MUST READ AS BLIND, NOT AS HEALTHY (2026-09-06, PLAN-top5 area 5 §5.2.4).
 # health-heartbeat sets EAP='Continue', so before the reader sweep an unreadable expected-automations.json
@@ -6523,6 +6867,7 @@ if (-not $hbM.Success) {
   } else { Bad 'heartbeat content-currency: the live public/free-dinners.json row no longer declares currency_field, so it is back on the 30h mtime rule and will page again from ~30h after every flip' }
   Remove-Item $ccDir -Recurse -Force -ErrorAction SilentlyContinue
 }
+} # u138-heartbeat-content-currency
 
 # ---------------------------------------------------------------- matcher parity (wired 2026-08-21)
 # WHICH COMMODITY OWNS A PRODUCT NAME is decided by Match-Category in compare-deals, and re-implemented in
@@ -6533,10 +6878,12 @@ if (-not $hbM.Success) {
 # SAMPLED, not exhaustive: the estate holds ~28.5k product names and the full sweep is minutes. 400 is
 # enough to catch a systematic divergence (the failure mode is a copy drifting for a WHOLE rule, not for
 # one unlucky name) while keeping this suite quick enough that people keep running it.
+if (Use-Unit 'u139-matcher-parity-wired-2026-08-21') {
 $r = Get-Early 'early:matcher-parity' (Join-Path $root 'test-matcher-parity.ps1') @('-Sample','400')
 if ($r.rc -eq 0 -and $r.text -match 'MATCHER-PARITY OK') { Ok 'matcher parity: every auditor copy of Match-Category still assigns names exactly as the engine does' }
 elseif ($r.rc -eq 3 -or $r.text -match 'FATAL') { Bad ('matcher parity could not evaluate (rc=' + $r.rc + ') - it proved nothing, which is not the same as agreement') }
 else { Bad ('matcher parity FAILED (rc=' + $r.rc + ') - an auditor no longer describes the engine that builds the board; audit-household-in-food is a HARD guard, so it may be judging cells under the wrong commodity') }
+} # u139-matcher-parity-wired-2026-08-21
 
 # COMPLETION MARKER (2026-08-08). This file is the founding case for the whole contract: on 2026-08-08 it
 # threw 242 checks before this point, printed 176 lines of PASS, and exited 1 - indistinguishable from an
@@ -6544,9 +6891,18 @@ else { Bad ('matcher parity FAILED (rc=' + $r.rc + ') - an auditor no longer des
 # REACHED THE END. check-ad-cycles requires it before believing a quiet result.
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 # ONE decision, taken by the pure function above, so the cases that prove it cannot drift from it.
+# OUTSIDE EVERY UNIT, ALWAYS: a verdict inside a unit is a verdict a selective run can skip.
 $verdict = Get-AuditorsVerdict $failed $hygiene $pass $skipped
-Write-Output $verdict.line
-Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=$failed hygiene=$hygiene skipped=$skipped"
+$unitNote = ''
+if ($script:UnitsSkipped.Count -gt 0) {
+  # A SELECTIVE RUN (see Use-Unit) states what it covered and never uses the PASS wording, whatever it found.
+  $unitsAll = $script:UnitsRan.Count + $script:UnitsSkipped.Count
+  Write-Output ('test-auditors SELECTIVE  ran ' + ($pass + $failed + $hygiene + $skipped) + ' case(s) in ' + $script:UnitsRan.Count + ' of ' + $unitsAll + ' unit(s) (' + $failed + ' failed, ' + $pass + ' passed' + $(if ($hygiene) { ', ' + $hygiene + ' HYGIENE' } else { '' }) + $(if ($skipped) { ', ' + $skipped + ' SKIPPED' } else { '' }) + '); ' + $script:UnitsSkipped.Count + ' unit(s) were not selected and proved nothing. NOT a full run and NOT a pass.')
+  $unitNote = ' selective=1 units_ran=' + $script:UnitsRan.Count + ' units_skipped=' + $script:UnitsSkipped.Count
+} else {
+  Write-Output $verdict.line
+}
+Write-GuardComplete -Name 'test-auditors' -Summary ("pass=$pass failed=$failed hygiene=$hygiene skipped=$skipped" + $unitNote)
 exit $verdict.rc
 } finally { Sweep-FxPaths }
 
