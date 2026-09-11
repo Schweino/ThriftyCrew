@@ -341,6 +341,8 @@ $static = @(
   @{ f = 'ops\audit-typed-param-shadow.ps1';   n = 'no NEW assignment reuses a typed parameter''s name with a value of another kind, which converts it rather than making a local - a ratchet over the AST, hermetic, reads source only' }
   # 8253ded82 glued a self-test's closing if/else onto its last case line, so the branch never exited and every push's gate ran a live three-store pull and scored it ok.
   @{ f = 'ops\audit-keyword-arguments.ps1';    n = 'no tracked .ps1 carries if, else, elseif, foreach, while, exit or return as a bare command ARGUMENT - a statement glued onto a command line never runs as one; a gate at zero, hermetic, reads source only' }
+  # 2026-09-11: this watcher ran only inside test-auditors, which this file skips, and walked grocery\ only; wave-preaudit's drill died mid-suite on the class it watches.
+  @{ f = 'grocery\test-native-stderr-eap.ps1'; n = 'no NEW native child redirects its stderr under EAP=Stop anywhere in the repo - the shell fixtures of the 2026-08-22 bug, plus an AST scan ratcheted by named site; hermetic, reads source only' }
   # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half
   # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
   # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.
@@ -745,10 +747,16 @@ if ($fail.Count) {
   # the child a broken pipe mid-write; harmless for a one-line rev-parse and a bad habit to
   # spread into a gate. The output is captured and indexed instead.
   $head = @(@($fail | ForEach-Object { "$_" })[0..([Math]::Min(11, $fail.Count - 1))])
+  # 'Continue' AROUND THE REDIRECT, NOT A CATCH ALONE (2026-09-11). Under this file's 'Stop' a git stderr line is a
+  # terminating throw; the catch kept the gate alive and threw git's answer away, so one warning recorded an empty
+  # commit. grocery\test-native-stderr-eap.ps1 watches the shape repo-wide. The catch stays for a missing git.
   $commit = ''
-  try { $c = @(& git -C $repo rev-parse --short HEAD 2>$null); if ($c.Count) { $commit = "$($c[0])" } } catch { }
   $branch = ''
-  try { $b = @(& git -C $repo rev-parse --abbrev-ref HEAD 2>$null); if ($b.Count) { $branch = "$($b[0])" } } catch { }
+  $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+  try {
+    $c = @(& git -C $repo rev-parse --short HEAD 2>$null); if ($c.Count) { $commit = "$($c[0])" }
+    $b = @(& git -C $repo rev-parse --abbrev-ref HEAD 2>$null); if ($b.Count) { $branch = "$($b[0])" }
+  } catch { } finally { $ErrorActionPreference = $prevEap }
   $null = Write-TcEvent -Kind 'gate-red' -Producer 'ops\run-gates.ps1' -Data @{
     failed  = $fail.Count
     passed  = $pass

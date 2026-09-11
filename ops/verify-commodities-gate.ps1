@@ -133,12 +133,17 @@ if ($SelfTest) {
   $g = Join-Path $env:TEMP ('cgfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
   [void](New-Item -ItemType Directory -Path $g -Force)
   try {
-    & git -C $g init -q -b main . 2>&1 | Out-Null
-    & git -C $g config user.email t@t 2>&1 | Out-Null
-    & git -C $g config user.name T 2>&1 | Out-Null
-    $src = Join-Path $g 'withbom.json'
-    [IO.File]::WriteAllBytes($src, ([byte[]](0xEF, 0xBB, 0xBF) + [Text.Encoding]::UTF8.GetBytes('{"a":1}')))
-    & git -C $g add withbom.json 2>&1 | Out-Null
+    # 'Continue' around the fixture's git calls: under this file's 'Stop' a git hint on stderr is a terminating
+    # throw, not text (grocery\test-native-stderr-eap.ps1).
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try {
+      & git -C $g init -q -b main . 2>&1 | Out-Null
+      & git -C $g config user.email t@t 2>&1 | Out-Null
+      & git -C $g config user.name T 2>&1 | Out-Null
+      $src = Join-Path $g 'withbom.json'
+      [IO.File]::WriteAllBytes($src, ([byte[]](0xEF, 0xBB, 0xBF) + [Text.Encoding]::UTF8.GetBytes('{"a":1}')))
+      & git -C $g add withbom.json 2>&1 | Out-Null
+    } finally { $ErrorActionPreference = $prevEap }
     $dst = Join-Path $g 'copy.json'
     $okSave = Save-GitBlob -Repo $g -Spec ':withbom.json' -Dst $dst
     $orig = [IO.File]::ReadAllBytes($src)
@@ -157,7 +162,10 @@ if ($SelfTest) {
 
 # ---- live path -------------------------------------------------------------------------------------
 $staged = @()
-try { $staged = @(& git -C $repo diff --cached --name-only --diff-filter=ACM 2>$null) } catch { }
+# 'Continue' around the redirect, not the catch alone. Under 'Stop' one git warning on stderr threw into the catch,
+# the staged set read EMPTY, and a rule change passed as "not applicable" (grocery\test-native-stderr-eap.ps1).
+$prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+try { $staged = @(& git -C $repo diff --cached --name-only --diff-filter=ACM 2>$null) } catch { } finally { $ErrorActionPreference = $prevEap }
 $inScope = Test-StagedTouchesRules $staged
 if (@($inScope).Count -eq 0) {
   Write-Output 'commodities-gate: no matching-rule input is staged - not applicable to this commit'

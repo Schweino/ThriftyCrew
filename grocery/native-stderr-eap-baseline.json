@@ -1,0 +1,9 @@
+{
+  "note": "NAMED high-water mark for native stderr redirects under EAP=Stop that the watcher could not read as guarded, one entry per site as path|command. A site not listed fails grocery\\test-native-stderr-eap.ps1. Only a plain run is safe at push time: it never writes this file. -Tighten records a believable fall; -Accept records the current set.",
+  "generated": "2026-09-11T16:37:32",
+  "count": 2,
+  "sites": [
+    "meal-prep\\pipeline\\wave-preaudit.ps1|& powershell @a 2>&1",
+    "meal-prep\\pipeline\\wave-preaudit.ps1|& powershell @a 2>&1"
+  ]
+}

@@ -123,7 +123,10 @@ if ($SelfTest) {
   New-Item -ItemType Directory -Path $tmp -Force | Out-Null
   try {
     Push-Location $tmp
-    git init -q 2>$null | Out-Null
+    # Under 'Stop' a redirected native stderr line is a terminating throw in PS 5.1, so git init runs under
+    # Continue (watched by grocery\test-native-stderr-eap.ps1).
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try { git init -q 2>$null | Out-Null } finally { $ErrorActionPreference = $prevEap }
     New-Item -ItemType Directory -Path (Join-Path $tmp 'lessons') -Force | Out-Null
     New-Item -ItemType Directory -Path (Join-Path $tmp 'grocery') -Force | Out-Null
     [IO.File]::WriteAllText((Join-Path $tmp 'lessons\lesson-04-the-gap-is-the-score.md'), "# Week 4`n")

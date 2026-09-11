@@ -350,8 +350,14 @@ if ($__ffSelfTest) {
   $probe = Join-Path $env:TEMP 'ff-clobber-probe.ps1'
   ("param([switch]`$SelfTest)`r`n. '" + $PSCommandPath + "'`r`nWrite-Output ('SelfTest=' + `$SelfTest)") |
     Set-Content $probe -Encoding UTF8
-  $probeOut = ((& powershell -NoProfile -ExecutionPolicy Bypass -File $probe -SelfTest 2>&1 |
-                 ForEach-Object { [string]$_ }) -join ' ').Trim()
+  # EAP 'Continue' around the child only: under the suite's 'Stop', PS 5.1 turns the child's first stderr
+  # line into a terminating throw HERE. Not native-lib: this file is dot-sourced, so it takes no new lib.
+  # grocery\test-native-stderr-eap.ps1 is the watcher.
+  $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+  try {
+    $probeOut = ((& powershell -NoProfile -ExecutionPolicy Bypass -File $probe -SelfTest 2>&1 |
+                   ForEach-Object { [string]$_ }) -join ' ').Trim()
+  } finally { $ErrorActionPreference = $prevEap }
   Remove-Item $probe -Force -ErrorAction SilentlyContinue
   TT 'MUST FIRE  dot-sourcing this must not clobber the caller''s own -SelfTest switch' `
      ($probeOut -match 'SelfTest=True') $probeOut

@@ -248,7 +248,10 @@ function New-TcSandbox([string]$rev) {
       # lib\ is pinned with the world it belongs to: an old script against today's lib is -Mode Script's question.
       $libNames = @(& git -C $repo ls-tree --name-only ("{0}:lib" -f $rev)) | Where-Object { $_ -match '\.ps1$' }
       foreach ($n in $libNames) {
-        $blob = & git -C $repo show ("{0}:lib/{1}" -f $rev, $n) 2>$null
+        # 'Continue' around each redirect: under 'Stop' git's "does not exist" on stderr threw instead of reaching
+        # the exit-code check below (grocery\test-native-stderr-eap.ps1).
+        $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+        try { $blob = & git -C $repo show ("{0}:lib/{1}" -f $rev, $n) 2>$null } finally { $ErrorActionPreference = $prevEap }
         if ($LASTEXITCODE -eq 0) { Set-Content -LiteralPath (Join-Path $libSb $n) -Value $blob -Encoding UTF8 }
       }
     } else {
@@ -258,7 +261,8 @@ function New-TcSandbox([string]$rev) {
       $names = @($leaf)
     }
     foreach ($n in $names) {
-      $blob = & git -C $repo show ("{0}:{1}/{2}" -f $rev, $srcRel, $n) 2>$null
+      $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+      try { $blob = & git -C $repo show ("{0}:{1}/{2}" -f $rev, $srcRel, $n) 2>$null } finally { $ErrorActionPreference = $prevEap }
       if ($LASTEXITCODE -eq 0) { Set-Content -LiteralPath (Join-Path $sb $n) -Value $blob -Encoding UTF8 }
     }
   }
@@ -274,7 +278,9 @@ function Invoke-TcArm([string]$sb, [string]$label) {
   $inSandbox = Join-Path $sb ('out\captures\' + (Split-Path $inFull -Leaf))
   $log = Join-Path $env:TEMP ("tc-oracle-$label.log")
   $argList = Get-TcArmArgList -ScriptPath (Join-Path $sb $leaf) -InPath $inSandbox -ScriptArgs $ScriptArgs
-  & powershell @argList > $log 2>$null
+  # One stderr line from the arm used to throw here under 'Stop' and lose both arms' verdicts.
+  $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+  try { & powershell @argList > $log 2>$null } finally { $ErrorActionPreference = $prevEap }
   $code = $LASTEXITCODE
   $out = Join-Path $sb $OutputRelPath
   $rows = @()

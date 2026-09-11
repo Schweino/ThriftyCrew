@@ -245,8 +245,14 @@ Write-Output ("rotation: $flips flip(s), $errors error(s); state + recipes-db + 
 if ($flips -gt 0 -and $errors -eq 0) {
   Write-Output 'set changed - resyncing the paywall structured data to the new visibilities'
   try {
-    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'pipeline\sync-paywall-schema.ps1') *>&1 |
-      Select-Object -Last 3 | ForEach-Object { Write-Output ("  paywall-schema: " + $_) }
+    # EAP 'Continue' around the redirect only: a native stderr line under 'Stop' is a terminating throw in
+    # PS 5.1, so a resync that ran landed in the catch below as failed (grocery\test-native-stderr-eap.ps1).
+    # The exit code still carries the verdict.
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try {
+      & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'pipeline\sync-paywall-schema.ps1') *>&1 |
+        Select-Object -Last 3 | ForEach-Object { Write-Output ("  paywall-schema: " + $_) }
+    } finally { $ErrorActionPreference = $prevEap }
     if ($LASTEXITCODE -ne 0) { throw "sync-paywall-schema exited $LASTEXITCODE" }
   } catch {
     Write-Output ("rotation WARNING: the paywall schema resync failed (" + $_.Exception.Message + ") - the freed recipes still tell Google they are gated until it runs. Re-run pipeline\sync-paywall-schema.ps1.")
@@ -256,8 +262,12 @@ if ($flips -gt 0 -and $errors -eq 0) {
 if ($flips -gt 0 -and $errors -eq 0) {
   Write-Output 'set changed - republishing the hub so its baked badges match the new rotation'
   try {
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-hub-grid.ps1') -Publish *>&1 |
-      Select-Object -Last 2 | ForEach-Object { Write-Output ("  hub: " + $_) }
+    # Same EAP 'Continue' guard as the resync above (grocery\test-native-stderr-eap.ps1).
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try {
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-hub-grid.ps1') -Publish *>&1 |
+        Select-Object -Last 2 | ForEach-Object { Write-Output ("  hub: " + $_) }
+    } finally { $ErrorActionPreference = $prevEap }
     if ($LASTEXITCODE -ne 0) { throw "build-hub-grid exited $LASTEXITCODE" }
   } catch {
     Write-Output ("rotation INCOMPLETE: flips applied but the hub republish failed (" + $_.Exception.Message + ") - the hub's baked FREE badges are one rotation stale until it publishes. Re-run build-hub-grid.ps1 -Publish.")

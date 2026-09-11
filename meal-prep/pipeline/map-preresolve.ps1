@@ -115,6 +115,7 @@ $mp   = Split-Path -Parent $here                      # ...\meal-prep
 $repo = Split-Path -Parent $mp                        # ...\ThriftyCrew
 $script:repoRoot = $repo
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'grocery\native-lib.ps1')   # Invoke-Native: a child's stderr line under 'Stop' is a terminating throw in PS 5.1
 
 $script:VOCAB_PS   = Join-Path $here 'ingredient-vocab.ps1'
 $script:RESOLVE_PS = Join-Path $here 'ingredient-resolutions.ps1'
@@ -328,9 +329,11 @@ function Invoke-Child {
     else { $parts.Add((ConvertTo-PsArg $a)) | Out-Null }
   }
   $cmd = ($parts.ToArray() -join ' ') + '; exit $LASTEXITCODE'
-  $out = & powershell -NoProfile -ExecutionPolicy Bypass -Command $cmd 2>&1
-  $rc = $LASTEXITCODE
-  $text = (@($out | ForEach-Object { [string]$_ }) -join "`n")
+  # Invoke-Native, NOT `2>&1`: under 'Stop' in PS 5.1 the child's first stderr line is a terminating
+  # throw in THIS script, so the caller died mid-batch. grocery\test-native-stderr-eap.ps1 is the watcher.
+  $res = Invoke-Native 'powershell' '-NoProfile' '-ExecutionPolicy' 'Bypass' '-Command' $cmd
+  $rc = $res.ExitCode
+  $text = ($res.Lines -join "`n")
   return [pscustomobject]@{ rc = $rc; text = $text }
 }
 
@@ -370,7 +373,11 @@ function Get-CompositeSplits {
   if (-not (Test-Path $script)) { return @{ splits = $out; why = 'no coverage_check.py beside this script' } }
   $req = @{ terms = @($Terms); resolved = @($ResolvedWhole); names = @($Names) } | ConvertTo-Json -Depth 4 -Compress
   try {
-    $txt = $req | & $py $script --split-terms 2>&1
+    # EAP 'Continue' around the splitter only: under 'Stop' in PS 5.1 python's first stderr line is a
+    # terminating throw, and the catch below then lost the JSON it printed. Stdin is piped, so not
+    # native-lib. grocery\test-native-stderr-eap.ps1 is the watcher.
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try { $txt = $req | & $py $script --split-terms 2>&1 } finally { $ErrorActionPreference = $prevEap }
     $text = (@($txt | ForEach-Object { [string]$_ }) -join "`n").Trim()
     $line = @($text -split "`n" | Where-Object { $_.Trim().StartsWith('{') } | Select-Object -Last 1)[0]
     if (-not $line) { return @{ splits = $out; why = ("the splitter printed no JSON: {0}" -f $text.Substring(0, [Math]::Min(160, $text.Length))) } }

@@ -43,7 +43,10 @@ Say "=== ThriftyCrew local inference install ==="
 
 # --- 1. verify the GPU actually is what this script assumes -----------------
 $cc = $null
-try { $cc = (& nvidia-smi --query-gpu=compute_cap --format=csv,noheader 2>$null | Select-Object -First 1) } catch { }
+# Under 'Stop' a redirected native stderr line is a terminating throw in PS 5.1, so this probe runs under
+# Continue; the catch still covers a missing nvidia-smi (watched by grocery\test-native-stderr-eap.ps1).
+$prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+try { $cc = (& nvidia-smi --query-gpu=compute_cap --format=csv,noheader 2>$null | Select-Object -First 1) } catch { } finally { $ErrorActionPreference = $prevEap }
 if (-not $cc) {
     Write-Warning "nvidia-smi not found. A CUDA GPU is required for a usable decode rate."
 } else {

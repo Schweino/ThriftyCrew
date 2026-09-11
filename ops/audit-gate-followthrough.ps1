@@ -71,13 +71,16 @@ function Get-FollowupCommits {
   <# [hash] committed since $SinceIso that touch the gate file or name it in the message. #>
   param([string]$Gate, [string]$SinceIso, [string]$Root)
   $hashes = @{}
+  # 'Continue' around the redirects: under 'Stop' one git stderr line threw into the catch below and the gate read
+  # as having no follow-up commits at all (grocery\test-native-stderr-eap.ps1).
+  $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
   try {
     $a = @(& git -C $Root log ("--since=" + $SinceIso) --format=%h -- $Gate 2>$null)
     foreach ($h in $a) { if ("$h".Trim()) { $hashes["$h".Trim()] = $true } }
     $leaf = [IO.Path]::GetFileNameWithoutExtension($Gate)
     $b = @(& git -C $Root log ("--since=" + $SinceIso) --format=%h ("--grep=" + $leaf) 2>$null)
     foreach ($h in $b) { if ("$h".Trim()) { $hashes["$h".Trim()] = $true } }
-  } catch { }
+  } catch { } finally { $ErrorActionPreference = $prevEap }
   return ,@($hashes.Keys)
 }
 

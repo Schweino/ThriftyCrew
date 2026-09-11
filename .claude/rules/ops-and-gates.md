@@ -25,6 +25,14 @@ everything else honest, so a defect here is silent by construction.
 - **A self-test that greps its own source cannot fail.** Build needles by concatenation, and never let
   a detector scan itself - `run-gates` and `audit-write-seam` both carry that exclusion for a reason.
   [[selftest-greps-its-own-source]]
+- **A catch around a native redirect is not a guard** (2026-09-11). Under `$ErrorActionPreference = 'Stop'`
+  EVERY redirect of a native child's stderr (`2>&1`, `2>$null`, `*>&1`, `> log 2>$null`, a bare `git ... 2>&1`)
+  makes its first stderr line a terminating throw, and `try { } catch { }` keeps the caller alive while throwing
+  the child's answer away: one git warning read as an empty staged set in `verify-commodities-gate`. Fix with
+  `Invoke-Native`/`Invoke-NativeScript` (`grocery\native-lib.ps1`), or `$prevEap = $ErrorActionPreference;
+  $ErrorActionPreference = 'Continue'` as its own statement before `try { call } finally { restore }`.
+  `grocery\test-native-stderr-eap.ps1` is the gate in `run-gates`: an AST scan of every `.ps1` below the root,
+  ratcheted by named site. It reads the preference lexically, so a guard it cannot see before the call is a site.
 - **Three fixture labels, three jobs** (Brad, 2026-09-07). `CLEAN TWIN` meant two OPPOSITE things
   here, so "add a must-fire and a clean twin" could be read either way:
   - `MUST FIRE` - the founding bug. The detector flags it, or the guard has stopped guarding.

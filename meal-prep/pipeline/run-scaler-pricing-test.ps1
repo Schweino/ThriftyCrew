@@ -32,6 +32,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+. (Join-Path (Split-Path (Split-Path $here -Parent) -Parent) 'grocery\native-lib.ps1')   # Invoke-Native: the only safe native stderr capture under EAP='Stop'
 
 if (-not $NodeExe) {
   $cand = Get-Command node -ErrorAction SilentlyContinue
@@ -83,8 +84,11 @@ function Invoke-Lane([string]$generator, [string]$tag, [bool]$negative) {
   $page = Join-Path $env:TEMP ("tc-fixture-" + $tag + "-" + $(if ($negative) { 'negative' } else { 'positive' }) + ".html")
   if ($negative) { & (Join-Path $here $generator) -OutFile $page -NegativeTest | Out-Null }
   else           { & (Join-Path $here $generator) -OutFile $page | Out-Null }
-  $raw = & $NodeExe $runner $page $JsdomEnv 2>&1
-  $code = $LASTEXITCODE
+  # Invoke-Native, never `2>&1`: under EAP=Stop node's first stderr line (a PAGE ERROR) is a terminating
+  # throw in PS 5.1 and kills the guard before it reports (grocery\test-native-stderr-eap.ps1).
+  $res = Invoke-Native $NodeExe $runner $page $JsdomEnv
+  $raw = $res.Lines
+  $code = $res.ExitCode
   $json = $null
   foreach ($line in @($raw)) { $t = ([string]$line).Trim(); if ($t.StartsWith('{')) { try { $json = $t | ConvertFrom-Json } catch {} } }
   return [pscustomobject]@{ tag=$tag; exit=$code; result=$json; raw=@($raw) }

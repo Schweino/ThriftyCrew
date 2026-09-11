@@ -71,7 +71,11 @@ try {
   # entries across the pull instead of trusting the log. Same fix as run-daily-local.ps1.
   $repoRoot = Split-Path $root -Parent
   $stashBefore = @(git -C $repoRoot stash list).Count
-  try { git -C $repoRoot pull --rebase --autostash origin main 2>&1 | Select-Object -Last 1 | ForEach-Object { Log ('git: ' + $_) } } catch { Log ('git pull warn: ' + $_.Exception.Message) }
+  # git writes routine progress ("From https://...") to stderr on a normal pull, and under 'Stop' a redirected
+  # native stderr line is a terminating throw in PS 5.1, so the pull runs under Continue, as RunChild does.
+  # The catch stays for anything else. Watched by grocery\test-native-stderr-eap.ps1.
+  $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+  try { git -C $repoRoot pull --rebase --autostash origin main 2>&1 | Select-Object -Last 1 | ForEach-Object { Log ('git: ' + $_) } } catch { Log ('git pull warn: ' + $_.Exception.Message) } finally { $ErrorActionPreference = $prevEap }
   $stashAfter = @(git -C $repoRoot stash list).Count
   if ($stashAfter -gt $stashBefore) {
     $smsg = "git pull --rebase --autostash could not restore local changes: " +

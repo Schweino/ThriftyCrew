@@ -232,12 +232,17 @@ if ($SelfTest) {
     # THE GUARD: -Check must FIRE on a re-drifted file and must NOT fire on a synced tree. Without the
     # must-fire half, a guard that always passes is indistinguishable from a guard that works.
     $selfPath = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $here 'sync-prose-from-spec.ps1' }
-    $clean = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -SpecsDir (Join-Path $T 'specs') -Check 2>&1 | Out-String
+    # EAP 'Continue' AROUND each child only: under 'Stop' in PS 5.1 a child's first stderr line is a
+    # terminating throw in this suite, which then dies with no summary. grocery\test-native-stderr-eap.ps1
+    # is the watcher.
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try { $clean = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -SpecsDir (Join-Path $T 'specs') -Check 2>&1 | Out-String } finally { $ErrorActionPreference = $prevEap }
     Chk 'CHECK on a synced tree exits clean' (($LASTEXITCODE -eq 0) -and ($clean -match 'CHECK OK')) ("rc=$LASTEXITCODE " + ($clean -replace "`r?`n", ' '))
     $reDrift = Read-JsonFile (Join-Path $T 'specs\prose\prose-drifted.json')
     $reDrift.upsell_html = '<p>someone edited the prose file back to $1.13.</p>'
     $reDrift | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $T 'specs\prose\prose-drifted.json') -Encoding UTF8
-    $dirty = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -SpecsDir (Join-Path $T 'specs') -Check 2>&1 | Out-String
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try { $dirty = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -SpecsDir (Join-Path $T 'specs') -Check 2>&1 | Out-String } finally { $ErrorActionPreference = $prevEap }
     Chk 'MUST FIRE  CHECK exits 1 and NAMES the slug when prose drifts again' (($LASTEXITCODE -eq 1) -and ($dirty -match 'CHECK FAIL') -and ($dirty -match 'drifted')) ("rc=$LASTEXITCODE " + ($dirty -replace "`r?`n", ' '))
     $stillDrift = Read-JsonFile (Join-Path $T 'specs\prose\prose-drifted.json')
     Chk 'CHECK writes NOTHING - the drift it reports is still there afterwards' ($stillDrift.upsell_html -match '1\.13') ("upsell=" + $stillDrift.upsell_html)

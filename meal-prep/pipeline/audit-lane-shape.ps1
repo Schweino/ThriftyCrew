@@ -500,10 +500,13 @@ if ($runSelfTest) {
     New-ProbeRun $silent $null
 
     $me = $PSCommandPath
+    # THROUGH Invoke-NativeScript, NOT `2>&1`: under 'Stop' in PS 5.1 the child's first stderr line is a
+    # terminating throw in this suite. grocery\test-native-stderr-eap.ps1 is the watcher.
+    . (Join-Path $repo 'grocery\native-lib.ps1')
     function RunProbe($dir) {
-      $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $me -RunDir $dir -Json 2>&1
-      $txt = (@($o | ForEach-Object { [string]$_ }) -join "`n")
-      return [pscustomobject]@{ code = $LASTEXITCODE; text = $txt }
+      $res = Invoke-NativeScript $me '-RunDir' $dir '-Json'
+      $txt = ($res.Lines -join "`n")
+      return [pscustomobject]@{ code = $res.ExitCode; text = $txt }
     }
     $rd = RunProbe $dirty
     T 'MUST FIRE  end to end, a per-recipe price lane in a real run dir exits 1' ($rd.code -eq 1) ("exit " + $rd.code + " :: " + $rd.text)

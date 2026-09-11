@@ -42,6 +42,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $mp   = Split-Path -Parent $here                      # ...\meal-prep
 $repo = Split-Path -Parent $mp                        # ...\income
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'grocery\native-lib.ps1')   # Invoke-NativeScript: the only safe native stderr capture under EAP='Stop'
 
 # ===================================================================================================
 # PURE GATE PREDICATES - so each founding bug can be pinned without touching a live file or Ghost.
@@ -614,8 +615,12 @@ Write-Output ("  P4  v2 specs               {0}/{0} present in db\recipes" -f $s
 # identical from outside. So a clean bill here needs both: exit 0 AND the guard's own end-of-run line.
 function Invoke-Gate {
   param([string]$Label, [string]$Script, [string[]]$GateArgs = @(), [string]$Marker = '', [string]$MarkerText = '')
-  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $Script @GateArgs 2>&1
-  $rc = $LASTEXITCODE
+  # Invoke-NativeScript, never `2>&1`: under EAP=Stop a gate's first stderr line is a terminating throw in
+  # PS 5.1, which kills the publish instead of letting this read the verdict (grocery\test-native-stderr-eap.ps1).
+  # .Lines keeps stdout and stderr in arrival order, as the redirect did.
+  $gateRes = Invoke-NativeScript $Script @GateArgs
+  $out = $gateRes.Lines
+  $rc = $gateRes.ExitCode
   $lines = @($out | ForEach-Object { [string]$_ })
   $reason = ''
   if ($rc -ne 0) { $reason = "exited $rc" }
@@ -718,9 +723,12 @@ if ($runSkipGhost) {
 $slugListPath = Join-Path $RunDir ("waves\wave-{0}.slugs.txt" -f $Wave)
 [IO.File]::WriteAllText($slugListPath, ((@($slugs) -join "`r`n") + "`r`n"), $UTF8)
 $specsDir = Join-Path $mp 'db\recipes'
-$dry = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'update-recipes-db.ps1') `
-        -RunDir $RunDir -SpecsDir $specsDir -SpecList $slugListPath -RunLabel $batch -DryRun 2>&1
-if ($LASTEXITCODE -ne 0) {
+# Invoke-NativeScript, never `2>&1`: a child's stderr line under EAP=Stop is a terminating throw in PS 5.1
+# (grocery\test-native-stderr-eap.ps1).
+$dryRes = Invoke-NativeScript (Join-Path $here 'update-recipes-db.ps1') `
+        '-RunDir' $RunDir '-SpecsDir' $specsDir '-SpecList' $slugListPath '-RunLabel' $batch '-DryRun'
+$dry = $dryRes.Lines
+if ($dryRes.ExitCode -ne 0) {
   @($dry | Select-Object -Last 20) | ForEach-Object { Write-Output ("        " + [string]$_) }
   Fail 'update-recipes-db -DryRun failed'
 }
@@ -819,8 +827,11 @@ Write-Output ("  E1  prose tokens           " + [string](@($mig | Where-Object {
 # would have published $1.87 instead of $3.73, Florentine $1.66 instead of $3.26.
 # propagate does NOT do this: it is built for spec EDITS, where cost has not moved.
 Write-Output '  E2  cost basis (new recipes are not in the manifest yet)'
-$cv = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'compute-v2-perserving.ps1') 2>&1
-if ($LASTEXITCODE -ne 0) { @($cv | Select-Object -Last 10) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'compute-v2-perserving failed' }
+# Invoke-NativeScript for E2-E4, never `2>&1`: a child's stderr line under EAP=Stop is a terminating throw
+# in PS 5.1 (grocery\test-native-stderr-eap.ps1). .ExitCode and .Lines stand in for $LASTEXITCODE and the capture.
+$cvRes = Invoke-NativeScript (Join-Path $here 'compute-v2-perserving.ps1')
+$cv = $cvRes.Lines
+if ($cvRes.ExitCode -ne 0) { @($cv | Select-Object -Last 10) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'compute-v2-perserving failed' }
 # IN-PROCESS, never `powershell -File`: that path marshals a [string[]] as one command-line string, so a
 # multi-slug array binds as ONE slug and the script reports a cheerful "re-anchored 1 spec". That is
 # exactly what happened on the first shakedown attempt with a 2-slug wave.
@@ -843,14 +854,15 @@ Write-Output ("      cost basis verified on {0}/{0} slug(s) against the everyday
 Stamp 'cost-basis' ("compute-v2-perserving + reanchor on {0} slug(s)" -f $slugs.Count)
 
 # ---- E3. recipes-db rows
-$upd = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'update-recipes-db.ps1') `
-        -RunDir $RunDir -SpecsDir $specsDir -SpecList $slugListPath -RunLabel $batch 2>&1
-if ($LASTEXITCODE -ne 0) { @($upd | Select-Object -Last 20) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'update-recipes-db failed' }
+$updRes = Invoke-NativeScript (Join-Path $here 'update-recipes-db.ps1') `
+        '-RunDir' $RunDir '-SpecsDir' $specsDir '-SpecList' $slugListPath '-RunLabel' $batch
+$upd = $updRes.Lines
+if ($updRes.ExitCode -ne 0) { @($upd | Select-Object -Last 20) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'update-recipes-db failed' }
 Write-Output ("  E3  recipes-db             " + [string](@($upd | Select-Object -Last 1)))
 Stamp 'recipes-db' ("{0} row(s) via {1}" -f $slugs.Count, $batch)
 
 # ---- E4. what is dirty, and is any of it not ours?
-$pd = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -DryRun 2>&1
+$pd = (Invoke-NativeScript (Join-Path $here 'propagate-recipes.ps1') '-DryRun').Lines
 $pdLines = @($pd | ForEach-Object { [string]$_ })
 # propagate's -DryRun LISTS only its first 30 slugs but reports the true total on its header line. Read the
 # TOTAL from there, never from the listing: counting the visible lines reported "30 dirty" on the first
@@ -931,7 +943,11 @@ if (-not $DryRun -and (Test-Path $drainer)) {
   try {
     $env:TC_STAGE_WRITES = $rvQueue
     $env:TC_WRITE_JOURNAL = $null
-    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -AllowCreateFile $allowFile 2>&1
+    # Output is discarded, so the redirect stays, under EAP 'Continue': a native stderr line under 'Stop'
+    # is a terminating throw in PS 5.1 (grocery\test-native-stderr-eap.ps1). The drainer below reads the result.
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try { $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -AllowCreateFile $allowFile 2>&1 }
+    finally { $ErrorActionPreference = $prevEap }
   } finally {
     $env:TC_STAGE_WRITES = $savedStage
     $env:TC_WRITE_JOURNAL = $savedJournal
@@ -939,8 +955,9 @@ if (-not $DryRun -and (Test-Path $drainer)) {
   if (-not (Test-Path $rvQueue)) {
     Write-Output '  E4a pre-publish review    nothing queued - no Ghost write was attempted, so there is nothing to review'
   } else {
-    $rvOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $drainer -Queue $rvQueue -WhatIf 2>&1
-    $rvRc = $LASTEXITCODE
+    $rvRes = Invoke-NativeScript $drainer '-Queue' $rvQueue '-WhatIf'
+    $rvOut = $rvRes.Lines
+    $rvRc = $rvRes.ExitCode
     @($rvOut | ForEach-Object { Write-Output ("    " + [string]$_) })
     if ($rvRc -ne 0) {
       # HELD or could-not-run. The queue file is left on disk beside the wave's other artifacts so the
@@ -952,8 +969,11 @@ if (-not $DryRun -and (Test-Path $drainer)) {
   }
 }
 
-$prop = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -AllowCreateFile $allowFile 2>&1
-$propRc = $LASTEXITCODE
+# Invoke-NativeScript, never `2>&1`: a stderr line under EAP=Stop would kill this script mid-publish, before
+# any stamp or state advance (grocery\test-native-stderr-eap.ps1).
+$propRes = Invoke-NativeScript (Join-Path $here 'propagate-recipes.ps1') '-AllowCreateFile' $allowFile
+$prop = $propRes.Lines
+$propRc = $propRes.ExitCode
 @($prop | ForEach-Object { Write-Output ("    " + [string]$_) })
 if ($propRc -ne 0) { Fail 'propagate-recipes failed - nothing was stamped, the next run retries the same slugs' }
 # A WAVE SLUG THAT DID NOT PUBLISH IS A FAILED WAVE, not a retry. propagate withholds its stamp so it stays
@@ -1097,10 +1117,14 @@ Write-Output ''
 Write-Output '== SERVEABILITY ==========================================================='
 $rollback = @()
 try {
-  $t5 = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'top5-weekly.ps1') -NoPublish 2>&1
-  if ($LASTEXITCODE -ne 0) { @($t5 | Select-Object -Last 10) | ForEach-Object { Write-Output ("        " + [string]$_) }; throw 'top5-weekly failed' }
-  $ef = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo 'grocery\export-feed.ps1') 2>&1
-  if ($LASTEXITCODE -ne 0) { @($ef | Select-Object -Last 10) | ForEach-Object { Write-Output ("        " + [string]$_) }; throw 'export-feed failed' }
+  # Invoke-NativeScript, never `2>&1`: under EAP=Stop a child's first stderr line is a terminating throw in
+  # PS 5.1, which this catch would report as a failed feed rebuild (grocery\test-native-stderr-eap.ps1).
+  $t5Res = Invoke-NativeScript (Join-Path $mp 'top5-weekly.ps1') '-NoPublish'
+  $t5 = $t5Res.Lines
+  if ($t5Res.ExitCode -ne 0) { @($t5 | Select-Object -Last 10) | ForEach-Object { Write-Output ("        " + [string]$_) }; throw 'top5-weekly failed' }
+  $efRes = Invoke-NativeScript (Join-Path $repo 'grocery\export-feed.ps1')
+  $ef = $efRes.Lines
+  if ($efRes.ExitCode -ne 0) { @($ef | Select-Object -Last 10) | ForEach-Object { Write-Output ("        " + [string]$_) }; throw 'export-feed failed' }
   Write-Output ("  E6  feed rebuilt           " + [string](@($ef | Where-Object { $_ -match '^smp-feed\.json:' } | Select-Object -Last 1)))
 } catch {
   Write-Output ("      ! " + $_.Exception.Message)

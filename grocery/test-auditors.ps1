@@ -1961,7 +1961,9 @@ foreach ($rule in @(
 # 2. AND NOTHING OF THAT SHAPE IS ACTUALLY TRACKED. The ignore list only governs UNTRACKED files: a file
 #    already in the index keeps being committed no matter what .gitignore says, which is exactly why the
 #    profiles needed `git rm -r --cached` and not just a rule.
-$tracked = @(& git -C (Split-Path $root -Parent) ls-files 2>$null)
+# Invoke-Native, not `2>$null`: this file runs under 'Stop', where one git warning on stderr is a terminating throw.
+$lsRes = Invoke-Native 'git' '-C' (Split-Path $root -Parent) 'ls-files'
+$tracked = @($lsRes.Output)
 $badTracked = @($tracked | Where-Object { $_ -match '__pycache__|\.pyc$|browser-profiles/' })
 if ($badTracked.Count -eq 0) { Ok ('no bytecode or browser-profile file is tracked (' + $tracked.Count + ' tracked file(s) checked)') }
 else { Bad ('these are TRACKED and should not be - a .gitignore rule does not untrack an existing file, it needs git rm --cached: ' + (($badTracked | Select-Object -First 6) -join ', ')) }
@@ -2231,14 +2233,15 @@ else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected
 # down here, and the two newest callers never inherited it. test-native-stderr-eap.ps1 proves the shell
 # behaviour empirically (a must-fire founding case plus a clean twin) AND scans those entry points, so this
 # check is a real invocation rather than another hand-maintained regex.
-if (Use-Unit 'u052-k0-the-same-rule-at-the-scheduled' -Reads 'grocery/**.ps1') {
+# 2026-09-11: the fixture's scan reads every .ps1 below the repo root, not grocery\ alone, so its inputs are all of them.
+if (Use-Unit 'u052-k0-the-same-rule-at-the-scheduled' -Reads '**.ps1') {
 try {
   $eapT = Join-Path $root 'test-native-stderr-eap.ps1'
   if (Test-Path $eapT) {
     $eapOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $eapT
     $eapRc = $LASTEXITCODE
     if ($eapRc -eq 0 -and (@($eapOut) -join "`n") -match 'NATIVE-STDERR-EAP-TEST-COMPLETE') {
-      Ok 'native-stderr/EAP fixture passes - scheduled entry points do not redirect a native child under EAP=Stop'
+      Ok 'native-stderr/EAP fixture passes - no script in the repo adds a native child stderr redirect under EAP=Stop beyond its named baseline'
     } else {
       Bad ('native-stderr/EAP fixture FAILED (rc=' + $eapRc + '): ' + ((@($eapOut) | Where-Object { $_ -match 'FAIL' }) -join ' | '))
     }
@@ -2793,8 +2796,9 @@ if ($iwbSrcRb -match 'wasPrice' -and $iwbSrcRb -match '\$f\[6\]') {
 # RunPS resolves against grocery\, so the lib is invoked directly rather than through it.
 if (Use-Unit 'u066-the-encoding-pair') {
 $jioPath = Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1'
-$jioOut  = (& powershell -NoProfile -ExecutionPolicy Bypass -File $jioPath -SelfTest 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
-if ($LASTEXITCODE -eq 0 -and $jioOut -match 'MUST FIRE' -and $jioOut -match 'SELF-TEST PASSED') {
+$jioRes  = Invoke-NativeScript $jioPath '-SelfTest'
+$jioOut  = @($jioRes.Lines) -join "`n"
+if ($jioRes.ExitCode -eq 0 -and $jioOut -match 'MUST FIRE' -and $jioOut -match 'SELF-TEST PASSED') {
   Ok 'lib\json-io -SelfTest passes, and its FIRST case proves the PS 5.1 codepage bug still exists before claiming to fix it'
 } else { Bad ('lib\json-io -SelfTest failed: ' + ((($jioOut -split "`n") | Select-Object -Last 3) -join ' | ')) }
 $jioSrc = Get-Content $jioPath -Raw

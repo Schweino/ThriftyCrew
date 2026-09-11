@@ -102,6 +102,7 @@ $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $_
 if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
 . (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
 . (Join-Path $__jioRoot 'lib\atomic-write.ps1')   # Write-TcAtomicFile: the hunt daemon reads state files lock-free while lanes advance them
+. (Join-Path $__jioRoot 'grocery\native-lib.ps1')   # Invoke-NativeScript: a child's stderr line under 'Stop' is a terminating throw in PS 5.1
 
 # CAPTURE EVERY SWITCH BEFORE DOT-SOURCING ANYTHING. A dot-sourced script runs its own param() block in
 # THIS scope, so a lib declaring [switch]$SelfTest silently resets ours to $false - that PS 5.1 trap made
@@ -604,8 +605,10 @@ function Get-TermVerdictMap {
   param([string]$QueuePath)
   $map = @{}
   if (-not (Test-Path $QueuePath)) { return $map }
-  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $QueuePath -List -Json 2>&1
-  $text = (@($out | ForEach-Object { [string]$_ }) -join "`n")
+  # Invoke-NativeScript, NOT `2>&1`: under 'Stop' in PS 5.1 the queue's first stderr line is a terminating
+  # throw in THIS script. grocery\test-native-stderr-eap.ps1 is the watcher.
+  $res = Invoke-NativeScript $QueuePath '-List' '-Json'
+  $text = ($res.Lines -join "`n")
   try { $doc = $text | ConvertFrom-Json } catch { throw ("hunt-run: could not parse ingredient-queue output: " + $text) }
   foreach ($it in @($doc.items)) { $map[[string]$it.term] = [string]$it.verdict }
   return $map
@@ -984,7 +987,10 @@ if ($runSelfTest) {
     # run - a real failure mode. The ABSENCE of a constraint has none: it cannot wrongly reject
     # anything. So an unstated edge is now UNBOUNDED, and what the refusal bought - a reader knowing
     # what the gates enforced - is kept in run.json and in the line -Init prints.
-    $noBand = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r1') -Conditions 'fixture' -Stop 'fixture' 2>&1
+    # EVERY DRILL CHILD GOES THROUGH Invoke-NativeScript, NOT `2>&1`: under 'Stop' in PS 5.1 a child's first
+    # stderr line is a terminating throw here, and the suite dies with no FAIL line and no summary.
+    # .Lines is stdout and stderr in arrival order, already strings. grocery\test-native-stderr-eap.ps1 watches.
+    $noBand = (Invoke-NativeScript $PSCommandPath '-Init' '-RunDir' (Join-Path $bt 'r1') '-Conditions' 'fixture' '-Stop' 'fixture').Lines
     $noBandTxt = (@($noBand | ForEach-Object { [string]$_ }) -join ' ')
     $rj1 = $null
     if (Test-Path (Join-Path $bt 'r1\run.json')) { $rj1 = (Get-Content (Join-Path $bt 'r1\run.json') -Raw -Encoding utf8 | ConvertFrom-Json) }
@@ -996,7 +1002,7 @@ if ($runSelfTest) {
       ($null -ne $rj1 -and (@($rj1.band_stated)).Count -eq 0) `
       ($(if ($rj1) { 'stated=' + ((@($rj1.band_stated)) -join ',') } else { 'no run.json' }))
 
-    $partial = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r2') -Conditions 'fixture' -Stop 'fixture' -CalMin 500 -CalMax 650 -CarbMax 40 2>&1
+    $partial = (Invoke-NativeScript $PSCommandPath '-Init' '-RunDir' (Join-Path $bt 'r2') '-Conditions' 'fixture' '-Stop' 'fixture' '-CalMin' 500 '-CalMax' 650 '-CarbMax' 40).Lines
     $rj2 = $null
     if (Test-Path (Join-Path $bt 'r2\run.json')) { $rj2 = (Get-Content (Join-Path $bt 'r2\run.json') -Raw -Encoding utf8 | ConvertFrom-Json) }
     T 'MUST FIRE  a PARTIAL band is honoured - stated edges apply, the unstated protein floor is unbounded' `
@@ -1004,11 +1010,11 @@ if ($runSelfTest) {
        $null -eq $rj2.band.proteinMin -and ((@($partial | ForEach-Object { [string]$_ }) -join ' ') -match 'protein any')) `
       ($partial -join ' ')
 
-    $inverted = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r3') -Conditions 'fixture' -Stop 'fixture' -CalMin 700 -CalMax 500 -CarbMax 40 -ProteinMin 0 2>&1
+    $inverted = (Invoke-NativeScript $PSCommandPath '-Init' '-RunDir' (Join-Path $bt 'r3') '-Conditions' 'fixture' '-Stop' 'fixture' '-CalMin' 700 '-CalMax' 500 '-CarbMax' 40 '-ProteinMin' 0).Lines
     T 'MUST FIRE  a floor above its own ceiling is refused - it admits nothing and would source zero recipes silently' `
       ((@($inverted | ForEach-Object { [string]$_ }) -join ' ') -match 'above -CalMax') ($inverted -join ' ')
 
-    $good = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r4') -Conditions 'fixture' -Stop 'fixture' -CalMin 500 -CalMax 650 -CarbMax 40 -ProteinMin 50 2>&1
+    $good = (Invoke-NativeScript $PSCommandPath '-Init' '-RunDir' (Join-Path $bt 'r4') '-Conditions' 'fixture' '-Stop' 'fixture' '-CalMin' 500 '-CalMax' 650 '-CarbMax' 40 '-ProteinMin' 50).Lines
     $rj = $null
     $rjp = Join-Path $bt 'r4\run.json'
     if (Test-Path $rjp) { $rj = (Get-Content $rjp -Raw -Encoding utf8 | ConvertFrom-Json) }
@@ -1018,7 +1024,7 @@ if ($runSelfTest) {
        [double]$rj.band.proteinMin -eq 50) `
       ($(if ($rj) { ($rj.band | ConvertTo-Json -Compress) } else { ($good -join ' ') }))
 
-    $zero = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r5') -Conditions 'fixture' -Stop 'fixture' -CalMin 400 -CalMax 650 -CarbMax 35 -ProteinMin 0 2>&1
+    $zero = (Invoke-NativeScript $PSCommandPath '-Init' '-RunDir' (Join-Path $bt 'r5') '-Conditions' 'fixture' '-Stop' 'fixture' '-CalMin' 400 '-CalMax' 650 '-CarbMax' 35 '-ProteinMin' 0).Lines
     $rj5 = $null
     $rjp5 = Join-Path $bt 'r5\run.json'
     if (Test-Path $rjp5) { $rj5 = (Get-Content $rjp5 -Raw -Encoding utf8 | ConvertFrom-Json) }
@@ -1044,7 +1050,7 @@ if ($runSelfTest) {
     Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'qa' -Label 'qa:x' -ItemList @('x') -By 'qa' -Detail '' -At '2026-08-24T10:16:00' -In 1000 -Out 200)
     # and a local-ladder zero-token line, which is work done, not work unmeasured
     Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'extract' -Label 'local rung 1' -ItemList @('y') -By 'local' -Detail '' -At '2026-08-24T10:17:00' -In 0 -Out 0)
-    $sumOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -LaneSummary -RunDir $lt3 -Json 2>&1
+    $sumOut = (Invoke-NativeScript $PSCommandPath '-LaneSummary' '-RunDir' $lt3 '-Json').Lines
     $sum = $null
     try { $sum = (@($sumOut | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
     $mapRow = $null; $qaRow = $null
@@ -1091,7 +1097,7 @@ if ($runSelfTest) {
       # neither touches $durations, so a fixture asserting on them cannot fail when the pairing breaks
       # - measured 2026-08-25, when exactly that fixture passed with both defects restored. A neuter
       # proof that does not fail is not a proof, and the assertion had to move, not the standard.
-      $so4 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -StageSummary -RunDir $lt4 -Json 2>&1
+      $so4 = (Invoke-NativeScript $PSCommandPath '-StageSummary' '-RunDir' $lt4 '-Json').Lines
       $s4 = $null
       try { $s4 = (@($so4 | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
       $r4 = $null
@@ -1118,7 +1124,7 @@ if ($runSelfTest) {
       & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Lane -RunDir $lt5 `
         -LaneName 'extract' -Label 'local rung 1' -Items 'y' -By 'local' -Event 'end' `
         -At '2026-08-24T10:00:42' -InputTokens 0 -OutputTokens 0 | Out-Null
-      $so5 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -StageSummary -RunDir $lt5 -Json 2>&1
+      $so5 = (Invoke-NativeScript $PSCommandPath '-StageSummary' '-RunDir' $lt5 '-Json').Lines
       $s5 = $null
       try { $s5 = (@($so5 | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
       $r5 = $null
@@ -1170,7 +1176,7 @@ if ($runSelfTest) {
       # ...and one recipe with NO history at all, which must read UNKNOWN rather than 0 minutes
       Write-JsonAtomic -Path (Join-Path $lt6 'state\d.json') -Obj ([pscustomobject]@{
         slug = 'd'; state = 'mapped'; history = @() })
-      $ro6 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecipeSummary -RunDir $lt6 -Json 2>&1
+      $ro6 = (Invoke-NativeScript $PSCommandPath '-RecipeSummary' '-RunDir' $lt6 '-Json').Lines
       $rs6 = $null
       try { $rs6 = (@($ro6 | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
       $ra = $null; $rb = $null; $rd = $null; $pr = $null
@@ -1198,7 +1204,7 @@ if ($runSelfTest) {
       # THE TEXT TABLE IS ITS OWN CASE, and it is here because the -Json cases above ALL PASSED while
       # the human table threw: the header used '{2,>10}', and '>' is not a .NET alignment token. A
       # summary nobody can read is not a summary, and only rendering it catches that.
-      $txt6 = (@(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecipeSummary -RunDir $lt6 2>&1) | ForEach-Object { [string]$_ }) -join "`n"
+      $txt6 = (Invoke-NativeScript $PSCommandPath '-RecipeSummary' '-RunDir' $lt6).Lines -join "`n"
       T 'MUST FIRE  the human table RENDERS, names the unattributed price lane and says plainly that `shared` is divided rather than measured' `
         ($txt6 -match 'attrib' -and $txt6 -notmatch 'Error formatting' -and
          $txt6 -match 'UNATTRIBUTED' -and $txt6 -match 'structural' -and
@@ -1237,7 +1243,7 @@ if ($runSelfTest) {
     # in the accumulator is unexercised - measured 2026-09-04, when neutering it turned nothing red.
     Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'qa' -Label 'unreported-tokens' -ItemList @('u') -By 'mechanical' -Detail '' -At '2026-08-24T10:30:00' -Event 'start')
     Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'qa' -Label 'unreported-tokens' -ItemList @('u') -By 'mechanical' -Detail '' -At '2026-08-24T10:30:30' -Event 'end')
-    $stgOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -StageSummary -RunDir $lt3 -Json 2>&1
+    $stgOut = (Invoke-NativeScript $PSCommandPath '-StageSummary' '-RunDir' $lt3 '-Json').Lines
     $stg = $null
     try { $stg = (@($stgOut | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
     $top = $null; $mech = $null

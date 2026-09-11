@@ -14,6 +14,7 @@ function Ok($name, $cond) { if ($cond) { Write-Output ("  PASS  " + $name); $scr
 
 . (Join-Path $mp 'lib\json-db-io.ps1')
 . (Join-Path $root 'lib\ghost-lib.ps1')
+. (Join-Path $root 'grocery\native-lib.ps1')   # Invoke-NativeScript: a child's stderr under 'Stop' must not kill this suite
 
 # ---- 1. Set-RecipeVisibility (key-scoped recipes-db patch) ----
 Write-Output 'Set-RecipeVisibility:'
@@ -79,18 +80,23 @@ Ok 'clean again after restore (exit 0)' ($LASTEXITCODE -eq 0)
 # rather than by mutating a 3.9 MB live file. Both scripts in the repair pair are checked: the guard that
 # has to SEE stale cost copies, and the sync that has to FIX them without touching anything else.
 Write-Output 'audit-db-agreement (COST-DRIFT guard) + sync-recipesdb-cost:'
-$dbSelf = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'engine\audit-db-agreement.ps1') -SelfTest 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
-Ok 'COST-DRIFT fixture: the guard still sees the 2026-07-25 stamped block (exit 0)' ($LASTEXITCODE -eq 0)
+# THROUGH Invoke-NativeScript, NOT `2>&1`. Under 'Stop' in PS 5.1 a child's first stderr line is a
+# terminating throw in THIS script, so the suite died with no summary. grocery\test-native-stderr-eap.ps1
+# is the watcher.
+$dbRes = Invoke-NativeScript (Join-Path $mp 'engine\audit-db-agreement.ps1') '-SelfTest'
+$dbSelf = $dbRes.Lines -join "`n"
+Ok 'COST-DRIFT fixture: the guard still sees the 2026-07-25 stamped block (exit 0)' ($dbRes.ExitCode -eq 0)
 # The clean twin is the load-bearing half. panang is the ONE row the stamped block legitimately belonged
 # to, so a spot check of the batch cleared it; without that case in the fixture a green run cannot be
 # told from a blind one.
 Ok 'the panang clean-twin is still in the fixture' ($dbSelf -match 'the one recipe the stamped block belongs to is silent')
-$scSelf = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'pipeline\sync-recipesdb-cost.ps1') -SelfTest 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
-Ok 'sync-recipesdb-cost fixture passes (exit 0)' ($LASTEXITCODE -eq 0)
+$scRes = Invoke-NativeScript (Join-Path $mp 'pipeline\sync-recipesdb-cost.ps1') '-SelfTest'
+$scSelf = $scRes.Lines -join "`n"
+Ok 'sync-recipesdb-cost fixture passes (exit 0)' ($scRes.ExitCode -eq 0)
 # Without this twin the sync can launder a broken spec into the index, and the guard above would then
 # read the result as agreement - two green checks over one wrong number.
 Ok 'the sync still refuses to copy an incoherent spec block' ($scSelf -match 'an incoherent SPEC block is refused')
-$scLive = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'pipeline\sync-recipesdb-cost.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+$scLive = (Invoke-NativeScript (Join-Path $mp 'pipeline\sync-recipesdb-cost.ps1')).Lines -join "`n"
 Ok 'sync-recipesdb-cost finds nothing to carry on live data (index mirrors the specs)' ($scLive -match 'cost sync: 0 field\(s\)')
 
 # ---- 4. audit-store-registry: regression + drift negative ----

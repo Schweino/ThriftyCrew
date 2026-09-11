@@ -645,6 +645,9 @@ if ($runSelfTest) {
     ($mapped | ConvertTo-Json -Depth 8)     | Set-Content (Join-Path $scratch 'mapped\drill-dish.json') -Encoding utf8
     ($extraction | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $scratch 'extracted\drill-dish.json') -Encoding utf8
 
+    # Invoke-Native, NOT `2>&1`: under 'Stop' in PS 5.1 the child's first stderr line is a terminating
+    # throw in this suite. grocery\test-native-stderr-eap.ps1 is the watcher.
+    . (Join-Path $repo 'grocery\native-lib.ps1')
     function Child([string[]]$ChildArgs) {
       # THE -Command ROAD, NOT -File. `powershell -File` cannot bind a multi-element [string[]] from
       # argv, and one marshalling road per language is cheaper than remembering which call has an array
@@ -656,8 +659,8 @@ if ($runSelfTest) {
         else { $parts += ("'" + ([string]$a).Replace("'", "''") + "'") }
       }
       $cmd = ($parts -join ' ') + '; exit $LASTEXITCODE'
-      $out = & powershell -NoProfile -ExecutionPolicy Bypass -Command $cmd 2>&1
-      return [pscustomobject]@{ rc = $LASTEXITCODE; text = ((@($out | ForEach-Object { [string]$_ })) -join "`n") }
+      $res = Invoke-Native 'powershell' '-NoProfile' '-ExecutionPolicy' 'Bypass' '-Command' $cmd
+      return [pscustomobject]@{ rc = $res.ExitCode; text = ($res.Lines -join "`n") }
     }
 
     $r0 = Child @('-RunDir', $scratch, '-Slug', 'drill-dish', '-FoodDbFile', $dbPath)

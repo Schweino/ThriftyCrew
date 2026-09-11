@@ -872,9 +872,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # ALERTS, DOES NOT BLOCK. A stale feed is a real defect and it is not a reason to withhold a
       # correct board - withholding would leave the recipe pages on the OLD week too, which is the same
       # divergence with fewer people looking at it. So it pages and lets the board ship.
+      # THROUGH Invoke-NativeScript (2026-09-11). Under 'Stop' a redirected native stderr line is a terminating
+      # throw in PS 5.1: the audit's first stderr line landed in the catch below and the alert was never sent.
+      # Watched by grocery\test-native-stderr-eap.ps1.
       try {
-        $fwp = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-feed-week-parity.ps1') 2>&1
-        $fwpRc = $LASTEXITCODE
+        $fwpRes = Invoke-NativeScript (Join-Path $root 'audit-feed-week-parity.ps1')
+        $fwp = $fwpRes.Lines
+        $fwpRc = $fwpRes.ExitCode
         foreach ($l in @($fwp)) { Log ('feed-week-parity: ' + [string]$l) }
         if ($fwpRc -eq 2) {
           try { Send-Alert -Subject "Grocery: BOARD AND FEED ON DIFFERENT WEEKS - $asofS" -Body (@($fwp) -join "`n") | Out-Null } catch {}

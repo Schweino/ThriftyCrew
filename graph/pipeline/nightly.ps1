@@ -289,6 +289,11 @@ function Test-SweepStartable {
 
 # ---------------------------------------------------------------- the machine's actual state
 function Get-FreeVramMiB {
+  # Under 'Stop' a redirected native stderr line is a terminating throw in PS 5.1, so the probe runs under
+  # Continue; the catch still covers a missing nvidia-smi (watched by grocery\test-native-stderr-eap.ps1).
+  # The assignment is local to this function, so it cannot leak to the caller and needs no restoring block:
+  # the self-test locates the chain's teardown by the FIRST such block in this file.
+  $ErrorActionPreference = 'Continue'
   try {
     $q = & nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits 2>$null
     if ($LASTEXITCODE -eq 0 -and $q) { return [int](([string]@($q)[0]).Trim()) }

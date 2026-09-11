@@ -52,6 +52,14 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
+. (Join-Path $root 'native-lib.ps1')   # Invoke-NativeScript
+# EVERY POWERSHELL CHILD BELOW RUNS THROUGH Invoke-BatchChild (2026-09-11). Under 'Stop' a redirected native
+# child's first stderr line is a terminating throw in PS 5.1, and a throw between the rule edit and its Revert
+# would leave the edit applied. Invoke-NativeScript runs the child under Continue and returns its real exit
+# code. Watched by grocery\test-native-stderr-eap.ps1.
+function Invoke-BatchChild([string]$Name, [object[]]$ChildArgs = @()) {
+  return (Invoke-NativeScript (Join-Path $root $Name) @ChildArgs).ExitCode
+}
 function Snapshot {
   $f = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
   $d = Read-JsonFile $f.FullName
@@ -105,8 +113,8 @@ Copy-Item $comFile $bak -Force
 # So: recompute the board under the OLD rules first, then freeze THAT. Every later difference is then
 # attributable to the edit and to nothing else. One extra compare-deals per batch is the whole cost.
 Write-Output 'rebuilding the board under the CURRENT rules so the baseline cannot carry an unrelated feed refresh...'
-& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'compare-deals.ps1') *>&1 | Out-Null
-if ($LASTEXITCODE -ne 0) { Write-Output ("apply-coverage-batch: baseline compare-deals exited $LASTEXITCODE - refusing to run a batch whose baseline cannot be trusted"); exit 2 }
+$childRc = Invoke-BatchChild 'compare-deals.ps1'
+if ($childRc -ne 0) { Write-Output ("apply-coverage-batch: baseline compare-deals exited $childRc - refusing to run a batch whose baseline cannot be trusted"); exit 2 }
 $baseCmp = Join-Path $OutDir '_baseline-batch.json'
 Copy-Item (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1).FullName $baseCmp -Force
 $before = Snapshot
@@ -135,13 +143,13 @@ Write-Output ("added {0} include pattern(s) across {1} commodit(y/ies), {2} excl
 function Revert([string]$why) {
   Copy-Item $bak $comFile -Force
   Write-Output ("REVERTED: $why")
-  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'compare-deals.ps1') *>&1 | Out-Null
+  Invoke-BatchChild 'compare-deals.ps1' | Out-Null
   exit 2
 }
 
 # ---- recompare
-& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'compare-deals.ps1') *>&1 | Out-Null
-if ($LASTEXITCODE -ne 0) { Revert "compare-deals exited $LASTEXITCODE" }
+$childRc = Invoke-BatchChild 'compare-deals.ps1'
+if ($childRc -ne 0) { Revert "compare-deals exited $childRc" }
 $after = Snapshot
 
 # ---- gate 1: crown diff
@@ -286,14 +294,13 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Output '    theft check: OK - no other commodity lost a cell or was re-priced'
 
-if ($WhatIfOnly) { Copy-Item $bak $comFile -Force; & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'compare-deals.ps1') *>&1 | Out-Null; Write-Output 'WhatIfOnly: reverted'; exit 0 }
+if ($WhatIfOnly) { Copy-Item $bak $comFile -Force; Invoke-BatchChild 'compare-deals.ps1' | Out-Null; Write-Output 'WhatIfOnly: reverted'; exit 0 }
 
 # ---- gate 3..5: the checks that actually catch collisions
-& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-known-wrong.ps1') *>&1 | Out-Null
-if ($LASTEXITCODE -ne 0) { Revert "audit-known-wrong failed ($LASTEXITCODE) - a widened rule re-admitted an adjudicated-wrong product" }
-& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-deals-page.ps1') *>&1 | Out-Null
-& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') *>&1 | Out-Null
-$tileRc = $LASTEXITCODE
+$childRc = Invoke-BatchChild 'audit-known-wrong.ps1'
+if ($childRc -ne 0) { Revert "audit-known-wrong failed ($childRc) - a widened rule re-admitted an adjudicated-wrong product" }
+Invoke-BatchChild 'build-deals-page.ps1' | Out-Null
+$tileRc = Invoke-BatchChild 'audit-tile-integrity.ps1'
 
 # A tile fault is not automatically the batch's fault. Two different things produce one:
 #   (a) the batch collided a rule onto the wrong product   -> REVERT, this is the cheese lesson
@@ -327,10 +334,10 @@ if ($tileRc -ne 0) {
     foreach ($st in @($mine | ForEach-Object { [string]$_.store } | Sort-Object -Unique)) {
       if (-not $st) { continue }
       Write-Output ("    deriving " + $st + " links from the rows the board just priced...")
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'derive-links-from-prices.ps1') -Store $st -Apply *>&1 | Out-Null
+      Invoke-BatchChild 'derive-links-from-prices.ps1' @('-Store', $st, '-Apply') | Out-Null
     }
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-worklist.ps1') *>&1 | Out-Null
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-ff-boardmatch.ps1') *>&1 | Out-Null
+    Invoke-BatchChild 'resolve-worklist.ps1' | Out-Null
+    Invoke-BatchChild 'resolve-ff-boardmatch.ps1' | Out-Null
     # SCOPED to the batch's own commodities. Called in bulk, this rewrote every Hy-Vee link on the board as
     # a side effect of a one-commodity exclude, and re-introduced the poultry-seasoning price divergence -
     # failing the publish on a row the batch had never touched. In-process with splatting, because an array
@@ -338,9 +345,9 @@ if ($tileRc -ne 0) {
     # Splatting needs a hashtable VARIABLE - `& script @{...}` passes the literal as a positional argument.
     $hvArgs = @{ Ids = @($TouchedIds) }
     & (Join-Path $root 'resolve-hyvee-links.ps1') @hvArgs *>&1 | Out-Null
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'merge-product-urls.ps1') *>&1 | Out-Null
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-deals-page.ps1') *>&1 | Out-Null
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') *>&1 | Out-Null
+    Invoke-BatchChild 'merge-product-urls.ps1' | Out-Null
+    Invoke-BatchChild 'build-deals-page.ps1' | Out-Null
+    Invoke-BatchChild 'audit-tile-integrity.ps1' | Out-Null
     $still = @()
     if (Test-Path $tf) {
       foreach ($rw in @((Read-JsonFile $tf).rows)) {
@@ -361,8 +368,8 @@ if ($tileRc -ne 0) {
     exit 1
   }
 }
-& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') *>&1 | Out-Null
-if ($LASTEXITCODE -ne 0) { Revert "guards failed ($LASTEXITCODE)" }
+$childRc = Invoke-BatchChild 'guards.ps1'
+if ($childRc -ne 0) { Revert "guards failed ($childRc)" }
 
 Write-Output 'BATCH GREEN: crown-diff reviewed, coverage gained, known-wrong clean, tile-integrity clean, guards clean.'
 exit 0
