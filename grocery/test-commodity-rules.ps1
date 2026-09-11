@@ -27,6 +27,8 @@
 param([string]$File = '', [switch]$Quiet)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# LIVE-TWIN on purpose (ops\audit-fixture-inputs.ps1, 2026-09-11): the RULES under test are the live file and the cases
+# are frozen, which is the question - does today's rule still do what its case says. -File points it at a copy.
 if (-not $File) { $File = Join-Path $root 'commodities.json' }
 
 if (-not (Test-Path $File)) {

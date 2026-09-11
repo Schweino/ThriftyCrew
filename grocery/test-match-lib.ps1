@@ -74,6 +74,8 @@ if ($a -lt 0 -or $b -lt 0 -or $b -le $a) {
 }
 $block = $src.Substring($a, $b - $a)
 $block = ($block -split "`n" | Where-Object { $_ -notmatch '\$GEX_OVERRIDE' }) -join "`n"
+# LIVE-TWIN on purpose (ops\audit-fixture-inputs.ps1, 2026-09-11): both matchers are handed this one copy of today's
+# rules, and the contract is that they decide identically on them.
 $commodities = Read-JsonFile (Join-Path $root 'commodities.json')
 . ([scriptblock]::Create($block))      # defines $GLOBAL_EXCLUDE, Get-MatchTexts, Match-Category (original)
 $origMatch = ${function:Match-Category}
@@ -98,15 +100,17 @@ if ($isShard) {
   . (Join-Path $root 'capture-depth-lib.ps1')
   . (Join-Path $root 'regular-fileset-lib.ps1')
   $names = @{}
+  # LIVE-TWIN on purpose (ops\audit-fixture-inputs.ps1, 2026-09-11): THE CORPUS IS NOT NEGOTIABLE (header) - it is every
+  # name the engine feeds the matcher today, so these reads are live by contract. The four below carry the same tag.
   $cmp = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
   $today = if ($cmp -and $cmp.BaseName -match '(\d{4}-\d{2}-\d{2})$') { [datetime]$Matches[1] } else { Get-Date }
-  foreach ($rf in (Select-RegularFileSet (Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json')) $today (Get-RegularUnionDays))) {
+  foreach ($rf in (Select-RegularFileSet (Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json')) $today (Get-RegularUnionDays))) {   # LIVE-TWIN: the live corpus
     $ex = Read-JsonFile $rf.FullName
     foreach ($d in $ex.deals) { if ($d.item) { $names[[string]$d.item] = 1 } }
   }
-  $adsF = Get-ChildItem (Join-Path $root 'out\ads-*.json') | Sort-Object Name -Descending | Select-Object -First 1
+  $adsF = Get-ChildItem (Join-Path $root 'out\ads-*.json') | Sort-Object Name -Descending | Select-Object -First 1   # LIVE-TWIN: the live corpus
   if ($adsF) { foreach ($d in (Read-JsonFile $adsF.FullName).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }
-  foreach ($f in (Get-ChildItem (Join-Path $root 'out\sams\sams-deals-*.json') -EA SilentlyContinue)) { foreach ($d in (Read-JsonFile $f.FullName).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }
+  foreach ($f in (Get-ChildItem (Join-Path $root 'out\sams\sams-deals-*.json') -EA SilentlyContinue)) { foreach ($d in (Read-JsonFile $f.FullName).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }   # LIVE-TWIN: the live corpus
   foreach ($sub in @('bakers\bakers-deals-*.json', 'fareway\fareway-deals-*.json')) {
     $f = Get-ChildItem (Join-Path $root ('out\' + $sub)) -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
     if ($f) { foreach ($d in (Read-JsonFile $f.FullName).deals) { if ($d.item) { $names[[string]$d.item] = 1 } } }

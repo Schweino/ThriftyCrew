@@ -88,6 +88,8 @@ if ($null -eq $gexList -or $GLOBAL_EXCLUDE.Count -lt 1) {
   Write-Output 'FATAL: the global exclude list is empty or unreadable'
   Exit-Guard -Name 'matcher-parity' -Summary 'BLIND: the exclude list came back empty' -Code 2
 }
+# LIVE-TWIN on purpose (ops\audit-fixture-inputs.ps1, 2026-09-11): parity is asked of today's rules over today's corpus,
+# and both arms are handed this one copy, so a rule edit cannot make them disagree - only a matcher edit can.
 $commodities = Read-JsonFile (Join-Path $root 'commodities.json')
 
 Invoke-Expression $engineSrc

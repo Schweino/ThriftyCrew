@@ -21,7 +21,9 @@
 # The count is deliberately per FILE rather than per case name: case labels are prose and get reworded all
 # the time, and a ratchet that fails on a reworded label is a ratchet people delete.
 #
-# WHAT IT COUNTS. Lines inside a script's `if ($SelfTest) { ... }` body that carry MUST FIRE / MUST-FIRE /
+# WHAT IT COUNTS. Lines inside a script's self-test body - every body lib\selftest-lib.ps1's Get-SelfTestBlock
+# returns: a gated if, the code after a guard-return, an Invoke-*SelfTest function, or a whole test-*.ps1 suite
+# (2026-09-11; grocery\test-auditors.ps1 declares no switch at all) - that carry MUST FIRE / MUST-FIRE /
 # MUST NOT FIRE in any case, written as SEPARATE words: a run-together identifier ($mustFire, a function
 # named for must-fires, a 'mustfire' fixture name) is not counted. That includes the assertion label, which
 # is where this estate writes it. It
@@ -106,6 +108,11 @@ if ($SelfTest) {
   $capSrc = "param([switch]`$SelfTest)`n`$runSelfTest = [bool]`$SelfTest`nif (`$runSelfTest) {`n  T '" + $MF + " one'`n  T '" + $MF + " two'`n}`n"
   McT 'MUST FIRE: must-fires under a variable captured from the -SelfTest switch are counted' `
       ((Get-MustFireCount -Text (Get-SelfTestBlock -Text $capSrc)) -eq 2)
+  # THE WHOLE-FILE SUITE (2026-09-11, later). grocery\test-auditors.ps1 declares no self-test switch, so every must-fire
+  # in it was outside the census. The live path passes -Path, which is what that rule keys on.
+  $wfSrc = "[CmdletBinding()]`nparam([string]`$SkipUnitsFile = '')`nOk '" + $MF + " one'`nOk '" + $MNF + " two'`n"
+  McT 'MUST FIRE: must-fires in a whole-file test-*.ps1 suite are counted when its path is passed' `
+      ((Get-MustFireCount -Text (Get-SelfTestBlock -Text $wfSrc -Path 'grocery\test-auditors.ps1')) -eq 2)
 
   # IDENTIFIERS ARE NOT LABELS (2026-09-11). With the separator optional the match counted names, so renaming
   # a $mustFire variable read as a LOST assertion and the ratchet went red on a rename. Each needle is built by
@@ -143,7 +150,7 @@ $scripts = @(Get-MustFireCensusScripts -RootDir $repo)
 $now = [ordered]@{}
 $total = 0
 foreach ($s in $scripts) {
-  $blk = Get-SelfTestBlock -Text ([IO.File]::ReadAllText($s.FullName))
+  $blk = Get-SelfTestBlock -Text ([IO.File]::ReadAllText($s.FullName)) -Path $s.FullName   # -Path: a whole-file test-*.ps1 suite is read by its name
   if (-not $blk) { continue }
   $c = Get-MustFireCount -Text $blk
   if ($c -le 0) { continue }

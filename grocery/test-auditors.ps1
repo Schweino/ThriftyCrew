@@ -105,8 +105,11 @@ Copy-Item (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1') (Join-
 # were never able to RUN, and "could not run" printed as FAIL. That is what took gates run #2 red on
 # 2026-08-08 while nothing was broken. They now SKIP when the data is absent, and the SKIP is counted and
 # printed in both summaries, so a machine that HAS the data still fails exactly as loudly as before.
+# LIVE-TWIN on purpose (ops\audit-fixture-inputs.ps1, 2026-09-11): these two lines only ask whether a real board is
+# here, so the live-data cases SKIP rather than FAIL where it is not. ops\prepush-test-auditors.ps1 reads this
+# assignment and its -or continuation, so the first line must keep ending in -or.
 $HasBoard = (@(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue).Count -gt 0) -or
-            (Test-Path (Join-Path $root 'out\recipe-board.json'))
+            (Test-Path (Join-Path $root 'out\recipe-board.json'))   # LIVE-TWIN: the same presence probe
 function Ok($m)   { Write-Output ("  PASS  " + $m); $script:pass++ }
 function Bad($m)  { Write-Output ("  FAIL  " + $m); $script:failed++ }
 # A case that could not run is NOT a pass. It gets its own counter and its own line in BOTH summaries, so
@@ -1399,13 +1402,14 @@ Remove-Item $fxSb -Recurse -Force -ErrorAction SilentlyContinue
 # It is the same shape as the token-added-sweep-and-gate-not class, applied to the bake.
 if (Use-Unit 'u035-d6-bake-currency-a-library-class') {
 $fxBk = NewFxDir 'catex-currency'
-Copy-Item (Join-Path $root 'commodities.json')      (Join-Path $fxBk 'commodities.json')
-Copy-Item (Join-Path $root 'categories.json')       (Join-Path $fxBk 'categories.json')
-Copy-Item (Join-Path $root 'category-excludes.json') (Join-Path $fxBk 'category-excludes.json')
-# LIVE-TWIN, DELIBERATELY (labelled 2026-09-06, PLAN-top5 area 4 §4.4). The three files copied above are
+# LIVE-TWIN, DELIBERATELY (labelled 2026-09-06, PLAN-top5 area 4 §4.4). The three files copied below are
 # the LIVE rule files, and that is the question: is production's commodities.json currently baked from
 # production's category-excludes.json? A frozen trio would prove the baker works and say nothing about the
-# board. The MUST-FIRE beneath it mutates these same copies, so the drift arm is not resting on live state.
+# board. MOVED ABOVE THE COPIES 2026-09-11: ops\audit-fixture-inputs.ps1 reads a declaration from the comment
+# block above a line, and began scanning this whole file that day. The other two copies carry it inline.
+Copy-Item (Join-Path $root 'commodities.json')      (Join-Path $fxBk 'commodities.json')
+Copy-Item (Join-Path $root 'categories.json')       (Join-Path $fxBk 'categories.json')          # LIVE-TWIN
+Copy-Item (Join-Path $root 'category-excludes.json') (Join-Path $fxBk 'category-excludes.json')  # LIVE-TWIN
 $r = RunPS 'apply-category-excludes.ps1' @('-Root', $fxBk, '-WhatIf')
 if ($r.rc -eq 0 -and $r.text -match 'library:\s*\+0 patterns') {
   Ok 'LIVE-TWIN category-exclude bake is CURRENT: a bake over the live rule files would add 0 patterns, so every library class the guard checks is actually in the engine''s rules'
@@ -1414,6 +1418,8 @@ if ($r.rc -eq 0 -and $r.text -match 'library:\s*\+0 patterns') {
 }
 # MUST FIRE: the same check over a PRE-FIX library (the two new classes deleted) must report DRIFT, or the
 # case above would pass on a bake that can no longer detect anything.
+# LIVE-TWIN (2026-09-11): this arm rolls back the LIVE files in memory, so it rests on cheese_carrier and the baked
+# bread-cheese pattern still being in them. The comment above the copies used to say it did not rest on live state.
 $bkLib = Read-JsonFile (Join-Path $root 'category-excludes.json')
 $bkLib.classes.PSObject.Properties.Remove('cheese_carrier')
 $bkLib.classes.PSObject.Properties.Remove('cracker_carrier')
@@ -1424,6 +1430,7 @@ foreach ($a in $bkLib.apply) {
 }
 $bkLib.apply = $bkApply
 # a commodities.json that predates the two classes: strip the two baked patterns back out
+# LIVE-TWIN: the live file, rolled back in memory (see above)
 $bkCom = Read-JsonFile (Join-Path $root 'commodities.json')
 foreach ($c in $bkCom) { if ($c.exclude) { $c.exclude = @(@($c.exclude) | Where-Object { $_ -ne 'bread\s+cheese' }) } }
 Set-Content (Join-Path $fxBk 'commodities.json') ($bkCom | ConvertTo-Json -Depth 6) -Encoding UTF8
@@ -1455,6 +1462,8 @@ $ceEnye = '\u' + '00f1'   # the escape, as six ASCII characters on disk
 $ceCommod = '[{"id":"pickled-jalapenos","label":"Pickled Jalapenos","unit":"oz","include":["jalape[n' + $ceEnye + ']o\\s+peppers"],"exclude":[]}]'
 Set-Content (Join-Path $fxCe 'commodities.json') $ceCommod -Encoding UTF8
 Set-Content (Join-Path $fxCe 'categories.json') '{"categories":[{"label":"Vegetables","commodities":["pickled-jalapenos"]}]}' -Encoding UTF8
+# LIVE-TWIN (2026-09-11): the bake needs a library to run, and this is production's. The verdict is the writer's
+# bytes, which an escaping writer keeps pure ASCII whatever classes the library holds.
 Copy-Item (Join-Path $root 'category-excludes.json') (Join-Path $fxCe 'category-excludes.json')
 $r = RunPS 'apply-category-excludes.ps1' @('-Root', $fxCe)
 $ceBytes = [IO.File]::ReadAllBytes((Join-Path $fxCe 'commodities.json'))
@@ -3980,7 +3989,7 @@ $rsSrc = Get-Content (Join-Path $root 'record-sample-verdict.ps1') -Raw
 if ($rsSrc -match 'DROPPED ' -and $rsSrc -match 'RunScope' -and $rsSrc -match '\$scopeWanted') {
   Ok 'verdict recorder pools only same-population runs and NAMES the ones it drops'
 } else { Bad 'record-sample-verdict pools runs of different store scope again - it will average a scoped sample into a whole-board one' }
-# and the live history must not contain a run with no scope recorded
+# and the live history must not contain a run with no scope recorded (LIVE-TWIN: the banked history is the subject)
 $vhP = Join-Path $root 'out\verification-history.json'
 if (Test-Path $vhP) {
   $vh = $null; try { $vh = ((Read-TextFile $vhP) + '').Trim() | ConvertFrom-Json } catch {}
@@ -5561,8 +5570,9 @@ $cacLive = @(Get-Content (Join-Path $root 'check-ad-cycles.ps1') | Where-Object 
 if ($cacLive.Count -gt 0) { Ok 'audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it' }
 else { Bad 'audit-capture-eviction is not called by check-ad-cycles.ps1 - the ONLY check that can see a thin capture evicting a rich one is hand-cranked, and a passing -SelfTest proves the code works, not that anything runs it' }
 
+# LIVE-TWIN (2026-09-11): half (2) above is CURRENCY on the live board, so both of these reads are live by design.
 $ceStamp = Join-Path $root 'out\capture-evictions.json'
-$ceCmps = @(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)
+$ceCmps = @(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)   # LIVE-TWIN: half (2)
 if ($ceCmps.Count -eq 0) {
   # No dated board here at all (a bare checkout). Still not a pass - but not a defect either, so it is a
   # counted SKIP rather than a FAIL. On a machine with boards, $HasBoard is true and this stays a hard FAIL.
@@ -5766,6 +5776,7 @@ else { Bad ('refresh-sams-verified -SelfTest failed (rc=' + $r.rc + ") - Sam's h
 # from watching 'Birds Eye Shredded Carrots & Broccoli Florets' hop OFF carrots and ONTO broccoli in the
 # match-soundness report. So this pins the whole family at once, in both directions.
 if (Use-Unit 'u118-mixed-vegetable-medleys') {
+# LIVE-TWIN (2026-09-11): the product names below are frozen and the RULES are live, which is the question.
 $cmMed = Read-JsonFile (Join-Path $root 'commodities.json')
 } # u118-mixed-vegetable-medleys
 function Get-MatchingCommodities([string]$name, $catalog) {
@@ -6000,6 +6011,7 @@ else {
   # THE PRODUCTION REFUSAL, END TO END. Everything above tests judgement or source; this runs the REAL guard
   # against a feed with pricing_inputs stripped and requires a findings exit that still carries the marker.
   $fcTmp = Register-Fx (Join-Path $env:TEMP ('feedcov-stripped-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))
+  # LIVE-TWIN (2026-09-11): the real guard on the real feed, stripped of pricing_inputs; run only when the feed is here.
   $fcCanon = Join-Path $root 'out\smp-feed.json'
   if (Test-Path $fcCanon) {
     try {
@@ -6481,6 +6493,7 @@ if ($null -eq $dcGexLive) {
 } else {
   # NOT @( ... | ConvertFrom-Json ): a top-level JSON array arrives as ONE pipeline object and @() around
   # it counts 1, so the sweep would examine a single commodity and report all clear. Measured here today.
+  # LIVE-TWIN: THE PRODUCTION ARM (above) - the live ruleset is the subject.
   $dcRaw = Read-JsonFile (Join-Path $PSScriptRoot 'commodities.json')
   $dcComs = @($dcRaw)
   $dcDead = @(); $dcUndec = 0

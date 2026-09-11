@@ -77,10 +77,11 @@ Write-Output ''
 # --- INFORMATION ONLY: how much of the live board's linked cells pu-lib can judge today. Never a failure:
 # live data changes daily and is not a fixture. A rising unresolved count is worth a look, not a red build.
 try {
+  # LIVE-TWIN on purpose (ops\audit-fixture-inputs.ps1, 2026-09-11): this sweep is informational and never fails (above).
   $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
   if ($cmpF) {
     $all = @((Read-JsonFile $cmpF.FullName).comparison)
-    $pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
+    $pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items   # LIVE-TWIN: the same informational sweep
     $res = 0; $unres = New-Object System.Collections.Generic.List[string]
     foreach ($it in $all) {
       $id = [string]$it.id; $unit = [string]$it.unit

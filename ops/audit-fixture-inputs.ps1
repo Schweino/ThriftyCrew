@@ -3,7 +3,8 @@
 # SCOPE OF A CLEAN REPORT: UNSOUND. It recognises the ways a self-test is known to reach
 #   outside its frozen inputs. A clean report means no known reach-out spelling was found, not
 #   that every suite is hermetic; a test that reads the tree through a helper this file does
-#   not follow passes silently.
+#   not follow passes silently. A here-string's content is data (2026-09-11), so a here-string
+#   later run IN-PROCESS against the live root is not seen either.
 #
 # WHY THIS EXISTS (2026-09-06, PLAN-top5-2026-09-06 area 4). A guard reads its RULINGS - an allowlist, a
 # ledger, a channel-exception file - from a fixed path beside itself, and the harness drives it with a
@@ -66,7 +67,19 @@ function Get-UnpinnedReads {
   param([string]$Text, [string[]]$ConfigOk = @())
   $out = New-Object System.Collections.ArrayList
   $lines = $Text -split "`r?`n"
+  # A HERE-STRING IS DATA (2026-09-11). ops\test-prepush-hook.ps1 writes a stub test-auditors.ps1 into a sandbox as a
+  # here-string and runs it THERE, so the stub's `Join-Path $root` reads resolve inside the sandbox, not this tree.
+  # Enrolling that suite whole made four of those lines read as live reads. Lines strictly inside a here-string skip.
+  $inHere = New-Object 'System.Collections.Generic.HashSet[int]'
+  $toks = $null; $perrs = $null
+  [void][System.Management.Automation.Language.Parser]::ParseInput($Text, [ref]$toks, [ref]$perrs)
+  foreach ($tk in @($toks)) {
+    if ($tk.Kind -ne [System.Management.Automation.Language.TokenKind]::HereStringLiteral -and
+        $tk.Kind -ne [System.Management.Automation.Language.TokenKind]::HereStringExpandable) { continue }
+    for ($ln = $tk.Extent.StartLineNumber + 1; $ln -lt $tk.Extent.EndLineNumber; $ln++) { [void]$inHere.Add($ln - 1) }
+  }
   for ($i = 0; $i -lt $lines.Count; $i++) {
+    if ($inHere.Contains($i)) { continue }
     $l = $lines[$i]
     $t = $l.TrimStart()
     if ($t.StartsWith('#')) { continue }
@@ -164,6 +177,18 @@ if ($SelfTest) {
   $srcC = "`$runSelfTest = [bool]`$SelfTest`nif (`$runSelfTest) {`n  `$z = Read-JsonFile (Join-Path `$root 'known-wrong.json')`n}`n"
   FiT 'MUST FIRE: a live read under a variable captured from -SelfTest is a finding' `
       ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcC)).Count -eq 1)
+  # THE WHOLE-FILE SUITE (2026-09-11, later). A test-*.ps1 that reads no self-test switch is its own self-test, so its
+  # reads are scanned too. The live path passes -Path; the rule keys on the file name.
+  $srcW = "param([switch]`$SelfTest)   # accepted so run-gates discovers this file`n`$z = Read-JsonFile (Join-Path `$root 'known-wrong.json')`n"
+  FiT 'MUST FIRE: a live read in a whole-file test-*.ps1 suite is a finding' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcW -Path 'ops\test-x.ps1')).Count -eq 1)
+  # THE SANDBOX STUB (2026-09-11, later): ops\test-prepush-hook.ps1's here-string test-auditors runs in a sandbox.
+  $srcH = "if (`$SelfTest) {`n  `$stub = @'`n`$b = Read-JsonFile (Join-Path `$root 'known-wrong.json')`n'@`n  [IO.File]::WriteAllText(`$sb, `$stub)`n}`n"
+  FiT 'MUST NOT FIRE: a read spelled inside a here-string (a stub written to a sandbox and run there) is data, not a read' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcH)).Count -eq 0)
+  $srcH2 = "if (`$SelfTest) {`n  `$stub = @'`nWrite-Output 1`n'@`n  `$b = Read-JsonFile (Join-Path `$root 'known-wrong.json')`n}`n"
+  FiT 'CLEAN TWIN: the same read as CODE right after a here-string closes is still found' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcH2)).Count -eq 1)
 
   # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
   # .claude\worktrees\<name> was excluded: no -SelfTest block was found anywhere and the audit exited 3.
@@ -187,7 +212,7 @@ $found = New-Object System.Collections.ArrayList
 $withSelfTest = 0
 foreach ($s in $scripts) {
   $txt = [IO.File]::ReadAllText($s.FullName)
-  $blk = Get-SelfTestBlock -Text $txt
+  $blk = Get-SelfTestBlock -Text $txt -Path $s.FullName   # -Path: a whole-file test-*.ps1 suite is read by its name
   if (-not $blk) { continue }
   $withSelfTest++
   $rel = $s.FullName.Replace($repo, '').TrimStart('\')

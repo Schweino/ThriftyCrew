@@ -40,6 +40,29 @@
 # body in source order, joined by newlines; a body nested inside one already taken is not repeated. Joining
 # can only ever ADD text to what the first match returned, so no census count can fall because of it.
 #
+# THREE MORE SHAPES (2026-09-11, later). The conditions above still left must-fire labels outside every body: 8
+# files and 111 lines counting only files that spell SelfTest, and 274 label lines in 25 files by a comment-blind
+# recount over every census file at 13b8b5df0. Each shape is read only where its body cannot run in production:
+#
+#   a guard-return          `if (-not <self-test condition>) { ...; exit }` whose LAST statement is exit or return:
+#                           the statements after it in its own block (grocery\test-pull-agent-lib.ps1). A guard
+#                           ending in anything else is refused - nine in the tree that day end in a try or an if,
+#                           and the production path can fall through those.
+#   Invoke-<name>SelfTest   a function so named: its body (meal-prep\pipeline\head-ingredients-lib.ps1). The verb is
+#                           part of the rule, because grocery\audit-alert-registry.ps1's Test-InsideSelfTest is a
+#                           predicate its live path calls on every Send-Alert site.
+#   a whole-file suite      a file NAMED test-*.ps1 (pass -Path) in whose code no self-test variable appears outside
+#                           the param block: from the param block, or the first statement, to the end, so the
+#                           header comment is not read. grocery\test-auditors.ps1 declares no switch at all, and
+#                           ops\test-prepush-hook.ps1 declares one only so run-gates finds it. A test-*.ps1 that
+#                           reads its switch is read by its gated body alone: grocery\test-guards.ps1 mutates live
+#                           files outside it. The name is the declaration; a file not so named is never read whole.
+#
+# SCOPE OF A CLEAN ANSWER: unsound. Still outside every body: a fixtures function with another name
+# (meal-prep\pipeline\selftest-names-lib.ps1 Invoke-NamesFixtures), labels in a production path
+# (meal-prep\pipeline\test-scaler-labels.ps1's generated page), and prose or messages that merely use the words
+# (ops\run-gates.ps1's gate list, grocery\triage-lib.ps1's header).
+#
 # A NEIGHBOUR, NOT A TWIN. lib\selftest-discovery.ps1 answers which SWITCH run-gates runs a script with; this
 # answers where the gated body IS. They differ over -or on purpose: discovery enrols `$Verbose -or $FfPriceSelfTest`
 # because that switch does reach the body, and this refuses it because the body also runs without the switch.
@@ -90,10 +113,12 @@ function Test-SelfTestCondition {
 }
 
 function Get-SelfTestBlock {
-  <# Every outermost self-test body in the script, joined in source order (see WHICH CONDITIONS above).
-     Returns '' when there is no such block AND when the file does not parse - a file that does not parse
-     is a different problem, and run-gates and the pre-commit hook both catch it. #>
-  param([string]$Text)
+  <# Every outermost self-test body in the script, joined in source order (see WHICH CONDITIONS and THREE MORE
+     SHAPES above). -Path is the script's path, and only its file name is read: the whole-file rule needs it, and
+     a caller passing text alone gets every other shape. Returns '' when there is no such body AND when the file
+     does not parse - a file that does not parse is a different problem, and run-gates and the pre-commit hook
+     both catch it. #>
+  param([string]$Text, [string]$Path = '')
   $errs = $null
   $ast = [System.Management.Automation.Language.Parser]::ParseInput($Text, [ref]$null, [ref]$errs)
   if ($errs -and $errs.Count) { return '' }
@@ -138,21 +163,80 @@ function Get-SelfTestBlock {
     }
   } while ($grew)
 
-  $kept = New-Object System.Collections.ArrayList
-  # FindAll walks parents before children, in source order, so an enclosing body is always taken first.
+  # Every candidate is a span of $Text; the outermost ones are kept below.
+  $spans = New-Object System.Collections.ArrayList
   foreach ($f in $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.IfStatementAst] }, $true)) {
     foreach ($c in $f.Clauses) {
-      if (-not (Test-SelfTestCondition -Node $c.Item1 -Names $names)) { continue }
-      $body = $c.Item2
-      $inside = $false
-      foreach ($t in $kept) {
-        if ($body.Extent.StartOffset -ge $t.Extent.StartOffset -and $body.Extent.EndOffset -le $t.Extent.EndOffset) { $inside = $true; break }
+      if (Test-SelfTestCondition -Node $c.Item1 -Names $names) {
+        [void]$spans.Add([pscustomobject]@{ S = $c.Item2.Extent.StartOffset; E = $c.Item2.Extent.EndOffset })
       }
-      if (-not $inside) { [void]$kept.Add($body) }
+    }
+    # A GUARD-RETURN: `if (-not <self-test condition>) { ...; exit }` as a statement of its own block. Only an exit
+    # or a return as the LAST statement counts; anything else there can let the production path fall through.
+    if ($f.Clauses.Count -ne 1 -or $f.ElseClause) { continue }
+    if ($f.Parent -isnot [System.Management.Automation.Language.NamedBlockAst] -and
+        $f.Parent -isnot [System.Management.Automation.Language.StatementBlockAst]) { continue }
+    $u = Get-SelfTestUnwrapped $f.Clauses[0].Item1
+    if ($u -isnot [System.Management.Automation.Language.UnaryExpressionAst]) { continue }
+    if ($u.TokenKind -ne [System.Management.Automation.Language.TokenKind]::Not -and
+        $u.TokenKind -ne [System.Management.Automation.Language.TokenKind]::Exclaim) { continue }
+    if (-not (Test-SelfTestCondition -Node $u.Child -Names $names)) { continue }
+    $gs = $f.Clauses[0].Item2.Statements
+    if (-not $gs.Count) { continue }
+    $last = $gs[$gs.Count - 1]
+    if ($last -isnot [System.Management.Automation.Language.ExitStatementAst] -and
+        $last -isnot [System.Management.Automation.Language.ReturnStatementAst]) { continue }
+    $after = $false; $first = -1; $end = -1
+    foreach ($s in $f.Parent.Statements) {
+      if ($after) { if ($first -lt 0) { $first = $s.Extent.StartOffset }; $end = $s.Extent.EndOffset }
+      elseif ([object]::ReferenceEquals($s, $f)) { $after = $true }
+    }
+    if ($first -ge 0) { [void]$spans.Add([pscustomobject]@{ S = $first; E = $end }) }
+  }
+
+  # A FUNCTION NAMED Invoke-<name>SelfTest: its body. The verb is part of the rule (see THREE MORE SHAPES).
+  foreach ($fd in $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true)) {
+    if (($fd.Name -replace '^(global|local|script|private):', '') -match '^Invoke-\w*SelfTest$') {
+      [void]$spans.Add([pscustomobject]@{ S = $fd.Body.Extent.StartOffset; E = $fd.Body.Extent.EndOffset })
     }
   }
-  if (-not $kept.Count) { return '' }
-  return (@($kept | ForEach-Object { $_.Extent.Text }) -join "`n")
+
+  # A WHOLE-FILE SUITE: a test-*.ps1 in whose code no self-test variable appears outside the param block.
+  if ((($Path -split '[\\/]')[-1]) -match '^test-.+\.ps1$') {
+    $inCode = $false
+    foreach ($v in $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.VariableExpressionAst] }, $true)) {
+      if (-not $names.Contains((Get-SelfTestVariableName $v))) { continue }
+      if ($ast.ParamBlock -and $v.Extent.StartOffset -ge $ast.ParamBlock.Extent.StartOffset -and
+          $v.Extent.EndOffset -le $ast.ParamBlock.Extent.EndOffset) { continue }
+      $inCode = $true; break
+    }
+    if (-not $inCode) {
+      # From the param block, or the first statement when there is none, so the header comment is not read.
+      $start = -1
+      if ($ast.ParamBlock) { $start = $ast.ParamBlock.Extent.StartOffset }
+      else {
+        foreach ($nb in @($ast.DynamicParamBlock, $ast.BeginBlock, $ast.ProcessBlock, $ast.EndBlock)) {
+          if ($nb -and $nb.Statements.Count) {
+            $s0 = $nb.Statements[0].Extent.StartOffset
+            if ($start -lt 0 -or $s0 -lt $start) { $start = $s0 }
+          }
+        }
+      }
+      if ($start -ge 0) { [void]$spans.Add([pscustomobject]@{ S = $start; E = $Text.Length }) }
+    }
+  }
+
+  if (-not $spans.Count) { return '' }
+  # Outermost first: by start, and the longer of two spans that start together. A span inside one already kept
+  # is not repeated. The AST nests, so two spans never partly overlap.
+  $ordered = @($spans | Sort-Object -Property @{ Expression = 'S'; Ascending = $true }, @{ Expression = 'E'; Descending = $true })
+  $kept = New-Object System.Collections.ArrayList
+  foreach ($sp in $ordered) {
+    $inside = $false
+    foreach ($k in $kept) { if ($sp.S -ge $k.S -and $sp.E -le $k.E) { $inside = $true; break } }
+    if (-not $inside) { [void]$kept.Add($sp) }
+  }
+  return (@($kept | ForEach-Object { $Text.Substring($_.S, $_.E - $_.S) }) -join "`n")
 }
 
 if ($__stlSelfTest) {
@@ -219,7 +303,54 @@ if ($__stlSelfTest) {
   StT 'CLEAN TWIN: a self-test if nested inside the self-test body is in the text exactly once' `
       (([regex]::Matches((Get-SelfTestBlock -Text $nest), 'nested = 1')).Count -eq 1)
 
+  # THREE MORE SHAPES (2026-09-11, later). Each MUST FIRE is a real suite's opening; each MUST NOT FIRE is a production
+  # path one of the three rules would take if it were one word looser.
+  $guard = "param([switch]`$SelfTest)`nfunction Find-Node { 'finder' }`nif (-not `$SelfTest) { Write-Output 'pass -SelfTest'; exit 0 }`n`$gr = 1`n"
+  $bg = Get-SelfTestBlock -Text $guard
+  StT 'MUST FIRE: the code after if (-not $SelfTest) { ...; exit 0 } is the self-test (the grocery\test-pull-agent-lib.ps1 shape)' `
+      (($bg -match '\$gr = 1') -and ($bg -notmatch 'pass -SelfTest') -and ($bg -notmatch 'finder'))
+  StT 'MUST FIRE: a dot-sourced lib guard, if (!$__abSelfTest) { return }, opens it too' `
+      ((Get-SelfTestBlock -Text "`$__abSelfTest = `$false`nif (!`$__abSelfTest) { return }`n`$gd = 1`n") -match '\$gd = 1')
+  $fnSrc = "function Get-HeadThing { 'production' }`nfunction Invoke-HiSelfTest {`n  `$hi = 1`n}`n"
+  $bf = Get-SelfTestBlock -Text $fnSrc
+  StT 'MUST FIRE: the body of a function named Invoke-<name>SelfTest is a self-test (the head-ingredients-lib shape)' `
+      (($bf -match '\$hi = 1') -and ($bf -notmatch 'production'))
+  $whole = "<#`n  test-auditors.ps1 - header prose`n#>`n[CmdletBinding()]`nparam([string]`$SkipUnitsFile = '')`n`$wf = 1`n"
+  $bw = Get-SelfTestBlock -Text $whole -Path 'C:\x\grocery\test-auditors.ps1'
+  StT 'MUST FIRE: a test-*.ps1 with no self-test switch is a whole-file suite from its param block on (the test-auditors shape)' `
+      (($bw -match '\$wf = 1') -and ($bw -match 'SkipUnitsFile') -and ($bw -notmatch 'header prose'))
+  $declared = "param([switch]`$SelfTest)   # accepted so run-gates discovers this file; the cases run either way`n`$wf2 = 1`n"
+  StT 'MUST FIRE: a test-*.ps1 whose -SelfTest switch nothing reads is a whole-file suite (the test-prepush-hook shape)' `
+      ((Get-SelfTestBlock -Text $declared -Path 'ops\test-prepush-hook.ps1') -match '\$wf2 = 1')
+
+  StT 'MUST NOT FIRE: a negated guard ending in a try, not an exit, lets production fall through (grocery\build-aldi-regular.ps1)' `
+      ((Get-SelfTestBlock -Text "param([switch]`$SelfTest)`nif (-not `$SelfTest) { try { Invoke-LivePull } finally { `$z = 0 } }`n`$after = 1`n") -eq '')
+  StT 'MUST NOT FIRE: a guard whose exit is itself conditional does not gate what follows' `
+      ((Get-SelfTestBlock -Text "param([switch]`$SelfTest)`nif (-not `$SelfTest) { if (`$Force) { exit 0 } }`n`$after = 1`n") -eq '')
+  StT 'MUST NOT FIRE: a guard-return on an unrelated switch leaves production code after it' `
+      ((Get-SelfTestBlock -Text "param([switch]`$Apply)`nif (-not `$Apply) { exit 0 }`n`$apply = 1`n") -eq '')
+  StT 'MUST NOT FIRE: a guard on -not ($SelfTest -or $Apply) lets -Apply alone through' `
+      ((Get-SelfTestBlock -Text "param([switch]`$SelfTest, [switch]`$Apply)`nif (-not (`$SelfTest -or `$Apply)) { exit 0 }`n`$either = 1`n") -eq '')
+  StT 'MUST NOT FIRE: a counter merely named for self-tests, guarding an exit, is not one (the ops\run-gates.ps1 shape)' `
+      ((Get-SelfTestBlock -Text "`$withSelfTest = @()`nif (-not `$withSelfTest.Count) { exit 3 }`n`$live = 1`n") -eq '')
+  StT 'MUST NOT FIRE: Test-InsideSelfTest is a predicate the live path calls, not a self-test (grocery\audit-alert-registry.ps1)' `
+      ((Get-SelfTestBlock -Text "function Test-InsideSelfTest {`n  param(`$Node)`n  `$p = 1`n}`n") -eq '')
+  StT 'MUST NOT FIRE: an unread -SelfTest switch in a file NOT named test-*.ps1 is not a whole-file suite' `
+      ((Get-SelfTestBlock -Text $declared -Path 'grocery\pull-regular-thing.ps1') -eq '')
+  StT 'MUST NOT FIRE: a name that merely contains test- is not a suite name' `
+      ((Get-SelfTestBlock -Text $declared -Path 'grocery\latest-test-run.ps1') -eq '')
+  StT 'MUST NOT FIRE: without -Path the whole-file rule cannot apply, so a caller passing text alone gets the old answer' `
+      ((Get-SelfTestBlock -Text $whole) -eq '')
+  $tg = "param([switch]`$SelfTest)`nif (`$SelfTest) {`n  `$st = 1`n}`n`$live = 'production'`n"
+  $btg = Get-SelfTestBlock -Text $tg -Path 'grocery\test-guards.ps1'
+  StT 'MUST NOT FIRE: a test-*.ps1 that READS its switch is read by its gated body alone (grocery\test-guards.ps1 mutates live files outside it)' `
+      (($btg -match '\$st = 1') -and ($btg -notmatch 'production'))
+  $onceSrc = "param([switch]`$SelfTest)`nif (-not `$SelfTest) { exit 0 }`nif (`$SelfTest) {`n  `$once = 1`n}`nfunction Invoke-XSelfTest {`n  `$inner = 1`n}`n"
+  $bo = Get-SelfTestBlock -Text $onceSrc
+  StT 'CLEAN TWIN: an if body and an Invoke-*SelfTest function inside a guard-return span are each read exactly once' `
+      ((([regex]::Matches($bo, 'once = 1')).Count -eq 1) -and (([regex]::Matches($bo, 'inner = 1')).Count -eq 1))
+
   if ($fail) { Write-Output "SELFTEST-LIB SELF-TEST FAILED ($fail)"; exit 1 }
-  Write-Output 'SELFTEST-LIB SELF-TEST PASSED (every opening shape found, production conditions refused, and the two shapes that broke the hand-written scanners are armed)'
+  Write-Output 'SELFTEST-LIB SELF-TEST PASSED (every opening shape found - gated body, guard-return, Invoke-*SelfTest, whole-file suite - production paths refused, and the two shapes that broke the hand-written scanners are armed)'
   exit 0
 }

@@ -203,6 +203,13 @@ everything else honest, so a defect here is silent by construction.
   that used it as a hashtable key threw, which is the lucky case; the same value in a `-match` matches nothing, so
   a walk that collects variable names finds none and returns an agreeing empty. Strip the scope from `UserPath`
   instead: `Get-SelfTestVariableName` in `lib/selftest-lib.ps1`.
+- **A self-test the census cannot find can lose its must-fires and stay green** (2026-09-11). `ops/audit-mustfire-census.ps1`
+  and `ops/audit-fixture-inputs.ps1` read only the bodies `Get-SelfTestBlock` in `lib/selftest-lib.ps1` returns: an
+  `if` gated on a self-test switch or a copy of one, the code after `if (-not $SelfTest) { ...; exit }`, a function
+  named `Invoke-<name>SelfTest`, and a whole file NAMED `test-*.ps1` that reads no self-test switch. Measured that
+  day, 17 files and 230 must-fire lines sat outside every shape the census then read, 65 of them in
+  `grocery/test-auditors.ps1`. **Open a new suite in one of these shapes.** Fixtures run from a function with another
+  name (`Invoke-NamesFixtures`), or behind a guard that ends in a try rather than an exit, are still invisible.
 - **A hermetic self-test never asserts an UPPER wall-clock bar** (2026-09-11). Several sessions push from
   one box, so a pre-push `run-gates` shares the cores with theirs: a set that takes 106 s quiet took 792 s,
   and `fanout-lib`'s "under 12 s" and `parallel-run`'s "under 2.5 s" concurrency cases blocked a push that

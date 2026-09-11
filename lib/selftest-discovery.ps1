@@ -36,7 +36,8 @@
 # A NEIGHBOUR, NOT A TWIN. lib\selftest-lib.ps1's Get-SelfTestBlock answers where the gated block IS, for
 # ops\audit-mustfire-census.ps1 and ops\audit-fixture-inputs.ps1. Since 2026-09-11 it also reads a renamed switch, a
 # variable captured from a switch and a compound condition, so the gates this file enrols are visible to those two
-# audits. They differ over -or on purpose: this enrols a renamed switch that is one operand of an -or chain, because
+# audits; and, later that day, a guard-return, an Invoke-*SelfTest function and a whole-file test-*.ps1 suite. The
+# last needs no switch at all, so it reaches suites this file never enrols (grocery\test-auditors.ps1 is one). They differ over -or on purpose: this enrols a renamed switch that is one operand of an -or chain, because
 # the switch does reach the body, and that refuses the chain unless EVERY operand is a self-test switch, because
 # otherwise the body also runs in production.
 #
