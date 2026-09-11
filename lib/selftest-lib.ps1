@@ -112,16 +112,21 @@ function Test-SelfTestCondition {
   return $false
 }
 
-function Get-SelfTestBlock {
-  <# Every outermost self-test body in the script, joined in source order (see WHICH CONDITIONS and THREE MORE
-     SHAPES above). -Path is the script's path, and only its file name is read: the whole-file rule needs it, and
-     a caller passing text alone gets every other shape. Returns '' when there is no such body AND when the file
-     does not parse - a file that does not parse is a different problem, and run-gates and the pre-commit hook
-     both catch it. #>
+function Get-SelfTestSpans {
+  <# Every outermost self-test body as a SPAN: .S and .E are offsets into $Text, in source order (see WHICH
+     CONDITIONS and THREE MORE SHAPES above). -Path is the script's path, and only its file name is read: the
+     whole-file rule needs it, and a caller passing text alone gets every other shape. Returns an EMPTY ARRAY
+     when there is no such body AND when the file does not parse - a file that does not parse is a different
+     problem, and run-gates and the pre-commit hook both catch it.
+
+     WHY THE OFFSETS ARE EXPOSED (2026-09-11). ops\audit-mustfire-census.ps1 asks two further questions that
+     need to know WHERE a body is and not only what it says: is this labelled function called only from inside
+     one, and is this labelled top-level table read by one. Get-SelfTestBlock below is still the text answer and
+     is unchanged, so ops\audit-fixture-inputs.ps1 gets exactly the bytes it got before this was split out. #>
   param([string]$Text, [string]$Path = '')
   $errs = $null
   $ast = [System.Management.Automation.Language.Parser]::ParseInput($Text, [ref]$null, [ref]$errs)
-  if ($errs -and $errs.Count) { return '' }
+  if ($errs -and $errs.Count) { return @() }
 
   # PowerShell variable names are case-insensitive, so the set is too.
   $names = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
@@ -226,7 +231,7 @@ function Get-SelfTestBlock {
     }
   }
 
-  if (-not $spans.Count) { return '' }
+  if (-not $spans.Count) { return @() }
   # Outermost first: by start, and the longer of two spans that start together. A span inside one already kept
   # is not repeated. The AST nests, so two spans never partly overlap.
   $ordered = @($spans | Sort-Object -Property @{ Expression = 'S'; Ascending = $true }, @{ Expression = 'E'; Descending = $true })
@@ -236,6 +241,18 @@ function Get-SelfTestBlock {
     foreach ($k in $kept) { if ($sp.S -ge $k.S -and $sp.E -le $k.E) { $inside = $true; break } }
     if (-not $inside) { [void]$kept.Add($sp) }
   }
+  return @($kept)
+}
+
+function Get-SelfTestBlock {
+  <# Every outermost self-test body, joined in source order: the TEXT answer, and the only thing this lib
+     returned before the spans were split out above. Same bytes for the same input, which is what
+     ops\audit-fixture-inputs.ps1 and ops\audit-mustfire-census.ps1 both read. #>
+  param([string]$Text, [string]$Path = '')
+  # Assign, THEN wrap. @(Get-Thing ...) inline reads a comma-returned array as ONE element [[ps-json-array-collapse]].
+  $kept = Get-SelfTestSpans -Text $Text -Path $Path
+  $kept = @($kept)
+  if (-not $kept.Count) { return '' }
   return (@($kept | ForEach-Object { $Text.Substring($_.S, $_.E - $_.S) }) -join "`n")
 }
 
@@ -349,6 +366,29 @@ if ($__stlSelfTest) {
   $bo = Get-SelfTestBlock -Text $onceSrc
   StT 'CLEAN TWIN: an if body and an Invoke-*SelfTest function inside a guard-return span are each read exactly once' `
       ((([regex]::Matches($bo, 'once = 1')).Count -eq 1) -and (([regex]::Matches($bo, 'inner = 1')).Count -eq 1))
+
+  # THE SPANS ARE THE SAME ANSWER (2026-09-11). Get-SelfTestSpans was split out so ops\audit-mustfire-census.ps1 can
+  # ask WHERE a body is; the text answer may not move, because ops\audit-fixture-inputs.ps1 reads it. The fixture
+  # INPUT below is built by concatenation: a literal label in it would be counted by the census this lib feeds
+  # ([[selftest-greps-its-own-source]]). The case labels themselves stay literal - they are real assertions.
+  $MFs = 'MUST' + ' FIRE'
+  $spanSrc = "param([switch]`$SelfTest)`nif (`$SelfTest) {`n  T '" + $MFs + ": one'`n}`nWrite-Output 'production'`n"
+  $sp1 = Get-SelfTestSpans -Text $spanSrc
+  $sp1 = @($sp1)
+  StT 'MUST FIRE: Get-SelfTestSpans returns one span whose offsets cut exactly the text Get-SelfTestBlock returns' `
+      (($sp1.Count -eq 1) -and [string]::Equals($spanSrc.Substring($sp1[0].S, $sp1[0].E - $sp1[0].S),
+        (Get-SelfTestBlock -Text $spanSrc), [StringComparison]::Ordinal))
+  $spNone = Get-SelfTestSpans -Text "Write-Output 'hi'"
+  $spNone = @($spNone)
+  StT 'CLEAN TWIN: a file with no self-test yields no spans at all, and the text answer is still the empty string' `
+      (($spNone.Count -eq 0) -and ((Get-SelfTestBlock -Text "Write-Output 'hi'") -eq ''))
+  $twoSrc = "param([switch]`$SelfTest)`nif (`$SelfTest) {`n  `$a = 1`n}`nWrite-Output 'live'`nif (`$SelfTest) {`n  `$b = 2`n}`n"
+  $sp2 = Get-SelfTestSpans -Text $twoSrc
+  $sp2 = @($sp2)
+  StT 'CLEAN TWIN: two bodies come back as two spans in source order, and joining them IS the text answer' `
+      (($sp2.Count -eq 2) -and ($sp2[0].S -lt $sp2[1].S) -and
+       [string]::Equals((@($sp2 | ForEach-Object { $twoSrc.Substring($_.S, $_.E - $_.S) }) -join "`n"),
+         (Get-SelfTestBlock -Text $twoSrc), [StringComparison]::Ordinal))
 
   if ($fail) { Write-Output "SELFTEST-LIB SELF-TEST FAILED ($fail)"; exit 1 }
   Write-Output 'SELFTEST-LIB SELF-TEST PASSED (every opening shape found - gated body, guard-return, Invoke-*SelfTest, whole-file suite - production paths refused, and the two shapes that broke the hand-written scanners are armed)'
