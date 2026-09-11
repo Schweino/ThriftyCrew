@@ -83,6 +83,7 @@ function Enter-TcGateSlots {
   if ($Want -lt 1) { $Want = 1 }
   if ($Exact -and $Want -gt $Total) { $Want = $Total }
   $held = [Collections.Generic.List[object]]::new()
+  $idx = [Collections.Generic.List[int]]::new()
   $sw = [Diagnostics.Stopwatch]::StartNew()
   $spoke = $false
   while ($true) {
@@ -92,16 +93,16 @@ function Enter-TcGateSlots {
       $got = $false
       try { $got = $mx.WaitOne(0) }
       catch [System.Threading.AbandonedMutexException] { $got = $true }   # a killed run, not a wedge
-      if ($got) { $held.Add($mx) } else { $mx.Dispose() }
+      if ($got) { $held.Add($mx); $idx.Add($i) } else { $mx.Dispose() }
     }
     if ($held.Count -ge $Want) { break }
     if (-not $Exact -and $held.Count -ge 1) { break }
     if ($Exact -and $held.Count) {
       foreach ($h in $held) { try { $h.ReleaseMutex() } catch { }; try { $h.Dispose() } catch { } }
-      $held.Clear()
+      $held.Clear(); $idx.Clear()
     }
     if ($sw.Elapsed.TotalSeconds -ge $WaitSec) {
-      return [pscustomobject]@{ Mutexes = @(); Count = 0; WaitedMs = $sw.Elapsed.TotalMilliseconds; TimedOut = $true }
+      return [pscustomobject]@{ Mutexes = $held; Indices = $idx; Count = 0; WaitedMs = $sw.Elapsed.TotalMilliseconds; TimedOut = $true; Prefix = $Prefix; Total = $Total }
     }
     # OUT-DEFAULT, NOT THE OUTPUT STREAM (2026-09-11). Anything OnWait writes would otherwise join this
     # function's return, so `$lease = Enter-TcGateSlots` became an ARRAY of the message and the lease: the
@@ -110,7 +111,41 @@ function Enter-TcGateSlots {
     if (-not $spoke -and $OnWait) { & $OnWait | Out-Default; $spoke = $true }
     Start-Sleep -Milliseconds $PollMs
   }
-  return [pscustomobject]@{ Mutexes = $held.ToArray(); Count = $held.Count; WaitedMs = $sw.Elapsed.TotalMilliseconds; TimedOut = $false }
+  return [pscustomobject]@{ Mutexes = $held; Indices = $idx; Count = $held.Count; WaitedMs = $sw.Elapsed.TotalMilliseconds; TimedOut = $false; Prefix = $Prefix; Total = $Total }
+}
+
+function Add-TcGateSlots {
+  <# NON-BLOCKING top-up of a lease toward Want, for a pool that still has gates queued. It tries only the slot
+     indices this lease does NOT already hold: a mutex is re-entrant for the thread that owns it, so retrying
+     slot 0 would "succeed" and count a slot twice. Emits nothing - read $Lease.Count. Same thread as Enter. #>
+  param([object]$Lease, [int]$Want)
+  if (-not $Lease -or $Lease.TimedOut) { return }
+  if ($Want -gt $Lease.Total) { $Want = $Lease.Total }
+  for ($i = 0; ($i -lt $Lease.Total) -and ($Lease.Mutexes.Count -lt $Want); $i++) {
+    if ($Lease.Indices.Contains($i)) { continue }
+    $mx = New-Object System.Threading.Mutex($false, ($Lease.Prefix + $i))
+    $got = $false
+    try { $got = $mx.WaitOne(0) }
+    catch [System.Threading.AbandonedMutexException] { $got = $true }
+    if ($got) { $Lease.Mutexes.Add($mx); $Lease.Indices.Add($i) } else { $mx.Dispose() }
+  }
+  $Lease.Count = $Lease.Mutexes.Count
+}
+
+function Reduce-TcGateSlots {
+  <# Give back every slot beyond Keep, newest first, for a pool whose dispatch is done and whose running gates
+     no longer need them. Emits nothing - read $Lease.Count. Same thread as Enter. #>
+  param([object]$Lease, [int]$Keep)
+  if (-not $Lease -or $Lease.TimedOut) { return }
+  if ($Keep -lt 0) { $Keep = 0 }
+  while ($Lease.Mutexes.Count -gt $Keep) {
+    $last = $Lease.Mutexes.Count - 1
+    $mx = $Lease.Mutexes[$last]
+    try { $mx.ReleaseMutex() } catch { }
+    try { $mx.Dispose() } catch { }
+    $Lease.Mutexes.RemoveAt($last); $Lease.Indices.RemoveAt($last)
+  }
+  $Lease.Count = $Lease.Mutexes.Count
 }
 
 function Exit-TcGateSlots {
@@ -120,6 +155,10 @@ function Exit-TcGateSlots {
     try { $mx.ReleaseMutex() } catch { }
     try { $mx.Dispose() } catch { }
   }
+  # Cleared, so a lease already reduced to nothing, or exited twice, releases nothing twice.
+  if ($Lease.Mutexes -is [Collections.IList]) { $Lease.Mutexes.Clear() }
+  if ($Lease.Indices -is [Collections.IList]) { $Lease.Indices.Clear() }
+  $Lease.Count = 0
 }
 
 if ($__gsSelfTest) {
@@ -255,22 +294,26 @@ foreach ($m in $ms) { try { $m.ReleaseMutex() } catch { } }
 
     $pG = $prefix + 'g-'
     $l = Enter-TcGateSlots -Want 2 -Total 2 -Prefix $pG -WaitSec 5 -PollMs 100
+    # READ BEFORE EXIT: Exit-TcGateSlots zeroes the lease's Count, so a count read afterwards says nothing
+    # about what was held.
+    $firstG = $l.Count
     Exit-TcGateSlots $l
     $h = Start-Holder $pG 2 'g'
     T 'CLEAN TWIN slots released by Exit-TcGateSlots are really free - another process takes all of them straight away' `
-      ($l.Count -eq 2 -and $h.Held -eq 2) ("first={0} otherProcessHeld={1}" -f $l.Count, $h.Held)
+      ($firstG -eq 2 -and $h.Held -eq 2) ("first={0} otherProcessHeld={1}" -f $firstG, $h.Held)
     [IO.File]::WriteAllText($h.Release, 'go'); [void]$h.Proc.WaitForExit(10000)
 
     # THE PRODUCTION SHAPE: a second push is already WAITING, holding its own handles, when this run exits.
     # Its handles keep the mutex objects alive, so only a real ReleaseMutex hands the slots over.
     $pH = $prefix + 'h-'
     $l = Enter-TcGateSlots -Want 2 -Total 2 -Prefix $pH -WaitSec 5 -PollMs 100
+    $firstH = $l.Count
     $w = Start-Holder $pH 2 'h' -WaitMs 8000 -ReturnWhileWaiting
     Start-Sleep -Milliseconds 300
     Exit-TcGateSlots $l
     $waiterHeld = Read-HolderCount $w.ReadyFile 25
     T 'CLEAN TWIN a run already WAITING in another process, with its handles open, gets every slot the moment this run exits its lease' `
-      ($l.Count -eq 2 -and $w.Waiting -and $waiterHeld -eq 2) ("first={0} waiterWasWaiting={1} waiterHeld={2}" -f $l.Count, $w.Waiting, $waiterHeld)
+      ($firstH -eq 2 -and $w.Waiting -and $waiterHeld -eq 2) ("first={0} waiterWasWaiting={1} waiterHeld={2}" -f $firstH, $w.Waiting, $waiterHeld)
     [IO.File]::WriteAllText($w.Release, 'go'); [void]$w.Proc.WaitForExit(10000)
 
     # -EXACT, the all-or-nothing request ops\cpu-load.ps1 makes for deliberate load.
@@ -299,12 +342,37 @@ foreach ($m in $ms) { try { $m.ReleaseMutex() } catch { } }
     T 'CLEAN TWIN an EXACT waiter gets all 3 the moment every slot is free, and proceeds' `
       ($waiterGot -eq 3) ("waiterGot={0}" -f $waiterGot)
     [void]$waiter.WaitForExit(10000)
+
+    # GROW AND SHRINK, which run-gates' pool calls so its grant moves with its work.
+    $pK = $prefix + 'k-'
+    $lK = Enter-TcGateSlots -Want 2 -Total 3 -Prefix $pK -WaitSec 5 -PollMs 100
+    $hK = Start-Holder $pK 3 'k' -WaitMs 400
+    $addOut = Add-TcGateSlots -Lease $lK -Want 3
+    $blockedCount = $lK.Count
+    T 'MUST FIRE  Add-TcGateSlots never re-counts a slot this lease already holds - a mutex is re-entrant for its own thread, so retrying slot 0 would read as a new grant' `
+      ($lK.Count -ge 2 -and $hK.Held -eq 1 -and $blockedCount -eq 2 -and $null -eq $addOut) ("leaseStart=2 otherProcessHeld={0} afterTopUp={1} emitted={2}" -f $hK.Held, $blockedCount, ($null -ne $addOut))
+    [IO.File]::WriteAllText($hK.Release, 'go'); [void]$hK.Proc.WaitForExit(10000)
+    Add-TcGateSlots -Lease $lK -Want 3
+    $grown = $lK.Count
+    T 'CLEAN TWIN Add-TcGateSlots takes the slot another run just gave back, topping the lease up to what it wanted' `
+      ($grown -eq 3) ("afterRelease={0}" -f $grown)
+    Reduce-TcGateSlots -Lease $lK -Keep 1
+    $kept = $lK.Count
+    $hK2 = Start-Holder $pK 3 'k2' -WaitMs 400
+    T 'CLEAN TWIN Reduce-TcGateSlots really gives back what it drops - keeping 1 of 3, another process takes the other 2 at once' `
+      ($kept -eq 1 -and $hK2.Held -eq 2) ("kept={0} otherProcessHeld={1}" -f $kept, $hK2.Held)
+    [IO.File]::WriteAllText($hK2.Release, 'go'); [void]$hK2.Proc.WaitForExit(10000)
+    Exit-TcGateSlots $lK
+    $hK3 = Start-Holder $pK 3 'k3' -WaitMs 400
+    T 'CLEAN TWIN Exit after Reduce leaves every slot free, and the lease reads 0' `
+      ($hK3.Held -eq 3 -and $lK.Count -eq 0) ("otherProcessHeld={0} leaseCount={1}" -f $hK3.Held, $lK.Count)
+    [IO.File]::WriteAllText($hK3.Release, 'go'); [void]$hK3.Proc.WaitForExit(10000)
   } finally {
     foreach ($p in $holders) { try { if (-not $p.HasExited) { $p.Kill() } } catch { } }
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
-  Write-Output ("SELF-TEST PASS: {0} cases - 4 must-fire led by a full machine refusing a new run, 3 must-not-fire led by a lone run getting its whole want, and 5 clean twins led by a killed run freeing its slots at once" -f $cases)
+  Write-Output ("SELF-TEST PASS: {0} cases - 5 must-fire led by a full machine refusing a new run, 3 must-not-fire led by a lone run getting its whole want, and 8 clean twins led by a killed run freeing its slots at once" -f $cases)
   exit 0
 }

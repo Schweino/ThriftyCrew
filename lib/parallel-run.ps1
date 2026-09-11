@@ -63,12 +63,26 @@ function Invoke-TcParallel {
 
      A TIMED-OUT JOB IS A HARD FAILURE, NOT A PASS. It comes back with the killed process's own exit
      code discarded and ExitCode 3 - could-not-evaluate - because a gate that hung proved nothing and
-     must never be scored as silence. #>
+     must never be scored as silence.
+
+     GROW AND SHRINK (2026-09-11), both optional; without them the pool behaves exactly as before. They
+     exist for run-gates' machine-wide worker budget (lib\gate-slots.ps1). A run that held its whole
+     grant until its whole pool finished made every other push queue behind its slowest straggler: six
+     runs were measured waiting while one held all 10 slots with 2 gates still running, and a run that
+     waits 20 minutes refuses the push.
+       Grow   is called while jobs are still QUEUED and every worker is busy, at most every 500 ms (first
+              plausible, not a sweep); it gets the current width and returns the new one. A smaller
+              answer is ignored - Grow can only widen.
+       Shrink is called once dispatch is complete and again every time a job finishes after that; it gets
+              the number of jobs still running, so a draining pool can hand back what it no longer uses.
+     Their output is not the pool's output: Grow's LAST value is read and Shrink's is discarded. #>
   param(
     [object[]]$Jobs,
     [int]$Concurrency = 12,
     [int]$TimeoutSec = 900,
-    [string]$WorkingDirectory = $null
+    [string]$WorkingDirectory = $null,
+    [scriptblock]$Grow = $null,
+    [scriptblock]$Shrink = $null
   )
   $n = @($Jobs).Count
   $results = New-Object object[] $n
@@ -77,7 +91,18 @@ function Invoke-TcParallel {
 
   $running = [Collections.Generic.List[object]]::new()
   $next = 0
+  $growSw = [Diagnostics.Stopwatch]::StartNew()
+  $shrankAtDispatchEnd = $false
   while (($next -lt $n) -or ($running.Count -gt 0)) {
+    if ($Grow -and ($next -lt $n) -and ($running.Count -ge $Concurrency) -and ($growSw.ElapsedMilliseconds -ge 500)) {
+      $g = & $Grow $Concurrency
+      $g = @($g)
+      if ($g.Count -and ($null -ne $g[$g.Count - 1])) {
+        $w = [int]$g[$g.Count - 1]
+        if ($w -gt $Concurrency) { $Concurrency = $w }
+      }
+      $growSw.Restart()
+    }
     while (($next -lt $n) -and ($running.Count -lt $Concurrency)) {
       $j = $Jobs[$next]
       $psi = New-Object Diagnostics.ProcessStartInfo
@@ -95,6 +120,10 @@ function Invoke-TcParallel {
         Sw = [Diagnostics.Stopwatch]::StartNew()
       })
       $next++
+    }
+    if ($Shrink -and -not $shrankAtDispatchEnd -and ($next -ge $n)) {
+      $null = & $Shrink $running.Count
+      $shrankAtDispatchEnd = $true
     }
 
     $done = @($running | Where-Object { $_.Proc.HasExited -or ($_.Sw.Elapsed.TotalSeconds -gt $TimeoutSec) })
@@ -115,6 +144,9 @@ function Invoke-TcParallel {
       }
       try { $r.Proc.Dispose() } catch { }
       [void]$running.Remove($r)
+    }
+    if ($Shrink -and $done.Count -and ($next -ge $n)) {
+      $null = & $Shrink $running.Count
     }
     if ($running.Count -ge $Concurrency -or ($next -ge $n -and $running.Count -gt 0)) {
       Start-Sleep -Milliseconds 15
@@ -181,7 +213,40 @@ if ($__prSelfTest) {
     Remove-TcRendezvousProbe -Probe $rdv
   }
 
+  # GROW AND SHRINK, proven by rendezvous files rather than timed: a job WAITS for a file only the behaviour
+  # under test can produce, and gives up after 20s (a hang guard, which load can only make slower to reach).
+  $gsDir = Join-Path $env:TEMP ('pr-gs-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  $null = New-Item -ItemType Directory -Force $gsDir
+  try {
+    $fa = Join-Path $gsDir 'a'; $fb = Join-Path $gsDir 'b'; $fr = Join-Path $gsDir 'released'
+    $waitFor = '[IO.File]::WriteAllText(''{0}'', ''1''); $sw = [Diagnostics.Stopwatch]::StartNew(); while (-not (Test-Path -LiteralPath ''{1}'') -and $sw.Elapsed.TotalSeconds -lt 20) {{ Start-Sleep -Milliseconds 50 }}; if (Test-Path -LiteralPath ''{1}'') {{ ''saw'' }} else {{ ''alone'' }}'
+    $jobA = MkJob ($waitFor -f $fa, $fb)
+    $jobB = MkJob ($waitFor -f $fb, $fa)
+    $script:growCalls = 0
+    $grow = Invoke-TcParallel -Jobs @($jobA, $jobB) -Concurrency 1 -Grow { param($w) $script:growCalls++; 2 }
+    T 'MUST FIRE  a pool started at width 1 WIDENS when Grow grants more - the second job starts while the first is still waiting for it, which width 1 can never do' `
+      ((($grow[0].Out -join '') -eq 'saw') -and (($grow[1].Out -join '') -eq 'saw') -and $script:growCalls -ge 1) `
+      ("jobA={0} jobB={1} growCalls={2}" -f ($grow[0].Out -join ''), ($grow[1].Out -join ''), $script:growCalls)
+
+    $slowJob = MkJob ('$sw = [Diagnostics.Stopwatch]::StartNew(); while (-not (Test-Path -LiteralPath ''{0}'') -and $sw.Elapsed.TotalSeconds -lt 20) {{ Start-Sleep -Milliseconds 50 }}; if (Test-Path -LiteralPath ''{0}'') {{ ''released'' }} else {{ ''never'' }}' -f $fr)
+    $script:shrinkSeen = [Collections.Generic.List[int]]::new()
+    $shr = Invoke-TcParallel -Jobs @($slowJob, (MkJob 'exit 0')) -Concurrency 2 -Shrink {
+      param($stillRunning)
+      $script:shrinkSeen.Add($stillRunning)
+      if ($stillRunning -eq 1) { [IO.File]::WriteAllText($fr, '1') }
+    }
+    $seen = ($script:shrinkSeen -join ',')
+    T 'MUST FIRE  once dispatch is done, Shrink hears the running count fall as jobs finish - it is told 1 while the straggler still runs, which is when run-gates hands slots back' `
+      ((($shr[0].Out -join '') -eq 'released') -and $script:shrinkSeen.Contains(1) -and $script:shrinkSeen[$script:shrinkSeen.Count - 1] -eq 0) `
+      ("straggler={0} shrinkSeen={1}" -f ($shr[0].Out -join ''), $seen)
+    $chatty = Invoke-TcParallel -Jobs @((MkJob 'Write-Output "only this"')) -Concurrency 1 -Shrink { param($s) Write-Output 'shrink noise' }
+    T 'MUST NOT FIRE  whatever Shrink writes never joins the pool''s results - one job in, one result out, its own line only' `
+      (@($chatty).Count -eq 1 -and ($chatty[0].Out -join '|') -eq 'only this') ("results={0} out={1}" -f @($chatty).Count, ($chatty[0].Out -join '|'))
+  } finally {
+    Remove-Item -LiteralPath $gsDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 3 must-fire cases led by job-order results and exact exit codes, 3 must-not-fire cases led by concurrency 1 matching the pool, and 4 clean twins including proven overlap'
+  Write-Output 'SELF-TEST PASS: 5 must-fire cases led by job-order results and exact exit codes and including a pool that widens and one that hands back, 4 must-not-fire cases led by concurrency 1 matching the pool, and 4 clean twins including proven overlap'
   exit 0
 }

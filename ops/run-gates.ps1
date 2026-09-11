@@ -461,12 +461,20 @@ if ($lease.TimedOut) {
   Exit-Guard -Name 'run-gates' -Summary 'blind=no-gate-worker-slot' -Code 3
 }
 $Jobs = $lease.Count
-Write-Output ("run-gates: {0} gate(s) dispatched into ONE pool at width {1} (asked {2}; {3} slot(s) of a machine-wide {4}, after {5:N1}s waiting for them)" -f $allJobs.Count, $Jobs, $askedJobs, $lease.Count, $script:TcGateSlotTotal, ($lease.WaitedMs / 1000))
+Write-Output ("run-gates: {0} gate(s) dispatched into ONE pool starting at width {1} (asked {2}; {3} slot(s) of a machine-wide {4}, after {5:N1}s waiting for them)" -f $allJobs.Count, $Jobs, $askedJobs, $lease.Count, $script:TcGateSlotTotal, ($lease.WaitedMs / 1000))
+# THE GRANT MOVES WITH THE WORK (2026-09-11). Holding the first grant until the whole pool finished queued
+# every other push behind this run's slowest straggler - measured: five runs idle while one held all 10
+# slots with 2 gates left. So the pool tops up toward what it asked for while gates are still queued, and
+# hands back every slot it no longer has a running gate for once the last gate is dispatched.
+$script:gateWidthMax = $lease.Count
 try {
-  $allRes = Invoke-TcParallel -Jobs $allJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
+  $allRes = Invoke-TcParallel -Jobs $allJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo `
+    -Grow { param($width) Add-TcGateSlots -Lease $lease -Want $askedJobs; if ($lease.Count -gt $script:gateWidthMax) { $script:gateWidthMax = $lease.Count }; $lease.Count } `
+    -Shrink { param($stillRunning) Reduce-TcGateSlots -Lease $lease -Keep $stillRunning }
 } finally {
   Exit-TcGateSlots $lease
 }
+Write-Output ("run-gates: pool width reached {0} of the {1} asked, and its slots were handed back as the last gates finished" -f $script:gateWidthMax, $askedJobs)
 # EXPLICIT INDEX COPIES, never `@(Get-Slice ...)` or a range expression. A function returning an array
 # UNROLLS, so a one-element slice - $pyStatic is exactly one job - would come back a SCALAR and index
 # into the object instead of the array, and an empty slice would need $a[0..-1] which is not empty.
