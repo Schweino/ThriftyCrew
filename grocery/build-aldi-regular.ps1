@@ -517,10 +517,16 @@ function Read-AldiCapture {
     the build runs rather than a copy of it. Returns data and prints NOTHING (Import-CaptureCsv's rule, for
     the same reason); the caller reports. A refusal comes back in .refuse with no row read.
   #>
-  param([string]$Path, [string]$Date)
+  param([string]$Path, [string]$Date, [switch]$WaiveMissingStoreLine)
   $lines = Get-Content $Path -Encoding UTF8
   $cs = Split-CaptureStore $lines
-  if ($cs.refuse) { return @{ refuse = $cs.refuse; cs = $cs; jr = $null; raw = @() } }
+  # -WaiveMissingStoreLine (2026-09-11) is for RE-READING a capture written before the store line existed, and
+  # nothing else. Its one caller is backfill-aldi-link-urls.ps1, which recovers the hrefs of rows an earlier build
+  # already priced and attributed; it reads an href, never a store. It waives the no-store-line refusal ONLY - a
+  # store line that is present and wrong (another city, Delivery, two stores, unparseable) is refused exactly as
+  # before. A build never passes it. The text it keys on is pinned by this file's own self-test ('no #tc-store line').
+  $waived = $WaiveMissingStoreLine -and $cs.refuse -and $cs.rows -eq 0 -and $cs.refuse.Contains('carries no #tc-store line')
+  if ($cs.refuse -and -not $waived) { return @{ refuse = $cs.refuse; cs = $cs; jr = $null; raw = @() } }
   $jr = Join-WrappedRecords $cs.lines
   $tmp = Join-Path $env:TEMP ('aldi-capture-clean-' + $Date + '-' + [guid]::NewGuid().ToString('N') + '.csv')
   try {
@@ -531,6 +537,13 @@ function Read-AldiCapture {
   $raw = if ($null -eq $read) { @() } else { @($read) }
   return @{ refuse = ''; cs = $cs; jr = $jr; raw = $raw }
 }
+
+# DOT-SOURCEABLE FOR ITS FUNCTIONS (2026-09-11). Everything above this line is definitions; everything below runs
+# a self-test or a build. backfill-aldi-link-urls.ps1 dot-sources this file so it can rebuild old captures through
+# Read-AldiCapture and Invoke-Build instead of carrying a copy of them, so a dot-source stops HERE. A caller must
+# know that dot-sourcing a script runs its param() block in the CALLER's scope, so its own $In, $Date and $SelfTest
+# are reset (lib\json-io.ps1 has the account). Run with -File or &, InvocationName is the path and nothing changes.
+if ($MyInvocation.InvocationName -eq '.') { return }
 
 if ($SelfTest) {
   $cases = @(
@@ -737,6 +750,20 @@ if ($SelfTest) {
     } else {
       Write-Output ('FAIL  CLEAN TWIN  Omaha capture: refusal [{0}] rows={1} stamped={2} source [{3}]' -f $cap.refuse, $nRows, $stamped, $src); $fail++
     }
+
+    # -WaiveMissingStoreLine (2026-09-11), for backfill-aldi-link-urls re-reading the pre-store-line captures.
+    # CLEAN TWIN: with the waiver, a store-less capture reads its two rows (the MUST FIRE above still refuses it without)
+    [IO.File]::WriteAllText($capFile, (@($COLS, $R1, $R2) -join "`n"), $utf8)
+    $capW = Read-AldiCapture -Path $capFile -Date '2026-01-01' -WaiveMissingStoreLine
+    if (-not $capW.refuse -and $capW.raw.Count -eq 2) {
+      Write-Output 'ok    CLEAN TWIN  -WaiveMissingStoreLine reads a store-less capture''s rows'
+    } else { Write-Output ('FAIL  -WaiveMissingStoreLine did not read a store-less capture: {0} row(s), refusal [{1}]' -f $capW.raw.Count, $capW.refuse); $fail++ }
+    # MUST FIRE: the waiver waives the MISSING line only - a store line naming another city is still refused
+    [IO.File]::WriteAllText($capFile, (@('#tc-store store="ALDI - OLA 12 - Lincoln" mode="In-Store" rows=2', $COLS, $R1, $R2) -join "`n"), $utf8)
+    $capL = Read-AldiCapture -Path $capFile -Date '2026-01-01' -WaiveMissingStoreLine
+    if ($capL.refuse -and $capL.refuse.Contains('not an Omaha store') -and $capL.raw.Count -eq 0) {
+      Write-Output 'ok    MUST FIRE  -WaiveMissingStoreLine still refuses a store line that names another city'
+    } else { Write-Output ('FAIL  -WaiveMissingStoreLine waived a non-Omaha store: {0} row(s), refusal [{1}]' -f $capL.raw.Count, $capL.refuse); $fail++ }
   } finally { Remove-Item $capFile -Force -ErrorAction SilentlyContinue }
 
   if ($fail) { Write-Output "$fail FAILED"; exit 1 } else { Write-Output "all self-tests pass"; exit 0 }
