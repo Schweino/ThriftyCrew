@@ -299,7 +299,13 @@ everything else honest, so a defect here is silent by construction.
   their baseline on a fall (read, not changed), and four that write through `WriteAllText` were not checked. The bot-owned data writers, archive and fixtures were left alone.
   **A typed parameter keeps its type**: `$json = '...'` in a script that declares `[switch]$Json` throws, because
   variable names are case-insensitive. It broke `audit-fact-claims`' tighten in this sweep, and only running
-  that path showed it.
+  that path showed it. It recurred the same day as `$rule = @(...)` beside `[string]$Rule` in a new self-test helper,
+  where `.Count` read 1 and a case passed over nothing, so **`ops/audit-typed-param-shadow.ps1` holds it at push
+  time**: a ratchet over the AST that reports a value whose KIND changes on the way into a typed parameter (an array
+  into `[string]`, a string into `[switch]` or `[bool]`, `$null` into `[string]`). A same-kind reassignment is legal:
+  in the 2026-09-11 census, 485 of 507 assignments to a typed parameter's name were default fills or read the
+  parameter they replace. Its first live site was `golden-test.ps1`'s `$structural = @(...)` beside
+  `[switch]$Structural`, which threw on every `-Provenance -Force` run. Run it for the count rather than quoting one.
 
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

@@ -337,6 +337,8 @@ $static = @(
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # From a linked worktree every FULL path carries \.claude\worktrees\, so a walk excluding on it reads nothing and reports clean; e1afb523b fixed nineteen and this blocks the next.
   @{ f = 'ops\audit-full-path-excludes.ps1';   n = 'no NEW tree walk excludes worktrees or .claude by matching a file''s FULL path instead of the path below its root - a ratchet, hermetic, reads source only' }
+  # A typed parameter keeps its type for its whole scope and names are case-insensitive, so `$rule = @(...)` beside [string]$Rule made ONE string and a self-test passed over nothing; the rule in ops-and-gates.md did not stop the recurrence (2026-09-11).
+  @{ f = 'ops\audit-typed-param-shadow.ps1';   n = 'no NEW assignment reuses a typed parameter''s name with a value of another kind, which converts it rather than making a local - a ratchet over the AST, hermetic, reads source only' }
   # 8253ded82 glued a self-test's closing if/else onto its last case line, so the branch never exited and every push's gate ran a live three-store pull and scored it ok.
   @{ f = 'ops\audit-keyword-arguments.ps1';    n = 'no tracked .ps1 carries if, else, elseif, foreach, while, exit or return as a bare command ARGUMENT - a statement glued onto a command line never runs as one; a gate at zero, hermetic, reads source only' }
   # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half

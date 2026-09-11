@@ -1,0 +1,14 @@
+{
+    "note":  "HIGH-WATER MARK for assignments that change a TYPED parameter\u0027s kind (ops\\audit-typed-param-shadow.ps1). It may only go DOWN; a fall is recorded only by -Tighten, and a fall to zero or over 60% in one run needs -AcceptDrop (lib\\ratchet.ps1).",
+    "generated":  "2026-09-11T17:02:21",
+    "sites":  1,
+    "names":  [
+                  "meal-prep\\engine\\golden-test.ps1 :: [switch]$Structural \u003c- array :: $structural = @($all | Where-Object { $_ -match \u0027\\.(buy_n|pkg_g|starter_n|starter_pkg_g):\u0027 -or $_ -match \u0027line only in (NEW|OLD)\u0027 -or $_ -match \u0027NO NEW MATCH\u0027 })"
+              ],
+    "history":  [
+                    {
+                        "date":  "2026-09-11T17:02:21",
+                        "count":  1
+                    }
+                ]
+}
