@@ -160,6 +160,18 @@ everything else honest, so a defect here is silent by construction.
   **A concurrency fixture keeps every writer's exit code and output** and counts a refusal as a refusal: the
   `| Out-Null` those fixtures carried threw away the one line that named the cause. Other `Move-Item -Force`
   replaces remain in the tree and were not swept.
+- **A hermetic self-test never asserts an UPPER wall-clock bar** (2026-09-11). Several sessions push from
+  one box, so a pre-push `run-gates` shares the cores with theirs: a set that takes 106 s quiet took 792 s,
+  and `fanout-lib`'s "under 12 s" and `parallel-run`'s "under 2.5 s" concurrency cases blocked a push that
+  touched neither file - the red that teaches `--no-verify`. Paired under the same load, the old cases
+  failed 8 of 20 while their rewrites passed 20 of 20. **To prove work runs concurrently, prove the
+  OVERLAP, not the speed:** `lib/concurrency-probe.ps1` has N children wait until all N have started,
+  which no serial pool can satisfy and no load can break (its width-1 and width-2 mutants went red 12 of
+  12). A clock survives as a generous hang guard, or as a LOWER bar that load can only help. Upper bars
+  still standing that day, listed and not fixed: `grocery/audit-coverage-gaps.ps1` (250 ms, 1 s),
+  `grocery/price-ingredient.ps1` (2 s), and three in `meal-prep/pipeline/hunt_daemon_selftest.py` (a 3 s
+  poll, a ~6 s loop, a 0.6 s barrier) whose timeouts decide the case. **Not every red under load is a
+  clock:** the two concurrency-fixture reds the same day were lost writes, the mutex rule above.
 
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.
