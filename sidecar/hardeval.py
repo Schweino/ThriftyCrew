@@ -53,6 +53,8 @@ import torch
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lib_match import (Matcher, clean_product, commodity_text, load_json, DEVICE,
                        EMBED_MODEL, RERANK_MODEL)
+# The comparison with a tracked record. Torch-free on purpose, so run-gates can run its self-test.
+import hardeval_baseline as hb
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data")
@@ -298,7 +300,12 @@ def holdout_families(corpus_dir: str) -> tuple[set[str], dict[str, str]]:
 
 
 def stage_score(reranker: str | None = None, tag: str = "stock",
-                defs_path: str | None = None, corpus_dir: str | None = None) -> None:
+                defs_path: str | None = None, corpus_dir: str | None = None,
+                baseline: str | None = None) -> int:
+    """Score, report, record. Returns the exit code: 0, or with a baseline hardeval_baseline's code for its verdict."""
+    # THE BASELINE IS READ BEFORE THIS RUN WRITES ANYTHING (2026-09-11), so no choice of tags can hand the
+    # comparison the file this run is about to produce. The rules and the bar live in hardeval_baseline.py.
+    base = hb.load_baseline(OUT, baseline) if baseline else None
     defs, defs_by_id = load_defs(defs_path)
     log(f"defs={defs_path or 'commodity-defs.json (today, drifts with the board)'}")
     pos_rows = load_json(os.path.join(DATA, "eval-positives.json"))
@@ -432,10 +439,6 @@ def stage_score(reranker: str | None = None, tag: str = "stock",
         rep.append(f"- `{r['_score']:.3f}`  **{r['id']}**  <- {r['product'][:90]}")
     rep.append("")
 
-    suffix = "" if tag == "stock" else f"-{tag}"
-    path = os.path.join(OUT, f"hardeval-report{suffix}.md")
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(rep))
     rec = {
         # WHICH MODEL SAID THIS. Without it, two reports on this box are indistinguishable the
         # moment a second copy of the reranker exists - which is the premise of section 6.
@@ -450,7 +453,17 @@ def stage_score(reranker: str | None = None, tag: str = "stock",
         "holdout_only": sorted(held) if held else None,
         "auc_old": auc(pos, old), "auc_gold": auc(pos, gold),
         "auc_mined": (auc(pos, mined) if mined else None)}
-    with open(os.path.join(OUT, f"hardeval{suffix}.json"), "w", encoding="utf-8") as f:
+    # AGAINST THE TRACKED RECORD OF THE SAME CONFIGURATION (2026-09-11). Before either file is written, so
+    # the report and the record both carry the verdict.
+    cmp = None
+    if base is not None:
+        cmp = hb.compare(rec, base, inputs=hb.snapshot_inputs(DATA, defs_path))
+        rep += hb.report_lines(cmp)
+        rec["baseline"] = cmp
+    path = hb.report_path(OUT, tag)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(rep))
+    with open(hb.record_path(OUT, tag), "w", encoding="utf-8") as f:
         json.dump(rec, f, indent=2)
     print("\n".join(rep))
     log(f"wrote {path}")
@@ -465,7 +478,9 @@ def stage_score(reranker: str | None = None, tag: str = "stock",
     print(f"hardeval: tag={tag} defs={defs_label} pinned={rec['is_pinned_model']} "
           f"positives={len(pos)} old={len(old)} auc_old={fmt(rec['auc_old'])} "
           f"gold={len(gold)} auc_gold={fmt(rec['auc_gold'])} "
-          f"mined={len(mined)} auc_mined={fmt(rec['auc_mined'])}", file=sys.stderr, flush=True)
+          f"mined={len(mined)} auc_mined={fmt(rec['auc_mined'])}"
+          + (f" {hb.summary_fields(cmp)}" if cmp else ""), file=sys.stderr, flush=True)
+    return hb.exit_code(cmp) if cmp else 0
 
 
 if __name__ == "__main__":
@@ -496,12 +511,21 @@ if __name__ == "__main__":
     ap.add_argument("--defs", default=None,
                     help="a FROZEN commodity-defs.json to score against instead of today's. Required "
                          "in practice for any before/after: see load_defs().")
+    ap.add_argument("--baseline", default=None, metavar="TAG",
+                    help="compare this run with the tracked record hardeval-TAG.json in the out directory, "
+                         "read before this run writes anything. Exit 0 held, 4 DRIFT, 3 not comparable, and "
+                         "the last stderr line carries verdict=. Rules and bar: hardeval_baseline.py.")
     a = ap.parse_args()
     tag = a.tag or ("stock" if not a.reranker else None)
     if tag is None:
         ap.error("--tag is required with --reranker (try --tag ft-v1)")
+    if a.baseline is not None and a.stage != "score":
+        ap.error("--baseline compares a score run; --stage mine writes no record")
+    if a.baseline is not None and a.baseline == tag:
+        ap.error(f"--baseline {a.baseline} is this run's own --tag, so it would compare with itself")
     if a.stage == "mine":
         stage_mine(a.top_k, defs_path=a.defs, margin=a.margin,
                    rerank_with=a.rerank_with, keep_above=a.keep_above)
     else:
-        stage_score(reranker=a.reranker, tag=tag, defs_path=a.defs, corpus_dir=a.holdout_from)
+        sys.exit(stage_score(reranker=a.reranker, tag=tag, defs_path=a.defs, corpus_dir=a.holdout_from,
+                             baseline=a.baseline))

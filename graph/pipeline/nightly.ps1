@@ -385,11 +385,35 @@ function Get-MlEvalArgs {
                  defs) with a run on the frozen defs under the same file names. Both files then sat
                  modified in the main checkout, and no lane could commit them. The tagged pair is
                  gitignored; see the root .gitignore beside the hardeval rules.
+                 --baseline phase3-frozen, ALSO ALWAYS (2026-09-11). hardeval.py compares the week with the
+                 tracked record of this same configuration and prints verdict=OK, DRIFT or UNCOMPARABLE. It
+                 is passed even with no frozen snapshot, where the answer is UNCOMPARABLE: a week scored on
+                 today's defs tracks the shelf, and must not read as a model that held.
   #>
   param([Parameter(Mandatory=$true)][string]$Sidecar, [string]$FrozenDefs, [bool]$HaveFrozen)
-  $a = @((Join-Path $Sidecar 'hardeval.py'), '--stage', 'score', '--tag', 'weekly')
+  $a = @((Join-Path $Sidecar 'hardeval.py'), '--stage', 'score', '--tag', 'weekly', '--baseline', 'phase3-frozen')
   if ($HaveFrozen -and $FrozenDefs) { $a += @('--defs', $FrozenDefs) }
   return ,$a
+}
+
+function Get-MlEvalState {
+  <#
+    .SYNOPSIS The state stage ml-eval records: OK, DRIFT, PARTIAL or BLIND. Pure, so the self-test drives it.
+    .DESCRIPTION DRIFT IS ITS OWN STATE, NEVER BLIND (2026-09-11). BLIND says the stage could not look. A drift
+                 says it looked and the pinned model no longer reproduces the tracked record, which is the
+                 opposite claim, and filing it under BLIND would hide it among the GPU-was-busy nights.
+                 The verdict= token in hardeval.py's summary line decides, and the exit code must AGREE with
+                 it (0 for OK, 4 for DRIFT): a bare code is read in three vocabularies in this estate, and a
+                 line alone does not prove the process finished. Everything else is BLIND, including rc 3
+                 UNCOMPARABLE and a clean exit with no verdict, because then no comparison happened.
+  #>
+  param([int]$ExitCode, [bool]$TimedOut, [string]$Detail)
+  if ($TimedOut) { return 'PARTIAL' }
+  $m = [regex]::Match([string]$Detail, '(?:^|\s)verdict=([A-Z]+)(?=\s|$)')
+  $v = if ($m.Success) { $m.Groups[1].Value } else { '' }
+  if ($ExitCode -eq 0 -and [string]::Equals($v, 'OK', [StringComparison]::Ordinal)) { return 'OK' }
+  if ($ExitCode -eq 4 -and [string]::Equals($v, 'DRIFT', [StringComparison]::Ordinal)) { return 'DRIFT' }
+  return 'BLIND'
 }
 
 function Get-MlEvalDetail {
@@ -487,6 +511,35 @@ if ($SelfTest) {
   if (-not $mlSrc.Contains($nMlArgs)) { Write-Output '  X MUST-FIRE: stage ml-eval must build its command line with Get-MlEvalArgs'; $bad++ }
   if (-not ($mlSrc.Contains($nMlDetail) -and $mlSrc.Contains($nMlTail))) { Write-Output '  X MUST-FIRE: stage ml-eval must put Get-MlEvalDetail''s line into the tail the stamp reads'; $bad++ }
   if ($mlSrc.Contains($nMlOld)) { Write-Output '  X MUST-FIRE: the untagged hardeval command line is back in this file'; $bad++ }
+
+  # -- ml-eval against the tracked record: DRIFT is its own state, and the verdict and the exit code must agree (2026-09-11)
+  $mlBase = [array]::IndexOf($mlA, '--baseline')
+  if ($mlBase -lt 0 -or $mlA[$mlBase + 1] -ne 'phase3-frozen') { Write-Output ('  X MUST-FIRE: ml-eval must compare with --baseline phase3-frozen (got: ' + ($mlA -join ' ') + ')'); $bad++ }
+  if ([array]::IndexOf($mlB, '--baseline') -lt 0) { Write-Output ('  X MUST-FIRE: with no frozen snapshot the baseline is still passed, so the week reads UNCOMPARABLE and not OK (got: ' + ($mlB -join ' ') + ')'); $bad++ }
+  $mlSum = 'hardeval: tag=weekly defs=phase3-baseline pinned=True positives=2816 old=25 auc_old=0.9705 gold=45 auc_gold=0.8312 mined=5132 auc_mined=0.9544 baseline=phase3-frozen'
+  $mlDrift = $mlSum + ' verdict=DRIFT bar=0.0005 old=held(+0.000000) gold=moved(-0.001656) mined=not-compared(n 5132 vs 4701)'
+  $mlHeld  = $mlSum + ' verdict=OK bar=0.0005 old=held(+0.000000) gold=held(+0.000000) mined=not-compared(n 5132 vs 4701)'
+  $mlUnc   = $mlSum + ' verdict=UNCOMPARABLE bar=0.0005 old=held(+0.000000) gold=not-compared(n 46 vs 45) mined=not-compared(n 5132 vs 4701) why=gold_n_46_vs_baseline_45'
+  $mlS = Get-MlEvalState -ExitCode 4 -TimedOut $false -Detail $mlDrift
+  if ($mlS -ne 'DRIFT') { Write-Output ('  X MUST-FIRE: rc 4 with verdict=DRIFT records DRIFT, not BLIND (got: ' + $mlS + ')'); $bad++ }
+  $mlS = Get-MlEvalState -ExitCode 0 -TimedOut $false -Detail $mlHeld
+  if ($mlS -ne 'OK') { Write-Output ('  X CLEAN TWIN: rc 0 with verdict=OK still records OK (got: ' + $mlS + ')'); $bad++ }
+  $mlS = Get-MlEvalState -ExitCode 0 -TimedOut $false -Detail $mlDrift
+  if ($mlS -ne 'BLIND') { Write-Output ('  X MUST-FIRE: a DRIFT line with rc 0 disagrees with itself and is BLIND, never OK (got: ' + $mlS + ')'); $bad++ }
+  $mlS = Get-MlEvalState -ExitCode 4 -TimedOut $false -Detail 'Traceback (most recent call last):'
+  if ($mlS -ne 'BLIND') { Write-Output ('  X MUST-FIRE: rc 4 with no verdict line is BLIND, never DRIFT (got: ' + $mlS + ')'); $bad++ }
+  $mlS = Get-MlEvalState -ExitCode 3 -TimedOut $false -Detail $mlUnc
+  if ($mlS -ne 'BLIND') { Write-Output ('  X MUST-FIRE: rc 3 UNCOMPARABLE is BLIND - no comparison was possible (got: ' + $mlS + ')'); $bad++ }
+  $mlS = Get-MlEvalState -ExitCode 0 -TimedOut $false -Detail $mlT[1]
+  if ($mlS -ne 'BLIND') { Write-Output ('  X MUST-FIRE: a clean exit whose line carries no verdict is BLIND, because nothing was compared (got: ' + $mlS + ')'); $bad++ }
+  $mlS = Get-MlEvalState -ExitCode 4 -TimedOut $false -Detail ($mlSum + ' verdict=drift')
+  if ($mlS -ne 'BLIND') { Write-Output ('  X MUST-FIRE: the verdict token is upper-case only, so verdict=drift is not DRIFT (got: ' + $mlS + ')'); $bad++ }
+  $mlS = Get-MlEvalState -ExitCode 3 -TimedOut $true -Detail $mlDrift
+  if ($mlS -ne 'PARTIAL') { Write-Output ('  X CLEAN TWIN: a timed-out run is still PARTIAL (got: ' + $mlS + ')'); $bad++ }
+  $nMlState = '$mlState = ' + 'Get-MlEvalState '
+  $nMlDriftRec = "Record 'ml-eval' " + "'DRIFT' " + '$mlDetail'
+  $nMlOkGate = '$r.Ok = ' + "(`$mlState -eq 'OK')"
+  if (-not ($mlSrc.Contains($nMlState) -and $mlSrc.Contains($nMlDriftRec) -and $mlSrc.Contains($nMlOkGate))) { Write-Output '  X MUST-FIRE: stage ml-eval must decide its state with Get-MlEvalState, record DRIFT with the summary line, and advance the stamp only on OK'; $bad++ }
 
   # -- deadline: the EARLIER of the two clocks wins, in both directions
   $now = [datetime]'2026-08-22 23:00'
@@ -1146,9 +1199,16 @@ try {
   # under the same name, leaving two tracked files modified that no lane may own. So the run is tagged
   # `weekly` (Get-MlEvalArgs) and its files are gitignored, and the durable copy is the summary line
   # Get-MlEvalDetail puts in graph-nightly-status.json, which is committed. Until then that line was a
-  # HuggingFace loading bar, and no week's AUC reached git. NOT YET DONE: nothing compares a week's AUC
-  # with hardeval-phase3-frozen.json, the tracked record of the same configuration, so a drift is
-  # recorded but raises nothing.
+  # HuggingFace loading bar, and no week's AUC reached git.
+  #
+  # AND IT IS COMPARED (2026-09-11). hardeval.py --baseline phase3-frozen checks the week against the
+  # tracked record of this same configuration, and Get-MlEvalState turns its verdict into the state:
+  # OK, DRIFT (the pinned model looked and no longer reproduces the record) or BLIND (it could not
+  # compare). Still never fatal - the chain's exit code ignores stage states. THE STAMP ADVANCES ONLY
+  # ON OK, so a DRIFT or a BLIND re-runs the next night (about 60 s of GPU) and stays in the newest
+  # committed status until somebody acts, instead of being replaced by six nights of SKIP. If the stage
+  # stops running at all the comparison cannot fire; the graph-nightly task's heartbeat is what watches
+  # for that, and a stale stamp makes the next run due.
   $evalStamp = Join-Path $grocery 'out\logs\ml-eval-last.txt'
   $evalDue = $true
   try {
@@ -1168,13 +1228,17 @@ try {
     # The stamp below keeps the LAST tail line, so that line is made hardeval.py's summary.
     $mlDetail = Get-MlEvalDetail -Tail $r.Tail
     $r.Tail = @($mlDetail)
+    # Ok means THE WEEK HELD from here on, not merely that the process exited 0 - that is what advances the stamp.
+    $mlState = Get-MlEvalState -ExitCode $r.ExitCode -TimedOut $r.TimedOut -Detail $mlDetail
+    $r.Ok = ($mlState -eq 'OK')
     if ($r.Ok) {
       Record 'ml-eval' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed
       # Tracked, eol=lf, BOM in the blob - so LF with a BOM, not Set-Content's CRLF.
       try { $null = Write-TcLfFile -Path $evalStamp -Text ((Get-Date).ToString('s')) } catch { }
     }
+    elseif ($mlState -eq 'DRIFT') { Record 'ml-eval' 'DRIFT' $mlDetail $r.Elapsed }
     elseif ($r.TimedOut) { Record 'ml-eval' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
-    else { Record 'ml-eval' 'BLIND' ("rc=" + $r.ExitCode + " - tracked, never fatal") $r.Elapsed }
+    else { Record 'ml-eval' 'BLIND' ("rc=" + $r.ExitCode + " - tracked, never fatal - " + $mlDetail) $r.Elapsed }
   }
   }
 }

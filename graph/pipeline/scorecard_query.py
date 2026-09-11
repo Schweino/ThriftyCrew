@@ -104,6 +104,9 @@ def local_lane(repo: str) -> dict:
             "free_vram_mib": n.get("free_vram_mib"),
             "stages": stages,
             "blind_stages": sorted(k for k, v in stages.items() if v in ("BLIND", "FAILED")),
+            # A stage that LOOKED and found a change (2026-09-11: ml-eval, when the pinned reranker no longer
+            # reproduces its tracked record). Not blind, and not quiet either, so it gets its own list.
+            "drift_stages": sorted(k for k, v in stages.items() if v == "DRIFT"),
         }
     if c is None:
         out["helper"] = {"state": "BLIND", "why": "no contested-scores.json - the sweep's contested lane has not run"}
@@ -348,6 +351,25 @@ def _selftest() -> int:
       blind["helper"]["state"] == "BLIND", blind["helper"])
     T("read_json returns None rather than raising on a missing file",
       read_json(os.path.join(HERE, "nope.json")) is None)
+
+    # A DRIFT stage is neither blind nor silent (2026-09-11). One temp repo per run, removed in finally.
+    import shutil
+    import tempfile
+    tmp = tempfile.mkdtemp(prefix="sq-")
+    try:
+        logs = os.path.join(tmp, "grocery", "out", "logs")
+        os.makedirs(logs)
+        with open(os.path.join(logs, "graph-nightly-status.json"), "w", encoding="utf-8") as f:
+            json.dump({"started": "2026-09-11T21:30:00", "stages": [
+                {"stage": "ml-eval", "state": "DRIFT"}, {"stage": "sweep", "state": "BLIND"},
+                {"stage": "resolve", "state": "OK"}]}, f)
+        drift = local_lane(tmp)["nightly"]
+        T("MUST FIRE  a DRIFT stage is listed in drift_stages",
+          drift.get("drift_stages") == ["ml-eval"], drift)
+        T("CLEAN TWIN a BLIND stage beside it is still listed in blind_stages, and only there",
+          drift.get("blind_stages") == ["sweep"], drift)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
     db = os.environ.get("SCORECARD_DB", DEFAULT_DB)
     if os.path.exists(db):
