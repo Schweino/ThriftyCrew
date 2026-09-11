@@ -56,7 +56,7 @@
   a library would not load, or the walk found too few scripts to be the real tree.
 #>
 [CmdletBinding()]
-param([switch]$Tighten, [switch]$Accept)
+param([switch]$Tighten, [switch]$Accept, [string]$BaselineFile = '')
 
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $root -Parent
@@ -77,7 +77,12 @@ try {
 # this process, and Invoke-Case below reads each child with a redirect, which this statement keeps non-terminating.
 $ErrorActionPreference = 'Continue'
 
-$BASELINE_FILE = Join-Path $root 'native-stderr-eap-baseline.json'
+# LIVE-TWIN, AND DELIBERATELY SO (ops\audit-fixture-inputs.ps1 reads this label). CASE 5's verdict rests on this
+# file, and that is the gate rather than a leak: the baseline is a ratchet's high-water mark over the LIVE tree,
+# not a ruling somebody adjudicates, so a red here means a new site appeared in the tree this run walked. Freezing
+# it would leave the repo unwatched, which is the whole failure this file exists to end. -BaselineFile drives the
+# same code from a frozen copy where a fixture needs one.
+$BASELINE_FILE = if ($BaselineFile) { $BaselineFile } else { Join-Path $root 'native-stderr-eap-baseline.json' }
 $tmp = Join-Path $env:TEMP ("eap-fixture-" + $PID)
 New-Item -ItemType Directory -Force -Path $tmp | Out-Null
 $fail = 0
