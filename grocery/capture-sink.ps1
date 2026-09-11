@@ -84,16 +84,113 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+# ---------------------------------------------------------------------------
+# WHICH PROCESSES -Stop MAY KILL: a real listener, and nothing else (2026-09-11).
+#
+# The first cut killed every powershell.exe whose command line was like '*-File*capture-sink.ps1*'.
+# A command line is not a process's identity, only the text it was started with, and two kinds of
+# shell carry that text without being a sink. Measured by the grocery-browser-stores-refresh agent and
+# reproduced the same morning with a dry-run copy, -Stop selected three pids:
+#   the listener   "...\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File grocery\capture-sink.ps1 -OutDir ...
+#   its wrapper    powershell.exe ... -Command "...; powershell ... -File grocery\capture-sink.ps1 -OutDir ...; ..."
+#   the CALLER     powershell.exe ... -Command "...; powershell ... -File grocery\capture-sink.ps1 -Stop; ..."
+# Killing the caller ended the agent's own command with exit 255 after its earlier steps had already
+# run, so a clean stop read as a failed step.
+#
+# So a process is stopped only when all three hold:
+#   1. It is not the stopping process or any ANCESTOR of it - whatever launched this -Stop mentions it.
+#      capture-watchdog.ps1 learned the same thing naming a log holder ("NEVER ACCUSE OURSELVES").
+#   2. powershell.exe was started in FILE mode on capture-sink.ps1. -File and -Command each end
+#      powershell.exe's own parameters and hand the rest on, so whichever comes FIRST decides what the
+#      process is. A -Command shell that merely quotes the -File line is a wrapper, not a sink; it
+#      exits on its own when its listener dies.
+#   3. The script was not given -Stop or -SelfTest (or an abbreviation, or -Stop:$true), read as
+#      TOKENS after the script path. A -Stop process is a stopper and a -SelfTest process is
+#      run-gates' child. Tokens, not a substring, so a quoted -OutDir containing "-Stop" still counts.
+function Test-CaptureSinkListenerLine {
+    param([string] $CommandLine)
+    if ([string]::IsNullOrWhiteSpace($CommandLine)) { return $false }
+    $tokens = [System.Collections.Generic.List[string]]::new()
+    foreach ($m in [regex]::Matches($CommandLine, '"[^"]*"|\S+')) { $tokens.Add($m.Value) }
+
+    # Token 0 is the executable. The first -File or -Command after it is the mode.
+    $scriptAt = -1
+    for ($i = 1; $i -lt $tokens.Count; $i++) {
+        if (-not $tokens[$i].StartsWith('-', [StringComparison]::Ordinal)) { continue }
+        $name = $tokens[$i].Substring(1).Split(':')[0].ToLowerInvariant()
+        if ($name.Length -eq 0) { continue }
+        if ('file'.StartsWith($name, [StringComparison]::Ordinal)) { $scriptAt = $i + 1; break }
+        if ('command'.StartsWith($name, [StringComparison]::Ordinal) -or
+            'encodedcommand'.StartsWith($name, [StringComparison]::Ordinal) -or $name -eq 'ec') { return $false }
+    }
+    if ($scriptAt -lt 1 -or $scriptAt -ge $tokens.Count) { return $false }
+    if ($tokens[$scriptAt].Trim('"') -notmatch '(?i)(^|[\\/])capture-sink\.ps1$') { return $false }
+
+    for ($i = $scriptAt + 1; $i -lt $tokens.Count; $i++) {
+        if (-not $tokens[$i].StartsWith('-', [StringComparison]::Ordinal)) { continue }
+        $name = $tokens[$i].Substring(1).Split(':')[0].ToLowerInvariant()
+        if ($name.Length -eq 0) { continue }
+        if ('stop'.StartsWith($name, [StringComparison]::Ordinal) -or
+            'selftest'.StartsWith($name, [StringComparison]::Ordinal)) { return $false }
+    }
+    return $true
+}
+
+# The stopping process and its ancestors, as a set of pids. PID REUSE: a parent that has exited can
+# have its pid handed to a new process, which is not our ancestor - and may be a real listener. A
+# "parent" created after its child is not the parent, so the walk stops there instead of sparing it.
+function Get-ProcessAncestorIds {
+    param([object[]] $Rows, [int] $ProcessId)
+    $byPid = @{}
+    foreach ($r in @($Rows)) { if ($null -ne $r) { $byPid[[int]$r.ProcessId] = $r } }
+    $ids = @{ $ProcessId = $true }
+    $cur = $byPid[$ProcessId]
+    for ($h = 0; $h -lt 64 -and $null -ne $cur; $h++) {
+        $parentId = [int]$cur.ParentProcessId
+        if ($parentId -le 0 -or $ids.ContainsKey($parentId)) { break }
+        $parent = $byPid[$parentId]
+        if ($null -eq $parent) { break }
+        if ($null -ne $parent.CreationDate -and $null -ne $cur.CreationDate -and $parent.CreationDate -gt $cur.CreationDate) { break }
+        $ids[$parentId] = $true
+        $cur = $parent
+    }
+    return $ids
+}
+
+# The rows that ARE listeners. Pure over its arguments, so the self-test drives it with no process
+# touched. Emits rows to the pipeline (never a comma-returned array): assign, then filter out nulls.
+function Select-CaptureSinkListener {
+    param([object[]] $Rows, [int] $Self)
+    $mine = Get-ProcessAncestorIds -Rows $Rows -ProcessId $Self
+    foreach ($r in @($Rows)) {
+        if ($null -eq $r) { continue }
+        if ($mine.ContainsKey([int]$r.ProcessId)) { continue }
+        if (-not [string]::Equals([string]$r.Name, 'powershell.exe', [StringComparison]::OrdinalIgnoreCase)) { continue }
+        if (Test-CaptureSinkListenerLine -CommandLine ([string]$r.CommandLine)) { $r }
+    }
+}
+
 if ($Stop) {
-    $found = $false
-    Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" |
-        Where-Object { $_.ProcessId -ne $PID -and $_.CommandLine -like '*-File*capture-sink.ps1*' } |
-        ForEach-Object {
-            Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
-            Write-Output "stopped capture-sink pid $($_.ProcessId)"
-            $found = $true
+    # Every process, not only powershell.exe: the ancestor walk has to see claude.exe, bash.exe and the rest.
+    $rows    = Get-CimInstance Win32_Process
+    $targets = Select-CaptureSinkListener -Rows $rows -Self $PID
+    $targets = @($targets | Where-Object { $null -ne $_ })
+    $stuck   = 0
+    foreach ($t in $targets) {
+        try {
+            Stop-Process -Id $t.ProcessId -Force -ErrorAction Stop
+            Write-Output "stopped capture-sink pid $($t.ProcessId)"
+        } catch {
+            if (Get-Process -Id $t.ProcessId -ErrorAction SilentlyContinue) {
+                Write-Output "could NOT stop capture-sink pid $($t.ProcessId), still running: $($_.Exception.Message)"
+                $stuck++
+            } else {
+                Write-Output "capture-sink pid $($t.ProcessId) had already exited"
+            }
         }
-    if (-not $found) { Write-Output 'no capture-sink process running' }
+    }
+    if (-not $targets.Count) { Write-Output 'no capture-sink process running' }
+    if ($stuck) { exit 1 }
     return
 }
 
@@ -315,6 +412,130 @@ if ($SelfTest) {
         Write-Output 'ok    CLEAN TWIN  a relative -OutDir resolves under grocery\, not under the current directory'
     } else {
         Write-Output ('FAIL  a relative -OutDir no longer anchors to the script: ' + $anchored); $fail++
+    }
+
+    # ---- WHICH PROCESSES -Stop KILLS, frozen against the 2026-09-11 reproduction. Pids are the ones
+    # observed; command lines are shortened to the parts the rule reads. The stopping process is pid
+    # 5000, a child of the calling tool shell. Pure over rows: nothing here touches a real process.
+    function Row([int]$ProcId, [int]$ParentId, [string]$Name, [string]$Cmd, $Created = $null) {
+        [pscustomobject]@{ ProcessId = $ProcId; ParentProcessId = $ParentId; Name = $Name; CommandLine = $Cmd; CreationDate = $Created }
+    }
+    function PidsOf($Rows, [int]$Self) {
+        $m = Select-CaptureSinkListener -Rows $Rows -Self $Self
+        $m = @($m | Where-Object { $null -ne $_ })
+        return (($m | ForEach-Object { [int]$_.ProcessId } | Sort-Object) -join ',')
+    }
+    # The INNER ESCAPED QUOTES in the two -Command lines are load-bearing. The live tool shell's line
+    # carries \" pairs, which break a quoted -Command payload into bare tokens and expose its -File to
+    # the parser. Without them the payload reads as one quoted token and the -Command rule is never
+    # exercised - the first cut of this fixture had none, and a mutation that disabled the rule survived
+    # every case but one.
+    $claudeCmd   = 'C:\Users\Owner\AppData\Roaming\Claude\claude-code\claude.exe --output-format stream-json'
+    $wrapperCmd  = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "try { $PSDefaultParameterValues[''Out-File:Encoding''] = ''utf8'' } catch {}; \"starting sink\"; powershell -NoProfile -ExecutionPolicy Bypass -File grocery\capture-sink.ps1 -Port 8797 -OutDir C:\sink -MaxIdleMinutes 10; $_ec = if ($null -ne $LASTEXITCODE) { $LASTEXITCODE } else { 1 }"'
+    $listenerCmd = '"C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File grocery\capture-sink.ps1 -Port 8797 -OutDir C:\sink -MaxIdleMinutes 10'
+    $callerCmd   = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "git status; \"stopping sink\"; powershell -NoProfile -ExecutionPolicy Bypass -File capture-sink.ps1 -Stop; $_ec = if ($null -ne $LASTEXITCODE) { $LASTEXITCODE } else { 1 }"'
+    $stopperCmd  = '"C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File capture-sink.ps1 -Stop'
+    $bashCmd     = 'C:\Program Files\Git\usr\bin\bash.exe -c "powershell -NoProfile -File grocery/capture-sink.ps1 -OutDir x"'
+    # cmd.exe's /c is not a dash token, so its line parses as -File mode: only the NAME filter refuses it.
+    $cmdCmd      = 'C:\WINDOWS\system32\cmd.exe /c powershell -NoProfile -File grocery\capture-sink.ps1 -OutDir x'
+    $box = @(
+        (Row 49648 26128 'claude.exe'     $claudeCmd),
+        (Row 2484  49648 'powershell.exe' $wrapperCmd),
+        (Row 43264 2484  'powershell.exe' $listenerCmd),
+        (Row 10736 49648 'powershell.exe' $callerCmd),
+        (Row 5000  10736 'powershell.exe' $stopperCmd),
+        (Row 6000  49648 'bash.exe'       $bashCmd),
+        (Row 6100  49648 'cmd.exe'        $cmdCmd)
+    )
+
+    # The founding bug, replayed: the pre-fix filter over these rows selects all three measured pids.
+    # If this stops firing, the fixture has drifted away from what was measured.
+    $oldHits = @($box | Where-Object { $_.Name -eq 'powershell.exe' -and $_.ProcessId -ne 5000 -and $_.CommandLine -like '*-File*capture-sink.ps1*' })
+    $oldPids = (($oldHits | ForEach-Object { [int]$_.ProcessId } | Sort-Object) -join ',')
+    if ($oldPids -ne '2484,10736,43264') {
+        Write-Output "FAIL  fixture is not the measured shape: the pre-fix filter selects '$oldPids', expected '2484,10736,43264'"; $fail++
+    } else {
+        Write-Output 'ok    MUST FIRE   the pre-fix filter still selects listener, wrapper AND caller on this fixture'
+    }
+
+    # MUST FIRE: the listener, and only the listener.
+    $got = PidsOf $box 5000
+    if ($got -ne '43264') {
+        Write-Output "FAIL  -Stop would kill pid(s) '$got', expected only the listener '43264'"; $fail++
+    } else {
+        Write-Output 'ok    MUST FIRE   only the listener is selected - not its wrapper, the caller, the stopper, bash or cmd'
+    }
+
+    # MUST NOT FIRE, line by line, so each rule is held on its own rather than hidden behind another.
+    $notListeners = [ordered]@{
+        'the caller, whose -Command text runs capture-sink.ps1 -Stop' = $callerCmd
+        'the -Stop process itself'                                    = $stopperCmd
+        'the wrapper, whose -Command text starts the listener'        = $wrapperCmd
+        'a -SelfTest run'                                             = 'powershell.exe -NoProfile -File C:\Codex\ThriftyCrew\grocery\capture-sink.ps1 -SelfTest'
+        '-Stop:$true'                                                 = 'powershell.exe -NoProfile -File grocery\capture-sink.ps1 -Stop:$true'
+        'the abbreviation -sto'                                       = 'powershell.exe -NoProfile -File grocery\capture-sink.ps1 -sto'
+        'an -EncodedCommand shell'                                    = 'powershell.exe -NoProfile -ec ZQBjAGgAbwA= -File grocery\capture-sink.ps1'
+        'a different script whose name ends the same'                 = 'powershell.exe -NoProfile -File grocery\old-capture-sink.ps1 -OutDir x'
+    }
+    $wrongly = @($notListeners.Keys | Where-Object { Test-CaptureSinkListenerLine -CommandLine $notListeners[$_] })
+    if ($wrongly.Count) {
+        Write-Output ('FAIL  read as a listener: ' + ($wrongly -join '; ')); $fail++
+    } else {
+        Write-Output ('ok    MUST NOT FIRE  ' + $notListeners.Count + ' non-listener line(s) refused, including the shell that runs capture-sink.ps1 -Stop')
+    }
+
+    # MUST NOT FIRE: the ancestor rule on its own. A parent whose line reads exactly like a listener is
+    # still spared when it launched the stopper; an unrelated listener beside it is still selected.
+    $anc = @(
+        (Row 7000 1    'powershell.exe' $listenerCmd),
+        (Row 7001 7000 'powershell.exe' $stopperCmd),
+        (Row 7002 1    'powershell.exe' $listenerCmd)
+    )
+    $gotAnc = PidsOf $anc 7001
+    if ($gotAnc -ne '7002') {
+        Write-Output "FAIL  ancestor rule: selected '$gotAnc', expected only the unrelated listener '7002'"; $fail++
+    } else {
+        Write-Output 'ok    MUST NOT FIRE  an ancestor of the stopper is spared even when its line reads as a listener'
+    }
+
+    # MUST NOT FIRE: a box with no listener selects nothing, and the empty result counts 0, not 1.
+    $none = Select-CaptureSinkListener -Rows @($box[0], $box[1], $box[3], $box[4]) -Self 5000
+    $none = @($none | Where-Object { $null -ne $_ })
+    if ($none.Count -ne 0) {
+        Write-Output "FAIL  a box with no listener selected $($none.Count) process(es)"; $fail++
+    } else {
+        Write-Output 'ok    MUST NOT FIRE  a box with no listener selects nothing'
+    }
+
+    # CLEAN TWIN: real listeners in the shapes this change was most likely to break on its way past.
+    $stillListeners = [ordered]@{
+        'the measured listener'               = $listenerCmd
+        'a quoted absolute script path'       = '"C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -File "C:\Codex\ThriftyCrew\grocery\capture-sink.ps1" -OutDir C:\sink'
+        # -Stop MID-VALUE, not at its end: at the end a quote-blind tokenizer reads '-Stop"', which no
+        # longer looks like -Stop, and this case passed under exactly the mutation it exists to catch.
+        'a quoted -OutDir containing -Stop'   = 'powershell.exe -NoProfile -File grocery\capture-sink.ps1 -OutDir "C:\my sinks\before -Stop after"'
+        'an -OutDir named Stop'               = 'powershell.exe -File grocery/capture-sink.ps1 -OutDir C:\sinks\Stop'
+        'no script arguments at all'          = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -File grocery\capture-sink.ps1'
+    }
+    $missed = @($stillListeners.Keys | Where-Object { -not (Test-CaptureSinkListenerLine -CommandLine $stillListeners[$_]) })
+    if ($missed.Count) {
+        Write-Output ('FAIL  a real listener is no longer recognised: ' + ($missed -join '; ')); $fail++
+    } else {
+        Write-Output ('ok    CLEAN TWIN  ' + $stillListeners.Count + ' real listener line(s) still recognised, including an -OutDir that contains -Stop')
+    }
+
+    # CLEAN TWIN: PID reuse. The stopper's parent exited and a listener was later given its pid. A
+    # "parent" created after its child is not the parent, so that listener is still stopped.
+    $t0 = [datetime]'2026-09-11T09:00:00'
+    $reuse = @(
+        (Row 8000 1    'powershell.exe' $listenerCmd ($t0.AddMinutes(5))),
+        (Row 8001 8000 'powershell.exe' $stopperCmd  $t0)
+    )
+    $gotReuse = PidsOf $reuse 8001
+    if ($gotReuse -ne '8000') {
+        Write-Output "FAIL  a listener holding a dead parent's reused pid was spared: selected '$gotReuse'"; $fail++
+    } else {
+        Write-Output 'ok    CLEAN TWIN  a listener that reused a dead ancestor''s pid is still stopped'
     }
 
     if ($fail) { Write-Output "$fail FAILED"; exit 1 }
