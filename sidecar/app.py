@@ -1,4 +1,4 @@
-"""
+r"""
 app.py - the local semantic sidecar. FastAPI on 127.0.0.1, called from PowerShell exactly like the
 smp-feed Worker is called (Invoke-RestMethod), so it fits the estate's existing habits.
 
@@ -18,7 +18,7 @@ CONTRACT WITH THE ESTATE (these are the rules that make it safe to run unattende
 Run:  .venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8077
 """
 from __future__ import annotations
-import os, sys, time
+import os, sys, threading, time
 from typing import Sequence
 
 from fastapi import FastAPI
@@ -30,21 +30,34 @@ from lib_match import Matcher, clean_product, commodity_text, DEVICE, EMBED_MODE
 app = FastAPI(title="Thrifty Crew semantic sidecar", version="1.0")
 
 # Lazy load: importing the module must not cost 100 s and 3 GB of VRAM. The first real request pays it.
+#
+# ONE LOAD, HOWEVER MANY FIRST REQUESTS (2026-09-11). FastAPI runs these sync endpoints on a threadpool, and
+# after every cold start the recall hook sends /recall-search and then /embed 1.5 s later, both inside a load
+# of about 10 s. Unguarded, both can see _M None and both load. The check is DOUBLE: the loaded path reads _M
+# without the lock, so a warm service never contends it, and the check repeats inside the lock, so a caller
+# that queued behind the load finds it done. /health never takes the lock, because start-sidecar.ps1 polls it
+# with a 3 s timeout WHILE the load holds it. sidecar/app_selftest.py holds all three; the trials are in
+# design/MEASURE-sidecar-double-load-2026-09-11.md.
 _M: Matcher | None = None
 _loaded_at: float | None = None
 # One entry per call into Matcher.load, appended BEFORE the load starts, reported by /health as load_count.
-# list.append is atomic under the GIL, so the count stays exact even while two threads race into the load.
+# 1 once loaded. More than 1 means a load raised and was retried, or this guard has gone.
 _load_starts: list[float] = []
+_load_lock = threading.Lock()
 
 
 def matcher() -> Matcher:
     global _M, _loaded_at
-    if _M is None:
-        _load_starts.append(time.time())
-        t0 = time.time()
-        _M = Matcher.load(with_reranker=True)
-        _loaded_at = time.time() - t0
-    return _M
+    m = _M
+    if m is not None:
+        return m
+    with _load_lock:
+        if _M is None:
+            _load_starts.append(time.time())
+            t0 = time.time()
+            _M = Matcher.load(with_reranker=True)
+            _loaded_at = time.time() - t0
+        return _M
 
 
 class EmbedReq(BaseModel):

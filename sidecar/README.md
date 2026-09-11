@@ -35,6 +35,13 @@ catalogue every night.
                    needs it. Measured 2026-08-22: 46 s -> 4 s on an unchanged shelf, ~18 s with
                    1,500 new names, findings byte-identical either way. SWEEP_CACHE=0 bypasses it.
     app.py         FastAPI service on 127.0.0.1:8077 for interactive/ad-hoc scoring.
+    app_selftest.py
+                   app.py's load guard, run by run-gates on the pinned interpreter: concurrent first
+                   requests load the models ONCE, and /health still answers during the load. It
+                   imports the real app.py over stubbed fastapi, pydantic, torch and lib_match.
+    probe_double_load.py
+                   The GPU harness that measured the double load that guard prevents. Design, bar
+                   and rows: design/MEASURE-sidecar-double-load-2026-09-11.md.
     backtest.py    An acceptance gate. Scores the matcher against defects the estate already
                    shipped. See out\backtest-report.md. NOT the gate that decides a fine-tune:
                    its 25 negatives are all dramatically wrong, so it never asks a hard question.
