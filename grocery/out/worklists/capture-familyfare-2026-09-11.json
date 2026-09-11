@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-12; next_pull 2026-09-13",
-    "cursor_start":  227,
-    "cursor_next":  234,
+    "cursor_start":  234,
+    "cursor_next":  241,
     "total_terms":  602,
     "rotation_terms":  [
-                           "liquid fabric softener",
-                           "facial tissues",
-                           "fajita seasoning packet",
-                           "maxi pads",
-                           "fennel bulb",
-                           "feta cheese crumbled",
-                           "firm tofu"
+                           "fish sauce",
+                           "fish sticks",
+                           "five spice powder",
+                           "floor cleaner",
+                           "all purpose flour",
+                           "french bread",
+                           "fresh basil"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "liquid fabric softener",
-                  "facial tissues",
-                  "fajita seasoning packet",
-                  "maxi pads",
-                  "fennel bulb",
-                  "feta cheese crumbled",
-                  "firm tofu"
+                  "fish sauce",
+                  "fish sticks",
+                  "five spice powder",
+                  "floor cleaner",
+                  "all purpose flour",
+                  "french bread",
+                  "fresh basil"
               ],
     "commodities":  [
-                        "fabric-softener",
-                        "facial-tissues",
-                        "fajita-seasoning",
-                        "feminine-pads",
-                        "fennel",
-                        "feta",
-                        "firm-tofu"
+                        "fish-sauce",
+                        "fish-sticks",
+                        "five-spice-powder",
+                        "floor-cleaner",
+                        "flour",
+                        "french-bread",
+                        "fresh-basil"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

@@ -96,3 +96,15 @@
 [2026-09-10T10:34:01] SENT 'Grocery capture watchdog: 1 issue(s) 2026-09-10' -> schweino68@gmail.com (id 1a08bf457e2ffeea)
 [2026-09-10T11:31:02] SUPPRESSED (already sent this type today) 'Grocery: Family Fare pull dropped a carried item - review' [type: grocery family fare pull dropped a carried item review]
 [2026-09-10T11:51:37] SENT 'Triage residual: Sam's gallon jugs on weight-priced commodities still price off a cent-rounded quotient size' -> schweino68@gmail.com (id 1a08c3b60c070b05)
+[2026-09-10T12:24:24] SENT 'Triage finding: the pipeline committers' own path lists disagree with lib/bot-paths.ps1, so the scope hook refuses their commits' -> schweino68@gmail.com (id 1a08c59676876aad)
+[2026-09-10T12:56:55] SENT 'Triage residual: a session edit made during a pipeline run is still swept into that run's commit' -> schweino68@gmail.com (id 1a08c772db768d96)
+[2026-09-10T12:56:57] SENT 'Triage residual: a day with no sign-in until after a task's catch-up window is still lost, and nothing reports it the next day' -> schweino68@gmail.com (id 1a08c7731e4e768b)
+[2026-09-10T13:15:23] SENT 'Triage residual: the foreign-held rule also holds back a non-committing pipeline run's writes, and graph nightly passes no start snapshot' -> schweino68@gmail.com (id 1a08c88146fa8b63)
+[2026-09-10T13:48:12] SENT 'Triage finding: test-auditors is red since a77ad8734, the Hy-Vee retired-identity sweep fires on that commit's own must-fire fixture' -> schweino68@gmail.com (id 1a08ca61cebfdd77)
+[2026-09-10T16:41:24] REVIEW 'Triage finding: source-domains -Record lost 1 of 8 concurrent writes and refused a push' [type: triage finding source domains record lost of concurrent writes and refused a push] - queued, NOT emailed (a triage-created item (-Lane weekly) is review by ruling 1)
+[2026-09-10T20:35:30] REVIEW 'Triage finding: Family Fare offers and circular paging read one page, page= is ignored by Freshop' [type: triage finding family fare offers and circular paging read one page page is ignored by freshop] - queued, NOT emailed (registry entry triage-finding)
+[2026-09-11T04:37:02] UNREGISTERED ALERT TYPE 'The knowledge store's nightly pass went RED' [type: the knowledge store s nightly pass went red] - no entry in grocery\alert-registry.json matches, so it queues AND pages as a registry defect. Register it and run grocery\audit-alert-registry.ps1.
+[2026-09-11T04:37:03] SENT 'UNREGISTERED ALERT TYPE: The knowledge store's nightly pass went RED' -> schweino68@gmail.com (id 1a08fd3dca872e8a)
+[2026-09-11T08:23:12] REVIEW 'Grocery: 1 board cell(s) sit in the wrong store department - 2026-09-11' [type: grocery board cell s sit in the wrong store department] - queued, NOT emailed (registry entry wrong-department)
+[2026-09-11T08:26:13] REVIEW 'Grocery: 2 NEW price flag(s) - 2026-09-11' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)
+[2026-09-11T08:32:02] SENT 'Grocery: a GUARD has gone blind (test-auditors failed)' -> schweino68@gmail.com (id 1a090aafe711fd5e)

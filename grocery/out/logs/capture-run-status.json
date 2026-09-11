@@ -1,20 +1,29 @@
 ﻿{
     "daily":  {
-                  "date":  "2026-09-10",
-                  "pid":  36380,
-                  "started":  "2026-09-10T08:00:01",
-                  "updated":  "2026-09-10T08:28:19",
-                  "stage":  "complete",
-                  "exit_code":  1,
-                  "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-10.log"
+                  "date":  "2026-09-11",
+                  "pid":  10384,
+                  "started":  "2026-09-11T08:00:02",
+                  "updated":  "2026-09-11T08:32:05",
+                  "stage":  "publishing",
+                  "exit_code":  null,
+                  "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-11.log",
+                  "dirty_at_start":  [
+                                         "graph/provenance/2026-09-10.jsonl",
+                                         "grocery/alert-log.txt",
+                                         "grocery/out/ff-carry-report.json",
+                                         "grocery/out/logs/capture-run-status.json",
+                                         "grocery/out/logs/graph-nightly-status.json",
+                                         "grocery/out/semantic-findings.json",
+                                         "meal-prep/db/source-domains.json"
+                                     ]
               },
     "ad":  {
                "date":  "2026-09-11",
                "pid":  19228,
                "started":  "2026-09-11T07:00:02",
-               "updated":  "2026-09-11T07:01:13",
-               "stage":  "publishing",
-               "exit_code":  null,
+               "updated":  "2026-09-11T07:02:57",
+               "stage":  "complete",
+               "exit_code":  0,
                "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-11.log",
                "dirty_at_start":  [
                                       "graph/provenance/2026-09-10.jsonl",

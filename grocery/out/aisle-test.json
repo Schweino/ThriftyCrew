@@ -9,6 +9,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "alfredo-sauce",
+        "store":  "Family Fare",
+        "product":  "Ragu Sauce, Classic Alfredo 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/pasta_sauces",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "all-purpose-cleaner",
         "store":  "Family Fare",
         "product":  "All Purpose Cleaner W/Bleach Our Family",
@@ -142,6 +151,15 @@
         "aisle":  "beverages/water",
         "verdict":  "ALLOW",
         "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "brown-rice",
+        "store":  "Family Fare",
+        "product":  "Long Grain Brown Rice Our Family",
+        "dept":  "pantry",
+        "aisle":  "pantry/dry_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
     },
     {
         "id":  "brownie-mix",
@@ -315,6 +333,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "chicken-noodle-soup",
+        "store":  "Family Fare",
+        "product":  "Chicken Noodle Soup Our Family Chunky",
+        "dept":  "pantry",
+        "aisle":  "pantry/broth_soups_stews_chili",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "chicken-wings",
         "store":  "Family Fare",
         "product":  "Chicken Party Wings",
@@ -405,6 +432,24 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
+        "id":  "cream-of-chicken-soup",
+        "store":  "Family Fare",
+        "product":  "Our Family Condensed Soup, Cream Of Chicken 10.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/broth_soups_stews_chili",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "cream-of-mushroom-soup",
+        "store":  "Family Fare",
+        "product":  "Our Family Condensed Soup, Cream Of Mushroom 10.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/broth_soups_stews_chili",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "croissants",
         "store":  "Family Fare",
         "product":  "4 Ct Butter Croissants",
@@ -484,6 +529,15 @@
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "egg-noodles",
+        "store":  "Family Fare",
+        "product":  "Extra Wide Egg Noodles Our Family",
+        "dept":  "pantry",
+        "aisle":  "pantry/pasta_sauces",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
     },
     {
         "id":  "english-muffins",
@@ -592,6 +646,15 @@
         "aisle":  "freezer/frozen_vegetables",
         "verdict":  "ALLOW",
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
+        "id":  "frozen-pizza",
+        "store":  "Family Fare",
+        "product":  "Contadina Tmto Bsl Pizza Squz Btl",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027pantry\u0027; category \u0027frozen\u0027 allows only: freezer"
     },
     {
         "id":  "frozen-waffles",
@@ -738,6 +801,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "hummus",
+        "store":  "Family Fare",
+        "product":  "Fresh \u0026 Finest By Our Family Garlic Hummus 10 Oz",
+        "dept":  "deli",
+        "aisle":  "deli/party_trays_dips",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "ice-cream",
         "store":  "Family Fare",
         "product":  "Vanilla Ice Cream Our Family",
@@ -835,6 +907,15 @@
         "aisle":  "fresh_fruits_vegetables/tropical_fruits",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
+        "id":  "marshmallows",
+        "store":  "Family Fare",
+        "product":  "Our Family Marshmallows 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "mayonnaise",
@@ -945,6 +1026,15 @@
         "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
     },
     {
+        "id":  "pizza-sauce",
+        "store":  "Family Fare",
+        "product":  "Pizza Sauce Our Family",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "plums",
         "store":  "Family Fare",
         "product":  "Fresh Plums, Red",
@@ -970,6 +1060,15 @@
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "queso",
+        "store":  "Family Fare",
+        "product":  "Tostitos Medium Salsa Con Queso 23 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
         "id":  "radishes",
@@ -1107,6 +1206,15 @@
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
+        "id":  "stuffing-mix",
+        "store":  "Family Fare",
+        "product":  "Our Family Stuffing Mix, Chicken Flavor 6 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/dry_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
+    },
+    {
         "id":  "sweet-corn",
         "store":  "Family Fare",
         "product":  "Fresh Sweet Corn (4 Ct)",
@@ -1177,6 +1285,15 @@
         "aisle":  "household/bath_tissue",
         "verdict":  "ALLOW",
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "tomato-soup",
+        "store":  "Family Fare",
+        "product":  "Our Family Condensed Soup, Tomato, Classic 26 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/broth_soups_stews_chili",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "tortilla-chips",

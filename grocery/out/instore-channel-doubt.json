@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-10 11:44",
+    "generated":  "2026-09-11 08:25",
     "board":  "comparison-2026-09-09.json",
     "note":  "Cells whose winning row cannot prove it is an in-store shelf row. Since 2026-09-01 the engine REFUSES this shape (instore-lib.ps1), so a cell here is either a REVIEWED exception someone verified on the live product page, or a cell the refusal did not reach - which is a defect in the refusal, not a question for the store. Still advisory, still drops nothing.",
     "doubt_count":  2,
@@ -258,6 +258,13 @@
                            "store":  "Fareway",
                            "file":  "fareway-regular-2026-09-10.json",
                            "rows":  822,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Fareway",
+                           "file":  "fareway-regular-2026-09-11.json",
+                           "rows":  813,
                            "with_field":  0,
                            "field_bearing":  false
                        },
@@ -657,6 +664,13 @@
                            "store":  "Baker\u0027s",
                            "file":  "bakers-regular-2026-09-10.json",
                            "rows":  7296,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-09-11.json",
+                           "rows":  7297,
                            "with_field":  0,
                            "field_bearing":  false
                        },
@@ -1466,6 +1480,13 @@
                            "field_bearing":  false
                        },
                        {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-09-11.json",
+                           "rows":  5411,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
                            "store":  "Sam\u0027s Club",
                            "file":  "sams-deals-2026-07-05.json",
                            "rows":  19,
@@ -1679,6 +1700,13 @@
                            "store":  "Sam\u0027s Club",
                            "file":  "sams-deals-2026-09-10.json",
                            "rows":  159,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Sam\u0027s Club",
+                           "file":  "sams-deals-2026-09-11.json",
+                           "rows":  141,
                            "with_field":  0,
                            "field_bearing":  false
                        },
@@ -2091,6 +2119,13 @@
                        {
                            "store":  "Hy-Vee",
                            "file":  "hyvee-regular-2026-09-10.json",
+                           "rows":  1544,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-09-11.json",
                            "rows":  1544,
                            "with_field":  0,
                            "field_bearing":  false

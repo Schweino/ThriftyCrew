@@ -299,6 +299,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "beef-jerky",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  1.599,
+        "link":  1.499,
+        "ratio":  0.94,
+        "price":  14.99,
+        "size":  "10 oz",
+        "boardItem":  "Old Trapper Teriyaki Jerky",
+        "linkItem":  "Old Trapper Teriyaki Jerky",
+        "board_src":  "main"
+    },
+    {
         "id":  "bell-peppers",
         "store":  "Baker\u0027s",
         "unit":  "each",
@@ -348,6 +361,19 @@
         "size":  "21 fl oz",
         "boardItem":  "Jergens Ultra Healing Hand and Body Dry Skin Lotion",
         "linkItem":  "Jergens Ultra Healing Hand and Body Dry Skin Lotion",
+        "board_src":  "main"
+    },
+    {
+        "id":  "bread-crumbs",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.166,
+        "link":  0.1527,
+        "ratio":  0.92,
+        "price":  2.29,
+        "size":  "15 oz",
+        "boardItem":  "Fareway Plain Bread Crumbs",
+        "linkItem":  "Fareway Plain Bread Crumbs",
         "board_src":  "main"
     },
     {
@@ -689,6 +715,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "chocolate-milk",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.0998,
+        "link":  0.0832,
+        "ratio":  0.83,
+        "price":  9.98,
+        "size":  "120 fl oz",
+        "boardItem":  "Nesquik  Chocolate Milk Beverage 8 fl. oz., 15 pk.",
+        "linkItem":  "Nesquik  Chocolate Milk Beverage 8 fl. oz., 15 pk.",
+        "board_src":  "main"
+    },
+    {
         "id":  "chuck-roast",
         "store":  "Aldi",
         "unit":  "lb",
@@ -754,6 +793,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "coconut-oil",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.5707,
+        "link":  0.6421,
+        "ratio":  1.13,
+        "price":  8.99,
+        "size":  "14 fl oz",
+        "boardItem":  "Hy-Vee Virgin Coconut Oil",
+        "linkItem":  "Hy-Vee Virgin Coconut Oil",
+        "board_src":  "main"
+    },
+    {
         "id":  "cod",
         "store":  "Aldi",
         "unit":  "lb",
@@ -764,19 +816,6 @@
         "size":  "32 oz",
         "boardItem":  "Fremont Fish Market Value Pack Cod Fillets 32 OZ",
         "linkItem":  "Fremont Fish Market Value Pack Cod Fillets 32 OZ",
-        "board_src":  "main"
-    },
-    {
-        "id":  "cod",
-        "store":  "Fareway",
-        "unit":  "lb",
-        "board":  11.99,
-        "link":  11.49,
-        "ratio":  0.96,
-        "price":  11.49,
-        "size":  "16 oz",
-        "boardItem":  "Supreme Choice Cod, Boneless, Fillets",
-        "linkItem":  "Supreme Choice Cod, Boneless, Fillets",
         "board_src":  "main"
     },
     {
@@ -1639,6 +1678,19 @@
     },
     {
         "id":  "pears",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  1.705,
+        "link":  1.6675,
+        "ratio":  0.98,
+        "price":  6.67,
+        "size":  "4 lb",
+        "boardItem":  "Bartlett Pears, 4 lbs.",
+        "linkItem":  "Bartlett Pears, 4 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "pears",
         "store":  "Hy-Vee",
         "unit":  "lb",
         "board":  1.99,
@@ -1778,6 +1830,19 @@
         "size":  "8 oz",
         "boardItem":  "Hy-Vee Wavy Potato Chips",
         "linkItem":  "Hy-Vee Wavy Potato Chips",
+        "board_src":  "main"
+    },
+    {
+        "id":  "powdered-sugar",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  0.925,
+        "link":  0.99,
+        "ratio":  1.07,
+        "price":  1.98,
+        "size":  "2 lb",
+        "boardItem":  "That\u0027s Smart! Powdered Sugar",
+        "linkItem":  "That\u0027s Smart! Powdered Sugar",
         "board_src":  "main"
     },
     {
@@ -2181,6 +2246,19 @@
         "size":  "14 oz",
         "boardItem":  "Fareway Sweetened Condensed Milk",
         "linkItem":  "Fareway Sweetened Condensed Milk",
+        "board_src":  "main"
+    },
+    {
+        "id":  "condensed-milk",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.2136,
+        "link":  0.1993,
+        "ratio":  0.93,
+        "price":  2.79,
+        "size":  "14 oz",
+        "boardItem":  "Hy-Vee Sweetened Condensed Milk",
+        "linkItem":  "Hy-Vee Sweetened Condensed Milk",
         "board_src":  "main"
     },
     {

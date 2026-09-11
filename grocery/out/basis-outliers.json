@@ -270,20 +270,6 @@
                               "id":  "chicken-broth",
                               "commodity":  "Chicken Broth / Stock",
                               "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.0416,
-                              "size":  "192 fl oz",
-                              "item":  "Member\u0027s Mark Chicken Broth, 32 oz., 6 pk.",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  true
-                          },
-                          {
-                              "id":  "chicken-broth",
-                              "commodity":  "Chicken Broth / Stock",
-                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.0528,
                               "size":  "32 fl oz",
@@ -337,6 +323,20 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
+                              "id":  "cookies",
+                              "commodity":  "Cookies (packaged)",
+                              "unit":  "oz",
+                              "store":  "Sam\u0027s Club",
+                              "per_unit":  0.121,
+                              "size":  "165 fl oz",
+                              "item":  "Premier Protein 30g High Protein Shake, Cookies and Cream, 11 fl. oz., 15 pk.",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false,
+                              "unit_kind":  "weight",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
                               "id":  "cooking-spray",
                               "commodity":  "Cooking Spray",
                               "unit":  "oz",
@@ -362,20 +362,6 @@
                               "row_kind":  "volume",
                               "holds_crown":  false,
                               "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
-                              "id":  "deodorant",
-                              "commodity":  "Deodorant",
-                              "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  1.3423,
-                              "size":  "2.6 fl oz",
-                              "item":  "Suave Invisible Solid Powder Antiperspirant Deodorant",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false,
-                              "unit_kind":  "weight",
                               "agrees_with_engine_divisor":  false
                           },
                           {
@@ -680,6 +666,20 @@
                               "per_unit":  0.1658,
                               "size":  "12 oz",
                               "item":  "Valentina Hot Sauce, Mexican 12.5 Fl Oz",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "hot-sauce",
+                              "commodity":  "Hot Sauce",
+                              "unit":  "floz",
+                              "store":  "Hy-Vee",
+                              "per_unit":  0.2492,
+                              "size":  "12 oz",
+                              "item":  "Franks Redhot Original Cayenne Pepper Hot Sauce",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false,
@@ -1083,7 +1083,7 @@
                               "commodity":  "Sweet Relish",
                               "unit":  "oz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.259,
+                              "per_unit":  0.199,
                               "size":  "10 oz",
                               "item":  "Hy-Vee Sweet Relish 10 oz",
                               "kind":  "weight",
@@ -1259,6 +1259,20 @@
                               "holds_crown":  false,
                               "unit_kind":  "volume",
                               "agrees_with_engine_divisor":  true
+                          },
+                          {
+                              "id":  "worcestershire",
+                              "commodity":  "Worcestershire Sauce",
+                              "unit":  "floz",
+                              "store":  "Hy-Vee",
+                              "per_unit":  0.1,
+                              "size":  "10 oz",
+                              "item":  "Thats Smart Worcestershire Sauce",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
                           },
                           {
                               "id":  "worcestershire",
@@ -1615,6 +1629,20 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
+                                                     "id":  "cookies",
+                                                     "commodity":  "Cookies (packaged)",
+                                                     "unit":  "oz",
+                                                     "store":  "Sam\u0027s Club",
+                                                     "per_unit":  0.121,
+                                                     "size":  "165 fl oz",
+                                                     "item":  "Premier Protein 30g High Protein Shake, Cookies and Cream, 11 fl. oz., 15 pk.",
+                                                     "kind":  "volume",
+                                                     "row_kind":  "weight",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "weight",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
                                                      "id":  "cooking-spray",
                                                      "commodity":  "Cooking Spray",
                                                      "unit":  "oz",
@@ -1640,20 +1668,6 @@
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
                                                      "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "deodorant",
-                                                     "commodity":  "Deodorant",
-                                                     "unit":  "oz",
-                                                     "store":  "Fareway",
-                                                     "per_unit":  1.3423,
-                                                     "size":  "2.6 fl oz",
-                                                     "item":  "Suave Invisible Solid Powder Antiperspirant Deodorant",
-                                                     "kind":  "volume",
-                                                     "row_kind":  "weight",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "weight",
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
@@ -1888,6 +1902,20 @@
                                                      "per_unit":  0.1658,
                                                      "size":  "12 oz",
                                                      "item":  "Valentina Hot Sauce, Mexican 12.5 Fl Oz",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "hot-sauce",
+                                                     "commodity":  "Hot Sauce",
+                                                     "unit":  "floz",
+                                                     "store":  "Hy-Vee",
+                                                     "per_unit":  0.2492,
+                                                     "size":  "12 oz",
+                                                     "item":  "Franks Redhot Original Cayenne Pepper Hot Sauce",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
@@ -2271,6 +2299,20 @@
                                                      "holds_crown":  false,
                                                      "unit_kind":  "volume",
                                                      "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "worcestershire",
+                                                     "commodity":  "Worcestershire Sauce",
+                                                     "unit":  "floz",
+                                                     "store":  "Hy-Vee",
+                                                     "per_unit":  0.1,
+                                                     "size":  "10 oz",
+                                                     "item":  "Thats Smart Worcestershire Sauce",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
                                                  }
                                              ],
     "findings":  [
@@ -2323,6 +2365,19 @@
                          "mult":  7.08,
                          "size":  "20 fl oz",
                          "item":  "Coca-Cola Soda Bottle",
+                         "peers_packed":  "0 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
+                         "id":  "dog-treats",
+                         "commodity":  "Dog Treats",
+                         "unit":  "oz",
+                         "store":  "Hy-Vee",
+                         "per_unit":  0.7821,
+                         "median":  0.1121,
+                         "mult":  6.98,
+                         "size":  "5.6 oz",
+                         "item":  "Milk-Bone Soft \u0026 Chewy Chicken Recipe Dog Treats",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
                      },
@@ -2392,6 +2447,19 @@
                          "size_shape_mismatch":  false
                      },
                      {
+                         "id":  "dog-treats",
+                         "commodity":  "Dog Treats",
+                         "unit":  "oz",
+                         "store":  "Aldi",
+                         "per_unit":  0.499,
+                         "median":  0.1121,
+                         "mult":  4.45,
+                         "size":  "10 oz",
+                         "item":  "Pure Being Zippy Bite Dog Treat With Collagen Support 10 OZ",
+                         "peers_packed":  "0 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
                          "id":  "shampoo",
                          "commodity":  "Shampoo",
                          "unit":  "floz",
@@ -2422,7 +2490,7 @@
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-10T11:36:10",
+    "generated":  "2026-09-11T08:14:47",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",
@@ -2502,20 +2570,6 @@
                                                        "per_unit":  0.0528,
                                                        "size":  "32 fl oz",
                                                        "item":  "Our Family Chicken Broth 32 Fl Oz",
-                                                       "kind":  "volume",
-                                                       "row_kind":  "weight",
-                                                       "holds_crown":  false,
-                                                       "unit_kind":  "volume",
-                                                       "agrees_with_engine_divisor":  true
-                                                   },
-                                                   {
-                                                       "id":  "chicken-broth",
-                                                       "commodity":  "Chicken Broth / Stock",
-                                                       "unit":  "floz",
-                                                       "store":  "Sam\u0027s Club",
-                                                       "per_unit":  0.0416,
-                                                       "size":  "192 fl oz",
-                                                       "item":  "Member\u0027s Mark Chicken Broth, 32 oz., 6 pk.",
                                                        "kind":  "volume",
                                                        "row_kind":  "weight",
                                                        "holds_crown":  false,
@@ -2653,7 +2707,7 @@
                                                        "commodity":  "Sweet Relish",
                                                        "unit":  "oz",
                                                        "store":  "Hy-Vee",
-                                                       "per_unit":  0.259,
+                                                       "per_unit":  0.199,
                                                        "size":  "10 oz",
                                                        "item":  "Hy-Vee Sweet Relish 10 oz",
                                                        "kind":  "weight",
