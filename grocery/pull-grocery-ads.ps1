@@ -155,8 +155,10 @@ function Pull-Aldi {
 }
 
 # ============================ FAMILY FARE (Freshop circular) ============================
+. (Join-Path $PSScriptRoot 'ff-price-lib.ps1')   # Get-FreshopPages, Select-FreshopCircular: the skip= pager and the widest-window picker (2026-09-11)
 function Pull-FamilyFare {
   try {
+    $pg = $null; $sel = $null
     $ak = $EXPECT.family_fare.app_key; $sid = $EXPECT.family_fare.store_id; $b = 'https://api.freshop.ncrcloud.com/1'
     $tok = $null
     foreach ($tu in @("https://api.freshop.ncrcloud.com/2/sessions?app_key=$ak","$b/sessions?app_key=$ak")) { try { $ts = Invoke-RestMethod -Uri $tu -Method Post -Headers $UA -TimeoutSec 20; if ($ts.token) { $tok = $ts.token; break } } catch {} }
@@ -166,25 +168,32 @@ function Pull-FamilyFare {
     $okOmaha = ($city -match '(?i)omaha') -and (Test-OmahaZip $zip)
     $circ = Invoke-RestMethod -Uri "$b/circulars?app_key=$ak&store_id=$sid$tq&limit=5" -Headers $UA -TimeoutSec 25
     $clist = $circ.items; if (-not $clist) { $clist = $circ }
-    $cur = $clist | Where-Object { (Test-Current $_.start_date $_.finish_date) } | Select-Object -First 1
+    # THE WIDEST CURRENT WINDOW, NOT THE FIRST LISTED (2026-09-11, queue 2026-09-10-fa6ad6): the 2-day 'Week's Ad
+    # Preview' is listed before the weekly ad while both are current. Select-FreshopCircular logs every current one.
+    $sel = Select-FreshopCircular -Circulars $clist -Today $TODAY
+    $cur = $sel.pick
+    if ($sel.log) { Write-Output ('Family Fare circulars current today: ' + $sel.log) }
     $okCurrent = [bool]$cur
     $deals = @()
     if ($okOmaha -and $okCurrent) {
-      $page = 1; $total = 999999; $collected = 0
-      do {
-        $r = Invoke-RestMethod -Uri "$b/products?app_key=$ak&store_id=$sid$tq&circular_id=$($cur.id)&limit=200&page=$page&fields=name,size,base_price,sale_price" -Headers $UA -TimeoutSec 30
-        if ($r.total) { $total = [int]$r.total }
-        $its = $r.items
-          # THE CIRCULAR'S WINDOW, ON EVERY ROW IT PRODUCED (2026-08-21). $cur is the circular these
-          # products were fetched FOR (circular_id=$($cur.id)), and it carries start_date/finish_date -
-          # 2026-08-16..2026-08-22 today. Emitting rows without it forces every consumer back to the
-          # store-level ad window, which is the defect that retires Hy-Vee's monthly deals a week early.
-          foreach ($it in $its) { $deals += [ordered]@{ item=$it.name; size=$it.size; regular=$it.base_price; ad_price=$it.sale_price; source_ad='Weekly Ad'; ad_from=([string]$cur.start_date -replace 'T.*',''); ad_to=([string]$cur.finish_date -replace 'T.*','') } }
-        $collected += @($its).Count; $page++
-      } while (@($its).Count -gt 0 -and $collected -lt $total -and $page -le 25)
+      # PAGED WITH skip= AT 100, NOT page= AT 200 (2026-09-11, queue 2026-09-10-fa6ad6). Freshop clamps limit to 100
+      # and ignores page=, so the old loop read the SAME 100 rows eleven times and reported them as 1,100 deals while
+      # 945 of the circular's 1,045 rows never arrived. Get-FreshopPages (ff-price-lib.ps1) walks skip=, dedupes by
+      # id, throws on a page that brings no new id, and stops on the first failed request keeping what it read.
+      # 15 requests is the cap: 11 reads a 1,045-row circular, and the old loop already spent 11 on one page.
+      $pg = Get-FreshopPages -Uri "$b/products?app_key=$ak&store_id=$sid$tq&circular_id=$($cur.id)&fields=id,name,size,base_price,sale_price" -PageSize 100 -MaxRequests 15 -DelayMs 3000 -Headers $UA
+      # THE CIRCULAR'S WINDOW, ON EVERY ROW IT PRODUCED (2026-08-21). $cur is the circular these products were
+      # fetched FOR, and it carries start_date/finish_date. Emitting rows without it forces every consumer back to
+      # the store-level ad window, which is the defect that retires Hy-Vee's monthly deals a week early.
+      foreach ($it in $pg.rows) { $deals += [ordered]@{ item=$it.name; size=$it.size; regular=$it.base_price; ad_price=$it.sale_price; source_ad='Weekly Ad'; ad_from=([string]$cur.start_date -replace 'T.*',''); ad_to=([string]$cur.finish_date -replace 'T.*','') } }
+      Write-Output ('Family Fare circular walk: deals=' + $pg.unique + ' coverage=' + $pg.unique + '/' + $pg.total + ' requests=' + $pg.requests + ' stop=' + $pg.stop + $(if ($pg.status) { ' status=' + $pg.status } else { '' }))
     }
     $from = if ($cur) { $cur.start_date } else { '' }; $to = if ($cur) { $cur.finish_date } else { '' }
     Add-Result 'Family Fare' ("store_id=$sid $city") $zip ($from -replace 'T.*','') ($to -replace 'T.*','') $okOmaha $okCurrent $deals
+    # COVERAGE ON THE RECORD (2026-09-11, queue 2026-09-10-fa6ad6): what the walk read against what the store says it
+    # has, so check-ad-cycles can speak on a short read (Get-CircularCoverageReview) instead of trusting a count.
+    if ($pg) { $rec = $report[$report.Count - 1]; $rec['ad_unique'] = $pg.unique; $rec['ad_total'] = $pg.total; $rec['coverage'] = ([string]$pg.unique + '/' + [string]$pg.total); $rec['ad_pager_stop'] = $pg.stop; $rec['ad_requests'] = $pg.requests; $rec['circular'] = [string]$cur.name }
+    if ($sel) { $report[$report.Count - 1]['circulars_current'] = [string]$sel.log }
   } catch { $report.Add([ordered]@{ store='Family Fare'; identity='ERROR'; zip=''; ad_from=''; ad_to=''; omaha=$false; current=$false; deals=0; status=('ERROR: '+$_.Exception.Message) }) }
 }
 
@@ -221,7 +230,47 @@ if ($SelfTest) {
   _T 'CLEAN TWIN  the Hy-Vee gate passes the flyer from the store it asked for (68137)' (Test-HyVeeFlyerStore '68137' '68137')
   _T 'MUST FIRE  with no expected postal code the Hy-Vee gate refuses rather than passing every Omaha flyer' (-not (Test-HyVeeFlyerStore '68137' ''))
   _T 'MUST FIRE  the live identity carries a flyer postal code, so the Hy-Vee gate cannot run open' ([string]$HVFLYER[3] -match '^68\d{3}$')
-  if ($fail -eq 0) { Write-Output "SELF-TEST PASS: $n case(s)"; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }
+  # ---- FRESHOP PAGER, CIRCULAR PICKER, COVERAGE REVIEW (2026-09-11, queue 2026-09-10-fa6ad6) -----------------------
+  # Frozen Freshop doubles, never the network. The founding double answers every request with the SAME first 100 rows
+  # whatever page= or skip= says, as Freshop answered page= from 09-02 to 09-09; the honest double pages on skip=.
+  function New-FfDouble([int]$Distinct, [int]$Total, [bool]$HonourSkip, [int]$FailOnRequest) {
+    $st = @{ n = 0 }
+    return {
+      param($u)
+      $st.n++
+      if ($FailOnRequest -gt 0 -and $st.n -ge $FailOnRequest) { throw 'HTTP 400 {"error_code":429,"error":"Too Many Requests"}' }
+      $skip = 0; $m = [regex]::Match([string]$u, '[?&]skip=(\d+)'); if ($HonourSkip -and $m.Success) { $skip = [int]$m.Groups[1].Value }
+      $lim = 100; $lm = [regex]::Match([string]$u, '[?&]limit=(\d+)'); if ($lm.Success) { $lim = [Math]::Min(100, [int]$lm.Groups[1].Value) }
+      $items = New-Object System.Collections.Generic.List[object]
+      for ($i = $skip; $i -lt [Math]::Min($Distinct, $skip + $lim); $i++) { $items.Add([pscustomobject]@{ id = [string](1000 + $i); name = ('Product ' + $i); size = '1 Ea'; base_price = 2.0; sale_price = '$1.50' }) }
+      return [pscustomobject]@{ total = $Total; items = $items.ToArray() }
+    }.GetNewClosure()
+  }
+  $oldD = New-FfDouble 1045 1045 $false 0; $rowsOld = 0; $idsOld = @{}
+  for ($pgN = 1; $pgN -le 11; $pgN++) { $respOld = & $oldD ('https://x/1/products?limit=200&page=' + $pgN); foreach ($it in $respOld.items) { $rowsOld++; $idsOld[[string]$it.id] = 1 } }
+  _T 'MUST FIRE  the founding loop shape (limit=200&page=1..11) over a Freshop that ignores page= reads 1,100 rows from 100 unique ids' (($rowsOld -eq 1100) -and ($idsOld.Count -eq 100))
+  $threw = ''; try { [void](Get-FreshopPages -Uri 'https://x/1/products?circular_id=1' -PageSize 100 -MaxRequests 15 -DelayMs 0 -Fetch (New-FfDouble 1045 1045 $false 0)) } catch { $threw = $_.Exception.Message }
+  _T 'MUST FIRE  the pager over an endpoint that ignores skip= throws "added zero new ids" rather than counting a repeated page as progress' ($threw -match 'added zero new ids')
+  $short = Get-FreshopPages -Uri 'https://x/1/products?circular_id=1' -PageSize 100 -MaxRequests 15 -DelayMs 0 -Fetch (New-FfDouble 100 1045 $true 0)
+  _T 'MUST FIRE  a circular that stops at 100 of a stated 1,045 reports unique=100 total=1045 coverage 9.6 stop=empty-page' (($short.unique -eq 100) -and ($short.total -eq 1045) -and ($short.coverage_pct -eq 9.6) -and ($short.stop -eq 'empty-page'))
+  $revShort = Get-CircularCoverageReview -Verification @([pscustomobject]@{ store = 'Family Fare'; status = 'PASS'; ad_unique = 100; ad_total = 1045; ad_pager_stop = 'empty-page' })
+  _T 'MUST FIRE  the check-ad-cycles review names the short read: Family Fare circular read 100 of 1045' ((@($revShort) -join ' ') -match 'Family Fare circular read 100 of 1045')
+  $full = Get-FreshopPages -Uri 'https://x/1/products?circular_id=1' -PageSize 100 -MaxRequests 15 -DelayMs 0 -Fetch (New-FfDouble 1045 1045 $true 0)
+  _T 'CLEAN TWIN  a 1,045-row circular that pages on skip= is read whole: 1,045 unique in 11 requests, coverage 100, stop=complete' (($full.unique -eq 1045) -and ($full.requests -eq 11) -and ($full.coverage_pct -eq 100) -and ($full.stop -eq 'complete'))
+  $revFull = Get-CircularCoverageReview -Verification @([pscustomobject]@{ store = 'Family Fare'; status = 'PASS'; ad_unique = 1045; ad_total = 1045; ad_pager_stop = 'complete' })
+  _T 'MUST NOT FIRE  a complete circular read adds no REVIEW line' (@($revFull | Where-Object { $_ }).Count -eq 0)
+  $thr = $null; $thrErr = ''; try { $thr = Get-FreshopPages -Uri 'https://x/1/products?circular_id=1' -PageSize 100 -MaxRequests 15 -DelayMs 0 -Fetch (New-FfDouble 1045 1045 $true 7) } catch { $thrErr = $_.Exception.Message }
+  _T 'CLEAN TWIN  a throttle on request 7 (HTTP 400, error_code 429) stops the walk without throwing and keeps the 600 rows read, naming the status' (($thrErr -eq '') -and ($null -ne $thr) -and ($thr.unique -eq 600) -and ($thr.total -eq 1045) -and ($thr.stop -eq 'request-failed') -and ($thr.status -match '429'))
+  $circs = @(
+    [pscustomobject]@{ id = '3981377556770213679'; name = 'Week''s Ad Preview'; start_date = '2026-09-11T00:00:00-05:00'; finish_date = '2026-09-12T23:59:59-05:00' },
+    [pscustomobject]@{ id = '3977578314389802074'; name = 'Current Ad'; start_date = '2026-09-06T00:00:00-05:00'; finish_date = '2026-09-12T23:59:59-05:00' }
+  )
+  $selT = Select-FreshopCircular -Circulars $circs -Today ([datetime]'2026-09-11')
+  _T 'MUST FIRE  given the 2-day preview listed FIRST and the weekly ad second, as /1/circulars answered on 2026-09-11, the picker takes the weekly ad and logs both' (($null -ne $selT.pick) -and ([string]$selT.pick.id -eq '3977578314389802074') -and ($selT.current -eq 2) -and ($selT.log -match 'Preview') -and ($selT.log -match 'Current Ad.*PICKED'))
+  $noneT = Select-FreshopCircular -Circulars @($circs[1]) -Today ([datetime]'2026-09-20')
+  _T 'MUST NOT FIRE  with no circular current on the day there is no pick, so the store stays BLOCKED as not current' ($null -eq $noneT.pick)
+  $revErr = Get-CircularCoverageReview -Verification @([pscustomobject]@{ store = 'Family Fare'; status = 'ERROR: Get-FreshopPages: the page at skip=100 added zero new ids'; deals = 0 })
+  _T 'MUST FIRE  a Family Fare pull that ERRORED adds a REVIEW line rather than passing silently beside two PASS stores' ((@($revErr) -join ' ') -match 'Family Fare circular pull ERRORED')  if ($fail -eq 0) { Write-Output "SELF-TEST PASS: $n case(s)"; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }
 }
 
 Write-Output ("Today: "+$TODAY.ToString('yyyy-MM-dd')+"  -  pulling current Omaha weekly ads...")

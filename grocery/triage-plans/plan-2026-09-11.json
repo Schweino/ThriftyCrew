@@ -1,0 +1,344 @@
+{
+  "generated": "2026-09-11T10:32:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-09 (built 2026-09-11 08:11:25; HEAD at dispatch 930195deb3ec9ad207b16ef0eb98ce633de227c7)",
+  "queue_ids_seen": ["2026-09-11-220094", "2026-09-10-4ac6ae", "2026-09-11-3b246c", "2026-09-11-62b248", "2026-09-10-fa6ad6", "2026-09-11-18da92"],
+  "routing_artifact": "plan-2026-09-11.routing.json",
+  "items": [
+    {
+      "queue_id": "2026-09-11-220094",
+      "subject": "Grocery: a GUARD has gone blind (test-auditors failed)",
+      "classification": "infra",
+      "lane": "ops",
+      "evidence": [
+        "out/test-auditors-fail-2026-09-11.txt:642 | FAIL Hy-Vee tag/identity fixtures FAILED (rc=1) ... still pinned to the RETIRED Omaha #01 identity - pull-grocery-ads.ps1: [IO.File]::WriteAllText((Join-Path $split 'stores.json'), '{\"stores\":[{\"name\":\"Hy-Vee\",\"store_id ... | HYVEE-TAG-CHECK FAILED (1) | TEST-AUDITORS-COMPLETE pass=701 failed=1 - the ONLY FAIL line of 702 cases",
+        "grocery/test-hyvee-tag-check.ps1:104-118 (item 12): reads every grocery/*.ps1 as TEXT, skips 3 named files and lines starting '#', and flags any remaining line matching 'adcb2ae1-f440-4512-bfe8-9624832c72a9' or '\\bstoreId\\s*=\\s*1465\\b' or '\\$HStore\\s*=\\s*1465\\b'",
+        "grocery/pull-grocery-ads.ps1:207 sits inside `if ($SelfTest) {` (opened at line 191) and writes a MUST FIRE fixture registry carrying store_id 1465 + location_id adcb2ae1-f440-4512-bfe8-9624832c72a9 + label Omaha #01 to a temp dir so Resolve-HyVeeFlyerCollection is proven to REFUSE it (line 212). Arrived in a77ad8734 (2026-09-10 13:40:20). Lines 199-200 of the same block already build their '1465' needles by concatenation ('14' + '65') to dodge the file's own self-check at 201; line 207 pastes the UUID raw",
+        "premise (a) VERIFIED on HEAD 930195deb: the three patterns match exactly one non-comment line across grocery/*.ps1 outside the skip list, pull-grocery-ads.ps1:207; no second failure exists in the 08:32 run",
+        "premise (c) MEASURED: ops/prepush-test-auditors.ps1 -ListUnits -PathsFile {grocery/pull-grocery-ads.ps1} -> 'SELECTIVE - 18 of 138 unit(s) reached' and u129-promoting-queued-prices (the unit that runs test-hyvee-tag-check.ps1) IS selected ('declares -Reads grocery/*.ps1'). R19's reachability is NOT the source. a77ad8734 reached main because it was pushed at 13:40, 4h43m before c3eb9cf31 (18:23) installed the pre-push test-auditors check at all; and because the daily chain's -Record (check-ad-cycles.ps1:2876) has since recorded this case as a known failure, a push today is not refused for it either - R19 by design: 'every one already in the known-failures record; this push added none. That is not a pass'",
+        "class population, measured: 5 sweeps read grocery/*.ps1 production text with a hand-kept file skip list or a leading-# skip as their ONLY fixture discriminator (test-hyvee-tag-check.ps1:105, test-auditors.ps1:562 unit u009, test-auditors.ps1:3967, test-guards.ps1:559, audit-store-registry.ps1:506); 90 grocery scripts carry 91 `if ($SelfTest)` blocks any of them can fire on; today exactly 1 fires"
+      ],
+      "surface_fix": {
+        "what": "test-hyvee-tag-check.ps1 item 12 scans only statements that RUN IN PRODUCTION: parse each file with [System.Management.Automation.Language.Parser]::ParseFile, drop the extent of every IfStatementAst whose condition text is exactly `$SelfTest`, then apply the same three patterns to the remaining non-comment lines. pull-grocery-ads.ps1:207 is left byte-identical",
+        "files": ["grocery/test-hyvee-tag-check.ps1", "lib/production-text.ps1"],
+        "exact_change": "new lib/production-text.ps1 exporting Get-TcProductionLines -Path <ps1> (returns [pscustomobject]{line_no, text} for every line outside any `if ($SelfTest) { ... }` extent, comment lines retained so callers keep their own '#' skip); test-hyvee-tag-check.ps1:107-109 replaces `$t = Get-Content $f.FullName -Raw` + `-split` with `foreach ($ln in (Get-TcProductionLines -Path $f.FullName))`"
+      },
+      "root_cause": "a text sweep over production scripts has no way to tell a frozen fixture from a live pin: it discriminates by file name and by a leading '#', and a fixture that must carry the retired literal to prove the refusal has to sit on a non-comment line of a production file. Any of the 5 such sweeps fires the moment any of the 91 -SelfTest blocks freezes the shape it hunts. A comment marker cannot fix the class because a marker can be copied onto a live line (triage-plans/README.md: the fixture marker scoped away from -SelfTest blocks on 2026-09-09 met its next fixture within the hour); a `$SelfTest` branch is dead in production by construction and cannot be",
+      "root_fix": {
+        "what": "one shared production-text reader, adopted by all 5 grocery text sweeps, so no -SelfTest fixture can page a sweep and no marker exists to copy",
+        "files": ["lib/production-text.ps1", "grocery/test-hyvee-tag-check.ps1", "grocery/test-guards.ps1", "grocery/test-auditors.ps1", "grocery/audit-store-registry.ps1"],
+        "exact_change": "test-guards.ps1:559-563 (Test-HasThrowingIdiom's input), test-auditors.ps1:569-575 (u009 array-wrap scan) and :3967-3977 (the search-term [string] cast scan), audit-store-registry.ps1:506-509 (Get-StoreListDrift's input) read lines through Get-TcProductionLines; each keeps its existing skip list for files that quote the pattern as prose or as detector text. lib/production-text.ps1 -SelfTest (discovered by ops/run-gates.ps1): MUST FIRE a needle on a top-level line is returned; MUST NOT FIRE the byte-identical line inside `if ($SelfTest) { }` is not returned, nor one inside a function defined inside that block; CLEAN TWIN a needle inside `if ($selftest -and $x)` (not the bare condition) IS still returned, so the scope stays narrow"
+      },
+      "leaves_open": "the type 'test-auditors red' is a bucket: 5 prior closes in 30 days were 5 different blindness shapes (a recipe-repair display matcher 08-22, a transient orphan 08-30, a fixture copied without its sibling libs 08-31, a hygiene drift 09-04, a CRLF end marker 09-07) and only today's is text-sweep-over-fixture; this source does not touch the other four, and sweeps outside grocery/ (ops/audit-fixture-inputs.ps1, whose gate is the subject of the foreign draft grocery/INCIDENT-2026-09-11-ops-audit-fixture-inputs-ps1-went-red-4-times-in.md) are not converted here",
+      "leaves_open_occurrences": 5,
+      "leaves_open_window": "30 days (2026-08-22 to 2026-09-11), the 5 prior closes of this type",
+      "leaves_open_followup": null,
+      "prior_closes": ["2026-08-22-7e1db7", "2026-08-30-b9d48f", "2026-08-31-4b2f47", "2026-09-04-0b63d3", "2026-09-07-76ec7f"],
+      "prevention": {
+        "source": ["lib/production-text.ps1", "grocery/test-hyvee-tag-check.ps1", "grocery/test-guards.ps1", "grocery/test-auditors.ps1", "grocery/audit-store-registry.ps1"],
+        "what": "a sweep over production script text reads only statements that run in production, so a -SelfTest block can freeze any literal it needs without paging a watcher, and there is no marker for a live line to wear. Why the earlier closes did not stop this one: each repaired its own blindness shape (matcher, orphan, fixture siblings, hygiene tier, CRLF marker); none was about a sweep reading fixture text, and the 09-09 marker approach to that shape was scoped so a fixture outside the marked region still fired",
+        "exact_change": "Get-TcProductionLines in lib/production-text.ps1 (AST-scoped, not regex-scoped) and the 5 call-site edits named in root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "grep over grocery/*.ps1 at HEAD 930195deb: 5 sweep sites over production text, 91 `if ($SelfTest)` blocks in 90 files; ops/prepush-test-auditors.ps1 -ListUnits for the pushed path",
+        "affected_now": 1,
+        "names": ["grocery/pull-grocery-ads.ps1:207 (the one line firing today)"],
+        "risk": "AST scoping removes only extents inside an `if ($SelfTest)` statement, so a live pin anywhere outside such a block is still seen; the only way item 12 goes blind is a production pin written INSIDE a SelfTest block, which is dead code. No board effect: the flyer request already takes its id from Get-HyVeeStore (a77ad8734), and the 09-11 board is unaffected",
+        "cell_effects": []
+      },
+      "freshness": "measured against HEAD 930195deb, out/test-auditors-fail-2026-09-11.txt (run 08:32:01), ops/prepush-test-auditors -ListUnits at ~10:12; board comparison-2026-09-09 built 2026-09-11 08:11:25 pinned, no board effect; if a77ad8734 or test-hyvee-tag-check.ps1 moved since, re-check that :207 is still the only match",
+      "proof": {
+        "guard_or_fixture": "test-auditors.ps1 unit u129 (runs test-hyvee-tag-check.ps1) + a new item-12 fixture tree driven through test-hyvee-tag-check's root the way test-guards' RunPSAt fixture is + lib/production-text.ps1 -SelfTest under ops/run-gates.ps1",
+        "must_fire_case": "a fixture script whose TOP-LEVEL line reads `$HStore = 1465` (the needle built by concatenation inside the test so the test file carries no literal) is reported by item 12 as 'still pinned to the RETIRED Omaha #01 identity' - the founding bug of item 12 stays visible",
+        "clean_twin": "the byte-identical line placed inside `if ($SelfTest) { ... }` in a sibling fixture script is NOT reported; and on the live tree, with pull-grocery-ads.ps1:207 unchanged, test-hyvee-tag-check.ps1 prints HYVEE-TAG-CHECK PASSED and test-auditors reports failed=0 (702 of 702)",
+        "fixture_occurrences": [
+          { "queue_id": "2026-08-22-7e1db7", "fixture": "repair-cook-measures display-matcher case, frozen at its close in test-auditors" },
+          { "queue_id": "2026-08-30-b9d48f", "fixture": "audit-script-census orphan case (dead-commodity-lib caller), frozen at its close" },
+          { "queue_id": "2026-08-31-4b2f47", "fixture": "triage-due fixture copies every dot-sourced lib, frozen at its close" },
+          { "queue_id": "2026-09-04-0b63d3", "fixture": "HYGIENE tier rc cases (1, 2, 3, 4, 124, 255, -1), frozen at its close" },
+          { "queue_id": "2026-09-07-76ec7f", "fixture": "test-capture-builders under BOTH line endings, frozen at its close" },
+          { "queue_id": "2026-09-11-220094", "fixture": "item-12 fixture tree: top-level pin fires, the same line inside if ($SelfTest) is silent" }
+        ],
+        "commands": ["powershell -File grocery\\test-hyvee-tag-check.ps1", "powershell -File lib\\production-text.ps1 -SelfTest", "powershell -File grocery\\test-auditors.ps1", "powershell -File ops\\run-gates.ps1"]
+      },
+      "rollback": "revert lib/production-text.ps1 and the 5 call-site hunks; the failure returns as the same KNOWN failure in ops/prepush-test-auditors' record, so nothing new is refused",
+      "do_not_touch": ["pull-grocery-ads.ps1:199-224 (the fixture must stay a real retired-identity registry; splitting the literal would be the marker approach)", "the three patterns at test-hyvee-tag-check.ps1:112", "R19's selection in ops/prepush-test-auditors.ps1", "any known-failures record file"],
+      "resolution_note": "Not a blind guard: test-hyvee-tag-check item 12 fired on pull-grocery-ads.ps1's own MUST FIRE fixture (line 207, inside if ($SelfTest), from a77ad8734), because the sweep reads production text and can only skip by file name or '#'. Fixed at the class: lib/production-text.ps1 returns only statements that run in production (AST-scoped, no marker), adopted by all 5 grocery text sweeps. R19's selection was measured and DOES reach this unit for a push touching pull-grocery-ads.ps1; the commit predated the pre-push check. test-auditors 702/702.",
+      "publish_batch": 0,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-10-4ac6ae",
+      "subject": "Triage finding: test-auditors is red since a77ad8734, the Hy-Vee retired-identity sweep fires on that commit's own must-fire fixture",
+      "classification": "superseded",
+      "lane": "ops",
+      "evidence": [
+        "same condition as 2026-09-11-220094: its body names test-hyvee-tag-check.ps1:118 firing on pull-grocery-ads.ps1's -SelfTest fixture from a77ad8734; verified on HEAD 930195deb as the only failing case (the body says line 202; on HEAD the fixture literal is at line 207)"
+      ],
+      "root_cause": "one condition, two ids: the weekly-lane finding of 09-10 13:48 and the daily page of 09-11 08:32 are the same red test-auditors run; 220094 owns it",
+      "resolution_note": "SUPERSEDED by 2026-09-11-220094 (same test-auditors failure, same fixture line). Closes with it.",
+      "publish_batch": 0,
+      "status": "planned"
+    },    {
+      "queue_id": "2026-09-11-3b246c",
+      "subject": "Grocery: 2 NEW price flag(s) - 2026-09-11",
+      "classification": "wrong-product",
+      "lane": "matching",
+      "evidence": [
+        "shrimp | Sam's Club | 'Member's Mark Shrimp and Corn Chowder, 24 oz., 2 pk.' | $10.47 / 48 oz | basis 'size 3 lb' | $3.49/lb | source 'everyday club price (Omaha 68137)' ad_from 2026-09-11 (sams-deals-2026-09-11.json) - a SOUP priced as raw frozen shrimp. The arithmetic is exact (24 oz x 2 = 48 oz = 3 lb; 10.47 / 3 = 3.49), so this is not a parse bug and not weekly item 2026-09-10-c8eb72 (no gallon, no quotient size)",
+        "the dispatch's cheap check listed this very row and read it as 'nowhere near $3.49/lb': it is exactly $3.49/lb",
+        "wow arm: last week's crown was Sam's 'Member's Mark Farm Raised Jumbo Raw EZ Peel Shrimp, Frozen, 21-30 ct. per pound, 3 lbs.' $5.82/lb on comparison-2026-09-02 (built 09-05) and comparison-2026-09-08 (built 09-09); that row lives only in sams-deals-2026-08-15.json (18 shrimp rows). Under capture-depth-lib.ps1 Select-FreshestCaptureRows the 08-15 capture still joins the 09-11 one (an older capture with MORE distinct matching products stays eligible), so the crown moved because the chowder UNDERCUT $5.82, not because anything was evicted",
+        "shrimp | Aldi | 'Fusia Shrimp Avocado Roll Sushi 11.5 OZ' | $5.29 / 11.5 oz | $7.36/lb - SUSHI on the same commodity, on the board since at least comparison-2026-09-02, never flagged because it is not an outlier",
+        "rule (commodities.json index 40, label 'Shrimp (frozen, raw)', category Meat & Poultry): include ['shrimp'] with no form requirement; excludes are type words (breaded, popcorn, scampi, boil, cocktail sauce, ...) and cover neither chowder, sushi, cooked, bisque nor tempura. 'raw' appears in the label and nowhere in the rule",
+        "routing (plan-2026-09-11.routing.json, 22,713 unique names over 20 files): S1b (shrimp excludes + release excludes) changes 12 names, every one a prepared or cooked product: 5 cooked shrimp (Aldi x3, Sam's x3), 1 Hy-Vee cooked skewers ad line, the chowder, the sushi, a tempura tray and the two Patagonian scallop-and-shrimp-in-garlic-parmesan-butter names. WITHOUT the release excludes those two Patagonian names re-land on garlic and parmesan - measured, which is why garlic and parmesan gain a \\bscallops?\\b exclude. S3 (the class baked into the 47 ^Meat ids) changes 2 names, both already in S1b: no legitimate meat product is eaten. S4 (the same classes into the 116 Fruit/Vegetables ids) changes 1: 'Fresh & Finest Herbed Tomato Bisque' tomatoes -> tomato-soup, a correct re-landing that moves no cell (FF tomatoes cell is 'Fresh Tomato On The Vine' $2.99/lb; FF tomato-soup cell 0.0842/oz beats the bisque's 0.343/oz)",
+        "cells after (artifact cell_candidates_after): Sam's shrimp = EZ Peel 3 lb $5.82/lb (08-15 capture, depth 5 raw products vs the 09-11 capture's 1, so it stays eligible as it did on 09-09); Aldi shrimp = 'Fremont Fish Market Medium EZ Peel Raw Shrimp 12 OZ' $6.29 / 0.75 lb = $8.3867/lb; garlic and parmesan hold no Patagonian row before or after"
+      ],
+      "surface_fix": {
+        "what": "exclude the prepared and cooked forms from shrimp, release the two scallop names from garlic and parmesan so they land nowhere, and rule today's two wrong rows",
+        "files": ["grocery/commodities.json", "grocery/known-wrong.json"],
+        "exact_change": "shrimp (index 40).exclude += '\\bchowder\\b', '\\bsushi\\b', '\\bcooked\\b', '\\bsoup\\b', '\\bbisque\\b', '\\btempura\\b', '\\bmarinated\\b', 'firecracker', '\\bscallops?\\b' ('\\bsoup\\b' and 'marinated' are already global excludes, kept so the commodity states its own form); garlic.exclude += '\\bscallops?\\b'; parmesan.exclude += '\\bscallops?\\b'; add-known-wrong.ps1 for the Sam's chowder row and the Aldi sushi row"
+      },
+      "root_cause": "a raw-protein commodity's rule is a bare include with type-word excludes, and category-excludes.json's ^Meat block has no class for a prepared dish that carries its protein's name (soups, chowders, bisques, sushi), so every such product is eligible at every one of the 47 Meat commodities and only the sanity outlier arm sees the cheap ones; the raw/cooked form the label promises is expressed nowhere in the schema. Ten prior closes of this type were ten different mechanisms (pack arithmetic, two-size lines, a unit-price attribute, a fuel-saver clause, donut holes, a snack bar); none could have stopped this one because the missing thing was a CLASS, not a token",
+      "root_fix": {
+        "what": "two new classes in the category-exclude library, baked into every ^Meat and every Fruit/Vegetables commodity by the sanctioned tool, and hard-failed by audit-food-category",
+        "files": ["grocery/category-excludes.json", "grocery/apply-category-excludes.ps1", "grocery/audit-food-category.ps1", "grocery/commodities.json"],
+        "exact_change": "category-excludes.json classes += soup_carrier ['\\bchowder\\b', '\\bsoup\\b', '\\bbisque\\b', '\\bgumbo\\b'] and sushi_carrier ['\\bsushi\\b']; apply blocks ^Meat and ^(Fruit|Vegetables)$ += both classes; exempt soup_carrier '' and sushi_carrier '' (measured: no commodity in either block is a soup or a sushi; canned-chili, clam-chowder and tomato-soup sit in other blocks). Run apply-category-excludes.ps1 (it writes ASCII-pinned, no BOM); wire both classes into audit-food-category.ps1 the way sausage_carrier was on 2026-09-02 so the class hard-fails estate-wide; test-auditors gains the case"
+      },
+      "leaves_open": "prepared-seafood shapes no class token names: 'Fremont Fish Market Salted Butter Shrimp Skewer 8 OZ' (Aldi $6.79 / 8 oz = $13.58/lb) and the fresh 'Member's Mark Jumbo Gulf Shrimp, Service Counter' ($10.47/lb, not frozen) stay on shrimp; neither prices a cell (Aldi cell 8.3867, Sam's 5.82). The schema still carries no raw/cooked form attribute, so 'cooked' is a shrimp-only exclude: a cooked product at another Meat commodity is still decided token by token",
+      "leaves_open_occurrences": 0,
+      "leaves_open_window": "0 cells on comparison-2026-09-09 and 0 in the 30-day close history of this type; 2 non-cell rows on the artifact corpus",
+      "leaves_open_followup": "watch:grocery/check-ad-cycles.ps1",
+      "prior_closes": ["2026-08-22-8360b4", "2026-08-31-8018b5", "2026-09-01-b7da16", "2026-09-02-19e1c3", "2026-09-04-def37c", "2026-09-05-521f1c", "2026-09-06-24ac66", "2026-09-07-05e4c3", "2026-09-09-9b1f92", "2026-09-10-b91a0a"],
+      "prevention": {
+        "source": ["grocery/category-excludes.json", "grocery/apply-category-excludes.ps1", "grocery/audit-food-category.ps1"],
+        "what": "the class library is the schema that makes a commodity born with its fences and audit-food-category is the check that hard-fails the class on every board; a prepared dish named for its protein is refused at every Meat and produce commodity, not at shrimp alone. Why the earlier closes did not stop this one: the sanity flag is the detector's bucket type and its 10 closes fixed 10 unrelated mechanisms; the two closes that added classes (sausage_carrier 09-02, frozen_dessert_brand 08-30) added the class their row exposed, and no close had seen a soup or a sushi",
+        "exact_change": "soup_carrier + sushi_carrier classes, applied to ^Meat and ^(Fruit|Vegetables)$, baked by apply-category-excludes.ps1, hard-failed by audit-food-category.ps1 (the same three-level shape as the 09-02 sausage_carrier close)"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "before/after first-match-wins routing of 22,713 unique names (27,424 rows) through grocery/match-lib.ps1 over the artifact's 20-file corpus: newest per-store regular + hunter files, ads-2026-09-09, bakers/sams/fareway newest deals, sams-deals-2026-08-15 (the capture holding the 09-09 crown), comparison-2026-09-09",
+        "affected_now": 13,
+        "names": ["Member's Mark Shrimp and Corn Chowder, 24 oz., 2 pk.", "Fusia Shrimp Avocado Roll Sushi 11.5 OZ", "Fremont Fish Market Jumbo Cooked Shrimp 12 OZ", "Sea Queen Medium Cooked Shrimp 12 OZ", "Fremont Fish Market Medium Cooked Shrimp 12 OZ", "Cooked shrimp skewers, 100% natural, 26 to 30 ct., 2 oz., 2/ $6.00", "Member's Mark Farm Raised Medium Cooked Shrimp, Frozen, 50-70 ct. per pound, 2 lbs.", "Member's Mark Farm Raised Large Cooked Shrimp, Frozen, 31-40 ct. per pound, 2 lbs.", "Member's Mark Farm Raised Jumbo Cooked Shrimp, Frozen, 21-25 ct. per pound, 2 lbs.", "Member's Mark Tempura and Coconut Shrimp Tray, 25 ct., priced per pound", "Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Bu", "Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Butter, priced per pound", "Fresh & Finest Herbed Tomato Bisque"],
+        "risk": "561 names carry a shrimp-set token and 408 a class token, but only 13 change route; the rest are already claimed or already excluded. Every changed name is a cooked or prepared product or a correct re-landing; no raw shrimp, no meat and no produce name moves. Positive control: the chowder row shrimp -> <unmatched>, recorded in the artifact. Shrimp keeps 7 of 7 stores (each store has a raw row in the artifact's cell_candidates_after or on the board)",
+        "cell_effects": [
+          { "commodity": "shrimp", "store": "Sam's Club", "before": 3.49, "after": 5.82, "row_after": "Member's Mark Farm Raised Jumbo Raw EZ Peel Shrimp, Frozen, 21-30 ct. per pound, 3 lbs. $5.82/lb (sams-deals-2026-08-15.json; the 09-09 crown), assuming the 08-15 capture is still inside Sam's carry policy as it was on the 09-09 build" },
+          { "commodity": "shrimp", "store": "Aldi", "before": 7.36, "after": 8.3867, "row_after": "Fremont Fish Market Medium EZ Peel Raw Shrimp 12 OZ $6.29 / 0.75 lb (aldi-regular-2026-09-11.json)" }
+        ]
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against comparison-2026-09-09 (built 2026-09-11 08:11:25), sams-deals-2026-09-11.json (foreign uncommitted, read at ~10:05), aldi-regular-2026-09-11.json (untracked, read at ~10:20) and the routing artifact frozen at 10:26; the Sam's cell prediction rests on sams-deals-2026-08-15.json still being eligible - if the developer's rebuild shows Sam's shrimp above 5.82 with no EZ Peel row, that capture aged out and the after-cell is the 09-11 jumbo raw at 8.485, still a real raw price",
+      "proof": {
+        "guard_or_fixture": "test-auditors.ps1 case for audit-food-category (the sausage_carrier shape from 2026-09-02) + test-commodity-rules.ps1 frozen cases + the 13 rows and positive control frozen in plan-2026-09-11.routing.json",
+        "must_fire_case": "frozen rows: the Sam's chowder on shrimp and the Aldi sushi on shrimp make audit-food-category exit 2 naming soup_carrier and sushi_carrier; test-commodity-rules: 'Member's Mark Shrimp and Corn Chowder, 24 oz., 2 pk.', 'Fusia Shrimp Avocado Roll Sushi 11.5 OZ' and 'Fremont Fish Market Jumbo Cooked Shrimp 12 OZ' resolve to NOTHING",
+        "clean_twin": "'Member's Mark Farm Raised Jumbo Raw EZ Peel Shrimp, Frozen, 21-30 ct. per pound, 3 lbs.', 'Kroger Peeled & Deveined Tail Off White Raw Shrimp' and 'Our Family Shrimp Raw Small' still resolve to shrimp; 'Fresh & Finest Herbed Tomato Bisque' resolves to tomato-soup, not tomatoes; 'Fresh Garlic' still resolves to garlic; audit-food-category exits 0 on the rebuilt board; audit-match-soundness reports exactly the artifact's names as MOVED/DROPPED and nothing else",
+        "fixture_occurrences": [
+          { "queue_id": "2026-08-22-8360b4", "fixture": "pack/basis arithmetic cases (shaved-beef-steak), frozen at its close" },
+          { "queue_id": "2026-08-31-8018b5", "fixture": "Test-NameOffersTwoSizes bare-each case (cauliflower), frozen at its close" },
+          { "queue_id": "2026-09-01-b7da16", "fixture": "canned-jalapeno / GV broccoli florets breadcrumb cases, frozen at its close" },
+          { "queue_id": "2026-09-02-19e1c3", "fixture": "no code change (acks with arithmetic)" },
+          { "queue_id": "2026-09-04-def37c", "fixture": "native_unit_price outlier-verified case, frozen at its close" },
+          { "queue_id": "2026-09-05-521f1c", "fixture": "Walmart printed-quantity-vs-unit-price refusal + capture supersession cases, frozen at its close" },
+          { "queue_id": "2026-09-06-24ac66", "fixture": "price-history unit banking / wow-across-unit-change case, frozen at its close" },
+          { "queue_id": "2026-09-07-05e4c3", "fixture": "fuel-saver clause strip + last-money-token hard guard, frozen at its close" },
+          { "queue_id": "2026-09-09-9b1f92", "fixture": "donuts hole/pod/dot excludes, 21 controls in plan-2026-09-09.routing.json" },
+          { "queue_id": "2026-09-10-b91a0a", "fixture": "shop-rescue slug demotion (KIND bar on whole coconut), frozen at its close" },
+          { "queue_id": "2026-09-11-3b246c", "fixture": "soup_carrier + sushi_carrier must-fire (chowder, sushi) and clean twins (EZ Peel, Kroger raw, tomato bisque -> tomato-soup)" }
+        ],
+        "commands": ["powershell -File grocery\\apply-category-excludes.ps1", "powershell -File grocery\\audit-food-category.ps1", "powershell -File grocery\\test-commodity-rules.ps1", "powershell -File grocery\\test-auditors.ps1"]
+      },
+      "rollback": "revert the commodities.json, category-excludes.json and known-wrong.json hunks and rebuild; no data migration",
+      "do_not_touch": ["the shrimp band (2.5-16) and any threshold", "the engine's capture-depth rule", "the Sam's unit-price ingest", "the global exclude list"],
+      "resolution_note": "Wrong product: Sam's 'Shrimp and Corn Chowder 24 oz 2 pk' ($10.47 / 3 lb = $3.49/lb, exact) took the shrimp crown from the real $5.82 EZ Peel; Aldi's cell was a sushi roll. Excluded chowder/sushi/cooked/tempura/scallops on shrimp (with release excludes on garlic and parmesan so the scallop medley lands nowhere), ruled both rows, and added soup_carrier + sushi_carrier to the category-exclude library baked into all Meat and produce commodities and hard-failed by audit-food-category. Routing measured: 13 of 22,713 names move, all prepared or cooked. Sam's shrimp back to $5.82, Aldi to $8.245/lb on real raw shrimp (the 32 oz Value Pack, cheaper per lb than the 12 oz EZ Peel the plan named). Board republished. Found on the rebuild and fixed in the same batch: Aldi granola held by a raisin bran cereal (granola excludes raisin bran, 1 of 166 names moves, ruled) and a canned candied yam winning fresh sweet-potatoes (excludes candied, 1 of 102 names moves, no cell).",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "true - comparison-2026-09-09 (built 08:11:25, unchanged when implementation began; HEAD had moved 930195deb -> 7d75b0d90 on .worktreeinclude, seed-worktree and the mustfire baseline only) held Sam's shrimp at 3.49 on 'Member's Mark Shrimp and Corn Chowder, 24 oz., 2 pk.' and Aldi shrimp at 7.36 on 'Fusia Shrimp Avocado Roll Sushi 11.5 OZ'; sams-deals-2026-09-11.json carried the row at $10.47 / 48 oz 'everyday club price (Omaha 68137)'; commodities.json index 40 shrimp includes 'shrimp' with no chowder, sushi, cooked, bisque or tempura exclude. Routing checked against plan-2026-09-11.routing.json, not re-derived: after the edits all 14 artifact names route as frozen (13 to <unmatched>, the bisque to tomato-soup) and 12 controls hold (0 misses of 26).",
+      "deviation": "Three details, no new class. (1) Aldi's after-cell is 8.245, 'Fremont Fish Market Value Pack Large Raw Peeled Shrimp 32 OZ' ($16.49 / 2 lb), not the plan's 8.3867: both rows are in the artifact's cell_candidates_after and the Value Pack is cheaper per lb, so the plan's pick was an arithmetic slip; the cell is real raw shrimp either way. (2) The rebuilt board showed Aldi granola held by 'Millville Crunchy Granola Raisin Bran 18.2 OZ' ($2.75, found_by_term cereal, an 18.2 oz raisin bran box) at 0.1511/oz from the 09-11 Aldi capture. Fixed: granola.exclude += \\braisin\\s+bran\\b (measured over 166 names carrying granola or raisin bran across 25 capture files and the board: 1 routing change, this row) plus a known-wrong ruling; the cell returned to 'Millville Oats Honey Almonds Whole Grain Granola 14 OZ' at 0.2321. (3) audit-match-soundness then listed 'Glory Foods Yams Candied 32 Oz' (walmart-regular-2026-09-11) as a new FORM contest won by FRESH sweet-potatoes over canned-yams; -Accept would have baselined that wrong route, so sweet-potatoes.exclude += \\bcandied\\b first (102 names measured, 1 change, 0 cells: it priced out of band). -Accept ran only after the parsed report matched the reviewed set exactly: DROPPED 5 and MOVED 1, all artifact names (the chowder, the Contadina and the Sam's 08-15 rows are absent because they are ruled or outside its corpus), plus 3 tuna contests whose winner canned-tuna is correct; the re-read was MOVED=0 DROPPED=0 new-contested=0. Board: 12 of 3,176 cells differ from the 08:11 build, the 3 rule moves plus 9 from captures that landed after 08:11 (Walmart 09:09, Aldi 09:11, FF 10:45), each a real product. audit-food-category 0 over 3,068 priced cells; test-auditors u140 MUST-FIRE (chowder and sushi exit 2 naming both classes) and MUST NOT FIRE (EZ Peel raw shrimp at Sam's and Aldi, a bisque on tomato-soup) pass; test-commodity-rules 92 cases.",
+      "shipped_commit": "5d1968736"
+    },    {
+      "queue_id": "2026-09-11-62b248",
+      "subject": "Grocery: 1 board cell(s) sit in the wrong store department - 2026-09-11",
+      "classification": "wrong-product",
+      "lane": "matching",
+      "evidence": [
+        "frozen-pizza | Family Fare | 'Contadina Tmto Bsl Pizza Squz Btl' | $2.99 / 13 oz | per-each (weight is one unit) | $2.99/each | found_by_term 'pizza sauce' | canonical_url /shop/pantry/canned_goods/tomato_sauce_paste/... (family-fare-regular-2026-09-11.json, as_of 2026-09-11) - a 13 oz squeeze bottle of pizza sauce priced as a frozen pizza. NOT the crown (Walmart Tony's 18.56 oz $2.96), but the live FF cell reads $2.99 on a sauce; its 13 oz cleared min_piece_oz 12",
+        "out/aisle-test.json (written 08:20:10): 161 rows, exactly 1 BLOCK: 'candidate sits in pantry; category frozen allows only: freezer'",
+        "rule frozen-pizza (index 95): include '\\bpizza\\b'; exclude carries '\\bsauce\\b', 'pizza\\s+crust', 'dough', 'seasoning' - every fence is a TYPE WORD and the store's abbreviated name carries none ('Squz Btl' = Squeeze Bottle, 'Tmto Bsl' = Tomato Basil). Its sibling row 'Contadina Sauce Squeeze Bottle' 13 oz $2.99 (as_of 08-19) IS excluded, by the one word the abbreviation dropped. pizza-sauce (index 216, include 'pizza\\s+sauce') cannot claim it either, so after the exclude it routes nowhere",
+        "routing (plan-2026-09-11.routing.json): S2 changes exactly 1 of 22,713 names, this one, frozen-pizza -> <unmatched>; 259 names carry a squeeze/bottle token and 258 are already claimed elsewhere or already excluded",
+        "FF frozen-pizza candidates after (artifact cell_candidates_after): 'Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz' $7.29 (Weekly Ad 09-06..09-12, ads-2026-09-09.json, where it appears 11 times - the fa6ad6 duplicate-page defect visible in this cell), then 'Di Giorno Frozen Pizza, Rising Crust Sausage & Pepperoni Pizza, 27.3oz (Frozen)' $7.49 everyday from 09-13"
+      ],
+      "surface_fix": {
+        "what": "fence the bottle forms on frozen-pizza and rule the row",
+        "files": ["grocery/commodities.json", "grocery/known-wrong.json"],
+        "exact_change": "frozen-pizza (index 95).exclude += '\\bsquz\\b', '\\bsqueeze\\b', '\\bbtl\\b', '\\bbottle\\b'; add-known-wrong.ps1 for the Family Fare 'Contadina Tmto Bsl Pizza Squz Btl' row"
+      },
+      "root_cause": "Family Fare's retail names are store-abbreviated, so any type-word exclude (commodity, class library or global) is defeated by a name that spells its type in an abbreviation the rule library has never seen; the one signal that survives abbreviation, the store's own shelf path (canonical_url on 99.7% of FF rows), is consulted by nothing at match time. aisle-test.ps1 reads it against the LIVE board on a 3-day cadence, after the cell has published, and its own header says roughly 8 in 10 of what it blocks is true pollution. The 4 prior closes of this type each added a token, a brand class or a map exception; none moved the shelf path into admission, which is why the fifth product with no type word reached a cell",
+      "root_fix": {
+        "what": "the FF shelf path becomes an ADMISSION input for Family Fare rows, using aisle-test's own department profile and reviewed-exception table as the one copy of the rule; aisle-test -LiveBoard stays as the outcome watch",
+        "files": ["grocery/pull-regular-familyfare.ps1", "grocery/compare-deals.ps1", "grocery/aisle-test.ps1"],
+        "exact_change": "pull-regular-familyfare.ps1 emits dept and aisle (segments 1-2 of canonical_url, the reduction aisle-test.ps1 already makes) on every row it writes; aisle-test.ps1 exposes its profile learner and its COMMODITY_DEPT exception table as functions (Get-AisleProfile / Test-AisleAllowed) instead of script body; compare-deals.ps1's Family Fare candidate admission calls Test-AisleAllowed and REFUSES a row whose dept is outside the commodity category's allowed set, recording the refusal in the identity/diagnostic output with the dept it saw. SHIP GATE, because aisle-test's own measurement is 7.8% of 3,828 rule-matched FF rows blocked with about 2 in 10 of those legitimate (Amy's frozen mac and cheese, pantry prunes): the developer runs the refusal in a scratch-dir dry run FIRST, lists every FF cell whose current row would be refused, and classifies each as wrong product (fix) or map gap (add to the exception table BEFORE the refusal ships). The refusal goes live only when the listed cell set contains no legitimate product; that list and its classification are recorded in this item's deviation field"
+      },
+      "leaves_open": "the abbreviation class at the other six stores: shelf-path admission covers Family Fare, the one capture that carries a shelf path today; Walmart batch rows carry a breadcrumb (the 09-01 close proved GV Broccoli Florets FROZEN by it) and nothing admits through it; Aldi, Fareway, Hy-Vee, Baker's and Sam's captures carry no category path at all, so a store-abbreviated name with no type word at those stores is still decided token by token",
+      "leaves_open_occurrences": 1,
+      "leaves_open_window": "30 days: 2026-09-01-b7da16 (Walmart GV Broccoli Florets, proved wrong by the store's own breadcrumb, fixed by token)",
+      "leaves_open_followup": "2026-09-11-bfc110",
+      "prior_closes": ["2026-08-24-da64ee", "2026-08-30-2611d3", "2026-08-31-e6a93d", "2026-09-02-1527d2"],
+      "prevention": {
+        "source": ["grocery/pull-regular-familyfare.ps1", "grocery/compare-deals.ps1", "grocery/aisle-test.ps1"],
+        "what": "a Family Fare row is admitted to a commodity only if the store itself shelves it in a department that commodity's category allows, so an abbreviated name that carries no type word cannot reach a cell on a word it does not contain. Why the earlier closes did not stop this one: 08-24 re-measured and changed nothing; 08-30 added a brand token and a brand class; 08-31 widened the department map; 09-02 added a sausage class; every one was a TOKEN or a MAP entry, and this name has no token to match. The store had already filed the product in pantry/canned_goods on the row the estate held",
+        "exact_change": "dept/aisle emitted by the FF builder; Test-AisleAllowed refusal in compare-deals' FF admission with the reviewed exception table; ship gated on the dry-run cell list"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "the same 22,713-name corpus and matcher as item 3b246c (plan-2026-09-11.routing.json section s_S2); the engine half's cell set is measured by the developer's scratch dry run per the ship gate, because aisle-test's profile is learned from the board and cannot be simulated by name routing",
+        "affected_now": 1,
+        "names": ["Contadina Tmto Bsl Pizza Squz Btl"],
+        "risk": "no frozen pizza in the corpus carries squeeze/bottle/squz/btl, so the surface excludes eat nothing legitimate. The engine change is where the risk sits: aisle-test's 2-in-10 legitimate-block rate on non-cell rows becomes a coverage loss if wired without the exception table, which is exactly what the ship gate measures before it goes live. Crown unchanged: Walmart $2.96",
+        "cell_effects": [
+          { "commodity": "frozen-pizza", "store": "Family Fare", "before": 2.99, "after": 7.29, "row_after": "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz $7.29 each (Weekly Ad 09-06..09-12); Di Giorno 27.3 oz $7.49 from 09-13" }
+        ]
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against comparison-2026-09-09 (built 2026-09-11 08:11:25), family-fare-regular-2026-09-11.json (5,411 rows, read ~10:20; the FF sweep appends every 3 hours) and out/aisle-test.json of 08:20:10; the routing artifact was frozen at 10:26",
+      "proof": {
+        "guard_or_fixture": "test-commodity-rules.ps1 frozen cases + aisle-test.ps1 -Candidates + a new test-auditors case over compare-deals' FF admission fed a frozen 3-row FF fixture",
+        "must_fire_case": "test-commodity-rules: 'Contadina Tmto Bsl Pizza Squz Btl' resolves to NOTHING; aisle-test -Id frozen-pizza -Product 'Contadina Tmto Bsl Pizza Squz Btl' -Url 'https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomato_sauce_paste/x' returns BLOCK; after the engine change a frozen FF row with that canonical_url on a Frozen-category commodity is refused at admission and the refusal line names dept 'pantry'",
+        "clean_twin": "'Contadina Pizza Sauce 15 Oz' still resolves to pizza-sauce; 'Di Giorno Frozen Pizza, Rising Crust Sausage & Pepperoni Pizza, 27.3oz (Frozen)' still resolves to frozen-pizza and a fixture row of it with canonical_url /shop/frozen/pizza/... is admitted; a reviewed COMMODITY_DEPT exception row (Planters Dry Roasted Pistachios, dairy/ready_to_eat, from the 08-31 close) is admitted, so the exception table is honoured by the same code path",
+        "fixture_occurrences": [
+          { "queue_id": "2026-08-24-da64ee", "fixture": "no code change at close (re-measured clean); the 7 named commodities are controls in aisle-test -LiveBoard" },
+          { "queue_id": "2026-08-30-2611d3", "fixture": "frozen_dessert_brand class must-fire (Blue Bunny on pistachios) + coriander seasoning fence, frozen at its close" },
+          { "queue_id": "2026-08-31-e6a93d", "fixture": "COMMODITY_DEPT reviewed exceptions (celery salt, smoked paprika, Planters pistachios), frozen at its close" },
+          { "queue_id": "2026-09-02-1527d2", "fixture": "sausage_carrier must-fire (Aidells gruyere sausage) with Johnsonville/Eckrich/Smoked Gruyere twins, frozen at its close" },
+          { "queue_id": "2026-09-11-62b248", "fixture": "Contadina squeeze bottle: resolves nowhere, BLOCKed by aisle-test, refused at FF admission; Di Giorno twin admitted" }
+        ],
+        "commands": ["powershell -File grocery\\test-commodity-rules.ps1", "powershell -File grocery\\aisle-test.ps1 -SelfTest", "powershell -File grocery\\aisle-test.ps1 -LiveBoard", "powershell -File grocery\\test-auditors.ps1"]
+      },
+      "rollback": "surface: revert the commodities.json and known-wrong.json hunks. Engine: revert the compare-deals admission hunk alone; the dept/aisle fields on FF rows are additive and harmless to leave",
+      "do_not_touch": ["min_piece_oz 12 on frozen-pizza (b28788fa ruling)", "aisle-test's category allowlists (widening one is how the 08-31 close hid three rows)", "any store other than Family Fare in this item"],
+      "resolution_note": "Wrong product: Family Fare's 'Contadina Tmto Bsl Pizza Squz Btl' (a 13 oz pizza-sauce squeeze bottle, shelved by the store in pantry/canned_goods) held the FF frozen-pizza cell at $2.99 because the abbreviated name carries no 'sauce'. Fenced squeeze/bottle forms and ruled the row (FF cell to the Bellatoria ad at $7.29; crown unchanged at Walmart $2.96). Class fix: FF rows now carry the store's own dept/aisle and compare-deals refuses a Family Fare candidate outside its category's departments at admission, using aisle-test's profile and exception table, gated on a dry-run cell list with zero legitimate refusals. Dry run, refusal ON vs OFF: 0 of 3,176 cells move (0 of 454 FF); after fixing a URL-reduction defect and reviewing 4 map gaps into the exception table, the live build refuses 7 rows, every one a wrong product or form.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "true - comparison-2026-09-09 (08:11:25) FF frozen-pizza cell 2.99 on 'Contadina Tmto Bsl Pizza Squz Btl'; family-fare-regular-2026-09-11.json row $2.99 / 13 oz, found_by_term 'pizza sauce', canonical_url /shop/pantry/canned_goods/tomato_sauce_paste/contadina_tmto_bsl_pizza_squz_btl/p/1764405684716243059; frozen-pizza (index 95) excludes \\bsauce\\b, pizza\\s+crust, dough and seasoning but no squz or btl; pizza-sauce (index 216) includes only pizza\\s+sauce; a pre-measure through aisle-test -Candidates over the 167 shelf-pathed FF cells on both boards judged exactly 1 BLOCK, this row. The plan's clean-twin URL shape '/shop/frozen/pizza/...' is not Family Fare's: the real Di Giorno row is /shop/freezer/frozen_meals_more/pizza/..., and the fixture uses it.",
+      "deviation": "Both halves shipped; the engine half passed its gate only after the dry run found and fixed two things. SHIP GATE: scratch compare-deals into two OutDirs with identical inputs, -NoAisleAdmission as the OFF arm. Run 1 moved 0 of 3,176 cells (0 of 454 FF) but refused 19 non-cell rows. 2 were a DEFECT in the reduction: a shelf-less canonical_url '/shop/<product_slug>/p/<id>' read the slug as the department and blocked 'Kraft Grated Cheese, Parmesan Cheese, 8 Oz' from parmesan and 'Kraft Cheddar Asadero Shredded Chees' from shredded-cheese. Get-AisleDept now needs a following shelf segment (2 of 1,828 FF URLs have that shape), with the Kraft row frozen in aisle-test. 10 were real product the map was too tight for, reviewed into COMMODITY_DEPT: Fresh & Finest bakery cookies and Bud's Best bite size cookies (cookies += bakery, seasonal_special_occasion), Grillo's dill spears (pickles += deli), and Sugar N Spice chili powder and roasted garlic powder (+= fresh_fruits_vegetables, the rack already reviewed for curry-powder). Run 2 and the live build: 0 cells moved and 7 rows refused, each a wrong product or form checked against its commodity's own label and excludes: Lean Cuisine frozen fettuccine on alfredo-sauce (excludes frozen, meal), Birds Eye frozen green beans and peas on the canned ids (exclude frozen), produce-aisle 'Pinto Beans' on canned-pinto-beans (excludes dry, dried), Our Family frozen sweet dinner rolls on dinner-rolls (excludes frozen), frozen Flax4Life muffins on 'Muffins (bakery)', Rice Dream rice drink on 'White Rice'. So the listed cell set is empty and no legitimate row is refused. SHAPE: the rule moved to a new grocery/aisle-lib.ps1, because compare-deals cannot dot-source aisle-test's script body without running its param block and live path in its own scope; aisle-test keeps thin wrappers and its -SelfTest drives the lib (20/20; test-auditors pin raised 14 -> 20). The admission proof is aisle-test's self-test over Get-AisleAdmissionRefusal plus the end-to-end dry run, not a separate test-auditors compare-deals fixture: test-auditors has no compare-deals fixture harness, and the scratch run logged each refusal with its department. Builder: Norm-Row stamps dept and aisle from canonical_url; its -SelfTest passes, and a direct reach check returned dept=pantry aisle=pantry/canned_goods.",
+      "shipped_commit": "5d1968736"
+    },    {
+      "queue_id": "2026-09-10-fa6ad6",
+      "subject": "Triage finding: Family Fare offers and circular paging read one page, page= is ignored by Freshop",
+      "classification": "capture-gap",
+      "lane": "pricing",
+      "evidence": [
+        "out/ads-2026-09-06..09-09.json: Family Fare verification deals=1100 in each, with exactly 100 unique item|size; ads-2026-09-02.json deals=1400, unique=100. pull-grocery-ads.ps1:173-184 asks limit=200&page=N and loops until collected >= total, so 11 pages of the SAME 100 rows were appended and reported as 1,100 verified deals",
+        "live probe 2026-09-11 10:15:46-10:15:57, 3 requests, token-less, User-Agent Mozilla/5.0, 3 s apart, 2h14m after the last FF rotation window (capture-cursor-log 08:01:13): GET /1/circulars -> 'Current Ad' 3977578314389802074 (09-06..09-12) and 'Week's Ad Preview' 3981377556770213679 (09-11..09-12), preview listed FIRST; GET /1/products?circular_id=3977578314389802074&limit=100&skip=100 -> total=1045, 100 rows, 0 of 100 present among the 100 the estate holds (e.g. 'Tyson Frozen Dino Nuggets 29 Oz' base 8.49 sale $7.29; 'Thomas' Nooks & Crannies Original English Muffins 6 Ea' 2 for $6.00). So skip= pages the circular and 945 of 1,045 weekly-ad rows (90.4%) never reach the board. MONEY BUG on the circular half",
+        "board comparison-2026-09-09: 454 Family Fare cells; 13 carry source 'Weekly Ad', 0 carry type 'ad', 435 everyday shelf price, 6 Recipe Hunter. Every FF sale the board can show today comes from those 100 rows",
+        "offers half (pull-regular-familyfare.ps1:477-509): GET /1/offers?limit=200&skip=200 -> total=8618, 200 rows, all 200 running today, 0 of 200 inside the 90-day bound (Get-PolicyQuarterDays); the estate's own page 1 yields the logged '0 product(s) covered by an offer running today (from 9009 offer record(s))' (ff-sweep-log.txt 09-05, twice). On the two slices measured, the offers loop is DEAD CODE costing up to 10 requests per run; 42 of 44 slices are unmeasured",
+        "budget: a skip= walk of the circular is 11 requests at 100 rows; today's loop already spends 11 for the same 100 rows, so the fix is request-neutral. design/TRIAL-familyfare-catalog-walk-2026-09-10.md measured the throttle at request 67 in one window",
+        "ordering hazard seen in the probe: both circulars are current today and pull-grocery-ads.ps1:169 takes `Select-Object -First 1`, so the next ad pull can select the 2-day preview instead of the weekly ad. Not proven to have happened: no ads-2026-09-10 or 09-11 file exists to check"
+      ],
+      "surface_fix": {
+        "what": "page the Family Fare circular with skip= at 100 rows and verify unique ids against total",
+        "files": ["grocery/pull-grocery-ads.ps1"],
+        "exact_change": "Pull-FamilyFare (line 173-184): limit=100&skip=$((page-1)*100), dedupe by product id, stop on the first 4xx, stop when unique >= total, assert unique grew on every page; write coverage=unique/total on the Family Fare verification record; pick the current circular with the WIDEST window (log every current one) instead of the first listed"
+      },
+      "root_cause": "both Freshop callers plan their pages from their own limit and page= and accept a 200 with a correct total as a complete read. Freshop silently clamps limit to 100 on /products and ignores page= and offset= on both endpoints (skip= is the pager), so a loop that never checks unique ids against total reads page 1 forever and reports 11 x 100 duplicates as 1,100 deals. The shape sits in two files because there is no shared Freshop pager, and nothing downstream compares rows delivered against total",
+      "root_fix": {
+        "what": "one Freshop pager, used by both callers, that cannot report a duplicate page as progress; the offers loop removed unless a one-time measurement finds a reason to keep it",
+        "files": ["grocery/ff-price-lib.ps1", "grocery/pull-grocery-ads.ps1", "grocery/pull-regular-familyfare.ps1", "grocery/check-ad-cycles.ps1"],
+        "exact_change": "Get-FreshopPages -Uri <base query> -PageSize 100 -MaxRequests N in ff-price-lib.ps1: walks skip=, dedupes by id, stops at the first 4xx (reporting the status and body), throws if a page adds zero new ids, returns rows + unique + total. pull-grocery-ads.ps1 uses it for the circular and stamps coverage on the verification record; check-ad-cycles.ps1 adds a REVIEW summary line when any store's circular coverage < 100% (rows still ship: a partial ad is real prices with a loud count, never a refusal). pull-regular-familyfare.ps1:471-513: the developer runs ONE off-window measurement first (44 requests of /offers at 200 per skip page, in a clear slot like the trial's 20:00, stop at the first 429) and records how many of the 8,618 offers fall inside 90 days; if 0, the offers loop is deleted and its 10 requests per run go back to the rotation; if > 0, it walks with the pager under a fixed request cap and the count goes in this item's deviation"
+      },
+      "leaves_open": "which FF cells gain a sale price is unknown until the first full walk runs (bounded above by 945 rows and 454 FF cells; every such cell can only move DOWN to a real ad price). The offers question is measured once by the developer, not by this plan (2 of 44 slices measured, both empty). The q= term search path (limit=25, no paging) is unaffected. The catalog walk lane stays unbuilt (the trial's verdict stands)",
+      "leaves_open_occurrences": 0,
+      "leaves_open_window": "0 measured cells; the class (a caller trusting a 200 with a correct total) has fired on every ad pull since at least 09-02, which THIS item is",
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "cells",
+        "measured_by": "comparison-2026-09-09 Family Fare cells (454), ads-2026-09-02..09-09 Family Fare deal rows (1100 / 100 unique each), the 3-request probe of 2026-09-11 10:15",
+        "affected_now": 13,
+        "names": ["13 Family Fare cells carry source 'Weekly Ad' today; up to 945 unread circular rows can reach FF cells after the walk"],
+        "risk": "new ad rows enter through the SAME parser as page 1 (name, size, base_price, sale_price, with '2 for $5.00' and 'N Ea' shapes page 1 already contains), so the parse path is exercised today; the walk costs the same 11 requests the broken loop already spends; a partial walk (429 mid-way) ships what it read with coverage < 100% and a REVIEW line, never a refusal or a stale carry",
+        "cell_effects": []
+      },
+      "freshness": "measured against ads-2026-09-09.json (the newest ad file), comparison-2026-09-09 (built 2026-09-11 08:11:25), capture-cursor-log.jsonl through 09:11:07 and the live Freshop probe at 10:15:46; the Current Ad window closes 09-12, so the developer's first walk may read the NEXT circular",
+      "proof": {
+        "guard_or_fixture": "pull-grocery-ads.ps1 -SelfTest (extended) + a test-auditors case driving Get-FreshopPages against a frozen Freshop double",
+        "must_fire_case": "a frozen double that answers every page= with the same 100 rows and pages only on skip=: the OLD loop shape (limit=200&page=N) yields 1,100 rows / 100 unique, and the pager fed page= (a caller that ignores its contract) throws 'page added zero new ids'; the pager fed a double reporting total=1045 that returns only 100 distinct ids reports unique=100 total=1045 coverage 9.6% and check-ad-cycles emits the REVIEW line",
+        "clean_twin": "the pager over a double with 1,045 distinct rows returns 1,045 unique in 11 requests and coverage 100% with no REVIEW; over a double that answers 400 {error_code:429} on request 7 it returns unique=600 total=1045 without throwing and the verification record says so; the circular picker given [preview 09-11..09-12, current 09-06..09-12] picks the current one",
+        "commands": ["powershell -File grocery\\pull-grocery-ads.ps1 -SelfTest", "powershell -File grocery\\test-auditors.ps1", "powershell -File grocery\\pull-grocery-ads.ps1 (one live run, then read the Family Fare verification line: deals=<unique> coverage=<unique>/<total>)"]
+      },
+      "rollback": "revert pull-grocery-ads.ps1 and the lib function; the next ad pull reads the same 100 rows again and the board keeps its 13 ad cells",
+      "do_not_touch": ["the 7-of-602/day term budget and the rotation cursor", "the catalog walk (not built, by the trial's verdict)", "the 90-day quarter bound in capture-policy", "any request pacing below 2.5 s between Freshop calls"],
+      "resolution_note": "Money bug, proven live: Family Fare's weekly-ad pull asked Freshop for limit=200&page=N, Freshop clamps to 100 and ignores page=, so every ad file since 09-02 held the same 100 of ~1,045 circular rows (11 duplicate pages reported as 1,100 deals); 945 ad prices never reached the board. Now paged with skip= at 100 via a shared pager that asserts unique ids against total, stamps coverage, and pages REVIEW when short; the circular picker takes the widest current window so the 2-day preview cannot displace the ad. Offers loop: measured off-window and [deleted | kept under a cap] (developer fills in).",
+      "publish_batch": 2,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-11-18da92",
+      "subject": "The knowledge store's nightly pass went RED",
+      "classification": "infra",
+      "lane": "ops",
+      "evidence": [
+        "C:\\Users\\Owner\\.claude\\recall-sleep-latest.md 04:37: 3 of 30 steps failed - forgetting exit 1 ('FAIL: 3 unruled candidates, above the high-water mark of 0'), memory clusters exit 1 ('FAIL: 3 unruled clusters, above the high-water mark of 0' and 'FAIL: unruled cross-project clusters fell to 12 from a mark of 13. Lower CROSS_UNRULED_MARK'), gate exit 1 ('58 of 58 passed' plus those FAIL lines); 'commit: NOT committed: the gate exited 1'",
+        "re-run read-only at ~10:00: recall-consolidate.py exit 1, 'CLUSTERS: 19, of which UNRULED 4', 'CROSS-PROJECT CLUSTERS: 12, of which UNRULED 12'; recall-forget.py exit 1, 'FAIL: 4 unruled candidates, above the high-water mark of 0'. The count grew from 3 to 4 in both between 04:37 and 10:00, from this morning's sessions alone",
+        "recall-consolidate.py:131 UNRULED_MARK = 0, :138 CROSS_UNRULED_MARK = 13 (set 2026-09-10); grocery\\alert-registry.json has no entry keyed on this subject, so send-alert queued it unregistered and mailed it (queue record carries unregistered=true; emitter C:\\Users\\Owner\\.claude\\skills\\recall-sleep.py:588-593 via grocery\\send-alert.ps1)"
+      ],
+      "surface_fix": {
+        "what": "the instance: lower the cross-project ratchet as it demands and rule on the waiting judgements with written reasons",
+        "files": ["C:\\Users\\Owner\\.claude\\skills\\recall-consolidate.py"],
+        "exact_change": "CROSS_UNRULED_MARK 13 -> 12; rule on the 4 unruled clusters (787de5a2fdd9, 1fe2b80e126d, 9abd1863ec14, 2d27eedbef82) and the 4 forgetting candidates through the tools' own --rule commands with a reason each, never a blanket defer to turn it green"
+      },
+      "root_cause": "the nightly pass holds its judgement ratchets (within-store clusters, forgetting candidates) at a mark of 0 over a quantity that every day's memory writing grows by construction, so any day the store grows it goes RED; nothing distinguishes 'a judgement is waiting' from 'a step crashed', the RED holds back the pass's mechanical commit, and the emitter's alert type was never registered, so it pages as an unregistered defect",
+      "root_fix": {
+        "what": "separate judgement-waiting from crashed, register both subjects, and let the mechanical outputs commit when only a judgement ratchet is red (the ops developer measures and may narrow it)",
+        "files": ["C:\\Users\\Owner\\.claude\\skills\\recall-sleep.py", "grocery/alert-registry.json", "C:\\Users\\Owner\\.claude\\skills\\recall-consolidate.py"],
+        "exact_change": "(1) recall-sleep.py tells a step that failed only on a judgement ratchet apart from a step that crashed or a mechanical check that failed, and emits a DIFFERENT subject for each; (2) register both types in grocery\\alert-registry.json - the crash/mechanical one as page condition '2 watcher-cannot-see' or '3 scheduled-work-did-not-run-or-land', the judgement-waiting one as review; run grocery\\audit-alert-registry.ps1 to exit 0; (3) the pass's mechanical outputs commit even when only a judgement ratchet is red; (4) the instance in surface_fix"
+      },
+      "leaves_open": "the judgement ratchets stay at mark 0 by design, so the review subject fires every day the store grows until a person rules; the fix makes that page honest (review, committed) rather than silent. 4 unruled clusters and 4 forgetting candidates wait today; the cross-project ratchet will demand another lowering the next time a cluster is ruled",
+      "leaves_open_occurrences": 1,
+      "leaves_open_window": "1 page (2026-09-11 04:37) since CROSS_UNRULED_MARK was set on 2026-09-10; the 10:00 re-run shows the count still growing",
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "recall-sleep.py's 30 steps and the alert-registry entry set; the skills store C:\\Users\\Owner\\.claude is a LOCAL git repo with no remote",
+        "affected_now": 3,
+        "names": ["forgetting (exit 1)", "memory clusters (exit 1)", "gate (exit 1)"],
+        "risk": "no board, price or reader-facing effect; the only behaviour change is which subject a red step pages under and whether mechanical outputs commit behind a judgement ratchet",
+        "cell_effects": []
+      },
+      "freshness": "measured against recall-sleep-latest.md of 04:37 and a read-only re-run at ~10:00 on 2026-09-11, per the orchestrator's transcription; board comparison-2026-09-09 (built 2026-09-11 08:11:25) pinned, no board effect",
+      "proof": {
+        "guard_or_fixture": "recall-sleep.py's own step-result fixture (new) + grocery/audit-alert-registry.ps1",
+        "must_fire_case": "a frozen step-result set where a ratchet step exits 1 with a FAIL 'above the high-water mark' line and a mechanical step crashes must emit the page subject; recall-consolidate's ratchet still exits 1 on a count above its mark",
+        "clean_twin": "a result set where ONLY judgement ratchets are red still emits the review subject (the waiting judgement is still reported, not silenced) and the mechanical commit still lands; audit-alert-registry.ps1 exits 0 with both subjects registered",
+        "commands": ["python C:\\Users\\Owner\\.claude\\skills\\recall-sleep.py --selftest (or the fixture the developer adds)", "powershell -File grocery\\audit-alert-registry.ps1"]
+      },
+      "rollback": "revert recall-sleep.py and the two registry entries in the local skills repo; the pass returns to one RED subject",
+      "do_not_touch": ["UNRULED_MARK = 0 (a ratchet is lowered by ruling, never raised)", "any blanket --rule defer"],
+      "resolution_note": "Transcribed from the orchestrator's decided item: the nightly pass went RED on judgement ratchets at mark 0 that the store's own growth trips daily, with no way to tell a waiting judgement from a crash and no registered alert type. recall-sleep.py now emits separate subjects (page vs review), both registered; mechanical outputs commit behind a judgement ratchet; CROSS_UNRULED_MARK lowered to 12 and the 4 clusters + 4 candidates ruled with reasons. Per-item ceiling 35 calls, ops lane.",
+      "publish_batch": 0,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "OPS batch (no board republish, items 220094 + 4ac6ae + 18da92): lib/production-text.ps1 + the 5 sweep call sites; test-hyvee-tag-check.ps1 exit 0 on the live tree; test-auditors.ps1 MUST be failed=0; ops/run-gates.ps1 exit 0; commit + push (the pre-push hook runs prepush-test-auditors - read its verdict line, a SELECTED CASES PASSED is not a suite pass); then the recall-sleep.py + alert-registry item in the LOCAL skills repo with audit-alert-registry.ps1 exit 0",
+    "BATCH 1 (items 3b246c + 62b248 surface fixes + class bake): edit commodities.json (shrimp, garlic, parmesan, frozen-pizza excludes), category-excludes.json (soup_carrier, sushi_carrier, apply blocks), then apply-category-excludes.ps1 (ASCII-pinned write), add-known-wrong.ps1 x3 (Sam's chowder, Aldi sushi, FF Contadina squeeze bottle); test-commodity-rules.ps1 + the new test-auditors cases green",
+    "repair-multipack-sizes.ps1 -Apply, then stamp-ad-as-of.ps1 -Apply (check-ad-cycles.ps1:640 and :657, both BEFORE compare-deals)",
+    "compare-deals.ps1 -MinStores 1 -IdentityNamespace staple (check-ad-cycles.ps1:669; with -BakersFile/-FarewayFile as the chain passes them)",
+    "diff the rebuilt board against comparison-2026-09-09: shrimp Sam's 3.49 -> 5.82, shrimp Aldi 7.36 -> 8.3867, frozen-pizza FF 2.99 -> 7.29, tomatoes/tomato-soup/garlic/parmesan unchanged; audit-match-soundness MOVED/DROPPED must equal the artifact's 14 names",
+    "audit-food-category.ps1 (expect 0 after the bake; the frozen chowder/sushi rows must make it exit 2 in the fixture)",
+    "audit-tile-integrity.ps1 -Quiet (:1022), audit-name-drift.ps1 (:1037), prune-bad-links.ps1 -Tol 0.32 (:1044), audit-name-drift.ps1 AGAIN when prune-bad-links rewrote product-urls.json (:1063), generate-board-overrides.ps1 (:1086)",
+    "guards.ps1 (:1089, MUST be 0) + the fan-out: audit-match-soundness (:1457, review drops line by line, -Accept only the 14 artifact names), aisle-test.ps1 -LiveBoard (:1458, expect 0 BLOCK), audit-basis-reconcile (:1490), audit-pack-basis (:1491), audit-capture-eviction (:1493)",
+    "publish-deals-page.ps1 (:1151); then test-auditors.ps1 (:2864, MUST be failed=0); commit + push; verify the live shrimp and frozen-pizza cells with a cache-busting query",
+    "62b248 ENGINE half (same batch only if the ship gate passes, otherwise its own batch): FF builder emits dept/aisle; aisle-test.ps1 exposes Test-AisleAllowed; scratch-dir dry run of compare-deals with the FF admission refusal; list every FF cell whose row would be refused and classify each; add map gaps to the exception table; wire the refusal live only at zero legitimate refusals; rerun the chain from repair-multipack-sizes",
+    "BATCH 2 (item fa6ad6, its own publish so a capture change is not confounded with the rule batch): ff-price-lib.ps1 Get-FreshopPages + pull-grocery-ads.ps1 circular walk + widest-window picker + coverage on the verification record + check-ad-cycles REVIEW line; pull-grocery-ads.ps1 -SelfTest + test-auditors case green; ONE live pull-grocery-ads run (11-12 Freshop requests, outside the 07:00-08:01 rotation slots); read 'Family Fare ... deals=<unique> coverage=<unique>/<total>'; then the full chain again from repair-multipack-sizes through publish, guards 0, test-auditors 0, commit + push; verify one new FF ad cell live",
+    "fa6ad6 offers measurement (developer, off-window, e.g. after 20:00 like the trial): 44 requests of /1/offers at limit=200&skip=N, stop at the first 429, count offers inside 90 days; record the count in the item and delete or cap the offers loop accordingly in the same or a follow-up commit"
+  ],
+  "open_questions_for_brad": []
+}

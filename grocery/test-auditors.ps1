@@ -1304,6 +1304,21 @@ else { Bad ('food-category flagged REAL raw shrimp or a bisque on tomato-soup (r
 Remove-Item $fxSs -Recurse -Force -ErrorAction SilentlyContinue
 } # u140-d5-must-fire-for-the-soup-and-sushi-carriers
 
+# THE FRESHOP PAGER AND THE CIRCULAR PICKER (2026-09-11, queue 2026-09-10-fa6ad6). Family Fare's weekly-ad pull asked
+# Freshop for limit=200&page=N; Freshop clamps limit to 100 and ignores page=, so every ad file from 09-02 to 09-09
+# held the same 100 rows of a ~1,045-row circular, recorded as 1,100 deals. pull-grocery-ads.ps1 -SelfTest drives
+# Get-FreshopPages, Select-FreshopCircular and Get-CircularCoverageReview (ff-price-lib.ps1) against frozen Freshop
+# doubles; this unit runs it and requires the founding case and each twin BY NAME, so a deleted case cannot pass as
+# a shorter green run.
+if (Use-Unit 'u141-freshop-pager-and-circular-picker' -Reads 'grocery/ff-price-lib.ps1', 'grocery/pull-grocery-ads.ps1', 'grocery/check-ad-cycles.ps1') {
+$r = RunPS 'pull-grocery-ads.ps1' @('-SelfTest')
+$need = @('founding loop shape', 'added zero new ids', 'coverage 9.6', 'read whole: 1,045 unique in 11 requests', 'throttle on request 7', 'picker takes the weekly ad', 'pull that ERRORED')
+$missing = @($need | Where-Object { $r.text -notmatch [regex]::Escape($_) })
+$failLines = @(($r.text -split "`n") | Where-Object { $_ -match '^FAIL' })
+if ($r.rc -eq 0 -and $missing.Count -eq 0 -and $failLines.Count -eq 0) { Ok 'Freshop pager: a page-ignoring endpoint throws, a short circular reads coverage 9.6 with a REVIEW line, a whole one reads 1,045 in 11 requests, a throttle keeps its 600 rows, and the weekly ad beats the 2-day preview' }
+else { Bad ('Freshop pager self-test failed or lost a case (rc=' + $r.rc + '; missing: ' + ($missing -join ', ') + '; ' + ($failLines -join ' | ') + ') - the Family Fare circular can be read one page deep again and reported as complete') }
+} # u141-freshop-pager-and-circular-picker
+
 # (d5) MUST-FIRE for cheese_carrier and cracker_carrier (2026-09-04, queue 2026-09-04-2cd17a). TWO FOUNDING
 # ROWS, frozen verbatim off the 09-04 Aldi capture that produced them:
 #   * 'Emporium Selection Bacon Bread Cheese 6 OZ' is a BAKED CHEESE. It routed to bacon (index 4) because

@@ -1,0 +1,956 @@
+{
+    "generated":  "2026-09-11T10:25:41",
+    "plan":  "plan-2026-09-11.json",
+    "board_week":  "comparison-2026-09-09 (built 2026-09-11 08:11:25)",
+    "measured_as":  "routing",
+    "method":  "first-match-wins over commodities.json in array order through the real matcher (grocery/match-lib.ps1 New-CommodityMatcher + Resolve-Commodity, global exclude from global-exclude-lib.ps1): every unique name in the corpus is routed before and after each scenario; a change is a name whose winning commodity differs. Token hits are reported beside routing changes to show the proxy gap.",
+    "corpus":  {
+                   "description":  "newest out\\regular\\*-regular-*.json per store prefix (hunter-* included) + newest ads-*.json + newest bakers/sams/fareway deals file + sams-deals-2026-08-15.json (the capture that priced the 09-09 shrimp crown; included so the depth question reads the same list) + every store item on comparison-2026-09-09; every section of this artifact reads this one list",
+                   "files":  [
+                                 "aldi-regular-2026-09-11.json",
+                                 "bakers-regular-2026-09-11.json",
+                                 "family-fare-regular-2026-09-11.json",
+                                 "fareway-regular-2026-09-11.json",
+                                 "hyvee-regular-2026-09-11.json",
+                                 "walmart-regular-2026-09-11.json",
+                                 "sams-regular-2026-08-01.json",
+                                 "hunter-aldi-regular-2026-08-16.json",
+                                 "hunter-bakers-regular-2026-08-16.json",
+                                 "hunter-familyfare-regular-2026-08-16.json",
+                                 "hunter-fareway-regular-2026-08-16.json",
+                                 "hunter-hyvee-regular-2026-08-16.json",
+                                 "hunter-samsclub-regular-2026-08-16.json",
+                                 "hunter-walmart-regular-2026-08-16.json",
+                                 "ads-2026-09-09.json",
+                                 "bakers-deals-2026-09-09.json",
+                                 "sams-deals-2026-09-11.json",
+                                 "fareway-deals-2026-09-06.json",
+                                 "sams-deals-2026-08-15.json",
+                                 "comparison-2026-09-09.json"
+                             ],
+                   "file_rows":  [
+                                     {
+                                         "file":  "aldi-regular-2026-09-11.json",
+                                         "rows":  3347
+                                     },
+                                     {
+                                         "file":  "bakers-regular-2026-09-11.json",
+                                         "rows":  7297
+                                     },
+                                     {
+                                         "file":  "family-fare-regular-2026-09-11.json",
+                                         "rows":  5411
+                                     },
+                                     {
+                                         "file":  "fareway-regular-2026-09-11.json",
+                                         "rows":  813
+                                     },
+                                     {
+                                         "file":  "hyvee-regular-2026-09-11.json",
+                                         "rows":  1544
+                                     },
+                                     {
+                                         "file":  "walmart-regular-2026-09-11.json",
+                                         "rows":  139
+                                     },
+                                     {
+                                         "file":  "sams-regular-2026-08-01.json",
+                                         "rows":  60
+                                     },
+                                     {
+                                         "file":  "hunter-aldi-regular-2026-08-16.json",
+                                         "rows":  8
+                                     },
+                                     {
+                                         "file":  "hunter-bakers-regular-2026-08-16.json",
+                                         "rows":  25
+                                     },
+                                     {
+                                         "file":  "hunter-familyfare-regular-2026-08-16.json",
+                                         "rows":  10
+                                     },
+                                     {
+                                         "file":  "hunter-fareway-regular-2026-08-16.json",
+                                         "rows":  10
+                                     },
+                                     {
+                                         "file":  "hunter-hyvee-regular-2026-08-16.json",
+                                         "rows":  14
+                                     },
+                                     {
+                                         "file":  "hunter-samsclub-regular-2026-08-16.json",
+                                         "rows":  7
+                                     },
+                                     {
+                                         "file":  "hunter-walmart-regular-2026-08-16.json",
+                                         "rows":  9
+                                     },
+                                     {
+                                         "file":  "ads-2026-09-09.json",
+                                         "rows":  1982
+                                     },
+                                     {
+                                         "file":  "bakers-deals-2026-09-09.json",
+                                         "rows":  146
+                                     },
+                                     {
+                                         "file":  "sams-deals-2026-09-11.json",
+                                         "rows":  190
+                                     },
+                                     {
+                                         "file":  "fareway-deals-2026-09-06.json",
+                                         "rows":  238
+                                     },
+                                     {
+                                         "file":  "sams-deals-2026-08-15.json",
+                                         "rows":  2999
+                                     },
+                                     {
+                                         "file":  "comparison-2026-09-09.json",
+                                         "rows":  3175
+                                     }
+                                 ],
+                   "rows":  27424,
+                   "names":  22713,
+                   "skipped":  [
+
+                               ]
+               },
+    "positive_control":  {
+                             "name":  "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+                             "before":  "shrimp",
+                             "expected":  "\u003cunmatched\u003e",
+                             "observed":  "\u003cunmatched\u003e"
+                         },
+    "scenarios":  {
+                      "S1":  "shrimp (index 40).exclude += \\bchowder\\b, \\bsushi\\b, \\bcooked\\b, \\bsoup\\b, \\bbisque\\b, \\btempura\\b, \\bmarinated\\b, firecracker",
+                      "S1b":  "S1 plus shrimp.exclude += \\bscallops?\\b AND the release excludes garlic.exclude += \\bscallops?\\b, parmesan.exclude += \\bscallops?\\b (without them the two Patagonian scallop-and-shrimp names re-land on garlic and parmesan)",
+                      "S2":  "frozen-pizza (index 95).exclude += \\bsquz\\b, \\bsqueeze\\b, \\bbtl\\b, \\bbottle\\b",
+                      "S3":  "category-excludes class soup_carrier \\bchowder\\b, \\bsoup\\b, \\bbisque\\b, \\bgumbo\\b + sushi_carrier \\bsushi\\b baked into the ^Meat block (47 ids)",
+                      "S4":  "the same two classes baked into the ^(Fruit|Vegetables)$ block (116 ids) - measured, NOT proposed unless clean"
+                  },
+    "s_S1":  {
+                 "proposed_rule":  "shrimp (index 40).exclude += \\bchowder\\b, \\bsushi\\b, \\bcooked\\b, \\bsoup\\b, \\bbisque\\b, \\btempura\\b, \\bmarinated\\b, firecracker",
+                 "token_matches_in_corpus":  556,
+                 "routing_changes":  10,
+                 "rows":  [
+                              {
+                                  "name":  "Fremont Fish Market Jumbo Cooked Shrimp 12 OZ",
+                                  "store":  "Aldi",
+                                  "file":  "aldi-regular-2026-09-11.json",
+                                  "price":  "$8.49",
+                                  "size":  "12 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Fusia Shrimp Avocado Roll Sushi 11.5 OZ",
+                                  "store":  "Aldi",
+                                  "file":  "aldi-regular-2026-09-11.json",
+                                  "price":  "$5.29",
+                                  "size":  "11.5 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Fusia Shrimp Avocado Roll Sushi 11.5 OZ",
+                                  "store":  "Aldi",
+                                  "file":  "comparison-2026-09-09.json",
+                                  "price":  "$5.29",
+                                  "size":  "11.5 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Sea Queen Medium Cooked Shrimp 12 OZ",
+                                  "store":  "Aldi",
+                                  "file":  "aldi-regular-2026-09-11.json",
+                                  "price":  "$5.99",
+                                  "size":  "12 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Fremont Fish Market Medium Cooked Shrimp 12 OZ",
+                                  "store":  "Aldi",
+                                  "file":  "aldi-regular-2026-09-11.json",
+                                  "price":  "$6.49",
+                                  "size":  "12 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Cooked shrimp skewers, 100% natural, 26 to 30 ct., 2 oz., 2/ $6.00",
+                                  "store":  "Hy-Vee",
+                                  "file":  "ads-2026-09-09.json",
+                                  "price":  "",
+                                  "size":  "",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+                                  "store":  "Sam\u0027s Club",
+                                  "file":  "sams-deals-2026-09-11.json",
+                                  "price":  "$10.47",
+                                  "size":  "48 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+                                  "store":  "Sam\u0027s Club",
+                                  "file":  "comparison-2026-09-09.json",
+                                  "price":  "$10.47",
+                                  "size":  "48 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Member\u0027s Mark Farm Raised Medium Cooked Shrimp, Frozen, 50-70 ct. per pound, 2 lbs.",
+                                  "store":  "Sam\u0027s Club",
+                                  "file":  "sams-deals-2026-08-15.json",
+                                  "price":  "$8.23",
+                                  "size":  "lb",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Member\u0027s Mark Tempura and Coconut Shrimp Tray, 25 ct., priced per pound",
+                                  "store":  "Sam\u0027s Club",
+                                  "file":  "sams-deals-2026-08-15.json",
+                                  "price":  "$8.42",
+                                  "size":  "lb",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Member\u0027s Mark Farm Raised Large Cooked Shrimp, Frozen, 31-40 ct. per pound, 2 lbs.",
+                                  "store":  "Sam\u0027s Club",
+                                  "file":  "sams-deals-2026-08-15.json",
+                                  "price":  "$8.73",
+                                  "size":  "lb",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Member\u0027s Mark Farm Raised Jumbo Cooked Shrimp, Frozen, 21-25 ct. per pound, 2 lbs.",
+                                  "store":  "Sam\u0027s Club",
+                                  "file":  "sams-deals-2026-08-15.json",
+                                  "price":  "$9.48",
+                                  "size":  "lb",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              }
+                          ]
+             },
+    "s_S1b":  {
+                  "proposed_rule":  "S1 plus shrimp.exclude += \\bscallops?\\b AND the release excludes garlic.exclude += \\bscallops?\\b, parmesan.exclude += \\bscallops?\\b (without them the two Patagonian scallop-and-shrimp names re-land on garlic and parmesan)",
+                  "token_matches_in_corpus":  561,
+                  "routing_changes":  12,
+                  "rows":  [
+                               {
+                                   "name":  "Fremont Fish Market Jumbo Cooked Shrimp 12 OZ",
+                                   "store":  "Aldi",
+                                   "file":  "aldi-regular-2026-09-11.json",
+                                   "price":  "$8.49",
+                                   "size":  "12 oz",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Fusia Shrimp Avocado Roll Sushi 11.5 OZ",
+                                   "store":  "Aldi",
+                                   "file":  "aldi-regular-2026-09-11.json",
+                                   "price":  "$5.29",
+                                   "size":  "11.5 oz",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Fusia Shrimp Avocado Roll Sushi 11.5 OZ",
+                                   "store":  "Aldi",
+                                   "file":  "comparison-2026-09-09.json",
+                                   "price":  "$5.29",
+                                   "size":  "11.5 oz",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Sea Queen Medium Cooked Shrimp 12 OZ",
+                                   "store":  "Aldi",
+                                   "file":  "aldi-regular-2026-09-11.json",
+                                   "price":  "$5.99",
+                                   "size":  "12 oz",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Fremont Fish Market Medium Cooked Shrimp 12 OZ",
+                                   "store":  "Aldi",
+                                   "file":  "aldi-regular-2026-09-11.json",
+                                   "price":  "$6.49",
+                                   "size":  "12 oz",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Cooked shrimp skewers, 100% natural, 26 to 30 ct., 2 oz., 2/ $6.00",
+                                   "store":  "Hy-Vee",
+                                   "file":  "ads-2026-09-09.json",
+                                   "price":  "",
+                                   "size":  "",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+                                   "store":  "Sam\u0027s Club",
+                                   "file":  "sams-deals-2026-09-11.json",
+                                   "price":  "$10.47",
+                                   "size":  "48 oz",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+                                   "store":  "Sam\u0027s Club",
+                                   "file":  "comparison-2026-09-09.json",
+                                   "price":  "$10.47",
+                                   "size":  "48 oz",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Member\u0027s Mark Farm Raised Medium Cooked Shrimp, Frozen, 50-70 ct. per pound, 2 lbs.",
+                                   "store":  "Sam\u0027s Club",
+                                   "file":  "sams-deals-2026-08-15.json",
+                                   "price":  "$8.23",
+                                   "size":  "lb",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Member\u0027s Mark Tempura and Coconut Shrimp Tray, 25 ct., priced per pound",
+                                   "store":  "Sam\u0027s Club",
+                                   "file":  "sams-deals-2026-08-15.json",
+                                   "price":  "$8.42",
+                                   "size":  "lb",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Bu",
+                                   "store":  "Sam\u0027s Club",
+                                   "file":  "sams-deals-2026-08-15.json",
+                                   "price":  "$19.28",
+                                   "size":  "2 lb",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Member\u0027s Mark Farm Raised Large Cooked Shrimp, Frozen, 31-40 ct. per pound, 2 lbs.",
+                                   "store":  "Sam\u0027s Club",
+                                   "file":  "sams-deals-2026-08-15.json",
+                                   "price":  "$8.73",
+                                   "size":  "lb",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Member\u0027s Mark Farm Raised Jumbo Cooked Shrimp, Frozen, 21-25 ct. per pound, 2 lbs.",
+                                   "store":  "Sam\u0027s Club",
+                                   "file":  "sams-deals-2026-08-15.json",
+                                   "price":  "$9.48",
+                                   "size":  "lb",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               },
+                               {
+                                   "name":  "Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Butter, priced per pound",
+                                   "store":  "Sam\u0027s Club",
+                                   "file":  "sams-deals-2026-08-15.json",
+                                   "price":  "$9.64",
+                                   "size":  "lb",
+                                   "before":  "shrimp",
+                                   "before_idx":  40,
+                                   "after":  "\u003cunmatched\u003e",
+                                   "changed":  true
+                               }
+                           ]
+              },
+    "s_S2":  {
+                 "proposed_rule":  "frozen-pizza (index 95).exclude += \\bsquz\\b, \\bsqueeze\\b, \\bbtl\\b, \\bbottle\\b",
+                 "token_matches_in_corpus":  259,
+                 "routing_changes":  1,
+                 "rows":  [
+                              {
+                                  "name":  "Contadina Tmto Bsl Pizza Squz Btl",
+                                  "store":  "Family Fare",
+                                  "file":  "family-fare-regular-2026-09-11.json",
+                                  "price":  "$2.99",
+                                  "size":  "13 oz",
+                                  "before":  "frozen-pizza",
+                                  "before_idx":  95,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Contadina Tmto Bsl Pizza Squz Btl",
+                                  "store":  "Family Fare",
+                                  "file":  "comparison-2026-09-09.json",
+                                  "price":  "$2.99",
+                                  "size":  "13 oz",
+                                  "before":  "frozen-pizza",
+                                  "before_idx":  95,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              }
+                          ]
+             },
+    "s_S3":  {
+                 "proposed_rule":  "category-excludes class soup_carrier \\bchowder\\b, \\bsoup\\b, \\bbisque\\b, \\bgumbo\\b + sushi_carrier \\bsushi\\b baked into the ^Meat block (47 ids)",
+                 "token_matches_in_corpus":  408,
+                 "routing_changes":  2,
+                 "rows":  [
+                              {
+                                  "name":  "Fusia Shrimp Avocado Roll Sushi 11.5 OZ",
+                                  "store":  "Aldi",
+                                  "file":  "aldi-regular-2026-09-11.json",
+                                  "price":  "$5.29",
+                                  "size":  "11.5 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Fusia Shrimp Avocado Roll Sushi 11.5 OZ",
+                                  "store":  "Aldi",
+                                  "file":  "comparison-2026-09-09.json",
+                                  "price":  "$5.29",
+                                  "size":  "11.5 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+                                  "store":  "Sam\u0027s Club",
+                                  "file":  "sams-deals-2026-09-11.json",
+                                  "price":  "$10.47",
+                                  "size":  "48 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              },
+                              {
+                                  "name":  "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+                                  "store":  "Sam\u0027s Club",
+                                  "file":  "comparison-2026-09-09.json",
+                                  "price":  "$10.47",
+                                  "size":  "48 oz",
+                                  "before":  "shrimp",
+                                  "before_idx":  40,
+                                  "after":  "\u003cunmatched\u003e",
+                                  "changed":  true
+                              }
+                          ]
+             },
+    "s_S4":  {
+                 "proposed_rule":  "the same two classes baked into the ^(Fruit|Vegetables)$ block (116 ids) - measured, NOT proposed unless clean",
+                 "token_matches_in_corpus":  408,
+                 "routing_changes":  1,
+                 "rows":  [
+                              {
+                                  "name":  "Fresh \u0026 Finest Herbed Tomato Bisque",
+                                  "store":  "Family Fare",
+                                  "file":  "family-fare-regular-2026-09-11.json",
+                                  "price":  "$5.49",
+                                  "size":  "16 oz",
+                                  "before":  "tomatoes",
+                                  "before_idx":  47,
+                                  "after":  "tomato-soup",
+                                  "changed":  true
+                              }
+                          ]
+             },
+    "s_S1bS2S3S4":  {
+                        "proposed_rule":  "S1b + S2 + S3 + S4 together (the proposed ship set)",
+                        "token_matches_in_corpus":  821,
+                        "routing_changes":  14,
+                        "rows":  [
+                                     {
+                                         "name":  "Fremont Fish Market Jumbo Cooked Shrimp 12 OZ",
+                                         "store":  "Aldi",
+                                         "file":  "aldi-regular-2026-09-11.json",
+                                         "price":  "$8.49",
+                                         "size":  "12 oz",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Fusia Shrimp Avocado Roll Sushi 11.5 OZ",
+                                         "store":  "Aldi",
+                                         "file":  "aldi-regular-2026-09-11.json",
+                                         "price":  "$5.29",
+                                         "size":  "11.5 oz",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Fusia Shrimp Avocado Roll Sushi 11.5 OZ",
+                                         "store":  "Aldi",
+                                         "file":  "comparison-2026-09-09.json",
+                                         "price":  "$5.29",
+                                         "size":  "11.5 oz",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Sea Queen Medium Cooked Shrimp 12 OZ",
+                                         "store":  "Aldi",
+                                         "file":  "aldi-regular-2026-09-11.json",
+                                         "price":  "$5.99",
+                                         "size":  "12 oz",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Fremont Fish Market Medium Cooked Shrimp 12 OZ",
+                                         "store":  "Aldi",
+                                         "file":  "aldi-regular-2026-09-11.json",
+                                         "price":  "$6.49",
+                                         "size":  "12 oz",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Contadina Tmto Bsl Pizza Squz Btl",
+                                         "store":  "Family Fare",
+                                         "file":  "family-fare-regular-2026-09-11.json",
+                                         "price":  "$2.99",
+                                         "size":  "13 oz",
+                                         "before":  "frozen-pizza",
+                                         "before_idx":  95,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Contadina Tmto Bsl Pizza Squz Btl",
+                                         "store":  "Family Fare",
+                                         "file":  "comparison-2026-09-09.json",
+                                         "price":  "$2.99",
+                                         "size":  "13 oz",
+                                         "before":  "frozen-pizza",
+                                         "before_idx":  95,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Fresh \u0026 Finest Herbed Tomato Bisque",
+                                         "store":  "Family Fare",
+                                         "file":  "family-fare-regular-2026-09-11.json",
+                                         "price":  "$5.49",
+                                         "size":  "16 oz",
+                                         "before":  "tomatoes",
+                                         "before_idx":  47,
+                                         "after":  "tomato-soup",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Cooked shrimp skewers, 100% natural, 26 to 30 ct., 2 oz., 2/ $6.00",
+                                         "store":  "Hy-Vee",
+                                         "file":  "ads-2026-09-09.json",
+                                         "price":  "",
+                                         "size":  "",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+                                         "store":  "Sam\u0027s Club",
+                                         "file":  "sams-deals-2026-09-11.json",
+                                         "price":  "$10.47",
+                                         "size":  "48 oz",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+                                         "store":  "Sam\u0027s Club",
+                                         "file":  "comparison-2026-09-09.json",
+                                         "price":  "$10.47",
+                                         "size":  "48 oz",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Member\u0027s Mark Farm Raised Medium Cooked Shrimp, Frozen, 50-70 ct. per pound, 2 lbs.",
+                                         "store":  "Sam\u0027s Club",
+                                         "file":  "sams-deals-2026-08-15.json",
+                                         "price":  "$8.23",
+                                         "size":  "lb",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Member\u0027s Mark Tempura and Coconut Shrimp Tray, 25 ct., priced per pound",
+                                         "store":  "Sam\u0027s Club",
+                                         "file":  "sams-deals-2026-08-15.json",
+                                         "price":  "$8.42",
+                                         "size":  "lb",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Bu",
+                                         "store":  "Sam\u0027s Club",
+                                         "file":  "sams-deals-2026-08-15.json",
+                                         "price":  "$19.28",
+                                         "size":  "2 lb",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Member\u0027s Mark Farm Raised Large Cooked Shrimp, Frozen, 31-40 ct. per pound, 2 lbs.",
+                                         "store":  "Sam\u0027s Club",
+                                         "file":  "sams-deals-2026-08-15.json",
+                                         "price":  "$8.73",
+                                         "size":  "lb",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Member\u0027s Mark Farm Raised Jumbo Cooked Shrimp, Frozen, 21-25 ct. per pound, 2 lbs.",
+                                         "store":  "Sam\u0027s Club",
+                                         "file":  "sams-deals-2026-08-15.json",
+                                         "price":  "$9.48",
+                                         "size":  "lb",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     },
+                                     {
+                                         "name":  "Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Butter, priced per pound",
+                                         "store":  "Sam\u0027s Club",
+                                         "file":  "sams-deals-2026-08-15.json",
+                                         "price":  "$9.64",
+                                         "size":  "lb",
+                                         "before":  "shrimp",
+                                         "before_idx":  40,
+                                         "after":  "\u003cunmatched\u003e",
+                                         "changed":  true
+                                     }
+                                 ]
+                    },
+    "cell_candidates_after":  {
+                                  "shrimp|Sams Club":  [
+                                                           {
+                                                               "name":  "Member\u0027s Mark Farm Raised Jumbo Raw Shrimp, Frozen, 21-25 ct. per pound, 2 lbs.",
+                                                               "file":  "sams-deals-2026-09-11.json",
+                                                               "price":  "$16.97",
+                                                               "size":  "2 lb",
+                                                               "before":  "shrimp"
+                                                           },
+                                                           {
+                                                               "name":  "Member\u0027s Mark Farm Raised Jumbo Raw Shrimp, Frozen, 21-25 ct. per pound, 2 lbs.",
+                                                               "file":  "sams-deals-2026-08-15.json",
+                                                               "price":  "$8.48",
+                                                               "size":  "lb",
+                                                               "before":  "shrimp"
+                                                           },
+                                                           {
+                                                               "name":  "Member\u0027s Mark Farm Raised Large Raw Shrimp, Frozen, 31-40 ct. per pound, 3 lbs.",
+                                                               "file":  "sams-deals-2026-08-15.json",
+                                                               "price":  "$6.99",
+                                                               "size":  "lb",
+                                                               "before":  "shrimp"
+                                                           },
+                                                           {
+                                                               "name":  "Member\u0027s Mark Jumbo Gulf Shrimp, Service Counter",
+                                                               "file":  "sams-deals-2026-08-15.json",
+                                                               "price":  "$10.47",
+                                                               "size":  "lb",
+                                                               "before":  "shrimp"
+                                                           },
+                                                           {
+                                                               "name":  "Wild Caught Extra Large Raw Argentine Red Shrimp, Frozen, 16-30 ct. per pound, 2 lbs.",
+                                                               "file":  "sams-deals-2026-08-15.json",
+                                                               "price":  "$9.98",
+                                                               "size":  "lb",
+                                                               "before":  "shrimp"
+                                                           },
+                                                           {
+                                                               "name":  "Member\u0027s Mark Farm Raised Jumbo Raw EZ Peel Shrimp, Frozen, 21-30 ct. per pound, 3 lbs.",
+                                                               "file":  "sams-deals-2026-08-15.json",
+                                                               "price":  "$5.82",
+                                                               "size":  "lb",
+                                                               "before":  "shrimp"
+                                                           }
+                                                       ],
+                                  "shrimp|Aldi":  [
+                                                      {
+                                                          "name":  "Fremont Fish Market Jumbo EZ Peel Raw Shrimp 12 OZ",
+                                                          "file":  "aldi-regular-2026-09-11.json",
+                                                          "price":  "$6.49",
+                                                          "size":  "12 oz",
+                                                          "before":  "shrimp"
+                                                      },
+                                                      {
+                                                          "name":  "Fremont Fish Market Medium Raw Peeled Shrimp 12 OZ",
+                                                          "file":  "aldi-regular-2026-09-11.json",
+                                                          "price":  "$6.49",
+                                                          "size":  "12 oz",
+                                                          "before":  "shrimp"
+                                                      },
+                                                      {
+                                                          "name":  "Fremont Fish Market Medium EZ Peel Raw Shrimp 12 OZ",
+                                                          "file":  "aldi-regular-2026-09-11.json",
+                                                          "price":  "$6.29",
+                                                          "size":  "12 oz",
+                                                          "before":  "shrimp"
+                                                      },
+                                                      {
+                                                          "name":  "Fremont Fish Market Argentine Red Shrimp 16 OZ",
+                                                          "file":  "aldi-regular-2026-09-11.json",
+                                                          "price":  "$9.99",
+                                                          "size":  "16 oz",
+                                                          "before":  "shrimp"
+                                                      },
+                                                      {
+                                                          "name":  "Fremont Fish Market Value Pack Large Raw Peeled Shrimp 32 OZ",
+                                                          "file":  "aldi-regular-2026-09-11.json",
+                                                          "price":  "$16.49",
+                                                          "size":  "32 oz",
+                                                          "before":  "shrimp"
+                                                      },
+                                                      {
+                                                          "name":  "Fremont Fish Market Large Shrimp 12 OZ",
+                                                          "file":  "aldi-regular-2026-09-11.json",
+                                                          "price":  "$7.49",
+                                                          "size":  "12 oz",
+                                                          "before":  "shrimp"
+                                                      },
+                                                      {
+                                                          "name":  "Jumbo Raw Jumbo Raw Fresh Shrimp Per LB",
+                                                          "file":  "aldi-regular-2026-09-11.json",
+                                                          "price":  "$9.49",
+                                                          "size":  "lb",
+                                                          "before":  "shrimp"
+                                                      },
+                                                      {
+                                                          "name":  "Fremont Fish Market Salted Butter Shrimp Skewer 8 OZ",
+                                                          "file":  "aldi-regular-2026-09-11.json",
+                                                          "price":  "$6.79",
+                                                          "size":  "8 oz",
+                                                          "before":  "shrimp"
+                                                      }
+                                                  ],
+                                  "frozen-pizza|Family Fare":  [
+                                                                   {
+                                                                       "name":  "Rao\u0027s® Uncured Pepperoni Pizza Frozen Pizza 18.300 Oz",
+                                                                       "file":  "family-fare-regular-2026-09-11.json",
+                                                                       "price":  "$14.99",
+                                                                       "size":  "18.300 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Rao\u0027s® Fire Roasted Vegetable Frozen Pizza 20.600 Oz",
+                                                                       "file":  "family-fare-regular-2026-09-11.json",
+                                                                       "price":  "$12.99",
+                                                                       "size":  "20.600 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Rao\u0027s® Five Cheese Frozen Pizza 19.000 Oz",
+                                                                       "file":  "family-fare-regular-2026-09-11.json",
+                                                                       "price":  "$13.99",
+                                                                       "size":  "19.000 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Rao\u0027s® Meat Trio Frozen Pizza 20.800 Oz",
+                                                                       "file":  "family-fare-regular-2026-09-11.json",
+                                                                       "price":  "$14.99",
+                                                                       "size":  "20.800 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Di Giorno Frozen Pizza, Rising Crust Sausage \u0026 Pepperoni Pizza, 27.3oz (Frozen)",
+                                                                       "file":  "family-fare-regular-2026-09-11.json",
+                                                                       "price":  "$7.49",
+                                                                       "size":  "27.3 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Nancy\u0027s Chicago Style Thin Crust Italian Sausage \u0026 Uncured Pepperoni Pizza 19.31 Oz",
+                                                                       "file":  "family-fare-regular-2026-09-11.json",
+                                                                       "price":  "$9.99",
+                                                                       "size":  "19.31 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Nancy\u0027s Chicago Style Thin Crust Italian Sausage Pizza 17.76 Oz",
+                                                                       "file":  "family-fare-regular-2026-09-11.json",
+                                                                       "price":  "$9.99",
+                                                                       "size":  "17.76 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   },
+                                                                   {
+                                                                       "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz",
+                                                                       "file":  "ads-2026-09-09.json",
+                                                                       "price":  "$7.29",
+                                                                       "size":  "19.41 oz",
+                                                                       "before":  "frozen-pizza"
+                                                                   }
+                                                               ]
+                              }
+}

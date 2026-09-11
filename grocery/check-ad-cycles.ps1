@@ -412,7 +412,19 @@ if ($serverDue) {
         Log ("pull attempt $attempt ok=$pullOk")
       } catch { Log ("pull attempt $attempt FAILED: " + $_.Exception.Message) }
     }
-    # HARD failure = no current ad data from ANY server store after a retry (API/network down, not "ad not posted yet")
+    # A SHORT OR FAILED CIRCULAR READ SPEAKS (2026-09-11, queue 2026-09-10-fa6ad6). Family Fare's ad files from 09-02
+    # to 09-09 each recorded 1,100 verified deals that were 100 unique rows of a 1,045-row circular, and nothing
+    # compared rows delivered against the store's own total. pull-grocery-ads now stamps ad_unique and ad_total on the
+    # verification record, and Get-CircularCoverageReview (ff-price-lib.ps1) turns a short read, or a Family Fare pull
+    # that errored, into a REVIEW line. The rows read still ship: never a refusal.
+    if ($pullOk -and (-not $NoPull) -and (Test-Path $adsToday)) {
+      try {
+        . (Join-Path $root 'ff-price-lib.ps1')
+        $covVer = @((Read-JsonFile $adsToday).verification)
+        $covRaw = Get-CircularCoverageReview -Verification $covVer
+        foreach ($cl in @($covRaw)) { if ($cl) { $summary += [string]$cl; Log ('circular coverage: ' + [string]$cl) } }
+      } catch { Log ('circular coverage review threw: ' + $_.Exception.Message) }
+    }    # HARD failure = no current ad data from ANY server store after a retry (API/network down, not "ad not posted yet")
     if (-not $pullOk) {
       $hardFail = $true
       Log "HARD FAILURE: server pull returned no current TODAY data after 2 attempts -> alerting, downstream skipped"
