@@ -1,0 +1,35 @@
+"""Slot accounting: held slots against runs that are actually INSIDE their pool.
+
+The child-process proxy undercounts: a run sampled between two gate spawns has no child and still
+holds its slots. This counts holders from the hook logs instead - a log that has printed its dispatch
+line and not yet its pool-done line is a holder - plus standalone runs, whose state has no log and is
+taken from children as a floor. Widths above 1 mean holders <= held is the only sound expectation.
+"""
+import json, statistics, sys
+
+rows = []
+for line in open(sys.argv[1], encoding="utf-8"):
+    try:
+        o = json.loads(line)
+    except ValueError:
+        continue
+    if o.get("kind") != "sample":
+        continue
+    hook_holding = sum(1 for l in o["logs"] if l["state"] == "running")
+    hook_waiting = sum(1 for l in o["logs"] if l["state"] == "waiting")
+    standalone_kids = sum(1 for r in o["runs"] if r["wt"] == "relative" and r["children"] > 0)
+    holders = hook_holding + standalone_kids
+    rows.append((o["ts"][11:19], o["held"], holders, hook_holding, standalone_kids, hook_waiting, len(o["runs"])))
+
+n = len(rows)
+excess = [h - k for _, h, k, *_ in rows]
+print(f"samples: {n}")
+print(f"held slots minus holders: min {min(excess)} median {statistics.median(excess)} max {max(excess)}")
+print(f"samples where holders EXCEEDED held slots (impossible unless a run works without a slot): {sum(1 for e in excess if e < 0)} of {n}")
+print(f"samples where held == holders exactly: {sum(1 for e in excess if e == 0)} of {n}")
+print(f"samples with 0 holders while 10 slots were held (a leak would look like this): {sum(1 for _, h, k, *_ in rows if k == 0 and h == 10)} of {n}")
+hold = [k for _, _, k, *_ in rows]
+print(f"holders per sample: min {min(hold)} median {statistics.median(hold)} max {max(hold)}")
+print("\nfirst 8 and last 8 samples (time, held, holders, hookInPool, standaloneWithKids, hookWaiting, runGatesProcs):")
+for r in rows[:8] + rows[-8:]:
+    print("   ", r)

@@ -1,0 +1,182 @@
+"""Analyse gate-queue-samples.jsonl written by gate-queue-sampler.ps1.
+
+Every rate below is printed with its denominator.
+- ARRIVAL = the hook log's creation time. The hook creates it just before run-gates starts, so it precedes
+  the slot wait by run-gates' discovery (observed 5-40 CPU-s).
+- DISPATCH = arrival + the wait run-gates itself printed. NOT the log's LastWriteTime: NTFS does not update
+  that for a file another process still holds open, so it reads as the creation time for the whole run.
+- A pass DELETES its hook log. So the logs kept on disk are biased toward failures and refusals; the
+  UNBIASED cohort is the runs that ARRIVED while the sampler was watching, whose every outcome was seen.
+- Inversions are counted conservatively: only where the overtaken run arrived MORE than 120 s earlier, so
+  discovery-time jitter cannot manufacture one.
+"""
+import json, sys, statistics
+from datetime import datetime, timedelta
+
+path = sys.argv[1]
+samples, cal = [], None
+for line in open(path, encoding="utf-8"):
+    line = line.strip()
+    if not line:
+        continue
+    try:
+        o = json.loads(line)
+    except ValueError:
+        continue
+    if o.get("kind") == "calibration":
+        cal = o
+    elif o.get("kind") == "sample":
+        samples.append(o)
+
+def t(s):
+    # PowerShell 'o' format carries 7 fractional digits; Python wants at most 6
+    if "." in s:
+        head, rest = s.split(".", 1)
+        frac = "".join(ch for ch in rest if ch.isdigit())[:6]
+        tz = rest[len("".join(ch for ch in rest if ch.isdigit())):]
+        s = f"{head}.{frac}{tz}"
+    return datetime.fromisoformat(s)
+
+def med(xs):
+    return statistics.median(xs) if xs else float("nan")
+
+start, end = t(samples[0]["ts"]), t(samples[-1]["ts"])
+mins = (end - start).total_seconds() / 60
+print("calibration:", cal)
+print(f"samples: {len(samples)} from {start:%H:%M:%S} to {end:%H:%M:%S} ({mins:.1f} min, every ~15 s)")
+
+held = [s["held"] for s in samples]
+print(f"slots held: min {min(held)} median {med(held)} max {max(held)}; all 10 held in {sum(1 for h in held if h == 10)} of {len(held)} samples")
+hw = [sum(1 for l in s["logs"] if l["state"] == "waiting") for s in samples]
+procs = [len(s["runs"]) for s in samples]
+kids = [sum(1 for r in s["runs"] if r["children"] > 0) for s in samples]
+idle = [len(s["runs"]) - k for s, k in zip(samples, kids)]
+print(f"hook runs in the slot wait: min {min(hw)} median {med(hw)} max {max(hw)}")
+print(f"run-gates processes (hook + standalone): min {min(procs)} median {med(procs)} max {max(procs)}; with gate children (running): min {min(kids)} median {med(kids)} max {max(kids)}; without (discovering, waiting or judging): median {med(idle)}")
+over = sum(1 for s, k in zip(samples, kids) if k > s["held"])
+print(f"samples where running runs exceeded held slots: {over} of {len(samples)}")
+under = sum(1 for s, k in zip(samples, kids) if s["held"] - k >= 3)
+print(f"samples where held slots exceeded running runs by 3 or more (a leak would show here, widths above 1 also do): {under} of {len(samples)}")
+dead = {r["pid"]: r for s in samples for r in s["runs"] if r["ancestorDead"]}
+print(f"run-gates whose launching session process had exited: {len(dead)} {[(p, r['wt']) for p, r in dead.items()]}")
+orph = {o["pid"]: o["cmd"] for s in samples for o in s["orphans"]}
+print(f"parentless ThriftyCrew powershell/python seen: {len(orph)}")
+for p, c in orph.items():
+    print(f"   {p}: ...{c[-95:]}")
+
+# arrivals and retries from the process list
+first_seen = {}
+for s in samples:
+    for r in s["runs"]:
+        first_seen.setdefault(r["pid"], (t(r["created"]), r["wt"], r["hook"]))
+arrived = {p: v for p, v in first_seen.items() if v[0] >= start}
+hook_arr = sum(1 for v in arrived.values() if v[2])
+print(f"\nrun-gates ARRIVALS during the window: {len(arrived)} in {mins:.1f} min = {60*len(arrived)/mins:.0f}/hour ({hook_arr} via the pre-push hook, {len(arrived)-hook_arr} standalone)")
+by_wt = {}
+for p, (c, wt, hook) in first_seen.items():
+    if wt not in ("relative",):
+        by_wt.setdefault(wt, []).append(c)
+rep = {wt: cs for wt, cs in by_wt.items() if len(cs) > 1}
+print(f"checkouts that started run-gates more than once while watched (named checkouts only; standalone runs have no path): {len(rep)} of {len(by_wt)} -> {sorted((wt, len(cs)) for wt, cs in rep.items())}")
+
+cpu = [s["cpuPct"] for s in samples]
+rq = [s["runQueue"] for s in samples]
+print(f"\ntotal CPU %: median {med(cpu)}; >=95% in {sum(1 for c in cpu if c >= 95)} of {len(cpu)} samples; processor queue median {med(rq)} max {max(rq)}")
+att = [s["cores"] for s in samples if s.get("cores")]
+if att:
+    keys = list(att[0].keys())
+    tot = {k: statistics.mean(a[k] for a in att) for k in keys}
+    allc = sum(tot.values())
+    print(f"CPU attribution, mean cores over {len(att)} attribution samples (32 logical; a process counts only if alive at the sample):")
+    for k in sorted(keys, key=lambda k: -tot[k]):
+        print(f"   {k:16s} {tot[k]:5.2f} cores  ({100*tot[k]/allc:.0f}% of attributed)")
+    print("   gateTree = processes below a run-gates (the gates the budget counts); sessionTree = below a Claude session but NOT below run-gates; claudeApp = claude.exe itself")
+
+# hook-log timelines
+logs, last_seen = {}, {}
+for s in samples:
+    ts = t(s["ts"])
+    for l in s["logs"]:
+        d = logs.setdefault(l["name"], {"created": t(l["created"]), "final": None, "waited": None, "timedOut": None, "wall": None})
+        d["final"] = l["state"]
+        if l["waited"] is not None:
+            d["waited"] = l["waited"]
+        if l["timedOut"] is not None:
+            d["timedOut"] = l["timedOut"]
+        if l["wall"]:
+            d["wall"] = l["wall"]
+        if l.get("wmax") is not None:
+            d["wmax"] = l["wmax"]
+        if l.get("w0") is not None:
+            d["w0"] = l["w0"]
+        last_seen[l["name"]] = ts
+for n, d in logs.items():
+    d["dispatch"] = d["created"] + timedelta(seconds=d["waited"]) if d["waited"] is not None else None
+    d["gone"] = last_seen[n] < end - timedelta(seconds=20)
+
+def summarise(label, ds):
+    disp = [d for d in ds if d["waited"] is not None]
+    tmo = [d for d in ds if d["timedOut"] is not None]
+    wait = [d for d in ds if d["waited"] is None and d["timedOut"] is None]
+    print(f"{label}: {len(ds)} runs; dispatched {len(disp)}, refused after 1,200 s {len(tmo)}, still waiting or starting at end {len(wait)}")
+    if disp:
+        w = sorted(d["waited"] for d in disp)
+        print(f"   wait before dispatch, {len(w)} dispatched: min {w[0]:.0f}s median {med(w):.0f}s max {w[-1]:.0f}s")
+    if wait:
+        ages = sorted((end - d["created"]).total_seconds() for d in wait)
+        print(f"   age of those still waiting at end: min {ages[0]:.0f}s median {med(ages):.0f}s max {ages[-1]:.0f}s")
+
+print()
+summarise("UNBIASED cohort - hook runs that ARRIVED during the window", [d for d in logs.values() if d["created"] >= start])
+summarise("BIASED - hook logs already on disk when the window opened (passes delete theirs)", [d for d in logs.values() if d["created"] < start])
+work = [d["wall"] for d in logs.values() if d["wall"]]
+if work:
+    gw = sorted(w[2] for w in work)
+    print(f"\ngate work inside a run (= slot-seconds; its 'wall' includes the wait), {len(gw)} failing runs that kept timing: min {gw[0]:.0f}s median {med(gw):.0f}s max {gw[-1]:.0f}s; started at width {sorted(set(w[1] for w in work))}")
+w0s = [d["w0"] for d in logs.values() if d.get("w0") is not None]
+wms = [d["wmax"] for d in logs.values() if d.get("wmax") is not None]
+print(f"starting width of dispatched hook runs: {sorted(w0s)} ({sum(1 for w in w0s if w == 1)} of {len(w0s)} at width 1)")
+print(f"peak width of hook runs whose pool finished and kept its log: {sorted(wms)} ({sum(1 for w in wms if w == 1)} of {len(wms)} never above 1)")
+holds = sorted((last_seen[n] - d["dispatch"]).total_seconds() for n, d in logs.items() if d["dispatch"] and d["dispatch"] >= start and d["gone"])
+if holds:
+    print(f"dispatch-to-log-gone for runs dispatched AND finished inside the window (+/-15 s, includes judging): {len(holds)} runs, min {holds[0]:.0f}s median {med(holds):.0f}s max {holds[-1]:.0f}s")
+
+inv_pairs, overtaken = 0, set()
+queued = [(n, d) for n, d in logs.items() if d["dispatch"] or d["timedOut"] is not None or d["final"] in ("waiting",)]
+for jn, j in queued:
+    if not j["dispatch"]:
+        continue
+    for iname, i in queued:
+        if iname == jn or (j["created"] - i["created"]).total_seconds() <= 120:
+            continue
+        i_end = i["dispatch"] or (i["created"] + timedelta(seconds=i["timedOut"]) if i["timedOut"] is not None else end)
+        if i["created"] < j["dispatch"] < i_end:
+            inv_pairs += 1
+            overtaken.add(iname)
+refused_over = sum(1 for n in overtaken if logs[n]["timedOut"] is not None)
+refused = sum(1 for n, d in queued if d["timedOut"] is not None)
+print(f"\nservice-order inversions (a run arriving > 120 s LATER was served while an earlier one still waited): {inv_pairs} pairs; {len(overtaken)} of {len(queued)} queued hook runs were overtaken at least once; {refused_over} of the {refused} refused runs were overtaken before refusing")
+if len(sys.argv) > 2:
+    with open(sys.argv[2], "w", encoding="utf-8", newline="\n") as fh:
+        for n, d in sorted(logs.items(), key=lambda kv: kv[1]["created"]):
+            fh.write(json.dumps({
+                "log": n, "arrived": d["created"].isoformat(timespec="seconds"),
+                "in_window": d["created"] >= start,
+                "outcome": "refused-no-slot" if d["timedOut"] is not None else ("dispatched" if d["dispatch"] else d["final"]),
+                "waited_s": d["waited"], "refused_after_s": d["timedOut"],
+                "dispatch_est": d["dispatch"].isoformat(timespec="seconds") if d["dispatch"] else None,
+                "start_width": d.get("w0"), "peak_width": d.get("wmax"),
+                "gate_work_s": d["wall"][2] if d["wall"] else None,
+                "log_deleted_before_window_end": d["gone"],
+                "overtaken": n in overtaken,
+            }) + "\n")
+    print(f"\nwrote one row per hook run to {sys.argv[2]}")
+print("\ntimeline (arrival, outcome):")
+for n, d in sorted(logs.items(), key=lambda kv: kv[1]["created"]):
+    if d["timedOut"] is not None:
+        out = f"REFUSED after {d['timedOut']:.0f}s at {(d['created'] + timedelta(seconds=d['timedOut'])):%H:%M}"
+    elif d["dispatch"]:
+        out = f"dispatched after {d['waited']:.0f}s at ~{d['dispatch']:%H:%M:%S}" + ("  then log deleted (pass)" if d["gone"] and d["final"] != "pooldone" else "")
+    else:
+        out = d["final"]
+    print(f"   {d['created']:%H:%M:%S} {n:22s} {out}")

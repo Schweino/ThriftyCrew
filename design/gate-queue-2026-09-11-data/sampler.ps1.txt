@@ -1,0 +1,101 @@
+# gate-queue-sampler.ps1 - READ-ONLY observer of the machine-wide gate slot queue. Adds no gate load.
+# Every IntervalSec: which of the 10 Global slots are HELD (NtQueryMutant, never acquires), every
+# run-gates process and its ancestry, the state of every recent pre-push log, total CPU, run queue.
+# Every AttribEvery samples: CPU split by process-tree category. One JSON line per sample.
+param([int]$Minutes = 30, [int]$IntervalSec = 15, [int]$AttribEvery = 4, [string]$Out)
+
+Add-Type -TypeDefinition @'
+using System; using System.Runtime.InteropServices;
+public static class TcMutantProbe {
+  [StructLayout(LayoutKind.Sequential)] public struct MBI { public int CurrentCount; [MarshalAs(UnmanagedType.U1)] public bool OwnedByCaller; [MarshalAs(UnmanagedType.U1)] public bool AbandonedState; }
+  [DllImport("kernel32.dll", SetLastError=true, CharSet=CharSet.Unicode)] static extern IntPtr OpenMutexW(uint access, bool inherit, string name);
+  [DllImport("kernel32.dll")] static extern bool CloseHandle(IntPtr h);
+  [DllImport("ntdll.dll")] static extern int NtQueryMutant(IntPtr h, int cls, ref MBI info, int len, out int ret);
+  // 1 held, 0 free (object exists), -1 no such object (free), <= -2 error
+  public static int State(string name) {
+    IntPtr h = OpenMutexW(0x0001, false, name);
+    if (h == IntPtr.Zero) { int e = Marshal.GetLastWin32Error(); return e == 2 ? -1 : -2 - e; }
+    try { MBI m = new MBI(); int r; int st = NtQueryMutant(h, 0, ref m, Marshal.SizeOf(typeof(MBI)), out r); if (st != 0) return -1000; return m.CurrentCount <= 0 ? 1 : 0; }
+    finally { CloseHandle(h); }
+  }
+}
+'@
+
+function Write-Line([object]$o) { [IO.File]::AppendAllText($Out, (($o | ConvertTo-Json -Compress -Depth 6) + "`n")) }
+
+# PROBE CALIBRATION: the probe must read a held mutex as held and a released one as free, or nothing below means anything.
+$calName = 'Local\tc-sampler-cal-' + [guid]::NewGuid().ToString('N')
+$cal = New-Object System.Threading.Mutex($false, $calName)
+$null = $cal.WaitOne(0)
+$heldRead = [TcMutantProbe]::State($calName)
+# Held by THIS thread: a second thread's view is what production sees, so read it from a runspace too.
+$rs = [powershell]::Create(); $null = $rs.AddScript("[TcMutantProbe]::State('$calName')"); $fromOther = $rs.Invoke()[0]; $rs.Dispose()
+$cal.ReleaseMutex()
+$freeRead = [TcMutantProbe]::State($calName)
+$cal.Dispose()
+$goneRead = [TcMutantProbe]::State($calName)
+Write-Line ([ordered]@{ kind = 'calibration'; heldSameThread = $heldRead; heldOtherThread = $fromOther; released = $freeRead; disposed = $goneRead })
+
+$sw = [Diagnostics.Stopwatch]::StartNew()
+$n = 0
+while ($sw.Elapsed.TotalMinutes -lt $Minutes) {
+  $n++
+  $ts = [DateTimeOffset]::Now
+  $slots = @(0..9 | ForEach-Object { [TcMutantProbe]::State('Global\tc-gate-worker-slot-' + $_) })
+  $procs = Get-CimInstance Win32_Process
+  $byId = @{}; foreach ($p in $procs) { $byId[[int]$p.ProcessId] = $p }
+  $kids = @{}; foreach ($p in $procs) { $pp = [int]$p.ParentProcessId; $par = $byId[$pp]; if ($par -and $par.CreationDate -le $p.CreationDate) { if (-not $kids.ContainsKey($pp)) { $kids[$pp] = New-Object Collections.ArrayList }; [void]$kids[$pp].Add([int]$p.ProcessId) } }
+  $gateIds = @{}
+  $runs = foreach ($p in $procs) {
+    if ($p.Name -ne 'powershell.exe' -or $p.CommandLine -notmatch 'run-gates\.ps1' -or $p.CommandLine -match '-Command') { continue }
+    $gateIds[[int]$p.ProcessId] = $true
+    $wt = if ($p.CommandLine -match 'worktrees[\\/]([^\\/]+)[\\/]ops') { $matches[1] } elseif ($p.CommandLine -match 'ThriftyCrew[\\/]ops') { 'MAIN' } else { 'relative' }
+    $chain = @(); $cur = $p; $dead = $false; $viaGit = $false
+    for ($k = 0; $k -lt 10; $k++) { $par = $byId[[int]$cur.ParentProcessId]; if (-not $par -or $par.CreationDate -gt $cur.CreationDate) { $dead = $true; break }; if ($par.Name -eq 'git.exe') { $viaGit = $true }; $cur = $par; if ($par.Name -eq 'claude.exe') { break } }
+    $nk = if ($kids.ContainsKey([int]$p.ProcessId)) { $kids[[int]$p.ProcessId].Count } else { 0 }
+    [ordered]@{ pid = [int]$p.ProcessId; created = $p.CreationDate.ToString('o'); wt = $wt; hook = $viaGit; ancestorDead = $dead; children = $nk; cpuS = [math]::Round(($p.UserModeTime + $p.KernelModeTime) / 1e7, 1) }
+  }
+  # ORPHANS: a powershell or python whose parent is gone and whose command line is inside ThriftyCrew.
+  $orphans = foreach ($p in $procs) {
+    if ($p.Name -notin @('powershell.exe', 'python.exe')) { continue }
+    if ($p.CommandLine -notmatch 'ThriftyCrew|-SelfTest|--selftest') { continue }
+    $par = $byId[[int]$p.ParentProcessId]
+    if ($par -and $par.CreationDate -le $p.CreationDate) { continue }
+    $cl = [string]$p.CommandLine; if ($cl.Length -gt 140) { $cl = $cl.Substring($cl.Length - 140) }
+    [ordered]@{ pid = [int]$p.ProcessId; created = $p.CreationDate.ToString('o'); cmd = $cl }
+  }
+  $logs = foreach ($f in (Get-ChildItem $env:TEMP -Filter 'tc-prepush-*.log' -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^tc-prepush-\d+\.log$' -and $_.LastWriteTime -ge $ts.LocalDateTime.AddMinutes(-90) })) {
+    $t = ''
+    try { $fs = [IO.File]::Open($f.FullName, 'Open', 'Read', 'ReadWrite'); $sr = New-Object IO.StreamReader($fs); $t = $sr.ReadToEnd(); $sr.Close() } catch { $t = '' }
+    $st = 'starting'; $waited = $null; $w0 = $null; $wmax = $null; $timedOut = $null
+    if ($t -match 'waiting for one') { $st = 'waiting' }
+    if ($t -match 'starting at width (\d+) \(asked \d+; \d+ slot\(s\) of a machine-wide \d+, after ([\d.,]+)s') { $st = 'running'; $w0 = [int]$matches[1]; $waited = [double]($matches[2] -replace ',', '') }
+    if ($t -match 'pool width reached (\d+)') { $st = 'pooldone'; $wmax = [int]$matches[1] }
+    if ($t -match 'COULD NOT EVALUATE - waited ([\d,]+)s') { $st = 'timedout'; $timedOut = [double]($matches[1] -replace ',', '') }
+    $wall = if ($t -match 'timing: \d+ gate\(s\), ([\d,]+)s wall at width (\d+)\. ([\d,]+)s of gate work') { @([double]($matches[1] -replace ',', ''), [int]$matches[2], [double]($matches[3] -replace ',', '')) } else { $null }
+    [ordered]@{ name = $f.Name; created = $f.CreationTime.ToString('o'); written = $f.LastWriteTime.ToString('o'); state = $st; waited = $waited; w0 = $w0; wmax = $wmax; timedOut = $timedOut; wall = $wall }
+  }
+  $cpu = (Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter "Name='_Total'").PercentProcessorTime
+  $rq = (Get-CimInstance Win32_PerfFormattedData_PerfOS_System).ProcessorQueueLength
+  $attrib = $null
+  if (($n % $AttribEvery) -eq 1) {
+    $cores = @{ gateTree = 0.0; runGatesItself = 0.0; claudeApp = 0.0; sessionTree = 0.0; other = 0.0 }
+    foreach ($c in (Get-CimInstance Win32_PerfFormattedData_PerfProc_Process | Where-Object { $_.Name -ne '_Total' -and $_.Name -ne 'Idle' })) {
+      $id = [int]$c.IDProcess; $v = [double]$c.PercentProcessorTime / 100
+      if ($v -le 0) { continue }
+      $p = $byId[$id]
+      if (-not $p) { $cores.other += $v; continue }
+      if ($gateIds.ContainsKey($id)) { $cores.runGatesItself += $v; continue }
+      if ($p.Name -eq 'claude.exe') { $cores.claudeApp += $v; continue }
+      $cat = 'other'; $cur = $p
+      for ($k = 0; $k -lt 12; $k++) { $par = $byId[[int]$cur.ParentProcessId]; if (-not $par -or $par.CreationDate -gt $cur.CreationDate) { break }; if ($gateIds.ContainsKey([int]$par.ProcessId)) { $cat = 'gateTree'; break }; if ($par.Name -eq 'claude.exe') { $cat = 'sessionTree'; break }; $cur = $par }
+      $cores[$cat] += $v
+    }
+    $attrib = [ordered]@{}; foreach ($k in $cores.Keys) { $attrib[$k] = [math]::Round($cores[$k], 2) }
+  }
+  $heldCount = @($slots | Where-Object { $_ -eq 1 }).Count
+  Write-Line ([ordered]@{ kind = 'sample'; n = $n; ts = $ts.ToString('o'); slots = $slots; held = $heldCount; cpuPct = $cpu; runQueue = $rq; runs = @($runs); orphans = @($orphans); logs = @($logs); cores = $attrib })
+  $spent = $sw.Elapsed.TotalSeconds % $IntervalSec
+  Start-Sleep -Milliseconds ([int](($IntervalSec - $spent) * 1000))
+}
+Write-Line ([ordered]@{ kind = 'end'; samples = $n; ts = [DateTimeOffset]::Now.ToString('o') })
