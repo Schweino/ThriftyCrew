@@ -274,6 +274,33 @@ function Invoke-PipelineCommit {
   return $msg
 }
 
+function Get-PipelineCommitOutcome {
+  <# PURE. What an Invoke-PipelineCommit verdict SAYS happened: committed, nothing, refused, threw, or unknown.
+
+     WHY A CALLER NEEDS IT (2026-09-11). The verdict is a sentence, and every caller printed it and carried on, so a
+     lane whose commit was refused exited exactly as a lane whose commit landed: graph-nightly's transcript of
+     2026-09-09 reads "commit refused" and, two lines later, "rc=0". The classifier sits beside the sentences it
+     reads, and the self-test drives it over verdicts this file really returns, so rewording one turns that suite
+     red instead of turning every refusal into a success. A push that failed after the commit landed is still
+     'committed': a local commit is the whole of this file's promise, and the next run carries it.
+
+     ONE IMPLEMENTATION, AND WHERE THE OTHER COPY IS. This function is taken verbatim from a commit that was still
+     unlanded on claude\serene-lichterman-3e9092 on 2026-09-12, so the rule is written once rather than twice. That
+     commit rewrites graph\pipeline\nightly.ps1 as well and had not been able to apply to main for fourteen hours;
+     this file's half does not depend on that half. Whoever lands second keeps one copy and drops the other.
+
+     Its first caller is grocery\health-heartbeat.ps1's RUN-LOG-VERDICT block, which pages when a scheduled lane's
+     run did not land its commit. #>
+  param([string]$Verdict)
+  $v = [string]$Verdict
+  if ($v -match '^REFUSED: ') { return 'refused' }
+  if ($v -match '^\S+: commit refused \(git exit ') { return 'refused' }
+  if ($v -match '^\S+: committer threw') { return 'threw' }
+  if ($v -match '^\S+: committed \d+ file') { return 'committed' }
+  if ($v -match '^\S+: nothing (to commit|changed)') { return 'nothing' }
+  return 'unknown'
+}
+
 if ($__pcSelfTest) {
   $fail = 0
   function T($n, $c, $g = '') { if ($c) { Write-Output ("ok    " + $n) } else { Write-Output ("FAIL  " + $n + "   got: " + $g); $script:fail++ } }
@@ -309,6 +336,18 @@ if ($__pcSelfTest) {
 
   $v2 = Invoke-PipelineCommit -Repo 'C:\nope' -Paths @('grocery/out/definitely-not-here.json') -Message 'x' -Name 'probe'
   T 'a path that does not exist is nothing to commit, not an error' ($v2 -like '*nothing to commit*') $v2
+
+  # ---- THE VERDICT CLASSIFIER (2026-09-12), driven over verdicts THIS FILE really returns, never retyped ones -----
+  T 'MUST FIRE  a source-path refusal classifies as refused' ((Get-PipelineCommitOutcome -Verdict $v) -eq 'refused') $v
+  T 'CLEAN TWIN  a lane with none of its paths present classifies as nothing' ((Get-PipelineCommitOutcome -Verdict $v2) -eq 'nothing') $v2
+  T 'MUST FIRE  an empty verdict is unknown, never a success' ((Get-PipelineCommitOutcome -Verdict '') -eq 'unknown')
+  # THE FOUNDING SHAPE, from grocery\out\logs\graph-nightly-2026-09-09.log: a pre-commit hook refused the commit and
+  # the run still stamped rc=0. The file list the real line carries is cut here, because naming another module's
+  # internals from lib\ is a cross-module reach and the prefix is all the classifier reads.
+  T 'MUST FIRE  a hook refusal classifies as refused' ((Get-PipelineCommitOutcome -Verdict 'graph-nightly: commit refused (git exit 1) - a hook or git itself rejected it; the tree is untouched. files named by the hook: ...') -eq 'refused')
+  T 'MUST FIRE  a committer that threw is not a success' ((Get-PipelineCommitOutcome -Verdict 'probe: committer threw and was swallowed (the lane''s work is not lost, only uncommitted): boom') -eq 'threw')
+  # CLEAN TWIN, and a REAL line: this is what the 2026-09-11 night logged, the first graph-nightly commit to land.
+  T 'CLEAN TWIN  a commit whose PUSH failed is still committed, which is the whole of this file''s promise' ((Get-PipelineCommitOutcome -Verdict 'graph-nightly: committed 20 file(s) - push failed, left local for the next capture-run to carry') -eq 'committed')
 
   # ---- FOREIGN-HELD (2026-09-10, queue 2026-09-10-3a9de4) ----------------------------------------------------------
   # PURE: the rule itself, with frozen times.
@@ -365,6 +404,7 @@ if ($__pcSelfTest) {
     [IO.File]::WriteAllText($fB, 'v4')
     $vt = Invoke-PipelineCommit -Repo $tr -Paths @('lane/out') -Message 'run2' -Name 'probe' -DirtyAtStart $snapT -RunStart $rs2
     T 'CLEAN TWIN  a foreign file the run rewrote is committed as the run''s own (2 files, nothing held)' (($vt -match 'committed 2 file') -and ($vt -notmatch 'foreign-held')) $vt
+    T 'CLEAN TWIN  both landed commits classify as committed, the foreign-held note included' (((Get-PipelineCommitOutcome -Verdict $ve) -eq 'committed') -and ((Get-PipelineCommitOutcome -Verdict $vt) -eq 'committed')) ($ve + ' | ' + $vt)
   } finally {
     Remove-Item -LiteralPath $tr -Recurse -Force -ErrorAction SilentlyContinue
   }

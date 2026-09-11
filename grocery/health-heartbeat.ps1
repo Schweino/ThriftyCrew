@@ -12,13 +12,17 @@
       silent death; LastTaskResult "not yet run" is OK only when allow_pending);
     - each critical output file / glob exists and is fresher than max_age_hours, EXCEPT an output_files row
       that declares currency_field: that one is rewritten only when it changes, so its mtime proves nothing
-      and it is judged on the currency stamp inside it instead (see the CONTENT-CURRENCY block).
+      and it is judged on the currency stamp inside it instead (see the CONTENT-CURRENCY block);
+    - each task row that declares run_log is judged on its RUN'S OWN TRANSCRIPT, whatever LastTaskResult says: the
+      last session of the newest <name>-<date>.log must carry rc=0, a committed or nothing-changed commit verdict in
+      that name, and a start inside max_age_hours (see the RUN-LOG-VERDICT block).
 
-  Exit 0 = all healthy, 2 = one or more silently dead/stale. -Alert emails Brad (de-duped by signature so
+  Exit 0 = all healthy, 2 = one or more silently dead/stale. -SelfTest runs the frozen RUN-LOG-VERDICT fixtures and
+  touches no scheduler and no mail: exit 0 pass, 1 a case failed, 3 could not run. -Alert emails Brad (de-duped by signature so
   a persistent outage is one email). Meant to run INDEPENDENTLY of the pipeline it watches - it is invoked
   from local-watchdog.ps1 (its own WakeToRun task), so a dead main pipeline cannot suppress its own alarm.
 #>
-param([switch]$Alert)
+param([switch]$Alert, [switch]$SelfTest)
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $ErrorActionPreference = 'Continue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -28,6 +32,11 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
 . (Join-Path $root 'alert-lib.ps1')
 $repo = Split-Path $root -Parent
+# lib\pipeline-commit.ps1 for Get-PipelineCommitOutcome, the classifier that sits beside the commit sentences it reads
+# (RUN-LOG-VERDICT below). Loaded under Stop inside a try because this file runs under Continue, and swallowed on
+# failure because the verdict reader checks for the classifier itself: a library that did not load becomes a NAMED
+# REASON on every run_log row, never a landed run. A try block is not a scope, so the functions land in this one.
+try { $ErrorActionPreference = 'Stop'; . (Join-Path $repo 'lib\pipeline-commit.ps1') } catch { } finally { $ErrorActionPreference = 'Continue' }
 $now  = Get-Date
 $cfg  = Read-JsonFile (Join-Path $root 'expected-automations.json')
 # AN EMPTY REGISTRY IS BLIND, NOT HEALTHY (2026-09-06, PLAN-top5 area 5 §5.2.4). This file sets
@@ -160,6 +169,200 @@ function Test-ContentCurrency {
 }
 # <<< CONTENT-CURRENCY
 
+# >>> RUN-LOG-VERDICT  (this file's own -SelfTest drives THIS text against frozen transcripts - keep the sentinels)
+# A TASK CAN READ 0 BY MORNING WHILE ITS WORK DID NOT LAND (2026-09-11). Founding case: TC Graph Nightly Matching,
+# 2026-09-07 to 09-10. graph-nightly's commit was refused on every night it ran, and nothing paged for four days:
+#   1. the task repeats hourly 21:30 to 05:30, and after a completed run every repetition takes the skip path and
+#      exits 0, so LastTaskResult reads 0 by morning whatever the real run returned;
+#   2. its 'proves' output is graph-nightly-status.json, which the chain writes in its finally block BEFORE the
+#      commit, so the proof is fresh on exactly the nights the commit was refused;
+#   3. that stamp carries no commit verdict, and must not be rewritten to carry one after the commit: the catch-up
+#      guard (Test-AlreadyRanThisWindow in graph\pipeline\nightly.ps1) reads it.
+# The record that outlives the repetitions is the RUN'S OWN TRANSCRIPT. Start-RunLog files it by wall-clock date under
+# a name the skip path never uses (it writes <name>-skipped-<date>.log), and it holds both the lane's commit verdict
+# and Stop-RunLog's rc stamp. So a row that declares run_log is judged on the LAST session of its newest dated
+# transcript, and all three of these must hold:
+#   * the rc stamp is present and 0. Absent means the run ended before Done() could stamp it;
+#   * a line in the lane's own name classifies as committed or nothing, by lib\pipeline-commit.ps1's
+#     Get-PipelineCommitOutcome. NOT THE rc ALONE: every founding transcript says "commit refused" and then "rc=0",
+#     because nightly.ps1 still ends in a typed zero (checked on main at 740c82af6, 2026-09-12), so an rc-only reader
+#     passes the founding case and would keep passing the next one. The rc is kept as a second signal, for the day it
+#     is earned rather than typed, and because it is the only thing that speaks for a run killed before its commit;
+#   * the session began inside the row's max_age_hours. WHEN THE PRODUCER STOPS the newest transcript only ages, so
+#     this fires on absence too, not only on a bad verdict. No new constant: it is the row's own number. Known gap:
+#     a night caught up at 05:30 followed by a night lost whole reads 29 h at the 10:30 heartbeat and fires a day late.
+# SCOPE OF A CLEAN VERDICT: UNSOUND. "landed" means the last session says rc=0 and a committed or nothing-changed
+# verdict in the lane's name. It does not prove the push reached origin (a failed push is still 'committed', by the
+# lib's own promise), nor that the commit held the right files.
+function Get-NewestRunLogName {
+  # The newest <Name>-yyyy-MM-dd.log among $Names BY THE DATE IN THE NAME, or ''. <Name>-skipped-<date>.log does not
+  # match, on purpose: a skipped repetition is dated later than the run it skipped and always stamps rc=0.
+  param([string[]]$Names, [string]$Name)
+  $rx = '^' + [regex]::Escape($Name) + '-(\d{4}-\d{2}-\d{2})\.log$'
+  $best = ''; $bestDay = ''
+  foreach ($n in @($Names)) {
+    $m = [regex]::Match([string]$n, $rx, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    if (-not $m.Success) { continue }
+    if ([string]::CompareOrdinal($m.Groups[1].Value, $bestDay) -gt 0) { $best = [string]$n; $bestDay = $m.Groups[1].Value }
+  }
+  return $best
+}
+function Test-RunLogVerdict {
+  # PURE over the transcript TEXT. Returns @{ landed; file; started; ageH; rc; outcome; verdict; reasons }, and every
+  # reason the run did not land is listed, so a stale night that was also refused says both.
+  param([string]$Text, [string]$Name, [double]$MaxAgeHours, [datetime]$Now)
+  $r = @{ landed = $false; file = ''; started = $null; ageH = $null; rc = $null; outcome = 'unknown'; verdict = ''; reasons = @() }
+  $reasons = New-Object System.Collections.Generic.List[string]
+  $lines = @(([string]$Text) -split "\r?\n")
+  $from = -1
+  for ($i = 0; $i -lt $lines.Count; $i++) { if ($lines[$i].Trim() -eq 'Windows PowerShell transcript start') { $from = $i } }
+  if ($from -lt 0) { $reasons.Add('it holds no transcript session'); $r.reasons = $reasons.ToArray(); return $r }
+  $session = @($lines[$from..($lines.Count - 1)])
+  $pfx = $Name + ': '
+  $pfxRefused = 'REFUSED: ' + $Name + ' '
+  $haveOc = [bool](Get-Command Get-PipelineCommitOutcome -ErrorAction SilentlyContinue)
+  $lastNamed = ''
+  foreach ($l in $session) {
+    if ($null -eq $r.started -and $l -match '^Start time: (\d{14})\s*$') {
+      $r.started = [datetime]::ParseExact($matches[1], 'yyyyMMddHHmmss', [Globalization.CultureInfo]::InvariantCulture)
+    }
+    if ($l -match '^--- run-log: finished \S+ rc=(-?\d+) ---\s*$') { $r.rc = [int]$matches[1] }
+    if (-not ($l.StartsWith($pfx, [StringComparison]::Ordinal) -or $l.StartsWith($pfxRefused, [StringComparison]::Ordinal))) { continue }
+    $lastNamed = $l
+    if ($haveOc) {
+      $oc = Get-PipelineCommitOutcome -Verdict $l
+      if ($oc -ne 'unknown') { $r.outcome = $oc; $r.verdict = $l }
+    }
+  }
+  if (-not $r.verdict -and $lastNamed) { $r.verdict = $lastNamed }
+  if ($null -ne $r.started) { $r.ageH = [math]::Round(($Now - $r.started).TotalHours, 1) }
+
+  if ($null -eq $r.started) { $reasons.Add('its session carries no Start time, so its age is unknown') }
+  elseif ($r.ageH -gt $MaxAgeHours) {
+    $reasons.Add(("its run began {0}, {1}h before this check (> the row's {2}h): the chain has not run since" -f $r.started.ToString('yyyy-MM-ddTHH:mm:ss'), $r.ageH, $MaxAgeHours))
+  }
+  if ($null -eq $r.rc) { $reasons.Add('it carries no rc stamp, so the run ended before Done() stamped one (killed, or cut off by the task time limit)') }
+  elseif ($r.rc -ne 0) { $reasons.Add(("it stamped rc={0}" -f $r.rc)) }
+  if (-not $haveOc) { $reasons.Add('lib\pipeline-commit.ps1 did not load, so no commit verdict could be classified') }
+  elseif (@('committed', 'nothing') -notcontains $r.outcome) {
+    if ($r.verdict) {
+      $short = if ($r.verdict.Length -gt 240) { $r.verdict.Substring(0, 240) + '...' } else { $r.verdict }
+      $reasons.Add(("its commit verdict is {0}: {1}" -f $r.outcome, $short))
+    } else { $reasons.Add(("no commit verdict under the name '{0}' is in the session" -f $Name)) }
+  }
+  $r.reasons = $reasons.ToArray()
+  $r.landed = ($reasons.Count -eq 0)
+  return $r
+}
+function Get-RunLogVerdict {
+  # The live half, kept thin: list the run_log directory, pick the newest dated transcript, judge it. Every miss is a
+  # reason, never a pass. Opened with ReadWrite sharing so a transcript another process still holds can be read.
+  param([string]$RunLog, [string]$RepoRoot, [double]$MaxAgeHours, [datetime]$Now)
+  $rel  = ([string]$RunLog) -replace '/', '\'
+  $dir  = Join-Path $RepoRoot (Split-Path $rel -Parent)
+  $name = Split-Path $rel -Leaf
+  $names = @()
+  try { $names = @(Get-ChildItem -LiteralPath $dir -File -ErrorAction Stop | ForEach-Object { $_.Name }) } catch { $names = @() }
+  $file = Get-NewestRunLogName -Names $names -Name $name
+  if (-not $file) {
+    return @{ landed = $false; file = ''; started = $null; ageH = $null; rc = $null; outcome = 'unknown'; verdict = ''
+              reasons = @(("no {0}-<date>.log exists under {1}" -f $name, $dir)) }
+  }
+  $text = ''
+  try {
+    $fs = [IO.File]::Open((Join-Path $dir $file), 'Open', 'Read', 'ReadWrite')
+    try { $text = (New-Object IO.StreamReader($fs, $true)).ReadToEnd() } finally { $fs.Dispose() }
+  } catch { $text = '' }
+  $v = Test-RunLogVerdict -Text $text -Name $name -MaxAgeHours $MaxAgeHours -Now $Now
+  $v.file = $file
+  return $v
+}
+# <<< RUN-LOG-VERDICT
+
+if ($SelfTest) {
+  # HERMETIC. Frozen transcripts under regression-inputs\, no scheduler, no mail. The two live reads at the end are
+  # labelled. Every case runs under Stop inside a try whose catch is a counted failure.
+  $hbFail = 0; $hbCases = 0
+  function HbCase([string]$n, [bool]$c, [string]$got = '') {
+    $script:hbCases++
+    if ($c) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  FAIL  ' + $n + '   got: ' + $got); $script:hbFail++ }
+  }
+  function HbShow($v) { return ('landed=' + $v.landed + ' rc=' + $v.rc + ' outcome=' + $v.outcome + ' started=' + $v.started + ' ageH=' + $v.ageH + ' reasons=' + (@($v.reasons) -join ' | ')) }
+  try {
+    $ErrorActionPreference = 'Stop'
+    if (-not (Get-Command Get-PipelineCommitOutcome -ErrorAction SilentlyContinue)) { throw 'lib\pipeline-commit.ps1 did not load, so Get-PipelineCommitOutcome is missing' }
+    $fx0909 = [IO.File]::ReadAllText((Join-Path $root 'regression-inputs\graph-nightly-2026-09-09.transcript.txt'))
+    $fxTwin = [IO.File]::ReadAllText((Join-Path $root 'regression-inputs\graph-nightly-committed-twin.transcript.txt'))
+  } catch { Write-Output ('health-heartbeat self-test: COULD NOT RUN - ' + $_.Exception.Message); exit 3 }
+
+  try {
+    # ---- MUST FIRE, THE FOUNDING NIGHT: 2026-09-09 21:30, commit refused by the hook, last line rc=0. Judged at the
+    #      first 10:30 heartbeat after it, which is where four days of silence would have become one page.
+    $v1 = Test-RunLogVerdict -Text $fx0909 -Name 'graph-nightly' -MaxAgeHours 30 -Now ([datetime]'2026-09-10T10:30:00')
+    HbCase 'MUST FIRE  2026-09-09 21:30: the commit was refused and the transcript says rc=0, and it pages' ((-not $v1.landed) -and $v1.outcome -eq 'refused' -and $v1.rc -eq 0) (HbShow $v1)
+    HbCase 'MUST FIRE  it judged the LAST session (21:30:01), not the -WhatIfOnly or -StopOnly sessions above it' ($v1.started -eq [datetime]'2026-09-09T21:30:01') (HbShow $v1)
+    HbCase 'MUST FIRE  it fires on the VERDICT, not on age: 13h old, inside the row''s 30h' ($null -ne $v1.ageH -and $v1.ageH -le 30 -and ((@($v1.reasons) -join ';') -match 'commit refused') -and ((@($v1.reasons) -join ';') -notmatch 'has not run since')) (HbShow $v1)
+
+    # ---- CLEAN TWIN: a night whose commit landed reads landed. Built from the real 2026-09-10 session; see its header.
+    $tw0 = [datetime]'2026-09-10T21:30:02'
+    $v2 = Test-RunLogVerdict -Text $fxTwin -Name 'graph-nightly' -MaxAgeHours 30 -Now $tw0.AddHours(13)
+    HbCase 'CLEAN TWIN a committed night (rc=0, "committed 23 file(s) and pushed") reads landed, with its start and outcome' ($v2.landed -and $v2.outcome -eq 'committed' -and $v2.rc -eq 0 -and $v2.started -eq $tw0) (HbShow $v2)
+    $v9 = Test-RunLogVerdict -Text ($fxTwin -replace '(?m)^graph-nightly: committed 23 file\(s\) and pushed', 'graph-nightly: nothing changed under its owned paths') -Name 'graph-nightly' -MaxAgeHours 30 -Now $tw0.AddHours(13)
+    HbCase 'CLEAN TWIN a night with nothing to commit reads landed' ($v9.landed -and $v9.outcome -eq 'nothing') (HbShow $v9)
+
+    # ---- MUST FIRE, THE PRODUCER STOPPED: that same clean night read 37 h later, which is a lost night at 10:30.
+    $v3 = Test-RunLogVerdict -Text $fxTwin -Name 'graph-nightly' -MaxAgeHours 30 -Now $tw0.AddHours(37)
+    HbCase 'MUST FIRE  a clean last run that is 37h old pages on age alone - silence is not health' ((-not $v3.landed) -and $v3.outcome -eq 'committed' -and $v3.rc -eq 0 -and ((@($v3.reasons) -join ';') -match 'has not run since')) (HbShow $v3)
+
+    # ---- MUST FIRE, the other ways a run does not land. Each is the twin with ONE thing changed, and each change is
+    #      asserted to have happened, so a fixture edit that stops matching turns the case red instead of green.
+    $killed = (@($fxTwin -split "\r?\n") | Where-Object { $_ -notmatch '^--- run-log: finished ' }) -join "`n"
+    $v4 = Test-RunLogVerdict -Text $killed -Name 'graph-nightly' -MaxAgeHours 30 -Now $tw0.AddHours(13)
+    # The REASON is asserted, not only the verdict (mutation probe, 2026-09-11): with the no-stamp branch deleted, the
+    # rc -ne 0 branch below it still fires on a null rc and pages "it stamped rc=", which is a page that lies.
+    HbCase 'MUST FIRE  a run killed before Done() (no rc stamp) pages, even with a committed verdict line, and SAYS there was no stamp' ((-not $v4.landed) -and $null -eq $v4.rc -and $v4.outcome -eq 'committed' -and ((@($v4.reasons) -join ';') -match 'no rc stamp') -and ((@($v4.reasons) -join ';') -notmatch 'stamped rc=')) (HbShow $v4)
+    $held = ((@($fxTwin -split "\r?\n") | Where-Object { -not $_.StartsWith('graph-nightly: ') }) -join "`n") -replace 'rc=0 ---', 'rc=3 ---'
+    $v5 = Test-RunLogVerdict -Text $held -Name 'graph-nightly' -MaxAgeHours 30 -Now $tw0.AddHours(13)
+    HbCase 'MUST FIRE  a held card (rc=3, the chain never reached its commit) pages' ((-not $v5.landed) -and $v5.rc -eq 3 -and $v5.outcome -eq 'unknown' -and $v5.verdict -eq '') (HbShow $v5)
+    $v6 = Test-RunLogVerdict -Text ($fxTwin -replace 'rc=0 ---', 'rc=1 ---') -Name 'graph-nightly' -MaxAgeHours 30 -Now $tw0.AddHours(13)
+    HbCase 'MUST FIRE  rc=1 with a landed commit pages: a chain body that threw is not a good night' ((-not $v6.landed) -and $v6.rc -eq 1 -and $v6.outcome -eq 'committed') (HbShow $v6)
+    $v7 = Test-RunLogVerdict -Text ($fxTwin -replace '(?m)^graph-nightly: committed 23 file\(s\) and pushed', 'graph-nightly: the commit did something nobody has a word for') -Name 'graph-nightly' -MaxAgeHours 30 -Now $tw0.AddHours(13)
+    HbCase 'MUST FIRE  a verdict the classifier does not recognise is not a landed run' ((-not $v7.landed) -and $v7.outcome -eq 'unknown' -and $v7.verdict -match 'nobody has a word') (HbShow $v7)
+    $v8 = Test-RunLogVerdict -Text ($fxTwin -replace '(?m)^graph-nightly: committed', 'harvest-crawl: committed') -Name 'graph-nightly' -MaxAgeHours 30 -Now $tw0.AddHours(13)
+    HbCase 'MUST FIRE  another lane''s committed verdict does not land this lane' ((-not $v8.landed) -and $v8.verdict -eq '' -and ((@($v8.reasons) -join ';') -match "no commit verdict under the name 'graph-nightly'")) (HbShow $v8)
+    $v10 = Test-RunLogVerdict -Text '' -Name 'graph-nightly' -MaxAgeHours 30 -Now $tw0
+    HbCase 'MUST FIRE  an empty transcript is not a landed run' ((-not $v10.landed) -and ((@($v10.reasons) -join ';') -match 'no transcript session')) (HbShow $v10)
+
+    # ---- WHICH FILE. The skip path writes a later-dated transcript that always says rc=0.
+    $sel = Get-NewestRunLogName -Names @('graph-nightly-2026-09-09.log', 'graph-nightly-skipped-2026-09-11.log', 'graph-nightly-status.json', 'graph-nightly-2026-09-10.log', 'graph-nightly-2026-09-06.log') -Name 'graph-nightly'
+    HbCase 'MUST FIRE  the newest REAL run is chosen by the date in its name; graph-nightly-skipped-2026-09-11.log does not win' ($sel -eq 'graph-nightly-2026-09-10.log') $sel
+    $none = Get-NewestRunLogName -Names @('graph-nightly-skipped-2026-09-11.log', 'graph-nightly-status.json') -Name 'graph-nightly'
+    HbCase 'MUST FIRE  only skip transcripts resolves to no run at all, which the live reader turns into a page' ($none -eq '') $none
+
+    # ---- THE JOIN. LIVE-TWIN, both reads, on purpose: the registry row and nightly.ps1 must name the same transcript
+    #      and the same committer. A rename on either side would leave this check reading a file that no longer
+    #      grows, or a prefix no verdict carries, and it would page every morning for the wrong reason or never.
+    $reg = Read-JsonFile (Join-Path $root 'expected-automations.json')
+    $rows = @(@($reg.windows_tasks) | Where-Object { [string]$_.name -eq 'TC Graph Nightly Matching' })
+    $decl = if ($rows.Count -eq 1 -and $rows[0].PSObject.Properties['run_log']) { [string]$rows[0].run_log } else { '' }
+    HbCase 'MUST FIRE  the TC Graph Nightly Matching row declares run_log, or this check is disarmed for the lane it was written for' ($decl -ne '') $decl
+    $leaf = if ($decl) { Split-Path ($decl -replace '/', '\') -Leaf } else { '' }
+    $parent = if ($decl) { Split-Path ($decl -replace '/', '\') -Parent } else { '' }
+    $nightSrc = [IO.File]::ReadAllText((Join-Path $repo 'graph\pipeline\nightly.ps1'))
+    HbCase 'MUST FIRE  nightly.ps1 opens its run transcript under the row''s run_log name, in grocery\out\logs' ($leaf -and $parent -eq 'grocery\out\logs' -and $nightSrc.Contains("Start-RunLog -Name '" + $leaf + "' -OutDir (Join-Path `$grocery 'out')")) ($decl)
+    HbCase 'MUST FIRE  nightly.ps1 commits under that same name, so its verdict line carries the prefix this check reads' ($leaf -and $nightSrc.Contains("-Name '" + $leaf + "' -Push")) ($decl)
+
+    # ---- THE WIRING. Needles built by concatenation, so these lines are not their own matches.
+    $hbSrc = [IO.File]::ReadAllText($PSCommandPath)
+    HbCase 'MUST FIRE  the task loop reads the run-log verdict for a row that declares one' ($hbSrc.Contains('Get-RunLog' + 'Verdict -RunLog $rlDecl'))
+    HbCase 'MUST FIRE  a nonzero result whose run did not land is not excused as "work landed" by a fresh proves output' ($hbSrc.Contains('if ($rv -and ' + '-not $rv.landed)'))
+  } catch { HbCase ('a case threw: ' + $_.Exception.Message) $false }
+
+  Write-Output ("health-heartbeat self-test: {0} case(s), {1} failed" -f $hbCases, $hbFail)
+  if ($hbFail) { exit 1 }
+  exit 0
+}
+
 # ---- Windows scheduled tasks (silent death = deleted / disabled / long-since-run) ----
 foreach ($t in @($cfg.windows_tasks)) {
   $name = [string]$t.name
@@ -175,6 +378,13 @@ foreach ($t in @($cfg.windows_tasks)) {
     continue
   }
   $ageH = [math]::Round(($now - $last).TotalHours, 1)
+  # RUN-LOG VERDICT (2026-09-11): a row that declares run_log is judged on its run's own transcript WHATEVER
+  # LastTaskResult says (see the RUN-LOG-VERDICT block). Not while the task is mid-run, when its session is still open.
+  $rv = $null
+  $rlDecl = if ($t.PSObject.Properties['run_log'] -and $t.run_log) { [string]$t.run_log } else { '' }
+  if ($rlDecl -and -not ([string]$task.State -eq 'Running' -or $res -eq $TASK_RUNNING)) {
+    $rv = Get-RunLogVerdict -RunLog $rlDecl -RepoRoot $repo -MaxAgeHours ([double]$t.max_age_hours) -Now $now
+  }
   # A task caught mid-run reports LastTaskResult 267009 (SCHED_S_TASK_RUNNING); that is alive, not failed.
   # This fires whenever the heartbeat's check races the watched task's own run (both scheduled 06:45).
   if ([string]$task.State -eq 'Running' -or $res -eq $TASK_RUNNING) { $okLines.Add(("{0,-38} currently running (OK)" -f $name)) }
@@ -192,12 +402,25 @@ foreach ($t in @($cfg.windows_tasks)) {
     # 'proves' output and that output is fresh AND was written by this run, the task's job got done (a
     # killed-at-the-end run, a battery stop, a retry that succeeded downstream) - report it, do not page it.
     # Without 'proves' nothing changes: a nonzero result pages. See Test-ProofLanded for why both halves.
-    $glob = if ($t.PSObject.Properties['proves'] -and $t.proves) { [string]$t.proves } else { '' }
-    $v = Test-ProofLanded -ProvesGlob $glob -RepoRoot $repo -MaxAgeHours ([double]$t.max_age_hours) -LastRunTime $last -Now $now
-    if ($v.fresh) { $okLines.Add(("{0,-38} result {1} BUT its output is {2}h fresh - work landed, not dead" -f $name, $res, $v.ageH)) }
-    else { $issues.Add(("TASK FAILED: '{0}' last result {1} (nonzero) - {2}{3}" -f $name, $res, $t.why, $v.why)) }
+    if ($rv -and -not $rv.landed) {
+      # A fresh proves output must not print "work landed" for a run whose own transcript says it did not; the RUN DID
+      # NOT LAND issue below pages it with the reason. graph-nightly's stamp is written BEFORE its commit.
+    } else {
+      $glob = if ($t.PSObject.Properties['proves'] -and $t.proves) { [string]$t.proves } else { '' }
+      $v = Test-ProofLanded -ProvesGlob $glob -RepoRoot $repo -MaxAgeHours ([double]$t.max_age_hours) -LastRunTime $last -Now $now
+      if ($v.fresh) { $okLines.Add(("{0,-38} result {1} BUT its output is {2}h fresh - work landed, not dead" -f $name, $res, $v.ageH)) }
+      else { $issues.Add(("TASK FAILED: '{0}' last result {1} (nonzero) - {2}{3}" -f $name, $res, $t.why, $v.why)) }
+    }
   }
   else { $okLines.Add(("{0,-38} ran {1}h ago, result 0" -f $name, $ageH)) }
+  if ($rv) {
+    $rvWhen = if ($null -ne $rv.started) { ([datetime]$rv.started).ToString('yyyy-MM-ddTHH:mm:ss') } else { 'an unknown time' }
+    if ($rv.landed) { $okLines.Add(("{0,-38} run of {1} landed: commit {2}, rc=0 ({3})" -f $name, $rvWhen, $rv.outcome, $rv.file)) }
+    else {
+      $rvFile = if ($rv.file) { [string]$rv.file } else { 'no run transcript' }
+      $issues.Add(("RUN DID NOT LAND: '{0}' run of {1} ({2}) - {3}. The task's LastTaskResult cannot show this: later repetitions overwrite it." -f $name, $rvWhen, $rvFile, (@($rv.reasons) -join '; ')))
+    }
+  }
 }
 
 # ---- REGISTRY DRIFT (2026-08-06): a task that exists on the machine but is in nobody's registry is invisible

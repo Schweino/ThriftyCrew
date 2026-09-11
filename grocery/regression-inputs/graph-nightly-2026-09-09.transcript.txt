@@ -1,0 +1,105 @@
+FIXTURE, FROZEN 2026-09-11 from grocery/out/logs/graph-nightly-2026-09-09.log (gitignored, and rotated after 30 days).
+The MUST FIRE case for the RUN-LOG-VERDICT block in grocery/health-heartbeat.ps1, read by its -SelfTest.
+Verbatim except that the Username, RunAs User and Machine header values are elided and the line endings are LF.
+The file holds three sessions, in this order: a hand -WhatIfOnly at 07:31 and a hand -StopOnly at 08:03 (both wrote
+here before queue 2026-09-09-d3e937 moved Start-RunLog below those verbs), then the scheduled 21:30 run. That run's
+commit was refused by the pre-commit hook and its last line still says rc=0, because the chain ends in a typed zero
+(still true on main at 740c82af6). A reader that trusts the rc stamp alone passes this file, and would pass the next
+refused night too. The two earlier sessions carry no rc stamp and
+no verdict, which is why the self-test also asserts WHICH session was judged.
+**********************
+Windows PowerShell transcript start
+Start time: 20260909073156
+Username: <elided in the fixture>
+RunAs User: <elided in the fixture>
+Configuration Name:
+Machine: <elided in the fixture>
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File graph/pipeline/nightly.ps1 -WhatIfOnly
+Process ID: 40476
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+  1 emit     C:\Codex\Python312\python.exe graph\pipeline\resolve.py --emit-contested sidecar\data\contested-pairs.json
+  1b defs    C:\Codex\Python312\python.exe graph\pipeline\emit_commodity_defs.py --out sidecar\data\commodity-defs-graph.json
+  1c hunter  C:\Codex\Python312\python.exe graph\learning\ingest_hunter_events.py   (CPU only, read-mostly, before the card changes hands)
+  2 sweep    grocery\audit-semantic-identity.ps1        (sidecar takes and releases the card)
+  3 serve    tools\local-llm\serve.ps1 -Slots 4
+  4 resolve  C:\Codex\Python312\python.exe graph\pipeline\resolve.py --llm --jobs 4 --adversarial --helper-scores sidecar\out\contested-scores.json --helper-threshold 0.0001
+  5 stage1   C:\Codex\Python312\python.exe graph\learning\stage1_analyze.py
+  6 stop     llama-server down, verified
+**********************
+Windows PowerShell transcript end
+End time: 20260909073156
+**********************
+**********************
+Windows PowerShell transcript start
+Start time: 20260909080301
+Username: <elided in the fixture>
+RunAs User: <elided in the fixture>
+Configuration Name:
+Machine: <elided in the fixture>
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File graph/pipeline/nightly.ps1 -StopOnly
+Process ID: 34688
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+**********************
+Windows PowerShell transcript end
+End time: 20260909080303
+**********************
+**********************
+Windows PowerShell transcript start
+Start time: 20260909213001
+Username: <elided in the fixture>
+RunAs User: <elided in the fixture>
+Configuration Name:
+Machine: <elided in the fixture>
+Host Application: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File C:\Codex\ThriftyCrew\graph\pipeline\nightly.ps1 -HardStop 06:30 -MaxMinutes 150
+Process ID: 32724
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+input-assert [graph-nightly]: 1 of 1 input(s) fresh
+  FRESH    C:\Codex\ThriftyCrew\graph\sqlite\graph.db is 13.1 h old, inside its 26 h window (producer: the 08:00 Daily Capture chain (compare-deals identity emission -> graph import)).
+graph-nightly: commit refused (git exit 1) - a hook or git itself rejected it; the tree is untouched. files named by the hook: grocery/out/logs/graph-nightly-status.json, graph/identity/recipe/_manifest.json, graph/identity/staple/_manifest.json, grocery/out/semantic-findings.json, graph/learning/hunter-review-packet.json, graph/learning/proposals.json, graph/state/hunter-ingest-cursor.json, graph/state/table-volume-baseline.json, lib\bot-paths.ps1
+commit:hook> warning: in the working copy of 'grocery/out/logs/graph-nightly-status.json', CRLF will be replaced by LF the next time Git touches it
+commit:hook> warning: in the working copy of 'graph/identity/recipe/_manifest.json', CRLF will be replaced by LF the next time Git touches it
+commit:hook> warning: in the working copy of 'graph/identity/staple/_manifest.json', CRLF will be replaced by LF the next time Git touches it
+commit:hook> warning: in the working copy of 'grocery/out/logs/graph-nightly-status.json', CRLF will be replaced by LF the next time Git touches it
+commit:hook> warning: in the working copy of 'grocery/out/semantic-findings.json', CRLF will be replaced by LF the next time Git touches it
+commit:hook> bot-commit-scope: REFUSING - this commit identifies as the pipeline (author 'smp-pipeline-bot') but stages 4 path(s) it does not own:
+commit:hook>     graph/learning/hunter-review-packet.json
+commit:hook>     graph/learning/proposals.json
+commit:hook>     graph/state/hunter-ingest-cursor.json
+commit:hook>     graph/state/table-volume-baseline.json
+commit:hook>   An automated commit stages its OWN outputs and nothing else - a shared working tree always
+commit:hook>   holds somebody else's half-finished work (2026-09-05: 192 .ps1 files mid-edit, 27 of them
+commit:hook>   throwing at startup, on main for 59 minutes).
+commit:hook>   If a path above genuinely belongs to the pipeline, declare it in lib\bot-paths.ps1 with the
+commit:hook>   writer's name and the reason. Do not widen the list to make one run go through.
+commit:hook> pre-commit: BLOCKED. This commit identifies as the pipeline but stages paths outside
+commit:hook>             lib\bot-paths.ps1. An automated commit stages its OWN outputs and nothing else.
+commit:hook>             Fix the staging, declare the path in lib\bot-paths.ps1, or use --no-verify.
+--- run-log: finished 2026-09-09T21:33:13 rc=0 ---
+**********************
+Windows PowerShell transcript end
+End time: 20260909213313
+**********************

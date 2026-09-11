@@ -1,0 +1,48 @@
+FIXTURE, CONSTRUCTED 2026-09-11. The CLEAN TWIN for the RUN-LOG-VERDICT block in grocery/health-heartbeat.ps1, read by
+its -SelfTest. No graph-nightly commit had ever landed when this was written (git log --all --author=smp-pipeline-bot
+--grep "Graph nightly" returned nothing), so there was no real committed transcript to freeze.
+It is the real 2026-09-10 21:30 session from grocery/out/logs/graph-nightly-2026-09-10.log, with the Username, RunAs User
+and Machine header values elided, LF line endings, and exactly two changes:
+  1. The refused verdict and its commit:hook> lines are replaced by one landed verdict in the shape
+     lib/pipeline-commit.ps1 Invoke-PipelineCommit returns: "{0}: committed {1} file(s)" plus " and pushed".
+     The 23 is illustrative, not a count from any run.
+  2. Five lines in nightly.ps1's Log format ("[HH:mm:ss] ...") and one Invoke-Stage tail line are added. Their text
+     comes from that night's graph-nightly-status.json. Their clock times are DERIVED (started 21:30:02 plus each
+     stage's sec; stop at the stamp's generated 23:01:29), not read from any transcript. They are there so the reader
+     is shown lines it must not take for a verdict. A real transcript holds none of them today: Log writes through
+     [Console]::WriteLine, which Start-Transcript does not record. The reader must ignore them either way.
+The rc=0 stamp is real. The chain stamps 0 for a night whose commit landed, and it stamps 0 on a refused night too,
+which is exactly why this check does not rest on it.
+**********************
+Windows PowerShell transcript start
+Start time: 20260910213002
+Username: <elided in the fixture>
+RunAs User: <elided in the fixture>
+Configuration Name:
+Machine: <elided in the fixture>
+Host Application: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File C:\Codex\ThriftyCrew\graph\pipeline\nightly.ps1 -HardStop 06:30 -MaxMinutes 150
+Process ID: 31268
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+--- run-log: graph-nightly | 2026-09-10T21:30:02 | pid 31268 ---
+[21:30:02] nightly matching chain: now 21:30, deadline 2026-09-11 00:00 (150 min), jobs 4
+input-assert [graph-nightly]: 1 of 1 input(s) fresh
+  FRESH      C:\Codex\ThriftyCrew\graph\sqlite\graph.db is 9.8 h old, inside its 26 h window (producer: the daily chain's graph-gates lane (grocery\audit-graph-gates.ps1 -> graph\import\import_all.py --observations)). Its newest price_observations.observed_at is 2026-09-10, inside its 36 h window.
+[22:57:44] resolve: rc=0 in 5041s
+    | resolved 37773 rows in 5040.4s (35647 distinct questions, 2882 model calls)
+[22:57:44] resolve: OK - resolved 37773 rows in 5040.4s (35647 distinct questions, 2882 model calls)
+[23:01:29] stop: OK
+[23:01:29] wrote C:\Codex\ThriftyCrew\grocery\out\logs\graph-nightly-status.json
+graph-nightly: committed 23 file(s) and pushed
+--- run-log: finished 2026-09-10T23:01:36 rc=0 ---
+**********************
+Windows PowerShell transcript end
+End time: 20260910230136
+**********************
