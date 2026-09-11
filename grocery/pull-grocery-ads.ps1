@@ -15,7 +15,7 @@ param([string]$OutDir = "$PSScriptRoot\out", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $UA = @{ 'User-Agent' = 'Mozilla/5.0' }
 $TODAY = (Get-Date).Date
-if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force $OutDir | Out-Null }
+# $OutDir is created at the write, not here: a -SelfTest never writes, so it must not make the directory either.
 
 $EXPECT = @{
   hyvee       = @{ collection = '' }   # the store's own id, set below from hyvee-store-lib (HY-VEE STORE)
@@ -202,13 +202,20 @@ if ($SelfTest) {
   # disagrees with the library must block Hy-Vee alone. Registries under test are written to a temp folder.
   $fail = 0; $n = 0
   function _T([string]$label, [bool]$cond) { $script:n++; if ($cond) { Write-Output "ok    $label" } else { Write-Output "FAIL  $label"; $script:fail++ } }
+  # EVERY TEMP PATH IS PER RUN (2026-09-11, .claude/rules/ops-and-gates.md). run-gates runs this on every push from
+  # every session at once, so a path is handed out by PgaScratch under a directory no other run can name, created
+  # with -ErrorAction Stop so a clash refuses rather than shares, and the finally below removes the whole directory.
+  $pgaRoot = Join-Path $env:TEMP ('pga-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $pgaRoot -ErrorAction Stop | Out-Null
+  function PgaScratch([string]$leaf) { return (Join-Path $pgaRoot $leaf) }
+  try {
   $s = Get-HyVeeStore -Root $PSScriptRoot
   _T 'MUST FIRE  the Hy-Vee flyer collection is the store hyvee-store-lib names, a positive id' (([string]$EXPECT.hyvee.collection -eq [string]$s.store_id) -and ([int]$EXPECT.hyvee.collection -gt 0))
   $src = [IO.File]::ReadAllText($PSCommandPath)
   $retired = 'digital-flyers/' + '14' + '65'
   $literal = "collection = '" + '14' + "65'"
   _T 'MUST NOT FIRE  no flyer request in this file names the retired Omaha #01 id' ((-not $src.Contains($retired)) -and (-not $src.Contains($literal)))
-  $tmp = Join-Path ([IO.Path]::GetTempPath()) ('pga-selftest-' + [guid]::NewGuid().ToString('N'))
+  $tmp = PgaScratch 'reg'
   $split = Join-Path $tmp 'split'; $agree = Join-Path $tmp 'agree'
   New-Item -ItemType Directory -Force $split, $agree | Out-Null
   try {
@@ -271,8 +278,85 @@ if ($SelfTest) {
   _T 'MUST NOT FIRE  with no circular current on the day there is no pick, so the store stays BLOCKED as not current' ($null -eq $noneT.pick)
   $revErr = Get-CircularCoverageReview -Verification @([pscustomobject]@{ store = 'Family Fare'; status = 'ERROR: Get-FreshopPages: the page at skip=100 added zero new ids'; deals = 0 })
   _T 'MUST FIRE  a Family Fare pull that ERRORED adds a REVIEW line rather than passing silently beside two PASS stores' ((@($revErr) -join ' ') -match 'Family Fare circular pull ERRORED')
-  if ($fail -eq 0) { Write-Output "SELF-TEST PASS: $n case(s)"; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }
+  # ---- A SELF-TEST THAT FELL THROUGH TO THE LIVE PULL (2026-09-11) ------------------------------------------------
+  # 8253ded82 put the last _T call and the verdict on ONE line. In command mode `if`, its condition and both blocks
+  # bind as extra arguments to _T, so the verdict never ran, the branch never exited, and every -SelfTest (run-gates
+  # on every push, test-auditors u141) fell through to a LIVE pull of three stores that wrote out\ads-<today>.json
+  # into the checkout it ran from: exit 0, no FAIL line, no verdict line. Measured that day in a worktree, run alone:
+  # the file went from absent to 359,704 bytes with Family Fare throttled to 100 of 1,045 rows, where the main
+  # checkout's pull had all 1,045. Run in the main checkout, that replaces today's complete ads file, and the 07:00
+  # bot commits it. These cases run the script OUT OF PROCESS, because the defect IS what happens after the branch
+  # should have exited. Each child runs from a mirror under this run's scratch directory with the network stubbed,
+  # so a regression writes the MIRROR's grocery\out, never the repo's, and never reaches a store. A mirrored child
+  # skips this block ($script:PgaProbeChild), which is what stops it recursing.
+  if (-not $script:PgaProbeChild) {
+    function Add-PgaProbePrelude([string]$Text) {
+      # After the param() line: stub the two web cmdlets (a function outranks a cmdlet) and mark the child.
+      $m = [regex]::Match($Text, '(?m)^param\([^\r\n]*')
+      if (-not $m.Success) { return '' }
+      $prelude = "`n" + '$script:PgaProbeChild = $true' + "`n" + 'function Invoke-RestMethod { throw ''pga probe: the network is stubbed'' }' + "`n" + 'function Invoke-WebRequest { throw ''pga probe: the network is stubbed'' }'
+      return $Text.Insert($m.Index + $m.Length, $prelude)
+    }
+    function Invoke-PgaMirror([string]$Name, [string]$Text, [string[]]$ArgList) {
+      # The whole set of grocery\*-lib.ps1 and the registry, never a hand list of what the script dot-sources today.
+      $g = Join-Path (PgaScratch $Name) 'grocery'
+      New-Item -ItemType Directory -Path $g -ErrorAction Stop | Out-Null
+      foreach ($l in @(Get-ChildItem -LiteralPath $PSScriptRoot -Filter '*-lib.ps1' -File)) { Copy-Item -LiteralPath $l.FullName -Destination $g }
+      $reg = Join-Path $PSScriptRoot 'stores.json'; if (Test-Path -LiteralPath $reg) { Copy-Item -LiteralPath $reg -Destination $g }
+      $p = Join-Path $g 'pull-grocery-ads.ps1'
+      [IO.File]::WriteAllText($p, $Text, (New-Object Text.UTF8Encoding($false)))
+      $prev = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+      try { $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $p @ArgList 2>&1 | ForEach-Object { [string]$_ }; $rc = $LASTEXITCODE }
+      finally { $ErrorActionPreference = $prev }
+      $outDir = Join-Path $g 'out'
+      $w = @(Get-ChildItem -LiteralPath $outDir -File -Recurse -ErrorAction SilentlyContinue)
+      return [pscustomobject]@{ rc = $rc; text = (@($o) -join "`n"); out = $outDir; written = @($w | ForEach-Object { $_.Name }) }
+    }
+    # The founding shape, frozen: the verdict glued to the last case, then the production write.
+    $founding = @(
+      'param([string]$OutDir = "$PSScriptRoot\out", [switch]$SelfTest)',
+      '$ErrorActionPreference = ''Stop''',
+      '$TODAY = (Get-Date).Date',
+      'if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force $OutDir | Out-Null }',
+      'if ($SelfTest) {',
+      '  $fail = 0; $n = 0',
+      '  function _T([string]$label, [bool]$cond) { $script:n++; if ($cond) { Write-Output "ok    $label" } else { Write-Output "FAIL  $label"; $script:fail++ } }',
+      '  _T ''the last case'' $true  if ($fail -eq 0) { Write-Output "SELF-TEST PASS: $n case(s)"; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }',
+      '}',
+      '$file = Join-Path $OutDir (''ads-'' + $TODAY.ToString(''yyyy-MM-dd'') + ''.json'')',
+      '(@{ today = $TODAY.ToString(''yyyy-MM-dd''); deals = @() } | ConvertTo-Json) | Set-Content $file -Encoding UTF8'
+    ) -join "`n"
+    $fr = Invoke-PgaMirror 'f' (Add-PgaProbePrelude $founding) @('-SelfTest')
+    _T 'MUST FIRE  the founding shape (last case and verdict on one line, 8253ded82) exits 0 with no verdict line, and the probe sees the ads-<date>.json it wrote into its grocery\out' (($fr.rc -eq 0) -and ($fr.text -notmatch '(?m)^SELF-TEST (PASS|FAIL)') -and (@(@($fr.written) | Where-Object { $_ -match '^ads-\d{4}-\d{2}-\d{2}\.json$' }).Count -eq 1))
+    $real = Add-PgaProbePrelude $src
+    $sr = Invoke-PgaMirror 's' $real @('-SelfTest')
+    _T 'MUST NOT FIRE  this script''s own -SelfTest, run from a mirror, ends on its verdict line with exit 0 and writes nothing under grocery\out' (($real.Length -gt $src.Length) -and ($sr.rc -eq 0) -and ($sr.text -match '(?m)^SELF-TEST PASS: \d+ case') -and (@($sr.written).Count -eq 0) -and ($sr.text -notmatch '(?m)^Saved: '))
+    $exitNeedle = '(?m)^[ \t]*exit 0[ \t]*# PGA-SELFTEST-' + 'EXIT[^\r\n]*'
+    $noExit = [regex]::Replace($real, $exitNeedle, '')
+    $nr = Invoke-PgaMirror 'n' $noExit @('-SelfTest')
+    _T 'MUST FIRE  with its exit line removed, this script''s -SelfTest stops at the fall-through guard: exit 1, names the fall-through, no store requested, nothing written' ((-not [string]::Equals($noExit, $real, [StringComparison]::Ordinal)) -and ($nr.rc -eq 1) -and ($nr.text -match 'fell through to the live pull') -and ($nr.text -notmatch '(?m)^Today: ') -and (@($nr.written).Count -eq 0))
+    $pr = Invoke-PgaMirror 'p' $real @()
+    $pw = @(@($pr.written) | Where-Object { $_ -match '^ads-\d{4}-\d{2}-\d{2}\.json$' })
+    $pj = $null
+    if ($pw.Count -eq 1) { try { $pj = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $pr.out $pw[0]))) } catch { $pj = $null } }
+    # EVERY STORE MUST CARRY THE STUB'S OWN ERROR. A mutation probe the same day dropped one stub and this case stayed
+    # green while its child made real Hy-Vee and Freshop requests, because a live pull also writes the file.
+    $stubbed = @()
+    if ($null -ne $pj) { $stubbed = @(@($pj.verification) | Where-Object { [string]$_.status -match 'pga probe: the network is stubbed' }) }
+    _T 'CLEAN TWIN  the production path with no -OutDir still writes ads-<date>.json into the grocery\out beside the script: one file, named for its own today, and all three stores'' records carry the probe stub''s error, so it wrote without reaching a store' (($pr.rc -eq 0) -and ($pw.Count -eq 1) -and ($null -ne $pj) -and [string]::Equals(('ads-' + [string]$pj.today + '.json'), [string]$pw[0], [StringComparison]::Ordinal) -and ($stubbed.Count -ge 3) -and ($pr.text -match ('(?m)^Saved: ' + [regex]::Escape($pr.out))))
+  }
+  } catch { Write-Output ('FAIL  a case threw: ' + $_.Exception.Message); $fail++ }
+  finally { Remove-Item -LiteralPath $pgaRoot -Recurse -Force -ErrorAction SilentlyContinue }
+  # A RED RUN EXITS ON ITS OWN LINE. run-gates reads only the exit code, so if the failing verdict shared the exit below,
+  # removing that one line would print SELF-TEST FAIL and still exit 0 (a mutation probe showed it, 2026-09-11).
+  if ($fail -ne 0) { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }
+  Write-Output "SELF-TEST PASS: $n case(s)"
+  exit 0   # PGA-SELFTEST-EXIT: the passing exit alone; the fall-through guard below catches the day it goes missing
 }
+
+# A -SelfTest NEVER REACHES A STORE (2026-09-11). If the branch above ever stops exiting again, this refuses before
+# any request and any write, so the run goes red instead of pulling live and writing out\ads-<today>.json.
+if ($SelfTest) { Write-Output 'SELF-TEST FAIL: the self-test fell through to the live pull. Nothing was requested and nothing was written.'; exit 1 }
 
 Write-Output ("Today: "+$TODAY.ToString('yyyy-MM-dd')+"  -  pulling current Omaha weekly ads...")
 Pull-HyVee; Pull-Aldi; Pull-FamilyFare
@@ -281,6 +365,7 @@ Write-Output ("{0,-12} {1,-22} {2,-7} {3,-11} {4,-11} {5,-6} {6,-8} {7,-6} {8}" 
 foreach ($r in $report) { Write-Output ("{0,-12} {1,-22} {2,-7} {3,-11} {4,-11} {5,-6} {6,-8} {7,-6} {8}" -f $r.store, ([string]$r.identity).Substring(0,[math]::Min(22,([string]$r.identity).Length)), $r.zip, $r.ad_from, $r.ad_to, $r.omaha, $r.current, $r.deals, $r.status) }
 $passStores = @($report | Where-Object { $_.status -eq 'PASS' } | ForEach-Object { $_.store } | Select-Object -Unique)
 $out = [ordered]@{ pulled_at=(Get-Date).ToString('s'); today=$TODAY.ToString('yyyy-MM-dd'); verification=$report; deal_count=$allDeals.Count; deals=$allDeals }
+if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force $OutDir | Out-Null }
 $file = Join-Path $OutDir ("ads-"+$TODAY.ToString('yyyy-MM-dd')+".json")
 ($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
 Write-Output ""
