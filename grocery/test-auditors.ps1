@@ -37,6 +37,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # silenced by the very thing it is testing is worth very little. $LASTEXITCODE still reads the
 # child's real code through the helper (verified), so the `$rc = $LASTEXITCODE` lines are unchanged.
 . (Join-Path $root 'native-lib.ps1')
+. (Join-Path (Split-Path $root -Parent) 'lib\production-text.ps1')   # Get-TcProductionLines / Get-TcProductionText: a class sweep over script text reads only what runs in production, so a frozen -SelfTest fixture is not an offender (queue 2026-09-11-220094). No param() block, so it cannot reset ours.
 . (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage. Must load BEFORE any use - the estate-wide sweep converted 25 call sites in this file and the presence check that adds this line matched a MENTION of json-io in a fixture string rather than a real dot-source, so the file was converted and left without it.
 function PSChild {
   # TWO EXPLICIT PARAMETERS, NOT ONE CATCH-ALL. A single ValueFromRemainingArguments array
@@ -579,7 +580,9 @@ $patterns = @(
 $offenders = @()
 foreach ($f in $scan) {
   if ($skipSelf -contains $f.Name) { continue }
-  $txt = Get-Content $f.FullName -Raw
+  # PRODUCTION STATEMENTS ONLY for .ps1 (queue 2026-09-11-220094): a frozen fixture of this very trap inside
+  # a guard's own -SelfTest block is not a live call site. A .yml has no such block and reads whole.
+  $txt = if ($f.Extension -eq '.ps1') { Get-TcProductionText -Path $f.FullName } else { Get-Content $f.FullName -Raw }
   foreach ($p in $patterns) {
     foreach ($ln in ([regex]::Matches($txt, $p))) {
       if ($ln.Value -match '^\s*#') { continue }   # the explanatory comments are not code
@@ -4051,7 +4054,9 @@ foreach ($sf in (Get-ChildItem (Join-Path $root '*.ps1') -File)) {
   if ($sf.Name -eq 'search-terms-lib.ps1' -or $sf.Name -eq 'test-auditors.ps1') { continue }
   $sTxt = Get-Content $sf.FullName -Raw
   if ($sTxt -notmatch 'commodity-search\.json') { continue }
-  $bad = @(Get-Content $sf.FullName | Where-Object {
+  # PRODUCTION STATEMENTS ONLY (queue 2026-09-11-220094), for the same reason the comment filter exists: a
+  # fixture frozen inside a guard's own -SelfTest block quotes the cast to prove it is refused.
+  $bad = @(@(Get-TcProductionLines -Path $sf.FullName | ForEach-Object { [string]$_.text }) | Where-Object {
       $ln = $_.Trim()
       if ($ln.StartsWith('#')) { return $false }
       ($ln -match '\[string\]\$p\.Value' -and $ln -match '\$term') -or ($ln -match '\[string\]\$terms\.\$id') -or ($ln -match '\[string\]\$_\.Value' -and $ln -match '\$term')

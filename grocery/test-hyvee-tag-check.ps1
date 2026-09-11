@@ -17,6 +17,7 @@
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $root -Parent) 'lib\production-text.ps1')   # Get-TcProductionLines - a fixture inside if ($SelfTest) is not a live pin; no param() block so it cannot reset ours
 . (Join-Path $root 'hyvee-store-lib.ps1')
 
 $fail = 0
@@ -101,19 +102,42 @@ else { Bad "the source label does not match the identity it should be built from
 # 12. NO PRODUCTION CALLER MAY STILL HARD-CODE THE OLD STORE. This is the check that makes the switch real
 #     rather than partial - the identity was in six files, and a board built from a blend of two stores is
 #     wrong in a way no price guard can see.
-$stale = @()
-foreach ($f in (Get-ChildItem (Join-Path $root '*.ps1') -File)) {
-  if ($f.Name -in @('hyvee-store-lib.ps1', 'test-hyvee-tag-check.ps1', 'probe-price-fields.ps1')) { continue }
-  $t = Get-Content $f.FullName -Raw
-  # A comment recounting the history is fine; a live storeId/location literal is not.
-  foreach ($line in ($t -split "`n")) {
-    $l = $line.Trim()
-    if ($l.StartsWith('#')) { continue }
-    if ($l -match 'adcb2ae1-f440-4512-bfe8-9624832c72a9' -or $l -match '\bstoreId\s*=\s*1465\b' -or $l -match '\$HStore\s*=\s*1465\b') {
-      $stale += ($f.Name + ': ' + $l.Substring(0, [Math]::Min(96, $l.Length)))
+#     ONE definition of the sweep, so the fixtures below drive the SAME code the live scan runs.
+function Get-RetiredIdentityPin {
+  param([string]$Dir, [string[]]$Skip = @('hyvee-store-lib.ps1', 'test-hyvee-tag-check.ps1', 'probe-price-fields.ps1'))
+  $hits = @()
+  foreach ($f in (Get-ChildItem (Join-Path $Dir '*.ps1') -File)) {
+    if ($f.Name -in $Skip) { continue }
+    # A comment recounting the history is fine; a live storeId/location literal is not. And a FIXTURE is not
+    # a pin: a guard's own `if ($SelfTest)` body has to carry the retired identity to prove it is refused,
+    # which is why this reads production statements only (lib\production-text.ps1, queue 2026-09-11-220094).
+    foreach ($pl in (Get-TcProductionLines -Path $f.FullName)) {
+      $l = ([string]$pl.text).Trim()
+      if ($l.StartsWith('#')) { continue }
+      if ($l -match 'adcb2ae1-f440-4512-bfe8-9624832c72a9' -or $l -match '\bstoreId\s*=\s*1465\b' -or $l -match '\$HStore\s*=\s*1465\b') {
+        $hits += ($f.Name + ': ' + $l.Substring(0, [Math]::Min(96, $l.Length)))
+      }
     }
   }
+  return $hits
 }
+# FROZEN FIXTURE TREE for the sweep itself (2026-09-11, queue 2026-09-11-220094). The founding bug of item
+# 12 is a LIVE pin; the false positive that made test-auditors red for a day is the identical line frozen
+# inside a guard's own -SelfTest block. Both are asserted here, on a temp tree, before the live scan.
+$fxDir = Join-Path ([IO.Path]::GetTempPath()) ('htc-pin-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+New-Item -ItemType Directory -Force -ErrorAction Stop $fxDir | Out-Null
+try {
+  $u8 = New-Object Text.UTF8Encoding($false)
+  $pin = '$HStore = ' + '14' + '65'      # BUILT, never written whole: this file is exempt, but the rule is the rule
+  [IO.File]::WriteAllText((Join-Path $fxDir 'live-pin.ps1'), ("# a production caller`n" + $pin + "`n"), $u8)
+  [IO.File]::WriteAllText((Join-Path $fxDir 'fixture-pin.ps1'), ("if (`$SelfTest) {`n  " + $pin + "`n}`n"), $u8)
+  $fxHits = @(Get-RetiredIdentityPin -Dir $fxDir -Skip @())
+  if ($fxHits.Count -eq 1 -and $fxHits[0] -match '^live-pin\.ps1') { Ok 'MUST FIRE: a top-level pin on the retired identity is still reported by this sweep' }
+  else { Bad ('the retired-identity sweep no longer flags a LIVE pin - it has stopped guarding (hits: ' + ($fxHits -join '; ') + ')') }
+  if (@($fxHits | Where-Object { $_ -match '^fixture-pin\.ps1' }).Count -eq 0) { Ok "MUST NOT FIRE: the same line inside a guard's own if (`$SelfTest) block is not a pin" }
+  else { Bad "the sweep flags a frozen -SelfTest fixture again - a guard cannot prove it refuses the retired identity without naming it" }
+} finally { Remove-Item -LiteralPath $fxDir -Recurse -Force -ErrorAction SilentlyContinue }
+$stale = @(Get-RetiredIdentityPin -Dir $root)
 if (-not $stale.Count) { Ok 'no production script still hard-codes the retired Omaha #01 identity' }
 else { foreach ($x in $stale) { Bad ("still pinned to the RETIRED Omaha #01 identity - " + $x) } }
 

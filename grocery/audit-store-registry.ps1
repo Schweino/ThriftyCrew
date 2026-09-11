@@ -38,6 +38,7 @@ param([switch]$Alert, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\production-text.ps1')   # Test-TcInsideSelfTestClause: the one copy of "a frozen -SelfTest fixture is not a live pin"; no param() block, so it cannot reset ours
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
 # Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
@@ -155,19 +156,13 @@ function Test-InlineSubsetMarker {
 # ONLY THE BODY OF A CLAUSE WHOSE CONDITION IS EXACTLY THE SWITCH counts. `if (-not $SelfTest)` is PRODUCTION -
 # capture-watchdog.ps1 runs its Family Fare shard window under exactly that condition - so a condition that
 # merely MENTIONS $SelfTest must not qualify, and neither does an else branch or any line outside the clause.
+# THE RULE MOVED TO lib\production-text.ps1 ON 2026-09-11 (queue 2026-09-11-220094) and this is now the one
+# caller of it rather than the one copy of it: four other sweeps over grocery script text needed the same
+# judgement, and a rule written five times is the estate's first root cause. The narrowness above is the
+# lib's narrowness, fixtured there (compound condition, else branch, `-not $SelfTest`, unparseable file).
 function Test-InsideSelfTestClause {
   param($Ast, [int]$Line)
-  if ($null -eq $Ast -or $Line -lt 1) { return $false }
-  $ifs = @($Ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.IfStatementAst] }, $true))
-  foreach ($ifAst in $ifs) {
-    foreach ($clause in $ifAst.Clauses) {
-      $cond = $clause.Item1; $body = $clause.Item2
-      if ($null -eq $cond -or $null -eq $body) { continue }
-      if ($cond.Extent.Text -notmatch '^\s*\$(script:)?SelfTest\s*$') { continue }
-      if ($Line -ge $body.Extent.StartLineNumber -and $Line -le $body.Extent.EndLineNumber) { return $true }
-    }
-  }
-  return $false
+  return (Test-TcInsideSelfTestClause -Ast $Ast -Line $Line)
 }
 
 function Get-StoreListDrift {

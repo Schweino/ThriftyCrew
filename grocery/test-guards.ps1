@@ -9,6 +9,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ps-source.ps1')   # Get-PsCodeOnly / Get-PsCodeLines - block comments too, no param() block so it cannot reset ours
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\production-text.ps1')   # Get-TcProductionText - a frozen -SelfTest fixture is not a live call site; no param() block either
 $root = $PSScriptRoot
 $pass = 0; $failed = 0
 
@@ -543,7 +544,9 @@ function Test-HasThrowingIdiom([string]$path) {
   # BLOCK comments too (2026-09-07). The line filter below caught the essay in publish-deals-page
   # that documents this trap, but only because that essay is written as `#` lines; the same
   # explanation in a block header would still have been read as a call site.
-  $lines = Get-PsCodeLines -Text ([IO.File]::ReadAllText($path))
+  # PRODUCTION STATEMENTS ONLY (2026-09-11, queue 2026-09-11-220094). A guard's own -SelfTest block has to
+  # freeze the shape it refuses, and a sweep that reads fixture text fires on its own siblings' fixtures.
+  $lines = Get-PsCodeLines -Text (Get-TcProductionText -Path $path)
   return @($lines | Where-Object { $_ -match '\(\[string\]\(Get-Content [^)]*\)\)\.Trim\(\)' }).Count -gt 0
 }
 # MUST-FIRE + CLEAN TWIN for the scan itself, on frozen synthetic files - the founding false positive and
