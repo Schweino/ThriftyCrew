@@ -213,7 +213,7 @@ if ($SelfTest) {
                                           'grocery\worktrees\stale\check-c.ps1' = 'Write-Output 3' }
   try {
     $wtFound = @(Get-AbCandidateFiles -RootDir $wtFx.Root)
-    $wtNested = @($wtFound | Where-Object { $_.FullName -like '*\grocery\worktrees\*' })
+    $wtNested = @($wtFound | Where-Object { (Get-TcPathBelowRoot $_.FullName $wtFx.Root) -like '*\grocery\worktrees\*' })
     $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
     T 'MUST FIRE  a root that IS a worktree is scanned, not skipped whole' (($wtHits.Root - $wtNested.Count) -eq 2) ("root=" + $wtHits.Root)
     T 'MUST NOT FIRE  a worktree nested inside a scanned directory below that root is still skipped' ($wtNested.Count -eq 0) ("nested=" + $wtNested.Count)

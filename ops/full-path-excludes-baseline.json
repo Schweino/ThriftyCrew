@@ -1,0 +1,11 @@
+{
+    "generated":  "2026-09-11T10:16:35",
+    "sites":  4,
+    "history":  [
+                    {
+                        "date":  "2026-09-11T10:16:35",
+                        "count":  4
+                    }
+                ],
+    "note":  "HIGH-WATER MARK for sites that match a file\u0027s FULL path against an exclusion carrying worktrees or .claude. It may only go DOWN, and a fall to zero or over 60% in one run is REFUSED as a probably-broken detector (lib\\ratchet.ps1)."
+}

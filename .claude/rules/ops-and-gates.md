@@ -139,6 +139,9 @@ everything else honest, so a defect here is silent by construction.
   discovery in a function that takes the root, so its self-test can point it there.** The rule does not
   recognise a checkout under a directory with some other name; `grocery/audit-script-census.ps1` prunes on
   the `.git` entry instead, which is the stronger boundary.
+  **A rule in a file is not a block**, so `ops/audit-full-path-excludes.ps1` holds this at push time: a ratchet
+  over the PowerShell AST and Python `os.walk` roots, wired into `run-gates`. Run it for the count rather than
+  quoting one.
 
 - **A mutex serialises WRITERS, never READERS, and under PS 5.1 a lock-free reader can cost a locked writer
   its write** (2026-09-11). `Move-Item -Force x.tmp x` fails with *"Cannot create a file when that file

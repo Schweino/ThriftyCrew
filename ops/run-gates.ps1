@@ -298,6 +298,8 @@ $static = @(
   @{ f = 'ops\audit-rule-currency.ps1';        n = 'every .claude\rules globs entry matches a tracked file; stale dated claims are reported (WS 7e)' }
   @{ f = 'ops\audit-measurement-provenance.ps1'; n = 'a recorded measurement names the harness it ran through and the commit or date it ran at - a RATCHET at 8, because retro-filling the existing set was explicitly not asked for and a bar over them would be red on day one' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
+  # From a linked worktree every FULL path carries \.claude\worktrees\, so a walk excluding on it reads nothing and reports clean; e1afb523b fixed nineteen and this blocks the next.
+  @{ f = 'ops\audit-full-path-excludes.ps1';   n = 'no NEW tree walk excludes worktrees or .claude by matching a file''s FULL path instead of the path below its root - a ratchet, hermetic, reads source only' }
   # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half
   # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
   # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.
