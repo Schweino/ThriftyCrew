@@ -430,6 +430,15 @@ everything else honest, so a defect here is silent by construction.
   rejected because main had moved. **The pool is still not stopped mid-flight** when a push becomes doomed after
   dispatch, which is the largest waste left. `design\MEASURE-gate-slot-starvation-2026-09-11.md` has every number
   and what was deliberately not done.
+- **A statement keyword written after a command is an ARGUMENT, and a gate run must leave nothing where the bot
+  stages** (2026-09-11). `grocery/pull-grocery-ads.ps1` put its self-test verdict after its last case on one line,
+  `_T '<label>' (<cond>)  if (...) { exit 0 } else { exit 1 }`. PowerShell read `if`, the condition and both blocks as
+  arguments to `_T`, so from 8253ded82 every `-SelfTest` exited 0 whatever its 21 cases said, fell through into the
+  LIVE ad pull, and wrote `grocery\out\ads-<today>.json` from every push's gate, a path `capture-run` stages whole.
+  `ops/audit-keyword-arguments.ps1` fails the shape (one command in 747 tracked scripts, so not a ratchet), and
+  `lib/gate-leftovers.ps1` snapshots the bot-staged paths around `run-gates`' pool and fails a LINKED worktree whose
+  pool changed a file there; the main checkout, where capture lanes write, prints REVIEW. It watches that pool only:
+  `prepush-test-auditors` runs after it and outside it.
 
 - **A PUSH IS A COMPARE-AND-SWAP WHOSE CRITICAL SECTION IS THE WHOLE HOOK, so the SLOWEST push converges on never
   landing** (2026-09-11). git fixes a push's refs when it connects and the remote updates a ref only if it still

@@ -159,6 +159,7 @@ function Add-TcGateTiming { param([string]$Name, [double]$Ms, [int]$SpawnMs) $sc
 . (Join-Path $repo 'lib\gate-slots.ps1')     # Enter-TcGateSlots - no param() block, so it cannot reset ours
 if (-not $Jobs -or $Jobs -lt 1) { $Jobs = [Math]::Max(1, [Math]::Min($script:TcGateSlotTotal, [Environment]::ProcessorCount - 2)) }
 . (Join-Path $repo 'lib\parallel-run.ps1')   # Invoke-TcParallel - no param() block, so it cannot reset ours
+. (Join-Path $repo 'lib\gate-leftovers.ps1') # Get-TcTreeSnapshot and the verdict on what the pool left where the bot stages
 $PSEXE = (Get-Command powershell).Source
 $fail = @()
 $noVerdict = @()   # self-tests that exited 0 without their own verdict line - scored 3, never ok (lib\selftest-verdict.ps1)
@@ -494,6 +495,9 @@ foreach ($g in $pySuites) {
 # SAFE BECAUSE THE GATES DO NOT WRITE, and that was measured rather than assumed: two full runs over
 # 108,129 files changed ZERO repo files, against a zero background-churn floor in the same window. So
 # there is no file-system channel by which a later batch could have depended on an earlier one.
+# MEASURED ONCE IS NOT KEPT (2026-09-11). From 8253ded82 pull-grocery-ads' self-test did the live ad pull on
+# every run and wrote grocery\out\ads-<today>.json. So the pool is now snapshotted where the daily bot stages,
+# before and after, and lib\gate-leftovers.ps1 fails a run that changed a file there from a linked worktree.
 #
 # ONE BEHAVIOUR CHANGE, deliberately: the `$pySuites.Count -lt 15` and interpreter-probe guards now
 # run BEFORE any gate verdict prints rather than after the self-test block, so a could-not-evaluate
@@ -577,6 +581,9 @@ Write-Output ("run-gates: {0} gate(s) dispatched into ONE pool starting at width
 # slots with 2 gates left. So the pool tops up toward what it asked for while gates are still queued, and
 # hands back every slot it no longer has a running gate for once the last gate is dispatched.
 $script:gateWidthMax = $lease.Count
+# TAKEN IMMEDIATELY AROUND THE POOL, so a slot wait above and the judging below cannot land in the window.
+$leftPaths = Get-TcBotStagedPaths
+$leftBefore = Get-TcTreeSnapshot -Root $repoFull -Paths $leftPaths
 try {
   $allRes = Invoke-TcParallel -Jobs $allJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo `
     -Grow { param($width) Add-TcGateSlots -Lease $lease -Want $askedJobs; if ($lease.Count -gt $script:gateWidthMax) { $script:gateWidthMax = $lease.Count }; $lease.Count } `
@@ -584,6 +591,7 @@ try {
 } finally {
   Exit-TcGateSlots $lease
 }
+$leftAfter = Get-TcTreeSnapshot -Root $repoFull -Paths $leftPaths
 Write-Output ("run-gates: pool width reached {0} of the {1} asked, and its slots were handed back as the last gates finished" -f $script:gateWidthMax, $askedJobs)
 # EXPLICIT INDEX COPIES, never `@(Get-Slice ...)` or a range expression. A function returning an array
 # UNROLLS, so a one-element slice - $pyStatic is exactly one job - would come back a SCALAR and index
@@ -738,6 +746,16 @@ foreach ($g in $pySuites) {
     @($out) | Where-Object { $_ -match '^\s*FAIL\b|SELF-TEST FAIL' } | Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
   }
 }
+
+# WHAT THE POOL LEFT WHERE THE DAILY BOT STAGES (2026-09-11, lib\gate-leftovers.ps1 has the account). A linked
+# worktree fails on it; the main checkout, where capture lanes also write, prints it as REVIEW and does not.
+$leftChanges = Compare-TcTreeSnapshot -Before $leftBefore -After $leftAfter
+$leftStage = Select-TcStageableChange -Root $repoFull -Changes $leftChanges
+$leftBlind = @($leftBefore.Blind) + @($leftAfter.Blind)
+$leftVerdict = Get-TcLeftoverVerdict -Changes $leftStage.Changes -Kind (Get-TcCheckoutKind -Root $repoFull) -Watched $leftAfter.Files.Count -Ignored $leftStage.Ignored -Blind $leftBlind -FilterError $leftStage.Error
+if ($leftVerdict.Fail) { $fail += 'gate-leftovers'; Write-Output '  FAIL  gate-leftovers  (the pool changed files where the daily bot stages)' } else { $pass++ }
+foreach ($l in $leftVerdict.Lines) { Write-Output $l }
+if ($leftBlind.Count) { $blindGates += ('gate-leftovers ({0} directory listing(s) failed)' -f $leftBlind.Count) }
 
 Write-Output ''
 Write-Output ("run-gates: {0} passed, {1} failed, {2} could not evaluate (exit 0 with no self-test verdict)" -f $pass, $fail.Count, $noVerdict.Count)
