@@ -97,6 +97,16 @@
 !/sidecar/out/backtest-*.json
 !/sidecar/out/hardeval-*.json
 !/sidecar/out/hardeval-report-*.md
+# ...EXCEPT THE SCHEDULED WEEKLY RUN (2026-09-11). graph\pipeline\nightly.ps1 stage ml-eval scores the pinned model
+# against the frozen phase3-baseline defs every week. Until this date it wrote the UNTAGGED pair above, so the
+# 2026-09-07 run replaced the hand-run stock record (2026-08-22, today's defs) with a run on different inputs under
+# the same name, and left both files modified in the main checkout where no lane could commit them: a lane never
+# owns a .md, and spelling this directory inside lib\ is a cross-module reach. It now runs as --tag weekly and its
+# files stay on this box. Nothing reads them from a committed tree, and they are reproducible from tracked inputs:
+# the 09-07 run matched hardeval-phase3-frozen.json's OLD and GOLD AUC to every printed digit. The numbers reach
+# git on the one-line summary the stage records in graph-nightly-status.json, which a lane does commit.
+/sidecar/out/hardeval-weekly.json
+/sidecar/out/hardeval-report-weekly.md
 # The rule gaps a reasoner found: pairs where a commodity's own include patterns reject a product
 # that IS that commodity. Each one is a live board defect and none of them is applied by any script,
 # so if this file is not tracked the finding exists only until the next run overwrites it.

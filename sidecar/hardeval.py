@@ -436,19 +436,36 @@ def stage_score(reranker: str | None = None, tag: str = "stock",
     path = os.path.join(OUT, f"hardeval-report{suffix}.md")
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(rep))
-    json.dump(
+    rec = {
         # WHICH MODEL SAID THIS. Without it, two reports on this box are indistinguishable the
         # moment a second copy of the reranker exists - which is the premise of section 6.
-        {"tag": tag, "embed_model": EMBED_MODEL, "rerank_model": m.rerank_id,
-         "is_pinned_model": (m.rerank_id == RERANK_MODEL),
-         "generated": time.strftime("%Y-%m-%d %H:%M:%S"),
-         "positives": len(pos), "old": len(old), "gold": len(gold), "mined": len(mined),
-         "holdout_only": sorted(held) if held else None,
-         "auc_old": auc(pos, old), "auc_gold": auc(pos, gold),
-         "auc_mined": (auc(pos, mined) if mined else None)},
-        open(os.path.join(OUT, f"hardeval{suffix}.json"), "w", encoding="utf-8"), indent=2)
+        "tag": tag, "embed_model": EMBED_MODEL, "rerank_model": m.rerank_id,
+        "is_pinned_model": (m.rerank_id == RERANK_MODEL),
+        # AND WHICH DEFS (2026-09-11). The untagged record was a today's-defs run on 2026-08-22 and a
+        # frozen-defs run on 2026-09-07, and nothing in this file could tell the two apart. The same
+        # two keys stage_mine already writes.
+        "defs": defs_path or "commodity-defs.json (today)", "defs_frozen": bool(defs_path),
+        "generated": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "positives": len(pos), "old": len(old), "gold": len(gold), "mined": len(mined),
+        "holdout_only": sorted(held) if held else None,
+        "auc_old": auc(pos, old), "auc_gold": auc(pos, gold),
+        "auc_mined": (auc(pos, mined) if mined else None)}
+    with open(os.path.join(OUT, f"hardeval{suffix}.json"), "w", encoding="utf-8") as f:
+        json.dump(rec, f, indent=2)
     print("\n".join(rep))
     log(f"wrote {path}")
+    # THE LINE A SCHEDULED CALLER KEEPS (2026-09-11). graph\pipeline\nightly.ps1 stamps one line of this
+    # process's output into graph-nightly-status.json, and on 2026-09-07 that line was a HuggingFace
+    # "Loading weights: 100%" bar, so the weekly run's numbers reached no committed record at all. It is
+    # printed LAST and on STDERR because the caller reads stdout and then stderr. Every AUC carries the
+    # sizes it was measured over.
+    def fmt(v):
+        return "n/a" if v is None or v != v else f"{v:.4f}"
+    defs_label = os.path.basename(os.path.dirname(defs_path)) if defs_path else "today"
+    print(f"hardeval: tag={tag} defs={defs_label} pinned={rec['is_pinned_model']} "
+          f"positives={len(pos)} old={len(old)} auc_old={fmt(rec['auc_old'])} "
+          f"gold={len(gold)} auc_gold={fmt(rec['auc_gold'])} "
+          f"mined={len(mined)} auc_mined={fmt(rec['auc_mined'])}", file=sys.stderr, flush=True)
 
 
 if __name__ == "__main__":
