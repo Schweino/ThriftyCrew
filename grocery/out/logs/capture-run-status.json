@@ -9,12 +9,20 @@
                   "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-10.log"
               },
     "ad":  {
-               "date":  "2026-09-10",
-               "pid":  15276,
-               "started":  "2026-09-10T07:00:01",
-               "updated":  "2026-09-10T07:02:43",
-               "stage":  "complete",
-               "exit_code":  0,
-               "log":  "--- run-log: capture-run-ad | 2026-09-10T07:00:01 | pid 15276 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-10.log"
+               "date":  "2026-09-11",
+               "pid":  19228,
+               "started":  "2026-09-11T07:00:02",
+               "updated":  "2026-09-11T07:01:13",
+               "stage":  "publishing",
+               "exit_code":  null,
+               "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-11.log",
+               "dirty_at_start":  [
+                                      "graph/provenance/2026-09-10.jsonl",
+                                      "grocery/alert-log.txt",
+                                      "grocery/out/ff-carry-report.json",
+                                      "grocery/out/logs/graph-nightly-status.json",
+                                      "grocery/out/semantic-findings.json",
+                                      "meal-prep/db/source-domains.json"
+                                  ]
            }
 }
