@@ -285,6 +285,20 @@ LEARN_SCRATCH = scratch_dir(prefix="daemon-learn-seam-")
 SCRATCH_EVENTS = os.path.join(LEARN_SCRATCH, "ingredient-events.jsonl")
 SCRATCH_RESOLUTIONS = os.path.join(LEARN_SCRATCH, "ingredient-resolutions.json")
 
+# THE FDC SHELF'S TWO SEAMS, DEFAULTED THE SAME WAY (2026-09-11). F1's fill_fdc_shelf calls the REAL
+# fdc_lookup.cache_fill in every map-lane fixture that does not stub it, and cache_fill writes
+# CACHE_FILE - the TRACKED meal-prep\db\fdc-cache.json - by default. Traced that day: 36 writes in one
+# battery, from 36 map-lane fixtures across the whole run and not one fixture at its end, each flipping
+# the committed LF blob to CRLF. From a checkout holding db\fdc-api-key.txt (the main one does) every
+# one of those fills was ALSO a live api.data.gov call whose candidates landed in the committed cache.
+# A per-fixture scratch path would be the thing each fixture has to remember, so neither is: the cache
+# is scratch and the suite is KEYLESS for everything, child processes included.
+# `_fdc_seams_are_never_live` asserts both.
+SCRATCH_FDC_CACHE = os.path.join(LEARN_SCRATCH, "fdc-cache.json")
+HD.fdc_lookup.CACHE_FILE = SCRATCH_FDC_CACHE
+os.environ.pop("FDC_API_KEY", None)
+os.environ["FDC_KEY_FILE"] = os.path.join(LEARN_SCRATCH, "no-fdc-api-key.txt")
+
 
 def daemon(run_dir=None, run_id="drill-run", dispatcher=None, ps=None, **kw):
     kw.setdefault("events_path", SCRATCH_EVENTS)
@@ -1151,6 +1165,9 @@ def run(names_out=None, names_ref=None):
     T("MUST FIRE  the shelf-coverage line reports X of Y and names the terms FDC LACKS - which are "
       "the mapper's licensed web reads, not findings",
       *_f1_shelf_coverage_line())
+    T("MUST FIRE  the daemon's real fill writes the SUITE's scratch FDC cache and never the tracked "
+      "one, and no fixture holds a key - 36 live writes in one battery, measured 2026-09-11",
+      *_fdc_seams_are_never_live())
 
     # =================================================================================================
     H("M4 - four prompt patches, no schema change (2026-08-25)")
@@ -2464,6 +2481,47 @@ def _learn_seams_are_never_live():
             and os.path.abspath(d.events_path) != os.path.abspath(live_ev)
             and os.path.abspath(d.resolutions_path) != os.path.abspath(live_led),
             "events=%s ledger=%s" % (d.events_path, d.resolutions_path))
+
+
+def _fdc_seams_are_never_live(live=None):
+    """MUST FIRE. The FDC cache a fixture's fill writes is never the tracked one, and no fixture holds
+    a key that would make that fill a network call.
+
+    Checked by DRIVING the daemon's own fill_fdc_shelf through the real cache_fill, with only FDC's
+    search stubbed, because the defect was never the constant - it was a fill nobody thought of as a
+    write. It refuses BEFORE the fill when the default is live: a case that fires by writing the
+    tracked file would be the defect it exists to catch.
+    """
+    live = os.path.normcase(os.path.abspath(live or os.path.join(MP, "db", "fdc-cache.json")))
+    target = HD.fdc_lookup.CACHE_FILE
+    if os.path.normcase(os.path.abspath(target)) == live:
+        return False, "CACHE_FILE is the live cache: %s" % target
+    if HD.fdc_lookup.api_key():
+        return False, "an FDC key is reachable, so a fixture's fill would call api.data.gov"
+    live_before = open(live, "rb").read() if os.path.exists(live) else None
+    had = open(target, "rb").read() if os.path.exists(target) else None
+    real_search = HD.fdc_lookup.search
+
+    def search(term, **kw):
+        return {"ok": True, "candidates": [{"fdc_id": 1, "description": "seam probe %s" % term}]}
+
+    HD.fdc_lookup.search = search
+    try:
+        st = arun(daemon().fill_fdc_shelf(["s1"], _f1_tables()))
+        landed = HD.fdc_lookup.cache_get("gochujang", path=target)
+        live_after = open(live, "rb").read() if os.path.exists(live) else None
+        return ((st or {}).get("added") == 4 and landed is not None and live_after == live_before,
+                "added=%s landed_in=%s live_unchanged=%s" % ((st or {}).get("added"), target,
+                                                             live_after == live_before))
+    finally:
+        HD.fdc_lookup.search = real_search
+        # leave the scratch cache as it was, so a later fixture's keyless fill sees no extra terms
+        if had is None:
+            if os.path.exists(target):
+                os.remove(target)
+        else:
+            with open(target, "wb") as f:
+                f.write(had)
 
 
 # =====================================================================================================

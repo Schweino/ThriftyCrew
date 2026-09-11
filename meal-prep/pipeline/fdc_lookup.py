@@ -354,7 +354,11 @@ def cache_read(path=None):
 
 
 def cache_write(cache, path=None):
-    with open(path or CACHE_FILE, "w", encoding="utf-8") as f:
+    """WRITTEN LF, because the file is COMMITTED LF (2026-09-11). Text mode on Windows turns every
+    "\\n" json.dump emits into CRLF, so any write - a real fill as much as a stray fixture - flipped all
+    41,527 line endings of the tracked blob and left the checkout ` M` with a zero-line diff. With
+    newline="\\n" a round-trip of the committed blob is byte-identical (md5 matched, measured)."""
+    with open(path or CACHE_FILE, "w", encoding="utf-8", newline="\n") as f:
         json.dump(cache, f, ensure_ascii=False, indent=1)
 
 
@@ -410,7 +414,11 @@ def cache_fill(terms, path=None, page_size=4, opener=None, key=None, pause=0.0, 
             log("  %-34s %s" % (t[:34], top[:52]))
         if pause:
             time.sleep(pause)
-    cache_write(c, path)
+    # A FILL THAT ADDED NOTHING DOES NOT REWRITE THE FILE. Every term cached, or every lookup unable
+    # to run (no key), used to rewrite ~900 KB for no change - one more window for a concurrent
+    # writer to be clobbered, and the whole mechanism by which a keyless fixture dirtied the tree.
+    if added:
+        cache_write(c, path)
     return {"added": added, "skipped": skipped, "failed": failed, "size": len(c["terms"])}
 
 
@@ -615,6 +623,17 @@ def selftest():
     st3 = cache_fill(["flaky-food"], path=tmp, opener=boom2, key="test")
     T("MUST FIRE  a lookup that COULD NOT RUN is not stored, so the next run retries it",
       st3["failed"] == 1 and cache_get("flaky-food", path=tmp) is None, json.dumps(st3))
+    with open(tmp, "rb") as f:
+        raw = f.read()
+    T("MUST FIRE  the cache is written LF - text mode wrote CRLF over the committed LF blob and "
+      "flipped every line of it",
+      b"\n" in raw and b"\r" not in raw, "CR=%d LF=%d" % (raw.count(b"\r"), raw.count(b"\n")))
+    nowrite = os.path.join(os.path.dirname(tmp), "untouched.json")
+    st4 = cache_fill(["flaky-food", "other-flaky-food"], path=nowrite, opener=boom2, key="test")
+    T("MUST FIRE  a fill that ADDED nothing does not write the file - a keyless run rewrote the "
+      "whole committed cache for no change",
+      st4["failed"] == 2 and not os.path.exists(nowrite), "%s exists=%s" % (json.dumps(st4),
+                                                                          os.path.exists(nowrite)))
 
     print("")
     if bad:
