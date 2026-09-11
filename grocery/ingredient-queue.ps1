@@ -482,13 +482,24 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
   # scratch ledger, and asserting the LIVE ledger's bytes are untouched.
   # NEUTER PROOF, RUN 2026-08-25: revert $ledgerFile to the hardcoded Join-Path and this case fails
   # on the scratch ledger still holding zero bids (the row went to the live file instead).
+  # THE "NOWHERE ELSE" HALF WAS INERT FROM 2026-08-25 TO 2026-09-11. It read `(Get-Item $live).Length`, and this
+  # file defines its own Get-Item($doc, $term): a script function outranks the cmdlet, the queue lookup returns
+  # nothing for a path, and .Length on nothing is 0, before and after, whatever -Promote did. The neuter above
+  # could not show it, because a -Promote that ignores -CarriagePath leaves the scratch ledger empty and the FIRST
+  # half fires. The live ledger is now compared by md5 (Get-FileHash, never Get-Item in this file), and the two
+  # halves are asserted separately so each names its own failure.
+  # NEUTER PROOF, RUN 2026-09-11, in a temp mirror holding the whole lib\ and a copy of carriage.json, both restored
+  # by md5 before every arm, one run per arm. A -Promote that writes the -CarriagePath ledger AND the mirror's own
+  # carriage.json: the old assertion PASSED with that ledger's md5 changed; this one goes red on the live line
+  # alone. A -Promote that ignores -CarriagePath: red on both halves here, on the scratch half alone before. Clean
+  # arms green before and after. Harness: a scratch harness running each arm's -SelfTest, at c17cc59a7 plus this change.
   $ctmp = Join-Path ([IO.Path]::GetTempPath()) ('iq-carriage-' + [Guid]::NewGuid().ToString('N'))
   New-Item -ItemType Directory -Path $ctmp | Out-Null
   try {
     $cq = Join-Path $ctmp 'queue.json'
     $cl = Join-Path $ctmp 'carriage.json'
-    $live = Join-Path $root 'carriage.json'   # LIVE-TWIN on purpose: the live ledger is the thing asserted UNTOUCHED, and only its length is read
-    $liveBefore = $(if (Test-Path $live) { (Get-Item $live).Length } else { -1 })
+    $live = Join-Path $root 'carriage.json'   # LIVE-TWIN on purpose: the live ledger is the thing asserted UNTOUCHED, and it is read only as an md5
+    $liveBefore = $(if (Test-Path -LiteralPath $live) { (Get-FileHash -LiteralPath $live -Algorithm MD5).Hash } else { 'absent' })
     $st = @{}; foreach ($s in $STORES) { $st[$s] = [pscustomobject]@{ state = 'not-carried'; evidence = 'fixture' } }
     $st["Baker's"] = [pscustomobject]@{ state = 'carried'; price = 3.49; item = 'Fixture Saffron'; size = '1 g'; evidence = 'fixture' }
     $qd = [pscustomobject]@{ items = @([pscustomobject]@{ term = 'fixture-saffron'; recipes = @('x'); added = (Get-Stamp); status = 'pending'; stores = [pscustomobject]$st; verdict = 'PENDING'; notes = $null }) }
@@ -500,13 +511,18 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     $ErrorActionPreference = $prev
     $prc = $LASTEXITCODE
     $got = Read-JsonFile $cl
-    $liveAfter = $(if (Test-Path $live) { (Get-Item $live).Length } else { -1 })
+    $liveAfter = $(if (Test-Path -LiteralPath $live) { (Get-FileHash -LiteralPath $live -Algorithm MD5).Hash } else { 'absent' })
     if ($prc -ne 0 -or -not ($got.bids.PSObject.Properties.Name -contains 'fixture-saffron')) {
       Write-Output ("  X MUST FIRE -Promote must write the SCRATCH ledger -CarriagePath names; rc=$prc " + ($o -join ' | ')); $bad++
-    } elseif ($liveAfter -ne $liveBefore) {
-      Write-Output '  X MUST FIRE -Promote wrote the LIVE carriage.json while -CarriagePath pointed elsewhere'; $bad++
+    } else { Write-Output '  ok MUST FIRE -Promote writes the ledger -CarriagePath names' }
+    # The fingerprint must be a real one before it can be compared: a lookup that returns nothing reads the
+    # same before and after, which is exactly how this half went inert.
+    if ($liveBefore -notmatch '^(absent|[0-9A-F]{32})$') {
+      Write-Output ("  X the live carriage.json fingerprint is not an md5, so the untouched check below cannot fire; got [" + $liveBefore + "]"); $bad++
+    } elseif (-not [string]::Equals($liveBefore, $liveAfter, [StringComparison]::Ordinal)) {
+      Write-Output ("  X MUST FIRE -Promote wrote the LIVE carriage.json while -CarriagePath pointed elsewhere; md5 $liveBefore -> $liveAfter"); $bad++
     } else {
-      Write-Output '  ok MUST FIRE -Promote writes the ledger -CarriagePath names and leaves the live one untouched - a no-publish drill must not write a live grocery ledger'
+      Write-Output '  ok MUST FIRE and it leaves the live carriage.json byte-identical by md5 - a no-publish drill must not write a live grocery ledger'
     }
   } finally { Remove-Item $ctmp -Recurse -Force -ErrorAction SilentlyContinue }
 

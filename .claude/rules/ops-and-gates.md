@@ -209,6 +209,12 @@ everything else honest, so a defect here is silent by construction.
   for `Invoke-History` before the function, every case line errored non-terminating, and the suite printed PASS
   over nothing. Aliases beat functions, so never name a helper `r`, `h`, `gc`, `ls` or any other alias; and run
   the cases under `$ErrorActionPreference = 'Stop'` inside a try whose catch is a counted failure.
+  **And a script function beats a CMDLET of the same name, which turns an assertion inert rather than erroring.**
+  `grocery/ingredient-queue.ps1` defines a queue lookup `Get-Item($doc, $term)`, so its `-Promote` fixture's
+  `(Get-Item $live).Length` called the lookup, got nothing back for a path, and read 0 before and after: the
+  "live ledger untouched" half could not fire from 2026-08-25 to 2026-09-11. Never name a function after a cmdlet,
+  and compare a file by content (`Get-FileHash -LiteralPath`). On 2026-09-11, 3 of 747 tracked `.ps1` defined one;
+  `grocery/test-auditors.ps1`'s scoped `Get-Date` is a deliberate clock mock.
 - **A self-test's exit 0 is not its verdict** (2026-09-11). 8253ded82 glued pull-grocery-ads' closing `if/else`
   onto its last case line, so the `-SelfTest` branch never exited, fell through to the LIVE three-store pull and
   exited 0, and run-gates scored it ok on every push for hours. run-gates now reads each self-test's stdout through
