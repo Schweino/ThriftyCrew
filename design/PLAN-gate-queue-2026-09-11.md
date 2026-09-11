@@ -39,8 +39,11 @@ run-gates in a loop.
 
 **Harness and commit.** Measured on 2026-09-11 through the five instruments below, against gate code at
 commit `d72b4f5cd`. This plan was written on a branch cut from `origin/main` at commit `e5ccc768e` and
-fast-forwarded to `564bdca47` before committing; that range does not touch `lib/gate-slots.ps1`,
-`lib/parallel-run.ps1`, `ops/hooks/pre-push` or `ops/run-gates.ps1`.
+REBASED onto main before it shipped, so its parent is whatever main had reached by then; the push herd in
+finding (5) is why that is not a fixed number. What matters is checked rather than assumed:
+`lib/gate-slots.ps1`, `lib/parallel-run.ps1`, `ops/hooks/pre-push` and `ops/run-gates.ps1` are unchanged
+between `e5ccc768e` and the tip this commit landed on, so every measurement below describes the gate code
+as it stands here.
 
 **The code every measured run executed:** `lib/gate-slots.ps1` and `lib/parallel-run.ps1` as of
 `d72b4f5cd` (12:26, the Grow/Shrink hand-back), `ops/hooks/pre-push` as of `8549a395a`. Checked, not
