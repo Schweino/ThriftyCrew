@@ -1,7 +1,23 @@
 # PLAN: why ~30 gate runs wait on 10 slots, and what to change (2026-09-11)
 
-**Status: PROPOSED. Nothing here is built.** Brad reads and edits this before any code changes.
-`$TcGateSlotTotal = 10` is Brad's ruling and nothing below changes it.
+**Status: SUPERSEDED IN PART, and kept as the independent BEFORE baseline.** `$TcGateSlotTotal = 10` is
+Brad's ruling and nothing here changes it.
+
+**Read this first.** While this was being measured, another session shipped the queue: `b1aab0424`, 18:18,
+*"Gate worker slots are a QUEUE: arrival order, a reused green verdict, and no gate for a push that cannot
+land"*, with its own account in `design/MEASURE-gate-slot-starvation-2026-09-11.md`. **That document is the
+primary one**, measured 16:35 to 17:05 at `c6533c7ea` through different probes, and options A, B and C
+below describe what it built. Its service-order probe and this document's log reading agree that the order
+was effectively random, from two instruments that share no code.
+
+What this document still adds, because its instruments saw things the other's could not:
+
+- what a session DOES after a refusal, read from the session transcripts (finding 1) and the push-retry
+  loops inside them (finding 4);
+- how often a passing gate was thrown away by the remote moving under it (finding 5);
+- **finding (7), still open and not addressed by `b1aab0424`:** a worktree that was never seeded fails the
+  gate on two meal-prep self-tests, and 8 of today's pushes paid a whole gate run to find that out;
+- the acceptance bars, which are now the bars for verifying the SHIPPED change rather than a proposal.
 
 ## In plain words
 
@@ -40,10 +56,14 @@ run-gates in a loop.
 **Harness and commit.** Measured on 2026-09-11 through the five instruments below, against gate code at
 commit `d72b4f5cd`. This plan was written on a branch cut from `origin/main` at commit `e5ccc768e` and
 REBASED onto main before it shipped, so its parent is whatever main had reached by then; the push herd in
-finding (5) is why that is not a fixed number. What matters is checked rather than assumed:
-`lib/gate-slots.ps1`, `lib/parallel-run.ps1`, `ops/hooks/pre-push` and `ops/run-gates.ps1` are unchanged
-between `e5ccc768e` and the tip this commit landed on, so every measurement below describes the gate code
-as it stands here.
+finding (5) is why that is not a fixed number.
+
+**Every measurement below describes the gate code BEFORE `b1aab0424` (18:18).** Checked rather than
+assumed: `lib/gate-slots.ps1`, `lib/parallel-run.ps1`, `ops/hooks/pre-push` and `ops/run-gates.ps1` were
+unchanged from `e5ccc768e` through `74fe03634`, which covers every run measured here; after that
+`b1aab0424` rewrote the slot library and the hook, and `fa76f872f` (17:51) added one gate entry to
+`ops/run-gates.ps1` that does not touch slot logic. So this is a BEFORE baseline, and the section "First
+reading after the queue shipped" is the only part of this document that describes the new code.
 
 **The code every measured run executed:** `lib/gate-slots.ps1` and `lib/parallel-run.ps1` as of
 `d72b4f5cd` (12:26, the Grow/Shrink hand-back), `ops/hooks/pre-push` as of `8549a395a`. Checked, not
@@ -246,7 +266,30 @@ Yes, in three places, and one habit multiplies all three:
   anyway (5).
 - The habit: run the gate by hand, then push (2), and wrap the push in a retry loop (4).
 
-## Proposed changes (not built)
+## The options, and what shipped at 18:18
+
+**A, B, C and E below are BUILT, in `b1aab0424`.** They were written here as proposals before that commit
+was read, and they are kept unedited so the rubric can be used as the bar for what shipped. What landed,
+read from the commit rather than from its title:
+
+- **A, the ordered queue** (`lib/gate-slots.ps1`): a waiter takes a TICKET, a file in a per-user queue
+  directory plus a mutex it holds while it waits, and only the oldest LIVE ticket may take slots. Liveness
+  is the mutex, never the file, so a killed waiter's ticket is swept. A run holding slots does not top up
+  while any ticket is live, and `-Exact` deliberate load neither queues nor jumps.
+- **B, the honest deadline and refusal**: the deadline became "the count of live tickets ahead of me has
+  not fallen for `WaitSec`", so a run that is moving up is not refused for being patient, and the hook's
+  exit-3 text now offers the gate's own reason - broken discovery, a queue that stopped moving, or a push
+  that cannot land - instead of asserting broken discovery.
+- **C, not judging one tree twice** (`lib/gate-verdict.ps1`): a green verdict is recorded against a
+  SHA-256 content fingerprint of the checkout (`git ls-tree -r HEAD`, with every path `git status` reports
+  taking its working-tree value), so the gate-then-push shape prints the recorded pass and dispatches
+  nothing. A red run over the same content withdraws the pass; `-NoReuse` always runs them. That is the
+  same-bytes key this document asked for, keyed more carefully than it proposed.
+- **The herd fix** (`lib/push-landable.ps1`): the hook asks whether the refs still hold the shas git handed
+  it and refuses in seconds, before taking a slot, when the remote will reject the push anyway.
+- **E**: `CLAUDE.md` now states the queue, the recorded verdict and the early refusal.
+
+**D is still open**, and finding (7) is untouched by that commit.
 
 **Rubric.** Each option is judged on: (r1) refusals and reruns removed; (r2) any chance a push goes out
 ungated, or a verdict is applied to bytes it did not run on, which must be zero; (r3) `$TcGateSlotTotal`
@@ -321,6 +364,22 @@ times, so this goes in alongside B's message, not instead of it.
 
 Raising the total (ruled). Random back-off in the caller (it is the unordered poll we already have).
 Skipping the gate when the queue is long (r2).
+
+## First reading after the queue shipped (18:18 to 18:45, 27 minutes)
+
+Not a verdict. A first look with the same instruments, stated with its denominator:
+
+- The queue is real and populated: the per-user ticket directory held **5 live tickets**, and **6 of the
+  12 kept hook logs since 18:18** carry the new line, *"all 10 machine-wide gate worker slots are held by
+  other gate runs - queued behind N earlier run(s)"*, with N reading 0, 2, 3, 3, 4 and 5.
+- **No run was refused at the deadline in that window: 0.** Before the change, I2 counted **46 refusals
+  between 14:48 and 17:34**. The windows are different lengths and the load is not the same, so this is a
+  direction, not a factor.
+- Waits recorded in that window where a grant printed one: 85, 227, 231, 326, 484 and 648 s.
+- I did NOT establish how often the recorded verdict was reused. The pattern that would have counted it
+  also matches the bare word "verdict", so there is no number here rather than a wrong one.
+
+The bars below are the real check, and they need a window with at least 30 hook runs.
 
 ## Acceptance bars, written before anything is built
 
