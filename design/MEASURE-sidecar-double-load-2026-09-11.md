@@ -76,3 +76,87 @@ and one process pays its CUDA context once however many loads it does, which pul
 2026-09-10 readings gave 1.99x. 1.6 is the first plausible number, not the survivor of a sweep. 15%: also
 first plausible, not swept; the only earlier reading of a warmed single load is one reading (4,527 MiB),
 which is no basis for a tighter band. Neither threshold was moved after the rows existed.
+
+## Results - appended after the run
+
+**Run:** 2026-09-11, trials started 15:00:59 to 15:15:41. **Harness:** `sidecar/probe_double_load.py` at
+`7f8fa73287ce65352af8fd7cd5845d500ee9dc64`, clean (`harness_dirty` false in all 18 rows), run under
+`C:\Codex\ThriftyCrew\sidecar\.venv\Scripts\python.exe` (Python 3.12.10). **Arms:** `unlocked` = `sidecar/app.py`
+at `38cce56c55911c83405843def6c50d16070ff1cd` (blob `12939f86bf`), `locked` = `sidecar/app.py` at
+`7f8fa73287ce65352af8fd7cd5845d500ee9dc64` (blob `d6a5016a51`). Each arm's extracted copy was checked
+byte-identical to its blob with `git hash-object --no-filters` before the first trial. **Verdict read:** harness
+exit 0; `invalid trials: 0 of 18`.
+
+### The verdicts, as `--summarise` derived them from the rows file
+
+- **B1 CONFIRMED.** `load_count` 2 in **6 of 6** unlocked concurrent trials (3 `pair0`, 3 `hook`).
+- **B2 CONFIRMED.** Median held **9,032 MiB** over the 6 trials with `load_count` 2, against **4,621 MiB** over
+  the 3 unlocked single trials: **1.95x** against a bar of 1.6x. The 2026-09-10 readings were 8,990 and 4,527
+  MiB, 1.99x. The unguarded double load is the 2x.
+- **B3 ACCEPTED.** `load_count` 1 in **6 of 6** locked concurrent trials, every request 200 in **6 of 6**, median
+  held **4,606 MiB** against **4,500 MiB** for the 3 locked single trials: **2.4%** drift against a bar of 15%.
+
+| arm | shape | valid | load_count | held MiB, per trial | median held |
+|---|---|---|---|---|---:|
+| unlocked | single | 3 of 3 | 1, 1, 1 | 4,555 / 4,621 / 4,621 | 4,621 |
+| unlocked | pair0 | 3 of 3 | 2, 2, 2 | 8,943 / 9,116 / 8,977 | 8,977 |
+| unlocked | hook | 3 of 3 | 2, 2, 2 | 9,087 / 9,189 / 8,949 | 9,087 |
+| locked | single | 3 of 3 | 1, 1, 1 | 4,492 / 4,500 / 4,605 | 4,500 |
+| locked | pair0 | 3 of 3 | 1, 1, 1 | 4,735 / 4,589 / 4,623 | 4,623 |
+| locked | hook | 3 of 3 | 1, 1, 1 | 4,542 / 4,402 / 4,649 | 4,542 |
+
+Every trial, in run order. MiB of a 16,303 MiB card; "after kill" is the card once the trial's process tree was
+gone, which is what the next trial's baseline had to settle from.
+
+| trial | round | arm | shape | baseline | after | held | peak held | load_count | load_seconds | after kill |
+|---:|---:|---|---|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 1 | unlocked | single | 2,284 | 6,839 | 4,555 | 4,555 | 1 | 19.1 | 2,013 |
+| 2 | 1 | locked | single | 1,964 | 6,456 | 4,492 | 4,533 | 1 | 14.5 | 1,878 |
+| 3 | 1 | unlocked | pair0 | 1,910 | 10,853 | 8,943 | 8,943 | 2 | 23.5 | 2,048 |
+| 4 | 1 | locked | pair0 | 1,942 | 6,677 | 4,735 | 4,718 | 1 | 13.9 | 2,017 |
+| 5 | 1 | unlocked | hook | 1,875 | 10,962 | 9,087 | 9,088 | 2 | 21.6 | 1,947 |
+| 6 | 1 | locked | hook | 1,834 | 6,376 | 4,542 | 4,530 | 1 | 24.3 | 1,690 |
+| 7 | 2 | locked | pair0 | 1,709 | 6,298 | 4,589 | 4,589 | 1 | 16.9 | 1,639 |
+| 8 | 2 | unlocked | pair0 | 1,661 | 10,777 | 9,116 | 9,116 | 2 | 61.5 | 1,803 |
+| 9 | 2 | locked | hook | 2,034 | 6,436 | 4,402 | 4,627 | 1 | 18.8 | 1,819 |
+| 10 | 2 | unlocked | hook | 1,787 | 10,976 | 9,189 | 9,189 | 2 | 31.1 | 1,871 |
+| 11 | 2 | locked | single | 1,876 | 6,376 | 4,500 | 4,505 | 1 | 23.4 | 1,771 |
+| 12 | 2 | unlocked | single | 1,765 | 6,386 | 4,621 | 4,637 | 1 | 21.6 | 1,781 |
+| 13 | 3 | unlocked | hook | 1,781 | 10,730 | 8,949 | 8,949 | 2 | 22.6 | 1,765 |
+| 14 | 3 | locked | hook | 1,765 | 6,414 | 4,649 | 4,649 | 1 | 13.3 | 1,797 |
+| 15 | 3 | unlocked | single | 1,797 | 6,418 | 4,621 | 4,621 | 1 | 12.7 | 1,813 |
+| 16 | 3 | locked | single | 1,781 | 6,386 | 4,605 | 4,609 | 1 | 12.7 | 1,785 |
+| 17 | 3 | unlocked | pair0 | 1,765 | 10,742 | 8,977 | 8,993 | 2 | 21.8 | 1,797 |
+| 18 | 3 | locked | pair0 | 1,645 | 6,268 | 4,623 | 4,623 | 1 | 12.4 | 1,635 |
+
+### What the bar did not cover, stated so nobody has to find it
+
+- **The idle reference was taken high, so the baseline check was looser than designed.** It read 2,598 MiB,
+  sampled just after `stop-sidecar.ps1` returned; the card read 1,660 MiB with nothing of ours on it at 15:16:40,
+  and trial baselines ran 1,645 to 2,284. So "settled within 300 MiB of idle" admitted baselines up to 2,898
+  where about 1,960 was meant. Two baselines stand out, trial 1 (2,284) and trial 9 (2,034). Neither is a
+  previous trial's residue - the card read 1,635 to 2,048 after every kill, and one trial's models are 4,400
+  MiB or more. Trial 9's peak held (4,627) is above its held (4,402), which fits about 200 MiB of some other
+  process's memory in its baseline. Scoring trial 9 at its peak instead moves the locked concurrent median to
+  4,625 MiB and the B3 drift to 2.8%; trial 1 is not the median of its cell. **No verdict moves.** Not fixed in
+  the harness: a change that has never been run is not a fix, and the next run should take the idle reference
+  as the lowest settled reading rather than the first.
+- **Peak held is a SAMPLED lower bound.** The sampler polls every 0.5 s, and in trials 4 and 6 it reads below
+  the settle wait's own reading. No bar reads it.
+- **The `hook` shape reached the matcher both times.** `/recall-search` answered `ok: true` in 6 of 6 `hook`
+  trials; a missing index would have returned before `matcher()` and made that shape a single request.
+- **Load time is an observation, not a measurement, and no bar reads it.** `load_seconds` ran 21.6 to 61.5 s in
+  the 6 double-load trials against 12.4 to 24.3 s in the 12 single-load trials, on a box shared with other
+  sessions' gates. It says, unqualified, that a double load also stretches the cold start that the recall
+  hook's 1.5 s timeout is waiting on.
+- **The watchdog came round once.** Trial 18 waited out the 15:15 run, which restarted the service (stamp
+  `restarted` at 15:15:28, task result 0); the harness stopped it through `stop-sidecar.ps1` before the trial.
+  The restart succeeded, so the watchdog's alert path was never taken.
+
+### The live service after the run
+
+Restarted through `C:\Codex\ThriftyCrew\sidecar\start-sidecar.ps1` at 15:16:40: exit 0, `load_seconds` 12.3, card
+**1,660 -> 6,370 of 16,303 MiB, about 4,710 MiB held**. That instance serves the MAIN checkout's `app.py`, which at
+that moment did not carry these commits (blob `460d827d31`, no `load_count` on `/health`), and `start-sidecar.ps1`
+warms with one request, so it is a single load either way. The guard is live from the first restart after the
+main checkout advances past `7f8fa7328`.

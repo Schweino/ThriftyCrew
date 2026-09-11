@@ -33,7 +33,9 @@ app = FastAPI(title="Thrifty Crew semantic sidecar", version="1.0")
 #
 # ONE LOAD, HOWEVER MANY FIRST REQUESTS (2026-09-11). FastAPI runs these sync endpoints on a threadpool, and
 # after every cold start the recall hook sends /recall-search and then /embed 1.5 s later, both inside a load
-# of about 10 s. Unguarded, both can see _M None and both load. The check is DOUBLE: the loaded path reads _M
+# of about 10 s. Unguarded, both saw _M None and both loaded: 6 of 6 concurrent cold-start trials read
+# load_count 2 and held a median 9,032 MiB against 4,621 MiB for one load, and with this lock 6 of 6 read 1
+# and held 4,606 MiB (design/MEASURE-sidecar-double-load-2026-09-11.md). The check is DOUBLE: the loaded path reads _M
 # without the lock, so a warm service never contends it, and the check repeats inside the lock, so a caller
 # that queued behind the load finds it done. /health never takes the lock, because start-sidecar.ps1 polls it
 # with a 3 s timeout WHILE the load holds it. sidecar/app_selftest.py holds all three; the trials are in
