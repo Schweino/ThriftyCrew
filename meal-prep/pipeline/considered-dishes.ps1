@@ -41,6 +41,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $mp   = Split-Path -Parent $here
 $repo = Split-Path -Parent $mp
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\atomic-write.ps1')   # Write-TcAtomicFile: a lock-free reader must not cost a writer its write
 if (-not $Store) { $Store = Join-Path $mp 'db\considered-dishes.json' }
 
 # Sauce/flavour families. Identity lives here more than in the protein: "creamy tuscan chicken" and
@@ -235,9 +236,15 @@ if ($runRecord) {
     _key = 'protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.'
     updated = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ss'); count = @($out).Count; dishes = @($out)
   }
-  $tmpf = $Store + '.tmp'
-  ($doc | ConvertTo-Json -Depth 6) | Set-Content -Path $tmpf -Encoding utf8
-  Move-Item -Path $tmpf -Destination $Store -Force
+  # THROUGH lib\atomic-write.ps1, NOT Set-Content + Move-Item (2026-09-11). The decider records here while
+  # the sourcers' -Query, harvest.py and harvest_embed.py read the ledger with no lock, and a bare Move-Item
+  # over a file one of them holds open fails. A reader that outlasts the retry budget still costs the ruling,
+  # and that is said on STDOUT with exit 1, the way source-domains says it.
+  try { [void](Write-TcAtomicFile -Path $Store -Text ($doc | ConvertTo-Json -Depth 6)) }
+  catch {
+    Write-Output ("considered-dishes: COULD NOT WRITE {0} - ruling for {1} NOT recorded. {2}" -f $Store, $Slug, $_.Exception.Message)
+    exit 1
+  }
   Write-Output ("considered-dishes: recorded {0}  [{1}]  {2}" -f $Slug, $key, $Verdict)
   Exit-Guard -Name 'considered-dishes' -Summary ("record {0}" -f $Slug) -Code 0
 }

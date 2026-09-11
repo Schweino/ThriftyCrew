@@ -101,6 +101,7 @@ $ErrorActionPreference = 'Stop'
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
 if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
 . (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one
+. (Join-Path $__jioRoot 'lib\atomic-write.ps1')   # Write-TcAtomicFile: the hunt daemon reads state files lock-free while lanes advance them
 
 # CAPTURE EVERY SWITCH BEFORE DOT-SOURCING ANYTHING. A dot-sourced script runs its own param() block in
 # THIS scope, so a lib declaring [switch]$SelfTest silently resets ours to $false - that PS 5.1 trap made
@@ -410,19 +411,14 @@ function Read-Json {
   return ($raw | ConvertFrom-Json)
 }
 function Write-JsonAtomic {
+  <# THE RETRY IS lib\atomic-write.ps1's SINCE 2026-09-11. This file's own loop gave a reader 3 attempts and
+     450 ms; the daemon's state scan opens these files with Python's open(), which shares read and write but
+     not delete, so a replace that lands on a scan fails every attempt that overlaps it. -NoBom -NoNewline
+     keeps the bytes the old WriteAllText wrote. #>
   param([string]$Path, $Obj, [int]$Depth = 12)
   $json = ($Obj | ConvertTo-Json -Depth $Depth)
-  $tmp = $Path + '.tmp'
-  for ($i = 0; $i -lt 3; $i++) {
-    try {
-      [IO.File]::WriteAllText($tmp, $json, $script:UTF8)
-      Move-Item -LiteralPath $tmp -Destination $Path -Force
-      return
-    } catch {
-      if ($i -eq 2) { throw ("hunt-run: could not write '{0}' after 3 attempts: {1}" -f $Path, $_.Exception.Message) }
-      Start-Sleep -Milliseconds (150 * ($i + 1))
-    }
-  }
+  try { [void](Write-TcAtomicFile -Path $Path -Text $json -NoBom -NoNewline) }
+  catch { throw ("hunt-run: could not write '{0}': {1}" -f $Path, $_.Exception.Message) }
 }
 function Get-StateLabel {
   <#

@@ -54,6 +54,7 @@
 # No param() block, so -SelfTest is read from $args (a dot-sourced param() block would reset the caller's own).
 $__rbSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 . (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\ledger-lock.ps1')   # Enter-TcLedgerLock: the Walmart and Sam's builders save this ledger side by side
+. (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: those builders' lock-free reads can hold the file at the replace
 
 # The TTL itself. Brad's number, and it is a POLICY value rather than a measurement: neither store
 # publishes a window, so this is the length we are choosing to stand behind, not one they gave us.
@@ -246,10 +247,10 @@ function Save-RollbackLedger([string]$Root = '') {
                     first_seen = $v.first_seen; last_seen = $v.last_seen; price_changed = $v.price_changed }
       })
     }
-    # The bytes this tracked ledger always had: UTF-8, no BOM, nothing appended.
-    $tmp = "$path.tmp"
-    [IO.File]::WriteAllText($tmp, ($doc | ConvertTo-Json -Depth 5), (New-Object System.Text.UTF8Encoding($false)))
-    Move-Item -LiteralPath $tmp -Destination $path -Force
+    # The bytes this tracked ledger always had: UTF-8, no BOM, nothing appended - hence -NoBom -NoNewline.
+    # Retried (2026-09-11): the lock serialises the savers, not a lock-free Import in a sibling builder, and a bare
+    # Move-Item over a file that reader holds open fails outright with the lock held.
+    [void](Write-TcAtomicFile -Path $path -Text ($doc | ConvertTo-Json -Depth 5) -NoBom -NoNewline)
     # This process now holds what is on disk, so a later lookup sees the siblings' entries and a later save starts clean.
     $script:RbLedger = $disk
     $script:RbTouched = New-Object 'System.Collections.Generic.HashSet[string]'

@@ -29,6 +29,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $mp   = Split-Path -Parent $here
 $repo = Split-Path -Parent $mp
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\atomic-write.ps1')   # Write-TcAtomicFile: a lock-free reader must not cost a writer its write
 if (-not $DigestFile) { $DigestFile = Join-Path $here 'catalog-digest.json' }
 if (-not $OutFile)    { $OutFile    = Join-Path $mp 'db\saturation.json' }
 
@@ -134,9 +135,9 @@ $doc = [pscustomobject]@{
   generated=(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss'); recipe_count=$digest.recipe_count; crowded_at=$CrowdedAt
   regions=@($regions.Values | Sort-Object count -Descending)
 }
-$tmpf = $OutFile + '.tmp'
-($doc | ConvertTo-Json -Depth 6) | Set-Content -Path $tmpf -Encoding utf8
-Move-Item -Path $tmpf -Destination $OutFile -Force
+# Retried (2026-09-11): the sourcers' -Brief and harvest.py's load_saturation read this with no lock, and a
+# rebuild run while either is live would otherwise fail its replace outright.
+[void](Write-TcAtomicFile -Path $OutFile -Text ($doc | ConvertTo-Json -Depth 6))
 $crowdedN = @($doc.regions | Where-Object { $_.count -ge $CrowdedAt }).Count
 Write-Output ("saturation.json: {0} regions over {1} recipes, {2} crowded (>= {3}) -> {4}" -f @($doc.regions).Count, $digest.recipe_count, $crowdedN, $CrowdedAt, $OutFile)
 foreach ($r in @($doc.regions | Where-Object { $_.count -ge $CrowdedAt } | Select-Object -First 8)) {

@@ -603,8 +603,9 @@ else { Bad 'the array-wrap probe behaved unexpectedly - re-read the ps51-json-ar
 # window that produced the empty read above. Assert the atomic swap + mutex are still in place.
 if (Use-Unit 'u010-5-send-alert-must-write-the-queue') {
 $sa = Get-Content (Join-Path $root 'send-alert.ps1') -Raw
-if ($sa -match 'Move-Item[^\r\n]*\$qFile' -and $sa -match 'System\.Threading\.Mutex') { Ok 'send-alert still writes the queue via mutex + atomic swap' }
-else { Bad 'send-alert lost its mutex or atomic swap - a concurrent read can see a truncated queue again' }
+# Write-TcAtomicFile since 2026-09-11: a bare Move-Item over the queue fails while a lock-free reader holds it.
+if ($sa -match 'Write-TcAtomicFile[^\r\n]*\$qFile' -and $sa -match 'System\.Threading\.Mutex') { Ok 'send-alert still writes the queue via mutex + retried atomic swap (Write-TcAtomicFile)' }
+else { Bad 'send-alert lost its mutex or its Write-TcAtomicFile swap - a concurrent read can see a truncated queue, or cost a write, again' }
 if ($sa -match 'refusing to overwrite') { Ok 'send-alert still refuses to overwrite a queue that reads back empty' }
 else { Bad 'send-alert lost the refuse-to-overwrite-empty guard - a bad read can wipe the backlog' }
 } # u010-5-send-alert-must-write-the-queue

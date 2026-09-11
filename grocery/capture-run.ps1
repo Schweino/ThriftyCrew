@@ -55,6 +55,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: capture-watchdog and a sibling capture-run read the status file lock-free
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\bot-paths.ps1') # Get-BotInputPaths/-BotServedPaths: the ONE ownership list, also read by push-data and the pre-commit hook
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\chain-verdict-lib.ps1') # Read-ChainVerdictStatus: the ONE reading of the guard verdict, shared with push-data
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-blob-lib.ps1') # Invoke-GitCaptured/Format-GitRefusal: a refused commit must keep the hook's own stderr (2026-09-09-a95022). Loaded HERE, not at the edge check below, because the commit stage runs first
@@ -133,9 +134,9 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
     }
     $dir = Split-Path $script:StatusFile -Parent
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
-    $tmp = $script:StatusFile + '.tmp'
-    ($doc | ConvertTo-Json -Depth 5) | Set-Content -Path $tmp -Encoding UTF8
-    Move-Item -Path $tmp -Destination $script:StatusFile -Force
+    # Retried, not a bare Move-Item (2026-09-11): capture-watchdog (hourly from 10:30) and the hourly re-fires of
+    # both capture tasks read this file with no lock, and a replace over a file they hold open fails outright.
+    [void](Write-TcAtomicFile -Path $script:StatusFile -Text ($doc | ConvertTo-Json -Depth 5))
   } catch { }
 }
 function Release-RunMutex {

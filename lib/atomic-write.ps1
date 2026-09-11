@@ -26,6 +26,14 @@
 # with a growing sleep until a reader lets go. If the budget runs out it THROWS, naming the path and the
 # attempts: the previous file is intact and the caller must say the write was NOT recorded.
 #
+# THE OTHER BYTE SHAPE IN THIS TREE (2026-09-11). Half the replace sites never used Set-Content: they wrote
+# `[IO.File]::WriteAllText($tmp, $text, (New-Object Text.UTF8Encoding($false)))` - no BOM, and nothing
+# appended. Routing those through the default would put a BOM and a CRLF into files that never had them,
+# which a byte-comparing gate reads as a change and a BOM-strict reader can choke on. So the two
+# differences are two explicit switches, named for the one byte each controls: -NoBom drops the BOM and
+# -NoNewline drops the CRLF (Set-Content's own word for it). Such a site passes BOTH and keeps its bytes.
+# The default is unchanged, so no existing caller moves.
+#
 # WHAT ELSE WAS TRIED, AND WHY NOT:
 #   * [IO.File]::Replace with the same retry. It lands too (400 of 400 against Get-Content, at most 4
 #     attempts; 400 of 400 against ReadAllText, at most 2), and it keeps the name present - but the lock-
@@ -70,13 +78,17 @@ function Write-TcAtomicFile {
     [Parameter(Mandatory=$true)][string]$Path,
     [Parameter(Mandatory=$true)][AllowEmptyString()][string]$Text,
     [int]$MaxAttempts = $script:TcAtomicAttempts,
-    [int]$BaseSleepMs = $script:TcAtomicBaseSleepMs
+    [int]$BaseSleepMs = $script:TcAtomicBaseSleepMs,
+    # The WriteAllText byte shape: see THE OTHER BYTE SHAPE in the header. A converted site passes both.
+    [switch]$NoBom,
+    [switch]$NoNewline
   )
   # PowerShell LOCATION semantics for a relative path, the way Set-Content resolved it - [IO.File] alone
   # would resolve against the process working directory (lib\json-io.ps1, Resolve-JioPath).
   $full = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
   $tmp = $full + '.tmp'
-  [IO.File]::WriteAllText($tmp, $Text + "`r`n", (New-Object Text.UTF8Encoding($true)))
+  $body = if ($NoNewline) { $Text } else { $Text + "`r`n" }
+  [IO.File]::WriteAllText($tmp, $body, (New-Object Text.UTF8Encoding(-not $NoBom)))
   $sw = [Diagnostics.Stopwatch]::StartNew()
   $last = ''
   for ($a = 1; $a -le $MaxAttempts; $a++) {
@@ -141,6 +153,29 @@ if ($__awSelfTest) {
     $n = Write-TcAtomicFile -Path $viaAw -Text $text
     $same = [Convert]::ToBase64String([IO.File]::ReadAllBytes($viaSc)) -eq [Convert]::ToBase64String([IO.File]::ReadAllBytes($viaAw))
     Case 'CLEAN TWIN' 'with nothing in the way it lands on the first attempt, byte-identical to Set-Content -Encoding utf8 (BOM, text, CRLF)' ($same -and $n -eq 1) ("same=$same attempts=$n")
+
+    # ---- the WriteAllText shape: a no-BOM site converted with -NoBom -NoNewline keeps its bytes ----
+    $noBomEnc = New-Object Text.UTF8Encoding($false)
+    $viaWat = Join-Path $dir 'via-writealltext.json'
+    [IO.File]::WriteAllText($viaWat, $text, $noBomEnc)
+    $viaAw2 = Join-Path $dir 'via-atomic-nobom.json'
+    [IO.File]::WriteAllText($viaAw2, 'old', $noBomEnc)
+    [void](Write-TcAtomicFile -Path $viaAw2 -Text $text -NoBom -NoNewline)
+    $watB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($viaWat))
+    $aw2B64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($viaAw2))
+    Case 'MUST FIRE' '-NoBom -NoNewline is byte-identical to WriteAllText with UTF8Encoding($false): no BOM appears and no CRLF is appended' ($watB64 -eq $aw2B64) ("writealltext=$watB64 atomic=$aw2B64")
+    # Each switch moves only its own byte, so neither can quietly stand in for the other.
+    $viaAw3 = Join-Path $dir 'via-atomic-nobom-only.json'
+    [void](Write-TcAtomicFile -Path $viaAw3 -Text $text -NoBom)
+    $scBytes = [IO.File]::ReadAllBytes($viaSc)
+    $aw3Bytes = [IO.File]::ReadAllBytes($viaAw3)
+    $scNoBom = [Convert]::ToBase64String($scBytes, 3, $scBytes.Length - 3)
+    Case 'MUST FIRE' '-NoBom alone drops exactly the three BOM bytes and keeps the CRLF' ($scBytes[0] -eq 0xEF -and $scNoBom -eq [Convert]::ToBase64String($aw3Bytes)) ("atomic=" + [Convert]::ToBase64String($aw3Bytes))
+    $viaAw4 = Join-Path $dir 'via-atomic-nonewline-only.json'
+    [void](Write-TcAtomicFile -Path $viaAw4 -Text $text -NoNewline)
+    $scNoCrlf = [Convert]::ToBase64String($scBytes, 0, $scBytes.Length - 2)
+    $aw4Bytes = [IO.File]::ReadAllBytes($viaAw4)
+    Case 'MUST FIRE' '-NoNewline alone drops exactly the trailing CRLF and keeps the BOM' ($scBytes[$scBytes.Length - 1] -eq 0x0A -and $scNoCrlf -eq [Convert]::ToBase64String($aw4Bytes)) ("atomic=" + [Convert]::ToBase64String($aw4Bytes))
 
     # ---- the founding shape: a reader that LETS GO ----
     # The premise first, asserted rather than trusted, so a Windows that stops failing this says so here.

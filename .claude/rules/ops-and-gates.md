@@ -158,14 +158,20 @@ everything else honest, so a defect here is silent by construction.
   trials, every one this error and none a lock timeout (worst wait 10,433 ms of the 15 s budget).
   `lib/atomic-write.ps1` (`Write-TcAtomicFile`) retries the move, and the three `Invoke-Locked` ledgers use it.
   **A concurrency fixture keeps every writer's exit code and output** and counts a refusal as a refusal: the
-  `| Out-Null` those fixtures carried threw away the one line that named the cause. Other `Move-Item -Force`
-  replaces remain in the tree and were not swept.
+  `| Out-Null` those fixtures carried threw away the one line that named the cause.
   **Its barrier goes INSIDE each writer, immediately before the contended call, never ahead of the writer's own
   process start-up.** A barrier in the parent or a `Start-Job` child releases writers that each then spend about a
   second starting powershell.exe, which spreads them further than the barrier closed: a disabled lock went uncaught
   in 5 of 11 runs, then 1 of 10. `lib/ledger-fixture.ps1` holds them on a kernel event inside `Invoke-Locked` (red
   50 of 50 with the lock disabled across the three ledgers, asserted as a count of writers at the barrier), gives
   self-test writers a hang-guard lock wait instead of the production 15 s, and names a writer that could not run.
+  **The other replaces were swept the same day** over `grocery/`, `meal-prep/`, `ops/` and `lib/`: of 21
+  tmp-then-replace sites, the 9 whose file a lane, a scheduled task or a daemon can read mid-replace now use
+  `Write-TcAtomicFile` too (the triage queue, the capture cursor, sale-windows, the ad schedule, the rollback ledger,
+  capture-run's status, hunt-run state, considered-dishes, saturation). The 12 left are written by one serial chain
+  step with no concurrent reader, already retry, or are run by hand. **A new replace of a file something else reads
+  uses `Write-TcAtomicFile`**, and a site that wrote with `WriteAllText` and no BOM passes `-NoBom -NoNewline` so its
+  bytes do not change.
 - **A lock around the SAVE is not a lock around the read-modify-write when the ledger was loaded earlier**
   (2026-09-11). `grocery/sale-windows.json`, `grocery/out/capture-cursor.json` and
   `grocery/rollback-first-seen.json` were read-modify-written by concurrent lanes and builders with no lock at

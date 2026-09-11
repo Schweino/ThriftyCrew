@@ -121,6 +121,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: the sibling lanes read ad-schedule.json lock-free while this one replaces it
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'omaha-time.ps1')
@@ -156,11 +157,10 @@ function Update-BakersAdSchedule([string]$ScheduleFile, [string]$DetectedOn) {
     }
   }
   $schedule.updated = $DetectedOn
-  $temporary = "$ScheduleFile.tmp-$([guid]::NewGuid().ToString('N'))"
-  try {
-    ($schedule | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $temporary -Encoding UTF8
-    Move-Item -LiteralPath $temporary -Destination $ScheduleFile -Force
-  } finally { Remove-Item -LiteralPath $temporary -Force -ErrorAction SilentlyContinue }
+  # Retried (2026-09-11): capture-run starts this lane beside Hy-Vee and Family Fare, whose Get-CapturePlan reads
+  # ad-schedule.json with no lock, and a bare Move-Item fails while one of them holds it. Write-TcAtomicFile
+  # removes its own temp copy when it gives up, which is what the old finally was for.
+  [void](Write-TcAtomicFile -Path $ScheduleFile -Text ($schedule | ConvertTo-Json -Depth 8))
   return $window
 }
 
