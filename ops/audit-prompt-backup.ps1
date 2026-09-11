@@ -4,7 +4,9 @@
 
   SCOPE OF A CLEAN REPORT: SOUND about currency, silent about content, the same split as
     audit-memory-backup.ps1. It proves the backup is current. Whether the prompts in it are the
-    right prompts is not a question it asks.
+    right prompts is not a question it asks. Outside the main checkout a clean report proves THIS
+    checkout's mirror matches THIS checkout's prompts, not that the main checkout's live prompts are
+    backed up, and it says nothing about SCOPE DRIFT, which only the main checkout can judge.
 
   WHY (2026-07-31): everything the triage agents depend on is versioned, self-tested and gated - and the
   agents' own instructions were not in git at all. They live in C:\Codex\ThriftyCrew\.claude\agents (project scope),
@@ -40,6 +42,20 @@
     -Sync        = -SyncScopes -SyncMirror -Adopt *. Kept verbatim: every design doc and every habit in
                  this estate says "run -Sync", and that must keep meaning exactly what it always meant.
   NO BACKUP therefore stays the one finding that still needs a person, which is the point.
+
+  WHICH TREE IS LIVE (2026-09-11). $PROJ and $SKILLS were the MAIN checkout's .claude paths, hard-coded,
+  while $backup is ops\prompt-backup in whichever tree this runs from. So an agent-prompt edit committed
+  WITH its refreshed mirror, gated from a .claude\worktrees\ checkout or a detached tc-gatecheck checkout,
+  read STALE BACKUP: the main checkout cannot hold an edit that has not reached main yet. run-gates runs
+  this audit live, so the pre-push hook refused that push on this gate alone and the only way through was
+  --no-verify. Measured 2026-09-10 on the Hy-Vee Omaha #02 pricer fix: exactly one issue, the file changed.
+  The project-scope prompts are now read from THIS checkout, so outside main the question is "does this
+  commit's mirror match this commit's prompts", which is the one a push can answer. Two things stay tied
+  to the main checkout, because they are about what RUNS rather than what is committed: SCOPE DRIFT (user
+  scope follows main, daily) is judged only there, and -SyncScopes is skipped anywhere else, out loud,
+  because from a worktree it would push a prompt that has not reached main into the scope sessions read.
+  Scheduled-task SKILLs are unchanged: their live copy is shared by every tree, so they already compared
+  like with like.
 #>
 # [CmdletBinding()] IS LOAD-BEARING HERE. Without it PS 5.1 drops an unrecognised -Arg into $args and runs
 # on: a typo'd -SyncMirrors would have made a read-only report look like a completed sync, and the daily
@@ -51,7 +67,9 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root   = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $backup = Join-Path $root 'prompt-backup'
-$PROJ   = 'C:\Codex\ThriftyCrew\.claude\agents'
+# The checkout whose prompts RUN. $PROJ and $SKILLS are no longer this path: they are resolved from the
+# checkout this script sits in, by Resolve-PromptRoots below. See WHICH TREE IS LIVE in the header.
+$MAIN   = 'C:\Codex\ThriftyCrew'
 $USER   = 'C:\Users\Owner\.claude\agents'
 $TASKS  = 'C:\Users\Owner\.claude\scheduled-tasks'
 # PROJECT-SCOPE SKILLS, added 2026-08-15. This was a whole class the audit could not see: recipe-hunter,
@@ -59,7 +77,7 @@ $TASKS  = 'C:\Users\Owner\.claude\scheduled-tasks'
 # which stages stream, why the price lane is a singleton, which gate must never be weakened. None of it was
 # in git. It was found while looking for that file to edit it, not by this guard, which is the tell that a
 # coverage check enumerating three known directories can only ever be as complete as that list.
-$SKILLS = 'C:\Codex\ThriftyCrew\.claude\skills'
+# $SKILLS is resolved from this checkout alongside $PROJ, by Resolve-PromptRoots below.
 
 # ---- HASH WHAT GIT HASHES (2026-09-06, queue 2026-09-06-fdc73a) ---------------------------------------
 # This hashed RAW ON-DISK BYTES to compare two paths that git deliberately holds identical only AFTER
@@ -119,8 +137,37 @@ function Get-PromptExemptions([string]$Path) {
   return $map
 }
 
+# ---- WHICH TREE IS LIVE (2026-09-11) - see the header -------------------------------------------------
+# Pure path arithmetic, no git, so -SelfTest can drive it over temp folders. The project-scope prompts are
+# read from the checkout this script sits in; is_main says whether that checkout is the one whose prompts run.
+# Ordinal, case-insensitive: Windows paths, and a culture-sensitive compare is the wrong default for data.
+function Resolve-PromptRoots {
+  param([string]$RepoRoot, [string]$MainRoot)
+  $full = [IO.Path]::GetFullPath($RepoRoot).TrimEnd('\')
+  $main = [IO.Path]::GetFullPath($MainRoot).TrimEnd('\')
+  return @{
+    root    = $full
+    proj    = (Join-Path $full '.claude\agents')
+    skills  = (Join-Path $full '.claude\skills')
+    is_main = [string]::Equals($full, $main, [StringComparison]::OrdinalIgnoreCase)
+  }
+}
+
+# -SyncScopes writes the USER scope, which every session outside the repo reads, so it follows only the
+# main checkout. Anywhere else it is SKIPPED and the skip is spoken: a sync that quietly declined reads
+# exactly like a sync with nothing to do. -SyncMirror and -Adopt write this checkout's own mirror and run.
+function Get-PromptSyncModes {
+  param([bool]$IsMain, [bool]$Scopes, [bool]$Mirror, [string]$Here = '', [string]$Main = '')
+  $note = ''
+  if ($Scopes -and -not $IsMain) {
+    $Scopes = $false
+    $note = ('SKIPPED -SyncScopes: this is not the main checkout (' + $Here + '). Project -> user scope from here would put a prompt that has not reached main into the scope every session reads. Run it from ' + $Main + ' once the change is on main.')
+  }
+  return @{ scopes = $Scopes; mirror = $Mirror; note = $note }
+}
+
 function Compare-Prompts {
-  param([string]$Proj, [string]$UserDir, [string]$Tasks, [string]$Backup, [string]$Skills = '', [hashtable]$Exempt = $null)
+  param([string]$Proj, [string]$UserDir, [string]$Tasks, [string]$Backup, [string]$Skills = '', [hashtable]$Exempt = $null, [switch]$SkipScopeDrift)
   $issues = New-Object System.Collections.Generic.List[string]
   $notes  = New-Object System.Collections.Generic.List[string]
   if ($null -eq $Exempt) { $Exempt = @{} }
@@ -133,9 +180,13 @@ function Compare-Prompts {
     $b = Join-Path $agentBk $f.Name
     if (-not (Test-Path $b)) { $issues.Add("NO BACKUP  agents\$($f.Name) - the live prompt exists only on this machine") }
     elseif ((FileHash1 $f.FullName) -ne (FileHash1 $b)) { $issues.Add("STALE BACKUP  agents\$($f.Name) - repo copy differs from the live project-scope file") }
-    $u = Join-Path $UserDir $f.Name
-    if (Test-Path $u) {
-      if ((FileHash1 $f.FullName) -ne (FileHash1 $u)) { $issues.Add("SCOPE DRIFT  $($f.Name) - the user-scope copy differs from the project-scope copy, so which prompt runs depends on the session's working directory") }
+    # Outside the main checkout the user scope still follows MAIN, so comparing it to this checkout's prompts
+    # would report every unmerged edit as drift. That question belongs to the main checkout's run.
+    if (-not $SkipScopeDrift) {
+      $u = Join-Path $UserDir $f.Name
+      if (Test-Path $u) {
+        if ((FileHash1 $f.FullName) -ne (FileHash1 $u)) { $issues.Add("SCOPE DRIFT  $($f.Name) - the user-scope copy differs from the project-scope copy, so which prompt runs depends on the session's working directory") }
+      }
     }
   }
   # a user-scope agent with no project twin is still live and still needs a backup
@@ -539,6 +590,51 @@ if ($SelfTest) {
     _C '  ...and the same call with no exemption DOES adopt it, so the case above proves the exemption' `
       (Test-Path (Join-Path $sb 'scheduled-tasks\private-task\SKILL.md'))
 
+    # ---- WHICH TREE IS LIVE (2026-09-11) ------------------------------------------------------------
+    # FROZEN from the founding push: the Hy-Vee Omaha #02 pricer fix was committed WITH its refreshed mirror
+    # in a worktree and read STALE BACKUP, because $PROJ was the main checkout, which had not pulled it yet.
+    # The paths below are built here, never read from the live tree, so the fixture cannot drift with it.
+    $wm     = Join-Path $tmp 'which-tree'
+    $mainR  = Join-Path $wm 'ThriftyCrew'
+    $wtR    = Join-Path $mainR '.claude\worktrees\wt1'
+    $wUser  = Join-Path $wm 'user'
+    $wTasks = Join-Path $wm 'tasks'
+    $wBk    = Join-Path $wtR 'ops\prompt-backup'
+    foreach ($d in @((Join-Path $mainR '.claude\agents'), (Join-Path $wtR '.claude\agents'), (Join-Path $wBk 'agents'), $wUser, $wTasks)) {
+      New-Item -ItemType Directory -Force $d | Out-Null
+    }
+    Set-Content (Join-Path $mainR '.claude\agents\pricer.md') "pricer v1 - main has not pulled yet" -Encoding UTF8
+    Set-Content (Join-Path $wUser 'pricer.md') "pricer v1 - main has not pulled yet" -Encoding UTF8
+    Set-Content (Join-Path $wtR '.claude\agents\pricer.md') "pricer v2 - the commit being pushed" -Encoding UTF8
+    Set-Content (Join-Path $wBk 'agents\pricer.md') "pricer v2 - the commit being pushed" -Encoding UTF8
+    $wtRoots = Resolve-PromptRoots $wtR $mainR
+    $mnRoots = Resolve-PromptRoots ($mainR.ToUpper() + '\') $mainR
+    _C 'clean twin: the main checkout resolves as main whatever its case or trailing slash, reading its own .claude\agents' `
+      ($mnRoots.is_main -and [string]::Equals($mnRoots.proj, (Join-Path $mainR '.claude\agents'), [StringComparison]::OrdinalIgnoreCase))
+    _C 'must-fire: a worktree nested under the main checkout does NOT resolve as main' (-not $wtRoots.is_main)
+    _C '  ...and reads its OWN .claude\agents, not the main checkout''s' `
+      ([string]::Equals($wtRoots.proj, (Join-Path $wtR '.claude\agents'), [StringComparison]::OrdinalIgnoreCase))
+    # The fixture must really be the founding shape, or the MUST NOT FIRE below proves nothing.
+    $r = Compare-Prompts (Join-Path $mainR '.claude\agents') $wUser $wTasks $wBk
+    _C 'founding shape reproduced: main checkout prompts against the worktree mirror is the STALE BACKUP the push hit' `
+      (($r.issues -join ' ') -match 'STALE BACKUP  agents\\pricer\.md')
+    $r = Compare-Prompts $wtRoots.proj $wUser $wTasks $wBk $wtRoots.skills @{} -SkipScopeDrift
+    _C 'MUST NOT FIRE: a worktree commit whose prompt and mirror agree is clean while main still holds the older copy' `
+      (($r.issues.Count -eq 0) -and ($r.checked -eq 1))
+    $r = Compare-Prompts $wtRoots.proj $wUser $wTasks $wBk $wtRoots.skills @{}
+    _C 'must-fire: the same comparison WITHOUT -SkipScopeDrift reports the older user copy as SCOPE DRIFT, so the skip is what silences it' `
+      (($r.issues -join ' ') -match 'SCOPE DRIFT  pricer\.md')
+    Set-Content (Join-Path $wtR '.claude\agents\pricer.md') "pricer v3 - edited again, mirror NOT refreshed" -Encoding UTF8
+    $r = Compare-Prompts $wtRoots.proj $wUser $wTasks $wBk $wtRoots.skills @{} -SkipScopeDrift
+    _C 'must-fire: in a worktree a prompt edited WITHOUT refreshing its mirror is still STALE BACKUP' `
+      (($r.issues -join ' ') -match 'STALE BACKUP  agents\\pricer\.md')
+    $m = Get-PromptSyncModes $false $true $true 'C:\wt' 'C:\main'
+    _C 'must-fire: outside the main checkout -SyncScopes is SKIPPED, and the skip is spoken' `
+      ((-not $m.scopes) -and ($m.note -match 'SKIPPED -SyncScopes'))
+    _C '  ...while -SyncMirror still runs there, since it writes only that checkout''s own mirror' ([bool]$m.mirror)
+    $m = Get-PromptSyncModes $true $true $true 'C:\main' 'C:\main'
+    _C 'clean twin: in the main checkout -SyncScopes still runs, as the daily capture-run needs' (([bool]$m.scopes) -and (-not $m.note))
+
     # BLIND: nothing to check is not a pass
     $empty = Join-Path $tmp 'empty'; New-Item -ItemType Directory -Force $empty | Out-Null
     $r = Compare-Prompts $empty $empty $empty $b $empty
@@ -561,13 +657,23 @@ catch {
   exit 3
 }
 
+# WHICH TREE IS LIVE (2026-09-11). Resolved once, before anything reads or writes, and printed below: a
+# comparison whose target set depends on where it runs owes the reader what it resolved.
+$roots  = Resolve-PromptRoots (Split-Path $root -Parent) $MAIN
+$PROJ   = $roots.proj
+$SKILLS = $roots.skills
+
 # -Sync KEEPS ITS OLD MEANING EXACTLY: all three halves, adopt everything. Expanded here rather than left as
 # a fourth code path, so there is one implementation of each write and no chance of the compatibility alias
 # drifting away from the thing it aliases.
 if ($Sync) { $SyncScopes = $true; $SyncMirror = $true; if (-not $Adopt -or -not @($Adopt).Count) { $Adopt = @('*') } }
 $adoptList = @($Adopt | Where-Object { $_ })
 if ($SyncScopes -or $SyncMirror -or $adoptList.Count) {
-  $sr = Invoke-PromptSync $PROJ $USER $TASKS $backup $SKILLS $script:PromptExempt -DoScopes:$SyncScopes -DoMirror:$SyncMirror -AdoptNames $adoptList
+  $modes = Get-PromptSyncModes $roots.is_main ([bool]$SyncScopes) ([bool]$SyncMirror) $roots.root $MAIN
+  if ($modes.note) { Write-Output ('  ' + $modes.note) }
+  $doScopes = [bool]$modes.scopes
+  $doMirror = [bool]$modes.mirror
+  $sr = Invoke-PromptSync $PROJ $USER $TASKS $backup $SKILLS $script:PromptExempt -DoScopes:$doScopes -DoMirror:$doMirror -AdoptNames $adoptList
   foreach ($l in $sr.log) { Write-Output $l }
   Write-Output ("prompt-backup: " + $sr.scoped + " user-scope copy/copies refreshed from project scope, " + $sr.mirrored + " mirror file(s) refreshed, " + $sr.adopted + " newly adopted into ops\prompt-backup")
   # ops\prompt-backup is a TRACKED path and the daily pipeline stages pipeline-owned data paths only, so a
@@ -576,8 +682,10 @@ if ($SyncScopes -or $SyncMirror -or $adoptList.Count) {
   if ($sr.mirrored -or $sr.adopted) { Write-Output '  commit ops\prompt-backup - the mirror changed on disk and nothing else will stage it' }
 }
 
-$res = Compare-Prompts $PROJ $USER $TASKS $backup $SKILLS $script:PromptExempt
+$res = Compare-Prompts $PROJ $USER $TASKS $backup $SKILLS $script:PromptExempt -SkipScopeDrift:(-not $roots.is_main)
 Write-Output ("prompt-backup: checked " + $res.checked + " live prompt(s) against ops\prompt-backup")
+if ($roots.is_main) { Write-Output ('  agent prompts and project skills read from ' + $roots.root + ' (the main checkout)') }
+else { Write-Output ('  agent prompts and project skills read from ' + $roots.root + ' - NOT the main checkout: this compares this checkout''s prompts with its own mirror, and SCOPE DRIFT is judged only in ' + $MAIN) }
 if ($res.checked -eq 0) {
   Write-Output 'PROMPT-BACKUP BLIND: found ZERO live prompts to check. Either the .claude paths moved or this ran somewhere without them - a clean result here would mean nothing.'
   exit 3
@@ -585,7 +693,11 @@ if ($res.checked -eq 0) {
 # The EXEMPT lines print on every run, clean or not. A deliberate non-mirror that nobody can see turns back
 # into an accident the first time someone new reads this output and "fixes" it.
 foreach ($n in $res.notes) { Write-Output ("  " + $n) }
-if ($res.issues.Count -eq 0) { Write-Output '  ok - every live agent prompt, scheduled-task SKILL and project-scope skill is backed up, current, and identical across scopes'; Write-GuardComplete -Name 'prompt-backup'; exit 0 }
+if ($res.issues.Count -eq 0) {
+  if ($roots.is_main) { Write-Output '  ok - every live agent prompt, scheduled-task SKILL and project-scope skill is backed up, current, and identical across scopes' }
+  else { Write-Output '  ok - this checkout''s agent prompts and project skills match its mirror, and every scheduled-task SKILL is backed up and current (scope agreement not judged outside the main checkout)' }
+  Write-GuardComplete -Name 'prompt-backup'; exit 0
+}
 Write-Output ("  " + $res.issues.Count + " issue(s):")
 foreach ($i in $res.issues) { Write-Output ("    " + $i) }
 # THE REMEDY IS PRINTED BY RISK, NOT AS ONE BUTTON (2026-09-05). The old line said "-Sync", and -Sync also
