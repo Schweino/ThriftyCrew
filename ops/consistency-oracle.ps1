@@ -29,6 +29,25 @@
   like grocery\build-walmart-deals.ps1 writes its output, a rejects file AND mutates the rollback
   ledger. Running an old revision in place would have written all three.
 
+  THE SANDBOX HAS THE REPO'S SHAPE, NOT A FLAT FOLDER (2026-09-11). It used to copy the script's own
+  directory straight into tc-oracle-<id>, so `Split-Path $PSScriptRoot -Parent` inside a sandboxed
+  script pointed at %TEMP% and every `..\lib\x.ps1` it loads was missing. That was survivable only while
+  every such load was guarded by a Test-Path (multipack-lib's is). The day grocery\rollback-ttl-lib.ps1
+  started loading lib\atomic-write.ps1 unconditionally, the founding run below lost its NEW arm with
+  "The term '...\Temp\lib\atomic-write.ps1' is not recognized". So the script's directory now lands at
+  tc-oracle-<id>\<its repo-relative dir> with tc-oracle-<id>\lib beside it: lib\ at the old revision
+  under -Mode World, and at HEAD under -Mode Script, the same rule the script's sibling libraries follow.
+
+  -ARGS NEVER REACHED THE STAGE BEFORE 2026-09-11. The parameter was named $Args, and inside a plain
+  function such as Invoke-TcArm that name is PowerShell's automatic $args, which was empty - measured:
+  script scope saw [Date], the function saw []. So every arm ran on its own defaults. The founding run
+  hid it because its -Date equalled the day it ran; on any other day the builder files its output under
+  today and both arms report "wrote False". And a SECOND defect sat under the first: the pair was built as
+  @('-' + $k, $v), where a comma binds tighter than +, so it was '-' + ($k, $v) - one element reading
+  "-Date 2026-09-10", which the child cannot bind even once the hashtable arrives. The self-test's list
+  count found it (8 elements, not 9). The parameter is $ScriptArgs now, still spelled -Args on the command
+  line, and the argument list is built by Get-TcArmArgList, which is pure so the self-test reaches it.
+
   TWO PINNING MODES, and the difference decides what a result MEANS:
     -Mode Script  pins ONLY the script under test; its libraries stay at HEAD. Answers "did THIS
                   script's behaviour change".
@@ -58,7 +77,8 @@ param(
   [string]$ArrayKey = '',
   [string[]]$KeyFields = @('id'),
   [ValidateSet('Script', 'World')][string]$Mode = 'World',
-  [hashtable]$Args = @{},
+  # NOT named $Args: inside a plain function that name is PowerShell's automatic $args. See -ARGS in the header.
+  [Alias('Args')][hashtable]$ScriptArgs = @{},
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -113,6 +133,27 @@ function Compare-TcRowSets {
 }
 
 # ------------------------------------------------------------------------------------- self-test
+function Get-TcSandboxLayout {
+  <# Where a sandbox puts the script's directory and lib\, mirroring the repo so a script's own
+     `Split-Path $PSScriptRoot -Parent` (or a walk up from it) reaches lib\ exactly as it does in the
+     tree. Pure: New-TcSandbox creates what this names. #>
+  param([string]$Top, [string]$SrcRel)
+  $rel = ($SrcRel -replace '/', '\').Trim('\')
+  $dir = if ($rel) { Join-Path $Top $rel } else { $Top }
+  return @{ ScriptDir = $dir; Lib = (Join-Path $Top 'lib') }
+}
+
+function Get-TcArmArgList {
+  <# The child powershell command line for one arm: the stage, its sandboxed input, then every -ScriptArgs
+     entry as -Name value. Pure, and it takes the hashtable as a parameter rather than reading a script
+     variable - reading one named $Args from a function is how the arguments were lost. #>
+  param([string]$ScriptPath, [string]$InPath, [hashtable]$ScriptArgs = @{})
+  $list = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $ScriptPath, '-In', $InPath)
+  # PARENTHESISED ON PURPOSE: a comma binds tighter than +, so '-' + $k, $v is '-' + ($k, $v) - ONE element.
+  foreach ($k in @($ScriptArgs.Keys | Sort-Object)) { $list += @(('-' + $k), [string]$ScriptArgs[$k]) }
+  return ,$list
+}
+
 if ($SelfTest) {
   $f = 0
   function T($m, $cond, $got) { if ($cond) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $got); $script:f++ } }
@@ -153,8 +194,23 @@ if ($SelfTest) {
   T 'CLEAN TWIN the key is built from the named fields in order' `
     ((Get-TcRowKey -Row $comp[0] -Fields @('id', 'item')) -eq '1|beans') (Get-TcRowKey -Row $comp[0] -Fields @('id', 'item'))
 
+  # The founding layout bug: a flat sandbox put a grocery script's parent at %TEMP%, so its ..\lib load missed.
+  $fakeTop = 'C:\sandbox-top'
+  $l1 = Get-TcSandboxLayout -Top $fakeTop -SrcRel 'grocery'
+  T 'MUST FIRE  a script one directory down finds lib\ at Split-Path $PSScriptRoot -Parent, as rollback-ttl-lib and send-alert load it' `
+    ((Join-Path (Split-Path $l1.ScriptDir -Parent) 'lib') -eq $l1.Lib) ("scriptDir=" + $l1.ScriptDir + " lib=" + $l1.Lib)
+  $l2 = Get-TcSandboxLayout -Top $fakeTop -SrcRel 'meal-prep/pipeline'
+  T 'CLEAN TWIN a script two directories down reaches the same lib\ two hops up, as hunt-run and considered-dishes do' `
+    ((Join-Path (Split-Path (Split-Path $l2.ScriptDir -Parent) -Parent) 'lib') -eq $l2.Lib) ("scriptDir=" + $l2.ScriptDir + " lib=" + $l2.Lib)
+
+  # The founding -Args bug: the arms were launched with none of the arguments the caller passed.
+  $al = Get-TcArmArgList -ScriptPath 'C:\sb\grocery\build-walmart-deals.ps1' -InPath 'C:\sb\grocery\out\captures\w.csv' -ScriptArgs @{ Date = '2026-09-10' }
+  $alText = ($al -join ' ')
+  T 'MUST FIRE  a -Args entry reaches the arm''s command line as -Date 2026-09-10, after the stage and its -In' `
+    (($alText -match '-File C:\\sb\\grocery\\build-walmart-deals\.ps1 -In C:\\sb\\grocery\\out\\captures\\w\.csv -Date 2026-09-10$') -and (@($al).Count -eq 9)) $alText
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 2 must-fire cases led by the one that keeps an emitted-versus-dropped row apart from a changed value, 2 must-not-fire cases including two empty arms, and 4 clean twins over composite keys, field tallies and the common denominator'
+  Write-Output 'SELF-TEST PASS: 4 must-fire cases led by the one that keeps an emitted-versus-dropped row apart from a changed value, 2 must-not-fire cases including two empty arms, and 5 clean twins over composite keys, field tallies, the common denominator and the sandbox layout'
   exit 0
 }
 
@@ -176,17 +232,28 @@ if (-not (Test-Path $inFull)) {
 }
 
 function New-TcSandbox([string]$rev) {
-  $sb = Join-Path $env:TEMP ('tc-oracle-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
-  New-Item -ItemType Directory -Path $sb | Out-Null
+  $top = Join-Path $env:TEMP ('tc-oracle-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  $layout = Get-TcSandboxLayout -Top $top -SrcRel $srcRel
+  $sb = $layout.ScriptDir
+  $libSb = $layout.Lib
+  New-Item -ItemType Directory -Path $sb, $libSb -Force | Out-Null
   if ($rev -eq 'WORKTREE') {
     Copy-Item (Join-Path $srcDir '*.ps1')  $sb -Force -ErrorAction SilentlyContinue
     Copy-Item (Join-Path $srcDir '*.json') $sb -Force -ErrorAction SilentlyContinue
+    Copy-Item (Join-Path $repo 'lib\*.ps1') $libSb -Force -ErrorAction SilentlyContinue
   } else {
     if ($Mode -eq 'World') {
       $names = @(& git -C $repo ls-tree --name-only ("{0}:{1}" -f $rev, $srcRel)) | Where-Object { $_ -match '\.(ps1|json)$' }
+      # lib\ is pinned with the world it belongs to: an old script against today's lib is -Mode Script's question.
+      $libNames = @(& git -C $repo ls-tree --name-only ("{0}:lib" -f $rev)) | Where-Object { $_ -match '\.ps1$' }
+      foreach ($n in $libNames) {
+        $blob = & git -C $repo show ("{0}:lib/{1}" -f $rev, $n) 2>$null
+        if ($LASTEXITCODE -eq 0) { Set-Content -LiteralPath (Join-Path $libSb $n) -Value $blob -Encoding UTF8 }
+      }
     } else {
       Copy-Item (Join-Path $srcDir '*.ps1')  $sb -Force -ErrorAction SilentlyContinue
       Copy-Item (Join-Path $srcDir '*.json') $sb -Force -ErrorAction SilentlyContinue
+      Copy-Item (Join-Path $repo 'lib\*.ps1') $libSb -Force -ErrorAction SilentlyContinue
       $names = @($leaf)
     }
     foreach ($n in $names) {
@@ -205,8 +272,7 @@ function New-TcSandbox([string]$rev) {
 function Invoke-TcArm([string]$sb, [string]$label) {
   $inSandbox = Join-Path $sb ('out\captures\' + (Split-Path $inFull -Leaf))
   $log = Join-Path $env:TEMP ("tc-oracle-$label.log")
-  $argList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $sb $leaf), '-In', $inSandbox)
-  foreach ($k in $Args.Keys) { $argList += @('-' + $k, [string]$Args[$k]) }
+  $argList = Get-TcArmArgList -ScriptPath (Join-Path $sb $leaf) -InPath $inSandbox -ScriptArgs $ScriptArgs
   & powershell @argList > $log 2>$null
   $code = $LASTEXITCODE
   $out = Join-Path $sb $OutputRelPath
