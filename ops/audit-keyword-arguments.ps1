@@ -1,11 +1,11 @@
 <#
   audit-keyword-arguments.ps1 - a statement keyword glued onto a command line is an ARGUMENT, not a statement.
 
-  SCOPE OF A CLEAN REPORT: UNSOUND. It reads the PowerShell AST of every tracked .ps1 and finds the seven
-    keywords listed under THE RULE when they appear unquoted as arguments of a command. A clean report means
-    none of those is present. A glued statement it does not list (for, switch, try, do, throw, break,
-    continue) is invisible to it, and so is a statement that is wrong for any other reason. A reported site
-    is real; silence is not proof.
+  SCOPE OF A CLEAN REPORT: UNSOUND. It reads the PowerShell AST of every tracked .ps1 and finds the keywords
+    listed under THE RULE, in the positions it names, when they appear unquoted as arguments of a command. A
+    clean report means none of those is present. A glued statement from the second set followed by anything
+    other than a paren or a scriptblock (`Write-Output 'x'  break`) is invisible to it, and so is a statement
+    that is wrong for any other reason. A reported site is real; silence is not proof.
 
   WHY THIS EXISTS (2026-09-11). Commit 8253ded82 joined grocery\pull-grocery-ads.ps1's last self-test case and
   the suite's closing verdict onto ONE line, separated only by spaces:
@@ -16,30 +16,43 @@
   exit at all, control fell through to the LIVE pull of Hy-Vee, Aldi and Family Fare, the script wrote
   out\ads-<today>.json and exited 0. run-gates runs every -SelfTest on every push and judges the exit code, so
   from 13:38 that day every push from every session did a live three-store pull and scored the suite ok. Nothing
-  errored, nothing warned, and all 21 of the file's cases printed ok. Only the parser can see it.
+  errored, nothing warned, and all 21 of the file's cases printed ok. Only the parser can see it. A copy of that
+  shape with a case that FAILS on purpose also exits 0 and runs its live path, so a red case could not have
+  failed it either; the self-test drives that pair in child processes on every run.
 
-  THE RULE. In the PowerShell AST, any element AFTER the command name of a CommandAst that is an unquoted
-  (BareWord) string constant spelling one of
-      if  else  elseif  foreach  while  exit  return
-  compared case-insensitively, as the language compares keywords. One site per command, naming every keyword
-  that command swallowed, so the founding line is one site carrying if and else.
+  MERGED (2026-09-11, Brad's ruling). Two sessions wrote a detector for this the same afternoon. This file read
+  seven keywords with anything after them, so it missed a glued `try {` or `switch (`. The other, never pushed,
+  read sixteen but only ahead of a paren or a scriptblock, so it missed a glued `exit 1`. One gate now carries
+  both halves, and the other's child-process proof of the fall-through.
+
+  THE RULE. In the PowerShell AST, an element AFTER the command name of a CommandAst that is an unquoted
+  (BareWord) string constant, compared case-insensitively as the language compares keywords, spelling
+      if  else  elseif  foreach  while  exit  return               with anything or nothing after it, or
+      try  catch  finally  switch  for  do  throw  break  continue  with the NEXT element a paren or scriptblock.
+  One site per command, naming every keyword that command swallowed in source order, so the founding line is
+  one site carrying if and else.
 
   WHAT IT DELIBERATELY DOES NOT FLAG.
     * A QUOTED word. Write-Output 'if' is a string its author meant. Quoting is also the fix when a bare word
       really is a value, and the failure message says so.
     * The command NAME. `$rows | foreach { $_ }` is the ForEach-Object alias, element 0, not an argument.
     * Comments and string contents, which the parser never turns into commands.
-    * continue, break, for, do, switch, try, throw. `-ErrorAction Continue` passes a bare word on a great many
-      lines here, and for is ordinary prose in an unquoted Write-Host. A legal command line has no ordinary
-      reason to carry the seven above bare, and that is the whole basis for choosing them.
+    * The second set followed by anything else. `-ErrorAction Continue` passes a bare word on a great many lines
+      here, and for, try and do are ordinary prose in an unquoted Write-Host. What no legal command line does is
+      put a paren or a scriptblock straight after one of them.
+    * A PARAMETER named like a keyword (`-Else { 1 }`, `-Switch (2)`). That is a CommandParameterAst, not a word.
     * No exemption for a bare word right after a parameter name (`-Mode return`). It would let a glued
       statement after a switch parameter through (`Invoke-Thing -Force  return $x`), which the self-test pins.
+  A LEGAL SHAPE THAT DOES FIRE: `cmd /c exit 1` hands exit to cmd bare, and the first set has no follower test.
+  None in the tree. Quote the argument.
 
   A GATE AT ZERO, NOT A RATCHET. MEASURED 2026-09-11 through this file, from a linked worktree at c17cc59a7 with
   the repair to pull-grocery-ads.ps1 applied: git listed 747 tracked .ps1, the walk resolved 747, none had a
   parse error, 0 sites, 14 s. With that one file put back to its c17cc59a7 blob (md5 AB704285...) the same live
   run exited 1 with exactly one site, grocery\pull-grocery-ads.ps1:273 carrying [if,else], and the repaired file
-  was restored byte-identical by md5. So the day-one count is zero, and any site is new.
+  was restored byte-identical by md5. The second set was measured before it was merged, from another linked
+  worktree at c17cc59a7: over 574 walked .ps1 and 49,996 commands, all sixteen keywords ahead of a paren or a
+  scriptblock matched one command, the same founding line. So the union also starts at zero, and any site is new.
 
   DISCOVERY. Every .ps1 under the root, excluded on the path BELOW the root (lib\tree-walk.ps1), never this
   file, and only the paths `git ls-files` lists, so untracked scratch in one checkout cannot make a push red in
@@ -50,7 +63,7 @@
   listed nothing, or the walk resolved nothing). Read the verdict LINE, not the number.
 
     ops\audit-keyword-arguments.ps1             scan the tracked tree
-    ops\audit-keyword-arguments.ps1 -SelfTest   the founding line, the legal forms, the walk
+    ops\audit-keyword-arguments.ps1 -SelfTest   the founding line, the legal forms, the fall-through, the walk
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
@@ -61,6 +74,8 @@ $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcRootFull, Get-TcPathBelowRoot, New-TcWorktreeFixture
 
 $script:KWA_KEYWORDS = @('if', 'else', 'elseif', 'foreach', 'while', 'exit', 'return')
+# Glued only when a paren or a scriptblock follows: bare, several of these are ordinary values or prose.
+$script:KWA_BLOCK_KEYWORDS = @('try', 'catch', 'finally', 'switch', 'for', 'do', 'throw', 'break', 'continue')
 $script:KWA_WALK_EXCLUDE = '\\work' + 'trees\\|\\\.git\\|node_modules'
 
 function Get-KwaFindings {
@@ -79,10 +94,16 @@ function Get-KwaFindings {
     $line = 0
     for ($i = 1; $i -lt $els.Count; $i++) {
       $e = $els[$i]
-      if ($e -is [System.Management.Automation.Language.StringConstantExpressionAst] -and
-          $e.StringConstantType -eq [System.Management.Automation.Language.StringConstantType]::BareWord -and
-          $script:KWA_KEYWORDS -contains [string]$e.Value) {
-        [void]$kws.Add(([string]$e.Value).ToLowerInvariant())
+      if ($e -isnot [System.Management.Automation.Language.StringConstantExpressionAst] -or
+          $e.StringConstantType -ne [System.Management.Automation.Language.StringConstantType]::BareWord) { continue }
+      $w = [string]$e.Value
+      $next = if ($i + 1 -lt $els.Count) { $els[$i + 1] } else { $null }
+      $glued = ($script:KWA_KEYWORDS -contains $w) -or
+               (($script:KWA_BLOCK_KEYWORDS -contains $w) -and
+                ($next -is [System.Management.Automation.Language.ParenExpressionAst] -or
+                 $next -is [System.Management.Automation.Language.ScriptBlockExpressionAst]))
+      if ($glued) {
+        [void]$kws.Add($w.ToLowerInvariant())
         if (-not $line) { $line = $e.Extent.StartLineNumber }
       }
     }
@@ -142,7 +163,17 @@ if ($SelfTest) {
     $r = Get-KwaFindings -Text 'Get-Item $p  foreach ($x in $y) { $x }'
     KwaT 'MUST FIRE  a glued foreach loop' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq 'foreach') (KwaGot $r)
     $r = Get-KwaFindings -Text 'Write-Verbose ''a''  While ($busy) { Start-Sleep 1 }  ElseIf'
-    KwaT 'MUST FIRE  keywords compare case-insensitively, as the language compares them' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq 'while,elseif') (KwaGot $r)
+    # -ceq, not -eq: PowerShell's -eq ignores case, so with -eq the report's lower-casing went untested and a
+    # mutation probe that removed it survived every case (2026-09-11).
+    KwaT 'MUST FIRE  keywords compare case-insensitively, as the language compares them, and are reported lower-cased' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -ceq 'while,elseif') (KwaGot $r)
+    $r = Get-KwaFindings -Text 'Remove-Item $tmp -Force  try { Get-Item $p } catch { $bad = $true }'
+    KwaT 'MUST FIRE  a glued try and its catch, each ahead of a scriptblock' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq 'try,catch') (KwaGot $r)
+    $r = Get-KwaFindings -Text 'Write-Output ''x''  switch ($v) { $null }'
+    KwaT 'MUST FIRE  a glued switch ahead of its paren' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq 'switch') (KwaGot $r)
+    $r = Get-KwaFindings -Text 'Write-Error ''bad''  throw (''stop'')'
+    KwaT 'MUST FIRE  a glued throw ahead of a paren never throws' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq 'throw') (KwaGot $r)
+    $r = Get-KwaFindings -Text ('$sb = {' + "`n" + '  _T ''case'' ($ok)  if ($fail) { exit 1 }' + "`n" + '}')
+    KwaT 'MUST FIRE  a glued statement inside a nested scriptblock is found, on line 2' ($r.Findings.Count -eq 1 -and $r.Findings[0].Line -eq 2 -and $r.Findings[0].Keywords -eq 'if') (KwaGot $r)
 
     # ---- MUST NOT FIRE -------------------------------------------------------------------------------
     $r = Get-KwaFindings -Text 'Write-Output ''if''; Write-Host "return"; Set-Thing -Mode ''exit'''
@@ -150,7 +181,11 @@ if ($SelfTest) {
     $r = Get-KwaFindings -Text '$rows | foreach { $_ }; $rows | ForEach-Object { if ($_) { return } }'
     KwaT 'MUST NOT FIRE  foreach as the command NAME (the ForEach-Object alias), and real statements inside a scriptblock' ($r.Findings.Count -eq 0) (KwaGot $r)
     $r = Get-KwaFindings -Text 'Get-Item $p -ErrorAction Continue; Write-Host waiting for the server'
-    KwaT 'MUST NOT FIRE  continue and for are left out on purpose: -ErrorAction Continue and unquoted prose' ($r.Findings.Count -eq 0) (KwaGot $r)
+    KwaT 'MUST NOT FIRE  continue and for bare, followed by nothing or by prose: -ErrorAction Continue and unquoted prose' ($r.Findings.Count -eq 0) (KwaGot $r)
+    $r = Get-KwaFindings -Text 'Write-Host try again later; Write-Host do it now, then break'
+    KwaT 'MUST NOT FIRE  try, do and break as prose words with no paren or scriptblock after them' ($r.Findings.Count -eq 0) (KwaGot $r)
+    $r = Get-KwaFindings -Text 'Invoke-Thing -Try { 1 } -Switch (2) -Else { 3 }'
+    KwaT 'MUST NOT FIRE  parameters NAMED like keywords are parameters, not bare words' ($r.Findings.Count -eq 0) (KwaGot $r)
     $r = Get-KwaFindings -Text ("# was: _T 'x' (y)  if (`$fail -eq 0) { exit 0 } else { exit 1 }`n`$s = '_T x (y)  if (`$f) { exit 0 } else { exit 1 }'")
     KwaT 'MUST NOT FIRE  the founding shape quoted in a comment and inside a string' ($r.Findings.Count -eq 0) (KwaGot $r)
     $r = Get-KwaFindings -Text $fxRepaired
@@ -169,6 +204,33 @@ if ($SelfTest) {
     KwaT 'CLEAN TWIN  the repaired form parses as a real top-level if whose then and else each hold an exit' ($ifs.Count -eq 1 -and $exitsThen -eq 1 -and $exitsElse -eq 1) ("ifs={0} then={1} else={2}" -f $ifs.Count, $exitsThen, $exitsElse)
     $r = Get-KwaFindings -Text ($fxRepaired + "`n" + 'Write-Output ''tail''  exit 3')
     KwaT 'CLEAN TWIN  a glued exit beside the repaired form in the same file is still reported, on line 4' ($r.Findings.Count -eq 1 -and $r.Findings[0].Line -eq 4) (KwaGot $r)
+    $r = Get-KwaFindings -Text 'Write-Output ''a''  try { 1 } finally { 2 }  return $x'
+    KwaT 'CLEAN TWIN  one command swallowing words from both sets is one site naming all of them in source order' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq 'try,finally,return') (KwaGot $r)
+
+    # ---- THE FALL-THROUGH, END TO END: each shape run in a child, with one case that fails on purpose ----
+    $kwaTmp = Join-Path ([IO.Path]::GetTempPath()) ('tc-kwa-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+    try {
+      [void](New-Item -ItemType Directory -Path $kwaTmp -ErrorAction Stop)
+      $utf8 = New-Object Text.UTF8Encoding($false)
+      $childHead = @(
+        'param([switch]$RunCases)',
+        'if ($RunCases) {',
+        '  $fail = 0; $n = 0',
+        '  function _T([string]$label, [bool]$cond) { $script:n++; if ($cond) { Write-Output "ok    $label" } else { Write-Output "FAIL  $label"; $script:fail++ } }',
+        '  _T ''first case passes'' ($true)',
+        '  _T ''second case fails on purpose'' ($false)') -join "`n"
+      $childVerdict = 'if ($fail -eq 0) { Write-Output "VERDICT PASS: $n"; exit 0 } else { Write-Output "VERDICT FAIL: $fail of $n"; exit 1 }'
+      $childTail = "`n}`nWrite-Output 'LIVE PATH REACHED'`nexit 0"
+      $childGlued = Join-Path $kwaTmp 'glued.ps1'; $childFixed = Join-Path $kwaTmp 'fixed.ps1'
+      [IO.File]::WriteAllText($childGlued, ($childHead + '  ' + $childVerdict + $childTail), $utf8)
+      [IO.File]::WriteAllText($childFixed, ($childHead + "`n  " + $childVerdict + $childTail), $utf8)
+      $oG = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $childGlued -RunCases); $rcG = $LASTEXITCODE
+      KwaT 'MUST FIRE  the hazard still exists on this PowerShell: a glued verdict exits 0 past a FAIL and runs the live path' ($rcG -eq 0 -and (($oG -join '|') -match 'LIVE PATH REACHED')) ('exit=' + $rcG + ' out=' + ($oG -join '|'))
+      $oF = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $childFixed -RunCases); $rcF = $LASTEXITCODE
+      KwaT 'CLEAN TWIN  the same verdict on its own line exits 1 on that FAIL and never reaches the live path' ($rcF -eq 1 -and (($oF -join '|') -match 'VERDICT FAIL: 1 of 2') -and (($oF -join '|') -notmatch 'LIVE PATH REACHED')) ('exit=' + $rcF + ' out=' + ($oF -join '|'))
+    } finally {
+      if (Test-Path -LiteralPath $kwaTmp) { Remove-Item -LiteralPath $kwaTmp -Recurse -Force -ErrorAction SilentlyContinue }
+    }
 
     # ---- THE WALK, FROM A WORKTREE ROOT (lib\tree-walk.ps1) -------------------------------------------
     $wtFx = New-TcWorktreeFixture -Files @{ 'grocery\glued.ps1' = $fxFounding; 'ops\clean.ps1' = $fxRepaired
@@ -196,8 +258,9 @@ if ($SelfTest) {
     Write-Output ('  FAIL  a case threw: ' + $_.Exception.Message)
   }
 
+  if ($script:cases -eq 0) { $script:fail++; Write-Output '  FAIL  zero cases ran' }
   if ($script:fail) { Write-Output ("KEYWORD-ARGUMENTS SELF-TEST FAILED ({0} of {1} case(s))" -f $script:fail, $script:cases); exit 1 }
-  Write-Output ("KEYWORD-ARGUMENTS SELF-TEST PASSED ({0} case(s): the founding line fires, quoted and legal forms stay silent, and the walk reads a worktree root and only tracked files)" -f $script:cases)
+  Write-Output ("KEYWORD-ARGUMENTS SELF-TEST PASSED ({0} case(s): the founding line and both keyword sets fire, quoted and legal forms stay silent, the fall-through is proven in a child, and the walk reads a worktree root and only tracked files)" -f $script:cases)
   exit 0
 }
 
@@ -233,9 +296,9 @@ if ($sites.Count) {
   foreach ($s in $sites) { Write-Output ('  glued  ' + $s) }
   Write-Output ("KEYWORD-ARGUMENTS AUDIT FAILED: {0} command(s) carry a statement keyword as a bare argument." -f $sites.Count)
   Write-Output '  PowerShell does not end a command at whitespace, so the statement after it never runs as one: an if/else'
-  Write-Output '  becomes arguments, an exit or return never leaves. Put the statement on its own line or after a ;.'
-  Write-Output '  If the word really is a value, quote it.'
+  Write-Output '  or a try/catch becomes arguments, an exit or return never leaves. Put the statement on its own line or'
+  Write-Output '  after a ;. If the word really is a value, quote it.'
   Exit-Guard -Name 'keyword-arguments' -Summary $summary -Code 1
 }
-Write-Output 'keyword-arguments: PASSED - no command carries if, else, elseif, foreach, while, exit or return as a bare argument.'
+Write-Output 'keyword-arguments: PASSED - no command carries if, else, elseif, foreach, while, exit or return as a bare argument, or try, catch, finally, switch, for, do, throw, break or continue bare ahead of a paren or scriptblock.'
 Exit-Guard -Name 'keyword-arguments' -Summary $summary -Code 0

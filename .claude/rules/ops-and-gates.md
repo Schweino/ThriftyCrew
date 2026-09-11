@@ -300,6 +300,15 @@ everything else honest, so a defect here is silent by construction.
   **A typed parameter keeps its type**: `$json = '...'` in a script that declares `[switch]$Json` throws, because
   variable names are case-insensitive. It broke `audit-fact-claims`' tighten in this sweep, and only running
   that path showed it.
+- **A statement on the same line as a command call is an ARGUMENT to that call** (2026-09-11). After a command
+  name PowerShell reads in argument mode, so `_T 'case' ($ok)  if ($fail -eq 0) { exit 0 } else { exit 1 }` is ONE
+  command with eight elements and no `if` statement anywhere: a simple function drops the extras into `$args` and
+  nothing errors. `grocery/pull-grocery-ads.ps1` at 8253ded82 closed its self-test that way, fell into its live
+  pull, wrote an ads file into the checkout and exited 0, and run-gates scored it ok. `ops/audit-keyword-arguments.ps1`
+  blocks it at push time: `if else elseif foreach while exit return` bare after a command name, and `try catch
+  finally switch for do throw break continue` bare ahead of a paren or a scriptblock. `cmd /c exit 1` fires too;
+  quote the argument. Two sessions built a detector for this the same afternoon and one was merged into the other,
+  so fetch `origin/main` and read what landed before building a gate.
 
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.
