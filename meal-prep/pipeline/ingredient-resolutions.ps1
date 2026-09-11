@@ -27,6 +27,7 @@ $mp   = Split-Path -Parent $here
 $repo = Split-Path -Parent $mp
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\atomic-write.ps1')   # Write-TcAtomicFile: a lock-free reader must not cost a writer its write
+. (Join-Path $repo 'lib\ledger-fixture.ps1') # Wait-TcLedgerFixtureGate: inert unless this file's own self-test launched the writer
 if (-not $Store) { $Store = Join-Path $mp 'db\ingredient-resolutions.json' }
 
 function Get-TermKey {
@@ -62,6 +63,9 @@ function Read-Store { param([string]$P)
 # the write would still lose the row that was read before the lock was taken.
 # ---------------------------------------------------------------------------------------------------
 $script:LOCK_TIMEOUT_MS = 15000
+# 15000 in production. Only a writer this file's SELF-TEST launched waits longer, as a hang guard: whether the
+# lock loses a row is the test's question, and a starved box must not answer it (lib\ledger-fixture.ps1).
+$script:LOCK_TIMEOUT_MS = Get-TcLedgerFixtureLockMs $script:LOCK_TIMEOUT_MS
 
 function Invoke-Locked {
   param([scriptblock]$Body, [string]$Path)
@@ -70,6 +74,7 @@ function Invoke-Locked {
   $mx = New-Object System.Threading.Mutex($false, $key)
   $held = $false
   try {
+    Wait-TcLedgerFixtureGate   # returns at once unless the self-test launched this writer; its barrier sits here, after start-up
     try { $held = $mx.WaitOne($script:LOCK_TIMEOUT_MS) }
     catch [System.Threading.AbandonedMutexException] { $held = $true }   # a dead writer, not a wedge
     if (-not $held) {
@@ -111,18 +116,19 @@ if ($runSelfTest) {
     # WITH THE LOCK NEUTERED, because process startup costs ~1 s and the read-modify-write costs
     # ~2 ms - the four writers never overlapped, so there was no race to lose. Two things fix that,
     # and both are needed:
-    #   1. A START BARRIER. Every child is handed the same UTC instant and spins until it arrives, so
-    #      they enter the critical section together instead of a second apart.
+    #   1. A START BARRIER. Every writer waits inside Invoke-Locked, after its own start-up, until all four
+    #      are there, so they ask for the lock together (THE BARRIER IS INSIDE THE WRITER, below).
     #   2. A STORE BIG ENOUGH TO BE SLOW. The scratch store is seeded with 400 rows, which puts the
     #      read-modify-write in the tens of milliseconds - wide enough for four barriered writers to
     #      sit inside it at once.
     # With both, the neutered run loses rows and the locked run loses none.
-    # NOT EVERY TIME, measured 2026-09-11 with WaitOne and ReleaseMutex both skipped: the concurrency cases
-    # below went red in 3 of 6 runs beside 32 CPU burners (timestamp barrier) and 3 of 5 without them
-    # (ready/go barrier). Each writer is still its own powershell.exe, and its start-up - about a second,
-    # and variable - spreads the writers further than any barrier closes, so a disabled lock is caught
-    # most runs and not all. A wider critical section would raise that rate and spend the lock-timeout
-    # margin, which is what makes this gate flaky in the OTHER direction. Four writers
+    # HOW OFTEN, measured 2026-09-11 with WaitOne and ReleaseMutex both skipped in a temp mirror. With the
+    # barrier in a Start-Job child AHEAD of each writer's start-up, the concurrency cases below went red in
+    # 3 of 6 runs beside 32 CPU burners (timestamp barrier), 3 of 5 without them (ready/go), and 9 of 10
+    # beside a run-gates loop. With the barrier INSIDE the writer (below) they went red in 20 of 20, and the
+    # locked suite passed 20 of 20 in the same iterations. Load uncontrolled throughout: other sessions' gate
+    # runs, and 32 CPU burners from another session after 11:47. Harness: a scratch harness running each
+    # arm's -SelfTest back to back, at 00c3527d7 plus this change. Four writers
     # and not two on purpose: the PS 5.1 collection traps say a fixture over a collection uses at
     # least three elements, and losing one of four is unmistakable where losing one of two reads as a
     # coin flip.
@@ -132,48 +138,31 @@ if ($runSelfTest) {
                          evidence='a row that must survive four concurrent writers'; by='fixture'
                          at='2026-08-24T00:00:00' } })
     ([pscustomobject]@{ count=$seed.Count; resolutions=$seed } | ConvertTo-Json -Depth 6) | Set-Content $ctmp -Encoding utf8
-    # A READY/GO BARRIER, NOT A TIMESTAMP (2026-09-11). The barrier used to be a UTC instant four seconds out,
-    # handed to each job as it was created - and Start-Job creates jobs ONE AT A TIME, about two seconds apiece,
-    # so the later writers reached that instant after it had passed and started seconds apart. Measured with
-    # every writer's timing kept: 5.6 s apart on an idle machine, and with the lock NEUTERED this suite then
-    # passed, because four writers that never overlap cannot lose a row. Now each job says it is ready and
-    # waits, and the parent says go only when all four are. That closes the gap the timestamp left (all four
-    # ready within about half a second, measured); it did NOT measurably raise the catch rate, which the
-    # writers' own start-up still limits - see NOT EVERY TIME above.
-    $gate = Join-Path $env:TEMP ('ir-gate-' + [guid]::NewGuid().ToString('N'))
-    New-Item -ItemType Directory -Path $gate -Force | Out-Null
-    $jobs = @()
-    foreach ($i in 1..4) {
-      $jobs += Start-Job -ScriptBlock {
-        param($script, $store, $n, $gate)
-        [IO.File]::WriteAllText((Join-Path $gate "ready-$n"), 'x')
-        $gsw = [Diagnostics.Stopwatch]::StartNew()
-        while (-not (Test-Path -LiteralPath (Join-Path $gate 'go')) -and $gsw.Elapsed.TotalSeconds -lt 150) { Start-Sleep -Milliseconds 2 }
-        # EACH WRITER REPORTS WHAT IT SAID AND HOW IT EXITED (2026-09-11). This was `| Out-Null`, so when
-        # run-gates went red on "kept 3 of 4" the one writer that knew why had already been thrown away, and
-        # a write lost silently, a write refused loudly and a writer that never ran all printed that line.
-        $ErrorActionPreference = 'Continue'
-        $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $script -Record -Term ("conc term $n") -ItemId ("conc-$n") -BidExists -By 'fixture' -Store $store 2>&1
-        [pscustomobject]@{ n = $n; rc = $LASTEXITCODE; out = ((@($o) | ForEach-Object { [string]$_ }) -join ' / ') }
-      } -ArgumentList $PSCommandPath, $ctmp, $i, $gate
-    }
-    $gw = [Diagnostics.Stopwatch]::StartNew()
-    while (@(Get-ChildItem -LiteralPath $gate -Filter 'ready-*').Count -lt 4 -and $gw.Elapsed.TotalSeconds -lt 150) { Start-Sleep -Milliseconds 20 }
-    $readyAtGo = @(Get-ChildItem -LiteralPath $gate -Filter 'ready-*').Count
-    [IO.File]::WriteAllText((Join-Path $gate 'go'), 'x')
-    Write-Output ("  info  barrier: {0} of 4 writers were ready when the parent said go ({1} ms)" -f $readyAtGo, $gw.ElapsedMilliseconds)
-    $jobs | Wait-Job -Timeout 180 | Out-Null
-    Remove-Item -LiteralPath $gate -Recurse -Force -ErrorAction SilentlyContinue
-    $recv = $jobs | Receive-Job -ErrorAction SilentlyContinue
-    $writers = @($recv | Where-Object { $null -ne $_ -and $_.PSObject.Properties['rc'] })
-    $jobs | Remove-Job -Force -ErrorAction SilentlyContinue
+    # THE BARRIER IS INSIDE THE WRITER, AFTER ITS START-UP (2026-09-11). It used to sit in a Start-Job child
+    # BEFORE `& powershell -File` - first a UTC instant, then a ready/go handshake - and either way each writer
+    # still paid its own powershell.exe start-up, about a second and variable, AFTER it was released. That
+    # spread the four further than any barrier closed, so a disabled lock was caught most runs and not all.
+    # Now the writers are plain processes that wait on lib\ledger-fixture.ps1's kernel event inside
+    # Invoke-Locked, immediately before WaitOne, so start-up is spent first and all four ask for the lock
+    # together. The same library keeps every writer's exit code, stdout and stderr and whether it was launched,
+    # reached the barrier and exited - a writer that could not run is named as that, never read as the lock
+    # losing a row - and gives the writers a hang-guard lock wait in place of the production 15 s.
+    # WHAT THIS GAVE UP: each writer's own lock-free read at start-up now happens before the barrier, so this
+    # case no longer lands one on a sibling's replace by chance. The held-reader case below drives that
+    # collision on purpose, every run.
+    $argSets = New-Object System.Collections.Generic.List[object]
+    foreach ($i in 1..4) { $argSets.Add([string[]]@('-Record', '-Term', "conc term $i", '-ItemId', "conc-$i", '-BidExists', '-By', 'fixture', '-Store', $ctmp)) }
+    $run = Invoke-TcLedgerWriters -Script $PSCommandPath -ArgSets $argSets.ToArray()
+    $writers = @($run.writers)
+    Write-Output ("  info  barrier: {0} of 4 writers were at the barrier when released ({1} ms)" -f $run.ready_at_go, $run.go_ms)
     $got = @(Read-Store $ctmp)
     $conc = @(@($got | Where-Object { [string]$_.key -like 'conc term *' } | ForEach-Object { [string]$_.key }) | Sort-Object)
     $seedKept = @($got | Where-Object { [string]$_.key -like 'seed *' }).Count
     Remove-Item $ctmp -Force -ErrorAction SilentlyContinue
-    $claimed = @(@($writers | Where-Object { $_.rc -eq 0 } | ForEach-Object { 'conc term ' + $_.n }) | Sort-Object)
-    $why = (@($writers | Where-Object { $_.rc -ne 0 } | ForEach-Object { ' | writer {0} exit {1}: {2}' -f $_.n, $_.rc, (([string]$_.out) -replace '^(.{160}).*$', '$1') }) -join '')
-    if ($writers.Count -lt 4) { $why += (' | {0} writer(s) returned NO result' -f (4 - $writers.Count)) }
+    $ran = @($writers | Where-Object { $_.ran })
+    $claimed = @(@($writers | Where-Object { $_.ran -and $_.exit -eq 0 } | ForEach-Object { 'conc term ' + $_.n }) | Sort-Object)
+    $why = Format-TcWriterTrouble $writers
+    T 'every writer RAN - launched, at the barrier when the four were released together, and exited (one that could not run is named here, never read as a lost row)' ($ran.Count -eq 4) ("ran " + $ran.Count + " of 4" + $why)
     T 'MUST FIRE  4 barriered concurrent -Record calls all land (the map lane writes 2-wide and the daemon holds the pen)' `
       (@($conc).Count -eq 4 -and ($conc -join ',') -eq 'conc term 1,conc term 2,conc term 3,conc term 4') `
       ("kept " + @($conc).Count + " of 4: " + ($conc -join ',') + $why)
@@ -181,7 +170,7 @@ if ($runSelfTest) {
     # REFUSES, which is loud and costs nothing silently; this one fails only when a writer said it recorded
     # and the row is not there (or the reverse). A refusal is counted as a refusal, never as a lost row.
     T 'MUST FIRE  and no write was lost SILENTLY - the rows that landed are exactly the writers that exited 0' `
-      ($writers.Count -eq 4 -and ($claimed -join ',') -eq ($conc -join ',')) `
+      ($ran.Count -eq 4 -and ($claimed -join ',') -eq ($conc -join ',')) `
       ("landed [" + ($conc -join ',') + "], exited 0 [" + ($claimed -join ',') + "]" + $why)
     T 'MUST FIRE  and not one of the 400 rows already in the ledger was dropped on the way' `
       ($seedKept -eq 400) ("kept $seedKept of 400")
