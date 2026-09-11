@@ -64,6 +64,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: a lock-free reader must not cost a writer its write
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $QueueFile) { $QueueFile = Join-Path $root 'ingredient-queue.json' }
 
@@ -83,9 +84,10 @@ function Write-Queue($doc, [string]$path) {
   # TMP + MOVE, not a direct Set-Content: -Derive and the pricer both READ this file while lanes are
   # live, and a reader that catches a half-written JSON parses nothing and reads the whole worklist
   # as empty - which Rule B then correctly refuses to call not-carried, but which still stalls a run.
-  $t = $path + '.tmp'
-  ($doc | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $t -Encoding UTF8
-  Move-Item -LiteralPath $t -Destination $path -Force
+  # THROUGH lib\atomic-write.ps1 SINCE 2026-09-11, because the tmp+move above was not enough on its own:
+  # those same live readers hold the file open, and a bare Move-Item -Force over a file another handle
+  # has open fails outright - inside the write lock, with the write lost. The retry outlasts the reader.
+  [void](Write-TcAtomicFile -Path $path -Text ($doc | ConvertTo-Json -Depth 8))
 }
 
 # ---------------------------------------------------------------------------------------------------
@@ -247,6 +249,9 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
   # PROVEN TO FAIL NEUTERED, 2026-08-24: with Invoke-Locked's WaitOne skipped, this measured
   # "landed 2 of 4" and seed rows dropped. Four writers, not two: losing one of four is unmistakable
   # where losing one of two reads as a coin flip.
+  # HOW OFTEN, measured 2026-09-11 with WaitOne and ReleaseMutex both skipped: red in 1 of 1 run beside 32
+  # CPU burners (timestamp barrier) and 1 of 2 without them (ready/go barrier). A disabled lock is caught
+  # most runs, not every run: each writer is its own powershell.exe, and its start-up spreads them.
   $ctmp = Join-Path ([IO.Path]::GetTempPath()) ('iq-conc-' + [Guid]::NewGuid().ToString('N') + '.json')
   try {
     $stq = @{}; foreach ($sn in $STORES) { $stq[$sn] = $null }
@@ -254,26 +259,88 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
       [pscustomobject]@{ term = "seed $_"; recipes = @('r'); added = (Get-Stamp); why = 'seed'
                          status = 'pending'; stores = [pscustomobject]$stq; verdict = 'PENDING'; notes = $null } })
     ([pscustomobject]@{ readme = 'concurrency fixture'; items = $seed } | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $ctmp -Encoding UTF8
-    $barrier = (Get-Date).ToUniversalTime().AddSeconds(4).ToString('o')
+    # A READY/GO BARRIER, NOT A TIMESTAMP (2026-09-11). The barrier used to be a UTC instant four seconds out,
+    # handed to each job as it was created - and Start-Job creates jobs ONE AT A TIME, about two seconds apiece,
+    # so the later writers reached that instant after it had passed and started seconds apart (up to 23 s
+    # under load, measured), and writers that do not overlap cannot lose an item. Now each job says it is
+    # ready and waits, and the parent says go only when all four are. That closes the gap the timestamp left;
+    # it did NOT measurably raise the catch rate, which the writers' own start-up still limits (HOW OFTEN above).
+    $gate = Join-Path ([IO.Path]::GetTempPath()) ('iq-gate-' + [Guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Path $gate -Force | Out-Null
     $jobs = @()
     foreach ($i in 1..4) {
       $jobs += Start-Job -ScriptBlock {
-        param($script, $qf, $n, $go)
-        $t = [datetime]::Parse($go, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind)
-        while ((Get-Date).ToUniversalTime() -lt $t) { Start-Sleep -Milliseconds 2 }
-        & powershell -NoProfile -ExecutionPolicy Bypass -File $script -Add -Term ("conc term $n") -Recipe ("recipe-$n") -Why 'fixture' -QueueFile $qf | Out-Null
-      } -ArgumentList $PSCommandPath, $ctmp, $i, $barrier
+        param($script, $qf, $n, $gate)
+        [IO.File]::WriteAllText((Join-Path $gate "ready-$n"), 'x')
+        $gsw = [Diagnostics.Stopwatch]::StartNew()
+        while (-not (Test-Path -LiteralPath (Join-Path $gate 'go')) -and $gsw.Elapsed.TotalSeconds -lt 150) { Start-Sleep -Milliseconds 2 }
+        # EACH WRITER REPORTS WHAT IT SAID AND HOW IT EXITED (2026-09-11). This was `| Out-Null`, so a write
+        # lost silently, a write refused loudly and a writer that never ran all read "landed 3 of 4".
+        $ErrorActionPreference = 'Continue'
+        $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $script -Add -Term ("conc term $n") -Recipe ("recipe-$n") -Why 'fixture' -QueueFile $qf 2>&1
+        [pscustomobject]@{ n = $n; rc = $LASTEXITCODE; out = ((@($o) | ForEach-Object { [string]$_ }) -join ' / ') }
+      } -ArgumentList $PSCommandPath, $ctmp, $i, $gate
     }
+    $gw = [Diagnostics.Stopwatch]::StartNew()
+    while (@(Get-ChildItem -LiteralPath $gate -Filter 'ready-*').Count -lt 4 -and $gw.Elapsed.TotalSeconds -lt 150) { Start-Sleep -Milliseconds 20 }
+    $readyAtGo = @(Get-ChildItem -LiteralPath $gate -Filter 'ready-*').Count
+    [IO.File]::WriteAllText((Join-Path $gate 'go'), 'x')
+    Write-Output ("  info  barrier: {0} of 4 writers were ready when the parent said go ({1} ms)" -f $readyAtGo, $gw.ElapsedMilliseconds)
     $jobs | Wait-Job -Timeout 180 | Out-Null
+    Remove-Item -LiteralPath $gate -Recurse -Force -ErrorAction SilentlyContinue
+    $recv = $jobs | Receive-Job -ErrorAction SilentlyContinue
+    $writers = @($recv | Where-Object { $null -ne $_ -and $_.PSObject.Properties['rc'] })
     $jobs | Remove-Job -Force -ErrorAction SilentlyContinue
     $got = Read-Queue $ctmp
     $conc = @(@($got.items | Where-Object { [string]$_.term -like 'conc term *' } | ForEach-Object { [string]$_.term }) | Sort-Object)
     $seedKept = @($got.items | Where-Object { [string]$_.term -like 'seed *' }).Count
-    if (@($conc).Count -ne 4) { Write-Output ("  X MUST FIRE 4 barriered concurrent -Add calls must all land; landed " + @($conc).Count + " of 4: " + ($conc -join ', ')); $bad++ }
+    $claimed = @(@($writers | Where-Object { $_.rc -eq 0 } | ForEach-Object { 'conc term ' + $_.n }) | Sort-Object)
+    $why = (@($writers | Where-Object { $_.rc -ne 0 } | ForEach-Object { ' | writer {0} exit {1}: {2}' -f $_.n, $_.rc, (([string]$_.out) -replace '^(.{160}).*$', '$1') }) -join '')
+    if ($writers.Count -lt 4) { $why += (' | {0} writer(s) returned NO result' -f (4 - $writers.Count)) }
+    if (@($conc).Count -ne 4) { Write-Output ("  X MUST FIRE 4 barriered concurrent -Add calls must all land; landed " + @($conc).Count + " of 4: " + ($conc -join ', ') + $why); $bad++ }
     else { Write-Output '  ok 4 barriered concurrent -Add calls all landed (the map lane writes 2-wide and the pricer records in parallel)' }
+    # THE MUTEX'S OWN GUARANTEE, apart from the one above: that fails on a loud refusal too, this fails only
+    # when a writer said it queued the term and the term is not there (or the reverse).
+    if ($writers.Count -ne 4 -or ($claimed -join ',') -ne ($conc -join ',')) { Write-Output ("  X MUST FIRE no -Add may be lost SILENTLY; landed [" + ($conc -join ',') + "], exited 0 [" + ($claimed -join ',') + "]" + $why); $bad++ }
+    else { Write-Output '  ok MUST FIRE and no -Add was lost silently - the terms that landed are exactly the writers that exited 0' }
     if ($seedKept -ne 400) { Write-Output ("  X MUST FIRE the 400 items already queued must survive; kept $seedKept of 400"); $bad++ }
     else { Write-Output '  ok and not one of the 400 items already in the queue was dropped on the way' }
   } finally { if (Test-Path $ctmp) { Remove-Item $ctmp -Force -ErrorAction SilentlyContinue } }
+
+  # MUST FIRE: AN -Add MADE WHILE A LOCK-FREE READER HOLDS THE QUEUE LANDS (2026-09-11). -Derive and the
+  # pricer read this file while lanes are live, and a bare Move-Item -Force over a file another handle holds
+  # fails inside the lock. The parent holds the queue the way Get-Content and Read-TextFile do (shared
+  # ReadWrite, not Delete) until the child has written its .tmp, 400 ms longer, then lets go.
+  $hqFile = Join-Path ([IO.Path]::GetTempPath()) ('iq-hold-' + [Guid]::NewGuid().ToString('N') + '.json')
+  $hqOutF = [IO.Path]::GetTempFileName(); $hqErrF = [IO.Path]::GetTempFileName()
+  try {
+    ([pscustomobject]@{ readme = 'hold fixture'; items = @() } | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $hqFile -Encoding UTF8
+    $hqHandle = New-Object IO.FileStream($hqFile, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
+    $hqSawTmp = $false
+    try {
+      # ONE-TOKEN VALUES ONLY: Start-Process joins -ArgumentList with spaces and quotes nothing, so a term with
+      # a space arrives as two arguments. Its first cut passed 'held term' and queued 'held'. And no comment
+      # INSIDE the continued command below: a comment ends a backtick continuation, and the second cut started
+      # a bare interactive powershell that way.
+      $hqProc = Start-Process -FilePath 'powershell' -PassThru -NoNewWindow `
+                -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',$PSCommandPath,'-Add','-Term','heldterm','-Recipe','recipe-held','-Why','fixture','-QueueFile',$hqFile) `
+                -RedirectStandardOutput $hqOutF -RedirectStandardError $hqErrF
+      $null = $hqProc.Handle   # cache the handle now, or ExitCode reads empty once the process is gone
+      $hqSw = [Diagnostics.Stopwatch]::StartNew()
+      while (-not (Test-Path -LiteralPath ($hqFile + '.tmp')) -and -not $hqProc.HasExited -and $hqSw.Elapsed.TotalSeconds -lt 120) { Start-Sleep -Milliseconds 10 }
+      $hqSawTmp = Test-Path -LiteralPath ($hqFile + '.tmp')
+      Start-Sleep -Milliseconds 400
+    } finally { $hqHandle.Dispose() }
+    [void]$hqProc.WaitForExit(120000)
+    $hqOut = [string](Get-Content $hqOutF -Raw); if ($null -eq $hqOut) { $hqOut = '' }
+    $hqDoc = Read-Queue $hqFile
+    $hqLanded = (@($hqDoc.items | Where-Object { [string]$_.term -eq 'heldterm' }).Count -eq 1)
+    if (-not ($hqSawTmp -and $hqProc.ExitCode -eq 0 -and $hqLanded)) {
+      Write-Output ("  X MUST FIRE an -Add made while a lock-free reader holds the queue open must LAND once the reader lets go; saw_tmp=$hqSawTmp exit=" + $hqProc.ExitCode + " landed=$hqLanded out=" + $hqOut.Trim()); $bad++
+    } else { Write-Output '  ok MUST FIRE an -Add made while a lock-free reader held the queue open landed once the reader let go (a bare Move-Item lost it inside the lock)' }
+  } finally {
+    foreach ($f in @($hqFile, ($hqFile + '.tmp'), $hqOutF, $hqErrF)) { Remove-Item -LiteralPath $f -Force -ErrorAction SilentlyContinue }
+  }
 
   # =================================================================================================
   # -RecordBatch (B2 / pin P8, added 2026-08-24). ATOMIC: every row validated first, ANY invalid row
@@ -658,9 +725,8 @@ if ($Promote) {
     $freshLed = Read-JsonFile $ledgerFile
     if ($freshLed.bids.PSObject.Properties.Name -contains $Bid) { $freshLed.bids.$Bid = $entry }
     else { $freshLed.bids | Add-Member -NotePropertyName $Bid -NotePropertyValue $entry }
-    $t = $ledgerFile + '.tmp'
-    ($freshLed | ConvertTo-Json -Depth 12) | Set-Content $t -Encoding UTF8
-    Move-Item -LiteralPath $t -Destination $ledgerFile -Force
+    # Through lib\atomic-write.ps1 for the same reason as Write-Queue: carriage.json has lock-free readers.
+    [void](Write-TcAtomicFile -Path $ledgerFile -Text ($freshLed | ConvertTo-Json -Depth 12))
   }
   Write-Output ("ingredient-queue: promoted '{0}' -> carriage.json[{1}] = {2}" -f $Term, $Bid, $v.verdict)
   Write-Output '   recost (meal-prep\engine\cost-recipes.ps1) for the gates to see it.'

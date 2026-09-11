@@ -26,6 +26,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $mp   = Split-Path -Parent $here
 $repo = Split-Path -Parent $mp
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\atomic-write.ps1')   # Write-TcAtomicFile: a lock-free reader must not cost a writer its write
 if (-not $Store) { $Store = Join-Path $mp 'db\ingredient-resolutions.json' }
 
 function Get-TermKey {
@@ -115,7 +116,13 @@ if ($runSelfTest) {
     #   2. A STORE BIG ENOUGH TO BE SLOW. The scratch store is seeded with 400 rows, which puts the
     #      read-modify-write in the tens of milliseconds - wide enough for four barriered writers to
     #      sit inside it at once.
-    # With both, the neutered run loses rows every time and the locked run loses none. Four writers
+    # With both, the neutered run loses rows and the locked run loses none.
+    # NOT EVERY TIME, measured 2026-09-11 with WaitOne and ReleaseMutex both skipped: the concurrency cases
+    # below went red in 3 of 6 runs beside 32 CPU burners (timestamp barrier) and 3 of 5 without them
+    # (ready/go barrier). Each writer is still its own powershell.exe, and its start-up - about a second,
+    # and variable - spreads the writers further than any barrier closes, so a disabled lock is caught
+    # most runs and not all. A wider critical section would raise that rate and spend the lock-timeout
+    # margin, which is what makes this gate flaky in the OTHER direction. Four writers
     # and not two on purpose: the PS 5.1 collection traps say a fixture over a collection uses at
     # least three elements, and losing one of four is unmistakable where losing one of two reads as a
     # coin flip.
@@ -125,27 +132,94 @@ if ($runSelfTest) {
                          evidence='a row that must survive four concurrent writers'; by='fixture'
                          at='2026-08-24T00:00:00' } })
     ([pscustomobject]@{ count=$seed.Count; resolutions=$seed } | ConvertTo-Json -Depth 6) | Set-Content $ctmp -Encoding utf8
-    $barrier = (Get-Date).ToUniversalTime().AddSeconds(4).ToString('o')
+    # A READY/GO BARRIER, NOT A TIMESTAMP (2026-09-11). The barrier used to be a UTC instant four seconds out,
+    # handed to each job as it was created - and Start-Job creates jobs ONE AT A TIME, about two seconds apiece,
+    # so the later writers reached that instant after it had passed and started seconds apart. Measured with
+    # every writer's timing kept: 5.6 s apart on an idle machine, and with the lock NEUTERED this suite then
+    # passed, because four writers that never overlap cannot lose a row. Now each job says it is ready and
+    # waits, and the parent says go only when all four are. That closes the gap the timestamp left (all four
+    # ready within about half a second, measured); it did NOT measurably raise the catch rate, which the
+    # writers' own start-up still limits - see NOT EVERY TIME above.
+    $gate = Join-Path $env:TEMP ('ir-gate-' + [guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Path $gate -Force | Out-Null
     $jobs = @()
     foreach ($i in 1..4) {
       $jobs += Start-Job -ScriptBlock {
-        param($script, $store, $n, $go)
-        $t = [datetime]::Parse($go, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind)
-        while ((Get-Date).ToUniversalTime() -lt $t) { Start-Sleep -Milliseconds 2 }
-        & powershell -NoProfile -ExecutionPolicy Bypass -File $script -Record -Term ("conc term $n") -ItemId ("conc-$n") -BidExists -By 'fixture' -Store $store | Out-Null
-      } -ArgumentList $PSCommandPath, $ctmp, $i, $barrier
+        param($script, $store, $n, $gate)
+        [IO.File]::WriteAllText((Join-Path $gate "ready-$n"), 'x')
+        $gsw = [Diagnostics.Stopwatch]::StartNew()
+        while (-not (Test-Path -LiteralPath (Join-Path $gate 'go')) -and $gsw.Elapsed.TotalSeconds -lt 150) { Start-Sleep -Milliseconds 2 }
+        # EACH WRITER REPORTS WHAT IT SAID AND HOW IT EXITED (2026-09-11). This was `| Out-Null`, so when
+        # run-gates went red on "kept 3 of 4" the one writer that knew why had already been thrown away, and
+        # a write lost silently, a write refused loudly and a writer that never ran all printed that line.
+        $ErrorActionPreference = 'Continue'
+        $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $script -Record -Term ("conc term $n") -ItemId ("conc-$n") -BidExists -By 'fixture' -Store $store 2>&1
+        [pscustomobject]@{ n = $n; rc = $LASTEXITCODE; out = ((@($o) | ForEach-Object { [string]$_ }) -join ' / ') }
+      } -ArgumentList $PSCommandPath, $ctmp, $i, $gate
     }
+    $gw = [Diagnostics.Stopwatch]::StartNew()
+    while (@(Get-ChildItem -LiteralPath $gate -Filter 'ready-*').Count -lt 4 -and $gw.Elapsed.TotalSeconds -lt 150) { Start-Sleep -Milliseconds 20 }
+    $readyAtGo = @(Get-ChildItem -LiteralPath $gate -Filter 'ready-*').Count
+    [IO.File]::WriteAllText((Join-Path $gate 'go'), 'x')
+    Write-Output ("  info  barrier: {0} of 4 writers were ready when the parent said go ({1} ms)" -f $readyAtGo, $gw.ElapsedMilliseconds)
     $jobs | Wait-Job -Timeout 180 | Out-Null
+    Remove-Item -LiteralPath $gate -Recurse -Force -ErrorAction SilentlyContinue
+    $recv = $jobs | Receive-Job -ErrorAction SilentlyContinue
+    $writers = @($recv | Where-Object { $null -ne $_ -and $_.PSObject.Properties['rc'] })
     $jobs | Remove-Job -Force -ErrorAction SilentlyContinue
     $got = @(Read-Store $ctmp)
     $conc = @(@($got | Where-Object { [string]$_.key -like 'conc term *' } | ForEach-Object { [string]$_.key }) | Sort-Object)
     $seedKept = @($got | Where-Object { [string]$_.key -like 'seed *' }).Count
     Remove-Item $ctmp -Force -ErrorAction SilentlyContinue
+    $claimed = @(@($writers | Where-Object { $_.rc -eq 0 } | ForEach-Object { 'conc term ' + $_.n }) | Sort-Object)
+    $why = (@($writers | Where-Object { $_.rc -ne 0 } | ForEach-Object { ' | writer {0} exit {1}: {2}' -f $_.n, $_.rc, (([string]$_.out) -replace '^(.{160}).*$', '$1') }) -join '')
+    if ($writers.Count -lt 4) { $why += (' | {0} writer(s) returned NO result' -f (4 - $writers.Count)) }
     T 'MUST FIRE  4 barriered concurrent -Record calls all land (the map lane writes 2-wide and the daemon holds the pen)' `
       (@($conc).Count -eq 4 -and ($conc -join ',') -eq 'conc term 1,conc term 2,conc term 3,conc term 4') `
-      ("kept " + @($conc).Count + " of 4: " + ($conc -join ','))
+      ("kept " + @($conc).Count + " of 4: " + ($conc -join ',') + $why)
+    # THE MUTEX'S OWN GUARANTEE, stated apart from the one above. "All four land" also fails when a writer
+    # REFUSES, which is loud and costs nothing silently; this one fails only when a writer said it recorded
+    # and the row is not there (or the reverse). A refusal is counted as a refusal, never as a lost row.
+    T 'MUST FIRE  and no write was lost SILENTLY - the rows that landed are exactly the writers that exited 0' `
+      ($writers.Count -eq 4 -and ($claimed -join ',') -eq ($conc -join ',')) `
+      ("landed [" + ($conc -join ',') + "], exited 0 [" + ($claimed -join ',') + "]" + $why)
     T 'MUST FIRE  and not one of the 400 rows already in the ledger was dropped on the way' `
       ($seedKept -eq 400) ("kept $seedKept of 400")
+
+    # MUST FIRE: A -Record MADE WHILE A LOCK-FREE READER HOLDS THE LEDGER LANDS (2026-09-11).
+    # The run-gates red at 839c5e666, made deterministic. The mutex serialises WRITERS and nothing serialises
+    # READERS; Get-Content and Read-TextFile open a file shared ReadWrite but not Delete, and a bare
+    # `Move-Item -Force` over a file held that way fails inside the lock with "Cannot create a file when that
+    # file already exists". Measured under 32 CPU burners with every writer's output kept, that was the whole
+    # of the failure: the writer held the lock, waited milliseconds, and lost the write at the replace. Here
+    # the parent holds exactly that handle until the child has written its .tmp, 400 ms longer, then lets go.
+    $htmp = Join-Path $env:TEMP ('ir-hold-' + [guid]::NewGuid().ToString('N') + '.json')
+    $hseed = @(1..3 | ForEach-Object { [pscustomobject]@{ key="seed $_"; term="seed $_"; item_id="seed-$_"; bid_exists=$true; evidence='fixture'; by='fixture'; at='2026-09-11T00:00:00' } })
+    ([pscustomobject]@{ count=3; resolutions=$hseed } | ConvertTo-Json -Depth 6) | Set-Content $htmp -Encoding utf8
+    $hOutF = [IO.Path]::GetTempFileName(); $hErrF = [IO.Path]::GetTempFileName()
+    $hold = New-Object IO.FileStream($htmp, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
+    $sawTmp = $false
+    try {
+      $hp = Start-Process -FilePath 'powershell' -PassThru -NoNewWindow `
+            -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',$PSCommandPath,'-Record','-Term','heldterm','-ItemId','held-1','-By','fixture','-Store',$htmp) `
+            -RedirectStandardOutput $hOutF -RedirectStandardError $hErrF
+      $null = $hp.Handle   # cache the handle now, or ExitCode reads empty once the process is gone
+      $hsw = [Diagnostics.Stopwatch]::StartNew()
+      while (-not (Test-Path -LiteralPath ($htmp + '.tmp')) -and -not $hp.HasExited -and $hsw.Elapsed.TotalSeconds -lt 120) { Start-Sleep -Milliseconds 10 }
+      $sawTmp = Test-Path -LiteralPath ($htmp + '.tmp')
+      Start-Sleep -Milliseconds 400
+    } finally { $hold.Dispose() }
+    [void]$hp.WaitForExit(120000)
+    $hOut = [string](Get-Content $hOutF -Raw); if ($null -eq $hOut) { $hOut = '' }
+    Remove-Item $hOutF, $hErrF -Force -ErrorAction SilentlyContinue
+    $hRows = @(Read-Store $htmp)
+    # ONE-TOKEN VALUES ONLY: Start-Process joins -ArgumentList with spaces and quotes nothing, so a term with a
+    # space arrives as two arguments. Its first cut passed 'held term' and recorded 'held'.
+    $heldLanded = (@($hRows | Where-Object { [string]$_.key -eq 'heldterm' }).Count -eq 1)
+    Remove-Item $htmp, ($htmp + '.tmp') -Force -ErrorAction SilentlyContinue
+    T 'MUST FIRE  a -Record made while a lock-free reader holds the ledger open LANDS once the reader lets go (a bare Move-Item lost it inside the lock)' `
+      ($sawTmp -and $hp.ExitCode -eq 0 -and $heldLanded -and @($hRows).Count -eq 4) `
+      ("saw_tmp=$sawTmp exit=" + $hp.ExitCode + " landed=$heldLanded rows=" + @($hRows).Count + " out=" + $hOut.Trim())
   } finally { if (Test-Path $tmp) { Remove-Item $tmp -Force } }
   # ---- AN UNWRITABLE STORE MUST NOT REPORT SUCCESS (2026-08-31) ----
   # Save-Rows used to let a failed Set-Content fall through, so -Invalidate printed "invalidated N
@@ -186,16 +260,19 @@ function Save-Rows { param($R)
     _doc='Ingredient string -> commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.'
     _rule='Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.'
     updated=(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss'); count=@($R).Count; resolutions=@($R) }
-  $t = $Store + '.tmp'
   # NO -ErrorAction HERE, DELIBERATELY, and it was measured rather than assumed. $ErrorActionPreference
-  # is 'Stop' at the top of this file, so a failed Set-Content is ALREADY terminating: an unwritable
-  # store has always exited non-zero and has never written a half-file or claimed success. The first
-  # cut of the 2026-08-31 fix added -ErrorAction Stop to both lines and a comment saying it stopped a
-  # silent fall-through; running all four combinations against an unwritable store proved the flags
-  # change nothing at all. Dead code that reads like a second safeguard teaches the next reader that
-  # two things defend this when only one does, so it is gone. What was actually wrong is below.
-  ($doc | ConvertTo-Json -Depth 6) | Set-Content -Path $t -Encoding utf8
-  Move-Item -Path $t -Destination $Store -Force }
+  # is 'Stop' at the top of this file, so a failed write is ALREADY terminating: an unwritable store has
+  # always exited non-zero and has never written a half-file or claimed success. The first cut of the
+  # 2026-08-31 fix added -ErrorAction Stop and a comment saying it stopped a silent fall-through; running
+  # all four combinations against an unwritable store proved the flags change nothing at all. Dead code
+  # that reads like a second safeguard teaches the next reader that two things defend this when only one
+  # does, so it is gone. What was actually wrong is at the -Record catch below.
+  #
+  # THROUGH lib\atomic-write.ps1, NOT Set-Content + Move-Item (2026-09-11). The mutex serialises WRITERS
+  # and nothing serialises READERS: a lock-free read holding this file open made a bare Move-Item fail
+  # INSIDE the lock, which is how run-gates read "kept 3 of 4" at 839c5e666. It still throws when a
+  # reader outlasts its retry budget, so the catch below still says COULD NOT WRITE.
+  [void](Write-TcAtomicFile -Path $Store -Text ($doc | ConvertTo-Json -Depth 6)) }
 
 if ($runRecord) {
   $k = Get-TermKey $Term

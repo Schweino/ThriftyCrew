@@ -1786,7 +1786,11 @@ def _record_outcome(url, outcome, note=""):
     args = ["-Record", "-Domain", url, "-Outcome", outcome]
     if note:
         args += ["-Note", note[:120]]
-    run_ps(SOURCE_DOMAINS_PS, args, timeout=60)
+    # THE EXIT CODE IS RETURNED, NOT DROPPED (2026-09-11). source-domains refuses a write it could not
+    # land - a lock it could not take in time, or a reader holding the ledger past its replace budget -
+    # and says so and exits non-zero. Discarding that made a refused failure record indistinguishable
+    # from a recorded one, and blocked-after-three counts exactly these.
+    return run_ps(SOURCE_DOMAINS_PS, args, timeout=60)
 
 
 def cmd_crawl(a):
@@ -1839,7 +1843,10 @@ def cmd_crawl(a):
             urls = enumerate_domain(d, robots)
         except Exception as e:
             findings.append("%s could not be enumerated: %s" % (d, e))
-            _record_outcome("https://%s/" % d, "fail", "harvest enumeration: %s" % e)
+            rc_rec, out_rec = _record_outcome("https://%s/" % d, "fail", "harvest enumeration: %s" % e)
+            if rc_rec != 0:
+                findings.append("%s: the failure was NOT recorded in source-domains (exit %s: %s)"
+                                % (d, rc_rec, (out_rec or "").strip()[:160]))
             continue
         if not urls:
             findings.append("%s enumerated ZERO recipe URLs (no sitemap, no WP-REST) - it starves the "

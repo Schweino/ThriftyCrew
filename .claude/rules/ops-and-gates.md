@@ -140,5 +140,17 @@ everything else honest, so a defect here is silent by construction.
   recognise a checkout under a directory with some other name; `grocery/audit-script-census.ps1` prunes on
   the `.git` entry instead, which is the stronger boundary.
 
+- **A mutex serialises WRITERS, never READERS, and under PS 5.1 a lock-free reader can cost a locked writer
+  its write** (2026-09-11). `Move-Item -Force x.tmp x` fails with *"Cannot create a file when that file
+  already exists"* whenever another handle holds `x` shared ReadWrite but not Delete - which is exactly how
+  `Get-Content` and `Read-TextFile` open it. It fails INSIDE the lock, with the lock held and the old file
+  intact, so the write is simply gone. run-gates went red that way on two concurrency fixtures at 839c5e666;
+  driven under 32 CPU burners with every writer's output kept, the fixture shape lost a write in 3 of 100
+  trials, every one this error and none a lock timeout (worst wait 10,433 ms of the 15 s budget).
+  `lib/atomic-write.ps1` (`Write-TcAtomicFile`) retries the move, and the three `Invoke-Locked` ledgers use it.
+  **A concurrency fixture keeps every writer's exit code and output** and counts a refusal as a refusal: the
+  `| Out-Null` those fixtures carried threw away the one line that named the cause. Other `Move-Item -Force`
+  replaces remain in the tree and were not swept.
+
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.
