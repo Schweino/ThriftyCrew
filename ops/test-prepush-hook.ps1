@@ -38,8 +38,13 @@
   in the damaged state - without starting the gate. The same gate pushed from the MAIN checkout is a clean twin, so
   the reorder cannot have cost the ordinary push.
 
+  THE SIXTH (2026-09-11, later). run-gates printed "lib\git-repo-env.ps1 is not recognized" from this sandbox and
+  passed: the sandbox copied a hand list of libraries older than that one, so the check's own Clear-TcGitRepoEnv
+  never ran and no case could tell. The sandbox now copies every lib\*.ps1, the check exits 3 on a library it cannot
+  load, and cases drive that refusal and hand the check a leaked GIT_DIR from a caller that is not the hook.
+
   WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
-  ops\prepush-test-auditors.ps1 and lib\guard-contract.ps1, and stubs for the gate and for test-auditors.
+  ops\prepush-test-auditors.ps1 with every lib\*.ps1, and stubs for the gate and for test-auditors.
   Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
   SCRUBS ITS OWN REPOSITORY ENVIRONMENT FIRST: run by an unfixed hook, a copy that did not would recreate
   the very damage it exists to detect, on the real repository.
@@ -167,6 +172,7 @@ function Use-Unit {
   return $true
 }
 [IO.File]::WriteAllText((Join-Path $env:TC_PREPUSH_PROBE 'auditors-ran.txt'), 'ran')
+[IO.File]::WriteAllText((Join-Path $env:TC_PREPUSH_PROBE 'ta-saw.txt'), ('GIT_DIR=' + [string]$env:GIT_DIR))
 $pass = 0; $failed = 0
 try {
 if (Use-Unit 'u001-guards') {
@@ -199,9 +205,15 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   [IO.File]::WriteAllText((Join-Path $main 'design\note.md'), "v1`n", $utf8)
   [IO.File]::WriteAllText((Join-Path $main '.gitignore'), "grocery/out/`n", $utf8)   # reach-fixture-ok: the %TEMP% sandbox repo's own .gitignore, not the real module
   Copy-Item -LiteralPath $taCheckSrc -Destination (Join-Path $main 'ops\prepush-test-auditors.ps1')
-  Copy-Item -LiteralPath $contractSrc -Destination (Join-Path $main 'lib\guard-contract.ps1')
-  $botPathsSrc = Join-Path $RepoRoot 'lib\bot-paths.ps1'
-  if (Test-Path -LiteralPath $botPathsSrc) { Copy-Item -LiteralPath $botPathsSrc -Destination (Join-Path $main 'lib\bot-paths.ps1') }
+  # EVERY lib\*.ps1, NOT A HAND LIST (2026-09-11). The list this replaced named guard-contract and bot-paths and
+  # predated lib\git-repo-env.ps1, so the check driven below loaded no clear, printed "is not recognized" on every
+  # direct call, and every case passed. The whole directory is 29 files under 400 KB that day, and it keeps the
+  # sandbox's libraries the production set. A library missing here now turns the cases red: the check refuses one
+  # it cannot load (the lib-load cases below).
+  $libFiles = Get-ChildItem -LiteralPath (Join-Path $RepoRoot 'lib') -File -Filter *.ps1
+  foreach ($libFile in @($libFiles | Where-Object { $_.Extension -ieq '.ps1' })) {
+    Copy-Item -LiteralPath $libFile.FullName -Destination (Join-Path $main ('lib\' + $libFile.Name))
+  }
   $steps += (G -C $main add -A)
   $steps += (G -C $main commit -q -m seed)
   $steps += (G init -q --bare $remote)
@@ -397,6 +409,56 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   Case 'CLEAN TWIN' 'the full run (no skip file) still runs every unit' `
     ((($ranU | Sort-Object) -join ',') -eq 'u001-guards,u002-beta,u003-gamma' -and (($fullOut -join "`n") -notmatch 'selective=1')) "ran=$($ranU -join ',') out=$($fullOut -join ' | ')"
 
+  # ---- THE SIXTH (2026-09-11): the check's OWN clear, and a library it cannot load ----
+  # The sandbox's hand list of libraries predated lib\git-repo-env.ps1, so every copy of the check driven above loaded
+  # no clear and all 26 cases passed; the hook sends the check's stderr to /dev/null, so on that path it said nothing.
+  # Nothing here could have written the REAL .git: the hook unsets the variables before starting the check, and this
+  # file clears its own before the -Record calls. What was lost was the third layer's only fixture, which no case ever
+  # handed a GIT_DIR. These cases run the check the way a caller that is NOT the hook does.
+  $env:TC_PREPUSH_TA_FAILS = ''; $env:TC_PREPUSH_TA_FAILS_BETA = ''
+  $checkPs1 = Join-Path $main 'ops\prepush-test-auditors.ps1'
+  $taSawFile = Join-Path $probe 'ta-saw.txt'
+  $pathsIn = Join-Path $sb 'paths-guard.txt'
+  [IO.File]::WriteAllText($pathsIn, "grocery/guards.ps1`n", $utf8)
+  # The leaked GIT_DIR names the SANDBOX's linked worktree, so a check that failed to clear it reaches only the sandbox.
+  $leak = Join-Path $main '.git\worktrees\linked'
+  Remove-Item -LiteralPath $taSawFile -ErrorAction SilentlyContinue
+  $env:GIT_DIR = $leak
+  try {
+    $leakSeen = (@(& powershell -NoProfile -Command '[string]$env:GIT_DIR') -join '').Trim()
+    $leakOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $checkPs1 -PathsFile $pathsIn 2>$null)
+    $leakRc = $LASTEXITCODE
+  } finally { Remove-Item -LiteralPath 'Env:\GIT_DIR' -ErrorAction SilentlyContinue }
+  $taSaw = if (Test-Path -LiteralPath $taSawFile) { [IO.File]::ReadAllText($taSawFile) } else { '' }
+  # CLEAN TWIN: the leak was real (a child started from that environment inherits it) and the check still ran its suite.
+  # Without it the case below passes on a check that never started test-auditors.
+  Case 'CLEAN TWIN' 'a caller leaking GIT_DIR hands it to its children, and the check still runs test-auditors' `
+    ([string]::Equals($leakSeen, $leak, [StringComparison]::OrdinalIgnoreCase) -and $taSaw -ne '' -and $leakRc -eq 0) "child=$leakSeen saw=$taSaw rc=$leakRc $($leakOut -join ' | ')"
+  # MUST FIRE: the check's own clear ran, so the test-auditors it started inherited no GIT_DIR.
+  Case 'MUST FIRE' 'the check started by a caller that is not the hook hands test-auditors no GIT_DIR' ($taSaw -eq 'GIT_DIR=') $taSaw
+
+  # -ListInputs is the probe for a library the check cannot load, because it exits 0 with every library present. A bare
+  # "exit 3" would not do: calling the check with no mode is also a 3.
+  $envLibCopy = Join-Path $main 'lib\git-repo-env.ps1'
+  $envLibAside = Join-Path $sb 'git-repo-env.ps1.aside'
+  $liOk = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $checkPs1 -ListInputs 2>$null); $liOkRc = $LASTEXITCODE
+  Case 'CLEAN TWIN' 'with every library present the check lists its inputs and exits 0' `
+    ($liOkRc -eq 0 -and ($liOk -join "`n") -match '(?m)^PREPUSH-TEST-AUDITORS-COMPLETE tracked=') "rc=$liOkRc $($liOk -join ' | ')"
+  # MUST FIRE, THE FOUNDING DEFECT: the library is missing, exactly the sandbox of 2026-09-11.
+  Move-Item -LiteralPath $envLibCopy -Destination $envLibAside
+  try { $liGone = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $checkPs1 -ListInputs 2>$null); $liGoneRc = $LASTEXITCODE }
+  finally { Move-Item -LiteralPath $envLibAside -Destination $envLibCopy }
+  Case 'MUST FIRE' 'a check whose lib\git-repo-env.ps1 is missing refuses as could-not-evaluate, not print and pass' `
+    ($liGoneRc -eq 3 -and ($liGone -join "`n") -match 'COULD NOT EVALUATE - lib\\git-repo-env\.ps1 did not load') "rc=$liGoneRc $($liGone -join ' | ')"
+  # MUST FIRE: a library that writes an error while it loads and then carries on. try/catch alone cannot see a
+  # non-terminating error, so this is the case that pins the check's 'Stop' around its loads.
+  $envLibBytes = [IO.File]::ReadAllBytes($envLibCopy)
+  [IO.File]::WriteAllText($envLibCopy, ("Write-Error 'half-loaded library'`n" + [IO.File]::ReadAllText($envLibCopy)), $utf8)
+  try { $liHalf = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $checkPs1 -ListInputs 2>$null); $liHalfRc = $LASTEXITCODE }
+  finally { [IO.File]::WriteAllBytes($envLibCopy, $envLibBytes) }
+  Case 'MUST FIRE' 'a library that errors while loading is refused too, not printed past' `
+    ($liHalfRc -eq 3 -and ($liHalf -join "`n") -match 'lib\\git-repo-env\.ps1 did not load \(half-loaded library\)') "rc=$liHalfRc $($liHalf -join ' | ')"
+
   # MUST FIRE, STATIC: run-gates clears the same environment for EVERY caller, not only this hook - a session
   # shell or a scheduled task spawned from inside a git hook inherits it just the same. Since 2026-09-11 it does so
   # through lib\git-repo-env.ps1, whose behaviour ops\audit-git-fixture-env.ps1 drives in a child process; this
@@ -426,6 +488,13 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
 }
+
+# A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". Measured 2026-09-11 by a mutant that kept the check from
+# writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
+# and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
+# prepush-test-auditors -SelfTest pins its own count.
+$expectedCases = 31
+if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''
 if ($fails.Count -gt 0) {

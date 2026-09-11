@@ -127,20 +127,41 @@ param(
   [switch]$SelfTest
 )
 
-$ErrorActionPreference = 'Continue'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
-. (Join-Path $RepoRoot 'lib\guard-contract.ps1')
-# The bot's ownership set. Absent, nothing is treated as bot-owned, which only makes the suite run MORE.
-$script:BotPathsLoaded = $false
-$bpLib = Join-Path $RepoRoot 'lib\bot-paths.ps1'
-if (Test-Path -LiteralPath $bpLib) { . $bpLib; $script:BotPathsLoaded = $true }
-
-# The hook already clears these; clear them again so a caller that is not the hook cannot hand this
-# script's git calls, or the test-auditors it spawns, a linked worktree's GIT_DIR (lib\git-repo-env.ps1).
-. (Join-Path $RepoRoot 'lib\git-repo-env.ps1')
-Clear-TcGitRepoEnv
-
 $script:GuardName = 'PREPUSH-TEST-AUDITORS'
+
+# A LIBRARY THAT DOES NOT LOAD IS COULD-NOT-EVALUATE, NEVER A PRINTED WARNING (2026-09-11). Under 'Continue' a
+# dot-source of a missing file prints "is not recognized" and the script carries on, and the hook sends this
+# script's stderr to /dev/null, so nobody sees it. Measured that day: ops\test-prepush-hook.ps1 copied this file
+# into its sandbox without lib\git-repo-env.ps1, the clear below never ran there, and all 26 of its cases passed.
+# So every library loads under 'Stop' inside a try. Missing, unparseable, throwing or erroring while loading, it
+# exits 3, which the hook refuses. try/catch alone catches the first three; 'Stop' is what catches the fourth.
+$ErrorActionPreference = 'Stop'
+try { . (Join-Path $RepoRoot 'lib\guard-contract.ps1') }
+catch {
+  # No completion marker: the contract that writes it is what failed, and exit 3 never carries one.
+  "prepush-test-auditors: COULD NOT EVALUATE - lib\guard-contract.ps1 did not load ($($_.Exception.Message)). Not a pass."
+  exit 3
+}
+$script:BotPathsLoaded = $false
+$libRel = 'lib\bot-paths.ps1'
+try {
+  # The bot's ownership set. ABSENT, nothing is treated as bot-owned, which only makes the suite run MORE, so
+  # absence is allowed. PRESENT and failing to load is refused like any other library.
+  $bpLib = Join-Path $RepoRoot $libRel
+  if (Test-Path -LiteralPath $bpLib) { . $bpLib; $script:BotPathsLoaded = $true }
+  # The hook already clears these; clear them again so a caller that is not the hook cannot hand this
+  # script's git calls, or the test-auditors it spawns, a linked worktree's GIT_DIR (lib\git-repo-env.ps1).
+  $libRel = 'lib\git-repo-env.ps1'
+  . (Join-Path $RepoRoot $libRel)
+  Clear-TcGitRepoEnv
+} catch {
+  $ErrorActionPreference = 'Continue'
+  "prepush-test-auditors: COULD NOT EVALUATE - $libRel did not load ($($_.Exception.Message)). Not a pass."
+  Exit-Guard -Name $script:GuardName -Code 3 -Summary 'blind=lib-load'
+}
+$ErrorActionPreference = 'Continue'
+
 $script:MaxAgeHours = 192        # see the header: 7-day chain cadence + 24h; first plausible value, no sweep
 $script:TimeoutSeconds = 1200    # the same bound check-ad-cycles gives this suite
 $script:MeasuredSeconds = 300    # a full test-auditors run, measured 2026-09-10 21:40 in the main checkout (300.2s, 702 cases)

@@ -181,6 +181,15 @@ everything else honest, so a defect here is silent by construction.
   for `Invoke-History` before the function, every case line errored non-terminating, and the suite printed PASS
   over nothing. Aliases beat functions, so never name a helper `r`, `h`, `gc`, `ls` or any other alias; and run
   the cases under `$ErrorActionPreference = 'Stop'` inside a try whose catch is a counted failure.
+- **A sandbox that runs a real script copies the WHOLE `lib\`, and a library the script cannot load is exit 3**
+  (2026-09-11). `ops/test-prepush-hook.ps1` copied `prepush-test-auditors.ps1` with a hand list of two libraries
+  older than `lib/git-repo-env.ps1`. Under `Continue` the dot-source printed "is not recognized" and carried on,
+  the hook sends that script's stderr to `/dev/null`, and all 26 cases passed while its `Clear-TcGitRepoEnv` never
+  ran. The sandbox now copies every `lib\*.ps1`, and the check loads each library under `Stop` inside a try that
+  exits 3. try alone catches a missing file, a parse error and a throw; an error WRITTEN while loading needs `Stop`.
+  Hand-listed library copies still standing, not swept: `grocery/send-alert.ps1`, `grocery/triage-close.ps1`,
+  `grocery/test-auditors.ps1` and `meal-prep/pipeline/wave-preaudit.ps1`. Unguarded dot-sources elsewhere were
+  not counted.
 - **A hermetic self-test never asserts an UPPER wall-clock bar** (2026-09-11). Several sessions push from
   one box, so a pre-push `run-gates` shares the cores with theirs: a set that takes 106 s quiet took 792 s,
   and `fanout-lib`'s "under 12 s" and `parallel-run`'s "under 2.5 s" concurrency cases blocked a push that
