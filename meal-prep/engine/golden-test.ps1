@@ -283,10 +283,12 @@ if($Provenance){
     }
     Write-Output ("  checked {0} recipes; exact match {1}; with diffs {2}" -f $checked,$matched,($checked-$matched))
     $all = @($totalDiffs) + @($lineDiffs)
-    $structural = @($all | Where-Object { $_ -match '\.(buy_n|pkg_g|starter_n|starter_pkg_g):' -or $_ -match 'line only in (NEW|OLD)' -or $_ -match 'NO NEW MATCH' })
-    $price      = @($all | Where-Object { $structural -notcontains $_ })
-    Write-Output ("  PRICE-DRIVEN {0}   STRUCTURAL {1}" -f $price.Count, $structural.Count)
-    $outp = @('==== STRUCTURAL (package counts/sizes, missing lines) ====') + $structural +
+    # NOT $structural: this script declares [switch]$Structural, a typed parameter keeps its type, and an array
+    # assigned to it threw here on every -Provenance -Force run (ops\audit-typed-param-shadow.ps1, 2026-09-11).
+    $structuralDiffs = @($all | Where-Object { $_ -match '\.(buy_n|pkg_g|starter_n|starter_pkg_g):' -or $_ -match 'line only in (NEW|OLD)' -or $_ -match 'NO NEW MATCH' })
+    $price      = @($all | Where-Object { $structuralDiffs -notcontains $_ })
+    Write-Output ("  PRICE-DRIVEN {0}   STRUCTURAL {1}" -f $price.Count, $structuralDiffs.Count)
+    $outp = @('==== STRUCTURAL (package counts/sizes, missing lines) ====') + $structuralDiffs +
             @('', '==== PRICE-DRIVEN (expected: baseline frozen 2026-07-26) ====') + $price
     [IO.File]::WriteAllLines((Join-Path $db 'golden-diffs.txt'), $outp, (New-Object Text.UTF8Encoding($false)))
     Write-Output '  full detail -> db\golden-diffs.txt'
