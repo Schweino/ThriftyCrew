@@ -249,6 +249,38 @@ disallowed for all agents.
 **Recommendation.** Keep the current method. If Brad wants the question closed anyway, make it one headed load in
 the seeded driver profile right after a successful 08:00 run, network log only, no retries.
 
+### 2026-09-11 headed probe (R12)
+
+Run by the one-time scheduled task `walmart-headed-probe-once` at 2026-09-11 09:35 CDT, at ThriftyCrew `main`
+HEAD `ed0a502db`.
+
+**Preconditions: all three held.**
+- `grocery/out/logs/capture-run-status.json`: `daily.date` 2026-09-11, `stage` complete, `exit_code` 0.
+- `grocery/out/regular/walmart-regular-2026-09-11.json`: 157,487 bytes, `captured` 2026-09-11, 8 pull terms,
+  written 09:09, backed by `out/captures/walmart-capture-2026-09-11.csv` (51,159 bytes, 09:08). The 08:00 driver
+  itself skipped Walmart (`PAUSED - captured through Brad's own Chrome`); today's file came from that attended lane.
+- `capture-run-daily-2026-09-11.log`: no CAPTCHA, challenge or wall for Walmart or Sam's. Sam's wrote 7 of 7
+  terms (MATCHES 7, EMPTY 0, UNUSABLE 0). The only "walled" text is the standing rescue-worklist label, not an event.
+
+**Tab used: none.** The Claude in Chrome extension answered `tabs_context_mcp` with "No tab group exists for this
+session". The extension acts only on tabs inside its own tab group, and a scheduled session starts with none. The
+two ways to get one, `createIfEmpty: true` or a `navigate` with no tabId, both open a new Chrome window, which R18
+forbids. Brad's existing tabs, including any walmart.com tab, were not reachable, so the probe stopped there.
+
+**Verdict: NOT PROBED** (this file's rubric: not looked at, for the stated reason). Zero requests were made to
+walmart.com. It is not WALLED, because nothing was loaded. Both open questions stay **could not verify**: whether
+the search page makes a separate product JSON call, and whether today's page still embeds products in
+`__NEXT_DATA__`.
+
+**Most important finding.** R12 and R18 as written cannot both be met by an unattended Claude in Chrome session:
+"an existing tab in Brad's Chrome" and "a tab the extension can reach" are different sets until a tab group
+exists, and creating the group is the new window R18 bans. Whether the 08:00 CDP driver's R18 enforcement meets
+the same limit: **could not verify** (not examined; it does not use this extension).
+
+**Recommendation.** If Brad still wants the question closed, run the same single load attended, with an existing
+walmart.com tab placed in the Claude tab group first (whether moving a tab into the group makes it reachable:
+**could not verify**); otherwise leave Walmart on the current method.
+
 ---
 
 ## Hy-Vee and Baker's
