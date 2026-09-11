@@ -827,6 +827,13 @@ def read_pool(path=POOL):
     return d
 
 
+def _pool_replace_wait(_try):
+    # The pause between refused os.replace attempts in write_pool. A module-level name so the self-test
+    # can swap it and release its reader AT the refusal - an event - instead of racing a timer against
+    # this sleep (2026-09-11).
+    time.sleep(0.4)
+
+
 def write_pool(pool, path=POOL):
     pool["_doc"] = POOL_DOC
     pool["updated"] = now_stamp()
@@ -852,7 +859,7 @@ def write_pool(pool, path=POOL):
         except PermissionError:
             if _try == 4:
                 raise
-            time.sleep(0.4)
+            _pool_replace_wait(_try)
 
 
 def pool_index(pool):
@@ -3813,21 +3820,28 @@ def cmd_selftest(a):
         shutil.rmtree(_rl, ignore_errors=True)
 
     # THE WRITE THAT COULD NOT LAND. A reader holding the pool open makes os.replace raise on
-    # Windows; one-shot, that lost a ruling and stranded its candidate. This holds the file open for
-    # longer than one attempt and asserts the write still lands.
+    # Windows; one-shot, that lost a ruling and stranded its candidate.
+    # RELEASED AT THE REFUSAL, NOT ON A TIMER (2026-09-11). This closed the reader from a thread after
+    # 0.9 s and trusted the retry loop's ~1.6 s window to outlast it: a 1.8x margin that a late-waking
+    # thread eats on a loaded box, and run-gates runs this beside sibling sessions' pushes at up to 100%
+    # CPU, so a correct write_pool could go red. The reader is now closed from inside the retry's own
+    # wait, which write_pool reaches only after a REAL PermissionError from a real open handle - so the
+    # first attempt is refused by construction and a retry is what lands the write. No clock, no thread.
+    # What it gives up: the old case also implied the window outlasts a 0.9 s reader. That is a tuning
+    # constant, not the property, and the old case only ever checked it against its own sleep.
     _wd = _tf.mkdtemp(prefix="harvest-write-")
+    _saved_wait = globals()["_pool_replace_wait"]
     try:
         _wp = os.path.join(_wd, "pool.json")
         write_pool({"candidates": [{"slug": "a", "status": "available"}]}, _wp)
         _fh = open(_wp, "r", encoding="utf-8")
-        _t0 = time.time()
+        _waits = []
 
-        def _release_later():
-            time.sleep(0.9)
+        def _release_at_refusal(_try):
+            _waits.append(_try)
             _fh.close()
 
-        _th = threading.Thread(target=_release_later)
-        _th.start()
+        globals()["_pool_replace_wait"] = _release_at_refusal
         # CAUGHT, so this is a RED CASE and not a crash. Without the retry the replace raises
         # PermissionError here - which is the whole point - and an uncaught raise takes the rest of
         # the suite with it, so the neuter reads as "exit 1, zero red" instead of naming the case.
@@ -3837,13 +3851,35 @@ def cmd_selftest(a):
             _wrote = True
         except Exception as _e:                                   # noqa: BLE001
             _wrote, _werr = False, "%s: %s" % (type(_e).__name__, _e)
-        _th.join()
+        finally:
+            _fh.close()
         _after = read_pool(_wp) if _wrote else {"candidates": []}
         T("MUST FIRE  a pool write RETRIES past a reader holding the file - one os.replace lost a "
           "decider's ruling on 2026-09-04 and stranded its candidate as taken forever",
-          _wrote and [c["slug"] for c in _after["candidates"]] == ["b"] and time.time() - _t0 > 0.5,
-          _werr or "%s in %.1fs" % ([c["slug"] for c in _after["candidates"]], time.time() - _t0))
+          _wrote and [c["slug"] for c in _after["candidates"]] == ["b"] and _waits[:1] == [0],
+          _werr or "%s after refusals %s" % ([c["slug"] for c in _after["candidates"]], _waits))
+
+        # ...AND A READER THAT NEVER LETS GO STILL MAKES THE WRITE AN ERROR. The retry must never turn a
+        # write that could not happen into a silent no-op. The wait only records here, so every attempt
+        # meets the open handle and the case costs no time.
+        _before = [c["slug"] for c in read_pool(_wp)["candidates"]]
+        _fh2 = open(_wp, "r", encoding="utf-8")
+        _waits2 = []
+        globals()["_pool_replace_wait"] = _waits2.append
+        _raised = ""
+        try:
+            write_pool({"candidates": [{"slug": "c", "status": "available"}]}, _wp)
+        except PermissionError as _e:
+            _raised = type(_e).__name__
+        finally:
+            _fh2.close()
+        _kept = [c["slug"] for c in read_pool(_wp)["candidates"]]
+        T("CLEAN TWIN ...and a reader that NEVER lets go still makes the write an ERROR after its "
+          "retries, leaving the pool it could not replace exactly as it was",
+          _raised == "PermissionError" and len(_waits2) >= 1 and _kept == _before,
+          "raised=%r refusals=%s kept=%s before=%s" % (_raised, _waits2, _kept, _before))
     finally:
+        globals()["_pool_replace_wait"] = _saved_wait
         shutil.rmtree(_wd, ignore_errors=True)
 
     # ---- A PAGE WITH NO RECIPE BLOCK IS NOT A RECIPE (2026-09-04, PLAN-after-review P1) ----------

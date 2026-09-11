@@ -90,28 +90,52 @@ if ($SelfTest) {
   # Hermetic: reads no board, no capture, no commodities file. The founding bug is FROZEN here as the
   # must-fire fixture - the exact loosened shape of the quinoa-uncooked include that burned 829 CPU-minutes
   # on 2026-08-14 - beside a clean twin that must still match normally.
+  #
+  # NO STOPWATCH DECIDES A CASE HERE (2026-09-11). This asserted "one match took under 4x the timeout" and
+  # "a quarantined call took under the timeout": UPPER wall-clock bars, in a self-test run-gates runs beside
+  # ~337 gates and sibling sessions' pushes on a box often at 100% CPU, so they timed the machine as well
+  # as the bound. Each property is now read off what the code under test PRODUCES - the engine's own
+  # timeout exception, which Note-Timeout counts, and the span New-Probe built the regex with. Load can
+  # delay these and cannot redden them.
+  #
+  # THE VICTIM IS SHORT ON PURPOSE. The 58-character name this carried costs far more than 30 s to FAIL
+  # unbounded: with the bound removed this self-test was killed at a 90 s guard, and under run-gates it
+  # would have run to the 900 s job timeout and scored exit 3 - a hang, never a red naming the case. The
+  # cost climbs steeply with length (unbounded CPU on 2026-09-11, box ~97% busy: 25 characters 2.2 s, 29
+  # characters 7.8 s, 31 characters 13.3 s, 32 past a 20 s guard). 29 was chosen: ~31x the 250 ms bound, so
+  # the timeout still fires on a far faster quiet machine, and a neutered bound goes red in seconds.
+  # 25 was the first tried and rejected at ~9x; 31 costs a neutered run 13 s for margin nobody needs.
   $bad = 0
   $FOUNDING = '^(?:[\w&.-]+.{0,25}){0,6}(?:(?:organic|whole[- ]grain|white|red|black|tri[- ]?colou?r).{0,25})*quinoa$'
-  $VICTIM   = 'Just Bare boneless skinless chicken breasts, 18 oz., $4.99'
+  $VICTIM   = 'Just Bare chicken breasts 1lb'
   $rxBad = New-Probe $FOUNDING
-  $sw = [Diagnostics.Stopwatch]::StartNew()
   $r1 = Test-Probe $rxBad $VICTIM 'selftest|founding'
-  $sw.Stop()
-  if ($reTimeouts.Count -lt 1) { Write-Output '  X MUST-FIRE: the founding ReDoS pattern did NOT time out - the bound is not armed'; $bad++ }
+  $armed = ($reTimeouts.Count -ge 1)
+  if (-not $armed) { Write-Output '  X MUST-FIRE: the founding ReDoS pattern did NOT time out - the bound is not armed'; $bad++ }
   if ($r1) { Write-Output '  X the timed-out match returned TRUE; a match it could not decide must not read as a hit'; $bad++ }
-  if ($sw.ElapsedMilliseconds -gt ($MatchTimeoutMs * 4)) { Write-Output ("  X the bound did not hold: one match took {0}ms against a {1}ms timeout" -f $sw.ElapsedMilliseconds, $MatchTimeoutMs); $bad++ }
-  # circuit breaker: after MAXPATTERNTIMEOUTS the pattern is skipped, so the cost stops growing
-  for ($i = 0; $i -lt ($MAXPATTERNTIMEOUTS + 2); $i++) { $null = Test-Probe $rxBad $VICTIM 'selftest|founding' }
-  if ($reTimeouts.Count -gt $MAXPATTERNTIMEOUTS) { Write-Output ("  X the breaker never tripped: {0} timeouts recorded past a limit of {1}" -f $reTimeouts.Count, $MAXPATTERNTIMEOUTS); $bad++ }
-  $swQ = [Diagnostics.Stopwatch]::StartNew(); $null = Test-Probe $rxBad $VICTIM 'selftest|founding'; $swQ.Stop()
-  if ($swQ.ElapsedMilliseconds -ge $MatchTimeoutMs) { Write-Output '  X a quarantined pattern still paid the full timeout'; $bad++ }
+  # THE BOUND IS THE CONFIGURED ONE, read off the probe. A span loosened to 1 s - anything under the victim's
+  # unbounded cost - still times out and passes the check above; this is the only case that sees it.
+  $wantSpan = [TimeSpan]::FromMilliseconds([Math]::Max(25, $MatchTimeoutMs))
+  if ($rxBad -and $rxBad.MatchTimeout -ne $wantSpan) { Write-Output ("  X MUST-FIRE: the probe was built with a {0}ms bound, not the configured {1}ms" -f $rxBad.MatchTimeout.TotalMilliseconds, $wantSpan.TotalMilliseconds); $bad++ }
+  # circuit breaker: after MAXPATTERNTIMEOUTS the pattern is skipped, so the cost stops growing.
+  # Skipped when the bound is not armed: nothing can be quarantined, and every call would pay the victim's
+  # full unbounded cost for a case that is already red.
+  if ($armed) {
+    for ($i = 0; $i -lt ($MAXPATTERNTIMEOUTS + 2); $i++) { $null = Test-Probe $rxBad $VICTIM 'selftest|founding' }
+    if ($reTimeouts.Count -gt $MAXPATTERNTIMEOUTS) { Write-Output ("  X the breaker never tripped: {0} timeouts recorded past a limit of {1}" -f $reTimeouts.Count, $MAXPATTERNTIMEOUTS); $bad++ }
+    # A QUARANTINED CALL PAYS NOTHING, counted rather than timed: the only way to pay the timeout is to run a
+    # match that hits it, and Note-Timeout records every one.
+    $beforeQ = $reTimeouts.Count
+    if (Test-Probe $rxBad $VICTIM 'selftest|founding') { Write-Output '  X a quarantined pattern returned TRUE'; $bad++ }
+    if ($reTimeouts.Count -ne $beforeQ) { Write-Output '  X a quarantined pattern still ran its match and paid the full timeout'; $bad++ }
+  }
   # CLEAN TWIN: the shipped replacement must still decide normally and correctly
   $rxOk = New-Probe '\bquinoa\b'
   $beforeClean = $reTimeouts.Count
   if (-not (Test-Probe $rxOk 'Simple Truth Organic Quinoa' 'selftest|clean')) { Write-Output '  X clean twin failed to match real quinoa'; $bad++ }
   if (Test-Probe $rxOk $VICTIM 'selftest|clean') { Write-Output '  X clean twin matched a chicken breast'; $bad++ }
   if ($reTimeouts.Count -ne $beforeClean) { Write-Output '  X clean twin recorded a timeout'; $bad++ }
-  if ($bad -eq 0) { Write-Output 'audit-coverage-gaps SELF-TEST PASS (founding ReDoS times out, breaker quarantines it, clean twin still decides)'; exit 0 }
+  if ($bad -eq 0) { Write-Output 'audit-coverage-gaps SELF-TEST PASS (founding ReDoS times out at the configured bound, breaker quarantines it, clean twin still decides)'; exit 0 }
   Write-Output ("audit-coverage-gaps SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

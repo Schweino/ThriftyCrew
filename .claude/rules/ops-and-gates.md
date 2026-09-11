@@ -173,10 +173,19 @@ everything else honest, so a defect here is silent by construction.
   failed 8 of 20 while their rewrites passed 20 of 20. **To prove work runs concurrently, prove the
   OVERLAP, not the speed:** `lib/concurrency-probe.ps1` has N children wait until all N have started,
   which no serial pool can satisfy and no load can break (its width-1 and width-2 mutants went red 12 of
-  12). A clock survives as a generous hang guard, or as a LOWER bar that load can only help. Upper bars
-  still standing that day, listed and not fixed: `grocery/audit-coverage-gaps.ps1` (250 ms, 1 s),
-  `grocery/price-ingredient.ps1` (2 s), and three in `meal-prep/pipeline/hunt_daemon_selftest.py` (a 3 s
-  poll, a ~6 s loop, a 0.6 s barrier) whose timeouts decide the case. **Not every red under load is a
+  12). A clock survives as a generous hang guard, or as a LOWER bar that load can only help.
+  **To prove a regex bound, count the timeout the code RECORDS, never time the call** (2026-09-11).
+  `grocery/audit-coverage-gaps.ps1` and `grocery/price-ingredient.ps1` timed their ReDoS match against 1 s
+  and 2 s bars, and neither bar could go red: with the bound removed, their 58-character victim ran past a
+  90 s guard, so the must-fire HUNG - and under `run-gates` a hang is the 900 s job timeout scored exit 3,
+  never a red that names the case. **A ReDoS fixture needs a victim whose UNBOUNDED cost is a few seconds**:
+  far above the bound, so the timeout still fires on a faster box, and short enough that a neutered bound
+  finishes and goes red. The cost climbs steeply with length (29 characters 7.8 s CPU, 32 past a 20 s
+  guard), so measure it rather than pick one. **A timer racing a retry window is the same bar in disguise:**
+  `meal-prep/pipeline/harvest.py`'s pool-write case closed its reader from a thread after 0.9 s against a
+  ~1.6 s retry window, and now closes it from inside the retry's own wait. Still standing that day, listed
+  and not fixed: three in `meal-prep/pipeline/hunt_daemon_selftest.py` (a 3 s poll, a ~6 s loop, a 0.6 s
+  barrier) whose timeouts decide the case. **Not every red under load is a
   clock:** the two concurrency-fixture reds the same day were lost writes, the mutex rule above.
 - **A timed lock wait is a BRANCH, and an append is not a locked write** (2026-09-11). `grocery/send-alert.ps1`
   stored `WaitOne(10000)`'s answer and never read it, so a timeout rewrote the whole triage queue UNLOCKED over

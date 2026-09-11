@@ -62,6 +62,12 @@ function Get-Slug([string]$s) { return (($s -replace '[^A-Za-z0-9]+', '-').Trim(
 # ---- resolve one term to a commodity id --------------------------------------------------------------
 # Ordered most-certain first, and every hit records HOW it matched so a wrong answer is auditable rather
 # than mysterious. An include-pattern hit is last because it is the loosest and the likeliest to be wrong.
+# A TIMED-OUT INCLUDE IS RECORDED, NOT SWALLOWED (2026-09-11). It used to fall into a bare catch that reads
+# exactly like "this include does not match", so a term whose only claimant timed out came back ABSENT - a
+# could-not-look settling the question. Each one lands in $ResolveTimeouts, every result carries the count
+# for its term, and the self-test reads the same record instead of timing the resolver.
+$IncludeMatchTimeoutMs = 100
+$ResolveTimeouts = New-Object System.Collections.ArrayList
 function Resolve-Commodity($Term, $Commods, $SearchPairs) {
   $slug = Get-Slug $Term
   $hit = $Commods | Where-Object { $_.id -eq $slug } | Select-Object -First 1
@@ -86,8 +92,10 @@ function Resolve-Commodity($Term, $Commods, $SearchPairs) {
       # bounded: an include is authored data and one bad pattern must not hang a lookup (see the ReDoS that
       # cost this estate 11 hours on 2026-08-14)
       try {
-        $rx = New-Object Text.RegularExpressions.Regex([string]$inc, [Text.RegularExpressions.RegexOptions]::IgnoreCase, [TimeSpan]::FromMilliseconds(100))
+        $rx = New-Object Text.RegularExpressions.Regex([string]$inc, [Text.RegularExpressions.RegexOptions]::IgnoreCase, [TimeSpan]::FromMilliseconds($IncludeMatchTimeoutMs))
         if ($rx.IsMatch($Term)) { return @{ id = [string]$c.id; how = "include pattern /$inc/" } }
+      } catch [Text.RegularExpressions.RegexMatchTimeoutException] {
+        [void]$ResolveTimeouts.Add([pscustomobject]@{ term = [string]$Term; commodity = [string]$c.id; pattern = [string]$inc; timeout_ms = $rx.MatchTimeout.TotalMilliseconds })
       } catch { }
     }
   }
@@ -109,14 +117,21 @@ if ($SelfTest) {
   $r = Resolve-Commodity 'ground beef' $fakeCommods $null
   if (-not $r -or $r.id -ne 'ground-beef-8020') { Write-Output '  X include pattern did not resolve'; $bad++ }
   if ($null -ne (Resolve-Commodity 'nothing like this exists' $fakeCommods $null)) { Write-Output '  X a nonsense term resolved'; $bad++ }
+  if ($ResolveTimeouts.Count -ne 0) { Write-Output ("  X a well-formed include recorded {0} timeout(s)" -f $ResolveTimeouts.Count); $bad++ }
   # MUST-FIRE: a pathological include must not hang the resolver. This is the founding-bug shape.
+  # READ OFF THE TIMEOUT THE RESOLVER RECORDS, NOT A STOPWATCH (2026-09-11). This asserted "under 2000 ms": an
+  # upper wall-clock bar, in a self-test run-gates runs on a shared box at up to 100% CPU. And it could not go
+  # red. With the bound removed, the 58-character victim it carried ran past a 90 s guard, so the case HUNG
+  # (run-gates would have held it to the 900 s job timeout and scored exit 3). This 29-character victim fails
+  # the pattern unbounded in 6.2 s CPU, ~62x the bound, so a neutered bound goes red in seconds. The length
+  # sweep behind the choice is in audit-coverage-gaps.ps1's self-test, which freezes the same shape.
   $redos = [pscustomobject]@{ id = 'redos'; label = 'Redos'; unit = 'oz'
                               include = @('^(?:[\w&.-]+.{0,25}){0,6}(?:(?:organic|whole[- ]grain|white|red).{0,25})*quinoa$'); exclude = @() }
-  $sw = [Diagnostics.Stopwatch]::StartNew()
-  $null = Resolve-Commodity 'Just Bare boneless skinless chicken breasts, 18 oz., $4.99' @($redos) $null
-  $sw.Stop()
-  if ($sw.ElapsedMilliseconds -gt 2000) { Write-Output ("  X MUST-FIRE: a ReDoS include hung the resolver for {0}ms" -f $sw.ElapsedMilliseconds); $bad++ }
-  if ($bad -eq 0) { Write-Output 'price-ingredient SELF-TEST PASS (slug, id/label/pattern resolution, nonsense rejected, ReDoS include bounded)'; exit 0 }
+  $rr = Resolve-Commodity 'Just Bare chicken breasts 1lb' @($redos) $null
+  if ($ResolveTimeouts.Count -lt 1) { Write-Output '  X MUST-FIRE: a ReDoS include did not time out - the resolver bound is not armed'; $bad++ }
+  elseif ([double]$ResolveTimeouts[0].timeout_ms -ne $IncludeMatchTimeoutMs) { Write-Output ("  X MUST-FIRE: the include ran under a {0}ms bound, not the configured {1}ms" -f $ResolveTimeouts[0].timeout_ms, $IncludeMatchTimeoutMs); $bad++ }
+  if ($null -ne $rr) { Write-Output '  X a timed-out include resolved the term; a match it could not decide must not read as a hit'; $bad++ }
+  if ($bad -eq 0) { Write-Output 'price-ingredient SELF-TEST PASS (slug, id/label/pattern resolution, nonsense rejected, ReDoS include times out at the configured bound and is recorded)'; exit 0 }
   Write-Output ("price-ingredient SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
 
@@ -225,8 +240,10 @@ foreach ($term in $Name) {
   # board first (it holds the prices, and it is the only definition some ids have), then the catalog
   $res = $null
   $tslug = Get-Slug $term
+  $ResolveTimeouts.Clear()   # per term, so a term named twice on one command line does not count its timeouts twice
   if ($boardSlugIx.ContainsKey($tslug)) { $res = @{ id = $boardSlugIx[$tslug]; how = 'board id/label' } }
   if (-not $res) { $res = Resolve-Commodity $term $commods $searchPairs }
+  $tTimeouts = $ResolveTimeouts.Count
   $row = $null
   if ($res) { $row = $boardIx[$res.id] }
 
@@ -237,7 +254,7 @@ foreach ($term in $Name) {
       cheapest_store = [string]$row.cheapest_store; cheapest = [double]$row.cheapest_price
       coverage = ("{0} of 7 stores" -f @($stores).Count)
       stores = @($stores | ForEach-Object { [pscustomobject]@{ store = [string]$_.store; per_unit = [double]$_.per_unit; item = [string]$_.item; size = [string]$_.size } })
-      ms = $sw.ElapsedMilliseconds })
+      include_timeouts = $tTimeouts; ms = $sw.ElapsedMilliseconds })
     continue
   }
 
@@ -264,14 +281,14 @@ foreach ($term in $Name) {
       # off the commodity definition.
       unit = (Get-DefUnit $res); cheapest_store = $null; cheapest = $null
       coverage = ("{0} candidate product(s) across {1} store(s) in today's captures" -f $cands.Count, (@($cands | Select-Object -ExpandProperty store -Unique)).Count)
-      stores = @($cands); ms = $sw.ElapsedMilliseconds })
+      stores = @($cands); include_timeouts = $tTimeouts; ms = $sw.ElapsedMilliseconds })
   } else {
     [void]$results.Add([pscustomobject]@{
       term = $term; tier = 'ABSENT'; commodity = $(if ($res) { $res.id } else { $null })
       resolved_by = $(if ($res) { $res.how } else { 'no commodity claims this term' })
       unit = (Get-DefUnit $res); cheapest_store = $null; cheapest = $null
       coverage = 'no board cell and no matching product in any capture'
-      stores = @(); ms = $sw.ElapsedMilliseconds })
+      stores = @(); include_timeouts = $tTimeouts; ms = $sw.ElapsedMilliseconds })
   }
 }
 
@@ -290,6 +307,7 @@ foreach ($r in $results) {
   $u = [string]$r.unit
   $uNote = if ($u) { $x = if ($u -eq 'each') { ' - the WHOLE item, not a seed/ground/flake form' } else { '' }; "  [unit: $u$x]" } else { '' }
   Write-Output ("{0}  '{1}'{2}  [{3}ms]" -f $r.tier, $r.term, $uNote, $r.ms)
+  if ([int]$r.include_timeouts -gt 0) { Write-Output ("   WARN {0} include pattern(s) timed out on this term, so a commodity that claims it could not be ruled out" -f $r.include_timeouts) }
   if ($r.tier -eq 'MAPPED') {
     Write-Output ("   commodity {0}  ({1})" -f $r.commodity, $r.resolved_by)
     Write-Output ("   cheapest  {0} `${1}/{2}   -   {3}" -f $r.cheapest_store, $r.cheapest, $r.unit, $r.coverage)
