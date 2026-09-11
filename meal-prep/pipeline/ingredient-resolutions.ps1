@@ -102,6 +102,14 @@ if ($runSelfTest) {
     $b = @(Read-Store $tmp)
     T 'the store round-trips' ($b.Count -eq 1 -and $b[0].key -eq 'sumac') ([string]$b.Count)
     T 'MUST FIRE  bid_exists=false survives the round-trip as FALSE, not as absent' ($b[0].bid_exists -eq $false) ([string]$b[0].bid_exists)
+    # CLEAN TWIN: -Query still answers from the ledger (2026-09-11). The read feeding -Query and the listing
+    # moved below -Record and -Invalidate, which no longer read before their lock; a read placed wrongly or
+    # dropped would leave -Query saying `no prior resolution` for a term the store holds. A real child, as callers do.
+    $qLines = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Query -Term 'Sumac' -Json -Store $tmp
+    $qCode = $LASTEXITCODE
+    $qRow = $null; try { $qRow = ((@($qLines) -join "`n") | ConvertFrom-Json) } catch { $qRow = $null }
+    T 'CLEAN TWIN -Query still answers from the ledger now that the read feeding it sits below -Record and -Invalidate' `
+      ($qCode -eq 3 -and $null -ne $qRow -and [string]$qRow.item_id -eq 'sumac') ("exit $qCode out: " + (@($qLines) -join ' / '))
     T 'a missing store reads as empty' ((@(Read-Store (Join-Path $env:TEMP 'nope-ir.json'))).Count -eq 0) 'not empty'
 
     # MUST FIRE: CONCURRENT WRITERS DO NOT LOSE ROWS (added 2026-08-24, D9's phase-1 obligation).
@@ -242,8 +250,6 @@ if ($runSelfTest) {
   Exit-Guard -Name 'ingredient-resolutions' -Summary 'selftest pass' -Code 0
 }
 
-$rows = @(Read-Store $Store)
-
 function Save-Rows { param($R)
   $doc = [pscustomobject]@{
     _doc='Ingredient string -> commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.'
@@ -266,9 +272,11 @@ function Save-Rows { param($R)
 if ($runRecord) {
   $k = Get-TermKey $Term
   if (-not $k) { Write-Output 'ingredient-resolutions: -Record needs -Term'; exit 1 }
-  # RE-READ INSIDE THE LOCK. $rows above was read before the mutex was taken, and using it here would
-  # keep the exact race the mutex exists to close - a writer that merges into a snapshot older than
-  # its own turn drops whatever landed in between.
+  # READ INSIDE THE LOCK, AND ONLY HERE. A snapshot read before the mutex was taken would keep the exact
+  # race the mutex exists to close - a writer that merges into a snapshot older than its own turn drops
+  # whatever landed in between. -Record and -Invalidate never used one, yet until 2026-09-11 the script read
+  # one first, holding the file open for nothing while a sibling replaced it (the reader side of 9f3ca3cbd).
+  # The read the query verbs need now sits below -Invalidate.
   try {
     Invoke-Locked -Path $Store -Body {
       $fresh = @(Read-Store $Store)
@@ -309,6 +317,9 @@ if ($runInv) {
   Write-Output ("ingredient-resolutions: invalidated {0} row(s) for item_id '{1}'" -f $script:invalidated, $ItemId)
   exit 0
 }
+# The read the query verbs answer from. Below -Record and -Invalidate on purpose: a writer reads only inside its lock.
+$rows = @(Read-Store $Store)
+
 if ($runQuery) {
   $k = Get-TermKey $Term
   $r = @($rows | Where-Object { [string]$_.key -eq $k })[0]

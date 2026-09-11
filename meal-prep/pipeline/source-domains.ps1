@@ -137,6 +137,14 @@ if ($runSelfTest) {
   try {
     ([pscustomobject]@{ domains=@([pscustomobject]@{domain='x.com';ok=1;fail=0;status='reliable'}) } | ConvertTo-Json -Depth 5) | Set-Content $tmp -Encoding utf8
     T 'the store round-trips' ((@(Read-Store $tmp)).Count -eq 1) ([string](@(Read-Store $tmp)).Count)
+    # CLEAN TWIN: -Query still answers from the ledger (2026-09-11). The read feeding -Query, -Brief and the
+    # listing moved below -Record, which no longer reads before its lock; a read placed wrongly or dropped
+    # would leave -Query saying `unknown` about a domain the store holds. Driven as a real child, as callers do.
+    $qLines = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Query -Domain 'https://www.x.com/a' -Json -Store $tmp
+    $qCode = $LASTEXITCODE
+    $qRow = $null; try { $qRow = ((@($qLines) -join "`n") | ConvertFrom-Json) } catch { $qRow = $null }
+    T 'CLEAN TWIN -Query still answers from the ledger now that the read feeding it sits below -Record' `
+      ($qCode -eq 0 -and $null -ne $qRow -and [string]$qRow.domain -eq 'x.com' -and [int]$qRow.ok -eq 1) ("exit $qCode out: " + (@($qLines) -join ' / '))
 
     # MUST FIRE: CONCURRENT WRITERS DO NOT LOSE INCREMENTS. Measured 2026-08-23 - before the mutex,
     # the v3 harvester's 8 parallel fetches turned 2,293 real outcomes into 65 recorded ones, which
@@ -267,16 +275,16 @@ if ($runSelfTest) {
   Exit-Guard -Name 'source-domains' -Summary 'selftest pass' -Code 0
 }
 
-$rows = @(Read-Store $Store)
-
 if ($runRecord) {
   $h = Get-Host2 $Domain
   if (-not $h) { Write-Output 'source-domains: -Record needs -Domain'; exit 1 }
   $o = $Outcome.ToLower()
   if (@('ok','fail','404','blocked') -notcontains $o) { Write-Output ("source-domains: -Outcome must be ok|fail|404|blocked (got '{0}')" -f $Outcome); exit 1 }
   Invoke-Locked -Path $Store -Body {
-  # RE-READ INSIDE THE LOCK. The copy loaded at script start was read before the lock was taken and
-  # may already be stale by an increment another writer has since committed.
+  # READ INSIDE THE LOCK, AND ONLY HERE. A copy read before the lock may be stale by an increment another
+  # writer has since committed, so -Record never used one - yet until 2026-09-11 it still read one first,
+  # holding the file open for nothing while a sibling replaced it (the reader side of 9f3ca3cbd). The
+  # read the query verbs need now sits below this branch.
   $rows = @(Read-Store $Store)
   $r = @($rows | Where-Object { [string]$_.domain -eq $h })[0]
   if (-not $r) {
@@ -313,6 +321,9 @@ if ($runRecord) {
   }
   exit 0
 }
+
+# The read the query verbs answer from. Below -Record on purpose: a writer reads only inside its lock.
+$rows = @(Read-Store $Store)
 
 if ($runQuery) {
   $h = Get-Host2 $Domain
