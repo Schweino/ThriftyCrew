@@ -222,6 +222,14 @@ everything else honest, so a defect here is silent by construction.
   1) - a lost exit after a failing verdict read ok before. 0 of 314 exit-0 suites printed either that day. So never
   echo a captured child's `FAIL` lines as your own at exit 0. It cannot see a passing fall-through into a path that
   prints nothing.
+- **A HARNESS that runs a child's self-test owes the same two reads** (2026-09-11), and run-gates' rule above does
+  not reach it: `grocery/test-auditors.ps1` spawns its children itself. u141 read rc 0, every case name and no `FAIL`
+  line from the fall-through above and passed it. Over the 46 `-SelfTest` call sites in that file, each child run
+  once: 45 required the child's verdict (the matched text hit exactly one line, the child's last or the one before
+  its `-COMPLETE` marker), u141 did not, and 7 of the 45 never read the exit code. All eight now require both.
+  Choose the text from the child's real last lines, never a word that also sits in a case label, and hand the child
+  a temp output directory where it takes one: `pull-grocery-ads` creates its `-OutDir` before the self-test runs, so
+  the default was the live `grocery\out`.
 - **A sandbox that runs a real script copies the WHOLE `lib\`, and a library the script cannot load is exit 3**
   (2026-09-11). `ops/test-prepush-hook.ps1` copied `prepush-test-auditors.ps1` with a hand list of two libraries
   older than `lib/git-repo-env.ps1`. Under `Continue` the dot-source printed "is not recognized" and carried on,

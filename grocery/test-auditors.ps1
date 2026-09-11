@@ -1318,12 +1318,24 @@ Remove-Item $fxSs -Recurse -Force -ErrorAction SilentlyContinue
 # doubles; this unit runs it and requires the founding case and each twin BY NAME, so a deleted case cannot pass as
 # a shorter green run.
 if (Use-Unit 'u141-freshop-pager-and-circular-picker' -Reads 'grocery/ff-price-lib.ps1', 'grocery/pull-grocery-ads.ps1', 'grocery/check-ad-cycles.ps1') {
-$r = RunPS 'pull-grocery-ads.ps1' @('-SelfTest')
+# THE SELF-TEST MUST END IN ITS OWN VERDICT, AND IT RUNS AGAINST A TEMP -OutDir (2026-09-11). Commit 8253ded82 put the
+# suite's closing `if ($fail -eq 0) { ...; exit 0 }` on the same line as its last case, so PowerShell passed `if`, the
+# condition and both blocks to _T as ARGUMENTS, no exit ran, and -SelfTest fell through into a LIVE pull of Hy-Vee, Aldi
+# and Family Fare that wrote out\ads-<today>.json and exited 0. Every case name had printed and no line began FAIL, so
+# this unit passed it. The verdict line is what a fall-through cannot print, and an ads file in the temp directory is
+# what only a fall-through writes. The child creates its -OutDir before it reaches the self-test, so the default is the
+# live grocery\out. dbd92279f fixed the child and ops\audit-keyword-arguments.ps1 blocks that one spelling; this is the
+# harness half, for every other way a suite can lose its exit. Of the 46 -SelfTest call sites in this file on that day,
+# this was the only one whose Ok did not require the child's own verdict line.
+$pgaOut = Register-Fx (Join-Path $env:TEMP ('taudit-pga-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
+$r = RunPS 'pull-grocery-ads.ps1' @('-SelfTest', '-OutDir', $pgaOut)
 $need = @('founding loop shape', 'added zero new ids', 'coverage 9.6', 'read whole: 1,045 unique in 11 requests', 'throttle on request 7', 'picker takes the weekly ad', 'pull that ERRORED')
 $missing = @($need | Where-Object { $r.text -notmatch [regex]::Escape($_) })
 $failLines = @(($r.text -split "`n") | Where-Object { $_ -match '^FAIL' })
-if ($r.rc -eq 0 -and $missing.Count -eq 0 -and $failLines.Count -eq 0) { Ok 'Freshop pager: a page-ignoring endpoint throws, a short circular reads coverage 9.6 with a REVIEW line, a whole one reads 1,045 in 11 requests, a throttle keeps its 600 rows, and the weekly ad beats the 2-day preview' }
-else { Bad ('Freshop pager self-test failed or lost a case (rc=' + $r.rc + '; missing: ' + ($missing -join ', ') + '; ' + ($failLines -join ' | ') + ') - the Family Fare circular can be read one page deep again and reported as complete') }
+$pgaVerdict = [bool]($r.text -match '(?m)^SELF-TEST PASS: \d+ case')
+$pgaWrote = @(Get-ChildItem -LiteralPath $pgaOut -Filter 'ads-*.json' -File -ErrorAction SilentlyContinue)
+if ($r.rc -eq 0 -and $pgaVerdict -and $pgaWrote.Count -eq 0 -and $missing.Count -eq 0 -and $failLines.Count -eq 0) { Ok 'Freshop pager: a page-ignoring endpoint throws, a short circular reads coverage 9.6 with a REVIEW line, a whole one reads 1,045 in 11 requests, a throttle keeps its 600 rows, the weekly ad beats the 2-day preview, and the self-test ends in its own verdict without pulling' }
+else { Bad ('Freshop pager self-test failed, lost a case or fell through into a LIVE pull (rc=' + $r.rc + '; verdict line=' + $pgaVerdict + '; ads files written=' + $pgaWrote.Count + '; missing: ' + ($missing -join ', ') + '; ' + ($failLines -join ' | ') + ') - the Family Fare circular can be read one page deep again, or a gate run can overwrite the day''s ad capture') }
 } # u141-freshop-pager-and-circular-picker
 
 # (d5) MUST-FIRE for cheese_carrier and cracker_carrier (2026-09-04, queue 2026-09-04-2cd17a). TWO FOUNDING
@@ -6069,9 +6081,13 @@ $mpPipe = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
 $sps = Join-Path $mpPipe 'sync-prose-from-spec.ps1'
 if (-not (Test-Path $sps)) { Bad 'sync-prose-from-spec.ps1 is missing - nothing keeps specs\prose in step with the specs, and a full spec-guards run silently reverts the cost redesign' }
 else {
+  # THE VERDICT AND THE EXIT CODE, BOTH (2026-09-11). This site and the six meal-prep repair sites below it read only
+  # the child's verdict line, so a suite that printed SELF-TEST PASS and then died, or fell through into a path that
+  # exits non-zero, still passed. Each child was run once that day: all seven exit 0 on a pass and print the matched
+  # text exactly once, as their verdict. $LASTEXITCODE survives the Out-String, as feed-freshness' check above relies on.
   $r = PSChild $sps -SelfTest | Out-String
-  if ($r -match 'SELF-TEST PASS') { Ok 'prose-sync: still writes spec -> prose only, still refuses to blank a field the spec lost, and its -Check still fires on a re-drifted file' }
-  else { Bad ('sync-prose-from-spec -SelfTest failed: ' + ($r -replace "`n", ' ')) }
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELF-TEST PASS') { Ok 'prose-sync: still writes spec -> prose only, still refuses to blank a field the spec lost, and its -Check still fires on a re-drifted file' }
+  else { Bad ('sync-prose-from-spec -SelfTest failed (rc=' + $LASTEXITCODE + '): ' + ($r -replace "`n", ' ')) }
 
   $chk = PSChild $sps -AllRuns -Check | Out-String
   # SCOPE, stated in the label because the first version of it over-claimed: these prose files belong to
@@ -6101,11 +6117,11 @@ else {
   $asc = Join-Path $mpPipe 'audit-spec-contradictions.ps1'
   $rsc = Join-Path $mpPipe 'repair-spec-contradictions.ps1'
   $r = PSChild $asc -SelfTest | Out-String
-  if ($r -match 'SELF-TEST PASS') { Ok 'spec-contradictions: all five classes still fire on the frozen live cases, and a self-consistent spec still produces nothing' }
-  else { Bad ('audit-spec-contradictions -SelfTest failed: ' + ($r -replace "`n", ' ')) }
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELF-TEST PASS') { Ok 'spec-contradictions: all five classes still fire on the frozen live cases, and a self-consistent spec still produces nothing' }
+  else { Bad ('audit-spec-contradictions -SelfTest failed (rc=' + $LASTEXITCODE + '): ' + ($r -replace "`n", ' ')) }
   $r = PSChild $rsc -SelfTest | Out-String
-  if ($r -match 'SELF-TEST PASS') { Ok 'contradiction repair: still refuses a two-quantity head line, "rice vinegar", and "wild rice" - and still matches "93/7 ground turkey" to its own line' }
-  else { Bad ('repair-spec-contradictions -SelfTest failed - a head ingredient line can be rewritten to the WRONG ingredient''s amount: ' + ($r -replace "`n", ' ')) }
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELF-TEST PASS') { Ok 'contradiction repair: still refuses a two-quantity head line, "rice vinegar", and "wild rice" - and still matches "93/7 ground turkey" to its own line' }
+  else { Bad ('repair-spec-contradictions -SelfTest failed (rc=' + $LASTEXITCODE + ') - a head ingredient line can be rewritten to the WRONG ingredient''s amount: ' + ($r -replace "`n", ' ')) }
   # BUY-COVERAGE's repair side (2026-08-15). The class fires on a cost line whose buy sentence disagrees
   # with the package the batch needs; this is the script that rewrites those sentences, and its fixtures
   # pin the two shapes plus the scope guard - a spec whose hand-written shop_smart uses the same words
@@ -6114,8 +6130,8 @@ else {
   if (-not (Test-Path $rbb)) { Bad 'repair-bulk-buy-line.ps1 is missing - bulk cost lines can go back to telling every shopper one package "lasts several batches"' }
   else {
     $r = PSChild $rbb -SelfTest | Out-String
-    if ($r -match 'all green') { Ok 'bulk buy line: a 1.88-batch box no longer reads "lasts several batches", a 14.8-batch bottle still does, and writer prose is never rewritten' }
-    else { Bad ('repair-bulk-buy-line -SelfTest failed - the buy sentence can drift from the package the recipe actually needs: ' + ($r -replace "`n", ' ')) }
+    if ($LASTEXITCODE -eq 0 -and $r -match 'all green') { Ok 'bulk buy line: a 1.88-batch box no longer reads "lasts several batches", a 14.8-batch bottle still does, and writer prose is never rewritten' }
+    else { Bad ('repair-bulk-buy-line -SelfTest failed (rc=' + $LASTEXITCODE + ') - the buy sentence can drift from the package the recipe actually needs: ' + ($r -replace "`n", ' ')) }
   }
 
   $r = (Get-Early 'early:spec-live' $asc @('-Quiet', '-ReportDir', $script:SpecLiveReportDir)).text
@@ -6132,8 +6148,8 @@ else {
   if (-not (Test-Path $rcm)) { Bad 'repair-cook-measures.ps1 is missing - the ingredients list can go back to naming packages a cook cannot measure' }
   else {
     $r = PSChild $rcm -SelfTest | Out-String
-    if ($r -match 'SELF-TEST PASS') { Ok 'cook measures: a package noun that cannot prove it equals the grams is still replaced, a whole can is still left alone, and a WEIGHT label is still out of scope' }
-    else { Bad ('repair-cook-measures -SelfTest failed: ' + ($r -replace "`n", ' ')) }
+    if ($LASTEXITCODE -eq 0 -and $r -match 'SELF-TEST PASS') { Ok 'cook measures: a package noun that cannot prove it equals the grams is still replaced, a whole can is still left alone, and a WEIGHT label is still out of scope' }
+    else { Bad ('repair-cook-measures -SelfTest failed (rc=' + $LASTEXITCODE + '): ' + ($r -replace "`n", ' ')) }
 
     $r = PSChild $rcm | Out-String
     $n = 0
@@ -6163,8 +6179,8 @@ else {
     if (-not (Test-Path $rrb)) { Bad 'repair-range-buy.ps1 is missing - a range label can ship again and the servings control will render "4-3 cloves"' }
     else {
       $r = PSChild $rrb -SelfTest | Out-String
-      if ($r -match 'SELF-TEST PASS') { Ok 'range labels: the founding garlic case still resolves to the grams, a range with an unweighable unit is still REFUSED rather than guessed, and "12-oz bag" is still not a range' }
-      else { Bad ('repair-range-buy -SelfTest failed: ' + ($r -replace "`n", ' ')) }
+      if ($LASTEXITCODE -eq 0 -and $r -match 'SELF-TEST PASS') { Ok 'range labels: the founding garlic case still resolves to the grams, a range with an unweighable unit is still REFUSED rather than guessed, and "12-oz bag" is still not a range' }
+      else { Bad ('repair-range-buy -SelfTest failed (rc=' + $LASTEXITCODE + '): ' + ($r -replace "`n", ' ')) }
 
       $r = PSChild $rrb | Out-String
       $n = -1
@@ -6187,8 +6203,8 @@ else {
     if (-not (Test-Path $srb)) { Bad 'sync-recipesdb-buy.ps1 is missing - a spec label repair now has no path into recipes-db, and the Meal Plan Builder reads recipes-db' }
     else {
       $r = PSChild $srb -SelfTest | Out-String
-      if ($r -match 'SELF-TEST PASS') { Ok 'recipes-db buy sync: both carry classes still fire on their frozen cases, and a true package noun, a hand-edited spec, a measure-vs-grams defect and disagreeing grams are all still refused' }
-      else { Bad ('sync-recipesdb-buy -SelfTest failed - the only path a label repair has into recipes-db: ' + ($r -replace "`n", ' ')) }
+      if ($LASTEXITCODE -eq 0 -and $r -match 'SELF-TEST PASS') { Ok 'recipes-db buy sync: both carry classes still fire on their frozen cases, and a true package noun, a hand-edited spec, a measure-vs-grams defect and disagreeing grams are all still refused' }
+      else { Bad ('sync-recipesdb-buy -SelfTest failed (rc=' + $LASTEXITCODE + ') - the only path a label repair has into recipes-db: ' + ($r -replace "`n", ' ')) }
 
       $r = PSChild $srb | Out-String
       $m = [regex]::Match($r, 'recipes-db buy sync: (\d+) label')
