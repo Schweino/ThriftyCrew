@@ -20,6 +20,17 @@
 #   +db\built              feed-covers-published, wave-preaudit      -> 185 passed
 #   +catalog-digest.json   find-similar, make-saturation             -> 187 passed
 #
+# 2026-09-11, the checkout this file NEVER reaches: a plain `git worktree add --detach` outside
+# .claude\worktrees. Harness ops\run-gates.ps1 at bfc3a1974 (the seed-worktree source-resolver change on
+# top of ed0a502db), run inside that checkout. 244 self-tests discovered, 336 gates:
+#
+#   332 passed, 4 failed   bare: feed-covers-published, wave-preaudit, find-similar, make-saturation.
+#                          start-sidecar BLIND on 1 case, its venv, which is deliberately not seeded
+#   ops\seed-worktree.ps1 -Target <checkout>, run from THAT checkout's own copy with no -Source: exit 0,
+#                          source named by git's common dir, 38 copied (db\built and this file's 37
+#                          files). Run again: exit 0, 38 already present.
+#   336 passed, 0 failed   exit 0, start-sidecar still BLIND on 1 case
+#
 # Syntax is gitignore-style patterns, matched against `git ls-files --others --ignored
 # --exclude-standard --directory`. So ONLY IGNORED FILES ARE ELIGIBLE - a tracked file is already in
 # the worktree and cannot be listed here. That matters for the two failures this file does NOT fix;
@@ -68,3 +79,7 @@ grocery/out/comparison-*.json
 # `git diff` shows nothing ([[crlf-flip-is-invisible-in-git-diff]]). Fixing it is a .gitattributes
 # question and a separate piece of work - recorded here so the next person to read a red worktree gate
 # does not spend the afternoon hunting for a data file that was never the problem.
+#
+# NOT REPRODUCED 2026-09-11: both passed in the plain detached checkout measured at the top of this file,
+# bare and seeded. Nothing measured says why they stopped failing, so this records the observation and
+# does not retire the account above.
