@@ -606,10 +606,19 @@ function Get-TermVerdictMap {
   $map = @{}
   if (-not (Test-Path $QueuePath)) { return $map }
   # Invoke-NativeScript, NOT `2>&1`: under 'Stop' in PS 5.1 the queue's first stderr line is a terminating
-  # throw in THIS script. grocery\test-native-stderr-eap.ps1 is the watcher.
+  # throw in THIS script. grocery\test-native-stderr-eap.ps1 is the watcher. It never throws on a non-zero
+  # exit either, so the check below is what reads it.
   $res = Invoke-NativeScript $QueuePath '-List' '-Json'
   $text = ($res.Lines -join "`n")
+  # A QUEUE THAT COULD NOT BE READ IS NOT AN EMPTY QUEUE (2026-09-11). ingredient-queue.ps1 now answers an
+  # unreadable queue, or an absent live one, with exit 2 and {"error": ...} on stdout. That PARSES and holds no
+  # items, so without these two checks every term reads as unknown and -Derive scores it PENDING in silence.
+  # Before that day the same queue made the child throw onto stderr and the parse below failed loudly; this keeps
+  # it loud. Two checks, not one: the exit code is the contract, and a document with no items list is refused
+  # even if some later exit forgets to say so.
+  if ($res.ExitCode -ne 0) { throw ("hunt-run: ingredient-queue exited {0}, so its verdicts cannot be used: {1}" -f $res.ExitCode, $text) }
   try { $doc = $text | ConvertFrom-Json } catch { throw ("hunt-run: could not parse ingredient-queue output: " + $text) }
+  if ($null -eq $doc -or -not ($doc.PSObject.Properties.Name -contains 'items')) { throw ("hunt-run: ingredient-queue answered with no items list, so its verdicts cannot be used: " + $text) }
   foreach ($it in @($doc.items)) { $map[[string]$it.term] = [string]$it.verdict }
   return $map
 }
@@ -1758,6 +1767,49 @@ if ($runSelfTest) {
       ($p5be.Count -eq 1 -and @($script:NonRecipeStateFiles).Count -eq 0) `
       ("n={0} skipped={1}" -f $p5be.Count, (@($script:NonRecipeStateFiles) -join ','))
   } finally { Remove-Item -LiteralPath $p5b -Recurse -Force -ErrorAction SilentlyContinue }
+
+  # ---- -Derive's VERDICT MAP REFUSES A QUEUE THAT COULD NOT BE READ (2026-09-11) --------------------------------
+  # ingredient-queue.ps1 now answers an unreadable queue, or an absent live one, with exit 2 and {"error": ...} on
+  # stdout - valid JSON with no items - where it used to throw onto stderr and fail the parse in Get-TermVerdictMap.
+  # Read as a map, that is every term unknown and every recipe PENDING, in silence. Each of the map's two checks
+  # gets a case only it can catch (a stub that breaks one rule and keeps the other), and one case drives the REAL
+  # queue script end to end through a wrapper, because Get-TermVerdictMap passes no -QueueFile of its own.
+  $vm = Join-Path ([IO.Path]::GetTempPath()) ('hunt-vmap-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  [void](New-Item -ItemType Directory -Path $vm -Force)
+  try {
+    $vmEnc = New-Object Text.UTF8Encoding($false)
+    $vmIq = Join-Path $repo 'grocery\ingredient-queue.ps1'
+    function New-VmStub([string]$Name, [string]$Body) { $vp = Join-Path $vm $Name; [IO.File]::WriteAllText($vp, $Body, $vmEnc); return $vp }
+    function New-VmWrap([string]$Name, [string]$QueueJson) {
+      return (New-VmStub $Name ("& powershell -NoProfile -ExecutionPolicy Bypass -File '" + $vmIq + "' -List -Json -QueueFile '" + $QueueJson + "' -ReadWaitMs 200`r`nexit `$LASTEXITCODE`r`n"))
+    }
+    $vmTrunc = Join-Path $vm 'truncated-queue.json'
+    [IO.File]::WriteAllText($vmTrunc, '{"readme":"x","items":[{"term":"saffron","recipes":["r"],"verdict":"CARR', $vmEnc)
+    $vmGood = Join-Path $vm 'good-queue.json'
+    [IO.File]::WriteAllText($vmGood, '{"readme":"x","items":[{"term":"saffron","recipes":["r"],"status":"resolved","verdict":"CARRIED","stores":{}}]}', $vmEnc)
+
+    $vmAErr = ''; $vmA = $null
+    try { $vmA = Get-TermVerdictMap (New-VmWrap 'wrap-unreadable.ps1' $vmTrunc) } catch { $vmAErr = $_.Exception.Message }
+    T 'MUST FIRE  -Derive''s verdict map REFUSES a queue the real ingredient-queue could not read, rather than scoring every term PENDING in silence' `
+      ($vmAErr -match 'cannot be used') ('no refusal; map keys: [' + $(if ($vmA) { @($vmA.Keys) -join ',' } else { '' }) + '] ' + $vmAErr)
+
+    $vmBErr = ''
+    try { $null = Get-TermVerdictMap (New-VmStub 'items-but-exit2.ps1' ('Write-Output ''{"queue":"q","count":1,"items":[{"term":"saffron","verdict":"CARRIED"}]}''' + "`r`n" + 'exit 2' + "`r`n")) } catch { $vmBErr = $_.Exception.Message }
+    T 'MUST FIRE  ...and a non-zero exit is refused ON ITS OWN, even when stdout still parses with items - the exit code is the contract' `
+      ($vmBErr -match 'exited 2') ('got: ' + $vmBErr)
+
+    $vmCErr = ''
+    try { $null = Get-TermVerdictMap (New-VmStub 'error-at-exit0.ps1' ('Write-Output ''{"error":"ingredient-queue: COULD NOT READ"}''' + "`r`n" + 'exit 0' + "`r`n")) } catch { $vmCErr = $_.Exception.Message }
+    T 'MUST FIRE  ...and a document with no items list is refused ON ITS OWN, even at exit 0 - an error object is not an empty queue' `
+      ($vmCErr -match 'no items list') ('got: ' + $vmCErr)
+
+    $vmDErr = ''; $vmD = $null; $vmEErr = ''; $vmE = $null
+    try { $vmD = Get-TermVerdictMap (New-VmWrap 'wrap-good.ps1' $vmGood) } catch { $vmDErr = $_.Exception.Message }
+    try { $vmE = Get-TermVerdictMap (New-VmWrap 'wrap-never-written.ps1' (Join-Path $vm 'never-written.json')) } catch { $vmEErr = $_.Exception.Message }
+    T 'CLEAN TWIN a readable queue still maps its terms to their verdicts, and a scratch queue nobody has written maps to nothing WITHOUT a refusal' `
+      (-not $vmDErr -and $null -ne $vmD -and [string]$vmD['saffron'] -eq 'CARRIED' -and -not $vmEErr -and $null -ne $vmE -and $vmE.Count -eq 0) `
+      ('good: saffron=' + $(if ($vmD) { [string]$vmD['saffron'] } else { '(no map)' }) + ' err=' + $vmDErr + ' | never-written: count=' + $(if ($null -ne $vmE) { $vmE.Count } else { '(no map)' }) + ' err=' + $vmEErr)
+  } finally { Remove-Item -LiteralPath $vm -Recurse -Force -ErrorAction SilentlyContinue }
 
   Invoke-NamesFixtures -TBlock ${function:T} -Seen $script:SeenNames -VectorFile (Join-Path $here 'selftest-names-vectors.json')
   $nf = Get-NamesFinish -Seen $script:SeenNames -NamesOut $runNamesOut -NamesDiff $runNamesDiff

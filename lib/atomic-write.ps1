@@ -61,8 +61,10 @@
 #   * [IO.File]::Replace with the same retry. It lands too (400 of 400 against Get-Content, at most 4
 #     attempts; 400 of 400 against ReadAllText, at most 2), and it keeps the name present - but the lock-
 #     free READERS paid for it: 1,344 of 1,934 Get-Content reads and 2,670 of 3,427 ReadAllText reads
-#     threw, against 113 of 412 beside the retried Move-Item. source-domains' Read-Store turns a read that
-#     throws into an EMPTY ledger, so moving the failure from the writer to its readers is not a fix.
+#     threw, against 113 of 412 beside the retried Move-Item. source-domains' Read-Store turned a read that
+#     threw into an EMPTY ledger, so moving the failure from the writer to its readers is not a fix. (Since
+#     2026-09-11 that reader waits the failure out and refuses rather than reading empty, which makes a
+#     throwing read cost a wait or a refusal instead of the ledger. It is still a cost, and still not a fix.)
 #     (Its first run was void and is not counted: PowerShell hands $null to a .NET string parameter as
 #     "", an illegal backup name, so every call threw ArgumentException. [NullString]::Value is right.)
 #   * A ReadAllText reader is the harsher neighbour for a bare Move-Item: 312 of 400 landed, 88 failed with

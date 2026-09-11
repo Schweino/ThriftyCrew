@@ -60,14 +60,19 @@ param(
   [string]$CarriagePath = '',
   [switch]$Json,
   [switch]$IngredientQueueSelfTest,
-  [switch]$SelfTest
+  [switch]$SelfTest,
+  [int]$ReadWaitMs = 3000     # the settled-read bound; lib\json-io.ps1 records where 3000 came from. Fixtures shorten it.
 )
 $ErrorActionPreference = 'Stop'
-. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile, Read-JsonFileSettled: PS 5.1 decodes a BOM-less file with the ANSI codepage, and a replace window is not an empty queue
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: a lock-free reader must not cost a writer its write
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ledger-fixture.ps1')  # Wait-TcLedgerFixtureGate: inert unless this file's own self-test launched the writer
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
-if (-not $QueueFile) { $QueueFile = Join-Path $root 'ingredient-queue.json' }
+# THE LIVE QUEUE IS TRACKED IN GIT, so it is in every checkout and its absence is never a fresh estate. A scratch
+# queue named by -QueueFile (the daemon's drill seam, a fixture) can be, before its first -Add.
+$liveQueue = Join-Path $root 'ingredient-queue.json'
+if (-not $QueueFile) { $QueueFile = $liveQueue }
+$queueIsLive = [string]::Equals([IO.Path]::GetFullPath($QueueFile), [IO.Path]::GetFullPath($liveQueue), [StringComparison]::OrdinalIgnoreCase)
 
 # The seven Omaha stores, spelled exactly as every capture and board row spells them. A worker recording
 # 'Bakers' or 'Sams Club' would create a silent eighth store and the all-seven-checked test would never fire.
@@ -76,10 +81,42 @@ $TERMINAL = @('carried', 'not-carried')
 
 function Get-Stamp { $d = Get-Date; return $d.ToString('yyyy-MM-ddTHH:mm:ss') }
 
-function Read-Queue([string]$path) {
-  if (-not (Test-Path $path)) { return [pscustomobject]@{ readme = 'Recipe Hunter ingredient worklist. Written by ingredient-queue.ps1 only. An ingredient is CARRIED when ONE store carries it; NOT-CARRIED only when all seven have been CHECKED and none do. Unchecked is never not-carried.'; items = @() } }
-  $raw = [IO.File]::ReadAllText($path, [Text.Encoding]::UTF8) -replace '^﻿', ''
-  return ($raw | ConvertFrom-Json)
+function New-QueueDoc {
+  return [pscustomobject]@{ readme = 'Recipe Hunter ingredient worklist. Written by ingredient-queue.ps1 only. An ingredient is CARRIED when ONE store carries it; NOT-CARRIED only when all seven have been CHECKED and none do. Unchecked is never not-carried.'; items = @() }
+}
+
+# ---------------------------------------------------------------------------------------------------
+# THE READ IS SETTLED, AND A MISSING QUEUE IS NO LONGER AN EMPTY ONE BY DEFAULT (2026-09-11).
+#
+# Read-Queue used to answer a missing file with a fresh EMPTY worklist, and a file that would not parse with a
+# raw throw onto stderr. Write-Queue replaces this file through Write-TcAtomicFile, which is still a delete then
+# a rename, and a separate reader polling a file replaced that way saw it ABSENT on 4,024 of 109,718 polls
+# across 1,500 replaces (the account is in lib\json-io.ps1, Read-JsonFileSettled). So a -List in that window
+# answered "0 item(s)", and inside the lock a writer that met a missing live queue merged its one term into an
+# empty worklist and saved that over every item.
+#
+# Read-Queue now returns WHAT IT SAW - State ok, absent or unreadable, after the bounded wait - and
+# Resolve-QueueRead says what that means, the policy the ingredient-resolutions ledger set on the same day,
+# with ONE difference: a settled-absent SCRATCH -QueueFile is an empty worklist for a consumer as well as a
+# writer, because the hunt daemon's drill seam names a per-run queue and lists it before its first -Add. The
+# live queue, which git tracks, gets that reading from nobody.
+#   -List, -Json, -Verdict, -Promote   CONSUMERS: unreadable, or the live queue absent, is exit 2 and one stdout line.
+#   -Add, -Record, -RecordBatch        WRITERS, inside the lock: the same two REFUSE - exit 1, stdout, bytes untouched.
+# ---------------------------------------------------------------------------------------------------
+function Read-Queue {
+  param([string]$Path, [int]$WaitMs = $ReadWaitMs, [scriptblock]$OnWait = $null)
+  $qs = Read-JsonFileSettled -Path $Path -WaitMs $WaitMs -OnWait $OnWait `
+          -Accept { param($d) $null -ne $d -and ($d.PSObject.Properties.Name -contains 'items') -and $null -ne $d.items }
+  return [pscustomobject]@{ State = $qs.State; Doc = $qs.Doc; Why = $qs.Why; Waits = $qs.Waits }
+}
+function Resolve-QueueRead {
+  <# What a settled read MEANS, in one place for every caller. Returns the document to use, or THROWS why it cannot
+     be used - a writer's throw lands in its catch as a refusal, a consumer's as exit 2. #>
+  param($Read, [string]$Path, [bool]$IsLive)
+  if ($Read.State -eq 'ok') { return $Read.Doc }
+  if ($Read.State -eq 'absent' -and -not $IsLive) { return (New-QueueDoc) }
+  if ($Read.State -eq 'absent') { throw ("the LIVE queue at {0} is absent, and git tracks it, so this is not an empty worklist. {1}" -f $Path, $Read.Why) }
+  throw ("could not READ the queue at {0}, so it cannot be treated as empty. {1}" -f $Path, $Read.Why)
 }
 function Write-Queue($doc, [string]$path) {
   # TMP + MOVE, not a direct Set-Content: -Derive and the pricer both READ this file while lanes are
@@ -228,12 +265,17 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
   # round-trip through the real file format
   $tmp = Join-Path ([IO.Path]::GetTempPath()) ('iq-selftest-' + [Guid]::NewGuid().ToString('N') + '.json')
   try {
-    $d = Read-Queue $tmp
-    if (@($d.items).Count -ne 0) { Write-Output '  X a missing queue file should read as empty'; $bad++ }
+    # CHANGED 2026-09-11: this asserted "a missing queue file should read as empty", which for the LIVE queue is
+    # the defect. A missing file now reads as ABSENT and says so, and Resolve-QueueRead makes it a new worklist
+    # only because this one is a scratch file.
+    $r0 = Read-Queue $tmp -WaitMs 100
+    if (-not ($r0.State -eq 'absent' -and $null -eq $r0.Doc -and $r0.Why)) { Write-Output ('  X a missing queue file should read as ABSENT with no document, and say so; got state=' + $r0.State); $bad++ }
+    $d = Resolve-QueueRead $r0 $tmp $false
+    if (@($d.items).Count -ne 0) { Write-Output '  X a settled-absent SCRATCH queue should resolve to an empty worklist'; $bad++ }
     $st = @{}; foreach ($s in $STORES) { $st[$s] = $null }
     $d.items = @([pscustomobject]@{ term = 'saffron'; recipes = @('x'); added = (Get-Stamp); status = 'pending'; stores = [pscustomobject]$st; verdict = 'PENDING'; notes = $null })
     Write-Queue $d $tmp
-    $d2 = Read-Queue $tmp
+    $d2 = (Read-Queue $tmp).Doc
     if (@($d2.items).Count -ne 1 -or [string]$d2.items[0].term -ne 'saffron') { Write-Output '  X round-trip lost the item'; $bad++ }
     if (($d2.items[0].stores.PSObject.Properties.Name | Measure-Object).Count -ne 7) { Write-Output '  X round-trip lost store slots'; $bad++ }
   } finally { if (Test-Path $tmp) { Remove-Item $tmp -Force -ErrorAction SilentlyContinue } }
@@ -282,7 +324,7 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     $run = Invoke-TcLedgerWriters -Script $PSCommandPath -ArgSets $argSets.ToArray()
     $writers = @($run.writers)
     Write-Output ("  info  barrier: {0} of 4 writers were at the barrier when released ({1} ms)" -f $run.ready_at_go, $run.go_ms)
-    $got = Read-Queue $ctmp
+    $got = (Read-Queue $ctmp).Doc
     $conc = @(@($got.items | Where-Object { [string]$_.term -like 'conc term *' } | ForEach-Object { [string]$_.term }) | Sort-Object)
     $seedKept = @($got.items | Where-Object { [string]$_.term -like 'seed *' }).Count
     $ran = @($writers | Where-Object { $_.ran })
@@ -326,7 +368,7 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     } finally { $hqHandle.Dispose() }
     [void]$hqProc.WaitForExit(120000)
     $hqOut = [string](Get-Content $hqOutF -Raw); if ($null -eq $hqOut) { $hqOut = '' }
-    $hqDoc = Read-Queue $hqFile
+    $hqDoc = (Read-Queue $hqFile).Doc
     $hqLanded = (@($hqDoc.items | Where-Object { [string]$_.term -eq 'heldterm' }).Count -eq 1)
     if (-not ($hqSawTmp -and $hqProc.ExitCode -eq 0 -and $hqLanded)) {
       Write-Output ("  X MUST FIRE an -Add made while a lock-free reader holds the queue open must LAND once the reader lets go; saw_tmp=$hqSawTmp exit=" + $hqProc.ExitCode + " landed=$hqLanded out=" + $hqOut.Trim()); $bad++
@@ -375,7 +417,7 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
     $ErrorActionPreference = $prev
     $rc = $LASTEXITCODE
-    $after = Read-Queue $btmp
+    $after = (Read-Queue $btmp).Doc
     $sf = (Get-QueueItem $after 'saffron').stores."Baker's"
     $ap = (Get-QueueItem $after 'achiote paste').stores.'Aldi'
     $gj = (Get-QueueItem $after 'gochujang').stores.'Hy-Vee'
@@ -404,7 +446,7 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     $o2 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
     $ErrorActionPreference = $prev
     $rc2 = $LASTEXITCODE
-    $after2 = Read-Queue $btmp
+    $after2 = (Read-Queue $btmp).Doc
     $wrote = @(@($after2.items) | Where-Object { @($_.stores.PSObject.Properties | Where-Object { $null -ne $_.Value }).Count -gt 0 }).Count
     if ($rc2 -ne 1 -or $wrote -ne 0) {
       Write-Output ("  X MUST FIRE one contract-violating row must write ZERO rows and exit 1; rc=$rc2 rows_written=$wrote"); $bad++
@@ -425,7 +467,7 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     $o3 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
     $ErrorActionPreference = $prev
     $rc3 = $LASTEXITCODE
-    $after3 = Read-Queue $btmp
+    $after3 = (Read-Queue $btmp).Doc
     $wrote3 = @(@($after3.items) | Where-Object { @($_.stores.PSObject.Properties | Where-Object { $null -ne $_.Value }).Count -gt 0 }).Count
     if ($rc3 -ne 1 -or $wrote3 -ne 0 -or ($o3 -join ' ') -notmatch 'no price') {
       Write-Output ("  X MUST FIRE carried-with-no-price must refuse the WHOLE batch; rc=$rc3 rows=$wrote3 " + ($o3 -join ' | ')); $bad++
@@ -443,7 +485,7 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     $o4 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
     $ErrorActionPreference = $prev
     $rc4 = $LASTEXITCODE
-    $after4 = Read-Queue $btmp
+    $after4 = (Read-Queue $btmp).Doc
     $wrote4 = @(@($after4.items) | Where-Object { @($_.stores.PSObject.Properties | Where-Object { $null -ne $_.Value }).Count -gt 0 }).Count
     if ($rc4 -ne 1 -or $wrote4 -ne 0) {
       Write-Output ("  X MUST FIRE a row naming an unqueued term must refuse the whole batch; rc=$rc4 rows=$wrote4"); $bad++
@@ -527,33 +569,161 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     }
   } finally { Remove-Item $ctmp -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # ---- A COULD-NOT-READ MUST NOT SETTLE THE QUEUE (2026-09-11) ----
+  # The ingredient-resolutions ledger's fix, carried to this one. Read-Queue answered a missing file with an EMPTY
+  # worklist and a broken one with a raw throw onto stderr: -List then said nothing was pending, and inside the lock
+  # a writer meeting a missing live queue saved its one term over every item. Children run as real processes
+  # because the exit code and the stdout/stderr split ARE the contract. ONE-TOKEN VALUES ONLY, for the Start-Process
+  # reason given at the held-reader case above. The queue lookup is Get-QueueItem, renamed off the cmdlet name by 46085e69f.
+  function Invoke-IqChild([string]$Script, [string[]]$ChildArgs) {
+    $eF = [IO.Path]::GetTempFileName(); $oF = [IO.Path]::GetTempFileName()
+    $cpr = Start-Process -FilePath 'powershell' -Wait -PassThru -NoNewWindow `
+             -ArgumentList (@('-NoProfile','-ExecutionPolicy','Bypass','-File',$Script) + $ChildArgs) `
+             -RedirectStandardError $eF -RedirectStandardOutput $oF
+    $o = [string](Get-Content $oF -Raw); if ($null -eq $o) { $o = '' }
+    $er = [string](Get-Content $eF -Raw); if ($null -eq $er) { $er = '' }
+    Remove-Item $eF, $oF -Force -ErrorAction SilentlyContinue
+    return [pscustomobject]@{ Code = $cpr.ExitCode; Out = $o; Err = $er }
+  }
+  function IqCase([string]$Name, [bool]$Ok, [string]$Got) {
+    if ($Ok) { Write-Output ('  ok ' + $Name) } else { Write-Output ('  X ' + $Name + '   got: ' + $Got); $script:bad++ }
+  }
+  $iqDir = Join-Path ([IO.Path]::GetTempPath()) ('iq-read-' + [Guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $iqDir -Force | Out-Null
+  $iqEnc = New-Object Text.UTF8Encoding($false)
+  $iqSlots = @{}; foreach ($sn in $STORES) { $iqSlots[$sn] = $null }
+  $iqItems = @('saffron', 'sumac', 'labneh' | ForEach-Object {
+    [pscustomobject]@{ term = $_; recipes = @('r'); added = (Get-Stamp); why = 'fixture'
+                       status = 'pending'; stores = [pscustomobject]$iqSlots; verdict = 'PENDING'; notes = $null } })
+  $iqThree = ([pscustomobject]@{ readme = 'read fixture'; items = $iqItems } | ConvertTo-Json -Depth 8)
+  try {
+    # (1) THE WINDOW, HELD IN PROCESS: the queue is absent at the first look and -OnWait puts it back on the first
+    #     wait, so the read provably saw the window and provably outlived it. Never raced.
+    $iqWin = Join-Path $iqDir 'window.json'
+    $qa = $null
+    try { $qa = Read-Queue $iqWin -WaitMs 5000 -OnWait ({ param($n, $s) if ($n -eq 1) { [IO.File]::WriteAllText($iqWin, $iqThree, $iqEnc) } }.GetNewClosure()) } catch { $qa = $null }
+    IqCase 'MUST FIRE a queue ABSENT at the first look (the replace window) reads all 3 items, not an empty worklist' `
+      ($null -ne $qa -and $qa.State -eq 'ok' -and $qa.Waits -ge 1 -and @($qa.Doc.items).Count -eq 3) `
+      ($(if ($qa) { 'state=' + $qa.State + ' waits=' + $qa.Waits } else { 'threw' }))
+
+    # (2) THE THREE WRITERS, INSIDE THE LOCK, against a queue they cannot read. The bytes on disk are the finding.
+    $iqTrunc = Join-Path $iqDir 'truncated.json'
+    [IO.File]::WriteAllText($iqTrunc, $iqThree.Substring(0, 120), $iqEnc)
+    $md5Trunc = (Get-FileHash -LiteralPath $iqTrunc -Algorithm MD5).Hash
+    $iqBatch = Join-Path $iqDir 'batch.json'
+    (@('saffron', 'sumac', 'labneh' | ForEach-Object { [pscustomobject]@{ term = $_; store = 'Aldi'; state = 'not-carried'; price = 0; size = ''; item = ''; evidence = 'fixture' } }) |
+      ConvertTo-Json -Depth 4) | Set-Content -LiteralPath $iqBatch -Encoding UTF8
+    foreach ($w in @(
+        @{ n = '-Add';         a = @('-Add','-Term','cumin','-Recipe','recipe-x','-Why','fixture') },
+        @{ n = '-Record';      a = @('-Record','-Term','saffron','-Store','Aldi','-State','not-carried','-Evidence','fixture') },
+        @{ n = '-RecordBatch'; a = @('-RecordBatch','-File',$iqBatch) })) {
+      $cw = Invoke-IqChild $PSCommandPath (@($w.a) + @('-QueueFile',$iqTrunc,'-ReadWaitMs','200'))
+      $md5Same = ((Get-FileHash -LiteralPath $iqTrunc -Algorithm MD5).Hash -eq $md5Trunc)
+      IqCase ('MUST FIRE ' + $w.n + ' against a queue it cannot READ writes NOTHING (bytes unchanged), exits non-zero, says COULD NOT WRITE and could not READ on stdout, and leaks nothing to stderr') `
+        ($md5Same -and $cw.Code -ne 0 -and ($cw.Out -match 'COULD NOT WRITE') -and ($cw.Out -match 'could not READ') -and [string]::IsNullOrWhiteSpace($cw.Err)) `
+        ('exit ' + $cw.Code + ' md5same=' + $md5Same + ' out=' + $cw.Out.Trim() + ' err=' + $cw.Err.Trim())
+    }
+
+    # (3) CONSUMERS on an unreadable queue: exit 2 COULD NOT READ, never an empty item list or "is not queued"
+    $cj = Invoke-IqChild $PSCommandPath @('-List','-Status','pending','-Json','-QueueFile',$iqTrunc,'-ReadWaitMs','200')
+    $cjErr = ''; try { $cjErr = [string](($cj.Out | ConvertFrom-Json).error) } catch { $cjErr = '' }
+    IqCase 'MUST FIRE -List -Json (the daemon''s call) on an unreadable queue is exit 2 with a JSON error, never an empty item list' `
+      ($cj.Code -eq 2 -and ($cjErr -match 'COULD NOT READ') -and -not ($cj.Out -match '"items"') -and [string]::IsNullOrWhiteSpace($cj.Err)) ('exit ' + $cj.Code + ': ' + $cj.Out + $cj.Err)
+    $cv = Invoke-IqChild $PSCommandPath @('-Verdict','-Term','saffron','-QueueFile',$iqTrunc,'-ReadWaitMs','200')
+    IqCase 'MUST FIRE -Verdict on an unreadable queue is exit 2 COULD NOT READ, never "is not queued"' `
+      ($cv.Code -eq 2 -and ($cv.Out -match 'COULD NOT READ') -and -not ($cv.Out -match 'is not queued') -and [string]::IsNullOrWhiteSpace($cv.Err)) ('exit ' + $cv.Code + ': ' + $cv.Out + $cv.Err)
+
+    # (4) THE LIVE QUEUE ABSENT. Driven from a MIRROR of this script and every library it dot-sources, read off its
+    #     own source, so the default queue path is a scratch copy of the live layout and the real queue is never
+    #     touched. A pattern that matched nothing leaves the mirror with no libraries, and the child fails loudly.
+    $iqMirror = Join-Path $iqDir 'mirror'
+    New-Item -ItemType Directory -Force -Path (Join-Path $iqMirror 'lib'), (Join-Path $iqMirror 'grocery') | Out-Null
+    $iqLibs = @([regex]::Matches([IO.File]::ReadAllText($PSCommandPath), '(?m)^\. \(Join-Path \(Split-Path \$PSScriptRoot -Parent\) ''lib\\([\w.-]+\.ps1)''\)') | ForEach-Object { $_.Groups[1].Value })
+    foreach ($iqLib in $iqLibs) { Copy-Item (Join-Path (Split-Path $root -Parent) ('lib\' + $iqLib)) -Destination (Join-Path $iqMirror 'lib') }
+    Copy-Item $PSCommandPath -Destination (Join-Path $iqMirror 'grocery')
+    $iqMirrorScript = Join-Path $iqMirror 'grocery\ingredient-queue.ps1'
+    $iqMirrorLive = Join-Path $iqMirror 'grocery\ingredient-queue.json'
+    $cla = Invoke-IqChild $iqMirrorScript @('-Add','-Term','cumin','-Recipe','recipe-x','-Why','fixture','-ReadWaitMs','200')
+    IqCase 'MUST FIRE -Add with the LIVE queue absent REFUSES, rather than starting a one-item worklist the 07:00 bot would commit' `
+      ($cla.Code -ne 0 -and ($cla.Out -match 'COULD NOT WRITE') -and ($cla.Out -match 'LIVE queue') -and -not (Test-Path -LiteralPath $iqMirrorLive) -and [string]::IsNullOrWhiteSpace($cla.Err)) `
+      ('exit ' + $cla.Code + ' created=' + (Test-Path -LiteralPath $iqMirrorLive) + ' libs=' + ($iqLibs -join ',') + ': ' + $cla.Out + $cla.Err)
+    $cll = Invoke-IqChild $iqMirrorScript @('-List','-Json','-ReadWaitMs','200')
+    IqCase 'MUST FIRE -List with the LIVE queue absent is exit 2, never an empty worklist' `
+      ($cll.Code -eq 2 -and ($cll.Out -match 'COULD NOT READ') -and -not ($cll.Out -match '"count"') -and [string]::IsNullOrWhiteSpace($cll.Err)) ('exit ' + $cll.Code + ': ' + $cll.Out + $cll.Err)
+
+    # (5) -Promote against a carriage ledger it cannot READ. The queue is readable and settled; only the ledger is broken.
+    $iqQ = Join-Path $iqDir 'promote-queue.json'
+    $iqNc = @{}; foreach ($sn in $STORES) { $iqNc[$sn] = [pscustomobject]@{ state = 'not-carried'; evidence = 'fixture' } }
+    Write-Queue ([pscustomobject]@{ readme = 'promote fixture'; items = @([pscustomobject]@{ term = 'fixture-sumac'; recipes = @('x'); added = (Get-Stamp); status = 'resolved'; stores = [pscustomobject]$iqNc; verdict = 'NOT-CARRIED'; notes = $null }) }) $iqQ
+    $iqLed = Join-Path $iqDir 'carriage-truncated.json'
+    [IO.File]::WriteAllText($iqLed, '{"bids":{"kept-bid":{"verdict":"CARRIED","store":"Aldi"', $iqEnc)
+    $md5Led = (Get-FileHash -LiteralPath $iqLed -Algorithm MD5).Hash
+    $cpo = Invoke-IqChild $PSCommandPath @('-Promote','-Term','fixture-sumac','-Bid','fixture-sumac','-QueueFile',$iqQ,'-CarriagePath',$iqLed,'-ReadWaitMs','200')
+    $ledSame = ((Get-FileHash -LiteralPath $iqLed -Algorithm MD5).Hash -eq $md5Led)
+    IqCase 'MUST FIRE -Promote against a carriage ledger it cannot READ writes NOTHING (bytes unchanged), exits non-zero, says so on stdout, and leaks nothing to stderr' `
+      ($ledSame -and $cpo.Code -ne 0 -and ($cpo.Out -match 'COULD NOT WRITE') -and ($cpo.Out -match 'could not READ') -and -not ($cpo.Out -match 'promoted ''fixture-sumac''') -and [string]::IsNullOrWhiteSpace($cpo.Err)) `
+      ('exit ' + $cpo.Code + ' md5same=' + $ledSame + ': ' + $cpo.Out + $cpo.Err)
+
+    # (6) CLEAN TWIN - the scratch roads the fix was most likely to break on its way past. A -QueueFile nobody has
+    #     written still LISTS as empty (exit 0), because the daemon's drill seam names a per-run queue before its
+    #     first -Add; and -Add still creates it.
+    $iqNew = Join-Path $iqDir 'new-queue.json'
+    $cne = Invoke-IqChild $PSCommandPath @('-List','-Json','-QueueFile',$iqNew,'-ReadWaitMs','200')
+    $cneCount = -1; try { $cneCount = [int](($cne.Out | ConvertFrom-Json).count) } catch { $cneCount = -1 }
+    $cna = Invoke-IqChild $PSCommandPath @('-Add','-Term','cumin','-Recipe','recipe-x','-Why','fixture','-QueueFile',$iqNew,'-ReadWaitMs','200')
+    $newQ = Read-Queue $iqNew -WaitMs 0
+    $newItems = @(); if ($newQ.State -eq 'ok') { $assignedItems = $newQ.Doc.items; $newItems = @($assignedItems) }
+    IqCase 'CLEAN TWIN a scratch -QueueFile nobody has written LISTS as empty (exit 0), and -Add still creates it holding exactly the new item' `
+      ($cne.Code -eq 0 -and $cneCount -eq 0 -and $cna.Code -eq 0 -and $newItems.Count -eq 1 -and [string]$newItems[0].term -eq 'cumin') `
+      ('list exit ' + $cne.Code + ' count=' + $cneCount + '; add exit ' + $cna.Code + ' state=' + $newQ.State + ' items=' + $newItems.Count + ': ' + $cna.Out)
+
+    # (7) CLEAN TWIN - a readable queue still answers -Verdict
+    $iqGood = Join-Path $iqDir 'good.json'
+    [IO.File]::WriteAllText($iqGood, $iqThree, $iqEnc)
+    $cgv = Invoke-IqChild $PSCommandPath @('-Verdict','-Term','labneh','-QueueFile',$iqGood,'-ReadWaitMs','200')
+    IqCase 'CLEAN TWIN -Verdict on a readable queue still answers PENDING for a queued term (exit 0)' `
+      ($cgv.Code -eq 0 -and ($cgv.Out -match 'PENDING\s+''labneh''')) ('exit ' + $cgv.Code + ': ' + $cgv.Out)
+  } finally { Remove-Item -LiteralPath $iqDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($bad -eq 0) { Write-Output 'ingredient-queue SELF-TEST PASS (Rule B: one carried is enough; unchecked/blocked/errored is never not-carried; file round-trips; concurrent writers lose nothing; -RecordBatch is atomic)'; exit 0 }
   Write-Output ("ingredient-queue SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
 
-$doc = Read-Queue $QueueFile
+# THE WRITERS READ ONLY INSIDE THE LOCK (2026-09-11). This file used to read the queue here, at the top, for every
+# mode - so a writer paid for a lock-free read it never used, and a queue that would not parse killed it with a raw
+# error on stderr before it reached the lock. The consumers' read is below the writers now.
+#
+# A WRITER'S REFUSAL IS ONE LINE ON STDOUT AND EXIT 1. Resolve-QueueRead throws when the in-lock read cannot be used
+# (unreadable, or the live queue absent), and Write-TcAtomicFile throws when a reader outlasts its retry budget;
+# either lands in the writer's catch with the file untouched. Nothing reaches stderr: the daemon reads a failed -Add
+# off stdout, and one noisy child kills ops\run-gates.ps1.
+function Write-QueueRefusal([string]$Path, [string]$Reason) {
+  Write-Output ("ingredient-queue: COULD NOT WRITE {0} - NOTHING was written. {1}" -f $Path, $Reason)
+}
 
 if ($Add) {
   if (-not $Term) { Write-Output 'ingredient-queue: -Add needs -Term'; exit 1 }
-  # RE-READ INSIDE THE LOCK. $doc above was read before the mutex was taken; merging into it here
-  # would drop whatever another writer landed in between - the exact race the lock exists to close.
+  # READ INSIDE THE LOCK. A copy read before the mutex was taken would drop whatever another writer landed in
+  # between - the exact race the lock exists to close.
   $script:addMsg = ''
-  Invoke-Locked -Path $QueueFile -Body {
-    $fresh = Read-Queue $QueueFile
-    $e = Get-QueueItem $fresh $Term
-    if ($e) {
-      if ($Recipe -and @($e.recipes) -notcontains $Recipe) { $e.recipes = @(@($e.recipes) + $Recipe) }
+  try {
+    Invoke-Locked -Path $QueueFile -Body {
+      $fresh = Resolve-QueueRead (Read-Queue $QueueFile) $QueueFile $queueIsLive
+      $e = Get-QueueItem $fresh $Term
+      if ($e) {
+        if ($Recipe -and @($e.recipes) -notcontains $Recipe) { $e.recipes = @(@($e.recipes) + $Recipe) }
+        Write-Queue $fresh $QueueFile
+        $script:addMsg = ("ingredient-queue: '{0}' already queued (status {1}); recipes now: {2}" -f $Term, $e.status, (@($e.recipes) -join ', '))
+        return
+      }
+      $st = @{}; foreach ($s in $STORES) { $st[$s] = $null }
+      $new = [pscustomobject]@{ term = $Term; recipes = @($Recipe | Where-Object { $_ }); added = (Get-Stamp)
+                                why = $Why; status = 'pending'; stores = [pscustomobject]$st; verdict = 'PENDING'; notes = $null }
+      $fresh.items = @(@($fresh.items) + $new)
       Write-Queue $fresh $QueueFile
-      $script:addMsg = ("ingredient-queue: '{0}' already queued (status {1}); recipes now: {2}" -f $Term, $e.status, (@($e.recipes) -join ', '))
-      return
+      $script:addMsg = ("ingredient-queue: queued '{0}'  (0 of 7 stores checked)" -f $Term)
     }
-    $st = @{}; foreach ($s in $STORES) { $st[$s] = $null }
-    $new = [pscustomobject]@{ term = $Term; recipes = @($Recipe | Where-Object { $_ }); added = (Get-Stamp)
-                              why = $Why; status = 'pending'; stores = [pscustomobject]$st; verdict = 'PENDING'; notes = $null }
-    $fresh.items = @(@($fresh.items) + $new)
-    Write-Queue $fresh $QueueFile
-    $script:addMsg = ("ingredient-queue: queued '{0}'  (0 of 7 stores checked)" -f $Term)
-  }
+  } catch { Write-QueueRefusal $QueueFile $_.Exception.Message; exit 1 }
   Write-Output $script:addMsg
   exit 0
 }
@@ -565,18 +735,20 @@ if ($Record) {
   $rowBad = Test-BatchRow ([pscustomobject]@{ term=$Term; store=$Store; state=$State; price=$Price }) 0 $STORES
   if (@($rowBad).Count) { foreach ($v in $rowBad) { Write-Output ("ingredient-queue: " + $v) }; exit 1 }
   $script:recMsg = ''; $script:recRc = 0
-  Invoke-Locked -Path $QueueFile -Body {
-    $fresh = Read-Queue $QueueFile
-    $e = Get-QueueItem $fresh $Term
-    if (-not $e) { $script:recMsg = ("ingredient-queue: '{0}' is not queued - -Add it first" -f $Term); $script:recRc = 1; return }
-    $e.stores.$Store = [pscustomobject]@{ state = $State; price = $(if ($Price -gt 0) { $Price } else { $null })
-                                          size = $Size; item = $Item; evidence = $Evidence; checked = (Get-Stamp) }
-    $v = Get-QueueVerdict $e $STORES $TERMINAL
-    $e.verdict = $v.verdict
-    $e.status = $(if ($v.verdict -eq 'PENDING') { 'pending' } else { 'resolved' })
-    Write-Queue $fresh $QueueFile
-    $script:recMsg = ("ingredient-queue: '{0}' @ {1} = {2}   ->  {3}  ({4} of 7 checked{5})" -f $Term, $Store, $State, $v.verdict, $v.checked.Count, $(if ($v.carried_by.Count) { ', carried by ' + ($v.carried_by -join ', ') } else { '' }))
-  }
+  try {
+    Invoke-Locked -Path $QueueFile -Body {
+      $fresh = Resolve-QueueRead (Read-Queue $QueueFile) $QueueFile $queueIsLive
+      $e = Get-QueueItem $fresh $Term
+      if (-not $e) { $script:recMsg = ("ingredient-queue: '{0}' is not queued - -Add it first" -f $Term); $script:recRc = 1; return }
+      $e.stores.$Store = [pscustomobject]@{ state = $State; price = $(if ($Price -gt 0) { $Price } else { $null })
+                                            size = $Size; item = $Item; evidence = $Evidence; checked = (Get-Stamp) }
+      $v = Get-QueueVerdict $e $STORES $TERMINAL
+      $e.verdict = $v.verdict
+      $e.status = $(if ($v.verdict -eq 'PENDING') { 'pending' } else { 'resolved' })
+      Write-Queue $fresh $QueueFile
+      $script:recMsg = ("ingredient-queue: '{0}' @ {1} = {2}   ->  {3}  ({4} of 7 checked{5})" -f $Term, $Store, $State, $v.verdict, $v.checked.Count, $(if ($v.carried_by.Count) { ', carried by ' + ($v.carried_by -join ', ') } else { '' }))
+    }
+  } catch { Write-QueueRefusal $QueueFile $_.Exception.Message; exit 1 }
   Write-Output $script:recMsg
   exit $script:recRc
 }
@@ -628,40 +800,53 @@ if ($RecordBatch) {
 
   $script:batchMsg = @()
   $script:batchRc = 0
-  Invoke-Locked -Path $QueueFile -Body {
-    $fresh = Read-Queue $QueueFile
-    # A SECOND PASS INSIDE THE LOCK, for the one thing the pure validator cannot know: whether the
-    # term is actually queued. Still all-or-nothing - the document is not touched until every row has
-    # somewhere to land.
-    $missing = @()
-    for ($i = 0; $i -lt @($rows).Count; $i++) {
-      $t = [string](@($rows)[$i].term)
-      if (-not (Get-QueueItem $fresh $t)) { $missing += ("row {0}: '{1}' is not queued - -Add it first" -f ($i + 1), $t) }
+  try {
+    Invoke-Locked -Path $QueueFile -Body {
+      $fresh = Resolve-QueueRead (Read-Queue $QueueFile) $QueueFile $queueIsLive
+      # A SECOND PASS INSIDE THE LOCK, for the one thing the pure validator cannot know: whether the
+      # term is actually queued. Still all-or-nothing - the document is not touched until every row has
+      # somewhere to land.
+      $missing = @()
+      for ($i = 0; $i -lt @($rows).Count; $i++) {
+        $t = [string](@($rows)[$i].term)
+        if (-not (Get-QueueItem $fresh $t)) { $missing += ("row {0}: '{1}' is not queued - -Add it first" -f ($i + 1), $t) }
+      }
+      if (@($missing).Count) {
+        $script:batchMsg = @(("ingredient-queue: -RecordBatch REFUSED - {0} row(s) name a term that is not queued. NOTHING was written." -f @($missing).Count)) + @($missing | ForEach-Object { "    " + $_ })
+        $script:batchRc = 1
+        return
+      }
+      $lines = @()
+      foreach ($r in @($rows)) {
+        $t = [string]$r.term
+        $e = Get-QueueItem $fresh $t
+        $pr = 0.0; if ($null -ne $r.price) { try { $pr = [double]$r.price } catch { $pr = 0.0 } }
+        $e.stores.([string]$r.store) = [pscustomobject]@{ state = [string]$r.state
+                                                          price = $(if ($pr -gt 0) { $pr } else { $null })
+                                                          size = [string]$r.size; item = [string]$r.item
+                                                          evidence = [string]$r.evidence; checked = (Get-Stamp) }
+        $v = Get-QueueVerdict $e $STORES $TERMINAL
+        $e.verdict = $v.verdict
+        $e.status = $(if ($v.verdict -eq 'PENDING') { 'pending' } else { 'resolved' })
+        $lines += ("  {0,-22} @ {1,-13} = {2,-12} ->  {3} ({4} of 7 checked)" -f $t, [string]$r.store, [string]$r.state, $v.verdict, $v.checked.Count)
+      }
+      Write-Queue $fresh $QueueFile
+      $script:batchMsg = @(("ingredient-queue: -RecordBatch wrote {0} record(s) in ONE take of the write lock" -f @($rows).Count)) + $lines
     }
-    if (@($missing).Count) {
-      $script:batchMsg = @(("ingredient-queue: -RecordBatch REFUSED - {0} row(s) name a term that is not queued. NOTHING was written." -f @($missing).Count)) + @($missing | ForEach-Object { "    " + $_ })
-      $script:batchRc = 1
-      return
-    }
-    $lines = @()
-    foreach ($r in @($rows)) {
-      $t = [string]$r.term
-      $e = Get-QueueItem $fresh $t
-      $pr = 0.0; if ($null -ne $r.price) { try { $pr = [double]$r.price } catch { $pr = 0.0 } }
-      $e.stores.([string]$r.store) = [pscustomobject]@{ state = [string]$r.state
-                                                        price = $(if ($pr -gt 0) { $pr } else { $null })
-                                                        size = [string]$r.size; item = [string]$r.item
-                                                        evidence = [string]$r.evidence; checked = (Get-Stamp) }
-      $v = Get-QueueVerdict $e $STORES $TERMINAL
-      $e.verdict = $v.verdict
-      $e.status = $(if ($v.verdict -eq 'PENDING') { 'pending' } else { 'resolved' })
-      $lines += ("  {0,-22} @ {1,-13} = {2,-12} ->  {3} ({4} of 7 checked)" -f $t, [string]$r.store, [string]$r.state, $v.verdict, $v.checked.Count)
-    }
-    Write-Queue $fresh $QueueFile
-    $script:batchMsg = @(("ingredient-queue: -RecordBatch wrote {0} record(s) in ONE take of the write lock" -f @($rows).Count)) + $lines
-  }
+  } catch { Write-QueueRefusal $QueueFile $_.Exception.Message; exit 1 }
   foreach ($m in $script:batchMsg) { Write-Output $m }
   exit $script:batchRc
+}
+
+# THE READ-ONLY MODES ARE CONSUMERS (2026-09-11). -Verdict, -Promote and the list read the queue here and not at
+# the top, so a writer never pays for a read it does not use. A read that cannot be used - unreadable, or the live
+# queue absent - is exit 2 with one line on stdout (a JSON object under -Json), never "0 item(s)" or "is not
+# queued", the answers a recipe parks on. The hunt daemon already reads a non-zero -List as a finding.
+try { $doc = Resolve-QueueRead (Read-Queue $QueueFile) $QueueFile $queueIsLive }
+catch {
+  $msg = ("ingredient-queue: COULD NOT READ - that is not the same as an empty worklist. {0}" -f $_.Exception.Message)
+  if ($Json) { ([pscustomobject]@{ error = $msg } | ConvertTo-Json -Compress) } else { Write-Output $msg }
+  exit 2
 }
 
 if ($Verdict) {
@@ -700,7 +885,8 @@ if ($Promote) {
   # carriage.json is ANOTHER single-file ledger, so its read-modify-write takes the same lock, keyed
   # on ITS path. The pricer is a singleton, but nothing about this script knows that, and a rule that
   # depends on the caller's cap is a rule the next cap change silently breaks.
-  $led = Read-JsonFile $ledgerFile
+  # (A lock-free `$led = Read-JsonFile $ledgerFile` stood here until 2026-09-11. Nothing used it; all it did
+  # was hold the ledger open and throw a raw error onto stderr when the ledger was mid-replace.)
   $stamp = (Get-Date -Format 'yyyy-MM-dd')
   if ($v.verdict -eq 'CARRIED') {
     # the cheapest carrying store's own row is the evidence
@@ -730,13 +916,24 @@ if ($Promote) {
                                 source = ("promoted from ingredient-queue term '" + $Term + "'")
                                 why = ("all seven Omaha stores answered and none carry it") }
   }
-  Invoke-Locked -Path $ledgerFile -Body {
-    # re-read inside the lock; $entry was computed from the queue, which is not the file under edit
-    $freshLed = Read-JsonFile $ledgerFile
-    if ($freshLed.bids.PSObject.Properties.Name -contains $Bid) { $freshLed.bids.$Bid = $entry }
-    else { $freshLed.bids | Add-Member -NotePropertyName $Bid -NotePropertyValue $entry }
-    # Through lib\atomic-write.ps1 for the same reason as Write-Queue: carriage.json has lock-free readers.
-    [void](Write-TcAtomicFile -Path $ledgerFile -Text ($freshLed | ConvertTo-Json -Depth 12))
+  try {
+    Invoke-Locked -Path $ledgerFile -Body {
+      # re-read inside the lock; $entry was computed from the queue, which is not the file under edit.
+      # SETTLED, AND ANYTHING BUT A READABLE LEDGER REFUSES (2026-09-11). Read-JsonFile threw a raw error onto
+      # stderr here when the ledger was mid-replace. The write below saves the WHOLE ledger, so no reading of a
+      # failed read can be merged into; and an absent ledger was already refused above, before the lock.
+      $cst = Read-JsonFileSettled -Path $ledgerFile -WaitMs $ReadWaitMs `
+               -Accept { param($d) $null -ne $d -and ($d.PSObject.Properties.Name -contains 'bids') -and $null -ne $d.bids }
+      if ($cst.State -ne 'ok') { throw ("could not READ the carriage ledger ({0}), so writing now would replace every bid it holds. {1}" -f $cst.State, $cst.Why) }
+      $freshLed = $cst.Doc
+      if ($freshLed.bids.PSObject.Properties.Name -contains $Bid) { $freshLed.bids.$Bid = $entry }
+      else { $freshLed.bids | Add-Member -NotePropertyName $Bid -NotePropertyValue $entry }
+      # Through lib\atomic-write.ps1 for the same reason as Write-Queue: carriage.json has lock-free readers.
+      [void](Write-TcAtomicFile -Path $ledgerFile -Text ($freshLed | ConvertTo-Json -Depth 12))
+    }
+  } catch {
+    Write-Output ("ingredient-queue: COULD NOT WRITE {0} - '{1}' was NOT promoted. {2}" -f $ledgerFile, $Term, $_.Exception.Message)
+    exit 1
   }
   Write-Output ("ingredient-queue: promoted '{0}' -> carriage.json[{1}] = {2}" -f $Term, $Bid, $v.verdict)
   Write-Output '   recost (meal-prep\engine\cost-recipes.ps1) for the gates to see it.'
