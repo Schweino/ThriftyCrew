@@ -12,7 +12,8 @@
   BLIND on a runner - and a blind check that reports success is the exact failure this estate keeps writing
   guards about. So this gate deliberately runs only what is hermetic:
 
-    1. every -SelfTest in the tree. That is the real payload. Each one drives frozen must-fire fixtures of a
+    1. every -SelfTest in the tree, and every self-test a dot-sourced lib gates on a renamed switch instead
+       (lib\selftest-discovery.ps1 is the rule). That is the real payload. Each one drives frozen must-fire fixtures of a
        founding bug plus its clean twin, needs no data, no network and no secrets, and fails loudly when a
        fix stops being able to detect the thing it was written for.
     2. the static-analysis detectors that read SOURCE rather than data (guard contract, cloud readiness,
@@ -42,7 +43,7 @@ $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\git-repo-env.ps1')
 Clear-TcGitRepoEnv
 . (Join-Path $repo 'lib\guard-contract.ps1')
-. (Join-Path $repo 'lib\ps-source.ps1')   # Get-PsCodeOnly - no param() block, so it cannot reset ours
+. (Join-Path $repo 'lib\selftest-discovery.ps1')   # Get-TcSelfTestSwitch - no param() block, so it cannot reset ours
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot - discovery excludes below the root, so a worktree root is scanned
 
 # Self-tests that cannot run hermetically, with the reason. Keyed by file name, same standard as every other
@@ -71,6 +72,12 @@ $scripts = @(Get-ChildItem $repoFull -Recurse -File -Filter *.ps1 -ErrorAction S
   Sort-Object FullName)
 
 $withSelfTest = @()
+# THE SWITCH EACH ONE RUNS WITH, keyed by full path (2026-09-11). Three grocery libs gate their self-test on a
+# RENAMED switch, because a dot-sourced param() block resets the caller's own switch under PS 5.1, and until this
+# date nothing here matched them, so their self-tests ran nowhere. They run with their own switch now; the rename
+# stays. $declinedSwitch names a renamed declaration the rule would not run, with the reason.
+$selfSwitch = @{}
+$declinedSwitch = @()
 foreach ($s in $scripts) {
   if ($SKIP.ContainsKey($s.Name)) { continue }
   # NEVER DISCOVER YOURSELF. run-gates runs every file it discovers with -SelfTest; discovering this
@@ -91,13 +98,25 @@ foreach ($s in $scripts) {
   # this rule exists to prevent, one comment syntax over, and it means run-gates could report green
   # coverage for a self-test that does not exist. Nine other places in the estate reduce source the
   # same way, so the reduction lives in lib\ps-source.ps1 rather than here.
-  $code = Get-PsCodeOnly -Text $t
-  if ($code -match '\[switch\]\$SelfTest' -or $code -match '\$__\w*SelfTest\s*=') { $withSelfTest += $s }
+  # 2026-09-11: the whole rule moved to lib\selftest-discovery.ps1 - the two matches above unchanged, plus the renamed
+  # switch - because this file has no self-test of its own, so neither comment rule had a fixture until then.
+  $found = Get-TcSelfTestSwitch -Text $t
+  if ($found.Switch) { $withSelfTest += $s; $selfSwitch[[string]$s.FullName] = $found.Switch }
+  elseif ($found.Declined) { $declinedSwitch += ('{0}: {1}' -f $s.FullName.Replace($repo, '').TrimStart('\'), $found.Declined) }
 }
+# What resolved to a renamed switch, as printable 'path -Switch' lines. A pipeline, not a wrapped function call.
+$renamedSelf = @($withSelfTest | Where-Object { -not [string]::Equals([string]$selfSwitch[[string]$_.FullName], 'SelfTest', [StringComparison]::Ordinal) } |
+  ForEach-Object { $_.FullName.Replace($repo, '').TrimStart('\') + ' -' + $selfSwitch[[string]$_.FullName] })
 
 if ($ListOnly) {
   Write-Output ("self-tests discovered: {0}" -f $withSelfTest.Count)
-  $withSelfTest | ForEach-Object { Write-Output ('  ' + $_.FullName.Replace($repo, '')) }
+  foreach ($w in $withSelfTest) {
+    $sw = [string]$selfSwitch[[string]$w.FullName]
+    if ([string]::Equals($sw, 'SelfTest', [StringComparison]::Ordinal)) { Write-Output ('  ' + $w.FullName.Replace($repo, '')) }
+    else { Write-Output ('  ' + $w.FullName.Replace($repo, '') + '  (runs with -' + $sw + ')') }
+  }
+  Write-Output ("  of which {0} run with a renamed switch" -f $renamedSelf.Count)
+  foreach ($d in $declinedSwitch) { Write-Output ('  NOT ENROLLED  ' + $d) }
   exit 0
 }
 
@@ -111,8 +130,10 @@ if (-not $withSelfTest.Count) {
 # this file has carried exactly this floor since it shipped; the PowerShell half did not. 201 were
 # discovered on 2026-09-07 after the block-comment fix below removed 8 libraries that had been
 # enrolled by their own headers, so 150 is a wide margin that still notices a collapse.
+# 2026-09-11: 262 at 8253ded82 plus this change, 258 before it. Three of the four added are libs gating on a
+# renamed switch, and they count toward this floor because they run; the fourth is lib\selftest-discovery.ps1.
 if ($withSelfTest.Count -lt 150) {
-  Write-Output ("run-gates: COULD NOT EVALUATE - PowerShell self-test DISCOVERY found only {0} suite(s); it found 201 on 2026-09-07. That is the walk broken, not the tree clean." -f $withSelfTest.Count)
+  Write-Output ("run-gates: COULD NOT EVALUATE - PowerShell self-test DISCOVERY found only {0} suite(s); it found 201 on 2026-09-07 and 262 on 2026-09-11. That is the walk broken, not the tree clean." -f $withSelfTest.Count)
   Exit-Guard -Name 'run-gates' -Summary ("blind=selftest-discovery-collapsed n=" + $withSelfTest.Count) -Code 3
 }
 
@@ -140,11 +161,16 @@ $PSEXE = (Get-Command powershell).Source
 $fail = @()
 $blindGates = @()
 Write-Output ("run-gates: {0} self-test(s) discovered" -f $withSelfTest.Count)
+# A DISCOVERED SET PRINTS WHAT IT RESOLVED (2026-09-11). The renamed-switch suites are named with the switch each
+# runs with, so a rule that stopped matching them reads as a count of 0 here rather than as nothing at all, and a
+# renamed declaration the rule declined is named with its reason. The rule itself is fixtured in its lib.
+Write-Output ("run-gates: {0} of them gate on a RENAMED switch and run with it, not -SelfTest: {1}" -f $renamedSelf.Count, $(if ($renamedSelf.Count) { $renamedSelf -join ', ' } else { 'none' }))
+foreach ($d in $declinedSwitch) { Write-Output ('run-gates: NOT ENROLLED - ' + $d) }
 # ---- the pool runs them; the loop below judges them, unchanged ----
 $selfJobs = [Collections.Generic.List[object]]::new(); $selfKeys = [Collections.Generic.List[string]]::new()
 foreach ($s in $withSelfTest) {
   [void]$selfKeys.Add([string]$s.FullName)
-  [void]$selfJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $s.FullName, '-SelfTest') })
+  [void]$selfJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $s.FullName, ('-' + $selfSwitch[[string]$s.FullName])) })
 }
 # ---- static-analysis detectors: they read SOURCE, so they work on a bare checkout ----
 $static = @(
