@@ -13,7 +13,7 @@ Fail either gate â†’ that store is flagged `BLOCKED` and contributes nothin
 
 | Store | Source (its own weekly ad) | Method | Browser needed? |
 |---|---|---|---|
-| Hy-Vee | Flipp SFML (`digital-flyers/1465`) | `pull-grocery-ads.ps1` | No |
+| Hy-Vee | Flipp SFML (`digital-flyers/<store_id>`, the store `Get-HyVeeStore` names: 1466 since 2026-09-10) | `pull-grocery-ads.ps1` | No |
 | Aldi | Flipp flyerkit JSON (store `446-048`) | `pull-grocery-ads.ps1` | No |
 | Family Fare | Freshop circular API (store `6401`) | `pull-grocery-ads.ps1` | No |
 | Baker's (Kroger) | flyer-page JPGs on przone CDN | `pull-bakers.ps1` + Chrome | Yes (Akamai-gated) |
@@ -134,7 +134,7 @@ adding a writer.
 | Walmart | `__NEXT_DATA__` `...searchResult.itemStacks[].items[]` | no (CSP) | 2026-07: `priceInfo.currentPrice.price` is GONE - read `priceInfo.itemPrice`/`linePrice`/`unitPrice`; `unitPrice` may be an object (`.price`) or a display string ("$2.48/lb", "5.4 c/fl oz") - parse both. Fresh produce often has no price. A 200 with no `__NEXT_DATA__` = PerimeterX challenge, not data. |
 | Sam's Club | same `__NEXT_DATA__` shape | yes | `priceInfo.linePrice`/`itemPrice` are `$`-strings; `canonicalUrl` -> `/ip/`; bare `/ip/<id>` 301s to the canonical slug (proven 2026-07-17; bogus id renders an "Uh-oh" h1, so verify the RENDERED page, not the status). Warehouse packs, judge by `unitPrice`. |
 | Family Fare | Freshop API `api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&q=` | n/a | `base_price` + `canonical_url`; ~350ms pacing, 400s after ~40 calls (400 = throttle AND unknown-field - indistinguishable; fall back to minimal `fields=`). |
-| Hy-Vee | headless REST `POST /aisles-online/api/search/products` (storeId 1465 in body) or client-rendered DOM `a[href*="/aisles-online/p/"]` | REST: no | bogus product page = 200 with `pageProps.notFound===true` - check it. Fresh produce priced by weight = no fixed price. |
+| Hy-Vee | headless REST `POST /aisles-online/api/search/products` (storeId from `Get-HyVeeStore` in body - 1466 since 2026-08-21, never the retired 1465) or client-rendered DOM `a[href*="/aisles-online/p/"]` | REST: no | bogus product page = 200 with `pageProps.notFound===true` - check it. Fresh produce priced by weight = no fixed price. |
 | Aldi | client-rendered DOM `a[href*="/store/aldi/products/"]`; search is `/store/aldi/s?k=<term>` (NOT `?q=` - that redirects to an unrelated carousel) | yes | store-brand names; resolver body stored in `localStorage.AL_RESOLVE`; dead item renders h1 "Item Unavailable" on a 200. |
 | Baker's | hidden same-origin IFRAME render of `/search?query=` + scroll + stable-count poll, then anchor-climb from `a[href*="/p/"]` | yes | plain `fetch()`+DOMParser is DEAD (client-rendered shell, zero cards) and so is the `.ProductCard`/`[data-testid^="product-card"]` class - climb from anchors to the nearest container with a `$`. Kroger banner, Akamai-gated; store = Saddlecreek; cards print their own "$X.XX/oz". `localStorage.BK_RESOLVE`. |
 
@@ -155,10 +155,10 @@ session silently defaulted to Des Moines). Canonical identities + where each is 
 
 | Store | Omaha identity | Enforced by |
 |---|---|---|
-| Hy-Vee (ads) | Flipp collection 1465, zip 68106 | pull-grocery-ads.ps1 hard zip gate (`Test-OmahaZip`) |
-| Hy-Vee (everyday) | Aisles Online store "Omaha #1, NE" | weekly SKILL step D verify |
+| Hy-Vee (ads) | Flipp collection = `Get-HyVeeStore` store_id (1466 since 2026-09-10; proven that each collection id is its store's own flyer), flyer postal code `flyer_postal_code` 68137 | pull-grocery-ads.ps1 Omaha zip gate (`Test-OmahaZip`) AND store gate (`Test-HyVeeFlyerStore`: the flyer's postal code must be the identity's, so another Omaha store's ad cannot pass) |
+| Hy-Vee (everyday) | `Get-HyVeeStore` in `hyvee-store-lib.ps1`, which reads `stores.json` Hy-Vee `store_identity` (storeId + locationId, never one without the other). In a browser the selector button reads "Shopping Omaha #02, NE" (read 2026-09-10). Omaha #01 (storeId 1465) is retired and is what a fresh session defaults to | `test-hyvee-tag-check.ps1` sweeps for the retired identity; browser lanes verify the selector |
 | Aldi (ads) | Flipp merchant_store_code 446-048 (Omaha) | pull-grocery-ads.ps1 hard zip gate |
-| Aldi (everyday) | aldi.us "ALDI - OLA 42 - Omaha", 68137 | weekly SKILL step F2 verify |
+| Aldi (everyday) | aldi.us **In-Store** mode, store line ending in Omaha ("ALDI - OLA nn - Omaha"). The OLA number is NOT the identity - 48 and 42 have both been live - so never assert it | weekly SKILL step F2 verify |
 | Family Fare | Freshop store_id **6401** = 50th & Grover St, 5019 Grover St, Omaha 68106 | pull-regular-familyfare.ps1 runtime city assertion (exit 2 on non-Omaha) + ads gate |
 | Baker's | "Pickup at Saddlecreek", 888 S Saddle Creek Rd, Omaha 68106 | weekly steps A + C verify, daily SKILL hard rule |
 | Walmart | "Omaha L St Supercenter", 12850 L St, 68137 | weekly SKILL step E verify |
@@ -184,7 +184,7 @@ Once registered, EVERY automation picks the item up with no further wiring (all 
    product; prefer broad + let include/exclude filter.
 4. **Same-day pricing at all 7 stores** (each price needs a matching product URL in `out\url-inputs\`):
    Walmart = product page in the browser (`__NEXT_DATA__`; raw fetch gets bot-walled); Sam's = browser
-   search; Hy-Vee = Aisles Online (verify "Omaha #1, NE"); Family Fare = Freshop API (base_price everyday,
+   search; Hy-Vee = Aisles Online (verify the store `Get-HyVeeStore` names, "Shopping Omaha #02, NE" as of 2026-09-10); Family Fare = Freshop API (base_price everyday,
    sale_price -> `extra-deals-<date>.json`); Fareway = storefront browser (VERIFY shopId 16668805 /
    postalCode 68136 in the graphql network params - a fresh session can default to a NON-Omaha store);
    Baker's = browser (Akamai; if blocked, skip - the term is registered so the daily/weekly agents fill it).

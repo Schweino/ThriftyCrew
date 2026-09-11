@@ -208,14 +208,16 @@ defaulted to Des Moines once, with plausible-looking wrong prices.
 **Aldi** - ATTENDED ONLY, like Walmart: Brad's own Chrome through the extension, and only when he is there.
   https://www.aldi.us/ . First-party Omaha prices, NOT Instacart markups. VERIFIED WORKING in the
   in-app pane on 2026-08-15; the exact sequence that worked:
-  - Store must read "ALDI - OLA 42 - Omaha", zip 68137.
+  - Store line must end in **Omaha** ("ALDI - OLA <n> - Omaha"). Assert the CITY, never the OLA number:
+    the session has read OLA 48 and OLA 42 at different times, and a pinned number refuses a correct
+    session while reading as a store problem.
   - Header must read **In-Store**. Delivery and Pickup are marked up. This is the price_mode proof.
   - A COLD SESSION DEFAULTS TO DELIVERY. On 2026-08-15 the pane opened on the right Omaha store with
     `aria-selected="true"` on Delivery - the precise shape of the 2026-07-14 bug that shipped 249 marked-up
     rows labelled in-store. Always read the selected mode; never assume.
   - Switching modes takes TWO steps and the first alone silently does nothing: open the "How would you like
     to shop?" dialog, click the In-Store option, THEN click its **Confirm** button. Re-read the header
-    afterwards - it should say "In-Store open 9am - 8pm - ALDI - OLA 42 - Omaha".
+    afterwards - it should say In-Store, then the hours, then a store line ending in Omaha.
   - Decline non-essential cookies if a consent banner appears ("Reject All Non-Essential").
   - Search without navigating: `window.__do_not_use_me_history.push('/aldi/s?k='+encodeURIComponent(term))`.
     Poll until the first `a[href*="/products/"]` href CHANGES (cap ~9s) or you scrape the previous term.
@@ -272,10 +274,22 @@ defaulted to Des Moines once, with plausible-looking wrong prices.
   re-verifies known product ids one request each, and 89.3% of the store's catalogue can never enter that
   way), so a term the board has never carried is browser work every single time.
   https://www.hy-vee.com/aisles-online/search?search=<term> . First-party, NOT Instacart.
-  - Store selector button must name **Omaha #02** (expect "Omaha #02, NE" or "Omaha #2, NE"). Brad ruled on 2026-08-21
-    that the board speaks for Omaha #02 (storeId 1466, `grocery/hyvee-store-lib.ps1`). If the selector names Omaha #1 or
-    #01, the retired store, switch it before reading any price: a #01 price is the wrong store's. This line said
-    "Omaha #1, NE" until 2026-09-10, and grocery/ingredient-queue.json holds 43 evidence strings naming #1 or #01.
+  - VERIFY THE STORE BEFORE READING A PRICE. The board speaks for ONE Hy-Vee, and it is whatever
+    `Get-HyVeeStore` returns: `. grocery\hyvee-store-lib.ps1; Get-HyVeeStore`, which reads
+    `grocery\stores.json` -> Hy-Vee -> `store_identity`. Take the identity from there, not from this file.
+    On Brad's 2026-08-21 ruling it is storeId 1466, label `Omaha #02`, and on 2026-09-10 the rendered
+    selector button read **"Shopping Omaha #02, NE"** (14591 Stony Brook Boulevard, 68137). That label was
+    read off the page, not inferred: Hy-Vee zero-pads it, so "Omaha #2, NE" is not what to expect.
+  - A FRESH SESSION OPENS ON THE WRONG STORE. On 2026-09-10 the in-app pane defaulted to "Shopping Omaha
+    #01, NE", which is storeId 1465, retired on 2026-08-21. Switch it: click the selector, search
+    "Omaha, NE", Select the store whose name is the `label`, then re-read the button. This line said
+    "Omaha #1, NE" until 2026-09-10, and grocery/ingredient-queue.json holds evidence strings naming #1 or
+    #01; a price read at that store is not evidence for the board's store.
+  - The label is not the proof (R4). After switching, read the storeId the page itself rendered:
+    `/"store":\{"name":"([^"]+)","state":"NE","storeId":(\d+)\}/.exec(document.getElementById('__NEXT_DATA__').textContent)`
+    must return the `label` and `store_id` that Get-HyVeeStore gave you. `__NEXT_DATA__` is written at
+    page load; Select reloads the page (navigation type `reload`, 2026-09-10), so read it once the
+    reload has landed. A mismatch or a null makes Hy-Vee UNUSABLE for the batch.
   - An in-page fetch returns a client-rendered shell with zero product hrefs. Use get_page_text / read_page
     on the RENDERED page.
   - Roughly 100s per term. Fine for one ingredient; never attempt a sweep.

@@ -90,11 +90,14 @@ R3. TRANSIENT RETRY (E8). A browser-lane EMPTY (no no-results phrase, just a bla
 R4. IDENTITY BEFORE ANY VERDICT (E6, E7). Wrong store, wrong club, wrong fulfillment mode, bot wall =>
     UNUSABLE for that store for the whole batch. The check is store-specific and machine-readable, never the
     on-screen label alone:
-      Aldi:    body text matches /In-Store[^|]{0,40}ALDI - OLA 42 - Omaha/ (mode AND store in one line)
+      Aldi:    body text matches /In-Store[^|]{0,40}ALDI - OLA \d+ - Omaha/ (mode AND city in one line;
+               amended 2026-09-10 - the OLA number is not asserted, 48 and 42 have both been live)
       Fareway: Apollo cache GetRetailerLocationAddress -> lineOneString == '17070 Audrey Street' (E6:
                retailerLocation 531573; shopId is REISSUABLE, never compare it), header reads In-Store
       Sam's:   club header is an Omaha club (13130 L St 68137)
-      Hy-Vee:  store selector reads 'Omaha #01, NE'
+      Hy-Vee:  store selector names the store Get-HyVeeStore returns (grocery\hyvee-store-lib.ps1, from
+               stores.json store_identity). Amended 2026-09-10: Brad moved the board to Omaha #02 on
+               2026-08-21, and the selector then read 'Shopping Omaha #02, NE'
       Walmart: no store toggle; UNUSABLE only on bot wall/timeout
 R5. UNIT PASSTHROUGH (E9). Every surface that prints candidates prints the commodity's unit beside the term,
     with the each-clarifier: `fennel (each - the whole item, not a seed/spice form)`. The unit comes from
