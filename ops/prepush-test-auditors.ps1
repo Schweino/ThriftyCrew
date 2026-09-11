@@ -349,6 +349,53 @@ function Get-HarnessSummary($Lines) {
   return $s
 }
 
+# ONE CHILD RUN, its stdout and stderr redirected to <Stem>.out and <Stem>.err. A function so the self-test
+# drives the same launch and the same file handling the hook does, not a copy of them.
+function Invoke-TaChild([string]$ScriptPath, [string[]]$ExtraArgs, [string]$Stem, [int]$TimeoutSeconds) {
+  $r = [pscustomobject]@{ rc = 124; lines = @(); outFile = ($Stem + '.out'); errFile = ($Stem + '.err'); secs = 0; startError = '' }
+  $argList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $ScriptPath + '"'))
+  if ($ExtraArgs) { $argList += $ExtraArgs }
+  $sw = [Diagnostics.Stopwatch]::StartNew()
+  try {
+    $proc = Start-Process -FilePath 'powershell.exe' -ArgumentList $argList -WorkingDirectory $RepoRoot -NoNewWindow -PassThru -RedirectStandardOutput $r.outFile -RedirectStandardError $r.errFile
+    $null = $proc.Handle
+    if ($proc.WaitForExit($TimeoutSeconds * 1000)) { $proc.WaitForExit(); $r.rc = $proc.ExitCode }
+    else { $null = & taskkill.exe /PID $proc.Id /T /F 2>$null }
+  } catch { $r.startError = $_.Exception.Message }
+  $sw.Stop(); $r.secs = [int]$sw.Elapsed.TotalSeconds
+  if (Test-Path -LiteralPath $r.outFile) { $r.lines = @([IO.File]::ReadAllLines($r.outFile)) }
+  return $r
+}
+
+# WHAT A CHILD'S TWO FILES BECOME ONCE THE VERDICT IS KNOWN (2026-09-11): both removed on a pass, both kept and
+# named on anything else. stderr used to be removed unconditionally, before the verdict existed. So a
+# test-auditors that died at startup, printing nothing to stdout and its cause to stderr alone, was refused as
+# COULD NOT EVALUATE with an EMPTY .out kept and the one file that said why already deleted. Observed on a push
+# from worktree priceless-lichterman-f9ee7f at about 12:56 that day, after run-gates passed 353 of 353; the
+# same suite started by hand passed startup, so the cause was never recovered.
+function Complete-TaChildFiles($Run, [int]$Code, [int]$HeadLines = 5) {
+  if ($Code -eq 0) {
+    Remove-Item -LiteralPath $Run.outFile -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $Run.errFile -ErrorAction SilentlyContinue
+    return
+  }
+  $out = @($Run.lines | Where-Object { ([string]$_).Trim() })
+  if ($Code -eq 3) { 'prepush-test-auditors: last lines test-auditors printed: ' + $(if ($out.Count -gt 0) { @($out | Select-Object -Last 3) -join ' | ' } else { '(none, its stdout is empty)' }) }
+  if (Test-Path -LiteralPath $Run.errFile) {
+    $err = @([IO.File]::ReadAllLines($Run.errFile) | Where-Object { $_.Trim() })
+    if ($err.Count -gt 0) {
+      $show = [Math]::Min($HeadLines, $err.Count)
+      "prepush-test-auditors: test-auditors (rc=$($Run.rc)) wrote $($err.Count) line(s) to stderr, kept at $($Run.errFile); the first $show"
+      foreach ($l in $err[0..($show - 1)]) { '  stderr | ' + $(if ($l.Length -gt 300) { $l.Substring(0, 300) + '...' } else { $l }) }
+    } else {
+      "prepush-test-auditors: test-auditors (rc=$($Run.rc)) wrote nothing to stderr; the empty file is kept at $($Run.errFile)"
+    }
+  } else {
+    "prepush-test-auditors: test-auditors left no stderr file at $($Run.errFile)" + $(if ($Run.startError) { " (it could not be started: $($Run.startError))" } else { '' })
+  }
+  "prepush-test-auditors: the full test-auditors output is kept at $($Run.outFile)"
+}
+
 # HOW test-auditors DECIDES IT HAS A BOARD, read from its own $HasBoard assignment (and its -or
 # continuation lines) so this check and the harness cannot drift into two copies of one rule.
 function Get-BoardPatterns([string]$Text, [string]$SelfRel) {
@@ -1041,9 +1088,40 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
     Case 'MUST FIRE' 'live: the real Use-Unit could be driven' $false 'not found'
   }
 
+  # ---- A CHILD'S FILES AFTER THE VERDICT (2026-09-11) ----
+  # Real children through the real launcher and the real cleanup, in a directory of this run's own, so a
+  # concurrent run of this suite can neither share nor delete them. The crash child is the founding shape: its
+  # cause on stderr, nothing on stdout, an exit before its completion marker. The pass child writes to stderr
+  # too, so its files are removed because the run passed and not because stderr happened to be empty. The
+  # 120s wait is a hang guard, never a speed bar.
+  $chDir = Join-Path $env:TEMP ('tc-ptast-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    $null = New-Item -ItemType Directory -Path $chDir -ErrorAction Stop
+    $utf8 = New-Object Text.UTF8Encoding($false)
+    $crashPs = Join-Path $chDir 'crash.ps1'
+    [IO.File]::WriteAllText($crashPs, ("[Console]::Error.WriteLine('founding startup crash: a harness library is missing')`n" + "exit 1`n"), $utf8)
+    $crash = Invoke-TaChild $crashPs @() (Join-Path $chDir 'crash') 120
+    $vc = Get-PushVerdict $crash.rc (Test-GuardComplete -Output $crash.lines -Name 'test-auditors') (Get-FailLines $crash.lines) $unread
+    $crashMsg = (Complete-TaChildFiles $crash $vc.code) -join "`n"
+    $errKept = Test-Path -LiteralPath $crash.errFile
+    Case 'MUST FIRE' 'a child that dies on stderr before its marker keeps its stderr file and names it with its cause' `
+      ($vc.code -eq 3 -and $errKept -and $crashMsg.Contains($crash.errFile) -and $crashMsg.Contains('founding startup crash: a harness library is missing')) "code=$($vc.code) rc=$($crash.rc) errKept=$errKept output: $crashMsg"
+    $passPs = Join-Path $chDir 'pass.ps1'
+    [IO.File]::WriteAllText($passPs, ("[Console]::Error.WriteLine('a warning a passing run may print')`n" + "'  PASS  one case'`n" + "'TEST-AUDITORS-COMPLETE pass=1 failed=0 hygiene=0 skipped=0'`n" + "exit 0`n"), $utf8)
+    $pass = Invoke-TaChild $passPs @() (Join-Path $chDir 'pass') 120
+    $vp = Get-PushVerdict $pass.rc (Test-GuardComplete -Output $pass.lines -Name 'test-auditors') (Get-FailLines $pass.lines) $unread
+    $written = @(@($pass.outFile, $pass.errFile) | Where-Object { (Test-Path -LiteralPath $_) -and (Get-Item -LiteralPath $_).Length -gt 0 }).Count
+    $null = Complete-TaChildFiles $pass $vp.code
+    $removed = @(@($pass.outFile, $pass.errFile) | Where-Object { -not (Test-Path -LiteralPath $_) }).Count
+    Case 'CLEAN TWIN' 'a passing run still removes both files it wrote, stderr included' ($vp.code -eq 0 -and $written -eq 2 -and $removed -eq 2) "code=$($vp.code) rc=$($pass.rc) written=$written removed=$removed"
+  } catch {
+    $fails += ('child-file cases THREW: ' + $_.Exception.Message)
+    "  child-file cases THREW: $($_.Exception.Message)"
+  } finally { Remove-Item -LiteralPath $chDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 69
+  $expectedCases = 71
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''
@@ -1193,29 +1271,21 @@ if ($ListUnits) {
 }
 
 $stamp = [guid]::NewGuid().ToString('N').Substring(0, 8)
-$outF = Join-Path $env:TEMP ("tc-prepush-ta-$PID-$stamp.out")
-$errF = Join-Path $env:TEMP ("tc-prepush-ta-$PID-$stamp.err")
+$stem = Join-Path $env:TEMP ("tc-prepush-ta-$PID-$stamp")
 $skipF = ''
-$taArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $taPath + '"'))
+$taExtra = @()
 if ($sel.mode -eq 'selective') {
-  $skipF = Join-Path $env:TEMP ("tc-prepush-ta-$PID-$stamp.skip")
+  $skipF = $stem + '.skip'
   [IO.File]::WriteAllLines($skipF, [string[]]@($sel.skipped), (New-Object Text.UTF8Encoding($false)))
-  $taArgs += @('-SkipUnitsFile', ('"' + $skipF + '"'))
+  $taExtra = @('-SkipUnitsFile', ('"' + $skipF + '"'))
   "prepush-test-auditors: running $($script:AuditorsRel) on $($sel.selected.Count) of $($model.unitCount) unit(s) (a full run measured $($script:MeasuredSeconds)s on 2026-09-10, bound $($script:TimeoutSeconds)s)"
 } else {
   "prepush-test-auditors: running $($script:AuditorsRel) in full (measured $($script:MeasuredSeconds)s on 2026-09-10, bound $($script:TimeoutSeconds)s)"
 }
-$sw = [Diagnostics.Stopwatch]::StartNew()
-$rc = 124
-try {
-  $proc = Start-Process -FilePath 'powershell.exe' -ArgumentList $taArgs -WorkingDirectory $RepoRoot -NoNewWindow -PassThru -RedirectStandardOutput $outF -RedirectStandardError $errF
-  $null = $proc.Handle
-  if ($proc.WaitForExit($script:TimeoutSeconds * 1000)) { $proc.WaitForExit(); $rc = $proc.ExitCode }
-  else { $null = & taskkill.exe /PID $proc.Id /T /F 2>$null }
-} catch { "prepush-test-auditors: could not start test-auditors: $($_.Exception.Message)" }
-$sw.Stop()
-$lines = @(); if (Test-Path -LiteralPath $outF) { $lines = @([IO.File]::ReadAllLines($outF)) }
-Remove-Item -LiteralPath $errF -ErrorAction SilentlyContinue
+$run = Invoke-TaChild $taPath $taExtra $stem $script:TimeoutSeconds
+if ($run.startError) { "prepush-test-auditors: could not start test-auditors: $($run.startError)" }
+$rc = $run.rc
+$lines = $run.lines
 if ($skipF) { Remove-Item -LiteralPath $skipF -ErrorAction SilentlyContinue }
 $complete = Test-GuardComplete -Output $lines -Name 'test-auditors'
 $fl = Get-FailLines $lines
@@ -1231,7 +1301,7 @@ if ($isSelective -and $complete -and -not $hs.selective) {
   "prepush-test-auditors: the harness did not report a selective run, so it ran every unit; treating this as a full run"
 }
 $v = Get-PushVerdict $rc $complete $fl $known $isSelective $ranNote
-$secs = [int]$sw.Elapsed.TotalSeconds
+$secs = $run.secs
 
 if ($isSelective -and $hs.found) {
   "prepush-test-auditors: ran $($hs.cases) of $totalText cases ($($hs.unitsRan) of $($hs.unitsRan + $hs.unitsSkipped) units), selected by $($paths.Count) pushed path(s)."
@@ -1241,11 +1311,7 @@ if ($isSelective -and $hs.found) {
 "prepush-test-auditors: $($v.verdict) after ${secs}s - $($v.detail)."
 foreach ($l in $v.newLines) { $s = $l -replace '^FAIL\s+', ''; '  NEW FAILING CASE      ' + $(if ($s.Length -gt 300) { $s.Substring(0, 300) + '...' } else { $s }) }
 foreach ($l in $v.oldLines) { $s = $l -replace '^FAIL\s+', ''; '  ALREADY FAILING       ' + $(if ($s.Length -gt 300) { $s.Substring(0, 300) + '...' } else { $s }) }
-if ($v.code -eq 0) { Remove-Item -LiteralPath $outF -ErrorAction SilentlyContinue }
-else {
-  if ($v.code -eq 3) { "prepush-test-auditors: last lines test-auditors printed: " + (@($lines | Select-Object -Last 3) -join ' | ') }
-  "prepush-test-auditors: the full test-auditors output is kept at $outF"
-}
+Complete-TaChildFiles $run $v.code
 
 if ($v.code -eq 0 -and $rp -and -not $PathsFile) {
   if ($isSelective) {
