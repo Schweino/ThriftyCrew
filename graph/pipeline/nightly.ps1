@@ -120,6 +120,7 @@ $statusF  = Join-Path $grocery 'out\logs\graph-nightly-status.json'
 # gap survived triage, so only the chain may write under the chain's name. The rule generalises: if
 # a verb wants a record, it gets its OWN name and its own rc stamp, never the run's.
 . (Join-Path $grocery 'run-log-lib.ps1')
+. (Join-Path $root 'lib\lf-write.ps1')   # Write-TcLfFile: the status stamp and both weekly stamps are tracked and stored eol=lf
 $runLog = $null
 function Done {
   param([int]$Rc = 0)
@@ -234,6 +235,24 @@ function Test-AlreadyRanThisWindow {
   $fmt = ('already ran this night at {0} (window opened {1}); the resolve stage completed, ' +
           'so this repetition is a no-op')
   return ($fmt -f $started.ToString('yyyy-MM-ddTHH:mm:ss'), $windowOpened.ToString('yyyy-MM-ddTHH:mm'))
+}
+
+function Write-NightlyStatusFile {
+  <#
+    .SYNOPSIS Write the status stamp the guard above reads, in the bytes git stores. Returns nothing.
+    .DESCRIPTION The stamp at $statusF is TRACKED, stored eol=lf, and its blob carries a
+                 UTF-8 BOM (read with `git cat-file blob` to a file on 2026-09-11: EF BB BF, 0 CR, one trailing
+                 LF). The teardown used to write it with `ConvertTo-Json | Set-Content -Encoding UTF8`, which
+                 under PS 5.1 is CRLF twice over, so every night left it ` M` with a zero-line diff and the
+                 graph-nightly commit hook printed "CRLF will be replaced by LF" for it
+                 (graph-nightly-2026-09-09.log). lib\lf-write.ps1 writes the old writer's bytes with CRLF folded
+                 to LF, BOM kept, so the switch moves no blob. A FUNCTION so the self-test drives the same write
+                 the teardown runs.
+  #>
+  param([Parameter(Mandatory=$true)][string]$Path, [Parameter(Mandatory=$true)]$Status)
+  $dir = Split-Path -Parent $Path
+  if (-not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Force $dir | Out-Null }
+  $null = Write-TcLfFile -Path $Path -Text ($Status | ConvertTo-Json -Depth 5)
 }
 
 function Test-LlamaStartable {
@@ -606,6 +625,51 @@ if ($SelfTest) {
   if (-not $src.Contains($nClockStamp)) { Write-Output '  X MUST-FIRE: the reader''s stamp must reach the assertion'; $bad++ }
   # MUST FIRE: the fixed OK text that judged graph.db on its mtime alone must not come back.
   if ($src.Contains($nOldOk)) { Write-Output '  X MUST-FIRE: the fixed mtime-only OK text is back in the inputs stage'; $bad++ }
+
+  # ---- the status stamp is written in the bytes git stores (2026-09-11) --------------------------
+  # grocery\out\logs\graph-nightly-status.json is tracked and stored eol=lf with a BOM, and the teardown
+  # wrote it CRLF through Set-Content (Write-NightlyStatusFile's header). These cases drive the REAL writer
+  # at a per-run temp path. NO TEARDOWN KEYWORD IN THIS BLOCK: the placement checks above read the FIRST
+  # one in this file and the self-test sits above the chain, so the cleanup simply follows the try/catch.
+  $gnCrOf = { param([byte[]]$B) $n = 0; foreach ($x in $B) { if ($x -eq 13) { $n++ } }; $n }
+  $gnT = Join-Path $env:TEMP ('gns-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Path $gnT -ErrorAction Stop | Out-Null
+    $gnStatus = [ordered]@{ started = '2026-09-09T21:30:02'; card_free = $true; stages = @(
+      [ordered]@{ stage = 'resolve'; state = 'OK'; detail = ''; sec = 2 }
+      [ordered]@{ stage = 'stop';    state = 'OK'; detail = ''; sec = 0 }) }
+    # MUST-FIRE, and the proof the byte check below can see the bug at all: the old writer still writes CR.
+    $gnOld = Join-Path $gnT 'old.json'
+    ($gnStatus | ConvertTo-Json -Depth 5) | Set-Content -Path $gnOld -Encoding UTF8
+    if ((& $gnCrOf ([IO.File]::ReadAllBytes($gnOld))) -eq 0) { Write-Output '  X MUST-FIRE: Set-Content wrote no CR here, so the no-CR check below proves nothing'; $bad++ }
+    # MUST-FIRE: the writer the teardown calls leaves no CR, keeps the blob's BOM and ends in ONE LF. Its
+    # parent directory does not exist yet, as on a fresh box.
+    $gnF = Join-Path $gnT 'logs\graph-nightly-status.json'
+    Write-NightlyStatusFile -Path $gnF -Status $gnStatus
+    $gnB = [IO.File]::ReadAllBytes($gnF)
+    $gnCr = & $gnCrOf $gnB
+    if ($gnCr -ne 0) { Write-Output ('  X MUST-FIRE: the status stamp must be written with no CR byte, found ' + $gnCr); $bad++ }
+    if (-not ($gnB.Length -ge 3 -and $gnB[0] -eq 0xEF -and $gnB[1] -eq 0xBB -and $gnB[2] -eq 0xBF)) {
+      Write-Output '  X MUST-FIRE: the status stamp must keep the BOM its committed blob carries'; $bad++ }
+    if (-not ($gnB.Length -ge 2 -and $gnB[-1] -eq 10 -and $gnB[-2] -eq 0x7D)) {
+      Write-Output '  X MUST-FIRE: the status stamp must end in exactly one LF after its closing brace'; $bad++ }
+    # CLEAN TWIN: the catch-up guard's own reader still parses what was written, and skips on it.
+    $gnRead = [IO.File]::ReadAllText($gnF) | ConvertFrom-Json
+    if (-not (Test-AlreadyRanThisWindow -Now ([datetime]'2026-09-09 23:30') -WindowStart '21:30' -Status $gnRead)) {
+      Write-Output '  X CLEAN TWIN: the catch-up guard must still read the LF stamp and skip a repeated night'; $bad++ }
+  } catch {
+    Write-Output ('  X the status-stamp cases threw: ' + $_.Exception.Message); $bad++
+  }
+  Remove-Item -LiteralPath $gnT -Recurse -Force -ErrorAction SilentlyContinue
+  # MUST-FIRE, SOURCE ASSERTION: the teardown and both weekly stamps write through the tested LF path, or
+  # the cases above test a function nothing calls. NEEDLES BUILT BY CONCATENATION.
+  $iStatusW = $src.IndexOf('Write-NightlyStatus' + 'File -Path $statusF')
+  if ($iStatusW -lt 0 -or ($iFinal -ge 0 -and $iStatusW -lt $iFinal)) {
+    Write-Output '  X MUST-FIRE: the teardown must write the status stamp through Write-NightlyStatusFile'; $bad++ }
+  foreach ($gnStampVar in @('$famStamp', '$evalStamp')) {
+    if (-not $src.Contains('Write-TcLf' + 'File -Path ' + $gnStampVar)) {
+      Write-Output ('  X MUST-FIRE: the weekly stamp ' + $gnStampVar + ' must be written through Write-TcLfFile'); $bad++ }
+  }
 
   if ($bad) { Write-Output "SELF-TEST FAILED ($bad)"; exit 2 }
   Write-Output 'self-test OK'
@@ -996,7 +1060,8 @@ try {
     $r = Invoke-Stage 'rejection-families' $py @('graph\learning\local_triage.py', '--cluster-rejections', '--limit', '600', '--jobs', "$Jobs", '--out', $famOut) ([math]::Max(300, [math]::Min(1800, (Remaining) - 120)))
     if ($r.Ok) {
       Record 'rejection-families' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed
-      try { (Get-Date).ToString('s') | Set-Content $famStamp -Encoding UTF8 } catch { }
+      # Tracked, eol=lf, BOM in the blob - so LF with a BOM, not Set-Content's CRLF.
+      try { $null = Write-TcLfFile -Path $famStamp -Text ((Get-Date).ToString('s')) } catch { }
     }
     elseif ($r.TimedOut) { Record 'rejection-families' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
     else { Record 'rejection-families' 'BLIND' ("rc=" + $r.ExitCode + ' - tracked, never fatal') $r.Elapsed }
@@ -1036,7 +1101,8 @@ try {
     $r = Invoke-Stage 'ml-eval' $sidecarPy $evalArgs ([math]::Min(1800, (Remaining)))
     if ($r.Ok) {
       Record 'ml-eval' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed
-      try { (Get-Date).ToString('s') | Set-Content $evalStamp -Encoding UTF8 } catch { }
+      # Tracked, eol=lf, BOM in the blob - so LF with a BOM, not Set-Content's CRLF.
+      try { $null = Write-TcLfFile -Path $evalStamp -Text ((Get-Date).ToString('s')) } catch { }
     }
     elseif ($r.TimedOut) { Record 'ml-eval' 'PARTIAL' 'stopped at the deadline' $r.Elapsed }
     else { Record 'ml-eval' 'BLIND' ("rc=" + $r.ExitCode + " - tracked, never fatal") $r.Elapsed }
@@ -1064,9 +1130,8 @@ finally {
     llama_started = $llamaStarted
     stages      = @($stages.ToArray())
   }
-  $dir = Split-Path -Parent $statusF
-  if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force $dir | Out-Null }
-  ($status | ConvertTo-Json -Depth 5) | Set-Content -Path $statusF -Encoding UTF8
+  # LF WITH THE BLOB'S BOM, never Set-Content: this file is tracked (Write-NightlyStatusFile's header).
+  Write-NightlyStatusFile -Path $statusF -Status $status
   Log ("wrote {0}" -f $statusF)
 }
 
