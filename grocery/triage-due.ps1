@@ -117,6 +117,24 @@ function Read-LaneStamp {
     return [datetime]::Parse($raw, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind)
   } catch { return $null }
 }
+# ---- PREVENTION IS WEEKLY WHETHER OR NOT ANYTHING IS OPEN (2026-09-10, ruling 6) -----------------------------
+# The weekly lane plans prevention for the scoreboard's top recurring class every week, "whether or not that class
+# fired that day". The lane used to wake only when a weekly-lane ITEM was open, so a clean week skipped
+# prevention entirely, which is the week this plan exists to produce. The fix is NOT to make a clear queue read
+# as DUE: test-auditors pins "IDLE only when the queue is really clear", and that meaning is right. So the IDLE
+# and DUE lines keep their meaning, and this adds a separate PREVENTION DUE line that the SKILL acts on. It uses
+# the lane's own stamp and 7 days, so one worked lane run satisfies both.
+function Test-PreventionDue {
+  <# .SYNOPSIS Is the weekly prevention step owed? Pure. A missing or unreadable stamp is owed, never recent. #>
+  param($StampTime, [datetime]$Now)
+  return (($null -eq $StampTime) -or (($Now - [datetime]$StampTime).TotalDays -ge $script:WeeklyEveryDays))
+}
+function Format-PreventionDueLine {
+  <# .SYNOPSIS The one line the SKILL's STEP 0 reads. Pure. #>
+  param($StampTime)
+  $last = if ($null -eq $StampTime) { 'never' } else { ([datetime]$StampTime).ToString('yyyy-MM-dd HH:mm') }
+  return ('PREVENTION DUE  the weekly lane last planned prevention: ' + $last + ' - run the SKILL''s STEP 3.5 prevention step today even if no weekly item is open (ruling 6)')
+}
 
 if ($SelfTest) {
   $fail = 0; $cases = 0
@@ -204,6 +222,17 @@ if ($SelfTest) {
     Set-Content -LiteralPath $stF -Value '2026-09-15T10:00:00.0000000' -Encoding ascii
     _T 'CLEAN TWIN a real lane stamp round-trips' ((Read-LaneStamp $stF) -eq [datetime]'2026-09-15T10:00:00') 'did not round-trip'
   } finally { Remove-Item -LiteralPath $stF -Force -ErrorAction SilentlyContinue }
+
+  # ---- PREVENTION IS WEEKLY WHETHER OR NOT ANYTHING IS OPEN (2026-09-10, ruling 6) ----
+  $pNow = [datetime]'2026-09-17T09:45:00'
+  # MUST FIRE: the founding gap. A clear queue and a lane never worked still owes this week's prevention.
+  _T 'MUST-FIRE a lane that has never run owes prevention even with nothing open' (Test-PreventionDue $null $pNow) 'not owed'
+  # MUST FIRE: a lane last worked 8 days ago owes it.
+  _T 'MUST-FIRE a lane last worked 8 days ago owes prevention' (Test-PreventionDue ([datetime]'2026-09-09T09:00:00') $pNow) 'not owed'
+  # MUST NOT FIRE: a lane worked 2 days ago does not.
+  _T 'MUST-NOT-FIRE a lane worked 2 days ago owes no prevention' (-not (Test-PreventionDue ([datetime]'2026-09-15T10:00:00') $pNow)) 'owed'
+  # CLEAN TWIN: the line names the last lane run, so the SKILL and a reader see how overdue it is.
+  _T 'CLEAN TWIN the PREVENTION DUE line names the last lane run date' ((Format-PreventionDueLine ([datetime]'2026-09-09T09:00:00')) -match '^PREVENTION DUE .*2026-09-09') (Format-PreventionDueLine ([datetime]'2026-09-09T09:00:00'))
 
   # ---- RETURNS ARE FAILURES (2026-09-10, Brad's ruling 5) ------------------------------------------------
   # The founding measurement: 25 types fired on 3+ days over 2026-08-22..09-10 and all 25 came back after a
@@ -297,7 +326,9 @@ if ($daily.Count -eq 0 -and -not $split.WeeklyDue) {
   if ($spools.Count -gt 0) { exit 0 }   # spool lines above already said DUE
   $nb = ''; if ($needsBrad.Count) { $nb = ' (' + $needsBrad.Count + ' item(s) parked needs-brad - do not re-triage, they are his)' }
   $wl = ''; if ($weekly.Count) { $wl = ' (' + $weekly.Count + ' weekly-lane item(s) wait for ' + $split.NextDue.ToString('yyyy-MM-dd') + ')' }
-  Write-Output ('IDLE  triage queue clear' + $wl + $nb); exit 0
+  Write-Output ('IDLE  triage queue clear' + $wl + $nb)
+  if (Test-PreventionDue $laneStamp (Get-Date)) { Write-Output (Format-PreventionDueLine $laneStamp) }
+  exit 0
 }
 if ($daily.Count) {
   Write-Output ("DUE  " + $daily.Count + " open alert(s) to triage:")
@@ -316,6 +347,8 @@ if ($weekly.Count) {
     Write-Output ('  [' + $i.id + '] x' + $i.count + '  ' + $i.subject + $ov)
   }
 }
+# a due weekly lane already runs prevention first; otherwise say when prevention alone is owed (ruling 6)
+if (-not $split.WeeklyDue -and (Test-PreventionDue $laneStamp (Get-Date))) { Write-Output (Format-PreventionDueLine $laneStamp) }
 # An item whose emitter was committed after the alert fired may be describing code that no longer exists.
 # Wrapped: this is provenance, and provenance must never cost a triage tick.
 try { foreach ($l in (Get-RemeasureLines $open (Split-Path -Parent $root))) { Write-Output $l } } catch { }

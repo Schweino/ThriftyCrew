@@ -308,9 +308,31 @@ that day's 08:00 run succeeding.
   - **Applied after the fact:** plan-2026-09-10.json now fails the gate, because 5 of its 11 items are
     RETURNs (d9e085, b91a0a, 20430e, 267ba6, 4de393). It was written before the rule and stays as the record.
     From here on, every item for a returning type costs the reviewer a prevention block. That cost is the point.
-- **Next:** step 7 (the weekly lane re-aimed) is building, and step 3b (the Family Fare catalog-walk trial) is
-  running. **R18 and R11 change the Chrome capture code**, so they start after the 2026-09-11 08:00 capture
-  and the R12 probe, not before.
+- **Step 7, the weekly lane re-aimed: DONE** (023981f9d, plus the wake-up fix below).
+  - A `"lane": "weekly"` plan must carry four things:
+    - a `prevention_target` whose days fired and rank the gate recomputes from `grocery/out/alert-census.jsonl`;
+    - a `new_source_check` recording that the row contract does not exist yet;
+    - a `prevention:<type>` item with the full code-item fields;
+    - `why_not_top` when the target is not rank 1.
+  - `grocery/triage-return-lib.ps1` is now the one copy of days-fired-per-type, shared by the scoreboard and the gate.
+  - Gate self-test: 66 of 66.
+  - Today's top class is `grocery matching soundness review needed`, fired on 12 of 14 days (rank 1 of 62 types).
+  - **Found on the way and fixed:** the lane only woke when a weekly item was open, so a clean week would have skipped prevention.
+    - The first attempt made a clear queue read as DUE, and test-auditors refused it, correctly.
+    - The fix leaves IDLE meaning "the queue is clear" and adds a separate `PREVENTION DUE` line, which the SKILL's STEP 0 acts on.
+    - triage-due self-test: 23 of 23.
+- **Step 3b, the Family Fare catalog walk: TRIAL DONE, NOT BUILT** (616017aba,
+  `design/TRIAL-familyfare-catalog-walk-2026-09-10.md`).
+  - Freshop ignores `page=` and `offset=`: 186 pages returned the same 100 ids. `limit` is capped at 100.
+  - `skip=` does page, and hit HTTP 429 after 66 requests (35.6% of the catalog).
+  - Rubric: complete NOT MET; follow-up search COULD NOT VERIFY; covers the rotation COULD NOT VERIFY. The lower bound: 2,339 of 5,395 everyday rows found in the 35.6%.
+  - **Found on the way:** the offers endpoint ignores `page=` too (page 2 identical to page 1, 200 of 200 ids, out of 8,600).
+    - `pull-regular-familyfare.ps1`'s offers loop pages that way.
+    - The ad-run logs for 09-02 to 09-05 read "0 product(s) covered by an offer running today".
+    - The circular puller probably has the same defect (unverified).
+  - That may be a live money defect and needs cross-window pacing to fix. It is filed as DAILY-lane queue item 2026-09-10-fa6ad6 for the 2026-09-11 triage, with the measurements and cell effects as the first thing to measure.
+  - The trial ended in a 429 at 20:28 CDT. If the 09-11 07:01 Family Fare window does not advance, suspect the trial.
+- **Next:** R18 (own Chrome tabs) and R11 (Aldi and Fareway page JSON) change the Chrome capture code, so they start after the 2026-09-11 08:00 capture and the R12 probe. Then step 8, the row contract.
 
 ### Ruling 7 result: the store probes (`design/PROBE-store-direct-data-2026-09-10.md`)
 

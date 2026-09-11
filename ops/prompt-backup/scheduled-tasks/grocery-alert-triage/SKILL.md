@@ -112,6 +112,10 @@ is exactly what it measures, so skipping it on IDLE days would blind the scorebo
 (design\PLAN-zero-alert-days-2026-09-10.md, ruling 4). Exit 3 means it could not read the queue: say so.
 IDLE means report one line and STOP (no agents, no plan, no cost). DUE means proceed. Items with status
 'needs-brad' are PARKED - never re-triage them.
+PREVENTION DUE (2026-09-10, ruling 6) is the one exception to stopping on IDLE. When the guard prints a
+`PREVENTION DUE` line, after IDLE or after DUE, run STEP 3.5 today even if no weekly-lane item is open: the
+weekly lane plans prevention for the scoreboard's top recurring class every week, whether or not anything is
+queued, and a clean week is exactly the week it must not skip. With no weekly ids, that run is prevention only.
 TWO LANES (2026-09-10). The guard lists the daily lane under `DUE` and weekly-lane items under `WEEKLY LANE`.
 `WEEKLY LANE DUE`, or a first line reading `DUE  WEEKLY LANE`, means run STEP 3.5 after the daily lane. A
 `WEEKLY LANE ... wait for <date>` line means those items are NOT today's work except by PULL FORWARD, and
