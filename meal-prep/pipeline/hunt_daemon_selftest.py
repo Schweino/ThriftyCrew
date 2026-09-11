@@ -301,6 +301,62 @@ def arun(coro):
         loop.close()
 
 
+# THE HANG GUARD, NEVER A VERDICT (2026-09-11). The cases that decided pass or fail on a wall clock - a
+# 3 s dispatch poll, two ~6 s release loops and a 0.6 s barrier - now wait on an EVENT the code under test
+# produces, so load makes them slower and never red. This bounds only a lane that never produces its event,
+# and every case that carries it reports a trip by name instead of passing. First plausible value, not a
+# sweep: the events it bounds take milliseconds quiet, and a larger value costs only a broken run's time.
+HANG_GUARD_SEC = 60.0
+
+
+class _TakeProbe(object):
+    """Counts the items a channel's consumers have FINISHED, read off the channel itself.
+
+    A consumer task that comes back to take() after being handed an item has finished that item - there
+    is no other way back into its loop. So "the lane is done with what it was given" is an event the lane
+    produces, and a case can wait on it instead of polling a queue against a deadline, which under load
+    cannot tell "not yet" from "never" (2026-09-11). The grocery rule for pages that load in pieces,
+    applied to a lane: wait on a COUNT, never sleep and hope.
+    """
+
+    def __init__(self, ch):
+        self.done = 0
+        self._holding = set()
+        self._waiters = []
+        real = ch.take
+
+        async def take():
+            me = asyncio.current_task()
+            if me in self._holding:
+                self._holding.discard(me)
+                self.done += 1
+                waiters, self._waiters = self._waiters, []
+                for fut in waiters:
+                    if not fut.done():
+                        fut.set_result(None)
+            got = await real()
+            if got is not None:
+                self._holding.add(me)
+            return got
+        ch.take = take
+
+    async def wait_done(self, n, lane):
+        """'done' once n items are finished, 'lane ended' when the lane task finished first, 'hang guard'
+        when neither happened inside HANG_GUARD_SEC. Only 'done' is a pass."""
+        loop = asyncio.get_running_loop()
+        deadline = loop.time() + HANG_GUARD_SEC
+        while self.done < n:
+            if lane.done():
+                return "lane ended"
+            left = deadline - loop.time()
+            if left <= 0:
+                return "hang guard"
+            fut = loop.create_future()
+            self._waiters.append(fut)
+            await asyncio.wait({fut, lane}, timeout=left, return_when=asyncio.FIRST_COMPLETED)
+        return "done"
+
+
 # =====================================================================================================
 # THE PINNED-REFERENCE GATE MOVED TO hunt_lib (2026-09-04, PLAN-after-review P5), because three
 # other Python and PowerShell suites needed exactly this and could not reach it here. These two
@@ -4003,19 +4059,24 @@ def _wave_mid_run():
     try:
         d = daemon(run_dir=tmp, dispatcher=fd, wave_size=2)
         seen = []
+        state = {}
 
         async def fake_wave(k, drain=False):
             seen.append({"wave": k, "drain": drain, "qa_open": not d.ch["qa"].is_closed()})
         d.run_wave = fake_wave
 
         async def drill():
+            # NO CLOCK (2026-09-11). This polled `seen` for up to 6 s. Both verdicts are in once the qa
+            # workers have FINISHED two items, read off the channel; whatever that pass scheduled is then
+            # awaited as the wave chain itself, so a wave that was scheduled is always seen and a wave that
+            # was not is never waited for.
+            probe = _TakeProbe(d.ch["qa"])
             task = asyncio.ensure_future(d.qa_lane())
             d.ch["qa"].push({"slug": "s1"})
             d.ch["qa"].push({"slug": "s2"})
-            for _ in range(600):
-                if seen:
-                    break
-                await asyncio.sleep(0.01)
+            state["lane"] = await probe.wait_done(2, task)
+            if d._wave_chain is not None:
+                await d._wave_chain
             mid = list(seen)                   # what had closed while the lane was still open
             d.ch["qa"].push({"slug": "s3"})
             d.ch["qa"].close()
@@ -4027,8 +4088,9 @@ def _wave_mid_run():
 
         mid, all_waves = arun(drill())
         ok = (len(mid) == 1 and mid[0]["wave"] == 1 and mid[0]["drain"] is False
-              and mid[0]["qa_open"] and len(all_waves) == 2 and all_waves[1]["drain"] is True)
-        return ok, "mid=%s all=%s" % (json.dumps(mid), json.dumps(all_waves))
+              and mid[0]["qa_open"] and len(all_waves) == 2 and all_waves[1]["drain"] is True
+              and state.get("lane") == "done")
+        return ok, "mid=%s all=%s lane=%s" % (json.dumps(mid), json.dumps(all_waves), state.get("lane"))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -7902,31 +7964,38 @@ def _extract_releases_a_lone_recipe():
         harvest.cached_body = lambda u, cache_dir=None: "<html><body>x</body></html>"
 
         async def go():
+            # NO CLOCK (2026-09-11). This polled the map channel for up to 6 s while sweep_one ran in an
+            # executor thread, so a box slower than that read a correct release as a held recipe. The
+            # lane now SAYS when it is done with the page: it comes back to the input channel for more,
+            # which it can only do after the page settled and the flush decision was taken. What each
+            # push saw of the input channel is recorded AT the push, so "released while the input was
+            # open" is read off the release itself rather than off when somebody happened to look.
+            probe = _TakeProbe(d.ch["extract"])
+            open_at_push = []
+            real_push = d.ch["map"].push
+
+            def push(rec):
+                open_at_push.append(not d.ch["extract"].is_closed())
+                real_push(rec)
+            d.ch["map"].push = push
             task = asyncio.ensure_future(d.extract_lane(ladder=lad))
-            released_while_open = False
-            # bounded yields: enough for one page to settle, and it can never hang the suite
-            # REAL sleeps, bounded: sweep_one runs in an executor THREAD, so yielding with sleep(0)
-            # spins the loop without ever letting the thread finish. Up to 6 s, and it cannot hang.
-            for _ in range(600):
-                if d.ch["map"].size() >= 1:
-                    released_while_open = True
-                    break
-                await asyncio.sleep(0.01)
+            lane = await probe.wait_done(1, task)
+            released_while_open = bool(open_at_push) and open_at_push[0]
             still_open = not d.ch["extract"].is_closed()
             d.ch["extract"].close()
             try:
-                await asyncio.wait_for(task, timeout=30)
+                await asyncio.wait_for(task, timeout=HANG_GUARD_SEC)
             except Exception:                                     # noqa: BLE001
                 pass
-            return released_while_open, still_open
+            return released_while_open, still_open, lane
 
         try:
-            released_while_open, still_open = arun(go())
+            released_while_open, still_open, lane = arun(go())
         finally:
             harvest.cached_body = real
-        return (released_while_open and still_open,
-                "released_while_input_open=%s input_was_still_open=%s map_size=%d"
-                % (released_while_open, still_open, d.ch["map"].size()))
+        return (released_while_open and still_open and lane == "done",
+                "released_while_input_open=%s input_was_still_open=%s map_size=%d lane=%s"
+                % (released_while_open, still_open, d.ch["map"].size(), lane))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -9529,21 +9598,80 @@ def _f1_a_failed_fill_degrades_and_still_dispatches():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _f1_cache_fill_with_gate(path, gate):
-    """A cache_fill that READS, waits at a barrier, then WRITES - the read-modify-write shape, with
-    the interleaving made deterministic instead of left to the thread scheduler.
+class _F1Gate(object):
+    """THE INTERLEAVING, DECIDED BY EVENTS AND NOT BY A 0.6 s BARRIER (2026-09-11).
 
-    Under the lock the second worker cannot reach the barrier, so the first times out (a broken
-    barrier), both writes serialize, and the union survives. With the lock neutered both workers meet
-    at the barrier holding the SAME stale read and the second write erases the first.
+    Each fill READS, then waits here until one of three things is true, every one an event the code under
+    test produces:
+      overlap   the other fill has read too. Only possible when nothing serialises them, so both now hold
+                the same stale read and the second write erases the first - the neuter's lost write.
+      blocked   the other worker is waiting on fdc_lock, which this fill's worker holds. The lock is
+                serialising them, and it is the only thing that can record this.
+      written   the other fill has already written. Nothing is left to interleave with.
+    The barrier waited 0.6 s for the second worker to read and then gave up. On a box slower than that the
+    neuter's two fills stopped overlapping, so the NEUTER went red - a lost write that did not happen
+    because a thread was late, not because a lock worked. In every correct and every neutered run one of
+    the three always happens, so no deadline decides anything. HANG_GUARD_SEC bounds only a worker that
+    never reaches its read or the lock at all, and a trip is recorded and fails both cases by name.
+    """
+
+    def __init__(self):
+        self.cv = threading.Condition()
+        self.reads = 0
+        self.writes = 0
+        self.blocked = 0
+        self.saw = []
+        self.tripped = False
+
+    def after_read(self):
+        with self.cv:
+            self.reads += 1
+            self.cv.notify_all()
+            if not self.cv.wait_for(lambda: self.reads >= 2 or self.blocked > 0 or self.writes > 0,
+                                    timeout=HANG_GUARD_SEC):
+                self.tripped = True
+            self.saw.append("written" if self.writes else "blocked" if self.blocked else
+                            "overlap" if self.reads >= 2 else "hang guard")
+
+    def after_write(self):
+        with self.cv:
+            self.writes += 1
+            self.cv.notify_all()
+
+    def lock(self, inner):
+        """fdc_lock, unchanged, reporting a worker that has to WAIT for it. A lock with no locked() - the
+        no-op neuter - can never block, so it never reports one."""
+        gate = self
+
+        class GateLock(object):
+            async def __aenter__(self):
+                locked = getattr(inner, "locked", None)
+                waits = bool(locked is not None and locked())
+                if waits:
+                    with gate.cv:
+                        gate.blocked += 1
+                        gate.cv.notify_all()
+                try:
+                    return await inner.__aenter__()
+                finally:
+                    if waits:
+                        with gate.cv:
+                            gate.blocked -= 1
+
+            async def __aexit__(self, *a):
+                return await inner.__aexit__(*a)
+        return GateLock()
+
+
+def _f1_cache_fill_with_gate(path, gate):
+    """A cache_fill that READS, waits at the gate, then WRITES - the read-modify-write shape, with the
+    interleaving made deterministic instead of left to the thread scheduler. See _F1Gate for why the wait
+    ends on an event and never on a timeout.
     """
     def fill(terms, page_size=3, pause=0.0, **kw):
         doc = HD.fdc_lookup.cache_read(path)
         doc.setdefault("terms", {})
-        try:
-            gate.wait(timeout=0.6)
-        except Exception:                                         # noqa: BLE001  (BrokenBarrierError)
-            pass
+        gate.after_read()
         added = 0
         for t in terms:
             k = HD.fdc_lookup._cache_key(t)                       # noqa: SLF001
@@ -9551,6 +9679,7 @@ def _f1_cache_fill_with_gate(path, gate):
                 doc["terms"][k] = {"asked": True, "candidates": []}
                 added += 1
         HD.fdc_lookup.cache_write(doc, path)
+        gate.after_write()
         return {"added": added, "skipped": len(terms) - added, "failed": 0,
                 "size": len(doc["terms"])}
     return fill
@@ -9569,7 +9698,8 @@ def _f1_two_fills(no_lock=False):
             async def __aexit__(self, *a):
                 return False
         d.fdc_lock = NoLock()
-    gate = threading.Barrier(2)
+    gate = _F1Gate()
+    d.fdc_lock = gate.lock(d.fdc_lock)
     real = HD.fdc_lookup.cache_fill
     HD.fdc_lookup.cache_fill = _f1_cache_fill_with_gate(path, gate)
     try:
@@ -9583,17 +9713,20 @@ def _f1_two_fills(no_lock=False):
 
         arun(both())
         keys = sorted((HD.fdc_lookup.cache_read(path).get("terms") or {}).keys())
-        return keys
+        return keys, gate
     finally:
         HD.fdc_lookup.cache_fill = real
         shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _f1_concurrent_fills_keep_every_term():
-    keys = _f1_two_fills()
+    keys, gate = _f1_two_fills()
     want = sorted(["labneh", "ras el hanout", "gochujang", "shared term",
                    "harissa", "doubanjiang"])
-    return keys == want, "cache(%d)=%s" % (len(keys), json.dumps(keys))
+    # "blocked" is the proof the two fills CONTENDED and the lock held one back. Without it a full union
+    # could also mean the fills never overlapped at all, which says nothing about the lock.
+    return (keys == want and "blocked" in gate.saw and not gate.tripped,
+            "cache(%d)=%s fills_waited_for=%s" % (len(keys), json.dumps(keys), gate.saw))
 
 
 def _f1_fdc_lock_is_load_bearing():
@@ -9602,9 +9735,10 @@ def _f1_fdc_lock_is_load_bearing():
     executor, which is what puts a real await between the cache's read and its write. With the I/O
     on the event loop nothing could interleave and this case would pass while proving nothing - the
     CHANGE M correction, met a second time."""
-    keys = _f1_two_fills(no_lock=True)
-    return len(keys) < 6, ("a no-op fdc_lock kept ALL %d terms, so the concurrency case above has "
-                           "stopped proving the lock does anything" % len(keys))
+    keys, gate = _f1_two_fills(no_lock=True)
+    return (len(keys) < 6 and "overlap" in gate.saw and not gate.tripped,
+            "a no-op fdc_lock kept %d of 6 terms (fills_waited_for=%s), so the concurrency case above "
+            "has stopped proving the lock does anything" % (len(keys), gate.saw))
 
 
 def _f1_shelf_coverage_line():
@@ -11388,14 +11522,49 @@ def _rw_terms_of(prompt):
     return prompt[i:prompt.find("\n", i)] if i >= 0 else "(no TERMS line)"
 
 
-async def _rw_wait_calls(d, n, timeout=3.0):
-    """Poll until the pricer has been dispatched n times, or give up. A fixed sleep here was a
-    flake: the evidence pre-pass takes longer than 20 ms on a loaded box, so a poll at 20 ms read
-    'no dispatch yet' as 'held'."""
-    t0 = time.time()
-    while len(d._dispatch.prompts("recipe-hunter-pricer")) < n and time.time() - t0 < timeout:
-        await asyncio.sleep(0.01)
-    return len(d._dispatch.prompts("recipe-hunter-pricer"))
+def _rw_hold_seams(d, on_wait):
+    """Swap the hold's wait for `on_wait(k)` (k counts the waits from 1) and record what the lane does.
+
+    NO CLOCK DECIDES THE HOLD CASES (2026-09-11). They polled the pricer's dispatch count for up to 3 s -
+    itself the repair for a 20 ms sleep that had flaked the same way - so an evidence pre-pass slower than
+    the poll still read a correct release as 'held'. Now the CASE ends each hold wait, and the lane says
+    when a batch went out: reap_priced runs after every dispatch. Both are events, and the release reason
+    is read off the lane's own log line rather than inferred."""
+    seen = {"waits": 0, "released": [], "event": None}
+    real_log = d.log
+
+    def log(m):
+        if str(m).startswith("price lane: releasing"):
+            seen["released"].append(str(m).split(" - ", 1)[-1])
+        real_log(m)
+    d.log = log
+
+    async def wait():
+        seen["waits"] += 1
+        return await on_wait(seen["waits"])
+    d.price_hold_wait = wait
+    real_reap = d.reap_priced
+
+    async def reap():
+        await real_reap()
+        _rw_reaped(seen).set()
+    d.reap_priced = reap
+    return seen
+
+
+def _rw_reaped(seen):
+    if seen["event"] is None:                  # made on the running loop; arun gives every case a new one
+        seen["event"] = asyncio.Event()
+    return seen["event"]
+
+
+async def _rw_until_reaped(seen):
+    """'reaped' once the lane has dispatched and reaped a batch, 'hang guard' if it never does."""
+    try:
+        await asyncio.wait_for(_rw_reaped(seen).wait(), timeout=HANG_GUARD_SEC)
+        return "reaped"
+    except asyncio.TimeoutError:
+        return "hang guard"
 
 
 def _rw_price_hold():
@@ -11456,14 +11625,23 @@ def _rw_price_hold():
                 "calls=%d" % len(prompts)))
     shutil.rmtree(tmp, ignore_errors=True)
 
-    # 4. the recheck timer: upstream goes idle WITHOUT a wake, and the batch still releases
+    # 4. the recheck timer: upstream goes idle WITHOUT a wake, and the batch still releases. The case ends
+    #    the first hold wait itself - upstream idle, no wake, the TimeoutError the real wait raises. A hold
+    #    that re-checks releases on that one wait. A hold that does not comes back for a SECOND, and the
+    #    second is the red: it closes the channel so the lane can finish, and it is counted.
     d, tmp = _rw_price_daemon(1)
-    seen = {}
+
+    async def wait4(k):
+        if k == 1:
+            d.map_inflight = 0                               # no wake pushed, on purpose
+            raise asyncio.TimeoutError()
+        d.ch["price_wake"].close()                           # the re-check did not release
+        return None
+    seen = _rw_hold_seams(d, wait4)
 
     async def feed4():
-        await asyncio.sleep(0.02)
-        d.map_inflight = 0                                   # no wake pushed, on purpose
-        seen["calls"] = await _rw_wait_calls(d, 1)
+        seen["lane"] = await _rw_until_reaped(seen)
+        seen["calls"] = len(d._dispatch.prompts("recipe-hunter-pricer"))
         d.ch["price_wake"].close()
 
     async def both4():
@@ -11471,16 +11649,23 @@ def _rw_price_hold():
     arun(both4())
     res.append(("MUST FIRE  a hold that never gets its wake re-checks upstream on its own timer and "
                 "releases when upstream is idle - the belt behind the wake",
-                seen.get("calls") == 1, "calls before close=%s" % seen.get("calls")))
+                seen.get("calls") == 1 and seen["waits"] == 1 and seen["released"] == ["upstream idle"],
+                "calls before close=%s hold waits=%d released=%s lane=%s"
+                % (seen.get("calls"), seen["waits"], seen["released"], seen.get("lane"))))
     shutil.rmtree(tmp, ignore_errors=True)
 
-    # 5. a FULL batch never holds, busy upstream or not
+    # 5. a FULL batch never holds, busy upstream or not. Upstream stays busy throughout, so any hold wait
+    #    at all is the red; it closes the channel so the lane can finish.
     d, tmp = _rw_price_daemon(1, terms=["t%d" % i for i in range(hunt_lib.PRICE_BATCH)])
-    seen = {}
+
+    async def wait5(_k):
+        d.ch["price_wake"].close()
+        return None
+    seen = _rw_hold_seams(d, wait5)
 
     async def feed5():
-        # upstream stays 'busy' the whole time the poll runs: a full batch must go out regardless
-        seen["calls"] = await _rw_wait_calls(d, 1)
+        seen["lane"] = await _rw_until_reaped(seen)
+        seen["calls"] = len(d._dispatch.prompts("recipe-hunter-pricer"))
         d.map_inflight = 0
         d.ch["price_wake"].close()
 
@@ -11488,7 +11673,32 @@ def _rw_price_hold():
         await asyncio.gather(d.price_lane(), feed5())
     arun(both5())
     res.append(("CLEAN TWIN  a batch already at PRICE_BATCH is dispatched without waiting on anyone",
-                seen.get("calls") == 1, "calls before upstream idled=%s" % seen.get("calls")))
+                seen.get("calls") == 1 and seen["waits"] == 0,
+                "calls before upstream idled=%s hold waits=%d lane=%s"
+                % (seen.get("calls"), seen["waits"], seen.get("lane"))))
+    shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6. ...and the REAL hold wait does end without a wake. Cases 4 and 5 end the wait themselves, which is
+    #    what makes them clock-free and also what they give up: the timer. So this drives the unswapped wait
+    #    on an open channel nobody pushes to and reads HOW it ended - the TimeoutError the hold re-checks on
+    #    - never how long it took. HANG_GUARD_SEC only bounds a wait that has no timeout at all.
+    d, tmp = _rw_price_daemon(1)
+    d.ch["price_wake"] = hunt_lib.chan()                     # open and empty: no wake will ever come
+
+    async def real_wait():
+        w = asyncio.ensure_future(d.price_hold_wait())
+        done, _pending = await asyncio.wait({w}, timeout=HANG_GUARD_SEC)
+        if not done:
+            w.cancel()
+            return "hit the hang guard"
+        exc = w.exception()
+        if isinstance(exc, asyncio.TimeoutError):
+            return "timed out"
+        return "ended with %r" % (exc if exc is not None else w.result(),)
+    how = arun(real_wait())
+    res.append(("CLEAN TWIN  the hold's own wait ENDS with no wake at all - the recheck timer the belt "
+                "rides on, read off the TimeoutError it raises and never timed",
+                how == "timed out", "the wait %s" % how))
     shutil.rmtree(tmp, ignore_errors=True)
     return res
 

@@ -207,9 +207,21 @@ everything else honest, so a defect here is silent by construction.
   finishes and goes red. The cost climbs steeply with length (29 characters 7.8 s CPU, 32 past a 20 s
   guard), so measure it rather than pick one. **A timer racing a retry window is the same bar in disguise:**
   `meal-prep/pipeline/harvest.py`'s pool-write case closed its reader from a thread after 0.9 s against a
-  ~1.6 s retry window, and now closes it from inside the retry's own wait. Still standing that day, listed
-  and not fixed: three in `meal-prep/pipeline/hunt_daemon_selftest.py` (a 3 s poll, a ~6 s loop, a 0.6 s
-  barrier) whose timeouts decide the case. **Not every red under load is a
+  ~1.6 s retry window, and now closes it from inside the retry's own wait.
+  **A poll with a deadline is the same bar again, and so is a barrier with a timeout** (2026-09-11).
+  `meal-prep/pipeline/hunt_daemon_selftest.py` decided five cases that way: a 3 s dispatch poll, two ~6 s
+  release loops and a 0.6 s `threading.Barrier`. Each now waits on an event the daemon produces. **End a wait
+  from inside a swappable seam, then give the real timer its own twin:** the price hold's wait is
+  `price_hold_wait()`, a case ends it by raising the TimeoutError itself, and a separate CLEAN TWIN reads that
+  the unswapped wait ENDS in TimeoutError, never how long it took - the half the seam gives up. **"The lane is
+  done" is a consumer back at its channel:** `_TakeProbe` counts a task that returns to `take()` after being
+  handed an item. **A contention fixture waits for OVERLAP, BLOCKED or WRITTEN**, never for seconds: `_F1Gate`
+  wraps the real lock and reports only a real wait. Six mutants went red in their named case in both arms and
+  none hung; paired under 10 `cpu-load` burners, both arms passed 200 of 200 on every case, so the flake did
+  not reproduce and the change rests on the mechanism and the mutants. Still standing, found and not fixed:
+  `_hb_heartbeat_reports_and_names_a_stall`, whose NO PROGRESS case needs about four event-loop ticks inside a
+  0.25 s sleep. **That battery is NOT scheduled anywhere**, whatever `run-gates`' skip reason used to say, so
+  these bars redden whoever runs it by hand after a daemon change. **Not every red under load is a
   clock:** the two concurrency-fixture reds the same day were lost writes, the mutex rule above.
 - **A timed lock wait is a BRANCH, and an append is not a locked write** (2026-09-11). `grocery/send-alert.ps1`
   stored `WaitOne(10000)`'s answer and never read it, so a timeout rewrote the whole triage queue UNLOCKED over

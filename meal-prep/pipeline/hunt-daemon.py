@@ -4263,6 +4263,16 @@ class Daemon(object):
         except Exception:                                         # noqa: BLE001
             return "upstream state unreadable"
 
+    async def price_hold_wait(self):
+        """ONE bounded wait inside hold_for_batch: the next wake, None once the channel has closed, or
+        asyncio.TimeoutError after PRICE_HOLD_RECHECK_SEC with no wake at all.
+
+        A METHOD SO A SELF-TEST CAN END A WAIT WITHOUT A WAKE (2026-09-11). The recheck fixtures polled
+        the pricer's dispatch count against a 3 s deadline, so a loaded box read a correct release as a
+        stranded term. Swapping this lets a case end the wait itself - an event it controls - the way
+        harvest.py's _pool_replace_wait lets its case release a reader at the refusal."""
+        return await asyncio.wait_for(self.ch["price_wake"].take(), timeout=self.PRICE_HOLD_RECHECK_SEC)
+
     async def hold_for_batch(self, closed):
         """Wait, bounded, while fewer than PRICE_BATCH terms are queued and upstream can still add
         some. Returns the updated `closed`. Never holds a full batch, never holds on an idle
@@ -4276,8 +4286,7 @@ class Daemon(object):
                 self.log("price lane: holding %d term(s) for a fuller batch (cap %d) - %s"
                          % (len(self.absent_terms), hunt_lib.PRICE_BATCH, self.upstream_state()))
             try:
-                w = await asyncio.wait_for(self.ch["price_wake"].take(),
-                                           timeout=self.PRICE_HOLD_RECHECK_SEC)
+                w = await self.price_hold_wait()
             except asyncio.TimeoutError:
                 continue
             if w is None:
