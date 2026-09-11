@@ -76,3 +76,10 @@ for. Data-dependent audits stay in the daily chain against a real board.
 - Never bypass or weaken a gate to get something through. Fix the cause.
 - A measurement is not a look: when you change something visual, screenshot it and read the words.
 - When a defect recurs, the durable fix is a memory, a gate or a command - not just the repair.
+- **Deliberate CPU load goes through `ops/cpu-load.ps1`** - never hand-rolled burners, never `run-gates` in
+  a loop (Brad, 2026-09-11). This 32-processor box is shared by every session and every push's gate, and on
+  that day four sessions' own load tests held it at 100% for over an hour while each recorded a load level
+  it did not control. The tool takes its cores from the same machine-wide pool of 10 that `run-gates` uses
+  (`lib/gate-slots.ps1`), refuses more than that or longer than 15 minutes, and its burners die with it.
+  `ops/audit-cpu-load.ps1` fails a committed script that starts burners any other way. A scratch script is
+  out of any gate's reach, so there the rule is the whole prevention.

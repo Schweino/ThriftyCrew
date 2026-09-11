@@ -64,17 +64,24 @@ function Enter-TcGateSlots {
   <# Returns Mutexes (the held slots - pass the whole object to Exit-TcGateSlots), Count, WaitedMs and
      TimedOut. Count is between 1 and min(Want, Total) on success. On TimedOut, Count is 0 and nothing is
      held: the caller must REFUSE rather than run, because running anyway is the pile-up this exists to stop.
-     OnWait runs ONCE, the first time every slot is found taken, so the wait is spoken rather than silent. #>
+     OnWait runs ONCE, the first time every slot is found taken, so the wait is spoken rather than silent.
+
+     -Exact is ALL OR NOTHING, for deliberate load (ops\cpu-load.ps1): a load test granted 3 of the 8 cores it
+     asked for would record a condition it never ran under. Whatever a pass took short of Want is RELEASED
+     before the wait, so an exact waiter never squats on slots a gate run could be using. A want above the
+     total is granted the total, because an exact want the machine can never satisfy would only time out. #>
   param(
     [int]$Want,
     [int]$Total = $script:TcGateSlotTotal,
     [string]$Prefix = $script:TcGateSlotPrefix,
     [int]$WaitSec = 1200,
     [int]$PollMs = 500,
-    [scriptblock]$OnWait = $null
+    [scriptblock]$OnWait = $null,
+    [switch]$Exact
   )
   if ($Total -lt 1) { $Total = 1 }
   if ($Want -lt 1) { $Want = 1 }
+  if ($Exact -and $Want -gt $Total) { $Want = $Total }
   $held = [Collections.Generic.List[object]]::new()
   $sw = [Diagnostics.Stopwatch]::StartNew()
   $spoke = $false
@@ -87,11 +94,20 @@ function Enter-TcGateSlots {
       catch [System.Threading.AbandonedMutexException] { $got = $true }   # a killed run, not a wedge
       if ($got) { $held.Add($mx) } else { $mx.Dispose() }
     }
-    if ($held.Count -ge 1) { break }
+    if ($held.Count -ge $Want) { break }
+    if (-not $Exact -and $held.Count -ge 1) { break }
+    if ($Exact -and $held.Count) {
+      foreach ($h in $held) { try { $h.ReleaseMutex() } catch { }; try { $h.Dispose() } catch { } }
+      $held.Clear()
+    }
     if ($sw.Elapsed.TotalSeconds -ge $WaitSec) {
       return [pscustomobject]@{ Mutexes = @(); Count = 0; WaitedMs = $sw.Elapsed.TotalMilliseconds; TimedOut = $true }
     }
-    if (-not $spoke -and $OnWait) { & $OnWait; $spoke = $true }
+    # OUT-DEFAULT, NOT THE OUTPUT STREAM (2026-09-11). Anything OnWait writes would otherwise join this
+    # function's return, so `$lease = Enter-TcGateSlots` became an ARRAY of the message and the lease: the
+    # message never printed, and `$lease.Count` read the array's length (2) instead of the slots held, so a
+    # run-gates that had waited for one slot sized its pool at 2. Found by cpu-load.ps1's self-test.
+    if (-not $spoke -and $OnWait) { & $OnWait | Out-Default; $spoke = $true }
     Start-Sleep -Milliseconds $PollMs
   }
   return [pscustomobject]@{ Mutexes = $held.ToArray(); Count = $held.Count; WaitedMs = $sw.Elapsed.TotalMilliseconds; TimedOut = $false }
@@ -223,6 +239,20 @@ foreach ($m in $ms) { try { $m.ReleaseMutex() } catch { } }
       ($h.Held -eq 3 -and -not $l.TimedOut -and $l.Count -ge 1 -and $script:spokeF -eq 1 -and $l.WaitedMs -ge 1000) ("holderHeld={0} count={1} spoke={2} waited={3:N0}ms" -f $h.Held, $l.Count, $script:spokeF, $l.WaitedMs)
     Exit-TcGateSlots $l
 
+    # THE CALLERS' SHAPE: run-gates and cpu-load both pass an OnWait that WRITES a line. That line must reach
+    # the console and must NOT join the returned lease, or the lease is an array and .Count is its length.
+    $pJ = $prefix + 'j-'
+    $h = Start-Holder $pJ 3 'j'
+    $relJ = $h.Release
+    $releaserJ = Start-Process -FilePath $PS -ArgumentList @('-NoProfile', '-Command', ("Start-Sleep -Milliseconds 1200; [IO.File]::WriteAllText('{0}', 'go')" -f $relJ)) -PassThru -WindowStyle Hidden
+    $holders.Add($releaserJ)
+    $lJ = Enter-TcGateSlots -Want 1 -Total 3 -Prefix $pJ -WaitSec 30 -PollMs 100 -OnWait { Write-Output '  (fixture) waiting line from OnWait' }
+    $isArray = $lJ -is [array]
+    $grant = if ($isArray) { -1 } else { $lJ.Count }
+    T 'MUST FIRE  an OnWait that WRITES output does not pollute the lease - Enter returns ONE object whose Count is the slots held, not an array of the message and the lease' `
+      ($h.Held -eq 3 -and -not $isArray -and $grant -eq 1) ("holderHeld={0} returnedArray={1} count={2}" -f $h.Held, $isArray, $(if ($isArray) { @($lJ).Count } else { $lJ.Count }))
+    foreach ($x in @($lJ)) { if ($x -isnot [string]) { Exit-TcGateSlots $x } }
+
     $pG = $prefix + 'g-'
     $l = Enter-TcGateSlots -Want 2 -Total 2 -Prefix $pG -WaitSec 5 -PollMs 100
     Exit-TcGateSlots $l
@@ -242,12 +272,39 @@ foreach ($m in $ms) { try { $m.ReleaseMutex() } catch { } }
     T 'CLEAN TWIN a run already WAITING in another process, with its handles open, gets every slot the moment this run exits its lease' `
       ($l.Count -eq 2 -and $w.Waiting -and $waiterHeld -eq 2) ("first={0} waiterWasWaiting={1} waiterHeld={2}" -f $l.Count, $w.Waiting, $waiterHeld)
     [IO.File]::WriteAllText($w.Release, 'go'); [void]$w.Proc.WaitForExit(10000)
+
+    # -EXACT, the all-or-nothing request ops\cpu-load.ps1 makes for deliberate load.
+    $pI = $prefix + 'i-'
+    $h = Start-Holder $pI 2 'i'
+    $l = Enter-TcGateSlots -Want 3 -Total 3 -Prefix $pI -Exact -WaitSec 1 -PollMs 100
+    T 'MUST FIRE  an EXACT request for 3 cores with 2 held elsewhere gets NONE and times out - a load test granted 1 of 3 would record a condition it never ran under' `
+      ($h.Held -eq 2 -and $l.TimedOut -and $l.Count -eq 0) ("holderHeld={0} timedOut={1} count={2}" -f $h.Held, $l.TimedOut, $l.Count)
+    Exit-TcGateSlots $l
+    # The exact waiter runs in ANOTHER process, so this one can test whether it squats on the free slot.
+    $waitOut = Join-Path $tmp 'i-waiter.out'
+    $wBody = ". '__LIB__'; `$r = Enter-TcGateSlots -Want 3 -Total 3 -Prefix '__PFX__' -Exact -WaitSec 30 -PollMs 100; [IO.File]::WriteAllText('__OUT__', [string]`$r.Count); Start-Sleep -Milliseconds 300; Exit-TcGateSlots `$r"
+    $wBody = $wBody.Replace('__LIB__', $PSCommandPath).Replace('__PFX__', $pI).Replace('__OUT__', $waitOut)
+    $wEnc = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($wBody))
+    $waiter = Start-Process -FilePath $PS -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-EncodedCommand', $wEnc) -PassThru -WindowStyle Hidden
+    $holders.Add($waiter)
+    Start-Sleep -Milliseconds 1500
+    # A second holder tries all three slots for 1.5s each: 0 and 1 are held, so only slot 2 can be taken - and
+    # only if the exact waiter lets go of it between passes.
+    $h2 = Start-Holder $pI 3 'i2' -WaitMs 1500
+    T 'MUST NOT FIRE  an EXACT waiter does not squat: while it waits for all 3, another process can still take the one free slot' `
+      ($h2.Held -eq 1 -and -not $waiter.HasExited) ("otherProcessHeld={0} waiterStillWaiting={1}" -f $h2.Held, (-not $waiter.HasExited))
+    [IO.File]::WriteAllText($h.Release, 'go'); [IO.File]::WriteAllText($h2.Release, 'go')
+    [void]$h.Proc.WaitForExit(10000); [void]$h2.Proc.WaitForExit(10000)
+    $waiterGot = Read-HolderCount $waitOut 25
+    T 'CLEAN TWIN an EXACT waiter gets all 3 the moment every slot is free, and proceeds' `
+      ($waiterGot -eq 3) ("waiterGot={0}" -f $waiterGot)
+    [void]$waiter.WaitForExit(10000)
   } finally {
     foreach ($p in $holders) { try { if (-not $p.HasExited) { $p.Kill() } } catch { } }
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
-  Write-Output ("SELF-TEST PASS: {0} cases - 2 must-fire led by a full machine refusing a new run, 2 must-not-fire led by a lone run getting its whole want, and 4 clean twins led by a killed run freeing its slots at once" -f $cases)
+  Write-Output ("SELF-TEST PASS: {0} cases - 4 must-fire led by a full machine refusing a new run, 3 must-not-fire led by a lone run getting its whole want, and 5 clean twins led by a killed run freeing its slots at once" -f $cases)
   exit 0
 }

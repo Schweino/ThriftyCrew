@@ -161,6 +161,9 @@ $static = @(
   # 2026-09-11: on 2026-09-10 seven self-tests that build temp repos ran under a linked worktree's GIT_DIR and wrote
   # the SHARED .git\config. This hook and this file clear it now; the fixtures are the layer present on every other path.
   @{ f = 'ops\audit-git-fixture-env.ps1';      n = 'every script that builds a temp repo clears the repository environment first, so a hook-spawned run cannot write the shared .git' }
+  # 2026-09-11: sessions' own load tests held the shared box at 100% for over an hour. Deliberate load now comes
+  # from ops\cpu-load.ps1, which draws on the same machine-wide budget as this file's pool.
+  @{ f = 'ops\audit-cpu-load.ps1';             n = 'every committed script that starts CPU burners takes its cores from the machine-wide budget run-gates shares' }
   # Same both-halves reason again: the discovery pass proves the scanner can still tell a frozen fixture
   # from a live ruling; this entry runs it over the real tree, which is what catches the NEXT self-test
   # written to read its own live allowlist (2026-09-06, PLAN-top5 area 4).
