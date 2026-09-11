@@ -75,6 +75,13 @@ carries all four rules in one file, and copying it is faster than re-deriving th
   the commit hash it ran at. Retro-filling the nine is NOT asked for, and a gate over them would be
   red on day one against every single one - which the ops rules already forbid. The ask is that the
   next one carries it.
+  **A rebase after the run REWRITES the hash you recorded** (2026-09-11). The sidecar double-load trials
+  were committed from a worktree, their rows stamped with the harness and arm commits, and the rebase
+  onto a moved origin/main before the push gave every one of those commits a new id - so the document
+  cited commits that would never exist on main. Cite the BLOB of each file the run read as well
+  (`git rev-parse <commit>:<path>`), because a rebase cannot move a blob, and after any rebase map old id
+  to new and check the blobs match rather than assuming it. `design/MEASURE-sidecar-double-load-2026-09-11.md`
+  is what that looks like.
 
 Two more that live elsewhere and bite here:
 

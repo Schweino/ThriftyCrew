@@ -87,6 +87,14 @@ at `38cce56c55911c83405843def6c50d16070ff1cd` (blob `12939f86bf`), `locked` = `s
 byte-identical to its blob with `git hash-object --no-filters` before the first trial. **Verdict read:** harness
 exit 0; `invalid trials: 0 of 18`.
 
+**The hashes above are the ones the rows record, and a rebase onto a moved origin/main rewrote them before the
+push.** On main, `38cce56c5` is `eb32b00b3226ab6be3f1127b3415568429ffa820` (the unlocked arm) and `7f8fa7328` is
+`16ca1df7c6a6b7fc3a19eb097e3f7ebc4e49225a` (the locked arm and the harness). Checked, not assumed:
+`sidecar/app.py`, `sidecar/probe_double_load.py` and `sidecar/lib_match.py` carry the same blob at each old
+commit and at its rewrite, and no upstream commit the rebase put underneath touched `sidecar/`. **The blob ids are
+the citation a rebase cannot move:** `app.py` `12939f86bf` (unlocked) and `d6a5016a51` (locked), harness
+`e3a804dadf`, `lib_match.py` `360c93b5ad`.
+
 ### The verdicts, as `--summarise` derived them from the rows file
 
 - **B1 CONFIRMED.** `load_count` 2 in **6 of 6** unlocked concurrent trials (3 `pair0`, 3 `hook`).
@@ -159,4 +167,5 @@ Restarted through `C:\Codex\ThriftyCrew\sidecar\start-sidecar.ps1` at 15:16:40: 
 **1,660 -> 6,370 of 16,303 MiB, about 4,710 MiB held**. That instance serves the MAIN checkout's `app.py`, which at
 that moment did not carry these commits (blob `460d827d31`, no `load_count` on `/health`), and `start-sidecar.ps1`
 warms with one request, so it is a single load either way. The guard is live from the first restart after the
-main checkout advances past `7f8fa7328`.
+main checkout advances past `16ca1df7c` (pre-rebase `7f8fa7328`), which is the commit that gives `app.py` blob
+`d6a5016a51`.
