@@ -12,6 +12,12 @@
       "name": "recall-sleep",
       "reason": "drives the knowledge store at C:\\Users\\Owner\\.claude and is already versioned and pushed in that store's own repository, so it is backed up; mirroring it here would publish internal absolute paths into a repo that loads without a login and buy no durability. Reversible: -Adopt it if that repo ever stops being its home",
       "added": "2026-09-07"
+    },
+    {
+      "kind": "scheduled-task",
+      "name": "walmart-headed-probe-once",
+      "reason": "a one-time probe (Brad ruling R12, 2026-09-10) that disables itself after its single run on 2026-09-11; its instructions and result are recorded in design\\PLAN-zero-alert-days-2026-09-10.md section 7 and design\\PROBE-store-direct-data-2026-09-10.md, so a mirror would be an orphan the day after it is written",
+      "added": "2026-09-10"
     }
   ]
 }

@@ -354,7 +354,7 @@ param([string]$Title = '')
   $fxAgree = [pscustomobject]@{ page_conditions = @($script:AlertPageConditions); entries = @([pscustomobject]@{ id = 'mem'; match = 'exact'; key = 'ops private memory notes reached the public repo'; class = 'page'; condition = '5 private-data-exposure'; emitter = 'grocery/check-ad-cycles.ps1' }) }
   $apRaw = Get-AlertRegistryEntryProblems $fxAgree
   $ap = @($apRaw)
-  _T 'CLEAN TWIN a page entry under condition 5 with agreeing lists is valid' ($ap.Count -eq 0) ($ap -join ' | ')
+  _T 'MUST NOT FIRE a page entry under condition 5 with agreeing lists is not reported' ($ap.Count -eq 0) ($ap -join ' | ')
 
   # MUST FIRE: a registry that is not there is not a registry; the check is blind and the mailer pages everything.
   $st = Read-AlertRegistry (Join-Path $env:TEMP ('no-such-alert-registry-' + [guid]::NewGuid().ToString('N') + '.json'))
