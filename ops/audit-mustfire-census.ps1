@@ -22,7 +22,9 @@
 # the time, and a ratchet that fails on a reworded label is a ratchet people delete.
 #
 # WHAT IT COUNTS. Lines inside a script's `if ($SelfTest) { ... }` body that carry MUST FIRE / MUST-FIRE /
-# MUST NOT FIRE in any case. That includes the assertion label, which is where this estate writes it. It
+# MUST NOT FIRE in any case, written as SEPARATE words: a run-together identifier ($mustFire, a function
+# named for must-fires, a 'mustfire' fixture name) is not counted. That includes the assertion label, which
+# is where this estate writes it. It
 # does NOT run anything - run-gates already runs every self-test, and this answers the different question
 # run-gates cannot: is the same set of must-fires still THERE.
 #
@@ -48,7 +50,11 @@ function Get-MustFireCount {
     # A COMMENT ABOUT must-fires is not a must-fire, or the essays this estate writes above its fixtures
     # would inflate the count and the ratchet would fail the day someone tidied the prose.
     if ($l.TrimStart().StartsWith('#')) { continue }
-    if ($l -match '(?i)MUST[ -]?(NOT[ -])?FIRE') { $n++ }
+    # The SEPARATOR IS REQUIRED and MUST may not follow a word character or a hyphen. With the separator
+    # optional, a case-insensitive match counted identifiers - $mustFire, Get-MustFireCount, a
+    # 'feedfresh-mustfire.json' fixture name - so renaming a variable read as a LOST assertion. Measured
+    # 2026-09-11: 19 such lines in 6 files. The boundary keeps a name like Get-Must-Fire-Thing out too.
+    if ($l -match '(?i)(?<![\w-])MUST[ -](NOT[ -])?FIRE') { $n++ }
   }
   return $n
 }
@@ -77,7 +83,7 @@ if ($SelfTest) {
   McT 'MUST FIRE: the negative form is counted too - it is the same kind of assertion' `
       ((Get-MustFireCount -Text ("T '" + $MNF + ": a bid whose value is the string null' `$x")) -eq 1)
   McT 'MUST FIRE: the hyphenated spelling this estate also uses is counted' `
-      ((Get-MustFireCount -Text ("Write-Output '  X MUST-FIRE: a fresh finding must be actionable'")) -eq 1)
+      ((Get-MustFireCount -Text ("Write-Output '  X MUST" + "-FIRE: a fresh finding must be actionable'")) -eq 1)
   McT 'CLEAN TWIN: a COMMENT about must-fires is prose, not an assertion' `
       ((Get-MustFireCount -Text ("# the " + $MF + " fixture below is the founding bug")) -eq 0)
   McT 'CLEAN TWIN: an empty body counts nothing' ((Get-MustFireCount -Text '') -eq 0)
@@ -93,6 +99,21 @@ if ($SelfTest) {
   $src = "if (`$SelfTest) {`n  T '" + $MF + " inside'`n}`nWrite-Output '" + $MF + " outside, in the live path'"
   McT 'CLEAN TWIN: a must-fire label OUTSIDE the self-test body is not a fixture' `
       ((Get-MustFireCount -Text (Get-SelfTestBlock -Text $src)) -eq 1)
+
+  # IDENTIFIERS ARE NOT LABELS (2026-09-11). With the separator optional the match counted names, so renaming
+  # a $mustFire variable read as a LOST assertion and the ratchet went red on a rename. Each needle is built by
+  # concatenation: this body is itself in the census, and a literal would be counted by the scan under test.
+  McT 'MUST NOT FIRE: a run-together variable name is not an assertion label' `
+      ((Get-MustFireCount -Text ('$must' + 'Fire = @(')) -eq 0)
+  McT 'MUST NOT FIRE: a call to the counting function is not an assertion label' `
+      ((Get-MustFireCount -Text ('$c = Get-Must' + 'FireCount -Text $blk')) -eq 0)
+  McT 'MUST NOT FIRE: a hyphenated name with the words inside it is not a label' `
+      ((Get-MustFireCount -Text ('$r = Get-Must-' + 'Fire-Thing -Path $x')) -eq 0)
+  McT 'MUST NOT FIRE: a run-together banner is not an assertion label' `
+      ((Get-MustFireCount -Text ("Write-Output 'MUST" + "FIRE-CENSUS SELF-TEST PASSED'")) -eq 0)
+  $spellings = "T '" + $MF + ": a'`nT 'MUST" + "-FIRE: b'`nT '" + $MNF + ": c'"
+  McT 'CLEAN TWIN: all three separated spellings still count, one per line' `
+      ((Get-MustFireCount -Text $spellings) -eq 3)
 
   # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
   # .claude\worktrees\<name> was excluded: the census counted nothing and exited 3 from every spawned session.
