@@ -94,6 +94,17 @@ everything else honest, so a defect here is silent by construction.
   **Worth running against a detector whose logic you have just rewritten** - that is when a survivor
   is most likely. Never a gate, and mutants run from a temp mirror with the original verified
   byte-identical by md5 afterwards.
+- **TWO GUARDS OVER ONE RULE MAKE THE FIXTURE INSENSITIVE, and a mutation probe is how you find out**
+  (2026-09-11). `ops/audit-mustfire-census.ps1` blanks comment tokens twice over when it decides whether a span
+  outside a self-test body is a fixture: once when testing whether the span is LABELLED, once when COUNTING it.
+  Two fixtures asserted the outcome - a prose-only function counts 0, a trailing-comment table counts 0 - and
+  both **SURVIVED** the single mutants that removed either half, 0 reds each, because the other half still held
+  the count at 0. The assertion was true, the cases were live, and neither could see which half worked. The
+  repair is an assertion on the MECHANISM, not the aggregate: the prose-only function is never PROMOTED, so no
+  span is added for it at all. With those two cases added, 7 of 7 single mutants died in their own named case
+  (control 34 pass, exit 0, originals md5-identical afterwards, temp mirror removed). **A defence worth having
+  twice is worth a case per copy**; otherwise the probe scores a survivor and the honest reading is that the
+  fixture is insensitive, not that the code is wrong.
 - **A control constant that may only move ONE WAY needs a RATE LIMIT and a PLAUSIBILITY BAR**
   (2026-09-09, backlog I93). `lib/ratchet.ps1` has it: the audits' high-water mark may only fall, so it
   refuses a fall to zero and a fall larger than `-MaxDropPct`, **keeps the old baseline**, and reports.
