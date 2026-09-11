@@ -35,6 +35,16 @@
 #   .\audit-capture-eviction.ps1 -Ratio 1.5         only cells 1.5x or more above the eligible cheapest
 #   .\audit-capture-eviction.ps1 -SelfTest          frozen founding-bug fixture + clean twins
 # Exit 0 = clean or advisory findings. Exit 2 = self-test regression. Exit 3 = BLIND (cannot see src_date).
+#
+# TWO FILES, TWO ROADS (2026-09-11). A live run writes out\capture-evictions.json, the REPORT, which is tracked so
+# the findings are reviewable in history (b9e30bf96), and then out\capture-evictions-stamp.json, the STAMP, which is
+# gitignored. The stamp records which board GENERATION this run read (file name and built_at), and it has to reach
+# a checkout by the road that board takes: this disk, or .worktreeinclude into a new worktree. test-auditors'
+# roster-currency case reads the stamp. It used to read the report, which crosses to another checkout only when
+# somebody commits it: a triage chain rebuilt the board at 14:27, ran this pass at 14:32 and committed its source
+# only, so every worktree carrying the new board refused unrelated pushes against a committed report naming the
+# old one. The report was NOT simply untracked, because the daily bot rewrites and commits it every morning and
+# an untrack commit conflicts with that (measured in design\PLAN-capture-eviction-stamp-2026-09-11.md).
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CandidatesFile = '', [string]$CompareFile = '', [double]$Ratio = 1.25, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
@@ -45,6 +55,18 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 . (Join-Path $root 'known-wrong-lib.ps1')
 # ONE implementation of the ELIGIBILITY rule, same two callers, same reason. See capture-depth-lib's header.
 . (Join-Path $root 'capture-depth-lib.ps1')
+
+# THE STAMP, pure so the self-test reaches the shape the live run writes. compare_built_at is copied verbatim from
+# the board this run read, so a reader can match the GENERATION and not only the file name: on 2026-09-11
+# comparison-2026-09-09.json was rebuilt in place at 12:19, and a name match cannot tell those two boards apart.
+function New-CaptureEvictionStamp {
+  param([string]$Generated, [string]$CompareFile, [object]$CompareDoc, [string]$CandidatesFile, [int]$FindingCount)
+  $stamp = [ordered]@{
+    generated = $Generated; compare_file = $CompareFile; compare_built_at = [string]$CompareDoc.built_at
+    candidates_file = $CandidatesFile; finding_count = $FindingCount; report = 'capture-evictions.json'
+  }
+  return $stamp
+}
 
 # THE DETECTOR, pure so the fixture reaches the REAL code path with no data files on disk
 # (fix-needs-reachable-selftest: two same-day fixes regressed in this estate because their self-test could
@@ -186,7 +208,17 @@ if ($SelfTest) {
   $f6 = @(Find-CaptureEvictions -Commodities $kwPool -Board $kwBoard -Ratio $Ratio)
   if ($f6.Count -ne 1) { Write-Output '  X MUST-FIRE: the known-wrong twin is unreachable - it passes even with no ruling'; $bad++ }
 
-  if ($bad -eq 0) { Write-Output 'audit-capture-eviction SELF-TEST PASS (2 must-fire, 5 clean twins)'; exit 0 }
+  # CLEAN TWIN 6: the stamp names the board this run audited AND carries that board's built_at verbatim, which is
+  # what lets test-auditors tell a same-name rebuild from the generation this run read. Frozen from 2026-09-11:
+  # comparison-2026-09-09.json rebuilt at 12:19:32, audited at 14:32:52.
+  $stDoc = [pscustomobject]@{ built_at = '2026-09-11T12:19:32'; comparison = @() }
+  $st = New-CaptureEvictionStamp -Generated '2026-09-11T14:32:52' -CompareFile 'comparison-2026-09-09.json' -CompareDoc $stDoc -CandidatesFile 'candidates-2026-09-09.json' -FindingCount 0
+  $stOk = [string]::Equals([string]$st.compare_built_at, '2026-09-11T12:19:32', [StringComparison]::Ordinal) -and
+          [string]::Equals([string]$st.compare_file, 'comparison-2026-09-09.json', [StringComparison]::Ordinal) -and
+          [string]::Equals([string]$st.generated, '2026-09-11T14:32:52', [StringComparison]::Ordinal)
+  if (-not $stOk) { Write-Output ('  X CLEAN TWIN: the stamp does not carry the board generation it audited: ' + ($st | ConvertTo-Json -Compress)); $bad++ }
+
+  if ($bad -eq 0) { Write-Output 'audit-capture-eviction SELF-TEST PASS (2 must-fire, 6 clean twins)'; exit 0 }
   Write-Output ("audit-capture-eviction SELF-TEST FAIL ($bad)"); exit 2
 }
 
@@ -243,8 +275,15 @@ foreach ($f in ($ranked | Select-Object -First 25)) {
 }
 if ($ranked.Count -gt 25) { Write-Output ("  ... and " + ($ranked.Count - 25) + " more (nothing truncated silently: rerun with -Ratio to widen or narrow)") }
 $outFile = Join-Path $OutDir 'capture-evictions.json'
-@{ generated = (Get-Date).ToString('s'); candidates_file = (Split-Path $CandidatesFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; findings = $ranked } |
+$generated = (Get-Date).ToString('s')
+@{ generated = $generated; candidates_file = (Split-Path $CandidatesFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; findings = $ranked } |
   ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 Write-Output ("  -> $outFile")
+# THE STAMP IS WRITTEN LAST, after the report write succeeded under EAP=Stop, so a stamp on disk means this run wrote
+# its report in this checkout. Gitignored on purpose; the header says why it is a second file.
+$stampFile = Join-Path $OutDir 'capture-evictions-stamp.json'
+$stamp = New-CaptureEvictionStamp -Generated $generated -CompareFile (Split-Path $CompareFile -Leaf) -CompareDoc $cmp -CandidatesFile (Split-Path $CandidatesFile -Leaf) -FindingCount $ranked.Count
+$stamp | ConvertTo-Json -Depth 3 | Set-Content $stampFile -Encoding UTF8
+Write-Output ("  -> $stampFile")
 Exit-Guard -Name 'capture-eviction' -Summary '' -Code 0
 

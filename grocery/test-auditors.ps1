@@ -5570,30 +5570,48 @@ $cacLive = @(Get-Content (Join-Path $root 'check-ad-cycles.ps1') | Where-Object 
 if ($cacLive.Count -gt 0) { Ok 'audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it' }
 else { Bad 'audit-capture-eviction is not called by check-ad-cycles.ps1 - the ONLY check that can see a thin capture evicting a rich one is hand-cranked, and a passing -SelfTest proves the code works, not that anything runs it' }
 
-# LIVE-TWIN (2026-09-11): half (2) above is CURRENCY on the live board, so both of these reads are live by design.
-$ceStamp = Join-Path $root 'out\capture-evictions.json'
+# LIVE-TWIN (2026-09-11): half (2) above is CURRENCY on the live board, so all three of these reads are live by design.
+# WHICH RECORD IT READS (2026-09-11). The pass writes two files. out\capture-evictions.json is the REPORT and is
+# tracked, so its findings stay reviewable in history. out\capture-evictions-stamp.json is the STAMP and is
+# gitignored, like the board it describes, so the two reach a checkout by the same road: this disk, or
+# .worktreeinclude into a new worktree. The report reaches a checkout only when somebody commits it. This case read
+# the report until 2026-09-11, when a triage chain rebuilt the board at 14:27, ran the pass at 14:32 in the main
+# checkout and committed its source only: every worktree carrying the new board then refused unrelated pushes
+# against a committed report that still named the old one, and would have until the next morning's bot commit.
+# So the STAMP decides wherever this checkout has one, and it must match the board's GENERATION (built_at) as well
+# as its file name, because a board is rebuilt in place under the same name (comparison-2026-09-09.json at 12:19
+# that day). A checkout with no stamp, made before the stamp existed, is judged on the report exactly as before.
+# The one input that passes here and failed before is a current stamp beside a lagging committed report; the
+# generation match is stricter than before. design\PLAN-capture-eviction-stamp-2026-09-11.md.
+$ceStamp = Join-Path $root 'out\capture-evictions-stamp.json'   # LIVE-TWIN: half (2)
+$ceReport = Join-Path $root 'out\capture-evictions.json'        # LIVE-TWIN: half (2)
 $ceCmps = @(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)   # LIVE-TWIN: half (2)
 if ($ceCmps.Count -eq 0) {
   # No dated board here at all (a bare checkout). Still not a pass - but not a defect either, so it is a
   # counted SKIP rather than a FAIL. On a machine with boards, $HasBoard is true and this stays a hard FAIL.
   if (-not $HasBoard) { Skip 'roster currency: no out\comparison-*.json here - the capture-eviction stamp was not compared against anything' }
   else { Bad 'roster currency UNCHECKABLE: no DATED out\comparison-YYYY-MM-DD.json to compare the capture-eviction stamp against - this check examined nothing, which is not the same as a clean board' }
-} elseif (-not (Test-Path $ceStamp)) {
-  Bad 'a board exists but out\capture-evictions.json does not - the rostered capture-eviction pass has never written its artifact, so the eviction class is going unwatched on the live board'
+} elseif ((-not (Test-Path $ceStamp)) -and (-not (Test-Path $ceReport))) {
+  Bad 'a board exists but neither out\capture-evictions-stamp.json nor out\capture-evictions.json does - the rostered capture-eviction pass has never written its artifact, so the eviction class is going unwatched on the live board'
 } else {
-  $ceDoc = Read-JsonFile $ceStamp
+  $ceFromStamp = [bool](Test-Path $ceStamp)
+  $ceRec = if ($ceFromStamp) { $ceStamp } else { $ceReport }
+  $ceName = Split-Path $ceRec -Leaf
+  $ceDoc = Read-JsonFile $ceRec
   $ceCmpDoc = Read-JsonFile $ceCmps[0].FullName
   $ceGen = $null; $ceBuilt = $null
   try { $ceGen = [datetime]::Parse([string]$ceDoc.generated, [Globalization.CultureInfo]::InvariantCulture) } catch {}
   try { $ceBuilt = [datetime]::Parse([string]$ceCmpDoc.built_at, [Globalization.CultureInfo]::InvariantCulture) } catch {}
   if ((-not $ceGen) -or (-not $ceBuilt)) {
-    Bad ('capture-evictions.json or the newest comparison carries an unparseable timestamp (generated=' + [string]$ceDoc.generated + ', built_at=' + [string]$ceCmpDoc.built_at + ') - roster currency cannot be established')
+    Bad ($ceName + ' or the newest comparison carries an unparseable timestamp (generated=' + [string]$ceDoc.generated + ', built_at=' + [string]$ceCmpDoc.built_at + ') - roster currency cannot be established')
   } elseif ([string]$ceDoc.compare_file -ne $ceCmps[0].Name) {
-    Bad ('capture-evictions.json audited ' + [string]$ceDoc.compare_file + ' but the newest board is ' + $ceCmps[0].Name + ' - the eviction check is reporting on a board that is no longer live')
+    Bad ($ceName + ' audited ' + [string]$ceDoc.compare_file + ' but the newest board is ' + $ceCmps[0].Name + ' - the eviction check is reporting on a board that is no longer live')
+  } elseif ($ceFromStamp -and (-not [string]::Equals([string]$ceDoc.compare_built_at, [string]$ceCmpDoc.built_at, [StringComparison]::Ordinal))) {
+    Bad ($ceName + ' read ' + $ceCmps[0].Name + ' as built at ' + [string]$ceDoc.compare_built_at + ' but the board on disk was built at ' + [string]$ceCmpDoc.built_at + ' - it was rebuilt under the same name and the rostered pass has not run on this generation')
   } elseif ($ceGen -lt $ceBuilt) {
-    Bad ('capture-evictions.json is stamped ' + $ceGen.ToString('s') + ', OLDER than the ' + $ceCmps[0].Name + ' generation it names (built_at ' + $ceBuilt.ToString('s') + ') - the rostered pass did not run on this board, so its zero findings describe a board that no longer exists')
+    Bad ($ceName + ' is stamped ' + $ceGen.ToString('s') + ', OLDER than the ' + $ceCmps[0].Name + ' generation it names (built_at ' + $ceBuilt.ToString('s') + ') - the rostered pass did not run on this board, so its zero findings describe a board that no longer exists')
   } else {
-    Ok ('capture-eviction roster is ARMED: capture-evictions.json (' + $ceGen.ToString('s') + ') post-dates the newest board ' + $ceCmps[0].Name + ' (built_at ' + $ceBuilt.ToString('s') + ')')
+    Ok ('capture-eviction roster is ARMED: ' + $ceName + ' (' + $ceGen.ToString('s') + ') post-dates the newest board ' + $ceCmps[0].Name + ' (built_at ' + $ceBuilt.ToString('s') + ')')
   }
 }
 } # u108-f-the-triage-pipeline-s-own-watchers

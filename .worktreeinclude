@@ -62,6 +62,14 @@ meal-prep/pipeline/catalog-digest.json
 # it - which is the kind of maintenance this estate has already proven it does not do.
 grocery/out/comparison-*.json
 
+# THE CAPTURE-EVICTION STAMP TRAVELS WITH THE BOARDS (2026-09-11). test-auditors asks whether the rostered
+# eviction pass ran on the newest board in this checkout, and reads this stamp for the answer. A worktree given the
+# boards and not the stamp is judged on the TRACKED report instead, which reaches a checkout only when somebody
+# commits it: on 2026-09-11 that refused unrelated pushes from every worktree carrying a board rebuilt at 14:27.
+# A few hundred bytes. Until the source checkout's first eviction pass writes one, seed-worktree reports this
+# line MISSING-SOURCE and exits non-zero, which is true. design/PLAN-capture-eviction-stamp-2026-09-11.md.
+grocery/out/capture-evictions-stamp.json
+
 # ---- WHAT THIS FILE CANNOT FIX ------------------------------------------------------------------
 # Two of the six worktree failures are not missing data and no entry here will help, because both are
 # TRACKED files and only ignored files are eligible:

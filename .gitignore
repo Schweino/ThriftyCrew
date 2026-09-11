@@ -205,6 +205,11 @@ __pycache__/
 /grocery/out/deals-page*.html
 /grocery/out/link-audit.json
 /grocery/out/name-drift.json
+# the capture-eviction STAMP (2026-09-11): which board generation audit-capture-eviction last read. It describes a
+# board ignored above, so it must travel the way that board travels - by disk, and by .worktreeinclude into a new
+# worktree - and never by commit. The findings stay in the TRACKED out/capture-evictions.json.
+# design/PLAN-capture-eviction-stamp-2026-09-11.md.
+/grocery/out/capture-evictions-stamp.json
 # the arrivals desk's daily docket: a pure function of the comparison-*.json boards (themselves ignored above)
 # plus commodities.json, rewritten from scratch every run at 35-45 KB. push-data.ps1 ends in `git add -A`, so
 # without this line every daily and weekly run would commit a churning derived file that nothing reads back -

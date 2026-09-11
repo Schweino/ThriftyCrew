@@ -58,6 +58,14 @@ is one copy of every rule and nothing here can drift from it.
 - **No hard-coded bands** (Brad, 2026-09-04). [[no-hardcoded-bands]]
 - **The boards are gitignored**, so a worktree, a CI runner or a clean checkout is BLIND here and the
   engines exit 0 having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them.
+- **A check that compares a derived file with a board reads that file by the BOARD'S road** (2026-09-11). A
+  board reaches a checkout by copy; a tracked file reaches it only by commit, and a hand-run chain rebuilds a
+  board and commits its source only. test-auditors' capture-eviction currency case read the tracked report and
+  refused unrelated pushes from every worktree carrying the rebuilt board, until somebody committed it; it now
+  reads a gitignored stamp that `.worktreeinclude` carries. **Do not repair a lag like that by untracking a file
+  the bot rewrites daily.** Measured in scratch repos: the bot's commit-then-`rebase -X theirs` hits a
+  modify/delete conflict and aborts, and an autostash rebase over a local edit exits 0 with the path left
+  unmerged, so the next commit exits 128. `design/PLAN-capture-eviction-stamp-2026-09-11.md`.
 - **`cohort` here means the PEER GROUP OF PRODUCTS holding a commodity's board cells** - never a group
   of members or a group of recipes (2026-09-08, backlog I100). `build-arrivals-docket.ps1:27-31,56-57`,
   `check-ad-cycles.ps1:1791`, `adjudicate-discovery.ps1:23`, `aisle-test.ps1:35-36` and

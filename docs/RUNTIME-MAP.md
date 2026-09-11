@@ -116,6 +116,12 @@ Files written by one runtime and read by another **through the committed repo**.
   deny-by-default `/*` catch-all) and has never been tracked. It is written by `send-alert.ps1` and read by
   the triage agent on the SAME PC, so it never crosses the git-bus, and its bodies carry alert text. Listing
   it here as must-stay-tracked was an over-claim.
+- **A currency record for a gitignored board is NOT on the bus (2026-09-11).** A file saying which board
+  generation an audit read must reach a checkout by the road the board takes, and the boards are gitignored.
+  `grocery/out/capture-evictions.json` stays tracked as the eviction REPORT; the same pass writes the gitignored
+  `capture-evictions-stamp.json`, `.worktreeinclude` carries it, and test-auditors' roster-currency case reads it.
+  Reading the tracked report instead refused unrelated pushes from every worktree carrying a board rebuilt
+  mid-day, until somebody committed it. `design/PLAN-capture-eviction-stamp-2026-09-11.md`.
 
 ## Log retention, stated (added 2026-09-08, backlog I36)
 
