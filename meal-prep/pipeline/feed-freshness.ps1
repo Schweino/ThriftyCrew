@@ -347,7 +347,18 @@ if ($__ffSelfTest) {
   # runs it in the CALLER's scope and silently resets that switch to $false on the next line. The header
   # warns about it, which is worth nothing unless something proves it. Out-of-process, because the bug IS
   # scope behaviour.
-  $probe = Join-Path $env:TEMP 'ff-clobber-probe.ps1'
+  #
+  # ONE SCRATCH DIRECTORY PER RUN (2026-09-11), after GcScratch in lib\guard-contract.ps1. The probe used to be
+  # the FIXED %TEMP%\ff-clobber-probe.ps1, and run-gates runs every -SelfTest on every push, so pushes from
+  # concurrent sessions ran this case over each other: one run could overwrite or delete another's probe
+  # between the write and the child reading it. -ErrorAction Stop makes a directory another run already made a
+  # loud refusal, never a quiet share, which is what makes 8 hex characters safe; short, because every
+  # character lands on the probe path and PS 5.1 stops at 260. The finally removes the directory however the
+  # case ends. The case body below keeps its original column so it stays one reviewable hunk.
+  $ffRoot = Join-Path $env:TEMP ('ff-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $ffRoot -ErrorAction Stop | Out-Null
+  try {
+  $probe = Join-Path $ffRoot 'ff-clobber-probe.ps1'
   ("param([switch]`$SelfTest)`r`n. '" + $PSCommandPath + "'`r`nWrite-Output ('SelfTest=' + `$SelfTest)") |
     Set-Content $probe -Encoding UTF8
   $probeOut = ((& powershell -NoProfile -ExecutionPolicy Bypass -File $probe -SelfTest 2>&1 |
@@ -355,6 +366,7 @@ if ($__ffSelfTest) {
   Remove-Item $probe -Force -ErrorAction SilentlyContinue
   TT 'MUST FIRE  dot-sourcing this must not clobber the caller''s own -SelfTest switch' `
      ($probeOut -match 'SelfTest=True') $probeOut
+  } finally { Remove-Item -LiteralPath $ffRoot -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($bad -eq 0) { Write-Output ("SELFTEST: {0}/{0} pass" -f $n); exit 0 }
   Write-Output ("SELFTEST: {0}/{1} pass - {2} FAILED" -f ($n - $bad), $n, $bad); exit 1
