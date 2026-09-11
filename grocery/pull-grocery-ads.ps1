@@ -270,7 +270,8 @@ if ($SelfTest) {
   $noneT = Select-FreshopCircular -Circulars @($circs[1]) -Today ([datetime]'2026-09-20')
   _T 'MUST NOT FIRE  with no circular current on the day there is no pick, so the store stays BLOCKED as not current' ($null -eq $noneT.pick)
   $revErr = Get-CircularCoverageReview -Verification @([pscustomobject]@{ store = 'Family Fare'; status = 'ERROR: Get-FreshopPages: the page at skip=100 added zero new ids'; deals = 0 })
-  _T 'MUST FIRE  a Family Fare pull that ERRORED adds a REVIEW line rather than passing silently beside two PASS stores' ((@($revErr) -join ' ') -match 'Family Fare circular pull ERRORED')  if ($fail -eq 0) { Write-Output "SELF-TEST PASS: $n case(s)"; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }
+  _T 'MUST FIRE  a Family Fare pull that ERRORED adds a REVIEW line rather than passing silently beside two PASS stores' ((@($revErr) -join ' ') -match 'Family Fare circular pull ERRORED')
+  if ($fail -eq 0) { Write-Output "SELF-TEST PASS: $n case(s)"; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }
 }
 
 Write-Output ("Today: "+$TODAY.ToString('yyyy-MM-dd')+"  -  pulling current Omaha weekly ads...")
