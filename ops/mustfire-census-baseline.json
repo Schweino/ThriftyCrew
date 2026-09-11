@@ -1,7 +1,7 @@
 ﻿{
     "readme":  "Baseline for ops\\audit-mustfire-census.ps1: how many must-fire assertions each self-test carries. A DROP is a hard fail - a must-fire that breaks goes red on its own, and a must-fire that is DELETED goes green with one fewer case and nobody counts tallies. A RISE is the estate getting better; re-run with -Update to retrain. Counting is per FILE, not per case name, because case labels are prose and a ratchet that fails on a reworded label is a ratchet people delete.",
     "written":  "2026-09-11",
-    "total":  1682,
+    "total":  1705,
     "files":  {
                   "check-uncommitted-source.ps1":  2,
                   "graph\\pipeline\\install-nightly-task.ps1":  8,
@@ -42,11 +42,12 @@
                   "grocery\\audit-store-taxonomy.ps1":  6,
                   "grocery\\audit-tile-integrity.ps1":  2,
                   "grocery\\audit-unit-basis-outlier.ps1":  26,
-                  "grocery\\build-aldi-regular.ps1":  11,
+                  "grocery\\backfill-aldi-link-urls.ps1":  14,
+                  "grocery\\build-aldi-regular.ps1":  12,
                   "grocery\\build-fareway-regular.ps1":  1,
                   "grocery\\build-sams-deals.ps1":  1,
                   "grocery\\build-walmart-deals.ps1":  1,
-                  "grocery\\capture-sink.ps1":  2,
+                  "grocery\\capture-sink.ps1":  7,
                   "grocery\\carry-forward-regular.ps1":  1,
                   "grocery\\compare-deals.ps1":  25,
                   "grocery\\cutover-feed-url.ps1":  5,
@@ -186,7 +187,7 @@
                   "ops\\verify-bot-commit-scope.ps1":  7,
                   "ops\\verify-bulk-edit.ps1":  9,
                   "ops\\verify-commodities-gate.ps1":  11,
-                  "sidecar\\start-sidecar.ps1":  10,
+                  "sidecar\\start-sidecar.ps1":  13,
                   "sidecar\\stop-sidecar.ps1":  9
               }
 }
