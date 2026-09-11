@@ -558,7 +558,8 @@ if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
   # The day-one count goes into the history as well, so every later fall is read against what was first measured.
   $hist = Add-RatchetHistory -Doc ([pscustomobject]@{}) -Count $count
   $doc = [pscustomobject]@{ generated = (Get-Date).ToString('s'); sites = $count; history = $hist; note = $note }
-  [IO.File]::WriteAllText($BASELINE_FILE, ($doc | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($false)))
+  # LF, no BOM: PS 5.1's ConvertTo-Json writes CRLF, and main is LF (a CRLF flip is invisible in git diff).
+  [IO.File]::WriteAllText($BASELINE_FILE, (($doc | ConvertTo-Json -Depth 5) -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
   Write-Output ("full-path-excludes: baseline written at {0} site(s). From here the number may only go DOWN." -f $count)
   Exit-Guard -Name 'full-path-excludes' -Summary ("{0} baseline={1}" -f $summary, $count) -Code 0
 }
@@ -583,7 +584,7 @@ if ($move.Verdict -eq 'tightened') {
   if (-not $doc) { $doc = [pscustomobject]@{} }
   $hist = Add-RatchetHistory -Doc $doc -Count $count
   $newDoc = [pscustomobject]@{ generated = (Get-Date).ToString('s'); sites = $move.NewBaseline; history = $hist; note = $note }
-  [IO.File]::WriteAllText($BASELINE_FILE, ($newDoc | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($false)))
+  [IO.File]::WriteAllText($BASELINE_FILE, (($newDoc | ConvertTo-Json -Depth 5) -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
   Write-Output ('PASSED and TIGHTENED - ' + $move.Message)
   Write-Output ('  ' + (Get-RatchetTrend -History $hist))
   Exit-Guard -Name 'full-path-excludes' -Summary ("{0} tightened-from={1}" -f $summary, $base) -Code 0
