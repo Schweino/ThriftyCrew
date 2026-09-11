@@ -58,6 +58,12 @@ param(
   # be read, the alert goes out exactly as if -CausedBy had not been passed. An alert is never dropped because its
   # incident could not be found.
   [string]$CausedBy = '',
+  # THE QUEUE LOCK, AS FIXTURE SEAMS (2026-09-11). Every live caller takes both defaults, and the name must stay the
+  # one grocery\triage-close.ps1 takes around its own rewrite of the queue. -SelfTest passes a fresh fixture name, so
+  # a lock it holds on purpose never makes a real alert on this box wait, and a short timeout, so the timed-out
+  # branch is reached without a 10 s pause per case.
+  [string]$QueueMutexName = 'Global\smp-grocery-triage-queue',
+  [int]$QueueLockTimeoutMs = 10000,
   # exercises the queue-routing decision against temp fixtures and exits. Sends nothing, touches no live file.
   [switch]$SelfTest
 )
@@ -328,7 +334,7 @@ if ($SelfTest) {
   try {
     Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $saG 'send-alert.ps1')
     foreach ($n in @('alert-registry-lib.ps1', 'mute-lib.ps1')) { Copy-Item -LiteralPath (Join-Path $PSScriptRoot $n) -Destination (Join-Path $saG $n) }
-    foreach ($n in @('json-io.ps1', 'chain-verdict-lib.ps1')) { Copy-Item -LiteralPath (Join-Path (Split-Path -Parent $PSScriptRoot) ('lib\' + $n)) -Destination (Join-Path $saL $n) }
+    foreach ($n in @('json-io.ps1', 'chain-verdict-lib.ps1', 'atomic-write.ps1', 'append-line.ps1')) { Copy-Item -LiteralPath (Join-Path (Split-Path -Parent $PSScriptRoot) ('lib\' + $n)) -Destination (Join-Path $saL $n) }
     $saReg = Join-Path $saG 'alert-registry.json'
     $saRegJson = '{ "readme": "frozen fixture", "entries": [' +
       '{ "id": "held", "match": "exact", "key": "grocery page held coverage", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "x" },' +
@@ -339,8 +345,12 @@ if ($SelfTest) {
     $saQ = Join-Path $saG 'triage-queue.json'
     $saBody = Join-Path $saDir 'body.txt'
     [IO.File]::WriteAllText($saBody, 'Frozen fixture body: Hy-Vee canned-mushrooms, 3 rows, enough store and number evidence that the body is not thin.', $utf8)
+    # A FIXTURE QUEUE LOCK, never the live one: every case below runs the real script, and the lock case holds this
+    # name on purpose, which must not make a real alert on this box wait.
+    . (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\mutex-hold.ps1')
+    $saMutex = New-TcFixtureMutexName 'smp-sa-selftest-queue'
     function _SA([string]$subj, [string[]]$extra = @()) {
-      $o = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $saG 'send-alert.ps1') -Subject $subj -BodyFile $saBody @extra
+      $o = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $saG 'send-alert.ps1') -Subject $subj -BodyFile $saBody -QueueMutexName $saMutex @extra
       $rc = $LASTEXITCODE
       $its = @()
       if (Test-Path -LiteralPath $saQ) { $qd = Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json; $its = @($qd.items) }
@@ -433,10 +443,42 @@ if ($SelfTest) {
     $gfOpen = [pscustomobject]@{ id = 'o'; type = 'grocery guards failed board not published'; status = 'open'; ts = '2026-09-10T08:15:00' }
     _T 'MUST NOT FIRE a blocked verdict with no open GUARDS FAILED item absorbs nothing' ([bool]($null -eq (Get-IncidentAbsorbTarget -Items @($gfRes) -CausedBy 'guards-hold' -Verdict $blk -Today '2026-09-10').target)) 'True'
     _T 'MUST NOT FIRE a blocked verdict from another day absorbs nothing' ([bool]($null -eq (Get-IncidentAbsorbTarget -Items @($gfOpen) -CausedBy 'guards-hold' -Verdict $blk -Today '2026-09-11').target)) 'True'
-  } finally { Remove-Item -LiteralPath $saDir -Recurse -Force -ErrorAction SilentlyContinue }
+    # ---- A QUEUE LOCK THAT WAS NOT TAKEN IS NEVER A QUEUE WRITE (2026-09-11) ----
+    # MUST FIRE, the founding shape: ANOTHER PROCESS holds the queue lock through this send's whole wait. Before the fix
+    # the send rewrote the queue anyway, unlocked, which is how an alert the holder had just queued could be lost. Now
+    # the queue must be byte-identical and the entry must be in the spool. The holder keeps the lock until it is
+    # released, so no clock decides this case.
+    [IO.File]::WriteAllText($saQ, $gfQueue, $utf8)
+    foreach ($sf in @(Get-ChildItem -LiteralPath $saG -Filter 'triage-spool-*.jsonl')) { Remove-Item -LiteralPath $sf.FullName -Force }
+    function _Spooled {
+      $rows = @()
+      foreach ($sf in @(Get-ChildItem -LiteralPath $saG -Filter 'triage-spool-*.jsonl')) {
+        foreach ($ln in @([IO.File]::ReadAllLines($sf.FullName))) { if ($ln.Trim()) { $rows += ($ln | ConvertFrom-Json) } }
+      }
+      return ,@($rows)
+    }
+    $lkSubj = 'Board prices aging inside a fresh file'
+    $qBefore = [Convert]::ToBase64String([IO.File]::ReadAllBytes($saQ))
+    $lk1 = $null
+    $lkHold = Start-TcMutexHold -Name $saMutex
+    try { if ($lkHold.Held) { $lk1 = _SA $lkSubj @('-QueueLockTimeoutMs', '1500') } } finally { Stop-TcMutexHold -Hold $lkHold }
+    _T ('the lock fixture really held the queue lock from another process (' + $lkHold.Detail + ')') ([bool]$lkHold.Held) 'True'
+    $sp1 = _Spooled
+    _T 'MUST FIRE a send whose queue lock is held by another process leaves triage-queue.json byte-identical' ([bool]($null -ne $lk1 -and [Convert]::ToBase64String([IO.File]::ReadAllBytes($saQ)) -eq $qBefore)) 'True'
+    _T 'MUST FIRE and the entry is in the spool, carrying its subject and naming the lock as the reason' ([bool]($sp1.Count -eq 1 -and [string]$sp1[0].subject -eq $lkSubj -and [string]$sp1[0].reason -match 'lock')) 'True'
+    _T 'MUST FIRE and the alert still takes the mail leg, saying it was NOT queued' ([bool]($null -ne $lk1 -and $lk1.out -match 'alert MUTED' -and $lk1.out -match 'NOT queued')) 'True'
+    # CLEAN TWIN: the lock released, the very same send is written to the queue and spools nothing more.
+    $lk2 = _SA $lkSubj @('-QueueLockTimeoutMs', '1500')
+    $sp2 = _Spooled
+    _T 'CLEAN TWIN with the lock free the same send is written to the queue (1 item -> 2) and says so' ([bool]($lk2.items.Count -eq 2 -and $lk2.out -match 'queued to triage-queue.json')) 'True'
+    _T 'MUST NOT FIRE and it adds nothing to the spool' $sp2.Count 1
+  } finally {
+    Stop-TcMutexHold
+    Remove-Item -LiteralPath $saDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
   Write-Output ""
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (queue routing + body-thin + emitter path + mute switch + birth lane + alert registry)'
+  Write-Output 'SELF-TEST PASS (queue routing + body-thin + emitter path + mute switch + birth lane + alert registry + queue lock refusal)'
   exit 0
 }
 
@@ -489,13 +531,32 @@ Get-ChildItem (Join-Path $root 'alert-sent-*.txt') -ErrorAction SilentlyContinue
 # Fix: serialize writers on a named mutex, and swap the file in atomically so a reader sees only whole JSON.
 # A DIGEST-CLASS ALERT IS NEVER QUEUED (ruling 1). The queue block below runs only when the class queues; it keeps
 # its old indentation so the change reads as the one condition it is.
+# THE QUEUE REPLACE AND THE SPOOL APPEND GO THROUGH lib\ (2026-09-11). Neither may take the alerter down on a day lib\
+# will not load, so each falls back to the write this script made before - a replace that can lose to a lock-free
+# reader, an append that can lose to another appender - and the log says so.
+$awLibOk = $false
+try { . (Join-Path (Split-Path -Parent $root) 'lib\atomic-write.ps1'); $awLibOk = $true } catch { Log ("lib\atomic-write.ps1 DID NOT LOAD (" + $_.Exception.Message + ") - the queue replace falls back to a bare Move-Item") }
+$alLibOk = $false
+try { . (Join-Path (Split-Path -Parent $root) 'lib\append-line.ps1'); $alLibOk = $true } catch { Log ("lib\append-line.ps1 DID NOT LOAD (" + $_.Exception.Message + ") - the spool append falls back to a bare Add-Content") }
+
 $queued = $false
 if (-not $delivery.queue) { Log ("DIGEST '" + $Subject + "' [type: " + $typeKey + "] - registry entry " + $delivery.entry_id + " is digest class, so it is mailed and NOT queued") }
 if ($delivery.queue) {
-$qMutex = New-Object System.Threading.Mutex($false, 'Global\smp-grocery-triage-queue')
+$qMutex = $null
 $qHeld = $false
-try { $qHeld = $qMutex.WaitOne(10000) } catch [System.Threading.AbandonedMutexException] { $qHeld = $true }
 try {
+  # A LOCK THAT WAS NOT TAKEN IS NEVER A QUEUE WRITE (2026-09-11). Until today the wait's answer went into $qHeld and
+  # nothing read it: after a 10 s timeout this block went on to read the queue, rebuild it and replace the whole file
+  # UNLOCKED, racing the writer that did hold the lock, so an alert that writer had just queued could be overwritten
+  # out of existence. The wait expires exactly when writers pile up - capture-run's store lanes, check-ad-cycles'
+  # 8-wide fanout of alerting audits, the 15-minute sidecar watchdog - which is when a lost write is likeliest.
+  # Now a lock not taken throws, and the catch below SPOOLS the entry: recorded, reported DUE by triage-due.ps1, never
+  # dropped and never written unlocked. $queued stays false, so the alert then takes the road of any failed queue
+  # write: a review-class alert is mailed, and an incident-caused one is not absorbed.
+  # The mutex is opened inside the try too, so a mutex that cannot be opened spools rather than killing the alert.
+  $qMutex = New-Object System.Threading.Mutex($false, $QueueMutexName)
+  try { $qHeld = $qMutex.WaitOne($QueueLockTimeoutMs) } catch [System.Threading.AbandonedMutexException] { $qHeld = $true }
+  if (-not $qHeld) { throw ('triage-queue lock ' + $QueueMutexName + ' not acquired in ' + $QueueLockTimeoutMs + ' ms - the queue was NOT rewritten unlocked, so this entry is spooled') }
   $qFile = Join-Path $root 'triage-queue.json'
   # THIS ONE IS THE GENERATIONAL HALF AND IT IS THE WORSE OF THE TWO. This read feeds a
   # read-modify-WRITE of the whole queue, so without -Encoding utf8 every alert appended re-decoded and
@@ -622,10 +683,17 @@ try {
   $items = @($items | Where-Object { $_.status -eq 'open' -or ([datetime]$_.ts) -ge $cut })
   $q.items = $items
   # atomic swap: write the whole document to a sibling temp, then replace. A reader either sees the old file
-  # or the new one, never a half-written one.
-  $qTmp = $qFile + '.tmp'
-  $q | ConvertTo-Json -Depth 4 | Set-Content $qTmp -Encoding UTF8
-  Move-Item -Path $qTmp -Destination $qFile -Force
+  # or the new one, never a half-written one. THROUGH lib\atomic-write.ps1 SINCE 2026-09-11: a bare Move-Item -Force
+  # fails outright while a lock-free reader (triage-due.ps1, queue-depth.ps1, the brain digest) has the file open, and
+  # the entry then went to the spool instead of the queue. The retry outlasts the reader. Same bytes either way: a
+  # UTF-8 BOM, the JSON, CRLF.
+  $qJson = $q | ConvertTo-Json -Depth 4
+  if ($awLibOk) { [void](Write-TcAtomicFile -Path $qFile -Text $qJson) }
+  else {
+    $qTmp = $qFile + '.tmp'
+    $qJson | Set-Content $qTmp -Encoding UTF8
+    Move-Item -Path $qTmp -Destination $qFile -Force
+  }
   $queued = $true
 } catch {
   Log ("triage-queue write failed (email still goes out): " + $_.Exception.Message)
@@ -634,11 +702,14 @@ try {
   try {
     $spool = Join-Path $root ('triage-spool-' + $today + '.jsonl')
     $line = ([pscustomobject]@{ ts=(Get-Date).ToString('s'); type=$typeKey; subject=$Subject; body=$Body; reason=$_.Exception.Message } | ConvertTo-Json -Depth 4 -Compress)
-    Add-Content -Path $spool -Value $line -Encoding UTF8
+    # THROUGH lib\append-line.ps1 (2026-09-11). A bare Add-Content lands a line only while no other process is
+    # appending: in a scratch harness two concurrent appenders landed 13 of 200 lines. A spool is written exactly when
+    # senders are contending for the queue lock, so without this the refusal above would have moved the loss here.
+    if ($alLibOk) { [void](Add-TcLine -Path $spool -Text $line) } else { Add-Content -Path $spool -Value $line -Encoding UTF8 }
   } catch { Log ('triage-spool write ALSO failed: ' + $_.Exception.Message) }
 } finally {
   if ($qHeld) { try { $qMutex.ReleaseMutex() } catch {} }
-  try { $qMutex.Dispose() } catch {}
+  if ($qMutex) { try { $qMutex.Dispose() } catch {} }
 }
 }   # if ($delivery.queue)
 

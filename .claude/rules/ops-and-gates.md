@@ -178,6 +178,17 @@ everything else honest, so a defect here is silent by construction.
   `grocery/price-ingredient.ps1` (2 s), and three in `meal-prep/pipeline/hunt_daemon_selftest.py` (a 3 s
   poll, a ~6 s loop, a 0.6 s barrier) whose timeouts decide the case. **Not every red under load is a
   clock:** the two concurrency-fixture reds the same day were lost writes, the mutex rule above.
+- **A timed lock wait is a BRANCH, and an append is not a locked write** (2026-09-11). `grocery/send-alert.ps1`
+  stored `WaitOne(10000)`'s answer and never read it, so a timeout rewrote the whole triage queue UNLOCKED over
+  the writer that held the lock, and `grocery/triage-close.ps1` never took the lock at all. Every other `WaitOne`
+  in the tree already refused on `$false`. **The timed-out branch needs a MUST FIRE, and a clock cannot give it
+  one:** `lib/mutex-hold.ps1` holds a fixture mutex from ANOTHER PROCESS until released, so the wait times out
+  however loaded the box is, and a fixture never holds a live name. The spool that branch lands in had its own
+  hole: **a bare `Add-Content` loses lines to a concurrent appender** - 13 of 200 landed with two processes, 5 of
+  1,200 with four, every failure *"Stream was not readable."* A file several processes append to goes through
+  `lib/append-line.ps1` (`Add-TcLine`: append-only rights, shared ReadWrite, one write), which landed 1,200 of
+  1,200. Other concurrent appenders were NOT swept; `lib/event-bus.ps1`'s `StreamWriter` opens with the same
+  writer-denying share and was not measured.
 
 - **A self-test names every temp path PER RUN, never by a fixed name under `%TEMP%`** (2026-09-11). `run-gates`
   runs every `-SelfTest` and `pre-push` runs `run-gates`, so pushes from concurrent sessions run the SAME suite
