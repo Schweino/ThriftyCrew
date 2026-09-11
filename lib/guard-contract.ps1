@@ -144,63 +144,87 @@ if ($__gcSelfTest) {
   $bare = & { Write-GuardComplete -Name 'x' }
   T 'a summary is optional and leaves no trailing space' ($bare -eq 'X-COMPLETE') "[$bare]"
 
-  # MUST FIRE, frozen from the 2026-08-08 regression above. A caller declaring its own [switch]$SelfTest
-  # dot-sources this file; if this file ever regrows a colliding param() block, the caller's switch comes
-  # back $false and this case goes red. It has to run out-of-process because the bug IS scope behaviour.
-  $probe = Join-Path $env:TEMP 'gc-clobber-probe.ps1'
-  ("param([switch]`$SelfTest)`r`n. '" + $PSCommandPath + "'`r`nWrite-Output ('SelfTest=' + `$SelfTest)") |
-    Set-Content $probe -Encoding UTF8
-  $probeOut = ((& powershell -NoProfile -ExecutionPolicy Bypass -File $probe -SelfTest 2>&1 |
-                 ForEach-Object { [string]$_ }) -join ' ').Trim()
-  Remove-Item $probe -Force -ErrorAction SilentlyContinue
-  T 'MUST FIRE  dot-sourcing this must not clobber a caller''s own -SelfTest switch' `
-    ($probeOut -match 'SelfTest=True') $probeOut
+  # ---- ONE SCRATCH DIRECTORY PER RUN (2026-09-11) ----------------------------------------------
+  # The out-of-process probes below used to write FIXED names straight under %TEMP%: gc-clobber-probe.ps1,
+  # gc-invoke-probe.ps1 and gc-probe-out-<mode>.txt. run-gates runs every -SelfTest and pre-push runs
+  # run-gates, so pushes from concurrent sessions ran this suite over each other and one run executed,
+  # read or deleted another's probe. Three concurrent run-gates loops went red here in 6 of 6 passes, with
+  # "the argument ...gc-clobber-probe.ps1 to the -File parameter does not exist" and a rawexit case reading
+  # "got: code=1 did work" - another run's output. A hermetic suite that goes red at random teaches
+  # --no-verify. So GcScratch is the ONLY way to name a path here: it hands out a leaf under a directory no
+  # other run can name, and records it, and the finally removes what it recorded and the directory.
+  # The name is 8 hex characters, not a whole guid, because every character here lands on every probe path
+  # and PS 5.1 stops at MAX_PATH: under a deep %TEMP% a full 32 put gc-probe-out-exitguard.txt at exactly
+  # 260 and the probe could not be written. -ErrorAction Stop is what makes the shorter name safe - a
+  # directory another run already made is a loud refusal here, never a quietly shared one.
+  $gcRoot = Join-Path $env:TEMP ('gc-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $gcRoot -ErrorAction Stop | Out-Null
+  $gcMade = New-Object System.Collections.Generic.List[string]
+  function GcScratch([string]$leaf) { $p = Join-Path $gcRoot $leaf; [void]$gcMade.Add($p); return $p }
+  try {
+    # MUST FIRE, frozen from the 2026-08-08 regression above. A caller declaring its own [switch]$SelfTest
+    # dot-sources this file; if this file ever regrows a colliding param() block, the caller's switch comes
+    # back $false and this case goes red. It has to run out-of-process because the bug IS scope behaviour.
+    $probe = GcScratch 'gc-clobber-probe.ps1'
+    ("param([switch]`$SelfTest)`r`n. '" + $PSCommandPath + "'`r`nWrite-Output ('SelfTest=' + `$SelfTest)") |
+      Set-Content $probe -Encoding UTF8
+    $probeOut = ((& powershell -NoProfile -ExecutionPolicy Bypass -File $probe -SelfTest 2>&1 |
+                   ForEach-Object { [string]$_ }) -join ' ').Trim()
+    Remove-Item $probe -Force -ErrorAction SilentlyContinue
+    T 'MUST FIRE  dot-sourcing this must not clobber a caller''s own -SelfTest switch' `
+      ($probeOut -match 'SelfTest=True') $probeOut
 
-  # ---- Invoke-Guard / Exit-Guard (2026-09-09, backlog I86) -------------------------------------
-  # These run OUT OF PROCESS because the behaviour under test IS process exit: `exit` inside a
-  # scriptblock cannot be observed from inside the same runspace without ending this suite.
-  $gp = Join-Path $env:TEMP 'gc-invoke-probe.ps1'
-  $body = @(
-    'param([string]$Mode)',
-    (". '" + $PSCommandPath + "'"),
-    'Invoke-Guard -Name ''probe'' -Body {',
-    '  if ($Mode -eq ''normal'') { ''scanned=10 findings=0'' }',
-    '  elseif ($Mode -eq ''exitguard'') { Exit-Guard -Name ''probe'' -Code 2 -Summary ''scanned=10 findings=3'' }',
-    '  elseif ($Mode -eq ''throws'') { throw ''boom'' }',
-    '  elseif ($Mode -eq ''rawexit'') { Write-Output ''did work''; exit 3 }',
-    '}'
-  ) -join "`r`n"
-  Set-Content -LiteralPath $gp -Value $body -Encoding UTF8
+    # ---- Invoke-Guard / Exit-Guard (2026-09-09, backlog I86) -----------------------------------
+    # These run OUT OF PROCESS because the behaviour under test IS process exit: `exit` inside a
+    # scriptblock cannot be observed from inside the same runspace without ending this suite.
+    $gp = GcScratch 'gc-invoke-probe.ps1'
+    $body = @(
+      'param([string]$Mode)',
+      (". '" + $PSCommandPath + "'"),
+      'Invoke-Guard -Name ''probe'' -Body {',
+      '  if ($Mode -eq ''normal'') { ''scanned=10 findings=0'' }',
+      '  elseif ($Mode -eq ''exitguard'') { Exit-Guard -Name ''probe'' -Code 2 -Summary ''scanned=10 findings=3'' }',
+      '  elseif ($Mode -eq ''throws'') { throw ''boom'' }',
+      '  elseif ($Mode -eq ''rawexit'') { Write-Output ''did work''; exit 3 }',
+      '}'
+    ) -join "`r`n"
+    Set-Content -LiteralPath $gp -Value $body -Encoding UTF8
 
-  function RunProbe([string]$mode) {
-    $o = Join-Path $env:TEMP ("gc-probe-out-" + $mode + ".txt")
-    & powershell -NoProfile -ExecutionPolicy Bypass -File $gp $mode > $o 2>$null
-    $code = $LASTEXITCODE
-    $lines = @(Get-Content $o -ErrorAction SilentlyContinue)
-    Remove-Item $o -Force -ErrorAction SilentlyContinue
-    return @{ Code = $code; Lines = $lines }
+    function RunProbe([string]$mode) {
+      $o = GcScratch ("gc-probe-out-" + $mode + ".txt")
+      & powershell -NoProfile -ExecutionPolicy Bypass -File $gp $mode > $o 2>$null
+      $code = $LASTEXITCODE
+      $lines = @(Get-Content $o -ErrorAction SilentlyContinue)
+      Remove-Item $o -Force -ErrorAction SilentlyContinue
+      return @{ Code = $code; Lines = $lines }
+    }
+
+    $r1 = RunProbe 'normal'
+    T 'Invoke-Guard writes the marker when the body returns normally' `
+      (Test-GuardComplete $r1.Lines 'probe') (($r1.Lines -join '|'))
+    T 'and the body''s return value becomes the summary' `
+      (($r1.Lines -join ' ') -match 'PROBE-COMPLETE scanned=10 findings=0') (($r1.Lines -join '|'))
+
+    $r2 = RunProbe 'exitguard'
+    T 'MUST FIRE  Exit-Guard writes the marker AND preserves the exit code - `exit` skips the statements after the body, so the marker has to travel with it' `
+      ((Test-GuardComplete $r2.Lines 'probe') -and $r2.Code -eq 2) ("code=" + $r2.Code + " " + ($r2.Lines -join '|'))
+    T 'MUST NOT FIRE  the marker is not written twice' `
+      (@($r2.Lines | Where-Object { $_ -match 'PROBE-COMPLETE' }).Count -eq 1) (($r2.Lines -join '|'))
+
+    $r3 = RunProbe 'throws'
+    T 'MUST FIRE  a body that THROWS writes NO marker - a crash must never look complete' `
+      (-not (Test-GuardComplete $r3.Lines 'probe')) (($r3.Lines -join '|'))
+
+    $r4 = RunProbe 'rawexit'
+    T 'MUST FIRE  a raw `exit` inside the body writes no marker, so the audit sees an unfinished guard rather than a silent pass' `
+      ((-not (Test-GuardComplete $r4.Lines 'probe')) -and $r4.Code -eq 3) ("code=" + $r4.Code + " " + ($r4.Lines -join '|'))
+    Remove-Item $gp -Force -ErrorAction SilentlyContinue
+  } finally {
+    foreach ($made in $gcMade) { Remove-Item -LiteralPath $made -Force -ErrorAction SilentlyContinue }
+    Remove-Item -LiteralPath $gcRoot -Recurse -Force -ErrorAction SilentlyContinue
   }
-
-  $r1 = RunProbe 'normal'
-  T 'Invoke-Guard writes the marker when the body returns normally' `
-    (Test-GuardComplete $r1.Lines 'probe') (($r1.Lines -join '|'))
-  T 'and the body''s return value becomes the summary' `
-    (($r1.Lines -join ' ') -match 'PROBE-COMPLETE scanned=10 findings=0') (($r1.Lines -join '|'))
-
-  $r2 = RunProbe 'exitguard'
-  T 'MUST FIRE  Exit-Guard writes the marker AND preserves the exit code - `exit` skips the statements after the body, so the marker has to travel with it' `
-    ((Test-GuardComplete $r2.Lines 'probe') -and $r2.Code -eq 2) ("code=" + $r2.Code + " " + ($r2.Lines -join '|'))
-  T 'MUST NOT FIRE  the marker is not written twice' `
-    (@($r2.Lines | Where-Object { $_ -match 'PROBE-COMPLETE' }).Count -eq 1) (($r2.Lines -join '|'))
-
-  $r3 = RunProbe 'throws'
-  T 'MUST FIRE  a body that THROWS writes NO marker - a crash must never look complete' `
-    (-not (Test-GuardComplete $r3.Lines 'probe')) (($r3.Lines -join '|'))
-
-  $r4 = RunProbe 'rawexit'
-  T 'MUST FIRE  a raw `exit` inside the body writes no marker, so the audit sees an unfinished guard rather than a silent pass' `
-    ((-not (Test-GuardComplete $r4.Lines 'probe')) -and $r4.Code -eq 3) ("code=" + $r4.Code + " " + ($r4.Lines -join '|'))
-  Remove-Item $gp -Force -ErrorAction SilentlyContinue
+  T ('the per-run scratch directory is removed on the way out, with the ' + $gcMade.Count + ' path(s) it handed out') `
+    (($gcMade.Count -eq 6) -and -not (Test-Path -LiteralPath $gcRoot)) ("made=" + $gcMade.Count + " root still exists=" + (Test-Path -LiteralPath $gcRoot))
 
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }

@@ -173,5 +173,23 @@ everything else honest, so a defect here is silent by construction.
   poll, a ~6 s loop, a 0.6 s barrier) whose timeouts decide the case. **Not every red under load is a
   clock:** the two concurrency-fixture reds the same day were lost writes, the mutex rule above.
 
+- **A self-test names every temp path PER RUN, never by a fixed name under `%TEMP%`** (2026-09-11). `run-gates`
+  runs every `-SelfTest` and `pre-push` runs `run-gates`, so pushes from concurrent sessions run the SAME suite
+  over each other in one `%TEMP%`. `lib/guard-contract.ps1` wrote `gc-clobber-probe.ps1`, `gc-invoke-probe.ps1`
+  and `gc-probe-out-<mode>.txt` there and was red in 6 of 6 run-gates passes under three concurrent loops;
+  `grocery/test-guards.ps1 -SelfTest` journalled into the one fixed `tg-restore-journal`, where another run's
+  `JournalClear` deleted its snapshot or its `JournalRecover` REPLAYED it. Measured with 4 copies launched
+  together, 5 rounds, original and fix alternating round by round: guard-contract green 0 of 20 before and 20
+  of 20 after, test-guards 15 of 20 before and 20 of 20 after, no temp entry left in 10 of 10 fixed rounds.
+  **Allocate one unique directory per run, hand out every path through one function that records it, and
+  remove it in `finally`** - `GcScratch` in guard-contract is the exemplar. Create it with `-ErrorAction Stop`
+  so a clash refuses rather than shares, and keep the name short: every character lands on every fixture path,
+  and PS 5.1 stops at 260. A name deliberately shared ACROSS runs, like the journal a killed run's successor must
+  find, stays fixed on the production path and is redirected inside the self-test. **To measure it, isolate
+  `TEMP` per batch directly under the real `%TEMP%`**: a root inside the session scratchpad put the fixed probe
+  at exactly 260 characters and every arm went red for the harness's reason, not the code's. Fixed names still
+  standing and not swept: `test-auditors`' shared `%TEMP%\lib` (which `pre-push` reaches through
+  `prepush-test-auditors`), `test-precedence-ladders`, `run-test-guards-weekly`, and `consistency-oracle`'s arm logs.
+
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

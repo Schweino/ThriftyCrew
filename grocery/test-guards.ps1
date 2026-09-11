@@ -247,6 +247,13 @@ if ($SelfTest) {
   # or RestoreAll ships the mutated intermediate as "restored".
   $td = Join-Path $env:TEMP ('tg-selftest-' + [guid]::NewGuid())
   New-Item -ItemType Directory $td | Out-Null
+  # THE JOURNAL IS PER RUN IN HERE (2026-09-11). $script:JournalDir is a FIXED %TEMP% name on purpose: a killed
+  # full run's successor has to find it. This branch is not that run. run-gates runs every -SelfTest and
+  # pre-push runs run-gates, so concurrent pushes ran this branch over each other on the one shared journal:
+  # a run's RestoreAll (JournalClear) deleted the snapshot another had just journalled, whose killed-run case
+  # then recovered nothing, and whose "journal cleared" case saw a directory a third run had just made. It
+  # also let a push's self-test clear, or REPLAY, the journal of a real hermetic run still in flight.
+  $script:JournalDir = Join-Path $td 'restore-journal'
   $f1 = Join-Path $td 'bomless.json'; [IO.File]::WriteAllBytes($f1, [Text.Encoding]::ASCII.GetBytes('{"a":1}'))
   $orig = [IO.File]::ReadAllBytes($f1)
   $null = Backup $f1; '{"a":2}' | Set-Content $f1 -Encoding UTF8
