@@ -204,10 +204,11 @@ if ($SelfTest) {
     ((Join-Path (Split-Path (Split-Path $l2.ScriptDir -Parent) -Parent) 'lib') -eq $l2.Lib) ("scriptDir=" + $l2.ScriptDir + " lib=" + $l2.Lib)
 
   # The founding -Args bug: the arms were launched with none of the arguments the caller passed.
-  $al = Get-TcArmArgList -ScriptPath 'C:\sb\grocery\build-walmart-deals.ps1' -InPath 'C:\sb\grocery\out\captures\w.csv' -ScriptArgs @{ Date = '2026-09-10' }
+  # Neutral paths on purpose: a module-internals literal here would read as a real reach to audit-cross-module-reach.
+  $al = Get-TcArmArgList -ScriptPath 'C:\sb\stage\build.ps1' -InPath 'C:\sb\stage\in\w.csv' -ScriptArgs @{ Date = '2026-09-10' }
   $alText = ($al -join ' ')
   T 'MUST FIRE  a -Args entry reaches the arm''s command line as -Date 2026-09-10, after the stage and its -In' `
-    (($alText -match '-File C:\\sb\\grocery\\build-walmart-deals\.ps1 -In C:\\sb\\grocery\\out\\captures\\w\.csv -Date 2026-09-10$') -and (@($al).Count -eq 9)) $alText
+    (($alText -match '-File C:\\sb\\stage\\build\.ps1 -In C:\\sb\\stage\\in\\w\.csv -Date 2026-09-10$') -and (@($al).Count -eq 9)) $alText
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
   Write-Output 'SELF-TEST PASS: 4 must-fire cases led by the one that keeps an emitted-versus-dropped row apart from a changed value, 2 must-not-fire cases including two empty arms, and 5 clean twins over composite keys, field tallies, the common denominator and the sandbox layout'
