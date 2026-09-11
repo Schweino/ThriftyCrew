@@ -202,9 +202,50 @@ it buys time until F1 to F4 land.
 **Not recommended: raising the slot total** - the slots are not what loads the box (Q4), and more gate width on a
 box this loaded made each run slower on the morning this budget was built.
 
-## Asked of Brad
+## Brad's rulings, 2026-09-11
 
-1. F1: may the two missing-input cases report BLIND, and should worktrees be seeded at creation (47 MB each)?
-2. F2 and F3: build the FIFO queue with admission control in `lib\gate-slots.ps1`?
-3. F4: allow a clean-tree pass cache for the pre-push hook, keyed as above?
-4. F5 now, as a stopgap, while the others are built?
+All four approved, in this order: **F1 (BLIND plus seeding) first**, then F5's line, then F2 with F3, then F4.
+
+## F1 as built, on branch `claude/gate-seed-blind-2026-09-11`
+
+- **`meal-prep\pipeline\feed-covers-published.ps1`** - the missing-card branch reports BLIND and the self-test
+  leaves through `Exit-Guard`, so the marker carries `blind=`. Unseeded here: exit 0,
+  `FEEDCOV-SELFTEST-COMPLETE cases=27 blind=1`, zero FAIL lines. With both cards copied in: exit 0,
+  `cases=28 blind=0`.
+- **`meal-prep\pipeline\wave-preaudit.ps1`** - same, and its drill names each input it could not find. Seeded:
+  exit 0, `blind=0`. With the reference card renamed away: exit 0, `blind=1`.
+  **A defect this found on the way:** an undeclared `$script:blindCases` is `$null`, which formats as an EMPTY
+  string, so the seeded arm printed `blind=` and run-gates' `blind=([1-9][0-9]*)` could read nothing. It only
+  looked right in the blind arm, where `+= 1` on `$null` yields 1. Declared at 0 now. Running BOTH arms is what
+  showed it; the blind arm alone passed.
+- **`ops\hooks\pre-push`** - seeds a checkout with no built card once, before the gate, via
+  `ops\seed-worktree.ps1`. Best effort and never a verdict: a seed that cannot run does not refuse the push,
+  because the gates then report BLIND, which is the honest answer. That is deliberately NOT the "a missing gate
+  is a refusal" rule the blocks around it apply - those decide, this one only supplies.
+- **`ops\test-prepush-hook.ps1`** - four cases: the seeder runs BEFORE the gate (a seed afterwards would leave
+  this push's gates as blind as they were), it is handed the pushing checkout, it does not run again once the
+  card is there, and a checkout with no seeder still pushes and is still gated. **35 of 35 cases pass**, up from
+  31. The count pin caught the addition with every case green, which is what it exists for.
+
+**Where it deviates from the ruling, and why.** "At birth" would need a `SessionStart` hook in a project
+`.claude\settings.json`, which this repo does not have (untracked, and `.claude\settings.local.json` is
+gitignored), and whether project hooks run without a trust prompt here was NOT measured. The pre-push hook is
+the estate's own installed mechanism, so seeding lands at a checkout's FIRST PUSH instead: certain to run, no
+per-session cost, and still once per checkout. If you want it truly at birth, that is a separate change.
+
+**What was verified, and what was not.** Verified: both self-tests in both arms, `grocery\audit-guard-contract.ps1`
+(exit 0, `covered=58 backlog=0 regressed=0 half=0 dead=0`, so the self-test markers do not trip it), the hook
+suite at 35 of 35, and the bytes of all four files (LF, CR=0, each keeping the BOM state of its own blob -
+`wave-preaudit` has one, the others do not). **NOT verified: `ops\run-gates.ps1` was never run**, per the
+instruction not to add load while the queue is jammed. So nothing here claims a full gate pass.
+
+**Landing it needs one more step.** Every worktree shares `C:\Codex\ThriftyCrew\.git\hooks`, so the hook change
+does nothing until `powershell -File ops\install-hooks.ps1` runs - and when it does, every checkout is re-armed
+at once. `ops\audit-hook-installed.ps1` runs from the DAILY CHAIN on the main checkout, not from run-gates, so a
+pushed-but-uninstalled hook shows up as a daily alert rather than a red gate on everybody's push.
+
+## Still to build, in Brad's order
+
+1. F5's CLAUDE.md line (stopgap).
+2. F2 with F3: the FIFO queue with admission control in `lib\gate-slots.ps1`.
+3. F4: the clean-tree pass cache for pre-push.

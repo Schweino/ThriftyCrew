@@ -103,6 +103,27 @@ fi
 # resolved. ops/test-prepush-hook.ps1 drives this hook from a linked worktree in a sandbox.
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_PREFIX GIT_NAMESPACE
 
+# SEED A BLIND CHECKOUT ONCE, BEFORE THE GATE (2026-09-11). meal-prep/db/built is gitignored and
+# .worktreeinclude structurally CANNOT carry it: Claude Code's candidate list is built with
+# `git ls-files --directory`, which collapses a fully-ignored directory to ONE line - measured this day as
+# 1 line against 1,168 files on disk. So a fresh worktree has no built card, and feed-covers-published and
+# wave-preaudit could not look. Both now report that BLIND rather than FAIL, which stops the refusal; this
+# makes them actually LOOK, which is the half that restores the coverage. Measured 2026-09-11: 31 of 106
+# worktrees had no card, and 18 of 53 failed gate runs that day failed on nothing else
+# (design/PLAN-gate-queue-2026-09-11.md).
+#
+# BEST EFFORT, NEVER A VERDICT. Seeding is an enabler, not a check, so a seed that cannot run must not
+# refuse the push - the gates then report BLIND, which is the honest outcome and is printed. That is why
+# this does not follow the "a missing gate is a refusal" rule the blocks above apply: those decide, this
+# one only supplies. It runs at most once per checkout, because the guard below sees the seeded card.
+seedcard="$repo/meal-prep/db/built/american-goulash-pasta.body.html"
+seeder="$repo/ops/seed-worktree.ps1"
+if [ ! -f "$seedcard" ] && [ -f "$seeder" ]; then
+  echo "pre-push: this checkout has no built cards, so two gates would be BLIND - seeding once (47 MB)." >&2
+  powershell -NoProfile -ExecutionPolicy Bypass -File "$seeder" -Target "$repo" >&2 || \
+    echo "pre-push: seeding did not complete; the gates will report BLIND rather than fail." >&2
+fi
+
 echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not once per commit." >&2
 
 # REDIRECT, THEN READ THE STATUS, THEN GREP THE FILE. Reading a status through a pipe gives the LAST

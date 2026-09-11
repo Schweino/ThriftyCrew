@@ -434,6 +434,10 @@ function Get-SharedVerdict {
 # ===================================================================================================
 if ($runSelfTest) {
   $f = 0
+  # DECLARED, NOT LEFT TO +=. An undeclared $script:blindCases is $null, which formats as an EMPTY string in
+  # the marker's blind=, so a seeded run printed `blind=` and run-gates' `blind=([1-9][0-9]*)` read nothing.
+  # It only looked right in the blind case, where += 1 on $null yields 1. Measured 2026-09-11.
+  $script:blindCases = 0
   function T($msg, $cond, $got) { if ($cond) { Write-Output ("ok    " + $msg) } else { Write-Output ("FAIL  " + $msg + "   got: " + $got); $script:f++ } }
 
   # ---- macro recompute ----------------------------------------------------------------------------
@@ -722,7 +726,20 @@ if ($runSelfTest) {
   $srcRef  = Join-Path $mp 'db\built\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html'
   $canDrill = ((Test-Path $srcSpec) -and (Test-Path $srcCost) -and (Test-Path $srcFood) -and (Test-Path $srcIng) -and (Test-Path $srcRef))
   if (-not $canDrill) {
-    T 'END-TO-END the drill inputs exist (a live spec, costed.json, the food DB, a reference card)' $false 'one of them is missing - the drill could not run, which is not a pass'
+    # COULD NOT LOOK IS BLIND, NOT FAILED (2026-09-11). Four of these five inputs are TRACKED and present in
+    # any checkout; the one that is not is the reference card under the gitignored meal-prep\db\built, which
+    # .worktreeinclude structurally cannot carry (a fully-ignored directory collapses to one line in
+    # `git ls-files --directory`: 1 line against 1,168 files, measured). So an unseeded worktree failed this
+    # drill after queueing up to 20 minutes for a gate worker slot, and that refusal said nothing about the
+    # change being pushed (design\PLAN-gate-queue-2026-09-11.md). The drill still does not run and this is
+    # NOT a pass: it is counted into the marker's blind=, which run-gates prints on a green run
+    # (ops\run-gates.ps1:536-546). ops\seed-worktree.ps1 is what makes it run.
+    $script:blindCases += 1
+    $missing = @()
+    foreach ($p in @($srcSpec, $srcCost, $srcFood, $srcIng, $srcRef)) { if (-not (Test-Path $p)) { $missing += $p } }
+    Write-Output 'BLIND END-TO-END the drill inputs exist (a live spec, costed.json, the food DB, a reference card) - could not look, NOT passed:'
+    foreach ($p in $missing) { Write-Output ("      missing " + $p) }
+    Write-Output '      seed it with: powershell -File ops\seed-worktree.ps1 -Target <this checkout>'
   } else {
     New-Item -ItemType Directory -Force (Join-Path $dMp 'db\recipes') | Out-Null
     New-Item -ItemType Directory -Force (Join-Path $dRun 'waves') | Out-Null
@@ -842,7 +859,15 @@ if ($runSelfTest) {
     Remove-Item $T -Recurse -Force -ErrorAction SilentlyContinue
   }
 
-  if ($f -eq 0) { Write-Output 'wave-preaudit SELF-TEST PASS'; exit 0 } else { Write-Output "wave-preaudit SELF-TEST FAIL: $f case(s)"; exit 1 }
+  # THE MARKER CARRIES blind=, so a case that COULD NOT LOOK is named on a green run instead of vanishing
+  # into a pass (ops\run-gates.ps1:536-546 reads the LAST marker line). Exit-Guard writes it and exits.
+  if ($f -eq 0) {
+    if ($script:blindCases -gt 0) { Write-Output "wave-preaudit SELF-TEST PASS, $($script:blindCases) case(s) BLIND - could not look, NOT passed" }
+    else { Write-Output 'wave-preaudit SELF-TEST PASS' }
+    Exit-Guard -Name 'WAVE-PREAUDIT-SELFTEST' -Code 0 -Summary ("blind={0}" -f $script:blindCases)
+  }
+  Write-Output "wave-preaudit SELF-TEST FAIL: $f case(s)"
+  Exit-Guard -Name 'WAVE-PREAUDIT-SELFTEST' -Code 1 -Summary ("failed={0} blind={1}" -f $f, $script:blindCases)
 }
 
 # ===================================================================================================

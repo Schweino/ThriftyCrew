@@ -43,6 +43,17 @@
   never ran and no case could tell. The sandbox now copies every lib\*.ps1, the check exits 3 on a library it cannot
   load, and cases drive that refusal and hand the check a leaked GIT_DIR from a caller that is not the hook.
 
+  THE SEVENTH (2026-09-11): the hook SEEDS a blind checkout, once, before the gate. meal-prep\db\built is
+  gitignored and .worktreeinclude structurally cannot carry it - Claude Code's candidate list is built with
+  `git ls-files --directory`, which collapses a fully-ignored directory to ONE line (measured that day: 1 line
+  against 1,168 files on disk). So a fresh worktree had no built card, feed-covers-published and wave-preaudit
+  could not look, and both FAILED the push - after it had queued up to 20 minutes for a gate worker slot. 18 of
+  53 failed gate runs that day failed on nothing else, and 31 of 106 worktrees had no card
+  (design\PLAN-gate-queue-2026-09-11.md). Those two gates now report the case BLIND; the hook seeds so they can
+  look. The cases use a STUB seeder and pin the hook's WIRING - that it runs, before the gate, handed this
+  checkout, once - plus the twin that a checkout with no seeder still pushes, because seeding supplies and
+  never decides.
+
   WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
   ops\prepush-test-auditors.ps1 with every lib\*.ps1, and stubs for the gate and for test-auditors.
   Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
@@ -409,6 +420,57 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   Case 'CLEAN TWIN' 'the full run (no skip file) still runs every unit' `
     ((($ranU | Sort-Object) -join ',') -eq 'u001-guards,u002-beta,u003-gamma' -and (($fullOut -join "`n") -notmatch 'selective=1')) "ran=$($ranU -join ',') out=$($fullOut -join ' | ')"
 
+  # ---- THE SEVENTH (2026-09-11): seeding a BLIND checkout, once, before the gate ----
+  # meal-prep\db\built is gitignored and .worktreeinclude CANNOT carry it - Claude Code's candidate list is
+  # built with `git ls-files --directory`, which collapses a fully-ignored directory to ONE line (measured:
+  # 1 line against 1,168 files). So a fresh worktree had no built card, feed-covers-published and
+  # wave-preaudit could not look, and both FAILED the push after it had queued up to 20 minutes for a gate
+  # worker slot: 18 of 53 failed gate runs on 2026-09-11 failed on nothing else
+  # (design\PLAN-gate-queue-2026-09-11.md). Those two now report BLIND; the hook seeds so they can look.
+  # A STUB SEEDER, deliberately: these cases pin the hook's WIRING - that it runs, that it runs BEFORE the
+  # gate, that it is handed this checkout, that it runs once, and that a checkout without a seeder still
+  # pushes. What ops\seed-worktree.ps1 actually copies is that script's own self-test, not this one's.
+  $seedRanFile = Join-Path $probe 'seed-ran.txt'
+  $seedStub = @'
+param([string]$Target = '')
+$p = $env:TC_PREPUSH_PROBE
+[IO.File]::WriteAllText((Join-Path $p 'seed-ran.txt'), ('target=' + $Target + ' gateRanBefore=' + (Test-Path -LiteralPath (Join-Path $p 'gate-saw.txt'))))
+$card = Join-Path $Target 'meal-prep\db\built\american-goulash-pasta.body.html'
+$null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
+[IO.File]::WriteAllText($card, 'seeded')
+'@
+  $seedPs1 = Join-Path $main 'ops\seed-worktree.ps1'
+  $seedCard = Join-Path $main 'meal-prep\db\built\american-goulash-pasta.body.html'
+  [IO.File]::WriteAllText($seedPs1, $seedStub, $utf8)
+  Remove-Item -LiteralPath $seedRanFile, $sawFile -ErrorAction SilentlyContinue
+  Remove-Item -LiteralPath $seedCard -ErrorAction SilentlyContinue
+  CommitFile $main 'design\seed-note.md' "seed v1`n"
+  $pSeed = PushOut $main 'seed-blind'
+  $seedSaw = if (Test-Path -LiteralPath $seedRanFile) { [IO.File]::ReadAllText($seedRanFile) } else { '' }
+  # MUST FIRE: a checkout with no built card is seeded, and the seeding happens BEFORE the gate starts -
+  # a seed that ran afterwards would leave this push's gates exactly as blind as they were.
+  Case 'MUST FIRE' 'a push from a checkout with no built card seeds it BEFORE the gate runs' `
+    ($pSeed.rc -eq 0 -and $seedSaw -match 'gateRanBefore=False' -and (Test-Path -LiteralPath $sawFile) -and (Test-Path -LiteralPath $seedCard)) `
+    "rc=$($pSeed.rc) seed='$seedSaw' gateRan=$(Test-Path -LiteralPath $sawFile) card=$(Test-Path -LiteralPath $seedCard)"
+  # MUST FIRE: and it is handed THIS checkout, not the script's own directory. seed-worktree seeding itself
+  # found no db\built and exited 2, which is the trap its own header records.
+  Case 'MUST FIRE' 'the seeder is handed the pushing checkout as its target' `
+    ($seedSaw -match [regex]::Escape((Split-Path -Leaf $main)) -and $seedSaw -notmatch 'target= ') "seed='$seedSaw'"
+  # MUST NOT FIRE: the next push does not seed again. One 47 MB copy per checkout, not one per push.
+  Remove-Item -LiteralPath $seedRanFile -ErrorAction SilentlyContinue
+  CommitFile $main 'design\seed-note.md' "seed v2`n"
+  $pSeed2 = PushOut $main 'seed-blind'
+  Case 'MUST NOT FIRE' 'a checkout that already has the card is not seeded again' `
+    ($pSeed2.rc -eq 0 -and -not (Test-Path -LiteralPath $seedRanFile)) "rc=$($pSeed2.rc) ranAgain=$(Test-Path -LiteralPath $seedRanFile)"
+  # CLEAN TWIN: seeding SUPPLIES, it does not decide. A checkout with no seeder script and no card still
+  # pushes and is still gated - the gates then report BLIND, which is the honest answer, not a refusal.
+  Remove-Item -LiteralPath $seedPs1, $seedCard, $sawFile, $seedRanFile -ErrorAction SilentlyContinue
+  CommitFile $main 'design\seed-note.md' "seed v3`n"
+  $pSeed3 = PushOut $main 'seed-blind'
+  Case 'CLEAN TWIN' 'a checkout with no seeder still pushes, and is still gated' `
+    ($pSeed3.rc -eq 0 -and $pSeed3.remote -eq $pSeed3.head -and (Test-Path -LiteralPath $sawFile) -and -not (Test-Path -LiteralPath $seedRanFile)) `
+    "rc=$($pSeed3.rc) gateRan=$(Test-Path -LiteralPath $sawFile)"
+
   # ---- THE SIXTH (2026-09-11): the check's OWN clear, and a library it cannot load ----
   # The sandbox's hand list of libraries predated lib\git-repo-env.ps1, so every copy of the check driven above loaded
   # no clear and all 26 cases passed; the hook sends the check's stderr to /dev/null, so on that path it said nothing.
@@ -493,7 +555,9 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 31
+# 31 -> 35 on 2026-09-11, the four seeding cases of THE SEVENTH. This pin did its job on the way in: every
+# one of the 35 was green and the suite still failed, naming the count, which is exactly what it exists for.
+$expectedCases = 35
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''
