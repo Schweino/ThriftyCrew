@@ -13,6 +13,9 @@ param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $qFile = Join-Path $root 'triage-queue.json'
+# RETURNS ARE FAILURES (2026-09-10, ruling 5): the one copy of the RETURN rule, shared with validate-triage-plan.ps1.
+# A lib that fails to load costs the RETURN lines, never the triage tick; the self-test below fails loudly instead.
+try { . (Join-Path $root 'triage-return-lib.ps1') } catch { }
 
 # ---- DID THE EMITTING CODE CHANGE AFTER THE ALERT FIRED? (2026-09-05, queue 2026-09-04-bf1642) ----------
 # FOUNDING CASE: alert 2026-09-04-bf1642 fired at 14:57:31 saying the recipe pool's dedup evidence had gone
@@ -201,6 +204,42 @@ if ($SelfTest) {
     Set-Content -LiteralPath $stF -Value '2026-09-15T10:00:00.0000000' -Encoding ascii
     _T 'CLEAN TWIN a real lane stamp round-trips' ((Read-LaneStamp $stF) -eq [datetime]'2026-09-15T10:00:00') 'did not round-trip'
   } finally { Remove-Item -LiteralPath $stF -Force -ErrorAction SilentlyContinue }
+
+  # ---- RETURNS ARE FAILURES (2026-09-10, Brad's ruling 5) ------------------------------------------------
+  # The founding measurement: 25 types fired on 3+ days over 2026-08-22..09-10 and all 25 came back after a
+  # close. These pin the pure rule in triage-return-lib.ps1, which validate-triage-plan.ps1 enforces too.
+  $rNow = [datetime]'2026-09-10T09:00:00'
+  $rType = 'grocery guards failed board not published'
+  $rP1 = [pscustomobject]@{ id = '2026-08-22-aaaaa1'; ts = '2026-08-22T08:15:00'; type = $rType; status = 'resolved' }
+  $rP2 = [pscustomobject]@{ id = '2026-09-05-aaaaa2'; ts = '2026-09-05T08:15:00'; type = $rType; status = 'resolved' }
+  $rOld = [pscustomobject]@{ id = '2026-08-01-aaaaa0'; ts = '2026-08-01T08:15:00'; type = $rType; status = 'resolved' }
+  $rParked = [pscustomobject]@{ id = '2026-09-06-aaaaa3'; ts = '2026-09-06T08:15:00'; type = $rType; status = 'needs-brad' }
+  $rOther = [pscustomobject]@{ id = '2026-09-06-bbbbb1'; ts = '2026-09-06T08:15:00'; type = 'grocery semantic sweep found product s no rule can see'; status = 'resolved' }
+  $rCur = [pscustomobject]@{ id = '2026-09-10-ccccc1'; ts = '2026-09-10T08:15:00'; type = $rType; status = 'open' }
+  try {
+    # MUST FIRE: a type triage closed twice inside the window, raised again, prints one RETURN line naming both closes.
+    $rl = Get-TriageReturnLines @($rCur) @($rP1, $rP2, $rCur, $rOther) $rNow
+    $rl = @($rl)
+    $want = '  RETURN: 2026-09-10-ccccc1 - grocery guards failed board not published was closed 2 time(s) in 30 days (2026-08-22-aaaaa1, 2026-09-05-aaaaa2)'
+    _T 'MUST-FIRE an open item whose type was closed twice in 30 days prints RETURN naming both prior ids' ($rl.Count -eq 1 -and $rl[0] -eq $want) (($rl -join ' | '))
+    # MUST NOT FIRE: a first-time type beside closes of other types is not a return.
+    $rFirst = [pscustomobject]@{ id = '2026-09-10-ccccc2'; ts = '2026-09-10T08:15:00'; type = 'grocery a type never closed before'; status = 'open' }
+    $rl2 = Get-TriageReturnLines @($rFirst) @($rP1, $rP2, $rOther, $rFirst) $rNow
+    _T 'MUST-NOT-FIRE a first-time type prints no RETURN line' ((@($rl2)).Count -eq 0) (($rl2 -join ' | '))
+    # MUST NOT FIRE: a close older than the queue's 30-day window is outside what the queue can show.
+    $rl3 = Get-TriageReturnLines @($rCur) @($rOld, $rCur) $rNow
+    _T 'MUST-NOT-FIRE a close older than 30 days is not a return' ((@($rl3)).Count -eq 0) (($rl3 -join ' | '))
+    # MUST NOT FIRE: an earlier item parked needs-brad was never closed, so nothing failed to hold.
+    $rl4 = Get-TriageReturnLines @($rCur) @($rParked, $rCur) $rNow
+    _T 'MUST-NOT-FIRE an earlier needs-brad item of the same type is not a close' ((@($rl4)).Count -eq 0) (($rl4 -join ' | '))
+    # CLEAN TWIN: beside another type's close and an aged-out one, the count is exactly the one real prior close.
+    $rl5 = Get-TriageReturnLines @($rCur) @($rOld, $rP2, $rOther, $rCur) $rNow
+    $rl5 = @($rl5)
+    $want5 = '  RETURN: 2026-09-10-ccccc1 - grocery guards failed board not published was closed 1 time(s) in 30 days (2026-09-05-aaaaa2)'
+    _T 'CLEAN TWIN a returned type counts exactly its own in-window closes' ($rl5.Count -eq 1 -and $rl5[0] -eq $want5) (($rl5 -join ' | '))
+  } catch {
+    _T 'the RETURN rule loads and runs (triage-return-lib.ps1)' $false $_.Exception.Message
+  }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
   Write-Output "SELF-TEST PASS ($cases triage-due cases)"
@@ -280,6 +319,14 @@ if ($weekly.Count) {
 # An item whose emitter was committed after the alert fired may be describing code that no longer exists.
 # Wrapped: this is provenance, and provenance must never cost a triage tick.
 try { foreach ($l in (Get-RemeasureLines $open (Split-Path -Parent $root))) { Write-Output $l } } catch { }
+# RETURNS ARE FAILURES (2026-09-10, Brad's ruling 5). An open item whose type triage already closed inside the
+# queue's 30-day window is a fix that did not hold. The orchestrator pastes these lines into the reviewer's
+# dispatch, and validate-triage-plan.ps1 derives the same status from the queue and demands prior_closes,
+# prevention at the source and a fixture from every occurrence. Advisory here, and never fatal, like RE-MEASURE.
+try {
+  $retLines = Get-TriageReturnLines $open $q.items (Get-Date)
+  foreach ($l in @($retLines)) { if ($l) { Write-Output $l } }
+} catch { }
 
 # ---------------------------------------------------------------- BOARD GENERATION, pinned for both stages
 # WHY (2026-08-06): the reviewer froze a 26,013-name routing corpus at 06:44 against comparison-2026-08-05, a

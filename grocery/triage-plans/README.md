@@ -127,6 +127,30 @@ with the change and a future reader can see why a rule exists.
       // Not required at handoff, because the reviewer is read-only and cannot mint a queue item.
       "leaves_open_followup": null,
 
+      // RETURNS ARE FAILURES (2026-09-10, Brad's ruling 5). GATED whenever the QUEUE, not the plan, says this
+      // item is a RETURN: triage-queue.json holds an earlier item of the same `type` closed as resolved inside
+      // its 30-day window. triage-due.ps1 prints a RETURN line for each one, and grocery/triage-return-lib.ps1 is
+      // the one copy of the rule. Measured 2026-08-22 to 2026-09-10: 25 alert types fired on 3 or more days and
+      // all 25 came back after a close, because every close repaired the instance and none reached the source.
+      // A RETURN code item carries all three fields below. A RETURN no-code-change item may carry
+      // "prevention_none_because": "<one line>" instead, because a by-design alert that keeps returning is
+      // Phase 2's recalibration work, not a code fix. superseded, needs-brad and needs-more-time are exempt.
+      // Leaving the fields off does not make an item a first-timer: the gate reads the queue.
+      //   - prior_closes: EVERY earlier resolved id of this type in the window. A missing one is named.
+      //   - prevention.source: the repo path(s) of the UPSTREAM PRODUCER of the class (a capture builder, the
+      //     ingest parser, the rule schema, the emitting check), plus what and exact_change. Once a type has
+      //     returned twice (2 or more prior closes), a source made only of rule or exclusion data
+      //     (commodities.json, category-excludes.json, known-wrong.json, price-bands.json,
+      //     commodity-search.json) is refused, because an exclude cannot stop the next product of that shape.
+      //   - proof.fixture_occurrences: one entry (the id, or an object with queue_id) for every prior close
+      //     PLUS this id, so the fixture is built from every occurrence and not only today's.
+      "prior_closes": ["2026-09-01-aaaaa1", "2026-09-05-aaaaa2"],
+      "prevention": {
+        "source": ["<repo path of the producer, e.g. the store's capture builder>"],
+        "what": "split or refuse 'A, size or B, size' ad lines at ingest, before any matching rule sees them",
+        "exact_change": "<the change at that source>"
+      },
+
       // WHAT ELSE THE CHANGE TOUCHES, MEASURED, not guessed. This is the anti-regression core:
       // run the proposed regex over every product name in the newest comparison AND out\regular\*.json
       // AND out\sams|bakers|fareway captures, and report what gains or loses a match.
@@ -268,6 +292,16 @@ refuses an item still `planned` (dropped, not finished) and a `done` or `deviate
 is not "nothing" but names no owner that resolves. It prints every residual verbatim so the report copies
 them instead of summarising them. The handoff gate stops a bad plan reaching the developer; this one stops
 a partial fix being reported as a whole one, which is what the 2026-09-09 report did.
+
+**Both modes read the queue (2026-09-10, Brad's ruling 5, RETURNS ARE FAILURES).** Handoff mode now reads
+`triage-queue.json` (or `-QueueFile`) too, and an unreadable queue is BLIND (exit 3) there exactly as under
+`-Closing`, because RETURN status is derived from the queue and never from the plan. For every item the queue
+makes a RETURN (an earlier item of its `type` closed as resolved inside the 30-day window) the gate demands
+`prior_closes` naming every such id, `prevention` with `source`, `what` and `exact_change`, and
+`proof.fixture_occurrences` covering every prior close plus the current id. A type closed twice or more may
+not name only rule or exclusion data files as its source. A RETURN no-code-change item may carry
+`prevention_none_because` instead; superseded, needs-brad and needs-more-time are exempt. The gate prints a
+`RETURNS:` line naming every RETURN item it found.
 
 ## Housekeeping
 

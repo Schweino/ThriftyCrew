@@ -197,6 +197,12 @@ always the bare `plan-<today>.json`), that round = 1, and a per-item effort ceil
 PER ITEM AND PER CLASS, not one number for the run: name the short wall budget from STEP 0.75 on the items
 it applies to, and a real ceiling on the substantive ones. A single ceiling quoted for a mixed dispatch is
 how a wall alert ends up costing what a wrong-product alert should.
+RETURNS ARE FAILURES (Brad's ruling 5, 2026-09-10). Paste every `RETURN:` line `triage-due.ps1` printed in
+STEP 0 into the dispatch, verbatim. Each names a type triage already closed in the last 30 days and its prior
+ids, and the reviewer needs them because the gate derives RETURN status from the QUEUE: a RETURN code item must
+carry `prior_closes` (every id on its line), `prevention` (the upstream `source`, `what`, `exact_change`) and
+`proof.fixture_occurrences` (every prior id plus today's), and a type returned twice may not name only rule or
+exclude files as its source. A Class C/D item you work inline that is a RETURN carries the same fields.
 
 STEP 2 - GATE THE HANDOFF, DETERMINISTICALLY. Do not eyeball the plan; run:
   powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -OpenIds <every open id>

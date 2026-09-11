@@ -194,6 +194,16 @@ whenever any item changes a matching rule. Requirements:
   class has ACTUALLY happened, and over what window. It decides the owner the developer may give it: a
   residual at 0 occurrences that an existing check would catch is owned by that check (`watch:<path>`) and
   costs nothing tomorrow, while one that has happened becomes a weekly-lane queue item (2026-09-10).
+- A RETURN item is a fix that did not hold, so it carries more (Brad's ruling 5, 2026-09-10). The orchestrator
+  passes you the `RETURN: <id> - <type> was closed N time(s) in 30 days (<ids>)` lines `triage-due.ps1` printed.
+  Each one carries `prior_closes` naming every id on its line, `prevention` with `source` (the repo path of the
+  upstream producer of the class: a capture builder, the ingest parser, the rule schema, the emitting check),
+  `what` and `exact_change`, and `proof.fixture_occurrences` covering every prior close plus today's id. Once a
+  type has returned twice, a source made only of rule or exclude files is refused, because an exclude cannot
+  stop the next product of the same shape. A no-code-change RETURN may carry `prevention_none_because` in one
+  line instead (a by-design alert that keeps returning is Phase 2 recalibration work). The gate derives RETURN
+  status from the queue, not from your plan, so leaving the fields off does not make an item a first-timer.
+  Why: over 2026-08-22 to 2026-09-10 all 25 alert types that fired on 3 or more days came back after a close.
 - `ship_sequence` is ordered and complete, including the gated chain and the live verification, and groups
   items into as few publishes as the dependencies allow.
 - Anything needing Brad (a purchase, a wall, a "what should this commodity MEAN" call) goes in

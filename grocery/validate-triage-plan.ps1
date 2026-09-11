@@ -47,6 +47,12 @@
   the same exit codes. Run it before a triage run reports itself done. A residual's owner is a queue id, a
   ruling id in open_questions_for_brad, or watch:<repo-relative path> for a residual whose
   leaves_open_occurrences is 0 (2026-09-10).
+  BOTH MODES READ THE QUEUE (2026-09-10, Brad's ruling 5, RETURNS ARE FAILURES). An item whose queue type was
+  already closed as resolved inside the 30-day window is a RETURN, and that status comes from the QUEUE, never
+  from the plan, so a plan that omits the fields cannot escape. A RETURN code item must carry prior_closes
+  (every prior id), prevention.source/what/exact_change, and proof.fixture_occurrences (every prior id plus
+  its own); twice returned, a source made only of rule or exclusion data is refused. An unreadable queue is
+  BLIND (exit 3) in handoff mode exactly as in -Closing. The rule itself is grocery\triage-return-lib.ps1.
   -SelfTest runs frozen good/bad fixtures through the rules and exits (0 pass, 1 fail).
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
@@ -88,8 +94,28 @@ function Test-TouchesMatchingRule($Item) {
   return (($files -join ' ') -match 'commodities\.json|category-excludes|price-bands|commodity-search')
 }
 
+. (Join-Path $root 'triage-return-lib.ps1')   # Get-TriageReturnPriors: the one copy of the RETURN rule (ruling 5)
+
+# Rule or exclusion DATA. Twice returned, a prevention whose source is only these is refused: an exclude stops
+# one product, and the type came back twice because the next product of the same shape was not in it.
+$DATA_ONLY_SOURCES = @('grocery/commodities.json', 'grocery/category-excludes.json', 'grocery/known-wrong.json',
+                       'grocery/price-bands.json', 'grocery/commodity-search.json')
+
+# The queue, read the same way for both modes. ok=$false is BLIND to the caller, never an empty queue.
+function Read-GateQueue {
+  param([string]$Path)
+  if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { return @{ ok = $false; why = "there is no queue at $Path"; items = @() } }
+  $qDoc = $null
+  try { $qDoc = Read-JsonFile $Path } catch { $qDoc = $null }
+  if (-not $qDoc -or -not $qDoc.PSObject.Properties['items']) { return @{ ok = $false; why = "the queue at $Path reads back empty, unparseable or with no items array"; items = @() } }
+  return @{ ok = $true; why = ''; items = @($qDoc.items | Where-Object { $_ }) }
+}
+
 function Test-Plan {
-  param($Doc, [string[]]$Expect, [string]$PlanDir, [switch]$Closing, $QueueIds = @(), [string]$RepoRoot = '')
+  param($Doc, [string[]]$Expect, [string]$PlanDir, [switch]$Closing, $QueueIds = @(), [string]$RepoRoot = '',
+        $QueueItems = $null, [datetime]$Now = [datetime]::MinValue)
+  if ($Now -eq [datetime]::MinValue) { $Now = Get-Date }
+  $returns = New-Object System.Collections.Generic.List[string]
   # a watch:<path> owner resolves against the repo this gate lives in unless a caller (the self-test) names one
   if (-not $RepoRoot) { $RepoRoot = Split-Path $root -Parent }
   # -Closing resolves a residual's owner against these. A ruling is owned by its id in open_questions_for_brad;
@@ -125,6 +151,64 @@ function Test-Plan {
     if ($Closing -and ($END_STATES -notcontains [string]$i.status)) {
       $st0 = if ([string]$i.status) { [string]$i.status } else { 'no status' }
       $problems.Add("$id is still '$st0' at close - every item ends done, deviated, blocked, bounced, superseded, needs-more-time or needs-brad")
+    }
+    # --- RETURNS ARE FAILURES (2026-09-10, Brad's ruling 5) ---------------------------------------------------
+    # FOUNDING MEASUREMENT: over 2026-08-22..09-10, 25 alert types fired on 3 or more days and ALL 25 came back
+    # after a close. Those closes carried root causes, and most carried root fixes, and the classes came back
+    # anyway, because the fix landed on the instance's rule (an exclude, a band) while whatever PRODUCED the class
+    # (a capture builder, the ingest parser, the rule schema, the emitting check) was untouched. So an item whose
+    # TYPE the queue shows closed before names that source, every prior close, and a fixture from all of them.
+    # RETURN status is read from the QUEUE and never from the plan: a field a plan may simply omit is no gate.
+    if ($null -ne $QueueItems) {
+      $qItem = $null
+      foreach ($qi in @($QueueItems)) { if ($qi -and [string]$qi.id -eq $id) { $qItem = $qi; break } }
+      $priors = @()
+      if ($qItem) { $pr0 = Get-TriageReturnPriors $QueueItems $qItem $Now; $priors = @($pr0) }
+      $exempt = (@('superseded', 'needs-brad', 'needs-more-time') -contains $cls)
+      $pnb = ([string]$i.prevention_none_because).Trim()
+      if ($priors.Count -gt 0) { [void]$returns.Add($id) }
+      if ($priors.Count -gt 0 -and -not $exempt -and -not ($cls -eq 'no-code-change' -and $pnb)) {
+        $retTxt = "$id is a RETURN (type '" + ([string]$qItem.type).Trim() + "' was closed " + $priors.Count + " time(s) in 30 days: " + ($priors -join ', ') + ")"
+        $pc = @(@($i.prior_closes) | Where-Object { $_ } | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ })
+        if ($pc.Count -eq 0) {
+          $problems.Add("$retTxt and carries no prior_closes - list every earlier close of this type, checked against the queue: " + ($priors -join ', '))
+        } else {
+          $missPc = @($priors | Where-Object { $pc -notcontains $_ })
+          if ($missPc.Count) { $problems.Add("$id prior_closes is missing " + ($missPc -join ', ') + " - the queue holds " + $priors.Count + " prior close(s) of this type in 30 days and a RETURN names every one (ruling 5)") }
+        }
+        $pv = $i.prevention
+        if (-not $pv -or ($pv -is [string])) {
+          $hint = if ($cls -eq 'no-code-change') { " A no-code-change RETURN may instead carry prevention_none_because in one line: a by-design alert that keeps returning is Phase 2's recalibration work (design/PLAN-zero-alert-days-2026-09-10.md), not a code fix." } else { ' prevention_none_because is accepted only on a no-code-change item.' }
+          $problems.Add("$retTxt and carries no prevention - name the upstream producer of the class in prevention.source (a capture builder, the ingest parser, the rule schema, the emitting check), with what and exact_change. A fix that did not hold is fixed at its source (Brad's ruling 5, 2026-09-10)." + $hint)
+        } else {
+          # a path, optionally followed by prose: the leading token is what is compared
+          $src = @(@($pv.source) | Where-Object { $_ } | ForEach-Object { ([string]$_) -split '[,;]' } | ForEach-Object { ($_.Trim() -replace '\s.*$', '') } | Where-Object { $_ })
+          if ($src.Count -eq 0) { $problems.Add("$id prevention has no source - the repo path(s) of the upstream producer of the class (a capture builder, the ingest parser, the rule schema, the emitting check)") }
+          if (-not ([string]$pv.what).Trim()) { $problems.Add("$id prevention has no what - what the change at the source stops") }
+          if (-not ([string]$pv.exact_change).Trim()) { $problems.Add("$id prevention has no exact_change") }
+          if ($priors.Count -ge 2 -and $src.Count -gt 0) {
+            $nonData = @($src | Where-Object { $DATA_ONLY_SOURCES -notcontains ((($_ -replace '\\', '/') -replace '^\./', '').ToLowerInvariant()) })
+            if ($nonData.Count -eq 0) {
+              $problems.Add("$id has come back after " + $priors.Count + " closes and prevention.source is only rule or exclusion data (" + ($src -join ', ') + ") - for a type that has returned twice a rule or an exclude alone does not satisfy ruling 5; name the producer that lets the class in (a capture builder, the ingest parser, the rule schema, the emitting check)")
+            }
+          }
+        }
+        $fo = New-Object System.Collections.Generic.List[string]
+        if ($i.proof) {
+          foreach ($o in @($i.proof.fixture_occurrences)) {
+            if (-not $o) { continue }
+            if ($o -is [string]) { [void]$fo.Add($o) }
+            else { foreach ($k in @('queue_id', 'id')) { if ($o.PSObject.Properties[$k] -and [string]$o.$k) { [void]$fo.Add([string]$o.$k) } } }
+          }
+        }
+        $needFo = @($priors) + @($id)
+        if ($fo.Count -eq 0) {
+          $problems.Add("$retTxt and has no proof.fixture_occurrences - a RETURN's fixture is built from EVERY occurrence, not only today's: " + ($needFo -join ', '))
+        } else {
+          $missFo = @($needFo | Where-Object { $need = $_; (@($fo | Where-Object { ([string]$_).IndexOf($need, [StringComparison]::Ordinal) -ge 0 })).Count -eq 0 })
+          if ($missFo.Count) { $problems.Add("$id proof.fixture_occurrences does not cover " + ($missFo -join ', ') + " - the fixture reproduces every prior close plus this one") }
+        }
+      }
     }
     if ($NO_CODE -contains $cls) { continue }
 
@@ -288,8 +372,8 @@ function Test-Plan {
     }
   }
 
-  if ($problems.Count) { return @{ rc = 2; problems = $problems } }
-  return @{ rc = 0; problems = @() }
+  if ($problems.Count) { return @{ rc = 2; problems = $problems; returns = $returns } }
+  return @{ rc = 0; problems = @(); returns = $returns }
 }
 
 if ($SelfTest) {
@@ -480,6 +564,89 @@ if ($SelfTest) {
     _CaseWatch 'CLEAN TWIN at close, a residual owned by a real queue item still passes' $owned 0 $null
   } finally { Remove-Item -LiteralPath $wRoot -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # --- RETURNS ARE FAILURES (2026-09-10, Brad's ruling 5) ----------------------------------------------------
+  # Founding measurement: 25 types fired on 3+ days over 2026-08-22..09-10 and all 25 came back after a close.
+  # Every case hands Test-Plan a QUEUE, because RETURN status is the queue's to say and never the plan's.
+  $retNow = [datetime]'2026-09-10T09:00:00'
+  $rt = 'grocery guards failed board not published'
+  $qP1 = [pscustomobject]@{ id = '2026-09-01-aaaaa1'; type = $rt; ts = '2026-09-01T08:15:00'; status = 'resolved' }
+  $qP2 = [pscustomobject]@{ id = '2026-09-05-aaaaa2'; type = $rt; ts = '2026-09-05T08:15:00'; status = 'resolved' }
+  $qCur = [pscustomobject]@{ id = 'q1'; type = $rt; ts = '2026-09-10T08:15:00'; status = 'open' }
+  $qFirst = [pscustomobject]@{ id = 'q1'; type = 'grocery a type never closed before'; ts = '2026-09-10T08:15:00'; status = 'open' }
+  $twice = @($qP1, $qP2, $qCur); $once = @($qP2, $qCur); $firstTime = @($qP1, $qP2, $qFirst)
+  function _CaseRet($label, $doc, $queue, $expectRc, $expectMatch, [bool]$expectReturn) {
+    $script:ran++
+    $r = Test-Plan $doc @('q1') $env:TEMP -QueueItems $queue -Now $retNow
+    $txt = ($r.problems -join ' | ')
+    $isRet = (@($r.returns | Where-Object { $_ }) -contains 'q1')
+    if ($r.rc -eq $expectRc -and $isRet -eq $expectReturn -and ((-not $expectMatch) -or ($txt -match $expectMatch))) { Write-Output "ok    $label" }
+    else { Write-Output ("FAIL  $label  rc=" + $r.rc + " want $expectRc; return=" + $isRet + " want " + $expectReturn + "; problems: " + $txt); $script:fail++ }
+  }
+  $fullRet = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $fullRet.items[0] | Add-Member -NotePropertyName prior_closes -NotePropertyValue @('2026-09-01-aaaaa1', '2026-09-05-aaaaa2') -Force
+  $fullRet.items[0] | Add-Member -NotePropertyName prevention -NotePropertyValue ([pscustomobject]@{ source = @('grocery/ingest-row-contract.ps1'); what = 'the capture refuses a row whose size was derived, before any rule sees it'; exact_change = 'every row declares size_kind and size_source; a derived size is never divided on' }) -Force
+  $fullRet.items[0].proof | Add-Member -NotePropertyName fixture_occurrences -NotePropertyValue @('2026-09-01-aaaaa1', '2026-09-05-aaaaa2', 'q1') -Force
+  # CLEAN TWIN: a complete RETURN item is recognised as a RETURN from the queue and passes.
+  _CaseRet 'CLEAN TWIN a complete RETURN item is recognised from the queue and passes the gate' $fullRet $twice 0 $null $true
+  # MUST FIRE: a RETURN code item with no prevention.
+  $noPrev = $fullRet | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $noPrev.items[0].PSObject.Properties.Remove('prevention')
+  _CaseRet 'MUST FIRE a RETURN code item with no prevention is rejected' $noPrev $once 2 'carries no prevention' $true
+  # MUST FIRE: prior_closes misses one of the queue's prior closes, and the message names it.
+  $missOne = $fullRet | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $missOne.items[0].prior_closes = @('2026-09-05-aaaaa2')
+  _CaseRet 'MUST FIRE prior_closes missing one of the queue''s prior ids names the missing id' $missOne $twice 2 'prior_closes is missing 2026-09-01-aaaaa1' $true
+  # MUST FIRE: twice returned, and the prevention is only a rule file.
+  $ruleOnly = $fullRet | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $ruleOnly.items[0].prevention.source = @('grocery/commodities.json')
+  _CaseRet 'MUST FIRE a twice-returned item whose prevention source is only grocery/commodities.json is rejected' $ruleOnly $twice 2 'only rule or exclusion data' $true
+  # MUST NOT FIRE: the same rule-file source once returned. The data-only refusal starts at two prior closes.
+  _CaseRet 'MUST NOT FIRE a once-returned item may name a rule file as its prevention source' $ruleOnly $once 0 $null $true
+  # MUST FIRE: the plan omits every RETURN field, and the queue still makes it a RETURN.
+  _CaseRet 'MUST FIRE a plan that omits every RETURN field is still a RETURN because the queue says so' $good $twice 2 'is a RETURN' $true
+  # MUST FIRE: a fixture built from the prior closes but not today's occurrence.
+  $noCur = $fullRet | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $noCur.items[0].proof.fixture_occurrences = @('2026-09-01-aaaaa1', '2026-09-05-aaaaa2')
+  _CaseRet 'MUST FIRE fixture_occurrences that leave out the current occurrence are rejected' $noCur $twice 2 'does not cover q1' $true
+  # MUST FIRE: prevention_none_because does not excuse a code item.
+  $codeNone = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $codeNone.items[0] | Add-Member -NotePropertyName prevention_none_because -NotePropertyValue 'the exclude is enough' -Force
+  _CaseRet 'MUST FIRE prevention_none_because does not excuse a RETURN code item' $codeNone $once 2 'accepted only on a no-code-change' $true
+  # MUST NOT FIRE: a first-time item, beside closes of another type, is asked for nothing new.
+  _CaseRet 'MUST NOT FIRE a first-time item is not asked for any RETURN field' $good $firstTime 0 $null $false
+  # MUST FIRE: a no-code-change RETURN with neither answer, and the message names Phase 2.
+  _CaseRet 'MUST FIRE a no-code-change RETURN with no prevention_none_because is rejected, naming Phase 2' $ok2 $once 2 'Phase 2' $true
+  # MUST NOT FIRE: a by-design RETURN says so in one line.
+  $byDesign = $ok2 | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $byDesign.items[0] | Add-Member -NotePropertyName prevention_none_because -NotePropertyValue 'by design: it re-fires on a real stale store, and recalibrating it is Phase 2 work' -Force
+  _CaseRet 'MUST NOT FIRE a no-code-change RETURN carrying prevention_none_because passes' $byDesign $once 0 $null $true
+  # MUST NOT FIRE: needs-more-time is exempt; its queue id stays open and the next run meets the rule.
+  $parkedRet = $ok2 | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $parkedRet.items[0].classification = 'needs-more-time'
+  _CaseRet 'MUST NOT FIRE a needs-more-time RETURN is exempt' $parkedRet $twice 0 $null $true
+  # BLIND: handoff mode now reads the queue, so an unreadable one is exit 3 and never a pass with no RETURNs.
+  $bDir = Join-Path $env:TEMP ('vtp-blind-' + $PID)
+  New-Item -ItemType Directory -Force -Path $bDir | Out-Null
+  try {
+    $u8 = New-Object Text.UTF8Encoding($false)
+    $bPlan = Join-Path $bDir 'plan.json'; $bQueue = Join-Path $bDir 'queue.json'; $okQueue = Join-Path $bDir 'queue-ok.json'
+    [IO.File]::WriteAllText($bPlan, ($good | ConvertTo-Json -Depth 9), $u8)
+    [IO.File]::WriteAllText($bQueue, '{ "items": [ { "id": "q1", "type"', $u8)
+    [IO.File]::WriteAllText($okQueue, '{ "items": [ { "id": "q1", "type": "t", "ts": "2026-09-10T08:15:00", "status": "open" } ] }', $u8)
+    $script:ran++
+    $gqB = Read-GateQueue $bQueue
+    $bOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Plan $bPlan -QueueFile $bQueue
+    $bRc = $LASTEXITCODE
+    if ((-not $gqB.ok) -and $bRc -eq 3 -and (($bOut -join ' ') -match 'BLIND')) { Write-Output 'ok    MUST FIRE handoff mode on an unreadable queue is BLIND (exit 3)' }
+    else { Write-Output ("FAIL  MUST FIRE handoff mode on an unreadable queue is BLIND  rc=$bRc ok=" + $gqB.ok + "; " + ($bOut -join ' ')); $script:fail++ }
+    $script:ran++
+    $gqM = Read-GateQueue (Join-Path $bDir 'no-such-queue.json')
+    if (-not $gqM.ok) { Write-Output 'ok    MUST FIRE a missing queue reads as not ok, never as an empty one' } else { Write-Output 'FAIL  a missing queue read as ok'; $script:fail++ }
+    $script:ran++
+    $gqO = Read-GateQueue $okQueue
+    if ($gqO.ok -and @($gqO.items).Count -eq 1 -and [string]@($gqO.items)[0].id -eq 'q1') { Write-Output 'ok    CLEAN TWIN a readable queue returns its one item' } else { Write-Output ("FAIL  a readable queue did not return its item: ok=" + $gqO.ok); $script:fail++ }
+  } finally { Remove-Item -LiteralPath $bDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   # --- routing artifact positive control (2026-08-06 case-insensitive $b/$B) ----------------------------
   # These need a real file on disk, because the check reads the artifact rather than trusting the plan.
   $artDir = Join-Path $env:TEMP ('vtp-selftest-' + $PID); New-Item -ItemType Directory -Force -Path $artDir | Out-Null
@@ -529,17 +696,16 @@ if (-not $doc) { Write-Output 'validate-triage-plan: BLIND - plan read back empt
 # -Closing resolves each residual's owner against the live queue, so the queue has to be READ, not assumed:
 # an unreadable queue would make every followup id resolve to nothing and fail a plan that is fine, or,
 # written the other way, pass one that is not. Either is a confident wrong answer, so it is BLIND instead.
+# BOTH MODES since 2026-09-10 (ruling 5): handoff derives RETURN items from the queue, so an unreadable queue there
+# would silently exempt every RETURN. That is the same confident wrong answer, so it gets the same BLIND.
+if (-not $QueueFile) { $QueueFile = Join-Path $root 'triage-queue.json' }
+$gq = Read-GateQueue $QueueFile
+if (-not $gq.ok) { Write-Output ("validate-triage-plan: BLIND - both modes read the queue (-Closing resolves owners against it, handoff derives RETURN items from it) and " + $gq.why); exit 3 }
+$queueItems = @($gq.items)
 $queueIds = @()
-if ($Closing) {
-  if (-not $QueueFile) { $QueueFile = Join-Path $root 'triage-queue.json' }
-  if (-not (Test-Path $QueueFile)) { Write-Output ("validate-triage-plan: BLIND - -Closing resolves owners against the queue and there is none at " + $QueueFile); exit 3 }
-  $qDoc = $null
-  try { $qDoc = Read-JsonFile $QueueFile } catch { $qDoc = $null }
-  if (-not $qDoc -or -not $qDoc.PSObject.Properties['items']) { Write-Output ("validate-triage-plan: BLIND - the queue at " + $QueueFile + " reads back empty, unparseable or with no items array"); exit 3 }
-  foreach ($qi in @($qDoc.items)) { if ($qi -and [string]$qi.id) { $queueIds += [string]$qi.id } }
-}
+foreach ($qi in $queueItems) { if ($qi -and [string]$qi.id) { $queueIds += [string]$qi.id } }
 
-$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds
+$res = Test-Plan $doc $OpenIds (Split-Path $Plan -Parent) -Closing:$Closing -QueueIds $queueIds -QueueItems $queueItems -Now (Get-Date)
 $items = @($doc.items)
 $mode = if ($Closing) { 'closing' } else { 'handoff' }
 Write-Output ("validate-triage-plan: " + $Plan)
@@ -550,6 +716,10 @@ foreach ($i in $items) {
   $lo  = ([string]$i.leaves_open).Trim()
   $loTag = if (-not $lo) { '-' } elseif ($lo -match '^nothing\b') { 'nothing' } else { 'OPEN' }
   Write-Output ("  {0,-20} {1,-16} evidence={2,-3} measured_as={3,-8} leaves_open={4}" -f $i.queue_id, $cls, @($i.evidence).Count, $ma, $loTag)
+}
+$retIds = @($res.returns | Where-Object { $_ })
+if ($retIds.Count) {
+  Write-Output ("  RETURNS: " + $retIds.Count + " of " + $items.Count + " item(s) are a type triage already closed in the last 30 days, read from the queue (ruling 5): " + ($retIds -join ', '))
 }
 # EVERY RESIDUAL, VERBATIM. These lines are what the orchestrator's report copies. A summary of them is how
 # the 2026-09-09 report called eight items closed when four had left part of their own class open.

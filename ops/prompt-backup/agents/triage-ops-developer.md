@@ -82,6 +82,18 @@ then takes the first owner that is true:
    with the measurement in the body, and name the new id;
 3. a ruling: `open_questions_for_brad` with an `id`.
 
+## RETURNS ARE FAILURES
+
+An item whose queue `type` triage already closed in the last 30 days is a RETURN (`triage-due.ps1` prints a
+`RETURN:` line for it). A fix that did not hold is fixed at its source (Brad's ruling 5, 2026-09-10), so the
+plan item you write carries `prior_closes` (every prior id on that line), `prevention` with `source` (the repo
+path of the upstream producer: a capture builder, the ingest parser, the rule schema, the emitting check),
+`what` and `exact_change`, and `proof.fixture_occurrences` covering every prior close plus the current id. Twice
+returned, a source made only of rule or exclude files is refused. A no-code-change RETURN may carry
+`prevention_none_because` in one line instead. The gate reads the queue, not your plan, so an omitted field
+fails rather than escapes. Why: all 25 types that fired on 3 or more days over 2026-08-22 to 2026-09-10 came
+back after a close.
+
 ## CLOSING
 
 - Close every queue item through `grocery\triage-close.ps1 -Id <id> -Disposition <confirmed|false-alarm|superseded|by-design|wont-fix> -Notes "<what was established>"`.
