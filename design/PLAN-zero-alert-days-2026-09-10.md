@@ -280,7 +280,19 @@ that day's 08:00 run succeeding.
       batch stalled. The watchdog's echoes are what 4b folds; the other three are Phase 2's starting set.
   - **Found on the way and filed:** `meal-prep/pipeline/source-domains.ps1`'s concurrency self-test lost 1 of 8
     writes under load and refused a push (1 failure in 4 runs). Weekly-lane queue item 2026-09-10-c069fa.
-- **Next: step 5** (test-auditors before a guard-touching push), then step 6 (returns are failures).
+- **Step 5, test-auditors before a guard-touching push: DONE** (c3eb9cf31).
+  - A push that adds a failing test-auditors case is refused and names the case.
+  - A failure already in the known-failures record is allowed and printed, never called a pass.
+  - A checkout without boards is refused as could-not-evaluate.
+  - Hook fixtures pass 16 of 16.
+  - **Measured cost:** the first real trigger (b8742ffa2's push) spent 338s in test-auditors, and the whole push took 400s. 399 of the last 958 session commits would have triggered it. That cost is an open question to Brad.
+- **Rulings R13 to R16 applied** (635680048, b8742ffa2).
+  - The registry now has 97 entries: 64 page, 32 review, 1 digest.
+  - Paywall leak and Family Fare catalog degrading are review; new price flags are confirmed review.
+  - `Ops: private memory notes reached the public repo` pages under a new condition 5. It keys on an `EXPOSURE:` tag that `audit-memory-backup.ps1` sets where the finding is created.
+  - **Found on the way and fixed:** the page contract lived in two places (the registry file and `alert-registry-lib.ps1`) with nothing comparing them, so R16's new condition was refused. The check now fails by name if the two copies disagree.
+- **R12 scheduled:** one-time task `walmart-headed-probe-once` at 2026-09-11 09:35, only if that morning's 08:00 capture succeeded, in an existing tab of Brad's Chrome. It is exempt from the public prompt mirror because it disables itself after one run.
+- **Next: step 6** (returns are failures, building), then R18, R11 and 3b.
 
 ### Ruling 7 result: the store probes (`design/PROBE-store-direct-data-2026-09-10.md`)
 
