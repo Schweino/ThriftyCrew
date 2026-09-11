@@ -46,6 +46,20 @@ function Get-SidecarPython {
   return $null
 }
 
+function Get-SidecarVenvState {
+  <# Where does this checkout's venv stand against the path the launcher looks at?
+       'present'   - the interpreter Get-SidecarPython names exists.
+       'elsewhere' - some directory under sidecar\ carries a pyvenv.cfg, but not the interpreter the
+                     launcher names. The venv was rebuilt or moved and the launcher would fail: ROT.
+       'absent'    - no venv of any name. A gate-check checkout, a CI runner, a fresh clone. #>
+  param([string]$SidecarDir)
+  if (Get-SidecarPython -SidecarDir $SidecarDir) { return 'present' }
+  $venvs = @(Get-ChildItem -LiteralPath $SidecarDir -Directory -Force -ErrorAction SilentlyContinue |
+    Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'pyvenv.cfg') })
+  if ($venvs.Count) { return 'elsewhere' }
+  return 'absent'
+}
+
 function Test-SidecarHealth {
   param([string]$Url, [int]$TimeoutSec = 3)
   try {
@@ -149,18 +163,60 @@ function Start-SidecarProcess {
 
 # ---------------------------------------------------------------------------
 if ($SelfTest) {
-  $fails = @(); $ran = @()
+  $fails = @(); $ran = @(); $blind = @()
   function Case {
-    param([string]$Label, [string]$Name, [bool]$Ok, [string]$Detail = '')
+    # -Blind names why a case COULD NOT LOOK. It is neither a pass nor a failure, it is printed as BLIND,
+    # and it is counted into the COMPLETE marker's blind= so run-gates can name it on a green run.
+    param([string]$Label, [string]$Name, [bool]$Ok, [string]$Detail = '', [string]$Blind = '')
     $script:ran += $Name
+    if ($Blind) {
+      $script:blind += "$Label $Name"
+      return ('  {0,-14} {1,-58} BLIND {2}' -f $Label, $Name, $Blind)
+    }
     if (-not $Ok) { $script:fails += "$Label $Name" }
     '  {0,-14} {1,-58} {2}' -f $Label, $Name, $(if ($Ok) { 'ok' } else { "FAIL $Detail" })
   }
 
   # MUST FIRE: the interpreter and the app this launcher names both exist. These are
   # the two facts that rot silently when the venv is rebuilt or the module moves.
+  #
+  # BLIND, NOT FAIL, IN A CHECKOUT WITH NO VENV AT ALL (2026-09-11). The venv is gitignored, so a
+  # `git worktree add` gate-check checkout, a CI runner and a fresh clone never have one, and this case
+  # was red in every one of them for a reason that had nothing to do with the change under test. There it
+  # cannot tell "the venv was rebuilt somewhere else" from "this checkout never had a venv", so it says it
+  # could not look. It still FAILS when a venv exists under sidecar\ but not where the launcher looks,
+  # which is the rot it was written for. A venv deleted outright from the main checkout goes BLIND here
+  # and is caught in production instead: ops\sidecar-watchdog.ps1 alerts "Semantic sidecar is down and
+  # would not restart" with "no .venv interpreter" as the reason. Seeding a junction to the main
+  # checkout's venv was considered and rejected; ops\seed-worktree.ps1's header records why.
+  $venvState = Get-SidecarVenvState -SidecarDir $SidecarDir
   Case 'MUST FIRE' 'the sidecar venv interpreter exists' `
-    ($null -ne (Get-SidecarPython -SidecarDir $SidecarDir)) (Join-Path $SidecarDir '.venv')
+    ($venvState -eq 'present') ("venv state '$venvState': a venv exists under sidecar\ but not at " + (Join-Path $SidecarDir '.venv\Scripts\python.exe')) `
+    -Blind $(if ($venvState -eq 'absent') { 'no venv of any name under sidecar\ in this checkout, so it cannot tell a mislaid venv from one never built' } else { '' })
+
+  # The three venv states, on temp directories. MUST FIRE is the rot; MUST NOT FIRE is the gate-check
+  # checkout this change exists for; CLEAN TWIN is the healthy main checkout still reading as present.
+  $vRoot = Join-Path $env:TEMP ("sidecar-venvstate-selftest-{0}" -f $PID)
+  try {
+    $vMoved = Join-Path $vRoot 'moved'; $vBroken = Join-Path $vRoot 'broken'; $vNone = Join-Path $vRoot 'none'; $vOk = Join-Path $vRoot 'ok'
+    foreach ($d in @((Join-Path $vMoved 'venv'), (Join-Path $vBroken '.venv'), $vNone, (Join-Path $vOk '.venv\Scripts'))) {
+      $null = New-Item -ItemType Directory -Force $d
+    }
+    [IO.File]::WriteAllText((Join-Path $vMoved 'venv\pyvenv.cfg'), 'home = x')
+    [IO.File]::WriteAllText((Join-Path $vBroken '.venv\pyvenv.cfg'), 'home = x')
+    [IO.File]::WriteAllText((Join-Path $vOk '.venv\pyvenv.cfg'), 'home = x')
+    [IO.File]::WriteAllText((Join-Path $vOk '.venv\Scripts\python.exe'), '')
+    Case 'MUST FIRE' 'a venv rebuilt under another name is ELSEWHERE, so the case fails' `
+      ((Get-SidecarVenvState -SidecarDir $vMoved) -eq 'elsewhere') (Get-SidecarVenvState -SidecarDir $vMoved)
+    Case 'MUST FIRE' 'a .venv with no Scripts\python.exe is ELSEWHERE, so the case fails' `
+      ((Get-SidecarVenvState -SidecarDir $vBroken) -eq 'elsewhere') (Get-SidecarVenvState -SidecarDir $vBroken)
+    Case 'MUST NOT FIRE' 'a checkout with no venv of any name is ABSENT - blind, never a failure' `
+      ((Get-SidecarVenvState -SidecarDir $vNone) -eq 'absent') (Get-SidecarVenvState -SidecarDir $vNone)
+    Case 'CLEAN TWIN' 'a .venv holding the interpreter the launcher names is PRESENT' `
+      ((Get-SidecarVenvState -SidecarDir $vOk) -eq 'present') (Get-SidecarVenvState -SidecarDir $vOk)
+  } finally {
+    Remove-Item -Recurse -Force $vRoot -ErrorAction SilentlyContinue
+  }
   Case 'MUST FIRE' 'app.py exists for uvicorn to import as app:app' `
     (Test-Path -LiteralPath (Join-Path $SidecarDir 'app.py'))
 
@@ -221,10 +277,15 @@ if ($SelfTest) {
   if ($fails.Count -gt 0) {
     "start-sidecar selftest: $($fails.Count) FAILED of $($ran.Count)"
     $fails | ForEach-Object { "  $_" }
-    Exit-Guard -Name 'START-SIDECAR-SELFTEST' -Code 1 -Summary "failed=$($fails.Count) of $($ran.Count)"
+    Exit-Guard -Name 'START-SIDECAR-SELFTEST' -Code 1 -Summary "failed=$($fails.Count) of $($ran.Count) blind=$($blind.Count)"
   }
-  "start-sidecar selftest: $($ran.Count) of $($ran.Count) cases pass"
-  Exit-Guard -Name 'START-SIDECAR-SELFTEST' -Code 0 -Summary "cases=$($ran.Count)"
+  if ($blind.Count -gt 0) {
+    "start-sidecar selftest: $($ran.Count - $blind.Count) of $($ran.Count) cases pass, $($blind.Count) BLIND - could not look, NOT passed:"
+    $blind | ForEach-Object { "  $_" }
+  } else {
+    "start-sidecar selftest: $($ran.Count) of $($ran.Count) cases pass"
+  }
+  Exit-Guard -Name 'START-SIDECAR-SELFTEST' -Code 0 -Summary "cases=$($ran.Count) blind=$($blind.Count)"
 }
 
 Invoke-Guard -Name 'START-SIDECAR' -Body {

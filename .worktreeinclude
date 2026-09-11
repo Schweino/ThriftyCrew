@@ -1,5 +1,12 @@
 # .worktreeinclude - gitignored files copied into every new worktree Claude Code creates.
 #
+# AND INTO EVERY OTHER CHECKOUT BY ops\seed-worktree.ps1 (2026-09-11). Claude Code honours this file only
+# for worktrees IT creates, so the documented gate-check checkout (`git worktree add --detach ...`) got
+# none of it and failed find-similar and make-saturation for want of the digest listed below.
+# seed-worktree now reads this file as the single list of FILES, resolving each pattern with git's own
+# matcher in the source checkout. Do not copy these lines into that script. A `!` negation line makes it
+# refuse to run, because it resolves one pattern at a time and cannot honour one.
+#
 # WHY (2026-09-06, backlog E7). A fresh worktree is BLIND, and blind here does not mean loud. The
 # gitignored data never arrives, the checks that need it cannot express their finding, and several of
 # them return a clean-looking result anyway. Two standing memories exist about this

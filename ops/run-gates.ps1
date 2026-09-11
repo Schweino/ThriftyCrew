@@ -131,6 +131,7 @@ if (-not $Jobs -or $Jobs -lt 1) { $Jobs = [Math]::Max(1, [Math]::Min(16, [Enviro
 . (Join-Path $repo 'lib\parallel-run.ps1')   # Invoke-TcParallel - no param() block, so it cannot reset ours
 $PSEXE = (Get-Command powershell).Source
 $fail = @()
+$blindGates = @()
 Write-Output ("run-gates: {0} self-test(s) discovered" -f $withSelfTest.Count)
 # ---- the pool runs them; the loop below judges them, unchanged ----
 $selfJobs = [Collections.Generic.List[object]]::new(); $selfKeys = [Collections.Generic.List[string]]::new()
@@ -458,7 +459,20 @@ foreach ($s in $withSelfTest) {
   $out = $gr.Out
   Add-TcGateTiming -Name ($s.FullName.Replace($repo, '')) -Ms $gr.Ms -SpawnMs 209
   $rc = $gr.ExitCode
-  if ($rc -eq 0) { $pass++; Write-Output ("  ok    {0}" -f $rel) }
+  if ($rc -eq 0) {
+    $pass++
+    # A PASS THAT COULD NOT LOOK IS NAMED (2026-09-11). A self-test may report a case BLIND - it could not
+    # look, so it neither passed nor failed - and exit 0; sidecar\start-sidecar.ps1 does for its venv in a
+    # checkout that has none. Its COMPLETE marker then carries blind=<n>, and without this line a green run
+    # would hide it. Read off the LAST marker only, so a fixture line quoting the word cannot trip it.
+    $marks = @(@($out) | Where-Object { "$_" -match '^[A-Z0-9][A-Z0-9-]*-COMPLETE\b' })
+    if ($marks.Count -and ("" + $marks[$marks.Count - 1]) -match '\bblind=([1-9][0-9]*)\b') {
+      $blindGates += ("{0} ({1} case(s))" -f $rel, $Matches[1])
+      Write-Output ("  ok    {0}  (BLIND on {1} case(s) - see its output)" -f $rel, $Matches[1])
+    } else {
+      Write-Output ("  ok    {0}" -f $rel)
+    }
+  }
   else {
     $fail += $rel
     Write-Output ("  FAIL  {0}  (exit {1})" -f $rel, $rc)
@@ -556,6 +570,12 @@ foreach ($g in $pySuites) {
 Write-Output ''
 Write-Output ("run-gates: {0} passed, {1} failed" -f $pass, $fail.Count)
 foreach ($f in $fail) { Write-Output ("  failed: " + $f) }
+# Counted as passes, and listed so that is never mistaken for having looked. Not a failure: a gate-check
+# checkout without the sidecar venv is not a broken tree. See the self-test loop above.
+if ($blindGates.Count) {
+  Write-Output ("run-gates: {0} passing gate(s) reported BLIND cases - they could not look, so those cases are NOT covered by this run:" -f $blindGates.Count)
+  foreach ($b in $blindGates) { Write-Output ("  blind:  " + $b) }
+}
 # A WORDS-LEVEL VERDICT ON EVERY EXIT PATH, NOT ONLY ON 3 (2026-09-06, backlog E2). The could-not-evaluate
 # path above has said "COULD NOT EVALUATE" in words since it was written; these two said only "186 passed,
 # 1 failed", which is a TALLY and not a verdict - a reader still has to know that this tool's 1 means
