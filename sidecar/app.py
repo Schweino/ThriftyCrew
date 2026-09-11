@@ -32,11 +32,15 @@ app = FastAPI(title="Thrifty Crew semantic sidecar", version="1.0")
 # Lazy load: importing the module must not cost 100 s and 3 GB of VRAM. The first real request pays it.
 _M: Matcher | None = None
 _loaded_at: float | None = None
+# One entry per call into Matcher.load, appended BEFORE the load starts, reported by /health as load_count.
+# list.append is atomic under the GIL, so the count stays exact even while two threads race into the load.
+_load_starts: list[float] = []
 
 
 def matcher() -> Matcher:
     global _M, _loaded_at
     if _M is None:
+        _load_starts.append(time.time())
         t0 = time.time()
         _M = Matcher.load(with_reranker=True)
         _loaded_at = time.time() - t0
@@ -69,6 +73,7 @@ def health() -> dict:
         "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None,
         "models": {"embed": EMBED_MODEL, "rerank": RERANK_MODEL},
         "models_loaded": _M is not None,
+        "load_count": len(_load_starts),
         "load_seconds": round(_loaded_at, 1) if _loaded_at else None,
     }
 
