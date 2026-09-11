@@ -332,7 +332,16 @@ that day's 08:00 run succeeding.
     - The circular puller probably has the same defect (unverified).
   - That may be a live money defect and needs cross-window pacing to fix. It is filed as DAILY-lane queue item 2026-09-10-fa6ad6 for the 2026-09-11 triage, with the measurements and cell effects as the first thing to measure.
   - The trial ended in a 429 at 20:28 CDT. If the 09-11 07:01 Family Fare window does not advance, suspect the trial.
-- **Next:** R18 (own Chrome tabs) and R11 (Aldi and Fareway page JSON) change the Chrome capture code, so they start after the 2026-09-11 08:00 capture and the R12 probe. Then step 8, the row contract.
+- **Ruling R19 (Brad, 2026-09-10): keep the push check blocking, and make it fast.** test-auditors runs only the
+  cases whose inputs a push touches.
+  - Bar: a guard-touching push adds under 90 seconds, measured on at least three representative pushes (a guard
+    script, a fixture, a scanned grocery script).
+  - The daily chain's full run keeps all 702 cases.
+  - A selective run says how many of the cases it ran and never reads as a pass.
+  - Anything whose inputs cannot be established runs every time.
+  - Building now in the money lane (max effort), because a selection bug silently blinds the watcher of the guards.
+- **Next:** R18 (own Chrome tabs) and R11 (Aldi and Fareway page JSON) change the Chrome capture code, so they start
+  after the 2026-09-11 08:00 capture and the R12 probe. Then step 8, the row contract.
 
 ### Ruling 7 result: the store probes (`design/PROBE-store-direct-data-2026-09-10.md`)
 
