@@ -34,8 +34,11 @@
 # self-test.
 #
 # A NEIGHBOUR, NOT A TWIN. lib\selftest-lib.ps1's Get-SelfTestBlock answers where the gated block IS, for
-# ops\audit-mustfire-census.ps1 and ops\audit-fixture-inputs.ps1. At this commit it recognises only rule 1's two gate
-# spellings, so a renamed gate this file enrols is still invisible to those two audits until it learns rule 2.
+# ops\audit-mustfire-census.ps1 and ops\audit-fixture-inputs.ps1. Since 2026-09-11 it also reads a renamed switch, a
+# variable captured from a switch and a compound condition, so the gates this file enrols are visible to those two
+# audits. They differ over -or on purpose: this enrols a renamed switch that is one operand of an -or chain, because
+# the switch does reach the body, and that refuses the chain unless EVERY operand is a self-test switch, because
+# otherwise the body also runs in production.
 #
 # THE FIXTURES WRITE `~` FOR `$`, so this file's source never spells a declaration either rule would read
 # ([[selftest-greps-its-own-source]]).

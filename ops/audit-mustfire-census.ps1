@@ -100,6 +100,12 @@ if ($SelfTest) {
   $src = "if (`$SelfTest) {`n  T '" + $MF + " inside'`n}`nWrite-Output '" + $MF + " outside, in the live path'"
   McT 'CLEAN TWIN: a must-fire label OUTSIDE the self-test body is not a fixture' `
       ((Get-MustFireCount -Text (Get-SelfTestBlock -Text $src)) -eq 1)
+  # THE CAPTURED SWITCH (2026-09-11). Get-SelfTestBlock read only `if ($SelfTest)`, so every must-fire under the
+  # meal-prep\pipeline idiom `$runSelfTest = [bool]$SelfTest` was outside the census and could be deleted with
+  # it green. lib\selftest-lib.ps1 carries the shapes; this pins the census end to end on the founding one.
+  $capSrc = "param([switch]`$SelfTest)`n`$runSelfTest = [bool]`$SelfTest`nif (`$runSelfTest) {`n  T '" + $MF + " one'`n  T '" + $MF + " two'`n}`n"
+  McT 'MUST FIRE: must-fires under a variable captured from the -SelfTest switch are counted' `
+      ((Get-MustFireCount -Text (Get-SelfTestBlock -Text $capSrc)) -eq 2)
 
   # IDENTIFIERS ARE NOT LABELS (2026-09-11). With the separator optional the match counted names, so renaming
   # a $mustFire variable read as a LOST assertion and the ratchet went red on a rename. Each needle is built by

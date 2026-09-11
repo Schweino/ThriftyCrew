@@ -221,6 +221,9 @@ if ($CaptureLibSelfTest) {
   # the two lanes cannot silently drift apart. must_not_match is the part that matters: it is real product
   # names lifted from live captures (vitaminwater XXX, Melinda's XXXX Reserve habanero, America's Test Kitchen)
   # that a lazier pattern would have thrown away.
+  # LIVE-TWIN on purpose (ops\audit-fixture-inputs.ps1, 2026-09-11): the regression sets live IN the pattern file so
+  # both lanes read one copy. A frozen copy here would let this lane drift from graph/lib/placeholder_names.py,
+  # which is the thing this case exists to catch.
   $plib = Get-Content (Join-Path $PSScriptRoot 'placeholder-name-patterns.json') -Raw -Encoding UTF8 | ConvertFrom-Json
   foreach ($n in @($plib.must_match)) {
     if (Test-PlaceholderProductName $n) { Write-Output ('ok    rejected test row: ' + $n) }

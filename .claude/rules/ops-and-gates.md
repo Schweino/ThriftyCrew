@@ -199,6 +199,10 @@ everything else honest, so a defect here is silent by construction.
   Hand-listed library copies still standing, not swept: `grocery/send-alert.ps1`, `grocery/triage-close.ps1`,
   `grocery/test-auditors.ps1` and `meal-prep/pipeline/wave-preaudit.ps1`. Unguarded dot-sources elsewhere were
   not counted.
+- **Under PS 5.1 `VariablePath.UnqualifiedPath` is INTERNAL and reads as `$null`** (2026-09-11). An AST walk
+  that used it as a hashtable key threw, which is the lucky case; the same value in a `-match` matches nothing, so
+  a walk that collects variable names finds none and returns an agreeing empty. Strip the scope from `UserPath`
+  instead: `Get-SelfTestVariableName` in `lib/selftest-lib.ps1`.
 - **A hermetic self-test never asserts an UPPER wall-clock bar** (2026-09-11). Several sessions push from
   one box, so a pre-push `run-gates` shares the cores with theirs: a set that takes 106 s quiet took 792 s,
   and `fanout-lib`'s "under 12 s" and `parallel-run`'s "under 2.5 s" concurrency cases blocked a push that

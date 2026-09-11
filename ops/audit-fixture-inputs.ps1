@@ -158,6 +158,12 @@ if ($SelfTest) {
   $srcB = "if (`$SelfTest) {`n  # LIVE-TWIN: this one is deliberate`n  `$a = Read-JsonFile (Join-Path `$root 'stores.json')`n  `$b = Read-JsonFile (Join-Path `$root 'known-wrong.json')`n}`n"
   FiT 'MUST FIRE: a LIVE-TWIN label does not carry past the line of code it precedes' `
       ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcB) -ConfigOk $CONFIG_OK).Count -eq 1)
+  # THE CAPTURED SWITCH (2026-09-11). Get-SelfTestBlock read only `if ($SelfTest)`, so a live read under the
+  # meal-prep\pipeline idiom `$runSelfTest = [bool]$SelfTest` was never scanned. Widening it surfaced two reads
+  # this audit had been blind to, in grocery\capture-lib.ps1 and grocery\ingredient-queue.ps1.
+  $srcC = "`$runSelfTest = [bool]`$SelfTest`nif (`$runSelfTest) {`n  `$z = Read-JsonFile (Join-Path `$root 'known-wrong.json')`n}`n"
+  FiT 'MUST FIRE: a live read under a variable captured from -SelfTest is a finding' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcC)).Count -eq 1)
 
   # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
   # .claude\worktrees\<name> was excluded: no -SelfTest block was found anywhere and the audit exited 3.

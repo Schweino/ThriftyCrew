@@ -487,7 +487,7 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
   try {
     $cq = Join-Path $ctmp 'queue.json'
     $cl = Join-Path $ctmp 'carriage.json'
-    $live = Join-Path $root 'carriage.json'
+    $live = Join-Path $root 'carriage.json'   # LIVE-TWIN on purpose: the live ledger is the thing asserted UNTOUCHED, and only its length is read
     $liveBefore = $(if (Test-Path $live) { (Get-Item $live).Length } else { -1 })
     $st = @{}; foreach ($s in $STORES) { $st[$s] = [pscustomobject]@{ state = 'not-carried'; evidence = 'fixture' } }
     $st["Baker's"] = [pscustomobject]@{ state = 'carried'; price = 3.49; item = 'Fixture Saffron'; size = '1 g'; evidence = 'fixture' }
