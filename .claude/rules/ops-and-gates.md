@@ -442,6 +442,15 @@ everything else honest, so a defect here is silent by construction.
   in the 2026-09-11 census, 485 of 507 assignments to a typed parameter's name were default fills or read the
   parameter they replace. Its first live site was `golden-test.ps1`'s `$structural = @(...)` beside
   `[switch]$Structural`, which threw on every `-Provenance -Force` run. Run it for the count rather than quoting one.
+  **Python text mode on Windows writes CRLF too, and a DEFAULT path is a write nobody sees.** `fdc_lookup.cache_write`
+  opened the tracked `meal-prep\db\fdc-cache.json` in text mode, and `hunt-daemon.py --selftest` reached it through
+  the daemon's real fill with the default path: traced 2026-09-11 at 36 writes from 36 map-lane fixtures in one
+  battery, each flipping 41,527 line endings, and from a checkout holding `db\fdc-api-key.txt` (the main one does)
+  each fill was also a live api.data.gov call. The writer now passes `newline="\n"` (the blob round-trips
+  md5-identical) and skips a fill that added nothing; the suite points `CACHE_FILE` at scratch and runs keyless for
+  EVERY fixture, as `LEARN_SCRATCH` does, and `_fdc_seams_are_never_live` asserts both. **When code under test writes
+  a tracked path by default, redirect the default suite-wide, never per fixture.** `count-tracked-writers` does not
+  see Python, so Python text-mode writers of tracked files were not counted.
 
 - **The gate worker slots are handed out in ARRIVAL ORDER, and a green verdict is not earned twice** (2026-09-11).
   Measured at 16:39 that day: 27 `run-gates` live, 8 of them holding all 10 slots at width 1 or 2, 19 holding
