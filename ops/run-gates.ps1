@@ -128,7 +128,13 @@ function Add-TcGateTiming { param([string]$Name, [double]$Ms, [int]$SpawnMs) $sc
 # throughout. The gates are independent by construction - each is its own process with its own exit
 # code - so the serial loop was the entire cost and none of the safety. -Jobs 1 restores the old
 # behaviour exactly, and the library's own fixtures assert that concurrency 1 and the pool agree.
-if (-not $Jobs -or $Jobs -lt 1) { $Jobs = [Math]::Max(1, [Math]::Min(16, [Environment]::ProcessorCount - 2)) }
+# WIDTH IS A SHARE OF A MACHINE-WIDE BUDGET, NOT A CLAIM ON THE MACHINE (2026-09-11, Brad: "fixed at 10
+# total"). This line was min(16, processors - 2) and every run took it as if it were alone; seven live at
+# once put 112 gate workers on 32 processors and each run took about 390s, against 372s serial. -Jobs is now
+# what a run ASKS for: lib\gate-slots.ps1 grants at most the free share of $TcGateSlotTotal slots, held
+# across every run-gates on the box, and the pool below runs at what was granted.
+. (Join-Path $repo 'lib\gate-slots.ps1')     # Enter-TcGateSlots - no param() block, so it cannot reset ours
+if (-not $Jobs -or $Jobs -lt 1) { $Jobs = [Math]::Max(1, [Math]::Min($script:TcGateSlotTotal, [Environment]::ProcessorCount - 2)) }
 . (Join-Path $repo 'lib\parallel-run.ps1')   # Invoke-TcParallel - no param() block, so it cannot reset ours
 $PSEXE = (Get-Command powershell).Source
 $fail = @()
@@ -440,8 +446,24 @@ $offSelf = $allJobs.Count;     foreach ($j in $selfJobs)     { [void]$allJobs.Ad
 $offStatic = $allJobs.Count;   foreach ($j in $staticJobs)   { [void]$allJobs.Add($j) }
 $offPyStatic = $allJobs.Count; foreach ($j in $pyStaticJobs) { [void]$allJobs.Add($j) }
 $offPySuite = $allJobs.Count;  foreach ($j in $pySuiteJobs)  { [void]$allJobs.Add($j) }
-Write-Output ("run-gates: {0} gate(s) dispatched into ONE pool at width {1}" -f $allJobs.Count, $Jobs)
-$allRes = Invoke-TcParallel -Jobs $allJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
+# THE SLOTS ARE HELD ONLY AROUND THE POOL: discovery above and judging below spawn nothing, so holding
+# them any longer would make other runs wait on work that uses no worker. A run that cannot get one slot
+# in 20 minutes REFUSES with 3 rather than running over the budget - running anyway is the pile-up.
+$askedJobs = $Jobs
+$lease = Enter-TcGateSlots -Want $askedJobs -OnWait {
+  Write-Output ("run-gates: all {0} machine-wide gate worker slots are held by other gate runs - waiting for one (up to 20 min)" -f $script:TcGateSlotTotal)
+}
+if ($lease.TimedOut) {
+  Write-Output ("run-gates: COULD NOT EVALUATE - waited {0:N0}s and every one of the {1} machine-wide gate worker slots stayed held by other gate runs. Nothing was run; that is not a pass." -f ($lease.WaitedMs / 1000), $script:TcGateSlotTotal)
+  Exit-Guard -Name 'run-gates' -Summary 'blind=no-gate-worker-slot' -Code 3
+}
+$Jobs = $lease.Count
+Write-Output ("run-gates: {0} gate(s) dispatched into ONE pool at width {1} (asked {2}; {3} slot(s) of a machine-wide {4}, after {5:N1}s waiting for them)" -f $allJobs.Count, $Jobs, $askedJobs, $lease.Count, $script:TcGateSlotTotal, ($lease.WaitedMs / 1000))
+try {
+  $allRes = Invoke-TcParallel -Jobs $allJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo
+} finally {
+  Exit-TcGateSlots $lease
+}
 # EXPLICIT INDEX COPIES, never `@(Get-Slice ...)` or a range expression. A function returning an array
 # UNROLLS, so a one-element slice - $pyStatic is exactly one job - would come back a SCALAR and index
 # into the object instead of the array, and an empty slice would need $a[0..-1] which is not empty.
