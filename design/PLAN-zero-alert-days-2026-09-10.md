@@ -339,7 +339,22 @@ that day's 08:00 run succeeding.
   - The daily chain's full run keeps all 702 cases.
   - A selective run says how many of the cases it ran and never reads as a pass.
   - Anything whose inputs cannot be established runs every time.
-  - Building now in the money lane (max effort), because a selection bug silently blinds the watcher of the guards.
+  - **DONE** (5c7f548e3).
+  - **Where the time went:** a full run took 300.2s. The first case printed at 111.3s, the top five units were 50.9%,
+    and there was no shared setup worth optimising, so the lever was selection.
+  - **How it selects:**
+    - `test-auditors.ps1` wraps its 1,365 case call sites in 138 units.
+    - `prepush-test-auditors.ps1` derives each unit's inputs from its own code, and 3 units always run.
+    - It hands the harness a list of units to SKIP, so a unit it failed to see still runs.
+    - A selective run prints how many of 702 it ran, never writes the known-failures record, and never reads as a pass.
+  - **Bar met on three pushes:** `guards.ps1` 42.9s (174 cases), a guard fixture 27.3s (38 cases), a glob-scanned
+    grocery script 34.3s (64 cases). The full run is unchanged: 702 cases, same single failing name.
+  - **Self-tests:** 69 of 69 and 21 of 21.
+  - **Leaves open:**
+    - a script two or more hops below a unit is not selected at push time. 0 occurrences measured, owned by
+      `watch:grocery/check-ad-cycles.ps1` (the daily full test-auditors run catches it the next morning).
+    - A push touching only `audit-basis-reconcile.ps1` was not timed and may exceed 90s.
+    - 10 units read variables inside code built at run time, which the variable pass does not model.
 - **Next:** R18 (own Chrome tabs) and R11 (Aldi and Fareway page JSON) change the Chrome capture code, so they start
   after the 2026-09-11 08:00 capture and the R12 probe. Then step 8, the row contract.
 
