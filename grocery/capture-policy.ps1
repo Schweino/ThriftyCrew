@@ -38,8 +38,13 @@ $script:AllStores = @('Hy-Vee', 'Aldi', "Baker's", 'Family Fare', 'Fareway', 'Wa
 if ($Reconcile) {
   $stores = if ($Store) { @($Store) } else { $script:AllStores }
   foreach ($s in $stores) {
-    $r = Set-SaleExpiryProcessed -Store $s -Today $Today -OutDir $OutDir
-    Write-Output ("{0,-13} marked {1,3} re-price(s)  -  {2}" -f $s, $r.Marked, $r.Reason)
+    # One store's refusal - the sale-windows lock not free within its budget - must not skip the stores after it.
+    try {
+      $r = Set-SaleExpiryProcessed -Store $s -Today $Today -OutDir $OutDir
+      Write-Output ("{0,-13} marked {1,3} re-price(s)  -  {2}" -f $s, $r.Marked, $r.Reason)
+    } catch {
+      Write-Output ("{0,-13} NOT recorded  -  {1} (its re-prices stay owed and lead tomorrow's slice)" -f $s, $_.Exception.Message)
+    }
   }
   return
 }

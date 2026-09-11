@@ -166,6 +166,21 @@ everything else honest, so a defect here is silent by construction.
   in 5 of 11 runs, then 1 of 10. `lib/ledger-fixture.ps1` holds them on a kernel event inside `Invoke-Locked` (red
   50 of 50 with the lock disabled across the three ledgers, asserted as a count of writers at the barrier), gives
   self-test writers a hang-guard lock wait instead of the production 15 s, and names a writer that could not run.
+- **A lock around the SAVE is not a lock around the read-modify-write when the ledger was loaded earlier**
+  (2026-09-11). `grocery/sale-windows.json`, `grocery/out/capture-cursor.json` and
+  `grocery/rollback-first-seen.json` were read-modify-written by concurrent lanes and builders with no lock at
+  all. `lib/ledger-lock.ps1` (`Enter-TcLedgerLock`) is the lock for a single-file ledger written from a LIBRARY:
+  it throws where the CLI copies `exit`, keys on SHA-256 of the full path rather than `GetHashCode`, and is
+  reentrant in one thread. The READ goes inside it. A ledger held in memory across a run - `rollback-ttl-lib`
+  loads at the first markdown and saves at the end - must RE-READ and MERGE under the lock, taking only the keys
+  it touched: a lock around its save alone still writes the copy it loaded, and loses every sibling's entry.
+  Each ledger's fixture launches its writers through `lib/ledger-fixture.ps1`, whose gate sits inside
+  `Enter-TcLedgerLock` immediately before `WaitOne`; the rates at which they went red with a lock neutered in a
+  temp mirror are in the commit that added them.
+- **A self-test can run ZERO cases and exit 0** (2026-09-11). A helper named `R` resolved to the built-in alias
+  for `Invoke-History` before the function, every case line errored non-terminating, and the suite printed PASS
+  over nothing. Aliases beat functions, so never name a helper `r`, `h`, `gc`, `ls` or any other alias; and run
+  the cases under `$ErrorActionPreference = 'Stop'` inside a try whose catch is a counted failure.
 - **A hermetic self-test never asserts an UPPER wall-clock bar** (2026-09-11). Several sessions push from
   one box, so a pre-push `run-gates` shares the cores with theirs: a set that takes 106 s quiet took 792 s,
   and `fanout-lib`'s "under 12 s" and `parallel-run`'s "under 2.5 s" concurrency cases blocked a push that

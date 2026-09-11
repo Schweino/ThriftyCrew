@@ -375,7 +375,10 @@ foreach ($r in $raw) {
     $rows.Add($b.row)
   } else { $rejects.Add([pscustomobject]@{ name=$r.n; lp=$r.lp; up=$r.up; reason=$b.err }) }
 }
-[void](Save-RollbackLedger $root)
+# NEVER FATAL (2026-09-11). This save runs BEFORE the rows below are written, and it can now refuse - the ledger lock
+# not free within its budget, or a ledger on disk it cannot read and will not overwrite - so an uncaught throw here
+# would cost the whole capture over one ledger.
+try { [void](Save-RollbackLedger $root) } catch { Write-Warning ("${Me}: rollback ledger NOT saved (" + $_.Exception.Message + ") - the first sightings this build dated are not recorded, and the next build that sees them anchors them to its own later capture") }
 if ($rollbacks -gt 0) { Write-Output ("${Me}: $rollbacks rollback(s) dated from first detection (" + (Get-RollbackTtlDays) + "-day TTL; Walmart publishes no end date)") }
 # de-dupe identical products (the same SKU is returned by several search terms)
 $seen = @{}; $ded = New-Object System.Collections.Generic.List[object]

@@ -537,7 +537,9 @@ if ($null -ne $idsOut) {
   Write-Output ("Walmart: name->itemId map $before -> $($idsOut.Count) entries ($($ids.Count) from this batch, merged not replaced)")
 }
 if ($markdowns -gt 0) {
-  [void](Save-RollbackLedger $root)
+  # Never fatal (2026-09-11): the save can now refuse - the ledger lock not free, or an unreadable ledger it will not
+  # overwrite - and the deals above are already written, so a refusal is a warning, not a failed import.
+  try { [void](Save-RollbackLedger $root) } catch { Write-Warning ("Walmart: rollback ledger NOT saved (" + $_.Exception.Message + ") - these markdowns' first sightings are not recorded, and the next build that sees them anchors them to its own later capture") }
   Write-Output ("Walmart: $markdowns row(s) stamped as MARKDOWNS off the store's own was-price, dated from first detection (" + (Get-RollbackTtlDays) + "-day TTL). These are NOT everyday prices and the board will stop honouring them when the window closes.")
 }
 Write-Output ("Walmart: verified $($rows.Count) row(s) through the builder invariants ($added added, $replaced replaced, $($rejects.Count) rejected, $($quarantined.Count) quarantined), total $($merged.Count); name->itemId map: $($ids.Count) -> $(Split-Path $outFile -Leaf)")

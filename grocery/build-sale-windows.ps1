@@ -34,6 +34,8 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ledger-lock.ps1')    # Enter-TcLedgerLock: capture-policy's Set-SaleExpiryProcessed writes this same file from concurrent lanes
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: the daily-due guards and export-feed read this file lock-free
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir)       { $OutDir       = Join-Path $root 'out' }
 if (-not $ScheduleFile) { $ScheduleFile = Join-Path $root 'ad-schedule.json' }
@@ -99,6 +101,16 @@ if (-not $ComparisonFile) {
 }
 $board = Read-JsonFile $ComparisonFile
 
+# ---------------------------------------------------------------- THE LOCK: from reading the prior log to writing the new one
+# ONE READ-MODIFY-WRITE (2026-09-11). The prior log is read just below and written back about 145 lines later, and in
+# between capture-policy's Set-SaleExpiryProcessed can record a landed re-price in this same file - from a lane of a
+# capture run that is still going, or from the 10:30 watchdog's Family Fare window. A build that read before that mark
+# and writes after it carries repriced_on / repriced_for over from its stale copy, so the mark is gone and the re-price
+# is owed again. Both writers take lib\ledger-lock.ps1's lock on this path, so a mark lands wholly before this read or
+# wholly after this write. The body keeps its old indent so the change reads as the lines it is. The lock is held for
+# the in-memory pass only: the board was read above, outside it.
+$swLock = Enter-TcLedgerLock -Path $LogFile
+try {
 # ---------------------------------------------------------------- prior log (first_seen continuity + roll-off carry)
 $prior = @{}
 if (Test-Path $LogFile) { try { foreach ($w in (Read-JsonFile $LogFile).windows) { $prior[($w.id + '|' + $w.store)] = $w } } catch {} }
@@ -245,7 +257,9 @@ $out = [ordered]@{
   note         = 'Per-item sale windows: sale_price + sale_start/sale_end from the ad; refresh_on = sale_end + 1 (the day the price reverts, when a re-price is due). Everyday/EDLP chips are not logged (no expiry). Derived daily from the newest comparison board; safe to delete (regenerates) EXCEPT for repriced_on/repriced_for, which record work that actually happened and cannot be rederived - an entry is pruned only once refresh_on is past AND repriced_for matches it, so a capped or throttled run leaves the re-price owed (status reprice-owed) instead of losing it.'
   windows      = $rows
 }
-($out | ConvertTo-Json -Depth 6) | Set-Content $LogFile -Encoding UTF8
+# Retried against a lock-free reader, in the bytes the Set-Content -Encoding UTF8 it replaced wrote (lib\atomic-write.ps1).
+[void](Write-TcAtomicFile -Path $LogFile -Text ($out | ConvertTo-Json -Depth 6))
+} finally { Exit-TcLedgerLock $swLock }   # THE LOCK ends here - it was taken just above the prior-log read
 
 # ---------------------------------------------------------------- report
 Write-Output ("SALE-WINDOW LOG  -  " + $today.ToString('yyyy-MM-dd') + "   (" + $out.active_count + " active sale(s), " + $rows.Count + " tracked, " + $out.owed_count + " re-price OWED)")

@@ -59,6 +59,13 @@
 
 $ErrorActionPreference = 'Stop'
 $script:PolicyRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Write-TcAtomicFile: the store lanes run side by side and read the cursor and sale-windows.json lock-free.
+. (Join-Path (Split-Path -Parent $script:PolicyRoot) 'lib\atomic-write.ps1')
+# Enter-TcLedgerLock: the same lanes also WRITE those two files side by side - see lib\ledger-lock.ps1.
+. (Join-Path (Split-Path -Parent $script:PolicyRoot) 'lib\ledger-lock.ps1')
+# -SelfTest drives both ledgers from concurrent processes (the block at the end of this file). Read from $args,
+# because this file declares no parameters - see the header.
+$__cplSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # The quarter. Change it HERE and nowhere else; MaxCarryDays must move with it.
 $script:QuarterDays = 90
@@ -613,44 +620,53 @@ function Set-SaleExpiryProcessed {
     return $res
   }
 
+  # THE WHOLE READ-MODIFY-WRITE IS INSIDE ONE LOCK (2026-09-11). capture-run starts the Hy-Vee, Baker's and Family
+  # Fare lanes together and each one ends here; the walled builders reach it through commit-capture-cursor, the 10:30
+  # watchdog's Family Fare window reaches it with no capture-run mutex, and build-sale-windows rewrites the same file
+  # under the same lock. Without it two writers read the same windows, each marks its own store, and the second write
+  # carries the first store's windows back UNMARKED - a re-price that really landed is owed again and fetched again.
+  # The existence check and the read are inside the lock on purpose: a lock around the write alone still writes what
+  # was read before it was taken. The rule is lib\ledger-lock.ps1; the fixture is this file's -SelfTest.
   $p = Get-SaleWindowsPath
-  if (-not (Test-Path $p)) { $res.Reason = 'no sale-windows.json'; return $res }
-  $doc = $null
-  try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText($p)) } catch { $res.Reason = 'sale-windows.json unreadable'; return $res }
-  if (-not $doc -or -not $doc.windows) { $res.Reason = 'sale-windows.json has no windows'; return $res }
+  $lock = Enter-TcLedgerLock -Path $p
+  try {
+    if (-not (Test-Path $p)) { $res.Reason = 'no sale-windows.json'; return $res }
+    $doc = $null
+    try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText($p)) } catch { $res.Reason = 'sale-windows.json unreadable'; return $res }
+    if (-not $doc -or -not $doc.windows) { $res.Reason = 'sale-windows.json has no windows'; return $res }
 
-  $todayD = [datetime]::ParseExact($todayS, 'yyyy-MM-dd', $null)
-  $set = @{}; foreach ($i in $want) { $set[[string]$i] = $true }
-  $marked = New-Object System.Collections.Generic.List[string]
-  $rows = New-Object System.Collections.Generic.List[object]
-  foreach ($w in @($doc.windows)) {
-    $e = [ordered]@{}
-    foreach ($pr in $w.PSObject.Properties) { $e[$pr.Name] = $pr.Value }
-    $ro = [string]$w.refresh_on
-    if ([string]$w.store -eq $Store -and $set.ContainsKey([string]$w.id) -and $ro) {
-      $roD = $null; try { $roD = [datetime]::ParseExact($ro, 'yyyy-MM-dd', $null) } catch { }
-      if ($roD -and $todayD -ge $roD -and (Get-SaleWindowRepricedFor $w) -ne $ro) {
-        $e['repriced_on'] = $todayS
-        $e['repriced_for'] = $ro
-        [void]$marked.Add([string]$w.id)
+    $todayD = [datetime]::ParseExact($todayS, 'yyyy-MM-dd', $null)
+    $set = @{}; foreach ($i in $want) { $set[[string]$i] = $true }
+    $marked = New-Object System.Collections.Generic.List[string]
+    $rows = New-Object System.Collections.Generic.List[object]
+    foreach ($w in @($doc.windows)) {
+      $e = [ordered]@{}
+      foreach ($pr in $w.PSObject.Properties) { $e[$pr.Name] = $pr.Value }
+      $ro = [string]$w.refresh_on
+      if ([string]$w.store -eq $Store -and $set.ContainsKey([string]$w.id) -and $ro) {
+        $roD = $null; try { $roD = [datetime]::ParseExact($ro, 'yyyy-MM-dd', $null) } catch { }
+        if ($roD -and $todayD -ge $roD -and (Get-SaleWindowRepricedFor $w) -ne $ro) {
+          $e['repriced_on'] = $todayS
+          $e['repriced_for'] = $ro
+          [void]$marked.Add([string]$w.id)
+        }
       }
+      [void]$rows.Add([pscustomobject]$e)
     }
-    [void]$rows.Add([pscustomobject]$e)
-  }
-  if ($marked.Count -eq 0) { $res.Reason = 'already recorded'; return $res }
+    if ($marked.Count -eq 0) { $res.Reason = 'already recorded'; return $res }
 
-  # Atomic, for the same reason the cursor is: a torn write here loses the record of work
-  # that was actually done, and the next build would prune it as unprocessed - or repeat it.
-  $out = [ordered]@{}
-  foreach ($pr in $doc.PSObject.Properties) { if ($pr.Name -ne 'windows') { $out[$pr.Name] = $pr.Value } }
-  # Through a VARIABLE, not inline. `$dict['k'] = @($listOfPSCustomObject)` throws
-  # "Argument types do not match" in Windows PowerShell 5.1 - the inline @() around a
-  # generic List of PSCustomObject picks the wrong indexer overload. Reproduced 2026-08-22.
-  $winArr = $rows.ToArray()
-  $out['windows'] = $winArr
-  $tmp = "$p.tmp"
-  Set-Content -Path $tmp -Value ($out | ConvertTo-Json -Depth 6) -Encoding UTF8
-  Move-Item -LiteralPath $tmp -Destination $p -Force
+    # Atomic, for the same reason the cursor is: a torn write here loses the record of work
+    # that was actually done, and the next build would prune it as unprocessed - or repeat it.
+    $out = [ordered]@{}
+    foreach ($pr in $doc.PSObject.Properties) { if ($pr.Name -ne 'windows') { $out[$pr.Name] = $pr.Value } }
+    # Through a VARIABLE, not inline. `$dict['k'] = @($listOfPSCustomObject)` throws
+    # "Argument types do not match" in Windows PowerShell 5.1 - the inline @() around a
+    # generic List of PSCustomObject picks the wrong indexer overload. Reproduced 2026-08-22.
+    $winArr = $rows.ToArray()
+    $out['windows'] = $winArr
+    # Retried against a lock-free reader, in the bytes the Set-Content -Encoding UTF8 it replaced wrote.
+    [void](Write-TcAtomicFile -Path $p -Text ($out | ConvertTo-Json -Depth 6))
+  } finally { Exit-TcLedgerLock $lock }
 
   $markedIds = @($marked | Sort-Object -Unique)
   $res.Marked = $marked.Count
@@ -732,18 +748,34 @@ function Save-CaptureCursor {
            'mean two different things.')
   }
   $p = Join-Path $OutDir $script:CursorFile
-  $cur = Get-CaptureCursors $OutDir
-  $h = @{}
-  foreach ($pr in $cur.PSObject.Properties) { $h[$pr.Name] = $pr.Value }
-  $h[(Get-CursorKey $Store)] = $Next
-  # The date this store last moved. Step-CaptureCursor reads it to enforce one slice per day,
-  # so a builder that runs twice does not rotate twice.
-  if ($AdvancedOn) { $h[((Get-CursorKey $Store) + '_last')] = $AdvancedOn }
-  $h['updated'] = (Get-Date).ToString('s')
-  $h['note'] = 'index into the commodity-search term order where each TERM-ROTATION store starts next. Advanced only after that store''s capture landed. Baker''s joined this cursor on 2026-08-22 (it used to pull all 598 terms daily). Hy-Vee is deliberately absent: it rotates by PRODUCT ID and keeps hyvee-rotation-cursor.json.'
-  $tmp = "$p.tmp"
-  Set-Content -Path $tmp -Value ($h | ConvertTo-Json -Depth 4) -Encoding UTF8
-  Move-Item -LiteralPath $tmp -Destination $p -Force
+  # THE WHOLE READ-MODIFY-WRITE IS INSIDE ONE LOCK (2026-09-11). The Baker's and Family Fare lanes start together,
+  # build-walmart-deals and build-sams-deals fan out side by side, and the 10:30 watchdog's Family Fare window takes no
+  # capture-run mutex. Each writer changes only its own store's key but writes the whole file, so without the lock the
+  # second write puts the first store's cursor BACK: that store re-buys a slice it already bought, and its _last date
+  # goes back with it. Reentrant: Step-CaptureCursor already holds this lock when it calls here.
+  $lock = Enter-TcLedgerLock -Path $p
+  try {
+    # AN UNREADABLE CURSOR IS NOT AN EMPTY ONE. Get-CaptureCursors answers {} for a file it cannot parse, which is right
+    # for a reader and wrong here: writing {} plus this store would send every other store's rotation back to #0.
+    $cur = [pscustomobject]@{}
+    if (Test-Path -LiteralPath $p) {
+      $cur = $null
+      try { $cur = ConvertFrom-Json ([IO.File]::ReadAllText($p)) } catch { }
+      if ($null -eq $cur) {
+        throw ("REFUSING to write the term cursor for '$Store': $p exists but could not be read. Writing it would send every other store's rotation back to #0; the file is left exactly as it was.")
+      }
+    }
+    $h = @{}
+    foreach ($pr in $cur.PSObject.Properties) { $h[$pr.Name] = $pr.Value }
+    $h[(Get-CursorKey $Store)] = $Next
+    # The date this store last moved. Step-CaptureCursor reads it to enforce one slice per day,
+    # so a builder that runs twice does not rotate twice.
+    if ($AdvancedOn) { $h[((Get-CursorKey $Store) + '_last')] = $AdvancedOn }
+    $h['updated'] = (Get-Date).ToString('s')
+    $h['note'] = 'index into the commodity-search term order where each TERM-ROTATION store starts next. Advanced only after that store''s capture landed. Baker''s joined this cursor on 2026-08-22 (it used to pull all 598 terms daily). Hy-Vee is deliberately absent: it rotates by PRODUCT ID and keeps hyvee-rotation-cursor.json.'
+    # Retried against a lock-free reader, in the bytes the Set-Content -Encoding UTF8 it replaced wrote.
+    [void](Write-TcAtomicFile -Path $p -Text ($h | ConvertTo-Json -Depth 4))
+  } finally { Exit-TcLedgerLock $lock }
 }
 
 function Write-CursorLog {
@@ -875,7 +907,6 @@ function Step-CaptureCursor {
   }
 
   $did = if ($null -ne $Landed) { [bool]$Landed } else { Test-CaptureLanded -Store $Store -Today $todayS -OutDir $OutDir }
-  $from = Get-CaptureCursor -Store $Store -OutDir $OutDir
 
   # ONE SLICE PER STORE PER DAY, however many times this is called.
   # The commit lives in each store's BUILDER, and a builder can legitimately run several times
@@ -903,28 +934,37 @@ function Step-CaptureCursor {
       Reason = "refusing to advance on a REPLAY: this run's date is $todayS but today is $realToday - a rebuild of an older capture, or a self-test, must never move the live rotation" }
   }
 
-  $lastKey = (Get-CursorKey $Store) + '_last'
-  $cursors = Get-CaptureCursors $OutDir
-  if ($cursors.PSObject.Properties.Name -contains $lastKey -and [string]$cursors.$lastKey -eq $todayS -and -not $Force) {
-    return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from
-      Reason = "already advanced for $todayS - one rotation slice per day, no matter how many times the builder runs" }
-  }
+  # FROM, THE DAY GUARD AND THE ADVANCE ARE ONE READ-MODIFY-WRITE (2026-09-11). They were three lock-free steps - read
+  # `from`, check <store>_last, save from + rotation - so two runs of one store's builder at once both read the old
+  # _last, both passed the guard, and both advanced and logged: the double advance the guard exists to stop, let
+  # through by timing. Holding the cursor lock across all three makes the second run read the first run's _last.
+  # Save-CaptureCursor takes the same lock again inside, which a mutex allows in one thread.
+  $lock = Enter-TcLedgerLock -Path (Join-Path $OutDir $script:CursorFile)
+  try {
+    $from = Get-CaptureCursor -Store $Store -OutDir $OutDir
+    $lastKey = (Get-CursorKey $Store) + '_last'
+    $cursors = Get-CaptureCursors $OutDir
+    if ($cursors.PSObject.Properties.Name -contains $lastKey -and [string]$cursors.$lastKey -eq $todayS -and -not $Force) {
+      return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from
+        Reason = "already advanced for $todayS - one rotation slice per day, no matter how many times the builder runs" }
+    }
 
-  if (-not $did -and -not $Force) {
-    return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from
-      Reason = "no fresh rows landed for $todayS - the slice is re-attempted tomorrow, not skipped" }
-  }
+    if (-not $did -and -not $Force) {
+      return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from
+        Reason = "no fresh rows landed for $todayS - the slice is re-attempted tomorrow, not skipped" }
+    }
 
-  $plan = Get-CapturePlan -Store $Store -Today $todayS
-  $all = Get-AllTerms
-  if ($all.Count -le 0) {
-    return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from; Reason = 'no terms' }
-  }
-  $to = (($from + $plan.RotationTerms) % $all.Count)
-  Save-CaptureCursor -Store $Store -Next $to -OutDir $OutDir -AdvancedOn $todayS
-  Write-CursorLog -Store $Store -From $from -To $to -Today $todayS -OutDir $OutDir
-  return [pscustomobject]@{ Store = $Store; Advanced = $true; From = $from; To = $to
-    Reason = "advanced $($plan.RotationTerms) term(s) after a landed capture" }
+    $plan = Get-CapturePlan -Store $Store -Today $todayS
+    $all = Get-AllTerms
+    if ($all.Count -le 0) {
+      return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from; Reason = 'no terms' }
+    }
+    $to = (($from + $plan.RotationTerms) % $all.Count)
+    Save-CaptureCursor -Store $Store -Next $to -OutDir $OutDir -AdvancedOn $todayS
+    Write-CursorLog -Store $Store -From $from -To $to -Today $todayS -OutDir $OutDir
+    return [pscustomobject]@{ Store = $Store; Advanced = $true; From = $from; To = $to
+      Reason = "advanced $($plan.RotationTerms) term(s) after a landed capture" }
+  } finally { Exit-TcLedgerLock $lock }
 }
 
 function Test-HyVeeCursorAdvance {
@@ -1140,6 +1180,293 @@ function Test-BrowserCaptureOwned {
 function Get-BrowserOwnedNote {
   param([Parameter(Mandatory=$true)][string]$Store)
   return ("$Store is deferred to a browser capture owner (out\browser-capture-due-<date>.flag) and the deferral is under 24h old, so this is an OWNED gap in flight, not an unowned one. It escalates normally once the deferral passes 24h.")
+}
+
+# ---------------------------------------------------------------------------
+# SELF-TEST: the two ledgers this file writes, written by concurrent PROCESSES (2026-09-11).
+#   powershell -File grocery\capture-policy-lib.ps1 -SelfTest
+# test-capture-policy.ps1 carries the policy rules. This carries the one thing a single process cannot show: what a
+# write does when a SIBLING writes the same file at the same moment. Every writer is its own powershell.exe launched by
+# lib\ledger-fixture.ps1's Invoke-TcLedgerWriters. Each pays its start-up and dot-sources this file, and is then held on
+# the fixture gate inside Enter-TcLedgerLock until all of them are there (ops-and-gates.md: the barrier goes inside the
+# writer). Each then writes many times, so the WRITES overlap and not merely the processes. Every write goes into a
+# temp directory, and nothing is asserted on time.
+# AN ERROR PART-WAY IS A FAILURE, NEVER A SHORT PASS - see rollback-ttl-lib's self-test for the day it was not.
+if ($__cplSelfTest) {
+  $script:cplN = 0; $script:cplBad = 0
+  function Test-CplCase([string]$What, [bool]$Cond, [string]$Detail = '') {
+    $script:cplN++
+    if ($Cond) { Write-Output ('  ok    ' + $What) }
+    else { $script:cplBad++; Write-Output ('  FAIL  ' + $What + $(if ($Detail) { ' -> ' + $Detail } else { '' })) }
+  }
+  # One NAME=number line out of a writer's stdout, or -1 when the writer never printed it.
+  function Get-CplField($Writer, [string]$Name) {
+    $m = [regex]::Match([string]$Writer.out, ('(?m)^' + $Name + '=(-?\d+)'))
+    if ($m.Success) { return [int]$m.Groups[1].Value }
+    return -1
+  }
+  # Every writer's own WHY line, after lib\ledger-fixture.ps1's account of any writer that did not run cleanly.
+  function Get-CplWhy([object[]]$Writers) {
+    $why = Format-TcWriterTrouble $Writers
+    foreach ($w in @($Writers)) { if ([string]$w.out -match '(?m)^WHY (.*)$') { $why += (' | writer ' + $w.n + ': ' + $Matches[1]) } }
+    return $why
+  }
+  function Write-CplWriter([string]$Path, [string]$Text) { [IO.File]::WriteAllText($Path, $Text, (New-Object Text.UTF8Encoding($false))) }
+  # A window shaped like the ones build-sale-windows writes, owed since 2026-08-21.
+  function New-CplWindow([string]$Store, [string]$Id) {
+    [ordered]@{ id = $Id; commodity = $Id; store = $Store; item = ('a product called ' + $Id); sale_price = 1.99; unit = 'lb'; size = '1 lb'
+                ad_text = 'weekly ad'; is_flash = $false; sale_start = '2026-08-15'; sale_end = '2026-08-20'; refresh_on = '2026-08-21'
+                status = 'reprice-owed'; first_seen = '2026-08-15'; last_seen = '2026-08-20'; note = ''; repriced_on = ''; repriced_for = '' }
+  }
+
+  $cplDir = Join-Path ([IO.Path]::GetTempPath()) ('cpl-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  [void][IO.Directory]::CreateDirectory($cplDir)
+  $cplLib = $PSCommandPath
+  $cplBsw = Join-Path $script:PolicyRoot 'build-sale-windows.ps1'
+  $ErrorActionPreference = 'Stop'
+  try {
+    # ---- 1. sale-windows.json: six lanes marking their own stores, while build-sale-windows rewrites the file ----
+    # Each lane marks 40 owed windows, five per call. build-sale-windows prunes a window once it is marked, so a marked
+    # window is either still there WITH its mark or gone - never there without it - and a lane can check its own marks.
+    # TWO THINGS MAKE A LOST MARK VISIBLE, and each was a draft that missed one:
+    #   * build-sale-windows REWRITES UNTIL EVERY LANE IS DONE, not a fixed number of times. The first draft ran it three
+    #     times and finished early; with its lock deleted in a temp mirror the suite stayed green 5 of 5.
+    #   * EACH LANE CHECKS ITS OWN MARKS BEFORE EVERY CALL AND ONCE AFTER THE LAST. The second draft looked only at the
+    #     file at the end, and went red in 3 of 5 with the lock deleted. An erasure can HEAL: a stale build-sale-windows
+    #     write removes marks, and a lane that read the file inside its lock just before that write then writes its own
+    #     copy, marks included, back over it. So the end state often looked whole after a real loss. A regression is now
+    #     counted the moment a lane sees one, healed later or not. With the locks in place none can be seen: every
+    #     writer re-reads inside the lock, and a lock-free read of a file replaced by rename is always a whole version.
+    # The 300 cap on rewrites is a hang guard for a lane that died.
+    $swRoot = Join-Path $cplDir 'sw'
+    [void][IO.Directory]::CreateDirectory($swRoot)
+    $swDone = Join-Path $cplDir 'sw-done'
+    [void][IO.Directory]::CreateDirectory($swDone)
+    $swStores = @('Hy-Vee', 'Aldi', "Baker's", 'Family Fare', 'Fareway', 'Walmart')
+    $swRows = [Collections.Generic.List[object]]::new()
+    for ($k = 0; $k -lt $swStores.Count; $k++) { for ($n = 0; $n -lt 40; $n++) { $swRows.Add((New-CplWindow $swStores[$k] ('sw-' + ($k + 1) + '-' + $n))) } }
+    for ($n = 0; $n -lt 300; $n++) { $swRows.Add((New-CplWindow "Sam's Club" ('filler-' + $n))) }
+    $swArr = $swRows.ToArray()
+    $swFile = Join-Path $swRoot 'sale-windows.json'
+    [IO.File]::WriteAllText($swFile, ([ordered]@{ updated = '2026-08-21T08:00:00'; today = '2026-08-21'; windows = $swArr } | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($true)))
+    $swBoard = Join-Path $swRoot 'comparison-2026-08-22.json'
+    [IO.File]::WriteAllText($swBoard, '{"comparison":[]}')
+    $swSched = Join-Path $swRoot 'ad-schedule.json'
+    [IO.File]::WriteAllText($swSched, '{"stores":[]}')
+    $swWriter = Join-Path $cplDir 'sw-writer.ps1'
+    Write-CplWriter $swWriter @'
+param([string]$Lib, [string]$Root, [string]$Mode, [int]$Index, [string]$Done, [string]$Bsw = '', [string]$Board = '', [string]$Sched = '', [string]$Log = '')
+$ErrorActionPreference = 'Stop'
+. $Lib
+$script:PolicyRoot = $Root
+$stores = @('Hy-Vee', 'Aldi', "Baker's", 'Family Fare', 'Fareway', 'Walmart')
+$refused = 0; $why = ''
+if ($Mode -eq 'lane') {
+  $marked = 0; $regressed = 0
+  $myStore = $stores[$Index - 1]
+  $mine = New-Object 'System.Collections.Generic.HashSet[string]'
+  for ($m = 0; $m -le 8; $m++) {
+    # Are this lane's marks still on disk? Read lock-free, the way the daily-due guards read it, retried past the
+    # instant a replace is mid-move. A mark present but unset is a regression, counted now even if a later write heals it.
+    if ($mine.Count -gt 0) {
+      $doc = $null
+      for ($a = 0; $a -lt 400 -and $null -eq $doc; $a++) { try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $Root 'sale-windows.json'))) } catch { Start-Sleep -Milliseconds 5 } }
+      if ($null -ne $doc) {
+        foreach ($win in @($doc.windows)) {
+          if ([string]$win.store -eq $myStore -and $mine.Contains([string]$win.id) -and [string]$win.repriced_for -ne '2026-08-21') { $regressed++ }
+        }
+      }
+    }
+    if ($m -eq 8) { break }
+    $ids = @(0..4 | ForEach-Object { 'sw-' + $Index + '-' + ($m * 5 + $_) })
+    try {
+      $r = Set-SaleExpiryProcessed -Store $myStore -Today '2026-08-22' -OutDir $Root -Ids $ids -Landed $true -AllowReplay
+      $marked += [int]$r.Marked
+      foreach ($id in @($r.Ids)) { if ($id) { [void]$mine.Add([string]$id) } }
+    }
+    catch { $refused++; $why = $_.Exception.Message }
+  }
+  [IO.File]::WriteAllText((Join-Path $Done ('lane-done-' + $Index)), 'x')
+  Write-Output ('MARKED=' + $marked)
+  Write-Output ('REGRESSED=' + $regressed)
+} else {
+  $built = 0
+  while ($built -lt 300 -and ([IO.Directory]::GetFiles($Done, 'lane-done-*')).Length -lt $stores.Count) {
+    try { & $Bsw -OutDir $Root -ComparisonFile $Board -ScheduleFile $Sched -LogFile $Log -AsOf '2026-08-22' | Out-Null; $built++ }
+    catch { $refused++; $why = $_.Exception.Message; break }
+  }
+  Write-Output ('BUILT=' + $built)
+}
+Write-Output ('REFUSED=' + $refused)
+if ($why) { Write-Output ('WHY ' + $why) }
+exit 0
+'@
+    $swArgs = New-Object System.Collections.Generic.List[object]
+    for ($i = 1; $i -le 6; $i++) { $swArgs.Add([string[]]@('-Lib', $cplLib, '-Root', $swRoot, '-Mode', 'lane', '-Index', [string]$i, '-Done', $swDone)) }
+    $swArgs.Add([string[]]@('-Lib', $cplLib, '-Root', $swRoot, '-Mode', 'build', '-Index', '7', '-Done', $swDone, '-Bsw', $cplBsw, '-Board', $swBoard, '-Sched', $swSched, '-Log', $swFile))
+    $sw = Invoke-TcLedgerWriters -Script $swWriter -ArgSets $swArgs.ToArray()
+    $swW = @($sw.writers)
+    $swRan = @($swW | Where-Object { $_.ran }).Count
+    $swWhy = Get-CplWhy $swW
+    $swReported = 0; $swRefused = 0; $swBuilt = 0; $swRegressed = 0
+    foreach ($w in $swW) {
+      if ([int]$w.n -le 6) {
+        $swReported += [Math]::Max((Get-CplField $w 'MARKED'), 0)
+        $swRegressed += [Math]::Max((Get-CplField $w 'REGRESSED'), 0)
+      } else { $swBuilt += [Math]::Max((Get-CplField $w 'BUILT'), 0) }
+      $swRefused += [Math]::Max((Get-CplField $w 'REFUSED'), 0)
+    }
+    $swDoc = ConvertFrom-Json ([IO.File]::ReadAllText($swFile))
+    $swById = @{}
+    foreach ($win in @($swDoc.windows)) { $swById[([string]$win.store + '|' + [string]$win.id)] = $win }
+    $swMarked = 0; $swPruned = 0; $swLost = 0
+    for ($k = 1; $k -le 6; $k++) {
+      for ($n = 0; $n -lt 40; $n++) {
+        $key = ($swStores[$k - 1] + '|sw-' + $k + '-' + $n)
+        if (-not $swById.ContainsKey($key)) { $swPruned++ }
+        elseif ([string]$swById[$key].repriced_for -eq '2026-08-21') { $swMarked++ }
+        else { $swLost++ }
+      }
+    }
+    $swFiller = 0
+    for ($n = 0; $n -lt 300; $n++) { if ($swById.ContainsKey(("Sam's Club|filler-" + $n))) { $swFiller++ } }
+    Write-Output ('  info  sale-windows barrier: {0} of 7 writers were at the barrier when released ({1} ms); build-sale-windows rewrote the file {2} time(s) while the lanes marked' -f $sw.ready_at_go, $sw.go_ms, $swBuilt)
+    Test-CplCase 'PREMISE    every writer RAN - six lanes and a build-sale-windows, launched, at the barrier when released together, and exited' `
+      ($swRan -eq 7 -and $swBuilt -ge 1) ("ran $swRan of 7; build-sale-windows rewrites=$swBuilt" + $swWhy)
+    Test-CplCase 'MUST FIRE  no recorded re-price ever went back to owed under a sibling''s write - not at the end, and not for a moment in between' `
+      ($swLost -eq 0 -and $swRegressed -eq 0 -and $swReported -eq 240) ("lanes reported $swReported of 240 marked; on disk at the end $swMarked still marked, $swPruned pruned as done, $swLost LOST back to owed; regressions seen mid-run=$swRegressed" + $swWhy)
+    Test-CplCase 'MUST FIRE  and no mark was lost SILENTLY - no writer refused, so every count above is a real write' ($swRefused -eq 0) ("refusals=$swRefused" + $swWhy)
+    Test-CplCase 'CLEAN TWIN all 300 windows nobody marked are still in the file' ($swFiller -eq 300) ("kept $swFiller of 300")
+
+    # ---- 2. capture-cursor.json: six stores' cursors saved side by side ----
+    # Each writer saves its own store 25 times and, before each save, reads what the file says about its key. Only that
+    # writer ever writes that key, so the file must say what it last wrote; anything less is a sibling's whole-file
+    # write putting the cursor BACK, and it is counted the moment it is seen. The store is passed as an INDEX, so no
+    # store name with a space or an apostrophe has to survive a command line.
+    $curRoot = Join-Path $cplDir 'cur'
+    [void][IO.Directory]::CreateDirectory($curRoot)
+    $curFile = Join-Path $curRoot 'capture-cursor.json'
+    $curSeed = [ordered]@{}
+    for ($n = 0; $n -lt 400; $n++) { $curSeed[('filler_' + $n)] = $n }
+    [IO.File]::WriteAllText($curFile, ($curSeed | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($true)))
+    $curStores = @('Family Fare', 'Walmart', "Sam's Club", 'Aldi', 'Fareway', "Baker's")
+    $curWriter = Join-Path $cplDir 'cur-writer.ps1'
+    Write-CplWriter $curWriter @'
+param([string]$Lib, [string]$Dir, [int]$Index)
+$ErrorActionPreference = 'Stop'
+. $Lib
+$store = @('Family Fare', 'Walmart', "Sam's Club", 'Aldi', 'Fareway', "Baker's")[$Index - 1]
+$key = Get-CursorKey $store
+$file = Join-Path $Dir 'capture-cursor.json'
+$saved = 0; $refused = 0; $regressed = 0; $last = 0; $why = ''
+for ($m = 1; $m -le 25; $m++) {
+  # Read lock-free, the way the lanes read it, retried past the instant a sibling's replace is mid-move.
+  $seen = $null
+  for ($a = 0; $a -lt 400 -and $null -eq $seen; $a++) {
+    try {
+      $d = ConvertFrom-Json ([IO.File]::ReadAllText($file))
+      if ($null -ne $d) { $seen = 0; if ($d.PSObject.Properties[$key]) { $seen = [int]$d.$key } }
+    } catch { Start-Sleep -Milliseconds 5 }
+  }
+  if ($null -ne $seen -and $seen -lt $last) { $regressed++ }
+  try { Save-CaptureCursor -Store $store -Next $m -OutDir $Dir; $last = $m; $saved++ } catch { $refused++; $why = $_.Exception.Message }
+}
+Write-Output ('SAVED=' + $saved)
+Write-Output ('REFUSED=' + $refused)
+Write-Output ('REGRESSED=' + $regressed)
+if ($why) { Write-Output ('WHY ' + $why) }
+exit 0
+'@
+    $curArgs = New-Object System.Collections.Generic.List[object]
+    for ($i = 1; $i -le 6; $i++) { $curArgs.Add([string[]]@('-Lib', $cplLib, '-Dir', $curRoot, '-Index', [string]$i)) }
+    $cur = Invoke-TcLedgerWriters -Script $curWriter -ArgSets $curArgs.ToArray()
+    $curW = @($cur.writers)
+    $curRan = @($curW | Where-Object { $_.ran }).Count
+    $curWhy = Get-CplWhy $curW
+    $curSaved = 0; $curRefused = 0; $curRegressed = 0
+    foreach ($w in $curW) {
+      $curSaved += [Math]::Max((Get-CplField $w 'SAVED'), 0)
+      $curRefused += [Math]::Max((Get-CplField $w 'REFUSED'), 0)
+      $curRegressed += [Math]::Max((Get-CplField $w 'REGRESSED'), 0)
+    }
+    $curDoc = ConvertFrom-Json ([IO.File]::ReadAllText($curFile))
+    $curAtEnd = 0; $curEnds = @()
+    foreach ($s in $curStores) {
+      $ck = Get-CursorKey $s
+      $cv = -1
+      if ($curDoc.PSObject.Properties[$ck]) { $cv = [int]$curDoc.$ck }
+      if ($cv -eq 25) { $curAtEnd++ }
+      $curEnds += ('{0}={1}' -f $ck, $cv)
+    }
+    $curFiller = 0
+    for ($n = 0; $n -lt 400; $n++) { $fp = $curDoc.PSObject.Properties[('filler_' + $n)]; if ($fp -and [int]$fp.Value -eq $n) { $curFiller++ } }
+    Write-Output ('  info  capture-cursor barrier: {0} of 6 writers were at the barrier when released ({1} ms)' -f $cur.ready_at_go, $cur.go_ms)
+    Test-CplCase 'PREMISE    every cursor writer RAN - launched, at the barrier when the six were released together, exited - and made all 25 saves' `
+      ($curRan -eq 6 -and $curSaved -eq 150) ("ran $curRan of 6; saves=$curSaved of 150" + $curWhy)
+    Test-CplCase 'MUST FIRE  no store''s cursor ever went BACKWARDS under a sibling''s whole-file write, and every one ends where its writer left it' `
+      ($curRegressed -eq 0 -and $curAtEnd -eq 6) ("regressions seen=$curRegressed; ended at 25: $curAtEnd of 6 (" + ($curEnds -join ' ') + ')' + $curWhy)
+    Test-CplCase 'MUST FIRE  and no save was refused, so every count above is a real write' ($curRefused -eq 0) ("refusals=$curRefused" + $curWhy)
+    Test-CplCase 'CLEAN TWIN all 400 other keys in the cursor file still hold their values' ($curFiller -eq 400) ("kept $curFiller of 400")
+
+    # ---- 3. Step-CaptureCursor: four runs of ONE store's builder advancing on the same day ----
+    # The one-slice-per-day guard reads <store>_last before it saves, so it only holds if the read and the save are one
+    # locked step. Uses TODAY'S REAL DATE because the replay guard refuses any other; a run that straddles midnight sees
+    # every writer refused and goes red rather than passing.
+    $stRoot = Join-Path $cplDir 'step'
+    [void][IO.Directory]::CreateDirectory($stRoot)
+    $stTerms = [ordered]@{}
+    for ($n = 0; $n -lt 180; $n++) { $stTerms[('c' + $n.ToString('000'))] = ('term ' + $n) }
+    [IO.File]::WriteAllText((Join-Path $stRoot 'commodity-search.json'), (@{ terms = $stTerms } | ConvertTo-Json -Depth 4))
+    $stToday = (Get-Date).ToString('yyyy-MM-dd')
+    $stWriter = Join-Path $cplDir 'step-writer.ps1'
+    Write-CplWriter $stWriter @'
+param([string]$Lib, [string]$Root, [string]$Today)
+$ErrorActionPreference = 'Stop'
+. $Lib
+$script:PolicyRoot = $Root
+try {
+  $r = Step-CaptureCursor -Store 'Walmart' -Today $Today -OutDir $Root -Landed $true
+  Write-Output ('ADVANCED=' + [int][bool]$r.Advanced)
+  Write-Output 'REFUSED=0'
+  Write-Output ('REASON ' + $r.Reason)
+} catch {
+  Write-Output 'ADVANCED=0'
+  Write-Output 'REFUSED=1'
+  Write-Output ('WHY ' + $_.Exception.Message)
+}
+exit 0
+'@
+    $stArgs = New-Object System.Collections.Generic.List[object]
+    for ($i = 1; $i -le 4; $i++) { $stArgs.Add([string[]]@('-Lib', $cplLib, '-Root', $stRoot, '-Today', $stToday)) }
+    $st = Invoke-TcLedgerWriters -Script $stWriter -ArgSets $stArgs.ToArray()
+    $stW = @($st.writers)
+    $stRan = @($stW | Where-Object { $_.ran }).Count
+    $stWhy = Get-CplWhy $stW
+    $stAdvanced = 0; $stRefused = 0
+    foreach ($w in $stW) {
+      if ((Get-CplField $w 'ADVANCED') -eq 1) { $stAdvanced++ }
+      $stRefused += [Math]::Max((Get-CplField $w 'REFUSED'), 0)
+    }
+    $stCursor = -1
+    $stCurFile = Join-Path $stRoot 'capture-cursor.json'
+    if (Test-Path -LiteralPath $stCurFile) { $stDoc = ConvertFrom-Json ([IO.File]::ReadAllText($stCurFile)); if ($stDoc.PSObject.Properties['Walmart']) { $stCursor = [int]$stDoc.Walmart } }
+    $stLog = 0
+    $stLogFile = Join-Path $stRoot 'capture-cursor-log.jsonl'
+    if (Test-Path -LiteralPath $stLogFile) { foreach ($line in [IO.File]::ReadAllLines($stLogFile)) { if ($line.Trim()) { $stLog++ } } }
+    Write-Output ('  info  step barrier: {0} of 4 writers were at the barrier when released ({1} ms)' -f $st.ready_at_go, $st.go_ms)
+    Test-CplCase 'PREMISE    every run of the store''s builder RAN - launched, at the barrier when the four were released together, and exited' ($stRan -eq 4) ("ran $stRan of 4" + $stWhy)
+    Test-CplCase 'MUST FIRE  exactly ONE of four same-day advances moves the cursor and logs it - the one-slice-per-day guard holds under a race' `
+      ($stAdvanced -eq 1 -and $stRefused -eq 0 -and $stCursor -eq 2 -and $stLog -eq 1) ("advanced=$stAdvanced of 4, cursor=$stCursor (want 2), log lines=$stLog (want 1), refusals=$stRefused" + $stWhy)
+  } catch {
+    Test-CplCase 'the self-test ran to its end with no unexpected error' $false ($_.Exception.Message + ' (line ' + $_.InvocationInfo.ScriptLineNumber + ')')
+  } finally {
+    $ErrorActionPreference = 'Continue'
+    Remove-Item -LiteralPath $cplDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
+  Write-Output ('capture-policy-lib SELF-TEST {0} ({1} of {2} failed)' -f $(if ($script:cplBad) { 'FAIL' } else { 'PASS' }), $script:cplBad, $script:cplN)
+  Write-Output ('CAPTURE-POLICY-LIB-COMPLETE cases={0} failed={1}' -f $script:cplN, $script:cplBad)
+  if ($script:cplBad -gt 0) { exit 1 }
+  exit 0
 }
 
 # ---------------------------------------------------------------------------
