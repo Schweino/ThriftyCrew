@@ -38,6 +38,7 @@ $ErrorActionPreference = 'Stop'
 $repo = Split-Path $PSScriptRoot -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\json-io.ps1')
+. (Join-Path $repo 'lib\lf-write.ps1')       # Write-TcLfFile: the baseline is a TRACKED eol=lf blob
 . (Join-Path $repo 'lib\selftest-lib.ps1')   # Get-SelfTestBlock: PowerShell's own parser, shared with audit-fixture-inputs
 . (Join-Path $repo 'lib\tree-walk.ps1')      # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
@@ -151,12 +152,15 @@ if (-not $now.Count) {
 
 $baseFile = Join-Path $PSScriptRoot 'mustfire-census-baseline.json'
 if ($Update) {
-  Write-JsonFile -Path $baseFile -Content ([ordered]@{
+  # LF, WITH the BOM the committed blob carries (2026-09-11). This was Write-JsonFile, which writes ConvertTo-Json's
+  # CRLF: the -Update that day left 208 CR bytes over an LF blob, the shape lib\lf-write.ps1 exists for, and
+  # 3176eb82b moved the other baseline writers without this one.
+  $null = Write-TcLfFile -Path $baseFile -Text ([ordered]@{
     readme  = 'Baseline for ops\audit-mustfire-census.ps1: how many must-fire assertions each self-test carries. A DROP is a hard fail - a must-fire that breaks goes red on its own, and a must-fire that is DELETED goes green with one fewer case and nobody counts tallies. A RISE is the estate getting better; re-run with -Update to retrain. Counting is per FILE, not per case name, because case labels are prose and a ratchet that fails on a reworded label is a ratchet people delete.'
     written = (Get-Date).ToString('yyyy-MM-dd')
     total   = $total
     files   = $now
-  }) -Depth 6
+  } | ConvertTo-Json -Depth 6)
   Write-Output ("audit-mustfire-census: baseline rewritten - {0} file(s), {1} must-fire assertion(s)" -f $now.Count, $total)
   exit 0
 }

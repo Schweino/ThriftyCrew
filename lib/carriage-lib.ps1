@@ -48,6 +48,13 @@ $script:CARRIAGE_CHECKED_STATES = @('carried', 'not-carried')
 # db\ingredients.json, and Korean Rice Cakes is one of the four recipes that got through. An ingredient
 # with no commodity id is precisely the one no board gate can see, so it needs a carriage key most.
 # ---------------------------------------------------------------------------------------------------
+# Self-test:   powershell -File lib\carriage-lib.ps1 -SelfTest
+#
+# NO param() BLOCK, DELIBERATELY - same reason as lib\json-io.ps1: dot-sourced under PS 5.1 a param() block runs
+# in the CALLER's scope, and cost-recipes.ps1 and hunt-run.ps1 both dot-source this file. The switch is read off
+# $args, only when the file is RUN, and before the dot-source below so nothing it loads can move $args first.
+$__carriageLibSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
+
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 function Get-CarriageKey {
@@ -179,71 +186,86 @@ function Get-LineCarriage {
   return Get-Carriage -Bid $bid -Item $item -FeedCarried $FeedCarried -Ledger $Ledger
 }
 
-function Invoke-CarriageLibSelfTest {
-  $bad = 0
-  function TT([string]$n, [bool]$ok, [string]$got) { if ($ok) { Write-Output "  ok  $n" } else { Write-Output "  X   $n  ($got)"; $script:__cbad++ } }
+# THE SELF-TEST, gated in this file (2026-09-11). Until that date these cases lived in a function,
+# Invoke-CarriageLibSelfTest, that nothing in the tree called: ops\run-gates.ps1 never ran them, and
+# ops\audit-mustfire-census.ps1 counts only the lines inside a gated block, so the five MUST FIRE cases were
+# outside its ratchet as well. Run by hand that day, 17 of 17 passed. They sit IN the block rather than behind a
+# call because the census reads source, and a call is one line it cannot see through.
+if ($__carriageLibSelfTest) {
+  $ErrorActionPreference = 'Stop'
+  function TT([string]$n, [bool]$ok, [string]$got) { $script:__ccases++; if ($ok) { Write-Output "  ok  $n" } else { Write-Output "  X   $n  ($got)"; $script:__cbad++ } }
   $script:__cbad = 0
+  $script:__ccases = 0
+  # A case that THROWS is a counted failure. Without the try, a throw under Stop ends the run with the cases after
+  # it unrun and nothing in the output saying so.
+  try {
 
-  $feedDoc = [pscustomobject]@{
-    'chicken-breast' = [pscustomobject]@{ cheapest = 2.5; stores = [pscustomobject]@{ 'Walmart' = 2.5; 'Aldi' = 2.7 } }
-    'dead-bid'       = [pscustomobject]@{ cheapest = 0;   stores = [pscustomobject]@{ 'Walmart' = 0 } }
+    $feedDoc = [pscustomobject]@{
+      'chicken-breast' = [pscustomobject]@{ cheapest = 2.5; stores = [pscustomobject]@{ 'Walmart' = 2.5; 'Aldi' = 2.7 } }
+      'dead-bid'       = [pscustomobject]@{ cheapest = 0;   stores = [pscustomobject]@{ 'Walmart' = 0 } }
+    }
+    $fc = Get-FeedCarriedSet $feedDoc
+    TT 'feed with a real price is CARRIED' ((Get-Carriage -Bid 'chicken-breast' -Item 'Chicken Breast' -FeedCarried $fc -Ledger @{}).verdict -eq 'CARRIED') 'not carried'
+    TT 'feed row with no price is not CARRIED' ((Get-Carriage -Bid 'dead-bid' -Item 'X' -FeedCarried $fc -Ledger @{}).verdict -eq 'UNKNOWN') 'not unknown'
+    TT 'a bid nobody has heard of is UNKNOWN, never NOT-CARRIED' ((Get-Carriage -Bid 'doubanjiang' -Item 'Doubanjiang' -FeedCarried $fc -Ledger @{}).verdict -eq 'UNKNOWN') 'not unknown'
+
+    # basis parsing
+    TT 'board basis yields its bid'  ((Get-BidFromBasis 'board:pork-loin:recipeboard-walmart') -eq 'pork-loin') 'wrong'
+    TT 'feed basis yields its bid'   ((Get-BidFromBasis 'feed:penne-pasta') -eq 'penne-pasta') 'wrong'
+    TT 'label basis yields no bid'   ($null -eq (Get-BidFromBasis 'label:The Spice Way 8 oz')) 'wrong'
+    TT '+drained is stripped'        ((Get-BidFromBasis 'feed:cannellini-beans+drained') -eq 'cannellini-beans') 'wrong'
+
+    # bid-less items key by name - the Korean Rice Cakes / Keto Bun case
+    TT 'a bid-less item still gets a key' ((Get-CarriageKey -Bid $null -Item 'Keto Bun') -eq 'item:Keto Bun') 'wrong key'
+    $led = @{ 'item:Keto Bun' = [pscustomobject]@{ verdict='CARRIED'; store='Walmart'; item='bettergoods Keto Friendly Hamburger Buns 14 oz 8 ct'; price=4.78; as_of='2026-08-01'; why='captured 3x' } }
+    TT 'a bid-less item can be CARRIED by the ledger' ((Get-Carriage -Bid $null -Item 'Keto Bun' -FeedCarried $fc -Ledger $led).verdict -eq 'CARRIED') 'not carried'
+
+    # ledger evidence bar
+    $weak = @{ 'x-bid' = [pscustomobject]@{ verdict='CARRIED'; store='Walmart' } }
+    TT 'MUST FIRE  CARRIED with no price/product/date degrades to UNKNOWN' ((Get-Carriage -Bid 'x-bid' -Item 'X' -FeedCarried $fc -Ledger $weak).verdict -eq 'UNKNOWN') 'honoured a bare claim'
+
+    function New-Stores([hashtable]$m) {
+      $o = [pscustomobject]@{}
+      foreach ($k in $m.Keys) { $o | Add-Member -NotePropertyName $k -NotePropertyValue ([pscustomobject]@{ state = $m[$k]; terms_tried = @('t') }) }
+      return $o
+    }
+    $all7 = @{}; foreach ($s in $script:CARRIAGE_STORES) { $all7[$s] = 'not-carried' }
+    $good = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $all7) } }
+    TT 'all seven answered none carrying is NOT-CARRIED' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $good).verdict -eq 'NOT-CARRIED') 'not not-carried'
+
+    $six = $all7.Clone(); $six["Hy-Vee"] = 'blocked'
+    $blocked = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $six) } }
+    TT 'MUST FIRE  six not-carried + one BLOCKED is UNKNOWN, never NOT-CARRIED' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $blocked).verdict -eq 'UNKNOWN') 'called a bot wall an absence'
+
+    $six2 = $all7.Clone(); $six2["Fareway"] = 'error'
+    $errd = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $six2) } }
+    TT 'MUST FIRE  an errored store does not count as checked' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $errd).verdict -eq 'UNKNOWN') 'called an error an absence'
+
+    $contra = $all7.Clone(); $contra['Aldi'] = 'carried'
+    $cont = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $contra) } }
+    TT 'MUST FIRE  NOT-CARRIED contradicted by a carried store degrades' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $cont).verdict -eq 'UNKNOWN') 'honoured a self-contradiction'
+
+    $noTerms = [pscustomobject]@{}
+    foreach ($s in $script:CARRIAGE_STORES) { $noTerms | Add-Member -NotePropertyName $s -NotePropertyValue ([pscustomobject]@{ state = 'not-carried' }) }
+    $nt = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = $noTerms } }
+    TT 'MUST FIRE  NOT-CARRIED with no term ever tried degrades' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $nt).verdict -eq 'UNKNOWN') 'honoured a termless absence'
+
+    # the feed wins over a stale ledger absence: this is the revival path
+    $stale = @{ 'chicken-breast' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $all7) } }
+    TT 'a live feed price overrides a stale NOT-CARRIED' ((Get-Carriage -Bid 'chicken-breast' -Item 'C' -FeedCarried $fc -Ledger $stale).verdict -eq 'CARRIED') 'stale absence won'
+
+    # line-level resolution: sumac is label-priced but its ITEM ROW has the bid
+    $itemBids = @{ 'Sumac' = 'ground-sumac' }
+    $sumacLed = @{ 'ground-sumac' = [pscustomobject]@{ verdict='CARRIED'; store="Baker's"; item='Morton & Bassett All Natural Sumac'; price=12.79; as_of='2026-08-22' } }
+    $line = [pscustomobject]@{ item='Sumac'; basis='label:The Spice Way 8 oz' }
+    TT 'a label-priced line is judged by its item row bid' ((Get-LineCarriage -Line $line -ItemBids $itemBids -FeedCarried $fc -Ledger $sumacLed).verdict -eq 'CARRIED') 'label line not resolved'
+
+  } catch {
+    $script:__cbad++
+    Write-Output ("  X   a case THREW, so every case after it went unrun: " + $_.Exception.Message)
   }
-  $fc = Get-FeedCarriedSet $feedDoc
-  TT 'feed with a real price is CARRIED' ((Get-Carriage -Bid 'chicken-breast' -Item 'Chicken Breast' -FeedCarried $fc -Ledger @{}).verdict -eq 'CARRIED') 'not carried'
-  TT 'feed row with no price is not CARRIED' ((Get-Carriage -Bid 'dead-bid' -Item 'X' -FeedCarried $fc -Ledger @{}).verdict -eq 'UNKNOWN') 'not unknown'
-  TT 'a bid nobody has heard of is UNKNOWN, never NOT-CARRIED' ((Get-Carriage -Bid 'doubanjiang' -Item 'Doubanjiang' -FeedCarried $fc -Ledger @{}).verdict -eq 'UNKNOWN') 'not unknown'
-
-  # basis parsing
-  TT 'board basis yields its bid'  ((Get-BidFromBasis 'board:pork-loin:recipeboard-walmart') -eq 'pork-loin') 'wrong'
-  TT 'feed basis yields its bid'   ((Get-BidFromBasis 'feed:penne-pasta') -eq 'penne-pasta') 'wrong'
-  TT 'label basis yields no bid'   ($null -eq (Get-BidFromBasis 'label:The Spice Way 8 oz')) 'wrong'
-  TT '+drained is stripped'        ((Get-BidFromBasis 'feed:cannellini-beans+drained') -eq 'cannellini-beans') 'wrong'
-
-  # bid-less items key by name - the Korean Rice Cakes / Keto Bun case
-  TT 'a bid-less item still gets a key' ((Get-CarriageKey -Bid $null -Item 'Keto Bun') -eq 'item:Keto Bun') 'wrong key'
-  $led = @{ 'item:Keto Bun' = [pscustomobject]@{ verdict='CARRIED'; store='Walmart'; item='bettergoods Keto Friendly Hamburger Buns 14 oz 8 ct'; price=4.78; as_of='2026-08-01'; why='captured 3x' } }
-  TT 'a bid-less item can be CARRIED by the ledger' ((Get-Carriage -Bid $null -Item 'Keto Bun' -FeedCarried $fc -Ledger $led).verdict -eq 'CARRIED') 'not carried'
-
-  # ledger evidence bar
-  $weak = @{ 'x-bid' = [pscustomobject]@{ verdict='CARRIED'; store='Walmart' } }
-  TT 'MUST FIRE  CARRIED with no price/product/date degrades to UNKNOWN' ((Get-Carriage -Bid 'x-bid' -Item 'X' -FeedCarried $fc -Ledger $weak).verdict -eq 'UNKNOWN') 'honoured a bare claim'
-
-  function New-Stores([hashtable]$m) {
-    $o = [pscustomobject]@{}
-    foreach ($k in $m.Keys) { $o | Add-Member -NotePropertyName $k -NotePropertyValue ([pscustomobject]@{ state = $m[$k]; terms_tried = @('t') }) }
-    return $o
-  }
-  $all7 = @{}; foreach ($s in $script:CARRIAGE_STORES) { $all7[$s] = 'not-carried' }
-  $good = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $all7) } }
-  TT 'all seven answered none carrying is NOT-CARRIED' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $good).verdict -eq 'NOT-CARRIED') 'not not-carried'
-
-  $six = $all7.Clone(); $six["Hy-Vee"] = 'blocked'
-  $blocked = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $six) } }
-  TT 'MUST FIRE  six not-carried + one BLOCKED is UNKNOWN, never NOT-CARRIED' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $blocked).verdict -eq 'UNKNOWN') 'called a bot wall an absence'
-
-  $six2 = $all7.Clone(); $six2["Fareway"] = 'error'
-  $errd = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $six2) } }
-  TT 'MUST FIRE  an errored store does not count as checked' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $errd).verdict -eq 'UNKNOWN') 'called an error an absence'
-
-  $contra = $all7.Clone(); $contra['Aldi'] = 'carried'
-  $cont = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $contra) } }
-  TT 'MUST FIRE  NOT-CARRIED contradicted by a carried store degrades' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $cont).verdict -eq 'UNKNOWN') 'honoured a self-contradiction'
-
-  $noTerms = [pscustomobject]@{}
-  foreach ($s in $script:CARRIAGE_STORES) { $noTerms | Add-Member -NotePropertyName $s -NotePropertyValue ([pscustomobject]@{ state = 'not-carried' }) }
-  $nt = @{ 'gone-bid' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = $noTerms } }
-  TT 'MUST FIRE  NOT-CARRIED with no term ever tried degrades' ((Get-Carriage -Bid 'gone-bid' -Item 'G' -FeedCarried $fc -Ledger $nt).verdict -eq 'UNKNOWN') 'honoured a termless absence'
-
-  # the feed wins over a stale ledger absence: this is the revival path
-  $stale = @{ 'chicken-breast' = [pscustomobject]@{ verdict='NOT-CARRIED'; stores = (New-Stores $all7) } }
-  TT 'a live feed price overrides a stale NOT-CARRIED' ((Get-Carriage -Bid 'chicken-breast' -Item 'C' -FeedCarried $fc -Ledger $stale).verdict -eq 'CARRIED') 'stale absence won'
-
-  # line-level resolution: sumac is label-priced but its ITEM ROW has the bid
-  $itemBids = @{ 'Sumac' = 'ground-sumac' }
-  $sumacLed = @{ 'ground-sumac' = [pscustomobject]@{ verdict='CARRIED'; store="Baker's"; item='Morton & Bassett All Natural Sumac'; price=12.79; as_of='2026-08-22' } }
-  $line = [pscustomobject]@{ item='Sumac'; basis='label:The Spice Way 8 oz' }
-  TT 'a label-priced line is judged by its item row bid' ((Get-LineCarriage -Line $line -ItemBids $itemBids -FeedCarried $fc -Ledger $sumacLed).verdict -eq 'CARRIED') 'label line not resolved'
-
-  Write-Output ("carriage-lib self-test: " + $(if ($script:__cbad -eq 0) { 'ALL PASS' } else { "$($script:__cbad) FAILED" }))
-  return $script:__cbad
+  if ($script:__ccases -eq 0) { Write-Output 'CARRIAGE-LIB SELF-TEST FAILED (ran zero cases)'; exit 1 }
+  if ($script:__cbad) { Write-Output ("CARRIAGE-LIB SELF-TEST FAILED ({0} failure(s) over {1} case(s) run)" -f $script:__cbad, $script:__ccases); exit 1 }
+  Write-Output ("CARRIAGE-LIB SELF-TEST PASSED ({0} of {0} case(s): a bot wall, an errored store, a self-contradiction and a termless search never read as NOT-CARRIED)" -f $script:__ccases)
+  exit 0
 }
