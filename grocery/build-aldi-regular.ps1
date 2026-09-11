@@ -16,6 +16,8 @@
      prices = every "$n.nn" the card rendered, space-joined. FIRST is the price you pay.
      unit   = a "$n.nn/lb"-style unit price when the card showed one (weighted goods), else blank
      size   = the size token the card printed, else blank -> fall back to the name
+     href   = the tile's product link. Absolute before 2026-08-25, RELATIVE since the committed search agent
+              (/store/aldi/products/<id>-<slug>). Resolve-AldiProductUrl turns either into the row's link_url.
   The capture OPENS with the store it was read at, one line per distinct store and mode, written by
   aldiSearchToCsv in pull-aldi-instore.js:   #tc-store store="ALDI - OLA 42 - Omaha" mode="In-Store" rows=812
   The file's `source` and every row's store_location come from that line, and a capture without exactly one
@@ -46,6 +48,35 @@ $SKIP_NAME = '(?i)\b(gift ?card|recipe|bundle|subscription)\b'
 
 # The column header aldiSearchToCsv writes under its store line.
 $CAPTURE_COLUMNS = 'id|term|name|prices|unit|size|href'
+
+# THE PRODUCT URL, RESOLVED (2026-09-11).
+# Invoke-Build used to keep an href only when it matched ^https?://. Every capture up to 2026-08-22 carried
+# absolute hrefs, so that held. Then the committed search agent landed on 2026-08-25, and aldiSearchExtract in
+# pull-aldi-instore.js returns a.getAttribute('href'), which is the page's RELATIVE path:
+#     /store/aldi/products/28024425-bake-shop-assorted-donut-holes-14-oz
+# Measured 2026-09-11 over the 15 captures from 2026-08-25 to 2026-09-10: 8,771 records, all 8,771 relative.
+# Of the 5,953 rows those builds priced fresh, NOT ONE carried a link_url, and the build printed
+# "rows carrying a product URL : 0" every day with no denominator beside it to show 0 was 0 of hundreds.
+# The Aldi links the board still had were carried-forward rows from the July and 08-22 captures, falling from
+# 1,676 on 08-25 to 618 on 09-10 as those rows retired. Unlinked, a fresh row also loses the linkability
+# tie-break in compare-deals' Select-StoreWinner and gives derive-links-from-prices no identity to derive from.
+#
+# FIXED HERE, NOT IN THE AGENT: the relative captures already on disk and any session still pasting the older
+# agent both arrive at this one function, so it has to read the relative form whatever the agent emits.
+# ONLY THE PROVEN SHAPE is resolved: /store/aldi/products/<numeric id>-<slug> under https://www.aldi.us, the
+# path the agent's own ALDI_PRODUCT_HREF_RX admits, and the exact form of every absolute href before 2026-08-25
+# and of all 395 Aldi links in product-urls.json that day. Any other relative path gets NO link: a host guessed
+# onto a path we have never seen is a "See item" that opens the wrong page. Whitespace is refused as well,
+# because a rejoined wrap glues the next line on after a space (Join-WrappedRecords' founding bug).
+# An absolute href passes through as before.
+$ALDI_ORIGIN = 'https://www.aldi.us'
+function Resolve-AldiProductUrl([string]$href) {
+  $h = $href.Trim()
+  if (-not $h) { return '' }
+  if ($h -match '^https?://') { return $h }
+  if ($h -cmatch '^/store/aldi/products/\d+-\S+$') { return ($ALDI_ORIGIN + $h) }
+  return ''
+}
 
 function Convert-Name([string]$slug) {
   $s = ($slug -replace '\s+', ' ').Trim()
@@ -271,6 +302,7 @@ function Invoke-Build([object[]]$raw, [string]$date, [string]$storeLocation = ''
   $rows = New-Object System.Collections.ArrayList
   $seen = @{}
   $rejects = New-Object System.Collections.ArrayList
+  $hrefUnread = 0   # priced rows that HAD an href this could not read as an aldi.us product URL
   foreach ($r in $raw) {
     $name = Convert-Name (Repair-SlugDecimals ([string]$r.name) ([string]$r.size))
     if (-not $name) { [void]$rejects.Add([pscustomobject]@{ item = [string]$r.name; why = 'no name' }); continue }
@@ -334,8 +366,9 @@ function Invoke-Build([object[]]$raw, [string]$date, [string]$storeLocation = ''
       as_of         = $date
       found_by_term = [string]$r.term
     }
-    $u = [string]$r.href
-    if ($u -match '^https?://') { $row['link_url'] = $u }
+    $u = Resolve-AldiProductUrl ([string]$r.href)
+    if ($u) { $row['link_url'] = $u }
+    elseif (([string]$r.href).Trim()) { $hrefUnread++ }
     if ($r.taxonomy_path) { $row['taxonomy_path'] = [string]$r.taxonomy_path }
     # PER ROW, not only in the file's `source`: carry-forward-regular copies older rows into this file with
     # their own fields and their own as_of, so a file-level source would name TODAY's store for a row read at
@@ -343,7 +376,7 @@ function Invoke-Build([object[]]$raw, [string]$date, [string]$storeLocation = ''
     if ($storeLocation) { $row['store_location'] = $storeLocation }
     [void]$rows.Add([pscustomobject]$row)
   }
-  return @{ rows = $rows.ToArray(); rejects = $rejects.ToArray() }
+  return @{ rows = $rows.ToArray(); rejects = $rejects.ToArray(); hrefUnread = $hrefUnread }
 }
 
 function Join-WrappedRecords {
@@ -560,6 +593,31 @@ if ($SelfTest) {
   if ($t.rows.Count -eq 1 -and $t.rows[0].current_price -eq 3.99 -and $t.rows[0].size -eq 'lb') { Write-Output "ok    weighted row publishes the per-lb rate, not the pack estimate" }
   else { Write-Output "FAIL  weighted row basis"; $fail++ }
 
+  # ---- THE PRODUCT URL (2026-09-11) - see Resolve-AldiProductUrl ------------------------------------------
+  # Every case drives Invoke-Build, the function the build runs, and reads link_url off the one row it returns.
+  $REL = '/store/aldi/products/28024425-bake-shop-assorted-donut-holes-14-oz'
+  $ucases = @(
+    # MUST FIRE, the founding shape, verbatim from aldi-capture-2026-09-10: 219 priced rows, 0 links
+    @{ label = 'MUST FIRE  a relative /store/aldi/products/ href becomes an absolute aldi.us link_url'
+       href = $REL; want = ('https://www.aldi.us' + $REL); unread = 0 }
+    # CLEAN TWIN: the absolute form every capture up to 2026-08-22 carried still reaches link_url untouched
+    @{ label = 'CLEAN TWIN  an absolute href still reaches link_url unchanged'
+       href = 'https://www.aldi.us/store/aldi/products/1-goldhen-grade-a-large-eggs-12-ct'
+       want = 'https://www.aldi.us/store/aldi/products/1-goldhen-grade-a-large-eggs-12-ct'; unread = 0 }
+    # MUST NOT FIRE: a relative path of any other shape gets no link rather than a guessed one, and is COUNTED
+    @{ label = 'MUST NOT FIRE  a relative path that is not a numbered Aldi product gets no link_url'
+       href = '/store/aldi/collections/bakery'; want = ''; unread = 1 }
+    # MUST NOT FIRE: a wrap-rejoined href carrying the next line after a space gets no link_url
+    @{ label = 'MUST NOT FIRE  a relative href with a rejoined fragment after a space gets no link_url'
+       href = ($REL + ' eggs'); want = ''; unread = 1 }
+  )
+  foreach ($c in $ucases) {
+    $b = Invoke-Build @([pscustomobject]@{ term = 'donut'; name = 'bake shop assorted donut holes 14 oz'; prices = '$3.49'; unit = ''; size = '14 oz'; href = $c.href }) '2026-01-01'
+    $got = if ($b.rows.Count -eq 1) { [string]$b.rows[0].link_url } else { '<no row>' }
+    if ([string]::Equals($got, $c.want, [StringComparison]::Ordinal) -and $b.hrefUnread -eq $c.unread) { Write-Output ('ok    ' + $c.label) }
+    else { Write-Output ("FAIL  {0} - link_url [{1}] want [{2}], unread {3} want {4}" -f $c.label, $got, $c.want, $b.hrefUnread, $c.unread); $fail++ }
+  }
+
   # slug decimals: repair only where the card size proves the number, never on a guess
   $dcases = @(
     @{ n = 'happy harvest whole kernel corn 15 25 oz'; s = '15.25 oz'; want = 'happy harvest whole kernel corn 15.25 oz' }
@@ -739,7 +797,14 @@ $rejFile = Join-Path $root "out\aldi-rejects-$Date.json"
 
 $why = $res.rejects | Group-Object why | Sort-Object Count -Descending
 Write-Output ("build-aldi-regular: {0} raw -> {1} priced rows over {2} search terms -> aldi-regular-$Date.json" -f $raw.Count, $rows.Count, $doc.pull_terms)
-Write-Output ("  rows carrying a product URL : {0}" -f (@($rows | Where-Object { $_.link_url }).Count))
+# WITH ITS DENOMINATOR, and a floor. This line read "0" for 15 straight builds (2026-08-25 to 09-10) and nobody
+# could see that 0 was 0 of several hundred. Every threshold here is an upper bound, so a link producer that
+# STOPS would otherwise go quiet; zero links on a non-empty build is that stop. Warned, not refused: the prices
+# are still right, and refusing would hold Aldi's fresh prices back over a missing "See item".
+$linked = @($rows | Where-Object { $_.link_url }).Count
+Write-Output ("  rows carrying a product URL : {0} of {1}" -f $linked, $rows.Count)
+if ($res.hrefUnread) { Write-Output ("  rows whose href is not a readable aldi.us product URL (shipped with no link) : {0} of {1}" -f $res.hrefUnread, $rows.Count) }
+if ($linked -eq 0) { Write-Warning ("build-aldi-regular: NONE of the {0} priced rows carries a product URL. Check the capture's href column against Resolve-AldiProductUrl before the board loses its Aldi links." -f $rows.Count) }
 if ($res.rejects.Count) {
   Write-Output ("  {0} rejected -> aldi-rejects-$Date.json" -f $res.rejects.Count)
   foreach ($g in $why) { Write-Output ("     {0}x {1}" -f $g.Count, $g.Name) }
