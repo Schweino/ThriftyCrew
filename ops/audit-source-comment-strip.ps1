@@ -29,6 +29,21 @@
   dropping whole-line comments, and then MATCHES a declaration or call against the result, must also
   remove block comments - either by calling Get-PsCodeOnly or by stripping them itself.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND, so a clean report proves nothing. It matches ONE spelling of the
+  class - a whole-line drop by -notmatch on a leading hash - and a scanner that reads comments by line
+  some other way is out of its reach. Found 2026-09-11: ops\audit-cross-module-reach.ps1 decided comment
+  or code by whether a hash sat EARLIER ON THE SAME LINE, so every line of a block header scored as code,
+  its ratchet read 133 -> 134 for a path named in header prose, and 15 of its 133 code sites that day were
+  block-comment prose. This audit examined that file and stayed silent, correctly by its own needle,
+  because that scanner never drops a line. A second needle for the hash-position spelling was measured
+  and NOT added: of the 506 files this audit examined, 6 spell an IndexOf on a hash, and only that one
+  classified PowerShell by line comments alone. 2 strip blocks first (audit-git-sweepers,
+  audit-lift-completeness) and 3 apply it to Python, a requirements file or a URL fragment, where it is
+  right (audit-full-path-excludes, audit-python-pins, audit-search-links). All 6 name a .ps1 somewhere, so
+  no text test tells the PowerShell reader apart: the needle would fire 3 times for 1 real case. The
+  scanner was fixed instead (it reads comments from the tokenizer now), which leaves that spelling
+  unguarded for the NEXT scanner. That is the gap, stated rather than closed.
+
   A RATCHET. The known call sites are recorded as a high-water mark that may only go DOWN, so an
   existing one can be worked off but a NEW scanner cannot appear with the gap.
 

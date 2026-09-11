@@ -40,7 +40,10 @@ everything else honest, so a defect here is silent by construction.
   THREE positional arguments; a simple function binds the first and drops the rest into `$args`, so
   the case runs against a truncated line. Two must-not-fire cases passed that way on 2026-09-07 while
   being fed a fragment that could never have matched anything. Write fixtures as single-quoted
-  literals with doubled inner quotes.
+  literals with doubled inner quotes. **The same trap inside an array literal:** in `@($a + 'x', $b)`
+  the comma binds tighter than `+`, so it is `$a` plus a two-element array, one string, not two lines.
+  A multi-line fixture built that way ran on one line on 2026-09-11 (`audit-cross-module-reach`).
+  Assign each concatenated line to a variable first.
 - **Never wrap a function call inline as `@(Get-Thing ...)`.** A comma-returned array reads as ONE
   element, so an empty result counts 1 and a real result binds the whole array to your loop variable.
   Assign, then wrap. Hit four times in one session on 2026-09-06.

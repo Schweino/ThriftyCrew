@@ -21,17 +21,36 @@
 # them into `code` and `comment`. Only the CODE count is ratcheted, because a comment naming a path is
 # documentation and gating it would push people to delete the explanation rather than the coupling.
 #
+# A COMMENT IS WHAT THE TOKENIZER SAYS IT IS, NOT WHAT THE LINE SAYS (2026-09-11). Until then a site was a
+# comment only when a `#` opened earlier on its OWN line, so every line inside a <# #> block scored as CODE
+# and was ratcheted: ops\audit-glued-keyword.ps1 read 133 -> 134 for naming grocery's ads file in its header
+# prose. That is the class ops\audit-source-comment-strip.ps1 names, in a spelling it does not match.
+# Measured at 0a681beb0 over ALL 159 sites the sweep returned (578 files scanned, 54 carrying a site),
+# through this file's own Get-ReachSites lifted by AST and each site placed in a Language.Parser token:
+#   15 of the 133 code sites sat inside a block comment, every one of them header prose read by eye;
+#    0 sat inside a here-string; 0 comment sites sat in real code; the other 144 kept their label.
+# So the baseline moved 133 -> 118 that day FOR THAT REASON ALONE. The number changed because what is
+# counted changed, not because any coupling was removed, and every run prints what the line rule would
+# still read beside it so nobody mistakes the drop for progress.
+#   * A HERE-STRING STAYS CODE. It is a value the program uses, like the quoted strings this has always
+#     counted, and `reach-fixture-ok:` is the per-line opt-out for a fixture.
+#   * The tokenizer runs only on a file that already has a site (54 of 578, about 0.3 s that day).
+#   * A file that does not parse cleanly, or carries a bare CR the line split would miscount, is classified
+#     by the old line rule, which leans CODE - so an unclosed block comment cannot hide the rest of a file.
+#
 # DELIBERATELY A RATCHET, NOT A GATE. The number is what it is today and a gate red on day one teaches
 # people to ignore red. The high-water mark may only go DOWN.
 #
-#   .\audit-cross-module-reach.ps1                 report + ratchet
-#   .\audit-cross-module-reach.ps1 -UpdateBaseline lower the high-water mark (refuses to raise it)
+#   .\audit-cross-module-reach.ps1                     report + ratchet
+#   .\audit-cross-module-reach.ps1 -ShowClassifierDiff also list every site the line rule reads differently
+#   .\audit-cross-module-reach.ps1 -UpdateBaseline     lower the high-water mark (refuses to raise it)
 #   .\audit-cross-module-reach.ps1 -SelfTest
 # Exit 0 clean, 2 the ratchet rose, 3 could not evaluate.
 # ---------------------------------------------------------------------------------------------------
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param(
   [switch]$UpdateBaseline,
+  [switch]$ShowClassifierDiff,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -41,6 +60,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
+. (Join-Path $repo 'lib\lf-write.ps1')    # Write-TcLfFile: the baseline is tracked and stored eol=lf
 
 $BASELINE = Join-Path $here 'cross-module-reach-baseline.json'
 
@@ -65,22 +85,60 @@ function Get-ModuleOfPath {
 
 function Test-IsCommentSite {
   param([string]$Line, [int]$MatchIndex)
-  # A site is a COMMENT site when a `#` opens before it on the line. Not perfect - a `#` inside a string
-  # earlier on the line fools this - but it is deliberately biased toward calling a site CODE, so the
-  # ratcheted number is never understated by a misread comment.
+  # THE LINE RULE, now the FALLBACK (2026-09-11): used only for a file the tokenizer could not read cleanly,
+  # and printed beside the real count so the 133 -> 118 reclassification stays visible.
+  # A site is a COMMENT site when a `#` opens before it on the line. It cannot see a block comment, and a
+  # `#` inside a string earlier on the line fools it the other way; but it leans toward calling a site CODE,
+  # which is the right direction for a fallback under a ratchet.
   if ($null -eq $Line) { return $false }
   $hash = $Line.IndexOf('#')
   if ($hash -lt 0) { return $false }
   return ($hash -lt $MatchIndex)
 }
 
+function Get-PsCommentExtents {
+  # The extents of every COMMENT token in $Text, line and block alike, from the real PowerShell tokenizer.
+  # Returns $null - meaning "use the line rule" - when the text does not parse cleanly or carries a bare CR.
+  # A parse error can leave a block comment unterminated, which would make the rest of the file one comment
+  # and understate the ratchet; a bare CR is a newline to the tokenizer and not to Get-ReachSites' split, so
+  # every line number after it would be off by one. Both fall back rather than guess.
+  # (Documented in line comments on purpose: lib\ps-source.ps1 records why a doc about comment delimiters
+  # should not itself be a block comment.)
+  param([string]$Text)
+  if ($null -eq $Text) { return $null }
+  if ($Text -match "`r(?!`n)") { return $null }
+  $tok = $null; $err = $null
+  try { [void][System.Management.Automation.Language.Parser]::ParseInput($Text, [ref]$tok, [ref]$err) } catch { return $null }
+  if ($null -eq $tok) { return $null }
+  if ($null -ne $err -and $err.Length -gt 0) { return $null }
+  $found = New-Object System.Collections.Generic.List[object]
+  foreach ($t in $tok) {
+    if ($t.Kind -eq [System.Management.Automation.Language.TokenKind]::Comment) { [void]$found.Add($t.Extent) }
+  }
+  return ,$found
+}
+
+function Test-IsInCommentExtent {
+  # True when (Line, Column), both 1-based, falls inside one of $Comments. An extent's end column is exclusive.
+  param($Comments, [int]$Line, [int]$Column)
+  foreach ($x in $Comments) {
+    if ($Line -lt $x.StartLineNumber -or $Line -gt $x.EndLineNumber) { continue }
+    if ($Line -eq $x.StartLineNumber -and $Column -lt $x.StartColumnNumber) { continue }
+    if ($Line -eq $x.EndLineNumber -and $Column -ge $x.EndColumnNumber) { continue }
+    return $true
+  }
+  return $false
+}
+
 function Get-ReachSites {
   param([string]$Text, [string]$OwnModule)
-  # Returns an array of @{ target=; module=; line=; comment=<bool> } for every internals path literal in
-  # $Text that belongs to a module OTHER than $OwnModule.
+  # Returns an array of @{ target=; module=; line=; comment=<bool>; line_comment=<bool>; classifier= } for every
+  # internals path literal in $Text that belongs to a module OTHER than $OwnModule. `comment` is the tokenizer's
+  # verdict (or the line rule's, when classifier is 'line'); `line_comment` is always the line rule's.
   $out = @()
   if (-not $Text) { return $out }
   $lines = $Text -split "`r?`n"
+  $comments = $null; $tokenised = $false
   foreach ($owner in $script:INTERNALS.Keys) {
     if ($owner -eq $OwnModule) { continue }
     foreach ($int in $script:INTERNALS[$owner]) {
@@ -114,8 +172,13 @@ function Get-ReachSites {
           # high-water mark it was measured against is untouched - it can only ever exclude a line an
           # author wrote it on, in a diff a reviewer reads.
           if ($lines[$i] -match 'reach-fixture-ok:\s*\S') { continue }
-          $out += @{ target = $int; module = $owner; line = ($i + 1)
-                     comment = (Test-IsCommentSite -Line $lines[$i] -MatchIndex $m.Index) }
+          # Tokenise once per file, and only a file that has a site to classify.
+          if (-not $tokenised) { $comments = Get-PsCommentExtents -Text $Text; $tokenised = $true }
+          $lineRule = Test-IsCommentSite -Line $lines[$i] -MatchIndex $m.Index
+          $byToken = ($null -ne $comments)
+          $isComment = if ($byToken) { Test-IsInCommentExtent -Comments $comments -Line ($i + 1) -Column ($m.Index + 1) } else { $lineRule }
+          $out += @{ target = $int; module = $owner; line = ($i + 1); comment = $isComment
+                     line_comment = $lineRule; classifier = $(if ($byToken) { 'token' } else { 'line' }) }
         }
       }
     }
@@ -209,6 +272,58 @@ if ($runSelfTest) {
   $s10 = @(Get-ReachSites -Text "`$p = 'grocery/out/a.json'`n# and grocery/out/b.json is the old one" -OwnModule 'meal-prep')
   T 'CLEAN TWIN  code and comment sites are both still found, and split correctly' ($s10.Count -eq 2 -and @($s10 | Where-Object { -not $_.comment }).Count -eq 1) ([string]$s10.Count)
 
+  # ---- BLOCK COMMENTS ARE THE TOKENIZER'S (2026-09-11) --------------------------------------------
+  # The delimiters are BUILT, never written into a string here: lib\ps-source.ps1's regex reducer, which
+  # run-gates' discovery and other scanners use, reads a comment opener inside a quoted string as a real one
+  # and would swallow this file's code up to the next closer.
+  $bo = '<' + '#'
+  $bc = '#' + '>'
+  # MUST NOT FIRE - the founding shape: a block header whose second line names grocery's ads file in prose.
+  # The line rule scored it CODE, and ops\audit-glued-keyword.ps1's header moved the ratchet 133 -> 134.
+  $bkText = @($bo, '  writing grocery\out\ads-<today>.json beside the tracked ads files', $bc, '$x = 1') -join "`n"
+  $bk = @(Get-ReachSites -Text $bkText -OwnModule 'ops')
+  T 'MUST NOT FIRE  a path inside a block comment is not a CODE site' ($bk.Count -eq 1 -and $bk[0].comment -and $bk[0].classifier -eq 'token') ("count=$($bk.Count) comment=$($bk[0].comment) by=$($bk[0].classifier)")
+  # ...and the line rule alone still misreads it, so the case above proves the tokenizer did the work.
+  T 'the line rule on its own still calls that block-comment line CODE (the misread this change retires)' ($bk.Count -eq 1 -and -not $bk[0].line_comment) ("line_comment=$($bk[0].line_comment)")
+
+  # MUST FIRE - a real code literal still counts: right after a closed block, and on the same line as one.
+  $afterText = @($bo, '  header prose that names nothing', $bc, '$p = ''grocery/out/x.json''') -join "`n"
+  $after = @(Get-ReachSites -Text $afterText -OwnModule 'ops')
+  T 'MUST FIRE  a code literal on the line after a closed block comment is a CODE site' ($after.Count -eq 1 -and -not $after[0].comment -and $after[0].line -eq 4) ("count=$($after.Count) comment=$($after[0].comment)")
+  $inlineText = $bo + ' grocery/out is prose here ' + $bc + ' $p = ''grocery/out/x.json'''
+  $inline = @(Get-ReachSites -Text $inlineText -OwnModule 'ops')
+  T 'MUST FIRE  on one line, the path after the closer is CODE and the one inside is COMMENT' ($inline.Count -eq 2 -and @($inline | Where-Object { -not $_.comment }).Count -eq 1) ("count=$($inline.Count)")
+  # MUST FIRE - an extent's end column is EXCLUSIVE. A path starting on the very next column after the closer is
+  # code; a mutation probe that made the end inclusive survived every case above until this one was added.
+  $flushText = $bo + ' x ' + $bc + 'grocery/out/x.json'
+  $flush = @(Get-ReachSites -Text $flushText -OwnModule 'ops')
+  T 'MUST FIRE  a path starting on the column right after the closer is CODE (the end column is exclusive)' ($flush.Count -eq 1 -and -not $flush[0].comment -and $flush[0].classifier -eq 'token') ("count=$($flush.Count) comment=$($flush[0].comment) by=$($flush[0].classifier)")
+
+  # MUST FIRE - a `#` inside a string earlier on the line no longer hides a real reach. The line rule
+  # called this a comment, the direction its header promised it never erred in.
+  $hs = @(Get-ReachSites -Text '$u = ''a#b''; $p = ''grocery/out/x.json''' -OwnModule 'ops')
+  T 'MUST FIRE  a hash inside an earlier string does not make a real reach a comment' ($hs.Count -eq 1 -and -not $hs[0].comment -and $hs[0].line_comment) ("comment=$($hs[0].comment) line_comment=$($hs[0].line_comment)")
+
+  # MUST FIRE - text that does not parse falls back to the line rule, so an unclosed block comment cannot
+  # turn every reach below it into prose. The opener line is ASSIGNED first: inside @( ) the comma binds tighter
+  # than +, so `@($bo + ' never closed', $next)` is $bo plus a two-element array, one line, and the first cut of
+  # this case ran on that fragment and went red for the fixture's reason, not the code's.
+  $openLine = $bo + ' never closed'
+  $openText = @($openLine, '$p = ''grocery/out/x.json''') -join "`n"
+  $open = @(Get-ReachSites -Text $openText -OwnModule 'ops')
+  T 'MUST FIRE  an unclosed block comment falls back to the line rule and still counts the reach below it' ($open.Count -eq 1 -and -not $open[0].comment -and $open[0].classifier -eq 'line') ("count=$($open.Count) comment=$($open[0].comment) by=$($open[0].classifier)")
+  # MUST FIRE - a bare CR is a newline to the tokenizer and not to the line split, so every line number after it
+  # would disagree; such text goes to the line rule rather than to a token looked up on the wrong line.
+  $crText = '$z = 1' + "`r" + '$p = ''grocery/out/x.json'''
+  $cr = @(Get-ReachSites -Text $crText -OwnModule 'ops')
+  T 'MUST FIRE  text with a bare CR is classified by the line rule, never by mis-numbered tokens' ($cr.Count -eq 1 -and $cr[0].classifier -eq 'line') ("count=$($cr.Count) by=$($cr[0].classifier)")
+
+  # CLEAN TWIN - a path inside a HERE-STRING is still a CODE site. It is the neighbour a reducer that went
+  # one token kind too far would silently drop, and the 2026-09-11 decision is that it stays counted.
+  $hereText = @('$body = @''', 'grocery/out/x.json', '''@') -join "`n"
+  $here1 = @(Get-ReachSites -Text $hereText -OwnModule 'ops')
+  T 'CLEAN TWIN  a path inside a here-string is still counted as a CODE site' ($here1.Count -eq 1 -and -not $here1[0].comment -and $here1[0].classifier -eq 'token') ("count=$($here1.Count) comment=$($here1[0].comment) by=$($here1[0].classifier)")
+
   # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
   # .claude\worktrees\<name> was excluded and this ratchet exited 3 from every spawned session.
   $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'meal-prep\b.ps1' = 'Write-Output 2' }
@@ -231,9 +346,11 @@ $files = @(Get-ReachSourceFiles -RootDir $repo)
 # a test that builds a path into another module's internals still breaks when that directory moves.
 if (-not $files.Count) { Write-Output 'cross-module-reach: no .ps1 files found - discovery is broken, not clean.'; exit 3 }
 
-$codeSites = 0; $commentSites = 0
+$codeSites = 0; $commentSites = 0; $lineRuleCode = 0
 $byPair = @{}
 $fileHits = @{}
+$filesBy = @{ token = 0; line = 0 }
+$reclassified = New-Object System.Collections.Generic.List[string]
 foreach ($f in $files) {
   $rel = $f.FullName.Substring($repo.Length).TrimStart('\','/')
   $own = Get-ModuleOfPath $rel
@@ -242,7 +359,13 @@ foreach ($f in $files) {
   if ($rel -replace '\\','/' -eq 'ops/audit-cross-module-reach.ps1') { continue }
   $text = [IO.File]::ReadAllText($f.FullName)
   $sites = @(Get-ReachSites -Text $text -OwnModule $own)
+  if ($sites.Count -gt 0) { $filesBy[$sites[0].classifier]++ }
   foreach ($s in $sites) {
+    if (-not $s.line_comment) { $lineRuleCode++ }
+    if ($s.comment -ne $s.line_comment) {
+      [void]$reclassified.Add(("{0}:{1}  {2} by the tokenizer, {3} by the line rule" -f $rel, $s.line,
+        $(if ($s.comment) { 'comment' } else { 'code' }), $(if ($s.line_comment) { 'comment' } else { 'code' })))
+    }
     if ($s.comment) { $commentSites++ } else {
       $codeSites++
       $k = "$own -> $($s.module)"
@@ -254,15 +377,20 @@ foreach ($f in $files) {
   }
 }
 
-Write-Output ("cross-module-reach: scanned {0} first-party .ps1 file(s)" -f $files.Count)
+Write-Output ("cross-module-reach: scanned {0} first-party .ps1 file(s); {1} carry a site, classified by the tokenizer in {2} and by the line-rule fallback in {3}" -f $files.Count, ($filesBy.token + $filesBy.line), $filesBy.token, $filesBy.line)
 Write-Output ("  code sites    {0}   (in {1} file(s))" -f $codeSites, $fileHits.Count)
 Write-Output ("  comment sites {0}   (not ratcheted - a comment naming a path is documentation)" -f $commentSites)
+Write-Output ("  the line rule alone would read {0} code site(s); {1} site(s) are classified differently (-ShowClassifierDiff lists them)" -f $lineRuleCode, $reclassified.Count)
 foreach ($k in ($byPair.Keys | Sort-Object { -$byPair[$_] })) {
   Write-Output ("    {0,-26} {1}" -f $k, $byPair[$k])
 }
 Write-Output '  top files:'
 foreach ($k in (@($fileHits.Keys | Sort-Object { -$fileHits[$_] }) | Select-Object -First 8)) {
   Write-Output ("    {0,-58} {1}" -f $k, $fileHits[$k])
+}
+if ($ShowClassifierDiff) {
+  Write-Output '  classified differently from the line rule:'
+  foreach ($r in $reclassified) { Write-Output ('    ' + $r) }
 }
 
 if ($runUpdate) {
@@ -276,7 +404,8 @@ if ($runUpdate) {
     recorded   = (Get-Date -Format 'yyyy-MM-dd')
     note       = 'HIGH-WATER MARK, MAY ONLY GO DOWN. Cross-module reaches into another module internals directory, counted as SITES in code (comments excluded). Backlog I90.'
   }
-  [IO.File]::WriteAllText($BASELINE, ($obj | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
+  # LF and no BOM, the bytes the committed blob carries, not the CRLF ConvertTo-Json writes under PS 5.1.
+  $null = Write-TcLfFile -Path $BASELINE -Text ($obj | ConvertTo-Json) -NoBom
   Write-Output ("cross-module-reach: baseline set to {0}" -f $codeSites)
   Exit-Guard -Name 'cross-module-reach' -Summary ("baseline={0}" -f $codeSites) -Code 0
 }
