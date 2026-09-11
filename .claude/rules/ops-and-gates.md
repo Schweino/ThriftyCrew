@@ -160,6 +160,12 @@ everything else honest, so a defect here is silent by construction.
   **A concurrency fixture keeps every writer's exit code and output** and counts a refusal as a refusal: the
   `| Out-Null` those fixtures carried threw away the one line that named the cause. Other `Move-Item -Force`
   replaces remain in the tree and were not swept.
+  **Its barrier goes INSIDE each writer, immediately before the contended call, never ahead of the writer's own
+  process start-up.** A barrier in the parent or a `Start-Job` child releases writers that each then spend about a
+  second starting powershell.exe, which spreads them further than the barrier closed: a disabled lock went uncaught
+  in 5 of 11 runs, then 1 of 10. `lib/ledger-fixture.ps1` holds them on a kernel event inside `Invoke-Locked` (red
+  50 of 50 with the lock disabled across the three ledgers, asserted as a count of writers at the barrier), gives
+  self-test writers a hang-guard lock wait instead of the production 15 s, and names a writer that could not run.
 - **A hermetic self-test never asserts an UPPER wall-clock bar** (2026-09-11). Several sessions push from
   one box, so a pre-push `run-gates` shares the cores with theirs: a set that takes 106 s quiet took 792 s,
   and `fanout-lib`'s "under 12 s" and `parallel-run`'s "under 2.5 s" concurrency cases blocked a push that
