@@ -32,6 +32,15 @@ beats reassurance: understating is exactly as wrong as overstating.
 (installed by `ops/install-hooks.ps1`, asserted live by `ops/audit-hook-installed.ps1`). It runs ONCE
 per push, not once per commit. **`git push --no-verify` is the deliberate, loud bypass.**
 
+**DO NOT RUN IT BY HAND WHEN A PUSH WILL RUN IT ANYWAY, and seed a worktree before its first push**
+(2026-09-11). The gate workers are a machine-wide budget of 10 shared by every session, so a run by hand
+and the push that follows are two turns in the same queue. Measured that day across 74 sessions:
+**123 runs by hand against 109 through a push, and 41 of the 66 sessions that ran it by hand then pushed
+the same tree**, while the queue ran about 89 arrivals an hour against the 40 it can serve. The queue
+refuses at 20 minutes, so pushes were being refused having proved nothing. A run by hand is right when it
+is a MEASUREMENT (a baseline against an after, a bare checkout against a seeded one); it is waste when it
+is a rehearsal of the push. `design/PLAN-gate-queue-2026-09-11.md` is the measurement.
+
 **This was NOT true between 2026-08-11 and 2026-09-09**, and this file asserted it anyway. `gates.yml`
 went `workflow_dispatch`-only when Actions minutes were exhausted, no hook existed, and no task called
 it - so for a month a push was gated exactly as much as the person pushing chose to gate it. The cloud

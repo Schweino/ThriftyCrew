@@ -118,19 +118,67 @@ unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_OBJECT_DIRECTORY G
 # one only supplies. It runs at most once per checkout, because the guard below sees the seeded card.
 seedcard="$repo/meal-prep/db/built/american-goulash-pasta.body.html"
 seeder="$repo/ops/seed-worktree.ps1"
-if [ ! -f "$seedcard" ] && [ -f "$seeder" ]; then
-  echo "pre-push: this checkout has no built cards, so two gates would be BLIND - seeding once (47 MB)." >&2
-  powershell -NoProfile -ExecutionPolicy Bypass -File "$seeder" -Target "$repo" >&2 || \
-    echo "pre-push: seeding did not complete; the gates will report BLIND rather than fail." >&2
+
+# ONE GATE RUN PER TREE, NOT TWO (2026-09-11, F4 of design/PLAN-gate-queue-2026-09-11.md). run-gates records
+# a PASS on a CLEAN tree into the common git directory; if the tree being pushed is that exact tree, running
+# it again proves nothing new and costs another turn in a queue that was serving about 40 runs an hour
+# against 89 arriving. MEASURED that day across 74 sessions: 123 runs by hand against 109 through a push, and
+# 41 of the 66 sessions that ran it by hand pushed the same tree minutes later.
+#
+# WHAT THE RECORD HAS TO SATISFY, and every one of these is the difference between reuse and a lie:
+#   * the TREE of every ref being pushed equals the tree the gate passed (a tree hash covers every tracked
+#     byte, this gate and its fixtures included, so the record cannot outlive what it proved);
+#   * the working tree is CLEAN, because the gates read the working tree, not the commit;
+#   * the SEED STATE matches, because the same tree proves LESS in a checkout where two gates were BLIND;
+#   * the record is under 2 hours old, so an ancient pass cannot vouch for today's push.
+# Anything missing, unreadable or unparsed falls through to running the gate. That is the safe direction:
+# the cost of a needless run is a queue slot, the cost of a wrong skip is an ungated push.
+skip_gate=0
+rec_tree=''; rec_seed=''; rec_at=''
+gitcommon="$(git -C "$repo" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+if [ -n "$gitcommon" ] && [ -f "$gitcommon/tc-gate-pass.txt" ]; then
+  read -r rec_tree rec_seed rec_at < "$gitcommon/tc-gate-pass.txt"
+  if [ -f "$seedcard" ]; then seed_now=seeded; else seed_now=blind; fi
+  now="$(date +%s)"
+  age=-1
+  case "$rec_at" in ''|*[!0-9]*) age=-1 ;; *) age=$(( now - rec_at )) ;; esac
+  dirty="$(git -C "$repo" status --porcelain 2>/dev/null | head -n 1)"
+  trees_match=1
+  seen_ref=0
+  while read -r lref lsha rref rsha; do
+    [ -z "$lsha" ] && continue
+    case "$lsha" in *[!0]*) ;; *) continue ;; esac
+    seen_ref=1
+    t="$(git -C "$repo" rev-parse "$lsha^{tree}" 2>/dev/null)"
+    [ -n "$t" ] && [ "$t" = "$rec_tree" ] || trees_match=0
+  done < "$refs"
+  if [ "$seen_ref" -eq 1 ] && [ "$trees_match" -eq 1 ] && [ -z "$dirty" ] && \
+     [ "$seed_now" = "$rec_seed" ] && [ "$age" -ge 0 ] && [ "$age" -lt 7200 ]; then
+    skip_gate=1
+  fi
 fi
 
-echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not once per commit." >&2
-
-# REDIRECT, THEN READ THE STATUS, THEN GREP THE FILE. Reading a status through a pipe gives the LAST
-# stage's, not the gate's, which this estate has a memory about.
 log="${TMPDIR:-/tmp}/tc-prepush-$$.log"
-powershell -NoProfile -ExecutionPolicy Bypass -File "$gate" > "$log" 2>/dev/null
-rc=$?
+if [ "$skip_gate" -eq 1 ]; then
+  # The message goes into the log as well as to the terminal, so every reader below - the tail on success,
+  # the grep on failure - sees a real file rather than a missing one.
+  echo "run-gates: ALREADY PASSED this exact tree ${rec_tree} (${age}s ago, ${rec_seed}), so this push did not run it again." > "$log"
+  cat "$log" >&2
+  rc=0
+else
+  if [ ! -f "$seedcard" ] && [ -f "$seeder" ]; then
+    echo "pre-push: this checkout has no built cards, so two gates would be BLIND - seeding once (47 MB)." >&2
+    powershell -NoProfile -ExecutionPolicy Bypass -File "$seeder" -Target "$repo" >&2 || \
+      echo "pre-push: seeding did not complete; the gates will report BLIND rather than fail." >&2
+  fi
+
+  echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not once per commit." >&2
+
+  # REDIRECT, THEN READ THE STATUS, THEN GREP THE FILE. Reading a status through a pipe gives the LAST
+  # stage's, not the gate's, which this estate has a memory about.
+  powershell -NoProfile -ExecutionPolicy Bypass -File "$gate" > "$log" 2>/dev/null
+  rc=$?
+fi
 
 if [ "$rc" -eq 0 ]; then
   tail -n 1 "$log" >&2

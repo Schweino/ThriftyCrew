@@ -483,11 +483,22 @@ $offPySuite = $allJobs.Count;  foreach ($j in $pySuiteJobs)  { [void]$allJobs.Ad
 # them any longer would make other runs wait on work that uses no worker. A run that cannot get one slot
 # in 20 minutes REFUSES with 3 rather than running over the budget - running anyway is the pile-up.
 $askedJobs = $Jobs
+# THE WAIT IS SPOKEN WITH A POSITION AND AN ESTIMATE (2026-09-11). "Waiting for a slot" told a session
+# nothing it could act on; "position 7 of 14, about 10 min" tells it whether to wait or do something else.
 $lease = Enter-TcGateSlots -Want $askedJobs -OnWait {
-  Write-Output ("run-gates: all {0} machine-wide gate worker slots are held by other gate runs - waiting for one (up to 20 min)" -f $script:TcGateSlotTotal)
+  param($pos, $depth, $eta, $samples)
+  $basis = if ($samples) { "{0} recent run(s)" -f $samples } else { 'the recorded default, no runs measured on this box yet' }
+  Write-Output ("run-gates: every one of the {0} machine-wide gate worker slots is held - QUEUED at position {1} of {2}, about {3:N0} min at {4}" -f $script:TcGateSlotTotal, $pos, $depth, ($eta / 60), $basis)
 }
 if ($lease.TimedOut) {
-  Write-Output ("run-gates: COULD NOT EVALUATE - waited {0:N0}s and every one of the {1} machine-wide gate worker slots stayed held by other gate runs. Nothing was run; that is not a pass." -f ($lease.WaitedMs / 1000), $script:TcGateSlotTotal)
+  # TWO REFUSALS, AND THEY ARE DIFFERENT FACTS. 'admission' means the queue was already too deep to serve
+  # this run inside the bound, and it is said in seconds rather than after 20 minutes of holding a session.
+  # 'timeout' means it waited its turn and the turn never came.
+  if ($lease.Refused -eq 'admission') {
+    Write-Output ("run-gates: COULD NOT EVALUATE - NOT QUEUED. {0} gate run(s) are ahead of this one, about {1:N0} min at the last {2} run(s), and the bound is {3:N0} min. Nothing was run; that is not a pass. Push again when the queue is shorter." -f ($lease.Position - 1), ($lease.EstimateSec / 60), $lease.CostSamples, (1200 / 60))
+    Exit-Guard -Name 'run-gates' -Summary 'blind=gate-queue-too-deep' -Code 3
+  }
+  Write-Output ("run-gates: COULD NOT EVALUATE - waited {0:N0}s at position {1} of {2} and never reached the head of the queue for one of the {3} machine-wide gate worker slots. Nothing was run; that is not a pass." -f ($lease.WaitedMs / 1000), $lease.Position, $lease.Depth, $script:TcGateSlotTotal)
   Exit-Guard -Name 'run-gates' -Summary 'blind=no-gate-worker-slot' -Code 3
 }
 $Jobs = $lease.Count
@@ -674,6 +685,38 @@ if ($timings.Count) {
   foreach ($r in ($timings | Sort-Object Ms -Descending | Select-Object -First 15)) {
     Write-Output ("   {0,7:N0}ms  {1}" -f $r.Ms, $r.Name)
   }
+  # WHAT THIS RUN COST THE BUDGET, so the queue's estimate rests on this machine rather than on a constant.
+  # Gate WORK, not wall: work is what occupied slots, and 10 slots serve 36,000 slot-seconds an hour. The
+  # queue averages the last 20 recorded runs and falls back to the measured default until there are any.
+  Add-TcGateRunCost -SlotSeconds (($timings | Measure-Object -Property Ms -Sum).Sum / 1000)
+}
+# A PASS ON A CLEAN TREE IS RECORDED, so the pre-push hook need not re-run the gate the session just ran
+# (2026-09-11, F4). MEASURED that day: 123 runs by hand against 109 through a push, and 41 of the 66 sessions
+# that ran it by hand pushed the same tree minutes later, each costing a second turn in a queue serving about
+# 40 runs an hour against 89 arriving.
+#
+# THE KEY IS THE TREE, NOT THE COMMIT. A tree hash covers every tracked byte, including this gate and every
+# fixture it runs, so a record cannot outlive a change to what it proved. Recorded ONLY when the working tree
+# is CLEAN, because a dirty tree is not the tree the hash names and the gates read the working tree.
+# The SEED STATE is part of the key: the same tree proves less in a checkout where two gates were BLIND, and a
+# record written there must not let a seeded push skip its own gate.
+# It writes into the COMMON git directory, which every linked worktree shares - deliberately, because a tree
+# is a tree wherever it was proved, and that sharing is what removes the duplicate run.
+# It cannot fail the run: everything here is inside a try that swallows.
+if (-not $fail.Count) {
+  try {
+    $dirty = @(& git -C $repo status --porcelain 2>$null)
+    $treeOut = @(& git -C $repo rev-parse 'HEAD^{tree}' 2>$null)
+    $tree = if ($treeOut.Count) { "$($treeOut[0])".Trim() } else { '' }
+    $commonOut = @(& git -C $repo rev-parse --path-format=absolute --git-common-dir 2>$null)
+    $common = if ($commonOut.Count) { "$($commonOut[0])".Trim() } else { '' }
+    if ($tree -and $common -and -not $dirty.Count -and [IO.Directory]::Exists($common)) {
+      $seeded = if (Test-Path -LiteralPath (Join-Path $repo 'meal-prep\db\built\american-goulash-pasta.body.html')) { 'seeded' } else { 'blind' }
+      # [DateTimeOffset], never -UFormat %s: that formats LOCAL time as if it were the epoch, 18,000s out here.
+      $line = ("{0} {1} {2}`n" -f $tree, $seeded, [DateTimeOffset]::UtcNow.ToUnixTimeSeconds())
+      [IO.File]::WriteAllText((Join-Path $common 'tc-gate-pass.txt'), $line, (New-Object Text.UTF8Encoding($false)))
+    }
+  } catch { }
 }
 # A RED GATE LEAVES A RECORD (WS 1b). Until 2026-09-09 a failure here printed to a terminal
 # and to a temp file the pre-push hook wrote, and that was the whole of it: no queue entry, no

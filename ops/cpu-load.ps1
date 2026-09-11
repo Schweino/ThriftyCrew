@@ -43,6 +43,11 @@ param(
   # which the run-gates executing it is holding.
   [string]$SlotPrefix = '',
   [int]$SlotTotal = 0,
+  # AND THE QUEUE IS A SEAM FOR THE SAME REASON (2026-09-11). Slots alone stopped deciding order when
+  # lib\gate-slots.ps1 gained a ticket queue: a fixture left on the production queue would wait behind real
+  # pushes, and its own tickets would tell every real waiter that somebody was ahead of them. The private
+  # Local\ budget is only half the isolation now.
+  [string]$SlotQueueDir = '',
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -159,6 +164,11 @@ if ($SelfTest) {
   $prefix = 'Local\tc-cpu-load-selftest-' + [guid]::NewGuid().ToString('N') + '-'
   $tmp = Join-Path $env:TEMP ('tc-cpu-load-st-' + [guid]::NewGuid().ToString('N'))
   $null = New-Item -ItemType Directory -Force $tmp
+  # THE QUEUE IS REDIRECTED TOO, for this process and for every child the cases start. The Local\ prefix keeps
+  # the fixture off the real slots; without this the fixture would still QUEUE on the real ticket directory,
+  # where it would wait behind live pushes and, worse, tell every live push that somebody was ahead of it.
+  $script:TcGateQueueDir = Join-Path $tmp 'queue'
+  $null = New-Item -ItemType Directory -Force $script:TcGateQueueDir
   $kids = [Collections.Generic.List[object]]::new()
   function Get-BurnersIn([string]$Dir) {
     if (-not $Dir) { return 0 }
@@ -167,7 +177,7 @@ if ($SelfTest) {
   }
   function Start-Tool([string[]]$ToolArgs, [string]$Name) {
     $o = Join-Path $tmp ($Name + '.out')
-    $a = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath) + $ToolArgs + @('-SlotPrefix', $prefix, '-SlotTotal', '2')
+    $a = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath) + $ToolArgs + @('-SlotPrefix', $prefix, '-SlotTotal', '2', '-SlotQueueDir', $script:TcGateQueueDir)
     $p = Start-Process -FilePath $PS -ArgumentList $a -PassThru -WindowStyle Hidden -RedirectStandardOutput $o -RedirectStandardError ($o + '.err')
     $null = $p.Handle
     $script:kids.Add($p)
@@ -258,6 +268,9 @@ if ($SelfTest) {
   Exit-Guard -Name 'CPU-LOAD-SELFTEST' -Code 0 -Summary "cases=$cases"
 }
 
+# The queue seam is applied by REDIRECTING the library's own default, so every call below - Enter's, and the
+# growth check inside it - reads the same directory without threading a parameter through each one.
+if ($SlotQueueDir) { $script:TcGateQueueDir = $SlotQueueDir }
 $prefixUse = if ($SlotPrefix) { $SlotPrefix } else { $script:TcGateSlotPrefix }
 $totalUse = if ($SlotTotal -gt 0) { $SlotTotal } else { $script:TcGateSlotTotal }
 Invoke-CpuLoad -Cores $Cores -Seconds $Seconds -ReadyFile $ReadyFile -StopFile $StopFile -WaitSec $WaitSec -Prefix $prefixUse -Total $totalUse

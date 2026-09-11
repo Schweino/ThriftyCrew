@@ -471,6 +471,63 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
     ($pSeed3.rc -eq 0 -and $pSeed3.remote -eq $pSeed3.head -and (Test-Path -LiteralPath $sawFile) -and -not (Test-Path -LiteralPath $seedRanFile)) `
     "rc=$($pSeed3.rc) gateRan=$(Test-Path -LiteralPath $sawFile)"
 
+  # ---- THE EIGHTH (2026-09-11): ONE GATE RUN PER TREE ----
+  # run-gates records a PASS on a CLEAN tree into the COMMON git directory, and the hook skips a tree already
+  # passed under the same key. MEASURED that day across 74 sessions: 123 runs by hand against 109 through a
+  # push, and 41 of the 66 sessions that ran it by hand pushed the same tree minutes later, each taking a
+  # second turn in a queue serving about 40 runs an hour against 89 arriving. The record is written by hand
+  # here because the sandbox's gate is a stub: these cases pin what the HOOK does with a record, and the key
+  # it insists on. The pushes come from the LINKED worktree, whose working tree is clean - $main carries the
+  # stubs as untracked files, and untracked counts as dirty, which is itself the conservative direction.
+  # THE LINKED CHECKOUT NEEDS A BOARD FIRST, and finding that out is the reason this comment exists. Without
+  # one the test-auditors check refuses every push from it as could-not-evaluate - correctly, and the case
+  # above pins exactly that - so a cache case asserting "the push went through" would fail for a reason that
+  # has nothing to do with the cache. It is COMMITTED rather than dropped in the working tree, because an
+  # untracked file is dirty and a dirty tree must never reuse a pass.
+  CommitFile $linked 'grocery\out\comparison-2026-01-01.json' "{`"comparison`":[]}`n"
+  $passFile = Join-Path $main '.git\tc-gate-pass.txt'
+  $nowEpoch = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+  CommitFile $linked 'design\cache-note.md' "cache v1`n"
+  $treeNow = GOut -C $linked rev-parse 'HEAD^{tree}'
+  [IO.File]::WriteAllText($passFile, ("{0} blind {1}`n" -f $treeNow, $nowEpoch), $utf8)
+  Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+  $pC1 = PushOut $linked 'cache-hit'
+  Case 'MUST FIRE' 'a push whose exact tree the gate already passed does not run the gate again' `
+    ($pC1.rc -eq 0 -and $pC1.remote -eq $pC1.head -and -not (Test-Path -LiteralPath $sawFile) -and $pC1.text -match 'ALREADY PASSED this exact tree') `
+    "rc=$($pC1.rc) gateRan=$(Test-Path -LiteralPath $sawFile) $($pC1.text)"
+  # CLEAN TWIN: skipping the gate does not skip the REST of the hook. The push still goes through the
+  # test-auditors check, which answers NOT NEEDED for a push that touches no guard input.
+  # The check SPEAKING is the property, not which answer it gives: the board committed above is a guard input,
+  # so this push selects a unit rather than answering NOT NEEDED. What must not happen is the hook returning
+  # early on the skip and never reaching its second half at all.
+  Case 'CLEAN TWIN' 'a push that skipped the gate still goes through the test-auditors check' `
+    ($pC1.text -match 'prepush-test-auditors:') "$($pC1.text)"
+  # MUST NOT FIRE: a record for another tree is not this tree's pass.
+  [IO.File]::WriteAllText($passFile, ("{0} blind {1}`n" -f ('0' * 40), $nowEpoch), $utf8)
+  CommitFile $linked 'design\cache-note.md' "cache v2`n"
+  Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+  $pC2 = PushOut $linked 'cache-miss'
+  Case 'MUST NOT FIRE' 'a record naming a different tree does not skip the gate' `
+    ($pC2.rc -eq 0 -and (Test-Path -LiteralPath $sawFile)) "rc=$($pC2.rc) gateRan=$(Test-Path -LiteralPath $sawFile)"
+  # MUST NOT FIRE: an old pass cannot vouch for today's push. 10,000s is past the two-hour bound.
+  CommitFile $linked 'design\cache-note.md' "cache v3`n"
+  $treeStale = GOut -C $linked rev-parse 'HEAD^{tree}'
+  [IO.File]::WriteAllText($passFile, ("{0} blind {1}`n" -f $treeStale, ($nowEpoch - 10000)), $utf8)
+  Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+  $pC3 = PushOut $linked 'cache-stale'
+  Case 'MUST NOT FIRE' 'a pass older than two hours does not skip the gate' `
+    ($pC3.rc -eq 0 -and (Test-Path -LiteralPath $sawFile)) "rc=$($pC3.rc) gateRan=$(Test-Path -LiteralPath $sawFile)"
+  # MUST NOT FIRE: the same tree, passed while the checkout was BLIND, must not vouch for a seeded one - the
+  # seeded run proves strictly more, and the key says so.
+  CommitFile $linked 'design\cache-note.md' "cache v4`n"
+  $treeSeed = GOut -C $linked rev-parse 'HEAD^{tree}'
+  [IO.File]::WriteAllText($passFile, ("{0} seeded {1}`n" -f $treeSeed, $nowEpoch), $utf8)
+  Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+  $pC4 = PushOut $linked 'cache-seed'
+  Case 'MUST NOT FIRE' 'a pass recorded in a seeded checkout does not skip the gate in a blind one' `
+    ($pC4.rc -eq 0 -and (Test-Path -LiteralPath $sawFile)) "rc=$($pC4.rc) gateRan=$(Test-Path -LiteralPath $sawFile)"
+  Remove-Item -LiteralPath $passFile -ErrorAction SilentlyContinue
+
   # ---- THE SIXTH (2026-09-11): the check's OWN clear, and a library it cannot load ----
   # The sandbox's hand list of libraries predated lib\git-repo-env.ps1, so every copy of the check driven above loaded
   # no clear and all 26 cases passed; the hook sends the check's stderr to /dev/null, so on that path it said nothing.
@@ -555,9 +612,10 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-# 31 -> 35 on 2026-09-11, the four seeding cases of THE SEVENTH. This pin did its job on the way in: every
-# one of the 35 was green and the suite still failed, naming the count, which is exactly what it exists for.
-$expectedCases = 35
+# 31 -> 35 on 2026-09-11, the four seeding cases of THE SEVENTH, then 35 -> 40 for the five of THE EIGHTH.
+# This pin did its job on the way in: every one of the 35 was green and the suite still failed, naming the
+# count, which is exactly what it exists for.
+$expectedCases = 40
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''

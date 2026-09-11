@@ -244,8 +244,60 @@ does nothing until `powershell -File ops\install-hooks.ps1` runs - and when it d
 at once. `ops\audit-hook-installed.ps1` runs from the DAILY CHAIN on the main checkout, not from run-gates, so a
 pushed-but-uninstalled hook shows up as a daily alert rather than a red gate on everybody's push.
 
-## Still to build, in Brad's order
+## F5, F2, F3 and F4 as built, same branch
 
-1. F5's CLAUDE.md line (stopgap).
-2. F2 with F3: the FIFO queue with admission control in `lib\gate-slots.ps1`.
-3. F4: the clean-tree pass cache for pre-push.
+**F5 - the line in CLAUDE.md.** Do not run the gate by hand when a push will run it anyway, and seed a
+worktree before its first push, with the measured numbers beside it and the distinction that matters: a run
+by hand is right when it is a MEASUREMENT (a baseline against an after, bare against seeded) and waste when it
+is a rehearsal of the push.
+
+**F2 and F3 - the queue, in `lib\gate-slots.ps1`.** A ticket is a FILE WHOSE NAME IS ITS WHOLE CONTENT:
+`<arrivalTicks>-<pid>-<processStartTicks>-<guid>.tkt`, so a poll costs a directory listing rather than an open
+per waiter, and a ticket naming a dead process (or a RECYCLED pid, which the start time catches) is skipped
+and pruned - the same crash property the abandoned mutex gives the slots.
+
+- **Head of queue only**, and it costs O(1) normally: the check walks earlier tickets in arrival order and
+  STOPS at the first live one, so the usual answer is a single `Get-Process`.
+- **Admission at arrival**: a run whose estimated wait exceeds the bound refuses in seconds with its position
+  and estimate, instead of holding a session for 20 minutes to be refused anyway.
+- **The wait is spoken with a position**: `QUEUED at position 7 of 14, about 10 min at 20 recent run(s)`.
+- **A pool does not top up while anyone is queued** (`Add-TcGateSlots`), which was the same unfairness one
+  level on: pools granted 1 slot had reached 10 and 6 while others waited.
+- **The estimate rests on this machine**: run-gates records its gate work as slot-seconds on every run, and
+  `Get-TcGateRunCost` averages the last 20, falling back to the measured 909 until there are any.
+- **Fail open, never closed**: if the queue directory cannot be created, listed or written, every function
+  degrades to "you are the head" and the run proceeds exactly as before. The SLOTS are the safety property.
+
+**F4 - one gate run per tree.** run-gates records a PASS on a CLEAN tree into the COMMON git directory
+(`tc-gate-pass.txt`: tree, seed state, epoch) and the hook skips a tree already passed under that key. The key
+is the TREE, not the commit, because a tree hash covers every tracked byte including the gate and its fixtures;
+the seed state is in the key because the same tree proves LESS where two gates were BLIND; the record expires
+at two hours; and anything missing, unreadable or dirty falls through to running the gate, because the cost of
+a needless run is a queue slot and the cost of a wrong skip is an ungated push.
+
+### Verified, and what it cost to learn
+
+- `lib\gate-slots.ps1 -SelfTest`: **24 of 24**, exit 0 (was 16). New: a free slot NOT taken out of turn, a dead
+  ticket blocking nobody, a granted lease leaving no ticket, refusal at arrival, no top-up while queued, a lone
+  run unrefused, the estimate's arithmetic, and recorded costs replacing the fallback.
+- `ops\test-prepush-hook.ps1`: **40 of 40**, exit 0 (was 31). Four seeding cases plus five cache cases,
+  including three MUST NOT FIRE: another tree, a pass older than two hours, and a pass recorded while seeded
+  not vouching for a blind checkout.
+- `ops\cpu-load.ps1 -SelfTest` 6 of 6, `ops\audit-cpu-load.ps1 -SelfTest` 17 of 17, `lib\parallel-run.ps1
+  -SelfTest` 13 cases, `grocery\audit-guard-contract.ps1` exit 0 `covered=58 half=0`. All five edited
+  PowerShell files parse clean; `sh -n` passes on the hook; every file is LF with the BOM state of its own blob.
+- **Three fixture defects, each found by running it:** a case meaning to test the WAIT was refused by ADMISSION
+  instead (the 909s fallback estimates 455s for one run ahead, past its 1s bound), so the suite now pins a 2s
+  cost first; the no-top-up case entered while five tickets were still queued and read 0 against 0, proving
+  nothing; and the cost-averaging case counted the suite's own pinned sample, so it now owns its directory.
+- **`ops\cpu-load.ps1` needed the queue seam too.** Its fixture had a private `Local\` slot budget but would
+  have queued on the REAL ticket directory, waiting behind live pushes and telling every live push somebody was
+  ahead of it. It now takes `-SlotQueueDir` and hands it to the children it starts.
+- **NOT run: `ops\run-gates.ps1`**, per the standing instruction not to add load. So nothing here claims a full
+  gate pass; what is claimed is each suite named above, with its exit code read.
+
+### What still has to happen for any of this to be live
+
+`powershell -File ops\install-hooks.ps1` after the branch merges. Every worktree shares
+`C:\Codex\ThriftyCrew\.git\hooks`, so that re-arms all of them at once, and until it runs the daily chain
+reports the hook as stale (a daily alert, not a blocked push).
