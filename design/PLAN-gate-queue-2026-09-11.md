@@ -196,6 +196,31 @@ visible is refusals, failures and live runs. Neither is a rate. The spread of vi
 thing without needing a denominator: 18, 31, 36, 77, 82, 91, 108, 250, 394, 425, 453, 460, 593, 597, 867,
 970 and 1,010 seconds, all of them overlapping in time.
 
+### (7) Found by pushing this plan: a BLIND worktree costs a whole gate run to discover
+
+The push that carried this document was BLOCKED by run-gates with two failures,
+`meal-prep\pipeline\feed-covers-published.ps1` and `meal-prep\pipeline\wave-preaudit.ps1`, in an area the
+commit does not touch. Run here by hand, both say what is actually wrong: *"missing
+...\meal-prep\db\built\american-goulash-pasta.body.html"* and *"one of them is missing - the drill could
+not run, which is not a pass"*. `meal-prep\db\built` and `meal-prep\db\recipes.json` are gitignored and a
+fresh worktree has neither. Neither script has changed since 09-09, so this is the worktree blindness
+`CLAUDE.md` already describes, not a broken tree, and `ops/seed-worktree.ps1` is the remedy. Confirmed by
+running it: `-Target` this worktree, exit 0 in 6 s, **1 of 39 seed paths copied** (`meal-prep\db\built`,
+1,168 files) and 38 already present, after which **both self-tests exit 0**. The seeded inputs are
+gitignored, so nothing about them reaches a commit.
+
+**It is not one session's mistake, it is a repeat demand source.** Of 83 kept hook logs today, **8 fail on
+exactly this pair**, from 8 different pushes: 11:43, 15:07, 15:13, 15:14, 15:20, 15:58, 16:01 and 17:45.
+Each one had already queued for a slot and run its whole gate before finding out. At today's cost that is
+roughly **1.5 to 4 slot-hours spent discovering that a worktree was not seeded**, and each of those
+sessions then has to seed and run the gate AGAIN.
+
+The cheap fix is not in this plan's options: run-gates could report a self-test that failed for want of a
+seeded input as BLIND rather than FAILED, the way it already names blind cases on a pass, or the hook could
+check the seed before spending the slot. Both need a rule that can tell "the input is absent" from "the
+input is wrong", which is exactly the distinction `a-could-not-look-must-not-settle-the-question` is about.
+**Named here, not designed here.**
+
 ### Why it refills
 
 Rough capacity: I1's 24 completed holds over 50 minutes run **296 to 942 s, median 584 s**, at max widths
