@@ -722,7 +722,14 @@ if ($runSelfTest) {
   $srcRef  = Join-Path $mp 'db\built\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html'
   $canDrill = ((Test-Path $srcSpec) -and (Test-Path $srcCost) -and (Test-Path $srcFood) -and (Test-Path $srcIng) -and (Test-Path $srcRef))
   if (-not $canDrill) {
-    T 'END-TO-END the drill inputs exist (a live spec, costed.json, the food DB, a reference card)' $false 'one of them is missing - the drill could not run, which is not a pass'
+    # Still a FAIL, never a skip. It names WHICH input is missing and, for one under a gitignored seeded directory,
+    # whether this checkout was never seeded or the file moved (lib\seed-hint.ps1, 2026-09-11). The reference card is
+    # the one an unseeded worktree lacks, and "one of them is missing" sent every spawned session that pushed hunting.
+    . (Join-Path $repo 'lib\seed-hint.ps1')
+    $drillWhy = @(@($srcSpec, $srcCost, $srcFood, $srcIng, $srcRef) | Where-Object { -not (Test-Path $_) } | ForEach-Object {
+        $h = Get-TcMissingInputHintHere -Repo $repo -Missing $_
+        if ($h) { $_ + ' [' + $h + ']' } else { $_ } })
+    T 'END-TO-END the drill inputs exist (a live spec, costed.json, the food DB, a reference card)' $false ('missing: ' + ($drillWhy -join ' | ') + ' - the drill could not run, which is not a pass')
   } else {
     New-Item -ItemType Directory -Force (Join-Path $dMp 'db\recipes') | Out-Null
     New-Item -ItemType Directory -Force (Join-Path $dRun 'waves') | Out-Null

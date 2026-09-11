@@ -393,7 +393,12 @@ if ($SelfTest) {
   if (Test-Path $sample) {
     $b = Get-CardBids ([IO.File]::ReadAllText($sample))
     TT 'the card parser finds bids in a real built card' ($null -ne $b -and $b.Count -ge 5) ("got " + $(if ($null -eq $b) { 'null' } else { $b.Count }))
-  } else { TT 'a real built card is available to parse' $false "missing $sample" }
+  } else {
+    # Still a FAIL, never a skip: a parser nobody ran against a real card has proven nothing. db\built is gitignored,
+    # so the hint says whether this checkout was never seeded or the card moved, and names the fix (2026-09-11).
+    . (Join-Path $repo 'lib\seed-hint.ps1')
+    TT 'a real built card is available to parse' $false ("missing $sample [" + (Get-TcMissingInputHintHere -Repo $repo -Missing $sample) + "]")
+  }
 
   if ($bad -eq 0) { Write-Output ("SELFTEST: {0}/{0} pass" -f $n); exit 0 }
   Write-Output ("SELFTEST: {0}/{1} pass - {2} FAILED" -f ($n - $bad), $n, $bad); exit 1

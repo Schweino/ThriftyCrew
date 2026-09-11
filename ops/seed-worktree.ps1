@@ -99,6 +99,9 @@ Clear-TcGitRepoEnv
 # THE DIRECTORIES .worktreeinclude CANNOT CARRY. Each line names the self-test it fixes, because a line
 # whose reason nobody can state is a line nobody can delete. Individual FILES belong in
 # .worktreeinclude, not here - this script reads that file, so listing one here too would be a second copy.
+# lib\seed-hint.ps1 PARSES this assignment: a self-test whose input lives under one of these directories calls
+# Get-TcMissingInputHintHere in its could-not-look case, so its failure names this script as the fix. Keep each `p` a
+# plain single-quoted literal, or that hint stops calling the directory seedable (2026-09-11).
 $SEED_DIRS = @(
   @{ p = 'meal-prep\db\built'
      why = 'feed-covers-published parses a real built card; wave-preaudit''s end-to-end drill needs a live spec and a reference card. 47 MB, 1,168 files.' }
