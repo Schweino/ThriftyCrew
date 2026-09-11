@@ -432,7 +432,7 @@ Add-Scene -Id 'macros' `
          '<div class="tile"><b class="gold">' + $moneyPs + '</b><i>a serving</i></div>' +
          '</div>')
 
-function Format-List {
+function Format-RowList {
   <# Fits N rows into the frame's usable band by scaling type, so the list NEVER truncates. #>
   param($Rows)
   $n = [math]::Max(1, @($Rows).Count)
@@ -456,7 +456,7 @@ function Format-List {
 Add-Scene -Id 'list' `
   -Vo "Here's the whole shopping list at this week's cheapest store prices, so screenshot it." `
   -Caption 'The whole list. Screenshot it.' `
-  -Body (Format-List -Rows $shown)
+  -Body (Format-RowList -Rows $shown)
 
 # 6. batch math (shown as arithmetic because cheapest_ps IS a whole-package total over 14)
 Add-Scene -Id 'batch' `

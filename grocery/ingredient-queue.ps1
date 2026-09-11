@@ -134,7 +134,7 @@ function Invoke-Locked {
     $mx.Dispose()
   }
 }
-function Get-Item($doc, [string]$term) {
+function Get-QueueItem($doc, [string]$term) {
   return @($doc.items | Where-Object { [string]$_.term -eq $term })[0]
 }
 
@@ -376,19 +376,19 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     $ErrorActionPreference = $prev
     $rc = $LASTEXITCODE
     $after = Read-Queue $btmp
-    $sf = (Get-Item $after 'saffron').stores."Baker's"
-    $ap = (Get-Item $after 'achiote paste').stores.'Aldi'
-    $gj = (Get-Item $after 'gochujang').stores.'Hy-Vee'
+    $sf = (Get-QueueItem $after 'saffron').stores."Baker's"
+    $ap = (Get-QueueItem $after 'achiote paste').stores.'Aldi'
+    $gj = (Get-QueueItem $after 'gochujang').stores.'Hy-Vee'
     if ($rc -ne 0 -or -not $sf -or -not $ap -or -not $gj) {
       Write-Output ("  X MUST FIRE one -RecordBatch call must land ALL THREE records; rc=$rc " + ($o -join ' | ')); $bad++
     } else { Write-Output '  ok one -RecordBatch call landed three records across three terms and three stores' }
     if ($sf -and ([double]$sf.price -ne 28.99 -or [string]$sf.item -ne 'Spice Islands Saffron' -or [string]$sf.evidence -ne 'jar of threads')) {
       Write-Output '  X MUST FIRE the batch road must carry price, item and evidence exactly as -Record does'; $bad++
     } else { Write-Output '  ok and each row carried its price, item and evidence through unchanged' }
-    if ((Get-Item $after 'saffron').verdict -ne 'CARRIED' -or (Get-Item $after 'saffron').status -ne 'resolved') {
+    if ((Get-QueueItem $after 'saffron').verdict -ne 'CARRIED' -or (Get-QueueItem $after 'saffron').status -ne 'resolved') {
       Write-Output '  X MUST FIRE Rule B must be applied per row - one carried store resolves the term'; $bad++
     } else { Write-Output '  ok Rule B applied per row: one carried store resolved saffron' }
-    if ((Get-Item $after 'gochujang').verdict -ne 'PENDING') {
+    if ((Get-QueueItem $after 'gochujang').verdict -ne 'PENDING') {
       Write-Output '  X MUST FIRE a BLOCKED store is not a check - the term must stay PENDING'; $bad++
     } else { Write-Output '  ok CLEAN TWIN a blocked store left its term PENDING (unchecked is never not-carried)' }
 
@@ -483,11 +483,12 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
   # NEUTER PROOF, RUN 2026-08-25: revert $ledgerFile to the hardcoded Join-Path and this case fails
   # on the scratch ledger still holding zero bids (the row went to the live file instead).
   # THE "NOWHERE ELSE" HALF WAS INERT FROM 2026-08-25 TO 2026-09-11. It read `(Get-Item $live).Length`, and this
-  # file defines its own Get-Item($doc, $term): a script function outranks the cmdlet, the queue lookup returns
-  # nothing for a path, and .Length on nothing is 0, before and after, whatever -Promote did. The neuter above
-  # could not show it, because a -Promote that ignores -CarriagePath leaves the scratch ledger empty and the FIRST
-  # half fires. The live ledger is now compared by md5 (Get-FileHash, never Get-Item in this file), and the two
-  # halves are asserted separately so each names its own failure.
+  # file then defined its queue lookup as Get-Item($doc, $term): a script function outranks the cmdlet, the lookup
+  # returned nothing for a path, and .Length on nothing is 0, before and after, whatever -Promote did. The neuter
+  # above could not show it, because a -Promote that ignores -CarriagePath leaves the scratch ledger empty and the
+  # FIRST half fires. The live ledger is now compared by md5 (Get-FileHash), and the two halves are asserted
+  # separately so each names its own failure. The same day the lookup was renamed Get-QueueItem, and
+  # ops\audit-cmdlet-shadow.ps1 now fails a push that defines a function named after a built-in command.
   # NEUTER PROOF, RUN 2026-09-11, in a temp mirror holding the whole lib\ and a copy of carriage.json, both restored
   # by md5 before every arm, one run per arm. A -Promote that writes the -CarriagePath ledger AND the mirror's own
   # carriage.json: the old assertion PASSED with that ledger's md5 changed; this one goes red on the live line
@@ -539,7 +540,7 @@ if ($Add) {
   $script:addMsg = ''
   Invoke-Locked -Path $QueueFile -Body {
     $fresh = Read-Queue $QueueFile
-    $e = Get-Item $fresh $Term
+    $e = Get-QueueItem $fresh $Term
     if ($e) {
       if ($Recipe -and @($e.recipes) -notcontains $Recipe) { $e.recipes = @(@($e.recipes) + $Recipe) }
       Write-Queue $fresh $QueueFile
@@ -566,7 +567,7 @@ if ($Record) {
   $script:recMsg = ''; $script:recRc = 0
   Invoke-Locked -Path $QueueFile -Body {
     $fresh = Read-Queue $QueueFile
-    $e = Get-Item $fresh $Term
+    $e = Get-QueueItem $fresh $Term
     if (-not $e) { $script:recMsg = ("ingredient-queue: '{0}' is not queued - -Add it first" -f $Term); $script:recRc = 1; return }
     $e.stores.$Store = [pscustomobject]@{ state = $State; price = $(if ($Price -gt 0) { $Price } else { $null })
                                           size = $Size; item = $Item; evidence = $Evidence; checked = (Get-Stamp) }
@@ -635,7 +636,7 @@ if ($RecordBatch) {
     $missing = @()
     for ($i = 0; $i -lt @($rows).Count; $i++) {
       $t = [string](@($rows)[$i].term)
-      if (-not (Get-Item $fresh $t)) { $missing += ("row {0}: '{1}' is not queued - -Add it first" -f ($i + 1), $t) }
+      if (-not (Get-QueueItem $fresh $t)) { $missing += ("row {0}: '{1}' is not queued - -Add it first" -f ($i + 1), $t) }
     }
     if (@($missing).Count) {
       $script:batchMsg = @(("ingredient-queue: -RecordBatch REFUSED - {0} row(s) name a term that is not queued. NOTHING was written." -f @($missing).Count)) + @($missing | ForEach-Object { "    " + $_ })
@@ -645,7 +646,7 @@ if ($RecordBatch) {
     $lines = @()
     foreach ($r in @($rows)) {
       $t = [string]$r.term
-      $e = Get-Item $fresh $t
+      $e = Get-QueueItem $fresh $t
       $pr = 0.0; if ($null -ne $r.price) { try { $pr = [double]$r.price } catch { $pr = 0.0 } }
       $e.stores.([string]$r.store) = [pscustomobject]@{ state = [string]$r.state
                                                         price = $(if ($pr -gt 0) { $pr } else { $null })
@@ -665,7 +666,7 @@ if ($RecordBatch) {
 
 if ($Verdict) {
   if (-not $Term) { Write-Output 'ingredient-queue: -Verdict needs -Term'; exit 1 }
-  $e = Get-Item $doc $Term
+  $e = Get-QueueItem $doc $Term
   if (-not $e) { Write-Output ("ingredient-queue: '{0}' is not queued" -f $Term); exit 1 }
   $v = Get-QueueVerdict $e $STORES $TERMINAL
   if ($Json) { ([pscustomobject]@{ term = $Term; verdict = $v.verdict; carried_by = @($v.carried_by); checked = @($v.checked); unchecked = @($STORES | Where-Object { $v.checked -notcontains $_ }) } | ConvertTo-Json -Depth 5); exit 0 }
@@ -687,7 +688,7 @@ if ($Verdict) {
 if ($Promote) {
   if (-not $Term) { Write-Output 'ingredient-queue: -Promote needs -Term'; exit 1 }
   if (-not $Bid)  { Write-Output 'ingredient-queue: -Promote needs -Bid (the commodity id, or "item:<Item Name>" for a bid-less ingredient) - the ledger is keyed by bid, not by term'; exit 1 }
-  $e = Get-Item $doc $Term
+  $e = Get-QueueItem $doc $Term
   if (-not $e) { Write-Output ("ingredient-queue: '{0}' is not queued" -f $Term); exit 1 }
   $v = Get-QueueVerdict $e $STORES $TERMINAL
   if ($v.verdict -eq 'PENDING') {

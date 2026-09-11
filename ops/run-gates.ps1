@@ -348,6 +348,9 @@ $static = @(
   @{ f = 'grocery\test-native-stderr-eap.ps1'; n = 'no NEW native child redirects its stderr under EAP=Stop anywhere in the repo - the shell fixtures of the 2026-08-22 bug, plus an AST scan ratcheted by named site; hermetic, reads source only' }
   # Concurrent pushes run the same self-tests over each other in ONE %TEMP%, so a fixed name there is shared; c3a686290 moved guard-contract and test-guards to a per-run directory and this blocks the next fixed name.
   @{ f = 'ops\audit-fixed-temp-names.ps1';     n = 'no NEW path under %TEMP% is built from a FIXED leaf that concurrent runs of one suite would share - a ratchet, hermetic, reads source only' }
+  # 2026-09-11: ingredient-queue defined a function named Get-Item, which outranks the cmdlet, so its live-ledger assertion
+  # read 0 before and after for 17 days. A rule in ops-and-gates.md reaches whoever opens it; this reaches the next definition.
+  @{ f = 'ops\audit-cmdlet-shadow.ps1';        n = 'no tracked script defines a function named after a built-in cmdlet or module function, except a file-and-name allowlist entry with its reason - hermetic, a pinned name list, reads source only' }
   # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half
   # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
   # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.
