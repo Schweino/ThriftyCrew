@@ -44,6 +44,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ratchet.ps1')
+. (Join-Path $repo 'lib\lf-write.ps1')   # Write-TcLfFile: the baseline is tracked and stored eol=lf
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: skip dirs match below the root, so a worktree root is not skipped whole
 
 # WHICH FILES ARE "CHECKING" SCRIPTS. Built by concatenation rather than written as one literal, so
@@ -262,9 +263,10 @@ if (-not (Test-Path $blDir)) { New-Item -ItemType Directory -Force $blDir | Out-
 $base = $null
 if (Test-Path $blF) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).unbound) } catch { $base = $null } }
 function Write-AbBaseline([int]$Count) {
-  @{ generated = (Get-Date).ToString('s'); unbound = $Count; examined = $scanned; names = @($findings)
-     note = 'High-water mark for the arg-binding ratchet (2026-09-07, the verify-bulk-edit -Paths drop). This number may only go DOWN. A run above it means a NEW checking script can silently ignore an argument it was given.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+  $json = @{ generated = (Get-Date).ToString('s'); unbound = $Count; examined = $scanned; names = @($findings)
+     note = 'High-water mark for the arg-binding ratchet (2026-09-07, the verify-bulk-edit -Paths drop). This number may only go DOWN. A run above it means a NEW checking script can silently ignore an argument it was given.' } | ConvertTo-Json -Depth 3
+  # LF with the BOM the committed blob carries, not the CRLF Set-Content writes under PS 5.1 (lib\lf-write.ps1).
+  $null = Write-TcLfFile $blF $json
 }
 if ($Accept -or $null -eq $base) {
   Write-AbBaseline $n

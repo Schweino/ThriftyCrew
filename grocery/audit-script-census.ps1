@@ -48,6 +48,7 @@ param(
   [switch]$WholeTreeIsStrict
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')   # Write-TcLfFile: the wide baseline is tracked and stored eol=lf
 # THE POPULATION IS THE WHOLE REPO SINCE 2026-09-09 (backlog I85 rung 2). It defaulted to this script's
 # own directory, so 72 scripts under .claude\, meal-prep\, site\, ops\, media\ and sidecar\ were
 # examined by nothing at all - and the output said "273 script(s) read against 632 executable files",
@@ -340,9 +341,10 @@ if ($WideBaseline) {
   }
   $od = Split-Path $censusBaselineFile -Parent
   if (-not (Test-Path $od)) { New-Item -ItemType Directory -Force -Path $od | Out-Null }
-  @{ uncalled = $wideNew.Count; recorded = (Get-Date -Format 'yyyy-MM-dd')
-     note = 'HIGH-WATER MARK for unrecorded orphans OUTSIDE grocery\. May only go DOWN. Backlog I85 rung 2. grocery\ itself is a hard gate, not a ratchet.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $censusBaselineFile -Encoding UTF8
+  $json = @{ uncalled = $wideNew.Count; recorded = (Get-Date -Format 'yyyy-MM-dd')
+     note = 'HIGH-WATER MARK for unrecorded orphans OUTSIDE grocery\. May only go DOWN. Backlog I85 rung 2. grocery\ itself is a hard gate, not a ratchet.' } | ConvertTo-Json -Depth 3
+  # LF with the BOM the committed blob carries, not the CRLF Set-Content writes under PS 5.1 (lib\lf-write.ps1).
+  $null = Write-TcLfFile $censusBaselineFile $json
   Write-Output ("  wide baseline set to " + $wideNew.Count)
 }
 

@@ -23,6 +23,7 @@ param([switch]$ShowAll, [switch]$Baseline, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')   # Write-TcLfFile: the baseline is tracked and stored eol=lf
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $repo = Split-Path $root -Parent
 
@@ -292,8 +293,9 @@ if (Test-Path $basePath) {
 # the known backlog looked like a brand-new arrival and all 26 fired as "NEW" on the very first armed run.
 # A ratchet that flags the backlog it was created to tolerate is just a louder version of no ratchet.
 if ($Baseline) {
-  (@{ covered = @($covered | Sort-Object); backlog = @($uncovered | Sort-Object); recorded = (Get-Date).ToString('yyyy-MM-dd') } |
-    ConvertTo-Json -Depth 4) | Out-File $basePath -Encoding utf8
+  $json = @{ covered = @($covered | Sort-Object); backlog = @($uncovered | Sort-Object); recorded = (Get-Date).ToString('yyyy-MM-dd') } | ConvertTo-Json -Depth 4
+  # LF with the BOM the committed blob carries, not the CRLF Out-File writes under PS 5.1 (lib\lf-write.ps1).
+  $null = Write-TcLfFile $basePath $json
   Write-Output ("guard-contract baseline recorded: {0} covered, {1} known backlog" -f $covered.Count, $uncovered.Count)
   exit 0
 }

@@ -248,12 +248,26 @@ everything else honest, so a defect here is silent by construction.
   were needed. The writer now emits the committed bytes and skips an identical write. Read the blob's BOM with
   `git cat-file` to a file: `Format-Hex` on a decoded string hides it, and this blob has one. The gate also
   passes `-ReportDir` to a temp directory, because LF bytes cannot stop a run over a DIFFERENT catalogue from
-  rewriting real content. **Verify by bytes: `git status --short` empty and a CR count of 0.** Other
-  `Set-Content` writers of tracked `out\` files were not swept.
+  rewriting real content. **Verify by bytes: `git status --short` empty and a CR count of 0.** Measured the
+  same day: a CRLF rewrite of unchanged content (169 -> 174 bytes) read ` M` with zero diff lines, and the same
+  LF bytes written back with a new mtime read clean.
   **Moving a write into a helper can hide it from a source-text ratchet, which then records a FALSE
   improvement.** Here `audit-write-only-reports` read 41 -> 40 twice, once for the helper verb and once
   because the new self-test spelled the report path next to a `Test-Path`, and each time it wrote the lower
   baseline. Compare the family NAMES against the committed baseline, not the count.
+  **The class was swept the same day.** `ops\count-tracked-writers.ps1` is the census (PowerShell AST over every
+  tracked `.ps1`, paths resolved through assignments, UNSOUND for any computed path; run it for the count). At
+  5d1968736 it read 1,042 `Set-Content`/`Add-Content`/`Out-File`/`>` sites over 746 scripts, 911 resolved and 324
+  matching a tracked file; 3 of the 1,042 pass `-NoNewline`, so the rest write CRLF. Its first cut counted depth per
+  AST node, never resolved a `$here = if ($PSScriptRoot) ...` root, and read 382 on the same tree: a number that
+  moved because the tool was wrong, not the tree. The 13 inside scripts `run-gates` runs live now write through `lib\lf-write.ps1`
+  (`Write-TcLfFile`: LF, one trailing LF, BOM unless `-NoBom`, identical bytes skipped), each verified against
+  its blob. **A plain run of a gate ratchet does not rewrite its tracked baseline**: `audit-write-only-reports`
+  states a fall and keeps the committed mark, and `-Tighten` records it. Five other gate ratchets still write
+  their baseline on a fall (read, not changed), and four that write through `WriteAllText` were not checked. The bot-owned data writers, archive and fixtures were left alone.
+  **A typed parameter keeps its type**: `$json = '...'` in a script that declares `[switch]$Json` throws, because
+  variable names are case-insensitive. It broke `audit-fact-claims`' tighten in this sweep, and only running
+  that path showed it.
 
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

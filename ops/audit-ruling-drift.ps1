@@ -43,6 +43,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ratchet.ps1')
+. (Join-Path $repo 'lib\lf-write.ps1')   # Write-TcLfFile: the baseline is tracked and stored eol=lf
 
 $REGISTRY = Join-Path $repo 'ops\ruling-implementations.json'
 $BASELINE = Join-Path $repo 'ops\ruling-drift-baseline.json'
@@ -161,9 +162,10 @@ foreach ($v in $violations) {
 }
 
 if (-not (Test-Path -LiteralPath $BASELINE)) {
-  @{ generated = (Get-Date).ToString('s'); violations = $count
-     note = 'HIGH-WATER MARK for ratified rulings the code does not implement. May only go DOWN.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $BASELINE -Encoding UTF8
+  $json = @{ generated = (Get-Date).ToString('s'); violations = $count
+     note = 'HIGH-WATER MARK for ratified rulings the code does not implement. May only go DOWN.' } | ConvertTo-Json -Depth 3
+  # LF with the BOM the committed blob carries, not the CRLF Set-Content writes under PS 5.1 (lib\lf-write.ps1).
+  $null = Write-TcLfFile $BASELINE $json
   Write-Output ("ruling-drift: baseline written at {0} unimplemented ruling(s). From here the number may only go DOWN." -f $count)
   Exit-Guard -Name 'ruling-drift' -Summary ("baseline={0}" -f $count) -Code 0
 }
@@ -187,9 +189,9 @@ if ($move.Verdict -eq 'tightened') {
   try { $doc = Get-Content $BASELINE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
   if (-not $doc) { $doc = [pscustomobject]@{} }
   $hist = Add-RatchetHistory -Doc $doc -Count $count
-  @{ generated = (Get-Date).ToString('s'); violations = $move.NewBaseline; history = $hist
-     note = 'HIGH-WATER MARK for ratified rulings the code does not implement. May only go DOWN, and an implausible fall is refused.' } |
-    ConvertTo-Json -Depth 5 | Set-Content $BASELINE -Encoding UTF8
+  $json = @{ generated = (Get-Date).ToString('s'); violations = $move.NewBaseline; history = $hist
+     note = 'HIGH-WATER MARK for ratified rulings the code does not implement. May only go DOWN, and an implausible fall is refused.' } | ConvertTo-Json -Depth 5
+  $null = Write-TcLfFile $BASELINE $json
   # The library message already names the guard; prefixing it again read as "x: ... x: ...".
   Write-Output ("PASSED and TIGHTENED - " + $move.Message)
   Write-Output ("  " + (Get-RatchetTrend -History $hist))

@@ -43,6 +43,7 @@ param(
 )
 $ErrorActionPreference='Stop'
 . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\lf-write.ps1')   # Write-TcLfFile: MANIFEST.json is tracked and stored eol=lf
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp   = Split-Path -Parent $here
 $db   = Join-Path $mp 'db'
@@ -126,14 +127,16 @@ if($runAll -or $Frozen -or $Rebaseline){
       Invoke-Engine (Join-Path $fexp 'costed.json') (Join-Path $fexp 'cost-flags.txt') $null | Out-Null
       $inputs = [ordered]@{}
       foreach($f in (Get-ChildItem $fin -Recurse -File | Sort-Object FullName)){ $inputs[$f.FullName.Substring($fin.Length+1)] = (Sha $f.FullName) }
-      ([ordered]@{
+      $manJson = ([ordered]@{
         _doc            = 'Baseline acceptance record. Inputs are FROZEN; only expected\ is rewritten, and only by -Rebaseline after a human read the diff.'
         accepted_utc    = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
         engine_sha256   = (Sha $engine)
         expected_costed = (Sha (Join-Path $fexp 'costed.json'))
         expected_flags  = (Sha (Join-Path $fexp 'cost-flags.txt'))
         inputs          = $inputs
-      }) | ConvertTo-Json -Depth 5 | Set-Content $manFile -Encoding UTF8
+      }) | ConvertTo-Json -Depth 5
+      # LF with the BOM the committed MANIFEST carries, not the CRLF Set-Content writes under PS 5.1 (lib\lf-write.ps1).
+      $null = Write-TcLfFile $manFile $manJson
       Write-Output ("  REBASELINED. expected\costed.json accepted for engine {0}" -f (Sha $engine).Substring(0,12))
     }
     elseif(-not (Test-Path $manFile)){ Bad 'no MANIFEST.json - run golden-test.ps1 -Rebaseline once to accept a baseline' }

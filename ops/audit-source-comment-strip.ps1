@@ -46,6 +46,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ratchet.ps1')
+. (Join-Path $repo 'lib\lf-write.ps1')   # Write-TcLfFile: the baseline is tracked and stored eol=lf
 . (Join-Path $repo 'lib\ps-source.ps1')
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: skip dirs match below the root, so a worktree root is not skipped whole
 
@@ -158,9 +159,10 @@ if (-not (Test-Path $blDir)) { New-Item -ItemType Directory -Force $blDir | Out-
 $base = $null
 if (Test-Path $blF) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).line_only) } catch { $base = $null } }
 function Write-ScsBaseline([int]$Count) {
-  @{ generated = (Get-Date).ToString('s'); line_only = $Count; examined = $scanned; names = @($findings)
-     note = 'High-water mark for the comment-strip ratchet (2026-09-07, the 8 libraries run-gates enrolled from their own headers). This number may only go DOWN.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+  $json = @{ generated = (Get-Date).ToString('s'); line_only = $Count; examined = $scanned; names = @($findings)
+     note = 'High-water mark for the comment-strip ratchet (2026-09-07, the 8 libraries run-gates enrolled from their own headers). This number may only go DOWN.' } | ConvertTo-Json -Depth 3
+  # LF with the BOM the committed blob carries, not the CRLF Set-Content writes under PS 5.1 (lib\lf-write.ps1).
+  $null = Write-TcLfFile $blF $json
 }
 if ($Accept -or $null -eq $base) {
   Write-ScsBaseline $n

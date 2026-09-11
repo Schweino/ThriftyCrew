@@ -23,19 +23,31 @@
   check people learn to scroll past (audit-band-censorship and audit-write-seam say the same in their own
   headers). The high-water mark may only go DOWN.
 
-  Usage:
-    .\audit-write-only-reports.ps1            scan, report, ratchet against ops\out\write-only-reports-baseline.json
-    .\audit-write-only-reports.ps1 -Accept    record the CURRENT count as the new high-water mark
-    .\audit-write-only-reports.ps1 -SelfTest  frozen two-file fixture: writer-only fires, writer+reader is silent
+  A RUN THAT IS NOT ASKED TO RECORD WRITES NOTHING (2026-09-11). run-gates runs this on every pre-push, and a fall
+  used to rewrite the TRACKED baseline right there: a 1,915-byte LF blob became 1,866 bytes with 48 CR, the note
+  lost its queue id, and the pushing checkout was left ` M` with a zero-line `git diff`, which makes the rebase
+  after a push lost to a moving main refuse. The rewrite never rode that push either, so the lower mark protected
+  only the checkout that happened to run it, and a count taken over uncommitted edits is not a baseline
+  (ops\prepush-test-auditors.ps1 refuses to record one for the same reason). So a fall is SPOKEN and the committed
+  mark KEPT; -Tighten records it deliberately, through lib\ratchet.ps1's plausibility bar, in the bytes git stores.
 
-  Exit: 0 = at or under the baseline. 2 = MORE write-only families than the baseline. 3 = could not evaluate.
+  Usage:
+    .\audit-write-only-reports.ps1            scan, report, ratchet against ops\out\write-only-reports-baseline.json; writes nothing
+    .\audit-write-only-reports.ps1 -Tighten   the same, and record a believable FALL as the new high-water mark
+    .\audit-write-only-reports.ps1 -Accept    record the CURRENT count as the new high-water mark, whatever it is
+    .\audit-write-only-reports.ps1 -SelfTest  frozen fixtures, plus this script's live path run against a temp tree
+
+  Exit: 0 = at or under the baseline. 2 = MORE write-only families than the baseline, or -Tighten refused an
+  implausible fall. 3 = could not evaluate.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$SelfTest, [switch]$Accept, [string]$Root = '', [string]$BaselineFile = '')
+param([switch]$SelfTest, [switch]$Accept, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\ratchet.ps1')    # Test-RatchetMove: a fall clears a plausibility bar before -Tighten records it
+. (Join-Path $repo 'lib\lf-write.ps1')   # Write-TcLfFile: the baseline is tracked and stored eol=lf
 
 # The question, as ONE pure function over a file->lines map, so the fixture drives exactly the rule the
 # live scan runs. A detector whose self-test exercises a different code path is the trap this estate
@@ -199,6 +211,44 @@ if ($SelfTest) {
     ($r3.written -eq 0 -and (@($r3.write_only)).Count -eq 0) ("written=$($r3.written)")
   # PS 5.1: @($null).Count is 1, so an empty finding set must not score 1.
   T 'an empty finding set counts 0, not the PS 5.1 @($null) 1' ((@($r2.write_only)).Count -eq 0) ([string](@($r2.write_only)).Count)
+  # THE LIVE PATH, DRIVEN (2026-09-11). The founding shape is a pre-push run-gates pass whose count FELL: it
+  # rewrote the tracked baseline in CRLF and left the pushing checkout dirty. These run THIS script as a child
+  # against a one-file temp tree and a temp baseline, so they exercise the code a gate runs, not a copy of it.
+  # One directory per run, removed in finally, because concurrent pushes run this suite in the same %TEMP%.
+  $wt = Join-Path $env:TEMP ('wor-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $wt -ErrorAction Stop | Out-Null
+  try {
+    $fxTree = Join-Path $wt 'tree'
+    New-Item -ItemType Directory -Path $fxTree -ErrorAction Stop | Out-Null
+    [IO.File]::WriteAllText((Join-Path $fxTree 'writer.ps1'), $wLine, (New-Object Text.UTF8Encoding($false)))   # exactly one write-only family
+    $blFx = Join-Path $wt 'baseline.json'
+    $seed = [ordered]@{ note = 'fixture note (queue fixture-q1)'; generated = '2026-01-01T00:00:00'; families = 2; names = @('ff-carry-report', 'retired-family') } | ConvertTo-Json -Depth 3
+    $null = Write-TcLfFile $blFx $seed
+    $seedB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($blFx))
+    $o1 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fxTree -BaselineFile $blFx
+    $rc1 = $LASTEXITCODE
+    $o1 = @($o1)
+    $same1 = [string]::Equals($seedB64, [Convert]::ToBase64String([IO.File]::ReadAllBytes($blFx)), [StringComparison]::Ordinal)
+    T 'a FALL (1 family, baseline 2) without -Tighten is spoken and NOT written, so a gate run leaves its checkout clean' `
+      ($rc1 -eq 0 -and $same1 -and (($o1 -join "`n") -match 'CAN tighten')) ("rc=$rc1 baselineUnchanged=$same1")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fxTree -BaselineFile $blFx -Tighten
+    $rc2 = $LASTEXITCODE
+    $b2 = [IO.File]::ReadAllBytes($blFx)
+    $cr2 = 0; foreach ($x in $b2) { if ($x -eq 13) { $cr2++ } }
+    $bom2 = ($b2.Length -ge 3 -and $b2[0] -eq 0xEF -and $b2[1] -eq 0xBB -and $b2[2] -eq 0xBF)
+    $doc2 = $null
+    if ($bom2) { $doc2 = [Text.Encoding]::UTF8.GetString($b2, 3, $b2.Length - 3) | ConvertFrom-Json }
+    T '-Tighten records the fall in the bytes git stores: no CR, the BOM, one trailing LF, and the note with its queue id kept' `
+      ($rc2 -eq 0 -and $cr2 -eq 0 -and $bom2 -and $b2[-1] -eq 10 -and $null -ne $doc2 -and [int]$doc2.families -eq 1 -and [string]$doc2.note -eq 'fixture note (queue fixture-q1)') `
+      ("rc=$rc2 cr=$cr2 bom=$bom2 families=$(if ($doc2) { $doc2.families }) note=$(if ($doc2) { $doc2.note })")
+    $blRise = Join-Path $wt 'baseline-rise.json'
+    $null = Write-TcLfFile $blRise ([ordered]@{ note = 'fixture'; generated = '2026-01-01T00:00:00'; families = 0; names = @() } | ConvertTo-Json -Depth 3)
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fxTree -BaselineFile $blRise
+    $rc3 = $LASTEXITCODE
+    T 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+  } finally {
+    Remove-Item -LiteralPath $wt -Recurse -Force -ErrorAction SilentlyContinue
+  }
   if ($bad -eq 0) { Write-Output 'WRITE-ONLY-REPORTS SELF-TEST PASS'; Write-GuardComplete -Name 'write-only-reports' -Summary 'selftest ok'; exit 0 }
   Write-Output ("WRITE-ONLY-REPORTS SELF-TEST FAILED ($bad)"); Write-GuardComplete -Name 'write-only-reports' -Summary "selftest failed=$bad"; exit 2
 }
@@ -256,12 +306,19 @@ Write-Output '  (a human-read report is legitimate; what this ratchets is that a
 $blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'out\write-only-reports-baseline.json' }
 $blDir = Split-Path $blF -Parent
 if (-not (Test-Path $blDir)) { New-Item -ItemType Directory -Force $blDir | Out-Null }
-$base = $null
-if (Test-Path $blF) { try { $base = [int]((Get-Content $blF -Raw | ConvertFrom-Json).families) } catch { $base = $null } }
+$base = $null; $blDoc = $null
+if (Test-Path $blF) { try { $blDoc = Get-Content $blF -Raw | ConvertFrom-Json; $base = [int]$blDoc.families } catch { $base = $null } }
+# THE COMMITTED FILE'S NOTE AND KEY ORDER (2026-09-11). The tighten writer replaced the note with a shorter text,
+# which dropped queue 2026-09-07-72756b, and both writers built an unordered hashtable. A recorded mark now keeps
+# the note the file already carries and writes the keys in the committed order, so its diff is only what changed.
+$script:WOR_NOTE = 'High-water mark for the write-only-report ratchet (queue 2026-09-07-72756b). This number may only go DOWN. A run above it means a NEW report family was written with no consumer.'
+function Write-WorBaseline([int]$Count) {
+  $note = if ($blDoc -and $blDoc.note) { [string]$blDoc.note } else { $script:WOR_NOTE }
+  $json = [ordered]@{ note = $note; generated = (Get-Date).ToString('s'); families = $Count; names = @($res.write_only) } | ConvertTo-Json -Depth 3
+  return (Write-TcLfFile $blF $json)
+}
 if ($Accept -or $null -eq $base) {
-  @{ generated = (Get-Date).ToString('s'); families = $n; names = $res.write_only
-     note = 'High-water mark for the write-only-report ratchet (queue 2026-09-07-72756b). This number may only go DOWN. A run above it means a NEW report family was written with no consumer.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+  $null = Write-WorBaseline $n
   Write-Output ("  baseline written: $n family(ies). From here the number may only go DOWN.")
   Exit-Guard -Name 'write-only-reports' -Summary "families=$n baseline=$n" -Code 0
 }
@@ -270,10 +327,16 @@ if ($n -gt $base) {
   Exit-Guard -Name 'write-only-reports' -Summary "families=$n baseline=$base" -Code 2
 }
 if ($n -lt $base) {
-  @{ generated = (Get-Date).ToString('s'); families = $n; names = $res.write_only
-     note = 'High-water mark for the write-only-report ratchet. This number may only go DOWN.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
-  Write-Output ("  ratchet tightened: $n family(ies), was $base. New baseline written.")
+  $move = Test-RatchetMove -Name 'write-only-reports' -Count $n -Baseline $base
+  if ($move.Verdict -eq 'implausible') {
+    Write-Output ('  ' + $move.Message + ' (-Accept is this script''s -AcceptDrop.)')
+    if ($Tighten) { Exit-Guard -Name 'write-only-reports' -Summary "families=$n baseline=$base refused-to-lower" -Code 2 }
+  } elseif ($Tighten) {
+    $null = Write-WorBaseline $n
+    Write-Output ("  ratchet tightened: $n family(ies), was $base. New baseline written - commit it, or it protects only this checkout.")
+  } else {
+    Write-Output ("  ratchet CAN tighten: $n family(ies), baseline $base. NOT written: this may be a pre-push gate, and a rewrite here dirties the checkout being pushed without riding the push. Record it with -Tighten and commit ops\out\write-only-reports-baseline.json.")
+  }
 }
 Write-Output ("write-only-reports: $n family(ies) against a baseline of $base - the known backlog, not a regression.")
 Exit-Guard -Name 'write-only-reports' -Summary "families=$n baseline=$base" -Code 0
