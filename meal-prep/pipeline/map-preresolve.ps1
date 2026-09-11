@@ -116,8 +116,9 @@ $repo = Split-Path -Parent $mp                        # ...\ThriftyCrew
 $script:repoRoot = $repo
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'grocery\native-lib.ps1')   # Invoke-Native: a child's stderr line under 'Stop' is a terminating throw in PS 5.1
+. (Join-Path $repo 'lib\json-io.ps1')   # Read-JsonFileSettled, for the prior-rulings ledger (Get-ResolutionCache). No param() block, so it cannot reset ours.
 
-$script:VOCAB_PS   = Join-Path $here 'ingredient-vocab.ps1'
+$script:VOCAB_PS  = Join-Path $here 'ingredient-vocab.ps1'
 $script:RESOLVE_PS = Join-Path $here 'ingredient-resolutions.ps1'
 $script:PRICE_PS   = Join-Path $repo 'grocery\price-ingredient.ps1'
 $script:PARSE_COMPUTE_PS = Join-Path $here 'parse-compute.ps1'
@@ -614,12 +615,22 @@ function Get-BoardAnswers {
 }
 
 function Get-ResolutionCache {
-  <# The prior-rulings ledger, whole, in one read. -Json on the bare path prints count+resolutions. #>
-  param([string]$Path)
+  <# The prior-rulings ledger, whole, in one read. -Json on the bare path prints count+resolutions.
+
+     THROUGH THE SETTLED READ, AND A COULD-NOT-READ IS BLOCKED (2026-09-11). This used to Test-Path first
+     and hand back an EMPTY cache on a miss. ingredient-resolutions.ps1 replaces the ledger by Move-Item
+     -Force, and a separate reader saw it ABSENT on 4,024 of 109,718 polls across 1,500 replaces, so a batch
+     read in that window ran with no prior rulings at all: every term re-derived, and tables written that
+     look like an honest pre-resolve. This is step 1 of the ladder and the ledger is tracked in git, so
+     there is no fresh-estate reading of a missing one. The throw lands in the lookup block's catch, which
+     is BLOCKED, exit 2 - the road an implausibly small vocabulary read already takes.
+     -WaitMs and -OnWait are fixture seams; the batch path passes neither. #>
+  param([string]$Path, [int]$WaitMs = 3000, [scriptblock]$OnWait = $null)
   $map = @{}
-  $doc = Read-Json $Path
-  if (-not $doc) { return $map }
-  $rows = As-Array $doc.resolutions
+  $read = Read-JsonFileSettled -Path $Path -WaitMs $WaitMs -OnWait $OnWait `
+            -Accept { param($d) $null -ne $d -and ($d.PSObject.Properties.Name -contains 'resolutions') -and $null -ne $d.resolutions }
+  if ($read.State -ne 'ok') { throw ("the prior-rulings ledger could not be read ({0}): {1}" -f $read.State, $read.Why) }
+  $rows = As-Array $read.Doc.resolutions
   foreach ($row in $rows) { $map[[string]$row.key] = $row }
   return $map
 }
@@ -2169,6 +2180,33 @@ if ($runSelfTest) {
       ($r2.rc -eq 2) ("rc=" + $r2.rc + " " + $r2.text.Trim())
     T 'MUST FIRE  ...and exit 2 writes NO table for the slugs it did reach: half a batch is worse than none' `
       (-not (Test-Path (Join-Path $scratch 'mapped-pre\clean.json'))) 'wrote a partial batch'
+
+    # ---- THE PRIOR-RULINGS LEDGER IS READ SETTLED, AND A COULD-NOT-READ BLOCKS (2026-09-11) ----
+    # ingredient-resolutions.ps1 replaces the ledger by Move-Item -Force, and a separate reader saw it ABSENT
+    # on 4,024 of 109,718 polls across 1,500 replaces. Get-ResolutionCache handed back an empty cache for that.
+    # (a) THE WINDOW, HELD: absent at the first look, and -OnWait puts it back on the first wait. Never raced.
+    $winPath = Join-Path $scratch 'window-resolutions.json'
+    $winBytes = [IO.File]::ReadAllBytes($cachePath)
+    $winCache = @{}; $winErr = ''
+    try {
+      $winCache = Get-ResolutionCache -Path $winPath -WaitMs 5000 -OnWait ({ param($n, $s) if ($n -eq 1) { [IO.File]::WriteAllBytes($winPath, $winBytes) } }.GetNewClosure())
+    } catch { $winErr = $_.Exception.Message }
+    T 'MUST FIRE  a ledger ABSENT at the first look (the writer''s Move-Item replace window) still yields its prior ruling' `
+      ($winCache.ContainsKey('shaved beef steak')) ('keys: ' + (@($winCache.Keys) -join ',') + ' ' + $winErr)
+    # (b) THE BATCH ROAD: a ledger that STAYS absent is BLOCKED, and no table is written off an empty cache.
+    #     mapped-pre is empty here (cleared for the exit-2 drill above), so a table on disk can only be this run's.
+    $rNoLedger = Invoke-Child $PSCommandPath @('-RunDir', $scratch, '-NoBoard', '-VocabFile', $vocabPath, '-ResolutionsFile', (Join-Path $scratch 'no-ledger-here.json'), '-Slugs', @('clean'))
+    T 'MUST FIRE  a prior-rulings ledger that STAYS absent is exit 2 BLOCKED, never a batch run on an empty cache' `
+      ($rNoLedger.rc -eq 2 -and $rNoLedger.text -match 'BLOCKED' -and $rNoLedger.text -match 'prior-rulings ledger') `
+      ('rc=' + $rNoLedger.rc + ' ' + ([string]$rNoLedger.text).Trim())
+    T 'MUST FIRE  ...and it writes NO table for the slug it could otherwise have reached' `
+      (-not (Test-Path (Join-Path $scratch 'mapped-pre\clean.json'))) 'wrote a table off an empty cache'
+    # (c) a TRUNCATED ledger throws unreadable, which the batch road turns into the same BLOCKED
+    $truncPath = Join-Path $scratch 'truncated-resolutions.json'
+    [IO.File]::WriteAllText($truncPath, '{"count":1,"resolutions":[{"key":"shaved beef st', (New-Object Text.UTF8Encoding($false)))
+    $truncErr = ''
+    try { [void](Get-ResolutionCache -Path $truncPath -WaitMs 150) } catch { $truncErr = $_.Exception.Message }
+    T 'MUST FIRE  a TRUNCATED prior-rulings ledger throws unreadable, never an empty cache' ($truncErr -match 'unreadable') $truncErr
 
     # re-run the good pair so the tables exist for the shape assertions
     Invoke-Child $PSCommandPath ($common + @('-Slugs', @('clean', 'residual'))) | Out-Null

@@ -28,11 +28,64 @@ import json
 import os
 import subprocess
 import sys
+import time
 
 EXIT_CLEAN = 0          # ran, nothing to report
 EXIT_FINDINGS = 1       # ran, has findings - the machine report is STILL written
 EXIT_CANNOT_RUN = 2     # missing input, parse failure, a dependency that is down.
 #                         BLOCKED, never a pass. Could-not-look is never a clean bill.
+
+# ---------------------------------------------------------------------------------------------------
+# THE SETTLED READ (2026-09-11). The Python twin of lib\json-io.ps1's Read-JsonFileSettled, whose header
+# carries the measurement and where the bound came from; the two numbers below are those numbers.
+#
+# A writer that replaces a file by `Move-Item -Force` from a .tmp deletes the name and then renames onto
+# it, so a separate reader sees NO FILE, or a file it cannot open, for a few milliseconds (max 258.6 ms
+# measured on this box under load). A reader that maps that to "empty" is wrong silently, and a few
+# percent of the time: 4,024 of 109,718 polls and 6,057 of 93,172 in two runs of 1,500 replaces.
+#
+# The CALLER owns the policy for a settled answer. A writer creating a scratch file may treat 'absent' as
+# new; a consumer of a file that has existed must not; nobody treats 'unreadable' as empty.
+# ---------------------------------------------------------------------------------------------------
+SETTLE_WAIT_MS = 3000
+SETTLE_STEP_MS = 20
+
+
+def read_json_settled(path, wait_ms=SETTLE_WAIT_MS, accept=None, on_wait=None,
+                      step_ms=SETTLE_STEP_MS):
+    """(doc, state, why, waits). state is 'ok', 'absent' or 'unreadable'.
+
+    Retries an absent or unreadable file (would not open, decode, parse, or `accept(doc)` said no) until
+    it reads or `wait_ms` has passed. A present, readable file returns on the first attempt with waits 0,
+    and a path whose DIRECTORY is missing returns 'absent' at once, because no replace removes one.
+    `on_wait(attempt, state)` runs before each sleep: the fixture seam that holds a window open and
+    closes it mid-read deterministically.
+    """
+    parent = os.path.dirname(os.path.abspath(path))
+    t0 = time.monotonic()
+    waits, state, why = 0, "", ""
+    while True:
+        if not os.path.isfile(path):
+            state, why = "absent", "no file at %s" % path
+        else:
+            try:
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f)
+                if accept is None or accept(doc):
+                    return doc, "ok", "", waits
+                state, why = "unreadable", "%s parsed, but is not the expected shape" % path
+            except (OSError, ValueError) as e:
+                state, why = "unreadable", "%s would not read (%s)" % (path, str(e)[:160])
+        if state == "absent" and not os.path.isdir(parent):
+            break
+        if (time.monotonic() - t0) * 1000.0 >= wait_ms:
+            break
+        waits += 1
+        if on_wait:
+            on_wait(waits, state)
+        time.sleep(step_ms / 1000.0)
+    return (None, state, "%s (still %s after %d attempt(s) over %d ms)"
+            % (why, state, waits + 1, int((time.monotonic() - t0) * 1000)), waits)
 
 # ---------------------------------------------------------------------------------------------------
 # DECIDE - section 4.5, verbatim. Replaces hunt-orchestrator.js's SEL.
@@ -2158,6 +2211,69 @@ def selftest():
       and PUB["required"] == ["ok"] and WAVECLOSE["required"] == ["wave", "slugs"], "drifted")
     T("MUST FIRE  the price lane's cap is 1 - architecture, not config",
       LANE_CAPS["price"] == 1, str(LANE_CAPS["price"]))
+
+    # ---- the settled read (2026-09-11). Each window is HELD by on_wait, never raced. ----
+    print("")
+    print("settled read (a replace window is waited out, never returned as the file's answer):")
+    import shutil
+    import tempfile
+    sdir = tempfile.mkdtemp(prefix="hunt-lib-settled-")
+    try:
+        sp = os.path.join(sdir, "ledger.json")
+        sbody = json.dumps({"resolutions": [{"key": "sumac"}, {"key": "za atar"}, {"key": "labneh"}]})
+
+        def sput(text):
+            with open(sp, "w", encoding="utf-8") as fh:
+                fh.write(text)
+
+        def shape(d):
+            return isinstance(d, dict) and isinstance(d.get("resolutions"), list)
+
+        seen_a = []
+
+        def back(n, st):
+            seen_a.append(st)
+            if n == 1:
+                sput(sbody)
+
+        doc, st, why, w = read_json_settled(sp, wait_ms=5000, accept=shape, on_wait=back)
+        T("MUST FIRE  a file ABSENT at the first look and back within the bound reads whole (3 rows)",
+          st == "ok" and w >= 1 and seen_a[:1] == ["absent"] and len(doc["resolutions"]) == 3,
+          "state=%s waits=%d seen=%s" % (st, w, seen_a))
+        sput(sbody[:30])
+        seen_b = []
+
+        def whole(n, st):
+            seen_b.append(st)
+            if n == 1:
+                sput(sbody)
+
+        doc, st, why, w = read_json_settled(sp, wait_ms=5000, accept=shape, on_wait=whole)
+        T("MUST FIRE  a file TRUNCATED at the first look reads whole once the writer finishes",
+          st == "ok" and w >= 1 and seen_b[:1] == ["unreadable"] and len(doc["resolutions"]) == 3,
+          "state=%s waits=%d seen=%s" % (st, w, seen_b))
+        sput(sbody[:30])
+        doc, st, why, w = read_json_settled(sp, wait_ms=150, accept=shape)
+        T("MUST FIRE  a file that STAYS truncated is 'unreadable' with a reason, never an empty doc",
+          doc is None and st == "unreadable" and w >= 1 and bool(why), "state=%s waits=%d" % (st, w))
+        sput('{"oops": 1}')
+        doc, st, why, w = read_json_settled(sp, wait_ms=150, accept=shape)
+        T("MUST FIRE  valid JSON of the wrong shape is 'unreadable', not an empty ledger",
+          doc is None and st == "unreadable", "state=%s" % st)
+        os.remove(sp)
+        doc, st, why, w = read_json_settled(sp, wait_ms=150)
+        T("MUST FIRE  a file that never appears is 'absent' after waiting, and the caller is told",
+          st == "absent" and w >= 1, "state=%s waits=%d" % (st, w))
+        sput(sbody)
+        doc, st, why, w = read_json_settled(sp, wait_ms=5000, accept=shape)
+        _d2, st2, _why2, w2 = read_json_settled(os.path.join(sdir, "no-such-dir", "x.json"),
+                                                wait_ms=5000)
+        T("CLEAN TWIN a readable file reads on the FIRST attempt, and a missing DIRECTORY is absent at "
+          "once - the normal path pays nothing",
+          st == "ok" and w == 0 and len(doc["resolutions"]) == 3 and st2 == "absent" and w2 == 0,
+          "state=%s waits=%d; missing-dir state=%s waits=%d" % (st, w, st2, w2))
+    finally:
+        shutil.rmtree(sdir, ignore_errors=True)
 
     print("")
     if bad:

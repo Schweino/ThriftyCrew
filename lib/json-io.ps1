@@ -139,6 +139,65 @@ function Read-JsonFile {
   return ,(Read-TextFile $Path | ConvertFrom-Json)
 }
 
+function Read-JsonFileSettled {
+  <# A read that WAITS OUT A REPLACE WINDOW instead of reporting the window as the file's answer (2026-09-11).
+
+     THE HAZARD, measured on this box (Windows 11, PS 5.1). A writer that replaces a file by `Move-Item -Force`
+     from a .tmp deletes the destination and then renames the .tmp onto it, so for a moment there is NO FILE,
+     and for a moment around the delete the name exists and cannot be opened. [IO.File]::Replace is no better.
+     A separate process polling [IO.File]::Exists while 1,500 replaces ran saw the file ABSENT on 4,024 of
+     109,718 polls in one run and 6,057 of 93,172 in another; with [IO.File]::Replace, 20,416 of 146,084.
+     A reader that tests for the file and maps a miss to "empty" is wrong that often, silently, and in the
+     direction that loses rows: the ingredient-resolutions ledger's own writer re-read its ledger that
+     way inside its lock, so a could-not-read would have saved only the new row over every existing one.
+
+     WHAT IT RETURNS. The caller owns the policy, because the right policy differs by caller:
+       State 'ok'          Doc is the parsed JSON, and -Accept (when given) says it is the expected shape
+       State 'absent'      no file, STILL, after waiting -WaitMs
+       State 'unreadable'  a file that would not open, decode, parse or pass -Accept, STILL, after -WaitMs
+     A WRITER that creates the file may treat a settled 'absent' as a new file. A CONSUMER of a file that has
+     existed before must not. Nobody may treat 'unreadable' as empty.
+
+     THE BOUND, AND WHAT ELSE WAS TRIED (measured 2026-09-11: a writer replacing a copy of the live 193 KB
+     ledger 1,500 times, a tight-polling reader in a separate process). The window in which the file was
+     absent or unopenable ran p50 5.4 and 11.7 ms, p99 10.4 and 99.0 ms, MAX 16.9 and 258.6 ms, over two runs
+     of 686 and 461 windows. A reader retrying for 2,000 ms saw 0 blind reads of 299, longest wait 113 ms.
+     The bar written before those runs was a bound of at least 10x the longest window seen, which is 3,000
+     ms. Only that one other value was tried. The wait is paid only when the file is genuinely missing or
+     broken: a present, readable file returns on the first attempt with Waits 0.
+
+     NO WAIT WHEN THE DIRECTORY IS MISSING. A replace never removes the directory, so there is no window to
+     wait out, and a path under a directory that does not exist comes back 'absent' at once.
+
+     -OnWait IS THE FIXTURE SEAM. It runs before each sleep with (attempt, state), which is how a self-test
+     holds a window open deterministically and closes it mid-read instead of racing a real writer. #>
+  param([Parameter(Mandatory=$true)][string]$Path, [int]$WaitMs = 3000, [int]$StepMs = 20,
+        [scriptblock]$Accept = $null, [scriptblock]$OnWait = $null)
+  $jsFull = Resolve-JioPath $Path
+  $jsDir = [IO.Path]::GetDirectoryName($jsFull)
+  $jsClock = [Diagnostics.Stopwatch]::StartNew()
+  $jsWaits = 0; $jsState = ''; $jsWhy = ''
+  while ($true) {
+    if (-not [IO.File]::Exists($jsFull)) { $jsState = 'absent'; $jsWhy = "no file at $jsFull" }
+    else {
+      try {
+        $jsDoc = Read-JsonFile $jsFull
+        if ($null -eq $Accept -or (& $Accept $jsDoc)) {
+          return [pscustomobject]@{ State = 'ok'; Doc = $jsDoc; Why = ''; Waits = $jsWaits; Path = $jsFull }
+        }
+        $jsState = 'unreadable'; $jsWhy = "$jsFull parsed, but is not the expected shape"
+      } catch { $jsState = 'unreadable'; $jsWhy = $_.Exception.Message }
+    }
+    if ($jsState -eq 'absent' -and $jsDir -and -not [IO.Directory]::Exists($jsDir)) { break }
+    if ($jsClock.ElapsedMilliseconds -ge $WaitMs) { break }
+    $jsWaits++
+    if ($OnWait) { & $OnWait $jsWaits $jsState }
+    Start-Sleep -Milliseconds $StepMs
+  }
+  return [pscustomobject]@{ State = $jsState; Doc = $null; Waits = $jsWaits; Path = $jsFull
+                            Why = ("{0} (still {1} after {2} attempt(s) over {3} ms)" -f $jsWhy, $jsState, ($jsWaits + 1), $jsClock.ElapsedMilliseconds) }
+}
+
 function Write-JsonFile {
   <# Writes UTF-8 WITH a BOM, so a bare Get-Content elsewhere in the estate still reads it correctly.
      This is belt and braces: Read-JsonFile does not need the BOM, but anything we have not converted yet
@@ -301,6 +360,60 @@ if ($__jioSelfTest) {
   $emptyOk = ($null -eq (Read-JsonFile $emptyF)) -and ($null -eq (Read-JsonFile $wsF))
   if ($u16ok -and $emptyOk) { Write-Output '  PASS  CLEAN TWIN: UTF-16 LE and BE with a BOM decode, and an empty or whitespace-only file reads as $null (as Get-Content did)' }
   else { Write-Output "  FAIL  a measured-equivalent shape moved (utf16=$u16ok empty/ws=$emptyOk)"; $fail++ }
+
+  # ---- A SETTLED READ WAITS OUT A REPLACE WINDOW (2026-09-11) -------------------------------------------
+  # Each window is HELD deterministically: the fixture removes or exclusively locks the file before the read
+  # and -OnWait puts it back on the first wait, so the read provably SAW the window (Waits >= 1) and provably
+  # outlived it. Racing a real writer would pass or fail on the scheduler, not on the code.
+  $sj = Join-Path $t 'settled.json'
+  $sjBody = '{"resolutions":[{"key":"sumac"},{"key":"za atar"},{"key":"labneh"}]}'
+  $sjEnc = New-Object Text.UTF8Encoding($false)
+  [IO.File]::WriteAllText($sj, $sjBody, $sjEnc)
+  $sjAccept = { param($d) $null -ne $d -and ($d.PSObject.Properties.Name -contains 'resolutions') }
+
+  # (12) MUST FIRE - ABSENT, THEN PRESENT. The founding shape: Move-Item -Force deleted the name mid-read.
+  Remove-Item $sj -Force
+  $r12 = Read-JsonFileSettled -Path $sj -WaitMs 5000 -Accept $sjAccept -OnWait ({ param($n, $s) if ($n -eq 1) { [IO.File]::WriteAllText($sj, $sjBody, $sjEnc) } }.GetNewClosure())
+  if ($r12.State -eq 'ok' -and $r12.Waits -ge 1 -and @($r12.Doc.resolutions).Count -eq 3) { Write-Output '  PASS  MUST FIRE: a file ABSENT at the first look and back within the bound reads whole (3 rows), not as empty' }
+  else { Write-Output ("  FAIL  an absent-then-present file did not read whole (state={0} waits={1})" -f $r12.State, $r12.Waits); $fail++ }
+
+  # (12b) MUST FIRE - PRESENT BUT UNOPENABLE, THEN OPENABLE. The other half of the window: the name exists and
+  #       the open fails. An exclusive handle holds it; the first wait releases it.
+  $sjLock = New-Object IO.FileStream($sj, [IO.FileMode]::Open, [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
+  try {
+    $r12b = Read-JsonFileSettled -Path $sj -WaitMs 5000 -Accept $sjAccept -OnWait ({ param($n, $s) if ($n -eq 1) { $sjLock.Dispose() } }.GetNewClosure())
+  } finally { $sjLock.Dispose() }
+  if ($r12b.State -eq 'ok' -and $r12b.Waits -ge 1 -and @($r12b.Doc.resolutions).Count -eq 3) { Write-Output '  PASS  MUST FIRE: a file that exists but will not OPEN at the first look reads whole once the handle is released' }
+  else { Write-Output ("  FAIL  an unopenable-then-openable file did not read whole (state={0} waits={1})" -f $r12b.State, $r12b.Waits); $fail++ }
+
+  # (12c) MUST FIRE - a file that STAYS broken is reported 'unreadable', never 'ok' and never an empty doc.
+  $sjBad = Join-Path $t 'settled-truncated.json'
+  [IO.File]::WriteAllText($sjBad, '{"resolutions":[{"key":"sumac"},{"key":', $sjEnc)
+  $r12c = Read-JsonFileSettled -Path $sjBad -WaitMs 150 -Accept $sjAccept
+  if ($r12c.State -eq 'unreadable' -and $null -eq $r12c.Doc -and $r12c.Waits -ge 1 -and $r12c.Why) { Write-Output '  PASS  MUST FIRE: a file that stays truncated is UNREADABLE after the bound, with a reason, and no doc' }
+  else { Write-Output ("  FAIL  a persistently truncated file was not reported unreadable (state={0} waits={1})" -f $r12c.State, $r12c.Waits); $fail++ }
+
+  # (12d) MUST FIRE - valid JSON of the WRONG SHAPE is unreadable too. A ledger with no rows array is not an
+  #       empty ledger, and a writer that believed it was would save over everything the real one held.
+  $sjShape = Join-Path $t 'settled-shape.json'
+  [IO.File]::WriteAllText($sjShape, '{"oops":1}', $sjEnc)
+  $r12d = Read-JsonFileSettled -Path $sjShape -WaitMs 150 -Accept $sjAccept
+  if ($r12d.State -eq 'unreadable' -and $null -eq $r12d.Doc) { Write-Output '  PASS  MUST FIRE: parsed JSON that -Accept refuses is UNREADABLE, not an empty ledger' }
+  else { Write-Output ("  FAIL  a wrong-shape file was accepted (state={0})" -f $r12d.State); $fail++ }
+
+  # (12e) MUST FIRE - a file that STAYS absent in a directory that exists is reported 'absent' after the bound.
+  $r12e = Read-JsonFileSettled -Path (Join-Path $t 'settled-never.json') -WaitMs 150
+  if ($r12e.State -eq 'absent' -and $r12e.Waits -ge 1) { Write-Output '  PASS  MUST FIRE: a file that never appears is ABSENT after waiting, and the caller is told so' }
+  else { Write-Output ("  FAIL  a never-present file was not reported absent after waiting (state={0} waits={1})" -f $r12e.State, $r12e.Waits); $fail++ }
+
+  # (12f) CLEAN TWIN - the normal path costs nothing: a present, readable file returns on the FIRST attempt,
+  #       and a path under a directory that does not exist returns at once, because no replace removes one.
+  [IO.File]::WriteAllText($sj, $sjBody, $sjEnc)
+  $r12f = Read-JsonFileSettled -Path $sj -WaitMs 5000 -Accept $sjAccept
+  $r12g = Read-JsonFileSettled -Path (Join-Path $t 'no-such-dir\settled.json') -WaitMs 5000
+  if ($r12f.State -eq 'ok' -and $r12f.Waits -eq 0 -and @($r12f.Doc.resolutions).Count -eq 3 -and $r12g.State -eq 'absent' -and $r12g.Waits -eq 0) {
+    Write-Output '  PASS  CLEAN TWIN: a readable file reads on the first attempt (Waits 0), and a missing DIRECTORY is absent at once'
+  } else { Write-Output ("  FAIL  the settled read taxed the normal path (ok-waits={0} state={1}; missing-dir waits={2} state={3})" -f $r12f.Waits, $r12f.State, $r12g.Waits, $r12g.State); $fail++ }
 
   Remove-Item $t -Recurse -Force -ErrorAction SilentlyContinue
   if ($fail) { Write-Output "JSON-IO SELF-TEST FAILED ($fail)"; exit 1 }

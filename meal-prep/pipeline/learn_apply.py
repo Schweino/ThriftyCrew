@@ -220,14 +220,40 @@ def wired_bids(vocab=VOCAB):
     return out, True
 
 
-def read_ledger(store=STORE):
-    """(rows_by_key, count, why_not). A missing ledger is an empty one; an UNREADABLE one says so."""
-    if not os.path.exists(store):
+def _ledger_shape(doc):
+    return isinstance(doc, dict) and isinstance(doc.get("resolutions"), list)
+
+
+def read_ledger(store=STORE, wait_ms=hunt_lib.SETTLE_WAIT_MS, on_wait=None, live=None):
+    """(rows_by_key, count, why_not).
+
+    THROUGH THE SETTLED READ (2026-09-11). This used to say "a missing ledger is an empty one" and test
+    os.path.exists first. But the ledger's own writer replaces it by Move-Item -Force, and a separate
+    reader saw the file ABSENT on 4,024 of 109,718 polls across 1,500 replaces, so a few percent of reads
+    came back as an empty ledger with no reason given - and supersede detection went blind for that slug
+    while the summary read clean. The replace window is now waited out (hunt_lib.read_json_settled).
+
+    WHAT A SETTLED ANSWER MEANS HERE, decided for this reader:
+      * UNREADABLE is never empty. It is returned as why_not, and the caller reports supersede detection
+        BLIND, as it always did for a parse failure.
+      * ABSENT on the LIVE ledger is also why_not. That file is tracked in git since 2026-08-16, so it is
+        in every checkout and its absence is not a fresh estate. `live` defaults to comparing against STORE.
+      * ABSENT on a SCRATCH ledger is a new one: this file is the ledger's creator (its -Record projection
+        is the one road that makes the file), so a first run must be able to find none. Every drill in
+        this suite starts that way.
+    """
+    if live is None:
+        live = os.path.normcase(os.path.abspath(store)) == os.path.normcase(os.path.abspath(STORE))
+    doc, state, why, _waits = hunt_lib.read_json_settled(store, wait_ms=wait_ms, accept=_ledger_shape,
+                                                         on_wait=on_wait)
+    if state == "absent" and not live:
         return {}, 0, ""
-    doc, why = _read_json(store)
-    if doc is None:
+    if state != "ok":
+        if state == "absent":
+            why = ("%s - this is the LIVE ledger, tracked in git, so its absence is not a fresh estate"
+                   % why)
         return {}, 0, why
-    rows = (doc or {}).get("resolutions") or []
+    rows = doc.get("resolutions") or []
     by_key = {}
     for r in rows:
         if isinstance(r, dict) and str(r.get("key") or ""):
@@ -1306,6 +1332,54 @@ def cmd_selftest(_a):
         events = os.path.join(tmp, "ingredient-events.jsonl")
         run_dir = os.path.join(tmp, "run-drill")
         os.makedirs(run_dir, exist_ok=True)
+
+        # ---- THE SETTLED READ, AND WHAT A SETTLED ANSWER MEANS HERE (2026-09-11) --------------------
+        # Each window is HELD: the fixture takes the ledger away (or truncates it) before the read and
+        # on_wait puts it back on the first wait, so the read provably SAW the window and outlived it.
+        wstore = os.path.join(tmp, "window-ledger.json")
+        wbody = json.dumps({"count": 3, "resolutions": [
+            {"key": "sumac", "item_id": "sumac"}, {"key": "za atar", "item_id": "za-atar"},
+            {"key": "labneh", "item_id": "labneh"}]})
+
+        def _put_ledger(text):
+            with io.open(wstore, "w", encoding="utf-8") as fh:
+                fh.write(text)
+
+        seen_w = []
+
+        def _restore(n, st):
+            seen_w.append(st)
+            if n == 1:
+                _put_ledger(wbody)
+
+        ledW, nW, whyW = read_ledger(wstore, on_wait=_restore)
+        T("MUST FIRE  a ledger ABSENT at the first look (the writer's Move-Item replace window) reads "
+          "all 3 rows, not as an empty ledger that blinds supersede detection",
+          nW == 3 and "labneh" in ledW and whyW == "" and seen_w[:1] == ["absent"],
+          "n=%d why=%r seen=%s" % (nW, whyW, seen_w))
+        _put_ledger(wbody[:60])
+        seen_t = []
+
+        def _complete(n, st):
+            seen_t.append(st)
+            if n == 1:
+                _put_ledger(wbody)
+
+        _ledT, nT, whyT = read_ledger(wstore, on_wait=_complete)
+        T("MUST FIRE  a ledger TRUNCATED at the first look reads all 3 rows once it is whole",
+          nT == 3 and whyT == "" and seen_t[:1] == ["unreadable"], "n=%d why=%r seen=%s"
+          % (nT, whyT, seen_t))
+        _put_ledger(wbody[:60])
+        _l, nU, whyU = read_ledger(wstore, wait_ms=150)
+        T("MUST FIRE  a ledger that STAYS truncated is reported as why_not, never read as an empty one",
+          nU == 0 and "unreadable" in whyU, "n=%d why=%r" % (nU, whyU))
+        os.remove(wstore)
+        _l, nL, whyL = read_ledger(wstore, wait_ms=150, live=True)
+        T("MUST FIRE  the LIVE ledger absent after the wait is reported, never a fresh estate - git "
+          "tracks it, so it is in every checkout", nL == 0 and "LIVE ledger" in whyL, "why=%r" % whyL)
+        _l, nS, whyS = read_ledger(wstore, wait_ms=150)
+        T("MUST NOT FIRE  a SCRATCH ledger absent after the wait is a new ledger and is not reported - "
+          "this file is the ledger's creator", nS == 0 and whyS == "", "n=%d why=%r" % (nS, whyS))
 
         ids, _why = known_bids()
         T("the three commodity namespaces yield a non-empty id set (BLIND is not clean)",

@@ -117,10 +117,61 @@ def read_json(path, default=None):
         return default
 
 
-def ledger_rows(store):
-    doc = read_json(store) or {}
-    return {str(r.get("key") or ""): r for r in (doc.get("resolutions") or [])
-            if isinstance(r, dict) and str(r.get("key") or "")}
+# THE SETTLED READ (2026-09-11), a local copy of meal-prep\pipeline\hunt_lib.py's read_json_settled so the
+# graph takes no code dependency on the meal-prep pipeline; lib\json-io.ps1's Read-JsonFileSettled header
+# carries the measurement the bound came from. The ledger's writer replaces it by Move-Item -Force, and a
+# separate reader saw it ABSENT on 4,024 of 109,718 polls across 1,500 replaces.
+LEDGER_WAIT_MS = 3000
+LEDGER_STEP_MS = 20
+
+
+def read_json_settled(path, wait_ms=LEDGER_WAIT_MS, accept=None, on_wait=None,
+                      step_ms=LEDGER_STEP_MS):
+    """(doc, state, why, waits); state is 'ok', 'absent' or 'unreadable'. The caller owns the policy."""
+    parent = os.path.dirname(os.path.abspath(path))
+    t0 = time.monotonic()
+    waits, state, why = 0, "", ""
+    while True:
+        if not os.path.isfile(path):
+            state, why = "absent", "no file at %s" % path
+        else:
+            try:
+                with io.open(path, "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f)
+                if accept is None or accept(doc):
+                    return doc, "ok", "", waits
+                state, why = "unreadable", "%s parsed, but is not the expected shape" % path
+            except (OSError, ValueError) as e:
+                state, why = "unreadable", "%s would not read (%s)" % (path, str(e)[:160])
+        if state == "absent" and not os.path.isdir(parent):
+            break
+        if (time.monotonic() - t0) * 1000.0 >= wait_ms:
+            break
+        waits += 1
+        if on_wait:
+            on_wait(waits, state)
+        time.sleep(step_ms / 1000.0)
+    return (None, state, "%s (still %s after %d attempt(s) over %d ms)"
+            % (why, state, waits + 1, int((time.monotonic() - t0) * 1000)), waits)
+
+
+def ledger_rows(store, wait_ms=LEDGER_WAIT_MS, on_wait=None):
+    """(rows_by_key, why_blind). This stage is a CONSUMER of the ledger, so after the settled read an
+    absent or unreadable ledger is BLIND and never {}.
+
+    It used to be `read_json(store) or {}`, which swallowed a missing file, a replace window and a parse
+    failure alike into an empty ledger. contradictions() against no rows finds no DISAGREES and no REFUTED
+    case, so the night wrote a morning packet missing exactly the cases it exists for, and exited clean.
+    The live ledger is tracked in git, so there is no fresh-estate reading of its absence either.
+    """
+    doc, state, why, _waits = read_json_settled(
+        store, wait_ms=wait_ms, on_wait=on_wait,
+        accept=lambda d: isinstance(d, dict) and isinstance(d.get("resolutions"), list))
+    if state != "ok":
+        return None, ("the resolutions ledger is %s: %s - contradiction detection has nothing to check "
+                      "the events against" % (state.upper(), why))
+    return {str(r.get("key") or ""): r for r in doc["resolutions"]
+            if isinstance(r, dict) and str(r.get("key") or "")}, ""
 
 
 # =====================================================================================================
@@ -359,6 +410,18 @@ def run_ingest(a):
         print(MARKER)
         return EXIT_CLEAN
 
+    # THE LEDGER IS READ BEFORE ANYTHING IS WRITTEN (2026-09-11). A night that cannot read it is BLIND:
+    # it files no event, writes no packet and moves no cursor, so the next night re-reads the same events
+    # against a readable ledger and nothing is lost. Writing on would REPLACE the morning packet with cases
+    # computed against no rows - every DISAGREES and REFUTED case gone, and an exit that reads clean.
+    # `ledger_wait_ms` is a drill seam only; the CLI never sets it, so a real night waits the full bound.
+    rows, why_rows = ledger_rows(a.store or STORE,
+                                 wait_ms=getattr(a, "ledger_wait_ms", LEDGER_WAIT_MS))
+    if rows is None:
+        print("ingest_hunter_events: BLIND - %s" % why_rows)
+        print(MARKER)
+        return EXIT_BLIND
+
     findings = []
     if a.provenance_dir:
         # THE DRILL SEAM. graphdb mirrors every decision to GRAPH_DIR\provenance\<day>.jsonl, which
@@ -386,7 +449,6 @@ def run_ingest(a):
         have.add(eid)
         logged += 1
 
-    rows = ledger_rows(a.store or STORE)
     cases = contradictions(events, rows)
 
     gold = []
@@ -610,6 +672,53 @@ def selftest():
         io.open(C.events, "w", encoding="utf-8").close()
         T("CLEAN TWIN  an EMPTY event log is a clean zero-event day (exit 0) - absent and empty are "
           "different facts about a night", run_ingest(C()) == EXIT_CLEAN, str(run_ingest(C())))
+
+        # ---- THE LEDGER IS READ SETTLED, AND A COULD-NOT-READ IS BLIND (2026-09-11) ---------------
+        # (a) the replace window, HELD: absent at the first look, put back by on_wait on the first wait.
+        wled = os.path.join(tmp, "window-ledger.json")
+        with io.open(store, "r", encoding="utf-8") as fh:
+            wtext = fh.read()
+        seen = []
+
+        def _back(n, st):
+            seen.append(st)
+            if n == 1:
+                with io.open(wled, "w", encoding="utf-8") as fh2:
+                    fh2.write(wtext)
+
+        wrows, wwhy = ledger_rows(wled, wait_ms=5000, on_wait=_back)
+        T("MUST FIRE  a ledger ABSENT at the first look (the writer's Move-Item replace window) still "
+          "yields its rows, so contradictions are not checked against nothing",
+          wrows is not None and "apple" in wrows and wwhy == "" and seen[:1] == ["absent"],
+          "rows=%s why=%r seen=%s" % (sorted(wrows or {}), wwhy, seen))
+
+        # (b) a ledger that STAYS absent: BLIND, and the night writes nothing
+        class D(A):
+            store = os.path.join(tmp, "no-such-ledger.json")
+            packet = os.path.join(tmp, "packet-d.json")
+            cursor = os.path.join(tmp, "cursor-d.json")
+            queue = os.path.join(tmp, "q-d.json")
+            gold = os.path.join(tmp, "hg-d.jsonl")
+            ledger_wait_ms = 150
+        rcD = run_ingest(D())
+        T("MUST FIRE  a MISSING resolutions ledger is BLIND (exit 3), not a clean night with no "
+          "contradictions", rcD == EXIT_BLIND, "rc=%s" % rcD)
+        T("MUST FIRE  ...and that BLIND night wrote no packet and moved no cursor - the morning's review "
+          "cases are never replaced by a set computed against no rows",
+          not os.path.exists(D.packet) and not os.path.exists(D.cursor),
+          "packet=%s cursor=%s" % (os.path.exists(D.packet), os.path.exists(D.cursor)))
+
+        # (c) a truncated ledger: BLIND too
+        trunc = os.path.join(tmp, "truncated-ledger.json")
+        with io.open(trunc, "w", encoding="utf-8") as fh:
+            fh.write(wtext[:40])
+
+        class E(D):
+            store = trunc
+        rcE = run_ingest(E())
+        T("MUST FIRE  a TRUNCATED resolutions ledger is BLIND (exit 3) as well, never an empty ledger",
+          rcE == EXIT_BLIND and not os.path.exists(E.packet), "rc=%s packet=%s"
+          % (rcE, os.path.exists(E.packet)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

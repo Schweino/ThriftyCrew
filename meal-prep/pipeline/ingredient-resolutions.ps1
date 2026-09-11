@@ -10,14 +10,15 @@
 # writer is paid rather than after the auditor catches it - the R3 shift-left in the efficiency plan.
 #
 #   .\ingredient-resolutions.ps1 -Record -Term 'shaved beef steak' -ItemId shaved-beef-steak [-BidExists] [-Evidence '...'] [-By mapper]
-#   .\ingredient-resolutions.ps1 -Query -Term 'shaved beef steak'         exit 3 when a prior ruling exists
+#   .\ingredient-resolutions.ps1 -Query -Term 'shaved beef steak'         exit 3 when a prior ruling exists, 2 when the ledger cannot be read
 #   .\ingredient-resolutions.ps1 -Invalidate -ItemId x    (a registrar ruling changed a commodity id)
 #   .\ingredient-resolutions.ps1 -SelfTest
 # ---------------------------------------------------------------------------------------------------
 param(
   [switch]$Record, [switch]$Query, [switch]$Invalidate, [switch]$List, [switch]$SelfTest,
   [string]$Term = '', [string]$ItemId = '', [string]$Evidence = '', [string]$By = '',
-  [switch]$BidExists, [string]$Store = '', [switch]$Json
+  [switch]$BidExists, [string]$Store = '', [switch]$Json,
+  [int]$ReadWaitMs = 3000     # the settled-read bound; lib\json-io.ps1 records where 3000 came from. Fixtures shorten it.
 )
 $ErrorActionPreference = 'Stop'
 $runRecord=[bool]$Record; $runQuery=[bool]$Query; $runInv=[bool]$Invalidate; $runSelfTest=[bool]$SelfTest; $runJson=[bool]$Json; $runBid=[bool]$BidExists
@@ -28,7 +29,12 @@ $repo = Split-Path -Parent $mp
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\atomic-write.ps1')   # Write-TcAtomicFile: a lock-free reader must not cost a writer its write
 . (Join-Path $repo 'lib\ledger-fixture.ps1') # Wait-TcLedgerFixtureGate: inert unless this file's own self-test launched the writer
-if (-not $Store) { $Store = Join-Path $mp 'db\ingredient-resolutions.json' }
+. (Join-Path $repo 'lib\json-io.ps1')   # Read-JsonFileSettled: the writer's replace window is waited out, never read as an empty ledger
+# THE LIVE LEDGER IS TRACKED IN GIT (since 2026-08-16), so it is in every checkout and its absence is never a
+# fresh estate. A scratch store named by -Store can be. The write path needs to know which one it holds.
+$liveStore = Join-Path $mp 'db\ingredient-resolutions.json'
+if (-not $Store) { $Store = $liveStore }
+$storeIsLive = [string]::Equals([IO.Path]::GetFullPath($Store), [IO.Path]::GetFullPath($liveStore), [StringComparison]::OrdinalIgnoreCase)
 
 function Get-TermKey {
   param([string]$T)
@@ -40,11 +46,28 @@ function Get-TermKey {
   $t = $t -replace '\s+', ' '
   return $t.Trim()
 }
-function Read-Store { param([string]$P)
-  if (-not (Test-Path $P)) { return @() }
-  try { $d = Get-Content $P -Raw -Encoding utf8 | ConvertFrom-Json } catch { return @() }
-  if ($d -and ($d.PSObject.Properties.Name -contains 'resolutions')) { return @($d.resolutions) }
-  return @() }
+# ---------------------------------------------------------------------------------------------------
+# THE READ IS SETTLED, AND IT NO LONGER ANSWERS "EMPTY" FOR "COULD NOT LOOK" (2026-09-11).
+#
+# Read-Store used to return @() for a missing file AND for any read or parse failure. Two things made that
+# wrong. Save-Rows replaces this file by Move-Item -Force, which deletes the name and then renames onto it,
+# and a separate reader saw the file ABSENT on 4,024 of 109,718 polls across 1,500 replaces - so a -Query in
+# that window answered "no prior resolution" with the ruling sitting on disk. And the in-lock re-read in
+# -Record and -Invalidate used this same function, so an unreadable ledger became an empty one and Save-Rows
+# then wrote only the new row over every row the ledger held.
+#
+# So it returns WHAT IT SAW - State ok, absent or unreadable, after lib\json-io.ps1's bounded wait - and each
+# caller decides what that means:
+#   -Query, -List, -Json   CONSUMERS: anything but ok is exit 2 with a stdout line, never "no prior resolution".
+#   -Record, -Invalidate   WRITERS, inside the lock: unreadable REFUSES the write. Absent is a new ledger for a
+#                          scratch -Store, and a refusal for the live one, which git tracks.
+# ---------------------------------------------------------------------------------------------------
+function Read-Store { param([string]$P, [int]$WaitMs = $ReadWaitMs, [scriptblock]$OnWait = $null)
+  $st = Read-JsonFileSettled -Path $P -WaitMs $WaitMs -OnWait $OnWait `
+          -Accept { param($d) $null -ne $d -and ($d.PSObject.Properties.Name -contains 'resolutions') -and $null -ne $d.resolutions }
+  $rowsRead = @()
+  if ($st.State -eq 'ok') { $assigned = $st.Doc.resolutions; $rowsRead = @($assigned) }
+  return [pscustomobject]@{ State = $st.State; Rows = $rowsRead; Why = $st.Why; Waits = $st.Waits } }
 
 # ---------------------------------------------------------------------------------------------------
 # THE WRITE LOCK (added 2026-08-24, PLAN-recipe-hunter-v3 D9's phase-1 obligation: "any single-file
@@ -99,7 +122,7 @@ if ($runSelfTest) {
   $tmp = Join-Path $env:TEMP ('ir-' + [guid]::NewGuid().ToString('N') + '.json')
   try {
     ([pscustomobject]@{ resolutions=@([pscustomobject]@{key='sumac';item_id='sumac';bid_exists=$false}) } | ConvertTo-Json -Depth 5) | Set-Content $tmp -Encoding utf8
-    $b = @(Read-Store $tmp)
+    $b = @((Read-Store $tmp).Rows)
     T 'the store round-trips' ($b.Count -eq 1 -and $b[0].key -eq 'sumac') ([string]$b.Count)
     T 'MUST FIRE  bid_exists=false survives the round-trip as FALSE, not as absent' ($b[0].bid_exists -eq $false) ([string]$b[0].bid_exists)
     # CLEAN TWIN: -Query still answers from the ledger (2026-09-11). The read feeding -Query and the listing
@@ -110,7 +133,11 @@ if ($runSelfTest) {
     $qRow = $null; try { $qRow = ((@($qLines) -join "`n") | ConvertFrom-Json) } catch { $qRow = $null }
     T 'CLEAN TWIN -Query still answers from the ledger now that the read feeding it sits below -Record and -Invalidate' `
       ($qCode -eq 3 -and $null -ne $qRow -and [string]$qRow.item_id -eq 'sumac') ("exit $qCode out: " + (@($qLines) -join ' / '))
-    T 'a missing store reads as empty' ((@(Read-Store (Join-Path $env:TEMP 'nope-ir.json'))).Count -eq 0) 'not empty'
+    # CHANGED 2026-09-11: this used to assert "a missing store reads as EMPTY", which is the defect. A missing
+    # store now reads as what it is, and each caller decides what absent means (see Read-Store's header).
+    $nope = Read-Store (Join-Path $env:TEMP ('nope-ir-' + [guid]::NewGuid().ToString('N') + '.json')) -WaitMs 100
+    T 'a missing store reads as ABSENT with no rows, and says so, rather than as an empty ledger' `
+      ($nope.State -eq 'absent' -and @($nope.Rows).Count -eq 0 -and $nope.Why) ('state=' + $nope.State)
 
     # MUST FIRE: CONCURRENT WRITERS DO NOT LOSE ROWS (added 2026-08-24, D9's phase-1 obligation).
     #
@@ -163,7 +190,7 @@ if ($runSelfTest) {
     $run = Invoke-TcLedgerWriters -Script $PSCommandPath -ArgSets $argSets.ToArray()
     $writers = @($run.writers)
     Write-Output ("  info  barrier: {0} of 4 writers were at the barrier when released ({1} ms)" -f $run.ready_at_go, $run.go_ms)
-    $got = @(Read-Store $ctmp)
+    $got = @((Read-Store $ctmp).Rows)
     $conc = @(@($got | Where-Object { [string]$_.key -like 'conc term *' } | ForEach-Object { [string]$_.key }) | Sort-Object)
     $seedKept = @($got | Where-Object { [string]$_.key -like 'seed *' }).Count
     Remove-Item $ctmp -Force -ErrorAction SilentlyContinue
@@ -209,7 +236,7 @@ if ($runSelfTest) {
     [void]$hp.WaitForExit(120000)
     $hOut = [string](Get-Content $hOutF -Raw); if ($null -eq $hOut) { $hOut = '' }
     Remove-Item $hOutF, $hErrF -Force -ErrorAction SilentlyContinue
-    $hRows = @(Read-Store $htmp)
+    $hRows = @((Read-Store $htmp).Rows)
     # ONE-TOKEN VALUES ONLY: Start-Process joins -ArgumentList with spaces and quotes nothing, so a term with a
     # space arrives as two arguments. Its first cut passed 'held term' and recorded 'held'.
     $heldLanded = (@($hRows | Where-Object { [string]$_.key -eq 'heldterm' }).Count -eq 1)
@@ -245,6 +272,100 @@ if ($runSelfTest) {
   T 'MUST FIRE  ...and leaks NOTHING to stderr (one noisy child kills ops\run-gates.ps1)' `
     ([string]::IsNullOrWhiteSpace($sErr)) $sErr
 
+  # ---- A COULD-NOT-READ MUST NOT SETTLE THE LEDGER (2026-09-11) ----
+  # Save-Rows replaces the ledger by Move-Item -Force, and a separate reader saw it ABSENT on 4,024 of 109,718
+  # polls across 1,500 replaces. Read-Store answered @() for that and for any parse failure, so -Query said "no
+  # prior resolution" with the ruling on disk, and the in-lock re-read handed Save-Rows an empty ledger to write
+  # the new row over. Children run as real processes because the exit code and the stdout/stderr split ARE the
+  # contract, the same reason the unwritable-store cases above are driven that way.
+  function Invoke-IrChild([string]$Script, [string[]]$ChildArgs) {
+    $eF = [IO.Path]::GetTempFileName(); $oF = [IO.Path]::GetTempFileName()
+    $cp = Start-Process -FilePath 'powershell' -Wait -PassThru -NoNewWindow `
+            -ArgumentList (@('-NoProfile','-ExecutionPolicy','Bypass','-File',$Script) + $ChildArgs) `
+            -RedirectStandardError $eF -RedirectStandardOutput $oF
+    $o = [string](Get-Content $oF -Raw); if ($null -eq $o) { $o = '' }
+    $e = [string](Get-Content $eF -Raw); if ($null -eq $e) { $e = '' }
+    Remove-Item $eF, $oF -Force -ErrorAction SilentlyContinue
+    return [pscustomobject]@{ Code = $cp.ExitCode; Out = $o; Err = $e }
+  }
+  $irDir = Join-Path $env:TEMP ('ir-read-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $irDir -Force | Out-Null
+  $irEnc = New-Object Text.UTF8Encoding($false)
+  $irThree = '{"count":3,"resolutions":[{"key":"sumac","item_id":"sumac","bid_exists":true},{"key":"za atar","item_id":"za-atar","bid_exists":true},{"key":"labneh","item_id":"labneh","bid_exists":false}]}'
+  try {
+    # (1) THE WINDOW, HELD IN PROCESS: the ledger is absent at the first look and -OnWait puts it back on the
+    #     first wait, so the read provably saw the window and provably outlived it. Never raced.
+    $irWin = Join-Path $irDir 'window.json'
+    $sa = $null
+    try { $sa = Read-Store $irWin -WaitMs 5000 -OnWait ({ param($n, $s) if ($n -eq 1) { [IO.File]::WriteAllText($irWin, $irThree, $irEnc) } }.GetNewClosure()) } catch { $sa = $null }
+    T 'MUST FIRE  a ledger ABSENT at the first look (the Move-Item replace window) reads all 3 rows, not an empty ledger' `
+      ($null -ne $sa -and $sa.State -eq 'ok' -and $sa.Waits -ge 1 -and @($sa.Rows).Count -eq 3) `
+      ($(if ($sa) { 'state=' + $sa.State + ' waits=' + $sa.Waits + ' rows=' + @($sa.Rows).Count } else { 'threw' }))
+
+    # (2) -Record INSIDE THE LOCK against a ledger it cannot read. The bytes on disk are the finding.
+    $irTrunc = Join-Path $irDir 'truncated.json'
+    [IO.File]::WriteAllText($irTrunc, $irThree.Substring(0, 120), $irEnc)
+    $md5Trunc = (Get-FileHash $irTrunc -Algorithm MD5).Hash
+    $cr = Invoke-IrChild $PSCommandPath @('-Record','-Term','cumin','-ItemId','cumin','-BidExists','-By','fixture','-Store',$irTrunc,'-ReadWaitMs','200')
+    T 'MUST FIRE  -Record against a ledger it cannot READ writes NOTHING - the bytes are unchanged, so no row is wiped' `
+      ((Get-FileHash $irTrunc -Algorithm MD5).Hash -eq $md5Trunc) ('the ledger changed; the child said: ' + $cr.Out)
+    T '...and exits non-zero' ($cr.Code -ne 0) ('exit ' + $cr.Code)
+    T '...and says so on STDOUT, naming the failed read, and claims no resolution' `
+      (($cr.Out -match 'COULD NOT WRITE') -and ($cr.Out -match 'could not READ') -and -not ($cr.Out -match 'cumin -> cumin')) $cr.Out
+    T 'MUST FIRE  ...and leaks NOTHING to stderr (one noisy child kills ops\run-gates.ps1)' ([string]::IsNullOrWhiteSpace($cr.Err)) $cr.Err
+
+    # (3) -Invalidate, the other writer, against the same unreadable ledger
+    $ci = Invoke-IrChild $PSCommandPath @('-Invalidate','-ItemId','sumac','-Store',$irTrunc,'-ReadWaitMs','200')
+    T 'MUST FIRE  -Invalidate against a ledger it cannot READ writes NOTHING either, exits non-zero and says why on stdout' `
+      ((Get-FileHash $irTrunc -Algorithm MD5).Hash -eq $md5Trunc -and $ci.Code -ne 0 -and ($ci.Out -match 'could not READ') -and -not ($ci.Out -match 'invalidated \d+ row')) `
+      ('exit ' + $ci.Code + ': ' + $ci.Out)
+    T '...and leaks NOTHING to stderr' ([string]::IsNullOrWhiteSpace($ci.Err)) $ci.Err
+
+    # (4) -Query is a CONSUMER: unreadable and settled-absent are both exit 2, never "no prior resolution"
+    #     The refusal names the phrase it is NOT ("not the same as no prior resolution"), so these match the
+    #     defect's exact answer, `no prior resolution for '<key>'`, and not the bare phrase - the first cut of
+    #     this fixture matched the refusal's own wording and failed a correct run.
+    $cq = Invoke-IrChild $PSCommandPath @('-Query','-Term','sumac','-Store',$irTrunc,'-ReadWaitMs','200')
+    T 'MUST FIRE  -Query on an unreadable ledger is exit 2 COULD NOT READ, never "no prior resolution"' `
+      ($cq.Code -eq 2 -and ($cq.Out -match 'COULD NOT READ') -and -not ($cq.Out -match "no prior resolution for '") -and [string]::IsNullOrWhiteSpace($cq.Err)) `
+      ('exit ' + $cq.Code + ': ' + $cq.Out + $cq.Err)
+    $cqa = Invoke-IrChild $PSCommandPath @('-Query','-Term','sumac','-Store',(Join-Path $irDir 'never.json'),'-ReadWaitMs','200')
+    T 'MUST FIRE  -Query on a ledger that STAYS absent is exit 2 as well - a consumer never reads absence as no ruling' `
+      ($cqa.Code -eq 2 -and ($cqa.Out -match 'COULD NOT READ') -and -not ($cqa.Out -match "no prior resolution for '") -and [string]::IsNullOrWhiteSpace($cqa.Err)) `
+      ('exit ' + $cqa.Code + ': ' + $cqa.Out + $cqa.Err)
+
+    # (5) THE LIVE LEDGER ABSENT. Driven from a MIRROR of this script and its two libraries, so the default
+    #     store path is a scratch copy of the live layout and the real ledger is never touched.
+    $irMirror = Join-Path $irDir 'mirror'
+    New-Item -ItemType Directory -Force -Path (Join-Path $irMirror 'lib'), (Join-Path $irMirror 'meal-prep\pipeline'), (Join-Path $irMirror 'meal-prep\db') | Out-Null
+    # EVERY LIBRARY THIS SCRIPT DOT-SOURCES, read off its own source rather than listed by hand. The first cut
+    # listed two, and the day lib\atomic-write.ps1 joined them the mirrored child could not load and this case
+    # went red for a reason that had nothing to do with what it tests. A pattern that matched nothing would
+    # leave the mirror with no libraries, and the child would fail loudly rather than pass.
+    $irLibs = @([regex]::Matches([IO.File]::ReadAllText($PSCommandPath), '(?m)^\. \(Join-Path \$repo ''lib\\([\w.-]+\.ps1)''\)') | ForEach-Object { $_.Groups[1].Value })
+    foreach ($irLib in $irLibs) { Copy-Item (Join-Path $repo ('lib\' + $irLib)) -Destination (Join-Path $irMirror 'lib') }
+    Copy-Item $PSCommandPath -Destination (Join-Path $irMirror 'meal-prep\pipeline')
+    $mirrorLive = Join-Path $irMirror 'meal-prep\db\ingredient-resolutions.json'
+    $cl = Invoke-IrChild (Join-Path $irMirror 'meal-prep\pipeline\ingredient-resolutions.ps1') @('-Record','-Term','cumin','-ItemId','cumin','-By','fixture','-ReadWaitMs','200')
+    T 'MUST FIRE  -Record with the LIVE ledger absent REFUSES, rather than starting a one-row ledger the 07:00 bot would commit' `
+      ($cl.Code -ne 0 -and ($cl.Out -match 'COULD NOT WRITE') -and ($cl.Out -match 'LIVE ledger') -and -not (Test-Path $mirrorLive) -and [string]::IsNullOrWhiteSpace($cl.Err)) `
+      ('exit ' + $cl.Code + ' created=' + (Test-Path $mirrorLive) + ': ' + $cl.Out + $cl.Err)
+
+    # (6) CLEAN TWIN - the fresh-ledger road the fix was most likely to break on its way past
+    $irNew = Join-Path $irDir 'new-ledger.json'
+    $cn = Invoke-IrChild $PSCommandPath @('-Record','-Term','cumin','-ItemId','cumin','-BidExists','-By','fixture','-Store',$irNew,'-ReadWaitMs','200')
+    $newRows = @((Read-Store $irNew -WaitMs 0).Rows)
+    T 'CLEAN TWIN a SCRATCH -Store that does not exist yet is still created by -Record, holding exactly the new row' `
+      ($cn.Code -eq 0 -and @($newRows).Count -eq 1 -and [string]$newRows[0].key -eq 'cumin') ('exit ' + $cn.Code + ' rows=' + @($newRows).Count + ': ' + $cn.Out)
+
+    # (7) CLEAN TWIN - a readable ledger still answers -Query with its prior ruling
+    $irGood = Join-Path $irDir 'good.json'
+    [IO.File]::WriteAllText($irGood, $irThree, $irEnc)
+    $cg = Invoke-IrChild $PSCommandPath @('-Query','-Term','labneh','-Store',$irGood,'-ReadWaitMs','200')
+    T 'CLEAN TWIN -Query on a readable ledger still finds the prior ruling (exit 3) and names it' `
+      ($cg.Code -eq 3 -and ($cg.Out -match 'labneh')) ('exit ' + $cg.Code + ': ' + $cg.Out)
+  } finally { Remove-Item $irDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($bad -gt 0) { Write-Output ("ingredient-resolutions SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'ingredient-resolutions SELF-TEST PASS'
   Exit-Guard -Name 'ingredient-resolutions' -Summary 'selftest pass' -Code 0
@@ -279,7 +400,16 @@ if ($runRecord) {
   # The read the query verbs need now sits below -Invalidate.
   try {
     Invoke-Locked -Path $Store -Body {
-      $fresh = @(Read-Store $Store)
+      $st = Read-Store $Store
+      # A COULD-NOT-READ REFUSES THE WRITE (2026-09-11). Save-Rows writes the WHOLE ledger, so merging into a
+      # read that failed would replace every row on disk with this one. The throw lands in the catch below:
+      # exit 1, one line on stdout, nothing on stderr, and the file untouched.
+      if ($st.State -eq 'unreadable') { throw ('could not READ the existing ledger, so writing now would replace every row it holds with this one - nothing was written. ' + $st.Why) }
+      # A settled ABSENT is a NEW ledger only for a scratch -Store. The lock rules out this script's own replace
+      # window and the wait rules out a foreign one, but the LIVE ledger is tracked in git: restarting it with
+      # one row is a wipe the 07:00 bot would commit with everything else, so that refuses too.
+      if ($st.State -eq 'absent' -and $storeIsLive) { throw ('the LIVE ledger is absent, and git tracks it, so this is not a fresh estate - nothing was written. ' + $st.Why) }
+      $fresh = @($st.Rows)
       $keep = @($fresh | Where-Object { [string]$_.key -ne $k })
       $row = [pscustomobject]@{ key=$k; term=$Term; item_id=$ItemId; bid_exists=$runBid; evidence=$Evidence; by=$By; at=(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss') }
       Save-Rows @($keep + $row)
@@ -304,7 +434,12 @@ if ($runInv) {
   $script:invalidated = 0
   try {
     Invoke-Locked -Path $Store -Body {
-      $fresh = @(Read-Store $Store)
+      $st = Read-Store $Store
+      # The same two refusals as -Record, for the same reasons: from a failed read, the rows that "survive" this
+      # invalidation are none, and Save-Rows would write that; and the live ledger's absence is not a fresh estate.
+      if ($st.State -eq 'unreadable') { throw ('could not READ the existing ledger, so writing now would replace every row it holds with none - nothing was written. ' + $st.Why) }
+      if ($st.State -eq 'absent' -and $storeIsLive) { throw ('the LIVE ledger is absent, and git tracks it, so this is not a fresh estate - nothing was written. ' + $st.Why) }
+      $fresh = @($st.Rows)
       $keep = @($fresh | Where-Object { [string]$_.item_id -ne $ItemId })
       $script:invalidated = @($fresh).Count - @($keep).Count
       Save-Rows $keep
@@ -318,8 +453,17 @@ if ($runInv) {
   exit 0
 }
 # The read the query verbs answer from. Below -Record and -Invalidate on purpose: a writer reads only inside its lock.
-$rows = @(Read-Store $Store)
-
+# THE READ-ONLY MODES ARE CONSUMERS (2026-09-11). A settled absence or an unreadable ledger is exit 2 with one line
+# on stdout (a JSON object under -Json) and never "no prior resolution" or "0 resolution(s)" - the answers a mapper
+# acts on by re-deriving a ruling the ledger already holds. Read here and not at the top, so a writer never pays
+# for a read it does not use: its own read happens inside the lock.
+$st = Read-Store $Store
+if ($st.State -ne 'ok') {
+  $msg = ("ingredient-resolutions: COULD NOT READ the store at {0} ({1}) - that is not the same as no prior resolution. {2}" -f $Store, $st.State, $st.Why)
+  if ($runJson) { ([pscustomobject]@{ error = $msg } | ConvertTo-Json -Compress) } else { Write-Output $msg }
+  exit 2
+}
+$rows = @($st.Rows)
 if ($runQuery) {
   $k = Get-TermKey $Term
   $r = @($rows | Where-Object { [string]$_.key -eq $k })[0]
