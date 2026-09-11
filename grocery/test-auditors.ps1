@@ -978,18 +978,29 @@ else {
 # by 3.3-7.1%, and one was CROWNED cheapest on the 2026-07-29 board (brown-gravy-mix $0.5333/oz vs Walmart's
 # real $0.552/oz). Its -SelfTest now carries the frozen founding-bug row (the shipped 0.9-oz shape MUST fail
 # the engine tolerance), the 2026-07-27 fish-sauce override, and the guard-5 multipack lockstep. Prove the
-# fixture still fires, and that the importer still LIFTS the builder's Build-Row instead of re-forking it.
+# fixture still fires, and that the importer runs the builder's OWN Build-Row, from its one home in
+# walmart-row-lib.ps1, instead of re-forking it.
 if (Use-Unit 'u022-n-4-the-walmart-batch-importer-s') {
 $r = RunPS 'import-walmart-batch.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'SELF-TEST PASS') { Ok 'import-walmart-batch verifies every batch row through the builder invariants (founding-bug fixture fires)' }
 else { Bad ('import-walmart-batch -SelfTest failed or lost its founding-bug fixture: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
 $iwSrc = Get-Content (Join-Path $root 'import-walmart-batch.ps1') -Raw
-# The lift list gained Get-NamePackMultipliers and Get-SameFamilyNameQty on 2026-09-05 with Build-Row's
-# refusal branch. Matching the two ENDS of the list rather than the whole literal keeps this check pinned to
-# what it is actually about - Build-Row is lifted, not re-forked - without failing every time the builder
-# grows a helper. A missing helper is not silent either way: the lift throws by name at :53.
-if ($iwSrc -match "'Resolve-Unit','Get-NameQtyCandidates'" -and $iwSrc -match "'Format-Qty','Build-Row'\)") { Ok 'import-walmart-batch still lifts Build-Row from build-walmart-deals (one home, no fork)' }
-else { Bad 'import-walmart-batch no longer lifts Build-Row - the second Walmart writer has re-forked the size math (the 2026-07-25 class)' }
+$bwSrc = Get-Content (Join-Path $root 'build-walmart-deals.ps1') -Raw
+$wrlPath = Join-Path $root 'walmart-row-lib.ps1'
+$wrlSrc = if (Test-Path $wrlPath) { Get-Content $wrlPath -Raw } else { '' }
+# ONE HOME, NOW BY DOT-SOURCE (2026-09-11). Until then the importer LIFTED Build-Row and six helpers out of
+# build-walmart-deals.ps1's source off a hand-maintained list, and this check pinned the two ends of that
+# list. Build-Row lives in walmart-row-lib.ps1 now and BOTH Walmart writers dot-source it, so the property is
+# restated for the new shape: each writer dot-sources the library, the library defines Build-Row, the
+# builder no longer defines its own (a second home is a fork), and the importer no longer reads the builder
+# as text (a leftover lift would run a second copy). Each half is its own line, so a failure names itself.
+$wrlDotRx = "(?m)^\.\s*\(Join-Path\s+\`$root\s+'walmart-row-lib\.ps1'\)"
+if ($iwSrc -match $wrlDotRx -and $bwSrc -match $wrlDotRx) { Ok 'import-walmart-batch and build-walmart-deals both dot-source Build-Row from walmart-row-lib.ps1 (one home, no fork)' }
+else { Bad 'a Walmart writer no longer dot-sources walmart-row-lib.ps1 - the second writer has re-forked the size math or gone back to lifting it (the 2026-07-25 class)' }
+if ($wrlSrc -match '(?m)^function\s+Build-Row\s*\(' -and $bwSrc -notmatch '(?m)^function\s+Build-Row\s*\(') { Ok 'Build-Row is defined in walmart-row-lib.ps1 and nowhere in build-walmart-deals.ps1' }
+else { Bad 'Build-Row is missing from walmart-row-lib.ps1 or defined again in build-walmart-deals.ps1 - two homes for the Walmart size math' }
+if ($iwSrc -notmatch "Get-Content\s+\(Join-Path\s+\`$root\s+'build-walmart-deals\.ps1'\)") { Ok 'import-walmart-batch no longer reads build-walmart-deals.ps1 as source text (the lift is gone, not doubled)' }
+else { Bad 'import-walmart-batch reads build-walmart-deals.ps1 as text again - a lift beside the dot-source runs a second copy of Build-Row' }
 } # u022-n-4-the-walmart-batch-importer-s
 
 # ---------------------------------------------------------------- N+5. delegated audits must say BLIND (exit 3), never a false OK

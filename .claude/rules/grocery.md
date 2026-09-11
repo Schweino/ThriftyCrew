@@ -41,11 +41,12 @@ is one copy of every rule and nothing here can drift from it.
   the read to the call that runs it. Over 596 files on 2026-09-11 it read 57 NAME it, 8 READ its
   source, and **1 EXECUTES: `test-match-lib.ps1:78`**, which runs the original matcher cut out of
   compare-deals so it can prove match-lib decides identically. That one is on purpose.
-  **The live production lift is not from compare-deals at all.** `-Script build-walmart-deals.ps1`
-  names `import-walmart-batch.ps1:58` (Build-Row, six helpers and `$script:UnitFamily`), and
-  `-Script import-walmart-batch.ps1` names `import-instacart-batch.ps1:68` (Merge-IwbRows).
-  `ops/audit-lift-completeness.ps1` checks both lists are closed. **Still run the script rather than
-  quoting any of these numbers.**
+  **The live production lift was not from compare-deals at all.** `-Script build-walmart-deals.ps1`
+  named `import-walmart-batch.ps1` (Build-Row, six helpers and `$script:UnitFamily`) until 2026-09-11,
+  when they moved to `walmart-row-lib.ps1` and both Walmart writers began dot-sourcing it
+  (`design/PLAN-walmart-row-lib-2026-09-11.md`). What remains is `-Script import-walmart-batch.ps1`
+  naming `import-instacart-batch.ps1` (Merge-IwbRows), and `ops/audit-lift-completeness.ps1` checks that
+  list is closed. **Still run the script rather than quoting any of these numbers.**
   A lifted `$script:` constant does not
   travel - the lift needs functions, parens and a column-0 brace, which is why the exclude list is
   exported as `Get-TcGlobalExclude` and not as a variable.

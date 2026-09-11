@@ -11,10 +11,10 @@
 # WIDENED 2026-09-10 BECAUSE IT HAD GONE VACUOUS. I82 moved the pricing math into pricing-math-lib.ps1 and
 # every builder dot-sources it, so nothing lifts from compare-deals.ps1 any more - and this audit, which
 # looked only at compare-deals.ps1, printed "0 lifting script(s) checked" and exited 0 in run-gates on
-# every push. The lifts still live read OTHER files: import-walmart-batch.ps1 cuts Build-Row and its
-# helpers out of build-walmart-deals.ps1, and import-instacart-batch.ps1 cuts Merge-IwbRows out of
-# import-walmart-batch.ps1 (`ops\count-source-lifters.ps1 -Script <file>` names them). So the SOURCE is
-# now whichever grocery script the lifter reads, and it prints every lift it checked.
+# every push. The lifts still live then read OTHER files: import-walmart-batch.ps1 cut Build-Row and its
+# helpers out of build-walmart-deals.ps1 (retired 2026-09-11, see below), and import-instacart-batch.ps1
+# cuts Merge-IwbRows out of import-walmart-batch.ps1 (`ops\count-source-lifters.ps1 -Script <file>` names
+# them). So the SOURCE is whichever grocery script the lifter reads, and it prints every lift it checked.
 #
 # WHAT IT CHECKS. For every grocery script with a `foreach ($fn in @(...))` lift list: find the grocery
 # scripts it reads with Get-Content, take the functions the list names that a source defines, find every
@@ -23,15 +23,16 @@
 # once: import-instacart-batch.ps1 defines Get-RowKey before its lift and must never lift the source's.
 #
 # WHY THIS IS A DETECTOR AND NOT THE FIX. The fix is the shape I82 gave the pricing math - a dot-sourced
-# library - and for Build-Row that means moving it out of build-walmart-deals.ps1, the live Walmart price
-# path. Until that is done the hand-maintained lists stay, and this makes their one failure mode visible
-# at gate time instead of at run time.
+# library. For Build-Row it shipped on 2026-09-11: Build-Row lives in grocery/walmart-row-lib.ps1 and both
+# Walmart writers dot-source it (design/PLAN-walmart-row-lib-2026-09-11.md), which took this audit from 2
+# lifts checked to 1. The Merge-IwbRows lift remains, so the detector stays, and it keeps that list's one
+# failure mode visible at gate time instead of at run time.
 #
 # SCOPE OF A CLEAN REPORT: UNSOUND, so a clean report proves nothing. It reads source text and knows one
 # lifting spelling - a `foreach` over an inline `@('A','B')` list, in a grocery script that Get-Contents
 # another grocery script by a literal filename within 120 characters. A lifter that builds its list some
 # other way, reads its source through a path variable, lifts a VARIABLE rather than a function (the
-# `$script:UnitFamily` that import-walmart-batch.ps1 also takes is invisible here), or calls through
+# `$script:UnitFamily` import-walmart-batch.ps1 took until 2026-09-11 was one), or calls through
 # `&$name` is invisible to it. A finding it reports is real; silence is not proof there is none.
 #
 #   .\audit-lift-completeness.ps1

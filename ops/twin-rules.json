@@ -35,11 +35,11 @@
     },
     {
       "name":  "deal-builder-size-token",
-      "why":  "FOUND BY THIS AUDITOR'S OWN UNDECLARED SWEEP on its first run, 2026-09-01, which is the point of that sweep. The size-token parser that reads a quantity and unit out of a product NAME is byte-identical (139 chars, md5 d7854998dde1) in the Sam's and Walmart deal builders. Nothing was watching it. A unit added to one store's list and not the other's would silently mis-size every product carrying it at that store - and per-unit price is the number this whole estate publishes.",
+      "why":  "FOUND BY THIS AUDITOR'S OWN UNDECLARED SWEEP on its first run, 2026-09-01, which is the point of that sweep. The size-token parser that reads a quantity and unit out of a product NAME is byte-identical (139 chars, md5 d7854998dde1) in the Sam's and Walmart deal builders. Nothing was watching it. A unit added to one store's list and not the other's would silently mis-size every product carrying it at that store - and per-unit price is the number this whole estate publishes. The Walmart side moved on 2026-09-11, verbatim with Get-NameQtyCandidates, into grocery/walmart-row-lib.ps1, which both Walmart writers dot-source; this audit went red the same day as UNWATCHED because its anchor still named the builder, which is the twin doing its job.",
       "sides":  [
         { "file":  "grocery/build-sams-deals.ps1",
           "capture":  "Matches\\(\\$n, '(\\(\\\\d\\[\\\\d\\.\\]\\*.*?)'\\)" },
-        { "file":  "grocery/build-walmart-deals.ps1",
+        { "file":  "grocery/walmart-row-lib.ps1",
           "capture":  "Matches\\(\\$n, '(\\(\\\\d\\[\\\\d\\.\\]\\*.*?)'\\)" }
       ]
     },

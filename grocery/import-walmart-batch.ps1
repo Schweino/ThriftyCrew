@@ -7,9 +7,9 @@
   decimal, no engine check, no multipack filter). Measured cost on the 23 rows it put into
   walmart-regular-2026-07-25.json: 6 of 23 failed build-walmart-deals' engine-reproduces-the-unit-price
   invariant (3.3-7.1% off), and one of them was CROWNED cheapest on the 2026-07-29 board
-  (brown-gravy-mix at $0.5333/oz vs Walmart's real $0.552/oz). So now the importer LIFTS Build-Row out of
-  build-walmart-deals.ps1 (a regex cut of each function's source, run through Invoke-Expression) - and every
-  batch row must pass:
+  (brown-gravy-mix at $0.5333/oz vs Walmart's real $0.552/oz). So now the importer runs the builder's own
+  Build-Row, dot-sourced from walmart-row-lib.ps1 exactly as build-walmart-deals.ps1 dot-sources it (until
+  2026-09-11 it cut the function's source out of the builder by regex) - and every batch row must pass:
     1. Build-Row: exact size from Walmart's own arithmetic (lp/up), name-snap when the name reproduces the
        unit price, package-vs-per-unit shape decided by the REAL engine, and the emit invariant:
        Get-UnitPrice(row) must reproduce Walmart's own unitPrice or the row is rejected, never published.
@@ -37,29 +37,21 @@ $today = (Get-Date).ToString('yyyy-MM-dd')
 $outRootDir = if ($OutRoot) { $OutRoot } else { $root }
 $regDir = Join-Path $outRootDir 'out\regular'
 
-# ---- lift the REAL pricing math + the REAL row builder (one rule, one home - the importer borrows, never forks) ----
+# ---- the REAL pricing math + the REAL row builder (one rule, one home - the importer borrows, never forks) ----
 . (Join-Path $root 'pricing-math-lib.ps1')   # I82: the pricing math is a LIBRARY now, not a
 # regex cut out of compare-deals.ps1's source. The hand-maintained name list this replaced had
 # one failure mode that had already fired: add a function Get-UnitPrice calls, forget to list it
 # here, and the lifted copy calls something that does not exist - at RUN time. A dot-source
 # cannot have that bug, because the file arrives whole.
-# THE LIFT BELOW IS THE ONE STILL LIVE, and it is out of build-walmart-deals.ps1, not compare-deals.ps1.
-# ops\audit-lift-completeness.ps1 (in run-gates) checks the list is closed under the calls its functions
-# make; it cannot see $script:UnitFamily, which is lifted separately below.
-$builderSrc = Get-Content (Join-Path $root 'build-walmart-deals.ps1') -Raw
-# Get-NamePackMultipliers joined this list 2026-09-05, with Build-Row's refusal branch. It is a HAND-MAINTAINED
-# copy of Build-Row's dependency set, so adding a helper to the builder without adding it here leaves the lift
-# short and Build-Row throws CommandNotFound at run time. That is not a silent failure - the throw below and
-# guards' walmart-batch self-test both fired within the hour - but it is a copy, and the next helper will cost
-# the same trip.
-foreach ($fn in @('Resolve-Unit','Get-NameQtyCandidates','Get-NamePackMultipliers','Get-SameFamilyNameQty','Get-NamePack','Format-Qty','Build-Row')) {
-  $m = [regex]::Match($builderSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
-  if (-not $m.Success) { throw "import-walmart-batch: could not lift $fn from build-walmart-deals.ps1" }
-  Invoke-Expression $m.Value
-}
-$m = [regex]::Match($builderSrc, '(?ms)^\$script:UnitFamily = @\{.*?^\}')
-if (-not $m.Success) { throw 'import-walmart-batch: could not lift $script:UnitFamily from build-walmart-deals.ps1' }
-Invoke-Expression $m.Value
+. (Join-Path $root 'walmart-row-lib.ps1')    # Build-Row, its six helpers and $script:UnitFamily: the SAME
+# file build-walmart-deals.ps1 dot-sources, so a batch row and a capture row are built by one function.
+# UNTIL 2026-09-11 THIS WAS THE LAST LIVE LIFT: a Get-Content of build-walmart-deals.ps1, a regex cut of
+# seven functions off a hand-maintained name list plus a separate cut for $script:UnitFamily, all run
+# through Invoke-Expression. A helper added to Build-Row but not to that list threw CommandNotFound at run
+# time, and did on 2026-09-05 with Get-NamePackMultipliers. The library arrives whole, so that class is gone.
+# $script:CaptureDate is deliberately NOT set here. Build-Row stamps as_of from it, so batch rows come back
+# with as_of $null and the import loop below stamps the run date itself, exactly as before the move.
+# See design\PLAN-walmart-row-lib-2026-09-11.md.
 . (Join-Path $root 'multipack-lib.ps1')      # guard-5 lockstep, exactly as the builder dot-sources it
 $script:iwbAllow = Get-MpAllowKeys $root
 
@@ -71,7 +63,7 @@ $script:iwbAllow = Get-MpAllowKeys $root
 function Parse-NameSize([string]$name) {
   if (-not $name) { return $null }
   # packs legitimately multiply the stated unit size - no clean single-unit claim to trust. Get-PackCount is
-  # the ENGINE'S own pack detector (lifted above), so this and compare-deals agree by construction; the extra
+  # the ENGINE'S own pack detector (pricing-math-lib, dot-sourced above), so this and compare-deals agree by construction; the extra
   # lines are the shapes it cannot see. MEASURED 2026-07-30 on the 4,626-row live capture: the shipped guard
   # let 46 multipacks through ("pack of 12", "(4 Cans)", "2 Blocks", "6-pack", "12 Bulk Pack").
   $nsPk = Get-PackCount $name
