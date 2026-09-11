@@ -296,6 +296,39 @@ a needless run is a queue slot and the cost of a wrong skip is an ungated push.
 - **NOT run: `ops\run-gates.ps1`**, per the standing instruction not to add load. So nothing here claims a full
   gate pass; what is claimed is each suite named above, with its exit code read.
 
+### What the first real push found, which no self-test had
+
+The branch was pushed and the hook ran the whole gate. It came back RED, and every one of the three reasons
+was worth having.
+
+1. **`ops\audit-cross-module-reach.ps1` ratcheted 118 to 122.** Four new cross-module path literals, all mine:
+   `ops\run-gates.ps1` naming a `meal-prep\db\built` card to read the seed state, and three sandbox paths in
+   `ops\test-prepush-hook.ps1`. The run-gates one was a design smell the ratchet was right about, and the fix
+   is better than the original: **a pass is recorded only when NO gate went blind**, which is a stronger key
+   than the seed state (a full run proves at least as much as the run it replaces, wherever it is reused) and
+   needs no meal-prep path in `ops\`. The three fixture paths carry `# reach-fixture-ok:` with a reason, which
+   is the audit's own per-line opt-in for exactly this. Back to 118, exit 0.
+2. **`ops\seo_url_inspect.py` failed, and I had never touched it.** Its two sampling cases read the live
+   `meal-prep\db\built`, so their verdict depended on how many cards the checkout happened to hold: 1,168
+   passed, ZERO passed on a `len(urls) < 2` guard without testing anything, and **TWO** - which is what this
+   worktree had, seeded with just the cards the other fixtures need - collapsed `stride` to 1 and made
+   "spread" identical to "the first N alphabetically". Now hermetic: 20 synthetic slugs in a temp directory,
+   where a stride of 5 and the first 4 are provably different lists. 9 of 9, exit 0.
+3. **`ops\seed-worktree.ps1` called a HALF-SEEDED directory seeded.** Its plan asked only whether the
+   destination existed, so this worktree - 2 of 1,168 files - was told "copied 0, 39 already present" while
+   staying blind, which is what produced defect 2 in the first place. **Half-seeded is the worst of the three
+   states because it is the one that looks seeded.** A destination directory holding fewer files than the
+   source is now PARTIAL and the missing files are copied: 3 new cases (a short directory is PARTIAL, a
+   complete one is still ALREADY-PRESENT, a file seed is never PARTIAL), 30 of 30.
+   **And the first version of that copy moved nothing**: `Copy-Item -LiteralPath <src>\* -Recurse` treats the
+   `*` as a literal character, so it named a file that does not exist. The post-copy count caught it and the
+   run exited 2 rather than reporting a fill - which is precisely why that check counts afterwards instead of
+   trusting the copy. Repaired live: `filled meal-prep\db\built (2 -> 1168 file(s))`, exit 0.
+
+**The push doing this is the point.** Three defects, none of which any self-test had reached: one a design
+smell in my own change, one a fixture that could not tell three different states apart, and one a seeder that
+reported work it had not done.
+
 ### What still has to happen for any of this to be live
 
 `powershell -File ops\install-hooks.ps1` after the branch merges. Every worktree shares

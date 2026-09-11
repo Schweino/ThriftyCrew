@@ -114,7 +114,10 @@ function Get-SeedPlan {
     [object[]]$Seeds,
     [string]$SourceRoot,
     [string]$TargetRoot,
-    [scriptblock]$Exists
+    [scriptblock]$Exists,
+    # HOW MANY FILES ARE UNDER A PATH, or -1 when it is not a directory. Optional: without it the plan
+    # behaves exactly as it did before, which is what every caller that seeds single files wants.
+    [scriptblock]$Count = $null
   )
   $plan = @()
   foreach ($s in @($Seeds)) {
@@ -126,7 +129,20 @@ function Get-SeedPlan {
     $dst = [IO.Path]::Combine($TargetRoot, $s.p)
     $srcOk = (-not $s.nohit) -and [bool](& $Exists $src)
     $dstOk = [bool](& $Exists $dst)
-    $action = if (-not $srcOk) { 'MISSING-SOURCE' } elseif ($dstOk) { 'ALREADY-PRESENT' } else { 'COPY' }
+    # A DIRECTORY THAT EXISTS IS NOT A DIRECTORY THAT IS SEEDED (2026-09-11). This asked only "is the path
+    # there", so a worktree holding 2 of meal-prep\db\built's 1,168 files was reported ALREADY-PRESENT and
+    # left half blind. MEASURED that day: a checkout in exactly that state ran seed-worktree, was told
+    # "39 already present, copied 0", and then reddened ops\seo_url_inspect.py - whose sample read those two
+    # files and could not tell a partial checkout from a full one. Half-seeded is the worst of the three
+    # states, because it is the one that looks seeded. With $Count supplied, a destination directory holding
+    # FEWER files than the source is PARTIAL and the missing files are copied.
+    $action = if (-not $srcOk) { 'MISSING-SOURCE' }
+              elseif (-not $dstOk) { 'COPY' }
+              elseif ($Count) {
+                $sc = [int](& $Count $src)
+                $dc = [int](& $Count $dst)
+                if ($sc -ge 0 -and $dc -ge 0 -and $dc -lt $sc) { 'PARTIAL' } else { 'ALREADY-PRESENT' }
+              } else { 'ALREADY-PRESENT' }
     $plan += [pscustomobject]@{ Path = $s.p; Source = $src; Dest = $dst; Action = $action; Why = $s.why }
   }
   # `,` not @(): a single-element array unrolls on the way out of a function and the caller's .Count
@@ -239,6 +255,28 @@ if ($SelfTest) {
   $p2 = Get-SeedPlan -Seeds $seeds -SourceRoot $S -TargetRoot $D -Exists { param($x) $true }
   T 'MUST FIRE  an already-seeded destination is ALREADY-PRESENT, never a second COPY' `
     (@($p2 | Where-Object { $_.Action -eq 'ALREADY-PRESENT' }).Count -eq 2) (($p2 | ForEach-Object { $_.Action }) -join ',')
+
+  # MUST FIRE - HALF-SEEDED IS THE STATE THAT LOOKS SEEDED (2026-09-11). The plan asked only whether the
+  # destination existed, so a worktree holding 2 of the source's 1,168 files was ALREADY-PRESENT and stayed
+  # blind. Measured that day: such a checkout ran this script, was told "copied 0, 39 already present", and
+  # then reddened a gate whose fixture sampled those two files.
+  $shortCount = { param($x) if ($x -like 'S:\*') { 1168 } else { 2 } }
+  $pShort = Get-SeedPlan -Seeds $seeds -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Count $shortCount
+  T 'MUST FIRE  a destination directory holding FEWER files than the source is PARTIAL, never ALREADY-PRESENT' `
+    (@($pShort | Where-Object { $_.Action -eq 'PARTIAL' }).Count -eq 2) (($pShort | ForEach-Object { $_.Action }) -join ',')
+
+  # CLEAN TWIN - and a directory that really is complete still copies nothing, so idempotence survives.
+  $fullCount = { param($x) 1168 }
+  $pFull = Get-SeedPlan -Seeds $seeds -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Count $fullCount
+  T 'CLEAN TWIN a destination directory with as many files as the source is ALREADY-PRESENT, so a second run still copies nothing' `
+    (@($pFull | Where-Object { $_.Action -eq 'ALREADY-PRESENT' }).Count -eq 2) (($pFull | ForEach-Object { $_.Action }) -join ',')
+
+  # MUST NOT FIRE - a FILE seed is not a short directory. The live predicate answers -1 for anything that is
+  # not a directory, and a -1 either side must never read as "the target has fewer".
+  $fileCount = { param($x) -1 }
+  $pFileCnt = Get-SeedPlan -Seeds $seeds -SourceRoot $S -TargetRoot $D -Exists { param($x) $true } -Count $fileCount
+  T 'MUST NOT FIRE  a file seed is never PARTIAL - the count predicate answers -1 for anything that is not a directory' `
+    (@($pFileCnt | Where-Object { $_.Action -eq 'PARTIAL' }).Count -eq 0) (($pFileCnt | ForEach-Object { $_.Action }) -join ',')
 
   # MUST FIRE - THE ONE THAT MATTERS. A source that is not there must be MISSING-SOURCE and must reach
   # the exit code, because "seeded nothing because there was nothing to seed" reported as success is
@@ -467,7 +505,16 @@ try {
 }
 
 $allSeeds = @($SEED_DIRS) + @($fileSeeds)
-$plan = Get-SeedPlan -Seeds $allSeeds -SourceRoot $sourceFull -TargetRoot $targetFull -Exists { param($x) Test-Path -LiteralPath $x }
+$plan = Get-SeedPlan -Seeds $allSeeds -SourceRoot $sourceFull -TargetRoot $targetFull `
+  -Exists { param($x) Test-Path -LiteralPath $x } `
+  -Count {
+    param($x)
+    if (-not (Test-Path -LiteralPath $x -PathType Container)) { return -1 }
+    # Assigned, then wrapped: this estate has a memory about @(Get-Thing ...) reading a comma-returned
+    # array as one element, and a count that is silently 1 is exactly the bug this predicate exists to stop.
+    $items = Get-ChildItem -LiteralPath $x -Recurse -File -Force -ErrorAction SilentlyContinue
+    return @($items).Count
+  }
 
 Write-Output ("seed-worktree: {0} -> {1}   (source from {2})" -f $sourceFull, $targetFull, $sourceHow)
 Write-Output ("  lists read from {0}: {1} directory seed(s), {2} .worktreeinclude pattern(s) resolving to {3} file seed(s)" -f $repo, @($SEED_DIRS).Count, $inc.Patterns.Count, @($fileSeeds | Where-Object { -not $_.nohit }).Count)
@@ -481,6 +528,39 @@ foreach ($row in $plan) {
     'ALREADY-PRESENT' {
       $skipped++
       Write-Output ("  present  {0}  - already there, left alone" -f $row.Path)
+    }
+    'PARTIAL' {
+      # THE MISSING FILES ONLY, and copied INTO the directory: `Copy-Item <src> -Destination <dst>` where
+      # dst already exists nests src INSIDE it, which would leave db\built\built. The trailing \* copies the
+      # contents. The counts either side are printed because "filled" without them is the same unreadable
+      # claim as a rate without its denominator.
+      $before = @(Get-ChildItem -LiteralPath $row.Dest -Recurse -File -Force -ErrorAction SilentlyContinue)
+      $want = @(Get-ChildItem -LiteralPath $row.Source -Recurse -File -Force -ErrorAction SilentlyContinue)
+      if ($WhatIf) {
+        Write-Output ("  WOULD FILL {0}  - it holds {1} of the source's {2} file(s). {3}" -f $row.Path, $before.Count, $want.Count, $row.Why)
+      } else {
+        # ONE COPY PER MISSING FILE, and -LiteralPath throughout. The first version of this was
+        # `Copy-Item -LiteralPath <src>\* -Recurse`, which copied NOTHING: -LiteralPath means the `*` is a
+        # literal character, not a wildcard, so it named a file that does not exist. Measured here, on a
+        # worktree holding 2 of 1,168 - and the post-copy count below is what caught it, which is why that
+        # check exists rather than a line saying "filled".
+        foreach ($sf in $want) {
+          $rel = $sf.FullName.Substring($row.Source.Length).TrimStart('\', '/')
+          $target = [IO.Path]::Combine($row.Dest, $rel)
+          if (Test-Path -LiteralPath $target) { continue }
+          $tp = Split-Path $target -Parent
+          if ($tp -and -not (Test-Path -LiteralPath $tp)) { New-Item -ItemType Directory -Force -Path $tp | Out-Null }
+          Copy-Item -LiteralPath $sf.FullName -Destination $target -Force
+        }
+        $after = @(Get-ChildItem -LiteralPath $row.Dest -Recurse -File -Force -ErrorAction SilentlyContinue)
+        if ($after.Count -lt $want.Count) {
+          $problems += $row.Path
+          Write-Output ("  SHORT    {0}  - filled to {1} file(s), source has {2}" -f $row.Path, $after.Count, $want.Count)
+        } else {
+          Write-Output ("  filled   {0}  ({1} -> {2} file(s), source has {3})" -f $row.Path, $before.Count, $after.Count, $want.Count)
+        }
+      }
+      $copied++
     }
     'COPY' {
       if ($WhatIf) {

@@ -698,12 +698,18 @@ if ($timings.Count) {
 # THE KEY IS THE TREE, NOT THE COMMIT. A tree hash covers every tracked byte, including this gate and every
 # fixture it runs, so a record cannot outlive a change to what it proved. Recorded ONLY when the working tree
 # is CLEAN, because a dirty tree is not the tree the hash names and the gates read the working tree.
-# The SEED STATE is part of the key: the same tree proves less in a checkout where two gates were BLIND, and a
-# record written there must not let a seeded push skip its own gate.
+#
+# AND ONLY WHEN NOTHING WENT BLIND. A run in an unseeded checkout proves LESS about the same tree - two gates
+# could not look - so it must not vouch for anyone else's push. Recording only a run where every gate looked
+# gives a record that proves at least as much as the run it replaces, wherever it is reused. It also keeps
+# this file out of another module's paths: "did every gate look" is a fact run-gates already holds, where
+# "is the built-card directory present" would be ops reaching into meal-prep, which ops\audit-cross-module-
+# reach.ps1 ratchets - and did, at 118 -> 122, when this was first written that way.
+#
 # It writes into the COMMON git directory, which every linked worktree shares - deliberately, because a tree
 # is a tree wherever it was proved, and that sharing is what removes the duplicate run.
 # It cannot fail the run: everything here is inside a try that swallows.
-if (-not $fail.Count) {
+if (-not $fail.Count -and -not $blindGates.Count) {
   try {
     $dirty = @(& git -C $repo status --porcelain 2>$null)
     $treeOut = @(& git -C $repo rev-parse 'HEAD^{tree}' 2>$null)
@@ -711,9 +717,8 @@ if (-not $fail.Count) {
     $commonOut = @(& git -C $repo rev-parse --path-format=absolute --git-common-dir 2>$null)
     $common = if ($commonOut.Count) { "$($commonOut[0])".Trim() } else { '' }
     if ($tree -and $common -and -not $dirty.Count -and [IO.Directory]::Exists($common)) {
-      $seeded = if (Test-Path -LiteralPath (Join-Path $repo 'meal-prep\db\built\american-goulash-pasta.body.html')) { 'seeded' } else { 'blind' }
       # [DateTimeOffset], never -UFormat %s: that formats LOCAL time as if it were the epoch, 18,000s out here.
-      $line = ("{0} {1} {2}`n" -f $tree, $seeded, [DateTimeOffset]::UtcNow.ToUnixTimeSeconds())
+      $line = ("{0} full {1}`n" -f $tree, [DateTimeOffset]::UtcNow.ToUnixTimeSeconds())
       [IO.File]::WriteAllText((Join-Path $common 'tc-gate-pass.txt'), $line, (New-Object Text.UTF8Encoding($false)))
     }
   } catch { }

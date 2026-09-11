@@ -435,12 +435,12 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
 param([string]$Target = '')
 $p = $env:TC_PREPUSH_PROBE
 [IO.File]::WriteAllText((Join-Path $p 'seed-ran.txt'), ('target=' + $Target + ' gateRanBefore=' + (Test-Path -LiteralPath (Join-Path $p 'gate-saw.txt'))))
-$card = Join-Path $Target 'meal-prep\db\built\american-goulash-pasta.body.html'
+$card = Join-Path $Target 'meal-prep\db\built\american-goulash-pasta.body.html'   # reach-fixture-ok: the stub seeder writes the sandbox's own card so the hook's guard can see it
 $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 [IO.File]::WriteAllText($card, 'seeded')
 '@
   $seedPs1 = Join-Path $main 'ops\seed-worktree.ps1'
-  $seedCard = Join-Path $main 'meal-prep\db\built\american-goulash-pasta.body.html'
+  $seedCard = Join-Path $main 'meal-prep\db\built\american-goulash-pasta.body.html'   # reach-fixture-ok: the card the HOOK tests for, inside the %TEMP% sandbox repo, never this estate's meal-prep
   [IO.File]::WriteAllText($seedPs1, $seedStub, $utf8)
   Remove-Item -LiteralPath $seedRanFile, $sawFile -ErrorAction SilentlyContinue
   Remove-Item -LiteralPath $seedCard -ErrorAction SilentlyContinue
@@ -484,7 +484,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   # above pins exactly that - so a cache case asserting "the push went through" would fail for a reason that
   # has nothing to do with the cache. It is COMMITTED rather than dropped in the working tree, because an
   # untracked file is dirty and a dirty tree must never reuse a pass.
-  CommitFile $linked 'grocery\out\comparison-2026-01-01.json' "{`"comparison`":[]}`n"
+  CommitFile $linked 'grocery\out\comparison-2026-01-01.json' "{`"comparison`":[]}`n"   # reach-fixture-ok: a stub board inside the %TEMP% sandbox repo, so the check can evaluate at all
   $passFile = Join-Path $main '.git\tc-gate-pass.txt'
   $nowEpoch = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
   CommitFile $linked 'design\cache-note.md' "cache v1`n"
