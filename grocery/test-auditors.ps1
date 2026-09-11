@@ -1787,12 +1787,14 @@ if (-not (Test-Path $foLib)) {
 } else {
   # ITS OWN FIXTURES, RUN HERE SO THEY ACTUALLY RUN. A self-test with no caller is not a guard - that is
   # the audit-unit-basis-outlier / test-matcher-parity lesson, and this file is where such a caller lives.
-  # The 14 cases include the three MUST-FIREs that matter most: a lane whose script is MISSING, a lane
+  # The 18 cases include the three MUST-FIREs that matter most: a lane whose script is MISSING, a lane
   # that exits 0 without its declared completion marker, and a lane killed at its budget must each come
   # back BLIND rather than clean. Plus a CONCURRENCY case, because every other assertion in that file
-  # would still pass if the pool had quietly become a serial loop.
+  # would still pass if the pool had quietly become a serial loop - and since 2026-09-11 its MUST FIRE
+  # twin, a pool held to one lane failing the same probe, which is why the pinned tally went 17 to 18.
+  # THE TALLY IS PINNED EXACTLY ON PURPOSE: a deleted case leaves exit 0 and a smaller number.
   $r = (Get-Early 'early:fanout-selftest' $foLib @('-SelfTest')).text
-  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 17/17 pass') {
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 18/18 pass') {
     Ok 'fanout-lib -SelfTest passes (a missing lane, a timeout, and a marker present-but-not-LAST each report BLIND; a child that warns on stderr does not; -Sequential agrees lane-for-lane; the pool is provably concurrent)'
   } else { Bad ('fanout-lib -SelfTest failed or lost its fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 
