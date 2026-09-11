@@ -1,11 +1,11 @@
 ﻿{
     "readme":  "Baseline for ops\\audit-mustfire-census.ps1: how many must-fire assertions each self-test carries. A DROP is a hard fail - a must-fire that breaks goes red on its own, and a must-fire that is DELETED goes green with one fewer case and nobody counts tallies. A RISE is the estate getting better; re-run with -Update to retrain. Counting is per FILE, not per case name, because case labels are prose and a ratchet that fails on a reworded label is a ratchet people delete.",
     "written":  "2026-09-11",
-    "total":  2806,
+    "total":  2811,
     "files":  {
                   "check-uncommitted-source.ps1":  2,
                   "graph\\pipeline\\install-nightly-task.ps1":  8,
-                  "graph\\pipeline\\nightly.ps1":  38,
+                  "graph\\pipeline\\nightly.ps1":  43,
                   "graph\\pipeline\\scorecard.ps1":  11,
                   "grocery\\add-commodity-rule.ps1":  7,
                   "grocery\\add-recipe-board-rows.ps1":  7,

@@ -381,6 +381,38 @@ function Test-SidecarUp {
   return $false
 }
 
+# ---------------------------------------------------------------- the weekly ML regression run
+function Get-MlEvalArgs {
+  <#
+    .SYNOPSIS The command line of stage ml-eval. Pure, so the self-test drives it.
+    .DESCRIPTION --tag weekly, ALWAYS (2026-09-11). Untagged, hardeval.py writes the sidecar's HAND-RUN
+                 stock record, and the 2026-09-07 run replaced the 2026-08-22 one (scored on today's
+                 defs) with a run on the frozen defs under the same file names. Both files then sat
+                 modified in the main checkout, and no lane could commit them. The tagged pair is
+                 gitignored; see the root .gitignore beside the hardeval rules.
+  #>
+  param([Parameter(Mandatory=$true)][string]$Sidecar, [string]$FrozenDefs, [bool]$HaveFrozen)
+  $a = @((Join-Path $Sidecar 'hardeval.py'), '--stage', 'score', '--tag', 'weekly')
+  if ($HaveFrozen -and $FrozenDefs) { $a += @('--defs', $FrozenDefs) }
+  return ,$a
+}
+
+function Get-MlEvalDetail {
+  <#
+    .SYNOPSIS The one line the status stamp keeps for a finished ml-eval run.
+    .DESCRIPTION hardeval.py's own "hardeval: " summary when the tail holds one, else the last line as
+                 before. The 2026-09-07 stamp reads "Loading weights: 100%" because Invoke-Stage appends
+                 stderr after stdout and a HuggingFace bar was the last thing written, so that week's
+                 AUCs reached no committed record. The stamp is the only committed copy of these numbers.
+  #>
+  param([string[]]$Tail)
+  $lines = @($Tail | Where-Object { $_ })
+  $sum = @($lines | Where-Object { $_ -match '^hardeval: ' })
+  if ($sum.Count) { return [string]$sum[$sum.Count - 1] }
+  if ($lines.Count) { return [string]$lines[$lines.Count - 1] }
+  return ''
+}
+
 # ---------------------------------------------------------------- bounded child processes
 function Stop-Tree([int]$procId) {
   foreach ($c in @(Get-CimInstance Win32_Process -Filter ("ParentProcessId = " + $procId) -ErrorAction SilentlyContinue)) { Stop-Tree ([int]$c.ProcessId) }
@@ -434,6 +466,32 @@ function Invoke-Stage {
 if ($SelfTest) {
   $bad = 0
   Write-Output 'nightly.ps1 self-test (no GPU, no data files, no processes touched)'
+
+  # -- ml-eval: the weekly run never writes the hand-run stock record, and its stamp keeps the numbers (2026-09-11)
+  $mlA = Get-MlEvalArgs -Sidecar 'C:\x\sc' -FrozenDefs 'C:\x\defs.json' -HaveFrozen $true
+  $mlTag = [array]::IndexOf($mlA, '--tag')
+  # MUST-FIRE: untagged, hardeval.py writes the untagged pair, which is what left two tracked files modified on 2026-09-07.
+  if ($mlTag -lt 0 -or $mlA[$mlTag + 1] -ne 'weekly') { Write-Output ('  X MUST-FIRE: ml-eval must pass --tag weekly (got: ' + ($mlA -join ' ') + ')'); $bad++ }
+  $mlDefs = [array]::IndexOf($mlA, '--defs')
+  if ($mlDefs -lt 0 -or $mlA[$mlDefs + 1] -ne 'C:\x\defs.json') { Write-Output ('  X CLEAN TWIN: the frozen defs must still be passed when present (got: ' + ($mlA -join ' ') + ')'); $bad++ }
+  $mlB = Get-MlEvalArgs -Sidecar 'C:\x\sc' -FrozenDefs 'C:\x\defs.json' -HaveFrozen $false
+  if (([array]::IndexOf($mlB, '--defs') -ge 0) -or ([array]::IndexOf($mlB, '--tag') -lt 0)) { Write-Output ('  X with no frozen snapshot: no --defs, and still tagged (got: ' + ($mlB -join ' ') + ')'); $bad++ }
+  # MUST-FIRE: the frozen 2026-09-07 stamp shape, a loading bar after the line that mattered.
+  $mlT = @('[21:33:41] wrote C:\x\report.md', 'hardeval: tag=weekly defs=phase3-baseline pinned=True positives=2816 old=25 auc_old=0.9705', 'Loading weights: 100%|##########| 393/393 [00:00<00:00, 4919.40it/s]')
+  $mlD = Get-MlEvalDetail -Tail $mlT
+  if ($mlD -notmatch '^hardeval: tag=weekly ') { Write-Output ('  X MUST-FIRE: the stamp must keep the summary, not the loading bar after it (got: ' + $mlD + ')'); $bad++ }
+  $mlD = Get-MlEvalDetail -Tail @('first line', 'last line')
+  if ($mlD -ne 'last line') { Write-Output ('  X CLEAN TWIN: with no summary line the stamp keeps the last line, as before (got: ' + $mlD + ')'); $bad++ }
+  # THE STAGE MUST CALL BOTH. The first cut of this change added and tested the two functions and left the stage on its
+  # old untagged command line, and every case above stayed green. NEEDLES BUILT BY CONCATENATION, or each line matches itself.
+  $mlSrc = [IO.File]::ReadAllText($PSCommandPath)
+  $nMlArgs   = '$evalArgs = ' + 'Get-MlEvalArgs '
+  $nMlDetail = '$mlDetail = ' + 'Get-MlEvalDetail -Tail $r.Tail'
+  $nMlTail   = '$r.Tail = ' + '@($mlDetail)'
+  $nMlOld    = "'hardeval.py'), " + "'--stage', 'score')"
+  if (-not $mlSrc.Contains($nMlArgs)) { Write-Output '  X MUST-FIRE: stage ml-eval must build its command line with Get-MlEvalArgs'; $bad++ }
+  if (-not ($mlSrc.Contains($nMlDetail) -and $mlSrc.Contains($nMlTail))) { Write-Output '  X MUST-FIRE: stage ml-eval must put Get-MlEvalDetail''s line into the tail the stamp reads'; $bad++ }
+  if ($mlSrc.Contains($nMlOld)) { Write-Output '  X MUST-FIRE: the untagged hardeval command line is back in this file'; $bad++ }
 
   # -- deadline: the EARLIER of the two clocks wins, in both directions
   $now = [datetime]'2026-08-22 23:00'
@@ -1087,6 +1145,15 @@ try {
   # FROZEN DEFS, DELIBERATELY. hardeval compares against a baseline, and backtest.py's own header
   # records what happens without them: the same model scored 17/25 one day and 24/24 another because
   # the BOARD changed. A weekly number measured against today's shelf would track the shelf.
+  #
+  # WHERE "TRACKED" LIVES (2026-09-11). Not in the files hardeval.py writes. Untagged, those are the
+  # sidecar's hand-run stock record, and this stage overwrote it on 2026-09-07 with a run on different defs
+  # under the same name, leaving two tracked files modified that no lane may own. So the run is tagged
+  # `weekly` (Get-MlEvalArgs) and its files are gitignored, and the durable copy is the summary line
+  # Get-MlEvalDetail puts in graph-nightly-status.json, which is committed. Until then that line was a
+  # HuggingFace loading bar, and no week's AUC reached git. NOT YET DONE: nothing compares a week's AUC
+  # with hardeval-phase3-frozen.json, the tracked record of the same configuration, so a drift is
+  # recorded but raises nothing.
   $evalStamp = Join-Path $grocery 'out\logs\ml-eval-last.txt'
   $evalDue = $true
   try {
@@ -1101,9 +1168,11 @@ try {
     Record 'ml-eval' 'BLIND' 'no sidecar interpreter - the suite needs torch' 0
   } else {
     $frozen = Join-Path $sidecar 'data\frozen\phase3-baseline\commodity-defs.json'
-    $evalArgs = @((Join-Path $sidecar 'hardeval.py'), '--stage', 'score')
-    if (Test-Path $frozen) { $evalArgs += @('--defs', $frozen) }
+    $evalArgs = Get-MlEvalArgs -Sidecar $sidecar -FrozenDefs $frozen -HaveFrozen (Test-Path $frozen)
     $r = Invoke-Stage 'ml-eval' $sidecarPy $evalArgs ([math]::Min(1800, (Remaining)))
+    # The stamp below keeps the LAST tail line, so that line is made hardeval.py's summary.
+    $mlDetail = Get-MlEvalDetail -Tail $r.Tail
+    $r.Tail = @($mlDetail)
     if ($r.Ok) {
       Record 'ml-eval' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed
       # Tracked, eol=lf, BOM in the blob - so LF with a BOM, not Set-Content's CRLF.
