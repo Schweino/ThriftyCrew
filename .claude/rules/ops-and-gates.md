@@ -216,6 +216,16 @@ everything else honest, so a defect here is silent by construction.
   at exactly 260 characters and every arm went red for the harness's reason, not the code's. Fixed names still
   standing and not swept: `test-auditors`' shared `%TEMP%\lib` (which `pre-push` reaches through
   `prepush-test-auditors`), `test-precedence-ladders`, `run-test-guards-weekly`, and `consistency-oracle`'s arm logs.
+- **A child a gate spawns must not write a TRACKED path, and a tracked file written under PS 5.1 must be
+  written LF** (2026-09-11). `test-auditors`' early `spec-live` child ran `audit-spec-contradictions`, which
+  wrote the committed `meal-prep\out\spec-contradictions.json` through `ConvertTo-Json | Set-Content -Encoding
+  UTF8`. Under PS 5.1 both halves write CRLF over an `eol=lf` blob, so every full pre-push run left the pushing
+  checkout ` M` with a ZERO-line `git diff`, and the post-push `git rebase origin/main` refused. Both repairs
+  were needed. The writer now emits the committed bytes and skips an identical write. Read the blob's BOM with
+  `git cat-file` to a file: `Format-Hex` on a decoded string hides it, and this blob has one. The gate also
+  passes `-ReportDir` to a temp directory, because LF bytes cannot stop a run over a DIFFERENT catalogue from
+  rewriting real content. **Verify by bytes: `git status --short` empty and a CR count of 0.** Other
+  `Set-Content` writers of tracked `out\` files were not swept.
 
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

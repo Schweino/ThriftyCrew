@@ -240,6 +240,12 @@ function RunPSMany {
 # child, so batching those needs each one given its own directory first. These five write nowhere, so
 # they are the tranche that needs no collision work at all. The rest is Tier 2/3 in the plan.
 #
+# THAT WAS FALSE FOR ONE OF THEM (2026-09-11). audit-spec-contradictions wrote its report to the TRACKED
+# meal-prep\out\spec-contradictions.json on every run, with CRLF under PS 5.1, so every full pre-push run
+# left the pushing checkout modified and the post-push `git rebase origin/main` refused. It now takes
+# -ReportDir. The launch and the harvest pass the SAME temp directory, because Get-Early's synchronous
+# fallback must run the identical child.
+#
 # THE PATTERN IS guards.ps1's Register-Kid/Wait-Kid, and the property that makes it safe is stated there:
 # harvest at the ORIGINAL call site, so every assertion keeps its text AND its position in the report.
 # Same process boundary, same arguments, same exit code, same artifacts. Only the waiting overlaps.
@@ -306,8 +312,10 @@ function Get-Early([string]$Key, [string]$Path, [object[]]$Argv) {
 }
 
 $script:MpPipeEarly = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
+# Where early:spec-live writes its report instead of the tracked meal-prep\out\ (see the 2026-09-11 note above).
+$script:SpecLiveReportDir = Register-Fx (Join-Path $env:TEMP ('taudit-speclive-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 if (-not $script:SkipUnits.Contains('u139-matcher-parity-wired-2026-08-21')) { Start-Early 'early:matcher-parity'  (Join-Path $root 'test-matcher-parity.ps1')                  @('-Sample', '400') }
-if (-not $script:SkipUnits.Contains('u122-specs-prose-re-sync')) { Start-Early 'early:spec-live'       (Join-Path $script:MpPipeEarly 'audit-spec-contradictions.ps1') @('-Quiet') }
+if (-not $script:SkipUnits.Contains('u122-specs-prose-re-sync')) { Start-Early 'early:spec-live'       (Join-Path $script:MpPipeEarly 'audit-spec-contradictions.ps1') @('-Quiet', '-ReportDir', $script:SpecLiveReportDir) }
 if (-not $script:SkipUnits.Contains('u128-the-precompiled-matcher')) { Start-Early 'early:match-lib'       (Join-Path $root 'test-match-lib.ps1')                       @('-Quiet') }
 if (-not $script:SkipUnits.Contains('u079-n-6-script-census-is-every-file-in')) { Start-Early 'early:census-live'     (Join-Path $root 'audit-script-census.ps1')                  @() }
 if (-not $script:SkipUnits.Contains('u049-the-inspect-fan-out')) { Start-Early 'early:fanout-selftest' (Join-Path $root 'fanout-lib.ps1')                           @('-SelfTest') }
@@ -6020,7 +6028,7 @@ else {
     else { Bad ('repair-bulk-buy-line -SelfTest failed - the buy sentence can drift from the package the recipe actually needs: ' + ($r -replace "`n", ' ')) }
   }
 
-  $r = (Get-Early 'early:spec-live' $asc @('-Quiet')).text
+  $r = (Get-Early 'early:spec-live' $asc @('-Quiet', '-ReportDir', $script:SpecLiveReportDir)).text
   if ($LASTEXITCODE -eq 0) { Ok 'no recipe spec contradicts itself worse than the recorded baseline (stat-vs-prose, stale money, head quantities, buy coverage all at ZERO)' }
   else { Bad ('a spec-contradiction class got WORSE: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL' }) -join ' ')) }
 

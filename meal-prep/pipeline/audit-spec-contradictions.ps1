@@ -48,7 +48,7 @@
   Ratchets against out\spec-contradictions-baseline.json so it can ship on a catalogue that already has
   findings: it fails when a CLASS gets worse, never on the standing count.
 
-  Usage: .\audit-spec-contradictions.ps1 [-Baseline] [-Quiet] [-SelfTest]
+  Usage: .\audit-spec-contradictions.ps1 [-Baseline] [-Quiet] [-SelfTest] [-ReportDir <dir>]
 #>
 # THIS AUDIT IS CATALOGUE-WIDE BY DESIGN, AND UNTIL 2026-09-02 IT SAID SO ONLY IN THE HEADER.
 #
@@ -65,8 +65,15 @@
 # catalogue baseline would read as "everything got better" every single time. Its siblings that ARE
 # scopable (audit-vocab-integrity, audit-unbid-ingredients, audit-cost-plausibility) take -Slugs because
 # their findings are per-recipe. This one's are not. Now a bogus argument stops the run and names itself.
+#
+# -ReportDir MOVES ONLY THE REPORT, NEVER THE BASELINE (2026-09-11). The baseline is this audit's INPUT - the
+# ratchet it compares against - so it is always read from $mp\out. A GATE run passes a temp directory
+# (grocery\test-auditors.ps1's early:spec-live, which the pre-push hook drives), because a verification that
+# writes a tracked file leaves the pushing checkout dirty whenever the catalogue it read differs from the one
+# the committed report describes; LF bytes fix the unchanged case and cannot fix that one. The default is
+# still out\, so the daily chain (check-ad-cycles) and wave-publish P5 write exactly where they always did.
 [CmdletBinding()]
-param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "")
+param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "", [string]$ReportDir = "")
 $ErrorActionPreference = 'Stop'
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
 if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
@@ -108,6 +115,33 @@ function Get-SpecSet([string]$mpRoot, [bool]$includeArchive) {
   }
   return $out
 }
+
+function Write-ReportJson([string]$path, $obj, [int]$depth) {
+  <#
+    BOTH FILES THIS AUDIT WRITES ARE TRACKED, and .gitattributes stores them eol=lf (2026-09-11). The
+    committed report and baseline are a UTF-8 BOM followed by LF line endings. They were written by
+    `ConvertTo-Json | Set-Content -Encoding UTF8`, and under Windows PowerShell 5.1 both halves write CRLF:
+    ConvertTo-Json joins its lines with CRLF and Set-Content ends the file with one more. So a run over an
+    unchanged catalogue left the report MODIFIED - 134 bytes committed, 144 on disk, 10 CR bytes, and a
+    `git diff` of zero lines. Seen twice from a linked worktree after a full pre-push test-auditors run,
+    where the `git rebase origin/main` after a push lost to a moving main refused with "You have unstaged
+    changes".
+
+    So the text goes to LF with one trailing LF, the BOM is KEPT because the committed blobs carry one
+    (read with git cat-file: Format-Hex on a decoded string hides it), and identical bytes are not rewritten
+    at all, so an unchanged run does not even move the mtime. Returns $true when it wrote.
+  #>
+  $full = Resolve-JioPath $path   # [IO.File] resolves against the process directory, not a -Root the caller gave relative
+  $text = (($obj | ConvertTo-Json -Depth $depth) -replace "`r`n", "`n") + "`n"
+  $bytes = [byte[]]((New-Object Text.UTF8Encoding($true)).GetPreamble() + (New-Object Text.UTF8Encoding($false)).GetBytes($text))
+  if (Test-Path -LiteralPath $full -PathType Leaf) {
+    $old = [IO.File]::ReadAllBytes($full)
+    if ([string]::Equals([Convert]::ToBase64String($old), [Convert]::ToBase64String($bytes), [StringComparison]::Ordinal)) { return $false }
+  }
+  [IO.File]::WriteAllBytes($full, $bytes)
+  return $true
+}
+
 if ($SelfTest) {
   $fail = 0
   function Chk([string]$label, [bool]$cond, [string]$got) {
@@ -671,6 +705,54 @@ if ($SelfTest) {
     Chk 'CLEAN TWIN -Quiet still binds and the run completes' ($__q.rc -eq 0) ("exit $($__q.rc) :: " + $__q.text.Trim())
     $__ia = __Run @('-Root', $__scratch, '-Quiet', '-IncludeArchive')
     Chk 'CLEAN TWIN -IncludeArchive still binds' ($__ia.rc -eq 0) ("exit $($__ia.rc) :: " + $__ia.text.Trim())
+
+    # ---- THE REPORT BYTES (2026-09-11) ------------------------------------------------------------------
+    # out\spec-contradictions.json and its baseline are TRACKED, stored eol=lf with a BOM. The writer was
+    # ConvertTo-Json | Set-Content -Encoding UTF8, which under PS 5.1 writes CRLF, so every run left the
+    # checkout modified with a zero-line diff. These read the bytes the REAL entry point wrote through
+    # __Run: a call site reverted to Set-Content would pass any test of Write-ReportJson on its own.
+    function __CrCount([string]$p) { $n = 0; foreach ($x in [IO.File]::ReadAllBytes($p)) { if ($x -eq 13) { $n++ } }; return $n }
+    # The premise, asserted rather than assumed, so the zero-CR checks below are known to be able to fail.
+    $__old = Join-Path $__scratch 'founding-writer.json'
+    @{ generated = 'see git'; specs = 0; by_class = @{}; findings = @() } | ConvertTo-Json -Depth 5 | Set-Content $__old -Encoding UTF8
+    $__oldCr = __CrCount $__old
+    Chk 'MUST FIRE  the founding writer (ConvertTo-Json | Set-Content -Encoding UTF8) still puts CR bytes on disk, so a zero-CR check can fail' `
+      ($__oldCr -gt 0) ("CR=$__oldCr - PS 5.1 no longer writes CRLF here; re-derive what the checks below prove")
+    # $__q above ran -Root $__scratch -Quiet, which is the real write of the report.
+    $__rep = Join-Path $__scratch 'out\spec-contradictions.json'
+    $__repCr = if (Test-Path -LiteralPath $__rep) { __CrCount $__rep } else { -1 }
+    Chk 'MUST FIRE  the report the real entry point writes carries ZERO CR bytes (the founding run left 10 in a 134-byte file)' `
+      ($__repCr -eq 0) ("CR=$__repCr (-1 = no report written) at $__rep")
+    $__rb = if (Test-Path -LiteralPath $__rep) { [IO.File]::ReadAllBytes($__rep) } else { $null }
+    $__rbDesc = if ($__rb.Length -ge 3) { "first=$($__rb[0]),$($__rb[1]),$($__rb[2]) last=$($__rb[-2]),$($__rb[-1])" } else { 'no report' }
+    Chk 'CLEAN TWIN ...and it still opens with the UTF-8 BOM the committed blob carries, and ends in exactly one LF' `
+      ($__rb.Length -ge 5 -and $__rb[0] -eq 0xEF -and $__rb[1] -eq 0xBB -and $__rb[2] -eq 0xBF -and $__rb[-1] -eq 10 -and $__rb[-2] -ne 10) $__rbDesc
+    $__bl = __Run @('-Root', $__scratch, '-Quiet', '-Baseline')
+    $__base = Join-Path $__scratch 'out\spec-contradictions-baseline.json'
+    $__baseCr = if (Test-Path -LiteralPath $__base) { __CrCount $__base } else { -1 }
+    Chk 'MUST FIRE  the -Baseline writer carries ZERO CR bytes too - it was the same Set-Content' `
+      ($__bl.rc -eq 0 -and $__baseCr -eq 0) ("exit $($__bl.rc), CR=$__baseCr (-1 = no baseline written) :: " + $__bl.text.Trim())
+    # -ReportDir is what test-auditors' early:spec-live passes, so a pre-push run never writes the tracked path.
+    $__rdRoot = Join-Path $__scratch 'rd-root'; $__rdOut = Join-Path $__scratch 'rd-report'
+    New-Item -ItemType Directory -Force -Path $__rdRoot | Out-Null
+    $__rd = __Run @('-Root', $__rdRoot, '-Quiet', '-ReportDir', $__rdOut)
+    Chk 'MUST FIRE  -ReportDir keeps a gate run OUT of the tracked out\ path' `
+      ($__rd.rc -eq 0 -and -not (Test-Path -LiteralPath (Join-Path $__rdRoot 'out\spec-contradictions.json'))) ("exit $($__rd.rc) :: " + $__rd.text.Trim())
+    Chk 'CLEAN TWIN ...and the report still lands, in the directory it was given' `
+      (Test-Path -LiteralPath (Join-Path $__rdOut 'spec-contradictions.json')) ("no report under $__rdOut :: " + $__rd.text.Trim())
+    # The skip. An unchanged run must not touch the file; a changed one must still write it.
+    $__wr = Join-Path $__scratch 'write-report.json'
+    $__t0 = New-Object DateTime(2020, 1, 1, 0, 0, 0, [DateTimeKind]::Utc)
+    $null = Write-ReportJson $__wr @{ specs = 1; findings = @() } 5
+    (Get-Item -LiteralPath $__wr).LastWriteTimeUtc = $__t0
+    $__again = Write-ReportJson $__wr @{ specs = 1; findings = @() } 5
+    $__mt = (Get-Item -LiteralPath $__wr).LastWriteTimeUtc
+    Chk 'MUST NOT FIRE an unchanged report is not rewritten - no write, and the mtime stays where it was' `
+      ($__again -eq $false -and $__mt -eq $__t0) ("wrote=$__again mtime=" + $__mt.ToString('o'))
+    $__changed = Write-ReportJson $__wr @{ specs = 2; findings = @() } 5
+    $__wrText = Read-TextFile $__wr
+    Chk 'CLEAN TWIN a CHANGED report is still written - the skip compares bytes, it does not refuse' `
+      ($__changed -eq $true -and $__wrText -match '"specs":\s+2') ("wrote=$__changed :: " + $__wrText)
   } finally { Remove-Item $__scratch -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
@@ -721,9 +803,10 @@ foreach ($p in $parsed) {
     $rows.Add([pscustomobject]@{ run = $p.run; slug = $p.slug; cls = $f.cls; why = $f.why })
   }
 }
-$outPath = Join-Path $mp 'out\spec-contradictions.json'
-New-Item -ItemType Directory -Force -Path (Split-Path $outPath) | Out-Null
-@{ generated = 'see git'; specs = $specs.Count; by_class = $byClass; findings = @($rows.ToArray()) } | ConvertTo-Json -Depth 5 | Set-Content $outPath -Encoding UTF8
+$reportRoot = if ($ReportDir) { $ReportDir } else { Join-Path $mp 'out' }
+$outPath = Join-Path $reportRoot 'spec-contradictions.json'
+New-Item -ItemType Directory -Force -Path $reportRoot | Out-Null
+$null = Write-ReportJson $outPath @{ generated = 'see git'; specs = $specs.Count; by_class = $byClass; findings = @($rows.ToArray()) } 5
 
 if (-not $Quiet) {
   Write-Output ("spec contradictions: {0} finding(s) across {1} spec(s)" -f $rows.Count, $specs.Count)
@@ -733,7 +816,7 @@ if (-not $Quiet) {
     if ($r.Count -eq 0) { continue }
     Write-Output ("  --- $k")
     foreach ($x in ($r | Select-Object -First 12)) { Write-Output ("      {0,-46} {1}" -f $x.slug, $x.why) }
-    if ($r.Count -gt 12) { Write-Output ("      ... and " + ($r.Count - 12) + " more (full list in out\spec-contradictions.json)") }
+    if ($r.Count -gt 12) { Write-Output ("      ... and " + ($r.Count - 12) + " more (full list in " + $outPath + ")") }
   }
 }
 
@@ -741,7 +824,7 @@ $basePath = Join-Path $mp 'out\spec-contradictions-baseline.json'
 if ($Baseline) {
   $nb = [ordered]@{}
   foreach ($k in ($byClass.Keys | Sort-Object)) { $nb[$k] = [int]$byClass[$k] }
-  $nb | ConvertTo-Json -Depth 3 | Set-Content $basePath -Encoding UTF8
+  $null = Write-ReportJson $basePath $nb 3
   Write-Output ('baseline written: ' + (($byClass.Keys | Sort-Object | ForEach-Object { "$_=$($byClass[$_])" }) -join ' '))
   Exit-Guard -Name 'spec-contradictions' -Code 0
 }
