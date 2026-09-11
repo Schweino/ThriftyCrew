@@ -41,6 +41,7 @@ param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path $PSScriptRoot -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 # ALLOWLISTED, AND EACH LINE IS A DECISION SOMEBODY DEFENDS IN A DIFF - never a way to make the gate quiet.
 # All four are repos that are THROWAWAY by construction: a sweep there cannot reach anyone's working tree.
@@ -86,6 +87,19 @@ function Get-SweeperFindings {
     [void]$findings.Add([pscustomobject]@{ Line = $ln; Text = $l.Trim() })
   }
   return ,@($findings.ToArray())
+}
+
+function Get-SweeperScriptFiles {
+  <# Every script the live scan reads under $RootDir, excluded on the path BELOW the root (lib\tree-walk.ps1).
+     On the full path a root under .claude\worktrees\ excluded itself whole, and this audit exited 3 BLIND
+     from every spawned session (2026-09-11). #>
+  param([string]$RootDir)
+  $rootFull = Get-TcRootFull $RootDir
+  $exts = @('.ps1', '.yml', '.yaml', '.sh', '.py')
+  Get-ChildItem $rootFull -Recurse -File -ErrorAction SilentlyContinue |
+    Where-Object { $exts -contains $_.Extension.ToLower() } |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\\.git\\' } |
+    Sort-Object FullName
 }
 
 if ($SelfTest) {
@@ -134,17 +148,23 @@ if ($SelfTest) {
   GsT 'MUST FIRE: every swept call is reported, not just the first' `
       ((Get-SweeperFindings -Text "git add -A`ngit add .").Count -eq 2)
 
+  # A WORKTREE ROOT IS SCANNED AND A SIBLING BELOW IT IS NOT (2026-09-11, lib\tree-walk.ps1). The walk matched
+  # \worktrees\ on the FULL path, so run from .claude\worktrees\<name> it excluded every file and exited 3.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'grocery\b.py' = 'print(1)' }
+  try {
+    $wtFound = @(Get-SweeperScriptFiles -RootDir $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    GsT 'MUST FIRE: a root that IS a worktree is scanned, not excluded whole' ($wtHits.Root -eq 2)
+    GsT 'MUST NOT FIRE: a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail) { Write-Output "GIT-SWEEPERS SELF-TEST FAILED ($fail)"; exit 2 }
   Write-Output 'GIT-SWEEPERS SELF-TEST PASSED (every spelling of the sweep armed, and every clean twin holds - including the prose and the assertion labels that document the incidents)'
   exit 0
 }
 
 # ---- live path: every tracked script in the tree -------------------------------------------------------
-$exts = @('.ps1', '.yml', '.yaml', '.sh', '.py')
-$files = @(Get-ChildItem $repo -Recurse -File -ErrorAction SilentlyContinue |
-  Where-Object { $exts -contains $_.Extension.ToLower() } |
-  Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\\.git\\' } |
-  Sort-Object FullName)
+$files = @(Get-SweeperScriptFiles -RootDir $repo)
 if (-not $files.Count) {
   Write-Output 'audit-git-sweepers: BLIND - found no scripts to scan, which means this discovery is broken, not that the tree is clean'
   Exit-Guard -Name 'audit-git-sweepers' -Summary 'blind=no-scripts' -Code 3

@@ -128,6 +128,17 @@ everything else honest, so a defect here is silent by construction.
   and `ops/test-prepush-hook.ps1` drives both from a sandbox linked worktree. **A new hook that spawns
   tests, or a fixture that builds a temp repo, clears `GIT_DIR` first** - but check what a `pre-commit`
   checker needs before stripping anything there: git points `GIT_INDEX_FILE` at the index being committed.
+- **A walk over this tree excludes on the path BELOW its root, never on the full path** (2026-09-11). A
+  linked worktree lives at `<main>\.claude\worktrees\<name>`, so `$_.FullName -notmatch '\\worktrees\\'`,
+  or `-like '*\.claude\*'`, excludes EVERY file when the walk runs from one, and every spawned session
+  runs from one. Nineteen walks in seventeen files did exactly that: from a worktree, twelve of fourteen
+  ops detectors exited 3, `run-gates`' Python discovery found no suites, and `audit-twin-drift`'s sweep
+  printed a clean count over nothing. It was recorded on 2026-08-26 and left standing for two weeks.
+  `lib/tree-walk.ps1` is the one rule (`Get-TcPathBelowRoot`), and its `New-TcWorktreeFixture` builds the
+  MUST FIRE case: a root under `.claude\worktrees\` with a sibling worktree below it. **A new walk puts its
+  discovery in a function that takes the root, so its self-test can point it there.** The rule does not
+  recognise a checkout under a directory with some other name; `grocery/audit-script-census.ps1` prunes on
+  the `.git` entry instead, which is the stronger boundary.
 
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

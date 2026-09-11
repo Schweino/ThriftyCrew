@@ -45,6 +45,7 @@ $repo = Split-Path $PSScriptRoot -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\json-io.ps1')
 . (Join-Path $repo 'lib\selftest-lib.ps1')   # Get-SelfTestBlock: PowerShell's own parser, shared with audit-mustfire-census
+. (Join-Path $repo 'lib\tree-walk.ps1')      # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 # CONFIG, NOT RULINGS. A registry of stores or a search template is not a verdict anybody adjudicates, so
 # a self-test reading one is not resting on a moving decision. Each line is defended in a diff.
@@ -90,6 +91,17 @@ function Get-UnpinnedReads {
     }
   }
   return ,@($out.ToArray() | Sort-Object -Unique)
+}
+
+function Get-FixtureInputScripts {
+  <# Every .ps1 the live path reads under $RootDir, excluded on the path BELOW the root (lib\tree-walk.ps1).
+     On the full path a root under .claude\worktrees\ excluded itself whole: this audit found no -SelfTest
+     block anywhere and exited 3 from every spawned session (2026-09-11). #>
+  param([string]$RootDir)
+  $rootFull = Get-TcRootFull $RootDir
+  Get-ChildItem $rootFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
+    Sort-Object FullName
 }
 
 if ($SelfTest) {
@@ -147,15 +159,23 @@ if ($SelfTest) {
   FiT 'MUST FIRE: a LIVE-TWIN label does not carry past the line of code it precedes' `
       ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcB) -ConfigOk $CONFIG_OK).Count -eq 1)
 
+  # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
+  # .claude\worktrees\<name> was excluded: no -SelfTest block was found anywhere and the audit exited 3.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'grocery\b.ps1' = 'Write-Output 2' }
+  try {
+    $wtFound = @(Get-FixtureInputScripts -RootDir $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    FiT 'MUST FIRE: a root that IS a worktree is scanned, not excluded whole' ($wtHits.Root -eq 2)
+    FiT 'MUST NOT FIRE: a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail) { Write-Output "FIXTURE-INPUTS SELF-TEST FAILED ($fail)"; exit 2 }
   Write-Output 'FIXTURE-INPUTS SELF-TEST PASSED (the founding shape armed, and every declaration that makes a read lawful holds)'
   exit 0
 }
 
 # ---- live path -----------------------------------------------------------------------------------------
-$scripts = @(Get-ChildItem $repo -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
-  Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
-  Sort-Object FullName)
+$scripts = @(Get-FixtureInputScripts -RootDir $repo)
 
 $found = New-Object System.Collections.ArrayList
 $withSelfTest = 0

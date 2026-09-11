@@ -32,7 +32,8 @@
                day one is one people learn to skip.
 
   EXIT: 0 = every declared twin agrees. 1 = at least one has drifted. 3 = COULD NOT EVALUATE (no
-        registry, no readable sides) - the house rule: a check that examined nothing must never say ok.
+        registry, no readable sides, or an UNDECLARED sweep that resolved no files) - the house rule: a
+        check that examined nothing must never say ok.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$Registry = '', [switch]$SelfTest, [switch]$Quiet)
@@ -41,6 +42,7 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 function Get-TwinText {
   <#
@@ -73,6 +75,17 @@ function Get-NormalisedRule {
   $t = [string]$Text
   $t = [regex]::Replace($t, '^\(\?i\)', '')
   return $t.Trim()
+}
+
+function Get-TwinSweepFiles {
+  <# Every .ps1/.py the UNDECLARED sweep reads under $RootDir, excluded on the path BELOW the root
+     (lib\tree-walk.ps1). On the full path a root under .claude\worktrees\ excluded itself whole, and the sweep
+     printed "0 undeclared duplicate literal(s)" with exit 0 over NOTHING, the quiet shape rather than the loud
+     one (2026-09-11). #>
+  param([string]$RootDir)
+  $rootFull = Get-TcRootFull $RootDir
+  Get-ChildItem $rootFull -Recurse -File -Include *.ps1, *.py -ErrorAction SilentlyContinue |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\|\\regression-inputs\\' }
 }
 
 if ($SelfTest) {
@@ -117,6 +130,15 @@ if ($SelfTest) {
     }
     T 'the live registry exists and names at least one twin' $liveOk 'registry missing or empty'
   } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
+  # THE UNDECLARED SWEEP, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). On the FULL path it resolved to
+  # nothing from .claude\worktrees\<name> and printed "0 undeclared" with exit 0, the quiet failure.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'sidecar\b.py' = 'print(1)' }
+  try {
+    $wtFound = @(Get-TwinSweepFiles -RootDir $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    T 'MUST FIRE  a root that IS a worktree is swept, not excluded whole' ($wtHits.Root -eq 2) ("root=" + $wtHits.Root)
+    T 'MUST NOT FIRE  a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0) ("sibling=" + $wtHits.Sibling)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($fail) { Write-Output ("twin-drift SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }
   Write-Output 'twin-drift SELF-TEST PASS'
   exit 0
@@ -172,8 +194,14 @@ foreach ($t in $twins) {
 # Reported, never failed. The right response is to declare it, and a brand-new auditor that fails a
 # clean tree on its first run is one that gets skipped rather than read.
 $lits = @{}
-$files = @(Get-ChildItem $repo -Recurse -File -Include *.ps1, *.py -ErrorAction SilentlyContinue |
-  Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\|\\regression-inputs\\' })
+$files = @(Get-TwinSweepFiles -RootDir $repo)
+# A SWEEP THAT READ NOTHING MUST NOT SAY "0 undeclared" (2026-09-11). From a linked worktree the old full-path
+# walk resolved to no files at all, and this pass reported a clean count with exit 0. A drifted declared twin
+# still exits 1 below; a blind sweep with no drift exits 3, never 0.
+$sweepBlind = ($files.Count -eq 0)
+if ($sweepBlind) {
+  Write-Output 'twin-drift: the UNDECLARED sweep resolved to ZERO .ps1/.py files - the walk is broken, not the tree free of duplicates.'
+}
 foreach ($f in $files) {
   $src = [IO.File]::ReadAllText($f.FullName)
   foreach ($m in [regex]::Matches($src, "'([^'\r\n]{30,200})'")) {
@@ -210,5 +238,5 @@ if ($undeclared.Count -and -not $Quiet) {
 }
 
 Write-Output ''
-Write-Output ("twin-drift: {0} declared twin(s) compared, {1} drifted, {2} undeclared duplicate literal(s)" -f $checked, $drifted, $undeclared.Count)
-Exit-Guard -Name 'audit-twin-drift' -Summary ("twins={0} drift={1} undeclared={2}" -f $checked, $drifted, $undeclared.Count) -Code $(if ($drifted) { 1 } else { 0 })
+Write-Output ("twin-drift: {0} declared twin(s) compared, {1} drifted, {2} undeclared duplicate literal(s) across {3} swept file(s)" -f $checked, $drifted, $undeclared.Count, $files.Count)
+Exit-Guard -Name 'audit-twin-drift' -Summary ("twins={0} drift={1} undeclared={2} swept={3}" -f $checked, $drifted, $undeclared.Count, $files.Count) -Code $(if ($drifted) { 1 } elseif ($sweepBlind) { 3 } else { 0 })

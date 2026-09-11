@@ -60,6 +60,7 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 $XMLDIR   = Join-Path $repo 'ops\scheduled-tasks'
 $REGISTRY = Join-Path $repo 'grocery\expected-automations.json'
@@ -178,6 +179,18 @@ function Test-RegistrarWatched {
     }
   }
   return ,$findings
+}
+
+function Get-RegistrarCandidateFiles {
+  <# Every .ps1 the live scan reads under $RootDir, never $Self. Matched on the path BELOW the root
+     (lib\tree-walk.ps1), which KEEPS the sibling-worktree exclusion the scan note below defends and stops it
+     excluding a root that IS a worktree: on the full path this gate walked 0 files and exited 3 from every
+     spawned session (2026-09-11). #>
+  param([string]$RootDir, [string]$Self = '')
+  $rootFull = Get-TcRootFull $RootDir
+  Get-ChildItem -Path $rootFull -Recurse -Filter '*.ps1' -File -ErrorAction SilentlyContinue |
+    Where-Object { $_.FullName -ne $Self -and
+                   (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\|\\\.git\\' }
 }
 
 if ($SelfTest) {
@@ -338,12 +351,22 @@ if ($SelfTest) {
   T ("MUST NOT FIRE the {0} registrar(s) shipped in this tree are each defined, watched and refusing" -f $scanned) `
     ($scanned -eq 4 -and $liveFindings.Count -eq 0) ("scanned=" + $scanned + " " + ($liveFindings -join '; '))
 
+  # ---- THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). The sibling exclusion the scan note
+  #      defends must hold, AND the root itself must be scanned: on the full path it walked 0 files and exited 3.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'graph\b.ps1' = 'Write-Output 2' }
+  try {
+    $wtFound = @(Get-RegistrarCandidateFiles -RootDir $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    T 'MUST FIRE  a root that IS a worktree is scanned, not excluded whole' ($wtHits.Root -eq 2) ("root=" + $wtHits.Root)
+    T 'MUST NOT FIRE a sibling worktree BELOW that root is still excluded - a stale copy of a registrar is not a registrar' ($wtHits.Sibling -eq 0) ("sibling=" + $wtHits.Sibling)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail -gt 0) {
     Write-Output ("SELF-TEST FAIL: {0} of {1} case(s)" -f $fail, $ran)
     Write-GuardComplete -Name 'task-registration' -Summary ("selftest-fail={0}/{1}" -f $fail, $ran)
     exit 2
   }
-  Write-Output ("SELF-TEST PASS: {0} case(s) - the call-site parser (literal, variable, unresolved, commented out), the frozen 2026-08-22 registrar with no definition and no registry row, its fixed twin, a defined-and-watched registrar with no refusal, both allowlists with their reasons, an unresolvable name, a file that registers nothing, and the four real registrars in this tree" -f $ran)
+  Write-Output ("SELF-TEST PASS: {0} case(s) - the call-site parser (literal, variable, unresolved, commented out), the frozen 2026-08-22 registrar with no definition and no registry row, its fixed twin, a defined-and-watched registrar with no refusal, both allowlists with their reasons, an unresolvable name, a file that registers nothing, the four real registrars in this tree, and the walk from a worktree root with a sibling below it" -f $ran)
   Exit-Guard -Name 'task-registration' -Summary ("selftest=pass cases={0}" -f $ran) -Code 0
 }
 
@@ -383,12 +406,15 @@ foreach ($row in @($regDoc.windows_tasks)) { if ($row -and $row.name) { $registr
 # CHECKOUTS of this same repo, at whatever commit they were cut from; it is gitignored, and scanning
 # it makes this gate's verdict depend on how stale somebody else's worktree is. The first live run
 # reported nine findings, six of them the same two registrars at an older commit. Same exclusion set
-# as ops\run-gates.ps1 line 52, deliberately - two walks over this tree that disagree about what the
+# as ops\run-gates.ps1's discovery, deliberately - two walks over this tree that disagree about what the
 # tree IS will disagree about everything downstream.
+#
+# AND IT EXCLUDES THEM BELOW THE ROOT, NOT ON THE FULL PATH (2026-09-11). When this gate itself runs from one
+# of those worktrees, every full path carries \worktrees\, and the old form excluded the very tree it was
+# asked to check: it walked 0 files and exited 3. Get-RegistrarCandidateFiles keeps the siblings out and
+# scans the root, and its self-test holds both halves.
 $self = $MyInvocation.MyCommand.Path
-$files = @(Get-ChildItem -Path $repo -Recurse -Filter '*.ps1' -File -ErrorAction SilentlyContinue |
-           Where-Object { $_.FullName -ne $self -and
-                          $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\|\\\.git\\' })
+$files = @(Get-RegistrarCandidateFiles -RootDir $repo -Self $self)
 $verbNeedle = 'Register-Scheduled' + 'Task'
 $registrars = @()
 foreach ($f in $files) {

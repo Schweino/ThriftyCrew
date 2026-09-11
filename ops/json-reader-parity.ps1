@@ -31,10 +31,14 @@ param([int]$Limit = 0, [switch]$Deep, [string]$OutFile = '')
 $ErrorActionPreference = 'Continue'
 $repo = Split-Path $PSScriptRoot -Parent
 . (Join-Path $repo 'lib\json-io.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
-$files = @(Get-ChildItem $repo -Recurse -File -ErrorAction SilentlyContinue |
+# MATCHED BELOW THE ROOT (2026-09-11). On the full path, every file in a linked worktree carried \worktrees\
+# and this harness reported BLIND from every spawned session. Sibling worktrees below the root stay excluded.
+$repoFull = Get-TcRootFull $repo
+$files = @(Get-ChildItem $repoFull -Recurse -File -ErrorAction SilentlyContinue |
   Where-Object { $_.Extension -ieq '.json' -or $_.Extension -ieq '.jsonl' } |
-  Where-Object { $_.FullName -notmatch '\\worktrees\\|node_modules|\.venv|\\\.git\\' } |
+  Where-Object { (Get-TcPathBelowRoot $_.FullName $repoFull) -notmatch '\\worktrees\\|node_modules|\.venv|\\\.git\\' } |
   Sort-Object FullName)
 if ($Limit -gt 0) { $files = @($files | Select-Object -First $Limit) }
 if (-not $files.Count) { Write-Output 'json-reader-parity: BLIND - found no .json/.jsonl files'; exit 3 }

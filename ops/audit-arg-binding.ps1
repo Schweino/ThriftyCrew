@@ -44,6 +44,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ratchet.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: skip dirs match below the root, so a worktree root is not skipped whole
 
 # WHICH FILES ARE "CHECKING" SCRIPTS. Built by concatenation rather than written as one literal, so
 # this file's own name (audit-...) and the prose above cannot enrol or exempt anything by accident.
@@ -125,6 +126,26 @@ function Test-BindingBreaksScriptRootDefault {
   return ($blk -match '(?i)\$PSScriptRoot|\$PSCommandPath|\$MyInvocation')
 }
 
+function Get-AbCandidateFiles {
+  <# Every .ps1 under ops\ and grocery\ below $RootDir that sits in no skipped directory. The skip list is matched
+     on the path BELOW the root (lib\tree-walk.ps1): on the full path \.claude\ and \worktrees\ are in EVERY path
+     of a linked worktree, so this ratchet examined 0 files and exited 3 from every spawned session (2026-09-11). #>
+  param([string]$RootDir)
+  $rootFull = Get-TcRootFull $RootDir
+  $skipDirs = @('\archive\', '\out\', '\.claude\', '\node_modules\', '\.git\', '\worktrees\',
+                '\.venv\', '\venv\', '\site-packages\', '\dist-info\')
+  foreach ($sub in @('ops', 'grocery')) {
+    $d = Join-Path $rootFull $sub
+    if (-not (Test-Path $d)) { continue }
+    foreach ($f in @(Get-ChildItem $d -Recurse -Filter *.ps1 -File -ErrorAction SilentlyContinue)) {
+      $below = Get-TcPathBelowRoot $f.FullName $rootFull
+      $skip = $false
+      foreach ($sd in $skipDirs) { if ($below -like ('*' + $sd + '*')) { $skip = $true; break } }
+      if (-not $skip) { $f }
+    }
+  }
+}
+
 if ($SelfTest) {
   $script:bad = 0
   function T([string]$n, [bool]$ok, [string]$got) {
@@ -183,36 +204,41 @@ if ($SelfTest) {
   # PS 5.1: @($null).Count is 1, so an empty finding set must not score 1 ([[ps-null-count-is-one]]).
   $empty = @()
   T 'an empty finding set counts 0, not the PS 5.1 @($null) 1' ((@($empty)).Count -eq 0) ([string](@($empty)).Count)
+  # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). The skip list matched \.claude\ and
+  # \worktrees\ on the FULL path, both of which are in every path of a linked worktree: 0 examined, exit 3.
+  # THE NEGATIVE CASE IS A WORKTREE INSIDE grocery\, not the fixture's usual sibling under .claude\. This walk
+  # starts in ops\ and grocery\ and never reaches .claude\, so a sibling there is skipped whatever the rule says:
+  # a mutation that dropped the skip list entirely left that version of this case green. This one goes red.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\audit-a.ps1' = 'Write-Output 1'; 'grocery\check-b.ps1' = 'Write-Output 2'
+                                          'grocery\worktrees\stale\check-c.ps1' = 'Write-Output 3' }
+  try {
+    $wtFound = @(Get-AbCandidateFiles -RootDir $wtFx.Root)
+    $wtNested = @($wtFound | Where-Object { $_.FullName -like '*\grocery\worktrees\*' })
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    T 'MUST FIRE  a root that IS a worktree is scanned, not skipped whole' (($wtHits.Root - $wtNested.Count) -eq 2) ("root=" + $wtHits.Root)
+    T 'MUST NOT FIRE  a worktree nested inside a scanned directory below that root is still skipped' ($wtNested.Count -eq 0) ("nested=" + $wtNested.Count)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($bad -eq 0) { Write-Output 'ARG-BINDING SELF-TEST PASS'; Write-GuardComplete -Name 'arg-binding' -Summary 'selftest ok'; exit 0 }
   Write-Output ("ARG-BINDING SELF-TEST FAILED ($bad)"); Write-GuardComplete -Name 'arg-binding' -Summary "selftest failed=$bad"; exit 2
 }
 
 # ---- live scan ----
 if (-not $Root) { $Root = $repo }
-$skipDirs = @('\archive\', '\out\', '\.claude\', '\node_modules\', '\.git\', '\worktrees\',
-              '\.venv\', '\venv\', '\site-packages\', '\dist-info\')
+$rootFull = Get-TcRootFull $Root
 $scanned = 0
 $findings = New-Object System.Collections.Generic.List[string]
 # Rule 2 is a HARD failure, not a ratchet entry. It is not a backlog: a script in this state cannot
 # run at all, so there is nothing to work down and nothing to grandfather.
 $broken = New-Object System.Collections.Generic.List[string]
-foreach ($sub in @('ops', 'grocery')) {
-  $d = Join-Path $Root $sub
-  if (-not (Test-Path $d)) { continue }
-  $files = @(Get-ChildItem $d -Recurse -Filter *.ps1 -File -ErrorAction SilentlyContinue)
-  foreach ($f in $files) {
-    $p = $f.FullName
-    $skip = $false
-    foreach ($sd in $skipDirs) { if ($p -like ('*' + $sd + '*')) { $skip = $true; break } }
-    if ($skip) { continue }
-    if (-not (Test-IsCheckingScript $f.Name)) { continue }
-    $scanned++
-    $txt = ''
-    try { $txt = [IO.File]::ReadAllText($p) } catch { continue }
-    $rel = $p.Replace($Root, '').TrimStart('\', '/')
-    if (Test-NeedsCmdletBinding $txt) { [void]$findings.Add($rel) }
-    if (Test-BindingBreaksScriptRootDefault $txt) { [void]$broken.Add($rel) }
-  }
+foreach ($f in @(Get-AbCandidateFiles -RootDir $rootFull)) {
+  if (-not (Test-IsCheckingScript $f.Name)) { continue }
+  $scanned++
+  $p = $f.FullName
+  $txt = ''
+  try { $txt = [IO.File]::ReadAllText($p) } catch { continue }
+  $rel = (Get-TcPathBelowRoot $p $rootFull).TrimStart('\', '/')
+  if (Test-NeedsCmdletBinding $txt) { [void]$findings.Add($rel) }
+  if (Test-BindingBreaksScriptRootDefault $txt) { [void]$broken.Add($rel) }
 }
 if ($scanned -eq 0) {
   Write-Output 'arg-binding: BLIND - zero checking scripts reached the scan, so a clean result would prove nothing'

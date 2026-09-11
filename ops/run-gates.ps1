@@ -44,6 +44,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ps-source.ps1')   # Get-PsCodeOnly - no param() block, so it cannot reset ours
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot - discovery excludes below the root, so a worktree root is scanned
 
 # Self-tests that cannot run hermetically, with the reason. Keyed by file name, same standard as every other
 # allowlist here: a line is a decision someone defends in a diff, not a way to make the gate quiet.
@@ -58,7 +59,7 @@ $SKIP = @{
   'test-auditors.ps1'   = 'data-dependent: needs a real board, which a clean checkout does not have (out\comparison-*.json is gitignored). Runs daily in the chain instead.'
 }
 
-$repoFull = (Resolve-Path -LiteralPath $repo).ProviderPath.TrimEnd('\')
+$repoFull = Get-TcRootFull $repo
 $scripts = @(Get-ChildItem $repoFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
   # \out\ is the pipeline's OUTPUT directory. Scripts that land there are one-offs and debris (the script
   # census counts 37 of them); running their self-tests would gate every push on abandoned scratch work.
@@ -66,7 +67,8 @@ $scripts = @(Get-ChildItem $repoFull -Recurse -File -Filter *.ps1 -ErrorAction S
   # .claude\worktrees\, so the full-path form excluded every file in it: discovery found zero and exited 3
   # from every spawned session, which pre-push then BLOCKS. Recorded 2026-08-26 and left standing until
   # ops\count-source-lifters.ps1 was found blind the same way. Sibling worktrees below the root stay excluded.
-  Where-Object { $_.FullName.Substring($repoFull.Length) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
+  # The rule lives in lib\tree-walk.ps1 since 2026-09-11, shared with every other walk that had the same bug.
+  Where-Object { (Get-TcPathBelowRoot $_.FullName $repoFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
   Sort-Object FullName)
 
 $withSelfTest = @()
@@ -345,9 +347,12 @@ $pySkip = @{
   'meal-prep\pipeline\hunt_daemon_selftest.py' = 'the full daemon battery - runs for minutes; exercised nightly'
 }
 $pySuites = @()
-foreach ($f in @(Get-ChildItem -Path $repo -Recurse -Filter '*.py' -File -ErrorAction SilentlyContinue |
-                 Where-Object { $_.FullName -notmatch '\\\.venv\\|\\archive\\|\\worktrees\\|\\node_modules\\|\\site-packages\\|\\\.git\\' })) {
-  $rel = $f.FullName.Substring($repo.Length).TrimStart('\')
+# MATCHED BELOW THE ROOT (2026-09-11, lib\tree-walk.ps1), the same fix as the PowerShell discovery above. On the full
+# path every .py in a linked worktree carried \worktrees\, so this walk resolved no suites from a spawned session
+# and the discovery floor below failed the gate for a reason that had nothing to do with the change being pushed.
+foreach ($f in @(Get-ChildItem -Path $repoFull -Recurse -Filter '*.py' -File -ErrorAction SilentlyContinue |
+                 Where-Object { (Get-TcPathBelowRoot $_.FullName $repoFull) -notmatch '\\\.venv\\|\\archive\\|\\worktrees\\|\\node_modules\\|\\site-packages\\|\\\.git\\' })) {
+  $rel = (Get-TcPathBelowRoot $f.FullName $repoFull).TrimStart('\')
   $txt = ''
   try { $txt = [IO.File]::ReadAllText($f.FullName) } catch { continue }
   if ($txt -notmatch '--selftest') { continue }

@@ -47,6 +47,7 @@ $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ratchet.ps1')
 . (Join-Path $repo 'lib\ps-source.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: skip dirs match below the root, so a worktree root is not skipped whole
 
 # NEEDLES BY CONCATENATION. This file scans source for a comment-stripping idiom, so spelling the
 # idiom out as a literal would make this file match itself - and a detector that finds itself cannot
@@ -62,6 +63,27 @@ function Test-StripsLineCommentsOnly {
   if ($Text -notmatch $script:SCS_LINE_STRIP) { return $false }
   if ($Text -match $script:SCS_BLOCK_STRIP) { return $false }
   return $true
+}
+
+function Get-ScsCandidateFiles {
+  <# Every .ps1 under ops\, grocery\, lib\ and meal-prep\ below $RootDir that sits in no skipped directory. The
+     skip list is matched on the path BELOW the root (lib\tree-walk.ps1): on the full path \.claude\ and
+     \worktrees\ are in EVERY path of a linked worktree, so this ratchet examined 0 files and exited 3 from every
+     spawned session (2026-09-11). #>
+  param([string]$RootDir)
+  $rootFull = Get-TcRootFull $RootDir
+  $skipDirs = @('\archive\', '\out\', '\.claude\', '\node_modules\', '\.git\', '\worktrees\',
+                '\.venv\', '\venv\', '\site-packages\', '\dist-info\')
+  foreach ($sub in @('ops', 'grocery', 'lib', 'meal-prep')) {
+    $d = Join-Path $rootFull $sub
+    if (-not (Test-Path $d)) { continue }
+    foreach ($f in @(Get-ChildItem $d -Recurse -Filter *.ps1 -File -ErrorAction SilentlyContinue)) {
+      $below = Get-TcPathBelowRoot $f.FullName $rootFull
+      $skip = $false
+      foreach ($sd in $skipDirs) { if ($below -like ('*' + $sd + '*')) { $skip = $true; break } }
+      if (-not $skip) { $f }
+    }
+  }
 }
 
 if ($SelfTest) {
@@ -92,29 +114,35 @@ if ($SelfTest) {
     ($selfSrc -and (-not (Test-StripsLineCommentsOnly $selfSrc))) 'the detector found itself'
   # PS 5.1: @($null).Count is 1 ([[ps-null-count-is-one]]).
   T 'an empty finding set counts 0, not the PS 5.1 @($null) 1' ((@(@())).Count -eq 0) ([string](@(@())).Count)
+  # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). The skip list matched \.claude\ and
+  # \worktrees\ on the FULL path, both of which are in every path of a linked worktree: 0 examined, exit 3.
+  # THE NEGATIVE CASE IS A WORKTREE INSIDE grocery\, not the fixture's usual sibling under .claude\. This walk
+  # starts in four module directories and never reaches .claude\, so a sibling there is skipped whatever the rule
+  # says: a mutation that dropped the skip list entirely left that version of this case green. This one goes red.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'lib\b.ps1' = 'Write-Output 2'
+                                          'grocery\worktrees\stale\c.ps1' = 'Write-Output 3' }
+  try {
+    $wtFound = @(Get-ScsCandidateFiles -RootDir $wtFx.Root)
+    $wtNested = @($wtFound | Where-Object { $_.FullName -like '*\grocery\worktrees\*' })
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    T 'MUST FIRE  a root that IS a worktree is scanned, not skipped whole' (($wtHits.Root - $wtNested.Count) -eq 2) ("root=" + $wtHits.Root)
+    T 'MUST NOT FIRE  a worktree nested inside a scanned directory below that root is still skipped' ($wtNested.Count -eq 0) ("nested=" + $wtNested.Count)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($bad -eq 0) { Write-Output 'SOURCE-COMMENT-STRIP SELF-TEST PASS'; Write-GuardComplete -Name 'source-comment-strip' -Summary 'selftest ok'; exit 0 }
   Write-Output ("SOURCE-COMMENT-STRIP SELF-TEST FAILED ($bad)"); Write-GuardComplete -Name 'source-comment-strip' -Summary "selftest failed=$bad"; exit 2
 }
 
 # ---- live scan ----
 if (-not $Root) { $Root = $repo }
-$skipDirs = @('\archive\', '\out\', '\.claude\', '\node_modules\', '\.git\', '\worktrees\',
-              '\.venv\', '\venv\', '\site-packages\', '\dist-info\')
+$rootFull = Get-TcRootFull $Root
 $scanned = 0
 $findings = New-Object System.Collections.Generic.List[string]
-foreach ($sub in @('ops', 'grocery', 'lib', 'meal-prep')) {
-  $d = Join-Path $Root $sub
-  if (-not (Test-Path $d)) { continue }
-  foreach ($f in @(Get-ChildItem $d -Recurse -Filter *.ps1 -File -ErrorAction SilentlyContinue)) {
-    $p = $f.FullName
-    $skip = $false
-    foreach ($sd in $skipDirs) { if ($p -like ('*' + $sd + '*')) { $skip = $true; break } }
-    if ($skip) { continue }
-    $scanned++
-    $txt = ''
-    try { $txt = [IO.File]::ReadAllText($p) } catch { continue }
-    if (Test-StripsLineCommentsOnly $txt) { [void]$findings.Add($p.Replace($Root, '').TrimStart('\', '/')) }
-  }
+foreach ($f in @(Get-ScsCandidateFiles -RootDir $rootFull)) {
+  $scanned++
+  $p = $f.FullName
+  $txt = ''
+  try { $txt = [IO.File]::ReadAllText($p) } catch { continue }
+  if (Test-StripsLineCommentsOnly $txt) { [void]$findings.Add((Get-TcPathBelowRoot $p $rootFull).TrimStart('\', '/')) }
 }
 if ($scanned -eq 0) {
   Write-Output 'source-comment-strip: BLIND - zero .ps1 files reached the scan, so a clean result would prove nothing'

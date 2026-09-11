@@ -38,6 +38,7 @@ $runSelfTest = [bool]$SelfTest
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 # Words that say THIS FILE'S OWN state only moves one way.
 #
@@ -87,6 +88,16 @@ function Test-TcGuarded {
   return $false
 }
 
+function Get-ActuatorSourceFiles {
+  <# Every .ps1/.py the sweep reads under $RootDir, excluded on the path BELOW the root (lib\tree-walk.ps1).
+     On the full path a root under .claude\worktrees\ excluded itself whole, and this report exited 3 from
+     every spawned session (2026-09-11). #>
+  param([string]$RootDir)
+  $rootFull = Get-TcRootFull $RootDir
+  Get-ChildItem $rootFull -Recurse -File -Include '*.ps1', '*.py' -ErrorAction SilentlyContinue |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\\.claude\\worktrees\\|\\grocery\\out\\|\\archive\\|\\node_modules\\|\\\.venv' }
+}
+
 # ---- self-test -------------------------------------------------------------------------------------
 if ($runSelfTest) {
   $bad = 0
@@ -122,18 +133,23 @@ if ($runSelfTest) {
   T 'CLEAN TWIN  the word list is matched literally, not as a regex' `
     (-not (Test-TcLatching 'high water')) 'a hyphenless spelling matched, so the match is not literal'
 
+  # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
+  # .claude\worktrees\<name> was excluded and this report exited 3 from every spawned session.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'graph\b.py' = 'print(1)' }
+  try {
+    $wtFound = @(Get-ActuatorSourceFiles -RootDir $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    T 'MUST FIRE  a root that IS a worktree is scanned, not excluded whole' ($wtHits.Root -eq 2) ("root=" + $wtHits.Root)
+    T 'MUST NOT FIRE  a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0) ("sibling=" + $wtHits.Sibling)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($bad -gt 0) { Write-Output ("one-way-actuators SELF-TEST FAIL ({0})" -f $bad); exit 2 }
-  Write-Output 'one-way-actuators SELF-TEST PASS: 6 case(s) resolved'
+  Write-Output 'one-way-actuators SELF-TEST PASS: 8 case(s) resolved'
   Exit-Guard -Name 'one-way-actuators' -Summary 'selftest pass' -Code 0
 }
 
 # ---- sweep -----------------------------------------------------------------------------------------
-$files = @(Get-ChildItem $repo -Recurse -File -Include '*.ps1', '*.py' -ErrorAction SilentlyContinue |
-           Where-Object { $_.FullName -notmatch '\\\.claude\\worktrees\\' -and
-                          $_.FullName -notmatch '\\grocery\\out\\' -and
-                          $_.FullName -notmatch '\\archive\\' -and
-                          $_.FullName -notmatch '\\node_modules\\' -and
-                          $_.FullName -notmatch '\\\.venv' })
+$files = @(Get-ActuatorSourceFiles -RootDir $repo)
 if (-not $files.Count) { Write-Output 'one-way-actuators: no source files found - discovery is broken, not clean.'; exit 3 }
 
 $findings = @()

@@ -22,6 +22,7 @@
 param([switch]$ShowAll, [switch]$Baseline, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $repo = Split-Path $root -Parent
 
@@ -128,6 +129,24 @@ $script:BARE_ALLOWED = @{
   'audit-search-terms.ps1'       = 1   # -Json: same, and its human path got the marker on 2026-08-23
 }
 
+# EXCLUDED BELOW THE ROOT (2026-09-11, lib\tree-walk.ps1). Both walks this audit makes matched \worktrees\ on the
+# FULL path, so from a linked worktree every chain detector read as MISSING and every detector on disk as DEAD.
+function Find-ChainDetectorFile {
+  <# The first file named $Name under $RootDir outside archive\ and any worktree below the root. #>
+  param([string]$RootDir, [string]$Name)
+  $rootFull = Get-TcRootFull $RootDir
+  Get-ChildItem $rootFull -Recurse -Filter $Name -File -ErrorAction SilentlyContinue |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\' } |
+    Select-Object -First 1
+}
+function Get-ContractExecFiles {
+  <# Every executable-shaped file under $RootDir that could call a detector, excluded below the root. #>
+  param([string]$RootDir)
+  $rootFull = Get-TcRootFull $RootDir
+  Get-ChildItem $rootFull -Recurse -File -Include *.ps1,*.psm1,*.js,*.yml,*.yaml,*.vbs,*.bat,*.cmd -ErrorAction SilentlyContinue |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv' }
+}
+
 if ($SelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
@@ -174,6 +193,18 @@ if ($SelfTest) {
   # a -SelfTest branch has its own PASS/FAIL line and is not part of the contract
   T 'exits inside an if ($SelfTest) block are not counted' `
     ((Get-BareVerdictExits "if (`$SelfTest) {`n  exit 0`n}").Count -eq 0) 'counted a self-test exit'
+  # THE WALKS, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Both matched \worktrees\ on the FULL path, so
+  # from .claude\worktrees\<name> every chain detector read as MISSING and every detector on disk as DEAD.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'grocery\audit-x.ps1' = 'Write-Output 1'; 'ops\y.yml' = 'a: 1' }
+  try {
+    $wtExec = @(Get-ContractExecFiles -RootDir $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtExec
+    T 'MUST FIRE  a root that IS a worktree is scanned for callers, not excluded whole' ($wtHits.Root -eq 2) ("root=" + $wtHits.Root)
+    T 'MUST NOT FIRE  a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0) ("sibling=" + $wtHits.Sibling)
+    $wtOne = @(Find-ChainDetectorFile -RootDir $wtFx.Root -Name 'audit-x.ps1')
+    T 'MUST FIRE  a chain detector under a worktree root is found, and it is the root''s copy, never the sibling''s' `
+      ($wtOne.Count -eq 1 -and $wtOne[0].FullName.StartsWith($wtFx.Root + '\grocery\')) ("found=" + (@($wtOne | ForEach-Object { $_.FullName }) -join ','))
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -210,8 +241,7 @@ $invoked = @($invoked | Sort-Object -Unique | Where-Object { Test-IsDetector $_ 
 
 $covered = @(); $uncovered = @(); $missing = @(); $halfCovered = @()
 foreach ($n in $invoked) {
-  $p = @(Get-ChildItem $repo -Recurse -Filter $n -File -ErrorAction SilentlyContinue |
-         Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\' } | Select-Object -First 1)
+  $p = @(Find-ChainDetectorFile -RootDir $repo -Name $n)
   if (-not $p.Count) { $missing += $n; continue }
   $txt = [IO.File]::ReadAllText($p[0].FullName)
   if (-not (Test-EmitsMarker $txt)) { $uncovered += $n; continue }
@@ -229,8 +259,7 @@ foreach ($n in $invoked) {
 # have been the WRONG fix: that says 'nothing calls this, deliberately' about a detector that in fact runs
 # more often than the daily chain does.
 $hookFiles = @(Get-ChildItem (Join-Path $repo 'ops\hooks') -File -ErrorAction SilentlyContinue)
-$execFiles = @(Get-ChildItem $repo -Recurse -File -Include *.ps1,*.psm1,*.js,*.yml,*.yaml,*.vbs,*.bat,*.cmd -ErrorAction SilentlyContinue |
-               Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv' })
+$execFiles = @(Get-ContractExecFiles -RootDir $repo)
 $execFiles = @($execFiles) + @($hookFiles)
 $execText = @{}
 foreach ($f in $execFiles) { try { $execText[$f.FullName] = [IO.File]::ReadAllText($f.FullName) } catch { } }

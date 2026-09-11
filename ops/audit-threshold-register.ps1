@@ -34,6 +34,7 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 $REGISTER = Join-Path $repo 'sidecar\THRESHOLDS.md'
 
@@ -56,13 +57,17 @@ function Get-Thresholds([string]$root) {
      A FUNCTION, not a script block, because compare-deals' lifters taught this estate that a
      $script: variable never travels with a lift. #>
   $found = New-Object System.Collections.Generic.List[object]
+  # MATCHED BELOW THE ROOT (2026-09-11, lib\tree-walk.ps1). None of $SCAN recurses, so on the full path the only
+  # thing this exclusion ever did was drop EVERY file when the root itself sat under .claude\worktrees\ - and
+  # the gate exited 3 from every spawned session.
+  $rootFull = Get-TcRootFull $root
   foreach ($pat in $SCAN) {
-    $full = Join-Path $root $pat
+    $full = Join-Path $rootFull $pat
     $dir = Split-Path $full -Parent
     if (-not (Test-Path $dir)) { continue }
     $leaf = Split-Path $full -Leaf
     foreach ($f in @(Get-ChildItem -Path $dir -Filter $leaf -File -ErrorAction SilentlyContinue)) {
-      if ($f.FullName -match '\\\.venv\\|\\archive\\|\\worktrees\\') { continue }
+      if ((Get-TcPathBelowRoot $f.FullName $rootFull) -match '\\\.venv\\|\\archive\\|\\worktrees\\') { continue }
       $n = 0
       foreach ($line in [IO.File]::ReadAllLines($f.FullName)) {
         $n++
@@ -116,6 +121,15 @@ TIMEOUT_SEC = 30
     if (-not (Test-Registered 'COVERAGE_COS_FLOOR' 'a register that mentions nothing')) { Write-Output 'ok    MUST FIRE  an unregistered threshold is a finding' } else { Write-Output 'FAIL  an unregistered threshold passed'; $fail++ }
     if (Test-Registered 'COVERAGE_COS_FLOOR' '| `COVERAGE_COS_FLOOR` | sweep.py | 0.55 | S1 |') { Write-Output 'ok    CLEAN TWIN a registered threshold passes' } else { Write-Output 'FAIL  a registered threshold was reported missing'; $fail++ }
     if (-not (Test-Registered 'keep-above' 'mentions margin but not the other flag')) { Write-Output 'ok    MUST FIRE  a flag absent from the register is a finding' } else { Write-Output 'FAIL  an unregistered flag passed'; $fail++ }
+
+    # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). None of $SCAN recurses, so on the FULL
+    # path the exclusion's only effect was to drop every file when the root sat under .claude\worktrees\.
+    $wtFx = New-TcWorktreeFixture -Files @{ 'sidecar\probe.py' = "COVERAGE_COS_FLOOR = 0.55`n" }
+    try {
+      $wtHits = Get-Thresholds $wtFx.Root
+      $wtNames = @($wtHits | ForEach-Object { $_.Name })
+      if ($wtNames -contains 'COVERAGE_COS_FLOOR') { Write-Output 'ok    MUST FIRE  a root that IS a worktree is scanned, not excluded whole' } else { Write-Output 'FAIL  MUST FIRE  a root under .claude\worktrees\ yielded no thresholds - the walk excluded itself'; $fail++ }
+    } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
 
     # The register on disk must actually cover the live tree - a self-test that only ever reads its
     # own fixture proves the regex compiles and nothing about the estate.

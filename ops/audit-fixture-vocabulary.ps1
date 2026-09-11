@@ -45,6 +45,7 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 # VENDORED TREES ARE NOT OUR FIXTURES. site-packages alone is 11,167 .py files, and counting them
 # made the pass line read "across 11,772 files" - a number that sounds like coverage and is almost
@@ -82,6 +83,17 @@ function Get-TcMislabelledTwins {
     }
   }
   return ,@($hits)
+}
+
+function Get-TcVocabularyFiles {
+  <# Every .ps1/.py the live run reads under $RootDir, never $Self. $EXCLUDE matches the path BELOW the root
+     (lib\tree-walk.ps1): on the full path a root under .claude\worktrees\ excluded itself whole, and this gate
+     exited 3 BLIND from every spawned session (2026-09-11). #>
+  param([string]$RootDir, [string]$Self = '')
+  $rootFull = Get-TcRootFull $RootDir
+  Get-ChildItem $rootFull -Recurse -File -ErrorAction SilentlyContinue -Include *.ps1, *.py |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $EXCLUDE -and $_.FullName -ne $Self } |
+    ForEach-Object { $_.FullName }
 }
 
 # ------------------------------------------------------------------------------------- self-test
@@ -125,8 +137,18 @@ if ($SelfTest) {
   $r0 = Get-TcMislabelledTwins -Files @('b.ps1') -ReadLines $fake
   T 'MUST NOT FIRE a file whose twins are all correctly labelled yields nothing' ((@($r0)).Count -eq 0) ("Count=" + @($r0).Count)
 
+  # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). $EXCLUDE matched on the FULL path, so run
+  # from .claude\worktrees\<name> this gate read zero files and exited 3.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'sidecar\b.py' = 'print(1)' }
+  try {
+    $wtFound = @(Get-TcVocabularyFiles -RootDir $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    T 'MUST FIRE  a root that IS a worktree is scanned, not excluded whole' ($wtHits.Root -eq 2) ("root=" + $wtHits.Root)
+    T 'MUST NOT FIRE  a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0) ("sibling=" + $wtHits.Sibling)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 5 must-fire absence idioms across both languages, 5 must-not-fire cases including the exit-code twin that founded them, plus the scanner and its return arity'
+  Write-Output 'SELF-TEST PASS: 5 must-fire absence idioms across both languages, 5 must-not-fire cases including the exit-code twin that founded them, plus the scanner and its return arity, and the walk from a worktree root with a sibling below it'
   exit 0
 }
 
@@ -134,8 +156,7 @@ if ($SelfTest) {
 # NEVER SCAN YOURSELF. The fixtures above are verbatim mislabels passed as ARGUMENTS, not comments, so
 # the comment filter does not reach them and this detector would report five findings inside its own
 # must-fire cases. run-gates and audit-write-seam both carry the same exclusion for the same reason.
-$files = @(Get-ChildItem $repo -Recurse -File -ErrorAction SilentlyContinue -Include *.ps1, *.py |
-  Where-Object { $_.FullName -notmatch $EXCLUDE -and $_.FullName -ne $PSCommandPath } | ForEach-Object { $_.FullName })
+$files = @(Get-TcVocabularyFiles -RootDir $repo -Self $PSCommandPath)
 if (-not $files.Count) {
   Write-Output 'FIXTURE-VOCABULARY AUDIT BLIND: found zero .ps1/.py files to scan, which means the discovery is broken rather than the tree being clean.'
   Exit-Guard -Name 'fixture-vocabulary' -Summary 'blind=no-files' -Code 3

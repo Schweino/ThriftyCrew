@@ -37,6 +37,7 @@ $repo = Split-Path $PSScriptRoot -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\json-io.ps1')
 . (Join-Path $repo 'lib\selftest-lib.ps1')   # Get-SelfTestBlock: PowerShell's own parser, shared with audit-fixture-inputs
+. (Join-Path $repo 'lib\tree-walk.ps1')      # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 function Get-MustFireCount {
   <# Pure. How many must-fire assertions does this self-test body carry? #>
@@ -50,6 +51,17 @@ function Get-MustFireCount {
     if ($l -match '(?i)MUST[ -]?(NOT[ -])?FIRE') { $n++ }
   }
   return $n
+}
+
+function Get-MustFireCensusScripts {
+  <# Every .ps1 the census reads under $RootDir, excluded on the path BELOW the root (lib\tree-walk.ps1).
+     On the full path a root under .claude\worktrees\ excluded itself whole: the census found no must-fire
+     assertion anywhere and exited 3 from every spawned session (2026-09-11). #>
+  param([string]$RootDir)
+  $rootFull = Get-TcRootFull $RootDir
+  Get-ChildItem $rootFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
+    Sort-Object FullName
 }
 
 if ($SelfTest) {
@@ -82,15 +94,23 @@ if ($SelfTest) {
   McT 'CLEAN TWIN: a must-fire label OUTSIDE the self-test body is not a fixture' `
       ((Get-MustFireCount -Text (Get-SelfTestBlock -Text $src)) -eq 1)
 
+  # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
+  # .claude\worktrees\<name> was excluded: the census counted nothing and exited 3 from every spawned session.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'grocery\b.ps1' = 'Write-Output 2' }
+  try {
+    $wtFound = @(Get-MustFireCensusScripts -RootDir $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    McT ($MF + ': a root that IS a worktree is scanned, not excluded whole') ($wtHits.Root -eq 2)
+    McT ($MNF + ': a sibling worktree BELOW that root is still excluded') ($wtHits.Sibling -eq 0)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail) { Write-Output "MUSTFIRE-CENSUS SELF-TEST FAILED ($fail)"; exit 2 }
   Write-Output 'MUSTFIRE-CENSUS SELF-TEST PASSED (every spelling counted, prose excluded, and a deletion provably moves the number)'
   exit 0
 }
 
 # ---- live path -----------------------------------------------------------------------------------------
-$scripts = @(Get-ChildItem $repo -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
-  Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
-  Sort-Object FullName)
+$scripts = @(Get-MustFireCensusScripts -RootDir $repo)
 
 $now = [ordered]@{}
 $total = 0

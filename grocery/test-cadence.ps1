@@ -19,7 +19,10 @@
   Extracts the real functions out of check-ad-cycles.ps1 (it cannot be dot-sourced - that runs the whole
   daily chain) and drives them against a sandbox, so this tests the shipped code, not a copy of it.
 #>
-$src = Get-Content 'C:\Codex\ThriftyCrew\grocery\check-ad-cycles.ps1' -Raw
+# RESOLVED BESIDE THIS FILE, never from an absolute path (2026-09-11). The literal C:\Codex\ThriftyCrew path
+# meant a run from a worktree tested MAIN's check-ad-cycles.ps1 and passed or failed on code the change had
+# not touched. capture-run.ps1 below was already read this way.
+$src = Get-Content (Join-Path $PSScriptRoot 'check-ad-cycles.ps1') -Raw
 $m = [regex]::Match($src, '(?s)function Test-CadenceDue \{.*?\n\}\r?\nfunction Set-CadenceRan.*?\n\}\r?\nfunction Get-CadenceLast.*?\n\}')
 if (-not $m.Success) { 'FAIL: could not extract the helpers'; exit 1 }
 $sandbox = Join-Path $env:TEMP ('cad-' + [guid]::NewGuid().ToString('N').Substring(0,8))

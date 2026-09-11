@@ -40,6 +40,7 @@ $runSelfTest = [bool]$SelfTest; $runUpdate = [bool]$UpdateBaseline
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\guard-contract.ps1')
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 $BASELINE = Join-Path $here 'cross-module-reach-baseline.json'
 
@@ -122,6 +123,16 @@ function Get-ReachSites {
   return $out
 }
 
+function Get-ReachSourceFiles {
+  <# Every first-party .ps1 the sweep reads under $RootDir, excluded on the path BELOW the root
+     (lib\tree-walk.ps1). On the full path a root under .claude\worktrees\ excluded itself whole, and this
+     ratchet exited 3 from every spawned session (2026-09-11). #>
+  param([string]$RootDir)
+  $rootFull = Get-TcRootFull $RootDir
+  Get-ChildItem $rootFull -Recurse -Filter '*.ps1' -File -ErrorAction SilentlyContinue |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\\.claude\\worktrees\\|\\grocery\\out\\|\\archive\\|\\node_modules\\' }
+}
+
 # ---- self-test -------------------------------------------------------------------------------------
 if ($runSelfTest) {
   $bad = 0
@@ -198,17 +209,23 @@ if ($runSelfTest) {
   $s10 = @(Get-ReachSites -Text "`$p = 'grocery/out/a.json'`n# and grocery/out/b.json is the old one" -OwnModule 'meal-prep')
   T 'CLEAN TWIN  code and comment sites are both still found, and split correctly' ($s10.Count -eq 2 -and @($s10 | Where-Object { -not $_.comment }).Count -eq 1) ([string]$s10.Count)
 
+  # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
+  # .claude\worktrees\<name> was excluded and this ratchet exited 3 from every spawned session.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'ops\a.ps1' = 'Write-Output 1'; 'meal-prep\b.ps1' = 'Write-Output 2' }
+  try {
+    $wtFound = @(Get-ReachSourceFiles -RootDir $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    T 'MUST FIRE  a root that IS a worktree is scanned, not excluded whole' ($wtHits.Root -eq 2) ("root=" + $wtHits.Root)
+    T 'MUST NOT FIRE  a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0) ("sibling=" + $wtHits.Sibling)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($bad -gt 0) { Write-Output ("cross-module-reach SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'cross-module-reach SELF-TEST PASS'
   Exit-Guard -Name 'cross-module-reach' -Summary 'selftest pass' -Code 0
 }
 
 # ---- sweep -----------------------------------------------------------------------------------------
-$files = @(Get-ChildItem $repo -Recurse -Filter '*.ps1' -File -ErrorAction SilentlyContinue |
-           Where-Object { $_.FullName -notmatch '\\\.claude\\worktrees\\' -and
-                          $_.FullName -notmatch '\\grocery\\out\\' -and
-                          $_.FullName -notmatch '\\archive\\' -and
-                          $_.FullName -notmatch '\\node_modules\\' })
+$files = @(Get-ReachSourceFiles -RootDir $repo)
 # `archive\` is excluded on purpose: retired code is not a live dependency, and counting it would let a
 # ratchet rise because somebody filed something away. Everything else is in scope, TEST scripts included -
 # a test that builds a path into another module's internals still breaks when that directory moves.

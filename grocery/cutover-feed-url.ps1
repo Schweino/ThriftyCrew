@@ -32,6 +32,7 @@ param([string]$NewBase, [switch]$Apply, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $repo = Split-Path $root -Parent
+. (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
 function Get-CanonicalBase { param([string]$RepoRoot)
   $lib = Join-Path $RepoRoot 'lib\site-endpoints.ps1'
@@ -43,6 +44,14 @@ function Test-ValidBase { param([string]$B)
   # an https origin with no trailing slash and no path - callers concatenate a rooted path onto it
   return ($B -match '^https://[a-z0-9][a-z0-9.-]*[a-z0-9]$')
 }
+function Get-FeedUrlScanFiles { param([string]$RepoRoot)
+  # Every file a cutover reads, and may rewrite, under $RepoRoot - excluded on the path BELOW the root
+  # (lib\tree-walk.ps1). On the full path a run from a linked worktree scanned nothing and reported
+  # "0 reference(s)", which reads exactly like a tree with nothing left to move (2026-09-11).
+  $rootFull = Get-TcRootFull $RepoRoot
+  Get-ChildItem $rootFull -Recurse -File -Include *.ps1, *.js, *.yml, *.json, *.md, *.html, *.htm -ErrorAction SilentlyContinue |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|node_modules|\\out\\|\\db\\built\\|\\archive\\|\\site-backups\\|cutover-feed-url\.ps1' }
+}
 
 if ($SelfTest) {
   $f = 0
@@ -52,6 +61,15 @@ if ($SelfTest) {
   T 'MUST FIRE  a trailing slash is refused (double-slash URLs)' (-not (Test-ValidBase 'https://feed.thriftycrew.com/')) 'accepted'
   T 'MUST FIRE  a base carrying a path is refused'         (-not (Test-ValidBase 'https://feed.thriftycrew.com/smp-feed.json')) 'accepted'
   T 'MUST FIRE  http (not https) is refused'               (-not (Test-ValidBase 'http://feed.thriftycrew.com')) 'accepted'
+  # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, a run from a
+  # linked worktree scanned nothing and reported 0 references.
+  $wtFx = New-TcWorktreeFixture -Files @{ 'grocery\a.ps1' = 'Write-Output 1'; 'site\b.html' = '<p>1</p>' }
+  try {
+    $wtFound = @(Get-FeedUrlScanFiles -RepoRoot $wtFx.Root)
+    $wtHits = Measure-TcWorktreeFixture -Fixture $wtFx -Found $wtFound
+    T 'MUST FIRE  a root that IS a worktree is scanned, not excluded whole' ($wtHits.Root -eq 2) ("root=" + $wtHits.Root)
+    T 'MUST NOT FIRE  a sibling worktree BELOW that root is still excluded - never rewrite another checkout' ($wtHits.Sibling -eq 0) ("sibling=" + $wtHits.Sibling)
+  } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -69,8 +87,7 @@ $rxAny = 'https://(?:smp-feed\.[a-z0-9-]+\.workers\.dev|feed\.thriftycrew\.com)'
 #
 # site-backups\ and archive\ are EXCLUDED ON PURPOSE: they are dated snapshots of what was deployed at a
 # past moment. Rewriting a historical record to say something it never said destroys its only value.
-$scan = @(Get-ChildItem $repo -Recurse -File -Include *.ps1, *.js, *.yml, *.json, *.md, *.html, *.htm -ErrorAction SilentlyContinue |
-          Where-Object { $_.FullName -notmatch '\\worktrees\\|node_modules|\\out\\|\\db\\built\\|\\archive\\|\\site-backups\\|cutover-feed-url\.ps1' })
+$scan = @(Get-FeedUrlScanFiles -RepoRoot $repo)
 
 $refs = @()
 foreach ($f in $scan) {
