@@ -476,7 +476,6 @@ if ($__foSelfTest) {
     Set-Content (Join-Path $td 'nomark.ps1') -Value "Write-Output 'quiet'; exit 0"
     Set-Content (Join-Path $td 'slow.ps1')   -Value "Start-Sleep -Seconds 30; Write-Output 'never'"
     Set-Content (Join-Path $td 'err.ps1')    -Value "[Console]::Error.WriteLine('a stderr line'); Write-Output 'OK-COMPLETE'; exit 0"
-    Set-Content (Join-Path $td 'sleep3.ps1') -Value "Start-Sleep -Seconds 3; Write-Output 'done'"
     Set-Content (Join-Path $td 'kept-going.ps1') -Value "Write-Output 'OK-COMPLETE'; Write-Output 'and then it kept going'; exit 0"
     Set-Content (Join-Path $td 'noisy.ps1')      -Value "[Console]::Error.WriteLine('a warning'); Write-Output 'work'; Write-Output 'OK-COMPLETE'; exit 0"
 
@@ -575,17 +574,25 @@ if ($__foSelfTest) {
 
     # AND IT MUST ACTUALLY BE CONCURRENT. Without this case the whole file could be a slow serial loop and
     # every assertion above would still pass - a fan-out that does not fan out, reporting green.
-    # THE SLEEP IS 3 s, NOT 6 (trimmed 2026-08-23 on a measurement). At 6 s this self-test was 12 s, which
-    # made it the single most expensive -SelfTest in the estate and 57% of that whole group's runtime - a
-    # fixture that costs more than the thing it is measuring is its own small defect. 8 x 3 s is concurrent
-    # at ~3-4 s and serial at ~24 s: the gap is still 6x, so a 12 s threshold cannot be flaky, and the case
-    # keeps exactly the discrimination it had.
-    $probe = 1..8 | ForEach-Object { New-FanoutLane -Name ("L$_") -File (Join-Path $td 'sleep3.ps1') -TimeoutSec 60 }
-    $sw = [Diagnostics.Stopwatch]::StartNew()
-    $pr = @(Invoke-Fanout -Lanes $probe -MaxParallel 8)
-    $sw.Stop()
-    $sum = 0; foreach ($x in $pr) { $sum += [int]$x.Elapsed }
-    T 'the pool really runs lanes CONCURRENTLY (8 x 3 s in under 12 s wall)' ($sw.Elapsed.TotalSeconds -lt 12 -and $sum -ge 16) ("wall {0:n1} s, sum {1} s" -f $sw.Elapsed.TotalSeconds, $sum)
+    # PROVEN BY THE CHILDREN, NOT TIMED BY THE CLOCK (2026-09-11). This was "8 x 3 s in under 12 s wall",
+    # and "a 12 s threshold cannot be flaky" was true only on a quiet box. It went red at 19.6 s in a
+    # pre-push run-gates sharing the machine with at least three other sessions' gates (337 gates, 792 s
+    # against 106 s quiet), blocking a push that touched neither file, and passed 3 of 3 solo straight
+    # after. Each lane now runs lib\concurrency-probe.ps1's rendezvous child, which waits until all 8 have
+    # started - satisfiable only by a pool holding 8 at once. Load makes it slower, never red; a pool of
+    # width 1 or 2 is red however quiet the box is. It also dropped the 3 s sleep, so it is cheaper too.
+    . (Join-Path $PSScriptRoot '..\lib\concurrency-probe.ps1')
+    $rdv = New-TcRendezvousProbe -Count 8
+    try {
+      $probe = 1..8 | ForEach-Object { New-FanoutLane -Name ("L$_") -File $rdv.Script -TimeoutSec ($rdv.DeadlineSec + 60) }
+      $pr = @(Invoke-Fanout -Lanes $probe -MaxParallel 8)
+      $rv = Get-TcRendezvousVerdict -Probe $rdv
+      $clean = @($pr | Where-Object { $_.ExitCode -eq 0 -and -not $_.Blind }).Count
+      T 'the pool really runs lanes CONCURRENTLY (all 8 alive at the same instant, proven by the lanes rather than timed)' ($rv.Ok -and $clean -eq 8) ("{0}; {1} of 8 lanes rc 0 and not blind" -f $rv.Detail, $clean)
+      Write-Output ('  info  ' + $rv.Detail)   # the start-gap margin, visible on a green run and not only a red one
+    } finally {
+      Remove-TcRendezvousProbe -Probe $rdv
+    }
   } finally {
     Remove-Item $td -Recurse -Force -ErrorAction SilentlyContinue
   }

@@ -162,13 +162,26 @@ if ($__prSelfTest) {
     ((Format-TcProcArg 'C:\Program Files\x.ps1') -eq '"C:\Program Files\x.ps1"') (Format-TcProcArg 'C:\Program Files\x.ps1')
   T 'CLEAN TWIN an ordinary argument is NOT quoted, so nothing downstream sees quotes it did not have' `
     ((Format-TcProcArg '-SelfTest') -eq '-SelfTest') (Format-TcProcArg '-SelfTest')
-  $t0 = [Diagnostics.Stopwatch]::StartNew()
-  $par = Invoke-TcParallel -Jobs @(1..6 | ForEach-Object { MkJob 'Start-Sleep -Milliseconds 600' }) -Concurrency 6
-  $t0.Stop()
-  T 'CLEAN TWIN six 600ms jobs at concurrency 6 finish in well under the 3.6s a serial loop would take - the whole point, asserted rather than assumed' `
-    ($t0.Elapsed.TotalSeconds -lt 2.5 -and @($par).Count -eq 6) ("{0:N2}s" -f $t0.Elapsed.TotalSeconds)
+  # PROVEN BY THE CHILDREN, NOT TIMED BY THE CLOCK (2026-09-11). This was "six 600ms jobs in under 2.5s",
+  # and it went red at 6.89s in a pre-push run-gates sharing the machine with at least three other
+  # sessions' gates (337 gates, 792s against 106s quiet), blocking a push that touched neither file; solo
+  # straight after it passed 3 of 3. A wall-clock bar measures the machine as well as the pool. Each job
+  # now runs lib\concurrency-probe.ps1's rendezvous child, which waits until all six have started - a
+  # serial loop can never satisfy that, and load only makes it slower.
+  . (Join-Path $PSScriptRoot 'concurrency-probe.ps1')
+  $rdv = New-TcRendezvousProbe -Count 6
+  try {
+    $par = Invoke-TcParallel -Jobs @(1..6 | ForEach-Object { [pscustomobject]@{ Exe = $PS; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $rdv.Script) } }) -Concurrency 6
+    $rv = Get-TcRendezvousVerdict -Probe $rdv
+    $rc0 = @($par | Where-Object { $_.ExitCode -eq 0 }).Count
+    T 'CLEAN TWIN six jobs at concurrency 6 are all alive at the same instant, each having waited for the other five to start - the whole point, asserted rather than assumed, and never timed' `
+      ($rv.Ok -and @($par).Count -eq 6 -and $rc0 -eq 6) ("{0}; {1} of 6 jobs exit 0" -f $rv.Detail, $rc0)
+    Write-Output ('info  ' + $rv.Detail)   # the start-gap margin, visible on a green run and not only a red one
+  } finally {
+    Remove-TcRendezvousProbe -Probe $rdv
+  }
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 3 must-fire cases led by job-order results and exact exit codes, 3 must-not-fire cases led by concurrency 1 matching the pool, and 4 clean twins including the measured speedup'
+  Write-Output 'SELF-TEST PASS: 3 must-fire cases led by job-order results and exact exit codes, 3 must-not-fire cases led by concurrency 1 matching the pool, and 4 clean twins including proven overlap'
   exit 0
 }
