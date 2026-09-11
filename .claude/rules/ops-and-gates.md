@@ -299,6 +299,13 @@ everything else honest, so a defect here is silent by construction.
   load failure is caught, the only case that can see it is one that reads the log.** A fifth sandbox with no `lib\`
   at all, `ops/consistency-oracle.ps1`'s flat `%TEMP%` one, was given the repo's shape the same day (5e5b09e62).
   Unguarded dot-sources elsewhere were not counted.
+  **PROVE A SANDBOX BY BUILDING ONE AND RUNNING A SUBJECT IN IT, not by path arithmetic** (2026-09-12). The
+  oracle's first cases for that repair computed where `lib\` would be and asserted the arithmetic, so they stayed
+  green when `New-TcSandbox` was reverted to flat, and when it kept the layout but copied no library. Its sandbox
+  cases now build real sandboxes from a fixture repo and run subjects out of process, and the MUST FIRE removes a
+  library from the arm's own `lib\` while planting a working copy where the flat layout looked. **That decoy is
+  load-bearing**: the flat revert turned 8 of 19 cases red with it, and 7 without it, where the must-fire stayed
+  GREEN because a flat sandbox fails the subject too, for the wrong reason.
 - **Under PS 5.1 `VariablePath.UnqualifiedPath` is INTERNAL and reads as `$null`** (2026-09-11). An AST walk
   that used it as a hashtable key threw, which is the lucky case; the same value in a `-match` matches nothing, so
   a walk that collects variable names finds none and returns an agreeing empty. Strip the scope from `UserPath`
@@ -398,12 +405,12 @@ everything else honest, so a defect here is silent by construction.
   `Set-Content` on the contended path throws *"Stream was not readable."* or *"cannot access the file ... used by
   another process"*, and under a suite's `EAP='Stop'` that is TERMINATING: the suite dies mid-run and reaches
   run-gates as a bare `exit 1` with a line count and no case. **So a self-test red that names no case is a
-  concurrency suspect, not a mystery.** Of the three fixed names left, the two robocopy `/MIR` fixture trees
-  (`test-precedence-ladders`, `run-test-guards-weekly`) are the same shape at tree scale - `/MIR` deletes what the
-  source lacks, and real scripts execute from inside - while the oracle's arm logs share the
-  write collision but nothing deletes or executes a fixed-name file. `test-auditors`' shared `%TEMP%\lib` left
-  that list the same day: each run copies every `lib\*.ps1` into its own root, and unit u142 names a missing or
-  stale one.
+  concurrency suspect, not a mystery.** Of the two fixed names left, both are robocopy `/MIR` fixture trees
+  (`test-precedence-ladders`, `run-test-guards-weekly`) and are the same shape at tree scale - `/MIR` deletes what
+  the source lacks, and real scripts execute from inside. `test-auditors`' shared `%TEMP%\lib` left that list on
+  2026-09-11: each run copies every `lib\*.ps1` into its own root, and unit u142 names a missing or stale one.
+  **The oracle's arm logs left it on 2026-09-12**: `ops/consistency-oracle.ps1` keeps both arms and both arms'
+  logs in one root per run and removes it in a `finally`, which also ends the two sandboxes every run leaked.
 - **A child a gate spawns must not write a TRACKED path, and a tracked file written under PS 5.1 must be
   written LF** (2026-09-11). `test-auditors`' early `spec-live` child ran `audit-spec-contradictions`, which
   wrote the committed `meal-prep\out\spec-contradictions.json` through `ConvertTo-Json | Set-Content -Encoding
