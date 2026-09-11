@@ -376,8 +376,21 @@ Not a verdict. A first look with the same instruments, stated with its denominat
   between 14:48 and 17:34**. The windows are different lengths and the load is not the same, so this is a
   direction, not a factor.
 - Waits recorded in that window where a grant printed one: 85, 227, 231, 326, 484 and 648 s.
-- I did NOT establish how often the recorded verdict was reused. The pattern that would have counted it
-  also matches the bare word "verdict", so there is no number here rather than a wrong one.
+- I did NOT establish how often the recorded verdict was reused across the estate. The pattern that would
+  have counted it also matches the bare word "verdict", so there is no number here rather than a wrong one.
+
+**Two data points from pushing this document, after the change:**
+
+1. **The reuse works, measured on one push.** This branch was pushed at 18:57 with the same content the
+   gate had judged 10 minutes earlier. The hook printed `RUN-GATES-COMPLETE pass=366 fail=0 reused=1` and
+   the push completed in **10 seconds**, against about 10 minutes for the run that earned that verdict.
+   One push, not a rate.
+2. **The landability check does not close the herd for a LONG gate, and finding (5) survives.** It refuses
+   a push whose refs are already stale when the hook starts. The push before that one was not stale at the
+   start: its gate passed (366, 0 fail, about 10 minutes) and the remote then refused it with `cannot lock
+   ref`, because main moved WHILE it ran. So a gate that outlives an update to main is still thrown away,
+   and **option D, the turnstile, remains the only item here that would close that** - now against a much
+   shorter gate, which is the measurement D was waiting for.
 
 The bars below are the real check, and they need a window with at least 30 hook runs.
 
