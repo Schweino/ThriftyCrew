@@ -20,6 +20,8 @@
 param([switch]$SelfTest)   # accepted so ops\run-gates.ps1 discovers this file; the cases run either way
 $ErrorActionPreference = 'Continue'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\bot-paths.ps1')
+# Every repo below is a temp repo: clear the repository environment first (2026-09-10; lib\git-repo-env.ps1).
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-repo-env.ps1'); Clear-TcGitRepoEnv
 
 $src = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'push-data.ps1'))
 $i = $src.IndexOf('# >>> PUSH-DATA COMMIT LANE')

@@ -89,13 +89,11 @@ $ErrorActionPreference = 'Stop'
 # NO REPOSITORY ENVIRONMENT IS INHERITED. Every git call here names its checkout with -C, and an inherited
 # GIT_DIR overrides -C: spawned from a hook in a linked worktree, `git -C <source> ls-files` would list the
 # hook's repository instead, and the self-test's temp repo would be written into the shared .git. Same list
-# and same reason as ops\run-gates.ps1 (2026-09-10).
-foreach ($v in @('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_COMMON_DIR', 'GIT_OBJECT_DIRECTORY',
-                 'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_PREFIX', 'GIT_NAMESPACE')) {
-  Remove-Item -LiteralPath ("Env:\" + $v) -ErrorAction SilentlyContinue
-}
+# and same reason as ops\run-gates.ps1 (2026-09-10), and since 2026-09-11 the same library.
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
+. (Join-Path $repo 'lib\git-repo-env.ps1')
+Clear-TcGitRepoEnv
 . (Join-Path $repo 'lib\guard-contract.ps1')
 
 # THE DIRECTORIES .worktreeinclude CANNOT CARRY. Each line names the self-test it fixes, because a line

@@ -31,6 +31,13 @@
   daily chain makes (no skip file) still runs every unit. A docs-only push running nothing is the NOT NEEDED
   case above.
 
+  THE FIFTH (2026-09-11), two more halves of the first incident. The stub gate also runs
+  `git -C <temp> config user.name`, the write that put user.name=Session into the shared config, and a case proves
+  the shared identity survives while the write lands in the temp repo. The hook now reads the refs BEFORE it asks
+  git for a tree, so a push that only deletes a ref goes through a checkout whose tree cannot be resolved - driven
+  in the damaged state - without starting the gate. The same gate pushed from the MAIN checkout is a clean twin, so
+  the reorder cannot have cost the ordinary push.
+
   WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
   ops\prepush-test-auditors.ps1 and lib\guard-contract.ps1, and stubs for the gate and for test-auditors.
   Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
@@ -51,9 +58,14 @@ $ErrorActionPreference = 'Continue'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 . (Join-Path $RepoRoot 'lib\guard-contract.ps1')
 
-$script:RepoEnv = @('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_COMMON_DIR', 'GIT_OBJECT_DIRECTORY',
-                    'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_PREFIX', 'GIT_NAMESPACE')
-foreach ($v in $script:RepoEnv) { Remove-Item -LiteralPath ("Env:\" + $v) -ErrorAction SilentlyContinue }
+$envLib = Join-Path $RepoRoot 'lib\git-repo-env.ps1'
+if (-not (Test-Path -LiteralPath $envLib)) {
+  # Never build the sandbox without the scrub: run by an unfixed hook, this file would do the damage it tests for.
+  "BLIND: $envLib is missing - the sandbox is not built without clearing the repository environment first"
+  Exit-Guard -Name 'TEST-PREPUSH-HOOK' -Code 3 -Summary 'blind=missing-env-lib'
+}
+. $envLib
+Clear-TcGitRepoEnv
 
 $fails = @(); $ran = @()
 function Case {
@@ -127,7 +139,10 @@ try {
   $stub = @'
 $p = $env:TC_PREPUSH_PROBE
 [IO.File]::WriteAllText((Join-Path $p 'gate-saw.txt'), ('GIT_DIR=' + [string]$env:GIT_DIR))
-$null = & git init -q (Join-Path $p ('initprobe-' + [guid]::NewGuid().ToString('N'))) 2>$null
+$t = Join-Path $p ('initprobe-' + [guid]::NewGuid().ToString('N'))
+$null = & git init -q $t 2>$null
+$null = & git -C $t config user.name GateProbeWrote 2>$null
+[IO.File]::WriteAllText((Join-Path $p 'gate-target.txt'), $t)
 exit ([int]$env:TC_PREPUSH_PROBE_EXIT)
 '@
   [IO.File]::WriteAllText((Join-Path $main 'ops\run-gates.ps1'), $stub, $utf8)
@@ -231,6 +246,24 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   $head = GOut -C $linked rev-parse HEAD
   Case 'CLEAN TWIN' 'a passing gate still lets the push through' `
     ($rc -eq 0 -and $remoteRef -eq $head -and $head.Length -eq 40) "rc=$rc remote=$remoteRef head=$head"
+  # MUST FIRE, THE MECHANISM NAMED ON 2026-09-11: the stub gate also runs `git -C <temp> config user.name`. With
+  # GIT_DIR inherited that write lands in the SHARED config; user.name=Session on 2026-09-10 was exactly this.
+  $mainName = GOut config --file (Join-Path $main '.git\config') user.name
+  $targetFile = Join-Path $probe 'gate-target.txt'
+  $target = if (Test-Path -LiteralPath $targetFile) { ([IO.File]::ReadAllText($targetFile)).Trim() } else { '' }
+  $targetName = if ($target -and (Test-Path -LiteralPath (Join-Path $target '.git\config'))) { GOut config --file (Join-Path $target '.git\config') user.name } else { '' }
+  Case 'MUST FIRE' 'a temp-repo config write inside that gate leaves the shared repo identity alone' ($mainName -eq 't') "user.name=$mainName"
+  # CLEAN TWIN: the write happened, where it was aimed. Without it the case above passes on a stub that wrote nothing.
+  Case 'CLEAN TWIN' 'the gate''s temp-repo config write lands in the temp repo it named' ($targetName -eq 'GateProbeWrote') "target=$target user.name=$targetName"
+
+  # ---- the same passing gate, pushed from the MAIN checkout ----
+  # CLEAN TWIN: git exports no GIT_DIR here, and the reordered hook still gates the ordinary push.
+  Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+  $rcMain = G -C $main -c ("core.hooksPath=" + $hooksPath) push -q origin HEAD:refs/heads/probe-main
+  $mainRef = GOut --git-dir $remote rev-parse --verify -q refs/heads/probe-main
+  $mainHead = GOut -C $main rev-parse HEAD
+  Case 'CLEAN TWIN' 'the same hook pushed from the MAIN checkout still runs the gate and lets the push through' `
+    ((Test-Path -LiteralPath $sawFile) -and $rcMain -eq 0 -and $mainRef -eq $mainHead -and $mainHead.Length -eq 40) "rc=$rcMain remote=$mainRef head=$mainHead"
 
   # ---- a gate that COULD NOT EVALUATE ----
   Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
@@ -247,10 +280,21 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   $null = G config --file $mainCfg core.bare true
   $env:TC_PREPUSH_PROBE_EXIT = '0'
   $rcBare = G -C $linked -c ("core.hooksPath=" + $hooksPath) push -q origin HEAD:refs/heads/unresolved
+  # THE SAME DAMAGED STATE, a push that only DELETES a ref (2026-09-11). It carries no code and needs no tree.
+  Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+  $probeBefore = GOut --git-dir $remote rev-parse --verify -q refs/heads/probe
+  $rcDel = G -C $linked -c ("core.hooksPath=" + $hooksPath) push -q origin :refs/heads/probe
+  $delSawGate = Test-Path -LiteralPath $sawFile
   $null = G config --file $mainCfg core.bare false
   $unres = GOut --git-dir $remote rev-parse --verify -q refs/heads/unresolved
+  $probeAfter = GOut --git-dir $remote rev-parse --verify -q refs/heads/probe
   Case 'MUST FIRE' 'a push whose working tree cannot be resolved is refused, not waved through' `
     (($rcBare -ne 0) -and ($unres -eq '')) "rc=$rcBare ref=$unres"
+  # CLEAN TWIN: the deletion went through - the ref existed, the push succeeded, and the ref moved.
+  Case 'CLEAN TWIN' 'a push that only deletes a ref still goes through when the tree cannot be resolved' `
+    (($probeBefore.Length -eq 40) -and ($rcDel -eq 0) -and ($probeAfter -ne $probeBefore)) "rc=$rcDel before=$probeBefore after=$probeAfter"
+  # MUST NOT FIRE: and no gate was started for it.
+  Case 'MUST NOT FIRE' 'a deletion-only push starts no gate' (-not $delSawGate) 'the gate ran'
 
   # ---- test-auditors before a guard-touching push (plan step 5) ----
   $ranFile = Join-Path $probe 'auditors-ran.txt'
@@ -353,18 +397,27 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   Case 'CLEAN TWIN' 'the full run (no skip file) still runs every unit' `
     ((($ranU | Sort-Object) -join ',') -eq 'u001-guards,u002-beta,u003-gamma' -and (($fullOut -join "`n") -notmatch 'selective=1')) "ran=$($ranU -join ',') out=$($fullOut -join ' | ')"
 
-  # MUST FIRE, STATIC: run-gates scrubs the same environment for EVERY caller, not only this hook - a
-  # session shell or a scheduled task spawned from inside a git hook inherits it just the same.
+  # MUST FIRE, STATIC: run-gates clears the same environment for EVERY caller, not only this hook - a session
+  # shell or a scheduled task spawned from inside a git hook inherits it just the same. Since 2026-09-11 it does so
+  # through lib\git-repo-env.ps1, whose behaviour ops\audit-git-fixture-env.ps1 drives in a child process; this
+  # checks the WIRING - a call on a code line, not a comment - and that the library still names GIT_DIR.
   # NEEDLES BUILT BY CONCATENATION, so this line is not its own match.
   $gatesText = if (Test-Path -LiteralPath $gatesSrc) { [IO.File]::ReadAllText($gatesSrc) } else { '' }
-  Case 'MUST FIRE' 'run-gates removes GIT_DIR from its own environment' `
-    ($gatesText.Contains("'GIT_" + "DIR'") -and $gatesText.Contains('Remove-Item -LiteralPath ("Env:' + '\"'))
-  # MUST FIRE, STATIC: the hook unsets BEFORE it runs the gate or the test-auditors check, not after.
+  $envLibText = [IO.File]::ReadAllText($envLib)
+  $callRx = '(?m)^[^#\r\n]*\bClear-TcGit' + 'RepoEnv\s*$'
+  $gatesCalls = [regex]::IsMatch($gatesText, $callRx)
+  Case 'MUST FIRE' 'run-gates calls the shared clear, and the library removes GIT_DIR' `
+    ($gatesCalls -and $envLibText.Contains("'GIT_" + "DIR'")) "run-gates call=$gatesCalls"
+  # MUST FIRE, STATIC: the hook reads the refs, THEN resolves the tree, THEN unsets, THEN runs the gate and the
+  # check. Refs first is what lets a deletion-only push through a tree it cannot resolve; resolving before the
+  # unset is what keeps `repo` naming this checkout.
+  $iRead = $hookText.IndexOf('while read -r ' + 'lref')
+  $iRepo = $hookText.IndexOf('repo="$(git rev-parse --show-' + 'toplevel')
   $iUnset = $hookText.IndexOf('unset GIT_' + 'DIR')
   $iRun = $hookText.IndexOf('powershell -NoProfile' + ' -ExecutionPolicy Bypass -File "$gate"')
   $iTa = $hookText.IndexOf('powershell -NoProfile' + ' -ExecutionPolicy Bypass -File "$ta"')
-  Case 'MUST FIRE' 'the hook unsets the repository environment before invoking the gate and the check' `
-    ($iUnset -ge 0 -and $iRun -gt $iUnset -and $iTa -gt $iUnset) "unset@$iUnset run@$iRun ta@$iTa"
+  Case 'MUST FIRE' 'the hook reads refs, resolves the tree, unsets the environment, then runs the gate and the check' `
+    ($iRead -ge 0 -and $iRepo -gt $iRead -and $iUnset -gt $iRepo -and $iRun -gt $iUnset -and $iTa -gt $iUnset) "read@$iRead repo@$iRepo unset@$iUnset run@$iRun ta@$iTa"
 } finally {
   Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TMPDIR', 'Env:\TC_PREPUSH_TA_FAILS', 'Env:\TC_PREPUSH_TA_FAILS_BETA' -ErrorAction SilentlyContinue
   if (Test-Path -LiteralPath $sb) {

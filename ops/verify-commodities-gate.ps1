@@ -93,6 +93,9 @@ function Save-GitBlob {
 }
 
 if ($SelfTest) {
+  # The byte-fidelity case below builds a temp repo, so the repository environment goes first - HERE and never on
+  # the live path, which runs under pre-commit and judges the staged set through GIT_INDEX_FILE (lib\git-repo-env.ps1).
+  . (Join-Path $repo 'lib\git-repo-env.ps1'); Clear-TcGitRepoEnv
   $script:bad = 0
   function T([string]$n, [bool]$ok, [string]$got) {
     if ($ok) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  X     ' + $n + '   got: ' + $got); $script:bad++ }

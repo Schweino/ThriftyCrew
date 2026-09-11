@@ -136,11 +136,9 @@ $bpLib = Join-Path $RepoRoot 'lib\bot-paths.ps1'
 if (Test-Path -LiteralPath $bpLib) { . $bpLib; $script:BotPathsLoaded = $true }
 
 # The hook already clears these; clear them again so a caller that is not the hook cannot hand this
-# script's git calls, or the test-auditors it spawns, a linked worktree's GIT_DIR.
-foreach ($v in @('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_COMMON_DIR', 'GIT_OBJECT_DIRECTORY',
-                 'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_PREFIX', 'GIT_NAMESPACE')) {
-  Remove-Item -LiteralPath ("Env:\" + $v) -ErrorAction SilentlyContinue
-}
+# script's git calls, or the test-auditors it spawns, a linked worktree's GIT_DIR (lib\git-repo-env.ps1).
+. (Join-Path $RepoRoot 'lib\git-repo-env.ps1')
+Clear-TcGitRepoEnv
 
 $script:GuardName = 'PREPUSH-TEST-AUDITORS'
 $script:MaxAgeHours = 192        # see the header: 7-day chain cadence + 24h; first plausible value, no sweep

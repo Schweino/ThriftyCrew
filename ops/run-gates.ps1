@@ -35,13 +35,12 @@ $ErrorActionPreference = 'Stop'
 # .git\config, and `git status` failed in every checkout on the box until it was repaired by hand.
 # ops\hooks\pre-push unsets these too; this covers every other caller, since a shell or a task spawned
 # from inside a hook inherits them the same way. This file finds the repo from its own path and needs none
-# of them. Fixtured in ops\test-prepush-hook.ps1.
-foreach ($v in @('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_COMMON_DIR', 'GIT_OBJECT_DIRECTORY',
-                 'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_PREFIX', 'GIT_NAMESPACE')) {
-  Remove-Item -LiteralPath ("Env:\" + $v) -ErrorAction SilentlyContinue
-}
+# of them. Fixtured in ops\test-prepush-hook.ps1. The list lives in lib\git-repo-env.ps1 since 2026-09-11, the
+# one copy that every script building a temp repo also calls. Nothing above this line runs git.
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
+. (Join-Path $repo 'lib\git-repo-env.ps1')
+Clear-TcGitRepoEnv
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ps-source.ps1')   # Get-PsCodeOnly - no param() block, so it cannot reset ours
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot - discovery excludes below the root, so a worktree root is scanned
@@ -153,6 +152,9 @@ $static = @(
   # which is what catches the next script to be written with a bare `git add`. Four incidents in seven
   # weeks, every one of them fixed only in the file that caused it (2026-09-06, PLAN-top5 area 3).
   @{ f = 'ops\audit-git-sweepers.ps1';         n = 'no tracked script stages by sweep - every git add names what it owns' }
+  # 2026-09-11: on 2026-09-10 seven self-tests that build temp repos ran under a linked worktree's GIT_DIR and wrote
+  # the SHARED .git\config. This hook and this file clear it now; the fixtures are the layer present on every other path.
+  @{ f = 'ops\audit-git-fixture-env.ps1';      n = 'every script that builds a temp repo clears the repository environment first, so a hook-spawned run cannot write the shared .git' }
   # Same both-halves reason again: the discovery pass proves the scanner can still tell a frozen fixture
   # from a live ruling; this entry runs it over the real tree, which is what catches the NEXT self-test
   # written to read its own live allowlist (2026-09-06, PLAN-top5 area 4).

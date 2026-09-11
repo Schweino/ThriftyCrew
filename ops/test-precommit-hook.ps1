@@ -15,6 +15,12 @@
   environment - none of which can be read off the source. So this drives the INSTALLED-SHAPE hook against
   throwaway repos in %TEMP% and reads git's own verdict: did the commit exist afterwards, or not.
 
+  FROM A LINKED WORKTREE (2026-09-11). The pre-push incident of 2026-09-10 has a pre-commit twin: git hands this hook
+  GIT_DIR from a linked worktree, and a checker that built a temp repo would write the shared config. The hook now
+  unsets the repository location and KEEPS GIT_INDEX_FILE. The cases drive a stub checker from a linked worktree and
+  from the main checkout, and a PARTIAL commit from a linked worktree, which is judged correctly only while
+  GIT_INDEX_FILE survives the unset.
+
   Run:  powershell -NoProfile -File ops\test-precommit-hook.ps1
   Exit: 0 pass, 1 a case failed, 3 BLIND (the hook or a checker is missing - nothing was proven).
 #>
@@ -22,6 +28,9 @@
 param([switch]$SelfTest)   # accepted so ops\run-gates.ps1 discovers this file; the cases run either way
 $ErrorActionPreference = 'Continue'
 $repo = Split-Path $PSScriptRoot -Parent
+# Every repo below is a temp repo, addressed by path: clear the repository environment first (2026-09-10;
+# lib\git-repo-env.ps1), so a copy of this file run from inside a hook cannot write the shared .git.
+. (Join-Path $repo 'lib\git-repo-env.ps1'); Clear-TcGitRepoEnv
 $hookSrc = Join-Path $PSScriptRoot 'hooks\pre-commit'
 # THE CHECKERS THE HOOK SHELLS OUT TO, copied in so the fixture repo is self-contained. A fixture that
 # reached back into the real tree for them would pass on a tree where the hook could never find them.
@@ -74,12 +83,15 @@ function New-HookRepo {
 
 function Try-Commit {
   <# Returns whether the commit LANDED, read from git rather than from an exit code we could misread. #>
-  param([string]$Work, [switch]$AsBot, [string]$Message = 'fixture commit')
+  param([string]$Work, [switch]$AsBot, [string]$Message = 'fixture commit', [string[]]$Paths = @())
   $before = (@(& git -C $Work rev-parse HEAD) -join '').Trim()
+  # -Paths is `git commit -- <paths>`: git commits those paths through a PRIVATE index, whose location reaches the
+  # hook only as GIT_INDEX_FILE.
+  $pathArgs = @(); if ($Paths.Count) { $pathArgs = @('--') + $Paths }
   $out = if ($AsBot) {
-    & git -C $Work -c user.name=smp-pipeline-bot -c user.email=bot@x commit -m $Message 2>&1
+    & git -C $Work -c user.name=smp-pipeline-bot -c user.email=bot@x commit -m $Message @pathArgs 2>&1
   } else {
-    & git -C $Work commit -m $Message 2>&1
+    & git -C $Work commit -m $Message @pathArgs 2>&1
   }
   $after = (@(& git -C $Work rev-parse HEAD) -join '').Trim()
   return [pscustomobject]@{ Landed = ($after -ne $before); Text = ((@($out) | ForEach-Object { [string]$_ }) -join "`n") }
@@ -201,6 +213,90 @@ try {
   $cm3 = Try-CommitFile -Work $wm3 -MsgPath ([string]$mh)
   T 'CLEAN TWIN ops\new-commit-message.ps1 output is accepted by the hook (tool and check agree)' $cm3.Landed $cm3.Text
 
+  # ---- A CHECKER RUN FROM A LINKED WORKTREE CANNOT REACH THE SHARED REPOSITORY (2026-09-11) ---------------
+  # Measured on git 2.54: a commit from a LINKED worktree hands this hook GIT_DIR=<main>\.git\worktrees\<name>, the
+  # main checkout hands it none, and inside the hook `git -C <temp> config user.name X` wrote X into the MAIN
+  # config - the pre-push incident of 2026-09-10, in the other hook. The hook now unsets the repository location and
+  # KEEPS GIT_INDEX_FILE. The stub stands in for a checker that builds a temp repo on its live path; it replaces
+  # verify-commodities-gate in the checkout only, unstaged, so the other two arms still run for real.
+  $probeStub = @'
+$t = Join-Path $env:TEMP ('hookprobe-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+$null = & git init -q $t 2>$null
+$null = & git -C $t config user.name CheckerProbeWrote 2>$null
+[IO.File]::WriteAllText($env:TC_PRECOMMIT_PROBE_OUT, $t)
+exit 0
+'@
+  $utf8NoBom = New-Object Text.UTF8Encoding($false)
+  function New-LinkedWorktree([string]$Main) {
+    $wl = Join-Path $env:TEMP ('hookwt-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    [void]$made.Add($wl)
+    # Production carries it, and 5f16140f7 found the bare-repo half of the incident depends on it.
+    & git -C $Main config extensions.worktreeConfig true
+    & git -C $Main worktree add -q --detach $wl 2>$null | Out-Null
+    return $wl
+  }
+  function Read-ProbeTarget([string]$OutFile) {
+    <# The temp repo the stub built and the user.name in its own config. The temp repo is queued for removal. #>
+    $t = if (Test-Path -LiteralPath $OutFile) { ([IO.File]::ReadAllText($OutFile)).Trim() } else { '' }
+    if ($t) { [void]$made.Add($t) }
+    $cfg = if ($t) { Join-Path $t '.git\config' } else { '' }
+    $nm = if ($cfg -and (Test-Path -LiteralPath $cfg)) { (@(& git config --file $cfg user.name) -join '').Trim() } else { '' }
+    return [pscustomobject]@{ Path = $t; Name = $nm }
+  }
+
+  $wl0 = New-HookRepo
+  $wl = New-LinkedWorktree $wl0
+  [IO.File]::WriteAllText((Join-Path $wl 'ops\verify-commodities-gate.ps1'), $probeStub, $utf8NoBom)
+  $probeOut = Join-Path $env:TEMP ('hookprobe-out-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.txt')
+  [void]$made.Add($probeOut)
+  $env:TC_PRECOMMIT_PROBE_OUT = $probeOut
+  New-Item -ItemType Directory -Force (Join-Path $wl 'design') | Out-Null   # an empty directory is not checked out
+  'x' | Set-Content (Join-Path $wl 'design\PLAN-z.md')
+  & git -C $wl add -- 'design/PLAN-z.md' | Out-Null
+  $cl = Try-Commit -Work $wl
+  $mainName = (@(& git config --file (Join-Path $wl0 '.git\config') user.name) -join '').Trim()
+  $mainBare = (@(& git config --file (Join-Path $wl0 '.git\config') core.bare) -join '').Trim()
+  $pt = Read-ProbeTarget $probeOut
+  T 'MUST FIRE  a checker the hook runs from a LINKED worktree cannot write the main repo config (user.name, core.bare)' `
+    (($mainName -eq 'Session') -and ($mainBare -eq 'false')) "user.name=$mainName core.bare=$mainBare"
+  T 'CLEAN TWIN that checker''s temp-repo write lands in the temp repo it named, so the case above is not vacuous' `
+    ($pt.Name -eq 'CheckerProbeWrote') "target=$($pt.Path) user.name=$($pt.Name)"
+  T 'CLEAN TWIN and the commit from the linked worktree still lands' $cl.Landed $cl.Text
+
+  # CLEAN TWIN: the same stubbed checker from the MAIN checkout, where git exports no GIT_DIR, still runs.
+  $wm0 = New-HookRepo
+  [IO.File]::WriteAllText((Join-Path $wm0 'ops\verify-commodities-gate.ps1'), $probeStub, $utf8NoBom)
+  $probeOut2 = Join-Path $env:TEMP ('hookprobe-out-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.txt')
+  [void]$made.Add($probeOut2)
+  $env:TC_PRECOMMIT_PROBE_OUT = $probeOut2
+  'x' | Set-Content (Join-Path $wm0 'design\PLAN-z.md')
+  & git -C $wm0 add -- 'design/PLAN-z.md' | Out-Null
+  $cm = Try-Commit -Work $wm0
+  $pt2 = Read-ProbeTarget $probeOut2
+  T 'CLEAN TWIN the same stubbed checker still runs from the MAIN checkout, and that commit lands' `
+    (($pt2.Name -eq 'CheckerProbeWrote') -and $cm.Landed) "user.name=$($pt2.Name) $($cm.Text)"
+
+  # MUST FIRE: A PARTIAL COMMIT FROM A LINKED WORKTREE IS STILL JUDGED. `git commit -- <path>` commits through a
+  # private index named to the hook only by GIT_INDEX_FILE; the on-disk index does not hold the change.
+  # WHY THE ASSERTION READS THE NAME, measured by mutation on 2026-09-11: a hook that unset GIT_INDEX_FILE too did
+  # NOT let this commit land. verify-bulk-edit saw an empty staged set, answered "BLIND: no modified tracked files
+  # to verify", and the hook refused - this commit for the wrong reason, and EVERY partial commit with it. A
+  # refusal alone therefore proves nothing about the index; a refusal that NAMES the file does, because only a
+  # checker reading the private index can know it.
+  $wp0 = New-HookRepo
+  $wp = New-LinkedWorktree $wp0
+  "function f {`r`n  'unclosed" | Set-Content (Join-Path $wp 'ops\new-commit-message.ps1')
+  $cp = Try-Commit -Work $wp -Paths @('ops/new-commit-message.ps1')
+  T 'MUST FIRE  a PARTIAL commit (git commit -- <path>) of an unparseable .ps1 from a linked worktree is refused BY NAME' `
+    ((-not $cp.Landed) -and ($cp.Text -match 'new-commit-message\.ps1') -and ($cp.Text -notmatch 'BLIND')) $cp.Text
+  # CLEAN TWIN: a partial commit of a data file from the same kind of checkout lands. This is the case that catches
+  # the fail-closed half of the mutation above, where every partial commit is refused.
+  $wq0 = New-HookRepo
+  $wq = New-LinkedWorktree $wq0
+  'changed' | Set-Content (Join-Path $wq 'grocery\out\regular\day1.json')   # reach-fixture-ok: the seed file of a %TEMP% hook repo, never this repo's grocery\out
+  $cq = Try-Commit -Work $wq -Paths @('grocery/out/regular/day1.json')   # reach-fixture-ok: the same %TEMP% seed file, committed by path
+  T 'CLEAN TWIN a PARTIAL commit of a data file from a linked worktree still lands' $cq.Landed $cq.Text
+
   # ---- --no-verify IS STILL THE LOUD BYPASS ----------------------------------------------------------
   # It is deliberate, and audit-hook-installed asserts the hook is present so skipping it is a choice.
   $w6 = New-HookRepo
@@ -219,5 +315,6 @@ try {
   if ($bad) { exit 1 }
   exit 0
 } finally {
+  Remove-Item -LiteralPath 'Env:\TC_PRECOMMIT_PROBE_OUT' -ErrorAction SilentlyContinue
   foreach ($d in $made) { Remove-Item -LiteralPath $d -Recurse -Force -ErrorAction SilentlyContinue }
 }

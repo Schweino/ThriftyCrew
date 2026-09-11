@@ -39,37 +39,11 @@
 #
 # Install:  powershell -File ops\install-hooks.ps1
 
-repo="$(git rev-parse --show-toplevel 2>/dev/null)"
-# NO WORKING TREE IS A REFUSAL, NOT A PASS (2026-09-10). This line used to `exit 0`. While the shared
-# repository was turned bare by the incident described below the unset line, --show-toplevel failed in
-# every checkout, and a sibling session's push at 05:28:19 went out through this hook with no gate run
-# and no log. A hook that cannot find the tree it is meant to gate has verified nothing - the same rule
-# this file already applies to a missing gate.
-if [ -z "$repo" ]; then
-  echo "pre-push: REFUSING - git could not resolve this checkout's working tree, so nothing gated this push." >&2
-  echo "          If 'git config core.bare' says true in a checkout, the shared config is damaged: repair that first." >&2
-  echo "          Bypass with: git push --no-verify" >&2
-  exit 1
-fi
-gate="$repo/ops/run-gates.ps1"
-
-# A MISSING GATE MUST NOT READ AS A PASS. That is the fail-open-reads-as-empty class, and it is exactly
-# how a guard stops guarding without anyone editing it. Same rule the pre-commit hook states.
-if [ ! -f "$gate" ]; then
-  echo "pre-push: REFUSING - ops/run-gates.ps1 is missing, so nothing verified this push." >&2
-  echo "          Restore it, or push with --no-verify if you have decided that is right." >&2
-  exit 1
-fi
-
 # A push that only DELETES refs introduces no new code to gate. stdin carries one line per ref as
 # "<local ref> <local sha> <remote ref> <remote sha>", and an all-zero local sha is a deletion.
-ta="$repo/ops/prepush-test-auditors.ps1"
-if [ ! -f "$ta" ]; then
-  echo "pre-push: REFUSING - ops/prepush-test-auditors.ps1 is missing, so nothing can say whether this push blinds a guard." >&2
-  echo "          Restore it, or push with --no-verify if you have decided that is right." >&2
-  exit 1
-fi
-
+# READ BEFORE ANYTHING ASKS GIT FOR THE TREE (2026-09-11). The tree refusal below used to come first, so
+# while the shared repository was bare a push that only deleted a branch was refused along with every
+# other push. A deletion carries no code for the gate to read and needs no working tree to judge.
 # The ref lines are kept for the test-auditors check below, which needs to know WHAT is being pushed.
 refs="${TMPDIR:-/tmp}/tc-prepush-refs-$$.txt"
 : > "$refs"
@@ -84,6 +58,38 @@ done
 if [ "$have_work" -eq 0 ]; then
   rm -f "$refs"
   exit 0
+fi
+
+repo="$(git rev-parse --show-toplevel 2>/dev/null)"
+# NO WORKING TREE IS A REFUSAL, NOT A PASS (2026-09-10). This line used to `exit 0`. While the shared
+# repository was turned bare by the incident described below the unset line, --show-toplevel failed in
+# every checkout, and a sibling session's push at 05:28:19 went out through this hook with no gate run
+# and no log. A hook that cannot find the tree it is meant to gate has verified nothing - the same rule
+# this file already applies to a missing gate.
+if [ -z "$repo" ]; then
+  rm -f "$refs"
+  echo "pre-push: REFUSING - git could not resolve this checkout's working tree, so nothing gated this push." >&2
+  echo "          If 'git config core.bare' says true in a checkout, the shared config is damaged: repair that first." >&2
+  echo "          Bypass with: git push --no-verify" >&2
+  exit 1
+fi
+gate="$repo/ops/run-gates.ps1"
+
+# A MISSING GATE MUST NOT READ AS A PASS. That is the fail-open-reads-as-empty class, and it is exactly
+# how a guard stops guarding without anyone editing it. Same rule the pre-commit hook states.
+if [ ! -f "$gate" ]; then
+  rm -f "$refs"
+  echo "pre-push: REFUSING - ops/run-gates.ps1 is missing, so nothing verified this push." >&2
+  echo "          Restore it, or push with --no-verify if you have decided that is right." >&2
+  exit 1
+fi
+
+ta="$repo/ops/prepush-test-auditors.ps1"
+if [ ! -f "$ta" ]; then
+  rm -f "$refs"
+  echo "pre-push: REFUSING - ops/prepush-test-auditors.ps1 is missing, so nothing can say whether this push blinds a guard." >&2
+  echo "          Restore it, or push with --no-verify if you have decided that is right." >&2
+  exit 1
 fi
 
 # THE GATE RUNS WITH NO REPOSITORY ENVIRONMENT (2026-09-10). A push from a LINKED worktree makes git

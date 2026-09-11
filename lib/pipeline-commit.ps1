@@ -331,8 +331,9 @@ if ($__pcSelfTest) {
   # from a pipeline-written baseline (grocery's json-readers-baseline.json, 2026-09-09) before the run started, and the
   # run never rewrote it. Same neutral lane/out directory; the run's own output is a .txt, so the fixture writes no
   # out\*.json report family that nothing reads (ops\audit-write-only-reports.ps1).
-  $savedGitEnv = @{}
-  foreach ($ev in @('GIT_DIR', 'GIT_INDEX_FILE', 'GIT_WORK_TREE')) { $savedGitEnv[$ev] = [Environment]::GetEnvironmentVariable($ev); [Environment]::SetEnvironmentVariable($ev, $null) }
+  # lib\git-repo-env.ps1 since 2026-09-11: all eight variables rather than three, and nothing to restore, because
+  # this branch runs only when the file is RUN with -SelfTest, in a process of its own.
+  . (Join-Path $PSScriptRoot 'git-repo-env.ps1'); Clear-TcGitRepoEnv
   $tr = Join-Path $env:TEMP ('pc-fh-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
   try {
     New-Item -ItemType Directory -Path (Join-Path $tr 'lane\out') -Force | Out-Null
@@ -366,7 +367,6 @@ if ($__pcSelfTest) {
     T 'CLEAN TWIN  a foreign file the run rewrote is committed as the run''s own (2 files, nothing held)' (($vt -match 'committed 2 file') -and ($vt -notmatch 'foreign-held')) $vt
   } finally {
     Remove-Item -LiteralPath $tr -Recurse -Force -ErrorAction SilentlyContinue
-    foreach ($ev in @($savedGitEnv.Keys)) { [Environment]::SetEnvironmentVariable($ev, $savedGitEnv[$ev]) }
   }
 
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }

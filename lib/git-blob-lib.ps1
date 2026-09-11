@@ -233,6 +233,9 @@ function Get-ResponseBytes {
 $__gitBlobSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 if ($__gitBlobSelfTest) {
+  # New-HookRepo below builds temp repos. Cleared HERE and never at load: capture-run dot-sources this file and runs
+  # its commit under a private GIT_INDEX_FILE (2026-09-10; lib\git-repo-env.ps1).
+  . (Join-Path $PSScriptRoot 'git-repo-env.ps1'); Clear-TcGitRepoEnv
   $ErrorActionPreference = 'Continue'
   $fail = 0; $cases = 0
   function GbT([string]$m, [bool]$cond, [string]$got = '') {

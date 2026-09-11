@@ -137,6 +137,8 @@ function Format-PreventionDueLine {
 }
 
 if ($SelfTest) {
+  # The fixture below builds a temp repo: clear the repository environment first (2026-09-10; lib\git-repo-env.ps1).
+  . (Join-Path (Split-Path $root -Parent) 'lib\git-repo-env.ps1'); Clear-TcGitRepoEnv
   $fail = 0; $cases = 0
   function _T([string]$label, [bool]$cond, [string]$detail) {
     $script:cases++

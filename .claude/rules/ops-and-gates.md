@@ -126,8 +126,14 @@ everything else honest, so a defect here is silent by construction.
   working tree and exited 0, so a sibling session's push went out ungated. `ops/hooks/pre-push` and
   `ops/run-gates.ps1` now clear the repository environment, the hook refuses when it cannot find a tree,
   and `ops/test-prepush-hook.ps1` drives both from a sandbox linked worktree. **A new hook that spawns
-  tests, or a fixture that builds a temp repo, clears `GIT_DIR` first** - but check what a `pre-commit`
-  checker needs before stripping anything there: git points `GIT_INDEX_FILE` at the index being committed.
+  tests, or a fixture that builds a temp repo, clears `GIT_DIR` first** - a fixture by calling
+  `Clear-TcGitRepoEnv` from `lib/git-repo-env.ps1` (2026-09-11), whose header records why a fixture scrubs
+  rather than refuses, and `ops/audit-git-fixture-env.ps1` fails a push that adds a `git init` without it.
+  **`pre-commit` has the same exposure and must keep `GIT_INDEX_FILE`** (measured 2026-09-11: from a linked
+  worktree it gets `GIT_DIR`, and a `git -C <temp> config` inside it wrote the main config). `GIT_INDEX_FILE`
+  names the index being committed - `.git/index`, or a lock file for `commit -a` and `commit -- <paths>` - so
+  under that hook a temp-repo `git add` writes the commit's index. That is why the fixture clears the full set
+  itself rather than trusting the hook above it.
 - **A walk over this tree excludes on the path BELOW its root, never on the full path** (2026-09-11). A
   linked worktree lives at `<main>\.claude\worktrees\<name>`, so `$_.FullName -notmatch '\\worktrees\\'`,
   or `-like '*\.claude\*'`, excludes EVERY file when the walk runs from one, and every spawned session

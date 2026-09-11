@@ -116,6 +116,8 @@ function Find-UnclassifiedIgnored {
 # it, and a guard that reported clean. The fixture rebuilds exactly that shape in a scratch repo rather
 # than reading the live tree, so it keeps testing the 2026-08-08 defect after the live tree is fixed.
 if ($SelfTest) {
+  # The scratch repo below is built with git init: clear the repository environment first (2026-09-10; lib\git-repo-env.ps1).
+  . (Join-Path $PSScriptRoot 'lib\git-repo-env.ps1'); Clear-TcGitRepoEnv
   $fail = 0
   $tmp = Join-Path ([IO.Path]::GetTempPath()) ("cus-selftest-" + [Guid]::NewGuid().ToString('N').Substring(0, 8))
   New-Item -ItemType Directory -Path $tmp -Force | Out-Null

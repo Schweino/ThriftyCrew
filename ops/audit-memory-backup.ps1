@@ -414,6 +414,9 @@ function Test-MemoryStore {
 
 # ------------------------------------------------------------------ self-test
 if ($SelfTest) {
+  # NewStore builds temp repos: clear the repository environment first, so a hook-spawned run cannot write the
+  # shared .git (2026-09-10; lib\git-repo-env.ps1).
+  . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-repo-env.ps1'); Clear-TcGitRepoEnv
   $fail = 0
   # Counted, not typed: a hand-maintained case tally is one more copy of a fact, and it is always the copy
   # nobody re-derives that goes stale.

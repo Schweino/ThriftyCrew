@@ -41,7 +41,34 @@ staged="$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)"
 [ -z "$staged" ] && exit 0
 
 repo="$(git rev-parse --show-toplevel 2>/dev/null)"
-[ -z "$repo" ] && exit 0
+# NO WORKING TREE IS A REFUSAL, NOT A PASS (2026-09-11). This line used to `exit 0`, the shape that let a
+# push out ungated on 2026-09-10 (ops/hooks/pre-push has the account). A hook that cannot find what it
+# checks has checked nothing, so it refuses. No fixture reaches this branch: with core.bare=true git itself
+# refused `git commit` from both the main checkout and a linked worktree with "this operation must be run in
+# a work tree", before this hook ran (measured 2026-09-11, git 2.54). It stays for a git or caller that does not.
+if [ -z "$repo" ]; then
+  echo "pre-commit: REFUSING - git could not resolve this checkout's working tree, so nothing verified this commit." >&2
+  echo "            If 'git config core.bare' says true in a checkout, the shared config is damaged: repair that first." >&2
+  echo "            Bypass with: git commit --no-verify" >&2
+  exit 1
+fi
+
+# THE CHECKERS DO NOT INHERIT THE REPOSITORY'S LOCATION (2026-09-11). Measured on git 2.54 in a sandbox: a
+# commit from a LINKED worktree hands this hook GIT_DIR=<common .git>/worktrees/<name>, and a commit from the
+# main checkout hands it none - the pre-push shape of 2026-09-10 exactly. Inside that hook
+# `git -C <temp> config user.name X` wrote X into the MAIN repository's config, and after the hook's
+# `git init <temp>` the next two commits from that worktree never reached the hook at all. No checker below
+# builds a temp repo on its live path today; this is so that the next one to do so cannot reach the shared .git.
+# GIT_INDEX_FILE IS KEPT, deliberately. It names the index being committed - `.git/index` for an ordinary
+# commit, a lock file for `git commit -a` or `git commit -- <paths>` - and every checker below judges the
+# STAGED set through it. Unset, a partial commit is judged against the on-disk index, which does not hold
+# what is being committed: measured by mutation on 2026-09-11, verify-bulk-edit then answered BLIND and this
+# hook refused EVERY `git commit -- <paths>`, the broken ones for the wrong reason. It still resolves with
+# GIT_DIR gone: git runs a hook from the top of the
+# working tree, which is where a relative value was written from. Because it stays, a checker that builds a
+# temp repo still clears its own environment first (lib/git-repo-env.ps1): a temp-repo `git add` under this
+# hook would write the commit's index. ops/test-precommit-hook.ps1 drives both halves from a linked worktree.
+unset GIT_DIR GIT_WORK_TREE GIT_COMMON_DIR GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_PREFIX GIT_NAMESPACE
 checker="$repo/ops/verify-bulk-edit.ps1"
 
 # A MISSING CHECKER MUST NOT READ AS A PASS. That is the fail-open-reads-as-empty class, and it is exactly

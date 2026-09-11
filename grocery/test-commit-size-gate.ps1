@@ -20,6 +20,8 @@
   Exit: 0 pass, 1 a case failed, 3 could not find the gate (BLIND - nothing was proven).
 #>
 $ErrorActionPreference='Continue'
+# Every repo below is a temp repo: clear the repository environment first (2026-09-10; lib\git-repo-env.ps1).
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\git-repo-env.ps1'); Clear-TcGitRepoEnv
 $d = Join-Path $env:TEMP ('gate-' + [guid]::NewGuid().ToString('N').Substring(0,8))
 New-Item -ItemType Directory $d -Force | Out-Null
 Push-Location $d
