@@ -59,6 +59,15 @@ everything else honest, so a defect here is silent by construction.
 - **Do not add a gate that is red on day one** for a backlog nobody is about to clear - it teaches
   people to ignore red. Use a ratchet with a high-water mark that may only go DOWN
   (`audit-write-seam`, `audit-fact-claims`, `audit-band-censorship`).
+  **A plain run of a ratchet never writes its mark** (2026-09-11). `run-gates` runs every static audit
+  with no arguments on every pre-push, so a tighten there rewrote a TRACKED baseline inside the checkout
+  being pushed, the push did not carry it, and a count taken over uncommitted edits is not a baseline
+  anyway. A fall is SPOKEN (`ratchet CAN tighten`) and the committed mark KEPT; `-Tighten` records it
+  through `Test-RatchetMove` in the bytes git stores (`lib/lf-write.ps1`), and `-Accept` / `-AcceptDrop`
+  keep recording what they always did. `ops/audit-write-only-reports.ps1` is the exemplar and
+  `ops/audit-write-seam.ps1` is the same shape: their last three self-test cases run the script as a child
+  against a temp tree and a temp baseline, so a fall leaves the baseline byte-identical, `-Tighten` writes
+  it, and a CLEAN TWIN proves a rise still exits 2. **Write the next ratchet that way from the start.**
 - **`git add` names what it owns.** `ops/audit-git-sweepers.ps1` fails a sweep.
 - **Every threshold here is an UPPER bound, so not one of them can fire on nothing happening**
   (2026-09-08, backlog I80). The alert conditions are staleness and band breaches, the `ops/` ratchets
@@ -385,8 +394,12 @@ everything else honest, so a defect here is silent by construction.
   moved because the tool was wrong, not the tree. The 13 inside scripts `run-gates` runs live now write through `lib\lf-write.ps1`
   (`Write-TcLfFile`: LF, one trailing LF, BOM unless `-NoBom`, identical bytes skipped), each verified against
   its blob. **A plain run of a gate ratchet does not rewrite its tracked baseline**: `audit-write-only-reports`
-  states a fall and keeps the committed mark, and `-Tighten` records it. Five other gate ratchets still write
-  their baseline on a fall (read, not changed), and four that write through `WriteAllText` were not checked. The bot-owned data writers, archive and fixtures were left alone.
+  states a fall and keeps the committed mark, and `-Tighten` records it. The next change read the other nine:
+  seven wrote on a plain run (`arg-binding`, `source-comment-strip`, `fact-claims`, `ruling-drift`, `write-seam`,
+  `full-path-excludes`, `conclusion-currency`) and now take the same rule, each with the three live-path cases;
+  `measurement-provenance` and `cross-module-reach` write only under `-UpdateBaseline`, so neither could dirty a
+  gate run; `measurement-provenance`'s CRLF writer folds to LF in that change, and `cross-module-reach`'s went to
+  `Write-TcLfFile` in 5b4cc0982. The bot-owned data writers, archive and fixtures were left alone.
   **A typed parameter keeps its type**: `$json = '...'` in a script that declares `[switch]$Json` throws, because
   variable names are case-insensitive. It broke `audit-fact-claims`' tighten in this sweep, and only running
   that path showed it. It recurred the same day as `$rule = @(...)` beside `[string]$Rule` in a new self-test helper,

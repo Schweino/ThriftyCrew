@@ -29,10 +29,18 @@
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 clean, 2 hard finding, 3 could-not-evaluate.
   Read the verdict LINE, not the number (backlog E2).
 
-  Self-test: powershell -File ops\audit-write-seam.ps1 -SelfTest
+  A RUN THAT IS NOT ASKED TO RECORD WRITES NOTHING (2026-09-11). run-gates runs this with no arguments on every
+  pre-push, and a fall used to rewrite the TRACKED baseline right there: the pushing checkout was left dirty, the
+  lower mark never rode that push, and a count taken over uncommitted edits is not a baseline. So a fall is SPOKEN
+  and the committed mark KEPT; -Tighten records it. ops\audit-write-only-reports.ps1 carries the full account.
+
+    ops\audit-write-seam.ps1               scan the tree, hold the ratchet; writes nothing
+    ops\audit-write-seam.ps1 -Tighten      the same, and record a believable FALL as the new high-water mark
+    ops\audit-write-seam.ps1 -AcceptDrop   record a fall lib\ratchet.ps1 would refuse
+    ops\audit-write-seam.ps1 -SelfTest     frozen fixtures, plus this script's live path run against a temp tree
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$SelfTest, [switch]$AcceptDrop)
+param([switch]$SelfTest, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
@@ -41,7 +49,9 @@ $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\lf-write.ps1')   # Write-TcLfFile: the baseline is tracked and stored eol=lf
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: exclusions match below the root, so a worktree root is not excluded whole
 
-$BASELINE_FILE = Join-Path $repo 'ops\write-seam-baseline.json'
+# -Root and -BaselineFile exist so the self-test can drive the LIVE path against a temp tree. A gate passes neither.
+$treeRoot = if ($Root) { $Root } else { $repo }
+$BASELINE_FILE = if ($BaselineFile) { $BaselineFile } else { Join-Path $treeRoot 'ops\write-seam-baseline.json' }
 
 # The seam itself, plus the trees run-gates already excludes everywhere else.
 $EXCLUDE = '\\archive\\|\\worktrees\\|\\out\\|node_modules|\\lib\\ghost-lib\.ps1$'
@@ -148,8 +158,49 @@ if ($SelfTest) {
     T 'MUST NOT FIRE  a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0) ("sibling=" + $wtHits.Sibling)
   } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # THE LIVE PATH, DRIVEN (2026-09-11). The founding shape is a pre-push run-gates pass whose count FELL: it rewrote
+  # the tracked baseline and left the pushing checkout dirty. These run THIS script as a child against a temp tree
+  # holding one bypass and a temp baseline, so they exercise the code a gate runs, not a copy of it. One directory
+  # per run, removed in finally, because concurrent pushes run this suite in the same %TEMP%.
+  $lt = Join-Path $env:TEMP ('ws-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $lt -ErrorAction Stop | Out-Null
+  try {
+    $ltTree = Join-Path $lt 'tree'
+    [void][IO.Directory]::CreateDirectory((Join-Path $ltTree 'ops'))
+    $ltBypass = 'Invoke-RestMethod -Method Put -Uri "$apiUrl/ghost/api/admin/posts/1/"'
+    [IO.File]::WriteAllText((Join-Path $ltTree 'ops\a.ps1'), $ltBypass, (New-Object Text.UTF8Encoding($false)))   # exactly one bypass
+    $ltBl = Join-Path $lt 'baseline.json'
+    $ltSeedJson = [ordered]@{ generated = '2026-01-01T00:00:00'; sites = 2; note = 'fixture' } | ConvertTo-Json -Depth 3
+    $null = Write-TcLfFile $ltBl $ltSeedJson
+    $ltSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl))
+    $o1 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl
+    $rc1 = $LASTEXITCODE
+    $o1 = @($o1)
+    $same1 = [string]::Equals($ltSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl)), [StringComparison]::Ordinal)
+    T 'a FALL (1 bypass, baseline 2) without -Tighten is spoken and NOT written, so a gate run leaves its checkout clean' `
+      ($rc1 -eq 0 -and $same1 -and (($o1 -join "`n") -match 'CAN tighten')) ("rc=$rc1 baselineUnchanged=$same1")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl -Tighten
+    $rc2 = $LASTEXITCODE
+    $b2 = [IO.File]::ReadAllBytes($ltBl)
+    $cr2 = 0; foreach ($x in $b2) { if ($x -eq 13) { $cr2++ } }
+    $bom2 = ($b2.Length -ge 3 -and $b2[0] -eq 0xEF -and $b2[1] -eq 0xBB -and $b2[2] -eq 0xBF)
+    $doc2 = $null
+    if ($bom2) { $doc2 = [Text.Encoding]::UTF8.GetString($b2, 3, $b2.Length - 3) | ConvertFrom-Json }
+    T '-Tighten records the fall in the bytes git stores: no CR, the BOM, one trailing LF, and the new mark of 1' `
+      ($rc2 -eq 0 -and $cr2 -eq 0 -and $bom2 -and $b2[-1] -eq 10 -and $null -ne $doc2 -and [int]$doc2.sites -eq 1) `
+      ("rc=$rc2 cr=$cr2 bom=$bom2 sites=$(if ($doc2) { $doc2.sites })")
+    $ltRise = Join-Path $lt 'baseline-rise.json'
+    $ltRiseJson = [ordered]@{ generated = '2026-01-01T00:00:00'; sites = 0; note = 'fixture' } | ConvertTo-Json -Depth 3
+    $null = Write-TcLfFile $ltRise $ltRiseJson
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
+    $rc3 = $LASTEXITCODE
+    T 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+  } finally {
+    Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 6 must-fire bypass shapes, 4 clean twins including a store search POST, plus the scanner and its return arity, and the walk from a worktree root with a sibling below it'
+  Write-Output 'SELF-TEST PASS: 6 must-fire bypass shapes, 4 clean twins including a store search POST, plus the scanner and its return arity, the walk from a worktree root with a sibling below it, and the live path: a fall is not written without -Tighten, -Tighten writes LF, a rise still fails'
   exit 0
 }
 
@@ -159,7 +210,7 @@ if ($SelfTest) {
 # detector would report six bypasses inside its own must-fire cases. run-gates carries the same rule for
 # the same reason. The cost is that a genuine bypass added to this file is missed; it makes no HTTP
 # calls, so that is a trade worth taking rather than mangling the fixtures to hide from the matcher.
-$files = @(Get-SeamScanFiles -RootDir $repo -Self $PSCommandPath)
+$files = @(Get-SeamScanFiles -RootDir $treeRoot -Self $PSCommandPath)
 if (-not $files.Count) {
   Write-Output 'WRITE-SEAM AUDIT BLIND: found zero .ps1 files to scan, which means the discovery is broken rather than the tree being clean.'
   Exit-Guard -Name 'write-seam' -Summary 'blind=no-files' -Code 3
@@ -179,7 +230,7 @@ if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
 $base = [int]((Get-Content $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json).sites)
 
 foreach ($h in ($hits | Sort-Object File, Line)) {
-  Write-Output ("  bypass  {0}:{1}" -f $h.File.Replace($repo, '').TrimStart('\'), $h.Line)
+  Write-Output ("  bypass  {0}:{1}" -f $h.File.Replace($treeRoot, '').TrimStart('\'), $h.Line)
 }
 if ($count -gt $base) {
   Write-Output ("WRITE-SEAM AUDIT FAILED: {0} mutating call(s) to our own surfaces now bypass Invoke-GhostApi, against a baseline of {1}. A NEW irreversible write was added outside the E1 safety layer - the staging gate and the journal cannot see it. Route it through Invoke-GhostApi." -f $count, $base)
@@ -196,6 +247,12 @@ if ($move.Verdict -eq 'implausible') {
   Exit-Guard -Name 'write-seam' -Summary ("sites={0} baseline={1} refused-to-lower" -f $count, $base) -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
+  # A FALL IS SPOKEN, NOT WRITTEN, unless this run was asked to record it (2026-09-11, see the header). -AcceptDrop
+  # is such an ask: it has always recorded the fall it names.
+  if (-not ($Tighten -or $AcceptDrop)) {
+    Write-Output ("write-seam: PASSED, and the ratchet CAN tighten - {0} known bypass(es), baseline {1}. NOT written: this may be a pre-push gate, and a rewrite here dirties the checkout being pushed without riding the push. Record it with -Tighten and commit ops\write-seam-baseline.json." -f $count, $base)
+    Exit-Guard -Name 'write-seam' -Summary ("sites={0} baseline={1} can-tighten" -f $count, $base) -Code 0
+  }
   $doc = $null
   try { $doc = Get-Content $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
   if (-not $doc) { $doc = [pscustomobject]@{} }

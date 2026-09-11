@@ -30,15 +30,22 @@
   the count above the baseline and fails. The high-water mark may only go DOWN (lib\ratchet.ps1 decides
   whether a fall is believable, so a broken scan cannot record 0 as the new permanent ceiling).
 
-  Usage:
-    .\audit-arg-binding.ps1            scan, report, ratchet against ops\out\arg-binding-baseline.json
-    .\audit-arg-binding.ps1 -Accept    record the CURRENT count as the new high-water mark
-    .\audit-arg-binding.ps1 -SelfTest  frozen fixtures: an unbound script fires, a bound one is silent
+  A RUN THAT IS NOT ASKED TO RECORD WRITES NOTHING (2026-09-11). run-gates runs this with no arguments on every
+  pre-push, and a fall used to rewrite the TRACKED baseline right there: the pushing checkout was left dirty, the
+  lower mark never rode that push, and a count taken over uncommitted edits is not a baseline. So a fall is SPOKEN
+  and the committed mark KEPT; -Tighten records it. ops\audit-write-only-reports.ps1 carries the full account.
 
-  Exit: 0 = at or under the baseline. 2 = MORE unbound checking scripts than the baseline. 3 = BLIND.
+  Usage:
+    .\audit-arg-binding.ps1            scan, report, ratchet against ops\out\arg-binding-baseline.json; writes nothing
+    .\audit-arg-binding.ps1 -Tighten   the same, and record a believable FALL as the new high-water mark
+    .\audit-arg-binding.ps1 -Accept    record the CURRENT count as the new high-water mark
+    .\audit-arg-binding.ps1 -SelfTest  frozen fixtures, plus this script's live path run against a temp tree
+
+  Exit: 0 = at or under the baseline. 2 = MORE unbound checking scripts than the baseline, or -Tighten refused an
+  implausible fall. 3 = BLIND.
 #>
 [CmdletBinding()]   # this file is itself in the class it audits
-param([switch]$SelfTest, [switch]$Accept, [string]$Root = '', [string]$BaselineFile = '')
+param([switch]$SelfTest, [switch]$Accept, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $here -Parent
@@ -219,6 +226,45 @@ if ($SelfTest) {
     T 'MUST FIRE  a root that IS a worktree is scanned, not skipped whole' (($wtHits.Root - $wtNested.Count) -eq 2) ("root=" + $wtHits.Root)
     T 'MUST NOT FIRE  a worktree nested inside a scanned directory below that root is still skipped' ($wtNested.Count -eq 0) ("nested=" + $wtNested.Count)
   } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+  # THE LIVE PATH, DRIVEN (2026-09-11). The founding shape is a pre-push run-gates pass whose count FELL: it rewrote
+  # the tracked baseline and left the pushing checkout dirty. These run THIS script as a child against a one-file
+  # temp tree and a temp baseline, so they exercise the code a gate runs, not a copy of it. One directory per run,
+  # removed in finally, because concurrent pushes run this suite in the same %TEMP%.
+  $lt = Join-Path $env:TEMP ('ab-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $lt -ErrorAction Stop | Out-Null
+  try {
+    $ltTree = Join-Path $lt 'tree'
+    [void][IO.Directory]::CreateDirectory((Join-Path $ltTree 'ops'))
+    [IO.File]::WriteAllText((Join-Path $ltTree 'ops\audit-fx.ps1'), $founding, (New-Object Text.UTF8Encoding($false)))   # exactly one unbound checking script
+    $ltBl = Join-Path $lt 'baseline.json'
+    $ltSeedJson = [ordered]@{ generated = '2026-01-01T00:00:00'; unbound = 2; examined = 2; names = @('ops\audit-fx.ps1', 'ops\audit-retired.ps1') } | ConvertTo-Json -Depth 3
+    $null = Write-TcLfFile $ltBl $ltSeedJson
+    $ltSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl))
+    $o1 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl
+    $rc1 = $LASTEXITCODE
+    $o1 = @($o1)
+    $same1 = [string]::Equals($ltSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl)), [StringComparison]::Ordinal)
+    T 'a FALL (1 unbound script, baseline 2) without -Tighten is spoken and NOT written, so a gate run leaves its checkout clean' `
+      ($rc1 -eq 0 -and $same1 -and (($o1 -join "`n") -match 'CAN tighten')) ("rc=$rc1 baselineUnchanged=$same1")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl -Tighten
+    $rc2 = $LASTEXITCODE
+    $b2 = [IO.File]::ReadAllBytes($ltBl)
+    $cr2 = 0; foreach ($x in $b2) { if ($x -eq 13) { $cr2++ } }
+    $bom2 = ($b2.Length -ge 3 -and $b2[0] -eq 0xEF -and $b2[1] -eq 0xBB -and $b2[2] -eq 0xBF)
+    $doc2 = $null
+    if ($bom2) { $doc2 = [Text.Encoding]::UTF8.GetString($b2, 3, $b2.Length - 3) | ConvertFrom-Json }
+    T '-Tighten records the fall in the bytes git stores: no CR, the BOM, one trailing LF, and the new mark of 1' `
+      ($rc2 -eq 0 -and $cr2 -eq 0 -and $bom2 -and $b2[-1] -eq 10 -and $null -ne $doc2 -and [int]$doc2.unbound -eq 1) `
+      ("rc=$rc2 cr=$cr2 bom=$bom2 unbound=$(if ($doc2) { $doc2.unbound })")
+    $ltRise = Join-Path $lt 'baseline-rise.json'
+    $ltRiseJson = [ordered]@{ generated = '2026-01-01T00:00:00'; unbound = 0; examined = 0; names = @() } | ConvertTo-Json -Depth 3
+    $null = Write-TcLfFile $ltRise $ltRiseJson
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
+    $rc3 = $LASTEXITCODE
+    T 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+  } finally {
+    Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
+  }
   if ($bad -eq 0) { Write-Output 'ARG-BINDING SELF-TEST PASS'; Write-GuardComplete -Name 'arg-binding' -Summary 'selftest ok'; exit 0 }
   Write-Output ("ARG-BINDING SELF-TEST FAILED ($bad)"); Write-GuardComplete -Name 'arg-binding' -Summary "selftest failed=$bad"; exit 2
 }
@@ -279,10 +325,15 @@ if ($move.Verdict -eq 'rose') {
   Exit-Guard -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$base" -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
-  Write-AbBaseline $n
-  Write-Output ("  ratchet tightened: $n unbound, was $base. New baseline written.")
+  if ($Tighten) {
+    Write-AbBaseline $n
+    Write-Output ("  ratchet tightened: $n unbound, was $base. New baseline written - commit it, or it protects only this checkout.")
+  } else {
+    Write-Output ("  ratchet CAN tighten: $n unbound, baseline $base. NOT written: this may be a pre-push gate, and a rewrite here dirties the checkout being pushed without riding the push. Record it with -Tighten and commit ops\out\arg-binding-baseline.json.")
+  }
 } elseif ($move.Verdict -eq 'implausible') {
-  Write-Output ('  ' + $move.Message + ' - baseline kept at ' + $base)
+  Write-Output ('  ' + $move.Message + ' - baseline kept at ' + $base + ' (-Accept is this script''s -AcceptDrop.)')
+  if ($Tighten) { Exit-Guard -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$base refused-to-lower" -Code 2 }
 }
 Write-Output ("arg-binding: $n of $scanned examined are unbound, against a baseline of $base.")
 Exit-Guard -Name 'arg-binding' -Summary "unbound=$n examined=$scanned baseline=$base" -Code 0

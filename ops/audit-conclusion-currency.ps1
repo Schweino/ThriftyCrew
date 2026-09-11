@@ -30,16 +30,30 @@
   current, and a moved harness that changed no behaviour still reads UNQUALIFIED - which is correct,
   because deciding that it changed nothing IS the re-read.
 
-  EXIT: 0 held or tightened, 2 the count rose, 3 could not evaluate (no documents, or no git).
+  A RUN THAT IS NOT ASKED TO RECORD WRITES NOTHING (2026-09-11). run-gates runs this with no arguments on every
+  pre-push, and a fall used to rewrite the TRACKED baseline right there: the pushing checkout was left dirty, the
+  lower mark never rode that push, and a count taken over uncommitted edits is not a baseline. So a fall is SPOKEN
+  and the committed mark KEPT; -Tighten records it. ops\audit-write-only-reports.ps1 carries the full account.
+
+    ops\audit-conclusion-currency.ps1              judge the documents, hold the ratchet; writes nothing
+    ops\audit-conclusion-currency.ps1 -Tighten     the same, and record a believable FALL as the new high-water mark
+    ops\audit-conclusion-currency.ps1 -Accept      record the CURRENT count as the new high-water mark
+    ops\audit-conclusion-currency.ps1 -SelfTest    frozen fixtures, plus this script's live path run against a temp repository
+
+  EXIT: 0 held, tightened or able to tighten, 2 the count rose or -Tighten refused an implausible fall, 3 could not
+  evaluate (no documents, or no git).
 #>
 [CmdletBinding()]
-param([switch]$SelfTest, [switch]$Json, [switch]$Accept, [switch]$ReportOnly)
+param([switch]$SelfTest, [switch]$Json, [switch]$Accept, [switch]$ReportOnly, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ratchet.ps1')
+
+# -Root and -BaselineFile exist so the self-test can drive the LIVE path against a temp repository. A gate passes neither.
+$treeRoot = if ($Root) { $Root } else { $repo }
 
 $script:HARNESS_LINE = '(?i)\b(harness|measured through|ran through|generated\b.{0,80}\bby)\b'
 $script:COMMIT_LINE  = '(?i)\bcommit\b'
@@ -166,6 +180,64 @@ if ($SelfTest) {
             Where-Object { $_.Name -like 'EVAL-*' -or $_.Name -like 'MEASURE-*' })
   Case 'CLEAN TWIN' 'the population is the EVAL-* and MEASURE-* documents, and it is not empty' ($docs.Count -gt 0) "$($docs.Count)"
 
+  # THE LIVE PATH, DRIVEN (2026-09-11). The founding shape is a pre-push run-gates pass whose count FELL: it rewrote
+  # the tracked baseline and left the pushing checkout dirty. These run THIS script as a child against a temp git
+  # repository whose one EVAL document cites a commit its harness has since moved past, and a temp baseline, so they
+  # exercise the code a gate runs, not a copy of it. One directory per run, removed in finally, because concurrent
+  # pushes run this suite in the same %TEMP%.
+  # THE REPOSITORY ENVIRONMENT IS CLEARED FIRST (lib\git-repo-env.ps1): under a hook in a linked worktree GIT_DIR is
+  # exported, and the git init and git -C <temp> config below would otherwise write the shared .git.
+  . (Join-Path $repo 'lib\git-repo-env.ps1')
+  Clear-TcGitRepoEnv
+  $lt = Join-Path $env:TEMP ('cc-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $lt -ErrorAction Stop | Out-Null
+  try {
+    $ltTree = Join-Path $lt 'tree'
+    [void][IO.Directory]::CreateDirectory((Join-Path $ltTree 'ops'))
+    [void][IO.Directory]::CreateDirectory((Join-Path $ltTree 'design'))
+    $ltUtf8 = New-Object Text.UTF8Encoding($false)
+    $null = & git -c init.defaultBranch=main init -q $ltTree
+    $null = & git -C $ltTree config user.name Fixture
+    $null = & git -C $ltTree config user.email t@t
+    $null = & git -C $ltTree config commit.gpgsign false
+    [IO.File]::WriteAllText((Join-Path $ltTree 'ops\h.ps1'), 'Write-Output 1', $ltUtf8)
+    $null = & git -C $ltTree add -- ops/h.ps1
+    $null = & git -C $ltTree commit -q -m one
+    $ltCited = ([string](& git -C $ltTree rev-parse HEAD)).Trim()
+    [IO.File]::WriteAllText((Join-Path $ltTree 'ops\h.ps1'), 'Write-Output 2', $ltUtf8)
+    $null = & git -C $ltTree add -- ops/h.ps1
+    $null = & git -C $ltTree commit -q -m two   # the harness moves after the cited commit
+    [IO.File]::WriteAllText((Join-Path $ltTree 'design\EVAL-fixture.md'), ("Harness: ops/h.ps1`nCommit it ran at: " + $ltCited + "`n"), $ltUtf8)
+    $ltBl = Join-Path $lt 'baseline.json'
+    [IO.File]::WriteAllText($ltBl, "{`n    ""unqualified"":  2,`n    ""note"":  ""fixture""`n}`n", $ltUtf8)
+    $ltSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl))
+    $o1 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl
+    $rc1 = $LASTEXITCODE
+    $o1 = @($o1)
+    $same1 = [string]::Equals($ltSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl)), [StringComparison]::Ordinal)
+    $tally1 = (@($o1) -match 'document\(s\) UNQUALIFIED') -join ' '
+    Case 'LIVE PATH' 'a FALL (1 unqualified, baseline 2) without -Tighten is spoken and NOT written, so a gate run leaves its checkout clean' `
+      ($rc1 -eq 0 -and $same1 -and (($o1 -join "`n") -match 'CAN tighten')) ("rc=$rc1 baselineUnchanged=$same1 $tally1")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl -Tighten
+    $rc2 = $LASTEXITCODE
+    $b2 = [IO.File]::ReadAllBytes($ltBl)
+    $cr2 = 0; foreach ($x in $b2) { if ($x -eq 13) { $cr2++ } }
+    $bom2 = ($b2.Length -ge 3 -and $b2[0] -eq 0xEF -and $b2[1] -eq 0xBB -and $b2[2] -eq 0xBF)
+    $doc2 = $null
+    try { $doc2 = [Text.Encoding]::UTF8.GetString($b2) | ConvertFrom-Json } catch { }
+    # The committed blob is LF, no BOM, one trailing LF, and -Tighten must keep that shape.
+    Case 'LIVE PATH' '-Tighten records the fall in the committed shape: no CR, no BOM, one trailing LF, and the new mark of 1' `
+      ($rc2 -eq 0 -and $cr2 -eq 0 -and -not $bom2 -and $b2[-1] -eq 10 -and $null -ne $doc2 -and [int]$doc2.unqualified -eq 1) `
+      ("rc=$rc2 cr=$cr2 bom=$bom2 unqualified=$(if ($doc2) { $doc2.unqualified })")
+    $ltRise = Join-Path $lt 'baseline-rise.json'
+    [IO.File]::WriteAllText($ltRise, "{`n    ""unqualified"":  0,`n    ""note"":  ""fixture""`n}`n", $ltUtf8)
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
+    $rc3 = $LASTEXITCODE
+    Case 'CLEAN TWIN' 'a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+  } finally {
+    Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   Write-Output ''
   if ($fails.Count) {
     Write-Output ("audit-conclusion-currency selftest: {0} FAILED of {1}" -f $fails.Count, $ran.Count)
@@ -177,23 +249,23 @@ if ($SelfTest) {
 }
 
 # ------------------------------------------------------------------------------------------------ live
-$docs = @(Get-ChildItem (Join-Path $repo 'design') -File -Filter '*.md' -ErrorAction SilentlyContinue |
+$docs = @(Get-ChildItem (Join-Path $treeRoot 'design') -File -Filter '*.md' -ErrorAction SilentlyContinue |
           Where-Object { $_.Name -like 'EVAL-*' -or $_.Name -like 'MEASURE-*' } | Sort-Object Name)
 if ($docs.Count -eq 0) {
   Write-Output 'CONCLUSION CURRENCY BLIND: no EVAL-* or MEASURE-* documents under design\ - nothing was judged.'
   if ($Json) { 'conclusion-currency-json: {"known": false}' }
   Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 3 -Summary 'docs=0 blind=1'
 }
-$head = & git -C $repo rev-parse --verify --quiet HEAD
+$head = & git -C $treeRoot rev-parse --verify --quiet HEAD
 if ($LASTEXITCODE -ne 0 -or -not $head) {
   Write-Output 'CONCLUSION CURRENCY BLIND: not a git checkout, so no harness history can be read.'
   if ($Json) { 'conclusion-currency-json: {"known": false}' }
   Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 3 -Summary "docs=$($docs.Count) blind=1"
 }
 
-$hashExists = { param($h) $null = & git -C $repo rev-parse --verify --quiet "$h^{commit}"; return ($LASTEXITCODE -eq 0) }
-$pathExists = { param($p) return (Test-Path -LiteralPath (Join-Path $repo ($p -replace '/', '\'))) }
-$afterFn = { param($h, $p) $n = & git -C $repo rev-list --count "$h..HEAD" -- $p; return [int]("$n".Trim()) }
+$hashExists = { param($h) $null = & git -C $treeRoot rev-parse --verify --quiet "$h^{commit}"; return ($LASTEXITCODE -eq 0) }
+$pathExists = { param($p) return (Test-Path -LiteralPath (Join-Path $treeRoot ($p -replace '/', '\'))) }
+$afterFn = { param($h, $p) $n = & git -C $treeRoot rev-list --count "$h..HEAD" -- $p; return [int]("$n".Trim()) }
 
 $unq = 0; $cur = 0; $nq = 0
 Write-Output 'CONCLUSION CURRENCY - does each recorded conclusion still describe the harness it names?'
@@ -210,7 +282,7 @@ foreach ($d in $docs) {
       $unq++
       Write-Output ("  UNQUALIFIED      {0}" -f $d.Name)
       foreach ($m in @($v.Moved)) {
-        $newest = & git -C $repo log -1 '--format=%h %cs' -- $m.Path
+        $newest = & git -C $treeRoot log -1 '--format=%h %cs' -- $m.Path
         Write-Output ("                   {0} has {1} commit(s) after cited {2}; newest {3}" -f $m.Path, $m.After, $m.Since, "$newest".Trim())
       }
     }
@@ -222,7 +294,7 @@ Write-Output ''
 Write-Output ("  {0} of {1} document(s) UNQUALIFIED, {2} current, {3} not qualifiable (ops\audit-measurement-provenance.ps1's finding)" -f $unq, $docs.Count, $cur, $nq)
 Write-Output '  To re-qualify one: re-read it against the moved harness and add "Re-read at commit <hash>: <what still holds>".'
 
-$blF = Join-Path $here 'conclusion-currency-baseline.json'
+$blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'conclusion-currency-baseline.json' }
 $base = $null
 if (Test-Path $blF) { try { $base = [int]([IO.File]::ReadAllText($blF) | ConvertFrom-Json).unqualified } catch { $base = $null } }
 function Write-CcBaseline([int]$Count) {
@@ -248,6 +320,15 @@ if ($move.Verdict -eq 'rose') {
   Write-Output "conclusion-currency: RATCHET BROKEN - $unq unqualified, baseline $base. A conclusion that was current now names a harness changed after it. Re-read it and add a Re-read at commit line."
   Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 2 -Summary "docs=$($docs.Count) unqualified=$unq baseline=$base"
 }
-if ($move.Verdict -eq 'tightened') { Write-CcBaseline $unq; Write-Output "  ratchet tightened: $unq, was $base." }
-elseif ($move.Verdict -eq 'implausible') { Write-Output ('  ' + $move.Message + ' - baseline kept at ' + $base) }
+if ($move.Verdict -eq 'tightened') {
+  if ($Tighten) {
+    Write-CcBaseline $unq
+    Write-Output "  ratchet tightened: $unq, was $base. New baseline written - commit it, or it protects only this checkout."
+  } else {
+    Write-Output "  ratchet CAN tighten: $unq unqualified, baseline $base. NOT written: this may be a pre-push gate, and a rewrite here dirties the checkout being pushed without riding the push. Record it with -Tighten and commit ops\conclusion-currency-baseline.json."
+  }
+} elseif ($move.Verdict -eq 'implausible') {
+  Write-Output ('  ' + $move.Message + ' - baseline kept at ' + $base + ' (-Accept is this script''s -AcceptDrop.)')
+  if ($Tighten) { Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 2 -Summary "docs=$($docs.Count) unqualified=$unq baseline=$base refused-to-lower" }
+}
 Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq baseline=$base"

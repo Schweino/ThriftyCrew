@@ -33,11 +33,25 @@
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 clean, 2 hard finding, 3 could-not-evaluate.
   Read the verdict LINE, not the number (backlog E2).
 
+  A RUN THAT IS NOT ASKED TO RECORD WRITES NOTHING (2026-09-11). run-gates runs this with no arguments on every
+  pre-push, and a fall used to rewrite the TRACKED baseline right there: the pushing checkout was left dirty, the
+  lower mark never rode that push, and a count taken over uncommitted edits is not a baseline. So a fall is SPOKEN
+  and the committed mark KEPT; -Tighten records it. ops\audit-write-only-reports.ps1 carries the full account.
+
+    meal-prep\pipeline\audit-fact-claims.ps1               read the specs, hold the ratchet; writes nothing
+    meal-prep\pipeline\audit-fact-claims.ps1 -Tighten      the same, and record a believable FALL as the new mark
+    meal-prep\pipeline\audit-fact-claims.ps1 -AcceptDrop   record a fall lib\ratchet.ps1 would refuse
+
   Self-test: powershell -File meal-prep\pipeline\audit-fact-claims.ps1 -SelfTest
 #>
 param(
   [switch]$SelfTest,
   [switch]$AcceptDrop,
+  # Record a believable fall. Without it a fall is reported and the committed baseline is left as it is.
+  [switch]$Tighten,
+  # The live path against another tree and baseline, so the self-test can drive it. A gate passes neither.
+  [string]$Root = '',
+  [string]$BaselineFile = '',
   # PRINT THEM ALL (2026-09-07, backlog E6). The gate line shows 15 and says "and 325 more", which is
   # right for a gate and useless for clearing the backlog: "each one declared or removed lowers the
   # mark" is advice nobody can follow against a list they cannot see.
@@ -53,8 +67,9 @@ $repo = Split-Path (Split-Path $here -Parent) -Parent
 . (Join-Path $repo 'lib\ratchet.ps1')
 . (Join-Path $repo 'lib\lf-write.ps1')   # Write-TcLfFile: the baseline is tracked and stored eol=lf
 
-$SPEC_DIR      = Join-Path $repo 'meal-prep\db\recipes'
-$BASELINE_FILE = Join-Path $repo 'meal-prep\db\fact-claims-baseline.json'
+$treeRoot      = if ($Root) { $Root } else { $repo }
+$SPEC_DIR      = Join-Path $treeRoot 'meal-prep\db\recipes'
+$BASELINE_FILE = if ($BaselineFile) { $BaselineFile } else { Join-Path $treeRoot 'meal-prep\db\fact-claims-baseline.json' }
 
 # THE SEVEN STORES, so a carriage assertion is recognised by the store it names rather than by a verb.
 $STORES = @('aldi', 'walmart', 'hy-vee', 'hyvee', 'family fare', 'familyfare', 'fareway', "baker's", 'bakers', "sam's club", 'sams club')
@@ -209,8 +224,49 @@ if ($SelfTest) {
 
   T 'MUST FIRE  a single problem comes back as an ARRAY, not unrolled' ($p2 -is [array]) ($p2.GetType().FullName)
 
+  # THE LIVE PATH, DRIVEN (2026-09-11). The founding shape is a pre-push run-gates pass whose count FELL: it rewrote
+  # the tracked baseline and left the pushing checkout dirty. These run THIS script as a child against a temp tree
+  # holding one spec with one undeclared storage claim and a temp baseline, so they exercise the code a gate runs,
+  # not a copy of it. One directory per run, removed in finally, because concurrent pushes share %TEMP%.
+  $lt = Join-Path $env:TEMP ('fc-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $lt -ErrorAction Stop | Out-Null
+  try {
+    $ltTree = Join-Path $lt 'tree'
+    $ltSpecs = Join-Path $ltTree 'meal-prep\db\recipes'
+    [void][IO.Directory]::CreateDirectory($ltSpecs)
+    [IO.File]::WriteAllText((Join-Path $ltSpecs 'zz.json'), '{ "intro_html": "<p>Portion it out. It keeps 5 days in the fridge.</p>" }', (New-Object Text.UTF8Encoding($false)))
+    $ltBl = Join-Path $lt 'baseline.json'
+    $ltSeedJson = [ordered]@{ generated = '2026-01-01T00:00:00'; undeclared = 2; note = 'fixture' } | ConvertTo-Json -Depth 3
+    $null = Write-TcLfFile $ltBl $ltSeedJson
+    $ltSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl))
+    $o1 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl
+    $rc1 = $LASTEXITCODE
+    $o1 = @($o1)
+    $same1 = [string]::Equals($ltSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl)), [StringComparison]::Ordinal)
+    T 'a FALL (1 undeclared claim, baseline 2) without -Tighten is spoken and NOT written, so a gate run leaves its checkout clean' `
+      ($rc1 -eq 0 -and $same1 -and (($o1 -join "`n") -match 'CAN tighten')) ("rc=$rc1 baselineUnchanged=$same1")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl -Tighten
+    $rc2 = $LASTEXITCODE
+    $b2 = [IO.File]::ReadAllBytes($ltBl)
+    $cr2 = 0; foreach ($x in $b2) { if ($x -eq 13) { $cr2++ } }
+    $bom2 = ($b2.Length -ge 3 -and $b2[0] -eq 0xEF -and $b2[1] -eq 0xBB -and $b2[2] -eq 0xBF)
+    $doc2 = $null
+    if ($bom2) { $doc2 = [Text.Encoding]::UTF8.GetString($b2, 3, $b2.Length - 3) | ConvertFrom-Json }
+    T '-Tighten records the fall in the bytes git stores: no CR, the BOM, one trailing LF, and the new mark of 1' `
+      ($rc2 -eq 0 -and $cr2 -eq 0 -and $bom2 -and $b2[-1] -eq 10 -and $null -ne $doc2 -and [int]$doc2.undeclared -eq 1) `
+      ("rc=$rc2 cr=$cr2 bom=$bom2 undeclared=$(if ($doc2) { $doc2.undeclared })")
+    $ltRise = Join-Path $lt 'baseline-rise.json'
+    $ltRiseJson = [ordered]@{ generated = '2026-01-01T00:00:00'; undeclared = 0; note = 'fixture' } | ConvertTo-Json -Depth 3
+    $null = Write-TcLfFile $ltRise $ltRiseJson
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
+    $rc3 = $LASTEXITCODE
+    T 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+  } finally {
+    Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 3 risk classes, 3 clean twins that keep it usable, the echo test both ways, both directions of the diff, and return arity'
+  Write-Output 'SELF-TEST PASS: 3 risk classes, 3 clean twins that keep it usable, the echo test both ways, both directions of the diff, return arity, and the live path: a fall is not written without -Tighten, -Tighten writes LF, a rise still fails'
   exit 0
 }
 
@@ -303,6 +359,12 @@ if ($move.Verdict -eq 'implausible') {
   Exit-Guard -Name 'fact-claims' -Summary ("undeclared={0} baseline={1} refused-to-lower" -f $count, $base) -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
+  # A FALL IS SPOKEN, NOT WRITTEN, unless this run was asked to record it (2026-09-11, see the header). -AcceptDrop
+  # is such an ask: it has always recorded the fall it names.
+  if (-not ($Tighten -or $AcceptDrop)) {
+    Write-Output ("fact-claims: PASSED, and the ratchet CAN tighten - {0} undeclared assertion(s), baseline {1}. NOT written: this may be a pre-push gate, and a rewrite here dirties the checkout being pushed without riding the push. Record it with -Tighten and commit meal-prep\db\fact-claims-baseline.json." -f $count, $base)
+    Exit-Guard -Name 'fact-claims' -Summary ("undeclared={0} baseline={1} can-tighten" -f $count, $base) -Code 0
+  }
   $doc = $null
   try { $doc = Get-Content $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
   if (-not $doc) { $doc = [pscustomobject]@{} }

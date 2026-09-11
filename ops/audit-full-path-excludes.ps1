@@ -65,12 +65,18 @@
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 at or below the high-water mark, 2 the mark rose or a
   fall was refused as implausible, 3 could not evaluate. Read the verdict LINE, not the number.
 
-    ops\audit-full-path-excludes.ps1               scan the tree, hold the ratchet
+    ops\audit-full-path-excludes.ps1               scan the tree, hold the ratchet; writes nothing
+    ops\audit-full-path-excludes.ps1 -Tighten      the same, and record a believable FALL as the new high-water mark
     ops\audit-full-path-excludes.ps1 -AcceptDrop   record a fall lib\ratchet.ps1 would refuse
-    ops\audit-full-path-excludes.ps1 -SelfTest     frozen founding lines, the fixed forms, the walk
+    ops\audit-full-path-excludes.ps1 -SelfTest     frozen founding lines, the fixed forms, the walk, and the live path
+
+  A RUN THAT IS NOT ASKED TO RECORD WRITES NOTHING (2026-09-11). run-gates runs this with no arguments on every
+  pre-push, and a fall used to rewrite the TRACKED baseline right there: the pushing checkout was left dirty, the
+  lower mark never rode that push, and a count taken over uncommitted edits is not a baseline. So a fall is SPOKEN
+  and the committed mark KEPT; -Tighten records it. ops\audit-write-only-reports.ps1 carries the full account.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$SelfTest, [switch]$AcceptDrop)
+param([switch]$SelfTest, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $here -Parent
@@ -78,7 +84,9 @@ $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\ratchet.ps1')
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: this file's own walk obeys the rule it enforces
 
-$BASELINE_FILE = Join-Path $repo 'ops\full-path-excludes-baseline.json'
+# -Root and -BaselineFile exist so the self-test can drive the LIVE path against a temp tree. A gate passes neither.
+$treeRoot = if ($Root) { $Root } else { $repo }
+$BASELINE_FILE = if ($BaselineFile) { $BaselineFile } else { Join-Path $treeRoot 'ops\full-path-excludes-baseline.json' }
 
 # THE NEEDLES ARE BUILT BY CONCATENATION, so no literal in this file carries the word it hunts for.
 $script:FPE_NEEDLE_CORE = 'work' + 'trees|\.cla' + 'ude'
@@ -522,22 +530,65 @@ Get-ChildItem . -Recurse | Where-Object { $_.DirectoryName -notmatch $Skip }'
     FpeT 'MUST NOT FIRE  the detector never scans itself' (@($wtFound | Where-Object { $_.FullName -eq $self }).Count -eq 0) ''
   } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # ---- THE LIVE PATH, DRIVEN (2026-09-11) ------------------------------------------------------------------
+  # The founding shape is a pre-push run-gates pass whose count FELL: it rewrote the tracked baseline and left the
+  # pushing checkout dirty. These run THIS script as a child against a temp tree holding the founding sweepers line
+  # and a temp baseline, so they exercise the code a gate runs, not a copy of it. One directory per run, removed in
+  # finally, because concurrent pushes run this suite in the same %TEMP%.
+  $lt = Join-Path $env:TEMP ('fpe-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $lt -ErrorAction Stop | Out-Null
+  try {
+    $ltTree = Join-Path $lt 'tree'
+    [void][IO.Directory]::CreateDirectory((Join-Path $ltTree 'ops'))
+    $ltUtf8 = New-Object Text.UTF8Encoding($false)
+    [IO.File]::WriteAllText((Join-Path $ltTree 'ops\walk.ps1'), $fxSweepers, $ltUtf8)   # exactly one site
+    $ltBl = Join-Path $lt 'baseline.json'
+    $ltSeedJson = [ordered]@{ generated = '2026-01-01T00:00:00'; sites = 2; note = 'fixture' } | ConvertTo-Json -Depth 3
+    [IO.File]::WriteAllText($ltBl, ($ltSeedJson -replace "`r`n", "`n"), $ltUtf8)
+    $ltSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl))
+    $o1 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl
+    $rc1 = $LASTEXITCODE
+    $o1 = @($o1)
+    $same1 = [string]::Equals($ltSeed, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl)), [StringComparison]::Ordinal)
+    FpeT 'a FALL (1 site, baseline 2) without -Tighten is spoken and NOT written, so a gate run leaves its checkout clean' `
+      ($rc1 -eq 0 -and $same1 -and (($o1 -join "`n") -match 'CAN tighten')) ("rc=$rc1 baselineUnchanged=$same1")
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltBl -Tighten
+    $rc2 = $LASTEXITCODE
+    $b2 = [IO.File]::ReadAllBytes($ltBl)
+    $cr2 = 0; foreach ($x in $b2) { if ($x -eq 13) { $cr2++ } }
+    $bom2 = ($b2.Length -ge 3 -and $b2[0] -eq 0xEF -and $b2[1] -eq 0xBB -and $b2[2] -eq 0xBF)
+    $doc2 = $null
+    try { $doc2 = [Text.Encoding]::UTF8.GetString($b2) | ConvertFrom-Json } catch { }
+    # The committed blob is LF, no BOM and no trailing newline, and -Tighten must keep that shape.
+    FpeT '-Tighten records the fall in the committed shape: no CR, no BOM, no trailing newline, and the new mark of 1' `
+      ($rc2 -eq 0 -and $cr2 -eq 0 -and -not $bom2 -and $b2[-1] -eq 0x7D -and $null -ne $doc2 -and [int]$doc2.sites -eq 1) `
+      ("rc=$rc2 cr=$cr2 bom=$bom2 sites=$(if ($doc2) { $doc2.sites })")
+    $ltRise = Join-Path $lt 'baseline-rise.json'
+    $ltRiseJson = [ordered]@{ generated = '2026-01-01T00:00:00'; sites = 0; note = 'fixture' } | ConvertTo-Json -Depth 3
+    [IO.File]::WriteAllText($ltRise, ($ltRiseJson -replace "`r`n", "`n"), $ltUtf8)
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
+    $rc3 = $LASTEXITCODE
+    FpeT 'CLEAN TWIN  a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+  } finally {
+    Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   if ($script:fail) { Write-Output ("FULL-PATH-EXCLUDES SELF-TEST FAILED ({0} of {1} case(s))" -f $script:fail, $script:cases); exit 2 }
-  Write-Output ("FULL-PATH-EXCLUDES SELF-TEST PASSED ({0} case(s): both founding lines and the Python leftovers fire, both fixed forms stay silent, and the walk reads a worktree root)" -f $script:cases)
+  Write-Output ("FULL-PATH-EXCLUDES SELF-TEST PASSED ({0} case(s): both founding lines and the Python leftovers fire, both fixed forms stay silent, the walk reads a worktree root, and a fall is not written without -Tighten)" -f $script:cases)
   exit 0
 }
 
 # ------------------------------------------------------------------------------------------- live run
 # NEVER SCAN YOURSELF. The self-test above carries the founding lines as fixtures; they are strings, so the
 # AST would not count them, but a detector that relies on that is one refactor from reporting itself.
-$files = @(Get-FpeScanFiles -RootDir $repo -Self $PSCommandPath)
+$files = @(Get-FpeScanFiles -RootDir $treeRoot -Self $PSCommandPath)
 $psCount = @($files | Where-Object { $_.Extension -ieq '.ps1' }).Count
 $pyCount = $files.Count - $psCount
 if (-not $psCount) {
   Write-Output 'FULL-PATH-EXCLUDES AUDIT BLIND: resolved zero .ps1 files, which means the discovery is broken rather than the tree being clean.'
   Exit-Guard -Name 'full-path-excludes' -Summary 'blind=no-files' -Code 3
 }
-$rootFull = Get-TcRootFull $repo
+$rootFull = Get-TcRootFull $treeRoot
 $sites = New-Object System.Collections.ArrayList
 $read = 0; $parseErrorFiles = 0
 foreach ($f in $files) {
@@ -579,6 +630,12 @@ if ($move.Verdict -eq 'implausible') {
   Exit-Guard -Name 'full-path-excludes' -Summary ("{0} baseline={1} refused-to-lower" -f $summary, $base) -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
+  # A FALL IS SPOKEN, NOT WRITTEN, unless this run was asked to record it (2026-09-11, see the header). -AcceptDrop
+  # is such an ask: it has always recorded the fall it names.
+  if (-not ($Tighten -or $AcceptDrop)) {
+    Write-Output ("full-path-excludes: PASSED, and the ratchet CAN tighten - {0} site(s), baseline {1}. NOT written: this may be a pre-push gate, and a rewrite here dirties the checkout being pushed without riding the push. Record it with -Tighten and commit ops\full-path-excludes-baseline.json." -f $count, $base)
+    Exit-Guard -Name 'full-path-excludes' -Summary ("{0} baseline={1} can-tighten" -f $summary, $base) -Code 0
+  }
   $doc = $null
   try { $doc = Get-Content -LiteralPath $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
   if (-not $doc) { $doc = [pscustomobject]@{} }

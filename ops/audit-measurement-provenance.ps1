@@ -163,7 +163,8 @@ if ($UpdateBaseline) {
   }
   $obj = [pscustomobject]@{ missing = $missing.Count; recorded = (Get-Date -Format 'yyyy-MM-dd')
     note = 'HIGH-WATER MARK: recorded-measurement documents that do NOT name their harness and commit. May only go DOWN. Backlog I47 rung 2. Retro-filling the existing set was explicitly NOT asked for; the ask is that the next one carries it.' }
-  [IO.File]::WriteAllText($BASELINE, ($obj | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
+  # LF, as the committed blob is: PS 5.1's ConvertTo-Json joins its lines with CRLF (2026-09-11, 3 CR in a two-key object).
+  [IO.File]::WriteAllText($BASELINE, (($obj | ConvertTo-Json) -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
   Write-Output ("measurement-provenance: baseline set to {0}" -f $missing.Count)
   Exit-Guard -Name 'measurement-provenance' -Summary ("baseline={0}" -f $missing.Count) -Code 0
 }
