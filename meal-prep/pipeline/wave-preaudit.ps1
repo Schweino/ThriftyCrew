@@ -438,7 +438,17 @@ if ($runSelfTest) {
   # the marker's blind=, so a seeded run printed `blind=` and run-gates' `blind=([1-9][0-9]*)` read nothing.
   # It only looked right in the blind case, where += 1 on $null yields 1. Measured 2026-09-11.
   $script:blindCases = 0
-  function T($msg, $cond, $got) { if ($cond) { Write-Output ("ok    " + $msg) } else { Write-Output ("FAIL  " + $msg + "   got: " + $got); $script:f++ } }
+  $cases = 0
+  function T($msg, $cond, $got) { $script:cases++; if ($cond) { Write-Output ("ok    " + $msg) } else { Write-Output ("FAIL  " + $msg + "   got: " + $got); $script:f++ } }
+  # A MID-RUN DEATH IS A COUNTED FAILURE, NEVER A SHORT RUN (2026-09-11). Before this try, one throw
+  # anywhere below ended the suite with no FAIL line and no summary: measured from a temp mirror with
+  # the drill's guard-contract copy removed, it printed 50 ok lines, died at a drill launch and exited 1,
+  # so a reader saw fewer cases and no cause. The catch names the error and its line, the summary always
+  # prints, and it states how many cases ran. The cases are NOT re-indented under this try, so the diff
+  # that added it stays the change itself. A BLIND case is not a case that ran, so it is counted in
+  # blindCases only, and the marker keeps reporting both numbers.
+  $T = $null
+  try {
 
   # ---- macro recompute ----------------------------------------------------------------------------
   $db = @{
@@ -760,13 +770,24 @@ if ($runSelfTest) {
     [IO.File]::WriteAllText($manPathD, ('{"wave":1,"run":"drill","batch":"drill-w1","slugs":["' + $dSlug + '"]}'), $UTF8)
 
     $selfPath = $PSCommandPath
+    # A DRILL CHILD'S STDERR IS TEXT, NEVER A THROW (2026-09-11). Both launches used to be
+    # `& powershell @a 2>&1`, and this script runs under EAP 'Stop', where PS 5.1 turns a native child's
+    # FIRST stderr line into a terminating NativeCommandError in THIS process. A child that could not load
+    # a library, or that merely printed a warning, killed the whole suite mid-drill instead of failing a
+    # case. grocery\test-auditors.ps1's RunPS carries the same scar. Every drill child now starts through
+    # LaunchDrill, which calls native-lib's Invoke-NativeScript: the estate's one redirect performed under
+    # EAP 'Continue', handing back the real exit code and every stdout and stderr line as text.
+    # CODE, so it hangs off THIS FILE's location, never off -Root (see the dot-source note at the top).
+    . (Join-Path (Split-Path -Parent (Split-Path -Parent $here)) 'grocery\native-lib.ps1')
+    function LaunchDrill([string]$childPath, [string[]]$argv) {
+      $res = Invoke-NativeScript $childPath @argv
+      return [pscustomobject]@{ rc = $res.ExitCode; lines = @($res.Lines) }
+    }
     # Every switch is passed exactly once - PowerShell refuses a duplicated parameter outright, and a
     # drill that dies on its own argument list would report a false MUST-FIRE.
     function RunDrill([string]$root, [string]$refCard, [string[]]$extra) {
-      $a = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $selfPath, '-RunDir', $dRun, '-Wave', '1',
-             '-Root', $root, '-SkipShared', '-SkipLive', '-ReferenceCard', $refCard) + $extra
-      $out = & powershell @a 2>&1
-      return [pscustomobject]@{ rc = $LASTEXITCODE; lines = @($out | ForEach-Object { [string]$_ }) }
+      $a = @('-RunDir', $dRun, '-Wave', '1', '-Root', $root, '-SkipShared', '-SkipLive', '-ReferenceCard', $refCard) + $extra
+      return (LaunchDrill $selfPath $a)
     }
     function ReadDrillReport() {
       $rp = Join-Path $dRun 'waves\wave-1.preaudit.json'
@@ -788,12 +809,24 @@ if ($runSelfTest) {
     function RunDrillFrom([string]$cwd, [string]$relRoot, [string]$refCard) {
       Push-Location $cwd
       try {
-        $a = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $selfPath, '-RunDir', $relRoot,
-               '-Wave', '1', '-Root', $dMp, '-SkipShared', '-SkipLive', '-ReferenceCard', $refCard)
-        $out = & powershell @a 2>&1
-        return [pscustomobject]@{ rc = $LASTEXITCODE; lines = @($out | ForEach-Object { [string]$_ }) }
+        $a = @('-RunDir', $relRoot, '-Wave', '1', '-Root', $dMp, '-SkipShared', '-SkipLive', '-ReferenceCard', $refCard)
+        return (LaunchDrill $selfPath $a)
       } finally { Pop-Location }
     }
+
+    # ---- MUST FIRE: a drill child's stderr line is read as text, and every later case still runs -------
+    # The founding shape above, frozen: one stderr line and exit 0. The launch sits in its own try so a
+    # regressed LaunchDrill fails THIS case by name rather than the suite's catch, and the drill below
+    # still runs and reports. Mutation-probed 2026-09-11: with LaunchDrill put back to a bare 2>&1 under
+    # 'Stop', this case went red naming the throw while every later case ran.
+    $noisyChild = Join-Path $T 'stderr-then-exit-0.ps1'
+    [IO.File]::WriteAllText($noisyChild, ("[Console]::Error.WriteLine('drill child warning on stderr')`nWrite-Output 'drill child stdout'`nexit 0`n"), $UTF8)
+    $rNoisy = $null; $noisyThrew = ''
+    try { $rNoisy = LaunchDrill $noisyChild @() } catch { $noisyThrew = $_.Exception.Message }
+    $noisyText = if ($null -ne $rNoisy) { ($rNoisy.lines -join ' / ') } else { '' }
+    T 'END-TO-END MUST FIRE a drill child that writes one stderr line and exits 0 is read as text, not a throw in this parent' `
+      ($null -ne $rNoisy -and $rNoisy.rc -eq 0 -and $noisyText -match 'drill child warning on stderr' -and $noisyText -match 'drill child stdout') `
+      $(if ($noisyThrew) { 'the launch THREW: ' + $noisyThrew } else { 'rc=' + $(if ($rNoisy) { $rNoisy.rc } else { 'none' }) + ' lines=' + $noisyText })
     $rRel = RunDrillFrom (Split-Path $dRun -Parent) (Split-Path $dRun -Leaf) $srcRef
     $repRel = ReadDrillReport
     $recorded = if ($null -ne $repRel) { [string]$repRel.inputs.run_dir } else { '' }
@@ -860,15 +893,26 @@ if ($runSelfTest) {
     Remove-Item $T -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  } catch {
+    # The death is itself a counted case, so the summary's ok plus FAIL lines add up to its total.
+    Write-Output ("FAIL  the self-test DIED after {0} case(s), so every case after that point never ran   got: {1} (line {2})" -f $cases, $_.Exception.Message, $_.InvocationInfo.ScriptLineNumber)
+    $script:cases++; $script:f++
+  } finally {
+    if ($T -and (Test-Path $T)) { Remove-Item $T -Recurse -Force -ErrorAction SilentlyContinue }
+  }
+  if ($cases -eq 0) { $f++; Write-Output 'FAIL  the self-test ran ZERO cases, which is never a pass' }
+
   # THE MARKER CARRIES blind=, so a case that COULD NOT LOOK is named on a green run instead of vanishing
   # into a pass (ops\run-gates.ps1:536-546 reads the LAST marker line). Exit-Guard writes it and exits.
+  # cases= rides beside it for the other half of the same question: blind= says what could not be looked at,
+  # cases= says how many were, so a run that died early cannot read as a quieter one that passed.
   if ($f -eq 0) {
-    if ($script:blindCases -gt 0) { Write-Output "wave-preaudit SELF-TEST PASS, $($script:blindCases) case(s) BLIND - could not look, NOT passed" }
-    else { Write-Output 'wave-preaudit SELF-TEST PASS' }
-    Exit-Guard -Name 'WAVE-PREAUDIT-SELFTEST' -Code 0 -Summary ("blind={0}" -f $script:blindCases)
+    if ($script:blindCases -gt 0) { Write-Output "wave-preaudit SELF-TEST PASS ($cases cases), $($script:blindCases) case(s) BLIND - could not look, NOT passed" }
+    else { Write-Output "wave-preaudit SELF-TEST PASS ($cases cases)" }
+    Exit-Guard -Name 'WAVE-PREAUDIT-SELFTEST' -Code 0 -Summary ("cases={0} blind={1}" -f $cases, $script:blindCases)
   }
-  Write-Output "wave-preaudit SELF-TEST FAIL: $f case(s)"
-  Exit-Guard -Name 'WAVE-PREAUDIT-SELFTEST' -Code 1 -Summary ("failed={0} blind={1}" -f $f, $script:blindCases)
+  Write-Output "wave-preaudit SELF-TEST FAIL: $f of $cases case(s)"
+  Exit-Guard -Name 'WAVE-PREAUDIT-SELFTEST' -Code 1 -Summary ("failed={0} cases={1} blind={2}" -f $f, $cases, $script:blindCases)
 }
 
 # ===================================================================================================
