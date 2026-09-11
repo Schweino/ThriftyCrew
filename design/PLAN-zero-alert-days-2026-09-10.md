@@ -292,7 +292,25 @@ that day's 08:00 run succeeding.
   - `Ops: private memory notes reached the public repo` pages under a new condition 5. It keys on an `EXPOSURE:` tag that `audit-memory-backup.ps1` sets where the finding is created.
   - **Found on the way and fixed:** the page contract lived in two places (the registry file and `alert-registry-lib.ps1`) with nothing comparing them, so R16's new condition was refused. The check now fails by name if the two copies disagree.
 - **R12 scheduled:** one-time task `walmart-headed-probe-once` at 2026-09-11 09:35, only if that morning's 08:00 capture succeeded, in an existing tab of Brad's Chrome. It is exempt from the public prompt mirror because it disables itself after one run.
-- **Next: step 6** (returns are failures, building), then R18, R11 and 3b.
+- **Step 6, returns are failures: DONE** (994e7baca).
+  - `grocery/triage-return-lib.ps1` holds the one copy of the RETURN rule: a new id for a type that already
+    has an earlier id closed as resolved within 30 days.
+  - `triage-due.ps1` prints a RETURN line for each open item that qualifies.
+  - `validate-triage-plan.ps1` now reads the queue in both modes, so a plan cannot escape by omitting the
+    fields. A RETURN code item must carry:
+    - `prior_closes`, naming every earlier close;
+    - `prevention`, with `source`, `what` and `exact_change`;
+    - `proof.fixture_occurrences`, covering every occurrence.
+  - Once a type has returned twice, a source made only of rule or exclusion files is refused. A no-code-change
+    RETURN may carry `prevention_none_because`, because a by-design return is Phase 2 work.
+  - Self-tests pass 52 of 52 and 19 of 19. The live queue shows 0 RETURN lines (8 open items, all in the
+    weekly lane).
+  - **Applied after the fact:** plan-2026-09-10.json now fails the gate, because 5 of its 11 items are
+    RETURNs (d9e085, b91a0a, 20430e, 267ba6, 4de393). It was written before the rule and stays as the record.
+    From here on, every item for a returning type costs the reviewer a prevention block. That cost is the point.
+- **Next:** step 7 (the weekly lane re-aimed) is building, and step 3b (the Family Fare catalog-walk trial) is
+  running. **R18 and R11 change the Chrome capture code**, so they start after the 2026-09-11 08:00 capture
+  and the R12 probe, not before.
 
 ### Ruling 7 result: the store probes (`design/PROBE-store-direct-data-2026-09-10.md`)
 
