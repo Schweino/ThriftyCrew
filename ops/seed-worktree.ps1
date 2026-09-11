@@ -20,6 +20,15 @@
   .worktreeinclude that nothing copied. So this reads .worktreeinclude as the single source for the
   files, and keeps $SEED_DIRS for the directories it cannot carry. The list is never duplicated here.
 
+  THE SOURCE IS THE MAIN CHECKOUT, WHEREVER THIS COPY RUNS (2026-09-11). The default source used to be the
+  checkout this script lives in, so the copy inside a worktree seeded that worktree from itself, found no
+  db\built and no digest there, and exited 2 unless -Source named main - a rule nobody remembers at the
+  moment it is needed. Every linked worktree shares the main checkout's .git, so the default is now the
+  parent of `git rev-parse --path-format=absolute --git-common-dir`. The ABSOLUTE form is not optional:
+  from the main checkout the plain form answers `.git`, and from a subdirectory `../.git` (measured). A
+  repository whose common dir is not a `.git` folder - bare, or a --separate-git-dir clone - names no main
+  checkout and is refused (exit 3). -Source still overrides, for a clone with no linked main.
+
   HOW A PATTERN BECOMES FILES: git does the matching, not this file. Each pattern goes to
   `git ls-files --others --ignored --exclude=<pattern>` in the SOURCE checkout, which applies real
   gitignore semantics (anchoring, `*` not crossing a slash, `**`) and lists only untracked files - so a
@@ -36,9 +45,16 @@
     1. It breaks this file's own contract, never write the source checkout. A junction is a write path
        back into it: any Python run from that venv in the target compiles __pycache__ into the SOURCE's
        site-packages, and a pip install there changes the source's interpreter.
-    2. Cleanup becomes destructive. `Remove-Item -Recurse` on a checkout holding a junction walks into
-       the target and deletes the real venv (torch and sentence-transformers, a long rebuild), and the
-       natural way to clean a temp checkout is exactly that command.
+    2. Cleanup becomes riskier. As first written here: `Remove-Item -Recurse` on a checkout holding a
+       junction walks into the target and deletes the real venv (torch and sentence-transformers, a long
+       rebuild). MEASURED 2026-09-11 against sandbox victims on Windows PowerShell 5.1.26100.9444, it did
+       NOT: eleven recursive deletes aimed at a junction or at its parent - Remove-Item with -Path and with
+       -LiteralPath, with and without -Force, fed from Get-ChildItem; `rm -r -fo`; `cmd /c rmdir /s /q`;
+       Git's `rm -rf` - all left the target intact. It may still hold on another build or for a symbolic
+       link, and nobody has measured either. What WAS measured is the trap beside it: `git worktree
+       remove`, plain and --force, exits 0 and LEAVES THE DIRECTORY behind with the junction still inside,
+       handing the cleanup to whatever delete somebody reaches for next. So this reason is weaker than it
+       was written, and reasons 1 and 3 decide the question on their own.
     3. It proves nothing about the change under test. The venv is environment, not code; seeding it
        turns a check that CANNOT LOOK into one that looks at a different checkout and reports on it.
   So start-sidecar now reports that case BLIND in a checkout that has no venv of any name, and still
@@ -50,14 +66,15 @@
   (golden-test, ghost-drift) were the CRLF condition in [[fresh-checkout-is-crlf-main-is-lf]] and no copy
   changes that. The engines are worse than the gate: cost-recipes with no board prices nothing and exits 0.
 
-  Usage:  powershell -File ops\seed-worktree.ps1 -Target <path-to-worktree>
-          powershell -File ops\seed-worktree.ps1 -Target <path> -Source C:\Codex\ThriftyCrew
-                    (run THIS copy of the script, read the data from another checkout - how a branch
-                     that changes this file seeds from main before it is merged)
+  Usage:  powershell -File ops\seed-worktree.ps1 -Target <path-to-checkout>
+                    (from ANY checkout - main, a worktree, a branch that changes this file: the data is
+                     read from the main checkout git names, so -Source is not needed)
+          powershell -File ops\seed-worktree.ps1 -Target <path> -Source <checkout>
+                    (read the data from a checkout git cannot name - a clone with no linked main)
           powershell -File ops\seed-worktree.ps1 -Target <path> -WhatIf     (rehearse, copy nothing)
 
   The lists ($SEED_DIRS and .worktreeinclude) are always read from the checkout this script lives in, so
-  the code and the list it reads travel together. -Source changes only where the bytes come from.
+  the code and the list it reads travel together. The source changes only where the bytes come from.
 
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 done, 2 something could not be copied,
   3 could-not-evaluate. Read the verdict LINE, not the number (backlog E2).
@@ -176,6 +193,33 @@ function Test-SameCheckout {
   return [string]::Equals((& $norm $A), (& $norm $B), [StringComparison]::OrdinalIgnoreCase)
 }
 
+function Get-SeedSourceRoot {
+  <# Pure. The main checkout, from the answer to `git rev-parse --path-format=absolute --git-common-dir`.
+     Every linked worktree shares the main checkout's .git, so its parent names the main checkout wherever
+     this runs. $null rather than a guess when the answer cannot name a checkout. #>
+  param([string]$CommonDir)
+  if (-not $CommonDir) { return $null }
+  $c = $CommonDir.Trim().Replace('/', '\').TrimEnd('\')
+  # RELATIVE IS REFUSED. Resolved against this process's working directory, `.git` or `../.git` would name
+  # whatever tree the caller happened to be standing in.
+  if (-not $c -or -not [IO.Path]::IsPathRooted($c)) { return $null }
+  # A bare repository or a --separate-git-dir clone has a common dir that is not `.git`, and the folder
+  # holding it is not a checkout.
+  if ([IO.Path]::GetFileName($c) -ine '.git') { return $null }
+  return [IO.Path]::GetDirectoryName($c)
+}
+
+function Get-MainCheckout {
+  <# The live resolver: the main checkout for the checkout at $From, or $null when git cannot name one.
+     No stderr redirect, for the reason Get-IgnoredMatches gives. #>
+  param([string]$From)
+  try {
+    $out = & git -C $From rev-parse --path-format=absolute --git-common-dir
+    if ($LASTEXITCODE -ne 0) { return $null }
+  } catch { return $null }
+  return Get-SeedSourceRoot -CommonDir ((@($out) | Where-Object { $_ }) -join '')
+}
+
 # ------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {
   $f = 0; $cases = 0
@@ -283,10 +327,27 @@ if ($SelfTest) {
   T 'CLEAN TWIN a sibling gate-check checkout is a different checkout' `
     (-not (Test-SameCheckout -A 'C:\Codex\ThriftyCrew' -B 'C:\Codex\tc-gatecheck-x')) 'Test-SameCheckout said same'
 
+  # ---- the SOURCE is the main checkout (2026-09-11) ------------------------------------------------
+  # MUST FIRE - THE FOUNDING BUG. The copy of this script inside a worktree took its OWN checkout as the
+  # source unless -Source was passed, found no db\built and no digest there, and exited 2. git names the
+  # shared common dir from any checkout, and its parent is the main checkout.
+  $r1 = Get-SeedSourceRoot -CommonDir 'C:/Codex/ThriftyCrew/.git'
+  T 'MUST FIRE  a linked worktree''s common dir names the MAIN checkout as the source' ($r1 -eq 'C:\Codex\ThriftyCrew') $r1
+  # MUST NOT FIRE - a RELATIVE answer names nothing. The plain form answers `.git` from the main checkout.
+  $r2 = Get-SeedSourceRoot -CommonDir '.git'
+  T 'MUST NOT FIRE  a relative common dir names no source' ($null -eq $r2) $r2
+  $r3 = Get-SeedSourceRoot -CommonDir 'D:\stores\thriftycrew.git'
+  T 'MUST NOT FIRE  a bare or separate git dir names no source, rather than the folder holding it' ($null -eq $r3) $r3
+  # CLEAN TWIN - git's raw output still resolves: forward slashes, a trailing separator, the line ending.
+  $raw = "C:/Codex/ThriftyCrew/.git/`r`n"
+  $r4 = Get-SeedSourceRoot -CommonDir $raw
+  T 'CLEAN TWIN git''s raw output, trailing separator and newline included, still names the main checkout' ($r4 -eq 'C:\Codex\ThriftyCrew') $r4
+
   # ---- the LIVE resolver against a real, throwaway git repository ---------------------------------
   # The pure cases above prove the plan; this proves git is asked the right question. Built in TEMP,
   # never under the repo, and removed in finally ([[test-suites-leak-temp-dirs]]).
   $tmp = Join-Path $env:TEMP ('seed-worktree-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  $tmpWt = $tmp + '-wt'
   try {
     $null = New-Item -ItemType Directory -Force (Join-Path $tmp 'data')
     $null = New-Item -ItemType Directory -Force (Join-Path $tmp 'sub')
@@ -312,7 +373,28 @@ if ($SelfTest) {
     $g3 = Get-IgnoredMatches -Root $tmp -Pattern 'nothing/*.json'
     T 'MUST NOT FIRE  a pattern matching nothing resolves to an EMPTY list, not an error' `
       (@($g3).Count -eq 0) ("got=" + (@($g3) -join '|'))
+
+    # The live SOURCE resolver, against a real LINKED worktree of the same throwaway repo. The pure cases
+    # prove the arithmetic; these prove git is asked the question whose answer that arithmetic expects.
+    # Quiet flags and core.autocrlf=false for the same stderr reason as the init above.
+    & git -C $tmp -c user.name=seed-selftest -c user.email=seed@selftest.invalid -c commit.gpgsign=false -c core.autocrlf=false commit -q -m fixture | Out-Null
+    $wtOk = ($LASTEXITCODE -eq 0)
+    if ($wtOk) {
+      & git -C $tmp -c core.autocrlf=false worktree add -q --detach $tmpWt HEAD | Out-Null
+      $wtOk = ($LASTEXITCODE -eq 0)
+    }
+    $m1 = Get-MainCheckout -From $tmpWt
+    T 'MUST FIRE  run from a LINKED worktree, the live resolver names the main checkout, not the worktree' `
+      ($wtOk -and $m1 -and (Test-SameCheckout -A $m1 -B $tmp)) ("worktree made=" + $wtOk + " got=" + $m1)
+    # From a SUBDIRECTORY of the main checkout the plain form answers `../.git`, so this is the case that
+    # goes red if the absolute flag is ever dropped.
+    $m2 = Get-MainCheckout -From (Join-Path $tmp 'sub')
+    T 'CLEAN TWIN run from a SUBDIRECTORY of the main checkout, the live resolver still names that checkout' `
+      ($m2 -and (Test-SameCheckout -A $m2 -B $tmp)) ("got=" + $m2)
   } finally {
+    # No junction lives in either directory, so a recursive delete is safe here. The worktree's registration
+    # is inside $tmp\.git and goes with it.
+    Remove-Item -LiteralPath $tmpWt -Recurse -Force -ErrorAction SilentlyContinue
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
 
@@ -329,7 +411,7 @@ if ($SelfTest) {
     $(if ($null -eq $shipped) { 'missing' } else { "patterns=$($shipped.Patterns.Count) refused=$($shipped.Refused.Count)" })
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
-  Write-Output ("SELF-TEST PASS: {0} of {0} checks - directory and .worktreeinclude file seeding, the git resolver in a temp repo, the source guard, and both shipped lists" -f $cases)
+  Write-Output ("SELF-TEST PASS: {0} of {0} checks - directory and .worktreeinclude file seeding, the git resolver in a temp repo, the main-checkout source resolver (pure and from a real linked worktree), the source guard, and both shipped lists" -f $cases)
   exit 0
 }
 
@@ -342,7 +424,18 @@ if (-not (Test-Path -LiteralPath $Target)) {
   Write-Output ("SEED-WORKTREE COULD NOT EVALUATE: -Target does not exist ({0})." -f $Target)
   Exit-Guard -Name 'seed-worktree' -Summary 'blind=no-target-dir' -Code 3
 }
-$sourceGiven = if ($Source) { $Source } else { $repo }
+$sourceHow = '-Source'
+if ($Source) {
+  $sourceGiven = $Source
+} else {
+  # THE MAIN CHECKOUT, NOT THIS SCRIPT'S OWN (2026-09-11) - the header says why.
+  $sourceHow = 'git common dir'
+  $sourceGiven = Get-MainCheckout -From $repo
+  if (-not $sourceGiven) {
+    Write-Output ("SEED-WORKTREE COULD NOT EVALUATE: git could not name a main checkout for {0} - a bare repository, a --separate-git-dir clone, or not a git checkout at all. Pass -Source <checkout to read the data from>." -f $repo)
+    Exit-Guard -Name 'seed-worktree' -Summary 'blind=no-main-checkout' -Code 3
+  }
+}
 if (-not (Test-Path -LiteralPath $sourceGiven)) {
   Write-Output ("SEED-WORKTREE COULD NOT EVALUATE: -Source does not exist ({0})." -f $sourceGiven)
   Exit-Guard -Name 'seed-worktree' -Summary 'blind=no-source-dir' -Code 3
@@ -378,7 +471,7 @@ try {
 $allSeeds = @($SEED_DIRS) + @($fileSeeds)
 $plan = Get-SeedPlan -Seeds $allSeeds -SourceRoot $sourceFull -TargetRoot $targetFull -Exists { param($x) Test-Path -LiteralPath $x }
 
-Write-Output ("seed-worktree: {0} -> {1}" -f $sourceFull, $targetFull)
+Write-Output ("seed-worktree: {0} -> {1}   (source from {2})" -f $sourceFull, $targetFull, $sourceHow)
 Write-Output ("  lists read from {0}: {1} directory seed(s), {2} .worktreeinclude pattern(s) resolving to {3} file seed(s)" -f $repo, @($SEED_DIRS).Count, $inc.Patterns.Count, @($fileSeeds | Where-Object { -not $_.nohit }).Count)
 $copied = 0; $skipped = 0; $problems = @()
 foreach ($row in $plan) {
