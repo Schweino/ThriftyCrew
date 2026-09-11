@@ -307,5 +307,26 @@ everything else honest, so a defect here is silent by construction.
   parameter they replace. Its first live site was `golden-test.ps1`'s `$structural = @(...)` beside
   `[switch]$Structural`, which threw on every `-Provenance -Force` run. Run it for the count rather than quoting one.
 
+- **The gate worker slots are handed out in ARRIVAL ORDER, and a green verdict is not earned twice** (2026-09-11).
+  Measured at 16:39 that day: 27 `run-gates` live, 8 of them holding all 10 slots at width 1 or 2, 19 holding
+  nothing, and 24 kept pre-push logs between 15:08 and 16:35 ending in exit 3 after the full 1,200 s - the red that
+  teaches `--no-verify`. A probe of `Enter-TcGateSlots` (one slot, 8 waiter processes 400 ms apart, 3 rounds) served
+  the FIRST arrival 6th, 8th and 5th of 8, with 19, 13 and 15 of 28 pairs out of order against a random average of
+  14: polling `WaitOne(0)` is a race, not a queue. `lib\gate-slots.ps1` now gives each waiter a TICKET, hands slots
+  to the oldest LIVE one, refuses only when the count ahead has not fallen for `WaitSec` (so a long queue that moves
+  is waited out, and a wedge is still a loud 3), stops a holder topping up past a run that holds nothing, and keeps
+  deliberate load from jumping the queue. **A ticket's liveness is its MUTEX, never its file**: a killed waiter's
+  ticket is swept by the next probe, while a frozen-but-alive one wedges the queue into a refusal rather than a pass.
+  `lib\gate-verdict.ps1` records a run that exits 0 against a fingerprint of the HEAD tree, every `git status` entry
+  and the BYTES of every script discovery walked - so an ignored script and a line-ending flip both move it - and the
+  next run in THAT checkout over identical content prints the pass instead of running 362 gates again (`-NoReuse`
+  overrides; a red run over that content withdraws it; an ignored input that is not a script is outside the
+  fingerprint, which is why reuse is same-checkout and time-limited). `lib\push-landable.ps1` refuses a push whose
+  refs the remote has already moved past, before it queues, because git fixes a push's refs when it connects: about
+  half that day's completions were a session's own run rather than a push, and 34 scratch files carry a push to main
+  rejected because main had moved. **The pool is still not stopped mid-flight** when a push becomes doomed after
+  dispatch, which is the largest waste left. `design\MEASURE-gate-slot-starvation-2026-09-11.md` has every number
+  and what was deliberately not done.
+
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

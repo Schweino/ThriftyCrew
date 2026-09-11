@@ -27,7 +27,7 @@
   which would mean the discovery is broken rather than the tree being clean).
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$ListOnly, [int]$Jobs = 0)
+param([switch]$ListOnly, [int]$Jobs = 0, [switch]$NoReuse, [string]$PushRefsFile = '', [string]$PushRemote = '')
 $ErrorActionPreference = 'Stop'
 # NO REPOSITORY ENVIRONMENT IS INHERITED (2026-09-10). Called from a git hook in a LINKED worktree, this
 # process arrives with GIT_DIR pointing at that worktree's gitdir, and every hermetic git self-test below
@@ -395,8 +395,11 @@ $pySuites = @()
 # MATCHED BELOW THE ROOT (2026-09-11, lib\tree-walk.ps1), the same fix as the PowerShell discovery above. On the full
 # path every .py in a linked worktree carried \worktrees\, so this walk resolved no suites from a spawned session
 # and the discovery floor below failed the gate for a reason that had nothing to do with the change being pushed.
-foreach ($f in @(Get-ChildItem -Path $repoFull -Recurse -Filter '*.py' -File -ErrorAction SilentlyContinue |
-                 Where-Object { (Get-TcPathBelowRoot $_.FullName $repoFull) -notmatch '\\\.venv\\|\\archive\\|\\worktrees\\|\\node_modules\\|\\site-packages\\|\\\.git\\' })) {
+# KEPT AS A LIST rather than consumed inline: lib\gate-verdict.ps1 fingerprints the BYTES of every script this
+# discovery walked, and that has to be the same set the gates were chosen from.
+$pyWalk = @(Get-ChildItem -Path $repoFull -Recurse -Filter '*.py' -File -ErrorAction SilentlyContinue |
+            Where-Object { (Get-TcPathBelowRoot $_.FullName $repoFull) -notmatch '\\\.venv\\|\\archive\\|\\worktrees\\|\\node_modules\\|\\site-packages\\|\\\.git\\' })
+foreach ($f in $pyWalk) {
   $rel = (Get-TcPathBelowRoot $f.FullName $repoFull).TrimStart('\')
   $txt = ''
   try { $txt = [IO.File]::ReadAllText($f.FullName) } catch { continue }
@@ -414,10 +417,11 @@ if ($pySuites.Count -lt 15) {
 # Windows Store shim, which exits 49 without running anything - a "pass" that ran no test is exactly
 # the blindness this section exists to end, so the candidates are probed and a miss is reported loudly.
 $pyExe = $null
+$pyVersion = ''   # part of the fingerprint below: the same tree judged by another interpreter is another run
 foreach ($cand in @('C:\Codex\Python312\python.exe', 'python3', 'python')) {
   try {
     $v = & $cand --version 2>&1
-    if ($LASTEXITCODE -eq 0 -and ([string]$v) -match 'Python\s+3') { $pyExe = $cand; break }
+    if ($LASTEXITCODE -eq 0 -and ([string]$v) -match 'Python\s+3') { $pyExe = $cand; $pyVersion = ([string]$v).Trim(); break }
   } catch { }
 }
 # PYTHON AUDITS WHOSE LIVE PASS BELONGS IN THE GATE (2026-09-07). The discovery pass below gives
@@ -481,16 +485,65 @@ $offSelf = $allJobs.Count;     foreach ($j in $selfJobs)     { [void]$allJobs.Ad
 $offStatic = $allJobs.Count;   foreach ($j in $staticJobs)   { [void]$allJobs.Add($j) }
 $offPyStatic = $allJobs.Count; foreach ($j in $pyStaticJobs) { [void]$allJobs.Add($j) }
 $offPySuite = $allJobs.Count;  foreach ($j in $pySuiteJobs)  { [void]$allJobs.Add($j) }
+# ---- A VERDICT ALREADY EARNED IS NOT EARNED AGAIN (2026-09-11) ----
+# About half the completed runs on the day the pool saturated were a session's own run-gates rather than a push, and
+# the shape in the process table was a session that runs the gate, reads the exit code and then pushes - so the hook
+# ran the identical tree again, for twice the slot time and one verdict. lib\gate-verdict.ps1 holds the rule: a
+# fingerprint over the HEAD tree, every git status entry, and the BYTES of every script this discovery walked (which
+# covers an ignored script, and a line-ending flip git diff hides). A green verdict recorded for that exact
+# fingerprint, in THIS checkout, inside its age limit, is printed and nothing is dispatched. -NoReuse runs them
+# anyway. Taken BEFORE the slots, so a reuse never joins the queue at all.
+. (Join-Path $repo 'lib\gate-verdict.ps1')
+$verdictPath = Join-Path $repo 'ops\out\gate-verdict.json'
+$fpFiles = [Collections.Generic.List[string]]::new()
+foreach ($s in $scripts) { [void]$fpFiles.Add([string]$s.FullName) }
+foreach ($s in $pyWalk) { [void]$fpFiles.Add([string]$s.FullName) }
+$fpExtra = @(('powershell=' + $PSEXE), ('python=' + [string]$pyExe + ' ' + $pyVersion), ('gates=' + $allJobs.Count))
+$fpBefore = Get-TcGateFingerprint -Repo $repo -Files $fpFiles.ToArray() -Extra $fpExtra
+if (-not $fail.Count) {
+  $priorVerdict = Read-TcGateVerdict -Path $verdictPath
+  $reuse = Test-TcGateVerdictReuse -Verdict $priorVerdict -Fingerprint $fpBefore.Fingerprint -Repo $repo -NowUtc ([DateTime]::UtcNow)
+  if ($reuse.Reuse -and -not $NoReuse) {
+    Write-Output ("run-gates: PASSED - all {0} gate(s) passed at {1} over content byte-identical to this checkout now, so not one was run again ({2}). Pass -NoReuse to run them regardless." -f $reuse.Passed, $reuse.At, $reuse.Reason)
+    Exit-Guard -Name 'run-gates' -Summary ("pass={0} fail=0 reused=1" -f $reuse.Passed) -Code 0
+  }
+  Write-Output ("run-gates: no recorded verdict stands in for this run - {0}" -f $(if ($NoReuse) { '-NoReuse was passed' } else { $reuse.Reason }))
+}
+# A PUSH THAT CAN NO LONGER LAND IS NOT WAITED FOR (2026-09-11). ops\hooks\pre-push hands this run the refs it is
+# pushing and the remote's URL, and lib\push-landable.ps1 asks the remote whether any of them still holds the sha
+# git gave the hook. When none does, every ref would be rejected whatever the gates say, so queueing for a slot and
+# then running every gate spends the machine on a verdict that session cannot use. Checked while waiting, and once
+# more before dispatch. A remote that cannot be read decides nothing and the gates run.
+$pushAbandon = $null
+if ($PushRefsFile) {
+  . (Join-Path $repo 'lib\push-landable.ps1')
+  $pushRemoteUse = if ($PushRemote) { $PushRemote } else { 'origin' }
+  $pushAbandon = { Get-TcPushCannotLandReason -RefsFile $PushRefsFile -Remote $pushRemoteUse -WorkingDirectory $repo }
+}
 # THE SLOTS ARE HELD ONLY AROUND THE POOL: discovery above and judging below spawn nothing, so holding
-# them any longer would make other runs wait on work that uses no worker. A run that cannot get one slot
-# in 20 minutes REFUSES with 3 rather than running over the budget - running anyway is the pile-up.
+# them any longer would make other runs wait on work that uses no worker. A run REFUSES with 3 rather than running
+# over the budget - running anyway is the pile-up - and since 2026-09-11 it waits in ARRIVAL ORDER, so a refusal
+# means the QUEUE stopped moving for 20 minutes, not that this run lost a race (lib\gate-slots.ps1).
 $askedJobs = $Jobs
-$lease = Enter-TcGateSlots -Want $askedJobs -OnWait {
-  Write-Output ("run-gates: all {0} machine-wide gate worker slots are held by other gate runs - waiting for one (up to 20 min)" -f $script:TcGateSlotTotal)
+$lease = Enter-TcGateSlots -Want $askedJobs -Abandon $pushAbandon -OnWait {
+  param($ahead)
+  Write-Output ("run-gates: all {0} machine-wide gate worker slots are held by other gate runs - queued behind {1} earlier run(s), and served in arrival order" -f $script:TcGateSlotTotal, $ahead)
 }
 if ($lease.TimedOut) {
-  Write-Output ("run-gates: COULD NOT EVALUATE - waited {0:N0}s and every one of the {1} machine-wide gate worker slots stayed held by other gate runs. Nothing was run; that is not a pass." -f ($lease.WaitedMs / 1000), $script:TcGateSlotTotal)
+  Write-Output ("run-gates: COULD NOT EVALUATE - waited {0:N0}s for a gate worker slot and the queue did not move for the last 1,200s ({1} run(s) still ahead of this one, and all {2} slots held). Nothing was run; that is not a pass." -f ($lease.WaitedMs / 1000), $lease.Ahead, $script:TcGateSlotTotal)
   Exit-Guard -Name 'run-gates' -Summary 'blind=no-gate-worker-slot' -Code 3
+}
+if ($pushAbandon -and -not $lease.Abandoned -and $lease.WaitedMs -ge 30000) {
+  $saidNow = & $pushAbandon
+  $saidNow = @($saidNow)
+  if ($saidNow.Count -and [string]$saidNow[$saidNow.Count - 1]) {
+    Exit-TcGateSlots $lease
+    $lease.Abandoned = [string]$saidNow[$saidNow.Count - 1]
+  }
+}
+if ($lease.Abandoned) {
+  Write-Output ("run-gates: COULD NOT EVALUATE - this push can no longer land, so no gate was run for it: {0}. Fetch, rebase onto what the remote holds now, and push again. Nothing was run; that is not a pass." -f $lease.Abandoned)
+  Exit-Guard -Name 'run-gates' -Summary 'blind=push-cannot-land' -Code 3
 }
 $Jobs = $lease.Count
 Write-Output ("run-gates: {0} gate(s) dispatched into ONE pool starting at width {1} (asked {2}; {3} slot(s) of a machine-wide {4}, after {5:N1}s waiting for them)" -f $allJobs.Count, $Jobs, $askedJobs, $lease.Count, $script:TcGateSlotTotal, ($lease.WaitedMs / 1000))
@@ -704,4 +757,23 @@ if ($fail.Count) {
     branch  = "$branch"
   }
 }
-Exit-Guard -Name 'run-gates' -Summary ("pass={0} fail={1}" -f $pass, $fail.Count) -Code $(if ($fail.Count) { 1 } else { 0 })
+# THE VERDICT IS RECORDED FOR THE CONTENT IT JUDGED (2026-09-11), and only when this run exits 0 AND the checkout is
+# byte-identical to the fingerprint taken before the gates ran: a pass over content that moved underneath it
+# describes neither version. A red or could-not-evaluate run over content a recorded pass names WITHDRAWS that pass,
+# because gates that disagree with themselves over one tree have given no verdict to reuse. This can never fail the
+# run: a verdict that could not be kept is a lost saving, not a defect in the tree.
+$gateCode = $(if ($fail.Count) { 1 } else { 0 })
+try {
+  if (-not $fpBefore.Fingerprint) {
+    Write-Output ("run-gates: this run's verdict is NOT recorded for reuse - {0}" -f $fpBefore.Reason)
+  } else {
+    $fpAfter = Get-TcGateFingerprint -Repo $repo -Files $fpFiles.ToArray() -Extra $fpExtra
+    $vCommit = ''
+    try { $vc = @(& git -C $repo rev-parse --short HEAD 2>$null); if ($vc.Count) { $vCommit = "$($vc[0])" } } catch { }
+    $kept = Save-TcGateVerdict -Path $verdictPath -ExitCode $gateCode -Before $fpBefore.Fingerprint -After $fpAfter.Fingerprint -Repo $repo -Passed $pass -Commit $vCommit
+    if ($kept -eq 'recorded') { Write-Output 'run-gates: this pass is recorded for reuse - the next run in this checkout over the same content prints it instead of running the gates again' }
+    elseif ($kept -eq 'content-moved') { Write-Output 'run-gates: this pass is NOT recorded for reuse - the checkout changed while the gates ran, so it describes neither version' }
+    elseif ($kept -eq 'withdrawn') { Write-Output 'run-gates: the recorded pass for this content is WITHDRAWN - the same content has now failed here' }
+  }
+} catch { }
+Exit-Guard -Name 'run-gates' -Summary ("pass={0} fail={1}" -f $pass, $fail.Count) -Code $gateCode

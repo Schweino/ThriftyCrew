@@ -144,6 +144,10 @@ try {
   $stub = @'
 $p = $env:TC_PREPUSH_PROBE
 [IO.File]::WriteAllText((Join-Path $p 'gate-saw.txt'), ('GIT_DIR=' + [string]$env:GIT_DIR))
+$i = [array]::IndexOf($args, '-PushRefsFile')
+$rf = if ($i -ge 0 -and $args.Count -gt ($i + 1)) { [string]$args[$i + 1] } else { '' }
+$seen = if ($rf -and (Test-Path -LiteralPath $rf)) { [IO.File]::ReadAllText($rf) } else { 'NO-REFS-FILE:' + $rf }
+[IO.File]::WriteAllText((Join-Path $p 'gate-refs.txt'), $seen)
 $t = Join-Path $p ('initprobe-' + [guid]::NewGuid().ToString('N'))
 $null = & git init -q $t 2>$null
 $null = & git -C $t config user.name GateProbeWrote 2>$null
@@ -258,6 +262,12 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   $head = GOut -C $linked rev-parse HEAD
   Case 'CLEAN TWIN' 'a passing gate still lets the push through' `
     ($rc -eq 0 -and $remoteRef -eq $head -and $head.Length -eq 40) "rc=$rc remote=$remoteRef head=$head"
+  # CLEAN TWIN (2026-09-11): the gate is handed the refs this push updates and the remote sha git gave the hook, so
+  # lib\push-landable.ps1 can refuse a push the remote will reject anyway before it spends a gate worker slot on it.
+  $gateRefsFile = Join-Path $probe 'gate-refs.txt'
+  $gateRefsSeen = if (Test-Path -LiteralPath $gateRefsFile) { ([IO.File]::ReadAllText($gateRefsFile)).Trim() } else { '' }
+  Case 'CLEAN TWIN' 'the hook hands the gate the refs this push updates, with the sha the remote held' `
+    ($gateRefsSeen.Contains($head) -and $gateRefsSeen.Contains('refs/heads/probe')) "refs=[$gateRefsSeen]"
   # MUST FIRE, THE MECHANISM NAMED ON 2026-09-11: the stub gate also runs `git -C <temp> config user.name`. With
   # GIT_DIR inherited that write lands in the SHARED config; user.name=Session on 2026-09-10 was exactly this.
   $mainName = GOut config --file (Join-Path $main '.git\config') user.name
@@ -493,7 +503,7 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 31
+$expectedCases = 32   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''

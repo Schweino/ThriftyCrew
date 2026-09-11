@@ -489,3 +489,6 @@ ops/out/recall-sleep-stamp.json
 ops/out/brain-digest-body.txt
 # WS 10e: every static detector's COMPLETE line per run-gates run. Per machine and per run, like the bus.
 ops/out/gate-readings.jsonl
+# The last green run-gates verdict for THIS checkout's exact content (lib/gate-verdict.ps1). Per checkout and per
+# machine by design - it names the repo path it was earned in - and committing it would put a write in every gate run.
+ops/out/gate-verdict.json

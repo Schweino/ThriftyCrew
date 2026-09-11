@@ -108,7 +108,25 @@ echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not 
 # REDIRECT, THEN READ THE STATUS, THEN GREP THE FILE. Reading a status through a pipe gives the LAST
 # stage's, not the gate's, which this estate has a memory about.
 log="${TMPDIR:-/tmp}/tc-prepush-$$.log"
-powershell -NoProfile -ExecutionPolicy Bypass -File "$gate" > "$log" 2>/dev/null
+# THE GATE IS TOLD WHAT THIS PUSH IS (2026-09-11). Given the refs and the remote's URL it can ask whether any of
+# them still holds the sha git handed this hook, and refuse in seconds - before queueing for a gate worker slot and
+# running every gate - when another push has already landed and the remote will reject this one whatever the gates
+# say (lib/push-landable.ps1). The path crosses into PowerShell in Windows form; with no cygpath the gate simply
+# cannot read the file and decides nothing, which is the same as a remote it cannot reach.
+refs_win="$refs"
+if command -v cygpath >/dev/null 2>&1; then
+  refs_win="$(cygpath -w "$refs")"
+fi
+# ONLY TO A GATE THAT ACCEPTS THEM. This hook is installed in the SHARED .git, so it stands in front of every
+# checkout on this box, and most of them are older than this change. run-gates declares [CmdletBinding()], which
+# makes an undeclared argument a HARD ERROR - so handing -PushRefsFile to an older copy would refuse every push from
+# every worktree until each one rebased. The flags go only to a gate whose own source names them; an older checkout
+# is gated exactly as it was before.
+if grep -q "PushRefsFile" "$gate" 2>/dev/null; then
+  powershell -NoProfile -ExecutionPolicy Bypass -File "$gate" -PushRefsFile "$refs_win" -PushRemote "$2" > "$log" 2>/dev/null
+else
+  powershell -NoProfile -ExecutionPolicy Bypass -File "$gate" > "$log" 2>/dev/null
+fi
 rc=$?
 
 if [ "$rc" -eq 0 ]; then
@@ -151,8 +169,9 @@ rm -f "$refs"
 
 echo "" >&2
 if [ "$rc" -eq 3 ]; then
-  echo "pre-push: BLOCKED - run-gates COULD NOT EVALUATE (exit 3)." >&2
-  echo "          That means gate discovery is broken, NOT that the tree is clean. A 3 is never a pass." >&2
+  echo "pre-push: BLOCKED - run-gates COULD NOT EVALUATE (exit 3). A 3 is never a pass, and the gate's own" >&2
+  echo "          reason is the line below: broken discovery, a queue that stopped moving, or a push that" >&2
+  echo "          can no longer land because the remote moved (rebase and push again)." >&2
 else
   echo "pre-push: BLOCKED - run-gates exited $rc. This tree must not be pushed until it passes." >&2
   echo "          Fix the cause, never the gate." >&2
