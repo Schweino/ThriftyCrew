@@ -476,7 +476,6 @@ if ($__foSelfTest) {
     Set-Content (Join-Path $td 'nomark.ps1') -Value "Write-Output 'quiet'; exit 0"
     Set-Content (Join-Path $td 'slow.ps1')   -Value "Start-Sleep -Seconds 30; Write-Output 'never'"
     Set-Content (Join-Path $td 'err.ps1')    -Value "[Console]::Error.WriteLine('a stderr line'); Write-Output 'OK-COMPLETE'; exit 0"
-    Set-Content (Join-Path $td 'sleep3.ps1') -Value "Start-Sleep -Seconds 3; Write-Output 'done'"
     Set-Content (Join-Path $td 'kept-going.ps1') -Value "Write-Output 'OK-COMPLETE'; Write-Output 'and then it kept going'; exit 0"
     Set-Content (Join-Path $td 'noisy.ps1')      -Value "[Console]::Error.WriteLine('a warning'); Write-Output 'work'; Write-Output 'OK-COMPLETE'; exit 0"
 
@@ -575,17 +574,36 @@ if ($__foSelfTest) {
 
     # AND IT MUST ACTUALLY BE CONCURRENT. Without this case the whole file could be a slow serial loop and
     # every assertion above would still pass - a fan-out that does not fan out, reporting green.
-    # THE SLEEP IS 3 s, NOT 6 (trimmed 2026-08-23 on a measurement). At 6 s this self-test was 12 s, which
-    # made it the single most expensive -SelfTest in the estate and 57% of that whole group's runtime - a
-    # fixture that costs more than the thing it is measuring is its own small defect. 8 x 3 s is concurrent
-    # at ~3-4 s and serial at ~24 s: the gap is still 6x, so a 12 s threshold cannot be flaky, and the case
-    # keeps exactly the discrimination it had.
-    $probe = 1..8 | ForEach-Object { New-FanoutLane -Name ("L$_") -File (Join-Path $td 'sleep3.ps1') -TimeoutSec 60 }
-    $sw = [Diagnostics.Stopwatch]::StartNew()
-    $pr = @(Invoke-Fanout -Lanes $probe -MaxParallel 8)
-    $sw.Stop()
-    $sum = 0; foreach ($x in $pr) { $sum += [int]$x.Elapsed }
-    T 'the pool really runs lanes CONCURRENTLY (8 x 3 s in under 12 s wall)' ($sw.Elapsed.TotalSeconds -lt 12 -and $sum -ge 16) ("wall {0:n1} s, sum {1} s" -f $sw.Elapsed.TotalSeconds, $sum)
+    # ASSERTED ON OVERLAP, NOT ON WALL TIME (2026-09-11). This was "8 x 3 s in under 12 s wall". The 2026-08-23
+    # note beside it reasoned that a 6x gap between concurrent (~3-4 s) and serial (~24 s) "cannot be flaky" -
+    # true on an idle box, and false inside run-gates, which runs 337 gates at width 16 beside sibling
+    # sessions: it failed there at 14.9 s wall while passing 17/17 solo. A correct pool on a saturated box is
+    # not faster, so no wall bar separates "busy" from "serial". The lanes now witness each other instead -
+    # lib\parallel-run.ps1's CONCURRENCY PROBE header has the mechanism and every design that was tried. It is
+    # also cheaper: the 2026-08-23 trim from 6 s to 3 s was about fixture cost, and the quorum forms as soon as
+    # the eighth lane is up rather than after a fixed sleep. WaitSec 120 is a liveness bound, not a speed bar:
+    # through this pool the longest any lane waited for its siblings was 6,662 ms over 8 rounds at 18-100% CPU
+    # (2026-09-11). A correct pool never pays it; a broken one pays it once. The rest is beside the same case
+    # in lib\parallel-run.ps1.
+    . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\parallel-run.ps1')   # the probe; no param() block, so it resets nothing here
+    $probe = New-TcConcurrencyProbe -Count 8 -Dir $td -WaitSec 120
+    try {
+      $pl = 1..8 | ForEach-Object { New-FanoutLane -Name ("L$_") -File $probe.Script -Arguments (Get-TcConcurrencyProbeArgs -Probe $probe -Index $_) -TimeoutSec 300 }
+      $pr = @(Invoke-Fanout -Lanes $pl -MaxParallel 8)
+      $prLines = @($pr | ForEach-Object { $_.StdOut })
+      $pv = Test-TcConcurrencyProbe -Probe $probe -Lines $prLines
+      T 'CLEAN TWIN the pool really runs lanes CONCURRENTLY - all 8 lanes witnessed in flight at once, so a loaded box can delay the proof but cannot fail it' ($pv.Reached -and $pv.MaxLive -eq 8 -and $pr.Count -eq 8) $pv.Detail
+    } finally { Close-TcConcurrencyProbe $probe }
+    # The serial arm. WaitSec does not decide it: at width 1 each lane starts after the last has EXITED, so
+    # no lane can see a token but its own, however long it waits. 2 s only keeps the case cheap.
+    $probe1 = New-TcConcurrencyProbe -Count 3 -Dir $td -WaitSec 2
+    try {
+      $sl1 = 1..3 | ForEach-Object { New-FanoutLane -Name ("S$_") -File $probe1.Script -Arguments (Get-TcConcurrencyProbeArgs -Probe $probe1 -Index $_) -TimeoutSec 300 }
+      $sr1 = @(Invoke-Fanout -Lanes $sl1 -MaxParallel 1)
+      $sr1Lines = @($sr1 | ForEach-Object { $_.StdOut })
+      $sv1 = Test-TcConcurrencyProbe -Probe $probe1 -Lines $sr1Lines
+      T 'MUST FIRE  a pool held to ONE lane fails the same concurrency probe - every lane sees only itself and no quorum forms' ((-not $sv1.Reached) -and $sv1.MaxLive -eq 1 -and $sr1.Count -eq 3) $sv1.Detail
+    } finally { Close-TcConcurrencyProbe $probe1 }
   } finally {
     Remove-Item $td -Recurse -Force -ErrorAction SilentlyContinue
   }

@@ -123,6 +123,130 @@ function Invoke-TcParallel {
   return ,$results
 }
 
+<# ---- CONCURRENCY PROBE ---------------------------------------------------------------------------------
+  Proves a pool REALLY runs N jobs at once, without timing the jobs (2026-09-11).
+
+  WHY NOT A STOPWATCH. This file's self-test asserted "six 600ms jobs at concurrency 6 finish in under
+  2.5s", and grocery\fanout-lib.ps1 asserted "8 x 3s in under 12s wall". Both are claims about the
+  MACHINE, not the pool: run-gates runs 337 gates at width 16 beside whatever sibling sessions are up, and
+  on 2026-09-11 the first failed at 11.71s inside run-gates and 3.39s solo at 100% CPU, then blocked an
+  unrelated push from the pre-push hook; the second failed at 14.9s. A correct pool on a saturated box does
+  not get faster, so a wall-time bar is red exactly when the box is busy, which in run-gates is always.
+
+  WHAT IT ASSERTS INSTEAD. Each job holds a named kernel token for its whole life (the OS drops it however
+  the process exits) and polls how many of the N tokens exist. When one job sees all N it sets a quorum
+  event the TEST holds, so the event outlives the jobs. N tokens alive at one instant is concurrency by
+  definition, and load only delays that instant, it cannot prevent it. A SERIAL pool can never set it:
+  job k starts after job k-1 has exited, so every job sees exactly one token - its own - whatever the load.
+
+  THE ONE REMAINING BOUND IS LIVENESS, NOT SPEED. A job that has waited -WaitSec with no quorum gives up and
+  sets an abandon event, so later jobs in a serial pool exit at once instead of each waiting again. It only
+  decides how long a BROKEN pool takes to be reported; for a correct pool it would have to exceed the gap
+  between the first and last of N children reaching their first line. The measurement behind the default
+  is in the self-test comment where it is used.
+
+  WHAT ELSE WAS TRIED, and why each was not taken. Every design below except the first was run beside the probe
+  on 2026-09-11: 8 rounds at 18-100% CPU on 32 logical cores (4 of them at 100%), each round running every arm
+  on the same jobs back to back, one row per round per arm, through a scratch harness at 7d75b0d90. The old
+  2.5s bar passed 5 of 8; a serial/parallel ratio of at least 2 passed 7 of 8 (1.62 at 100%); job-stamped
+  overlap passed 7 of 8 (4 of 6 overlapping at 100%); the quorum passed 8 of 8, and a serial pool failed it 8
+  of 8. Through grocery\fanout-lib.ps1's pool the quorum also passed 8 of 8 and its width-1 twin failed 8 of 8.
+    - RAISE THE LIMIT. Weakens the gate and only moves the load at which it goes red. Refused by rule.
+    - A SERIAL BASELINE IN THE SAME RUN, ASSERTING A SPEEDUP RATIO. Still load-dependent: the two arms run
+      seconds apart under a load that swings within the run, and on a saturated box six PowerShell start-ups
+      contend for the same cores, so a correct pool's ratio sinks toward 1. It also doubles the fixture cost.
+    - PER-JOB START/END TIMESTAMPS WRITTEN BY THE JOBS, ASSERTING OVERLAP. A child records its start only
+      after PowerShell has initialised, and under load that start-up jitter exceeds a short job's duration,
+      so the intervals stop overlapping. Making the job long enough to cover the jitter is a wall-time guess
+      again. The quorum is this idea with the guess removed: each job WAITS for its siblings.
+    - REPORT BLIND WHEN A CALIBRATION PROBE SAYS THE BOX IS SATURATED. The box is saturated on nearly every
+      run-gates run, so the case would read BLIND on almost every push and a real serial regression would
+      ship as a pass-with-a-note. It gives the coverage up exactly where the gate runs.
+#>
+function New-TcConcurrencyProbe {
+  <# Writes the job script into -Dir (the caller owns and removes the directory) and creates the two events
+     the TEST holds. Close it with Close-TcConcurrencyProbe. Jobs are launched with
+     `powershell -NoProfile -ExecutionPolicy Bypass -File <Script> <Get-TcConcurrencyProbeArgs ...>`. #>
+  param([Parameter(Mandatory)][int]$Count, [Parameter(Mandatory)][string]$Dir, [int]$WaitSec = 120)
+  $run = [guid]::NewGuid().ToString('N')
+  # Local\ is the session namespace, and the GUID keeps two run-gates in sibling worktrees - which run this
+  # same self-test at the same moment - from counting each other's tokens.
+  $prefix = 'Local\tc-probe-' + $run
+  $child = @'
+param([string]$Prefix, [int]$Index, [int]$Count, [int]$WaitSec)
+$token = New-Object Threading.Mutex($false, ($Prefix + '-live-' + $Index))
+$initMs = [int]((Get-Date) - (Get-Process -Id $PID).StartTime).TotalMilliseconds
+$quorum = $null; $abandon = $null
+$okQ = [Threading.EventWaitHandle]::TryOpenExisting(($Prefix + '-quorum'), [ref]$quorum)
+$okA = [Threading.EventWaitHandle]::TryOpenExisting(($Prefix + '-abandon'), [ref]$abandon)
+if (-not ($okQ -and $okA)) {
+  Write-Output ('PROBE index={0} quorum=nohandles max_live=0 init_ms={1} waited_ms=0' -f $Index, $initMs); exit 3
+}
+$max = 0; $how = 'missed'; $sw = [Diagnostics.Stopwatch]::StartNew()
+while ($true) {
+  $live = 0
+  for ($i = 1; $i -le $Count; $i++) {
+    $h = $null
+    if ([Threading.Mutex]::TryOpenExisting(($Prefix + '-live-' + $i), [ref]$h)) { $live++; $h.Dispose() }
+  }
+  if ($live -gt $max) { $max = $live }
+  if ($live -ge $Count) { [void]$quorum.Set() }
+  if ($quorum.WaitOne(0)) { $how = 'reached'; break }
+  if ($abandon.WaitOne(0)) { $how = 'abandoned'; break }
+  if ($sw.Elapsed.TotalSeconds -ge $WaitSec) { [void]$abandon.Set(); $how = 'timedout'; break }
+  Start-Sleep -Milliseconds 20
+}
+Write-Output ('PROBE index={0} quorum={1} max_live={2} init_ms={3} waited_ms={4}' -f $Index, $how, $max, $initMs, [int]$sw.Elapsed.TotalMilliseconds)
+$token.Dispose()
+exit 0
+'@
+  $script = Join-Path $Dir ('concurrency-probe-' + $run.Substring(0, 8) + '.ps1')
+  [IO.File]::WriteAllText($script, $child, (New-Object Text.UTF8Encoding($false)))
+  $manual = [Threading.EventResetMode]::ManualReset
+  return [pscustomobject]@{
+    Prefix = $prefix; Count = $Count; WaitSec = $WaitSec; Script = $script
+    Quorum = (New-Object Threading.EventWaitHandle($false, $manual, ($prefix + '-quorum')))
+    Abandon = (New-Object Threading.EventWaitHandle($false, $manual, ($prefix + '-abandon')))
+  }
+}
+
+function Get-TcConcurrencyProbeArgs {
+  <# The arguments for job -Index, 1-based. Every index 1..Count must be launched exactly once. #>
+  param([Parameter(Mandatory)]$Probe, [Parameter(Mandatory)][int]$Index)
+  return @('-Prefix', $Probe.Prefix, '-Index', [string]$Index, '-Count', [string]$Probe.Count, '-WaitSec', [string]$Probe.WaitSec)
+}
+
+function Test-TcConcurrencyProbe {
+  <# The verdict. -Lines is every stdout line the jobs produced, flattened. Reached is true only when the
+     test's own quorum event was set AND every index 1..Count reported quorum=reached - so a job that never
+     ran, crashed or printed nothing cannot be scored as having been in flight. MaxLive is the most tokens
+     any one job saw at once: exactly 1 is the signature of a serial pool. #>
+  param([Parameter(Mandatory)]$Probe, [AllowEmptyCollection()][object[]]$Lines)
+  $seen = @{}; $maxLive = 0; $maxWait = 0
+  foreach ($l in @($Lines)) {
+    if ("$l" -match '^PROBE index=(\d+) quorum=(\w+) max_live=(\d+) init_ms=(-?\d+) waited_ms=(\d+)') {
+      $seen[[int]$Matches[1]] = $Matches[2]
+      if ([int]$Matches[3] -gt $maxLive) { $maxLive = [int]$Matches[3] }
+      if ([int]$Matches[5] -gt $maxWait) { $maxWait = [int]$Matches[5] }
+    }
+  }
+  $event = $Probe.Quorum.WaitOne(0)
+  $reachedJobs = 0
+  for ($i = 1; $i -le $Probe.Count; $i++) { if ($seen[$i] -eq 'reached') { $reachedJobs++ } }
+  $states = (@($seen.Keys | Sort-Object | ForEach-Object { "$_=" + $seen[$_] }) -join ' ')
+  return [pscustomobject]@{
+    Reached = ($event -and $reachedJobs -eq $Probe.Count)
+    MaxLive = $maxLive
+    Detail = ("quorum_event={0} reached {1} of {2} job(s), max_live={3}, longest wait {4}ms, abandon={5} [{6}]" -f `
+      $event, $reachedJobs, $Probe.Count, $maxLive, $maxWait, $Probe.Abandon.WaitOne(0), $states)
+  }
+}
+
+function Close-TcConcurrencyProbe {
+  param($Probe)
+  if ($Probe) { try { $Probe.Quorum.Dispose() } catch { }; try { $Probe.Abandon.Dispose() } catch { } }
+}
+
 if ($__prSelfTest) {
   $f = 0
   function T($m, $cond, $got) { if ($cond) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $got); $script:f++ } }
@@ -162,13 +286,48 @@ if ($__prSelfTest) {
     ((Format-TcProcArg 'C:\Program Files\x.ps1') -eq '"C:\Program Files\x.ps1"') (Format-TcProcArg 'C:\Program Files\x.ps1')
   T 'CLEAN TWIN an ordinary argument is NOT quoted, so nothing downstream sees quotes it did not have' `
     ((Format-TcProcArg '-SelfTest') -eq '-SelfTest') (Format-TcProcArg '-SelfTest')
-  $t0 = [Diagnostics.Stopwatch]::StartNew()
-  $par = Invoke-TcParallel -Jobs @(1..6 | ForEach-Object { MkJob 'Start-Sleep -Milliseconds 600' }) -Concurrency 6
-  $t0.Stop()
-  T 'CLEAN TWIN six 600ms jobs at concurrency 6 finish in well under the 3.6s a serial loop would take - the whole point, asserted rather than assumed' `
-    ($t0.Elapsed.TotalSeconds -lt 2.5 -and @($par).Count -eq 6) ("{0:N2}s" -f $t0.Elapsed.TotalSeconds)
+  # THE WHOLE POINT - THE POOL REALLY RUNS ITS JOBS AT ONCE - ASSERTED ON OVERLAP, NOT ON A STOPWATCH
+  # (2026-09-11). This was "six 600ms jobs finish in under 2.5s", which is a claim about the machine: it
+  # failed at 11.71s inside run-gates, at 3.39s solo on a 100%-CPU box, and blocked an unrelated push from
+  # the pre-push hook. The CONCURRENCY PROBE header above has the mechanism and what else was tried.
+  # WaitSec 120 IS A LIVENESS BOUND, NOT A SPEED BAR: it only has to exceed the gap between the first and
+  # last of six children reaching their first line. Measured 2026-09-11 over 8 rounds at 18-100% CPU through
+  # a scratch harness at 7d75b0d90: the longest any child here waited for its siblings was 1,486 ms, against a
+  # PowerShell start-up of up to 3,606 ms; one earlier single round at 100% saw 3,503 ms and 4,906 ms. Through
+  # fanout-lib's runspace pool the longest was 6,662 ms. 60 was the first value, and it was raised to 120 on
+  # that fanout figure rather than swept, because the bound is FREE for a correct pool - quorum releases every
+  # job the moment it forms - and a broken pool pays it once, since the first job to give up tells the rest.
+  $probeDir = Join-Path ([IO.Path]::GetTempPath()) ('parallel-run-probe-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $probeDir -Force | Out-Null
+  try {
+    function Invoke-ProbeAt([int]$Count, [int]$Width, [int]$WaitSec) {
+      $p = New-TcConcurrencyProbe -Count $Count -Dir $probeDir -WaitSec $WaitSec
+      try {
+        $jobs = @(1..$Count | ForEach-Object {
+          [pscustomobject]@{ Exe = $PS; ArgList = (@('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $p.Script) + (Get-TcConcurrencyProbeArgs -Probe $p -Index $_)) }
+        })
+        $res = Invoke-TcParallel -Jobs $jobs -Concurrency $Width
+        $lines = @(); $allButLast = @()
+        foreach ($x in $res) { $lines += @($x.Out) }
+        foreach ($x in @($res)[0..($Count - 2)]) { $allButLast += @($x.Out) }
+        $v = Test-TcConcurrencyProbe -Probe $p -Lines $lines
+        $vShort = Test-TcConcurrencyProbe -Probe $p -Lines $allButLast
+        return [pscustomobject]@{ Reached = $v.Reached; MaxLive = $v.MaxLive; Detail = $v.Detail; Jobs = @($res).Count; ReachedMissingOne = $vShort.Reached }
+      } finally { Close-TcConcurrencyProbe $p }
+    }
+    $conc = Invoke-ProbeAt -Count 6 -Width 6 -WaitSec 120
+    T 'CLEAN TWIN six jobs at concurrency 6 are all IN FLIGHT AT ONCE - witnessed by the jobs themselves, so a loaded box can delay the proof but cannot fail it' `
+      ($conc.Reached -and $conc.MaxLive -eq 6 -and $conc.Jobs -eq 6) $conc.Detail
+    T 'MUST FIRE  a job that printed no probe line is NOT counted as in flight - the quorum event alone is not the verdict, or a job that crashed would score as concurrent' `
+      ($conc.Reached -and -not $conc.ReachedMissingOne) ("reached=" + $conc.Reached + " reached_without_job_6=" + $conc.ReachedMissingOne)
+    # WaitSec does not decide this verdict: in a serial pool job k starts after job k-1 has EXITED, so no
+    # job can ever see a token but its own. 2s only keeps the case cheap.
+    $serial = Invoke-ProbeAt -Count 3 -Width 1 -WaitSec 2
+    T 'MUST FIRE  THE BUG THE CLEAN TWIN EXISTS FOR - the same probe calls a SERIAL pool serial: at concurrency 1 every job sees only its own token and no quorum forms' `
+      ((-not $serial.Reached) -and $serial.MaxLive -eq 1 -and $serial.Jobs -eq 3) $serial.Detail
+  } finally { Remove-Item -LiteralPath $probeDir -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 3 must-fire cases led by job-order results and exact exit codes, 3 must-not-fire cases led by concurrency 1 matching the pool, and 4 clean twins including the measured speedup'
+  Write-Output 'SELF-TEST PASS: 5 must-fire cases led by job-order results, exact exit codes and a serial pool failing the concurrency probe, 3 must-not-fire cases led by concurrency 1 matching the pool, and 4 clean twins including all six jobs witnessed in flight at once'
   exit 0
 }

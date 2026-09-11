@@ -148,6 +148,16 @@ everything else honest, so a defect here is silent by construction.
   **A rule in a file is not a block**, so `ops/audit-full-path-excludes.ps1` holds this at push time: a ratchet
   over the PowerShell AST and Python `os.walk` roots, wired into `run-gates`. Run it for the count rather than
   quoting one.
+- **A self-test in `run-gates` never puts a WALL-CLOCK BAR on work that shares the box** (2026-09-11).
+  `run-gates` runs ~337 gates at width 16 beside sibling sessions, often at 100% CPU, so "six 600ms jobs in
+  under 2.5s" (`lib/parallel-run.ps1`) and "8 x 3 s in under 12 s" (`grocery/fanout-lib.ps1`) were claims
+  about the MACHINE: they failed at 11.71s and 14.9s and blocked an unrelated push from the hook. **A
+  concurrency claim is proved by overlap the jobs WITNESS** - `New-TcConcurrencyProbe` in
+  `lib/parallel-run.ps1`, with a width-1 MUST FIRE - and its header lists the three designs that lost and
+  why. A hang bound many times above a correct run is tolerable; a performance bar within ~10x of the work's
+  own cost is not, and raising it only moves the load at which it goes red. Two remained on that date:
+  `grocery/audit-coverage-gaps.ps1:102` (4x) and `meal-prep/pipeline/harvest.py`'s `write_pool` retry case
+  (~1.8x).
 
 - **A mutex serialises WRITERS, never READERS, and under PS 5.1 a lock-free reader can cost a locked writer
   its write** (2026-09-11). `Move-Item -Force x.tmp x` fails with *"Cannot create a file when that file
