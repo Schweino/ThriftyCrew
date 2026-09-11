@@ -62,6 +62,7 @@ param(
   #
   # -NoIdentity is the kill switch section 10.17 asks for: the gate ships ADVISORY and is promoted by
   # Brad, and until then step 1 must be revertible without a code revert. It wins over the namespace.
+  [switch]$NoAisleAdmission,   # dry-run arm only: admit Family Fare rows the store shelves outside their commodity's departments (aisle-lib.ps1)
   [string]$IdentityNamespace = "",
   [switch]$NoIdentity
 )
@@ -1871,6 +1872,14 @@ function Get-RowProductId($row) {
   if ($v) { return $v }
   return ''
 }
+# FAMILY FARE SHELF-PATH ADMISSION (2026-09-11, queue 2026-09-11-62b248). The store's own canonical_url is
+# indexed as the everyday rows load (Add-AisleShelfRow, in the regular loader below) and read in the hot loop
+# (Get-AisleAdmissionRefusal), so a Family Fare row the store shelves outside its commodity's departments
+# cannot price a cell. The rule is aisle-lib.ps1, the one copy aisle-test.ps1 also judges the live board by.
+# -NoAisleAdmission turns only the refusal off, for the dry-run arm that measures what it refuses.
+. (Join-Path $PSScriptRoot 'aisle-lib.ps1')
+$AisleShelf = New-AisleShelfIndex
+$AisleRefused = New-Object System.Collections.Generic.List[object]
 function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='',$srcFile='',$srcRow=$null) {
   # THE FORMAT LAYER, AND THE ONE DROP HERE THAT SAID NOTHING (2026-09-07, backlog E5). A row whose
   # name did not parse vanishes before any business rule runs, so a capture whose name field moved
@@ -2161,6 +2170,7 @@ if (Test-Path $regDir) {
     # on disk - the board is mostly carried-forward rows, which a producer-side fix could not reach for
     # a quarter - and so the capture files stay the honest record of what the store showed us.
     foreach ($d in $ex.deals) {
+      if ([string]$ex.store -eq 'Family Fare') { Add-AisleShelfRow $AisleShelf $d }   # the store's own shelf path, indexed as it loads (aisle-lib.ps1)
       $rsd = Get-RowSrcDate ([string]$ex.store) $d $sd
       $spl = Get-PriceSplit $d ([string]$ex.store)
       $script:LastBasis = if ($spl.sale_from) { 'store' } else { '' }
@@ -2390,6 +2400,7 @@ $channelAllowed = 0
 # detail scan happens once per distinct name after the board is written (see the emission block).
 $IDENT_ON = ($IdentityNamespace -ne '') -and (-not $NoIdentity)
 $identityRows = $(if ($IDENT_ON) { New-Object System.Collections.Generic.List[object] } else { $null })
+$AisleCatMap = $(if ($NoAisleAdmission) { @{} } else { Get-AisleCategoryMap -Root $PSScriptRoot })
 foreach ($d in $deals) {
   $c = Resolve-Commodity -Matcher $fastMatcher -Name $d.name
   if ($IDENT_ON) { [void]$identityRows.Add($d) }
@@ -2434,7 +2445,18 @@ foreach ($d in $deals) {
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("min_piece_oz>=$($MINPIECE[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
       $uprice = $null; $basis = 'WRONG-PIECE-FORM'   # drop from ranking; board still ships via runner-up
     }
-    else {
+    elseif ((-not $NoAisleAdmission) -and ([string]$d.store -eq 'Family Fare') -and ($aisleNo = Get-AisleAdmissionRefusal -CatMap $AisleCatMap -Store ([string]$d.store) -CommodityId ([string]$c.id) -Dept (Get-AisleShelfDept $AisleShelf ([string]$d.product_id) ([string]$d.name)))) {
+      # WRONG AISLE (2026-09-11, queue 2026-09-11-62b248). Family Fare itself shelves this product in a department
+      # its commodity's category does not allow; aisle-lib.ps1 holds the rule. The founding row was a pizza-SAUCE
+      # squeeze bottle, 'Contadina Tmto Bsl Pizza Squz Btl', holding the frozen-pizza cell at $2.99: its
+      # abbreviated name carries no type word for any exclude to see, and the store had filed it in
+      # pantry/canned_goods. A row with no shelf path is ADMITTED - only a department the store authored can
+      # refuse. Flagged rather than silently dropped, like every refusal above, so a department map that is too
+      # tight reads as findings and not as a quietly emptier board.
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("aisle=" + $aisleNo.dept + " (" + $aisleNo.reason + ")"); price_text=$d.price_text; size_text=$d.size_text })
+      $AisleRefused.Add([pscustomobject]@{ id=[string]$c.id; store=[string]$d.store; name=[string]$d.name; dept=[string]$aisleNo.dept; unit_price=$uprice })
+      $uprice = $null; $basis = 'WRONG-AISLE'   # drop from ranking; board still ships via runner-up
+    }    else {
       # RIGHT PRODUCT, NOT ON THE SHELF (see the channel block in instore-lib.ps1). A ship-only or
       # third-party listing is not an in-store price and must not be published as one. Since 2026-09-01
       # this asks the ID-KEYED question rather than the row-keyed one: refusing the 08-31 row of a
@@ -2535,6 +2557,8 @@ if ($KW_BLOCKS.Count) {
   $matched = $kept
 }
 Write-Output ("known-wrong: $($KW_BLOCKS.Count) active blocked cell(s) in the ruling file, $kwDropped priced row(s) dropped from this board")
+Write-Output ("aisle-admission: refused {0} Family Fare row(s) the store shelves outside their commodity's departments; shelf paths indexed for {1} product id(s) and {2} name(s){3}" -f $AisleRefused.Count, $AisleShelf.by_id.Count, $AisleShelf.by_name.Count, $(if ($NoAisleAdmission) { ' - REFUSAL DISABLED by -NoAisleAdmission' } else { '' }))
+foreach ($ar in $AisleRefused) { Write-Output ("  aisle-admission: refused [{0}] {1} '{2}' (unit_price {3}) - the store shelves it in '{4}'" -f $ar.store, $ar.id, $ar.name, $ar.unit_price, $ar.dept) }
 # THE CHANNEL REFUSAL, COUNTED OUT LOUD. A gate that drops rows silently is indistinguishable from a
 # capture that never found them, which is how the whole in-store class stayed invisible for a month.
 if ($channelRefused.Count) {

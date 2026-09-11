@@ -1273,6 +1273,37 @@ else { Bad ('food-category flagged sausages on SAUSAGE commodities (rc=' + $r.rc
 Remove-Item $fxSc -Recurse -Force -ErrorAction SilentlyContinue
 } # u032-d4-must-fire-for-the-sausage-carrier
 
+# (d5) MUST-FIRE for the soup_carrier and sushi_carrier classes (2026-09-11, queue 2026-09-11-3b246c). THE FOUNDING
+# ROWS, frozen verbatim off the live board they were holding (comparison-2026-09-09, built 2026-09-11 08:11): Sam's
+# Club's shrimp cell read $3.49/lb because the cheapest thing matching "shrimp" there was a 2-pack of SHRIMP AND CORN
+# CHOWDER ($10.47 for 48 oz, exact arithmetic, not a parse bug), and Aldi's shrimp cell was a SUSHI ROLL at $7.36/lb.
+# shrimp's include is the bare word and every fence it carried was a type word for a shrimp product (breaded, popcorn,
+# scampi, boil), so nothing in the library could say "this is a prepared dish that names its protein". Measured over
+# 22,713 corpus names (triage-plans\plan-2026-09-11.routing.json): baked into ^Meat and ^(Fruit|Vegetables)$ the two
+# classes move 3 names, both of these rows plus a tomato bisque that correctly re-lands on tomato-soup. Never
+# regenerate these rows from the board: the fix removed them, so a regenerated fixture would encode the fix and pass
+# by finding nothing ([[guard-fixture-rule]]).
+if (Use-Unit 'u140-d5-must-fire-for-the-soup-and-sushi-carriers') {
+$fxSs = NewFxDir 'afc-soup-sushi'
+$ssRow = '{"week_of":"2026-09-09","comparison":[{"commodity":"Shrimp (frozen, raw)","id":"shrimp","unit":"lb","stores":[{"store":"Sam''s Club","per_unit":3.49,"item":"Member''s Mark Shrimp and Corn Chowder, 24 oz., 2 pk."},{"store":"Aldi","per_unit":7.36,"item":"Fusia Shrimp Avocado Roll Sushi 11.5 OZ"}]}]}'
+Set-Content (Join-Path $fxSs 'comparison-2026-09-09.json') $ssRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSs)
+if ($r.rc -eq 2 -and $r.text -match 'soup_carrier' -and $r.text -match 'sushi_carrier') {
+  Ok 'food-category MUST-FIRE: a shrimp chowder and a shrimp sushi roll on shrimp hard-fail as soup_carrier and sushi_carrier (exit 2)'
+} else {
+  Bad ('food-category did NOT catch the Sam''s chowder and the Aldi sushi roll on shrimp (rc=' + $r.rc + ') - soup_carrier or sushi_carrier is gone from category-excludes.json, or no longer applied to the Meat scope, so a prepared dish that names its protein can hold that protein''s cell again')
+}
+# MUST NOT FIRE: the real raw shrimp that took both cells back, and the bisque on the commodity it IS (tomato-soup sits
+# outside both scoped blocks), are legal rows and the audit must stay silent on them. If this fires, a class token is
+# too broad or has leaked into a block that carries soups.
+$ssLegal = '{"week_of":"2026-09-09","comparison":[{"commodity":"Shrimp (frozen, raw)","id":"shrimp","unit":"lb","stores":[{"store":"Sam''s Club","per_unit":5.82,"item":"Member''s Mark Farm Raised Jumbo Raw EZ Peel Shrimp, Frozen, 21-30 ct. per pound, 3 lbs."},{"store":"Aldi","per_unit":8.3867,"item":"Fremont Fish Market Medium EZ Peel Raw Shrimp 12 OZ"}]},{"commodity":"Tomato Soup (canned)","id":"tomato-soup","unit":"oz","stores":[{"store":"Family Fare","per_unit":0.3431,"item":"Fresh & Finest Herbed Tomato Bisque"}]}]}'
+Set-Content (Join-Path $fxSs 'comparison-2026-09-09.json') $ssLegal -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSs)
+if ($r.rc -eq 0) { Ok 'food-category MUST NOT FIRE: EZ Peel raw shrimp at Sam''s Club and Aldi and a tomato bisque on tomato-soup all stay silent - the prepared-dish classes fence only the scoped blocks' }
+else { Bad ('food-category flagged REAL raw shrimp or a bisque on tomato-soup (rc=' + $r.rc + ') - a soup_carrier/sushi_carrier token is too broad or reached a block that carries soups: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxSs -Recurse -Force -ErrorAction SilentlyContinue
+} # u140-d5-must-fire-for-the-soup-and-sushi-carriers
+
 # (d5) MUST-FIRE for cheese_carrier and cracker_carrier (2026-09-04, queue 2026-09-04-2cd17a). TWO FOUNDING
 # ROWS, frozen verbatim off the 09-04 Aldi capture that produced them:
 #   * 'Emporium Selection Bacon Bread Cheese 6 OZ' is a BAKED CHEESE. It routed to bacon (index 4) because
@@ -2844,8 +2875,12 @@ else { Bad 'discover-hyvee may now write into the store feed - unreviewed discov
 # Raised 12 -> 14 on 2026-08-06 when the reviewed COMMODITY_DEPT exception table grew from 7 entries to 21
 # and took a must-fire / clean-twin pair with it (an excepted commodity in a NON-listed department must still
 # BLOCK; the same commodity in its listed department must ALLOW through the exception). Never lower it.
+# Raised 14 -> 20 on 2026-09-11 (queue 2026-09-11-62b248) when the rule moved to aisle-lib.ps1 and compare-deals
+# began refusing Family Fare rows at ADMISSION through it: the Contadina squeeze bottle refused by id and by name
+# naming pantry, Di Giorno allowed from freezer, the Planters exception honoured through the same path, a
+# shelf-less row and a non-FF row admitted, and a /shop/<product_slug>/p/ URL that must not read as a department.
 $r = RunPS 'aisle-test.ps1' @('-SelfTest')
-if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: 14/14 pass') { Ok 'aisle-test -SelfTest passes (5 founding/exception flips blocked, hard positive allowed, exception path allowed, blind refuses, multi-row unrolls)' }
+if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: 20/20 pass') { Ok 'aisle-test -SelfTest passes (5 founding/exception flips blocked, hard positive allowed, exception path allowed, blind refuses, multi-row unrolls)' }
 else { Bad ('aisle-test -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
 $atSrc = Get-Content (Join-Path $root 'aisle-test.ps1') -Raw
 if ($atSrc -match 'Wimmer') { Ok 'the hard-positive fixture (a real hot dog scoring BELOW three of the four failures) is still armed' }

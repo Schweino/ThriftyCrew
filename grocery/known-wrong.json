@@ -4378,6 +4378,66 @@
                         "ruled_on":  "2026-09-10",
                         "ruled_by":  "triage 2026-09-10 20430e",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "shrimp|SamsClub|members-mark-shrimp-and-corn-chowder-24-oz-2-pk",
+                        "commodity":  "shrimp",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark Shrimp and Corn Chowder, 24 oz., 2 pk."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Soup, not shrimp: Member\u0027s Mark Shrimp and Corn Chowder 24 oz 2 pk, $10.47 for 48 oz, priced as raw frozen shrimp at $3.49/lb (exact arithmetic, not a parse bug) and held the shrimp crown over real raw EZ Peel shrimp at $5.82/lb. Queue 2026-09-11-3b246c, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "shrimp|Aldi|fusia-shrimp-avocado-roll-sushi-11-5-oz",
+                        "commodity":  "shrimp",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Fusia Shrimp Avocado Roll Sushi 11.5 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Sushi, not raw shrimp: Fusia Shrimp Avocado Roll Sushi 11.5 OZ at $5.29 held the Aldi shrimp cell at $7.36/lb. Queue 2026-09-11-3b246c, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-pizza|FamilyFare|contadina-tmto-bsl-pizza-squz-btl",
+                        "commodity":  "frozen-pizza",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Contadina Tmto Bsl Pizza Squz Btl"
+                                  ],
+                        "product_id":  "1764405684716243059",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pizza SAUCE squeeze bottle, not a frozen pizza: Contadina Tmto Bsl Pizza Squz Btl, $2.99 for 13 oz, shelved by Family Fare in pantry/canned_goods/tomato_sauce_paste, held the FF frozen-pizza cell at $2.99/each. Queue 2026-09-11-62b248, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "granola|Aldi|millville-crunchy-granola-raisin-bran-18-2-oz",
+                        "commodity":  "granola",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Millville Crunchy Granola Raisin Bran 18.2 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Cereal, not granola: Millville Crunchy Granola Raisin Bran 18.2 OZ at $2.75 (found by the term cereal, an 18.2 oz raisin bran box) held the Aldi granola cell at $0.1511/oz on the 2026-09-11 rebuild. Found while implementing queue 2026-09-11-3b246c, triage-plans/plan-2026-09-11.json.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-11",
+                        "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

@@ -66,6 +66,11 @@
   safe direction inverts: no aisle evidence means we do not flip. Refusing depth costs coverage; accepting
   a bad flip costs a wrong price, and a wrong price is the thing the product promises never to do.
 
+  THE RULE ITSELF LIVES IN aisle-lib.ps1 SINCE 2026-09-11 (queue 2026-09-11-62b248). compare-deals.ps1 now
+  refuses a Family Fare row at ADMISSION through the same functions, so the department tables, the reviewed
+  exceptions and the verdict moved there verbatim. This file keeps the outcome watch (-LiveBoard), the
+  candidate judge (-Candidates / -Id) and the hermetic self-test, which drives the lib's code path.
+
   Usage:
     .\aisle-test.ps1 -SelfTest
     .\aisle-test.ps1 -Candidates candidates.json      [{id, store, product, canonical_url}]
@@ -84,195 +89,19 @@ param(
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path $PSScriptRoot 'aisle-lib.ps1')   # THE rule: Get-AisleDept, the two department tables, Test-AisleAllowed, the admission index
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
-# ---- the shelf path, reduced to what we compare on -------------------------------------------------
-# Segment 1 is the DEPARTMENT (fresh_fruits_vegetables, household, health_beauty, pantry...). Segment 2 is
-# the aisle within it. We gate on DEPARTMENT: it is the level the four failures violate, and it is stable -
-# a store reshuffling an aisle inside a department must not start refusing real product.
-function Get-Dept([string]$u) {
-  if (-not $u) { return '' }
-  $m = [regex]::Match([string]$u, '/shop/([^/]+)/')
-  if ($m.Success) { return $m.Groups[1].Value.ToLower() }
-  return ''
-}
-function Get-Aisle([string]$u) {
-  if (-not $u) { return '' }
-  $m = [regex]::Match([string]$u, '/shop/([^/]+)/([^/]+)/')
-  if ($m.Success) { return ($m.Groups[1].Value + '/' + $m.Groups[2].Value).ToLower() }
-  return (Get-Dept $u)
-}
-
-# ---- the AUTHORED category -> department allowlist ---------------------------------------------------
-# This table is written by a human and reviewed. The first build LEARNED it per commodity from rows the
-# engine matched, and that failed for a reason worth keeping: the rules are already polluted, so the
-# profile inherited their errors. watermelon's learned profile contained health_beauty (1 of 10 matches)
-# purely because the rule already matches Olay Watermelon Body Wash - so the gate cheerfully ALLOWED the
-# body wash. A gate that learns its baseline from the thing it is auditing cannot catch that thing.
-#
-# Measured department mix per estate category on the live FF catalogue (2026-08-01, n in parens):
-#   pet 100% pets_wildlife (141)    baby 100% health_beauty (62)     canned 97% pantry (358)
-#   personal 94% health_beauty (283) condiments 93% pantry (383)     household 91% household (265)
-#   grains 91% pantry (201)         frozen 89% freezer (101)          baking 84% pantry (350)
-#   meat 83% meat +13% deli (240)   bakery 78% bakery (94)            dairy 66% dairy +18% deli (282)
-#   veg 62% fresh_fruits_vegetables (137)
-# and THREE that are not mapping failures but rule pollution, recorded here because they are findings:
-#   fruit  34% fresh_fruits_vegetables, 26% pantry, 24% BEVERAGES, 7% HEALTH_BEAUTY (140)
-#   snacks 47% beverages, 45% pantry (600)
-#   oils   69% pantry, 29% beverages (191)   [also: 'coffee' is filed under 'oils', likely miscategorised]
-# For `fruit` the allowlist is deliberately produce-ONLY: the beverage and health_beauty share IS the
-# defect this gate exists to stop, so encoding it would be encoding the bug.
-$CAT_DEPT = @{
-  'baby'       = @('health_beauty')
-  'bakery'     = @('bakery', 'pantry')
-  'baking'     = @('pantry')
-  'canned'     = @('pantry')
-  'condiments' = @('pantry', 'deli')
-  'dairy'      = @('dairy', 'deli')
-  'frozen'     = @('freezer')
-  'fruit'      = @('fresh_fruits_vegetables')
-  'grains'     = @('pantry')
-  'household'  = @('household')
-  'meat'       = @('meat', 'deli', 'meat_seafood')
-  'oils'       = @('pantry')
-  'personal'   = @('health_beauty', 'household')
-  'pet'        = @('pets_wildlife')
-  'snacks'     = @('pantry', 'beverages')
-  'veg'        = @('fresh_fruits_vegetables', 'pantry', 'freezer')
-}
-
-# ---- reviewed per-commodity exceptions ---------------------------------------------------------------
-# The category default is right for most things and WRONG for a predictable minority: commodities the
-# STORE shelves somewhere other than where the estate files them. Measured by judging all 3,828
-# rule-matched FF rows and reading every commodity that absorbed blocks - 10.8% blocked, and these are the
-# ones where the blocked rows were REAL product, not pollution:
-#   coffee(30) + orange-juice(26) + lemonade(7)  real drinks, but filed under 'oils'/'fruit'
-#   hand-soap(24) + protein-bars(19)             stores shelve these in health_beauty, not household/snacks
-#   whipped-cream(9)                             Cool Whip is literally frozen
-#   dried-cranberries(7)                         dried fruit is pantry, not produce
-# Everything else that blocked was the gate working: Spindrift Blood Orange sparkling water under
-# `oranges`, Ruffles Cheddar & SOUR CREAM chips under `sour-cream`, Eggo Cookies-and-Creme waffles under
-# `cookies`, Mike's HARD Lemonade under `lemonade`, Starbucks Refreshers under `watermelon`.
-# NOTE for later: `coffee` sits in the estate category 'oils', which is almost certainly a
-# miscategorisation rather than an aisle problem. Left alone here - recategorising a commodity moves it on
-# the public board's category filter, which is a bigger change than this gate should make on its own.
-# 2026-08-06 (triage plan-2026-08-06, item 2026-08-03-3ec6da): the standing BLOCK set had grown to a fixed
-# 21 rows that re-paged on every product-string churn, and ALL 21 were read row by row against the board -
-# every one a REAL instance of its commodity that Family Fare simply shelves somewhere else (Sugar 'N Spice
-# spice packets and bagged Chile De Arbol in produce, canned milks and refrigerated bagels in dairy,
-# ReaLemon-class juices in beverages, breaded nuggets and fish sticks filed under meat, Pampa rice and Lil
-# Dutch Maid cookies in the trial-sizes aisle, dried prunes in pantry, California Sun Dry tomatoes in
-# produce). A standing set of known-real blocks is worse than useless: a genuinely NEW cross-department
-# hijack arrives buried in a 21-row list a human has to diff from memory. Draining it to zero re-arms the
-# signature dedup in check-ad-cycles so the alert only speaks on a new block.
-# EVERY entry below is the commodity's CURRENT category allowlist PLUS the observed FF department - never a
-# raw replacement, because this table REPLACES the category map (see Judge), so a bare list would silently
-# BLOCK a department that is allowed today. Verified: none of the 21 loses a department it already allows.
-# The category-level CAT_DEPT map above stays tight on purpose - loosening it is the thing this gate exists
-# to refuse.
-$COMMODITY_DEPT = @{
-  'coffee'            = @('beverages', 'pantry')
-  'orange-juice'      = @('beverages', 'pantry')
-  'lemonade'          = @('beverages', 'pantry')
-  'hand-soap'         = @('health_beauty', 'household')
-  'protein-bars'      = @('health_beauty', 'pantry')
-  'whipped-cream'     = @('freezer', 'dairy')
-  'dried-cranberries' = @('pantry', 'fresh_fruits_vegetables')
-  # --- reviewed 2026-08-06, all 21 read against their board row ---
-  'bagels'             = @('bakery', 'pantry', 'dairy')                                # FF shelves Lender's/Bubba's bagels in dairy
-  'bay-leaves'         = @('pantry', 'fresh_fruits_vegetables')                         # Sugar 'N Spice packets hang in produce
-  'curry-powder'       = @('pantry', 'fresh_fruits_vegetables')
-  'dried-arbol-chiles' = @('pantry', 'fresh_fruits_vegetables')                         # bagged dried chiles are a produce item
-  'ground-fennel'      = @('pantry', 'fresh_fruits_vegetables')
-  'ground-turmeric'    = @('pantry', 'fresh_fruits_vegetables')
-  'poultry-seasoning'  = @('pantry', 'fresh_fruits_vegetables')
-  'condensed-milk'     = @('pantry', 'dairy')                                           # canned milks sit in the dairy aisle
-  'evaporated-milk'    = @('pantry', 'dairy')
-  'cheese-tortellini'  = @('pantry', 'freezer')
-  'rice'               = @('pantry', 'seasonal_special_occasion')                        # Pampa rice in the trial-sizes aisle
-  'chicken-nuggets'    = @('freezer', 'meat')                                            # breaded frozen nuggets filed under meat
-  'fish-sticks'        = @('freezer', 'meat')
-  'coffee-creamer'     = @('dairy', 'deli', 'beverages')                                 # 26 FF creamers hang in beverages
-  'corned-beef-hash'   = @('pantry', 'meat')
-  'gingersnaps'        = @('pantry', 'beverages', 'seasonal_special_occasion')
-  'lemon-juice'        = @('pantry', 'deli', 'beverages')                                # ReaLemon-class juice bottles
-  'lime-juice'         = @('pantry', 'deli', 'beverages')
-  'minced-garlic'      = @('pantry', 'deli', 'fresh_fruits_vegetables')
-  'prunes'             = @('fresh_fruits_vegetables', 'pantry')                          # dried fruit is pantry, not produce
-  'sun-dried-tomatoes' = @('pantry', 'fresh_fruits_vegetables')                          # FF shelves the California Sun Dry jar in produce
-  # --- reviewed 2026-08-30 (plan-2026-08-30-2, queue 2026-08-30-2611d3), each read against its board row ---
-  # The standing BLOCK set had regrown to 11 and re-paged every 3 days. Ten were RIGHT products failing a
-  # wrong map; the eleventh was Blue Bunny ICE CREAM holding the pistachios crown, which is the catch this
-  # gate exists for and which was buried under the ten. Draining the ten re-arms the signature dedup so the
-  # alert only speaks on a NEW block. Every entry below is the commodity's current category allowlist PLUS
-  # the observed Family Fare department - never a bare replacement, because this table REPLACES the category
-  # map in Judge, so a short list would silently BLOCK a department that is allowed today.
-  'dried-basil'        = @('pantry', 'fresh_fruits_vegetables')   # Litehouse freeze-dried herbs hang on the produce spice rack
-  'black-peppercorns'  = @('pantry', 'fresh_fruits_vegetables')   # Sugar 'N Spice packets, same rack as bay-leaves above
-  'cinnamon-stick'     = @('pantry', 'fresh_fruits_vegetables')   # Canela Entera, the Hispanic spice rack in produce
-  'whole-cloves'       = @('pantry', 'fresh_fruits_vegetables')   # Sugar 'N Spice packets
-  'dried-ancho-chiles' = @('pantry', 'fresh_fruits_vegetables')   # bagged dried chiles ARE a produce item at FF, like dried-arbol-chiles
-  # The three alcohol rows are right products in the right aisle: the estate files them under the 'snacks'
-  # CATEGORY (pantry, beverages), so beer_wine_spirits is disallowed for a bottle of wine. Fixed here rather
-  # than by recategorising, because a commodity's category is also its section on the public board and that
-  # is a bigger change than this gate should make on its own (see the coffee note above).
-  'brandy'             = @('pantry', 'beverages', 'beer_wine_spirits')
-  'red-wine'           = @('pantry', 'beverages', 'beer_wine_spirits')
-  'white-wine'         = @('pantry', 'beverages', 'beer_wine_spirits')
-  'vienna-sausage'     = @('pantry', 'meat')                      # FF files Libby's tins under meat/sausage; category 'canned' allows only pantry
-  'parmesan'           = @('dairy', 'deli', 'pantry')             # Our Family GRATED 16 oz is shelf-stable and sits in pantry
-  # --- reviewed 2026-08-31 (queue 2026-08-31-e6a93d), each read against its Family Fare row ---
-  # Three blocks, all RIGHT product on a shelf the map does not allow, so the standing set was about to
-  # start regrowing again - which is the state the 08-06 and 08-30 notes above both drained precisely so a
-  # genuinely new hijack cannot arrive buried in a list. Nothing here loses a department it allows today.
-  #   celery-salt    'Dan's Pantry Celery Salt' $4.99 / 12 oz, in fresh_fruits_vegetables/fresh_spices_herbs
-  #   smoked-paprika 'Sugar N Spice Paprika Smoked Pp' $2.49 / 1 oz, the SAME produce spice rack and the
-  #                  SAME brand already reviewed for bay-leaves, black-peppercorns and whole-cloves
-  # Neither of those two is even on the board (both under MinStores), so the block was costing a candidate
-  # rather than publishing a wrong cell - still worth draining, for the buried-in-a-list reason above.
-  #   pistachios     'Planters Dry Roasted Pistachios 12.75 Oz' $5.99, filed in dairy/ready_to_eat. Read the
-  #                  whole row before allowing it, because THIS is the commodity Blue Bunny ice cream
-  #                  crowned on 08-30: all five cells are real pistachios today and the crown is Sam's
-  #                  48 oz at 0.3538/oz, with the Planters row a non-crown runner-up at 0.4698.
-  'celery-salt'        = @('pantry', 'fresh_fruits_vegetables')
-  'smoked-paprika'     = @('pantry', 'fresh_fruits_vegetables')
-  'pistachios'         = @('pantry', 'beverages', 'dairy')
-}
-
-function Get-CategoryMap {
-  $cats = Read-JsonFile (Join-Path $root 'categories.json')
-  $m = @{}
-  $keyByLabel = @{}
-  foreach ($c in @($cats.categories)) {
-    $keyByLabel[[string]$c.label] = [string]$c.key
-    foreach ($id in @($c.commodities)) { $m[[string]$id] = [string]$c.key }
-  }
-  # THE RECIPE BOARD IS A SECOND ID NAMESPACE (2026-08-30, queue 2026-08-30-2611d3). categories.json lists
-  # only the STAPLE ids, so every recipe-board id reached Judge with no category and came back BLIND -
-  # 21 of them on 2026-08-30 (greek-yogurt, mozzarella-cheese, salsa-verde, smoked-paprika and 17 more),
-  # while -LiveBoard has been reading recipe-board.json since it was written. Unjudged is exactly how the
-  # Blue Bunny ice cream held the pistachios crown, so a whole namespace nobody judges is the same hole
-  # one commodity wide. The recipe rows carry their category as a LABEL on the row itself; build-deals-page
-  # already THROWS if that label is not one of categories.json's sections, so the label is canonical and
-  # this is a lookup, not a guess. categories.json membership always wins - a staple id can never be
-  # re-keyed by a recipe row - and a label with no section is left BLIND rather than mapped to something.
-  foreach ($rbn in @('out\recipe-board-everyday.json', 'out\recipe-board.json')) {
-    $rbp = Join-Path $root $rbn
-    if (-not (Test-Path $rbp)) { continue }
-    try { $rbd = Read-JsonFile $rbp } catch { continue }
-    foreach ($r in @($rbd.comparison)) {
-      $rid = [string]$r.id; $rlab = [string]$r.category
-      if (-not $rid -or -not $rlab) { continue }
-      if ($m.ContainsKey($rid)) { continue }
-      if ($keyByLabel.ContainsKey($rlab)) { $m[$rid] = $keyByLabel[$rlab] }
-    }
-  }
-  return $m
-}
+# ---- thin names over the lib, so this file reads the way it always has ------------------------------
+function Get-Dept([string]$u) { return (Get-AisleDept $u) }
+function Get-Aisle([string]$u) { return (Get-AisleShelf $u) }
+$CAT_DEPT = $AISLE_CAT_DEPT
+$COMMODITY_DEPT = $AISLE_COMMODITY_DEPT
+function Get-CategoryMap { return (Get-AisleCategoryMap -Root $root) }
 
 # ---- per-commodity evidence, kept as a SECONDARY signal only -----------------------------------------
 # Still useful for reporting how unusual a candidate is, but it no longer decides anything, because of
-# the pollution above.
+# the pollution recorded in aisle-lib.ps1.
 function Build-Profile {
   param([string]$FeedFile)
   $coms = Read-JsonFile (Join-Path $root 'commodities.json')
@@ -309,19 +138,7 @@ function Build-Profile {
 
 function Judge {
   param($CatMap, [string]$CommodityId, [string]$Url)
-  $dept = Get-Dept $Url
-  if (-not $dept) { return [pscustomobject]@{ verdict = 'BLIND'; reason = 'candidate has no shelf path - cannot place it on a shelf, so the flip is refused' } }
-  if ($COMMODITY_DEPT.ContainsKey($CommodityId)) {
-    $ov = @($COMMODITY_DEPT[$CommodityId])
-    if ($ov -contains $dept) { return [pscustomobject]@{ verdict = 'ALLOW'; reason = "'$dept' is a reviewed exception department for '$CommodityId'" } }
-    return [pscustomobject]@{ verdict = 'BLOCK'; reason = "candidate sits in '$dept'; '$CommodityId' allows only: $($ov -join ', ')" }
-  }
-  if (-not $CatMap.ContainsKey($CommodityId)) { return [pscustomobject]@{ verdict = 'BLIND'; reason = "'$CommodityId' is in no estate category - refused rather than guessed" } }
-  $cat = $CatMap[$CommodityId]
-  if (-not $CAT_DEPT.ContainsKey($cat)) { return [pscustomobject]@{ verdict = 'BLIND'; reason = "category '$cat' has no reviewed department allowlist - refused rather than guessed" } }
-  $allowed = @($CAT_DEPT[$cat])
-  if ($allowed -contains $dept) { return [pscustomobject]@{ verdict = 'ALLOW'; reason = "'$dept' is an allowed department for category '$cat'" } }
-  return [pscustomobject]@{ verdict = 'BLOCK'; reason = "candidate sits in '$dept'; category '$cat' allows only: $($allowed -join ', ')" }
+  return (Test-AisleAllowed -CatMap $CatMap -CommodityId $CommodityId -Url $Url)
 }
 
 # ---- self-test: the founding failures MUST be blocked, the hard positives MUST pass ------------------
@@ -392,8 +209,43 @@ if ($SelfTest) {
     $v2 = Judge -CatMap $P -CommodityId ([string]$rowsFx[1].id) -Url ([string]$rowsFx[1].canonical_url)
     if ($v1.verdict -ne 'BLOCK' -or $v2.verdict -ne 'ALLOW') { Write-Output ("  X ARRAY-UNROLL: rows judged $($v1.verdict)/$($v2.verdict), expected BLOCK/ALLOW"); $bad++ }
   }
+  # ---- ADMISSION (2026-09-11, queue 2026-09-11-62b248) --------------------------------------------------
+  # compare-deals refuses a Family Fare row through Get-AisleAdmissionRefusal over the index Add-AisleShelfRow
+  # builds, so these cases drive exactly that path. Rows frozen verbatim from family-fare-regular-2026-09-11.json;
+  # the Planters row carried no canonical_url that day, so its department is the one the 2026-08-31 review
+  # recorded ('dairy/ready_to_eat'), passed as the dept field the builder now stamps.
+  $PA = @{ 'frozen-pizza' = 'frozen'; 'pistachios' = 'snacks' }
+  $ix = New-AisleShelfIndex
+  Add-AisleShelfRow $ix ([pscustomobject]@{ item = 'Contadina Tmto Bsl Pizza Squz Btl'; product_id = '1764405684716243059'; canonical_url = 'https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomato_sauce_paste/contadina_tmto_bsl_pizza_squz_btl/p/1764405684716243059' })
+  Add-AisleShelfRow $ix ([pscustomobject]@{ item = 'Di Giorno Frozen Pizza, Rising Crust Sausage & Pepperoni Pizza, 27.3oz (Frozen)'; product_id = '1564405684715603663'; canonical_url = 'https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/pizza/di_giorno_frozen_pizza_rising_crust_sausage_pepperoni_pizza_27_3oz_frozen/p/1564405684715603663' })
+  Add-AisleShelfRow $ix ([pscustomobject]@{ item = 'Planters Dry Roasted Pistachios 12.75 Oz'; dept = 'dairy' })
+  # MUST-FIRE: the founding row is refused at admission, by id, and the refusal names the department it saw
+  $ref = Get-AisleAdmissionRefusal -CatMap $PA -Store 'Family Fare' -CommodityId 'frozen-pizza' -Dept (Get-AisleShelfDept $ix '1764405684716243059' 'Contadina Tmto Bsl Pizza Squz Btl')
+  if (-not $ref -or [string]$ref.dept -ne 'pantry' -or [string]$ref.verdict -ne 'BLOCK') { Write-Output '  X MUST-FIRE: the Contadina squeeze bottle on frozen-pizza was NOT refused at admission naming dept pantry'; $bad++ }
+  # MUST-FIRE: and by NAME when the row carries no product id (an ad row naming the same product)
+  $ref2 = Get-AisleAdmissionRefusal -CatMap $PA -Store 'Family Fare' -CommodityId 'frozen-pizza' -Dept (Get-AisleShelfDept $ix '' '  Contadina Tmto Bsl Pizza Squz Btl ')
+  if (-not $ref2) { Write-Output '  X MUST-FIRE: the Contadina row was NOT refused when looked up by name alone'; $bad++ }
+  # CLEAN TWIN: the real frozen pizza's shelf resolves to freezer and is ALLOWED for frozen-pizza
+  $dg = Test-AisleAllowed -CatMap $PA -CommodityId 'frozen-pizza' -Dept (Get-AisleShelfDept $ix '1564405684715603663' '')
+  if ($dg.verdict -ne 'ALLOW' -or $dg.dept -ne 'freezer') { Write-Output ("  X CLEAN-TWIN: Di Giorno should ALLOW from freezer - got $($dg.verdict) from '$($dg.dept)'"); $bad++ }
+  # CLEAN TWIN: a reviewed COMMODITY_DEPT exception is honoured by the same path (category 'snacks' does not allow dairy)
+  $pl = Test-AisleAllowed -CatMap $PA -CommodityId 'pistachios' -Dept (Get-AisleShelfDept $ix '' 'Planters Dry Roasted Pistachios 12.75 Oz')
+  if ($pl.verdict -ne 'ALLOW' -or $pl.reason -notmatch 'reviewed exception') { Write-Output ("  X CLEAN-TWIN: Planters pistachios in dairy should ALLOW through the reviewed exception - got $($pl.verdict): $($pl.reason)"); $bad++ }
+  # MUST NOT FIRE: a Family Fare row with no shelf path is ADMITTED (BLIND admits at admission), and another
+  # store's row is never judged even when its name matches a refused product
+  $blindAdmit = Get-AisleAdmissionRefusal -CatMap $PA -Store 'Family Fare' -CommodityId 'frozen-pizza' -Dept (Get-AisleShelfDept $ix '999' 'Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz')
+  $otherStore = Get-AisleAdmissionRefusal -CatMap $PA -Store 'Walmart' -CommodityId 'frozen-pizza' -Dept 'pantry'
+  if ($null -ne $blindAdmit -or $null -ne $otherStore) { Write-Output '  X MUST-NOT-FIRE: a row with no shelf path, or a non-Family-Fare row, was refused at admission'; $bad++ }
+  # MUST NOT FIRE: a shelf-less canonical_url is not a department. Frozen verbatim from the row the 2026-09-11 dry
+  # run refused before Get-AisleDept learned this: the product SLUG was read as department
+  # 'kraft_grated_cheese_parmesan_cheese_8_oz' and a real grated parmesan was blocked from parmesan.
+  $krUrl = 'https://www.shopfamilyfare.com/shop/kraft_grated_cheese_parmesan_cheese_8_oz/p/1564405684716409165'
+  $ixK = New-AisleShelfIndex
+  Add-AisleShelfRow $ixK ([pscustomobject]@{ item = 'Kraft Grated Cheese, Parmesan Cheese, 8 Oz'; product_id = '1564405684716409165'; canonical_url = $krUrl })
+  $krRef = Get-AisleAdmissionRefusal -CatMap @{ 'parmesan' = 'dairy' } -Store 'Family Fare' -CommodityId 'parmesan' -Dept (Get-AisleShelfDept $ixK '1564405684716409165' 'Kraft Grated Cheese, Parmesan Cheese, 8 Oz')
+  if ((Get-Dept $krUrl) -ne '' -or $null -ne $krRef) { Write-Output ("  X MUST-NOT-FIRE: the shelf-less Kraft URL was read as department '" + (Get-Dept $krUrl) + "' and refused a real parmesan"); $bad++ }
   if ($bad) { Write-Output "aisle-test SELFTEST: FAILED ($bad)"; exit 2 }
-  Write-Output 'aisle-test SELFTEST: 14/14 pass (5 must-fire blocked incl. an excepted commodity in a non-listed dept, 4 clean twins allowed incl. the hard positive and the exception path, 3 blind paths refuse, multi-row file unrolls)'
+  Write-Output 'aisle-test SELFTEST: 20/20 pass (5 must-fire blocked incl. an excepted commodity in a non-listed dept, 4 clean twins allowed incl. the hard positive and the exception path, 3 blind paths refuse, multi-row file unrolls; ADMISSION: the Contadina squeeze bottle refused by id and by name naming pantry, Di Giorno allowed from freezer, the Planters exception honoured, a shelf-less row and a non-FF row admitted, a /shop/<product_slug>/p/ URL is not a department)'
   exit 0
 }
 

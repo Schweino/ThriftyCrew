@@ -16,6 +16,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 . (Join-Path $root 'alert-lib.ps1')
 # The Freshop price rule (current-not-regular, and drop multi-buy offer text) is shared with
 # probe-ingredient.ps1 so both callers cannot drift. Has its own -SelfTest carrying the founding bug.
+. (Join-Path $root 'aisle-lib.ps1')      # Get-AisleDept / Get-AisleShelf: the store's shelf path as dept + aisle fields on every row (Norm-Row)
 . (Join-Path $root 'ff-price-lib.ps1')
 
 # ---------------------------------------------------------------------------------------------------------
@@ -225,7 +226,11 @@ function Norm-Row($r, $asOf, $isCarried) {
   # could not retire the sale on the day Freshop says it ends, and FF markdowns were dated by nothing.
   # The same normalizer-strips-the-contract shape as the three fields above; same fix.
   foreach ($k in @('current_price', 'base_price', 'marked_down', 'canonical_url', 'product_id', 'found_by_term', 'ad_from', 'ad_to')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
-  if ($isCarried) { $h['carried_forward'] = $true }
+  # THE STORE'S OWN SHELF, AS FIELDS (2026-09-11, queue 2026-09-11-62b248). dept and aisle are segments 1-2 of
+  # canonical_url, reduced by aisle-lib.ps1 - the one copy compare-deals admits Family Fare rows through - so a
+  # reader of this file sees the department the store filed each product in without re-deriving it. Recomputed
+  # from canonical_url on every pass, carried rows included, so a stale field cannot outlive its URL.
+  if ($h.Contains('canonical_url')) { $shelfDept = Get-AisleDept ([string]$h['canonical_url']); if ($shelfDept) { $h['dept'] = $shelfDept; $h['aisle'] = (Get-AisleShelf ([string]$h['canonical_url'])) } }  if ($isCarried) { $h['carried_forward'] = $true }
   return $h
 }
 

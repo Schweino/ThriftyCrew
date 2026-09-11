@@ -168,7 +168,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -322,7 +327,12 @@
                         "\\bcone\\b,ice\\s*cream,frozen\\s+dessert",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -486,7 +496,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bmeal\\b"
@@ -638,7 +653,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -803,7 +823,12 @@
                         "\\bsausages?\\b",
                         "bread\\s+cheese",
                         "\\bbrats\\b",
-                        "bacon\\s+jam"
+                        "bacon\\s+jam",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -1122,7 +1147,12 @@
                         "\\bboneless\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -2576,7 +2606,12 @@
                         "\\bsausages?\\b",
                         "protein\\s+bars?",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -2810,7 +2845,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -3032,7 +3072,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -3248,7 +3293,11 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b"
                     ]
     },
     {
@@ -3459,7 +3508,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -3675,7 +3729,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -3898,7 +3957,12 @@
                         "\\ball[\\s-]purpose\\b",
                         "\\bcomplete\\s+seasoning\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -4112,7 +4176,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -4335,7 +4404,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -4567,7 +4641,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -4787,7 +4866,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -5015,7 +5099,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -5686,7 +5775,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -5851,7 +5945,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bchicken\\b",
                         "bread\\s+cheese",
-                        "\\bbrats\\b"
+                        "\\bbrats\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -5996,7 +6095,12 @@
                         "\\brum\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -6156,7 +6260,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "bread\\s+cheese",
-                        "italian\\s+sandwich"
+                        "italian\\s+sandwich",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -6323,7 +6432,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -6484,7 +6598,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -6651,7 +6770,17 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsushi\\b",
+                        "\\bcooked\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\btempura\\b",
+                        "\\bmarinated\\b",
+                        "firecracker",
+                        "\\bscallops?\\b",
+                        "\\bgumbo\\b"
                     ]
     },
     {
@@ -6773,7 +6902,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -6899,7 +7033,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -7251,7 +7390,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -7481,7 +7625,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -7714,7 +7863,12 @@
                         "\\bsausages?\\b",
                         "\\bcoconut\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -7939,7 +8093,11 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -8153,7 +8311,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -8370,7 +8533,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -8595,7 +8763,11 @@
                         "\\bsalad\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -8807,7 +8979,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -9018,7 +9195,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -9228,7 +9410,11 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -9442,7 +9628,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -9675,7 +9866,13 @@
                         "\\btomatoes?\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bscallops?\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -9893,7 +10090,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -10121,7 +10323,11 @@
                         "\\bbowls?\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -10333,7 +10539,13 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b",
+                        "\\bcandied\\b"
                     ]
     },
     {
@@ -14842,7 +15054,11 @@
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\bblue\\s+bunny\\b"
+                        "\\bblue\\s+bunny\\b",
+                        "\\bsquz\\b",
+                        "\\bsqueeze\\b",
+                        "\\bbtl\\b",
+                        "\\bbottle\\b"
                     ]
     },
     {
@@ -15896,7 +16112,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -16140,7 +16361,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -16349,7 +16575,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -16557,7 +16788,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -16752,7 +16988,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -16978,7 +17219,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -17199,7 +17445,12 @@
                         "\\bspreads?\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -17412,7 +17663,12 @@
                         "\\bspreads?\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -17662,7 +17918,12 @@
                         "\\bsausages?\\b",
                         "\\bbrats?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -17870,7 +18131,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -18080,7 +18346,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -18299,7 +18570,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -18507,7 +18783,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -18720,7 +19001,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -18933,7 +19219,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -19140,7 +19431,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -19349,7 +19645,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -19556,7 +19857,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -19762,7 +20068,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -19986,7 +20297,12 @@
                         "\\btomatoes?\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -20199,7 +20515,12 @@
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
                         "\\bsauced\\b",
-                        "\\bchili\\b"
+                        "\\bchili\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -20423,7 +20744,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -20629,7 +20955,12 @@
                         "\\bseeds?\\b",
                         "\\bsprouting\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -20842,7 +21173,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -21058,7 +21394,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -21180,7 +21521,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -21333,7 +21679,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -21485,7 +21836,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -21640,7 +21996,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -21786,7 +22147,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -21943,7 +22309,12 @@
                         "little\\s+journey\\s+baby",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -22094,7 +22465,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -22250,7 +22626,11 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bchicken\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -22402,7 +22782,12 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bbeer\\b"
@@ -22559,7 +22944,12 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -22714,7 +23104,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -22878,7 +23273,11 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "seasoned"
@@ -23035,7 +23434,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -23192,7 +23596,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -23353,7 +23762,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -23514,7 +23928,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -23667,7 +24086,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "bread\\s+cheese",
-                        "italian\\s+sandwich"
+                        "italian\\s+sandwich",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -23827,7 +24251,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -23976,7 +24405,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -24764,7 +25198,8 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\bscallops?\\b"
                     ]
     },
     {
@@ -33734,7 +34169,8 @@
                         "\\bartificially\\s+flavou?red\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bsausages?\\b"
+                        "\\bsausages?\\b",
+                        "\\braisin\\s+bran\\b"
                     ]
     },
     {
@@ -39265,7 +39701,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -48866,7 +49307,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -52303,7 +52749,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -52509,7 +52960,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -52721,7 +53177,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -52932,7 +53393,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -53125,7 +53591,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -53653,7 +54124,11 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bwater\\b"
@@ -53984,7 +54459,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -54266,7 +54746,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -55182,7 +55667,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -55460,7 +55950,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -56144,7 +56639,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -56360,7 +56860,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "pint_oz":  10
     },
@@ -56761,7 +57266,12 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -56929,7 +57439,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -57095,7 +57610,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -57419,7 +57939,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -57637,7 +58162,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -57860,7 +58390,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -58076,7 +58611,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -58302,7 +58842,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -58512,7 +59057,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -58747,7 +59297,12 @@
                         "\\bsausages?\\b",
                         "\\blimes?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -58957,7 +59512,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -59169,7 +59729,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -59373,7 +59938,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -59578,7 +60148,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -59792,7 +60367,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -60000,7 +60580,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -60208,7 +60793,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -60414,7 +61004,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -60644,7 +61239,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -60864,7 +61464,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -61070,7 +61675,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -61274,7 +61884,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -61478,7 +62093,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -61682,7 +62302,11 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -61893,7 +62517,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -62099,7 +62728,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -62305,7 +62939,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -62508,7 +63147,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -62715,7 +63359,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -62923,7 +63572,11 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -63127,7 +63780,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -63332,7 +63990,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -63544,7 +64207,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -63750,7 +64418,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -63961,7 +64634,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -64174,7 +64852,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -64383,7 +65066,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -64604,7 +65292,12 @@
                         "\\bpotato\\s+salad\\b",
                         "\\bmacaroni\\s+salad\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -64820,7 +65513,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -65028,7 +65726,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -65233,7 +65936,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -65442,7 +66150,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -65644,7 +66357,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -65855,7 +66573,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -66059,7 +66782,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -66267,7 +66995,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -66479,7 +67212,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -66688,7 +67426,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -66880,7 +67623,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -67091,7 +67839,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -67303,7 +68056,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -67515,7 +68273,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -67722,7 +68485,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -67995,7 +68763,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "band_min":  0.04,
         "band_max":  0.65
@@ -68611,7 +69384,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "band_min":  0.14,
         "band_max":  22.44
@@ -68759,7 +69537,12 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "band_min":  0.05,
         "band_max":  14.97
@@ -68965,7 +69748,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "band_min":  1.39,
         "band_max":  14.95
@@ -72028,7 +72816,12 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "band_min":  0.15,
         "band_max":  1.32
@@ -72344,7 +73137,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ],
         "band_min":  0.42,
         "band_max":  5.97
@@ -74259,7 +75057,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -74470,7 +75273,12 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -74838,7 +75646,12 @@
                         "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "bread\\s+cheese"
+                        "bread\\s+cheese",
+                        "\\bchowder\\b",
+                        "\\bsoup\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {
@@ -75818,7 +76631,11 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bsteam(?:ers?|ables?|fresh|crisp)\\b",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\bchowder\\b",
+                        "\\bbisque\\b",
+                        "\\bgumbo\\b",
+                        "\\bsushi\\b"
                     ]
     },
     {

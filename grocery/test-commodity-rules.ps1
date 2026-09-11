@@ -271,6 +271,72 @@ $cases = @(
      why='CLEAN TWIN real mushrooms are untouched' }
   @{ id='pasta'; name='Great Value Spaghetti, 16 oz'; expect='included'
      why='CLEAN TWIN real dry pasta is untouched' }
+
+  # =================================================================================================
+  # 2026-09-11 triage (plan-2026-09-11.json, routing frozen in plan-2026-09-11.routing.json). Every
+  # name below is verbatim from the capture named in its `why`. NEVER regenerate these from the live
+  # board: the rows they encode are the ones the rules were wrong about.
+  # =================================================================================================
+
+  # ---- shrimp: a prepared dish that names its protein (queue 3b246c) -------------------------------
+  @{ id='shrimp'; name="Member's Mark Shrimp and Corn Chowder, 24 oz., 2 pk."; expect='excluded'
+     why='FOUNDING CASE a soup held the Sam''s Club shrimp crown at $3.49/lb (10.47 / 3 lb, exact) over real raw shrimp at $5.82/lb (sams-deals-2026-09-11)' }
+  @{ id='shrimp'; name='Fusia Shrimp Avocado Roll Sushi 11.5 OZ'; expect='excluded'
+     why='FOUNDING CASE a sushi roll held the Aldi shrimp cell at $7.36/lb (aldi-regular-2026-09-11)' }
+  @{ id='shrimp'; name='Fremont Fish Market Jumbo Cooked Shrimp 12 OZ'; expect='excluded'
+     why='the label promises RAW shrimp and a cooked bag is a different product (aldi-regular-2026-09-11)' }
+  @{ id='shrimp'; name="Member's Mark Tempura and Coconut Shrimp Tray, 25 ct., priced per pound"; expect='excluded'
+     why='a prepared tempura tray is not raw shrimp (sams-deals-2026-08-15)' }
+  @{ id='shrimp'; name='Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Butter, priced per pound'; expect='excluded'
+     why='a scallop-and-shrimp medley in garlic parmesan butter is not raw shrimp (sams-deals-2026-08-15)' }
+  @{ id='garlic'; name='Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Bu'; expect='excluded'
+     why='THE SECOND LANDING released from shrimp, the truncated medley name (no butter token) fell onto garlic; the scallop release exclude sends it nowhere (sams-deals-2026-08-15)' }
+  @{ id='parmesan'; name='Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Butter, priced per pound'; expect='excluded'
+     why='THE THIRD LANDING garlic already refuses butter, so the full name fell onto parmesan; same release exclude' }
+  @{ id='shrimp'; name="Member's Mark Farm Raised Jumbo Raw EZ Peel Shrimp, Frozen, 21-30 ct. per pound, 3 lbs."; expect='included'
+     why='CLEAN TWIN the real raw shrimp that takes the Sam''s Club cell back at $5.82/lb (sams-deals-2026-08-15)' }
+  @{ id='shrimp'; name='Fremont Fish Market Medium EZ Peel Raw Shrimp 12 OZ'; expect='included'
+     why='CLEAN TWIN the real raw shrimp that takes the Aldi cell back (aldi-regular-2026-09-11)' }
+  @{ id='shrimp'; name='Kroger Peeled & Deveined Tail Off White Raw Shrimp'; expect='included'
+     why='CLEAN TWIN the Baker''s cell holder on comparison-2026-09-09 is untouched' }
+  @{ id='shrimp'; name='Our Family Shrimp Raw Small'; expect='included'
+     why='CLEAN TWIN the Family Fare cell holder on comparison-2026-09-09 is untouched' }
+  @{ id='tomatoes'; name='Fresh & Finest Herbed Tomato Bisque'; expect='excluded'
+     why='the soup_carrier bake on produce: a bisque is not a fresh tomato (family-fare-regular-2026-09-11)' }
+  @{ id='tomato-soup'; name='Fresh & Finest Herbed Tomato Bisque'; expect='included'
+     why='CLEAN TWIN and it re-lands on the commodity it actually is' }
+  @{ id='garlic'; name='Fresh Garlic'; expect='included'
+     why='CLEAN TWIN the Family Fare garlic cell holder survives the scallop release exclude and the class bake' }
+
+  # ---- frozen-pizza: a store-abbreviated sauce bottle with no type word (queue 62b248) -------------
+  @{ id='frozen-pizza'; name='Contadina Tmto Bsl Pizza Squz Btl'; expect='excluded'
+     why='FOUNDING CASE a 13 oz pizza SAUCE squeeze bottle, shelved by Family Fare in pantry/canned_goods, held the FF frozen-pizza cell at $2.99; the abbreviated name carries no sauce token (family-fare-regular-2026-09-11)' }
+  @{ id='pizza-sauce'; name='Contadina Tmto Bsl Pizza Squz Btl'; expect='no-include-match'
+     why='it routes nowhere rather than to pizza-sauce, whose pizza\s+sauce include cannot see the abbreviation; a drop is the honest result' }
+  @{ id='frozen-pizza'; name='Di Giorno Frozen Pizza, Rising Crust Sausage & Pepperoni Pizza, 27.3oz (Frozen)'; expect='included'
+     why='CLEAN TWIN a real frozen pizza is untouched by the bottle fence (family-fare-regular-2026-09-11)' }
+  @{ id='frozen-pizza'; name='Bellatoria Ultra Thin Crust Ultimate Supreme Pizza 19.41 Oz'; expect='included'
+     why='CLEAN TWIN the Weekly Ad pizza that takes the Family Fare cell back (ads-2026-09-09)' }
+
+  # ---- granola: a raisin-bran CEREAL named for granola, found on the 2026-09-11 rebuild (queue 3b246c) ---
+  # Measured before the fence: 166 corpus names carry granola or raisin bran, 65 route to granola, and the
+  # exclude moves exactly one - this row. Every other raisin-bran name already routes to cereal.
+  @{ id='granola'; name='Millville Crunchy Granola Raisin Bran 18.2 OZ'; expect='excluded'
+     why='FOUNDING CASE an 18.2 oz raisin bran cereal box, found by the term cereal, held the Aldi granola cell at $0.1511/oz on the 2026-09-11 rebuild (aldi-regular-2026-09-11)' }
+  @{ id='granola'; name='Millville Oats Honey Almonds Whole Grain Granola 14 OZ'; expect='included'
+     why='CLEAN TWIN the real Aldi granola is untouched by the raisin bran fence (aldi-regular-2026-09-11)' }
+  @{ id='cereal'; name='Our Family Cereal, Raisin Bran, Crunchy 18.2 Oz'; expect='included'
+     why='CLEAN TWIN real raisin bran still routes to cereal (family-fare-regular-2026-09-11)' }
+
+  # ---- sweet-potatoes: a CANNED candied yam routed to the FRESH commodity (queue 3b246c, found by match-soundness) ---
+  # Measured before the fence: 102 corpus names carry candied, yam or sweet potato, 24 route to sweet-potatoes,
+  # and the exclude moves exactly one - this row, to canned-yams. It priced out of band, so it held no cell.
+  @{ id='sweet-potatoes'; name='Glory Foods Yams Candied 32 Oz'; expect='excluded'
+     why='FOUNDING CASE a 32 oz can of candied yams won the FRESH sweet-potatoes contest over canned-yams (match-soundness new-contested [FORM], walmart-regular-2026-09-11); accepting that baseline would have blessed the wrong route' }
+  @{ id='canned-yams'; name='Glory Foods Yams Candied 32 Oz'; expect='included'
+     why='CLEAN TWIN released from fresh, it lands on the canned commodity it is' }
+  @{ id='sweet-potatoes'; name='Kroger Baker Sweet Potatoes'; expect='included'
+     why='CLEAN TWIN a real fresh sweet potato is untouched by the candied fence' }
 )
 
 $bad = 0
