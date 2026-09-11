@@ -77,8 +77,9 @@ real one, which is both fuller and more restricted.
      through the tool output either: it truncates around 1 KB, so a 40-60 KB sweep would need ~60
      round trips per store and still risk a partial read. That is what the sink is for.
 Also: sweepToCsv does not emit a header row and every builder needs one - q|n|lp|up|id|was|rb|sel|ff for
-Walmart, q|n|lp|up|id|was for Sam's. ALDI IS THE EXCEPTION: aldiSearchToCsv writes its own header, with the
-#tc-store store line above it. Post its output UNCHANGED and prepend nothing.
+Walmart, q|n|lp|up|id|was for Sam's, id|term|name|prices|unit|size|href for Aldi. Keep prepending Aldi's too:
+its emitter now also writes one under a #tc-store store line, build-aldi-regular drops the duplicate, and an
+older copy of the emitter writes none.
 
 STEP ZERO - MAKE SURE THE 0800 CHAIN HAS FINISHED. You run at 09:00, and the 0800 task's downstream
 chain (compare -> guards -> publish -> commit) measured 08:12-08:43 on 2026-08-22 - 31 minutes. It
@@ -216,9 +217,10 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     assert the OLA number: the session has read OLA 48 and OLA 42 at different times, and a pinned
     number refuses a correct capture while reading as a store problem. Asserted PER TERM, not once per
     run: a session flipped back to Delivery mid-sweep marks every later row up ~10% while looking normal.
-    Emit aldiSearchToCsv(idByTerm) UNCHANGED -> out\captures\aldi-capture-<date>.csv. Its first line is
+    Emit id|term|name|prices|unit|size|href, then aldiSearchToCsv(idByTerm)'s output unaltered ->
+    out\captures\aldi-capture-<date>.csv. That output opens with
     #tc-store store="ALDI - OLA <n> - Omaha" mode="In-Store" rows=<n> - the store each row was READ at -
-    then the id|term|name|prices|unit|size|href header. build-aldi-regular writes `source` and each row's
+    and its own copy of the header, which the builder drops. build-aldi-regular writes `source` and each row's
     store_location from that line, and REFUSES a capture with no store line, a non-Omaha or non-In-Store
     one, or one that straddles two stores (2026-09-10: every file since 07-29 had claimed OLA 42 from a
     literal, including the fortnight the session read OLA 48). Never hand-assemble this file or strip
