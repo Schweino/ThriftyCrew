@@ -1599,6 +1599,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         New-FanoutLane -Name 'golden-test'         -File (Join-Path $mealPrep 'engine\golden-test.ps1')         -TimeoutSec 600 -Marker 'GOLDEN-TEST-COMPLETE'
         New-FanoutLane -Name 'scaler-pricing'      -File (Join-Path $mealPrep 'pipeline\run-scaler-pricing-test.ps1') -TimeoutSec 600 -Arguments @('-Quiet')
         New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1') -Marker 'DB-AGREEMENT-COMPLETE'
+        New-FanoutLane -Name 'published-macros'    -File (Join-Path $mealPrep 'engine\audit-published-macros.ps1') -Marker 'PUBLISHED-MACROS-COMPLETE'
         New-FanoutLane -Name 'spec-contradictions' -File (Join-Path $mealPrep 'pipeline\audit-spec-contradictions.ps1') -TimeoutSec 600 -Arguments @('-Quiet') -Marker 'SPEC-CONTRADICTIONS-COMPLETE'
         New-FanoutLane -Name 'store-integrity'     -File (Join-Path $mealPrep 'pipeline\audit-store-integrity.ps1') -Marker 'STORE-INTEGRITY-COMPLETE'
         New-FanoutLane -Name 'guard-contract'      -File (Join-Path $root 'audit-guard-contract.ps1')       -Due $cadDue['guard-contract'] -Marker 'GUARD-CONTRACT-COMPLETE'
@@ -2172,6 +2173,26 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           try { Send-Alert -Subject "Recipe db drift (index vs specs)" -Body "meal-prep\engine\audit-db-agreement.ps1 found drift between recipes-db.json and db\recipes specs (or missing db\ingredients items). Run it for the list; fix the lagging side." | Out-Null } catch {}
         } else { Log 'db-agreement guard: clean' }
       } catch { Log ('db-agreement guard threw: ' + $_.Exception.Message) }
+      # published-macros ratchet (2026-09-12): each published stat against a recompute of the spec's OWN
+      # ingredients_grams, and recipes-db's ingredient WEIGHTS against the spec's. The recompute ran at write
+      # time only, so the 557 recipes published before 2026-08-24 were never checked, and audit-db-agreement
+      # never compared grams - which is how a correct 460 cal pozole was republished as 652 off the index's
+      # stale tortilla weight. Ratchets by NAME against meal-prep\out\published-macros-baseline.json, so it
+      # fires only on a recipe or index row outside the known backlog. Exit 2 is a NEW one; any other non-zero
+      # is a could-not-look (no baseline, or nothing judged) and is reported, never read as clean.
+      try {
+        $pmJ = Get-FanoutRecord 'published-macros' $fanRecs
+        $pm = $pmJ.Output
+        if ($pmJ.ExitCode -eq 2) {
+          $pmNew = (($pm | Where-Object { $_ -match '^\s*NEW\s' }) -join ' | ')
+          Log ('published-macros found a recipe outside its baseline: ' + $pmNew)
+          $summary += 'REVIEW    a published recipe no longer carries the macros its ingredients make, or its index weight left the spec - run meal-prep\engine\audit-published-macros.ps1'
+          try { Send-Alert -Subject "Recipe macros moved off their ingredients" -Body ("meal-prep\engine\audit-published-macros.ps1 found a recipe OUTSIDE its recorded baseline: either a published stat no longer matches a recompute of the spec's own ingredients_grams (5 cal / 2 g), or recipes-db.json's ingredient weight no longer matches the spec. The SPEC is the authority - recompute from its ingredients_grams, never from the index, and run git log -S on the published number before restating it, because it may be a correction somebody already checked. " + $pmNew) | Out-Null } catch {}
+        } elseif ($pmJ.ExitCode -ne 0) {
+          Log ('published-macros could not evaluate (exit ' + $pmJ.ExitCode + ') - a could-not-look, not a clean run')
+          $summary += 'REVIEW    published-macros could not evaluate (no baseline, or nothing judged) - run meal-prep\engine\audit-published-macros.ps1'
+        } else { Log 'published-macros: every finding inside the baseline' }
+      } catch { Log ('published-macros guard threw: ' + $_.Exception.Message) }
       # self-contradiction guard: a spec that disagrees with ITSELF (2026-08-04). Ratchets per class
       # against out\spec-contradictions-baseline.json, so this only fires when a class gets WORSE.
       # test-auditors already proves the matcher still sees its founding bugs; this runs the real audit

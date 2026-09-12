@@ -256,6 +256,10 @@ foreach($s in $specSlugs.Keys){
   # while the card reads the SPEC) shopped 794 g of cornstarch for a noodle dish. Both read CLEAN here.
   # Compared on the CANONICAL name - scaler.canon when a card renames an ingredient for the reader, else
   # scaler.item - which is the key update-recipes-db.ps1 writes into the index. Armed at ZERO.
+  # WEIGHTS ARE NOT COMPARED HERE, and that is where turkey-pozole-rojo's 1,914 g vs 575 g tortillas read CLEAN
+  # (2026-09-12). engine\audit-published-macros.ps1 compares index grams against the spec on this same
+  # canonical key, as a RATCHET: 20 rows disagreed on the day it shipped, and this guard exits 1 on any issue
+  # and alerts daily, so adding them here would have made it red every morning.
   $specIng = @($spec.scaler.ing | ForEach-Object { if($_.PSObject.Properties.Name -contains 'canon' -and $_.canon){ [string]$_.canon } else { [string]$_.item } })
   $idxIng  = @($row.ingredients | ForEach-Object { [string]$_.item })
   if($specIng.Count -ne $idxIng.Count){
