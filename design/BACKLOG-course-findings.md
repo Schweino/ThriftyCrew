@@ -10104,3 +10104,599 @@ of one uncited instructor's 10% figure, which is not a good trade. Registered as
 version, if this is ever picked up, is to let the board answer for itself: commodities whose prices
 actually move together across the seven stores are the comparison-shopped set, and that is a query
 against history rather than a judgement call.
+
+### I129 - Every check in this estate is a SAFETY property and almost none is a LIVENESS property, and the vocabulary for saying so is missing `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Distributed systems name exactly two shapes of correctness requirement. **Safety: something bad never
+happens. Liveness: something good eventually happens.** They need different mechanisms, and estates
+accumulate the first and not the second, because every incident suggests a safety check and nothing
+going wrong suggests nothing.
+
+**The estate has already written this finding in its own words without the vocabulary.**
+`.claude/rules/ops-and-gates.md` (backlog I80): *"Every threshold here is an UPPER bound, so not one
+of them can fire on nothing happening ... The only two checks that watch for ABSENCE are
+`grocery/health-heartbeat.ps1` and the cloud `heartbeat.yml`, and both watch scheduled tasks, never
+throughput."* That is precisely "we have safety checks and two liveness checks, both narrow".
+
+**Why the vocabulary is worth having rather than just the observation.** I80's rule is *"when adding
+any threshold, write down what the number does when the producer STOPS"* - a per-threshold obligation
+discharged one threshold at a time. The safety/liveness split turns the same question into a
+**portfolio audit**: sort every gate, audit and alert into the two buckets and read the ratio. A
+detector that cannot fire on nothing happening is a safety check; one that asserts a stage ran, a
+queue drained, or a backlog item closed is a liveness check.
+
+**What I checked and did not find.** `liveness` appears in the tracked tree only in the *concurrency*
+sense - a gate-slot ticket's liveness being its mutex (`ops-and-gates.md`,
+`design/PLAN-push-livelock-2026-09-11.md`, `design/MEASURE-gate-slot-admission-2026-09-11.md`) and
+`p8-feed-liveness` - never as the pair with safety. `safety` and `liveness` never appear as a paired
+property anywhere. So the classification has never been run.
+
+**Rung 1, cheap and reversible:** a read-only report that classifies each `ops/audit-*.ps1`,
+`grocery/*audit*`, gate and alert condition as safety or liveness and prints the split **with its
+denominator**. It writes a file and nothing else. If the ratio is as lopsided as I80 implies, the
+follow-on is choosing which two or three liveness checks are worth having - which is a separate item
+and a ruling, not this one.
+
+The theory is `~/.claude/skills/software-craft/distributed-correctness.md` 1 and
+`~/.claude/skills/reliability-craft/failure-detection-and-membership.md` 1a.
+
+### I130 - A deletion merged from peers can resurrect itself, and the estate's merged ledgers have never been checked for it `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Gossip-style membership hits this exactly and its fix is a named mechanism. Process 2 times out a row
+and **deletes** it; process 1 has not timed out yet and gossips its table over; process 2 sees the
+row as *new* and re-adds it with a fresh timestamp; then 1 deletes it and 2 gossips it back. The dead
+entry ping-pongs forever. The cure is **two timeouts**: mark failed at `T_fail`, keep a tombstone
+until `T_cleanup`, and **ignore any incoming copy of the row during that window**.
+
+**The general rule: in any state merged from peers, a deletion must be recorded as a deletion for at
+least as long as the slowest peer's own staleness window.** Removing the row lets a peer who has not
+caught up re-teach it, and a re-teach is indistinguishable from new information.
+
+**Where this estate has the shape.** `.claude/rules/ops-and-gates.md` (2026-09-11) records that
+`rollback-ttl-lib` loads a ledger at the first markdown and saves at the end, and must **RE-READ AND
+MERGE under the lock, taking only the keys it touched** - an explicit peer merge. The same bullet
+names `grocery/sale-windows.json`, `grocery/out/capture-cursor.json` and
+`grocery/rollback-first-seen.json` as read-modify-written by concurrent lanes and builders.
+
+**The question nobody has asked: does any of those merges ever DELETE a key?** A merge that only ever
+adds and updates is safe from this. A merge that takes "only the keys it touched" while a sibling
+removed a key elsewhere can restore the removed key with no error anywhere. Rung 1 is reading the
+three merge paths and answering yes or no; it may well be no, and that is a result.
+
+**The other half, and it is the cheaper fix where it applies.** Kelips replaces deletion with **soft
+state**: file metadata is kept alive by periodic heartbeats and *expires on its own* if nothing
+refreshes it, so **there is no delete operation to get wrong** - you stop refreshing. That is the
+direct answer to the one-directional accumulator `ops-and-gates.md` (backlog I93) already names:
+`graph/learning/promote_aliases.py`'s holds *"only accumulate and never expire"*. A hold that must be
+re-asserted each run to survive cannot latch permanently, and it needs no expiry logic, only a
+refresh. Whether that suits holds specifically is a ruling, not this item.
+
+Checked and not found: `anti-entropy`, `gossip`, `epidemic`, `tombstone` as a merge concept - zero
+hits across the tracked tree.
+
+### I131 - Ordering records by a scalar timestamp across independent writers is a named trap, and this estate has been bitten by it at least three times without naming it `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Lamport's result, and the half that is always forgotten: **`L(a) < L(b)` does NOT mean a happened
+before b.** It rules out only "b before a". The two events may be entirely **concurrent**, and
+nothing in the number says which. Lamport timestamps *respect* causality; they cannot *detect* it.
+Vector clocks can, at O(N) space - the biconditional is bought, not free.
+
+**The general form: a total order derived from a partial order silently invents every missing
+comparison, and the output does not mark which comparisons were real.**
+
+**Three recorded estate incidents are this exact shape**, and each was diagnosed on its own:
+
+- `newest-state-file-per-slug-misclassifies` - "a rejected-dupe outranks the live instance by mtime".
+- `spec-mtime-is-not-evidence-of-a-recost` - "reanchor rewrites every spec daily".
+- `ps-uformat-s-is-local-time` - an epoch that was not the epoch.
+
+Each was read as a bug in one script. **They are one class: sorting records written by independent
+writers on a scalar that was never a causal order.** The ~07:00 bot, several concurrent sessions and
+scheduled tasks all write this tree, so mtime here is a genuinely concurrent quantity.
+
+**Rung 1:** enumerate the places that pick a winner by `LastWriteTime`, an mtime, or a bare
+timestamp field, and for each say whether the records compared could have come from independent
+writers. Where they could, the comparison is decoration and the code needs either a real causal marker
+(a run id, a provenance stamp, the commit it was produced at) or an explicit refusal. Read-only; it
+produces a list.
+
+Checked and not found: `vector clock`, `Lamport`, `happens-before`, `causal order` - zero hits in the
+tracked tree and zero in the skills store before this course.
+
+### I132 - A retry down the same path cannot tell "the subject is dead" from "the route to the subject is bad", and every capture retry here is a same-path retry `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+SWIM's failure detector gives a probe target **two chances of different kinds**, and the distinction
+is the whole design. The repeated direct ping is a **temporal** second chance: the first packet may
+just have been dropped. The **indirect** pings - asking K other randomly chosen processes to probe the
+target and relay the answer - are a **spatial** second chance: they traverse **different network
+paths**, so a congested or lossy path between exactly these two endpoints no longer decides the
+verdict. A detector with only temporal retries blames the subject for the route, every time.
+
+**This estate's capture lane is entirely temporal.** `.claude/rules/grocery.md` already names **four**
+causes of a 200 with a correct selector and zero rows - `blocked`, `not-carried`, `unrendered`,
+`unsettled` - and the memory `bot-wall-verdict-discards-its-evidence` says *"re-probe one term before
+calling a store cold"*. Both are right and both re-probe **the same way from the same place**. The
+missing axis is: probe the same store from a **different session, IP or transport** before recording
+`blocked`. If the second path succeeds, the verdict was about our route, not the store.
+
+Note the cost asymmetry the course draws out, because it decides the design: a **missed** stop causes
+silent wrong data, while a **false** stop costs one retry. That asymmetry is why every published
+detector keeps completeness at 100% and spends accuracy - and why `UNCHECKED IS NEVER NOT-CARRIED`
+(`a-could-not-look-must-not-settle-the-question`) is the right call here too.
+
+**Rung 1:** count how many capture verdicts in the last N runs were reached on probes that all shared
+one session or one egress path. If the answer is "all of them", the follow-on is a design item about
+a second path, not a code change.
+
+### I133 - Random selection gives fairness in expectation but no deadline, and round-robin with re-permutation gives both for free `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+SWIM picks its ping target uniformly at random, which gives **completeness only eventually** - any one
+member may go unprobed for arbitrarily long. One change fixes it: **traverse the membership list
+round-robin, one target per period, and randomly permute the list each time you wrap.** That bounds the
+worst case at **2N-1 periods** (the victim was just passed, then lands last after the permutation)
+**while changing nothing about the false-positive rate or the scalability properties** that random
+sampling was chosen for.
+
+**This estate refuses `Get-Random` for work selection on reproducibility grounds**
+(`.claude/rules/ops-and-gates.md`, backlog I38: a deterministic verification sample, a reproducible
+worklist, a retry jitter on the attempt index) and those refusals are right. **But a deterministic
+sample is not the same as a bounded one.** A sample that deterministically picks the same k items, or
+one that picks by any fixed rule, can still leave a particular item unexamined indefinitely - and the
+report says "sampled k of N" with no statement about how long the unlucky item has waited.
+
+**Rung 1, read-only:** for each sampling verification here, answer one question - *what is the
+worst-case number of runs before a given item is examined?* If the answer is "unbounded" or "nobody
+knows", wrap-and-permute converts it to a stated bound at the cost of one persisted cursor. Whether to
+adopt it anywhere is a later call; this rung produces the list and the answer.
+
+### I134 - the restore drill exists, is the only thing that would prove `graph.db` is actually reconstructible, and has ZERO callers `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-dbrecovery-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `advanced-topics-future-trends-database-technologies` item 8, *Database Backup and
+Recovery*: a recovery is restore-the-backup then roll-the-log-forward, and the DBA's stated bottom
+line is that a database you cannot put back is a database you have lost. The course never says to
+rehearse it, which is its own gap; the estate's gap is that it built the rehearsal and never runs it.
+
+**Measured 2026-09-12**, `grep -rn -- "--drill"` over all **8,423** tracked files
+(`git ls-files | wc -l` = 8423), excluding `design/BACKLOG-course-findings.md`:
+
+```
+graph/lib/rebuild.py:5:      python graph/lib/rebuild.py --drill      # destructive round-trip drill
+graph/lib/rebuild.py:120:    ap.add_argument("--drill", action="store_true",
+```
+
+**2 hits, and both are inside the file that declares the flag** - one in its own usage docstring, one
+in its own argparse. Nothing calls it: not `graph/pipeline/nightly.ps1`, not `ops/run-gates.ps1`, not
+any of the **9** scheduled tasks in `ops/scheduled-tasks/`, not CI.
+
+`rebuild.py --verify` is in the same position, and that is not new information -
+`design/PLAN-drain-architecture-2026-09-07.md:50` already lists it as *"(zero callers)"*. What IS new
+is that the class did not close when the neighbouring one did: `audit_graph_durability.py` was wired
+into `graph/pipeline/nightly.ps1:960` and it checks the **mirror** row for row, which is a detective
+check that the JSON and the database agree today. **It does not execute the rebuild.** So the estate
+verifies that the backup's contents look right and has never once verified that the restore path
+runs.
+
+**Why it matters here specifically.** The five tables `rebuild.py` names - `learning_proposals`,
+`approved_patches`, `eval_runs`, `cell_state`, `question_verdicts` - exist nowhere else, and the
+`audit_graph_durability.py` header records that they are kept mirrored by **eight hand-placed
+`export_learning()` calls**, which is write-through by convention. The README encourages `rm
+graph.db`. The first time anyone follows that advice is the first time the rebuild path has been
+exercised, and it will be exercised against the live record of what the learning loop was allowed to
+do.
+
+**First rung, and it is cheap and reversible.** Do not schedule anything and do not change
+`nightly.ps1`. Run `python graph/lib/rebuild.py --drill` once, by hand, against a `shutil.copy2` of
+`graph/sqlite/graph.db`, and record whether it exits 0 and whether the five tables come back with the
+row counts the durability audit's baseline holds. If it passes, the finding is a scheduling question.
+**If it does not, the estate has been carrying an unrecoverable backup for months and nothing could
+have told it.** Either answer is worth the one command.
+
+### I135 - the ledger writers are serializable and the readers are lock-free, and nothing states which isolation level the readers get or which decisions are safe at it `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-dbrecovery-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `advanced-topics-future-trends-database-technologies` item 10, *Database Concurrency*:
+the SQL standard's four isolation levels, each defined by the read anomaly it still permits - dirty
+read, non-repeatable read, phantom read. The useful half is that **the level is a dial you choose**,
+so "how much isolation does this reader need" is a question with four enumerated answers rather than
+a judgement call.
+
+**What the estate has, verified by reading the files 2026-09-12.** `lib/ledger-lock.ps1` shipped
+2026-09-11 and its header is correct and well argued: a `Global\` named mutex around the whole
+read-modify-write, with the READ inside it, keyed on SHA-256 of the full path, reentrant, throwing
+rather than exiting. In the course's vocabulary the WRITERS are **serializable**, and that is the
+right level for them.
+
+The readers are a different story, and `grocery/capture-policy-lib.ps1:62` says so in as many words:
+
+```
+# Write-TcAtomicFile: the store lanes run side by side and read the cursor and sale-windows.json lock-free.
+```
+
+Three lines later, at `:64`, the same header notes that those same lanes also WRITE those two files
+side by side, under the lock. So the design is deliberate and the two halves are stated three lines
+apart: **atomic replace for the reader, mutex for the writer.** `capture-policy-lib.ps1:1273` even
+carries a 400-attempt retry loop around a lock-free `ReadAllText` of `sale-windows.json`.
+
+**The gap is not the design, it is that the design has no name and therefore no stated limit.** An
+atomic replace buys a reader a whole file and never half a file. It buys **no repeatability**: two
+reads by one lane, seconds apart, can return two different windows, because a sibling committed
+between them. That is a **non-repeatable read**, it is legal at `read committed`, and it is only a
+defect if some decision is made across two reads rather than within one. Nothing in
+`.claude/rules/grocery.md`, `.claude/rules/ops-and-gates.md`, `lib/ledger-lock.ps1` or
+`capture-policy-lib.ps1` states which it is.
+
+**Why it matters here specifically.** `Get-CapturePlan` reads `sale-windows.json` and
+`capture-cursor.json` to decide which terms a lane fetches today, and the lanes run concurrently and
+mark their own stores in those same files. A plan computed from read 1 and acted on after read 2's
+state landed is the exact shape, and it would present as a store re-asking a slice it already bought
+or skipping one it owes - which reads as a capture bug, not a concurrency one.
+
+**First rung, and it costs no code.** Write one line into `lib/ledger-lock.ps1`'s header saying what
+a lock-free reader of a ledger is guaranteed (a whole file, not a repeatable one) and what it is
+therefore not allowed to do (carry a value across two reads and treat it as still current). Then
+count, by reading, how many call sites read a ledger twice inside one logical decision. **If the
+answer is zero the rule is free and the class is closed by documentation. If it is not zero, that
+count is the real item** and it is a different, larger one.
+
+### I136 - nothing for the estate on the rest of the course `DONE` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-dbrecovery-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Modules 2, 3 and 4 - data warehousing, the data cube, big data's Vs, NoSQL stores - produced no
+estate finding, and that is a result rather than an omission. The estate runs two SQLite databases
+totalling under 300 MB with a single-digit number of concurrent writers; `database-craft/MAP.md` 8
+already records that nothing here is large. The warehouse/OLAP material is routed to the store as
+knowledge (`database-craft/analytical-stores.md`) and is a lens for a future decision, not a change
+to propose today. Proposing a warehouse, a cube or a document store against this data volume would
+be the course selling its own subject through me.
+
+### I137 - the food database cannot represent sodium, sugar or saturated fat, so three of the course's four checkable recommendations are unfalsifiable against anything we sell `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-foodhealth-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `food-and-health` item 23, *Reading Nutrition Labels*, names exactly five things to read
+off a panel when comparing two packaged items: calories, dietary fiber, sugars, the fat breakdown,
+and sodium. Item 11 quotes the WHO 2015 guideline of under 10% of calories from free sugars, ideally
+under 5%, which it converts to about 25 g or 6 teaspoons a day for a 2,000-calorie diet. Item 5 says
+processed meats "tend to be very high in sodium, which can be a contributor to high blood pressure".
+
+**Measured 2026-09-12**, by `json.load` over the two tracked databases:
+
+| field | present | of |
+|---|---|---|
+| `fiber_g` | 98 | 441 items in `meal-prep/food-macros-db.json` |
+| `sodium_mg` / `sodium` | **0** | 441 |
+| `sugar_g` / `sugars_g` / `added_sugar_g` | **0** | 441 |
+| `saturated_fat_g` / `sat_fat_g` | **0** | 441 |
+
+And every one of the **583** recipes in `meal-prep/recipes-db.json` carries exactly four
+`per_serving` fields and no others: `calories`, `protein_g`, `carbs_g`, `fat_g`. Not 580 of 583. All
+583, including all 563 marked `visibility: paid`.
+
+**Why it matters here.** The `meal-macro` skill's whole discipline is that macros are 100% label
+accurate, and the panel we transcribe from carries sodium, sugars and saturated fat on its face. We
+read them off the label and drop them on the floor. The consequence is not that the numbers are
+wrong; it is that **the three quantities a reader would use to judge whether a batch is good for them
+cannot be produced at all**, so any health-adjacent statement about our recipes is unfalsifiable by
+construction rather than untrue.
+
+**First rung, and it is cheap.** Do not change a recipe or a page. Count how many of the 441 food-DB
+rows have a `verify_source` whose label is still reachable, so we know what a backfill would actually
+cost before anyone commits to one. `needs_verify` is already set on 117 of 441, so the machinery for
+"this row is not trusted yet" exists and a new optional field would not have to fight it.
+
+**What I checked and did not find.** `nutrient.densit` and `cost per calorie` are clean no-matches
+over all 8,423 files `git ls-files` returns. `dietary guidelines`, `recommended daily` and
+`World Health Organization` are also 0 of 8,423. All 30 `myplate` hits are source-blog domain names
+(`getonmyplate.com`, `dontmissmyplate.com`, `remakemyplate.com`), not the USDA guidance. **No
+dietary authority of any kind is cited anywhere in this repository.**
+
+### I138 - two recipes we sell carry "Healthy" in the title we publish, and one of them is 5.5% vegetable by weight `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-foodhealth-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Item 21, *Constructing a Healthy Plate*, states the course's one structural rule about a
+meal: "The plate itself should consist of about one half plant based food, ideally with a mix of
+different colored vegetables... The remaining one half of the plate should be equally divided into
+whole grains and lean protein rich foods." Item 9 warns specifically about "highly processed foods
+that masquerade as healthy foods".
+
+**Measured 2026-09-12.** Two of 583 recipes carry a health word in the `name` field that goes to the
+page title:
+
+- **Healthy Hamburger Helper** (`paid`, 563 cal / 41 p / 59 c / 19 f per serving). Its only
+  vegetable is 280 g of yellow onion in a 5,074 g batch: **5.5% plant by weight**. It also carries
+  1,680 g beef broth, 396 g shredded cheddar, 60 g Worcestershire and 5 g added salt, which is the
+  sodium shape item 5 names, and which finding 1 says we cannot measure.
+- **Healthy Chicken, Rice and Broccoli Skillet** (`paid`, 472 cal / 47 p / 47 c / 10 f). This one is
+  defensible on the course's own terms: 892 g broccoli plus 201 g onion.
+
+**The ruling wanted.** Both titles were inherited from the source blog and neither is our sentence.
+The question is whether a title we put on a paid page is a claim we own. `.claude/rules/site-and-publish.md`
+already says a wrong number on a live page is a real cost to a real reader and that understating is
+exactly as wrong as overstating, and a health word is the same kind of assertion with none of the
+same machinery behind it. Brad decides; there is no work here until he does.
+
+**What I checked and did not find, and this is the reassuring half.** Across all **584** built recipe
+bodies in `meal-prep/db/built/`, `guilt.free`, `superfood`, `detox`, `heart.health`,
+`anti.inflammat`, `fat.burning`, `boost (metabolism|immunity)`, `good for you` and `weight loss` are
+each **0 of 584**. Every one of the 21 `healthy` hits and the single `nutritious` hit is inside a
+source-attribution line naming the originating blog ("Recipe adapted from The Clean Eating Couple",
+"skinnyfitalicious.com", "Eat Yourself Skinny"). **The recipe prose makes no health claim of its
+own.** That is a good result and it should be said out loud, because it means finding 1 is a gap and
+not a live exposure.
+
+### I139 - the median recipe is 22% vegetable by weight against a course rule of one half the plate `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-foodhealth-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Item 21 as above. Item 18 adds that the average American eats under two cups of fruit and
+vegetables a day, "less than half of the recommended daily intake", and that increasing vegetable
+intake is the single most important change for most people.
+
+**Measured 2026-09-12** over all 583 recipes, classifying an ingredient as a vegetable when its
+`item_id` or `item` matches any of 41 keywords (pepper, onion, broccoli, spinach, carrot, tomato,
+zucchini, cabbage, kale, mushroom, celery, cauliflower, green bean, peas, corn, lettuce, cucumber,
+squash, asparagus, brussels, bok choy, eggplant, leek, scallion, jalapeno, poblano, salsa, sweet
+potato, potato, pico, coleslaw, slaw, edamame, artichoke, okra, radish, beet, turnip, chard, arugula,
+sprout):
+
+- median vegetable share **22.1%** by weight, mean 24.6%
+- **62 of 583** reach 50% plant by weight
+- **332 of 583** are below 25%
+- only **4 of 583** match no vegetable keyword at all
+
+**Read this as an upper bound, not a point estimate.** The classifier counts `potato` and `corn` as
+vegetables and counts them by raw weight, both of which flatter us against a rule the course states
+about coloured vegetables on a plate. Weight is also not plate area. The direction is what is safe to
+carry: the true figure is below 22%, not above it.
+
+**Why it matters here.** This is not an argument for changing any recipe. It is an argument that the
+Recipe Hunter's selection criteria are stated entirely in cost, protein and board coverage, and carry
+no vegetable term at all, so the 22% is an unmanaged output of a pipeline that never looks at it. If
+Brad ever wants the catalogue to move, the first rung is to print this number per batch at hunt time
+so it is visible before publication rather than measurable only afterwards.
+
+### I140 - the course's own "cost per calorie is the wrong denominator" argument lands directly on our headline metric, and nothing in the estate has ever stated the other denominator `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-foodhealth-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Item 9, verbatim: "When people talk about fast food being cheaper than fresh food,
+they're often referring to the fact that the cost per calorie of highly processed food is lower than
+that of fresh, whole food. This is often true because highly processed food is so high in calories
+that the cost per calorie is relatively low. But, if we instead look at the cost of food per unit of
+nutrient density, then buying fewer calories of higher nutrient density food is a much better use of
+our food budget."
+
+**Where it lands.** `cost_per_serving` is the number on every recipe card, the number the board feeds,
+and the number the whole product is sold on. It is a per-serving cost, which for a 14-serving batch
+of a 563-calorie dish is very close to a cost per calorie. The course's position is that this exact
+denominator is the one that makes processed food look like the rational purchase, and that it is the
+wrong one.
+
+**The honest framing, and why this is a ruling and not work.** Thrifty Crew's promise is
+budget-first, and the course is not in a position to price anything; its "spend your food budget
+wisely" advice is delivered by two affluent Californians and the course never once names a price.
+Our denominator is not obviously wrong for our reader. But **we have never stated that we chose it**,
+and `.claude/rules/measurement.md` already rules that a rate is printed with its denominator and that
+a verdict carries its rubric. This is the same rule one level up: the headline metric of the whole
+business has an unstated denominator choice with a known argument against it. The ask is one
+paragraph somewhere durable saying which denominator we price on and why, not a second metric.
+
+**What I checked and did not find.** `cost per calorie` and `nutrient.densit` are both 0 of 8,423
+tracked files.
+
+### I141 - nothing recorded here, so it is not re-derived: the recipe catalogue is well clear of the wellness-claim failure mode `DONE` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-foodhealth-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Recorded because a future session reading finding 2 could reasonably go looking for a claims problem
+and spend a day finding nothing. The measurement above already establishes there is nothing there:
+over 584 built recipe bodies, eight wellness-claim patterns return 0 and every health word present is
+inside a source citation. The `low.carb` count of 135 of 584 is likewise not an ideology: 113 of them
+are one related-recipes card linking to a single recipe titled "Low Carb Taco Cabbage Beef Skillet",
+and the remainder are source URLs (`lowcarbmaven.com`, `heyketomama.com`). One prose mention exists
+and it is a substitution note, not advice. The catalogue's exposure is the absent fields in finding 1,
+not the words on the page.
+
+### I142 - Published per-serving macros are sums of label-rounded values multiplied by a median 5.2x and up to 156x `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`meal-prep/food-macros-db.json` says in its own readme that each row's
+`calories/protein_g/carbs_g/fat_g` are **per serving**, and the serving is the one printed on the
+product's Nutrition Facts panel. `meal-prep/db/food-label-captures.json` confirms the provenance: its
+readme says every panel there was transcribed off the product photograph in Brad's Chrome. Recipes
+then scale those per-serving values by weight.
+
+That means a published macro is not a measurement of the dish. It is a sum of **regulatory
+disclosures**, each already rounded by the manufacturer to the increments the CFR prescribes,
+multiplied by a scale factor.
+
+Measured 2026-09-12 over the committed tree, all 584 recipe files parsed and every ingredient-use
+resolved:
+
+- 584 of 584 recipes carry `ingredients_grams`; **7,845 ingredient-uses, 0 unmatched** to a
+  `food-macros-db.json` row.
+- Scale factor, defined as `grams used in the batch / serving_grams of the row`, i.e. how many label
+  servings the batch consumes: **median 5.2x, p90 21.0x, max 155.7x**.
+- **845 of 7,845 uses (11%) are at 20x or more.**
+- **187 of 441 rows (42%) declare at least one macro as exactly 0** (fat 131, protein 99, carbs 84).
+- **678 of those 845 high-scale uses (80%) sit on a row that declares a macro as exactly 0.**
+
+Worst six by scale factor:
+
+| scale | recipe | ingredient | zero fields on the row |
+|---|---|---|---|
+| 156x | chicken-40-cloves-garlic | Garlic, 467 g vs 3 g/serving | fat |
+| 107x | escondidinho-de-carne-braz | Salt, 160 g vs 1.5 g/serving | fat, carbs, protein |
+| 103x | chicken-pad-thai-noodle-bowl | Garlic, 308 g vs 3 g/serving | fat |
+| 88x | colombian-pork-loin-blackbean | Sugar, 350 g vs 4 g/serving | fat, protein |
+| 84x | vietnamese-chicken-curry | Sugar, 336 g vs 4 g/serving | fat, protein |
+| 84x | cape-malay-chicken-curry | Garam Masala, 42 g vs 0.5 g/serving | fat, carbs, protein |
+
+**The shape of the defect, which is what matters and does not depend on knowing the increments.** A
+declared `0` on a label is not an assertion that the quantity is zero; it is an assertion that the
+quantity is below the threshold at which the manufacturer must declare it. Our arithmetic multiplies
+that `0` by 156 and it stays `0`. Every other declared value carries the same structure with a
+non-zero centre: the true figure lies in a band around it, and scaling widens the band in proportion
+while the stored number stays put. The error is **systematically one-directional for the zeros** -
+always an understatement - and this estate's own rule is that understating is exactly as wrong as
+overstating.
+
+This is not an argument that the published macros are badly wrong. Garlic's fat at 156x is a small
+absolute number. It is an argument that **nobody here has ever computed the band**, and that the
+per-serving macro on a paid recipe page is presented to the reader with the same authority as a
+weighed measurement while being a sum of rounded disclosures.
+
+**Rung 1, and it is cheap and deletable.** Read 21 CFR 101.9(c) for the declared increments per
+nutrient, then run one script over the existing 7,845 resolved ingredient-uses that emits, per
+published recipe, the per-serving macro we print beside the interval implied by each contributing
+row's rounding. No page changes, no DB changes, one report file. That report is what tells Brad
+whether this is a rounding footnote or a correction, and it cannot be guessed at from here: the
+scale factors are wide enough that the answer could plausibly be either.
+
+**What I checked and did not find.** No file in the tree computes or records an uncertainty, a band
+or a tolerance on a macro. `meal-prep/db/food-label-captures.json` records `status` (LABEL / PROXY /
+CONFLICT / UNFOUND) and a free-text note, which is provenance, not precision. The two CONFLICT rows
+prove the capture process already refuses to write on disagreement, so the discipline exists; it just
+has no notion of a number being rounded rather than wrong.
+
+### I143 - Reader-facing recipe prose uses FDA-defined nutrient content claim terms 767 times with no numeric bar behind any of them `NEEDS A RULING` `queue-7` `1-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Module 3 is unambiguous that "nutrient content claim" is a closed, FDA-defined vocabulary and that the
+regulator is rigid about it. Instructor Guy Johnson, twice, across items 29 and 30: a manufacturer may
+say "high in fiber" or "good source of fiber" because those terms have codified numeric conditions,
+and may not say "packed with fiber" or "loaded with fiber" because those do not. Pre-approval is not
+required precisely *because* the numeric conditions are spelled out in regulation, so using the term
+is an assertion that the food meets them.
+
+Measured 2026-09-12 over the **reader-facing prose fields only** (`intro_html`, `cost_closing_html`,
+`cost_note_html`, `portion_html`, `upsell_html`, `shop_smart`, `make_it`, `head`, `name`,
+`credit_html`), excluding internal fields and tags:
+
+- **330 of 584 recipes, 767 occurrences.**
+- `high protein` 358, `high-protein` 295, `fat free` 42, `sugar-free` 22, `low calorie` 18,
+  `low fat` 7, `sugar free` 5, `fat-free` 5, `low-fat` 5, `high in protein` 4, `low-sodium` 3,
+  `low sodium` 3.
+
+**The ruling Brad owes, and it has two independent halves.**
+
+*The legal half, which the course does not answer and I will not guess at.* These rules govern the
+**labeling of packaged food**. Whether a recipe on a paid membership site is "labeling" is outside
+anything this course says, and a confident answer either way from me would be invented.
+
+*The editorial half, which does not wait on the legal one.* A reader who buys groceries has learned
+what "high protein" means from labels, because that is the only place the phrase is defined. When our
+page uses the same words with no bar behind them, the reader is not reading our marketing adjective;
+they are reading the label term. That is a wrong number in words rather than digits, and it fails the
+same standing rule.
+
+**The hook already exists and is the reason this is cheap.** `forbidden_prose_terms` is a live field
+on the recipe schema and already bans exactly this class of word: `guilt-free`, `superfood`,
+`clean eating`, `keto`, `low-carb`, `restaurant-quality`, `authentic`, `cheap`. It is carried by only
+**38 of 584 recipes** and it is per-recipe rather than global, so it is a convention rather than a
+gate. Whatever Brad rules, the mechanism to enforce it is already built and needs promoting to a
+global list plus a check, not designing.
+
+**Marked 1-WAY because the first rung is the ruling itself and the obvious consequence is a sweep of
+330 live pages on a paid site.** That is not deletable.
+
+### I144 - Nothing in our own files carries any allergen information, and we sell recipes `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Module 2, item 22, is the course's longest single lecture and is entirely about allergen disclosure:
+nine major allergens (milk, eggs, fish, shellfish, tree nuts, peanuts, wheat, soybeans, sesame),
+sesame added by the FASTER Act amending FALCPA with compliance required from 1 January 2023; tree
+nuts and shellfish must name the **specific** nut or shellfish rather than the category; there is **no
+threshold** - FDA states the answer is none, so manufacturers set their own; and "may contain" is not
+recognised by the act and is purely voluntary.
+
+Measured 2026-09-12, case-insensitive over `meal-prep`, `content`, `site`, `public` and `worker`:
+`allergen` returns **99 files, and 98 of them are scraped source pages under
+`meal-prep/db/page-cache/`** - other people's recipe sites, captured by the Recipe Hunter. The
+ninety-ninth is `meal-prep/engine/regression-inputs/golden/inputs/grocery-out/comparison-2026-01-01.json`,
+a frozen fixture. **Zero of our own schemas, pipeline scripts, recipe rows, cards or published pages
+mention an allergen at all.** `allergy` is likewise absent from the skills store (clean no-match over
+1,502 sections) so there is no prior thinking to consult either.
+
+The recipes are full of the top nine by construction - a high-protein meal-prep catalogue is milk,
+eggs, wheat, soy and peanuts in most of its dishes.
+
+**Why this is filed as a measurement rung and not a build.** The honest first step is to count which
+of the 584 recipes contain a top-nine allergen by ingredient, which is a read over data we already
+hold and which produces a number Brad can size a decision against. It is entirely possible the answer
+is "a recipe lists its ingredients in full, so a reader with an allergy can already see it", and that
+is a legitimate position - the page is not a package and it is not hiding anything. But it is a
+position nobody here has taken on purpose, and the difference between "we decided the ingredient list
+suffices" and "nobody thought about it" is the whole point of writing it down.
+
+### I145 - Sodium is read off the panel and then discarded on the way into the macro DB `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`meal-prep/db/food-label-captures.json` carries a `sodium_mg` field and populates it - the Great Value
+chicken broth capture records 830 mg, the beef broth 810 mg. `meal-prep/food-macros-db.json` has **no
+sodium field on any of its 441 rows**, nor any sugar field. Fiber survives on 98 of 441.
+
+So the panel was read, the sodium was transcribed by hand off a photograph at the five-to-eight round
+trips per label that `reading-a-nutrition-label-off-a-product-photo` records as the cost, and then it
+was dropped. The expensive half of the work was done and the cheap half was not.
+
+Item 21 lists what a US panel must carry: calories, total fat, cholesterol, sodium, total
+carbohydrate, dietary fiber, total sugars, added sugars, protein, vitamin D, calcium, iron,
+potassium. We carry four of those on every row.
+
+**This is filed as `RUNG1 DOC` rather than a build because the first question is whether we WANT
+sodium**, and that is a sentence in a schema file, not a migration. If the answer is yes, the
+captures already hold it for the rows they cover and the field costs nothing; if no, the capture
+schema should stop collecting it so the next label sweep does not pay for a number nobody stores.
+Either way the decision should be written down where the next person reading `SPEC-SCHEMA.md` finds
+it. Worth noting that a meal-prep audience is a plausible sodium-watching audience, and that broth,
+canned tomatoes and soy sauce are exactly the ingredients where it concentrates.
+
+### I146 - The label capture procedure does not record WHICH panel column a number came from, and dual-column panels are standard `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Item 21 walks a real Cheerios box and points out that its panel is a **dual column** one: it declares
+the nutrition per 1.5 cup serving of cereal AND per serving with three quarters of a cup of skim milk
+added. Both columns are on the same panel, both are legally required to be there, and they describe
+two different foods.
+
+`meal-prep/db/food-label-captures.json`'s fields are `item`, `status`, `product`, `url`, `label`
+(`servings_per_container`, `serving`, `calories`, `fat_g`, `carbs_g`, `protein_g`, `sodium_mg`,
+`serving_g`, `serving_g_note`, `fiber_g`), `stored_brand` and `note`. **There is no field naming the
+column.** Nor is there one in `food-macros-db.json`, whose only nearby field is a free-text `notes`
+carrying things like `"raw"`.
+
+The `"raw"` note is the tell that this estate already knows the shape of the problem: `food-db-naming-rulings`
+ruling 2 exists precisely because `Chicken Thigh (Bone-In, Skin-On)` at 221 cal/100 g edible and
+`Chicken Thighs (bone-in, skin-on, raw)` at 177 as-purchased are different numbers with nothing in
+either name saying so, and Brad's ruling was to put the basis **in the name**. A dual-column panel is
+the same defect one step earlier: the as-prepared column is a different basis, and unlike raw-versus-cooked
+it leaves no trace at all once transcribed.
+
+Fourteen captures exist today, none of them obviously a dual-column product. The cost of fixing this
+before the next sweep is one field and one sentence in the capture readme; the cost of fixing it after
+is re-photographing labels at five to eight round trips each.
+
+**Rung 1: add a required column field to the capture schema and a line to the readme saying an
+as-prepared column is never the row's source without the basis going in the name.** No existing row
+changes and no page changes.
