@@ -58,6 +58,9 @@ is one copy of every rule and nothing here can drift from it.
 - **No hard-coded bands** (Brad, 2026-09-04). [[no-hardcoded-bands]]
 - **The boards are gitignored**, so a worktree, a CI runner or a clean checkout is BLIND here and the
   engines exit 0 having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them.
+  **A RE-SEED REFRESHES a seeded FILE whose source was rewritten since the copy** (2026-09-11). A board is
+  rebuilt under the SAME dated name several times a day, and a seeder that left every present file alone gave
+  a half-old, half-new set: a stale board under a fresh ruling. Directory seeds are not refreshed.
 - **A check that compares a derived file with a board reads that file by the BOARD'S road** (2026-09-11). A
   board reaches a checkout by copy; a tracked file reaches it only by commit, and a hand-run chain rebuilds a
   board and commits its source only. test-auditors' capture-eviction currency case read the tracked report and
