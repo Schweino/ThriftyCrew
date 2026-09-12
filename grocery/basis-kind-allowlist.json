@@ -19,6 +19,14 @@
       "reason": "The can is 18.8 oz by WEIGHT - the product name says '18.8 OZ' - and the size field labelled the same number as fl oz. Same number either way, so the per-oz figure is correct."
     },
     {
+      "id": "coconut-oil",
+      "store": "Sam's Club",
+      "size": "56 oz",
+      "reviewed": "2026-09-12",
+      "reviewed_by": "claude (grocery triage, plan-2026-09-11-3 verification)",
+      "reason": "The size names a WEIGHT on a commodity whose other six cells label their jars by fluid ounce (Walmart 56 fl oz, Baker's 30 fl oz, Aldi 14 FL OZ, Hy-Vee 14 fl oz, Fareway 15 fl oz, Family Fare 14 oz), so the peer majority elects volume and this is the one cell labelled the other way. The NUMBER is right and the store says so itself: the item is 'Member's Mark Organic Virgin Coconut Oil, 56oz.' at $10.98, 10.98 / 56 = 0.19607, which is the published 0.1961, and the row's own native_unit_price from Sam's is 0.20/oz on the same 56, so our divisor is the one the store prices by. Crown checked for robustness across the whole plausible reading, not assumed: coconut oil's density is about 0.92, so if the 56 is net weight the true content is about 60.9 fl oz and the per-fl-oz price is 0.1804, while if the 56 is already fluid the price is 0.1961. Sam's is cheapest at both ends against the runner-up Walmart at 0.2434, a 19 percent margin that is more than twice the roughly 8 percent the density question can move, so no published verdict changes either way. The weight reading also OVERSTATES our per-fl-oz figure, the safe direction for a crown holder, the same argument as the insect-spray and red-wine-vinegar entries. NOT an exclude, because the product IS coconut oil and its number is exact. Flagged on 2026-09-12 because a foreign capture refresh re-keyed the Sam's row during the triage run; the identical crown was already live at 0.1952 on the board published 2026-09-11 20:56, so this is a first review of the size string, not a regression."
+    },
+    {
       "id": "condensed-milk",
       "store": "Sam's Club",
       "size": "84 fl oz",
