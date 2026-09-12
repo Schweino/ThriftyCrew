@@ -36,6 +36,12 @@ not run one whose inputs are untouched, so a run DISPATCHES less and holds its s
 shortens how long a starved waiter waits; it does not change who wins a freed slot, which is what was measured
 here and lives in `lib\gate-slots.ps1`.
 
+**Re-read at commit `1417315df`:** `ops\run-gates.ps1` moved again, twice on 2026-09-12 - six tree-wide ratchets are
+now marked `daily` and deferred out of a push, and the loop that judges them skips them too. Neither touches
+`lib\gate-slots.ps1`, which is what this document measures: who wins a freed slot. What it DOES change is the
+denominator around it - a push dispatches less - and that was already true of the per-gate keys, so the caveat below
+about each session running its own checkout's `run-gates` now covers three versions rather than two.
+
 **Re-read at commit `b2460165e`:** `ops\run-gates.ps1` is unchanged since the re-read above; only the hash that
 one cites is gone. The branch carrying that change was rebased onto a main other sessions were pushing to, so
 `30f237b35` was rewritten as `81ba9dbf0` with identical content. The verdicts below are untouched.

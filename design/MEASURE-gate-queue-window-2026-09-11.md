@@ -20,6 +20,13 @@ ceiling this file computes from slot-seconds, and changes none of the arrival or
 **Re-read at commit `46a78c564`:** the commit adding the harness; every total here was produced by running that
 copy of it over the sampled rows.
 
+**Re-read at commit `1417315df`:** `ops\run-gates.ps1` moved twice more on 2026-09-12: six tree-wide ratchets are
+marked `daily` and no longer run in a push, and the loop that judges them skips them as well. The observer is
+untouched, and every total below still reads as measured. The direction is the same one already noted for the
+per-gate keys - a run does LESS work, so the slot-second ceiling this file computes is an upper bound on a run that
+no longer exists in that form. The arrival and admission findings are unaffected, because neither depends on how
+much work a run dispatches.
+
 **Re-read at commit `b2460165e`:** nothing in either harness changed since the re-read above, and this line
 exists only because the hash that one cites no longer resolves. That branch was rebased onto a main several
 sessions were pushing to, which rewrote every commit on it, so `30f237b35` became `c3d8ab4c2` for the observer
