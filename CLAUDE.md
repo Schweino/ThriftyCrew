@@ -104,6 +104,13 @@ for. Data-dependent audits stay in the daily chain against a real board.
   it wants no script: I wrote one, and `audit-guard-contract` called it DEAD while `audit-script-census`
   called it uncensused, both correctly - a detector with no production caller is one nobody runs.
   **The habit is the whole prevention. There is nothing here to automate.**
+- **A SIBLING MAY ALREADY HOLD THE FIX, on a branch nobody pushed**, and `main` matching `origin/main` says
+  nothing about the hundred worktrees beside it. Before building, run `git log --all --oneline -- <file>`.
+  **Measured 2026-09-11**: seven commits on seven branches carried the same two-line `pull-grocery-ads` fix and
+  four sessions had each written a detector for that one line, none of it pushed, while the brief for a fifth
+  session said the fix had shipped. That fifth session then built nothing and spent its afternoon comparing the
+  four, which was the cheap outcome; the expensive one is four more copies. When the same hour produces two
+  rival versions, the tie is broken by running both over one case list, not by whichever session pushes first.
 - Comparison boards are rebuilt daily, so a fresh correction in `known-wrong.json` is red on purpose
   until the next build.
 
