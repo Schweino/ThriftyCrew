@@ -2,9 +2,16 @@
 
 Status: MEASURED, and the block shipped with this file.
 
-Harness: `ops/audit-crossroad-reads.ps1` as committed with this document, run over
-`grocery/test-auditors.ps1`. Commit the numbers below were read at: `1975ea45d` plus this change, in
-worktree `bold-bohr-996bf1`. Re-run it rather than quoting these figures; it prints its own denominator.
+Harness: `ops/audit-crossroad-reads.ps1`, run over `grocery/test-auditors.ps1`. The numbers below were
+first read in worktree `bold-bohr-996bf1` on the tree that became commit `3afbb5049`, rebased onto
+`origin/main`. Re-run it rather than quoting these figures; it prints its own denominator.
+
+Re-read at commit `3afbb5049`: every number in this document still holds. The harness is NEW in that
+commit, so the base commit this work started from cannot qualify it - a document and the harness it
+names cannot cite each other in one commit, and `ops/audit-conclusion-currency.ps1` correctly called
+the first attempt UNQUALIFIED for exactly that reason. The re-read is a real run, not a formality: at
+that content `-SelfTest` exited 0 over 15 cases and the live run exited 0 at 157 units, 253 resolved
+path expressions, 2 tracked derived artifacts, 1 unit on both roads, 0 new against the baseline.
 
 ## The question
 
