@@ -36,6 +36,10 @@ not run one whose inputs are untouched, so a run DISPATCHES less and holds its s
 shortens how long a starved waiter waits; it does not change who wins a freed slot, which is what was measured
 here and lives in `lib\gate-slots.ps1`.
 
+**Re-read at commit `b2460165e`:** `ops\run-gates.ps1` is unchanged since the re-read above; only the hash that
+one cites is gone. The branch carrying that change was rebased onto a main other sessions were pushing to, so
+`30f237b35` was rewritten as `81ba9dbf0` with identical content. The verdicts below are untouched.
+
 **Harness and commit.** `ops\probe-gate-slot-admission.ps1` (the probe) and `ops\report-gate-slot-admission.ps1`
 (the analysis), both introduced by commit fd55e361d and unmoved since, run 2026-09-11 against whatever
 `run-gates.ps1` each session's own checkout happened to be running; this session's checkout stood at c6533c7ea.

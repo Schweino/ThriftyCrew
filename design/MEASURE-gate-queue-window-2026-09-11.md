@@ -20,6 +20,14 @@ ceiling this file computes from slot-seconds, and changes none of the arrival or
 **Re-read at commit `46a78c564`:** the commit adding the harness; every total here was produced by running that
 copy of it over the sampled rows.
 
+**Re-read at commit `b2460165e`:** nothing in either harness changed since the re-read above, and this line
+exists only because the hash that one cites no longer resolves. That branch was rebased onto a main several
+sessions were pushing to, which rewrote every commit on it, so `30f237b35` became `c3d8ab4c2` for the observer
+and `81ba9dbf0` for `run-gates` with identical content. Worth recording rather than quietly renumbering: a
+citation to an unmerged commit is only as stable as the branch carrying it, so a measurement written against
+work that has not landed owes this re-read again on the last rebase before it does. It was rewritten three
+times before landing, once per rebase, which is the cost of citing a branch instead of a merged commit.
+
 ## What was sampled
 
 Every 15 s from **16:48:33 to 18:18:23** (360 ticks). The totals count runs that STARTED in the first 60 minutes,
