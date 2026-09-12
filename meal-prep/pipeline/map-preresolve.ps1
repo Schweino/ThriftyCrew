@@ -107,6 +107,20 @@ $ErrorActionPreference = 'Stop'
 # COPY EVERY SWITCH INTO A PLAIN BOOL FIRST. A dot-sourced lib declaring its own [switch]$SelfTest
 # resets ours in THIS scope - the PS 5.1 trap that made migrate-prose-tokens' first -SelfTest run
 # execute the live path instead of its fixtures.
+# gate-inputs: meal-prep\pipeline\coverage_check.py, meal-prep\pipeline\ingredient-vocab.ps1, meal-prep\pipeline\parse-compute.ps1, meal-prep\pipeline\build-intake-skeleton.ps1, lib\json-io.ps1, lib\guard-contract.ps1, grocery\native-lib.ps1, grocery\commodities.json, grocery\recipe-commodities.json, grocery\out\recipe-board-everyday.json, meal-prep\db\fdc-cache.json, meal-prep\db\densities.json, meal-prep\food-macros-db.json
+# WHY THIS SUITE DECLARES (Brad, 2026-09-12). ~48s on every push, and the key could never infer this file: it builds
+# script paths into variables ($script:VOCAB_PS and the rest), which a source key cannot follow. The list above was READ,
+# not guessed, and checked against every function that builds a repo path:
+#   * the self-test itself calls Get-FdcCandidates (the live fdc-cache.json), Get-CompositeSplits (coverage_check.py),
+#     and lifts build-intake-skeleton.ps1's source as text;
+#   * it re-runs THIS FILE as a child with -NoBoard and a scratch vocabulary and ledger, and that main path calls
+#     Get-CommodityIds against the real repo (the two commodity files and the gitignored everyday board),
+#     Get-VocabClassification (ingredient-vocab.ps1, on the scratch vocabulary), and - with no -NoPrecheck -
+#     Get-MacroPrecheck, whose parse-compute.ps1 reads the live densities.json and food-macros-db.json and loads
+#     lib\json-io.ps1 through a walk-up path the key cannot see.
+# NOT inputs, deliberately: grocery\price-ingredient.ps1 (the self-test hands Select-CheapestAlternative a stub, and
+# -NoBoard skips the main path's board lookup) and ingredient-resolutions.ps1 ($script:RESOLVE_PS is defined and never
+# used). The board is gitignored; a checkout without one fails this declaration and runs the suite every time.
 $runSelfTest = [bool]$SelfTest; $runJson = [bool]$Json; $runNoBoard = [bool]$NoBoard; $runNoPrecheck = [bool]$NoPrecheck
 $runAssemble = [bool]$Assemble; $runNewBids = [bool]$NewBids
 
