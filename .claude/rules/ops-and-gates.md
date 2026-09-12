@@ -263,6 +263,20 @@ everything else honest, so a defect here is silent by construction.
   Choose the text from the child's real last lines, never a word that also sits in a case label, and hand the child
   a temp output directory where it takes one: `pull-grocery-ads` creates its `-OutDir` before the self-test runs, so
   the default was the live `grocery\out`.
+- **A BLIND case that gates a BLOCK is scored on the BLOCK, and only the SEEING arm can check that number**
+  (2026-09-12). `blind=` on a `-COMPLETE` marker is what run-gates prints on a green run, so it is the whole
+  statement of what a passing gate did not cover. `meal-prep/pipeline/wave-preaudit.ps1` reported `blind=1` for a
+  single could-not-look case that skipped its entire end-to-end drill: run-gates printed *"wave-preaudit (1
+  case(s))"*, which reads as one case of 50, and the real figure was **14 of 64**, every one an END-TO-END MUST
+  FIRE or CLEAN TWIN over the real publish drill. Measured by diffing CASE NAMES between an unseeded and a seeded
+  run in one checkout, never counts. This is `measurement.md`'s abstention and denominator rules landing on a gate
+  marker: **count the cases the blind branch SUPPRESSED, not the one that noticed**, and print `cases` beside
+  `blind` so the two add to the suite. **The blind arm cannot verify its own number** - it is a claim about code
+  it could not run - so the seeing arm asserts it: a CLEAN TWIN after the block checks that it ran exactly what a
+  blind checkout reports as not covered, and goes red in the main checkout the day somebody adds a case without
+  moving the constant. Swept that day: 3 self-tests carry `blind=` on their marker, and `sidecar/start-sidecar.ps1`
+  was already right because its blind case stays inside its own `$ran` total. Not a gate - a three-file class does
+  not earn a ratchet, and a bar on blind counts would be red on day one.
 - **A sandbox that runs a real script copies the WHOLE `lib\`, and a library the script cannot load is exit 3**
   (2026-09-11). `ops/test-prepush-hook.ps1` copied `prepush-test-auditors.ps1` with a hand list of two libraries
   older than `lib/git-repo-env.ps1`. Under `Continue` the dot-source printed "is not recognized" and carried on,
