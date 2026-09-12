@@ -1,32 +1,38 @@
 ﻿{
-    "generated":  "2026-09-09T21:33:03",
-    "started":  "2026-09-09T21:30:01",
-    "deadline":  "2026-09-10T00:00:01",
+    "generated":  "2026-09-11T21:51:08",
+    "started":  "2026-09-11T21:30:05",
+    "deadline":  "2026-09-12T00:00:05",
     "hard_stop":  "06:30",
     "jobs":  4,
-    "contested":  0,
-    "elapsed_sec":  182,
+    "contested":  264,
+    "elapsed_sec":  1263,
     "card_free":  true,
-    "free_vram_mib":  14348,
+    "free_vram_mib":  14803,
     "llama_started":  true,
     "stages":  [
                    {
                        "stage":  "inputs",
                        "state":  "OK",
-                       "detail":  "graph.db is inside its 26h window",
+                       "detail":  "C:\\Codex\\ThriftyCrew\\graph\\sqlite\\graph.db is 13.2 h old, inside its 26 h window (producer: the daily chain\u0027s graph-gates lane (grocery\\audit-graph-gates.ps1 -\u003e graph\\import\\import_all.py --observations)). Its newest price_observations.observed_at is 2026-09-11, inside its 36 h window.",
                        "sec":  0
+                   },
+                   {
+                       "stage":  "verdict-expiry",
+                       "state":  "OK",
+                       "detail":  "total=10690 expired=0 reask=0 deferred=0",
+                       "sec":  34
                    },
                    {
                        "stage":  "emit",
                        "state":  "OK",
-                       "detail":  "contested: 0 question(s) of 20478 (20478 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 1.9s",
-                       "sec":  2
+                       "detail":  "contested: 264 question(s) of 29647 (29383 settled by the deterministic layers), 7405 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 18.8s",
+                       "sec":  20
                    },
                    {
                        "stage":  "defs",
                        "state":  "OK",
-                       "detail":  "[21:30:03] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
-                       "sec":  0
+                       "detail":  "[21:31:33] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "sec":  15
                    },
                    {
                        "stage":  "hunter",
@@ -38,31 +44,67 @@
                        "stage":  "durability",
                        "state":  "OK",
                        "detail":  "GRAPH-DURABILITY-COMPLETE findings=0",
-                       "sec":  0
+                       "sec":  18
+                   },
+                   {
+                       "stage":  "handoff",
+                       "state":  "OK",
+                       "detail":  "STOP-SIDECAR-COMPLETE service=2 stopped=2 port=free",
+                       "sec":  6
                    },
                    {
                        "stage":  "sweep",
                        "state":  "OK",
                        "detail":  "",
-                       "sec":  136
+                       "sec":  353
                    },
                    {
                        "stage":  "serve",
                        "state":  "OK",
                        "detail":  "4 slots",
-                       "sec":  12
+                       "sec":  19
                    },
                    {
                        "stage":  "resolve",
                        "state":  "OK",
-                       "detail":  "resolved 22110 rows in 2.0s (20478 distinct questions, 0 model calls)",
-                       "sec":  2
+                       "detail":  "resolved 31790 rows in 665.8s (29647 distinct questions, 193 model calls)",
+                       "sec":  671
                    },
                    {
                        "stage":  "stage1",
                        "state":  "OK",
                        "detail":  "Next: python graph/learning/stage2_review.py --emit-packet",
                        "sec":  26
+                   },
+                   {
+                       "stage":  "stage2-packet",
+                       "state":  "OK",
+                       "detail":  "Hand this to the Fable review agent; ingest its verdicts with --ingest.",
+                       "sec":  0
+                   },
+                   {
+                       "stage":  "gold-seed",
+                       "state":  "OK",
+                       "detail":  "      pepperoncini",
+                       "sec":  0
+                   },
+                   {
+                       "stage":  "gold-score",
+                       "state":  "BLIND",
+                       "detail":  "rc=1 - never fatal",
+                       "sec":  3
+                   },
+                   {
+                       "stage":  "lint-adjacency",
+                       "state":  "OK",
+                       "detail":  "704 near-miss(es); 17 on a product the board publishes",
+                       "sec":  74
+                   },
+                   {
+                       "stage":  "rejection-families",
+                       "state":  "SKIP",
+                       "detail":  "ran within the last 7 days",
+                       "sec":  0
                    },
                    {
                        "stage":  "ml-eval",

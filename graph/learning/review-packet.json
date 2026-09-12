@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-21T01:01:21",
+  "generated_at": "2026-09-11T21:49:47",
   "reviewer": "claude-fable-medium",
-  "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise.",
+  "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
     "false_merge_rate_max": 0.02,
     "missed_merge_rate_max": 0.1,
@@ -9,118 +9,135 @@
   },
   "proposals": [
     {
-      "proposal_id": "lp:a04c4cccdbc518e5b2b8",
+      "proposal_id": "lp:3db0ce0751eb9f9d0421",
       "kind": "add_alias",
-      "target": "93-7-ground-turkey",
+      "target": "au-jus-gravy-mix",
       "target_label": null,
-      "payload": "93%?/7%?\\s+ground\\s+turkey",
+      "payload": "au\\s+jus\\s+gravy\\s+mix",
       "stage1_confidence": 0.95,
-      "rationale": "Matches 'Jennie O Fresh 93%/7% Ground Turkey'. Anchors on the specific lean/fat ratio and meat type.",
+      "rationale": "Matches 'Au Jus Gravy Mix' and variants like 'Our Family Au Jus Gravy Mix' by anchoring on the core product name.",
       "blast_radius": {
-        "counts": {
-          "intended_capture": 1,
-          "absorbs_review": 0,
-          "already_matched": 1,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "intended_capture": [
-            {
-              "product": "Jennie O Fresh 93%/7% Ground Turkey 16 Oz",
-              "rows": 2
-            }
-          ],
-          "already_matched": [
-            {
-              "product": "Jennie-O 93/7 Ground Turkey, 2.5 lbs., 2 pk.",
-              "rows": 1
-            }
-          ]
-        }
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     },
     {
-      "proposal_id": "lp:5391cad5f9c88306761a",
-      "kind": "add_known_wrong",
-      "target": "cannellini-beans",
+      "proposal_id": "lp:79a96fd4f7dc90cc554c",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
       "target_label": null,
-      "payload": "Our Family Great Northern Beans 15.5 Oz",
+      "payload": "buffalo\\s+wing\\s+sauce",
       "stage1_confidence": 0.95,
-      "rationale": "Great Northern beans are a different variety than Cannellini beans (though similar, they are distinct commodities in grocery classification)."
+      "rationale": "Matches multiple listings like 'Moore's Original Buffalo Wing Sauce' and 'Cookies Wings 'N Things Buffalo Wing Sauce' by anchoring on the core product name 'Buffalo Wing Sauce'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
     },
     {
-      "proposal_id": "lp:75996eaba7c051dee1a3",
+      "proposal_id": "lp:d3d41447422f8eae352f",
       "kind": "add_alias",
-      "target": "pineapple-chunks",
+      "target": "hot-honey",
       "target_label": null,
-      "payload": "pineapple\\s+tidbits",
+      "payload": "hot\\s+honey",
       "stage1_confidence": 0.95,
-      "rationale": "Matches 'Great Value Canned Pineapple Tidbits' and 'Our Family Pineapple, Tidbits'. Tidbits are a form of chunks.",
+      "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on the core product name 'Hot Honey'.",
       "blast_radius": {
-        "counts": {
-          "intended_capture": 1,
-          "absorbs_review": 0,
-          "already_matched": 0,
-          "cross_commodity": 4,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 1
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [
-          "matches 4 name(s) already priced under a different commodity — confirm the collision is benign before accepting"
-        ],
-        "examples": {
-          "cross_commodity": [
-            {
-              "product": "(4 pack) Dole Fruit Bowls Pineapple Tidbits in 100% Fruit Juice, 4 oz Cups (4 Pack)",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:canned-pineapple"
-              ]
-            },
-            {
-              "product": "Dole Fruit Bowls Pineapple Tidbits in 100% Fruit Juice, 4 oz Cups (4 Pack)",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:canned-pineapple"
-              ]
-            },
-            {
-              "product": "Dole Pineapple Tidbits in 100% Fruit Juice, 20 oz Can",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:canned-pineapple"
-              ]
-            },
-            {
-              "product": "Great Value Pineapple Tidbits, 4 oz, 4 Count",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:canned-pineapple"
-              ]
-            }
-          ],
-          "blocked_by_rules": [
-            {
-              "product": "Dole Fruit Bowls No Sugar Added Pineapple Tidbits in Water, 4 oz Cups (4 Pack)",
-              "blocked_by": "matched exclude pattern '\\bwater\\b'"
-            }
-          ],
-          "intended_capture": [
-            {
-              "product": "Great Value Canned Pineapple Tidbits, 20 oz",
-              "rows": 2
-            }
-          ]
-        }
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:ff96cdbe378d25ad36d7",
+      "kind": "add_alias",
+      "target": "part-skim-mozzarella-shredded",
+      "target_label": null,
+      "payload": "shredded\\s+mozzarella|mozzarella\\s+shredded",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches multiple listings: 'Great Value Shredded Mozzarella', 'Kraft Natural Mozzarella Shredded Cheese', 'Sargento Mozzarella Shredded Cheese', etc. Anchors on the combination of 'Shredded' and 'Mozzarella'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:b94ce818e72eca8b947c",
+      "kind": "add_alias",
+      "target": "caesar-salad-kit",
+      "target_label": null,
+      "payload": "caesar\\s+salad|chick\\s+caesar",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Tay Farm Chick Caesar' and other Caesar salad kit variants without matching unrelated items.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:a19a1c027540449ec0b0",
+      "kind": "add_alias",
+      "target": "jasmine-rice-dry",
+      "target_label": null,
+      "payload": "gv\\s+thjasmine",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Great Value Gv Thjasmine'. This is a specific typo/abbreviation for Great Value Jasmine Rice. The pattern is very specific to this listing.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:47ba5ac072a1a2c31613",
+      "kind": "add_alias",
+      "target": "caesar-salad-kit",
+      "target_label": null,
+      "payload": "chick\\s*caesar",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Tay Farm Chick Caesar' (20x). Anchors on the specific product name 'Chick Caesar' to avoid matching generic chicken or other caesar items.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:7294458a9496b4a94895",
+      "kind": "add_alias",
+      "target": "apple-cider",
+      "target_label": null,
+      "payload": "100%\\s+apple\\s+cider|apple\\s+cider\\s+juice",
+      "stage1_confidence": 0.95,
+      "rationale": "Covers Hy-Vee 100% Apple Cider and Our Family Apple Cider Juice. The pattern anchors on the food name 'apple cider'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:c3c6eec7e9d544dcde9f",
+      "kind": "add_alias",
+      "target": "au-jus-gravy-mix",
+      "target_label": null,
+      "payload": "au\\s+jus\\s+(gravy|sauce)\\s+mix",
+      "stage1_confidence": 0.95,
+      "rationale": "Covers various brands of Au Jus Gravy Mix including Hy-Vee, Kroger, and Our Family. The pattern anchors on the food name 'au jus gravy mix' or 'au jus sauce mix'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:3079a01b2b0bd3d4f5df",
+      "kind": "add_alias",
+      "target": "frozen-cut-green-beans",
+      "target_label": null,
+      "payload": "green\\s+beans,?\\s*cut",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Our Family Green Beans, Cut, Fresh Frozen 24 Oz' (2x)",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:929bf9e63401f5cc7f5e",
+      "kind": "add_alias",
+      "target": "jasmine-rice-dry",
+      "target_label": null,
+      "payload": "jasmine\\s+rice",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Mahatma Jasmine Rice' (2x)",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     },
     {
@@ -161,940 +178,737 @@
       }
     },
     {
-      "proposal_id": "lp:1a9e67427329bba72c16",
+      "proposal_id": "lp:f2948717e287640a1ebe",
       "kind": "add_alias",
-      "target": "cheddar-cheese-shredded",
+      "target": "apple-cider",
       "target_label": null,
-      "payload": "(shredded|finely\\s+shredded)\\s+(mild|sharp|triple)?\\s*cheddar",
+      "payload": "100%\\s+apple\\s+cider",
       "stage1_confidence": 0.9,
-      "rationale": "Matches 'Great Value Sharp Cheddar Finely Shredded', 'Happy Farms Thick Shredded Triple Cheddar', and 'Hy-Vee Finely Shredded Mild Cheddar'. Anchors on shredded cheddar.",
+      "rationale": "Matches 'Hy-Vee 100% Apple Cider' by anchoring on the specific '100% Apple Cider' phrase.",
       "blast_radius": {
-        "counts": {
-          "intended_capture": 5,
-          "absorbs_review": 0,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "intended_capture": [
-            {
-              "product": "Happy Farms Shredded Mild Cheddar Cheese",
-              "rows": 1
-            },
-            {
-              "product": "Happy Farms Shredded Sharp Cheddar Cheese",
-              "rows": 1
-            },
-            {
-              "product": "Happy Farms Thick Shredded Triple Cheddar",
-              "rows": 1
-            },
-            {
-              "product": "Hy-Vee Finely Shredded Mild Cheddar Natural Cheese",
-              "rows": 1
-            },
-            {
-              "product": "Tillamook Farmstyle Shredded Triple Cheddar Cheese, 8 oz",
-              "rows": 1
-            }
-          ]
-        }
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     },
     {
-      "proposal_id": "lp:072a85e8924c34eea8b7",
+      "proposal_id": "lp:317b9a3c1ae7b5de7582",
       "kind": "add_alias",
-      "target": "1-3-fat-cream-cheese",
+      "target": "apple-cider",
       "target_label": null,
-      "payload": "cream\\s+cheese",
+      "payload": "sparkling\\s+apple\\s+cider",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Martinelli's Sparkling Apple Cider' by anchoring on the specific 'Sparkling Apple Cider' phrase.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:e3c8d0d1ddfbae4172fd",
+      "kind": "add_alias",
+      "target": "apple-cider",
+      "target_label": null,
+      "payload": "apple\\s+cider\\s+juice",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Our Family Apple Cider Juice' by anchoring on the specific 'Apple Cider Juice' phrase.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:030a8c66c11a41806165",
+      "kind": "add_alias",
+      "target": "au-jus-gravy-mix",
+      "target_label": null,
+      "payload": "au\\s+jus\\s+sauce\\s+mix",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Hy-Vee Au Jus Sauce Mix' by anchoring on the specific 'Au Jus Sauce Mix' phrase.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f8d5d9559584b5a30c2d",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "medium\\s+buffalo\\s+sauce",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Buffalo Wild Wings Medium Buffalo Sauce' by anchoring on the specific flavor variant name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f523e92f2f71999cf1c3",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "medium\\s+wing\\s+sauce",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Burman's Medium Wing Sauce' by anchoring on the specific flavor variant name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:e889e4919a7716172629",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "zesty\\s+buffalo\\s+sauce",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce' by anchoring on the specific flavor variant name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:81a977c15bd7b56bc4bc",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "buffalo\\s+wings\\s+hot\\s+sauce",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Frank's Red Hot Buffalo Wings Hot Sauce' by anchoring on the specific product name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:dee170c61d48ab3d7c82",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "moore's\\s+original\\s+buffalo\\s+wing\\s+sauce",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches '(2 pack) Moore's Original Buffalo Wing Sauce' by anchoring on the specific brand and product name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:e4a28593e58590712ecd",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "spicy\\s+garlic\\s+buffalo\\s+sauce",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Buffalo Wild Wings Spicy Garlic Buffalo Sauce' by anchoring on the specific flavor descriptor 'Spicy Garlic Buffalo Sauce'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:2fec5989ff2298ed6721",
+      "kind": "add_alias",
+      "target": "frozen-cut-green-beans",
+      "target_label": null,
+      "payload": "cut\\s+green\\s+beans",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans'. Anchors on 'Cut Green Beans' which is the standard form for frozen green beans.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:5a43941a25d5cb1fd300",
+      "kind": "add_alias",
+      "target": "hot-italian-sausage",
+      "target_label": null,
+      "payload": "spicy\\s+italian\\s+sausage",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on 'Spicy Italian Sausage' to distinguish from mild or sweet varieties.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:38759a83f8e3ba423283",
+      "kind": "add_alias",
+      "target": "liquid-smoke",
+      "target_label": null,
+      "payload": "hickory\\s+liquid\\s+smoke",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on the specific flavor/type 'Hickory Liquid Smoke'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:d40c463be57c4b456b0f",
+      "kind": "add_alias",
+      "target": "roasted-red-peppers",
+      "target_label": null,
+      "payload": "roasted\\s+peppers",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Dunbars Roasted Peppers'. Anchors on 'Roasted Peppers'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:7d4c9691846ab0cd1016",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "buffalo\\s+sauce|zesty\\s+buffalo",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce' specifically for buffalo wing sauce.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f6b7c1fe62147e339717",
+      "kind": "add_alias",
+      "target": "frozen-broccoli-florets",
+      "target_label": null,
+      "payload": "broccoli\\s+florets|baby\\s+broccoli",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Birds Eye Baby Broccoli Florets' for frozen broccoli florets.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:4e99c4e806c10d00cf2e",
+      "kind": "add_alias",
+      "target": "frozen-cut-green-beans",
+      "target_label": null,
+      "payload": "cut\\s+green\\s+beans|steam\\s+cut\\s+green\\s+beans",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans' for frozen cut green beans.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:25f0837f43339ff9cce1",
+      "kind": "add_alias",
+      "target": "hot-honey",
+      "target_label": null,
+      "payload": "hot\\s+honey|habanero\\s+honey",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Pace® Hot Honey Habanero' for hot honey.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:60fc3c71c54d04cb6fe9",
+      "kind": "add_alias",
+      "target": "hot-italian-sausage",
+      "target_label": null,
+      "payload": "spicy\\s+italian\\s+sausage|cafe\\s+spicy\\s+italian",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage' for hot Italian sausage.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f301cd43eafbf9dc2ae6",
+      "kind": "add_alias",
+      "target": "liquid-smoke",
+      "target_label": null,
+      "payload": "liquid\\s+smoke|hickory\\s+liquid\\s+smoke",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade' for liquid smoke.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:ec266f9d4b343086748e",
+      "kind": "add_alias",
+      "target": "red-bell-pepper",
+      "target_label": null,
+      "payload": "red\\s+pepper|red\\s+bell\\s+pepper",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Red Pepper' for red bell pepper.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:41c8f5a0f04aabf6a2f2",
+      "kind": "add_alias",
+      "target": "roasted-red-peppers",
+      "target_label": null,
+      "payload": "roasted\\s+peppers|roasted\\s+red\\s+peppers",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Dunbars Roasted Peppers' for roasted red peppers.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:bee3845b24ad138577b0",
+      "kind": "add_alias",
+      "target": "jasmine-rice-dry",
+      "target_label": null,
+      "payload": "thjasmine",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Great Value Gv Thjasmine'. This appears to be a typo for 'Th Jasmine' or similar, but 'thjasmine' is unique enough to this specific listing pattern.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:6cf621d6997aff5c41e9",
+      "kind": "add_alias",
+      "target": "frozen-cut-green-beans",
+      "target_label": null,
+      "payload": "smart\\s+way\\s+cut\\s+green\\s+beans",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Smart Way Cut Green Beans'. Specific to the brand and cut.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:9473738901f8444aeacf",
+      "kind": "add_alias",
+      "target": "hot-honey",
+      "target_label": null,
+      "payload": "pace\\s+hot\\s+honey",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on brand and product name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:7953971dc8bc9b8aff14",
+      "kind": "add_alias",
+      "target": "hot-italian-sausage",
+      "target_label": null,
+      "payload": "cafe\\s+spicy\\s+italian\\s+sausage",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on the specific product line name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:6f8834729c0dc143e588",
+      "kind": "add_alias",
+      "target": "liquid-smoke",
+      "target_label": null,
+      "payload": "figaro\\s+hickory\\s+liquid\\s+smoke",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade'. Anchors on brand and specific flavor/type.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:09510bd4b3aec846547e",
+      "kind": "add_alias",
+      "target": "part-skim-mozzarella-shredded",
+      "target_label": null,
+      "payload": "great\\s+value\\s+shredded\\s+mozzarella",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Great Value Shredded Mozzarella'. Specific to brand and form.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:61c98017ad0c21337a96",
+      "kind": "add_alias",
+      "target": "part-skim-mozzarella-shredded",
+      "target_label": null,
+      "payload": "kraft\\s+natural\\s+mozzarella\\s+(finely\\s+)?shredded",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches multiple Kraft Natural Mozzarella Shredded variants. Anchors on brand and form.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:82840d564b8bb47ce951",
+      "kind": "add_alias",
+      "target": "hot-honey",
+      "target_label": null,
+      "payload": "hot\\s+honey\\s+habanero",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on the specific flavor profile 'Hot Honey Habanero'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:6aaa753dd8feaa520251",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "zesty\\s*buffalo\\s*sauce",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce'. Anchors on the specific flavor/brand combo to avoid matching generic buffalo sauce or other hot sauces.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:a0368ffbacd516174490",
+      "kind": "add_alias",
+      "target": "frozen-broccoli-florets",
+      "target_label": null,
+      "payload": "baby\\s*broccoli\\s*florets",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Birds Eye Baby Broccoli Florets'. Anchors on the specific cut/size 'Baby Broccoli Florets'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:7355845ab46221826a1a",
+      "kind": "add_alias",
+      "target": "frozen-cut-green-beans",
+      "target_label": null,
+      "payload": "smart\\s*way\\s*cut\\s*green\\s*beans",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Smart Way Cut Green Beans'. Anchors on brand + cut to ensure it's the frozen/cut variety.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:3db33b8f9cc0a862b019",
+      "kind": "add_alias",
+      "target": "hot-honey",
+      "target_label": null,
+      "payload": "pace\\s*hot\\s*honey",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on brand + core product name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:d1c18a5b22c52e3f2b96",
+      "kind": "add_alias",
+      "target": "jasmine-rice-dry",
+      "target_label": null,
+      "payload": "gv\\s*thjasmine",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Great Value Gv Thjasmine'. This is a specific typo/abbreviation for Great Value Jasmine Rice. Anchoring on the typo ensures we don't match other jasmine rice brands.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:470ec9a8e8e66875d247",
+      "kind": "add_alias",
+      "target": "liquid-smoke",
+      "target_label": null,
+      "payload": "figaro\\s*hickory\\s*liquid\\s*smoke",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on brand + flavor to avoid matching other liquid smoke brands or marinades.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:0019844aab8fe608dfce",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "zesty\\s+buffalo\\s+sauce|buffalo\\s+wing\\s+sauce|buffalo\\s+wild\\s+wings.*hot\\s+sauce|asian\\s+kick\\s+wing\\s+sauce",
+      "stage1_confidence": 0.9,
+      "rationale": "Covers multiple variations of Buffalo Wing Sauce including brand-specific names like Chick-fil-A Zesty Buffalo, Sweet Baby Ray's Buffalo Wing, Buffalo Wild Wings Hot Sauce, and Burman S Asian Kick Wing Sauce.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:da4edaa9b843203cddde",
+      "kind": "add_alias",
+      "target": "zero-sugar-soda-2l",
+      "target_label": null,
+      "payload": "fresca\\s+.*\\s+2\\s+liters|fresca\\s+.*\\s+2l",
+      "stage1_confidence": 0.9,
+      "rationale": "Fresca is a zero-sugar soda brand. The pattern anchors on the brand and size to match the specific commodity.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:7cdc9118b7436d6df700",
+      "kind": "add_alias",
+      "target": "frozen-peas",
+      "target_label": null,
+      "payload": "sweet\\s+peas",
+      "stage1_confidence": 0.9,
+      "rationale": "Great Value Sweet Peas are a type of frozen peas. The pattern anchors on the food name 'sweet peas'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:c4b1135c0292b56cbcfa",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "buffalo\\s+wing\\s+sauce|buffalo\\s+sauce",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches numerous listings like 'Sweet Baby Ray's Buffalo Wing Sauce', 'Frank's RedHot Kosher Buffalo Wings Hot Sauce', 'Guy Fieri Flavortown O.G. Buffalo Sauce'. The pattern anchors on 'buffalo' and 'sauce' to avoid matching unrelated items",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:8630ffa1547156497789",
+      "kind": "add_alias",
+      "target": "hot-italian-sausage",
+      "target_label": null,
+      "payload": "hot\\s+italian.*sausage|sausage.*hot\\s+italian",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Johnsonville Hot Italian Pork Sausage Links' (2x)",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:38431c78c770107eb55f",
+      "kind": "add_alias",
+      "target": "part-skim-mozzarella-shredded",
+      "target_label": null,
+      "payload": "part-skim\\s+mozzarella.*shredded|shredded.*part-skim\\s+mozzarella",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese' (2x). The second listing 'Great Value Shredded Mozzarella, 80 oz' is ambiguous as it doesn't specify part-skim, so we only anchor on the explicit part-skim mention",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:4a3463ec5779e1cce86a",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "medium\\s+sauce",
       "stage1_confidence": 0.85,
-      "rationale": "Matches 'Kroger Original Cream Cheese Brick' and 'Philadelphia Cream Cheese'. While '1/3 Fat' is specific, standard cream cheese is often the closest available substitute or the intended base commodity in these datasets when specific fat %s",
+      "rationale": "Matches 'Buffalo Wild Wings Medium Sauce' by anchoring on the specific flavor descriptor 'Medium Sauce' in the context of Buffalo Wild Wings.",
       "blast_radius": {
-        "counts": {
-          "intended_capture": 52,
-          "absorbs_review": 0,
-          "already_matched": 5,
-          "cross_commodity": 1,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 43
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [
-          "matches 1 name(s) already priced under a different commodity — confirm the collision is benign before accepting"
-        ],
-        "examples": {
-          "intended_capture": [
-            {
-              "product": "Alaska Smokehouse 3.25oz Salmon Spread Tin, Made with Wild Alaskan Pink Salmon and Cream C",
-              "rows": 1
-            },
-            {
-              "product": "Bakery Fresh Cream Cheese Iced Cinnamon Rolls (4 Ct)",
-              "rows": 1
-            },
-            {
-              "product": "Cream Cheese Bar Our Family (2 Ct)",
-              "rows": 1
-            },
-            {
-              "product": "Cream Cheese Spread, Soft Our Family",
-              "rows": 1
-            },
-            {
-              "product": "Cream Cheese, Regular Our Family",
-              "rows": 1
-            },
-            {
-              "product": "Fareway Cream Cheese Original",
-              "rows": 1
-            },
-            {
-              "product": "Fareway Cream Cheese Spread",
-              "rows": 3
-            },
-            {
-              "product": "Fareway Cream Cheese, Original",
-              "rows": 2
-            },
-            {
-              "product": "Fresh & Finest 4 Ct Cream Cheese Iced Cinnamon Rolls",
-              "rows": 1
-            },
-            {
-              "product": "Garden Vegetable Cream Cheese Spread",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Blueberry Cream Cheese Spread, 8 oz Tub",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Buffalo Cream Cheese Spread, 8 oz Tub",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Classic Cream Cheese Spread, 8 oz Tub",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Cream Cheese Brick, 8 oz (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Cream Cheese Brick, 8 oz Block, 2 Pack",
-              "rows": 2
-            },
-            {
-              "product": "Great Value French Toast Cream Cheese Spread, 8 oz Tub",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Garden Vegetable Cream Cheese Spread, 8 oz Tub (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Mixed Berry Cream Cheese Spread, 8 oz Tub (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Original Cream Cheese Spread Tub, 16 oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Original Cream Cheese Spread, 12 oz Tub (Refrigerated)",
-              "rows": 1
-            }
-          ],
-          "blocked_by_rules": [
-            {
-              "product": "Bakery Fresh Cream Cheese Filled Croissants",
-              "blocked_by": "matched exclude pattern 'filled'"
-            },
-            {
-              "product": "Betty Crocker Whipped Cream Cheese Frosting, Gluten Free, 12 oz",
-              "blocked_by": "matched exclude pattern 'frosting'"
-            },
-            {
-              "product": "Cream Cheese, Whipped Our Family",
-              "blocked_by": "matched exclude pattern 'whipped'"
-            },
-            {
-              "product": "Egglife Grab & Go Everything Bagel Wrap with Rotisserie Chicken & Cream Cheese, 3.2 Ounces",
-              "blocked_by": "matched exclude pattern '\\bwrap\\b'"
-            },
-            {
-              "product": "Freshness Guaranteed Carrot Cake Sandwich Cookies with Cream Cheese Icing, 12 Count, Shelf",
-              "blocked_by": "matched exclude pattern '\\bcake\\b'"
-            },
-            {
-              "product": "Great Value Chive & Onion Cream Cheese Spread, Soft, 8 oz Tub",
-              "blocked_by": "matched exclude pattern 'onion'"
-            },
-            {
-              "product": "Great Value Cream Cheese Frosting, White, 16 oz Tub",
-              "blocked_by": "matched exclude pattern 'frosting'"
-            },
-            {
-              "product": "Great Value Fat-Free Cream Cheese Brick, 8 oz Block",
-              "blocked_by": "matched exclude pattern 'fat[\\s-]?free'"
-            },
-            {
-              "product": "Great Value Original Whipped Cream Cheese Spread, 12 oz Tub",
-              "blocked_by": "matched exclude pattern 'whipped'"
-            },
-            {
-              "product": "Great Value Original Whipped Cream Cheese Spread, 8 oz Cup",
-              "blocked_by": "matched exclude pattern 'whipped'"
-            },
-            {
-              "product": "Great Value Strawberry Cream Cheese Spread, 8 oz Tub",
-              "blocked_by": "matched exclude pattern 'strawberry'"
-            },
-            {
-              "product": "Great Value Whipped Strawberry Cream Cheese Spread, 12 oz Tub (Refrigerated)",
-              "blocked_by": "matched exclude pattern 'whipped'"
-            },
-            {
-              "product": "Marketside Cream Cheese Croissant Baked Muffins, 4 Count, 10.8 oz",
-              "blocked_by": "matched exclude pattern '\\bbaked\\b'"
-            },
-            {
-              "product": "Marzetti Cream Cheese Cream Cheese! Fruit Dip 13.5 Oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Our Family Chive & Onion Cream Cheese Spread 8 Oz",
-              "blocked_by": "matched exclude pattern 'onion'"
-            },
-            {
-              "product": "Philadelphia Chive & Onion Cream Cheese Spread 7.5 Oz",
-              "blocked_by": "matched exclude pattern 'onion'"
-            },
-            {
-              "product": "Philadelphia Cream Cheese Dip Pretzels With Garlic & Herb 2.6 Oz",
-              "blocked_by": "matched exclude pattern 'garlic'"
-            },
-            {
-              "product": "Philadelphia Cream Cheese Frosting, Ready to Eat, 1 Tub, for Desserts and Treats, Original",
-              "blocked_by": "matched exclude pattern 'frosting'"
-            },
-            {
-              "product": "Philadelphia Cream Cheese Spread, Garlic & Herb 7.5 Oz",
-              "blocked_by": "matched exclude pattern 'garlic'"
-            },
-            {
-              "product": "Philadelphia Flavored Cream Cheese Spread, 1 Tub, for Smooth, Spreadable Mornings, Chive &",
-              "blocked_by": "matched exclude pattern 'onion'"
-            }
-          ],
-          "already_matched": [
-            {
-              "product": "Great Value Light Cream Cheese Spread, 8 oz Tub",
-              "rows": 1
-            },
-            {
-              "product": "Hy-Vee 1/3 Less Fat than Cream Cheese (Neufchatel Cheese)",
-              "rows": 2
-            },
-            {
-              "product": "Philadelphia Reduced Fat Cream Cheese 8 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Philadelphia Reduced Fat Cream Cheese, 1 Tub, for Smooth, Spreadable Mornings, Original, N",
-              "rows": 1
-            },
-            {
-              "product": "Philadelphia Reduced Fat Cream Cheese, 1 Tub, for Smooth, Spreadable Mornings, Original, N",
-              "rows": 1
-            }
-          ],
-          "cross_commodity": [
-            {
-              "product": "Red Baron Pizza or Philadelphia Cream Cheese Spread",
-              "rows": 2,
-              "priced_by": [
-                "commodity:staple:cream-cheese",
-                "commodity:staple:frozen-pizza"
-              ]
-            }
-          ]
-        }
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     },
     {
-      "proposal_id": "lp:9108479cf35cc685ca81",
+      "proposal_id": "lp:1ceb69e929cfd0c9d108",
       "kind": "add_alias",
-      "target": "honey-dijon-mustard",
+      "target": "buffalo-wing-sauce",
       "target_label": null,
-      "payload": "(dijon|honey)\\s+mustard",
+      "payload": "spicy\\s+garlic\\s+sauce",
       "stage1_confidence": 0.85,
-      "rationale": "Matches 'Burman's Dijon Mustard' and 'Our Family Mustard, Honey'. These are the two main components of Honey Dijon, often used interchangeably or as substitutes in price tracking if exact blend isn't available.",
+      "rationale": "Matches 'Buffalo Wild Wings Sauce, Spicy Garlic' by anchoring on the specific flavor descriptor 'Spicy Garlic Sauce'.",
       "blast_radius": {
-        "counts": {
-          "intended_capture": 17,
-          "absorbs_review": 0,
-          "already_matched": 12,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 36
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "already_matched": [
-            {
-              "product": "Beano's Honey Mustard 8 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Fareway Honey Mustard",
-              "rows": 2
-            },
-            {
-              "product": "French's Honey Mustard 12 Oz",
-              "rows": 1
-            },
-            {
-              "product": "French's Kosher Honey Mustard, 12.0 oz Bottle",
-              "rows": 1
-            },
-            {
-              "product": "French's Kosher Hot Honey Mustard, 12.0 oz Bottle",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Honey Dijon Mustard, 12 oz",
-              "rows": 2
-            },
-            {
-              "product": "Great Value Honey Mustard, 12 oz",
-              "rows": 2
-            },
-            {
-              "product": "Hy-Vee Stone Ground Honey Dijon Mustard",
-              "rows": 1
-            },
-            {
-              "product": "Inglehoffer The Original Sweet Honey Mustard 10.25 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Ken's Steak House Honey Mustard, 32 oz.",
-              "rows": 1
-            },
-            {
-              "product": "Kroger Honey Mustard",
-              "rows": 2
-            },
-            {
-              "product": "Member's Mark Foodservice Honey Mustard, 128 oz.",
-              "rows": 2
-            }
-          ],
-          "intended_capture": [
-            {
-              "product": "Burman's Dijon Mustard",
-              "rows": 2
-            },
-            {
-              "product": "Fareway Dijon Mustard",
-              "rows": 3
-            },
-            {
-              "product": "French's Chardonnay Dijon Mustard Squeeze Bottle 12 Oz",
-              "rows": 1
-            },
-            {
-              "product": "French's Kosher Chardonnay Dijon Mustard Squeeze Bottle, 12.0 oz Bottle",
-              "rows": 1
-            },
-            {
-              "product": "French's Stone Ground Dijon Mustard 12 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Dijon Mustard, 12 oz",
-              "rows": 2
-            },
-            {
-              "product": "Great Value Organic Dijon Mustard, 12 oz",
-              "rows": 1
-            },
-            {
-              "product": "Grey Poupon Dijon Mustard 10 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Grey Poupon Dijon Mustard 8 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Grey Poupon Dijon Mustard, 10 oz. Squeeze Bottle",
-              "rows": 1
-            },
-            {
-              "product": "Grey Poupon Dijon Mustard, 8 oz. Jar, Liquids",
-              "rows": 1
-            },
-            {
-              "product": "Hy-Vee Stone Ground Dijon Mustard",
-              "rows": 1
-            },
-            {
-              "product": "Kroger Dijon Mustard",
-              "rows": 1
-            },
-            {
-              "product": "Organicville Dijon Mustard 12 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Silver Spring Classic Dijon Mustard 9.5 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Smash Kitchen Organic Dijon Mustard, 12 oz Bottle",
-              "rows": 1
-            },
-            {
-              "product": "Star Kist Whole Grain Dijon Mustard Tuna Salad 3 Oz",
-              "rows": 1
-            }
-          ],
-          "blocked_by_rules": [
-            {
-              "product": "Chick Fil A Honey Mustard Sauce 16 Fl Oz",
-              "blocked_by": "matched exclude pattern '\\bsauce\\b'"
-            },
-            {
-              "product": "Chick-fil-A Honey Mustard Sauce,16 fl oz Squeeze Bottle",
-              "blocked_by": "matched exclude pattern '\\bsauce\\b'"
-            },
-            {
-              "product": "DOT'S Homestyle Pretzels Honey Mustard Flavored Seasoned Pretzel Twists Bag, 16 oz",
-              "blocked_by": "matched exclude pattern 'pretzel'"
-            },
-            {
-              "product": "Dot's Homestyle Pretzels Seasoned Honey Mustard Flavored Pretzel Twists 16 Oz",
-              "blocked_by": "matched exclude pattern 'pretzel'"
-            },
-            {
-              "product": "Flavortown Honey Mustard Sauce 12.5 oz",
-              "blocked_by": "matched exclude pattern '\\bsauce\\b'"
-            },
-            {
-              "product": "G Hughes Zero Sugar Honey Mustard Dipping Sauce, 18 oz",
-              "blocked_by": "matched exclude pattern '\\bsauce\\b'"
-            },
-            {
-              "product": "Glutino Gluten Free Honey Mustard Pretzel Twists, Gluten Free Snacks, 11 oz",
-              "blocked_by": "matched exclude pattern 'pretzel'"
-            },
-            {
-              "product": "Goldfish® Honey Mustard Seasoned Pretzels 8.000 Oz",
-              "blocked_by": "matched exclude pattern 'pretzel'"
-            },
-            {
-              "product": "Great Value Honey Mustard Dipping Sauce, 12 fl oz",
-              "blocked_by": "matched exclude pattern '\\bsauce\\b'"
-            },
-            {
-              "product": "Great Value Honey Mustard Dressing & Dip, 16 fl oz",
-              "blocked_by": "matched exclude pattern 'dressing'"
-            },
-            {
-              "product": "Great Value Honey Mustard Seasoned Pretzel Twists, 16 oz",
-              "blocked_by": "matched exclude pattern 'pretzel'"
-            },
-            {
-              "product": "Hy-Vee Honey Mustard Dressing",
-              "blocked_by": "matched exclude pattern 'dressing'"
-            },
-            {
-              "product": "Inglehoffer Traditional Dijon Mustard With White Wine 9 Oz",
-              "blocked_by": "matched exclude pattern '\\bwine\\b'"
-            },
-            {
-              "product": "Ken's Steak House Honey Mustard Dressing 16 Fl Oz",
-              "blocked_by": "matched exclude pattern 'dressing'"
-            },
-            {
-              "product": "Ken's Steak House Honey Mustard Dressing 16 fl oz",
-              "blocked_by": "matched exclude pattern 'dressing'"
-            },
-            {
-              "product": "Ken's Steak House Honey Mustard Dressing, Topping & Spread 24 Fl Oz",
-              "blocked_by": "matched exclude pattern 'dressing'"
-            },
-            {
-              "product": "Ken's Steak House Honey Mustard Dressing, Topping & Spread 24 fl oz",
-              "blocked_by": "matched exclude pattern 'dressing'"
-            },
-            {
-              "product": "Ken's Steak House Honey Mustard Dressing, Topping & Spread 710 Ml",
-              "blocked_by": "matched exclude pattern 'dressing'"
-            },
-            {
-              "product": "Ken's Steak House® Lite Honey Mustard Salad Dressing 24 fl oz",
-              "blocked_by": "matched exclude pattern 'dressing'"
-            },
-            {
-              "product": "Kindling Protein Pretzels, Honey Mustard, 6.5 oz Bag",
-              "blocked_by": "matched exclude pattern 'pretzel'"
-            }
-          ]
-        }
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     },
     {
-      "proposal_id": "lp:6c04fc395a7dd2e607e1",
+      "proposal_id": "lp:c5a0e98911b2e1a0b373",
       "kind": "add_alias",
-      "target": "golden-raisins",
+      "target": "frozen-broccoli-florets",
       "target_label": null,
-      "payload": "(california|seedless)\\s+raisins",
-      "stage1_confidence": 0.8,
-      "rationale": "Matches 'Hy-Vee Raisins California Sun-Dried', 'Southern Grove Seedless Raisins', and 'Sun-Maid California Raisins'. Golden raisins are typically the seedless California variety.",
+      "payload": "baby\\s+broccoli\\s+florets",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Birds Eye Baby Broccoli Florets'. Anchors on 'Baby Broccoli Florets' to distinguish from regular broccoli florets if they are priced separately, though often interchangeable. High confidence due to specific product name.",
       "blast_radius": {
-        "counts": {
-          "intended_capture": 13,
-          "absorbs_review": 0,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "intended_capture": [
-            {
-              "product": "Great Value All-Natural California Raisins, 24 oz",
-              "rows": 1
-            },
-            {
-              "product": "Kroger 100% Fruit Seedless Raisins",
-              "rows": 1
-            },
-            {
-              "product": "Kroger Seedless Raisins",
-              "rows": 1
-            },
-            {
-              "product": "Our Family Seedless Raisins 20 Oz",
-              "rows": 2
-            },
-            {
-              "product": "Our Family Seedless Raisins 6 Ea",
-              "rows": 1
-            },
-            {
-              "product": "Simple Truth Organic Seedless Raisins",
-              "rows": 1
-            },
-            {
-              "product": "Simple Truth Organic Seedless Raisins Mulitpack",
-              "rows": 1
-            },
-            {
-              "product": "Simply Truth Organic Seedless Raisins",
-              "rows": 1
-            },
-            {
-              "product": "Smart Way Seedless Raisins",
-              "rows": 1
-            },
-            {
-              "product": "Southern Grove California Raisins",
-              "rows": 1
-            },
-            {
-              "product": "Southern Grove Seedless Raisins",
-              "rows": 2
-            },
-            {
-              "product": "Sun-Maid California Raisins, 30 oz 2 pk",
-              "rows": 1
-            },
-            {
-              "product": "Sun-Maid Natural California Raisins, 24 Oz.",
-              "rows": 2
-            }
-          ]
-        }
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     },
     {
-      "proposal_id": "lp:333512c7a51cbdbd8e90",
+      "proposal_id": "lp:cbbd6b5ff067974bc9b5",
       "kind": "add_alias",
-      "target": "light-sour-cream",
+      "target": "jasmine-rice-dry",
       "target_label": null,
-      "payload": "sour\\s+cream",
-      "stage1_confidence": 0.8,
-      "rationale": "Matches 'Daisy Sour Cream' and 'Hy-Vee Sour Cream'. While 'Light' is specific, standard sour cream is the closest match if light isn't explicitly distinguished in the commodity list, or these listings are being used as proxies.",
+      "payload": "thjasmine|jasmine\\s+rice",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Great Value Gv Thjasmine' (likely a typo for Jasmine) and standard jasmine rice listings. The regex handles the specific typo found in the data.",
       "blast_radius": {
-        "counts": {
-          "intended_capture": 45,
-          "absorbs_review": 0,
-          "already_matched": 8,
-          "cross_commodity": 13,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 20
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [
-          "matches 13 name(s) already priced under a different commodity — confirm the collision is benign before accepting"
-        ],
-        "examples": {
-          "cross_commodity": [
-            {
-              "product": "Barrel O' Fun Sour Cream & Onion Potato Chips 7 Oz",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            },
-            {
-              "product": "Barrel O'fun Cheddar & Sour Cream Ripple Potato Chips 8 Oz",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            },
-            {
-              "product": "Clancy's Sour Cream And Onion Potato Chips",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            },
-            {
-              "product": "Freshness Guaranteed Glazed Sour Cream Donuts, 20 oz, 8 Count",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:donuts"
-              ]
-            },
-            {
-              "product": "Great Value Cheddar & Sour Cream Potato Chips Party Size, 13 oz",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            },
-            {
-              "product": "Great Value Rippled Cheddar & Sour Cream Potato Chips, 8 oz Bag",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            },
-            {
-              "product": "Idahoan Cheddar & Sour Cream Mashed Potatoes, 4 oz Pouch",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:instant-mashed-potatoes"
-              ]
-            },
-            {
-              "product": "Idahoan Sour Cream & Chives Mashed Potatoes, 4 oz Pouch",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:instant-mashed-potatoes"
-              ]
-            },
-            {
-              "product": "Lay's Potato Chips, Cheddar & Sour Cream, 7.75 oz Bag",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            },
-            {
-              "product": "Lay's Sour Cream & Onion Flavor Potato Chips, 7.75 oz Bag",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            },
-            {
-              "product": "Lay's Sour Cream & Onion Potato Chips, 15.25 oz.",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            },
-            {
-              "product": "Ruffles Cheddar & Sour Cream Potato Chips, 1 oz., 50 pk.",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            },
-            {
-              "product": "Ruffles Cheddar & Sour Cream Potato Chips, 15.125 oz.",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:potato-chips"
-              ]
-            }
-          ],
-          "intended_capture": [
-            {
-              "product": "Cacique Crema Mexicana Agria, Sour Cream, 15 oz Jar (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Cacique Sour Cream, Crema Mexicana Agria 15 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Cacique Sour Cream, Crema Salvadorena, Salvadoran Style 15 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Cacique Sour Cream, Original Crema, Mexican Style 12 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Brand Pure and Natural Sour Cream, 14 oz., 2 pk.",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Brand Pure and Natural Sour Cream, 48 oz.",
-              "rows": 2
-            },
-            {
-              "product": "Daisy Pure and Natural Light Squeeze Sour Cream, 50% Less Fat, 14 oz Pouch (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Pure and Natural Sour Cream, 14 oz Pouch (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Pure and Natural Sour Cream, 16 oz (1 lb) Tub (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Pure and Natural Sour Cream, 24 oz (1.5 lb) Tub (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Pure and Natural Sour Cream, 48 oz (3 lb) Tub (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Pure and Natural Sour Cream, 8 oz Tub (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Pure and Natural Sour Cream, 80 oz (5lb) Tub (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Sour Cream",
-              "rows": 3
-            },
-            {
-              "product": "Daisy Sour Cream 16 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Sour Cream 24 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Sour Cream 3 Lb",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Sour Cream, 48 oz",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Sour Cream, Light 14 Oz",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Sour Cream, Light 16 Oz",
-              "rows": 2
-            }
-          ],
-          "blocked_by_rules": [
-            {
-              "product": "Clancy's Ridged Cheddar & Sour Cream Flavored Potato Chips",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Daisy Dip, French Onion, Sour Cream 16 Oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Daisy Sour Cream Creamy Ranch Dip, 16 oz Tub (Refrigerated)",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Daisy Sour Cream French Onion Dip, 16 oz Tub (Refrigerated)",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Freshness Guaranteed Regular Glazed Sour Cream Cake Donuts, 4 oz, 2 Count",
-              "blocked_by": "matched exclude pattern '\\bcake\\b'"
-            },
-            {
-              "product": "Great Value Sour Cream & Onion Flavored Potato Chips Party Size, 12.5 oz",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Great Value Sour Cream & Onion Flavored Potato Chips, 7.75 oz Bag",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Hiland Sour Cream Chive Dip, 16 Oz.",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Lay's Cheddar & Sour Cream Flavored Potato Chips 7.75 Oz",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Lay's Sour Cream & Onion Flavored Potato Chips 7.75 Oz",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Our Family Potato Chips, Cheddar & Sour Cream Flavored 7.75 Oz",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Our Family Potato Chips, Sour Cream & Onion Flavored 7.75 Oz",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Our Family Sour Cream Dip, French Onion 16 Oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Our Family Sour Cream Dip, French Onion 8 Oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Ruffles Cheddar & Sour Cream Flavored Potato Chips 8 Oz",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Ruffles Cheddar & Sour Cream Potato Snack Chips, Party Size, 12.5 oz Bag",
-              "blocked_by": "matched exclude pattern '\\bsnack\\b'"
-            },
-            {
-              "product": "Ruffles Party Size Cheddar & Sour Cream Flavored Potato Chips 12.5 Oz",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Ruffles Potato Chips Sour Cream & Onion Flavor Snack Chips, 8 ounce Bag",
-              "blocked_by": "matched exclude pattern '\\bsnack\\b'"
-            },
-            {
-              "product": "Ruffles Potato Chips, Cheddar & Sour Cream Flavored 2.25 Oz",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            },
-            {
-              "product": "Ruffles Sour Cream & Onion Flavored Potato Chips 8 Oz",
-              "blocked_by": "matched exclude pattern 'flavored'"
-            }
-          ],
-          "already_matched": [
-            {
-              "product": "Daisy Daisy® Light Sour Cream 16 Oz. Tub",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Pure and Natural Light Sour Cream, 50% Less Fat, 16 oz (1 lb) Tub (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Daisy Pure and Natural Light Sour Cream, 50% Less Fat, 8 oz Tub (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Friendly Farms Light Sour Cream",
-              "rows": 2
-            },
-            {
-              "product": "Friendly Farms Light Sour Cream 16 OZ",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Light Sour Cream, 16 oz Tub",
-              "rows": 2
-            },
-            {
-              "product": "Great Value Light Sour Cream, 8 oz",
-              "rows": 1
-            },
-            {
-              "product": "Kroger Light Sour Cream",
-              "rows": 1
-            }
-          ]
-        }
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     },
     {
-      "proposal_id": "lp:f4815b86b55fade1a748",
+      "proposal_id": "lp:96b38aeb310022de8f50",
       "kind": "add_alias",
       "target": "frozen-chopped-spinach",
       "target_label": null,
-      "payload": "organic\\s+spinach",
-      "stage1_confidence": 0.7,
-      "rationale": "Matches 'Simply Nature Organic Spinach'. Assuming this is the frozen variety as it's a common frozen brand, but confidence is lower due to lack of 'frozen' keyword in listing.",
+      "payload": "spinach",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Simply Nature Organic Spinach' for frozen chopped spinach.",
       "blast_radius": {
-        "counts": {
-          "intended_capture": 1,
-          "absorbs_review": 0,
-          "already_matched": 0,
-          "cross_commodity": 1,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [
-          "matches 1 name(s) already priced under a different commodity — confirm the collision is benign before accepting"
-        ],
-        "examples": {
-          "cross_commodity": [
-            {
-              "product": "Cerebelly 6+ Months Organic Spinach Apple Sweet Potato Puree 4 Oz",
-              "rows": 1,
-              "priced_by": [
-                "commodity:staple:sweet-potatoes"
-              ]
-            }
-          ],
-          "intended_capture": [
-            {
-              "product": "Simply Nature Organic Spinach",
-              "rows": 1
-            }
-          ]
-        }
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:64c19418e15f80db993b",
+      "kind": "add_alias",
+      "target": "jasmine-rice-dry",
+      "target_label": null,
+      "payload": "jasmine|thjasmine",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Great Value Gv Thjasmine' for jasmine rice (dry).",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:485eb7ee2d2a06a5ca69",
+      "kind": "add_alias",
+      "target": "part-skim-mozzarella-shredded",
+      "target_label": null,
+      "payload": "shredded\\s+mozzarella",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches multiple listings like 'Great Value Shredded Mozzarella', 'Kraft Natural Mozzarella Shredded Cheese', etc. This is the core descriptor for the commodity.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:d5f35b4ef8ad684c5ae6",
+      "kind": "add_alias",
+      "target": "frozen-chopped-spinach",
+      "target_label": null,
+      "payload": "simply\\s+nature\\s+organic\\s+spinach",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Simply Nature Organic Spinach'. While brand-anchored, this is a specific frozen spinach product often sold in chopped form. The pattern is specific enough to avoid matching fresh spinach or other brands.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:ac47636a10f82049e3a3",
+      "kind": "add_alias",
+      "target": "frozen-chopped-spinach",
+      "target_label": null,
+      "payload": "simply\\s*nature\\s*organic\\s*spinach",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Simply Nature Organic Spinach'. While 'Simply Nature' is a brand, the listing is ambiguous without it. This specific pattern ensures we only catch this exact product variant which is likely chopped/frozen in this context.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:e1df68793df689b7caaa",
+      "kind": "add_alias",
+      "target": "hot-italian-sausage",
+      "target_label": null,
+      "payload": "cafe\\s*spicy\\s*italian\\s*sausage",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on the specific flavor profile 'Cafe Spicy' to distinguish from regular or sweet Italian sausage.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:2b9b8d73f7618385c923",
+      "kind": "add_alias",
+      "target": "part-skim-mozzarella-shredded",
+      "target_label": null,
+      "payload": "great\\s*value\\s*shredded\\s*mozzarella",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Great Value Shredded Mozzarella'. Great Value shredded mozzarella is typically part-skim. This avoids matching whole milk or other brands.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f5a66d65aa151507cae7",
+      "kind": "add_alias",
+      "target": "part-skim-mozzarella-shredded",
+      "target_label": null,
+      "payload": "kraft\\s+natural\\s+mozzarella\\s+shredded",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Kraft Natural Mozzarella Shredded Cheese'. Kraft Natural Mozzarella is typically part-skim.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:9c2648c3983482d2fe12",
+      "kind": "add_alias",
+      "target": "tortilla-chips",
+      "target_label": null,
+      "payload": "spicy\\s+margarita\\s+chips",
+      "stage1_confidence": 0.85,
+      "rationale": "Clancy's Spicy Margarita Chips are a type of tortilla chip. The pattern anchors on the specific flavor/name to avoid matching other chips.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:72d7671ec7274de8d227",
+      "kind": "add_alias",
+      "target": "frozen-chicken-nuggets",
+      "target_label": null,
+      "payload": "chicken\\s+breast\\s+bites|breaded\\s+chicken\\s+.*\\s+frozen",
+      "stage1_confidence": 0.85,
+      "rationale": "Member's Mark Chicken Breast Bites are a type of frozen chicken nugget/bite. The pattern anchors on the food name to avoid matching other chicken products.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:2c32a05694b0a1fe1fd6",
+      "kind": "add_alias",
+      "target": "red-bell-pepper",
+      "target_label": null,
+      "payload": "^red\\s+pepper$",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Red Pepper'. Anchored to the full string to avoid matching 'Roasted Red Peppers' or 'Red Bell Pepper Sauce'. Note: 'Red Pepper' is ambiguous (could be chili flakes), but in a grocery context next to 'Roasted Red Peppers', it often指",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:a5c91ae0c05071d0dcde",
+      "kind": "add_alias",
+      "target": "frozen-cut-green-beans",
+      "target_label": null,
+      "payload": "hy-vee\\s*fresh\\s*steam\\s*cut\\s*green\\s*beans",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans'. Note: 'Fresh' in frozen listings often means 'freshly frozen' or is a brand descriptor. This specific pattern avoids matching fresh green beans.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:06c5a3d12c1905644c70",
+      "kind": "add_alias",
+      "target": "red-bell-pepper",
+      "target_label": null,
+      "payload": "^red\\s*pepper$",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Red Pepper'. In grocery contexts, 'Red Pepper' usually implies Red Bell Pepper unless specified as chili/ground. The anchor ensures it's the whole item.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:7c6b2f2c111a970b63ec",
+      "kind": "add_alias",
+      "target": "frozen-cut-green-beans",
+      "target_label": null,
+      "payload": "hy-vee\\s+fresh\\s+steam\\s+cut\\s+green\\s+beans",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans'. Note: 'Fresh' in the name is confusing for a frozen commodity, but this is likely the specific frozen product line from Hy-Vee. The pattern is very specific to avoid matching fresh green beans.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:2a8c63974c00fec0d0da",
+      "kind": "add_alias",
+      "target": "large-eggs-dozen",
+      "target_label": null,
+      "payload": "whitewater\\s+valley\\s+18",
+      "stage1_confidence": 0.8,
+      "rationale": "Whitewater Valley 18 is a specific brand/size of eggs. The pattern anchors on the brand and size to match the commodity.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
     }
-  ]
+  ],
+  "hold_clears": []
 }

@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-11 08:23",
-    "board":  "comparison-2026-09-09.json",
-    "sidecar_generated":  "2026-09-11 08:23:10",
+    "generated":  "2026-09-11 21:37",
+    "board":  "comparison-2026-09-11.json",
+    "sidecar_generated":  "2026-09-11 21:37:44",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,16 +9,25 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3175,
-                     "corpus":  41462,
-                     "rule_invisible":  7849
+                     "board_pairs":  3179,
+                     "corpus":  41506,
+                     "rule_invisible":  7911
                  },
     "identity_count":  0,
-    "coverage_count":  0,
+    "coverage_count":  1,
     "identity":  [
 
                  ],
     "coverage":  [
-
+                     {
+                         "kind":  "coverage",
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Walmart",
+                         "product":  "Progresso Chickarina Soup, Traditional Canned Soup, 19 oz",
+                         "cos":  0.6668,
+                         "score":  0.904233,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     }
                  ]
 }

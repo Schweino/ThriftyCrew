@@ -1,6 +1,18 @@
 [
   {
     "confidence": 0.9,
+    "created_at": "2026-09-10T22:57:46",
+    "id": "lp:0019844aab8fe608dfce",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"zesty\\\\s+buffalo\\\\s+sauce|buffalo\\\\s+wing\\\\s+sauce|buffalo\\\\s+wild\\\\s+wings.*hot\\\\s+sauce|asian\\\\s+kick\\\\s+wing\\\\s+sauce\"}",
+    "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
+    "rationale": "Covers multiple variations of Buffalo Wing Sauce including brand-specific names like Chick-fil-A Zesty Buffalo, Sweet Baby Ray's Buffalo Wing, Buffalo Wild Wings Hot Sauce, and Burman S Asian Kick Wing Sauce.",
+    "status": "proposed",
+    "target_id": "buffalo-wing-sauce"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:01ecf00e4f4d13203f0d",
     "kind": "add_alias",
@@ -432,6 +444,18 @@
     "target_id": "commodity:staple:red-onion"
   },
   {
+    "confidence": 0.8,
+    "created_at": "2026-09-10T22:57:46",
+    "id": "lp:2a8c63974c00fec0d0da",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"whitewater\\\\s+valley\\\\s+18\"}",
+    "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
+    "rationale": "Whitewater Valley 18 is a specific brand/size of eggs. The pattern anchors on the brand and size to match the commodity.",
+    "status": "proposed",
+    "target_id": "large-eggs-dozen"
+  },
+  {
     "confidence": 0.85,
     "created_at": "2026-08-30T21:32:45",
     "id": "lp:2b9b8d73f7618385c923",
@@ -488,6 +512,18 @@
     "payload_json": "{\"payload\": \"cut\\\\s+green\\\\s+beans\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans'. Anchors on 'Cut Green Beans' which is the standard form for frozen green beans.",
+    "status": "proposed",
+    "target_id": "frozen-cut-green-beans"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-09-11T21:49:21",
+    "id": "lp:3079a01b2b0bd3d4f5df",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"green\\\\s+beans,?\\\\s*cut\"}",
+    "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
+    "rationale": "Matches 'Our Family Green Beans, Cut, Fresh Frozen 24 Oz' (2x)",
     "status": "proposed",
     "target_id": "frozen-cut-green-beans"
   },
@@ -598,6 +634,18 @@
     "rationale": "the 'Seasoning Mix, Taco' / 'Seasoning Mix, Original, Taco' comma orders",
     "status": "applied",
     "target_id": "commodity:staple:taco-seasoning"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-11T21:49:21",
+    "id": "lp:38431c78c770107eb55f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"part-skim\\\\s+mozzarella.*shredded|shredded.*part-skim\\\\s+mozzarella\"}",
+    "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
+    "rationale": "Matches 'Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese' (2x). The second listing 'Great Value Shredded Mozzarella, 80 oz' is ambiguous as it doesn't specify part-skim, so we only anchor on the explicit part-skim mention",
+    "status": "proposed",
+    "target_id": "part-skim-mozzarella-shredded"
   },
   {
     "confidence": 0.9,
@@ -1308,6 +1356,18 @@
     "target_id": "commodity:staple:refrigerated-biscuits"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-10T22:57:46",
+    "id": "lp:7294458a9496b4a94895",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"100%\\\\s+apple\\\\s+cider|apple\\\\s+cider\\\\s+juice\"}",
+    "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
+    "rationale": "Covers Hy-Vee 100% Apple Cider and Our Family Apple Cider Juice. The pattern anchors on the food name 'apple cider'.",
+    "status": "proposed",
+    "target_id": "apple-cider"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:72b31d551c938cc95040",
@@ -1318,6 +1378,18 @@
     "rationale": "escalation-review round 2: 'Home Barrier' / 'Insect Barrier' is the indoor-spray product name",
     "status": "applied",
     "target_id": "commodity:staple:insect-spray"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-10T22:57:46",
+    "id": "lp:72d7671ec7274de8d227",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"chicken\\\\s+breast\\\\s+bites|breaded\\\\s+chicken\\\\s+.*\\\\s+frozen\"}",
+    "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
+    "rationale": "Member's Mark Chicken Breast Bites are a type of frozen chicken nugget/bite. The pattern anchors on the food name to avoid matching other chicken products.",
+    "status": "proposed",
+    "target_id": "frozen-chicken-nuggets"
   },
   {
     "confidence": 0.9,
@@ -1426,6 +1498,30 @@
     "rationale": "allows a form/scent phrase between 'Bathroom' and 'Cleaner'",
     "status": "applied",
     "target_id": "commodity:staple:shower-cleaner"
+  },
+  {
+    "confidence": 0.8,
+    "created_at": "2026-09-07T21:32:35",
+    "id": "lp:7c6b2f2c111a970b63ec",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"hy-vee\\\\s+fresh\\\\s+steam\\\\s+cut\\\\s+green\\\\s+beans\"}",
+    "queue_hash": "d682b8c730032228e5212f3aff23c4aa57059d761aeb14a96d4c5e19e6c641da",
+    "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans'. Note: 'Fresh' in the name is confusing for a frozen commodity, but this is likely the specific frozen product line from Hy-Vee. The pattern is very specific to avoid matching fresh green beans.",
+    "status": "proposed",
+    "target_id": "frozen-cut-green-beans"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-10T22:57:46",
+    "id": "lp:7cdc9118b7436d6df700",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"sweet\\\\s+peas\"}",
+    "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
+    "rationale": "Great Value Sweet Peas are a type of frozen peas. The pattern anchors on the food name 'sweet peas'.",
+    "status": "proposed",
+    "target_id": "frozen-peas"
   },
   {
     "confidence": 0.9,
@@ -1546,6 +1642,18 @@
     "rationale": "allows a flavor word between 'Deli Sliced' and 'Turkey'; ham/ground/bacon excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:turkey-lunchmeat"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-11T21:49:21",
+    "id": "lp:8630ffa1547156497789",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"hot\\\\s+italian.*sausage|sausage.*hot\\\\s+italian\"}",
+    "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
+    "rationale": "Matches 'Johnsonville Hot Italian Pork Sausage Links' (2x)",
+    "status": "proposed",
+    "target_id": "hot-italian-sausage"
   },
   {
     "confidence": 0.9,
@@ -1692,6 +1800,18 @@
     "target_id": "commodity:staple:cookies"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-11T21:49:21",
+    "id": "lp:929bf9e63401f5cc7f5e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"jasmine\\\\s+rice\"}",
+    "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
+    "rationale": "Matches 'Mahatma Jasmine Rice' (2x)",
+    "status": "proposed",
+    "target_id": "jasmine-rice-dry"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:9309882fb3bc33dc1e9d",
@@ -1762,6 +1882,18 @@
     "rationale": "'Air Spray' is the second retail name for a room air freshener",
     "status": "applied",
     "target_id": "commodity:staple:air-freshener"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-10T22:57:46",
+    "id": "lp:9c2648c3983482d2fe12",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"spicy\\\\s+margarita\\\\s+chips\"}",
+    "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
+    "rationale": "Clancy's Spicy Margarita Chips are a type of tortilla chip. The pattern anchors on the specific flavor/name to avoid matching other chips.",
+    "status": "proposed",
+    "target_id": "tortilla-chips"
   },
   {
     "confidence": 0.9,
@@ -2220,6 +2352,30 @@
     "target_id": "commodity:staple:pickled-jalapenos"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-10T22:57:46",
+    "id": "lp:c3c6eec7e9d544dcde9f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+(gravy|sauce)\\\\s+mix\"}",
+    "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
+    "rationale": "Covers various brands of Au Jus Gravy Mix including Hy-Vee, Kroger, and Our Family. The pattern anchors on the food name 'au jus gravy mix' or 'au jus sauce mix'.",
+    "status": "proposed",
+    "target_id": "au-jus-gravy-mix"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-11T21:49:21",
+    "id": "lp:c4b1135c0292b56cbcfa",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"buffalo\\\\s+wing\\\\s+sauce|buffalo\\\\s+sauce\"}",
+    "queue_hash": "8f974cd3e0489656be154549bd660eafa6ceeb1490441e52c3745cd9f92eab58",
+    "rationale": "Matches numerous listings like 'Sweet Baby Ray's Buffalo Wing Sauce', 'Frank's RedHot Kosher Buffalo Wings Hot Sauce', 'Guy Fieri Flavortown O.G. Buffalo Sauce'. The pattern anchors on 'buffalo' and 'sauce' to avoid matching unrelated items",
+    "status": "proposed",
+    "target_id": "buffalo-wing-sauce"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:c4d4a3ffc8b46e6a882c",
@@ -2494,6 +2650,18 @@
     "rationale": "McCormick's 'Brown Gravy Seasoning Mix' wording; jar/ready-to-serve/chicken/turkey excludes guard the rest",
     "status": "applied",
     "target_id": "commodity:staple:brown-gravy-mix"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-10T22:57:46",
+    "id": "lp:da4edaa9b843203cddde",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"fresca\\\\s+.*\\\\s+2\\\\s+liters|fresca\\\\s+.*\\\\s+2l\"}",
+    "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
+    "rationale": "Fresca is a zero-sugar soda brand. The pattern anchors on the brand and size to match the specific commodity.",
+    "status": "proposed",
+    "target_id": "zero-sugar-soda-2l"
   },
   {
     "confidence": 0.9,
