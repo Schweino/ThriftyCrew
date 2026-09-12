@@ -54,6 +54,17 @@
   checkout, once - plus the twin that a checkout with no seeder still pushes, because seeding supplies and
   never decides.
 
+  THE EIGHTH (2026-09-11, later still): ONE PUSH AT A TIME. git fixes a push's refs when it connects, so a push is a
+  compare-and-swap whose critical section is this whole hook - and measured that day, 11 consecutive attempts from
+  one session each passed run-gates and each were rejected with "cannot lock ref 'refs/heads/main'" while other
+  sessions landed every 15 to 25 minutes. The hook now holds a machine-wide push lock across the gate
+  (ops\hold-push-lock.ps1, lib\push-lock.ps1, design\PLAN-push-livelock-2026-09-11.md). The cases drive REAL pushes
+  and pin the two halves that matter: a push takes the lock, says so and lands; and with the lock held by somebody
+  else the hook says UNLOCKED and pushes ANYWAY, because a fairness device that could refuse a push would be worse
+  than the livelock. Plus the twins that a red gate under a held lock still refuses, and that both a passing and a
+  refused push hand the lock back. THE FIXTURE NEVER TOUCHES THE LIVE LOCK: TC_PUSH_LOCK_PREFIX redirects it onto a
+  private Local\ name, which hold-push-lock honours only because it is Local\.
+
   WHAT THIS DRIVES. A sandbox repository, a linked worktree, the REAL ops\hooks\pre-push, the REAL
   ops\prepush-test-auditors.ps1 with every lib\*.ps1, and stubs for the gate and for test-auditors.
   Then real `git push`es to a sandbox bare remote. No network, nothing outside the sandbox. THIS FILE
@@ -163,6 +174,19 @@ $t = Join-Path $p ('initprobe-' + [guid]::NewGuid().ToString('N'))
 $null = & git init -q $t 2>$null
 $null = & git -C $t config user.name GateProbeWrote 2>$null
 [IO.File]::WriteAllText((Join-Path $p 'gate-target.txt'), $t)
+# IS THE PUSH LOCK ACTUALLY HELD WHILE THE GATE RUNS? This is the only reading that can see an EARLY RELEASE, and
+# without it the push-lock cases below pass whether the lock is held for the whole hook or for 250 ms. It is not
+# hypothetical: the first version of the hook handed the holder Git Bash's `$$`, an MSYS pid Get-Process cannot
+# resolve, so the holder read its own hook as dead and released at once - and all 41 cases passed anyway. 1 here
+# means the lock was FREE while the gate ran, which is the failure.
+if ($env:TC_PUSH_LOCK_PREFIX) {
+  $mx = New-Object System.Threading.Mutex($false, ($env:TC_PUSH_LOCK_PREFIX + '0'))
+  $free = $false
+  try { $free = $mx.WaitOne(0) } catch [System.Threading.AbandonedMutexException] { $free = $true }
+  if ($free) { try { $mx.ReleaseMutex() } catch { } }
+  $mx.Dispose()
+  [IO.File]::WriteAllText((Join-Path $p 'gate-lock-free.txt'), [string][int]$free)
+}
 exit ([int]$env:TC_PREPUSH_PROBE_EXIT)
 '@
   [IO.File]::WriteAllText((Join-Path $main 'ops\run-gates.ps1'), $stub, $utf8)
@@ -480,6 +504,81 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
     ($pSeed3.rc -eq 0 -and $pSeed3.remote -eq $pSeed3.head -and (Test-Path -LiteralPath $sawFile) -and -not (Test-Path -LiteralPath $seedRanFile)) `
     "rc=$($pSeed3.rc) gateRan=$(Test-Path -LiteralPath $sawFile)"
 
+  # ---- THE EIGHTH (2026-09-11): ONE PUSH AT A TIME (design\PLAN-push-livelock-2026-09-11.md) ----
+  # The hook now starts ops\hold-push-lock.ps1 before the gate and holds the machine-wide push lock across it, so a
+  # push that passes its gate is not beaten to the ref by one that started later. Everything above this block ran
+  # with NO hold-push-lock.ps1 in the sandbox, which is the older-checkout path and is therefore already driven by
+  # all 26 cases: the hook must behave exactly as it did before when the script is absent.
+  #
+  # THE FIXTURE NEVER TOUCHES THE LIVE LOCK. TC_PUSH_LOCK_PREFIX redirects the hold onto a Local\ name of this run's
+  # own, which hold-push-lock honours only because it is Local\ - a Global\ value is ignored. Without that, these
+  # cases would take the real push lock and hold up every other session on this box for as long as they run, and the
+  # contended case below would have wedged a real push behind a fixture.
+  . (Join-Path $RepoRoot 'lib\mutex-hold.ps1')
+  $holderSrc = Join-Path $RepoRoot 'ops\hold-push-lock.ps1'
+  if (Test-Path -LiteralPath $holderSrc) {
+    Copy-Item -LiteralPath $holderSrc -Destination (Join-Path $main 'ops\hold-push-lock.ps1')
+    $lkPrefix = 'Local\tc-prepush-hook-selftest-' + [guid]::NewGuid().ToString('N') + '-'
+    $env:TC_PUSH_LOCK_PREFIX = $lkPrefix
+    $env:TC_PUSH_LOCK_QUEUE_ROOT = (Join-Path $sb 'lockq')
+    # A SHORT WAIT, honoured only because the prefix above is a private Local\ one. The contended case asserts the
+    # BRANCH - unlocked, and the push still goes through - never how long the wait was, and a case that sat out the
+    # real 1,200 s would be a wall-clock bar in a hermetic suite. It must also be shorter than lib\mutex-hold.ps1's
+    # 300 s cap, or the fixture's own holder expires first and the hook gets the lock after all: that is exactly what
+    # happened the first time this block ran, and the case read "held after waiting 299s".
+    $env:TC_PUSH_LOCK_WAIT_SEC = '3'
+    try {
+      $lockFreeFile = Join-Path $probe 'gate-lock-free.txt'
+      Remove-Item -LiteralPath $sawFile, $lockFreeFile -ErrorAction SilentlyContinue
+      CommitFile $main 'design\lock-note.md' "lock v1`n"
+      $pLk = PushOut $main 'pushlock'
+      Case 'MUST FIRE' 'a push takes the machine-wide push lock, says so, and still lands' `
+        ($pLk.rc -eq 0 -and $pLk.remote -eq $pLk.head -and $pLk.text -match 'push lock - held' -and (Test-Path -LiteralPath $sawFile)) `
+        "rc=$($pLk.rc) gateRan=$(Test-Path -LiteralPath $sawFile) text=$($pLk.text)"
+      # THE CASE THAT CAN SEE AN EARLY RELEASE, and the only one that can. The gate stub asked, from inside the hook
+      # while the gate was running, whether the push lock was takeable. If it was, the hook said "held" and was not
+      # holding anything - which is exactly what the first version of this change did, passing every other case.
+      $lockFreeDuring = if (Test-Path -LiteralPath $lockFreeFile) { [IO.File]::ReadAllText($lockFreeFile).Trim() } else { 'the gate never reported' }
+      Case 'MUST FIRE' 'the lock is STILL HELD while the gate runs, not handed back the moment the hook says held' `
+        ($lockFreeDuring -eq '0') "lockWasFreeDuringGate=$lockFreeDuring"
+      # MUST NOT FIRE: the holder is a process, and a leaked one would hold up every push on the box. The hook's trap
+      # writes the release file on every exit path, so no holder may outlive the push that started it.
+      $stillHeld = Start-TcMutexHold -Name ($lkPrefix + '0')
+      Case 'MUST NOT FIRE' 'the holder that push started did not outlive it - the lock is free again straight after' `
+        ($null -ne $stillHeld -and $stillHeld.Held) "held=$(if ($stillHeld) { $stillHeld.Held } else { 'no hold' })"
+      # MUST FIRE, and it is the whole degrade rule: with the lock held by somebody else the hook must say UNLOCKED
+      # in words and PUSH ANYWAY. A fairness device that could refuse a push would be worse than the livelock.
+      Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+      CommitFile $main 'design\lock-note.md' "lock v2`n"
+      $pBusy = PushOut $main 'pushlock'
+      Case 'MUST FIRE' 'with the push lock held by another push, the hook says unlocked, gates anyway, and still lets the push through' `
+        ($pBusy.rc -eq 0 -and $pBusy.remote -eq $pBusy.head -and $pBusy.text -match 'push lock - unlocked' -and (Test-Path -LiteralPath $sawFile)) `
+        "rc=$($pBusy.rc) gateRan=$(Test-Path -LiteralPath $sawFile) text=$($pBusy.text)"
+      Stop-TcMutexHold $stillHeld
+      # CLEAN TWIN: the lock decides nothing about the tree. A red gate under a HELD lock is refused exactly as before.
+      Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+      $env:TC_PREPUSH_PROBE_EXIT = '1'
+      CommitFile $main 'design\lock-note.md' "lock v3`n"
+      $pRed = PushOut $main 'pushlock'
+      $env:TC_PREPUSH_PROBE_EXIT = '0'
+      Case 'CLEAN TWIN' 'a red gate under a held push lock still refuses the push - the lock decides nothing about the tree' `
+        ($pRed.rc -ne 0 -and $pRed.text -match 'push lock - held' -and $pRed.text -match 'BLOCKED') `
+        "rc=$($pRed.rc) text=$($pRed.text)"
+      # MUST NOT FIRE: a refused push releases the lock too, or one red gate would wedge the box.
+      $afterRed = Start-TcMutexHold -Name ($lkPrefix + '0')
+      Case 'MUST NOT FIRE' 'a REFUSED push hands the push lock back as well, so one red gate cannot wedge the box' `
+        ($null -ne $afterRed -and $afterRed.Held) "held=$(if ($afterRed) { $afterRed.Held } else { 'no hold' })"
+      Stop-TcMutexHold $afterRed
+    } finally {
+      Remove-Item -LiteralPath Env:TC_PUSH_LOCK_PREFIX -ErrorAction SilentlyContinue
+      Remove-Item -LiteralPath Env:TC_PUSH_LOCK_QUEUE_ROOT -ErrorAction SilentlyContinue
+      Remove-Item -LiteralPath Env:TC_PUSH_LOCK_WAIT_SEC -ErrorAction SilentlyContinue
+      Remove-Item -LiteralPath (Join-Path $main 'ops\hold-push-lock.ps1') -ErrorAction SilentlyContinue
+    }
+  } else {
+    Case 'MUST FIRE' 'ops\hold-push-lock.ps1 exists to be driven' $false 'the push-lock cases could not run'
+  }
+
   # ---- THE SIXTH (2026-09-11): the check's OWN clear, and a library it cannot load ----
   # The sandbox's hand list of libraries predated lib\git-repo-env.ps1, so every copy of the check driven above loaded
   # no clear and all 26 cases passed; the hook sends the check's stderr to /dev/null, so on that path it said nothing.
@@ -564,7 +663,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 36   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with THE SEVENTH's four seeding cases
+$expectedCases = 42   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''

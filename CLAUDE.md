@@ -50,6 +50,21 @@ by a push no longer pays twice** - the hook prints the recorded pass and dispatc
 anyway, and a red run over that same content withdraws the pass). And a push the remote will reject anyway,
 because main moved while it waited, is refused in seconds instead of after the whole run: rebase and push again.
 
+**ONE PUSH AT A TIME ON THIS BOX, and `ops\push-main.ps1` is how you land one** (2026-09-11). A push is a
+compare-and-swap whose critical section is the whole hook, so on a busy day the slowest push never lands however
+green its gates are: measured over 11 consecutive attempts from one session, `run-gates` passed every time and every
+one was rejected with *"cannot lock ref"* while others landed every 15 to 25 minutes. The hook now holds a
+machine-wide push lock across the gate, so nothing else can land while yours runs. **A plain `git push` still works
+and is still fully gated**, but it takes the lock only after git has fixed its refs, so a long queue can still leave
+it stale and refused in seconds with "rebase and push again". `ops\push-main.ps1` takes the lock FIRST and then
+fetches, rebases and pushes inside it, which is what makes a verified commit land on its FIRST attempt. It weakens
+nothing - it runs a plain `git push`, and a red gate refuses it like any other. **A lock that cannot be taken is
+never a refusal**: the hook says so and pushes on, gated exactly as before. **It binds only the checkouts that HAVE
+`ops\hold-push-lock.ps1`**, because the shared hook must not hard-fail in a checkout older than itself - so a
+checkout that has not pulled this still pushes unlocked and can still overtake you. Measured on the very push that
+shipped it: 379 gates green, rejected anyway by a checkout that had not caught up.
+`design\MEASURE-push-lock-2026-09-11.md`.
+
 **A checkout with no built cards is SEEDED on its first push, and a gate that still cannot look says BLIND**
 (2026-09-11). `meal-prep/db/built` is gitignored and `.worktreeinclude` structurally cannot carry it, so
 `feed-covers-published` and `wave-preaudit` used to FAIL an unseeded worktree - after it had queued for a slot,

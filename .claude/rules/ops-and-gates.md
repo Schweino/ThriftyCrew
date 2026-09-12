@@ -407,5 +407,34 @@ everything else honest, so a defect here is silent by construction.
   dispatch, which is the largest waste left. `design\MEASURE-gate-slot-starvation-2026-09-11.md` has every number
   and what was deliberately not done.
 
+- **A PUSH IS A COMPARE-AND-SWAP WHOSE CRITICAL SECTION IS THE WHOLE HOOK, so the SLOWEST push converges on never
+  landing** (2026-09-11). git fixes a push's refs when it connects and the remote updates a ref only if it still
+  holds the sha the hook was handed. Measured across 11 consecutive attempts from one session: the hook took 577 to
+  1,840 s, **`run-gates` PASSED every time** (341 to 368 gates plus a 127 to 411 s test-auditors leg), and every
+  attempt was rejected with *"cannot lock ref 'refs/heads/main' ... is at X but expected Y"* while other sessions
+  landed every 15 to 25 minutes. That is optimistic concurrency control with no contention management, and green
+  gates have nothing to do with who wins it. The retry is not free either: the session must rebase, a rebase is
+  genuinely new content, so `gate-verdict` correctly declines to reuse the pass and every gate runs again.
+  **Serialising costs no throughput, which is the objection to answer first:** `refs/heads/main` is ALREADY
+  serialised, so today's parallelism is parallel GATING of which all but one result is discarded - N sessions each
+  pay T and N-1 of those T are thrown away, and landings per hour are 1/T either way. `lib\push-lock.ps1` is that
+  lock (the `gate-slots` queue at a budget of one, deliberately not a second copy of the arrival-order rules);
+  `ops\hooks\pre-push` holds it across the gate through `ops\hold-push-lock.ps1`, because a mutex needs a live
+  process and the hook's two PowerShell children each exit; `ops\push-main.ps1` takes it BEFORE it fetches and
+  rebases, which is the only place a base can be guaranteed not to go stale, so that push lands on its first
+  attempt. **Every lock path degrades to the behaviour of the day before, never to a refusal** - no holder script in
+  an older checkout, a wedged queue, anything thrown, and the hook says so and pushes on. The lock is a FAIRNESS
+  device and the gate is what makes a push safe, which is why a bypassed lock is not a hole in anything and why one
+  that could refuse would be worse than the livelock. `design\MEASURE-push-lock-2026-09-11.md` has the numbers, the
+  acceptance bars written before the run, and the first harness that was confounded by its own queue.
+  **A CONSEQUENCE FOR EVERY SUITE, and it went red before it was understood: `run-gates` now often runs WITH THE REAL
+  PUSH LOCK HELD** - `ops\push-main.ps1` takes it, then pushes, so the hook and every gate under it are descendants of
+  the holder and inherit `TC_PUSH_LOCK_HOLDER`. The token therefore names the LOCK it was taken on and a mismatch is
+  not an inheritance: while it was a bare `<pid>:<guid>`, every suite that redirects to a private `Local\` lock was
+  handed `inherited` and believed it held a lock nobody had taken, and `hold-push-lock` and `test-prepush-hook` both
+  failed the push for it. **A suite that reads ambient state a gate's own caller may be holding must say which
+  instance it means** - the `identity-graph-commodity-is-namespaced` shape, an agreeing answer about something else.
+  Drive such a suite once with the real lock held before believing it.
+
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

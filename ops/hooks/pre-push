@@ -124,6 +124,81 @@ if [ ! -f "$seedcard" ] && [ -f "$seeder" ]; then
     echo "pre-push: seeding did not complete; the gates will report BLIND rather than fail." >&2
 fi
 
+# ONE PUSH AT A TIME ON THIS BOX (2026-09-11, design/PLAN-push-livelock-2026-09-11.md).
+# git fixes a push's refs when it connects, and the remote updates a ref only if it STILL holds the sha this hook was
+# handed. So a push is a compare-and-swap whose critical section is this whole hook. Measured that day across 11
+# consecutive attempts from one session: 577 to 1,840 s each, run-gates PASSED every time, and every single one was
+# rejected with "cannot lock ref 'refs/heads/main' ... is at X but expected Y" while other sessions landed every 15 to
+# 25 minutes. That is the starvation of the longest transaction under optimistic concurrency control, and the slowest
+# push converges on never landing however green its gates are. The retry is not free either: the session must rebase,
+# a rebase is genuinely new content, so the recorded verdict correctly does not apply and all 341 to 368 gates run
+# again. Eleven attempts, eleven full gates, nothing landed.
+#
+# SERIALISING COSTS NO THROUGHPUT. refs/heads/main is ALREADY serialised - one push lands at a time whatever anyone
+# does - so today's parallelism is not parallel landing, it is parallel GATING of which all but one result is thrown
+# away. ops/probe-push-throughput.ps1 is the harness that holds that claim to account, and its numbers are in
+# design/MEASURE-push-lock-2026-09-11.md.
+#
+# UNLOCKED IS NOT A REFUSAL. This is a FAIRNESS device; the gate is what makes a push safe, and nothing in the lock
+# reads a tree. This file is installed in the SHARED .git and stands in front of every checkout on this box, most of
+# them older than this change, so every lock path degrades to the behaviour of the day before it existed: no holder
+# script in the pushing checkout, a wedged queue, or anything thrown, and the push simply races for the ref as it
+# always did. It is said out loud either way.
+lockdir=""
+release_push_lock() {
+  if [ -n "$lockdir" ]; then
+    : > "$lockdir/release" 2>/dev/null
+    # The directory goes too: one per push would otherwise accumulate in %TEMP% forever, and the estate's
+    # test-suites-leak-temp-dirs rule puts that on whoever allocated it. This does NOT wait for the holder to
+    # notice - a `wait` here could block the hook's exit if the holder ever hung - so removing the release file
+    # out from under it falls back to its SECOND end condition, the watched hook process disappearing, which is
+    # about to happen anyway and is checked every 250 ms.
+    rm -rf "$lockdir" 2>/dev/null
+    lockdir=""
+  fi
+}
+# EVERY EXIT PATH RELEASES, including the ones below this line that were written before the lock existed and the ones
+# a future change adds. A trap is the only way to get that property without editing each of them.
+trap release_push_lock EXIT
+holder="$repo/ops/hold-push-lock.ps1"
+if [ -f "$holder" ]; then
+  lockdir="${TMPDIR:-/tmp}/tc-pushlock-$$"
+  rm -rf "$lockdir"; mkdir -p "$lockdir"
+  lockdir_win="$lockdir"
+  if command -v cygpath >/dev/null 2>&1; then
+    lockdir_win="$(cygpath -w "$lockdir")"
+  fi
+  # THE WINDOWS PID, NEVER `$$` (2026-09-11, and this silently disabled the whole lock in its first version).
+  # The holder releases as soon as the hook it watches is gone, and it asks Get-Process. Git Bash's `$$` is an MSYS
+  # pid from a DIFFERENT namespace: measured here, `$$` was 172200 while the real Windows pid was 135392, and
+  # `Get-Process -Id 172200` threw ProcessCommandException. Test-TcProcessAlive reads a thrown
+  # ProcessCommandException as "gone" - which is the right default for a pid it cannot find - so the holder decided
+  # the hook was dead about 250 ms after taking the lock, and handed it straight back. Every sandbox case still
+  # passed, because none of them could see WHEN the lock was released; the gate stub now takes that reading.
+  # /proc/<pid>/winpid is the MSYS translation. With no /proc the watch is simply not armed, and the release file
+  # plus the hang guard end the hold - degrade, never a refusal.
+  lockwatch="$(cat /proc/$$/winpid 2>/dev/null)"
+  case "$lockwatch" in
+    ''|*[!0-9]*) lockwatch=0 ;;
+  esac
+  # </dev/null so the background child cannot inherit this hook's stdin, which the ref loop above has already read.
+  powershell -NoProfile -ExecutionPolicy Bypass -File "$holder" -SignalDir "$lockdir_win" -WatchPid "$lockwatch" \
+    > /dev/null 2>&1 < /dev/null &
+  lockpid=$!
+  echo "pre-push: waiting for the machine-wide push lock, so this push is not beaten to the ref after it passes." >&2
+  # BOUNDED BY THE HOLDER BEING ALIVE, not by a clock here: the holder's own wait is the queue's, and a holder that
+  # died without writing its state must not leave this hook waiting for a file nobody will write.
+  while [ ! -f "$lockdir/state" ] && kill -0 "$lockpid" 2>/dev/null; do
+    sleep 1
+  done
+  if [ -f "$lockdir/state" ]; then
+    echo "pre-push: push lock - $(head -n 1 "$lockdir/state")" >&2
+  else
+    echo "pre-push: the push lock holder exited without saying anything, so this push races for the ref as it did before." >&2
+    release_push_lock
+  fi
+fi
+
 echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not once per commit." >&2
 
 # REDIRECT, THEN READ THE STATUS, THEN GREP THE FILE. Reading a status through a pipe gives the LAST

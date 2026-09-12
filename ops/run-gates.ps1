@@ -548,7 +548,13 @@ if ($lease.TimedOut) {
   Write-Output ("run-gates: COULD NOT EVALUATE - waited {0:N0}s for a gate worker slot and the queue did not move for the last 1,200s ({1} run(s) still ahead of this one, and all {2} slots held). Nothing was run; that is not a pass." -f ($lease.WaitedMs / 1000), $lease.Ahead, $script:TcGateSlotTotal)
   Exit-Guard -Name 'run-gates' -Summary 'blind=no-gate-worker-slot' -Code 3
 }
-if ($pushAbandon -and -not $lease.Abandoned -and $lease.WaitedMs -ge 30000) {
+# CHECKED BEFORE DISPATCH ALWAYS, not only after a slot wait of 30 s (2026-09-11). The `-ge 30000` guard that used to
+# stand here meant a push whose slots were FREE never asked the remote at all - so it ran all 362 gates and was then
+# rejected, which is the one case the check exists for and the one it could not see. It matters more now the hook
+# holds the machine-wide push lock across this run (lib\push-lock.ps1): a push can be overtaken while it waits for the
+# lock, and that wait costs no gate slots but does end in a full gate. One ls-remote is a second or two in front of
+# 600; a remote that cannot be read still decides nothing and the gates run.
+if ($pushAbandon -and -not $lease.Abandoned) {
   $saidNow = & $pushAbandon
   $saidNow = @($saidNow)
   if ($saidNow.Count -and [string]$saidNow[$saidNow.Count - 1]) {
