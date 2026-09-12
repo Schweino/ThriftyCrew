@@ -209,11 +209,23 @@ Set-Content -Path $queue -Value $rows'
   Invoke-UwCase 'MUST NOT FIRE' 'a method that is not WaitOne is not judged' (@($r.Findings).Count -eq 0)
 
   # --- CLEAN TWIN: adjacent behaviour that must STILL WORK (a POSITIVE assertion) -------------------
+  # A DISTANT READ, AS A PAIR. Asserting only the silence would be a CLEAN TWIN over an ABSENCE,
+  # which ops\audit-fixture-vocabulary.ps1 fails and is right to: a silence proves nothing on its
+  # own, because a detector that simply failed to look is silent too. The pair says WHICH.
+  # The two texts differ by the read ALONE, so the change in verdict can have no other cause.
   $laterRead = '$held = $mx.WaitOne(1000)
 Start-Sleep -Milliseconds 5
 if ($held) { $mx.ReleaseMutex() }'
   $r = Get-UwFindings -Text $laterRead
-  Invoke-UwCase 'CLEAN TWIN' 'a read FAR from the assignment still counts as read' (@($r.Findings).Count -eq 0)
+  Invoke-UwCase 'MUST NOT FIRE' 'a read FAR from the assignment still counts as read' (@($r.Findings).Count -eq 0)
+
+  $noRead = '$held = $mx.WaitOne(1000)
+Start-Sleep -Milliseconds 5
+$mx.ReleaseMutex()'
+  $r = Get-UwFindings -Text $noRead
+  $nr = @($r.Findings)
+  Invoke-UwCase 'CLEAN TWIN' 'take that distant read away and it FIRES, naming the variable' (
+    $nr.Count -eq 1 -and $nr[0].Why -match 'held')
 
   $two = '$a = $m1.WaitOne(10)
 $b = $m2.WaitOne(10)
