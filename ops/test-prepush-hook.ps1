@@ -582,9 +582,16 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
       # THE CASE THAT CAN SEE AN EARLY RELEASE, and the only one that can. The gate stub asked, from inside the hook
       # while the gate was running, whether the push lock was takeable. If it was, the hook said "held" and was not
       # holding anything - which is exactly what the first version of this change did, passing every other case.
+      # THE SENSE OF THIS CASE WAS DELIBERATELY REVERSED (2026-09-12). It asserted the lock was HELD while the gate
+      # ran, which was the point when the lock was taken at the top of the hook. It is now taken AFTER every check
+      # passes, so the gate runs UNLOCKED and the lock covers the ref update only - because a session waiting out
+      # every other session's checks was the estate's worst queue: 9 pushes deep, oldest at 13 minutes, one of them
+      # waiting 957s for a lock it could not use. The probe reads, from inside the hook while the gate runs,
+      # whether the lock is takeable; a 1 now means the design is working, and a 0 means the lock has crept back
+      # across the checks.
       $lockFreeDuring = if (Test-Path -LiteralPath $lockFreeFile) { [IO.File]::ReadAllText($lockFreeFile).Trim() } else { 'the gate never reported' }
-      Case 'MUST FIRE' 'the lock is STILL HELD while the gate runs, not handed back the moment the hook says held' `
-        ($lockFreeDuring -eq '0') "lockWasFreeDuringGate=$lockFreeDuring"
+      Case 'MUST FIRE' 'the gate runs UNLOCKED - the lock is taken after the checks, so nobody queues behind another push''s gate' `
+        ($lockFreeDuring -eq '1') "lockWasFreeDuringGate=$lockFreeDuring"
       # MUST NOT FIRE: the holder is a process, and a leaked one would hold up every push on the box. The hook's trap
       # writes the release file on every exit path, so no holder may outlive the push that started it.
       $stillHeld = Start-TcMutexHold -Name ($lkPrefix + '0')
@@ -605,8 +612,11 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
       CommitFile $main 'design\lock-note.md' "lock v3`n"
       $pRed = PushOut $main 'pushlock'
       $env:TC_PREPUSH_PROBE_EXIT = '0'
-      Case 'CLEAN TWIN' 'a red gate under a held push lock still refuses the push - the lock decides nothing about the tree' `
-        ($pRed.rc -ne 0 -and $pRed.text -match 'push lock - held' -and $pRed.text -match 'BLOCKED') `
+      # STRONGER SINCE THE LOCK MOVED (2026-09-12): a red gate is refused AND never takes the lock at all, because
+      # the lock is taken only once every check has passed. A failing push no longer occupies the queue for the
+      # length of its own gate, which is the other half of what made the queue 13 minutes deep.
+      Case 'CLEAN TWIN' 'a red gate refuses the push and never takes the push lock - a failing push costs the queue nothing' `
+        ($pRed.rc -ne 0 -and $pRed.text -notmatch 'push lock - held' -and $pRed.text -match 'BLOCKED') `
         "rc=$($pRed.rc) text=$($pRed.text)"
       # MUST NOT FIRE: a refused push releases the lock too, or one red gate would wedge the box.
       $afterRed = Start-TcMutexHold -Name ($lkPrefix + '0')
@@ -623,6 +633,10 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
       # the test-auditors check refuses it for a reason that has nothing to do with the lock. What is asserted is that
       # it took the lock rather than jumping the queue.
       Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+      # THE LOCK IS TAKEN ONLY AFTER EVERY CHECK PASSES, so this push must actually pass them: the linked checkout
+      # needs a board, or the test-auditors check refuses it as could-not-evaluate and the push never reaches the
+      # lock at all - which would make this case pass or fail for a reason that has nothing to do with the holder.
+      CommitFile $linked 'grocery\out\comparison-2026-01-01.json' "{`"comparison`":[]}`n"   # reach-fixture-ok: a stub board inside the %TEMP% sandbox repo
       CommitFile $linked 'design\lock-note-wt.md' "lock from a linked worktree`n"
       $pWt = PushOut $linked 'pushlock-wt'
       Case 'MUST FIRE' 'a push from a checkout with no holder of its own uses the MAIN checkout''s and still queues' `

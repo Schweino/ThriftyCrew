@@ -186,7 +186,24 @@ if [ ! -f "$holder" ]; then
       ;;
   esac
 fi
-if [ -f "$holder" ]; then
+# TAKEN AFTER THE CHECKS, NOT ACROSS THEM (2026-09-12, Brad: "We cant have pushes waiting so long for 'checks'
+# before it gets pushed"). The lock was acquired here, at the top, and held across the whole gate, so every session
+# in the queue waited out every other session's checks: MEASURED that morning, 9 pushes queued with the oldest at
+# 13 minutes, and one of this session's own pushes waited 957s for a lock it then could not use because main had
+# moved. A hold is a gate run plus the auditors, about two minutes, so twenty sessions is over half an hour.
+#
+# WHAT THE ORIGINAL DESIGN BOUGHT, and why this can now give it up. Holding across the gate meant only one session
+# gated at a time, so no gate run was ever thrown away by losing the race (design/MEASURE-push-lock-2026-09-11.md:
+# 550 gate-seconds wasted an arm against 0). That argument rested on a losing re-gate costing a FULL run. It no
+# longer does: lib/gate-input-key.ps1 keys each self-test on what it reads, so after a rebase the self-tests whose
+# inputs did not move are reused and the re-gate is a fraction of a run. The waste it prevented got cheap; the
+# queue it created did not.
+#
+# SO THE CRITICAL SECTION IS THE PUSH ITSELF. The holder watches the PARENT - git - rather than this hook, because
+# the ref update happens after this hook exits, and a lock released at hook exit never covered it. git finishing
+# ends the hold; the holder's own cap ends it if git hangs.
+take_push_lock() {
+  [ -f "$holder" ] || return 0
   lockdir="${TMPDIR:-/tmp}/tc-pushlock-$$"
   rm -rf "$lockdir"; mkdir -p "$lockdir"
   lockdir_win="$lockdir"
@@ -202,7 +219,13 @@ if [ -f "$holder" ]; then
   # passed, because none of them could see WHEN the lock was released; the gate stub now takes that reading.
   # /proc/<pid>/winpid is the MSYS translation. With no /proc the watch is simply not armed, and the release file
   # plus the hang guard end the hold - degrade, never a refusal.
-  lockwatch="$(cat /proc/$$/winpid 2>/dev/null)"
+  # THE PARENT'S WINDOWS PID: git's, not this hook's. The hook exits and git then updates the ref, so a hold that
+  # ended with the hook ended before the thing it protects. If /proc cannot name the parent the watch falls back to
+  # this hook's own pid, which is the behaviour of the day before - degrade, never a refusal.
+  lockwatch="$(cat /proc/$PPID/winpid 2>/dev/null)"
+  case "$lockwatch" in
+    ''|*[!0-9]*) lockwatch="$(cat /proc/$$/winpid 2>/dev/null)" ;;
+  esac
   case "$lockwatch" in
     ''|*[!0-9]*) lockwatch=0 ;;
   esac
@@ -222,7 +245,7 @@ if [ -f "$holder" ]; then
     echo "pre-push: the push lock holder exited without saying anything, so this push races for the ref as it did before." >&2
     release_push_lock
   fi
-fi
+}
 
 echo "pre-push: running ops/run-gates.ps1 (about 51s) - once for this push, not once per commit." >&2
 
@@ -271,6 +294,11 @@ if [ "$rc" -eq 0 ]; then
   # not decided anything.
   if [ "$tarc" -eq 0 ] && tail -n 1 "$talog" | grep -q -E "^PREPUSH-TEST-AUDITORS-COMPLETE"; then
     rm -f "$talog"
+    # EVERY CHECK HAS PASSED, so now take the lock and hold it across the ref update only. The trap is cleared
+    # first: it exists to hand the lock back on every failing path, and on THIS path the holder must outlive the
+    # hook, because git has not pushed yet. What ends the hold is git exiting, which the holder watches.
+    take_push_lock
+    trap - EXIT
     exit 0
   fi
   echo "" >&2
