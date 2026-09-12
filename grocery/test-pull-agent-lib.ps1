@@ -169,7 +169,14 @@ const { walmartProbe } = new Function('wallWhy', 'fetch', src + '\nreturn { walm
 
 const nextData = o => '<html><body><script id="__NEXT_DATA__" type="application/json">' +
   JSON.stringify(o) + '</scr' + 'ipt></body></html>';
-const stack = items => ({ props: { pageProps: { initialData: { searchResult: { itemStacks: [{ items }] } } } } });
+// EVERY PAYLOAD CARRIES ITS STORE NOW (2026-09-12). walmartProbe refuses rows it cannot attribute to
+// a store, so a fixture without a store block is not a payload the shipped agent will read at all -
+// these price cases would every one come back UNUSABLE for a reason that is not about the price shape.
+// Section 6 is where the store read itself is put under test.
+const stack = items => ({ props: { pageProps: { initialData: {
+  searchResult: { itemStacks: [{ items }] },
+  pageMetadata: { location: { storeId: 5361, postalCode: '68137', displayName: 'Omaha L St Supercenter' } },
+} } } });
 const probe = async items => { page = nextData(stack(items)); return await walmartProbe('miracle whip'); };
 
 // 2026-09-02, measured: every flat field is "" and the price is one level down in priceDetails.
@@ -319,6 +326,222 @@ try {
   & $node $tmpA $ald
   if ($LASTEXITCODE -ne 0) { $bad++ }
 } finally { Remove-Item $tmpA -Force -ErrorAction SilentlyContinue }
+
+# --- 6. the WALMART capture must carry the store it was READ at -------------------------------------
+# 2026-09-12, and this is the Aldi fix of section 5 arriving at the store that needed it most. Walmart
+# prices ARE per-store and this agent asserted no store at all, so a session drifted to storeId 3153
+# ("Omaha S 167th St Neighborhood Market") and the agent captured clean, plausible, wrong-basis prices
+# at it twice - 414 rows on 2026-08-27 and 380 on 2026-09-12 - both caught only by a human reading the
+# page header, and both quarantined by hand. build-walmart-deals.ps1 stamped "Omaha L St Supercenter
+# 68137" on every row from a LITERAL and read no store from the capture, so it was structurally unable
+# to notice. The agent now reads the store from __NEXT_DATA__ at assert time and on every response,
+# and the mid-sweep flip is refused per term rather than left to the builder to find afterwards.
+$jsWS = @'
+const fs = require('fs');
+const lib = fs.readFileSync(process.argv[2], 'utf8');
+const src = fs.readFileSync(process.argv[3], 'utf8');
+const wm = lib.match(/function wallWhy\(html, phrases\) \{[\s\S]*?\n\}/);
+if (!wm) { console.log('  X     wallWhy is not defined in pull-agent-lib.js'); process.exit(1); }
+eval(wm[0]);
+
+let bad = 0;
+function T(n, ok, got) { if (ok) console.log('  ok    ' + n); else { console.log('  X     ' + n + '   got: ' + got); bad++; } }
+
+const LST  = { storeId: 5361, postalCode: '68137', displayName: 'Omaha L St Supercenter' };
+const NBHD = { storeId: 3153, postalCode: '68135', displayName: 'Omaha S 167th St Neighborhood Market' };
+const payload = (store, items) => ({ props: { pageProps: { initialData: {
+  searchResult: { itemStacks: [{ items: items || [] }] },
+  pageMetadata: store ? { location: store } : {},
+} } } });
+const html = o => '<html><body><script id="__NEXT_DATA__" type="application/json">' +
+  JSON.stringify(o) + '</scr' + 'ipt></body></html>';
+const item = (id, price) => ({ name: 'Great Value Thing ' + id, usItemId: String(id), sellerName: 'Walmart.com',
+  fulfillmentType: 'STORE', priceInfo: { priceDetails: { priceLines: [
+    { lineType: 'CURRENT_PRICE', values: [{ key: 'PRICE', value: String(price) }] } ] } } });
+
+// The agent loads UNTOUCHED; only wallWhy, fetch, the page and its storage come from outside, so what
+// is under test is the shipped file (sections 2, 4 and 5 follow the same rule, for the same reason).
+function loadAgent(pageStore) {
+  const ctx = { page: '', kv: {} };
+  const doc = {
+    body: { innerText: '' },
+    getElementById: id => (id === '__NEXT_DATA__' && pageStore !== undefined)
+      ? { textContent: JSON.stringify(payload(pageStore, [])) } : null,
+  };
+  const loc = { hostname: 'www.walmart.com' };
+  const storage = { getItem: k => (k in ctx.kv ? ctx.kv[k] : null), setItem: (k, v) => { ctx.kv[k] = String(v); } };
+  const stubFetch = async () => ({ status: 200, text: async () => ctx.page });
+  const api = new Function('wallWhy', 'fetch', 'document', 'location', 'localStorage',
+    src + '\nreturn { walmartIdentity, walmartProbe, walmartSweepToCsv, walmartStoreFromData, WALMART_SANCTIONED_STORE };')(
+    wallWhy, stubFetch, doc, loc, storage);
+  api.ctx = ctx;
+  return api;
+}
+
+(async () => {
+  // 1. THE READ ITSELF. The path the 2026-08-28 ruling names, and a payload shape that has moved
+  //    three times already - so the read walks for the store rather than pinning one path.
+  const a = loadAgent(LST);
+  const who = a.walmartIdentity();
+  T('walmartIdentity READS the store off __NEXT_DATA__, it no longer says there is nothing to assert',
+    who.storeId === '5361' && who.postalCode === '68137' && /L St Supercenter/.test(who.store), JSON.stringify(who));
+  T('...and the page location outscores an item node that also carries a storeId',
+    a.walmartStoreFromData({ items: [{ storeId: 999, name: 'a product' }], pageMetadata: { location: LST } }).id === '5361',
+    JSON.stringify(a.walmartStoreFromData({ items: [{ storeId: 999, name: 'a product' }], pageMetadata: { location: LST } })));
+
+  // 2. MUST FIRE - the founding bug, twice over. A 3153 session must not capture a single row.
+  let threw = '';
+  try { loadAgent(NBHD).walmartIdentity(); } catch (e) { threw = e.message; }
+  T('MUST FIRE  a session on storeId 3153 REFUSES to pull at all',
+    /3153/.test(threw) && /5361/.test(threw), threw || 'it did not throw - a 3153 sweep would capture 380 plausible rows again');
+  T('...and the refusal says it is the WRONG BASIS, not a wall or a missing selector',
+    /BASIS/i.test(threw) && /switch the store/i.test(threw), threw);
+
+  // 3. MUST FIRE - a store we cannot read is not a store we may assume. Blind is never a pass.
+  let threwBlind = '';
+  try { loadAgent(null).walmartIdentity(); } catch (e) { threwBlind = e.message; }
+  T('MUST FIRE  a page whose __NEXT_DATA__ carries no store refuses the sweep',
+    /no storeId/i.test(threwBlind), threwBlind || 'it did not throw');
+
+  // 4. MUST FIRE - THE MID-SWEEP FLIP, which is why this is asserted per response and not once per
+  //    run. pull-aldi-instore.js asserts per TERM for exactly this; a once-per-run assert cannot
+  //    tell a clean sweep from a session that was flipped after it started.
+  const f = loadAgent(LST);
+  f.walmartIdentity();
+  f.ctx.page = html(payload(NBHD, [item(1, '8.97')]));
+  const rFlip = await f.walmartProbe('applesauce');
+  T('MUST FIRE  a response priced at another store settles UNUSABLE with NO rows',
+    rFlip.state === 'UNUSABLE' && rFlip.rows.length === 0, rFlip.state + ' / ' + rFlip.rows.length + ' row(s)');
+  T('...and the verdict names both stores, so the ledger says what it refused',
+    /3153/.test(rFlip.why || '') && /5361/.test(rFlip.why || ''), rFlip.why);
+
+  // 5. CLEAN TWIN - the ordinary case is untouched: same store, rows kept, store on every row.
+  const g = loadAgent(LST);
+  g.walmartIdentity();
+  g.ctx.page = html(payload(LST, [item(1, '8.97'), item(2, '2.50')]));
+  const rOk = await g.walmartProbe('applesauce');
+  T('CLEAN TWIN  a response at the asserted store still yields its rows',
+    rOk.state === 'MATCHES' && rOk.rows.length === 2, rOk.state + ' / ' + rOk.rows.length + ' / ' + (rOk.why || ''));
+  T('...and every row carries the store it was read at, read from its OWN response',
+    rOk.rows.every(x => x.si === '5361' && x.sz === '68137' && x.st === 'Omaha L St Supercenter' && x.sr === 'response'),
+    JSON.stringify(rOk.rows.map(x => [x.si, x.sz, x.sr])));
+
+  // 5b. THE LIVE SHAPE, FROZEN FROM A MEASURED RESPONSE (2026-09-12, /search?q=anaheim peppers through
+  //     Brad's own Chrome: HTTP 200, 876,030 bytes, 61 item nodes). Two things about it that no
+  //     hand-written fixture would have guessed, and both decide the read: the store block carries NO
+  //     display name, and 131 nodes in the payload carry a storeId - 130 of them the value 0, on item
+  //     nodes. So the scoring is what makes this work, and the row's store NAME has to be borrowed
+  //     from the asserted store. If either half regresses, this capture line goes out saying store=""
+  //     or naming storeId 0, and the builder refuses every Walmart capture from then on.
+  const liveStore = { storeId: 5361, postalCode: '68137' };            // no displayName - measured
+  const liveItems = [];
+  for (let i = 0; i < 130; i++) liveItems.push(Object.assign(item(1000 + i, '1.00'), { storeId: 0 }));
+  const lv = loadAgent(LST);
+  lv.walmartIdentity();
+  lv.ctx.page = html(payload(liveStore, liveItems));
+  const rLive = await lv.walmartProbe('anaheim peppers');
+  T('THE LIVE SHAPE  a nameless store block beside 130 item nodes at storeId 0 still reads 5361/68137',
+    rLive.state === 'MATCHES' && rLive.rows.length === 130 && rLive.rows.every(x => x.si === '5361' && x.sz === '68137'),
+    rLive.state + ' / ' + rLive.rows.length + ' / ' + JSON.stringify((rLive.rows[0] || {}).si) + ' / ' + (rLive.why || ''));
+  T('...and the row NAME is borrowed from the asserted store, never left empty and never storeId 0',
+    (rLive.rows[0] || {}).st === 'Omaha L St Supercenter' && (rLive.rows[0] || {}).sr === 'response',
+    JSON.stringify([(rLive.rows[0] || {}).st, (rLive.rows[0] || {}).sr]));
+
+  // 5c. MUST FIRE - THE CASE A MUTATION PROBE ASKED FOR (2026-09-12). Dropping the page-location key
+  //     bonus from the scoring SURVIVED the case above: against the measured payload the nameless
+  //     location block still wins on its postal code (2) over 130 bare item nodes (1), so that fixture
+  //     could not see whether the bonus worked. It is load-bearing against the shape RIGHT BESIDE the
+  //     measured one - a node carrying a storeId, a postal code AND a name scores 3 and beats a
+  //     nameless location block on merit alone. A marketplace seller's address block is exactly that.
+  //     Without the bonus this capture would name somebody else's storeId, which is the wrong basis
+  //     arriving by a different door.
+  const rival = { storeId: 7777, postalCode: '90210', name: 'Some Seller Warehouse' };
+  const rv = loadAgent(LST);
+  rv.walmartIdentity();
+  rv.ctx.page = html(payload(liveStore, [Object.assign(item(9, '5.00'), { seller: rival })]));
+  const rRival = await rv.walmartProbe('anaheim peppers');
+  T('MUST FIRE  a nameless page location still outranks a fully-named rival store node in the payload',
+    rRival.state === 'MATCHES' && (rRival.rows[0] || {}).si === '5361',
+    rRival.state + ' / ' + JSON.stringify((rRival.rows[0] || {}).si) + ' / ' + (rRival.why || ''));
+
+  // 6. THE FALLBACK IS MARKED, NOT SILENT. A response with no store block is attributed to the store
+  //    read at assert time - a known blind spot for those rows, which is why they say read="page"
+  //    and get their own #tc-store line rather than being folded in with the proven ones.
+  const h = loadAgent(LST);
+  h.walmartIdentity();
+  h.ctx.page = html(payload(null, [item(3, '1.25')]));
+  const rFall = await h.walmartProbe('apples');
+  T('a response with no store block falls back to the asserted store and SAYS so',
+    rFall.state === 'MATCHES' && rFall.rows.length === 1 && rFall.rows[0].si === '5361' && rFall.rows[0].sr === 'page',
+    rFall.state + ' / ' + JSON.stringify((rFall.rows[0] || {})));
+
+  // 7. MUST FIRE - no assert and no store in the response is how both quarantines happened.
+  const n = loadAgent(LST);
+  n.ctx.page = html(payload(null, [item(4, '3.00')]));
+  const rNone = await n.walmartProbe('apples');
+  T('MUST FIRE  a probe run without walmartIdentity() keeps nothing when the response has no store',
+    rNone.state === 'UNUSABLE' && rNone.rows.length === 0, rNone.state + ' / ' + (rNone.why || ''));
+
+  // 8. MUST FIRE - two stores at equal confidence is not a store. Never resolved by a guess.
+  const amb = loadAgent(LST).walmartStoreFromData({ a: { store: { storeId: 5361 } }, b: { store: { storeId: 3153 } } });
+  T('MUST FIRE  two rival storeIds at equal confidence read as AMBIGUOUS, never as the first one',
+    amb && amb.id === 'AMBIGUOUS', JSON.stringify(amb));
+
+  // 9. THE CAPTURE LINE, which is what build-walmart-deals now rules on.
+  //     The rows come from the REAL probe and are then persisted the way runPacedSweep persists them
+  //     ({ term: { v, why, rows } }), so the emitter is fed the shipped extractor's own output rather
+  //     than a hand-written row - the shape trap section 4's header describes, one level up.
+  const e = loadAgent(LST);
+  e.walmartIdentity();
+  e.ctx.page = html(payload(LST, [item(1, '8.97'), item(2, '2.50')]));
+  const rEmit = await e.walmartProbe('applesauce');
+  T('the emitter is fed real probe output, not a hand-written row', rEmit.state === 'MATCHES' && rEmit.rows.length === 2, rEmit.state);
+  e.ctx.kv['TC_WALMART_SWEEP'] = JSON.stringify({ applesauce: { v: 'MATCHES', why: null, rows: rEmit.rows },
+                                                  kale: { v: 'EMPTY', why: 'no results', rows: [] } });
+  const csv = e.walmartSweepToCsv().split('\n');
+  T('CLEAN TWIN  the capture OPENS with the store line, counted',
+    csv[0] === '#tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=2', csv[0]);
+  T('...then the column header, so the driver prepends nothing', csv[1] === 'q|n|lp|up|id|was|rb|sel|ff', csv[1]);
+  T('...then exactly the rows, the search term first', csv.length === 4 && csv[2].indexOf('applesauce|') === 0, csv.join(' / '));
+  T('the store line carries no pipe, so the pipe-splitting capture readers skip it as a short line',
+    csv[0].indexOf('|') < 0, csv[0]);
+  T('...and the 9-column positional contract build-walmart-deals reads is unchanged',
+    csv[2].split('|').length === 9, csv[2]);
+
+  // 10. MUST FIRE - a row persisted by an older agent has no store and must never be folded into one.
+  const old = loadAgent(LST);
+  old.ctx.kv['TC_WALMART_SWEEP'] = JSON.stringify({ t: { v: 'MATCHES', rows: [
+    { n: 'proven row', lp: '$1.00', up: '', id: '1', was: '', rb: 0, sel: '', ff: '', st: 'Omaha L St Supercenter', si: '5361', sz: '68137', sr: 'response' },
+    { n: 'row from an older agent', lp: '$2.00', up: '', id: '2', was: '', rb: 0, sel: '', ff: '' },
+  ] } });
+  const om = old.walmartSweepToCsv().split('\n');
+  T('MUST FIRE  a row with no store read gets its own UNRECORDED line, never folded into its neighbour',
+    om[0] === '#tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=1' &&
+    om[1] === '#tc-store store="UNRECORDED" id="UNRECORDED" zip="" read="UNRECORDED" rows=1', om.slice(0, 2).join(' / '));
+
+  // 11. a store string carrying a quote, pipe or newline cannot break its own line.
+  const hos = loadAgent(LST);
+  hos.ctx.kv['TC_WALMART_SWEEP'] = JSON.stringify({ t: { v: 'MATCHES', rows: [
+    { n: 'x', lp: '$1.00', up: '', id: '1', was: '', rb: 0, sel: '', ff: '', st: 'Omaha "L|St"\nSupercenter', si: '5361', sz: '68137', sr: 'response' } ] } });
+  const hl = hos.walmartSweepToCsv().split('\n');
+  T('a store string carrying a quote, pipe or newline cannot break its line',
+    hl[0] === '#tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=1', hl[0]);
+
+  // 12. The sanctioned id is a MIRROR of stores.json -> Walmart -> store_identity. The agreement of
+  //     the two copies is asserted in build-walmart-deals.ps1's self-test, which can read both files;
+  //     this case only pins that the constant is still here to be compared.
+  T('the agent carries the sanctioned store as a named constant, for the builder to check against',
+    loadAgent(LST).WALMART_SANCTIONED_STORE.id === '5361', JSON.stringify(loadAgent(LST).WALMART_SANCTIONED_STORE));
+
+  process.exit(bad === 0 ? 0 : 1);
+})().catch(e => { console.log('  X     the Walmart store test threw: ' + (e && e.stack)); process.exit(1); });
+'@
+$tmpWS = Join-Path ([IO.Path]::GetTempPath()) ('wmstore-' + [guid]::NewGuid().ToString('N') + '.js')
+[IO.File]::WriteAllText($tmpWS, $jsWS, (New-Object System.Text.UTF8Encoding($false)))
+try {
+  & $node $tmpWS $lib $wal
+  if ($LASTEXITCODE -ne 0) { $bad++ }
+} finally { Remove-Item $tmpWS -Force -ErrorAction SilentlyContinue }
 
 if ($bad -eq 0) { Write-Output 'test-pull-agent-lib SELF-TEST PASS'; exit 0 }
 Write-Output ("test-pull-agent-lib SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1

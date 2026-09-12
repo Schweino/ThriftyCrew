@@ -62,6 +62,14 @@
 param(
   [string]$In = "",
   [string]$Date = "",
+  # -WaiveMissingStoreLine (2026-09-12) is for RE-READING a capture written BEFORE the #tc-store line
+  # existed, and nothing else. It waives the no-store-line refusal only: a store line that is present
+  # and wrong (another store, UNRECORDED, two stores, unparseable) is refused exactly as without it.
+  # A file built this way does NOT get an L St stamp - its `source` says the store was never recorded,
+  # which is the honest statement and the whole reason the literal had to go. The daily chain
+  # (capture-run.ps1) never passes it; the one file it exists for is the 774-row 2026-09-12 capture,
+  # taken at a store the operator verified by hand hours before this refusal shipped.
+  [switch]$WaiveMissingStoreLine,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -78,6 +86,7 @@ $script:CaptureDate = $Date
 if (-not $script:CaptureDate -and $In) { $m = [regex]::Match($In, '\d{4}-\d{2}-\d{2}'); if ($m.Success) { $script:CaptureDate = $m.Value } }
 if (-not $script:CaptureDate) { $script:CaptureDate = (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
+. (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
 # ---- the REAL pricing math: the same library compare-deals.ps1 dot-sources ----
 . (Join-Path $root 'pricing-math-lib.ps1')   # I82: the pricing math is a LIBRARY now, not a
@@ -107,6 +116,157 @@ if (-not $script:CaptureDate) { $script:CaptureDate = (Get-Date).ToString('yyyy-
 $bwAllow = Get-MpAllowKeys $root
 function BW-IsMultipackReject($item, $size) {
   return ((Test-MpClassify 'Walmart' ([string]$item) ([string]$size) $script:bwAllow) -eq 'reject')
+}
+
+# ---- WHICH WALMART THESE PRICES ARE FOR (2026-09-12) ----------------------------------------------
+# THE STAMP USED TO BE A LITERAL, AND THAT IS THE WHOLE DEFECT. Line 403 of this file read
+# '...(Omaha L St Supercenter 68137)...' and this builder read NO store from the capture, so it was
+# structurally incapable of noticing a capture taken somewhere else. Brad's session drifted to storeId
+# 3153 ("Omaha S 167th St Neighborhood Market") and the agent brought back clean, plausible prices from
+# it TWICE - 414 rows on 2026-08-27, 380 on 2026-09-12. Both were caught by a human reading the page
+# header against a memory, and both were quarantined by hand. Real prices in the wrong basis are the
+# hardest error to find later, because every number still looks fine.
+#
+# pull-walmart-instore.js now opens the capture with one line per distinct store it actually read:
+#     #tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=774
+# and this is the one place that line is ruled on. The capture is REFUSED, and nothing is written, when:
+#   a store line does not parse   a store we cannot read is a store we did not read
+#   no store line                 it cannot say which Walmart it read
+#   id="UNRECORDED"               rows persisted by an agent that did not keep the store
+#   not the sanctioned store      3153 and anything else: right prices, wrong basis
+#   more than one store           one file names one store, and a sweep that straddled two cannot
+# This is build-aldi-regular.ps1's Split-CaptureStore arriving at the store that needed it most; that
+# file's header explains each decision and this is deliberately the same shape.
+#
+# THE SANCTIONED STORE IS NOT A LITERAL HERE EITHER. It is read from stores.json -> Walmart ->
+# store_identity, which carries Brad's 2026-08-28 ruling. Aldi's builder deliberately does NOT pin its
+# OLA number, because that session legitimately moves between Omaha stores and a pinned number would
+# refuse a correct capture; Walmart is the opposite case - one store is RULED, and the drift is the
+# defect. What both refuse to do is claim a store nobody read.
+$script:WM_CAPTURE_COLUMNS = 'q|n|lp|up|id|was|rb|sel|ff'
+
+function Get-WalmartSanctionedStore {
+  <# The board's Walmart basis, from the registry. Returns @{ id; zip; label } or @{ refuse } - never
+     a default: a builder that cannot learn which store is sanctioned must not stamp one. #>
+  param([string]$Root)
+  $reg = Join-Path $Root 'stores.json'
+  if (-not (Test-Path $reg)) { return @{ refuse = "stores.json is missing at $reg, so the sanctioned Walmart store cannot be read and no capture can be attributed." } }
+  $doc = Read-JsonFile $reg
+  $w = @($doc.stores | Where-Object { [string]$_.name -eq 'Walmart' })
+  if ($w.Count -ne 1) { return @{ refuse = ("stores.json names {0} stores called Walmart; exactly one must carry store_identity." -f $w.Count) } }
+  $si = $w[0].store_identity
+  if (-not $si -or -not $si.store_id) {
+    return @{ refuse = 'stores.json -> Walmart has no store_identity.store_id, so there is no sanctioned store to check a capture against. Add it (see the Hy-Vee entry for the shape) rather than letting this builder assume one.' }
+  }
+  return @{ id = ([string]$si.store_id).Trim(); zip = ([string]$si.postal_code).Trim(); label = ([string]$si.label).Trim() }
+}
+
+function Split-WalmartCaptureStore {
+  <# Split the #tc-store lines off a capture and rule on them. Returns the remaining lines, the store,
+     the counts, and .refuse - data only, no output (Import-CaptureCsv's rule; the caller reports). #>
+  param([string[]]$Lines, $Sanctioned)
+  $kept   = New-Object System.Collections.ArrayList
+  $stores = New-Object System.Collections.ArrayList
+  $bad    = New-Object System.Collections.ArrayList
+  $sawColumns = $false
+  foreach ($ln in $Lines) {
+    $s = [string]$ln
+    if ($s -match '^\s*#tc-store\b') {
+      $m = [regex]::Match($s, '^\s*#tc-store\s+store="([^"]*)"\s+id="([^"]*)"\s+zip="([^"]*)"\s+read="([^"]*)"\s+rows=(\d+)\s*$')
+      if ($m.Success) {
+        [void]$stores.Add([pscustomobject]@{
+          store = $m.Groups[1].Value.Trim(); id = $m.Groups[2].Value.Trim(); zip = $m.Groups[3].Value.Trim()
+          read  = $m.Groups[4].Value.Trim(); rows = [int]$m.Groups[5].Value })
+      } else { [void]$bad.Add($s.Trim()) }
+      continue
+    }
+    # An operator following the pre-2026-09-12 runbook prepends a column header to output that now
+    # carries its own. The second copy is not a record. (build-aldi-regular carries the same guard.)
+    if ([string]::Equals($s.Trim(), $script:WM_CAPTURE_COLUMNS, [StringComparison]::Ordinal)) {
+      if ($sawColumns) { continue }
+      $sawColumns = $true
+    }
+    [void]$kept.Add($s)
+  }
+
+  # ORDINAL throughout: this text arrived from a web page, and PowerShell's default string comparison
+  # is culture-sensitive - which ignores a NUL outright (see .claude/rules/ops-and-gates.md).
+  $distinct = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $total = 0; $pageRows = 0
+  $unrec = New-Object System.Collections.ArrayList
+  $wrong = New-Object System.Collections.ArrayList
+  foreach ($x in $stores) {
+    [void]$distinct.Add($x.id)
+    $total += $x.rows
+    if (-not [string]::Equals($x.read, 'response', [StringComparison]::Ordinal)) { $pageRows += $x.rows }
+    if (-not $x.id -or [string]::Equals($x.id, 'UNRECORDED', [StringComparison]::Ordinal)) { [void]$unrec.Add($x) }
+    elseif (-not [string]::Equals($x.id, [string]$Sanctioned.id, [StringComparison]::Ordinal) -or
+            ($Sanctioned.zip -and $x.zip -and -not [string]::Equals($x.zip, [string]$Sanctioned.zip, [StringComparison]::Ordinal))) {
+      [void]$wrong.Add($x)
+    }
+  }
+
+  $why = ''
+  if ($bad.Count) {
+    $why = ('a store line does not parse: [' + $bad[0] + '] - a store we cannot read is a store we did not read.')
+  } elseif ($stores.Count -eq 0) {
+    $why = 'the capture carries no #tc-store line, so it cannot say which Walmart it read. Re-capture through walmartSweepToCsv in pull-walmart-instore.js, which writes one; never hand-assemble this file.'
+  } elseif ($unrec.Count) {
+    $n = 0; foreach ($x in $unrec) { $n += $x.rows }
+    $why = ('{0} row(s) were captured with no store read (id="UNRECORDED"), so they cannot be attributed to any Walmart.' -f $n)
+  } elseif ($distinct.Count -gt 1) {
+    # AHEAD OF THE WRONG-STORE CHECK, and that ordering is load-bearing rather than cosmetic.
+    # build-aldi-regular tests its straddle LAST because several Aldi stores are legitimate, so a
+    # two-store file can be all-legal. Here exactly ONE id is sanctioned, so a straddling file always
+    # contains a non-sanctioned group - put the wrong-store check first and this branch can never fire
+    # for any input, which is a guard that cannot arm and a fixture that proves nothing. It also names
+    # the better diagnosis: a straddle means the session flipped mid-sweep (re-capture the affected
+    # terms), where a single wrong store means the whole sweep was in the wrong basis.
+    $why = ('the sweep straddles {0} stores (ids {1}) - one file names one store, and a session that flipped mid-sweep has some rows in each basis.' -f $distinct.Count, (@($distinct) -join '; '))
+  } elseif ($wrong.Count) {
+    $why = ('the rows were read at storeId {0} ("{1}"{2}), not the sanctioned {3} "{4}" {5}. These are real prices in the WRONG BASIS - the 2026-08-27 and 2026-09-12 quarantines are both this shape. Quarantine this file, switch the store, and re-capture.' -f
+      $wrong[0].id, $wrong[0].store, $(if ($wrong[0].zip) { ' ' + $wrong[0].zip } else { '' }), $Sanctioned.id, $Sanctioned.label, $Sanctioned.zip)
+  }
+
+  $store = ''; $id = ''; $zip = ''
+  if (-not $why) { $store = $stores[0].store; $id = $stores[0].id; $zip = $stores[0].zip }
+  return @{ lines = $kept.ToArray(); store = $store; id = $id; zip = $zip
+            rows = $total; page_rows = $pageRows; groups = $stores.ToArray(); refuse = $why }
+}
+
+function Get-WalmartSource {
+  <# The `source` stamp, written from the store line the capture actually carried. The wording the
+     literal always had, so old files and new ones read as one shape - the only difference is that
+     the store named in it was READ. #>
+  param([string]$Store, [string]$Id, [string]$Zip, [switch]$Unrecorded)
+  $where = if ($Unrecorded) {
+    'store NOT RECORDED in the capture - it predates the #tc-store line, built under -WaiveMissingStoreLine, so the basis of these rows rests on whoever captured them'
+  } else {
+    ('storeId {0} {1}{2}, read from the capture' -f $Id, $Store, $(if ($Zip) { ' ' + $Zip } else { '' }))
+  }
+  return ('walmart.com in-page __NEXT_DATA__ priceDetails.priceLines (' + $where + '); built by build-walmart-deals.ps1, every row verified to reproduce Walmart''s own unitPrice through compare-deals'' real Get-UnitPrice.')
+}
+
+function Read-WalmartCapture {
+  <# The capture exactly as the build consumes it: the store line split off and ruled on FIRST, then
+     the rows read through capture-lib. One function, so the self-test drives the path the build runs
+     rather than a copy of it. Returns data and prints NOTHING; a refusal comes back in .refuse. #>
+  param([string]$Path, $Sanctioned, [switch]$WaiveMissingStoreLine)
+  if ($Sanctioned.refuse) { return @{ refuse = $Sanctioned.refuse; cs = $null; raw = @(); waived = $false } }
+  $lines = Get-Content -LiteralPath $Path -Encoding UTF8
+  $cs = Split-WalmartCaptureStore -Lines $lines -Sanctioned $Sanctioned
+  # Waives the MISSING line only, and only when there is no store line at all to disagree with. The
+  # text it keys on is pinned by this file's own self-test ('no #tc-store line').
+  $waived = [bool]($WaiveMissingStoreLine -and $cs.refuse -and $cs.rows -eq 0 -and $cs.refuse.Contains('carries no #tc-store line'))
+  if ($cs.refuse -and -not $waived) { return @{ refuse = $cs.refuse; cs = $cs; raw = @(); waived = $false } }
+  $tmp = Join-Path $env:TEMP ('bw-capture-clean-' + [guid]::NewGuid().ToString('N') + '.csv')
+  try {
+    Set-Content -LiteralPath $tmp -Value $cs.lines -Encoding UTF8
+    $read = Import-CaptureCsv -Path $tmp -Delimiter '|'
+  } finally { Remove-Item -LiteralPath $tmp -Force -ErrorAction SilentlyContinue }
+  # assign, THEN wrap: an empty read comes back $null, and @($null) counts 1 ([[ps-null-count-is-one]])
+  $raw = if ($null -eq $read) { @() } else { @($read) }
+  return @{ refuse = ''; cs = $cs; raw = $raw; waived = $waived }
 }
 
 if ($SelfTest) {
@@ -345,13 +505,165 @@ if ($SelfTest) {
     foreach ($t in @($csvNew, $csvOld)) { if (Test-Path $t) { Remove-Item $t -Force -ErrorAction SilentlyContinue } }
   }
 
+  # ---- WHICH WALMART THE CAPTURE WAS READ AT (2026-09-12) -----------------------------------------
+  # The founding bug is two hand quarantines of clean, plausible, wrong-basis rows (414 on 2026-08-27,
+  # 380 on 2026-09-12), both read at storeId 3153 and both stamped "Omaha L St Supercenter 68137" by
+  # the literal that used to sit in the output block below. Split-WalmartCaptureStore's header has the
+  # account. Every fixture line here is a single-quoted literal assigned to its own variable, because
+  # a fixture built by concatenation inside a call binds as several arguments and runs on a fragment
+  # (.claude/rules/ops-and-gates.md).
+  $wmCols  = 'q|n|lp|up|id|was|rb|sel|ff'
+  $wmRow1  = 'applesauce|GoGo SqueeZ Applesauce Pouches, Apple Apple, 3.2 oz., 32 ct.|$15.98|$0.50/ea|111||0|Walmart.com|STORE'
+  $wmRow2  = 'cucumbers|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|222||0|Walmart.com|STORE'
+  $wmLSt   = '#tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=2'
+  $wm3153  = '#tc-store store="Omaha S 167th St Neighborhood Market" id="3153" zip="68135" read="response" rows=2'
+  $wmPage  = '#tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="page" rows=2'
+  $wmUnrec = '#tc-store store="UNRECORDED" id="UNRECORDED" zip="" read="UNRECORDED" rows=2'
+  $wmZip   = '#tc-store store="Omaha L St Supercenter" id="5361" zip="68135" read="response" rows=2'
+  $wmOther = '#tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=1'
+  $wmSecond= '#tc-store store="Omaha S 167th St Neighborhood Market" id="3153" zip="68135" read="response" rows=1'
+  $wmJunk  = '#tc-store Omaha L St Supercenter 5361'
+  $wmUtf8  = New-Object System.Text.UTF8Encoding($false)
+  $wmDir   = Join-Path $env:TEMP ('bw-store-fix-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $wmDir -ErrorAction Stop | Out-Null
+  $wmN = 0
+  function _WmCapture($lines) {
+    $script:wmN++
+    $p = Join-Path $script:wmDir ('cap-' + $script:wmN + '.csv')
+    [IO.File]::WriteAllText($p, (($lines) -join "`n"), $script:wmUtf8)
+    return $p
+  }
+  try {
+    $wmSanct = Get-WalmartSanctionedStore $root
+    if (-not $wmSanct.refuse -and $wmSanct.id -and $wmSanct.zip) {
+      Write-Output ("ok    the sanctioned store comes from stores.json, not a literal -> storeId $($wmSanct.id) $($wmSanct.label) $($wmSanct.zip)")
+    } else { Write-Output ("FAIL  stores.json -> Walmart -> store_identity did not resolve: $($wmSanct.refuse)"); $fail++ }
+
+    # THE MIRROR. pull-walmart-instore.js cannot read stores.json (a browser console has no
+    # filesystem), so it carries the sanctioned store as a constant. This is what makes that
+    # duplication safe - the same job audit-pull-profiles.ps1 does for the pacing numbers.
+    $wmJs = Join-Path $root 'pull-walmart-instore.js'
+    $wmJsTxt = if (Test-Path $wmJs) { [IO.File]::ReadAllText($wmJs) } else { '' }
+    $wmJsM = [regex]::Match($wmJsTxt, ('WALMART_' + 'SANCTIONED_STORE\s*=\s*\{\s*id:\s*''([^'']+)''\s*,\s*zip:\s*''([^'']+)''\s*,\s*label:\s*''([^'']+)'''))
+    if ($wmJsM.Success -and $wmJsM.Groups[1].Value -eq $wmSanct.id -and $wmJsM.Groups[2].Value -eq $wmSanct.zip -and $wmJsM.Groups[3].Value -eq $wmSanct.label) {
+      Write-Output 'ok    the agent''s mirrored sanctioned store agrees with stores.json'
+    } elseif (-not $wmJsM.Success) {
+      Write-Output 'FAIL  pull-walmart-instore.js carries no WALMART_SANCTIONED_STORE constant to check - the agent can no longer refuse a wrong-store sweep'; $fail++
+    } else {
+      Write-Output ("FAIL  MIRROR DRIFT: the agent says id=$($wmJsM.Groups[1].Value) zip=$($wmJsM.Groups[2].Value) label='$($wmJsM.Groups[3].Value)', stores.json says id=$($wmSanct.id) zip=$($wmSanct.zip) label='$($wmSanct.label)'"); $fail++
+    }
+
+    # MUST FIRE - the founding bug. A 3153 capture must be REFUSED, whole.
+    $cap3153 = Read-WalmartCapture -Path (_WmCapture @($wm3153, $wmCols, $wmRow1, $wmRow2)) -Sanctioned $wmSanct
+    if ($cap3153.refuse -and $cap3153.refuse -match '3153' -and $cap3153.refuse -match '5361' -and $cap3153.refuse -match 'WRONG BASIS' -and $cap3153.raw.Count -eq 0) {
+      Write-Output 'ok    MUST FIRE  a capture read at storeId 3153 is REFUSED, naming both stores and the basis'
+    } else { Write-Output ("FAIL  MUST FIRE: a 3153 capture was not refused properly - rows=$($cap3153.raw.Count) refusal=[$($cap3153.refuse)]"); $fail++ }
+
+    # CLEAN TWIN - a sanctioned capture still builds, and builds IDENTICALLY. The store line changes
+    # the provenance and must change nothing about a single row: the same two rows read with the line
+    # and without it (waived) go through Build-Row to byte-identical output.
+    $capLSt = Read-WalmartCapture -Path (_WmCapture @($wmLSt, $wmCols, $wmRow1, $wmRow2)) -Sanctioned $wmSanct
+    $capOld = Read-WalmartCapture -Path (_WmCapture @($wmCols, $wmRow1, $wmRow2)) -Sanctioned $wmSanct -WaiveMissingStoreLine
+    $rowsNewJson = ($capLSt.raw | ForEach-Object { (Build-Row $_).row } | ConvertTo-Json -Depth 5 -Compress)
+    $rowsOldJson = ($capOld.raw | ForEach-Object { (Build-Row $_).row } | ConvertTo-Json -Depth 5 -Compress)
+    if (-not $capLSt.refuse -and $capLSt.raw.Count -eq 2 -and $capLSt.cs.id -eq '5361' -and $capLSt.cs.store -eq 'Omaha L St Supercenter') {
+      Write-Output 'ok    CLEAN TWIN  a sanctioned capture is read, and the store it names is the one it was read at'
+    } else { Write-Output ("FAIL  CLEAN TWIN: a 5361 capture did not read cleanly - rows=$($capLSt.raw.Count) id='$($capLSt.cs.id)' refusal=[$($capLSt.refuse)]"); $fail++ }
+    if ($rowsNewJson -and [string]::Equals($rowsNewJson, $rowsOldJson, [StringComparison]::Ordinal)) {
+      Write-Output 'ok    CLEAN TWIN  the store line changes the provenance and NOT one priced row (identical Build-Row output with and without it)'
+    } else { Write-Output 'FAIL  CLEAN TWIN: the store line changed the built rows'; $fail++ }
+
+    # ...and the stamp is the half that moved. It must name the store that was read, and say so
+    # honestly when there was none - never fall back to the literal this change removed.
+    $srcNew = Get-WalmartSource -Store $capLSt.cs.store -Id $capLSt.cs.id -Zip $capLSt.cs.zip
+    $srcOld = Get-WalmartSource -Store '' -Id '' -Zip '' -Unrecorded
+    if ($srcNew -match 'storeId 5361' -and $srcNew -match 'read from the capture' -and
+        $srcOld -match 'NOT RECORDED' -and $srcOld -notmatch '5361' -and $srcOld -notmatch 'L St') {
+      Write-Output 'ok    the source stamp names the store READ, and a store-less capture is stamped NOT RECORDED rather than L St'
+    } else { Write-Output ("FAIL  source stamp: new=[$srcNew] old=[$srcOld]"); $fail++ }
+
+    # MUST FIRE - the four refusals, one case each.
+    foreach ($wmC in @(
+      @{ l = @($wmCols, $wmRow1, $wmRow2);                        want = 'no #tc-store line';        name = 'a capture with no store line at all' },
+      @{ l = @($wmUnrec, $wmCols, $wmRow1, $wmRow2);              want = 'UNRECORDED';               name = 'rows persisted by an agent that kept no store' },
+      @{ l = @($wmOther, $wmSecond, $wmCols, $wmRow1, $wmRow2);   want = 'straddles 2 stores';       name = 'a sweep that straddled two stores' },
+      @{ l = @($wmJunk, $wmCols, $wmRow1, $wmRow2);               want = 'does not parse';           name = 'a store line we cannot read' },
+      @{ l = @($wmZip, $wmCols, $wmRow1, $wmRow2);                want = 'WRONG BASIS';              name = 'the sanctioned id under another postal code' }
+    )) {
+      $c = Read-WalmartCapture -Path (_WmCapture $wmC.l) -Sanctioned $wmSanct
+      if ($c.refuse -and $c.refuse -match [regex]::Escape($wmC.want) -and $c.raw.Count -eq 0) {
+        Write-Output ("ok    MUST FIRE  " + $wmC.name + " is refused (" + $wmC.want + ")")
+      } else { Write-Output ("FAIL  MUST FIRE: " + $wmC.name + " was not refused - rows=$($c.raw.Count) refusal=[$($c.refuse)]"); $fail++ }
+    }
+
+    # MUST NOT FIRE - a read="page" group is a marked blind spot, not a defect. Refusing it would
+    # retire the lane the first time a /search payload stops carrying its own store block.
+    $capPage = Read-WalmartCapture -Path (_WmCapture @($wmPage, $wmCols, $wmRow1, $wmRow2)) -Sanctioned $wmSanct
+    if (-not $capPage.refuse -and $capPage.cs.page_rows -eq 2 -and $capPage.cs.rows -eq 2) {
+      Write-Output 'ok    MUST NOT FIRE  a read="page" capture builds, and its rows are COUNTED as attributed rather than proven'
+    } else { Write-Output ("FAIL  a read=page capture was refused or miscounted - page_rows=$($capPage.cs.page_rows) of $($capPage.cs.rows) refusal=[$($capPage.refuse)]"); $fail++ }
+
+    # MUST NOT FIRE - an operator following the old runbook prepends a column header to output that
+    # now carries its own. The second copy must not become a row.
+    $capDup = Read-WalmartCapture -Path (_WmCapture @($wmCols, $wmLSt, $wmCols, $wmRow1, $wmRow2)) -Sanctioned $wmSanct
+    if (-not $capDup.refuse -and $capDup.raw.Count -eq 2) {
+      Write-Output 'ok    MUST NOT FIRE  a duplicated column header is dropped, not read as a product'
+    } else { Write-Output ("FAIL  duplicate column header: rows=$($capDup.raw.Count) refusal=[$($capDup.refuse)]"); $fail++ }
+
+    # MUST FIRE - the waiver is for a MISSING line only. A present-but-wrong one is refused with it.
+    $capW3153 = Read-WalmartCapture -Path (_WmCapture @($wm3153, $wmCols, $wmRow1, $wmRow2)) -Sanctioned $wmSanct -WaiveMissingStoreLine
+    if ($capW3153.refuse -and $capW3153.refuse -match '3153') {
+      Write-Output 'ok    MUST FIRE  -WaiveMissingStoreLine still refuses a store line that names the wrong store'
+    } else { Write-Output ("FAIL  -WaiveMissingStoreLine waived a 3153 capture: refusal=[$($capW3153.refuse)]"); $fail++ }
+    if ($capOld.waived -and $capOld.raw.Count -eq 2) {
+      Write-Output 'ok    CLEAN TWIN  -WaiveMissingStoreLine reads a pre-2026-09-12 capture''s rows'
+    } else { Write-Output ("FAIL  -WaiveMissingStoreLine did not read a store-less capture: rows=$($capOld.raw.Count)"); $fail++ }
+
+    # MUST FIRE - a registry that cannot name the sanctioned store must REFUSE, never default. A
+    # default here is the literal coming back in another costume.
+    $wmBadReg = Join-Path $wmDir 'reg-nostore'
+    New-Item -ItemType Directory -Path $wmBadReg -ErrorAction Stop | Out-Null
+    [IO.File]::WriteAllText((Join-Path $wmBadReg 'stores.json'), '{"stores":[{"name":"Walmart","pull_profile":{}}]}', $wmUtf8)
+    $wmNo = Get-WalmartSanctionedStore $wmBadReg
+    $capNoReg = Read-WalmartCapture -Path (_WmCapture @($wmLSt, $wmCols, $wmRow1)) -Sanctioned $wmNo
+    if ($wmNo.refuse -and -not $wmNo.id -and $capNoReg.refuse -and $capNoReg.raw.Count -eq 0) {
+      Write-Output 'ok    MUST FIRE  a registry with no store_identity refuses the build instead of assuming a store'
+    } else { Write-Output ("FAIL  a registry with no store_identity did not refuse: id='$($wmNo.id)' refusal=[$($wmNo.refuse)] cap=[$($capNoReg.refuse)]"); $fail++ }
+  } finally {
+    Remove-Item -LiteralPath $wmDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
 # ---------------------------------------------------------------- build
 if (-not $In -or -not (Test-Path $In)) { throw "${Me}: -In not found: $In" }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
-$raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
+# THE STORE LINE IS RULED ON FIRST, then the rows are read through capture-lib, all inside
+# Read-WalmartCapture so the self-test drives this exact path. Split-WalmartCaptureStore's header says
+# why a capture that cannot name its store is refused rather than built and flagged.
+$wmStore = Get-WalmartSanctionedStore $root
+$cap = Read-WalmartCapture -Path $In -Sanctioned $wmStore -WaiveMissingStoreLine:$WaiveMissingStoreLine
+if ($cap.refuse) {
+  throw ("${Me}: REFUSING " + (Split-Path $In -Leaf) + ' - ' + $cap.refuse + ' Nothing was written.')
+}
+if ($cap.waived) {
+  Write-Warning ("${Me}: this capture carries NO store line (it predates 2026-09-12) and -WaiveMissingStoreLine was passed. Its rows are built, and its `source` says the store was never recorded - it does NOT claim the sanctioned store.")
+} else {
+  Write-Output ("${Me}: store READ at capture: storeId {0} {1} {2}" -f $cap.cs.id, $cap.cs.store, $cap.cs.zip)
+  # SPOKEN, NOT SILENT. A row whose own /search response carried no store block is attributed to the
+  # store read when the sweep started, so a mid-sweep flip could not have been seen for it. That is a
+  # known blind spot and it is stated here with its denominator rather than left to be inferred.
+  if ($cap.cs.page_rows -gt 0) {
+    Write-Warning ("${Me}: {0} of {1} row(s) carry read=""page"" - their own response named no store, so they are attributed to the store read at assert time. A mid-sweep flip would not have been visible for those rows." -f $cap.cs.page_rows, $cap.cs.rows)
+  }
+}
+$raw = $cap.raw
+# FLAGGED, NOT REFUSED: the store line counts the rows the page wrote under it. A different count means
+# rows were added to or lost from the file after the page wrote it - a hand edit or a truncated post.
+if (-not $cap.waived -and $cap.cs.rows -ne $script:CaptureRowsRead) {
+  Write-Warning ("${Me}: the store line accounts for {0} row(s) and the capture holds {1}. Rows were added to or lost from the file after the page wrote it; the store named is still the one the page read." -f $cap.cs.rows, $script:CaptureRowsRead)
+}
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled field(s) on ingest (UTF-8 read as ANSI upstream)") }
 if ($script:CapturePlaceholderCount -gt 0) { Write-Output ("  dropped $($script:CapturePlaceholderCount) vendor placeholder row(s) at ingest ($($script:CapturePlaceholderPct)% of what was read)") }
 if ($script:CaptureIngestWarning) { Write-Output ("  " + $script:CaptureIngestWarning) }
@@ -400,7 +712,10 @@ $outFile = Join-Path $outDir ("walmart-regular-$Date.json")
   store      = "Walmart"
   week_of    = $Date
   price_type = 'everyday'
-  source     = 'walmart.com in-page __NEXT_DATA__ priceDetails.priceLines (Omaha L St Supercenter 68137); built by build-walmart-deals.ps1, every row verified to reproduce Walmart''s own unitPrice through compare-deals'' real Get-UnitPrice.'
+  # THE STORE THE CAPTURE SAYS IT READ, never a literal. Until 2026-09-12 this line named
+  # "Omaha L St Supercenter 68137" whatever the rows were captured at, which is why two 3153 sweeps
+  # had to be caught by a human - see Split-WalmartCaptureStore's header.
+  source     = (Get-WalmartSource -Store $cap.cs.store -Id $cap.cs.id -Zip $cap.cs.zip -Unrecorded:$cap.waived)
   captured   = $Date
   # HOW COMPREHENSIVE was this pull? Distinct search terms in the raw capture. A full worklist pull runs ~400+
   # terms (commodity-search.json holds 447); a PerimeterX-throttled partial runs ~50. Deal COUNT cannot tell

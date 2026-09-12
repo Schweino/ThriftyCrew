@@ -76,10 +76,12 @@ real one, which is both fuller and more restricted.
      (window.__tcRun = ...) and POLLED, never awaited in one call. Do not try to return the CSV
      through the tool output either: it truncates around 1 KB, so a 40-60 KB sweep would need ~60
      round trips per store and still risk a partial read. That is what the sink is for.
-Also: sweepToCsv does not emit a header row and every builder needs one - q|n|lp|up|id|was|rb|sel|ff for
-Walmart, q|n|lp|up|id|was for Sam's, id|term|name|prices|unit|size|href for Aldi. Keep prepending Aldi's too:
-its emitter now also writes one under a #tc-store store line, build-aldi-regular drops the duplicate, and an
-older copy of the emitter writes none.
+Also: sweepToCsv does not emit a header row and every builder needs one - q|n|lp|up|id|was for Sam's.
+ALDI AND WALMART NOW WRITE THEIR OWN (aldiSearchToCsv since 2026-09-10, walmartSweepToCsv since
+2026-09-12): their output opens with a #tc-store line naming the store each row was READ at, then its
+own copy of the column header. POST BOTH UNALTERED. Keep prepending Aldi's header anyway - the builder
+drops the duplicate and an older copy of the emitter writes none - but never prepend anything ABOVE a
+#tc-store line and never strip one: both builders REFUSE a capture that cannot name its store.
 
 STEP ZERO - MAKE SURE THE 0800 CHAIN HAS FINISHED. You run at 09:00, and the 0800 task's downstream
 chain (compare -> guards -> publish -> commit) measured 08:12-08:43 on 2026-08-22 - 31 minutes. It
@@ -228,6 +230,22 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     Then: build-aldi-regular.ps1 -In <that> -Date <date>
 
   WALMART (everyday). fetch('/search?q=<term>') from a walmart.com tab, parse <script id="__NEXT_DATA__">.
+    ASSERT THE STORE FIRST, AND IT IS NOT OPTIONAL (2026-09-12). Walmart prices ARE the local store's,
+    which is the reason the store matters and not a reason to skip it. Brad's session has drifted to
+    storeId 3153 "Omaha S 167th St Neighborhood Market" twice, and both times this agent captured real,
+    clean, plausible rows at it - 414 on 2026-08-27, 380 on 2026-09-12 - which a human caught by reading
+    the page header, and which had to be quarantined by hand. The board's basis is storeId 5361, Omaha
+    L St Supercenter 68137 (Brad's ruling, grocery\out\walmart-store-ruling-2026-08-28.json, mirrored in
+    stores.json -> Walmart -> store_identity). The ID is the discriminator: 3153 is an Omaha address too,
+    so any test on the word "Omaha" passes the wrong store.
+    walmartIdentity() now READS storeId from __NEXT_DATA__ and THROWS on anything else, and walmartProbe
+    re-reads it from every /search response - a session can be flipped mid-sweep, and a term whose
+    response names another store settles UNUSABLE rather than MATCHES. If it refuses: SWITCH THE STORE
+    in Brad's Chrome (that is yours to do, Brad 2026-08-28) and re-run; do not re-escalate the ruling.
+    STILL OWED: 15 of the 23 terms in grocery\out\walmart-store-ruling-2026-08-28.json. Eight were
+    recaptured at L St on 2026-09-12 (fresh rhubarb, apples, apple juice, applesauce, apple cider
+    vinegar, alfredo sauce, aluminum foil, acorn squash); the call_cap of 25/day stopped the rest. Put
+    the remaining 15 at the head of the first Walmart worklist; after that the ruling is discharged.
     The price shape is FLAT STRINGS: priceInfo.linePrice "$1.74", priceInfo.unitPrice "2.7 c/fl oz".
     The older nested shape (currentPrice.price / priceDetails.priceLines[0].price) may still appear -
     read both. lp MUST reach the CSV as "$x.xx"; the builder rejects a bare number as "no linePrice".
@@ -246,7 +264,14 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     EMIT EMPTY RATHER THAN GUESSING. If a node has no sellerName or no fulfillmentType, write the field
     EMPTY. Empty means unknown and every consumer admits the row; it must never be filled with a default,
     because "" and "SHIP" are about to mean opposite things.
-    Pace 3500ms +/- 2000. Emit q|n|lp|up|id|was|rb|sel|ff -> out\captures\walmart-capture-<date>.csv
+    Pace 3500ms +/- 2000. Post walmartSweepToCsv()'s output UNALTERED ->
+    out\captures\walmart-capture-<date>.csv. It opens with
+    #tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=<n> - the store
+    each row was READ at - and its own q|n|lp|up|id|was|rb|sel|ff header, which the builder drops if you
+    prepend a second one. read="page" marks rows whose own response carried no store block. build-walmart-deals
+    writes `source` from that line instead of the literal it carried until 2026-09-12, and REFUSES a capture
+    with no store line, an UNRECORDED one, one read at any store but 5361/68137, or one that straddles two
+    stores. Never hand-assemble this file or strip that line.
     Then: build-walmart-deals.ps1 -In <that> -Date <date>
 
   SAM'S CLUB (everyday, only if 0800 failed). fetch('/s/<term>'), same __NEXT_DATA__ approach.

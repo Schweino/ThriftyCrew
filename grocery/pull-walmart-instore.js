@@ -11,10 +11,27 @@
   nothing to tune, and without the three-state verdict a blocked search is indistinguishable from a
   store that does not carry the item.
 
-  Walmart has NO store toggle to assert -- prices are already the local store's -- so the identity
-  check here is narrower than Fareway's or Aldi's: it only confirms we are on walmart.com and NOT
-  already sitting on the interstitial. That asymmetry is deliberate; do not add a fake store assert
-  to make the four agents look uniform.
+  *** THE STORE IS READ, AND IT COST TWO HAND QUARANTINES TO GET HERE (2026-09-12) ***
+  This header used to say "Walmart has NO store toggle to assert -- prices are already the local
+  store's -- so the identity check here is narrower than Fareway's or Aldi's", and called that
+  asymmetry deliberate. The first half was true and the conclusion was wrong: "prices are already
+  the local store's" is exactly why the store matters. Brad's session drifted to storeId 3153
+  ("Omaha S 167th St Neighborhood Market") and this agent captured real, clean, plausible prices at
+  it TWICE -- 414 rows on 2026-08-27 and 380 rows on 2026-09-12 -- and both times the only thing
+  that noticed was a human reading the page header against a memory. Both had to be quarantined by
+  hand. The board's sanctioned basis is storeId 5361, the L St Supercenter 68137 (Brad's ruling,
+  grocery/out/walmart-store-ruling-2026-08-28.json), and 3153 is a smaller-assortment Neighborhood
+  Market, so a NOT-CARRIED ruled there is false and a price read there is the right number in the
+  wrong basis -- the hardest error to find later, because every figure still looks fine.
+
+  So the store is READ from __NEXT_DATA__, at identity-assert time AND from every /search response,
+  and it travels on every row (st/si/sz/sr) into a #tc-store line at the head of the capture. The
+  per-response read is not belt-and-braces: pull-aldi-instore.js asserts per TERM because a session
+  really does get flipped mid-sweep, and a sweep that asserts once cannot tell a flip from a clean
+  run. A term whose response reads a different store records UNUSABLE rather than MATCHES, so the
+  wrong-basis rows are never written at all, and build-walmart-deals.ps1 refuses a capture that
+  cannot name its store. Switching the store back IS this agent's to do (Brad, 2026-08-28, in
+  memory walmart-session-store-3153-drift) -- through his own Chrome, before capturing.
 
   PRICE SHAPE: priceInfo.priceDetails.priceLines is Walmart's own structure (see stores.json capture
   note). Read the current price, and keep the unit price where Walmart states one -- it is the
@@ -35,7 +52,75 @@ const WALMART_WALL_PHRASES = [
   'access denied', 'unusual traffic', 'px-captcha',
 ];
 
-/** Walmart has no store selector to assert - only confirm the origin and that we are not already walled. */
+/*
+  THE SANCTIONED STORE, MIRRORED. grocery/stores.json -> Walmart -> store_identity is canonical (it
+  carries Brad's ruling and the drifted store it exists to refuse); a browser console cannot read a
+  file, so this is a mirror, and build-walmart-deals.ps1's self-test FAILS when the two disagree -
+  the same discipline audit-pull-profiles.ps1 applies to the pacing constants above, and for the same
+  reason: a duplicated constant is the class where a shared-source fix ships nothing.
+  The id is what discriminates. "Omaha" does not: 3153 is an Omaha address too.
+*/
+const WALMART_SANCTIONED_STORE = { id: '5361', zip: '68137', label: 'Omaha L St Supercenter' };
+
+/*
+  WHICH STORE THIS PAYLOAD IS PRICED FOR.
+  The documented path is __NEXT_DATA__ pageMetadata.location.storeId (the 2026-08-28 ruling file
+  names it, and the operator read 5361/68137/"Omaha L St Supercenter" there on 2026-09-12). It is
+  read by WALKING for it rather than by that one path, for the reason this file's price extractor
+  already gives three times over: Walmart has moved the shape of its payload under us repeatedly,
+  and a single hard path that stops resolving returns undefined, which reads as "no store" and not
+  as "we have gone blind".
+
+  Candidates are SCORED, because more than one node can carry a storeId (an item's availability
+  block does) and the one we want is the page's own location. Highest score wins; if two different
+  storeIds tie at the top the answer is AMBIGUOUS, which is never the sanctioned id and so is
+  refused downstream rather than resolved by a guess.
+*/
+function walmartStoreFromData(data) {
+  const found = [];                                   // { id, zip, label, score }
+  (function walk(node, key, depth) {
+    if (!node || typeof node !== 'object' || depth > 14) return;
+    if (Array.isArray(node)) { for (const v of node) walk(v, key, depth + 1); return; }
+    const id = node.storeId ?? node.store_id;
+    if (id != null && id !== '' && (typeof id === 'number' || typeof id === 'string')) {
+      const zip = node.postalCode ?? node.postal_code ?? node.zipcode ?? node.zip ?? '';
+      const label = node.displayName ?? node.name ?? node.storeName ?? node.label ?? '';
+      let score = 1;
+      if (zip) score = 2;
+      if (zip && label) score = 3;
+      if (String(key).toLowerCase() === 'location' || String(key).toLowerCase() === 'store') score += 2;
+      found.push({ id: String(id).trim(), zip: String(zip).trim(), label: String(label).trim(), score: score });
+    }
+    for (const k of Object.keys(node)) walk(node[k], k, depth + 1);
+  })(data, '', 0);
+
+  if (!found.length) return null;
+  const top = found.reduce((a, b) => (b.score > a.score ? b : a), found[0]);
+  const rivals = new Set(found.filter(f => f.score === top.score).map(f => f.id));
+  if (rivals.size > 1) {
+    return { id: 'AMBIGUOUS', zip: '', label: 'payload names ' + rivals.size + ' stores at equal confidence (' + [...rivals].join(', ') + ')' };
+  }
+  return { id: top.id, zip: top.zip, label: top.label };
+}
+
+/** The same read against the page we are SITTING on, for the identity assert. */
+function walmartStoreFromDocument() {
+  const el = document.getElementById('__NEXT_DATA__');
+  if (!el) return null;
+  let data;
+  try { data = JSON.parse(el.textContent || ''); } catch (e) { return null; }
+  return walmartStoreFromData(data);
+}
+
+/* The store read when the sweep started. Every row falls back to it when its own /search response
+   carried no store block, and the capture says so (read="page") rather than implying otherwise. */
+let walmartAssertedStore = null;
+
+/**
+ * Confirm the origin, that we are not already walled, AND which store we are priced at.
+ * Throws on a store we cannot read or a store that is not the sanctioned one - a wrong-basis sweep
+ * is worse than no sweep, because its rows look right (see the header's two quarantines).
+ */
 function walmartIdentity() {
   if (!/(^|\.)walmart\.com$/.test(location.hostname)) {
     throw new Error(`REFUSING TO PULL: not on walmart.com (host is ${location.hostname}); fetch must be same-origin.`);
@@ -44,7 +129,22 @@ function walmartIdentity() {
   if (WALMART_WALL_PHRASES.some(p => body.includes(p))) {
     throw new Error('REFUSING TO PULL: this page is already the bot interstitial. Clear it in the UI first.');
   }
-  return { store: 'Walmart (local store pricing; no store toggle to assert)', host: location.hostname };
+  const where = walmartStoreFromDocument();
+  if (!where) {
+    throw new Error('REFUSING TO PULL: no storeId in this page\'s __NEXT_DATA__, so nothing here can say which store these prices are. Load a /search page in this tab and re-run; if a search page still carries no store block the payload shape has moved and walmartStoreFromData needs a look - do NOT capture blind.');
+  }
+  if (where.id !== WALMART_SANCTIONED_STORE.id) {
+    throw new Error('REFUSING TO PULL: this session is on storeId ' + where.id + ' (' + (where.label || 'unnamed') + (where.zip ? ' ' + where.zip : '') + '), not the sanctioned ' +
+      WALMART_SANCTIONED_STORE.id + ' ' + WALMART_SANCTIONED_STORE.label + ' ' + WALMART_SANCTIONED_STORE.zip +
+      '. Prices here are real and in the WRONG BASIS - the 2026-08-27 and 2026-09-12 quarantines are both this. Switch the store in this browser first (that is this agent\'s to do, Brad 2026-08-28), then re-run.');
+  }
+  walmartAssertedStore = { id: where.id, zip: where.zip || WALMART_SANCTIONED_STORE.zip, label: where.label || WALMART_SANCTIONED_STORE.label };
+  return {
+    store: 'Walmart storeId ' + walmartAssertedStore.id + ' - ' + walmartAssertedStore.label + ' ' + walmartAssertedStore.zip,
+    storeId: walmartAssertedStore.id,
+    postalCode: walmartAssertedStore.zip,
+    host: location.hostname,
+  };
 }
 
 async function walmartProbe(term) {
@@ -66,6 +166,57 @@ async function walmartProbe(term) {
 
   let data;
   try { data = JSON.parse(m[1]); } catch (e) { return { state: 'UNUSABLE', rows: [], why: 'nextdata-unparseable' }; }
+
+  /*
+    THE STORE, PER RESPONSE (2026-09-12). Read from THIS payload, not from the assert at the top of
+    the run: a session can be flipped mid-sweep, and the two quarantines in this file's header are
+    what a once-per-run assert cannot see. pull-aldi-instore.js asserts per term for the same reason.
+
+    A response that names a DIFFERENT store settles as UNUSABLE, never MATCHES. That is the whole
+    point: rows read in the wrong basis are not written at all, so build-walmart-deals never has to
+    decide about them. UNUSABLE also means runPacedSweep retries the term and sweepRemaining hands it
+    back, so nothing is silently dropped - the verdict ledger names the store it refused.
+
+    A response with NO store block falls back to the store read at assert time and is MARKED as such
+    (sr='page'). That fallback is deliberate and it is a known blind spot, not a claim: a flip would
+    be invisible for those rows. It is not silent - the rows carry read="page", the #tc-store line
+    groups them separately, and the builder says out loud how many were attributed that way. The
+    alternative, refusing every row whose response has no store block, would retire the whole lane
+    on a payload shape nobody has measured yet.
+  */
+  const respStore = walmartStoreFromData(data);
+  const asserted = walmartAssertedStore;
+  let where, readFrom;
+  if (respStore && respStore.id !== 'AMBIGUOUS') {
+    where = respStore; readFrom = 'response';
+    if (asserted && respStore.id !== asserted.id) {
+      return { state: 'UNUSABLE', rows: [],
+        why: 'store flipped mid-sweep: this response is priced for storeId ' + respStore.id + ' (' + (respStore.label || 'unnamed') + ') and the sweep asserted ' + asserted.id + ' (' + asserted.label + '). Refusing to record prices in the wrong basis - switch the store back and re-run this term.' };
+    }
+    /*
+      THE NAME IS NOT IN THE PAYLOAD, MEASURED (2026-09-12, live /search?q=anaheim peppers through
+      Brad's Chrome: HTTP 200, 876,030 bytes, 61 item nodes). The store block carries storeId and
+      postalCode and NO display name, while 130 item nodes carry storeId 0 - so the scoring above
+      picks the page location (score 4) over those (score 1), tie count 1, and the label comes back
+      empty. The capture line still has to be readable, so the NAME falls back to the store we
+      asserted - which is truthful exactly because a response naming a different ID was already
+      refused above. The ID and the ZIP are always the read ones; only the display name is borrowed.
+    */
+    const named = where.label ||
+      (asserted && asserted.id === where.id ? asserted.label : '') ||
+      (where.id === WALMART_SANCTIONED_STORE.id ? WALMART_SANCTIONED_STORE.label : 'name not in payload');
+    where = { id: where.id, zip: where.zip || (asserted && asserted.id === where.id ? asserted.zip : ''), label: named };
+  } else if (respStore && respStore.id === 'AMBIGUOUS') {
+    return { state: 'UNUSABLE', rows: [],
+      why: 'cannot say which store this response is priced for - ' + respStore.label + '. Refusing to record prices we cannot attribute.' };
+  } else if (asserted) {
+    where = asserted; readFrom = 'page';
+  } else {
+    // No store in the response and no assert to fall back on: walmartIdentity() was bypassed, which
+    // is how both quarantined captures happened. A row with no store is not a row worth keeping.
+    return { state: 'UNUSABLE', rows: [],
+      why: 'no store in this response and no asserted store to fall back on - walmartIdentity() never ran. Run the sweep through pullWalmartInStore, which asserts the store first.' };
+  }
 
   const rows = [];
   const seen = new Set();
@@ -219,6 +370,13 @@ async function walmartProbe(term) {
         rb: rb ? 1 : 0,
         sel: String(sel).replace(/[|\r\n]+/g, ' ').trim(),
         ff: String(ff).replace(/[|\r\n]+/g, ' ').trim().toUpperCase(),
+        // THE STORE TRAVELS WITH THE ROW, the way aldiSearchProbe puts st/md on each row. These do
+        // NOT become CSV columns - walmartSweepToCsv counts them off into the #tc-store header, so
+        // the 9-column positional contract build-walmart-deals has always read is untouched.
+        st: where.label,
+        si: where.id,
+        sz: where.zip,
+        sr: readFrom,
       });
     }
     for (const k of Object.keys(node)) walk(node[k], depth + 1);
@@ -265,9 +423,50 @@ const walmartAgent = {
 };
 
 const pullWalmartInStore    = (worklist, opts) => runPacedSweep(walmartAgent, worklist, opts);
-// q|n|lp|up|id|was|rb|sel|ff - the first five are the contract build-walmart-deals has always read
-// positionally; was/rb/sel/ff are appended so an older builder ignores them rather than mis-parsing.
-// sel/ff use `?? ''` and NOT a default: empty is the honest encoding of "the node did not say".
-const walmartSweepToCsv     = () => sweepToCsv(WALMART_STORAGE_KEY, p => [p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '', p.rb ?? 0, p.sel ?? '', p.ff ?? '']);
+/* q|n|lp|up|id|was|rb|sel|ff - the first five are the contract build-walmart-deals has always read
+   positionally; was/rb/sel/ff are appended so an older builder ignores them rather than mis-parsing.
+   sel/ff use `?? ''` and NOT a default: empty is the honest encoding of "the node did not say".
+
+   THE STORE TRAVELS WITH THE CAPTURE (2026-09-12), exactly as aldiSearchToCsv does it - that file's
+   header documents each decision and this is the same shape for the same reason. The output OPENS
+   with one line per distinct store the sweep actually read, counted off the st/si/sz/sr the probe put
+   on each row, then the column header:
+
+       #tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=774
+       q|n|lp|up|id|was|rb|sel|ff
+
+   A row with no store (persisted by an agent older than this) is counted as id="UNRECORDED" and is
+   never folded into a store it was not read at. read="page" marks rows attributed from the
+   identity-assert read because their own response carried no store block - see walmartProbe.
+   build-walmart-deals.ps1 refuses a capture with no store line, an UNRECORDED one, one that is not
+   the sanctioned store, or one that straddles two stores, and writes its `source` stamp from the
+   line instead of the literal it used to carry. The line holds no '|', so the pipe-splitting readers
+   of these files skip it as a short line. POST THIS OUTPUT UNCHANGED: it already has its column
+   header, so do not prepend a second one. */
+const WALMART_CAPTURE_COLUMNS = 'q|n|lp|up|id|was|rb|sel|ff';
+// The NUL strip is not decoration: it is the group key's separator below, and a store name carrying
+// one would split into the wrong number of fields.
+const walmartStoreField = s => String(s == null ? '' : s).replace(/["|\r\n\u0000]/g, ' ').replace(/\s+/g, ' ').trim();
+
+const walmartSweepToCsv = () => {
+  const res = JSON.parse(localStorage.getItem(WALMART_STORAGE_KEY) || '{}');
+  const out = [];
+  const stores = new Map();          // id + NUL + zip + NUL + label + NUL + read -> row count, first-read order
+  for (const [term, r] of Object.entries(res)) {
+    if (r.v !== 'MATCHES') continue;
+    for (const p of r.rows) {
+      const k = [walmartStoreField(p.si) || 'UNRECORDED', walmartStoreField(p.sz),
+                 walmartStoreField(p.st) || 'UNRECORDED', walmartStoreField(p.sr) || 'UNRECORDED'].join('\u0000');
+      stores.set(k, (stores.get(k) || 0) + 1);
+      out.push([term, p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '', p.rb ?? 0, p.sel ?? '', p.ff ?? ''].join('|'));
+    }
+  }
+  const head = [];
+  for (const [k, n] of stores.entries()) {
+    const [id, zip, label, read] = k.split('\u0000');
+    head.push('#tc-store store="' + label + '" id="' + id + '" zip="' + zip + '" read="' + read + '" rows=' + n);
+  }
+  return head.concat([WALMART_CAPTURE_COLUMNS], out).join('\n');
+};
 const walmartSweepVerdicts  = () => sweepVerdicts(WALMART_STORAGE_KEY);
 const walmartSweepRemaining = wl => sweepRemaining(WALMART_STORAGE_KEY, wl);

@@ -132,10 +132,15 @@ STORES = {
         "verdicts": "walmartSweepVerdicts",
         "storage_key": "TC_WALMART_SWEEP",
         "identity": "walmartIdentity()",
-        # The header the PowerShell builder parses with. sweepToCsv emits DATA ONLY - Import-Csv
-        # needs a header line or the first product row is eaten as one. Must match
-        # walmartSweepToCsv's cell order exactly: [term, n, lp, up, id, was, rb].
-        "csv_header": "q|n|lp|up|id|was|rb",
+        # The header the PowerShell builder parses with. Must match walmartSweepToCsv's cell order
+        # exactly: [term, n, lp, up, id, was, rb, sel, ff] - sel/ff arrived with the marketplace
+        # shelf signal on 2026-08-29 and this said seven columns until 2026-09-12, which the write
+        # path's own column check would have refused (Walmart is paused here, so it never fired).
+        # SINCE 2026-09-12 walmartSweepToCsv ALSO EMITS ITS OWN #tc-store line(s) and this header, so
+        # the write path below counts columns on the first DATA line and does not prepend a second
+        # copy. The store travels with the capture because Walmart prices are per-store; see that
+        # file's header for the two hand quarantines that cost.
+        "csv_header": "q|n|lp|up|id|was|rb|sel|ff",
         "capture": os.path.join("out", "captures", "walmart-capture-{date}.csv"),
         # BRAD'S RULE, 2026-08-22: "walmart can never be headless." (Now true of every store here -
         # see NEVER_HEADLESS_REASON below; kept on Walmart explicitly because he named it.)
@@ -170,12 +175,15 @@ STORES = {
         # job cannot do it and correctly reports it as outstanding on the browser flag.
         "paused": "captured through Brad's own Chrome (attended, like Aldi) - this driver's browser "
                   "gets price-less payloads, his does not",
-        # Walmart is the one store with nothing to assert: prices are already the local store's and
-        # there is no store toggle in the payload, so walmartIdentity() only proves we are on
-        # walmart.com and not already walled. Seeding is therefore about the SESSION (a warm,
-        # cookied profile is less wall-prone than a cold one), not about store selection.
+        # WALMART HAS A STORE TO ASSERT AFTER ALL (2026-09-12). This note used to say it was the one
+        # store with nothing to prove, "prices are already the local store's" - which is the reason
+        # the store matters, not a reason to skip it. walmartIdentity() now reads storeId from
+        # __NEXT_DATA__ and REFUSES anything but the sanctioned 5361, so seeding is about the session
+        # AND the store: a warm cookied profile on the wrong store captures plausible wrong-basis
+        # prices, which is exactly what had to be quarantined by hand twice.
         "seed_hint": "browse a couple of pages so the profile has a normal session, and set the "
-                     "pickup store to an Omaha store (Omaha L St Supercenter, 12850 L ST, 68137).",
+                     "store to Omaha L St Supercenter, 12850 L ST, 68137 (storeId 5361) - the "
+                     "agent refuses to sweep anywhere else, and 3153 is the drift it refuses.",
     },
     "samsclub": {
         "name": "Sam's Club",
@@ -978,8 +986,11 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
             # also saves on a keypress rather than on evidence: press Enter with the wrong store
             # selected and you have blessed the wrong store. Polling the agent's OWN assertIdentity()
             # means the marker is written because the page proved the Omaha store, not because a
-            # human said so. Walmart is the exception it cannot cover (nothing to assert), so that
-            # one gets a dwell instead - stated plainly rather than dressed up as verification.
+            # human said so. WALMART USED TO BE THE EXCEPTION THIS COULD NOT COVER ("nothing to
+            # assert", so it got the dwell and nothing else); since 2026-09-12 walmartIdentity()
+            # reads storeId from __NEXT_DATA__ and refuses anything but the sanctioned store, so
+            # seeding Walmart is now verified by the same poll as the rest. The loop never branched
+            # on store - only this note did.
             # INJECTED SCRIPTS DO NOT SURVIVE NAVIGATION, AND SEEDING IS ALL NAVIGATION.
             # Picking a store reloads the page (Fareway and Sam's both do a full navigation), which
             # wipes anything evaluated into the old document. A first version injected once before
@@ -1135,15 +1146,25 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
         header = cfg.get("csv_header")
         if not header:
             return False, f"no csv_header declared for {name} - refusing to write an unparseable capture"
-        cols = len(header.split("|"))
-        first = body.strip().split("\n")[0]
+        # AND AN EMITTER MAY NOW BRING ITS OWN (2026-09-12). walmartSweepToCsv writes one #tc-store
+        # line per store it read and then the column header itself, because the store a price was read
+        # at has to travel with the capture - Walmart prices are per-store, and two sweeps at the
+        # wrong store had to be quarantined by hand. So: the store lines are not rows and are not
+        # counted, and a body that already opens with the declared header does not get a second copy.
+        # The column count is still asserted, against the first real DATA line, because that is the
+        # check that catches a field-shifting drift.
+        lines = [ln for ln in body.strip().split("\n") if not ln.lstrip().startswith("#tc-store")]
+        own_header = bool(lines) and lines[0].strip() == header
+        data = lines[1:] if own_header else lines
+        first = data[0] if data else ""
         got = len(first.split("|"))
         if got != cols:
             return False, (f"capture shape drift: {cfg['to_csv']}() emits {got} columns but the declared "
                            f"header '{header}' names {cols}. Refusing to write - a mismatched header "
                            f"silently shifts every field rather than failing.")
         with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(header + "\n")
+            if not own_header:
+                fh.write(header + "\n")
             fh.write(body if body.endswith("\n") else body + "\n")
 
         summary = json.loads(summary_raw) if summary_raw else {}
@@ -1421,10 +1442,16 @@ def self_test(headless=False):
             if str(verdict).startswith("REFUSED"):
                 print(f"    ok    identity guard refuses an unseeded profile -> {verdict}")
             elif key == "walmart":
-                # Walmart's guard only asserts the origin (it has no store toggle), so NO-THROW is
-                # legitimate there and must not be reported as a failure.
-                print(f"    ok    identity guard reachable, returned {verdict} "
-                      f"(expected: Walmart has no store toggle to assert)")
+                # WALMART USED TO BE EXEMPTED HERE, and the exemption printed "ok ... expected:
+                # Walmart has no store toggle to assert" for any NO-THROW. Since 2026-09-12
+                # walmartIdentity() reads storeId from __NEXT_DATA__ and refuses anything but the
+                # sanctioned store, so a throwaway profile MUST refuse - a NO-THROW now means the
+                # store assert has stopped asserting, which is the state that produced two hand
+                # quarantines. It is the one store where this is a failure rather than a caution.
+                print(f"    FAIL  identity guard did NOT refuse an unseeded throwaway profile "
+                      f"({verdict}). Walmart's guard reads storeId from __NEXT_DATA__ and must "
+                      f"refuse a session that is not the sanctioned store.")
+                failures += 1
             else:
                 # AND FOR EVERY OTHER STORE, NO-THROW IS A CAUTION, NOT A PASS (2026-08-24). This
                 # line used to print the Walmart sentence for any store that did not refuse, which

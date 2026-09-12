@@ -204,7 +204,7 @@
         "retries": 3,
         "confidence": "proposed",
         "evidence": "2026-08-15: hit a Robot or human? wall during the weekly refresh. THE RATE THAT TRIGGERED IT WAS NEVER RECORDED - the sweep was an ad-hoc snippet with no instrumentation, so there is no before-number to compare against. Deliberately the most conservative of the four agents because Walmart has already walled us once at an unknown rate. Promote only on a CLEAN timing verdict.",
-        "identity_assert": "no store toggle (prices are already the local store's); assert origin is walmart.com and the page is not already the interstitial",
+        "identity_assert": "storeId read from __NEXT_DATA__ must be the sanctioned store in store_identity below, at assert time AND on every /search response (a session really does get flipped mid-sweep); plus origin is walmart.com and the page is not already the interstitial. Until 2026-09-12 this said 'no store toggle (prices are already the local store's)', which was the reasoning behind two hand quarantines - see store_identity.",
         "wall_signals": [
           "Robot or human?",
           "access denied",
@@ -213,6 +213,24 @@
           "403",
           "429"
         ]
+      },
+      "store_identity": {
+        "store_id": 5361,
+        "postal_code": "68137",
+        "label": "Omaha L St Supercenter",
+        "note": "Walmart prices ARE per-store, so this is the board's basis and not a preference. pull-walmart-instore.js mirrors it as WALMART_SANCTIONED_STORE (a browser console cannot read a file) and build-walmart-deals.ps1's self-test fails when the mirror and this block disagree - the same duplication discipline audit-pull-profiles.ps1 applies to the pacing numbers. The ID is what discriminates: 3153 is an Omaha address too, so any test on the word 'Omaha' passes the drifted store.",
+        "ruled": "2026-08-28 Brad: (a) RESTORE - L St 68137 stays canonical, recapture forward, no backfill audit. Corrected the same day: switching the store back IS the agent's to do, through Brad's own Chrome. Full ruling in out/walmart-store-ruling-2026-08-28.json.",
+        "drifted_to": {
+          "store_id": 3153,
+          "postal_code": "68135",
+          "label": "Omaha S 167th St Neighborhood Market",
+          "why_it_matters": "a smaller-assortment Neighborhood Market, so a NOT-CARRIED ruled there is false and a price read there is the right number in the wrong basis",
+          "hand_quarantines": [
+            "2026-08-27, 414 rows - out/captures/_sink/archive/walmart-quarantine-store3153-2026-08-27.*",
+            "2026-09-12, 380 rows - out/captures/_sink/archive/walmart-capture-2026-09-12.store3153-QUARANTINE.*"
+          ],
+          "closed": "2026-09-12 - the agent reads the store and refuses to sweep at 3153; the capture carries a #tc-store line and the builder refuses a file it cannot attribute"
+        }
       }
     }
   ],

@@ -55,6 +55,20 @@ is one copy of every rule and nothing here can drift from it.
   bulk seller. [[wrong-product-class-is-a-seller-shape]]
 - **One bad Walmart pull holds a ship-only cell for 90 days** once Marketplace rows enter the union.
   [[walmart-marketplace-rows-pollute-the-union]]
+- **A CAPTURE THAT CANNOT NAME ITS STORE IS REFUSED, at Walmart and at Aldi** (2026-09-12, Aldi
+  2026-09-10). Both emitters open their capture with a `#tc-store` line naming the store each row was
+  READ at, and both builders write `source` from that line instead of a literal. **Post the emitter's
+  output UNALTERED and never strip the line.** Walmart's `build-walmart-deals` refuses a capture with no
+  store line, an `UNRECORDED` one, one read anywhere but the sanctioned storeId (stores.json -> Walmart
+  -> `store_identity`, currently 5361 / 68137 on Brad's 2026-08-28 ruling), or one that straddles two
+  stores; `pull-walmart-instore.js` refuses to sweep at the wrong store at all and re-reads the store
+  from EVERY `/search` response, because a session flips mid-sweep. **The id is the discriminator, never
+  the word "Omaha"** - the drifted 3153 Neighborhood Market is an Omaha address too, which is why
+  414 rows on 2026-08-27 and 380 on 2026-09-12 read as perfectly normal and both had to be quarantined
+  by hand. Right prices in the wrong basis is the hardest defect here to find later.
+  **Aldi's OLA number is deliberately NOT pinned** and Walmart's storeId deliberately IS: that session
+  legitimately moves between Omaha Aldis, where one Walmart is ruled. What neither may do is claim a
+  store nobody read. [[walmart-session-store-3153-drift]], [[aldi-store-is-ola-42]]
 - **No hard-coded bands** (Brad, 2026-09-04). [[no-hardcoded-bands]]
 - **The boards are gitignored**, so a worktree, a CI runner or a clean checkout is BLIND here and the
   engines exit 0 having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them.
