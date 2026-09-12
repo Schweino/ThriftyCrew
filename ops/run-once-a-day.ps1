@@ -203,8 +203,13 @@ if ($SelfTest) {
     # wrapped (a3952ca0f). A new wrapped task fails the resolved-set case until it adds its own frozen row.
     # daemon-battery was BORN wrapped (2026-09-11), so it has no pre-wrap command: its row is the command its
     # definition was committed to hand the child, frozen here so a later edit to the XML must edit this too.
+    # daily-ratchets likewise, born wrapped at 88c7a835c (2026-09-12). Its row was NOT added with the task, and
+    # main was red for every checkout on the box until it was - both this case and the resolved-set case below
+    # failed, the latter reporting found=5 missing= against a frozen 4, which reads as a passing set until you
+    # notice the count is what is compared. That is the failure this comment exists to prevent a third time.
     $preWrap = @{
       'daemon-battery'   = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-daemon-battery.ps1"' }
+      'daily-ratchets'   = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-daily-ratchets.ps1"' }
       'brain-digest'     = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\brain-digest.ps1" -Alert -Quiet' }
       'recall-sleep'     = @{ Exe = 'C:\Codex\Python312\python.exe'; ArgLine = '"C:\Users\Owner\.claude\skills\recall-sleep.py" --cwd "C:\Codex\ThriftyCrew" --commit --push' }
       'capture-watchdog' = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-watchdog.ps1" -Alert' }
