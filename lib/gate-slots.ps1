@@ -136,7 +136,20 @@ $__gsSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-S
 # THE BUDGET. Brad's ruling, 2026-09-11: a fixed 10 across the machine. NOT a sweep and not derived from a
 # width curve - the measured curve (MEASURE-gate-cost-2026-09-09) has points at 16, 24 and 32 only, so what
 # a lone run costs at 10 is unmeasured here. Registered in docs\CONTROL-CONSTANTS.md.
-$script:TcGateSlotTotal = 10
+#
+# RAISED TO 24 (Brad, 2026-09-12). The wall clock of a gate run is its WORK divided by the width it gets, and at 10
+# machine-wide the width was the binding half: measured that morning, a warm run did 778 s of gate work and got
+# width 4, for 224 s wall, while the box - 32 logical processors - sat at 36% busy with 3 runs on it. Halving the
+# work by caching bought nothing, because the width halved with it. 24 leaves 8 processors for the capture lanes,
+# the daemons and the daily bot, which also live here.
+# NOT A SWEEP EITHER, and it is recorded as such: it is 3/4 of the processor count, chosen because the contention
+# was visible and the headroom was measured, not because 24 beat 16 and 32 on a curve. What it does when the
+# producer stops is nothing - it is a ceiling on concurrency, so an idle box simply uses less of it.
+# MIXED VERSIONS ARE SAFE. The slots are Global\ mutexes named by index, so a checkout still on 10 contends only
+# for 0-9 and never takes 10-23; the two budgets do not corrupt each other, and the box's true ceiling during a
+# rollout is whatever the newest checkout says. That is the same degrade-to-the-old-behaviour rule the push lock
+# takes, and for the same reason: this queue stands in front of every checkout on the box, most of them older.
+$script:TcGateSlotTotal = 24
 $script:TcGateSlotPrefix = 'Global\tc-gate-worker-slot-'
 # WHERE THE QUEUE LIVES. Per user, not per checkout: the slots are machine-wide Global\ mutexes and every session on
 # this box runs as one user, so every run-gates - any worktree, any clone - must see one queue. Not %TEMP%: this is a
