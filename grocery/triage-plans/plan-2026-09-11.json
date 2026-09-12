@@ -2,7 +2,7 @@
   "generated": "2026-09-11T10:32:00",
   "round": 1,
   "board_week": "comparison-2026-09-09 (built 2026-09-11 08:11:25; HEAD at dispatch 930195deb3ec9ad207b16ef0eb98ce633de227c7)",
-  "queue_ids_seen": ["2026-09-11-220094", "2026-09-10-4ac6ae", "2026-09-11-3b246c", "2026-09-11-62b248", "2026-09-10-fa6ad6", "2026-09-11-18da92"],
+  "queue_ids_seen": ["2026-09-11-220094", "2026-09-10-4ac6ae", "2026-09-11-3b246c", "2026-09-11-62b248", "2026-09-10-fa6ad6", "2026-09-11-18da92", "2026-09-11-d7dc8f"],
   "routing_artifact": "plan-2026-09-11.routing.json",
   "items": [
     {
@@ -32,7 +32,7 @@
       "leaves_open": "the type 'test-auditors red' is a bucket: 5 prior closes in 30 days were 5 different blindness shapes (a recipe-repair display matcher 08-22, a transient orphan 08-30, a fixture copied without its sibling libs 08-31, a hygiene drift 09-04, a CRLF end marker 09-07) and only today's is text-sweep-over-fixture; this source does not touch the other four, and sweeps outside grocery/ (ops/audit-fixture-inputs.ps1, whose gate is the subject of the foreign draft grocery/INCIDENT-2026-09-11-ops-audit-fixture-inputs-ps1-went-red-4-times-in.md) are not converted here",
       "leaves_open_occurrences": 5,
       "leaves_open_window": "30 days (2026-08-22 to 2026-09-11), the 5 prior closes of this type",
-      "leaves_open_followup": null,
+      "leaves_open_followup": "2026-09-11-935ce3",
       "prior_closes": ["2026-08-22-7e1db7", "2026-08-30-b9d48f", "2026-08-31-4b2f47", "2026-09-04-0b63d3", "2026-09-07-76ec7f"],
       "prevention": {
         "source": ["lib/production-text.ps1", "grocery/test-hyvee-tag-check.ps1", "grocery/test-guards.ps1", "grocery/test-auditors.ps1", "grocery/audit-store-registry.ps1"],
@@ -66,10 +66,10 @@
       "do_not_touch": ["pull-grocery-ads.ps1:199-224 (the fixture must stay a real retired-identity registry; splitting the literal would be the marker approach)", "the three patterns at test-hyvee-tag-check.ps1:112", "R19's selection in ops/prepush-test-auditors.ps1", "any known-failures record file"],
       "resolution_note": "Not a blind guard: test-hyvee-tag-check item 12 fired on pull-grocery-ads.ps1's own MUST FIRE fixture (line 207, inside if ($SelfTest), from a77ad8734), because the sweep reads production text and can only skip by file name or '#'. Fixed at the class: lib/production-text.ps1 returns only statements that run in production (AST-scoped, no marker), adopted by all 5 grocery text sweeps. R19's selection was measured and DOES reach this unit for a push touching pull-grocery-ads.ps1; the commit predated the pre-push check. test-auditors 702/702.",
       "publish_batch": 0,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": "true, re-verified on HEAD f66b52fe0 after dbd92279f moved the file: the three patterns match exactly ONE non-comment line across grocery/*.ps1 outside the skip list, pull-grocery-ads.ps1:216 (the plan said 207; the fixture line moved with that commit), and it sits inside the `if ($SelfTest) {` block opened at 200. lib/production-text.ps1 did not exist. The other four sweeps read production text as the plan described, except that audit-store-registry.ps1 already carried the AST rule as its own Test-InsideSelfTestClause (added 2026-09-10, queue 2026-09-10-483a9c).",
+      "deviation": "Two, both narrowing. (1) The rule was LIFTED, not written twice: audit-store-registry.ps1 already held the exact clause-scoping rule, so lib/production-text.ps1 carries that rule and audit-store-registry now calls it. Its LINE INPUT was deliberately NOT changed to production-only text: it reports a store-list literal inside a -SelfTest block only when other conditions hold too, and swapping its input would change what it reports without a measurement to back it, so the adoption there is the shared rule and nothing else. (2) test-auditors u009 scans .yml workflows as well as .ps1; only the .ps1 arm reads through Get-TcProductionText, because a .yml has no clause to scope and parsing one would be the fallback path every time. Added beyond the plan: item 12 is now a function (Get-RetiredIdentityPin) with a frozen fixture tree, so the sweep's own must-fire and must-not-fire run before the live scan. PROOF: lib/production-text.ps1 -SelfTest 10 of 10 cases, exit 0; test-hyvee-tag-check.ps1 exit 0 (HYVEE-TAG-CHECK PASSED, HYVEE-TAG-CHECK-COMPLETE failed=0); test-guards.ps1 -SelfTest exit 0; audit-store-registry.ps1 -SelfTest exit 0; test-auditors.ps1 exit 0, TEST-AUDITORS-COMPLETE pass=707 failed=0 hygiene=0 skipped=0 against 706/1 before, same 707 total, so no case was lost. ops/run-gates.ps1 was NOT run: the push herd had it at 28 to 49 minutes today and this lane does not push; the orchestrator's push runs it over these commits. The known-failures record could not be cleared by hand: ops/prepush-test-auditors.ps1 -Record over the green run exits 3, 'RECORD NOT WRITTEN - 6 guard input(s) differ from what the remote holds (uncommitted or unpushed)', which is the in-flight rule working; its writer is pre-push, confirm-or-shrink, so the entry shrinks on the orchestrator's push.",
+      "shipped_commit": "9f4a52289"
     },
     {
       "queue_id": "2026-09-10-4ac6ae",
@@ -82,7 +82,10 @@
       "root_cause": "one condition, two ids: the weekly-lane finding of 09-10 13:48 and the daily page of 09-11 08:32 are the same red test-auditors run; 220094 owns it",
       "resolution_note": "SUPERSEDED by 2026-09-11-220094 (same test-auditors failure, same fixture line). Closes with it.",
       "publish_batch": 0,
-      "status": "planned"
+      "status": "superseded",
+      "premise_verified": "true - the condition it names is the one 220094 fixed: on HEAD f66b52fe0 the only match was pull-grocery-ads.ps1:216 (its body said 202, the line moved), inside that file's if ($SelfTest) block.",
+      "deviation": null,
+      "shipped_commit": "9f4a52289"
     },    {
       "queue_id": "2026-09-11-3b246c",
       "subject": "Grocery: 2 NEW price flag(s) - 2026-09-11",
@@ -300,7 +303,7 @@
       "leaves_open": "the judgement ratchets stay at mark 0 by design, so the review subject fires every day the store grows until a person rules; the fix makes that page honest (review, committed) rather than silent. 4 unruled clusters and 4 forgetting candidates wait today; the cross-project ratchet will demand another lowering the next time a cluster is ruled",
       "leaves_open_occurrences": 1,
       "leaves_open_window": "1 page (2026-09-11 04:37) since CROSS_UNRULED_MARK was set on 2026-09-10; the 10:00 re-run shows the count still growing",
-      "leaves_open_followup": null,
+      "leaves_open_followup": "2026-09-11-36f57d",
       "blast_radius": {
         "measured_as": "callers",
         "measured_by": "recall-sleep.py's 30 steps and the alert-registry entry set; the skills store C:\\Users\\Owner\\.claude is a LOCAL git repo with no remote",
@@ -320,10 +323,29 @@
       "do_not_touch": ["UNRULED_MARK = 0 (a ratchet is lowered by ruling, never raised)", "any blanket --rule defer"],
       "resolution_note": "Transcribed from the orchestrator's decided item: the nightly pass went RED on judgement ratchets at mark 0 that the store's own growth trips daily, with no way to tell a waiting judgement from a crash and no registered alert type. recall-sleep.py now emits separate subjects (page vs review), both registered; mechanical outputs commit behind a judgement ratchet; CROSS_UNRULED_MARK lowered to 12 and the 4 clusters + 4 candidates ruled with reasons. Per-item ceiling 35 calls, ops lane.",
       "publish_batch": 0,
-      "status": "planned",
-      "premise_verified": null,
+      "status": "deviated",
+      "premise_verified": "partly, and the instance had MOVED by the time it was implemented. Verified: recall-sleep.py committed nothing behind a red gate (`committed = commit_outputs(a.push) if gate_ok else ...`), grocery/alert-registry.json held no entry for the subject, and the 04:37 report shows forgetting, memory clusters and the gate all exit 1 on FAIL lines that are ratchet counts. NOT still true at 18:00: recall-forget.py now exits 0 ('every candidate has a ruling', 59 rulings on record), recall-consolidate.py had ONE unruled within-store cluster left, not 4, and CROSS_UNRULED_MARK is already 11, not the 13 the plan quoted (another session lowered it as the FAIL demanded and ruled the candidates). So the surface fix as written was already done by someone else; what was left of it was the one cluster.",
+      "deviation": "Three. (1) The instance shrank before I reached it (see premise_verified): I ruled the one remaining unruled cluster, 83292a9372cf, as a gist under claude-code-craft's heading 'A worktree is not the main tree, and main moves while you work', with the reason recorded in recall-consolidations.json - brief-may-already-be-shipped, verify-a-task-brief-baseline-on-your-own-branch and worktree-base-can-carry-a-siblings-unpushed-commits are one causal chain, and this run paid for exactly that chain when dbd92279f had already moved the file under item 220094's premise. No blanket defer was used and no mark was raised. The 11 cross-project clusters sit AT their mark (11 of 11 unruled), so they are not failing; they are the residual. (2) The exit code now follows the MECHANICAL half, which the plan did not ask for and the measurement demands: grocery/health-heartbeat.ps1 pages on a nonzero task result, so a ratchet at mark 0 over a store that grows daily would page every day while nothing had broken. A waiting judgement is still reported - in the report, on stdout, in the stamp (judgement_waiting) and as its own REVIEW alert. The gate step and both ratchets still exit 1 themselves; nothing was weakened. (3) d7dc8f's claim was TESTED and HOLDS (see that item): the stamp is written on every path a completed run takes. What it could not survive is a crash before the steps finish, so main() now leaves a crash stamp carrying repr(exc), and classify_failures fails closed - a failed step with no FAIL line at all, or exit 124/125, is BROKEN, never waiting. PROOF: python skills/recall-sleep.py --selftest, 25 of 25 cases pass, exit 0, including 4 new ones (a ratchet-only failure is a judgement; a traceback with no FAIL line is broken and raises the page subject; a judgement-only night raises the review subject; a timeout is broken even when its text says 'unruled'). grocery/audit-alert-registry.ps1 exit 0, ALERT-REGISTRY-COMPLETE files=36 sites=73 subjects=79 unreadable=1 findings=0, with both subjects registered.",
+      "shipped_commit": "7e01327 in C:\\Users\\Owner\\.claude (LOCAL repo, no remote - not part of the ThriftyCrew push); 9f4a52289 in ThriftyCrew for the two alert-registry entries"
+    },
+    {
+      "queue_id": "2026-09-11-d7dc8f",
+      "subject": "Automation silent-death: 1 issue(s)",
+      "classification": "superseded",
+      "lane": "ops",
+      "evidence": [
+        "grocery/health-heartbeat.ps1 (ts 10:34) reported \"TASK FAILED: 'TC Recall Sleep 0435' last result 1 (nonzero)\" and \"its newest output recall-sleep-stamp.json PREDATES the run that was supposed to write it, so that run produced nothing\" - the same producer as 2026-09-11-18da92, seen from the watcher's side",
+        "MEASURED, and the body's claim that the pass 'now stamps on every path, red or green' HOLDS: ops/out/recall-sleep-stamp.json is dated 2026-09-11 04:37:01 and reads ok=false with failed=[forgetting, memory clusters, gate] - the stamp WAS written on the red path, with the gate at exit 1",
+        "WHY THE WATCHER SAW IT PREDATE THE RUN: the task is a repeating trigger wrapped in ops/run-once-a-day.ps1 -Key recall-sleep. Get-ScheduledTaskInfo read LastRunTime 2026-09-11 12:35:01 with LastTaskResult 1, while the report, the log and the stamp are all 04:37 - the 12:35 firing was a NO-OP repetition that re-reported the 04:35 child's exit code and moved LastRunTime without doing any work. run-once-a-day.ps1's own header states that cost in its lines 36-39: 'a no-op also moves LastRunTime, so on a day the child exited nonzero AFTER writing its proves ... it over-reports a real nonzero exit; it never hides one'",
+        "so the page has ONE cause with 18da92: the pass exits nonzero on a judgement ratchet that the store's own growth trips daily. Remove that and the task result is 0, the repetition re-reports 0, and this watcher goes quiet on its own"
+      ],
+      "root_cause": "one condition, two ids: the nightly pass's red exit code. 18da92 owns it and is fixed at the source (the exit code follows the mechanical half, the mechanical outputs commit, a break and a waiting judgement raise different subjects, and a crash before the steps finish now leaves a stamp)",
+      "resolution_note": "SUPERSEDED by 2026-09-11-18da92 (primary). Its body's claim was tested rather than trusted: the stamp IS written on every path a completed run takes (04:37:01, ok=false, gate in failed), so there was no second defect there. The 'produced nothing' reading came from a no-op run-once-a-day repetition at 12:35 moving LastRunTime past the 04:37 outputs, which run-once-a-day documents as over-reporting and never hiding. The gap that WAS real - a crash before the steps finish leaves no stamp, no report and no log, and reads exactly like an ordinary red - is fixed under 18da92 in this run.",
+      "publish_batch": 0,
+      "status": "superseded",
+      "premise_verified": "true as a page, not as a diagnosis: the task result was 1 and the stamp did predate LastRunTime; the inference that 'that run produced nothing' does not hold for the 04:35 run, which produced everything, and does hold trivially for the 12:35 no-op, which was not supposed to produce anything.",
       "deviation": null,
-      "shipped_commit": null
+      "shipped_commit": "7e01327 in C:\\Users\\Owner\\.claude (LOCAL repo, no remote)"
     }
   ],
   "ship_sequence": [
