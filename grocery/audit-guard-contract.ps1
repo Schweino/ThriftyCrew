@@ -132,20 +132,44 @@ $script:BARE_ALLOWED = @{
 
 # EXCLUDED BELOW THE ROOT (2026-09-11, lib\tree-walk.ps1). Both walks this audit makes matched \worktrees\ on the
 # FULL path, so from a linked worktree every chain detector read as MISSING and every detector on disk as DEAD.
+# ONE WALK, NOT ONE PER DETECTOR (2026-09-12). Find-ChainDetectorFile walked the WHOLE TREE for every chain
+# detector name - 58 of them - and Get-ContractExecFiles walked it again. On a warm cache that is nearly free,
+# which is exactly why it never showed: measured alone, this audit takes 15.3s and 58 walks of this tree cost
+# about 3s. Inside run-gates' pool it is a different machine: ten scanners reading the tree at once, against
+# live virus scanning, and the SAME audit took 356s of a 407s run on 2026-09-12 - 87% of every push's wall
+# clock, and the one gate that set it. A push on an idle box had gone from 48-78s (09-10, width 16) to 407s.
+#
+# The tree is walked ONCE per root and indexed; both questions below are then lookups over that list. Order is
+# preserved, so "the FIRST file named X" is still the same file: the index is the walk's own output, filtered,
+# never re-sorted. The cache lives for one process, and this script runs once and exits - it is not a cache
+# across a changing tree, and the self-test's fixture roots are unique temp directories.
+$script:TcContractTree = @{}
+function Get-TcContractTreeFiles {
+  <# Every file under $RootFull outside a worktree or archive, walked once and remembered for this process. #>
+  param([string]$RootFull)
+  if (-not $script:TcContractTree.ContainsKey($RootFull)) {
+    $all = Get-ChildItem $RootFull -Recurse -File -ErrorAction SilentlyContinue
+    $script:TcContractTree[$RootFull] = @(@($all) | Where-Object { (Get-TcPathBelowRoot $_.FullName $RootFull) -notmatch '\\worktrees\\|\\archive\\' })
+  }
+  return $script:TcContractTree[$RootFull]
+}
 function Find-ChainDetectorFile {
   <# The first file named $Name under $RootDir outside archive\ and any worktree below the root. #>
   param([string]$RootDir, [string]$Name)
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -Filter $Name -File -ErrorAction SilentlyContinue |
-    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\' } |
-    Select-Object -First 1
+  $files = Get-TcContractTreeFiles -RootFull $rootFull
+  # ORDINAL, not the default -eq: a file name that arrived from outside is data, and this estate has a memory
+  # about culture-sensitive comparison ignoring a NUL byte outright.
+  foreach ($f in $files) { if ([string]::Equals($f.Name, $Name, [StringComparison]::OrdinalIgnoreCase)) { return $f } }
+  return $null
 }
 function Get-ContractExecFiles {
   <# Every executable-shaped file under $RootDir that could call a detector, excluded below the root. #>
   param([string]$RootDir)
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -File -Include *.ps1,*.psm1,*.js,*.yml,*.yaml,*.vbs,*.bat,*.cmd -ErrorAction SilentlyContinue |
-    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv' }
+  $exec = @('.ps1', '.psm1', '.js', '.yml', '.yaml', '.vbs', '.bat', '.cmd')
+  $files = Get-TcContractTreeFiles -RootFull $rootFull
+  return @($files | Where-Object { $exec -contains $_.Extension.ToLowerInvariant() -and (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch 'node_modules|\.venv' })
 }
 
 if ($SelfTest) {
@@ -206,6 +230,23 @@ if ($SelfTest) {
     T 'MUST FIRE  a chain detector under a worktree root is found, and it is the root''s copy, never the sibling''s' `
       ($wtOne.Count -eq 1 -and $wtOne[0].FullName.StartsWith($wtFx.Root + '\grocery\')) ("found=" + (@($wtOne | ForEach-Object { $_.FullName }) -join ','))
   } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+
+  # THE INDEX ANSWERS WHAT THE WALK ANSWERED (2026-09-12). The per-detector walk became ONE indexed walk
+  # because this audit was 87% of every push's wall clock inside the pool. The whole claim of that change is
+  # that nothing moved except the cost, and the way it could be wrong is a DIFFERENT answer: another file of
+  # the same name, or none at all. So both are asked on the real tree - a name that exists, a second that
+  # exists elsewhere in it, and one that does not exist at all, where the honest answer is nothing.
+  $rootFullProbe = Get-TcRootFull $repo
+  foreach ($probe in @('check-ad-cycles.ps1', 'guards.ps1', 'no-such-detector-xyz.ps1')) {
+    $viaIndex = Find-ChainDetectorFile -RootDir $repo -Name $probe
+    $direct = Get-ChildItem $rootFullProbe -Recurse -Filter $probe -File -ErrorAction SilentlyContinue |
+      Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFullProbe) -notmatch '\\worktrees\\|\\archive\\' } |
+      Select-Object -First 1
+    T ("CLEAN TWIN the indexed lookup returns exactly what the per-detector walk returned: " + $probe) `
+      (([string]$viaIndex.FullName) -eq ([string]$direct.FullName)) `
+      ("index='" + [string]$viaIndex.FullName + "' walk='" + [string]$direct.FullName + "'")
+  }
+
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
