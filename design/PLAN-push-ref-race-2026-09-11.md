@@ -174,6 +174,25 @@ row and a non-zero exit, and a set with no width-1 rows exiting **3 with `verdic
 inventing a verdict. **`-Sweep` itself is NOT yet exercised**: it needs the quiet box it insists on, and
 the box has been at 100% with 6 to 11 gate runs live all night.
 
+### The box is almost never quiet, and that corrects an earlier conclusion (2026-09-12)
+
+Waiting for the quiet box the ruling asked for produced a measurement nobody had asked for. A probe
+every 90 s from **05:58 to 09:24 (134 samples)** found the box quiet - no other `run-gates` and CPU at or
+under 60% - in **1 of 134 samples (0.7%)**. Median concurrent gate runs **5**, max **14**. Median CPU
+**73%**, and 100% at the peak. The single quiet window arrived at 09:24 and held for at least four
+consecutive probes.
+
+`design/MEASURE-gate-queue-window-2026-09-11.md` closes by reading the afternoon's saturation as
+**"transient overload against a fixed ceiling"** that "drained on its own by 18:00". The overnight sample
+says that reading was too kind: the queue did not drain, it thinned. Five concurrent gate runs at 3 a.m.
+on a Saturday is not a transient, and the afternoon's 19-39 is that same state under a working day. **The
+harness that found this is `ops/measure-gate-width.ps1 -Probe`, which adds no load**, and the per-sample
+rows are kept with the sweep.
+
+This does not change the recommended order, but it does change what the lease is up against: a landing
+lane's throughput has to be found under the load the box actually carries, because the quiet condition
+this estate has been measuring against is available about seven hours in a thousand.
+
 ## What would make me wrong
 
 - If the 4.3/h landing rate is transient rather than this estate's normal rate, the race is not worth a

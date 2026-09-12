@@ -59,7 +59,7 @@
 
   Usage:
     powershell -File ops\measure-gate-width.ps1 -Probe
-    powershell -File ops\measure-gate-width.ps1 -Sweep -OutCsv <path> [-Widths 1,2,5,10] [-Replicates 3]
+    powershell -File ops\measure-gate-width.ps1 -Sweep -OutCsv <path> [-Widths '1,2,5,10'] [-Replicates 3]
     powershell -File ops\measure-gate-width.ps1 -Report -OutCsv <path>
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
@@ -67,11 +67,30 @@ param(
   [switch]$Probe,
   [switch]$Sweep,
   [switch]$Report,
-  [int[]]$Widths = @(1, 2, 5, 10),
+  # A STRING, NOT [int[]], AND THE REASON IS A BUG THIS ALREADY HIT (2026-09-12). Under `powershell -File`,
+  # `-Widths 1,2,5,10` arrives as the single STRING '1,2,5,10' - -File does no array parsing - and coercing it
+  # to [int[]] does NOT fail: [int]'1,2,5,10' is 12510, because .NET parses thousands separators by default.
+  # So the first sweep launched silently as ONE arm at width 12510, which the lease clamps to 10, and every row
+  # would have been dropped for a reached width that did not match. It announced "sweeping widths 12510" and
+  # that line is the only reason it was caught. Parsed here instead, where a non-numeric entry can refuse.
+  [string]$Widths = '1,2,5,10',
   [int]$Replicates = 3,
   [string]$OutCsv = '',
   [int]$MaxOtherRuns = 0,
-  [int]$MaxCpuPct = 60,
+  # THE CPU ADMISSION LEVEL WAS 60 AND IS NOW 85, CHANGED AFTER SEEING IT REFUSE (2026-09-12). Recorded rather
+  # than quietly edited, because a threshold moved after it fires is the shape measurement.md warns about.
+  # WHAT CHANGED IS THE ADMISSION CONDITION, NOT THE ACCEPTANCE BAR: $BarRatio is untouched, so what the sweep
+  # must show to earn its recommendation is exactly what it had to show before.
+  # The evidence: 134 probes from 05:58 to 09:24 found the box quiet in 1, and at 09:31 it read 0 other gate
+  # runs at 63% CPU - gate-free, and refused anyway. This box idles at 35-65% with ~140 Claude sessions live,
+  # so a 60% bar excludes nearly every genuinely gate-free moment while excluding almost nothing that would
+  # corrupt the curve. What corrupts a WIDTH curve is (a) another gate run holding the slots this one needs,
+  # which is $MaxOtherRuns and is separately caught per row by widthReached, and (b) so little free CPU that
+  # extra workers have no core to run on. At 85% of 32 processors about 5 remain, which still separates width
+  # 1 from width 10; at 100% it would not. NOT A SWEEP - one reasoned move, and the first value was itself
+  # only the first plausible number. Every row carries its own othersStart/othersEnd and the CPU at the time,
+  # so a reader who disagrees with this level can re-judge the rows rather than re-run them.
+  [int]$MaxCpuPct = 85,
   [switch]$Force
 )
 $ErrorActionPreference = 'Stop'
@@ -138,6 +157,26 @@ if ($Sweep) {
     Write-Output ('MEASURE-GATE-WIDTH-COMPLETE mode=sweep rows=0 aborted=not-quiet')
     exit 3
   }
+  $widthList = [Collections.Generic.List[int]]::new()
+  foreach ($wTok in ([string]$Widths -split ',')) {
+    $t = ([string]$wTok).Trim()
+    if (-not $t) { continue }
+    $n = 0
+    # NumberStyles::None, so '1,2,5,10' can never arrive here as ONE number again - the default styles accept
+    # thousands separators, which is exactly how that string became the single width 12510.
+    if (-not [int]::TryParse($t, [Globalization.NumberStyles]::None, [Globalization.CultureInfo]::InvariantCulture, [ref]$n) -or $n -lt 1) {
+      Write-Output ("measure-gate-width: -Widths entry '{0}' is not a positive whole number." -f $t)
+      Write-Output 'MEASURE-GATE-WIDTH-COMPLETE mode=sweep rows=0 aborted=bad-widths'
+      exit 3
+    }
+    $widthList.Add($n)
+  }
+  if ($widthList.Count -eq 0) {
+    Write-Output 'measure-gate-width: -Widths parsed to nothing, so there is no arm to run.'
+    Write-Output 'MEASURE-GATE-WIDTH-COMPLETE mode=sweep rows=0 aborted=bad-widths'
+    exit 3
+  }
+  $sweepWidths = $widthList.ToArray()
   $gate = Join-Path $repo 'ops\run-gates.ps1'
   if (-not (Test-Path -LiteralPath $gate)) {
     Write-Output 'measure-gate-width: ops\run-gates.ps1 is missing, so there is nothing to time.'
@@ -155,10 +194,10 @@ if ($Sweep) {
   $rows = [Collections.Generic.List[object]]::new()
   $order = 0
   $aborted = ''
-  Write-Output ('measure-gate-width: sweeping widths {0}, {1} replicate(s) each, INTERLEAVED, at HEAD {2}' -f ($Widths -join ','), $Replicates, $headSha)
+  Write-Output ('measure-gate-width: sweeping widths {0}, {1} replicate(s) each, INTERLEAVED, at HEAD {2}' -f (($sweepWidths | ForEach-Object { [string]$_ }) -join ' '), $Replicates, $headSha)
   Write-Output ('measure-gate-width: the bar, stated before the run - median wall at width {0} must be at most {1:P0} of median wall at width {2}' -f $script:BarAt, $script:BarRatio, $script:BarFrom)
   for ($rep = 1; ($rep -le $Replicates) -and (-not $aborted); $rep++) {
-    foreach ($w in $Widths) {
+    foreach ($w in $sweepWidths) {
       $why2 = Get-QuietReason -Others (Get-OtherGateRuns) -Cpu (Get-CpuPct) -MaxOther $MaxOtherRuns -MaxCpu $MaxCpuPct
       if ($why2 -and -not $Force) {
         $aborted = $why2
@@ -167,6 +206,7 @@ if ($Sweep) {
       }
       $order++
       $othersStart = Get-OtherGateRuns
+      $cpuStart = Get-CpuPct
       $sw = [Diagnostics.Stopwatch]::StartNew()
       # A NATIVE CHILD'S STDERR IS NOT REDIRECTED UNDER 'Stop' (.claude\rules\ops-and-gates.md): every redirect
       # makes its first stderr line a terminating throw, and a catch around it would throw the answer away. The
@@ -182,6 +222,7 @@ if ($Sweep) {
       }
       $sw.Stop()
       $othersEnd = Get-OtherGateRuns
+      $cpuEnd = Get-CpuPct
       $lines = @($out)
       $text = ($lines -join "`n")
       # run-gates:761  "timing: N gate(s), Xs wall at width Y. Zs of gate work inside it, ..."
@@ -213,17 +254,19 @@ if ($Sweep) {
           rc           = $rc
           othersStart  = $othersStart
           othersEnd    = $othersEnd
+          cpuStart     = $cpuStart
+          cpuEnd       = $cpuEnd
           headSha      = $headSha
           atUtc        = [DateTimeOffset]::UtcNow.ToString('o')
         })
-      Write-Output ('  rep {0} asked {1,2} -> reached {2,2}: {3,6:N0}s wall ({4,6:N0}s harness), {5,6:N0}s work over {6} gate(s), rc {7}, others {8}/{9}' -f `
-          $rep, $w, $widthReached, $wallS, $sw.Elapsed.TotalSeconds, $workS, $gates, $rc, $othersStart, $othersEnd)
+      Write-Output ('  rep {0} asked {1,2} -> reached {2,2}: {3,6:N0}s wall ({4,6:N0}s harness), {5,6:N0}s work over {6} gate(s), rc {7}, others {8}/{9}, cpu {10}/{11}%' -f `
+          $rep, $w, $widthReached, $wallS, $sw.Elapsed.TotalSeconds, $workS, $gates, $rc, $othersStart, $othersEnd, $cpuStart, $cpuEnd)
     }
   }
-  $hdr = 'order,replicate,widthAsked,widthDispatch,widthReached,wallHarnessS,wallGateS,workS,gates,passed,failed,rc,othersStart,othersEnd,headSha,atUtc'
+  $hdr = 'order,replicate,widthAsked,widthDispatch,widthReached,wallHarnessS,wallGateS,workS,gates,passed,failed,rc,othersStart,othersEnd,cpuStart,cpuEnd,headSha,atUtc'
   $body = foreach ($x in $rows) {
-    ('{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}' -f $x.order, $x.replicate, $x.widthAsked, $x.widthDispatch, $x.widthReached,
-      $x.wallHarnessS, $x.wallGateS, $x.workS, $x.gates, $x.passed, $x.failed, $x.rc, $x.othersStart, $x.othersEnd, $x.headSha, $x.atUtc)
+    ('{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17}' -f $x.order, $x.replicate, $x.widthAsked, $x.widthDispatch, $x.widthReached,
+      $x.wallHarnessS, $x.wallGateS, $x.workS, $x.gates, $x.passed, $x.failed, $x.rc, $x.othersStart, $x.othersEnd, $x.cpuStart, $x.cpuEnd, $x.headSha, $x.atUtc)
   }
   $all = @($hdr) + @($body)
   $dir = Split-Path $OutCsv -Parent
@@ -247,15 +290,35 @@ if ($Report) {
     Write-Output 'MEASURE-GATE-WIDTH-COMPLETE mode=report rows=0'
     exit 3
   }
-  # A ROW WHOSE REACHED WIDTH IS NOT THE ASKED WIDTH RAN AT A DIFFERENT WIDTH. It is named and dropped, never
-  # averaged in - a run that reports the width it asked for records a condition it never ran under.
-  $usableList = $all | Where-Object { [int]$_.widthReached -eq [int]$_.widthAsked -and [int]$_.rc -eq 0 -and [double]$_.wallGateS -gt 0 }
-  $usable = @($usableList)
-  $droppedList = $all | Where-Object { -not ([int]$_.widthReached -eq [int]$_.widthAsked -and [int]$_.rc -eq 0 -and [double]$_.wallGateS -gt 0) }
-  $dropped = @($droppedList)
-  Write-Output ('measure-gate-width: usable {0} of {1} row(s); {2} dropped (reached width not the asked width, a non-zero exit, or no timing line)' -f $usable.Count, $all.Count, $dropped.Count)
+  # WHAT DISQUALIFIES A ROW, and the two things that deliberately do NOT.
+  #   - A REACHED width that is not the ASKED width ran at a different width. A lease grants what is free, so
+  #     recording the ask would record a condition the run never met.
+  #   - A row with no timing line ran no gates at all (exit 3: the slot wait, or a push that cannot land).
+  #   - A row over a DIFFERENT NUMBER OF GATES is not the same job. Discovery grows as the tree does, and
+  #     comparing a 362-gate run against a 200-gate one is comparing two workloads and calling it width. The
+  #     modal count wins and every other row is named. This is the one that would have corrupted the result
+  #     silently rather than loudly.
+  # NOT disqualifying: a NON-ZERO exit. A red run still dispatches and times every gate, so its wall is as
+  # valid as a green one's - dropping it would let an unrelated failing gate invalidate a whole sweep. Only
+  # exit 3 matters here, and the no-timing-line rule already catches it. rc is kept on every row regardless.
+  $timed = @($all | Where-Object { [double]$_.wallGateS -gt 0 -and [int]$_.gates -gt 0 })
+  $modalGates = 0
+  if ($timed.Count) {
+    $counts = @{}
+    foreach ($x in $timed) { $k = [int]$x.gates; $counts[$k] = 1 + [int]$counts[$k] }
+    $best = -1
+    foreach ($k in $counts.Keys) { if ($counts[$k] -gt $best) { $best = $counts[$k]; $modalGates = $k } }
+  }
+  $ok = { param($r) ([int]$r.widthReached -eq [int]$r.widthAsked) -and ([double]$r.wallGateS -gt 0) -and ([int]$r.gates -eq $modalGates) }
+  $usable = @($all | Where-Object { & $ok $_ })
+  $dropped = @($all | Where-Object { -not (& $ok $_) })
+  Write-Output ('measure-gate-width: usable {0} of {1} row(s), all over {2} gate(s); {3} dropped' -f $usable.Count, $all.Count, $modalGates, $dropped.Count)
   foreach ($d in $dropped) {
-    Write-Output ('   dropped: asked {0} reached {1} rc {2} wall {3}s others {4}/{5}' -f $d.widthAsked, $d.widthReached, $d.rc, $d.wallGateS, $d.othersStart, $d.othersEnd)
+    $why = @()
+    if ([int]$d.widthReached -ne [int]$d.widthAsked) { $why += ('reached {0} not the {1} asked' -f $d.widthReached, $d.widthAsked) }
+    if ([double]$d.wallGateS -le 0) { $why += 'no timing line, so no gate ran' }
+    elseif ([int]$d.gates -ne $modalGates) { $why += ('{0} gates, not the modal {1}' -f $d.gates, $modalGates) }
+    Write-Output ('   dropped: asked {0} rc {1} wall {2}s others {3}/{4} cpu {5}/{6} - {7}' -f $d.widthAsked, $d.rc, $d.wallGateS, $d.othersStart, $d.othersEnd, $d.cpuStart, $d.cpuEnd, ($why -join '; '))
   }
   function Get-Median {
     param([double[]]$Values)
