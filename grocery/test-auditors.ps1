@@ -1919,9 +1919,19 @@ else { Bad ('check-ad-cycles has ' + $cadBare.Count + ' cadence gate(s) whose th
 # capture-run and daily.yml both read that inferred number as the chain's verdict. "downstream rc=1" then
 # means only "something threw somewhere". An explicit terminal exit does not hide a crash (a crash never
 # reaches it) - it makes the SUCCESS deliberate.
+# A COMPUTED EXIT COUNTS, AND ONLY IF THE FILE ASSIGNS IT (2026-09-12). This read `^exit\s+\d+$`, a literal
+# number, which was the whole of the shape until the chain's verdict started deciding its own exit code: the
+# last statement is now `exit $chainExit`, 0 or 1 by whether its own commit landed. That is MORE deliberate
+# than a typed constant, not less, so refusing it would push the next author back to a literal and lose the
+# verdict. The must-fire is untouched - a file that ends in anything but a terminal exit still fails - and a
+# variable the file never assigns fails too, because `exit $neverSet` exits 0 and would hide a crash exactly
+# as the inferred code did.
 $cacTail = @(($cacSrc -replace "`r", '') -split "`n" | Where-Object { $_.Trim() -ne '' -and $_.Trim() -notmatch '^#' })
-if ($cacTail.Count -and $cacTail[-1].Trim() -match '^exit\s+\d+$') { Ok 'check-ad-cycles ends with an explicit exit - the chain verdict its callers read is stated, not inferred' }
-else { Bad ('check-ad-cycles has no explicit terminal exit, so its exit code is whatever PowerShell infers - a crash and a clean run are told apart only by luck; last statement: ' + $(if ($cacTail.Count) { $cacTail[-1].Trim() } else { '<none>' })) }
+$cacLast = $(if ($cacTail.Count) { $cacTail[-1].Trim() } else { '' })
+$cacExitVar = $(if ($cacLast -match '^exit\s+\$([A-Za-z_]\w*)$') { $Matches[1] } else { '' })
+$cacExitOk = ($cacLast -match '^exit\s+\d+$') -or ($cacExitVar -and ($cacSrc -match ('\$' + [regex]::Escape($cacExitVar) + '\s*=')))
+if ($cacExitOk) { Ok ('check-ad-cycles ends with an explicit exit (' + $cacLast + ') - the chain verdict its callers read is stated, not inferred') }
+else { Bad ('check-ad-cycles has no explicit terminal exit, so its exit code is whatever PowerShell infers - a crash and a clean run are told apart only by luck; last statement: ' + $(if ($cacLast) { $cacLast } else { '<none>' })) }
 } # u048-the-cadence-must-not-become-a-silent
 
 # ---- THE INSPECT FAN-OUT (2026-08-23, PLAN-use-the-cores phase 1) --------------------------------------
