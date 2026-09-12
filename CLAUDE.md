@@ -37,11 +37,17 @@ went `workflow_dispatch`-only when Actions minutes were exhausted, no hook exist
 it - so for a month a push was gated exactly as much as the person pushing chose to gate it. The cloud
 workflow is still dispatch-only; the hook is what restored the property, locally and for free.
 
-**Exit 0 = passed. 1 = at least one gate failed. 3 = could not evaluate**, which means discovery is
-broken, not that the tree is clean, or that a self-test exited 0 without printing its OWN verdict as its
-last words (2026-09-11: a verdict glued onto a case line let pull-grocery-ads fall through to a live
-pull and score ok for hours). Never read 3 as a pass. (The recipe battery uses exit 2 for its
-own could-not-run - check which tool you actually ran.)
+**Exit 0 = passed. 1 = at least one gate failed. 3 = could not evaluate**, which is never the tree being
+clean. **A 3 HAS FIVE CAUSES and you read WHICH from the gate's own `blind=` token**, never from a habit:
+discovery broken (`blind=no-selftests`, `blind=selftest-discovery-collapsed`); no gate worker slot inside
+the wait, which is contention on this box and nothing wrong with your checkout (`blind=no-gate-worker-slot`);
+a push the remote has already moved past (`blind=push-cannot-land`, rebase and push again); a pool that
+returned a different count than it dispatched; or a self-test that exited 0 without printing its OWN verdict
+as its last words (2026-09-11: a verdict glued onto a case line let pull-grocery-ads fall through to a live
+pull and score ok for hours). `pre-push` reads that token and names the cause in its refusal - until
+2026-09-12 it said "discovery is broken" for all five, which on a busy box sent the pusher to debug a walk
+that was fine. Never read 3 as a pass, whichever cause it names and even when it names none. (The recipe
+battery uses exit 2 for its own could-not-run - check which tool you actually ran.)
 
 **The 10 machine-wide gate worker slots are a QUEUE, served in arrival order** (`lib/gate-slots.ps1`, since
 2026-09-11): a refusal with 3 means the queue itself stopped moving for 20 minutes, never that your run lost a

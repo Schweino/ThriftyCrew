@@ -24,8 +24,11 @@
 # .claude/rules/ops-and-gates.md warns about and how a gate goes quietly unfirable. Not worth 20s.
 #
 # THE EXIT CODE IS READ, NEVER THE TALLY. run-gates: 0 = passed, 1 = at least one gate failed,
-# 3 = COULD NOT EVALUATE, which means discovery is broken rather than the tree being clean. A 3 is
-# NEVER a pass and is refused here as loudly as a 1.
+# 3 = COULD NOT EVALUATE - nothing was judged, which is never the tree being clean. A 3 has SEVERAL causes and
+# the refusal below reads which one from the gate's own blind= marker: discovery collapsing, no gate worker slot
+# inside the wait, a push the remote will already reject, a pool that returned a different number of results than
+# it dispatched, or a self-test that exited 0 without its own verdict. A 3 is NEVER a pass and is refused here as
+# loudly as a 1, whichever cause it was and even when the gate named none.
 #
 # IT STANDS IN FRONT OF THE AUTOMATED PUSHES TOO, deliberately, and that is worth knowing before it
 # surprises somebody: the ~07:00 bot and wave-publish both push. run-gates is HERMETIC - it reads
@@ -265,9 +268,50 @@ rm -f "$refs"
 
 echo "" >&2
 if [ "$rc" -eq 3 ]; then
-  echo "pre-push: BLOCKED - run-gates COULD NOT EVALUATE (exit 3). A 3 is never a pass, and the gate's own" >&2
-  echo "          reason is the line below: broken discovery, a queue that stopped moving, or a push that" >&2
-  echo "          can no longer land because the remote moved (rebase and push again)." >&2
+  # NAME THE CAUSE THE GATE ACTUALLY REPORTED (2026-09-12). This block said "that means gate discovery is
+  # broken" for every 3, and by 2026-09-11 a 3 had at least three causes: discovery collapsing, the machine-wide
+  # gate worker queue not moving for 20 minutes, and a push the remote will already reject. That afternoon a
+  # standalone run-gates and then a push both waited about 20 minutes for one of the 10 slots while roughly 30
+  # other run-gates processes queued and the box sat near 87%, and the hook told the pusher their discovery was
+  # broken. A refusal that points at the wrong cause sends somebody to debug a walk that is fine, and the next
+  # thing they reach for is --no-verify - so it must name what run-gates said, or say plainly that it could not
+  # tell. THE REFUSAL IS UNCONDITIONAL EITHER WAY: every branch below falls through to the same exit 1.
+  #
+  # TWO READS, MARKER FIRST. Exit-Guard writes "RUN-GATES-COMPLETE blind=<token>" as the last line and the
+  # token travels with the exit, so it is the reliable one. Two exit-3 paths carry no token - the pool-size
+  # mismatch writes no marker at all, and the no-verdict path's marker counts suites - so the COULD NOT
+  # EVALUATE line is the fallback, and a 3 with neither is reported as exactly that.
+  blind="$(grep -o 'RUN-GATES-COMPLETE blind=[A-Za-z0-9_-]*' "$log" 2>/dev/null | tail -n 1 | sed 's/.*blind=//')"
+  reason="$(grep -E '^run-gates: COULD NOT EVALUATE' "$log" 2>/dev/null | tail -n 1)"
+  echo "pre-push: BLOCKED - run-gates COULD NOT EVALUATE (exit 3). A 3 is NEVER a pass." >&2
+  case "$blind" in
+    no-gate-worker-slot)
+      echo "          CAUSE: no gate worker slot. The 10 machine-wide slots stayed held by other gate runs and" >&2
+      echo "          the queue did not move, so NOTHING was run. That is CONTENTION on this box, not a broken" >&2
+      echo "          tree and nothing wrong with this checkout. Let the other runs drain and push again; the" >&2
+      echo "          gate's own line below says how long it waited and how many runs were ahead of it." >&2
+      ;;
+    push-cannot-land)
+      echo "          CAUSE: this push can no longer land - the remote moved while it waited, so no gate was run" >&2
+      echo "          for it. Fetch, rebase onto what the remote holds now, and push again." >&2
+      ;;
+    no-selftests|selftest-discovery-collapsed)
+      echo "          CAUSE: gate DISCOVERY is broken. run-gates found no self-tests, or far fewer than this tree" >&2
+      echo "          holds, so it refused to judge. Fix the walk; a tree that cannot be examined is not a clean one." >&2
+      ;;
+    ?*)
+      echo "          CAUSE: the gate reported blind=$blind. Read its own line below before doing anything else." >&2
+      ;;
+    *)
+      if [ -n "$reason" ]; then
+        echo "          The gate named no blind= cause, so its own COULD NOT EVALUATE line below is the whole" >&2
+        echo "          account. Read it rather than assuming which of the causes this was." >&2
+      else
+        echo "          The gate said nothing about WHY, so this refusal cannot name a cause. Read the full output" >&2
+        echo "          below and let it say which cause this was; every guess here has been wrong at least once." >&2
+      fi
+      ;;
+  esac
 else
   echo "pre-push: BLOCKED - run-gates exited $rc. This tree must not be pushed until it passes." >&2
   echo "          Fix the cause, never the gate." >&2

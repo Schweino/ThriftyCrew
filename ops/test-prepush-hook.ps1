@@ -187,6 +187,12 @@ if ($env:TC_PUSH_LOCK_PREFIX) {
   $mx.Dispose()
   [IO.File]::WriteAllText((Join-Path $p 'gate-lock-free.txt'), [string][int]$free)
 }
+# WHAT THE GATE SAYS, not just what it exits with (2026-09-12). The hook reads this stdout back out of its
+# log to name WHY a 3 happened, so a case that only sets an exit code cannot reach that decision at all.
+# Lines are separated by @@ because a newline cannot survive the environment block cleanly here.
+if ($env:TC_PREPUSH_PROBE_SAY) {
+  foreach ($l in ([string]$env:TC_PREPUSH_PROBE_SAY -split '@@')) { Write-Output $l }
+}
 exit ([int]$env:TC_PREPUSH_PROBE_EXIT)
 '@
   [IO.File]::WriteAllText((Join-Path $main 'ops\run-gates.ps1'), $stub, $utf8)
@@ -329,6 +335,44 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
   $refused = GOut --git-dir $remote rev-parse --verify -q refs/heads/refused
   # CLEAN TWIN: the unset did not cost the hook its refusal. A 3 is never a pass.
   Case 'CLEAN TWIN' 'a gate exiting 3 still blocks the push' (($rc3 -ne 0) -and ($refused -eq '')) "rc=$rc3 ref=$refused"
+
+  # ---- a 3 must name the cause run-gates ACTUALLY reported (2026-09-12) ----
+  # THE FOUNDING CASE. Until this date the hook answered every 3 with "that means gate discovery is broken",
+  # and by 2026-09-11 a 3 also meant the machine-wide gate worker queue had not moved: that afternoon a
+  # standalone run-gates and then a push each waited about 20 minutes while roughly 30 other run-gates
+  # processes queued and the box sat near 87%, and both pushers were told their discovery was broken. A
+  # refusal that points at the wrong cause sends somebody to debug a walk that is fine, and the next thing
+  # they reach for is --no-verify. The stub prints exactly what run-gates prints on that path - the COULD NOT
+  # EVALUATE line and Exit-Guard's marker - so these cases drive the hook's real read of its own log.
+  $slotSay = 'run-gates: COULD NOT EVALUATE - waited 1,200s for a gate worker slot and the queue did not move for the last 1,200s (7 run(s) still ahead of this one, and all 10 slots held). Nothing was run; that is not a pass.' +
+    '@@RUN-GATES-COMPLETE blind=no-gate-worker-slot'
+  $env:TC_PREPUSH_PROBE_SAY = $slotSay
+  $slotPush = PushOut $linked 'slot-blind'
+  $slotText = $slotPush.text
+  Case 'MUST FIRE' 'a 3 from slot starvation is refused AND named as slots, not as broken discovery' `
+    (($slotPush.rc -ne 0) -and ($slotPush.remote -eq '') -and ($slotText -match 'CAUSE: no gate worker slot') -and ($slotText -notmatch '(?i)discovery')) `
+    ("rc=" + $slotPush.rc + " ref=[" + $slotPush.remote + "] text=[" + $slotText + "]")
+
+  # CLEAN TWIN: the cause this hook could already name still gets named. A discovery collapse is the same
+  # exit code down the same branch, and the repair must not have traded one wrong cause for another.
+  $discSay = 'run-gates: COULD NOT EVALUATE - PowerShell self-test DISCOVERY found only 12 suite(s); it found 201 on 2026-09-07 and 262 on 2026-09-11. That is the walk broken, not the tree clean.' +
+    '@@RUN-GATES-COMPLETE blind=selftest-discovery-collapsed n=12'
+  $env:TC_PREPUSH_PROBE_SAY = $discSay
+  $discPush = PushOut $linked 'discovery-blind'
+  $discText = $discPush.text
+  Case 'CLEAN TWIN' 'a 3 from a discovery collapse is refused and still says DISCOVERY' `
+    (($discPush.rc -ne 0) -and ($discPush.remote -eq '') -and ($discText -match 'CAUSE: gate DISCOVERY is broken')) `
+    ("rc=" + $discPush.rc + " ref=[" + $discPush.remote + "] text=[" + $discText + "]")
+
+  # CLEAN TWIN: a 3 that names no cause at all - the pool-size mismatch exits 3 with no marker - is still
+  # refused, and the hook says it cannot name one rather than inventing the nearest.
+  $env:TC_PREPUSH_PROBE_SAY = 'run-gates: something went wrong and it did not say what'
+  $mutePush = PushOut $linked 'mute-blind'
+  $muteText = $mutePush.text
+  Case 'CLEAN TWIN' 'a 3 with no blind token is refused and names no cause rather than guessing one' `
+    (($mutePush.rc -ne 0) -and ($mutePush.remote -eq '') -and ($muteText -match 'cannot name a cause') -and ($muteText -notmatch '(?i)discovery')) `
+    ("rc=" + $mutePush.rc + " ref=[" + $mutePush.remote + "] text=[" + $muteText + "]")
+  $env:TC_PREPUSH_PROBE_SAY = ''
 
   # ---- a checkout whose working tree git cannot resolve ----
   # MUST FIRE, THE SECOND FOUNDING CASE: the sandbox repo turned bare, exactly the damaged state, and a
@@ -651,7 +695,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
   Case 'MUST FIRE' 'the hook reads refs, resolves the tree, unsets the environment, then runs the gate and the check' `
     ($iRead -ge 0 -and $iRepo -gt $iRead -and $iUnset -gt $iRepo -and $iRun -gt $iUnset -and $iTa -gt $iUnset) "read@$iRead repo@$iRepo unset@$iUnset run@$iRun ta@$iTa"
 } finally {
-  Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TMPDIR', 'Env:\TC_PREPUSH_TA_FAILS', 'Env:\TC_PREPUSH_TA_FAILS_BETA' -ErrorAction SilentlyContinue
+  Remove-Item -LiteralPath 'Env:\TC_PREPUSH_PROBE', 'Env:\TC_PREPUSH_PROBE_EXIT', 'Env:\TC_PREPUSH_PROBE_SAY', 'Env:\TMPDIR', 'Env:\TC_PREPUSH_TA_FAILS', 'Env:\TC_PREPUSH_TA_FAILS_BETA' -ErrorAction SilentlyContinue
   if (Test-Path -LiteralPath $sb) {
     # The sandbox's own worktree first, through git, then the directory. No junctions are ever made here.
     if ($built) { $null = G -C $main worktree remove --force $linked }
@@ -663,7 +707,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 42   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases
+$expectedCases = 45   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12)
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''

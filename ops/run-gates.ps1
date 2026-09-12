@@ -23,9 +23,22 @@
   The data-dependent audits stay where they are, in the daily chain against a real board. This gate answers
   "did this change break the machinery?", not "is today's board correct".
 
-  Exit 0 = every gate passed. 1 = at least one failed. 3 = could not evaluate (found no self-tests at all,
-  which would mean the discovery is broken rather than the tree being clean, or a self-test exited 0 without
-  its own verdict as its last words - lib\selftest-verdict.ps1 is that rule, since 2026-09-11).
+  Exit 0 = every gate passed. 1 = at least one failed. 3 = COULD NOT EVALUATE, which is never the tree being
+  clean. A 3 HAS FIVE CAUSES and each one names itself in the COMPLETE marker's blind= token or in its own
+  COULD NOT EVALUATE line, because a refusal that points at the wrong cause sends the reader to debug something
+  that is fine and the next thing they reach for is --no-verify:
+
+    blind=no-selftests / blind=selftest-discovery-collapsed - DISCOVERY is broken. The walk found no self-tests,
+      or far fewer than this tree holds.
+    blind=no-gate-worker-slot - this run never got one of the 10 machine-wide worker slots and the queue did not
+      move for the wait. CONTENTION on the box; nothing here was run and nothing here is wrong (lib\gate-slots.ps1).
+    blind=push-cannot-land - the remote moved past this push while it waited, so no gate was run for it
+      (lib\push-landable.ps1). Rebase and push again.
+    a pool that returned a different number of results than it dispatched - no marker, its own line says so.
+    a self-test that exited 0 without its own verdict as its last words - lib\selftest-verdict.ps1 is that rule,
+      since 2026-09-11. The marker carries noverdict=N rather than a blind= token.
+
+  ops\hooks\pre-push reads that token and names the cause in its refusal; ops\test-prepush-hook.ps1 fixtures it.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$ListOnly, [int]$Jobs = 0, [switch]$NoReuse, [string]$PushRefsFile = '', [string]$PushRemote = '')
