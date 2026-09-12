@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>03:15 daily: the six tree-wide ratchets a push no longer pays for (ops/run-daily-ratchets.ps1). Brad, 2026-09-12. They cost 184s of a 699s push and audit-mustfire-census alone, at 54s, was the wall-clock floor - no pool finishes sooner than its longest single job. What they protect is the estate's own guard quality over months: a deleted must-fire fixture, a self-test resting on an unfrozen rulings file, a stray control byte, a write-only report family, a walk that breaks inside worktrees, a statement keyword glued onto a command line. None of them can put a wrong number in front of a paying reader, so learning about one the next morning costs a morning. It is NOT a nightly full gate sweep, which Brad refused: six named audits, about 100s. The names are not listed here or in the runner - they are read from ops/run-gates.ps1's own entries marked daily, the same mark that makes a push skip them, so the two can never disagree. Runs THROUGH ops/run-once-a-day.ps1 like brain-digest, recall-sleep and daemon-battery: the wrapper owns the transcript a hidden task owes (ops/audit-run-log-claims.ps1) and the once-a-day stamp, so the runner needs no reach into grocery/ and ops/audit-cross-module-reach.ps1 stays at its baseline. 03:15 sits clear of the 02:30 daemon battery and the 04:35 recall sleep.</Description>
+    <URI>\TC Daily Ratchets 0315</URI>
+  </RegistrationInfo>
+  <Principals>
+    <Principal id="Author">
+      <UserId>__CURRENT_USER_SID__</UserId>
+      <LogonType>InteractiveToken</LogonType>
+    </Principal>
+  </Principals>
+  <Settings>
+    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
+    <ExecutionTimeLimit>PT1H</ExecutionTimeLimit>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <IdleSettings>
+      <Duration>PT10M</Duration>
+      <WaitTimeout>PT1H</WaitTimeout>
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
+  </Settings>
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2026-09-13T03:15:00-05:00</StartBoundary>
+      <ScheduleByDay>
+        <DaysInterval>1</DaysInterval>
+      </ScheduleByDay>
+    </CalendarTrigger>
+  </Triggers>
+  <Actions Context="Author">
+    <Exec>
+      <Command>C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key daily-ratchets -Exe "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgLine "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"C:\Codex\ThriftyCrew\ops\run-daily-ratchets.ps1\""</Arguments>
+    </Exec>
+  </Actions>
+</Task>

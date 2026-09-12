@@ -1,132 +1,140 @@
 {
-  "readme": "Registry of automations + critical outputs the health-heartbeat.ps1 watches for SILENT DEATH - an automation that stopped being scheduled (deleted/disabled), or an output that quietly went stale, WITHOUT a loud failure. Since 2026-08-22 health-heartbeat runs from the 'TC Grocery Capture Watchdog' task, moved to 10:30 on 2026-08-31 and RENAMED to 'TC Grocery Capture Watchdog 1030' on 2026-09-07 by ops/install-grocery-tasks.ps1 -FixName (the earlier ruling here said the 0930 name was deliberately not renamed; the registrar renamed it on the live scheduler at 06:30 and this registry did not hear, so the heartbeat paged one rename as two issues - a phantom TASK MISSING and an unwatched real task - at 10:30 the same morning. The registrar's $OWNED table and this registry MUST name the same tasks, and ops/install-grocery-tasks.ps1 -VerifyRegistry now checks exactly that on every push, through ops/audit-task-registry.ps1 in run-gates) (local-watchdog.ps1 and the SMP tasks are retired); capture-watchdog covers loud failures and the run record. Brad's rule 2026-08-22: Windows tasks are the ONLY routines that fire (no Claude scheduled agents) - every one belongs HERE, and health-heartbeat's REGISTRY DRIFT check pages if a 'TC *' or 'SMP *' task exists that is not listed. The rule was written when there were exactly three and said 'the three TC Grocery tasks'; two more were registered after it (TC Graph Nightly Matching 08-22, TC Recipe Harvest Crawl 08-24) and neither was added here, so each was unwatched from birth. Re-worded 2026-08-25 to state the rule that actually holds - a registry whose preamble contradicts its own contents teaches the reader to skip both. THE COUNT IS NOT THE RULE; THE REGISTRATION IS. Adding a task without adding it here is the defect, whatever the total. max_age_hours ~30 tolerates a late run + a weekend gap on a daily thing. Optional 'proves' (path or glob, repo-relative) names the output that shows the task's WORK actually landed: a nonzero exit whose proof output is fresh is reported as a warning, not paged as a death. The proof must be no older than the run it claims to prove. Optional 'run_log' (repo-relative directory plus the Start-RunLog name, e.g. grocery/out/logs/graph-nightly) is for a task whose WORK ends in a commit and whose LastTaskResult later occurrences overwrite: the heartbeat reads the last session of the newest <name>-<date>.log and pages unless it stamped rc=0, carries a committed or nothing-changed verdict under that name, and began inside max_age_hours, whatever LastTaskResult says (RUN-LOG-VERDICT in health-heartbeat.ps1). OUTPUT_FILES HAS A SECOND, OPT-IN FORM (2026-09-04, queue 2026-09-04-2feb5c): a writer that legitimately no-ops when its inputs have not changed gives its output no mtime liveness signal at all, so such a row declares 'currency_field' (the field inside the file that carries its currency stamp) plus 'currency_equals' (what that stamp must equal; only 'board_week', the newest grocery/out/comparison-<date>.json by name, is understood) and is judged on CONTENT instead. It is opt-in because the other four output_files rows are rewritten on every run and their mtime IS a real liveness signal - a default-on content check would silently disarm all four. Do not add these fields to a row whose writer cannot no-op, and do not widen max_age_hours to silence a no-op writer: see the CONTENT-CURRENCY block in health-heartbeat.ps1 for both rejected remedies.",
-  "windows_tasks": [
-    {
-      "name": "TC Grocery Ad Pulls 0700",
-      "max_age_hours": 30,
-      "why": "07:00 weekly-ad pull for every store whose ad rolled over (capture-run -Kind ad; captures only, no chain). proves = the ads file itself: a run-log exists the moment the process starts, so proving with it downgraded a killed run (0xC000013A) to 'work landed'.",
-      "allow_pending": true,
-      "proves": "grocery/out/ads-*.json"
-    },
-    {
-      "name": "TC Grocery Daily Capture 0800",
-      "max_age_hours": 30,
-      "why": "08:00 quarterly-rotation capture + the ONE daily chain: compare -> guards -> publish -> recipes -> commit",
-      "proves": "grocery/out/comparison-*.json"
-    },
-    {
-      "name": "TC Grocery Capture Watchdog 1030",
-      "max_age_hours": 30,
-      "why": "10:30 outcome check of the two tasks above (was 09:30 until 2026-08-31, and NAMED 0930 until 2026-09-07 when ops/install-grocery-tasks.ps1 -FixName renamed it on the live scheduler; it now runs AFTER the 09:45 alert-triage pass, so a board triage has already unblocked and republished is not reported as a failure - see Test-RunSuperseded in capture-watchdog.ps1) (schedule, run record, board, publish, ads, browser flags) + this heartbeat. EXITS 1 BY DESIGN whenever it has findings, and it is the script that RUNS health-heartbeat - without this flag the heartbeat pages about the watchdog every day the watchdog does its job (self-referential, permanent from its first real finding). KEEP allow_nonzero_exit ON THIS ROW: dropping it makes the heartbeat page TASK FAILED at 10:30 tomorrow when the watchdog exits 1 by design.",
-      "allow_nonzero_exit": true
-    },
-    {
-      "name": "TC Graph Nightly Matching",
-      "max_age_hours": 30,
-      "why": "21:30 nightly graph matching (graph/pipeline/nightly.ps1 -HardStop 06:30 -MaxMinutes 150). Registered 2026-08-22, AFTER Brad's three-task rule was written, and never added here - so from that day nothing would have noticed if it stopped: health-heartbeat flagged it as TASK UNWATCHED every morning and the drift check is what finally named it (2026-08-24). proves = its own status stamp, which says the chain RAN. It cannot say the work LANDED: the chain writes it in its finally block, BEFORE the commit. run_log (2026-09-11) is what does: health-heartbeat judges the last session of the newest grocery/out/logs/graph-nightly-<date>.log on its rc stamp, its commit verdict and its age, whatever LastTaskResult says, because the hourly skip repetitions overwrite that with 0 by morning. Founding case: the lane's commit was refused on every night it ran from 2026-09-07 to 09-10 and nothing paged. Keep run_log's name equal to nightly.ps1's Start-RunLog and Invoke-PipelineCommit names; the heartbeat's -SelfTest checks both.",
-      "proves": "grocery/out/logs/graph-nightly-status.json",
-      "run_log": "grocery/out/logs/graph-nightly"
-    },
-    {
-      "name": "TC Recipe Harvest Crawl",
-      "max_age_hours": 30,
-      "why": "18:00 daily recipe candidate crawl (meal-prep/pipeline/harvest-crawl.ps1). Registered 2026-08-24 and likewise never added here. proves = the dated crawl log, which is appended on every run including one that finds no new candidates; candidate-pool.json would have been the wrong proof because a legitimately empty crawl never touches it, and a proof that only exists on a good day pages on the ordinary ones.",
-      "proves": "meal-prep/runs/_harvest-log/crawl-*.log"
-    },
-    {
-      "name": "TC Sidecar Watchdog",
-      "max_age_hours": 2,
-      "why": "every 15 min: is the semantic sidecar on 127.0.0.1:8077 alive. It was down for the whole of 2026-09-09 and nothing noticed, because the recall hook falls back to lexical in silence - 723 semantic offers on 09-08, 0 on 09-09 - while every prompt paid two 1.5s timeouts (p50 3195ms against a 200ms bar). Defers inside the 21:30-06:30 GPU window rather than taking the card from the nightly, so a deferred run is a normal run and still stamps.",
-      "proves": "ops/out/sidecar-watchdog-stamp.json"
-    },
-    {
-      "name": "TC Recall Sleep 0435",
-      "max_age_hours": 30,
-      "why": "the knowledge store's nightly offline pass: harvest, join reflex outcomes from the transcripts, re-derive floors and weights, refresh drafts and failure classes, run the forgetting and clustering queues, finish with the gate. It ran as a Claude scheduled AGENT until 2026-09-09, against Brad's 2026-08-22 rule that Windows tasks are the only routines that fire - one more failure mode between the schedule and the work. The pass now stamps on every path, red or green, because a stamp written only on success reads as 'never ran' on exactly the mornings somebody needs to know it did.",
-      "proves": "ops/out/recall-sleep-stamp.json"
-    },
-    {
-      "name": "TC Brain Digest 0645",
-      "max_age_hours": 30,
-      "why": "one morning page: what the night moved, what went red, which stage of the loop is starving, and every judgement queue with the age of its oldest unruled item against a floor. It exists because the queues drain only when somebody sits down at them - measured 2026-09-09, 60 graph alias proposals had waited 19.9 days with nothing anywhere saying so.",
-      "proves": "ops/out/brain-digest-body.txt"
-    },
-    {
-      "name": "TC Daemon Battery 0230",
-      "max_age_hours": 30,
-      "why": "02:30 nightly: the Recipe Hunter daemon's full self-test battery (548 cases, 388-677 s of wall on 2026-09-11), run by ops/run-daemon-battery.ps1 in a throwaway detached checkout of origin/main. run-gates skips it because it runs for minutes, and its skip reason said 'exercised nightly' while nothing ran it; the same day it was found rewriting the tracked meal-prep/db/fdc-cache.json 36 times per run. Exit 2 is a red case, a case name missing against meal-prep/pipeline/hunt_daemon_selftest.names.txt, or any git status line in that checkout afterwards; exit 3 is could-not-run. proves = a stamp written ONLY on a green verdict, never on every path: a red battery must page, and a stamp written on a red run would excuse its own nonzero exit as work that landed.",
-      "proves": "ops/out/logs/daemon-battery-green.json"
-    }
-  ],
-  "startup_entries": [],
-  "output_files": [
-    {
-      "path": "grocery/out/smp-feed.json",
-      "max_age_hours": 30,
-      "why": "public price feed every card fetches"
-    },
-    {
-      "path": "public/smp-feed.json",
-      "max_age_hours": 30,
-      "why": "the SERVED feed (Cloudflare)"
-    },
-    {
-      "path": "public/free-dinners.json",
-      "max_age_hours": 30,
-      "currency_field": "week_of",
-      "currency_equals": "board_week",
-      "why": "this week's free-dinner rotation. REWRITTEN ONLY WHEN THE FREE SET FLIPS, so its mtime tracks the WEEKLY rotation, not the daily run that rotate-free-dinners.ps1 makes: the no-op early return at rotate-free-dinners.ps1:129-130 sits before the write at line 228. Judged on week_of, not on mtime. max_age_hours is kept here and is NOT consulted while currency_field is present - deleting the two currency_* fields is the rollback, and the number is left alone so nobody widens it (a window wider than the cadence never fires on time)."
-    },
-    {
-      "path": "meal-prep/pipeline/v2-perserving.json",
-      "max_age_hours": 30,
-      "why": "recipe per-serving manifest (top5/rotation read it)"
-    },
-    {
-      "path": "meal-prep/ingredient-map.json",
-      "max_age_hours": 30,
-      "why": "derived item->bid map (tools + top5 badges read it; regenerated daily)"
-    }
-  ],
-  "external_files": [
-    {
-      "path": "%USERPROFILE%\\.claude\\recall-log.jsonl",
-      "label": "recall-log.jsonl",
-      "max_age_hours": 72,
-      "why": "the automatic-recall hook's offer log. Added 2026-09-08 (backlog I78): the recall hooks are the estate's newest automated loop and appeared in NO watch list, so the whole loop could stop firing and nothing would go red. A heartbeat is written by the watched thing and cannot separate 'found nothing' from 'never invoked'; this is the watcher watching on its own schedule, which is the only shape that can say this should have run and did not. 72h not 30h because the hook only writes when a session runs, and Brad does not work every day - a 30h window would page every quiet weekend and teach him to ignore it."
-    },
-    {
-      "path": "%USERPROFILE%\\.claude\\recall-reflex-log.jsonl",
-      "label": "recall-reflex-log.jsonl",
-      "max_age_hours": 72,
-      "why": "the reflex hook's fire log. Watched SEPARATELY from recall-log.jsonl rather than trusting one to prove the other: they are two different hooks on two different events, and the estate has already paid for assuming one signal covers two loops. Same 72h reasoning."
-    }
-  ],
-  "output_globs": [
-    {
-      "glob": "grocery/out/comparison-*.json",
-      "max_age_hours": 30,
-      "why": "the daily cross-store board"
-    }
-  ],
-  "queues": [
-    {
-      "name": "recipe-specs-awaiting-propagate",
-      "max_age_hours": 72,
-      "why": "specs whose content changed since propagate last shipped them - the drain is propagate-recipes.ps1",
-      "cost_if_undrained": "corrected cards sit on disk and readers are served the old ones. On 2026-09-07 this was 120 cards and five days: the scaler fix, seventeen wrong-panel macro repairs, the Shop Smart bullet change."
-    },
-    {
-      "name": "staged-ghost-writes",
-      "max_age_hours": 48,
-      "why": "writes an agent queued for approval instead of sending - the drain is ops/review-staged.ps1",
-      "cost_if_undrained": "an agent did the work and it never reaches the site. Armed for agent runs on 2026-09-07, so this queue starts existing now."
-    },
-    {
-      "name": "open-triage-items",
-      "max_age_hours": 96,
-      "why": "ops alerts raised and not yet closed - the drain is triage, closing through grocery/triage-close.ps1",
-      "cost_if_undrained": "a live alert nobody answered. The queue de-dupes per type per day, so depth here is distinct conditions, not repeats."
-    }
-  ]
+    "readme":  "Registry of automations + critical outputs the health-heartbeat.ps1 watches for SILENT DEATH - an automation that stopped being scheduled (deleted/disabled), or an output that quietly went stale, WITHOUT a loud failure. Since 2026-08-22 health-heartbeat runs from the \u0027TC Grocery Capture Watchdog\u0027 task, moved to 10:30 on 2026-08-31 and RENAMED to \u0027TC Grocery Capture Watchdog 1030\u0027 on 2026-09-07 by ops/install-grocery-tasks.ps1 -FixName (the earlier ruling here said the 0930 name was deliberately not renamed; the registrar renamed it on the live scheduler at 06:30 and this registry did not hear, so the heartbeat paged one rename as two issues - a phantom TASK MISSING and an unwatched real task - at 10:30 the same morning. The registrar\u0027s $OWNED table and this registry MUST name the same tasks, and ops/install-grocery-tasks.ps1 -VerifyRegistry now checks exactly that on every push, through ops/audit-task-registry.ps1 in run-gates) (local-watchdog.ps1 and the SMP tasks are retired); capture-watchdog covers loud failures and the run record. Brad\u0027s rule 2026-08-22: Windows tasks are the ONLY routines that fire (no Claude scheduled agents) - every one belongs HERE, and health-heartbeat\u0027s REGISTRY DRIFT check pages if a \u0027TC *\u0027 or \u0027SMP *\u0027 task exists that is not listed. The rule was written when there were exactly three and said \u0027the three TC Grocery tasks\u0027; two more were registered after it (TC Graph Nightly Matching 08-22, TC Recipe Harvest Crawl 08-24) and neither was added here, so each was unwatched from birth. Re-worded 2026-08-25 to state the rule that actually holds - a registry whose preamble contradicts its own contents teaches the reader to skip both. THE COUNT IS NOT THE RULE; THE REGISTRATION IS. Adding a task without adding it here is the defect, whatever the total. max_age_hours ~30 tolerates a late run + a weekend gap on a daily thing. Optional \u0027proves\u0027 (path or glob, repo-relative) names the output that shows the task\u0027s WORK actually landed: a nonzero exit whose proof output is fresh is reported as a warning, not paged as a death. The proof must be no older than the run it claims to prove. Optional \u0027run_log\u0027 (repo-relative directory plus the Start-RunLog name, e.g. grocery/out/logs/graph-nightly) is for a task whose WORK ends in a commit and whose LastTaskResult later occurrences overwrite: the heartbeat reads the last session of the newest \u003cname\u003e-\u003cdate\u003e.log and pages unless it stamped rc=0, carries a committed or nothing-changed verdict under that name, and began inside max_age_hours, whatever LastTaskResult says (RUN-LOG-VERDICT in health-heartbeat.ps1). OUTPUT_FILES HAS A SECOND, OPT-IN FORM (2026-09-04, queue 2026-09-04-2feb5c): a writer that legitimately no-ops when its inputs have not changed gives its output no mtime liveness signal at all, so such a row declares \u0027currency_field\u0027 (the field inside the file that carries its currency stamp) plus \u0027currency_equals\u0027 (what that stamp must equal; only \u0027board_week\u0027, the newest grocery/out/comparison-\u003cdate\u003e.json by name, is understood) and is judged on CONTENT instead. It is opt-in because the other four output_files rows are rewritten on every run and their mtime IS a real liveness signal - a default-on content check would silently disarm all four. Do not add these fields to a row whose writer cannot no-op, and do not widen max_age_hours to silence a no-op writer: see the CONTENT-CURRENCY block in health-heartbeat.ps1 for both rejected remedies.",
+    "windows_tasks":  [
+                          {
+                              "name":  "TC Grocery Ad Pulls 0700",
+                              "max_age_hours":  30,
+                              "why":  "07:00 weekly-ad pull for every store whose ad rolled over (capture-run -Kind ad; captures only, no chain). proves = the ads file itself: a run-log exists the moment the process starts, so proving with it downgraded a killed run (0xC000013A) to \u0027work landed\u0027.",
+                              "allow_pending":  true,
+                              "proves":  "grocery/out/ads-*.json"
+                          },
+                          {
+                              "name":  "TC Grocery Daily Capture 0800",
+                              "max_age_hours":  30,
+                              "why":  "08:00 quarterly-rotation capture + the ONE daily chain: compare -\u003e guards -\u003e publish -\u003e recipes -\u003e commit",
+                              "proves":  "grocery/out/comparison-*.json"
+                          },
+                          {
+                              "name":  "TC Grocery Capture Watchdog 1030",
+                              "max_age_hours":  30,
+                              "why":  "10:30 outcome check of the two tasks above (was 09:30 until 2026-08-31, and NAMED 0930 until 2026-09-07 when ops/install-grocery-tasks.ps1 -FixName renamed it on the live scheduler; it now runs AFTER the 09:45 alert-triage pass, so a board triage has already unblocked and republished is not reported as a failure - see Test-RunSuperseded in capture-watchdog.ps1) (schedule, run record, board, publish, ads, browser flags) + this heartbeat. EXITS 1 BY DESIGN whenever it has findings, and it is the script that RUNS health-heartbeat - without this flag the heartbeat pages about the watchdog every day the watchdog does its job (self-referential, permanent from its first real finding). KEEP allow_nonzero_exit ON THIS ROW: dropping it makes the heartbeat page TASK FAILED at 10:30 tomorrow when the watchdog exits 1 by design.",
+                              "allow_nonzero_exit":  true
+                          },
+                          {
+                              "name":  "TC Graph Nightly Matching",
+                              "max_age_hours":  30,
+                              "why":  "21:30 nightly graph matching (graph/pipeline/nightly.ps1 -HardStop 06:30 -MaxMinutes 150). Registered 2026-08-22, AFTER Brad\u0027s three-task rule was written, and never added here - so from that day nothing would have noticed if it stopped: health-heartbeat flagged it as TASK UNWATCHED every morning and the drift check is what finally named it (2026-08-24). proves = its own status stamp, which says the chain RAN. It cannot say the work LANDED: the chain writes it in its finally block, BEFORE the commit. run_log (2026-09-11) is what does: health-heartbeat judges the last session of the newest grocery/out/logs/graph-nightly-\u003cdate\u003e.log on its rc stamp, its commit verdict and its age, whatever LastTaskResult says, because the hourly skip repetitions overwrite that with 0 by morning. Founding case: the lane\u0027s commit was refused on every night it ran from 2026-09-07 to 09-10 and nothing paged. Keep run_log\u0027s name equal to nightly.ps1\u0027s Start-RunLog and Invoke-PipelineCommit names; the heartbeat\u0027s -SelfTest checks both.",
+                              "proves":  "grocery/out/logs/graph-nightly-status.json",
+                              "run_log":  "grocery/out/logs/graph-nightly"
+                          },
+                          {
+                              "name":  "TC Recipe Harvest Crawl",
+                              "max_age_hours":  30,
+                              "why":  "18:00 daily recipe candidate crawl (meal-prep/pipeline/harvest-crawl.ps1). Registered 2026-08-24 and likewise never added here. proves = the dated crawl log, which is appended on every run including one that finds no new candidates; candidate-pool.json would have been the wrong proof because a legitimately empty crawl never touches it, and a proof that only exists on a good day pages on the ordinary ones.",
+                              "proves":  "meal-prep/runs/_harvest-log/crawl-*.log"
+                          },
+                          {
+                              "name":  "TC Sidecar Watchdog",
+                              "max_age_hours":  2,
+                              "why":  "every 15 min: is the semantic sidecar on 127.0.0.1:8077 alive. It was down for the whole of 2026-09-09 and nothing noticed, because the recall hook falls back to lexical in silence - 723 semantic offers on 09-08, 0 on 09-09 - while every prompt paid two 1.5s timeouts (p50 3195ms against a 200ms bar). Defers inside the 21:30-06:30 GPU window rather than taking the card from the nightly, so a deferred run is a normal run and still stamps.",
+                              "proves":  "ops/out/sidecar-watchdog-stamp.json"
+                          },
+                          {
+                              "name":  "TC Recall Sleep 0435",
+                              "max_age_hours":  30,
+                              "why":  "the knowledge store\u0027s nightly offline pass: harvest, join reflex outcomes from the transcripts, re-derive floors and weights, refresh drafts and failure classes, run the forgetting and clustering queues, finish with the gate. It ran as a Claude scheduled AGENT until 2026-09-09, against Brad\u0027s 2026-08-22 rule that Windows tasks are the only routines that fire - one more failure mode between the schedule and the work. The pass now stamps on every path, red or green, because a stamp written only on success reads as \u0027never ran\u0027 on exactly the mornings somebody needs to know it did.",
+                              "proves":  "ops/out/recall-sleep-stamp.json"
+                          },
+                          {
+                              "name":  "TC Brain Digest 0645",
+                              "max_age_hours":  30,
+                              "why":  "one morning page: what the night moved, what went red, which stage of the loop is starving, and every judgement queue with the age of its oldest unruled item against a floor. It exists because the queues drain only when somebody sits down at them - measured 2026-09-09, 60 graph alias proposals had waited 19.9 days with nothing anywhere saying so.",
+                              "proves":  "ops/out/brain-digest-body.txt"
+                          },
+                          {
+                              "name":  "TC Daemon Battery 0230",
+                              "max_age_hours":  30,
+                              "why":  "02:30 nightly: the Recipe Hunter daemon\u0027s full self-test battery (548 cases, 388-677 s of wall on 2026-09-11), run by ops/run-daemon-battery.ps1 in a throwaway detached checkout of origin/main. run-gates skips it because it runs for minutes, and its skip reason said \u0027exercised nightly\u0027 while nothing ran it; the same day it was found rewriting the tracked meal-prep/db/fdc-cache.json 36 times per run. Exit 2 is a red case, a case name missing against meal-prep/pipeline/hunt_daemon_selftest.names.txt, or any git status line in that checkout afterwards; exit 3 is could-not-run. proves = a stamp written ONLY on a green verdict, never on every path: a red battery must page, and a stamp written on a red run would excuse its own nonzero exit as work that landed.",
+                              "proves":  "ops/out/logs/daemon-battery-green.json"
+                          },
+                          {
+                              "name":  "TC Daily Ratchets 0315",
+                              "max_age_hours":  30,
+                              "why":  "03:15 daily: the six tree-wide ratchets a PUSH no longer runs (ops/run-daily-ratchets.ps1), marked daily in ops/run-gates.ps1\u0027s own static list. Brad, 2026-09-12: they cost 184s of a 699s push and audit-mustfire-census at 54s was the wall-clock floor, while none of them can put a wrong number in front of a paying reader - so they moved off the push and onto a clock. THIS ROW IS WHAT MAKES THAT SAFE. Deferred and unscheduled, those six run NOWHERE, which is the absence ops-and-gates.md warns about and the reason a definition is not a registration. proves = a stamp written ONLY on a green verdict, never on every path: a red or blind run leaves yesterday\u0027s stamp standing so the heartbeat pages on it, where a stamp written on every path would let a failing ratchet prove its own run landed.",
+                              "proves":  "ops/out/logs/daily-ratchets-green.json"
+                          }
+                      ],
+    "startup_entries":  [
+
+                        ],
+    "output_files":  [
+                         {
+                             "path":  "grocery/out/smp-feed.json",
+                             "max_age_hours":  30,
+                             "why":  "public price feed every card fetches"
+                         },
+                         {
+                             "path":  "public/smp-feed.json",
+                             "max_age_hours":  30,
+                             "why":  "the SERVED feed (Cloudflare)"
+                         },
+                         {
+                             "path":  "public/free-dinners.json",
+                             "max_age_hours":  30,
+                             "currency_field":  "week_of",
+                             "currency_equals":  "board_week",
+                             "why":  "this week\u0027s free-dinner rotation. REWRITTEN ONLY WHEN THE FREE SET FLIPS, so its mtime tracks the WEEKLY rotation, not the daily run that rotate-free-dinners.ps1 makes: the no-op early return at rotate-free-dinners.ps1:129-130 sits before the write at line 228. Judged on week_of, not on mtime. max_age_hours is kept here and is NOT consulted while currency_field is present - deleting the two currency_* fields is the rollback, and the number is left alone so nobody widens it (a window wider than the cadence never fires on time)."
+                         },
+                         {
+                             "path":  "meal-prep/pipeline/v2-perserving.json",
+                             "max_age_hours":  30,
+                             "why":  "recipe per-serving manifest (top5/rotation read it)"
+                         },
+                         {
+                             "path":  "meal-prep/ingredient-map.json",
+                             "max_age_hours":  30,
+                             "why":  "derived item-\u003ebid map (tools + top5 badges read it; regenerated daily)"
+                         }
+                     ],
+    "external_files":  [
+                           {
+                               "path":  "%USERPROFILE%\\.claude\\recall-log.jsonl",
+                               "label":  "recall-log.jsonl",
+                               "max_age_hours":  72,
+                               "why":  "the automatic-recall hook\u0027s offer log. Added 2026-09-08 (backlog I78): the recall hooks are the estate\u0027s newest automated loop and appeared in NO watch list, so the whole loop could stop firing and nothing would go red. A heartbeat is written by the watched thing and cannot separate \u0027found nothing\u0027 from \u0027never invoked\u0027; this is the watcher watching on its own schedule, which is the only shape that can say this should have run and did not. 72h not 30h because the hook only writes when a session runs, and Brad does not work every day - a 30h window would page every quiet weekend and teach him to ignore it."
+                           },
+                           {
+                               "path":  "%USERPROFILE%\\.claude\\recall-reflex-log.jsonl",
+                               "label":  "recall-reflex-log.jsonl",
+                               "max_age_hours":  72,
+                               "why":  "the reflex hook\u0027s fire log. Watched SEPARATELY from recall-log.jsonl rather than trusting one to prove the other: they are two different hooks on two different events, and the estate has already paid for assuming one signal covers two loops. Same 72h reasoning."
+                           }
+                       ],
+    "output_globs":  [
+                         {
+                             "glob":  "grocery/out/comparison-*.json",
+                             "max_age_hours":  30,
+                             "why":  "the daily cross-store board"
+                         }
+                     ],
+    "queues":  [
+                   {
+                       "name":  "recipe-specs-awaiting-propagate",
+                       "max_age_hours":  72,
+                       "why":  "specs whose content changed since propagate last shipped them - the drain is propagate-recipes.ps1",
+                       "cost_if_undrained":  "corrected cards sit on disk and readers are served the old ones. On 2026-09-07 this was 120 cards and five days: the scaler fix, seventeen wrong-panel macro repairs, the Shop Smart bullet change."
+                   },
+                   {
+                       "name":  "staged-ghost-writes",
+                       "max_age_hours":  48,
+                       "why":  "writes an agent queued for approval instead of sending - the drain is ops/review-staged.ps1",
+                       "cost_if_undrained":  "an agent did the work and it never reaches the site. Armed for agent runs on 2026-09-07, so this queue starts existing now."
+                   },
+                   {
+                       "name":  "open-triage-items",
+                       "max_age_hours":  96,
+                       "why":  "ops alerts raised and not yet closed - the drain is triage, closing through grocery/triage-close.ps1",
+                       "cost_if_undrained":  "a live alert nobody answered. The queue de-dupes per type per day, so depth here is distinct conditions, not repeats."
+                   }
+               ]
 }

@@ -41,6 +41,9 @@ $OWNED = @(
   [pscustomobject]@{ Name = 'TC Recall Sleep 0435';  File = 'tc-recall-sleep-0435.xml' }
   [pscustomobject]@{ Name = 'TC Brain Digest 0645';  File = 'tc-brain-digest-0645.xml' }
   [pscustomobject]@{ Name = 'TC Daemon Battery 0230'; File = 'tc-daemon-battery-0230.xml' }
+  # 2026-09-12: the six tree-wide ratchets a PUSH no longer runs. They are deferred in ops\run-gates.ps1 by a
+  # `daily = $true` mark, so without THIS registration they run nowhere at all - not in a push, not on a clock.
+  [pscustomobject]@{ Name = 'TC Daily Ratchets 0315'; File = 'tc-daily-ratchets-0315.xml' }
 )
 
 function Test-TaskWatched {
