@@ -240,6 +240,12 @@ __pycache__/
 /grocery/out/weekly-run.lock
 /grocery/out/smp-feed.json
 /grocery/out/recipe-board-everyday.bak-*.json
+# readings + verdict of the bounded I125 produce-intraday probe (grocery\probe-produce-intraday.ps1).
+# Ignored for the reason the weekly lock above is: a scheduled task writes it twice a day into the MAIN
+# checkout, and a tracked file dirtied by a task refuses every other session's ops\push-main.ps1 until
+# somebody commits it. The verdict travels in design\MEASURE-produce-intraday-2026-09-12.md instead.
+/grocery/out/produce-intraday.jsonl
+/grocery/out/produce-intraday-verdict.json
 # rolling local archive of aged out\ snapshots (run-daily-local.ps1 retention moves files in and later
 # deletes them; tracking it would make push-data's `git add -A` commit stale data and churn on every purge)
 /grocery/out/archive/

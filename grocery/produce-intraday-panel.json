@@ -1,0 +1,45 @@
+{
+  "note": "THE PANEL AND THE ACCEPTANCE BAR FOR BACKLOG I125, pinned 2026-09-12 BEFORE the first reading. Brad's ruling that day: 'Run the cheap test once: one produce commodity at one chain store, priced online morning and afternoon on the same day, repeated on two days. If no price moves, record that US chain online produce prices here do not move intraday and close it. If any move, every capture starts recording its capture time (hour and timezone) alongside asof, and nothing else changes until that data shows a pattern.' ONE STORE, exactly as ruled. The commodity count is the one detail the ruling left open and it is 15, not 1: the marginal cost of a fifteenth product is one HTTP call inside the same hour, and a single commodity could be a fixed-price outlier - a 'does not move' verdict that closes the item forever should not rest on one row. Twelve are the most perishable produce the board carries, because a markdown-on-perishables claim is only testable where the markdown would happen; three are long-shelf-life controls, so a move that turns out to be store-wide repricing can be told apart from a perishable markdown. PRODUCTS ARE PINNED BY productId, never by search term: Kroger's search ranking moves on its own, so a top-hit-vs-top-hit comparison would report a ranking change as a price change - the exact confound this measurement exists to rule out. A price here is what the store charges today, promo when one is live and regular otherwise, which is the same rule grocery/pull-regular-bakers-api.ps1 publishes on.",
+  "item": "I125",
+  "harness": "grocery/probe-produce-intraday.ps1",
+  "measurement_doc": "design/MEASURE-produce-intraday-2026-09-12.md",
+  "store": "bakers",
+  "store_label": "Baker's - Saddlecreek, 888 S Saddle Creek Rd, Omaha 68106",
+  "location_id": "61500319",
+  "api": "https://api.kroger.com/v1/products/<productId>?filter.locationId=<locationId>",
+  "pinned_on": "2026-09-12",
+  "plan": {
+    "note": "The two deciding days. Each has one morning and one afternoon reading; the evening reading is SUPPLEMENTARY and is deliberately NOT part of the verdict arithmetic, because the ruling names morning and afternoon. It is recorded anyway because it costs one more trigger and because a store that reprices perishables at all is likeliest to do it late in the day - so a 'no move' verdict that never looked after 15:30 would be worth less to whoever reads it next.",
+    "dates": ["2026-09-13", "2026-09-14"],
+    "deciding_windows": ["morning", "afternoon"],
+    "supplementary_windows": ["evening"],
+    "window_from_hour": "morning = local hour < 12, afternoon = 12 to 17, evening = 18 and later. The window is read from the hour the reading ACTUALLY happened at, never from the trigger that was meant to fire it: the task runs with StartWhenAvailable, so a box that was asleep at 08:30 produces an afternoon reading, and labelling that 'morning' would manufacture a pair out of two afternoon prices."
+  },
+  "bar": {
+    "note": "WRITTEN BEFORE THE FIRST READING (backlog E21). A threshold chosen after seeing the number is not a threshold.",
+    "move_threshold_usd": 0.01,
+    "pair_rule": "A deciding pair is ONE product, ONE date, its morning price against its afternoon price, both read ok. A morning-to-morning or day-to-day difference is NOT a move for this purpose: that is the daily ad cycle, which the asof machinery already handles and which this item is not about.",
+    "deciding_pairs_planned": 30,
+    "min_pairs_for_a_verdict": 24,
+    "close_if": "moves == 0 AND pairs >= 24 - record that US chain online produce prices here do not move intraday, close I125, change no capture schema.",
+    "open_if": "moves >= 1 - every capture starts recording its capture time (hour and timezone) alongside asof, and nothing else changes.",
+    "otherwise": "BLIND. Fewer than 24 readable pairs is a could-not-look, and a could-not-look must not settle the question. A product that errored or returned no price is counted and named, never scored as 'did not move'."
+  },
+  "products": [
+    { "commodity": "strawberries",      "kind": "perishable", "product_id": "0003338320027", "description": "Fresh Strawberries - 1 LB Clamshell",   "size": "1 lb",   "price_at_pin": 3.99 },
+    { "commodity": "raspberries",       "kind": "perishable", "product_id": "0003338321000", "description": "Fresh Red Raspberries - 6 OZ Clamshell", "size": "6 oz",  "price_at_pin": 2.50 },
+    { "commodity": "blueberries",       "kind": "perishable", "product_id": "0003338322101", "description": "Fresh Blueberries - 1 PT Clamshell",    "size": "1 pt",   "price_at_pin": 4.79 },
+    { "commodity": "spring-mix",        "kind": "perishable", "product_id": "0001111091052", "description": "Kroger Baby Spring Mix",                "size": "10 oz",  "price_at_pin": 3.99 },
+    { "commodity": "spinach",           "kind": "perishable", "product_id": "0001111091649", "description": "Kroger Tender Baby Spinach Bag Salad",  "size": "10 oz",  "price_at_pin": 2.49 },
+    { "commodity": "lettuce",           "kind": "perishable", "product_id": "0000000004640", "description": "Romaine Lettuce",                       "size": "1 ct",   "price_at_pin": 2.79 },
+    { "commodity": "asparagus",         "kind": "perishable", "product_id": "0000000004080", "description": "Green Asparagus",                       "size": "1 lb",   "price_at_pin": 3.69 },
+    { "commodity": "fresh-green-beans", "kind": "perishable", "product_id": "0000000004066", "description": "Fresh Bagged Green Beans",              "size": "1 lb",   "price_at_pin": 2.19 },
+    { "commodity": "broccoli",          "kind": "perishable", "product_id": "0000000003082", "description": "Broccoli Crown",                        "size": "1 lb",   "price_at_pin": 2.19 },
+    { "commodity": "cherry-tomatoes",   "kind": "perishable", "product_id": "0001111091686", "description": "Kroger Fresh Grape Tomatoes",           "size": "10 oz",  "price_at_pin": 2.99 },
+    { "commodity": "mushrooms",         "kind": "perishable", "product_id": "0001111091011", "description": "Kroger Whole White Mushrooms",          "size": "8 oz",   "price_at_pin": 2.39 },
+    { "commodity": "avocados",          "kind": "perishable", "product_id": "0000000004046", "description": "Fresh Medium Ripe Avocado",             "size": "1 each", "price_at_pin": 1.00 },
+    { "commodity": "bananas",           "kind": "control",    "product_id": "0000000004011", "description": "Fresh Bunch of Bananas, 5-7 Bananas",   "size": "1 lb",   "price_at_pin": 0.55 },
+    { "commodity": "russet-potatoes",   "kind": "control",    "product_id": "0000000004072", "description": "Russet Potato",                         "size": "1 lb",   "price_at_pin": 0.89 },
+    { "commodity": "onions",            "kind": "control",    "product_id": "0000000004093", "description": "Jumbo Yellow Onions",                   "size": "1 lb",   "price_at_pin": 1.19 }
+  ]
+}
