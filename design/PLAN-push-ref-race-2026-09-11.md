@@ -193,6 +193,74 @@ This does not change the recommended order, but it does change what the lease is
 lane's throughput has to be found under the load the box actually carries, because the quiet condition
 this estate has been measuring against is available about seven hours in a thousand.
 
+## THE SWEEP RAN, 2026-09-12. THE BAR IS MET AT 0.26, AND K IS 5
+
+**Harness:** `ops/measure-gate-width.ps1 -Sweep`, `-Report` for every total. **Rows:**
+`design/DATA-gate-width-sweep-2026-09-12.csv`, 8 rows, **0 dropped** - every one reached the width it
+asked for, over the same 373 gates, with **zero other gate runs live at the start of each**. Collected
+across five quiet windows found by polling; the first row ran at `ff5573014`, the other seven at
+`7c6dbe359`, and the identical 373-gate discovery either side is why they are one set - the change
+between those commits was the harness's own source, which is not a discovered gate.
+
+| width | n | median wall | range | vs width 1 | median gate work |
+|---|---|---|---|---|---|
+| 1 | 3 | **725s** | 675-860 | 100% | 718s |
+| 5 | 3 | **191s** | 173-217 | **26%** | 879s |
+| 10 | 2 | **113s** | 111-114 | **16%** | 910s |
+
+**THE BAR IS MET: 191s against 725s is 26%, where the bar written before the run was 50%.**
+
+### The finding that matters more than the ratio
+
+**On a completely idle box - no other gate run, CPU in the teens - a width-1 gate run takes 12
+minutes.** At the landing rate of 4.3/h (now four consecutive days: 53, 61, 62, and 43 over 10 h today)
+that run loses the ref race **58% of the time before any contention exists at all**. The 25-31 minute
+runs in the brief were width-1 runs plus queueing on top. **18 of 19 grants on 2026-09-11 were width 1**,
+so the configuration the estate actually runs in is one that cannot land reliably even on an empty
+machine. That is the race, and it is not caused by the queue.
+
+### Why K is 5, and the trade stated honestly
+
+A minimum grant width **lowers raw throughput** - only two runs fit at width 5 instead of ten, so
+runs/hour falls from 49.7 to 37.7. It wins anyway because it converts runs into *landings* far better,
+and landings are what the estate wants:
+
+| K | concurrent runs | runs/h | P(win the race) | **landings/h** |
+|---|---|---|---|---|
+| 1 (today) | 10 | 49.7 | 42% | 20.9 |
+| **5** | **2** | **37.7** | **80%** | **30.0** |
+| 10 | 1 | 31.9 | 87% | 27.8 |
+
+**K=5 is the peak.** K=10 is faster per run (113s against 191s) but serialises the box to one run at a
+time and lands fewer. Slot-seconds per landing tell the same story from the other side: 1,729 at width 1
+against 1,201 at width 5, so width 5 costs **32% more per run and ~30% less per landing**.
+
+**And it resolves the bistability this plan opened with.** Against the measured demand of 55 unique runs
+an hour: at width 1 capacity is 49.7 and the queue **saturates**; at K=5 effective demand falls to 29.1
+against a capacity of 37.7 and it **drains**. One change moves the system from the unstable state to the
+stable one.
+
+### What this does NOT say
+
+- **Width 2 was never measured.** K=5 beats K=1 and K=10 on measured points; K=2 is not ruled out by
+  measurement, only by interpolation, and interpolation puts it below both.
+- The curve is **this box, quiet, at 373 gates**. Under load every wall figure rises, and the
+  2026-09-11 logs (870-1,543 slot-seconds a run) say by 1.5 to 3 times. The ORDER of the widths is what
+  the recommendation rests on, not the absolute seconds.
+- **A deep queue of runs that are not racing gets slower.** A position is served every 72.5s at width 1
+  and every 95.5s at K=5. Hand runs and branch pushes pay that; only landings are bought. If that trade
+  is wrong, K is wrong.
+- n is 3, 3 and 2. The margin is wide - width 5 would have to be 1.9x worse than measured to fail the
+  bar - but these are single-digit samples on one machine on one morning.
+
+### Where that leaves the landing lease
+
+The lease's problem was its margin: capacity `1440/T` against 53-62 landings a day needed **T under ~23
+minutes**, and the gate measured 25-31. **At K=5 a gate run is 191s quiet**, and even at the 3x load
+inflation it is under 10 minutes. So the lease becomes comfortable rather than marginal - and it may not
+be needed at all, since K=5 alone takes P(win) from 42% to 80%. **Re-measure T under K=5 before building
+it**, which is what recommendation 2 already said.
+
 ## What would make me wrong
 
 - If the 4.3/h landing rate is transient rather than this estate's normal rate, the race is not worth a
