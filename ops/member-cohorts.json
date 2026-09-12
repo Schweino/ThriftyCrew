@@ -1,6 +1,6 @@
 ﻿{
-    "readme":  "Aggregate member cohorts: signup month against CURRENT status, counts only. NO PER-MEMBER ROW AND NO EMAIL ADDRESS IS STORED HERE OR ANYWHERE - ruled by Brad 2026-09-08, backlog I97, and enforced by ops/member-cohorts.ps1, which reads only created_at and status off a member and builds this from month strings, status strings and integers. These are ENDPOINTS, not a retention curve: Ghost gives current status and not a status history, so this cannot say WHEN anyone left. Backlog I98 is the monthly snapshot that would fix that and it is not started.",
-    "generated":  "2026-09-09 04:36",
+    "readme":  "Aggregate member cohorts: signup month against CURRENT status, counts only. NO PER-MEMBER ROW AND NO EMAIL ADDRESS IS STORED HERE OR ANYWHERE - ruled by Brad 2026-09-08, backlog I97, and enforced by ops/member-cohorts.ps1, which reads only created_at and status off a member and builds this from month strings, status strings and integers. These are ENDPOINTS, not a retention curve: Ghost gives current status and not a status history, so this cannot say WHEN anyone left. Backlog I98 is the monthly snapshot that fixes that and it IS RUNNING as of 2026-09-09 - the series is ops/member-cohorts-history.jsonl, appended once per calendar month. It builds forward and cannot be backfilled, so read the series rather than this file once more than one month has accumulated.",
+    "generated":  "2026-09-12 10:30",
     "members_counted":  18,
     "members_with_unreadable_signup_date":  0,
     "statuses":  {

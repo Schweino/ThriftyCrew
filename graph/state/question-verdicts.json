@@ -12030,7 +12030,7 @@
     "product_key": "soft scrub sapphire waters duo cubes in tank cleaner 4 ea",
     "product_name": "Soft Scrub Sapphire Waters Duo Cubes In Tank Cleaner 4 Ea",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is a 'Duo Cubes In Tank Cleaner', which is a specific product for cleaning toilet tanks (a different food/cut/grade analog: different product type). It does not match the commodity 'All-Purpose Cleaner' or the known surface patterns for general-purpose cleaning sprays/liquids.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is a 'Duo Cubes In Tank Cleaner', which is a specific product for cleaning toilet tanks (a different food/cut/grade analog: different product type). It does not match the commodity 'All-Purpose Cleaner' or the known surface patterns for general-purpose cleaning sprays/liquids.",
     "status": "llm_rejected"
   },
   {
@@ -43457,7 +43457,7 @@
     "product_key": "minute rice, brown 8.8 oz",
     "product_name": "Minute Rice, Brown 8.8 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: reviewer REJECT: 8.8 oz is Minute's READY TO SERVE two-cup pack (2 x 4.4 oz cups), not dry rice - the commodity excludes cup/ready-to-heat/microwave forms and its include-hit sibling is the 28 oz dry box; a per-lb price from a heat-and-eat cup would misprice the row several-fold.",
+    "reason": "banked: banked: banked: banked: banked: banked: reviewer REJECT: 8.8 oz is Minute's READY TO SERVE two-cup pack (2 x 4.4 oz cups), not dry rice - the commodity excludes cup/ready-to-heat/microwave forms and its include-hit sibling is the 28 oz dry box; a per-lb price from a heat-and-eat cup would misprice the row several-fold.",
     "status": "llm_rejected"
   },
   {
@@ -48770,7 +48770,7 @@
     "product_key": "fresh express garden shreds iceberg 14 oz",
     "product_name": "Fresh Express Garden Shreds Iceberg 14 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing specifies 'Iceberg', which is a distinct variety of lettuce, whereas the commodity is 'Cabbage (green)'. These are different food items.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing specifies 'Iceberg', which is a distinct variety of lettuce, whereas the commodity is 'Cabbage (green)'. These are different food items.",
     "status": "llm_rejected"
   },
   {
@@ -49243,7 +49243,7 @@
     "product_key": "tanimura & antle lettuce, artisan romaine 2 ea",
     "product_name": "Tanimura & Antle Lettuce, Artisan Romaine 2 Ea",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing explicitly identifies the product as 'Lettuce, Artisan Romaine', which is a different vegetable (lettuce) than the commodity 'Cabbage'. The word 'cabbage' does not appear in the listing.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing explicitly identifies the product as 'Lettuce, Artisan Romaine', which is a different vegetable (lettuce) than the commodity 'Cabbage'. The word 'cabbage' does not appear in the listing.",
     "status": "llm_rejected"
   },
   {
@@ -70995,6 +70995,39 @@
   },
   {
     "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "eagle brand sweetened condensed milk, 14 oz. cans, 4 pk.",
+    "product_name": "Eagle Brand Sweetened Condensed Milk, 14 oz. cans, 4 pk.",
+    "prompt_version": null,
+    "reason": "helper: 5.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "fleischmann's instant dry yeast, 16 oz., 2 pk.",
+    "product_name": "Fleischmann's Instant Dry Yeast, 16 oz., 2 pk.",
+    "prompt_version": null,
+    "reason": "helper: 3e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "hershey's cocoa 100% cacao natural unsweetened, 23 oz.",
+    "product_name": "Hershey's Cocoa 100% Cacao Natural Unsweetened, 23 oz.",
+    "prompt_version": null,
+    "reason": "llm: The listing is 'Hershey's Cocoa', which is a powder form of chocolate used for baking or beverages. The commodity is 'Chocolate Chips', which are solid pieces of chocolate. These are different food forms (powder vs. solid chips) and are not interchangeable in the context of grocery price comparison for specific items like chips.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
     "confidence": 1.0,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "reviewer",
@@ -71002,6 +71035,127 @@
     "product_name": "M&M's Minis Semi-Sweet Chocolate Baking Candy - 10 oz Bag",
     "prompt_version": null,
     "reason": "reviewer REJECT: M&M's Minis 'Baking CANDY' - candy-coated chocolate pieces; the commodity is chocolate chips.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "magnolia sweetened condensed milk, 14 oz., 6 pk.",
+    "product_name": "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
+    "prompt_version": null,
+    "reason": "helper: 7.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": 1.0,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "mccormick pure vanilla extract, 8 fl. oz.",
+    "product_name": "McCormick Pure Vanilla Extract, 8 fl. oz.",
+    "prompt_version": null,
+    "reason": "llm: The product is 'Vanilla Extract', which is a flavoring agent, not a solid confectionery or baking ingredient like 'Chocolate Chips'. The words 'Vanilla' and 'Extract' are fundamentally different food categories from 'Chocolate' and 'Chips'.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark natural pecan halves, 32 oz.",
+    "product_name": "Member's Mark Natural Pecan Halves, 32 oz.",
+    "prompt_version": null,
+    "reason": "helper: 4.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "nestle la lechera sweetened condensed milk, 14 oz., 6 pk.",
+    "product_name": "Nestle La Lechera Sweetened Condensed Milk, 14 oz., 6 pk.",
+    "prompt_version": null,
+    "reason": "helper: 8.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": 1.0,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "nielsen-massey gourmet pure vanilla extract 8 fl. oz.",
+    "product_name": "Nielsen-Massey Gourmet Pure Vanilla Extract 8 fl. oz.",
+    "prompt_version": null,
+    "reason": "llm: The product is 'Vanilla Extract', which is a flavoring agent, not a solid chocolate confection or baking ingredient like 'Chocolate Chips'. The listing contains no reference to chocolate, chips, or morsels.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": 1.0,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "nielsen-massey pure almond extract, 8 fl. oz.",
+    "product_name": "Nielsen-Massey Pure Almond Extract, 8 fl. oz.",
+    "prompt_version": null,
+    "reason": "llm: The product is 'Pure Almond Extract', which is a flavoring agent, not a solid confectionery ingredient like chocolate chips. It does not match any surface patterns for chocolate chips or morsels.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "nielsen-massey pure lemon extract, 8 fl. oz.",
+    "product_name": "Nielsen-Massey Pure Lemon Extract, 8 fl. oz.",
+    "prompt_version": null,
+    "reason": "helper: 6.3e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "nielsen-massey pure lemon paste, 8 fl. oz.",
+    "product_name": "Nielsen-Massey Pure Lemon Paste, 8 fl. oz.",
+    "prompt_version": null,
+    "reason": "helper: 2.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "rising star baking supply premium cocoa powder, 20 oz.",
+    "product_name": "Rising Star Baking Supply Premium Cocoa Powder, 20 oz.",
+    "prompt_version": null,
+    "reason": "llm: The listing is for 'Cocoa Powder', which is a different food product (powdered cocoa solids) than 'Chocolate Chips' (solid chocolate pieces). The known surface patterns for chocolate chips do not match 'Cocoa Powder'. While both are baking ingredients, they are distinct commodities.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": 1.0,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "rising star baking supply pure vanilla extract, 8 fl. oz.",
+    "product_name": "Rising Star Baking Supply Pure Vanilla Extract, 8 fl. oz.",
+    "prompt_version": null,
+    "reason": "llm: The product is 'Pure Vanilla Extract', which is a flavoring agent, not a chocolate confection or baking chip. It does not contain the words 'chocolate', 'chips', or 'morsels'.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-chips",
+    "confidence": 0.95,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "rising star baking supply salted caramel baker's syrup, 8 oz",
+    "product_name": "Rising Star Baking Supply Salted Caramel Baker's Syrup, 8 oz",
+    "prompt_version": null,
+    "reason": "llm: The product is 'Salted Caramel Baker's Syrup', which is a liquid syrup, not solid chocolate chips or morsels. It does not match the commodity 'Chocolate Chips'.",
     "status": "llm_rejected"
   },
   {
@@ -71045,7 +71199,7 @@
     "product_key": "carnation breakfast essentials ready to drink, rich milk chocolate 8 oz., 24 pk.",
     "product_name": "Carnation Breakfast Essentials Ready To Drink, Rich Milk Chocolate 8 oz., 24 pk.",
     "prompt_version": null,
-    "reason": "reviewer REJECT: Carnation Breakfast Essentials is a fortified nutritional shake, not chocolate milk.",
+    "reason": "banked: reviewer REJECT: Carnation Breakfast Essentials is a fortified nutritional shake, not chocolate milk.",
     "status": "llm_rejected"
   },
   {
@@ -71056,7 +71210,7 @@
     "product_key": "carnation malted milk, chocolate",
     "product_name": "Carnation Malted Milk, Chocolate",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: reviewer REJECT: 'Malted Milk' - Carnation malted milk POWDER, a drink mix rather than the ready-to-drink chocolate milk this cell prices per fl oz; the commodity excludes powder and mix for exactly this.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: reviewer REJECT: 'Malted Milk' - Carnation malted milk POWDER, a drink mix rather than the ready-to-drink chocolate milk this cell prices per fl oz; the commodity excludes powder and mix for exactly this.",
     "status": "llm_rejected"
   },
   {
@@ -71089,7 +71243,7 @@
     "product_key": "ensure original nutrition shake, milk chocolate, 8 fl. oz., 24 pk.",
     "product_name": "Ensure Original Nutrition Shake, Milk Chocolate, 8 fl. oz., 24 pk.",
     "prompt_version": null,
-    "reason": "llm: The product is an 'Ensure Original Nutrition Shake', which is a medical/clinical nutrition supplement, not a standard retail chocolate milk beverage. While it contains 'Milk Chocolate' flavoring, the base product type ('Nutrition Shake') and brand context (Ensure) distinguish it from the commodity 'Chocolate Milk' (e.g., LALA, Nesquik, fairlife). The known surface patterns match the flavor text bu",
+    "reason": "banked: llm: The product is an 'Ensure Original Nutrition Shake', which is a medical/clinical nutrition supplement, not a standard retail chocolate milk beverage. While it contains 'Milk Chocolate' flavoring, the base product type ('Nutrition Shake') and brand context (Ensure) distinguish it from the commodity 'Chocolate Milk' (e.g., LALA, Nesquik, fairlife). The known surface patterns match the flavor text bu",
     "status": "llm_rejected"
   },
   {
@@ -71102,6 +71256,17 @@
     "prompt_version": null,
     "reason": "banked: banked: banked: banked: banked: banked: reviewer CONFIRM: 'Lactose Free Reduced Fat CHOCOLATE Ultra Filtered MILK, 52 fl oz' - chocolate milk; lactose-free is an attribute.",
     "status": "llm_confirmed"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-milk",
+    "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "ferrero rocher premium milk chocolate hazelnut, 48 ct.",
+    "product_name": "Ferrero Rocher Premium Milk Chocolate Hazelnut, 48 ct.",
+    "prompt_version": null,
+    "reason": "llm: The listing is 'Ferrero Rocher Premium Milk Chocolate Hazelnut', which is a confectionery product (chocolate-covered hazelnuts) and not a liquid milk beverage. The commodity 'Chocolate Milk' refers to a dairy drink. The presence of 'Milk Chocolate' describes the type of chocolate coating, not the product category.",
+    "status": "llm_rejected"
   },
   {
     "commodity_id": "commodity:staple:chocolate-milk",
@@ -71122,7 +71287,7 @@
     "product_key": "finest reserve toffee pretzel & sea salt milk chocolate bar 3 oz",
     "product_name": "Finest Reserve Toffee Pretzel & Sea Salt Milk Chocolate Bar 3 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is a 'Milk Chocolate Bar', which is a solid confectionery product. The commodity is 'Chocolate Milk', which is a liquid beverage. These are different food forms (solid bar vs. liquid drink) and different products entirely.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is a 'Milk Chocolate Bar', which is a solid confectionery product. The commodity is 'Chocolate Milk', which is a liquid beverage. These are different food forms (solid bar vs. liquid drink) and different products entirely.",
     "status": "llm_rejected"
   },
   {
@@ -71199,7 +71364,7 @@
     "product_key": "hershey's giant milk chocolate 25 ea",
     "product_name": "Hershey's Giant Milk Chocolate 25 Ea",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Hershey's Giant Milk Chocolate', which is a solid chocolate bar (confectionery), whereas the commodity 'Chocolate Milk' refers to a liquid dairy beverage. The presence of 'Milk' in the product name describes the flavor/ingredient of the candy, not the form of the product.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Hershey's Giant Milk Chocolate', which is a solid chocolate bar (confectionery), whereas the commodity 'Chocolate Milk' refers to a liquid dairy beverage. The presence of 'Milk' in the product name describes the flavor/ingredient of the candy, not the form of the product.",
     "status": "llm_rejected"
   },
   {
@@ -71265,7 +71430,7 @@
     "product_key": "hershey's snack size milk chocolate 10.35 oz",
     "product_name": "Hershey's Snack Size Milk Chocolate 10.35 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Hershey's Snack Size Milk Chocolate', which is a solid chocolate bar (confectionery), not a liquid beverage. The commodity 'Chocolate Milk' refers to a dairy drink. The words 'Milk Chocolate' describe the type of candy, not the product category.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Hershey's Snack Size Milk Chocolate', which is a solid chocolate bar (confectionery), not a liquid beverage. The commodity 'Chocolate Milk' refers to a dairy drink. The words 'Milk Chocolate' describe the type of candy, not the product category.",
     "status": "llm_rejected"
   },
   {
@@ -71331,7 +71496,7 @@
     "product_key": "m&m's full size peanut milk chocolate candy 1.74 oz",
     "product_name": "M&M's Full Size Peanut Milk Chocolate Candy 1.74 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'M&M's Full Size Peanut Milk Chocolate Candy', which is a confectionery/candy product. The commodity is 'Chocolate Milk', a beverage. The presence of the words 'Milk' and 'Chocolate' in the candy description does not make it a milk beverage; it is a different food category (candy vs. liquid dairy). The known surface pattern 'chocolate\\s+milk' matches the substring 'Milk Chocolate' i",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'M&M's Full Size Peanut Milk Chocolate Candy', which is a confectionery/candy product. The commodity is 'Chocolate Milk', a beverage. The presence of the words 'Milk' and 'Chocolate' in the candy description does not make it a milk beverage; it is a different food category (candy vs. liquid dairy). The known surface pattern 'chocolate\\s+milk' matches the substring 'Milk Chocolate' i",
     "status": "llm_rejected"
   },
   {
@@ -71342,8 +71507,30 @@
     "product_key": "m&m's milk chocolate chocolate candies 3.1 oz",
     "product_name": "M&M's Milk Chocolate Chocolate Candies 3.1 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'M&M's Milk Chocolate Chocolate Candies', which are solid confectionery items (candies), not a liquid beverage. The commodity 'Chocolate Milk' refers to a dairy drink. The presence of the word 'milk' in the flavor description ('Milk Chocolate') does not make the product a milk beverage.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'M&M's Milk Chocolate Chocolate Candies', which are solid confectionery items (candies), not a liquid beverage. The commodity 'Chocolate Milk' refers to a dairy drink. The presence of the word 'milk' in the flavor description ('Milk Chocolate') does not make the product a milk beverage.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-milk",
+    "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "m&m's pop'd caramel crunchy & airy milk chocolate candy, 19 oz.",
+    "product_name": "M&M'S Pop'd Caramel Crunchy & Airy Milk Chocolate Candy, 19 oz.",
+    "prompt_version": null,
+    "reason": "llm: The listing is 'M&M'S Pop'd Caramel Crunchy & Airy Milk Chocolate Candy'. The commodity is 'Chocolate Milk', which refers to a liquid dairy beverage. The product is explicitly labeled as 'Candy' and contains 'Caramel Crunchy & Airy' components, making it a solid confectionery item rather than a milk drink. The presence of the word 'Milk' in 'Milk Chocolate' describes the type of chocolate used in ",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chocolate-milk",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "mars full size chocolate candy bars, variety pack, 30 pk.",
+    "product_name": "Mars Full Size Chocolate Candy Bars, Variety Pack, 30 pk.",
+    "prompt_version": null,
+    "reason": "helper: 2.5e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:chocolate-milk",
@@ -71397,7 +71584,7 @@
     "product_key": "stephen's gourmet milk chocolate hot cocoa 4 lbs.",
     "product_name": "Stephen's Gourmet Milk Chocolate Hot Cocoa 4 lbs.",
     "prompt_version": null,
-    "reason": "llm: The listing is 'Stephen's Gourmet Milk Chocolate Hot Cocoa'. The commodity is 'Chocolate Milk' (a liquid dairy beverage). The product is 'Hot Cocoa', which is a powder or mix intended to be prepared with water or milk, not a ready-to-drink chocolate milk beverage. The known surface patterns for the commodity include 'chocolate\\s+milk' and 'milk\\s+drink,\\s*chocolate', but this product is explicitly",
+    "reason": "banked: llm: The listing is 'Stephen's Gourmet Milk Chocolate Hot Cocoa'. The commodity is 'Chocolate Milk' (a liquid dairy beverage). The product is 'Hot Cocoa', which is a powder or mix intended to be prepared with water or milk, not a ready-to-drink chocolate milk beverage. The known surface patterns for the commodity include 'chocolate\\s+milk' and 'milk\\s+drink,\\s*chocolate', but this product is explicitly",
     "status": "llm_rejected"
   },
   {
@@ -71408,7 +71595,7 @@
     "product_key": "yoo-hoo chocolate drink 6.5 fl. oz., 40 pk.",
     "product_name": "Yoo-hoo Chocolate Drink 6.5 fl. oz., 40 pk.",
     "prompt_version": null,
-    "reason": "llm: The product is explicitly labeled 'Chocolate Drink' and is a single-serving carton (6.5 fl oz), which matches the pattern of the previously rejected items ('Yoo-hoo Chocolate Drink, 6.5 fl oz...'). The commodity 'Chocolate Milk' on this board refers to multi-serve or standard milk cartons (e.g., 14 fl oz, 32 oz, 52 oz) as seen in the positive examples. Yoo-hoo is a chocolate-flavored beverage drin",
+    "reason": "banked: llm: The product is explicitly labeled 'Chocolate Drink' and is a single-serving carton (6.5 fl oz), which matches the pattern of the previously rejected items ('Yoo-hoo Chocolate Drink, 6.5 fl oz...'). The commodity 'Chocolate Milk' on this board refers to multi-serve or standard milk cartons (e.g., 14 fl oz, 32 oz, 52 oz) as seen in the positive examples. Yoo-hoo is a chocolate-flavored beverage drin",
     "status": "llm_rejected"
   },
   {
@@ -71557,6 +71744,17 @@
   {
     "commodity_id": "commodity:staple:chuck-roast",
     "confidence": 0.95,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "john soules fully cooked angus beef fajitas 24 oz.",
+    "product_name": "John Soules Fully Cooked Angus Beef Fajitas 24 oz.",
+    "prompt_version": null,
+    "reason": "llm: The listing is 'Fully Cooked' and 'Fajitas', which are prepared/cooked forms of beef, whereas the commodity 'Chuck Roast' implies a raw cut of meat. Additionally, 'Fajitas' typically refers to sliced or diced meat, not a roast cut.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chuck-roast",
+    "confidence": 0.95,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "model",
     "product_key": "london broil roast, choice angus beef, 1 per tray, fresh, 1.06 - 2.39 lb",
@@ -71579,12 +71777,34 @@
   {
     "commodity_id": "commodity:staple:chuck-roast",
     "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark usda choice angus beef boneless bottom round roast, priced per pound",
+    "product_name": "Member's Mark USDA Choice Angus Beef Boneless Bottom Round Roast, priced per pound",
+    "prompt_version": null,
+    "reason": "llm: The listing explicitly identifies the product as 'Bottom Round Roast'. In beef butchery, the 'Round' primal is distinct from the 'Chuck' primal. The commodity is specifically 'Chuck Roast', and a different cut (Round) is a rejection criterion per domain rules.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chuck-roast",
+    "confidence": 0.98,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "model",
     "product_key": "member's mark usda choice angus beef eye of round roast, priced per pound",
     "product_name": "Member's Mark USDA Choice Angus Beef Eye of Round Roast, priced per pound",
     "prompt_version": null,
-    "reason": "llm: The listing specifies 'Eye of Round Roast', which is a distinct cut of beef from the hindquarter. The commodity is 'Chuck Roast', which comes from the shoulder (forequarter). These are different cuts with different textures and prices, so they are not interchangeable on this board.",
+    "reason": "banked: llm: The listing specifies 'Eye of Round Roast', which is a distinct cut of beef from the hindquarter. The commodity is 'Chuck Roast', which comes from the shoulder (forequarter). These are different cuts with different textures and prices, so they are not interchangeable on this board.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chuck-roast",
+    "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark usda choice angus beef sirloin tri-tip roast, priced per pound",
+    "product_name": "Member's Mark USDA Choice Angus Beef Sirloin Tri-Tip Roast, priced per pound",
+    "prompt_version": null,
+    "reason": "llm: The listing explicitly identifies the cut as 'Sirloin Tri-Tip Roast'. The commodity is 'Chuck Roast'. In beef butchery, the tri-tip (bottom sirloin) and the chuck are distinct primal cuts with different muscle structures and prices. The presence of 'Sirloin' and 'Tri-Tip' contradicts the 'Chuck' requirement.",
     "status": "llm_rejected"
   },
   {
@@ -71595,7 +71815,40 @@
     "product_key": "member's mark usda prime beef tenderloin roast, priced per pound",
     "product_name": "Member's Mark USDA Prime Beef Tenderloin Roast, priced per pound",
     "prompt_version": null,
-    "reason": "llm: The listing specifies 'Beef Tenderloin Roast', which is a distinct cut of beef (tenderloin) different from the commodity 'Chuck Roast' (chuck). The known surface patterns for chuck roast ('chuck\\s+roast', etc.) do not match 'Tenderloin Roast'. Tenderloin is a premium cut, whereas chuck is a shoulder cut; they are not interchangeable.",
+    "reason": "banked: llm: The listing specifies 'Beef Tenderloin Roast', which is a distinct cut of beef (tenderloin) different from the commodity 'Chuck Roast' (chuck). The known surface patterns for chuck roast ('chuck\\s+roast', etc.) do not match 'Tenderloin Roast'. Tenderloin is a premium cut, whereas chuck is a shoulder cut; they are not interchangeable.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chuck-roast",
+    "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member’s mark usda choice angus beef boneless sirloin tip roast, priced per pound",
+    "product_name": "Member’s Mark USDA Choice Angus Beef Boneless Sirloin Tip Roast, priced per pound",
+    "prompt_version": null,
+    "reason": "llm: The listing explicitly identifies the product as 'Sirloin Tip Roast'. In beef butchery, the Sirloin Tip is a distinct cut from the Chuck primal (which includes Chuck Roast, Chuck Eye, and Chuck Tender). The commodity 'Chuck Roast' refers specifically to cuts from the chuck primal, whereas this item is from the sirloin/short loin area. Therefore, it is a different cut of meat.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chuck-roast",
+    "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member’s mark usda choice angus beef boneless top round roast, priced per pound",
+    "product_name": "Member’s Mark USDA Choice Angus Beef Boneless Top Round Roast, priced per pound",
+    "prompt_version": null,
+    "reason": "llm: The listing explicitly identifies the product as 'Top Round Roast', which is a distinct cut of beef from the hindquarter (round primal). The commodity is 'Chuck Roast', which comes from the shoulder primal. These are different cuts with different textures and cooking properties, so they are not interchangeable on this board.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:chuck-roast",
+    "confidence": 0.95,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member’s mark usda choice angus beef stew meat, priced per pound",
+    "product_name": "Member’s Mark USDA Choice Angus Beef Stew Meat, priced per pound",
+    "prompt_version": null,
+    "reason": "llm: The listing specifies 'Stew Meat', which is a distinct cut/grade (typically cubed or chopped chuck/round) different from the whole muscle 'Chuck Roast' named in the commodity. The known surface patterns for 'chuck roast' do not match 'stew meat'. While both are beef, 'stew meat' is not synonymous with 'roast' in grocery classification.",
     "status": "llm_rejected"
   },
   {
@@ -71632,6 +71885,17 @@
     "status": "llm_rejected"
   },
   {
+    "commodity_id": "commodity:staple:chuck-roast",
+    "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "sadler's smokehouse mesquite beef brisket 2 lbs.",
+    "product_name": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+    "prompt_version": null,
+    "reason": "llm: The listing specifies 'Beef Brisket', which is a distinct cut of beef different from the 'Chuck' cut named in the commodity. The known surface patterns for the commodity ('chuck\\s+roast', etc.) do not match the product name.",
+    "status": "llm_rejected"
+  },
+  {
     "commodity_id": "commodity:staple:cilantro",
     "confidence": 1.0,
     "decided_at": "2026-08-21T01:37:15",
@@ -71639,7 +71903,7 @@
     "product_key": "adolph's unseasoned tenderizer, 44.5 oz.",
     "product_name": "Adolph's Unseasoned Tenderizer, 44.5 oz.",
     "prompt_version": null,
-    "reason": "llm: The listing is 'Adolph's Unseasoned Tenderizer', which is a meat tenderizing product (typically containing papain or bromelain), not the fresh herb 'Cilantro'. The words 'Tenderizer' and 'Unseasoned' explicitly identify it as a different food category.",
+    "reason": "banked: llm: The listing is 'Adolph's Unseasoned Tenderizer', which is a meat tenderizing product (typically containing papain or bromelain), not the fresh herb 'Cilantro'. The words 'Tenderizer' and 'Unseasoned' explicitly identify it as a different food category.",
     "status": "llm_rejected"
   },
   {
@@ -71655,14 +71919,36 @@
   },
   {
     "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "kinder's woodfired garlic with smoked flavor seasoning, 23 oz.",
+    "product_name": "Kinder's Woodfired Garlic with Smoked Flavor Seasoning, 23 oz.",
+    "prompt_version": null,
+    "reason": "helper: 2.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
     "confidence": 0.98,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "model",
     "product_key": "mccormick basil balsamic seasoning, 11.37 oz.",
     "product_name": "McCormick Basil Balsamic Seasoning, 11.37 oz.",
     "prompt_version": null,
-    "reason": "llm: The listing is 'McCormick Basil Balsamic Seasoning', which is a dried herb/spice blend containing basil and balsamic vinegar. The commodity is 'Cilantro (bunch)', which is a fresh leafy green herb. These are different foods (basil vs. cilantro) and different forms (packaged seasoning vs. fresh bunch). The word 'Basil' in the listing explicitly contradicts the commodity name 'Cilantro'.",
+    "reason": "banked: llm: The listing is 'McCormick Basil Balsamic Seasoning', which is a dried herb/spice blend containing basil and balsamic vinegar. The commodity is 'Cilantro (bunch)', which is a fresh leafy green herb. These are different foods (basil vs. cilantro) and different forms (packaged seasoning vs. fresh bunch). The word 'Basil' in the listing explicitly contradicts the commodity name 'Cilantro'.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "mccormick grill mates montreal steak seasoning, 29 oz.",
+    "product_name": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+    "prompt_version": null,
+    "reason": "helper: 2.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:cilantro",
@@ -71672,8 +71958,63 @@
     "product_key": "mccormick original taco seasoning mix, 1 oz., 12 pk.",
     "product_name": "McCormick Original Taco Seasoning Mix, 1 oz., 12 pk.",
     "prompt_version": null,
-    "reason": "llm: The listing is 'McCormick Original Taco Seasoning Mix', which is a dry spice blend. The commodity is 'Cilantro (bunch)', which is a fresh herb. A seasoning mix is a different food category and form than fresh cilantro.",
+    "reason": "banked: llm: The listing is 'McCormick Original Taco Seasoning Mix', which is a dry spice blend. The commodity is 'Cilantro (bunch)', which is a fresh herb. A seasoning mix is a different food category and form than fresh cilantro.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark cayenne pepper, 16 oz.",
+    "product_name": "Member's Mark Cayenne Pepper, 16 oz.",
+    "prompt_version": null,
+    "reason": "helper: 3.2e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark fine ground black pepper, 18 oz.",
+    "product_name": "Member's Mark Fine Ground Black Pepper, 18 oz.",
+    "prompt_version": null,
+    "reason": "helper: 4.4e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark ground white pepper, 18 oz.",
+    "product_name": "Member's Mark Ground White Pepper, 18 oz.",
+    "prompt_version": null,
+    "reason": "helper: 2.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark minced garlic, 48 oz.",
+    "product_name": "Member's Mark Minced Garlic, 48 oz.",
+    "prompt_version": null,
+    "reason": "helper: 2.3e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark minced onion, 15 oz.",
+    "product_name": "Member's Mark Minced Onion, 15 oz.",
+    "prompt_version": null,
+    "reason": "helper: 2.2e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:cilantro",
@@ -71683,8 +72024,74 @@
     "product_key": "member's mark organic ground cumin, 8 oz.",
     "product_name": "Member's Mark Organic Ground Cumin, 8 oz.",
     "prompt_version": null,
-    "reason": "llm: The listing is for 'Ground Cumin', which is a different spice than the commodity 'Cilantro'. The words 'Cumin' and 'Cilantro' are distinct food items.",
+    "reason": "banked: llm: The listing is for 'Ground Cumin', which is a different spice than the commodity 'Cilantro'. The words 'Cumin' and 'Cilantro' are distinct food items.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark restaurant coarse black pepper, 18 oz.",
+    "product_name": "Member's Mark Restaurant Coarse Black Pepper, 18 oz.",
+    "prompt_version": null,
+    "reason": "helper: 7.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark sea salt, 36 oz.",
+    "product_name": "Member's Mark Sea Salt, 36 oz.",
+    "prompt_version": null,
+    "reason": "helper: 1.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": 1.0,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark whole bay leaves, 2 oz.",
+    "product_name": "Member's Mark Whole Bay Leaves, 2 oz.",
+    "prompt_version": null,
+    "reason": "llm: The listing is for 'Whole Bay Leaves', which are a dried spice/leaf, whereas the commodity is 'Cilantro', a fresh herb. These are different food items.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member’s mark lemon pepper seasoning, 31 oz.",
+    "product_name": "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
+    "prompt_version": null,
+    "reason": "helper: 8.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member’s mark taco seasoning, 23 oz.",
+    "product_name": "Member’s Mark Taco Seasoning, 23 oz.",
+    "prompt_version": null,
+    "reason": "helper: 2.5e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cilantro",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "orale! guajillo peppers, 12 oz.",
+    "product_name": "Orale! Guajillo Peppers, 12 oz.",
+    "prompt_version": null,
+    "reason": "helper: 2e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:cinnamon-stick",
@@ -71749,8 +72156,19 @@
     "product_key": "kinder's tavern garlic & cheddar burger seasoning, 10.2 oz.",
     "product_name": "Kinder's Tavern Garlic & Cheddar Burger Seasoning, 10.2 oz.",
     "prompt_version": null,
-    "reason": "llm: The product is 'Garlic & Cheddar Burger Seasoning', which is a different food item (seasoning) and does not contain the required words 'cinnamon' or 'sticks'. It fails the surface pattern and is a different commodity.",
+    "reason": "banked: llm: The product is 'Garlic & Cheddar Burger Seasoning', which is a different food item (seasoning) and does not contain the required words 'cinnamon' or 'sticks'. It fails the surface pattern and is a different commodity.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cinnamon-stick",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "kinder’s crispy panko blend seasoned coating mix, buttery garlic & herb seasoned, 13 oz.",
+    "product_name": "Kinder’s Crispy Panko Blend Seasoned Coating Mix, Buttery Garlic & Herb Seasoned, 13 oz.",
+    "prompt_version": null,
+    "reason": "helper: 1.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:cinnamon-stick",
@@ -71765,13 +72183,24 @@
   },
   {
     "commodity_id": "commodity:staple:cinnamon-stick",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "mccormick all purpose garlic onion black pepper sea salt, 9.12 oz.",
+    "product_name": "McCormick All Purpose Garlic Onion Black Pepper Sea Salt, 9.12 oz.",
+    "prompt_version": null,
+    "reason": "helper: 1.5e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cinnamon-stick",
     "confidence": 0.95,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "model",
     "product_key": "member's mark cinnamon french toast sticks, frozen, 48 oz.",
     "product_name": "Member's Mark Cinnamon French Toast Sticks, Frozen, 48 oz.",
     "prompt_version": null,
-    "reason": "llm: The listing is 'Cinnamon French Toast Sticks', which are frozen bread products. The commodity is 'Cinnamon Sticks' (the spice). This matches the pattern of previously rejected items like 'Kodiak Cinnamon French Toast Sticks'. The word 'Sticks' here refers to the shape of the bread, not the form of the cinnamon spice.",
+    "reason": "banked: llm: The listing is 'Cinnamon French Toast Sticks', which are frozen bread products. The commodity is 'Cinnamon Sticks' (the spice). This matches the pattern of previously rejected items like 'Kodiak Cinnamon French Toast Sticks'. The word 'Sticks' here refers to the shape of the bread, not the form of the cinnamon spice.",
     "status": "llm_rejected"
   },
   {
@@ -71782,7 +72211,7 @@
     "product_key": "member's mark himalayan pink salt, 38 oz.",
     "product_name": "Member's Mark Himalayan Pink Salt, 38 oz.",
     "prompt_version": null,
-    "reason": "llm: The product is 'Himalayan Pink Salt', which is a different food item (salt) than the commodity 'Cinnamon Sticks'.",
+    "reason": "banked: llm: The product is 'Himalayan Pink Salt', which is a different food item (salt) than the commodity 'Cinnamon Sticks'.",
     "status": "llm_rejected"
   },
   {
@@ -71804,7 +72233,7 @@
     "product_key": "member's mark organic garlic and herb seasoning, 8.25 oz.",
     "product_name": "Member's Mark Organic Garlic and Herb Seasoning, 8.25 oz.",
     "prompt_version": null,
-    "reason": "llm: The product is 'Garlic and Herb Seasoning', which is a different food item than 'Cinnamon Sticks'. It does not contain the word 'cinnamon' or 'sticks' in the context of the spice.",
+    "reason": "banked: llm: The product is 'Garlic and Herb Seasoning', which is a different food item than 'Cinnamon Sticks'. It does not contain the word 'cinnamon' or 'sticks' in the context of the spice.",
     "status": "llm_rejected"
   },
   {
@@ -71842,13 +72271,24 @@
   },
   {
     "commodity_id": "commodity:staple:cinnamon-stick",
+    "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "trident sugar-free chewing gum, cinnamon, 14 pieces, 15 pk.",
+    "product_name": "Trident Sugar-Free Chewing Gum, Cinnamon, 14 pieces, 15 pk.",
+    "prompt_version": null,
+    "reason": "llm: The listing is for 'Chewing Gum', which is a non-food item (or confectionery) distinct from the raw spice 'Cinnamon Sticks'. The word 'Cinnamon' appears only as a flavor descriptor ('Cinnamon, 14 pieces'), not as the primary commodity. The product does not match the pattern of being a packaged retail product of cinnamon sticks.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cinnamon-stick",
     "confidence": 0.95,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "model",
     "product_key": "weber roasted garlic & herb seasoning, 24 oz.",
     "product_name": "Weber Roasted Garlic & Herb Seasoning, 24 oz.",
     "prompt_version": null,
-    "reason": "llm: The product is 'Roasted Garlic & Herb Seasoning', which is a different food item (seasoning blend) than the commodity 'Cinnamon Sticks'. It does not contain cinnamon sticks.",
+    "reason": "banked: llm: The product is 'Roasted Garlic & Herb Seasoning', which is a different food item (seasoning blend) than the commodity 'Cinnamon Sticks'. It does not contain cinnamon sticks.",
     "status": "llm_rejected"
   },
   {
@@ -71897,6 +72337,17 @@
   },
   {
     "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "bumble bee tuna salad snack on the run kit, 3.5 oz., 9 pk.",
+    "product_name": "Bumble Bee Tuna Salad Snack On The Run Kit, 3.5 oz., 9 pk.",
+    "prompt_version": null,
+    "reason": "helper: 3.4e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
     "confidence": 0.95,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "model",
@@ -71914,8 +72365,41 @@
     "product_key": "juanita's foods original canned menudo, 25 oz., 3 pk.",
     "product_name": "Juanita's Foods Original Canned Menudo, 25 oz., 3 pk.",
     "prompt_version": null,
-    "reason": "llm: The listing is 'Juanita's Foods Original Canned Menudo'. The commodity is 'Clam Chowder'. Menudo is a distinct Mexican soup/stew (typically containing hominy, meat, and vegetables) and is not clam chowder. The product does not contain the required keywords or represent the same food item.",
+    "reason": "banked: llm: The listing is 'Juanita's Foods Original Canned Menudo'. The commodity is 'Clam Chowder'. Menudo is a distinct Mexican soup/stew (typically containing hominy, meat, and vegetables) and is not clam chowder. The product does not contain the required keywords or represent the same food item.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark broccoli cheddar soup, 32 oz., 2 pk.",
+    "product_name": "Member's Mark Broccoli Cheddar Soup, 32 oz., 2 pk.",
+    "prompt_version": null,
+    "reason": "helper: 3.1e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark chicken salad, 2 lbs.",
+    "product_name": "Member's Mark Chicken Salad, 2 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 2.2e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark loaded baked potato soup, 32 oz., 2 pk.",
+    "product_name": "Member's Mark Loaded Baked Potato Soup, 32 oz., 2 pk.",
+    "prompt_version": null,
+    "reason": "helper: 2.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:clam-chowder",
@@ -71925,7 +72409,7 @@
     "product_key": "member's mark loaded potato salad, 3 lbs.",
     "product_name": "Member's Mark Loaded Potato Salad, 3 lbs.",
     "prompt_version": null,
-    "reason": "llm: The listing is 'Loaded Potato Salad', which is a different food item (potato salad) than the commodity 'Clam Chowder'. It does not contain clams or chowder.",
+    "reason": "banked: llm: The listing is 'Loaded Potato Salad', which is a different food item (potato salad) than the commodity 'Clam Chowder'. It does not contain clams or chowder.",
     "status": "llm_rejected"
   },
   {
@@ -71942,13 +72426,35 @@
   {
     "commodity_id": "commodity:staple:clam-chowder",
     "confidence": 0.98,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark shrimp and corn chowder, 24 oz., 2 pk.",
+    "product_name": "Member's Mark Shrimp and Corn Chowder, 24 oz., 2 pk.",
+    "prompt_version": null,
+    "reason": "llm: The commodity is 'Clam Chowder', but the listing is 'Shrimp and Corn Chowder'. The primary protein/ingredient differs (Shrimp vs Clam), making it a different food item.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": 0.98,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "model",
     "product_key": "member's mark shrimp tray with cocktail sauce, priced per pound",
     "product_name": "Member's Mark Shrimp Tray with Cocktail Sauce, priced per pound",
     "prompt_version": null,
-    "reason": "llm: The listing is for 'Shrimp Tray', which is a different food item (shrimp) than the commodity 'Clam Chowder'. It does not contain the required surface pattern 'clam chowder' and is not a soup.",
+    "reason": "banked: llm: The listing is for 'Shrimp Tray', which is a different food item (shrimp) than the commodity 'Clam Chowder'. It does not contain the required surface pattern 'clam chowder' and is not a soup.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark southern style potato salad, 5 lbs.",
+    "product_name": "Member's Mark Southern Style Potato Salad, 5 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 1.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:clam-chowder",
@@ -71958,8 +72464,19 @@
     "product_key": "member's mark yukon gold mashed potatoes, 32 oz. each, 2 ct.",
     "product_name": "Member's Mark Yukon Gold Mashed Potatoes, 32 oz. each, 2 ct.",
     "prompt_version": null,
-    "reason": "llm: The listing is for 'Yukon Gold Mashed Potatoes', which is a potato product. The commodity is 'Clam Chowder'. These are completely different food items (potatoes vs. clam soup). The word 'Mashed' does not imply chowder, and there is no mention of clams or chowder in the listing.",
+    "reason": "banked: llm: The listing is for 'Yukon Gold Mashed Potatoes', which is a potato product. The commodity is 'Clam Chowder'. These are completely different food items (potatoes vs. clam soup). The word 'Mashed' does not imply chowder, and there is no mention of clams or chowder in the listing.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "members mark creamy chicken and wild rice soup, 24. oz. each, 2 pk.",
+    "product_name": "Members Mark Creamy Chicken and Wild Rice Soup, 24. oz. Each, 2 pk.",
+    "prompt_version": null,
+    "reason": "helper: 2.5e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:clam-chowder",
@@ -72051,6 +72568,17 @@
   },
   {
     "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "progresso traditional chicken noodle soup, 19 oz., 6 pk.",
+    "product_name": "Progresso Traditional Chicken Noodle Soup, 19 oz., 6 pk.",
+    "prompt_version": null,
+    "reason": "helper: 3.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
     "confidence": 0.95,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "model",
@@ -72103,6 +72631,270 @@
     "prompt_version": null,
     "reason": "banked: banked: banked: banked: banked: llm: The commodity is 'Clam Chowder', which is a soup/stew. The listing is 'Minced Clams in Clam Juice', which is a raw/prepared shellfish product, not a chowder. The words 'Minced Clams' and 'Clam Juice' describe the ingredients/form, but the absence of 'Chowder' or 'Soup' indicates it is a different food item.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "starkist chunk light tuna in oil, 5 oz., 12 pk.",
+    "product_name": "StarKist Chunk Light Tuna in Oil, 5 oz., 12 pk.",
+    "prompt_version": null,
+    "reason": "helper: 2.4e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "starkist chunk light tuna in water, 5 oz., 12 pk.",
+    "product_name": "StarKist Chunk Light Tuna in Water, 5 oz., 12 pk.",
+    "prompt_version": null,
+    "reason": "helper: 2.3e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "starkist solid white albacore tuna in water, 5 oz., 8 pk.",
+    "product_name": "StarKist Solid White Albacore Tuna in Water, 5 oz., 8 pk.",
+    "prompt_version": null,
+    "reason": "helper: 2.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "swanson chicken bone broth, 32 oz., 3 pk.",
+    "product_name": "Swanson Chicken Bone Broth, 32 oz., 3 pk.",
+    "prompt_version": null,
+    "reason": "helper: 1.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "swanson chicken broth 14.5 oz., 12 pk.",
+    "product_name": "Swanson Chicken Broth 14.5 oz., 12 pk.",
+    "prompt_version": null,
+    "reason": "helper: 1.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clam-chowder",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "swanson chicken broth 32 oz., 6 pk.",
+    "product_name": "Swanson Chicken Broth 32 oz., 6 pk.",
+    "prompt_version": null,
+    "reason": "helper: 1.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "bananas, 3 lbs.",
+    "product_name": "Bananas, 3 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 1.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "bartlett pears, 4 lbs.",
+    "product_name": "Bartlett Pears, 4 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 1.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": 0.95,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "cara cara oranges, 6 lbs.",
+    "product_name": "Cara Cara Oranges, 6 lbs.",
+    "prompt_version": null,
+    "reason": "llm: The listing explicitly identifies the product as 'Oranges' ('Cara Cara Oranges'), which is a different citrus variety than the commodity 'Clementines / Mandarins'. While both are citrus fruits, they are distinct food items with different flavors and characteristics, and the domain rules specify rejecting products that are a different food or variety.",
+    "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "envy apples, 4 lbs.",
+    "product_name": "Envy Apples, 4 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 2.1e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "gala apples, 5 lbs.",
+    "product_name": "Gala Apples, 5 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 1.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "green seedless grapes, 3 lbs.",
+    "product_name": "Green Seedless Grapes, 3 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 2.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": 0.2,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark fresh fruit tray, priced per pound",
+    "product_name": "Member's Mark Fresh Fruit Tray, priced per pound",
+    "prompt_version": null,
+    "reason": "llm UNSURE conf=0.20: The listing 'Member's Mark Fresh Fruit Tray' does not explicitly name 'Clementines', 'Mandarins', 'Cuties', or 'Halos'. While fruit trays often contain citrus, they frequently include a mix of fruits (apples, grapes, etc.) or other citrus varieties (oranges, lemons) that are not clementines/mandarins. Without the specific variety name, it is ambiguous whether this tray contains the target commodit",
+    "status": "escalated"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark fruit and cheese party tray, priced per pound",
+    "product_name": "Member's Mark Fruit and Cheese Party Tray, priced per pound",
+    "prompt_version": null,
+    "reason": "helper: 2.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "member's mark fruit and cheese tray, priced per pound",
+    "product_name": "Member's Mark Fruit and Cheese Tray, priced per pound",
+    "prompt_version": null,
+    "reason": "helper: 4.8e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "navel oranges, 6 lbs.",
+    "product_name": "Navel Oranges, 6 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 3.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "organic blueberries, 18 oz.",
+    "product_name": "Organic Blueberries, 18 oz.",
+    "prompt_version": null,
+    "reason": "helper: 1.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "organic green kiwi, 2 lbs.",
+    "product_name": "Organic Green Kiwi, 2 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 2.1e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "organic strawberries, 2 lbs.",
+    "product_name": "Organic Strawberries, 2 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 1.8e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "pink lady apples, 5 lbs.",
+    "product_name": "Pink Lady Apples, 5 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 1.9e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "red seedless grapes, 3 lbs.",
+    "product_name": "Red Seedless Grapes, 3 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 2.7e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "strawberries, 2 lbs.",
+    "product_name": "Strawberries, 2 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 1.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "sweet sapphire grapes, 3 lbs.",
+    "product_name": "Sweet Sapphire Grapes, 3 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 1.6e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:clementines",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "wild twist apples, 4 lbs.",
+    "product_name": "Wild Twist Apples, 4 lbs.",
+    "prompt_version": null,
+    "reason": "helper: 2.1e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:cocktail-sauce",
@@ -72257,6 +73049,17 @@
     "prompt_version": null,
     "reason": "banked: banked: banked: banked: banked: banked: llm: The listing explicitly names the product as 'Tartar Sauce', which is a distinct condiment from 'Cocktail Sauce'. The commodity pattern 'cocktail\\s+sauce' does not match the text 'Tartar Sauce'. Although both are seafood sauces, they are different food items.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:cocktail-sauce",
+    "confidence": 1.0,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "reviewer",
+    "product_key": "member's mark shrimp tray with cocktail sauce, priced per pound",
+    "product_name": "Member's Mark Shrimp Tray with Cocktail Sauce, priced per pound",
+    "prompt_version": null,
+    "reason": "adjudicated known-wrong for this commodity",
+    "status": "known_wrong"
   },
   {
     "commodity_id": "commodity:staple:cocktail-sauce",
@@ -73850,7 +74653,7 @@
     "product_key": "graza frizzle high heat cooking oil 25.3 fl oz",
     "product_name": "Graza Frizzle High Heat Cooking Oil 25.3 Fl Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Graza Frizzle High Heat Cooking Oil', which is a liquid oil product. The commodity is 'Cooking Spray', which is an aerosolized product. Although both are used for cooking and the listing contains the word 'Cooking', it is a different form of the product (oil vs. spray) and does not match the specific commodity definition or the known surface patterns for spray.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Graza Frizzle High Heat Cooking Oil', which is a liquid oil product. The commodity is 'Cooking Spray', which is an aerosolized product. Although both are used for cooking and the listing contains the word 'Cooking', it is a different form of the product (oil vs. spray) and does not match the specific commodity definition or the known surface patterns for spray.",
     "status": "llm_rejected"
   },
   {
@@ -76033,6 +76836,17 @@
   },
   {
     "commodity_id": "commodity:staple:cream-cheese",
+    "confidence": 1.0,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "reviewer",
+    "product_key": "fresh & finest 4 ct cream cheese iced cinnamon rolls",
+    "product_name": "Fresh & Finest 4 Ct Cream Cheese Iced Cinnamon Rolls",
+    "prompt_version": null,
+    "reason": "retro-applied known-wrong ruling (import sweep)",
+    "status": "known_wrong"
+  },
+  {
+    "commodity_id": "commodity:staple:cream-cheese",
     "confidence": 0.95,
     "decided_at": "2026-08-21T01:37:15",
     "decided_by": "model",
@@ -76380,7 +77194,7 @@
     "product_key": "campbell's® cream of chicken and mushroom soup 10.500 oz",
     "product_name": "Campbell's® Cream Of Chicken And Mushroom Soup 10.500 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Cream Of Chicken And Mushroom Soup', which includes 'Chicken' as a primary ingredient/variety. The commodity is strictly 'Cream of Mushroom Soup'. In grocery semantics, adding a distinct protein like chicken creates a different product variety (Chicken & Mushroom vs. Mushroom only), similar to how 93/7 turkey is distinct from 85/15. Therefore, it is a different food variety.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Cream Of Chicken And Mushroom Soup', which includes 'Chicken' as a primary ingredient/variety. The commodity is strictly 'Cream of Mushroom Soup'. In grocery semantics, adding a distinct protein like chicken creates a different product variety (Chicken & Mushroom vs. Mushroom only), similar to how 93/7 turkey is distinct from 85/15. Therefore, it is a different food variety.",
     "status": "llm_rejected"
   },
   {
@@ -76589,7 +77403,7 @@
     "product_key": "the rustik oven hearty grains & seeds bagels",
     "product_name": "The Rustik Oven Hearty Grains & Seeds Bagels",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing explicitly identifies the product as 'Bagels', which is a different food item than 'Croissants'. The words 'Hearty Grains & Seeds' describe the variety of the bagel, not a croissant.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing explicitly identifies the product as 'Bagels', which is a different food item than 'Croissants'. The words 'Hearty Grains & Seeds' describe the variety of the bagel, not a croissant.",
     "status": "llm_rejected"
   },
   {
@@ -78382,7 +79196,7 @@
     "product_key": "clyde's glazed apple fritters",
     "product_name": "Clyde's Glazed Apple Fritters",
     "prompt_version": null,
-    "reason": "banked: reviewer CONFIRM: 'Glazed Apple Fritters' - a fried glazed pastry sold in the donut case; the commodity is generic Donuts priced each.",
+    "reason": "banked: banked: reviewer CONFIRM: 'Glazed Apple Fritters' - a fried glazed pastry sold in the donut case; the commodity is generic Donuts priced each.",
     "status": "llm_confirmed"
   },
   {
@@ -80120,7 +80934,7 @@
     "product_key": "dried curly ribbon egg free noodles our family",
     "product_name": "Dried Curly Ribbon Egg Free Noodles Our Family",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: llm: The listing explicitly states 'Egg Free', which contradicts the commodity 'Egg Noodles'. The product is a different food type (egg-free pasta) rather than the specified egg-based noodle.",
+    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing explicitly states 'Egg Free', which contradicts the commodity 'Egg Noodles'. The product is a different food type (egg-free pasta) rather than the specified egg-based noodle.",
     "status": "llm_rejected"
   },
   {
@@ -88667,7 +89481,7 @@
     "product_key": "ben & jerry's ice cream, half baked 1 pt",
     "product_name": "Ben & Jerry's Ice Cream, Half Baked 1 Pt",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Ben & Jerry's Ice Cream', which is a frozen dessert. The commodity 'Half & Half' refers to a dairy liquid (milk/cream blend). Although the flavor name 'Half Baked' contains the word 'Half', it does not contain the phrase 'Half & Half' or 'Half and Half', nor is it the dairy product.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Ben & Jerry's Ice Cream', which is a frozen dessert. The commodity 'Half & Half' refers to a dairy liquid (milk/cream blend). Although the flavor name 'Half Baked' contains the word 'Half', it does not contain the phrase 'Half & Half' or 'Half and Half', nor is it the dairy product.",
     "status": "llm_rejected"
   },
   {
@@ -88766,7 +89580,7 @@
     "product_key": "finest reserve artisan cheese & garlic half baguette 11 oz",
     "product_name": "Finest Reserve Artisan Cheese & Garlic Half Baguette 11 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is a 'Half Baguette', which is a bread product. The commodity is 'Half & Half', a dairy product. The word 'Half' in the listing refers to the size/quantity of the baguette, not the dairy mixture.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is a 'Half Baguette', which is a bread product. The commodity is 'Half & Half', a dairy product. The word 'Half' in the listing refers to the size/quantity of the baguette, not the dairy mixture.",
     "status": "llm_rejected"
   },
   {
@@ -88777,7 +89591,7 @@
     "product_key": "folgers half caff ground medium coffee 22.6 oz",
     "product_name": "Folgers Half Caff Ground Medium Coffee 22.6 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is for 'Folgers Half Caff Ground Medium Coffee', which is a coffee product. The commodity is 'Half & Half', a dairy product. The word 'Half' in the listing refers to 'Half Caff' (half-caffeinated), not the dairy mixture 'Half & Half'. The known surface pattern 'half\\s*(?:&|and)\\s*half' does not match the text 'Half Caff'.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is for 'Folgers Half Caff Ground Medium Coffee', which is a coffee product. The commodity is 'Half & Half', a dairy product. The word 'Half' in the listing refers to 'Half Caff' (half-caffeinated), not the dairy mixture 'Half & Half'. The known surface pattern 'half\\s*(?:&|and)\\s*half' does not match the text 'Half Caff'.",
     "status": "llm_rejected"
   },
   {
@@ -89019,7 +89833,7 @@
     "product_key": "open acres half portion boneless pork loin",
     "product_name": "Open Acres Half Portion Boneless Pork Loin",
     "prompt_version": null,
-    "reason": "llm: The listing is 'Open Acres Half Portion Boneless Pork Loin'. The commodity is 'Half & Half' (a dairy product). The word 'Half' in the listing refers to the portion size ('Half Portion') of a meat product ('Pork Loin'), not the dairy mixture. This is a different food entirely.",
+    "reason": "banked: llm: The listing is 'Open Acres Half Portion Boneless Pork Loin'. The commodity is 'Half & Half' (a dairy product). The word 'Half' in the listing refers to the portion size ('Half Portion') of a meat product ('Pork Loin'), not the dairy mixture. This is a different food entirely.",
     "status": "llm_rejected"
   },
   {
@@ -90262,7 +91076,7 @@
     "product_key": "bar s bun length franks family pack 24 ea",
     "product_name": "Bar S Bun Length Franks Family Pack 24 Ea",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is for 'Franks' (hot dogs), which are the meat product, whereas the commodity is 'Hot Dog Buns' (the bread). The word 'Bun' in the listing refers to the length of the franks ('Bun Length'), not the buns themselves.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is for 'Franks' (hot dogs), which are the meat product, whereas the commodity is 'Hot Dog Buns' (the bread). The word 'Bun' in the listing refers to the length of the franks ('Bun Length'), not the buns themselves.",
     "status": "llm_rejected"
   },
   {
@@ -90339,7 +91153,7 @@
     "product_key": "john morrell franks, bun length 12 oz",
     "product_name": "John Morrell Franks, Bun Length 12 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing explicitly names the product as 'Franks', which refers to hot dogs (the meat), not buns. The phrase 'Bun Length' describes the size of the hot dog relative to a standard bun, but does not indicate that the item sold is a bun. The commodity is 'Hot Dog Buns' (bread), while the product is 'Franks' (meat).",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing explicitly names the product as 'Franks', which refers to hot dogs (the meat), not buns. The phrase 'Bun Length' describes the size of the hot dog relative to a standard bun, but does not indicate that the item sold is a bun. The commodity is 'Hot Dog Buns' (bread), while the product is 'Franks' (meat).",
     "status": "llm_rejected"
   },
   {
@@ -90361,7 +91175,7 @@
     "product_key": "nathan's famous skinless all beef franks, bun length 8 ea",
     "product_name": "Nathan's Famous Skinless All Beef Franks, Bun Length 8 Ea",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is for 'All Beef Franks' (hot dogs), which are the meat product, not the bread product ('Buns') specified in the commodity. The phrase 'Bun Length' describes the size of the franks, not the item itself.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is for 'All Beef Franks' (hot dogs), which are the meat product, not the bread product ('Buns') specified in the commodity. The phrase 'Bun Length' describes the size of the franks, not the item itself.",
     "status": "llm_rejected"
   },
   {
@@ -96158,7 +96972,7 @@
     "product_key": "silk organic unsweet dairy free vegan soy milk 64 fl oz",
     "product_name": "Silk Organic Unsweet Dairy Free Vegan Soy Milk 64 Fl Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The commodity is 'Oat Milk', but the listing explicitly identifies the product as 'Soy Milk'. Soy and oat are different plant-based milks (different base ingredients), making this a different food item.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The commodity is 'Oat Milk', but the listing explicitly identifies the product as 'Soy Milk'. Soy and oat are different plant-based milks (different base ingredients), making this a different food item.",
     "status": "llm_rejected"
   },
   {
@@ -99969,6 +100783,17 @@
   },
   {
     "commodity_id": "commodity:staple:pizza-sauce",
+    "confidence": 0.95,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "contadina tmto bsl pizza squz btl",
+    "product_name": "Contadina Tmto Bsl Pizza Squz Btl",
+    "prompt_version": null,
+    "reason": "llm MATCH (unverified, survived the §3.3 challenge): The listing contains the explicit phrase 'Pizza Squz Btl', which decodes to 'Pizza Squeeze Bottle'. This identifies the product as a pizza sauce (specifically in squeeze bottle format), matching the commodity 'Pizza Sauce'. Unlike the rejected items which were hot sauces, generic Italian sauces, or garlic dipping sauces, this item is explicitly labeled for pizza.",
+    "status": "llm_match_unverified"
+  },
+  {
+    "commodity_id": "commodity:staple:pizza-sauce",
     "confidence": 0.9,
     "decided_at": "2026-09-11T08:20:10",
     "decided_by": "model",
@@ -99988,6 +100813,17 @@
     "prompt_version": null,
     "reason": "reviewer REJECT: Dei Fratelli 'Italian Sauce' - a pasta-style tomato sauce, not pizza sauce.",
     "status": "llm_rejected"
+  },
+  {
+    "commodity_id": "commodity:staple:pizza-sauce",
+    "confidence": null,
+    "decided_at": "2026-09-12T09:25:29",
+    "decided_by": "model",
+    "product_key": "delallo pesto topping, basil 6.7 oz",
+    "product_name": "Delallo Pesto Topping, Basil 6.7 Oz",
+    "prompt_version": null,
+    "reason": "helper: 4.3e-05 < 0.0001 (C:\\Codex\\ThriftyCrew\\sidecar\\models\\resolve-ce-v1)",
+    "status": "helper_rejected"
   },
   {
     "commodity_id": "commodity:staple:pizza-sauce",
@@ -100195,7 +101031,7 @@
     "product_key": "melinda's creamy pizza hot sauce ranch dipping sauce and spicy dressing 355 ml",
     "product_name": "Melinda's Creamy Pizza Hot Sauce Ranch Dipping Sauce And Spicy Dressing 355 Ml",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: llm: The listing is 'Melinda's Creamy Pizza Hot Sauce Ranch Dipping Sauce And Spicy Dressing'. The commodity is 'Pizza Sauce', which typically refers to a tomato-based sauce used as a base for pizza. The product listed is a 'Ranch Dipping Sauce' and 'Spicy Dressing' that merely mentions 'Pizza' in its name (likely as a suggested use or flavor profile variant), but it is fundamentally a different food i",
+    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Melinda's Creamy Pizza Hot Sauce Ranch Dipping Sauce And Spicy Dressing'. The commodity is 'Pizza Sauce', which typically refers to a tomato-based sauce used as a base for pizza. The product listed is a 'Ranch Dipping Sauce' and 'Spicy Dressing' that merely mentions 'Pizza' in its name (likely as a suggested use or flavor profile variant), but it is fundamentally a different food i",
     "status": "llm_rejected"
   },
   {
@@ -100217,7 +101053,7 @@
     "product_key": "melindas pizza hot sauce 12 oz",
     "product_name": "Melindas Pizza Hot Sauce 12 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: reviewer REJECT: 'Pizza Hot Sauce' - a hot sauce, not pizza sauce; different food.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: reviewer REJECT: 'Pizza Hot Sauce' - a hot sauce, not pizza sauce; different food.",
     "status": "llm_rejected"
   },
   {
@@ -103363,7 +104199,7 @@
     "product_key": "bodyarmor zero sugar tropical punch powder hydration boosters 0.28 fl oz",
     "product_name": "Bodyarmor Zero Sugar Tropical Punch Powder Hydration Boosters 0.28 Fl Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Bodyarmor Zero Sugar Tropical Punch Powder Hydration Boosters', which is a beverage powder/hydration drink, not the baking ingredient 'Powdered Sugar' (confectioners' sugar). The word 'Sugar' appears only in the context of 'Zero Sugar' (a dietary claim) and 'Tropical Punch' (flavor), while 'Powder' refers to the form of the drink mix. It is a different food category entirely.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Bodyarmor Zero Sugar Tropical Punch Powder Hydration Boosters', which is a beverage powder/hydration drink, not the baking ingredient 'Powdered Sugar' (confectioners' sugar). The word 'Sugar' appears only in the context of 'Zero Sugar' (a dietary claim) and 'Tropical Punch' (flavor), while 'Powder' refers to the form of the drink mix. It is a different food category entirely.",
     "status": "llm_rejected"
   },
   {
@@ -103429,7 +104265,7 @@
     "product_key": "gatorade zero sugar grape thirst quencher powder 8 ea",
     "product_name": "Gatorade Zero Sugar Grape Thirst Quencher Powder 8 Ea",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Gatorade Zero Sugar Grape Thirst Quencher Powder', which is a powdered sports drink mix. The commodity is 'Powdered Sugar' (confectioners' sugar), a baking ingredient. While both contain the word 'powder' or 'sugar', they are fundamentally different food products (beverage mix vs. sweetener). The known surface patterns for powdered sugar ('confectioners?', '10x\\s+sugar') do not mat",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Gatorade Zero Sugar Grape Thirst Quencher Powder', which is a powdered sports drink mix. The commodity is 'Powdered Sugar' (confectioners' sugar), a baking ingredient. While both contain the word 'powder' or 'sugar', they are fundamentally different food products (beverage mix vs. sweetener). The known surface patterns for powdered sugar ('confectioners?', '10x\\s+sugar') do not mat",
     "status": "llm_rejected"
   },
   {
@@ -103638,7 +104474,7 @@
     "product_key": "metamucil metamucil psyllium fiber powder, sugar free, orange, glp 1 friendly fiber>, 114 tsp 23.3 oz",
     "product_name": "Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 114 Tsp 23.3 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The product is 'Metamucil Psyllium Fiber Powder', which is a dietary fiber supplement, not a sweetener. The word 'Sugar' appears only in the descriptor 'Sugar Free', indicating the absence of the commodity. The primary ingredient is psyllium husk, making it a different food category entirely.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The product is 'Metamucil Psyllium Fiber Powder', which is a dietary fiber supplement, not a sweetener. The word 'Sugar' appears only in the descriptor 'Sugar Free', indicating the absence of the commodity. The primary ingredient is psyllium husk, making it a different food category entirely.",
     "status": "llm_rejected"
   },
   {
@@ -103649,7 +104485,7 @@
     "product_key": "metamucil metamucil psyllium fiber powder, sugar free, orange, glp 1 friendly fiber>, 72 tsp 15 oz",
     "product_name": "Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 72 Tsp 15 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The product is 'Metamucil Psyllium Fiber Powder', which is a dietary fiber supplement, not a sweetener. The word 'Sugar' appears only in the descriptor 'Sugar Free', indicating the absence of the commodity. The primary ingredient is psyllium husk, making it a different food category entirely.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The product is 'Metamucil Psyllium Fiber Powder', which is a dietary fiber supplement, not a sweetener. The word 'Sugar' appears only in the descriptor 'Sugar Free', indicating the absence of the commodity. The primary ingredient is psyllium husk, making it a different food category entirely.",
     "status": "llm_rejected"
   },
   {
@@ -103715,7 +104551,7 @@
     "product_key": "sugar 'n spice garlic powder",
     "product_name": "Sugar 'N Spice Garlic Powder",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Garlic Powder', which is a different food item (spice) than the commodity 'Powdered Sugar' (sweetener). The word 'Sugar' appears only in the brand name 'Sugar 'N Spice', not as the product type.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Garlic Powder', which is a different food item (spice) than the commodity 'Powdered Sugar' (sweetener). The word 'Sugar' appears only in the brand name 'Sugar 'N Spice', not as the product type.",
     "status": "llm_rejected"
   },
   {
@@ -103726,7 +104562,7 @@
     "product_key": "sugar 'n spice roasted garlic powder pp",
     "product_name": "Sugar 'N Spice Roasted Garlic Powder Pp",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is for 'Roasted Garlic Powder', which is a spice/seasoning, not 'Powdered Sugar' (confectioners' sugar). The word 'Sugar' appears only in the brand name 'Sugar 'N Spice'. This is a different food item entirely.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is for 'Roasted Garlic Powder', which is a spice/seasoning, not 'Powdered Sugar' (confectioners' sugar). The word 'Sugar' appears only in the brand name 'Sugar 'N Spice'. This is a different food item entirely.",
     "status": "llm_rejected"
   },
   {
@@ -103759,7 +104595,7 @@
     "product_key": "sugar n spice chili powder pp",
     "product_name": "Sugar N Spice Chili Powder Pp",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Chili Powder', which is a spice/seasoning, not 'Powdered Sugar' (confectioners' sugar). The word 'Sugar' appears in the brand name 'Sugar N Spice', but the product itself is chili powder.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Chili Powder', which is a spice/seasoning, not 'Powdered Sugar' (confectioners' sugar). The word 'Sugar' appears in the brand name 'Sugar N Spice', but the product itself is chili powder.",
     "status": "llm_rejected"
   },
   {
@@ -103770,7 +104606,7 @@
     "product_key": "sugar n spice curry powder pp",
     "product_name": "Sugar N Spice Curry Powder Pp",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Curry Powder', which is a spice blend, not 'Powdered Sugar' (confectioners' sugar). The word 'Sugar' appears only as part of the brand name 'Sugar N Spice'. This is a different food item entirely.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Curry Powder', which is a spice blend, not 'Powdered Sugar' (confectioners' sugar). The word 'Sugar' appears only as part of the brand name 'Sugar N Spice'. This is a different food item entirely.",
     "status": "llm_rejected"
   },
   {
@@ -103792,7 +104628,7 @@
     "product_key": "top care fiber powder, sugar free, 4 in 1, orange flavor 36.8 oz",
     "product_name": "Top Care Fiber Powder, Sugar Free, 4 In 1, Orange Flavor 36.8 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The product is 'Top Care Fiber Powder', which is a dietary supplement or fiber powder, not a sweetener. The listing explicitly states 'Sugar Free', directly contradicting the commodity 'Powdered Sugar'. While it contains the word 'Powder' and mentions 'Sugar' in the context of being free of it, it is a different food category entirely.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The product is 'Top Care Fiber Powder', which is a dietary supplement or fiber powder, not a sweetener. The listing explicitly states 'Sugar Free', directly contradicting the commodity 'Powdered Sugar'. While it contains the word 'Powder' and mentions 'Sugar' in the context of being free of it, it is a different food category entirely.",
     "status": "llm_rejected"
   },
   {
@@ -103803,7 +104639,7 @@
     "product_key": "top care fiber powder, sugar free, orange flavor 23.3 oz",
     "product_name": "Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Top Care Fiber Powder', which is a dietary supplement/fiber product, not a sweetener. The word 'Sugar' appears only in the descriptor 'Sugar Free', indicating the absence of sugar, and 'Powder' refers to the fiber form, not powdered sugar (confectioners' sugar). It does not match the commodity 'Powdered Sugar'.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Top Care Fiber Powder', which is a dietary supplement/fiber product, not a sweetener. The word 'Sugar' appears only in the descriptor 'Sugar Free', indicating the absence of sugar, and 'Powder' refers to the fiber form, not powdered sugar (confectioners' sugar). It does not match the commodity 'Powdered Sugar'.",
     "status": "llm_rejected"
   },
   {
@@ -109127,7 +109963,7 @@
     "product_key": "frank's sweet bavarian style kraut",
     "product_name": "Frank's Sweet Bavarian Style Kraut",
     "prompt_version": null,
-    "reason": "banked: reviewer CONFIRM: 'Sweet Bavarian Style Kraut' - Bavarian is a sauerkraut style, still sauerkraut.",
+    "reason": "banked: banked: reviewer CONFIRM: 'Sweet Bavarian Style Kraut' - Bavarian is a sauerkraut style, still sauerkraut.",
     "status": "llm_confirmed"
   },
   {
@@ -109160,7 +109996,7 @@
     "product_key": "oh snap! dilly bites pickle pouches",
     "product_name": "OH SNAP! Dilly Bites Pickle Pouches",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Pickle Pouches', which are pickled cucumbers, a different food item than sauerkraut (fermented cabbage). The word 'sauerkraut' does not appear in the title.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Pickle Pouches', which are pickled cucumbers, a different food item than sauerkraut (fermented cabbage). The word 'sauerkraut' does not appear in the title.",
     "status": "llm_rejected"
   },
   {
@@ -114682,7 +115518,7 @@
     "product_key": "campbell's® 100% tomato juice 33.000 fl oz",
     "product_name": "Campbell's® 100% Tomato Juice 33.000 Fl Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
     "status": "llm_rejected"
   },
   {
@@ -114693,7 +115529,7 @@
     "product_key": "campbell's® 100% tomato juice 46.000 fl oz",
     "product_name": "Campbell's® 100% Tomato Juice 46.000 Fl Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
     "status": "llm_rejected"
   },
   {
@@ -114704,7 +115540,7 @@
     "product_key": "campbell's® 100% tomato juice 64.000 fl oz",
     "product_name": "Campbell's® 100% Tomato Juice 64.000 Fl Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
     "status": "llm_rejected"
   },
   {
@@ -114715,7 +115551,7 @@
     "product_key": "campbell's® 100% tomato juice 69.000 fl oz",
     "product_name": "Campbell's® 100% Tomato Juice 69.000 Fl Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
     "status": "llm_rejected"
   },
   {
@@ -114726,7 +115562,7 @@
     "product_key": "campbell's® low sodium 100% tomato juice 64.000 fl oz",
     "product_name": "Campbell's® Low Sodium 100% Tomato Juice 64.000 Fl Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Tomato Juice', which is a different food product than 'Tomato Soup'. The surface patterns for the commodity require 'soup' or 'bisque', which are absent in the listing.",
     "status": "llm_rejected"
   },
   {
@@ -114748,7 +115584,7 @@
     "product_key": "prego® creamy tomato pasta sauce with garlic 23.750 oz",
     "product_name": "Prego® Creamy Tomato Pasta Sauce With Garlic 23.750 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Prego® Creamy Tomato Pasta Sauce With Garlic', which is a pasta sauce. The commodity is 'Tomato Soup'. These are distinct food categories (pasta sauce vs. soup). The presence of the word 'Tomato' does not make it a soup.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Prego® Creamy Tomato Pasta Sauce With Garlic', which is a pasta sauce. The commodity is 'Tomato Soup'. These are distinct food categories (pasta sauce vs. soup). The presence of the word 'Tomato' does not make it a soup.",
     "status": "llm_rejected"
   },
   {
@@ -114759,7 +115595,7 @@
     "product_key": "prego® creamy tomato pasta sauce with ricotta cheese 23.750 oz",
     "product_name": "Prego® Creamy Tomato Pasta Sauce With Ricotta Cheese 23.750 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Prego® Creamy Tomato Pasta Sauce With Ricotta Cheese', which is a pasta sauce, not a tomato soup. The commodity is specifically 'Tomato Soup (canned)'. While both contain tomato, they are distinct food categories (pasta sauce vs. soup). The surface patterns for tomato soup do not match the product name.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Prego® Creamy Tomato Pasta Sauce With Ricotta Cheese', which is a pasta sauce, not a tomato soup. The commodity is specifically 'Tomato Soup (canned)'. While both contain tomato, they are distinct food categories (pasta sauce vs. soup). The surface patterns for tomato soup do not match the product name.",
     "status": "llm_rejected"
   },
   {
@@ -114792,7 +115628,7 @@
     "product_key": "prego® traditional pasta sauce 24.000 oz",
     "product_name": "Prego® Traditional Pasta Sauce 24.000 Oz",
     "prompt_version": null,
-    "reason": "banked: banked: banked: banked: banked: banked: llm: The listing is 'Prego® Traditional Pasta Sauce', which is a pasta sauce, not a tomato soup. The commodity is specifically 'Tomato Soup (canned)'. While both may contain tomatoes, they are distinct food categories (soup vs. sauce). The surface patterns for tomato soup do not match the product name.",
+    "reason": "banked: banked: banked: banked: banked: banked: banked: llm: The listing is 'Prego® Traditional Pasta Sauce', which is a pasta sauce, not a tomato soup. The commodity is specifically 'Tomato Soup (canned)'. While both may contain tomatoes, they are distinct food categories (soup vs. sauce). The surface patterns for tomato soup do not match the product name.",
     "status": "llm_rejected"
   },
   {

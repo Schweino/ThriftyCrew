@@ -1,6 +1,6 @@
 ﻿{
     "store":  "Family Fare",
-    "updated":  "2026-09-12T09:01:25",
+    "updated":  "2026-09-12T10:34:41",
     "note":  "term -\u003e the last date that search term returned products. Written ONLY from measured receipt inside the buy loop, never bulk-stamped. Used to classify a 14-day carry expiry as starved / churn / unknown; see Get-FfExpiryClass in pull-regular-familyfare.ps1.",
     "term_count":  599,
     "terms":  {
@@ -463,7 +463,7 @@
                   "purified water 24 pack":  "2026-09-06",
                   "quart freezer bags":  "2026-09-06",
                   "quick grits":  "2026-08-19",
-                  "quinoa":  "2026-08-25",
+                  "quinoa":  "2026-09-12",
                   "radishes":  "2026-09-07",
                   "raisins":  "2026-09-12",
                   "ramen noodles":  "2026-09-05",

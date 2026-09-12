@@ -204,6 +204,23 @@
     "run_at": "2026-08-20T18:27:15"
   },
   {
+    "context": "nightly",
+    "detail_json": "{\"entity_precision\": 0.9985486211901307, \"entity_recall\": 0.523990860624524, \"relation_precision\": 0.9985486211901307, \"relation_recall\": 0.523990860624524, \"false_merge_rate\": 0.0013422818791946308, \"missed_merge_rate\": 0.476009139375476, \"counts\": {\"tp\": 688, \"fp\": 1, \"tn\": 744, \"fn\": 625, \"gold_match\": 1313, \"gold_no_match\": 745, \"escalated\": 0, \"missing_node\": 10}, \"by_status\": {\"known_wrong\": 301, \"include_hit\": 689, \"no_include_hit\": 1018, \"excluded\": 19, \"category_excluded\": 31}, \"f1\": 0.6873126873126875, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}, \"deterministic\": {\"missed_merge_rate\": 0.476009139375476, \"false_merge_rate\": 0.0013422818791946308, \"entity_recall\": 0.523990860624524}, \"system\": {\"missed_merge_rate\": 0.13328255902513328, \"false_merge_rate\": 0.0013422818791946308, \"entity_recall\": 0.8667174409748667}}",
+    "entity_precision": 0.9985486211901307,
+    "entity_recall": 0.523990860624524,
+    "false_merge_rate": 0.0013422818791946308,
+    "gold_version": "2965af07f2c40831",
+    "id": "eval:57d1e116ac571bb49b3f",
+    "missed_merge_rate": 0.476009139375476,
+    "model": "deterministic-only",
+    "n_gold": 2088,
+    "n_pred": 689,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 0.9985486211901307,
+    "relation_recall": 0.523990860624524,
+    "run_at": "2026-09-10T22:58:11"
+  },
+  {
     "context": "phase2",
     "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.7116564417177914, \"relation_precision\": 1.0, \"relation_recall\": 0.7116564417177914, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.2883435582822086, \"counts\": {\"tp\": 696, \"fp\": 0, \"tn\": 492, \"fn\": 282, \"gold_match\": 978, \"gold_no_match\": 492, \"escalated\": 0, \"missing_node\": 26}, \"by_status\": {\"known_wrong\": 172, \"include_hit\": 696, \"no_include_hit\": 600, \"excluded\": 2}, \"f1\": 0.8315412186379929, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
     "entity_precision": 1.0,
@@ -304,6 +321,23 @@
     "relation_precision": 1.0,
     "relation_recall": 0.9812332439678284,
     "run_at": "2026-08-20T15:14:24"
+  },
+  {
+    "context": "nightly",
+    "detail_json": "{\"entity_precision\": 0.9814285714285714, \"entity_recall\": 0.5256312165263963, \"relation_precision\": 0.9814285714285714, \"relation_recall\": 0.5256312165263963, \"false_merge_rate\": 0.017173051519154558, \"missed_merge_rate\": 0.4743687834736037, \"counts\": {\"tp\": 687, \"fp\": 13, \"tn\": 744, \"fn\": 620, \"gold_match\": 1307, \"gold_no_match\": 757, \"escalated\": 0, \"missing_node\": 10}, \"by_status\": {\"known_wrong\": 301, \"include_hit\": 700, \"no_include_hit\": 1018, \"excluded\": 16, \"category_excluded\": 29}, \"f1\": 0.6846038863976083, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}, \"deterministic\": {\"missed_merge_rate\": 0.4743687834736037, \"false_merge_rate\": 0.017173051519154558, \"entity_recall\": 0.5256312165263963}, \"system\": {\"missed_merge_rate\": 0.13006885998469778, \"false_merge_rate\": 0.017173051519154558, \"entity_recall\": 0.8699311400153023}}",
+    "entity_precision": 0.9814285714285714,
+    "entity_recall": 0.5256312165263963,
+    "false_merge_rate": 0.017173051519154558,
+    "gold_version": "68f5b273b7ef8d8f",
+    "id": "eval:7b73e9e7d03376cc014d",
+    "missed_merge_rate": 0.4743687834736037,
+    "model": "deterministic-only",
+    "n_gold": 2094,
+    "n_pred": 700,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 0.9814285714285714,
+    "relation_recall": 0.5256312165263963,
+    "run_at": "2026-09-11T21:49:47"
   },
   {
     "context": "final-2026-08-20",

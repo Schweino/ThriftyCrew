@@ -3,9 +3,9 @@
                   "date":  "2026-09-12",
                   "pid":  18492,
                   "started":  "2026-09-12T09:00:03",
-                  "updated":  "2026-09-12T09:45:22",
-                  "stage":  "publishing",
-                  "exit_code":  null,
+                  "updated":  "2026-09-12T09:53:38",
+                  "stage":  "complete",
+                  "exit_code":  1,
                   "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-12.log",
                   "dirty_at_start":  [
                                          "graph/identity/staple/_manifest.json",

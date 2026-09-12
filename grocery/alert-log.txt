@@ -125,3 +125,5 @@
 [2026-09-12T09:32:01] REVIEW 'Grocery: 2 store(s) dropped from a commodity they carry - 2026-09-12' [type: grocery store s dropped from a commodity they carry] - queued, NOT emailed (registry entry stores-dropped)
 [2026-09-12T09:32:01] REVIEW 'Grocery: semantic sweep found 1 product(s) no rule can see - 2026-09-12' [type: grocery semantic sweep found product s no rule can see] - queued, NOT emailed (registry entry semantic-sweep)
 [2026-09-12T09:35:43] REVIEW 'Grocery: 95 NEW price flag(s) - 2026-09-12' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)
+[2026-09-12T10:30:14] SENT 'Automation silent-death: 2 issue(s)' -> schweino68@gmail.com (id 1a0963d97615ef28)
+[2026-09-12T10:34:43] SENT 'Grocery capture watchdog: 2 issue(s) 2026-09-12' -> schweino68@gmail.com (id 1a09641b4bc3eeea)

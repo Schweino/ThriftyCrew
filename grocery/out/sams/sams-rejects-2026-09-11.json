@@ -10,5 +10,29 @@
         "lp":  "$9.76",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Mangos, 8.8 lbs.",
+        "lp":  "$12.95",
+        "up":  "$1.52/lb",
+        "reason":  "NAME CONFLICT: name states 8.8 lb but none reproduces Sam\u0027s 1.52/lb (lp/up derives 8.52)"
+    },
+    {
+        "name":  "SUNSET Fresh Bombs Squad Tomatoes, 1.5 lbs.",
+        "lp":  "$7.97",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
+        "lp":  "$5.77",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Demakes Bros. Choice Beef Shaved Steak,  16 oz, 2 pk.",
+        "lp":  "$17.47",
+        "up":  "$0.62/oz",
+        "reason":  "NAME CONFLICT: name states 16, 32 oz but none reproduces Sam\u0027s 0.62/oz (lp/up derives 28.177)"
     }
 ]
