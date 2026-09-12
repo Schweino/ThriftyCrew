@@ -811,6 +811,10 @@ $staticBy = @{}; for ($i = 0; $i -lt $staticKeys.Count; $i++) { $staticBy[$stati
 # number for six weeks - the case its own header names - left no trace. ops\report-ratchet-trends.ps1 reads it.
 $gateReadings = [Collections.Generic.List[object]]::new()
 foreach ($g in $static) {
+  # THE SAME SKIP THE DISPATCH LOOP APPLIED, or a deferred ratchet is judged on a result nobody produced. Without
+  # this the six read `FAIL (exit )` on an EMPTY exit code, which is the estate's own trap - an absent value
+  # scoring as a verdict - and it failed the first push that deferred them.
+  if ([bool]$g.daily) { continue }
   $p = Join-Path $repo $g.f
   if (-not (Test-Path $p)) { $fail += $g.f; Write-Output ("  FAIL  {0} is missing" -f $g.f); continue }
   $gr = $staticBy[[string]$g.f]
