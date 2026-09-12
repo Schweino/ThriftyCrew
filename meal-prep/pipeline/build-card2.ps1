@@ -139,6 +139,10 @@ if ($shapeBad.Count) { throw ("bullet-field shape ({0}): {1}" -f $spec.slug, ($s
 # body, the JSON-LD, the meta description - can ever quote a number the stat has moved away from. A spec
 # still holding plain literals passes through untouched (expansion is a no-op without tokens).
 . (Join-Path $here '..\lib\render-tokens.ps1')
+# THE ALLERGEN LINE IS GENERATED HERE AND NOWHERE ELSE (Brad's ruling, 2026-09-12, backlog I144).
+# Format-TcAllergenLine owns the bytes; pipeline\audit-allergen-line.ps1 re-derives through the same
+# function and refuses a card that disagrees, so the check cannot drift away from the renderer.
+. (Join-Path $here '..\lib\allergen-lib.ps1')
 $spec = Expand-SpecProse $spec
 $spec = Move-SpecPriceToReleaseHydration $spec
 $staticRecipeCost = [string]$spec.stat.cost_ps
@@ -360,6 +364,10 @@ if(-not $global:__tcTplCache.ContainsKey('elite-recipe')){
 .smp-rel-m{font-size:1.15rem;color:#8a94a6}
 .smp-rel-p{margin-top:.2rem;font-size:1.5rem;font-weight:750;color:#0c5c3b;font-variant-numeric:tabular-nums}
 .smp-rel-p em{font-size:1.08rem;font-weight:500;font-style:normal;color:#8a94a6}
+.smp-allergen{margin:1.1rem 0 0;padding:.9rem 1.1rem;background:#fbf8f1;border:1px solid #e7e2d4;border-left:4px solid #16263F;border-radius:10px;font-size:1.25rem;line-height:1.55;color:#16263F}
+.smp-allergen strong{letter-spacing:.01em}
+.smp-allergen-hidden{display:block;margin-top:.35rem;font-weight:650}
+.smp-allergen-note{display:block;margin-top:.35rem;font-size:1.08rem;color:#6b7484}
 '@) + (Compress-TcCss (Get-TcPrintCss)) + '</style>' + (Compress-TcAsset (Get-TcMotionJs)) + '<!--TC-ELITE-END-->'
 }
 $L.Add($global:__tcTplCache['elite-recipe'])
@@ -387,6 +395,21 @@ $L.Add('<h2 id="smp-ing">Ingredients</h2>')
 $L.Add('<ul class="smp-ing">')
 foreach($li in $spec.ingredients_display){ $L.Add('<li>' + $li + '</li>') }
 $L.Add('</ul>')
+# ---- THE ALLERGEN LINE, AND IT IS DELIBERATELY ABOVE THE PAYWALL ----------------------------------
+# Brad's ruling (2026-09-12, backlog I144) says every card carries it; WHERE it sits was left open, and
+# this is the long-term answer. A reader with a peanut allergy must not have to buy a membership to
+# find out the recipe has peanuts. The ingredient list is already free - the paywall cut was moved here
+# on 2026-08-31 precisely so the ingredients are crawlable and readable - so putting the mechanical
+# SUMMARY of that same list behind the gate would have the page contradict itself, with the evidence
+# public and the safety conclusion paid. It sits directly under the list it is derived from, which is
+# also where a reader looks for it.
+#
+# IT THROWS RATHER THAN UNDERSTATING. Format-TcAllergenLine refuses an ingredient db\allergens.json
+# cannot classify, so a new ingredient blocks the build until somebody classifies it. On this page a
+# quiet "contains nothing" is the worst answer available: it reads as a clean lookup.
+$allergenTable = Get-TcAllergenTable -Path (Join-Path $here '..\db\allergens.json')
+$allergenResult = Get-TcRecipeAllergens $spec.scaler.ing $allergenTable.Items
+$L.Add((Format-TcAllergenLine $allergenResult $spec.slug))
 $L.Add('')
 # ---- WHERE THE PAYWALL GOES (2026-08-31, Brad's call) ----------------------------------------------
 # Everything ABOVE this line is the free preview; everything below is members-only. engine\publish.ps1
@@ -458,7 +481,7 @@ $navyBad = Test-TcNavyAdjacency -Html $body
 if(@($navyBad).Count){ throw ("navy-band rule broken in " + $spec.slug + ": " + ($navyBad -join ' | ')) }
 $goldBad = Test-TcGoldDiscipline -Html $body
 if(@($goldBad).Count){ throw ("gold-discipline rule broken in " + $spec.slug + ": " + ($goldBad -join ' | ')) }
-foreach($mk in @('smp-sc-data','smp-ct-list','smp-ct-btn','smp-ing','smp-mi','smp-jump-cook')){
+foreach($mk in @('smp-sc-data','smp-ct-list','smp-ct-btn','smp-ing','smp-mi','smp-jump-cook','smp-allergen')){
   if($body -notmatch [regex]::Escape($mk)){ throw ("lost required hook '" + $mk + "' in " + $spec.slug) }
 }
 

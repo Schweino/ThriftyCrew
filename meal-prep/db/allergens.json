@@ -1,0 +1,1465 @@
+{
+  "readme": "ALLERGEN CLASSIFICATION for every row of db/ingredients.json, one entry per ingredient-map item name. Brad's ruling, 2026-09-12, backlog I144: every recipe card carries a generated 'Contains' line over the nine major US allergens, naming the specific nut, shellfish or fish, and calling out hidden sources. The line is NEVER hand-written: meal-prep/lib/allergen-lib.ps1 derives it from this table by the spec's own scaler ingredient names, build-card2.ps1 renders it, and pipeline/audit-allergen-line.ps1 refuses a card whose line is missing or disagrees. EDIT pipeline/gen_allergen_table.py AND RERUN IT; do not hand-edit this file, because the generator is what proves every map row is covered.",
+  "ruling": "Brad, 2026-09-12, backlog I144. See design/RULING-allergen-line-2026-09-12.md.",
+  "rule": "An allergen is listed when it is inherent to the food the ingredient NAMES: the food cannot be that food without it, or the standard US supermarket formulation of that named product carries it as a defining component. An allergen only SOME brands add is not listed, because that is a guess rather than a derivation, and the card's own note is what covers it: the line reflects the recipe as written, and the reader checks the label on the brand they buy. Two consequences worth stating because they look like omissions. (1) Refined oils are exempt from FALCPA allergen labelling, so soybean oil alone does not make a row soy. (2) 'May contain' is not recognised by FALCPA and is purely voluntary, so it never appears here. Coconut IS listed as a tree nut because the FDA's tree-nut list includes it; the card names the specific nut, so a reader allergic to almonds is not misled by a coconut recipe.",
+  "generated_by": "meal-prep/pipeline/gen_allergen_table.py",
+  "allergens": [
+    {
+      "key": "milk",
+      "label": "milk"
+    },
+    {
+      "key": "eggs",
+      "label": "eggs"
+    },
+    {
+      "key": "fish",
+      "label": "fish",
+      "names_species": true
+    },
+    {
+      "key": "shellfish",
+      "label": "shellfish",
+      "names_species": true
+    },
+    {
+      "key": "tree_nuts",
+      "label": "tree nuts",
+      "names_species": true
+    },
+    {
+      "key": "peanuts",
+      "label": "peanuts"
+    },
+    {
+      "key": "wheat",
+      "label": "wheat"
+    },
+    {
+      "key": "soy",
+      "label": "soy"
+    },
+    {
+      "key": "sesame",
+      "label": "sesame"
+    }
+  ],
+  "not_a_food": [
+    "_r300_note"
+  ],
+  "items": {
+    "1/3 Fat Cream Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "93/7 Ground Beef": {
+      "contains": []
+    },
+    "93/7 Ground Turkey": {
+      "contains": []
+    },
+    "99/1 Ground Turkey": {
+      "contains": []
+    },
+    "Achiote Paste": {
+      "contains": []
+    },
+    "Aji Amarillo Paste": {
+      "contains": []
+    },
+    "Alfredo Sauce": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "All-Purpose Flour": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Almonds": {
+      "contains": [
+        "tree_nuts:almond"
+      ]
+    },
+    "Apple": {
+      "contains": []
+    },
+    "Apple Cider": {
+      "contains": []
+    },
+    "Apple Cider Vinegar": {
+      "contains": []
+    },
+    "Apple Juice": {
+      "contains": []
+    },
+    "Artichoke Hearts": {
+      "contains": []
+    },
+    "Avocado": {
+      "contains": []
+    },
+    "Au Jus Gravy Mix": {
+      "contains": [
+        "wheat",
+        "soy"
+      ],
+      "hidden": {
+        "wheat": "the flour a gravy mix is thickened with",
+        "soy": "the hydrolyzed soy protein in a gravy mix"
+      }
+    },
+    "Baked Beans": {
+      "contains": []
+    },
+    "Baking Powder": {
+      "contains": []
+    },
+    "Baking Soda": {
+      "contains": []
+    },
+    "Balsamic Vinegar": {
+      "contains": []
+    },
+    "Basil Pesto": {
+      "contains": [
+        "milk",
+        "tree_nuts:pine nut"
+      ],
+      "hidden": {
+        "tree_nuts": "the pine nuts in pesto"
+      }
+    },
+    "Bay Leaves": {
+      "contains": []
+    },
+    "BBQ Sauce": {
+      "contains": []
+    },
+    "BBQ Sauce (Sugar Free)": {
+      "contains": []
+    },
+    "Beef Broth": {
+      "contains": []
+    },
+    "Beef Chuck Roast": {
+      "contains": []
+    },
+    "Beef Flank/Sirloin Steak": {
+      "contains": []
+    },
+    "Berbere Seasoning": {
+      "contains": []
+    },
+    "Black Pepper": {
+      "contains": []
+    },
+    "Blackberries": {
+      "contains": []
+    },
+    "Boneless Skinless Chicken Breast": {
+      "contains": []
+    },
+    "Boneless Skinless Chicken Thigh": {
+      "contains": []
+    },
+    "Bratwurst": {
+      "contains": []
+    },
+    "Bread Crumbs": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Broccoli Florets": {
+      "contains": []
+    },
+    "Brown Gravy Mix": {
+      "contains": [
+        "wheat",
+        "soy"
+      ],
+      "hidden": {
+        "wheat": "the flour a gravy mix is thickened with",
+        "soy": "the hydrolyzed soy protein in a gravy mix"
+      }
+    },
+    "Brown Sugar": {
+      "contains": []
+    },
+    "Brussels Sprouts": {
+      "contains": []
+    },
+    "Buffalo Wing Sauce": {
+      "contains": [
+        "milk"
+      ],
+      "hidden": {
+        "milk": "the butter in buffalo wing sauce"
+      }
+    },
+    "Bulgur Wheat": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Butter": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Butter Crackers": {
+      "contains": [
+        "wheat",
+        "soy"
+      ],
+      "hidden": {
+        "soy": "the soybean oil crackers are baked with"
+      }
+    },
+    "Cajun Seasoning": {
+      "contains": []
+    },
+    "Canned Black Beans": {
+      "contains": []
+    },
+    "Canned Pinto Beans": {
+      "contains": []
+    },
+    "Cannellini Beans": {
+      "contains": []
+    },
+    "Capers": {
+      "contains": []
+    },
+    "Caraway Seeds": {
+      "contains": []
+    },
+    "Carrots": {
+      "contains": []
+    },
+    "Cashews": {
+      "contains": [
+        "tree_nuts:cashew"
+      ]
+    },
+    "Cayenne Pepper": {
+      "contains": []
+    },
+    "Celery": {
+      "contains": []
+    },
+    "Celery Salt": {
+      "contains": []
+    },
+    "Cheddar Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Cheddar Cheese, Shredded": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Cheese Tortellini": {
+      "contains": [
+        "milk",
+        "eggs",
+        "wheat"
+      ]
+    },
+    "Cherry Tomatoes": {
+      "contains": []
+    },
+    "Chicken Broth": {
+      "contains": []
+    },
+    "Chicken Livers": {
+      "contains": []
+    },
+    "Chickpeas": {
+      "contains": []
+    },
+    "Chili Crisp": {
+      "contains": [
+        "soy"
+      ],
+      "hidden": {
+        "soy": "the soybeans and soybean oil in chili crisp"
+      }
+    },
+    "Chili Crisp / Chili Oil": {
+      "contains": [
+        "soy"
+      ],
+      "hidden": {
+        "soy": "the soybeans and soybean oil in chili crisp"
+      }
+    },
+    "Chili Powder": {
+      "contains": []
+    },
+    "Chipotle in Adobo": {
+      "contains": []
+    },
+    "Cocoa Powder": {
+      "contains": []
+    },
+    "Coconut Milk": {
+      "contains": [
+        "tree_nuts:coconut"
+      ],
+      "hidden": {
+        "tree_nuts": "coconut, which the FDA lists as a tree nut"
+      }
+    },
+    "Condensed French Onion Soup": {
+      "contains": [
+        "wheat",
+        "soy"
+      ],
+      "hidden": {
+        "wheat": "the wheat in condensed soup",
+        "soy": "the soy protein in condensed soup"
+      }
+    },
+    "Corn Chips": {
+      "contains": []
+    },
+    "Corn Muffin Mix": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Corn Tortillas": {
+      "contains": []
+    },
+    "Corned Beef Brisket": {
+      "contains": []
+    },
+    "Cornstarch": {
+      "contains": []
+    },
+    "Cottage Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Cream of Chicken Soup": {
+      "contains": [
+        "milk",
+        "wheat",
+        "soy"
+      ],
+      "hidden": {
+        "wheat": "the flour a cream soup is thickened with",
+        "soy": "the soy protein in condensed soup"
+      }
+    },
+    "Cream of Mushroom Soup": {
+      "contains": [
+        "milk",
+        "wheat",
+        "soy"
+      ],
+      "hidden": {
+        "wheat": "the flour a cream soup is thickened with",
+        "soy": "the soy protein in condensed soup"
+      }
+    },
+    "Crushed Tomatoes": {
+      "contains": []
+    },
+    "Cucumber": {
+      "contains": []
+    },
+    "Curry Powder": {
+      "contains": []
+    },
+    "Diced Green Chiles": {
+      "contains": []
+    },
+    "Diced Ham": {
+      "contains": []
+    },
+    "Diced Tomatoes": {
+      "contains": []
+    },
+    "Diced Tomatoes & Green Chilies": {
+      "contains": []
+    },
+    "Dijon Mustard": {
+      "contains": []
+    },
+    "Dill Pickles": {
+      "contains": []
+    },
+    "Doubanjiang": {
+      "contains": [
+        "soy",
+        "wheat"
+      ],
+      "hidden": {
+        "soy": "the fermented soybeans in doubanjiang",
+        "wheat": "the wheat flour in doubanjiang"
+      }
+    },
+    "Dried Ancho Chiles": {
+      "contains": []
+    },
+    "Dried Arbol Chiles": {
+      "contains": []
+    },
+    "Dried Basil": {
+      "contains": []
+    },
+    "Dried Dill": {
+      "contains": []
+    },
+    "Dried Guajillo Chiles": {
+      "contains": []
+    },
+    "Dried Oregano": {
+      "contains": []
+    },
+    "Dried Parsley": {
+      "contains": []
+    },
+    "Dried Rosemary": {
+      "contains": []
+    },
+    "Dried Thyme": {
+      "contains": []
+    },
+    "Egg Noodles": {
+      "contains": [
+        "eggs",
+        "wheat"
+      ]
+    },
+    "Eggplant": {
+      "contains": []
+    },
+    "Eggs": {
+      "contains": [
+        "eggs"
+      ]
+    },
+    "Enchilada Sauce": {
+      "contains": []
+    },
+    "Fajita Seasoning": {
+      "contains": []
+    },
+    "Fat Free Cheddar": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Fat Free Cottage Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Feta Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Fettuccine": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Fish Sauce": {
+      "contains": [
+        "fish:anchovy"
+      ]
+    },
+    "Five-Spice Powder": {
+      "contains": []
+    },
+    "Fresh Basil": {
+      "contains": []
+    },
+    "Fresh Cilantro": {
+      "contains": []
+    },
+    "Fresh Mint": {
+      "contains": []
+    },
+    "Fries": {
+      "contains": []
+    },
+    "Frozen Chopped Spinach": {
+      "contains": []
+    },
+    "Frozen Green Peas": {
+      "contains": []
+    },
+    "Frozen Hash Browns": {
+      "contains": []
+    },
+    "Frozen Peas": {
+      "contains": []
+    },
+    "Garam Masala": {
+      "contains": []
+    },
+    "Garlic": {
+      "contains": []
+    },
+    "Garlic Powder": {
+      "contains": []
+    },
+    "Ginger": {
+      "contains": []
+    },
+    "Gingersnap Cookies": {
+      "contains": [
+        "wheat",
+        "soy"
+      ],
+      "hidden": {
+        "soy": "the soybean oil cookies are baked with"
+      }
+    },
+    "Gochujang": {
+      "contains": [
+        "soy",
+        "wheat"
+      ],
+      "hidden": {
+        "soy": "the fermented soybeans in gochujang",
+        "wheat": "the wheat in gochujang"
+      }
+    },
+    "Golden Raisins": {
+      "contains": []
+    },
+    "Greek Yogurt": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Green Beans": {
+      "contains": []
+    },
+    "Green Bell Peppers": {
+      "contains": []
+    },
+    "Green Cabbage": {
+      "contains": []
+    },
+    "Green Chile Sauce": {
+      "contains": []
+    },
+    "Green Olives": {
+      "contains": []
+    },
+    "Green Onions": {
+      "contains": []
+    },
+    "Grits": {
+      "contains": []
+    },
+    "Ground Allspice": {
+      "contains": []
+    },
+    "Ground Cinnamon": {
+      "contains": []
+    },
+    "Ground Cloves": {
+      "contains": []
+    },
+    "Ground Coriander": {
+      "contains": []
+    },
+    "Ground Cumin": {
+      "contains": []
+    },
+    "Ground Fennel": {
+      "contains": []
+    },
+    "Ground Ginger": {
+      "contains": []
+    },
+    "Ground Nutmeg": {
+      "contains": []
+    },
+    "Ground Pork": {
+      "contains": []
+    },
+    "Ground Turmeric": {
+      "contains": []
+    },
+    "Half and Half": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Harissa Paste": {
+      "contains": []
+    },
+    "Heavy Cream": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Hickory Smoked Bacon": {
+      "contains": []
+    },
+    "High Fiber Tortilla": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Hoisin Sauce": {
+      "contains": [
+        "soy",
+        "wheat"
+      ],
+      "hidden": {
+        "soy": "the fermented soybeans in hoisin",
+        "wheat": "the wheat flour in hoisin"
+      }
+    },
+    "Hominy": {
+      "contains": []
+    },
+    "Honey": {
+      "contains": []
+    },
+    "Honey Dijon Mustard": {
+      "contains": []
+    },
+    "Horseradish Sauce": {
+      "contains": [
+        "eggs"
+      ],
+      "hidden": {
+        "eggs": "the egg yolk in a creamy horseradish sauce"
+      }
+    },
+    "Hot Honey": {
+      "contains": []
+    },
+    "Hot Italian Sausage": {
+      "contains": []
+    },
+    "Hot Sauce": {
+      "contains": []
+    },
+    "Hummus": {
+      "contains": [
+        "sesame"
+      ],
+      "hidden": {
+        "sesame": "the tahini in hummus"
+      }
+    },
+    "Italian Seasoning": {
+      "contains": []
+    },
+    "Jalapeno": {
+      "contains": []
+    },
+    "Japanese Curry Roux": {
+      "contains": [
+        "wheat",
+        "milk",
+        "soy"
+      ],
+      "hidden": {
+        "wheat": "the flour a curry roux block is made from",
+        "milk": "the milk solids in a curry roux block",
+        "soy": "the soy in a curry roux block"
+      }
+    },
+    "Jerk Seasoning": {
+      "contains": []
+    },
+    "Kale": {
+      "contains": []
+    },
+    "Ketchup": {
+      "contains": []
+    },
+    "Keto Bun": {
+      "contains": [
+        "wheat",
+        "eggs"
+      ],
+      "hidden": {
+        "wheat": "the wheat protein most keto buns are built on"
+      }
+    },
+    "Kidney Beans": {
+      "contains": []
+    },
+    "Korean Rice Cakes": {
+      "contains": []
+    },
+    "Lemon Juice": {
+      "contains": []
+    },
+    "Lemongrass Paste": {
+      "contains": []
+    },
+    "Light Sour Cream": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Lime Juice": {
+      "contains": []
+    },
+    "Liquid Smoke": {
+      "contains": []
+    },
+    "Lo Mein Noodles": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Mango": {
+      "contains": []
+    },
+    "Marinara Sauce": {
+      "contains": []
+    },
+    "Mayonnaise": {
+      "contains": [
+        "eggs"
+      ]
+    },
+    "Mexican Cheese Blend": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Milk": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Mirin": {
+      "contains": []
+    },
+    "Miso Paste": {
+      "contains": [
+        "soy"
+      ],
+      "hidden": {
+        "soy": "the fermented soybeans miso is made from"
+      }
+    },
+    "Mole Paste": {
+      "contains": [
+        "tree_nuts:almond",
+        "peanuts",
+        "wheat",
+        "sesame"
+      ],
+      "hidden": {
+        "tree_nuts": "the almonds in mole",
+        "peanuts": "the peanuts in mole",
+        "wheat": "the crackers or bread thickening the mole",
+        "sesame": "the sesame seeds in mole"
+      }
+    },
+    "Mozzarella Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Olive Oil": {
+      "contains": []
+    },
+    "Olives": {
+      "contains": []
+    },
+    "Onion Powder": {
+      "contains": []
+    },
+    "Onion Soup Mix": {
+      "contains": [
+        "soy"
+      ],
+      "hidden": {
+        "soy": "the hydrolyzed soy protein in a soup mix"
+      }
+    },
+    "Orange Juice": {
+      "contains": []
+    },
+    "Orange Zest": {
+      "contains": []
+    },
+    "Orzo Pasta": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Oyster Sauce": {
+      "contains": [
+        "shellfish:oyster"
+      ],
+      "hidden": {
+        "shellfish": "the oysters in oyster sauce"
+      }
+    },
+    "Panko Breadcrumbs": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Paprika": {
+      "contains": []
+    },
+    "Parmesan Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Pasta Shells": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Pasta Shells - jumbo": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Peanut Butter": {
+      "contains": [
+        "peanuts"
+      ]
+    },
+    "Peanuts": {
+      "contains": [
+        "peanuts"
+      ]
+    },
+    "Penne Pasta": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Pepperoncini": {
+      "contains": []
+    },
+    "Pigeon Peas": {
+      "contains": []
+    },
+    "Pineapple Chunks": {
+      "contains": []
+    },
+    "Pineapple Juice": {
+      "contains": []
+    },
+    "Plain Yogurt": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Poblano Peppers": {
+      "contains": []
+    },
+    "Pomegranate Molasses": {
+      "contains": []
+    },
+    "Poppy Seeds": {
+      "contains": []
+    },
+    "Pork Chops": {
+      "contains": []
+    },
+    "Pork Chorizo": {
+      "contains": []
+    },
+    "Pork Loin": {
+      "contains": []
+    },
+    "Pork Shoulder": {
+      "contains": []
+    },
+    "Pork Tenderloin": {
+      "contains": []
+    },
+    "Potato": {
+      "contains": []
+    },
+    "Potato Gnocchi": {
+      "contains": [
+        "wheat"
+      ],
+      "hidden": {
+        "wheat": "the wheat flour binding potato gnocchi"
+      }
+    },
+    "Poultry Seasoning": {
+      "contains": []
+    },
+    "Provolone Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Pumpkin Puree": {
+      "contains": []
+    },
+    "Ranch Dressing": {
+      "contains": [
+        "milk",
+        "eggs"
+      ]
+    },
+    "Ranch Seasoning Mix": {
+      "contains": [
+        "milk"
+      ],
+      "hidden": {
+        "milk": "the buttermilk powder in a ranch mix"
+      }
+    },
+    "Red Bell Pepper": {
+      "contains": []
+    },
+    "Red Curry Paste": {
+      "contains": [
+        "shellfish:shrimp"
+      ],
+      "hidden": {
+        "shellfish": "the shrimp paste in Thai curry paste"
+      }
+    },
+    "Red Onion": {
+      "contains": []
+    },
+    "Red Pepper Flakes": {
+      "contains": []
+    },
+    "Red Wine Vinegar": {
+      "contains": []
+    },
+    "Reduced Fat Mozzarella": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Refried Beans": {
+      "contains": []
+    },
+    "Refrigerated Biscuits": {
+      "contains": [
+        "wheat",
+        "milk"
+      ],
+      "hidden": {
+        "milk": "the buttermilk in refrigerated biscuits"
+      }
+    },
+    "Rice": {
+      "contains": []
+    },
+    "Rice Noodles": {
+      "contains": []
+    },
+    "Rice Vinegar": {
+      "contains": []
+    },
+    "Ricotta Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Roasted Red Peppers": {
+      "contains": []
+    },
+    "Rotini Pasta": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Rotisserie Chicken": {
+      "contains": []
+    },
+    "Rye Bread": {
+      "contains": [
+        "wheat"
+      ],
+      "hidden": {
+        "wheat": "the wheat flour rye bread is mostly made of"
+      }
+    },
+    "Salsa": {
+      "contains": []
+    },
+    "Salsa Verde": {
+      "contains": []
+    },
+    "Salt": {
+      "contains": []
+    },
+    "Sandwich Bread": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Sauerkraut": {
+      "contains": []
+    },
+    "Sazon Seasoning": {
+      "contains": []
+    },
+    "Seasoned Black Beans": {
+      "contains": []
+    },
+    "Sesame Oil": {
+      "contains": [
+        "sesame"
+      ]
+    },
+    "Shallots": {
+      "contains": []
+    },
+    "Shredded Carrots": {
+      "contains": []
+    },
+    "Smoked Paprika": {
+      "contains": []
+    },
+    "Smoked Turkey Sausage": {
+      "contains": []
+    },
+    "Snow Peas": {
+      "contains": []
+    },
+    "Soy Sauce": {
+      "contains": [
+        "soy",
+        "wheat"
+      ],
+      "hidden": {
+        "wheat": "the wheat soy sauce is brewed with"
+      }
+    },
+    "Spaghetti": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Spinach": {
+      "contains": []
+    },
+    "Sriracha": {
+      "contains": []
+    },
+    "Stuffing Mix": {
+      "contains": [
+        "wheat",
+        "soy"
+      ],
+      "hidden": {
+        "soy": "the soybean oil in a stuffing mix"
+      }
+    },
+    "Sugar": {
+      "contains": []
+    },
+    "Sugar-Free Maple Syrup": {
+      "contains": []
+    },
+    "Sumac": {
+      "contains": []
+    },
+    "Sun-Dried Tomatoes": {
+      "contains": []
+    },
+    "Sweet Chili Sauce": {
+      "contains": []
+    },
+    "Sweet Potatoes": {
+      "contains": []
+    },
+    "Sweet Soy Sauce": {
+      "contains": [
+        "soy",
+        "wheat"
+      ],
+      "hidden": {
+        "wheat": "the wheat soy sauce is brewed with"
+      }
+    },
+    "Sweet Whole Kernel Corn": {
+      "contains": []
+    },
+    "Swiss Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Taco Seasoning": {
+      "contains": []
+    },
+    "Tahini": {
+      "contains": [
+        "sesame"
+      ]
+    },
+    "Tater Tots": {
+      "contains": []
+    },
+    "Teriyaki Sauce": {
+      "contains": [
+        "soy",
+        "wheat"
+      ],
+      "hidden": {
+        "wheat": "the wheat soy sauce is brewed with"
+      }
+    },
+    "Toasted Sesame Seeds": {
+      "contains": [
+        "sesame"
+      ]
+    },
+    "Tomatillos": {
+      "contains": []
+    },
+    "Tomato Paste": {
+      "contains": []
+    },
+    "Tomato Sauce": {
+      "contains": []
+    },
+    "Tortilla": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Traditional Pasta Sauce": {
+      "contains": []
+    },
+    "Turkey Bacon": {
+      "contains": []
+    },
+    "Turkey Breast": {
+      "contains": []
+    },
+    "Turkey Pepperoni": {
+      "contains": []
+    },
+    "Vegetable Oil": {
+      "contains": []
+    },
+    "Walnuts": {
+      "contains": [
+        "tree_nuts:walnut"
+      ]
+    },
+    "White Mushrooms": {
+      "contains": []
+    },
+    "White Vinegar": {
+      "contains": []
+    },
+    "White Wine Vinegar": {
+      "contains": []
+    },
+    "Wild Rice": {
+      "contains": []
+    },
+    "Worcestershire Sauce": {
+      "contains": [
+        "fish:anchovy"
+      ],
+      "hidden": {
+        "fish": "the anchovies in Worcestershire sauce"
+      }
+    },
+    "Yellow Onion": {
+      "contains": []
+    },
+    "Zero-Sugar Soda": {
+      "contains": []
+    },
+    "Ziti Pasta": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Zucchini": {
+      "contains": []
+    },
+    "Korean glass noodles (dangmyeon)": {
+      "contains": []
+    },
+    "Cauliflower": {
+      "contains": []
+    },
+    "Fresh Parsley": {
+      "contains": []
+    },
+    "Fresh Oregano": {
+      "contains": []
+    },
+    "Dry White Wine": {
+      "contains": []
+    },
+    "Monterey Jack Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Pepper Jack Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Gruyere Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "80/20 Ground Beef": {
+      "contains": []
+    },
+    "Shaved Beef Steak": {
+      "contains": []
+    },
+    "Pork Smoked Sausage": {
+      "contains": []
+    },
+    "Portobello Mushrooms": {
+      "contains": []
+    },
+    "Brandy": {
+      "contains": []
+    },
+    "Broccolini": {
+      "contains": []
+    },
+    "Beef Base": {
+      "contains": [
+        "soy"
+      ],
+      "hidden": {
+        "soy": "the hydrolyzed soy protein in a bouillon base"
+      }
+    },
+    "Egg Yolk": {
+      "contains": [
+        "eggs"
+      ]
+    },
+    "Sun-Dried Tomatoes (Oil-Packed)": {
+      "contains": []
+    },
+    "Boneless Beef Short Ribs": {
+      "contains": []
+    },
+    "Yellow Bell Pepper": {
+      "contains": []
+    },
+    "Yellow Mustard": {
+      "contains": []
+    },
+    "Broccoli": {
+      "contains": []
+    },
+    "Black Olives": {
+      "contains": []
+    },
+    "Fresh Rosemary": {
+      "contains": []
+    },
+    "Fresh Sage": {
+      "contains": []
+    },
+    "Fresh Cranberries": {
+      "contains": []
+    },
+    "Spaghetti Squash": {
+      "contains": []
+    },
+    "Whole Chicken": {
+      "contains": []
+    },
+    "Lemons": {
+      "contains": []
+    },
+    "Fresh Thyme": {
+      "contains": []
+    },
+    "Dry Red Wine": {
+      "contains": []
+    },
+    "Bell Peppers": {
+      "contains": []
+    },
+    "Shredded Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Lime": {
+      "contains": []
+    },
+    "Sea Salt": {
+      "contains": []
+    },
+    "Almond Butter": {
+      "contains": [
+        "tree_nuts:almond"
+      ]
+    },
+    "Masa Harina": {
+      "contains": []
+    },
+    "Fresh Mozzarella": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Boursin Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Bone Broth": {
+      "contains": []
+    },
+    "High Protein Pasta": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Frozen Lightly Breaded Chicken Breast Bites": {
+      "contains": [
+        "wheat"
+      ],
+      "hidden": {
+        "wheat": "the breading on the chicken bites"
+      }
+    },
+    "No-Boil Lasagna Noodles": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Cotija Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Fresh Lemon Juice": {
+      "contains": []
+    },
+    "Lemon Zest": {
+      "contains": []
+    },
+    "Lime Zest": {
+      "contains": []
+    },
+    "Coconut Oil": {
+      "contains": []
+    },
+    "Cooking Spray": {
+      "contains": []
+    },
+    "Cranberry Sauce": {
+      "contains": []
+    },
+    "Fresh Red Chili": {
+      "contains": []
+    },
+    "Blackened Seasoning": {
+      "contains": []
+    },
+    "Romaine Lettuce": {
+      "contains": []
+    },
+    "Cilantro Lime Rice": {
+      "contains": []
+    },
+    "Fresh Lime Juice": {
+      "contains": []
+    },
+    "Apricot Jam": {
+      "contains": []
+    },
+    "Light Mayonnaise": {
+      "contains": [
+        "eggs"
+      ]
+    },
+    "Cooked White Rice": {
+      "contains": []
+    },
+    "Reduced Fat Cheddar Cheese": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Adobo Seasoning": {
+      "contains": []
+    },
+    "Deli Ham": {
+      "contains": []
+    },
+    "Dill Pickle Slices": {
+      "contains": []
+    },
+    "Pepperoni": {
+      "contains": []
+    },
+    "Sour Cream": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Smoked Sausage": {
+      "contains": []
+    },
+    "Andouille Smoked Sausage": {
+      "contains": []
+    },
+    "Tandoori Masala": {
+      "contains": []
+    },
+    "Baby Potatoes": {
+      "contains": []
+    },
+    "Whole Wheat Flour": {
+      "contains": [
+        "wheat"
+      ]
+    },
+    "Frozen Cauliflower Rice": {
+      "contains": []
+    },
+    "Fat Free Mozzarella": {
+      "contains": [
+        "milk"
+      ]
+    },
+    "Mustard Powder": {
+      "contains": []
+    },
+    "Bok Choy": {
+      "contains": []
+    },
+    "Bean Sprouts": {
+      "contains": []
+    },
+    "Tomatoes": {
+      "contains": []
+    }
+  }
+}

@@ -10908,7 +10908,43 @@ global list plus a check, not designing.
 **Marked 1-WAY because the first rung is the ruling itself and the obvious consequence is a sweep of
 330 live pages on a paid site.** That is not deletable.
 
-### I144 - Nothing in our own files carries any allergen information, and we sell recipes `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I144 - Nothing in our own files carries any allergen information, and we sell recipes `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BUILD`
+
+**BRAD RULED ON IT 2026-09-12 AND THE MECHANISM SHIPPED THE SAME DAY. The ruling is
+`design\RULING-allergen-line-2026-09-12.md`**, which carries it verbatim, the four detail decisions it
+left open, and every number below. Brad's answer to the question this item put to him - top-nine set,
+or only the hidden ones - is **the top nine, with the hidden ones called out separately on top**:
+
+> Every recipe card carries a 'Contains' line listing which of the nine major allergens (milk, eggs,
+> fish, shellfish, tree nuts, peanuts, wheat, soy, sesame) its ingredients include, derived
+> mechanically from the ingredient map, naming the specific nut or shellfish, and explicitly calling
+> out hidden sources such as anchovy in Worcestershire sauce and shellfish in oyster sauce. The line is
+> generated, never hand-written, and a publish check refuses a card whose allergen line is missing or
+> disagrees with its ingredients. A short note says it reflects the recipe as written and readers
+> should check the labels of the brands they buy.
+
+**What shipped.** The classification of all 353 food rows of the ingredient map
+(`meal-prep\db\allergens.json`, written by `pipeline\gen_allergen_table.py`, which refuses to write
+unless every row is classified); the vocabulary, the derivation and the ONLY spelling of the line
+(`meal-prep\lib\allergen-lib.ps1`); the renderer (`pipeline\build-card2.ps1`, **above the paywall**,
+because a reader with a peanut allergy must not buy a membership to learn the recipe has peanuts); and
+the publish check (`pipeline\audit-allergen-line.ps1`, exit 0 on 23 of 23 cases), wired into
+`wave-publish.ps1`'s P5 gate table. The check re-derives through the same function the card rendered
+with and compares BYTES, so it cannot drift into a second implementation of one rule.
+
+**Re-measured once the derivation existed, and it is much bigger than rung 1 could see. 217 of 584
+recipes (37.2%) carry at least one of the nine that a reader cannot get from the ingredient NAMES** -
+wheat 132, soy 45, fish 42, tree nuts 32, shellfish 24, milk 18, sesame 2, eggs 1. Rung 1 put it at
+7.2% because by hand it could only count Worcestershire and oyster sauce. 484 of 584 carry at least one
+of the nine at all; 100 carry none. The fish 42 is exactly rung 1's Worcestershire count, which is the
+cross-check that the derivation finds the thing that started the item.
+
+**WHY IT IS PARTLY DONE AND NOT DONE: the 584 cards already live carry no line.** `audit-allergen-line`
+over the whole catalogue reports `584 of 584 missing`, exit 1, with ZERO `unclassified` findings - so
+the backfill is a rebuild and republish and not a data-gathering exercise. That republish is a Ghost
+operation against a live paid site and is filed as its own item rather than smuggled into this one. It
+also owes the **375px mobile check, which has NOT been done**: the session that built the line had no
+browser tool, took no screenshot and read no rendered page.
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** CONFIRMED and it is a reader-safety question, not a documentation one. **42 of 583 recipes contain Worcestershire sauce, which contains anchovy, and the ingredient list does not say so; 19 contain oyster sauce.** So the otherwise defensible position that a full ingredient list is disclosure enough is false for 7.2% of the catalogue. 0 of 584 built cards mention an allergen at all, while 481 of 583 recipes carry at least one of the top nine. **The question for Brad: do the cards carry an allergen line, and if so is it the top-nine set or only the hidden ones a reader cannot infer from the ingredient names?**
 

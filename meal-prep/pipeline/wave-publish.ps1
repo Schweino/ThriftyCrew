@@ -674,6 +674,16 @@ $gates = @(
   # kindless one refuses in wording that reads like a verdict on the recipe. Eleven recipes sat terminal
   # on exactly that. Repo-wide rather than wave-scoped, and a no-op on a GO report with no blockers.
   @{ label = 'audit-wave-blocker-headings'; path = (Join-Path $here 'audit-wave-blocker-headings.ps1'); args = @(); marker = 'wave-blocker-headings'; text = '' },
+  # THE ALLERGEN LINE (Brad's ruling, 2026-09-12, backlog I144). Every card carries a generated
+  # 'Contains' line over the nine major US allergens; this refuses one that is missing or disagrees with
+  # the spec's current ingredients. It is the only gate here about reader SAFETY rather than money, and
+  # it is the one whose failure a reader cannot detect for themselves: 42 of 583 recipes contain
+  # Worcestershire sauce, which contains anchovy, and the ingredient list never said so.
+  # Wave-scoped, like the other spec gates, and the wave's cards were built by the wave, so it is green
+  # on a freshly built wave and red on a stale card - which is exactly the failure it exists for.
+  # Verified by its completion marker rather than a text line: a detector that dies mid-run is silent,
+  # and on this gate "no findings" must never read the same as "never ran".
+  @{ label = 'audit-allergen-line';       path = (Join-Path $here 'audit-allergen-line.ps1');       args = @('-Slugs', ($slugs -join ',')); marker = 'audit-allergen-line'; text = '' },
   @{ label = 'test-guards';               path = (Join-Path $here 'test-guards.ps1');               args = @();         marker = '';                    text = 'ALL GUARD PREDICATE TESTS PASS' }
 )
 foreach ($g in $gates) {
