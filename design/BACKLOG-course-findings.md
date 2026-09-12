@@ -10064,7 +10064,11 @@ Three things this course would have flagged in another estate and does not flag 
   the FTL, FFS cylinder groups. Read in full and routed nowhere. It is background for anyone who
   already knows random I/O is dear and sequential I/O is cheap.
 
-### I123 - The re-arm clock is one global number for a quantity the course says is per-commodity `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I123 - The re-arm clock is one global number for a quantity the course says is per-commodity `DONE - PREMISE REFUTED, RULED BY BRAD 2026-09-12` `queue-7`
+
+**CLOSED 2026-09-12 ON BRAD'S RULING. Premise refuted, the constant stays, and the measurement moved to its own item.** His words: `$REARM_DAYS` "is the alert re-paging window, it is already tunable per alert type through `alert-tuning.json`, and it stays as is. The measured per-commodity re-promotion spread (the item reports 480 gaps, median 8 days, commodity medians 3.5 to 37) is recorded as a finding about sale cadence, not about alerts. If it is ever used, it goes into capture scheduling or sale-window expectations as a per-commodity value derived from board history, never as a hand-set constant, and that is a new backlog item with its own measurement rung."
+
+That new item is **I169**, and it carries the numbers, the ruling's constraint on any later use, and the three things the recorded figure does not say. Nothing changed in `grocery/check-ad-cycles.ps1`, in `grocery/alert-tuning.json` or in the `$REARM_DAYS` row of `docs/CONTROL-CONSTANTS.md`, which already describes it as the per-alert-type re-arm window and was checked against the code on the day of the ruling: the constant is read at `check-ad-cycles.ps1` against a flag's `last_alerted`, the tuning file's `types` is still `{}`, and both readings the item made of them hold.
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Premise REFUTED: `$REARM_DAYS` is the ALERT re-arm window - how long an unacked flag waits before re-paging - not a promotion cadence. Different quantity, different actor. It is also already per-alert-type via `alert-tuning.json`, whose `types` is `{}`, so 0 tunings have ever been written. The underlying course claim was measured anyway, off 37 gitignored boards: 480 re-promotion gaps, median 8 days, per-commodity medians spanning 3.5 to 37 days. **The spread is real; it just is not about this constant, so the question for Brad is which axis he actually wants tuned.**
 
@@ -11629,3 +11633,52 @@ standard the spawn prompt set: buffer overflow and ASLR against the x86 stack (t
 compiled code), SQL injection against a database we do not own, the Therac-25 PDP-11 assembly case
 and four lectures reading Satoshi Nakamoto's Bitcoin abstract sentence by sentence. Those are routed
 as knowledge where they transfer and are named as out of scope here rather than filed for the tally.
+
+### I169 - per-commodity sale cadence is measured, spans 3.5 to 37 days, and nothing that schedules a capture or expects a sale window can read it `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\ruling-i123-2026-09-12.md` on 2026-09-12.** Written by the session applying Brad's approvals-page ruling on I123, not by a course lane; the merge's stamp says "a course agent" for every item because it is fixed text, and this one was not. Ids are allocated here because this is the only writer.
+
+**Filed 2026-09-12 on Brad's ruling closing I123, which is where this number was first recorded and
+was the wrong home for it.** His words: the measured spread "is recorded as a finding about sale
+cadence, not about alerts. If it is ever used, it goes into capture scheduling or sale-window
+expectations as a per-commodity value derived from board history, never as a hand-set constant, and
+that is a new backlog item with its own measurement rung." This is that item.
+
+**What is NOT in scope, and it is the whole reason I123 closed.** `$REARM_DAYS` is the ALERT
+re-paging window - how long an unacked review flag waits before it pages Brad again
+(`grocery/check-ad-cycles.ps1`, read against a flag's `last_alerted`). It is already tunable per
+alert type through `grocery/alert-tuning.json`, and it stays as it is. Any work under this item that
+finds itself editing that constant has drifted onto the refuted question. Two different quantities
+with two different actors: one is when we page a human, the other is when a retailer re-promotes an
+item. The `identity-graph-commodity-is-namespaced` shape, an agreeing number about something else.
+
+**The measurement, as recorded on I123 and not re-run here.** Its first rung, worked 2026-09-12 by
+the course-orchestrating session across six parallel lanes, read 37 gitignored `comparison-*.json`
+boards and found **480 re-promotion gaps, median 8 days, with per-commodity medians spanning 3.5 to
+37 days**. The spread is real and it is roughly tenfold end to end.
+
+**Three things that figure does not say, and the first rung is to make it say them.**
+
+1. **It has no denominator.** 480 gaps over how many commodities, and how many commodities could not
+   form a gap at all because they were promoted once or never? A commodity with two promotions in 37
+   boards has one gap and no distribution. `build-arrivals-docket.ps1:56-57` is the shape to copy: it
+   refuses to score a cohort it cannot form and reports it BLIND rather than passing it.
+2. **Its harness was scratch and is not committed**, so re-running it means writing it again, and a
+   rewritten probe is a second harness however faithful the description. That is exactly the case
+   `.claude/rules/measurement.md` names, and the question here can plainly recur, because Brad's
+   ruling requires the value to be DERIVED from board history every time it is used rather than set
+   once. So the first rung commits its probe, the way `ops/probe-gate-slot-fairness.ps1` does.
+3. **The boards it reads are gitignored**, so any committed probe is BLIND in a worktree, a CI runner
+   or a clean checkout and must say so rather than printing a clean zero.
+
+**The binding constraint on any later use, from the ruling.** If this is ever used it goes into
+CAPTURE SCHEDULING or SALE-WINDOW EXPECTATIONS, as a per-commodity value DERIVED FROM BOARD HISTORY.
+Never a hand-set constant, and therefore never a new row in `docs/CONTROL-CONSTANTS.md`: a derived
+per-commodity value is not a control constant, and turning it into one is the failure mode this
+sentence exists to forbid. Nothing is proposed for the capture rotation today and nothing should be
+until the rung above is worked.
+
+**Why it might be worth working.** `grocery/capture-policy-lib.ps1` drips the rotation and gives sale
+expiries their own allowance; if a commodity's own re-promotion cadence were known, a term whose sale
+window is about to turn over is a better recapture candidate than one drawn by rotation order. That
+is a hypothesis, not a design, and it wants the denominator above before anyone builds to it.
