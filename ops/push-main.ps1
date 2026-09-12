@@ -119,12 +119,65 @@ function Say {
   [Console]::Out.WriteLine($Text)
 }
 
+function Invoke-TcWarmGate {
+  <# Run the gate OUTSIDE the push lock, so the expensive half of a push is not serialised behind every other
+     session on this box. Returns Ran / Code / Why; it decides nothing, so its caller can degrade on a 3.
+
+     Start-Process's ExitCode is empty under PS 5.1 unless .Handle is touched while the process is alive
+     ([[ps-start-process-exitcode-needs-handle]]), and reading an empty ExitCode as 0 would turn a red gate into a
+     pass here - the one outcome this must never produce. So the handle is taken before the wait, and a code that
+     still cannot be read is reported as could-not-evaluate rather than as a pass. #>
+  param([string]$Dir)
+  $gate = Join-Path $Dir 'ops\run-gates.ps1'
+  if (-not (Test-Path -LiteralPath $gate)) {
+    return [pscustomobject]@{ Ran = $false; Code = 3; Why = 'this checkout has no ops\run-gates.ps1' }
+  }
+  try {
+    $p = Start-Process -FilePath 'powershell.exe' -WorkingDirectory $Dir -NoNewWindow -PassThru -ErrorAction Stop `
+      -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $gate)
+    $null = $p.Handle
+    $p.WaitForExit()
+    $code = $p.ExitCode
+    if ($null -eq $code) { return [pscustomobject]@{ Ran = $true; Code = 3; Why = 'the gate ran but its exit code could not be read' } }
+    return [pscustomobject]@{ Ran = $true; Code = [int]$code; Why = '' }
+  } catch {
+    return [pscustomobject]@{ Ran = $false; Code = 3; Why = ('the gate could not be started: ' + $_.Exception.Message) }
+  }
+}
+
 function Invoke-TcPushMain {
-  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '')
+  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null)
   $enter = @{ WaitSec = $LockWaitSec; PollMs = 500 }
   if ($LockPrefix) { $enter['Prefix'] = $LockPrefix }
   if ($LockQueueRoot) { $enter['QueueRoot'] = $LockQueueRoot }
   $enter['OnWait'] = { param($ahead) Say ("push-main: {0} push(es) are ahead of this one on this box, and the lock is served in arrival order - waiting." -f $ahead) }
+
+  # ---- THE GATE RUNS BEFORE THE LOCK IS TAKEN (Brad, 2026-09-12) ----
+  # The lock serialises pushes machine-wide, and until now the ~10-minute gate ran INSIDE it, so the box could land
+  # about six pushes an hour however many sessions were working: measured that morning at 9 pushes queued, the oldest
+  # 47 minutes, while only 2 gates ran on a 32-core box and the ref update itself took 2 seconds. Serialising the PUSH
+  # costs nothing, because refs/heads/main is serialised already; serialising the GATE costs everything, because
+  # gating is the part that can run in parallel and has its own 10-slot budget to bound it.
+  # Running it here is not a second gate and weakens nothing: the hook still gates inside the lock, and a red gate
+  # there still refuses. What this buys is that the hook's run is WARM - lib\gate-verdict.ps1 replays the whole
+  # verdict when the rebase changed nothing, and the per-gate input keys re-run only the gates whose own inputs the
+  # rebase brought in - so the lock is held for seconds rather than minutes.
+  # A RED GATE NEVER QUEUES. Before this, a push that was going to fail took the lock, held it for its whole run and
+  # blocked every other session on the box before refusing. It now refuses without ever entering the queue.
+  # A 3 IS NOT A REFUSAL AND NOT A PASS. Exit 3 is could-not-evaluate, which on this box is usually slot contention,
+  # so this degrades to exactly the behaviour of the day before: take the lock and let the hook be the gate.
+  $runner = $(if ($GateRunner) { $GateRunner } else { { param($d) Invoke-TcWarmGate -Dir $d } })
+  $g = & $runner $Dir
+  if ($g.Ran -and $g.Code -eq 1) {
+    Say 'push-main: REFUSED - run-gates exited 1 before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again.'
+    return 1
+  }
+  if ($g.Code -ne 0) {
+    Say ("push-main: the gate did not settle outside the lock ({0}), so it is left to the hook inside the lock, gated exactly as before.{1}" -f $g.Code, $(if ($g.Why) { ' ' + $g.Why } else { '' }))
+  } else {
+    Say 'push-main: gate PASSED outside the lock, so the lock is taken only for the fetch, the rebase and the ref update.'
+  }
+
   $lock = Enter-TcPushLock @enter
   if (-not $lock.Held) {
     # STILL NOT A REFUSAL. The lock is a fairness device; without it this push is exactly as gated as it ever was and
@@ -225,6 +278,41 @@ if ($SelfTest) {
   $null = New-Item -ItemType Directory -Force -ErrorAction Stop $tmp
   $prefix = 'Local\tc-push-main-selftest-' + [guid]::NewGuid().ToString('N') + '-'
   $qroot = Join-Path $tmp 'q'
+  # EVERY CASE INJECTS ITS GATE. Without this each fixture below would launch the real ops\run-gates.ps1 - hundreds of
+  # seconds, 10 machine-wide slots, from a suite that run-gates itself runs. The seam is what makes the ORDER
+  # assertable at all: $gateSawLock records whether the push lock was free at the moment the gate ran, which is the
+  # mechanism this change is about and cannot be read from a clock.
+  #
+  # THE PROBE MUST RUN IN ANOTHER PROCESS, and the first version of this case did not - it SURVIVED the mutant that
+  # hoists the lock back above the gate (2026-09-12, measured: mutant exit 0, the case still ok). A Windows mutex is
+  # REENTRANT ON ITS OWNING THREAD, so a probe calling Enter-TcPushLock from inside this same process is handed the
+  # lock the caller is already holding and reports it free either way. `-NoInherit` does not help: that governs the
+  # token a descendant reads, not the kernel object's own thread affinity. This is the estate's insensitive-fixture
+  # shape - a live case, a true assertion, and no ability to see which half was working.
+  $probeScript = Join-Path $tmp 'lockprobe.ps1'
+  [IO.File]::WriteAllText($probeScript, @'
+param([string]$Name)
+$m = $null
+try { $m = [System.Threading.Mutex]::OpenExisting($Name) } catch { Write-Output 'FREE'; exit 0 }
+$got = $m.WaitOne(0)
+if ($got) { $m.ReleaseMutex(); Write-Output 'FREE' } else { Write-Output 'HELD' }
+$m.Dispose()
+'@)
+  $script:gateSawLock = $null
+  $script:gateRuns = 0
+  $okGate = {
+    param($d)
+    $script:gateRuns++
+    # NO `2>$null` HERE. Under EAP=Stop a native child's first stderr line becomes a terminating throw, which is what
+    # grocery\test-native-stderr-eap.ps1 ratchets - and this probe's whole job is to report what it saw, so a redirect
+    # that could swallow the reason it could not look is the last thing it should carry.
+    $out = @(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $probeScript -Name ($prefix + '0'))
+    $script:gateSawLock = [bool](@($out | Where-Object { "$_".Trim() -eq 'FREE' }).Count)
+    return [pscustomobject]@{ Ran = $true; Code = 0; Why = '' }
+  }
+  $redGate = { param($d) $script:gateRuns++; return [pscustomobject]@{ Ran = $true; Code = 1; Why = '' } }
+  $blindGate = { param($d) $script:gateRuns++; return [pscustomobject]@{ Ran = $true; Code = 3; Why = 'no gate worker slot' } }
+
   $prev = $ErrorActionPreference
   $ErrorActionPreference = 'Continue'
   try {
@@ -264,7 +352,7 @@ if ($SelfTest) {
     $a = New-Clone 'a'
     [IO.File]::WriteAllText((Join-Path $a 'a.txt'), 'a')
     $null = & git -C $a add -- a.txt 2>$null; $null = & git -C $a commit -q -m a 2>$null
-    $r1 = Invoke-TcPushMain -Dir $a -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot
+    $r1 = Invoke-TcPushMain -Dir $a -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate
     $remA = ([string](@(& git -C $origin rev-parse main 2>$null))[0]).Trim()
     $headA = ([string](@(& git -C $a rev-parse HEAD 2>$null))[0]).Trim()
     T ($kMNF + '  a clean branch on a current base lands on its first attempt') `
@@ -278,7 +366,7 @@ if ($SelfTest) {
     [IO.File]::WriteAllText((Join-Path $c 'c.txt'), 'c')
     $null = & git -C $c add -- c.txt 2>$null; $null = & git -C $c commit -q -m c 2>$null
     $null = & git -C $c push -q origin HEAD:main 2>$null      # c lands while b is still holding a stale base
-    $r2 = Invoke-TcPushMain -Dir $b -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot
+    $r2 = Invoke-TcPushMain -Dir $b -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate
     $remB = ([string](@(& git -C $origin rev-parse main 2>$null))[0]).Trim()
     $headB = ([string](@(& git -C $b rev-parse HEAD 2>$null))[0]).Trim()
     $hasC = @(& git -C $b log --oneline 2>$null) -match ' c$'
@@ -291,7 +379,7 @@ if ($SelfTest) {
     $null = & git -C $d2 add -- d.txt 2>$null; $null = & git -C $d2 commit -q -m d 2>$null
     [IO.File]::WriteAllText((Join-Path $d2 'dirty.txt'), 'uncommitted')
     $headD0 = ([string](@(& git -C $d2 rev-parse HEAD 2>$null))[0]).Trim()
-    $r3 = Invoke-TcPushMain -Dir $d2 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot
+    $r3 = Invoke-TcPushMain -Dir $d2 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate
     $headD1 = ([string](@(& git -C $d2 rev-parse HEAD 2>$null))[0]).Trim()
     T ($kMF + '  a dirty checkout is refused and its branch is left exactly where it was') `
       ($r3 -eq 1 -and $headD0 -eq $headD1) ("rc={0} before={1} after={2}" -f $r3, $headD0, $headD1)
@@ -305,7 +393,7 @@ if ($SelfTest) {
     $null = & git -C $g add -- clash.txt 2>$null; $null = & git -C $g commit -q -m theirs 2>$null
     $null = & git -C $g push -q origin HEAD:main 2>$null
     $headE0 = ([string](@(& git -C $e rev-parse HEAD 2>$null))[0]).Trim()
-    $r4 = Invoke-TcPushMain -Dir $e -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot
+    $r4 = Invoke-TcPushMain -Dir $e -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate
     $headE1 = ([string](@(& git -C $e rev-parse HEAD 2>$null))[0]).Trim()
     $midRebase = (Test-Path -LiteralPath (Join-Path $e '.git\rebase-merge')) -or (Test-Path -LiteralPath (Join-Path $e '.git\rebase-apply'))
     T ($kMF + '  a conflicting rebase is aborted, refused, and leaves no half-finished rebase behind') `
@@ -313,7 +401,7 @@ if ($SelfTest) {
 
     # NOTHING TO PUSH IS A REFUSAL, not a claimed landing.
     $h = New-Clone 'h'
-    $r5 = Invoke-TcPushMain -Dir $h -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot
+    $r5 = Invoke-TcPushMain -Dir $h -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate
     T ($kMF + '  a checkout with nothing to push is refused rather than reporting a landing') ($r5 -eq 1) ("rc={0}" -f $r5)
 
     # -DryRun DOES EVERYTHING BUT THE PUSH, and the remote is untouched.
@@ -321,10 +409,58 @@ if ($SelfTest) {
     [IO.File]::WriteAllText((Join-Path $i 'i.txt'), 'i')
     $null = & git -C $i add -- i.txt 2>$null; $null = & git -C $i commit -q -m i 2>$null
     $remBefore = ([string](@(& git -C $origin rev-parse main 2>$null))[0]).Trim()
-    $r6 = Invoke-TcPushMain -Dir $i -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot
+    $r6 = Invoke-TcPushMain -Dir $i -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate
     $remAfter = ([string](@(& git -C $origin rev-parse main 2>$null))[0]).Trim()
     T ($kCT + '  -DryRun leaves the remote exactly where it was and still reports success') `
       ($r6 -eq 0 -and $remBefore -eq $remAfter) ("rc={0} before={1} after={2}" -f $r6, $remBefore, $remAfter)
+    # ---- THE GATE RUNS BEFORE THE LOCK (Brad, 2026-09-12) ----
+    # The assertion is the ORDER, read from the MECHANISM and never from a clock: $okGate tries to take the push lock
+    # itself while it runs, and can only succeed if the caller has not taken it yet. A wall-clock bar here would be
+    # the shape ops-and-gates.md forbids - several sessions push from this box, so any duration is somebody else's
+    # load - and it could not tell "the gate ran first" from "the gate ran fast".
+    # THE ORDERING CASE GETS ITS OWN RUN, WITH THE INHERITANCE TOKEN CLEARED. Reading the flag left by whichever case
+    # ran last made it FLAKY, and a flaky case is an insensitive one: the mutant that hoists the lock back above the
+    # gate died in only 1 of 2 paired rounds. The reason is lib\push-lock.ps1's inheritance - a lease taken while
+    # TC_PUSH_LOCK_HOLDER names a live holder HOLDS NOTHING and releases nothing, by design, so whether the mutant
+    # really owned the mutex when the probe looked depended on what an earlier case had left in this process's
+    # environment. Cleared here, the mutant owns it every time.
+    $o = New-Clone 'o'
+    [IO.File]::WriteAllText((Join-Path $o 'o.txt'), 'o')
+    $null = & git -C $o add -- o.txt 2>$null; $null = & git -C $o commit -q -m o 2>$null
+    $tokenWas = $env:TC_PUSH_LOCK_HOLDER
+    $env:TC_PUSH_LOCK_HOLDER = $null
+    $script:gateSawLock = $null
+    $rOrder = Invoke-TcPushMain -Dir $o -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate
+    $env:TC_PUSH_LOCK_HOLDER = $tokenWas
+    T ($kMF + '  the gate runs BEFORE the push lock is taken, so gating is not serialised behind every other session') `
+      ($script:gateSawLock -eq $true -and $rOrder -eq 0) ("lockWasFreeWhenTheGateRan={0} rc={1}" -f $script:gateSawLock, $rOrder)
+
+    # A RED GATE NEVER ENTERS THE QUEUE. Before this change it took the lock, ran its whole set, and held up every
+    # other push on the box before refusing.
+    $j = New-Clone 'j'
+    [IO.File]::WriteAllText((Join-Path $j 'j.txt'), 'j')
+    $null = & git -C $j add -- j.txt 2>$null; $null = & git -C $j commit -q -m j 2>$null
+    $remJ0 = ([string](@(& git -C $origin rev-parse main 2>$null))[0]).Trim()
+    $script:gateSawLock = $null
+    $rRed = Invoke-TcPushMain -Dir $j -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $redGate
+    $remJ1 = ([string](@(& git -C $origin rev-parse main 2>$null))[0]).Trim()
+    $lockFreeAfterRed = Enter-TcPushLock -Prefix $prefix -QueueRoot $qroot -WaitSec 5 -PollMs 50 -NoInherit
+    T ($kMF + '  a red gate refuses the push and never takes the lock, so a failing push stops blocking everyone else') `
+      ($rRed -eq 1 -and $remJ0 -eq $remJ1 -and $lockFreeAfterRed.Held) ("rc={0} remoteMoved={1} lockFree={2}" -f $rRed, ($remJ0 -ne $remJ1), $lockFreeAfterRed.Held)
+    Exit-TcPushLock $lockFreeAfterRed
+
+    # A 3 IS NOT A REFUSAL. Could-not-evaluate outside the lock is usually slot contention on this box, and treating
+    # it as red would make a busy box unpushable; treating it as green would be reading a 3 as a pass, which this
+    # estate refuses everywhere. It degrades to the behaviour of the day before: take the lock, let the hook gate it.
+    $k = New-Clone 'k'
+    [IO.File]::WriteAllText((Join-Path $k 'k.txt'), 'k')
+    $null = & git -C $k add -- k.txt 2>$null; $null = & git -C $k commit -q -m k 2>$null
+    $rBlind = Invoke-TcPushMain -Dir $k -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $blindGate
+    $remK = ([string](@(& git -C $origin rev-parse main 2>$null))[0]).Trim()
+    $headK = ([string](@(& git -C $k rev-parse HEAD 2>$null))[0]).Trim()
+    T ($kCT + '  a gate that could not evaluate outside the lock still pushes under it, gated by the hook exactly as before') `
+      ($rBlind -eq 0 -and $remK -eq $headK) ("rc={0} remote={1} head={2}" -f $rBlind, $remK, $headK)
+
     T ($kMNF + '  every clone these cases ran against carried the seeded history, so none of them judged an empty repository') `
       ($script:cloneFails -eq 0) ("clonesThatCameUpEmpty={0}" -f $script:cloneFails)
     $freeNow = Enter-TcPushLock -Prefix $prefix -QueueRoot $qroot -WaitSec 5 -PollMs 50 -NoInherit

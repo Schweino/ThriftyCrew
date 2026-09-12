@@ -62,14 +62,31 @@ green its gates are: measured over 11 consecutive attempts from one session, `ru
 one was rejected with *"cannot lock ref"* while others landed every 15 to 25 minutes. The hook now holds a
 machine-wide push lock across the gate, so nothing else can land while yours runs. **A plain `git push` still works
 and is still fully gated**, but it takes the lock only after git has fixed its refs, so a long queue can still leave
-it stale and refused in seconds with "rebase and push again". `ops\push-main.ps1` takes the lock FIRST and then
-fetches, rebases and pushes inside it, which is what makes a verified commit land on its FIRST attempt. It weakens
+it stale and refused in seconds with "rebase and push again". `ops\push-main.ps1` **gates OUTSIDE the lock and then
+takes it for the fetch, the rebase and the ref update only**, which is what makes a verified commit land on its FIRST
+attempt without holding up the box while it does. It weakens
 nothing - it runs a plain `git push`, and a red gate refuses it like any other. **A lock that cannot be taken is
 never a refusal**: the hook says so and pushes on, gated exactly as before. **It binds only the checkouts that HAVE
 `ops\hold-push-lock.ps1`**, because the shared hook must not hard-fail in a checkout older than itself - so a
 checkout that has not pulled this still pushes unlocked and can still overtake you. Measured on the very push that
 shipped it: 379 gates green, rejected anyway by a checkout that had not caught up.
 `design\MEASURE-push-lock-2026-09-11.md`.
+
+**THE GATE MUST NOT RUN INSIDE THE LOCK** (Brad, 2026-09-12). It did until that morning, and the arithmetic is the
+whole story: the lock serialises pushes machine-wide, so with a ~10-minute gate inside it the box lands about SIX
+pushes an hour however many sessions are working. Measured at 08:20 that day with seven sessions pushing: **9 git
+pushes queued, the oldest waiting 47 minutes, ZERO run-gates processes running on a 32-core box**, and one session's
+own log reading `RUN-GATES-COMPLETE pass=387 fail=0` then `push lock - held after waiting 1,002s` then *"cannot lock
+ref"* - it came out of a 17-minute queue holding a base main had moved seven commits past. The ref update itself
+takes **2 seconds**. Serialising the PUSH costs nothing because `refs/heads/main` is serialised already; serialising
+the GATE costs everything, because gating is the part that parallelises and `lib\gate-slots.ps1` already bounds it at
+10. So `push-main` gates first, unlocked, and the hook's run inside the lock is WARM - the whole verdict replays when
+the rebase changed nothing, and the per-gate input keys re-run only what the rebase actually touched. **A red gate
+now never enters the queue at all**, where before it took the lock, ran its full set and blocked every other session
+before refusing. The ordering is fixtured on the MECHANISM: the self-test's gate probes the lock FROM ANOTHER PROCESS,
+because a Windows mutex is reentrant on its owning thread and the first version of that case, probing in-process,
+SURVIVED the mutant that hoists the lock back above the gate. Paired 3 rounds after the fix: mutant killed 3 of 3 in
+its own named case, original passed 3 of 3.
 
 **A checkout with no built cards is SEEDED on its first push, and a gate that still cannot look says BLIND**
 (2026-09-11). `meal-prep/db/built` is gitignored and `.worktreeinclude` structurally cannot carry it, so
