@@ -51,13 +51,17 @@ These are the ones worth building. Ranked with the cheap, already-bled ones firs
 
    **This one found a live site while the audit was being written.** Four files mention the name:
    three are comments warning against it, sitting directly above the correct UserPath-stripping
-   code. The fourth, `ops/prepush-test-auditors.ps1:485`, actually CALLS it, with a fallback to
-   UserPath when it comes back empty. Because it is always empty under PS 5.1 the fallback always
-   fires, so that file never strips the scope prefix the other three strip - `$script:x` and `$x`
-   read as two different names there. What that changes downstream is NOT verified here, and it is
-   NOT repaired in this audit because the file sits on the push path; it is named so the repair is
-   a decision rather than a rediscovery. It is also the argument for the gate: three authors wrote
-   a warning comment about this exact call, and the fourth call was written anyway.
+   code. The fourth, `ops/prepush-test-auditors.ps1:485`, actually CALLED it, with a fallback to
+   UserPath when it came back empty.
+
+   **CORRECTION, made on reading the site rather than the grep hit.** The first version of this
+   paragraph said that file therefore never stripped the scope prefix and read `$script:x` and `$x`
+   as two different names. That was wrong: it strips the prefix explicitly on the next line, so its
+   RESULT was correct all along and nothing was broken. What was true is narrower - the call was
+   dead code, always returning empty, and indistinguishable at a glance from the version that is
+   not. It was removed when the gate was built, which is what lets the gate ship at a baseline of
+   zero. The argument for the gate survives the correction and is really the stronger half: three
+   authors wrote a warning comment about this exact call, and a fourth call was written anyway.
 
 5. **`@(Get-Thing ...)` - a command call wrapped inline in an array subexpression.** Recorded as
    hit four times in one session. AST-decidable exactly: an ArrayExpression whose sole element is

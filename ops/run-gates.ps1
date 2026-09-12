@@ -371,6 +371,8 @@ $static = @(
   # 2026-09-11: ingredient-queue defined a function named Get-Item, which outranks the cmdlet, so its live-ledger assertion
   # read 0 before and after for 17 days. A rule in ops-and-gates.md reaches whoever opens it; this reaches the next definition.
   @{ f = 'ops\audit-cmdlet-shadow.ps1';        n = 'no tracked script defines a function named after a built-in cmdlet or module function, except a file-and-name allowlist entry with its reason - hermetic, a pinned name list, reads source only' }
+  @{ f = 'ops\audit-unread-wait.ps1';          n = 'every TIMED WaitOne has its answer read on some path - a timed-out wait returns $false and the caller holds nothing, which rewrote the triage queue unlocked on 2026-09-11; hermetic, AST, reads source only' }
+  @{ f = 'ops\audit-internal-ast-members.ps1'; n = 'no script reads an AST member that is INTERNAL under PS 5.1 (VariablePath.UnqualifiedPath reads as $null, so a name walk returns an agreeing empty) - hermetic, AST, reads source only' }
   # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half
   # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
   # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.

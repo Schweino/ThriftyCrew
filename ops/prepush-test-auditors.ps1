@@ -482,7 +482,10 @@ $script:WrapRx = "^Use-Unit\s+'(?<id>[a-z0-9][a-z0-9-]{0,80})'(?<rest>(?:\s+-Rea
 function Get-VarName($v) {
   $vp = $v.VariablePath
   if ($vp.IsDriveQualified) { $d = ([string]$vp.DriveName).ToLower(); if (@('script', 'global', 'local', 'private') -notcontains $d) { return $null } }
-  $up = [string]$vp.UnqualifiedPath; if (-not $up) { $up = [string]$vp.UserPath }
+  # UserPath, never VariablePath.UnqualifiedPath: under PS 5.1 that property is INTERNAL and reads as $null, so
+  # the fallback below it always fired and the call was dead (2026-09-12). The scope prefix is stripped on the
+  # line below, which is why removing it changes nothing here. lib\selftest-lib.ps1 makes the same refusal.
+  $up = [string]$vp.UserPath
   if (-not $up) { return $null }
   $n = $up.ToLower(); if ($n.Contains(':')) { $n = $n.Substring($n.LastIndexOf(':') + 1) }
   if ($script:NotDeps -contains $n) { return $null }
