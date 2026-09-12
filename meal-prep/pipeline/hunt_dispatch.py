@@ -269,37 +269,37 @@ def build_argv(agent, reconstruct=False, extra=None, resume=None):
         if agent.model:
             argv += ["--model", agent.model]
         argv += ["--append-system-prompt", agent.body]
-        if agent.tools:
-            argv += ["--allowedTools", ",".join(agent.tools)]
     else:
         argv += ["--agent", agent.name]
     if agent.effort:
         argv += ["--effort", agent.effort]
-    # PRE-APPROVED TOOLS ONLY, EVERYTHING ELSE DENIED (2026-09-07, backlog E8). Until today this
-    # passed --allowedTools and no permission mode, so every agent inherited defaultMode from
-    # ~/.claude/settings.json - bypassPermissions. The tool list shaped what an agent reached for and
-    # was not what stopped it reaching further.
+    # PRE-APPROVED TOOLS ONLY, EVERYTHING ELSE DENIED (2026-09-07, backlog E8), and the agent's OWN
+    # tools are the pre-approval, on EVERY road (2026-09-12).
     #
     # dontAsk and not a prompting mode, deliberately: this lane is unattended, and a mode that asks
-    # would stall the daemon rather than protect it. Value checked against `claude --help`, which
-    # lists acceptEdits, auto, bypassPermissions, default, dontAsk, plan.
+    # would stall the daemon rather than protect it.
     #
-    # *** IT IS CURRENTLY INERT, AND THAT IS MEASURED, NOT ASSUMED (2026-09-07). *** With the prompt
-    # on stdin so the variadic --allowedTools could not swallow it:
-    #     --permission-mode dontAsk + --allowedTools Read -> a Bash command RAN
-    #     --permission-mode default + --allowedTools Read -> RAN
-    #     --permission-mode plan, which is read-only by definition -> RAN
-    # A read-only mode running a shell command is the decisive one: the CLI flag does NOT govern while
-    # ~/.claude/settings.json carries `defaultMode: bypassPermissions`. So --allowedTools is not a
-    # boundary either, and the tool lists ops/audit-agent-tools.ps1 gates are DOCUMENTATION of intent,
-    # not enforcement.
-    #
-    # The flag stays because it is right in principle and becomes effective the moment that setting
-    # changes - which is Brad's to change, not this file's. Until then, do not describe it as a
-    # boundary anywhere: an unarmed guard that people believe in is worse than a missing one.
+    # *** THE FLAG GOVERNS. *** On 2026-09-07 it was measured INERT under ~/.claude/settings.json
+    # `defaultMode: bypassPermissions` (dontAsk, default and even plan all ran Bash). Re-measured
+    # 2026-09-12 on CLI 2.1.236 with that setting unchanged, prompt on stdin:
+    #     --permission-mode dontAsk + --allowedTools Read  -> Bash DENIED (permission_denials: Bash)
+    #     --permission-mode default + --allowedTools Read  -> Bash DENIED
+    #     --permission-mode plan                           -> refused, nothing ran
+    #     --permission-mode dontAsk + --allowedTools Bash  -> Bash RAN
+    #     no mode + --allowedTools Read                    -> Bash RAN (bypass still the default)
+    # and, the one that broke this lane:
+    #     --agent <frontmatter tools: Read, Write, Bash> + dontAsk             -> Write AND Bash DENIED
+    #     the same + --allowedTools Read,Write,Bash                            -> both RAN
+    # A frontmatter `tools:` list says which tools an agent HAS; it is not a permission rule, so under
+    # dontAsk the primary and resume roads - which passed no --allowedTools - denied the mapper its
+    # Edit/Write and every agent its Bash/PowerShell. The list therefore rides on every road now.
+    # An agent that declares no tools gets no --allowedTools, so under dontAsk it runs read-only:
+    # that is the safe direction, and every agent in .claude/agents declares a list.
     #
     # On EVERY road including resume and reconstruct - a resumed dispatch that quietly dropped the
-    # mode would be the one path nobody exercises.
+    # mode or the tools would be the one path nobody exercises.
+    if agent.tools:
+        argv += ["--allowedTools", ",".join(agent.tools)]
     argv += ["--permission-mode", "dontAsk"]
     argv += list(extra or [])
     return argv
@@ -833,6 +833,13 @@ def selftest():
         # an unattended daemon instead of protecting it.
         T("MUST FIRE  every dispatch runs pre-approved tools only, and DENIES the rest",
           primary[primary.index("--permission-mode") + 1] == "dontAsk", " ".join(primary))
+        # 2026-09-12: under dontAsk a frontmatter tool list is NOT a pre-approval. Measured: an
+        # --agent whose frontmatter declares Write and Bash had both DENIED until the same list was
+        # passed as --allowedTools. So the primary road must carry it or the mapper cannot write.
+        T("MUST FIRE  the PRIMARY road pre-approves the agent's own tools - under dontAsk its "
+          "frontmatter list alone is denied",
+          "--allowedTools" in primary and primary[primary.index("--allowedTools") + 1] == "Read,Grep,Glob",
+          " ".join(primary))
 
         resumed = build_argv(a, resume="abc-123")
         T("MUST FIRE  the RESUME road continues the session by id and re-declares NEITHER the agent "
@@ -845,6 +852,13 @@ def selftest():
           "would be the one road nobody exercises",
           "--permission-mode" in resumed and resumed[resumed.index("--permission-mode") + 1] == "dontAsk",
           " ".join(resumed))
+        T("MUST FIRE  the RESUME road pre-approves the agent's tools too - a resumed session under "
+          "dontAsk with no --allowedTools is denied everything it was resumed to finish",
+          "--allowedTools" in resumed and resumed[resumed.index("--allowedTools") + 1] == "Read,Grep,Glob",
+          " ".join(resumed))
+        prim2 = build_argv(b)
+        T("MUST NOT FIRE  an agent declaring no tools gets no --allowedTools on the primary road, never "
+          "an empty list", "--allowedTools" not in prim2, " ".join(prim2))
 
         recon = build_argv(a, reconstruct=True)
         T("CLEAN TWIN the fallback road restates model, body and tools (section 4.1a as written)",

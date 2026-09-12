@@ -1126,7 +1126,33 @@ every new worktree. Would automate the manual copy-in that `run-gates-blind-in-w
 ignored set is ~25 GB, so it must be a narrow list: the four gates' real inputs plus the three board
 files.
 
-### E8 - "Don't ask" permission mode for unattended runs `DONE - RULED 2026-09-07, BYPASS STAYS ON AND THE FLAG STAYS INERT`
+### E8 - "Don't ask" permission mode for unattended runs `DONE - THE FLAG GOVERNS SINCE AT LEAST 2026-09-12; DISPATCH NOW PRE-APPROVES EACH AGENT'S OWN TOOLS`
+
+**RE-MEASURED 2026-09-12 - THE 2026-09-07 TABLE BELOW NO LONGER HOLDS.** An approvals-page run under
+`claude -p --permission-mode dontAsk` was denied Edit, Write, PowerShell and Bash. Same method as below
+(prompt on stdin), CLI 2.1.236, `defaultMode: bypassPermissions` still set in `~/.claude/settings.json`:
+
+| invocation | result |
+|---|---|
+| `--permission-mode dontAsk` + `--allowedTools Read` | Bash **DENIED** (`permission_denials: Bash`) |
+| `--permission-mode default` + `--allowedTools Read` | Bash **DENIED** |
+| `--permission-mode plan` | refused, nothing ran |
+| `--permission-mode dontAsk` + `--allowedTools Bash` | Bash ran |
+| no mode + `--allowedTools Read` | Bash ran - bypass is still the default |
+| `--agent` with frontmatter `tools: Read, Write, Bash` + `dontAsk` | Write **and** Bash **DENIED** |
+| the same + `--allowedTools Read,Write,Bash` | both ran |
+
+So the flag is a real boundary now, and `--allowedTools` is too. The last two rows are what mattered:
+**a frontmatter tool list is not a pre-approval**, and `hunt_dispatch`'s primary and resume roads passed
+no `--allowedTools`, so every dispatched agent would have been denied its Bash and PowerShell and the
+mapper its Edit and Write. No daemon run has happened since 2026-09-04, before this flag was added, so
+no recipe was affected; the next run would have been. `build_argv` now passes each agent's own list on
+all three roads, pinned by must-fire cases on the primary and resume roads. What stays true below:
+consequence 1 is reversed (the audited tool lists ARE enforcement now), and the reason the flag was
+kept - it arms itself when the default moves - is exactly what happened, only it moved in the CLI, not
+in settings. What made the run below read INERT was not re-established; it was not a settings change.
+
+*The 2026-09-07 record, kept as written:*
 *Source: Claude Code in Action (course 1).* Purpose-built for CI, scheduled jobs and overnight
 batches: pre-approved tools only, everything else auto-denied with no prompt to hang on. May fit the
 scheduled tasks and the daemon better than what they use now.
