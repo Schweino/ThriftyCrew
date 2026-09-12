@@ -9315,7 +9315,9 @@ things that have been eliminated. That elimination is the value here.
 means there is no click signal to improve against yet. Any acceptance bar wants stating in
 IMPRESSIONS and in POSITION, never in clicks, until clicks exist at all.
 
-### I102 - `starvation` and `deadlock` each mean two or three different things in this tree, and nothing says so `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I102 - `starvation` and `deadlock` each mean two or three different things in this tree, and nothing says so `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** `.claude/rules/ops-and-gates.md`, new section "The words these rules were written without", first bullet. The three counts are carried with the test that produced each, per the rule the item itself invokes.
 
 **Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9384,7 +9386,9 @@ first-party `.ps1` and `.py`.
 
 ---
 
-### I103 - The timed-lock-wait rule stops one step short: it does not say the refusal branch must release first `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I103 - The timed-lock-wait rule stops one step short: it does not say the refusal branch must release first `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** Same section, second bullet: blocking deadlocks and cannot livelock, tryLock livelocks and cannot deadlock, the refusal branch must RELEASE before it loops, and the real fix is breaking the symmetry.
 
 **Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9845,7 +9849,9 @@ decision in the writer's own header the way `atomic-write.ps1` already writes it
 
 ---
 
-### I118 - "Write the pointed-to object before the object that points to it" already governs two incidents here and is written down as neither `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I118 - "Write the pointed-to object before the object that points to it" already governs two incidents here and is written down as neither `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** Same section, third bullet, with both estate incidents named as instances of the one rule: leak versus corruption is what the ordering chooses between.
 
 **Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9923,7 +9929,9 @@ variables. Nothing reads stored data on a schedule to check it is still what it 
 
 ---
 
-### I120 - Idempotency is this estate's cheapest concurrency fix and no header states it `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I120 - Idempotency is this estate's cheapest concurrency fix and no header states it `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** Same section, fourth bullet, naming Write-TcAtomicFile as idempotent and Add-TcLine as not, which is why only the latter’s OPEN is retried.
 
 **Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9952,7 +9960,9 @@ stops") applied to a retry loop.
 
 ---
 
-### I121 - `Add-TcLine`'s header should say `AppendData` is `O_APPEND`, because that is the property being bought `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 DOC`
+### I121 - `Add-TcLine`'s header should say `AppendData` is `O_APPEND`, because that is the property being bought `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** `lib/append-line.ps1`, new header block above THE RULE: AppendData is the Win32 spelling of POSIX O_APPEND, so this is a named guarantee requested explicitly and not a flag found by trial.
 
 **Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10049,7 +10059,9 @@ The ruling wanted: is produce compared store-to-store on the board today in a wa
 capture skew would distort? If yes, this is worth the hour. If produce is only ever compared
 within-store or against its own history, it is not.
 
-### I126 - A deep discount is evidence about the FUTURE of a cell, and is currently read only as a price `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I126 - A deep discount is evidence about the FUTURE of a cell, and is currently read only as a price `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** `.claude/rules/grocery.md`, final bullet. Habit only, nothing automated, per the item’s own proposal.
 
 **Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10303,7 +10315,9 @@ row counts the durability audit's baseline holds. If it passes, the finding is a
 **If it does not, the estate has been carrying an unrecoverable backup for months and nothing could
 have told it.** Either answer is worth the one command.
 
-### I135 - the ledger writers are serializable and the readers are lock-free, and nothing states which isolation level the readers get or which decisions are safe at it `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I135 - the ledger writers are serializable and the readers are lock-free, and nothing states which isolation level the readers get or which decisions are safe at it `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** `.claude/rules/ops-and-gates.md`, fifth bullet, recast as the question to ask of a NEW lock-free reader: which of the three anomalies can this decision survive.
 
 **Merged from `design\backlog-inbox\q7-dbrecovery-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10647,7 +10661,9 @@ is a legitimate position - the page is not a package and it is not hiding anythi
 position nobody here has taken on purpose, and the difference between "we decided the ingredient list
 suffices" and "nobody thought about it" is the whole point of writing it down.
 
-### I145 - Sodium is read off the panel and then discarded on the way into the macro DB `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I145 - Sodium is read off the panel and then discarded on the way into the macro DB `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** `.claude/rules/meal-prep.md`. Recorded as an OPEN QUESTION FOR BRAD rather than answered, because the item says the first question is whether we want sodium at all. What is stated as wrong today is neither answer, but paying for the number and discarding it.
 
 **Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10671,7 +10687,9 @@ Either way the decision should be written down where the next person reading `SP
 it. Worth noting that a meal-prep audience is a plausible sodium-watching audience, and that broth,
 canned tomatoes and soy sauce are exactly the ingredients where it concentrates.
 
-### I146 - The label capture procedure does not record WHICH panel column a number came from, and dual-column panels are standard `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I146 - The label capture procedure does not record WHICH panel column a number came from, and dual-column panels are standard `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** `.claude/rules/meal-prep.md`, with the food-db-naming-rulings parallel: a dual-column panel is the basis-in-the-name defect one step earlier, and it leaves no trace at all once transcribed.
 
 **Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11000,7 +11018,9 @@ The remaining material from these two modules is either already held by the stor
 specific. In particular I looked for and did NOT find an estate problem that the VM memory model, the
 symbol-table-for-object-fields material, or the standard-mapping conventions would answer.
 
-### I158 - the gate-slot ticket queue is the only protocol here worth a state-space model, and its first rung is paper rather than a tool `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I158 - the gate-slot ticket queue is the only protocol here worth a state-space model, and its first rung is paper rather than a tool `DONE`
+
+**CLOSED 2026-09-12 by the course-orchestrating session, first rung worked and landed.** `design/MODEL-gate-slot-queue-2026-09-12.md`, the paper rung worked and stopped there. Its section 6 answers the only question that decides the exercise: two of the three founding defects are caught at N=2, the third is narrowed to a shape without its number.
 
 **Merged from `design\backlog-inbox\q7-formalverif-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

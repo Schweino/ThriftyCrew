@@ -127,5 +127,17 @@ is one copy of every rule and nothing here can drift from it.
   whether any of the four browser-required stores is browser-required only because nobody looked.**
   That is one hour per store and it could retire the 75-minute Walmart pull.
 
+- **A DEEP DISCOUNT IS EVIDENCE ABOUT A CELL'S FUTURE, not only about its price today** (2026-09-12,
+  backlog I126). A retailer's markdown is either **temporary** (a promotion, the item stays) or
+  **permanent** (an exit: clear the inventory at the end of the product's life, then drop it from the
+  assortment in a reviewed deletion, not by drift). The two are INDISTINGUISHABLE in one day's
+  capture, and today a deep discount and a later `not-carried` are recorded here as unrelated events.
+  **Nothing automated is proposed and none should be.** The forward habit is only this: an unusually
+  deep discount must NOT raise confidence that a store carries an item, because it can mean the
+  opposite. And if a cheap signal is ever wanted, a commodity that showed a deep discount and THEN
+  went quiet is a better `not-carried` candidate than one that simply went quiet - which bears on
+  `[[a-could-not-look-must-not-settle-the-question]]`, since it is the one case where the silence
+  carries information rather than none.
+
 Regime: this holds for files under `grocery/`. It says nothing about `meal-prep/`, which has its own
 rules file and its own corrector.

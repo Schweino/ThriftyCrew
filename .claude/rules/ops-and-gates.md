@@ -563,5 +563,64 @@ everything else honest, so a defect here is silent by construction.
   instance it means** - the `identity-graph-commodity-is-namespaced` shape, an agreeing answer about something else.
   Drive such a suite once with the real lock held before believing it.
 
+## The words these rules were written without `[2026-09-12, backlog I102, I103, I118, I120, I135]`
+
+Every rule above was derived here, from an incident, without the vocabulary that names it. That was
+not a mistake - the scar tissue is worth more than the theory - but the names buy three things the
+incidents could not: they say which of two failures you are looking at, they say what the OTHER
+failure mode of your fix is, and they turn "how much isolation does this need" into a question with
+enumerated answers. None of the following is a gate, and none of it asks for a sweep.
+
+- **`starvation` and `deadlock` each mean two or three different things in this tree, and nothing
+  said so.** Measured 2026-09-11 over first-party `.ps1`, `.py` and `.md`, and **the test is stated
+  with every number because two greps disagreed and not one word of the disagreement was about the
+  tree** - all of it was about which test was meant, the `compare-deals` shape from
+  `.claude/rules/grocery.md`. `starvation` alone, excluding `grocery/out/`, `archive/`, `.claude/`
+  and `.venv`: **13 files**, of which 7 are the gate-slot SCHEDULING sense. Including `starved`,
+  `.claude/rules/` and `archive/`: **26**. `deadlock` on the same filter as the 13: **71**. Say which
+  sense you mean, the way `cohort` in the grocery rules has to.
+- **A blocking lock can DEADLOCK and cannot livelock. A `tryLock`-with-retry can LIVELOCK and cannot
+  deadlock.** A timeout does not remove a hang; it converts a deadlock into a livelock, where the
+  threads are responsive and still finish nothing. This sharpens the timed-lock-wait rule above by
+  one step that rule does not reach: **the refusal branch must RELEASE what it already holds before
+  it loops.** A retry that keeps its resource while spinning is strictly worse than blocking, because
+  it holds the thing everyone else is waiting for and makes no progress itself. And the real fix is
+  neither construct: **break the symmetry** - a deadlock needs a cycle in the who-waits-for-whom
+  graph, so having one participant acquire in the opposite order removes the cycle and no timeout is
+  needed. `lib\gate-slots.ps1` already does the equivalent by serving the oldest live ticket.
+- **Write the POINTED-TO object before the object that points to it.** Data before the inode, the
+  file before the directory entry naming it, the artefact before the row claiming it exists. Every
+  interruption then leaves an object nothing refers to yet, which is a **leak**, and never a
+  reference to an object that is not there, which is **corruption**. Those are not equally bad, and
+  the ordering is the whole of what chooses between them. Two incidents here are this one rule and
+  were each recorded as neither: `[[repairs-that-never-reach-a-commit]]` (*"commit the source WITH
+  the artifact"* - the artefact is pointed-to, the commit is the pointer), and the 2026-09-11
+  `spec-contradictions.json` incident where a gate's child moved a tracked artefact without the
+  reason for it moving. **When a change touches two files where one refers to the other, name which
+  is the pointed-to object, write it first, and say so in the commit.** A detector cannot see this;
+  the habit is the whole prevention.
+- **State whether a retried operation is IDEMPOTENT, and what makes it so.** This is the estate's
+  cheapest concurrency fix and no header claims it. It is better than the delivery guarantee it
+  replaces: make a duplicate harmless and a lost request, a lost reply and a crashed-then-restarted
+  server become indistinguishable and need no distinguishing, because retrying is correct in all
+  three. The property is invisible at the call site and turns on small details - NFS's `WRITE` is
+  idempotent only because the request carries the **offset**, and "append these bytes" would not be.
+  **Two adjacent files in `lib\` are the two sides of it:** `Write-TcAtomicFile` replaces a whole
+  file with a whole text and is **idempotent**, which is exactly why its retry loop is safe;
+  `Add-TcLine` appends and is **NOT**, so a retry duplicates a line - which is why only its OPEN is
+  retried and never its write. Every other retry in the tree is safe or unsafe for this reason and
+  none of them says which.
+- **The ledger WRITERS are serializable and the READERS are lock-free, and nothing says which
+  decisions are safe at that level.** `lib/ledger-lock.ps1` puts the read inside the mutex, so a
+  writer gets the strongest level there is and that is right for it. The readers get no level at all:
+  `grocery/capture-policy-lib.ps1:62` states plainly that the store lanes read the cursor and
+  `sale-windows.json` lock-free. In the isolation vocabulary that permits a **non-repeatable read**
+  (two reads of one key in one pass disagree) and a **phantom** (a key appears mid-pass), and neither
+  is a defect in the readers - it is a level, and the four levels are each DEFINED by the anomaly
+  they still permit. **So the question to ask of a new lock-free reader is not "is this safe" but
+  "which of the three anomalies can this decision survive".** A reader that samples one key once
+  survives all three. A reader that compares two keys, or iterates and then acts on the count, does
+  not.
+
 Regime: this holds for gate and library code. Data-dependent audits live in the daily chain, not in
 `run-gates`, and the split is deliberate - see `run-gates.ps1`'s own header.

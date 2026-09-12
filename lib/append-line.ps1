@@ -9,6 +9,14 @@
 #   * 4 writers x 300, bare Add-Content:        5 of 1,200 landed.
 #   * 4 writers x 300, the open below:      1,200 of 1,200 landed, every one well-formed and distinct, no retry.
 #
+# WHAT `AppendData` ACTUALLY IS, because the code reads like a Windows trick and is not one (2026-09-12,
+# backlog I121). `FileSystemRights::AppendData` is the Win32 spelling of POSIX `O_APPEND`: it makes seek-to-end
+# and write a SINGLE operation, which is the entire property being bought here. A bare Add-Content opens, seeks
+# and writes as three steps, and two appenders then interleave inside that gap - which is the 13-of-200 measured
+# below. So this is not a flag somebody found by trial; it is a named guarantee requested explicitly, and a
+# later "simplification" back to Add-Content removes the guarantee rather than the ceremony. Note also that this
+# append is NOT idempotent: a retried write duplicates a line, which is why only the OPEN below is retried.
+#
 # THE RULE. Open with FileSystemRights.AppendData ONLY and FileShare.ReadWrite, and hand the whole line to ONE
 # unbuffered Write. With append-only rights Windows places every write at the end of the file as one step, so
 # concurrent appenders interleave whole lines and never overwrite or split each other, and ReadWrite sharing
