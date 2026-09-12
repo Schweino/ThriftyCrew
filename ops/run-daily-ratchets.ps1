@@ -126,6 +126,33 @@ if ($fails.Count) {
   Write-Output '  These are the tree-wide ratchets a push no longer runs. Fix the cause; do not retrain a baseline to make a red go away.'
 }
 Write-Output ("DAILY-RATCHETS-COMPLETE ratchets={0} failed={1} blind={2}" -f $names.Count, $fails.Count, $blind.Count)
-if ($blind.Count) { exit 3 }
-if ($fails.Count) { exit 1 }
-exit 0
+
+# THE STAMP IS WRITTEN ONLY ON A GREEN VERDICT, and that is deliberate. A stamp written on every path would let a RED
+# run prove it happened, and the watcher reads "work landed" from exactly that file - so a failing ratchet would
+# excuse its own nonzero exit. The same reasoning is recorded on TC Daemon Battery 0230's row in
+# grocery\expected-automations.json, and it is the reason a red or blind run leaves yesterday's stamp standing:
+# health-heartbeat then sees it go stale and pages, which is what should happen when these stop passing.
+if (-not $blind.Count -and -not $fails.Count) {
+  $stampDir = Join-Path $repo 'ops\out\logs'
+  try {
+    if (-not [IO.Directory]::Exists($stampDir)) { $null = [IO.Directory]::CreateDirectory($stampDir) }
+    $head = ''
+    try { $head = ([string](& git -C $repo rev-parse --short HEAD)).Trim() } catch { $head = '' }
+    $stamp = [ordered]@{
+      written_utc = [DateTime]::UtcNow.ToString('o')
+      commit      = $head
+      ratchets    = $names.Count
+      names       = @($names)
+      seconds     = [int]($swAll.ElapsedMilliseconds / 1000)
+    }
+    $json = ($stamp | ConvertTo-Json -Depth 4)
+    [IO.File]::WriteAllText((Join-Path $stampDir 'daily-ratchets-green.json'), ($json -replace "`r`n", "`n") + "`n", (New-Object Text.UTF8Encoding($false)))
+  } catch {
+    # A STAMP THAT COULD NOT BE WRITTEN IS NOT A FAILED RATCHET, but it must not read as a silent success either:
+    # the run passed, and the watcher will page on the stale stamp, which is the correct outcome.
+    Write-Output ("run-daily-ratchets: the ratchets PASSED but the stamp could not be written ({0}) - the watcher will page on a stale stamp, which is right." -f $_.Exception.Message)
+  }
+}
+$rc = 0
+if ($blind.Count) { $rc = 3 } elseif ($fails.Count) { $rc = 1 }
+exit $rc
