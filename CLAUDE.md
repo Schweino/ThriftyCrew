@@ -48,6 +48,14 @@ by a push no longer pays twice** - the hook prints the recorded pass and dispatc
 anyway, and a red run over that same content withdraws the pass). And a push the remote will reject anyway,
 because main moved while it waited, is refused in seconds instead of after the whole run: rebase and push again.
 
+**A checkout with no built cards is SEEDED on its first push, and a gate that still cannot look says BLIND**
+(2026-09-11). `meal-prep/db/built` is gitignored and `.worktreeinclude` structurally cannot carry it, so
+`feed-covers-published` and `wave-preaudit` used to FAIL an unseeded worktree - after it had queued for a slot,
+and for a reason that said nothing about the change being pushed. Measured that day: 31 of 106 worktrees had no
+card, and 18 of 53 failed gate runs failed on nothing else. The hook now runs `ops/seed-worktree.ps1` once when
+the cards are missing; if seeding cannot run, those cases report BLIND and run-gates names them, because a
+could-not-look is never a failure and never a pass.
+
 It deliberately runs only what is hermetic: every `-SelfTest` in the tree, plus the static-analysis
 detectors that read source rather than data. Each self-test drives a frozen must-fire fixture of a
 founding bug and its clean twin, so it fails loudly when a fix stops detecting the thing it exists

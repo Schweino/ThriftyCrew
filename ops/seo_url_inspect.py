@@ -155,12 +155,27 @@ def selftest():
     T("MUST NOT FIRE", "an empty result set does not invent a summary",
       summarise([])[0]["n"] == 0)
 
-    urls = sample_urls(4)
-    T("CLEAN TWIN", "the sample is deterministic across calls", urls == sample_urls(4), urls[:2])
-    T("CLEAN TWIN", "the sample is spread, not the first N alphabetically",
-      len(urls) < 2 or urls != [SITE_BASE + s + "/" for s in
-                                sorted(set(os.path.basename(f).split(".")[0]
-                                           for f in glob.glob(os.path.join(BUILT, "*.body.html"))))[:4]])
+    # THESE TWO ARE HERMETIC NOW (2026-09-11), and the reason is a push they blocked. They read the live
+    # meal-prep/db/built, so their verdict depended on how many cards the checkout happened to hold: with
+    # 1,168 they passed; with ZERO they passed on the `len(urls) < 2` guard without testing anything; and
+    # with TWO - a checkout seeded with just the two cards other fixtures need - `stride` collapsed to 1,
+    # "spread" became identical to "the first N alphabetically", and the case FAILED for a reason that had
+    # nothing to do with the sampler. A fixture reading live data cannot tell those three apart, so it builds
+    # its own: 20 slugs, where a stride of 5 and the first 4 are provably different lists.
+    import shutil
+    import tempfile
+    tmpd = tempfile.mkdtemp(prefix="seo-sample-")
+    try:
+        for i in range(20):
+            open(os.path.join(tmpd, "slug-%02d.body.html" % i), "w").close()
+        urls = sample_urls(4, built_dir=tmpd)
+        T("CLEAN TWIN", "the sample is deterministic across calls",
+          urls == sample_urls(4, built_dir=tmpd), urls[:2])
+        first4 = [SITE_BASE + ("slug-%02d" % i) + "/" for i in range(4)]
+        T("CLEAN TWIN", "the sample is spread, not the first N alphabetically",
+          len(urls) == 4 and urls != first4, urls)
+    finally:
+        shutil.rmtree(tmpd, ignore_errors=True)
 
     print("")
     if bad:
