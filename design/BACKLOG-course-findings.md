@@ -10682,7 +10682,32 @@ no vegetable term at all, so the 22% is an unmanaged output of a pipeline that n
 Brad ever wants the catalogue to move, the first rung is to print this number per batch at hunt time
 so it is visible before publication rather than measurable only afterwards.
 
-### I140 - the course's own "cost per calorie is the wrong denominator" argument lands directly on our headline metric, and nothing in the estate has ever stated the other denominator `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+### I140 - the course's own "cost per calorie is the wrong denominator" argument lands directly on our headline metric, and nothing in the estate has ever stated the other denominator `DONE` `queue-7`
+
+**BRAD RULED IT ON 2026-09-12, verbatim:** *"Thrifty Crew prices on cost per serving, and that is a
+deliberate choice: our reader is a budget-first family deciding what dinner costs, and a serving is the
+unit they buy and eat. Cost per serving is not a claim about nutritional value, and we never present a
+cheaper recipe as a better one on that number alone. Every recipe card also carries protein per serving,
+so a reader sees value beyond calories. We will not add a nutrient-density metric, because no standard
+one exists that we could compute honestly from our data. Record this paragraph in docs as the stated
+denominator for the headline metric."*
+
+**Recorded, and pointed at from where the number is handled.** `docs\HEADLINE-METRIC.md` carries the
+ruling verbatim, the argument against it, and what it permits and forbids. Pointers sit on the line that
+writes the number (`meal-prep\pipeline\build-v2-spec.ps1`), above the card's stat line
+(`meal-prep\pipeline\build-card2.ps1`) and beside the cost-fidelity attribute in
+`docs\QUALITY-ATTRIBUTES.md`. **No gate and no second metric**, which is what the ruling says: the
+ruling states no number for `ops\audit-ruling-drift.ps1` to compare, and a detector over a metric we
+have ruled out adding would have no production caller.
+
+**Two things checked while recording it, so the ruling's own claims are measured rather than asserted.**
+584 of 584 built recipe bodies carry a protein figure on the stat line, and it comes from the spec's
+`macros_per_serving`, so the card's cost and macros share one denominator. `meal-prep\food-macros-db.json`
+holds 441 rows with four macros each, `fiber_g` on 98 of 441, and no sodium or sugar field on any row -
+which is the concrete form of "no standard one exists that we could compute honestly from our data".
+**The one pointer still wanted is a line in `.claude\rules\meal-prep.md`**, the channel that loads
+itself; the run that landed this could not write under `.claude\`, and `docs\HEADLINE-METRIC.md` says so
+rather than leaving it as an intention.
 
 **Merged from `design\backlog-inbox\q7-foodhealth-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

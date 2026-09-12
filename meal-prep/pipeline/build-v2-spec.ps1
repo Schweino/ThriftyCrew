@@ -540,6 +540,12 @@ function Build-Spec($cf){
   $spec.portion_html = $portionHtml
   $spec.credit_html = $creditHtml
   $spec.upsell_html = $upsellHtml
+  # THE DENOMINATOR IS THE SERVING, AND IT IS A RULING (Brad, 2026-09-12, backlog I140).
+  # docs\HEADLINE-METRIC.md is the ruling: we price on cost per serving because a serving is the unit a
+  # budget-first family buys and eats, it is NOT a claim about nutritional value, and no nutrient-density
+  # metric is added because the food DB holds four macros and nothing honest could be computed from them.
+  # The cost-per-calorie argument against this denominator is written out there with its answer, so it
+  # does not have to be re-argued here. A different denominator, or a second metric, is a new ruling.
   $spec.cost_batch            = $(if($cf){ $cf.batch }     else { 0 })
   $spec.cost_batch_true       = $(if($cf){ $cf.trueC }     else { 0 })
   $spec.cost_per_serving      = $(if($cf){ $cf.cps }       else { 0 })

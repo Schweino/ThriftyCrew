@@ -52,6 +52,11 @@ the empty cell. That is the right call and it should stay a conscious one.
 | Paywall correctness | `H/L` | Paid content served free, or free content locked | the split at `<!--TC-PAYWALL-->`, checked in **both** directions |
 | Publish atomicity | `M/H` | A crash mid-wave loses the journal and the next publish refuses | per-slug journal writes |
 
+**The headline metric's denominator is a ruling, not a default** (Brad, 2026-09-12, backlog I140).
+`cost_per_serving` is what this estate prices on, `docs/HEADLINE-METRIC.md` is the ruling, and it
+carries the cost-per-calorie argument against it with the answer. Relevant here because cost fidelity
+above is an attribute of a number whose denominator was, until that date, nowhere stated.
+
 ## `graph/` - identity and learning
 
 | Attribute | Pri | The scenario | What holds it up |

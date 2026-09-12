@@ -370,6 +370,10 @@ if($spec.PSObject.Properties.Name -contains 'credit_html' -and $spec.credit_html
   $L.Add('')
 }
 $L.Add($scalerBlock)
+# The stat line below is the reader's view of the headline metric, and its denominator is RULED: cost per
+# serving, with calories and protein per serving beside it so a reader sees value beyond calories
+# (Brad, 2026-09-12, backlog I140; docs\HEADLINE-METRIC.md). Price words only here - a cheaper recipe is
+# never presented as a better one on this number, and this line is not a nutrition verdict.
 $st = $spec.stat
 $L.Add(('<p class="smp-stat"><strong>Makes 14 servings &middot; ~{0} cal &middot; {1}g protein &middot; {2}g carbs &middot; {3}g fat &middot; <span data-tc-live-price>current price loading</span>.</strong></p>' -f $st.cal,$st.protein,$st.carbs,$st.fat))
 $L.Add('')
