@@ -21,7 +21,14 @@
 #   .\fetch-recipe.ps1 -Url https://... [-Refresh]      fetch (or serve from cache), emit JSON-LD if present
 #   .\fetch-recipe.ps1 -Url https://... -BodyPath       just print the cached body path
 #   .\fetch-recipe.ps1 -Stats
+#   .\fetch-recipe.ps1 -SanitizeCache                    strip active content from every page already cached
 #   .\fetch-recipe.ps1 -SelfTest
+#
+# THE CACHE HOLDS NO EXECUTABLE CONTENT (2026-09-12). Recipe blogs carry ad and tracker scripts, and
+# with ~38,000 pages cached some were real phishing payloads: Defender raised Trojan:HTML/Phish alerts
+# on the cache over and over. Nothing here ever runs a page, and every reader wants only the JSON-LD
+# and the prose, so every <script> EXCEPT application/ld+json, every <iframe> and every <noscript> is
+# removed BEFORE the body is written. A page whose strip times out is not cached at all.
 # ---------------------------------------------------------------------------------------------------
 param(
   [string]$Url = '', [switch]$Refresh, [switch]$BodyPath, [switch]$Stats, [switch]$Json, [switch]$SelfTest,
@@ -30,11 +37,11 @@ param(
   # `reliable` in the ledger - which is what the crawl enumerates. So probing a useless site
   # admitted it. Measured: four domains the probe judged UNUSABLE were promoted by the act of
   # probing them. -NoRecord lets a caller fetch without making a claim about the publisher.
-  [switch]$NoRecord,
+  [switch]$NoRecord, [switch]$SanitizeCache,
   [string]$CacheDir = '', [int]$TimeoutSec = 30
 )
 $ErrorActionPreference = 'Stop'
-$runRefresh=[bool]$Refresh; $runBodyPath=[bool]$BodyPath; $runStats=[bool]$Stats; $runJson=[bool]$Json; $runSelfTest=[bool]$SelfTest
+$runRefresh=[bool]$Refresh; $runBodyPath=[bool]$BodyPath; $runStats=[bool]$Stats; $runJson=[bool]$Json; $runSelfTest=[bool]$SelfTest; $runSanitize=[bool]$SanitizeCache
 
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = Split-Path -Parent $here
@@ -61,6 +68,28 @@ function Get-JsonLdBlocks {
   $rx = [regex]'(?is)<script[^>]*type\s*=\s*["'']application/ld\+json["''][^>]*>(.*?)</script>'
   foreach ($m in $rx.Matches($Html)) { $out += $m.Groups[1].Value }
   return $out
+}
+
+$script:ActiveContentRx = @(
+  # Self-closing first, and a body may not cross another <script: otherwise `<script src=x/>` runs on
+  # to the NEXT </script>, which is the JSON-LD block's, and deletes the recipe (the self-test caught it).
+  [regex]::new('<script\b(?![^>]*application/ld\+json)[^>]*/>', 'IgnoreCase, Singleline', [TimeSpan]::FromSeconds(10)),
+  [regex]::new('<script\b(?![^>]*application/ld\+json)[^>]*>(?:(?!<script\b).)*?</script\s*>', 'IgnoreCase, Singleline', [TimeSpan]::FromSeconds(10)),
+  [regex]::new('<iframe\b.*?(</iframe\s*>|/>)', 'IgnoreCase, Singleline', [TimeSpan]::FromSeconds(10)),
+  [regex]::new('<noscript\b.*?</noscript\s*>', 'IgnoreCase, Singleline', [TimeSpan]::FromSeconds(10))
+)
+
+function Remove-ActiveContent {
+  param([string]$Html)
+  # Returns the page with every non-JSON-LD script, iframe and noscript removed, or $null when a strip
+  # timed out - an unstrippable page is not cached, because it can be fetched again and cannot be trusted.
+  if (-not $Html) { return $Html }
+  try {
+    foreach ($rx in $script:ActiveContentRx) { $Html = $rx.Replace($Html, '') }
+    return $Html
+  } catch [System.Text.RegularExpressions.RegexMatchTimeoutException] {
+    return $null
+  }
 }
 
 function Find-RecipeNode {
@@ -107,6 +136,16 @@ if ($runSelfTest) {
   T 'MUST FIRE  a multi-valued @type containing Recipe still matches' ((Find-RecipeNode $multi).name -eq 'MultiType') 'missed multi-type'
   T 'MUST NOT FIRE a non-Recipe page yields no node' ($null -eq (Find-RecipeNode ('{"@type":"Article","name":"No"}' | ConvertFrom-Json))) 'false positive'
 
+  $dirty = '<html><head><script src="ad.js"></script><SCRIPT type="text/javascript">evil()</SCRIPT><script async src="x.js"/>' +
+    '<script type="application/ld+json">{"@type":"Recipe","name":"Kept"}</script></head>' +
+    '<body><iframe src="https://ads.example"></iframe><noscript><img src="px"></noscript><p>1 cup rice</p></body></html>'
+  $clean = Remove-ActiveContent $dirty
+  T 'MUST FIRE  an ad script is stripped' ($clean -notmatch 'evil\(\)|ad\.js|x\.js') $clean
+  T 'MUST FIRE  an iframe and a noscript are stripped' ($clean -notmatch '(?i)<iframe|<noscript') $clean
+  T 'CLEAN TWIN the JSON-LD Recipe survives the strip' ((Find-RecipeNode ((@(Get-JsonLdBlocks $clean))[0] | ConvertFrom-Json)).name -eq 'Kept') $clean
+  T 'CLEAN TWIN the prose survives the strip' ($clean -match '<p>1 cup rice</p>') $clean
+  T 'MUST NOT FIRE a page with no active content is unchanged' ((Remove-ActiveContent '<p>plain</p>') -ceq '<p>plain</p>') 'changed'
+
   if ($bad -gt 0) { Write-Output ("fetch-recipe SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'fetch-recipe SELF-TEST PASS'
   Exit-Guard -Name 'fetch-recipe' -Summary 'selftest pass' -Code 0
@@ -118,6 +157,25 @@ if ($runStats) {
   $mb = if ($f.Count) { [Math]::Round((($f | Measure-Object -Property Length -Sum).Sum / 1MB), 2) } else { 0 }
   Write-Output ("fetch-recipe cache: {0} page(s), {1} MB, at {2}" -f $f.Count, $mb, $CacheDir)
   exit 0
+}
+
+if ($runSanitize) {
+  if (-not (Test-Path $CacheDir)) { Write-Output 'fetch-recipe: cache is empty'; exit 0 }
+  $enc = New-Object Text.UTF8Encoding($true)
+  $scanned = 0; $rewritten = 0; $dropped = 0; $unreadable = 0
+  foreach ($f in [IO.Directory]::EnumerateFiles($CacheDir, '*.html')) {
+    $scanned++
+    try { $raw = [IO.File]::ReadAllText($f) } catch { $unreadable++; continue }
+    $cleaned = Remove-ActiveContent $raw
+    if ($null -eq $cleaned) {
+      Remove-Item -LiteralPath $f -Force; $dropped++
+    } elseif (-not [string]::Equals($cleaned, $raw, [StringComparison]::Ordinal)) {
+      [IO.File]::WriteAllText($f, $cleaned, $enc); $rewritten++
+    }
+    if ($scanned % 2000 -eq 0) { Write-Output ("  ... {0} scanned, {1} rewritten" -f $scanned, $rewritten) }
+  }
+  Write-Output ("fetch-recipe sanitize: scanned={0} rewritten={1} dropped_timeout={2} unreadable={3}" -f $scanned, $rewritten, $dropped, $unreadable)
+  exit $(if ($unreadable -gt 0) { 1 } else { 0 })
 }
 
 if (-not $Url) { Write-Output 'fetch-recipe: -Url is required'; exit 1 }
@@ -148,6 +206,8 @@ if ((Test-Path $bodyFile) -and -not $runRefresh) {
     Write-Output ("fetch-recipe: FETCH FAILED {0} - {1}" -f $Url, $_.Exception.Message)
     exit 1
   }
+  $html = Remove-ActiveContent $html
+  if ($null -eq $html) { Write-Output ("fetch-recipe: FETCH FAILED {0} - page could not be stripped of active content in time; not cached" -f $Url); exit 1 }
   Set-Content -Path $bodyFile -Value $html -Encoding utf8
 }
 
