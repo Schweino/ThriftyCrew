@@ -48,6 +48,12 @@
   Exit 0 ran, 3 could not run (refused, no slots in time, no Python, burners did not start), 2 self-test
   regression.
 #>
+# gate-inputs: lib\gate-slots.ps1
+# WHY THIS FILE DECLARES (Brad, 2026-09-12). It was never refused on anything in its own source: the inference
+# refused it by CONTAGION, because lib\gate-slots.ps1 was unkeyable and unkeyability travels up a load graph.
+# That library now declares too, but the contagion rule is deliberately one-way - a declaring gate stops asking
+# the inference about what it loads - so this line is what actually lets the 22s stop being spent on every push.
+# Its slots come from that budget, so a change there must still re-run this; the declaration says exactly that.
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [int]$Cores = 4,

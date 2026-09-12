@@ -131,6 +131,13 @@
   NO param() BLOCK, for the reason lib\guard-contract.ps1 spells out: PS 5.1 runs a dot-sourced param()
   block in the CALLER's scope, so declaring [switch]$SelfTest here would reset the caller's.
 #>
+# gate-inputs: lib\gate-slots.ps1
+# WHY THIS FILE DECLARES (Brad, 2026-09-12). The inference refused it on ONE line - `return (Join-Path $Root $leaf)`
+# in Get-TcGateQueueDir - reading `$Root` as a repo root because of its NAME. It is not: it defaults to
+# $script:TcGateQueueRoot, which is under LocalApplicationData, so no repo file is involved at all. That refusal
+# cost 34s on every push and poisoned four more gates that merely dot-source this one (cpu-load among them),
+# because unkeyability travels up a load graph. This suite reads nothing but its own bytes: its children
+# dot-source $PSCommandPath, its mutexes live in a private Local\ prefix and its queue root is a per-run guid.
 $__gsSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # THE BUDGET. Brad's ruling, 2026-09-11: a fixed 10 across the machine. NOT a sweep and not derived from a

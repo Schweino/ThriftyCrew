@@ -78,6 +78,15 @@
   check it proves the hook's wiring and the script's decisions against a stub suite; it does not prove the
   real suite's input set, which the script's own -SelfTest pins live.
 #>
+# gate-inputs: ops\hooks\pre-push, ops\prepush-test-auditors.ps1, ops\hold-push-lock.ps1, lib\*.ps1
+# WHY THIS FILE DECLARES (Brad, 2026-09-12). At 67s this is the most expensive gate on the box and the one that
+# sets the floor on a push's wall clock, since no pool can finish sooner than its longest single job. It could
+# never be keyed by inference: line 258 copies the library set with `Get-ChildItem (Join-Path $RepoRoot 'lib')
+# -Filter *.ps1`, a DIRECTORY ENUMERATION, and no source key can name a listing - which is exactly why the glob
+# form exists. A library added to lib\ tomorrow moves this key with nobody editing the line above.
+# The set is what the sandbox actually copies in: the hook itself (251), prepush-test-auditors (252),
+# hold-push-lock (fallback path) and every lib\*.ps1 (258-260). ops\run-gates.ps1 is already in every key as a
+# RUNNER, so it is deliberately not repeated here.
 [CmdletBinding()]
 param([switch]$SelfTest)   # accepted so ops\run-gates.ps1 discovers this file; the cases run either way
 

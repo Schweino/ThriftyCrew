@@ -116,6 +116,73 @@ function Test-TcGateCacheable {
   return [pscustomobject]@{ Ok = $true; Why = '' }
 }
 
+# A GATE MAY DECLARE WHAT IT READS, instead of being guessed at (Brad, 2026-09-12). One line in its own source:
+#
+#     # gate-inputs: lib\*.ps1, ops\hooks\pre-push, ops\prepush-test-auditors.ps1
+#
+# WHY IT EXISTS. The rules below INFER a gate's inputs from its source text, and inference has exactly two failure
+# directions. Guessing too wide refuses a gate that reads nothing of the kind - 53 of 293 on 2026-09-12, among them
+# every expensive suite on the box, and ops\test-prepush-hook.ps1 (67s) which cannot EVER be inferred because it
+# copies lib\*.ps1 by DIRECTORY ENUMERATION and no source key can name a listing. Guessing too narrow would reuse a
+# stale pass, which is why the inference is deliberately conservative and why its refusals are not a bug.
+# A declaration replaces the guess with an assertion the author signed, visible in a diff and reviewable as code.
+#
+# WHAT IT DOES NOT DO. It does not shorten the key: every declared path is hashed, globs and all, and the transitive
+# walk still follows a declared .ps1 into what IT loads, so a library two hops away still moves the key.
+# A DECLARED PATH THAT MATCHES NOTHING IS A REFUSAL, never an empty set: a typo'd or stale declaration would
+# otherwise narrow the input set silently, which is the one direction that turns into a stale pass.
+$script:TcGateDeclRx = '(?im)^[ \t]*#[ \t]*gate-inputs:[ \t]*(.+?)[ \t]*$'
+
+function Get-TcGateDeclaredInputs {
+  <# The declared input patterns, in source order, or an empty array when the gate declares none. Pure over text so
+     the fixture drives it without a disk. #>
+  param([string]$Text)
+  $out = [Collections.Generic.List[string]]::new()
+  foreach ($m in [regex]::Matches($Text, $script:TcGateDeclRx)) {
+    foreach ($p in ($m.Groups[1].Value -split ',')) {
+      $t = $p.Trim()
+      if ($t) { [void]$out.Add($t) }
+    }
+  }
+  return @($out)
+}
+
+function Resolve-TcGateDeclaredInputs {
+  <# Expand declared patterns against the repo root. Returns Ok and either Paths (relative, sorted ordinally) or
+     Why. A pattern matching nothing refuses the whole gate; so does one that escapes the repo. #>
+  param([string]$Repo, [string[]]$Patterns)
+  $repoFull = [IO.Path]::GetFullPath($Repo).TrimEnd('\')
+  $seen = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
+  $paths = [Collections.Generic.List[string]]::new()
+  foreach ($pat in @($Patterns)) {
+    if ($pat -match '(?i)^[a-z]:\\' -or $pat -match '\.\.') {
+      return [pscustomobject]@{ Ok = $false; Paths = @(); Why = ("the declared input '" + $pat + "' is not a path inside this repo") }
+    }
+    $rel = $pat -replace '/', '\'
+    $full = [IO.Path]::Combine($repoFull, $rel)
+    $hits = @()
+    if ($rel -match '[\*\?]') {
+      $dir = [IO.Path]::GetDirectoryName($full)
+      $leaf = [IO.Path]::GetFileName($full)
+      if ($dir -and [IO.Directory]::Exists($dir)) {
+        $hits = @([IO.Directory]::GetFiles($dir, $leaf) | Sort-Object)
+      }
+    } elseif ([IO.File]::Exists($full)) {
+      $hits = @($full)
+    }
+    if (-not $hits.Count) {
+      return [pscustomobject]@{ Ok = $false; Paths = @(); Why = ("the declared input '" + $pat + "' matches no file, so the declaration is stale or misspelt") }
+    }
+    foreach ($h in $hits) {
+      $r = $h.Substring($repoFull.Length).TrimStart('\')
+      if (-not $seen.ContainsKey($r)) { $seen[$r] = $true; [void]$paths.Add($r) }
+    }
+  }
+  $sorted = $paths.ToArray()
+  [Array]::Sort($sorted, [StringComparer]::OrdinalIgnoreCase)
+  return [pscustomobject]@{ Ok = $true; Paths = @($sorted); Why = '' }
+}
+
 function Get-TcGateInputKey {
   <# The key for ONE gate. $Repo is the checkout, $GateFile its full path, $GateArg the argument it runs with
      (so `-SelfTest` and a renamed switch are different entries), $RunnerFiles the bytes of whatever dispatches
@@ -136,8 +203,17 @@ function Get-TcGateInputKey {
   try { $text = [IO.File]::ReadAllText($GateFile) } catch {
     return [pscustomobject]@{ Ok = $false; Key = ''; Why = 'the gate file could not be read'; Files = @() }
   }
-  $can = Test-TcGateCacheable -Text $text
-  if (-not $can.Ok) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = $can.Why; Files = @() } }
+  # A DECLARATION OUTRANKS THE INFERENCE, because the author knows what the gate reads and the regex is guessing.
+  # Only the REFUSAL is lifted: every declared path is still hashed below, and the transitive walk still runs.
+  $declared = Get-TcGateDeclaredInputs -Text $text
+  $declResolved = $null
+  if ($declared.Count) {
+    $declResolved = Resolve-TcGateDeclaredInputs -Repo $Repo -Patterns $declared
+    if (-not $declResolved.Ok) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = $declResolved.Why; Files = @() } }
+  } else {
+    $can = Test-TcGateCacheable -Text $text
+    if (-not $can.Ok) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = $can.Why; Files = @() } }
+  }
 
   $repoFull = [IO.Path]::GetFullPath($Repo).TrimEnd('\')
   $rows = [Collections.Generic.List[string]]::new()
@@ -153,6 +229,8 @@ function Get-TcGateInputKey {
   foreach ($m in [regex]::Matches($text, $script:TcGateLibRx)) { $queue.Enqueue($m.Groups[1].Value) }
   $refs = Get-TcGateReferencedPaths -Text $text
   foreach ($p in $refs.Paths) { if ($p -notmatch '(?i)^lib\\') { $queue.Enqueue($p) } }
+  # The declared set joins the same queue, so a declared .ps1 is walked into exactly like an inferred one.
+  if ($declResolved) { foreach ($p in $declResolved.Paths) { $queue.Enqueue($p) } }
   while ($queue.Count) {
     $rel = $queue.Dequeue()
     if ($seen.ContainsKey($rel)) { continue }
@@ -164,10 +242,26 @@ function Get-TcGateInputKey {
       $sub = ''
       try { $sub = [IO.File]::ReadAllText($full) } catch { $sub = '' }
       if ($sub) {
-        # A LIBRARY THAT READS DATA POISONS EVERY GATE THAT LOADS IT, so the refusal travels up the graph.
-        $subCan = Test-TcGateCacheable -Text $sub
-        if (-not $subCan.Ok) {
-          return [pscustomobject]@{ Ok = $false; Key = ''; Why = ('a file it loads (' + $rel + ') ' + $subCan.Why); Files = @() }
+        # A LIBRARY THAT READS DATA POISONS EVERY GATE THAT LOADS IT, so the refusal travels up the graph - UNLESS
+        # this gate declared its inputs, in which case the author has already answered the question the inference
+        # was asking, and the contagion is the inference's uncertainty rather than a fact about the library.
+        # This is what unblocks the 8 gates refused on 2026-09-12 only because something they load was unkeyable.
+        # A DECLARING LIBRARY DOES NOT POISON ITS CALLERS EITHER, and that is the half that matters: on
+        # 2026-09-12 lib\gate-slots.ps1 alone refused four gates that merely dot-source it. Its own declaration
+        # answers the question the inference was guessing at, so the contagion stops there - and the library's
+        # declared inputs join this walk, or a caller's key would be blind to what the library reads.
+        $subDecl = Get-TcGateDeclaredInputs -Text $sub
+        if ($subDecl.Count) {
+          $subRes = Resolve-TcGateDeclaredInputs -Repo $Repo -Patterns $subDecl
+          if (-not $subRes.Ok) {
+            return [pscustomobject]@{ Ok = $false; Key = ''; Why = ('a file it loads (' + $rel + ') ' + $subRes.Why); Files = @() }
+          }
+          foreach ($p in $subRes.Paths) { $queue.Enqueue($p) }
+        } elseif (-not $declResolved) {
+          $subCan = Test-TcGateCacheable -Text $sub
+          if (-not $subCan.Ok) {
+            return [pscustomobject]@{ Ok = $false; Key = ''; Why = ('a file it loads (' + $rel + ') ' + $subCan.Why); Files = @() }
+          }
         }
         foreach ($m in [regex]::Matches($sub, $script:TcGateLibRx)) { $queue.Enqueue($m.Groups[1].Value) }
       }
@@ -286,6 +380,64 @@ if ($SelfTest) { Write-Output 'cases' }
     $kUnrel = Get-TcGateInputKey -Repo $sb -GateFile $gate -GateArg '-OtherSwitch' -RunnerFiles @($runner)
     T 'MUST NOT FIRE  a file the gate never names does not change its key, which is the whole point of caching per gate' `
       ($kUnrel.Key -eq $kArg.Key) 'an unrelated file moved the key'
+
+    # ---- A GATE MAY DECLARE ITS INPUTS (Brad, 2026-09-12) ----
+    # The declaration exists for gates the inference cannot key, so every case here starts from a gate the
+    # inference REFUSES and asks what the declaration does to it.
+    $decl = Join-Path $sb 'ops\test-hooky.ps1'
+    $declBody = "`$p = Join-Path `$repo `$whatever   # the inference cannot follow this`nif (`$SelfTest) { }`n"
+    [IO.File]::WriteAllText($decl, $declBody, $utf8)
+    $kNoDecl = Get-TcGateInputKey -Repo $sb -GateFile $decl -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  without a declaration the inference still refuses a variable-built path, so nothing is weakened by default' `
+      ((-not $kNoDecl.Ok) -and $kNoDecl.Why -match 'variable') ("ok={0} why={1}" -f $kNoDecl.Ok, $kNoDecl.Why)
+    [IO.File]::WriteAllText($decl, ("# gate-inputs: lib\*.ps1, ops\unrelated.ps1`n" + $declBody), $utf8)
+    $kDecl = Get-TcGateInputKey -Repo $sb -GateFile $decl -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  a gate that DECLARES what it reads is keyable although the inference refused it' `
+      ($kDecl.Ok) ("ok={0} why={1}" -f $kDecl.Ok, $kDecl.Why)
+    # THE DECLARED FILES ARE HASHED, not merely listed - the point is that a change to one still moves the key.
+    [IO.File]::WriteAllText((Join-Path $sb 'ops\unrelated.ps1'), "# edited after the declaration`n", $utf8)
+    $kDeclEdit = Get-TcGateInputKey -Repo $sb -GateFile $decl -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  editing a DECLARED file moves the key, so a declaration shortens nothing' `
+      ($kDeclEdit.Ok -and $kDeclEdit.Key -ne $kDecl.Key) 'a declared file was not in the key'
+    # A GLOB MEANS THE DIRECTORY, which is the only form that can cover ops\test-prepush-hook.ps1 - it copies
+    # lib\*.ps1 by enumeration, so a NEW library must move its key without anyone editing the declaration.
+    [IO.File]::WriteAllText((Join-Path $sb 'lib\brand-new.ps1'), "# a library that did not exist a moment ago`n", $utf8)
+    $kDeclNew = Get-TcGateInputKey -Repo $sb -GateFile $decl -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  a NEW file appearing under a declared glob moves the key, which a hand list could never do' `
+      ($kDeclNew.Ok -and $kDeclNew.Key -ne $kDeclEdit.Key) 'a new file under the declared glob did not reach the key'
+    # THE SAFETY PROPERTY. A declaration that matches nothing is the one way this could narrow an input set in
+    # silence, and silence here is a STALE PASS - so it refuses instead.
+    [IO.File]::WriteAllText($decl, ("# gate-inputs: lib\typo-*.ps1`n" + $declBody), $utf8)
+    $kStale = Get-TcGateInputKey -Repo $sb -GateFile $decl -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  a declared pattern matching NO file is refused, never read as an empty input set' `
+      ((-not $kStale.Ok) -and $kStale.Why -match 'matches no file') ("ok={0} why={1}" -f $kStale.Ok, $kStale.Why)
+    [IO.File]::WriteAllText($decl, ("# gate-inputs: ..\outside.ps1`n" + $declBody), $utf8)
+    $kEsc = Get-TcGateInputKey -Repo $sb -GateFile $decl -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  a declaration cannot name a path outside this repo' `
+      ((-not $kEsc.Ok) -and $kEsc.Why -match 'inside this repo') ("ok={0} why={1}" -f $kEsc.Ok, $kEsc.Why)
+    $declPure = Get-TcGateDeclaredInputs -Text "# gate-inputs: a.ps1 , b.ps1`n# gate-inputs: c.ps1`n"
+    T 'CLEAN TWIN  the declaration parser splits on commas, trims, and reads more than one declaration line' `
+      ($declPure.Count -eq 3 -and $declPure[0] -eq 'a.ps1' -and $declPure[2] -eq 'c.ps1') ($declPure -join '|')
+    T 'MUST NOT FIRE  a gate with no declaration line declares nothing, rather than declaring everything' `
+      ((Get-TcGateDeclaredInputs -Text "# just a comment`n").Count -eq 0) 'a gate without a declaration was read as declaring something'
+    # THE CONTAGION STOPS AT A DECLARATION. An undeclared gate that loads an unkeyable library is refused, and
+    # must stay refused; the same gate loading a library that DECLARES is keyable, because the library has
+    # answered the question the inference could not. On 2026-09-12 one library refused four gates this way.
+    $poisonLib = Join-Path $sb 'lib\poisons.ps1'
+    [IO.File]::WriteAllText($poisonLib, "`$q = Join-Path `$repo `$whatever`n", $utf8)
+    $caller = Join-Path $sb 'ops\loads-poison.ps1'
+    [IO.File]::WriteAllText($caller, ". (Join-Path `$repo 'lib\poisons.ps1')`nif (`$SelfTest) { }`n", $utf8)
+    $kPoisoned = Get-TcGateInputKey -Repo $sb -GateFile $caller -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  a gate that loads an UNKEYABLE library is still refused, so the contagion rule is not lost' `
+      ((-not $kPoisoned.Ok) -and $kPoisoned.Why -match 'a file it loads') ("ok={0} why={1}" -f $kPoisoned.Ok, $kPoisoned.Why)
+    [IO.File]::WriteAllText($poisonLib, ("# gate-inputs: lib\poisons.ps1`n`$q = Join-Path `$repo `$whatever`n"), $utf8)
+    $kCured = Get-TcGateInputKey -Repo $sb -GateFile $caller -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  the same gate is keyable once the library it loads DECLARES, so one file stops refusing its callers' `
+      ($kCured.Ok) ("ok={0} why={1}" -f $kCured.Ok, $kCured.Why)
+    [IO.File]::WriteAllText($poisonLib, ("# gate-inputs: lib\never-existed-*.ps1`n`$q = Join-Path `$repo `$whatever`n"), $utf8)
+    $kBadSub = Get-TcGateInputKey -Repo $sb -GateFile $caller -GateArg '-SelfTest' -RunnerFiles @($runner)
+    T 'MUST FIRE  a STALE declaration in a loaded library refuses its callers too, rather than quietly keying them' `
+      ((-not $kBadSub.Ok) -and $kBadSub.Why -match 'matches no file') ("ok={0} why={1}" -f $kBadSub.Ok, $kBadSub.Why)
 
     # MUST FIRE - the refusals. A gate we cannot key must never be cached.
     $dataGate = Join-Path $sb 'ops\audit-data.ps1'

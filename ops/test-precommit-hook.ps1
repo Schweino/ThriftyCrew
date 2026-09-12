@@ -24,6 +24,11 @@
   Run:  powershell -NoProfile -File ops\test-precommit-hook.ps1
   Exit: 0 pass, 1 a case failed, 3 BLIND (the hook or a checker is missing - nothing was proven).
 #>
+# gate-inputs: ops\hooks\pre-commit, ops\hooks\commit-msg, ops\verify-bulk-edit.ps1, ops\verify-bot-commit-scope.ps1, ops\verify-commodities-gate.ps1, ops\new-commit-message.ps1, grocery\identity-lib.ps1, lib\bot-paths.ps1, lib\guard-contract.ps1
+# WHY THIS FILE DECLARES (Brad, 2026-09-12). 39s on every push to re-prove a hook whose entire input set this
+# script ALREADY NAMES: the list above is $needed, copied from it, and the suite refuses BLIND when one of them is
+# missing. So the inputs were written down long before the key could read them - the declaration only moves them
+# somewhere a key can look. Nine named files, none of which a commit elsewhere in the tree can touch.
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)   # accepted so ops\run-gates.ps1 discovers this file; the cases run either way
 $ErrorActionPreference = 'Continue'
