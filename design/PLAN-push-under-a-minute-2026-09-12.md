@@ -179,10 +179,26 @@ joining them. **The measured five alone are 202 s of the 778 s.**
 `lib\*.ps1` by DIRECTORY ENUMERATION, and a source key cannot name a listing. Its trigger must be the whole of `lib\`.
 Selection handles it; the per-gate cache never could.
 
-**A GATE THAT IS NOT DOING ITS JOB, found on the way.** `ops\audit-cpu-load.ps1`'s push-path arm is its hermetic
-`-SelfTest`, not its live tree scan - so the check that would catch a NEW burner-starting script in the commit being
-pushed is **already absent from the push path**. It has been passing on fixtures. That is a finding about coverage, not
-about throughput, and it is worth more than the seconds this plan is chasing.
+**A CLAIM THIS PLAN MADE AND THEN DISPROVED, left standing here because the retraction is the useful part.** This file
+asserted that `ops\audit-cpu-load.ps1` was "not doing its job" - that only its hermetic `-SelfTest` reached the push
+path and its live tree scan did not. **That is FALSE.** It is registered in `ops\run-gates.ps1`'s `$static` list (line
+209), so a push runs it BOTH ways, and one real push's own output carries both lines:
+
+```
+ok    ops\audit-cpu-load.ps1
+ok    ops\audit-cpu-load.ps1  (every committed script that starts CPU burners takes its cores ...)
+AUDIT-CPU-LOAD-COMPLETE findings=0 starters=1 scanned=725
+```
+
+**How it got written down: it came from a review that read the discovery path and missed the static registration, and
+it was relayed into this plan and into a commit message WITHOUT being checked against a run.** Every other number in
+this document was verified against a command before it was written; this one was not, because it arrived already
+phrased as a finding. **A delegated finding is an input, not a result** - it earns the same check as a number this
+plan computed itself, and the `$static` list is one grep away. The same shape as
+`an-agreeing-number-escapes-scrutiny`, arriving from a colleague rather than from a tool.
+
+The disposition table above is unaffected: `audit-cpu-load`'s `-SelfTest` still moves to ON-CHANGE, and its `$static`
+live entry still stays at PUSH, which is exactly what the two-lists rule says.
 
 **THE DISCIPLINE ALREADY EXISTS HERE.** `grocery\test-auditors.ps1` is not run whole: `ops\prepush-test-auditors.ps1`
 derives its touched-input set and runs only the reachable units. What this plan proposes is extending a mechanism this
