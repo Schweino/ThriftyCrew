@@ -231,6 +231,16 @@ everything else honest, so a defect here is silent by construction.
   1) - a lost exit after a failing verdict read ok before. 0 of 314 exit-0 suites printed either that day. So never
   echo a captured child's `FAIL` lines as your own at exit 0. It cannot see a passing fall-through into a path that
   prints nothing.
+- **And the STATIC half: a self-test block must LEAVE on every path** (2026-09-11). The verdict rule above is a
+  runtime read, so by the time it speaks the block has already done the live work: that afternoon every gated push
+  ran a real three-store pull and wrote `grocery\out\ads-<today>.json` into its own checkout before anything was
+  scored, and 29 checkouts held one by evening. `ops/audit-selftest-fallthrough.ps1` reads the AST at push time and
+  fails a top-level self-test `if` that live statements follow and that can end without `exit`, `throw`, `return` or
+  `Exit-Guard`. A verdict `if` with no `else` is one, a `catch` that only reports is another, and so is the passing
+  fall-through into a silent path the verdict check states it cannot see. Close a self-test block with an
+  unconditional `exit` after its verdict. Measured over 761 tracked scripts: 274 top-level gates and one site,
+  `grocery/import-aldi-batch.ps1`, whose gate only appended `-SelfTest` and fell out to the call below; it now calls
+  the child and exits inside the gate.
 - **A HARNESS that runs a child's self-test owes the same two reads** (2026-09-11), and run-gates' rule above does
   not reach it: `grocery/test-auditors.ps1` spawns its children itself. u141 read rc 0, every case name and no `FAIL`
   line from the fall-through above and passed it. Over the 46 `-SelfTest` call sites in that file, each child run

@@ -15,6 +15,10 @@ param([string]$Raw = 'out\staples500\aldi-batch1-raw.txt', [string]$ModeVerified
 $ErrorActionPreference = 'Stop'
 $fwd = @('-Store', 'Aldi', '-Raw', $Raw, '-SourceLabel', 'Aldi OLA 42 Omaha In-Store shelf price (batch capture)')
 if ($ModeVerified) { $fwd += @('-ModeVerified', $ModeVerified) }
-if ($SelfTest) { $fwd += '-SelfTest' }
-& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'import-instacart-batch.ps1') @fwd
+$child = Join-Path $PSScriptRoot 'import-instacart-batch.ps1'
+# The self-test gate runs the child's self-test and LEAVES (2026-09-11). It used to append -SelfTest and fall out of
+# its if into the call below, which is the shape ops\audit-selftest-fallthrough.ps1 fails: the next edit to that call
+# would run under run-gates' -SelfTest. Same arguments, same order.
+if ($SelfTest) { & powershell -NoProfile -ExecutionPolicy Bypass -File $child @fwd -SelfTest; exit $LASTEXITCODE }
+& powershell -NoProfile -ExecutionPolicy Bypass -File $child @fwd
 exit $LASTEXITCODE

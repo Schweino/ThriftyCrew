@@ -344,6 +344,8 @@ $static = @(
   @{ f = 'ops\audit-typed-param-shadow.ps1';   n = 'no NEW assignment reuses a typed parameter''s name with a value of another kind, which converts it rather than making a local - a ratchet over the AST, hermetic, reads source only' }
   # 8253ded82 glued a self-test's closing if/else onto its last case line, so the branch never exited and every push's gate ran a live three-store pull and scored it ok.
   @{ f = 'ops\audit-keyword-arguments.ps1';    n = 'no tracked .ps1 or .psm1 carries a statement keyword (if, else, exit, return, try, throw, continue and the rest) as a bare command ARGUMENT - a statement glued onto a command line never runs as one; a gate at zero, hermetic, reads source only' }
+  # The keyword audit above sees that SPELLING and lib\selftest-verdict.ps1 sees the silence AFTER the live work ran. This reads the control flow, so the push stops before a self-test can reach a store.
+  @{ f = 'ops\audit-selftest-fallthrough.ps1'; n = 'no top-level self-test block that live statements follow can end without exit, throw, return or Exit-Guard - a gate at zero, hermetic, reads source only' }
   # 2026-09-11: this watcher ran only inside test-auditors, which this file skips, and walked grocery\ only; wave-preaudit's drill died mid-suite on the class it watches.
   @{ f = 'grocery\test-native-stderr-eap.ps1'; n = 'no NEW native child redirects its stderr under EAP=Stop anywhere in the repo - the shell fixtures of the 2026-08-22 bug, plus an AST scan ratcheted by named site; hermetic, reads source only' }
   # Concurrent pushes run the same self-tests over each other in ONE %TEMP%, so a fixed name there is shared; c3a686290 moved guard-contract and test-guards to a per-run directory and this blocks the next fixed name.
