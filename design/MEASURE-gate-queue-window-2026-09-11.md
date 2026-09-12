@@ -35,6 +35,13 @@ citation to an unmerged commit is only as stable as the branch carrying it, so a
 work that has not landed owes this re-read again on the last rebase before it does. It was rewritten three
 times before landing, once per rebase, which is the cost of citing a branch instead of a merged commit.
 
+**Re-read at commit `9105ca380`:** `ops/run-gates.ps1` moved again, in the same direction once more. Python suites
+that declare their inputs are now keyed and reused like PowerShell self-tests, and `grocery/pull-browser-stores.py`
+runs its hermetic `--selftest-lookup` in a push (0.9 s) instead of a Chrome launch per store (median 31.8 s over 25
+runs). Both LOWER the work a run dispatches, so the slot-second ceiling this file computes stays an upper bound on a
+run that no longer exists in that form. The observer is untouched, and the arrival and admission findings do not
+depend on work per run, so every total below still reads as measured.
+
 **Re-read at commit `4774011959e`:** `ops/run-gates.ps1` moved again, and in the same direction as the per-gate keys: the
 cache those keys fill is now shared by every checkout rather than held per checkout (it had been named from each
 gate's FULL path, so a gate that passed in one worktree ran again in the next over identical bytes). A run therefore

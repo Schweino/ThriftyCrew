@@ -61,6 +61,11 @@ re-read was owed at all: the sentence above mentions that script as prose, on a 
 keys on, so the audit counts it among this document's own instruments. That is its stated approximation, not a
 finding about this measurement.
 
+**Re-read at commit `9105ca380`: every verdict below stands as measured.** `ops\run-gates.ps1` now keys and reuses
+Python suites that declare their inputs, and runs the browser driver's hermetic self-test in a push instead of its
+Chrome one. Nothing in `lib\gate-slots.ps1` or either probe moved, so who wins a freed slot is unchanged; a run holds
+its slots for less time, which shortens a starved waiter's wait and changes no admission decision.
+
 **Re-read at commit `4774011959e`: every verdict below stands as measured.** `ops\run-gates.ps1` now names each per-gate
 cache entry by the gate's path below its checkout and by its key, instead of by its full path, so a pass recorded in
 one checkout is reused by every other checkout holding the same bytes. That touches nothing in `lib\gate-slots.ps1` and
