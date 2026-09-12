@@ -37,6 +37,16 @@
     - THE DEADLINE IS "THE QUEUE STOPPED MOVING". A waiter refuses only when the count of live tickets ahead of it
       has not fallen for WaitSec (Step-TcGateQueueWait). A wedged head still ends in a loud refusal; a long queue
       that keeps moving does not.
+    - WHAT THE 1,200 s DOES WHEN THE PRODUCERS NEVER STOP, which is the reading the ops rules ask for beside what a
+      threshold does when a producer STOPS. It never fires, and a waiter's wait is then UNBOUNDED - but its SERVICE
+      is guaranteed, because no later arrival can overtake a live ticket, so the wait is set by the drain rate and
+      not by luck. That is the whole trade against the fixed 20-minute total it replaced: the old number bounded the
+      WAIT and left service to chance, so on 2026-09-11 the unlucky refused while later arrivals ran; this one bounds
+      NOTHING about the wait and makes the order a guarantee. THE FAILURE IT CANNOT SEE is a queue that keeps moving
+      and fills faster than it drains: everybody is served, nobody is refused, and every wait grows without bound.
+      There is no floor here on the drain rate, and by the ops rule on thresholds a floor is the only thing that
+      could catch it - this is an upper bound on NO PROGRESS, so it cannot fire on a queue that is merely too slow.
+      The detective cover for that is the hook's own telemetry, never this function.
     - A RUN HOLDING SLOTS DOES NOT TOP UP while any ticket is live. The freed slot is the queue's.
     - DELIBERATE LOAD (-Exact) NEVER QUEUES AND NEVER JUMPS THE QUEUE. It takes nothing while any ticket is live and
       keeps its fixed deadline: gates go first, and a load test waits for an idle machine or times out.
@@ -86,6 +96,20 @@
   (the later, faster-polling waiter took the slot), the top-up taking a queued run's slot, the queued run then never
   being served, the dead ticket never swept, and deliberate load jumping the queue. The other 24 passed, so the
   mutant is confined to what these cases claim.
+
+  RE-MEASURED AT 20 ARRIVALS, 2026-09-12, through ops\probe-gate-slot-fairness.ps1 at commit 8b7d7ff4d - the harness
+  this file's first measurement described but never committed, which is why that one cost a re-write to repeat. Bars
+  written before the run; 3 rounds, arms alternating round by round, 20 arrivals wanting 3 slots each of a private
+  budget of 4. THIS TREE: 0 of 190 pairs served out of arrival order in every round, worst arrival passed by 0 of 19
+  later ones, 0 of 20 refused, peak 4 of 4. THE PRE-QUEUE MUTANT (Get-TcGateQueueAhead answering 0, original verified
+  byte-identical by md5 after): 47, 49 and 53 of 190 inverted, and one arrival passed by 9, 9 and 15 of 19.
+  **THE SHAPE MATTERS MORE THAN THE TOTAL**: 47 of 190 is well under the 95 a uniformly random order averages,
+  because a waiter that arrives earlier also starts polling earlier and usually does win. The damage was never spread
+  - it fell hard on a FEW runs, which is exactly the production signature, most pushes fine and a handful refused.
+  AND THE FIX DOES NOT MAKE THE AVERAGE WAIT BETTER: median wait rose from 2.3-4.3 s to 5.1-5.2 s while the max held
+  at about 10.5 s in both arms. It cannot, and it is not meant to - the budget and the work are unchanged, so the
+  same queue drains in the same time and all that moves is WHO waits. What it buys is that the wait is now bounded
+  by the drain rather than by luck.
 
   SCOPE OF A CLEAN REPORT: the self-test proves on this machine, with every competitor in its own process, that the
   budget holds, that the earlier of two waiters is served first, that a holder does not top up past a queued run,

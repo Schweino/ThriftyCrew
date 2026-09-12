@@ -60,6 +60,13 @@ carries all four rules in one file, and copying it is faster than re-deriving th
   call for a 1-second script; `design/EVAL-hunter-wall-clock-2026-09-04.md` 46 is the second and says
   it plainly - *"arithmetically true and causally wrong"*. **Both were caught by a human re-reading
   the commit clock months later, by luck.**
+  **NAMING A SCRATCH HARNESS IS NOT NAMING A HARNESS** (2026-09-12). `MEASURE-gate-slot-starvation-2026-09-11.md`
+  did everything this rule asks - it named its probes, described each body beside the number it produced, and gave
+  the commit. The probes were still scratch, so when the next day asked whether the fix had held, re-running that
+  measurement meant WRITING IT AGAIN, and a rewritten probe is a second harness however faithful the description
+  was. A described probe also cannot go red when the thing it measures moves. So a measurement that anyone may
+  want to repeat COMMITS its harness, as `ops/probe-gate-slot-fairness.ps1` now does for that file's item 5, and
+  a one-off keeps the description. The test is whether the question can recur, not how big the probe is.
   **Measured 2026-09-09: 8 of the 9 `design/EVAL-*.md` and `MEASURE-*.md` documents name a harness
   that has CHANGED since the document was written**, and the ninth only reads current because it was
   edited for an unrelated item the day before - so the honest figure is nearer 9 of 9. A moved harness
