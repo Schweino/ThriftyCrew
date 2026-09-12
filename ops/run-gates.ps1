@@ -777,7 +777,10 @@ try {
   } else {
     $fpAfter = Get-TcGateFingerprint -Repo $repo -Files $fpFiles.ToArray() -Extra $fpExtra
     $vCommit = ''
-    try { $vc = @(& git -C $repo rev-parse --short HEAD 2>$null); if ($vc.Count) { $vCommit = "$($vc[0])" } } catch { }
+    # Same 'Continue' as the event above, for the same reason: under this file's 'Stop' a git stderr line is a
+    # terminating throw, and the catch would keep the run alive while recording a verdict with no commit on it.
+    $prevEapV = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try { $vc = @(& git -C $repo rev-parse --short HEAD 2>$null); if ($vc.Count) { $vCommit = "$($vc[0])" } } catch { } finally { $ErrorActionPreference = $prevEapV }
     $kept = Save-TcGateVerdict -Path $verdictPath -ExitCode $gateCode -Before $fpBefore.Fingerprint -After $fpAfter.Fingerprint -Repo $repo -Passed $pass -Commit $vCommit
     if ($kept -eq 'recorded') { Write-Output 'run-gates: this pass is recorded for reuse - the next run in this checkout over the same content prints it instead of running the gates again' }
     elseif ($kept -eq 'content-moved') { Write-Output 'run-gates: this pass is NOT recorded for reuse - the checkout changed while the gates ran, so it describes neither version' }
