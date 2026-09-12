@@ -224,6 +224,37 @@ everything else honest, so a defect here is silent by construction.
   Each ledger's fixture launches its writers through `lib/ledger-fixture.ps1`, whose gate sits inside
   `Enter-TcLedgerLock` immediately before `WaitOne`; the rates at which they went red with a lock neutered in a
   temp mirror are in the commit that added them.
+- **THE LOCK ORDER IS DECLARED, OUTERMOST FIRST** (Brad's ruling, 2026-09-12, backlog I104). This estate has four
+  independent mutual-exclusion mechanisms, and until this line nothing said which order they nest in. **Any change
+  that holds two of them at once takes them in this order, releases in REVERSE, and SAYS IN ITS COMMIT that it is
+  the first nested acquisition of that pair** - the pair nobody has nested before is the one with no precedent to
+  copy, so the commit is where the next reader finds out one exists:
+  1. **the push lock** - `lib\push-lock.ps1` (`Enter-TcPushLock`)
+  2. **the gate worker slots** - `lib\gate-slots.ps1` (`Enter-TcGateSlots`)
+  3. **the `Invoke-Locked` mutexes** - `grocery\ingredient-queue.ps1`, `meal-prep\pipeline\ingredient-resolutions.ps1`,
+     `meal-prep\pipeline\source-domains.ps1`
+  4. **the ledger locks** - `lib\ledger-lock.ps1` (`Enter-TcLedgerLock`), and **between two ledger locks, ASCENDING
+     by full ledger path compared ORDINALLY**.
+
+  **The tie-break sorts on the same string that NAMES the mutex**: the lower-cased full path `Get-TcLedgerLockName`
+  already builds (`GetFullPath` of the provider path, trailing separators trimmed, `ToLowerInvariant`), compared with
+  `[string]::CompareOrdinal`. Sorting on the caller's own spelling would not be a total order at all, because the path
+  is the identity there - `ledger.json`, its upper-cased form and a `sub\..\.\` detour are ONE lock that would sort
+  into three different positions, and two callers could then take the same two ledgers in opposite orders while each
+  believed it was ascending. Ordinal for the reason the `-ne` rule above gives: the default comparison here is
+  culture-sensitive, and a culture-sensitive order is not a stable base for a deadlock-freedom claim.
+
+  **One nesting already exists and already obeys this**, checked 2026-09-12: `ops\push-main.ps1:203` takes the push
+  lock and then runs `git push` inside it, whose `pre-push` hook runs the warm `run-gates`, which takes gate worker
+  slots at `ops\run-gates.ps1:594`. That is (1) over (2). Nothing takes two ledger locks, and nothing takes a ledger
+  lock under an `Invoke-Locked` mutex, so 3-over-4 and 4-over-4 are declared and unexercised.
+
+  **Why write an order nobody needs yet, and why it is not a gate.** **No gate is added until a second lock is
+  actually nested** - a detector over a case that cannot occur is the shape these rules already refuse, and it would
+  have no production caller. What is bought instead is the thing a gate could not buy anyway: a lock-ordering
+  deadlock is the failure where *some* interleavings succeed, so it survives its own fixture, review, and a week of
+  production before it wedges two lanes at 07:00. Declaring the order is free while it is still arbitrary, and
+  expensive once two callers already disagree and one of them has to be unwound.
 - **A self-test can run ZERO cases and exit 0** (2026-09-11). A helper named `R` resolved to the built-in alias
   for `Invoke-History` before the function, every case line errored non-terminating, and the suite printed PASS
   over nothing. Aliases beat functions, so never name a helper `r`, `h`, `gc`, `ls` or any other alias; and run

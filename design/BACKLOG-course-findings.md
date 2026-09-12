@@ -9428,7 +9428,28 @@ and a gate over a case that cannot occur is the shape the ops rules already refu
 
 ---
 
-### I104 - No lock-ordering rule exists, and today nothing needs one - which is the cheapest moment to write it `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+### I104 - No lock-ordering rule exists, and today nothing needs one - which is the cheapest moment to write it `DONE` `queue-7`
+
+**RULED BY BRAD 2026-09-12, and shipped the same day: write the order down now.** His ruling, verbatim:
+*"Write the lock order down now, in lib/ledger-lock.ps1's header and in .claude/rules/ops-and-gates.md. Canonical
+order, outermost first: (1) the push lock, (2) gate worker slots, (3) Invoke-Locked mutexes, (4) Enter-TcLedgerLock
+ledger locks, and between two ledger locks, ascending by full ledger path compared ordinally. Any change that holds
+two of these at once must take them in that order, release in reverse, and say in its commit that it is the first
+nested acquisition. No gate is added until a second lock is actually nested."*
+
+Both places carry it. **Two details the ruling left open were chosen here and named in the commit.** First, the
+ordinal tie-break compares the LOWER-CASED full path `Get-TcLedgerLockName` already derives, not the caller's own
+spelling: the path is the lock's identity, so `ledger.json`, its upper-cased form and a `sub\..\.\` detour are ONE
+lock that would otherwise sort into three different positions, and two callers could take the same two ledgers in
+opposite orders while each believed it was ascending. Second, this state change was written into this file directly
+rather than through `design\backlog-inbox`, whose merge only ever APPENDS a new finding with a fresh id and
+structurally cannot update an existing item - filing it there would have minted a second id for a ruling on this one.
+
+**One correction to the finding below: it is not true that nothing nests two of the four.** Checked 2026-09-12,
+`ops\push-main.ps1:203` takes the push lock and then runs `git push` inside it, whose `pre-push` hook runs the warm
+`run-gates`, which takes gate worker slots at `ops\run-gates.ps1:594`. That is (1) over (2), it predates the ruling,
+and it already obeys the declared order - so this ratifies the one nesting that exists rather than inventing one.
+What genuinely has no precedent is 3-over-4 and 4-over-4, and those are declared and unexercised.
 
 **Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

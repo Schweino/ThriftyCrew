@@ -47,6 +47,32 @@
   REENTRANT IN ONE THREAD. A mutex counts its owner's acquisitions, so Step-CaptureCursor can hold the cursor lock
   and call Save-CaptureCursor, which takes it again. Every Enter needs exactly one Exit.
 
+  THE LOCK ORDER, OUTERMOST FIRST, AND THIS LOCK IS INNERMOST (Brad's ruling, 2026-09-12, backlog I104). This estate
+  has four independent mutual-exclusion mechanisms and nothing said which order they nest in until that ruling. Any
+  change that holds two of them at once takes them in this order, releases in REVERSE, and SAYS IN ITS COMMIT that it
+  is the first nested acquisition of that pair:
+    1  the push lock          lib\push-lock.ps1   (Enter-TcPushLock)
+    2  the gate worker slots  lib\gate-slots.ps1  (Enter-TcGateSlots)
+    3  the Invoke-Locked mutexes   grocery\ingredient-queue.ps1, meal-prep\pipeline\ingredient-resolutions.ps1,
+                                   meal-prep\pipeline\source-domains.ps1
+    4  the ledger locks       THIS FILE           (Enter-TcLedgerLock), and between TWO ledger locks, ASCENDING by
+                              full ledger path compared ORDINALLY.
+  THE TIE-BREAK SORTS ON THE STRING THAT NAMES THE MUTEX, which is exactly the key Get-TcLedgerLockName below builds:
+  GetFullPath of the provider path, trailing separators trimmed, ToLowerInvariant - compared with
+  [string]::CompareOrdinal. Sorting on the caller's own spelling would not be a total order at all, because THE PATH
+  IS THE IDENTITY above means 'ledger.json', its upper-cased form and a sub\..\.\ detour are ONE lock that would sort
+  into three different positions, and two callers could then take the same two ledgers in opposite orders while each
+  believed it was ascending. Ordinal because PowerShell's default string comparison is culture-sensitive
+  (.claude\rules\ops-and-gates.md), and a culture-sensitive order is not a stable base for a deadlock-freedom claim.
+
+  ONE NESTING ALREADY EXISTS AND ALREADY OBEYS IT, checked 2026-09-12: ops\push-main.ps1 takes the push lock and runs
+  `git push` inside it, whose pre-push hook runs the warm run-gates, which takes gate worker slots. That is 1 over 2.
+  Nothing takes two ledger locks, and nothing takes a ledger lock under an Invoke-Locked mutex, so 3-over-4 and
+  4-over-4 are declared and unexercised. NO GATE ENFORCES THIS UNTIL A SECOND LOCK IS ACTUALLY NESTED - a detector
+  over a case that cannot occur is the shape the ops rules refuse. The order is written down now because a
+  lock-ordering deadlock is the failure where SOME interleavings succeed, so it survives its fixture and a week of
+  production; declaring it is free while it is still arbitrary and expensive once two callers already disagree.
+
   A WRITER THAT DIES HOLDING IT does not wedge the ledger: Windows hands the mutex to the next waiter as abandoned.
   The file is intact, because every writer here replaces through a temp file.
 
