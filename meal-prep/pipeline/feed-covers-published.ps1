@@ -389,19 +389,41 @@ if ($SelfTest) {
 
   # -- the card parser has to survive the real artifact, or every bid list silently comes back empty and
   #    the guard reads green over a catalogue it never checked.
+  #    A CHECKOUT WITHOUT THE CARD IS BLIND, NOT FAILED (2026-09-11). db\built is gitignored and
+  #    .worktreeinclude structurally cannot carry it - `git ls-files --directory` collapses a fully-ignored
+  #    directory to one line, measured this day as 1 line against 1,168 files - so every unseeded worktree
+  #    failed this case, and learned it only after waiting up to 20 minutes for a gate worker slot. 18 of 53
+  #    failed gate runs that day failed on nothing but this case and wave-preaudit's twin of it
+  #    (design\PLAN-gate-queue-2026-09-11.md). The case cannot pass without the card and must never claim to:
+  #    it reports BLIND, run-gates names it on a green run from the blind= on the marker below
+  #    (ops\run-gates.ps1:536-546), and ops\seed-worktree.ps1 is what makes it actually look.
+  #    start-sidecar.ps1's venv case is the precedent this copies.
   $sample = Join-Path $mp 'db\built\american-goulash-pasta.body.html'
+  $blindN = 0
   if (Test-Path $sample) {
     $b = Get-CardBids ([IO.File]::ReadAllText($sample))
     TT 'the card parser finds bids in a real built card' ($null -ne $b -and $b.Count -ge 5) ("got " + $(if ($null -eq $b) { 'null' } else { $b.Count }))
   } else {
-    # Still a FAIL, never a skip: a parser nobody ran against a real card has proven nothing. db\built is gitignored,
-    # so the hint says whether this checkout was never seeded or the card moved, and names the fix (2026-09-11).
+    # BLIND, NOT FAILED, AND IT SAYS WHY (2026-09-11). A parser nobody ran against a real card has proven
+    # nothing - so this is NOT a pass, and it is counted into blind= on the marker below, which run-gates
+    # prints on a green run (ops\run-gates.ps1:536-546). What it must not do is REFUSE the push: db\built is
+    # gitignored and .worktreeinclude structurally cannot carry it, so an unseeded worktree was refused after
+    # queueing for a gate worker slot, for a reason that said nothing about the change being pushed. Measured
+    # that day: 31 of 106 worktrees had no card, and 18 of 53 failed gate runs failed on nothing but this case
+    # and wave-preaudit's twin of it (design\PLAN-gate-queue-2026-09-11.md). The hint naming WHICH state this
+    # is - never seeded, or the card moved - is lib\seed-hint.ps1, and it is the useful half of the old red.
     . (Join-Path $repo 'lib\seed-hint.ps1')
-    TT 'a real built card is available to parse' $false ("missing $sample [" + (Get-TcMissingInputHintHere -Repo $repo -Missing $sample) + "]")
+    $blindN = 1
+    Write-Output ("  BLIND the card parser cannot be driven against a real built card - could not look: missing {0} [{1}]" -f $sample, (Get-TcMissingInputHintHere -Repo $repo -Missing $sample))
   }
 
-  if ($bad -eq 0) { Write-Output ("SELFTEST: {0}/{0} pass" -f $n); exit 0 }
-  Write-Output ("SELFTEST: {0}/{1} pass - {2} FAILED" -f ($n - $bad), $n, $bad); exit 1
+  if ($bad -eq 0) {
+    if ($blindN) { Write-Output ("SELFTEST: {0}/{0} pass, {1} BLIND - could not look, NOT passed" -f $n, $blindN) }
+    else { Write-Output ("SELFTEST: {0}/{0} pass" -f $n) }
+    Exit-Guard -Name 'FEEDCOV-SELFTEST' -Code 0 -Summary ("cases={0} blind={1}" -f $n, $blindN)
+  }
+  Write-Output ("SELFTEST: {0}/{1} pass - {2} FAILED" -f ($n - $bad), $n, $bad)
+  Exit-Guard -Name 'FEEDCOV-SELFTEST' -Code 1 -Summary ("failed={0} of {1} blind={2}" -f $bad, $n, $blindN)
 }
 
 # ---- live ---------------------------------------------------------------------------------------------

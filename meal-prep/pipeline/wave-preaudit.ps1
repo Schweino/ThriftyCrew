@@ -434,6 +434,10 @@ function Get-SharedVerdict {
 # ===================================================================================================
 if ($runSelfTest) {
   $f = 0
+  # DECLARED, NOT LEFT TO +=. An undeclared $script:blindCases is $null, which formats as an EMPTY string in
+  # the marker's blind=, so a seeded run printed `blind=` and run-gates' `blind=([1-9][0-9]*)` read nothing.
+  # It only looked right in the blind case, where += 1 on $null yields 1. Measured 2026-09-11.
+  $script:blindCases = 0
   function T($msg, $cond, $got) { if ($cond) { Write-Output ("ok    " + $msg) } else { Write-Output ("FAIL  " + $msg + "   got: " + $got); $script:f++ } }
 
   # ---- macro recompute ----------------------------------------------------------------------------
@@ -722,14 +726,21 @@ if ($runSelfTest) {
   $srcRef  = Join-Path $mp 'db\built\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html'
   $canDrill = ((Test-Path $srcSpec) -and (Test-Path $srcCost) -and (Test-Path $srcFood) -and (Test-Path $srcIng) -and (Test-Path $srcRef))
   if (-not $canDrill) {
-    # Still a FAIL, never a skip. It names WHICH input is missing and, for one under a gitignored seeded directory,
-    # whether this checkout was never seeded or the file moved (lib\seed-hint.ps1, 2026-09-11). The reference card is
-    # the one an unseeded worktree lacks, and "one of them is missing" sent every spawned session that pushed hunting.
+    # BLIND, NOT FAILED, AND IT NAMES WHICH INPUT AND WHY (2026-09-11). Four of these five inputs are TRACKED
+    # and present in any checkout; the one that is not is the reference card under the gitignored
+    # meal-prep\db\built, which .worktreeinclude structurally cannot carry (a fully-ignored directory collapses
+    # to ONE line in `git ls-files --directory`: 1 line against 1,168 files, measured). So an unseeded worktree
+    # failed this drill after queueing for a gate worker slot, and that refusal said nothing about the change
+    # being pushed - "one of them is missing" sent every spawned session that pushed hunting
+    # (design\PLAN-gate-queue-2026-09-11.md). The drill still does NOT run and this is NOT a pass: it is
+    # counted into the marker's blind=, which run-gates prints on a green run. lib\seed-hint.ps1 says whether
+    # this checkout was never seeded or the file moved, which is the half of the old red worth keeping.
     . (Join-Path $repo 'lib\seed-hint.ps1')
+    $script:blindCases += 1
     $drillWhy = @(@($srcSpec, $srcCost, $srcFood, $srcIng, $srcRef) | Where-Object { -not (Test-Path $_) } | ForEach-Object {
         $h = Get-TcMissingInputHintHere -Repo $repo -Missing $_
         if ($h) { $_ + ' [' + $h + ']' } else { $_ } })
-    T 'END-TO-END the drill inputs exist (a live spec, costed.json, the food DB, a reference card)' $false ('missing: ' + ($drillWhy -join ' | ') + ' - the drill could not run, which is not a pass')
+    Write-Output ('BLIND END-TO-END the drill inputs exist (a live spec, costed.json, the food DB, a reference card) - could not look, NOT passed. missing: ' + ($drillWhy -join ' | '))
   } else {
     New-Item -ItemType Directory -Force (Join-Path $dMp 'db\recipes') | Out-Null
     New-Item -ItemType Directory -Force (Join-Path $dRun 'waves') | Out-Null
@@ -849,7 +860,15 @@ if ($runSelfTest) {
     Remove-Item $T -Recurse -Force -ErrorAction SilentlyContinue
   }
 
-  if ($f -eq 0) { Write-Output 'wave-preaudit SELF-TEST PASS'; exit 0 } else { Write-Output "wave-preaudit SELF-TEST FAIL: $f case(s)"; exit 1 }
+  # THE MARKER CARRIES blind=, so a case that COULD NOT LOOK is named on a green run instead of vanishing
+  # into a pass (ops\run-gates.ps1:536-546 reads the LAST marker line). Exit-Guard writes it and exits.
+  if ($f -eq 0) {
+    if ($script:blindCases -gt 0) { Write-Output "wave-preaudit SELF-TEST PASS, $($script:blindCases) case(s) BLIND - could not look, NOT passed" }
+    else { Write-Output 'wave-preaudit SELF-TEST PASS' }
+    Exit-Guard -Name 'WAVE-PREAUDIT-SELFTEST' -Code 0 -Summary ("blind={0}" -f $script:blindCases)
+  }
+  Write-Output "wave-preaudit SELF-TEST FAIL: $f case(s)"
+  Exit-Guard -Name 'WAVE-PREAUDIT-SELFTEST' -Code 1 -Summary ("failed={0} blind={1}" -f $f, $script:blindCases)
 }
 
 # ===================================================================================================
