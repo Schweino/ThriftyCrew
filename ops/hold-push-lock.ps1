@@ -45,6 +45,7 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\push-lock.ps1')
+. (Join-Path $repo 'lib\push-ledger.ps1')
 
 function Get-TcHoldLockNames {
   <# Which lock this hold should take. Normally the real one; a FIXTURE may redirect it, and the redirect is
@@ -90,27 +91,49 @@ function Test-TcHoldDone {
 }
 
 function Invoke-TcPushLockHold {
-  <# Take the lock, announce it, hold until done, release. Returns the state word it announced. #>
-  param([string]$Dir, [int]$WatchPid, [int]$WaitSec, [int]$MaxHoldSec, [int]$PollMs, [string]$Prefix = '', [string]$QueueRoot = '')
+  <# Take the lock, announce it, hold until done, release. Returns the state word it announced.
+
+     IT ALSO RECORDS ONE ROW (2026-09-12, lib\push-ledger.ps1). This is the one place on the box that knows how long
+     a push waited, and until now it said so only in a file the hook deletes on its way out - so every account of
+     whether the push path converges has been archaeology over whatever %TEMP% happened to still hold, a population
+     that drops its successes. The row carries the wait, the state, and refs/remotes/origin/<branch> as it stood
+     BEFORE the wait and at the GRANT: a difference between those two is a landing that happened under this push's
+     feet, which is the quantity that decides whether retrying can converge. Recording is best effort and is never
+     read by anything that decides - a ledger must not be able to refuse a push. #>
+  param([string]$Dir, [int]$WatchPid, [int]$WaitSec, [int]$MaxHoldSec, [int]$PollMs, [string]$Prefix = '', [string]$QueueRoot = '',
+    [string]$RepoDir = '', [string]$LedgerRoot = '', [string]$WatchRef = 'refs/remotes/origin/main')
   $args2 = @{ WaitSec = $WaitSec; PollMs = 500 }
   if ($Prefix) { $args2['Prefix'] = $Prefix }
   if ($QueueRoot) { $args2['QueueRoot'] = $QueueRoot }
+  # READ BEFORE THE WAIT, or the comparison is between the ref and itself. An unreadable ref is '' and its row is
+  # counted UNKNOWN rather than as a ref that stood still.
+  $baseSha = $(if ($RepoDir) { Get-TcPushLedgerRefSha -Dir $RepoDir -Ref $WatchRef } else { '' })
+  $record = {
+    param([string]$State, [double]$WaitMs, [string]$Grant)
+    $null = Write-TcPushRow -Event 'hook-lock' -WaitMs $WaitMs -State $State -BaseSha $baseSha -GrantSha $Grant `
+      -Outcome '' -Checkout $RepoDir -Root $LedgerRoot
+  }
   $lock = $null
   try {
     $lock = Enter-TcPushLock @args2
   } catch {
+    & $record 'unlocked' -1 ''
     Write-TcHoldState -Dir $Dir -Text ('unlocked the push lock could not be taken (' + $_.Exception.Message + '); this push is gated exactly as it was before, it just races for the ref')
     return 'unlocked'
   }
+  $grantSha = $(if ($RepoDir) { Get-TcPushLedgerRefSha -Dir $RepoDir -Ref $WatchRef } else { '' })
   if (-not $lock.Held) {
+    & $record 'unlocked' ([double]$lock.WaitedMs) $grantSha
     Write-TcHoldState -Dir $Dir -Text ('unlocked ' + $lock.Reason + '; this push is gated exactly as it was before, it just races for the ref')
     return 'unlocked'
   }
   if ($lock.Inherited) {
+    & $record 'inherited' ([double]$lock.WaitedMs) $grantSha
     Write-TcHoldState -Dir $Dir -Text ('inherited ' + $lock.Reason)
     Exit-TcPushLock $lock
     return 'inherited'
   }
+  & $record 'held' ([double]$lock.WaitedMs) $grantSha
   try {
     Write-TcHoldState -Dir $Dir -Text ('held after waiting {0:N0}s - no other push on this box can land while this hook runs' -f ($lock.WaitedMs / 1000))
     $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -140,6 +163,13 @@ if ($SelfTest) {
   $qroot = Join-Path $tmp 'q'
   $kids = [Collections.Generic.List[object]]::new()
   $PS = (Get-Command powershell).Source
+  # EVERY CASE IN THIS SUITE WRITES ITS LEDGER ROWS TO SCRATCH (2026-09-12). The cases below call
+  # Invoke-TcPushLockHold without -LedgerRoot, and before this redirect existed those wrote FIXTURE rows into the
+  # production ledger - the first live convergence report off this box was computed over them. A default that
+  # reaches a real path is redirected suite-wide, never per fixture (ops-and-gates.md).
+  $prodLedger = Get-TcPushLedgerPath
+  $ledgerRootWas = $env:TC_PUSH_LEDGER_ROOT
+  $env:TC_PUSH_LEDGER_ROOT = Join-Path $tmp 'suite-ledger'
   try {
     # ---- THE END CONDITIONS, driven directly rather than by waiting on a clock ----
     $d = Join-Path $tmp 'd1'; $null = New-Item -ItemType Directory -Force $d
@@ -185,6 +215,48 @@ if ($SelfTest) {
     T ($kMNF + '  with the lock free, the state file says held and names the wait') `
       ($st -eq 'held' -and $line.StartsWith('held')) ("state={0} line={1}" -f $st, $line)
 
+    # ---- THE ROW THIS HOLD RECORDS (2026-09-12, lib\push-ledger.ps1) ----
+    # The wait and the staleness were only ever written to <SignalDir>\state, which ops\hooks\pre-push deletes on its
+    # way out, so nobody could answer "how long do pushes wait, and how often does the remote move while they do"
+    # without reading whatever %TEMP% happened to still hold - a population with its successes deleted.
+    $dl = Join-Path $tmp 'ledger'; $null = New-Item -ItemType Directory -Force $dl
+    [IO.File]::WriteAllText((Join-Path $dl 'release'), 'go')
+    $ledRoot = Join-Path $tmp 'led'
+    $stL = Invoke-TcPushLockHold -Dir $dl -WatchPid 0 -WaitSec 5 -MaxHoldSec 5400 -PollMs 50 -Prefix $prefix -QueueRoot $qroot `
+      -RepoDir $repo -LedgerRoot $ledRoot
+    # ASSIGN, THEN WRAP. A function's comma-returned array reads as ONE element inside an inline @( ) - an empty
+    # result would count 1 and this case would pass over nothing ([[ps-json-array-collapse]]).
+    $ledRowsRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRoot)
+    $ledRows = @($ledRowsRaw)
+    T ($kMF + '  a hold records exactly one ledger row naming its wait, its state and the ref it watched, so the wait outlives the signal directory') `
+      ($stL -eq 'held' -and $ledRows.Count -eq 1 -and $ledRows[0].state -eq 'held' -and $ledRows[0].event -eq 'hook-lock' `
+        -and ([string]$ledRows[0].base) -match '^[0-9a-f]{7,40}$' -and [double]$ledRows[0].waitMs -ge 0) `
+      ("state={0} rows={1} rowState={2} base={3}" -f $stL, $ledRows.Count, $(if ($ledRows.Count) { $ledRows[0].state } else { '' }), $(if ($ledRows.Count) { $ledRows[0].base } else { '' }))
+
+    # A REF IT COULD NOT READ IS RECORDED AS UNKNOWN, never as a ref that stood still - otherwise a box where git
+    # could not be reached would report a perfect zero-staleness rate.
+    $dn = Join-Path $tmp 'ledgerblind'; $null = New-Item -ItemType Directory -Force $dn
+    [IO.File]::WriteAllText((Join-Path $dn 'release'), 'go')
+    $ledRoot2 = Join-Path $tmp 'led2'
+    $null = Invoke-TcPushLockHold -Dir $dn -WatchPid 0 -WaitSec 5 -MaxHoldSec 5400 -PollMs 50 -Prefix $prefix -QueueRoot $qroot `
+      -RepoDir $repo -LedgerRoot $ledRoot2 -WatchRef 'refs/remotes/origin/no-such-branch-here-42'
+    $blindRowsRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRoot2)
+    $mBlind = Measure-TcPushRows @($blindRowsRaw)
+    T ($kMF + '  a hold whose watched ref cannot be read records UNKNOWN, so the staleness rate never counts it as a ref that stood still') `
+      ($mBlind.Rows -eq 1 -and $mBlind.Unknown -eq 1 -and $mBlind.Comparable -eq 0) `
+      ("rows={0} unknown={1} comparable={2}" -f $mBlind.Rows, $mBlind.Unknown, $mBlind.Comparable)
+
+    # AND THE LEDGER MUST NOT BE ABLE TO REFUSE A PUSH. The root is a FILE, so no row can be written at all.
+    $db = Join-Path $tmp 'ledgerbroken'; $null = New-Item -ItemType Directory -Force $db
+    [IO.File]::WriteAllText((Join-Path $db 'release'), 'go')
+    $ledFile = Join-Path $tmp 'led-not-a-dir'
+    [IO.File]::WriteAllText($ledFile, 'not a directory')
+    $stB = Invoke-TcPushLockHold -Dir $db -WatchPid 0 -WaitSec 5 -MaxHoldSec 5400 -PollMs 50 -Prefix $prefix -QueueRoot $qroot `
+      -RepoDir $repo -LedgerRoot $ledFile
+    $lineB = [IO.File]::ReadAllText((Join-Path $db 'state'))
+    T ($kCT + '  a ledger that cannot be written does not stop the hold: the lock is still taken and the hook is still told') `
+      ($stB -eq 'held' -and $lineB.StartsWith('held')) ("state={0} line={1}" -f $stB, $lineB)
+
     # A CONTENDER IS ANOTHER PROCESS, because a mutex is recursive in one thread and this one would take it again.
     $body = @'
 . '__LIB__'
@@ -227,8 +299,20 @@ Exit-TcPushLock $lk
     T ($kCT + '  an inherited hold released nothing of its ancestor''s, and left the lock takeable afterwards') `
       ($free.Held) ("held={0}" -f $free.Held)
     Exit-TcPushLock $free
+
+    # NOTHING THIS SUITE WROTE REACHED THE PRODUCTION LEDGER. Keyed on this process's pid rather than on the file's
+    # size, because a real push from another session may append to it while these cases run.
+    $prodRaw = Read-TcPushRows -Path $prodLedger
+    $prodMine = @(@($prodRaw) | Where-Object { -not $_.PSObject.Properties['malformed'] -and [int]$_.pid -eq $PID })
+    T ($kMF + '  no row this suite wrote reached the production ledger, so the convergence report is never computed over fixtures') `
+      ($prodMine.Count -eq 0) ("rowsFromThisProcessInProduction={0}" -f $prodMine.Count)
   } finally {
     foreach ($p in $kids) { try { if (-not $p.HasExited) { $p.Kill() } } catch { } }
+    if ($null -eq $ledgerRootWas) {
+      Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_ROOT -ErrorAction SilentlyContinue
+    } else {
+      $env:TC_PUSH_LEDGER_ROOT = $ledgerRootWas
+    }
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
     Remove-Item -LiteralPath Env:TC_PUSH_LOCK_HOLDER -ErrorAction SilentlyContinue
   }
@@ -245,6 +329,6 @@ $names = Get-TcHoldLockNames -PrefixEnv ([string]$env:TC_PUSH_LOCK_PREFIX) -Root
   -WaitEnv ([string]$env:TC_PUSH_LOCK_WAIT_SEC)
 if ($names.WaitSec -gt 0) { $WaitSec = $names.WaitSec }
 $state = Invoke-TcPushLockHold -Dir $SignalDir -WatchPid $WatchPid -WaitSec $WaitSec -MaxHoldSec $MaxHoldSec `
-  -PollMs $PollMs -Prefix $names.Prefix -QueueRoot $names.QueueRoot
+  -PollMs $PollMs -Prefix $names.Prefix -QueueRoot $names.QueueRoot -RepoDir $repo -LedgerRoot ([string]$env:TC_PUSH_LEDGER_ROOT)
 Write-Output ('hold-push-lock: ' + $state)
 exit 0

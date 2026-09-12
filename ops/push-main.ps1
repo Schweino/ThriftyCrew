@@ -1,6 +1,12 @@
 <#
-  push-main.ps1 - push to main so that it LANDS: take the machine-wide push lock first, then rebase, then gate, then
-  push, all inside it.
+  push-main.ps1 - push to main so that it LANDS: gate first, OUTSIDE the machine-wide push lock, then take the lock
+  and do the fetch, the rebase and the push inside it.
+
+  THAT SENTENCE USED TO SAY "take the lock first, then rebase, then gate, then push, all inside it" (fixed
+  2026-09-12). It was true for one day. The gate moved out of the lock that morning in 4ae8376f4 - with a ~10-minute
+  gate inside a machine-wide lock the box lands about six pushes an hour however many sessions are working - and this
+  header was left describing the order it no longer ran. A header that describes the previous version of its own file
+  is worse than no header, because the next reader takes it as the design and measures against it.
 
   Run:        powershell -File ops\push-main.ps1
               powershell -File ops\push-main.ps1 -DryRun        (do everything except the push)
@@ -46,6 +52,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\push-lock.ps1')
 . (Join-Path $repo 'lib\git-repo-env.ps1')
+. (Join-Path $repo 'lib\push-ledger.ps1')
 
 function Invoke-TcGit {
   <# git, with its exit code and its TWO STREAMS KEPT APART: Out is stdout and is the only thing any caller parses,
@@ -146,7 +153,20 @@ function Invoke-TcWarmGate {
 }
 
 function Invoke-TcPushMain {
-  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null)
+  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '')
+  # WHAT THE REMOTE HELD BEFORE THIS PUSH QUEUED. Read here and compared with what the fetch inside the lock returns,
+  # it is this wrapper's own answer to "did the remote move while I waited" - the quantity that decides whether a
+  # retry can ever converge, recorded per push in lib\push-ledger.ps1 rather than re-derived from %TEMP% afterwards.
+  # An unreadable ref is '' and is recorded UNKNOWN, never as a ref that stood still.
+  $ledgerBase = Get-TcPushLedgerRefSha -Dir $Dir -Ref ('refs/remotes/' + $Remote + '/' + $Branch)
+  $ledgerGrant = ''
+  $ledgerWaitMs = -1
+  $ledgerState = ''
+  $outcome = 'unknown'
+  $writeRow = {
+    $null = Write-TcPushRow -Event 'push-main' -WaitMs $ledgerWaitMs -State $ledgerState -BaseSha $ledgerBase `
+      -GrantSha $ledgerGrant -Outcome $outcome -Checkout $Dir -Root $LedgerRoot
+  }
   $enter = @{ WaitSec = $LockWaitSec; PollMs = 500 }
   if ($LockPrefix) { $enter['Prefix'] = $LockPrefix }
   if ($LockQueueRoot) { $enter['QueueRoot'] = $LockQueueRoot }
@@ -170,6 +190,8 @@ function Invoke-TcPushMain {
   $g = & $runner $Dir
   if ($g.Ran -and $g.Code -eq 1) {
     Say 'push-main: REFUSED - run-gates exited 1 before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again.'
+    $outcome = 'refused-gate-red'; $ledgerState = 'not-taken'
+    & $writeRow
     return 1
   }
   if ($g.Code -ne 0) {
@@ -179,6 +201,8 @@ function Invoke-TcPushMain {
   }
 
   $lock = Enter-TcPushLock @enter
+  $ledgerWaitMs = [double]$lock.WaitedMs
+  $ledgerState = $(if (-not $lock.Held) { 'unlocked' } elseif ($lock.Inherited) { 'inherited' } else { 'held' })
   if (-not $lock.Held) {
     # STILL NOT A REFUSAL. The lock is a fairness device; without it this push is exactly as gated as it ever was and
     # merely races for the ref, which is what every push did before the lock existed.
@@ -193,10 +217,14 @@ function Invoke-TcPushMain {
     $f = Invoke-TcGit -Dir $Dir -Arguments @('fetch', '--quiet', $Remote, $Branch)
     if ($f.Code -ne 0) {
       Say ("push-main: COULD NOT EVALUATE - `git fetch {0} {1}` exited {2}, so what this push would land on is unknown. That is not a pass.`n{3}" -f $Remote, $Branch, $f.Code, $f.Text)
+      $outcome = 'blind-fetch-failed'
       return 3
     }
     $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
     $rem = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'FETCH_HEAD')).Out[0]).Trim()
+    # WHAT THE REMOTE HOLDS NOW, read under the lock. Against $ledgerBase above it says whether the remote moved
+    # while this push queued - recorded whatever happens next, including on the paths that refuse.
+    $ledgerGrant = $rem
     $mbR = Invoke-TcGit -Dir $Dir -Arguments @('merge-base', 'HEAD', $rem)
     $mb = $(if ($mbR.Code -eq 0 -and $mbR.Out.Count) { ([string]$mbR.Out[0]).Trim() } else { '' })
     $cntR = Invoke-TcGit -Dir $Dir -Arguments @('rev-list', '--count', ($rem + '..HEAD'))
@@ -210,6 +238,7 @@ function Invoke-TcPushMain {
     $plan = Get-TcPushPlan -Head $head -RemoteSha $rem -MergeBase $mb -Ahead $ahead -Dirty $dirty
     if (-not $plan.Ready) {
       Say ("push-main: REFUSED - {0}" -f $plan.Reason)
+      $outcome = 'refused-not-ready'
       return 1
     }
     Say ("push-main: {0} commit(s) to land on {1}/{2}; {3}." -f $ahead, $Remote, $Branch, $plan.Reason)
@@ -220,6 +249,7 @@ function Invoke-TcPushMain {
         # hand back, because the next session to push inherits it.
         $null = Invoke-TcGit -Dir $Dir -Arguments @('rebase', '--abort')
         Say ("push-main: REFUSED - the rebase onto {0}/{1} conflicts, so it was aborted and this branch is exactly where it was. Resolve it and run this again.`n{2}" -f $Remote, $Branch, $rb.Text)
+        $outcome = 'refused-rebase-conflict'
         return 1
       }
       $head = ([string](Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')).Out[0]).Trim()
@@ -227,6 +257,7 @@ function Invoke-TcPushMain {
     }
     if ($DryRun) {
       Say 'push-main: -DryRun, so nothing was pushed. Everything up to the push was done under the lock.'
+      $outcome = 'dry-run'
       return 0
     }
     # A PLAIN PUSH: the pre-push hook runs, the gate runs, and a red gate refuses this exactly as it refuses any other
@@ -235,12 +266,17 @@ function Invoke-TcPushMain {
     Say $p.Text
     if ($p.Code -ne 0) {
       Say ("push-main: the push did NOT land (git exited {0}). Nothing here overrides that; read the reason above." -f $p.Code)
+      $outcome = 'push-rejected'
       return 1
     }
     Say ("push-main: LANDED on {0}/{1} at {2}, on the first attempt." -f $Remote, $Branch, $head.Substring(0, 9))
+    $outcome = $(if ($plan.NeedsRebase) { 'landed-after-rebase' } else { 'landed' })
     return 0
   } finally {
+    # THE LOCK GOES BACK FIRST, then the row is written: a ledger write must never sit inside the critical section
+    # this whole file exists to keep short, and nothing reads the row to decide anything.
     Exit-TcPushLock $lock
+    & $writeRow
   }
 }
 
@@ -315,6 +351,13 @@ $m.Dispose()
 
   $prev = $ErrorActionPreference
   $ErrorActionPreference = 'Continue'
+  # EVERY CASE IN THIS SUITE WRITES ITS LEDGER ROWS TO SCRATCH (2026-09-12). The cases that do not pass -LedgerRoot
+  # push temp CLONES, so before this redirect existed their rows - real shas, real waits, from repositories that
+  # exist for a second - went into the production ledger and were counted by the first live convergence report.
+  # A default that reaches a real path is redirected suite-wide, never per fixture.
+  $prodLedger = Get-TcPushLedgerPath
+  $ledgerRootWas = $env:TC_PUSH_LEDGER_ROOT
+  $env:TC_PUSH_LEDGER_ROOT = Join-Path $tmp 'suite-ledger'
   try {
     Clear-TcGitRepoEnv
     $origin = Join-Path $tmp 'origin'
@@ -461,13 +504,62 @@ $m.Dispose()
     T ($kCT + '  a gate that could not evaluate outside the lock still pushes under it, gated by the hook exactly as before') `
       ($rBlind -eq 0 -and $remK -eq $headK) ("rc={0} remote={1} head={2}" -f $rBlind, $remK, $headK)
 
+    # ---- THE ROW EACH PUSH RECORDS (2026-09-12, lib\push-ledger.ps1) ----
+    # The case above proves a stale base lands on the first attempt. This proves the box can SAY SO afterwards: the
+    # row carries what the remote held when the push queued, what it held under the lock, and how it ended, so
+    # "did the remote move while this push waited" stops being archaeology over a %TEMP% that drops its successes.
+    $ledRoot = Join-Path $tmp 'led'
+    $m1 = New-Clone 'm1'
+    [IO.File]::WriteAllText((Join-Path $m1 'm1.txt'), 'm1')
+    $null = & git -C $m1 add -- m1.txt 2>$null; $null = & git -C $m1 commit -q -m m1 2>$null
+    $m2 = New-Clone 'm2'
+    [IO.File]::WriteAllText((Join-Path $m2 'm2.txt'), 'm2')
+    $null = & git -C $m2 add -- m2.txt 2>$null; $null = & git -C $m2 commit -q -m m2 2>$null
+    $null = & git -C $m2 push -q origin HEAD:main 2>$null     # m2 lands while m1 is still on a base that has moved
+    $rLed = Invoke-TcPushMain -Dir $m1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -LedgerRoot $ledRoot
+    $ledRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRoot)
+    $ledRows = @($ledRaw)
+    $mLed = Measure-TcPushRows $ledRows
+    T ($kMF + '  a push whose base the remote moved past records a row saying the remote MOVED and that it landed after a rebase') `
+      ($rLed -eq 0 -and $ledRows.Count -eq 1 -and $mLed.Moved -eq 1 -and $ledRows[0].outcome -eq 'landed-after-rebase') `
+      ("rc={0} rows={1} moved={2} outcome={3}" -f $rLed, $ledRows.Count, $mLed.Moved, $(if ($ledRows.Count) { $ledRows[0].outcome } else { '' }))
+
+    # A REFUSAL IS RECORDED TOO. A ledger that only holds the pushes that landed is the same biased population the
+    # %TEMP% logs already were, and it is the refusals that say whether the path converges.
+    $ledRoot2 = Join-Path $tmp 'led2'
+    $n1 = New-Clone 'n1'
+    [IO.File]::WriteAllText((Join-Path $n1 'clash2.txt'), 'mine')
+    $null = & git -C $n1 add -- clash2.txt 2>$null; $null = & git -C $n1 commit -q -m mine2 2>$null
+    $n2 = New-Clone 'n2'
+    [IO.File]::WriteAllText((Join-Path $n2 'clash2.txt'), 'theirs')
+    $null = & git -C $n2 add -- clash2.txt 2>$null; $null = & git -C $n2 commit -q -m theirs2 2>$null
+    $null = & git -C $n2 push -q origin HEAD:main 2>$null
+    $rRef = Invoke-TcPushMain -Dir $n1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -LedgerRoot $ledRoot2
+    $refRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRoot2)
+    $refRows = @($refRaw)
+    T ($kMF + '  a push refused because its rebase conflicts records that refusal by name, so the ledger is not just the pushes that landed') `
+      ($rRef -eq 1 -and $refRows.Count -eq 1 -and $refRows[0].outcome -eq 'refused-rebase-conflict') `
+      ("rc={0} rows={1} outcome={2}" -f $rRef, $refRows.Count, $(if ($refRows.Count) { $refRows[0].outcome } else { '' }))
+
     T ($kMNF + '  every clone these cases ran against carried the seeded history, so none of them judged an empty repository') `
       ($script:cloneFails -eq 0) ("clonesThatCameUpEmpty={0}" -f $script:cloneFails)
     $freeNow = Enter-TcPushLock -Prefix $prefix -QueueRoot $qroot -WaitSec 5 -PollMs 50 -NoInherit
     T ($kCT + '  every one of those runs handed the push lock back, including the refusals') ($freeNow.Held) ("held={0}" -f $freeNow.Held)
     Exit-TcPushLock $freeNow
+
+    # NOTHING THIS SUITE WROTE REACHED THE PRODUCTION LEDGER. Keyed on this process's pid, not on the file's size:
+    # a real push from another session may append to it while these cases run.
+    $prodRaw = Read-TcPushRows -Path $prodLedger
+    $prodMine = @(@($prodRaw) | Where-Object { -not $_.PSObject.Properties['malformed'] -and [int]$_.pid -eq $PID })
+    T ($kMF + '  no row this suite wrote reached the production ledger, so the convergence report is never computed over temp clones') `
+      ($prodMine.Count -eq 0) ("rowsFromThisProcessInProduction={0}" -f $prodMine.Count)
   } finally {
     $ErrorActionPreference = $prev
+    if ($null -eq $ledgerRootWas) {
+      Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_ROOT -ErrorAction SilentlyContinue
+    } else {
+      $env:TC_PUSH_LEDGER_ROOT = $ledgerRootWas
+    }
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
