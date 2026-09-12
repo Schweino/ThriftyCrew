@@ -69,8 +69,8 @@ is one copy of every rule and nothing here can drift from it.
   **Aldi's OLA number is deliberately NOT pinned** and Walmart's storeId deliberately IS: that session
   legitimately moves between Omaha Aldis, where one Walmart is ruled. What neither may do is claim a
   store nobody read. [[walmart-session-store-3153-drift]], [[aldi-store-is-ola-42]]
-- **A STANDING RULING'S OWED TERMS ARE DERIVED AND LEAD THE WORKLIST - never hand-picked, never hand
-  -discharged** (2026-09-12). Brad's store-drift ruling named 23 terms to recapture and said to put
+- **A STANDING RULING'S OWED TERMS ARE DERIVED AND LEAD THE WORKLIST**, never hand-picked and never
+  hand-discharged (2026-09-12). Brad's store-drift ruling named 23 terms to recapture and said to put
   them at the head of the next Walmart worklist; nothing carried that anywhere for a fortnight, because
   a list in a JSON file and a line in a runbook are reminders and not mechanisms. `Get-WalmartRulingOwed`
   in `capture-policy-lib.ps1` now derives what is owed - the ruling's own list, minus terms a built
