@@ -30,27 +30,43 @@ queue was built to remove from the gate pool.
 - **Not weakening the staleness check.** Refusing to gate a tree that cannot land is right, and the
   refusal is what told me the cause in one line both times.
 
-## 3. Proposal A: rebase the waiter, in a shared helper rather than in the hook
+## 3. PROPOSAL A WAS ALREADY BUILT, AND THIS PLAN'S FIRST DRAFT PROPOSED IT ANYWAY
 
-`ops\push-main.ps1`, which every session uses instead of a bare `git push`: fetch, rebase onto what
-the remote holds now, push, and **on the staleness refusal only**, loop, bounded. Stop immediately on
-a real gate red, a rebase conflict, or an attempt limit, and say which.
+**`ops\push-main.ps1` shipped 2026-09-11 and does exactly what the draft asked for**, and better: it
+takes the machine-wide lock FIRST, then fetches, rebases and pushes inside it, so the base cannot go
+stale between the rebase and the ref update. A helper that rebases *between attempts*, which is what
+the draft proposed, only shortens the odds; taking the lock first removes the race.
 
-- The hook stays as it is. It stands in front of 130 checkouts, most older than any change here, and
-  `PLAN-push-livelock` 4.4's degrade-never-block property must survive untouched.
-- **A retry that rebases is not a blind retry**: every attempt has a different input, which is the
-  distinction `software-craft/distributed-coordination.md` draws between a repair and an amplifier.
-- This session ran exactly that loop tonight, by hand. Shipping it is making a habit mechanical.
+`CLAUDE.md` names it in the sentence *"ONE PUSH AT A TIME ON THIS BOX, and `ops\push-main.ps1` is how
+you land one"*. This session read that file and hand-rolled a retry loop anyway, three times.
 
-**Weakness, stated:** it does not reduce the wait, so under heavier arrival rates the loop gets longer.
-It converts a failed push into a slow one, which is the right direction but not a ceiling.
+**The measurement that settles it, from this session, same commits, same box, within one hour:**
 
-## 4. Proposal B: check staleness BEFORE queueing, not only after
+| route | outcome |
+|---|---|
+| plain `git push`, attempt 1 | waited 1,255 s for the lock, exit 3, remote had moved |
+| plain `git push`, attempt 2 | waited 1,130 s, exit 3, remote had moved |
+| plain `git push`, attempt 3 | waited 1,853 s, exit 3, remote had moved |
+| plain `git push`, attempt 4 | waited 1,505 s, **gate PASSED 386 of 386**, then rejected: *cannot lock ref* |
+| `ops\push-main.ps1` | **LANDED on the first attempt** |
 
-Today a push waits nineteen minutes and is then told its base moved. The same check before the wait
-costs one `git ls-remote` and would send the caller to rebase immediately. It does not remove the race
-(the remote can move during the wait regardless) but it removes the case where the answer was already
-knowable at the start. **Cheap, and strictly an improvement in the message the caller gets.**
+Attempt 4 is the one worth keeping: the gate ran, everything passed, and the push still lost the ref
+in the moment between. That is the livelock `PLAN-push-livelock-2026-09-11.md` diagnosed, still live
+for anyone who reaches for `git push`, and already solved for anyone who does not.
+
+**So there is nothing to build here.** The residual is that a plain `git push` remains available, works,
+is fully gated, and starves under contention - and the estate deliberately keeps it working, because
+the hook must not hard-fail in a checkout older than itself. The gap is knowledge, not machinery:
+**this plan's own author had the rule delivered and did not apply it.** What a rules file cannot do, a
+tool that lands on the first attempt can, so the honest recommendation is to reach for `push-main.ps1`
+and to stop treating a slow push as a queueing problem to be outwitted.
+
+## 4. Proposal B: WITHDRAWN, for the same reason
+
+The draft proposed checking staleness before queueing rather than after. `push-main.ps1` makes the
+question moot for anyone using it: there is no wait during which the base can go stale. Adding a
+pre-check to the hook would improve only the message a plain `git push` gets before it fails, which is
+not worth touching a hook standing in front of 130 checkouts.
 
 ## 5. The debris, which is separate from the queueing and older
 
@@ -71,19 +87,16 @@ knowable at the start. **Cheap, and strictly an improvement in the message the c
 
 ## 6. The acceptance bar, written before any of it is built
 
-- **Proposal A:** over the next 20 pushes from sessions using the helper, **no push fails with the
-  staleness refusal as its final outcome**. Failing an attempt and landing on a later one is a pass.
-  Measured from the helper's own log, which records attempts per landing.
-- **Proposal B:** a push whose base is already stale learns so **before** it waits for the lock, and
-  the hook's degrade-never-block paths still behave as `PLAN-push-livelock` 4.4 describes, proven by
-  that plan's existing fixtures still passing unchanged.
+Proposals A and B are withdrawn, so only the debris work has a bar left to meet.
+
 - **The reaper:** run against a mirror first. It must refuse every worktree with uncommitted work,
   and the count it removes must equal the count it names. A reaper that removes something it did not
   print is the bug that matters.
-- **What would make me wrong about A:** if the arrival rate is the real problem rather than the
-  waiter, the loop will simply take longer without failing, and the honest reading is then that the
-  gate's cost, not the queueing, is what needs the work. That is Brad's ruling and
-  `docs/CONTROL-CONSTANTS.md` holds the budget.
+- **The stash report:** it prints and never deletes, so its bar is that a human can act on it - age,
+  file count, and the first paths, for each of the 11.
+- **What was already measured, so nobody re-derives it:** four plain pushes failed and one
+  `push-main.ps1` landed first time, section 3. The gate is not the bottleneck the draft assumed: on
+  attempt 4 it passed 386 of 386 and the push was still rejected.
 
 ## 7. What this is deliberately not
 
