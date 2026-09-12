@@ -1,0 +1,31 @@
+{
+  "readme": "THE GLOBAL FORBIDDEN PROSE LIST. Terms no recipe title and no reader-facing prose may carry, on any recipe, ever. It is the GLOBAL half of the per-spec forbidden_prose_terms field: that field is a per-recipe convention a writer opts into, this file is a rule every recipe is held to. One data file on purpose, so the PowerShell readers and any future Python reader read the same bytes and cannot drift apart.",
+  "ruling": "Brad, 2026-09-12, backlog I138. 'A title we publish on a paid page is our claim, whatever blog it came from. No recipe title or reader-facing prose may carry a health word (healthy, clean, guilt-free, light, nutritious and the like) unless we own a written bar behind it. Source attribution lines naming the originating blog stay as they are. Add healthy to the global forbidden prose list so the Recipe Hunter cannot import the word again.'",
+  "enforced_by": [
+    "meal-prep\\pipeline\\forbidden-prose-lib.ps1  - the one matcher and the one reader-facing field set",
+    "meal-prep\\pipeline\\build-v2-spec.ps1        - REFUSES to write a new spec carrying one (the Recipe Hunter's import door)",
+    "meal-prep\\pipeline\\spec-guards.ps1          - fails validation for an existing spec carrying one",
+    "meal-prep\\pipeline\\audit-forbidden-prose.ps1 - push-time gate over the whole committed catalogue, at zero. It lives here rather than in ops\\ because its population is meal-prep\\db\\recipes, and an ops\\ detector reading that is the coupling ops\\audit-cross-module-reach.ps1 ratchets"
+  ],
+  "attribution_is_exempt": "credit_html, source_url and source_site are NOT swept. Brad's ruling says the source attribution line naming the originating blog stays as it is: 'Recipe adapted from The Clean Eating Couple' is a fact about where the recipe came from, not a claim we are making about the food. 16 of 584 recipes carry the word 'healthy' in an attribution field and every one of them is correct. The slug is exempt for a different reason: it is the live URL of a paid page, and changing it breaks every link and search result pointing at it.",
+  "a_brand_name_is_the_one_hard_case": "If a PRODUCT we buy is literally branded with a listed word (Campbell's Healthy Request, say), it would land in ingredients_display and this gate would fire on a name we did not write. That has not happened: 0 of 584 recipes carry a listed term in ingredients_display today. When it does, it wants a ruling and a named exception on the row, not a quiet widening of the matcher.",
+  "matching": "Case-insensitive, on WORD BOUNDARIES. A term with a hyphen matches its spaced form too (guilt-free finds 'guilt free'). Substring matching was rejected: it makes 'healthy' fire inside 'healthyfoodiegirl.com'.",
+  "terms": [
+    { "term": "healthy",     "reason": "Brad's ruling, I138, named explicitly. Was in two live paid titles, one of which is 5.5% vegetable by weight." },
+    { "term": "healthful",   "reason": "The same claim in another spelling. 0 of 584 today; listed so it cannot arrive as the workaround." },
+    { "term": "nutritious",  "reason": "Named in Brad's ruling. 0 of 584 in reader-facing prose today." },
+    { "term": "wholesome",   "reason": "The same claim without the word. 0 of 584 today." },
+    { "term": "guilt-free",  "reason": "Named in Brad's ruling. Already banned by hand in 38 of 584 per-spec lists, which is a convention, not a rule." },
+    { "term": "clean eating","reason": "The health-claim form of 'clean'. The bare word is NOT listed - see not_listed below." },
+    { "term": "eat clean",   "reason": "Same claim, imperative form." },
+    { "term": "superfood",   "reason": "A nutrient claim with no regulatory or measurable meaning. 0 of 584 today." },
+    { "term": "detox",       "reason": "A physiological claim about the reader's body. 0 of 584 today." },
+    { "term": "good for you","reason": "The plain-English form of the same claim, and the one a writer reaches for when the single words are blocked." }
+  ],
+  "not_listed": [
+    { "term": "clean", "reason": "Brad's ruling names it, and a bare word-boundary ban on it is not implementable: measured 2026-09-12 over the reader-facing fields of all 584 recipes, 58 carry it and the uses are 'scrape the bottom of the pot clean' and 'rinse them clean'. Banning it would put the gate red on day one over 58 sentences that make no claim about health. The health-claim FORMS of it are listed above ('clean eating', 'eat clean'); the verb is not." },
+    { "term": "light", "reason": "Same measurement: 67 of 584, and the uses are the product name 'Light Sour Cream (generic)', 'store it away from light', and 'light brown sugar'. A ban would fire on an ingredient's actual name. If we ever mean 'light' as a calorie claim it will be in a sentence, and the sentence will say so in words this list already holds." },
+    { "term": "high protein", "reason": "NOT a health word and NOT ruled on here. It is an FDA nutrient content claim used 767 times across 330 of 584 recipes, and it is backlog I143, which is open and awaiting Brad. Folding it in here would decide I143 without him." },
+    { "term": "keto", "reason": "A diet word rather than a health word. Not in Brad's I138 class. One live title carries it (Keto Turkey Broccoli Cheddar Casserole) and it is left standing on purpose." }
+  ]
+}

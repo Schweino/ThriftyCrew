@@ -374,6 +374,13 @@ $static = @(
   # 2026-09-11: ingredient-queue defined a function named Get-Item, which outranks the cmdlet, so its live-ledger assertion
   # read 0 before and after for 17 days. A rule in ops-and-gates.md reaches whoever opens it; this reaches the next definition.
   @{ f = 'ops\audit-cmdlet-shadow.ps1';        n = 'no tracked script defines a function named after a built-in cmdlet or module function, except a file-and-name allowlist entry with its reason - hermetic, a pinned name list, reads source only' }
+  # Brad's ruling, 2026-09-12, backlog I138: a title we publish on a paid page is our claim whatever blog it came
+  # from. This one is on EVERY push rather than daily, because it is one of the few detectors here that CAN put a
+  # wrong claim in front of a paying reader, which is the distinction the daily/push split above is drawn on. It
+  # reads the committed specs, which are tracked and present in a bare checkout, so it is hermetic.
+  # It sits in meal-prep\pipeline rather than ops\ because its population IS meal-prep\db\recipes, and an ops\
+  # detector reading that is the coupling audit-cross-module-reach ratchets: its first draft moved 118 to 120.
+  @{ f = 'meal-prep\pipeline\audit-forbidden-prose.ps1'; n = 'no recipe title and no reader-facing prose carries a globally forbidden health word - a gate at ZERO over the 584 committed specs, with the source attribution line exempt by Brad''s ruling; hermetic, reads tracked data only' }
   @{ f = 'ops\audit-unread-wait.ps1';          n = 'every TIMED WaitOne has its answer read on some path - a timed-out wait returns $false and the caller holds nothing, which rewrote the triage queue unlocked on 2026-09-11; hermetic, AST, reads source only' }
   @{ f = 'ops\audit-internal-ast-members.ps1'; n = 'no script reads an AST member that is INTERNAL under PS 5.1 (VariablePath.UnqualifiedPath reads as $null, so a name walk returns an agreeing empty) - hermetic, AST, reads source only' }
   # Brad's ruling (2026-09-12, backlog I112): a lesson may state a rate of return only beside its source, the

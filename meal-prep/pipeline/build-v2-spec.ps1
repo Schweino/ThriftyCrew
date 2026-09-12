@@ -86,6 +86,7 @@ $mp   = Split-Path -Parent $here                            # ...\meal-prep
 . (Join-Path $here 'cost-render-lib.ps1')                   # THE cost-block renderer, shared with recost-spec-cost-block
 . (Join-Path $here 'friendly-amt-lib.ps1')                  # THE buy-label deriver - see the block comment below
 . (Join-Path $mp 'lib\dash-sweep.ps1')                      # Test-Dashes - shared with spec-guards, fixtured in -SelfTest
+. (Join-Path $here 'forbidden-prose-lib.ps1')               # Get-TcForbiddenProseHit - the GLOBAL health-word ban (Brad, I138)
 
 # ---- SELF-TEST. This script had none, which is how a dash sweep that reads its own ban list shipped.
 # No file is read or written and nothing is dispatched; it exists so these guards cannot regress quietly.
@@ -138,6 +139,22 @@ if($SelfTest){
     ($__bvsSrc -match '(?m)^\s*if\(\$ssBad\)\{[\s\S]{0,120}?throw') 'a bad shape would only warn'
   T '   ...and the empty default is an ARRAY, so the guard cannot be satisfied by a bare empty string' `
     ($__bvsSrc -match "IProp \`$prose 'shop_smart'\)[^\r\n]*\}\s*else\s*\{\s*@\(\)\s*\}") 'the default is still a string'
+
+  # ---- THE GLOBAL HEALTH-WORD BAN AT THE IMPORT DOOR (Brad's ruling, 2026-09-12, backlog I138) ----
+  # Both titles that ruling renamed arrived through this script, carrying the source blog's word. The
+  # per-recipe forbidden_prose_terms list above cannot stop that, because the writer chooses that list.
+  $fpBadTitle = [pscustomobject]@{ name='Healthy Hamburger Helper'; slug='healthy-hamburger-helper'; intro_html='<p>clean prose</p>'; forbidden_prose_terms=@() }
+  $fpHitsBad = @(Get-TcForbiddenProseHit -Spec $fpBadTitle)
+  T 'MUST FIRE  the founding title "Healthy Hamburger Helper" is refused at the write boundary' ($fpHitsBad.Count -eq 1 -and $fpHitsBad[0].Field -eq 'name') ('hits=' + $fpHitsBad.Count)
+  $fpOk = [pscustomobject]@{ name='Homemade Hamburger Helper'; slug='healthy-hamburger-helper'; credit_html='Recipe adapted from The Clean Eating Couple, healthy-baked-ziti'; source_site='Healthy Foodie Girl'; forbidden_prose_terms=@('healthy') }
+  $fpHitsOk = @(Get-TcForbiddenProseHit -Spec $fpOk)
+  T 'MUST NOT FIRE  the renamed title with its attribution, slug and ban list intact is silent' ($fpHitsOk.Count -eq 0) ('hits=' + $fpHitsOk.Count)
+  # THE SEAL, the same one the shop_smart shape case carries: a predicate whose only caller is its own
+  # test runs never. This asserts the LIVE write path calls it and throws.
+  T 'the live write path sweeps the global list' `
+    ($__bvsSrc -match '(?m)^\s*\$fpHits\s*=\s*@\(Get-TcForbiddenProseHit') 'the refusal is not wired into Write-Spec'
+  T '   ...and THROWS on a finding rather than warning' `
+    ($__bvsSrc -match '(?s)if\(\$fpHits\.Count\)\{[\s\S]{0,500}?throw') 'a forbidden term would only warn'
 
   if($script:f -eq 0){ Write-Output 'build-v2-spec SELF-TEST PASS'; exit 0 }
   Write-Output ("build-v2-spec SELF-TEST FAIL: " + $script:f + " case(s)"); exit 1
@@ -537,6 +554,15 @@ function Build-Spec($cf){
 }
 function Write-Spec($spec,[string]$path){
   Test-Dashes $spec
+  # THE GLOBAL HEALTH-WORD BAN (Brad's ruling, 2026-09-12, backlog I138). This is the Recipe Hunter's
+  # import door, and both of the titles that ruling renamed came in through it carrying a word from the
+  # source blog. A per-recipe forbidden_prose_terms list cannot stop that, because the writer chooses it.
+  # Attribution is exempt inside the sweep, not here - see forbidden-prose-lib.ps1's skip list.
+  $fpHits = @(Get-TcForbiddenProseHit -Spec $spec)
+  if($fpHits.Count){
+    $lines = @($fpHits | ForEach-Object { Format-TcForbiddenProseHit -Hit $_ })
+    throw ("FORBIDDEN PROSE: " + ($lines -join ' | ') + " A title or a sentence we publish is OUR claim whatever blog it came from, and none of these words has a written bar behind it (Brad, 2026-09-12, I138). Reword it. The source attribution line is exempt and is not what this found.")
+  }
   if(-not (Test-Path (Split-Path -Parent $path))){ New-Item -ItemType Directory (Split-Path -Parent $path) -Force | Out-Null }
   $json = ConvertTo-Json -InputObject $spec -Depth 8
   $null = $json | ConvertFrom-Json    # parse-verify before writing, never ship a broken file

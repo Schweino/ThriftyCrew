@@ -10550,7 +10550,46 @@ over all 8,423 files `git ls-files` returns. `dietary guidelines`, `recommended 
 (`getonmyplate.com`, `dontmissmyplate.com`, `remakemyplate.com`), not the USDA guidance. **No
 dietary authority of any kind is cited anywhere in this repository.**
 
-### I138 - two recipes we sell carry "Healthy" in the title we publish, and one of them is 5.5% vegetable by weight `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+### I138 - two recipes we sell carry "Healthy" in the title we publish, and one of them is 5.5% vegetable by weight `DONE` `queue-7`
+
+**BRAD RULED 2026-09-12, and it is carried out.** His words: *"A title we publish on a paid page is our
+claim, whatever blog it came from. No recipe title or reader-facing prose may carry a health word
+(healthy, clean, guilt-free, light, nutritious and the like) unless we own a written bar behind it.
+Rename Healthy Hamburger Helper now to a plain descriptive name. Rename Healthy Chicken, Rice and
+Broccoli Skillet too, for consistency rather than because it fails. Source attribution lines naming the
+originating blog stay as they are. Add 'healthy' to the global forbidden prose list so the Recipe Hunter
+cannot import the word again."*
+
+What shipped:
+
+- **Healthy Hamburger Helper -> Homemade Hamburger Helper.** **Healthy Chicken, Rice and Broccoli
+  Skillet -> Chicken, Rice and Broccoli Skillet.** Both SLUGS are unchanged, deliberately: a slug is the
+  live URL of a paid page and changing it breaks every link and search result pointing at it, which is a
+  1-WAY act Brad did not ask for. `healthy-hamburger-helper.json` therefore still carries that filename.
+- **The global list is `meal-prep\pipeline\forbidden-prose-global.json`**, read through
+  `meal-prep\pipeline\forbidden-prose-lib.ps1`. One data file, three callers: `build-v2-spec.ps1`
+  REFUSES to write a spec carrying a listed term (the Recipe Hunter's import door), `spec-guards.ps1`
+  fails validation, and `meal-prep\pipeline\audit-forbidden-prose.ps1` is a gate at ZERO in `run-gates` on
+  every push. That detector sits in `meal-prep\pipeline` and not in `ops\` because its population is
+  `meal-prep\db\recipes`, and an `ops\` script reading that is the coupling `audit-cross-module-reach`
+  ratchets: the first draft moved that baseline 118 to 120, which is how the placement was settled.
+- **The measurement the ruling was made on was incomplete, and this is the half worth reading.** The
+  finding below counted the `name` field and the built BODIES, and concluded every other `healthy` was in
+  an attribution line. Swept over every reader-facing field of all 584 SPECS on 2026-09-12, there were
+  **17 findings across 12 recipes**: the 2 titles, 2 meta descriptions, 10 meta keyword lists, 2
+  sentences of prose, and one `clean-eating` in a cost line. All 17 were repaired in the same change, so
+  the gate stands at zero rather than being a ratchet carrying a debt. 16 further `healthy` occurrences
+  are in `credit_html` / `source_url` / `source_site` and were left exactly as they are, per the ruling.
+- **`clean` and `light` are named in the ruling and are NOT on the list, with the measurement recorded in
+  the file's `not_listed` block.** A word-boundary ban on `clean` would fire on 58 of 584 recipes, all of
+  them "scrape the bottom of the pot clean"; on `light`, 67 of 584, most of them the product name "Light
+  Sour Cream". The health-claim FORMS are listed instead (`clean eating`, `eat clean`). A gate red on day
+  one over 125 sentences that make no health claim is the shape `ops-and-gates.md` forbids.
+- **`high protein` was deliberately left alone.** It is 767 uses across 330 of 584 recipes and it is
+  backlog **I143**, which is open and awaiting Brad. Folding it in here would have decided I143 without him.
+- The live Ghost pages carry the new titles only once the publish drain runs: the Ghost admin key is
+  gitignored and exists in the main checkout only, so a worktree cannot publish. The two specs are dirty
+  by `propagate-recipes`' own hash, so the next drain carries them.
 
 **Merged from `design\backlog-inbox\q7-foodhealth-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

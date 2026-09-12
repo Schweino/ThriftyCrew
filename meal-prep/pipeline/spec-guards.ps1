@@ -51,6 +51,7 @@ if(-not $RunSlugsFile){  $RunSlugsFile  = Join-Path $RunDir 'run-slugs.txt' }
 if(-not $OutDir){        $OutDir        = $RunDir }
 if(-not $ManifestFile){  $ManifestFile  = Join-Path $here 'v2-perserving.json' }
 . (Join-Path $here 'guard-lib.ps1')              # shared, reusable guard predicates (prose-ingredient drift, stale superlative)
+. (Join-Path $here 'forbidden-prose-lib.ps1')    # Get-TcForbiddenProseHit - the GLOBAL health-word ban (Brad, I138)
 . (Join-Path $here 'recipe-coherence-lib.ps1')   # the ingredient/step coherence + non-empty-field gates
 # everyday_ps per slug (2026-07-26 cost redesign): stat.cost_ps / head.costPerServing may legitimately
 # carry the manifest's everyday whole-package basis instead of cost_batch/14 (see basis check below)
@@ -399,6 +400,16 @@ foreach($sf in $specs){
       if(-not $s){ continue }
       if($s -match ('(?i)' + [regex]::Escape([string]$bad))){ Fail $slug ("forbidden term '" + $bad + "' present: " + $s.Substring(0,[Math]::Min(80,$s.Length))); break }
     }
+  }
+  # ---------- the GLOBAL half of the same rule (Brad's ruling, 2026-09-12, backlog I138) ------------
+  # The list above is PER RECIPE and the writer chooses it, so it is a convention: 38 of 584 carried one.
+  # This list is global and every recipe is held to it. It reads its own reader-facing field set through
+  # forbidden-prose-lib, NOT $readerStr above, because the two carve-outs differ and must not be merged:
+  # $readerStr deliberately INCLUDES credit_html (a per-recipe ban on "cornstarch" should catch it there),
+  # and Brad's ruling deliberately EXEMPTS it, because the attribution line naming the originating blog is
+  # a fact about where the recipe came from and not a claim we are making about the food.
+  foreach($fpHit in @(Get-TcForbiddenProseHit -Spec $spec)){
+    Fail $slug (Format-TcForbiddenProseHit -Hit $fpHit)
   }
 
   # ---------- stale superlative-protein claim ----------
