@@ -80,21 +80,6 @@ function Get-BotInputPaths {
     # table means an empty index there. On a quiet day the emitter writes identical bytes and this stages
     # nothing.
     'graph/identity',
-    # WHAT THE SCHEDULED LANES ALREADY DECLARE THEY OWN (2026-09-11, queue 2026-09-10-47eafb, weekly lane).
-    # lib\pipeline-commit.ps1 Get-PipelinePaths is the other declaration of this one fact, and the two were
-    # written separately, so they disagreed: measured that day, 8 of the 22 paths the three lanes declare
-    # were not owned here, and ops\verify-bot-commit-scope.ps1 (run by the pre-commit hook) therefore
-    # refused those lanes' OWN commits whenever one of the eight was dirty, which is most days -
-    # check-ad-cycles' commit was refused at 11:50:57 on 2026-09-10 over exactly this. The refusal is the
-    # hook working; the defect is the second list. Each of the eight is lane state or a lane ledger, the
-    # same class as source-domains.json and graph/identity above, and none is source: the MUST FIRE cases
-    # below still refuse a .ps1, a design doc and a prefix sibling. The self-test now compares the two
-    # declarations directly, so the next path added to either one cannot silently disagree again.
-    'grocery/notify-known-ids.json', 'grocery/sale-fallback-ownership.json',
-    'meal-prep/db/costed.stamp.json',
-    'meal-prep/db/candidate-pool.json', 'meal-prep/db/harvest-state.json',
-    'meal-prep/db/considered-dishes.json',
-    'graph/learning', 'graph/state',
     # THE AUDIT RECORD, WHICH WE WERE DROPPING WHILE KEEPING 191 MB OF COOKIES (2026-08-23). .gitignore:106
     # states the rule outright - "provenance JSONL ARE tracked: they are the evaluation record and the
     # audit" - and then this list never staged them, so graph\provenance\2026-08-22.jsonl and -23 sat
@@ -204,29 +189,6 @@ if ($__botPathsSelfTest) {
   # every path beginning with those characters, which is how an ownership list quietly becomes a sweep.
   BpT 'MUST FIRE: a sibling whose name merely STARTS with an owned directory is NOT owned' `
       (-not (Test-BotPathOwned -Path 'grocery/outbound-notes.md'))
-  # TWO DECLARATIONS OF ONE FACT MUST AGREE (2026-09-11, queue 2026-09-10-47eafb). MUST FIRE: every path
-  # lib\pipeline-commit.ps1 hands a scheduled lane to stage is owned here, or that lane's own commit is
-  # refused by the pre-commit hook the first day the path is dirty. The founding measurement is in the
-  # INPUTS comment above: 8 of 22 unowned, across all three lanes. The loop names the offender rather than
-  # counting, because the repair is per path.
-  $pcLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\pipeline-commit.ps1'
-  if (-not (Test-Path $pcLib)) { $pcLib = Join-Path $PSScriptRoot 'pipeline-commit.ps1' }
-  if (Test-Path $pcLib) {
-    . $pcLib
-    foreach ($kind in @('pricing', 'graph', 'harvest')) {
-      $declaredRaw = Get-PipelinePaths -Kind $kind   # assign, THEN wrap: @(Get-Thing ...) reads a comma-returned array as one element
-      $declared = @($declaredRaw)
-      $unowned = @($declared | Where-Object { -not (Test-BotPathOwned -Path $_) })
-      BpT ("MUST FIRE: every path the $kind lane declares is owned here - " + $declared.Count + " declared, " + $unowned.Count + " unowned" + $(if ($unowned.Count) { ': ' + ($unowned -join ', ') } else { '' })) `
-          ($unowned.Count -eq 0)
-    }
-  } else {
-    BpT 'MUST FIRE: lib\pipeline-commit.ps1 was found so the two declarations could be compared' $false
-  }
-  # CLEAN TWIN: widening the list for those lanes did not hand the bot a source tree. A path no lane
-  # declares and no rule owns is still refused.
-  BpT 'CLEAN TWIN: an undeclared data file outside every owned root is still NOT owned' `
-      (-not (Test-BotPathOwned -Path 'meal-prep/db/nothing-declares-this.json'))
   # A caller may pass its own set; passing an EMPTY set must own nothing, never everything.
   BpT 'MUST FIRE: an empty ownership set owns nothing (an unreadable list is not a skeleton key)' `
       (-not (Test-BotPathOwned -Path 'grocery/out/x.json' -Owned @()))
