@@ -472,6 +472,51 @@ everything else honest, so a defect here is silent by construction.
   rejected because main had moved. **The pool is still not stopped mid-flight** when a push becomes doomed after
   dispatch, which is the largest waste left. `design\MEASURE-gate-slot-starvation-2026-09-11.md` has every number
   and what was deliberately not done.
+  **FOUR SESSIONS FIXED THIS ON THE SAME DAY AND THREE OF THE FIXES WERE THROWN AWAY WITH THEIR EVIDENCE**
+  (folded in 2026-09-12). Only `b1aab0424` landed; the other three branches each carried a working queue, a
+  measurement and an observer, and conflicted in the same two files. **The code was the cheap half and the
+  measurements were the expensive half**, so the fold kept every number and re-landed no second queue. What the
+  others knew that the winner did not:
+  - **ORDER DECIDES WHICH PUSHES ARE REFUSED, NEVER HOW MANY.** A held slot is running a gate 99 to 100% of the
+    time it is held, so this box does about **41 run-gates an hour**, and **a queue longer than about 14 cannot
+    clear inside a 20-minute wait whatever the order**. No arrival-order change adds a run to that figure. The
+    levers on capacity are the gate work per run, the budget of 10, and how often sessions push, and the queue
+    touches none of them. `design\MEASURE-gate-queue-live-sampling-2026-09-11.md`, the best live sampling of the
+    four. **State that bound beside any fairness fix**, or the fix reads as a throughput fix and the next person
+    measures it against a number it was never going to move.
+  - **EVERY LOCK PATH DEGRADES TO THE DAY BEFORE, AND THAT NOW INCLUDES THE QUEUE.** `New-TcGateTicket` threw when
+    it could not create or write the queue directory, straight out of `Enter-TcGateSlots`, into a `run-gates` that
+    runs under `EAP=Stop` and a `pre-push` under that: one stray file, one full disk or one permission change and
+    every push on the box is a could-not-evaluate. The rule the push lock already followed had not reached the
+    queue. A ticket that cannot be written now returns `$null`, the run waits **out of turn** exactly as it did
+    before there was a queue, and carries the reason in `.QueueBroke`. It still takes only FREE slots, so the
+    budget is untouched and the degraded run is gated no less. **A run that cannot join the queue must also stop
+    DEFERRING to it**, or it is passed over for as long as the line keeps moving, which is a livelock and a worse
+    refusal than the one being avoided.
+  - **A SUITE WHOSE CASES ARE A LITERAL LIST ASSERTS HOW MANY RAN.** This is the counterpart of the discovered-set
+    rule above: a literal list knows its own number, so a shortfall is a defect rather than a smaller tree. One
+    branch printed PASS with a case never reached because a fixture variable `$pS` IS `$PS` - PowerShell names are
+    case-insensitive - so it overwrote the powershell.exe path and every child after it failed to start.
+  - **AND A FIXTURE NAME CLAIMED TWICE PASSES AGAINST A MACHINE NOBODY IS HOLDING.** A name is the stem of a
+    fixture's `.ready` and `.release` files, so the second claimant reads the first's stale ready file and finds a
+    release that already says go: its holder frees the slots at once and the case asserts nothing. Two names were
+    doubled folding these branches in, and the case that caught it read `got=1` where it should have read 0. The
+    fixed-temp-name rule below is the same trap one scope out. `lib\gate-slots.ps1` now claims each name once and
+    THROWS on a reuse, because the quiet version looks exactly like a pass.
+  - **AND THE REUSE NUMBER THAT LOOKS LIKE A VERDICT ON `gate-verdict` IS ABOUT A DIFFERENT QUESTION.** One branch
+    measured reuse at **0 runs saved** and rejected it: over 2026-09-11 the shared repo's `origin/*` reflogs hold 42
+    push updates carrying 39 distinct trees, and the three trees pushed twice were each one `git push` updating two
+    refs, so one hook run. That is keyed on **the same tree pushed twice**. `lib\gate-verdict.ps1` is keyed on a
+    hand `run-gates` followed by a push **in the same checkout**, which those reflogs say nothing about, and it
+    fingerprints raw script bytes rather than a tree hash precisely because a tree hash cannot name what run-gates
+    read. Same shape as `identity-graph-commodity-is-namespaced`: an agreeing number about something else. **How
+    often a hand run is followed by a push of identical content in the same checkout is still unmeasured by
+    anybody**, and it is the number gate-verdict's value actually turns on.
+  Three read-only observers survived and are on main, uncalled on purpose and censused:
+  `ops\probe-gate-slot-admission.ps1` and `ops\report-gate-slot-admission.ps1` answer who got each freed slot,
+  `ops\observe-gate-queue.ps1` answers how long the line is and who is in it. The rejected head-takes-one design is
+  `design\PLAN-gate-slot-fair-admission-2026-09-11.md`, kept so it need not be re-derived; the whole ruling, with
+  what was deliberately NOT folded in, is `design\PLAN-gate-slot-consolidation-2026-09-12.md`.
 - **A statement keyword written after a command is an ARGUMENT, and a gate run must leave nothing where the bot
   stages** (2026-09-11). `grocery/pull-grocery-ads.ps1` put its self-test verdict after its last case on one line,
   `_T '<label>' (<cond>)  if (...) { exit 0 } else { exit 1 }`. PowerShell read `if`, the condition and both blocks as

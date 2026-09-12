@@ -45,6 +45,15 @@
   1,864 s), short enough that an ignored input rarely moves under it. When the producer stops - no green run - there is
   no verdict and every run runs.
 
+  A LINKED WORKTREE IS FIXTURED SINCE 2026-09-12, folded from claude\gate-slot-starvation's reuse suite, which had
+  that case where this file did not. It matters because every spawned session on this box runs in one, and a linked
+  worktree's .git is a FILE into the parent's repository - a shared object store and a shared config, the difference
+  behind both the GIT_DIR-inheriting hook and the walk that excluded everything below .claude\worktrees\. Four cases
+  now drive it, and writing them corrected a wrong belief: a worktree does NOT fingerprint differently from its
+  parent when the two hold identical content, and it must not, because the key is content and the HEAD tree id is
+  deliberately out of it. What keeps one checkout off another's pass is the REPO CHECK in Test-TcGateVerdictReuse,
+  not the fingerprint, and those are asserted as two cases rather than one.
+
   SCOPE OF A CLEAN REPORT: a reuse proves the fingerprinted inputs matched a run that exited 0. It proves nothing
   about an input outside the fingerprint, and a nondeterministic gate that passed once stays passed for that content
   until a red run over it withdraws the verdict. The self-test drives every rule against a real git checkout in a
@@ -412,6 +421,50 @@ if ($__gvSelfTest) {
     $stNo = Get-TcWorkingTreeState -Top $sb
     Check 'MUST FIRE  a directory that is not a checkout comes back NOT ok, with a reason and no content key' `
       ((-not $stNo.Ok) -and $null -eq $stNo.ContentKey -and $stNo.Why) ("ok={0} key={1} why={2}" -f $stNo.Ok, $stNo.ContentKey, $stNo.Why)
+
+    # ---- A LINKED WORKTREE, which is where every spawned session on this box actually runs (added 2026-09-12,
+    # folded from claude\gate-slot-starvation's reuse suite, which had this case where this file did not). The
+    # cases above all run in a plain `git init` checkout, and a linked worktree differs in the one way that
+    # matters here: its .git is a FILE pointing at a gitdir inside the parent's repository, so every git call
+    # goes through a SHARED object store and a shared config. The estate has been bitten by that difference
+    # repeatedly - the GIT_DIR-inheriting hook and the walk that excluded every file below .claude\worktrees\
+    # are both in .claude\rules\ops-and-gates.md. What must hold: a worktree gets its OWN real fingerprint, it
+    # is not its parent's though they share a repository, and the pass it records is its own.
+    $wt = Join-Path $sb 'wt'
+    $addWt = Invoke-SandboxGit -C $w worktree add -q --detach $wt
+    if (-not [IO.Directory]::Exists($wt)) {
+      $script:gvFail++
+      Write-Output ('FAIL  CLEAN TWIN  the linked-worktree case could not build its worktree   got: ' + ($addWt -join ' '))
+    } else {
+      [IO.File]::WriteAllText((Join-Path $wt 'ignored.ps1'), "Write-Output 'ignored'`n", $utf8)
+      $wtFiles = @((Join-Path $wt 'gate.ps1'), (Join-Path $wt 'ignored.ps1'))
+      $fpWt = Get-TcGateFingerprint -Repo $wt -Files $wtFiles -Extra $extra
+      $fpWt2 = Get-TcGateFingerprint -Repo $wt -Files $wtFiles -Extra $extra
+      Check 'CLEAN TWIN  a LINKED WORKTREE fingerprints like any other checkout - its .git is a file into the parent''s repository, and that is still a real fingerprint, twice the same' `
+        (([string]$fpWt.Fingerprint).Length -eq 64 -and $fpWt.Fingerprint -eq $fpWt2.Fingerprint) ("{0} ({1})" -f $fpWt.Fingerprint, $fpWt.Reason)
+      # WHAT KEEPS TWO CHECKOUTS APART IS THE CHECKOUT CHECK, NOT THE FINGERPRINT, and the first version of this
+      # case had it backwards: it asserted a worktree must fingerprint differently from its parent, and went red
+      # because they held identical content. They SHOULD agree there - the key is content and the HEAD tree id is
+      # deliberately out of it, so two checkouts holding the same bytes are one job. Both halves are asserted
+      # here, because each is a different rule and a case that proves two things at once proves neither.
+      $fpParent = Get-TcGateFingerprint -Repo $w -Files $files -Extra $extra
+      Check 'CLEAN TWIN  a worktree holding exactly its parent''s content fingerprints the SAME as the parent - content is the key and history is not, so identical bytes in two checkouts are one job' `
+        ($fpWt.Fingerprint -and $fpParent.Fingerprint -and $fpWt.Fingerprint -eq $fpParent.Fingerprint) ("worktree={0} parent={1}" -f $fpWt.Fingerprint, $fpParent.Fingerprint)
+      [IO.File]::WriteAllText((Join-Path $wt 'gate.ps1'), "Write-Output 'gate in the worktree only'`n", $utf8)
+      $fpWtEdit = Get-TcGateFingerprint -Repo $wt -Files $wtFiles -Extra $extra
+      $fpParentAfter = Get-TcGateFingerprint -Repo $w -Files $files -Extra $extra
+      Check 'MUST FIRE  an edit made in the WORKTREE moves only the worktree''s fingerprint and leaves its parent''s alone, though both go through one shared git repository' `
+        ($fpWtEdit.Fingerprint -and $fpWtEdit.Fingerprint -ne $fpWt.Fingerprint -and $fpParentAfter.Fingerprint -eq $fpParent.Fingerprint) `
+        ("worktreeBefore={0} worktreeAfter={1} parentBefore={2} parentAfter={3}" -f $fpWt.Fingerprint, $fpWtEdit.Fingerprint, $fpParent.Fingerprint, $fpParentAfter.Fingerprint)
+      $vpWt = Join-Path $sb 'out-wt\gate-verdict.json'
+      $savedWt = Save-TcGateVerdict -Path $vpWt -ExitCode 0 -Before $fpWt.Fingerprint -After $fpWt.Fingerprint -Repo $wt -Passed 5 -NowUtc $now
+      $vWt = Read-TcGateVerdict -Path $vpWt
+      $tWtOwn = Test-TcGateVerdictReuse -Verdict $vWt -Fingerprint $fpWt.Fingerprint -Repo $wt -NowUtc $now.AddMinutes(5)
+      $tWtParent = Test-TcGateVerdictReuse -Verdict $vWt -Fingerprint $fpWt.Fingerprint -Repo $w -NowUtc $now.AddMinutes(5)
+      Check 'CLEAN TWIN  a pass recorded in a linked worktree is reused by THAT worktree and is refused to the parent checkout, so a shared repository never shares a verdict' `
+        ($savedWt -eq 'recorded' -and $tWtOwn.Reuse -and -not $tWtParent.Reuse) `
+        ("saved={0} ownReuse={1} parentReuse={2} ({3})" -f $savedWt, $tWtOwn.Reuse, $tWtParent.Reuse, $tWtParent.Reason)
+    }
   } catch {
     $script:gvFail++
     Write-Output ('FAIL  the self-test threw: ' + $_.Exception.Message)
@@ -419,7 +472,7 @@ if ($__gvSelfTest) {
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0: the count is asserted, so a block that stops early cannot read as a pass.
-  if ($script:gvCases -lt 25) { $script:gvFail++; Write-Output ('FAIL  only {0} of 25 cases ran' -f $script:gvCases) }
+  if ($script:gvCases -lt 29) { $script:gvFail++; Write-Output ('FAIL  only {0} of 29 cases ran' -f $script:gvCases) }
   if ($script:gvFail) { Write-Output ('gate-verdict SELF-TEST FAIL: {0} failure(s) over {1} case(s)' -f $script:gvFail, $script:gvCases); exit 1 }
   Write-Output ('gate-verdict SELF-TEST PASS: {0} cases - led by a commit of the very bytes already fingerprinted keeping the fingerprint, a red run withdrawing the pass it contradicts, and an edit to an ignored script changing it' -f $script:gvCases)
   exit 0

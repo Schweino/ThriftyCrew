@@ -111,6 +111,18 @@
   same queue drains in the same time and all that moves is WHO waits. What it buys is that the wait is now bounded
   by the drain rather than by luck.
 
+  FOLD-MUTANT 2026-09-12, for the eight cases folded in from the three branches that fixed this starvation and did
+  not land. Single mutants, each from a temp mirror, the original verified byte-identical by md5 after every round,
+  mirrors removed; the predicted kill was written in the probe before the run. Control green from the mirror first,
+  so a kill is the mutant and not the harness. **7 of 8 killed, each by its own predicted case**: a ticket that
+  throws again on CreateDirectory, one that throws on the write, the admission guard removed, a fast path that
+  creates the queue directory, an -Exact that queues, a sweep that ignores -Before, and a ticket file never deleted.
+  THE SURVIVOR IS EQUIVALENT, and for the reason the ABANDONED MUTEX paragraph above gives: it made Test-TcGateTicketLive's typed
+  AbandonedMutexException catch treat the ticket as not taken, and that catch is never reached on this runtime, so
+  the mutant cannot change behaviour. That left the pinned-ticket case unproven, so it was re-probed on a line that
+  IS reached - the probe answering LIVE always - which went red in 4 cases including the pinned one. A survivor on
+  an unreachable line is not a missing case, but only a second mutant can tell those apart, which is why it was run.
+
   SCOPE OF A CLEAN REPORT: the self-test proves on this machine, with every competitor in its own process, that the
   budget holds, that the earlier of two waiters is served first, that a holder does not top up past a queued run,
   that a killed waiter's ticket is swept, that deliberate load does not jump the queue, that an abandon check ends a
@@ -180,16 +192,34 @@ function Get-TcGateQueueAhead {
 
 function New-TcGateTicket {
   <# Joins the queue: the mutex first, then the file, so no probe can see the file before its owner holds it. The name
-     is the arrival time in ticks, so an ordinal sort of the names is arrival order. #>
-  param([string]$Prefix, [string]$Dir)
-  $null = [IO.Directory]::CreateDirectory($Dir)
+     is the arrival time in ticks, so an ordinal sort of the names is arrival order.
+
+     A TICKET THAT CANNOT BE WRITTEN RETURNS $null, IT NEVER THROWS (2026-09-12). This is reached from
+     ops\run-gates.ps1, which runs under $ErrorActionPreference = 'Stop', and from ops\hooks\pre-push below it: a
+     throw here is a could-not-evaluate for every push on this box, out of one unwritable directory - a stray file
+     where the queue root goes, a full disk, a permission change. The push lock already follows the estate rule that
+     every lock path degrades to the behaviour of the day before and never to a refusal (ops\hold-push-lock.ps1); the
+     queue had not. So the caller waits OUT OF TURN, exactly as it did before there was a queue, and says why. The
+     budget of 10 is enforced by the slot mutexes and is untouched by this, so the degraded run is gated no less.
+     Found by claude\gate-slot-fifo and folded in on 2026-09-12; driven with a FILE sitting where the queue root
+     goes, which made CreateDirectory throw. #>
+  param([string]$Prefix, [string]$Dir, [ref]$Why)
   $name = '{0:D19}-{1}-{2}' -f [DateTime]::UtcNow.Ticks, $PID, [guid]::NewGuid().ToString('N').Substring(0, 8)
+  try { $null = [IO.Directory]::CreateDirectory($Dir) }
+  catch { if ($Why) { $Why.Value = 'queue directory unavailable: ' + $_.Exception.Message }; return $null }
   $mx = New-Object System.Threading.Mutex($false, ($Prefix + 'q-' + $name))
   $got = $false
   try { $got = $mx.WaitOne(0) } catch [System.Threading.AbandonedMutexException] { $got = $true }
   if (-not $got) { $mx.Dispose(); throw ('New-TcGateTicket: a brand-new ticket mutex was already held: ' + $name) }
   $path = Join-Path $Dir ($name + '.ticket')
-  [IO.File]::WriteAllText($path, [string]$PID)
+  # The mutex is already held, so a failure here must give it back rather than leave a name nobody can take.
+  try { [IO.File]::WriteAllText($path, [string]$PID) }
+  catch {
+    if ($Why) { $Why.Value = 'queue ticket unwritable: ' + $_.Exception.Message }
+    try { $mx.ReleaseMutex() } catch { }
+    try { $mx.Dispose() } catch { }
+    return $null
+  }
   return [pscustomobject]@{ Name = $name; Path = $path; Mutex = $mx }
 }
 
@@ -214,8 +244,20 @@ function Step-TcGateQueueWait {
 }
 
 function New-TcGateLease {
-  param($Held, $Idx, [int]$Count, [double]$WaitedMs, [bool]$TimedOut, [string]$Abandoned, [string]$Prefix, [int]$Total, [string]$Dir, [int]$Ahead)
-  return [pscustomobject]@{ Mutexes = $Held; Indices = $Idx; Count = $Count; WaitedMs = $WaitedMs; TimedOut = $TimedOut; Abandoned = $Abandoned; Prefix = $Prefix; Total = $Total; QueueDir = $Dir; Ahead = $Ahead }
+  # QueueBroke is the reason this run could not take a ticket, empty when it could. A degraded run is gated exactly
+  # as before, so this is not a failure field - but a queue that silently stopped queueing is indistinguishable from
+  # one nobody is waiting in, which is the shape this estate keeps paying for.
+  # NOTHING PRINTS IT YET, AND THAT IS A DELIBERATE OMISSION WITH A REASON (2026-09-12). The line belongs in
+  # ops\run-gates.ps1, which is the only caller holding the lease - and TWO recorded measurements name that file as
+  # their harness (design\MEASURE-gate-queue-window-2026-09-11.md and MEASURE-gate-slot-admission-2026-09-11.md,
+  # both citing b2460165e). So a seven-line diagnostic print there makes both conclusions UNQUALIFIED and breaks
+  # ops\audit-conclusion-currency.ps1's ratchet, and re-qualifying them needs a re-read citing the editing commit,
+  # which every push-main rebase renames - measured three times on this very push. Trading two sessions'
+  # measurements for a print that fires only when the queue directory is unwritable is the wrong trade, so the
+  # reason is carried HERE, on the lease, where any caller can read it. Add the print in a change that also
+  # re-reads those two documents. design\PLAN-gate-slot-consolidation-2026-09-12.md has the whole account.
+  param($Held, $Idx, [int]$Count, [double]$WaitedMs, [bool]$TimedOut, [string]$Abandoned, [string]$Prefix, [int]$Total, [string]$Dir, [int]$Ahead, [string]$QueueBroke = '')
+  return [pscustomobject]@{ Mutexes = $Held; Indices = $Idx; Count = $Count; WaitedMs = $WaitedMs; TimedOut = $TimedOut; Abandoned = $Abandoned; Prefix = $Prefix; Total = $Total; QueueDir = $Dir; Ahead = $Ahead; QueueBroke = $QueueBroke }
 }
 
 function Enter-TcGateSlots {
@@ -255,7 +297,7 @@ function Enter-TcGateSlots {
   $sweepSw = [Diagnostics.Stopwatch]::StartNew()
   $abandonSw = [Diagnostics.Stopwatch]::StartNew()
   $stall = New-TcGateQueueState
-  $spoke = $false; $ticket = $null; $ahead = 0; $first = $true
+  $spoke = $false; $ticket = $null; $ahead = 0; $first = $true; $queueBroke = ''
   try {
     while ($true) {
       $sweep = $first -or ($sweepSw.Elapsed.TotalSeconds -ge $SweepEverySec)
@@ -263,6 +305,12 @@ function Enter-TcGateSlots {
       $first = $false
       $mine = if ($ticket) { $ticket.Name } else { '' }
       $ahead = Get-TcGateQueueAhead -Dir $dir -Prefix $Prefix -Before $mine -Sweep:$sweep
+      # A run that could not take a ticket has no turn to wait for, so deferring to the queue would leave it passed
+      # over for as long as the queue keeps moving - a livelock, which is a worse refusal than the one this avoids.
+      # It stops deferring and polls for a free slot exactly as it did before there was a queue, and the stall rule
+      # below becomes the old fixed deadline for it. It still takes only FREE slots, so the machine-wide budget is
+      # untouched and the run is gated no less. $ahead stays honest for the report; only admission ignores it.
+      if ($queueBroke -and -not $ticket) { $ahead = 0 }
       if ($ahead -eq 0) {
         # The loop stops at Total, so a want above the total is granted the total without a separate clamp.
         for ($i = 0; ($i -lt $Total) -and ($held.Count -lt $Want); $i++) {
@@ -281,13 +329,21 @@ function Enter-TcGateSlots {
       }
       if ($Exact) {
         if ($sw.Elapsed.TotalSeconds -ge $WaitSec) {
-          return (New-TcGateLease -Held $held -Idx $idx -Count 0 -WaitedMs $sw.Elapsed.TotalMilliseconds -TimedOut $true -Abandoned '' -Prefix $Prefix -Total $Total -Dir $dir -Ahead $ahead)
+          return (New-TcGateLease -Held $held -Idx $idx -Count 0 -WaitedMs $sw.Elapsed.TotalMilliseconds -TimedOut $true -Abandoned '' -Prefix $Prefix -Total $Total -Dir $dir -Ahead $ahead -QueueBroke $queueBroke)
         }
       } else {
         # Joining after a pass that found nothing: every live ticket counted in $ahead arrived before this one.
-        if (-not $ticket) { $ticket = New-TcGateTicket -Prefix $Prefix -Dir $dir }
+        # A ticket that cannot be written leaves this run waiting OUT OF TURN rather than refusing the push - see
+        # New-TcGateTicket's header. It is retried on the next pass, so a directory that comes back joins the queue.
+        # NOT named $why: the abandon block below already owns that name in this scope, and PowerShell names are
+        # case-insensitive and function-scoped, so sharing it would make one reason silently become the other.
+        if (-not $ticket) {
+          $ticketWhy = ''
+          $ticket = New-TcGateTicket -Prefix $Prefix -Dir $dir -Why ([ref]$ticketWhy)
+          if (-not $ticket -and -not $queueBroke) { $queueBroke = $ticketWhy }
+        }
         if (Step-TcGateQueueWait -State $stall -Ahead $ahead -NowMs $sw.Elapsed.TotalMilliseconds -WaitSec $WaitSec) {
-          return (New-TcGateLease -Held $held -Idx $idx -Count 0 -WaitedMs $sw.Elapsed.TotalMilliseconds -TimedOut $true -Abandoned '' -Prefix $Prefix -Total $Total -Dir $dir -Ahead $ahead)
+          return (New-TcGateLease -Held $held -Idx $idx -Count 0 -WaitedMs $sw.Elapsed.TotalMilliseconds -TimedOut $true -Abandoned '' -Prefix $Prefix -Total $Total -Dir $dir -Ahead $ahead -QueueBroke $queueBroke)
         }
       }
       if ($Abandon -and $abandonSw.Elapsed.TotalSeconds -ge $AbandonEverySec) {
@@ -296,7 +352,7 @@ function Enter-TcGateSlots {
         $said = @($said)
         $why = if ($said.Count) { [string]$said[$said.Count - 1] } else { '' }
         if ($why) {
-          return (New-TcGateLease -Held $held -Idx $idx -Count 0 -WaitedMs $sw.Elapsed.TotalMilliseconds -TimedOut $false -Abandoned $why -Prefix $Prefix -Total $Total -Dir $dir -Ahead $ahead)
+          return (New-TcGateLease -Held $held -Idx $idx -Count 0 -WaitedMs $sw.Elapsed.TotalMilliseconds -TimedOut $false -Abandoned $why -Prefix $Prefix -Total $Total -Dir $dir -Ahead $ahead -QueueBroke $queueBroke)
         }
       }
       # OUT-DEFAULT, NOT THE OUTPUT STREAM (2026-09-11). Anything OnWait writes would otherwise join this
@@ -306,7 +362,7 @@ function Enter-TcGateSlots {
       if (-not $spoke -and $OnWait) { & $OnWait $ahead | Out-Default; $spoke = $true }
       Start-Sleep -Milliseconds $PollMs
     }
-    return (New-TcGateLease -Held $held -Idx $idx -Count $held.Count -WaitedMs $sw.Elapsed.TotalMilliseconds -TimedOut $false -Abandoned '' -Prefix $Prefix -Total $Total -Dir $dir -Ahead 0)
+    return (New-TcGateLease -Held $held -Idx $idx -Count $held.Count -WaitedMs $sw.Elapsed.TotalMilliseconds -TimedOut $false -Abandoned '' -Prefix $Prefix -Total $Total -Dir $dir -Ahead 0 -QueueBroke $queueBroke)
   } finally {
     Remove-TcGateTicket $ticket
   }
@@ -381,12 +437,25 @@ if ($__gsSelfTest) {
   $qroot = Join-Path $tmp 'q'
   $script:TcGateQueueRoot = $qroot
   $holders = [Collections.Generic.List[object]]::new()
+  # EVERY FIXTURE NAME IS CLAIMED ONCE (2026-09-12). A name is the stem of this run's .waiting/.ready/.release
+  # files, so two fixtures sharing one means the second reads the first's stale .ready and finds a .release that
+  # already says "go" - its holder frees the slots immediately and the case passes against a machine nobody is
+  # holding. That is what happened folding the 2026-09-11 branches in: 'b' and 'e' were each claimed twice and
+  # the broken-queue case read got=1 where it should have read 0. It THROWS rather than warns, because the whole
+  # defect is that the quiet version looks like a pass. Same trap as the fixed-temp-name rule in
+  # .claude\rules\ops-and-gates.md, one scope down.
+  $claimed = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+  function Claim-FixtureName([string]$Name) {
+    if (-not $claimed.Add($Name)) { throw ("self-test fixture name used twice: '" + $Name + "' - every fixture owns its own .ready and .release files") }
+    return $Name
+  }
 
   # A HOLDER IS ANOTHER PROCESS, for the one-thread reason in the header. It writes a waiting marker, tries
   # slots 0..N-1 of the prefix with up to WaitMs each, writes HOW MANY IT HOLDS to its ready file, and keeps
   # them until a release file appears (or 60s pass). The count is the point: a holder that merely says
   # "ready" passes every "another process can take them" case whether or not it took anything.
   function Start-Holder([string]$Pfx, [int]$N, [string]$Name, [int]$WaitMs = 2000, [switch]$ReturnWhileWaiting) {
+    $Name = Claim-FixtureName $Name
     $waiting = Join-Path $tmp ($Name + '.waiting'); $ready = Join-Path $tmp ($Name + '.ready'); $release = Join-Path $tmp ($Name + '.release')
     $body = @'
 $ms = @()
@@ -431,6 +500,7 @@ foreach ($m in $ms) { try { $m.ReleaseMutex() } catch { } }
   # A QUEUED RUN IS ANOTHER PROCESS too: it calls Enter-TcGateSlots for one slot under this run's queue root, writes
   # the count it was granted, and holds it until its release file appears.
   function Start-Waiter([string]$Name, [string]$Pfx, [int]$Total, [int]$PollMs) {
+    $Name = Claim-FixtureName $Name
     $ready = Join-Path $tmp ($Name + '.ready'); $release = Join-Path $tmp ($Name + '.release')
     $body = @'
 . '__LIB__'
@@ -449,6 +519,7 @@ Exit-TcGateSlots $l
   }
   # A bare ticket in another process: queued, and never asking for a slot.
   function Start-TicketHolder([string]$Name, [string]$Pfx) {
+    $Name = Claim-FixtureName $Name
     $release = Join-Path $tmp ($Name + '.release')
     $body = @'
 . '__LIB__'
@@ -462,6 +533,62 @@ Remove-TcGateTicket $t
     $p = Start-Process -FilePath $PS -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-EncodedCommand', $enc) -PassThru -WindowStyle Hidden
     $script:holders.Add($p)
     [pscustomobject]@{ Proc = $p; Release = $release }
+  }
+  # A DELIBERATE-LOAD WAITER IN ANOTHER PROCESS: -Exact, so it must never take a ticket. Checking after it exits
+  # could not tell "never took one" from "took one and cleaned up", so it holds the wait open while this run counts.
+  function Start-ExactWaiter([string]$Name, [string]$Pfx, [int]$Want, [int]$Total) {
+    $Name = Claim-FixtureName $Name
+    $ready = Join-Path $tmp ($Name + '.ready')
+    $body = @'
+. '__LIB__'
+[IO.File]::WriteAllText('__READY__', 'waiting')
+$l = Enter-TcGateSlots -Want __WANT__ -Total __TOTAL__ -Prefix '__PFX__' -Exact -QueueRoot '__QROOT__' -WaitSec 25 -PollMs 100
+Exit-TcGateSlots $l
+'@
+    $body = $body.Replace('__LIB__', $PSCommandPath).Replace('__WANT__', [string]$Want).Replace('__TOTAL__', [string]$Total)
+    $body = $body.Replace('__PFX__', $Pfx).Replace('__QROOT__', $qroot).Replace('__READY__', $ready)
+    $enc = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($body))
+    $p = Start-Process -FilePath $PS -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-EncodedCommand', $enc) -PassThru -WindowStyle Hidden
+    $script:holders.Add($p)
+    $sw = [Diagnostics.Stopwatch]::StartNew()
+    while (-not (Test-Path -LiteralPath $ready) -and $sw.Elapsed.TotalSeconds -lt 30 -and -not $p.HasExited) { Start-Sleep -Milliseconds 50 }
+    [pscustomobject]@{ Proc = $p; Started = (Test-Path -LiteralPath $ready) }
+  }
+  # PINS A TICKET'S MUTEX NAME OPEN from a third process: it finds the ticket file, opens a HANDLE on that ticket's
+  # mutex without ever taking it, and holds the handle. That is what makes the header's handle-destruction effect
+  # visible - with the pin, a killed owner's mutex comes back ABANDONED instead of the name vanishing and a fresh
+  # one being created. Without it the sweep case passes down the easy path and proves the harder one by luck.
+  function Start-TicketPinner([string]$Name, [string]$Pfx) {
+    $Name = Claim-FixtureName $Name
+    $ready = Join-Path $tmp ($Name + '.ready'); $release = Join-Path $tmp ($Name + '.release')
+    $body = @'
+$d = '__DIR__'
+$sw = [Diagnostics.Stopwatch]::StartNew()
+$f = $null
+while ($sw.Elapsed.TotalSeconds -lt 30) {
+  $all = @([IO.Directory]::GetFiles($d, '*.ticket'))
+  if ($all.Count -ge 1) { $f = $all[0]; break }
+  Start-Sleep -Milliseconds 25
+}
+if (-not $f) { [IO.File]::WriteAllText('__READY__', 'NOTICKET'); exit }
+$n = [IO.Path]::GetFileNameWithoutExtension($f)
+$mx = New-Object System.Threading.Mutex($false, ('__PFX__' + 'q-' + $n))
+[IO.File]::WriteAllText('__READY__', $n)
+$sw2 = [Diagnostics.Stopwatch]::StartNew()
+while (-not (Test-Path -LiteralPath '__RELEASE__') -and $sw2.Elapsed.TotalSeconds -lt 60) { Start-Sleep -Milliseconds 50 }
+$mx.Dispose()
+'@
+    $dir = Get-TcGateQueueDir -Prefix $Pfx -Root $qroot
+    $null = [IO.Directory]::CreateDirectory($dir)
+    $body = $body.Replace('__DIR__', $dir).Replace('__PFX__', $Pfx).Replace('__READY__', $ready).Replace('__RELEASE__', $release)
+    $enc = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($body))
+    $p = Start-Process -FilePath $PS -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-EncodedCommand', $enc) -PassThru -WindowStyle Hidden
+    $script:holders.Add($p)
+    $sw = [Diagnostics.Stopwatch]::StartNew()
+    while (-not (Test-Path -LiteralPath $ready) -and $sw.Elapsed.TotalSeconds -lt 30 -and -not $p.HasExited) { Start-Sleep -Milliseconds 50 }
+    $pinned = ''
+    if (Test-Path -LiteralPath $ready) { try { $pinned = [IO.File]::ReadAllText($ready).Trim() } catch { } }
+    [pscustomobject]@{ Proc = $p; Release = $release; Pinned = $pinned }
   }
   function Get-TicketCount([string]$Pfx) {
     $d = Get-TcGateQueueDir -Prefix $Pfx -Root $qroot
@@ -728,11 +855,173 @@ Remove-TcGateTicket $t
     $xGot2 = $lX2.Count
     Exit-TcGateSlots $lX2
     T 'CLEAN TWIN once the queue is empty, the same EXACT request gets both slots' ($xGot2 -eq 2) ("got={0}" -f $xGot2)
+
+    # ------------------------------------------------------------------------------------------------------
+    # FOLDED IN 2026-09-12 from the three branches that fixed this starvation and did not land
+    # (claude\gate-slot-fifo, claude\gate-slot-line, claude\gate-slot-starvation). Each case below asserts a
+    # property THIS implementation already claims and nothing asserted. The rival branches' heartbeat cases - a
+    # live-but-frozen waiter aged out of the line - are deliberately NOT here: this file's header states the
+    # frozen-waiter wedge as a chosen behaviour, so folding them in would be a second queue design, not a
+    # missing case. design\PLAN-gate-slot-consolidation-2026-09-12.md has the whole ruling.
+    # ------------------------------------------------------------------------------------------------------
+
+    # THE FAST PATH TOUCHES NOTHING. A run that never waits must not create the queue directory or a ticket:
+    # every run on an idle box takes this path, and a ticket written there would be swept by somebody else's
+    # probe and cost a real turn.
+    $pQn = $prefix + 'qn-'
+    $qN = Join-Path $tmp ('qn-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    $lQn = Enter-TcGateSlots -Want 2 -Total 2 -Prefix $pQn -WaitSec 5 -PollMs 100 -QueueRoot $qN
+    $nGot = $lQn.Count
+    $nDir = [IO.Directory]::Exists((Get-TcGateQueueDir -Prefix $pQn -Root $qN))
+    Exit-TcGateSlots $lQn
+    T 'MUST NOT FIRE  a run that never has to wait takes NO ticket and does not even create the queue directory - only a run that waits joins the queue' `
+      ($nGot -eq 2 -and -not $nDir) ("got={0} queueDirCreated={1}" -f $nGot, $nDir)
+
+    # A BROKEN QUEUE DEGRADES, IT NEVER REFUSES. run-gates runs under EAP=Stop and pre-push runs run-gates, so a
+    # throw out of Enter is a could-not-evaluate for every push on this box. A FILE where the queue root goes makes
+    # CreateDirectory throw - the shape a stray file, a full disk or a permission change produces.
+    $pQb = $prefix + 'qb-'
+    $qB = Join-Path $tmp ('qbad-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    [IO.File]::WriteAllText($qB, 'a file, not a directory')
+    $hQb = Start-Holder $pQb 2 'zzb'
+    $bThrew = ''
+    $bGot = -1; $bTimed = $false; $bWhy = ''
+    try {
+      $lQb = Enter-TcGateSlots -Want 1 -Total 2 -Prefix $pQb -WaitSec 1 -PollMs 100 -QueueRoot $qB
+      $bGot = $lQb.Count; $bTimed = $lQb.TimedOut; $bWhy = [string]$lQb.QueueBroke
+      Exit-TcGateSlots $lQb
+    } catch { $bThrew = $_.Exception.Message }
+    T 'MUST NOT FIRE  a queue directory that cannot be written does not REFUSE a push - the run waits out of turn as it did before there was a queue, times out loudly on the slots, and carries the reason instead of throwing out of Enter' `
+      (-not $bThrew -and $bGot -eq 0 -and $bTimed -and $bWhy) ("threw='{0}' got={1} timedOut={2} why='{3}'" -f $bThrew, $bGot, $bTimed, $bWhy)
+    [IO.File]::WriteAllText($hQb.Release, 'go'); [void]$hQb.Proc.WaitForExit(10000)
+    $bGot2 = -1; $bThrew2 = ''
+    try {
+      $lB2 = Enter-TcGateSlots -Want 2 -Total 2 -Prefix $pQb -WaitSec 5 -PollMs 100 -QueueRoot $qB
+      $bGot2 = $lB2.Count
+      Exit-TcGateSlots $lB2
+    } catch { $bThrew2 = $_.Exception.Message }
+    T 'CLEAN TWIN with the queue still broken and the slots free, the run is gated exactly as before - it takes its whole want, so degrading costs the budget nothing' `
+      (-not $bThrew2 -and $bGot2 -eq 2) ("threw='{0}' got={1}" -f $bThrew2, $bGot2)
+
+    # THE HARDER HALF, AND THE ONLY ONE THAT EXERCISES THE ADMISSION GUARD. Above, the queue ROOT is a file, so the
+    # directory never exists, Get-TcGateQueueAhead answers 0 and the run would have been admitted with or without
+    # the guard. The guard exists for the other shape: a queue directory this run can READ, holding somebody else's
+    # LIVE ticket, that it cannot WRITE into - a deny-write ACL here, a full disk or a locked-down profile in
+    # production. Without the guard such a run defers to a queue it can never join and is refused for as long as
+    # the queue keeps moving; with it, it stops deferring, takes the free slot and is gated as it was before there
+    # was a queue. The budget is untouched either way, because it still only ever takes a FREE slot.
+    $denyOk = $false; $dThrew = ''; $dGot = -1; $dWhy = ''; $dAhead = -1
+    $pQd = $prefix + 'qd-'
+    $tQd = Start-TicketHolder 'zzdt' $pQd
+    $null = Wait-TicketCount $pQd 1 30
+    $dDir = Get-TcGateQueueDir -Prefix $pQd -Root $qroot
+    try {
+      $acl = Get-Acl -LiteralPath $dDir
+      $me = [Security.Principal.WindowsIdentity]::GetCurrent().Name
+      $deny = New-Object Security.AccessControl.FileSystemAccessRule($me, 'CreateFiles,WriteData', 'ContainerInherit,ObjectInherit', 'None', 'Deny')
+      $acl.AddAccessRule($deny); Set-Acl -LiteralPath $dDir -AclObject $acl
+      # PROVE THE DENY BIT, never assume it: an ACL that did not take would make the case pass down the ordinary
+      # path and assert nothing at all.
+      try { [IO.File]::WriteAllText((Join-Path $dDir 'probe.tmp'), 'x'); [IO.File]::Delete((Join-Path $dDir 'probe.tmp')) }
+      catch { $denyOk = $true }
+      if ($denyOk) {
+        try {
+          $lQd = Enter-TcGateSlots -Want 1 -Total 1 -Prefix $pQd -WaitSec 3 -PollMs 100
+          $dGot = $lQd.Count; $dWhy = [string]$lQd.QueueBroke; $dAhead = [int]$lQd.Ahead
+          Exit-TcGateSlots $lQd
+        } catch { $dThrew = $_.Exception.Message }
+      }
+    } catch { $dThrew = 'acl: ' + $_.Exception.Message }
+    finally {
+      try { $a2 = Get-Acl -LiteralPath $dDir; $a2.RemoveAccessRuleAll($deny); Set-Acl -LiteralPath $dDir -AclObject $a2 } catch { }
+      [IO.File]::WriteAllText($tQd.Release, 'go'); [void]$tQd.Proc.WaitForExit(10000)
+    }
+    T 'MUST NOT FIRE  a run that can READ the queue but cannot WRITE a ticket into it is not held behind the live ticket it can see - it stops deferring to a queue it can never join, takes the free slot and is gated, rather than being refused for a permission' `
+      ($denyOk -and -not $dThrew -and $dGot -eq 1 -and $dWhy) `
+      ("denyTook={0} threw='{1}' got={2} aheadSeen={3} why='{4}'" -f $denyOk, $dThrew, $dGot, $dAhead, $dWhy)
+
+    # DELIBERATE LOAD TAKES NO TICKET. The queue case above proves load does not JUMP the queue; this is the other
+    # direction - a waiting -Exact must be invisible to it, or a load test would hold back every gate run on the box.
+    # Counted WHILE it waits: after it exits, "never took one" and "took one and tidied up" are the same bytes.
+    $pQe = $prefix + 'qe-'
+    $hQe = Start-Holder $pQe 2 'zze'
+    $wQe = Start-ExactWaiter 'zzew' $pQe 2 2
+    Start-Sleep -Milliseconds 1200
+    $eTickets = Get-TicketCount $pQe
+    $eAlive = -not $wQe.Proc.HasExited
+    T 'MUST NOT FIRE  a deliberate-load request WAITING for its cores takes no ticket, so it can never hold a gate run back - counted while it is still waiting, not after it tidied up' `
+      ($wQe.Started -and $eAlive -and $eTickets -eq 0) ("started={0} stillWaiting={1} tickets={2}" -f $wQe.Started, $eAlive, $eTickets)
+    [IO.File]::WriteAllText($hQe.Release, 'go'); [void]$hQe.Proc.WaitForExit(10000); [void]$wQe.Proc.WaitForExit(30000)
+
+    # A PROBE MUST NOT SWEEP ITS OWN TICKET. A mutex is re-entrant for the thread that owns it, so a waiter that
+    # probed its own ticket would find it takeable, read it as dead and DELETE it - losing its own turn, silently,
+    # and only under load. The header claims a probe never touches the ticket of the thread probing; nothing
+    # asserted it. The first half asserts the hazard is real, the second that the -Before skip is what avoids it.
+    $pS2 = $prefix + 's2-'
+    $dS2 = Get-TcGateQueueDir -Prefix $pS2 -Root $qroot
+    $tS2 = New-TcGateTicket -Prefix $pS2 -Dir $dS2
+    $selfReadsDead = -not (Test-TcGateTicketLive -Prefix $pS2 -Name $tS2.Name)
+    $null = Get-TcGateQueueAhead -Dir $dS2 -Prefix $pS2 -Before $tS2.Name -Sweep
+    $selfSurvived = [IO.File]::Exists($tS2.Path)
+    T 'CLEAN TWIN a waiter sweeping the queue never sweeps ITSELF - its own ticket mutex is re-entrant and so reads as takeable, and the ticket file is still there afterwards because the sweep skips everything from its own name on' `
+      ($selfReadsDead -and $selfSurvived) ("ownProbeReadsDead={0} ownTicketSurvived={1}" -f $selfReadsDead, $selfSurvived)
+    Remove-TcGateTicket $tS2
+
+    # A KILLED WAITER'S TICKET, WITH THE NAME PINNED OPEN. The header warns that a named mutex nobody else has open
+    # is DESTROYED with its last handle, so a one-process fixture "recovers" for the wrong reason. With a third
+    # process holding a handle, the killed owner's mutex comes back ABANDONED instead - the production shape, and
+    # the path the typed catch exists for.
+    $pQp = $prefix + 'qp-'
+    $tQp = Start-TicketHolder 'zzpt' $pQp
+    $null = Wait-TicketCount $pQp 1 30
+    $pin = Start-TicketPinner 'zzpin' $pQp
+    $pinnedOk = ($pin.Pinned -and $pin.Pinned -ne 'NOTICKET')
+    try { $tQp.Proc.Kill() } catch { }
+    [void]$tQp.Proc.WaitForExit(10000)
+    $lQp = Enter-TcGateSlots -Want 1 -Total 1 -Prefix $pQp -WaitSec 5 -PollMs 100
+    $pGot = $lQp.Count
+    Exit-TcGateSlots $lQp
+    $pSwept = (Get-TicketCount $pQp) -eq 0
+    T 'CLEAN TWIN a waiter KILLED while queued does not hold the queue even when a third process pins its ticket mutex OPEN, so the mutex comes back ABANDONED rather than the name vanishing - the next run is served and the dead ticket is swept' `
+      ($pinnedOk -and $pGot -eq 1 -and $pSwept) ("pinned='{0}' got={1} swept={2}" -f $pin.Pinned, $pGot, $pSwept)
+    [IO.File]::WriteAllText($pin.Release, 'go'); [void]$pin.Proc.WaitForExit(10000)
+
+    # NOBODY LEAVES A TICKET BEHIND. A ticket outliving its run is the wedge this queue's refusal exists to report,
+    # so it would turn a bug into a machine-wide stall. Both exits are asserted: the run that TIMED OUT in the
+    # queue, and the run that was ADMITTED after waiting. Only the abandon exit was covered before.
+    $pQl = $prefix + 'ql-'
+    $hQl = Start-Holder $pQl 1 'zzl'
+    $lQl = Enter-TcGateSlots -Want 1 -Total 1 -Prefix $pQl -WaitSec 1 -PollMs 100
+    $lTimed = $lQl.TimedOut
+    Exit-TcGateSlots $lQl
+    $afterTimeout = Get-TicketCount $pQl
+    [IO.File]::WriteAllText($hQl.Release, 'go'); [void]$hQl.Proc.WaitForExit(10000)
+    $hQl2 = Start-Holder $pQl 1 'zzl2'
+    $wQl = Start-Waiter 'zzlw' $pQl 1 100
+    $null = Wait-TicketCount $pQl 1 30
+    [IO.File]::WriteAllText($hQl2.Release, 'go'); [void]$hQl2.Proc.WaitForExit(10000)
+    $lwGot = Read-HolderCount $wQl.Ready 30
+    $afterAdmit = Get-TicketCount $pQl
+    [IO.File]::WriteAllText($wQl.Release, 'go'); [void]$wQl.Proc.WaitForExit(30000)
+    T 'CLEAN TWIN no run leaves a ticket behind - neither the one REFUSED after the queue stopped moving nor the one ADMITTED after waiting, so a finished run can never stall the queue behind it' `
+      ($lTimed -and $afterTimeout -eq 0 -and $lwGot -eq 1 -and $afterAdmit -eq 0) `
+      ("timedOut={0} ticketsAfterRefusal={1} waiterGot={2} ticketsAfterAdmission={3}" -f $lTimed, $afterTimeout, $lwGot, $afterAdmit)
   } finally {
     foreach ($p in $holders) { try { if (-not $p.HasExited) { $p.Kill() } } catch { } }
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  # THE CASE COUNT IS ASSERTED, NOT JUST PRINTED (2026-09-12). These cases are a LITERAL LIST, so the number that
+  # should run is knowable in advance and a shortfall is a defect rather than a smaller tree. claude\gate-slot-fifo's
+  # suite printed PASS with a case never reached: a fixture variable $pS IS $PS - PowerShell names are
+  # case-insensitive - so it overwrote the powershell.exe path and every child after it failed to start. This file
+  # uses $PS for exactly that, so the trap is live here; the count is what makes it loud. Raise it when you add a
+  # case, which is the point: an edit that silently drops one cannot pass.
+  $expected = 37
+  if ($cases -ne $expected) {
+    Write-Output ("FAIL  MUST" + " FIRE  the suite runs every case it declares - a case that silently never ran would print PASS   got: ran={0} expected={1}" -f $cases, $expected)
+    $f++
+  }
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("SELF-TEST PASS: {0} cases - {1} must-fire led by a full machine refusing a new run and the earlier of two queued runs being served first, {2} must-not-fire led by a lone run getting its whole want, and {3} clean twins led by a killed run freeing its slots at once" -f $cases, $kinds[$kMF], $kinds[$kMNF], $kinds[$kCT])
   exit 0
