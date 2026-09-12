@@ -1,0 +1,414 @@
+{
+  "generated": "2026-09-11T21:40:00",
+  "lane": "weekly",
+  "round": 1,
+  "board_week": "2026-09-11",
+  "queue_ids_seen": [
+    "2026-09-10-582032",
+    "2026-09-10-c8eb72",
+    "2026-09-10-47eafb",
+    "2026-09-10-d67882",
+    "2026-09-10-272117",
+    "2026-09-10-a86b87",
+    "2026-09-10-c069fa",
+    "2026-09-11-c4a68f",
+    "2026-09-11-935ce3",
+    "2026-09-11-36f57d",
+    "2026-09-11-bfc110",
+    "2026-09-11-b09671"
+  ],
+  "not_reached": [
+    "2026-09-11-c4a68f",
+    "2026-09-11-935ce3",
+    "2026-09-11-36f57d",
+    "2026-09-11-bfc110",
+    "2026-09-11-b09671"
+  ],
+  "prevention_target": {
+    "type": "grocery new price flag s",
+    "window_days": 14,
+    "days_fired": 12,
+    "rank": 1,
+    "why_not_top": null
+  },
+  "new_source_check": "no row contract exists yet (build step 8 of design/PLAN-zero-alert-days-2026-09-10.md), so this is a record and not a check. Went live since the last lane run: grocery/triage-weekly-lane-stamp.txt does not exist (this is the first weekly lane), so the window taken is the 14 days ending 2026-09-11. NO NEW STORE and NO NEW FEED: grocery/stores.json still declares 7 stores across 7 commits, all of them edits to existing store records. LARGE COMMODITY BATCHES DID go live: 29 commits to grocery/commodities.json (592 commodities now) and 20 to the capture builders (build-aldi-regular, build-sams-deals, build-bakers-deals, build-fareway-regular, build-walmart-deals, import-walmart-batch). None of them was checked against a row contract, because there is none; when step 8 lands, this step runs its validator over exactly that set.",
+  "items": [
+    {
+      "queue_id": "prevention:grocery new price flag s",
+      "subject": "PREVENTION: Grocery: N NEW price flag(s) - rank 1, fired on 12 of the 14 days ending 2026-09-11",
+      "classification": "infra",
+      "lane": "weekly",
+      "evidence": [
+        "census, recomputed through Get-AlertCensusTypeDays over grocery/out/alert-census.jsonl (281 day/type rows, history 2026-08-22 to 2026-09-11) for the 14 days ending 2026-09-11: rank=1 days=12 type='grocery new price flag s'. Runners-up: rank 2 'grocery matching soundness review needed' days=11, rank 3 'grocery semantic sweep found product s no rule can see' days=10. audit-alert-census.ps1 exit 0, verdict line ALERT-CENSUS-COMPLETE quiet7=0/7 quiet30=0/21 alerts30=261 returns30=101 recurring=25, so the census is measured and not BLIND",
+        "no prevention item exists anywhere: a search of grocery/triage-plans/plan-*.json for the string 'prevention:' returns nothing, so no type has been passed over and why_not_top is null",
+        "THE DRIVER, measured on the live files 2026-09-11: sanity-check.ps1 over comparison-2026-09-11.json emits 58 flags (36 outlier-verified and quiet, 19 outlier, 3 wow). Only 2 of them were NEW today. 21 of the 58 carry a clock in grocery/out/alerted-flags.json, and their last_alerted dates are 08-29 (10 keys), 08-30 (3), 08-31 (1), 09-01 (2), 09-06 (4) and 09-11 (1), so the 14-day re-arm falls on SIX DISTINCT DAYS inside the next 14: 09-12, 09-13, 09-14, 09-15, 09-20, 09-25. Six mails, every one of them about a flag the reader has already been told about",
+        "corroborated in the queue bodies: Anaheim Peppers, Blueberries, Cheddar cheese curds and Crushed Thai Chili all paged as NEW on 2026-09-06 (queue 2026-09-06-24ac66) and are all still standing outlier flags on today's board, which is the re-arm cycle and not a new event",
+        "and the same shape one event at a time: 2026-09-05 (bouillon), 2026-09-10 (whole coconut) and 2026-09-11 (shrimp) each paged an outlier AND a wow on ONE commodity, which is one price event wearing two keys",
+        "premise check on a cheaper candidate, and it failed: the unit cross-check reports '0 row(s) priced in a unit that is not comparable with their commodity's' on today's board, so widening Test-NativeComparable to convertible unit families has ZERO live instances and was dropped before any code was written"
+      ],
+      "surface_fix": {
+        "what": "a key the 14-day clock re-armed no longer starts a mail of its own. It pages when the run is already paging something else, and otherwise forces its own page once it is more than REARM_RIDE_DAYS (7) past due, pulling every other waiting re-arm into that same mail",
+        "files": ["grocery/check-ad-cycles.ps1"],
+        "exact_change": "REVIEW-ACKLOAD region: $REARM_RIDE_DAYS = 7 beside $REARM_DAYS, with its rationale and the two alternatives rejected. REVIEW-DECISION region: the re-arm branch records days past due in $rearmOver, and after the loop, if every due key is a re-arm and none is more than $REARM_RIDE_DAYS past due, $newIdx is emptied and $rearmHeld records the count. The summary line gains ', N re-arm(s) HELD to ride the next page day (still due)'"
+      },
+      "root_cause": "the re-arm is per key and every key carries its own clock, so a standing backlog of reviewed-but-unfixable flags pages on a different day almost every day. Nothing about any single one of those mails is wrong, which is why seven fixes to individual flags never moved the type: the class cannot go quiet while the backlog stands, because the backlog itself is the emitter's schedule. Fixing the flags one at a time cannot reach it and neither can any exclude",
+      "root_fix": {
+        "what": "coalesce at the emitter: a re-arm rides a page day, it never opens one. Genuinely new events (a key never seen, one that cleared and came back, an ack that ran out, a key with no usable clock) are untouched and still page same-day",
+        "files": ["grocery/check-ad-cycles.ps1", "grocery/test-auditors.ps1"],
+        "exact_change": "as surface_fix, plus four frozen cases in test-auditors unit u067 that drive the REAL extracted REVIEW-DECISION and REVIEW-STAMP regions against a frozen two-key backlog"
+      },
+      "prevention": {
+        "source": ["grocery/check-ad-cycles.ps1"],
+        "what": "the upstream producer of this alert is the review-flag block in check-ad-cycles.ps1, which decides what counts as NEW and mails it. The flags themselves come from grocery/sanity-check.ps1 and were deliberately left alone: every one of the 19 paging outliers is a real 35-percent-plus spread that a human still has to judge, and quieting those would be weakening the guard rather than preventing the alert",
+        "exact_change": "$REARM_RIDE_DAYS = 7 in the REVIEW-ACKLOAD region and the coalescing block at the end of the REVIEW-DECISION region"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "the two sentinel regions are executed by exactly one production call path (check-ad-cycles.ps1's review-flag stage) and by test-auditors unit u067, which extracts and runs them against frozen state. Live effect computed from grocery/out/alerted-flags.json and today's guards file: the 21 clocked standing flags re-arm on 6 distinct days in the 14 days from 2026-09-12; under the new rule the 09-12, 09-13, 09-14 and 09-15 groups all wait and page together on 09-19, when the oldest is 7 days past due",
+        "affected_now": 21,
+        "names": [
+          "the 21 clocked standing flags, by re-arm date: 09-12 (10 keys), 09-13 (3), 09-14 (1), 09-15 (2), 09-20 (4), 09-25 (1)"
+        ],
+        "risk": "a re-arm can now be up to 7 days later than before, on a flag that has already been open at least 14 days and already been reported once. Nothing is dropped and nothing is stamped while held, so a held key stays DUE exactly as a -NoAlert run leaves it due, and every flag still pages inside REARM_DAYS + REARM_RIDE_DAYS = 21 days. No board effect: this block reads flags and sends mail, it prices nothing and publishes nothing",
+        "cell_effects": []
+      },
+      "freshness": "measured against grocery/out/alerted-flags.json and grocery/out/comparison-2026-09-11.json as they stood at 21:00 on 2026-09-11, and against the census at ALERT-CENSUS-COMPLETE for 2026-08-22..2026-09-11. The 07:00 and 08:00 runs rewrite alerted-flags.json daily, so the six re-arm dates move as keys page; the mechanism does not",
+      "proof": {
+        "guard_or_fixture": "grocery/test-auditors.ps1 unit u067-l-review-flag-re-arm-ack-expiry, which extracts the REVIEW-ACKLOAD, REVIEW-DECISION and REVIEW-STAMP regions from check-ad-cycles.ps1 and runs the real source against frozen synthetic state",
+        "must_fire_case": "frozen backlog: two open flags last_alerted at T0-14 and T0-11, nothing else flagged. Over 11 simulated days they must page on exactly ONE day (they page on day 8, when the older is 7 days past due). Before the fix they paged on day 0 and day 3, two separate mails. A second must-fire asserts both keys appear in that one mail, so holding is proved not to be dropping",
+        "clean_twin": "a key NEVER SEEN still pages the day it appears (never deferred), and on day 3, when both backlog keys are genuinely due, they RIDE that already-paging day rather than waiting for one of their own. The ten pre-existing u067 cases are the other half of the twin: the never-re-arms bug, the ack-expiry re-arm, the no-cry-wolf window, and all three -NoAlert cases still pass unchanged",
+        "commands": ["powershell -NoProfile -File grocery\\test-auditors.ps1"]
+      },
+      "rollback": "revert the two hunks in check-ad-cycles.ps1 (the constant and the coalescing block) and the four cases in test-auditors.ps1. No state migration: the rule reads last_alerted, which it already read, and writes nothing new",
+      "do_not_touch": [
+        "the ack-expiry re-arm branch, which must stay unconditional or a short ack is silently rounded up to 14 days",
+        "the -NoAlert suppression and the send-failure guard",
+        "sanity-check.ps1's 35 percent outlier and 40 percent week-over-week thresholds",
+        "grocery/price-bands.json and every other file on the money lane's list"
+      ],
+      "resolution_note": "PREVENTION, first weekly lane. Target: 'grocery new price flag s', rank 1, fired on 12 of the 14 days ending 2026-09-11. LAST WEEK'S TARGET: there is none. grocery/triage-weekly-lane-stamp.txt does not exist and no plan-*.json in the tree carries a 'prevention:' item, so this is the first prevention target ever set and there is no before/after to measure this week. The BEFORE count for this one is stated here for the next lane to measure against: days_fired 12 over the 14 days ending 2026-09-11, recomputed by the gate from grocery/out/alert-census.jsonl. Root cause is the emitter's schedule, not any individual flag: 21 standing flags re-arm on 6 distinct days in the next 14. Re-arms now ride a page day instead of opening one, and force their own only when 7 days past due. Nothing is dropped, nothing is quieted, and every flag still pages inside 21 days.",
+      "publish_batch": 0,
+      "status": "done",
+      "premise_verified": "true, and one premise was falsified before it cost anything. VERIFIED: the census reads rank 1 days=12 for this type through the gate's own function; no prevention item exists in any plan; the 21 clocked standing flags re-arm on 6 distinct days in the next 14; four of the flags that paged as NEW on 09-06 are still standing today. FALSIFIED: the unit cross-check reports 0 not-comparable rows on today's board, so the candidate fix of widening comparability to convertible unit families had zero live instances and was abandoned before any edit. Also measured and rejected: coalescing an outlier and its shadow wow would cut mails on 3 of the 6 sampled days but would not make ONE day quiet, because each of those days still had a flag left",
+      "deviation": null,
+      "shipped_commit": null,
+      "leaves_open": "the 19 paging outlier flags and the 3 wow flags themselves are untouched, so the type still pages on a genuinely new event, which is what it is for. Two named residuals inside that: (1) one price event still mints TWO keys when a commodity is both an outlier and a week-over-week mover, seen on 3 of the 6 days sampled (2026-09-05 bouillon, 09-10 whole coconut, 09-11 shrimp); (2) the outlier-verified quiet path has no wow twin, so a cheapest row whose own store publishes a unit price that reproduces ours still pages under the wow key. Both live in grocery/sanity-check.ps1 and neither changes a board price",
+      "leaves_open_occurrences": 3,
+      "leaves_open_window": "6 days sampled from the queue bodies of this type, 2026-09-05 to 2026-09-11",
+      "leaves_open_followup": "2026-09-11-b09671"
+    },
+    {
+      "queue_id": "2026-09-10-582032",
+      "subject": "Triage residual: two-product ad lines have no engine handler, 40 of 146 Baker's rows match the shape",
+      "classification": "parse-basis-bug",
+      "classification_note": "recorded as parse-basis-bug and not wrong-product, on the gate's challenge and after re-reading the founding case: the ad line really does offer the cereal, and the ad price really is $4.49; what is wrong is the SIZE the engine divided by (the other product's 46 fl oz on a row priced by weight). No routing measurement is claimed here because none was taken: this lane may not change the rule and did not",
+      "lane": "money",
+      "evidence": [
+        "RE-MEASURED 2026-09-11 on grocery/out/bakers/bakers-deals-2026-09-09.json, which is still the newest Baker's file and still the live ad week (2026-09-09 to 2026-09-15): 42 of 146 rows carry the two-product shape by my own regex over the item field, against the 40 of 146 the item recorded with its own. The class is live, not stale. Examples read off the file today: 'Artesano Bread, 20 oz or Buns, 6-8 ct'; 'Private Selection Cara Cara Navels, 4 lb Bag or Pomegranates, 1 ct'; 'Private Selection Fresh Baked Butter Croissants, Large, 4 ct or Bakery Fresh Muffins, 4 ct'",
+        "the founding case priced the CEREAL commodity by the orange juice's 46 fl oz and took the crown at $0.0976/oz against an honest $0.219 to $0.333/oz",
+        "THE FIX IS ON THE LINE THIS LANE DOES NOT CROSS: splitting or refusing an 'A, size or B, size' line changes which product a row matches and which size divides its price. That is the matching and pricing rule, and every repair path runs through the ad-line parse that feeds compare-deals.ps1 and pricing-math-lib.ps1. The cheapest honest owner of a rule that decides a published crown is the max-effort money lane"
+      ],
+      "surface_fix": null,
+      "root_cause": "the weekly-ad parser has one product per line by construction, so a line offering two products at one price is parsed as one product with whichever size the regex reaches first. What shipped on 2026-09-09 was one known-wrong.json entry for one row, which cannot reach the other 41",
+      "root_fix_none_because": "not implemented here by design: this lane may not change a matching or pricing rule, and there is no version of this fix that does not. Handed back with the measurement rather than half-done",
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "count of rows matching the shape in the newest Baker's file, re-run 2026-09-11",
+        "affected_now": 42,
+        "names": ["42 of 146 rows in bakers-deals-2026-09-09.json carry the shape; the item's own measurement was 40 of 146 with a different regex, and ads-2026-09-09.json was 1 of 1,982 and sams-deals 0 of 97"],
+        "risk": "unchanged by this lane. Any cell one of those 42 rows holds is priced by one product's size against another product's commodity until the money lane ships a handler",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-11 against bakers-deals-2026-09-09.json, the live ad week. A new Baker's ad lands 2026-09-16 and the count will move with it; the shape will not",
+      "proof": {
+        "guard_or_fixture": "none run here. guards.ps1 already hard-fails a publish when such a row wins a cell, which is what held the board on 2026-09-09",
+        "must_fire_case": "for the money lane: the founding row 'Simply Orange Juice, 46 fl oz or Post Large Size Cereal, 13.5-20.5 oz' at $4.49 must not price the cereal commodity at $0.0976/oz",
+        "clean_twin": "for the money lane: an ordinary single-product ad line with one size must still price exactly as it does today",
+        "commands": []
+      },
+      "rollback": "nothing shipped",
+      "do_not_touch": ["everything: this item was not implemented"],
+      "resolution_note": "MIS-LANED, handed back to the money lane. Re-measured 2026-09-11: 42 of 146 rows in the live Baker's ad still carry the two-product shape, so the class is live. Every repair changes which product a row matches and which size divides its price, which is a matching and pricing rule and outside the weekly lane's reach. No code shipped; the queue id stays open for the max-effort lane.",
+      "publish_batch": 0,
+      "status": "bounced",
+      "premise_verified": "true: re-measured today, 42 of 146 in the newest Baker's file, and the file is still the current ad week",
+      "deviation": "bounced rather than implemented, on the lane rule. The measurement that shows it touches prices is in the evidence: the founding row set a published crown at $0.0976/oz",
+      "shipped_commit": null,
+      "leaves_open": "the whole class, unchanged: 42 of 146 rows of the live Baker's ad carry the two-product shape and any of them can price a wrong cell",
+      "leaves_open_occurrences": 42,
+      "leaves_open_window": "the live ad week, 2026-09-09 to 2026-09-15",
+      "leaves_open_followup": "2026-09-10-582032"
+    },
+    {
+      "queue_id": "2026-09-10-c8eb72",
+      "subject": "Triage residual: Sam's gallon jugs on weight-priced commodities price off a cent-rounded quotient size",
+      "classification": "parse-basis-bug",
+      "lane": "money",
+      "evidence": [
+        "RE-MEASURED 2026-09-11 on grocery/out/comparison-2026-09-11.json: bbq-sauce still has Sam's Club holding the CROWN at $0.07/oz off 'Sweet Baby Ray's Original Barbecue Sauce, 1 gal.' with size 171.143 oz, which is the cent-rounded quotient size the item describes, not a size read off the jug",
+        "the fl-oz half of the class was fixed on 2026-09-10 and shows as fixed today: ranch-dressing's Sam's row now carries size 128 fl oz and prices at $0.0858/oz from the name's volume",
+        "THE FIX IS ON THE LINE THIS LANE DOES NOT CROSS: the size a row is divided by IS the published per-unit price. bbq-sauce's crown moves the moment the derivation changes, and the item's own note says the true per-oz lies in [0.065, 0.075) with Walmart 6.1 percent dearer, so the crown itself is in play. That is a pricing rule and a board change, which belongs to the max-effort money lane"
+      ],
+      "surface_fix": null,
+      "root_cause": "build-sams-deals.ps1 Build-Row derives pack size as linePrice divided by Sam's cent-rounded unit price whenever the name states its size in a unit family Sam's did not price by, so the size is a function of the price and carries an error of plus or minus 0.005 divided by unitPrice. On a weight-priced commodity there is no safe substitution, because a gallon's weight depends on density",
+      "root_fix_none_because": "not implemented here by design: every repair path changes a published crown, which this lane may not do. Handed back with the measurement",
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "re-read of comparison-2026-09-11.json for the cells the item named",
+        "affected_now": 1,
+        "names": ["bbq-sauce | Sam's Club | 'Sweet Baby Ray's Original Barbecue Sauce, 1 gal.' | size 171.143 oz | $0.07/oz, still the crown today"],
+        "risk": "unchanged by this lane. The item measured 11 distinct products in the corpus carrying a gallon-named derived size on a weight-priced commodity, of which 2 held cells on 2026-09-09; today bbq-sauce is the one still visible as a crown",
+        "cell_effects": []
+      },
+      "freshness": "measured against comparison-2026-09-11.json as it stood at 21:00 on 2026-09-11. The board rebuilds daily and the cell can change hands; the derivation does not",
+      "proof": {
+        "guard_or_fixture": "none run here",
+        "must_fire_case": "for the money lane: a Sam's row whose name states a gallon and whose size came from linePrice / cent-rounded unitPrice must not silently set a weight-priced crown",
+        "clean_twin": "for the money lane: the fl-oz path fixed on 2026-09-10 (ranch dressing at 128 fl oz, $0.0858/oz) must not move",
+        "commands": []
+      },
+      "rollback": "nothing shipped",
+      "do_not_touch": ["everything: this item was not implemented"],
+      "resolution_note": "MIS-LANED, handed back to the money lane. Re-measured 2026-09-11: the bbq-sauce cell is still a Sam's Club crown at $0.07/oz off a 171.143 oz quotient size. Any fix changes a published price, which is outside the weekly lane's reach. No code shipped; the queue id stays open for the max-effort lane.",
+      "publish_batch": 0,
+      "status": "bounced",
+      "premise_verified": "true: the cell is still live and still a crown today, and the fl-oz half of the fix is visibly in place",
+      "deviation": "bounced rather than implemented, on the lane rule",
+      "leaves_open": "the whole class for weight-priced commodities: 11 products in the corpus carry a gallon-named derived size, and bbq-sauce holds a crown off one today",
+      "leaves_open_occurrences": 11,
+      "leaves_open_window": "the 19-file corpus of plan-2026-09-10.routing.json, re-checked against comparison-2026-09-11",
+      "leaves_open_followup": "2026-09-10-c8eb72",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-10-47eafb",
+      "subject": "Triage finding: the pipeline committers' own path lists disagree with lib/bot-paths.ps1, so the scope hook refuses their commits",
+      "classification": "infra",
+      "lane": "weekly",
+      "evidence": [
+        "RE-MEASURED 2026-09-11 with the estate's own predicate (Test-BotPathOwned over Get-PipelinePaths, both dot-sourced at HEAD 359d7c3c7): pricing 12 declared, 3 unowned (grocery/notify-known-ids.json, grocery/sale-fallback-ownership.json, meal-prep/db/costed.stamp.json); graph 6 declared, 2 unowned (graph/learning, graph/state); harvest 4 declared, 3 unowned (meal-prep/db/candidate-pool.json, meal-prep/db/harvest-state.json, meal-prep/db/considered-dishes.json). That is 8 of 22, WIDER than the item's own measurement, which named only the pricing lane's 3",
+        "all eight are lane state or lane ledgers of the same class as meal-prep/db/source-domains.json and graph/identity, which bot-paths already owns for exactly the reason given in its header: an observation that never leaves this box is an observation lost",
+        "the symptom the item recorded: check-ad-cycles' commit was refused at 11:50:57 on 2026-09-10 because three of its own declared paths were dirty and unowned"
+      ],
+      "surface_fix": {
+        "what": "bot-paths.ps1 owns the eight paths the three lanes already declare",
+        "files": ["lib/bot-paths.ps1"],
+        "exact_change": "Get-BotInputPaths gains grocery/notify-known-ids.json, grocery/sale-fallback-ownership.json, meal-prep/db/costed.stamp.json, meal-prep/db/candidate-pool.json, meal-prep/db/harvest-state.json, meal-prep/db/considered-dishes.json, graph/learning and graph/state, with the measurement and the reason in the comment above them"
+      },
+      "root_cause": "two declarations of one fact, written separately: lib/pipeline-commit.ps1 Get-PipelinePaths says what each lane owns and lib/bot-paths.ps1 says what an automated commit may touch. Nothing compared them, so they drifted apart and the pre-commit hook refused each lane's OWN commit the first day one of its undeclared paths was dirty",
+      "root_fix": {
+        "what": "the self-test compares the two declarations directly, so the next path added to either one cannot silently disagree",
+        "files": ["lib/bot-paths.ps1"],
+        "exact_change": "lib/bot-paths.ps1 -SelfTest dot-sources lib/pipeline-commit.ps1 and asserts, per lane, that every path Get-PipelinePaths declares is owned, naming the offenders rather than counting them"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "Test-BotPathOwned over all three Get-PipelinePaths lists before and after the edit, plus lib/bot-paths.ps1 -SelfTest",
+        "affected_now": 8,
+        "names": ["grocery/notify-known-ids.json", "grocery/sale-fallback-ownership.json", "meal-prep/db/costed.stamp.json", "meal-prep/db/candidate-pool.json", "meal-prep/db/harvest-state.json", "meal-prep/db/considered-dishes.json", "graph/learning", "graph/state"],
+        "risk": "this WIDENS what an automated commit may stage, which is the direction that cost this estate 3c44d0c1. Contained three ways: every one of the eight is already declared by a scheduled lane in the other file, so nothing new is staged that a committer was not already trying to stage; none is source, and the MUST FIRE cases for a .ps1, a design doc and a prefix sibling all still pass; and the newly owned graph paths are the exact reason the graph lane's missing start snapshot was fixed in the same plan, so a session's file dirty before the run is held back rather than swept",
+        "cell_effects": []
+      },
+      "freshness": "measured against HEAD 359d7c3c7 on 2026-09-11 with all three lists as they stand today. If a lane declares a new path, the new self-test case is what will say so",
+      "proof": {
+        "guard_or_fixture": "lib/bot-paths.ps1 -SelfTest",
+        "must_fire_case": "the same predicate over the same three lists reported 8 unowned paths before the edit (pricing 3, graph 2, harvest 3), which is the founding bug; the new cases assert 0 unowned per lane and print the declared count with it",
+        "clean_twin": "the four pre-existing MUST FIRE cases still refuse a .ps1, a design doc, a prefix sibling and an empty ownership set, and a new twin asserts that a data file no lane declares is still NOT owned, so the widening did not become a sweep",
+        "commands": ["powershell -NoProfile -File lib\\bot-paths.ps1 -SelfTest"]
+      },
+      "rollback": "revert the two hunks in lib/bot-paths.ps1. The lanes go back to being refused by the pre-commit hook, which is the state of 2026-09-10",
+      "do_not_touch": ["the INPUTS and SERVED split", "ops/verify-bot-commit-scope.ps1", "the pre-commit hook"],
+      "resolution_note": "Confirmed and fixed at the source. Re-measured 2026-09-11: 8 of the 22 paths the three scheduled lanes declare were not owned by lib/bot-paths.ps1 (the item had found 3), so each lane's own commit was refused the first day one of them was dirty. bot-paths now owns all eight, and its self-test compares the two declarations per lane so they cannot drift again. lib/bot-paths.ps1 -SelfTest exit 0, pricing 12/0, graph 6/0, harvest 4/0.",
+      "publish_batch": 0,
+      "status": "done",
+      "premise_verified": "true, and wider than the plan premise: measured with Test-BotPathOwned at HEAD, the disagreement covers all three lanes, 8 of 22 paths, not the pricing lane's 3 alone",
+      "deviation": "the fix covers all three lanes rather than the one the item named, because the measurement found the other two. That widens what shipped, it does not narrow it",
+      "shipped_commit": null,
+      "leaves_open": "a session's edit made DURING a run to one of the newly owned paths can now be swept into that lane's commit instead of being refused by the scope hook. That is the class of 2026-09-10-d67882, which stays open and is the owner; the pre-run half of it is already held back by the foreign-held rule, and the graph lane's missing start snapshot was fixed in this same plan so that its newly owned paths are covered by it",
+      "leaves_open_occurrences": 0,
+      "leaves_open_window": "no occurrence on the newly owned paths is possible before this change ships; the class itself is measured under 2026-09-10-d67882",
+      "leaves_open_followup": "2026-09-10-d67882"
+    },
+    {
+      "queue_id": "2026-09-10-a86b87",
+      "subject": "Triage residual: the foreign-held rule also holds back a non-committing pipeline run's writes, and graph nightly passes no start snapshot",
+      "classification": "infra",
+      "lane": "weekly",
+      "evidence": [
+        "EDGE 2 RE-MEASURED and FIXED. At HEAD, an AST walk over every Invoke-PipelineCommit call site in the tree found graph/pipeline/nightly.ps1:1222 passing neither -DirtyAtStart nor -RunStart, against grocery/capture-run.ps1, grocery/check-ad-cycles.ps1 and meal-prep/pipeline/harvest-crawl.ps1, which all pass both. With none, the committer fails open and cannot tell a session's half-written file from the night's own writes",
+        "this matters more from today, because the same plan gives the graph lane ownership of graph/learning and graph/state in lib/bot-paths.ps1, so the pre-commit hook no longer refuses those files on its behalf",
+        "EDGE 1 NOT FIXED: a pipeline run that commits nothing (the capture watchdog's Family Fare shard window appending to a dated regular file after the 08:00 run has committed it) still leaves a file that every later run holds as foreign. The item's own measurement stands: one more dirty dated file on the shared tree per day until grocery/push-data.ps1 ships it, and no price is lost because the next day's file carries the rows forward"
+      ],
+      "surface_fix": {
+        "what": "graph nightly takes a start-of-run snapshot and passes it to its committer",
+        "files": ["graph/pipeline/nightly.ps1"],
+        "exact_change": "at $started = Get-Date, dot-source lib/pipeline-commit.ps1 and take Get-DirtyOwnedSnapshot over Get-PipelinePaths -Kind graph into $graphDirtyAtStart, guarded so a snapshot that throws holds nothing back and says so; the commit call gains -DirtyAtStart $graphDirtyAtStart -RunStart $started"
+      },
+      "root_cause": "the foreign-held rule can only work if the CALLER hands it a snapshot taken before the run wrote anything, and nothing checked that the callers do. The rule's own fixtures all build their snapshot by hand, so a lane that passes none is invisible to them",
+      "root_fix": {
+        "what": "the rule's own self-test walks the real call sites, so a lane that passes no snapshot is a red case rather than an invisible one",
+        "files": ["lib/pipeline-commit.ps1", "graph/pipeline/nightly.ps1"],
+        "exact_change": "lib/pipeline-commit.ps1 -SelfTest parses every .ps1 in the repo that mentions Invoke-PipelineCommit (excluding itself, whose only calls are the two refusal probes, and excluding archive/ and .claude/, the latter matched on the path BELOW the repo root so a run from a worktree does not exclude the whole tree) and fails any call site missing -DirtyAtStart or -RunStart, printing the number of sites and files it resolved"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "the new AST walk: 3 call sites in 3 files outside lib/pipeline-commit.ps1, all passing both parameters after the fix",
+        "affected_now": 1,
+        "names": ["graph/pipeline/nightly.ps1:1222, the one call site that passed neither"],
+        "risk": "the graph lane can now hold a file back that it used to commit. That is the intended behaviour and it fails open: a snapshot that cannot be taken holds nothing and says so on the commit line, so the night's evidence still lands",
+        "cell_effects": []
+      },
+      "freshness": "measured against HEAD 359d7c3c7 on 2026-09-11. A new committer added after this ships is caught by the new self-test case rather than by a re-read",
+      "proof": {
+        "guard_or_fixture": "lib/pipeline-commit.ps1 -SelfTest",
+        "must_fire_case": "PROVEN, not asserted: the same AST walk run against git show HEAD:graph/pipeline/nightly.ps1 reports 'sites at HEAD=1, line 1222 missing=-DirtyAtStart,-RunStart'. After the fix the live walk reports 0 missing",
+        "clean_twin": "the walk prints what it resolved (3 sites in 3 files) and fails if it resolves fewer than 3, so an empty walk cannot read as a clean report; and the five pre-existing foreign-held cases, including the end-to-end throwaway-repo case and its CLEAN TWIN, still pass unchanged",
+        "commands": ["powershell -NoProfile -File lib\\pipeline-commit.ps1 -SelfTest"]
+      },
+      "rollback": "revert the two hunks in graph/pipeline/nightly.ps1 and the one case block in lib/pipeline-commit.ps1",
+      "do_not_touch": ["Get-ForeignHeldPaths' rule", "the fail-open behaviour of an unavailable snapshot"],
+      "resolution_note": "Half shipped, half open, so the id stays open. EDGE 2 fixed: graph nightly was the one committer passing no start snapshot (proved against HEAD by an AST walk, nightly.ps1:1222 missing both parameters), it now takes one at $started, and lib/pipeline-commit.ps1 -SelfTest walks every call site so the next lane that forgets is red instead of invisible (3 sites in 3 files, exit 0). EDGE 1 (a pipeline run that commits nothing leaves a file every later run holds as foreign) is NOT fixed and is what keeps this id open.",
+      "publish_batch": 0,
+      "status": "needs-more-time",
+      "premise_verified": "true for both edges. Edge 2 verified by running the new walk against the pre-fix file from git. Edge 1 re-read from the item's own measurement and not re-derived: the capture watchdog's shard window still appends to the dated Family Fare regular file, and grocery/out/regular/family-fare-regular-2026-09-11.json is dirty in the tree right now",
+      "deviation": "edge 2 shipped, edge 1 not started: the budget for this item went on proving the call-site defect and gating it. The id stays open rather than a new one being minted",
+      "shipped_commit": null,
+      "leaves_open": "EDGE 1: the foreign-held rule cannot tell a session's edit from a write by a pipeline run that has no commit of its own, so the capture watchdog's shard append leaves one dated Family Fare file dirty on the shared tree per day until push-data ships it",
+      "leaves_open_occurrences": 1,
+      "leaves_open_window": "daily since 2026-09-10, when the foreign-held rule shipped; one file per day, and grocery/out/regular/family-fare-regular-2026-09-11.json is today's",
+      "leaves_open_followup": "2026-09-10-a86b87"
+    },
+    {
+      "queue_id": "2026-09-10-272117",
+      "subject": "Triage residual: a day with no sign-in until after a task's catch-up window is still lost, and nothing reports it the next day",
+      "classification": "no-code-change",
+      "lane": "weekly",
+      "evidence": [
+        "RE-MEASURED 2026-09-11: the residual's second half is FALSE as written. grocery/health-heartbeat.ps1 reads grocery/expected-automations.json and checks that each registered Windows task EXISTS, is not disabled, and RAN within max_age_hours, alerting through Send-Alert when it did not. All six one-shot tasks the item names are registered there: TC Grocery Ad Pulls 0700, TC Grocery Daily Capture 0800, TC Grocery Capture Watchdog 1030, TC Recall Sleep 0435, TC Brain Digest 0645 and TC Recipe Harvest Crawl, every one at max_age_hours=30 (9 tasks registered in total, 8 at 30 hours and the sidecar watchdog at 2)",
+        "so a day a task loses entirely IS reported the next day, inside 30 hours, by an existing check that pages on the FIRST occurrence",
+        "the first half stands at zero: the item measured 0 occurrences in the 20 days that have run logs (2026-08-22 to 2026-09-10, a log for every day), and the one measured gap (restart 20:33, sign-in 03:29) is covered by every task's catch-up window",
+        "the Interactive logon type is deliberate and not a defect: a non-interactive token cannot open the DPAPI-protected browser profiles (graph/pipeline/install-nightly-task.ps1:62)"
+      ],
+      "surface_fix": null,
+      "root_cause": "the residual was written from the task scheduler's side, where StartWhenAvailable does not re-queue a missed Interactive occurrence, and it did not account for health-heartbeat watching the same tasks from the artefact side. The remaining exposure is a restart plus no sign-in for a whole 4 to 8 hour window, which has not happened in 20 days of logs",
+      "root_fix_none_because": "there is nothing to fix: the reporting half is already owned by health-heartbeat, which pages on the first occurrence, and the losing half has happened 0 times in 20 measured days behind a logon type that is required for the work",
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "read of grocery/expected-automations.json (9 registered tasks with their max_age_hours) and of health-heartbeat.ps1's task check and Send-Alert path",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none: nothing changed",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-11 against expected-automations.json and health-heartbeat.ps1 at HEAD. If a task is ever added to Task Scheduler and not to that registry, health-heartbeat's own TASK UNWATCHED issue is what says so",
+      "proof": {
+        "guard_or_fixture": "grocery/health-heartbeat.ps1, already scheduled and already alerting",
+        "must_fire_case": "a registered task that has not run within max_age_hours (30) is reported as a silent death and mailed",
+        "clean_twin": "a task registered in Task Scheduler but absent from expected-automations.json is reported as TASK UNWATCHED rather than passing quietly",
+        "commands": []
+      },
+      "rollback": "nothing shipped",
+      "do_not_touch": ["the Interactive logon type", "the catch-up windows shipped on 2026-09-10"],
+      "resolution_note": "Closed by-design after re-measurement. The reporting half of the residual is false as written: health-heartbeat.ps1 checks all six one-shot tasks through expected-automations.json at max_age_hours=30 and mails on the first occurrence, so a lost day IS reported the next day. The losing half has happened 0 times in the 20 days that have run logs, the one measured gap is covered by the catch-up windows shipped 2026-09-10, and the Interactive logon type is required for the DPAPI-protected browser profiles. Residual owned by watch:grocery/health-heartbeat.ps1 at 0 occurrences.",
+      "publish_batch": 0,
+      "status": "done",
+      "premise_verified": "false, and that is the finding: the premise 'nothing reports it the next day' does not hold. The six tasks are registered in expected-automations.json at 30 hours and health-heartbeat mails on the first miss",
+      "deviation": "closed rather than fixed, because the measurement removed the work",
+      "shipped_commit": null,
+      "leaves_open": "a restart followed by no sign-in for a whole catch-up window still loses that task's day; the loss is reported, not prevented",
+      "leaves_open_occurrences": 0,
+      "leaves_open_window": "20 days with run logs, 2026-08-22 to 2026-09-10",
+      "leaves_open_followup": "watch:grocery/health-heartbeat.ps1"
+    },
+    {
+      "queue_id": "2026-09-10-d67882",
+      "subject": "Triage residual: a session edit made during a pipeline run is still swept into that run's commit",
+      "classification": "needs-more-time",
+      "lane": "weekly",
+      "evidence": [
+        "the class is real and structural: both committers stage by DIRECTORY (grocery/out alone is 1,342 tracked files) and the foreign-held rule shipped on 2026-09-10 discriminates by MTIME against the run start, so a file a session edits AFTER the run started has a newer mtime and is indistinguishable from one the run wrote",
+        "re-measured only as far as the budget allowed: the rule is in lib/pipeline-commit.ps1 as Get-ForeignHeldPaths and its input is a mtime map, so no version of it can see this case. No occurrence count was taken over the last 14 days of bot commits; that measurement is the first thing the next lane should buy",
+        "this plan's 47eafb fix widens the exposure slightly, by giving the three lanes ownership of 8 paths the scope hook used to refuse on their behalf (graph/learning, graph/state and six ledgers). The pre-run half of those is covered by the foreign-held rule and, for the graph lane, by the start snapshot shipped here under a86b87"
+      ],
+      "surface_fix": null,
+      "root_cause": "ownership is inferred from mtime, and mtime cannot distinguish an author. A rule that could would have to compare content against what the run itself wrote (a per-file write journal kept by the run) rather than when the file changed",
+      "root_fix_none_because": "not attempted: the item ceiling went on the four items above it. Nothing was shipped and nothing was weakened",
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "not measured this run",
+        "affected_now": 0,
+        "names": [],
+        "risk": "unchanged: nothing shipped for this item",
+        "cell_effects": []
+      },
+      "freshness": "not re-measured beyond reading the rule at HEAD 359d7c3c7 on 2026-09-11",
+      "proof": {
+        "guard_or_fixture": "none run for this item",
+        "must_fire_case": "for whoever picks it up: a file CLEAN at run start, edited by a session mid-run, must not be staged by the run's commit",
+        "clean_twin": "a file the run itself wrote mid-run must still be committed as the run's own",
+        "commands": []
+      },
+      "rollback": "nothing shipped",
+      "do_not_touch": ["the mtime rule that shipped on 2026-09-10, which is correct for the pre-run case"],
+      "resolution_note": "NOT WORKED: the lane's item budget ran out above it. The class was re-read and stands (ownership is inferred from mtime, which cannot see an edit made after the run started, so a write journal kept by the run is the shape of any real fix). No occurrence count was taken and nothing shipped; the id stays open and un-minted.",
+      "publish_batch": 0,
+      "status": "needs-more-time",
+      "premise_verified": "partially: the mtime rule was re-read at HEAD and cannot see this case. The occurrence count over recent bot commits was NOT taken",
+      "deviation": "not started, on budget",
+      "shipped_commit": null,
+      "leaves_open": "the whole class: a session edit made during a run is still swept into that run's commit",
+      "leaves_open_occurrences": 0,
+      "leaves_open_window": "not measured this run, which is itself the first thing the next lane should buy",
+      "leaves_open_followup": "2026-09-10-d67882"
+    },
+    {
+      "queue_id": "2026-09-10-c069fa",
+      "subject": "Triage finding: source-domains -Record lost 1 of 8 concurrent writes and refused a push",
+      "classification": "superseded",
+      "lane": "weekly",
+      "evidence": [
+        "already closed before this lane reached it: triage-queue.json has 2026-09-10-c069fa at status=resolved, resolved_ts 2026-09-11T14:41:51, disposition=confirmed",
+        "its close names the cause and the fix: Move-Item -Force over the ledger threw 'Cannot create a file when that file already exists' whenever another process held the file open without FileShare.Delete, measured at 3 of 40 self-test runs on unchanged code; fixed by 9f3ca3cbd (lib/atomic-write.ps1 retry), and main at 7107ce79e passed the self-test 80 of 80"
+      ],
+      "surface_fix": null,
+      "root_cause": "see the close: the write step inside the mutex, not the lock and not the barrier",
+      "root_fix_none_because": "already shipped by another lane at 9f3ca3cbd; there is nothing for this lane to do",
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "not re-measured: the item is closed and its close carries the measurement",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none",
+        "cell_effects": []
+      },
+      "freshness": "read from triage-queue.json on 2026-09-11 at 21:00",
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/source-domains.ps1 -SelfTest concurrency case, kept and not weakened",
+        "must_fire_case": "covered by the close",
+        "clean_twin": "covered by the close",
+        "commands": []
+      },
+      "rollback": "nothing shipped",
+      "do_not_touch": ["the concurrency case"],
+      "resolution_note": "Superseded: closed as confirmed at 14:41 on 2026-09-11 by the lane that shipped 9f3ca3cbd, before this weekly lane reached it. Nothing done here. Its own follow-up (drop the unused pre-lock read) is recorded in that close and is not minted as a new id.",
+      "publish_batch": 0,
+      "status": "superseded",
+      "premise_verified": "true: the queue says resolved, and the close names the commit",
+      "deviation": null,
+      "shipped_commit": null,
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null
+    }
+  ],
+  "ship_sequence": [
+    "audit-alert-census.ps1 (exit 0) and the 14-day ranking through Get-AlertCensusTypeDays, before choosing anything",
+    "prevention: grocery/check-ad-cycles.ps1 (the constant, the re-arm bookkeeping, the coalescing block, the summary line) + the four frozen cases in grocery/test-auditors.ps1",
+    "grocery/test-auditors.ps1 (MUST be 0 failed)",
+    "47eafb: lib/bot-paths.ps1 (the eight paths and the cross-declaration cases), then lib/bot-paths.ps1 -SelfTest",
+    "a86b87 edge 2: graph/pipeline/nightly.ps1 (snapshot at $started, passed at the commit) + the call-site walk in lib/pipeline-commit.ps1, then lib/pipeline-commit.ps1 -SelfTest",
+    "commit by explicit path with git commit -F; the orchestrator pushes and the pre-push hook runs ops/run-gates.ps1",
+    "validate-triage-plan.ps1 -Closing, then the lane stamp, then triage-close.ps1 per finished id"
+  ],
+  "open_questions_for_brad": []
+}

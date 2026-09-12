@@ -2412,6 +2412,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # checks stayed green - measured by the post-batch review. $REARM_DAYS lives in here for the same
       # reason: the harness hard-coded 14, so changing production's window was equally invisible.
       $REARM_DAYS = 14
+      # HOW LONG A RE-ARM MAY WAIT FOR A PAGE DAY IT DOES NOT HAVE TO ITSELF (2026-09-11, weekly prevention
+      # lane, census rank 1: this type fired on 12 of the 14 days ending 2026-09-11). Lives in here beside
+      # $REARM_DAYS for the same reason: the harness must run the real number, not a transcription.
+      # Measured on out\alerted-flags.json that day: 21 of the 58 standing flags carry a clock, and their
+      # re-arm dates fall on 6 DISTINCT days inside the following 14 (09-12 x10, 09-13 x3, 09-14 x1,
+      # 09-15 x2, 09-20 x4, 09-25 x1). Six separate mails, every one of them a flag the reader has already
+      # been told about, is how a real page gets read as noise.
+      # 7 was chosen because it is the cadence the board and the weekly lane already run on, so a held
+      # re-arm is never more than one board week late and every flag still pages inside REARM_DAYS + 7 = 21
+      # days. Alternatives considered and rejected: a fixed digest WEEKDAY (needs no state either, but it
+      # breaks the -NoAlert property - a page suppressed by the cloud backup on a Tuesday would wait until
+      # the next Monday instead of the next alerting run); a 7-day batch COUNTER (needs a new non-flag key
+      # in alerted-flags.json, which is tracked state this block does not own). Not the survivor of a sweep.
+      $REARM_RIDE_DAYS = 7
       # TUNED FROM LIVE PRECISION (WS 10b, 2026-09-10). grocery\tune-alert-rearm.ps1 writes alert-tuning.json:
       # doubled for an alert that is mostly wrong, halved for one that is right, clamped 7..56, one move per
       # 14 days. Read HERE, inside the extracted region, so test-auditors.ps1 runs the real read. An absent,
@@ -2446,6 +2460,8 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         Log ("REVIEW FLAGS: " + $flagParts.Count + " -> " + (($flagParts | Select-Object -First 4) -join ' ; '))
         $newIdx = @()
         # <<REVIEW-DECISION-BEGIN>> test-auditors.ps1 extracts this region and runs it against frozen state.
+        $rearmOver = @{}   # index -> days PAST its re-arm date, for the keys the 14-day clock re-armed
+        $rearmHeld = 0
         for ($fi = 0; $fi -lt $flagParts.Count; $fi++) {
           $k = if ($fi -lt $flagKeys.Count) { [string]$flagKeys[$fi] } else { [string]$flagParts[$fi] }
           $isNew = $true
@@ -2484,11 +2500,30 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               # "keep expiries short (weeks, not months): the expiry is the whole point"; this makes that true.
               # Fires ONCE: the page stamps last_alerted past the expiry date, so the next run falls through.
               elseif ($ackUntil.ContainsKey($k) -and $lastPage.Date -le $ackUntil[$k]) { $isNew = $true; $ackReArmed++ }
-              elseif (((Get-Date) - $lastPage).TotalDays -ge $REARM_DAYS) { $isNew = $true; $reArmed++ }
+              elseif (((Get-Date) - $lastPage).TotalDays -ge $REARM_DAYS) { $isNew = $true; $reArmed++; $rearmOver[$fi] = ((Get-Date) - $lastPage).TotalDays - $REARM_DAYS }
               else { $isNew = $false }
             }
           }
           if ($isNew) { $newIdx += $fi }
+        }
+        # A RE-ARM RIDES, IT DOES NOT LEAD (2026-09-11, weekly prevention lane).
+        # The 14-day re-arm above is per key and each key carries its own clock, so a standing backlog of
+        # reviewed-but-unfixable flags pages on a different day almost every day: 21 live keys, 6 distinct
+        # re-arm days in the next 14. Nothing about any single one of those mails is wrong, and that is the
+        # point - the class cannot go quiet while the backlog stands, however good each individual fix is.
+        # So a key the 14-day clock re-armed no longer starts a mail of its own. It pages when the run is
+        # ALREADY paging something (a key never seen, one that cleared and came back, an ack that ran out,
+        # or a clockless key that failed open), which costs no extra day; failing that, it forces its own
+        # page once it is more than $REARM_RIDE_DAYS past due, which pulls every other waiting re-arm into
+        # that same mail. NOTHING IS DROPPED OR STAMPED when they are held: the stamp region below only
+        # touches keys in $newIdx, so a held key stays DUE exactly as a -NoAlert run leaves it due, and the
+        # count is spoken on the summary line rather than being silently absorbed.
+        if ($newIdx.Count -gt 0) {
+          $rearmLead = @($newIdx | Where-Object { -not $rearmOver.ContainsKey($_) })
+          if ($rearmLead.Count -eq 0) {
+            $rearmForced = @($newIdx | Where-Object { [double]$rearmOver[$_] -gt $REARM_RIDE_DAYS })
+            if ($rearmForced.Count -eq 0) { $rearmHeld = $newIdx.Count; $reArmed = 0; $newIdx = @() }
+          }
         }
         # <<REVIEW-DECISION-END>>
         $stillOpen = $flagParts.Count - $newIdx.Count
@@ -2497,6 +2532,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($reArmed)    { $extra += ", $reArmed RE-ARMED after $REARM_DAYS days open" }
         if ($ackReArmed) { $extra += ", $ackReArmed RE-ARMED the day their ack expired" }
         if ($ackExpired) { $extra += ", $ackExpired ack(s) EXPIRED" }
+        if ($rearmHeld)  { $extra += ", $rearmHeld re-arm(s) HELD to ride the next page day (still due)" }
         if ($sanityQuiet) { $extra += ", $sanityQuiet store-verified outlier(s) recorded, not paged" }
         $summary += ("REVIEW    $($flagParts.Count) price flag(s) on the board ($($newIdx.Count) new, $stillOpen already seen$extra) - see guards-/flagged- json")
         if ($newIdx.Count -gt 0 -and -not $NoAlert) {

@@ -369,6 +369,38 @@ if ($__pcSelfTest) {
     Remove-Item -LiteralPath $tr -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  # ---- EVERY SCHEDULED CALLER PASSES A START SNAPSHOT (2026-09-11, queue 2026-09-10-a86b87 edge 2) ----
+  # The foreign-held rule above can only work if the CALLER hands it a snapshot taken before the run
+  # wrote anything; with none, Invoke-PipelineCommit fails open and sweeps a session's half-written file
+  # into the lane's commit. graph\pipeline\nightly.ps1 was the one lane that passed none, and nothing
+  # could see that, because the rule's own fixtures all construct their snapshot by hand. This walks the
+  # real call sites. It EXCLUDES this file, whose only calls are the two refusal probes above, and it
+  # takes each path BELOW the repo root rather than the full path - a spawned session runs from
+  # <root>\.claude\worktrees\<name>, where a full-path '\.claude\' exclude drops every file in the tree.
+  $pcRepo = Split-Path $PSScriptRoot -Parent
+  $pcSelf = Join-Path $PSScriptRoot 'pipeline-commit.ps1'
+  $pcAll = @(Get-ChildItem -LiteralPath $pcRepo -Filter *.ps1 -Recurse -File -ErrorAction SilentlyContinue)
+  $pcMissing = @(); $pcSites = 0; $pcScanned = 0
+  foreach ($f in $pcAll) {
+    $rel = $f.FullName.Substring($pcRepo.Length + 1)
+    if ($rel -match '^\.claude\\' -or $rel -match '(^|\\)archive\\' -or $f.FullName -eq $pcSelf) { continue }
+    $txt = [IO.File]::ReadAllText($f.FullName)
+    if ($txt -notmatch 'Invoke-PipelineCommit') { continue }
+    $pcScanned++
+    $pcAst = [System.Management.Automation.Language.Parser]::ParseInput($txt, [ref]$null, [ref]$null)
+    $pcCalls = @($pcAst.FindAll({ param($n) ($n -is [System.Management.Automation.Language.CommandAst]) -and ($n.GetCommandName() -eq 'Invoke-PipelineCommit') }, $true))
+    foreach ($c in $pcCalls) {
+      $pcSites++
+      $ct = $c.Extent.Text
+      if (($ct -notmatch '-DirtyAtStart') -or ($ct -notmatch '-RunStart')) { $pcMissing += ($rel + ':' + $c.Extent.StartLineNumber) }
+    }
+  }
+  T 'MUST FIRE  every production call site passes -DirtyAtStart AND -RunStart (graph nightly passed neither, and swept a session edit into the night''s commit)' `
+    ($pcMissing.Count -eq 0) ($pcMissing -join ', ')
+  # A DISCOVERED TARGET SET PRINTS WHAT IT RESOLVED: "no findings" and "the walk matched nothing" are the
+  # same bytes otherwise, and this one walks a tree that is empty in a bare checkout.
+  T ("CLEAN TWIN the walk resolved real call sites: $pcSites site(s) in $pcScanned file(s) outside this one") ($pcSites -ge 3) ("sites=$pcSites files=$pcScanned")
+
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }
   Write-Output 'SELF-TEST PASS: the source-path refusal in eight shapes, every real path list proved data-only and non-empty, no path owned twice, and the committer refusing before it touches git'
   exit 0

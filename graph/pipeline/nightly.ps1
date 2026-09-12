@@ -748,6 +748,20 @@ if ($StopOnly) {
 
 # ---------------------------------------------------------------- plan the window
 $started  = Get-Date
+# THE START-OF-RUN SNAPSHOT (2026-09-11, queue 2026-09-10-a86b87 edge 2, weekly lane). This lane commits
+# graph/identity, graph/learning, graph/state and graph/provenance, and it was the ONE committer that
+# passed no snapshot, so Invoke-PipelineCommit could not tell a session's half-written learning file from
+# this run's own writes and swept it in. It has to be taken HERE, before any stage writes: taken inside
+# the committer it would see every file the run produced as dirty-before-start and hold the whole night
+# back. A snapshot that cannot be taken holds nothing back and says so on the commit line - the same
+# fail-open the other three lanes carry, because a lane that refuses to commit is a lane whose evidence
+# never leaves this box.
+$graphDirtyAtStart = $null
+try {
+  . (Join-Path $root 'lib\pipeline-commit.ps1')
+  $graphOwnedRaw = Get-PipelinePaths -Kind graph     # assign, THEN wrap
+  $graphDirtyAtStart = Get-DirtyOwnedSnapshot -Repo $root -Paths @($graphOwnedRaw)
+} catch { $graphDirtyAtStart = [pscustomobject]@{ ok = $false; files = @(); why = ('the snapshot threw: ' + $_.Exception.Message) } }
 $deadline = Resolve-Deadline -Now $started -HardStop $HardStop -MaxMinutes $MaxMinutes
 $refuse   = Test-WindowUsable -Now $started -Deadline $deadline -MinMinutes $MinMinutes
 
@@ -1221,7 +1235,7 @@ try {
   . (Join-Path $root 'lib\pipeline-commit.ps1')
   $msg = Invoke-PipelineCommit -Repo $root -Paths (Get-PipelinePaths -Kind graph) `
            -Message ("Graph nightly: identity, learning and provenance (" + (Get-Date).ToString('yyyy-MM-dd') + ") [graph]") `
-           -Name 'graph-nightly' -Push
+           -Name 'graph-nightly' -Push -DirtyAtStart $graphDirtyAtStart -RunStart $started
   Write-Output $msg
 } catch { Write-Output ('graph-nightly: committer threw and was swallowed: ' + $_.Exception.Message) }
 

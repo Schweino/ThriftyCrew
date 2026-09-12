@@ -2988,12 +2988,14 @@ if (-not $rfD.Success -or -not $rfS.Success -or -not $rfA.Success) {
     return $h
   }
   # one simulated day of the REAL decision + stamp regions. $script:RF_NOW shadows Get-Date inside the scope.
-  function RfRunDay([datetime]$now, [hashtable]$fstate, [bool]$noAlert, [bool]$sendFails) {
+  function RfRunDay([datetime]$now, [hashtable]$fstate, [bool]$noAlert, [bool]$sendFails, [string[]]$keys = @()) {
     $script:RF_NOW = $now
     function Get-Date { return $script:RF_NOW }
     function Log([string]$m) { }
     $NoAlert = $noAlert
-    $flagKeys  = @($rfOpen, $rfAck, $rfFresh)          # all three flagged EVERY day - the backlog scenario
+    # $keys lets a case drive the SAME region with its own flag set (the re-arm coalescing cases below).
+    # Omitted, it is the original three, so every case written before 2026-09-11 runs unchanged.
+    $flagKeys  = if (@($keys).Count -gt 0) { @($keys) } else { @($rfOpen, $rfAck, $rfFresh) }   # flagged EVERY day - the backlog scenario
     $flagParts = @($flagKeys | ForEach-Object { $_ + '|detail' })
     # RUN THE REAL ACK LOADER, not a transcription of it (post-batch review 2026-07-30). This block used to
     # carry its own copy of the loop and its own $REARM_DAYS = 14, so production's $ackUntil line - half of
@@ -3049,6 +3051,43 @@ if (-not $rfD.Success -or -not $rfS.Success -or -not $rfA.Success) {
   $null = RfRunDay $rfT0.AddDays(0) $rfSt $false $true
   if (@($rfSt.Keys | Where-Object { $rfSt[$_].last_alerted -eq $rfT0.ToString('s') }).Count -eq 0) { Ok 'review flags: a FAILED send stamps nothing (existing guard still intact)' }
   else { Bad 'review flags: a failed send stamped last_alerted - the alert is lost' }
+  # ---- RE-ARMS RIDE, THEY DO NOT LEAD (2026-09-11, weekly prevention lane) --------------------------
+  # Founding measurement, off the live out\alerted-flags.json: 21 standing flags carry a clock and their
+  # 14-day re-arms fall on 6 DISTINCT days inside the next 14, so this alert type fired on 12 of the 14
+  # days ending 2026-09-11 (census rank 1) on flags the reader had already been told about. Frozen here as
+  # two open keys whose re-arms fall 3 days apart: one page day, not two.
+  $rfA1 = 'SANITY|FIXTURE Backlog A|outlier'
+  $rfA2 = 'SANITY|FIXTURE Backlog B|outlier'
+  $rfNew = 'SANITY|FIXTURE Brand New|outlier'
+  function RfBacklogState {
+    $h = @{}
+    $h[$rfA1] = [pscustomobject]@{ first_seen = $rfT0.AddDays(-40).ToString('s'); last_seen = $rfT0.AddDays(-1).ToString('s'); last_detail = 'x'; last_alerted = $rfT0.AddDays(-14).ToString('s') }
+    $h[$rfA2] = [pscustomobject]@{ first_seen = $rfT0.AddDays(-40).ToString('s'); last_seen = $rfT0.AddDays(-1).ToString('s'); last_detail = 'x'; last_alerted = $rfT0.AddDays(-11).ToString('s') }
+    return $h
+  }
+  # MUST FIRE 4: the two re-arms land in ONE mail. Before the fix A paged on day 0 and B on day 3.
+  $rfSt = RfBacklogState; $rfDays = @()
+  for ($rfD2 = 0; $rfD2 -lt 11; $rfD2++) { if ((RfRunDay $rfT0.AddDays($rfD2) $rfSt $false $false @($rfA1, $rfA2)).due.Count -gt 0) { $rfDays += $rfD2 } }
+  if (@($rfDays).Count -eq 1) { Ok ('review flags: two staggered re-arms page on ONE day (day ' + ($rfDays -join ',') + '), not one mail each') }
+  else { Bad ('review flags: a backlog of 2 re-armed flags paged on ' + @($rfDays).Count + ' separate day(s) [' + ($rfDays -join ',') + '] - each standing flag still starts a mail of its own, which is what makes this type fire almost daily') }
+  # MUST FIRE 4b: held is not dropped. Both keys must be in that one mail, and it must happen inside
+  # REARM_DAYS + REARM_RIDE_DAYS, or a held re-arm has been silently swallowed.
+  $rfSt = RfBacklogState; $rfPaged = @()
+  for ($rfD2 = 0; $rfD2 -lt 11; $rfD2++) { $rfPaged += @((RfRunDay $rfT0.AddDays($rfD2) $rfSt $false $false @($rfA1, $rfA2)).due) }
+  if (($rfPaged -contains $rfA1) -and ($rfPaged -contains $rfA2)) { Ok 'review flags: every held re-arm still pages - holding is not dropping' }
+  else { Bad ('review flags: a held re-arm never paged in 11 days - it was swallowed, not deferred (paged: ' + (($rfPaged | Sort-Object -Unique) -join ' ; ') + ')') }
+  # CLEAN TWIN 4: a key NEVER SEEN pages the day it appears, and the waiting re-arms ride along in that
+  # same mail rather than waiting for their own day. This is the half the fix was most likely to break.
+  $rfSt = RfBacklogState
+  $rfR = RfRunDay $rfT0 $rfSt $false $false @($rfA1, $rfA2, $rfNew)
+  if ($rfR.due -contains $rfNew) { Ok 'review flags: a brand-new flag still pages the day it appears, never deferred' }
+  else { Bad 'review flags: a NEW flag was held by the re-arm coalescing - novel flags must page same-day' }
+  # Day 3, not day 0: B's own clock does not re-arm until day 3, so asking for both on day 0 would be
+  # asserting something the re-arm window forbids and the case would grade correct behaviour as broken.
+  $rfSt = RfBacklogState
+  $rfR = RfRunDay $rfT0.AddDays(3) $rfSt $false $false @($rfA1, $rfA2, $rfNew)
+  if (($rfR.due -contains $rfA1) -and ($rfR.due -contains $rfA2)) { Ok 'review flags: re-arms RIDE a day that is already paging, so they cost no extra mail' }
+  else { Bad 'review flags: re-arms did not ride a page day that was already sending - they will each cost a day of their own later' }
 }
 } # u067-l-review-flag-re-arm-ack-expiry
 
