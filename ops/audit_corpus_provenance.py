@@ -27,6 +27,17 @@ THE ONE THING IT DOES RATCHET is corpora with NO recoverable provenance at all. 
 do not say where they came from cannot answer this question even in principle, and that number may
 only go DOWN.
 
+A RUN THAT IS NOT ASKED TO RECORD WRITES NOTHING (2026-09-12, the rule 740c82af6 gave seven
+PowerShell ratchets and this one did not get). ops/run-gates.ps1 runs this with NO arguments on every
+pre-push, and a repair used to rewrite the TRACKED baseline right there: the shorter list never rode
+that push, so it protected only the checkout that happened to run it, it left that checkout ` M`
+mid-push, and a list taken over uncommitted edits is not a baseline anyway. It also costs the pass its
+reuse record - run-gates then reports that the checkout changed while the gates ran, and the next push
+pays for every gate again. So a repair is SPOKEN and the committed list KEPT; --tighten records it.
+
+    python ops/audit_corpus_provenance.py --tighten   # record the repair as the new, shorter list
+    python ops/audit_corpus_provenance.py --update    # record the CURRENT list, whatever it is
+
 Exit 0 = clean. 2 = a NEW corpus with no provenance. 3 = could not evaluate.
 Read the verdict LINE, not the number (backlog E2).
 """
@@ -36,7 +47,10 @@ import argparse
 import io
 import json
 import os
+import shutil
+import subprocess
 import sys
+import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, ".."))
@@ -152,9 +166,12 @@ def read_corpus(path, fmt):
 
 
 def selftest():
-    bad = []
+    bad, ran = [], []
 
     def T(name, ok, got=""):
+        # EVERY CASE IS COUNTED, so the verdict states its own denominator rather than a number
+        # somebody typed once and never revised (.claude/rules/measurement.md).
+        ran.append(name)
         if ok:
             print("  ok    " + name)
         else:
@@ -212,30 +229,111 @@ def selftest():
     T("CLEAN TWIN a corpus read and STILL missing its provenance stays on the list",
       repaired(["a.json"], ["a.json"], ["a.json"]) == [], str(repaired(["a.json"], ["a.json"], ["a.json"])))
 
+    # ---- THE LIVE PATH, DRIVEN (2026-09-12) -------------------------------------------------------
+    # The founding shape is a pre-push run-gates pass whose list SHRANK: it rewrote the TRACKED
+    # baseline in the checkout being pushed, without riding the push, and cost that pass its reuse
+    # record. These three run THIS file as a child against a temp corpus tree and a temp baseline, so
+    # they exercise the code a gate runs rather than a copy of it. One directory per run, removed in
+    # finally: concurrent pushes run this suite in the same temp directory.
+    wt = tempfile.mkdtemp(prefix="cp-live-")
+    try:
+        gold = os.path.join(wt, "graph", "gold")
+        os.makedirs(gold)
+        # gold.jsonl now CARRIES provenance, so it is the repair; hunter-gold.jsonl still does not.
+        with io.open(os.path.join(gold, "gold.jsonl"), "w", encoding="utf-8", newline="\n") as f:
+            f.write('{"source": "known-wrong.json", "label": "MATCH"}\n')
+        with io.open(os.path.join(gold, "hunter-gold.jsonl"), "w", encoding="utf-8", newline="\n") as f:
+            f.write('{"label": "MATCH"}\n')
+        fx_note = "fixture note (keep me)"
+        bl = os.path.join(wt, "baseline.json")
+        write_baseline(bl, ["graph/gold/gold.jsonl", "graph/gold/hunter-gold.jsonl"], fx_note)
+        with io.open(bl, "rb") as f:
+            seed_bytes = f.read()
+
+        def child(*extra):
+            p = subprocess.run([sys.executable, os.path.abspath(__file__), "--root", wt,
+                                "--baseline", bl] + list(extra),
+                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            return p.returncode, p.stdout.decode("utf-8", "replace")
+
+        rc1, out1 = child()
+        with io.open(bl, "rb") as f:
+            after1 = f.read()
+        T("MUST FIRE  a REPAIR with no --tighten is SPOKEN and the baseline left byte-identical, so a "
+          "gate run leaves its checkout clean",
+          rc1 == EXIT_CLEAN and after1 == seed_bytes and "CAN tighten" in out1,
+          "rc=%d unchanged=%s" % (rc1, after1 == seed_bytes))
+
+        rc2, _ = child("--tighten")
+        with io.open(bl, "rb") as f:
+            after2 = f.read()
+        doc2 = json.loads(after2.decode("utf-8"))
+        T("--tighten records the repair in the bytes git stores: no CR, no BOM, one trailing LF, the "
+          "repaired corpus gone from the list, and the note kept",
+          rc2 == EXIT_CLEAN and b"\r" not in after2 and not after2.startswith(b"\xef\xbb\xbf")
+          and after2.endswith(b"\n") and doc2["no_provenance"] == ["graph/gold/hunter-gold.jsonl"]
+          and doc2["note"] == fx_note,
+          "rc=%d cr=%d list=%s" % (rc2, after2.count(b"\r"), doc2.get("no_provenance")))
+
+        # CLEAN TWIN: not writing on a repair must not have disarmed the ratchet where it matters.
+        bl_rise = os.path.join(wt, "baseline-rise.json")
+        write_baseline(bl_rise, [], fx_note)
+        with io.open(bl_rise, "rb") as f:
+            rise_seed = f.read()
+        p = subprocess.run([sys.executable, os.path.abspath(__file__), "--root", wt,
+                            "--baseline", bl_rise], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        with io.open(bl_rise, "rb") as f:
+            rise_after = f.read()
+        T("CLEAN TWIN a NEW corpus with no provenance still exits 2 and writes nothing, so not "
+          "recording a repair did not disarm the ratchet",
+          p.returncode == EXIT_FINDING and rise_after == rise_seed,
+          "rc=%d unchanged=%s" % (p.returncode, rise_after == rise_seed))
+    finally:
+        shutil.rmtree(wt, ignore_errors=True)
+
     if bad:
         print("")
-        print("SELF-TEST FAIL: %d check(s)" % len(bad))
+        print("SELF-TEST FAIL: %d of %d check(s)" % (len(bad), len(ran)))
         print("CORPUS-PROVENANCE-SELFTEST-COMPLETE")
         return 1
     print("")
-    print("SELF-TEST PASS: 5 must-fire cases including the absence-is-not-a-repair trap this "
-          "ratchet would have fallen into, 4 must-not-fire cases led by the escalation that is "
-          "neither, and 5 clean twins")
+    print("SELF-TEST PASS: %d of %d case(s) - the must-fire set including the "
+          "absence-is-not-a-repair trap this ratchet would have fallen into, the must-not-fire set "
+          "led by the escalation that is neither, the clean twins, and the live path driven against "
+          "a temp corpus tree and a temp baseline" % (len(ran) - len(bad), len(ran)))
     print("CORPUS-PROVENANCE-SELFTEST-COMPLETE")
     return 0
+
+
+def write_baseline(path, noprov, note):
+    """The recorded list, in the bytes git stores: UTF-8 with no BOM, LF, one trailing newline.
+
+    The NOTE the file already carries is KEPT rather than replaced, so the diff of a record is only
+    the list that moved.
+    """
+    with io.open(path, "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"no_provenance": sorted(noprov), "note": note}, f, indent=2)
+        f.write("\n")
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="how much of our evidence is a recorded failure")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--update", action="store_true", help="retrain the no-provenance baseline")
+    ap.add_argument("--tighten", action="store_true",
+                    help="record a REPAIR as the new, shorter list; without it a repair is only spoken")
+    # --root and --baseline exist for the self-test, so its three live-path cases drive THIS file
+    # against a temp corpus tree and a temp baseline rather than a copy of its logic.
+    ap.add_argument("--root", default=REPO, help=argparse.SUPPRESS)
+    ap.add_argument("--baseline", default=BASELINE, help=argparse.SUPPRESS)
     a = ap.parse_args()
     if a.selftest:
         return selftest()
+    repo, baseline_file = a.root, a.baseline
 
     seen, blind = [], []
     for rel, fmt in CORPORA:
-        rows = read_corpus(os.path.join(REPO, rel.replace("/", os.sep)), fmt)
+        rows = read_corpus(os.path.join(repo, rel.replace("/", os.sep)), fmt)
         if rows is None:
             blind.append(rel)
             continue
@@ -270,20 +368,23 @@ def main() -> int:
     print("  That number is REPORTED, not judged: a matcher corpus should be heavy on adjudicated")
     print("  failures and an identity corpus should not, and no rule here knows which is which.")
 
-    base = None
-    if os.path.exists(BASELINE):
+    DEFAULT_NOTE = ("Corpora whose rows carry no source at all, so they cannot answer "
+                    "'how much of this evidence is a recorded failure' even in "
+                    "principle. This list may only get SHORTER.")
+    base, note = None, DEFAULT_NOTE
+    if os.path.exists(baseline_file):
         try:
-            with io.open(BASELINE, encoding="utf-8-sig") as f:
-                base = json.load(f).get("no_provenance")
+            with io.open(baseline_file, encoding="utf-8-sig") as f:
+                doc = json.load(f)
+            base = doc.get("no_provenance")
+            note = doc.get("note") or DEFAULT_NOTE
         except Exception:                                          # noqa: BLE001
             base = None
     if base is None or a.update:
-        with io.open(BASELINE, "w", encoding="utf-8", newline="\n") as f:
-            json.dump({"no_provenance": sorted(noprov),
-                       "note": ("Corpora whose rows carry no source at all, so they cannot answer "
-                                "'how much of this evidence is a recorded failure' even in "
-                                "principle. This list may only get SHORTER.")}, f, indent=2)
-            f.write("\n")
+        # SEEDING IS NOT RECORDING A REPAIR. With no baseline there is nothing to protect and nothing
+        # to compare against, so the first run writes one - which in production cannot happen, the
+        # file being tracked. --update is the deliberate ask to re-record whatever is there now.
+        write_baseline(baseline_file, noprov, note)
         print("")
         print("  baseline written: %d corpus/corpora with no provenance. The list may only get shorter."
               % len(noprov))
@@ -309,14 +410,19 @@ def main() -> int:
     # repair and drop it from the baseline forever, on the strength of a run that never opened it.
     # Same shape lib/ratchet.ps1 refuses: a detector that saw nothing recording zero as the ceiling.
     fixed = repaired(base, [rel for rel, _ in seen], noprov)
-    if fixed:
-        with io.open(BASELINE, "w", encoding="utf-8", newline="\n") as f:
-            json.dump({"no_provenance": sorted(noprov),
-                       "note": ("Corpora whose rows carry no source at all. This list may only get "
-                                "SHORTER.")}, f, indent=2)
-            f.write("\n")
+    if fixed and (a.tighten or a.update):
+        write_baseline(baseline_file, noprov, note)
         print("")
         print("  TIGHTENED: %s now carry provenance. The list may only get shorter." % ", ".join(fixed))
+        print("  New baseline written - commit ops/corpus-provenance-baseline.json, or it protects "
+              "only this checkout.")
+    elif fixed:
+        # SPOKEN, NOT WRITTEN. This may be a pre-push run-gates pass, and a rewrite here dirties the
+        # checkout being pushed without riding the push - and costs that pass its reuse record.
+        print("")
+        print("  the ratchet CAN tighten: %s now carry provenance. NOT written: this may be a "
+              "pre-push gate. Record it with --tighten and commit "
+              "ops/corpus-provenance-baseline.json." % ", ".join(fixed))
     print("")
     print("corpus-provenance: PASSED - %d corpus/corpora reported, %d still carrying no source at all "
           "(unchanged from the baseline)." % (len(seen), len(noprov)))

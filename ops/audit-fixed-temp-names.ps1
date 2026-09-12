@@ -88,23 +88,45 @@
   single edits from a temp mirror killed 8; the survivor was a root reached through two variables, which now has
   its own case.
 
+  A RUN THAT IS NOT ASKED TO RECORD WRITES NOTHING (2026-09-12, the rule 740c82af6 gave the other seven
+  ratchets and this one did not get). run-gates runs every static audit with NO arguments on every pre-push, so a
+  fall used to rewrite the TRACKED baseline inside the checkout being pushed. Measured that day: a plain run
+  printed "PASSED and TIGHTENED - 9 finding(s), down from 10" and left ops\fixed-temp-names-baseline.json ` M`,
+  which also made run-gates report "this pass is NOT recorded for reuse - the checkout changed while the gates
+  ran", so the run's own green verdict could not be reused and the next push paid for all 362 gates again.
+  Reproduced at 740c82af6 in this checkout with the mark set to 11: exit 0, "PASSED and TIGHTENED", baseline ` M`.
+  The rewrite never rode that push either, so the lower mark protected only the checkout that happened to run it,
+  and a count taken over uncommitted edits is not a baseline. So a fall is SPOKEN and the committed mark KEPT;
+  -Tighten records it, through lib\ratchet.ps1's plausibility bar and in the bytes git stores (lib\lf-write.ps1).
+
+  ONE DELIBERATE DIFFERENCE FROM ops\audit-write-only-reports.ps1, which exits 2 on an implausible fall only when
+  a record was asked for: this one exits 2 either way, as it always has. A fall to zero or past -MaxDropPct here
+  means the AST test stopped seeing sites the tree still holds, and that is a broken detector rather than a clean
+  tree - the one thing this file's own SCOPE line says silence never proves. Nothing is written on that path
+  regardless, so the red costs a run, never a baseline.
+
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 at or below the high-water mark, 2 the mark rose or a fall
   was refused as implausible, 3 could not evaluate. Read the verdict LINE, not the number.
 
-    ops\audit-fixed-temp-names.ps1               scan the tree, hold the ratchet
-    ops\audit-fixed-temp-names.ps1 -AcceptDrop   record a fall lib\ratchet.ps1 would refuse
-    ops\audit-fixed-temp-names.ps1 -SelfTest     frozen founding lines, the per-run forms, the probes, the walk
+    ops\audit-fixed-temp-names.ps1               scan the tree, hold the ratchet; writes NOTHING
+    ops\audit-fixed-temp-names.ps1 -Tighten      the same, and record a believable FALL as the new high-water mark
+    ops\audit-fixed-temp-names.ps1 -AcceptDrop   record a fall lib\ratchet.ps1 would otherwise refuse
+    ops\audit-fixed-temp-names.ps1 -SelfTest     frozen founding lines, the per-run forms, the probes, the walk,
+                                                 and this script's live path against a temp tree and baseline
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([switch]$SelfTest, [switch]$AcceptDrop)
+param([switch]$SelfTest, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ratchet.ps1')
+. (Join-Path $repo 'lib\lf-write.ps1')    # Write-TcLfFile: the baseline is TRACKED and stored eol=lf
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: a walk that runs from a worktree reads it
 
-$BASELINE_FILE = Join-Path $repo 'ops\fixed-temp-names-baseline.json'
+# -Root and -BaselineFile exist for the self-test, so the three live-path cases drive THIS script against a
+# temp tree and a temp baseline rather than a copy of its logic. Production passes neither.
+$BASELINE_FILE = if ($BaselineFile) { $BaselineFile } else { Join-Path $repo 'ops\fixed-temp-names-baseline.json' }
 
 # THE NEEDLES ARE BUILT BY CONCATENATION, so no literal in this file spells what it hunts for.
 $script:FTN_PREFILTER = '(?i)env:T' + 'E?MP\b|GetTem' + 'pPath'
@@ -507,6 +529,56 @@ if ($SelfTest) {
       FtnT 'MUST NOT FIRE  a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0) ('sibling=' + $wtHits.Sibling)
       FtnT 'MUST NOT FIRE  the detector never scans itself' (@($wtFound | Where-Object { $_.FullName -eq $self }).Count -eq 0) ''
     } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+
+    # ---- THE LIVE PATH, DRIVEN (2026-09-12) ---------------------------------------------------------------
+    # The founding shape is a pre-push run-gates pass whose count FELL: it rewrote the TRACKED baseline, left the
+    # pushing checkout ` M`, and cost that pass its reuse record. These three run THIS script as a child against a
+    # one-file temp tree and a temp baseline, so they exercise the code a gate runs rather than a copy of it.
+    # ONE DIRECTORY PER RUN, removed in finally - this suite's own rule, and concurrent pushes share %TEMP%.
+    $ftnWt = Join-Path $env:TEMP ('ftn-live-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    New-Item -ItemType Directory -Path $ftnWt -ErrorAction Stop | Out-Null
+    try {
+      $fxTree = Join-Path $ftnWt 'tree'
+      New-Item -ItemType Directory -Path $fxTree -ErrorAction Stop | Out-Null
+      # EXACTLY ONE fixed site, so the counts below are the fixture's and not the tree's.
+      $fxSrc = '$b = Join-Path $env:TEMP ''tc-live-fixture'''
+      [IO.File]::WriteAllText((Join-Path $fxTree 'suite.ps1'), $fxSrc, (New-Object Text.UTF8Encoding($false)))
+      $fxNote = 'fixture note (keep me)'
+      $blFx = Join-Path $ftnWt 'baseline.json'
+      $seed = [pscustomobject]@{ generated = '2026-01-01T00:00:00'; sites = 2
+                                 history = @([pscustomobject]@{ date = '2026-01-01T00:00:00'; count = 2 }); note = $fxNote }
+      $null = Write-TcLfFile -Path $blFx -Text ($seed | ConvertTo-Json -Depth 5) -NoBom
+      $seedB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($blFx))
+
+      $o1 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fxTree -BaselineFile $blFx)
+      $rc1 = $LASTEXITCODE
+      $same1 = [string]::Equals($seedB64, [Convert]::ToBase64String([IO.File]::ReadAllBytes($blFx)), [StringComparison]::Ordinal)
+      FtnT 'MUST FIRE  a FALL (1 site, baseline 2) with no -Tighten is SPOKEN and the baseline left byte-identical, so a gate run leaves its checkout clean' `
+        ($rc1 -eq 0 -and $same1 -and (($o1 -join "`n") -match 'CAN tighten')) ("rc=$rc1 baselineUnchanged=$same1 said=" + (($o1 | Where-Object { $_ -match 'CAN tighten|TIGHTENED' }) -join ' | '))
+
+      $null = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fxTree -BaselineFile $blFx -Tighten)
+      $rc2 = $LASTEXITCODE
+      $b2 = [IO.File]::ReadAllBytes($blFx)
+      $cr2 = 0; foreach ($x in $b2) { if ($x -eq 13) { $cr2++ } }
+      $bom2 = ($b2.Length -ge 3 -and $b2[0] -eq 0xEF -and $b2[1] -eq 0xBB -and $b2[2] -eq 0xBF)
+      $doc2 = $null
+      try { $doc2 = [Text.Encoding]::UTF8.GetString($b2) | ConvertFrom-Json } catch { }
+      FtnT '-Tighten records the fall in the bytes git stores: no CR, no BOM (the committed blob has none), one trailing LF, sites lowered, and the note kept' `
+        ($rc2 -eq 0 -and $cr2 -eq 0 -and (-not $bom2) -and $b2[-1] -eq 10 -and $null -ne $doc2 -and
+         [int]$doc2.sites -eq 1 -and [string]$doc2.note -eq $fxNote -and @($doc2.history).Count -eq 2) `
+        ("rc=$rc2 cr=$cr2 bom=$bom2 sites=$(if ($doc2) { $doc2.sites }) note=$(if ($doc2) { $doc2.note })")
+
+      # CLEAN TWIN: not writing on a fall must not have disarmed the ratchet in the direction that matters.
+      $blRise = Join-Path $ftnWt 'baseline-rise.json'
+      $riseSeed = [pscustomobject]@{ generated = '2026-01-01T00:00:00'; sites = 0; history = @(); note = $fxNote }
+      $null = Write-TcLfFile -Path $blRise -Text ($riseSeed | ConvertTo-Json -Depth 5) -NoBom
+      $riseB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($blRise))
+      $null = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fxTree -BaselineFile $blRise)
+      $rc3 = $LASTEXITCODE
+      $same3 = [string]::Equals($riseB64, [Convert]::ToBase64String([IO.File]::ReadAllBytes($blRise)), [StringComparison]::Ordinal)
+      FtnT 'CLEAN TWIN  a count that ROSE still exits 2 and writes nothing, so not recording a fall did not disarm the ratchet' `
+        ($rc3 -eq 2 -and $same3) ("rc=$rc3 baselineUnchanged=$same3")
+    } finally { Remove-Item -LiteralPath $ftnWt -Recurse -Force -ErrorAction SilentlyContinue }
   } catch {
     # A case that THROWS is a counted failure, never a suite that stopped early and printed a pass.
     $script:cases++; $script:fail++
@@ -521,12 +593,13 @@ if ($SelfTest) {
 # ------------------------------------------------------------------------------------------- live run
 # NEVER SCAN YOURSELF. The self-test above carries the founding lines as fixtures; they are strings, so the
 # AST would not count them, but a detector that relies on that is one refactor from reporting itself.
-$files = @(Get-FtnScanFiles -RootDir $repo -Self $PSCommandPath)
+if (-not $Root) { $Root = $repo }
+$files = @(Get-FtnScanFiles -RootDir $Root -Self $PSCommandPath)
 if (-not $files.Count) {
   Write-Output 'FIXED-TEMP-NAMES AUDIT BLIND: resolved zero .ps1 files, which means the discovery is broken rather than the tree being clean.'
   Exit-Guard -Name 'fixed-temp-names' -Summary 'blind=no-files' -Code 3
 }
-$rootFull = Get-TcRootFull $repo
+$rootFull = Get-TcRootFull $Root
 $sites = New-Object System.Collections.ArrayList; $probeSites = New-Object System.Collections.ArrayList
 $read = 0; $parseErrorFiles = 0; $uniqueAll = 0; $unresolvedAll = 0
 foreach ($f in $files) {
@@ -551,16 +624,31 @@ foreach ($s in $probeSites) { Write-Output ('  absence-probe  ' + $s) }
 $summary = "files={0} read={1} built={2} fixed={3} probes={4} unresolved={5}" -f $files.Count, $read, $built, $count, $probeSites.Count, $unresolvedAll
 
 $note = 'HIGH-WATER MARK for paths built under %TEMP% from a FIXED leaf, which concurrent runs of one suite share. Absence probes passed straight to a Get-/Read-/Test- command are listed, not counted. It may only go DOWN, and a fall to zero or over 60% in one run is REFUSED as a probably-broken detector (lib\ratchet.ps1).'
-if (-not (Test-Path -LiteralPath $BASELINE_FILE)) {
+$blDoc = $null
+if (Test-Path -LiteralPath $BASELINE_FILE) {
+  try { $blDoc = Get-Content -LiteralPath $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { $blDoc = $null }
+}
+function Write-FtnBaseline([int]$Sites) {
+  <# The recorded mark, in the bytes git stores. The committed blob carries NO BOM, so -NoBom: matching it is
+     what keeps a record to an unchanged count from showing up as a whole-file rewrite. The NOTE the file
+     already carries is KEPT rather than replaced, and the key order is the committed one, so the diff of a
+     record is only what moved. #>
+  $keepNote = if ($blDoc -and $blDoc.note) { [string]$blDoc.note } else { $note }
+  $srcDoc = if ($blDoc) { $blDoc } else { [pscustomobject]@{} }
+  $hist = Add-RatchetHistory -Doc $srcDoc -Count $Sites
+  $doc = [pscustomobject]@{ generated = (Get-Date).ToString('s'); sites = $Sites; history = $hist; note = $keepNote }
+  $null = Write-TcLfFile -Path $BASELINE_FILE -Text ($doc | ConvertTo-Json -Depth 5) -NoBom
+  return $hist
+}
+if (-not $blDoc) {
+  # SEEDING IS NOT RECORDING A FALL. With no baseline there is nothing to protect and nothing to compare
+  # against, so the first run writes one - which in production cannot happen, the file being tracked.
   # The day-one count goes into the history as well, so every later fall is read against what was first measured.
-  $hist = Add-RatchetHistory -Doc ([pscustomobject]@{}) -Count $count
-  $doc = [pscustomobject]@{ generated = (Get-Date).ToString('s'); sites = $count; history = $hist; note = $note }
-  # LF, no BOM: PS 5.1's ConvertTo-Json writes CRLF, and main is LF (a CRLF flip is invisible in git diff).
-  [IO.File]::WriteAllText($BASELINE_FILE, (($doc | ConvertTo-Json -Depth 5) -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
+  $null = Write-FtnBaseline $count
   Write-Output ("fixed-temp-names: baseline written at {0} site(s). From here the number may only go DOWN." -f $count)
   Exit-Guard -Name 'fixed-temp-names' -Summary ("{0} baseline={1}" -f $summary, $count) -Code 0
 }
-$base = [int]((Get-Content -LiteralPath $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json).sites)
+$base = [int]$blDoc.sites
 
 if ($count -gt $base) {
   Write-Output ("FIXED-TEMP-NAMES AUDIT FAILED: {0} path(s) are built under %TEMP% from a FIXED leaf, against a baseline of {1}." -f $count, $base)
@@ -578,15 +666,21 @@ if ($move.Verdict -eq 'implausible') {
   Exit-Guard -Name 'fixed-temp-names' -Summary ("{0} baseline={1} refused-to-lower" -f $summary, $base) -Code 2
 }
 if ($move.Verdict -eq 'tightened') {
-  $doc = $null
-  try { $doc = Get-Content -LiteralPath $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
-  if (-not $doc) { $doc = [pscustomobject]@{} }
-  $hist = Add-RatchetHistory -Doc $doc -Count $count
-  $newDoc = [pscustomobject]@{ generated = (Get-Date).ToString('s'); sites = $move.NewBaseline; history = $hist; note = $note }
-  [IO.File]::WriteAllText($BASELINE_FILE, (($newDoc | ConvertTo-Json -Depth 5) -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
-  Write-Output ('PASSED and TIGHTENED - ' + $move.Message)
-  Write-Output ('  ' + (Get-RatchetTrend -History $hist))
-  Exit-Guard -Name 'fixed-temp-names' -Summary ("{0} tightened-from={1}" -f $summary, $base) -Code 0
+  if ($Tighten -or $AcceptDrop) {
+    $hist = Write-FtnBaseline ([int]$move.NewBaseline)
+    Write-Output ('PASSED and TIGHTENED - ' + $move.Message)
+    Write-Output ('  ' + (Get-RatchetTrend -History $hist))
+    Write-Output '  New baseline written - commit ops\fixed-temp-names-baseline.json, or it protects only this checkout.'
+    Exit-Guard -Name 'fixed-temp-names' -Summary ("{0} tightened-from={1}" -f $summary, $base) -Code 0
+  }
+  # SPOKEN, NOT WRITTEN. This may be a pre-push run-gates pass, and a rewrite here dirties the checkout being
+  # pushed without riding the push - and it costs that pass its reuse record as well.
+  # ASSIGNED FIRST, not concatenated inside the -replace: `'a' + $m -replace x, y` binds as `('a' + $m) -replace
+  # x, y` here, which happens to be what was meant and is one precedence change from not being.
+  $spoken = [string]$move.Message -replace 'Baseline lowered; it can never rise again\.', 'NOT written.'
+  Write-Output ("fixed-temp-names: PASSED, and the ratchet CAN tighten - " + $spoken)
+  Write-Output '  Record it deliberately: ops\audit-fixed-temp-names.ps1 -Tighten, then commit ops\fixed-temp-names-baseline.json.'
+  Exit-Guard -Name 'fixed-temp-names' -Summary ("{0} baseline={1} can-tighten={2}" -f $summary, $base, $count) -Code 0
 }
 Write-Output ("fixed-temp-names: PASSED - {0} known site(s), unchanged from the baseline. Each one moved under a per-run directory lowers the mark for good." -f $count)
 Exit-Guard -Name 'fixed-temp-names' -Summary ("{0} baseline={1}" -f $summary, $base) -Code 0
