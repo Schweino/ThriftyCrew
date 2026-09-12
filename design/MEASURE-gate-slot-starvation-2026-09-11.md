@@ -5,6 +5,11 @@ number below, plus `Win32_Process` snapshots, the pre-push logs the hook keeps u
 `gate-readings.jsonl` rows, and session scratch files. Run 2026-09-11 between 16:35 and 17:05 local against the tree
 at commit c6533c7ea.
 
+**The fairness probe of item 5 is now committed as `ops\probe-gate-slot-fairness.ps1`**, because a described probe
+costs a re-write to repeat and this one had to be re-written the next day to answer whether the fix held. The
+re-measurement at 20 arrivals is the last section of this file. The other numbers here still come from the scratch
+probes and snapshots described with each.
+
 ## The question
 
 A push is gated by `run-gates` through a machine-wide budget of 10 gate worker slots. That afternoon, two consecutive
@@ -118,3 +123,68 @@ the gate again after a fix. Out of scope for this change.
 | Removes the measured starvation | yes, the refusal can no longer be bad luck | no | partly, it shortens the queue |
 | Removes wasted slot time | no | yes, for the run-then-push shape | yes, for a push already rejected |
 | Hermetic fixtures, no day-one red | yes | yes | yes |
+
+## Re-measured at 20 arrivals, 2026-09-12
+
+**Re-read at commit 78b720b3b: every conclusion above still holds, and item 5 is now re-measured below.** The
+arrival-order finding, the occupancy snapshot and the cost-per-run numbers were unaffected by that commit, which
+adds the probe and records in `lib\gate-slots.ps1`'s header what the wait does when the producers never stop.
+
+`ops\audit-conclusion-currency.ps1` is why this line exists and why the change is two commits. The section below
+names a harness that did not exist when this document cited `c6533c7ea`, so on the first attempt the audit read a
+document whose newest cited commit predated its own harness and refused the push - correctly, and it is the same
+rule that catches a verdict left standing over a harness that moved underneath it. A document cannot cite a harness
+from the future. So the probe landed first, as 78b720b3b, and this section cites the commit it landed as.
+
+**Harness and commit.** `ops\probe-gate-slot-fairness.ps1` at commit 78b720b3b, run against the tree at 8b7d7ff4d.
+It is the probe of item 5 above, kept this time. 20 arrivals, each wanting 3 slots of a private budget of 4 for 1,500 ms of
+work, staggered 250 ms apart on one absolute release clock published after every child reports ready, because
+powershell.exe takes about a second to start and launch order is therefore not arrival order. One row per arrival,
+and every total below derived from the rows. Arms alternate ROUND BY ROUND, not arm by arm, so a busy stretch on
+this shared box cannot land on one arm only; each arm records the machine's live `run-gates` count at its start (4
+to 10 across the six arms).
+
+**The two arms.** AFTER is this tree. BEFORE is a temp mirror whose `Get-TcGateQueueAhead` returns 0 always, which
+is the documented pre-queue behaviour: tickets still written, never honoured, nothing swept. The original was
+verified byte-identical by md5 after the mutant runs.
+
+**Bars, written before the run** (scratchpad, and restated here): B1 at most 19 of 190 pairs inverted; B2 no arrival
+passed by more than 2 later ones; B3 no refusals; B4 peak held at most the budget; B5 the first arrival waits least.
+And the standing MUST NOT FIRE: a lone run still gets the whole budget.
+
+| Round | Arm | Inverted pairs of 190 | Worst arrival passed by, of 19 | Refused of 20 | Peak of 4 |
+|---|---|---|---|---|---|
+| 1 | after | **0** | **0** | 0 | 4 |
+| 1 | before | 47 | 9 | 0 | 4 |
+| 2 | after | **0** | **0** | 0 | 4 |
+| 2 | before | 49 | 9 | 0 | 4 |
+| 3 | after | **0** | **0** | 0 | 4 |
+| 3 | before | 53 | 15 | 0 | 4 |
+
+Every bar held on all three AFTER rounds. BEFORE breached B1 and B2 in all three. A lone run asking for 10 of a
+budget of 10 got 10 of 10 in 34 ms.
+
+**Three things the table does not say, and each of them matters more than the totals do.**
+
+1. **47 of 190 is well under the 95 a uniformly random order averages, and that is not the fix flattering itself.**
+   A waiter that arrives earlier also starts polling earlier, so under the old code it usually did win. The damage
+   was never spread evenly; it fell hard on a FEW arrivals, and the max passed-by column is where it shows. That is
+   exactly the production signature of 2026-09-11: most pushes were fine and a handful waited out the full deadline
+   and refused. A mean would have hidden it.
+2. **The fix does not make the average wait better, and cannot.** Median wait to first slot rose from 2.3 to 4.3 s
+   (before) to 5.1 to 5.2 s (after), with the max at about 10.5 s in both arms. The budget and the work are
+   unchanged, so the same queue drains in the same time and the only thing that moves is WHO waits. What arrival
+   order buys is a wait bounded by the drain rate instead of by luck.
+3. **This probe does not reproduce the refusal itself**, only the mechanism behind it. Its queue drains in about
+   11 s, so no arm ever reached its deadline. The production refusal needed a queue that took 20 minutes to turn
+   over, which is item 2 of this file and is unchanged by any of this.
+
+**What was considered and not changed.** A cap on how many slots one run may hold while others wait. The head of
+the queue may still take the whole budget, and with `run-gates` sizing its pool to what it got, that is the run
+that finishes soonest and frees them soonest; capping the head would lengthen the queue it is at the front of.
+Arrival order already makes head-of-line a turn rather than a prize.
+
+**What the 1,200 s does when the producers never stop** is now recorded in `lib\gate-slots.ps1`'s own header, per
+the ops rule that a threshold states what it does when its producer stops: it never fires, the wait is unbounded
+but the SERVICE is guaranteed, and the failure it cannot see is a queue that moves while filling faster than it
+drains. That needs a floor on the drain rate, which this upper bound structurally cannot be.
