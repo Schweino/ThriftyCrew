@@ -36,7 +36,7 @@ not run one whose inputs are untouched, so a run DISPATCHES less and holds its s
 shortens how long a starved waiter waits; it does not change who wins a freed slot, which is what was measured
 here and lives in `lib\gate-slots.ps1`.
 
-**Re-read at commit `1417315df`:** `ops\run-gates.ps1` moved again, twice on 2026-09-12 - six tree-wide ratchets are
+**Re-read at commit `683363de8`:** `ops\run-gates.ps1` moved again, twice on 2026-09-12 - six tree-wide ratchets are
 now marked `daily` and deferred out of a push, and the loop that judges them skips them too. Neither touches
 `lib\gate-slots.ps1`, which is what this document measures: who wins a freed slot. What it DOES change is the
 denominator around it - a push dispatches less - and that was already true of the per-gate keys, so the caveat below

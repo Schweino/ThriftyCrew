@@ -20,7 +20,7 @@ ceiling this file computes from slot-seconds, and changes none of the arrival or
 **Re-read at commit `46a78c564`:** the commit adding the harness; every total here was produced by running that
 copy of it over the sampled rows.
 
-**Re-read at commit `1417315df`:** `ops\run-gates.ps1` moved twice more on 2026-09-12: six tree-wide ratchets are
+**Re-read at commit `683363de8`:** `ops\run-gates.ps1` moved twice more on 2026-09-12: six tree-wide ratchets are
 marked `daily` and no longer run in a push, and the loop that judges them skips them as well. The observer is
 untouched, and every total below still reads as measured. The direction is the same one already noted for the
 per-gate keys - a run does LESS work, so the slot-second ceiling this file computes is an upper bound on a run that
