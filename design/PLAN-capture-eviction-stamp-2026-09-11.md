@@ -121,3 +121,90 @@ runs `run-gates` and a FULL test-auditors run, because `grocery/test-auditors.ps
 - **Hand-run chains still do not commit the report, and no longer need to.** A chain that rebuilds a board and
   skips the pass is still refused, in the checkout that holds that board, which is the true positive this case
   exists for.
+
+# Second pass, same day: with no stamp the answer is a SKIP, not the report
+
+Status: SHIPPED with this section. The first two bullets above turned out to be the defect, not a footnote.
+
+This is the other half of `78db9d6a9` (session practical-hypatia-083434), which found the same split from the
+seeding side, measured the whole class - 304 tracked undated-name records in the two directories a seeded file
+lands in, 12 carrying a dated-board pointer, 4 then 5 disagreeing within half an hour - and made
+`ops/seed-worktree.ps1` REPORT each disagreement without moving its exit code. Its own message names what it left:
+"no eviction pass has written that stamp yet ... the case still falls back to the tracked report. The founding
+failure recurs on the next rebuild-before-commit. The case itself is untouched here." That fallback is what this
+section closes. The two changes do not overlap: that one reports at the seeder, this one decides in the case, and
+neither refuses a push for a disagreement no pusher can repair.
+
+## What was still wrong
+
+"Worktrees made before this change keep the old behaviour ... not a regression: their verdict is exactly what it
+was" is true and is exactly the problem. The old verdict in those checkouts was the commit-lag measurement this
+document is about. Putting the record on the board's road fixes nothing for a checkout that has no record on that
+road - it still fell through to the tracked report, and a checkout that carries a copied board beside a committed
+report is comparing two files that arrived by different roads.
+
+Established before changing anything:
+
+- **The writer** is `grocery/audit-capture-eviction.ps1`'s live run. It writes `out/capture-evictions.json` and
+  then `out/capture-evictions-stamp.json` into `<repo>/grocery/out`, always the script's own root - there is no
+  `-OutDir`, so a run only ever stamps the checkout it runs in.
+- **The runner** is the `capture-eviction` fan-out lane in `grocery/check-ad-cycles.ps1:1509`. It carries no
+  `-Due`, so it runs on every ad-cycle generation, and the consumer at `:2593` reads its exit code and its verdict
+  line. In `grocery/ad-cycle-log.txt` that lane has recorded a real verdict on **12 of 12** runs - 0 BLIND, 0
+  did-not-complete, 0 threw.
+- **Will the daily chain produce a stamp?** Yes. `TC Grocery Daily Capture 0800` (Ready, last result 0, next run
+  2026-09-12 08:00) runs `grocery/capture-run.ps1 -Kind daily`, which calls `check-ad-cycles` downstream in the
+  MAIN checkout, where both inputs the pass needs are present (`candidates-2026-09-11.json` and the 09-11 board).
+  So the first stamp lands in `C:\Codex\ThriftyCrew\grocery\out` at about 08:2x, and every worktree seeded after
+  that carries it. **Not in any existing worktree**, and not anywhere until then.
+- **`ops/seed-worktree.ps1` exiting 2 on it is correct** and is left alone: a `.worktreeinclude` line matching no
+  file in the source is MISSING-SOURCE, the target really is blind on it, and the pre-push hook's call is
+  best-effort (`|| echo`), so it refuses no push.
+
+## The change
+
+`Get-CaptureEvictionCurrency` in `grocery/test-auditors.ps1` holds the decision as a pure function, and the case
+asks it in two steps instead of one:
+
+1. a STAMP decides wherever the checkout has one (unchanged, including the generation match);
+2. with no stamp, could this checkout ever have RUN the pass? The live run resolves its input as a dated
+   `out/candidates-*.json`, which `.worktreeinclude` does not carry. With none present the verdict is a counted
+   **SKIP** naming that, because the tracked report there measures another checkout's commit clock;
+3. with candidates present - the chain's own checkout, where the report is that run's own output - the report is
+   judged exactly as before, message for message.
+
+The `compare_file` comparison also moved from `-ne` to `[string]::Equals(..., Ordinal)`, for the reason the
+`compare_built_at` line beside it already had: PS 5.1's culture-sensitive `-ne` ignores a NUL, so a damaged name
+would have read as a clean match.
+
+Two things kept it honest rather than convenient. `ops/audit-write-only-reports.ps1` still finds a reader for the
+`capture-evictions` family, because the report is still read in the checkout that writes it - a stamp-only reader
+was refused in the first pass for that reason and is still refused. And the SKIP is narrow: it cannot fire where a
+stamp exists, and it cannot fire where the pass can run, which is asserted by two of the frozen cases below.
+
+## Verification
+
+Paired, one row per case per arm, same inputs to both arms, in a temp tree that touches no repo file: the HEAD
+block and the working-tree block lifted verbatim from the same file and driven with `$root` pointed at the fixture
+(`scratchpad/arm-probe.ps1`). Bar stated before the runs: exactly one cell may move, the incident cell, and the
+other three lines must be identical text.
+
+| Case (board comparison-2026-09-11.json, built_at 14:27:41) | old | new |
+|---|---|---|
+| seeded worktree, no candidates, committed report names 09-09 | FAIL `capture-evictions.json audited comparison-2026-09-09.json but the newest board is comparison-2026-09-11.json` | **SKIP** `this checkout holds 1 dated board(s) and 0 dated out\candidates-*.json ...` |
+| seeded worktree, no candidates, current stamp | PASS ARMED (stamp) | PASS ARMED (stamp), identical text |
+| the chain's checkout, candidates present, report names 09-09 | FAIL | FAIL, identical text |
+| the chain's checkout, candidates present, current report | PASS ARMED (report) | PASS ARMED (report), identical text |
+
+1 of 4 cells moved, and it is the incident. The other 3 are byte-identical across arms.
+
+## What this leaves, stated
+
+- **A checkout with a fresh board and zero dated candidates now SKIPs rather than FAILs.** In the main checkout
+  that cannot arise from retention: `grocery/prune-intermediates.ps1` keeps the newest 3 and refuses to prune to
+  zero. If it ever did arise there, the case reports a counted SKIP with its reason, which is a could-not-look and
+  is printed in both summaries - never a silent pass.
+- **Existing worktrees get the SKIP, not the stamp.** The pre-push hook seeds once, gated on a missing built card,
+  so it will not re-copy into a worktree that already has one. That is the honest outcome for a checkout that
+  cannot run the pass, and any worktree made after tomorrow's 08:2x chain gets the stricter stamp test instead.
+- **Nothing here makes a hand-run chain commit the report**, and nothing here needs it to.

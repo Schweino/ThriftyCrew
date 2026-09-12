@@ -66,6 +66,15 @@ is one copy of every rule and nothing here can drift from it.
   the bot rewrites daily.** Measured in scratch repos: the bot's commit-then-`rebase -X theirs` hits a
   modify/delete conflict and aborts, and an autostash rebase over a local edit exits 0 with the path left
   unmerged, so the next commit exits 128. `design/PLAN-capture-eviction-stamp-2026-09-11.md`.
+  **Putting the record on the right road is only half: with NO record on that road the answer is a counted SKIP,
+  never a FAIL** (same day, second pass). The stamp only reaches a checkout seeded after the first live pass writes
+  one, so every checkout made before that still fell back to the tracked report - the same commit-lag measurement,
+  still refusing pushes, and main's dirty working copy still passing what a clean checkout failed. The question is
+  now asked in two steps: could this checkout ever have RUN the pass? It reads `out/candidates-*.json`, which
+  `.worktreeinclude` does not carry, so a worktree exits 3 BLIND there. With none present the case says so and
+  counts a SKIP; with candidates present - the chain's own checkout, where the report is that run's own output -
+  it is judged exactly as before, message for message. Nothing is weakened: the FAIL that goes away could never
+  tell "the pass did not run" from "nobody has committed a report yet".
 - **`cohort` here means the PEER GROUP OF PRODUCTS holding a commodity's board cells** - never a group
   of members or a group of recipes (2026-09-08, backlog I100). `build-arrivals-docket.ps1:27-31,56-57`,
   `check-ad-cycles.ps1:1791`, `adjudicate-discovery.ps1:23`, `aisle-test.ps1:35-36` and

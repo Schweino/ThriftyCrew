@@ -5591,48 +5591,166 @@ $cacLive = @(Get-Content (Join-Path $root 'check-ad-cycles.ps1') | Where-Object 
 if ($cacLive.Count -gt 0) { Ok 'audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it' }
 else { Bad 'audit-capture-eviction is not called by check-ad-cycles.ps1 - the ONLY check that can see a thin capture evicting a rich one is hand-cranked, and a passing -SelfTest proves the code works, not that anything runs it' }
 
-# LIVE-TWIN (2026-09-11): half (2) above is CURRENCY on the live board, so all three of these reads are live by design.
-# WHICH RECORD IT READS (2026-09-11). The pass writes two files. out\capture-evictions.json is the REPORT and is
-# tracked, so its findings stay reviewable in history. out\capture-evictions-stamp.json is the STAMP and is
-# gitignored, like the board it describes, so the two reach a checkout by the same road: this disk, or
-# .worktreeinclude into a new worktree. The report reaches a checkout only when somebody commits it. This case read
-# the report until 2026-09-11, when a triage chain rebuilt the board at 14:27, ran the pass at 14:32 in the main
-# checkout and committed its source only: every worktree carrying the new board then refused unrelated pushes
-# against a committed report that still named the old one, and would have until the next morning's bot commit.
-# So the STAMP decides wherever this checkout has one, and it must match the board's GENERATION (built_at) as well
-# as its file name, because a board is rebuilt in place under the same name (comparison-2026-09-09.json at 12:19
-# that day). A checkout with no stamp, made before the stamp existed, is judged on the report exactly as before.
-# The one input that passes here and failed before is a current stamp beside a lagging committed report; the
-# generation match is stricter than before. design\PLAN-capture-eviction-stamp-2026-09-11.md.
+# WHICH RECORD ANSWERS "DID THE ROSTERED PASS RUN ON THIS BOARD", AND WHY THE TRACKED REPORT IS NOT THAT RECORD
+# OUTSIDE THE CHECKOUT THAT WROTE IT (2026-09-11, second pass over the same incident).
+#
+# The pass writes two files. out\capture-evictions.json is the REPORT and is TRACKED, so its findings stay
+# reviewable in history. out\capture-evictions-stamp.json is the STAMP and is gitignored, like the board it
+# describes, so the two reach a checkout by the same road: this disk, or .worktreeinclude into a new worktree.
+#
+# THE REPORT CROSSES CHECKOUTS BY COMMIT; THE BOARD CROSSES BY COPY. Comparing them therefore answers a DIFFERENT
+# QUESTION from the one this case asks. This case asks: has the rostered pass run on the newest board in THIS
+# checkout? Report-versus-board answers: how long ago did somebody commit a report, in some OTHER checkout, naming
+# the board that was later copied here - which the daily bot's commit clock decides, not the pass. In the checkout
+# that RAN the pass, the report on disk is that run's own output and the comparison is sound. Anywhere else it is a
+# commit-lag measurement wearing a currency verdict's words, and whether it reads pass or fail is an accident of
+# when the last commit happened relative to the last board copy.
+#
+# It cost a day. 2026-09-11: a triage chain rebuilt the board at 14:27, ran the pass at 14:32 in the main checkout
+# and committed its source only (correctly - explicit paths). Every worktree carrying the new board then REFUSED
+# unrelated pushes against a committed report naming the old one, while main's own dirty working copy passed. The
+# stamp (422699bb3) put the record on the board's road for every checkout seeded after the first live pass under
+# that code, and left the checkouts that have no stamp "judged on the report exactly as before" - which is exactly
+# the false FAIL, still standing. So the decision is three-way, and Get-CaptureEvictionCurrency below holds it:
+#   * a STAMP decides wherever the checkout has one. It travels the board's road, and it must match the board's
+#     GENERATION (built_at) as well as its name, because a board is rebuilt in place under the same name
+#     (comparison-2026-09-09.json at 12:19 that day).
+#   * with NO stamp, ask whether this checkout could ever have run the pass. The pass resolves its input as
+#     out\candidates-YYYY-MM-DD.json (audit-capture-eviction.ps1's live run; the case below asserts that spelling
+#     has not moved), and .worktreeinclude does not carry those, so a worktree exits 3 BLIND there and can never
+#     write a stamp or a report of its own. With none present the verdict is a counted SKIP naming that reason -
+#     never a FAIL, and never a pass either (a-could-not-look-must-not-settle-the-question).
+#   * with candidates present - the chain's own checkout - the report IS this checkout's own output, and it is
+#     judged exactly as it was before this change, message for message.
+# THIS DOES NOT WEAKEN THE CASE. The FAIL that goes away is one that could never tell "the pass did not run" from
+# "nobody has committed a report yet", in a checkout where the first is unanswerable. The true positive this case
+# exists for - a chain that rebuilds a board and skips the pass - is still a FAIL in the checkout that holds that
+# board and can run that pass, and a seeded checkout gets the STRICTER stamp test instead of a SKIP as soon as one
+# live pass has run upstream. design\PLAN-capture-eviction-stamp-2026-09-11.md has the timeline and the two repairs
+# that were measured and refused (untracking the report; a stamp-only reader).
+#
+# PURE, so the frozen cases below drive the real decision with no file on disk - the same reason
+# audit-capture-eviction's own detector is a function. Returns @{ verdict = PASS|FAIL|SKIP; message = <line> }.
+function Get-CaptureEvictionCurrency {
+  param(
+    [object]$Stamp,             # out\capture-evictions-stamp.json parsed, or $null when this checkout has none
+    [object]$Report,            # out\capture-evictions.json parsed, or $null
+    [int]$CandidateFileCount,   # dated out\candidates-*.json here: 0 means the pass has never been runnable
+    [int]$BoardCount,           # dated boards here, so the SKIP line prints its denominator
+    [string]$BoardName, [string]$BoardBuiltAt
+  )
+  $fromStamp = $false
+  if ($Stamp) { $rec = $Stamp; $name = 'capture-evictions-stamp.json'; $fromStamp = $true }
+  elseif ($CandidateFileCount -le 0) {
+    return @{ verdict = 'SKIP'; message = ('roster currency: this checkout holds ' + $BoardCount + ' dated board(s) and 0 dated out\candidates-*.json, so the rostered capture-eviction pass has never been runnable here and has written no out\capture-evictions-stamp.json. The TRACKED out\capture-evictions.json was NOT read as a currency record: it crosses checkouts by COMMIT while the board crosses by COPY, so against a copied board it measures another checkout''s commit clock, not whether the pass ran on this board') }
+  }
+  elseif (-not $Report) {
+    return @{ verdict = 'FAIL'; message = 'a board exists but neither out\capture-evictions-stamp.json nor out\capture-evictions.json does - the rostered capture-eviction pass has never written its artifact, so the eviction class is going unwatched on the live board' }
+  }
+  else { $rec = $Report; $name = 'capture-evictions.json' }
+  $gen = $null; $built = $null
+  try { $gen = [datetime]::Parse([string]$rec.generated, [Globalization.CultureInfo]::InvariantCulture) } catch {}
+  try { $built = [datetime]::Parse([string]$BoardBuiltAt, [Globalization.CultureInfo]::InvariantCulture) } catch {}
+  if ((-not $gen) -or (-not $built)) {
+    return @{ verdict = 'FAIL'; message = ($name + ' or the newest comparison carries an unparseable timestamp (generated=' + [string]$rec.generated + ', built_at=' + [string]$BoardBuiltAt + ') - roster currency cannot be established') }
+  }
+  # ORDINAL on both name comparisons. PS 5.1's `-ne` on strings is culture-sensitive, and a culture-sensitive
+  # comparison IGNORES a NUL: ('a' + [char]0 + 'b') -ne 'ab' reads $false. These two names arrive from a JSON
+  # document and from the filesystem, so they are exactly the text that can come back damaged, and the damaged
+  # case would read as a clean match - the agreeing answer. This one was `-ne` until 2026-09-11.
+  if (-not [string]::Equals([string]$rec.compare_file, $BoardName, [StringComparison]::Ordinal)) {
+    return @{ verdict = 'FAIL'; message = ($name + ' audited ' + [string]$rec.compare_file + ' but the newest board is ' + $BoardName + ' - the eviction check is reporting on a board that is no longer live') }
+  }
+  if ($fromStamp -and (-not [string]::Equals([string]$rec.compare_built_at, [string]$BoardBuiltAt, [StringComparison]::Ordinal))) {
+    return @{ verdict = 'FAIL'; message = ($name + ' read ' + $BoardName + ' as built at ' + [string]$rec.compare_built_at + ' but the board on disk was built at ' + [string]$BoardBuiltAt + ' - it was rebuilt under the same name and the rostered pass has not run on this generation') }
+  }
+  if ($gen -lt $built) {
+    return @{ verdict = 'FAIL'; message = ($name + ' is stamped ' + $gen.ToString('s') + ', OLDER than the ' + $BoardName + ' generation it names (built_at ' + $built.ToString('s') + ') - the rostered pass did not run on this board, so its zero findings describe a board that no longer exists') }
+  }
+  return @{ verdict = 'PASS'; message = ('capture-eviction roster is ARMED: ' + $name + ' (' + $gen.ToString('s') + ') post-dates the newest board ' + $BoardName + ' (built_at ' + $built.ToString('s') + ')') }
+}
+
+# THE FROZEN CASES for that decision, all from the 2026-09-11 incident: board comparison-2026-09-11.json built at
+# 14:27:41, the committed report naming comparison-2026-09-09.json (generated 08:20:59), the repaired report at
+# 19:22:26, the live stamp at 15:10:52. Ordinal Contains, never -match, so a needle cannot be read as a pattern.
+$ceFxOk = 0; $ceFxN = 0
+function Test-CeCurrency {
+  param([string]$Label, [hashtable]$Verdict, [string]$Expect, [string]$Needle)
+  $script:ceFxN++
+  if (([string]$Verdict.verdict -eq $Expect) -and ([string]$Verdict.message).Contains($Needle)) { $script:ceFxOk++; return }
+  Bad ('capture-eviction currency ' + $Label + ': expected ' + $Expect + ' saying "' + $Needle + '", got ' + [string]$Verdict.verdict + ': ' + [string]$Verdict.message)
+}
+$ceFxBoard = 'comparison-2026-09-11.json'
+$ceFxBuilt = '2026-09-11T14:27:41'
+$ceFxOldReport = [pscustomobject]@{ generated = '2026-09-11T08:20:59'; compare_file = 'comparison-2026-09-09.json' }
+$ceFxLateReport = [pscustomobject]@{ generated = '2026-09-11T08:20:59'; compare_file = $ceFxBoard }
+$ceFxGoodReport = [pscustomobject]@{ generated = '2026-09-11T19:22:26'; compare_file = $ceFxBoard }
+$ceFxGoodStamp = [pscustomobject]@{ generated = '2026-09-11T15:10:52'; compare_file = $ceFxBoard; compare_built_at = $ceFxBuilt }
+$ceFxOldStamp = [pscustomobject]@{ generated = '2026-09-11T15:10:52'; compare_file = 'comparison-2026-09-09.json'; compare_built_at = $ceFxBuilt }
+$ceFxRebuiltStamp = [pscustomobject]@{ generated = '2026-09-11T15:10:52'; compare_file = $ceFxBoard; compare_built_at = '2026-09-11T08:11:25' }
+# MUST FIRE: the founding positive, in the checkout that CAN run the pass. A report naming an older board there is
+# this checkout's own output, so it really does mean no pass has run on this generation.
+Test-CeCurrency 'MUST FIRE (report names an older board where the pass runs)' `
+  (Get-CaptureEvictionCurrency -Stamp $null -Report $ceFxOldReport -CandidateFileCount 4 -BoardCount 39 -BoardName $ceFxBoard -BoardBuiltAt $ceFxBuilt) `
+  'FAIL' 'audited comparison-2026-09-09.json but the newest board is comparison-2026-09-11.json'
+# MUST FIRE: the same shape read off a STAMP, which is the road every seeded checkout is on.
+Test-CeCurrency 'MUST FIRE (stamp names an older board)' `
+  (Get-CaptureEvictionCurrency -Stamp $ceFxOldStamp -Report $ceFxGoodReport -CandidateFileCount 0 -BoardCount 39 -BoardName $ceFxBoard -BoardBuiltAt $ceFxBuilt) `
+  'FAIL' 'capture-evictions-stamp.json audited comparison-2026-09-09.json'
+# MUST FIRE: same board NAME, different generation - the in-place rebuild a name match cannot see.
+Test-CeCurrency 'MUST FIRE (board rebuilt in place under the same name)' `
+  (Get-CaptureEvictionCurrency -Stamp $ceFxRebuiltStamp -Report $ceFxGoodReport -CandidateFileCount 0 -BoardCount 39 -BoardName $ceFxBoard -BoardBuiltAt $ceFxBuilt) `
+  'FAIL' 'it was rebuilt under the same name and the rostered pass has not run on this generation'
+# MUST FIRE: the right board name, but the pass ran BEFORE that board was built (the 2026-08-31 shape).
+Test-CeCurrency 'MUST FIRE (the pass pre-dates the board it names)' `
+  (Get-CaptureEvictionCurrency -Stamp $null -Report $ceFxLateReport -CandidateFileCount 4 -BoardCount 39 -BoardName $ceFxBoard -BoardBuiltAt $ceFxBuilt) `
+  'FAIL' 'OLDER than the comparison-2026-09-11.json generation it names'
+# MUST NOT FIRE: the incident input, in a checkout that cannot run the pass. A seeded worktree carrying the new
+# board beside the lagging COMMITTED report must not be failed on another checkout's commit clock.
+Test-CeCurrency 'MUST NOT FIRE (a seeded worktree judged on a lagging committed report)' `
+  (Get-CaptureEvictionCurrency -Stamp $null -Report $ceFxOldReport -CandidateFileCount 0 -BoardCount 39 -BoardName $ceFxBoard -BoardBuiltAt $ceFxBuilt) `
+  'SKIP' 'has never been runnable here'
+# CLEAN TWIN: a seeded worktree that DOES have a stamp still gets a real verdict, not the SKIP - the SKIP must not
+# swallow the checkouts the stamp was built to serve.
+Test-CeCurrency 'CLEAN TWIN (a seeded worktree with a current stamp is ARMED)' `
+  (Get-CaptureEvictionCurrency -Stamp $ceFxGoodStamp -Report $ceFxOldReport -CandidateFileCount 0 -BoardCount 39 -BoardName $ceFxBoard -BoardBuiltAt $ceFxBuilt) `
+  'PASS' 'roster is ARMED: capture-evictions-stamp.json'
+# CLEAN TWIN: the chain's own checkout, no stamp yet, its own current report - the behaviour this change had to
+# leave alone, because it is what the main checkout does until its first live pass under the stamp code.
+Test-CeCurrency 'CLEAN TWIN (no stamp, current report where the pass runs)' `
+  (Get-CaptureEvictionCurrency -Stamp $null -Report $ceFxGoodReport -CandidateFileCount 4 -BoardCount 39 -BoardName $ceFxBoard -BoardBuiltAt $ceFxBuilt) `
+  'PASS' 'roster is ARMED: capture-evictions.json'
+if ($ceFxOk -eq $ceFxN) { Ok ('capture-eviction currency decision: ' + $ceFxOk + ' of ' + $ceFxN + ' frozen case(s) - 4 must-fire, 1 must-not-fire, 2 clean twins; the SKIP fires only where the pass cannot run, and never over a stamp') }
+else { Bad ('capture-eviction currency decision: only ' + $ceFxOk + ' of ' + $ceFxN + ' frozen case(s) returned the verdict they assert - the line(s) above name each one, and until they are green the roster-currency verdict below is not trustworthy') }
+
+# ONE SPELLING OF "CAN THIS CHECKOUT RUN THE PASS", TWO READERS. The SKIP above is only honest while the live run
+# really does resolve its input from dated out\candidates-*.json; if that moves, this case would SKIP a checkout
+# that can run the pass. Needle built by concatenation so this assertion cannot be satisfied by its own text.
+if ($aceSrc -match ([regex]::Escape("candidates-" + "*.json")) -and $aceSrc -match ([regex]::Escape('^candidates-\d{4}-\d{2}-\d{2}$'))) {
+  Ok 'audit-capture-eviction still resolves its input as a dated out\candidates-*.json - the currency SKIP above reads the same spelling to decide whether this checkout could have run the pass'
+} else {
+  Bad 'audit-capture-eviction no longer resolves its input as a dated out\candidates-*.json - the roster-currency case decides "this checkout cannot run the pass" from that spelling, so it would now SKIP a checkout that CAN run it'
+}
+
+# LIVE-TWIN (2026-09-11): half (2) above is CURRENCY on the live board, so all four of these reads are live by design.
 $ceStamp = Join-Path $root 'out\capture-evictions-stamp.json'   # LIVE-TWIN: half (2)
 $ceReport = Join-Path $root 'out\capture-evictions.json'        # LIVE-TWIN: half (2)
+$ceCands = @(Get-ChildItem (Join-Path $root 'out\candidates-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^candidates-\d{4}-\d{2}-\d{2}$' })   # LIVE-TWIN: half (2)
 $ceCmps = @(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)   # LIVE-TWIN: half (2)
 if ($ceCmps.Count -eq 0) {
   # No dated board here at all (a bare checkout). Still not a pass - but not a defect either, so it is a
   # counted SKIP rather than a FAIL. On a machine with boards, $HasBoard is true and this stays a hard FAIL.
   if (-not $HasBoard) { Skip 'roster currency: no out\comparison-*.json here - the capture-eviction stamp was not compared against anything' }
   else { Bad 'roster currency UNCHECKABLE: no DATED out\comparison-YYYY-MM-DD.json to compare the capture-eviction stamp against - this check examined nothing, which is not the same as a clean board' }
-} elseif ((-not (Test-Path $ceStamp)) -and (-not (Test-Path $ceReport))) {
-  Bad 'a board exists but neither out\capture-evictions-stamp.json nor out\capture-evictions.json does - the rostered capture-eviction pass has never written its artifact, so the eviction class is going unwatched on the live board'
 } else {
-  $ceFromStamp = [bool](Test-Path $ceStamp)
-  $ceRec = if ($ceFromStamp) { $ceStamp } else { $ceReport }
-  $ceName = Split-Path $ceRec -Leaf
-  $ceDoc = Read-JsonFile $ceRec
+  $ceDoc = if (Test-Path $ceStamp) { Read-JsonFile $ceStamp } else { $null }
+  $ceRptDoc = if (Test-Path $ceReport) { Read-JsonFile $ceReport } else { $null }
   $ceCmpDoc = Read-JsonFile $ceCmps[0].FullName
-  $ceGen = $null; $ceBuilt = $null
-  try { $ceGen = [datetime]::Parse([string]$ceDoc.generated, [Globalization.CultureInfo]::InvariantCulture) } catch {}
-  try { $ceBuilt = [datetime]::Parse([string]$ceCmpDoc.built_at, [Globalization.CultureInfo]::InvariantCulture) } catch {}
-  if ((-not $ceGen) -or (-not $ceBuilt)) {
-    Bad ($ceName + ' or the newest comparison carries an unparseable timestamp (generated=' + [string]$ceDoc.generated + ', built_at=' + [string]$ceCmpDoc.built_at + ') - roster currency cannot be established')
-  } elseif ([string]$ceDoc.compare_file -ne $ceCmps[0].Name) {
-    Bad ($ceName + ' audited ' + [string]$ceDoc.compare_file + ' but the newest board is ' + $ceCmps[0].Name + ' - the eviction check is reporting on a board that is no longer live')
-  } elseif ($ceFromStamp -and (-not [string]::Equals([string]$ceDoc.compare_built_at, [string]$ceCmpDoc.built_at, [StringComparison]::Ordinal))) {
-    Bad ($ceName + ' read ' + $ceCmps[0].Name + ' as built at ' + [string]$ceDoc.compare_built_at + ' but the board on disk was built at ' + [string]$ceCmpDoc.built_at + ' - it was rebuilt under the same name and the rostered pass has not run on this generation')
-  } elseif ($ceGen -lt $ceBuilt) {
-    Bad ($ceName + ' is stamped ' + $ceGen.ToString('s') + ', OLDER than the ' + $ceCmps[0].Name + ' generation it names (built_at ' + $ceBuilt.ToString('s') + ') - the rostered pass did not run on this board, so its zero findings describe a board that no longer exists')
-  } else {
-    Ok ('capture-eviction roster is ARMED: ' + $ceName + ' (' + $ceGen.ToString('s') + ') post-dates the newest board ' + $ceCmps[0].Name + ' (built_at ' + $ceBuilt.ToString('s') + ')')
+  $ceVerdict = Get-CaptureEvictionCurrency -Stamp $ceDoc -Report $ceRptDoc -CandidateFileCount $ceCands.Count -BoardCount $ceCmps.Count -BoardName $ceCmps[0].Name -BoardBuiltAt ([string]$ceCmpDoc.built_at)
+  switch ([string]$ceVerdict.verdict) {
+    'PASS' { Ok ([string]$ceVerdict.message) }
+    'SKIP' { Skip ([string]$ceVerdict.message) }
+    default { Bad ([string]$ceVerdict.message) }
   }
 }
 } # u108-f-the-triage-pipeline-s-own-watchers

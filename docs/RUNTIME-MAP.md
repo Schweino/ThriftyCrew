@@ -121,7 +121,12 @@ Files written by one runtime and read by another **through the committed repo**.
   `grocery/out/capture-evictions.json` stays tracked as the eviction REPORT; the same pass writes the gitignored
   `capture-evictions-stamp.json`, `.worktreeinclude` carries it, and test-auditors' roster-currency case reads it.
   Reading the tracked report instead refused unrelated pushes from every worktree carrying a board rebuilt
-  mid-day, until somebody committed it. `design/PLAN-capture-eviction-stamp-2026-09-11.md`.
+  mid-day, until somebody committed it. **And where the off-bus record is ABSENT, the on-bus one does not stand
+  in for it**: a checkout with no stamp is asked whether it could ever have run the pass (it needs
+  `out/candidates-*.json`, which `.worktreeinclude` does not carry), and where it could not, the case reports a
+  counted SKIP naming that rather than judging the tracked report against a copied board. Only the checkout that
+  runs the pass reads the report as a currency record, because only there is the report that run's own output.
+  `design/PLAN-capture-eviction-stamp-2026-09-11.md`.
 
 ## Log retention, stated (added 2026-09-08, backlog I36)
 
