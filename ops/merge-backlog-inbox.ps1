@@ -93,6 +93,9 @@ if (-not $Backlog) { $Backlog = Join-Path $repo 'design\BACKLOG-course-findings.
 # The closed vocabulary, copied from the legend `audit-backlog-status.ps1` enforces.
 # A state outside it turns that gate red, so this refuses rather than writes.
 $STATES = @('DONE', 'PARKED', 'NEEDS A RULING', 'PARTLY DONE', 'OPEN')
+# The first-rung types audit-backlog-status.ps1 accepts, kept here so this merge refuses an invented
+# one rather than writing a heading that reddens the next push. `[ADDED 2026-09-12 after eight did.]`
+$RUNG_TYPES = @('READ', 'MEASURE', 'DOC', 'BUILD', 'RULING', 'BLOCKED')
 
 function Test-State([string]$s) {
   foreach ($v in $STATES) { if ($s -match ('^' + [regex]::Escape($v) + '\b')) { return $true } }
@@ -207,6 +210,18 @@ function Read-Inbox([string]$path) {
       $hasRung = @($rest | Where-Object { $_ -match '^RUNG1\s+\S+$' }).Count
       if ($hasRev -ne 1 -or $hasRung -ne 1) {
         throw ("in $([IO.Path]::GetFileName($path)): finding '$title' is state '$state', so its state line owes exactly one of ``2-WAY``/``1-WAY`` (it has $hasRev) and exactly one ``RUNG1 <TYPE>`` (it has $hasRung). audit-backlog-status.ps1 fails the heading without them, which is what happened to I101 on 2026-09-09.")
+      }
+      # AND THE TYPE ITSELF IS A CLOSED VOCABULARY, which this check missed until 2026-09-12.
+      # `RUNG1 <anything>` satisfied the count above, so eight findings landed carrying MEASUREMENT,
+      # CENSUS and PROTOTYPE - all reasonable English, none of them a value the audit accepts. They
+      # merged clean and turned run-gates red on the push instead, which is the late failure a single
+      # writer exists to prevent: this merge is the last place that can refuse a heading cheaply.
+      $rungRow = @($rest | Where-Object { $_ -match '^RUNG1\s+\S+$' })
+      if ($rungRow.Count -eq 1) {
+        $rtype = ($rungRow[0] -replace '^RUNG1\s+', '')
+        if ($RUNG_TYPES -notcontains $rtype) {
+          throw ("in $([IO.Path]::GetFileName($path)): finding '$title' declares ``RUNG1 $rtype``, which is not in the closed vocabulary ($($RUNG_TYPES -join ', ')). audit-backlog-status.ps1 would fail the heading. A census or a count is MEASURE; building a throwaway to learn from is BUILD.")
+        }
       }
     }
     $bodyLines = @($lines | Select-Object -Skip 1) | Where-Object { $_ -ne $stateLine }
@@ -363,6 +378,28 @@ if ($SelfTest) {
   _C 'MUST FIRE' 'and the VERDICT line states merged and quarantined counts' `
     ($out3 -match 'VERDICT: merged 1 finding\(s\) from 1 file\(s\), quarantined 1 file\(s\). Exit 2.') 'no verdict line'
   Remove-Item $q -Recurse -Force -ErrorAction SilentlyContinue
+
+  # MUST FIRE - AN INVENTED FIRST-RUNG TYPE, and this is a MEASURED escape rather than a hypothetical.
+  # `[2026-09-12.]` The check above counted `RUNG1 <anything>`, so eight findings merged clean carrying
+  # MEASUREMENT, CENSUS and PROTOTYPE. Every one is reasonable English and none is a value
+  # audit-backlog-status.ps1 accepts, so they turned run-gates red on the push instead, which is the
+  # late failure a single writer exists to prevent. The twin is the point: a LEGAL rung must still
+  # merge, because a vocabulary check that refused everything would satisfy the must-fire by accident.
+  $inbR = Join-Path $root 'inbox-rung'
+  New-Item -ItemType Directory -Path $inbR -Force | Out-Null
+  Set-Content (Join-Path $inbR 'lane-rung-bad.md')  "## a census is not a rung type`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 CENSUS```n`nbody`n" -Encoding UTF8
+  Set-Content (Join-Path $inbR 'lane-rung-good.md') "## a legal rung lands`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
+  $outR = & $PSCommandPath -InboxDir $inbR -Backlog $bl 2>&1 | Out-String
+  $cR = $LASTEXITCODE
+  $afterR = Get-Content $bl -Raw -Encoding UTF8
+  $qR = Join-Path $inbR 'quarantine'
+  _C 'MUST FIRE' 'an invented RUNG1 type is quarantined and names the vocabulary' `
+    ($cR -eq 2 -and $outR -match 'RUNG1 CENSUS' -and $outR -match 'closed vocabulary' -and (Test-Path (Join-Path $qR 'lane-rung-bad.md'))) "exit $cR :: $outR"
+  _C 'MUST FIRE' 'and no heading carrying it reaches the backlog' `
+    (($afterR -notmatch 'RUNG1 CENSUS') -and ($afterR -notmatch 'a census is not a rung type')) 'an unacceptable rung was written'
+  _C 'CLEAN TWIN' 'a LEGAL rung type still merges beside it' `
+    (($afterR -match 'a legal rung lands') -and -not (Test-Path (Join-Path $inbR 'lane-rung-good.md'))) 'the vocabulary check refused a legal value'
+  Remove-Item $inbR -Recurse -Force -ErrorAction SilentlyContinue
 
   # MUST FIRE - THE MEASURED SHAPE, and the whole reason this changed. Three times on
   # 2026-09-11 and 12 a lane closed its file with a `## Nothing else` section carrying no
@@ -632,7 +669,7 @@ function Move-ToQuarantine {
     if (-not (Test-Path -LiteralPath $qdir)) { New-Item -ItemType Directory -Path $qdir -Force -ErrorAction Stop | Out-Null }
     foreach ($b in $script:bad) {
       $dest = Join-Path $qdir $b.Name
-      Move-Item -LiteralPath $b.Path -Destination $dest -Force -ErrorAction Stop
+      Move-Item -LiteralPath $b.Path -Destination $dest -Force -ErrorAction Stop  # atomic-replace:allow the destination is a quarantine path nothing reads concurrently, and the source is a drop file its lane has finished with; losing this move to a reader is not a failure mode here
       $note = "QUARANTINED $((Get-Date).ToString('yyyy-MM-dd')) by merge-backlog-inbox.ps1`n`n" + $b.Reason +
               "`n`nThe file itself is UNCHANGED. Fix it, move it back into the inbox, and re-run the merge.`n" +
               "Check it first, in isolation:`n  ops\merge-backlog-inbox.ps1 -ValidateFile <path to the fixed file>`n"

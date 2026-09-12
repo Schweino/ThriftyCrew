@@ -10844,7 +10844,7 @@ purchase on a PowerShell-and-Python estate with no RPC layer and no cluster. The
 (items 60 to 62) are classical cryptography primitives and are not `security-craft`'s subject, which
 is adversarial input against LLM systems. Recorded so nobody re-reads them looking for an item.
 
-### I153 - The cost argument that kept the real PowerShell tokenizer out of `lib\ps-source.ps1` is refuted by measurement `OPEN` `queue-7` `2-WAY` `RUNG1 MEASUREMENT`
+### I153 - The cost argument that kept the real PowerShell tokenizer out of `lib\ps-source.ps1` is refuted by measurement `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10911,7 +10911,7 @@ Sourcing: `nand2tetris2` unit 4.2 (Lexical Analysis) is the general form of all 
 irrelevant for the compiler"*, and tokenizing exists precisely so nothing downstream can see that
 noise.
 
-### I154 - Three different comment-reducers exist, none of them blanks a STRING LITERAL, and the estate's workaround for that is a written rule `OPEN` `queue-7` `2-WAY` `RUNG1 CENSUS`
+### I154 - Three different comment-reducers exist, none of them blanks a STRING LITERAL, and the estate's workaround for that is a written rule `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10939,7 +10939,7 @@ Not proposing the change here. Proposing that if the item above is ruled in, the
 specified to blank comments **and** string-literal contents behind a switch, because retrofitting
 the second one later means re-fixturing every caller a second time.
 
-### I155 - Most `ops\audit-*.ps1` detectors cannot say WHERE, and position is free at the rung above `OPEN` `queue-7` `2-WAY` `RUNG1 CENSUS`
+### I155 - Most `ops\audit-*.ps1` detectors cannot say WHERE, and position is free at the rung above `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10967,7 +10967,7 @@ why.
 findings=3`). This is the same discipline one field further: a finding you cannot locate is a
 denominator without a numerator's address.
 
-### I156 - A staged fixture technique the estate does not use: manufacture a simplified corpus FROM the real tracked files `OPEN` `queue-7` `2-WAY` `RUNG1 PROTOTYPE`
+### I156 - A staged fixture technique the estate does not use: manufacture a simplified corpus FROM the real tracked files `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11113,7 +11113,7 @@ whether this is one instance or a class. **It is explicitly NOT a proposal to ad
 of these windows are unreachable by any fixture, and a check that cannot be satisfied is the "red on
 day one" shape the ops rules already forbid.
 
-### I160 - `$null` is used to answer a presence question, and nothing says which question each form answers `OPEN` `queue-7` `2-WAY` `RUNG1 MEASUREMENT`
+### I160 - `$null` is used to answer a presence question, and nothing says which question each form answers `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11156,7 +11156,7 @@ and it retires the question permanently.
 
 ---
 
-### I161 - Four of five tracked state ledgers have no schema check, while `known-wrong.json` has both a required-key list and a closed vocabulary `OPEN` `queue-7` `2-WAY` `RUNG1 CENSUS`
+### I161 - Four of five tracked state ledgers have no schema check, while `known-wrong.json` has both a required-key list and a closed vocabulary `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11218,7 +11218,7 @@ until the invariants are written down nobody knows whether the existing data sat
 
 ---
 
-### I162 - 510 array-append sites are `$x += …` on a variable initialised `@()`, which is quadratic in PowerShell `OPEN` `queue-7` `2-WAY` `RUNG1 MEASUREMENT`
+### I162 - 510 array-append sites are `$x += …` on a variable initialised `@()`, which is quadratic in PowerShell `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11258,7 +11258,7 @@ form, so the replacement idiom is known-good here.
 
 ---
 
-### I163 - The estate's `switch` statements silently do nothing when nothing matches, and there is no register of which ones should `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 CENSUS`
+### I163 - The estate's `switch` statements silently do nothing when nothing matches, and there is no register of which ones should `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
