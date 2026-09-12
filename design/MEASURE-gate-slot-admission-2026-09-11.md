@@ -61,6 +61,13 @@ re-read was owed at all: the sentence above mentions that script as prose, on a 
 keys on, so the audit counts it among this document's own instruments. That is its stated approximation, not a
 finding about this measurement.
 
+**Re-read at commit `140a0f4f6`: every verdict below stands as measured.** `ops\run-gates.ps1` moved once more, and
+for the first time in these re-reads it dispatches MORE rather than less: `grocery\check-ad-cycles.ps1` leaves its
+`$SKIP` list, so one more self-test runs in a push. That reaches this document only through the mixed-versions
+caveat below, which now covers a fourth version. It touches no probe, no analysis and nothing in
+`lib\gate-slots.ps1`, so who wins a freed slot - the whole of what is measured here - is unchanged; the only
+number it moves is the denominator each run's slot tenure is drawn from, by the seconds one fixture costs.
+
 A READ-ONLY probe. It never calls `WaitOne` on a slot and never takes one. Once a second it reads the
 system handle table (`NtQuerySystemInformation`, extended handle information), duplicates only the
 mutant handles held by `run-gates.ps1` and `cpu-load.ps1` processes, reads each one's name and

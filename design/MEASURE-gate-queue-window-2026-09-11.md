@@ -35,6 +35,14 @@ citation to an unmerged commit is only as stable as the branch carrying it, so a
 work that has not landed owes this re-read again on the last rebase before it does. It was rewritten three
 times before landing, once per rebase, which is the cost of citing a branch instead of a merged commit.
 
+**Re-read at commit `140a0f4f6`:** `ops/run-gates.ps1` moved again, and in the opposite direction to every change
+noted above: `grocery/check-ad-cycles.ps1` leaves its `$SKIP` list, so the discovered set grows by one self-test
+(264 to 265 in the checkout that made the change) and a push dispatches slightly MORE work, by the seconds that
+file's own fixtures cost. Nothing sampled below depends on the size of that set except the slot-second ceiling,
+and one fixture moves it by far less than the per-run spread this file already reports (870 s at 16h, 825 s at
+17h, 698 s at 18h). The observer is untouched, and the arrival and admission findings do not depend on how much
+work a run dispatches, so every total below still reads as measured.
+
 ## What was sampled
 
 Every 15 s from **16:48:33 to 18:18:23** (360 ticks). The totals count runs that STARTED in the first 60 minutes,
