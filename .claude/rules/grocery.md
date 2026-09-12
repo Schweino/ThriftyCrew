@@ -69,6 +69,17 @@ is one copy of every rule and nothing here can drift from it.
   **Aldi's OLA number is deliberately NOT pinned** and Walmart's storeId deliberately IS: that session
   legitimately moves between Omaha Aldis, where one Walmart is ruled. What neither may do is claim a
   store nobody read. [[walmart-session-store-3153-drift]], [[aldi-store-is-ola-42]]
+- **A STANDING RULING'S OWED TERMS ARE DERIVED AND LEAD THE WORKLIST - never hand-picked, never hand
+  -discharged** (2026-09-12). Brad's store-drift ruling named 23 terms to recapture and said to put
+  them at the head of the next Walmart worklist; nothing carried that anywhere for a fortnight, because
+  a list in a JSON file and a line in a runbook are reminders and not mechanisms. `Get-WalmartRulingOwed`
+  in `capture-policy-lib.ps1` now derives what is owed - the ruling's own list, minus terms a built
+  `walmart-regular` file PROVES were recaptured at the sanctioned store - and `Get-CaptureWorklist` puts
+  the result at the head as `ruling_terms`. Two properties are what make it a mechanism: it **empties
+  itself** as captures land (so **do not edit a ruling file to mark a term done**), and the owed terms
+  come out of the allowance the **sale expiries** get, never out of the rotation's daily drip, so the
+  cursor can never advance over a term a prepend displaced. A file built under `-WaiveMissingStoreLine`
+  discharges NOTHING - its own stamp says the store was never recorded.
 - **No hard-coded bands** (Brad, 2026-09-04). [[no-hardcoded-bands]]
 - **The boards are gitignored**, so a worktree, a CI runner or a clean checkout is BLIND here and the
   engines exit 0 having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them.

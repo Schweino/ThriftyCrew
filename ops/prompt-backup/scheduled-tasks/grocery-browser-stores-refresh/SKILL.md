@@ -242,10 +242,17 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     re-reads it from every /search response - a session can be flipped mid-sweep, and a term whose
     response names another store settles UNUSABLE rather than MATCHES. If it refuses: SWITCH THE STORE
     in Brad's Chrome (that is yours to do, Brad 2026-08-28) and re-run; do not re-escalate the ruling.
-    STILL OWED: 15 of the 23 terms in grocery\out\walmart-store-ruling-2026-08-28.json. Eight were
-    recaptured at L St on 2026-09-12 (fresh rhubarb, apples, apple juice, applesauce, apple cider
-    vinegar, alfredo sauce, aluminum foil, acorn squash); the call_cap of 25/day stopped the rest. Put
-    the remaining 15 at the head of the first Walmart worklist; after that the ruling is discharged.
+    THE RULING'S OWED TERMS ARE IN YOUR WORKLIST ALREADY - do not hand-pick them (2026-09-12).
+    capture-policy-lib derives what the 2026-08-28 store-drift ruling still owes and puts it at the
+    HEAD of the Walmart worklist as `ruling_terms`, inside the same allowance the sale expiries get, so
+    the rotation keeps its daily drip. Fetch the worklist in the order given. A term leaves that list on
+    its own once a built walmart-regular file NAMES the sanctioned store and carries a row for it, so
+    NEVER edit a ruling file to mark something done - capture it and the list shortens itself.
+    `ruling_deferred` are owed terms that did not fit today and lead tomorrow's; `ruling_blind` means
+    this checkout could not read what has already landed and is naming everything the ruling named.
+    As of 2026-09-12: 8 of 23 recaptured at L St (fresh rhubarb, apples, apple juice, applesauce, apple
+    cider vinegar, alfredo sauce, aluminum foil, acorn squash), 15 owed, and the 25/day call_cap is what
+    stopped the rest.
     The price shape is FLAT STRINGS: priceInfo.linePrice "$1.74", priceInfo.unitPrice "2.7 c/fl oz".
     The older nested shape (currentPrice.price / priceDetails.priceLines[0].price) may still appear -
     read both. lp MUST reach the CSV as "$x.xx"; the builder rejects a bare number as "no linePrice".

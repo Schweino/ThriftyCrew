@@ -257,6 +257,130 @@ try {
   $owed = @($after.windows | Where-Object { [string]$_.id -eq 'owed-item' })
   if (@($owed).Count -eq 1 -and [string]$owed[0].status -eq 'reprice-owed') { Ok "the surviving entry is labelled 'reprice-owed' so a stale sale price is visible, not silent" }
   else { Bad ("survivor status = '" + (@($owed | ForEach-Object { $_.status }) -join ',') + "', expected reprice-owed") }
+  # ---- A STANDING RULING'S OWED TERMS LEAD THE WALMART WORKLIST (2026-09-12) ----------------------
+  # THE FOUNDING BUG: Brad's 2026-08-28 store-drift ruling named 23 terms priced at the wrong store and
+  # said to put them at the head of the first clean Walmart worklist. Nothing carried that anywhere -
+  # the list lived in a JSON file and in the 09:00 runbook - so a fortnight later 15 were still owed
+  # and the only thing standing between them and being forgotten was whoever read those two documents.
+  # Get-WalmartRulingOwed derives what is still owed, and Get-CaptureWorklist leads with it.
+  # The cases that matter most are the two NEGATIVES: a file that cannot name its store must discharge
+  # nothing, and an attestation dated after the capture format learned to speak must not be accepted.
+  $wmOut = Join-Path $tmp 'out'
+  $wmRule = Join-Path $wmOut 'walmart-store-ruling-2026-08-28.json'
+  $wmReg = Join-Path $wmOut 'regular'
+  $wmTerms = @('bacon', 'bread', 'butter', 'rice')
+  [IO.File]::WriteAllText($wmRule, (@{ ruled = '2026-08-28'; terms_to_recapture_first = $wmTerms } | ConvertTo-Json -Depth 4))
+  [IO.File]::WriteAllText((Join-Path $tmp 'stores.json'), (@{ stores = @(
+      @{ name = 'Walmart'; store_identity = @{ store_id = 5361; postal_code = '68137'; label = 'Omaha L St Supercenter' } }) } | ConvertTo-Json -Depth 5))
+  function WmRegular([string]$date, [string]$source, [string[]]$terms) {
+    if (-not (Test-Path $script:wmReg)) { New-Item -ItemType Directory -Path $script:wmReg -Force | Out-Null }
+    $deals = @($terms | ForEach-Object { @{ item = 'Thing'; found_by_term = $_ } })
+    [IO.File]::WriteAllText((Join-Path $script:wmReg ("walmart-regular-$date.json")),
+      (@{ store = 'Walmart'; week_of = $date; source = $source; deals = $deals } | ConvertTo-Json -Depth 5))
+  }
+  $wmProven = 'walmart.com in-page __NEXT_DATA__ priceDetails.priceLines (storeId 5361 Omaha L St Supercenter 68137, read from the capture); built by build-walmart-deals.ps1'
+  $wmWaived = 'walmart.com in-page __NEXT_DATA__ priceDetails.priceLines (store NOT RECORDED in the capture - it predates the #tc-store line, built under -WaiveMissingStoreLine); built by build-walmart-deals.ps1'
+
+  # A. BLIND is not a discharge. With no out\regular to read, nothing can be proven recaptured, and the
+  #    honest answer is "all of them, and here is why I cannot tell" - never "none owed".
+  #    IN ITS OWN EMPTY OUT DIRECTORY, because the cases above this one have already created a
+  #    regular\ in the shared root - the first version of this case read blind=False for that reason,
+  #    which is a fixture that could not fire rather than a bug in the code it was aimed at.
+  $wmBlindOut = Join-Path $tmp 'blind-out'
+  New-Item -ItemType Directory -Path $wmBlindOut -Force | Out-Null
+  Copy-Item -LiteralPath $wmRule -Destination (Join-Path $wmBlindOut 'walmart-store-ruling-2026-08-28.json')
+  $rA = Get-WalmartRulingOwed -OutDir $wmBlindOut
+  if ($rA.Blind -and @($rA.Owed).Count -eq 4 -and $rA.Why -match 'already been recaptured') {
+    Ok 'a checkout with no built files says BLIND and reports every ruling term as owed, rather than discharging them'
+  } else { Bad ("blind case: blind=$($rA.Blind) owed=$(@($rA.Owed).Count) why=[$($rA.Why)]") }
+
+  # B. MUST FIRE - the ruling's terms LEAD the Walmart worklist, ahead of the rotation.
+  New-Item -ItemType Directory -Path $wmReg -Force | Out-Null
+  $rB = Get-WalmartRulingOwed -OutDir $wmOut
+  $wlB = Get-CaptureWorklist -Store 'Walmart' -Today '2026-09-13' -OutDir $wmOut
+  $tB = @($wlB.Terms | ForEach-Object { $_.term })
+  if (-not $rB.Blind -and $rB.Sanctioned -eq '5361' -and @($tB).Count -ge 4 -and (@($tB[0..3]) -join ',') -eq ($wmTerms -join ',')) {
+    Ok "MUST FIRE  the ruling's owed terms lead the Walmart worklist: [$(@($tB) -join ', ')]"
+  } else { Bad ("ruling terms did not lead the worklist: blind=$($rB.Blind) sanctioned=$($rB.Sanctioned) terms=[$(@($tB) -join ', ')]") }
+
+  # C. A file that NAMES the sanctioned store discharges exactly the terms it carries.
+  WmRegular '2026-09-01' $wmProven @('bacon')
+  $rC = Get-WalmartRulingOwed -OutDir $wmOut
+  if (@($rC.Proven) -contains 'bacon' -and @($rC.Owed).Count -eq 3 -and @($rC.Owed) -notcontains 'bacon') {
+    Ok 'a built file that names the sanctioned store discharges its terms, with no hand edit anywhere'
+  } else { Bad ("proven=[$(@($rC.Proven) -join ',')] owed=[$(@($rC.Owed) -join ',')]") }
+
+  # D. MUST NOT FIRE - and this is the case the whole design turns on. A file built under
+  #    -WaiveMissingStoreLine SAYS the store was not recorded, so it proves nothing about the basis of
+  #    its rows however carefully somebody checked the store by hand. If this ever discharges a term,
+  #    the ruling closes itself on evidence that does not exist.
+  WmRegular '2026-09-02' $wmWaived @('bread')
+  $rD = Get-WalmartRulingOwed -OutDir $wmOut
+  if (@($rD.Owed) -contains 'bread' -and @($rD.Proven) -notcontains 'bread') {
+    Ok 'MUST NOT FIRE  a file whose stamp says the store was NOT RECORDED discharges nothing'
+  } else { Bad ("a store-less file discharged a term: proven=[$(@($rD.Proven) -join ',')] owed=[$(@($rD.Owed) -join ',')]") }
+
+  # E. MUST NOT FIRE - a capture from BEFORE the ruling cannot discharge it. Those are the very rows
+  #    the ruling exists to replace.
+  WmRegular '2026-08-01' $wmProven @('butter')
+  $rE = Get-WalmartRulingOwed -OutDir $wmOut
+  if (@($rE.Owed) -contains 'butter') { Ok 'MUST NOT FIRE  a file built before the ruling was made does not discharge it' }
+  else { Bad ("a pre-ruling file discharged a term: owed=[$(@($rE.Owed) -join ',')]") }
+
+  # F. THE ATTESTATION IS CLOSED BY CONSTRUCTION. A hand attestation is accepted only for a capture
+  #    taken on or before the day the format learned to name its store; a later one is not, because
+  #    from that day a capture proves its own store and trust is no longer needed.
+  [IO.File]::WriteAllText($wmRule, (@{ ruled = '2026-08-28'; terms_to_recapture_first = $wmTerms
+      recaptured_at_l_st = [ordered]@{ '2026-09-12' = @('butter'); '2026-09-20' = @('rice'); note = 'prose, not a date' } } | ConvertTo-Json -Depth 5))
+  $rF = Get-WalmartRulingOwed -OutDir $wmOut
+  if (@($rF.Attested) -contains 'butter' -and @($rF.Owed) -notcontains 'butter' -and @($rF.Owed) -contains 'rice') {
+    Ok 'an attestation from before the store line is accepted; one dated after it is NOT, and a prose key is not a date'
+  } else { Bad ("attested=[$(@($rF.Attested) -join ',')] owed=[$(@($rF.Owed) -join ',')]") }
+
+  # G. THE ROTATION KEEPS ITS DRIP, AND THE CAP HOLDS. The ruling's terms come out of the allowance the
+  #    expiries get (cap minus rotation), never out of the rotation - advancing the cursor over terms a
+  #    prepend displaced is the starvation bug Select-ExpiryFirstSlice's own header describes.
+  #    THE CAP IS DERIVED FROM WHAT IS ACTUALLY OWED HERE, not from a number typed in: the cases above
+  #    discharge terms, so a hard-coded "3 owed" read deferred=0 and failed for the fixture's own
+  #    arithmetic rather than for anything in the code. Set the cap to rotation + (owed - 1) and
+  #    exactly one owed term must be left for tomorrow.
+  $wmCapWas = $script:StoreCallCap['Walmart'].cap
+  try {
+    $rG = Get-WalmartRulingOwed -OutDir $wmOut
+    $owedG = @($rG.Owed).Count
+    if ($owedG -lt 2) { Bad "the cap case needs at least 2 owed terms to have one deferred; it has $owedG" }
+    else {
+      $capG = 1 + ($owedG - 1)                     # rotation is 1 over a 12-term catalogue
+      $script:StoreCallCap['Walmart'].cap = $capG
+      $wlG = Get-CaptureWorklist -Store 'Walmart' -Today '2026-09-13' -OutDir $wmOut
+      $tG = @($wlG.Terms | ForEach-Object { $_.term })
+      if (@($tG).Count -le $capG -and @($wlG.RulingTerms).Count -eq ($owedG - 1) -and $wlG.RulingDeferred -eq 1 -and
+          @($wlG.RotationTerms).Count -eq 1 -and $wlG.CursorNext -eq (($wlG.CursorStart + 1) % $wlG.TotalTerms)) {
+        Ok "the cap holds over the whole slice (took $(@($tG).Count) of cap $capG with $owedG owed, 1 deferred) and the rotation keeps its full drip, so the cursor cannot advance over a term nobody asked for"
+      } else { Bad ("cap/drip: cap=$capG owed=$owedG terms=$(@($tG).Count) ruling=$(@($wlG.RulingTerms).Count) deferred=$($wlG.RulingDeferred) rotation=$(@($wlG.RotationTerms).Count) cursor $($wlG.CursorStart)->$($wlG.CursorNext)") }
+    }
+  } finally { $script:StoreCallCap['Walmart'].cap = $wmCapWas }
+
+  # H. MUST NOT FIRE - no other store is touched by a Walmart ruling.
+  $wlH = Get-CaptureWorklist -Store 'Family Fare' -Today '2026-08-22' -OutDir $wmOut
+  if (@($wlH.RulingTerms).Count -eq 0 -and $wlH.RulingTotal -eq 0) { Ok 'MUST NOT FIRE  a Walmart ruling prepends nothing to another store''s worklist' }
+  else { Bad ("Family Fare picked up ruling terms: $(@($wlH.RulingTerms | ForEach-Object { $_.term }) -join ',')") }
+
+  # I. AND IT GOES QUIET. A discharged ruling - every term proven - prepends nothing, and so does a
+  #    checkout with no ruling file at all. This is what makes it a mechanism rather than a permanent
+  #    23-term tax on the worklist.
+  WmRegular '2026-09-03' $wmProven $wmTerms
+  $rI = Get-WalmartRulingOwed -OutDir $wmOut
+  $wlI = Get-CaptureWorklist -Store 'Walmart' -Today '2026-09-13' -OutDir $wmOut
+  if (@($rI.Owed).Count -eq 0 -and @($wlI.RulingTerms).Count -eq 0 -and @($wlI.Terms).Count -eq @($wlI.RotationTerms).Count) {
+    Ok 'a fully discharged ruling prepends nothing - the worklist is exactly the rotation again'
+  } else { Bad ("a discharged ruling still prepends: owed=[$(@($rI.Owed) -join ',')] ruling=$(@($wlI.RulingTerms).Count)") }
+  Remove-Item -LiteralPath $wmRule -Force
+  $rJ = Get-WalmartRulingOwed -OutDir $wmOut
+  $wlJ = Get-CaptureWorklist -Store 'Walmart' -Today '2026-09-13' -OutDir $wmOut
+  if (-not $rJ.Blind -and @($rJ.Owed).Count -eq 0 -and @($wlJ.RulingTerms).Count -eq 0) {
+    Ok 'a checkout with no ruling file at all owes nothing and does not throw'
+  } else { Bad ("no-ruling case: blind=$($rJ.Blind) owed=$(@($rJ.Owed).Count) ruling=$(@($wlJ.RulingTerms).Count)") }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

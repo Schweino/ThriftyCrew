@@ -339,6 +339,130 @@ function Get-CaptureCursors([string]$outDir) {
   return [pscustomobject]@{}
 }
 
+# ---- THE WALMART STORE-DRIFT RULING, READ RATHER THAN REMEMBERED (2026-09-12) --------------------
+#
+# Brad ruled on 2026-08-28 that the L St Supercenter stays canonical and named 23 terms to recapture
+# first, because they were priced while the session had drifted to another store. The ruling said "put
+# them at the head of the first clean Walmart worklist" and NOTHING CARRIED THAT ANYWHERE: the list sat
+# in a JSON file and in the 09:00 runbook, so for a fortnight it depended on whoever read those. Eight
+# landed on 2026-09-12 and fifteen were still owed, which is the shape of a reminder rather than a
+# mechanism ([[an-intention-has-no-exit-code]]).
+#
+# So the worklist reads it. Two things make this a mechanism rather than a second reminder:
+#   1. OWED IS DERIVED, not maintained. A term leaves the list when a walmart-regular file that NAMES
+#      the sanctioned store carries a row for it. Nobody has to edit anything, and the list empties
+#      itself and goes quiet - the day it is empty this prepends nothing.
+#   2. THE ROTATION KEEPS ITS DRIP. These terms come out of the same allowance the sale expiries come
+#      from (the call cap minus the rotation), ahead of them, so the quarterly sweep is not starved and
+#      the rotation cursor still advances over terms that were really asked for. Advancing the cursor
+#      past terms a prepend displaced is the starvation bug Select-ExpiryFirstSlice's header describes.
+# An owed term that does not fit today is not lost: it is still owed tomorrow, by the same derivation.
+$script:WalmartRulingFile = 'walmart-store-ruling-2026-08-28.json'
+# The day the Walmart capture format learned to name its own store. An ATTESTED discharge - a human or
+# agent verifying the store and writing it down - is accepted only for a capture taken on or before
+# this date, because every capture after it proves its own store and needs nothing taken on trust.
+# The attestation list is CLOSED by construction; it can never grow a new entry that this accepts.
+$script:WalmartStoreLineFrom = '2026-09-12'
+
+function Get-WalmartRulingOwed {
+  <#
+    .SYNOPSIS Which of the store-drift ruling's terms are still owed a recapture at the sanctioned store.
+    .DESCRIPTION
+      Pure read. Owed = the ruling's own list, minus terms ATTESTED as recaptured before the capture
+      format could name its store, minus terms PROVEN recaptured by a walmart-regular file whose source
+      names the sanctioned storeId. Order is the ruling's own, so the oldest instruction is served first.
+
+      A COULD-NOT-LOOK IS NEVER A DISCHARGE. With no out\regular to read (a worktree, a CI runner, a
+      clean checkout) this cannot know what has landed, so it says BLIND and reports everything the
+      ruling names as still owed. Over-asking costs requests; under-asking leaves a wrong-basis price
+      on the board, and those are not the same mistake.
+    .OUTPUTS @{ Owed; All; Attested; Proven; Sanctioned; Blind; Why }
+  #>
+  [CmdletBinding()]
+  param([string]$OutDir = '')
+  if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+  $none = [pscustomobject]@{ Owed = @(); All = @(); Attested = @(); Proven = @(); Sanctioned = ''; Blind = $false; Why = '' }
+
+  $rulePath = Join-Path $OutDir $script:WalmartRulingFile
+  if (-not (Test-Path $rulePath)) { return $none }        # no ruling on file: nothing is owed
+  $doc = $null
+  try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText($rulePath)) } catch { $doc = $null }
+  if (-not $doc) {
+    $n = $none.PSObject.Copy(); $n.Blind = $true
+    $n.Why = ('the ruling file ' + $script:WalmartRulingFile + ' is present but unparseable, so what it still owes is unknown')
+    return $n
+  }
+  # assign, THEN wrap - a single-element JSON array comes back unwrapped ([[ps-json-array-collapse]])
+  $rawAll = $doc.terms_to_recapture_first
+  $all = @(@($rawAll) | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ })
+  if ($all.Count -eq 0) { return $none }
+
+  # THE SANCTIONED STORE COMES FROM THE REGISTRY, never from a literal here - the same rule
+  # build-walmart-deals.ps1 follows, and the same single source of truth.
+  $sanct = ''
+  $stores = Get-PolicyJson 'stores.json'
+  if ($stores) {
+    foreach ($s in @($stores.stores)) {
+      if ([string]$s.name -eq 'Walmart' -and $s.store_identity -and $s.store_identity.store_id) {
+        $sanct = ([string]$s.store_identity.store_id).Trim()
+      }
+    }
+  }
+
+  # 1. ATTESTED, and only from before the capture format could speak for itself.
+  $att = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  $cut = [datetime]::ParseExact($script:WalmartStoreLineFrom, 'yyyy-MM-dd', $null)
+  if ($doc.recaptured_at_l_st) {
+    foreach ($prop in $doc.recaptured_at_l_st.PSObject.Properties) {
+      $when = $null
+      try { $when = [datetime]::ParseExact($prop.Name, 'yyyy-MM-dd', $null) } catch { continue }  # 'note' and friends
+      if ($when -gt $cut) { continue }
+      foreach ($t in @($prop.Value)) { $s2 = ([string]$t).Trim(); if ($s2) { [void]$att.Add($s2) } }
+    }
+  }
+
+  # 2. PROVEN by a built file that names the store it was read at.
+  $proven = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  $regDir = Join-Path $OutDir 'regular'
+  $blind = ''
+  if (-not $sanct) {
+    $blind = 'stores.json does not declare Walmart store_identity.store_id, so no built file can be checked against the sanctioned store'
+  } elseif (-not (Test-Path $regDir)) {
+    $blind = ('there is no ' + $regDir + ' to read, so which of these terms have already been recaptured is unknown in this checkout')
+  } else {
+    # Filter on the DATE IN THE NAME before opening anything: the ruling cannot be discharged by a file
+    # built before it was made, and these files run to a quarter of a megabyte each.
+    $since = ''
+    try { $since = ([string]$doc.ruled).Trim() } catch { $since = '' }
+    foreach ($f in @(Get-ChildItem -LiteralPath $regDir -Filter 'walmart-regular-*.json' -File -ErrorAction SilentlyContinue)) {
+      $m = [regex]::Match($f.Name, '(\d{4}-\d{2}-\d{2})')
+      if (-not $m.Success) { continue }
+      if ($since -and ([string]$m.Groups[1].Value) -lt $since) { continue }
+      $d = $null
+      try { $d = ConvertFrom-Json ([IO.File]::ReadAllText($f.FullName)) } catch { continue }
+      if (-not $d) { continue }
+      # THE STAMP IS THE PROOF. A file built under -WaiveMissingStoreLine says the store was NOT
+      # recorded and discharges nothing, however carefully somebody verified the store by hand -
+      # that is what an attestation above is for, and it is closed.
+      if ([string]$d.source -notmatch ('storeId\s+' + [regex]::Escape($sanct) + '\b')) { continue }
+      foreach ($row in @($d.deals)) {
+        $t = ([string]$row.found_by_term).Trim()
+        if ($t) { [void]$proven.Add($t) }
+      }
+    }
+  }
+
+  $owed = @($all | Where-Object { -not $att.Contains($_) -and -not $proven.Contains($_) })
+  return [pscustomobject]@{
+    Owed = $owed; All = $all
+    Attested = @($all | Where-Object { $att.Contains($_) })
+    Proven = @($all | Where-Object { $proven.Contains($_) })
+    Sanctioned = $sanct
+    Blind = [bool]$blind
+    Why = $blind
+  }
+}
+
 function Get-CaptureWorklist {
   <#
     .SYNOPSIS Today's terms for one store: rotation slice + sales reverting today.
@@ -374,6 +498,37 @@ function Get-CaptureWorklist {
     foreach ($hit in @($all | Where-Object { $_.id -eq $id })) { [void]$sale.Add($hit) }
   }
 
+  # A STANDING RULING'S TERMS LEAD, INSIDE THE SAME ALLOWANCE THE EXPIRIES GET (2026-09-12). See
+  # Get-WalmartRulingOwed's header: owed is derived from what has actually been recaptured at the
+  # sanctioned store, so this empties itself and then prepends nothing. The allowance is the call cap
+  # minus the rotation's reserved drip, which is what stops a 23-term ruling from starving the
+  # quarterly sweep and from advancing the cursor over terms nobody asked for. Expiries give way to it
+  # and stay owed in sale-windows.json, which is exactly what they already do when the cap is short.
+  $rule = if ($Store -eq 'Walmart') { Get-WalmartRulingOwed -OutDir $OutDir } else { $null }
+  $ruleTerms = New-Object System.Collections.Generic.List[object]
+  $ruleDeferred = 0
+  $saleDeferredByRuling = 0
+  $allowance = $plan.CallCap - $plan.RotationTerms
+  if ($allowance -lt 0) { $allowance = 0 }
+  if ($rule -and @($rule.Owed).Count -gt 0) {
+    foreach ($t in @($rule.Owed)) {
+      if ($ruleTerms.Count -ge $allowance) { $ruleDeferred++; continue }
+      $hits = @($all | Where-Object { [string]$_.term -eq [string]$t })
+      if ($hits.Count -eq 0) { continue }          # a ruling term the catalogue no longer carries
+      foreach ($hit in $hits) { [void]$ruleTerms.Add($hit) }
+    }
+    # The expiries share what is left of the allowance. Trimming them here is not a loss: a window is
+    # marked repriced only when a capture LANDS, so an untaken expiry leads tomorrow's slice.
+    $saleRoom = $allowance - $ruleTerms.Count
+    if ($saleRoom -lt 0) { $saleRoom = 0 }
+    if ($sale.Count -gt $saleRoom) {
+      $saleDeferredByRuling = $sale.Count - $saleRoom
+      $keep = New-Object System.Collections.Generic.List[object]
+      for ($i = 0; $i -lt $saleRoom; $i++) { [void]$keep.Add($sale[$i]) }
+      $sale = $keep
+    }
+  }
+
   return [pscustomobject]@{
     Store         = $Store
     Today         = $plan.Today
@@ -387,11 +542,22 @@ function Get-CaptureWorklist {
     CallCap        = $plan.CallCap
     ExpiryDeferred = $plan.ExpiryDeferred
     ExpiryOldest   = $plan.ExpiryOldest
+    # A standing ruling's owed terms, ahead of everything (2026-09-12). Empty for every store but
+    # Walmart, and empty for Walmart too once the ruling is discharged.
+    RulingTerms   = $ruleTerms.ToArray()
+    RulingOwed    = if ($rule) { @($rule.Owed) } else { @() }
+    RulingTotal   = if ($rule) { @($rule.All).Count } else { 0 }
+    RulingDeferred = $ruleDeferred
+    RulingBlind   = if ($rule) { [bool]$rule.Blind } else { $false }
+    RulingWhy     = if ($rule) { [string]$rule.Why } else { '' }
+    SaleDeferredByRuling = $saleDeferredByRuling
     # Dedupe on the TERM STRING. Select-Object -Unique on PSCustomObjects compares
     # their ToString(), which is identical for every one of them, so it silently
     # collapsed a 13-term worklist to a single entry - a store would then be told to
     # fetch one term a day and the rotation would never complete.
-    Terms         = @(@($rot.ToArray()) + @($sale.ToArray()) |
+    # THE RULING'S TERMS COME FIRST here, because Group-Object keeps first-seen order and this list is
+    # fetched in order: a run that is cut short must have spent its requests on the owed ones.
+    Terms         = @(@($ruleTerms.ToArray()) + @($rot.ToArray()) + @($sale.ToArray()) |
                       Group-Object -Property term | ForEach-Object { $_.Group[0] })
     QuarterDays   = $plan.QuarterDays
     MaxCarryDays  = $plan.MaxCarryDays
@@ -1099,12 +1265,20 @@ function Write-CaptureWorklist {
     total_terms    = $wl.TotalTerms
     rotation_terms = @($wl.RotationTerms | ForEach-Object { $_.term })
     sale_terms     = @($wl.SaleTerms | ForEach-Object { $_.term })
-    terms          = @($wl.Terms | ForEach-Object { $_.term })
-    commodities    = @($wl.Terms | ForEach-Object { $_.id })
+    # A STANDING RULING'S OWED TERMS, AT THE HEAD OF `terms` (2026-09-12). Walmart's store-drift
+    # ruling of 2026-08-28 named terms priced at the wrong store; these are the ones not yet proven
+    # recaptured at the sanctioned store. Derived, so the list empties itself and then disappears.
+    ruling_terms   = @($wl.RulingTerms | ForEach-Object { $_.term })
+    ruling_owed_total = @($wl.RulingOwed).Count
+    ruling_of       = $wl.RulingTotal
+    ruling_deferred = $wl.RulingDeferred
+    ruling_blind    = $wl.RulingBlind
+    ruling_blind_why = $wl.RulingWhy
     call_cap       = $wl.CallCap
     expiry_deferred = $wl.ExpiryDeferred
+    expiry_deferred_by_ruling = $wl.SaleDeferredByRuling
     expiry_oldest_owed = $wl.ExpiryOldest
-    note           = 'Fetch ONLY these terms today - the list is already capped at this store''s call_cap so it cannot trip a rate limit. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it. expiry_deferred re-prices did NOT fit today; they are still recorded as owed in sale-windows.json and lead tomorrow''s slice, oldest first - do NOT fetch them here.'
+    note           = 'Fetch ONLY these terms today - the list is already capped at this store''s call_cap so it cannot trip a rate limit. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it. expiry_deferred re-prices did NOT fit today; they are still recorded as owed in sale-windows.json and lead tomorrow''s slice, oldest first - do NOT fetch them here. ruling_terms are a STANDING RULING''s owed recaptures and lead this list; they leave it on their own once a built file proves them recaptured at the sanctioned store, so never edit a ruling file to discharge one. ruling_blind means this checkout could not read what has already landed and is reporting everything the ruling named.'
   }
   Set-Content -Path $file -Value ($doc | ConvertTo-Json -Depth 5) -Encoding UTF8
   return $file
