@@ -1,6 +1,6 @@
 ﻿{
     "note":  "Baseline for audit-published-macros (2026-09-12). Names, not only counts: a NEW name fails the run even when the count held. Both lists may only SHRINK, and only through -Tighten or -Accept.",
-    "generated":  "2026-09-12T14:32:35",
+    "generated":  "2026-09-12T15:02:57",
     "tolerance":  {
                       "cal":  5,
                       "gram":  2,
@@ -8,32 +8,17 @@
                   },
     "families":  {
                      "stat_vs_recompute":  {
-                                               "count":  24,
+                                               "count":  9,
                                                "names":  [
-                                                             "bigos-polish-hunters-stew",
-                                                             "brazilianstyle-pork-ribs-bowls",
                                                              "cheesy-beef-broccoli-bowls",
-                                                             "chicken-bulgogi-rice-bowls",
-                                                             "chicken-fried-rice-skillet",
-                                                             "ethiopian-minchet-abish-berbere-beef-bowls",
-                                                             "ground-beef-shawarma-bowls",
-                                                             "ground-turkey-calabacitas-skillet",
-                                                             "jamaican-brown-stew-chicken",
                                                              "korean-ground-beef-rice-bowls",
-                                                             "loobia-polo-persian-beef-green-bean-rice",
-                                                             "mediterranean-beef-hummus-bowls",
-                                                             "pakistani-chapli-kebab-rice-bowls",
-                                                             "slow-cooker-barbacoa-bowl",
-                                                             "slow-cooker-chicken-gyro-bowls",
                                                              "slow-cooker-chicken-korma-rice-bowls",
                                                              "slow-cooker-chicken-shawarma-bowls",
                                                              "slow-cooker-chicken-tacos-rice-bowls",
                                                              "slow-cooker-chicken-tagine-bowls",
                                                              "slow-cooker-mediterranean-chicken-bowls",
-                                                             "slow-cooker-pulled-pork-bowl",
                                                              "tex-mex-beef-rice-skillet-bowls",
-                                                             "thai-turkey-larb-bowls",
-                                                             "turkey-egg-roll-in-a-bowl-over-rice"
+                                                             "thai-turkey-larb-bowls"
                                                          ]
                                            },
                      "index_grams_vs_spec":  {
@@ -51,6 +36,10 @@
                     {
                         "date":  "2026-09-12T14:32:35",
                         "count":  24
+                    },
+                    {
+                        "date":  "2026-09-12T15:02:57",
+                        "count":  9
                     }
                 ]
 }
