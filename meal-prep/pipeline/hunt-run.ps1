@@ -716,6 +716,9 @@ function Read-LaneLog {
 # guard-fixture rule: a guard with no must-fire case is indistinguishable from a guard that is broken.
 # Hermetic - it writes only into a temp directory and calls nothing live.
 # ===================================================================================================
+# What this self-test reads, so run-gates can skip it when none of these changed. The live feed, ledger and stoplist
+# are NOT here: the carriage cases copy carriage-lib into a fixture root. -Init's board and digest lookups only print.
+# gate-inputs: meal-prep\pipeline\audit-blocker-lib.ps1, meal-prep\pipeline\selftest-names-lib.ps1, meal-prep\pipeline\selftest-names-vectors.json, meal-prep\pipeline\batch-ledger.ps1, meal-prep\lib\json-db-io.ps1, grocery\ingredient-queue.ps1, grocery\native-lib.ps1, lib\carriage-lib.ps1, lib\json-io.ps1, lib\atomic-write.ps1, lib\guard-contract.ps1, lib\ledger-fixture.ps1
 if ($runSelfTest) {
   $f = 0
   # The pinned-reference gate, shared with harvest-crawl.ps1 and held in step with hunt_lib's copy of
@@ -752,20 +755,43 @@ if ($runSelfTest) {
   # ---- CARRIAGE UNION. The 2026-08-22 hole: an ingredient that MAPS FINE but no Omaha store stocks.
   # The mapper reports nothing (it mapped everything), so -Terms is empty, so the recipe derives `priced`
   # with no pricing work at all. hunt-run must find it from the mapped bids on its own.
+  # HERMETIC (2026-09-12). These cases used to read the LIVE feed, ledger and stoplist, so the gate cache could
+  # never key them and a rebuilt feed could flip them. The carriage LOGIC stays real (a copy of lib\carriage-lib.ps1
+  # and the json-io it loads); the DATA is a fixture repo root: a ledger, a stoplist, and a feed only for the
+  # feed case.
   $tmpRun = Join-Path ([IO.Path]::GetTempPath()) ('hr-carr-' + [Guid]::NewGuid().ToString('N'))
   New-Item -ItemType Directory -Force (Join-Path $tmpRun 'mapped') | Out-Null
+  $fxRoot = Join-Path $tmpRun 'repo'
+  foreach ($d in @('lib', 'grocery\out')) { New-Item -ItemType Directory -Force (Join-Path $fxRoot $d) | Out-Null }   # reach-fixture-ok: builds the folder inside a temp repo root, never grocery's own
   try {
+    foreach ($l in @('carriage-lib.ps1', 'json-io.ps1')) { Copy-Item (Join-Path $repo ('lib\' + $l)) (Join-Path $fxRoot ('lib\' + $l)) -ErrorAction Stop }
+    @{ bids = @{
+        'chicken-thighs' = @{ verdict = 'CARRIED'; store = "Baker's"; item = 'Fixture Chicken Thighs'; price = 1.49; as_of = '2026-08-24' }
+        'doubanjiang'    = @{ verdict = 'UNKNOWN'; as_of = '2026-08-22'; why = 'fixture: never established either way' }
+        'item:Keto Bun'  = @{ verdict = 'CARRIED'; store = 'Walmart'; item = 'Fixture Keto Buns'; price = 4.78; as_of = '2026-08-11' } } } |
+      ConvertTo-Json -Depth 6 | Set-Content (Join-Path $fxRoot 'grocery\carriage.json') -Encoding UTF8
+    @{ terms = @('water') } | ConvertTo-Json | Set-Content (Join-Path $fxRoot 'grocery\non-purchasable-terms.json') -Encoding UTF8
     @{ slug = 'fixture-dish'; ingredients = @(
         @{ item = 'Chicken Thighs'; bid = 'chicken-thighs' },
         @{ item = 'Doubanjiang';    bid = 'doubanjiang' },
-        @{ item = 'Keto Bun';       bid = $null }) } | ConvertTo-Json -Depth 6 |
+        @{ item = 'Keto Bun';       bid = $null },
+        @{ item = 'Gochujang';      bid = 'gochujang' },
+        @{ item = 'Water';          bid = $null }) } | ConvertTo-Json -Depth 6 |
       Set-Content (Join-Path $tmpRun 'mapped\fixture-dish.json') -Encoding UTF8
-    $cb = Get-CarriageBlockingTerms -RunDir $tmpRun -Slug 'fixture-dish' -RepoRoot $repo
+    $cb = Get-CarriageBlockingTerms -RunDir $tmpRun -Slug 'fixture-dish' -RepoRoot $fxRoot
     T 'carriage derives blocking terms from the mapped artifact' ($cb.read) $cb.why
     T 'MUST FIRE  a mapped-but-uncarried ingredient is derived as blocking' (@($cb.terms) -contains 'Doubanjiang') (@($cb.terms) -join ',')
     T 'CLEAN TWIN  a carried ingredient is NOT derived as blocking' (@($cb.terms) -notcontains 'Chicken Thighs') (@($cb.terms) -join ',')
     T 'a bid-less item proven carried by the ledger is not blocking' (@($cb.terms) -notcontains 'Keto Bun') (@($cb.terms) -join ',')
-    $cbMissing = Get-CarriageBlockingTerms -RunDir $tmpRun -Slug 'no-such-slug' -RepoRoot $repo
+    T 'MUST FIRE  a bid in neither the feed nor the ledger is blocking' (@($cb.terms) -contains 'Gochujang') (@($cb.terms) -join ',')
+    T 'MUST NOT FIRE  a stoplisted term is skipped, never blocking' ((@($cb.terms) -notcontains 'Water') -and (@($cb.skipped | ForEach-Object { $_.term }) -contains 'Water')) (@($cb.terms) -join ',')
+    # The feed path: the same dish once a fixture feed prices gochujang at one store.
+    @{ ingredients = @{ gochujang = @{ stores = @{ Walmart = 3.48 } } } } | ConvertTo-Json -Depth 6 |
+      Set-Content (Join-Path $fxRoot 'grocery\out\smp-feed.json') -Encoding UTF8   # reach-fixture-ok: writes a fixture feed inside a temp repo root, never the live feed
+    $cbFeed = Get-CarriageBlockingTerms -RunDir $tmpRun -Slug 'fixture-dish' -RepoRoot $fxRoot
+    T 'CLEAN TWIN  a bid the feed prices is carried, with no ledger row' (@($cbFeed.terms) -notcontains 'Gochujang') (@($cbFeed.terms) -join ',')
+    T '   and the feed carries only what it prices' (@($cbFeed.terms) -contains 'Doubanjiang') (@($cbFeed.terms) -join ',')
+    $cbMissing = Get-CarriageBlockingTerms -RunDir $tmpRun -Slug 'no-such-slug' -RepoRoot $fxRoot
     T 'MUST FIRE  an unreadable mapped file reports read=false rather than a silent empty pass' (-not $cbMissing.read) 'claimed a clean read'
   } finally { Remove-Item $tmpRun -Recurse -Force -ErrorAction SilentlyContinue }
 
