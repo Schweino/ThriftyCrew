@@ -10700,3 +10700,603 @@ is re-photographing labels at five to eight round trips each.
 **Rung 1: add a required column field to the capture schema and a line to the readme saying an
 as-prepared column is never the row's source without the basis going in the name.** No existing row
 changes and no page changes.
+
+### I147 - The gate slot pool is not strategy-proof, and over-declaring `-Want` pays `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\q7-cloud2-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`lib/gate-slots.ps1`'s `Enter-TcGateSlots -Want N` lets each caller declare how many of the
+machine-wide 10 slots it wants, and takes up to that many. Checked 2026-09-12 by `grep -lI
+"Enter-TcGateSlots"` over 4,705 tracked code and doc files (data directories excluded): the real
+callers are `ops/run-gates.ps1`, `ops/cpu-load.ps1`, `ops/run-daemon-battery.ps1` and
+`lib/push-lock.ps1`. `-Want` is clamped to `Total` and to what is free, and the ticket queue means
+only the oldest live ticket may take slots, so the blast radius is bounded.
+
+**The property the course names is `strategy-proof`: a tenant cannot benefit by over-declaring its
+requirements.** Dominant Resource Fairness is designed so that exaggerating a need can only leave a
+tenant where it was or make it worse. This pool has the opposite incentive: a caller that asks for
+more gets more, up to the whole budget, and nothing checks the request against what the caller
+actually uses. `Enter` already releases whatever a pass took short of `Want` (line 207), so the
+mechanism to notice the gap partly exists.
+
+**Nothing has gone wrong.** The three callers are all ours and none is adversarial. The finding is
+that **the policy's correctness currently rests on every caller being honest, which is an assumption
+about behaviour rather than a property of the mechanism** - and the estate's own rule is that a rule
+with no enforcement is a hope. **The ruling wanted:** whether to record `-Want` against slots
+actually used in `gate-readings.jsonl` (detective, cheap, no red on day one), or to leave it, on the
+grounds that four in-house callers is not a multi-tenant system and never will be.
+
+### I148 - `run-gates` schedules its waiters FIFO, and it has the history that would let it schedule shortest-first `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-cloud2-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Shortest-task-first **provably minimises average completion time** across every possible scheduling
+strategy on a single processor. It is not a heuristic; it is a theorem. Hadoop's production
+schedulers use FIFO anyway, and the course is explicit about why: **a Hadoop task does not arrive
+labelled with its duration and the programmer does not know it either**, so the optimal policy takes
+an input nobody can measure.
+
+**This estate is in the unusual position of having that input.** `ops/run-gates.ps1` writes
+per-checkout `gate-readings.jsonl`, `ops/observe-gate-queue.ps1` and `ops/report-ratchet-trends.ps1`
+read it, and `design/MEASURE-gate-cost-2026-09-09.md` already holds per-gate costs. The 2026-09-11
+starvation measurement records that under contention a run holds its one slot for about 20 minutes
+while the same set takes 48 to 101 s at width 16.
+
+The ticket queue deliberately serves waiters in **arrival order**, and that was the right fix for the
+measured defect: before it, service order was effectively random (19, 13 and 15 inversions of 28
+pairs across three rounds) and a run that had waited 19 minutes was no likelier to be served than one
+that had just arrived. **Arrival order fixed starvation. It did not optimise for completion time**,
+and those are different goals - the course's first distinction is that utilisation and completion
+time come apart, and a third axis, fairness, comes apart from both.
+
+**What is worth measuring before anyone proposes a change:** the spread of gate-set wall times across
+the committed `gate-readings.jsonl` rows. If a push touching one markdown file and a push touching 40
+scripts have similar gate costs, there is nothing here and this item closes. If they differ by an
+order of magnitude, a priority queue over an estimate from history would cut the average wait, and
+**the estimate is available here in a way it is not in Hadoop**. Any such change must keep the
+arrival-order guarantee as a floor, because shortest-first starves the longest job by construction -
+which is precisely the failure the ticket queue was built to fix.
+
+### I149 - Nothing in the estate backs off when it retries a repair, and the class was not swept `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-cloud2-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Two of the three outage case studies had **the same** second cause, and in both the trigger was
+corrected within minutes while the outage ran for hours. AWS EBS 2011: replicas that believed their
+backup was gone began aggressive re-mirroring, which consumed the capacity that made more replicas
+look gone - a re-mirroring storm over 13% of EBS volumes, 3.5 days, 0.07% of affected volumes
+permanently lost. Facebook 2010: cache servers fixing an invalid configuration value queried the
+database at hundreds of thousands of queries per second, and **a database error was then interpreted
+as "value invalid", so the entry was deleted and re-fetched**. Both companies shipped the same fix:
+**exponential backoff**. Neither system had backed off; both retried as hard or harder each time.
+
+**The rule: any automatic repair that fires on detecting damage is a positive feedback loop waiting
+for a shared trigger.** The question to ask of each is *what happens if it fires for every subject at
+once*, because the resource they all contend for is the one that just became scarce.
+
+**What I did not do, stated plainly: I did not sweep the tree for this.** A grep over 4,705 tracked
+code and doc files found `congestion` in zero and no occurrence of `exponential backoff` outside the
+skills store; that is a term count and not an audit, and the estate's own rules say an absence
+settled on a word is not settled. The candidates a sweep would have to open are the capture retry
+paths, `lib/atomic-write.ps1`'s move retry, the rollback TTL sweep, and anything that re-runs a
+failed stage. **The `ops-and-gates.md` rule about `WaitOne`'s timed-out branch is the nearest thing
+already written down, and it is about a lock wait rather than about a repair.**
+
+**Why it is worth an item even so:** this box already demonstrated the shape once. On 2026-09-11 four
+sessions' own CPU load tests held 32 processors at 100% for over an hour while each recorded a load
+level it did not control, and seven concurrent `run-gates` pile-ups were **slower than no parallelism
+at all** (390 s loaded against 372 s fully serial). That is not a retry storm, but it is the same
+arithmetic: a mechanism that is correct for one caller and an amplifier when every caller fires it
+together. The machine-wide budget was the ceiling that fixed it, and **a ceiling on the repair rate
+is the second half of the course's prescription, beside per-attempt backoff.**
+
+### I150 - The estate has no leader election, and that is a deliberate-looking absence rather than a gap `PARKED` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-cloud2-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Measured 2026-09-12 over the same 4,705 tracked code and doc files: **zero** occurrences of `leader
+election`, `\belection\b`, `quorum`, `ZooKeeper`, `Ricart`, `Maekawa`, `Lamport`, `vector clock`,
+`consensus` in the coordination sense (the 4 `consensus` hits are model-agreement in
+`design/PLAN-local-matching-*.md` and token overlap in `grocery/build-arrivals-docket.ps1:31`), and
+`Chubby` and `bully` hit only grocery product titles. Every coordinator in this estate is **statically
+assigned**: the ~07:00 bot, the 09:00 agent, each scheduled task, the single `-Exact` load lane.
+
+**That is the correct design for this estate and no change is proposed.** Election exists to survive
+a coordinator's failure in a group of interchangeable peers, and there is no such group here. It is
+recorded because the question *"who is in charge of this right now"* does arise - several sessions
+and the bot share one checkout and one branch - and the estate's answer is a **human habit**
+(`git log origin/main..HEAD --oneline`, and CLAUDE.md's *"the habit is the whole prevention. There is
+nothing here to automate"*). The course's answer to the same question is a lease, and section 5a of
+`~/.claude/skills/software-craft/distributed-coordination.md` argues why. **Parked so that a future
+session considering an automatic coordinator has the vocabulary and does not re-derive it.**
+
+### I151 - Checked and NOT filed, because checking refuted them `DONE` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-cloud2-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+- **"The estate has four mutual-exclusion mechanisms with no declared acquisition order."** Already
+  filed as **I104** by lane `q7-concurrency` on 2026-09-11, with the same three mechanisms named. Not
+  refiled. My material adds only that deadlock has **three** necessary conditions rather than one, so
+  I104's ruling has three places to intervene rather than the lock-ordering one; that is written into
+  `~/.claude/skills/software-craft/concurrency-correctness.md` 2 and does not need an item.
+- **"The estate has no compare-and-set."** Already **I105**, same lane, same day.
+- **"A lease that never expires leaks silently."** I expected to find this live and it is largely
+  handled: `lib/gate-slots.ps1` backs every slot and every queue ticket with a **named mutex**, so a
+  killed holder's claim is released by the kernel and the ticket file is swept - the header says
+  *"liveness is the mutex, never the file"*. The one place the shape did appear,
+  `design/EVAL-dedup-shortlist-2026-09-04.md:405`'s *"leased to a dead run, permanently, and
+  silently"*, has since been answered by `--release-taken` plus the daemon reclaiming its own rows at
+  start-up (memory `taken-pool-rows-have-no-release`). **The estate got this right; recorded so the
+  next reader does not re-open it.**
+- **"Nothing marks superseded design documents as deprecated."** The course cites a Google App Engine
+  outage prolonged because operators could not tell which version of a procedure was current. This
+  estate's `design/` does carry `[SUPERSEDED ...]`, `[CORRECTED: date]` and `[REFUTED: date, by
+  what]` markers in place and its rules require the refutation be kept rather than deleted. **The
+  practice already exists and is stronger than the one the lecture recommends.** No item.
+
+### I152 - Nothing else for the estate from this course `DONE` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-cloud2-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+The RPC and marshalling material, the NFS/AFS and distributed-shared-memory lectures, the Storm and
+Spark demos, the sensor-network lecture, the network-structure lecture and the two interviews have no
+purchase on a PowerShell-and-Python estate with no RPC layer and no cluster. The security lectures
+(items 60 to 62) are classical cryptography primitives and are not `security-craft`'s subject, which
+is adversarial input against LLM systems. Recorded so nobody re-reads them looking for an item.
+
+### I153 - The cost argument that kept the real PowerShell tokenizer out of `lib\ps-source.ps1` is refuted by measurement `OPEN` `queue-7` `2-WAY` `RUNG1 MEASUREMENT`
+
+**Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`lib\ps-source.ps1` is the estate's one shared way to reduce PowerShell source before matching it.
+Its header states the reason it stops at a regex strip:
+
+> *"NOT A PARSER, and it does not pretend to be. A `<#` inside a single-quoted string would be
+> treated as a comment opener. Nothing in this estate writes that, and the alternative - running the
+> real tokenizer on every file - costs more than the gate can afford. Named here so the limit is a
+> decision rather than a surprise."*
+
+The header is right to name it as a decision. The decision rests on a cost nobody appears to have
+measured, and the cost is backwards.
+
+**Measured 2026-09-12, this box, over every tracked `.ps1` (`git ls-files '*.ps1'` = 771 files,
+13,538,383 characters, 1,470,454 tokens).** Each arm reduces the same in-memory strings in one
+process; the second run put the tokenizer FIRST in every round, which is the disadvantaged position,
+after warming both arms once unrecorded:
+
+| Arm | Run 1 (regex first) | Run 2, three rounds (tokenizer first) |
+|---|---|---|
+| `[PSParser]::Tokenize` | 984 ms | 1,119 / 1,108 / 1,170 ms |
+| the current regex strip (`(?s)<\#.*?\#>` blank, then drop `^\s*#` lines) | 1,498 ms | 1,587 / 1,422 / 1,393 ms |
+| `[Language.Parser]::ParseInput` (full AST, for reference) | 1,213 ms | not re-run |
+
+Tokenizer errors: 0 of 771. Parse errors: 0 of 771. **The real tokenizer is roughly 20 to 30 per
+cent FASTER than the hand-rolled stripper that was kept because the tokenizer was assumed too
+expensive**, and a full AST parse of the entire tracked set is also faster than the strip.
+
+**What this measurement does NOT settle, stated so nobody over-reads it.** It times the reduction
+step only, over strings already in memory, in one process, on one box, once. A gate that shells out
+per file pays process start-up either way, so the comparison is fair for the reduction and says
+nothing about an invocation pattern. It also says nothing about whether `Tokenize` is *correct* for
+every caller of `Get-PsCodeOnly` - that is a behavioural question and would need its own
+must-fire fixture per caller.
+
+**Why it matters beyond the milliseconds.** The header's own asymmetry paragraph is the argument for
+fixing this: *"a stripper that removes too little ENROLS prose as code; a stripper that removes too
+much DELETES code. Both look like a pass from outside."* The estate has now been bitten by that
+class three times in eleven days, each time one comment syntax further out:
+
+1. **2026-09-01** - a comment *discussing* `[switch]$SelfTest` enrolled `run-gates` in its own
+   discovery and spawned 18 copies of itself. Fix: strip line comments.
+2. **2026-09-07** - a `<# ... #>` header explaining why a file has NO self-test enrolled it AS one,
+   and `run-gates` reported green coverage for a self-test that does not exist. Fix:
+   `lib\ps-source.ps1`, blanking block comments too.
+3. **2026-09-11** - `ops\audit-mustfire-census.ps1` recorded that `Get-MustFireCount` *"only skips a
+   line that STARTS with #, so the opening line of a block comment reads as code"*, making a
+   prose-only function look labelled. Fix: that file now calls `[PSParser]::Tokenize` and blanks
+   every `Comment` token, **privately, in its own file** - the very thing `ps-source` declined.
+
+So one detector already paid for the tokenizer because the shared reducer was wrong again, and the
+shared reducer still carries the paragraph saying the tokenizer is unaffordable.
+
+**The rung-1 measurement is done and is above.** The decision that follows it is Brad's: whether
+`lib\ps-source.ps1` gains a token-based reducer beside `Get-PsCodeOnly` (callers opting in one at a
+time, each with its own must-fire), or whether the regex strip stays and the header's cost sentence
+is corrected so the next reader is not told something the clock disagrees with. **Correcting the
+sentence is the cheap half and it is worth doing either way**, because right now the file teaches a
+false constraint to everyone who opens it.
+
+Sourcing: `nand2tetris2` unit 4.2 (Lexical Analysis) is the general form of all three incidents -
+*"the original input contains all sorts of noise like whitespace and comments, which are completely
+irrelevant for the compiler"*, and tokenizing exists precisely so nothing downstream can see that
+noise.
+
+### I154 - Three different comment-reducers exist, none of them blanks a STRING LITERAL, and the estate's workaround for that is a written rule `OPEN` `queue-7` `2-WAY` `RUNG1 CENSUS`
+
+**Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Measured 2026-09-12 by reading all three files:
+
+| File | Rung | What it removes |
+|---|---|---|
+| `lib\ps-source.ps1` | raw characters | block comments (regex), whole-line comments |
+| `lib\production-text.ps1` | AST | the BODY of an `if ($SelfTest)` clause, so a sweep cannot fire on a fixture |
+| `ops\audit-mustfire-census.ps1` (local function) | tokens | every `Comment` token, blanked in place, preserving offsets |
+
+`git grep -nE "PSTokenType\]::String|StringConstantExpressionAst|SingleQuoted" -- lib\ps-source.ps1
+lib\production-text.ps1 ops\audit-mustfire-census.ps1` returns **no hits**: none of the three is
+aware of string literals. So a detector's needle written as a literal in its own source is still
+matchable, which is exactly why `.claude\rules\ops-and-gates.md` has to carry the rule *"a self-test
+that greps its own source cannot fail - build needles by concatenation, and never let a detector
+scan itself."*
+
+**That rule is a workaround for a missing lexer, and it is worth seeing it as one.** A matcher that
+ran over tokens could not match inside a `StringConstantExpression` at all, and the concatenation
+discipline would stop being load-bearing. `ops\audit-fixture-vocabulary.ps1`-style rules that depend
+on humans spelling something a particular way are the class this would retire.
+
+Not proposing the change here. Proposing that if the item above is ruled in, the token reducer is
+specified to blank comments **and** string-literal contents behind a switch, because retrofitting
+the second one later means re-fixturing every caller a second time.
+
+### I155 - Most `ops\audit-*.ps1` detectors cannot say WHERE, and position is free at the rung above `OPEN` `queue-7` `2-WAY` `RUNG1 CENSUS`
+
+**Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`git grep -lE "LineNumber|lineNo|\$lineNum|StartLineNumber" -- 'ops/audit-*.ps1'` returns **11** of
+**45** tracked `ops\audit-*.ps1`, measured 2026-09-12. **That test is unsound in both directions**
+and should be read as an indicator, not a census: it counts a file that mentions any of those tokens
+anywhere, including in a comment, and it misses a detector that builds a position by hand from a
+loop index. The honest statement is that a clear majority of these detectors have no line-number
+vocabulary in them at all.
+
+`nand2tetris2` unit 4.10 names the cost precisely, from the compiler side:
+
+> *"Once we construct a tokenizer we no longer need the input file. However, if we wish to handle
+> errors, then we must preserve the original source code in order to annotate it."*
+
+**The stage that discards position is the stage after which you can no longer say where.** A
+detector that prints `findings=3` and cannot name the file and line makes a human re-run the search
+by hand to act on it. Both `[PSParser]::Tokenize` (`StartLine`, `StartColumn`) and
+`[Language.Parser]::ParseInput` (`.Extent.StartLineNumber`) carry position for free, so this is a
+side effect of the rung, not a separate piece of work: **every detector that moves up a rung should
+gain a file and line in its finding output in the same change**, and one that does not should say
+why.
+
+`lib\guard-contract.ps1`'s `Write-GuardComplete` already enforces the denominator (`scanned=3164
+findings=3`). This is the same discipline one field further: a finding you cannot locate is a
+denominator without a numerator's address.
+
+### I156 - A staged fixture technique the estate does not use: manufacture a simplified corpus FROM the real tracked files `OPEN` `queue-7` `2-WAY` `RUNG1 PROTOTYPE`
+
+**Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`nand2tetris2` project 10 ships two versions of every test program: the real one, and an
+**expressionless** one in which every expression has been mechanically replaced by a bare variable
+that is in scope. The result is semantically nonsense and **syntactically perfectly valid**, so a
+half-built parser can be tested against the full shape, size and awkwardness of real input while the
+one dimension it cannot yet handle is flattened.
+
+The estate's fixtures are the opposite shape: hand-written `MUST FIRE` / `MUST NOT FIRE` / `CLEAN
+TWIN` literals, small by construction. `.claude\rules\ops-and-gates.md` already records what that
+costs - *"fixtures here are assembled from bugs we found and cases we already handle, so the ones
+that failed silently are absent, and their absence is invisible in the score"*, and
+`.claude\rules\measurement.md` measures it at **189 of 6,476 gold rows** coming from a recorded
+failure.
+
+A worked first rung, cheap and throwaway: take the 771 tracked `.ps1`, strip every comment and every
+string-literal body through the tokenizer, and run one existing detector over both the real corpus
+and the flattened one. Findings that survive the flattening are structural; findings that vanish
+were living in prose or in a literal. That is a **differential oracle over two versions of the
+input** rather than two versions of the program, it needs no new gate, and it would put a number on
+how much of each detector's output is comment and literal noise. If the number is zero for a
+detector, that detector has earned the right to stay a regex.
+
+### I157 - Nothing else `DONE` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+The remaining material from these two modules is either already held by the store or is Hack-platform
+specific. In particular I looked for and did NOT find an estate problem that the VM memory model, the
+symbol-table-for-object-fields material, or the standard-mapping conventions would answer.
+
+### I158 - the gate-slot ticket queue is the only protocol here worth a state-space model, and its first rung is paper rather than a tool `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-formalverif-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Coursera `introduction-to-modeling-for-formal-verification`, CU Boulder, worked
+2026-09-12; 42 of 52 items read, 10 proctored quizzes not opened. The routed learning is
+`~/.claude/skills/software-craft/modelling-for-verification.md`.
+
+**The estate has no model-checking vocabulary at all, measured 2026-09-12** over the 8,424 files
+`git ls-files` returns: `model check` 0 files, `state space` 0, `transition system` 0, `formal
+verif` 0, `TLA+` 0. (`state machine` 17, `interleav` 37, `fairness` 15, `reentran` 6, `atomicity` 3,
+`linearizab` 1 - so the estate has the practice and none of the formalism. Case-insensitive
+`git grep -lI -i`.)
+
+**Why `lib/gate-slots.ps1`'s ticket queue clears the bar.** It is the only place in this tree where
+the estate implements a concurrent protocol rather than calling a primitive. Its parts, from its own
+header: `$TcGateSlotTotal` named slot mutexes; a ticket file per waiter under one machine-wide queue
+directory, named for its arrival ticks; a per-ticket mutex taken *before* the file is written;
+"only the oldest live ticket may take slots"; "a run holding slots does not top up while any ticket
+is live"; and a deadline that fires on the queue not moving rather than on elapsed time. Several OS
+processes, shared state in the filesystem, and two properties of exactly the two classes the course
+teaches to specify - a **safety** one (slots held across the machine never exceed the budget) and a
+**fairness/starvation** one (arrival order is honoured and a waiter is eventually served).
+
+**Its first version was wrong in three independent ways and none was found by a test.** The header
+records the outage that found them: 27 run-gates live at 16:39 on 2026-09-11, 8 of them holding all
+10 slots at width 1 or 2 while 19 held none, and 24 pre-push logs between 15:08 and 16:35 ending in a
+refusal after the full 1,200 s. The three causes were not FIFO, a fixed deadline, and a top-up that
+raced the queue. Its own FIFO probe - 8 waiters, 400 ms apart, 3 rounds - served the first arrival
+6th, 8th and 5th.
+
+**The state space is small enough at the process counts that matter**, by the arithmetic in section 5
+of the routed file (`|locations|` times the product of variable domain sizes; `K^N` across N
+components). A waiter has about 5 locations (idle, ticketed, at the head, holding, releasing); slot
+occupancy is one boolean per slot; ticket order is a permutation. Three waiters against a private
+2-slot budget is on the order of `5^3 x 2^2 x 3!` = roughly 3,000 states; three waiters against the
+real 10-slot budget is about `5^3 x 2^10 x 3!` = under a million. Mutual-exclusion and FIFO defects
+in this shape appear at 2 and 3 participants - Peterson's does - so the real 27-process case never
+needs enumerating.
+
+**What it would buy over the 29 self-test cases that already exist.** Those cases drive real
+processes and assert overlap, which proves the good interleavings happen and cannot enumerate the
+ones that do not. All three original defects were interleavings nobody drove. The mutant probe
+recorded in the header (`Get-TcGateQueueAhead` neutered to answer 0) went red in 5 of 29 - that
+measures the fixtures against **one** neutering, not against the protocol's reachable states.
+
+**Why the other two candidates do NOT clear it, stated so nobody re-asks.**
+
+- **The ledger locks (`lib/ledger-lock.ps1`, 294 lines).** The protocol is "take one named mutex, do
+  the whole read-modify-write inside it, release". **One lock means no lock-order cycle is
+  expressible**, so the classic deadlock property is vacuously true, and the reentrancy is the
+  Windows mutex counting its own owner's acquisitions rather than estate code. Of the four defects
+  actually recorded against this family, two (a lock around the save only; a timed `WaitOne` whose
+  false branch was never read) would show in a model and are already fixed and fixtured, one (no lock
+  at all) is not a protocol question, and one (`Move-Item -Force` refusing inside the lock because a
+  lock-free reader held the file shared ReadWrite without Delete) is **outside any model of the
+  protocol** - it is a Win32 file-sharing fact, and a model would report the write succeeded. That is
+  the course's limit 1 exactly: the model verifies a system this estate does not have.
+- **The promote-and-demote ladders (`graph/learning/promote_aliases.py`, 897 lines).** Holds only
+  accumulate and never expire, which is documented in the file and asserted by a MUST FIRE case. The
+  interesting quantity is an unbounded hold count, and the course is explicit that an infinite-state
+  system must be abstracted to a finite one before any of this applies. Abstracted to hold
+  present/absent per commodity, the property "one degraded run can latch a permanent hold on many
+  commodities" is already known to be TRUE and already mitigated by `MAX_NEW_HOLDS_PER_RUN = 10`.
+  There is no question left for a checker to answer.
+
+**The first rung, and it is deliberately cheap.** Write the gate-slot queue as a program graph on
+paper or in a markdown file under `design/`: locations per waiter, the guard on each transition, the
+shared variables, and the two properties stated separately from the model. Count the states by the
+formula. That is a `2-WAY` document that can be deleted, it needs no tool installed, and it either
+produces an interleaving the 29 cases do not cover - which then becomes a fixture - or it does not,
+which is also an answer. **Installing a model checker is NOT the first rung and is not proposed
+here**; no such tool exists in this tree, this course teaches none (SPIN is named 7 times across the
+transcripts and demonstrated once in a screenshot, with no syntax and no invocation taught), and a
+one-person estate should not carry one on the strength of a single candidate.
+
+---
+
+### I159 - `gate-slots.ps1` states an ordering precondition that none of its 29 self-test cases can reach, and the class is general `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\q7-formalverif-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Measured 2026-09-12** by reading `lib/gate-slots.ps1`'s self-test block and listing every case
+title. There are 29 cases. Each drives 2 or 3 real processes through a named scenario, and they are
+good: the budget under contention, an abandoned mutex, arrival order against a waiter polling 16
+times as often, the top-up against a queued run, a swept ticket, the stall rule, deliberate load not
+jumping the queue.
+
+**The gap is a precondition the file states in prose at lines 158-159**: the ticket mutex is taken
+**before** the ticket file is written, *"so no probe can see the file before its owner holds it"*.
+That ordering is load-bearing - a probe landing in the window would see a ticket whose mutex is free,
+read it as a dead waiter, and sweep a live one. **No case among the 29 names it**, and the reason is
+structural rather than an oversight: the window is between two statements inside one function, so
+there is no second process to drive it from and no seam to inject at. The estate's own rule in
+`.claude/rules/ops-and-gates.md` - put the barrier inside the writer, immediately before the
+contended call - closes the window it can reach, and cannot reach this one.
+
+**Why this is worth filing as its own item rather than as part of the one above.** It is the general
+shape, and the course's atomicity material (section 4 of the routed file) is what names it: an
+algorithm that is correct *because two updates happen together* carries a precondition that appears
+nowhere in the algorithm's own text and that nothing enforces. Peterson's mutual exclusion is the
+textbook case - correct with its two shared-variable writes atomic, and reaching a both-in-critical
+state without them. **A model enumerates that window for free; a process-driven fixture cannot reach
+it at all.**
+
+**First rung: read, not build.** Sweep the concurrency-relevant libraries - `lib/gate-slots.ps1`,
+`lib/ledger-lock.ps1`, `lib/atomic-write.ps1`, `lib/append-line.ps1`, `lib/event-bus.ps1` - for
+comments of the form "X before Y, so that...", and count how many of those stated orderings have a
+case. That is a `git grep` plus a read, it produces a count with a denominator, and it decides
+whether this is one instance or a class. **It is explicitly NOT a proposal to add a gate**: several
+of these windows are unreachable by any fixture, and a check that cannot be satisfied is the "red on
+day one" shape the ops rules already forbid.
+
+### I160 - `$null` is used to answer a presence question, and nothing says which question each form answers `OPEN` `queue-7` `2-WAY` `RUNG1 MEASUREMENT`
+
+**Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+ML's `option` type makes "there is no value" a different **type** from "there is a value", so
+forgetting to check for absence is a compile error rather than a wrong number. PowerShell has no
+such split: `$null` is simultaneously "absent", "present and null", and - through
+`@($null).Count` being **1** - "one element". The estate already carries the scar
+(`ps-null-count-is-one.md`: an absent field scores 1, so a naive "did it grow?" proof passes when
+nothing happened) but **only as that one case**. The general rule - *a presence question is asked
+with `ContainsKey` or `PSObject.Properties`, never inferred from `$null` or from a count* - is not
+written in any rules file.
+
+**Measured 2026-09-12 over `git ls-files '*.ps1'` = 771 tracked files:**
+
+| Form | Sites | Files |
+|---|---|---|
+| `-eq $null` / `-ne $null` / `$null -eq` / `$null -ne` | **1,409** | 343 |
+| `.ContainsKey(` | **1,441** | not counted |
+| `PSObject.Properties -contains` / `.Match` | **280** | not counted |
+
+```
+grep -nE '(-eq|-ne)\s+\$null|\$null\s+(-eq|-ne)' $(git ls-files '*.ps1') | wc -l
+grep -nE '\.ContainsKey\(' $(git ls-files '*.ps1') | wc -l
+```
+
+**The finding is NOT "1,409 sites are wrong."** Most are almost certainly fine, and the
+`ContainsKey` count says the estate already reaches for the presence form very often. The finding
+is that **both forms are in heavy use and nothing distinguishes the two questions**, so which one a
+site uses is down to whoever wrote it. That is exactly the condition under which the
+`@($null).Count` bug recurs, and it is invisible to every gate.
+
+**Rung 1 (measurement, cheap, reversible).** Take a deterministic sample - say 40 - of the 1,409
+`$null`-comparison sites and classify each: (a) genuinely asking "is this value null", (b) asking
+"did this key/field exist" and using `$null` as a proxy, (c) can't tell. If (b) is a meaningful
+fraction, the repair is one line in `C:\Codex\CLAUDE.md` beside the existing `@($null).Count` rule,
+not a sweep. **If (b) is near zero, close this and record the number** - that is a useful result
+and it retires the question permanently.
+
+**2-WAY** because a sample is read-only and a rules line is one edit.
+
+---
+
+### I161 - Four of five tracked state ledgers have no schema check, while `known-wrong.json` has both a required-key list and a closed vocabulary `OPEN` `queue-7` `2-WAY` `RUNG1 CENSUS`
+
+**Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Grossman's module-system section separates two things this estate conflates:
+
+- a **property** - what callers are promised (the board never prints an unreduced price);
+- an **invariant** - what every function inside may assume because every function inside maintains
+  it (a denominator is never zero, a ledger row always has a `store`).
+
+His point is that an invariant nothing enforces is a comment, and *"I have certainly found that
+when I put things in comments and documentation, my library clients don't always follow those
+rules."* The repair in ML is to hide the type so the only way to make a value is through the
+constructor that installs the invariant. **PowerShell cannot hide a JSON file**, so the substitute
+is a check at the boundary - and the estate has already built exactly that, once.
+
+`grocery/audit-known-wrong.ps1` is the exemplar and it is genuinely good. It enforces a
+required-key list (`key`, `commodity`, `store`, `names`, `retire_when`, `evidence`, `ruled_on`,
+`ruled_by`, at line 130) **and** a closed vocabulary for `retire_when` (line 138), with an error
+message that explains the consequence rather than the rule: *"An unevaluable retire trigger is the
+allowlist bug: nobody can ever prove the entry stale."*
+
+**Measured 2026-09-12.** Of five tracked single-file state ledgers -
+
+| File | Tracked | Named by an audit | Shape enforced |
+|---|---|---|---|
+| `grocery/known-wrong.json` | yes | `grocery/audit-known-wrong.ps1` | **yes - keys + closed vocab** |
+| `grocery/out/capture-cursor.json` | yes | incidentally | no |
+| `grocery/rollback-first-seen.json` | yes | incidentally | no |
+| `grocery/alert-state.json` | yes | incidentally | no |
+| `graph/state/cell-state.json` | yes | incidentally | no |
+
+The three audits that mention the other four at all are `grocery/audit-ff-carry.ps1`,
+`grocery/audit-script-census.ps1` and `ops/audit-write-only-reports.ps1`; none validates their
+shape - they name the paths for other reasons.
+
+```
+grep -rlnE 'capture-cursor|rollback-first-seen|alert-state|cell-state' \
+  $(git ls-files 'ops/audit-*.ps1' 'grocery/audit-*.ps1')
+```
+
+Across the wider set: **104 audits** (`git ls-files 'ops/audit-*.ps1'` = 45, `'grocery/audit-*.ps1'`
+= 59) and **4** name a closed vocabulary under the spellings `closed vocabulary` or
+`$allowed…=@(` / `$valid…=@(` - `grocery/audit-commodity-dupes.ps1`,
+`grocery/audit-known-wrong.ps1`, `ops/audit-backlog-status.ps1`, and one under `meal-prep/`.
+**That grep is unsound and the real number is at least 4, not exactly 4.**
+
+**Why it matters here specifically.** These four ledgers are the ones the concurrency work of
+2026-09-11 taught the estate to lock (`lib/ledger-lock.ps1`, `Enter-TcLedgerLock`). Locking fixed
+*who writes*; nothing checks *what got written*. A lane that writes a malformed row under a
+correctly held lock produces a durable, well-ordered, wrong ledger.
+
+**Rung 1 (census, read-only).** For each of the four, write down its required keys and any field
+whose value set is meant to be closed - read from the writers, not from the current contents, since
+the current contents are one sample. Then say for each whether a check is worth having. **This is
+deliberately not "add four audits"**: `ops-and-gates.md` forbids a gate that is red on day one, and
+until the invariants are written down nobody knows whether the existing data satisfies them.
+
+**2-WAY** because the census writes nothing.
+
+---
+
+### I162 - 510 array-append sites are `$x += …` on a variable initialised `@()`, which is quadratic in PowerShell `OPEN` `queue-7` `2-WAY` `RUNG1 MEASUREMENT`
+
+**Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Grossman's `reverse` example is the general shape: the naive version is O(n²) **not because of the
+call stack** but because `append` copies its first argument at every step, and he says plainly
+*"beware of appending things - if you are recursively appending at every step, your algorithm is
+sometimes significantly less efficient than you might expect."* PowerShell's `+=` on an array is
+that exact operation: `[object[]]` is fixed-size, so `+=` allocates a new array and copies the
+whole thing. Building n elements costs n²/2 copies.
+
+**Measured 2026-09-12** by AST-free line matching over `git ls-files '*.ps1'` = 771 files: a
+variable assigned `@()` on its own line, then `+=`'d by name in the same file.
+
+- **510 sites** across **194 of 771 files**.
+
+The script is in this session's scratchpad, not committed; it is ~15 lines of Python and is trivial
+to re-derive from the description above. It is **unsound in both directions**: it misses an array
+built by `[object[]]$x = @()` on a multi-statement line or `+=`'d through a different scope prefix,
+and it over-counts any variable that is reassigned to something non-array before the append.
+
+**The finding is not "510 bugs."** Most of these loops run over tens of items where the difference
+is unmeasurable, and rewriting them all would be a large, risky, low-value sweep. The finding is
+that **nobody knows which ones are hot**, and `Walmart's full pull is ~75 minutes`
+(`walmart-full-pull-takes-75-minutes.md`) while `browser-required-is-a-session-not-a-renderer.md`
+already established that 45 of those minutes are chosen pacing rather than necessity - so the
+remaining 30 have never been attributed.
+
+**Rung 1 (measurement).** For the capture and comparison lanes only - `grocery/compare-deals.ps1`,
+`grocery/build-*-deals.ps1`, `grocery/import-*-batch.ps1` - instrument or reason out the largest
+collection any `+=` loop builds in a real run. **If the largest is in the hundreds, close this and
+say so.** If any is in the thousands, that one site becomes a one-line change to
+`[System.Collections.Generic.List[object]]::new()` plus `.Add()`, which is behaviour-preserving and
+locally testable. Note that `ps-list-object-array-wrap-throws.md` already records the `::new()`
+form, so the replacement idiom is known-good here.
+
+**2-WAY** because measuring changes nothing and a single-site swap is one commit to revert.
+
+---
+
+### I163 - The estate's `switch` statements silently do nothing when nothing matches, and there is no register of which ones should `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 CENSUS`
+
+**Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+ML refuses to compile a `case` with a branch that can never be taken, and warns on one that misses
+a possibility. Grossman then shows the trade explicitly: collapsing his nine-case table into a
+`_ => NEGATIVE` wildcard makes the compiler call the match exhaustive **even after he deletes a
+real case**, and without the wildcard the compiler names the one he forgot. *"You are giving up a
+little bit of the type checker's helpfulness."*
+
+PowerShell's `switch` has the wildcard behaviour and none of the checking: with no `default`, an
+unmatched value falls through silently and the statement evaluates to nothing. **That is the same
+family as the estate's standing rule that a suite whose target set is DISCOVERED must print what it
+RESOLVED** (`ops-and-gates.md`, backlog I39): *"no findings" and "the glob matched nothing" are the
+same bytes.* A `switch` that matched nothing and a `switch` that matched a branch doing nothing are
+also the same bytes.
+
+**Measured 2026-09-12: 82 `switch` statements** across the 771 tracked `.ps1`
+(`grep -cE '^\s*switch\s*[-(]'`, summed). **This grep is weak** - it only catches a `switch` at the
+start of a line - so 82 is a floor.
+
+**Why this is `NEEDS A RULING` and not `OPEN`.** The work is not the census; the census is an hour.
+The decision Brad has to make is whether this class is worth a rule at all, and there is a real
+argument on both sides:
+
+- **For:** this estate has been bitten at least five times by the shape where "nothing happened"
+  and "nothing to do" are indistinguishable, which is why `<NAME>-COMPLETE` markers exist, why I39
+  exists, and why I80 exists (every threshold is an upper bound, so none can fire on the producer
+  stopping). A silent `switch` is the same defect one level down.
+- **Against:** most of those 82 are almost certainly dispatch over a literal set in the same file,
+  which is the case Grossman says *cannot* resolve empty and therefore needs nothing. Adding a
+  rule that fires on all 82 would be exactly the "red on day one" gate `ops-and-gates.md` forbids,
+  and it would teach people to ignore it.
+
+**The ruling needed:** is the rule *"a `switch` whose subject comes from data rather than from a
+literal in the same file carries a `default` that REFUSES loudly"* - a one-line addition to
+`ops-and-gates.md` for new code only, with no sweep and no gate - worth having? **Rung 1 is the
+census that would inform it**: of the 82, how many switch on a value that came from a JSON file, a
+board row or a parameter, versus a literal set. If the answer is "three", the rule is not worth
+writing and this closes.
+
+**2-WAY** because both the census and a rules line are trivially reversible.
