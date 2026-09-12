@@ -64,6 +64,15 @@ cost about 2 s over 118 files on its first run. It dispatches no self-test, take
 the queue, the observer or `lib/gate-slots.ps1`. Like the `140a0f4f6` change it adds work rather than removing it,
 by far less than the per-run spread this file reports, so every total below still reads as measured.
 
+**Re-read at commit `40f3fcdd8`:** `ops/run-gates.ps1` moved again, by one entry, and in the same direction as the
+two changes above: Brad's I138 ruling adds `meal-prep/pipeline/audit-forbidden-prose.ps1` to the static list, a
+hermetic read of the 584 committed recipe specs against a 10-term list. Timed in this checkout at that commit,
+three consecutive runs: **3,659 ms, 3,657 ms and 3,461 ms** for the live pass, plus **399 ms and 410 ms** for the
+`-SelfTest` the discovery pass runs, so about **3.9 s** added to a push. Against the 396 s of gate work the pool
+measured on that same run, that is under 1%, and well inside the per-run spread this file already reports (870 s
+at 16h, 825 s at 17h, 698 s at 18h). It dispatches no probe, takes no slot of its own and changes nothing in the
+queue, the observer or `lib/gate-slots.ps1`, so every total below still reads as measured.
+
 ## What was sampled
 
 Every 15 s from **16:48:33 to 18:18:23** (360 ticks). The totals count runs that STARTED in the first 60 minutes,
