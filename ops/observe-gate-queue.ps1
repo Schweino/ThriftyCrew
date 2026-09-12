@@ -21,7 +21,7 @@
     -Retro   the same questions answered from what runs have already left behind: the hook's kept logs in %TEMP%,
              each checkout's ops\out\gate-readings.jsonl, and sessions' own saved output.
 
-  THE CONTENT KEY is lib\gate-pass-reuse.ps1's, so "the same tree twice" here means what the pre-push reuse means.
+  THE CONTENT KEY is lib\gate-verdict.ps1's, so "the same tree twice" here means what the pre-push reuse means.
 
   SCOPE OF A CLEAN REPORT: UNSOUND in both directions, deliberately. -Watch cannot see a run that starts and ends
   inside one tick, reads a checkout's state once per run rather than continuously, and classifies a run by its
@@ -50,7 +50,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repoRoot = Split-Path $here -Parent
 . (Join-Path $repoRoot 'lib\git-repo-env.ps1')
 Clear-TcGitRepoEnv
-. (Join-Path $repoRoot 'lib\gate-pass-reuse.ps1')   # Get-TcWorkingTreeState: the same content key the reuse uses
+. (Join-Path $repoRoot 'lib\gate-verdict.ps1')   # Get-TcWorkingTreeState: the same content key the reuse uses
 $enc = New-Object Text.UTF8Encoding($false)
 
 function Read-TcShared([string]$Path) {
@@ -264,7 +264,7 @@ if ($Report) {
   }
   Write-Output ("CLASSIFIER against the hook's own log: agrees {0} of {1} readable verdict(s); {2} hook run(s) had none" -f $agree, ($agree + $dis.Count), $noTruth)
   $dis | ForEach-Object { Write-Output ('   DISAGREE ' + $_) }
-  # THE SAME CONTENT TWICE, keyed exactly as lib\gate-pass-reuse.ps1 keys it.
+  # THE SAME CONTENT TWICE, keyed exactly as lib\gate-verdict.ps1 keys it.
   $keyed = @($all | Where-Object { $_.keyStart } | Sort-Object s)
   $hooksW = @($keyed | Where-Object { $_.origin -eq 'hook' -and $_.s -ge $w0 -and $_.s -lt $w1 })
   $pairM = 0; $pairMEval = 0; $pairMOverlap = 0; $pairHook = 0; $gaps = @()
@@ -288,7 +288,7 @@ if ($Report) {
   $uniq = @($winK | Group-Object { "$($_.top)|$($_.keyStart)" })
   Write-Output ("   distinct (checkout, content) among {0} window starts that had a key: {1} -> {2:N1} per hour of real demand" -f $winK.Count, $uniq.Count, ($uniq.Count * 60.0 / $WindowMin))
   # CLEAN IS READ FROM THE KEYS, not from a dirty count: a clean tree's content key IS HEAD's tree, and that holds
-  # for rows written by any version of -Watch. It is the condition lib\gate-pass-reuse.ps1 requires at push time.
+  # for rows written by any version of -Watch. It is the condition lib\gate-verdict.ps1 requires at push time.
   Write-Output ("   clean working tree at start (content key == HEAD tree): hook {0} of {1}, hand {2} of {3}" -f `
     @($keyed | Where-Object { $_.origin -eq 'hook' -and $_.keyStart -eq $_.headTree }).Count, @($keyed | Where-Object { $_.origin -eq 'hook' }).Count, `
     @($keyed | Where-Object { $_.origin -eq 'manual' -and $_.keyStart -eq $_.headTree }).Count, @($keyed | Where-Object { $_.origin -eq 'manual' }).Count)

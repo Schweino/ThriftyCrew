@@ -178,6 +178,47 @@ function Get-TcGateFingerprint {
   return [pscustomobject]@{ Fingerprint = $fp; Reason = ''; Entries = $lines.Count; Tree = $treeId }
 }
 
+function Get-TcWorkingTreeState {
+  <# What checkout a path is standing in, and what content it holds, in the SAME key the push reuse uses.
+
+     WHY IT LIVES HERE (2026-09-12). ops\observe-gate-queue.ps1 dot-sourced `lib\gate-pass-reuse.ps1` and called
+     this function; NEITHER existed. `git grep` over origin/main found no definition anywhere and no such file,
+     so every mode of the observer died on the dot-source and exited 3 - the estate's own no-load tool for
+     "is the gate queue backing up" could not answer it, on the morning a queue was 9 deep with the oldest push
+     waiting 13 minutes. The content key belongs beside the fingerprint the reuse keys on, which is here, so
+     "the same tree twice" in the observer means exactly what it means at push time.
+
+     Returns Ok, Top (the checkout root), HeadTree, ContentKey, Dirty (the porcelain lines) and Why. A checkout
+     git cannot read comes back Ok=$false with Why saying so, never a guess: the observer prints these, and a
+     fabricated key would read as a repeated tree that never happened.
+
+     -ScratchDir is accepted because the caller passes it and ignored because nothing here needs a temp file. #>
+  param([string]$Top, [string]$ScratchDir = '')
+  $bad = { param($w) [pscustomobject]@{ Ok = $false; Top = ''; HeadTree = ''; ContentKey = $null; Dirty = @(); Why = $w } }
+  if (-not $Top) { return (& $bad 'no path given') }
+  if (-not [IO.Directory]::Exists($Top)) { return (& $bad ("not a directory: " + $Top)) }
+  $root = ''
+  $eap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $out = @(& git -C $Top rev-parse --show-toplevel 2>$null)
+    if ($LASTEXITCODE -eq 0 -and $out.Count) { $root = ([string]$out[0]).Trim() -replace '/', '\' }
+  } catch { } finally { $ErrorActionPreference = $eap }
+  if (-not $root) { return (& $bad ("git could not name a checkout at " + $Top)) }
+  $fp = Get-TcGateFingerprint -Repo $root
+  $dirty = @()
+  $eap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $st = @(& git --no-optional-locks -C $root status --porcelain 2>$null)
+    if ($LASTEXITCODE -eq 0) { $dirty = @($st | Where-Object { $_ }) }
+  } catch { } finally { $ErrorActionPreference = $eap }
+  if (-not $fp.Fingerprint) {
+    return [pscustomobject]@{ Ok = $false; Top = $root; HeadTree = $fp.Tree; ContentKey = $null; Dirty = $dirty; Why = $fp.Reason }
+  }
+  return [pscustomobject]@{ Ok = $true; Top = $root; HeadTree = $fp.Tree; ContentKey = $fp.Fingerprint; Dirty = $dirty; Why = '' }
+}
+
 function Read-TcGateVerdict {
   <# The recorded verdict, or $null for no file, an unreadable one, or one without a fingerprint. #>
   param([string]$Path)
@@ -351,6 +392,26 @@ if ($__gvSelfTest) {
     $vc = Read-TcGateVerdict -Path $vp2
     $t = Test-TcGateVerdictReuse -Verdict $vc -Fingerprint $key -Repo $w -NowUtc $now
     Check 'MUST FIRE  a corrupt verdict file reads as no verdict, never as a pass' ($null -eq $vc -and -not $t.Reuse) $t.Reason
+
+    # ---- Get-TcWorkingTreeState: what ops\observe-gate-queue.ps1 asks, and it asked a file that did not exist ----
+    # The observer dot-sourced lib\gate-pass-reuse.ps1 and called this; neither existed anywhere in the tree, so every
+    # mode died on the dot-source and exited 3 (2026-09-12). These cases pin the shape the observer reads.
+    $stRoot = Get-TcWorkingTreeState -Top $w
+    $fpNow = Get-TcGateFingerprint -Repo $w
+    Check 'CLEAN TWIN  a checkout reports its root, its HEAD tree and the SAME content key the reuse keys on' `
+      ($stRoot.Ok -and $stRoot.ContentKey -eq $fpNow.Fingerprint -and $stRoot.HeadTree -eq $fpNow.Tree -and $stRoot.Top.TrimEnd('\') -ieq $w.TrimEnd('\')) `
+      ("ok={0} key={1} top={2}" -f $stRoot.Ok, $stRoot.ContentKey, $stRoot.Top)
+    # The observer hands it a process's CWD, which is usually BELOW the root - it must resolve, not refuse.
+    $sub = Join-Path $w 'sub'
+    $null = New-Item -ItemType Directory -Force -Path $sub
+    $stSub = Get-TcWorkingTreeState -Top $sub
+    Check 'CLEAN TWIN  a path BELOW the checkout resolves to the checkout root, which is what a process CWD gives it' `
+      ($stSub.Ok -and $stSub.Top.TrimEnd('\') -ieq $w.TrimEnd('\')) ("ok={0} top={1}" -f $stSub.Ok, $stSub.Top)
+    # MUST FIRE: a path git cannot name is NOT a content key. A guess here would read in the observer as two runs
+    # over the same tree that never happened.
+    $stNo = Get-TcWorkingTreeState -Top $sb
+    Check 'MUST FIRE  a directory that is not a checkout comes back NOT ok, with a reason and no content key' `
+      ((-not $stNo.Ok) -and $null -eq $stNo.ContentKey -and $stNo.Why) ("ok={0} key={1} why={2}" -f $stNo.Ok, $stNo.ContentKey, $stNo.Why)
   } catch {
     $script:gvFail++
     Write-Output ('FAIL  the self-test threw: ' + $_.Exception.Message)
@@ -358,7 +419,7 @@ if ($__gvSelfTest) {
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0: the count is asserted, so a block that stops early cannot read as a pass.
-  if ($script:gvCases -lt 22) { $script:gvFail++; Write-Output ('FAIL  only {0} of 22 cases ran' -f $script:gvCases) }
+  if ($script:gvCases -lt 25) { $script:gvFail++; Write-Output ('FAIL  only {0} of 25 cases ran' -f $script:gvCases) }
   if ($script:gvFail) { Write-Output ('gate-verdict SELF-TEST FAIL: {0} failure(s) over {1} case(s)' -f $script:gvFail, $script:gvCases); exit 1 }
   Write-Output ('gate-verdict SELF-TEST PASS: {0} cases - led by a commit of the very bytes already fingerprinted keeping the fingerprint, a red run withdrawing the pass it contradicts, and an edit to an ignored script changing it' -f $script:gvCases)
   exit 0
