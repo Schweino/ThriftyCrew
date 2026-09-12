@@ -10156,7 +10156,32 @@ an older Aldi feed's store identity was a typed literal rather than captured dat
 builder already does. Today a store swap underneath a feed is invisible rather than merely
 unrecorded, and no historical row can be re-checked against the shelf it came from.
 
-### I125 - Produce prices may move within a single day, and nothing here records an hour `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I125 - Produce prices may move within a single day, and nothing here records an hour `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 READ`
+
+**BRAD RULED IT WORTH THE HOUR ON 2026-09-12, verbatim:** *"Yes, produce is compared store to store on
+the board, so this is worth the one hour. Run the cheap test once: one produce commodity at one chain
+store, priced online morning and afternoon on the same day, repeated on two days. If no price moves,
+record that US chain online produce prices here do not move intraday and close it. If any move, every
+capture starts recording its capture time (hour and timezone) alongside asof, and nothing else changes
+until that data shows a pattern."*
+
+**The test is BUILT, SCHEDULED and RUNNING; what is left is reading its answer.**
+`design\MEASURE-produce-intraday-2026-09-12.md` is the measurement, with the acceptance bar written
+before the first reading. The harness is `grocery\probe-produce-intraday.ps1` (landed `62a2d10d0`) and
+the panel is `grocery\produce-intraday-panel.json`. Existing captures could not answer it: over 5,682
+files in `captures\`, `regular\` and `archive\`, only two same-day groups are more than three hours
+apart and both are rebuilds, so the test had to be run forward.
+
+Fifteen pinned produce products at ONE chain store (Baker's Saddlecreek, through Kroger's public API),
+read at 08:30, 15:30 and 20:00 on 2026-09-13 and 2026-09-14 by the bounded task `TC Produce Intraday
+Probe`. Zero moves over at least 24 morning-vs-afternoon pairs CLOSES it, one move OPENS it, anything
+else is BLIND and closes nothing. The 20:00 readings are recorded but deliberately outside the verdict,
+because the ruling names morning and afternoon.
+
+**The next rung is a READ, and it comes to whoever is on duty rather than waiting to be remembered:**
+when the last reading is done the task's watch row goes stale on purpose and health-heartbeat pages
+once, naming the verdict file. The measurement doc's Status section is the four-step instruction for
+that page, including deleting the whole probe afterwards.
 
 **Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

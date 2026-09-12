@@ -15,16 +15,17 @@
   a board that compares seven stores captured hours apart would be comparing different prices for the
   same afternoon, and no field we store could ever say so.
 
-  WHY IT IS A PROBE AND NOT A GATE. It answers one question once. Nothing calls it from code, and
-  grocery\audit-script-census.ps1 carries the entry that records that. When the verdict is read, this
-  file, its panel and its census entry all go.
+  WHY IT IS A PROBE AND NOT A GATE. It answers one question once. Nothing calls it from code; a
+  bounded scheduled task runs it six times (see -Install) and then stops, and grocery\
+  audit-script-census.ps1 carries the entry that records that. When the verdict is read, this file,
+  its panel, its census entry, its task definition and its expected-automations row all go.
 
-  THE SCHEDULING LANDS IN A SECOND COMMIT, and the order is the point. A bounded Windows task runs
-  this six times over two days, and its definition names this script by absolute path in the MAIN
-  checkout. ops\audit-run-log-claims.ps1 checks that a hidden task's target actually exists, so the
-  definition cannot land until this file is there: the POINTED-TO object is written before the object
-  that points to it (.claude\rules\ops-and-gates.md). Landing them together would mean a task
-  definition naming a script no checkout held.
+  THE TASK DEFINITION LANDED ONE COMMIT AFTER THIS SCRIPT, and the order is the point rather than a
+  convenience. A hidden task's committed definition names its target by ABSOLUTE path in the main
+  checkout, and ops\audit-run-log-claims.ps1 checks that the target exists - correctly, because a task
+  pointing at a missing script fires, does nothing and reports success. A worktree cannot satisfy that
+  for a file it has just written, so the POINTED-TO object was written before the object that points
+  to it (.claude\rules\ops-and-gates.md). The same applies to anyone moving or renaming this file.
 
   THE ACCEPTANCE BAR, WRITTEN BEFORE THE FIRST READING (backlog E21). It is stated here, in
   grocery\produce-intraday-panel.json, and in design\MEASURE-produce-intraday-2026-09-12.md, and the
@@ -52,6 +53,8 @@
   Modes:
     -Read        take one reading of the whole panel and append one row per product to the ledger
     -Verdict     score the ledger against the bar above and write the verdict file
+    -Install     register the bounded task (six one-time triggers, then it is inert)
+    -Uninstall   remove it
     -SelfTest    hermetic; no network, no ledger, no scheduler
 
   Exit codes: 0 fine, 1 a reading or the scoring failed, 3 could not evaluate (no credentials, no
@@ -60,10 +63,13 @@
 param(
   [switch]$Read,
   [switch]$Verdict,
+  [switch]$Install,
+  [switch]$Uninstall,
   [switch]$SelfTest,
   [string]$PanelPath = '',
   [string]$LedgerPath = '',
-  [string]$VerdictPath = ''
+  [string]$VerdictPath = '',
+  [string]$TaskRoot = 'C:\Codex\ThriftyCrew'
 )
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -72,6 +78,47 @@ $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\lf-write.ps1')
 . (Join-Path $here 'native-lib.ps1')
 . (Join-Path $here 'run-log-lib.ps1')
+
+$TASK_NAME = 'TC Produce Intraday Probe'
+
+function Test-TaskWatched {
+  <# Is this task named in the watcher's registry? '' to proceed, else the refusal.
+
+     THE WATCH ENTRY IS AN INPUT TO REGISTRATION, and this is deliberately a FOURTH copy of the same
+     function - the nightly, harvest and ops registrars each carry their own. They own different lanes
+     and must not take a dependency on each other, and ops\audit-task-registration.ps1 fails the push
+     if a registrar that names a task literally drops the refusal, so the copies cannot drift apart
+     silently. The state it exists to prevent: TC Graph Nightly Matching was registered 2026-08-22 and
+     watched 2026-08-25, so for three mornings nothing would have noticed it stop. Pure over its
+     arguments so the fixture can drive it. #>
+  param([Parameter(Mandatory=$true)][string]$TaskName, $Registry)
+  if (-not $Registry) {
+    return ("grocery\expected-automations.json could not be read, so whether '{0}' is watched is UNKNOWN. Unreadable is not watched." -f $TaskName)
+  }
+  $watch = $null
+  foreach ($row in @($Registry.windows_tasks)) { if ($row -and ([string]$row.name -eq $TaskName)) { $watch = $row } }
+  if (-not $watch) {
+    return ("grocery\expected-automations.json has no windows_tasks entry for '{0}', so health-heartbeat could not notice if it stopped firing. Add the entry (name, max_age_hours, why, proves) FIRST, then register." -f $TaskName)
+  }
+  foreach ($f in @('max_age_hours', 'why', 'proves')) {
+    if (-not $watch.PSObject.Properties[$f] -or -not [string]$watch.$f) {
+      return ("grocery\expected-automations.json names '{0}' but its row has no {1}, so the watch is incomplete." -f $TaskName, $f)
+    }
+  }
+  return ''
+}
+
+function Get-PiXmlTriggerDates {
+  <# The dates the COMMITTED definition actually fires on. The panel says which days the measurement
+     spans and the XML says when the box will run it: two hand-maintained tables holding one fact, the
+     shape that let a half-applied task rename page twice on 2026-09-07. The self-test compares them.
+     Pure over its argument. #>
+  param([Parameter(Mandatory=$true)][string]$Xml)
+  $dates = @()
+  foreach ($m in [regex]::Matches($Xml, '<StartBoundary>(\d{4}-\d{2}-\d{2})T')) { $dates += $m.Groups[1].Value }
+  $uniq = @($dates | Sort-Object -Unique)
+  return ,$uniq
+}
 
 function Get-PiPanelPath { param([string]$Given) if ($Given) { return $Given } return (Join-Path $here 'produce-intraday-panel.json') }
 function Get-PiLedgerPath { param([string]$Given) if ($Given) { return $Given } return (Join-Path $here 'out\produce-intraday.jsonl') }
@@ -409,6 +456,27 @@ if ($SelfTest) {
       @($fixPanel.products).Count -eq 15 -and @($fixPanel.plan.deciding_windows).Count -eq 2 -and `
       [int]$fixPanel.bar.deciding_pairs_planned -eq (@($fixPanel.products).Count * @($fixPanel.plan.dates).Count)
     }
+    Assert-PiCase 'MUST FIRE: an unreadable registry is not a watched task, so registration refuses' {
+      '' -ne (Test-TaskWatched -TaskName 'TC Produce Intraday Probe' -Registry $null)
+    }
+    Assert-PiCase 'MUST FIRE: a registry that does not name the task refuses before any scheduler call' {
+      $r = [pscustomobject]@{ windows_tasks = @([pscustomobject]@{ name = 'TC Something Else'; max_age_hours = 30; why = 'x'; proves = 'y' }) }
+      '' -ne (Test-TaskWatched -TaskName 'TC Produce Intraday Probe' -Registry $r)
+    }
+    Assert-PiCase 'MUST FIRE: a watch row missing proves is an incomplete watch, and refuses' {
+      $r = [pscustomobject]@{ windows_tasks = @([pscustomobject]@{ name = 'TC Produce Intraday Probe'; max_age_hours = 14; why = 'x' }) }
+      '' -ne (Test-TaskWatched -TaskName 'TC Produce Intraday Probe' -Registry $r)
+    }
+    Assert-PiCase 'MUST NOT FIRE: the SHIPPED expected-automations.json watches this task with a complete row' {
+      $r = [IO.File]::ReadAllText((Join-Path $here 'expected-automations.json')) | ConvertFrom-Json
+      '' -eq (Test-TaskWatched -TaskName 'TC Produce Intraday Probe' -Registry $r)
+    }
+    Assert-PiCase 'CLEAN TWIN: the committed definition names this task and fires on exactly the panel plan dates' {
+      $x = [IO.File]::ReadAllText((Join-Path (Split-Path $here -Parent) 'ops\scheduled-tasks\tc-produce-intraday-probe.xml'))
+      $xd = Get-PiXmlTriggerDates -Xml $x
+      $pd = @(@($fixPanel.plan.dates) | ForEach-Object { [string]$_ })
+      $x.Contains('<URI>\TC Produce Intraday Probe</URI>') -and (($xd -join ',') -eq ($pd -join ',')) -and ([regex]::Matches($x, '<StartBoundary>')).Count -eq 6
+    }
     Assert-PiCase 'every panel commodity is a real Fruit or Vegetables id in this estate' {
       $cats = (Get-Content -LiteralPath (Join-Path $here 'categories.json') -Raw -Encoding UTF8 | ConvertFrom-Json).categories
       $produce = @()
@@ -424,6 +492,78 @@ if ($SelfTest) {
   if ($fails -eq 0) { Write-Output 'probe-produce-intraday self-test: PASS'; exit 0 }
   Write-Output 'probe-produce-intraday self-test: FAIL'
   exit 1
+}
+
+# ---------------------------------------------------------------------------- install / uninstall
+if ($Install -or $Uninstall) {
+  $existing = Get-ScheduledTask -TaskName $TASK_NAME -ErrorAction SilentlyContinue
+  if ($Uninstall) {
+    if ($existing) { Unregister-ScheduledTask -TaskName $TASK_NAME -Confirm:$false; Write-Output "produce-intraday: unregistered '$TASK_NAME'" }
+    else { Write-Output "produce-intraday: '$TASK_NAME' was not registered" }
+    exit 0
+  }
+  $panel = Get-Content -LiteralPath (Get-PiPanelPath $PanelPath) -Raw -Encoding UTF8 | ConvertFrom-Json
+  # THE COMMITTED XML IS THE TRUTH ABOUT WHAT RUNS, as it is for every other task here: six one-time
+  # triggers, not a daily one, because the measurement is bounded and a daily trigger would leave a
+  # permanent new routine on a box whose task list is a watched registry. When the last trigger has
+  # fired the task is inert and health-heartbeat's TASK STALE pages the next morning naming the verdict
+  # file. That page IS the handoff - it is what stops this ending as a reminder nobody acts on.
+  $xmlFile = Join-Path $repo 'ops\scheduled-tasks\tc-produce-intraday-probe.xml'
+  if (-not (Test-Path -LiteralPath $xmlFile)) {
+    Write-Output ("produce-intraday COULD NOT EVALUATE: no committed definition at {0}. Nothing was registered." -f $xmlFile)
+    exit 3
+  }
+  # THE REFUSAL COMES BEFORE ANY SCHEDULER CALL, so an unwatched task cannot exist even for a moment.
+  $reg = $null
+  try { $reg = [IO.File]::ReadAllText((Join-Path $repo 'grocery\expected-automations.json')) | ConvertFrom-Json } catch { $reg = $null }
+  $refusal = Test-TaskWatched -TaskName $TASK_NAME -Registry $reg
+  if ($refusal) {
+    Write-Output ("produce-intraday REFUSED: " + $refusal)
+    exit 3
+  }
+  # THE TASK MUST POINT AT THE CHECKOUT THAT WILL STILL EXIST WHEN IT FIRES, which is the main one and
+  # never the worktree this was written in - a worktree is removed when its session lands. That path is
+  # in the committed XML; -TaskRoot is what this check reads, and the two must name the same checkout.
+  # Credentials live there too (grocery\.krogerkey is gitignored, so no worktree has one).
+  $taskScript = Join-Path $TaskRoot 'grocery\probe-produce-intraday.ps1'
+  # REFUSE on what will not fix itself, WARN on what will. A wrong root and a missing key are permanent:
+  # every reading would exit 3 BLIND forever and the ledger would stay empty. A missing SCRIPT is not,
+  # because this probe is registered by the session that writes it and reaches the main checkout only
+  # when that checkout picks up the commit - which the ~07:00 bot's rebase does daily, before the first
+  # 08:30 trigger. Refusing on that would mean nobody could ever register it in one sitting. If it does
+  # NOT arrive the task still fires, powershell exits nonzero on a missing -File, the verdict file stays
+  # stale, and health-heartbeat pages TASK FAILED at 10:30 - so the silent-failure hole stays closed.
+  if (-not (Test-Path -LiteralPath (Join-Path $TaskRoot '.git'))) {
+    Write-Output ("produce-intraday COULD NOT EVALUATE: {0} is not a git checkout, so the task would have no probe to run. Nothing was registered." -f $TaskRoot)
+    exit 3
+  }
+  if (-not (Test-Path -LiteralPath (Join-Path $TaskRoot 'grocery\.krogerkey'))) {
+    Write-Output ("produce-intraday COULD NOT EVALUATE: {0}\grocery\.krogerkey is missing, so every reading would exit 3 BLIND. Nothing was registered." -f $TaskRoot)
+    exit 3
+  }
+  $pending = -not (Test-Path -LiteralPath $taskScript)
+  $xml = [IO.File]::ReadAllText($xmlFile)
+  $xmlDates = Get-PiXmlTriggerDates -Xml $xml
+  $planDates = @(@($panel.plan.dates) | ForEach-Object { [string]$_ })
+  if (($xmlDates -join ',') -ne ($planDates -join ',')) {
+    Write-Output ("produce-intraday REFUSED: the committed definition fires on {0} and the panel plans {1}. Two tables holding one fact have drifted; fix them before registering." -f ($xmlDates -join ' '), ($planDates -join ' '))
+    exit 3
+  }
+  $sid = ([Security.Principal.WindowsIdentity]::GetCurrent()).User.Value
+  $xml = $xml.Replace('__CURRENT_USER_SID__', $sid)
+  # STRIP THE XML DECLARATION: Register-ScheduledTask -Xml takes a UTF-16 .NET string and refuses one
+  # whose declaration claims UTF-8 ("unable to switch the encoding"). The committed bytes stay UTF-8;
+  # the CALL just makes no encoding claim. ops\install-grocery-tasks.ps1 found this on 2026-09-07 and
+  # ops\install-ops-tasks.ps1 hit it again anyway, so it is written here too rather than looked up.
+  $xml = [regex]::Replace($xml, '^\s*<\?xml[^>]*\?>\s*', '')
+  if ($existing) { Unregister-ScheduledTask -TaskName $TASK_NAME -Confirm:$false }
+  $null = Register-ScheduledTask -TaskName $TASK_NAME -Xml $xml -Force
+  Write-Output ("produce-intraday: registered '{0}' from {1}, {2} one-time trigger(s) over {3} ({4})" -f `
+                $TASK_NAME, 'ops\scheduled-tasks\tc-produce-intraday-probe.xml', ([regex]::Matches($xml, '<StartBoundary>')).Count, ($xmlDates -join ' and '), $taskScript)
+  if ($pending) {
+    Write-Output ("produce-intraday NOTE: {0} does NOT hold the probe yet. The first reading needs that checkout to pick up the commit carrying it; if it has not by the first trigger, health-heartbeat pages TASK FAILED at the next 10:30 and the readings can be restarted by editing the plan dates in the panel and re-running -Install." -f $TaskRoot)
+  }
+  exit 0
 }
 
 # ---------------------------------------------------------------------------- read
@@ -537,5 +677,5 @@ if ($Verdict) {
   exit 0
 }
 
-Write-Output 'probe-produce-intraday.ps1 - pass one of -Read, -Verdict, -SelfTest. See the header for the acceptance bar.'
+Write-Output 'probe-produce-intraday.ps1 - pass one of -Read, -Verdict, -Install, -Uninstall, -SelfTest. See the header for the acceptance bar.'
 exit 3
