@@ -204,6 +204,22 @@ live entry still stays at PUSH, which is exactly what the two-lists rule says.
 derives its touched-input set and runs only the reachable units. What this plan proposes is extending a mechanism this
 estate already trusts in production, not inventing one.
 
+## The guarantee that makes this safe, VERIFIED rather than assumed (2026-09-12)
+
+Everything above rests on one property, so it was read out of the source rather than believed:
+
+**`ops/run-gates.ps1`'s cache loop iterates `$selfJobs` ONLY, never `$staticJobs`.** The per-gate key, the cache hit
+and the skip all live inside `for ($i = 0; $i -lt $selfJobs.Count; $i++)`. The `$static` list - the LIVE tree-wide
+audits - is dispatched unconditionally and is never consulted against a key.
+
+So `audit-source-control-bytes` (ReadAllBytes over every tracked source file), `audit-full-path-excludes` (AST over
+every `.ps1` and `.py`), `audit-task-registration` and `test-native-stderr-eap` **run on every push and no declaration
+can skip them.** Declaring inputs on such a file skips only its FIXTURE suite, which the discovery pass runs under
+`-SelfTest` as a separate entry with a separate key. The two halves of those files were never the same job.
+
+That is what lets a push stop running things without the whole-tree ratchets going quiet: **the checks any commit can
+redden were already on a list that selection cannot reach.**
+
 ## What this predicts, stated before building
 
 A typical push (2 to 4 files) selects **single digits** of gates. With the 53 dispositioned, the gate half of a push
