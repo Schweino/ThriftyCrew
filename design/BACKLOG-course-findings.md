@@ -9322,7 +9322,27 @@ IMPRESSIONS and in POSITION, never in clicks, until clicks exist at all.
 Measured 2026-09-11 by grep over first-party `*.ps1`, `*.py` and `*.md`, excluding `grocery/out/`,
 `archive/` and `.claude/`.
 
-**`starvation` / `starved`: 26 files, at least two unrelated senses.** I did not classify all 26.
+**`[CORRECTED 2026-09-11, by the run that filed it, before anybody acted on it.]` The count was
+published as "26 first-party files" and described as the filtered count. That description was wrong,
+and the correction is the useful half: two greps disagreed and not one word of the disagreement was
+about the tree. All of it was about WHICH TEST WAS MEANT** - the same shape `.claude/rules/grocery.md`
+records for `compare-deals`, where one quantity produced six answers in a day. So the test is stated
+with every number here:
+
+| Test | Count |
+|---|---|
+| `starvation` alone, excluding `grocery/out/`, `archive/`, `.claude/`, `.venv` and the run's own artefact | **13 files** |
+| `starvation` OR `starved`, including `.claude/rules/` and `archive/` | **26 files** |
+| `deadlock`, on the 13's filter | **71 files** |
+
+**The 13 classify, which the first report said it could not do:** 7 are the gate-slot scheduling
+sense (`lib/gate-slots.ps1`, `lib/gate-verdict.ps1`, `lib/push-landable.ps1`,
+`ops/observe-gate-queue.ps1`, `grocery/test-auditors.ps1`, and both
+`design/MEASURE-gate-*-2026-09-11.md`), 2 are the grocery term sense, and **4 are unclassified**
+(`design/PLAN-recipe-hunter-v3`, `design/WORKLIST-token-cost`, `meal-prep/pipeline/harvest.py`,
+`harvest_embed.py`), which look like a lane or worklist sense and may be a THIRD meaning. That would
+strengthen this finding rather than weaken it. **The 71 for `deadlock` makes the point harder**: the
+concurrency sense is a small minority of 71.
 
 - **Scheduling starvation, the real concurrency sense.** `lib/gate-slots.ps1:617` carries a MUST FIRE
   named *"THE STARVATION FIX - two runs wait for one slot and the one that ARRIVED FIRST gets it,
