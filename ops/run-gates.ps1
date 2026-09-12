@@ -210,10 +210,10 @@ $static = @(
   # Same both-halves reason again: the discovery pass proves the scanner can still tell a frozen fixture
   # from a live ruling; this entry runs it over the real tree, which is what catches the NEXT self-test
   # written to read its own live allowlist (2026-09-06, PLAN-top5 area 4).
-  @{ f = 'ops\audit-fixture-inputs.ps1';       n = 'no self-test rests its verdict on a live rulings file the harness never froze' }
+  @{ daily = $true; f = 'ops\audit-fixture-inputs.ps1';       n = 'no self-test rests its verdict on a live rulings file the harness never froze' }
   # A must-fire that BREAKS turns its own line red and everybody sees it. One that is DELETED leaves a
   # green suite with one fewer case, and nobody counts tallies ([[exit-code-first-tally-second]]).
-  @{ f = 'ops\audit-mustfire-census.ps1';      n = 'no self-test has quietly lost a must-fire assertion' }
+  @{ daily = $true; f = 'ops\audit-mustfire-census.ps1';      n = 'no self-test has quietly lost a must-fire assertion' }
   # BOTH HALVES ONE MORE TIME. Every one of the 19 bytes this found on its first sweep was a backslash
   # eaten by an escape at authoring time, almost always in a Windows path: out\archive became
   # out<BEL>rchive because \a is BEL, pipeline\feed- became pipeline<FF>eed- because \f is form feed,
@@ -222,7 +222,7 @@ $static = @(
   # script's own self-test stays green, grep and sed DISPLAY the damage as a merely missing character,
   # and a NUL makes grep classify the whole file as binary so every text search silently skips it
   # (2026-09-07).
-  @{ f = 'ops\audit-source-control-bytes.ps1'; n = 'no tracked source file carries a raw control byte from an eaten backslash' }
+  @{ daily = $true; f = 'ops\audit-source-control-bytes.ps1'; n = 'no tracked source file carries a raw control byte from an eaten backslash' }
   # BOTH HALVES AGAIN, and here the live half is the whole point. The discovery pass above runs this
   # file's -SelfTest and proves the enumeration works against a frozen root; THIS entry runs it against
   # the REAL root, which is the only place the debris actually lands. .gitignore line 3 is `/*`, so the
@@ -248,7 +248,7 @@ $static = @(
   # discovery pass runs every -SelfTest it finds, which wires the FIXTURE and not the DETECTOR.
   # audit-guard-contract caught this file shipping with no production caller - the same defect it exists
   # to detect, in the detector itself.
-  @{ f = 'ops\audit-write-only-reports.ps1';   n = 'no NEW out\ report family is written by a script and read by none' }
+  @{ daily = $true; f = 'ops\audit-write-only-reports.ps1';   n = 'no NEW out\ report family is written by a script and read by none' }
   # THE FACT CHECK LIST, and the live half is the point: it reads the 584 real cards, which is where the
   # undeclared claims actually are. Hermetic - specs are tracked, so it works on a bare checkout. A
   # ratchet, because 340 assertions predate the field (2026-09-06, backlog E6).
@@ -357,11 +357,11 @@ $static = @(
   @{ f = 'ops\audit-measurement-provenance.ps1'; n = 'a recorded measurement names the harness it ran through and the commit or date it ran at - a RATCHET at 8, because retro-filling the existing set was explicitly not asked for and a bar over them would be red on day one' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # From a linked worktree every FULL path carries \.claude\worktrees\, so a walk excluding on it reads nothing and reports clean; e1afb523b fixed nineteen and this blocks the next.
-  @{ f = 'ops\audit-full-path-excludes.ps1';   n = 'no NEW tree walk excludes worktrees or .claude by matching a file''s FULL path instead of the path below its root - a ratchet, hermetic, reads source only' }
+  @{ daily = $true; f = 'ops\audit-full-path-excludes.ps1';   n = 'no NEW tree walk excludes worktrees or .claude by matching a file''s FULL path instead of the path below its root - a ratchet, hermetic, reads source only' }
   # A typed parameter keeps its type for its whole scope and names are case-insensitive, so `$rule = @(...)` beside [string]$Rule made ONE string and a self-test passed over nothing; the rule in ops-and-gates.md did not stop the recurrence (2026-09-11).
   @{ f = 'ops\audit-typed-param-shadow.ps1';   n = 'no NEW assignment reuses a typed parameter''s name with a value of another kind, which converts it rather than making a local - a ratchet over the AST, hermetic, reads source only' }
   # 8253ded82 glued a self-test's closing if/else onto its last case line, so the branch never exited and every push's gate ran a live three-store pull and scored it ok.
-  @{ f = 'ops\audit-keyword-arguments.ps1';    n = 'no tracked .ps1 or .psm1 carries a statement keyword (if, else, exit, return, try, throw, continue and the rest) as a bare command ARGUMENT - a statement glued onto a command line never runs as one; a gate at zero, hermetic, reads source only' }
+  @{ daily = $true; f = 'ops\audit-keyword-arguments.ps1';    n = 'no tracked .ps1 or .psm1 carries a statement keyword (if, else, exit, return, try, throw, continue and the rest) as a bare command ARGUMENT - a statement glued onto a command line never runs as one; a gate at zero, hermetic, reads source only' }
   # The keyword audit above sees that SPELLING and lib\selftest-verdict.ps1 sees the silence AFTER the live work ran. This reads the control flow, so the push stops before a self-test can reach a store.
   @{ f = 'ops\audit-selftest-fallthrough.ps1'; n = 'no top-level self-test block that live statements follow can end without exit, throw, return or Exit-Guard - a gate at zero, hermetic, reads source only' }
   # 2026-09-11: this watcher ran only inside test-auditors, which this file skips, and walked grocery\ only; wave-preaudit's drill died mid-suite on the class it watches.
@@ -382,11 +382,36 @@ $static = @(
   # a confident "not applicable" that proves nothing. It declares [switch]$SelfTest, so the discovery
   # pass above already runs its fixtures, which is the half that can rot.
 )
-# Same guard the loop applies, so nothing is spawned for a file the loop will skip.
+# `daily = $true` MEANS "NOT ON EVERY PUSH" (Brad, 2026-09-12), and the mark lives on the entry rather than in a
+# second list, because a name carried in two files goes stale and this one decides what a push checks.
+#
+# WHY THESE SIX LEFT THE PUSH. They are tree-wide RATCHETS, and what they protect is the estate's own guard
+# quality over months: a deleted must-fire fixture, a self-test resting on an unfrozen rulings file, a stray
+# control byte, a write-only report family, a walk that breaks inside worktrees, a statement keyword glued onto a
+# command line. **Not one of them can put a wrong number in front of a paying reader.** Learning about one the
+# next morning costs a morning; learning about it 31 seconds sooner costs every push on this box, every day.
+# Being ABLE to fail is not the same as needing to fail within 60 seconds, and that distinction is the whole
+# ruling. Measured warm on 2026-09-12: mustfire-census 54s, fixture-inputs 42s, write-only-reports 34s,
+# source-control-bytes 22s, full-path-excludes 16s, keyword-arguments 16s - 184s of a 699s run, and
+# mustfire-census alone was the wall-clock FLOOR, since no pool finishes sooner than its longest single job.
+#
+# WHY NOT THE OTHER TREE-WIDE ONES. grocery\test-native-stderr-eap.ps1 and ops\audit-task-registration.ps1 stay on
+# every push: they are the same class but cost under 16s, and this trade only pays where there is something to
+# buy. test-native-stderr-eap's own value is catching the new site IN THIS DIFF, which is worth its seconds.
+#
+# WHY IT IS NOT A NIGHTLY FULL SWEEP. Brad refused one, correctly: a net nobody reads is worse than none, because
+# it licenses looser selection. This is six named audits on a schedule, about two minutes, reporting where he
+# already looks each morning - not 391 gates re-proving a tree nothing touched.
+#
+# THE FAILURE MODE TO WATCH, stated now: these six go quiet if the schedule stops. That is the absence
+# ops-and-gates.md warns about, so the daily run's own verdict must be READ, and a run that did not happen must
+# be as visible as a run that failed.
 $staticJobs = [Collections.Generic.List[object]]::new(); $staticKeys = [Collections.Generic.List[string]]::new()
+$dailyDeferred = 0
 foreach ($g in $static) {
   $pp = Join-Path $repo $g.f
   if (-not (Test-Path $pp)) { continue }
+  if ([bool]$g.daily) { $dailyDeferred++; continue }
   [void]$staticKeys.Add([string]$g.f)
   [void]$staticJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $pp) })
 }
@@ -664,6 +689,11 @@ $toRun = [Collections.Generic.List[object]]::new()
 $runIdx = [Collections.Generic.List[int]]::new()
 for ($i = 0; $i -lt $allJobs.Count; $i++) { if (-not $cacheHit[$i]) { [void]$toRun.Add($allJobs[$i]); [void]$runIdx.Add($i) } }
 Write-Output ("run-gates: {0} of {1} self-test(s) already passed over these exact inputs and were not run again; {2} could not be keyed and always run" -f $reusedCount, $selfJobs.Count, $unkeyable)
+# SAID OUT LOUD ON EVERY RUN, because what a green run did NOT cover is part of what the green means. A reader who
+# does not know six ratchets were deferred will read this pass as wider than it is.
+if ($dailyDeferred -gt 0) {
+  Write-Output ("run-gates: {0} tree-wide ratchet(s) are marked daily and were NOT run here - they are the scheduled run's, not this push's. A push does not prove them." -f $dailyDeferred)
+}
 # TAKEN IMMEDIATELY AROUND THE POOL, so a slot wait above and the judging below cannot land in the window.
 $leftPaths = Get-TcBotStagedPaths
 $leftBefore = Get-TcTreeSnapshot -Root $repoFull -Paths $leftPaths
