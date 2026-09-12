@@ -5950,10 +5950,23 @@ $mpPipe = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
 $ffs = Join-Path $mpPipe 'feed-freshness.ps1'
 if (-not (Test-Path $ffs)) { Bad 'meal-prep\pipeline\feed-freshness.ps1 is missing - nothing decides which feed a pricing stage may compute on, and the download-once-forever bug has nothing stopping it coming back' }
 else {
+  # A FLOOR, NOT AN EQUALITY, the same ruling as $TCB_MIN_CASES above (2026-09-09): it was
+  # `-match 'SELFTEST: 25/25 pass'`, so ADDING a case turned this red with the PASSING run's own output as
+  # the failure text. 25 -> 26 on 2026-09-11, when the clobber probe moved off the fixed %TEMP% name onto a
+  # per-run scratch directory and gained the case that asserts the directory is removed again. A floor still
+  # catches what the count is for - a case that silently stops running - and the n/n shape means no case
+  # failed, so the bar is not lower than the equality it replaces.
+  $FF_MIN_CASES = 26
   $r = PSChild $ffs -SelfTest | Out-String
-  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 25/25 pass') {
-    Ok 'feed-freshness -SelfTest passes with its founding-bug fixtures armed (July 27 snapshot refused, fresh feed passes, mtime-laundering caught, an 8h cache refused against a 1h canonical feed, legitimate 23.5h aging not refused)'
-  } else { Bad ('feed-freshness -SelfTest failed or lost its founding-bug fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
+  $ffRc = $LASTEXITCODE
+  $ffOk = $false; $ffCount = 0
+  if ($r -match 'SELFTEST: (\d+)/(\d+) pass') {
+    $ffCount = [int]$Matches[2]
+    $ffOk = ([int]$Matches[1] -eq $ffCount) -and ($ffCount -ge $FF_MIN_CASES)
+  }
+  if ($ffRc -eq 0 -and $ffOk) {
+    Ok ('feed-freshness -SelfTest passes with its founding-bug fixtures armed (July 27 snapshot refused, fresh feed passes, mtime-laundering caught, an 8h cache refused against a 1h canonical feed, legitimate 23.5h aging not refused; ' + $ffCount + ' cases, floor ' + $FF_MIN_CASES + ')')
+  } else { Bad ('feed-freshness -SelfTest failed or lost its founding-bug fixtures (rc=' + $ffRc + ', floor ' + $FF_MIN_CASES + ' cases): ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 
   # THE FROZEN FIXTURE FILES THEMSELVES. Same rule as every other fixture here: never regenerate them from
   # the live feed, or the staleness they encode disappears and the test passes by finding nothing.
