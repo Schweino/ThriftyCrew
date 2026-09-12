@@ -39,6 +39,14 @@
   prints both ("pool width reached X of the Y asked") and both are kept, and -Report discards any row where they
   differ rather than averaging it in.
 
+  WHAT wallGateS IS, so it is not misread later: run-gates starts its stopwatch at its line 147, before discovery
+  and before it queues for a slot, so the number covers discovery plus any slot wait plus the pool plus judging.
+  That is deliberate - it is exactly the window a push must win against a moving origin/main, which is the
+  question PLAN-push-ref-race asks. On the quiet box this harness insists on, the slot wait is ~0 and the figure
+  is the pool's; under contention it would not be, which is why othersStart and othersEnd are on every row and
+  why -Report can name a contaminated one. wallHarnessS is the whole child process as this harness timed it, kept
+  beside it so the two can be compared rather than trusted.
+
   ONE ROW PER RUN, AND EVERY TOTAL DERIVES FROM IT (measurement.md E24). A pair of medians cannot be
   un-aggregated; the CSV can. Each row carries its input fingerprint - HEAD sha, the gate count discovered, and
   the concurrent run-gates seen at start and end - so a row taken under contention can be found later rather than

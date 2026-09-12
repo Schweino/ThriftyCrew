@@ -143,6 +143,37 @@ already drives the hook from a sandbox linked worktree, which is where those cas
    a habit, with the bot and wave-publish enrolled and a hold cap.
 4. **Not built: Option 1's re-gate skip**, for the reason in its section.
 
+## Brad's ruling, 2026-09-12
+
+**Sweep width first, re-measure T under whatever that gives, and decide the landing lease after** -
+recommendations 1 and 2, in that order, with 3 held until there is a number. And **wait for a quiet box**
+rather than measuring under load: a width curve taken at 100% CPU measures the contention.
+
+Option 1's re-gate skip is not built, as recommended.
+
+### The harness, built 2026-09-12
+
+`ops/measure-gate-width.ps1` - `-Probe` (is the box quiet, adds no load), `-Sweep` (the real runs),
+`-Report` (totals). The bar is in its source above the run, as `measurement.md` E21 requires, and
+`-Report` judges against the same constants the header states rather than a number chosen after seeing
+the result.
+
+Three choices in it worth naming, because a first cut would have got each one wrong:
+
+- **Arms are interleaved (1,2,5,10, 1,2,5,10, ...), never blocked.** Load here drifts over tens of
+  minutes, so a blocked sweep would confound width with the hour it ran in - the defect
+  `grocery/check-ad-cycles.ps1` carries a block headed *"THE MEASUREMENT WAS CONFOUNDED"* about.
+- **The width recorded is the width REACHED, not the width asked**, and `-Report` drops a row where they
+  differ instead of averaging it in. A lease grants what is free; a run that asked 10 and got 3 ran at 3.
+- **It refuses to start unless the box is quiet, and aborts mid-sweep if that stops being true.** Unlike
+  `ops/observe-gate-queue.ps1`, this harness DOES add gate load, and its header says so at the top.
+
+**Verified:** parse clean, LF, no BOM; `-Probe` read 11 live runs at 87% and refused; `-Report` driven
+over four synthetic sets - bar met (0.30), bar not met (0.81), the drop rule naming both a short-width
+row and a non-zero exit, and a set with no width-1 rows exiting **3 with `verdict=unjudged`** rather than
+inventing a verdict. **`-Sweep` itself is NOT yet exercised**: it needs the quiet box it insists on, and
+the box has been at 100% with 6 to 11 gate runs live all night.
+
 ## What would make me wrong
 
 - If the 4.3/h landing rate is transient rather than this estate's normal rate, the race is not worth a
