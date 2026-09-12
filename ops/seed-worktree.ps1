@@ -61,6 +61,59 @@
   FAILS when a venv exists somewhere the launcher does not look, which is the rot the case was written
   for. run-gates prints every BLIND case it sees, so a green run cannot hide one.
 
+  TWO ROADS INTO ONE DIRECTORY, AND THE PAIR THAT NEVER EXISTED (2026-09-11). A gitignored input reaches a
+  checkout from the main checkout's WORKING TREE, by the copy below. A tracked input reaches it from the
+  COMMIT. Where a check reads both - a dated board and the record beside it saying which board was audited -
+  a seeded checkout can hold a pair that no checkout ever held, and the check then fails for a reason that
+  has nothing to do with the change being pushed.
+  MEASURED that day: the daily chain rebuilt the board at 14:27 and ran the eviction pass at 14:32 in the
+  main checkout, committing neither. A worktree seeded afterwards held comparison-2026-09-11.json beside the
+  last bot commit's out\capture-evictions.json, which named comparison-2026-09-09.json, and
+  grocery\test-auditors.ps1's roster-currency case refused an unrelated push on exactly that.
+
+  THE CLASS, MEASURED NOT GUESSED (2026-09-11, at 4ac43c532, through the scan this file now carries).
+  Over the 304 tracked, undated-name files sitting in the two directories a seeded FILE lands in
+  (grocery\out and meal-prep\pipeline), 12 carried a dated-board pointer and 4 named a different board in
+  the target than the same file named in the source's working tree: out\band-censorship.json,
+  out\basis-outliers.json, out\basis-reconcile.json and out\pack-basis-audit.json.
+  DO NOT QUOTE THAT NUMBER. RUN THIS SCRIPT. Half an hour later the same scan read 5, because the daily
+  chain had rewritten out\semantic-findings.json in the main checkout in between - which is the moving
+  target this whole check exists for. The count is a reading of one moment, not a property of the tree, and
+  a run prints it with its denominator.
+  What does NOT move with it: NONE of those files is read by any test - each is written by its own audit and
+  read back by the daily chain in the same run, for its findings and never for currency - so the class has
+  exactly ONE member a test compares, out\capture-evictions.json, read by test-auditors' u108-f
+  roster-currency case. That read was moved to a gitignored stamp beside the board (422699bb3,
+  design\PLAN-capture-eviction-stamp-2026-09-11.md), which is the per-file repair; this is the layer that
+  NAMES the next one, because nothing else can see a road split.
+  STILL OPEN, and why the class is live rather than closed: no eviction pass has written that stamp yet, so
+  .worktreeinclude reports it MISSING-SOURCE, this script exits 2 on every seed, and the case falls back to
+  the tracked report exactly as before. The founding failure recurs on the next rebuild-before-commit.
+
+  WHAT THIS DOES ABOUT IT: IT REPORTS, AND IT WRITES NO TRACKED PATH. After the copy it compares each such
+  record's board pointer in the target against the same record's pointer in the source, and prints one line
+  per disagreement saying which board each names and which road each took. The exit code does NOT move.
+  WHAT WAS CONSIDERED AND REJECTED:
+    1. COPY THE TRACKED-BUT-REWRITTEN FILES IN TOO, from the source's working tree, without staging them.
+       It would make the pair consistent, and it is refused: a child a gate spawns must not write a TRACKED
+       path (.claude\rules\ops-and-gates.md, 2026-09-11). This script is spawned by ops\hooks\pre-push, and
+       writing the source's uncommitted content over the target's tracked files leaves the pushing checkout
+       ` M` on those paths - the shape that made the post-push `git rebase origin/main` refuse that same day.
+       It would also overwrite an edit the target itself is making to one of those files, and hand a gate a
+       pair assembled from a checkout that is not the one under test.
+    2. HOLD THE SEEDED BOARD BACK to the generation the tracked records name. It makes the pair consistent
+       by starving the pricing engines of the newest board, which is the reason the boards are seeded at all.
+    3. REFUSE (exit 2) ON A DISAGREEMENT. Red on day one, which the ops rules forbid: four and then five
+       files disagreed within half an hour of a normal afternoon, no test compares any of them, and nothing
+       the pusher can do from the target repairs it. A refusal here teaches `--no-verify`, which is the
+       failure this whole file exists to avoid.
+  SCOPE OF A CLEAN PAIR REPORT: UNSOUND. It reads only tracked files sitting DIRECTLY in a directory a
+  seeded FILE lands in, whose own file name carries no date (a dated name is an archive describing a board
+  of its own day, not a claim about now), under the size cap, and it recognises only a pointer spelled as
+  <prefix>YYYY-MM-DD.json for a prefix the seeded set itself supplies. A record that names its board another
+  way, lives elsewhere, or is compared through a field this does not parse is not seen. A finding is real;
+  silence proves nothing. The counts it prints are its denominator.
+
   WHAT BLIND LOOKS LIKE HERE, since it is not loud. A worktree at 2fdb99cf ran ops\run-gates.ps1 and
   failed six self-tests that pass in the main checkout. Four were missing data. The other two
   (golden-test, ghost-drift) were the CRLF condition in [[fresh-checkout-is-crlf-main-is-lf]] and no copy
@@ -237,6 +290,124 @@ function Get-MainCheckout {
   return Get-SeedSourceRoot -CommonDir ((@($out) | Where-Object { $_ }) -join '')
 }
 
+### ---- THE PAIR CHECK: two roads into one directory (2026-09-11) --------------------------------------
+# The header says why this exists, what it reports, what it refuses to do, and what a clean report is worth.
+
+# A record over this many bytes is not read. A board pointer lives in a small report; the boards themselves
+# are megabytes and carry a dated NAME, so they are excluded before the size ever matters. FIRST plausible
+# value, not the survivor of a sweep: nothing was measured against 1 MB or 8 MB. What it does when the
+# producer stops: a record that stops being written keeps its last pointer and is reported as stale, which
+# is true - this is a report and has no floor to lose. Measured 2026-09-11: 9 of the 304 records examined
+# were over it or unreadable, and the run prints that count beside the rest. docs\CONTROL-CONSTANTS.md.
+$PAIR_MAX_BYTES = 2MB
+
+function Get-DatedSeries {
+  <# Pure. Which DATED FILE SERIES does the seeded set carry? One row per prefix, with the newest member.
+     Reading the prefix off the seeded files rather than naming it here keeps every module's own file
+     spelling out of ops\ (ops\audit-cross-module-reach.ps1) and makes this work for any dated series a
+     future .worktreeinclude line adds. A leaf is <prefix>YYYY-MM-DD.json with a non-empty prefix. #>
+  param([string[]]$SeedPaths)
+  $byPrefix = @{}
+  foreach ($p in @($SeedPaths)) {
+    if (-not $p) { continue }
+    $leaf = [IO.Path]::GetFileName(([string]$p).Replace('/', '\'))
+    $m = [regex]::Match($leaf, '^(?<pre>.+-)(?<d>\d{4}-\d{2}-\d{2})\.json$')
+    if (-not $m.Success) { continue }
+    $pre = $m.Groups['pre'].Value
+    if (-not $byPrefix.ContainsKey($pre)) { $byPrefix[$pre] = New-Object System.Collections.Generic.List[string] }
+    $byPrefix[$pre].Add($leaf)
+  }
+  $rows = @()
+  foreach ($k in @($byPrefix.Keys | Sort-Object)) {
+    # Assigned, then wrapped: a one-member series unrolls out of the pipeline and [0] would index the
+    # STRING, returning its first character. That exact collapse made the first run of this measurement
+    # report 0 findings over 4 real ones ([[ps-json-array-collapse]]).
+    $members = @(@($byPrefix[$k]) | Sort-Object -Descending)
+    $rows += [pscustomobject]@{ Prefix = $k; Newest = [string]$members[0]; Count = $members.Count }
+  }
+  return ,@($rows)
+}
+
+function Get-RecordPointer {
+  <# Pure over a record's TEXT. The NEWEST '<Prefix>YYYY-MM-DD.json' the text names, or '' when it names
+     none. Newest, not first: a report that mentions the board it replaced as well as the one it audited
+     must still be judged on the one it audited. #>
+  param([string]$Text, [string]$Prefix)
+  if ([string]::IsNullOrEmpty($Text) -or [string]::IsNullOrEmpty($Prefix)) { return '' }
+  $rx = [regex]([regex]::Escape($Prefix) + '\d{4}-\d{2}-\d{2}\.json')
+  $found = $rx.Matches($Text)
+  if (-not $found.Count) { return '' }
+  $names = @(@($found | ForEach-Object { $_.Value }) | Sort-Object -Descending)
+  return [string]$names[0]
+}
+
+function Test-IsDatedName {
+  <# Pure. Does this file's own NAME carry a date? A dated name is an archive - it describes the board of
+     its own day on purpose, for ever - so it is never a stale pointer. An undated name is rewritten in
+     place, so its pointer is a claim about NOW and can go stale against the board seeded beside it. #>
+  param([string]$Leaf)
+  return [bool]([regex]::IsMatch([string]$Leaf, '\d{4}-\d{2}-\d{2}'))
+}
+
+function Get-SeedPairFindings {
+  <# Pure, so the cases drive it with synthetic records instead of resting on today's disk. One finding per
+     record whose pointer in the TARGET differs from the same record's pointer in the SOURCE's working tree.
+     Records naming no board at all are not findings, and neither is a pair that agrees - including a pair
+     that agrees on a board OLDER than the newest seeded one, because then the source is no better and a
+     check that reds on it reds in the main checkout too. Seeding did not cause that one. #>
+  param([object[]]$Records, [string]$Newest)
+  $out = @()
+  foreach ($r in @($Records)) {
+    $t = [string]$r.Target
+    $s = [string]$r.Source
+    if (-not $t -and -not $s) { continue }
+    if ([string]::Equals($t, $s, [StringComparison]::Ordinal)) { continue }
+    # Ordinal throughout: -eq and -ne on strings are culture-sensitive here, and a culture-sensitive
+    # comparison ignores a NUL byte outright ([[ps-ne-is-culture-sensitive-and-ignores-nul]]).
+    $verdict = if ([string]::Equals($s, [string]$Newest, [StringComparison]::Ordinal)) { 'STALE-IN-TARGET' }
+               elseif ([string]::CompareOrdinal($t, $s) -gt 0) { 'AHEAD-IN-TARGET' }
+               else { 'DIFFERS' }
+    $out += [pscustomobject]@{ Path = $r.Rel; Target = $t; Source = $s; Verdict = $verdict }
+  }
+  return ,@($out)
+}
+
+function Get-TrackedPairRecords {
+  <# Pure given $Lister and $Reader. THE DISCOVERY LIVES IN A FUNCTION THAT TAKES THE ROOTS so the cases can
+     point it at a temp repo (.claude\rules\ops-and-gates.md, 2026-09-11). Returns @{ Records; Examined;
+     Skipped } - Examined is the denominator this prints, because "no findings" and "the walk matched
+     nothing" are otherwise the same bytes.
+     $Lister maps one repo-relative directory to the TRACKED paths in the target, as git prints them
+     (forward slashes, repo-relative, subdirectories included). $Reader maps a full path to its text, or
+     $null when it cannot or should not be read. #>
+  param([string]$TargetRoot, [string]$SourceRoot, [string[]]$Dirs, [string]$Prefix,
+        [scriptblock]$Lister, [scriptblock]$Reader)
+  $records = @(); $examined = 0; $skipped = 0; $seen = @{}
+  foreach ($d in @($Dirs)) {
+    $dn = ([string]$d).Replace('/', '\').Trim('\')
+    if (-not $dn) { continue }
+    $listed = & $Lister $dn
+    foreach ($rel in @($listed | Where-Object { $_ })) {
+      $relw = ([string]$rel).Replace('/', '\')
+      # THIS DIRECTORY, NOT THE TREE BELOW IT. The road split is about two inputs sitting side by side; a
+      # file two levels down is not the pair a check reads as one set.
+      if (-not [string]::Equals((Split-Path $relw -Parent), $dn, [StringComparison]::OrdinalIgnoreCase)) { continue }
+      if ($seen.ContainsKey($relw.ToLower())) { continue }
+      $seen[$relw.ToLower()] = $true
+      if (Test-IsDatedName ([IO.Path]::GetFileName($relw))) { continue }
+      $examined++
+      $tText = & $Reader ([IO.Path]::Combine($TargetRoot, $relw))
+      if ($null -eq $tText) { $skipped++; continue }
+      $tp = Get-RecordPointer -Text ([string]$tText) -Prefix $Prefix
+      if (-not $tp) { continue }
+      $sText = & $Reader ([IO.Path]::Combine($SourceRoot, $relw))
+      $sp = if ($null -eq $sText) { '' } else { Get-RecordPointer -Text ([string]$sText) -Prefix $Prefix }
+      $records += [pscustomobject]@{ Rel = ($relw -replace '\\', '/'); Target = $tp; Source = $sp }
+    }
+  }
+  return [pscustomobject]@{ Records = @($records); Examined = $examined; Skipped = $skipped }
+}
+
 # ------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {
   $f = 0; $cases = 0
@@ -382,6 +553,92 @@ if ($SelfTest) {
   $r4 = Get-SeedSourceRoot -CommonDir $raw
   T 'CLEAN TWIN git''s raw output, trailing separator and newline included, still names the main checkout' ($r4 -eq 'C:\Codex\ThriftyCrew') $r4
 
+  # ---- THE PAIR CHECK: two roads into one directory (2026-09-11) ----------------------------------
+  # EVERY PATH AND BOARD NAME BELOW IS SYNTHETIC (fx\out\, board-YYYY-MM-DD.json). A literal naming another
+  # module's internals is a cross-module reach even inside a fixture, and the prefix is read off the seeded
+  # set at run time precisely so this file never has to spell the real one.
+  $fxSeeds = @('fx/out/board-2026-01-01.json', 'fx/out/board-2026-01-02.json', 'fx/other/digest.json')
+  $series = Get-DatedSeries -SeedPaths $fxSeeds
+  T 'MUST FIRE  the dated series and its NEWEST member are read off the seeded set, never named in this file' `
+    ((@($series).Count -eq 1) -and ($series[0].Prefix -ceq 'board-') -and ($series[0].Newest -ceq 'board-2026-01-02.json') -and ($series[0].Count -eq 2)) `
+    (($series | ForEach-Object { $_.Prefix + '/' + $_.Newest + '/' + $_.Count }) -join ',')
+  # ARITY - one series must come back as an array of one, or the caller's .Count reads a property of the row.
+  T 'a single dated series comes back as an ARRAY, not unrolled' ($series -is [array]) ($series.GetType().FullName)
+
+  $fxNewest = 'board-2026-01-02.json'
+  # MUST FIRE - THE FOUNDING BUG. The board copied from the source's working tree is NEWER than the board the
+  # target's TRACKED record names, because the record reached the target by commit and the board by copy. The
+  # target holds a pair that no checkout ever held, and the check that reads both fails for a reason that has
+  # nothing to do with the change being pushed.
+  $recStale = @([pscustomobject]@{ Rel = 'fx/out/report.json'; Target = 'board-2026-01-01.json'; Source = $fxNewest })
+  $fStale = Get-SeedPairFindings -Records $recStale -Newest $fxNewest
+  T 'MUST FIRE  a board newer than the TRACKED record it would be compared to is reported, as STALE-IN-TARGET, naming both boards' `
+    ((@($fStale).Count -eq 1) -and ($fStale[0].Verdict -ceq 'STALE-IN-TARGET') -and ($fStale[0].Path -ceq 'fx/out/report.json') -and
+     ($fStale[0].Target -ceq 'board-2026-01-01.json') -and ($fStale[0].Source -ceq $fxNewest)) `
+    (($fStale | ForEach-Object { $_.Path + '=' + $_.Verdict + ':' + $_.Target + '<-' + $_.Source }) -join ',')
+
+  # MUST NOT FIRE - a CONSISTENT pair is left alone. This is the negative assertion: a record that names the
+  # same board in both checkouts is not a finding, and neither is a pair that agrees on an OLDER board than
+  # the newest one seeded - then the source is no better, and a check that reds on it reds in the main
+  # checkout too. Seeding did not cause that one and must not be blamed for it.
+  $recOk = @([pscustomobject]@{ Rel = 'fx/out/current.json'; Target = $fxNewest; Source = $fxNewest },
+             [pscustomobject]@{ Rel = 'fx/out/old-both.json'; Target = 'board-2026-01-01.json'; Source = 'board-2026-01-01.json' },
+             [pscustomobject]@{ Rel = 'fx/out/no-board.json'; Target = ''; Source = '' })
+  $fOk = Get-SeedPairFindings -Records $recOk -Newest $fxNewest
+  T 'MUST NOT FIRE  a pair that agrees is not a finding, whether it agrees on the newest board or on an older one, and a record naming no board is not one either' `
+    (@($fOk).Count -eq 0) (($fOk | ForEach-Object { $_.Path + '=' + $_.Verdict }) -join ',')
+
+  # MUST FIRE - the other direction is real and is NOT the founding bug, so it gets its own verdict rather
+  # than being folded into it: the target carries a committed repair the source's working tree has not made.
+  $recAhead = @([pscustomobject]@{ Rel = 'fx/out/repaired.json'; Target = $fxNewest; Source = 'board-2026-01-01.json' })
+  $fAhead = Get-SeedPairFindings -Records $recAhead -Newest $fxNewest
+  T 'MUST FIRE  a target whose record is AHEAD of the source''s is reported under its own verdict, not as the founding bug' `
+    ((@($fAhead).Count -eq 1) -and ($fAhead[0].Verdict -ceq 'AHEAD-IN-TARGET')) `
+    (($fAhead | ForEach-Object { $_.Verdict }) -join ',')
+
+  # MUST FIRE - a record that mentions the board it REPLACED as well as the one it audited is judged on the
+  # newest it names. Judged on the first, every multi-board report would read as permanently stale.
+  $twoBoards = 'audited board-2026-01-02.json, superseding board-2026-01-01.json'
+  T 'MUST FIRE  a record naming several boards is judged on the NEWEST one it names' `
+    ((Get-RecordPointer -Text $twoBoards -Prefix 'board-') -ceq $fxNewest) `
+    (Get-RecordPointer -Text $twoBoards -Prefix 'board-')
+  # MUST NOT FIRE - another series' dated file is not this series' pointer.
+  T 'MUST NOT FIRE  a dated name from ANOTHER series is not a pointer for this prefix' `
+    ((Get-RecordPointer -Text 'ads-2026-01-02.json' -Prefix 'board-') -ceq '') `
+    (Get-RecordPointer -Text 'ads-2026-01-02.json' -Prefix 'board-')
+
+  # MUST NOT FIRE - a DATED file name is an archive. It describes the board of its own day on purpose and for
+  # ever, so calling it stale would report ten true-but-useless findings a day and teach people to skip the
+  # block. An UNDATED name is rewritten in place, so its pointer is a claim about NOW.
+  T 'MUST NOT FIRE  a file whose own NAME carries a date is an archive, never a stale pointer' `
+    ((Test-IsDatedName 'verification-sample-2026-01-02.json') -and -not (Test-IsDatedName 'report.json')) `
+    ('dated=' + (Test-IsDatedName 'verification-sample-2026-01-02.json') + ' undated=' + (Test-IsDatedName 'report.json'))
+
+  # THE DISCOVERY, pointed at synthetic roots through its two seams. It must examine the undated tracked
+  # files in the named directory, skip the dated ones, and STATE ITS DENOMINATOR - "no findings" and "the
+  # walk matched nothing" are the same bytes without it.
+  $fxLister = { param($d) if ($d -eq 'fx\out') { @('fx/out/report.json', 'fx/out/board-2026-01-01.json', 'fx/out/sub/deep.json') } else { @() } }
+  $fxReader = {
+    param($p)
+    if ($p -like '*\tgt\*report.json') { return 'audited board-2026-01-01.json' }
+    if ($p -like '*\src\*report.json') { return 'audited board-2026-01-02.json' }
+    return $null
+  }
+  $disc = Get-TrackedPairRecords -TargetRoot 'S:\tgt' -SourceRoot 'S:\src' -Dirs @('fx\out') -Prefix 'board-' -Lister $fxLister -Reader $fxReader
+  T 'MUST FIRE  the discovery examines the undated tracked file, skips the dated one and the one below the directory, and states its denominator' `
+    (($disc.Examined -eq 1) -and (@($disc.Records).Count -eq 1) -and ($disc.Records[0].Rel -ceq 'fx/out/report.json') -and
+     ($disc.Records[0].Target -ceq 'board-2026-01-01.json') -and ($disc.Records[0].Source -ceq 'board-2026-01-02.json')) `
+    ('examined=' + $disc.Examined + ' records=' + @($disc.Records).Count + ' first=' + $(if (@($disc.Records).Count) { $disc.Records[0].Rel + ':' + $disc.Records[0].Target + '<-' + $disc.Records[0].Source } else { 'none' }))
+
+  # CLEAN TWIN - ORDINARY IGNORED FILES STILL COPY. A positive assertion about the behaviour this change was
+  # most likely to have broken on its way past: the pair check is a read, and the seeding it reads after must
+  # still plan every copy it planned before.
+  $planPair = Get-SeedPlan -Seeds (@($SEED_DIRS) + @($fs1)) -SourceRoot $S -TargetRoot $D -Exists { param($x) $x -like 'S:\*' }
+  T 'CLEAN TWIN ordinary ignored files and the directory seed still plan a COPY with the pair check in the file' `
+    ((@($planPair | Where-Object { $_.Action -eq 'COPY' }).Count -eq 2) -and
+     (@($planPair | Where-Object { $_.Path -eq 'meal-prep\pipeline\catalog-digest.json' -and $_.Action -eq 'COPY' }).Count -eq 1)) `
+    (($planPair | ForEach-Object { $_.Path + '=' + $_.Action }) -join ',')
+
   # ---- the LIVE resolver against a real, throwaway git repository ---------------------------------
   # The pure cases above prove the plan; this proves git is asked the right question. Built in TEMP,
   # never under the repo, and removed in finally ([[test-suites-leak-temp-dirs]]).
@@ -395,17 +652,30 @@ if ($SelfTest) {
     # warning becomes a terminating error under EAP=Stop when run-gates captures this process's streams.
     & git -C $tmp init -q -b main . | Out-Null
     [IO.File]::WriteAllText((Join-Path $tmp '.gitignore'), "data/*.json`nsub/digest.json`nsub/other.txt`n", $utf8)
-    foreach ($n in @('data\a.json', 'data\b.json', 'data\tracked.json', 'sub\digest.json', 'sub\other.txt')) {
+    foreach ($n in @('data\a.json', 'data\b.json', 'sub\digest.json', 'sub\other.txt')) {
       [IO.File]::WriteAllText((Join-Path $tmp $n), '{}', $utf8)
     }
+    # THE PAIR FIXTURE, in the same temp repo. data\tracked.json is the RECORD: an undated name, tracked, and
+    # matching the ignore glob exactly as the real one does. It is committed naming the older board, so the
+    # linked worktree made below gets that text by CHECKOUT while the newer board arrives by COPY.
+    # Single-quoted literals assigned to variables first: a fixture built by concatenation in an argument
+    # binds as three arguments ([[ps-concat-in-argument-is-three-args]]).
+    $recOld = 'audited board-2026-01-01.json'
+    $recNew = 'audited board-2026-01-02.json'
+    [IO.File]::WriteAllText((Join-Path $tmp 'data\tracked.json'), $recOld, $utf8)
+    [IO.File]::WriteAllText((Join-Path $tmp 'data\board-2026-01-01.json'), '{}', $utf8)
     & git -C $tmp -c core.autocrlf=false -c core.safecrlf=false add -f data/tracked.json .gitignore | Out-Null
     $gitOk = ($LASTEXITCODE -eq 0)
     $g1 = Get-IgnoredMatches -Root $tmp -Pattern 'data/*.json'
     $g1s = @($g1 | Sort-Object)
     T 'MUST FIRE  the git resolver lists every untracked ignored file a glob pattern matches' `
       ($gitOk -and ($g1s -contains 'data/a.json') -and ($g1s -contains 'data/b.json')) ("got=" + ($g1s -join '|'))
+    # ASSERTED AS A SET, NOT A COUNT. This read `-eq 2` until 2026-09-11, when the pair fixture added a third
+    # ignored file to the same directory and a case about TRACKING went red over arithmetic. The set says
+    # what the case is actually about, and the next fixture file cannot quietly change its meaning.
+    $g1Want = @('data/a.json', 'data/b.json', 'data/board-2026-01-01.json') | Sort-Object
     T 'MUST NOT FIRE  a TRACKED file matching the pattern is not listed - it is already in every checkout' `
-      ($gitOk -and -not ($g1s -contains 'data/tracked.json') -and ($g1s.Count -eq 2)) ("got=" + ($g1s -join '|'))
+      ($gitOk -and -not ($g1s -contains 'data/tracked.json') -and (($g1s -join '|') -ceq (($g1Want) -join '|'))) ("got=" + ($g1s -join '|'))
     $g2 = Get-IgnoredMatches -Root $tmp -Pattern 'sub/digest.json'
     T 'CLEAN TWIN the git resolver lists a literal file pattern as exactly that one file' `
       ((@($g2).Count -eq 1) -and (@($g2)[0] -eq 'sub/digest.json')) ("got=" + (@($g2) -join '|'))
@@ -430,6 +700,43 @@ if ($SelfTest) {
     $m2 = Get-MainCheckout -From (Join-Path $tmp 'sub')
     T 'CLEAN TWIN run from a SUBDIRECTORY of the main checkout, the live resolver still names that checkout' `
       ($m2 -and (Test-SameCheckout -A $m2 -B $tmp)) ("got=" + $m2)
+
+    # ---- THE PAIR CHECK, LIVE: the record by COMMIT, the board by COPY --------------------------
+    # The pure cases prove the arithmetic. This proves the two roads really diverge in a real repository,
+    # and that git is asked the right question about the TARGET's tracked set.
+    if ($wtOk) {
+      # The source's working tree moves on and commits nothing - the daily chain's normal afternoon.
+      [IO.File]::WriteAllText((Join-Path $tmp 'data\tracked.json'), $recNew, $utf8)
+      [IO.File]::WriteAllText((Join-Path $tmp 'data\board-2026-01-02.json'), '{}', $utf8)
+      $liveBoards = Get-IgnoredMatches -Root $tmp -Pattern 'data/board-*.json'
+      $liveSeries = Get-DatedSeries -SeedPaths $liveBoards
+      $livePrefix = if (@($liveSeries).Count) { $liveSeries[0].Prefix } else { '' }
+      $liveNewest = if (@($liveSeries).Count) { $liveSeries[0].Newest } else { '' }
+      T 'MUST FIRE  the live series names the board the SOURCE would seed, read off git''s own ignored list' `
+        (($livePrefix -ceq 'board-') -and ($liveNewest -ceq 'board-2026-01-02.json')) ("prefix=" + $livePrefix + " newest=" + $liveNewest)
+      $liveDisc = Get-TrackedPairRecords -TargetRoot $tmpWt -SourceRoot $tmp -Dirs @('data') -Prefix $livePrefix `
+        -Lister { param($d) $r = & git -C $tmpWt -c core.quotepath=off ls-files -- ($d -replace '\\', '/'); return ,@($r) } `
+        -Reader { param($p) if (Test-Path -LiteralPath $p -PathType Leaf) { return [IO.File]::ReadAllText($p) } else { return $null } }
+      $liveFind = Get-SeedPairFindings -Records $liveDisc.Records -Newest $liveNewest
+      T 'MUST FIRE  THE FOUNDING BUG, live: the linked worktree''s COMMITTED record names an older board than the one the source would seed, and that is reported as STALE-IN-TARGET' `
+        (($liveDisc.Examined -eq 1) -and (@($liveFind).Count -eq 1) -and ($liveFind[0].Verdict -ceq 'STALE-IN-TARGET') -and
+         ($liveFind[0].Target -ceq 'board-2026-01-01.json') -and ($liveFind[0].Source -ceq 'board-2026-01-02.json')) `
+        ('examined=' + $liveDisc.Examined + ' findings=' + @($liveFind).Count + ' ' +
+         (@($liveFind | ForEach-Object { $_.Path + '=' + $_.Verdict + ':' + $_.Target + '<-' + $_.Source }) -join ','))
+      # MUST NOT FIRE - once the source's record agrees with the target's again, the same live scan is silent.
+      # The founding case above and this one differ in ONE byte of the source's record, so a scan that always
+      # fires cannot pass both.
+      [IO.File]::WriteAllText((Join-Path $tmp 'data\tracked.json'), $recOld, $utf8)
+      $liveDisc2 = Get-TrackedPairRecords -TargetRoot $tmpWt -SourceRoot $tmp -Dirs @('data') -Prefix $livePrefix `
+        -Lister { param($d) $r = & git -C $tmpWt -c core.quotepath=off ls-files -- ($d -replace '\\', '/'); return ,@($r) } `
+        -Reader { param($p) if (Test-Path -LiteralPath $p -PathType Leaf) { return [IO.File]::ReadAllText($p) } else { return $null } }
+      $liveFind2 = Get-SeedPairFindings -Records $liveDisc2.Records -Newest $liveNewest
+      T 'MUST NOT FIRE  live: a record the two checkouts agree on is silent, though the board seeded beside it is newer than both' `
+        (($liveDisc2.Examined -eq 1) -and (@($liveFind2).Count -eq 0)) `
+        ('examined=' + $liveDisc2.Examined + ' findings=' + @($liveFind2).Count)
+    } else {
+      T 'MUST FIRE  THE FOUNDING BUG, live: the linked worktree''s COMMITTED record names an older board than the one the source would seed' $false 'the temp worktree could not be created, so the live pair cases could not run'
+    }
   } finally {
     # No junction lives in either directory, so a recursive delete is safe here. The worktree's registration
     # is inside $tmp\.git and goes with it.
@@ -450,7 +757,7 @@ if ($SelfTest) {
     $(if ($null -eq $shipped) { 'missing' } else { "patterns=$($shipped.Patterns.Count) refused=$($shipped.Refused.Count)" })
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
-  Write-Output ("SELF-TEST PASS: {0} of {0} checks - directory and .worktreeinclude file seeding, the git resolver in a temp repo, the main-checkout source resolver (pure and from a real linked worktree), the source guard, and both shipped lists" -f $cases)
+  Write-Output ("SELF-TEST PASS: {0} of {0} checks - directory and .worktreeinclude file seeding, the git resolver in a temp repo, the main-checkout source resolver (pure and from a real linked worktree), the source guard, both shipped lists, and the pair check (pure, and live over a record that reached a linked worktree by commit while the file it names reached it by copy)" -f $cases)
   exit 0
 }
 
@@ -588,6 +895,55 @@ foreach ($row in $plan) {
         }
       }
       $copied++
+    }
+  }
+}
+
+# ---- THE PAIR CHECK: two roads into one directory ------------------------------------------------
+# A REPORT, never a verdict: the exit code below is untouched by anything here. The header says why, what
+# was rejected, and what a clean report is worth. It runs after an ALREADY-PRESENT run too, because a
+# re-seed copies nothing and the pair can still have come apart since the last one.
+$pairDirs = @(@($fileSeeds | Where-Object { -not $_.nohit } | ForEach-Object { Split-Path ([string]$_.p) -Parent }) |
+              Where-Object { $_ } | Sort-Object -Unique)
+$seriesRows = Get-DatedSeries -SeedPaths @($fileSeeds | Where-Object { -not $_.nohit } | ForEach-Object { [string]$_.p })
+if (-not @($seriesRows).Count) {
+  Write-Output '  pair check: the seeded set carries no dated file series, so no record can name one. Nothing compared.'
+} else {
+  foreach ($ser in $seriesRows) {
+    try {
+      $disc = Get-TrackedPairRecords -TargetRoot $targetFull -SourceRoot $sourceFull -Dirs $pairDirs -Prefix $ser.Prefix `
+        -Lister {
+          param($d)
+          $listed = & git -C $targetFull -c core.quotepath=off ls-files -- ($d -replace '\\', '/')
+          if ($LASTEXITCODE -ne 0) { throw ("git ls-files exited {0} in {1} for '{2}'" -f $LASTEXITCODE, $targetFull, $d) }
+          return ,@($listed)
+        } `
+        -Reader {
+          param($p)
+          if (-not (Test-Path -LiteralPath $p -PathType Leaf)) { return $null }
+          if ((Get-Item -LiteralPath $p).Length -gt $PAIR_MAX_BYTES) { return $null }
+          try { return [IO.File]::ReadAllText($p) } catch { return $null }
+        }
+    } catch {
+      # A could-not-look is never a clean report. It does not move the exit code either, because seeding
+      # itself succeeded and this is a read about the target's own git state.
+      Write-Output ("  pair check BLIND for '{0}': could not list the target's tracked files - {1}" -f $ser.Prefix, $_.Exception.Message)
+      continue
+    }
+    $findings = Get-SeedPairFindings -Records $disc.Records -Newest $ser.Newest
+    # THE DENOMINATOR, ALWAYS. "no findings" and "the walk matched nothing" are the same bytes without it.
+    Write-Output ("  pair check '{0}': newest seeded {1}; examined {2} tracked undated-name file(s) in {3} director(y/ies), {4} carr(y/ies) a pointer, {5} unreadable; {6} disagree(s)" -f `
+      $ser.Prefix, $ser.Newest, $disc.Examined, @($pairDirs).Count, @($disc.Records).Count, $disc.Skipped, @($findings).Count)
+    foreach ($fd in $findings) {
+      # AN EMPTY POINTER IS PRINTED AS (none), never as nothing: a line reading "names " with the rest of the
+      # sentence carried on looks like a formatting slip and hides a record that stopped naming a file at all.
+      $fdT = if ($fd.Target) { $fd.Target } else { '(none)' }
+      $fdS = if ($fd.Source) { $fd.Source } else { '(none)' }
+      Write-Output ("    {0}  {1}  - the target's TRACKED copy names {2}; the source's working copy names {3}. The record reached this checkout by COMMIT and the file it names by COPY, so a check reading both sees a pair no checkout ever held." -f `
+        $fd.Verdict, $fd.Path, $fdT, $fdS)
+    }
+    if (@($findings).Count) {
+      Write-Output ('    A check that compares one of the files above against the seeded file it names will FAIL here for that reason, not for the change being pushed. The repair is per file and is not a copy: write the record to a GITIGNORED path listed in .worktreeinclude, so it travels by the same road as the file it describes. Nothing here writes a tracked path and the exit code below is unaffected.')
     }
   }
 }
