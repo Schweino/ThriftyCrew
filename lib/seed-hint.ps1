@@ -8,15 +8,24 @@
 # them and both passed. seed-worktree's $SEED_DIRS already named exactly those two self-tests, and nothing a pusher
 # could see did, so every spawned session that pushed met a red with no stated cause.
 #
-# WHY IN THE FAILING CASE'S TEXT, NOT IN THE HOOK OR run-gates. Blast radius:
-#   - This code runs only inside a case that has ALREADY failed. It cannot turn a failure into a pass or a skip, cannot
-#     move any verdict, and adds nothing to a green run. A could-not-look stays a FAIL; it only gains its cause.
+# THE VERDICT MOVED OUT FROM UNDER THIS FILE THE SAME EVENING (2026-09-11, 1975ea45d at 19:18, three quarters of an
+# hour after 1efc52b23 shipped this). Both callers now report that case BLIND instead of FAIL, and the pre-push hook
+# seeds a cardless checkout before the gate. So the two sentences below that said "a could-not-look stays a FAIL" and
+# "adds nothing to a green run" were false from 19:18, and the hint's own text still told a reader the case would stay
+# red. Corrected 2026-09-12. What did NOT change is this file's job or its blast radius: it explains a case that could
+# not look, and it still cannot move any verdict.
+#
+# WHY IN THE CASE'S OWN TEXT, NOT IN THE HOOK OR run-gates. Blast radius:
+#   - This code runs only inside a case that has already declined to answer. It cannot turn a could-not-look into a
+#     pass, a fail or a skip, and it cannot move any verdict. It DOES print on a green run, under the BLIND line.
 #   - A hint in ops\hooks\pre-push or ops\run-gates.ps1 would run on every push by every session and the ~07:00 bot,
 #     would need its own idea of which gitignored directories matter, and would print on ANY red in an unseeded
 #     worktree, including a red that seeding cannot fix.
 #   - It reaches a hand run of the self-test, not only a gate run.
-#   WHAT IT DOES NOT REACH: the hook's own summary greps `^  FAIL`, and run-gates indents a case's lines further, so the
-#   pusher's screen shows the failing FILE and the path of the kept gate log. The hint is in that log, under the file.
+#   WHAT IT DOES NOT REACH: the pusher's screen. The hook's summary greps `^  FAIL` and prints only when the gate is
+#   red, so a green push carrying a BLIND case shows none of this. run-gates names the blind gate and its case count on
+#   its own last lines, and the hint itself is in the kept gate log under that file. That is deliberate: on a push the
+#   hook has already tried to seed, so a BLIND case there means seeding could not run, and the hook says THAT out loud.
 #
 # TWO CAUSES, NOT ONE. A missing file under a seeded directory is either an UNSEEDED checkout (the directory is absent
 # or empty) or a MOVED input (the directory is populated and this file is not in it: retired or renamed at its source).
@@ -83,7 +92,7 @@ function Get-TcMissingInputHint {
     if (-not $rel.StartsWith($dn + '\', [StringComparison]::OrdinalIgnoreCase)) { continue }
     $n = [int](& $FileCount ([IO.Path]::Combine($root, $dn)))
     if ($n -le 0) {
-      return ("UNSEEDED CHECKOUT: {0} is gitignored and this checkout has no files in it, so this input was never copied here. That is setup, not a code defect, and the case stays red until it is done. Fix: powershell -NoProfile -File {1}\ops\seed-worktree.ps1 -Target {1}   then re-run." -f $dn, $root)
+      return ("UNSEEDED CHECKOUT: {0} is gitignored and this checkout has no files in it, so this input was never copied here. That is setup, not a code defect: the case cannot look, so it stays BLIND - not passed, and NOT covered by this run - until it is done. Fix: powershell -NoProfile -File {1}\ops\seed-worktree.ps1 -Target {1}   then re-run." -f $dn, $root)
     }
     return ("MOVED INPUT: {0} is seeded here ({1} file(s)) but {2} is not in it, so the input was retired or renamed at its source. Seeding will not bring it back: point the case at a file that exists." -f $dn, $n, $rel)
   }

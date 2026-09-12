@@ -418,7 +418,11 @@ if ($SelfTest) {
   }
 
   if ($bad -eq 0) {
-    if ($blindN) { Write-Output ("SELFTEST: {0}/{0} pass, {1} BLIND - could not look, NOT passed" -f $n, $blindN) }
+    # WITH ITS DENOMINATOR (measurement.md, 2026-09-12). "27/27 pass, 1 BLIND" put full coverage on the left
+    # of the comma and the hole on the right; cases + blind is the whole suite, so state that instead. The
+    # gap here is genuinely 1 - MEASURED by diffing case NAMES between an unseeded and a seeded run of this
+    # file in one checkout, 27 against 28 - unlike wave-preaudit's twin, where one blind gate skipped 14.
+    if ($blindN) { Write-Output ("SELFTEST: {0} of {1} cases ran, {2} BLIND - could not look, NOT passed" -f $n, ($n + $blindN), $blindN) }
     else { Write-Output ("SELFTEST: {0}/{0} pass" -f $n) }
     Exit-Guard -Name 'FEEDCOV-SELFTEST' -Code 0 -Summary ("cases={0} blind={1}" -f $n, $blindN)
   }

@@ -734,6 +734,18 @@ if ($runSelfTest) {
   $srcFood = Join-Path $mp 'food-macros-db.json'
   $srcIng  = Join-Path $mp 'db\ingredients.json'
   $srcRef  = Join-Path $mp 'db\built\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html'
+  # A BLIND GATE IS SCORED ON WHAT IT SKIPPED, NOT ON THE ONE CASE THAT NOTICED (2026-09-12). This block
+  # reported blind=1, so run-gates printed "wave-preaudit (1 case(s))" - which reads as one case of 50, about
+  # 2%. MEASURED that day by diffing CASE NAMES between the two arms in one checkout: unseeded ran 50 cases,
+  # seeded ran 64, so 14 never ran and every one of them is an END-TO-END MUST FIRE or CLEAN TWIN over the
+  # real publish drill. blind=1 understated the coverage loss by 13 (measurement.md: a matcher that abstains
+  # is scored on what it skipped, and a rate is printed with its denominator). A blind run now reports
+  # cases=50 blind=14, so 50+14 is the whole suite and a reader can compute the coverage.
+  # THE CONSTANT CANNOT DRIFT SILENTLY: the assertion after the else-branch runs in every SEEDED checkout -
+  # the main one, the daily chain, any pusher who seeded - and goes RED naming this line the day the drill
+  # gains or loses a case. The blind arm cannot check it, which is exactly why the seeing arm must.
+  $DRILL_BLIND_CASES = 14
+  $casesBeforeDrill = $cases
   $canDrill = ((Test-Path $srcSpec) -and (Test-Path $srcCost) -and (Test-Path $srcFood) -and (Test-Path $srcIng) -and (Test-Path $srcRef))
   if (-not $canDrill) {
     # BLIND, NOT FAILED, AND IT NAMES WHICH INPUT AND WHY (2026-09-11). Four of these five inputs are TRACKED
@@ -746,11 +758,11 @@ if ($runSelfTest) {
     # counted into the marker's blind=, which run-gates prints on a green run. lib\seed-hint.ps1 says whether
     # this checkout was never seeded or the file moved, which is the half of the old red worth keeping.
     . (Join-Path $repo 'lib\seed-hint.ps1')
-    $script:blindCases += 1
+    $script:blindCases += $DRILL_BLIND_CASES
     $drillWhy = @(@($srcSpec, $srcCost, $srcFood, $srcIng, $srcRef) | Where-Object { -not (Test-Path $_) } | ForEach-Object {
         $h = Get-TcMissingInputHintHere -Repo $repo -Missing $_
         if ($h) { $_ + ' [' + $h + ']' } else { $_ } })
-    Write-Output ('BLIND END-TO-END the drill inputs exist (a live spec, costed.json, the food DB, a reference card) - could not look, NOT passed. missing: ' + ($drillWhy -join ' | '))
+    Write-Output ('BLIND END-TO-END the drill inputs exist (a live spec, costed.json, the food DB, a reference card) - could not look, NOT passed. The WHOLE drill is skipped, so ' + $DRILL_BLIND_CASES + ' case(s) did not run, not one. missing: ' + ($drillWhy -join ' | '))
   } else {
     New-Item -ItemType Directory -Force (Join-Path $dMp 'db\recipes') | Out-Null
     New-Item -ItemType Directory -Force (Join-Path $dRun 'waves') | Out-Null
@@ -893,6 +905,18 @@ if ($runSelfTest) {
     Remove-Item $T -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  # THE SEEING ARM KEEPS THE BLIND ARM'S NUMBER HONEST (2026-09-12). $DRILL_BLIND_CASES is what a checkout
+  # that cannot run the drill reports as not covered, and nothing in that checkout can verify it. This case
+  # runs only where the drill DID run, and goes red the day somebody adds or deletes a drill case without
+  # moving the constant - so the number a blind run prints is checked by every seeded run instead of by
+  # nobody. The `+ 1` counts THIS case, which is itself one of the cases a blind run never reaches: T
+  # increments $cases only after its arguments are evaluated, so $cases is still short by this one here.
+  if ($canDrill) {
+    T 'CLEAN TWIN the drill ran exactly the case count a BLIND checkout reports as not covered ($DRILL_BLIND_CASES)' `
+      (($cases - $casesBeforeDrill + 1) -eq $DRILL_BLIND_CASES) `
+      ("drill ran {0} case(s) incl. this one; the constant says {1}" -f ($cases - $casesBeforeDrill + 1), $DRILL_BLIND_CASES)
+  }
+
   } catch {
     # The death is itself a counted case, so the summary's ok plus FAIL lines add up to its total.
     Write-Output ("FAIL  the self-test DIED after {0} case(s), so every case after that point never ran   got: {1} (line {2})" -f $cases, $_.Exception.Message, $_.InvocationInfo.ScriptLineNumber)
@@ -907,7 +931,9 @@ if ($runSelfTest) {
   # cases= rides beside it for the other half of the same question: blind= says what could not be looked at,
   # cases= says how many were, so a run that died early cannot read as a quieter one that passed.
   if ($f -eq 0) {
-    if ($script:blindCases -gt 0) { Write-Output "wave-preaudit SELF-TEST PASS ($cases cases), $($script:blindCases) case(s) BLIND - could not look, NOT passed" }
+    # WITH ITS DENOMINATOR (measurement.md). "PASS (50 cases), 1 case(s) BLIND" read as 2% not covered when
+    # the true figure was 14 of 64; cases + blind is the whole suite, so the coverage is on the line.
+    if ($script:blindCases -gt 0) { Write-Output "wave-preaudit SELF-TEST PASS ($cases of $($cases + $script:blindCases) cases ran), $($script:blindCases) case(s) BLIND - could not look, NOT passed" }
     else { Write-Output "wave-preaudit SELF-TEST PASS ($cases cases)" }
     Exit-Guard -Name 'WAVE-PREAUDIT-SELFTEST' -Code 0 -Summary ("cases={0} blind={1}" -f $cases, $script:blindCases)
   }
