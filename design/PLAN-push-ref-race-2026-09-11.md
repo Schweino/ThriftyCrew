@@ -253,6 +253,33 @@ stable one.
 - n is 3, 3 and 2. The margin is wide - width 5 would have to be 1.9x worse than measured to fail the
   bar - but these are single-digit samples on one machine on one morning.
 
+### A SIBLING SESSION SHIPPED A PUSH LOCK WHILE THIS WAS BEING MEASURED (2026-09-12)
+
+Four commits landed on main during the sweep: `e73f3d940` "One push at a time on this box, so a push
+that passed its gate actually lands", `39e8af0bd`, `71275d638` "The push lock reaches every checkout",
+and `a6e724f36` "The push lock covers the PUSH, not everyone else's checks". That is Option 3, built
+independently, and this session did not check for it before recommending it - the same collision
+`PLAN-gate-queue-2026-09-11.md` records and `check-for-a-sibling-session-before-fixing` names.
+
+**It is a NARROWER lock than this plan proposed, and the difference decides what is left to do.**
+`take_push_lock` is called at `ops/hooks/pre-push:300` - AFTER run-gates at :272 and after the
+test-auditors check - and the code's own comment says it holds "across the ref update only". So:
+
+- **What it fixes:** two pushes on this box that pass their gates at nearly the same moment no longer
+  race each other for the ref. The winner is decided by a queue instead of by chance.
+- **What it does NOT fix, and this plan's measurements are about that:** `origin/main` moving *during*
+  a gate run. Session B's gate finishes at minute 10 of session A's 25-minute gate, B takes the lock,
+  lands, releases - and A's push is rejected when it finally arrives, exactly as before. The lock is
+  not held across the gate, so it cannot hold the ref still for the window that actually matters.
+
+This plan proposed holding the lease across **fetch, rebase, gate and push**. What shipped holds it
+across the push alone. Both are defensible - a lock held across a 25-minute gate serialises every
+landing on the box, which is the thin-margin problem stated below - but they solve different halves,
+and **the half the brief reported is the one still open**.
+
+**Which is why the width result is now the load-bearing fix rather than the cheap first step.** At
+width 1 the race window is 725 seconds; at K=5 it is 191. Nothing in the push lock changes that number.
+
 ### Where that leaves the landing lease
 
 The lease's problem was its margin: capacity `1440/T` against 53-62 landings a day needed **T under ~23
