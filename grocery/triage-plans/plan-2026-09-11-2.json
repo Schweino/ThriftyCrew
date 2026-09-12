@@ -95,7 +95,8 @@
       "leaves_open": "the 19 paging outlier flags and the 3 wow flags themselves are untouched, so the type still pages on a genuinely new event, which is what it is for. Two named residuals inside that: (1) one price event still mints TWO keys when a commodity is both an outlier and a week-over-week mover, seen on 3 of the 6 days sampled (2026-09-05 bouillon, 09-10 whole coconut, 09-11 shrimp); (2) the outlier-verified quiet path has no wow twin, so a cheapest row whose own store publishes a unit price that reproduces ours still pages under the wow key. Both live in grocery/sanity-check.ps1 and neither changes a board price",
       "leaves_open_occurrences": 3,
       "leaves_open_window": "6 days sampled from the queue bodies of this type, 2026-09-05 to 2026-09-11",
-      "leaves_open_followup": "2026-09-11-b09671"
+      "leaves_open_followup": "2026-09-11-9fbafc",
+      "leaves_open_followup_note": "minted by this lane with send-alert.ps1 -Force -Lane weekly, because the residual has occurred (3 of 6 sampled days) and so may not take a watch, and no open id covered it. The first id written here, 2026-09-11-b09671, was WRONG and was caught by reading it: that item is the Family Fare ad rows residual and has nothing to do with sanity-check's keys. The gate accepted it because the id exists, which is all a gate can check"
     },
     {
       "queue_id": "2026-09-10-582032",
