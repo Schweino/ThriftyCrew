@@ -9,6 +9,14 @@ sampled while that work was being built, and it ships the per-run rows so the to
 `-Retro` read the day's own kept records. It holds no gate slot, opens no slot mutex and starts no gate.
 **Commit it ran at:** the commit that adds this file, 2026-09-11. What it measured: `lib/gate-slots.ps1` at
 `d72b4f5cd` and `ops/run-gates.ps1` at `8b21be2fa` - that is, the estate BEFORE b1aab0424 changed either.
+**Re-read at commit `f89e23335`:** the harness moved, and the totals stand. `ops/observe-gate-queue.ps1` was
+changed only so it can LOAD: it dot-sourced `lib/gate-pass-reuse.ps1` and called `Get-TcWorkingTreeState`, and
+neither was ever committed, so every mode exited 3 in any checkout but the one that wrote them. The sampling,
+the classifier and every total below are untouched, so what was measured still reads as measured - but note
+that the numbers here were produced by a harness nobody else could run, which is why this re-read exists.
+`ops/run-gates.ps1` also moved (per-gate input keys, 2026-09-12): that lowers the WORK a run does and so the
+ceiling this file computes from slot-seconds, and changes none of the arrival or admission findings.
+
 **Re-read at commit `46a78c564`:** the commit adding the harness; every total here was produced by running that
 copy of it over the sampled rows.
 

@@ -596,15 +596,117 @@ Write-Output ("run-gates: {0} gate(s) dispatched into ONE pool starting at width
 # slots with 2 gates left. So the pool tops up toward what it asked for while gates are still queued, and
 # hands back every slot it no longer has a running gate for once the last gate is dispatched.
 $script:gateWidthMax = $lease.Count
+# ---- ONE GATE, ONE INPUT KEY (2026-09-12, Brad: "1141s per run is insane") ----------------------
+# lib\gate-verdict.ps1 reuses a WHOLE run when the tree is byte-identical, which makes a re-push 3s. It
+# cannot help the ordinary push: a session commits two files and all 383 gates run again, including the
+# 279 self-tests that could not have been affected. MEASURED 2026-09-12: 874s of gate work here and
+# 1,141s estate-wide against a median commit of 2 files, which at 10 slots and one push at a time is
+# half an hour of queue for twenty sessions.
+#
+# So each SELF-TEST is keyed on everything it reads - its own bytes, every library it dot-sources
+# transitively, every repo file its source names as a literal, its switch, and this runner's own bytes -
+# and one that already passed over exactly those bytes is not run again. lib\gate-input-key.ps1 holds the
+# key and its refusals: a gate that reads a DATA directory or builds a path from a variable is never
+# cached, because a key over source cannot watch bytes that move without a commit. Measured over the 279
+# self-tests: 185 keyable, 83 refused for data, 11 for an unresolvable path.
+#
+# ONLY SELF-TESTS. The static detectors scan the whole tree by construction, so their input IS the tree
+# and a two-file change really can change their answer. They run every time.
+#
+# A REUSED GATE IS A GATE THAT PASSED, NOT A GATE THAT WAS SKIPPED, and the line below says which it was.
+# Nothing red is ever cached, and a run that reported a BLIND case is not cached either - that note has to
+# be printed by a run that looked, and a reused entry carries no output to print it from.
+. (Join-Path $repo 'lib\gate-input-key.ps1')
+# -NoReuse SUPPRESSES THE READ, NEVER THE WRITE. A run told to judge everything afresh still records what it
+# judged, or the flag would leave the next run with nothing and the cache could never warm up again.
+# EAP=Continue AROUND THE NATIVE CALL, never a bare 2>$null under Stop: that is the 2026-08-22 bug
+# grocery\test-native-stderr-eap.ps1 ratchets, and it caught this line on the first run.
+$cacheDir = ''
+$eapKey = $ErrorActionPreference
+try {
+  $ErrorActionPreference = 'Continue'
+  $cd = @(& git -C $repo rev-parse --path-format=absolute --git-common-dir 2>$null)
+  if ($LASTEXITCODE -eq 0 -and $cd.Count) {
+    $cacheDir = Join-Path (([string]$cd[0]).Trim()) 'tc-gate-inputs'
+    if (-not [IO.Directory]::Exists($cacheDir)) { $null = [IO.Directory]::CreateDirectory($cacheDir) }
+  }
+} catch { $cacheDir = '' } finally { $ErrorActionPreference = $eapKey }
+$runnerFiles = @($PSCommandPath, (Join-Path $repo 'lib\parallel-run.ps1'), (Join-Path $repo 'lib\gate-input-key.ps1'))
+$gateKey = New-Object string[] $allJobs.Count
+$gateCachePath = New-Object string[] $allJobs.Count
+$cacheHit = New-Object bool[] $allJobs.Count
+$cacheVerdict = New-Object string[] $allJobs.Count
+$reusedCount = 0; $unkeyable = 0
+$nowUtcKey = [DateTime]::UtcNow
+if ($cacheDir) {
+  for ($i = 0; $i -lt $selfJobs.Count; $i++) {
+    $fullPath = [string]$selfKeys[$i]
+    $swName = '-' + [string]$selfSwitch[$fullPath]
+    $k = Get-TcGateInputKey -Repo $repo -GateFile $fullPath -GateArg $swName -RunnerFiles $runnerFiles
+    if (-not $k.Ok) { $unkeyable++; continue }
+    $idx = $offSelf + $i
+    $gateKey[$idx] = $k.Key
+    $gateCachePath[$idx] = Get-TcGateCachePath -CacheDir $cacheDir -GateId ($fullPath + '|' + $swName)
+    $line = ''
+    try { if ([IO.File]::Exists($gateCachePath[$idx])) { $line = ([IO.File]::ReadAllText($gateCachePath[$idx])).Trim() } } catch { $line = '' }
+    # THE GATE'S OWN VERDICT LINE COMES BACK WITH IT. A self-test that exits 0 without naming its verdict is
+    # scored 3 here (lib\selftest-verdict.ps1), so an entry that cannot replay that line is not a usable
+    # answer: 182 reused gates scored could-not-evaluate the first time this ran without it.
+    $verdictLine = Get-TcGateCachedVerdict -Line $line
+    if (-not $NoReuse -and $verdictLine -and (Test-TcGateCacheHit -Line $line -Key $k.Key -NowUtc $nowUtcKey).Hit) {
+      $cacheHit[$idx] = $true; $cacheVerdict[$idx] = $verdictLine; $reusedCount++
+    }
+  }
+}
+# DISPATCH ONLY WHAT IS NOT ALREADY ANSWERED, then scatter the results back into their own slots, because
+# every loop below indexes by the job's position. A reused entry is filled in afterwards.
+$toRun = [Collections.Generic.List[object]]::new()
+$runIdx = [Collections.Generic.List[int]]::new()
+for ($i = 0; $i -lt $allJobs.Count; $i++) { if (-not $cacheHit[$i]) { [void]$toRun.Add($allJobs[$i]); [void]$runIdx.Add($i) } }
+Write-Output ("run-gates: {0} of {1} self-test(s) already passed over these exact inputs and were not run again; {2} could not be keyed and always run" -f $reusedCount, $selfJobs.Count, $unkeyable)
 # TAKEN IMMEDIATELY AROUND THE POOL, so a slot wait above and the judging below cannot land in the window.
 $leftPaths = Get-TcBotStagedPaths
 $leftBefore = Get-TcTreeSnapshot -Root $repoFull -Paths $leftPaths
 try {
-  $allRes = Invoke-TcParallel -Jobs $allJobs.ToArray() -Concurrency $Jobs -WorkingDirectory $repo `
+  $ranRes = Invoke-TcParallel -Jobs $toRun.ToArray() -Concurrency $Jobs -WorkingDirectory $repo `
     -Grow { param($width) Add-TcGateSlots -Lease $lease -Want $askedJobs; if ($lease.Count -gt $script:gateWidthMax) { $script:gateWidthMax = $lease.Count }; $lease.Count } `
     -Shrink { param($stillRunning) Reduce-TcGateSlots -Lease $lease -Keep $stillRunning }
 } finally {
   Exit-TcGateSlots $lease
+}
+$allRes = New-Object object[] $allJobs.Count
+for ($j = 0; $j -lt $runIdx.Count; $j++) { $allRes[$runIdx[$j]] = $ranRes[$j] }
+for ($i = 0; $i -lt $allJobs.Count; $i++) {
+  if (-not $cacheHit[$i]) { continue }
+  # THE GATE'S OWN VERDICT IS THE LAST LINE, because that is the line every reader below takes: the verdict
+  # scorer, the BLIND marker check and the failure printer all read from the end.
+  $allRes[$i] = [pscustomobject]@{
+    Out = @('REUSED - this gate passed over these exact inputs, and nothing it reads has changed since', $cacheVerdict[$i])
+    ExitCode = 0; Ms = 0; TimedOut = $false
+  }
+}
+# RECORDED ONLY FOR A RUN THAT LOOKED AND PASSED. A red result is never written, so a failing gate runs
+# every time until it is fixed; a run that reported a BLIND case is not written either, because the next
+# run would then print a pass with no blind line and the estate would lose the one thing that names it.
+if ($cacheDir) {
+  . (Join-Path $repo 'lib\atomic-write.ps1')
+  for ($i = 0; $i -lt $selfJobs.Count; $i++) {
+    $idx = $offSelf + $i
+    if ($cacheHit[$idx] -or -not $gateKey[$idx]) { continue }
+    $r = $allRes[$idx]
+    if ($null -eq $r -or $r.ExitCode -ne 0) { continue }
+    $marks = @(@($r.Out) | Where-Object { "$_" -match '^[A-Z0-9][A-Z0-9-]*-COMPLETE\b' })
+    if ($marks.Count -and ("" + $marks[$marks.Count - 1]) -match '\bblind=([1-9][0-9]*)\b') { continue }
+    # STORED WITH THE LINE THIS ESTATE'S OWN READER CALLS THE VERDICT, not merely the last one. A suite may end
+    # with completion markers and carry its verdict in one of them (lib\selftest-verdict.ps1 scans back through
+    # trailing markers), so "the last line" cached the wrong text for 29 suites and they scored 3 on reuse.
+    # A suite whose verdict that reader cannot find is not cached at all: it scores 3 when it runs, and an
+    # entry that replays an unreadable verdict would turn that into a silent pass.
+    $v = Get-TcSelfTestVerdict -Lines @($r.Out)
+    if (-not $v.Found -or -not $v.Line) { continue }
+    $lastLine = ([string]$v.Line).Trim()
+    try { $null = Write-TcAtomicFile -Path $gateCachePath[$idx] -Text ($gateKey[$idx] + ' 0 ' + ([DateTime]::UtcNow.ToString('o')) + ' ' + $lastLine) } catch { }
+  }
 }
 $leftAfter = Get-TcTreeSnapshot -Root $repoFull -Paths $leftPaths
 Write-Output ("run-gates: pool width reached {0} of the {1} asked, and its slots were handed back as the last gates finished" -f $script:gateWidthMax, $askedJobs)

@@ -29,6 +29,13 @@ Two alternatives must be ruled in or out with the same data:
 
 ## The harness
 
+**Re-read at commit `f89e23335`:** what this file measures still holds. Its own harness - the probe and the
+reporter - is unchanged; what moved is `ops\run-gates.ps1`, which this file names only in the caveat that each
+session runs its own checkout's copy. The 2026-09-12 change there keys each self-test on its inputs and does
+not run one whose inputs are untouched, so a run DISPATCHES less and holds its slots for less time. That
+shortens how long a starved waiter waits; it does not change who wins a freed slot, which is what was measured
+here and lives in `lib\gate-slots.ps1`.
+
 **Harness and commit.** `ops\probe-gate-slot-admission.ps1` (the probe) and `ops\report-gate-slot-admission.ps1`
 (the analysis), both introduced by commit fd55e361d and unmoved since, run 2026-09-11 against whatever
 `run-gates.ps1` each session's own checkout happened to be running; this session's checkout stood at c6533c7ea.
