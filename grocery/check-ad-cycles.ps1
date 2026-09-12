@@ -13,7 +13,11 @@
     * Browser stores (Baker's/Sam's): can't pull headless -> if DUE, FLAG for a Chrome pull (agent/manual).
 
   Params: -Today <yyyy-MM-dd> (override for testing), -Force (pull regardless), -NoPull (use latest ads file),
-          -NoDownstream (skip compare/history), -ScheduleFile <path> (default ad-schedule.json).
+          -NoDownstream (skip compare/history), -ScheduleFile <path> (default ad-schedule.json),
+          -NoCommit (the caller commits; capture-run passes it), -SelfTest (fixtures only, then exit).
+  Exit:   0 the chain ran to its end and, without -NoCommit, its own commit landed or had nothing to land.
+          1 a stage threw, or (without -NoCommit only, since 2026-09-11) that commit did not land; the EXIT line says which.
+          3 it refused to pull, because neither -NoPull nor -ForcePull was passed.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
@@ -39,9 +43,110 @@ param(
   # without telling you how to proceed just gets worked around.
   [switch]$ForcePull,
   [int]$MaxParallel = 8,
-  [switch]$Sequential
+  [switch]$Sequential,
+  # Runs only the fixtures in the block below and exits, before this file loads a lib or touches grocery\out.
+  [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+# ---- -SelfTest (2026-09-11): the commit's verdict decides this chain's exit code, and -NoCommit never reaches it ------
+# Ahead of every line that loads a lib, creates a directory or folds a log sidecar, so run-gates can run it on each
+# push without touching grocery\out. Two halves: the frozen 2026-09-10 verdict through lib\pipeline-commit.ps1's own
+# classifier and exit rule, then the wiring at the bottom of this file read off the PARSED file. A grep over a file that
+# contains the grep matches itself, and only a parse tree can say which `if` a statement actually sits inside.
+if ($SelfTest) {
+  $script:cacFail = 0
+  $script:cacCases = 0
+  function Test-CacCase([string]$Label, [scriptblock]$Check) {
+    # A case that THROWS is a counted failure, never a skipped line.
+    $script:cacCases++
+    $ok = $false
+    try { $ok = [bool](& $Check) } catch { $Label = $Label + ' (threw: ' + $_.Exception.Message + ')' }
+    if ($ok) { Write-Output ('  PASS  ' + $Label) } else { Write-Output ('  FAIL  ' + $Label); $script:cacFail++ }
+  }
+  . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\pipeline-commit.ps1')
+
+  # MUST FIRE, frozen from grocery\ad-cycle-log.txt at 2026-09-10T11:50:57: the verdict as Log wrote it minus Log's own
+  # timestamp, and the first line of the hook's transcript that followed it. That run reached its end, logged this, and
+  # left through the typed `exit 0` this file ended in until 2026-09-11.
+  $v0910 = 'check-ad-cycles: commit refused (git exit 1) - a hook or git itself rejected it; the tree is untouched. files named by the hook: grocery/out/aisle-test.json, grocery/out/aldi-rejects-2026-09-10.json, grocery/out/alerted-flags.json, grocery/out/asof-evidence.json, grocery/out/audit/match-baseline.json, grocery/out/audit/soundness-report.json, grocery/out/band-censorship.json, grocery/out/basis-outliers.json, grocery/out/basis-reconcile.json, grocery/out/cadence/cadence-aisle-test.txt, grocery/out/cadence/cadence-cloud-readiness.txt, grocery/out/cadence/cadence-commodity-dupes.txt' + "`n" + 'commit:hook> warning: in the working copy of ''grocery/out/aisle-test.json'', CRLF will be replaced by LF the next time Git touches it'
+  Test-CacCase 'MUST FIRE  the 2026-09-10 commit line, as logged, classifies as refused' { (Get-PipelineCommitOutcome -Verdict $v0910) -eq 'refused' }
+  Test-CacCase 'MUST FIRE  ...and a chain that ran to its end with that commit exits 1, not the 0 it returned' { (Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome (Get-PipelineCommitOutcome -Verdict $v0910)) -eq 1 }
+  # CLEAN TWIN: the commit landed and the push failed. lib\pipeline-commit.ps1's self-test has the committer return this
+  # sentence for real; here it carries this chain's name.
+  $vPush = 'check-ad-cycles: committed 141 file(s) - push failed, left local for the next capture-run to carry'
+  Test-CacCase 'CLEAN TWIN  a landed commit whose push failed still exits 0' { (Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome (Get-PipelineCommitOutcome -Verdict $vPush)) -eq 0 }
+
+  # ---- the wiring, off the parse tree. Needles built by concatenation, so no line of this block spells what it seeks.
+  $cacTok = $null
+  $cacErr = $null
+  $cacAst = [System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$cacTok, [ref]$cacErr)
+  Test-CacCase 'this file parses, or every structural case below reads a half-built tree' { ($null -ne $cacErr) -and ($cacErr.Count -eq 0) }
+  $cacTop = @($cacAst.EndBlock.Statements)
+  $cacSelf = $null
+  foreach ($s in $cacTop) {
+    if (($s -is [System.Management.Automation.Language.IfStatementAst]) -and [string]::Equals($s.Clauses[0].Item1.Extent.Text.Trim(), ('$Self' + 'Test'), [StringComparison]::Ordinal)) { $cacSelf = $s }
+  }
+  function Test-CacInSelfTest($Node) {
+    ($null -ne $cacSelf) -and ($Node.Extent.StartOffset -ge $cacSelf.Extent.StartOffset) -and ($Node.Extent.EndOffset -le $cacSelf.Extent.EndOffset)
+  }
+  function Test-CacUnderNoCommitGuard($Node) {
+    $p = $Node.Parent
+    while ($null -ne $p) {
+      if ($p -is [System.Management.Automation.Language.IfStatementAst]) {
+        foreach ($cl in $p.Clauses) { if ([string]::Equals($cl.Item1.Extent.Text.Trim(), ('-not $No' + 'Commit'), [StringComparison]::Ordinal)) { return $true } }
+      }
+      $p = $p.Parent
+    }
+    return $false
+  }
+  function Get-CacCalls([string]$Name) {
+    $found = $cacAst.FindAll({ param($n) ($n -is [System.Management.Automation.Language.CommandAst]) -and [string]::Equals([string]$n.GetCommandName(), $Name, [StringComparison]::OrdinalIgnoreCase) }.GetNewClosure(), $true)
+    return ,@($found | Where-Object { -not (Test-CacInSelfTest $_) })
+  }
+  $cacExitVar = '$chain' + 'Exit'
+  $cacAssignsAll = $cacAst.FindAll({ param($n) ($n -is [System.Management.Automation.Language.AssignmentStatementAst]) -and [string]::Equals($n.Left.Extent.Text, $cacExitVar, [StringComparison]::Ordinal) }.GetNewClosure(), $true)
+  $cacAssigns = @($cacAssignsAll | Where-Object { -not (Test-CacInSelfTest $_) })
+  $cacOutside = @($cacAssigns | Where-Object { -not (Test-CacUnderNoCommitGuard $_) })
+  $cacInside = @($cacAssigns | Where-Object { Test-CacUnderNoCommitGuard $_ } | Sort-Object { $_.Extent.StartOffset })
+  $cacCommit = Get-CacCalls ('Invoke-Pipeline' + 'Commit')
+  $cacRule = Get-CacCalls ('Get-PipelineLane' + 'ExitCode')
+  $cacWord = Get-CacCalls ('Get-PipelineCommit' + 'Outcome')
+  $cacLast = $cacTop[$cacTop.Count - 1]
+
+  # run-gates enrols this file because this block exits before the chain starts. Its SKIP entry used to say running
+  # it "would execute the whole pipeline", which is what happens the day a statement is added above this block.
+  Test-CacCase 'MUST FIRE  this block is the first statement after $ErrorActionPreference, so running -SelfTest can never start the chain' {
+    $idx = [array]::IndexOf($cacTop, $cacSelf)
+    ($null -ne $cacSelf) -and ($idx -ge 0) -and ($idx -le 1) -and
+      (($idx -eq 0) -or [string]::Equals($cacTop[0].Extent.Text.Trim(), ('$ErrorAction' + 'Preference = ''Stop'''), [StringComparison]::Ordinal))
+  }
+  Test-CacCase 'MUST FIRE  the file ends in exit $chainExit, never the typed 0 of 2026-09-10' {
+    ($cacLast -is [System.Management.Automation.Language.ExitStatementAst]) -and ($null -ne $cacLast.Pipeline) -and [string]::Equals($cacLast.Pipeline.Extent.Text.Trim(), $cacExitVar, [StringComparison]::Ordinal)
+  }
+  Test-CacCase 'CLEAN TWIN  a -NoCommit run (capture-run''s) still exits 0: the one assignment outside if (-not $NoCommit) is a top-level 0' {
+    ($cacOutside.Count -eq 1) -and ($cacOutside[0].Parent -eq $cacAst.EndBlock) -and [string]::Equals($cacOutside[0].Right.Extent.Text.Trim(), '0', [StringComparison]::Ordinal)
+  }
+  Test-CacCase 'MUST FIRE  inside if (-not $NoCommit) the exit starts at 1 ahead of the committer, and only the lane exit rule replaces it' {
+    $later = @($cacInside | Select-Object -Skip 1 | Where-Object { $_.Right.Extent.Text -notmatch ('^\s*Get-PipelineLane' + 'ExitCode\s') })
+    ($cacInside.Count -ge 2) -and [string]::Equals($cacInside[0].Right.Extent.Text.Trim(), '1', [StringComparison]::Ordinal) -and
+      ($cacCommit.Count -eq 1) -and ($cacInside[0].Extent.StartOffset -lt $cacCommit[0].Extent.StartOffset) -and ($later.Count -eq 0)
+  }
+  Test-CacCase 'MUST FIRE  the rule scores LaneRc 0 with the classifier''s word for $msg, assigned to the outcome it reads' {
+    ($cacRule.Count -eq 1) -and ($cacWord.Count -eq 1) -and (Test-CacUnderNoCommitGuard $cacRule[0]) -and
+      ($cacRule[0].Extent.Text -match '-LaneRc 0\s+-CommitOutcome \$chainOutcome\s*$') -and ($cacWord[0].Extent.Text -match '-Verdict \$msg\s*$') -and
+      ($cacWord[0].Parent.Parent -is [System.Management.Automation.Language.AssignmentStatementAst]) -and
+      [string]::Equals($cacWord[0].Parent.Parent.Left.Extent.Text, ('$chain' + 'Outcome'), [StringComparison]::Ordinal) -and
+      ($cacWord[0].Extent.StartOffset -lt $cacRule[0].Extent.StartOffset)
+  }
+  Test-CacCase 'CLEAN TWIN  the committer is still reached only without -NoCommit, so capture-run''s run is never committed twice' {
+    ($cacCommit.Count -eq 1) -and (Test-CacUnderNoCommitGuard $cacCommit[0])
+  }
+
+  if ($script:cacCases -eq 0) { Write-Output 'check-ad-cycles SELF-TEST FAILED (ran zero cases)'; exit 1 }
+  if ($script:cacFail) { Write-Output ("check-ad-cycles SELF-TEST FAILED ({0} of {1} case(s))" -f $script:cacFail, $script:cacCases); exit 1 }
+  Write-Output ("check-ad-cycles SELF-TEST PASSED ({0} of {0} case(s): the 2026-09-10 refused commit exits 1, a landed commit with a failed push exits 0, and this file's own tail wires that verdict only without -NoCommit)" -f $script:cacCases)
+  exit 0
+}
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
@@ -3360,14 +3465,33 @@ try {
 #
 # Guarded and non-fatal: a chain that cannot commit is degraded, and a chain KILLED BY its committer
 # has lost the board it just built.
+#
+# AND THE COMMIT'S VERDICT DECIDES THE EXIT CODE (2026-09-11). This logged the verdict and fell through to a
+# typed `exit 0`, so at 11:50 on 2026-09-10 a run whose commit the pre-commit hook refused told its caller
+# the chain had done everything. Only a caller WITHOUT -NoCommit gets here - a human, a triage session,
+# daily.yml on a runner - and each runs this file to get the board committed, so a commit that did not land
+# is not one of the findings the note above keeps out of the exit code: it is the job not done. capture-run
+# passes -NoCommit, never reaches a verdict and still exits 0 here; the -SelfTest reads that off the parsed
+# file. 1 is what graph-nightly exits for the same event. A chain that THREW also exits 1, so read the EXIT
+# line, not the number.
+$chainExit = 0
 if (-not $NoCommit) {
+  $chainExit = 1   # NOT LANDED until a classified verdict says so: a committer that could not even load landed nothing
+  $chainOutcome = 'threw'
   try {
     . (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')
     $msg = Invoke-PipelineCommit -Repo (Split-Path $root -Parent) -Paths (Get-PipelinePaths -Kind pricing) `
              -Message ("Pricing chain: board, recost and audits (" + (Get-Date).ToString('yyyy-MM-dd') + ") [pricing]") `
              -Name 'check-ad-cycles' -Push -DirtyAtStart $script:ChainDirtyAtStart -RunStart $script:ChainStart
     Log $msg
+    $chainOutcome = Get-PipelineCommitOutcome -Verdict $msg
+    $chainExit = Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome $chainOutcome
   } catch { Log ('pricing committer threw and was swallowed: ' + $_.Exception.Message) }
+  if ($chainExit -ne 0) {
+    $exitLine = 'check-ad-cycles: EXIT ' + $chainExit + ' - the chain ran to its end and its own commit did NOT land (' + $chainOutcome + '). The board is built and uncommitted; the committer''s verdict is logged just above this line in ad-cycle-log.txt.'
+    Log $exitLine
+    Write-Output $exitLine
+  }
 }
-exit 0
+exit $chainExit
 

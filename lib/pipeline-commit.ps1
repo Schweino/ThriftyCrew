@@ -301,6 +301,27 @@ function Get-PipelineCommitOutcome {
   return 'unknown'
 }
 
+function Test-PipelineCommitLanded {
+  <# PURE. Did the commit do its job, going by Get-PipelineCommitOutcome's word? 'committed' did, a failed push after it
+     included, and so did 'nothing'. 'refused', 'threw', 'unknown' and any word the classifier never returns did not. #>
+  param([string]$CommitOutcome)
+  return (@('committed', 'nothing') -contains [string]$CommitOutcome)
+}
+
+function Get-PipelineLaneExitCode {
+  <# PURE. The exit code a lane EARNED: its own work's code, and 1 when that was clean but its commit did not land.
+
+     WHY (2026-09-11). meal-prep\pipeline\harvest-crawl.ps1's commit was refused on every run from 2026-09-07 to 09-11
+     and every run stamped rc=0; grocery\check-ad-cycles.ps1's was refused on 2026-09-10 and it left through a typed
+     `exit 0`. Both printed the verdict, and nothing reads a printed sentence, so the exit code has to carry it. A lane
+     already failing keeps its own code, which is the more specific one. graph\pipeline\nightly.ps1's
+     Get-NightlyExitCode applies the same landing rule inside its own precedence (a held card outranks it there). #>
+  param([int]$LaneRc, [string]$CommitOutcome)
+  if ($LaneRc -ne 0) { return $LaneRc }
+  if (Test-PipelineCommitLanded -CommitOutcome $CommitOutcome) { return 0 }
+  return 1
+}
+
 if ($__pcSelfTest) {
   $fail = 0
   function T($n, $c, $g = '') { if ($c) { Write-Output ("ok    " + $n) } else { Write-Output ("FAIL  " + $n + "   got: " + $g); $script:fail++ } }
@@ -348,6 +369,17 @@ if ($__pcSelfTest) {
   T 'MUST FIRE  a committer that threw is not a success' ((Get-PipelineCommitOutcome -Verdict 'probe: committer threw and was swallowed (the lane''s work is not lost, only uncommitted): boom') -eq 'threw')
   # CLEAN TWIN, and a REAL line: this is what the 2026-09-11 night logged, the first graph-nightly commit to land.
   T 'CLEAN TWIN  a commit whose PUSH failed is still committed, which is the whole of this file''s promise' ((Get-PipelineCommitOutcome -Verdict 'graph-nightly: committed 20 file(s) - push failed, left local for the next capture-run to carry') -eq 'committed')
+
+  # ---- THE LANE'S EARNED EXIT CODE (2026-09-12) ----------------------------------------------------------------------
+  # What a lane does with the word above. The lanes' own suites freeze the refused lines their logs really carry.
+  foreach ($oc in @('refused', 'threw', 'unknown', '')) {
+    $x = Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome $oc
+    T ("MUST FIRE  a clean lane whose commit outcome is '" + $oc + "' exits 1, never 0") ($x -eq 1) $x
+  }
+  T 'CLEAN TWIN  a clean lane whose commit landed still exits 0' ((Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome 'committed') -eq 0) (Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome 'committed')
+  T 'CLEAN TWIN  a clean lane with nothing to commit still exits 0' ((Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome 'nothing') -eq 0) (Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome 'nothing')
+  T 'CLEAN TWIN  a lane already exiting 2 keeps its 2 when its commit is also refused' ((Get-PipelineLaneExitCode -LaneRc 2 -CommitOutcome 'refused') -eq 2) (Get-PipelineLaneExitCode -LaneRc 2 -CommitOutcome 'refused')
+  T 'CLEAN TWIN  a lane already exiting 1 keeps its 1 when its commit landed' ((Get-PipelineLaneExitCode -LaneRc 1 -CommitOutcome 'committed') -eq 1) (Get-PipelineLaneExitCode -LaneRc 1 -CommitOutcome 'committed')
 
   # ---- FOREIGN-HELD (2026-09-10, queue 2026-09-10-3a9de4) ----------------------------------------------------------
   # PURE: the rule itself, with frozen times.
@@ -405,11 +437,21 @@ if ($__pcSelfTest) {
     $vt = Invoke-PipelineCommit -Repo $tr -Paths @('lane/out') -Message 'run2' -Name 'probe' -DirtyAtStart $snapT -RunStart $rs2
     T 'CLEAN TWIN  a foreign file the run rewrote is committed as the run''s own (2 files, nothing held)' (($vt -match 'committed 2 file') -and ($vt -notmatch 'foreign-held')) $vt
     T 'CLEAN TWIN  both landed commits classify as committed, the foreign-held note included' (((Get-PipelineCommitOutcome -Verdict $ve) -eq 'committed') -and ((Get-PipelineCommitOutcome -Verdict $vt) -eq 'committed')) ($ve + ' | ' + $vt)
+    # CLEAN TWIN (2026-09-12): the commit LANDS and the push FAILS, and a clean lane must still exit 0. Hooks pinned to
+    # an EMPTY directory so no inherited core.hooksPath can refuse this commit instead, and this repo has no remote, so
+    # -Push fails for real: the sentence scored is the one the committer builds for that case, not a retyped copy.
+    $noHookDir = Join-Path $tr 'fixture-no-hooks'
+    New-Item -ItemType Directory -Path $noHookDir -Force | Out-Null
+    & git -C $tr config core.hooksPath ($noHookDir -replace '\\', '/') | Out-Null
+    [IO.File]::WriteAllText($fB, 'v5')
+    $vp = Invoke-PipelineCommit -Repo $tr -Paths @('lane/out') -Message 'run3' -Name 'probe' -Push
+    $xp = Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome (Get-PipelineCommitOutcome -Verdict $vp)
+    T 'CLEAN TWIN  a landed commit whose push failed classifies as committed and a clean lane still exits 0' (($vp -match 'committed 1 file') -and ($vp -match 'push (failed|threw)') -and ((Get-PipelineCommitOutcome -Verdict $vp) -eq 'committed') -and ($xp -eq 0)) ($vp + ' | exit=' + $xp)
   } finally {
     Remove-Item -LiteralPath $tr -Recurse -Force -ErrorAction SilentlyContinue
   }
 
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }
-  Write-Output 'SELF-TEST PASS: the source-path refusal in eight shapes, every real path list proved data-only and non-empty, no path owned twice, and the committer refusing before it touches git'
+  Write-Output 'SELF-TEST PASS: the source-path refusal in eight shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, and a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0)'
   exit 0
 }

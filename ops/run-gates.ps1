@@ -64,7 +64,10 @@ Clear-TcGitRepoEnv
 # Self-tests that cannot run hermetically, with the reason. Keyed by file name, same standard as every other
 # allowlist here: a line is a decision someone defends in a diff, not a way to make the gate quiet.
 $SKIP = @{
-  'check-ad-cycles.ps1' = 'the daily chain itself - running it would execute the whole pipeline, not test it'
+  # check-ad-cycles.ps1 LEFT THIS LIST ON 2026-09-11. It stood here because the file had no -SelfTest, so running it
+  # with one would have executed the whole pipeline. It has one now, and that block is the first statement after
+  # $ErrorActionPreference and exits before any lib loads, which its own self-test asserts off the parse tree. Its
+  # fixtures are the commit-verdict exit code; skipped here, nothing would have run them.
   # test-auditors is NOT hermetic and cannot be made so cheaply: it drives the real audits against the real
   # board, and grocery\out\comparison-*.json is gitignored. On gates run #2 it failed with
   # "food-category clean twin failed (rc=3)" - rc=3 is could-not-evaluate, i.e. it went BLIND for want of a

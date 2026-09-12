@@ -28,8 +28,9 @@
   publisher per calendar day and tracks the count in its own state. Running this twice in a day is
   harmless: the second run finds no room and fetches nothing. That is asserted by the self-test.
 
-  Exit 0 = crawled (or correctly found no room). Exit 1 = the crawl reported findings. Exit 2 = it
-  could not run at all.
+  Exit 0 = crawled (or correctly found no room), and its commit landed or had nothing to land. Exit 1 = the
+  crawl reported findings, or (since 2026-09-11) its commit did not land - refused, threw, or a verdict
+  nobody recognises; the FINDING line says which. Exit 2 = it could not run at all.
 #>
 param([switch]$SelfTest, [int]$Limit = 400, [int]$PerDomain = 60, [switch]$DryRun,
       # THE PINNED-REFERENCE GATE (2026-09-04, PLAN-after-review P5). With -SelfTest:
@@ -123,6 +124,35 @@ if ($SelfTest) {
   T 'MUST FIRE  ...and in THIS order: crawl, rebuild, calibrate, rescore, read' `
     ($iCrawl -gt 0 -and $iCrawl -lt $iBuild -and $iBuild -lt $iCal -and $iCal -lt $iScore -and $iScore -lt $iRead) `
     ("crawl={0} build={1} calibrate={2} rescore={3} read={4}" -f $iCrawl, $iBuild, $iCal, $iScore, $iRead)
+  # ---- THE COMMIT'S VERDICT DECIDES THE EXIT (2026-09-11) ----------------------------------------------------------
+  # MUST FIRE, frozen from grocery\out\logs\harvest-crawl-2026-09-09.log: the verdict as that run logged it minus the
+  # two-space indent Say added, and the first line of the hook's transcript that followed it. Every run from 2026-09-07
+  # to 09-11 logged this shape and stamped rc=0. Scored by lib\pipeline-commit.ps1's own classifier and exit rule,
+  # never by matching the sentence here.
+  . (Join-Path $repo 'lib\pipeline-commit.ps1')
+  $v0909 = 'harvest-crawl: commit refused (git exit 1) - a hook or git itself rejected it; the tree is untouched. files named by the hook: meal-prep/db/candidate-pool.json, meal-prep/db/harvest-state.json, meal-prep/db/source-domains.json, lib\bot-paths.ps1' + "`n" + 'commit:hook> warning: in the working copy of ''meal-prep/db/candidate-pool.json'', CRLF will be replaced by LF the next time Git touches it'
+  $oc0909 = Get-PipelineCommitOutcome -Verdict $v0909
+  T 'MUST FIRE  the 2026-09-09 commit line, as logged, classifies as refused' ($oc0909 -eq 'refused') $oc0909
+  $x0909 = Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome $oc0909
+  T 'MUST FIRE  ...and a clean crawl with that commit exits 1, not the rc=0 it stamped' ($x0909 -eq 1) $x0909
+  # The same file's 2026-09-10 runs carry a foreign-held note between "untouched" and the files the hook named.
+  $v0910 = 'harvest-crawl: commit refused (git exit 1) - a hook or git itself rejected it; the tree is untouched; foreign-held: 1 tracked owned file(s) another session dirtied before this run started, left uncommitted: meal-prep/db/source-domains.json. files named by the hook: meal-prep/db/candidate-pool.json, meal-prep/db/harvest-state.json, lib\bot-paths.ps1'
+  $x0910 = Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome (Get-PipelineCommitOutcome -Verdict $v0910)
+  T 'MUST FIRE  the 2026-09-10 line, foreign-held note and all, also exits 1' ($x0910 -eq 1) $x0910
+  # CLEAN TWIN: the commit landed and the push failed. lib\pipeline-commit.ps1's self-test has the committer return this
+  # sentence for real; here it carries this lane's name.
+  $vPush = 'harvest-crawl: committed 3 file(s) - push failed, left local for the next capture-run to carry'
+  $xPush = Get-PipelineLaneExitCode -LaneRc 0 -CommitOutcome (Get-PipelineCommitOutcome -Verdict $vPush)
+  T 'CLEAN TWIN  a landed commit whose push failed still exits the clean crawl''s 0' ($xPush -eq 0) $xPush
+  # SOURCE, over the executing region only: the run ends in the EARNED code. Needles built, as everywhere above.
+  $iStart = $code.IndexOf('$crawl' + 'Exit = 1')
+  $iCall  = $code.IndexOf('Invoke-Pipeline' + 'Commit -Repo')
+  $iWord  = $code.IndexOf('$crawlOutcome = Get-Pipeline' + 'CommitOutcome -Verdict $msg')
+  $iRule  = $code.IndexOf('$crawlExit = Get-Pipeline' + 'LaneExitCode -LaneRc $rc -CommitOutcome $crawlOutcome')
+  T 'MUST FIRE  the run ends in Done $crawlExit, never the crawl''s own Done $rc' `
+    (($code -match ('(?m)^Done \$crawl' + 'Exit\s*$')) -and -not ($code -match ('(?m)^Done \$r' + 'c\s*$'))) 'the last Done does not take the earned code'
+  T 'MUST FIRE  the exit starts at 1 ahead of the committer, and only the classified verdict then scores it' `
+    (($iStart -ge 0) -and ($iStart -lt $iCall) -and ($iCall -lt $iWord) -and ($iWord -lt $iRule)) ("start={0} commit={1} word={2} rule={3}" -f $iStart, $iCall, $iWord, $iRule)
   Invoke-NamesFixtures -TBlock ${function:T} -Seen $script:SeenNames -VectorFile (Join-Path $here 'selftest-names-vectors.json')
   $nf = Get-NamesFinish -Seen $script:SeenNames -NamesOut $NamesOut -NamesDiff $NamesDiff
   foreach ($ln in $nf.Lines) { Write-Output $ln }
@@ -242,7 +272,6 @@ if ($idxStale) {
   if ($rc -eq 0) { $rc = 1 }
 }
 
-Say ("harvest-crawl: exit {0}  (log: {1})" -f $rc, $log)
 # COMMIT WHAT THIS LANE OWNS (2026-09-07). Until today capture-run.ps1 was the only committer in the
 # estate, so this task's pool and harvest state sat uncommitted until the next morning swept the tree -
 # on 2026-09-06 that was twenty hours. Several engines here read the newest COMMITTED artefact, so
@@ -251,6 +280,14 @@ Say ("harvest-crawl: exit {0}  (log: {1})" -f $rc, $log)
 # NOT A SWEEP. lib\pipeline-commit.ps1 stages an explicit list and REFUSES outright if any of it looks
 # like source or config, which is the 2026-09-05 shape. Push is one attempt and never blocks: if it
 # fails the commit stays local and the next capture-run carries it.
+#
+# THE VERDICT DECIDES THE EXIT CODE TOO (2026-09-11). This printed the verdict and exited with the crawl's own code,
+# so every run from 2026-09-07 to 09-11 stamped rc=0 under "commit refused". The exit is 1 until a classified verdict
+# says the commit landed: a committer that could not even load has landed nothing. WHAT THAT REACHES, stated: the
+# scheduler's LastTaskResult and this run record's rc stamp, and nothing pages on either. grocery\health-heartbeat.ps1
+# excuses a nonzero result when the task's proof output is fresh, and this task's proof is the crawl log written
+# above, so it reports a refused commit as "work landed" - true of the crawl, silent about the commit.
+$crawlExit = 1
 try {
   . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\pipeline-commit.ps1')
   $repoRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
@@ -258,6 +295,10 @@ try {
            -Message ("Harvest crawl: pool and harvest state (" + (Get-Date).ToString('yyyy-MM-dd') + ") [harvest]") `
            -Name 'harvest-crawl' -Push -DirtyAtStart $crawlDirtyAtStart -RunStart $crawlStart
   Say ('  ' + $msg)
-} catch { Say ('  harvest-crawl: committer threw and was swallowed: ' + $_.Exception.Message) }
+  $crawlOutcome = Get-PipelineCommitOutcome -Verdict $msg
+  $crawlExit = Get-PipelineLaneExitCode -LaneRc $rc -CommitOutcome $crawlOutcome
+  if (-not (Test-PipelineCommitLanded -CommitOutcome $crawlOutcome)) { Say ('  FINDING the commit did not land (' + $crawlOutcome + '), so this run exits ' + $crawlExit) }
+} catch { Say ('  harvest-crawl: committer threw and was swallowed, so this run exits 1: ' + $_.Exception.Message) }
 
-Done $rc
+Say ("harvest-crawl: exit {0}  (log: {1})" -f $crawlExit, $log)
+Done $crawlExit
