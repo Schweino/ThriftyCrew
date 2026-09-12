@@ -43,6 +43,37 @@ inputs `lib/gate-input-key.ps1` can already resolve:
 commit is **4.0**, median 2. So the normal case is that **234 to 240 of 240 gates are provably unaffected and run
 anyway.**
 
+## THE NET DOES NOT EXIST YET, so the order inverts (measured 2026-09-12, before any selection was built)
+
+This plan's safety rests on a nightly full sweep catching what a selected push skips. **It was checked rather than
+assumed, and it is not there.**
+
+```
+total scheduled tasks on this box:        193
+tasks that run ops\run-gates.ps1:           0
+"TC Daemon Battery 0230" registered:        no
+```
+
+**`ops\hooks\pre-push` is the ONLY thing on this box that ever runs the full gate set.** Nothing else, on any schedule,
+ever has. So selection built today would not be an optimisation over a net - it would remove coverage outright, which
+is the one thing `CLAUDE.md`'s standing rules forbid, and the whole-tree guarantee would simply end.
+
+The claim that misled the first draft of this plan was this file's own reading of *"data-dependent audits stay in the
+daily chain"*. They do. **The daily chain is not a gate sweep**, and the two were conflated here. This is exactly the
+trap `.claude/rules/ops-and-gates.md` already records in its own words - *"A definition is not a registration: check
+`Get-ScheduledTask` before saying it runs"* - written about this very battery, and it caught this plan.
+
+**THE ORDER, therefore, and step 0 is not optional:**
+
+0. **Build and REGISTER the nightly full sweep, and prove it runs.** A scheduled `run-gates` over a fresh checkout of
+   `main`, its verdict reaching Brad the way the morning digest already does. Not "defined" - registered, with
+   `Get-ScheduledTask` showing it and at least one green run on the clock.
+1. Only then may a push stop running anything. Until step 0 is observed green, every gate stays where it is.
+
+The acceptance bar for step 0, in its own units: `Get-ScheduledTask` names it, one completed run exists with a read
+exit code, and a deliberately reddened tree is seen to produce a verdict that REACHES someone. A sweep nobody reads is
+not a net, and a sweep that fails silently is worse than none, because this plan would then be trusting it.
+
 ## What to build
 
 **Run what the change touches. Sweep everything on a schedule.** This is ordinary affected-target selection, and this
