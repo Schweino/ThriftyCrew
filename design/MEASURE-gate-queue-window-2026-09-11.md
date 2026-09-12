@@ -35,6 +35,14 @@ citation to an unmerged commit is only as stable as the branch carrying it, so a
 work that has not landed owes this re-read again on the last rebase before it does. It was rewritten three
 times before landing, once per rebase, which is the cost of citing a branch instead of a merged commit.
 
+**Re-read at commit `4774011959e`:** `ops/run-gates.ps1` moved again, and in the same direction as the per-gate keys: the
+cache those keys fill is now shared by every checkout rather than held per checkout (it had been named from each
+gate's FULL path, so a gate that passed in one worktree ran again in the next over identical bytes). A run therefore
+dispatches LESS whenever another checkout has already passed the same content, which lowers the work per run and so
+the slot-second ceiling this file computes - that ceiling is now an upper bound on a run that seldom exists in that
+form. The observer is untouched, and neither the arrival findings nor the admission findings depend on how much work
+a run carries, so every total below still reads as measured.
+
 **Re-read at commit `140a0f4f6`:** `ops/run-gates.ps1` moved again, and in the opposite direction to every change
 noted above: `grocery/check-ad-cycles.ps1` leaves its `$SKIP` list, so the discovered set grows by one self-test
 (264 to 265 in the checkout that made the change) and a push dispatches slightly MORE work, by the seconds that

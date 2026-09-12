@@ -61,6 +61,13 @@ re-read was owed at all: the sentence above mentions that script as prose, on a 
 keys on, so the audit counts it among this document's own instruments. That is its stated approximation, not a
 finding about this measurement.
 
+**Re-read at commit `4774011959e`: every verdict below stands as measured.** `ops\run-gates.ps1` now names each per-gate
+cache entry by the gate's path below its checkout and by its key, instead of by its full path, so a pass recorded in
+one checkout is reused by every other checkout holding the same bytes. That touches nothing in `lib\gate-slots.ps1` and
+nothing in either probe, so who wins a freed slot - the whole of what is measured here - is unchanged. What it moves is
+only the tenure each run holds its slots for, which falls whenever another checkout already passed the content; that
+shortens a starved waiter's wait and changes no admission decision.
+
 **Re-read at commit `140a0f4f6`: every verdict below stands as measured.** `ops\run-gates.ps1` moved once more, and
 for the first time in these re-reads it dispatches MORE rather than less: `grocery\check-ad-cycles.ps1` leaves its
 `$SKIP` list, so one more self-test runs in a push. That reaches this document only through the mixed-versions
