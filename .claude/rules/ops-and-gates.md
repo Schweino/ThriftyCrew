@@ -184,6 +184,14 @@ everything else honest, so a defect here is silent by construction.
   **A rule in a file is not a block**, so `ops/audit-full-path-excludes.ps1` holds this at push time: a ratchet
   over the PowerShell AST and Python `os.walk` roots, wired into `run-gates`. Run it for the count rather than
   quoting one.
+  **AND AN EXCLUSION MUST PRUNE, NOT ONLY FILTER** (2026-09-12). `Get-ChildItem -Recurse | Where-Object` still
+  LISTS every worktree before the filter drops it. From a worktree that costs nothing; from the main checkout,
+  which holds all 135, a recursive `.ps1` listing enumerated 100,747 files against 780, and a push gated there took
+  233 to 258 s against 48 to 93 s from a worktree (`audit-guard-contract` alone 222 s). **A new walk over the root
+  calls `Get-TcTreeFiles -RootFull $root [-Filter] -PruneBelow <its own exclusion>` and keeps its filter**: it
+  returns `Get-ChildItem -Recurse -File`'s exact list and order and never enters a directory that exclusion drops
+  (verified on the main checkout, 93,835 files in 85.3 s against 3.7 s, identical). Do not convert from `-Include`
+  by copying it: `-Include` enters junctions and orders its output differently, so check the extension instead.
 
 - **A mutex serialises WRITERS, never READERS, and under PS 5.1 a lock-free reader can cost a locked writer
   its write** (2026-09-11). `Move-Item -Force x.tmp x` fails with *"Cannot create a file when that file
