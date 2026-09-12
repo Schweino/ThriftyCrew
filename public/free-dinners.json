@@ -1,6 +1,6 @@
 {
-    "week_of":  "2026-09-09",
-    "updated":  "2026-09-09T08:18:43",
+    "week_of":  "2026-09-11",
+    "updated":  "2026-09-12T09:22:22",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
@@ -8,21 +8,21 @@
                      "protein":  "chicken",
                      "rank":  1,
                      "name":  "Chicken Pot Pie Casserole with Biscuits",
-                     "per_serving":  1.81
+                     "per_serving":  1.78
                  },
                  {
                      "slug":  "poppy-seed-chicken-and-rice-casserole",
                      "protein":  "chicken",
                      "rank":  2,
                      "name":  "Poppy Seed Chicken and Rice Casserole",
-                     "per_serving":  1.95
+                     "per_serving":  1.92
                  },
                  {
                      "slug":  "buffalo-chicken-pasta-bake",
                      "protein":  "chicken",
                      "rank":  3,
                      "name":  "Buffalo Chicken Pasta Bake",
-                     "per_serving":  1.98
+                     "per_serving":  1.95
                  },
                  {
                      "slug":  "chicken-bulgogi-rice-bowls",
@@ -32,11 +32,11 @@
                      "per_serving":  1.99
                  },
                  {
-                     "slug":  "chicken-fried-rice-skillet",
+                     "slug":  "creamy-tuscan-chicken-skillet",
                      "protein":  "chicken",
                      "rank":  5,
-                     "name":  "Chicken Fried Rice",
-                     "per_serving":  2
+                     "name":  "Creamy Tuscan Chicken Skillet",
+                     "per_serving":  1.99
                  },
                  {
                      "slug":  "turkey-biscuit-pot-pie-casserole",
@@ -57,7 +57,7 @@
                      "protein":  "turkey",
                      "rank":  3,
                      "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
-                     "per_serving":  2.04
+                     "per_serving":  2.01
                  },
                  {
                      "slug":  "turkey-alfredo-rotini-bake",
@@ -71,7 +71,7 @@
                      "protein":  "turkey",
                      "rank":  5,
                      "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
-                     "per_serving":  2.09
+                     "per_serving":  2.06
                  },
                  {
                      "slug":  "low-carb-taco-cabbage-beef-skillet",
@@ -88,18 +88,18 @@
                      "per_serving":  2.29
                  },
                  {
-                     "slug":  "lebanese-hashweh",
-                     "protein":  "beef",
-                     "rank":  3,
-                     "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.36
-                 },
-                 {
                      "slug":  "million-dollar-baked-spaghetti",
                      "protein":  "beef",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Million Dollar Baked Spaghetti",
-                     "per_serving":  2.41
+                     "per_serving":  2.32
+                 },
+                 {
+                     "slug":  "lebanese-hashweh",
+                     "protein":  "beef",
+                     "rank":  4,
+                     "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
+                     "per_serving":  2.33
                  },
                  {
                      "slug":  "keto-cheeseburger-skillet",
@@ -113,7 +113,7 @@
                      "protein":  "pork",
                      "rank":  1,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
-                     "per_serving":  1.57
+                     "per_serving":  1.54
                  },
                  {
                      "slug":  "bratwurst-sauerkraut-potatoes-bake",
@@ -134,7 +134,7 @@
                      "protein":  "pork",
                      "rank":  4,
                      "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
-                     "per_serving":  1.85
+                     "per_serving":  1.87
                  },
                  {
                      "slug":  "pork-egg-roll-in-a-bowl",

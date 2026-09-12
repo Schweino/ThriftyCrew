@@ -1,6 +1,17 @@
 ﻿{
     "resolved":  [
                      {
+                         "id":  "cream-cheese",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Cream Cheese Bar Our Family (2 Ct)",
+                         "board_pu":  0.2494,
+                         "name":  "Cream Cheese Bar Our Family (2 Ct)",
+                         "url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/cream_cheese/cream_cheese_bar_our_family_2_ct/p/1564405684712726060",
+                         "price":  "$3.99",
+                         "size":  "16 oz",
+                         "score":  1
+                     },
+                     {
                          "id":  "eggs",
                          "fault":  "NO-LINK",
                          "board":  "Large Grade A Eggs Our Family (30 Ct)",
@@ -42,6 +53,14 @@
                         "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
                     },
                     {
+                        "id":  "clam-chowder",
+                        "why":  "match found but per-unit disagrees: board $0.1081 vs link $0.1724 (37.3%)"
+                    },
+                    {
+                        "id":  "cooked-shredded-chicken",
+                        "why":  "match found but per-unit disagrees: board $0.6244 vs link $0.7494 (16.7%)"
+                    },
+                    {
                         "id":  "croissants",
                         "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
@@ -60,6 +79,22 @@
                     {
                         "id":  "french-bread",
                         "why":  "match found but its size \"15 oz\" gives no per-unit in each"
+                    },
+                    {
+                        "id":  "frozen-burritos",
+                        "why":  "match found but per-unit disagrees: board $1.3738 vs link $1.6238 (15.4%)"
+                    },
+                    {
+                        "id":  "hash-browns",
+                        "why":  "match found but per-unit disagrees: board $0.1406 vs link $0.1653 (14.9%)"
+                    },
+                    {
+                        "id":  "frozen-lasagna",
+                        "why":  "match found but per-unit disagrees: board $0.2406 vs link $0.361 (33.3%)"
+                    },
+                    {
+                        "id":  "frozen-pizza",
+                        "why":  "match found but its size \"24.6 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "garlic-bread",
@@ -82,11 +117,19 @@
                         "why":  "match found but per-unit disagrees: board $0.3119 vs link $0.4369 (28.6%)"
                     },
                     {
+                        "id":  "tortilla-chips",
+                        "why":  "match found but per-unit disagrees: board $0.1663 vs link $0.3327 (50%)"
+                    },
+                    {
+                        "id":  "vegetable-soup",
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                    },
+                    {
                         "id":  "yukon-gold-potatoes",
-                        "why":  "match found but per-unit disagrees: board $0.798 vs link $1.398 (42.9%)"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     }
                 ],
-    "worked":  19,
-    "generated":  "2026-09-11 08:14",
-    "board":  "comparison-2026-09-09.json"
+    "worked":  28,
+    "generated":  "2026-09-12 09:13",
+    "board":  "comparison-2026-09-11.json"
 }

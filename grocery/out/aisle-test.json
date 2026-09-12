@@ -27,13 +27,13 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
-        "id":  "almond-milk",
+        "id":  "almonds",
         "store":  "Family Fare",
-        "product":  "Unsweetened Almond Milk",
-        "dept":  "dairy",
-        "aisle":  "dairy/milk",
+        "product":  "Our Family Almonds, Natural, Whole 12 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
-        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
         "id":  "aluminum-foil",
@@ -52,6 +52,15 @@
         "aisle":  "pantry/mixes_spices_seasoning",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
+        "id":  "applesauce",
+        "store":  "Family Fare",
+        "product":  "Our Family Applesauce, Unsweetened 48 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "asparagus",
@@ -88,6 +97,15 @@
         "aisle":  "fresh_fruits_vegetables/potatoes",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "bagels",
+        "store":  "Family Fare",
+        "product":  "Lender\u0027s Pre Sliced Cinnamon Raisin Swirl Bagels 6 Ea",
+        "dept":  "dairy",
+        "aisle":  "dairy/breads_rolls_bagels",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is a reviewed exception department for \u0027bagels\u0027"
     },
     {
         "id":  "baked-beans",
@@ -335,7 +353,7 @@
     {
         "id":  "chicken-noodle-soup",
         "store":  "Family Fare",
-        "product":  "Chicken Noodle Soup Our Family Chunky",
+        "product":  "Progresso 99% Fat Free Chicken Noodle Soup 19 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
@@ -648,15 +666,6 @@
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
-        "id":  "frozen-pizza",
-        "store":  "Family Fare",
-        "product":  "Contadina Tmto Bsl Pizza Squz Btl",
-        "dept":  "pantry",
-        "aisle":  "pantry/canned_goods",
-        "verdict":  "BLOCK",
-        "reason":  "candidate sits in \u0027pantry\u0027; category \u0027frozen\u0027 allows only: freezer"
-    },
-    {
         "id":  "frozen-waffles",
         "store":  "Family Fare",
         "product":  "Our Family Buttermilk Waffles 24 Ea",
@@ -673,6 +682,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "graham-crackers",
+        "store":  "Family Fare",
+        "product":  "Crav\u0027n Flavor Graham Crackers, Chocolate, 3 Inner Packs 14.4 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/crackers",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
         "id":  "granola",
@@ -911,7 +929,7 @@
     {
         "id":  "marshmallows",
         "store":  "Family Fare",
-        "product":  "Our Family Marshmallows 16 Oz",
+        "product":  "Our Family Marshmallows, Mini 10.5 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
@@ -965,7 +983,7 @@
     {
         "id":  "paper-towels",
         "store":  "Family Fare",
-        "product":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
+        "product":  "Bounty White 2 Ply Essentials Double Rolls Paper Towels 4 Ea",
         "dept":  "household",
         "aisle":  "household/paper_towels",
         "verdict":  "ALLOW",
@@ -999,6 +1017,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
+        "id":  "peanuts",
+        "store":  "Family Fare",
+        "product":  "Our Family Peanuts, Dry Roasted 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
         "id":  "pickled-jalapenos",
         "store":  "Family Fare",
         "product":  "La Costena Jalapenos, Pickled Jalapeno Peppers 26 Oz",
@@ -1014,7 +1041,7 @@
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
-        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+        "reason":  "\u0027pantry\u0027 is a reviewed exception department for \u0027pickles\u0027"
     },
     {
         "id":  "pita-bread",
@@ -1078,6 +1105,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_prepared_fruits_vegetables",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "raisins",
+        "store":  "Family Fare",
+        "product":  "Our Family Seedless Raisins 20 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
         "id":  "ranch-dressing",
@@ -1294,15 +1330,6 @@
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
-    },
-    {
-        "id":  "tortilla-chips",
-        "store":  "Family Fare",
-        "product":  "Our Family Hint Of Lime Tortilla Chips 13 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/chips_other_salty_snacks",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "turkey-bacon",

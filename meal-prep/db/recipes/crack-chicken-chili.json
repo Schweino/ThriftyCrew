@@ -31,7 +31,7 @@
   "protein": 46,
   "carbs": 28,
   "fat": 24,
-  "cost_ps": "3.01"
+  "cost_ps": "3.00"
  },
  "intro_html": "<p>Some dinners make you choose between cheap and satisfying. This one flat out refuses. Crack Chicken Chili is a slow cooker full of shredded chicken, four cans of beans, sweet corn, nearly two bricks of cream cheese and a pile of crisp bacon, and it comes out rich enough that folks think you fussed over it all day. You did not. You dumped, you waited, you shredded. That is the whole trick.</p><p>Each container lands at {{cal}} calories with {{protein}} grams of protein, which is the kind of number that keeps you full clear through the afternoon instead of circling the vending machine. And it does it for ${{cost_ps}} a serving. Let me walk you through it.</p>",
  "ingredients_display": [
@@ -240,7 +240,7 @@
   "prepTime": "PT10M",
   "cookTime": "PT4H",
   "totalTime": "PT4H10M",
-  "costPerServing": 3.01,
+  "costPerServing": 3.00,
   "recipeIngredient": [
    "Boneless Skinless Chicken Breast, 3 1/2 lb, boneless and skinless (1588 g)",
    "Bone Broth, 5 1/4 cups (1260 g)",

@@ -78,19 +78,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "almonds",
-        "store":  "Aldi",
-        "unit":  "oz",
-        "board":  0.425,
-        "link":  0.4421,
-        "ratio":  1.04,
-        "price":  6.19,
-        "size":  "14 oz",
-        "boardItem":  "Southern Grove Almonds Snickerdoodle Spiced 14 OZ",
-        "linkItem":  "Southern Grove Oil Roasted Salted Almonds 14 OZ",
-        "board_src":  "main"
-    },
-    {
         "id":  "apple-cider-vinegar",
         "store":  "Aldi",
         "unit":  "floz",
@@ -195,19 +182,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "bacon",
-        "store":  "Sam\u0027s Club",
-        "unit":  "lb",
-        "board":  3.986,
-        "link":  3.784,
-        "ratio":  0.95,
-        "price":  37.84,
-        "size":  "10 lb",
-        "boardItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
-        "linkItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
-        "board_src":  "main"
-    },
-    {
         "id":  "baked-beans",
         "store":  "Fareway",
         "unit":  "oz",
@@ -221,6 +195,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "baking-powder",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3691,
+        "link":  0.3074,
+        "ratio":  0.83,
+        "price":  2.49,
+        "size":  "8.1 oz",
+        "boardItem":  "Clabber Girl Hearth Club Baking Powder",
+        "linkItem":  "Clabber Girl Hearth Club Baking Powder",
+        "board_src":  "main"
+    },
+    {
         "id":  "baking-soda",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -231,6 +218,19 @@
         "size":  "16 oz",
         "boardItem":  "Hy Vee Pure Baking Soda",
         "linkItem":  "Hy Vee Pure Baking Soda",
+        "board_src":  "main"
+    },
+    {
+        "id":  "balsamic-vinegar",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.2355,
+        "link":  0.1704,
+        "ratio":  0.72,
+        "price":  2.88,
+        "size":  "16.9 fl oz",
+        "boardItem":  "Fareway Balsamic Vinegar",
+        "linkItem":  "Fareway Balsamic Vinegar",
         "board_src":  "main"
     },
     {
@@ -325,16 +325,29 @@
         "board_src":  "main"
     },
     {
-        "id":  "black-pepper",
-        "store":  "Sam\u0027s Club",
+        "id":  "blackberries",
+        "store":  "Aldi",
         "unit":  "oz",
-        "board":  0.4185,
-        "link":  0.481,
-        "ratio":  1.15,
-        "price":  38.48,
-        "size":  "5 lb",
-        "boardItem":  "Member\u0027s Mark Coarse Black Pepper, 5 lbs.",
-        "linkItem":  "Member\u0027s Mark Coarse Black Pepper, 5 lbs.",
+        "board":  0.415,
+        "link":  0.3583,
+        "ratio":  0.86,
+        "price":  2.15,
+        "size":  "6 oz",
+        "boardItem":  "Blackberries 6 OZ",
+        "linkItem":  "Blackberries, Package",
+        "board_src":  "main"
+    },
+    {
+        "id":  "bleach",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.039,
+        "link":  0.0312,
+        "ratio":  0.8,
+        "price":  3.99,
+        "size":  "128 fl oz",
+        "boardItem":  "Sun Brite Ultra Bleach",
+        "linkItem":  "Sun Brite Ultra Bleach",
         "board_src":  "main"
     },
     {
@@ -351,6 +364,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "blueberries",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.5178,
+        "link":  0.41,
+        "ratio":  0.79,
+        "price":  4.97,
+        "size":  "12.122 oz",
+        "boardItem":  "Organic Blueberries, 18 oz.",
+        "linkItem":  "Naturipe\u0027s Berry Peachy Blueberries, Dry Pint",
+        "board_src":  "main"
+    },
+    {
         "id":  "lotion",
         "store":  "Fareway",
         "unit":  "floz",
@@ -361,6 +387,19 @@
         "size":  "21 fl oz",
         "boardItem":  "Jergens Ultra Healing Hand and Body Dry Skin Lotion",
         "linkItem":  "Jergens Ultra Healing Hand and Body Dry Skin Lotion",
+        "board_src":  "main"
+    },
+    {
+        "id":  "body-wash",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.2206,
+        "link":  0.165,
+        "ratio":  0.75,
+        "price":  2.97,
+        "size":  "18 fl oz",
+        "boardItem":  "Suave Ocean Breeze Moisturizing Body Wash with Glycerin \u0026 Vitamin E, 18 FL OZ",
+        "linkItem":  "Suave Ocean Breeze Moisturizing Body Wash with Glycerin \u0026 Vitamin E, 18 FL OZ",
         "board_src":  "main"
     },
     {
@@ -429,6 +468,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "brown-gravy-mix",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.8466,
+        "link":  0.7273,
+        "ratio":  0.86,
+        "price":  1.28,
+        "size":  "1.76 oz",
+        "boardItem":  "Southeastern Mills Gravy Mix, Classic, Brown",
+        "linkItem":  "Southeastern Mills Gravy Mix, Classic, Brown",
+        "board_src":  "main"
+    },
+    {
         "id":  "brown-rice",
         "store":  "Hy-Vee",
         "unit":  "lb",
@@ -468,6 +520,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "brussels-sprouts",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  3.0743,
+        "link":  2.2629,
+        "ratio":  0.74,
+        "price":  1.98,
+        "size":  "14 oz",
+        "boardItem":  "Fareway Brussels Sprouts",
+        "linkItem":  "Fareway Brussels Sprouts",
+        "board_src":  "main"
+    },
+    {
+        "id":  "butter",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  3.98,
+        "link":  3.48,
+        "ratio":  0.87,
+        "price":  3.48,
+        "size":  "16 oz",
+        "boardItem":  "Fareway Solid Butter",
+        "linkItem":  "Fareway Solid Butter",
+        "board_src":  "main"
+    },
+    {
         "id":  "caesar-salad-kit",
         "store":  "Aldi",
         "unit":  "oz",
@@ -478,6 +556,19 @@
         "size":  "11.15 oz",
         "boardItem":  "Dole Chopped Caesar Salad Kit 11 15 OZ",
         "linkItem":  "Dole Chopped Caesar Salad Kit 11.15 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cajun-seasoning",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3738,
+        "link":  0.3113,
+        "ratio":  0.83,
+        "price":  2.49,
+        "size":  "8 oz",
+        "boardItem":  "Tony Chachere\u0027s Creole Seasoning, Original",
+        "linkItem":  "Tony Chachere\u0027s Creole Seasoning, Original",
         "board_src":  "main"
     },
     {
@@ -556,6 +647,19 @@
         "size":  "15 oz",
         "boardItem":  "Hy-Vee Pinto Beans",
         "linkItem":  "Hy-Vee Pinto Beans",
+        "board_src":  "main"
+    },
+    {
+        "id":  "canned-pumpkin",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1721,
+        "link":  0.1372,
+        "ratio":  0.8,
+        "price":  3.98,
+        "size":  "29 oz",
+        "boardItem":  "Libby\u0027s Pumpkin 100% Pure Pumpkin",
+        "linkItem":  "Libby\u0027s Pumpkin 100% Pure Pumpkin",
         "board_src":  "main"
     },
     {
@@ -650,19 +754,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "celery",
-        "store":  "Aldi",
-        "unit":  "each",
-        "board":  1.99,
-        "link":  2.59,
-        "ratio":  1.3,
-        "price":  2.59,
-        "size":  "each",
-        "boardItem":  "Celery, Each",
-        "linkItem":  "Organic Celery Heart Each",
-        "board_src":  "main"
-    },
-    {
         "id":  "charcoal",
         "store":  "Hy-Vee",
         "unit":  "lb",
@@ -673,6 +764,19 @@
         "size":  "7.7 lb",
         "boardItem":  "Hy-Vee Charcoal Briquets",
         "linkItem":  "Hy-Vee Charcoal Briquets",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cheese-tortellini",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3153,
+        "link":  0.2621,
+        "ratio":  0.83,
+        "price":  4.98,
+        "size":  "19 oz",
+        "boardItem":  "Louisa Four Cheese Tortellini",
+        "linkItem":  "Louisa Four Cheese Tortellini",
         "board_src":  "main"
     },
     {
@@ -806,6 +910,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "coconut-oil",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.5993,
+        "link":  0.5327,
+        "ratio":  0.89,
+        "price":  7.99,
+        "size":  "15 oz",
+        "boardItem":  "Fareway Organic Coconut Oil",
+        "linkItem":  "Fareway Organic Coconut Oil",
+        "board_src":  "main"
+    },
+    {
         "id":  "cod",
         "store":  "Aldi",
         "unit":  "lb",
@@ -819,16 +936,16 @@
         "board_src":  "main"
     },
     {
-        "id":  "coffee",
+        "id":  "coffee-creamer",
         "store":  "Sam\u0027s Club",
-        "unit":  "oz",
-        "board":  0.394,
-        "link":  0.4172,
-        "ratio":  1.06,
-        "price":  17.98,
-        "size":  "43.1 oz",
-        "boardItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
-        "linkItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
+        "unit":  "floz",
+        "board":  0.114,
+        "link":  0.1429,
+        "ratio":  1.25,
+        "price":  7.43,
+        "size":  "52 fl oz",
+        "boardItem":  "Chobani Dairy Coffee Creamer, Vanilla, 52 fl. oz.",
+        "linkItem":  "Chobani Dairy Coffee Creamer, Vanilla, 52 fl. oz.",
         "board_src":  "main"
     },
     {
@@ -842,6 +959,19 @@
         "size":  "16 oz",
         "boardItem":  "Aldi Rotisserie Style Pulled Chicken 16 OZ",
         "linkItem":  "Aldi Rotisserie Style Pulled Chicken 16 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "corn-chips",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2488,
+        "link":  0.1862,
+        "ratio":  0.75,
+        "price":  2.98,
+        "size":  "16 oz",
+        "boardItem":  "Fareway Corn Chips",
+        "linkItem":  "Fareway Corn Chips",
         "board_src":  "main"
     },
     {
@@ -1027,6 +1157,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "drain-cleaner",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.1403,
+        "link":  0.1247,
+        "ratio":  0.89,
+        "price":  3.99,
+        "size":  "32 fl oz",
+        "boardItem":  "Drano Liquid Drain Cleaner",
+        "linkItem":  "Drano Liquid Drain Cleaner",
+        "board_src":  "main"
+    },
+    {
         "id":  "enchilada-sauce",
         "store":  "Fareway",
         "unit":  "oz",
@@ -1115,6 +1258,19 @@
         "size":  "3.805 lb",
         "boardItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
         "linkItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "fish-sticks",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3248,
+        "link":  0.2431,
+        "ratio":  0.75,
+        "price":  5.98,
+        "size":  "24.6 oz",
+        "boardItem":  "Van de Kamp\u0027s Crunchy Fish Sticks",
+        "linkItem":  "Van de Kamp\u0027s Crunchy Fish Sticks",
         "board_src":  "main"
     },
     {
@@ -1274,6 +1430,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "fruit-punch",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.0671,
+        "link":  0.0554,
+        "ratio":  0.83,
+        "price":  2.88,
+        "size":  "52 fl oz",
+        "boardItem":  "Minute Maid Zero Sugar Fruit Punch",
+        "linkItem":  "Minute Maid Zero Sugar Fruit Punch",
+        "board_src":  "main"
+    },
+    {
         "id":  "furniture-polish",
         "store":  "Fareway",
         "unit":  "oz",
@@ -1326,6 +1495,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "granola",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.285,
+        "link":  0.2129,
+        "ratio":  0.75,
+        "price":  2.98,
+        "size":  "14 oz",
+        "boardItem":  "Fareway Classic Granola",
+        "linkItem":  "Fareway Classic Granola",
+        "board_src":  "main"
+    },
+    {
         "id":  "sugar",
         "store":  "Aldi",
         "unit":  "lb",
@@ -1336,6 +1518,19 @@
         "size":  "4 lb",
         "boardItem":  "Baker S Corner Granulated Sugar 4 LB",
         "linkItem":  "Baker\u0027s Corner Granulated Sugar",
+        "board_src":  "main"
+    },
+    {
+        "id":  "grape-juice",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.0702,
+        "link":  0.0622,
+        "ratio":  0.89,
+        "price":  3.98,
+        "size":  "64 fl oz",
+        "boardItem":  "Old Orchard 100% Juice, Grape",
+        "linkItem":  "Old Orchard 100% Juice, Grape",
         "board_src":  "main"
     },
     {
@@ -1353,6 +1548,19 @@
     },
     {
         "id":  "conditioner",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.2613,
+        "link":  0.2351,
+        "ratio":  0.9,
+        "price":  8.98,
+        "size":  "38.2 fl oz",
+        "boardItem":  "Pantene Pro-V Nourishing Coconut Milk \u0026 Shea Butter Conditioner, 38.2 fl. oz.",
+        "linkItem":  "Pantene Pro-V Nourishing Coconut Milk \u0026 Shea Butter Conditioner, 38.2 fl. oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "conditioner",
         "store":  "Aldi",
         "unit":  "floz",
         "board":  0.4775,
@@ -1362,6 +1570,32 @@
         "size":  "10.4 fl oz",
         "boardItem":  "Pantene Fine Volume Conditioner",
         "linkItem":  "Pantene Pro-V Daily Moisture Renewal Conditioner",
+        "board_src":  "main"
+    },
+    {
+        "id":  "hand-sanitizer",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.6212,
+        "link":  0.4962,
+        "ratio":  0.8,
+        "price":  3.97,
+        "size":  "8 fl oz",
+        "boardItem":  "PURELL Advanced Hand Sanitizer, Refreshing Gel",
+        "linkItem":  "PURELL Advanced Hand Sanitizer, Refreshing Gel",
+        "board_src":  "main"
+    },
+    {
+        "id":  "hand-soap",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.2107,
+        "link":  0.1662,
+        "ratio":  0.79,
+        "price":  7.48,
+        "size":  "45 fl oz",
+        "boardItem":  "Softsoap Antibacterial Liquid Hand Soap, 11.25 fl. oz., 4 pk.",
+        "linkItem":  "Softsoap Antibacterial Liquid Hand Soap, 11.25 fl. oz., 4 pk.",
         "board_src":  "main"
     },
     {
@@ -1375,6 +1609,19 @@
         "size":  "7.5 fl oz",
         "boardItem":  "Dial Antibacterial Defense Power Berries Scent Foaming Hand Soap, 7.5 fl oz",
         "linkItem":  "Dial Antibacterial Defense Power Berries Scent Foaming Hand Soap, 7.5 fl oz",
+        "board_src":  "main"
+    },
+    {
+        "id":  "hoisin-sauce",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.3929,
+        "link":  0.3528,
+        "ratio":  0.9,
+        "price":  4.48,
+        "size":  "12.7 oz",
+        "boardItem":  "House of Tsang Hoisin Sauce",
+        "linkItem":  "House of Tsang Hoisin Sauce",
         "board_src":  "main"
     },
     {
@@ -1404,19 +1651,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "hummus",
-        "store":  "Aldi",
-        "unit":  "oz",
-        "board":  0.2488,
-        "link":  0.259,
-        "ratio":  1.04,
-        "price":  2.59,
-        "size":  "10 oz",
-        "boardItem":  "Park Street Deli Savory Pumpkin Hummus 8 OZ",
-        "linkItem":  "Park Street Deli Classic Hummus 10 OZ",
-        "board_src":  "main"
-    },
-    {
         "id":  "iced-tea",
         "store":  "Fareway",
         "unit":  "floz",
@@ -1427,6 +1661,19 @@
         "size":  "128 fl oz",
         "boardItem":  "Milo\u0027s Zero Calorie Sweet Iced Tea",
         "linkItem":  "Milo\u0027s Zero Calorie Sweet Iced Tea",
+        "board_src":  "main"
+    },
+    {
+        "id":  "instant-coffee",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  1.3738,
+        "link":  1.2488,
+        "ratio":  0.91,
+        "price":  9.99,
+        "size":  "8 oz",
+        "boardItem":  "Folgers Classic Decaf Instant Coffee",
+        "linkItem":  "Folgers Classic Decaf Instant Coffee",
         "board_src":  "main"
     },
     {
@@ -1482,6 +1729,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "laundry-pods",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.3469,
+        "link":  0.2775,
+        "ratio":  0.8,
+        "price":  19.98,
+        "size":  "72 ct",
+        "boardItem":  "Tide Power PODS + Ultra OXI Laundry Detergent Pacs, 72 ct.",
+        "linkItem":  "Tide Power PODS + Ultra OXI Laundry Detergent Pacs, 72 ct.",
+        "board_src":  "main"
+    },
+    {
         "id":  "stain-remover",
         "store":  "Fareway",
         "unit":  "floz",
@@ -1495,6 +1755,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "stain-remover",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.1506,
+        "link":  0.1169,
+        "ratio":  0.78,
+        "price":  13.18,
+        "size":  "112.75 fl oz",
+        "boardItem":  "Clorox 2 For Colors Stain Remover, Laundry + Fabric, Free and Clear, 90 Loads, 112.75 fl. oz.",
+        "linkItem":  "Clorox 2 for Colors Free \u0026 Clear Stain Remover, 90 loads, 112.75 fl. oz.",
+        "board_src":  "main"
+    },
+    {
         "id":  "lemon-pepper-seasoning",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -1505,6 +1778,19 @@
         "size":  "31 oz",
         "boardItem":  "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
         "linkItem":  "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "lemonade",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.039,
+        "link":  0.0311,
+        "ratio":  0.8,
+        "price":  3.98,
+        "size":  "128 fl oz",
+        "boardItem":  "Milo\u0027s Lemonade",
+        "linkItem":  "Milo\u0027s Lemonade",
         "board_src":  "main"
     },
     {
@@ -1573,16 +1859,42 @@
         "board_src":  "main"
     },
     {
-        "id":  "mushrooms",
-        "store":  "Aldi",
+        "id":  "miracle-whip",
+        "store":  "Fareway",
         "unit":  "oz",
-        "board":  0.1862,
-        "link":  0.1612,
-        "ratio":  0.87,
-        "price":  1.29,
-        "size":  "8 oz",
-        "boardItem":  "White Mushroom 8 OZ",
-        "linkItem":  "Monterey White Mushrooms Sliced 8 OZ",
+        "board":  0.2327,
+        "link":  0.1993,
+        "ratio":  0.86,
+        "price":  5.98,
+        "size":  "30 fl oz",
+        "boardItem":  "Miracle Whip Miracle Whip",
+        "linkItem":  "Miracle Whip Miracle Whip",
+        "board_src":  "main"
+    },
+    {
+        "id":  "mixed-nuts",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.5711,
+        "link":  0.4639,
+        "ratio":  0.81,
+        "price":  12.99,
+        "size":  "28 oz",
+        "boardItem":  "Fareway Roasted and Salted Select Mixed Nuts",
+        "linkItem":  "Fareway Roasted and Salted Select Mixed Nuts",
+        "board_src":  "main"
+    },
+    {
+        "id":  "mouthwash",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.1476,
+        "link":  0.1175,
+        "ratio":  0.8,
+        "price":  3.97,
+        "size":  "33.8 fl oz",
+        "boardItem":  "GoodSense Mouth Rinse, Antiseptic, Blue Mint",
+        "linkItem":  "GoodSense Mouth Rinse, Antiseptic, Blue Mint",
         "board_src":  "main"
     },
     {
@@ -1596,6 +1908,19 @@
         "size":  "2 lb",
         "boardItem":  "Nectarines Bagged 2 LB",
         "linkItem":  "Nectarines Bagged 2 LB",
+        "board_src":  "main"
+    },
+    {
+        "id":  "oat-milk",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.0863,
+        "link":  0.0669,
+        "ratio":  0.78,
+        "price":  3.48,
+        "size":  "52 fl oz",
+        "boardItem":  "Planet Oat Oatmilk",
+        "linkItem":  "Planet Oat Oatmilk",
         "board_src":  "main"
     },
     {
@@ -1651,6 +1976,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "oven-cleaner",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.4131,
+        "link":  0.3779,
+        "ratio":  0.91,
+        "price":  5.48,
+        "size":  "14.5 fl oz",
+        "boardItem":  "EASY-OFF Fume Free Oven Cleaner Spray Lemon",
+        "linkItem":  "EASY-OFF Fume Free Oven Cleaner Spray Lemon",
+        "board_src":  "main"
+    },
+    {
+        "id":  "oyster-sauce",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.2373,
+        "link":  0.1968,
+        "ratio":  0.83,
+        "price":  2.48,
+        "size":  "12.6 oz",
+        "boardItem":  "Kikkoman Oyster Sauce Red",
+        "linkItem":  "Kikkoman Oyster Sauce Red",
+        "board_src":  "main"
+    },
+    {
         "id":  "dried-parsley",
         "store":  "Fareway",
         "unit":  "oz",
@@ -1661,6 +2012,19 @@
         "size":  "3 oz",
         "boardItem":  "Badia Spices Parsley Flakes",
         "linkItem":  "Badia Spices Parsley Flakes",
+        "board_src":  "main"
+    },
+    {
+        "id":  "pasta-sauce",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1764,
+        "link":  0.2218,
+        "ratio":  1.26,
+        "price":  9.76,
+        "size":  "44 oz",
+        "boardItem":  "Rao\u0027s Homemade Marinara Sauce, 22 oz., 2 pk.",
+        "linkItem":  "Rao\u0027s Homemade Marinara Sauce, 22 oz., 2 pk.",
         "board_src":  "main"
     },
     {
@@ -1768,6 +2132,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "pizza-sauce",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.0993,
+        "link":  0.0893,
+        "ratio":  0.9,
+        "price":  1.34,
+        "size":  "15 oz",
+        "boardItem":  "Fareway Pizza Sauce",
+        "linkItem":  "Fareway Pizza Sauce",
+        "board_src":  "main"
+    },
+    {
         "id":  "plums",
         "store":  "Aldi",
         "unit":  "lb",
@@ -1804,19 +2181,6 @@
         "size":  "per lb",
         "boardItem":  "Assorted Pork Chops",
         "linkItem":  "Premium Bone-In Assorted Pork Chops, per lb",
-        "board_src":  "main"
-    },
-    {
-        "id":  "potato-chips",
-        "store":  "Aldi",
-        "unit":  "oz",
-        "board":  0.148,
-        "link":  0.1674,
-        "ratio":  1.13,
-        "price":  1.59,
-        "size":  "9.5 oz",
-        "boardItem":  "Clancy S Hot Chili Lime Ridged Potato Chips 12.5 OZ",
-        "linkItem":  "Clancy S Spicy Dill Pickle Potato Chips 9.5 OZ",
         "board_src":  "main"
     },
     {
@@ -1859,6 +2223,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "prunes",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.4579,
+        "link":  0.4162,
+        "ratio":  0.91,
+        "price":  9.99,
+        "size":  "24 oz",
+        "boardItem":  "Sunsweet Prunes, Pitted, Value Pack",
+        "linkItem":  "Sunsweet Prunes, Pitted, Value Pack",
+        "board_src":  "main"
+    },
+    {
         "id":  "raisins",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -1869,6 +2246,19 @@
         "size":  "60 oz",
         "boardItem":  "Sun-Maid California Sun-Dried Raisins, 30 oz., 2 pk.",
         "linkItem":  "Sun-Maid California Sun-Dried Raisins, 30 oz., 2 pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "raisins",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2745,
+        "link":  0.2495,
+        "ratio":  0.91,
+        "price":  4.99,
+        "size":  "20 oz",
+        "boardItem":  "Sun-Maid California Sun-Dried Raisins",
+        "linkItem":  "Sun-Maid California Sun-Dried Raisins",
         "board_src":  "main"
     },
     {
@@ -1924,6 +2314,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "red-wine-vinegar",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.2355,
+        "link":  0.1704,
+        "ratio":  0.72,
+        "price":  2.88,
+        "size":  "16.9 fl oz",
+        "boardItem":  "Fareway Red Wine Vinegar",
+        "linkItem":  "Fareway Red Wine Vinegar",
+        "board_src":  "main"
+    },
+    {
+        "id":  "refrigerated-biscuits",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2448,
+        "link":  0.1834,
+        "ratio":  0.75,
+        "price":  2.99,
+        "size":  "16.3 oz",
+        "boardItem":  "Pillsbury Grands! Southern Homestyle Original Biscuits",
+        "linkItem":  "Pillsbury Grands! Southern Homestyle Original Biscuits",
+        "board_src":  "main"
+    },
+    {
         "id":  "ribeye-steak",
         "store":  "Hy-Vee",
         "unit":  "lb",
@@ -1934,6 +2350,19 @@
         "size":  "lb",
         "boardItem":  "Heritage Shaved Ribeye",
         "linkItem":  "Beef Ribeye Steak - Thin",
+        "board_src":  "main"
+    },
+    {
+        "id":  "rice-cakes",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.621,
+        "link":  0.5519,
+        "ratio":  0.89,
+        "price":  3.99,
+        "size":  "7.23 oz",
+        "boardItem":  "Quaker Rice Cakes, Chocolate",
+        "linkItem":  "Quaker Rice Cakes, Chocolate",
         "board_src":  "main"
     },
     {
@@ -2015,6 +2444,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "sandwich-cookies",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1396,
+        "link":  0.1192,
+        "ratio":  0.85,
+        "price":  2.98,
+        "size":  "25 oz",
+        "boardItem":  "Fareway Lemon Cremes Sandwich Cookies",
+        "linkItem":  "Fareway Lemon Cremes Sandwich Cookies",
+        "board_src":  "main"
+    },
+    {
         "id":  "sauerkraut",
         "store":  "Aldi",
         "unit":  "oz",
@@ -2041,6 +2483,45 @@
         "board_src":  "main"
     },
     {
+        "id":  "shampoo",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.1107,
+        "link":  0.0876,
+        "ratio":  0.79,
+        "price":  1.97,
+        "size":  "22.5 oz",
+        "boardItem":  "Suave Ocean Breeze Refreshing Shampoo with Sea Algae Extract \u0026 Vitamin E, Cleanses, Softens \u0026 Shines For All Hair Types, 22.5 FL OZ",
+        "linkItem":  "Suave Ocean Breeze Refreshing Shampoo with Sea Algae Extract \u0026 Vitamin E, Cleanses, Softens \u0026 Shines For All Hair Types, 22.5 FL OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "shampoo",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.2613,
+        "link":  0.2351,
+        "ratio":  0.9,
+        "price":  8.98,
+        "size":  "38.2 fl oz",
+        "boardItem":  "Pantene Pro-V Nourishing Coconut Milk \u0026 Shea Butter Shampoo, 38.2 fl. oz.",
+        "linkItem":  "Pantene Pro-V Nourishing Coconut Milk \u0026 Shea Butter Shampoo, 38.2 fl. oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "shaving-cream",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3173,
+        "link":  0.2718,
+        "ratio":  0.86,
+        "price":  2.99,
+        "size":  "11 oz",
+        "boardItem":  "Gillette Foamy Classic Shave Foam for Men Original Scent",
+        "linkItem":  "Gillette Foamy Classic Shave Foam for Men Original Scent",
+        "board_src":  "main"
+    },
+    {
         "id":  "shaving-cream",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -2064,19 +2545,6 @@
         "size":  "96 oz",
         "boardItem":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Paradise, and Floral Fusion, 32 oz., 3 pk.",
         "linkItem":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Paradise, and Floral Fusion, 32 oz., 3 pk.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "sirloin-steak",
-        "store":  "Aldi",
-        "unit":  "lb",
-        "board":  7.99,
-        "link":  8.59,
-        "ratio":  1.08,
-        "price":  8.59,
-        "size":  "lb",
-        "boardItem":  "Thin Sliced Black Angus Beef Sirloin Tip Steak For Carne Asada Per LB",
-        "linkItem":  "Usda Choice Black Angus Sirloin Tip Steak For Carne Asada 1 Each",
         "board_src":  "main"
     },
     {
@@ -2132,6 +2600,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "spring-mix",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.599,
+        "link":  0.544,
+        "ratio":  0.91,
+        "price":  5.44,
+        "size":  "10 oz",
+        "boardItem":  "Organic Girl Essential Salads Baby Spring Mix",
+        "linkItem":  "Organic Girl Essential Salads Baby Spring Mix",
+        "board_src":  "main"
+    },
+    {
         "id":  "steak-sauce",
         "store":  "Fareway",
         "unit":  "floz",
@@ -2168,6 +2649,19 @@
         "size":  "16 oz",
         "boardItem":  "Fresh Strawberries",
         "linkItem":  "Fresh Strawberries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "stuffing-mix",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.3325,
+        "link":  0.3742,
+        "ratio":  1.13,
+        "price":  8.98,
+        "size":  "24 oz",
+        "boardItem":  "Kinder\u0027s Brown Butter \u0026 Herbs Homestyle Stuffing Mix, 24 oz.",
+        "linkItem":  "Kinder\u0027s Brown Butter \u0026 Herbs Homestyle Stuffing Mix, 24 oz.",
         "board_src":  "main"
     },
     {
@@ -2301,6 +2795,45 @@
         "board_src":  "main"
     },
     {
+        "id":  "tampons",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.3244,
+        "link":  0.3113,
+        "ratio":  0.96,
+        "price":  4.98,
+        "size":  "16 ct",
+        "boardItem":  "U by Kotex Click Compact Unscented Tampons, Regular",
+        "linkItem":  "U by Kotex Click Compact Unscented Tampons, Regular",
+        "board_src":  "main"
+    },
+    {
+        "id":  "tartar-sauce",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.2492,
+        "link":  0.2317,
+        "ratio":  0.93,
+        "price":  2.78,
+        "size":  "12 fl oz",
+        "boardItem":  "Kraft Tartar Sauce",
+        "linkItem":  "Kraft Tartar Sauce",
+        "board_src":  "main"
+    },
+    {
+        "id":  "tater-tots",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1869,
+        "link":  0.1553,
+        "ratio":  0.83,
+        "price":  4.97,
+        "size":  "32 oz",
+        "boardItem":  "Ore-Ida Crispy Tater Tots",
+        "linkItem":  "Ore-Ida Crispy Tater Tots",
+        "board_src":  "main"
+    },
+    {
         "id":  "teriyaki-sauce",
         "store":  "Sam\u0027s Club",
         "unit":  "floz",
@@ -2311,6 +2844,19 @@
         "size":  "27.5 oz",
         "boardItem":  "Kinder\u0027s Teriyaki Marinade Sauce, 27.5 oz.",
         "linkItem":  "Kinder\u0027s Teriyaki Marinade Sauce, 27.5 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "teriyaki-sauce",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.2369,
+        "link":  0.2181,
+        "ratio":  0.92,
+        "price":  3.49,
+        "size":  "16 fl oz",
+        "boardItem":  "Sweet Baby Ray\u0027s Honey Teriyaki Sauce \u0026 Marinade",
+        "linkItem":  "Sweet Baby Ray\u0027s Honey Teriyaki Sauce \u0026 Marinade",
         "board_src":  "main"
     },
     {
@@ -2327,6 +2873,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "toaster-pastries",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.3317,
+        "link":  0.25,
+        "ratio":  0.75,
+        "price":  1.5,
+        "size":  "6 ct",
+        "boardItem":  "Toast\u0027em Pop-ups Toaster Pastries, Cherry",
+        "linkItem":  "Toast\u0027em Pop-ups Toaster Pastries, Cherry",
+        "board_src":  "main"
+    },
+    {
+        "id":  "toilet-bowl-cleaner",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.1456,
+        "link":  0.1035,
+        "ratio":  0.71,
+        "price":  4.97,
+        "size":  "48 fl oz",
+        "boardItem":  "Lysol Bam Tw Toilet Bowl Cleaner",
+        "linkItem":  "Lysol Bam Tw Toilet Bowl Cleaner",
+        "board_src":  "main"
+    },
+    {
         "id":  "tomatoes",
         "store":  "Hy-Vee",
         "unit":  "lb",
@@ -2337,6 +2909,19 @@
         "size":  "lb",
         "boardItem":  "Roma Tomatoes",
         "linkItem":  "Roma Tomatoes",
+        "board_src":  "main"
+    },
+    {
+        "id":  "toothpaste",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.5246,
+        "link":  0.4333,
+        "ratio":  0.83,
+        "price":  2.47,
+        "size":  "5.7 oz",
+        "boardItem":  "Crest Cavity Protection Toothpaste Gel, Cool Mint",
+        "linkItem":  "Crest Cavity Protection Toothpaste Gel, Cool Mint",
         "board_src":  "main"
     },
     {
@@ -2376,6 +2961,32 @@
         "size":  "2 oz",
         "boardItem":  "Hy Vee Pure Vanilla Extract",
         "linkItem":  "Hy Vee Pure Vanilla Extract",
+        "board_src":  "main"
+    },
+    {
+        "id":  "vanilla-extract",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  4.2475,
+        "link":  3.2475,
+        "ratio":  0.76,
+        "price":  12.99,
+        "size":  "4 oz",
+        "boardItem":  "McCormick All Natural Pure Vanilla Extract",
+        "linkItem":  "McCormick All Natural Pure Vanilla Extract",
+        "board_src":  "main"
+    },
+    {
+        "id":  "vegetable-broth",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.1091,
+        "link":  0.0775,
+        "ratio":  0.71,
+        "price":  2.48,
+        "size":  "32 fl oz",
+        "boardItem":  "Swanson\u0027s Vegetable broth",
+        "linkItem":  "Swanson\u0027s Vegetable broth",
         "board_src":  "main"
     },
     {
@@ -2445,15 +3056,15 @@
     },
     {
         "id":  "yogurt",
-        "store":  "Aldi",
+        "store":  "Fareway",
         "unit":  "oz",
-        "board":  0.0809,
-        "link":  0.0867,
-        "ratio":  1.07,
-        "price":  0.52,
-        "size":  "6 oz",
-        "boardItem":  "Friendly Farms Nonfat Plain Yogurt 32 OZ",
-        "linkItem":  "Friendly Farms Peach Original Lowfat Yogurt 6 OZ",
+        "board":  0.1247,
+        "link":  0.1022,
+        "ratio":  0.82,
+        "price":  3.27,
+        "size":  "32 oz",
+        "boardItem":  "Yoplait Original Smooth Style Vanilla Low Fat Yogurt Tub",
+        "linkItem":  "Yoplait Original Smooth Style Vanilla Low Fat Yogurt Tub",
         "board_src":  "main"
     },
     {

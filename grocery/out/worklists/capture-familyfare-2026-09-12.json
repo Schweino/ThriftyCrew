@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-12; next_pull 2026-09-13",
-    "cursor_start":  248,
-    "cursor_next":  255,
+    "cursor_start":  241,
+    "cursor_next":  248,
     "total_terms":  602,
     "rotation_terms":  [
-                           "fresh sage",
-                           "fresh stir fry vegetables",
-                           "sweet Italian turkey sausage",
-                           "fresh thyme",
-                           "whole nutmeg",
-                           "vanilla frosting",
-                           "frozen broccoli florets"
+                           "fresh cranberries",
+                           "fresh dill",
+                           "ginger root",
+                           "fresh green beans",
+                           "fresh mint",
+                           "fresh parsley bunch",
+                           "fresh rosemary"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "fresh sage",
-                  "fresh stir fry vegetables",
-                  "sweet Italian turkey sausage",
-                  "fresh thyme",
-                  "whole nutmeg",
-                  "vanilla frosting",
-                  "frozen broccoli florets"
+                  "fresh cranberries",
+                  "fresh dill",
+                  "ginger root",
+                  "fresh green beans",
+                  "fresh mint",
+                  "fresh parsley bunch",
+                  "fresh rosemary"
               ],
     "commodities":  [
-                        "fresh-sage",
-                        "fresh-stir-fry-blend",
-                        "fresh-sweet-italian-turkey-sausage",
-                        "fresh-thyme",
-                        "fresh-whole-nutmeg",
-                        "frosting",
-                        "frozen-broccoli"
+                        "fresh-cranberries",
+                        "fresh-dill",
+                        "fresh-ginger",
+                        "fresh-green-beans",
+                        "fresh-mint",
+                        "fresh-parsley",
+                        "fresh-rosemary"
                     ],
     "call_cap":  40,
     "expiry_deferred":  0,

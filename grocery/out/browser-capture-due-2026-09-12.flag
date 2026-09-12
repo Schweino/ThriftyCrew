@@ -1,0 +1,13 @@
+﻿{
+    "date":  "2026-09-12",
+    "note":  "These stores could NOT be driven automatically. Open ONE CHROME TAB PER STORE and work each store worklist in out\\worklists\\capture-\u003cstore\u003e-\u003cdate\u003e.json. Advance the cursor with Save-CaptureCursor only AFTER the capture lands. (Aldi is here by design: its pull agent walks product slugs, not search terms - see pull-browser-stores.py ALDI_NOTE.) `stores` is what THIS run could not do; `owned` is every store deferred today and when it was first deferred, which is what the ad-coverage watchers measure their 24h against.",
+    "owned":  {
+                  "Aldi":  "2026-09-12T09:02:39",
+                  "Walmart":  "2026-09-12T09:02:39"
+              },
+    "stores":  [
+                   "Aldi",
+                   "Walmart"
+               ],
+    "kind":  "daily"
+}

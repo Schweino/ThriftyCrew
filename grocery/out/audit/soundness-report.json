@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-11 08:20",
+    "generated":  "2026-09-12 09:25",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -11,10 +11,28 @@
 
                 ],
     "new_contested":  [
-
+                          {
+                              "name":  "Koda Farms Blue Star Mochiko Sweet Rice Flour 16 oz., 6 ct.",
+                              "chain":  "rice (lb) \u003e flour (lb)",
+                              "form":  false,
+                              "winner":  "rice",
+                              "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Red Bull Energy Coconut Edition 8.4 oz., 24 pk.",
+                              "chain":  "energy-drinks (floz) \u003e coconut (each)",
+                              "form":  true,
+                              "winner":  "energy-drinks",
+                              "verdict":  "size 201.6 floz = 0.1934/floz ; size 201.6 floz = 0.1735/floz",
+                              "cell":  "",
+                              "crown":  false
+                          }
                       ],
     "new_contested_names":  [
-
+                                "Koda Farms Blue Star Mochiko Sweet Rice Flour 16 oz., 6 ct.",
+                                "Red Bull Energy Coconut Edition 8.4 oz., 24 pk."
                             ],
     "cell_by_contest":  [
 

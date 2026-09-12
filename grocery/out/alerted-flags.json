@@ -5,18 +5,18 @@
                                                     "last_detail":  "SANITY|Brown Gravy Mix (dry packet)|wow|cheapest moved down 53% vs last week ($0.54 -\u003e $0.26)",
                                                     "last_alerted":  "2026-08-16T06:22:31"
                                                 },
+    "SANITY|Donuts|wow":  {
+                              "first_seen":  "2026-09-10T08:19:31",
+                              "last_seen":  "2026-09-10T11:45:29",
+                              "last_detail":  "SANITY|Donuts|wow|cheapest moved up 74% vs last week ($0.24 -\u003e $0.42)",
+                              "last_alerted":  "2026-09-10T08:19:31"
+                          },
     "SANITY|Food Storage Bags (gallon)|wow":  {
                                                   "first_seen":  "2026-09-07T08:23:49",
                                                   "last_seen":  "2026-09-07T08:23:49",
                                                   "last_detail":  "SANITY|Food Storage Bags (gallon)|wow|cheapest moved up 55% vs last week ($0.03 -\u003e $0.05) (prior unit unrecorded)",
                                                   "last_alerted":  "2026-09-07T08:23:49"
                                               },
-    "SANITY|Paper Towels|wow":  {
-                                    "first_seen":  "2026-08-16T06:22:31",
-                                    "last_seen":  "2026-08-23T13:25:46",
-                                    "last_detail":  "SANITY|Paper Towels|wow|cheapest moved down 41% vs last week ($0.99 -\u003e $0.58)",
-                                    "last_alerted":  "2026-08-16T06:22:31"
-                                },
     "SANITY|Canned Butter Beans|outlier":  {
                                                "first_seen":  "2026-08-15T06:22:39",
                                                "last_seen":  "2026-08-31T08:18:17",
@@ -35,6 +35,12 @@
                                       "last_detail":  "SANITY|Dog Treats|outlier|Sam\u0027s Club $0.06 is 38% below runner-up Walmart $0.09 - verify the price/size parse",
                                       "last_alerted":  "2026-08-29T08:18:55"
                                   },
+    "SANITY|Peanuts|wow":  {
+                               "first_seen":  "2026-09-12T09:35:43",
+                               "last_seen":  "2026-09-12T09:35:43",
+                               "last_detail":  "SANITY|Peanuts|wow|cheapest moved up 64% vs last week ($0.09 -\u003e $0.14)",
+                               "last_alerted":  "2026-09-12T09:35:43"
+                           },
     "SANITY|Gochujang (Korean Chili Paste)|outlier":  {
                                                           "first_seen":  "2026-07-30T09:04:45",
                                                           "last_seen":  "2026-08-31T08:18:17",
@@ -43,22 +49,16 @@
                                                       },
     "SANITY|Wild Rice|outlier":  {
                                      "first_seen":  "2026-08-01T06:14:42",
-                                     "last_seen":  "2026-09-11T08:26:13",
+                                     "last_seen":  "2026-09-12T09:35:43",
                                      "last_detail":  "SANITY|Wild Rice|outlier|Hy-Vee $0.69 is 41% below runner-up Fareway $1.16 - verify the price/size parse",
-                                     "last_alerted":  "2026-08-29T08:18:55"
+                                     "last_alerted":  "2026-09-12T09:35:43"
                                  },
-    "SANITY|Donuts|wow":  {
-                              "first_seen":  "2026-09-10T08:19:31",
-                              "last_seen":  "2026-09-10T11:45:29",
-                              "last_detail":  "SANITY|Donuts|wow|cheapest moved up 74% vs last week ($0.24 -\u003e $0.42)",
-                              "last_alerted":  "2026-09-10T08:19:31"
-                          },
-    "SANITY|Floor Cleaner|outlier":  {
-                                         "first_seen":  "2026-07-30T09:04:45",
-                                         "last_seen":  "2026-08-31T08:18:17",
-                                         "last_detail":  "SANITY|Floor Cleaner|outlier|Sam\u0027s Club $0.05 is 60% below runner-up Walmart $0.14 - verify the price/size parse",
-                                         "last_alerted":  "2026-08-29T08:18:55"
-                                     },
+    "SANITY|Minced Garlic (jarred)|outlier":  {
+                                                  "first_seen":  "2026-07-29T09:14:03",
+                                                  "last_seen":  "2026-09-04T08:21:17",
+                                                  "last_detail":  "SANITY|Minced Garlic (jarred)|outlier|Sam\u0027s Club $0.12 is 46% below runner-up Walmart $0.22 - verify the price/size parse",
+                                                  "last_alerted":  "2026-08-29T08:18:55"
+                                              },
     "SANITY|White Vinegar (distilled)|wow":  {
                                                  "first_seen":  "2026-08-23T13:25:46",
                                                  "last_seen":  "2026-08-29T08:18:55",
@@ -84,9 +84,9 @@
                                       },
     "SANITY|Baby Wipes|outlier":  {
                                       "first_seen":  "2026-08-30T08:29:17",
-                                      "last_seen":  "2026-08-31T08:18:17",
-                                      "last_detail":  "SANITY|Baby Wipes|outlier|Walmart $0.01 is 40% below runner-up Sam\u0027s Club $0.02 - verify the price/size parse",
-                                      "last_alerted":  "2026-08-30T08:29:17"
+                                      "last_seen":  "2026-09-12T09:35:43",
+                                      "last_detail":  "SANITY|Baby Wipes|outlier|Walmart $0.01 is 49% below runner-up Aldi $0.03 - verify the price/size parse",
+                                      "last_alerted":  "2026-09-12T09:35:43"
                                   },
     "SANITY|Thai Red Curry Paste|wow":  {
                                             "first_seen":  "2026-09-01T08:17:27",
@@ -96,16 +96,16 @@
                                         },
     "MULTIBUY|Hy-Vee|diapers":  {
                                     "first_seen":  "2026-08-31T08:18:17",
-                                    "last_seen":  "2026-09-11T08:26:13",
+                                    "last_seen":  "2026-09-12T09:35:43",
                                     "last_detail":  "MULTIBUY|Hy-Vee|Diapers",
                                     "last_alerted":  "2026-08-31T08:18:17"
                                 },
-    "SANITY|Dried Cranberries|wow":  {
-                                         "first_seen":  "2026-08-13T09:08:52",
-                                         "last_seen":  "2026-08-13T09:08:52",
-                                         "last_detail":  "SANITY|Dried Cranberries|wow|cheapest moved up 56% vs last week ($0.16 -\u003e $0.25)",
-                                         "last_alerted":  "2026-08-13T09:08:52"
-                                     },
+    "SANITY|Garlic Powder|wow":  {
+                                     "first_seen":  "2026-09-01T08:17:27",
+                                     "last_seen":  "2026-09-01T08:17:27",
+                                     "last_detail":  "SANITY|Garlic Powder|wow|cheapest moved up 47% vs last week ($0.22 -\u003e $0.32)",
+                                     "last_alerted":  "2026-09-01T08:17:27"
+                                 },
     "SANITY|Trash Bags (13 gal)|outlier":  {
                                                "first_seen":  "2026-08-27T08:19:52",
                                                "last_seen":  "2026-08-30T08:29:17",
@@ -126,9 +126,9 @@
                               },
     "SANITY|Serrano Peppers|outlier":  {
                                            "first_seen":  "2026-07-29T09:14:03",
-                                           "last_seen":  "2026-09-11T08:26:13",
+                                           "last_seen":  "2026-09-12T09:35:43",
                                            "last_detail":  "SANITY|Serrano Peppers|outlier|Family Fare $2.99 is 40% below runner-up Baker\u0027s $4.99 - verify the price/size parse",
-                                           "last_alerted":  "2026-08-29T08:18:55"
+                                           "last_alerted":  "2026-09-12T09:35:43"
                                        },
     "SANITY|Egg Noodles|outlier":  {
                                        "first_seen":  "2026-08-07T06:18:50",
@@ -142,12 +142,24 @@
                                                  "last_detail":  "SANITY|Garlic Herb Seasoning|outlier|Sam\u0027s Club $0.42 is 40% below runner-up Walmart $0.69 - verify the price/size parse",
                                                  "last_alerted":  "2026-08-29T08:18:55"
                                              },
+    "SANITY|Nutmeg (ground)|wow":  {
+                                       "first_seen":  "2026-09-12T09:35:43",
+                                       "last_seen":  "2026-09-12T09:35:43",
+                                       "last_detail":  "SANITY|Nutmeg (ground)|wow|cheapest moved up 48% vs last week ($0.84 -\u003e $1.25)",
+                                       "last_alerted":  "2026-09-12T09:35:43"
+                                   },
     "SANITY|Drain Cleaner|outlier":  {
                                          "first_seen":  "2026-07-29T09:14:03",
                                          "last_seen":  "2026-09-04T08:21:17",
                                          "last_detail":  "SANITY|Drain Cleaner|outlier|Walmart $0.04 is 47% below runner-up Sam\u0027s Club $0.08 - verify the price/size parse",
                                          "last_alerted":  "2026-08-29T08:18:55"
                                      },
+    "MULTIBUY|Family Fare|cherries":  {
+                                          "first_seen":  "2026-09-12T09:35:43",
+                                          "last_seen":  "2026-09-12T09:35:43",
+                                          "last_detail":  "MULTIBUY|Family Fare|Cherries (fresh)",
+                                          "last_alerted":  "2026-09-12T09:35:43"
+                                      },
     "MULTIBUY|Hy-Vee|pasta":  {
                                   "first_seen":  "2026-08-10T09:05:38",
                                   "last_seen":  "2026-08-17T06:27:18",
@@ -160,36 +172,30 @@
                                    "last_detail":  "SANITY|Bananas|outlier|Walmart $0.28 is 43% below runner-up Sam\u0027s Club $0.49 - verify the price/size parse",
                                    "last_alerted":  "2026-09-01T08:17:27"
                                },
-    "SANITY|Cheddar cheese curds|outlier":  {
-                                                "first_seen":  "2026-08-27T08:19:52",
-                                                "last_seen":  "2026-09-11T08:26:13",
-                                                "last_detail":  "SANITY|Cheddar cheese curds|outlier|Aldi $0.36 is 43% below runner-up Family Fare $0.62 - verify the price/size parse",
-                                                "last_alerted":  "2026-09-06T08:25:44"
-                                            },
     "SANITY|Feta Cheese|outlier":  {
                                        "first_seen":  "2026-07-29T09:14:03",
                                        "last_seen":  "2026-08-15T09:12:24",
                                        "last_detail":  "SANITY|Feta Cheese|outlier|Sam\u0027s Club $0.30 is 39% below runner-up Aldi $0.50 - verify the price/size parse",
                                        "last_alerted":  "2026-08-14T20:16:05"
                                    },
-    "SANITY|Bar Soap|wow":  {
-                                "first_seen":  "2026-08-13T09:08:52",
-                                "last_seen":  "2026-08-13T09:08:52",
-                                "last_detail":  "SANITY|Bar Soap|wow|cheapest moved up 45% vs last week ($0.50 -\u003e $0.72)",
-                                "last_alerted":  "2026-08-13T09:08:52"
-                            },
-    "SANITY|Spinach (fresh)|outlier":  {
-                                           "first_seen":  "2026-07-30T09:04:45",
-                                           "last_seen":  "2026-08-15T09:12:24",
-                                           "last_detail":  "SANITY|Spinach (fresh)|outlier|Walmart $0.13 is 45% below runner-up Aldi $0.24 - verify the price/size parse",
-                                           "last_alerted":  "2026-08-12T06:20:33"
-                                       },
+    "MULTIBUY|Family Fare|conditioner":  {
+                                             "first_seen":  "2026-09-12T09:35:43",
+                                             "last_seen":  "2026-09-12T09:35:43",
+                                             "last_detail":  "MULTIBUY|Family Fare|Hair Conditioner",
+                                             "last_alerted":  "2026-09-12T09:35:43"
+                                         },
     "SANITY|Snow Peas / Pea Pods (fresh)|outlier":  {
                                                         "first_seen":  "2026-08-06T11:31:48",
                                                         "last_seen":  "2026-09-04T08:21:17",
                                                         "last_detail":  "SANITY|Snow Peas / Pea Pods (fresh)|outlier|Walmart $0.32 is 37% below runner-up Hy-Vee $0.50 - verify the price/size parse",
                                                         "last_alerted":  "2026-08-22T08:27:23"
                                                     },
+    "MULTIBUY|Hy-Vee|fruit-snacks":  {
+                                         "first_seen":  "2026-08-03T09:05:43",
+                                         "last_seen":  "2026-08-23T13:25:46",
+                                         "last_detail":  "MULTIBUY|Hy-Vee|Fruit Snacks",
+                                         "last_alerted":  "2026-08-18T06:23:50"
+                                     },
     "SANITY|Thyme (dried)|outlier":  {
                                          "first_seen":  "2026-07-29T09:14:03",
                                          "last_seen":  "2026-09-04T08:21:17",
@@ -204,7 +210,7 @@
                                                },
     "SANITY|Keto Hamburger Buns|outlier":  {
                                                "first_seen":  "2026-08-30T08:29:17",
-                                               "last_seen":  "2026-09-11T08:26:13",
+                                               "last_seen":  "2026-09-12T09:35:43",
                                                "last_detail":  "SANITY|Keto Hamburger Buns|outlier|Walmart $0.60 is 47% below runner-up Baker\u0027s $1.12 - verify the price/size parse",
                                                "last_alerted":  "2026-08-30T08:29:17"
                                            },
@@ -216,16 +222,16 @@
                                     },
     "MULTIBUY|Baker\u0027s|string-cheese":  {
                                                 "first_seen":  "2026-09-10T08:19:31",
-                                                "last_seen":  "2026-09-11T08:26:13",
+                                                "last_seen":  "2026-09-12T09:35:43",
                                                 "last_detail":  "MULTIBUY|Baker\u0027s|String Cheese",
                                                 "last_alerted":  "2026-09-10T08:19:31"
                                             },
-    "SANITY|Dried Guajillo Chiles|outlier":  {
-                                                 "first_seen":  "2026-08-20T06:24:56",
-                                                 "last_seen":  "2026-08-31T08:18:17",
-                                                 "last_detail":  "SANITY|Dried Guajillo Chiles|outlier|Sam\u0027s Club $0.43 is 48% below runner-up Family Fare $0.83 - verify the price/size parse",
-                                                 "last_alerted":  "2026-08-20T06:24:56"
-                                             },
+    "SANITY|Shrimp (frozen, raw)|wow":  {
+                                            "first_seen":  "2026-09-11T08:26:13",
+                                            "last_seen":  "2026-09-12T09:35:43",
+                                            "last_detail":  "SANITY|Shrimp (frozen, raw)|wow|cheapest moved up 94% vs last week ($3.49 -\u003e $6.76)",
+                                            "last_alerted":  "2026-09-11T08:26:13"
+                                        },
     "SANITY|Raspberries|outlier":  {
                                        "first_seen":  "2026-08-12T09:08:33",
                                        "last_seen":  "2026-09-04T08:21:17",
@@ -240,7 +246,7 @@
                                                  },
     "SANITY|Paper Towels|outlier":  {
                                         "first_seen":  "2026-08-16T06:22:31",
-                                        "last_seen":  "2026-09-11T08:26:13",
+                                        "last_seen":  "2026-09-12T09:35:43",
                                         "last_detail":  "SANITY|Paper Towels|outlier|Aldi $0.58 is 41% below runner-up Hy-Vee $0.99 - verify the price/size parse",
                                         "last_alerted":  "2026-08-30T08:29:17"
                                     },
@@ -262,6 +268,12 @@
                                            "last_detail":  "SANITY|Ground Turmeric|outlier|Sam\u0027s Club $0.40 is 52% below runner-up Walmart $0.83 - verify the price/size parse",
                                            "last_alerted":  "2026-08-29T08:18:55"
                                        },
+    "MULTIBUY|Baker\u0027s|corn-chips":  {
+                                             "first_seen":  "2026-09-10T08:19:31",
+                                             "last_seen":  "2026-09-12T09:35:43",
+                                             "last_detail":  "MULTIBUY|Baker\u0027s|Corn Chips (Fritos class)",
+                                             "last_alerted":  "2026-09-10T08:19:31"
+                                         },
     "SANITY|Blackberries|outlier":  {
                                         "first_seen":  "2026-08-20T09:15:25",
                                         "last_seen":  "2026-08-23T13:25:46",
@@ -285,9 +297,21 @@
                                                "last_seen":  "2026-08-23T13:25:46",
                                                "last_detail":  "SANITY|Spring Mix Salad Greens|wow|cheapest moved down 44% vs last week ($0.31 -\u003e $0.17)"
                                            },
+    "SANITY|Canned Beef Stew|outlier":  {
+                                            "first_seen":  "2026-09-01T08:17:27",
+                                            "last_seen":  "2026-09-01T08:17:27",
+                                            "last_detail":  "SANITY|Canned Beef Stew|outlier|Walmart $0.05 is 66% below runner-up Sam\u0027s Club $0.15 - verify the price/size parse",
+                                            "last_alerted":  "2026-09-01T08:17:27"
+                                        },
+    "MULTIBUY|Family Fare|bacon":  {
+                                       "first_seen":  "2026-09-12T09:35:43",
+                                       "last_seen":  "2026-09-12T09:35:43",
+                                       "last_detail":  "MULTIBUY|Family Fare|Bacon",
+                                       "last_alerted":  "2026-09-12T09:35:43"
+                                   },
     "MULTIBUY|Baker\u0027s|potato-chips":  {
                                                "first_seen":  "2026-09-10T08:19:31",
-                                               "last_seen":  "2026-09-11T08:26:13",
+                                               "last_seen":  "2026-09-12T09:35:43",
                                                "last_detail":  "MULTIBUY|Baker\u0027s|Potato Chips",
                                                "last_alerted":  "2026-09-10T08:19:31"
                                            },
@@ -297,18 +321,18 @@
                                              "last_detail":  "PACKBASIS|hummus|Sam\u0027s Club|cheapest only because a 16-pack count was multiplied into the size (0.1395 vs 2.232 as a pack total) - Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.",
                                              "last_alerted":  "2026-08-29T08:18:55"
                                          },
-    "SANITY|Shrimp (frozen, raw)|wow":  {
-                                            "first_seen":  "2026-09-11T08:26:13",
-                                            "last_seen":  "2026-09-11T08:26:13",
-                                            "last_detail":  "SANITY|Shrimp (frozen, raw)|wow|cheapest moved down 40% vs last week ($5.82 -\u003e $3.49)",
-                                            "last_alerted":  "2026-09-11T08:26:13"
-                                        },
     "SANITY|Coleslaw Mix|wow":  {
                                     "first_seen":  "2026-08-06T11:31:48",
                                     "last_seen":  "2026-08-16T06:22:31",
                                     "last_detail":  "SANITY|Coleslaw Mix|wow|cheapest moved down 55% vs last week ($0.16 -\u003e $0.07)",
                                     "last_alerted":  "2026-08-06T11:31:48"
                                 },
+    "SANITY|Floor Cleaner|wow":  {
+                                     "first_seen":  "2026-09-12T09:35:43",
+                                     "last_seen":  "2026-09-12T09:35:43",
+                                     "last_detail":  "SANITY|Floor Cleaner|wow|cheapest moved up 43% vs last week ($0.05 -\u003e $0.08)",
+                                     "last_alerted":  "2026-09-12T09:35:43"
+                                 },
     "SANITY|Couscous|outlier":  {
                                     "first_seen":  "2026-08-16T06:22:31",
                                     "last_seen":  "2026-09-04T08:21:17",
@@ -321,12 +345,6 @@
                                             "last_detail":  "SANITY|Popsicles / Ice Pops|wow|cheapest moved up 53% vs last week ($0.08 -\u003e $0.13)",
                                             "last_alerted":  "2026-08-26T08:21:45"
                                         },
-    "SANITY|Olive Oil|outlier":  {
-                                     "first_seen":  "2026-08-02T09:03:25",
-                                     "last_seen":  "2026-08-22T09:38:48",
-                                     "last_detail":  "SANITY|Olive Oil|outlier|Sam\u0027s Club $0.19 is 36% below runner-up Fareway $0.30 - verify the price/size parse",
-                                     "last_alerted":  "2026-08-12T06:20:33"
-                                 },
     "SANITY|Baby Potatoes|wow":  {
                                      "first_seen":  "2026-09-09T08:27:25",
                                      "last_seen":  "2026-09-11T08:26:13",
@@ -339,18 +357,6 @@
                                         "last_detail":  "SANITY|Garam Masala|outlier|Walmart $0.99 is 57% below runner-up Fareway $2.33 - verify the price/size parse",
                                         "last_alerted":  "2026-08-29T08:18:55"
                                     },
-    "SANITY|Canned Butter Beans|wow":  {
-                                           "first_seen":  "2026-08-15T06:22:39",
-                                           "last_seen":  "2026-08-15T06:22:39",
-                                           "last_detail":  "SANITY|Canned Butter Beans|wow|cheapest moved down 61% vs last week ($0.23 -\u003e $0.09)",
-                                           "last_alerted":  "2026-08-15T06:22:39"
-                                       },
-    "SANITY|Whole cloves|wow":  {
-                                    "first_seen":  "2026-08-16T06:22:31",
-                                    "last_seen":  "2026-08-16T06:22:31",
-                                    "last_detail":  "SANITY|Whole cloves|wow|cheapest moved down 56% vs last week ($2.49 -\u003e $1.09)",
-                                    "last_alerted":  "2026-08-16T06:22:31"
-                                },
     "SANITY|Garden Salad Blend (bagged)|wow":  {
                                                    "first_seen":  "2026-08-06T11:31:48",
                                                    "last_seen":  "2026-08-16T06:22:31",
@@ -365,7 +371,7 @@
                                  },
     "SANITY|Insect / Bug Spray (home)|outlier":  {
                                                      "first_seen":  "2026-09-01T08:17:27",
-                                                     "last_seen":  "2026-09-11T08:26:13",
+                                                     "last_seen":  "2026-09-12T09:35:43",
                                                      "last_detail":  "SANITY|Insect / Bug Spray (home)|outlier|Walmart $0.07 is 72% below runner-up Baker\u0027s $0.27 - verify the price/size parse",
                                                      "last_alerted":  "2026-09-01T08:17:27"
                                                  },
@@ -441,6 +447,12 @@
                                               "last_detail":  "PACKBASIS|artichokes|Baker\u0027s|cheapest only because a 10-pack count was multiplied into the size (0.359 vs 3.59 as a pack total) - ARTICHOKES HRTS 8-10 CT 6/14 OZ/CASE-KROGER (EACH)",
                                               "last_alerted":  "2026-08-22T09:38:48"
                                           },
+    "SANITY|Snow Peas / Pea Pods (fresh)|wow":  {
+                                                    "first_seen":  "2026-08-20T09:15:25",
+                                                    "last_seen":  "2026-08-20T09:15:25",
+                                                    "last_detail":  "SANITY|Snow Peas / Pea Pods (fresh)|wow|cheapest moved up 58% vs last week ($0.32 -\u003e $0.50)",
+                                                    "last_alerted":  "2026-08-20T09:15:25"
+                                                },
     "SANITY|Grits (quick)|outlier":  {
                                          "first_seen":  "2026-09-01T08:17:27",
                                          "last_seen":  "2026-09-04T08:21:17",
@@ -461,9 +473,9 @@
                                       },
     "SANITY|Turkey Breast (raw)|outlier":  {
                                                "first_seen":  "2026-07-29T09:14:03",
-                                               "last_seen":  "2026-09-11T08:26:13",
+                                               "last_seen":  "2026-09-12T09:35:43",
                                                "last_detail":  "SANITY|Turkey Breast (raw)|outlier|Fareway $2.99 is 38% below runner-up Walmart $4.81 - verify the price/size parse",
-                                               "last_alerted":  "2026-08-29T08:18:55"
+                                               "last_alerted":  "2026-09-12T09:35:43"
                                            },
     "SANITY|Dill Weed (dried)|wow":  {
                                          "first_seen":  "2026-07-31T06:14:37",
@@ -485,19 +497,13 @@
                                           },
     "SANITY|Blueberries|outlier":  {
                                        "first_seen":  "2026-09-06T08:25:44",
-                                       "last_seen":  "2026-09-11T08:26:13",
+                                       "last_seen":  "2026-09-12T09:35:43",
                                        "last_detail":  "SANITY|Blueberries|outlier|Aldi $0.23 is 40% below runner-up Baker\u0027s $0.39 - verify the price/size parse",
                                        "last_alerted":  "2026-09-06T08:25:44"
                                    },
-    "SANITY|Brown Gravy Mix (dry packet)|outlier":  {
-                                                        "first_seen":  "2026-08-16T06:22:31",
-                                                        "last_seen":  "2026-09-04T08:21:17",
-                                                        "last_detail":  "SANITY|Brown Gravy Mix (dry packet)|outlier|Sam\u0027s Club $0.26 is 44% below runner-up Walmart $0.46 - verify the price/size parse",
-                                                        "last_alerted":  "2026-08-30T08:29:17"
-                                                    },
     "SANITY|Crushed Thai Chili|outlier":  {
                                               "first_seen":  "2026-08-22T08:27:23",
-                                              "last_seen":  "2026-09-11T08:26:13",
+                                              "last_seen":  "2026-09-12T09:35:43",
                                               "last_detail":  "SANITY|Crushed Thai Chili|outlier|Walmart $2.47 is 44% below runner-up Hy-Vee $4.37 - verify the price/size parse",
                                               "last_alerted":  "2026-09-06T08:25:44"
                                           },
@@ -507,24 +513,30 @@
                                                  "last_detail":  "SANITY|Artichokes (fresh, whole)|wow|cheapest moved up 872% vs last week ($0.36 -\u003e $3.49)",
                                                  "last_alerted":  "2026-08-31T08:18:17"
                                              },
-    "SANITY|Mangoes|wow":  {
-                               "first_seen":  "2026-08-13T06:19:53",
-                               "last_seen":  "2026-08-13T06:19:53",
-                               "last_detail":  "SANITY|Mangoes|wow|cheapest moved up 60% vs last week ($0.74 -\u003e $1.19)",
-                               "last_alerted":  "2026-08-13T06:19:53"
-                           },
     "SANITY|Dried Cranberries|outlier":  {
                                              "first_seen":  "2026-07-30T09:04:45",
                                              "last_seen":  "2026-09-04T08:21:17",
                                              "last_detail":  "SANITY|Dried Cranberries|outlier|Sam\u0027s Club $0.16 is 36% below runner-up Walmart $0.25 - verify the price/size parse",
                                              "last_alerted":  "2026-08-30T08:29:17"
                                          },
+    "MULTIBUY|Family Fare|yogurt":  {
+                                        "first_seen":  "2026-09-12T09:35:43",
+                                        "last_seen":  "2026-09-12T09:35:43",
+                                        "last_detail":  "MULTIBUY|Family Fare|Yogurt",
+                                        "last_alerted":  "2026-09-12T09:35:43"
+                                    },
     "SANITY|Adobo seasoning|wow":  {
                                        "first_seen":  "2026-08-16T06:22:31",
                                        "last_seen":  "2026-08-16T06:22:31",
                                        "last_detail":  "SANITY|Adobo seasoning|wow|cheapest moved down 57% vs last week ($0.31 -\u003e $0.13)",
                                        "last_alerted":  "2026-08-16T06:22:31"
                                    },
+    "SANITY|Insect / Bug Spray (home)|wow":  {
+                                                 "first_seen":  "2026-09-02T08:18:42",
+                                                 "last_seen":  "2026-09-05T08:22:16",
+                                                 "last_detail":  "SANITY|Insect / Bug Spray (home)|wow|cheapest moved down 41% vs last week ($0.12 -\u003e $0.07)",
+                                                 "last_alerted":  "2026-09-02T08:18:42"
+                                             },
     "SANITY|Black peppercorns|outlier":  {
                                              "first_seen":  "2026-08-15T06:22:39",
                                              "last_seen":  "2026-08-26T08:21:45",
@@ -543,6 +555,12 @@
                                         "last_detail":  "SANITY|Whole cloves|outlier|Sam\u0027s Club $1.09 is 56% below runner-up Walmart $2.49 - verify the price/size parse",
                                         "last_alerted":  "2026-08-29T08:18:55"
                                     },
+    "SANITY|Ground Cinnamon|wow":  {
+                                       "first_seen":  "2026-07-30T09:04:45",
+                                       "last_seen":  "2026-08-22T09:38:48",
+                                       "last_detail":  "SANITY|Ground Cinnamon|wow|cheapest moved up 142% vs last week ($0.15 -\u003e $0.36)",
+                                       "last_alerted":  "2026-08-16T06:22:31"
+                                   },
     "MULTIBUY|Hy-Vee|frozen-pizza":  {
                                          "first_seen":  "2026-08-24T08:21:08",
                                          "last_seen":  "2026-08-30T08:29:17",
@@ -567,12 +585,12 @@
                                      "last_detail":  "SANITY|Brown Lentils|wow|cheapest moved up 92% vs last week ($1.00 -\u003e $1.92)",
                                      "last_alerted":  "2026-08-31T08:18:17"
                                  },
-    "SANITY|Adobo seasoning|outlier":  {
-                                           "first_seen":  "2026-08-16T06:22:31",
-                                           "last_seen":  "2026-09-04T08:21:17",
-                                           "last_detail":  "SANITY|Adobo seasoning|outlier|Sam\u0027s Club $0.13 is 57% below runner-up Baker\u0027s $0.31 - verify the price/size parse",
-                                           "last_alerted":  "2026-08-31T08:18:17"
-                                       },
+    "MULTIBUY|Baker\u0027s|ice-cream":  {
+                                            "first_seen":  "2026-09-12T09:35:43",
+                                            "last_seen":  "2026-09-12T09:35:43",
+                                            "last_detail":  "MULTIBUY|Baker\u0027s|Ice Cream",
+                                            "last_alerted":  "2026-09-12T09:35:43"
+                                        },
     "SANITY|Laundry Detergent Pods|wow":  {
                                               "first_seen":  "2026-09-07T08:23:49",
                                               "last_seen":  "2026-09-07T08:23:49",
@@ -591,9 +609,15 @@
                                             "last_detail":  "SANITY|Gelatin (Jell-O)|outlier|Hy-Vee $0.99 is 39% below runner-up Walmart $1.62 - verify the price/size parse",
                                             "last_alerted":  "2026-08-29T08:18:55"
                                         },
+    "SANITY|Garam Masala|wow":  {
+                                    "first_seen":  "2026-08-30T08:29:17",
+                                    "last_seen":  "2026-08-30T08:29:17",
+                                    "last_detail":  "SANITY|Garam Masala|wow|cheapest moved up 65% vs last week ($0.99 -\u003e $1.64)",
+                                    "last_alerted":  "2026-08-30T08:29:17"
+                                },
     "MULTIBUY|Hy-Vee|sparkling-water":  {
                                             "first_seen":  "2026-07-29T09:14:03",
-                                            "last_seen":  "2026-09-11T08:26:13",
+                                            "last_seen":  "2026-09-12T09:35:43",
                                             "last_detail":  "MULTIBUY|Hy-Vee|Sparkling Water",
                                             "last_alerted":  "2026-09-07T08:23:49"
                                         },
@@ -615,12 +639,18 @@
                                        "last_detail":  "SANITY|Pomegranate|outlier|Sam\u0027s Club $1.20 is 76% below runner-up Baker\u0027s $4.99 - verify the price/size parse",
                                        "last_alerted":  "2026-08-30T08:29:17"
                                    },
-    "SANITY|Baby Potatoes|outlier":  {
-                                         "first_seen":  "2026-08-29T08:18:55",
-                                         "last_seen":  "2026-09-08T08:25:21",
-                                         "last_detail":  "SANITY|Baby Potatoes|outlier|Fareway $1.00 is 50% below runner-up Baker\u0027s $2.00 - verify the price/size parse",
-                                         "last_alerted":  "2026-08-29T08:18:55"
-                                     },
+    "SANITY|Large Eggs (dozen)|wow":  {
+                                          "first_seen":  "2026-08-31T08:18:17",
+                                          "last_seen":  "2026-09-01T08:17:27",
+                                          "last_detail":  "SANITY|Large Eggs (dozen)|wow|cheapest moved up 59% vs last week ($1.00 -\u003e $1.59)",
+                                          "last_alerted":  "2026-08-31T08:18:17"
+                                      },
+    "SANITY|Cajun / Creole Seasoning|outlier":  {
+                                                    "first_seen":  "2026-07-29T09:14:03",
+                                                    "last_seen":  "2026-09-04T08:21:17",
+                                                    "last_detail":  "SANITY|Cajun / Creole Seasoning|outlier|Sam\u0027s Club $0.17 is 46% below runner-up Walmart $0.31 - verify the price/size parse",
+                                                    "last_alerted":  "2026-09-02T08:18:42"
+                                                },
     "SANITY|Poultry Seasoning|wow":  {
                                          "first_seen":  "2026-08-12T06:20:33",
                                          "last_seen":  "2026-09-01T08:17:27",
@@ -647,15 +677,15 @@
                              },
     "SANITY|Chili Crisp / Chili Oil|outlier":  {
                                                    "first_seen":  "2026-07-29T09:14:03",
-                                                   "last_seen":  "2026-09-11T08:26:13",
+                                                   "last_seen":  "2026-09-12T09:35:43",
                                                    "last_detail":  "SANITY|Chili Crisp / Chili Oil|outlier|Hy-Vee $0.32 is 52% below runner-up Walmart $0.67 - verify the price/size parse",
-                                                   "last_alerted":  "2026-08-29T08:18:55"
+                                                   "last_alerted":  "2026-09-12T09:35:43"
                                                },
     "SANITY|Coriander (ground)|wow":  {
                                           "first_seen":  "2026-08-30T08:29:17",
-                                          "last_seen":  "2026-09-01T08:17:27",
-                                          "last_detail":  "SANITY|Coriander (ground)|wow|cheapest moved up 181% vs last week ($0.34 -\u003e $0.96)",
-                                          "last_alerted":  "2026-08-30T08:29:17"
+                                          "last_seen":  "2026-09-12T09:35:43",
+                                          "last_detail":  "SANITY|Coriander (ground)|wow|cheapest moved up 48% vs last week ($0.96 -\u003e $1.42)",
+                                          "last_alerted":  "2026-09-12T09:35:43"
                                       },
     "SANITY|Uncooked Quinoa|wow":  {
                                        "first_seen":  "2026-08-16T06:22:31",
@@ -675,6 +705,12 @@
                                         "last_detail":  "SANITY|Coleslaw Mix|outlier|Sam\u0027s Club $0.07 is 43% below runner-up Walmart $0.13 - verify the price/size parse",
                                         "last_alerted":  "2026-08-30T08:29:17"
                                     },
+    "MULTIBUY|Family Fare|iced-tea":  {
+                                          "first_seen":  "2026-09-12T09:35:43",
+                                          "last_seen":  "2026-09-12T09:35:43",
+                                          "last_detail":  "MULTIBUY|Family Fare|Iced Tea (bottled/gallon)",
+                                          "last_alerted":  "2026-09-12T09:35:43"
+                                      },
     "SANITY|Sweet Corn (ear)|outlier":  {
                                             "first_seen":  "2026-07-29T09:14:03",
                                             "last_seen":  "2026-08-30T08:29:17",
@@ -686,6 +722,12 @@
                                                "last_seen":  "2026-08-23T13:25:46",
                                                "last_detail":  "SANITY|Cooked Shredded Chicken|wow|cheapest moved down 45% vs last week ($0.69 -\u003e $0.37)"
                                            },
+    "SANITY|Dried Guajillo Chiles|outlier":  {
+                                                 "first_seen":  "2026-08-20T06:24:56",
+                                                 "last_seen":  "2026-08-31T08:18:17",
+                                                 "last_detail":  "SANITY|Dried Guajillo Chiles|outlier|Sam\u0027s Club $0.43 is 48% below runner-up Family Fare $0.83 - verify the price/size parse",
+                                                 "last_alerted":  "2026-08-20T06:24:56"
+                                             },
     "SANITY|Celery|outlier":  {
                                   "first_seen":  "2026-08-10T09:05:38",
                                   "last_seen":  "2026-08-15T09:12:24",
@@ -700,7 +742,7 @@
                                          },
     "SANITY|Anaheim Peppers|outlier":  {
                                            "first_seen":  "2026-08-06T11:31:48",
-                                           "last_seen":  "2026-09-11T08:26:13",
+                                           "last_seen":  "2026-09-12T09:35:43",
                                            "last_detail":  "SANITY|Anaheim Peppers|outlier|Baker\u0027s $1.49 is 49% below runner-up Walmart $2.94 - verify the price/size parse",
                                            "last_alerted":  "2026-09-06T08:25:44"
                                        },
@@ -712,13 +754,19 @@
                                },
     "SANITY|Spring Mix Salad Greens|outlier":  {
                                                    "first_seen":  "2026-07-29T09:14:03",
-                                                   "last_seen":  "2026-09-11T08:26:13",
+                                                   "last_seen":  "2026-09-12T09:35:43",
                                                    "last_detail":  "SANITY|Spring Mix Salad Greens|outlier|Aldi $0.17 is 44% below runner-up Baker\u0027s $0.31 - verify the price/size parse",
-                                                   "last_alerted":  "2026-08-29T08:18:55"
+                                                   "last_alerted":  "2026-09-12T09:35:43"
                                                },
+    "SANITY|Blackberries|wow":  {
+                                    "first_seen":  "2026-08-24T08:21:08",
+                                    "last_seen":  "2026-08-24T08:21:08",
+                                    "last_detail":  "SANITY|Blackberries|wow|cheapest moved up 50% vs last week ($0.22 -\u003e $0.33)",
+                                    "last_alerted":  "2026-08-24T08:21:08"
+                                },
     "SANITY|Popsicles / Ice Pops|outlier":  {
                                                 "first_seen":  "2026-07-29T09:14:03",
-                                                "last_seen":  "2026-09-11T08:26:13",
+                                                "last_seen":  "2026-09-12T09:35:43",
                                                 "last_detail":  "SANITY|Popsicles / Ice Pops|outlier|Walmart $0.08 is 45% below runner-up Baker\u0027s $0.15 - verify the price/size parse",
                                                 "last_alerted":  "2026-09-01T08:17:27"
                                             },
@@ -728,18 +776,36 @@
                                              "last_detail":  "SANITY|Dill Weed (dried)|outlier|Walmart $1.51 is 60% below runner-up Family Fare $3.78 - verify the price/size parse",
                                              "last_alerted":  "2026-08-29T08:18:55"
                                          },
+    "MULTIBUY|Hy-Vee|gelatin":  {
+                                    "first_seen":  "2026-08-24T08:21:08",
+                                    "last_seen":  "2026-08-30T08:29:17",
+                                    "last_detail":  "MULTIBUY|Hy-Vee|Gelatin (Jell-O)",
+                                    "last_alerted":  "2026-08-24T08:21:08"
+                                },
     "SANITY|Pistachios|outlier":  {
                                       "first_seen":  "2026-08-30T08:29:17",
                                       "last_seen":  "2026-08-30T08:29:17",
                                       "last_detail":  "SANITY|Pistachios|outlier|Family Fare $0.12 is 65% below runner-up Sam\u0027s Club $0.35 - verify the price/size parse",
                                       "last_alerted":  "2026-08-30T08:29:17"
                                   },
-    "SANITY|Minced Garlic (jarred)|outlier":  {
-                                                  "first_seen":  "2026-07-29T09:14:03",
-                                                  "last_seen":  "2026-09-04T08:21:17",
-                                                  "last_detail":  "SANITY|Minced Garlic (jarred)|outlier|Sam\u0027s Club $0.12 is 46% below runner-up Walmart $0.22 - verify the price/size parse",
-                                                  "last_alerted":  "2026-08-29T08:18:55"
-                                              },
+    "SANITY|Dog Treats|wow":  {
+                                  "first_seen":  "2026-09-12T09:35:43",
+                                  "last_seen":  "2026-09-12T09:35:43",
+                                  "last_detail":  "SANITY|Dog Treats|wow|cheapest moved up 61% vs last week ($0.06 -\u003e $0.09)",
+                                  "last_alerted":  "2026-09-12T09:35:43"
+                              },
+    "SANITY|Gruyere Cheese|outlier":  {
+                                          "first_seen":  "2026-08-22T08:27:23",
+                                          "last_seen":  "2026-08-31T08:18:17",
+                                          "last_detail":  "SANITY|Gruyere Cheese|outlier|Aldi $0.34 is 53% below runner-up Hy-Vee $0.71 - verify the price/size parse",
+                                          "last_alerted":  "2026-08-22T08:27:23"
+                                      },
+    "SANITY|Bananas|wow":  {
+                               "first_seen":  "2026-09-01T08:17:27",
+                               "last_seen":  "2026-09-01T08:17:27",
+                               "last_detail":  "SANITY|Bananas|wow|cheapest moved down 43% vs last week ($0.49 -\u003e $0.28)",
+                               "last_alerted":  "2026-09-01T08:17:27"
+                           },
     "SANITY|Habanero Peppers|wow":  {
                                         "first_seen":  "2026-07-29T09:14:03",
                                         "last_seen":  "2026-08-17T06:27:18",
@@ -752,35 +818,23 @@
                                                      "last_detail":  "PACKBASIS|canned-peaches|Sam\u0027s Club|cheapest only because a 24-pack count was multiplied into the size (0.0616 vs 1.4784 as a pack total) - Summer Is Inside Organic Diced Peaches in Fruit Juice, 4 oz., 24 pk.",
                                                      "last_alerted":  "2026-08-16T06:22:31"
                                                  },
-    "SANITY|Honeydew Melon|wow":  {
-                                      "first_seen":  "2026-07-31T06:14:37",
-                                      "last_seen":  "2026-08-13T06:19:53",
-                                      "last_detail":  "SANITY|Honeydew Melon|wow|cheapest moved up 67% vs last week ($2.99 -\u003e $4.99)",
-                                      "last_alerted":  "2026-07-31T06:14:37"
-                                  },
     "SANITY|Cajun / Creole Seasoning|wow":  {
                                                 "first_seen":  "2026-08-06T11:31:48",
                                                 "last_seen":  "2026-08-22T09:38:48",
                                                 "last_detail":  "SANITY|Cajun / Creole Seasoning|wow|cheapest moved up 100% vs last week ($0.08 -\u003e $0.17)",
                                                 "last_alerted":  "2026-08-22T08:27:23"
                                             },
-    "SANITY|Cherries (fresh)|outlier":  {
-                                            "first_seen":  "2026-08-20T09:15:25",
-                                            "last_seen":  "2026-08-20T09:15:25",
-                                            "last_detail":  "SANITY|Cherries (fresh)|outlier|Aldi $2.49 is 58% below runner-up Baker\u0027s $5.99 - verify the price/size parse",
-                                            "last_alerted":  "2026-08-20T09:15:25"
-                                        },
-    "SANITY|Large Eggs (dozen)|wow":  {
-                                          "first_seen":  "2026-08-31T08:18:17",
-                                          "last_seen":  "2026-09-01T08:17:27",
-                                          "last_detail":  "SANITY|Large Eggs (dozen)|wow|cheapest moved up 59% vs last week ($1.00 -\u003e $1.59)",
-                                          "last_alerted":  "2026-08-31T08:18:17"
-                                      },
-    "SANITY|Ground Cinnamon|outlier":  {
+    "SANITY|Adobo seasoning|outlier":  {
                                            "first_seen":  "2026-08-16T06:22:31",
-                                           "last_seen":  "2026-08-20T12:41:25",
-                                           "last_detail":  "SANITY|Ground Cinnamon|outlier|Aldi $0.15 is 59% below runner-up Walmart $0.36 - verify the price/size parse",
-                                           "last_alerted":  "2026-08-16T06:22:31"
+                                           "last_seen":  "2026-09-04T08:21:17",
+                                           "last_detail":  "SANITY|Adobo seasoning|outlier|Sam\u0027s Club $0.13 is 57% below runner-up Baker\u0027s $0.31 - verify the price/size parse",
+                                           "last_alerted":  "2026-08-31T08:18:17"
+                                       },
+    "SANITY|Spinach (fresh)|outlier":  {
+                                           "first_seen":  "2026-07-30T09:04:45",
+                                           "last_seen":  "2026-08-15T09:12:24",
+                                           "last_detail":  "SANITY|Spinach (fresh)|outlier|Walmart $0.13 is 45% below runner-up Aldi $0.24 - verify the price/size parse",
+                                           "last_alerted":  "2026-08-12T06:20:33"
                                        },
     "SANITY|Aluminum Foil|outlier":  {
                                          "first_seen":  "2026-08-11T06:18:22",
@@ -794,6 +848,12 @@
                                      "last_detail":  "SANITY|Whole Coconut|wow|cheapest moved down 62% vs last week ($3.49 -\u003e $1.33)",
                                      "last_alerted":  "2026-09-10T08:19:31"
                                  },
+    "SANITY|Harissa Paste|outlier":  {
+                                         "first_seen":  "2026-07-29T09:14:03",
+                                         "last_seen":  "2026-09-12T09:35:43",
+                                         "last_detail":  "SANITY|Harissa Paste|outlier|Walmart $0.85 is 87% below runner-up Hy-Vee $6.31 - verify the price/size parse",
+                                         "last_alerted":  "2026-09-12T09:35:43"
+                                     },
     "SANITY|White Wine|outlier":  {
                                       "first_seen":  "2026-08-17T06:27:18",
                                       "last_seen":  "2026-08-31T08:18:17",
@@ -806,12 +866,18 @@
                                                       "last_detail":  "SANITY|Frozen Cauliflower Florets|outlier|Walmart $0.10 is 52% below runner-up Baker\u0027s $0.21 - verify the price/size parse",
                                                       "last_alerted":  "2026-08-31T08:18:17"
                                                   },
-    "SANITY|Furniture Polish / Dusting Spray|outlier":  {
-                                                            "first_seen":  "2026-07-29T09:14:03",
-                                                            "last_seen":  "2026-09-05T08:22:16",
-                                                            "last_detail":  "SANITY|Furniture Polish / Dusting Spray|outlier|Fareway $0.24 is 36% below runner-up Walmart $0.37 - verify the price/size parse",
-                                                            "last_alerted":  "2026-09-01T08:17:27"
-                                                        },
+    "MULTIBUY|Family Fare|jalapenos":  {
+                                           "first_seen":  "2026-09-12T09:35:43",
+                                           "last_seen":  "2026-09-12T09:35:43",
+                                           "last_detail":  "MULTIBUY|Family Fare|Jalapeno Peppers",
+                                           "last_alerted":  "2026-09-12T09:35:43"
+                                       },
+    "SANITY|Basil (dried)|wow":  {
+                                     "first_seen":  "2026-08-03T09:05:43",
+                                     "last_seen":  "2026-08-30T08:29:17",
+                                     "last_detail":  "SANITY|Basil (dried)|wow|cheapest moved up 45% vs last week ($0.73 -\u003e $1.06)",
+                                     "last_alerted":  "2026-08-30T08:29:17"
+                                 },
     "SANITY|Cinnamon Sticks|outlier":  {
                                            "first_seen":  "2026-08-15T06:22:39",
                                            "last_seen":  "2026-08-15T09:12:24",
@@ -820,16 +886,16 @@
                                        },
     "SANITY|Fennel Seed / Ground Fennel|outlier":  {
                                                        "first_seen":  "2026-07-29T09:14:03",
-                                                       "last_seen":  "2026-09-11T08:26:13",
+                                                       "last_seen":  "2026-09-12T09:35:43",
                                                        "last_detail":  "SANITY|Fennel Seed / Ground Fennel|outlier|Family Fare $0.62 is 77% below runner-up Baker\u0027s $2.70 - verify the price/size parse",
-                                                       "last_alerted":  "2026-08-29T08:18:55"
+                                                       "last_alerted":  "2026-09-12T09:35:43"
                                                    },
-    "SANITY|Harissa Paste|outlier":  {
-                                         "first_seen":  "2026-07-29T09:14:03",
-                                         "last_seen":  "2026-09-11T08:26:13",
-                                         "last_detail":  "SANITY|Harissa Paste|outlier|Walmart $0.85 is 87% below runner-up Hy-Vee $6.31 - verify the price/size parse",
-                                         "last_alerted":  "2026-08-29T08:18:55"
-                                     },
+    "SANITY|Olive Oil|outlier":  {
+                                     "first_seen":  "2026-08-02T09:03:25",
+                                     "last_seen":  "2026-08-22T09:38:48",
+                                     "last_detail":  "SANITY|Olive Oil|outlier|Sam\u0027s Club $0.19 is 36% below runner-up Fareway $0.30 - verify the price/size parse",
+                                     "last_alerted":  "2026-08-12T06:20:33"
+                                 },
     "SANITY|Uncooked Quinoa|outlier":  {
                                            "first_seen":  "2026-08-16T06:22:31",
                                            "last_seen":  "2026-08-26T08:21:45",
@@ -844,7 +910,7 @@
                                      },
     "MULTIBUY|Hy-Vee|baby-wipes":  {
                                        "first_seen":  "2026-08-31T08:18:17",
-                                       "last_seen":  "2026-09-11T08:26:13",
+                                       "last_seen":  "2026-09-12T09:35:43",
                                        "last_detail":  "MULTIBUY|Hy-Vee|Baby Wipes",
                                        "last_alerted":  "2026-08-31T08:18:17"
                                    },
@@ -871,42 +937,24 @@
                                     "last_detail":  "MULTIBUY|Hy-Vee|Shampoo",
                                     "last_alerted":  "2026-08-18T06:23:50"
                                 },
-    "SANITY|Gruyere Cheese|outlier":  {
-                                          "first_seen":  "2026-08-22T08:27:23",
-                                          "last_seen":  "2026-08-31T08:18:17",
-                                          "last_detail":  "SANITY|Gruyere Cheese|outlier|Aldi $0.34 is 53% below runner-up Hy-Vee $0.71 - verify the price/size parse",
-                                          "last_alerted":  "2026-08-22T08:27:23"
-                                      },
-    "SANITY|Lemons|outlier":  {
-                                  "first_seen":  "2026-07-29T09:14:03",
-                                  "last_seen":  "2026-09-05T08:22:16",
-                                  "last_detail":  "SANITY|Lemons|outlier|Walmart $0.50 is 41% below runner-up Baker\u0027s $0.85 - verify the price/size parse",
-                                  "last_alerted":  "2026-08-22T08:27:23"
-                              },
     "SANITY|Limes|outlier":  {
                                  "first_seen":  "2026-07-29T09:14:03",
                                  "last_seen":  "2026-09-05T08:22:16",
                                  "last_detail":  "SANITY|Limes|outlier|Walmart $0.25 is 64% below runner-up Baker\u0027s $0.69 - verify the price/size parse",
                                  "last_alerted":  "2026-08-22T08:27:23"
                              },
-    "SANITY|Trash Bags (13 gal)|wow":  {
-                                           "first_seen":  "2026-08-27T08:19:52",
-                                           "last_seen":  "2026-09-01T08:17:27",
-                                           "last_detail":  "SANITY|Trash Bags (13 gal)|wow|cheapest moved up 87% vs last week ($0.05 -\u003e $0.09)",
-                                           "last_alerted":  "2026-08-27T08:19:52"
-                                       },
     "MULTIBUY|Hy-Vee|sports-drinks":  {
                                           "first_seen":  "2026-07-29T09:14:03",
                                           "last_seen":  "2026-08-30T08:29:17",
                                           "last_detail":  "MULTIBUY|Hy-Vee|Sports Drinks",
                                           "last_alerted":  "2026-08-18T06:23:50"
                                       },
-    "SANITY|Snow Peas / Pea Pods (fresh)|wow":  {
-                                                    "first_seen":  "2026-08-20T09:15:25",
-                                                    "last_seen":  "2026-08-20T09:15:25",
-                                                    "last_detail":  "SANITY|Snow Peas / Pea Pods (fresh)|wow|cheapest moved up 58% vs last week ($0.32 -\u003e $0.50)",
-                                                    "last_alerted":  "2026-08-20T09:15:25"
-                                                },
+    "SANITY|Floor Cleaner|outlier":  {
+                                         "first_seen":  "2026-07-30T09:04:45",
+                                         "last_seen":  "2026-08-31T08:18:17",
+                                         "last_detail":  "SANITY|Floor Cleaner|outlier|Sam\u0027s Club $0.05 is 60% below runner-up Walmart $0.14 - verify the price/size parse",
+                                         "last_alerted":  "2026-08-29T08:18:55"
+                                     },
     "SANITY|Tartar Sauce|outlier":  {
                                         "first_seen":  "2026-07-29T09:14:03",
                                         "last_seen":  "2026-09-01T08:17:27",
@@ -919,29 +967,23 @@
                                                 "last_detail":  "SANITY|Prunes / Dried Plums|outlier|Walmart $0.16 is 52% below runner-up Baker\u0027s $0.33 - verify the price/size parse",
                                                 "last_alerted":  "2026-08-26T08:21:45"
                                             },
-    "SANITY|Shaved Beef Steak|outlier":  {
-                                             "first_seen":  "2026-08-22T08:27:23",
-                                             "last_seen":  "2026-08-28T08:18:30",
-                                             "last_detail":  "SANITY|Shaved Beef Steak|outlier|Sam\u0027s Club $4.37 is 41% below runner-up Aldi $7.37 - verify the price/size parse",
-                                             "last_alerted":  "2026-08-22T08:27:23"
-                                         },
     "SANITY|Whole Coconut|outlier":  {
                                          "first_seen":  "2026-09-10T08:19:31",
                                          "last_seen":  "2026-09-10T08:19:31",
                                          "last_detail":  "SANITY|Whole Coconut|outlier|Fareway $1.33 is 62% below runner-up Baker\u0027s $3.49 - verify the price/size parse",
                                          "last_alerted":  "2026-09-10T08:19:31"
                                      },
-    "SANITY|Insect / Bug Spray (home)|wow":  {
-                                                 "first_seen":  "2026-09-02T08:18:42",
-                                                 "last_seen":  "2026-09-05T08:22:16",
-                                                 "last_detail":  "SANITY|Insect / Bug Spray (home)|wow|cheapest moved down 41% vs last week ($0.12 -\u003e $0.07)",
-                                                 "last_alerted":  "2026-09-02T08:18:42"
-                                             },
+    "SANITY|Shaved Beef Steak|outlier":  {
+                                             "first_seen":  "2026-08-22T08:27:23",
+                                             "last_seen":  "2026-08-28T08:18:30",
+                                             "last_detail":  "SANITY|Shaved Beef Steak|outlier|Sam\u0027s Club $4.37 is 41% below runner-up Aldi $7.37 - verify the price/size parse",
+                                             "last_alerted":  "2026-08-22T08:27:23"
+                                         },
     "SANITY|Onion Soup Mix (dry packets)|outlier":  {
                                                         "first_seen":  "2026-07-31T06:14:37",
-                                                        "last_seen":  "2026-09-11T08:26:13",
+                                                        "last_seen":  "2026-09-12T09:35:43",
                                                         "last_detail":  "SANITY|Onion Soup Mix (dry packets)|outlier|Family Fare $0.59 is 35% below runner-up Hy-Vee $0.90 - verify the price/size parse",
-                                                        "last_alerted":  "2026-08-29T08:18:55"
+                                                        "last_alerted":  "2026-09-12T09:35:43"
                                                     },
     "SANITY|Microwave Popcorn|outlier":  {
                                              "first_seen":  "2026-07-30T09:04:45",
@@ -955,12 +997,18 @@
                                          "last_detail":  "SANITY|Brown Lentils|outlier|Walmart $1.00 is 50% below runner-up Fareway $1.99 - verify the price/size parse",
                                          "last_alerted":  "2026-08-31T08:18:17"
                                      },
-    "SANITY|Coriander (ground)|outlier":  {
-                                              "first_seen":  "2026-08-02T09:03:25",
-                                              "last_seen":  "2026-09-11T08:26:13",
-                                              "last_detail":  "SANITY|Coriander (ground)|outlier|Fareway $0.96 is 43% below runner-up Baker\u0027s $1.69 - verify the price/size parse",
-                                              "last_alerted":  "2026-08-30T08:29:17"
-                                          },
+    "SANITY|Oats / Oatmeal|wow":  {
+                                      "first_seen":  "2026-09-12T09:35:43",
+                                      "last_seen":  "2026-09-12T09:35:43",
+                                      "last_detail":  "SANITY|Oats / Oatmeal|wow|cheapest moved up 90% vs last week ($0.05 -\u003e $0.10)",
+                                      "last_alerted":  "2026-09-12T09:35:43"
+                                  },
+    "SANITY|Lemons|outlier":  {
+                                  "first_seen":  "2026-07-29T09:14:03",
+                                  "last_seen":  "2026-09-05T08:22:16",
+                                  "last_detail":  "SANITY|Lemons|outlier|Walmart $0.50 is 41% below runner-up Baker\u0027s $0.85 - verify the price/size parse",
+                                  "last_alerted":  "2026-08-22T08:27:23"
+                              },
     "MULTIBUY|Hy-Vee|protein-bars":  {
                                          "first_seen":  "2026-08-18T06:23:50",
                                          "last_seen":  "2026-08-23T13:25:46",
@@ -969,28 +1017,22 @@
                                      },
     "SANITY|Muffins (bakery)|outlier":  {
                                             "first_seen":  "2026-08-13T09:08:52",
-                                            "last_seen":  "2026-08-15T09:12:24",
-                                            "last_detail":  "SANITY|Muffins (bakery)|outlier|Walmart $0.55 is 44% below runner-up Fareway $0.99 - verify the price/size parse",
-                                            "last_alerted":  "2026-08-13T09:08:52"
+                                            "last_seen":  "2026-09-12T09:35:43",
+                                            "last_detail":  "SANITY|Muffins (bakery)|outlier|Walmart $0.37 is 40% below runner-up Baker\u0027s $0.63 - verify the price/size parse",
+                                            "last_alerted":  "2026-09-12T09:35:43"
                                         },
-    "SANITY|Canned Beef Stew|wow":  {
-                                        "first_seen":  "2026-08-12T06:20:33",
-                                        "last_seen":  "2026-09-05T08:22:16",
-                                        "last_detail":  "SANITY|Canned Beef Stew|wow|cheapest moved up 194% vs last week ($0.05 -\u003e $0.15)",
-                                        "last_alerted":  "2026-09-01T08:17:27"
-                                    },
     "SANITY|White Miso Paste|wow":  {
                                         "first_seen":  "2026-09-01T08:17:27",
                                         "last_seen":  "2026-09-05T08:22:16",
                                         "last_detail":  "SANITY|White Miso Paste|wow|cheapest moved up 137% vs last week ($0.23 -\u003e $0.55)",
                                         "last_alerted":  "2026-09-01T08:17:27"
                                     },
-    "SANITY|Hummus|outlier":  {
-                                  "first_seen":  "2026-07-29T09:14:03",
-                                  "last_seen":  "2026-09-11T08:26:13",
-                                  "last_detail":  "SANITY|Hummus|outlier|Sam\u0027s Club $0.14 is 44% below runner-up Aldi $0.25 - verify the price/size parse",
-                                  "last_alerted":  "2026-08-29T08:18:55"
-                              },
+    "SANITY|Clementines / Mandarins|outlier":  {
+                                                   "first_seen":  "2026-08-12T09:08:33",
+                                                   "last_seen":  "2026-09-09T08:27:25",
+                                                   "last_detail":  "SANITY|Clementines / Mandarins|outlier|Aldi $0.96 is 37% below runner-up Sam\u0027s Club $1.52 - verify the price/size parse",
+                                                   "last_alerted":  "2026-09-02T08:18:42"
+                                               },
     "SANITY|Jalapeno Peppers|outlier":  {
                                             "first_seen":  "2026-09-01T08:17:27",
                                             "last_seen":  "2026-09-01T08:17:27",
@@ -1003,23 +1045,29 @@
                                            "last_detail":  "SANITY|Lasagna Noodles|outlier|Walmart $0.12 is 44% below runner-up Hy-Vee $0.21 - verify the price/size parse",
                                            "last_alerted":  "2026-08-14T20:16:05"
                                        },
-    "SANITY|Basil (dried)|wow":  {
-                                     "first_seen":  "2026-08-03T09:05:43",
-                                     "last_seen":  "2026-08-30T08:29:17",
-                                     "last_detail":  "SANITY|Basil (dried)|wow|cheapest moved up 45% vs last week ($0.73 -\u003e $1.06)",
-                                     "last_alerted":  "2026-08-30T08:29:17"
-                                 },
     "MULTIBUY|Baker\u0027s|soda":  {
                                        "first_seen":  "2026-09-10T08:19:31",
-                                       "last_seen":  "2026-09-11T08:26:13",
+                                       "last_seen":  "2026-09-12T09:35:43",
                                        "last_detail":  "MULTIBUY|Baker\u0027s|Soda (12-pack)",
                                        "last_alerted":  "2026-09-10T08:19:31"
                                    },
+    "SANITY|Cheddar cheese curds|outlier":  {
+                                                "first_seen":  "2026-08-27T08:19:52",
+                                                "last_seen":  "2026-09-12T09:35:43",
+                                                "last_detail":  "SANITY|Cheddar cheese curds|outlier|Aldi $0.36 is 43% below runner-up Family Fare $0.62 - verify the price/size parse",
+                                                "last_alerted":  "2026-09-06T08:25:44"
+                                            },
+    "SANITY|Paper Towels|wow":  {
+                                    "first_seen":  "2026-08-16T06:22:31",
+                                    "last_seen":  "2026-08-23T13:25:46",
+                                    "last_detail":  "SANITY|Paper Towels|wow|cheapest moved down 41% vs last week ($0.99 -\u003e $0.58)",
+                                    "last_alerted":  "2026-08-16T06:22:31"
+                                },
     "SANITY|Bok Choy|outlier":  {
                                     "first_seen":  "2026-07-29T09:14:03",
-                                    "last_seen":  "2026-09-11T08:26:13",
+                                    "last_seen":  "2026-09-12T09:35:43",
                                     "last_detail":  "SANITY|Bok Choy|outlier|Baker\u0027s $2.49 is 38% below runner-up Hy-Vee $3.99 - verify the price/size parse",
-                                    "last_alerted":  "2026-08-29T08:18:55"
+                                    "last_alerted":  "2026-09-12T09:35:43"
                                 },
     "SANITY|Dried Arbol Chiles|outlier":  {
                                               "first_seen":  "2026-07-29T09:14:03",
@@ -1027,12 +1075,12 @@
                                               "last_detail":  "SANITY|Dried Arbol Chiles|outlier|Sam\u0027s Club $0.50 is 40% below runner-up Family Fare $0.83 - verify the price/size parse",
                                               "last_alerted":  "2026-08-29T08:18:55"
                                           },
-    "SANITY|Blackberries|wow":  {
-                                    "first_seen":  "2026-08-24T08:21:08",
-                                    "last_seen":  "2026-08-24T08:21:08",
-                                    "last_detail":  "SANITY|Blackberries|wow|cheapest moved up 50% vs last week ($0.22 -\u003e $0.33)",
-                                    "last_alerted":  "2026-08-24T08:21:08"
-                                },
+    "SANITY|Furniture Polish / Dusting Spray|outlier":  {
+                                                            "first_seen":  "2026-07-29T09:14:03",
+                                                            "last_seen":  "2026-09-05T08:22:16",
+                                                            "last_detail":  "SANITY|Furniture Polish / Dusting Spray|outlier|Fareway $0.24 is 36% below runner-up Walmart $0.37 - verify the price/size parse",
+                                                            "last_alerted":  "2026-09-01T08:17:27"
+                                                        },
     "SANITY|Carrots|wow":  {
                                "first_seen":  "2026-08-16T06:22:31",
                                "last_seen":  "2026-08-16T06:22:31",
@@ -1051,23 +1099,29 @@
                                                "last_detail":  "SANITY|Ham (deli / sliced)|outlier|Walmart $0.12 is 40% below runner-up Sam\u0027s Club $0.21 - verify the price/size parse",
                                                "last_alerted":  "2026-08-26T08:21:45"
                                            },
+    "MULTIBUY|Family Fare|shampoo":  {
+                                         "first_seen":  "2026-09-12T09:35:43",
+                                         "last_seen":  "2026-09-12T09:35:43",
+                                         "last_detail":  "MULTIBUY|Family Fare|Shampoo",
+                                         "last_alerted":  "2026-09-12T09:35:43"
+                                     },
     "SANITY|Canned Mandarin Oranges|outlier":  {
                                                    "first_seen":  "2026-08-16T06:22:31",
                                                    "last_seen":  "2026-08-20T12:41:25",
                                                    "last_detail":  "SANITY|Canned Mandarin Oranges|outlier|Aldi $0.07 is 41% below runner-up Sam\u0027s Club $0.12 - verify the price/size parse",
                                                    "last_alerted":  "2026-08-16T06:22:31"
                                                },
-    "SANITY|Cajun / Creole Seasoning|outlier":  {
-                                                    "first_seen":  "2026-07-29T09:14:03",
-                                                    "last_seen":  "2026-09-04T08:21:17",
-                                                    "last_detail":  "SANITY|Cajun / Creole Seasoning|outlier|Sam\u0027s Club $0.17 is 46% below runner-up Walmart $0.31 - verify the price/size parse",
-                                                    "last_alerted":  "2026-09-02T08:18:42"
-                                                },
+    "SANITY|Whole cloves|wow":  {
+                                    "first_seen":  "2026-08-16T06:22:31",
+                                    "last_seen":  "2026-08-16T06:22:31",
+                                    "last_detail":  "SANITY|Whole cloves|wow|cheapest moved down 56% vs last week ($2.49 -\u003e $1.09)",
+                                    "last_alerted":  "2026-08-16T06:22:31"
+                                },
     "MULTIBUY|Family Fare|soda":  {
                                       "first_seen":  "2026-07-29T09:14:03",
-                                      "last_seen":  "2026-09-11T08:26:13",
+                                      "last_seen":  "2026-09-12T09:35:43",
                                       "last_detail":  "MULTIBUY|Family Fare|Soda (12-pack)",
-                                      "last_alerted":  "2026-08-29T08:18:55"
+                                      "last_alerted":  "2026-09-12T09:35:43"
                                   },
     "SANITY|Mirin (Sweet Cooking Wine)|outlier":  {
                                                       "first_seen":  "2026-07-29T09:14:03",
@@ -1075,27 +1129,27 @@
                                                       "last_detail":  "SANITY|Mirin (Sweet Cooking Wine)|outlier|Walmart $0.26 is 53% below runner-up Baker\u0027s $0.55 - verify the price/size parse",
                                                       "last_alerted":  "2026-08-29T08:18:55"
                                                   },
-    "SANITY|Bananas|wow":  {
-                               "first_seen":  "2026-09-01T08:17:27",
-                               "last_seen":  "2026-09-01T08:17:27",
-                               "last_detail":  "SANITY|Bananas|wow|cheapest moved down 43% vs last week ($0.49 -\u003e $0.28)",
-                               "last_alerted":  "2026-09-01T08:17:27"
-                           },
+    "SANITY|Hummus|outlier":  {
+                                  "first_seen":  "2026-07-29T09:14:03",
+                                  "last_seen":  "2026-09-12T09:35:43",
+                                  "last_detail":  "SANITY|Hummus|outlier|Sam\u0027s Club $0.14 is 44% below runner-up Aldi $0.25 - verify the price/size parse",
+                                  "last_alerted":  "2026-09-12T09:35:43"
+                              },
     "SANITY|Beef Jerky|outlier":  {
                                       "first_seen":  "2026-08-12T06:20:33",
                                       "last_seen":  "2026-08-20T12:41:25",
                                       "last_detail":  "SANITY|Beef Jerky|outlier|Walmart $0.62 is 38% below runner-up Aldi $1.00 - verify the price/size parse",
                                       "last_alerted":  "2026-08-12T06:20:33"
                                   },
-    "SANITY|Garam Masala|wow":  {
-                                    "first_seen":  "2026-08-30T08:29:17",
-                                    "last_seen":  "2026-08-30T08:29:17",
-                                    "last_detail":  "SANITY|Garam Masala|wow|cheapest moved up 65% vs last week ($0.99 -\u003e $1.64)",
-                                    "last_alerted":  "2026-08-30T08:29:17"
-                                },
+    "SANITY|Trash Bags (13 gal)|wow":  {
+                                           "first_seen":  "2026-08-27T08:19:52",
+                                           "last_seen":  "2026-09-01T08:17:27",
+                                           "last_detail":  "SANITY|Trash Bags (13 gal)|wow|cheapest moved up 87% vs last week ($0.05 -\u003e $0.09)",
+                                           "last_alerted":  "2026-08-27T08:19:52"
+                                       },
     "SANITY|Chili Garlic Sauce|outlier":  {
                                               "first_seen":  "2026-08-31T08:18:17",
-                                              "last_seen":  "2026-09-11T08:26:13",
+                                              "last_seen":  "2026-09-12T09:35:43",
                                               "last_detail":  "SANITY|Chili Garlic Sauce|outlier|Baker\u0027s $0.31 is 41% below runner-up Walmart $0.53 - verify the price/size parse",
                                               "last_alerted":  "2026-08-31T08:18:17"
                                           },
@@ -1117,12 +1171,12 @@
                                          "last_detail":  "SANITY|Shaved Beef Steak|wow|cheapest moved up 69% vs last week ($4.37 -\u003e $7.37)",
                                          "last_alerted":  "2026-08-22T08:27:23"
                                      },
-    "SANITY|Clementines / Mandarins|outlier":  {
-                                                   "first_seen":  "2026-08-12T09:08:33",
-                                                   "last_seen":  "2026-09-09T08:27:25",
-                                                   "last_detail":  "SANITY|Clementines / Mandarins|outlier|Aldi $0.96 is 37% below runner-up Sam\u0027s Club $1.52 - verify the price/size parse",
-                                                   "last_alerted":  "2026-09-02T08:18:42"
-                                               },
+    "SANITY|Baby Potatoes|outlier":  {
+                                         "first_seen":  "2026-08-29T08:18:55",
+                                         "last_seen":  "2026-09-08T08:25:21",
+                                         "last_detail":  "SANITY|Baby Potatoes|outlier|Fareway $1.00 is 50% below runner-up Baker\u0027s $2.00 - verify the price/size parse",
+                                         "last_alerted":  "2026-08-29T08:18:55"
+                                     },
     "SANITY|Donuts|outlier":  {
                                   "first_seen":  "2026-09-09T08:27:25",
                                   "last_seen":  "2026-09-09T08:27:25",
@@ -1153,12 +1207,12 @@
                                 "last_detail":  "SANITY|Red Wine|wow|cheapest moved down 42% vs last week ($0.24 -\u003e $0.14)",
                                 "last_alerted":  "2026-09-01T08:17:27"
                             },
-    "MULTIBUY|Hy-Vee|fruit-snacks":  {
-                                         "first_seen":  "2026-08-03T09:05:43",
-                                         "last_seen":  "2026-08-23T13:25:46",
-                                         "last_detail":  "MULTIBUY|Hy-Vee|Fruit Snacks",
-                                         "last_alerted":  "2026-08-18T06:23:50"
-                                     },
+    "SANITY|Canned Butter Beans|wow":  {
+                                           "first_seen":  "2026-08-15T06:22:39",
+                                           "last_seen":  "2026-08-15T06:22:39",
+                                           "last_detail":  "SANITY|Canned Butter Beans|wow|cheapest moved down 61% vs last week ($0.23 -\u003e $0.09)",
+                                           "last_alerted":  "2026-08-15T06:22:39"
+                                       },
     "SANITY|Chinese Five Spice|outlier":  {
                                               "first_seen":  "2026-08-07T06:18:50",
                                               "last_seen":  "2026-08-16T06:22:31",
@@ -1177,18 +1231,12 @@
                                        "last_detail":  "SANITY|Cauliflower|outlier|Hy-Vee $1.16 is 41% below runner-up Fareway $1.98 - verify the price/size parse",
                                        "last_alerted":  "2026-08-31T08:18:17"
                                    },
-    "SANITY|Mangoes|outlier":  {
-                                   "first_seen":  "2026-08-02T09:03:25",
-                                   "last_seen":  "2026-08-12T09:08:33",
-                                   "last_detail":  "SANITY|Mangoes|outlier|Walmart $0.74 is 38% below runner-up Aldi $1.19 - verify the price/size parse",
-                                   "last_alerted":  "2026-08-02T09:03:25"
-                               },
-    "SANITY|Raisins|wow":  {
-                               "first_seen":  "2026-08-13T09:08:52",
-                               "last_seen":  "2026-08-13T09:08:52",
-                               "last_detail":  "SANITY|Raisins|wow|cheapest moved up 50% vs last week ($0.13 -\u003e $0.20)",
-                               "last_alerted":  "2026-08-13T09:08:52"
-                           },
+    "SANITY|Brown Gravy Mix (dry packet)|outlier":  {
+                                                        "first_seen":  "2026-08-16T06:22:31",
+                                                        "last_seen":  "2026-09-04T08:21:17",
+                                                        "last_detail":  "SANITY|Brown Gravy Mix (dry packet)|outlier|Sam\u0027s Club $0.26 is 44% below runner-up Walmart $0.46 - verify the price/size parse",
+                                                        "last_alerted":  "2026-08-30T08:29:17"
+                                                    },
     "SANITY|Bulgur Wheat (dry)|outlier":  {
                                               "first_seen":  "2026-08-22T09:38:48",
                                               "last_seen":  "2026-08-22T09:38:48",
@@ -1201,36 +1249,30 @@
                                           "last_detail":  "SANITY|Canned Peaches|outlier|Sam\u0027s Club $0.06 is 36% below runner-up Walmart $0.10 - verify the price/size parse",
                                           "last_alerted":  "2026-08-16T06:22:31"
                                       },
-    "SANITY|Canned Beef Stew|outlier":  {
-                                            "first_seen":  "2026-09-01T08:17:27",
-                                            "last_seen":  "2026-09-01T08:17:27",
-                                            "last_detail":  "SANITY|Canned Beef Stew|outlier|Walmart $0.05 is 66% below runner-up Sam\u0027s Club $0.15 - verify the price/size parse",
-                                            "last_alerted":  "2026-09-01T08:17:27"
-                                        },
+    "SANITY|Ground Cinnamon|outlier":  {
+                                           "first_seen":  "2026-08-16T06:22:31",
+                                           "last_seen":  "2026-08-20T12:41:25",
+                                           "last_detail":  "SANITY|Ground Cinnamon|outlier|Aldi $0.15 is 59% below runner-up Walmart $0.36 - verify the price/size parse",
+                                           "last_alerted":  "2026-08-16T06:22:31"
+                                       },
     "SANITY|Frozen Brussels Sprouts|outlier":  {
                                                    "first_seen":  "2026-08-09T06:17:40",
                                                    "last_seen":  "2026-09-04T08:21:17",
                                                    "last_detail":  "SANITY|Frozen Brussels Sprouts|outlier|Walmart $0.14 is 40% below runner-up Family Fare $0.24 - verify the price/size parse",
                                                    "last_alerted":  "2026-08-24T08:21:08"
                                                },
-    "MULTIBUY|Hy-Vee|gelatin":  {
-                                    "first_seen":  "2026-08-24T08:21:08",
-                                    "last_seen":  "2026-08-30T08:29:17",
-                                    "last_detail":  "MULTIBUY|Hy-Vee|Gelatin (Jell-O)",
-                                    "last_alerted":  "2026-08-24T08:21:08"
-                                },
     "SANITY|Beef Jerky|wow":  {
                                   "first_seen":  "2026-08-22T08:27:23",
                                   "last_seen":  "2026-08-22T09:38:48",
                                   "last_detail":  "SANITY|Beef Jerky|wow|cheapest moved up 60% vs last week ($0.62 -\u003e $1.00)",
                                   "last_alerted":  "2026-08-22T08:27:23"
                               },
-    "SANITY|Garlic Powder|wow":  {
-                                     "first_seen":  "2026-09-01T08:17:27",
-                                     "last_seen":  "2026-09-01T08:17:27",
-                                     "last_detail":  "SANITY|Garlic Powder|wow|cheapest moved up 47% vs last week ($0.22 -\u003e $0.32)",
-                                     "last_alerted":  "2026-09-01T08:17:27"
-                                 },
+    "SANITY|Canned Beef Stew|wow":  {
+                                        "first_seen":  "2026-08-12T06:20:33",
+                                        "last_seen":  "2026-09-05T08:22:16",
+                                        "last_detail":  "SANITY|Canned Beef Stew|wow|cheapest moved up 194% vs last week ($0.05 -\u003e $0.15)",
+                                        "last_alerted":  "2026-09-01T08:17:27"
+                                    },
     "SANITY|Bay Leaves|wow":  {
                                   "first_seen":  "2026-08-07T06:18:50",
                                   "last_seen":  "2026-08-30T08:29:17",
@@ -1243,24 +1285,24 @@
                                                    "last_detail":  "SANITY|French Bread / Baguette|outlier|Walmart $1.25 is 37% below runner-up Baker\u0027s $1.99 - verify the price/size parse",
                                                    "last_alerted":  "2026-08-22T08:27:23"
                                                },
-    "SANITY|Ground Cinnamon|wow":  {
-                                       "first_seen":  "2026-07-30T09:04:45",
-                                       "last_seen":  "2026-08-22T09:38:48",
-                                       "last_detail":  "SANITY|Ground Cinnamon|wow|cheapest moved up 142% vs last week ($0.15 -\u003e $0.36)",
-                                       "last_alerted":  "2026-08-16T06:22:31"
-                                   },
+    "SANITY|Cherries (fresh)|outlier":  {
+                                            "first_seen":  "2026-08-20T09:15:25",
+                                            "last_seen":  "2026-08-20T09:15:25",
+                                            "last_detail":  "SANITY|Cherries (fresh)|outlier|Aldi $2.49 is 58% below runner-up Baker\u0027s $5.99 - verify the price/size parse",
+                                            "last_alerted":  "2026-08-20T09:15:25"
+                                        },
     "SANITY|Shower / Bathroom Cleaner|outlier":  {
                                                      "first_seen":  "2026-08-07T06:18:50",
                                                      "last_seen":  "2026-08-28T08:18:30",
                                                      "last_detail":  "SANITY|Shower / Bathroom Cleaner|outlier|Walmart $0.05 is 35% below runner-up Aldi $0.08 - verify the price/size parse",
                                                      "last_alerted":  "2026-08-22T08:27:23"
                                                  },
-    "MULTIBUY|Baker\u0027s|corn-chips":  {
-                                             "first_seen":  "2026-09-10T08:19:31",
-                                             "last_seen":  "2026-09-11T08:26:13",
-                                             "last_detail":  "MULTIBUY|Baker\u0027s|Corn Chips (Fritos class)",
-                                             "last_alerted":  "2026-09-10T08:19:31"
-                                         },
+    "SANITY|Coriander (ground)|outlier":  {
+                                              "first_seen":  "2026-08-02T09:03:25",
+                                              "last_seen":  "2026-09-11T08:26:13",
+                                              "last_detail":  "SANITY|Coriander (ground)|outlier|Fareway $0.96 is 43% below runner-up Baker\u0027s $1.69 - verify the price/size parse",
+                                              "last_alerted":  "2026-08-30T08:29:17"
+                                          },
     "SANITY|All-Purpose Cleaner|wow":  {
                                            "first_seen":  "2026-09-01T08:17:27",
                                            "last_seen":  "2026-09-01T08:17:27",
