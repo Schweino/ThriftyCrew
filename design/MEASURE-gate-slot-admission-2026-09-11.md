@@ -80,8 +80,8 @@ caveat below, which now covers a fourth version. It touches no probe, no analysi
 `lib\gate-slots.ps1`, so who wins a freed slot - the whole of what is measured here - is unchanged; the only
 number it moves is the denominator each run's slot tenure is drawn from, by the seconds one fixture costs.
 
-**Re-read at commit `53e1d65bf`: every verdict below stands as measured.** `opsun-gates.ps1` gains one static
-audit, `opsudit-lesson-rate-claims.ps1` (Brad's I112 ruling), about 2 s of hermetic reading. It touches no probe, no
+**Re-read at commit `53e1d65bf`: every verdict below stands as measured.** `ops\run-gates.ps1` gains one static
+audit, `ops\audit-lesson-rate-claims.ps1` (Brad's I112 ruling), about 2 s of hermetic reading. It touches no probe, no
 analysis and nothing in `lib\gate-slots.ps1`, so who wins a freed slot is unchanged; the only number it can move
 is each run's slot tenure, by those seconds.
 
