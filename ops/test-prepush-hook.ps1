@@ -613,6 +613,21 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
       Case 'MUST NOT FIRE' 'a REFUSED push hands the push lock back as well, so one red gate cannot wedge the box' `
         ($null -ne $afterRed -and $afterRed.Held) "held=$(if ($afterRed) { $afterRed.Held } else { 'no hold' })"
       Stop-TcMutexHold $afterRed
+      # MUST FIRE - THE CHECKOUT THAT HAS NOT REBASED STILL QUEUES (2026-09-12). The holder was resolved from the
+      # PUSHING checkout, so the lock reached only worktrees that had rebased since it shipped, and a fairness device
+      # that reaches half the queue is worse than none: the sessions that updated waited while the ones that did not
+      # went straight past them to the ref. MEASURED that morning: 30 of 132 worktrees carried the script, 9 pushes sat
+      # on the lock with the oldest at 13 minutes, and the other 102 were landing past them. The sandbox has the holder
+      # in $main only - the linked worktree shares its commits and not its untracked files - which is exactly the
+      # older-checkout shape. The push from it is NOT asserted to land: this sandbox's linked checkout has no board, so
+      # the test-auditors check refuses it for a reason that has nothing to do with the lock. What is asserted is that
+      # it took the lock rather than jumping the queue.
+      Remove-Item -LiteralPath $sawFile -ErrorAction SilentlyContinue
+      CommitFile $linked 'design\lock-note-wt.md' "lock from a linked worktree`n"
+      $pWt = PushOut $linked 'pushlock-wt'
+      Case 'MUST FIRE' 'a push from a checkout with no holder of its own uses the MAIN checkout''s and still queues' `
+        ($pWt.text -match 'using the main checkout' -and $pWt.text -match 'push lock - held') `
+        "text=$($pWt.text)"
     } finally {
       Remove-Item -LiteralPath Env:TC_PUSH_LOCK_PREFIX -ErrorAction SilentlyContinue
       Remove-Item -LiteralPath Env:TC_PUSH_LOCK_QUEUE_ROOT -ErrorAction SilentlyContinue
@@ -707,7 +722,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 45   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12)
+$expectedCases = 46   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''

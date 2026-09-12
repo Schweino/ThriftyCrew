@@ -164,6 +164,28 @@ release_push_lock() {
 # a future change adds. A trap is the only way to get that property without editing each of them.
 trap release_push_lock EXIT
 holder="$repo/ops/hold-push-lock.ps1"
+# AND WHEN THIS CHECKOUT IS OLDER, THE MAIN ONE'S COPY (2026-09-12). The line above resolves the holder from the
+# PUSHING checkout, so the lock reached only the worktrees that had rebased since it shipped - and a fairness device
+# that reaches some of the queue is worse than none: the sessions that updated queue politely while the ones that did
+# not sail past them to the ref. MEASURED that morning: 30 of 132 worktrees carried this script, 9 pushes were queued
+# on the lock with the oldest waiting 13 minutes, and pushes from the other 102 were landing straight past them.
+# The hook itself is installed in the SHARED .git and is always current, so it can reach the main checkout's copy,
+# which is current too. hold-push-lock resolves lib\push-lock.ps1 from its OWN directory, so main's copy runs against
+# main's library rather than an older worktree's.
+# STILL NEVER A REFUSAL. If git cannot name the main checkout, or it has no copy either, $holder simply stays missing
+# and this push races for the ref exactly as it did the day before the lock existed.
+if [ ! -f "$holder" ]; then
+  common="$(git -C "$repo" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+  case "$common" in
+    */.git)
+      main_checkout="${common%/.git}"
+      if [ -f "$main_checkout/ops/hold-push-lock.ps1" ]; then
+        holder="$main_checkout/ops/hold-push-lock.ps1"
+        echo "pre-push: this checkout has no push-lock holder, using the main checkout's - otherwise this push would jump the queue others are waiting in." >&2
+      fi
+      ;;
+  esac
+fi
 if [ -f "$holder" ]; then
   lockdir="${TMPDIR:-/tmp}/tc-pushlock-$$"
   rm -rf "$lockdir"; mkdir -p "$lockdir"
