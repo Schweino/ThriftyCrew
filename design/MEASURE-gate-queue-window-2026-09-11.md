@@ -58,6 +58,12 @@ and one fixture moves it by far less than the per-run spread this file already r
 17h, 698 s at 18h). The observer is untouched, and the arrival and admission findings do not depend on how much
 work a run dispatches, so every total below still reads as measured.
 
+**Re-read at commit `53e1d65bf`:** `ops/run-gates.ps1` moved again, by one entry: Brad's I112 ruling adds
+`ops/audit-lesson-rate-claims.ps1` to the static list, a hermetic ratchet over tracked markdown under `content\` that
+cost about 2 s over 118 files on its first run. It dispatches no self-test, takes no slot and changes nothing in
+the queue, the observer or `lib/gate-slots.ps1`. Like the `140a0f4f6` change it adds work rather than removing it,
+by far less than the per-run spread this file reports, so every total below still reads as measured.
+
 ## What was sampled
 
 Every 15 s from **16:48:33 to 18:18:23** (360 ticks). The totals count runs that STARTED in the first 60 minutes,
