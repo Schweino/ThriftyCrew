@@ -374,7 +374,7 @@ try {
 # a build is worth one line of warning.
 $outDir = Join-Path $root 'out'
 $cmp = @(Get-ChildItem (Join-Path $outDir 'comparison-*.json') -ErrorAction SilentlyContinue |
-         Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object LastWriteTime -Descending)
+         Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object BaseName -Descending)
 if (-not $cmp.Count) {
   Write-Output 'BOARD UNKNOWN  no comparison-*.json on disk - measure nothing against "the board" until one exists'
 } else {
@@ -383,9 +383,12 @@ if (-not $cmp.Count) {
   Write-Output ("BOARD " + $newest.BaseName + "  built " + $newest.LastWriteTime.ToString('HH:mm:ss') + " (" + $ageMin + " min ago)")
   # MID-BUILD: compare-deals writes candidates-*.json a beat BEFORE comparison-*.json, so candidates being the
   # newer of the two means a build is in flight right now and neither file is a stable thing to measure.
+  # This one IS a wall-clock question, so it compares the most recently WRITTEN of each - which is a different
+  # file from the one pinned above, and deliberately so (backlog I131, 2026-09-12).
+  $newestWrite = @($cmp | Sort-Object LastWriteTime -Descending)[0]
   $cand = @(Get-ChildItem (Join-Path $outDir 'candidates-*.json') -ErrorAction SilentlyContinue |
             Where-Object { $_.BaseName -match '^candidates-\d{4}-\d{2}-\d{2}$' } | Sort-Object LastWriteTime -Descending)
-  if ($cand.Count -and $cand[0].LastWriteTime -gt $newest.LastWriteTime) {
+  if ($cand.Count -and $cand[0].LastWriteTime -gt $newestWrite.LastWriteTime) {
     Write-Output '  MID-BUILD: candidates is newer than comparison, so a board build is writing RIGHT NOW.'
     Write-Output '             Wait for it to finish before measuring, or the plan will be stale on arrival.'
   } elseif ($ageMin -le 10) {

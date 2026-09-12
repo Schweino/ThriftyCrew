@@ -4774,7 +4774,9 @@ the same account as the confirmation above. Worth doing in the same sitting; not
 
 ---
 
-### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `PARTLY DONE - TWO OF THE FIVE SCHEDULED STAGES ASSERT NOW; THE CAPTURE ENTRY POINTS WANT A WATCHED RUN` `queue-4` `2-WAY` `RUNG1 READ`
+### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `OPEN` `queue-4` `2-WAY` `RUNG1 READ`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Remainder established and it is SMALLER than filed.
 
 **`[RUNG 2 BUILT 2026-09-09, at the size rung 1 narrowed it to - five entry points, not 172 files.]`**
 
@@ -5065,7 +5067,9 @@ question is answerable without archaeology.
 **What it is not.** Not a proposal to adopt propensity scores or IPTW. This estate mostly compares
 two configurations it controls, where the repair is a paired design (I48), not an adjustment.
 
-### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `PARTLY DONE - THE HARNESS AND BOTH ARMS ARE BUILT; ONLY THE DECIDER CALLS NEED A DISPATCH` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Unchanged and blocked on exactly what it says: `--score` exits 3, 0 of 20 pairs, `verdicts.jsonl` absent. 40 decider calls are the remaining cost.
 
 **RE-CHECK:** `python meal-prep/pipeline/dedup_paired_probe.py --score` - it exits 3 and says BLIND while the decider verdicts are missing. **The block lifts when it exits 0 or 2**, which is the moment both arms have been dispatched and their rows written back.
 
@@ -7310,7 +7314,9 @@ distance between any two nodes is falling.
 them can see a query getting slower because a region densified rather than because it grew. One
 query answers it: edges per node, tracked over time.
 
-### I77 - the one-hop memory expansion experiment now has a design and, more importantly, a control group `OPEN - BLOCKED ON A RUN, NOT ON A DECISION` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I77 - the one-hop memory expansion experiment now has a design and, more importantly, a control group `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The stated blocker has CLEARED. The turn join now yields 266 (query, opened file) cases, and **251 of 266 opened a file the retriever never offered** - which is precisely the discriminating property the item said no mechanical case set could have. What remains is the noise filter, which is local and read-only.
 
 **RE-CHECK:** count the rows carrying a `turn` in `~/.claude/recall-log.jsonl`, and the open rows among them. **The block lifts when enough turns have accumulated to draw a case set from real queries** - the join only exists from 2026-09-09 forward, so this is a question about elapsed use, not about anything anyone can run today.
 
@@ -9164,7 +9170,9 @@ at least 2 other priced cells, and 41 of 492 commodities on the 2026-07-30 board
 that (22 with one priced cell, 19 with exactly two). That is the same small-cohort discipline the course
 teaches for retention tables, implemented here first.
 
-### I101 - 639 published pages earn 300 impressions and 1 click a month, and nothing in the estate measures it `PARTLY DONE` `queue-reach` `2-WAY` `RUNG1 MEASURE`
+### I101 - 639 published pages earn 300 impressions and 1 click a month, and nothing in the estate measures it `DONE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** "Nothing in the estate measures it" is REFUTED: a Search Console series has run daily since 2026-09-07 via `grocery/check-ad-cycles.ps1:940`, and holds 8 rows over 6 distinct dates with impressions moving 292 to 241. The residual is narrower than the item states: every stored row is site-total (`"rows": 1`), so the 104-of-639 page-coverage figure has never been taken twice and no per-page trend exists.
 
 **Merged from `design\backlog-inbox\reach-2026-09-09.md` on 2026-09-09.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9446,6 +9454,8 @@ that a rule with no production caller is one nobody runs.
 
 ### I105 - The estate has no compare-and-set, and the one retry it does have is not one `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
 
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Central claim REFUTED and the real gap is the opposite one. The estate DOES have a compare-and-set in production on its most irreversible writes: 12 scripts write Ghost through a conditional PUT carrying the post`s own `updated_at`, which the server rejects with 409 if the value moved. **0 of those 12 handle the 409** - `git grep -nI -E "409|Conflict"` across them returns 3 lines and every one is a comment. So the missing piece is the failed-commit branch, not the CAS. `lib/ghost-lib.ps1` is the seam. The estate had already named the pattern twice, in `lib/push-lock.ps1` and `lib/push-landable.ps1`, which describe `git push` itself as a compare-and-swap.
+
 **Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 Every mutual exclusion in this tree is **pessimistic**: a named mutex, `Enter-TcLedgerLock`, or a slot
@@ -9471,7 +9481,9 @@ theory is written up in `~/.claude/skills/software-craft/concurrency-correctness
 
 ---
 
-### I106 - A ledger's whole-file rewrite and its single-field writes are two operations with one safety argument `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I106 - A ledger's whole-file rewrite and its single-field writes are two operations with one safety argument `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Both halves measured and the cheap half is not worth doing. The lock spans 151 lines of a 281-line file, but the non-ledger work inside it costs 36 ms cold and 2 ms warm of a sub-0.7 s hold (whole-script wall clock 970/902/1035 ms over 3 runs), so moving it out buys ~4% at worst. The contention the item calls unmeasured is ALREADY fixtured at `grocery/capture-policy-lib.ps1:1228-1335`, which its own comment records as red 3 of 5 with the lock deleted.
 
 **Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9605,7 +9617,9 @@ cross-reference at all.
 
 ---
 
-### I110 - `lesson-38` says employers use a credit score; the course says they get the report, and the distinction is the one that changes what a reader should do `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+### I110 -  `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Fix verified on disk, and the sweep the item asked for is done: 36 employer mentions across 14 of 55 lessons, every one read, and NONE pairs an employer with a score - so the error was unique to lesson 38. Residual recorded rather than fixed: the old sentence is still verbatim in `content/substack/posts/substack-week-38.md:25` and in two archive Ghost bodies. Whether that Substack vault is live was not established.
 
 **Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9681,7 +9695,9 @@ real. This is a voice-and-liability question rather than a work item, which is w
 
 ---
 
-### I113 - the free instrument the course names is one this estate has never told a reader about `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I113 - the free instrument the course names is one this estate has never told a reader about `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Measured: annualcreditreport.com appears in 1 of 55 lessons; the stagger strategy, the paid look-alike warning, and any statement that the three bureaus disagree are 0 of 55 each. 54 of 55 lessons carry the `Try this together` slot such a mention would go in. The gap is real and now has its denominator; writing the lesson copy is a content decision, not a measurement.
 
 **Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9741,7 +9757,9 @@ Recorded so a later run does not repeat the sweep.
   working tree. If a lesson was edited on Ghost and never written back, these counts are wrong about
   that lesson, and nothing here checked.
 
-### I116 - `Read-TextFile` opens without `FILE_SHARE_DELETE`, and one file in `lib\` already shows the fix `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+### I116 -  `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** VERIFIED and FIXED. `lib/json-io.ps1`s `Read-TextFile` opened `FileShare.ReadWrite` without Delete, which makes a concurrent `Move-Item -Force` fail INSIDE the writer`s lock with the lock held and the old file intact, so the write is lost silently. Now opens ReadWrite plus Delete. The share mode is a script-scoped value rather than a literal ON PURPOSE: `Read-TextFile` opens and disposes inside one `CopyTo`, so no fixture can race that handle and a case that tried would pass whatever the mode said. Two cases added - a MUST FIRE asserting the constant, and a CLEAN TWIN that PROVES the platform premise by refusing a replace under a ReadWrite-only reader and landing the same replace under this one. Both kill a reverting mutant (exit 1, 2 failures, original md5-identical afterwards). One correction to the item: the fix was not in "exactly one place" - `ops/observe-gate-queue.ps1:59` already had it too, and the cited line in `gate-verdict.ps1` is 76, not 67.
 
 **Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9894,6 +9912,8 @@ one-line rule handles more cheaply.
 
 ### I119 - No cold corpus in this estate is ever re-read, and the 8-of-9 stale-harness finding is what that costs `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** One third already done: the EVAL/MEASURE corpus whose cost the item quotes has been scrubbed on every push since 2026-09-10. Run read-only, exit 0: 21 docs, 5 current, 4 unqualified, and **12 not qualifiable (57%)** - that hole is the honest gap. `graph/gold`, `graph/provenance` and `meal-prep/db` have no re-validation at all.
+
 **Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 Storage corruption has a silent class - a block that returns the wrong bytes with no error - and the
@@ -9997,7 +10017,9 @@ Three things this course would have flagged in another estate and does not flag 
   the FTL, FFS cylinder groups. Read in full and routed nowhere. It is background for anyone who
   already knows random I/O is dear and sequential I/O is cheap.
 
-### I123 - The re-arm clock is one global number for a quantity the course says is per-commodity `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I123 - The re-arm clock is one global number for a quantity the course says is per-commodity `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Premise REFUTED: `$REARM_DAYS` is the ALERT re-arm window - how long an unacked flag waits before re-paging - not a promotion cadence. Different quantity, different actor. It is also already per-alert-type via `alert-tuning.json`, whose `types` is `{}`, so 0 tunings have ever been written. The underlying course claim was measured anyway, off 37 gitignored boards: 480 re-promotion gaps, median 8 days, per-commodity medians spanning 3.5 to 37 days. **The spread is real; it just is not about this constant, so the question for Brad is which axis he actually wants tuned.**
 
 **Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10020,6 +10042,8 @@ what it means but not whether it was the first plausible number or the survivor 
 a second, different question about the same constant: whether it should be one number at all.
 
 ### I124 - Six of seven store feeds do not record which physical store the price came from `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The COUNT is REFUTED: "six of seven" holds under no test. Four different tests give 1, 1, 4 and 2 of 7, and the item`s own `git grep store_location` returned exactly one file, which is what produced the wrong number. Walmart gained a `#tc-store` gate on 2026-09-12 and is now the best-gated store of the seven; Baker`s carries a structured `location_id`; Hy-Vee and Family Fare carry their store id in prose. **The true gaps are Sam`s Club (nothing, under any test) and Fareway**, and the real defect is declared-versus-captured store ids rather than absent ones. Build described with files and lines in the lane report, deliberately not written.
 
 **Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10078,7 +10102,9 @@ discount should not raise confidence that a store carries an item, because it ca
 If a cheap signal is ever wanted, a commodity that showed a deep discount and then went quiet is a
 better `not-carried` candidate than one that simply went quiet.
 
-### I127 - A missing row on an ADVERTISED item has a cause the four-cause vocabulary does not name `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I127 - A missing row on an ADVERTISED item has a cause the four-cause vocabulary does not name `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The prior is REFUTED, in the opposite direction: a board cell is missing on 2.2% of in-window days against 10.9% out-of-window, so a cell is 5x LESS likely to be missing while the item is advertised. The confound is stated rather than hidden - the board carries forward and prioritises advertised items, so this measures the board and not the shelf. The larger finding is that 2 of the 4 existing causes, `unrendered` and `unsettled`, appear in NO enum anywhere: the live vocabulary is `carried/not-carried/blocked/error`, so a fifth cause is premature while two are undeployed.
 
 **Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10119,6 +10145,8 @@ against history rather than a judgement call.
 
 ### I129 - Every check in this estate is a SAFETY property and almost none is a LIVENESS property, and the vocabulary for saying so is missing `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Quantified: 105 detectors (`ops/audit-*.ps1` 45, `ops/audit_*.py` 1, `grocery/audit-*.ps1` 59), of which **3 are liveness checks that can fire when the producer STOPS (2.9%)**, and one of those three is advisory and can never block. Method matters: 52 of 105 merely MENTION staleness vocabulary and that number is worthless, 19 contain real age arithmetic, and all 19 were hand-opened - 16 use age as a WINDOWING FILTER, which is the opposite of a liveness check. Scope: grocery and ops only; `meal-prep/` and `graph/` were excluded, so this is not an estate figure.
+
 **Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 Distributed systems name exactly two shapes of correctness requirement. **Safety: something bad never
@@ -10154,7 +10182,9 @@ and a ruling, not this one.
 The theory is `~/.claude/skills/software-craft/distributed-correctness.md` 1 and
 `~/.claude/skills/reliability-craft/failure-detection-and-membership.md` 1a.
 
-### I130 - A deletion merged from peers can resurrect itself, and the estate's merged ledgers have never been checked for it `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I130 - A deletion merged from peers can resurrect itself, and the estate's merged ledgers have never been checked for it `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Answer is NO, established by opening all three merge paths rather than grepping for a concept. Two of the three never delete a key at all (0 `.Remove(` calls), so they cannot resurrect a deletion. The third, `sale-windows`, prunes only when `repriced_for` equals the exact `refresh_on` the PEER wrote after a landed capture - the acknowledgement IS the tombstone - and it re-reads inside the same lock the peers write under.
 
 **Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10190,7 +10220,9 @@ refresh. Whether that suits holds specifically is a ruling, not this item.
 Checked and not found: `anti-entropy`, `gossip`, `epidemic`, `tombstone` as a merge concept - zero
 hits across the tracked tree.
 
-### I131 - Ordering records by a scalar timestamp across independent writers is a named trap, and this estate has been bitten by it at least three times without naming it `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I131 - Ordering records by a scalar timestamp across independent writers is a named trap, and this estate has been bitten by it at least three times without naming it `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** CONFIRMED with a live fourth incident and FIXED. `grocery/triage-due.ps1` reported `BOARD comparison-2026-09-09` today while `comparison-2026-09-11.json` sat on disk: the 09-09 board was rebuilt under its own name at 09:08 so its mtime outranked the genuinely newer board, and the tool then told the reviewer to pin that generation. Fixed at `:377` to sort by `BaseName`, with the mid-build check kept on `LastWriteTime` because that one IS a wall-clock question. Verified after: it now pins `comparison-2026-09-11`. Census: 12 winner-by-mtime sites against 205 that sort by name, so the mtime form is the minority habit; `comparison-*` and `candidates-*` are the two globs where mtime order currently contradicts name order.
 
 **Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10223,6 +10255,8 @@ tracked tree and zero in the skills store before this course.
 
 ### I132 - A retry down the same path cannot tell "the subject is dead" from "the route to the subject is bad", and every capture retry here is a same-path retry `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Structural half SETTLED: every capture verdict here is same-path by construction. 0 sites can vary egress (`-Proxy`, `HTTPS_PROXY`, `proxy_url` all return 0 of 0) and 0 vary the HTTP session, so all 7 retry-carrying capture files retry temporally down the identical route. The design question is bigger than "add a proxy": `grocery/pull-browser-stores.py:17-27` uses ONE human-seeded persistent Chrome profile per store precisely because a fresh profile silently lands on a default store and returns a plausible price from the wrong one, so a second path is in direct tension with the store identity. The verdict DENOMINATOR the item asks for is not recoverable from disk - the ingredient queue is drained and `carriage.json` holds product-level verdicts with no probe-path evidence.
+
 **Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 SWIM's failure detector gives a probe target **two chances of different kinds**, and the distinction
@@ -10250,6 +10284,8 @@ a second path, not a code change.
 
 ### I133 - Random selection gives fairness in expectation but no deadline, and round-robin with re-permutation gives both for free `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** CONFIRMED and worse than filed. `build-verification-sample.ps1` seeds on the board date, so each day is an independent draw of 100 from 3,179 priced cells - unbounded worst case, against 63 runs if wrapped and permuted. But two other sites are deterministically NEVER: `harvest.py:2266` (`random.seed(11)`, the same 1,200 files forever) and `seo_reach_diagnosis.py:92` (sorted then strided, the same indices forever). The I38 ruling reads as though determinism is the safe property; these are its counterexample.
+
 **Merged from `design\backlog-inbox\q7-cloud1-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 SWIM picks its ping target uniformly at random, which gives **completeness only eventually** - any one
@@ -10271,7 +10307,9 @@ worst-case number of runs before a given item is examined?* If the answer is "un
 knows", wrap-and-permute converts it to a stated bound at the cost of one persisted cursor. Whether to
 adopt it anywhere is a later call; this rung produces the list and the answer.
 
-### I134 - the restore drill exists, is the only thing that would prove `graph.db` is actually reconstructible, and has ZERO callers `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I134 - the restore drill exists, is the only thing that would prove `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Drill run against an isolated 305 MB mirror in scratch: exit 0 in 0.60 s, 5 of 5 tables, 14,492 rows through a full delete-and-rebuild. Also ran the harder test the drill cannot run - a cold restore from HEAD`s COMMITTED JSON into a database that did not exist - which passed at 14,392 rows. The 100-row gap is the working tree`s uncommitted lead and is today`s real exposure. Correction to the item: it calls this rung cheap and reversible and IN THE MAIN CHECKOUT IT IS NOT, because `graph/lib/graphdb.py:30-32` hard-derives its paths from `__file__` with no override, so a drill there rewrites five tracked files and deletes the DB.
 
 **Merged from `design\backlog-inbox\q7-dbrecovery-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10379,6 +10417,8 @@ be the course selling its own subject through me.
 
 ### I137 - the food database cannot represent sodium, sugar or saturated fat, so three of the course's four checkable recommendations are unfalsifiable against anything we sell `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Two of the item`s own numbers are WRONG. "needs_verify is set on 117 of 441" conflates carrying the key with being true: 117 rows carry it, only **10 are true**. And its backfill question is answered - **165 of 441 rows name a USDA FDC id or the portal**, so they can be backfilled by API with no photograph needed. Worse than the item says in one respect: sugars and saturated fat are not even transcribed in the label captures (0 of 10 label blocks), while sodium IS captured (9 of 10) and then dropped on the way in.
+
 **Merged from `design\backlog-inbox\q7-foodhealth-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 **Source.** `food-and-health` item 23, *Reading Nutrition Labels*, names exactly five things to read
@@ -10453,7 +10493,9 @@ source-attribution line naming the originating blog ("Recipe adapted from The Cl
 own.** That is a good result and it should be said out loud, because it means finding 1 is a gap and
 not a live exposure.
 
-### I139 - the median recipe is 22% vegetable by weight against a course rule of one half the plate `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I139 - the median recipe is 22% vegetable by weight against a course rule of one half the plate `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Reproduces to the digit on an independent reimplementation: median 22.1% vegetable by weight, 62 of 583 recipes at or above 50%, 332 of 583 under 25%, 4 of 583 matching nothing. A tighter classifier that excludes spice peppers (563 uses were being caught by the bare keyword `pepper`) and excludes potato and corn gives 16.8%. Both numbers are reported because they answer different questions.
 
 **Merged from `design\backlog-inbox\q7-foodhealth-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10526,7 +10568,9 @@ and the remainder are source URLs (`lowcarbmaven.com`, `heyketomama.com`). One p
 and it is a substitution note, not advice. The catalogue's exposure is the absent fields in finding 1,
 not the words on the page.
 
-### I142 - Published per-serving macros are sums of label-rounded values multiplied by a median 5.2x and up to 156x `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I142 - Published per-serving macros are sums of label-rounded values multiplied by a median 5.2x and up to 156x `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The rounding worry is LARGELY REFUTED, and the audit found one real error instead. Applying the CFR 101.9(c) band to every row looks alarming (calories +/-9.9%, fat +/-23.3%), but a median 61.6% of a batch`s mass comes from USDA FDC rows, which are NOT label-rounded; treating those as exact gives calories 5.4% median and fat 12.9%. That is a footnote, not a correction. THE REAL FINDING, outside the item`s thesis: `turkey-pozole-rojo` (paid, published 2026-07-25) sold 460 calories for a 651.5-calorie serving, 29% low on calories and 43% low on carbs. Recomputed twice independently - a Python pass and the estate`s own `recipe-macros.ps1`, agreeing at 652/42.2/94.5/12.2 with all 18 ingredients matched. Spec `stat`, `recipes-db.json` and the built card corrected, republished with Brad`s approval, and the LIVE page verified reading 652 cal / 42g protein. 582 of the other 583 recipes reproduce within 5% (median disagreement 0.08%), so this was one recipe and not a class.
 
 **Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10631,7 +10675,9 @@ global list plus a check, not designing.
 **Marked 1-WAY because the first rung is the ruling itself and the obvious consequence is a sweep of
 330 live pages on a paid site.** That is not deletable.
 
-### I144 - Nothing in our own files carries any allergen information, and we sell recipes `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I144 - Nothing in our own files carries any allergen information, and we sell recipes `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** CONFIRMED and it is a reader-safety question, not a documentation one. **42 of 583 recipes contain Worcestershire sauce, which contains anchovy, and the ingredient list does not say so; 19 contain oyster sauce.** So the otherwise defensible position that a full ingredient list is disclosure enough is false for 7.2% of the catalogue. 0 of 584 built cards mention an allergen at all, while 481 of 583 recipes carry at least one of the top nine. **The question for Brad: do the cards carry an allergen line, and if so is it the top-nine set or only the hidden ones a reader cannot infer from the ingredient names?**
 
 **Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10744,7 +10790,9 @@ with no enforcement is a hope. **The ruling wanted:** whether to record `-Want` 
 actually used in `gate-readings.jsonl` (detective, cheap, no red on day one), or to leave it, on the
 grounds that four in-house callers is not a multi-tenant system and never will be.
 
-### I148 - `run-gates` schedules its waiters FIFO, and it has the history that would let it schedule shortest-first `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I148 -  `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Premise REFUTED: the history the item wants to schedule on does not exist. `gate-readings.jsonl` holds 5,099 rows over 128 runs with NO duration field, and `t` is written once per run so per-gate time is not recoverable; the timings live only in memory at `run-gates.ps1:165` and are printed, never stored. The file is also gitignored. The build is one field at line 839. Payoff is capped by the already-recorded bound: this box does ~41 run-gates an hour, so order decides WHO is refused and never HOW MANY.
 
 **Merged from `design\backlog-inbox\q7-cloud2-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10775,7 +10823,9 @@ order of magnitude, a priority queue over an estimate from history would cut the
 arrival-order guarantee as a floor, because shortest-first starves the longest job by construction -
 which is precisely the failure the ticket queue was built to fix.
 
-### I149 - Nothing in the estate backs off when it retries a repair, and the class was not swept `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I149 - Nothing in the estate backs off when it retries a repair, and the class was not swept `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Headline REFUTED. "Nothing backs off" is false: 16 of 219 sleep sites grow with the attempt, and `lib/ghost-lib.ps1:263-269` - the estate`s only live API client and the exact shape of both course case studies - already has exponential backoff, jitter, a 30 s cap and the transient/permanent split that was the actual lesson. The two files the item nominated as candidates, `atomic-write` and `append-line`, both already back off with an 8x ceiling. Honest residual: the other 203 sleeps were not classified into retry versus pacing, so no number is claimed about them.
 
 **Merged from `design\backlog-inbox\q7-cloud2-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10862,7 +10912,9 @@ purchase on a PowerShell-and-Python estate with no RPC layer and no cluster. The
 (items 60 to 62) are classical cryptography primitives and are not `security-craft`'s subject, which
 is adversarial input against LLM systems. Recorded so nobody re-reads them looking for an item.
 
-### I153 - The cost argument that kept the real PowerShell tokenizer out of `lib\ps-source.ps1` is refuted by measurement `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I153 - The cost argument that kept the real PowerShell tokenizer out of `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Already shipped. The tokenizer rung landed in `lib/ps-source.ps1` at commit `4876c7244` on 2026-09-12, self-test 14 of 14, exit 0. The committed measurement is finer than this item and partly disagrees with it: the tokenize CALL is 2.4x faster, while the whole rung is 3.1x slower, and that trade was accepted deliberately.
 
 **Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10929,7 +10981,9 @@ Sourcing: `nand2tetris2` unit 4.2 (Lexical Analysis) is the general form of all 
 irrelevant for the compiler"*, and tokenizing exists precisely so nothing downstream can see that
 noise.
 
-### I154 - Three different comment-reducers exist, none of them blanks a STRING LITERAL, and the estate's workaround for that is a written rule `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I154 - Three different comment-reducers exist, none of them blanks a STRING LITERAL, and the estate's workaround for that is a written rule `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Claim reproduces - 0 hits for string-token awareness in all three reducers - but the window it was written to catch CLOSED when I153 landed without the switch. Re-fixturing 7 real callers is the cost. **The question for Brad: is a string-literal-aware reducer worth 7 re-fixtured callers now that the change it was meant to protect has already shipped?**
 
 **Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10957,7 +11011,9 @@ Not proposing the change here. Proposing that if the item above is ruled in, the
 specified to blank comments **and** string-literal contents behind a switch, because retrofitting
 the second one later means re-fixturing every caller a second time.
 
-### I155 - Most `ops\audit-*.ps1` detectors cannot say WHERE, and position is free at the rung above `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I155 - Most `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Reproduces at 11 of 45 by a strict token-reduced test that excludes comments, which is identical to the item`s own grep - so its number was not inflated. New fact that changes the shape of the fix: there is NO shared finding emitter in `lib/guard-contract.ps1`, so "position is free at the rung above" is true of the AST and false of the plumbing. Every detector would need its own emit change.
 
 **Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -10986,6 +11042,8 @@ findings=3`). This is the same discipline one field further: a finding you canno
 denominator without a numerator's address.
 
 ### I156 - A staged fixture technique the estate does not use: manufacture a simplified corpus FROM the real tracked files `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Premise HALF REFUTED: it proposes building a tokenizer-based source flattener, and `lib/ps-source.ps1` already IS one, shipped 2026-09-12 - the same day this item was filed - with measured costs in its header. It blanks comments and not string literals, so 1 of the 2 dimensions is already done and the remaining build is a string-literal blanking rung. Subject population for the differential: 28 of 45 `ops/audit-*.ps1` are plain text matchers (4 already reduce, 13 parse the AST and are immune).
 
 **Merged from `design\backlog-inbox\q7-compiler-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11098,7 +11156,9 @@ one-person estate should not carry one on the strength of a single candidate.
 
 ---
 
-### I159 - `gate-slots.ps1` states an ordering precondition that none of its 29 self-test cases can reach, and the class is general `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+### I159 -  `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Claim HOLDS at 0 of 37 cases (the file has grown from the 29 the item cites). A sweep of the 5 libraries found **1 genuinely uncovered ordering precondition out of 15 candidates across 51 production comment spans**, which is near a class of one and does not earn a gate. Side finding worth more than the item: `lib/event-bus.ps1` has NO self-test at all.
 
 **Merged from `design\backlog-inbox\q7-formalverif-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11133,7 +11193,9 @@ whether this is one instance or a class. **It is explicitly NOT a proposal to ad
 of these windows are unreachable by any fixture, and a check that cannot be satisfied is the "red on
 day one" shape the ops rules already forbid.
 
-### I160 - `$null` is used to answer a presence question, and nothing says which question each form answers `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I160 -  `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** 13 of 40 sampled sites (33%) use `$null` to answer a presence question. Not near zero, so the one-line rule the item proposes is earned rather than ceremonial - but a sweep is not, because the recount is 1,465 sites across 353 of 777 files.
 
 **Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11176,7 +11238,9 @@ and it retires the question permanently.
 
 ---
 
-### I161 - Four of five tracked state ledgers have no schema check, while `known-wrong.json` has both a required-key list and a closed vocabulary `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I161 - Four of five tracked state ledgers have no schema check, while `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The item`s own table is WRONG on two of five rows. `cell-state.json` is the mirror of a SQLite table with a real DDL (3 NOT NULLs, a composite primary key), which is STRONGER enforcement than the `known-wrong.json` exemplar the item picked, because it happens at the write rather than post-hoc; and `capture-cursor.json` throws at its writer on a closed store list. The two real gaps are elsewhere, and one is proved: a rollback row missing `price` reads silently as 0.0.
 
 **Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11238,7 +11302,9 @@ until the invariants are written down nobody knows whether the existing data sat
 
 ---
 
-### I162 - 510 array-append sites are `$x += …` on a variable initialised `@()`, which is quadratic in PowerShell `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I162 - 510 array-append sites are `DONE` `queue-7`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Hypothesis REFUTED by an AST census of the six named lane files: 18 `+=` sites, 9 of them arrays, and the largest bound is 33 elements (Sam`s capture files). None grows per board row, so none is quadratic in anything that scales. The unattributed Walmart minutes are not this.
 
 **Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11323,6 +11389,8 @@ writing and this closes.
 
 ### I164 - post-publish-reviewer's findings are the one review output nobody can count `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
 
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Partly REFUTED and sharpened. The needs-Brad branch IS countable: 14 of 191 tracked triage-queue rows mention post-publish review (5 findings, 6 absent reviews, 0 open, nothing since 2026-09-03). The real defect is more specific than "writes nothing": the brief DOES license a report at line 101 but names no path and no committer, and 2 of the 4 comparison agents do not write at all - their orchestrator does. Separately, the brief CONTRADICTS ITSELF: line 45 tells the agent to fix, while lines 103-105 tell it that a reviewer which repairs has destroyed its own evidence.
+
 **Merged from `design\backlog-inbox\codereview-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 The course's checklist method ends with a step the estate has not applied to its own reviewers:
@@ -11371,6 +11439,8 @@ cited as evidence for changing a threshold.
 
 ### I165 - The four importers each decide feed-row validity for themselves, and only Walmart's was ever lifted into a library `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Structural claim partly REFUTED: there are THREE implementations, not four - `import-aldi-batch.ps1` is a 24-line shim onto the Instacart importer, converted 2026-07-30. The side-by-side the item asks for is built: **7 of 8 validity conditions have fewer than three importers agreeing**. Also found, and worth more than the count: a false statement in shipped source, where the Instacart importer`s comment claims mojibake repair is "uniform across all four importers" while Sam`s has zero calls and no `capture-lib` at all.
+
 **Merged from `design\backlog-inbox\securedesign-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 **The course's rule.** Glock's design-level rule for free-form input is that the DESIGNER writes one
@@ -11407,7 +11477,9 @@ decide whether a shared library is worth the change; `walmart-row-lib.ps1` is th
 divergence exists. The verified claim is the structural one - four independent implementations, one
 shared library covering one store - which is the condition under which divergence is the default.
 
-### I166 - No gate reads a tracked file for a secret, and the only thing standing between the Ghost Admin key and a commit is one .gitignore line `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I166 - No gate reads a tracked file for a secret, and the only thing standing between the Ghost Admin key and a commit is one .gitignore line `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Premise CONFIRMED: 0 of 8,477 tracked files and 0 of 2,881 commits carry a secret-scan gate. But the proposed rung would have been useless - the Ghost-key regex returns 0 of 0 and the Cloudflare token shape returns 653 false positives, so a naive scanner is not the answer. **The question for Brad, and it is the reason this is a ruling: a generic named-secret regex found exactly ONE hit across 8,477 files - a committed 32-hex value assigned to a field named `token` at `grocery/pull-grocery-ads.ps1:22`, beside the Aldi merchant store code.** It is used as a `?access_token=` query parameter against `dam.flippenterprise.net/flyerkit`, which is the public flyer API a retailer widget calls, so it is very likely a shared public key rather than a credential. It was not printed, not tested, and not rotated. Brad rules whether it is a credential or a public retailer identifier.
 
 **Merged from `design\backlog-inbox\securedesign-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11444,6 +11516,8 @@ it is not zero, that is an incident and not a backlog item.
 that nothing in the gate set would tell you.
 
 ### I167 - Ghost's own surface is checked at two fixed lists, never censused `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The post half is partly REFUTED: `ops/audit-ghost-drift.ps1 -Discover` ALREADY paginates every post Ghost holds and then discards every unmatched one without listing it, so the census exists and throws away its own denominator. The manifest is 16 tools generated 2026-08-08, 35 days stale. The integrations and webhooks half genuinely needs one live Admin API GET, which was deliberately NOT made; the exact call is written out in the lane report. The item predicted a 403, and that prediction is unsupported - the memory it cites records 403 on `/stats/` and `/settings/` and says nothing about `/integrations/`.
 
 **Merged from `design\backlog-inbox\securedesign-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

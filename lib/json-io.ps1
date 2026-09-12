@@ -47,6 +47,8 @@
 # switch off $args, and only when this file is RUN rather than dot-sourced.
 $__jioSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
+$script:JioReadShare = [IO.FileShare]([IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete)
+
 function Resolve-JioPath {
   <# PowerShell LOCATION semantics, which [IO.File] does not have (2026-09-06, PLAN-top5 area 5, measured).
      .NET resolves a relative path against the PROCESS working directory; `Push-Location` moves only the
@@ -86,7 +88,17 @@ function Read-TextFile {
   # relative-path mistake reads as a relative-path mistake rather than as a missing file.
   if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { throw "Read-TextFile: no such file: $full (from '$Path')" }
   $bytes = $null
-  $fs = New-Object IO.FileStream($full, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
+  # FILE_SHARE_DELETE IS REQUIRED, NOT TIDINESS (2026-09-12, backlog I116). A reader that holds a file
+  # shared ReadWrite but NOT Delete makes a concurrent `Move-Item -Force <tmp> <this file>` fail with
+  # "Cannot create a file when that file already exists" - and that failure lands INSIDE the writer's
+  # lock, with the lock held and the old file intact, so the write is simply LOST. A mutex serialises
+  # writers and can do nothing about a lock-free reader, which is why the share mode is the fix and a
+  # lock is not. `lib\gate-verdict.ps1:76` and `ops\observe-gate-queue.ps1:59` already open this way.
+  # Measured in a temp tree: ReadWrite loses the move in 2 of 2 arms, ReadWrite+Delete lands in 2 of 2.
+  # It is a script-scoped VALUE rather than a literal so the self-test can assert the constant itself.
+  # Read-TextFile opens and disposes its handle inside one CopyTo, so no fixture can race that handle;
+  # a case that tried would prove nothing about a revert. Asserting the value can, and does not grep source.
+  $fs = New-Object IO.FileStream($full, [IO.FileMode]::Open, [IO.FileAccess]::Read, $script:JioReadShare)
   try {
     $ms = New-Object IO.MemoryStream
     try { $fs.CopyTo($ms); $bytes = $ms.ToArray() } finally { $ms.Dispose() }
@@ -328,6 +340,33 @@ if ($__jioSelfTest) {
     if ($lockThrew) { Write-Output '  PASS  CLEAN TWIN: an EXCLUSIVE lock still throws - a real conflict is not read through' }
     else { Write-Output '  FAIL  an exclusively locked file was read anyway'; $fail++ }
   } finally { $ls.Dispose() }
+
+  # (9c) MUST FIRE - the reader's share mode PERMITS DELETE (2026-09-12, backlog I116). A reader holding a
+  #      file shared ReadWrite but not Delete makes a concurrent `Move-Item -Force <tmp> <file>` fail with
+  #      "Cannot create a file when that file already exists" - INSIDE the writer's lock, with the lock held,
+  #      so the write is LOST and nothing throws in the reader. This asserts the CONSTANT rather than racing
+  #      the handle, deliberately: Read-TextFile opens and disposes inside one CopyTo, so no fixture can hold
+  #      that handle long enough to race it, and a case that tried would pass whatever the share mode said.
+  if (($script:JioReadShare -band [IO.FileShare]::Delete) -eq [IO.FileShare]::Delete) {
+    Write-Output '  PASS  MUST FIRE: the read share mode permits DELETE, so a concurrent atomic replace is not refused'
+  } else { Write-Output '  FAIL  the read share mode omits Delete - a lock-free read here silently costs a locked writer its write'; $fail++ }
+  # (9d) CLEAN TWIN - the PLATFORM behaviour the constant exists for, proved rather than asserted, so the
+  #      case above cannot become folklore. Without Delete the replace is refused; with it, it lands.
+  $repl = Join-Path $t 'replace-me.json'
+  $tmpNew = Join-Path $t 'replace-me.tmp'
+  [IO.File]::WriteAllText($repl, '{"item":"old"}', (New-Object Text.UTF8Encoding($false)))
+  [IO.File]::WriteAllText($tmpNew, '{"item":"new"}', (New-Object Text.UTF8Encoding($false)))
+  $noDel = New-Object IO.FileStream($repl, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
+  $refusedNoDelete = $false
+  try { try { Move-Item -LiteralPath $tmpNew -Destination $repl -Force -ErrorAction Stop } catch { $refusedNoDelete = $true } }  # atomic-replace:allow the REFUSAL is the assertion - this replace must fail under a ReadWrite-only reader
+  finally { $noDel.Dispose() }
+  $withDel = New-Object IO.FileStream($repl, [IO.FileMode]::Open, [IO.FileAccess]::Read, $script:JioReadShare)
+  $landedWithDelete = $false
+  try { try { Move-Item -LiteralPath $tmpNew -Destination $repl -Force -ErrorAction Stop; $landedWithDelete = $true } catch { $landedWithDelete = $false } }  # atomic-replace:allow the raw Move-Item IS the subject under test - going through Write-TcAtomicFile would retry and hide the very behaviour this proves
+  finally { $withDel.Dispose() }
+  if ($refusedNoDelete -and $landedWithDelete) {
+    Write-Output '  PASS  CLEAN TWIN: a replace under a ReadWrite-only reader is REFUSED and the same replace under this reader LANDS'
+  } else { Write-Output "  FAIL  the share-mode premise did not reproduce (refusedWithoutDelete=$refusedNoDelete landedWithDelete=$landedWithDelete)"; $fail++ }
 
   # (10) MUST FIRE - a RELATIVE path resolves against the PowerShell location, not the process working
   #      directory. `Push-Location` moves only the former, and three scripts in this estate call
