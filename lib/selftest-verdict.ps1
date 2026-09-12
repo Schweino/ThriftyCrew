@@ -142,7 +142,7 @@ if ($__svSelfTest) {
     '',
     'STORE        IDENTITY               ZIP     AD FROM     AD TO       OMAHA  CURRENT  DEALS  STATUS',
     'VERIFIED stores: Hy-Vee, Aldi   total verified deals: 412',
-    'Saved: C:\Codex\ThriftyCrew\grocery\out\ads-2026-09-11.json')
+    'Saved: ...\ads-2026-09-11.json')
   Test-SvCase 'MUST FIRE  the 8253ded82 output - every case ok, then the live pull, exit 0 - carries no verdict' { -not (Get-SvFound $founding) }
   Test-SvCase 'MUST FIRE  a verdict printed and then fallen past - production lines after it - is not the last word' {
     -not (Get-SvFound @('  ok    one case', 'SELF-TEST PASS: 1 case(s)', 'pulling...', 'Saved: out\x.json'))
@@ -239,7 +239,7 @@ if ($__svSelfTest) {
       'function _T([string]$m, [bool]$c) { $script:n++; if ($c) { Write-Output (''  ok    '' + $m) } else { Write-Output (''  FAIL  '' + $m); $script:fail++ } }',
       'if ($SelfTest) {')
     $verdict = 'if ($fail -eq 0) { Write-Output "SELF-TEST PASS: $n case(s)"; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail of $n case(s)"; exit 1 }'
-    $tail = @('}', 'Write-Output ''Today: 2026-09-11  -  pulling current Omaha weekly ads...''', 'Write-Output ''Saved: out\ads-2026-09-11.json''')
+    $tail = @('}', 'Write-Output ''Today: 2026-09-11  -  pulling current Omaha weekly ads...''', 'Write-Output ''Saved: ...\ads-2026-09-11.json''')
     $glued = Get-SvScratch 'glued.ps1'
     [IO.File]::WriteAllText($glued, ((@($head) + @("  _T 'MUST FIRE  a case' (`$true)  " + $verdict) + $tail) -join "`r`n"), (New-Object Text.UTF8Encoding($false)))
     $apart = Get-SvScratch 'apart.ps1'
@@ -262,10 +262,10 @@ if ($__svSelfTest) {
     }
     $gScore = Get-TcSelfTestScore -ExitCode $res[0].ExitCode -Lines $gOut
     Test-SvCase ('MUST FIRE  THE FOUNDING SHAPE, RUN: a verdict glued onto the last case line falls through to the production path, exits 0, and scores no-verdict (exit ' + $res[0].ExitCode + ', last: ' + (@($gOut) | Select-Object -Last 1) + ')') {
-      ($res[0].ExitCode -eq 0) -and (($gOut -join "`n") -match 'Saved: out') -and ($gScore.Score -ceq 'no-verdict')
+      ($res[0].ExitCode -eq 0) -and (($gOut -join "`n") -match 'ads-2026-09-11\.json') -and ($gScore.Score -ceq 'no-verdict')
     }
     Test-SvCase ('MUST NOT FIRE  the same suite with its verdict on its own line exits 0 before the production path and scores ok (exit ' + $res[1].ExitCode + ')') {
-      ($res[1].ExitCode -eq 0) -and -not (($aOut -join "`n") -match 'Saved: out') -and ((Get-TcSelfTestScore -ExitCode $res[1].ExitCode -Lines $aOut).Score -ceq 'ok')
+      ($res[1].ExitCode -eq 0) -and -not (($aOut -join "`n") -match 'ads-2026-09-11\.json') -and ((Get-TcSelfTestScore -ExitCode $res[1].ExitCode -Lines $aOut).Score -ceq 'ok')
     }
     Test-SvCase ('CLEAN TWIN  the same suite with a failing case still exits 1 and scores fail (exit ' + $res[2].ExitCode + ')') {
       ($res[2].ExitCode -eq 1) -and ((Get-TcSelfTestScore -ExitCode $res[2].ExitCode -Lines $rOut).Score -ceq 'fail')
