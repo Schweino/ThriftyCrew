@@ -202,6 +202,39 @@ function Format-Qty([double]$q) {
   return ('{0:0.###}' -f $q)
 }
 
+# A HUMAN-READ NET SIZE, KEYED AND VERIFIED AGAINST SAM'S OWN ARITHMETIC (2026-09-11, queue 2026-09-10-c8eb72).
+# When Sam's prices by a unit its NAME does not state, this builder back-solves the pack size as
+# linePrice / unitPrice - and unitPrice is rounded to the cent, so that size is only good to 0.005/unitPrice
+# (7.1% at $0.07/oz). For a WEIGHT commodity there is no name-based substitute, because a gallon's weight
+# depends on what is in it: "Sweet Baby Ray's Original Barbecue Sauce, 1 gal." is a 1.3 g/ml sauce and is NOT
+# 128 oz. The only honest source is somebody reading the label or the PDP specifications, so this file gives
+# that reading a keyed home - and the builder refuses a reading that does not reproduce Sam's own printed unit
+# price, so a mistyped or mis-unit number cannot ship. No size is ever invented here; an empty file changes
+# nothing.
+$script:SamsSizeHints = $null
+$script:SamsHintNotes = New-Object System.Collections.Generic.List[object]
+function Get-SamsSizeHints($rootDir) {
+  if ($null -ne $script:SamsSizeHints) { return ,$script:SamsSizeHints }
+  $script:SamsSizeHints = @()
+  $p = Join-Path $rootDir 'sams-size-hints.json'
+  if (Test-Path $p) {
+    try {
+      # Read explicitly as UTF-8 rather than through Read-JsonFile: this script dot-sources no json-io,
+      # and PS 5.1's Get-Content would decode a BOM-less file with the ANSI codepage. ReadAllText with an
+      # explicit encoding honours a BOM when there is one and assumes UTF-8 when there is not, which is what
+      # every writer of this file produces.
+      $doc = [IO.File]::ReadAllText($p, [Text.Encoding]::UTF8) | ConvertFrom-Json
+      # NO @() AROUND THE READ: in PS 5.1 @($null) counts ONE, so an absent 'hints' key would become a
+      # single $null entry and every lookup below would compare against it (ps51-json-array-traps).
+      $h = $doc.hints
+      if ($null -ne $h) { $script:SamsSizeHints = @($h) }
+    } catch { Write-Warning ('build-sams-deals: sams-size-hints.json unreadable (' + $_.Exception.Message + ') - every derived size keeps its quotient') }
+  }
+  return ,$script:SamsSizeHints
+}
+# Which hint field belongs to which priced unit. A hint stated in a unit Sam's did not price by cannot be
+# checked against Sam's arithmetic at all, so it is reported rather than silently ignored.
+$script:SamsHintFieldUnit = @{ 'net_oz' = 'oz'; 'net_floz' = 'fl oz'; 'net_lb' = 'lb'; 'net_ct' = 'ct' }
 # Build ONE engine-shaped row from a raw capture row. Returns @{row=..; err=..}
 function Build-Row($raw) {
   $lpm = [regex]::Match(("" + $raw.lp), '\$\s*([\d,]+(?:\.\d{1,2})?)')
@@ -231,7 +264,44 @@ function Build-Row($raw) {
   $derived = $lp / $up
   $qty = $derived
   $basis = 'derived lp/up'
-  $cands = Get-NameQtyCandidates $raw.n $u.tok
+  # A KEYED, HUMAN-READ SIZE OUTRANKS THE QUOTIENT - IF IT REPRODUCES SAM'S OWN UNIT PRICE. Keyed on the exact
+  # item id AND the exact name, because Sam's re-uses neither loosely and a hint that has drifted off its
+  # product must stop applying rather than quietly re-size a different jug. The test is the same one the name
+  # candidates face above: lp / hint must display as the unitPrice Sam's printed. A hint that fails it is NOT
+  # a reason to reject the row - the row is exactly as good as it was - so it keeps the derived size and the
+  # bad reading is reported in the rejects file where a human will see it.
+  $hintQty = $null
+  foreach ($h in (Get-SamsSizeHints $root)) {
+    if ($null -eq $h) { continue }
+    if (([string]$h.sams_item_id) -ne ([string]$raw.id)) { continue }
+    if (([string]$h.name) -ne ([string]$raw.n)) { continue }
+    $hf = @($script:SamsHintFieldUnit.Keys | Where-Object { $null -ne $h.$_ -and ([string]$h.$_) -ne '' })
+    if ($hf.Count -ne 1) {
+      [void]$script:SamsHintNotes.Add([pscustomobject]@{ name=[string]$raw.n; lp=[string]$raw.lp; up=[string]$raw.up; reason=('BAD HINT: entry for ' + [string]$raw.id + ' states ' + $hf.Count + ' size field(s); exactly one of ' + (($script:SamsHintFieldUnit.Keys | Sort-Object) -join ', ') + ' is required') })
+      break
+    }
+    $want = $script:SamsHintFieldUnit[$hf[0]]
+    if ($want -ne [string]$u.tok) {
+      [void]$script:SamsHintNotes.Add([pscustomobject]@{ name=[string]$raw.n; lp=[string]$raw.lp; up=[string]$raw.up; reason=('BAD HINT: ' + $hf[0] + ' is a ' + $want + ' reading but Sam''s prices this row by ' + [string]$u.tok + ' - it cannot be checked against Sam''s arithmetic') })
+      break
+    }
+    $hv = 0.0
+    if (-not [double]::TryParse(([string]$h.$($hf[0])), [ref]$hv) -or $hv -le 0) {
+      [void]$script:SamsHintNotes.Add([pscustomobject]@{ name=[string]$raw.n; lp=[string]$raw.lp; up=[string]$raw.up; reason=('BAD HINT: ' + $hf[0] + "='" + [string]$h.$($hf[0]) + "' is not a positive number") })
+      break
+    }
+    $hErr = [math]::Abs(($lp / $hv) - $up)
+    if ($hErr -le 0.005001) { $hintQty = $hv }
+    else {
+      [void]$script:SamsHintNotes.Add([pscustomobject]@{ name=[string]$raw.n; lp=[string]$raw.lp; up=[string]$raw.up; reason=('BAD HINT: ' + $hf[0] + '=' + $hv + ' gives ' + [math]::Round($lp / $hv, 4) + '/' + [string]$u.tok + ", which does not display as Sam's " + $up + ' - keeping the derived size ' + (Format-Qty $derived)) })
+    }
+    break
+  }
+  if ($null -ne $hintQty) {
+    $qty = $hintQty
+    $basis = 'name hint (reproduces Sam''s unit price)'
+  }
+  $cands = if ($null -ne $hintQty) { @() } else { Get-NameQtyCandidates $raw.n $u.tok }
   $best = $null; $bestErr = [double]::MaxValue
   foreach ($c in $cands) {
     if ($c -le 0) { continue }
@@ -306,6 +376,13 @@ function Build-Row($raw) {
     if ($null -eq $got) { $errs += ($t.shape + ": engine returned null (size='" + $t.size + "')"); continue }
     $diff = [math]::Abs($got.unit_price - $up) / $up
     if ($diff -gt $tol) { $errs += ($t.shape + ": engine " + [math]::Round($got.unit_price,4) + " vs Sam's " + $up + ' (' + [math]::Round($diff*100) + '% off)'); continue }
+    # size_rounding_pct: BELT AND BRACES AT INGEST (2026-09-11, queue 2026-09-10-c8eb72). compare-deals
+    # computes the same number from qty_basis + sams_unit_price on the way onto the board, which is what makes
+    # the CARRIED 2026-09-01 row work without rewriting a capture. Stamping it here too means every capture
+    # written from now on states its own error bar, so anything reading these files directly can see it
+    # without re-deriving the rule. ONE copy of the arithmetic: pricing-math-lib owns it.
+    # Absent on a row whose size is not a quotient - a name-stated or hinted size has no rounding in it.
+    $szRound = Get-DerivedRoundingPct ($t.shape + '; qty ' + $basis) ($upm.Groups[0].Value.Trim())
     return @{ row = [pscustomobject]@{
       store     = "Sam's Club"
       item      = [string]$raw.n
@@ -336,7 +413,7 @@ function Build-Row($raw) {
       taxonomy_path   = [string]$raw.taxonomy_path
       link_url        = [string]$raw.url
       image_url       = [string]$raw.image_url
-    } | ForEach-Object { if ($null -ne $nameVolFloz) { Add-Member -InputObject $_ -NotePropertyName 'name_volume_floz' -NotePropertyValue ([math]::Round([double]$nameVolFloz, 3)) }; $_ } }   # name_volume_floz: see THE NAME'S VOLUME above
+    } | ForEach-Object { if ($null -ne $nameVolFloz) { Add-Member -InputObject $_ -NotePropertyName 'name_volume_floz' -NotePropertyValue ([math]::Round([double]$nameVolFloz, 3)) }; if ($null -ne $szRound) { Add-Member -InputObject $_ -NotePropertyName 'size_rounding_pct' -NotePropertyValue ([double]$szRound) }; $_ } }   # name_volume_floz: see THE NAME'S VOLUME above; size_rounding_pct: see BELT AND BRACES above
   }
   return @{ err=("INVARIANT: no shape reproduces Sam's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
 }
@@ -480,6 +557,60 @@ if ($SelfTest) {
   if ([math]::Abs($ge.unit_price - 1.09) -lt 0.005) { Write-Output ("ok    emitted row prices to " + [math]::Round($ge.unit_price,4) + "/each [" + $ge.basis + "]  (quarantined shape gave " + [math]::Round($old.unit_price,4) + " [" + $old.basis + "])") }
   else { Write-Output "FAIL  emitted cucumber row -> $($ge.unit_price)"; $fail++ }
 
+  # ---- case 8f/8g/8h: THE DERIVED SIZE'S ERROR BAR, AND THE VERIFIED SIZE HINT ----------------------
+  # (2026-09-11, queue 2026-09-10-c8eb72.) Frozen by hand from the real carried Sam's row that holds the
+  # bbq-sauce crown on comparison-2026-09-11. $script:SamsSizeHints is set directly so these cases never read
+  # the live sams-size-hints.json: a fixture that read the shipping file would pass by finding nothing the day
+  # somebody empties it.
+  $rawSBR = [pscustomobject]@{ n="Sweet Baby Ray's Original Barbecue Sauce, 1 gal."; lp='$11.98'; up='$0.07/oz'; id='4W2VMU21D4SI'; q='bbq sauce' }
+  # 8f MUST FIRE: no hint. 11.98 / 0.07 = 171.143, and the row must SAY that the size is a quotient good to
+  # 0.005/0.07 = 7.14% - the error bar that is wider than the 6% margin this row wins its crown by.
+  $script:SamsSizeHints = @(); $script:SamsHintNotes.Clear()
+  $r8f = Build-Row $rawSBR
+  if ($r8f.row -and [string]$r8f.row.size -eq '171.143 oz' -and [string]$r8f.row.qty_basis -eq 'package; qty derived lp/up' -and $null -ne $r8f.row.size_rounding_pct -and [math]::Abs([double]$r8f.row.size_rounding_pct - 7.14) -lt 0.005) {
+    Write-Output 'ok    8f SBR derived size 171.143 oz carries size_rounding_pct 7.14'
+  } else { Write-Output ("FAIL  8f SBR derived: err='" + $r8f.err + "' size='" + $r8f.row.size + "' basis='" + $r8f.row.qty_basis + "' pct='" + $r8f.row.size_rounding_pct + "'"); $fail++ }
+  # 8g MUST FIRE: a human-read 160 oz REPRODUCES Sam's printed $0.07/oz (11.98/160 = 0.0749, which displays as
+  # $0.07), so it replaces the quotient, the row says where the size came from, and the rounding field is GONE
+  # because a read size has no rounding in it.
+  $script:SamsSizeHints = @([pscustomobject]@{ sams_item_id='4W2VMU21D4SI'; name="Sweet Baby Ray's Original Barbecue Sauce, 1 gal."; net_oz=160; source='label'; reviewed='2026-09-11' })
+  $script:SamsHintNotes.Clear()
+  $r8g = Build-Row $rawSBR
+  $g8size  = [string]$r8g.row.size
+  $g8basis = [string]$r8g.row.qty_basis
+  $g8eng   = [string]$r8g.row.engine_check
+  $g8pct   = $r8g.row.size_rounding_pct
+  $g8notes = $script:SamsHintNotes.Count
+  $g8ok = ($null -ne $r8g.row) -and ($g8size -eq '160 oz') -and ($g8basis -eq 'package; qty name hint (reproduces Sam''s unit price)')
+  $g8ok = $g8ok -and ($null -eq $g8pct) -and ($g8eng -like '*0.0749*') -and ($g8notes -eq 0)
+  if ($g8ok) { Write-Output 'ok    8g SBR hint 160 oz replaces the quotient, no rounding field, engine 0.0749/oz' }
+  else { Write-Output ("FAIL  8g SBR hint: err='" + $r8g.err + "' size='" + $g8size + "' basis='" + $g8basis + "' pct='" + $g8pct + "' engine='" + $g8eng + "' notes=" + $g8notes); $fail++ }
+  # 8h MUST FIRE: 128 oz is the WRONG reading (that is a gallon of water, not of a 1.3 g/ml sauce). 11.98/128
+  # displays as $0.09, not Sam's $0.07, so the hint is refused, reported, and the derived size stands. This is
+  # the case that makes a hint safe to accept at all.
+  $script:SamsSizeHints = @([pscustomobject]@{ sams_item_id='4W2VMU21D4SI'; name="Sweet Baby Ray's Original Barbecue Sauce, 1 gal."; net_oz=128; source='guess'; reviewed='2026-09-11' })
+  $script:SamsHintNotes.Clear()
+  $r8h = Build-Row $rawSBR
+  $note8h = @() + $script:SamsHintNotes.ToArray()
+  if ($r8h.row -and [string]$r8h.row.size -eq '171.143 oz' -and $note8h.Count -eq 1 -and ([string]$note8h[0].reason) -match '^BAD HINT') {
+    Write-Output 'ok    8h SBR hint 128 oz does not reproduce $0.07/oz - refused, reported, derived size kept'
+  } else { Write-Output ("FAIL  8h SBR bad hint: size='" + $r8h.row.size + "' notes=" + $note8h.Count + " reason='" + $(if ($note8h.Count) { $note8h[0].reason }) + "'"); $fail++ }
+  # 8i MUST NOT FIRE: a hint keyed to ANOTHER item id must not touch this row. A hint that has drifted off its
+  # product has to stop applying rather than quietly re-size a different jug.
+  $script:SamsSizeHints = @([pscustomobject]@{ sams_item_id='SOMEOTHERID'; name="Sweet Baby Ray's Original Barbecue Sauce, 1 gal."; net_oz=160; source='label'; reviewed='2026-09-11' })
+  $script:SamsHintNotes.Clear()
+  $r8i = Build-Row $rawSBR
+  if ($r8i.row -and [string]$r8i.row.size -eq '171.143 oz' -and $script:SamsHintNotes.Count -eq 0) { Write-Output 'ok    8i a hint on another item id is ignored silently' }
+  else { Write-Output ("FAIL  8i foreign hint applied: size='" + $r8i.row.size + "' notes=" + @($script:SamsHintNotes).Count); $fail++ }
+  # 8j CLEAN TWIN: case 8d's ranch row still keeps size '122 oz' and name_volume_floz 128 - the 2026-09-10
+  # gallon-jug path is untouched - and now also states its own 5.56% band.
+  $script:SamsSizeHints = @(); $script:SamsHintNotes.Clear()
+  $r8j = Build-Row ([pscustomobject]@{ n="Member's Mark Ranch Dressing, 1 gal."; lp='$10.98'; up='$0.09/oz'; id='RANCH1'; q='ranch dressing' })
+  if ($r8j.row -and [string]$r8j.row.size -eq '122 oz' -and [double]$r8j.row.name_volume_floz -eq 128 -and $null -ne $r8j.row.size_rounding_pct -and [math]::Abs([double]$r8j.row.size_rounding_pct - 5.56) -lt 0.005) {
+    Write-Output 'ok    8j ranch keeps 122 oz + name_volume_floz 128 and gains size_rounding_pct 5.56'
+  } else { Write-Output ("FAIL  8j ranch: err='" + $r8j.err + "' size='" + $r8j.row.size + "' nv='" + $r8j.row.name_volume_floz + "' pct='" + $r8j.row.size_rounding_pct + "'"); $fail++ }
+  $script:SamsSizeHints = $null; $script:SamsHintNotes.Clear()
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
@@ -513,6 +644,12 @@ foreach ($r in $raw) {
     $rows.Add($b.row)
   } else { $rejects.Add([pscustomobject]@{ name=$r.n; lp=$r.lp; up=$r.up; reason=$b.err }) }
 }
+# A BAD HINT IS A NOTE, NOT A REJECTION (2026-09-11, queue 2026-09-10-c8eb72). A human-read size that does not
+# reproduce Sam's own unit price is refused - it never touches a published number - but the ROW is exactly as
+# good as it was without the hint, so it ships with its derived size and the bad reading is reported here.
+# Counted apart from the rejects so "N rejected" keeps meaning "N rows not published".
+$hintNotes = @() + $script:SamsHintNotes.ToArray()
+if ($hintNotes.Count) { Write-Output ("build-sams-deals: $($hintNotes.Count) BAD HINT note(s) in sams-size-hints.json - the row kept its derived size, see the rejects file") }
 # NEVER FATAL (2026-09-11). This save runs BEFORE the rows below are written, and it can now refuse - the ledger lock
 # not free within its budget, or a ledger on disk it cannot read and will not overwrite - so an uncaught throw here
 # would cost the whole capture over one ledger.
@@ -539,12 +676,15 @@ $outFile = Join-Path $outDir ("sams-deals-$Date.json")
   deals      = $ded
 } | ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 
-if ($rejects.Count) {
+if ($rejects.Count -or $hintNotes.Count) {
   # NOT "sams-deals-*.rejects.json": compare-deals globs out\sams\sams-deals-*.json to find captures. Today it
   # skips this file only because its BaseName does not end in a date - one refactor of that check away from
   # feeding rejected rows back into the board. Keep the name outside the glob entirely.
   $rj = Join-Path $outDir ("sams-rejects-$Date.json")
-  $rejects | ConvertTo-Json -Depth 4 | Set-Content $rj -Encoding UTF8
+  # BAD HINT notes ride in the same file (their rows WERE published - see the note above), so a human has one
+  # place to look for "what did this build refuse to believe".
+  $rjRows = @($rejects) + @($hintNotes)
+  $rjRows | ConvertTo-Json -Depth 4 | Set-Content $rj -Encoding UTF8
 }
 Write-Output ("build-sams-deals: {0} raw -> {1} priced ({2} after de-dupe), {3} rejected -> {4}" -f $raw.Count, $rows.Count, $ded.Count, $rejects.Count, (Split-Path $outFile -Leaf))
 if ($rejects.Count) {

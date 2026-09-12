@@ -1841,6 +1841,66 @@ if ($SelfTest) {
     ((Format-TcNamelessByStore $script:NamelessRowsByStore) -like '*Walmart=1*') (Format-TcNamelessByStore $script:NamelessRowsByStore)
   $script:NamelessRows = 0; $script:NamelessRowsByStore = @{}
 
+  # ---- THE INGEST SEAM: what the supplement loop hands Add-Norm for a two-product flyer line ----------
+  # (2026-09-11, queue 2026-09-10-582032.) Frozen from bakers-deals-2026-09-09, built the way the loader
+  # builds it: split the item, then take each part's size the way the loader takes it. The assertion is the
+  # exact NAME + SIZE + split_from triple that reaches Add-Norm, because that triple is what decides which
+  # commodity the row routes to and what the engine divides by.
+  if (-not (Get-Command Split-TwoProductAdLine -ErrorAction SilentlyContinue)) { . (Join-Path $PSScriptRoot 'pricing-math-lib.ps1') }
+  $ingestCases = @(
+    # MUST FIRE - the founding line. Before this, ONE row reached Add-Norm named for the cereal and sized by
+    # the orange juice: $4.49 / 46 fl oz = $0.0976/oz, published as the cheapest cereal in Omaha.
+    # want is 'name @@ size' per emitted row - FLAT strings on purpose: @(@('a','b')) collapses to @('a','b')
+    # in PS 5.1, so a nested one-row fixture would silently compare the first CHARACTER of each field.
+    @{ item='Simply Orange Juice, 46 fl oz or Post Large Size Cereal, 13.5-20.5 oz'; size='46 fl oz'
+       want=@('Simply Orange Juice, 46 fl oz @@ 46 fl oz','Post Large Size Cereal, 13.5-20.5 oz @@ 13.5-20.5 oz') }
+    # MUST FIRE - the line holding a Baker's cell today. Same price, same per-unit, the bacon's own name.
+    @{ item='Farmland Bacon, 12-16 oz or Oscar Mayer Beef Franks, 15 oz'; size='12-16 oz'
+       want=@('Farmland Bacon, 12-16 oz @@ 12-16 oz','Oscar Mayer Beef Franks, 15 oz @@ 15 oz') }
+    # MUST FIRE - the transcriber sized the SECOND product, so a per-part size cannot just take the first
+    @{ item='Nature Valley Bars, 5-12 ct or Pepperidge Farm Goldfish, 4.8-8 oz'; size='4.8-8 oz'
+       want=@('Nature Valley Bars, 5-12 ct @@ 5-12 ct','Pepperidge Farm Goldfish, 4.8-8 oz @@ 4.8-8 oz') }
+    # CLEAN TWIN - a single-product line still reaches Add-Norm as ONE row with the FILE's size and no
+    # split_from, exactly as it did before any of this existed
+    @{ item='Kroger Pasta Sauce, 24 oz'; size='24 oz'; want=@('Kroger Pasta Sauce, 24 oz @@ 24 oz') }
+    # CLEAN TWIN - a size-less alternation is one product in two flavours and keeps the file's size
+    @{ item='Raspberries or Blackberries'; size='6 oz'; want=@('Raspberries or Blackberries @@ 6 oz') }
+  )
+  foreach ($ic in $ingestCases) {
+    $parts = Split-TwoProductAdLine ([string]$ic.item)
+    $parts = @($parts)
+    $sfx = if ($parts.Count -gt 1) { [string]$ic.item } else { '' }
+    $emitted = @()
+    foreach ($pn in $parts) {
+      $psz = if ($parts.Count -gt 1) { Get-SplitPartSizeText $pn ([string]$ic.size) } else { [string]$ic.size }
+      $emitted += ([string]$pn + ' @@ ' + [string]$psz)
+    }
+    $ok = ($emitted.Count -eq @($ic.want).Count)
+    if ($ok) { for ($i = 0; $i -lt $emitted.Count; $i++) { if ([string]$emitted[$i] -ne [string]$ic.want[$i]) { $ok = $false } } }
+    # split_from is set when and only when the line was split - it is what tells Get-UnitPrice this row's
+    # size is its own, and what keeps the refusal from firing on a part
+    if ($ok -and (($parts.Count -gt 1) -ne [bool]$sfx)) { $ok = $false }
+    if ($ok) { Write-Output ("  ok  ingest[" + $emitted.Count + "] " + $ic.item) }
+    else {
+      $script:fail++
+      Write-Output ("  FAIL ingest " + $ic.item)
+      Write-Output ("       want: " + (($ic.want | ForEach-Object { "'" + $_ + "'" }) -join ' | '))
+      Write-Output ("       got : " + (($emitted | ForEach-Object { "'" + $_ + "'" }) -join ' | '))
+    }
+  }
+  # MUST FIRE - the fail-closed complement. A two-size line the strict rule leaves WHOLE (Hy-Vee's shape)
+  # must come back UNPRICED from the generic size division rather than priced by one of its two sizes.
+  $hv = [pscustomobject]@{ name='Sparkling Ice Sparkling Water, 6 pk. bottles 17 fl. oz. or 10 pk. mini cans 7.5 fl. oz., $6.99'; price_text='$6.99'; size_text='17 fl oz'; regular=$null }
+  $hvGot = Get-UnitPrice $hv ([pscustomobject]@{ unit='floz' })
+  if ($null -ne $hvGot) { $script:fail++; Write-Output ("  FAIL refusal: a two-size line that cannot be split was priced at " + $hvGot.unit_price + " [" + $hvGot.basis + "] instead of being refused") }
+  else { Write-Output '  ok  refusal: an unsplittable two-size line returns null rather than picking one of its sizes' }
+  # CLEAN TWIN - the SAME shape once it carries split_from prices normally off its own size
+  $hv2 = [pscustomobject]@{ name='Post Large Size Cereal, 13.5-20.5 oz'; price_text='$4.49'; size_text='13.5-20.5 oz'; regular=$null; split_from='Simply Orange Juice, 46 fl oz or Post Large Size Cereal, 13.5-20.5 oz' }
+  $hv2Got = Get-UnitPrice $hv2 ([pscustomobject]@{ unit='oz' })
+  if ($null -eq $hv2Got -or [math]::Abs([double]$hv2Got.unit_price - 0.219) -gt 0.0005) {
+    $script:fail++; Write-Output ("  FAIL split part: want 0.219/oz, got " + $(if ($null -eq $hv2Got) { 'null' } else { $hv2Got.unit_price }))
+  } else { Write-Output '  ok  split part: the cereal half prices 4.49 / 20.5 oz = 0.219/oz and can never be 0.0976' }
+
   if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct, plus the format-layer nameless-row counter)'; exit 0 }
   else { Write-Output ("SELF-TEST FAIL: $script:fail case(s)"); exit 1 }
 }
@@ -1880,7 +1940,7 @@ function Get-RowProductId($row) {
 . (Join-Path $PSScriptRoot 'aisle-lib.ps1')
 $AisleShelf = New-AisleShelfIndex
 $AisleRefused = New-Object System.Collections.Generic.List[object]
-function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='',$srcFile='',$srcRow=$null) {
+function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='',$srcFile='',$srcRow=$null,$splitFrom='') {
   # THE FORMAT LAYER, AND THE ONE DROP HERE THAT SAID NOTHING (2026-09-07, backlog E5). A row whose
   # name did not parse vanishes before any business rule runs, so a capture whose name field moved
   # would yield fewer rows and produce no signal at all - "silent by construction". It is still
@@ -1930,7 +1990,20 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   # unit price and an absent proof must never read as an agreeing one.
   $nup = $null
   if ($srcRow) { $nup = Get-DisplayedUnitPrice $srcRow }
-  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId; fulfillment=[string]$ful; src_file=[string]$srcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }) })
+  # pu_rounding_pct: THE ERROR BAR ON A SAM'S DERIVED SIZE (2026-09-11, queue 2026-09-10-c8eb72). Sam's prints
+  # its unit price rounded to the CENT and build-sams-deals derives any pack size Sam's did not state as
+  # linePrice / that rounded number, so the size - and therefore this row's per-unit - carries a relative error
+  # of 0.005/unitPrice. Both fields the computation needs are ALREADY on every Sam's row (qty_basis and
+  # sams_unit_price), including the carried 2026-09-01 row that holds the bbq-sauce crown, so no capture is
+  # rewritten to gain this. Null on every other store's rows, which is correct: nobody else's size is a
+  # quotient, and an absent error bar must never read as a measured zero.
+  # The RULE is pricing-math-lib's, so the builder and the board compute the same number from the same fields.
+  $purp = $null
+  if ($srcRow) { $purp = Get-DerivedRoundingPct ([string]$srcRow.qty_basis) ([string]$srcRow.sams_unit_price) }
+  # split_from: the WHOLE flyer line this row was cut out of, when Split-TwoProductAdLine cut it (queue
+  # 2026-09-10-582032). Carried so audit-match-soundness and the identity table can show provenance, and so
+  # Get-UnitPrice can tell a part whose size is its own from a two-size line nobody has split.
+  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId; fulfillment=[string]$ful; src_file=[string]$srcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$splitFrom })
 }
 $ads = Read-JsonFile $AdsFile
 $today = $ads.today
@@ -1942,15 +2015,31 @@ $script:ExpiredSaleRows = 0
 $script:NamelessRows = 0
 $script:NamelessRowsByStore = @{}
 foreach ($d in $ads.deals) {                                                                # weekly ads = 'sale'
-  switch ($d.store) {
-    # pull-grocery-ads stamps ad_from/ad_to on EVERY deal now - per FLYER for Hy-Vee (it runs three at
-    # once), per ITEM for Aldi (flyerkit gives each product its own), per CIRCULAR for Family Fare.
-    # Passing them through is the entire point of having captured them.
-    # Aldi also now carries original_price as `regular`, so an Aldi ad row can state what it was cut from.
-    'Hy-Vee'      { Add-Norm $d.store $d.item $d.item $null $null $d.source_ad 'sale' '' $d.ad_from $d.ad_to }      # price+size embedded in item text
-    'Aldi'        { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to }
-    'Family Fare' { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to }
-    default       { Add-Norm $d.store $d.item ($d.ad_price + ' ' + $d.item) $d.size $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to }
+  # ONE FLYER LINE CAN SELL TWO PRODUCTS (2026-09-11, queue 2026-09-10-582032). The split is the SAME
+  # function the supplement loop below calls - one copy of the rule, at the ingest seam, before matching
+  # ever sees the name. On ads-2026-09-11 it fires ZERO times by measurement: Hy-Vee's two-product shape is
+  # "A size, B size, $price" (10 lines, 4 routing, 0 holding a cell), which the strict rule deliberately
+  # leaves WHOLE because the loose rule that split it manufactured a wrong-product coffee crown in
+  # simulation. Those lines are refused by Get-UnitPrice instead of being priced by an arbitrary one of
+  # their two sizes. Routing this loop through the one function is the point: the next flyer that writes
+  # "A, size or B, size" here is handled the day it lands rather than the day somebody notices.
+  $adParts = Split-TwoProductAdLine ([string]$d.item)
+  $adParts = @($adParts)
+  $sf = if ($adParts.Count -gt 1) { [string]$d.item } else { '' }
+  foreach ($pn in $adParts) {
+    # the file row's size belongs to a part only when it states that part's own size expression; otherwise
+    # the size is cut from the part itself. Unsplit lines keep $d.size byte for byte.
+    $pSize = if ($adParts.Count -gt 1) { Get-SplitPartSizeText $pn ([string]$d.size) } else { $d.size }
+    switch ($d.store) {
+      # pull-grocery-ads stamps ad_from/ad_to on EVERY deal now - per FLYER for Hy-Vee (it runs three at
+      # once), per ITEM for Aldi (flyerkit gives each product its own), per CIRCULAR for Family Fare.
+      # Passing them through is the entire point of having captured them.
+      # Aldi also now carries original_price as `regular`, so an Aldi ad row can state what it was cut from.
+      'Hy-Vee'      { Add-Norm $d.store $pn $pn $null $null $d.source_ad 'sale' '' $d.ad_from $d.ad_to '' '' '' '' $null $sf }      # price+size embedded in item text
+      'Aldi'        { Add-Norm $d.store $pn $d.ad_price $pSize $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to '' '' '' '' $null $sf }
+      'Family Fare' { Add-Norm $d.store $pn $d.ad_price $pSize $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to '' '' '' '' $null $sf }
+      default       { Add-Norm $d.store $pn ($d.ad_price + ' ' + $pn) $pSize $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to '' '' '' '' $null $sf }
+    }
   }
 }
 # ad-based extra files (Baker's ad, Sam's, Fareway weekly-ad sales). Each file may declare price_type (Sam's
@@ -2050,9 +2139,29 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
     foreach ($d in $ex.deals) {
       $rFrom = if ($d.ad_from) { [string]$d.ad_from } else { [string]$ex.ad_from }
       $rTo   = if ($d.ad_to)   { [string]$d.ad_to }   else { [string]$ex.ad_to }
-      # $d LAST: the capture row itself, so Add-Norm can read the store's own published unit price off it
-      # (out\sams\sams-deals-*.json carries sams_unit_price on every row). Passed, never re-parsed here.
-      Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd $rFrom $rTo '' (Get-RowProductId $d) '' '' $d
+      # ONE FLYER LINE, TWO PRODUCTS (2026-09-11, queue 2026-09-10-582032). This is where the Baker's
+      # vision-read flyer lands, and 45 of its 146 lines sell two different products at one price
+      # ("Farmland Bacon, 12-16 oz or Oscar Mayer Beef Franks, 15 oz"). Split BEFORE matching sees the name,
+      # so each product routes on its own words and divides by its own size; the whole line used to route on
+      # whichever product's words first-match-wins and divide by whichever size the transcriber wrote.
+      # Split-TwoProductAdLine returns ONE element for every other line, so those are emitted exactly as
+      # before.
+      $adParts = Split-TwoProductAdLine ([string]$d.item)
+      $adParts = @($adParts)
+      $sf = if ($adParts.Count -gt 1) { [string]$d.item } else { '' }
+      foreach ($pn in $adParts) {
+        $pSize = if ($adParts.Count -gt 1) { Get-SplitPartSizeText $pn ([string]$d.size) } else { $d.size }
+        # THE STORE'S PRODUCT ID NAMES ONE PRODUCT, AND A SPLIT LINE HAS TWO. Handing both parts the same id
+        # would make them the same product to Select-FreshestCaptureRows' supersession, which would let one
+        # part evict the other. A part of a split line therefore carries NO id - it is name-keyed, exactly as
+        # every ad row without an id already is. Unsplit rows keep theirs.
+        # NOT $pid: that is a READ-ONLY automatic variable in PowerShell and assigning it throws
+        # mid-ingest, which is how this line announced itself on its first run.
+        $partProdId = if ($adParts.Count -gt 1) { '' } else { (Get-RowProductId $d) }
+        # $d LAST: the capture row itself, so Add-Norm can read the store's own published unit price off it
+        # (out\sams\sams-deals-*.json carries sams_unit_price on every row). Passed, never re-parsed here.
+        Add-Norm $d.store $pn $d.ad_price $pSize $d.regular $d.source_ad $pt $sd $rFrom $rTo '' $pid '' '' $d $sf
+      }
     }
   }
 }
@@ -2509,6 +2618,10 @@ foreach ($d in $deals) {
     # THE STORE'S OWN PER-UNIT NUMBER, still raw. Resolved against $f.unit at the emit below, because only
     # there is it known which commodity's unit this row is finally being compared in.
     native_up=$d.native_up; native_up_unit=$d.native_up_unit
+    # pu_rounding_pct: the error bar Sam's own cent rounding puts on a DERIVED size, carried from the row so
+    # the crown step can ask whether a winner's margin is thinner than its own size's precision.
+    # split_from: the whole flyer line this row was cut out of, or '' - provenance for the soundness audit.
+    pu_rounding_pct=$d.pu_rounding_pct; split_from=$d.split_from
     unit_price=$uprice; basis=$basis; note=$note })
 }
 
@@ -2569,6 +2682,11 @@ if ($channelRefused.Count) {
 }
 
 # ---------------------------------------------------------------- rank: cheapest per store, then across stores
+# WHICH CELLS CARRY SAM'S CENT-ROUNDING, AND WHICH CROWNS IT PUTS IN DOUBT (2026-09-11, queue
+# 2026-09-10-c8eb72). Both rules are pricing-math-lib's - Get-CellRoundingPct and Get-RoundingBandTies - so the
+# board, the ingest builder and the audit all read one copy, and test-pu-lib can drive them from frozen cases
+# without a board. This file used to be where such a rule would have been written, and this estate has already
+# paid for the second copy of one.
 $report = New-Object System.Collections.Generic.List[object]
 foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Object id)) {
   $priced = $g.Group
@@ -2609,11 +2727,31 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
   if ($ranked.Count -lt $MinStores) { continue }
   $f = $priced[0]
   $nm = @($ranked | Where-Object { -not $_.membership } | Select-Object -First 1)
+  # A CROWN WON BY LESS THAN ITS OWN SIZE'S PRECISION IS NOT A CROWN (2026-09-11, queue 2026-09-10-c8eb72).
+  # The winner here can be a Sam's row whose size is a price quotient, and the board used to rank that
+  # quotient as an exact number. Live case: bbq-sauce, Sam's "Sweet Baby Ray's Original Barbecue Sauce, 1
+  # gal." at $0.07/oz over Walmart's $0.0743 - a 6% margin decided by a size with a 7.1% error bar. Sam's own
+  # arithmetic proves only that the jug weighs more than 159.73 oz and at most 184.31 oz (11.98/size rounds to
+  # $0.07 nowhere else), so the true per-oz is somewhere in [0.0650, 0.0750) and Walmart's 0.0743 is INSIDE
+  # it. The jug's net weight is in no artifact here and the Sam's PDP answers a bot wall, so the honest act is
+  # to SAY SO rather than to pick a winner.
+  # THE CROWN IS NOT REASSIGNED, deliberately: the runner-up is not proven cheaper either, and handing it the
+  # crown would publish the opposite unproven claim. Each store keeps its own printed unit price; the
+  # commodity gains a flag, audit-unit-basis-outlier lists it, and how the page SHOWS a tie is Brad's ruling
+  # brad-2026-09-11-rounding-tie. Until then nothing visible changes.
+  $tieWith = Get-RoundingBandTies $ranked[0] (@($ranked | Select-Object -Skip 1))
+  $tieWith = @($tieWith)
+  $withinRounding = ($tieWith.Count -gt 0)
   $report.Add([pscustomobject]@{
     commodity = $f.label; id=$g.Name; unit=$f.unit
     cheapest_store = $ranked[0].store
     cheapest_price = $ranked[0].unit_price
     cheapest_type = $ranked[0].price_type
+    # Emitted on EVERY row, true or false, because it is a verdict computed for every row: an absent field
+    # would let "we did not look" read as "we looked and it was clean", which is the one reading this estate
+    # refuses. cheapest_tie_with is empty unless the flag is true.
+    cheapest_within_rounding = $withinRounding
+    cheapest_tie_with = $tieWith
     nomem_store = $(if($nm.Count){$nm[0].store}else{$null})
     nomem_price = $(if($nm.Count){$nm[0].unit_price}else{$null})
     nomem_type  = $(if($nm.Count){$nm[0].price_type}else{$null})
@@ -2632,6 +2770,14 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
       $nat = Resolve-NativeUnitPrice $_.native_up ([string]$_.native_up_unit) ([string]$f.unit)
       $row = [ordered]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to; ad_basis=$_.ad_basis }
       if ($nat) { $row['native_unit_price'] = $nat.price; $row['native_unit'] = $nat.unit }
+      # pu_rounding_pct: this cell's per-unit was divided by a size Sam's cent rounding produced, so it is
+      # only exact to +/- this percent. Emitted ONLY where it is true of the number shown (see
+      # Get-CellRoundingPct), and absent everywhere else - no other store's size is a quotient.
+      $rp = Get-CellRoundingPct $_
+      if ($null -ne $rp) { $row['pu_rounding_pct'] = $rp }
+      # split_from: the whole two-product flyer line this row was cut out of, so a reader of the board can
+      # see the ad said "A or B" and this cell is the A half.
+      if ([string]$_.split_from) { $row['split_from'] = [string]$_.split_from }
       [pscustomobject]$row
     })
   })

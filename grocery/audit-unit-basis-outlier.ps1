@@ -201,6 +201,43 @@ function Find-BasisOutliers {
   return ,@($out)
 }
 
+# ---- THE THIRD TAIL: A CROWN WON BY LESS THAN ITS OWN SIZE'S PRECISION -------------------------------
+# (2026-09-11, queue 2026-09-10-c8eb72.) Sam's prints its unit price rounded to the CENT, and build-sams-deals
+# derives any pack size Sam's did not state as linePrice / that rounded number, so the size carries a relative
+# error of 0.005/unitPrice. compare-deals now stamps that error bar on the cell (pu_rounding_pct) and flags the
+# commodity when the runner-up sits inside it (cheapest_within_rounding). This lists them.
+# WARN, NEVER HARD, and the distinction is the whole point: every price involved is REAL - each store's own
+# printed number - so there is no wrong price to block a board over. What is unproven is which of two stores is
+# cheaper. The founding pair, live on comparison-2026-09-11: bbq-sauce Sam's $0.07/oz (size 171.143 oz, a
+# quotient, +/-7.1%) over Walmart's $0.0743, and glass-cleaner Sam's $0.07/floz over Walmart's $0.0713.
+# SCOPE OF A CLEAN REPORT here: this arm reads a flag the ENGINE computed, so it is exactly as complete as
+# compare-deals' stamping. It finds no rounding band on a board built before that stamping existed.
+function Find-RoundingBandCrowns { param($Rows)
+  $out = @()
+  foreach ($r in @($Rows)) {
+    if (-not $r.cheapest_within_rounding) { continue }
+    $win = @($r.stores | Where-Object { [string]$_.store -eq [string]$r.cheapest_store })
+    $pct = $null
+    if ($win.Count -and $null -ne $win[0].pu_rounding_pct) { $pct = [double]$win[0].pu_rounding_pct }
+    $cp = [double]$r.cheapest_price
+    $lo = $null; $hi = $null
+    if ($null -ne $pct) { $lo = [math]::Round($cp * (1.0 - $pct / 100.0), 4); $hi = [math]::Round($cp * (1.0 + $pct / 100.0), 4) }
+    # NO BARE @() ON THE TIE LIST: @($null) counts ONE in PS 5.1, so an absent field would report a phantom
+    # tied store (ps51-json-array-traps).
+    $ties = @()
+    if ($null -ne $r.cheapest_tie_with) { $ties = @($r.cheapest_tie_with) }
+    $out += [pscustomobject]@{
+      id = [string]$r.id; commodity = [string]$r.commodity; unit = [string]$r.unit
+      store = [string]$r.cheapest_store; per_unit = $cp
+      rounding_pct = $pct; band_low = $lo; band_high = $hi; tie_with = $ties
+      item = $(if ($win.Count) { [string]$win[0].item } else { '' })
+      size = $(if ($win.Count) { [string]$win[0].size } else { '' })
+      basis = $(if ($win.Count) { [string]$win[0].basis } else { '' })
+    }
+  }
+  return ,@($out)
+}
+
 if ($SelfTest) {
   # FROZEN FIXTURES. Hand-written, never regenerated from the live board (guard-fixture rule).
   # MUST-FIRE 1 is the founding case: PurAqua at Aldi, a 24-pack price on a one-bottle size.
@@ -432,7 +469,47 @@ if ($SelfTest) {
   $f3 = [pscustomobject]@{ id='ranch-dressing'; store="Sam's Club"; size='126.8 oz' }
   if (TKA $f3 $al) { Write-Output '  X MUST-FIRE: the same size on another commodity was silenced'; $bad++ }
 
-  if ($bad -eq 0) { Write-Output 'audit-unit-basis-outlier SELF-TEST PASS (9 must-fire, 7 clean twins, both tails, both references, allowlist keyed to the size, kind_equivalent scoped)'; exit 0 }
+  # ---- THE THIRD TAIL: rounding-band crowns (2026-09-11, queue 2026-09-10-c8eb72) ----
+  # MUST FIRE, frozen by hand from the real comparison-2026-09-11 rows. NEVER regenerated from the board: the
+  # flag is what is under test, so a regenerated fixture would encode whatever the engine happens to stamp.
+  $bandFire = @(
+    [pscustomobject]@{ id='bbq-sauce'; commodity='BBQ Sauce'; unit='oz'; cheapest_store="Sam's Club"; cheapest_price=0.07
+      cheapest_within_rounding=$true; cheapest_tie_with=@('Walmart'); stores=@(
+      [pscustomobject]@{ store="Sam's Club"; per_unit=0.07;   size='171.143 oz'; basis='size 171.143 oz'; pu_rounding_pct=7.14; item="Sweet Baby Ray's Original Barbecue Sauce, 1 gal." }
+      [pscustomobject]@{ store='Walmart';    per_unit=0.0743; size='40 oz';      basis='size 40 oz';      item='Kraft Hint of Honey Slow-Simmered Barbecue Sauce Value Size, 40 oz Bottle' }
+    )}
+  )
+  $b1 = Find-RoundingBandCrowns -Rows $bandFire
+  $bh = @($b1 | Where-Object { $_.id -eq 'bbq-sauce' })
+  if (@($bh).Count -ne 1) { Write-Output ("  X MUST-FIRE: bbq-sauce rounding-band crown not listed (found " + @($bh).Count + ")"); $bad++ }
+  else {
+    if ($bh[0].rounding_pct -ne 7.14) { Write-Output ("  X MUST-FIRE: wrong band width, got '" + $bh[0].rounding_pct + "' want 7.14"); $bad++ }
+    # the BAND is the assertion that matters - a listing with no band says nothing about why the crown is unsafe
+    if ($bh[0].band_low -gt 0.065 -or $bh[0].band_high -lt 0.0749) { Write-Output ("  X MUST-FIRE: band [" + $bh[0].band_low + ", " + $bh[0].band_high + "] does not contain Walmart's 0.0743"); $bad++ }
+    if (@($bh[0].tie_with) -join ',' -ne 'Walmart') { Write-Output ("  X MUST-FIRE: tie_with should name Walmart, got '" + (@($bh[0].tie_with) -join ',') + "'"); $bad++ }
+  }
+  # MUST NOT FIRE: pickles is the same shape with a WIDER band (0.05/oz is +/-10%) and its runner-up still sits
+  # OUTSIDE it, so the crown is safe and the class must stay silent. This is the row that proves the arm is
+  # judging the margin and not merely the presence of a derived Sam's size.
+  $bandClean = @(
+    [pscustomobject]@{ id='pickles'; commodity='Pickles'; unit='oz'; cheapest_store="Sam's Club"; cheapest_price=0.05
+      cheapest_within_rounding=$false; cheapest_tie_with=@(); stores=@(
+      [pscustomobject]@{ store="Sam's Club"; per_unit=0.05;   size='126.8 oz'; basis='size 126.8 oz'; pu_rounding_pct=10.0; item='Mt. Olive Kosher Dills Fresh Pack Pickles, 1 gal.' }
+      [pscustomobject]@{ store='Walmart';    per_unit=0.0745; size='80 fl oz'; basis='size 80 oz';    item='Mt. Olive Whole Kosher Dill Pickles, 80 fl oz Jar' }
+    )}
+    # and a board built BEFORE the engine stamped the flag carries neither field: silence, never a phantom.
+    [pscustomobject]@{ id='mayonnaise'; commodity='Mayonnaise'; unit='oz'; cheapest_store="Sam's Club"; cheapest_price=0.0936; stores=@(
+      [pscustomobject]@{ store="Sam's Club"; per_unit=0.0936; size='128 fl oz'; basis='size 128 oz'; item="Member's Mark Foodservice Extra Heavy Mayonnaise, 128 fl. oz." }
+      [pscustomobject]@{ store='Walmart';    per_unit=0.099;  size='30 fl oz';  basis='size 30 oz';  item='Great Value Light Mayonnaise, 30 fl oz' }
+    )}
+  )
+  $b2 = Find-RoundingBandCrowns -Rows $bandClean
+  if (@($b2).Count -ne 0) {
+    foreach ($c in $b2) { Write-Output ("  X MUST-NOT-FIRE fired: " + $c.commodity + " / " + $c.store) }
+    $bad += @($b2).Count
+  }
+
+  if ($bad -eq 0) { Write-Output 'audit-unit-basis-outlier SELF-TEST PASS (10 must-fire, 9 clean twins, three tails, both references, allowlist keyed to the size, kind_equivalent scoped)'; exit 0 }
   Write-Output ("audit-unit-basis-outlier SELF-TEST FAIL ($bad)"); exit 2
 }
 
@@ -534,14 +611,29 @@ foreach ($arm in @(
   if (@($crowns).Count -gt 15) { Write-Output ("       ... and " + (@($crowns).Count - 15) + " more crown-holder(s) in this arm (full list in basis-outliers.json)") }
 }
 
+# ---- the THIRD tail: crowns won inside their own size's rounding band (WARN, never hard) ----
+$bandCrowns = Find-RoundingBandCrowns -Rows $rows
+Write-Output ''
+Write-Output ("rounding-band crowns: {0} of {1} row(s) are won by a cell whose size is a PRICE QUOTIENT, by a margin thinner than that quotient's own cent-rounding error" -f @($bandCrowns).Count, $rows.Count)
+foreach ($f in ($bandCrowns | Sort-Object commodity)) {
+  Write-Output ("  [WARN ROUNDING BAND] {0,-24} {1,-12} {2} /{3}  +/-{4}%  true value anywhere in [{5}, {6}]  also inside it: {7}" -f `
+    $f.commodity, $f.store, ('{0:N4}' -f $f.per_unit), $f.unit, $f.rounding_pct, ('{0:N4}' -f $f.band_low), ('{0:N4}' -f $f.band_high), ((@($f.tie_with) -join ', ')))
+  Write-Output ("      size='{0}' basis='{1}'  {2}" -f $f.size, $f.basis, $f.item)
+}
+if (@($bandCrowns).Count) {
+  Write-Output '  WARN and never HARD: every price here is the store''s own printed number, so there is no wrong price to block a board over. What is NOT proven is which store is cheapest.'
+  Write-Output '  Fix per row: read the pack size off the label or the PDP and key it into sams-size-hints.json - build-sams-deals verifies it against Sam''s own unit price before it can replace the quotient.'
+}
+
 $outFile = Join-Path $OutDir 'basis-outliers.json'
 @{ generated = (Get-Date).ToString('s'); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; min_stores = $MinStores
    findings = @($ranked); kind_mismatch = @($kinds); kind_mismatch_crown = @($kindCrown)
    kind_mismatch_label_vs_declared_unit = @($kindDisagreesUnit)
-   kind_mismatch_agrees_unit_not_majority = @($kindAgreesUnit) } |
+   kind_mismatch_agrees_unit_not_majority = @($kindAgreesUnit)
+   rounding_band_crown = @($bandCrowns) } |
   ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 Write-Output ("  -> $outFile   ($(@($nearInt).Count) with the pack-shape mismatch, which is the pack-price-on-a-unit-size fingerprint)")
-Write-GuardComplete -Name 'unit-basis-outlier' -Summary ("ratio={0} kind={1} crown={2} reviewed={3}" -f @($findings).Count, @($kinds).Count, @($kindCrown).Count, @($kindReviewed).Count)
+Write-GuardComplete -Name 'unit-basis-outlier' -Summary ("scanned={0} ratio={1} kind={2} crown={3} reviewed={4} rounding_band={5}" -f $rows.Count, @($findings).Count, @($kinds).Count, @($kindCrown).Count, @($kindReviewed).Count, @($bandCrowns).Count)
 # EXIT 2 (hard) only for an UNREVIEWED crown mismatch, never for the ratio findings, which stay advisory as
 # this file was always designed to be. The distinction is what makes it safe to gate on: a ratio outlier is a
 # product that looks dear and takes nothing, while a crown held by a cell measured in a different currency is

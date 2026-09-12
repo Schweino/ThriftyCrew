@@ -1,0 +1,18 @@
+{
+  "_what": "Human-read NET sizes for Sam's Club rows whose pack size the builder can only back-solve as linePrice / unitPrice. Sam's prints unitPrice rounded to the cent, so a derived size carries a relative error of 0.005/unitPrice (7.1% at $0.07/oz, 10% at $0.05/oz) and the board was ranking that quotient as an exact number. A hint here replaces the quotient with a real reading.",
+  "_rules": [
+    "NEVER GUESS A NUMBER. net_oz / net_floz / net_lb / net_ct is read off the product label or the PDP specifications, and 'source' says which. A size nobody read is left absent; the quotient stands and says so.",
+    "A hint is keyed on the EXACT sams_item_id AND the EXACT name. Sam's re-keys items (the Sweet Baby Ray's jug has been 13599611407 and 4W2VMU21D4SI), and a hint that has drifted off its product must stop applying rather than quietly re-size a different jug.",
+    "build-sams-deals.ps1 VERIFIES every hint against Sam's own arithmetic before it is used: linePrice / hint must display as the unitPrice Sam's printed (within 0.005001). A reading that fails is reported as BAD HINT in out\\sams\\sams-rejects-<date>.json and the derived size stands, so a mistyped or mis-united number cannot reach the board.",
+    "Exactly ONE size field per entry, and it must be in the unit Sam's priced the row by - a reading in another unit cannot be checked against Sam's arithmetic at all and is reported.",
+    "128 fl oz is NOT the answer for a weight-priced gallon. A gallon's weight depends on its density: Sweet Baby Ray's is a 1.3 g/ml sauce, which is why Sam's own arithmetic puts that jug between 159.73 and 184.31 oz."
+  ],
+  "_shape": {
+    "sams_item_id": "4W2VMU21D4SI",
+    "name": "Sweet Baby Ray's Original Barbecue Sauce, 1 gal.",
+    "net_oz": 0,
+    "source": "PDP specifications in real Chrome | label",
+    "reviewed": "YYYY-MM-DD"
+  },
+  "hints": []
+}

@@ -441,6 +441,125 @@ function Test-NameOffersTwoSizes([string]$name) {
   }
   return $false
 }
+# ---------------------------------------------------------------------------------------------------
+# TWO PRODUCTS, ONE FLYER LINE (2026-09-11, queue 2026-09-10-582032).
+# Every weekly-ad supplement row is ONE product by construction: the Baker's transcription writes one item
+# and one size per flyer line, and compare-deals normalises whatever it is handed as one name with one size.
+# A Kroger flyer line that sells two DIFFERENT products at one price therefore routes by whichever product's
+# words first-match-wins over commodities.json and divides by whichever size the transcriber happened to
+# write, so the basis is right only when both belong to the same product. Measured on
+# bakers-deals-2026-09-09 (146 rows, 70 carrying ' or '): 45 lines carry the two-product shape, and four of
+# them priced a wrong basis on the live ad - three too dear, one too cheap. The founding case:
+#     "Simply Orange Juice, 46 fl oz or Post Large Size Cereal, 13.5-20.5 oz"  $4.49  size "46 fl oz"
+# routed to CEREAL and divided by the ORANGE JUICE's 46 fl oz -> $0.0976/oz against an honest $0.219, and
+# it took the crown. The direction is whichever product the transcriber sized, so the too-cheap case lands
+# on a crown again as soon as the next flyer puts the size on the other product.
+#
+# THE RULE IS STRICT ON PURPOSE, AND THE LOOSE ONE WAS MEASURED AND REJECTED. Splitting on any segment that
+# carries a size ANYWHERE also fired on 39 Hy-Vee lines of the shape "A size, B size, $price" (where 'or'
+# also joins varieties and size options), produced parts like "cans 12 fl. oz., $9.99", and would have
+# created a WRONG-PRODUCT coffee crown out of "ice coffee 50.7 oz., 3/ $10.00" (coffee | Hy-Vee 0.3857 ->
+# 0.0657, taking the crown off Aldi at 0.3825). So a line is split ONLY when EVERY ' or '-separated segment
+# ends in its own size expression; anything else is left whole, and Get-UnitPrice refuses to price a whole
+# line that states two sizes rather than picking one of them at random.
+#
+# A SEGMENT WITH NO SIZE IS A VARIETY ALTERNATION, not a second product: "Simply Fruit Drink or Ade, 52 fl
+# oz" is one product sold in two flavours at one size, so it is glued to the following segment and the
+# 'or' stays inside the part. Returns ONE element (the name unchanged) whenever the line must not be split,
+# so the caller has a single code path.
+$script:TcAdSizeTailRx = '(?i)\d[\d.\-]*\s*-?\s*(?:fl\.?\s*oz|oz|ct|lbs?|pk|pack|mega\s+rolls?|double\s+rolls?|rolls?|ml|liters?|litres?|\bl\b|gal|qt|pt|count|ea)\b\.?(?:\s+(?:bag|bottles?|cans?|jar|box|pkg|package|carton))?\.?$'
+# A whole-line qualifier, not part of either product's name. Stripped before the size test, because
+# "..., 4.8-8 oz, Select Varieties" ends in prose and would refuse a line that is otherwise clean.
+$script:TcAdLineQualifierRx = '(?i)\s*,\s*(?:in\s+the\s+bakery|select\s+varieties)\s*\.?\s*$'
+function Split-TwoProductAdLine([string]$name) {
+  if (-not $name) { return ,@() }
+  $whole = "" + $name
+  if ($whole -notmatch '(?i)\s+or\s+') { return ,@($whole) }
+  $stripped = ([regex]::Replace($whole, $script:TcAdLineQualifierRx, '')).Trim()
+  $segs = @([regex]::Split($stripped, '(?i)\s+or\s+'))
+  if ($segs.Count -lt 2) { return ,@($whole) }
+  # glue every size-less segment onto the one that FOLLOWS it, keeping the 'or' it was joined by
+  $parts = New-Object System.Collections.Generic.List[string]
+  $pending = ''
+  foreach ($s in $segs) {
+    $seg = ("" + $s).Trim()
+    if (-not $seg) { return ,@($whole) }
+    $cur = if ($pending) { $pending + ' or ' + $seg } else { $seg }
+    if ([regex]::IsMatch($cur, $script:TcAdSizeTailRx)) { [void]$parts.Add($cur); $pending = '' }
+    else { $pending = $cur }
+  }
+  # a trailing segment that never found a size means the LAST product states none: leave the line whole
+  if ($pending) { return ,@($whole) }
+  if ($parts.Count -lt 2) { return ,@($whole) }
+  return ,@($parts.ToArray())
+}
+# The size text a split part must be priced by. The file row's size field is the transcriber's pick and is
+# NOT reliably the first product's ("Nature Valley Bars, 5-12 ct or Pepperidge Farm Goldfish, 4.8-8 oz"
+# carries size '4.8-8 oz'), so it is handed to a part only when it actually contains that part's own size
+# expression; otherwise the size is cut from the part's own tail. Never invents a size: a part with no
+# readable tail gets '' and prices exactly as an unsized row does.
+function Get-SplitPartSizeText([string]$part, [string]$fileSize) {
+  $m = [regex]::Match(("" + $part), $script:TcAdSizeTailRx)
+  if (-not $m.Success) { return '' }
+  $tail = $m.Value.Trim().TrimEnd('.')
+  $fs = ("" + $fileSize).Trim()
+  if ($fs) {
+    $norm = { param($t) (($t -replace '\s+', ' ') -replace '\.', '').Trim().ToLower() }
+    if ((& $norm $fs) -eq (& $norm $tail) -or (& $norm $fs).Contains((& $norm $tail))) { return $fs }
+  }
+  return $tail
+}
+# ---------------------------------------------------------------------------------------------------
+# THE ERROR BAR ON A SAM'S DERIVED SIZE (2026-09-11, queue 2026-09-10-c8eb72).
+# build-sams-deals derives every pack size Sam's did not state in its priced unit as linePrice / unitPrice,
+# and Sam's prints unitPrice rounded to the CENT, so that size carries a relative error of 0.005/unitPrice -
+# 7.1% at $0.07/oz, 10% at $0.05/oz. The row says so in qty_basis ('qty derived lp/up') and carries Sam's
+# printed unit price beside it, but nothing downstream read either, so the board ranked a quotient as an
+# exact number: "Sweet Baby Ray's Original Barbecue Sauce, 1 gal." took the bbq-sauce crown at $0.07/oz by a
+# 6% margin over Walmart's $0.0743 with a 7.1% error bar on its own size. Pure, so the pricing library owns
+# it and both the builder and the board compute the same number from the same two fields.
+# Returns $null for anything that is not a derived row - absent means "no quotient here", never "no error".
+function Get-DerivedRoundingPct([string]$qtyBasis, [string]$samsUnitPrice) {
+  if (-not $qtyBasis) { return $null }
+  if (("" + $qtyBasis) -notmatch '(?i)derived\s+lp\s*/\s*up') { return $null }
+  $m = [regex]::Match(("" + $samsUnitPrice), '\$\s*([\d,]+(?:\.\d{1,4})?)')
+  if (-not $m.Success) { return $null }
+  $up = 0.0
+  if (-not [double]::TryParse(($m.Groups[1].Value -replace ',', ''), [ref]$up)) { return $null }
+  if ($up -le 0) { return $null }
+  return [math]::Round(100.0 * 0.005 / $up, 2)
+}
+# Which CELLS that error bar actually describes, and it is one copy of the rule. A Sam's row whose qty_basis
+# says 'derived lp/up' had its size back-solved out of a rounded unit price - but a cell the engine priced from
+# the NAME's volume instead was NOT divided by that quotient (the 2026-09-10 gallon-jug path: ranch-dressing
+# and hot-sauce divide by the 128 fl oz the name states). Stamping a band on those would publish an uncertainty
+# their number does not have, so the basis string decides it, here, once, for the board and the audit alike.
+function Get-CellRoundingPct($row) {
+  if ($null -eq $row) { return $null }
+  if ($null -eq $row.pu_rounding_pct) { return $null }
+  if (([string]$row.basis) -match 'from the NAME volume') { return $null }
+  return [double]$row.pu_rounding_pct
+}
+# THE CROWN TEST. Given the cheapest row and the rows it beat, name every store whose own per-unit falls inside
+# the cheapest row's rounding band. A non-empty answer means the ranking was decided by less precision than the
+# winner's size has, so the board must not claim one of them is cheaper. Returns an EMPTY array when the winner
+# carries no band, which is the common case and the right answer: no quotient, no doubt.
+# The crown is never reassigned on this - the runner-up is not proven cheaper either.
+function Get-RoundingBandTies($cheapest, $others) {
+  $ties = New-Object System.Collections.Generic.List[string]
+  $pct = Get-CellRoundingPct $cheapest
+  if ($null -eq $pct -or $pct -le 0) { return ,@() }
+  $cp = [double]$cheapest.unit_price
+  if ($cp -le 0) { return ,@() }
+  $e = [double]$pct / 100.0
+  $lo = $cp * (1.0 - $e); $hi = $cp * (1.0 + $e)
+  foreach ($o in @($others)) {
+    if ($null -eq $o) { continue }
+    $opu = [double]$o.unit_price
+    if ($opu -ge $lo -and $opu -le $hi) { [void]$ties.Add([string]$o.store) }
+  }
+  return ,@($ties.ToArray())
+}
 function Get-PackCount($text) {
   if (-not $text) { return $null }
   $t = ("" + $text).ToLower()
@@ -615,6 +734,19 @@ function Get-UnitPrice($deal, $cat) {
         return @{ unit_price=($pr.per_item/$nvFloz); basis=("size $nvR floz from the NAME volume (size field '" + $sizeForAmt + "' is a bare-oz label on a fl-oz commodity)"); size_override=($nvR.ToString([Globalization.CultureInfo]::InvariantCulture) + ' fl oz'); note=$pr.note }
       }
     }
+    # FAIL CLOSED ON A LINE THAT STATES TWO SIZES AND COULD NOT BE SPLIT (2026-09-11, queue 2026-09-10-582032).
+    # Split-TwoProductAdLine handles the shape the Baker's flyer writes ("A, size or B, size") at the ingest
+    # seam, and a row it produced carries split_from, so the size below is that part's OWN size. What is left
+    # is the shape it deliberately refuses: Hy-Vee's "A size, B size, $price", where 'or' also joins varieties
+    # and size options (10 such lines on ads-2026-09-11, 4 routing, 0 holding a cell). For those the size field
+    # and the name each name two different quantities and NOTHING here can tell which one the price belongs to,
+    # so the division below was picking one at arbitrary - which is how the founding cereal line published
+    # $0.0976/oz against an honest $0.219 and crowned the commodity.
+    # UNPRICED IS THE HONEST ANSWER: the row drops out of the ranking and the cell falls to a store we can
+    # divide correctly, instead of publishing a real price against the wrong product's size. The refusal sits
+    # AFTER the name-volume branch above, which already carries its own either/or refusal, so the 2026-09-10
+    # gallon-jug path is untouched.
+    if ($deal.name -and (Test-NameOffersTwoSizes ([string]$deal.name)) -and -not $deal.split_from) { return $null }
     $amt = Get-SizeAmount $sizeForAmt $unit
     # The NAME is a last resort, and it is only usable when it states ONE size. An either/or ad names two
     # (see Test-NameOffersTwoSizes) and the first-match regex would silently pick the larger, cheaper-looking
