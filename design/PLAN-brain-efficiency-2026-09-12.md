@@ -227,6 +227,78 @@ reusing the live skills index unchanged. Production applies a floor (0.548) and 
 arms here are comparable to EACH OTHER and to nothing else. A shippable build has to be measured
 through the production path.
 
+## THE SECOND REGRESSION: the lexical class, measured properly
+
+The first regression's whole cost landed on a class the question set could not measure - one
+question. `course/lexical-questions.jsonl` adds ten more (14 targets, all resolved, each verified
+by grep against the target rather than by running the retriever, which would be circular), taking
+the lexical class from 1 to 11 and the set from 30 to 40.
+
+| arm | hit@3 | cross-domain | direct | **lexical** |
+|---|---|---|---|---|
+| skills-only | 28 of 40 | 11 of 14 | 10 of 15 | **7 of 11** |
+| skills+memory | 27 of 40 | 11 of 14 | 10 of 15 | **6 of 11** |
+
+**Still exactly ONE case changed, and it is the SAME case.** Ten new lexical questions, zero
+additional losses. The feared class-wide displacement did not appear: the concern that memory
+chunks would crowd out identifier queries in general is now measured and refuted, over 11x the
+coverage that raised it.
+
+**And the one remaining loss is a GROUND-TRUTH artifact, not a regression.** q5 asks *"why did the
+gate exit 3 instead of 1"*. It is keyed to `course/rule-evidence.md` and
+`claude-code-automation/hooks.md`. With memory present it returns
+`memory/prepush-gate-goes-blind-on-slot-starvation.md`, whose description reads *"run-gates exits
+3 after waiting 1,200s for a gate slot and the hook blocks the push; that is BLIND"* - which
+answers the question more directly than either keyed file. The estate's own question set carries a
+`[KEY CORRECTED]` note for exactly this hazard.
+
+**The key is NOT being widened**, because a key adjusted after seeing the run describes a decision
+already taken. It is recorded here so the next person to score this set can decide with the
+evidence in front of them. The honest summary is that the measured cost of adding the memory store
+is **one question, whose new answer is better than its key**, against 16 of 20 on questions that
+previously scored zero.
+
+## THE PRODUCTION PATH, AND IT REVERSES THE VERDICT
+
+Arms B and C scored top-3 with NO floor. Production applies one: `MIN_COSINE = 0.548`. A floor
+does not re-rank, it DELETES - a correct answer at rank 3 below the floor becomes nothing
+returned at all - so the shipping decision belongs to the number measured through the real path.
+
+Measured by calling the sidecar's `/recall-search` against the built memory index
+(`recall-embed-memory-C--Codex-ThriftyCrew.npz`, 170 vectors), k=4 as the hook uses:
+
+| arm | hit@1 | hit@3 | avg hits returned | returned NOTHING |
+|---|---|---|---|---|
+| E - no floor (arm C's setting) | 11 of 20 | **16 of 20** | 4.0 | 0 of 20 |
+| D - floor 0.548, **production** | 9 of 20 | **11 of 20** | 1.4 | **4 of 20** |
+
+**11 of 20 is BELOW the bar of 12, so on the production path this change does NOT clear the bar
+it was given, and it is NOT shipped.** Arm C's 16 of 20 was an over-estimate produced by a
+setting production does not use, and had the build gone out on it, the live result would have
+been a third worse than the number that justified it.
+
+**The cause is identifiable and it is not that the idea is wrong.** 0.548 was calibrated on
+SKILLS chunks - long, multi-paragraph sections. A memory file is one fact, often a few hundred
+bytes, and short documents sit lower in cosine against a conversational query. Five cases show it
+exactly: q5, q18 and q20 return NOTHING at the floor while returning the correct answer at rank 1
+or 2 without it, and q9 and q17 keep only their wrong first hit. Applying a floor calibrated on
+one corpus to a different corpus is precisely the defect `sidecar/THRESHOLDS.md` exists to
+prevent - three score spaces that do not share a scale - reproduced one level up.
+
+**THE NEXT STEP, AND ITS DISCIPLINE.** Derive a memory-specific floor with
+`course/derive-semantic-floor.py`. Two rules on it, or it is worthless:
+- **It must NOT be fitted to these 20 questions.** A floor tuned until this set passes is a
+  description of a decision already taken. Hold out half, derive on the other half, and report
+  the held-out number.
+- **The new floor is registered in `sidecar/THRESHOLDS.md`** with its corpus, or the estate has
+  a fourth unregistered score space, which is the thing that register exists to stop.
+
+**VERDICT: NOT SHIPPED.** The build is written and tested (`recall-embed-memory.py`, 5 of 5
+cases, 170 vectors in 1.0 s) and the index exists, but nothing in `recall-hook.py` has been
+changed to consult it. The decision to wire it in waits on a memory-corpus floor measured on
+held-out questions. Both earlier bars stand as recorded; this one was failed, and the failure is
+the reason the change is not live.
+
 ## HOW WE WILL KNOW IT WORKED
 
 Write the bar before the run, in the metric's own units, per `.claude/rules/measurement.md`:
