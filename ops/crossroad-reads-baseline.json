@@ -1,0 +1,17 @@
+﻿{
+    "readme":  "Baseline for ops\\audit-crossroad-reads.ps1: the grocery\\test-auditors.ps1 units that read BOTH a tracked artifact under out\\ or public\\ (which reaches a checkout by COMMIT) and a gitignored path (which reaches it by COPY). Written by -Update, a deliberate act after a real repair. The ratchet is BY NAME: a new unit fails the audit, and a unit that disappears is reported so this file can be trimmed. It may only ever get shorter.",
+    "written":  "2026-09-11",
+    "units":  [
+                  {
+                      "unit":  "u108-f-the-triage-pipeline-s-own-watchers",
+                      "why":  "DEFENDED, and it is the repaired case rather than the open one. u108 reads the gitignored STAMP wherever the checkout has one and only FALLS BACK to the tracked report, so the incident of 2026-09-11 cannot recur in a checkout that has been seeded. The fallback is kept on purpose for two reasons stated in design\\PLAN-capture-eviction-stamp-2026-09-11.md: a checkout made before the stamp existed keeps exactly the verdict it had, and removing the report's only machine reader would make it write-only and turn ops\\audit-write-only-reports.ps1 red, which would be a weakened gate paying for a test fix. This entry retires when every live checkout carries a stamp and the fallback is deleted.",
+                      "by_commit":  [
+                                        "grocery\\out\\capture-evictions.json"
+                                    ],
+                      "by_copy":  [
+                                      "grocery\\out\\capture-evictions-stamp.json",
+                                      "grocery\\out\\comparison-*.json"
+                                  ]
+                  }
+              ]
+}

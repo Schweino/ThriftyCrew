@@ -66,6 +66,15 @@ is one copy of every rule and nothing here can drift from it.
   the bot rewrites daily.** Measured in scratch repos: the bot's commit-then-`rebase -X theirs` hits a
   modify/delete conflict and aborts, and an autostash rebase over a local edit exits 0 with the path left
   unmerged, so the next commit exits 128. `design/PLAN-capture-eviction-stamp-2026-09-11.md`.
+  **A rule in a file is not a block**, so `ops/audit-crossroad-reads.ps1` holds this at push time: a ratchet BY
+  NAME over test-auditors' AST, wired into `run-gates`, naming each unit that reads both a TRACKED artifact under
+  `out\` or `public\` and a gitignored path. Tracked SOURCE and rule files are deliberately not the class - they
+  travel by the same road as the code under test, so they cannot lag behind it. **The class was censused the same
+  day and it is SMALL: over 157 units and 253 resolved live path expressions, only TWO tracked artifacts under
+  `out\` are read live** - `capture-evictions.json` (u108, the incident, repaired by the stamp and kept in the
+  baseline because the report fallback is deliberate) and `verification-history.json` (u085), and only ONE unit is
+  on both roads. u085 is not in the class: its case asks a property of that file ALONE, so there is no second road
+  for it to disagree with. Run the script for the count rather than quoting one.
 - **`cohort` here means the PEER GROUP OF PRODUCTS holding a commodity's board cells** - never a group
   of members or a group of recipes (2026-09-08, backlog I100). `build-arrivals-docket.ps1:27-31,56-57`,
   `check-ad-cycles.ps1:1791`, `adjudicate-discovery.ps1:23`, `aisle-test.ps1:35-36` and

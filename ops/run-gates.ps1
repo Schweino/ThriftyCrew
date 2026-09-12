@@ -351,6 +351,9 @@ $static = @(
   # 2026-09-11: ingredient-queue defined a function named Get-Item, which outranks the cmdlet, so its live-ledger assertion
   # read 0 before and after for 17 days. A rule in ops-and-gates.md reaches whoever opens it; this reaches the next definition.
   @{ f = 'ops\audit-cmdlet-shadow.ps1';        n = 'no tracked script defines a function named after a built-in cmdlet or module function, except a file-and-name allowlist entry with its reason - hermetic, a pinned name list, reads source only' }
+  # 2026-09-11: a test-auditors case compared a TRACKED artifact under out\ with a board that reaches a worktree by COPY, so a chain
+  # that regenerated it in main and committed its source only refused every push from every worktree for about 17 hours.
+  @{ f = 'ops\audit-crossroad-reads.ps1';      n = 'no NEW test-auditors case decides its verdict by comparing a file that reaches a checkout by COMMIT with one that reaches it by COPY - a ratchet BY NAME over the AST, hermetic, reads source and git' }
   # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half
   # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
   # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.
