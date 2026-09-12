@@ -297,9 +297,60 @@ function Get-TcGateCachedVerdict {
   return $parts[3]
 }
 
+function Get-TcGateCacheId {
+  <# What a cache entry is NAMED by: the gate's path BELOW its checkout, its switch, and its key.
+
+     THE CACHE WAS NEVER SHARED, although the comment on Get-TcGateCachePath said it was (found 2026-09-12). run-gates
+     named each entry from the gate's FULL path, so C:\Codex\ThriftyCrew\ops\x.ps1 and
+     ...\.claude\worktrees\w1\ops\x.ps1 were two entries. The KEY inside was already path-independent - its rows are a
+     file name, a repo-relative path and a SHA - so the answer was right and simply unreachable from any other checkout.
+     Measured with the main checkout and a worktree at the SAME commit: 5 of 7 keyable gates had identical keys and
+     different cache files, and the directory held 4,551 entries, 18.6 per keyable gate, across 138 worktrees. A push
+     from any checkout that had not itself passed that content ran cold: 93 to 373 s of wall that day against 43 to 71 s
+     warm.
+
+     THE KEY IS IN THE NAME, not just in the line, so two checkouts at DIFFERENT commits do not overwrite each other's
+     entry and evict it on every alternate push. One entry per (gate, content) is shared by every checkout that holds
+     that content, which is what the cache was for.
+
+     NOT NORMALISED: the key still hashes raw bytes. The same day, three tracked files read clean in `git status` in both
+     checkouts with different bytes on disk (line endings), so gates reading them do not share between those two. That
+     is the conservative direction on purpose - several gates here read other files' BYTES, and a key that folded CRLF
+     into LF would replay a pass across a difference such a gate would see. #>
+  param([string]$Repo, [string]$GateFile, [string]$GateArg, [string]$Key)
+  $root = [IO.Path]::GetFullPath($Repo).TrimEnd('\')
+  $full = [IO.Path]::GetFullPath(($GateFile -replace '/', '\'))
+  $rel = $full
+  if ($full.Length -gt $root.Length -and $full.StartsWith($root + '\', [StringComparison]::OrdinalIgnoreCase)) {
+    $rel = $full.Substring($root.Length + 1)
+  }
+  # A gate outside its own checkout keeps its full path, so it simply does not share - it never collides.
+  return ($rel.ToLowerInvariant() + '|' + $GateArg + '|' + $Key)
+}
+
+function Remove-TcGateStaleEntries {
+  <# Delete cache entries past the age backstop, and nothing else. Returns how many were removed.
+
+     NOTHING PRUNED THIS DIRECTORY BEFORE, and naming entries by their key means one per (gate, content), so it would
+     otherwise only grow. It is safe BY THE HIT RULE: Test-TcGateCacheHit refuses an entry whose recorded time is older
+     than the backstop, and an entry's recorded time is written in the same write as the file, so a file whose write
+     time is past the backstop can never be a hit. Removing it changes no answer any run could get. A delete that races
+     another run's is caught and ignored; a reader that loses the race reads a miss and runs the gate. #>
+  param([string]$CacheDir, [DateTime]$NowUtc, [int]$MaxAgeHours = $script:TcGateKeyMaxAgeHours)
+  if (-not $CacheDir -or -not [IO.Directory]::Exists($CacheDir)) { return 0 }
+  $cut = $NowUtc.AddHours(-$MaxAgeHours)
+  $removed = 0
+  foreach ($p in [IO.Directory]::EnumerateFiles($CacheDir, '*.pass')) {
+    try {
+      if ([IO.File]::GetLastWriteTimeUtc($p) -lt $cut) { [IO.File]::Delete($p); $removed++ }
+    } catch { }
+  }
+  return $removed
+}
+
 function Get-TcGateCachePath {
-  <# One file per gate under the COMMON git directory, so every worktree on this box shares the answers: the
-     same bytes are the same bytes wherever they are checked out. #>
+  <# The file for one cache id under the COMMON git directory. Pass it Get-TcGateCacheId's answer, never a full path:
+     a full path is one checkout's name for a gate, and that is exactly how the cache stopped being shared. #>
   param([string]$CacheDir, [string]$GateId)
   $sha = [Security.Cryptography.SHA256]::Create()
   try { $h = ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($GateId))) -replace '-', '').ToLowerInvariant() }
@@ -488,6 +539,48 @@ if ($SelfTest) { Write-Output 'cases' }
       ((Get-TcGateCachedVerdict -Line $stored) -eq 'SELF-TEST PASS: 14 cases - the founding bug and its twin') (Get-TcGateCachedVerdict -Line $stored)
     T 'MUST FIRE  an entry with no verdict line yields nothing, so the caller runs the gate rather than replaying silence' `
       ((Get-TcGateCachedVerdict -Line ($k1.Key + ' 0 ' + $now.ToString('o'))) -eq '') 'invented a verdict from an entry that had none'
+    # ---- ONE ENTRY PER GATE AND CONTENT, SHARED BY EVERY CHECKOUT (2026-09-12) ----
+    # The founding defect, end to end rather than through the id function alone: two byte-identical checkouts at two
+    # different paths. Before the fix they computed the same key and wrote two different cache files.
+    $twinGate = Join-Path $sb 'ops\audit-twin.ps1'
+    [IO.File]::WriteAllText($twinGate, "# a gate with nothing to read`nif (`$SelfTest) { }`n", $utf8)
+    $sb2 = $sb + '-twin'
+    Copy-Item -LiteralPath $sb -Destination $sb2 -Recurse -Force
+    try {
+      $twinGate2 = Join-Path $sb2 'ops\audit-twin.ps1'
+      $kTwinA = Get-TcGateInputKey -Repo $sb -GateFile $twinGate -GateArg '-SelfTest' -RunnerFiles @($runner)
+      $kTwinB = Get-TcGateInputKey -Repo $sb2 -GateFile $twinGate2 -GateArg '-SelfTest' -RunnerFiles @((Join-Path $sb2 'ops\run-gates.ps1'))
+      $cA = Get-TcGateCachePath -CacheDir 'C:\c' -GateId (Get-TcGateCacheId -Repo $sb -GateFile $twinGate -GateArg '-SelfTest' -Key $kTwinA.Key)
+      $cB = Get-TcGateCachePath -CacheDir 'C:\c' -GateId (Get-TcGateCacheId -Repo $sb2 -GateFile $twinGate2 -GateArg '-SelfTest' -Key $kTwinB.Key)
+      T 'MUST FIRE  byte-identical checkouts at two different paths compute one key AND land on one cache file' `
+        ($kTwinA.Ok -and $kTwinB.Ok -and $kTwinA.Key -eq $kTwinB.Key -and $cA -eq $cB) ("okA={0} okB={1} sameKey={2} sameFile={3}" -f $kTwinA.Ok, $kTwinB.Ok, ($kTwinA.Key -eq $kTwinB.Key), ($cA -eq $cB))
+    } finally {
+      Remove-Item -LiteralPath $sb2 -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    $idA = Get-TcGateCacheId -Repo 'C:\box\main' -GateFile 'C:\box\main\ops\audit-thing.ps1' -GateArg '-SelfTest' -Key 'k1'
+    $idC = Get-TcGateCacheId -Repo 'C:\box\main' -GateFile 'C:\box\main\ops\audit-thing.ps1' -GateArg '-SelfTest' -Key 'k2'
+    T 'MUST FIRE  different inputs are a different entry, so checkouts at two commits never evict each other' ($idA -ne $idC) "$idA / $idC"
+    $idD = Get-TcGateCacheId -Repo 'C:\Box\Main' -GateFile 'c:\box\main\OPS/audit-thing.ps1' -GateArg '-SelfTest' -Key 'k1'
+    T 'MUST NOT FIRE  case and separator spelling do not split one gate into two entries' ($idA -eq $idD) "$idA / $idD"
+
+    # ---- PRUNING, which is only safe because it agrees with the hit rule ----
+    $pc = Join-Path $sb 'cache'
+    $null = New-Item -ItemType Directory -Force -Path $pc
+    $oldE = Join-Path $pc 'old.pass'; $freshE = Join-Path $pc 'fresh.pass'; $notMine = Join-Path $pc 'readme.txt'
+    foreach ($x in @($oldE, $freshE, $notMine)) { [IO.File]::WriteAllText($x, 'x', $utf8) }
+    $nowP = [DateTime]::UtcNow
+    $pastBackstop = $nowP.AddHours(-($script:TcGateKeyMaxAgeHours + 1))
+    [IO.File]::SetLastWriteTimeUtc($oldE, $pastBackstop)
+    [IO.File]::SetLastWriteTimeUtc($notMine, $pastBackstop)
+    $gone = Remove-TcGateStaleEntries -CacheDir $pc -NowUtc $nowP
+    T 'MUST FIRE  an entry past the backstop is removed, because it can never be a hit again' `
+      ((-not (Test-Path -LiteralPath $oldE)) -and $gone -eq 1) ("removed={0} oldStillThere={1}" -f $gone, (Test-Path -LiteralPath $oldE))
+    T 'CLEAN TWIN  an entry inside the backstop is still there to be reused' (Test-Path -LiteralPath $freshE) 'a fresh entry was pruned'
+    T 'CLEAN TWIN  a file that is not a cache entry is kept, however old it is' (Test-Path -LiteralPath $notMine) 'pruning removed a file it does not own'
+    $staleLine = 'kX 0 ' + $pastBackstop.ToString('o') + ' SELF-TEST PASS: x'
+    T 'MUST NOT FIRE  an entry old enough to prune is one the hit rule already refuses, so pruning changes no answer' `
+      (-not (Test-TcGateCacheHit -Line $staleLine -Key 'kX' -NowUtc $nowP).Hit) 'an entry past the backstop still read as a hit'
+
     $p1 = Get-TcGateCachePath -CacheDir 'C:\c' -GateId 'ops\a.ps1|-SelfTest'
     $p2 = Get-TcGateCachePath -CacheDir 'C:\c' -GateId 'ops\a.ps1|-Other'
     T 'MUST FIRE  two arguments of one file are two cache entries, never one' ($p1 -ne $p2) "$p1 / $p2"
@@ -498,7 +591,7 @@ if ($SelfTest) { Write-Output 'cases' }
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0, so the count is asserted.
-  if ($cases -lt 19) { $f++; Write-Output ("FAIL  only {0} of 19 cases ran" -f $cases) }
+  if ($cases -lt 40) { $f++; Write-Output ("FAIL  only {0} of 40 cases ran" -f $cases) }
   if ($f) { Write-Output ("gate-input-key SELF-TEST FAIL: {0} of {1} case(s)" -f $f, $cases); exit 1 }
   Write-Output ("gate-input-key SELF-TEST PASS: {0} cases - led by every input moving the key one at a time, including two hops down a library graph, and by the three refusals that keep a stale pass impossible" -f $cases)
   exit 0

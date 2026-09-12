@@ -674,7 +674,10 @@ if ($cacheDir) {
     if (-not $k.Ok) { $unkeyable++; continue }
     $idx = $offSelf + $i
     $gateKey[$idx] = $k.Key
-    $gateCachePath[$idx] = Get-TcGateCachePath -CacheDir $cacheDir -GateId ($fullPath + '|' + $swName)
+    # NAMED BY THE PATH BELOW THE CHECKOUT AND BY THE KEY, never by $fullPath (2026-09-12). The full path made every
+    # checkout its own cache, so a gate that passed in one worktree ran again in the next over identical bytes -
+    # 4,551 entries, 18.6 per keyable gate, and cold pushes of 93 to 373 s. See Get-TcGateCacheId.
+    $gateCachePath[$idx] = Get-TcGateCachePath -CacheDir $cacheDir -GateId (Get-TcGateCacheId -Repo $repo -GateFile $fullPath -GateArg $swName -Key $k.Key)
     $line = ''
     try { if ([IO.File]::Exists($gateCachePath[$idx])) { $line = ([IO.File]::ReadAllText($gateCachePath[$idx])).Trim() } } catch { $line = '' }
     # THE GATE'S OWN VERDICT LINE COMES BACK WITH IT. A self-test that exits 0 without naming its verdict is
@@ -740,6 +743,11 @@ if ($cacheDir) {
     $lastLine = ([string]$v.Line).Trim()
     try { $null = Write-TcAtomicFile -Path $gateCachePath[$idx] -Text ($gateKey[$idx] + ' 0 ' + ([DateTime]::UtcNow.ToString('o')) + ' ' + $lastLine) } catch { }
   }
+  # PRUNED PAST THE BACKSTOP, because entries are named by content now and nothing else ever removed one. Safe by the
+  # hit rule: an entry that old cannot be a hit, so no run's answer changes. Said only when it did something.
+  $pruned = 0
+  try { $pruned = Remove-TcGateStaleEntries -CacheDir $cacheDir -NowUtc ([DateTime]::UtcNow) } catch { $pruned = 0 }
+  if ($pruned -gt 0) { Write-Output ("run-gates: removed {0} gate cache entr(y/ies) past the {1}h backstop - none of them could have been reused." -f $pruned, $script:TcGateKeyMaxAgeHours) }
 }
 $leftAfter = Get-TcTreeSnapshot -Root $repoFull -Paths $leftPaths
 Write-Output ("run-gates: pool width reached {0} of the {1} asked, and its slots were handed back as the last gates finished" -f $script:gateWidthMax, $askedJobs)
