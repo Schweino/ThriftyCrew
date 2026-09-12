@@ -160,6 +160,10 @@ if ($__prSelfTest) {
   function T($m, $cond, $got) { if ($cond) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $got); $script:f++ } }
   $PS = (Get-Command powershell).Source
   function MkJob($cmd) { [pscustomobject]@{ Exe = $PS; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', $cmd) } }
+  # lib\concurrency-probe.ps1's rendezvous child, launched through the pool under test. Both concurrency
+  # cases below use it: the CLEAN TWIN proves the pool runs jobs together, the MUST FIRE proves it stops at its cap.
+  . (Join-Path $PSScriptRoot 'concurrency-probe.ps1')
+  function MkRdvJob($probe) { [pscustomobject]@{ Exe = $PS; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $probe.Script) } }
 
   # MUST FIRE - the three properties a naive pool loses.
   $slowFirst = @(
@@ -175,6 +179,33 @@ if ($__prSelfTest) {
   $big = Invoke-TcParallel -Jobs @((MkJob '1..4000 | ForEach-Object { "line $_ padded out to make this exceed the pipe buffer" }')) -Concurrency 2
   T 'MUST FIRE  a child emitting far more than the ~4KB pipe buffer neither deadlocks nor truncates - reading after WaitForExit is the classic hang this library exists to prevent' `
     ($big[0].Out.Count -eq 4000 -and $big[0].Out[3999] -match 'line 4000') ([string]$big[0].Out.Count)
+  # THE CAP HOLDS WITHOUT -Grow (2026-09-11). Two rendezvous children go through the pool at concurrency 1,
+  # passing no -Grow, and must NOT meet. Started and reported must both be 2, so a pool that launched nothing
+  # cannot pass this by never running. -Grow (d72b4f5cd) is the ONLY thing allowed to widen the pool, and the
+  # Grow MUST FIRE below is the other half, proving width 1 widens when it is asked to. That case also goes
+  # red on an uncapped pool, through its growCalls check, but it always passes -Grow, so it cannot see a cap
+  # that holds only when -Grow is passed: that mutant was killed by THIS case alone. A caller that passes no
+  # -Grow relies on this path, and run-gates shares a machine-wide budget of gate workers that a pool
+  # ignoring -Concurrency would overspend unseen.
+  # THE 2s DEADLINE is concurrency-probe.ps1's own serial MUST FIRE value, the only value tried, not the
+  # survivor of a sweep. No length of it can redden a correct pool - a serial child has nobody to meet - but
+  # unlike the CLEAN TWIN's 60s a correct pool PAYS it on every green run, once, so it is not set lavishly.
+  # It bounds how far apart an uncapped pair may start and still be caught. Measured 2026-09-11 on a box
+  # shared with about ten sessions: two children through this pool at width 2 started 5 to 110ms apart over
+  # 10 runs (32 to 74% CPU, at 7b2218939). Mutants in a temp mirror, counted as killed on this case: at
+  # 7b2218939, cap deleted 2 of 2 and `-lt` made `-le` 2 of 3; at d72b4f5cd, each 1 of 1, and the cap
+  # dropped only without -Grow 1 of 1. The one survivor ran while the whole self-test took 29.7s against 6.6s
+  # alone. So a saturated box can hide this regression for a run and can never fake one; a longer deadline
+  # would buy detection on those moments at a cost every green run in every session pays.
+  $cap = New-TcRendezvousProbe -Count 2 -DeadlineSec 2
+  try {
+    $capRes = Invoke-TcParallel -Jobs @(1..2 | ForEach-Object { MkRdvJob $cap }) -Concurrency 1
+    $cv = Get-TcRendezvousVerdict -Probe $cap
+    T 'MUST FIRE  a pool held to concurrency 1 never runs two jobs at once - two rendezvous children through it both start and report yet never meet, so a pool that ignores its cap goes red' `
+      ((-not $cv.Ok) -and $cv.Started -eq 2 -and $cv.Reported -eq 2 -and @($capRes).Count -eq 2) $cv.Detail
+  } finally {
+    Remove-TcRendezvousProbe -Probe $cap
+  }
 
   # MUST NOT FIRE - the legal inputs.
   $ser = Invoke-TcParallel -Jobs $slowFirst -Concurrency 1
@@ -200,10 +231,9 @@ if ($__prSelfTest) {
   # straight after it passed 3 of 3. A wall-clock bar measures the machine as well as the pool. Each job
   # now runs lib\concurrency-probe.ps1's rendezvous child, which waits until all six have started - a
   # serial loop can never satisfy that, and load only makes it slower.
-  . (Join-Path $PSScriptRoot 'concurrency-probe.ps1')
   $rdv = New-TcRendezvousProbe -Count 6
   try {
-    $par = Invoke-TcParallel -Jobs @(1..6 | ForEach-Object { [pscustomobject]@{ Exe = $PS; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $rdv.Script) } }) -Concurrency 6
+    $par = Invoke-TcParallel -Jobs @(1..6 | ForEach-Object { MkRdvJob $rdv }) -Concurrency 6
     $rv = Get-TcRendezvousVerdict -Probe $rdv
     $rc0 = @($par | Where-Object { $_.ExitCode -eq 0 }).Count
     T 'CLEAN TWIN six jobs at concurrency 6 are all alive at the same instant, each having waited for the other five to start - the whole point, asserted rather than assumed, and never timed' `
@@ -247,6 +277,6 @@ if ($__prSelfTest) {
   }
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 5 must-fire cases led by job-order results and exact exit codes and including a pool that widens and one that hands back, 4 must-not-fire cases led by concurrency 1 matching the pool, and 4 clean twins including proven overlap'
+  Write-Output 'SELF-TEST PASS: 6 must-fire cases led by job-order results and exact exit codes and including a cap that holds, a pool that widens and one that hands back, 4 must-not-fire cases led by concurrency 1 matching the pool, and 4 clean twins including proven overlap'
   exit 0
 }
