@@ -7,8 +7,13 @@ at commit c6533c7ea.
 
 **The fairness probe of item 5 is now committed as `ops\probe-gate-slot-fairness.ps1`**, because a described probe
 costs a re-write to repeat and this one had to be re-written the next day to answer whether the fix held. The
-re-measurement at 20 arrivals is the last section of this file. The other numbers here still come from the scratch
-probes and snapshots described with each.
+re-measurement at 20 arrivals is the last section of this file.
+
+**The raw rows behind items 1 and 6 are committed as `design\DATA-gate-slot-starvation-2026-09-11.csv`** - 138 rows,
+one per `run-gates` process, carrying its origin, start and end, outcome, worker count and the verdict line its hook
+log ended on. This file did not name it, so the numbers here could not be traced to their own data; that is the E24
+discipline kept and then not pointed at. The remaining numbers - the occupancy snapshot's zero-wait probe and the
+service-order probe of item 5 - came from scratch probes described with each and were not kept.
 
 ## The question
 
