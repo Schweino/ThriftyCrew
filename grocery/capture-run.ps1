@@ -376,7 +376,12 @@ if ($browser.Count) {
       # skip here: compare-deals hands a commodity to the FRESHEST capture outright, so a thin pass
       # can move a cell onto a worse product.
       # Still bounded well under the task's own 2h limit, so one wedged store cannot hold the morning.
-      $bpOut = & $py $driver @storeArgs '--date' $todayS '--timeout-min' '20'
+      # --preflight (Brad, 2026-09-12): the driver runs its Chrome plumbing self-test FIRST and captures nothing if it
+      # fails. That check used to run on every push, where it cost ~30s and answered a question about this machine's
+      # browser that no push can change; here it is asked right before the browser is relied on. A failed preflight
+      # exits 2 with no capture file, and the per-store "did the capture land?" pass below already reports each store
+      # as still outstanding - no new branch, the existing fallback.
+      $bpOut = & $py $driver @storeArgs '--date' $todayS '--timeout-min' '20' '--preflight'
       $bpRc = $LASTEXITCODE
       foreach ($l in @($bpOut)) { Write-Output ("  " + $l) }
       Write-Output ("browser driver rc=$bpRc")

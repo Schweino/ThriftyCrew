@@ -454,6 +454,16 @@ $pySkip = @{
   'meal-prep\pipeline\hunt-daemon.py'       = 'the daemon itself - its --selftest IS the battery below; runs for minutes'
   'meal-prep\pipeline\hunt_daemon_selftest.py' = 'the full daemon battery - 250-680 s; nightly as TC Daemon Battery 0230 (ops\run-daemon-battery.ps1), not at push time'
 }
+# A PYTHON SUITE CAN BE TOLD WHICH SELF-TEST A PUSH RUNS (Brad, 2026-09-12). Keyed like $pySkip, and a decision
+# someone defends in a diff. grocery\pull-browser-stores.py's --selftest launches a real Chrome per store (~30s on
+# every push) to prove plumbing whose answer depends on the browser and the machine - nothing a push changes and
+# nothing a file hash can see, so it could never be cached honestly. A push runs its hermetic --selftest-lookup
+# (0.5s, no browser, no network, scored ok by lib\selftest-verdict.ps1), and capture-run asks the browser question
+# with --preflight right before it drives one. The node-based grocery\test-pull-agent-lib.ps1 still proves the
+# agents' logic on every push.
+$pyArg = @{
+  'grocery\pull-browser-stores.py' = '--selftest-lookup'
+}
 $pySuites = @()
 # MATCHED BELOW THE ROOT (2026-09-11, lib\tree-walk.ps1), the same fix as the PowerShell discovery above. On the full
 # path every .py in a linked worktree carried \worktrees\, so this walk resolved no suites from a spawned session
@@ -468,7 +478,8 @@ foreach ($f in $pyWalk) {
   try { $txt = [IO.File]::ReadAllText($f.FullName) } catch { continue }
   if ($txt -notmatch '--selftest') { continue }
   if ($pySkip.ContainsKey($rel)) { continue }
-  $pySuites += @{ f = $rel; a = '--selftest'; n = 'discovered Python self-test' }
+  $pyA = if ($pyArg.ContainsKey($rel)) { [string]$pyArg[$rel] } else { '--selftest' }
+  $pySuites += @{ f = $rel; a = $pyA; n = 'discovered Python self-test' }
 }
 if ($pySuites.Count -lt 15) {
   # DISCOVERY BROKEN IS NOT A CLEAN TREE. Nineteen suites were found the day this shipped; a run that
@@ -689,12 +700,38 @@ if ($cacheDir) {
     }
   }
 }
+# PYTHON SUITES ARE KEYED TOO, but ONLY on what they DECLARE (2026-09-12). Get-TcGateInputKey refuses a non-PowerShell
+# gate with no `# gate-inputs:` line, because its inference cannot see an import or an open(), so an undeclared suite
+# keeps running on every push exactly as before. The interpreter is a RUNNER here: its own bytes join the key, so a
+# pass under one Python is never replayed under another, and an interpreter found only by name on PATH has no bytes
+# to hash, so it keys nothing at all.
+$pyReused = 0
+$pyRunner = @()
+if ($pyExe -and [IO.Path]::IsPathRooted([string]$pyExe) -and [IO.File]::Exists([string]$pyExe)) { $pyRunner = @($runnerFiles) + @([string]$pyExe) }
+if ($cacheDir -and $pyRunner.Count) {
+  for ($i = 0; $i -lt $pySuiteJobs.Count; $i++) {
+    $pyParts = ([string]$pySuiteKeys[$i]) -split '\|', 2
+    $pyFull = Join-Path $repo $pyParts[0]
+    $k = Get-TcGateInputKey -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -RunnerFiles $pyRunner
+    if (-not $k.Ok) { continue }
+    $idx = $offPySuite + $i
+    $gateKey[$idx] = $k.Key
+    $gateCachePath[$idx] = Get-TcGateCachePath -CacheDir $cacheDir -GateId (Get-TcGateCacheId -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -Key $k.Key)
+    $line = ''
+    try { if ([IO.File]::Exists($gateCachePath[$idx])) { $line = ([IO.File]::ReadAllText($gateCachePath[$idx])).Trim() } } catch { $line = '' }
+    $verdictLine = Get-TcGateCachedVerdict -Line $line
+    if (-not $NoReuse -and $verdictLine -and (Test-TcGateCacheHit -Line $line -Key $k.Key -NowUtc $nowUtcKey).Hit) {
+      $cacheHit[$idx] = $true; $cacheVerdict[$idx] = $verdictLine; $pyReused++
+    }
+  }
+}
 # DISPATCH ONLY WHAT IS NOT ALREADY ANSWERED, then scatter the results back into their own slots, because
 # every loop below indexes by the job's position. A reused entry is filled in afterwards.
 $toRun = [Collections.Generic.List[object]]::new()
 $runIdx = [Collections.Generic.List[int]]::new()
 for ($i = 0; $i -lt $allJobs.Count; $i++) { if (-not $cacheHit[$i]) { [void]$toRun.Add($allJobs[$i]); [void]$runIdx.Add($i) } }
 Write-Output ("run-gates: {0} of {1} self-test(s) already passed over these exact inputs and were not run again; {2} could not be keyed and always run" -f $reusedCount, $selfJobs.Count, $unkeyable)
+Write-Output ("run-gates: {0} of {1} Python suite(s) already passed over their declared inputs and were not run again; the rest declare nothing and always run" -f $pyReused, $pySuiteJobs.Count)
 # SAID OUT LOUD ON EVERY RUN, because what a green run did NOT cover is part of what the green means. A reader who
 # does not know six ratchets were deferred will read this pass as wider than it is.
 if ($dailyDeferred -gt 0) {
@@ -742,6 +779,20 @@ if ($cacheDir) {
     if (-not $v.Found -or -not $v.Line) { continue }
     $lastLine = ([string]$v.Line).Trim()
     try { $null = Write-TcAtomicFile -Path $gateCachePath[$idx] -Text ($gateKey[$idx] + ' 0 ' + ([DateTime]::UtcNow.ToString('o')) + ' ' + $lastLine) } catch { }
+  }
+  # THE SAME RULES FOR A PYTHON SUITE: only a key that exists, only a pass, never a run that reported a blind case,
+  # and only with the verdict line lib\selftest-verdict.ps1 itself would find. Python markers are indented, so the
+  # blind check reads each line trimmed - the PowerShell loop above anchors at column 0.
+  for ($i = 0; $i -lt $pySuiteJobs.Count; $i++) {
+    $idx = $offPySuite + $i
+    if ($cacheHit[$idx] -or -not $gateKey[$idx]) { continue }
+    $r = $allRes[$idx]
+    if ($null -eq $r -or $r.ExitCode -ne 0) { continue }
+    $marks = @(@($r.Out) | ForEach-Object { ("" + $_).Trim() } | Where-Object { $_ -match '^[A-Z0-9][A-Z0-9-]*-COMPLETE\b' })
+    if ($marks.Count -and ("" + $marks[$marks.Count - 1]) -match '\bblind=([1-9][0-9]*)\b') { continue }
+    $v = Get-TcSelfTestVerdict -Lines @($r.Out)
+    if (-not $v.Found -or -not $v.Line) { continue }
+    try { $null = Write-TcAtomicFile -Path $gateCachePath[$idx] -Text ($gateKey[$idx] + ' 0 ' + ([DateTime]::UtcNow.ToString('o')) + ' ' + ([string]$v.Line).Trim()) } catch { }
   }
   # PRUNED PAST THE BACKSTOP, because entries are named by content now and nothing else ever removed one. Safe by the
   # hit rule: an entry that old cannot be a hit, so no run's answer changes. Said only when it did something.

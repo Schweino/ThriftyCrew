@@ -32,6 +32,14 @@ carries evidence.
 EXIT CODES (section 4.5): 0 clean / 1 findings / 2 could-not-run. Marker LEARN-APPLY-COMPLETE.
 INTERPRETER: C:\Codex\Python312\python.exe (bare `python` is the Windows Store shim, exit 49).
 """
+# gate-inputs: meal-prep\pipeline\hunt_lib.py, meal-prep\pipeline\ingredient-resolutions.ps1, meal-prep\db\ingredients.json, grocery\commodities.json, grocery\recipe-commodities.json, grocery\out\recipe-board-everyday.json
+# WHY THIS SUITE DECLARES (Brad, 2026-09-12). ~32s on every push, and run-gates cannot key a Python suite by guessing:
+# its inference reads PowerShell and cannot see `import hunt_lib` or an open(). Read before it was written, not taken
+# from a summary: cmd_selftest's 21 ledger-touching calls all pass a TEMP store and TEMP events (checked call by call),
+# so the live ledger and event log are never read. What it does read is listed above - hunt_lib (imported),
+# ingredient-resolutions.ps1 (spawned by _record; the key follows its lib\ dot-sources), and known_bids()/wired_bids(),
+# which the drill calls with their DEFAULT live paths: the three commodity namespaces and the recipe vocabulary.
+# The board is gitignored, so a checkout without one fails this declaration and runs the suite every time, as before.
 from __future__ import annotations
 
 import argparse

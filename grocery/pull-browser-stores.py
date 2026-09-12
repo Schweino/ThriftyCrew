@@ -1322,6 +1322,41 @@ def lookup_self_test():
     finally:
         read_worklist, read_worklist_pairs, profile_dir, Chrome = _rw, _rwp, _pd, _ch
 
+    # ---- --preflight: the Chrome check runs BEFORE a capture, and a failure drives no store (2026-09-12) ----
+    # Driven through main() itself with the browser, the capture lane and Chrome discovery swapped out, so what is
+    # proven is the ORDER inside main(), not a helper that main() might stop calling.
+    _g = globals()
+    _saved = {n: _g[n] for n in ("self_test", "run_store", "find_chrome")}
+    _argv = sys.argv
+    drove = []
+
+    def _fake_run(k, date_s, **_kw):
+        drove.append(k)
+        return True, "fake capture"
+    try:
+        _g["find_chrome"] = lambda: "chrome"
+        _g["run_store"] = _fake_run
+        _g["self_test"] = lambda headless=False: 1
+        sys.argv = ["pull-browser-stores.py", "--preflight", "--store", "fareway", "--date", "2026-01-01"]
+        rc_bad = main()
+        T("MUST FIRE  --preflight with a FAILING Chrome self-test exits 2 and drives no store",
+          rc_bad == 2 and drove == [], "rc=%r drove=%r" % (rc_bad, drove))
+        _g["self_test"] = lambda headless=False: 0
+        del drove[:]
+        rc_ok = main()
+        T("CLEAN TWIN --preflight with a PASSING Chrome self-test goes on to drive the store",
+          rc_ok == 0 and drove == ["fareway"], "rc=%r drove=%r" % (rc_ok, drove))
+        _g["self_test"] = lambda headless=False: 1
+        del drove[:]
+        sys.argv = ["pull-browser-stores.py", "--store", "fareway", "--date", "2026-01-01"]
+        rc_plain = main()
+        T("MUST NOT FIRE  without --preflight the Chrome self-test is not run, so a manual pull is unchanged",
+          rc_plain == 0 and drove == ["fareway"], "rc=%r drove=%r" % (rc_plain, drove))
+    finally:
+        sys.argv = _argv
+        for _n, _v in _saved.items():
+            _g[_n] = _v
+
     print(f"  LOOKUP-SELFTEST-COMPLETE checks={len(bad)}failed" if bad else
           "  LOOKUP-SELFTEST-COMPLETE failed=0")
     return len(bad)
@@ -1530,6 +1565,9 @@ def main():
                     help="prove the driver<->agent plumbing on a throwaway profile. Captures nothing.")
     ap.add_argument("--selftest-lookup", action="store_true",
                     help="lookup mode's hermetic fixtures only - no browser, no network at all.")
+    ap.add_argument("--preflight", action="store_true",
+                    help="run the Chrome plumbing self-test FIRST and capture nothing if it fails. "
+                         "capture-run passes this; a push runs --selftest-lookup instead.")
     args = ap.parse_args()
 
     if args.selftest_lookup:
@@ -1567,6 +1605,22 @@ def main():
             # Degrade, never go silent: the caller reads UNUSABLE and hands the store to a human.
             write_lookup_unusable(lookup["out"], keys[0], lookup["terms"], f"no Chrome: {e}")
         return 2
+
+    # THE CHROME PLUMBING CHECK MOVED HERE FROM EVERY PUSH (Brad, 2026-09-12). self_test() launches a real Chrome per
+    # store and proves the agents load after injection, the resume contract holds and Walmart's identity guard
+    # refuses an unseeded profile. It ran on every push, ~30s, and its answer depends on the browser and the machine,
+    # which no push changes and no file hash can see - so a push now runs the hermetic --selftest-lookup, and the
+    # capture run asks the browser question right before it depends on the answer. A FAILING PREFLIGHT CAPTURES
+    # NOTHING: the failure this check exists for is a driver that launches, injects nothing useful and reports a
+    # clean empty result, which compare-deals would read as "the store carries none of this". Exit 2 is this file's
+    # "nothing could run", and capture-run already reports a store with no capture file as still outstanding.
+    if args.preflight and not lookup and not args.seed:
+        print("preflight: Chrome plumbing self-test before any capture")
+        if self_test(headless=args.headless):
+            print("PREFLIGHT FAILED - the driver did not prove its plumbing, so nothing was captured. "
+                  "A clean empty capture from a broken driver reads as a store that carries nothing.")
+            return 2
+        print("preflight: passed")
 
     if lookup:
         print(f"browser LOOKUP  -  {STORES[keys[0]]['name']}  -  {len(lookup['terms'])} term(s)  "

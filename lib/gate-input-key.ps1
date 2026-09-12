@@ -207,6 +207,14 @@ function Get-TcGateInputKey {
   # Only the REFUSAL is lifted: every declared path is still hashed below, and the transitive walk still runs.
   $declared = Get-TcGateDeclaredInputs -Text $text
   $declResolved = $null
+  # A GATE THAT IS NOT POWERSHELL MUST DECLARE, OR IT IS NOT KEYED (2026-09-12). The inference below reads PowerShell
+  # spellings - Join-Path literals, dot-sourced lib\ paths - and a Python suite has neither. Handed a .py, it finds
+  # nothing to refuse and nothing to follow, and would key the file on its own bytes alone: an `import hunt_lib` or an
+  # open() of a board would be invisible, and a pass would replay after either changed. That is the unsafe direction,
+  # so for anything but PowerShell the only road to a key is the author's own list.
+  if (-not $declared.Count -and $GateFile -notmatch '(?i)\.psm?1$') {
+    return [pscustomobject]@{ Ok = $false; Key = ''; Why = 'is not PowerShell and declares no inputs, and the inference cannot see what it imports or opens'; Files = @() }
+  }
   if ($declared.Count) {
     $declResolved = Resolve-TcGateDeclaredInputs -Repo $Repo -Patterns $declared
     if (-not $declResolved.Ok) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = $declResolved.Why; Files = @() } }
@@ -539,6 +547,22 @@ if ($SelfTest) { Write-Output 'cases' }
       ((Get-TcGateCachedVerdict -Line $stored) -eq 'SELF-TEST PASS: 14 cases - the founding bug and its twin') (Get-TcGateCachedVerdict -Line $stored)
     T 'MUST FIRE  an entry with no verdict line yields nothing, so the caller runs the gate rather than replaying silence' `
       ((Get-TcGateCachedVerdict -Line ($k1.Key + ' 0 ' + $now.ToString('o'))) -eq '') 'invented a verdict from an entry that had none'
+    # ---- A NON-POWERSHELL GATE KEYS ONLY ON WHAT IT DECLARES (2026-09-12) ----
+    $pyGate = Join-Path $sb 'ops\suite_thing.py'
+    $pyHelper = Join-Path $sb 'ops\helper_lib.py'
+    [IO.File]::WriteAllText($pyHelper, "VALUE = 1`n", $utf8)
+    [IO.File]::WriteAllText($pyGate, "import helper_lib`nif '--selftest' in __import__('sys').argv: pass`n", $utf8)
+    $kPyBare = Get-TcGateInputKey -Repo $sb -GateFile $pyGate -GateArg '--selftest' -RunnerFiles @($runner)
+    T 'MUST FIRE  a Python suite with no declaration is refused, because the inference cannot see an import' `
+      ((-not $kPyBare.Ok) -and $kPyBare.Why -match 'not PowerShell') ("ok={0} why={1}" -f $kPyBare.Ok, $kPyBare.Why)
+    [IO.File]::WriteAllText($pyGate, "# gate-inputs: ops\helper_lib.py`nimport helper_lib`nif '--selftest' in __import__('sys').argv: pass`n", $utf8)
+    $kPyDecl = Get-TcGateInputKey -Repo $sb -GateFile $pyGate -GateArg '--selftest' -RunnerFiles @($runner)
+    T 'CLEAN TWIN  the same Python suite is keyable once it declares what it imports' ($kPyDecl.Ok) ("ok={0} why={1}" -f $kPyDecl.Ok, $kPyDecl.Why)
+    [IO.File]::WriteAllText($pyHelper, "VALUE = 2`n", $utf8)
+    $kPyEdit = Get-TcGateInputKey -Repo $sb -GateFile $pyGate -GateArg '--selftest' -RunnerFiles @($runner)
+    T 'MUST FIRE  editing the module a Python suite imports moves its key, so an import is never a stale pass' `
+      ($kPyEdit.Ok -and $kPyEdit.Key -ne $kPyDecl.Key) 'editing an imported module left the key unchanged'
+
     # ---- ONE ENTRY PER GATE AND CONTENT, SHARED BY EVERY CHECKOUT (2026-09-12) ----
     # The founding defect, end to end rather than through the id function alone: two byte-identical checkouts at two
     # different paths. Before the fix they computed the same key and wrote two different cache files.
@@ -591,7 +615,7 @@ if ($SelfTest) { Write-Output 'cases' }
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0, so the count is asserted.
-  if ($cases -lt 40) { $f++; Write-Output ("FAIL  only {0} of 40 cases ran" -f $cases) }
+  if ($cases -lt 43) { $f++; Write-Output ("FAIL  only {0} of 43 cases ran" -f $cases) }
   if ($f) { Write-Output ("gate-input-key SELF-TEST FAIL: {0} of {1} case(s)" -f $f, $cases); exit 1 }
   Write-Output ("gate-input-key SELF-TEST PASS: {0} cases - led by every input moving the key one at a time, including two hops down a library graph, and by the three refusals that keep a stale pass impossible" -f $cases)
   exit 0
