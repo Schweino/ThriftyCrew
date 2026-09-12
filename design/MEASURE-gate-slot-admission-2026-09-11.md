@@ -85,7 +85,7 @@ audit, `ops\audit-lesson-rate-claims.ps1` (Brad's I112 ruling), about 2 s of her
 analysis and nothing in `lib\gate-slots.ps1`, so who wins a freed slot is unchanged; the only number it can move
 is each run's slot tenure, by those seconds.
 
-**Re-read at commit `40f3fcdd8`: every verdict below stands as measured.** `ops\run-gates.ps1` gains one more static
+**Re-read at commit `1a97b53af`: every verdict below stands as measured.** `ops\run-gates.ps1` gains one more static
 audit, `meal-prep\pipeline\audit-forbidden-prose.ps1` (Brad's I138 ruling), measured in this checkout at that commit
 at about **3.9 s** a push: 3,659 / 3,657 / 3,461 ms for the live read of 584 committed specs, plus 399 / 410 ms for the
 `-SelfTest` the discovery pass runs. It touches no probe, no analysis and nothing in `lib\gate-slots.ps1`, so who wins

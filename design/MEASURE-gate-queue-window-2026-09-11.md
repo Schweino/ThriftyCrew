@@ -64,7 +64,7 @@ cost about 2 s over 118 files on its first run. It dispatches no self-test, take
 the queue, the observer or `lib/gate-slots.ps1`. Like the `140a0f4f6` change it adds work rather than removing it,
 by far less than the per-run spread this file reports, so every total below still reads as measured.
 
-**Re-read at commit `40f3fcdd8`:** `ops/run-gates.ps1` moved again, by one entry, and in the same direction as the
+**Re-read at commit `1a97b53af`:** `ops/run-gates.ps1` moved again, by one entry, and in the same direction as the
 two changes above: Brad's I138 ruling adds `meal-prep/pipeline/audit-forbidden-prose.ps1` to the static list, a
 hermetic read of the 584 committed recipe specs against a 10-term list. Timed in this checkout at that commit,
 three consecutive runs: **3,659 ms, 3,657 ms and 3,461 ms** for the live pass, plus **399 ms and 410 ms** for the
