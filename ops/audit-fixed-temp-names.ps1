@@ -75,7 +75,10 @@
     grocery\run-test-guards-weekly.ps1:26          smp-test-guards-hermetic
     ops\consistency-oracle.ps1:207                 tc-oracle-$label.log, each arm's log in Invoke-TcArm
     meal-prep\pipeline\feed-freshness.ps1:350      ff-clobber-probe.ps1, the guard-contract founding shape in this
-                                                   file's own self-test block
+                                                   file's own self-test block. FIXED and the mark lowered to 10 the
+                                                   same day: it was measured red in 29 of 60 concurrent writer runs,
+                                                   19 of them dying with no verdict line at all, and moved under a
+                                                   per-run scratch directory. The fixture line above stays frozen.
     meal-prep\pipeline\run-scaler-pricing-test.ps1:56 and :83   the runner and page fixtures
     meal-prep\build-hub-grid.ps1:36                tc-hub-work
     grocery\backfill-aldi-link-urls.ps1:472        the dry-run report, named by board date

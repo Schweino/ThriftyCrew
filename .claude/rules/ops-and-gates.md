@@ -329,6 +329,18 @@ everything else honest, so a defect here is silent by construction.
   counted, because two runs that only read an absence cannot collide. Its first run listed five fixed names that
   no rule had named, among them `meal-prep/pipeline/feed-freshness.ps1`'s `ff-clobber-probe.ps1`, the
   guard-contract shape copied into another suite. Run it for the list rather than quoting one.
+  **That one is now fixed and the mark is 10** (2026-09-11, after a pre-push `run-gates` went red on it at 18:30
+  while the same file at the same commit passed standalone a minute later). Measured before and after with 6
+  writers released together on a kernel event inside each writer, 10 rounds per arm, arms alternating round by
+  round, `TEMP` isolated per round: **red in 29 of 60 writer runs before, 0 of 60 after**. **The half worth
+  keeping is that only 10 of the 29 named a case** - the other **19 printed no verdict line at all**, because
+  `Set-Content` on the contended path throws *"Stream was not readable."* or *"cannot access the file ... used by
+  another process"*, and under a suite's `EAP='Stop'` that is TERMINATING: the suite dies mid-run and reaches
+  run-gates as a bare `exit 1` with a line count and no case. **So a self-test red that names no case is a
+  concurrency suspect, not a mystery.** Of the four fixed names left, the two robocopy `/MIR` fixture trees
+  (`test-precedence-ladders`, `run-test-guards-weekly`) are the same shape at tree scale - `/MIR` deletes what the
+  source lacks, and real scripts execute from inside - while `%TEMP%\lib` and the oracle's arm logs share the
+  write collision but nothing deletes or executes a fixed-name file.
 - **A child a gate spawns must not write a TRACKED path, and a tracked file written under PS 5.1 must be
   written LF** (2026-09-11). `test-auditors`' early `spec-live` child ran `audit-spec-contradictions`, which
   wrote the committed `meal-prep\out\spec-contradictions.json` through `ConvertTo-Json | Set-Content -Encoding

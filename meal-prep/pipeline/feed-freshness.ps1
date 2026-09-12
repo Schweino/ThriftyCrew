@@ -321,46 +321,85 @@ if ($__ffSelfTest) {
     TT 'the frozen feed fixtures exist' $false "missing $mf / $cl"
   }
 
-  # -- A MISSING FEED MUST REFUSE, NOT CRASH. Shipped broken and caught end-to-end on 2026-08-15: a caller
-  # passing a -FeedPath that does not exist hit Resolve-Path, which throws, and under the caller's
-  # EAP='Stop' that exited 1 (read downstream as "skipped recipes") instead of the intended 2. A guard that
-  # dies on bad input has not refused anything - it has just failed in a way that looks like a different
-  # problem. Drives the REAL I/O entry point, because the bug was in the I/O half, not the judgement.
-  $missing = Join-Path $env:TEMP ('ff-nonexistent-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')
-  $threw = $false; $res = $null
-  try { $res = Resolve-AndCheckFeed -Explicit $missing -Now $NOW } catch { $threw = $true; $res = $_.Exception.Message }
-  TT 'MUST FIRE  a -FeedPath that does not exist is REFUSED (UNDATED), never crashes the caller' `
-     ((-not $threw) -and $res.verdict -eq 'UNDATED') $(if ($threw) { "threw: $res" } else { $res.verdict })
-
-  # -- the seal: the production caller must still ROUTE THROUGH this file. A guard cannot detect its own
-  # unsealing, so assert the precondition in source (the regression-test.ps1 lesson). test-auditors runs
-  # this daily, which is what makes this file's only caller not be its own test.
-  $prod = 'C:\Codex\ThriftyCrew\meal-prep\pipeline\compute-v2-perserving.ps1'
-  $src = if (Test-Path $prod) { Get-Content $prod -Raw } else { '' }
-  TT 'the production caller dot-sources this file' ($src -match 'feed-freshness\.ps1') 'not dot-sourced'
-  TT 'the production caller calls Resolve-AndCheckFeed' ($src -match 'Resolve-AndCheckFeed') 'not called'
-  TT 'MUST FIRE  the founding "download only if missing" shape has not come back' `
-     ($src -notmatch '(?s)if\s*\(\s*-not\s*\(Test-Path\s+\$FeedPath\s*\)\s*\)\s*\{\s*[^}]*Invoke-WebRequest') 'the download-if-missing branch is back'
-
-  # MUST FIRE, borrowed from lib\guard-contract.ps1's own regression. compute-v2-perserving.ps1 declares
-  # [switch]$SelfTest and dot-sources this file; if this file ever grows a colliding param() block, PS 5.1
-  # runs it in the CALLER's scope and silently resets that switch to $false on the next line. The header
-  # warns about it, which is worth nothing unless something proves it. Out-of-process, because the bug IS
-  # scope behaviour.
-  $probe = Join-Path $env:TEMP 'ff-clobber-probe.ps1'
-  ("param([switch]`$SelfTest)`r`n. '" + $PSCommandPath + "'`r`nWrite-Output ('SelfTest=' + `$SelfTest)") |
-    Set-Content $probe -Encoding UTF8
-  # EAP 'Continue' around the child only: under the suite's 'Stop', PS 5.1 turns the child's first stderr
-  # line into a terminating throw HERE. Not native-lib: this file is dot-sourced, so it takes no new lib.
-  # grocery\test-native-stderr-eap.ps1 is the watcher.
-  $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+  # ---- ONE SCRATCH DIRECTORY PER RUN (2026-09-11) ------------------------------------------------------
+  # The clobber probe below used to be written to the FIXED name %TEMP%\ff-clobber-probe.ps1 - the exact
+  # shape lib\guard-contract.ps1 was fixed out of on c3a686290, copied into this suite. run-gates runs
+  # every -SelfTest and pre-push runs run-gates, so concurrent pushes run THIS suite over each other in
+  # one %TEMP%, and one run then executes, reads or deletes another's probe.
+  #
+  # MEASURED 2026-09-11: 6 writers released together on a kernel event inside each writer process (so the
+  # ~0.5 s of powershell.exe start-up is paid BEFORE the gate opens), 10 rounds per arm, arms alternating
+  # round by round under the same box load, TEMP isolated per round directly under the real %TEMP%. The
+  # fixed name went red in 29 of 60 writer runs, 8 of 10 rounds carrying at least one red; this per-run
+  # form went red in 0 of 60, every run printing SELFTEST: 26/26. TWO OUTCOME SHAPES, and the second is
+  # why the symptom named no case at all:
+  #   - 10 of 60 LOST THE CASE and printed SELFTEST: 24/25 - another run's Remove-Item took the probe out
+  #     from under the child ("the term ... is not recognized", 5), or the child could not read it (2), or
+  #     it returned nothing at all (3).
+  #   - 19 of 60 printed NO VERDICT LINE AT ALL, exit 1 after 24 ok lines: Set-Content on the contended
+  #     path threw "Stream was not readable." (16) or "cannot access the file ... because it is being used
+  #     by another process" (3), and under this suite's EAP='Stop' that is TERMINATING, so the suite died
+  #     rather than scoring a case. That is exactly what reached run-gates at 18:30 that day - "FAIL
+  #     feed-freshness.ps1 (exit 1) ...24 line(s) of output" with no case named - and why the same file at
+  #     the same commit passed standalone a minute later.
+  # FfScratch is the ONLY way to name a temp path in here: a leaf under a directory no other run can name,
+  # recorded, and the finally removes what it handed out and the directory. 8 hex characters, not a whole
+  # guid, because every character lands on every path below and PS 5.1 stops at 260. -ErrorAction Stop is
+  # what makes the short name safe - a directory another run already holds is a loud refusal, never a
+  # quietly shared one.
+  $ffRoot = Join-Path $env:TEMP ('ff-st-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $ffRoot -ErrorAction Stop | Out-Null
+  $ffMade = New-Object System.Collections.Generic.List[string]
+  function FfScratch([string]$leaf) { $p = Join-Path $ffRoot $leaf; [void]$ffMade.Add($p); return $p }
   try {
-    $probeOut = ((& powershell -NoProfile -ExecutionPolicy Bypass -File $probe -SelfTest 2>&1 |
-                   ForEach-Object { [string]$_ }) -join ' ').Trim()
-  } finally { $ErrorActionPreference = $prevEap }
-  Remove-Item $probe -Force -ErrorAction SilentlyContinue
-  TT 'MUST FIRE  dot-sourcing this must not clobber the caller''s own -SelfTest switch' `
-     ($probeOut -match 'SelfTest=True') $probeOut
+    # -- A MISSING FEED MUST REFUSE, NOT CRASH. Shipped broken and caught end-to-end on 2026-08-15: a caller
+    # passing a -FeedPath that does not exist hit Resolve-Path, which throws, and under the caller's
+    # EAP='Stop' that exited 1 (read downstream as "skipped recipes") instead of the intended 2. A guard that
+    # dies on bad input has not refused anything - it has just failed in a way that looks like a different
+    # problem. Drives the REAL I/O entry point, because the bug was in the I/O half, not the judgement.
+    $missing = FfScratch 'ff-nonexistent.json'
+    $threw = $false; $res = $null
+    try { $res = Resolve-AndCheckFeed -Explicit $missing -Now $NOW } catch { $threw = $true; $res = $_.Exception.Message }
+    TT 'MUST FIRE  a -FeedPath that does not exist is REFUSED (UNDATED), never crashes the caller' `
+       ((-not $threw) -and $res.verdict -eq 'UNDATED') $(if ($threw) { "threw: $res" } else { $res.verdict })
+
+    # -- the seal: the production caller must still ROUTE THROUGH this file. A guard cannot detect its own
+    # unsealing, so assert the precondition in source (the regression-test.ps1 lesson). test-auditors runs
+    # this daily, which is what makes this file's only caller not be its own test.
+    $prod = 'C:\Codex\ThriftyCrew\meal-prep\pipeline\compute-v2-perserving.ps1'
+    $src = if (Test-Path $prod) { Get-Content $prod -Raw } else { '' }
+    TT 'the production caller dot-sources this file' ($src -match 'feed-freshness\.ps1') 'not dot-sourced'
+    TT 'the production caller calls Resolve-AndCheckFeed' ($src -match 'Resolve-AndCheckFeed') 'not called'
+    TT 'MUST FIRE  the founding "download only if missing" shape has not come back' `
+       ($src -notmatch '(?s)if\s*\(\s*-not\s*\(Test-Path\s+\$FeedPath\s*\)\s*\)\s*\{\s*[^}]*Invoke-WebRequest') 'the download-if-missing branch is back'
+
+    # MUST FIRE, borrowed from lib\guard-contract.ps1's own regression. compute-v2-perserving.ps1 declares
+    # [switch]$SelfTest and dot-sources this file; if this file ever grows a colliding param() block, PS 5.1
+    # runs it in the CALLER's scope and silently resets that switch to $false on the next line. The header
+    # warns about it, which is worth nothing unless something proves it. Out-of-process, because the bug IS
+    # scope behaviour.
+    $probe = FfScratch 'ff-clobber-probe.ps1'
+    ("param([switch]`$SelfTest)`r`n. '" + $PSCommandPath + "'`r`nWrite-Output ('SelfTest=' + `$SelfTest)") |
+      Set-Content $probe -Encoding UTF8
+    # EAP 'Continue' around the child only: under the suite's 'Stop', PS 5.1 turns the child's first stderr
+    # line into a terminating throw HERE. Not native-lib: this file is dot-sourced, so it takes no new lib.
+    # grocery\test-native-stderr-eap.ps1 is the watcher.
+    $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try {
+      $probeOut = ((& powershell -NoProfile -ExecutionPolicy Bypass -File $probe -SelfTest 2>&1 |
+                     ForEach-Object { [string]$_ }) -join ' ').Trim()
+    } finally { $ErrorActionPreference = $prevEap }
+    Remove-Item $probe -Force -ErrorAction SilentlyContinue
+    TT 'MUST FIRE  dot-sourcing this must not clobber the caller''s own -SelfTest switch' `
+       ($probeOut -match 'SelfTest=True') $probeOut
+  } finally {
+    foreach ($made in $ffMade) { Remove-Item -LiteralPath $made -Force -ErrorAction SilentlyContinue }
+    Remove-Item -LiteralPath $ffRoot -Recurse -Force -ErrorAction SilentlyContinue
+  }
+  # Asserted, not assumed: a suite that leaks a directory per run into %TEMP% every push is its own defect,
+  # and the count is what catches a path that went back to being named outside FfScratch.
+  TT ('the per-run scratch directory is removed on the way out, with the ' + $ffMade.Count + ' path(s) it handed out') `
+     (($ffMade.Count -eq 2) -and -not (Test-Path -LiteralPath $ffRoot)) ("made=" + $ffMade.Count + " root still exists=" + (Test-Path -LiteralPath $ffRoot))
 
   if ($bad -eq 0) { Write-Output ("SELFTEST: {0}/{0} pass" -f $n); exit 0 }
   Write-Output ("SELFTEST: {0}/{1} pass - {2} FAILED" -f ($n - $bad), $n, $bad); exit 1
