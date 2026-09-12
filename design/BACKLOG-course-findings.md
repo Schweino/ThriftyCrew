@@ -9716,7 +9716,48 @@ actionable instead of merely reassuring. The reassurance that a young person's n
 
 ---
 
-### I112 - the course's own numbers are illustrative, and three of them will read as promises if they are ever lifted into a lesson `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 DOC`
+### I112 - the course's own numbers are illustrative, and three of them will read as promises if they are ever lifted into a lesson `DONE` `queue-7`
+
+**BRAD RULED IT 2026-09-12, and the ruling is carried out.** Verbatim: *"A lesson may show a projected
+rate of return only when it carries, next to the number: the source and the period it covers, whether it
+is nominal or after inflation, and that fees are not included (or the fee assumed). Prefer a historical
+figure stated as history over a forward projection, and pair any nominal figure with its after-inflation
+figure. No rate may be lifted from a course or chart that does not name its source. Illustrations that are
+pure arithmetic (penny doubling, a stated made-up rate labelled as an example) are fine and need none of
+this. Existing lessons that quote a rate get checked against this rule the next time they are edited."*
+
+**What carries it.** `ops/audit-lesson-rate-claims.ps1`, wired into `run-gates` on every push (not
+`daily`, on that file's own criterion: unlike the tree-wide ratchets it can put a wrong number in front of
+a paying reader). It reads every markdown under `content/` as PARAGRAPHS, calls a paragraph a rate-of-return
+claim when it carries a percentage, an earning word and a per-year word, exempts one labelled as a made-up
+example, and otherwise names WHICH of the ruling's four requirements it is missing. It quotes the ruling
+verbatim in its own header, so the mechanism and the words it enforces cannot drift apart.
+
+**ONE HALF IS NOT LANDED AND IT IS THE HALF THAT REACHES A WRITER.** The ruling belongs in
+`.claude/rules/site-and-publish.md`, which auto-loads whenever anybody touches `content/`, and in the
+`Step 1` substance checklist of `.claude/skills/lesson/SKILL.md`, which is where a lesson is actually
+drafted. **This session's writes to both were refused by the harness's permission layer** - every path
+under `.claude/rules/` and `.claude/skills/` is blocked for an agent, while `ops/` and `design/` are not -
+so the gate went in and the two pointers did not. That is filed as its own finding with the exact text to
+paste. Until it lands, a drafter learns this rule from a red push rather than before writing, which is the
+worse order: the gate catches the number, not the habit.
+
+**Measured on its first run, at the commit that added it: 118 files, 5,271 paragraphs, 14 rate-of-return
+claims, 8 of them labelled illustrations, 0 fully qualified, 6 unqualified.** So the high-water mark starts
+at **6** and not at 0, which is the ruling's own instruction - existing lessons get checked when next
+edited, and a bar at zero would be red on day one over copy Brad deliberately did not order a sweep of.
+The six are `lesson-28:35` (8%, missing all four), `lesson-30:33` (10% and 7%, missing source and fees),
+`substack-financial-basics-of-investing:39` and `:51`, `substack-week-28:49` and `substack-week-30:47`.
+**Nothing was edited in a lesson**: the ruling defers that, and these are a worklist.
+
+**The distinction the detector turns on, and the one thing a future editor most needs:** a HEDGE is not a
+LABEL. *"Past returns don't guarantee future results"* is true of a sourceless 10% and does nothing to
+source it, so it does not buy the arithmetic exemption; *"let's say 7%"* and *"an assumed 7%"* do, because
+the lesson invented the number. `substack-financial-basics-of-investing:39` is exactly that case and is one
+of the six. Two open details were chosen rather than asked about, both toward the long-term answer: the
+scan covers the substack mirror as well as `content/lessons/` (the same prose is published twice and the
+liability is identical), and a paragraph about BORROWING is excluded whole, because a credit-card or
+student-loan rate is not a rate of return and the ruling does not reach it.
 
 **Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11682,3 +11723,48 @@ until the rung above is worked.
 expiries their own allowance; if a commodity's own re-promotion cadence were known, a term whose sale
 window is about to turn over is a better recapture candidate than one drawn by rotation order. That
 is a hypothesis, not a design, and it wants the denominator above before anyone builds to it.
+
+---
+
+### I170 - brad's rate-of-return ruling is enforced at push time but is written down nowhere a lesson drafter reads `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\i112-ruling-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Brad ruled backlog I112 on 2026-09-12: a lesson may show a projected rate of return only when
+it carries, next to the number, the source, the period it covers, whether it is nominal or after inflation,
+and that fees are not included (or the fee assumed); pure-arithmetic illustrations labelled as examples are
+exempt; existing lessons are checked when next edited. The mechanism landed in the same change -
+`ops/audit-lesson-rate-claims.ps1`, a ratchet wired into `run-gates` on every push, quoting the ruling
+verbatim in its header, mark at 6.
+
+**What did not land, and why.** The ruling is a WRITING rule, so its two natural homes are
+`.claude/rules/site-and-publish.md` (auto-loads on any `content/` edit) and the `Step 1 - Get the real
+substance` checklist in `.claude/skills/lesson/SKILL.md` (where a lesson is drafted). **Both writes were
+refused by the harness's permission layer**, with `Edit` and `Write` each denied on each file in don't-ask
+mode. Measured by probe during that session: `ops/audit-lesson-rate-claims.ps1` (new file, `Write`) and
+`ops/run-gates.ps1` (`Edit`) both succeeded, and `design/BACKLOG-course-findings.md` (`Edit`) succeeded, so
+the block is on the CONFIGURATION directories and not on the worktree - note that the worktree's own path
+contains `.claude\worktrees\`, so it is not a blanket `.claude` deny. No deny list was findable in
+`.claude/settings*.json` (neither file exists), `~/.claude/settings.json` (hooks only, no permissions
+block) or any managed-policy path. **Nothing was routed around**: writing a config file through Bash after
+the file-write tools refused it would bypass the intent of the refusal, which is what that protection is
+for.
+
+**Why it matters here.** The gate catches the NUMBER; these two lines catch the HABIT, and the order is
+the whole cost. With only the gate, a session drafts a lesson, quotes a 9% out of a course, and learns at
+push time - after the prose is written, and on the one class of number the estate's standing rules already
+forbid being unsourceable, on a live paid page, about somebody's retirement. Worse, the gate is a ratchet
+over `content/` markdown: a rate that reaches Ghost by some other road is outside it entirely. And this is
+the `an-intention-has-no-exit-code` shape pointed at the person rather than the code - the rule now exists,
+is enforced, and is unreadable by the one agent most likely to break it.
+
+**The first rung, and it is a paste.** Two additions, both written and ready in the commit message of the
+change that added the gate, plus the full account already in I112's own backlog entry:
+1. `.claude/rules/site-and-publish.md` - a bullet above the `Regime:` line carrying the ruling verbatim,
+   the "a HEDGE is not a LABEL" distinction, and the first-run measurement (118 files, 5,271 paragraphs,
+   14 claims, 8 illustrations, 6 unqualified).
+2. `.claude/skills/lesson/SKILL.md` - one paragraph under `Step 1`, since that step is already headed
+   "never fabricate" and already tells the drafter not to invent Brad's specifics.
+
+Either Brad pastes them, or a session with permission on `.claude/rules/` and `.claude/skills/` does. It
+needs no judgement and no measurement; it needs write access.

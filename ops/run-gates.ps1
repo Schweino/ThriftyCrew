@@ -376,6 +376,12 @@ $static = @(
   @{ f = 'ops\audit-cmdlet-shadow.ps1';        n = 'no tracked script defines a function named after a built-in cmdlet or module function, except a file-and-name allowlist entry with its reason - hermetic, a pinned name list, reads source only' }
   @{ f = 'ops\audit-unread-wait.ps1';          n = 'every TIMED WaitOne has its answer read on some path - a timed-out wait returns $false and the caller holds nothing, which rewrote the triage queue unlocked on 2026-09-11; hermetic, AST, reads source only' }
   @{ f = 'ops\audit-internal-ast-members.ps1'; n = 'no script reads an AST member that is INTERNAL under PS 5.1 (VariablePath.UnqualifiedPath reads as $null, so a name walk returns an agreeing empty) - hermetic, AST, reads source only' }
+  # Brad's ruling (2026-09-12, backlog I112): a lesson may state a rate of return only beside its source, the
+  # period it covers, whether it is nominal or after inflation, and the fee position. ON EVERY PUSH rather than
+  # daily, on this file's own criterion: unlike the six tree-wide ratchets below, this one CAN put a wrong number
+  # in front of a paying reader, and the number in question is somebody's retirement. Hermetic - it reads tracked
+  # markdown under content\, so it is green on a bare checkout, and it cost ~2s over 118 files on its first run.
+  @{ f = 'ops\audit-lesson-rate-claims.ps1';   n = 'no NEW published lesson states a rate of return without the source, the period, the nominal-or-real basis and the fee statement Brad''s ruling requires beside it - a made-up rate labelled as an example is exempt; a ratchet, high-water mark may only go DOWN' }
   # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half
   # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
   # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.
