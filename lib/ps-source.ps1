@@ -1,5 +1,22 @@
 # ps-source.ps1 - THE one way to reduce PowerShell source to the part that actually runs.
 #
+# STANDING RULE, AND IT BINDS THE NEXT PERSON TO REWRITE THIS FILE (Brad's ruling, 2026-09-12,
+# backlog I154). This estate has THREE source reducers: this one, lib\production-text.ps1 (AST, drops
+# the body of a self-test clause, keeps comments), and Get-McBlankedText inside
+# ops\audit-mustfire-census.ps1 (tokens, blanks every comment in place and keeps offsets). Measured
+# 2026-09-12 by reading all three: NOT ONE OF THEM BLANKS A STRING LITERAL, which is why
+# .claude\rules\ops-and-gates.md has to carry "a self-test that greps its own source cannot fail -
+# build needles by concatenation". That rule is a WORKAROUND FOR A MISSING LEXER: a reducer that
+# blanked string contents could not match inside one at all. Brad ruled: do NOT retrofit the switch
+# now and do NOT re-fixture the callers for it alone, because the change it was written to protect has
+# already shipped. What he ruled instead is the trigger, and this is it - THE NEXT REWRITE OF ANY OF
+# THE THREE, FOR ANY REASON, CONSOLIDATES THEM INTO ONE TOKEN-BASED REDUCER IN lib\ THAT BLANKS
+# COMMENTS BY DEFAULT AND STRING-LITERAL CONTENTS BEHIND A SWITCH, AND MOVES THE CALLERS IT TOUCHES
+# ONTO IT IN THE SAME CHANGE. Adding the string half later costs a SECOND re-fixturing of every
+# caller, which is the whole reason this is written now. If you are here to rewrite this file, that
+# consolidation is your change and not a follow-up item. Until then the concatenation rule stands
+# exactly as written, and nothing gates this: no detector can tell a rewrite from a one-line fix.
+#
 # WHY THIS EXISTS (2026-09-07). ops\run-gates.ps1 decides which scripts have a -SelfTest by matching
 # `[switch]$SelfTest` against the file's source. On 2026-09-01 it learned to strip comments first,
 # because a comment DISCUSSING the switch had enrolled run-gates in its own discovery and spawned 18

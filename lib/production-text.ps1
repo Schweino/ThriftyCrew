@@ -1,5 +1,21 @@
 # production-text.ps1 - THE one way for a sweep over PowerShell source to read only what RUNS IN PRODUCTION.
 #
+# STANDING RULE, AND IT BINDS THE NEXT PERSON TO REWRITE THIS FILE (Brad's ruling, 2026-09-12,
+# backlog I154). This estate has THREE source reducers: this one, lib\ps-source.ps1 (tokens, blanks
+# block comments and drops whole-line ones), and Get-McBlankedText inside
+# ops\audit-mustfire-census.ps1 (tokens, blanks every comment in place and keeps offsets). Measured
+# 2026-09-12 by reading all three: NOT ONE OF THEM BLANKS A STRING LITERAL, which is why
+# .claude\rules\ops-and-gates.md has to carry "a self-test that greps its own source cannot fail -
+# build needles by concatenation". That rule is a WORKAROUND FOR A MISSING LEXER. Brad ruled: do NOT
+# retrofit the switch now and do NOT re-fixture the callers for it alone, because the change it was
+# written to protect has already shipped. What he ruled instead is the trigger - THE NEXT REWRITE OF
+# ANY OF THE THREE, FOR ANY REASON, CONSOLIDATES THEM INTO ONE TOKEN-BASED REDUCER IN lib\ THAT BLANKS
+# COMMENTS BY DEFAULT AND STRING-LITERAL CONTENTS BEHIND A SWITCH, AND MOVES THE CALLERS IT TOUCHES
+# ONTO IT IN THE SAME CHANGE. Adding the string half later costs a SECOND re-fixturing of every
+# caller. This file's rung is the AST one, so read the consolidation as one reducer with three modes
+# and a string switch, not as a rewrite of what it decides: what it drops is a self-test clause BODY,
+# and that rule is narrow on purpose (below) and does not move.
+#
 # WHY THIS EXISTS (2026-09-11, queue 2026-09-11-220094). Five sweeps in grocery\ read every grocery\*.ps1 as
 # TEXT and flag a pattern they must never see live: a retired Hy-Vee identity, the PS 5.1 @()-no-unroll trap,
 # the throwing empty-stamp idiom, a [string] cast over a search-term array, a drifted store list. Their only

@@ -11250,7 +11250,49 @@ Sourcing: `nand2tetris2` unit 4.2 (Lexical Analysis) is the general form of all 
 irrelevant for the compiler"*, and tokenizing exists precisely so nothing downstream can see that
 noise.
 
-### I154 - Three different comment-reducers exist, none of them blanks a STRING LITERAL, and the estate's workaround for that is a written rule `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I154 - Three different comment-reducers exist, none of them blanks a STRING LITERAL, and the estate's workaround for that is a written rule `PARKED` `queue-7`
+
+**BRAD RULED IT 2026-09-12, and the ruling is carried out.** Verbatim: *"Do not retrofit now and do not
+re-fixture the seven callers for this alone. Standing rule: the next time any of the three source reducers
+(lib\ps-source.ps1, lib\production-text.ps1, the local reducer in ops\audit-mustfire-census.ps1) is rewritten
+for any reason, that change consolidates them into one token-based reducer in lib\ that blanks comments by
+default and string-literal contents behind a switch, and moves the callers it touches onto it in the same
+change. Until then the build-needles-by-concatenation rule in ops-and-gates.md stays load-bearing and stays as
+written."*
+
+**Where the standing rule now lives, and why there.** A trigger fires at the moment somebody opens one of the
+three reducers, so the rule is written into all three of their own headers, in full and in the same words:
+`lib\ps-source.ps1` and `lib\production-text.ps1` at the head of the file header, and
+`ops\audit-mustfire-census.ps1` directly above `Get-McBlankedText`, because there the reducer is a function and
+not the file. That is the channel a rewriter cannot miss - a rule the reader has to already know about in order
+to look it up is not a mechanism. **`.claude\rules\ops-and-gates.md` was NOT edited**, for two reasons and
+either would do on its own: the ruling itself says that file's concatenation rule stays as written, and a
+standing rule copied into a second place is the two-copies-of-one-truth trap this estate keeps paying for. (The
+run that carried this out also had edits under `.claude\` denied by its own tool policy, so had the argument
+gone the other way it would have had to come back for approval anyway.)
+
+**No gate, deliberately, and this is the part worth defending.** *"Is being rewritten"* is not a thing a
+detector can tell apart from a one-line fix, so any gate over those three files would redden an unrelated edit
+and teach `--no-verify` - the failure mode `.claude\rules\ops-and-gates.md` already warns about in as many
+words, and the reason a detector over a case that cannot be recognised is worse than no detector. The header
+note is the whole prevention here, the way the unpushed-commit habit is.
+
+**`PARKED` rather than `DONE` or `PARTLY DONE`.** `DONE` would say nothing is left, and something is: the
+consolidation itself. `PARTLY DONE` would put it back in the queue as work somebody should pick up, which is
+the one thing the ruling refuses. `PARKED` is exactly the label's meaning - investigated, no work proposed,
+reopen when the situation changes - and the situation that reopens it is named: any rewrite of any of the three.
+
+**Two corrections to the measurement below, neither of which touches the ruling.** First, the table calls
+`lib\ps-source.ps1` a raw-character rung, and it has not been one since I153 landed on 2026-09-12: it tokenizes,
+and the character rung survives only as a fallback for a file `PSParser` refuses. The claim the item rests on is
+unchanged - it blanks COMMENT tokens and says nothing about String tokens - but the consolidation is smaller
+than the table implies, because two of the three are already token-based and only `production-text` is an AST
+rung. Second, on the caller count, say which test: measured 2026-09-12 in a worktree at `384c94252` by
+`git grep` for the dot-source line over tracked `.ps1`, **8 files dot-source `lib\ps-source.ps1`** and **4
+dot-source `lib\production-text.ps1`**, with `grocery\test-guards.ps1` in both, so **11 distinct files**. The
+ruling's *"seven"* is RUNG 1's narrower count of callers that would need re-fixturing. Both are right about
+different questions, and the change that finally consolidates these should re-run its own count rather than
+quote either.
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Claim reproduces - 0 hits for string-token awareness in all three reducers - but the window it was written to catch CLOSED when I153 landed without the switch. Re-fixturing 7 real callers is the cost. **The question for Brad: is a string-literal-aware reducer worth 7 re-fixtured callers now that the change it was meant to protect has already shipped?**
 

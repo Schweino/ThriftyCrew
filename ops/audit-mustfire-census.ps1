@@ -136,6 +136,19 @@ function Test-McInside {
   return $false
 }
 
+# STANDING RULE OVER THE FUNCTION BELOW, AND IT BINDS THE NEXT PERSON TO REWRITE IT (Brad's ruling,
+# 2026-09-12, backlog I154). This is the THIRD source reducer in the estate, beside lib\ps-source.ps1
+# (tokens, blanks block comments and drops whole-line ones) and lib\production-text.ps1 (AST, drops the
+# body of a self-test clause). Measured 2026-09-12 by reading all three: NOT ONE OF THEM BLANKS A STRING
+# LITERAL, which is why .claude\rules\ops-and-gates.md has to carry "a self-test that greps its own
+# source cannot fail - build needles by concatenation". That rule is a WORKAROUND FOR A MISSING LEXER.
+# Brad ruled: do NOT retrofit the switch now and do NOT re-fixture the callers for it alone, because the
+# change it was written to protect has already shipped. What he ruled is the trigger - THE NEXT REWRITE
+# OF ANY OF THE THREE, FOR ANY REASON, CONSOLIDATES THEM INTO ONE TOKEN-BASED REDUCER IN lib\ THAT
+# BLANKS COMMENTS BY DEFAULT AND STRING-LITERAL CONTENTS BEHIND A SWITCH, AND MOVES THE CALLERS IT
+# TOUCHES ONTO IT IN THE SAME CHANGE. Adding the string half later costs a SECOND re-fixturing of every
+# caller. This function is the one that would move first: it is a private copy of a lib\ job, and its
+# blank-in-place-and-keep-offsets behaviour is a THIRD mode that lib\ps-source.ps1 does not export today.
 function Get-McBlankedText {
   <# $Text with every COMMENT token replaced by spaces of the same length, so offsets do not move. Only the spans
      this file ADDS are read from it; a gate body is still counted raw, so no existing count can move.
