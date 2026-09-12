@@ -1,0 +1,12 @@
+[
+  {
+    "slug": "honey-bbq-chicken-mac-and-cheese",
+    "item": "Salt",
+    "old_grams": 63,
+    "new_grams": 42,
+    "old_buy": "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total)",
+    "new_buy": "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total)",
+    "reason": "Carries the 2026-09-02 PASTA-WATER SALT ruling (commit 59831927d, recorded in this spec's writer_notes) into recipes-db: the 3 1/2 tsp booked for the boiling water came off the ingredient line, as 23 of the 24 specs that salt pasta water already book it, and the spec's label and grams moved together (10 1/2 tsp / 63 g to 7 tsp / 42 g) while the index kept both. Checked 2026-09-12 against the commit diff, the writer note, and the source recipe (three 1 tsp salt uses at 4 servings, one of them the pasta water). make_it still salts the pot; salt is zero-macro, so no stat moves.",
+    "reviewed": "2026-09-12"
+  }
+]

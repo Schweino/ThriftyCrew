@@ -332,7 +332,7 @@ foreach ($sf in $specFiles) {
 
 Write-Output ("published-macros: {0} spec(s) resolved under {1}" -f $specFiles.Count, $specDir)
 Write-Output ("  stat vs recompute: judged {0} of {1}, FAIL {2} of {0} judged, BLIND {3} (tolerance {4} cal / {5} g, from build-v2-spec)" -f $judged, $specFiles.Count, $statFail.Count, $statBlind.Count, $script:PM_CAL_TOL, $script:PM_GRAM_TOL)
-Write-Output ("  index grams vs spec: {0} recipe(s) in both masters, {1} ingredient row(s) paired, {2} unpaired (a name on one side only is audit-db-agreement's finding), {3} disagreeing" -f $gramRecipes, $paired, $unpaired, $gramFind.Count)
+Write-Output ("  index grams vs spec: {0} recipe(s) in both masters, {1} ingredient row(s) paired, {2} unpaired (a name on one side only is audit-db-agreement's finding), {3} disagreeing - a proven-class repair is meal-prep\pipeline\sync-recipesdb-grams.ps1 -Apply, then gen-planner-data.ps1" -f $gramRecipes, $paired, $unpaired, $gramFind.Count)
 foreach ($b in $statBlind) { Write-Output ("  BLIND  {0} :: {1}" -f $b.Key, $b.Detail) }
 
 if ($specFiles.Count -eq 0 -or $judged -eq 0) {

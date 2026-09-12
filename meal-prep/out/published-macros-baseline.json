@@ -1,6 +1,6 @@
 ﻿{
     "note":  "Baseline for audit-published-macros (2026-09-12). Names, not only counts: a NEW name fails the run even when the count held. Both lists may only SHRINK, and only through -Tighten or -Accept.",
-    "generated":  "2026-09-12T13:56:17",
+    "generated":  "2026-09-12T14:32:35",
     "tolerance":  {
                       "cal":  5,
                       "gram":  2,
@@ -37,28 +37,9 @@
                                                          ]
                                            },
                      "index_grams_vs_spec":  {
-                                                 "count":  20,
+                                                 "count":  0,
                                                  "names":  [
-                                                               "al-pastor-pork-taco-bowl-with-cilantro-lime-rice|Pineapple Chunks",
-                                                               "arroz-con-carne-molida|Sweet Whole Kernel Corn",
-                                                               "carbonada-chilean-beef-corn-soup|Sweet Whole Kernel Corn",
-                                                               "cheesy-turkey-sausage-vegetable-rice-casserole|Sweet Whole Kernel Corn",
-                                                               "chili-cornbread-casserole|Sweet Whole Kernel Corn",
-                                                               "creamy-kielbasa-potato-soup|Sweet Whole Kernel Corn",
-                                                               "crockpot-mexican-turkey-casserole|Sweet Whole Kernel Corn",
-                                                               "green-chile-chicken-burrito|Sweet Whole Kernel Corn",
-                                                               "green-chile-ground-turkey-skillet|Sweet Whole Kernel Corn",
-                                                               "ground-turkey-calabacitas-skillet|Sweet Whole Kernel Corn",
-                                                               "high-protein-beef-bean-burrito|Sweet Whole Kernel Corn",
-                                                               "honey-bbq-chicken-mac-and-cheese|Salt",
-                                                               "pastel-de-choclo-chilean-beef-corn-bake|Sweet Whole Kernel Corn",
-                                                               "pulled-pork-enchilada-bake|Sweet Whole Kernel Corn",
-                                                               "pulled-pork-shepherds-pie|Sweet Whole Kernel Corn",
-                                                               "sheet-pan-bbq-turkey-meatballs-over-rice|Pineapple Chunks",
-                                                               "turkey-corn-chowder|Sweet Whole Kernel Corn",
-                                                               "turkey-noodle-casserole|Sweet Whole Kernel Corn",
-                                                               "turkey-taco-soup|Sweet Whole Kernel Corn",
-                                                               "turkey-tamale-pie|Sweet Whole Kernel Corn"
+
                                                            ]
                                              }
                  },
@@ -66,6 +47,10 @@
                     {
                         "date":  "2026-09-12T13:56:17",
                         "count":  44
+                    },
+                    {
+                        "date":  "2026-09-12T14:32:35",
+                        "count":  24
                     }
                 ]
 }
