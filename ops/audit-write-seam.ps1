@@ -106,7 +106,7 @@ function Get-SeamScanFiles {
      ratchet exited 3 BLIND from every spawned session (2026-09-11). #>
   param([string]$RootDir, [string]$Self = '')
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
+  Get-TcTreeFiles -RootFull $rootFull -Filter *.ps1 -PruneBelow $EXCLUDE |
     Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $EXCLUDE -and $_.FullName -ne $Self } |
     ForEach-Object { $_.FullName }
 }

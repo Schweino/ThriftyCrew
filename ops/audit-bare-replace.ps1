@@ -94,7 +94,7 @@ function Get-BareReplaceScanFiles {
      (lib\tree-walk.ps1), so a root that is itself a linked worktree is scanned rather than excluded whole. #>
   param([string]$RootDir, [string]$Self = '')
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
+  Get-TcTreeFiles -RootFull $rootFull -Filter *.ps1 -PruneBelow $EXCLUDE |
     Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $EXCLUDE -and $_.FullName -ne $Self } |
     ForEach-Object { $_.FullName }
 }

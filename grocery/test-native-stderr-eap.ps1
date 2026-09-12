@@ -375,7 +375,7 @@ function Invoke-TcEapScan {
   $rootFull = Get-TcRootFull $RootDir
   # NEVER SCAN YOURSELF (ops-and-gates.md). The AST cannot read this file's fixtures as calls, since they are strings,
   # but the rule is cheaper to keep than to argue with, and this file sets no 'Stop' around a native call of its own.
-  $files = @(Get-ChildItem -LiteralPath $rootFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
+  $files = @(Get-TcTreeFiles -RootFull $rootFull -Filter *.ps1 -PruneBelow $script:ScanExclude |
              Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $script:ScanExclude -and $_.FullName -ne $Self })
   $scannedRel = New-Object System.Collections.ArrayList
   $sites = New-Object System.Collections.ArrayList

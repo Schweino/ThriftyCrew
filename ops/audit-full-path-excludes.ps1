@@ -351,7 +351,7 @@ function Get-FpeScanFiles {
      $Self. The rule this detector enforces, applied to its own walk. #>
   param([string]$RootDir, [string]$Self = '')
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem -LiteralPath $rootFull -Recurse -File -ErrorAction SilentlyContinue |
+  Get-TcTreeFiles -RootFull $rootFull -PruneBelow $script:FPE_WALK_EXCLUDE |
     Where-Object { ($_.Extension -ieq '.ps1' -or $_.Extension -ieq '.py') -and
                    (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $script:FPE_WALK_EXCLUDE -and
                    -not [string]::Equals($_.FullName, $Self, [StringComparison]::OrdinalIgnoreCase) } |

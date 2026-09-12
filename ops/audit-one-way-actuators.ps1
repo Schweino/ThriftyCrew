@@ -94,8 +94,10 @@ function Get-ActuatorSourceFiles {
      every spawned session (2026-09-11). #>
   param([string]$RootDir)
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -File -Include '*.ps1', '*.py' -ErrorAction SilentlyContinue |
-    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\\.claude\\worktrees\\|\\grocery\\out\\|\\archive\\|\\node_modules\\|\\\.venv' }
+  $exclude = '\\\.claude\\worktrees\\|\\grocery\\out\\|\\archive\\|\\node_modules\\|\\\.venv'
+  Get-TcTreeFiles -RootFull $rootFull -PruneBelow $exclude |
+    Where-Object { ($_.Extension -ieq '.ps1' -or $_.Extension -ieq '.py') -and
+                   (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $exclude }
 }
 
 # ---- self-test -------------------------------------------------------------------------------------

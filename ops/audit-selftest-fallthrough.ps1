@@ -167,7 +167,7 @@ function Get-SftScanFiles {
      $Tracked is given only the root-relative paths it holds. Same walk as ops\audit-keyword-arguments.ps1. #>
   param([string]$RootDir, [string]$Self = '', $Tracked = $null)
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem -LiteralPath $rootFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
+  Get-TcTreeFiles -RootFull $rootFull -Filter *.ps1 -PruneBelow $script:SFT_WALK_EXCLUDE |
     Where-Object {
       $below = Get-TcPathBelowRoot $_.FullName $rootFull
       ($_.Extension -ieq '.ps1') -and ($below -notmatch $script:SFT_WALK_EXCLUDE) -and

@@ -188,9 +188,10 @@ function Get-RegistrarCandidateFiles {
      spawned session (2026-09-11). #>
   param([string]$RootDir, [string]$Self = '')
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem -Path $rootFull -Recurse -Filter '*.ps1' -File -ErrorAction SilentlyContinue |
+  $exclude = '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\|\\\.git\\'
+  Get-TcTreeFiles -RootFull $rootFull -Filter '*.ps1' -PruneBelow $exclude |
     Where-Object { $_.FullName -ne $Self -and
-                   (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\|\\\.git\\' }
+                   (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $exclude }
 }
 
 if ($SelfTest) {

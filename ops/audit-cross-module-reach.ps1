@@ -192,8 +192,9 @@ function Get-ReachSourceFiles {
      ratchet exited 3 from every spawned session (2026-09-11). #>
   param([string]$RootDir)
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -Filter '*.ps1' -File -ErrorAction SilentlyContinue |
-    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\\.claude\\worktrees\\|\\grocery\\out\\|\\archive\\|\\node_modules\\' }
+  $exclude = '\\\.claude\\worktrees\\|\\grocery\\out\\|\\archive\\|\\node_modules\\'
+  Get-TcTreeFiles -RootFull $rootFull -Filter '*.ps1' -PruneBelow $exclude |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $exclude }
 }
 
 # ---- self-test -------------------------------------------------------------------------------------

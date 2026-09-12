@@ -112,8 +112,9 @@ function Get-FixtureInputScripts {
      block anywhere and exited 3 from every spawned session (2026-09-11). #>
   param([string]$RootDir)
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
-    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
+  $exclude = '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\'
+  Get-TcTreeFiles -RootFull $rootFull -Filter *.ps1 -PruneBelow $exclude |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $exclude } |
     Sort-Object FullName
 }
 

@@ -49,6 +49,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')   # Write-TcLfFile: the wide baseline is tracked and stored eol=lf
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\tree-walk.ps1')  # Get-TcTreeFiles: the walks never enter a nested checkout
 # THE POPULATION IS THE WHOLE REPO SINCE 2026-09-09 (backlog I85 rung 2). It defaulted to this script's
 # own directory, so 72 scripts under .claude\, meal-prep\, site\, ops\, media\ and sidecar\ were
 # examined by nothing at all - and the output said "273 script(s) read against 632 executable files",
@@ -206,7 +207,9 @@ function Test-InOtherCheckout {
 }
 
 # -Filter *.ps1 is the legacy 8.3 matcher and also matches .ps1xml, so the extension is re-checked exactly.
-$all = @(Get-ChildItem -Path $Root -Filter *.ps1 -Recurse -File -ErrorAction SilentlyContinue |
+# The nested checkouts and archives are PRUNED from the walk, not only filtered out of it (2026-09-12, lib\tree-walk.ps1):
+# from the main checkout this listed every worktree's copy of the tree before throwing it away.
+$all = @(Get-TcTreeFiles -RootFull $Root -Filter *.ps1 -SkipDirs $nested -PruneBelow '\\archive\\' |
          Where-Object { $_.Extension -eq '.ps1' -and $_.FullName -notmatch '\\archive\\' -and
                         -not (Test-InOtherCheckout $_.FullName) })
 # AN `out\` SEGMENT ANYWHERE, not just at the top of $Root (2026-09-09, backlog I85 rung 2). This test
@@ -233,7 +236,7 @@ $exts = '.ps1','.psm1','.js','.yml','.yaml','.vbs','.bat','.cmd'
 # NOR MAY A COPY OF THIS FILE BE ONE: $self is a single path, so on 2026-08-03 four worktree copies of this
 # census sailed straight past it. The nested-checkout prune above is what holds that line now.
 $self = $MyInvocation.MyCommand.Path
-$src = @(Get-ChildItem -Path $ScanRoot -Recurse -File -ErrorAction SilentlyContinue |
+$src = @(Get-TcTreeFiles -RootFull $ScanRoot -SkipDirs $nested -PruneBelow '\\archive\\|\\node_modules\\|\\\.git\\' |
          Where-Object { $exts -contains $_.Extension.ToLower() -and
                         $_.FullName -ne $self -and
                         $_.FullName -notmatch '\\archive\\' -and

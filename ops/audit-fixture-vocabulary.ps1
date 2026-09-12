@@ -91,8 +91,9 @@ function Get-TcVocabularyFiles {
      exited 3 BLIND from every spawned session (2026-09-11). #>
   param([string]$RootDir, [string]$Self = '')
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -File -ErrorAction SilentlyContinue -Include *.ps1, *.py |
-    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $EXCLUDE -and $_.FullName -ne $Self } |
+  Get-TcTreeFiles -RootFull $rootFull -PruneBelow $EXCLUDE |
+    Where-Object { ($_.Extension -ieq '.ps1' -or $_.Extension -ieq '.py') -and
+                   (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $EXCLUDE -and $_.FullName -ne $Self } |
     ForEach-Object { $_.FullName }
 }
 

@@ -382,7 +382,7 @@ function Get-FtnScanFiles {
   <# Every .ps1 and .psm1 under $RootDir, excluded on the path BELOW the root (lib\tree-walk.ps1) and never $Self. #>
   param([string]$RootDir, [string]$Self = '')
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem -LiteralPath $rootFull -Recurse -File -ErrorAction SilentlyContinue |
+  Get-TcTreeFiles -RootFull $rootFull -PruneBelow $script:FTN_WALK_EXCLUDE |
     Where-Object { ($_.Extension -ieq '.ps1' -or $_.Extension -ieq '.psm1') -and
                    (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $script:FTN_WALK_EXCLUDE -and
                    -not [string]::Equals($_.FullName, $Self, [StringComparison]::OrdinalIgnoreCase) } |

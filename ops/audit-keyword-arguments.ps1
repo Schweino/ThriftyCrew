@@ -142,8 +142,8 @@ function Get-KwaScanFiles {
      filtered: a -Filter also matches longer extensions on Windows (*.ps1 finds .ps1xml). #>
   param([string]$RootDir, [string]$Self = '', $Tracked = $null)
   $rootFull = Get-TcRootFull $RootDir
-  $ps1 = @(Get-ChildItem -LiteralPath $rootFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue)
-  $psm1 = @(Get-ChildItem -LiteralPath $rootFull -Recurse -File -Filter *.psm1 -ErrorAction SilentlyContinue)
+  $ps1 = @(Get-TcTreeFiles -RootFull $rootFull -Filter *.ps1 -PruneBelow $script:KWA_WALK_EXCLUDE)
+  $psm1 = @(Get-TcTreeFiles -RootFull $rootFull -Filter *.psm1 -PruneBelow $script:KWA_WALK_EXCLUDE)
   ($ps1 + $psm1) |
     Where-Object {
       $below = Get-TcPathBelowRoot $_.FullName $rootFull

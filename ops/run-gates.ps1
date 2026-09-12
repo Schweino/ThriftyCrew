@@ -78,7 +78,10 @@ $SKIP = @{
 }
 
 $repoFull = Get-TcRootFull $repo
-$scripts = @(Get-ChildItem $repoFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
+# PRUNED AS WELL AS FILTERED (2026-09-12): from the main checkout the filter discarded 135 worktrees' copies only after
+# listing them. Get-TcTreeFiles never enters a directory the same pattern excludes, and returns what Get-ChildItem did.
+$psDiscoverExclude = '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\'
+$scripts = @(Get-TcTreeFiles -RootFull $repoFull -Filter *.ps1 -PruneBelow $psDiscoverExclude |
   # \out\ is the pipeline's OUTPUT directory. Scripts that land there are one-offs and debris (the script
   # census counts 37 of them); running their self-tests would gate every push on abandoned scratch work.
   # MATCHED BELOW THE REPO ROOT, NOT ON THE FULL PATH (2026-09-10). A linked worktree lives under
@@ -86,7 +89,7 @@ $scripts = @(Get-ChildItem $repoFull -Recurse -File -Filter *.ps1 -ErrorAction S
   # from every spawned session, which pre-push then BLOCKS. Recorded 2026-08-26 and left standing until
   # ops\count-source-lifters.ps1 was found blind the same way. Sibling worktrees below the root stay excluded.
   # The rule lives in lib\tree-walk.ps1 since 2026-09-11, shared with every other walk that had the same bug.
-  Where-Object { (Get-TcPathBelowRoot $_.FullName $repoFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\out\\' } |
+  Where-Object { (Get-TcPathBelowRoot $_.FullName $repoFull) -notmatch $psDiscoverExclude } |
   Sort-Object FullName)
 
 $withSelfTest = @()
@@ -483,8 +486,9 @@ $pySuites = @()
 # and the discovery floor below failed the gate for a reason that had nothing to do with the change being pushed.
 # KEPT AS A LIST rather than consumed inline: lib\gate-verdict.ps1 fingerprints the BYTES of every script this
 # discovery walked, and that has to be the same set the gates were chosen from.
-$pyWalk = @(Get-ChildItem -Path $repoFull -Recurse -Filter '*.py' -File -ErrorAction SilentlyContinue |
-            Where-Object { (Get-TcPathBelowRoot $_.FullName $repoFull) -notmatch '\\\.venv\\|\\archive\\|\\worktrees\\|\\node_modules\\|\\site-packages\\|\\\.git\\' })
+$pyDiscoverExclude = '\\\.venv\\|\\archive\\|\\worktrees\\|\\node_modules\\|\\site-packages\\|\\\.git\\'
+$pyWalk = @(Get-TcTreeFiles -RootFull $repoFull -Filter '*.py' -PruneBelow $pyDiscoverExclude |
+            Where-Object { (Get-TcPathBelowRoot $_.FullName $repoFull) -notmatch $pyDiscoverExclude })
 foreach ($f in $pyWalk) {
   $rel = (Get-TcPathBelowRoot $f.FullName $repoFull).TrimStart('\')
   $txt = ''

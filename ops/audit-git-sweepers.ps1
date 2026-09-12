@@ -96,9 +96,10 @@ function Get-SweeperScriptFiles {
   param([string]$RootDir)
   $rootFull = Get-TcRootFull $RootDir
   $exts = @('.ps1', '.yml', '.yaml', '.sh', '.py')
-  Get-ChildItem $rootFull -Recurse -File -ErrorAction SilentlyContinue |
+  $exclude = '\\worktrees\\|\\archive\\|node_modules|\.venv|\\\.git\\'
+  Get-TcTreeFiles -RootFull $rootFull -PruneBelow $exclude |
     Where-Object { $exts -contains $_.Extension.ToLower() } |
-    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv|\\\.git\\' } |
+    Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $exclude } |
     Sort-Object FullName
 }
 

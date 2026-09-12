@@ -74,9 +74,10 @@ function Get-CpuLoadScripts {
   <# Every .ps1 and .py under $RootDir except $Self, excluded on the path BELOW the root (lib\tree-walk.ps1). #>
   param([string]$RootDir, [string]$Self = '')
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -File -Include *.ps1, *.py -ErrorAction SilentlyContinue |
+  $exclude = '\\worktrees\\|\\archive\\|node_modules|\\\.venv\\|\\\.git\\|\\out\\'
+  Get-TcTreeFiles -RootFull $rootFull -PruneBelow $exclude |
     Where-Object { ($_.Extension -ieq '.ps1' -or $_.Extension -ieq '.py') -and $_.FullName -ne $Self -and
-                   (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\\\.venv\\|\\\.git\\|\\out\\' } |
+                   (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $exclude } |
     Sort-Object FullName
 }
 

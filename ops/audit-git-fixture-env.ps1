@@ -66,9 +66,10 @@ function Get-GitFixtureScripts {
      is checked as well as filtered: a three-letter -Filter also matches longer extensions on Windows. #>
   param([string]$RootDir, [string]$Self = '')
   $rootFull = Get-TcRootFull $RootDir
-  Get-ChildItem $rootFull -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
+  $exclude = '\\worktrees\\|\\archive\\|node_modules|\\\.venv\\|\\\.git\\|\\out\\'
+  Get-TcTreeFiles -RootFull $rootFull -Filter *.ps1 -PruneBelow $exclude |
     Where-Object { $_.Extension -ieq '.ps1' -and $_.FullName -ne $Self -and
-                   (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch '\\worktrees\\|\\archive\\|node_modules|\\\.venv\\|\\\.git\\|\\out\\' } |
+                   (Get-TcPathBelowRoot $_.FullName $rootFull) -notmatch $exclude } |
     Sort-Object FullName
 }
 

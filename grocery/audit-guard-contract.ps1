@@ -148,7 +148,9 @@ function Get-TcContractTreeFiles {
   <# Every file under $RootFull outside a worktree or archive, walked once and remembered for this process. #>
   param([string]$RootFull)
   if (-not $script:TcContractTree.ContainsKey($RootFull)) {
-    $all = Get-ChildItem $RootFull -Recurse -File -ErrorAction SilentlyContinue
+    # PRUNED, not only filtered (2026-09-12): from the main checkout the filter below threw away 135 worktrees it had
+    # already listed, and this one walk was 222s of a 239s push gate.
+    $all = Get-TcTreeFiles -RootFull $RootFull -PruneBelow '\\worktrees\\|\\archive\\'
     $script:TcContractTree[$RootFull] = @(@($all) | Where-Object { (Get-TcPathBelowRoot $_.FullName $RootFull) -notmatch '\\worktrees\\|\\archive\\' })
   }
   return $script:TcContractTree[$RootFull]
@@ -239,7 +241,7 @@ if ($SelfTest) {
   $rootFullProbe = Get-TcRootFull $repo
   foreach ($probe in @('check-ad-cycles.ps1', 'guards.ps1', 'no-such-detector-xyz.ps1')) {
     $viaIndex = Find-ChainDetectorFile -RootDir $repo -Name $probe
-    $direct = Get-ChildItem $rootFullProbe -Recurse -Filter $probe -File -ErrorAction SilentlyContinue |
+    $direct = Get-TcTreeFiles -RootFull $rootFullProbe -Filter $probe -PruneBelow '\\worktrees\\|\\archive\\' |
       Where-Object { (Get-TcPathBelowRoot $_.FullName $rootFullProbe) -notmatch '\\worktrees\\|\\archive\\' } |
       Select-Object -First 1
     T ("CLEAN TWIN the indexed lookup returns exactly what the per-detector walk returned: " + $probe) `
