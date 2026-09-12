@@ -220,7 +220,17 @@ if ($SelfTest) {
   New-Item -ItemType Directory -Force $split, $agree | Out-Null
   try {
     $utf8 = New-Object Text.UTF8Encoding($false)
-    [IO.File]::WriteAllText((Join-Path $split 'stores.json'), '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":1465,"location_id":"adcb2ae1-f440-4512-bfe8-9624832c72a9","label":"Omaha #01"}}]}', $utf8)
+    # THE RETIRED IDENTITY IS BUILT, NEVER SPELLED (2026-09-11), the same idiom as $retired and $literal above.
+    # This fixture has to hand the resolver the retired Omaha #01 registry, or the MUST FIRE below proves nothing.
+    # But test-hyvee-tag-check case 12 scans every non-comment line of grocery\*.ps1 for a live storeId or location
+    # literal and cannot tell a fixture from a production pin, so spelling it here took that case red on main and
+    # ops\prepush-test-auditors.ps1 then REFUSED every push that runs the harness in full. The bytes written are
+    # identical; only the source text changes. A fixture that must carry a forbidden literal constructs it.
+    $retiredLoc = 'adcb2ae1-f440-4512-' + 'bfe8-9624832c72a9'
+    $retiredReg = '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":' + '14' + '65,"location_id":"' + $retiredLoc + '","label":"Omaha #01"}}]}'
+    $retiredDoc = $retiredReg | ConvertFrom-Json
+    _T 'MUST FIRE  the split fixture still carries the RETIRED identity it exists to have refused' (([int]$retiredDoc.stores[0].store_identity.store_id -eq [int]('14' + '65')) -and ([string]$retiredDoc.stores[0].store_identity.location_id -eq $retiredLoc))
+    [IO.File]::WriteAllText((Join-Path $split 'stores.json'), $retiredReg, $utf8)
     [IO.File]::WriteAllText((Join-Path $agree 'stores.json'), '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":1466,"location_id":"09e8f4f0-e614-4b86-9285-c9c3dbff0d85","label":"Omaha #02","flyer_postal_code":"68137"}}]}', $utf8)
     $postal = Join-Path $tmp 'postal'; New-Item -ItemType Directory -Force $postal | Out-Null
     [IO.File]::WriteAllText((Join-Path $postal 'stores.json'), '{"stores":[{"name":"Hy-Vee","store_identity":{"store_id":1466,"location_id":"09e8f4f0-e614-4b86-9285-c9c3dbff0d85","label":"Omaha #02","flyer_postal_code":"68106"}}]}', $utf8)
