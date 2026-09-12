@@ -9314,3 +9314,773 @@ things that have been eliminated. That elimination is the value here.
 **THE CAVEAT THAT STILL GOVERNS ANY ACTION.** Zero clicks in 90 days across 656 read impressions
 means there is no click signal to improve against yet. Any acceptance bar wants stating in
 IMPRESSIONS and in POSITION, never in clicks, until clicks exist at all.
+
+### I102 - `starvation` and `deadlock` each mean two or three different things in this tree, and nothing says so `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Measured 2026-09-11 by grep over first-party `*.ps1`, `*.py` and `*.md`, excluding `grocery/out/`,
+`archive/` and `.claude/`.
+
+**`starvation` / `starved`: 26 files, at least two unrelated senses.** I did not classify all 26.
+
+- **Scheduling starvation, the real concurrency sense.** `lib/gate-slots.ps1:617` carries a MUST FIRE
+  named *"THE STARVATION FIX - two runs wait for one slot and the one that ARRIVED FIRST gets it,
+  though the later one polls 16 times as often"*, backed by
+  `design/MEASURE-gate-slot-starvation-2026-09-11.md`, and cited by `lib/gate-verdict.ps1`,
+  `lib/push-landable.ps1` and `ops/observe-gate-queue.ps1`. **This is correct and the estate deserves
+  credit for it**: it is starvation freedom implemented as an arrival-order fairness policy, which is
+  exactly the remedy the course names and then defers to an operating-systems course as an advanced
+  topic. Nothing here needs changing.
+- **Term starvation, a data-coverage sense.** `grocery/pull-regular-familyfare.ps1:289` and
+  `grocery/pull-regular-hyvee.ps1:192` use the word for a search term that has bought nothing inside
+  its carry window. Also correct in place, and nothing to do with scheduling.
+
+**`deadlock`: three senses, and the rarest one is the real one.**
+
+- The concurrency sense: the **pipe-buffer** hang. `lib/parallel-run.ps1:24`,
+  `lib/git-blob-lib.ps1:35`, `grocery/guards.ps1:114`, all three saying read-both-streams-before
+  `WaitForExit`.
+- The lock sense, exactly once: `lib/ledger-lock.ps1:271`'s reentrancy CLEAN TWIN.
+- **The metaphorical sense, which is the majority**: a policy or pipeline that re-picks the same
+  nothing every day and cannot advance. `grocery/capture-policy-lib.ps1:981-1011`,
+  `grocery/pull-regular-hyvee.ps1:628`, `grocery/audit-tile-integrity.ps1:182`, and the many
+  *"can never deadlock the daily publish"* gate comments. No thread is involved in any of them.
+
+**Why it matters here.** This is the `cohort` shape `.claude/rules/grocery.md` already names as a
+known hazard, and that rules file already records what it costs: a future session greps a word while
+working on locks, gets a page of hits in another sense, and reads them as coverage. An agreeing
+answer about something else.
+
+**Proposed, and it is a one-line rule rather than a gate.** When either word is used about threads,
+processes or locks, write its qualifier every time - `lock deadlock`, `pipe deadlock`, `slot
+starvation`. The bare word keeps the common metaphorical sense. **A gate on this would be red on day
+one against dozens of legitimate existing uses**, which `.claude/rules/ops-and-gates.md` forbids, so
+this belongs in that rules file as a naming line and nowhere else. Where it would go: beside the
+existing `cohort` precedent, or in `ops-and-gates.md` next to the lock rules.
+
+**Free names, checked:** `livelock`, `linearizable` and any form of `lock order` return zero across
+first-party `.ps1` and `.py`.
+
+---
+
+### I103 - The timed-lock-wait rule stops one step short: it does not say the refusal branch must release first `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`.claude/rules/ops-and-gates.md` already rules that *"a timed lock wait is a BRANCH"*, that the
+timed-out branch needs a MUST FIRE, and that a clock cannot give it one - hence `lib/mutex-hold.ps1`
+holding a fixture mutex from another process. That was bought with `grocery/send-alert.ps1`'s stored
+and never-read `WaitOne(10000)`. **All of that is right and none of it is what this finding is
+about.**
+
+What the course adds, from the dining philosophers (both solutions, worked):
+
+- **Blocking locks can deadlock and cannot livelock. `tryLock`-with-retry can livelock and cannot
+  deadlock.** A timeout does not remove the hang; it converts a deadlock into a livelock, where the
+  threads are responsive and still finish nothing.
+- **A retry branch that keeps a resource it already holds while looping is strictly worse than
+  blocking.** In the lecture's version the `tryLock` solution that forgets to unlock its left
+  chopstick before `continue` holds it forever while spinning.
+- **The fix for both is neither construct, it is breaking the symmetry**: one participant acquires in
+  the opposite order. Generally, **a deadlock needs a cycle in the who-waits-for-what graph, so a
+  single global order of lock acquisition makes deadlock unreachable by construction** - a design-time
+  property, and cheaper and more certain than any amount of timeout tuning.
+
+**Proposed.** Two sentences added to the existing timed-lock-wait rule in
+`.claude/rules/ops-and-gates.md`: a refusal branch releases everything it already holds before it
+loops, and a retry loop that can fail on every attempt for every participant needs a bound on
+ATTEMPTS as well as on each wait. **Needs a ruling on whether it is worth a fixture** - today nothing
+in the tree takes two different locks at once (see below), so the must-fire would be hypothetical,
+and a gate over a case that cannot occur is the shape the ops rules already refuse.
+
+---
+
+### I104 - No lock-ordering rule exists, and today nothing needs one - which is the cheapest moment to write it `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Checked 2026-09-11. The three callers of `Enter-TcLedgerLock` are `grocery/rollback-ttl-lib.ps1`,
+`grocery/capture-policy-lib.ps1` and `grocery/build-sale-windows.ps1`. **None dot-sources another's
+lock-taking library**, so no path holds two different ledger locks at once.
+`lib/ledger-lock.ps1` is reentrant within one thread, which covers self-nesting and says nothing
+about two ledgers. `lib/gate-slots.ps1`'s machine-wide slot pool and the `Invoke-Locked` mutexes are
+the other two exclusion mechanisms and are likewise never nested today.
+
+So there is no defect here and nothing is broken. The finding is that **the estate now has four
+independent mutual-exclusion mechanisms and no declared acquisition order between them**, and the
+first change that takes two will not know it is the first. That failure is the one the course says is
+hardest to catch, because *some* interleavings succeed.
+
+**The ruling wanted:** whether to write the order down now (a line in `lib/ledger-lock.ps1`'s header
+naming a canonical order, plus the same in `ops-and-gates.md`) or to leave it until a second lock is
+actually nested. Arguments both ways: writing it now costs two lines and is free of red-on-day-one
+risk; writing it now also documents an ordering nobody has needed, and the ops rules are explicit
+that a rule with no production caller is one nobody runs.
+
+---
+
+### I105 - The estate has no compare-and-set, and the one retry it does have is not one `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Every mutual exclusion in this tree is **pessimistic**: a named mutex, `Enter-TcLedgerLock`, or a slot
+from `lib/gate-slots.ps1`. Checked 2026-09-11: nothing resembling a compare-and-set exists.
+
+The nearest thing is `lib/atomic-write.ps1`'s `Write-TcAtomicFile`, which retries a failed
+`Move-Item -Force` after the 2026-09-11 lost-write measurement (3 of 100 trials under 32 burners).
+**That retries the OPERATION and does not re-verify that the file is still what it read.** For that
+function it is the right design - it holds the lock and owns the content - and it is worth recording
+that it is not a CAS, because the name invites the reading.
+
+Why it matters: the optimistic pattern is the other correct answer to the estate's own
+*"a lock around the SAVE is not a lock around the read-modify-write"* rule. The estate solved that by
+widening the lock to cover the read, which is correct. The alternative is to keep the read lock-free
+and commit only if the value has not moved, which has two properties a lock does not:
+**no deadlock, because nothing blocks, and no livelock, because a failed commit means somebody else's
+succeeded, so the system always moves forward.** It does not give starvation freedom - an unlucky
+writer can lose every race - and its cost is that every shared field needs its own compare-and-set.
+
+**Not proposed as a change.** This is recorded so that the next time a read-modify-write contention
+bug is found, both remedies are on the table rather than only the one the estate has practised. The
+theory is written up in `~/.claude/skills/software-craft/concurrency-correctness.md` section 5.
+
+---
+
+### I106 - A ledger's whole-file rewrite and its single-field writes are two operations with one safety argument `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+The course's sharpest transferable fact about concurrent containers: `ConcurrentHashMap`'s `get`,
+`put` and `putIfAbsent` are linearizable with respect to each other, and `clear()` and `putAll()`
+**are not**, in the same class. **Thread-safe per operation is not thread-safe as a set, and the
+aggregate, whole-structure operations are the exceptions.**
+
+The estate has already paid for this shape once: `grocery/send-alert.ps1`'s timed-out branch
+*"rewrote the whole triage queue UNLOCKED over the writer that held the lock"* - a whole-structure
+write racing point writes.
+
+**Still live in a benign form, and worth a look rather than a fix.**
+`grocery/build-sale-windows.ps1:112-262` takes the `sale-windows.json` ledger lock at line 112 and
+releases it at 262, roughly 150 lines later, to do a whole-file rewrite. Inside that span is a
+`Get-ChildItem` scan for per-store ad manifests, which touches the ledger not at all. Meanwhile
+`grocery/capture-policy-lib.ps1:631-669`, `756-778` and `942-967` take the same kind of lock to
+read-modify-write a single field.
+
+**Both are correct today** - both take the lock, and I found no unlocked reader or writer of that
+file in the paths I read. **What I did NOT measure: the actual hold time, or whether the two lanes
+ever contend in practice.** So this is an observation, not a defect report, and the number that would
+settle it does not exist yet.
+
+**Proposed, cheap half:** move the manifest scan and any other non-ledger work outside the lock in
+`build-sale-windows.ps1`. The test is whether the work inside the lock touches the ledger at all.
+**Proposed, rule half:** when a ledger gains a whole-file operation, state in the same change what it
+is ordered against - the point writers, or nothing.
+
+---
+
+### I107 - Not filed, and why `DONE` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-concurrency-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+- **The overlap-not-elapsed-time rule.** `.claude/rules/ops-and-gates.md` already has it, measured
+  (`lib/concurrency-probe.ps1`, the fanout and parallel-run wall-clock bars that blocked an unrelated
+  push, the width-1 and width-2 mutants going red 12 of 12). The course supplies the theory that says
+  why - linearizability permits no ordering claim between overlapping operations - and that went to
+  the skills store, not here. No estate change is warranted.
+- **The barrier-inside-each-writer rule.** The course does not cover barriers at all. The estate is
+  simply ahead.
+- **Per-run temp names, the `GIT_DIR` inheritance, the tracked-path LF writes, the machine-wide CPU
+  pool.** None has any counterpart in the course. Recorded as checked so a later reader does not
+  assume the course was mined shallowly for them.
+- **Everything about Java.** `synchronized`, `ReentrantLock`, `AtomicInteger`, `ConcurrentHashMap`,
+  the PCDP library, Maven and the four graded mini-projects were discarded per the queue entry.
+
+### I108 - the 52 money lessons have no risk-management lesson at all, and risk management is one eighth of the professional curriculum `OPEN` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `financial-planning` Module 7, "Risk Management": three lectures totalling about 46
+minutes (Risk Management Overview, Insurance Basics, Life Insurance), a two-professional panel, and
+two assessments. It is one of the eight content modules the CFP Board co-designed, and the course
+sequences it as a foundation rather than an extra: the savings lecture (item 39) puts insurance
+*below* emergency savings in its own foundation stack, and the investing lecture (item 70) tells the
+learner to have that foundation before investing at all.
+
+**What the estate has.** Measured 2026-09-11 over the 52 files `content/lessons/lesson-01..52`:
+
+- `insurance` appears in **2 of 52** lessons, both incidental: `lesson-31-the-401k-and-free-money.md`
+  line 15 ("HR ... walks them through insurance options") and
+  `lesson-36-good-debt-bad-debt-exit-plan.md` line 73 ("a car they can't afford the insurance on").
+- `deductible`, `premium`, `term life`, `renters` and `disability` are **0 of 52**.
+- `liability` looks like 6 of 52 and **is not one of them**. Every hit is `reliability` or
+  `unreliability` in the reputation sense (Weeks 8, 20, 21, 24, 26 and 38, all read). The
+  financial sense is 0 of 52, and it is recorded this way rather than as a bare zero because a
+  substring count is how an absence gets asserted wrongly - the first draft of this finding said
+  "0 of 52" and was wrong about the instrument, not about the answer.
+- No lesson title names risk, insurance or protection. The 52 titles were read in full.
+
+So the whole of what a policy is, what a deductible and a premium are, why renter's insurance covers
+your things and the landlord's does not, and why term costs a fraction of permanent for the same
+death benefit, is absent from a product whose stated job is preparing a teenager for adult money.
+
+**Why it matters here.** Two of the three insurance products the course treats as first-contact for a
+young adult are exactly the ones a teenager meets first and soonest: auto (which most will carry
+before they leave home) and renter's (first apartment). The course's own panel puts a number on the
+cheapest end of the third: a 30-year, $1,000,000 term policy at about $20 a month bought young
+(item 88). That is `[SINGLE-SOURCED: one broker, undated, US]` and must not be published as a price,
+but the shape of the claim - that term is cheap and gets expensive with age - is the lesson.
+
+**What it would touch.** New lesson content only. It cannot be squeezed into the closed Week 1-52
+series without renumbering, which the `lesson` skill's own rule forbids; the realistic shapes are a
+normal-titled lesson outside the 52, or a short arc. That choice is Brad's, which is why this is
+`RUNG1 RULING` rather than a build.
+
+---
+
+### I109 - the curriculum teaches index funds and a custodial account before it ever teaches a buffer, and the emergency fund has no lesson `OPEN` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** The course states the ordering twice, in two voices, and it is the single most repeated
+instruction in the eight modules. Lecture item 39: *"the next step that most financial planners will
+talk to you about is emergency savings ... a strong foundation."* Lecture item 70, opening the
+investing module: *"before we jump up to investing, I want to re-emphasize that it's really important
+that you have emergency savings ... before you start thinking about investing."* The practising CFP
+in item 100 calls it *"the first goal really that we want them to build out"* for a young client.
+
+**What the estate has.** Measured over the 52 lessons on 2026-09-11:
+
+- The phrase `emergency fund` occurs **once in 52 lessons**, at
+  `lesson-40-want-less-win-more.md` line 35, as one clause in a list of things a wide gap funds.
+- `months of expenses`, or any target for a buffer, occurs **0 times**.
+- The ordering runs the other way. Week 29 is `the-custodial-account-conversation`, Week 30 is
+  `boring-wins-index-funds-101`, Week 31 is `the-401k-and-free-money`. The nearest thing to a buffer
+  rule, `lesson-42-the-30-percent-breathing-room-rule.md`, lands **twelve weeks after** the
+  index-fund lesson (Week 30), and it is a rule about a *savings rate*, not about a *reserve*. Those are
+  different things: a household can hit 30% every month and still have nothing to absorb a $700
+  transmission.
+
+**The disagreement worth noticing, because it is inside the course too.** The lecturer gives
+**three to six months** of expenses and says plainly that he distrusts rules of thumb and that the
+number is personal (item 27). The practising CFP, talking about the same young client, gives
+**six to twelve months**, twelve if there is a single income (item 100). That spread is itself the
+teachable point and is the honest way to publish it: the range is wide, the driver is how replaceable
+your income is, and anybody quoting one number is quoting a default.
+
+**Why it matters here.** This is the ordering failure the estate already knows in another costume.
+`growth-craft/applies-here.md` records "retention before acquisition" and
+`search-position-diagnosis.md` records "diagnose the layer before optimising anything". A reader who
+opens a custodial account at Week 29 with no reserve is one car repair away from selling at a bad
+time, which is the exact mechanism item 100 names for why the buffer does not go in the market.
+
+**What it would touch.** Content, and possibly sequence. The 52 are published and numbered, so
+reordering them is not on the table; a lesson outside the series plus a cross-reference added to
+Weeks 29 and 30 is the cheap shape. Ruling needed on whether published lessons may gain a
+cross-reference at all.
+
+---
+
+### I110 - `lesson-38` says employers use a credit score; the course says they get the report, and the distinction is the one that changes what a reader should do `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `content/lessons/lesson-38-credit-scores-explained-simply.md` line 11: *"lenders,
+landlords, and sometimes even employers use to quickly judge how reliably you pay back what you
+owe."* The course's credit lectures (items 61 and 62) draw the report/score line hard and never put
+an employer on the score side: the report is the record and is free from each of the three bureaus
+once a year through `annualcreditreport.com`; the score is a number computed from it and **costs
+money** - the lecture quotes a one-time FICO as low as $7.95 alongside a free report.
+
+**Why it matters here.** Our own lesson gets the report/score split right two sections later
+(line 57, and it names `AnnualCreditReport.com` correctly at line 59), so the opening line
+contradicts the lesson's own body. It is a small wrong sentence in a paid lesson on a live site, and
+the direction of the error is the expensive one: a parent who believes an employer pulls a *score*
+will go buy one.
+
+**Also worth a second read while that file is open.** Line 11 says "typically between 300 and 850",
+which is right for FICO and for current VantageScore, but the course records that earlier
+VantageScore versions ran 501 to 990 and that the version matters when you buy one (item 62). Our
+lesson never names FICO or VantageScore at all, so a reader who buys a score cannot tell which one
+they bought. That is an addition, not an error.
+
+**What it would touch.** One published lesson, one sentence, plus optionally two sentences naming the
+two scoring models. Nothing in code.
+
+---
+
+### I111 - nothing in the 52 lessons teaches the personal balance sheet, which is the professional curriculum's first tool `OPEN` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Course Module 1, item 20, "Where Are You Now?": assets minus liabilities is net worth,
+you write it once a year, and a negative number in your twenties is normal rather than alarming - the
+worked example has a new graduate at **minus $8,000** and the lecture says so explicitly to defuse it.
+It is the course's answer to "where do I start", and it comes before budgeting, before saving and
+before goals get numbers attached.
+
+**What the estate has.** `balance sheet` is **0 of 52**. `net worth` is **0 of 52**; the only hit in
+`content/lessons/` is the standalone page `net-worth-by-age.md`, which is a different artefact and a
+different job - it tells a reader what is normal for their age, and never tells them how to compute
+their own. So the estate publishes the benchmark without publishing the instrument.
+
+**Why it matters here.** It is a one-evening parent-and-teen exercise with a worksheet shape, which
+is exactly the `Try this together` slot every lesson already has, and it makes `net-worth-by-age.md`
+actionable instead of merely reassuring. The reassurance that a young person's net worth is
+*supposed* to be negative is also directly on the voice these lessons already use.
+
+---
+
+### I112 - the course's own numbers are illustrative, and three of them will read as promises if they are ever lifted into a lesson `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Read across items 39, 43, 70 and 78. The course repeatedly demonstrates compounding at
+**9%** ("not an unrealistic amount given the return on the US stock market over any 30 year time
+period", item 39) and runs the same $2,000-a-year-for-9-years chart to **$579,471 at 65** in two
+separate lectures. Item 43 runs $20 a week at **5%** and again at **10%**. Item 70 runs $20 a week at
+2% against 8%. None of these carries a date, a source, a fee assumption or an inflation adjustment,
+and item 78 separately teaches that fees are the thing that decides long-term wealth - so the charts
+contradict the lecture's own advice by ignoring the cost they just told you to watch.
+
+**Why it matters here.** `CLAUDE.md` forbids fabricated numbers, and the estate's standing rule is
+that understating is exactly as wrong as overstating. A compounding chart lifted from this course
+into a lesson would arrive with a rate that nobody here can source, on a live paid page, about
+somebody's retirement. `lesson-28-meet-compound-interest-hands-on.md` and
+`lesson-02-the-compounding-secret.md` currently avoid the trap by using a penny-doubling that is
+arithmetic rather than a return assumption, which is the right call and should be kept.
+
+**The ruling wanted.** Whether any lesson may publish a projected rate of return at all, and if so,
+what it must carry alongside it - the source, the date, the fee assumption, whether it is nominal or
+real. This is a voice-and-liability question rather than a work item, which is why it is
+`NEEDS A RULING`.
+
+---
+
+### I113 - the free instrument the course names is one this estate has never told a reader about `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Items 60, 61 and 62 spend most of a module on the same practical point: US consumers are
+entitled to a free credit report from each of Equifax, Experian and TransUnion once a year through
+`annualcreditreport.com`, the three bureaus do not hold identical information, and the two published
+strategies are *all three at once for coverage* or *one every four months for frequency*. The vignette
+at item 60 exists specifically to warn that look-alike sites charge for it.
+
+**What the estate has.** `annualcreditreport` appears in exactly **1 of 52** lessons,
+`lesson-38-credit-scores-explained-simply.md` line 59, in a single sentence with no mention of the
+stagger strategy, no warning about paid look-alikes, and no note that the three bureaus disagree.
+
+**Why it matters here.** It is the only free, concrete, do-it-tonight action in the whole borrowing
+module, it fits the `Try this together` slot exactly, and the scam warning is the kind of specific
+protective detail that separates a lesson somebody pays for from a blog post.
+
+---
+
+### I114 - the course carries a pedagogical device the lessons do not have, and it is the one the 52 could use most `PARKED` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Every module of `financial-planning` pairs each lecture with a two-minute **street
+interview** (about a dozen of them, items 13, 26, 28, 33, 38, 46, 69, 73, 83, 85, 94) and a
+**vignette** - a scripted two-person argument about a real decision: whether to go to Belize on a
+credit card (item 16), whether to fund a child's college (item 18), whether to take the employer
+retirement match at 22 (item 76).
+
+**Why it is parked rather than open.** The vignettes are the format, and the format transfers: a
+short scripted disagreement between two people who both have a point, with no resolution given, is a
+better conversation-starter for a parent and a teenager than a question list, and every one of the 52
+lessons ends with question lists. But this is a content-design proposal with no measurement behind
+it, no A/B mechanism on the estate to test it, and it would change the shape of a published series.
+Recorded so the next run does not re-derive it; not proposed as work.
+
+---
+
+### I115 - what I checked and did NOT find `DONE` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Recorded so a later run does not repeat the sweep.
+
+- **Nothing in the skills store holds personal finance as a subject.** Over 1,418 indexed sections on
+  2026-09-11, `insurance`, `investing`, `diversification`, `mortgage`, `deductible`, `amortization`,
+  `FICO` and `liquidity` are all clean no-matches. `budget`, `credit`, `debt`, `savings`, `interest`
+  and `retirement` all hit, and every hit read is a different sense - error budgets, credit as
+  attribution, technical debt, a cached-token saving, log retention.
+- **No lesson contradicts the course on a number.** The three places the two could have disagreed -
+  the 35% payment-history weight in `lesson-38` line 33, the 30%-of-limit utilisation guidance at
+  line 35, and the 300-850 range at line 11 - all agree with what the course teaches. The credit-score
+  finding above is about a category error, not a figure.
+- **Nothing about taxes.** The course itself does not teach tax beyond naming tax-deferred and Roth
+  as wrappers, so the estate having nothing on it is not a gap this course establishes.
+- **I did not read the live Ghost posts.** Every count is against `content/lessons/*.md` in the
+  working tree. If a lesson was edited on Ghost and never written back, these counts are wrong about
+  that lesson, and nothing here checked.
+
+### I116 - `Read-TextFile` opens without `FILE_SHARE_DELETE`, and one file in `lib\` already shows the fix `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`lib\json-io.ps1:89` opens with `[IO.FileShare]::ReadWrite`. Delete is **not** shared, so any caller
+holding that handle makes a concurrent writer's `Move-Item -Force` fail *inside its own lock* with
+*"Cannot create a file when that file already exists."* That is the exact founding defect
+`lib\atomic-write.ps1` was written to work around on 2026-09-11, and its header documents the
+deterministic repro: a handle opened `ReadWrite`-shared fails the move every time, one opened
+`ReadWrite+Delete`-shared does not.
+
+**`lib\gate-verdict.ps1:67` already opens `[IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete`.**
+So the correct share mode exists in this tree, in exactly one place, and the hot-path reader that
+every ledger goes through does not use it.
+
+Why this is not obvious from the PowerShell side: on POSIX a name and an inode are separate objects,
+`unlink` and `rename` act on the *name*, and an open handle **cannot refuse them**. Windows sharing
+modes have no POSIX analogue. The intuition "a reader cannot interfere with a replace" is simply
+false here, which is why this cost a day to diagnose.
+
+### And the estate had already diagnosed this class, in Python, SEVEN DAYS EARLIER
+
+This is the part worth reading twice, and it was added after the first draft of this file: my first
+grep timed out and I wrote the item without it.
+
+`meal-prep\pipeline\harvest.py:847-862` carries, dated **2026-09-04**:
+
+> *"RETRIED, BECAUSE A READER CAN BLOCK THE REPLACE ON WINDOWS ... The C runtime opens a file for
+> reading without `FILE_SHARE_DELETE`, so `os.replace` raises `PermissionError` while another
+> process has the pool open ... Re-raises after the last try: a write that could not happen must
+> still be an error, never a silent no-op."*
+
+`design\REVIEW-after-dedup-2026-09-04.md` **5e** writes it up as a defect with a measured cost: a
+`--mark-ruled` exited 1, `decide_apply._mark_ruled` captured the stderr and threw it away, the
+finding said only "the pool ruling did not land", and **a candidate stayed `taken:` forever**. The
+pool is a 100 MB file, so the window is not small.
+
+**So the same platform rule was found twice, independently, seven days apart, and fixed the same way
+both times** - a bounded retry around the replace that re-raises rather than returning quietly.
+Neither file references the other, and neither is findable from the other.
+
+**That makes the first-class item here a knowledge one, and it is cheaper than any code change:**
+cross-reference the two headers, and state in both that this is a property of **Windows**, not of
+PowerShell and not of Python. The `lib\atomic-write.ps1` header is otherwise the best-documented
+file in the tree and it does not know that the Python side solved this first;
+`.claude/rules/ops-and-gates.md` records the PowerShell instance and not the Python one. Any future
+third language on this box will pay the full price a third time.
+
+**It also widens the fix list.** Sites that replace a file by rename and can meet a concurrent
+reader are at least: `lib\atomic-write.ps1` (retries, good), `meal-prep\pipeline\harvest.py:855`
+(retries, good), and every remaining bare `Move-Item -Force` / `os.replace` in the tree, which was
+**not swept** by either repair - `ops-and-gates.md` already notes "other `Move-Item -Force` replaces
+remain in the tree and were not swept."
+
+**The change, if it is wanted:** add `-bor [IO.FileShare]::Delete` to `Read-TextFile` and say in a
+comment that the `Delete` is what lets a concurrent writer's replace land.
+
+**Why it is a ruling and not a patch.** It changes the semantics every caller of `Read-TextFile`
+gets, and `atomic-write.ps1`'s measurements were taken against the *current* reader. Its retry loop
+would still be needed for readers that do not go through `Read-TextFile` (`Get-Content` itself, the
+daemon, anything in Python). So this narrows the problem rather than removing the retry, and the
+right sequence is: change the share mode, then re-run `atomic-write.ps1 -SelfTest` - whose
+**PREMISE** case at line 189 deliberately asserts that a bare `Move-Item -Force` *fails* against a
+`Get-Content`-shaped reader, and which must still pass, because `Get-Content` has not changed.
+
+---
+
+### I117 - Nothing in this estate flushes a write to the device, and that should be a written decision rather than an omission `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`fsync`, `FlushFileBuffers`, `WriteThrough` and `Flush($true)` return **0 hits across 912 tracked
+`.ps1`, `.py` and `.js` files** (counted 2026-09-11; the tree's only `flush` is `sys.stdout.flush()`
+in `meal-prep/pipeline/extract_sweep.py`). `Write-TcAtomicFile` (`lib\atomic-write.ps1:74`) writes the
+temp file with `[IO.File]::WriteAllText` and moves it; the bytes are in the page cache when the move
+returns.
+
+The canonical idiom is `write` then **`fsync`** then `close` then `rename`, and the flush is what
+makes "the name now points at the new file" imply "the new file's bytes are on the device". Without
+it, a power loss in the window can leave the real name pointing at a file that is short or empty -
+**worse than not writing at all, because a good file has been replaced by a bad one.**
+
+**Scope, stated honestly so this is not read as bigger than it is.** This needs a power loss or a
+bluescreen. A crash of the writing *process* is harmless: the page cache belongs to the OS and
+survives. So the exposure is a hard power event on one desktop, not a routine failure.
+
+**What needs ruling is which ledgers, if any, deserve the cost** - and the test is not "is the file
+important" but "if the last few seconds of writes vanished, would anything notice or recover?"
+Candidates where the answer looks like no:
+
+- `graph/learning/promote_aliases.py`'s holds - one-directional and never expiring, so a lost write
+  is a hold that silently never happened.
+- `grocery/rollback-first-seen.json` and `grocery/sale-windows.json` - read-modify-written across
+  runs, so a lost write is not re-derived.
+
+Everything rebuilt daily (the boards, the price tables) needs nothing: the repair is the next build.
+
+**On Windows the POSIX two-step reduces to one call.** There is no directory handle to flush, and
+NTFS records the directory entry in the same metadata transaction as the file. So a per-ledger
+decision costs one `Flush($true)`, not two. `[That second clause is ours and UNVERIFIED - registered
+as claim C182 in the skills store. Measure it before relying on it.]`
+
+**Do not sweep this.** A flush on every ledger write would cost every run and buy almost nothing;
+the value is in naming the two or three places where silence is unacceptable, and writing the
+decision in the writer's own header the way `atomic-write.ps1` already writes its tuning constants.
+
+---
+
+### I118 - "Write the pointed-to object before the object that points to it" already governs two incidents here and is written down as neither `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+The file-system rule that covers every crash-consistency case in one line. Data before the inode
+that references it; the file before the directory entry naming it; the artefact before the row
+claiming it exists. Every interruption then leaves an object nothing refers to yet - a **leak** -
+and never a reference to an object that does not exist - **corruption**. Those are not equally bad,
+and the ordering is the whole of what chooses between them.
+
+Two live instances in this estate, each recorded as its own incident and neither as this rule:
+
+- `repairs-that-never-reach-a-commit` - *"commit the source WITH the artifact"*. The artefact is the
+  pointed-to object; the commit that claims it exists is the pointer.
+- The 2026-09-11 `spec-contradictions.json` incident, where a gate's child rewrote a tracked artefact
+  and the artefact moved without the reason for it moving.
+
+**The proposal is one line in `.claude/rules/ops-and-gates.md`**, not a gate: *when a change touches
+two files where one refers to the other, name which is the pointed-to object, write it first, and
+say so in the commit.* A detector cannot see this - it is about ordering inside a change, not about
+the text of any file - so the rule is the whole prevention, the same shape as the
+`git log origin/main..HEAD` habit the project CLAUDE.md already says has nothing to automate.
+
+**Also worth noting and not acting on: this estate already has a write-ahead journal and it is an
+UNDO log.** `grocery\test-guards.ps1:67` `JournalSnapshot` writes a file's **original** bytes to a
+known directory *before* mutating it, `JournalRecover` (line 77) replays them back on a later run,
+and `JournalClear` (line 76) retires them. That is the course's protocol run backwards - a redo log
+stores the new image and rolls forward, an undo log stores the old image and rolls back - and the
+undo direction is the right one for a harness whose job is to leave the tree as it found it. It also
+explains that file's fixed-`%TEMP%` rule in `.claude/rules/ops-and-gates.md`: a journal only works
+if a killed run's successor can find it, which is why the course's own journal sits at a known
+address rather than wherever the last writer put it.
+
+`meal-prep`'s *publish journal* is **not** this - it is written as work completes, so it is a
+progress record, which is precisely why `publish-wave-crash-loses-the-journal` was a defect. And
+nothing here writes a **redo** log, which is correct: a redo journal earns its cost when one logical
+change spans several files, and the only candidate is the source-plus-artefact pair above, which the
+one-line rule handles more cheaply.
+
+---
+
+### I119 - No cold corpus in this estate is ever re-read, and the 8-of-9 stale-harness finding is what that costs `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Storage corruption has a silent class - a block that returns the wrong bytes with no error - and the
+study the course cites found **most** of its detectable errors by **scrubbing**: reading every block
+on a schedule rather than waiting for someone to ask. A check that only runs when something reads
+has no coverage over the things nobody reads, **and its clean report is a statement about traffic
+rather than about data.**
+
+The estate's daily chain audits *today's* board, which is the right target and is also everything it
+covers. The corpora that are cold and never re-validated:
+
+- `graph/gold/*.jsonl` and `graph/provenance/*.jsonl`
+- `meal-prep/db/` fixtures
+- `design/EVAL-*.md` and `MEASURE-*.md`
+
+**The last one already has its measurement, and it is the argument for this item.** On 2026-09-09,
+**8 of 9** of those documents named a harness that had changed since the document was written, and
+the ninth only read current by accident. `.claude/rules/measurement.md` records that both confounded
+measurements it names *"were caught by a human re-reading the commit clock months later, by luck"*.
+That is bit rot in a corpus nobody re-reads, found by the one mechanism that does not scale.
+
+**What is NOT asked for:** a gate. `measurement.md` says plainly that retro-filling the nine is not
+wanted and that a gate over them would be red on day one against every one of them, which
+`ops-and-gates.md` forbids. **What is asked for is a schedule and a report**: something that walks
+those files periodically and prints how many still resolve against the commits they name, as a
+number that can go down. A scrub is detective by construction and cannot be replaced by a
+preventive gate, for the same reason `ops-and-gates.md`'s floor argument gives: the failure it
+catches is one where nothing ran to be gated.
+
+`scrub` is not a clean no-match in this tree, and the two hits are a different sense:
+`ops\test-prepush-hook.ps1` and `ops\audit-git-fixture-env.ps1` use it for scrubbing environment
+variables. Nothing reads stored data on a schedule to check it is still what it was.
+
+---
+
+### I120 - Idempotency is this estate's cheapest concurrency fix and no header states it `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+NFS's move, and it is better than the delivery guarantee it replaces: rather than build exactly-once
+delivery, make the **operation** such that a duplicate cannot hurt - then a lost request, a lost
+reply and a crashed-and-restarted server are indistinguishable and need no distinguishing, because
+retrying is correct in all three.
+
+The property is invisible at the call site and it turns on small details. `WRITE` is idempotent in
+NFS only because the request carries the **offset**; "append these bytes" would not be.
+
+**Two adjacent files in `lib\` are the two sides of this and neither says so:**
+
+- `Write-TcAtomicFile` replaces a whole file with a whole text. **Idempotent.** Re-running it is
+  free, which is exactly why its retry loop is safe.
+- `Add-TcLine` appends. **Not idempotent.** A retry duplicates a line.
+
+Every other retry in the tree is safe or unsafe for this reason and none of them says which:
+`grocery`'s capture retries, the daemon's `--release-taken` reclaim, the `Move-Item` retry itself.
+
+**The proposal: a header line, not a gate.** When writing anything with a retry, state whether the
+operation is idempotent and what makes it so - the offset, the whole-file replace, the natural key.
+The retry is only correct while that property holds. This is the same discipline
+`ops-and-gates.md` already demands of a tuning constant ("what does this number do when the producer
+stops") applied to a retry loop.
+
+---
+
+### I121 - `Add-TcLine`'s header should say `AppendData` is `O_APPEND`, because that is the property being bought `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`lib\append-line.ps1:65` opens with `[Security.AccessControl.FileSystemRights]::AppendData`. That is
+the Win32 spelling of POSIX `O_APPEND`, which makes seek-to-end and write a **single** operation -
+which is precisely why several processes can append to one file and none loses a line. A bare
+`Add-Content` opens, seeks and writes as separate steps, and this estate measured it losing 13 of
+200 lines with two appenders and 5 of 1,200 with four.
+
+So the shipped fix is not a Windows trick, it is **the POSIX guarantee requested explicitly**. The
+code is right and the reason is not written down, which is the difference between a fix somebody can
+maintain and one somebody later "simplifies".
+
+`PARTLY DONE` because the mechanism shipped 2026-09-11 and only the naming is outstanding. One
+sentence in the header.
+
+---
+
+### I122 - Nothing to do, recorded so it is not re-derived `DONE` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Three things this course would have flagged in another estate and does not flag here:
+
+- **RAID and storage redundancy.** One box, one disk. The course's model is "detect the corruption,
+  then restore from the redundant copy"; here there is no redundant copy, so **detection without a
+  git-tracked original is detection with no remedy**. That raises the value of everything being in
+  git and is another argument against the gitignored boards being anything but rebuildable. Nothing
+  to build.
+- **A journal.** Covered under the write-ordering item above: correct design, not a gap.
+- **The whole hardware half** - buses, DMA, interrupts versus polling, disk geometry, flash pages and
+  the FTL, FFS cylinder groups. Read in full and routed nowhere. It is background for anyone who
+  already knows random I/O is dear and sequential I/O is cheap.
+
+### I123 - The re-arm clock is one global number for a quantity the course says is per-commodity `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`grocery/check-ad-cycles.ps1:2414` sets `$REARM_DAYS = 14` for every commodity, tuned only as a
+single global value between 7 and 56 from `alert-tuning.json` (read at `:2437`). The course's account
+of promotion cadence is that a retailer re-promotes an item at roughly the **household consumption
+cycle** of that item, and gives a worked example of two promotion cycles separated by 20 to 22 days
+to match a monthly cycle. If that holds, the correct re-arm interval for milk, bread and eggs is very
+different from the one for flour, sugar, rice and oil, and a single number is too long for fast
+movers and about right for slow ones.
+
+**This is a reason to measure, not to change the constant.** The measurement is cheap and the data
+already exists: group the board history by commodity and measure the observed gap between promoted
+states per commodity, then compare the distribution against 14. If the spread is wide, `$REARM_DAYS`
+is masking real structure. If it is narrow, the course's mechanism does not survive contact with
+seven Omaha chains and that is worth writing down too.
+
+Note `.claude/rules/ops-and-gates.md` already names `$REARM_DAYS = 14` as a constant that records
+what it means but not whether it was the first plausible number or the survivor of a sweep. This adds
+a second, different question about the same constant: whether it should be one number at all.
+
+### I124 - Six of seven store feeds do not record which physical store the price came from `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`grocery/build-aldi-regular.ps1:376` stamps `store_location` on every row and `:743` asserts it is
+`ALDI - OLA 42 - Omaha`. Grepping the whole tree, **that is the only writer of `store_location`.**
+
+The course is unambiguous that this matters: the most common clustering regime is "hybrid
+standardization", a national frame with real local variation; category tactics list price as
+"uniform versus tailored ... you can have different pricing for different stores"; markdowns are
+targeted at "specific stores and markets"; and Walmart's own programme for it is named in the course
+as "store of the community". So a chain's price is a cluster-level fact, not a chain-level one.
+
+The estate already knows this empirically and from the wrong direction: `walmart-session-store-3153-drift`
+records that Walmart's store is held in a session that drifts, and `aldi-store-is-ola-42` records that
+an older Aldi feed's store identity was a typed literal rather than captured data.
+
+**Proposed:** every store writer stamps the store or cluster the row came from, the way the Aldi
+builder already does. Today a store swap underneath a feed is invisible rather than merely
+unrecorded, and no historical row can be re-checked against the shelf it came from.
+
+### I125 - Produce prices may move within a single day, and nothing here records an hour `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+The course states that perishables are marked down intraday as routine yield management: fresh
+vegetables sell higher in the morning than in the afternoon, the same mechanism as two airline seats
+on one flight. The estate's entire vocabulary for row freshness is **days** (`grocery/audit-row-age.ps1`,
+the `asof` machinery); no capture records a time of day.
+
+**Why this needs a ruling rather than a fix.** The course's example is an unorganised vegetable
+market, not a chain supermarket, and the generalisation to Hy-Vee or Bakers is not something the
+course supports. Registered as claim C178. It could be settled for near nothing - one commodity, one
+store, produce, priced morning and afternoon on the same day - and the answer decides whether this is
+a real confound in every produce comparison the board publishes or a non-issue for US chains.
+
+The ruling wanted: is produce compared store-to-store on the board today in a way that a few hours of
+capture skew would distort? If yes, this is worth the hour. If produce is only ever compared
+within-store or against its own history, it is not.
+
+### I126 - A deep discount is evidence about the FUTURE of a cell, and is currently read only as a price `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+The course's pricing life cycle ends in markdown, and the retailer chooses "either temporary or
+permanent". A **permanent** markdown is an exit: it clears inventory at the end of the product's life
+and frequently precedes the item leaving the assortment, which the course describes as a reviewed
+deletion process driven by market coverage, not as drift.
+
+Today a deep discount and a later `not-carried` are recorded as unrelated events. The two markdown
+kinds are indistinguishable in one day's capture.
+
+**Proposed, and deliberately modest:** nothing automated. The forward habit is that an unusually deep
+discount should not raise confidence that a store carries an item, because it can mean the opposite.
+If a cheap signal is ever wanted, a commodity that showed a deep discount and then went quiet is a
+better `not-carried` candidate than one that simply went quiet.
+
+### I127 - A missing row on an ADVERTISED item has a cause the four-cause vocabulary does not name `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+`.claude/rules/grocery.md` names four causes of a 200 with a correct selector and zero rows -
+`blocked`, `not-carried`, `unrendered`, `unsettled` - and insists *unchecked is never not-carried*.
+The course adds a fifth thing that is not a capture defect at all: **the item is genuinely out of
+stock because it is on promotion.** Continuous replenishment "performs best in a stable pricing
+environment and is not suitable for promotions", because a promotion spikes volume briefly and
+disrupts the regular flow.
+
+This does not change the rule, which is already correct in refusing to settle the question. It
+supplies a prior: on an item we know is advertised this week, a missing row is more likely to be a
+true empty shelf than the same absence on an unadvertised item.
+
+**Related and separable:** the course puts Direct Store Delivery at 25% of US supermarket volume,
+covering soft drinks, bottled water, juice, beer and ice cream, where a distributor stocks the shelf
+on its own schedule rather than the store's. If any of those categories are on the board, they should
+not be expected to follow the store's ad cycle at all.
+
+### I128 - The board has no notion of whether a commodity is one shoppers actually compare `PARKED` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-retail-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+The course's strongest claim is that a retailer actively manages under 10% of its prices, and that
+consumers comparison-shop only that set - rice, salt, sugar, oil - while prices outside it are set by
+each chain's own margin rule and are not compared at all. If true, a wide cross-store spread means
+two completely different things depending on which side of that line the commodity sits, and an
+alert that does not know the difference produces false positives by construction on the second.
+
+The estate's `commodity:staple:` namespace is already close to the right filter, and nobody chose it
+for this reason.
+
+**Parked rather than open**, because acting on it means classifying ~492 commodities on the strength
+of one uncited instructor's 10% figure, which is not a good trade. Registered as C176. The cheap
+version, if this is ever picked up, is to let the board answer for itself: commodities whose prices
+actually move together across the seven stores are the comparison-shopped set, and that is a query
+against history rather than a judgement call.

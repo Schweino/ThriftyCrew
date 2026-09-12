@@ -8,7 +8,7 @@
 
 Let's strip away the mystery.
 
-A credit score is a three-digit number — typically between 300 and 850 — that lenders, landlords, and sometimes even employers use to quickly judge how reliably you pay back what you owe. The higher the number, the better. A score above 700 is generally considered good. Above 750, most doors open comfortably. Below 600, borrowing money gets expensive or difficult.
+A credit score is a three-digit number — typically between 300 and 850 — that lenders and landlords use to quickly judge how reliably you pay back what you owe. Employers are a common exception worth knowing: some ask to see a version of your credit report, and only with your written permission, but they do not get this score. The higher the number, the better. A score above 700 is generally considered good. Above 750, most doors open comfortably. Below 600, borrowing money gets expensive or difficult.
 
 Back in Week 20, we talked about reputation — how it's built by consistent daily behavior stored in other people's memories, and how it opens or closes doors before you ever walk into the room. A credit score is exactly that, but in numerical form. It is a reputation for money.
 
