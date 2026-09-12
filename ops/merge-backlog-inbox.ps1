@@ -35,15 +35,51 @@
   enforces, and this refuses the merge rather than writing a heading that gate
   would fail - the whole point is that the backlog stays green.
 
-  Exit 0 = merged, or nothing to merge. Exit 2 = an inbox file is malformed and
-  NOTHING was written. Exit 3 = could not evaluate.
+  ONE MALFORMED FILE IS QUARANTINED; IT NO LONGER REFUSES THE BATCH.
+  `[CHANGED 2026-09-12. The all-or-nothing rule above was deliberate, so here is why it
+  is going, argued from what it was actually buying.]`
+  It was chosen for two reasons: the backlog must stay GREEN for audit-backlog-status.ps1,
+  and an id allocator with several writers loses findings. QUARANTINE KEEPS BOTH. The bad
+  file's findings are never appended, so no heading that gate would fail is ever written;
+  and this is still the ONE writer and the ONE allocator, over a smaller accepted set, so
+  no id is reused and none is lost - the quarantined lane's findings are allocated on the
+  retry run instead. What the batch refusal bought beyond those two was nothing. What it
+  COST was measured: three times on 2026-09-11 and 12 a lane ended its file with a closing
+  section like `## Nothing else` and no state line under it, and each refusal blocked THREE
+  innocent lanes until a human fixed the one file. A gate that reddens three lanes for a
+  fourth lane's typo teaches people to ignore red, or to hand-edit somebody else's drop
+  file under time pressure, which ops-and-gates.md warns about in as many words.
+  So the bad file is MOVED to `<inbox>\quarantine\` with its bytes intact and a
+  `.reason.txt` beside it, it is NAMED in the output, the rest of the batch merges, and the
+  run EXITS NON-ZERO so the failure is loud and attributable. Quarantine is per FILE and
+  never per finding: dropping one `##` block out of a file a lane meant to file whole would
+  be the silent loss this tool exists to prevent.
 
-  Params: -InboxDir, -Backlog, -DryRun (print the plan, write nothing), -SelfTest
+  VALIDATION IS A STEP WITH AN EXIT CODE, NOT A SENTENCE:
+
+      -ValidateFile <path>      one file, in ISOLATION, before it joins the drop box
+
+  It copies that ONE file into a fresh per-run temp inbox and runs this same code path with
+  -DryRun, which reads the real backlog and writes nothing. It never reads the real inbox,
+  though, because siblings are
+  writing there and their problems are not this lane's to report. Exit 0 = it would merge,
+  2 = it would be quarantined, 3 = could not evaluate. This NAMES the existing -InboxDir
+  plus -DryRun mechanism rather than adding a second one: one lane did exactly this by hand
+  on 2026-09-12 and its files merged first time, and the lanes that broke the batch are the
+  ones that skipped the same instruction when it was only prose in a spawn prompt.
+
+  Exit 0 = everything merged, or nothing to merge. Exit 2 = at least one inbox file was
+  malformed and QUARANTINED; every other file merged. Exit 3 = could not evaluate.
+  Read the verdict LINE, not the number alone.
+
+  Params: -InboxDir, -Backlog, -DryRun (print the plan, write nothing),
+          -ValidateFile <path> (one file, isolated), -SelfTest
 #>
 [CmdletBinding()]
 param(
   [string]$InboxDir = '',
   [string]$Backlog = '',
+  [string]$ValidateFile = '',
   [switch]$DryRun,
   [switch]$SelfTest
 )
@@ -183,6 +219,70 @@ function Read-Inbox([string]$path) {
   return $out
 }
 
+# ---- -ValidateFile: ONE inbox file, in ISOLATION, with an exit code. ----------------
+# A NAME for -InboxDir plus -DryRun, not a second implementation: it copies the one file
+# into a fresh per-run temp inbox and re-enters this same script. What that buys over
+# doing it by hand, which is what the instruction used to ask for in prose: it cannot be
+# pointed at the REAL inbox, so a sibling's malformed file is never reported as this
+# lane's problem, and this lane's check never touches a sibling's bytes.
+if ($ValidateFile) {
+  if ($PSBoundParameters.ContainsKey('InboxDir')) {
+    Write-Output "COULD NOT EVALUATE - -ValidateFile judges ONE file in its own temp inbox, so -InboxDir means nothing here. Drop one of the two."
+    Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+    exit 3
+  }
+  if (-not (Test-Path -LiteralPath $ValidateFile)) {
+    Write-Output "COULD NOT EVALUATE - no file at $ValidateFile."
+    Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+    exit 3
+  }
+  $leaf = [IO.Path]::GetFileName($ValidateFile)
+  if ($leaf -notlike '*.md') {
+    Write-Output "COULD NOT EVALUATE - $leaf is not a .md file, so the merge would never read it and validating it would prove nothing."
+    Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+    exit 3
+  }
+  if ($leaf -eq 'README.md' -or $leaf -like '_*') {
+    Write-Output "COULD NOT EVALUATE - the merge SKIPS README.md and _*.md, so validating a findings file under that name would report a clean pass over a file that is never read. Rename it."
+    Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+    exit 3
+  }
+  # Named per run under one directory removed in a finally: several sessions share one
+  # %TEMP%, and a fixed name here would have lanes validating into each other.
+  $valBox = Join-Path $env:TEMP ('mbi-val-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Path $valBox -ErrorAction Stop | Out-Null
+    Copy-Item -LiteralPath $ValidateFile -Destination (Join-Path $valBox $leaf) -ErrorAction Stop
+    $valOut = & $PSCommandPath -InboxDir $valBox -Backlog $Backlog -DryRun 2>&1 | Out-String
+    $valCode = $LASTEXITCODE
+    foreach ($ln in ($valOut -split "`r?`n")) {
+      if ($ln.Trim() -eq 'MERGE-BACKLOG-INBOX-COMPLETE') { continue }
+      if (-not $ln.Trim()) { continue }
+      Write-Output $ln
+    }
+    if ($valCode -eq 0) {
+      Write-Output ("VALIDATE OK - {0} would merge. Nothing was written, and the real inbox was neither read nor touched." -f $leaf)
+    } elseif ($valCode -eq 2) {
+      Write-Output ("VALIDATE FAILED - {0} would be QUARANTINED, not merged. Fix it before the merge runs; the reason is above." -f $leaf)
+    } else {
+      Write-Output ("VALIDATE COULD NOT EVALUATE - exit {0}. That is discovery broken, not a pass." -f $valCode)
+    }
+    Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+    exit $valCode
+  } finally {
+    # RETRY THE REMOVAL. A single -ErrorAction SilentlyContinue delete left an empty temp
+    # directory behind in 16 of about 90 validate calls on 2026-09-12: the child process
+    # has only just exited and Windows can still hold a handle to the directory it copied
+    # into. Three tries, then give up quietly - a leaked empty directory must never turn a
+    # validation into a failure.
+    for ($try = 0; $try -lt 3; $try++) {
+      if (-not (Test-Path -LiteralPath $valBox)) { break }
+      Remove-Item -LiteralPath $valBox -Recurse -Force -ErrorAction SilentlyContinue
+      if (Test-Path -LiteralPath $valBox) { Start-Sleep -Milliseconds 120 }
+    }
+  }
+}
+
 if ($SelfTest) {
   # FIXTURE RULE, learned twice on 2026-09-08: no case may depend on what an earlier case
   # left in the inbox. A case that needs a clean inbox clears it wholesale; a case that
@@ -237,15 +337,126 @@ if ($SelfTest) {
   $out2 = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   _C 'MUST NOT FIRE' 'an empty inbox is exit 0 and writes nothing' ($LASTEXITCODE -eq 0 -and (Get-Content $bl -Raw -Encoding UTF8) -eq $after) $LASTEXITCODE
 
-  # A bad state must refuse the WHOLE merge, not write half of it.
+  # A bad file must reach the backlog with NOTHING, and must not take its siblings down
+  # with it. `[CONTRACT CHANGED 2026-09-12.]` Two of these cases asserted the old
+  # all-or-nothing refusal; what survives of it is the half that mattered, which is that
+  # nothing the bad file says is ever appended.
   Set-Content (Join-Path $inb 'lane-c.md') "## good one`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
   Set-Content (Join-Path $inb 'lane-d.md') "## bad one`n``SHIPPED`` ``queue-6```n`nbody`n" -Encoding UTF8
   $before = Get-Content $bl -Raw -Encoding UTF8
   $out3 = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
   $c3 = $LASTEXITCODE
+  $after3 = Get-Content $bl -Raw -Encoding UTF8
+  $q = Join-Path $inb 'quarantine'
   _C 'MUST FIRE' 'an invented state refuses the merge with exit 2' ($c3 -eq 2 -and $out3 -match 'closed vocabulary') $c3
-  _C 'MUST NOT FIRE' 'and NOTHING is written when one file is bad' ((Get-Content $bl -Raw -Encoding UTF8) -eq $before) 'partial write'
-  _C 'MUST NOT FIRE' 'and the good file is left in the inbox for a retry' ((Test-Path (Join-Path $inb 'lane-c.md'))) 'good file consumed'
+  _C 'MUST FIRE' 'and NOTHING the bad file said reaches the backlog' `
+    (($after3 -notmatch 'SHIPPED') -and ($after3 -notmatch 'bad one') -and ($after3 -notmatch 'lane-d')) 'bad content was written'
+  _C 'MUST FIRE' 'and the INNOCENT file merges and is consumed, not held hostage' `
+    (($after3 -match 'good one') -and -not (Test-Path (Join-Path $inb 'lane-c.md'))) 'the good lane was blocked by its sibling'
+  _C 'MUST FIRE' 'and the bad file keeps its bytes under inbox\quarantine, named in the output' `
+    ((Test-Path (Join-Path $q 'lane-d.md')) -and ((Get-Content (Join-Path $q 'lane-d.md') -Raw -Encoding UTF8) -match 'SHIPPED') -and
+     ($out3 -match 'QUARANTINED') -and ($out3 -match 'lane-d\.md') -and -not (Test-Path (Join-Path $inb 'lane-d.md'))) 'no retriable copy'
+  _C 'MUST FIRE' 'and a .reason.txt beside it names the cause and the retry route' `
+    ((Test-Path (Join-Path $q 'lane-d.md.reason.txt')) -and
+     ((Get-Content (Join-Path $q 'lane-d.md.reason.txt') -Raw -Encoding UTF8) -match 'closed vocabulary') -and
+     ((Get-Content (Join-Path $q 'lane-d.md.reason.txt') -Raw -Encoding UTF8) -match 'ValidateFile')) 'no reason on disk'
+  _C 'MUST FIRE' 'and the VERDICT line states merged and quarantined counts' `
+    ($out3 -match 'VERDICT: merged 1 finding\(s\) from 1 file\(s\), quarantined 1 file\(s\). Exit 2.') 'no verdict line'
+  Remove-Item $q -Recurse -Force -ErrorAction SilentlyContinue
+
+  # MUST FIRE - THE MEASURED SHAPE, and the whole reason this changed. Three times on
+  # 2026-09-11 and 12 a lane closed its file with a `## Nothing else` section carrying no
+  # state line, and each refusal blocked THREE other lanes' findings until a human fixed
+  # the one file. Four lanes, one typo: three must land.
+  Get-ChildItem $inb -Filter *.md | Remove-Item -Force
+  Set-Content (Join-Path $inb 'lane-p.md') "## p finding`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody p`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-q.md') "## q finding`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody q`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-r.md') "## r finding`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody r`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-s.md') "## s finding`n``OPEN`` ``queue-7`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody s`n`n## Nothing else`n" -Encoding UTF8
+  $outT4 = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
+  $cT4 = $LASTEXITCODE
+  $blT4 = Get-Content $bl -Raw -Encoding UTF8
+  _C 'MUST FIRE' 'the 3x measured shape: one typo quarantines ONE file, three lanes land' `
+    ($cT4 -eq 2 -and $blT4 -match 'body p' -and $blT4 -match 'body q' -and $blT4 -match 'body r' -and
+     $blT4 -notmatch 'body s' -and (Test-Path (Join-Path $q 'lane-s.md'))) "exit $cT4 :: $outT4"
+  # CLEAN TWIN: the allocator still runs ONCE over the accepted set, so the three that
+  # landed got three consecutive ids and the quarantined lane burned none of them.
+  $idsT4 = @([regex]::Matches($blT4, '(?m)^### I(\d+)\b') | ForEach-Object { [int]$_.Groups[1].Value })
+  $maxT4 = ($idsT4 | Measure-Object -Maximum).Maximum
+  $dupT4 = @($idsT4 | Group-Object | Where-Object { $_.Count -gt 1 })
+  _C 'CLEAN TWIN' 'ids stay a single dense sequence: the quarantined lane burns none' `
+    ($dupT4.Count -eq 0 -and $idsT4.Count -eq ($maxT4 - 39)) "max I$maxT4 over $($idsT4.Count) id(s), $($dupT4.Count) duplicate(s)"
+  Remove-Item $q -Recurse -Force -ErrorAction SilentlyContinue
+
+  # CLEAN TWIN: every file bad is still the old behaviour - nothing written - but it is
+  # now reached by quarantining each of them rather than by refusing the batch.
+  Get-ChildItem $inb -Filter *.md | Remove-Item -Force
+  Set-Content (Join-Path $inb 'lane-m.md') "## m`n``SHIPPED`` ``queue-6```n`nbody`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-n.md') "## n`n`nno state line at all`n" -Encoding UTF8
+  $blPreAll = Get-Content $bl -Raw -Encoding UTF8
+  $outAll = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
+  $cAll = $LASTEXITCODE
+  _C 'CLEAN TWIN' 'every file bad: nothing written, both quarantined, exit 2' `
+    ($cAll -eq 2 -and ((Get-Content $bl -Raw -Encoding UTF8) -eq $blPreAll) -and
+     (Test-Path (Join-Path $q 'lane-m.md')) -and (Test-Path (Join-Path $q 'lane-n.md'))) "exit $cAll :: $outAll"
+  Remove-Item $q -Recurse -Force -ErrorAction SilentlyContinue
+
+  # CLEAN TWIN: the no-findings branch has its own consume step, and it must consume the
+  # ACCEPTED files only. A lane that landed with nothing beside a lane that landed badly:
+  # the empty one is consumed, the bad one is quarantined, and neither is deleted wrongly.
+  Get-ChildItem $inb -Filter *.md | Remove-Item -Force
+  Set-Content (Join-Path $inb 'lane-nil.md') "NOTHING TO FILE`n`nnothing measured this run`n" -Encoding UTF8
+  Set-Content (Join-Path $inb 'lane-rot.md') "## rotten`n``SHIPPED`` ``queue-6```n`nbody`n" -Encoding UTF8
+  $blPreNil = Get-Content $bl -Raw -Encoding UTF8
+  $outNil = & $PSCommandPath -InboxDir $inb -Backlog $bl 2>&1 | Out-String
+  $cNil = $LASTEXITCODE
+  _C 'CLEAN TWIN' 'an empty landing beside a bad file: empty consumed, bad quarantined, nothing written' `
+    ($cNil -eq 2 -and ((Get-Content $bl -Raw -Encoding UTF8) -eq $blPreNil) -and
+     -not (Test-Path (Join-Path $inb 'lane-nil.md')) -and
+     (Test-Path (Join-Path $q 'lane-rot.md')) -and
+     ((Get-Content (Join-Path $q 'lane-rot.md') -Raw -Encoding UTF8) -match 'rotten')) "exit $cNil :: $outNil"
+  Remove-Item $q -Recurse -Force -ErrorAction SilentlyContinue
+
+  # ---------------- -ValidateFile: one file, in isolation, with an exit code ---------
+  # The instruction to do this was PROSE in the spawn prompt, and the lanes that skipped
+  # it are the ones that broke the batch. These cases make it a step.
+  $vbox = Join-Path $tmp 'validate-box'
+  New-Item -ItemType Directory -Path $vbox -Force | Out-Null
+  $vgood = Join-Path $vbox 'lane-v.md'
+  Set-Content $vgood "## a legal finding`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
+  $vsib = Join-Path $vbox 'lane-v-sibling.md'
+  Set-Content $vsib "## a sibling's bad finding`n``SHIPPED`` ``queue-6```n`nbody`n" -Encoding UTF8
+  $blV = Get-Content $bl -Raw -Encoding UTF8
+  $outV = & $PSCommandPath -ValidateFile $vgood -Backlog $bl 2>&1 | Out-String
+  $cV = $LASTEXITCODE
+  _C 'MUST NOT FIRE' '-ValidateFile on a legal file is exit 0, writes nothing, consumes nothing' `
+    ($cV -eq 0 -and $outV -match 'VALIDATE OK' -and (Test-Path $vgood) -and ((Get-Content $bl -Raw -Encoding UTF8) -eq $blV)) "exit $cV :: $outV"
+  _C 'CLEAN TWIN' 'a sibling''s malformed file in the same directory does not fail this lane' `
+    ($cV -eq 0 -and $outV -notmatch 'sibling' -and (Test-Path $vsib)) "exit $cV :: $outV"
+
+  $outVb = & $PSCommandPath -ValidateFile $vsib -Backlog $bl 2>&1 | Out-String
+  $cVb = $LASTEXITCODE
+  _C 'MUST FIRE' '-ValidateFile on a malformed file is exit 2 and names the reason' `
+    ($cVb -eq 2 -and $outVb -match 'VALIDATE FAILED' -and $outVb -match 'closed vocabulary') "exit $cVb :: $outVb"
+
+  $outVc = & $PSCommandPath -ValidateFile $vgood -InboxDir $vbox -Backlog $bl 2>&1 | Out-String
+  $cVc = $LASTEXITCODE
+  _C 'MUST FIRE' '-ValidateFile together with -InboxDir is exit 3, never a quiet pass' `
+    ($cVc -eq 3 -and $outVc -match 'COULD NOT EVALUATE') "exit $cVc :: $outVc"
+
+  $outVd = & $PSCommandPath -ValidateFile (Join-Path $vbox 'no-such-lane.md') -Backlog $bl 2>&1 | Out-String
+  $cVd = $LASTEXITCODE
+  _C 'MUST FIRE' '-ValidateFile on a missing path is exit 3, not exit 0' `
+    ($cVd -eq 3 -and $outVd -match 'COULD NOT EVALUATE') "exit $cVd :: $outVd"
+
+  $vskip = Join-Path $vbox 'README.md'
+  Set-Content $vskip "## a finding hiding in a skipped name`n``OPEN`` ``queue-6`` ``2-WAY`` ``RUNG1 MEASURE```n`nbody`n" -Encoding UTF8
+  $outVe = & $PSCommandPath -ValidateFile $vskip -Backlog $bl 2>&1 | Out-String
+  $cVe = $LASTEXITCODE
+  _C 'MUST FIRE' '-ValidateFile on a skipped name is exit 3, because the merge never reads it' `
+    ($cVe -eq 3 -and $outVe -match 'SKIPS README') "exit $cVe :: $outVe"
+
+  Get-ChildItem $inb -Filter *.md | Remove-Item -Force -ErrorAction SilentlyContinue
 
   # A finding with no state line at all.
   Remove-Item (Join-Path $inb 'lane-d.md') -Force -ErrorAction SilentlyContinue   # tolerant BY RULE: no case may depend on what an earlier case left behind
@@ -384,17 +595,55 @@ if (-not $files -or @($files).Count -eq 0) {
   exit 0
 }
 
-# READ EVERY FILE BEFORE WRITING ANYTHING. One malformed finding refuses the whole
-# merge, so a bad lane cannot leave the backlog half-updated - the same
-# verify-then-write ordering that stopped a broken pattern shipping earlier today.
+# READ EVERY FILE BEFORE WRITING ANYTHING, AND JUDGE EACH FILE ALONE. A malformed file
+# is QUARANTINED and its siblings still merge: nothing it says is appended, so the backlog
+# still cannot go red on its account, and the single allocator below still runs once, over
+# the accepted set. The whole-batch refusal this replaced blocked three innocent lanes
+# three times on 2026-09-11 and 12, every time over a closing `## Nothing else` heading
+# with no state line under it.
 $findings = @()
-try {
-  foreach ($f in $files) { $findings += Read-Inbox $f.FullName }
-} catch {
-  Write-Output ("MERGE REFUSED: " + $_.Exception.Message)
-  Write-Output "Nothing was written and the inbox is untouched. Fix that file and re-run."
-  Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-  exit 2
+$bad = New-Object System.Collections.ArrayList
+foreach ($f in $files) {
+  try {
+    $findings += Read-Inbox $f.FullName
+  } catch {
+    [void]$bad.Add([pscustomobject]@{ Name = $f.Name; Path = $f.FullName; Reason = $_.Exception.Message })
+  }
+}
+
+$badNames = @($bad | ForEach-Object { $_.Name })
+$accepted = @($files | Where-Object { $badNames -notcontains $_.Name })
+if (@($bad).Count -gt 0) {
+  $verb = 'QUARANTINED'
+  if ($DryRun) { $verb = 'WOULD BE QUARANTINED' }
+  Write-Output ("{0} ({1} inbox file(s)) - NOT merged, kept on disk, and this run exits 2:" -f $verb, @($bad).Count)
+  foreach ($b in $bad) { Write-Output ("  " + $b.Name + ": " + $b.Reason) }
+}
+
+function Move-ToQuarantine {
+  <# The bad files, AFTER the accepted ones have landed. They keep their bytes, because
+     the lane's work is in them; they MOVE, so an empty inbox still means what it says and
+     a re-run does not re-report them forever; and each lands beside a .reason.txt,
+     because a reason printed to a console nobody kept is not a retry.
+     Returns $true, or $false having said why. #>
+  if (@($script:bad).Count -eq 0) { return $true }
+  $qdir = Join-Path $InboxDir 'quarantine'
+  try {
+    if (-not (Test-Path -LiteralPath $qdir)) { New-Item -ItemType Directory -Path $qdir -Force -ErrorAction Stop | Out-Null }
+    foreach ($b in $script:bad) {
+      $dest = Join-Path $qdir $b.Name
+      Move-Item -LiteralPath $b.Path -Destination $dest -Force -ErrorAction Stop
+      $note = "QUARANTINED $((Get-Date).ToString('yyyy-MM-dd')) by merge-backlog-inbox.ps1`n`n" + $b.Reason +
+              "`n`nThe file itself is UNCHANGED. Fix it, move it back into the inbox, and re-run the merge.`n" +
+              "Check it first, in isolation:`n  ops\merge-backlog-inbox.ps1 -ValidateFile <path to the fixed file>`n"
+      [IO.File]::WriteAllText(($dest + '.reason.txt'), ($note -replace "`r`n", "`n"), (New-Object Text.UTF8Encoding($false)))
+    }
+  } catch {
+    Write-Output ("COULD NOT EVALUATE - the accepted lanes MERGED, but moving a bad file to quarantine failed: " + $_.Exception.Message)
+    Write-Output "That bad file is still in the inbox and its findings have NOT landed. Move it out by hand before the next run."
+    return $false
+  }
+  return $true
 }
 
 # An empty landing is a RESULT and is reported by name; it never becomes a backlog item,
@@ -405,23 +654,36 @@ $empties  = @($findings | Where-Object { $_.Empty })
 $findings = @($findings | Where-Object { -not $_.Empty })
 foreach ($e in $empties) { Write-Output ("  NOTHING TO FILE declared by " + $e.From) }
 
+$exitCode = 0
+if (@($bad).Count -gt 0) { $exitCode = 2 }
+
 if (@($findings).Count -eq 0) {
   if (@($empties).Count -gt 0 -and -not $DryRun) {
     # Consume them, so a lane that landed with nothing is not re-reported forever.
-    foreach ($f in $files) { Remove-Item -LiteralPath $f.FullName -Force }
+    # ONLY THE ACCEPTED ONES: a quarantined file has landed nowhere, and deleting it
+    # would be the silent loss this whole tool exists to prevent.
+    foreach ($f in $accepted) { Remove-Item -LiteralPath $f.FullName -Force }
     Write-Output ("no findings to merge; {0} lane(s) declared NOTHING TO FILE and were consumed." -f @($empties).Count)
   } else {
-    Write-Output "inbox holds $(@($files).Count) file(s) and no findings. Nothing to merge."
+    Write-Output "inbox holds $(@($accepted).Count) accepted file(s) and no findings. Nothing to merge."
   }
+  if (-not $DryRun) {
+    $moved = Move-ToQuarantine
+    if (-not $moved) {
+      Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+      exit 3
+    }
+  }
+  Write-Output ("VERDICT: merged 0 finding(s), quarantined {0} file(s). Exit {1}." -f @($bad).Count, $exitCode)
   Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-  exit 0
+  exit $exitCode
 }
 
 $text = Get-Content -LiteralPath $Backlog -Raw -Encoding UTF8
 $next = Get-NextId $text
 
 Write-Output ("MERGING {0} finding(s) from {1} inbox file(s), ids I{2} onward:" -f `
-  @($findings).Count, @($files).Count, $next)
+  @($findings).Count, @($accepted).Count, $next)
 $block = New-Object System.Text.StringBuilder
 $i = $next
 foreach ($f in $findings) {
@@ -443,9 +705,10 @@ foreach ($f in $findings) {
 
 if ($DryRun) {
   Write-Output ''
-  Write-Output "-DryRun: nothing written, inbox untouched."
+  Write-Output "-DryRun: nothing written, inbox untouched, nothing quarantined."
+  Write-Output ("VERDICT: {0} finding(s) would merge, {1} file(s) would be quarantined. Exit {2}." -f @($findings).Count, @($bad).Count, $exitCode)
   Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-  exit 0
+  exit $exitCode
 }
 
 # NOT Add-Content: it appends [Environment]::NewLine after the value on top of whatever the
@@ -453,11 +716,22 @@ if ($DryRun) {
 # UTF8Encoding($false) is the no-BOM form the workspace CLAUDE.md prescribes.
 [IO.File]::AppendAllText($Backlog, $block.ToString(), (New-Object Text.UTF8Encoding($false)))
 # The inbox is emptied only after a successful append, so a crash re-runs cleanly
-# rather than losing the findings - the failure this whole script exists for.
-foreach ($f in $files) { Remove-Item -LiteralPath $f.FullName -Force }
+# rather than losing the findings - the failure this whole script exists for. ONLY THE
+# ACCEPTED FILES: a quarantined file has landed nowhere and is never deleted.
+foreach ($f in $accepted) { Remove-Item -LiteralPath $f.FullName -Force }
+
+$moved = Move-ToQuarantine
+if (-not $moved) {
+  Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
+  exit 3
+}
 
 Write-Output ''
 $emptyNote = if (@($empties).Count -gt 0) { ", plus {0} lane(s) declaring NOTHING TO FILE" -f @($empties).Count } else { '' }
-Write-Output ("merged {0} finding(s){1}; inbox emptied. Run ops\audit-backlog-status.ps1 to confirm the states." -f @($findings).Count, $emptyNote)
+Write-Output ("merged {0} finding(s){1}. Run ops\audit-backlog-status.ps1 to confirm the states." -f @($findings).Count, $emptyNote)
+if (@($bad).Count -gt 0) {
+  Write-Output ("{0} inbox file(s) were QUARANTINED into {1} and were NOT merged. Fix each one, move it back, and re-run." -f @($bad).Count, (Join-Path $InboxDir 'quarantine'))
+}
+Write-Output ("VERDICT: merged {0} finding(s) from {1} file(s), quarantined {2} file(s). Exit {3}." -f @($findings).Count, @($accepted).Count, @($bad).Count, $exitCode)
 Write-Output 'MERGE-BACKLOG-INBOX-COMPLETE'
-exit 0
+exit $exitCode

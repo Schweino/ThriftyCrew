@@ -56,6 +56,25 @@ After the last lane lands, once:
 powershell -NoProfile -File C:\Codex\ThriftyCrew\ops\merge-backlog-inbox.ps1
 ```
 
-Add `-DryRun` to see the plan and write nothing. It reads every file before writing anything, so a
-malformed finding refuses the WHOLE merge with exit 2 and leaves the good files in place for a retry.
-Exit 0 is merged, or nothing to merge. Then confirm with `ops\audit-backlog-status.ps1`.
+Add `-DryRun` to see the plan and write nothing.
+
+**CHECK YOUR OWN FILE BEFORE YOU LEAVE IT HERE. `[2026-09-12]`**
+
+```
+powershell -NoProfile -File C:\Codex\ThriftyCrew\ops\merge-backlog-inbox.ps1 -ValidateFile <your file>
+```
+
+It copies that ONE file into a fresh temp drop box and runs the same parser over it, so it can never
+report a sibling's problem as yours and can never touch the real box. **Exit 0 would merge, 2 would be
+quarantined, 3 could not evaluate. Read the exit code.** The trap that has fired four times is a
+closing `## Nothing else` or `## nothing for the estate` section with no state line under it: every
+`##` heading is a finding and every finding owes a state line, including the one that says there is
+nothing to report.
+
+**A malformed file is QUARANTINED, not fatal `[CHANGED 2026-09-12]`.** It used to refuse the WHOLE
+merge, which cost three innocent lanes on each of its three firings. Now the merge writes the good
+files, MOVES the bad one to `quarantine\` with its bytes unchanged and a `.reason.txt` beside it, and
+names it. **Exit 0 merged everything, 2 merged the rest and quarantined at least one, 3 could not
+evaluate.** What did not change is why the old behaviour existed: the destination still never receives
+a heading the status audit would fail, ids are still allocated by one writer over one accepted set,
+and nothing is half written. Then confirm with `ops\audit-backlog-status.ps1`.
