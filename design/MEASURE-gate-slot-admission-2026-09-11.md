@@ -92,6 +92,12 @@ at about **3.9 s** a push: 3,659 / 3,657 / 3,461 ms for the live read of 584 com
 a freed slot - the whole of what is measured here - is unchanged; the only number it can move is each run's slot
 tenure, by those seconds, and it moves that UPWARD as the `140a0f4f6` and `53e1d65bf` changes did.
 
+**Re-read at commit `c74644b18`: every verdict below stands as measured.** `ops\run-gates.ps1`'s discovery walks
+now skip the directories their own exclusions drop instead of listing them and discarding the result, and their
+file lists were verified identical in content and order on the main checkout. It touches no probe, no analysis and
+nothing in `lib\gate-slots.ps1`, so who wins a freed slot is unchanged; the only number it can move is each run's
+slot tenure, downward in a checkout that holds worktrees, plus the seconds of the walk helper's own new self-test.
+
 A READ-ONLY probe. It never calls `WaitOne` on a slot and never takes one. Once a second it reads the
 system handle table (`NtQuerySystemInformation`, extended handle information), duplicates only the
 mutant handles held by `run-gates.ps1` and `cpu-load.ps1` processes, reads each one's name and

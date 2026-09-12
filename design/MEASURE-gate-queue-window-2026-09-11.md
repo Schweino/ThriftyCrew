@@ -73,6 +73,13 @@ measured on that same run, that is under 1%, and well inside the per-run spread 
 at 16h, 825 s at 17h, 698 s at 18h). It dispatches no probe, takes no slot of its own and changes nothing in the
 queue, the observer or `lib/gate-slots.ps1`, so every total below still reads as measured.
 
+**Re-read at commit `c74644b18`:** `ops/run-gates.ps1` moved again, and only in how it LISTS the tree: its
+PowerShell and Python discovery no longer enter a directory their own exclusion drops (`lib/tree-walk.ps1`,
+`Get-TcTreeFiles`). On the main checkout, which holds every worktree, the new walks returned the identical 610 `.ps1`
+and 126 `.py` paths in the identical order, in 0.2 s and 0.7 s against 11.8 s and 11.1 s. The discovered set gains
+one self-test, the walk helper's own, which adds work by far less than the per-run spread this file reports; the
+observer and the queue are untouched, so every total below still reads as measured.
+
 ## What was sampled
 
 Every 15 s from **16:48:33 to 18:18:23** (360 ticks). The totals count runs that STARTED in the first 60 minutes,

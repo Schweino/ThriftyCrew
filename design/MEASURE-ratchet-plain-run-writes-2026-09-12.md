@@ -9,6 +9,13 @@ taken with this checkout at `740c82af6`, which was main's tip at the time; `9098
 `500b42169` before it landed, so it is no longer that commit's child, and the conversions were verified
 at `9098caaa4` itself.
 
+**Re-read at commit `c74644b18`: every figure below still holds.** `ops\audit-fixed-temp-names.ps1` and
+`ops\audit-bare-replace.ps1` moved only in how they list the tree: each now walks through `lib\tree-walk.ps1`'s
+`Get-TcTreeFiles`, which never enters a directory the audit's own exclusion drops. No baseline write, record flag or
+rise branch changed. Both self-tests still pass (35 and 22 cases), and each audit's plain-run output over a worktree
+matched its output from before the change line for line, except that fixed-temp-names now also counts the walk
+helper's own per-run temp path (built 308 to 309; fixed names still 7).
+
 This document is in its own commit for the reason `design\MEASURE-gate-slot-admission-2026-09-11.md`
 gives: a document cannot carry the hash of the commit that adds it, and here the harness IS what moved,
 so the scripts land first and this cites them. The gate suite that ran over the whole tree is named in
