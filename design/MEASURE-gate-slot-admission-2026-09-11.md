@@ -36,6 +36,14 @@ They are in their own commit for exactly this reason: a document cannot carry th
 it, and a measurement whose harness is newer than the commit it cites is UNQUALIFIED by
 `ops\audit-conclusion-currency.ps1`, correctly.
 
+**Re-read at commit 740c82af6: every verdict below stands as measured.** That commit changed
+`ops\audit-conclusion-currency.ps1` in one respect only - a plain run now states a fall and keeps the committed
+mark, `-Tighten` records it, and `-Root` / `-BaselineFile` exist so its self-test can drive the live path against
+a temp tree. It altered no probe, no analysis, no slot library and no number in this document. Note why the
+re-read was owed at all: the sentence above mentions that script as prose, on a line beside the word this audit
+keys on, so the audit counts it among this document's own instruments. That is its stated approximation, not a
+finding about this measurement.
+
 A READ-ONLY probe. It never calls `WaitOne` on a slot and never takes one. Once a second it reads the
 system handle table (`NtQuerySystemInformation`, extended handle information), duplicates only the
 mutant handles held by `run-gates.ps1` and `cpu-load.ps1` processes, reads each one's name and
