@@ -34,7 +34,10 @@ $__gikSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-
 # A DATA DIRECTORY IS BYTES THAT CHANGE WITHOUT A COMMIT. A gate that reads one cannot be keyed on source.
 # reach-fixture-ok: these are the NAMES this rule refuses, not a reach - nothing here opens any of them, and a
 # detector that names the directories it excludes cannot avoid spelling them.
-$script:TcGateDataRx = '(?i)(grocery\\out|meal-prep\\db|meal-prep\\out|graph\\(gold|learning|out)|public\\|content\\|site\\|run\\waves|\.git\\)'   # reach-fixture-ok: the shape this rule REFUSES, named in a pattern or written into a temp sandbox; nothing here opens a real data file
+# The DIRECTORIES whose bytes move without a commit. Kept as a body so the two rules below can ask a different
+# question of the same list: one about a path joined to THIS repo, one about a drive-rooted literal.
+$script:TcGateDataBody = '(?:grocery\\out|meal-prep\\db|meal-prep\\out|graph\\(?:gold|learning|out)|public\\|content\\|site\\|run\\waves|\.git\\)'   # reach-fixture-ok: the shape this rule REFUSES, named in a pattern; nothing here opens a real data file
+$script:TcGateDataRx = '(?i)' + $script:TcGateDataBody
 # Join-Path $repo $something: the second part is a variable, so the file it names cannot be read from source.
 $script:TcGateComputedRx = '(?i)Join-Path\s+\$(repo|root|RepoRoot|here)\s+\$'
 # Join-Path $repo 'a\b.ps1': a literal the key can resolve and hash.
@@ -71,12 +74,41 @@ function Get-TcGateReferencedPaths {
   return [pscustomobject]@{ Paths = @($sorted); Computed = [regex]::IsMatch($Text, $script:TcGateComputedRx) }
 }
 
+function Remove-TcGateComments {
+  <# Pure. Drops whole-line comments before the refusal rules read the text. A comment cannot open a file, and
+     a header that DESCRIBES the data a script avoids would otherwise refuse it: measured 2026-09-12, 12 of the
+     279 self-tests were refused for a data path that appears only in prose or on a fixture line. #>
+  param([string]$Text)
+  $out = [Collections.Generic.List[string]]::new()
+  foreach ($l in ($Text -split "`n")) {
+    $t = $l.TrimStart()
+    if ($t.StartsWith('#')) { continue }
+    if ($l -match 'reach-fixture-ok') { continue }
+    $out.Add($l)
+  }
+  return ($out -join "`n")
+}
+
 function Test-TcGateCacheable {
   <# Pure over TEXT. Why is returned even on success, so a run can print WHY a gate was refused rather than
-     leaving a reader to guess which of the two rules bit. #>
+     leaving a reader to guess which of the two rules bit.
+
+     IT ASKS WHAT THE PATH IS JOINED TO (2026-09-12). The first version matched a data directory ANYWHERE in
+     the text, so a suite that builds a sandbox repo under %TEMP% and writes `Join-Path $main '.git\...'` was
+     refused as a data reader. That is how the most expensive gates on the box - the ones that test the push
+     and commit hooks, 54s and 34s - stayed uncacheable while reading nothing of this estate's data at all.
+     A read of THIS repo's data is joined to the repo root; a path joined to some other variable is a sandbox
+     the suite made itself. A bare literal with no join is still refused, because it names a real place. #>
   param([string]$Text)
-  if ([regex]::IsMatch($Text, $script:TcGateDataRx)) {
-    return [pscustomobject]@{ Ok = $false; Why = 'reads a data directory, whose bytes change with no commit' }
+  $code = Remove-TcGateComments -Text $Text
+  if ([regex]::IsMatch($code, ('(?i)Join-Path\s+\$(?:repo|root|RepoRoot|here)\s+''' + $script:TcGateDataBody))) {
+    return [pscustomobject]@{ Ok = $false; Why = 'reads a data directory under this repo, whose bytes change with no commit' }
+  }
+  # A DRIVE-ROOTED literal names a real place on this box whatever it is joined to, so it is still refused.
+  # A relative literal is NOT, because that is what a sandbox path looks like: 'Join-Path $main ''.git\hooks'''
+  # builds a temp repo, and refusing it cost the two hook suites - the most expensive gates here - for nothing.
+  if ([regex]::IsMatch($code, ('(?i)''[A-Za-z]:\\[^'']*' + $script:TcGateDataBody))) {
+    return [pscustomobject]@{ Ok = $false; Why = 'names a data path on this box as an absolute literal' }
   }
   if ([regex]::IsMatch($Text, $script:TcGateComputedRx)) {
     return [pscustomobject]@{ Ok = $false; Why = 'builds a repo path from a variable, which a source key cannot watch' }

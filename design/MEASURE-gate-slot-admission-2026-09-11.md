@@ -29,7 +29,7 @@ Two alternatives must be ruled in or out with the same data:
 
 ## The harness
 
-**Re-read at commit `f89e23335`:** what this file measures still holds. Its own harness - the probe and the
+**Re-read at commit `30f237b35`:** what this file measures still holds. Its own harness - the probe and the
 reporter - is unchanged; what moved is `ops\run-gates.ps1`, which this file names only in the caveat that each
 session runs its own checkout's copy. The 2026-09-12 change there keys each self-test on its inputs and does
 not run one whose inputs are untouched, so a run DISPATCHES less and holds its slots for less time. That
