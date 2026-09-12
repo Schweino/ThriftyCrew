@@ -231,6 +231,55 @@ function Get-PsCodeLines {
   return @((Get-PsCodeOnly -Text $Text) -split "`n")
 }
 
+function Get-PsBlockCommentsBlanked {
+  # BLOCK comments blanked to their own newlines and NOTHING ELSE: every line of the input survives, line
+  # comments included, and line endings are left exactly as they came in. For a caller that REPORTS A LINE
+  # NUMBER, which Get-PsCodeOnly cannot serve, because it drops whole-line comments and so shifts every
+  # line after the first one.
+  #
+  # WHY (2026-09-12). ops\verify-bulk-edit.ps1's order check stripped `#` line comments per line and reported
+  # "calls Read-JsonFile at top level on line 47" for prose INSIDE a header block, where no line starts with
+  # a hash. The commit was refused over a sentence. That caller keeps its own per-line handling of strings
+  # and line comments, so it needs the block half alone, with the numbering intact.
+  #
+  # Same lexer, same fallback direction as Get-PsCodeOnly: a file PSParser refuses is blanked by the regex
+  # half of the character rung, which removes too much rather than too little.
+  param([string]$Text)
+  if ($null -eq $Text) { return '' }
+  if ($Text.Length -eq 0) { return '' }
+  $errs = $null
+  $tokens = $null
+  try { $tokens = [System.Management.Automation.PSParser]::Tokenize($Text, [ref]$errs) } catch { $tokens = $null }
+  $errCount = 0
+  if ($null -ne $errs) { $errList = @($errs); $errCount = $errList.Count }
+  if ($null -eq $tokens -or $errCount -gt 0) {
+    return [regex]::Replace($Text, '(?s)<#.*?#>', { param($m) ($m.Value -replace '[^\r\n]', '') })
+  }
+  $types = $tokens.Type
+  if ($null -eq $types) { return $Text }
+  $typeArr = [object[]]$types
+  $commentType = [System.Management.Automation.PSTokenType]::Comment
+  $n = $Text.Length
+  $sb = New-Object System.Text.StringBuilder $n
+  $prev = 0
+  $ti = 0
+  while ($true) {
+    $ti = [Array]::IndexOf($typeArr, $commentType, $ti)
+    if ($ti -lt 0) { break }
+    $tk = $tokens[$ti]
+    $ti++
+    $s = [int]$tk.Start
+    $len = [int]$tk.Length
+    if ($len -le 0 -or $s -lt $prev -or ($s + $len) -gt $n) { continue }
+    if ($Text[$s] -ne '<') { continue }
+    if ($s -gt $prev) { [void]$sb.Append($Text, $prev, $s - $prev) }
+    [void]$sb.Append([regex]::Replace($Text.Substring($s, $len), '[^\r\n]', ''))
+    $prev = $s + $len
+  }
+  if ($prev -lt $n) { [void]$sb.Append($Text, $prev, $n - $prev) }
+  return $sb.ToString()
+}
+
 if ($__psSourceSelfTest) {
   $ErrorActionPreference = 'Stop'
   $script:psFail = 0
@@ -426,6 +475,23 @@ if ($__psSourceSelfTest) {
       'Write-Output 1')
     Test-PsSourceCase 'MUST NOT FIRE  a LINE comment quoting the declaration leaves nothing to enrol (the 2026-09-01 recursion)' {
       (Get-PsCodeOnly -Text $fxLineProse) -notmatch '\[switch\]\$SelfTest'
+    }
+
+    # ---- THE BLOCK-ONLY REDUCTION, for callers that report line numbers (2026-09-12) --------------------
+    $fxBlockOnly = New-PsSourceText -Lines @(
+      '<# header naming Read-JsonFile',
+      '   over two lines #>',
+      '# a line comment that must SURVIVE here',
+      '~q = ''<# a quoted opener, not a comment''',
+      '~live = 7')
+    Test-PsSourceCase 'MUST FIRE  the block-only reduction blanks a header to its own newlines and keeps every other line, so line 5 is still line 5' {
+      $lines = @((Get-PsBlockCommentsBlanked -Text $fxBlockOnly) -split "`n")
+      ($lines.Count -eq 5) -and ($lines[0] -eq '') -and ($lines[1] -eq '') -and
+      ($lines[2] -match 'must SURVIVE') -and ($lines[3] -match 'a quoted opener') -and ($lines[4] -eq '$live = 7')
+    }
+    Test-PsSourceCase 'CLEAN TWIN  the block-only reduction leaves CRLF endings and comment-free source byte-identical' {
+      $plain = "`$a = 1`r`n# note`r`n`$b = 2`r`n"
+      [string]::Equals((Get-PsBlockCommentsBlanked -Text $plain), $plain, [StringComparison]::Ordinal)
     }
 
     # ---- A REAL FILE, READ FROM DISK ------------------------------------------------------------------

@@ -24,7 +24,7 @@
   Run:  powershell -NoProfile -File ops\test-precommit-hook.ps1
   Exit: 0 pass, 1 a case failed, 3 BLIND (the hook or a checker is missing - nothing was proven).
 #>
-# gate-inputs: ops\hooks\pre-commit, ops\hooks\commit-msg, ops\verify-bulk-edit.ps1, ops\verify-bot-commit-scope.ps1, ops\verify-commodities-gate.ps1, ops\new-commit-message.ps1, grocery\identity-lib.ps1, lib\bot-paths.ps1, lib\guard-contract.ps1
+# gate-inputs: ops\hooks\pre-commit, ops\hooks\commit-msg, ops\verify-bulk-edit.ps1, ops\verify-bot-commit-scope.ps1, ops\verify-commodities-gate.ps1, ops\new-commit-message.ps1, grocery\identity-lib.ps1, lib\bot-paths.ps1, lib\guard-contract.ps1, lib\ps-source.ps1
 # WHY THIS FILE DECLARES (Brad, 2026-09-12). 39s on every push to re-prove a hook whose entire input set this
 # script ALREADY NAMES: the list above is $needed, copied from it, and the suite refuses BLIND when one of them is
 # missing. So the inputs were written down long before the key could read them - the declaration only moves them
@@ -42,7 +42,7 @@ $hookSrc = Join-Path $PSScriptRoot 'hooks\pre-commit'
 $needed = @('ops\hooks\pre-commit', 'ops\verify-bulk-edit.ps1', 'ops\verify-bot-commit-scope.ps1',
             'ops\verify-commodities-gate.ps1', 'grocery\identity-lib.ps1',
             'ops\hooks\commit-msg', 'ops\new-commit-message.ps1',
-            'lib\bot-paths.ps1', 'lib\guard-contract.ps1')
+            'lib\bot-paths.ps1', 'lib\guard-contract.ps1', 'lib\ps-source.ps1')
 foreach ($f in $needed) {
   if (-not (Test-Path -LiteralPath (Join-Path $repo $f))) {
     Write-Output ("BLIND: " + $f + " is missing - the hook cannot be proven"); exit 3

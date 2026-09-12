@@ -42,6 +42,7 @@
 param([switch]$SelfTest, [switch]$Staged)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ps-source.ps1')   # Get-PsBlockCommentsBlanked; no param() block
 $repo = Split-Path $PSScriptRoot -Parent
 
 # ---- the invariants, as functions, so the self-test drives the SAME code the live path does -------------
@@ -107,16 +108,22 @@ function Get-DependencyGaps {
   # a comment or a fixture string), a local definition, or a conditional load. Defect 3 was exactly this
   # distinction, and a substring check cannot make it.
   param([string]$Text, [string]$FnName, [string]$LibLeaf, [string]$FilePath = '')
+  # BLOCK COMMENTS ARE BLANKED BEFORE ANY LINE IS READ (2026-09-12). Every check below strips `#` LINE
+  # comments per line, and a line inside a `<# ... #>` header has no leading hash, so prose quoting
+  # `@(Read-JsonFile ingredients.json)` in sync-recipesdb-grams.ps1's header was reported as a top-level
+  # call on line 47 and the commit was refused. PowerShell's own lexer decides what is a comment, strings
+  # stay intact (the dot-source path IS one), and every line keeps its number for the report.
+  $code = Get-PsBlockCommentsBlanked -Text $Text
   $calls = 0
-  foreach ($l in ($Text -split "`r?`n")) {
+  foreach ($l in ($code -split "`r?`n")) {
     $t = $l.TrimStart()
     if ($t.StartsWith('#')) { continue }
     if ($l -match ("(?<![\w-])" + [regex]::Escape($FnName) + "\s") -and $l -notmatch 'function\s') { $calls++ }
   }
   if ($calls -eq 0) { return $null }
-  $defines = [bool]([regex]::Match($Text, 'function\s+' + [regex]::Escape($FnName) + '\b').Success)
+  $defines = [bool]([regex]::Match($code, 'function\s+' + [regex]::Escape($FnName) + '\b').Success)
   $sourced = $false
-  foreach ($l in ($Text -split "`r?`n")) {
+  foreach ($l in ($code -split "`r?`n")) {
     $t = $l.TrimStart()
     if ($t.StartsWith('#')) { continue }
     if (($t.StartsWith('. ') -or $t -match '\{\s*\.\s') -and $l -match [regex]::Escape($LibLeaf)) { $sourced = $true; break }
@@ -127,8 +134,8 @@ function Get-DependencyGaps {
   # from two levels down, so each dot-sourced a path that does not exist and threw at STARTUP. Checking only
   # that the LINE is present calls all 27 correctly wired, so evaluate the path the file actually writes.
   # The walk-up form resolves at any depth and needs no check.
-  if ($FilePath -and ($Text -notmatch 'while\s*\(')) {
-    foreach ($ln2 in ($Text -split "`r?`n")) {
+  if ($FilePath -and ($code -notmatch 'while\s*\(')) {
+    foreach ($ln2 in ($code -split "`r?`n")) {
       $t2 = $ln2.TrimStart()
       if ($t2.StartsWith('#') -or -not $t2.StartsWith('. ')) { continue }
       if ($ln2 -notmatch [regex]::Escape($LibLeaf)) { continue }
@@ -149,7 +156,7 @@ function Get-DependencyGaps {
   # A call inside a FUNCTION BODY is exempt: the body does not run until something calls it, which is
   # after the load. So the test is brace depth 0, which is the only depth that runs at load time.
   $depth = 0; $dsLine = -1; $firstTop = -1; $i = 0
-  foreach ($l in ($Text -split "`r?`n")) {
+  foreach ($l in ($code -split "`r?`n")) {
     $i++
     $t = $l.TrimStart()
     # STRINGS FIRST, THEN THE COMMENT: a `#` inside a quoted string is not a comment, and stripping
@@ -238,6 +245,35 @@ if ($SelfTest) {
          ". (Join-Path `$__jioRoot 'lib\json-io.ps1')`n`$rc = Read-JsonFile `$p"
   $g = Get-DependencyGaps -Text $pre -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
   if (-not $g) { Write-Output '  PASS  CLEAN TWIN: the walk-up preamble NAMING the function in its throw message is not a call above the dot-source' } else { Write-Output "  FAIL  the estate's own correct preamble was reported as a defect ($g)"; $fail++ }
+  # ---- DEFECT 8: PROSE IN A BLOCK COMMENT READ AS A CALL (2026-09-12) --------------------------------
+  # The founding shape, reduced from sync-recipesdb-grams.ps1: a `<# ... #>` header quoting the function
+  # ABOVE the dot-source, the only real call inside a function defined below it. A line inside a block has
+  # no leading hash, so per-line comment stripping left the prose standing and the commit was refused.
+  # Single-quoted here-strings, so nothing in them is this file's own code.
+  $fxBlockProse = @'
+<# WHY
+   the old reader wrapped @(Read-JsonFile ingredients.json) and collapsed a one-row array
+#>
+. (Join-Path $root 'lib\json-io.ps1')
+function Get-Rows($p) {
+  return Read-JsonFile $p
+}
+$rows = Get-Rows $x
+'@
+  $g = Get-DependencyGaps -Text $fxBlockProse -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
+  if (-not $g) { Write-Output '  PASS  MUST NOT FIRE: the function named inside a block comment above the dot-source is prose, not a top-level call (defect 8)' } else { Write-Output "  FAIL  prose inside a block comment was reported as a call - defect 8 can recur ($g)"; $fail++ }
+  # CLEAN TWIN: blanking the block must not blind the check. A multi-line block followed by a GENUINE early
+  # call on a code line is still reported, and on its true line number, which proves the blanking kept
+  # every line where it was.
+  $fxBlockThenCall = @'
+<# a header
+   that spans
+   several lines #>
+$rc = Read-JsonFile $p
+. (Join-Path $root 'lib\json-io.ps1')
+'@
+  $g = Get-DependencyGaps -Text $fxBlockThenCall -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
+  if ($g -and $g -match 'on line 4 ' -and $g -match 'until line 5 ') { Write-Output '  PASS  CLEAN TWIN: a genuine call after a multi-line block comment is still reported, on its true line (4, dot-source 5)' } else { Write-Output "  FAIL  a real early call after a block comment was missed or mis-numbered ($g)"; $fail++ }
   # ---- DEFECT 7: THE ARGUMENT NOBODY REFUSED (2026-09-07) -------------------------------------------
   # The founding bug is this file's own: `-Paths <file>` bound to nothing, fell into $args, and the
   # unscoped sweep exited 0. Asserting the ATTRIBUTE is present would be a check on a string; this
