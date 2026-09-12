@@ -831,7 +831,12 @@ function Set-SaleExpiryProcessed {
     $winArr = $rows.ToArray()
     $out['windows'] = $winArr
     # Retried against a lock-free reader, in the bytes the Set-Content -Encoding UTF8 it replaced wrote.
-    [void](Write-TcAtomicFile -Path $p -Text ($out | ConvertTo-Json -Depth 6))
+    # -Flush (2026-09-12, Brad's I117 ruling): sale-windows.json is in the NOT-RE-DERIVED class, and THIS
+    # writer writes the half that earns it. The daily rebuild regenerates every window from the board, but
+    # repriced_on / repriced_for record work that actually happened and nothing can recompute them - which
+    # is the same argument the comment above already makes about a torn write. Both writers of this file
+    # flush; build-sale-windows.ps1 is the other.
+    [void](Write-TcAtomicFile -Path $p -Text ($out | ConvertTo-Json -Depth 6) -Flush)
   } finally { Exit-TcLedgerLock $lock }
 
   $markedIds = @($marked | Sort-Object -Unique)

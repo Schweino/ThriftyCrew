@@ -42,6 +42,15 @@
   was read before the lock was taken. So the save takes lib\ledger-lock.ps1's lock, RE-READS the file inside it,
   and folds in only the entries this process changed ($script:RbTouched) by Merge-RollbackEntry's rules. The load
   takes the same lock, so it reads a whole file and never the instant between a sibling's delete and its move.
+
+  WHICH DURABILITY CLASS THIS LEDGER IS IN: **NOT RE-DERIVED**, so its save FLUSHES TO THE DEVICE (Brad's
+  ruling, 2026-09-12, backlog I117 - lib\atomic-write.ps1's header carries it verbatim, and the two classes).
+  Everything above is the argument for it: first_seen is the day the store's feed first showed the cut price,
+  and nothing can recompute that from a later capture. A lost write is not a stale number that the next build
+  corrects; it is an anchor re-minted from a LATER date, which is the TTL-runs-long failure this file exists
+  to prevent. The save therefore passes -Flush. The window a flush closes is narrow - a hard power event
+  between the move and the page cache reaching the disk - and the cost measured on this box is under a
+  millisecond on a save that happens once per build.
   Self-test: powershell -File grocery\rollback-ttl-lib.ps1 -SelfTest
 
   Usage:
@@ -250,7 +259,8 @@ function Save-RollbackLedger([string]$Root = '') {
     # The bytes this tracked ledger always had: UTF-8, no BOM, nothing appended - hence -NoBom -NoNewline.
     # Retried (2026-09-11): the lock serialises the savers, not a lock-free Import in a sibling builder, and a bare
     # Move-Item over a file that reader holds open fails outright with the lock held.
-    [void](Write-TcAtomicFile -Path $path -Text ($doc | ConvertTo-Json -Depth 5) -NoBom -NoNewline)
+    # -Flush (2026-09-12, Brad's I117 ruling): this ledger is in the NOT-RE-DERIVED class - see the header.
+    [void](Write-TcAtomicFile -Path $path -Text ($doc | ConvertTo-Json -Depth 5) -NoBom -NoNewline -Flush)
     # This process now holds what is on disk, so a later lookup sees the siblings' entries and a later save starts clean.
     $script:RbLedger = $disk
     $script:RbTouched = New-Object 'System.Collections.Generic.HashSet[string]'

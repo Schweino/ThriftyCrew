@@ -20,6 +20,14 @@
           for first_seen continuity). Output: sale-windows.json in the grocery ROOT (durable, gitignored;
           regenerated daily by check-ad-cycles so it self-heals).
 
+  WHICH DURABILITY CLASS sale-windows.json IS IN: **NOT RE-DERIVED**, so its write FLUSHES TO THE DEVICE
+  (Brad's ruling, 2026-09-12, backlog I117; lib\atomic-write.ps1's header carries it verbatim and defines
+  the two classes). The self-healing above is true of the WINDOWS and false of two fields, and the file's
+  own note already says so: repriced_on / repriced_for record a re-price that actually happened, cannot be
+  recomputed from any board, and decide whether a window is pruned or left owed. A lost write there is not
+  a stale number the next build corrects - it is work the estate forgets doing, or does twice. The other
+  writer of this same file is Set-SaleExpiryProcessed in capture-policy-lib.ps1, and it flushes too.
+
   Usage : powershell -ExecutionPolicy Bypass -File build-sale-windows.ps1
           powershell -ExecutionPolicy Bypass -File build-sale-windows.ps1 -AsOf 2026-07-15   (test a date)
           powershell -ExecutionPolicy Bypass -File build-sale-windows.ps1 -SelfTest
@@ -258,7 +266,8 @@ $out = [ordered]@{
   windows      = $rows
 }
 # Retried against a lock-free reader, in the bytes the Set-Content -Encoding UTF8 it replaced wrote (lib\atomic-write.ps1).
-[void](Write-TcAtomicFile -Path $LogFile -Text ($out | ConvertTo-Json -Depth 6))
+# -Flush (2026-09-12, Brad's I117 ruling): this ledger is in the NOT-RE-DERIVED class - see the header.
+[void](Write-TcAtomicFile -Path $LogFile -Text ($out | ConvertTo-Json -Depth 6) -Flush)
 } finally { Exit-TcLedgerLock $swLock }   # THE LOCK ends here - it was taken just above the prior-log read
 
 # ---------------------------------------------------------------- report

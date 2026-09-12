@@ -89,9 +89,53 @@
 # box a case can only get slower. The one clock left is a 60 s hang guard. Its fail-fast cases assert what
 # the retry did (how many refusals it counted, which error came through), never how quickly it threw.
 #
+# -Flush FLUSHES THE TEMP FILE TO THE DEVICE BEFORE THE MOVE, AND IT IS OPT-IN (Brad's ruling, 2026-09-12,
+# backlog I117). Verbatim: "Files rebuilt from source (boards, price tables, reports) never flush; the next
+# build is the repair. Ledgers that are not re-derived if their last write is lost flush to disk before the
+# replace: graph/learning/promote_aliases.py's holds, grocery/rollback-first-seen.json and
+# grocery/sale-windows.json. Implement it once, as an opt-in switch on Write-TcAtomicFile (and the Python
+# equivalent for the holds), never as a default for every write. Any new ledger that is read-modify-written
+# across runs states in its header which of the two classes it is in. The unverified claim that NTFS needs no
+# separate directory flush stays registered as C182 until someone checks it."
+#
+#   WHAT IT BUYS. Without it the bytes are in the OS page cache when Move-Item returns, so the canonical
+#   write-fsync-close-rename is only three of its four steps. A power loss or a bluescreen in that window can
+#   leave the REAL name pointing at a file that is short or empty - worse than not writing at all, because a
+#   good file has been replaced by a bad one. `$fs.Flush($true)` is FlushFileBuffers: it does not return until
+#   the device says it has the bytes.
+#   WHAT IT DOES NOT BUY, stated so it is not read as bigger than it is. It needs a HARD power event. A crash
+#   of the writing PROCESS is harmless without it, because the page cache belongs to the OS and outlives the
+#   process. That is why it is opt-in: a flush on every write in this tree would cost every run and buy almost
+#   nothing, and the value is in the two or three ledgers where silence is unacceptable.
+#   WHICH CLASS A FILE IS IN is the whole decision, and the test is not "is this file important" but "if its
+#   last write vanished, would anything notice or re-derive it?" REBUILT-FROM-SOURCE (the boards, the price
+#   tables, the reports, this file's own caches) never flushes - the next build is the repair. NOT RE-DERIVED
+#   (a read-modify-written ledger whose lost write is simply gone) flushes. The three ruled ledgers are
+#   grocery\rollback-ttl-lib.ps1's first_seen ledger, grocery\sale-windows.json, and
+#   graph\learning\promotion-holds.json through graph\lib\durable_write.py, which is the Python half of this
+#   same ruling. That is FOUR call sites, because sale-windows.json has two writers - build-sale-windows.ps1
+#   rebuilds it and Set-SaleExpiryProcessed in capture-policy-lib.ps1 records the re-prices - and flushing
+#   only one of them would cover the file in name. A new ledger states its class in its own header.
+#   THE DIRECTORY ENTRY IS NOT FLUSHED, and that is a claim we have NOT checked. On POSIX the idiom is two
+#   fsyncs, the file and then its directory; the belief that NTFS records the directory entry in the same
+#   metadata transaction is why there is one call here and not two. It is registered UNVERIFIED as claim C182
+#   in the skills store. If it turns out to be wrong, this flushes the file and not the name.
+#   COST, MEASURED ON THIS BOX 2026-09-12, not guessed and not swept. A ONE-OFF, so it keeps its description
+#   rather than a committed harness: dot-source this file, write the same text to one temp path 20 times per
+#   arm with the arms ALTERNATING round by round (plain, -Flush, plain, -Flush ...) so disk state hits both
+#   equally, and take each arm's median. At 4 KB: plain 1.7 ms, -Flush 2.3 ms. At 140 KB: plain 1.9 ms,
+#   -Flush 2.5 ms. So the flush costs about 0.6 to 0.7 ms per write on this machine's disk at both sizes,
+#   which is why it is affordable on a ledger written a few times a run and would not be affordable as a
+#   default on every write in the tree. It says nothing about another device: a disk with a volatile write
+#   cache answers FlushFileBuffers at a different price.
+#
 # SCOPE OF A CLEAN REPORT: the self-test drives real handles held from a second runspace on this machine's
 # file system. A pass proves the retry outlasts a reader that lets go and refuses one that does not, on
 # NTFS under this Windows build. It proves nothing about a network share or a different file system.
+# AND NOTHING HERE PROVES A FLUSH REACHED THE PLATTER: that needs a power cut, not a test. What the -Flush
+# cases prove is that the bytes are unchanged, that the retry and the refusal are unchanged, and that the
+# flush CALL completed - $script:TcAtomicFlushes is incremented after Flush($true) returns, never before, so
+# the count is evidence the call ran rather than evidence the branch was entered.
 #
 # Dot-source:  . (Join-Path $repoRoot 'lib\atomic-write.ps1')
 # Self-test:   powershell -File lib\atomic-write.ps1 -SelfTest
@@ -102,6 +146,9 @@ $__awSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-S
 
 $script:TcAtomicAttempts = 40
 $script:TcAtomicBaseSleepMs = 25
+# Incremented AFTER a Flush($true) returns. A test seam, the same job -OnRefusal does: it is the only
+# observable evidence that the durable path ran, because no hermetic test can watch a device.
+$script:TcAtomicFlushes = 0
 
 function Test-TcReplaceRefusal {
   <# $true when a failed move is the transient refusal worth waiting out: an IOException that is not a missing
@@ -124,6 +171,23 @@ function Remove-TcAtomicDebris {
   return ''
 }
 
+function Write-TcDurableFile {
+  <# Writes $Bytes to $Path and does not return until the DEVICE has them. Used only by -Flush; see Brad's
+     I117 ruling in the header for which files earn it. FileShare.Read is what [IO.File]::WriteAllText opens
+     with, so the non-flushing path and this one present the same handle to anything watching the temp file. #>
+  param([string]$Path, [byte[]]$Bytes)
+  $fs = New-Object IO.FileStream($Path, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+  try {
+    $fs.Write($Bytes, 0, $Bytes.Length)
+    # Flush($true) is FlushFileBuffers. Flush() alone only pushes .NET's own buffer into the page cache,
+    # which is where the bytes already were, so the $true is the entire point of this function.
+    $fs.Flush($true)
+  } finally { $fs.Dispose() }
+  # AFTER the flush returned, never before: a count taken on entry would say the branch was reached, and
+  # what a case needs to assert is that the call completed.
+  $script:TcAtomicFlushes++
+}
+
 function Write-TcAtomicFile {
   <# Replaces $Path with $Text. Returns the number of move attempts it took (1 when nothing was in the
      way). Throws at once on a failure waiting cannot fix, and after the budget on a refusal that outlasts
@@ -138,6 +202,9 @@ function Write-TcAtomicFile {
     [switch]$NoNewline,
     # Writers that share no mutex: see -UniqueTemp in the header.
     [switch]$UniqueTemp,
+    # A ledger that is NOT re-derived if its last write is lost: see -Flush in the header (Brad, I117).
+    # Never a default, and never for a file the next build rewrites anyway.
+    [switch]$Flush,
     # Runs after each refused attempt with the attempt number: see -OnRefusal in the header.
     [scriptblock]$OnRefusal = $null
   )
@@ -146,7 +213,19 @@ function Write-TcAtomicFile {
   $full = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
   $tmp = if ($UniqueTemp) { '{0}.{1}.tmp' -f $full, [guid]::NewGuid().ToString('N').Substring(0, 8) } else { $full + '.tmp' }
   $body = if ($NoNewline) { $Text } else { $Text + "`r`n" }
-  [IO.File]::WriteAllText($tmp, $body, (New-Object Text.UTF8Encoding(-not $NoBom)))
+  $enc = New-Object Text.UTF8Encoding(-not $NoBom)
+  if ($Flush) {
+    # The same bytes WriteAllText would have written: it emits the encoding's preamble and then the text,
+    # and GetBytes never includes the preamble. Built once here so the two paths cannot drift apart.
+    $pre = $enc.GetPreamble()
+    $payload = $enc.GetBytes($body)
+    $bytes = [byte[]]::new($pre.Length + $payload.Length)
+    [Array]::Copy($pre, 0, $bytes, 0, $pre.Length)
+    [Array]::Copy($payload, 0, $bytes, $pre.Length, $payload.Length)
+    Write-TcDurableFile -Path $tmp -Bytes $bytes
+  } else {
+    [IO.File]::WriteAllText($tmp, $body, $enc)
+  }
   # A budget that reads as zero must still try once: an attempt count of 0 would throw without ever moving.
   if ($MaxAttempts -lt 1) { $MaxAttempts = 1 }
   $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -384,6 +463,42 @@ if ($__awSelfTest) {
     Case 'MUST FIRE' 'PREMISE: a sibling writer holding the shared <path>.tmp costs a plain write' ($shared -ne '') 'the shared temp did not collide'
     Case 'MUST FIRE' '-UniqueTemp: the same write lands beside that sibling, through a temp name of its own' ($uniqueErr -eq '' -and ([IO.File]::ReadAllText($ut)).Trim() -eq $text) ("error='$uniqueErr'")
     Case 'MUST NOT FIRE' 'and no temp file of its own is left behind once the write lands' ($leftUnique.Count -eq 0) ("left=" + $leftUnique.Count)
+
+    # ---- -Flush: the durable path for a ledger nothing re-derives (Brad's I117 ruling) -----------------
+    # NO CASE HERE CAN PROVE BYTES REACHED THE PLATTER - that needs a power cut. These prove the three
+    # things a test CAN reach: the bytes do not move, the flush call completed, and a plain write is
+    # still not paying for it.
+    $flA = Join-Path $dir 'flush-bytes.json'
+    [void](Write-TcAtomicFile -Path $flA -Text $text)
+    $flB = Join-Path $dir 'flush-bytes-durable.json'
+    [void](Write-TcAtomicFile -Path $flB -Text $text -Flush)
+    Case 'MUST FIRE' '-Flush writes byte-identical content to the same write without it (BOM, text, CRLF)' ([Convert]::ToBase64String([IO.File]::ReadAllBytes($flA)) -eq [Convert]::ToBase64String([IO.File]::ReadAllBytes($flB))) ("durable=" + [Convert]::ToBase64String([IO.File]::ReadAllBytes($flB)))
+    $flC = Join-Path $dir 'flush-nobom-durable.json'
+    [void](Write-TcAtomicFile -Path $flC -Text $text -NoBom -NoNewline -Flush)
+    Case 'MUST FIRE' '-Flush composes with -NoBom -NoNewline: no BOM appears and no CRLF is appended, so a converted ledger keeps its bytes' ([Convert]::ToBase64String([IO.File]::ReadAllBytes($flC)) -eq $watB64) ("durable=" + [Convert]::ToBase64String([IO.File]::ReadAllBytes($flC)))
+
+    # THE MECHANISM, NOT THE OUTCOME. Both paths produce the same file, so only the counter can tell them
+    # apart - and it is incremented after Flush($true) RETURNS, so a rise is evidence the call completed.
+    $flD = Join-Path $dir 'flush-counted.json'
+    $beforeFlushes = $script:TcAtomicFlushes
+    [void](Write-TcAtomicFile -Path $flD -Text $text -Flush)
+    $afterFlush = $script:TcAtomicFlushes
+    [void](Write-TcAtomicFile -Path $flD -Text 'plain')
+    $afterPlain = $script:TcAtomicFlushes
+    Case 'MUST FIRE' '-Flush completes one Flush($true) per write, counted after the call returns' (($afterFlush - $beforeFlushes) -eq 1) ("delta=" + ($afterFlush - $beforeFlushes))
+    Case 'MUST NOT FIRE' 'a write WITHOUT -Flush flushes nothing, so the default is not quietly paying for the durable path' (($afterPlain - $afterFlush) -eq 0) ("delta=" + ($afterPlain - $afterFlush))
+
+    # CLEAN TWIN: -Flush changes how the TEMP file is written and nothing about the replace, so the retry
+    # that this whole library exists for must still be there.
+    $flHeld = Join-Path $dir 'flush-held.json'
+    [IO.File]::WriteAllText($flHeld, 'old', $bomless)
+    $released = New-Signal 'flush-released'
+    $hold = Start-TcFileHold -Path $flHeld -UntilFile $released
+    $err = ''; $n = 0
+    try { $n = Write-TcAtomicFile -Path $flHeld -Text $text -Flush -OnRefusal { param($at) if ($at -eq 1) { [IO.File]::WriteAllText($released, 'x') } } } catch { $err = $_.Exception.Message }
+    if (-not (Test-Path -LiteralPath $released)) { [IO.File]::WriteAllText($released, 'x') }
+    Stop-TcFileHold $hold
+    Case 'CLEAN TWIN' 'a -Flush write that met a reader is still RETRIED and still lands once the reader lets go' ($hold.Opened -and $hold.Saw -and $err -eq '' -and $n -gt 1 -and ([IO.File]::ReadAllText($flHeld)).Trim() -eq $text) ("opened=$($hold.Opened) refused_first=$($hold.Saw) attempts=$n error='$err'")
   } finally {
     Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
   }

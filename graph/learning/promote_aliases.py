@@ -67,6 +67,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
 
 from graphdb import REPO_ROOT                              # noqa: E402
+from durable_write import write_text_durably               # noqa: E402
 
 CATALOG = os.path.join(REPO_ROOT, "grocery", "commodities.json")
 DB = os.path.join(REPO_ROOT, "graph", "sqlite", "graph.db")
@@ -616,8 +617,14 @@ def record_holds(skip: set, added: dict, learned: dict, accept_batch: bool = Fal
                 "reason": "promote_aliases --gated: the guard suite hard-failed naming this "
                           "commodity, and went green once it was withheld"})
             n += 1
-    with io.open(HOLDS, "w", encoding="utf-8", newline="\n") as fh:
-        json.dump(doc, fh, indent=2, ensure_ascii=False)
+    # DURABLE, because this ledger is in the NOT-RE-DERIVED class (Brad's I117 ruling, 2026-09-12;
+    # graph/lib/durable_write.py's header carries it verbatim and defines the two classes). Holds only
+    # ever accumulate, nothing expires them and nothing recomputes them, so a write lost to a power cut
+    # is a hold that silently never happened - while the guard run that produced it has already gone
+    # green and moved on. This also replaces a truncate-in-place with a temp-then-replace, so an
+    # interrupted write can no longer leave a half-written holds file where a whole one was.
+    # The bytes are what io.open(newline="\n") + json.dump wrote: UTF-8, LF, no BOM, no trailing newline.
+    write_text_durably(HOLDS, json.dumps(doc, indent=2, ensure_ascii=False))
     print(f"  recorded {n} new hold(s) in {os.path.basename(HOLDS)}")
     print("  NOTE: the reasons are generic. Replace them with the measured cause before")
     print("        anyone tries to clear one - 'the gate said no' is not a diagnosis.")
@@ -820,6 +827,47 @@ def _selftest() -> int:
       clear_proposals([board_hold], hist[1:]) == [], "proposed")
     T("CLEAN TWIN  a proposal carries the hold's own reason and date, so the reviewer reads the original cause",
       bool(props) and props[0]["reason"] == board_hold["reason"] and props[0]["held"] == "2026-08-21", props[:1])
+
+    # ---- the holds file is DURABLE (Brad's I117 ruling, 2026-09-12) -----------------------------
+    # HOLDS is redirected suite-wide for these cases rather than per fixture: code under test that
+    # writes a tracked path by default must never be pointed at it from a self-test.
+    import tempfile
+    from durable_write import flush_count
+    global HOLDS
+    realHolds = HOLDS
+    scratch = tempfile.mkdtemp(prefix="tc-holds-")
+    try:
+        HOLDS = os.path.join(scratch, "promotion-holds.json")
+        learned_one = {"commodity:staple:salt": ["kosher salt"]}
+        before = flush_count()
+        record_holds({"commodity:staple:salt"}, {}, learned_one)
+        wrote = flush_count() - before
+        with open(HOLDS, "rb") as fh:
+            raw = fh.read()
+        doc = json.loads(raw.decode("utf-8"))
+        # THE MECHANISM, not the outcome: both writers produce a file, so only the counter says which
+        # one ran, and it is incremented after os.fsync returns.
+        T("MUST FIRE  recording a hold FLUSHES it to the device - one completed fsync per write",
+          wrote == 1, wrote)
+        T("CLEAN TWIN  and the bytes are what it always wrote: UTF-8, LF, no BOM, no trailing newline",
+          raw == json.dumps(doc, indent=2, ensure_ascii=False).encode("utf-8"), repr(raw[:30]))
+        T("CLEAN TWIN  the hold itself is unchanged - one row carrying its commodity, pattern and date",
+          len(doc["holds"]) == 1 and doc["holds"][0]["pattern"] == "kosher salt", doc.get("holds"))
+
+        # MUST NOT FIRE: the rate limit still refuses BEFORE anything is written, so a refused batch
+        # neither writes nor flushes. A durable write of a batch we decided not to take would be worse
+        # than a lost one, because holds are permanent.
+        HOLDS = os.path.join(scratch, "refused.json")
+        big = {"commodity:staple:x": ["p%d" % i for i in range(MAX_NEW_HOLDS_PER_RUN + 1)]}
+        before = flush_count()
+        record_holds({"commodity:staple:x"}, {}, big)
+        T("MUST NOT FIRE  a batch over the rate limit writes NOTHING and flushes nothing - the refusal still comes first",
+          flush_count() == before and not os.path.exists(HOLDS),
+          "flushes=%d exists=%s" % (flush_count() - before, os.path.exists(HOLDS)))
+    finally:
+        HOLDS = realHolds
+        import shutil
+        shutil.rmtree(scratch, ignore_errors=True)
 
     if fails:
         print(f"SELF-TEST FAIL: {len(fails)} case(s)")

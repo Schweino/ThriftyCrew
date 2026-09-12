@@ -9914,7 +9914,55 @@ right sequence is: change the share mode, then re-run `atomic-write.ps1 -SelfTes
 
 ---
 
-### I117 - Nothing in this estate flushes a write to the device, and that should be a written decision rather than an omission `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+### I117 - Nothing in this estate flushes a write to the device, and that should be a written decision rather than an omission `DONE` `queue-7`
+
+**BRAD RULED IT 2026-09-12 from the approvals page, and the ruling is carried out.** Verbatim:
+*"Files rebuilt from source (boards, price tables, reports) never flush; the next build is the repair.
+Ledgers that are not re-derived if their last write is lost flush to disk before the replace:
+graph/learning/promote_aliases.py's holds, grocery/rollback-first-seen.json and
+grocery/sale-windows.json. Implement it once, as an opt-in switch on Write-TcAtomicFile (and the
+Python equivalent for the holds), never as a default for every write. Any new ledger that is
+read-modify-written across runs states in its header which of the two classes it is in. The unverified
+claim that NTFS needs no separate directory flush stays registered as C182 until someone checks it."*
+
+**What carries it.** `-Flush` on `Write-TcAtomicFile` (`lib\atomic-write.ps1`), which writes the temp
+file through a `FileStream` and calls `Flush($true)` - FlushFileBuffers - before the move, and is off by
+default so no existing caller moves. The Python half is a new `graph\lib\durable_write.py`
+(`write_text_durably`: temp file, `flush`, `os.fsync`, `os.replace`, with the same refusal-retry the
+PowerShell lib measured). It lives in `graph\lib` because that directory is already on
+`promote_aliases.py`'s import path, and it is a module rather than a function inside the caller so the
+next Python ledger imports it instead of copying it. Both headers carry the ruling verbatim and define
+the two classes; the three ruled ledgers each state in their own header which class they are in and why.
+
+**Four call sites, not three, and the fourth is the same file.** `sale-windows.json` has TWO writers -
+`build-sale-windows.ps1` rebuilds it and `Set-SaleExpiryProcessed` in `capture-policy-lib.ps1` records
+`repriced_on` / `repriced_for` - and the second is the one that writes the half nothing can re-derive.
+Flushing only the rebuild would have left the ruling covering the file in name.
+
+**COST, measured on this box 2026-09-12, paired with the arms alternating round by round, n=20 per arm,
+medians:** 4 KB, plain 1.7 ms and `-Flush` 2.3 ms; 140 KB, plain 1.9 ms and `-Flush` 2.5 ms. So about
+0.6 to 0.7 ms per write, which is why it is affordable on a ledger written a few times a run and why a
+default on every write in the tree would not be. A ONE-OFF, so the description is in
+`lib\atomic-write.ps1`'s header rather than a committed harness; it says nothing about another device.
+
+**What was NOT done, deliberately.** No sweep, on the ruling's own words. **No gate**: a detector over
+"does this header declare its class" would be red on day one against every ledger in the tree, which
+`ops-and-gates.md` forbids, and the ruled class is three files. **C182 stays registered and unmeasured** -
+the directory entry is still not flushed, and if that claim is wrong this flushes the file and not its
+name; both new headers say so in those words rather than implying the idiom is complete.
+
+**The nearest UNRULED candidate, named so the next reader does not have to re-derive it:**
+`grocery\out\capture-cursor.json` is also read-modify-written across runs and also not re-derived. It is
+outside the ruling's list and was left alone. **Nothing else was surveyed** - that is one file noticed
+while working the three, not a sweep of the tree.
+
+**ONE HALF IS NOT LANDED, and it is the auto-loading half.** The standing rule - *a new ledger that is
+read-modify-written across runs states in its header which of the two classes it is in* - belongs in
+`.claude\rules\ops-and-gates.md`, which loads whenever anybody touches `ops\` or `lib\`. **This session's
+write to that file was refused by the harness's permission layer**, the same refusal I112 hit on the same
+day, so the rule currently lives only in the two library headers, which a person reads when they are
+already at the right file rather than before they choose. The text to paste is in the commit that closed
+this item.
 
 **Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
