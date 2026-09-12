@@ -206,7 +206,9 @@ if ($SelfTest) {
     # daily-ratchets likewise, born wrapped at 88c7a835c (2026-09-12). Its row was NOT added with the task, and
     # main was red for every checkout on the box until it was - both this case and the resolved-set case below
     # failed, the latter reporting found=5 missing= against a frozen 4, which reads as a passing set until you
-    # notice the count is what is compared. That is the failure this comment exists to prevent a third time.
+    # notice the count is what is compared. That is the failure this comment exists to prevent a third time,
+    # and the resolved-set case's own got line now states both counts and names the unfrozen key, so the next
+    # one is legible from the gate output without reading this file.
     $preWrap = @{
       'daemon-battery'   = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-daemon-battery.ps1"' }
       'daily-ratchets'   = @{ Exe = 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'; ArgLine = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-daily-ratchets.ps1"' }
@@ -236,7 +238,16 @@ if ($SelfTest) {
       T ('CLEAN TWIN  ' + $xf.Name + ' hands its child exactly the command the task ran before it was wrapped') (($null -ne $want) -and [string]::Equals([string]$b.Exe, [string]$want.Exe, [StringComparison]::Ordinal) -and [string]::Equals([string]$b.ArgLine, [string]$want.ArgLine, [StringComparison]::Ordinal)) ('key=' + $k + ' exe=' + $(if ($b) { $b.Exe }) + ' argline=' + $(if ($b) { $b.ArgLine }))
     }
     $missingKeys = @($preWrap.Keys | Where-Object { -not $found.ContainsKey($_) })
-    T ('the committed definitions naming this wrapper resolved to exactly the frozen set: ' + (@($found.Keys | Sort-Object) -join ', ')) ((@($found.Keys).Count -eq $preWrap.Count) -and ($missingKeys.Count -eq 0)) ('found=' + (@($found.Keys) -join ',') + ' missing=' + ($missingKeys -join ','))
+    # THE GOT LINE STATES THE TWO COUNTS IT COMPARES, and names the surplus as well as the shortfall. This
+    # assertion is a COUNT test wearing a list: on 2026-09-12 it failed reporting 'found=<five names> missing='
+    # for a task committed without its frozen row, which reads as a passing set - nothing in the message said
+    # the frozen side held four. A rate is printed with its denominator (.claude\rules\measurement.md) and the
+    # same rule applies to a set: print what was found AND what it was judged against, or the reader has to
+    # re-derive the assertion from the source to see why a green-looking line is red. 'unfrozen' is the side
+    # that actually fires when a new wrapped task ships without its row, so it is named, not just counted.
+    $unfrozenKeys = @($found.Keys | Where-Object { -not $preWrap.ContainsKey($_) })
+    $setGot = 'found=' + @($found.Keys).Count + ' frozen=' + $preWrap.Count + ' missing=' + $(if ($missingKeys.Count) { $missingKeys -join ',' } else { 'none' }) + ' unfrozen=' + $(if ($unfrozenKeys.Count) { $unfrozenKeys -join ',' } else { 'none' }) + ' keys=' + (@($found.Keys | Sort-Object) -join ',')
+    T ('the committed definitions naming this wrapper resolved to exactly the frozen set: ' + (@($found.Keys | Sort-Object) -join ', ')) ((@($found.Keys).Count -eq $preWrap.Count) -and ($missingKeys.Count -eq 0)) $setGot
     $broken = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\run-once-a-day.ps1" -Key brain-digest -Exe "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgLine "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\ops\brain-digest.ps1" -Alert -Quiet"'
     $bb = Get-EchoedBinding $broken
     T 'MUST FIRE  the same definition with its inner quotes left unescaped does NOT hand the child its command, so the case above can fail' (-not ($bb -and [string]::Equals([string]$bb.ArgLine, [string]$preWrap['brain-digest'].ArgLine, [StringComparison]::Ordinal))) ('argline=' + $(if ($bb) { $bb.ArgLine }))
