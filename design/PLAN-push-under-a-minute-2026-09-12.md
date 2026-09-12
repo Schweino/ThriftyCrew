@@ -100,6 +100,63 @@ temp fixtures. Reading the refusal reason as a finding about the gate would be t
 `an-agreeing-number-escapes-scrutiny` shape. All 17 were confirmed to RUN on a push (checked against one push's own
 output); nothing here establishes that any of them is waste. Each needs reading, which is what the disposition list is.
 
+## The disposition of all 53, read rather than guessed (2026-09-12)
+
+Brad ruled the principle first: **a green push proves that everything the change could plausibly break is green**, and the
+whole-tree guarantee moves to a nightly sweep. Each of the 53 was then read against the rubric above.
+
+**THE HEURISTIC WAS WRONG ABOUT THE 17, AND THIS IS THE CORRECTION THAT MATTERS.** They were flagged `reads a data
+directory` because their SOURCE TEXT names one. Read: **15 of 17 are hermetic**, every one of them because the live
+data reads sit AFTER the `-SelfTest` exit. Exactly one is blind in a worktree and only for **1 of its 28 cases**
+(`feed-covers-published`, which already reports it as `blind=` and does not fail the push). **Twelve of the 17 are pure
+in-memory cases costing close to nothing and STAY at push.** A refusal reason is a fact about the key, never about the
+gate, and reading it as the latter is this estate's `an-agreeing-number-escapes-scrutiny` shape.
+
+**THE STRUCTURAL KEY, and what makes this safe.** `ops/run-gates.ps1` runs TWO things: a discovery pass over every
+`-SelfTest` in the tree, and an explicit `$static` list that runs certain audits **live**. Seven files appear in both.
+**Removing a self-test from the push does NOT remove the live audit.** So every tree-wide protection stays untouched
+while its fixture suite stops running on every push.
+
+**STAYS AT PUSH - the tree-wide live halves, which any commit can redden:**
+`audit-source-control-bytes` (ReadAllBytes over every tracked source file; one heredoc-written path anywhere plants a
+control byte and the affected script's own self-test stays green), `audit-full-path-excludes` (AST over every `.ps1`
+and `.py`, ratcheted), `audit-task-registration` (every `.ps1` walked for `Register-ScheduledTask`),
+`test-native-stderr-eap` (AST ratchet whose whole value is catching the new site in THIS diff), `audit-alert-registry`'s
+argument-less run, `audit-phantom-paths`, `audit-memory-citations`, `audit-stray-root-artifacts`, and
+`prepush-test-auditors`' self-test - that last one because it DERIVES which test-auditors units a push runs, so a silent
+degradation there ships a green push over an unrun guard, which is the 2026-09-10 failure it was built for.
+Plus the twelve cheap pure suites among the 17.
+
+**MOVES TO ON-CHANGE - the measured money, with its trigger set:**
+
+| gate | measured warm | trigger |
+|---|---|---|
+| `ops\test-prepush-hook.ps1` | 67 s | `ops\hooks\pre-push`, `ops\prepush-test-auditors.ps1`, `ops\hold-push-lock.ps1`, **`lib\**`** |
+| `meal-prep\pipeline\map-preresolve.ps1` | 40 s | `meal-prep\pipeline\*`, `lib\json-io.ps1`, `grocery\native-lib.ps1` |
+| `ops\test-precommit-hook.ps1` | 39 s | the 9 files it already names in `$needed` |
+| `lib\gate-slots.ps1` | 34 s | itself only |
+| `ops\cpu-load.ps1` | 22 s | itself, `lib\gate-slots.ps1` |
+
+with `hunt-run` (~1,100 fixture lines, many temp trees), `audit-event-bus`'s 800-event four-process drill,
+`audit-ghost-drift` (a child process plus a `git status` per tool file), `audit-capture-encoding` (four child
+processes), `test-pull-agent-lib` (node spawned six-plus times), `build-aldi-regular`, `import-walmart-batch`,
+`import-instacart-batch`, `validate-triage-plan`, `rebid-ingredient`, `verify-commodities-gate`, `brain-digest`,
+`pipeline-commit`, `consistency-oracle`, `test-guards`, `test-scaler-labels`, and the remaining machinery suites
+joining them. **The measured five alone are 202 s of the 778 s.**
+
+**`ops\test-prepush-hook.ps1` CAN NEVER BE CACHED, and that corrects a claim made earlier today.** It copies
+`lib\*.ps1` by DIRECTORY ENUMERATION, and a source key cannot name a listing. Its trigger must be the whole of `lib\`.
+Selection handles it; the per-gate cache never could.
+
+**A GATE THAT IS NOT DOING ITS JOB, found on the way.** `ops\audit-cpu-load.ps1`'s push-path arm is its hermetic
+`-SelfTest`, not its live tree scan - so the check that would catch a NEW burner-starting script in the commit being
+pushed is **already absent from the push path**. It has been passing on fixtures. That is a finding about coverage, not
+about throughput, and it is worth more than the seconds this plan is chasing.
+
+**THE DISCIPLINE ALREADY EXISTS HERE.** `grocery\test-auditors.ps1` is not run whole: `ops\prepush-test-auditors.ps1`
+derives its touched-input set and runs only the reachable units. What this plan proposes is extending a mechanism this
+estate already trusts in production, not inventing one.
+
 ## What this predicts, stated before building
 
 A typical push (2 to 4 files) selects **single digits** of gates. With the 53 dispositioned, the gate half of a push
