@@ -11300,3 +11300,187 @@ board row or a parameter, versus a literal set. If the answer is "three", the ru
 writing and this closes.
 
 **2-WAY** because both the census and a rules line are trivially reversible.
+
+### I164 - post-publish-reviewer's findings are the one review output nobody can count `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\codereview-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+The course's checklist method ends with a step the estate has not applied to its own reviewers:
+**monitor a checklist's usage AND its effectiveness, explicitly by defect detection rate.** A
+checklist nobody measures cannot be shown to be doing anything, and one that has stopped working
+looks identical to one that is working.
+
+Measured 2026-09-12 over the five verdict-only agents in `C:\Codex\ThriftyCrew\.claude\agents\`,
+by grepping each brief for an instruction to write its output to a durable path:
+
+| agent | writes findings to a file |
+|---|---|
+| `recipe-batch-auditor.md` | yes |
+| `recipe-source-qa.md` | yes (`meal-prep/out/fidelity/findings-NN.json`) |
+| `triage-reviewer.md` | yes (one plan file) |
+| `recipe-dedup-selector.md` | yes (the dish-rulings ledger) |
+| **`post-publish-reviewer.md`** | **no - 0 matches** |
+
+`post-publish-reviewer` holds the `Write` tool and its brief never tells it to write anything. Its
+entire output is a report into the session transcript, which is exactly the shape the estate's own
+`measurement.md` rule refuses: *"RECORD THE CASE AT THE MOMENT IT FAILS, including the ones you fix
+by hand and move on from."* This agent is described as "the last set of eyes, running AFTER the work
+claims to be done", and it fixes what it finds through the gated paths - so the cases it catches are
+precisely the ones that got past every gate, which is the highest-value corpus in the estate and the
+only one not being kept.
+
+**The first rung is a MEASURE, not a build:** count how many post-publish reviews have run and what
+they found, from whatever record exists (session transcripts, the triage queue's `needs-brad` rows,
+git history around publishes). If the answer is "unrecoverable", that is the finding, and the cheap
+fix is one line in the agent brief telling it to append its per-category verdict and every bug to a
+dated JSONL beside the other findings corpora. 2-WAY: it is an append-only record and adding it
+changes no verdict.
+
+**Nothing else from this course is worth an estate item, and that is the honest result.** Three of
+the course's four modules are test automation, not code review, and were confirm-only against
+`software-craft/test-design-and-oracles.md`. Everything the review module does teach, the estate
+already does and in most cases does better: `ops/audit-agent-tools.ps1` gates that a reviewer must
+not hold edit tools, which is stronger than anything the course says about reviewer independence;
+`ops/review-staged.ps1`'s header derives the course's best line (a review whose unit is one item
+cannot see a defect living in the combination) independently and with a worked argument; and four
+of the five reviewer agents already carry an enumerated checklist, which is the course's
+checklist-based technique under another name. The course gives no measured numbers for any of it -
+`bias`, `confirmation`, `blind spot`, `self review`, `lines of code`, `review rate` and
+`defect density` all count 0 over its 222,844 characters of transcript - so nothing here can be
+cited as evidence for changing a threshold.
+
+### I165 - The four importers each decide feed-row validity for themselves, and only Walmart's was ever lifted into a library `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\securedesign-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**The course's rule.** Glock's design-level rule for free-form input is that the DESIGNER writes one
+validator and the implementors use it, because *"if you leave the solution to implementors, you can
+get different solutions to the same problem, which appears in different parts of the software."*
+His definition of free-form is broader than it first reads and is the useful half: **if the input
+was not built by your software, it is free-form** - packets, downloaded documents, drag-and-drop,
+and by extension every store feed this estate parses.
+
+**What is on disk, checked 2026-09-12 with `git ls-files "grocery/import-*.ps1"`.** Four importers:
+`grocery/import-aldi-batch.ps1`, `grocery/import-instacart-batch.ps1`,
+`grocery/import-sams-prices.ps1`, `grocery/import-walmart-batch.ps1`. Exactly one shared row
+library: `grocery/walmart-row-lib.ps1`, created 2026-09-11 (`design/PLAN-walmart-row-lib-2026-09-11.md`)
+because `Build-Row`, six helpers and `$script:UnitFamily` were being LIFTED from
+`build-walmart-deals.ps1` into `import-walmart-batch.ps1`. The grocery rules file records that the
+one remaining lift is `import-instacart-batch.ps1`'s `Merge-IwbRows` going into
+`import-walmart-batch.ps1`. There is no equivalent library for Aldi or Sam's, and no
+`grocery/*validate*` file covers feed rows - the three that exist are `sanity-check.ps1`,
+`validate-fills.ps1` and `validate-triage-plan.ps1`, none of which is a row-level input validator.
+
+**Why this is worth measuring rather than fixing blind.** The estate has already paid for this class
+once, and the repair it chose (extract a library, make both Walmart writers dot-source it) is
+exactly the right one. What nobody has counted is **where the four importers DISAGREE about what a
+valid row is** - a price field shape, a unit family, a missing size, a negative or zero price, a
+non-ASCII byte, a row with no product name. A disagreement between two of them is a wrong cell on a
+paid board, which this estate treats as a real cost to a real reader.
+
+**First rung, and it is a measurement, not a build.** For each of the four importers, list the
+conditions under which it REJECTS a row and the conditions under which it coerces one. Put the four
+lists side by side. The finding is the set of conditions where fewer than four agree. Only then
+decide whether a shared library is worth the change; `walmart-row-lib.ps1` is the exemplar if it is.
+
+**Not claimed:** I did not read the four importers' bodies, so I am not asserting a specific
+divergence exists. The verified claim is the structural one - four independent implementations, one
+shared library covering one store - which is the condition under which divergence is the default.
+
+### I166 - No gate reads a tracked file for a secret, and the only thing standing between the Ghost Admin key and a commit is one .gitignore line `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\securedesign-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**What was verified on disk, 2026-09-12.**
+
+- `lib/ghost-lib.ps1` lines 12 to 17: the estate's Ghost Admin key comes from `$env:GHOST_ADMIN_KEY`,
+  else `meal-prep\.ghostkey`, else it throws.
+- `git check-ignore -v meal-prep/.ghostkey` exits 0 and cites `.gitignore:289`.
+- `git log --all --oneline -- meal-prep/.ghostkey` returns nothing: the key file has **never** been
+  committed on any branch.
+- `.gitignore` is an **allow-list** (`/*` at line 3, then explicit `!` negations), so a NEW secret
+  file anywhere outside an allow-listed path is untracked by default. That is a genuinely good
+  structural defence and it is why this is a MEASURE item rather than an alarm.
+- `git ls-files "ops/audit-*.ps1"` returns **45** scripts. Grepping the tracked `ops/*.ps1` and
+  `grocery/*.ps1` for `secret scan|credential leak|api.key.*commit|leaked key` returns **zero**
+  files. The only `ops/audit-*` whose name contains "key" is `audit-keyword-arguments.ps1`, which is
+  about PowerShell parsing.
+
+**The uncovered path, stated precisely.** The allow-list protects a new *file*. It does nothing
+about a key pasted into an **already-tracked** file - a `.ps1`, a `design/*.md` plan, an incident
+writeup, a commit message. `run-gates` runs 45 static audits on every push and none of them would
+see it. Ghost Admin keys are `id:secrethex`, a shape a regex can find with near-zero false
+positives, and the same is true of the Cloudflare account id already sitting in
+`ops/cloudflare-estate.json` (that one is deliberate and would need an allow entry).
+
+**First rung: measure, do not build.** Run one regex for the `<24 hex>:<64 hex>` Ghost key shape and
+for a Cloudflare API token shape over `git log -p --all` and over the current tree, and report the
+count with its denominator (files scanned). If it is zero, that is the result and the question
+becomes whether a day-one-green ratchet is worth adding - which the ops rules permit, since a
+high-water mark of 0 that may only go down is exactly the shape `audit-write-seam` already uses. If
+it is not zero, that is an incident and not a backlog item.
+
+**Not claimed:** I did not run that scan. I am not asserting a secret is committed; I am asserting
+that nothing in the gate set would tell you.
+
+### I167 - Ghost's own surface is checked at two fixed lists, never censused `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\securedesign-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**The course's method, and it is the transferable part.** Glock's QA reported a handful of stored
+procedures in the database that no code called, some of them developers' test-data injection tools
+shipped to production. Rather than delete the ones QA named, he **wrote code to enumerate the stored
+procedures the application calls and diff that against the ones the database holds**. The census
+found about 20% uncalled, in that product and in already-shipped ones, and removing them *"amounted
+to reducing the attack surface."* The instance was worth the prompt it gave him to go count.
+
+**What the estate has, checked 2026-09-12.**
+
+- `ops/cloudflare-estate.json` plus `ops/audit-cloudflare-estate.ps1` is **exactly this census, done
+  right**, for Cloudflare: a declared state, compared against live. Its own header records that it
+  was written after an R2 lifecycle misconfiguration billed $9.00/month for four days, and that
+  `docs/RUNTIME-MAP.md` was measured WRONG about the `tc-grocery-v3` worker being out of the serving
+  path - it took 480 requests in five days and all 542 live recipe cards hydrate prices from it.
+  That is the estate's own dead-stored-procedure story, at infrastructure scale, and it is closed.
+- Ghost has no equivalent. `grocery/audit-ghost-drift.ps1` compares the bytes of **sixteen** named
+  tool posts against their local sources. `meal-prep/pipeline/audit-paid-not-public.ps1` compares
+  `recipes-db.json`'s `visibility` against Ghost's for every published recipe - and it is a model of
+  the course's other rule, the direction that loses money, which its header states explicitly. Both
+  are excellent. Neither enumerates what Ghost actually holds.
+
+**The unasked question.** How many **integrations and Admin API keys** does the Ghost site have, how
+many does anything in this repo use, and how many webhooks are registered? The repo knows about one
+key. Nobody has counted the live side. The same question applies to published posts that no local
+source produces.
+
+**First rung, and it may terminate immediately.** Memory `ghost-integration-token-limits` records
+that integration tokens **403 on all `/settings/` writes**, and integrations are likely reachable
+only through the browser session. So rung 1 is: try the Admin API's integrations endpoint with the
+estate's key and record what it returns. A 403 is a complete and useful answer - it says the census
+needs Brad in a browser and cannot be automated - and it should be written down either way, because
+"we cannot see this" is the honest state and is currently unrecorded.
+
+**Not claimed:** I did not call Ghost. No live probing was in scope for this run.
+
+### I168 - Confirmed and NOT filed `DONE` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\securedesign-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Three things the course would flag that the estate has already solved, recorded so a later run does
+not re-find them as gaps:
+
+- **The paywall direction.** `meal-prep/pipeline/audit-paid-not-public.ps1` exists, and its header is
+  the clearest statement of the "check the direction that loses money" principle anywhere in the
+  estate. It names both verdicts (`LEAK`, `BADGE-SKEW`), says which one fails the gate, says why it
+  is a detector and not a repair, and lists the three known causes. The course's version of this
+  rule is weaker than the estate's.
+- **The frozen V3 route.** Declared in `ops/cloudflare-estate.json`, measured, and audited. Closed.
+- **The Ghost key never reaching a commit.** Verified above: gitignored, never committed on any
+  branch, and the allow-list `.gitignore` shape makes an accidental new secret file untracked by
+  default.
+
+Nothing else from this course produces an estate item. Two thirds of it is out of scope by the
+standard the spawn prompt set: buffer overflow and ASLR against the x86 stack (this estate ships no
+compiled code), SQL injection against a database we do not own, the Therac-25 PDP-11 assembly case
+and four lectures reading Satoshi Nakamoto's Bitcoin abstract sentence by sentence. Those are routed
+as knowledge where they transfer and are named as out of scope here rather than filed for the tally.
