@@ -1,1 +1,1 @@
-﻿almond-flour|Sam's Club;cinnamon-stick|Fareway
+﻿almond-flour|Sam's Club;cinnamon-stick|Fareway;quinoa-uncooked|Family Fare

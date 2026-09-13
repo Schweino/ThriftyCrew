@@ -1,14 +1,5 @@
 ﻿[
     {
-        "id":  "ground-beef-8020",
-        "store":  "Family Fare",
-        "product":  "Standard Pride 80%/20% 100% Pure Ground Beef 48 Oz Discount Limit 2",
-        "dept":  "meat",
-        "aisle":  "meat/beef",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
-    },
-    {
         "id":  "alfredo-sauce",
         "store":  "Family Fare",
         "product":  "Ragu Sauce, Classic Alfredo 16 Oz",
@@ -25,6 +16,15 @@
         "aisle":  "household/cleaners_air_fresheners",
         "verdict":  "ALLOW",
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "almond-milk",
+        "store":  "Family Fare",
+        "product":  "Unsweetened Almond Milk",
+        "dept":  "dairy",
+        "aisle":  "dairy/milk",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
         "id":  "almonds",
@@ -79,15 +79,6 @@
         "aisle":  "meat/pork",
         "verdict":  "ALLOW",
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
-    },
-    {
-        "id":  "baby-food",
-        "store":  "Family Fare",
-        "product":  "Gerber Sitter 2nd Foods (6+ Months) Veggie Blends Carrot Sweet Potato Pea 2 Ea",
-        "dept":  "health_beauty",
-        "aisle":  "health_beauty/baby_child",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027baby\u0027"
     },
     {
         "id":  "baby-potatoes",
@@ -151,6 +142,15 @@
         "aisle":  "pantry/mixes_spices_seasoning",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "blackberries",
+        "store":  "Family Fare",
+        "product":  "Fresh Blackberries",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/berries",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
     },
     {
         "id":  "bleach",
@@ -324,13 +324,13 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
-        "id":  "cantaloupe",
+        "id":  "carrots",
         "store":  "Family Fare",
-        "product":  "Cantaloupe/Rockmelon Melon, Small",
+        "product":  "Our Family Whole Carrots 32 Oz",
         "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/melons",
+        "aisle":  "fresh_fruits_vegetables/carrots",
         "verdict":  "ALLOW",
-        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
         "id":  "cauliflower",
@@ -340,6 +340,15 @@
         "aisle":  "fresh_fruits_vegetables/cauliflower_asparagus",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "cheese-crackers",
+        "store":  "Family Fare",
+        "product":  "Crav\u0027n Flavor Cheese Crackers, Cheddar, Family Size 21 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/crackers",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "cherry-tomatoes",
@@ -443,11 +452,20 @@
     {
         "id":  "cooking-spray",
         "store":  "Family Fare",
-        "product":  "Our Family Cooking Spray, No Stick, Canola Oil 6 Oz",
+        "product":  "Our Family Cooking Spray, No Stick, Butter Flavored 6 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
+        "id":  "crackers",
+        "store":  "Family Fare",
+        "product":  "Our Family Saltine Original Crackers 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/crackers",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "cream-of-chicken-soup",
@@ -614,7 +632,7 @@
     {
         "id":  "breakfast-sandwiches",
         "store":  "Family Fare",
-        "product":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
+        "product":  "Jimmy Dean Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen, 8 Ct",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_meals_more",
         "verdict":  "ALLOW",
@@ -673,6 +691,15 @@
         "aisle":  "freezer/frozen_meals_more",
         "verdict":  "ALLOW",
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
+        "id":  "fruit-punch",
+        "store":  "Family Fare",
+        "product":  "Minute Maid Fruit Punch Juice Drink Carton 59 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "fresh-ginger",
@@ -810,15 +837,6 @@
         "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
     },
     {
-        "id":  "hot-dogs",
-        "store":  "Family Fare",
-        "product":  "Bar S Classic Bun Length Franks 16 Oz",
-        "dept":  "meat",
-        "aisle":  "meat/hot_dogs",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
-    },
-    {
         "id":  "hummus",
         "store":  "Family Fare",
         "product":  "Fresh \u0026 Finest By Our Family Garlic Hummus 10 Oz",
@@ -909,6 +927,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
     },
     {
+        "id":  "lemonade",
+        "store":  "Family Fare",
+        "product":  "Minute Maid Lemonade Carton 59 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027lemonade\u0027"
+    },
+    {
         "id":  "lettuce",
         "store":  "Family Fare",
         "product":  "Tanimura \u0026 Antle Lettuce 4 Ea",
@@ -929,7 +956,7 @@
     {
         "id":  "marshmallows",
         "store":  "Family Fare",
-        "product":  "Our Family Marshmallows, Mini 10.5 Oz",
+        "product":  "Our Family Marshmallows 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
@@ -945,6 +972,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "microwave-popcorn",
+        "store":  "Family Fare",
+        "product":  "Our Family Microwave Popcorn, Kettle Corn, 3 Pack 3 Ea",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "miracle-whip",
         "store":  "Family Fare",
         "product":  "Miracle Whip Dressing 30 Fl Oz",
@@ -952,6 +988,15 @@
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
+        "id":  "mixed-nuts",
+        "store":  "Family Fare",
+        "product":  "Our Family Mixed Nuts 10.3 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
         "id":  "muffins",
@@ -974,7 +1019,7 @@
     {
         "id":  "pancake-mix",
         "store":  "Family Fare",
-        "product":  "Our Family Buttermilk Complete Pancake \u0026 Waffle Mix 32 Oz",
+        "product":  "Mrs. Butter Worth\u0027s Pancake \u0026 Waffle Mix, Complete 32 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/breakfast",
         "verdict":  "ALLOW",
@@ -983,7 +1028,7 @@
     {
         "id":  "paper-towels",
         "store":  "Family Fare",
-        "product":  "Bounty White 2 Ply Essentials Double Rolls Paper Towels 4 Ea",
+        "product":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
         "dept":  "household",
         "aisle":  "household/paper_towels",
         "verdict":  "ALLOW",
@@ -1024,6 +1069,15 @@
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
+        "id":  "pears",
+        "store":  "Family Fare",
+        "product":  "Bartlett/Williams/Wbc Pears, Small",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/pears_peaches_plums",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
     },
     {
         "id":  "pickled-jalapenos",
@@ -1089,13 +1143,13 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
-        "id":  "queso",
+        "id":  "pretzels",
         "store":  "Family Fare",
-        "product":  "Tostitos Medium Salsa Con Queso 23 Oz",
+        "product":  "Our Family Pretzels, Classic, Mini Twists 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
-        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "radishes",
@@ -1132,15 +1186,6 @@
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
-    },
-    {
-        "id":  "raspberries",
-        "store":  "Family Fare",
-        "product":  "Fresh Red Raspberry",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/berries",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
     },
     {
         "id":  "red-potatoes",
@@ -1188,6 +1233,15 @@
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "sandwich-cookies",
+        "store":  "Family Fare",
+        "product":  "Golden With Vanilla Creme Vanilla Sandwich Cookies",
+        "dept":  "pantry",
+        "aisle":  "pantry/cookies",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "shower-cleaner",
         "store":  "Family Fare",
         "product":  "Scrubbing Bubbles Bathroom Cleaner, Multi Purpose Foam, Easy Clean 32 Fl Oz",
@@ -1197,18 +1251,18 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
-        "id":  "shredded-cheese",
+        "id":  "soda",
         "store":  "Family Fare",
-        "product":  "Our Family Natural Finely Cut Mexican Shredded Cheese 32 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/cheese",
+        "product":  "Jarritos Soda, Natural Flavor, Grapefruit 1.58 Qt",
+        "dept":  "beverages",
+        "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
-        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
+        "product":  "Sparkling Ice Zero Sugar Fruit Punch Sparkling Water 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -1226,7 +1280,7 @@
     {
         "id":  "sports-drinks",
         "store":  "Family Fare",
-        "product":  "Gatorade Thirst Quencher, Fruit Punch 8 Ea",
+        "product":  "Gatorade Advanced Rehydration Fruit Punch Thirst Quencher 28 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/sport_energy",
         "verdict":  "ALLOW",
@@ -1332,6 +1386,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
+        "id":  "tortilla-chips",
+        "store":  "Family Fare",
+        "product":  "Our Family Hint Of Lime Tortilla Chips 13 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/chips_other_salty_snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "turkey-bacon",
         "store":  "Family Fare",
         "product":  "Jennie O Turkey Bacon 12 Oz",
@@ -1411,15 +1474,6 @@
         "aisle":  "dairy/yogurt",
         "verdict":  "ALLOW",
         "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
-    },
-    {
-        "id":  "cheddar-cheese-shredded",
-        "store":  "Family Fare",
-        "product":  "Our Family Mild Cheddar Shredded Cheese 16 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/cheese",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
         "id":  "frozen-green-beans",

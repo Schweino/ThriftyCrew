@@ -1,20 +1,20 @@
 ﻿{
-    "store":  "Family Fare",
+    "store":  "Aldi",
     "date":  "2026-09-13",
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
-    "ad_rollover":  true,
-    "ad_note":  "ad pull DUE (next_pull 2026-09-13)",
-    "cursor_start":  248,
-    "cursor_next":  255,
+    "ad_rollover":  false,
+    "ad_note":  "ad current until 2026-09-15; next_pull 2026-09-16",
+    "cursor_start":  112,
+    "cursor_next":  119,
     "total_terms":  602,
     "rotation_terms":  [
-                           "fresh sage",
-                           "fresh stir fry vegetables",
-                           "sweet Italian turkey sausage",
-                           "fresh thyme",
-                           "whole nutmeg",
-                           "vanilla frosting",
-                           "frozen broccoli florets"
+                           "dry cat food",
+                           "clumping cat litter",
+                           "cauliflower head",
+                           "cayenne pepper",
+                           "celery",
+                           "cereal",
+                           "charcoal briquets"
                        ],
     "sale_terms":  [
 
@@ -27,7 +27,7 @@
     "ruling_deferred":  0,
     "ruling_blind":  false,
     "ruling_blind_why":  "",
-    "call_cap":  40,
+    "call_cap":  45,
     "expiry_deferred":  0,
     "expiry_deferred_by_ruling":  0,
     "expiry_oldest_owed":  "",

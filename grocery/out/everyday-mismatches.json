@@ -66,6 +66,19 @@
     },
     {
         "id":  "all-purpose-cleaner",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.078,
+        "link":  0.0702,
+        "ratio":  0.9,
+        "price":  8.98,
+        "size":  "128 fl oz",
+        "boardItem":  "Fabuloso Multi-Purpose Cleaner, Lavender",
+        "linkItem":  "Fabuloso Multi-Purpose Cleaner, Lavender",
+        "board_src":  "main"
+    },
+    {
+        "id":  "all-purpose-cleaner",
         "store":  "Hy-Vee",
         "unit":  "floz",
         "board":  0.1559,
@@ -164,8 +177,8 @@
         "ratio":  1.04,
         "price":  13.98,
         "size":  "34 fl oz",
-        "boardItem":  "Member\u0027s Mark Avocado Oil Glass Bottle, 34 fl. oz.",
-        "linkItem":  "Member\u0027s Mark Avocado Oil Glass Bottle, 34 fl. oz.",
+        "boardItem":  "Member\u0027s Mark Avocado Oil in Plastic Bottle, 34 fl. oz.",
+        "linkItem":  "Member\u0027s Mark Avocado Oil in Plastic Bottle, 34 fl. oz.",
         "board_src":  "main"
     },
     {
@@ -179,6 +192,19 @@
         "size":  "5 ct",
         "boardItem":  "Avocados, 5 ct.",
         "linkItem":  "Avocados, 5 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "baby-formula",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.9717,
+        "link":  0.7704,
+        "ratio":  0.79,
+        "price":  36.98,
+        "size":  "48 oz",
+        "boardItem":  "Member’s Mark Organic Whole Milk Infant Formula, 36 oz.",
+        "linkItem":  "Member\u0027s Mark, Advantage Premium, Infant Formula, 48 oz.",
         "board_src":  "main"
     },
     {
@@ -378,6 +404,19 @@
     },
     {
         "id":  "lotion",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.2302,
+        "link":  0.2598,
+        "ratio":  1.13,
+        "price":  8.78,
+        "size":  "33.8 fl oz",
+        "boardItem":  "Johnson\u0027s Moisturizing Pink Baby Lotion with Coconut Oil, 33.8 fl. oz.",
+        "linkItem":  "Johnson\u0027s Moisturizing Pink Baby Lotion with Coconut Oil, 33.8 fl. oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "lotion",
         "store":  "Fareway",
         "unit":  "floz",
         "board":  0.4281,
@@ -572,6 +611,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "canned-asparagus",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3993,
+        "link":  0.3653,
+        "ratio":  0.91,
+        "price":  5.48,
+        "size":  "15 oz",
+        "boardItem":  "Green Giant Extra Long Asparagus Spears",
+        "linkItem":  "Green Giant Extra Long Asparagus Spears",
+        "board_src":  "main"
+    },
+    {
         "id":  "beef-stew",
         "store":  "Fareway",
         "unit":  "oz",
@@ -582,6 +634,19 @@
         "size":  "15 oz",
         "boardItem":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots",
         "linkItem":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots",
+        "board_src":  "main"
+    },
+    {
+        "id":  "canned-chili",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1876,
+        "link":  0.1592,
+        "ratio":  0.85,
+        "price":  3.98,
+        "size":  "25 oz",
+        "boardItem":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
+        "linkItem":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
         "board_src":  "main"
     },
     {
@@ -608,6 +673,32 @@
         "size":  "15.5 oz",
         "boardItem":  "Bush\u0027s Best White Hominy",
         "linkItem":  "Bush\u0027s Best White Hominy",
+        "board_src":  "main"
+    },
+    {
+        "id":  "mandarin-oranges",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1527,
+        "link":  0.1293,
+        "ratio":  0.85,
+        "price":  1.94,
+        "size":  "15 oz",
+        "boardItem":  "Fareway Mandarin Oranges",
+        "linkItem":  "Fareway Mandarin Oranges",
+        "board_src":  "main"
+    },
+    {
+        "id":  "canned-mixed-vegetables",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.106,
+        "link":  0.096,
+        "ratio":  0.91,
+        "price":  1.44,
+        "size":  "15 oz",
+        "boardItem":  "Fareway Diced Mixed Vegetables",
+        "linkItem":  "Fareway Diced Mixed Vegetables",
         "board_src":  "main"
     },
     {
@@ -647,6 +738,19 @@
         "size":  "15 oz",
         "boardItem":  "Hy-Vee Pinto Beans",
         "linkItem":  "Hy-Vee Pinto Beans",
+        "board_src":  "main"
+    },
+    {
+        "id":  "canned-pinto-beans",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.0865,
+        "link":  0.0639,
+        "ratio":  0.74,
+        "price":  0.99,
+        "size":  "15.5 oz",
+        "boardItem":  "Fareway Pinto Beans",
+        "linkItem":  "Fareway Pinto Beans",
         "board_src":  "main"
     },
     {
@@ -699,6 +803,19 @@
         "size":  "5 oz",
         "boardItem":  "Chicken of the Sea Pink Salmon, in Water, Alaskan, Wild Caught, Skinless \u0026 Boneless",
         "linkItem":  "Chicken of the Sea Pink Salmon, in Water, Alaskan, Wild Caught, Skinless \u0026 Boneless",
+        "board_src":  "main"
+    },
+    {
+        "id":  "canned-white-beans",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.0865,
+        "link":  0.0639,
+        "ratio":  0.74,
+        "price":  0.99,
+        "size":  "15.5 oz",
+        "boardItem":  "Fareway Great Northern Beans",
+        "linkItem":  "Fareway Great Northern Beans",
         "board_src":  "main"
     },
     {
@@ -767,6 +884,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cheese-crackers",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3557,
+        "link":  0.2543,
+        "ratio":  0.71,
+        "price":  1.78,
+        "size":  "7 oz",
+        "boardItem":  "Stauffers Whales Baked Cheddar Cheese Crackers",
+        "linkItem":  "Stauffers Whales Baked Cheddar Cheese Crackers",
+        "board_src":  "main"
+    },
+    {
         "id":  "cheese-tortellini",
         "store":  "Fareway",
         "unit":  "oz",
@@ -803,6 +933,19 @@
         "size":  "10.5 oz",
         "boardItem":  "Kroger Condensed Chicken Noodle Soup",
         "linkItem":  "Kroger Condensed Chicken Noodle Soup",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chili-beans",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.0865,
+        "link":  0.0639,
+        "ratio":  0.74,
+        "price":  0.99,
+        "size":  "15.5 oz",
+        "boardItem":  "Fareway Chili Beans",
+        "linkItem":  "Fareway Chili Beans",
         "board_src":  "main"
     },
     {
@@ -975,6 +1118,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "corn-dogs",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.8317,
+        "link":  0.795,
+        "ratio":  0.96,
+        "price":  4.77,
+        "size":  "6 ct",
+        "boardItem":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
+        "linkItem":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
+        "board_src":  "main"
+    },
+    {
         "id":  "corned-beef-hash",
         "store":  "Fareway",
         "unit":  "oz",
@@ -1024,6 +1180,19 @@
         "size":  "3 lb",
         "boardItem":  "Darigold Cottage Cheese, 3 lbs.",
         "linkItem":  "Darigold Cottage Cheese, 3 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cranberry-sauce",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1914,
+        "link":  0.1771,
+        "ratio":  0.93,
+        "price":  2.48,
+        "size":  "14 oz",
+        "boardItem":  "Ocean Spray Whole Cranberry Sauce, Canned Side Dish",
+        "linkItem":  "Ocean Spray Whole Cranberry Sauce, Canned Side Dish",
         "board_src":  "main"
     },
     {
@@ -1092,6 +1261,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "deodorant",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  1.6327,
+        "link":  1.9212,
+        "ratio":  1.18,
+        "price":  19.98,
+        "size":  "10.4 oz",
+        "boardItem":  "Old Spice Fiji Antiperspirant Deodorant, Palm Tree + Coconut, 2.6 oz., 4 pk.",
+        "linkItem":  "Old Spice Fiji Antiperspirant Deodorant, Palm Tree + Coconut, 2.6 oz., 4 pk.",
+        "board_src":  "main"
+    },
+    {
         "id":  "tomatoes-green-chilies",
         "store":  "Fareway",
         "unit":  "oz",
@@ -1157,6 +1339,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "dog-food",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  1.7685,
+        "link":  1.5377,
+        "ratio":  0.87,
+        "price":  19.99,
+        "size":  "208 oz",
+        "boardItem":  "Rachael Ray Nutrish Adult Dry Dog Food Real Beef, Pea \u0026 Brown Rice Recipe, 13 lb. Bag",
+        "linkItem":  "Rachael Ray Nutrish Adult Dry Dog Food Real Beef, Pea \u0026 Brown Rice Recipe, 13 lb. Bag",
+        "board_src":  "main"
+    },
+    {
         "id":  "drain-cleaner",
         "store":  "Fareway",
         "unit":  "floz",
@@ -1167,6 +1362,19 @@
         "size":  "32 fl oz",
         "boardItem":  "Drano Liquid Drain Cleaner",
         "linkItem":  "Drano Liquid Drain Cleaner",
+        "board_src":  "main"
+    },
+    {
+        "id":  "dried-cranberries",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3121,
+        "link":  0.2912,
+        "ratio":  0.93,
+        "price":  6.99,
+        "size":  "24 oz",
+        "boardItem":  "Ocean Spray Dried Cranberries",
+        "linkItem":  "Ocean Spray Dried Cranberries",
         "board_src":  "main"
     },
     {
@@ -1235,6 +1443,45 @@
         "board_src":  "main"
     },
     {
+        "id":  "evaporated-milk",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1658,
+        "link":  0.14,
+        "ratio":  0.84,
+        "price":  1.68,
+        "size":  "12 fl oz",
+        "boardItem":  "California Farms Evaporated Milk",
+        "linkItem":  "California Farms Evaporated Milk",
+        "board_src":  "main"
+    },
+    {
+        "id":  "feminine-pads",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.2081,
+        "link":  0.1942,
+        "ratio":  0.93,
+        "price":  6.99,
+        "size":  "36 ct",
+        "boardItem":  "Always Ultra Thin Pads with Wings",
+        "linkItem":  "Always Ultra Thin Pads with Wings",
+        "board_src":  "main"
+    },
+    {
+        "id":  "feta",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.87,
+        "link":  0.745,
+        "ratio":  0.86,
+        "price":  2.98,
+        "size":  "4 oz",
+        "boardItem":  "Crystal Farms Cheese, Feta, Crumbled",
+        "linkItem":  "Crystal Farms Cheese, Feta, Crumbled",
+        "board_src":  "main"
+    },
+    {
         "id":  "fish-sauce",
         "store":  "Walmart",
         "unit":  "floz",
@@ -1284,6 +1531,32 @@
         "size":  "96 fl oz",
         "boardItem":  "Bona Hardwood Floor Cleaner Refill",
         "linkItem":  "Bona Hardwood Floor Cleaner Refill",
+        "board_src":  "main"
+    },
+    {
+        "id":  "storage-bags",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.149,
+        "link":  0.124,
+        "ratio":  0.83,
+        "price":  2.48,
+        "size":  "20 ct",
+        "boardItem":  "Bright Essentials Storage Bags, Double Zipper, 20 Gallon",
+        "linkItem":  "Bright Essentials Storage Bags, Double Zipper, 20 Gallon",
+        "board_src":  "main"
+    },
+    {
+        "id":  "quart-storage-bags",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.2495,
+        "link":  0.1995,
+        "ratio":  0.8,
+        "price":  3.99,
+        "size":  "20 ct",
+        "boardItem":  "Hefty Quart Storage Slider Bags",
+        "linkItem":  "Hefty Quart Storage Slider Bags",
         "board_src":  "main"
     },
     {
@@ -1339,6 +1612,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "breakfast-sandwiches",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  1.8225,
+        "link":  1.7475,
+        "ratio":  0.96,
+        "price":  6.99,
+        "size":  "each",
+        "boardItem":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count",
+        "linkItem":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count",
+        "board_src":  "main"
+    },
+    {
         "id":  "frozen-broccoli",
         "store":  "Fareway",
         "unit":  "oz",
@@ -1349,6 +1635,19 @@
         "size":  "52 oz",
         "boardItem":  "Birds Eye Broccoli Florets, Frozen Vegetables",
         "linkItem":  "Birds Eye Broccoli Florets, Frozen Vegetables",
+        "board_src":  "main"
+    },
+    {
+        "id":  "frozen-burritos",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  1.99,
+        "link":  1.67,
+        "ratio":  0.84,
+        "price":  1.67,
+        "size":  "each",
+        "boardItem":  "Tina\u0027s Big Burrito Beef \u0026 Bean Green Chili, Quick Meal",
+        "linkItem":  "Tina\u0027s Big Burrito Beef \u0026 Bean Green Chili, Quick Meal",
         "board_src":  "main"
     },
     {
@@ -1417,6 +1716,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "frozen-fruit",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3431,
+        "link":  0.2806,
+        "ratio":  0.82,
+        "price":  4.49,
+        "size":  "16 oz",
+        "boardItem":  "Fareway Unsweetened Sliced Strawberries",
+        "linkItem":  "Fareway Unsweetened Sliced Strawberries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "frozen-pizza",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  4.49,
+        "link":  3.33,
+        "ratio":  0.74,
+        "price":  3.33,
+        "size":  "each",
+        "boardItem":  "Jack\u0027s Original Thin Supreme Pizza Pepperoni Sausage Onion Pizza Frozen",
+        "linkItem":  "Jack\u0027s Original Thin Supreme Pizza Pepperoni Sausage Onion Pizza Frozen",
+        "board_src":  "main"
+    },
+    {
         "id":  "frozen-waffles",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
@@ -1427,6 +1752,19 @@
         "size":  "72 ct",
         "boardItem":  "Eggo Homestyle Waffles, Frozen Breakfast, 72 ct.",
         "linkItem":  "Eggo Homestyle Waffles, Frozen Breakfast, 72 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "fruit-cups",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.8225,
+        "link":  0.695,
+        "ratio":  0.84,
+        "price":  2.78,
+        "size":  "4 ct",
+        "boardItem":  "Fareway Mandarin Oranges in 100% Juice",
+        "linkItem":  "Fareway Mandarin Oranges in 100% Juice",
         "board_src":  "main"
     },
     {
@@ -1456,6 +1794,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "garlic-bread",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  4.49,
+        "link":  3.99,
+        "ratio":  0.89,
+        "price":  3.99,
+        "size":  "each",
+        "boardItem":  "Fareway Garlic Bread",
+        "linkItem":  "Fareway Garlic Bread",
+        "board_src":  "main"
+    },
+    {
         "id":  "garlic-powder",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -1469,6 +1820,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "glass-cleaner",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.1244,
+        "link":  0.0919,
+        "ratio":  0.74,
+        "price":  2.94,
+        "size":  "32 fl oz",
+        "boardItem":  "Bright Essentials Glass Cleaner, Streak Free, Scent Free",
+        "linkItem":  "Bright Essentials Glass Cleaner, Streak Free, Scent Free",
+        "board_src":  "main"
+    },
+    {
         "id":  "graham-crackers",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -1479,6 +1843,19 @@
         "size":  "14.4 oz",
         "boardItem":  "Hy-Vee Graham Crackers With Honey",
         "linkItem":  "Hy-Vee Graham Crackers With Honey",
+        "board_src":  "main"
+    },
+    {
+        "id":  "graham-crackers",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2764,
+        "link":  0.2417,
+        "ratio":  0.87,
+        "price":  3.48,
+        "size":  "14.4 oz",
+        "boardItem":  "Fareway Honey Graham Crackers",
+        "linkItem":  "Fareway Honey Graham Crackers",
         "board_src":  "main"
     },
     {
@@ -1534,6 +1911,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "fresh-green-beans",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  3.495,
+        "link":  2.94,
+        "ratio":  0.84,
+        "price":  5.88,
+        "size":  "32 oz",
+        "boardItem":  "Pero Family Farms Snipped Green Beans",
+        "linkItem":  "Pero Family Farms Snipped Green Beans",
+        "board_src":  "main"
+    },
+    {
+        "id":  "green-olives",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3805,
+        "link":  0.309,
+        "ratio":  0.81,
+        "price":  6.49,
+        "size":  "21 oz",
+        "boardItem":  "Fareway Olives, Manzanilla, Stuffed with Minced Pimiento",
+        "linkItem":  "Fareway Olives, Manzanilla, Stuffed with Minced Pimiento",
+        "board_src":  "main"
+    },
+    {
         "id":  "ground-turkey",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
@@ -1548,15 +1951,15 @@
     },
     {
         "id":  "conditioner",
-        "store":  "Sam\u0027s Club",
+        "store":  "Fareway",
         "unit":  "floz",
-        "board":  0.2613,
-        "link":  0.2351,
-        "ratio":  0.9,
-        "price":  8.98,
-        "size":  "38.2 fl oz",
-        "boardItem":  "Pantene Pro-V Nourishing Coconut Milk \u0026 Shea Butter Conditioner, 38.2 fl. oz.",
-        "linkItem":  "Pantene Pro-V Nourishing Coconut Milk \u0026 Shea Butter Conditioner, 38.2 fl. oz.",
+        "board":  0.1107,
+        "link":  0.0876,
+        "ratio":  0.79,
+        "price":  1.97,
+        "size":  "22.5 fl oz",
+        "boardItem":  "Suave Essentials Ocean Breeze Conditioner for Dry Hair, 22.5 fl oz, 1-Count",
+        "linkItem":  "Suave Essentials Ocean Breeze Conditioner for Dry Hair, 22.5 fl oz, 1-Count",
         "board_src":  "main"
     },
     {
@@ -1625,6 +2028,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "honey",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.3495,
+        "link":  0.4245,
+        "ratio":  1.21,
+        "price":  16.98,
+        "size":  "40 oz",
+        "boardItem":  "Nate\u0027s Honey 100% Organic Pure Raw and Unfiltered Honey, 40 oz.",
+        "linkItem":  "Nate\u0027s Honey 100% Organic Pure Raw and Unfiltered Honey, 40 oz.",
+        "board_src":  "main"
+    },
+    {
         "id":  "horseradish-sauce",
         "store":  "Fareway",
         "unit":  "oz",
@@ -1638,6 +2054,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "hot-dogs",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.12,
+        "link":  0.1119,
+        "ratio":  0.93,
+        "price":  1.79,
+        "size":  "16 oz",
+        "boardItem":  "Bar-S Classic Franks Hot Dogs",
+        "linkItem":  "Bar-S Classic Jumbo Franks",
+        "board_src":  "main"
+    },
+    {
         "id":  "hot-sauce",
         "store":  "Aldi",
         "unit":  "floz",
@@ -1648,6 +2077,19 @@
         "size":  "12 fl oz",
         "boardItem":  "Burman S Hot Sauce 12 FL OZ",
         "linkItem":  "Burman\u0027s Hot Sauce",
+        "board_src":  "main"
+    },
+    {
+        "id":  "hummus",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.4362,
+        "link":  0.3738,
+        "ratio":  0.86,
+        "price":  2.99,
+        "size":  "8 oz",
+        "boardItem":  "Sabra Hummus Garlic",
+        "linkItem":  "Sabra Hummus Garlic",
         "board_src":  "main"
     },
     {
@@ -1677,6 +2119,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "instant-mashed-potatoes",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.4854,
+        "link":  0.361,
+        "ratio":  0.74,
+        "price":  1.48,
+        "size":  "4.1 oz",
+        "boardItem":  "Idahoan Baby Reds w/Roasted Garlic \u0026 Parm Mashed Potatoes",
+        "linkItem":  "Idahoan Baby Reds w/Roasted Garlic \u0026 Parm Mashed Potatoes",
+        "board_src":  "main"
+    },
+    {
         "id":  "jalapenos",
         "store":  "Aldi",
         "unit":  "lb",
@@ -1687,6 +2142,19 @@
         "size":  "8 oz",
         "boardItem":  "Jalapeno Pepper Package 8 OZ",
         "linkItem":  "Jalapeno Peppers, Package",
+        "board_src":  "main"
+    },
+    {
+        "id":  "jumbo-pasta-shells",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2908,
+        "link":  0.2483,
+        "ratio":  0.85,
+        "price":  2.98,
+        "size":  "12 oz",
+        "boardItem":  "Barilla Jumbo Shells - Non-GMO Pasta Made with Durum Wheat Semolina \u0026 Kosher Certified",
+        "linkItem":  "Barilla Jumbo Shells - Non-GMO Pasta Made with Durum Wheat Semolina \u0026 Kosher Certified",
         "board_src":  "main"
     },
     {
@@ -1833,6 +2301,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "marshmallows",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1681,
+        "link":  0.1244,
+        "ratio":  0.74,
+        "price":  1.99,
+        "size":  "16 oz",
+        "boardItem":  "Fireside Marshmallows",
+        "linkItem":  "Fireside Marshmallows",
+        "board_src":  "main"
+    },
+    {
         "id":  "bottled-marinade",
         "store":  "Fareway",
         "unit":  "floz",
@@ -1856,6 +2337,19 @@
         "size":  "1 gal",
         "boardItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
         "linkItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
+        "board_src":  "main"
+    },
+    {
+        "id":  "mini-sweet-peppers",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3119,
+        "link":  0.2494,
+        "ratio":  0.8,
+        "price":  3.99,
+        "size":  "16 oz",
+        "boardItem":  "Mini Peppers",
+        "linkItem":  "Mini Peppers",
         "board_src":  "main"
     },
     {
@@ -2002,6 +2496,45 @@
         "board_src":  "main"
     },
     {
+        "id":  "pancake-mix",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.0934,
+        "link":  0.0841,
+        "ratio":  0.9,
+        "price":  2.69,
+        "size":  "32 oz",
+        "boardItem":  "Fareway Complete Buttermilk Pancake \u0026 Waffle Mix",
+        "linkItem":  "Fareway Complete Buttermilk Pancake \u0026 Waffle Mix",
+        "board_src":  "main"
+    },
+    {
+        "id":  "paper-towels",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  2.2475,
+        "link":  1.745,
+        "ratio":  0.78,
+        "price":  6.98,
+        "size":  "4 ct",
+        "boardItem":  "Bounty Essentials Paper Towels Select-A-Size , 4 Count",
+        "linkItem":  "Bounty Essentials Paper Towels Select-A-Size , 4 Count",
+        "board_src":  "main"
+    },
+    {
+        "id":  "parchment-paper",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  3.99,
+        "link":  2.99,
+        "ratio":  0.75,
+        "price":  2.99,
+        "size":  "each",
+        "boardItem":  "Bright Essentials Parchment Paper",
+        "linkItem":  "Bright Essentials Parchment Paper",
+        "board_src":  "main"
+    },
+    {
         "id":  "dried-parsley",
         "store":  "Fareway",
         "unit":  "oz",
@@ -2145,6 +2678,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "plastic-wrap",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  2.99,
+        "link":  2.68,
+        "ratio":  0.9,
+        "price":  2.68,
+        "size":  "each",
+        "boardItem":  "Saran Premium Wrap Plastic Film",
+        "linkItem":  "Saran Premium Wrap Plastic Film",
+        "board_src":  "main"
+    },
+    {
         "id":  "plums",
         "store":  "Aldi",
         "unit":  "lb",
@@ -2197,6 +2743,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "potato-gnocchi",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2494,
+        "link":  0.2369,
+        "ratio":  0.95,
+        "price":  3.79,
+        "size":  "16 oz",
+        "boardItem":  "DeLallo Gnocchi, Potato",
+        "linkItem":  "DeLallo Gnocchi, Potato",
+        "board_src":  "main"
+    },
+    {
         "id":  "powdered-sugar",
         "store":  "Hy-Vee",
         "unit":  "lb",
@@ -2223,6 +2782,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "protein-bars",
+        "store":  "Hy-Vee",
+        "unit":  "each",
+        "board":  0.656,
+        "link":  0.698,
+        "ratio":  1.06,
+        "price":  3.49,
+        "size":  "5 ct",
+        "boardItem":  "Hy-Vee Chewy Protein Bars Peanut Butter \u0026 Dark Chocolate 5-1.42 oz Bars",
+        "linkItem":  "Hy-Vee Chewy Protein Bars Peanut Butter \u0026 Dark Chocolate 5-1.42 oz Bars",
+        "board_src":  "main"
+    },
+    {
         "id":  "prunes",
         "store":  "Fareway",
         "unit":  "oz",
@@ -2233,6 +2805,19 @@
         "size":  "24 oz",
         "boardItem":  "Sunsweet Prunes, Pitted, Value Pack",
         "linkItem":  "Sunsweet Prunes, Pitted, Value Pack",
+        "board_src":  "main"
+    },
+    {
+        "id":  "queso",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2735,
+        "link":  0.2039,
+        "ratio":  0.75,
+        "price":  4.69,
+        "size":  "23 oz",
+        "boardItem":  "Tostitos Medium Con Queso Salsa Dip",
+        "linkItem":  "Tostitos Medium Con Queso Salsa Dip",
         "board_src":  "main"
     },
     {
@@ -2444,6 +3029,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "sandwich-bags",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.0596,
+        "link":  0.0496,
+        "ratio":  0.83,
+        "price":  2.48,
+        "size":  "50 ct",
+        "boardItem":  "Bright Essentials Sandwich Bags, Double Zipper, Sandwich Size",
+        "linkItem":  "Bright Essentials Sandwich Bags, Double Zipper, Sandwich Size",
+        "board_src":  "main"
+    },
+    {
         "id":  "sandwich-cookies",
         "store":  "Fareway",
         "unit":  "oz",
@@ -2496,19 +3094,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "shampoo",
-        "store":  "Sam\u0027s Club",
-        "unit":  "floz",
-        "board":  0.2613,
-        "link":  0.2351,
-        "ratio":  0.9,
-        "price":  8.98,
-        "size":  "38.2 fl oz",
-        "boardItem":  "Pantene Pro-V Nourishing Coconut Milk \u0026 Shea Butter Shampoo, 38.2 fl. oz.",
-        "linkItem":  "Pantene Pro-V Nourishing Coconut Milk \u0026 Shea Butter Shampoo, 38.2 fl. oz.",
-        "board_src":  "main"
-    },
-    {
         "id":  "shaving-cream",
         "store":  "Fareway",
         "unit":  "oz",
@@ -2545,6 +3130,19 @@
         "size":  "96 oz",
         "boardItem":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Paradise, and Floral Fusion, 32 oz., 3 pk.",
         "linkItem":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Paradise, and Floral Fusion, 32 oz., 3 pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "shower-cleaner",
+        "store":  "Fareway",
+        "unit":  "floz",
+        "board":  0.1244,
+        "link":  0.0919,
+        "ratio":  0.74,
+        "price":  2.94,
+        "size":  "32 fl oz",
+        "boardItem":  "Bright Essentials Bathroom Cleaner, Lime Scent",
+        "linkItem":  "Bright Essentials Bathroom Cleaner, Lime Scent",
         "board_src":  "main"
     },
     {
@@ -2587,19 +3185,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "sports-drinks",
-        "store":  "Family Fare",
-        "unit":  "floz",
-        "board":  0.0624,
-        "link":  0.0782,
-        "ratio":  1.25,
-        "price":  2.19,
-        "size":  "28 fl oz",
-        "boardItem":  "Gatorade Thirst Quencher, Fruit Punch 8 Ea",
-        "linkItem":  "Gatorade Advanced Rehydration Fruit Punch Thirst Quencher 28 Fl Oz",
-        "board_src":  "main"
-    },
-    {
         "id":  "spring-mix",
         "store":  "Fareway",
         "unit":  "oz",
@@ -2639,19 +3224,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "strawberries",
-        "store":  "Family Fare",
-        "unit":  "oz",
-        "board":  0.3119,
-        "link":  0.2806,
-        "ratio":  0.9,
-        "price":  4.49,
-        "size":  "16 oz",
-        "boardItem":  "Fresh Strawberries",
-        "linkItem":  "Fresh Strawberries",
-        "board_src":  "main"
-    },
-    {
         "id":  "stuffing-mix",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -2688,6 +3260,19 @@
         "size":  "8 oz",
         "boardItem":  "Tuscan Garden Sundried Tomatoes 8 OZ",
         "linkItem":  "Tuscan Garden Sundried Tomatoes 8 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "sun-dried-tomatoes",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.7113,
+        "link":  0.6212,
+        "ratio":  0.87,
+        "price":  4.97,
+        "size":  "8 oz",
+        "boardItem":  "Mezzetta Sun-Dried Tomatoes",
+        "linkItem":  "Mezzetta Sun-Dried Tomatoes",
         "board_src":  "main"
     },
     {
@@ -2834,6 +3419,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "tea-bags",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.0738,
+        "link":  0.0598,
+        "ratio":  0.81,
+        "price":  2.99,
+        "size":  "50 ct",
+        "boardItem":  "Lipton Yellow Label Black Tea",
+        "linkItem":  "Lipton Yellow Label Black Tea",
+        "board_src":  "main"
+    },
+    {
         "id":  "teriyaki-sauce",
         "store":  "Sam\u0027s Club",
         "unit":  "floz",
@@ -2935,6 +3533,19 @@
         "size":  "8 ct",
         "boardItem":  "L\u0027oven Fresh Original Low Carb Tortillas, 8 Count",
         "linkItem":  "Pueblo Lindo Burrito Flour Tortillas 8 CT",
+        "board_src":  "main"
+    },
+    {
+        "id":  "turkey-lunchmeat",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.4994,
+        "link":  0.4369,
+        "ratio":  0.87,
+        "price":  6.99,
+        "size":  "16 oz",
+        "boardItem":  "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast Sliced Sandwich Lunch Meat Family Size",
+        "linkItem":  "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast Sliced Sandwich Lunch Meat Family Size",
         "board_src":  "main"
     },
     {
@@ -3195,19 +3806,6 @@
         "size":  "8 oz",
         "boardItem":  "Hy-Vee Finely Shredded Mild Cheddar Natural Cheese",
         "linkItem":  "Hy-Vee Finely Shredded Mild Cheddar Natural Cheese",
-        "board_src":  "recipe"
-    },
-    {
-        "id":  "cheddar-cheese-shredded",
-        "store":  "Family Fare",
-        "unit":  "oz",
-        "board":  0.2494,
-        "link":  0.3238,
-        "ratio":  1.3,
-        "price":  2.59,
-        "size":  "8 oz",
-        "boardItem":  "Our Family Mild Cheddar Shredded Cheese 16 Oz",
-        "linkItem":  "Our Family Extra Sharp Cheddar Shredded Cheese 8 Oz",
         "board_src":  "recipe"
     },
     {

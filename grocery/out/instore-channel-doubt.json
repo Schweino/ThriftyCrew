@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-09-12 09:34",
-    "board":  "comparison-2026-09-11.json",
+    "generated":  "2026-09-13 08:20",
+    "board":  "comparison-2026-09-13.json",
     "note":  "Cells whose winning row cannot prove it is an in-store shelf row. Since 2026-09-01 the engine REFUSES this shape (instore-lib.ps1), so a cell here is either a REVIEWED exception someone verified on the live product page, or a cell the refusal did not reach - which is a defect in the refusal, not a question for the store. Still advisory, still drops nothing.",
     "doubt_count":  2,
     "crown_count":  1,
@@ -689,6 +689,13 @@
                            "field_bearing":  false
                        },
                        {
+                           "store":  "Baker\u0027s",
+                           "file":  "bakers-regular-2026-09-13.json",
+                           "rows":  7301,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
                            "store":  "Walmart",
                            "file":  "walmart-regular-2026-07-05.json",
                            "rows":  27,
@@ -913,6 +920,20 @@
                            "field_bearing":  true
                        },
                        {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-09-11.json",
+                           "rows":  139,
+                           "with_field":  137,
+                           "field_bearing":  true
+                       },
+                       {
+                           "store":  "Walmart",
+                           "file":  "walmart-regular-2026-09-12.json",
+                           "rows":  309,
+                           "with_field":  307,
+                           "field_bearing":  true
+                       },
+                       {
                            "store":  "Aldi",
                            "file":  "aldi-regular-2026-07-06.json",
                            "rows":  30,
@@ -1091,6 +1112,13 @@
                            "store":  "Aldi",
                            "file":  "aldi-regular-2026-09-10.json",
                            "rows":  3288,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Aldi",
+                           "file":  "aldi-regular-2026-09-11.json",
+                           "rows":  3347,
                            "with_field":  0,
                            "field_bearing":  false
                        },
@@ -1503,7 +1531,14 @@
                        {
                            "store":  "Family Fare",
                            "file":  "family-fare-regular-2026-09-12.json",
-                           "rows":  5413,
+                           "rows":  5416,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Family Fare",
+                           "file":  "family-fare-regular-2026-09-13.json",
+                           "rows":  5421,
                            "with_field":  0,
                            "field_bearing":  false
                        },
@@ -2161,6 +2196,13 @@
                        {
                            "store":  "Hy-Vee",
                            "file":  "hyvee-regular-2026-09-12.json",
+                           "rows":  1544,
+                           "with_field":  0,
+                           "field_bearing":  false
+                       },
+                       {
+                           "store":  "Hy-Vee",
+                           "file":  "hyvee-regular-2026-09-13.json",
                            "rows":  1544,
                            "with_field":  0,
                            "field_bearing":  false

@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-12 09:25",
+    "generated":  "2026-09-13 08:16",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -12,11 +12,101 @@
                 ],
     "new_contested":  [
                           {
+                              "name":  "Bragg Organic Apple Cider Vinegar Honey Cayenne Wellness Cleanse, Raw and Unfiltered, 16 fl oz",
+                              "chain":  "apple-cider-vinegar (floz) \u003e cayenne-pepper (oz)",
+                              "form":  true,
+                              "winner":  "apple-cider-vinegar",
+                              "verdict":  "NOT-IN-STORE",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Bragg Organic Apple Cider Vinegar Pineapple Turmeric with The Mother, Raw and Unfiltered, 16 fl oz",
+                              "chain":  "pineapple (each) \u003e apple-cider-vinegar (floz) \u003e ground-turmeric (oz)",
+                              "form":  true,
+                              "winner":  "pineapple",
+                              "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Dawn Ultra Strawberry Field Scent",
+                              "chain":  "strawberries (oz) \u003e dish-soap (floz)",
+                              "form":  true,
+                              "winner":  "strawberries",
+                              "verdict":  "size 38 oz = 0.1708/oz",
+                              "cell":  "strawberries @ Family Fare 0.1708/oz",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Giovanni Rana Alfredo Premium Pasta Topping Jar (Family Size, 15oz), Serving Size, 1, Refrigerated",
+                              "chain":  "pasta (oz) \u003e alfredo-sauce (oz)",
+                              "form":  false,
+                              "winner":  "pasta",
+                              "verdict":  "OUT-OF-BAND",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Go Gurt Fat Free Sponge Bob Square Pants Strawberry Splash/Cool Cotton Candy Yogurt Value Pack 20 Ea",
+                              "chain":  "yogurt (oz) \u003e sponges (each)",
+                              "form":  true,
+                              "winner":  "yogurt",
+                              "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Haagen Dazs Non Dairy Sweet Lemon Coconut Sorbet 14 Fl Oz",
+                              "chain":  "lemons (each) \u003e coconut (each)",
+                              "form":  false,
+                              "winner":  "lemons",
+                              "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
                               "name":  "Koda Farms Blue Star Mochiko Sweet Rice Flour 16 oz., 6 ct.",
                               "chain":  "rice (lb) \u003e flour (lb)",
                               "form":  false,
                               "winner":  "rice",
-                              "verdict":  "not in the newest candidates file",
+                              "verdict":  "size 6 lb = 2.6133/lb",
+                              "cell":  "rice @ Sam\u0027s Club 2.6133/lb",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Mott\u0027s 100% Juice Apple White Grape Juice, 8 fl oz, 6 Count Bottles",
+                              "chain":  "apple-juice (floz) \u003e grape-juice (floz)",
+                              "form":  false,
+                              "winner":  "apple-juice",
+                              "verdict":  "size 48 floz = 0.0921/floz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Our Family Natural Finely Cut Pizza Blend Shredded Cheese 32 Oz",
+                              "chain":  "shredded-cheese (oz) \u003e frozen-pizza (each)",
+                              "form":  true,
+                              "winner":  "shredded-cheese",
+                              "verdict":  "size 32 oz = 0.2341/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Panera Bread Coffee, Ground, Hazelnut Creme 12 Oz",
+                              "chain":  "bread (each) \u003e coffee (oz)",
+                              "form":  true,
+                              "winner":  "bread",
+                              "verdict":  "OUT-OF-BAND",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Panera Bread Coffee, Ground, Light Roast 12 Oz",
+                              "chain":  "bread (each) \u003e coffee (oz)",
+                              "form":  true,
+                              "winner":  "bread",
+                              "verdict":  "OUT-OF-BAND",
                               "cell":  "",
                               "crown":  false
                           },
@@ -25,16 +115,37 @@
                               "chain":  "energy-drinks (floz) \u003e coconut (each)",
                               "form":  true,
                               "winner":  "energy-drinks",
-                              "verdict":  "size 201.6 floz = 0.1934/floz ; size 201.6 floz = 0.1735/floz",
+                              "verdict":  "size 201.6 floz = 0.2107/floz ; size 201.6 floz = 0.1934/floz ; size 201.6 floz = 0.1735/floz",
                               "cell":  "",
                               "crown":  false
                           }
                       ],
     "new_contested_names":  [
+                                "Bragg Organic Apple Cider Vinegar Honey Cayenne Wellness Cleanse, Raw and Unfiltered, 16 fl oz",
+                                "Bragg Organic Apple Cider Vinegar Pineapple Turmeric with The Mother, Raw and Unfiltered, 16 fl oz",
+                                "Dawn Ultra Strawberry Field Scent",
+                                "Giovanni Rana Alfredo Premium Pasta Topping Jar (Family Size, 15oz), Serving Size, 1, Refrigerated",
+                                "Go Gurt Fat Free Sponge Bob Square Pants Strawberry Splash/Cool Cotton Candy Yogurt Value Pack 20 Ea",
+                                "Haagen Dazs Non Dairy Sweet Lemon Coconut Sorbet 14 Fl Oz",
                                 "Koda Farms Blue Star Mochiko Sweet Rice Flour 16 oz., 6 ct.",
+                                "Mott\u0027s 100% Juice Apple White Grape Juice, 8 fl oz, 6 Count Bottles",
+                                "Our Family Natural Finely Cut Pizza Blend Shredded Cheese 32 Oz",
+                                "Panera Bread Coffee, Ground, Hazelnut Creme 12 Oz",
+                                "Panera Bread Coffee, Ground, Light Roast 12 Oz",
                                 "Red Bull Energy Coconut Edition 8.4 oz., 24 pk."
                             ],
     "cell_by_contest":  [
-
+                            {
+                                "name":  "Dawn Ultra Strawberry Field Scent",
+                                "cell":  "strawberries @ Family Fare 0.1708/oz",
+                                "crown":  false,
+                                "claimed_by":  "strawberries \u003e dish-soap"
+                            },
+                            {
+                                "name":  "Koda Farms Blue Star Mochiko Sweet Rice Flour 16 oz., 6 ct.",
+                                "cell":  "rice @ Sam\u0027s Club 2.6133/lb",
+                                "crown":  false,
+                                "claimed_by":  "rice \u003e flour"
+                            }
                         ]
 }
