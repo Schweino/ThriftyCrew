@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-13 08:16",
+    "generated":  "2026-09-14 08:16",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -30,12 +30,57 @@
                               "crown":  false
                           },
                           {
+                              "name":  "Charmin bath tissue 9 mega XL rolls or Bounty paper towels 6 double rolls, $15.49",
+                              "chain":  "paper-towels (each) \u003e toilet-paper (each)",
+                              "form":  false,
+                              "winner":  "paper-towels",
+                              "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Chobani Zero Added Sugar Lowfat Greek Raspberry Lemon Yogurt 6.7 Oz",
+                              "chain":  "yogurt (oz) \u003e sugar (lb)",
+                              "form":  true,
+                              "winner":  "yogurt",
+                              "verdict":  "size 6.7 oz = 0.2239/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Colgate, Hello toothpaste 3.2 to 5 oz., Colgate 360 or power Bluey toothbrushes 1 or 2 ct., $5.96",
+                              "chain":  "toothpaste (oz) \u003e toothbrushes (each)",
+                              "form":  true,
+                              "winner":  "toothpaste",
+                              "verdict":  "size 5 oz = 1.192/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
                               "name":  "Dawn Ultra Strawberry Field Scent",
                               "chain":  "strawberries (oz) \u003e dish-soap (floz)",
                               "form":  true,
                               "winner":  "strawberries",
                               "verdict":  "size 38 oz = 0.1708/oz",
                               "cell":  "strawberries @ Family Fare 0.1708/oz",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Dole spinach 8 oz. pkg., classic romaine 9 oz. pkg. or greener selection 11 oz. pkg., $2.88",
+                              "chain":  "lettuce (each) \u003e spinach (oz)",
+                              "form":  true,
+                              "winner":  "lettuce",
+                              "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Family Size Nabisco Ritz crackers, Oreo or Chips Ahoy!, cookies 8 to 20.5 oz., $4.48",
+                              "chain":  "crackers (oz) \u003e sandwich-cookies (oz)",
+                              "form":  false,
+                              "winner":  "crackers",
+                              "verdict":  "size 20.5 oz = 0.2185/oz",
+                              "cell":  "",
                               "crown":  false
                           },
                           {
@@ -62,6 +107,24 @@
                               "form":  false,
                               "winner":  "lemons",
                               "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Honey Stinger waffles, chews or gels, 20% off regular price,",
+                              "chain":  "honey (oz) \u003e frozen-waffles (each)",
+                              "form":  true,
+                              "winner":  "honey",
+                              "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Hy-Vee almonds, peanuts, macadamia nuts or cashew halves \u0026 pieces, 6.5 to 15 oz., $7.49",
+                              "chain":  "peanuts (oz) \u003e almonds (oz)",
+                              "form":  false,
+                              "winner":  "peanuts",
+                              "verdict":  "size 15 oz = 0.4993/oz",
                               "cell":  "",
                               "crown":  false
                           },
@@ -118,21 +181,38 @@
                               "verdict":  "size 201.6 floz = 0.2107/floz ; size 201.6 floz = 0.1934/floz ; size 201.6 floz = 0.1735/floz",
                               "cell":  "",
                               "crown":  false
+                          },
+                          {
+                              "name":  "The Mad Butcher\u0027s salsa or queso, 15 or 16 oz., $2.99",
+                              "chain":  "salsa (oz) \u003e queso (oz)",
+                              "form":  false,
+                              "winner":  "salsa",
+                              "verdict":  "size 16 oz = 0.1869/oz",
+                              "cell":  "",
+                              "crown":  false
                           }
                       ],
     "new_contested_names":  [
                                 "Bragg Organic Apple Cider Vinegar Honey Cayenne Wellness Cleanse, Raw and Unfiltered, 16 fl oz",
                                 "Bragg Organic Apple Cider Vinegar Pineapple Turmeric with The Mother, Raw and Unfiltered, 16 fl oz",
+                                "Charmin bath tissue 9 mega XL rolls or Bounty paper towels 6 double rolls, $15.49",
+                                "Chobani Zero Added Sugar Lowfat Greek Raspberry Lemon Yogurt 6.7 Oz",
+                                "Colgate, Hello toothpaste 3.2 to 5 oz., Colgate 360 or power Bluey toothbrushes 1 or 2 ct., $5.96",
                                 "Dawn Ultra Strawberry Field Scent",
+                                "Dole spinach 8 oz. pkg., classic romaine 9 oz. pkg. or greener selection 11 oz. pkg., $2.88",
+                                "Family Size Nabisco Ritz crackers, Oreo or Chips Ahoy!, cookies 8 to 20.5 oz., $4.48",
                                 "Giovanni Rana Alfredo Premium Pasta Topping Jar (Family Size, 15oz), Serving Size, 1, Refrigerated",
                                 "Go Gurt Fat Free Sponge Bob Square Pants Strawberry Splash/Cool Cotton Candy Yogurt Value Pack 20 Ea",
                                 "Haagen Dazs Non Dairy Sweet Lemon Coconut Sorbet 14 Fl Oz",
+                                "Honey Stinger waffles, chews or gels, 20% off regular price,",
+                                "Hy-Vee almonds, peanuts, macadamia nuts or cashew halves \u0026 pieces, 6.5 to 15 oz., $7.49",
                                 "Koda Farms Blue Star Mochiko Sweet Rice Flour 16 oz., 6 ct.",
                                 "Mott\u0027s 100% Juice Apple White Grape Juice, 8 fl oz, 6 Count Bottles",
                                 "Our Family Natural Finely Cut Pizza Blend Shredded Cheese 32 Oz",
                                 "Panera Bread Coffee, Ground, Hazelnut Creme 12 Oz",
                                 "Panera Bread Coffee, Ground, Light Roast 12 Oz",
-                                "Red Bull Energy Coconut Edition 8.4 oz., 24 pk."
+                                "Red Bull Energy Coconut Edition 8.4 oz., 24 pk.",
+                                "The Mad Butcher\u0027s salsa or queso, 15 or 16 oz., $2.99"
                             ],
     "cell_by_contest":  [
                             {

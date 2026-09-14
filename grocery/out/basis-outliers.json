@@ -46,6 +46,20 @@
                               "id":  "almond-milk",
                               "commodity":  "Almond Milk",
                               "unit":  "floz",
+                              "store":  "Hy-Vee",
+                              "per_unit":  0.0467,
+                              "size":  "64 oz",
+                              "item":  "Hy Vee Almondmilk Original Unsweetened",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "almond-milk",
+                              "commodity":  "Almond Milk",
+                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.131,
                               "size":  "48 oz",
@@ -1317,7 +1331,7 @@
                               "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-13.json",
+    "compare_file":  "comparison-2026-09-14.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -1482,6 +1496,20 @@
                                                      "per_unit":  0.131,
                                                      "size":  "48 oz",
                                                      "item":  "Unsweetened Almond Milk",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "almond-milk",
+                                                     "commodity":  "Almond Milk",
+                                                     "unit":  "floz",
+                                                     "store":  "Hy-Vee",
+                                                     "per_unit":  0.0467,
+                                                     "size":  "64 oz",
+                                                     "item":  "Hy Vee Almondmilk Original Unsweetened",
                                                      "kind":  "weight",
                                                      "row_kind":  "volume",
                                                      "holds_crown":  false,
@@ -2509,7 +2537,7 @@
                                 }
                             ],
     "ratio":  4,
-    "generated":  "2026-09-13T08:10:58",
+    "generated":  "2026-09-14T08:11:09",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",

@@ -136,3 +136,20 @@
 [2026-09-13T08:18:07] REVIEW 'Grocery: 3 store(s) dropped from a commodity they carry - 2026-09-13' [type: grocery store s dropped from a commodity they carry] - queued, NOT emailed (registry entry stores-dropped)
 [2026-09-13T08:21:21] QUEUE ABSORBED into open item 2026-09-12-c424f3 (day 1 of this condition, count now 2) - no new id minted
 [2026-09-13T08:21:21] REVIEW 'Grocery: 3 NEW price flag(s) - 2026-09-13' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)
+[2026-09-13T10:30:09] QUEUE ABSORBED into open item 2026-09-12-34df27 (day 1 of this condition, count now 2) - no new id minted
+[2026-09-13T10:30:10] SENT 'Automation silent-death: 5 issue(s)' -> schweino68@gmail.com (id 1a09b63dfbf8e0cc)
+[2026-09-13T10:34:09] QUEUE ABSORBED BY INCIDENT guards-hold into 2026-09-13-76d263 (count now 2): 'Grocery capture watchdog: held by guards 2026-09-13' - no new id, no mail
+[2026-09-13T10:34:10] QUEUE ABSORBED into open item 2026-09-12-d7af0c (day 1 of this condition, count now 2) - no new id minted
+[2026-09-13T10:34:11] SENT 'Grocery capture watchdog: 2 issue(s) 2026-09-13' -> schweino68@gmail.com (id 1a09b678d355cc83)
+[2026-09-14T04:38:15] QUEUE ABSORBED into open item 2026-09-12-87ca2f (day 2 of this condition, count now 3) - no new id minted
+[2026-09-14T04:38:16] SENT 'The knowledge store's nightly pass went RED' -> schweino68@gmail.com (id 1a09f48105f4aef8)
+[2026-09-14T08:05:33] QUEUE ABSORBED into open item 2026-09-12-91ec35 (day 2 of this condition, count now 2) - no new id minted
+[2026-09-14T08:05:33] REVIEW 'Grocery: Family Fare pull dropped a carried item - review' [type: grocery family fare pull dropped a carried item review] - queued, NOT emailed (registry entry ff-carry)
+[2026-09-14T08:12:00] QUEUE ABSORBED into open item 2026-09-13-76d263 (day 1 of this condition, count now 3) - no new id minted
+[2026-09-14T08:12:02] SENT 'Grocery: GUARDS FAILED - board not published - 2026-09-14' -> schweino68@gmail.com (id 1a0a00bc3d90154f)
+[2026-09-14T08:17:26] QUEUE ABSORBED into open item 2026-09-12-099302 (day 2 of this condition, count now 2) - no new id minted
+[2026-09-14T08:17:26] REVIEW 'Grocery: semantic sweep found 2 product(s) no rule can see - 2026-09-14' [type: grocery semantic sweep found product s no rule can see] - queued, NOT emailed (registry entry semantic-sweep)
+[2026-09-14T08:20:33] QUEUE ABSORBED into open item 2026-09-12-c424f3 (day 2 of this condition, count now 3) - no new id minted
+[2026-09-14T08:20:33] REVIEW 'Grocery: 12 NEW price flag(s) - 2026-09-14' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)
+[2026-09-14T08:23:02] REVIEW 'Tools: a live page has drifted from its local source' [type: tools a live page has drifted from its local source] - queued, NOT emailed (registry entry ghost-drift)
+[2026-09-14T08:23:05] SENT 'Ops: an agent prompt is not backed up' -> schweino68@gmail.com (id 1a0a015e15cc6651)

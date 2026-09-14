@@ -2,33 +2,33 @@
     "readme":  "Product identity table, one current row per (store, product key) in this namespace. Truth is the .jsonl files beside this manifest; graph.db is a rebuildable index of them (graph/schema.md commitment 3). History is git: the files are tracked and sorted, so an assignment change is a commit diff. Written by compare-deals.ps1 -IdentityNamespace; never hand-edit.",
     "namespace":  "staple",
     "rules_hash":  "c077334f74e1a97316aadb09074baca3a481f42af606c9d995370806cf1dbeae",
-    "board_date":  "2026-09-13",
-    "built_at":  "2026-09-13T08:07:13",
-    "rows_total":  43747,
-    "rows_reused_from_previous":  42620,
-    "rows_rematched":  1127,
+    "board_date":  "2026-09-14",
+    "built_at":  "2026-09-14T08:07:39",
+    "rows_total":  43793,
+    "rows_reused_from_previous":  42948,
+    "rows_rematched":  845,
     "rows_contested":  794,
     "key_collisions_demoted_to_name":  731,
     "stores":  [
                    {
                        "store":  "Aldi",
                        "rows":  3478,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7491,
+                       "rows":  7490,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  6287,
+                       "rows":  6334,
                        "changed":  true
                    },
                    {
                        "store":  "Fareway",
                        "rows":  842,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Hy-Vee",
@@ -43,7 +43,7 @@
                    {
                        "store":  "Walmart",
                        "rows":  19717,
-                       "changed":  true
+                       "changed":  false
                    }
                ]
 }

@@ -54,6 +54,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
+        "id":  "apple-juice",
+        "store":  "Family Fare",
+        "product":  "Our Family Apple Juice",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "applesauce",
         "store":  "Family Fare",
         "product":  "Our Family Applesauce, Unsweetened 48 Oz",
@@ -133,6 +142,15 @@
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
+        "id":  "beef-jerky",
+        "store":  "Family Fare",
+        "product":  "Our Family Beef Jerky, Original 3.25 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "black-pepper",
@@ -450,6 +468,15 @@
         "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027coffee-creamer\u0027"
     },
     {
+        "id":  "coffee-pods",
+        "store":  "Family Fare",
+        "product":  "Eight O\u0027clock Coffee K Cup Pods Dark Roast Dark Italian Espresso Coffee Value Pack 32 Ea",
+        "dept":  "beverages",
+        "aisle":  "beverages/coffee",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "cooking-spray",
         "store":  "Family Fare",
         "product":  "Our Family Cooking Spray, No Stick, Butter Flavored 6 Oz",
@@ -466,6 +493,15 @@
         "aisle":  "pantry/crackers",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "cranberry-juice",
+        "store":  "Family Fare",
+        "product":  "Our Family Cranberry Juice Cocktail 64 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "cream-of-chicken-soup",
@@ -702,6 +738,15 @@
         "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "fruit-snacks",
+        "store":  "Family Fare",
+        "product":  "Welch\u0027s Red, White \u0026 Blueberry Fruit Snacks 26 Ea",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "fresh-ginger",
         "store":  "Family Fare",
         "product":  "Ginger Root",
@@ -725,6 +770,15 @@
         "product":  "Blueberry Flax Granola Our Family",
         "dept":  "pantry",
         "aisle":  "pantry/breakfast",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "granola-bars",
+        "store":  "Family Fare",
+        "product":  "Our Family Chewy Assorted Granola Bars Variety Pack 10 Ea",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
@@ -826,6 +880,15 @@
         "aisle":  "fresh_fruits_vegetables/melons",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
+        "id":  "hot-cocoa",
+        "store":  "Family Fare",
+        "product":  "Milk Chocolate Hot Cocoa Mix Our Family (10 Ct)",
+        "dept":  "beverages",
+        "aisle":  "beverages/other_hot_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "hot-dog-buns",
@@ -1152,6 +1215,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "pudding-cups",
+        "store":  "Family Fare",
+        "product":  "Our Family Pudding Cups, Banana 4 Ea",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "radishes",
         "store":  "Family Fare",
         "product":  "Red Radishes",
@@ -1222,6 +1294,15 @@
         "aisle":  "meat/beef",
         "verdict":  "ALLOW",
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
+        "id":  "rice-cakes",
+        "store":  "Family Fare",
+        "product":  "Quaker Caramel Chocolate Chip Rice Cakes 7.4 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "rotisserie-chicken",
@@ -1350,6 +1431,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
+        "id":  "tea-bags",
+        "store":  "Family Fare",
+        "product":  "Lipton Black Tea Bags",
+        "dept":  "beverages",
+        "aisle":  "beverages/tea",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "tilapia",
         "store":  "Family Fare",
         "product":  "Our Family Fillets, Tilapia 16 Oz",
@@ -1361,7 +1451,7 @@
     {
         "id":  "toaster-pastries",
         "store":  "Family Fare",
-        "product":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
+        "product":  "Our Family Chocolate Fudge Toaster Pastries 12 Ea",
         "dept":  "pantry",
         "aisle":  "pantry/breakfast",
         "verdict":  "ALLOW",
@@ -1519,6 +1609,15 @@
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
+        "id":  "apple-cider",
+        "store":  "Family Fare",
+        "product":  "Our Family Apple Cider Juice 64 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "mexican-cheese-blend",

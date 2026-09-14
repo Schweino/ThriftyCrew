@@ -78,8 +78,8 @@
                          "rejected":  0.688,
                          "band_min":  0.7,
                          "floor_ratio":  0.9829,
-                         "median_price":  1.4732,
-                         "median_ratio":  0.467,
+                         "median_price":  1.3738,
+                         "median_ratio":  0.5008,
                          "save_pct":  44.8,
                          "name":  "Odoms Tennessee Pride Maple Pancake Sausage Sandwiches, Frozen Breakfast Sandwiches, 10 Count",
                          "price_text":  "$6.88",
@@ -498,14 +498,14 @@
                          "label":  "Sandwich Bags",
                          "store":  "Hy-Vee",
                          "unit":  "each",
-                         "board_price":  0.034,
+                         "board_price":  0.0366,
                          "board_item":  "That\u0027s Smart! Recloseable Sandwich Bags",
                          "rejected":  0.0086,
                          "band_min":  0.01,
                          "floor_ratio":  0.86,
                          "median_price":  0.0186,
                          "median_ratio":  0.4624,
-                         "save_pct":  74.7,
+                         "save_pct":  76.5,
                          "name":  "That\u0027s Smart! Fold \u0026 Close Sandwich Bags",
                          "price_text":  "$1.29",
                          "size_text":  "150 ct"
@@ -817,10 +817,10 @@
                          "size_text":  "13.007 fl oz"
                      }
                  ],
-    "compare_file":  "comparison-2026-09-13.json",
+    "compare_file":  "comparison-2026-09-14.json",
     "near_floor":  0.75,
     "median_floor":  0.4,
     "cells":  29,
-    "generated":  "2026-09-13T08:10:57",
-    "flagged_file":  "flagged-2026-09-13.json"
+    "generated":  "2026-09-14T08:11:09",
+    "flagged_file":  "flagged-2026-09-14.json"
 }

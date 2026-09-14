@@ -10,20 +10,13 @@
                          "price":  "$2.39",
                          "size":  "12 ct",
                          "score":  1
-                     },
-                     {
-                         "id":  "tortilla-chips",
-                         "fault":  "NO-LINK",
-                         "board":  "Our Family Hint Of Lime Tortilla Chips 13 Oz",
-                         "board_pu":  0.1915,
-                         "name":  "Our Family Hint Of Lime Tortilla Chips 13 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/our_family_hint_of_lime_tortilla_chips_13_oz/p/1564405684716556129",
-                         "price":  "$2.49",
-                         "size":  "13 oz",
-                         "score":  1
                      }
                  ],
     "refused":  [
+                    {
+                        "id":  "ground-beef-8020",
+                        "why":  "match found but per-unit disagrees: board $6.49 vs link $7.99 (18.8%)"
+                    },
                     {
                         "id":  "aluminum-foil",
                         "why":  "match found but its size \"1 ea\" gives no per-unit in sq_ft"
@@ -31,6 +24,10 @@
                     {
                         "id":  "dried-basil",
                         "why":  "match found but its size \"200 ml\" gives no per-unit in oz"
+                    },
+                    {
+                        "id":  "block-cheese",
+                        "why":  "match found but per-unit disagrees: board $0.2288 vs link $0.3238 (29.3%)"
                     },
                     {
                         "id":  "bread",
@@ -49,8 +46,12 @@
                         "why":  "match found but its size \"9 oz\" gives no per-unit in each"
                     },
                     {
-                        "id":  "cherry-tomatoes",
-                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
+                        "id":  "cantaloupe",
+                        "why":  "no confident match (best 0)"
+                    },
+                    {
+                        "id":  "cat-food",
+                        "why":  "match found but per-unit disagrees: board $1.1869 vs link $2.2825 (48%)"
                     },
                     {
                         "id":  "clam-chowder",
@@ -81,6 +82,10 @@
                         "why":  "match found but its size \"15 oz\" gives no per-unit in each"
                     },
                     {
+                        "id":  "frozen-fries",
+                        "why":  "match found but per-unit disagrees: board $0.1607 vs link $0.2496 (35.6%)"
+                    },
+                    {
                         "id":  "hash-browns",
                         "why":  "no confident match (best 0.375)"
                     },
@@ -97,27 +102,39 @@
                         "why":  "match found but per-unit disagrees: board $2.89 vs link $0.3612 (700%)"
                     },
                     {
+                        "id":  "gelatin",
+                        "why":  "match found but its size \"0.3 oz\" gives no per-unit in each"
+                    },
+                    {
                         "id":  "orange-juice",
                         "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
+                    },
+                    {
+                        "id":  "protein-bars",
+                        "why":  "match found but per-unit disagrees: board $0.915 vs link $1.165 (21.5%)"
                     },
                     {
                         "id":  "queso",
                         "why":  "match found but per-unit disagrees: board $0.1993 vs link $0.3993 (50.1%)"
                     },
                     {
-                        "id":  "sports-drinks",
-                        "why":  "match found but per-unit disagrees: board $0.0446 vs link $0.0782 (43%)"
+                        "id":  "sliced-cheese",
+                        "why":  "match found but its size \"16 ea\" gives no per-unit in oz"
                     },
                     {
                         "id":  "strawberries",
                         "why":  "match found but per-unit disagrees: board $0.1708 vs link $0.2103 (18.8%)"
                     },
                     {
+                        "id":  "maple-syrup",
+                        "why":  "match found but per-unit disagrees: board $0.1042 vs link $0.2246 (53.6%)"
+                    },
+                    {
                         "id":  "vegetable-soup",
-                        "why":  "match found but per-unit disagrees: board $0.1053 vs link $0.1784 (41%)"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
-    "worked":  27,
-    "generated":  "2026-09-13 08:10",
-    "board":  "comparison-2026-09-13.json"
+    "worked":  31,
+    "generated":  "2026-09-14 08:10",
+    "board":  "comparison-2026-09-14.json"
 }

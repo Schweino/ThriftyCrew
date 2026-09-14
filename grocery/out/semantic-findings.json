@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-13 08:18",
-    "board":  "comparison-2026-09-13.json",
-    "sidecar_generated":  "2026-09-13 08:18:04",
+    "generated":  "2026-09-14 08:17",
+    "board":  "comparison-2026-09-14.json",
+    "sidecar_generated":  "2026-09-14 08:17:23",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -10,15 +10,34 @@
                    },
     "examined":  {
                      "board_pairs":  3183,
-                     "corpus":  41537,
-                     "rule_invisible":  7915
+                     "corpus":  41568,
+                     "rule_invisible":  7916
                  },
     "identity_count":  0,
-    "coverage_count":  0,
+    "coverage_count":  2,
     "identity":  [
 
                  ],
     "coverage":  [
-
+                     {
+                         "kind":  "coverage",
+                         "id":  "tilapia",
+                         "commodity":  "Tilapia Fillets",
+                         "store":  "Walmart",
+                         "product":  "Great Value Frozen Skinless \u0026 Boneless Swai Fish Fillets Value Bag, 4 lb",
+                         "cos":  0.6396,
+                         "score":  0.92059,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "breakfast-sandwiches",
+                         "commodity":  "Frozen Breakfast Sandwiches",
+                         "store":  "Family Fare",
+                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
+                         "cos":  0.7192,
+                         "score":  0.916499,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     }
                  ]
 }
