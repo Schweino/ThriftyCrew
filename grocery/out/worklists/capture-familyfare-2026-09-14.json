@@ -4,17 +4,17 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-19; next_pull 2026-09-20",
-    "cursor_start":  270,
-    "cursor_next":  277,
+    "cursor_start":  277,
+    "cursor_next":  284,
     "total_terms":  602,
     "rotation_terms":  [
-                           "fruit cocktail canned",
-                           "fruit cups",
-                           "fruit punch",
-                           "fruit snacks",
-                           "furniture polish",
-                           "garam masala",
-                           "garden salad bag"
+                           "fresh garlic",
+                           "frozen garlic bread",
+                           "garlic herb seasoning",
+                           "garlic infused oil",
+                           "garlic powder",
+                           "gelatin cups",
+                           "ginger snaps"
                        ],
     "sale_terms":  [
 
