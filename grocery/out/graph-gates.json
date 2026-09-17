@@ -1,9 +1,9 @@
 {
-    "updated":  "2026-09-14T08:15:19",
+    "updated":  "2026-09-17T07:14:11",
     "python":  "C:\\Codex\\Python312\\python.exe",
     "mode":  "ADVISORY - graph checks the finished board and can never change a price or stop a publish. Promotion to blocking is per-gate, after a clean record of real days, and is Brad\u0027s call.",
     "gates_total":  8,
-    "gates_failing":  0,
+    "gates_failing":  1,
     "gates":  [
                   {
                       "gate":  "omaha_identity",
@@ -12,7 +12,7 @@
                   },
                   {
                       "gate":  "ad_window",
-                      "verdict":  "PASS",
+                      "verdict":  "FAIL",
                       "detail":  ""
                   },
                   {
@@ -38,12 +38,12 @@
                   {
                       "gate":  "provenance_complete",
                       "verdict":  "PASS",
-                      "detail":  ""
+                      "detail":  "{\"checked\": 5, \"overdue\": [{\"store\": \"Fareway\", \"window\": \"2026-09-07..2026-09-12\", \"today\": \"2026-09-17\", \"days_past_window\": 5, \"next_pull\": \"2026-09-13\", \"pull_method\": \"browser\", \"days_overdue\": 4"
                   },
                   {
                       "gate":  "observations_fresh",
                       "verdict":  "PASS",
-                      "detail":  "FRESH: newest observed_at \u00272026-09-14\u0027, 0 h old against a 36 h window; graph.db written 0 h ago"
+                      "detail":  "FRESH: newest observed_at \u00272026-09-17\u0027, 0 h old against a 36 h window; graph.db written 0 h ago"
                   }
               ]
 }

@@ -10,6 +10,17 @@
                          "price":  "$2.39",
                          "size":  "12 ct",
                          "score":  1
+                     },
+                     {
+                         "id":  "sliced-cheese",
+                         "fault":  "NO-LINK",
+                         "board":  "Kraft American Cheese Slices 24 Ea",
+                         "board_pu":  0.3744,
+                         "name":  "Kraft American Cheese Slices 24 Ea",
+                         "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/packaged_sliced/kraft_american_cheese_slices_24_ea/p/17691",
+                         "price":  "$5.99",
+                         "size":  "16 oz",
+                         "score":  1
                      }
                  ],
     "refused":  [
@@ -23,7 +34,7 @@
                     },
                     {
                         "id":  "dried-basil",
-                        "why":  "match found but its size \"200 ml\" gives no per-unit in oz"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "block-cheese",
@@ -107,7 +118,7 @@
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "protein-bars",
@@ -116,10 +127,6 @@
                     {
                         "id":  "queso",
                         "why":  "match found but per-unit disagrees: board $0.1993 vs link $0.3993 (50.1%)"
-                    },
-                    {
-                        "id":  "sliced-cheese",
-                        "why":  "match found but its size \"16 ea\" gives no per-unit in oz"
                     },
                     {
                         "id":  "strawberries",
@@ -135,6 +142,6 @@
                     }
                 ],
     "worked":  31,
-    "generated":  "2026-09-14 08:10",
-    "board":  "comparison-2026-09-14.json"
+    "generated":  "2026-09-17 07:09",
+    "board":  "comparison-2026-09-17.json"
 }

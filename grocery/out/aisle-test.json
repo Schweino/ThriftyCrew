@@ -1,5 +1,14 @@
 ﻿[
     {
+        "id":  "air-freshener",
+        "store":  "Family Fare",
+        "product":  "Glade Odor Fighting Soft Mist Air Freshener Room Spray, Orchid Blossom, 7.3oz., 1 Count 7.3 Oz",
+        "dept":  "household",
+        "aisle":  "household/cleaners_air_fresheners",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
         "id":  "alfredo-sauce",
         "store":  "Family Fare",
         "product":  "Ragu Sauce, Classic Alfredo 16 Oz",
@@ -133,6 +142,15 @@
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "batteries",
+        "store":  "Family Fare",
+        "product":  "Simply Done Aa Alkaline Batteries 20 Ea",
+        "dept":  "household",
+        "aisle":  "household/electrical",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
         "id":  "bbq-sauce",
@@ -360,6 +378,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "charcoal",
+        "store":  "Family Fare",
+        "product":  "Kingsford Applewood Smooth Smoke Flavor Charcoal Briquets 16 Lb",
+        "dept":  "household",
+        "aisle":  "household/home_maintenance_more",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
         "id":  "cheese-crackers",
         "store":  "Family Fare",
         "product":  "Crav\u0027n Flavor Cheese Crackers, Cheddar, Family Size 21 Oz",
@@ -486,6 +513,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
+        "id":  "ground-coriander",
+        "store":  "Family Fare",
+        "product":  "Spice Islands Ground Coriander 1.7 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "crackers",
         "store":  "Family Fare",
         "product":  "Our Family Saltine Original Crackers 16 Oz",
@@ -576,9 +612,18 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "disinfectant-spray",
+        "store":  "Family Fare",
+        "product":  "Lysol Crisp Linen Scent Disinfectant Spray 19 Oz",
+        "dept":  "household",
+        "aisle":  "household/cleaners_air_fresheners",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
         "id":  "disinfecting-wipes",
         "store":  "Family Fare",
-        "product":  "Clorox Grapefruit \u0026 Orange Blossom Disinfecting Wipes 75 Ea",
+        "product":  "Clorox 3 In 1 Crisp Lemon Disinfecting Wipes 75 Ea",
         "dept":  "household",
         "aisle":  "household/cleaners_air_fresheners",
         "verdict":  "ALLOW",
@@ -601,6 +646,15 @@
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "dryer-sheets",
+        "store":  "Family Fare",
+        "product":  "Arm \u0026 Hammer Mountain Rain Dryer Sheets 144 Ea",
+        "dept":  "household",
+        "aisle":  "household/laundry",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
         "id":  "egg-noodles",
@@ -628,6 +682,24 @@
         "aisle":  "dairy/milk",
         "verdict":  "ALLOW",
         "reason":  "\u0027dairy\u0027 is a reviewed exception department for \u0027evaporated-milk\u0027"
+    },
+    {
+        "id":  "fabric-softener",
+        "store":  "Family Fare",
+        "product":  "Free \u0026 Clear Fabric Softener Our Family",
+        "dept":  "household",
+        "aisle":  "household/laundry",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "fish-sticks",
+        "store":  "Family Fare",
+        "product":  "Van De Kamp\u0027s Wild Caught Crunchy Breaded Fish Sticks 24.6 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/seafood_fish",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is a reviewed exception department for \u0027fish-sticks\u0027"
     },
     {
         "id":  "storage-bags",
@@ -671,6 +743,15 @@
         "product":  "Jimmy Dean Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen, 8 Ct",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_meals_more",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
+        "id":  "frozen-broccoli",
+        "store":  "Family Fare",
+        "product":  "Frozen Broccoli Florets Our Family Steamable",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
         "verdict":  "ALLOW",
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
@@ -754,6 +835,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "glass-cleaner",
+        "store":  "Family Fare",
+        "product":  "Our Family Glass Cleaner Refill With Ammonia 67.6 Fl Oz",
+        "dept":  "household",
+        "aisle":  "household/cleaners_air_fresheners",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
         "id":  "graham-crackers",
@@ -918,6 +1008,15 @@
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
+        "id":  "instant-coffee",
+        "store":  "Family Fare",
+        "product":  "Cafe Bustelo Espresso Instant Coffee 200 G",
+        "dept":  "beverages",
+        "aisle":  "beverages/coffee",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "instant-mashed-potatoes",
         "store":  "Family Fare",
         "product":  "Idahoan Idahoan® Baby Reds® Brand Mashed Potatoes 8.2 Oz. Pouch",
@@ -988,6 +1087,15 @@
         "aisle":  "fresh_fruits_vegetables/tropical_fruits",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
+        "id":  "stain-remover",
+        "store":  "Family Fare",
+        "product":  "Shout Laundry Stain Remover, Triple Acting, Value Refill 60 Fl Oz",
+        "dept":  "household",
+        "aisle":  "household/laundry",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
         "id":  "lemonade",
@@ -1062,6 +1170,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
+        "id":  "mouthwash",
+        "store":  "Family Fare",
+        "product":  "Top Care Everyday Mouthwash, Freshening, Mint",
+        "dept":  "health_beauty",
+        "aisle":  "health_beauty/oral_care",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027personal\u0027"
+    },
+    {
         "id":  "muffins",
         "store":  "Family Fare",
         "product":  "Little Bites Blueberry Muffins 5 Ea",
@@ -1089,11 +1206,38 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
     },
     {
+        "id":  "paper-napkins",
+        "store":  "Family Fare",
+        "product":  "Bounty Paper Napkins, White, 200 Count 200 Ct",
+        "dept":  "household",
+        "aisle":  "household/disposable_tableware",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "paper-plates",
+        "store":  "Family Fare",
+        "product":  "Our Family Paper Plates, Everyday, 9 Inch 100 Ea",
+        "dept":  "household",
+        "aisle":  "household/disposable_tableware",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
         "id":  "paper-towels",
         "store":  "Family Fare",
         "product":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
         "dept":  "household",
         "aisle":  "household/paper_towels",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "parchment-paper",
+        "store":  "Family Fare",
+        "product":  "Our Family Parchment Paper 1 Ea",
+        "dept":  "household",
+        "aisle":  "household/food_storage",
         "verdict":  "ALLOW",
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
@@ -1177,6 +1321,15 @@
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
+        "id":  "plastic-wrap",
+        "store":  "Family Fare",
+        "product":  "Our Family Clear 200 Sq Ft Plastic Wrap 1 Ea",
+        "dept":  "household",
+        "aisle":  "household/food_storage",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
         "id":  "plums",
@@ -1314,6 +1467,15 @@
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "sandwich-bags",
+        "store":  "Family Fare",
+        "product":  "Our Family Pleated Fold \u0026 Close Sandwich Bags 150 Ea",
+        "dept":  "household",
+        "aisle":  "household/food_storage",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
         "id":  "sandwich-cookies",
         "store":  "Family Fare",
         "product":  "Golden With Vanilla Creme Vanilla Sandwich Cookies",
@@ -1431,6 +1593,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
+        "id":  "tater-tots",
+        "store":  "Family Fare",
+        "product":  "Lamb Weston Super Crispy Tots 28 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_potatoes",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
         "id":  "tea-bags",
         "store":  "Family Fare",
         "product":  "Lipton Black Tea Bags",
@@ -1458,6 +1629,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "toilet-bowl-cleaner",
+        "store":  "Family Fare",
+        "product":  "Works Toilet Bowl Cleaner, Disinfectant 1 Qt",
+        "dept":  "household",
+        "aisle":  "household/cleaners_air_fresheners",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
         "id":  "toilet-paper",
         "store":  "Family Fare",
         "product":  "Angel Soft 2 Ply Mega Rolls Unscented Mega Rolls Bathroom Tissue 24 Ea",
@@ -1474,6 +1654,15 @@
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "toothbrushes",
+        "store":  "Family Fare",
+        "product":  "Top Care Soft Ultra Fresh Toothbrushes 6 Ea",
+        "dept":  "health_beauty",
+        "aisle":  "health_beauty/oral_care",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027personal\u0027"
     },
     {
         "id":  "tortilla-chips",
@@ -1564,6 +1753,15 @@
         "aisle":  "dairy/yogurt",
         "verdict":  "ALLOW",
         "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
+        "id":  "frozen-broccoli-florets",
+        "store":  "Family Fare",
+        "product":  "Frozen Broccoli Florets Our Family Steamable",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
         "id":  "frozen-green-beans",

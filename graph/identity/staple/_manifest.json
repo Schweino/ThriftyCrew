@@ -2,27 +2,27 @@
     "readme":  "Product identity table, one current row per (store, product key) in this namespace. Truth is the .jsonl files beside this manifest; graph.db is a rebuildable index of them (graph/schema.md commitment 3). History is git: the files are tracked and sorted, so an assignment change is a commit diff. Written by compare-deals.ps1 -IdentityNamespace; never hand-edit.",
     "namespace":  "staple",
     "rules_hash":  "c077334f74e1a97316aadb09074baca3a481f42af606c9d995370806cf1dbeae",
-    "board_date":  "2026-09-14",
-    "built_at":  "2026-09-14T08:07:39",
-    "rows_total":  43793,
-    "rows_reused_from_previous":  42948,
-    "rows_rematched":  845,
-    "rows_contested":  794,
-    "key_collisions_demoted_to_name":  731,
+    "board_date":  "2026-09-17",
+    "built_at":  "2026-09-17T07:06:39",
+    "rows_total":  43649,
+    "rows_reused_from_previous":  43180,
+    "rows_rematched":  469,
+    "rows_contested":  792,
+    "key_collisions_demoted_to_name":  730,
     "stores":  [
                    {
                        "store":  "Aldi",
-                       "rows":  3478,
-                       "changed":  false
+                       "rows":  3473,
+                       "changed":  true
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7490,
+                       "rows":  7296,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  6334,
+                       "rows":  6391,
                        "changed":  true
                    },
                    {
@@ -32,7 +32,7 @@
                    },
                    {
                        "store":  "Hy-Vee",
-                       "rows":  2285,
+                       "rows":  2283,
                        "changed":  true
                    },
                    {

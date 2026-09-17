@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-14 08:16",
+    "generated":  "2026-09-17 07:15",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -11,6 +11,15 @@
 
                 ],
     "new_contested":  [
+                          {
+                              "name":  "Benton\u0027s Maple Leaf Creme Cookies",
+                              "chain":  "cookies (oz) \u003e sandwich-cookies (oz)",
+                              "form":  false,
+                              "winner":  "cookies",
+                              "verdict":  "size 11.4 oz = 0.3061/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
                           {
                               "name":  "Bragg Organic Apple Cider Vinegar Honey Cayenne Wellness Cleanse, Raw and Unfiltered, 16 fl oz",
                               "chain":  "apple-cider-vinegar (floz) \u003e cayenne-pepper (oz)",
@@ -30,6 +39,15 @@
                               "crown":  false
                           },
                           {
+                              "name":  "Cauliflower or Green Beans with Mushrooms",
+                              "chain":  "mushrooms (oz) \u003e cauliflower (each) \u003e fresh-green-beans (lb) \u003e canned-green-beans (oz)",
+                              "form":  true,
+                              "winner":  "mushrooms",
+                              "verdict":  "size 12 oz = 0.2908/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
                               "name":  "Charmin bath tissue 9 mega XL rolls or Bounty paper towels 6 double rolls, $15.49",
                               "chain":  "paper-towels (each) \u003e toilet-paper (each)",
                               "form":  false,
@@ -40,6 +58,15 @@
                           },
                           {
                               "name":  "Chobani Zero Added Sugar Lowfat Greek Raspberry Lemon Yogurt 6.7 Oz",
+                              "chain":  "yogurt (oz) \u003e sugar (lb)",
+                              "form":  true,
+                              "winner":  "yogurt",
+                              "verdict":  "size 6.7 oz = 0.2239/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Chobani Zero Added Sugar Lowfat Greek Strawberry Kiwi Yogurt 6.7 Oz",
                               "chain":  "yogurt (oz) \u003e sugar (lb)",
                               "form":  true,
                               "winner":  "yogurt",
@@ -193,10 +220,13 @@
                           }
                       ],
     "new_contested_names":  [
+                                "Benton\u0027s Maple Leaf Creme Cookies",
                                 "Bragg Organic Apple Cider Vinegar Honey Cayenne Wellness Cleanse, Raw and Unfiltered, 16 fl oz",
                                 "Bragg Organic Apple Cider Vinegar Pineapple Turmeric with The Mother, Raw and Unfiltered, 16 fl oz",
+                                "Cauliflower or Green Beans with Mushrooms",
                                 "Charmin bath tissue 9 mega XL rolls or Bounty paper towels 6 double rolls, $15.49",
                                 "Chobani Zero Added Sugar Lowfat Greek Raspberry Lemon Yogurt 6.7 Oz",
+                                "Chobani Zero Added Sugar Lowfat Greek Strawberry Kiwi Yogurt 6.7 Oz",
                                 "Colgate, Hello toothpaste 3.2 to 5 oz., Colgate 360 or power Bluey toothbrushes 1 or 2 ct., $5.96",
                                 "Dawn Ultra Strawberry Field Scent",
                                 "Dole spinach 8 oz. pkg., classic romaine 9 oz. pkg. or greener selection 11 oz. pkg., $2.88",

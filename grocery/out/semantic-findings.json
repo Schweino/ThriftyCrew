@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-14 08:17",
-    "board":  "comparison-2026-09-14.json",
-    "sidecar_generated":  "2026-09-14 08:17:23",
+    "generated":  "2026-09-17 07:16",
+    "board":  "comparison-2026-09-17.json",
+    "sidecar_generated":  "2026-09-17 07:16:05",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,16 +9,26 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3183,
-                     "corpus":  41568,
-                     "rule_invisible":  7916
+                     "board_pairs":  3184,
+                     "corpus":  41611,
+                     "rule_invisible":  7921
                  },
     "identity_count":  0,
-    "coverage_count":  2,
+    "coverage_count":  4,
     "identity":  [
 
                  ],
     "coverage":  [
+                     {
+                         "kind":  "coverage",
+                         "id":  "baby-formula",
+                         "commodity":  "Baby Formula",
+                         "store":  "Family Fare",
+                         "product":  "Similac Infant Formula, With Iron, Hypoallergenic, Ready To Feed, 0 12 Months 6 Ea",
+                         "cos":  0.6881,
+                         "score":  0.932382,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
                      {
                          "kind":  "coverage",
                          "id":  "tilapia",
@@ -37,6 +47,16 @@
                          "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
                          "cos":  0.7192,
                          "score":  0.916499,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
+                         "store":  "Walmart",
+                         "product":  "Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray",
+                         "cos":  0.6876,
+                         "score":  0.90091,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

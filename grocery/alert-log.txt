@@ -153,3 +153,23 @@
 [2026-09-14T08:20:33] REVIEW 'Grocery: 12 NEW price flag(s) - 2026-09-14' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)
 [2026-09-14T08:23:02] REVIEW 'Tools: a live page has drifted from its local source' [type: tools a live page has drifted from its local source] - queued, NOT emailed (registry entry ghost-drift)
 [2026-09-14T08:23:05] SENT 'Ops: an agent prompt is not backed up' -> schweino68@gmail.com (id 1a0a015e15cc6651)
+[2026-09-14T10:30:09] QUEUE ABSORBED into open item 2026-09-12-34df27 (day 2 of this condition, count now 3) - no new id minted
+[2026-09-14T10:30:10] SENT 'Automation silent-death: 5 issue(s)' -> schweino68@gmail.com (id 1a0a08a3bbf5776e)
+[2026-09-14T10:34:04] QUEUE ABSORBED BY INCIDENT guards-hold into 2026-09-13-76d263 (count now 4): 'Grocery capture watchdog: held by guards 2026-09-14' - no new id, no mail
+[2026-09-14T10:34:05] QUEUE ABSORBED into open item 2026-09-12-d7af0c (day 2 of this condition, count now 3) - no new id minted
+[2026-09-14T10:34:06] SENT 'Grocery capture watchdog: 2 issue(s) 2026-09-14' -> schweino68@gmail.com (id 1a0a08dd5acb3961)
+[2026-09-17T05:12:33] QUEUE ABSORBED into open item 2026-09-12-34df27 (day 5 of this condition, count now 4) - no new id minted
+[2026-09-17T05:12:35] SENT 'Automation silent-death: 10 issue(s)' -> schweino68@gmail.com (id 1a0aeda8bea3e15f)
+[2026-09-17T05:12:57] DIGEST 'Brain digest: the night, the weakest link, and what is waiting' [type: brain digest the night the weakest link and what is waiting] - registry entry brain-digest is digest class, so it is mailed and NOT queued
+[2026-09-17T05:12:58] SENT 'Brain digest: the night, the weakest link, and what is waiting' -> schweino68@gmail.com (id 1a0aedae7d279ddd)
+[2026-09-17T05:16:20] QUEUE ABSORBED into open item 2026-09-12-87ca2f (day 5 of this condition, count now 4) - no new id minted
+[2026-09-17T05:16:21] SENT 'The knowledge store's nightly pass went RED' -> schweino68@gmail.com (id 1a0aeddfc5729f90)
+[2026-09-17T05:17:31] REVIEW 'Grocery: Family Fare catalog is degrading - 1 signal(s)' [type: grocery family fare catalog is degrading signal s] - queued, NOT emailed (registry entry ff-catalog-degrading)
+[2026-09-17T05:17:32] QUEUE ABSORBED into open item 2026-09-12-d7af0c (day 5 of this condition, count now 4) - no new id minted
+[2026-09-17T05:17:33] SENT 'Grocery capture watchdog: 8 issue(s) 2026-09-17' -> schweino68@gmail.com (id 1a0aedf161facfed)
+[2026-09-17T07:10:56] QUEUE ABSORBED into open item 2026-09-13-76d263 (day 4 of this condition, count now 5) - no new id minted
+[2026-09-17T07:10:57] SENT 'Grocery: GUARDS FAILED - board not published - 2026-09-17' -> schweino68@gmail.com (id 1a0af46e98a493d2)
+[2026-09-17T07:16:09] QUEUE ABSORBED into open item 2026-09-12-099302 (day 5 of this condition, count now 3) - no new id minted
+[2026-09-17T07:16:09] REVIEW 'Grocery: semantic sweep found 4 product(s) no rule can see - 2026-09-17' [type: grocery semantic sweep found product s no rule can see] - queued, NOT emailed (registry entry semantic-sweep)
+[2026-09-17T07:19:56] QUEUE ABSORBED into open item 2026-09-12-c424f3 (day 5 of this condition, count now 4) - no new id minted
+[2026-09-17T07:19:56] REVIEW 'Grocery: 3 NEW price flag(s) - 2026-09-17' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)

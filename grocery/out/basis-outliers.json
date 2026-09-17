@@ -845,7 +845,7 @@
                               "commodity":  "Mouthwash",
                               "unit":  "floz",
                               "store":  "Family Fare",
-                              "per_unit":  0.0973,
+                              "per_unit":  0.0885,
                               "size":  "33.8 oz",
                               "item":  "Top Care Everyday Mouthwash, Freshening, Mint",
                               "kind":  "weight",
@@ -1331,7 +1331,7 @@
                               "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-14.json",
+    "compare_file":  "comparison-2026-09-17.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -2067,7 +2067,7 @@
                                                      "commodity":  "Mouthwash",
                                                      "unit":  "floz",
                                                      "store":  "Family Fare",
-                                                     "per_unit":  0.0973,
+                                                     "per_unit":  0.0885,
                                                      "size":  "33.8 oz",
                                                      "item":  "Top Care Everyday Mouthwash, Freshening, Mint",
                                                      "kind":  "weight",
@@ -2386,7 +2386,22 @@
                                                  }
                                              ],
     "rounding_band_crown":  [
-
+                                {
+                                    "id":  "chicken-thighs",
+                                    "commodity":  "Chicken Thighs / Drumsticks",
+                                    "unit":  "lb",
+                                    "store":  "Sam\u0027s Club",
+                                    "per_unit":  0.98,
+                                    "rounding_pct":  0.51,
+                                    "band_low":  0.975,
+                                    "band_high":  0.985,
+                                    "tie_with":  [
+                                                     "Walmart"
+                                                 ],
+                                    "item":  "Member\u0027s Mark Chicken Drumsticks, Case, priced per pound",
+                                    "size":  "lb",
+                                    "basis":  "per-lb marker"
+                                }
                             ],
     "findings":  [
                      {
@@ -2433,9 +2448,9 @@
                          "commodity":  "Razors (disposable)",
                          "unit":  "each",
                          "store":  "Hy-Vee",
-                         "per_unit":  1.9975,
+                         "per_unit":  2.115,
                          "median":  0.3317,
-                         "mult":  6.02,
+                         "mult":  6.38,
                          "size":  "4 ct",
                          "item":  "Bic Soleil Razors, Lavender \u0026 Eucalyptus Scented, 4 Blades",
                          "peers_packed":  "5 of 6",
@@ -2537,7 +2552,7 @@
                                 }
                             ],
     "ratio":  4,
-    "generated":  "2026-09-14T08:11:09",
+    "generated":  "2026-09-17T07:10:04",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",

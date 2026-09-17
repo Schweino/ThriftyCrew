@@ -208,6 +208,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "baby-formula",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  1.9192,
+        "link":  1.6776,
+        "ratio":  0.87,
+        "price":  20.97,
+        "size":  "12.5 oz",
+        "boardItem":  "Enfamil Infant Formula, Milk-based Baby Formula with Iron, Powder Can",
+        "linkItem":  "Enfamil Infant Formula, Milk-based Baby Formula with Iron, Powder Can",
+        "board_src":  "main"
+    },
+    {
         "id":  "baked-beans",
         "store":  "Fareway",
         "unit":  "oz",
@@ -871,6 +884,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "charcoal",
+        "store":  "Baker\u0027s",
+        "unit":  "lb",
+        "board":  0.5838,
+        "link":  0.5188,
+        "ratio":  0.89,
+        "price":  7.99,
+        "size":  "15.4 lb",
+        "boardItem":  "Kroger Ridged Charcoal Briquettes - Original 15.4 LB",
+        "linkItem":  "Kroger Ridged Charcoal Briquettes - Original 15.4 LB",
+        "board_src":  "main"
+    },
+    {
         "id":  "cheese-crackers",
         "store":  "Fareway",
         "unit":  "oz",
@@ -985,6 +1011,19 @@
         "size":  "lb",
         "boardItem":  "Hy Vee Choice Reserve Boneless Chuck Roast",
         "linkItem":  "Hy-Vee Choice Reserve Boneless Chuck Roast",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chuck-roast",
+        "store":  "Baker\u0027s",
+        "unit":  "lb",
+        "board":  9.99,
+        "link":  10.99,
+        "ratio":  1.1,
+        "price":  10.99,
+        "size":  "lb",
+        "boardItem":  "Choice Beef Chuck Roast",
+        "linkItem":  "Choice Beef Chuck Roast",
         "board_src":  "main"
     },
     {
@@ -1271,6 +1310,19 @@
         "size":  "10.4 oz",
         "boardItem":  "Old Spice Fiji Antiperspirant Deodorant, Palm Tree + Coconut, 2.6 oz., 4 pk.",
         "linkItem":  "Old Spice Fiji Antiperspirant Deodorant, Palm Tree + Coconut, 2.6 oz., 4 pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "deodorant",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  2.1115,
+        "link":  1.9192,
+        "ratio":  0.91,
+        "price":  4.99,
+        "size":  "2.6 oz",
+        "boardItem":  "Secret Invisible Solid Antiperspirant and Deodorant, Powder Fresh, 2.6 oz",
+        "linkItem":  "Secret Invisible Solid Antiperspirant and Deodorant, Powder Fresh, 2.6 oz",
         "board_src":  "main"
     },
     {
@@ -1817,6 +1869,19 @@
         "size":  "2.5 oz",
         "boardItem":  "Thats Smart Garlic Powder",
         "linkItem":  "That\u0027s Smart Garlic Powder",
+        "board_src":  "main"
+    },
+    {
+        "id":  "gingersnaps",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.2492,
+        "link":  0.2083,
+        "ratio":  0.84,
+        "price":  2.5,
+        "size":  "12 oz",
+        "boardItem":  "Kroger Ginger Snaps Cookies",
+        "linkItem":  "Kroger Ginger Snaps Cookies",
         "board_src":  "main"
     },
     {
@@ -2402,6 +2467,19 @@
         "size":  "28 oz",
         "boardItem":  "Fareway Roasted and Salted Select Mixed Nuts",
         "linkItem":  "Fareway Roasted and Salted Select Mixed Nuts",
+        "board_src":  "main"
+    },
+    {
+        "id":  "mouthwash",
+        "store":  "Family Fare",
+        "unit":  "floz",
+        "board":  0.0885,
+        "link":  0.0973,
+        "ratio":  1.1,
+        "price":  3.29,
+        "size":  "33.8 oz",
+        "boardItem":  "Top Care Everyday Mouthwash, Freshening, Mint",
+        "linkItem":  "Top Care Everyday Mouthwash, Freshening, Mint",
         "board_src":  "main"
     },
     {
@@ -3780,6 +3858,19 @@
         "size":  "3 lb",
         "boardItem":  "Freshness Guaranteed Boneless Skinless Chicken Thighs Family Pack, 2.6 - 6.9 lb Tray",
         "linkItem":  "Great Value All Natural Boneless Skinless Chicken Thighs, 3 lb",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "boneless-skinless-chicken-thigh",
+        "store":  "Baker\u0027s",
+        "unit":  "lb",
+        "board":  3.6633,
+        "link":  3.99,
+        "ratio":  1.09,
+        "price":  3.99,
+        "size":  "lb",
+        "boardItem":  "Kroger Frozen Raw Boneless Skinless Chicken Thighs",
+        "linkItem":  "Heritage Farm Boneless Skinless Chicken Thighs",
         "board_src":  "recipe"
     },
     {
