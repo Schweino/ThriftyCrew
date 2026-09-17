@@ -25,11 +25,8 @@
   </Settings>
   <Triggers>
     <CalendarTrigger>
-      <StartBoundary>2026-09-10T18:00:00-05:00</StartBoundary>
-      <Repetition>
-        <Interval>PT1H</Interval>
-        <Duration>PT6H</Duration>
-      </Repetition>
+      <StartBoundary>2026-09-20T18:00:00-05:00</StartBoundary>
+      <EndBoundary>2026-09-25T00:00:00-05:00</EndBoundary>
       <ScheduleByDay>
         <DaysInterval>1</DaysInterval>
       </ScheduleByDay>
@@ -38,7 +35,7 @@
   <Actions Context="Author">
     <Exec>
       <Command>C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
-      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\meal-prep\pipeline\harvest-crawl.ps1"</Arguments>
+      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\meal-prep\pipeline\harvest-crawl.ps1" -Domains thereciperebel.com,lecremedelacrumb.com,fitfoodiefinds.com,healthyfitnessmeals.com</Arguments>
     </Exec>
   </Actions>
 </Task>

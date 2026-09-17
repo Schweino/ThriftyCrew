@@ -33,6 +33,10 @@
   nobody recognises; the FINDING line says which. Exit 2 = it could not run at all.
 #>
 param([switch]$SelfTest, [int]$Limit = 400, [int]$PerDomain = 60, [switch]$DryRun,
+      # A NAMED RETRY (2026-09-17). Comma-separated publishers to crawl instead of the ledger's reliable set.
+      # Four publishers answered 429 to that day's one-off backlog pass and the ledger marks any domain with a
+      # failure unreliable, so the scheduled retry names them. A blocked domain is still refused by harvest.py.
+      [string]$Domains = '',
       # THE PINNED-REFERENCE GATE (2026-09-04, PLAN-after-review P5). With -SelfTest:
       # -NamesOut pins the case NAMES this run executed; -NamesDiff reruns and exits 2 on any
       # REMOVAL, even when every case that ran passed.
@@ -197,6 +201,7 @@ $stamp = (Get-Date).ToString('yyyy-MM-dd')
 $log = Join-Path $logDir ("crawl-{0}.log" -f $stamp)
 $args = @($harvest, '--crawl', '--limit', $Limit, '--per-domain', $PerDomain)
 if ($DryRun) { $args += '--dry-run' }
+if ($Domains) { $args += @('--domains', $Domains) }
 
 Say ("harvest-crawl: {0}  limit {1}, {2}/publisher" -f (Get-Date).ToString('HH:mm:ss'), $Limit, $PerDomain)
 # FOREIGN-HELD (2026-09-10, queue 2026-09-10-3a9de4). The committer at the bottom unstages an owned file that was
