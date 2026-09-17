@@ -80,6 +80,12 @@ and 126 `.py` paths in the identical order, in 0.2 s and 0.7 s against 11.8 s an
 one self-test, the walk helper's own, which adds work by far less than the per-run spread this file reports; the
 observer and the queue are untouched, so every total below still reads as measured.
 
+**Re-read at commit `4ad20f97e`:** `ops/run-gates.ps1` gains one static audit entry,
+`ops/audit-list-array-wrap.ps1`, and nothing else: no change to the pool, the slot budget, the queue, the observer
+or `lib/gate-slots.ps1`. The one number it can move is each run's slot tenure, upward by the audit's own 24 to 33 s
+of gate work inside a pool 24 wide, which is far below the per-run spread this file reports and in the same
+direction as the `53e1d65bf` and `1a97b53af` entries above. Every total below still reads as measured.
+
 ## What was sampled
 
 Every 15 s from **16:48:33 to 18:18:23** (360 ticks). The totals count runs that STARTED in the first 60 minutes,

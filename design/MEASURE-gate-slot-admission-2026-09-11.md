@@ -98,6 +98,11 @@ file lists were verified identical in content and order on the main checkout. It
 nothing in `lib\gate-slots.ps1`, so who wins a freed slot is unchanged; the only number it can move is each run's
 slot tenure, downward in a checkout that holds worktrees, plus the seconds of the walk helper's own new self-test.
 
+**Re-read at commit `4ad20f97e`: every verdict below stands as measured.** `ops\run-gates.ps1` gains one more
+static audit entry, `ops\audit-list-array-wrap.ps1`, and touches no probe, no analysis and nothing in
+`lib\gate-slots.ps1`, so who wins a freed slot is unchanged. The only number it can move is each run's slot tenure,
+upward by that audit's own 24 to 33 s of gate work, as the `53e1d65bf` and `1a97b53af` entries above moved it.
+
 A READ-ONLY probe. It never calls `WaitOne` on a slot and never takes one. Once a second it reads the
 system handle table (`NtQuerySystemInformation`, extended handle information), duplicates only the
 mutant handles held by `run-gates.ps1` and `cpu-load.ps1` processes, reads each one's name and
