@@ -119,6 +119,29 @@ function Get-BotGlobPaths {
   return ,@('grocery/alert-sent-*.txt')
 }
 
+function Get-BotLanePaths {
+  <# What the scheduled lanes declare they own, READ from lib\pipeline-commit.ps1 Get-PipelinePaths rather
+     than copied here. ONE DECLARATION, NOT TWO (2026-09-17). The copy added 2026-09-11 raised
+     ops\audit-cross-module-reach.ps1, so d2969a1d3 removed it on 2026-09-12 - and from then the pre-commit
+     hook refused every lane commit that staged a path only Get-PipelinePaths named. Measured 2026-09-17: no
+     harvest-crawl pool commit landed after ba24ff785 (2026-09-12 00:10), and a 5,945-entry crawl was
+     refused over candidate-pool.json and harvest-state.json. Reading the lane list makes the two agree by
+     construction and adds no path literal. An unloadable pipeline-commit.ps1 THROWS: an empty lane set
+     would silently refuse every lane commit again. #>
+  if ($null -ne $script:BotLanePathsCache) { return ,$script:BotLanePathsCache }
+  if (-not (Get-Command Get-PipelinePaths -ErrorAction SilentlyContinue)) {
+    . (Join-Path $PSScriptRoot 'pipeline-commit.ps1')
+  }
+  $all = New-Object System.Collections.Generic.List[string]
+  foreach ($kind in @('pricing', 'graph', 'harvest')) {
+    $declared = Get-PipelinePaths -Kind $kind
+    foreach ($p in @($declared)) { $all.Add([string]$p) }
+  }
+  if ($all.Count -eq 0) { throw 'bot-paths: Get-PipelinePaths declared no lane paths' }
+  $script:BotLanePathsCache = $all.ToArray()
+  return ,$script:BotLanePathsCache
+}
+
 function Test-BotPathOwned {
   <# Is one repo-relative path (either slash style) inside the declared ownership set?
      A DIRECTORY ENTRY OWNS ITS SUBTREE, and nothing else. 'grocery/out' owns 'grocery/out/regular/x.json'
@@ -129,7 +152,7 @@ function Test-BotPathOwned {
     [string[]]$Owned
   )
   if (-not $PSBoundParameters.ContainsKey('Owned')) {
-    $Owned = @((Get-BotInputPaths) + (Get-BotServedPaths) + (Get-BotGlobPaths))
+    $Owned = @((Get-BotInputPaths) + (Get-BotServedPaths) + (Get-BotGlobPaths) + (Get-BotLanePaths))
   }
   $p = $Path.Replace('\', '/').TrimStart('./')
   foreach ($o in $Owned) {
@@ -189,6 +212,23 @@ if ($__botPathsSelfTest) {
   # every path beginning with those characters, which is how an ownership list quietly becomes a sweep.
   BpT 'MUST FIRE: a sibling whose name merely STARTS with an owned directory is NOT owned' `
       (-not (Test-BotPathOwned -Path 'grocery/outbound-notes.md'))
+  # THE LANES' OWN COMMITS (2026-09-17). The founding refusal: harvest-crawl staged these two and the hook
+  # refused it from 2026-09-12 to 2026-09-17.
+  # Read from the lane's own declaration, never spelled here: a path literal is a cross-module reach site.
+  # Get-BotLanePaths loads pipeline-commit.ps1 inside its own scope, so the test loads it here too.
+  if (-not (Get-Command Get-PipelinePaths -ErrorAction SilentlyContinue)) { . (Join-Path $PSScriptRoot 'pipeline-commit.ps1') }
+  $harvestRaw = Get-PipelinePaths -Kind 'harvest'
+  $harvestPaths = @($harvestRaw)
+  $harvestUnowned = @($harvestPaths | Where-Object { -not (Test-BotPathOwned -Path $_) })
+  BpT ('MUST FIRE: the harvest lane owns its pool and its state - ' + $harvestPaths.Count + ' declared, ' + $harvestUnowned.Count + ' unowned') `
+      (($harvestPaths.Count -ge 2) -and ($harvestUnowned.Count -eq 0))
+  $laneRaw = Get-BotLanePaths
+  $lanePaths = @($laneRaw)
+  $laneUnowned = @($lanePaths | Where-Object { -not (Test-BotPathOwned -Path $_) })
+  BpT ('CLEAN TWIN: every path the three lanes declare is owned - ' + $lanePaths.Count + ' declared, ' + $laneUnowned.Count + ' unowned') `
+      (($lanePaths.Count -gt 10) -and ($laneUnowned.Count -eq 0))
+  BpT 'MUST NOT FIRE: reading the lane list did not hand the bot a source file' `
+      (-not (Test-BotPathOwned -Path 'lib/pipeline-commit.ps1'))
   # A caller may pass its own set; passing an EMPTY set must own nothing, never everything.
   BpT 'MUST FIRE: an empty ownership set owns nothing (an unreadable list is not a skeleton key)' `
       (-not (Test-BotPathOwned -Path 'grocery/out/x.json' -Owned @()))

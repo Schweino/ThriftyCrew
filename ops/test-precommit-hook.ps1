@@ -68,6 +68,9 @@ function New-HookRepo {
     New-Item -ItemType Directory -Force (Join-Path $w $d) | Out-Null
   }
   foreach ($f in $needed) { Copy-Item (Join-Path $repo $f) (Join-Path $w $f) -Force }
+  # THE WHOLE lib\, not a hand list (ops-and-gates.md): bot-paths.ps1 began reading lib\pipeline-commit.ps1
+  # on 2026-09-17, and the hand list failed 2 of 19 cases for a library the sandbox simply did not have.
+  Copy-Item (Join-Path $repo 'lib\*.ps1') (Join-Path $w 'lib') -Force
   'seed' | Set-Content (Join-Path $w 'grocery\out\regular\day1.json')
   & git -C $w add -A | Out-Null
   & git -C $w -c core.hooksPath=nonexistent commit -q -m seed | Out-Null
