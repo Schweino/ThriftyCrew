@@ -9,7 +9,8 @@
   WHY IT KEEPS A FILE: send-alert.ps1 keeps only 30 days of resolved queue history, so any trend older than
   that disappears. Every run merges one row per day per alert type into out\alert-census.jsonl. Inside the
   queue's 30-day window the queue's measurement replaces the stored row; older rows are kept as written, so
-  the history outlives the queue.
+  the history outlives the queue. A queue RESET (the queue's `reset.date`) moves that window to start the day after
+  the reset, because an archived queue is not a run of quiet days (2026-09-17: one run deleted 317 stored rows).
 
   THE MEASUREMENT (the same one the plan's baseline used): an "alert" on a day is a new queue id minted that
   day or a recurrence absorbed into an open id that day. Same-day increments of one id are not dated in the
@@ -82,16 +83,32 @@ function Get-CensusRows {
 }
 
 function Merge-CensusRows {
-  <# .SYNOPSIS Pure. Rows on or after $Cutoff come from the queue; older rows keep the stored version when one exists. #>
+  <# .SYNOPSIS Pure. Rows on or after $Cutoff come from the queue; older rows keep the stored version when one exists,
+     unless the queue saw MORE alerts that day than the stored row (a post-reset alert on the reset day itself). #>
   param($Existing, $Fresh, [string]$Cutoff)
   $out = @{}
   foreach ($e in @($Existing)) { if ($e -and [string]$e.date -lt $Cutoff) { $out[[string]$e.date + '|' + [string]$e.type] = $e } }
   foreach ($f in @($Fresh)) {
     if (-not $f) { continue }
     $k = [string]$f.date + '|' + [string]$f.type
-    if ([string]$f.date -ge $Cutoff -or -not $out.ContainsKey($k)) { $out[$k] = $f }
+    if ([string]$f.date -ge $Cutoff -or -not $out.ContainsKey($k) -or [int]$f.alerts -gt [int]$out[$k].alerts) { $out[$k] = $f }
   }
   return @($out.Values | Sort-Object { [string]$_.date }, { [string]$_.type })
+}
+
+function Get-CensusCutoff {
+  <# .SYNOPSIS Pure. The first day the queue is the truth for: the 30-day window, or the day AFTER a queue reset if later.
+     A reset (2026-09-17: 195 items archived by hand) empties the queue without the days it covered being quiet, so
+     the queue has no evidence about any day up to and including the reset day and must not overwrite them. #>
+  param([datetime]$Today, [int]$WindowDays, [string]$ResetDate)
+  $cut = $Today.AddDays(-($WindowDays - 1))
+  if ($ResetDate) {
+    $r = [datetime]::MinValue
+    if ([datetime]::TryParseExact($ResetDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture, 'None', [ref]$r)) {
+      if ($r.AddDays(1) -gt $cut) { $cut = $r.AddDays(1) }
+    } else { throw ("alert-census: queue reset.date is not yyyy-MM-dd: '" + $ResetDate + "'") }
+  }
+  return $cut.ToString('yyyy-MM-dd')
 }
 
 function Get-CensusSummary {
@@ -170,6 +187,25 @@ if ($SelfTest) {
   _T 'CLEAN TWIN a stored row older than the queue window survives the merge' ($keptOld.Count -eq 1 -and [int]$keptOld[0].alerts -eq 3) ("kept=" + $keptOld.Count)
   # MUST FIRE: inside the window the queue is the truth, so a stale stored count is replaced.
   _T 'MUST-FIRE a stored row inside the window is replaced by the queue measurement' ($a1.Count -eq 1 -and [int]$a1[0].alerts -eq 1) ("alerts=" + $(if ($a1.Count) { $a1[0].alerts } else { 'none' }))
+  # RESET (founding case 2026-09-17): Brad archived the whole queue, the next run merged an EMPTY queue over a window
+  # that covered every stored row, and 317 rows of committed history were deleted. A reset is not a quiet month.
+  $resetStored = @(
+    [pscustomobject]@{ date = '2026-09-10'; type = 'g'; subject = 'Guards failed'; alerts = 4; new_ids = 1; recurrences = 3; closes = 0; dispositions = @{}; returns = 0 },
+    [pscustomobject]@{ date = '2026-09-17'; type = 'w'; subject = 'Watchdog'; alerts = 1; new_ids = 1; recurrences = 0; closes = 0; dispositions = @{}; returns = 0 }
+  )
+  $cutR = Get-CensusCutoff ([datetime]'2026-09-17') 30 '2026-09-17'
+  $afterReset = @(Merge-CensusRows $resetStored @() $cutR)
+  # MUST FIRE: an empty queue after a reset leaves every stored row, the reset day's own included.
+  _T 'MUST-FIRE a queue reset keeps the stored history the empty queue cannot see' ($cutR -eq '2026-09-18' -and $afterReset.Count -eq 2) ("cutoff=" + $cutR + " kept=" + $afterReset.Count)
+  # CLEAN TWIN: with no reset the window is still the 30 days, so the ordinary replace still happens.
+  _T 'CLEAN TWIN with no reset the cutoff is still the 30-day window' ((Get-CensusCutoff ([datetime]'2026-09-17') 30 '') -eq '2026-08-19') ("cutoff=" + (Get-CensusCutoff ([datetime]'2026-09-17') 30 ''))
+  # CLEAN TWIN: an alert that lands after the reset, on the reset day, is still counted over the smaller stored row.
+  $postReset = @([pscustomobject]@{ date = '2026-09-17'; type = 'w'; subject = 'Watchdog'; alerts = 2; new_ids = 2; recurrences = 0; closes = 0; dispositions = @{}; returns = 0 })
+  $wRow = @(Merge-CensusRows $resetStored $postReset $cutR | Where-Object { $_.date -eq '2026-09-17' -and $_.type -eq 'w' })
+  _T 'CLEAN TWIN a post-reset alert on the reset day is counted when the queue saw more' ($wRow.Count -eq 1 -and [int]$wRow[0].alerts -eq 2) ("rows=" + $wRow.Count)
+  $badReset = $false; try { $null = Get-CensusCutoff ([datetime]'2026-09-17') 30 'Sept 17' } catch { $badReset = $true }
+  # MUST FIRE: a reset date nobody can read is a refusal, never a silent fall back to the window that deletes history.
+  _T 'MUST-FIRE an unreadable reset date throws instead of merging' $badReset 'did not throw'
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail of $ran case(s)"; exit 1 }
   Write-Output "SELF-TEST PASS ($ran alert-census cases)"
@@ -190,7 +226,8 @@ $existing = @()
 if (Test-Path -LiteralPath $OutFile) {
   foreach ($line in [IO.File]::ReadAllLines($OutFile)) { if ($line.Trim()) { try { $existing += ($line | ConvertFrom-Json) } catch { } } }
 }
-$cutoff = $now.AddDays(-($script:QueueWindowDays - 1)).ToString('yyyy-MM-dd')
+$resetDate = if ($q.PSObject.Properties['reset'] -and $q.reset -and $q.reset.PSObject.Properties['date']) { [string]$q.reset.date } else { '' }
+$cutoff = Get-CensusCutoff $now $script:QueueWindowDays $resetDate
 $merged = @(Merge-CensusRows $existing $fresh $cutoff)
 $outDir = Split-Path -Parent $OutFile
 if (-not (Test-Path -LiteralPath $outDir)) { New-Item -ItemType Directory -Force -Path $outDir | Out-Null }
