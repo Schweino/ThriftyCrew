@@ -21,7 +21,7 @@
 #   .\fetch-recipe.ps1 -Url https://... [-Refresh]      fetch (or serve from cache), emit JSON-LD if present
 #   .\fetch-recipe.ps1 -Url https://... -BodyPath       just print the cached body path
 #   .\fetch-recipe.ps1 -Stats
-#   .\fetch-recipe.ps1 -SanitizeCache                    strip active content from every page already cached
+#   .\fetch-recipe.ps1 -SanitizeCache                    strip and slim every page already cached (idempotent)
 #   .\fetch-recipe.ps1 -SelfTest
 #
 # THE CACHE HOLDS NO EXECUTABLE CONTENT (2026-09-12). Recipe blogs carry ad and tracker scripts, and
@@ -29,6 +29,9 @@
 # on the cache over and over. Nothing here ever runs a page, and every reader wants only the JSON-LD
 # and the prose, so every <script> EXCEPT application/ld+json, every <iframe> and every <noscript> is
 # removed BEFORE the body is written. A page whose strip times out is not cached at all.
+# AND THEN ONLY WHAT IS READ IS KEPT (2026-09-17): see ConvertTo-SlimPage. Paired over 314 cached pages
+# (every 60th by name), the full and slim copies agreed 314 of 314 on recipe_jsonld, 314 of 314 on
+# page_text_from_html and 314 of 314 on mined link domains, at 8.7% of the bytes. One variant tried.
 # ---------------------------------------------------------------------------------------------------
 param(
   [string]$Url = '', [switch]$Refresh, [switch]$BodyPath, [switch]$Stats, [switch]$Json, [switch]$SelfTest,
@@ -78,6 +81,46 @@ $script:ActiveContentRx = @(
   [regex]::new('<iframe\b.*?(</iframe\s*>|/>)', 'IgnoreCase, Singleline', [TimeSpan]::FromSeconds(10)),
   [regex]::new('<noscript\b.*?</noscript\s*>', 'IgnoreCase, Singleline', [TimeSpan]::FromSeconds(10))
 )
+
+$script:SlimMarker = '<!-- tc-slim v1 -->'
+$script:SlimRx = @{
+  ScriptStyle = [regex]::new('<(script|style)[^>]*>.*?</\1>', 'IgnoreCase, Singleline', [TimeSpan]::FromSeconds(10))
+  Tag         = [regex]::new('<[^>]+>', 'None', [TimeSpan]::FromSeconds(10))
+  Blank       = [regex]::new('\n{2,}', 'None', [TimeSpan]::FromSeconds(10))
+  Link        = [regex]::new('https?://([a-z0-9.-]+[.][a-z]{2,})[/"'']', 'IgnoreCase', [TimeSpan]::FromSeconds(10))
+}
+
+function ConvertTo-SlimPage {
+  param([string]$Html)
+  # THE CACHE KEEPS WHAT ITS READERS READ, AND NOTHING ELSE (2026-09-17). Three things are read off a
+  # cached page, and this keeps exactly those:
+  #   the JSON-LD blocks   harvest.recipe_jsonld and this script's Find-RecipeNode
+  #   the visible text     local_extract.page_text_from_html (tags to newlines, blank runs collapsed),
+  #                        computed HERE by the same three steps so a re-read reproduces it
+  #   the outbound domains harvest.mine_link_domains, kept as one bare <a href> per distinct domain
+  # Menus, styling, markup and attributes are dropped. Returns $null when a regex timed out, and an
+  # already-slim page unchanged, so running it twice is a no-op.
+  if (-not $Html) { return $Html }
+  if ($Html.StartsWith($script:SlimMarker, [StringComparison]::Ordinal)) { return $Html }
+  try {
+    $sb = New-Object Text.StringBuilder
+    [void]$sb.Append($script:SlimMarker).Append("`n<html><head>`n")
+    foreach ($b in (Get-JsonLdBlocks $Html)) { [void]$sb.Append('<script type="application/ld+json">').Append($b).Append("</script>`n") }
+    [void]$sb.Append("</head><body>`n")
+    $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+    foreach ($m in $script:SlimRx.Link.Matches($Html)) {
+      $d = $m.Groups[1].Value
+      if ($seen.Add($d)) { [void]$sb.Append('<a href="https://').Append($d).Append("/`"></a>`n") }
+    }
+    $text = $script:SlimRx.ScriptStyle.Replace($Html, ' ')
+    $text = $script:SlimRx.Tag.Replace($text, "`n")
+    $text = $script:SlimRx.Blank.Replace($text, "`n")
+    [void]$sb.Append($text).Append("`n</body></html>`n")
+    return $sb.ToString()
+  } catch [System.Text.RegularExpressions.RegexMatchTimeoutException] {
+    return $null
+  }
+}
 
 function Remove-ActiveContent {
   param([string]$Html)
@@ -146,6 +189,15 @@ if ($runSelfTest) {
   T 'CLEAN TWIN the prose survives the strip' ($clean -match '<p>1 cup rice</p>') $clean
   T 'MUST NOT FIRE a page with no active content is unchanged' ((Remove-ActiveContent '<p>plain</p>') -ceq '<p>plain</p>') 'changed'
 
+  $full = '<html><head><title>T</title><style>.x{color:red}</style><script type="application/ld+json">{"@type":"Recipe","name":"Slim"}</script></head>' +
+    '<body><nav class="menu"><a href="https://www.foodblog.com/about">About</a></nav><ul><li class="ing">2 cups <b>rice</b></li></ul></body></html>'
+  $slim = ConvertTo-SlimPage $full
+  T 'MUST FIRE  markup, attributes and styling are dropped' ($slim -notmatch 'class=|color:red|<nav|<li') $slim
+  T 'CLEAN TWIN the slim page still yields the JSON-LD Recipe' ((Find-RecipeNode ((@(Get-JsonLdBlocks $slim))[0] | ConvertFrom-Json)).name -eq 'Slim') $slim
+  T 'CLEAN TWIN the visible text survives, one piece per line' ($slim -match "2 cups\s*\nrice") $slim
+  T 'CLEAN TWIN an outbound domain survives as a bare link' ($slim -match '<a href="https://www\.foodblog\.com/"></a>') $slim
+  T 'MUST NOT FIRE slimming a slim page is a no-op' ((ConvertTo-SlimPage $slim) -ceq $slim) 'changed on a second pass'
+
   if ($bad -gt 0) { Write-Output ("fetch-recipe SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'fetch-recipe SELF-TEST PASS'
   Exit-Guard -Name 'fetch-recipe' -Summary 'selftest pass' -Code 0
@@ -167,6 +219,7 @@ if ($runSanitize) {
     $scanned++
     try { $raw = [IO.File]::ReadAllText($f) } catch { $unreadable++; continue }
     $cleaned = Remove-ActiveContent $raw
+    if ($null -ne $cleaned) { $cleaned = ConvertTo-SlimPage $cleaned }
     if ($null -eq $cleaned) {
       Remove-Item -LiteralPath $f -Force; $dropped++
     } elseif (-not [string]::Equals($cleaned, $raw, [StringComparison]::Ordinal)) {
@@ -207,6 +260,7 @@ if ((Test-Path $bodyFile) -and -not $runRefresh) {
     exit 1
   }
   $html = Remove-ActiveContent $html
+  if ($null -ne $html) { $html = ConvertTo-SlimPage $html }
   if ($null -eq $html) { Write-Output ("fetch-recipe: FETCH FAILED {0} - page could not be stripped of active content in time; not cached" -f $Url); exit 1 }
   Set-Content -Path $bodyFile -Value $html -Encoding utf8
 }
