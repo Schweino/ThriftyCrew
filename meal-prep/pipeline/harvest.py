@@ -1225,6 +1225,22 @@ def nightly_room(state, domain, cap=NIGHTLY_CAP, today=None):
     return cap - int((state.get("days") or {}).get(today, {}).get(domain, 0))
 
 
+def unseen_urls(urls, by_url, state):
+    """The crawl frontier: enumerated URLs neither in the pool NOR already refused entry.
+
+    THE FRONTIER WAS STUCK (2026-09-17). A page refused at entry - its slug already pooled, or already
+    published - never reached `by_url`, so every later crawl read it as unseen, re-parsed it from the
+    cache and refused it again. Measured on that morning's run: 1,147 of 1,305 pages handled were
+    re-refusals, 9 entered as available, and wellplated.com read 706 unseen before and after. A refused
+    URL is now remembered in harvest state, so the frontier advances past it."""
+    refused = state.get("refused_urls") or {}
+    return [u for u in urls if norm_url(u) not in by_url and norm_url(u) not in refused]
+
+
+def note_refused(state, url, why):
+    state.setdefault("refused_urls", {})[norm_url(url)] = why
+
+
 def note_fetch(state, domain, today=None):
     today = today or date.today().isoformat()
     state.setdefault("days", {}).setdefault(today, {})
@@ -1863,7 +1879,7 @@ def cmd_crawl(a):
         # Already-pooled URLs are dropped rather than skipped-over, so tonight's cap advances the
         # frontier by itself: today's top `room` enter the pool, and tomorrow `fresh` starts after
         # them. A separate cursor would only be a second, driftable, account of the same fact.
-        fresh = [u for u in urls if norm_url(u) not in by_url]
+        fresh = unseen_urls(urls, by_url, state)
         take = fresh[:room]
         plan[d] = {"urls": take, "enumerated": len(urls), "fresh": len(fresh), "robots": robots}
         say("  %-28s %5d enumerated, %5d unseen, taking %d (nightly cap %d)"
@@ -1940,6 +1956,8 @@ def cmd_crawl(a):
         # An exact already-published slug never enters the pool. The catalog already carries that
         # dinner; re-offering it to a decider is the churn this whole plane exists to stop.
         why = refuse_entry(entry["slug"], entry["url"], pub_slugs, by_slug, by_url)
+        if why:
+            note_refused(state, entry["url"], why)
         if why == "already published":
             skipped_pub += 1
             continue
@@ -3428,6 +3446,15 @@ def cmd_selftest(a):
     T("MUST FIRE  the nightly cap stops the 61st fetch",
       nightly_room(st, "d.com", 60, "2026-08-23") == 0,
       str(nightly_room(st, "d.com", 60, "2026-08-23")))
+
+    _fr_urls = ["https://d.com/pooled/", "https://d.com/refused/", "https://d.com/new/"]
+    _fr_pool = {norm_url("https://d.com/pooled/"): {}}
+    _fr_st = {}
+    T("CLEAN TWIN the frontier drops a pooled URL and keeps the rest",
+      unseen_urls(_fr_urls, _fr_pool, _fr_st) == _fr_urls[1:], str(unseen_urls(_fr_urls, _fr_pool, _fr_st)))
+    note_refused(_fr_st, "https://d.com/refused/", "slug already in pool")
+    T("MUST FIRE  a URL refused at entry never re-enters the frontier",
+      unseen_urls(_fr_urls, _fr_pool, _fr_st) == ["https://d.com/new/"], str(unseen_urls(_fr_urls, _fr_pool, _fr_st)))
 
     # ---- the pool's single-writer rules -------------------------------------------------------------
     tmp = os.path.join(os.environ.get("TEMP", "."), "harvest-selftest-%d.json" % os.getpid())
