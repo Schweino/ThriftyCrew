@@ -706,7 +706,7 @@ if ($runSelfTest) {
   T '.ToArray() converts a List[object] of check results (@() on it throws in PS 5.1)' `
     ($arrOk -and $arrCount -eq 2) ("ok=$arrOk count=$arrCount")
   $atThrew = $false
-  try { $null = @($lst) } catch { $atThrew = $true }
+  try { $null = @($lst) } catch { $atThrew = $true }   # list-array-wrap:allow this fixture EXECUTES the wrap to prove PS 5.1 still throws
   T 'MUST FIRE  @() on that same list still throws, so the .ToArray() above is not decoration' `
     $atThrew 'PS no longer throws here - re-read the trap comment before simplifying it away'
   $od = [ordered]@{}
@@ -1213,7 +1213,7 @@ foreach ($slug in $target) {
   $spec = $null
   try { $spec = Read-JsonFile $specPath } catch {
     $checks.Add((New-Check 'spec-present' $false ([ordered]@{}) ("the spec does not parse: " + $_.Exception.Message)))
-    $slugChecks.Add($slug, @($checks)); continue
+    $slugChecks.Add($slug, $checks.ToArray()); continue
   }
   $checks.Add((New-Check 'spec-present' $true ([ordered]@{ mtime = (Get-Item $specPath).LastWriteTime.ToString('s') }) 'spec present and parses'))
 

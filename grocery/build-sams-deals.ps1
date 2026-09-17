@@ -605,7 +605,7 @@ if ($SelfTest) {
   $script:SamsHintNotes.Clear()
   $r8i = Build-Row $rawSBR
   if ($r8i.row -and [string]$r8i.row.size -eq '171.143 oz' -and $script:SamsHintNotes.Count -eq 0) { Write-Output 'ok    8i a hint on another item id is ignored silently' }
-  else { Write-Output ("FAIL  8i foreign hint applied: size='" + $r8i.row.size + "' notes=" + @($script:SamsHintNotes).Count); $fail++ }
+  else { Write-Output ("FAIL  8i foreign hint applied: size='" + $r8i.row.size + "' notes=" + $script:SamsHintNotes.Count); $fail++ }
   # 8j CLEAN TWIN: case 8d's ranch row still keeps size '122 oz' and name_volume_floz 128 - the 2026-09-10
   # gallon-jug path is untouched - and now also states its own 5.56% band.
   $script:SamsSizeHints = @(); $script:SamsHintNotes.Clear()

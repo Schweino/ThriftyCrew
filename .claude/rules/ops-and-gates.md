@@ -56,6 +56,18 @@ everything else honest, so a defect here is silent by construction.
   element, so an empty result counts 1 and a real result binds the whole array to your loop variable.
   Assign, then wrap. Hit four times in one session on 2026-09-06.
   [[ps-json-array-collapse]], [[ps-null-count-is-one]]
+- **`@($v)` THROWS when `$v` came from `New-Object ...List[object]`**, and the wrap is what throws, not the `+`
+  (2026-09-17). `@($l)`, `@($l).Count`, `foreach ($x in @($l))` and `[ordered]@{ p = @($l) }` all die with
+  *"Argument types do not match"* even when the list is EMPTY, and the error points at whatever encloses the wrap;
+  `$l + @($arr)` is fine, so is the same type built with `::new()`, so is `.ToArray()`, and so is every other element
+  type (`List[string]`, `List[psobject]`, an ArrayList). New-Object returns its instance PSObject-wrapped and that
+  wrapper is what `@()` cannot convert. It was hand-fixed in `build-deals-page`, then in
+  `grocery\build-arrivals-docket.ps1:446`, then written into a memory, and 9c44c3a37 wrote it again in
+  `build-sams-deals`: every Sam's build with a reject then died AFTER writing the deals file and before its rejects
+  file, summary and cursor advance, for five days. A rule that recurs despite a memory needs a gate, so
+  `ops/audit-list-array-wrap.ps1` holds it at push time, at ZERO, with `# list-array-wrap:allow <reason>` on the line
+  for the two fixtures that execute the wrap to prove PS 5.1 still throws. Its first run found four more latent
+  sites, every one on an error path nobody had taken. [[ps-list-object-array-wrap-throws]]
 - **Under `powershell -File`, `-Count 1,2,4,8` into an `[int[]]` binds as the ONE number 1248.** The list
   arrives as one string and the number conversion reads its commas as thousands separators. A measurement
   harness launched 1,168 child processes on the shared box that way on 2026-09-11. A script meant to be run

@@ -377,6 +377,14 @@ $static = @(
   # 2026-09-11: ingredient-queue defined a function named Get-Item, which outranks the cmdlet, so its live-ledger assertion
   # read 0 before and after for 17 days. A rule in ops-and-gates.md reaches whoever opens it; this reaches the next definition.
   @{ f = 'ops\audit-cmdlet-shadow.ps1';        n = 'no tracked script defines a function named after a built-in cmdlet or module function, except a file-and-name allowlist entry with its reason - hermetic, a pinned name list, reads source only' }
+  # 9c44c3a37 wrote `@($rejects) + @($hintNotes)` over a New-Object List[object], which throws under PS 5.1, so
+  # every Sam's build carrying a reject died after writing the deals file and before its rejects file, summary and
+  # cursor advance - for five days. The same trap had already been hand-fixed in build-arrivals-docket.ps1 and
+  # build-deals-page.ps1 and recorded in a memory, and it recurred anyway. ON EVERY PUSH rather than daily, on this
+  # file's own criterion: unlike the six tree-wide ratchets below, what it catches is not degraded guard quality but
+  # a lane that CRASHES at run time, and the value is the new site in THIS diff - the same reason
+  # test-native-stderr-eap stays. It cost 24s over 785 tracked scripts on 2026-09-17. Hermetic, reads source only.
+  @{ f = 'ops\audit-list-array-wrap.ps1';      n = 'no tracked script wraps a New-Object List[object] in @(), which throws "Argument types do not match" under PS 5.1 even when the list is empty - a gate at ZERO, with a marked fixture that proves the throw as its only exception' }
   # Brad's ruling, 2026-09-12, backlog I138: a title we publish on a paid page is our claim whatever blog it came
   # from. This one is on EVERY push rather than daily, because it is one of the few detectors here that CAN put a
   # wrong claim in front of a paying reader, which is the distinction the daily/push split above is drawn on. It

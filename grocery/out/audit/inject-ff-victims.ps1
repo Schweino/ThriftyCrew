@@ -23,4 +23,4 @@ $out=[ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; so
 $file="$reg\family-fare-regular-$todayS.json"
 ($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
 Write-Output ("merged: "+$before+" existing + "+$added+" recovered victims = "+$deals.Count+" -> "+$file)
-Write-Output ("ground pork present now: "+([bool](@($deals)|Where-Object{[string]$_.item -match '(?i)ground pork'})))
+Write-Output ("ground pork present now: "+([bool]($deals.ToArray()|Where-Object{[string]$_.item -match '(?i)ground pork'})))

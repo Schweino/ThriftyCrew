@@ -398,7 +398,7 @@ foreach ($sf in (Get-ChildItem (Join-Path $mp 'db\recipes\*.json'))) {
 # bases, and sweeping it in is the very over-reach this scoping exists to stop. Refuse and let a human name it.
 if ($blind.Count -gt 0) {
   Die ('CANNOT IDENTIFY ' + $blind.Count + ' block(s) carrying bid ' + $fromBid + ' - no canon, no item: ' +
-       ((@($blind) | Select-Object -First 5) -join '; ') + '. Nothing written.')
+       (($blind.ToArray() | Select-Object -First 5) -join '; ') + '. Nothing written.')
 }
 Write-Output ("  {0} spec(s) rewritten: {1}" -f $touched.Count, (($touched | ForEach-Object { $_.slug }) -join ', '))
 if ($skipped.Count -gt 0) {

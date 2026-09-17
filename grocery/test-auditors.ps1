@@ -2443,7 +2443,7 @@ $ffcSrc = Get-Content (Join-Path $root 'audit-ff-carry.ps1') -Raw
 $ffcList = New-Object System.Collections.Generic.List[object]
 $ffcList.Add([pscustomobject]@{ term = 't' })
 $ffcThrows = $false
-try { $null = @($ffcList) } catch { $ffcThrows = $true }
+try { $null = @($ffcList) } catch { $ffcThrows = $true }   # list-array-wrap:allow this fixture EXECUTES the wrap to prove PS 5.1 still throws
 if ($ffcThrows) { Ok 'PS 5.1 still throws on @(List[object]) - the founding hazard is real, not a historical quirk' }
 else { Bad 'PS 5.1 no longer throws on @(List[object]) - this fixture no longer proves anything; re-derive it' }
 if ($ffcSrc -match 'confirmed_victims\s*=\s*@\(\$victims\)') { Bad 'audit-ff-carry wraps its List[object] in @( ) again - it will throw after all 464 probes and log nothing' }
