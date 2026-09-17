@@ -46,7 +46,11 @@
 param(
   [string]$In = "",
   [string]$Date = "",
-  [switch]$SelfTest
+  [switch]$SelfTest,
+  # -OutDir and -NoCursor exist for the self-test's end-to-end child ONLY (case 11): it builds a fixture capture
+  # into a temp directory, and must neither write out\sams nor advance the live Sam's rotation cursor.
+  [string]$OutDir = "",
+  [switch]$NoCursor
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
@@ -611,6 +615,53 @@ if ($SelfTest) {
   } else { Write-Output ("FAIL  8j ranch: err='" + $r8j.err + "' size='" + $r8j.row.size + "' nv='" + $r8j.row.name_volume_floz + "' pct='" + $r8j.row.size_rounding_pct + "'"); $fail++ }
   $script:SamsSizeHints = $null; $script:SamsHintNotes.Clear()
 
+  # ---- case 11: THE BUILD ITSELF, END TO END, AS A CHILD ----------------------------------------------
+  # (2026-09-17.) Every case above calls Build-Row, and none ran the code BELOW this block, so from 9c44c3a37
+  # (2026-09-12) every real build with at least one reject died at the rejects-file merge with "Argument types
+  # do not match" (`@(List[object]) + @(...)` under PS 5.1): the deals file was already written, but the rejects
+  # file, the summary line and the cursor advance never ran, and the Sam's cursor sat still for six days.
+  # The child writes to a per-run temp -OutDir and passes -NoCursor, so it touches neither out\sams nor the live
+  # cursor. The fixture date 1999-01-01 is one no real capture carries, and the live path for it is asserted absent.
+  . (Join-Path $root 'native-lib.ps1')
+  $bsdT = Join-Path $env:TEMP ('bsd-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $bsdT -ErrorAction Stop | Out-Null
+  try {
+    $bsdHead = 'q|n|lp|up|id'
+    $bsdGood = 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|FIXTURE1'
+    $bsdBad  = 'beans|Bogus Beans, 99 ct.|$3.27|$1.09/ea|FIXTURE2'
+    $bsdLiveDeals = Join-Path $root 'out\sams\sams-deals-1999-01-01.json'
+    # The rollback ledger is NOT redirected by -OutDir. The fixture carries no was-price, so it must stay byte-identical.
+    $bsdLedger = Join-Path $root 'rollback-first-seen.json'
+    $bsdLedgerHash = if (Test-Path -LiteralPath $bsdLedger) { (Get-FileHash -LiteralPath $bsdLedger).Hash } else { '' }
+    # 11a MUST FIRE: one priced row and one reject. The build must reach its summary line, write the rejects file
+    # holding exactly that reject, and exit 0.
+    $csvA = Join-Path $bsdT 'sams-capture-a.csv'
+    [IO.File]::WriteAllText($csvA, ($bsdHead + "`n" + $bsdGood + "`n" + $bsdBad + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $outA = Join-Path $bsdT 'a'
+    $runA = Invoke-NativeScript $PSCommandPath '-In' $csvA '-Date' '1999-01-01' '-OutDir' $outA '-NoCursor'
+    $linesA = @($runA.Lines | ForEach-Object { [string]$_ })
+    $sumA = @($linesA | Where-Object { $_ -match '^build-sams-deals: 2 raw -> 1 priced \(1 after de-dupe\), 1 rejected -> sams-deals-1999-01-01\.json$' }).Count
+    $rjA = Join-Path $outA 'sams-rejects-1999-01-01.json'
+    $rjNames = @()
+    if (Test-Path -LiteralPath $rjA) { $rjDoc = Get-Content -LiteralPath $rjA -Raw -Encoding UTF8 | ConvertFrom-Json; $rjNames = @($rjDoc | ForEach-Object { [string]$_.name }) }
+    $okA = ($runA.ExitCode -eq 0) -and ($sumA -eq 1) -and ($rjNames.Count -eq 1) -and ($rjNames[0] -eq 'Bogus Beans, 99 ct.') -and (Test-Path -LiteralPath (Join-Path $outA 'sams-deals-1999-01-01.json'))
+    if ($okA) { Write-Output 'ok    11a MUST FIRE  a build with one reject reaches its summary line, writes the rejects file and exits 0' }
+    else { Write-Output ("FAIL  11a build with a reject: exit=" + $runA.ExitCode + " summary_lines=" + $sumA + " reject_names=" + ($rjNames -join ';') + " | " + (($linesA | Select-Object -Last 4) -join ' / ')); $fail++ }
+    # 11b CLEAN TWIN: the same build with no reject still reaches its summary line, exits 0 and writes no rejects file.
+    $csvB = Join-Path $bsdT 'sams-capture-b.csv'
+    [IO.File]::WriteAllText($csvB, ($bsdHead + "`n" + $bsdGood + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $outB = Join-Path $bsdT 'b'
+    $runB = Invoke-NativeScript $PSCommandPath '-In' $csvB '-Date' '1999-01-01' '-OutDir' $outB '-NoCursor'
+    $linesB = @($runB.Lines | ForEach-Object { [string]$_ })
+    $sumB = @($linesB | Where-Object { $_ -match '^build-sams-deals: 1 raw -> 1 priced \(1 after de-dupe\), 0 rejected -> sams-deals-1999-01-01\.json$' }).Count
+    if ($runB.ExitCode -eq 0 -and $sumB -eq 1 -and -not (Test-Path -LiteralPath (Join-Path $outB 'sams-rejects-1999-01-01.json'))) { Write-Output 'ok    11b CLEAN TWIN  a build with no reject reaches its summary line, exits 0 and writes no rejects file' }
+    else { Write-Output ("FAIL  11b clean build: exit=" + $runB.ExitCode + " summary_lines=" + $sumB + " | " + (($linesB | Select-Object -Last 4) -join ' / ')); $fail++ }
+    # 11c MUST NOT FIRE: the fixture children wrote nothing into the live out\sams.
+    $bsdLedgerAfter = if (Test-Path -LiteralPath $bsdLedger) { (Get-FileHash -LiteralPath $bsdLedger).Hash } else { '' }
+    if (-not (Test-Path -LiteralPath $bsdLiveDeals) -and $bsdLedgerAfter -eq $bsdLedgerHash) { Write-Output 'ok    11c MUST NOT FIRE  the fixture builds left out\sams and the rollback ledger untouched' }
+    else { Write-Output ('FAIL  11c a fixture build wrote live state: deals_present=' + (Test-Path -LiteralPath $bsdLiveDeals) + ' ledger_changed=' + ($bsdLedgerAfter -ne $bsdLedgerHash)); $fail++ }
+  } finally { Remove-Item -LiteralPath $bsdT -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
@@ -623,6 +674,9 @@ if (-not $In -or -not (Test-Path $In)) { throw "build-sams-deals: -In not found:
 if (-not $Date -and $In) { $m = [regex]::Match($In, '\d{4}-\d{2}-\d{2}'); if ($m.Success) { $Date = $m.Value } }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
 $raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
+# Assign, THEN wrap: a one-row capture comes back as a lone PSCustomObject, which under PS 5.1 has no .Count, so the
+# summary line printed " raw" with no number (found by self-test 11b, 2026-09-17).
+$raw = @($raw)
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled field(s) on ingest (UTF-8 read as ANSI upstream)") }
 if ($script:CapturePlaceholderCount -gt 0) { Write-Output ("  dropped $($script:CapturePlaceholderCount) vendor placeholder row(s) at ingest ($($script:CapturePlaceholderPct)% of what was read)") }
 if ($script:CaptureIngestWarning) { Write-Output ("  " + $script:CaptureIngestWarning) }
@@ -659,7 +713,7 @@ if ($rollbacks -gt 0) { Write-Output ("build-sams-deals: $rollbacks rollback(s) 
 $seen = @{}; $ded = New-Object System.Collections.Generic.List[object]
 foreach ($r in $rows) { $k = $r.item + '|' + $r.ad_price + '|' + $r.size; if (-not $seen.ContainsKey($k)) { $seen[$k]=$true; $ded.Add($r) } }
 
-$outDir = Join-Path $root 'out\sams'
+$outDir = if ($OutDir) { $OutDir } else { Join-Path $root 'out\sams' }
 if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir -Force | Out-Null }
 $outFile = Join-Path $outDir ("sams-deals-$Date.json")
 [ordered]@{
@@ -683,7 +737,10 @@ if ($rejects.Count -or $hintNotes.Count) {
   $rj = Join-Path $outDir ("sams-rejects-$Date.json")
   # BAD HINT notes ride in the same file (their rows WERE published - see the note above), so a human has one
   # place to look for "what did this build refuse to believe".
-  $rjRows = @($rejects) + @($hintNotes)
+  # .ToArray(), NOT @($rejects): under PS 5.1 `@(List[object]) + @(...)` throws "Argument types do not match".
+  # From 9c44c3a37 (2026-09-12) until 2026-09-17 that killed every build with a reject right here, after the deals
+  # file was written, so no rejects file, no summary line and no cursor advance. Self-test case 11 is the gate.
+  $rjRows = @($rejects.ToArray()) + @($hintNotes)
   $rjRows | ConvertTo-Json -Depth 4 | Set-Content $rj -Encoding UTF8
 }
 Write-Output ("build-sams-deals: {0} raw -> {1} priced ({2} after de-dupe), {3} rejected -> {4}" -f $raw.Count, $rows.Count, $ded.Count, $rejects.Count, (Split-Path $outFile -Leaf))
@@ -702,7 +759,7 @@ if ($rejects.Count) {
 # really landed and holds rows, so this cannot advance on an empty build.
 # Never fatal: a cursor that fails to move costs one repeated slice tomorrow,
 # while a builder that dies after writing its rows costs the rows.
-if (-not $SelfTest) {
+if (-not $SelfTest -and -not $NoCursor) {
   try {
   & (Join-Path $PSScriptRoot 'commit-capture-cursor.ps1') -Store 'Sam''s Club' -Date $Date | Write-Output
   } catch { Write-Warning ("cursor commit skipped: " + $_.Exception.Message) }
