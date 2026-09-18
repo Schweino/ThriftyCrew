@@ -29,10 +29,38 @@
   copy: `two copies of a rule` drift silently, so the second copy has to be proven against the first on
   the real corpus, every suite run, not reasoned about once.
 
+  BOUNDED-TIME MATCHING (2026-09-19, backlog I183, I208, I209). Every regex here is built with a
+  MatchTimeout (default 250 ms), because .NET Framework's engine backtracks and a catalogue include is
+  machine-written as often as hand-written. audit-coverage-gaps.ps1's header is the estate's own incident:
+  one ambiguous include once blocked the daily pipeline for 11 hours. A timeout alone would only turn a
+  hang into an uncaught RegexMatchTimeoutException that aborts the whole board build, so the compiled core
+  and the PowerShell twin both CATCH it and score that name COULD-NOT-LOOK, which is never the same answer
+  as no-match ([[a-could-not-look-must-not-settle-the-question]]):
+    * first-match-wins means a commodity that could not be decided makes every LATER answer unknowable, so
+      the name resolves to nothing and is recorded as could-not-look, with the commodity and the kind
+      (include / exclude / global) that could not be decided. A definite hit elsewhere still wins where the
+      order allows it: an include that times out on the raw name but matches the variant is a hit, and an
+      exclude that fires is a definite exclusion whatever a sibling exclude did.
+    * a per-regex CIRCUIT BREAKER, as audit-coverage-gaps has: after 3 timeouts a regex is quarantined for
+      the rest of the run and every later look at it is could-not-look without running it, so one bad
+      pattern costs at most 3 bounds and not one bound per name. A commodity's plain includes are ONE
+      combined regex, so that breaker is per commodity.
+    * Get-CommodityMatcherBlind reads it all back; compare-deals prints it, writes it into the board's
+      health block and the flagged file, and check-ad-cycles pages it; the identity table does not record a
+      could-not-look name as unmatched, because a stored "no commodity owns this" is reused next run.
+  Why 250 ms: on the 2026-09-19 corpus (42,753 distinct names, board 2026-09-17) the slowest single
+  Resolve was 15.1 ms in a cold pass (under 2 ms re-timed) and the slowest single regex on a real name
+  6.3 ms, so the bound sits more than 16x above anything a real name costs; it is also the bound
+  audit-coverage-gaps has run with since 2026-08-14. It was the only value tried. Measured by I209 on
+  Framework 4: a 250 ms timeout costs 2 to 4 percent on ordinary matches. NOT RegexOptions.Compiled: I209
+  measured it SLOWER here on a catalogue-shaped pattern and 89 to 125 ms dearer to build.
+
   Usage:
       . match-lib.ps1
       $m = New-CommodityMatcher -Commodities $commodities -GlobalExclude $GLOBAL_EXCLUDE
       $c = Resolve-Commodity -Matcher $m -Name $productName      # -> commodity object or $null
+      $b = Get-CommodityMatcherBlind -Matcher $m                 # -> what could not be decided, and why
+  Self-test:  powershell -File grocery\match-lib.ps1 -SelfTest   (hermetic: frozen catalogue, no board)
 #>
 
 function Get-MatchTexts([string]$name) {
@@ -56,7 +84,78 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 namespace ThriftyCrew {
-  public sealed class MatchCore {
+  // One regex match that hit its MatchTimeout. Entry is the commodity index (-1 for a global exclude).
+  public sealed class MatchTimeoutNote {
+    public string Kind; public int Entry; public string Pattern; public string Name; public bool Quarantined;
+  }
+  // One name the matcher could not decide, and the first commodity (and kind) that made it undecidable.
+  public sealed class MatchBlindNote {
+    public string Name; public int Entry; public string Kind;
+  }
+  public sealed class BoundedMatchCore {
+    // Resolve's answer for a name it could not decide. Never -1, which means "no commodity owns it".
+    public const int CouldNotLook = -2;
+    public int BreakerLimit = 3;
+    public List<MatchTimeoutNote> Timeouts = new List<MatchTimeoutNote>();
+    public List<MatchBlindNote> Blind = new List<MatchBlindNote>();
+    public int QuarantineSkips;    // looks answered could-not-look WITHOUT running, because the regex was quarantined
+    // Keyed by Regex REFERENCE (Regex does not override Equals). Consulted only once it is non-empty, so a
+    // run with no timeout pays one Count read per match and nothing else.
+    Dictionary<Regex, int> _dead = new Dictionary<Regex, int>();
+    // 1 = match, 0 = no match, -1 = could not look (timed out now, or quarantined by the breaker).
+    int Look(Regex rx, string s, int entry, string kind) {
+      int n = 0;
+      if (_dead.Count != 0 && _dead.TryGetValue(rx, out n) && n >= BreakerLimit) { QuarantineSkips++; return -1; }
+      try { return rx.IsMatch(s) ? 1 : 0; }
+      catch (RegexMatchTimeoutException) {
+        n = n + 1; _dead[rx] = n;
+        Timeouts.Add(new MatchTimeoutNote { Kind = kind, Entry = entry, Pattern = rx.ToString(), Name = s, Quarantined = n >= BreakerLimit });
+        return -1;
+      }
+    }
+    // An entry's include verdict, in the original's order: combined (raw, variant), then each special
+    // (raw, variant), first definite hit wins. A timeout only matters if nothing after it hits.
+    int LookInclude(int i, string raw, string variant) {
+      bool blind = false; int r;
+      if (Inc[i] != null) {
+        r = Look(Inc[i], raw, i, "include"); if (r == 1) return 1; if (r < 0) blind = true;
+        r = Look(Inc[i], variant, i, "include"); if (r == 1) return 1; if (r < 0) blind = true;
+      }
+      if (IncSpecial[i] != null) {
+        foreach (var rx in IncSpecial[i]) {
+          r = Look(rx, raw, i, "include"); if (r == 1) return 1; if (r < 0) blind = true;
+          r = Look(rx, variant, i, "include"); if (r == 1) return 1; if (r < 0) blind = true;
+        }
+      }
+      return blind ? -1 : 0;
+    }
+    // 1 = excluded, 0 = every exclude missed, -1 = none fired but one could not be decided.
+    int LookExclude(int i, string raw) {
+      if (Exc[i] == null) return 0;
+      bool blind = false;
+      foreach (var rx in Exc[i]) { int r = Look(rx, raw, i, "exclude"); if (r == 1) return 1; if (r < 0) blind = true; }
+      return blind ? -1 : 0;
+    }
+    // The global-exclude pass: definite hits and undecided texts, separately.
+    void LookGlobals(string raw, out List<string> ghits, out List<string> gblind) {
+      ghits = null; gblind = null;
+      for (int g = 0; g < Gex.Length; g++) {
+        int r = Look(Gex[g], raw, -1, "global");
+        if (r == 1) { if (ghits == null) ghits = new List<string>(); ghits.Add(GexText[g]); }
+        else if (r < 0) { if (gblind == null) gblind = new List<string>(); gblind.Add(GexText[g]); }
+      }
+    }
+    // After an include hit: 1 = blocked by a definite global hit it does not relax, -1 = an undecided global
+    // it does not relax could block it, 0 = clear. A definite block wins over an undecided one.
+    int GlobalGate(int i, List<string> ghits, List<string> gblind) {
+      if (ghits != null) { foreach (var g in ghits) { if (Array.IndexOf(Relax[i], g) < 0) return 1; } }
+      if (gblind != null) { foreach (var g in gblind) { if (Array.IndexOf(Relax[i], g) < 0) return -1; } }
+      return 0;
+    }
+    int NoteBlind(string raw, int entry, string kind) {
+      Blind.Add(new MatchBlindNote { Name = raw, Entry = entry, Kind = kind });
+      return CouldNotLook;
+    }
     public Regex[] Gex; public string[] GexText;
     public Regex[] Inc;            // per entry: combined include, or null
     public Regex[][] IncSpecial;   // per entry: standalone includes with inline options
@@ -109,12 +208,11 @@ namespace ThriftyCrew {
         }
       }
     }
-    // Returns the index of the winning entry, or -1.
+    // Returns the index of the winning entry, -1 for none, or CouldNotLook (-2) when an entry that comes
+    // before any winner could not be decided inside the bound.
     public int Resolve(string raw, string variant) {
-      List<string> ghits = null;
-      for (int g = 0; g < Gex.Length; g++) {
-        if (Gex[g].IsMatch(raw)) { if (ghits == null) ghits = new List<string>(); ghits.Add(GexText[g]); }
-      }
+      List<string> ghits, gblind;
+      LookGlobals(raw, out ghits, out gblind);
       if (_idx == null) BuildIndex();
       // PREFILTER: an entry whose every include requires a literal is a candidate only if one of those
       // literals occurs in the raw OR the variant text. Same predicate as testing IndexOf per token;
@@ -126,20 +224,15 @@ namespace ThriftyCrew {
       for (int i = 0; i < Inc.Length; i++) {
         if (!HasInc[i]) continue;
         if (!_always[i] && !cand[i]) continue;
-        bool hit = false;
-        if (Inc[i] != null && (Inc[i].IsMatch(raw) || Inc[i].IsMatch(variant))) hit = true;
-        if (!hit && IncSpecial[i] != null) {
-          foreach (var rx in IncSpecial[i]) { if (rx.IsMatch(raw) || rx.IsMatch(variant)) { hit = true; break; } }
-        }
-        if (!hit) continue;
-        if (ghits != null) {
-          bool blocked = false;
-          foreach (var g in ghits) { if (Array.IndexOf(Relax[i], g) < 0) { blocked = true; break; } }
-          if (blocked) continue;
-        }
-        bool bad = false;
-        if (Exc[i] != null) { foreach (var rx in Exc[i]) { if (rx.IsMatch(raw)) { bad = true; break; } } }
-        if (bad) continue;
+        int hit = LookInclude(i, raw, variant);
+        if (hit == 0) continue;
+        if (hit < 0) return NoteBlind(raw, i, "include");
+        int gate = GlobalGate(i, ghits, gblind);
+        if (gate > 0) continue;
+        if (gate < 0) return NoteBlind(raw, i, "global");
+        int bad = LookExclude(i, raw);
+        if (bad > 0) continue;
+        if (bad < 0) return NoteBlind(raw, i, "exclude");
         return i;
       }
       return -1;
@@ -164,13 +257,16 @@ namespace ThriftyCrew {
     //     foreach ($inc in $c.include) { foreach ($t in $texts) { ... } }
     // -1 means "the entry won through a path with no individually-compiled include", which can only
     // happen if IncEach was not built.
+    // Could-not-look: an undecidable entry BEFORE the winner makes the answer undecidable (CouldNotLook, as
+    // Resolve). One AFTER the winner cannot change the winner, so it is left out of the contested set and
+    // stays on record in Timeouts; the contested set is advisory, the winner is not. A winning pattern that
+    // times out while being NAMED is skipped, so winPat can come back -1 on a winner, which test-match-lib
+    // already reports as a matched name with no include_hit.
     public int ResolveDetail(string raw, string variant, List<int> others, out int winPat) {
       winPat = -1;
       int winner = -1;
-      List<string> ghits = null;
-      for (int g = 0; g < Gex.Length; g++) {
-        if (Gex[g].IsMatch(raw)) { if (ghits == null) ghits = new List<string>(); ghits.Add(GexText[g]); }
-      }
+      List<string> ghits, gblind;
+      LookGlobals(raw, out ghits, out gblind);
       if (_idx == null) BuildIndex();
       var cand = new bool[Inc.Length];
       Collect(raw, cand);
@@ -178,25 +274,20 @@ namespace ThriftyCrew {
       for (int i = 0; i < Inc.Length; i++) {
         if (!HasInc[i]) continue;
         if (!_always[i] && !cand[i]) continue;
-        bool hit = false;
-        if (Inc[i] != null && (Inc[i].IsMatch(raw) || Inc[i].IsMatch(variant))) hit = true;
-        if (!hit && IncSpecial[i] != null) {
-          foreach (var rx in IncSpecial[i]) { if (rx.IsMatch(raw) || rx.IsMatch(variant)) { hit = true; break; } }
-        }
-        if (!hit) continue;
-        if (ghits != null) {
-          bool blocked = false;
-          foreach (var g in ghits) { if (Array.IndexOf(Relax[i], g) < 0) { blocked = true; break; } }
-          if (blocked) continue;
-        }
-        bool bad = false;
-        if (Exc[i] != null) { foreach (var rx in Exc[i]) { if (rx.IsMatch(raw)) { bad = true; break; } } }
-        if (bad) continue;
+        int hit = LookInclude(i, raw, variant);
+        if (hit == 0) continue;
+        if (hit < 0) { if (winner < 0) return NoteBlind(raw, i, "include"); continue; }
+        int gate = GlobalGate(i, ghits, gblind);
+        if (gate > 0) continue;
+        if (gate < 0) { if (winner < 0) return NoteBlind(raw, i, "global"); continue; }
+        int bad = LookExclude(i, raw);
+        if (bad > 0) continue;
+        if (bad < 0) { if (winner < 0) return NoteBlind(raw, i, "exclude"); continue; }
         if (winner < 0) {
           winner = i;
           if (IncEach != null && IncEach[i] != null) {
             for (int p = 0; p < IncEach[i].Length; p++) {
-              if (IncEach[i][p].IsMatch(raw) || IncEach[i][p].IsMatch(variant)) { winPat = p; break; }
+              if (Look(IncEach[i][p], raw, i, "include-name") == 1 || Look(IncEach[i][p], variant, i, "include-name") == 1) { winPat = p; break; }
             }
           }
         } else if (others != null) { others.Add(i); }
@@ -260,20 +351,32 @@ namespace ThriftyCrew {
 '@
 function Get-MatchCoreType {
   if ($script:MatchCoreLoaded) { return $true }
-  if ('ThriftyCrew.MatchCore' -as [type]) { $script:MatchCoreLoaded = $true; return $true }
+  if ('ThriftyCrew.BoundedMatchCore' -as [type]) { $script:MatchCoreLoaded = $true; return $true }
   try { Add-Type -TypeDefinition $script:MatchCoreSource -Language CSharp -ErrorAction Stop | Out-Null; $script:MatchCoreLoaded = $true; return $true }
   catch { $script:MatchCoreLoaded = $false; return $false }
+}
+
+function New-MatchLookState([int]$BreakerLimit = 3) {
+  # The PowerShell twin's timeout bookkeeping, the same four facts BoundedMatchCore keeps. dead is keyed by
+  # the Regex OBJECT, which a hashtable compares by reference, exactly as the C# dictionary does.
+  return @{ limit = $BreakerLimit; dead = @{}; skips = 0
+            timeouts = (New-Object System.Collections.ArrayList); blind = (New-Object System.Collections.ArrayList) }
 }
 
 function New-CommodityMatcher {
   param(
     [Parameter(Mandatory)]$Commodities,
-    [Parameter(Mandatory)][string[]]$GlobalExclude
+    [Parameter(Mandatory)][string[]]$GlobalExclude,
+    # THE BOUND, per regex match. 250 ms: see the header for the measurement that chose it. Floored at 25 ms,
+    # as audit-coverage-gaps floors its own, so a typo cannot make every ordinary match a timeout.
+    [int]$MatchTimeoutMs = 250,
+    [int]$BreakerLimit = 3
   )
   $opt = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+  $span = [TimeSpan]::FromMilliseconds([Math]::Max(25, $MatchTimeoutMs))
   $gex = New-Object System.Collections.Generic.List[object]
   foreach ($g in $GlobalExclude) {
-    $gex.Add([pscustomobject]@{ text = [string]$g; rx = [regex]::new([string]$g, $opt) })
+    $gex.Add([pscustomobject]@{ text = [string]$g; rx = [regex]::new([string]$g, $opt, $span) })
   }
   $entries = New-Object System.Collections.Generic.List[object]
   foreach ($c in $Commodities) {
@@ -284,19 +387,25 @@ function New-CommodityMatcher {
     $plain = @($incs | Where-Object { $_ -notmatch '\(\?[imsxn-]+\)' })
     $special = @($incs | Where-Object { $_ -match '\(\?[imsxn-]+\)' })
     $combined = $null
-    if ($plain.Count) { $combined = [regex]::new((($plain | ForEach-Object { '(?:' + $_ + ')' }) -join '|'), $opt) }
-    $specialRx = @($special | ForEach-Object { [regex]::new($_, $opt) })
-    $excRx = @(@($c.exclude | Where-Object { $null -ne $_ -and "$_" -ne '' }) | ForEach-Object { [regex]::new([string]$_, $opt) })
+    if ($plain.Count) { $combined = [regex]::new((($plain | ForEach-Object { '(?:' + $_ + ')' }) -join '|'), $opt, $span) }
+    $specialRx = @($special | ForEach-Object { [regex]::new($_, $opt, $span) })
+    $excRx = @(@($c.exclude | Where-Object { $null -ne $_ -and "$_" -ne '' }) | ForEach-Object { [regex]::new([string]$_, $opt, $span) })
     $relax = @($c.relax_global | Where-Object { $_ } | ForEach-Object { [string]$_ })
+    # incAll is the include ORDER both paths test in: the combined alternation, then each special.
+    $incAll = @(@($combined) + $specialRx | Where-Object { $null -ne $_ })
+    # Every include compiled INDIVIDUALLY, in file order: which one fired, for the detail scan only. Built once
+    # here for both paths (the interpreted twin used to build one per winning pattern per name).
+    $incEach = @($incs | ForEach-Object { [regex]::new([string]$_, $opt, $span) })
     $entries.Add([pscustomobject]@{
       commodity = $c; inc = $combined; incSpecial = $specialRx; exc = $excRx; relax = $relax
-      incPatterns = $incs
+      incPatterns = $incs; incAll = $incAll; incEach = $incEach
       hasInc = (($null -ne $combined) -or ($specialRx.Count -gt 0))
     })
   }
   $core = $null
   if (Get-MatchCoreType) {
-    $core = New-Object ThriftyCrew.MatchCore
+    $core = New-Object ThriftyCrew.BoundedMatchCore
+    $core.BreakerLimit = $BreakerLimit
     $core.Gex = [System.Text.RegularExpressions.Regex[]]@($gex | ForEach-Object { $_.rx })
     $core.GexText = [string[]]@($gex | ForEach-Object { $_.text })
     $n = $entries.Count
@@ -319,7 +428,7 @@ function New-CommodityMatcher {
       $toks = New-Object System.Collections.Generic.List[string]
       $sound = $true
       foreach ($p in @($e.incPatterns)) {
-        $t = [ThriftyCrew.MatchCore]::RequiredLiteral([string]$p)
+        $t = [ThriftyCrew.BoundedMatchCore]::RequiredLiteral([string]$p)
         if ($null -eq $t) { $sound = $false; break }
         $toks.Add($t)
       }
@@ -333,12 +442,177 @@ function New-CommodityMatcher {
     $incT = New-Object 'string[][]' $n
     for ($i = 0; $i -lt $n; $i++) {
       $pats = @($entries[$i].incPatterns)
-      $incE[$i] = [System.Text.RegularExpressions.Regex[]]@($pats | ForEach-Object { [regex]::new([string]$_, $opt) })
+      $incE[$i] = [System.Text.RegularExpressions.Regex[]]@($entries[$i].incEach)
       $incT[$i] = [string[]]@($pats | ForEach-Object { [string]$_ })
     }
     $core.IncEach = $incE; $core.IncEachText = $incT
   }
-  return [pscustomobject]@{ gex = $gex; entries = $entries; core = $core }
+  return [pscustomobject]@{ gex = $gex; entries = $entries; core = $core; span = $span; look = (New-MatchLookState $BreakerLimit) }
+}
+
+function Add-MatchTimeoutNote($L, $Rx, [string]$Text, [int]$Entry, [string]$Kind) {
+  # Called only when a match has just timed out, so the bookkeeping costs nothing on a clean call.
+  $n = [int]$L.dead[$Rx] + 1
+  $L.dead[$Rx] = $n
+  [void]$L.timeouts.Add([pscustomobject]@{ Kind = $Kind; Entry = $Entry; Pattern = $Rx.ToString(); Name = $Text; Quarantined = ($n -ge $L.limit) })
+}
+
+function Invoke-MatchPsScan {
+  <#
+    THE INTERPRETED TWIN of BoundedMatchCore.Resolve (and, with -Detail, ResolveDetail): same order, same
+    predicate, same could-not-look rule, used only when Add-Type is unavailable. Every look is
+    1 = match, 0 = no match, -1 = could not look (timed out now, or quarantined by the breaker), written
+    inline rather than as a helper call because this path runs ~1,200 looks per name with no prefilter.
+    Returns idx (entry index, -1 none, -2 could not look), and for -Detail the contested set and the
+    winning pattern's index.
+  #>
+  param($Matcher, [string]$N, [string]$V, [switch]$Detail)
+  $L = $Matcher.look
+  if ($null -eq $L) { $L = New-MatchLookState; $Matcher | Add-Member -NotePropertyName look -NotePropertyValue $L -Force }
+  # FAST PATH: the pre-2026-09-19 loop, verbatim, inside ONE try. While no regex is quarantined and no match
+  # times out it decides exactly as the precise scan below, near the old speed. Measured 2026-09-19 over the
+  # first 2,000 corpus names, two rounds each: the old loop 4.7 s, the precise scan alone 8.0 to 8.4 s, with this
+  # fast path 5.2 to 5.5 s, answers identical. A timeout abandons it for the precise scan, which re-runs the name
+  # and RECORDS what it could not decide - so until the breaker trips, an undecidable name pays two bounds here.
+  if ($L.dead.Count -eq 0) {
+    try {
+      $ghits = $null
+      foreach ($g in $Matcher.gex) { if ($g.rx.IsMatch($N)) { if ($null -eq $ghits) { $ghits = New-Object System.Collections.Generic.List[string] }; $ghits.Add($g.text) } }
+      $win = -1; $winIx = -1
+      $others = New-Object System.Collections.Generic.List[int]
+      for ($i = 0; $i -lt $Matcher.entries.Count; $i++) {
+        $e = $Matcher.entries[$i]
+        if (-not $e.hasInc) { continue }
+        $hit = $false
+        foreach ($rx in $e.incAll) { if ($rx.IsMatch($N) -or $rx.IsMatch($V)) { $hit = $true; break } }
+        if (-not $hit) { continue }
+        if ($null -ne $ghits) {
+          $blocked = $false
+          foreach ($g in $ghits) { if ($e.relax -notcontains $g) { $blocked = $true; break } }
+          if ($blocked) { continue }
+        }
+        $bad = $false
+        foreach ($rx in $e.exc) { if ($rx.IsMatch($N)) { $bad = $true; break } }
+        if ($bad) { continue }
+        if ($win -lt 0) {
+          $win = $i
+          if (-not $Detail) { break }
+          $each = @($e.incEach)
+          for ($p = 0; $p -lt $each.Count; $p++) { if ($each[$p].IsMatch($N) -or $each[$p].IsMatch($V)) { $winIx = $p; break } }
+        } else { $others.Add($i) }
+      }
+      return [pscustomobject]@{ idx = $win; others = $others; winIx = $winIx }
+    } catch [System.Text.RegularExpressions.RegexMatchTimeoutException] { }
+  }
+  $ghits = $null; $gblind = $null
+  foreach ($g in $Matcher.gex) {
+    $r = 0
+    if ($L.dead.Count -and [int]$L.dead[$g.rx] -ge $L.limit) { $L.skips = [int]$L.skips + 1; $r = -1 }
+    else { try { if ($g.rx.IsMatch($N)) { $r = 1 } } catch [System.Text.RegularExpressions.RegexMatchTimeoutException] { $r = -1; Add-MatchTimeoutNote $L $g.rx $N -1 'global' } }
+    if ($r -eq 1) { if ($null -eq $ghits) { $ghits = New-Object System.Collections.Generic.List[string] }; $ghits.Add($g.text) }
+    elseif ($r -lt 0) { if ($null -eq $gblind) { $gblind = New-Object System.Collections.Generic.List[string] }; $gblind.Add($g.text) }
+  }
+  $win = -1; $winIx = -1
+  $others = New-Object System.Collections.Generic.List[int]
+  $texts = @($N, $V)
+  for ($i = 0; $i -lt $Matcher.entries.Count; $i++) {
+    $e = $Matcher.entries[$i]
+    if (-not $e.hasInc) { continue }
+    $hit = 0
+    foreach ($rx in $e.incAll) {
+      foreach ($s in $texts) {
+        $r = 0
+        if ($L.dead.Count -and [int]$L.dead[$rx] -ge $L.limit) { $L.skips = [int]$L.skips + 1; $r = -1 }
+        else { try { if ($rx.IsMatch($s)) { $r = 1 } } catch [System.Text.RegularExpressions.RegexMatchTimeoutException] { $r = -1; Add-MatchTimeoutNote $L $rx $s $i 'include' } }
+        if ($r -eq 1) { $hit = 1; break }
+        if ($r -lt 0) { $hit = -1 }
+      }
+      if ($hit -eq 1) { break }
+    }
+    if ($hit -eq 0) { continue }
+    $kind = ''
+    if ($hit -lt 0) { $kind = 'include' }
+    else {
+      $gate = 0
+      if ($null -ne $ghits) { foreach ($g in $ghits) { if ($e.relax -notcontains $g) { $gate = 1; break } } }
+      if ($gate -eq 0 -and $null -ne $gblind) { foreach ($g in $gblind) { if ($e.relax -notcontains $g) { $gate = -1; break } } }
+      if ($gate -gt 0) { continue }
+      if ($gate -lt 0) { $kind = 'global' }
+      else {
+        $bad = 0
+        foreach ($rx in $e.exc) {
+          $r = 0
+          if ($L.dead.Count -and [int]$L.dead[$rx] -ge $L.limit) { $L.skips = [int]$L.skips + 1; $r = -1 }
+          else { try { if ($rx.IsMatch($N)) { $r = 1 } } catch [System.Text.RegularExpressions.RegexMatchTimeoutException] { $r = -1; Add-MatchTimeoutNote $L $rx $N $i 'exclude' } }
+          if ($r -eq 1) { $bad = 1; break }
+          if ($r -lt 0) { $bad = -1 }
+        }
+        if ($bad -gt 0) { continue }
+        if ($bad -lt 0) { $kind = 'exclude' }
+      }
+    }
+    if ($kind) {
+      # Undecidable BEFORE any winner: the answer is undecidable. AFTER one: left out of the contested set.
+      if ($win -lt 0) { [void]$L.blind.Add([pscustomobject]@{ Name = $N; Entry = $i; Kind = $kind }); return [pscustomobject]@{ idx = -2; others = $others; winIx = -1 } }
+      continue
+    }
+    if ($win -lt 0) {
+      $win = $i
+      if (-not $Detail) { break }
+      $each = @($e.incEach)
+      for ($p = 0; $p -lt $each.Count; $p++) {
+        $named = $false
+        foreach ($s in $texts) {
+          try { if ($each[$p].IsMatch($s)) { $named = $true } } catch [System.Text.RegularExpressions.RegexMatchTimeoutException] { Add-MatchTimeoutNote $L $each[$p] $s $i 'include-name' }
+          if ($named) { break }
+        }
+        if ($named) { $winIx = $p; break }
+      }
+    } else { $others.Add($i) }
+  }
+  return [pscustomobject]@{ idx = $win; others = $others; winIx = $winIx }
+}
+
+function Get-CommodityMatcherBlind {
+  <#
+    WHAT THE MATCHER COULD NOT DECIDE, read back from whichever path ran (the compiled core, or the twin).
+      timeouts          regex matches that hit the bound
+      quarantine_skips  looks answered could-not-look without running, because the breaker had tripped
+      quarantined       the regexes the breaker tripped on, with their commodity and kind
+      could_not_look    DISTINCT names resolved to nothing because a commodity before any winner could not
+                        be decided; each with that commodity, the kind, and how many times it was looked up
+    A could-not-look name is NOT an unmatched name and must never be recorded as one.
+  #>
+  param([Parameter(Mandatory)]$Matcher)
+  $tos = @(); $bl = @(); $skips = 0
+  if ($null -ne $Matcher.core) {
+    $tos = @($Matcher.core.Timeouts.ToArray()); $bl = @($Matcher.core.Blind.ToArray()); $skips = [int]$Matcher.core.QuarantineSkips
+  }
+  if ($null -ne $Matcher.look) {
+    $tos += @($Matcher.look.timeouts.ToArray()); $bl += @($Matcher.look.blind.ToArray()); $skips += [int]$Matcher.look.skips
+  }
+  $idOf = { param($ix) if ($ix -ge 0 -and $ix -lt $Matcher.entries.Count) { [string]$Matcher.entries[$ix].commodity.id } else { '(global exclude)' } }
+  $byName = [ordered]@{}
+  foreach ($b in $bl) {
+    $k = [string]$b.Name
+    if ($byName.Contains($k)) { $byName[$k].looks++ ; continue }
+    $byName[$k] = [pscustomobject]@{ name = $k; commodity = (& $idOf ([int]$b.Entry)); kind = [string]$b.Kind; looks = 1 }
+  }
+  $q = [ordered]@{}
+  foreach ($t in @($tos | Where-Object { $_.Quarantined })) {
+    $k = [string]$t.Entry + '|' + [string]$t.Kind + '|' + [string]$t.Pattern
+    if (-not $q.Contains($k)) {
+      $pt = [string]$t.Pattern
+      $q[$k] = [pscustomobject]@{ commodity = (& $idOf ([int]$t.Entry)); kind = [string]$t.Kind; pattern = $(if ($pt.Length -gt 200) { $pt.Substring(0, 200) + '...' } else { $pt }) }
+    }
+  }
+  return [pscustomobject]@{
+    timeout_ms = $(if ($Matcher.span) { [int]$Matcher.span.TotalMilliseconds } else { 0 })
+    timeouts = $tos.Count
+    quarantine_skips = $skips
+    quarantined = @($q.Values)
+    could_not_look = @($byName.Values)
+  }
 }
 
 function Resolve-CommodityDetail {
@@ -363,7 +637,9 @@ function Resolve-CommodityDetail {
     $winPat = 0
     $idx = $Matcher.core.ResolveDetail($n, $v, $others, [ref]$winPat)
     if ($idx -lt 0) {
-      return [pscustomobject]@{ commodity = $null; include_hit = ''; include_hit_ix = -1; excludes_tested = 0; candidates = @() }
+      # could_not_look = $true is NOT an unmatched product: the matcher ran out of its bound before it could
+      # say. A caller that stores "no commodity owns this" must not store it for these.
+      return [pscustomobject]@{ commodity = $null; include_hit = ''; include_hit_ix = -1; excludes_tested = 0; candidates = @(); could_not_look = ($idx -eq [ThriftyCrew.BoundedMatchCore]::CouldNotLook) }
     }
     $e = $Matcher.entries[$idx]
     $hit = ''
@@ -374,41 +650,17 @@ function Resolve-CommodityDetail {
       include_hit_ix = $winPat
       excludes_tested = $Matcher.core.ExcludeCount($idx)
       candidates = @($others | ForEach-Object { [string]$Matcher.entries[$_].commodity.id })
+      could_not_look = $false
     }
   }
   # FALLBACK (no Add-Type): the interpreted twin, same order, same predicate. Rare, and covered by the
   # same corpus assertion in test-match-lib, so it cannot drift from the compiled one silently either.
-  $ghits = $null
-  foreach ($g in $Matcher.gex) { if ($g.rx.IsMatch($n)) { if ($null -eq $ghits) { $ghits = New-Object System.Collections.Generic.List[string] }; $ghits.Add($g.text) } }
-  $win = $null; $winHit = ''; $winIx = -1; $winExc = 0
-  $cands = New-Object System.Collections.Generic.List[string]
-  foreach ($e in $Matcher.entries) {
-    if (-not $e.hasInc) { continue }
-    $hit = $false
-    if ($null -ne $e.inc) { if ($e.inc.IsMatch($n) -or $e.inc.IsMatch($v)) { $hit = $true } }
-    if (-not $hit -and $e.incSpecial.Count) {
-      foreach ($rx in $e.incSpecial) { if ($rx.IsMatch($n) -or $rx.IsMatch($v)) { $hit = $true; break } }
-    }
-    if (-not $hit) { continue }
-    if ($null -ne $ghits) {
-      $blocked = $false
-      foreach ($g in $ghits) { if ($e.relax -notcontains $g) { $blocked = $true; break } }
-      if ($blocked) { continue }
-    }
-    $bad = $false
-    foreach ($rx in $e.exc) { if ($rx.IsMatch($n)) { $bad = $true; break } }
-    if ($bad) { continue }
-    if ($null -eq $win) {
-      $win = $e; $winExc = @($e.exc).Count
-      $pats = @($e.incPatterns)
-      for ($p = 0; $p -lt $pats.Count; $p++) {
-        $rx = [regex]::new([string]$pats[$p], [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
-        if ($rx.IsMatch($n) -or $rx.IsMatch($v)) { $winHit = [string]$pats[$p]; $winIx = $p; break }
-      }
-    } else { $cands.Add([string]$e.commodity.id) }
-  }
-  if ($null -eq $win) { return [pscustomobject]@{ commodity = $null; include_hit = ''; include_hit_ix = -1; excludes_tested = 0; candidates = @() } }
-  return [pscustomobject]@{ commodity = $win.commodity; include_hit = $winHit; include_hit_ix = $winIx; excludes_tested = $winExc; candidates = @($cands) }
+  $r = Invoke-MatchPsScan -Matcher $Matcher -N $n -V $v -Detail
+  if ($r.idx -lt 0) { return [pscustomobject]@{ commodity = $null; include_hit = ''; include_hit_ix = -1; excludes_tested = 0; candidates = @(); could_not_look = ($r.idx -eq -2) } }
+  $e = $Matcher.entries[$r.idx]
+  $winHit = $(if ($r.winIx -ge 0) { [string]@($e.incPatterns)[$r.winIx] } else { '' })
+  return [pscustomobject]@{ commodity = $e.commodity; include_hit = $winHit; include_hit_ix = $r.winIx; excludes_tested = @($e.exc).Count
+                            candidates = @($r.others | ForEach-Object { [string]$Matcher.entries[$_].commodity.id }); could_not_look = $false }
 }
 
 function Resolve-Commodity {
@@ -419,31 +671,124 @@ function Resolve-Commodity {
   if ($null -eq $Name) { $Name = '' }
   $texts = Get-MatchTexts $Name
   $n = $texts[0]; $v = $texts[1]
+  # $null for BOTH "no commodity owns this" and "could not look": the board cannot place either row. The
+  # difference is recorded on the matcher, and Get-CommodityMatcherBlind is how a caller tells them apart.
   if ($null -ne $Matcher.core) {
     $idx = $Matcher.core.Resolve($n, $v)
     if ($idx -lt 0) { return $null }
     return $Matcher.entries[$idx].commodity
   }
-  # global prepared-food tokens that hit the RAW name (usually none)
-  $ghits = $null
-  foreach ($g in $Matcher.gex) { if ($g.rx.IsMatch($n)) { if ($null -eq $ghits) { $ghits = New-Object System.Collections.Generic.List[string] }; $ghits.Add($g.text) } }
-  foreach ($e in $Matcher.entries) {
-    if (-not $e.hasInc) { continue }
-    $hit = $false
-    if ($null -ne $e.inc) { if ($e.inc.IsMatch($n) -or $e.inc.IsMatch($v)) { $hit = $true } }
-    if (-not $hit -and $e.incSpecial.Count) {
-      foreach ($rx in $e.incSpecial) { if ($rx.IsMatch($n) -or $rx.IsMatch($v)) { $hit = $true; break } }
-    }
-    if (-not $hit) { continue }
-    if ($null -ne $ghits) {
-      $blocked = $false
-      foreach ($g in $ghits) { if ($e.relax -notcontains $g) { $blocked = $true; break } }
-      if ($blocked) { continue }
-    }
-    $bad = $false
-    foreach ($rx in $e.exc) { if ($rx.IsMatch($n)) { $bad = $true; break } }
-    if ($bad) { continue }
-    return $e.commodity
+  $r = Invoke-MatchPsScan -Matcher $Matcher -N $n -V $v
+  if ($r.idx -lt 0) { return $null }
+  return $Matcher.entries[$r.idx].commodity
+}
+
+# ---- SELF-TEST (2026-09-19, backlog I183 / I209) --------------------------------------------------------
+# The dot-sourced gate form (lib\selftest-discovery.ps1 rule 1): NO param() block, because compare-deals
+# dot-sources this file and a param() block would reset the engine's own -SelfTest. Dot-sourced, this is false.
+$__matchLibSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
+if ($__matchLibSelfTest) {
+  # HERMETIC: a frozen five-line catalogue, no board, no commodities.json. Every case runs on BOTH paths - the
+  # compiled core production uses and the PowerShell twin used when Add-Type is unavailable.
+  #
+  # NO STOPWATCH DECIDES A CASE (ops-and-gates.md): the bound is proven by the timeout the code RECORDS and by
+  # the MatchTimeout the regex was BUILT with, never by timing a call. THE VICTIM IS SIZED FOR A NEUTERED RUN:
+  # the founding include below is I208's cubic chicken-breast shape, and 'boneless' + 800 spaces costs it
+  # several seconds unbounded (measured 2026-09-19 on this box: 500 spaces 769 ms, 600 1,274 ms, 700 2,933 ms),
+  # so the 250 ms bound fires with room on a faster machine and a neutered bound goes red in seconds, not a hang.
+  $ErrorActionPreference = 'Stop'
+  $bad = 0; $ran = 0
+  function _MT([string]$label, [bool]$ok, [string]$got) {
+    $script:ran++
+    if ($ok) { Write-Output ('  ok    ' + $label) } else { Write-Output ('  FAIL  ' + $label + '   got: ' + $got); $script:bad++ }
   }
-  return $null
+  $FOUNDING = '(?:boneless|skinless)\s*[,&/ ]+\s*(?:boneless|skinless)[^,]*chicken\s+breast'
+  $ATOMIC   = '(?:boneless|skinless)(?>\s*[,&/ ]+\s*)(?:boneless|skinless)[^,]*chicken\s+breast'
+  $VICTIM   = 'boneless' + (' ' * 800) + 'x chicken breast'
+  $NOGLOBAL = @('zz-fixture-global-that-never-matches-zz')
+  function _Cat([object[]]$rows) { return @($rows | ForEach-Object { [pscustomobject]@{ id = $_[0]; include = @($_[1]); exclude = @($_[2]); relax_global = @($_[3]) } }) }
+  function _Paths($m) {
+    # the compiled core, and the interpreted twin over the SAME entries with its own bookkeeping
+    $ps = [pscustomobject]@{ gex = $m.gex; entries = $m.entries; core = $null; span = $m.span; look = (New-MatchLookState) }
+    $out = @()
+    if ($null -ne $m.core) { $out += ,@('compiled', $m) } else { Write-Output '  FAIL  the compiled core did not load, so the path production runs is unproven'; $script:bad++ }
+    $out += ,@('ps-twin', $ps)
+    return ,$out
+  }
+  function _Id($c) { if ($c) { [string]$c.id } else { '<none>' } }
+  try {
+    # --- MUST FIRE: an include that cannot be decided makes the NAME could-not-look, never no-match ------
+    # fixture-redos comes FIRST, so first-match-wins means nobody can say fixture-breast owns the victim. A
+    # catch that scored the timeout as a miss would answer fixture-breast here - the silent wrong answer.
+    $cat = _Cat @(@('fixture-redos', $FOUNDING, @(), @()), @('fixture-breast', 'chicken\s+breast', @(), @()))
+    $m = New-CommodityMatcher -Commodities $cat -GlobalExclude $NOGLOBAL
+    _MT 'MUST FIRE  every regex is BUILT with the configured 250 ms bound' ($m.entries[0].inc.MatchTimeout.TotalMilliseconds -eq 250 -and $m.entries[0].incEach[0].MatchTimeout.TotalMilliseconds -eq 250 -and $m.gex[0].rx.MatchTimeout.TotalMilliseconds -eq 250) ([string]$m.entries[0].inc.MatchTimeout)
+    foreach ($pp in (_Paths $m)) {
+      $path = $pp[0]; $mm = $pp[1]
+      $c = Resolve-Commodity -Matcher $mm -Name $VICTIM
+      $b = Get-CommodityMatcherBlind -Matcher $mm
+      _MT ("MUST FIRE  [$path] a timed-out include resolves to nothing, NOT to the later fixture-breast") ($null -eq $c) (_Id $c)
+      _MT ("MUST FIRE  [$path] the timeout is RECORDED") ($b.timeouts -ge 1) ("timeouts=" + $b.timeouts)
+      $cl = @($b.could_not_look)
+      _MT ("MUST FIRE  [$path] the name is recorded could-not-look against fixture-redos/include") ($cl.Count -eq 1 -and $cl[0].commodity -eq 'fixture-redos' -and $cl[0].kind -eq 'include') (($cl | ForEach-Object { $_.commodity + '/' + $_.kind }) -join ',')
+      # --- MUST FIRE: the breaker. After 3 timeouts the regex is quarantined and costs nothing more -----
+      $answers = @(); foreach ($k in 1..5) { $answers += (_Id (Resolve-Commodity -Matcher $mm -Name $VICTIM)) }
+      $b = Get-CommodityMatcherBlind -Matcher $mm
+      _MT ("MUST FIRE  [$path] the breaker stops at exactly 3 timeouts over 6 looks") ($b.timeouts -eq 3) ("timeouts=" + $b.timeouts)
+      _MT ("MUST FIRE  [$path] later looks are answered by the quarantine, without running") ($b.quarantine_skips -ge 1 -and @($b.quarantined | Where-Object { $_.commodity -eq 'fixture-redos' -and $_.kind -eq 'include' }).Count -eq 1) ("skips=" + $b.quarantine_skips + " quarantined=" + @($b.quarantined).Count)
+      _MT ("MUST FIRE  [$path] a quarantined include is STILL could-not-look, never no-match") (@($answers | Where-Object { $_ -ne '<none>' }).Count -eq 0) ($answers -join ',')
+      $d = Resolve-CommodityDetail -Matcher $mm -Name $VICTIM
+      _MT ("MUST FIRE  [$path] the detail scan says could_not_look, so the identity table will not store it as unmatched") ($d.could_not_look -eq $true -and $null -eq $d.commodity) ("could_not_look=" + $d.could_not_look + " commodity=" + (_Id $d.commodity))
+    }
+    # --- MUST FIRE: an undecidable GLOBAL exclude blocks the answer unless the commodity relaxes it ------
+    $catG = _Cat @(,@('fixture-breast', 'chicken\s+breast', @(), @()))
+    $mG = New-CommodityMatcher -Commodities $catG -GlobalExclude @($FOUNDING)
+    $catR = _Cat @(,@('fixture-breast', 'chicken\s+breast', @(), @($FOUNDING)))
+    $mR = New-CommodityMatcher -Commodities $catR -GlobalExclude @($FOUNDING)
+    foreach ($pp in (_Paths $mG)) {
+      $c = Resolve-Commodity -Matcher $pp[1] -Name $VICTIM; $cl = @((Get-CommodityMatcherBlind -Matcher $pp[1]).could_not_look)
+      _MT ("MUST FIRE  [$($pp[0])] an undecided global exclude the commodity does not relax is could-not-look/global") ($null -eq $c -and $cl.Count -eq 1 -and $cl[0].kind -eq 'global') ((_Id $c) + ' ' + (($cl | ForEach-Object { $_.kind }) -join ','))
+    }
+    foreach ($pp in (_Paths $mR)) {
+      $c = Resolve-Commodity -Matcher $pp[1] -Name $VICTIM
+      _MT ("CLEAN TWIN  [$($pp[0])] a commodity that RELAXES that global still wins") ((_Id $c) -eq 'fixture-breast') (_Id $c)
+    }
+    # --- MUST FIRE: an undecided EXCLUDE; CLEAN TWIN: a definite sibling exclude still excludes ---------
+    $catX = _Cat @(@('fixture-meat', 'chicken', @($FOUNDING), @()), @('fixture-breast', 'chicken\s+breast', @(), @()))
+    $mX = New-CommodityMatcher -Commodities $catX -GlobalExclude $NOGLOBAL
+    $catY = _Cat @(@('fixture-meat', 'chicken', @($FOUNDING, 'chicken'), @()), @('fixture-breast', 'chicken\s+breast', @(), @()))
+    $mY = New-CommodityMatcher -Commodities $catY -GlobalExclude $NOGLOBAL
+    foreach ($pp in (_Paths $mX)) {
+      $c = Resolve-Commodity -Matcher $pp[1] -Name $VICTIM; $cl = @((Get-CommodityMatcherBlind -Matcher $pp[1]).could_not_look)
+      _MT ("MUST FIRE  [$($pp[0])] an undecided exclude is could-not-look/exclude, not a win for fixture-meat") ($null -eq $c -and $cl.Count -eq 1 -and $cl[0].commodity -eq 'fixture-meat' -and $cl[0].kind -eq 'exclude') ((_Id $c) + ' ' + (($cl | ForEach-Object { $_.commodity + '/' + $_.kind }) -join ','))
+    }
+    foreach ($pp in (_Paths $mY)) {
+      $c = Resolve-Commodity -Matcher $pp[1] -Name $VICTIM; $cl = @((Get-CommodityMatcherBlind -Matcher $pp[1]).could_not_look)
+      _MT ("CLEAN TWIN  [$($pp[0])] an exclude that FIRES excludes, whatever a timed-out sibling did, and the next commodity wins") ((_Id $c) -eq 'fixture-breast' -and $cl.Count -eq 0) ((_Id $c) + ' blind=' + $cl.Count)
+    }
+    # --- CLEAN TWIN: ordinary names decide exactly as before, with nothing recorded ---------------------
+    foreach ($pp in (_Paths (New-CommodityMatcher -Commodities $cat -GlobalExclude $NOGLOBAL))) {
+      $got = @(); foreach ($nm in @('Boneless, Skinless Chicken Breast 3 lb', 'Tyson chicken breast tenders', 'Great Value Quick Grits, 24 oz')) { $got += (_Id (Resolve-Commodity -Matcher $pp[1] -Name $nm)) }
+      $b = Get-CommodityMatcherBlind -Matcher $pp[1]
+      _MT ("CLEAN TWIN  [$($pp[0])] ordinary names still resolve (redos, breast, none) with 0 timeouts") (($got -join ',') -eq 'fixture-redos,fixture-breast,<none>' -and $b.timeouts -eq 0 -and @($b.could_not_look).Count -eq 0) (($got -join ',') + ' timeouts=' + $b.timeouts)
+      $d = Resolve-CommodityDetail -Matcher $pp[1] -Name 'Boneless & Skinless Chicken Breast'
+      _MT ("CLEAN TWIN  [$($pp[0])] the detail scan still names the include that fired") ($d.could_not_look -eq $false -and $d.include_hit -eq $FOUNDING -and (_Id $d.commodity) -eq 'fixture-redos') ($d.include_hit + ' / ' + (_Id $d.commodity))
+    }
+    # --- CLEAN TWIN (I208): the atomic rewrite decides the victim with NO timeout, and answers as before --
+    $catA = _Cat @(@('fixture-redos', $ATOMIC, @(), @()), @('fixture-breast', 'chicken\s+breast', @(), @()))
+    $mA = New-CommodityMatcher -Commodities $catA -GlobalExclude $NOGLOBAL
+    $mF = New-CommodityMatcher -Commodities $cat -GlobalExclude $NOGLOBAL
+    $probe = @('boneless, skinless chicken breast', 'boneless & skinless chicken breast', 'skinless /  boneless chicken breast', 'boneless  skinless chicken breast', 'boneless chicken breast')
+    $ga = @($probe | ForEach-Object { _Id (Resolve-Commodity -Matcher $mA -Name $_) }); $gf = @($probe | ForEach-Object { _Id (Resolve-Commodity -Matcher $mF -Name $_) })
+    $cv = Resolve-Commodity -Matcher $mA -Name $VICTIM
+    _MT 'CLEAN TWIN  the I208 atomic group answers the 5 probe names exactly as the founding include' (($ga -join ',') -eq ($gf -join ',')) (($ga -join ',') + ' vs ' + ($gf -join ','))
+    _MT 'CLEAN TWIN  the I208 atomic group decides the victim with 0 timeouts' ((_Id $cv) -eq 'fixture-breast' -and (Get-CommodityMatcherBlind -Matcher $mA).timeouts -eq 0) ((_Id $cv) + ' timeouts=' + (Get-CommodityMatcherBlind -Matcher $mA).timeouts)
+  } catch {
+    Write-Output ('  FAIL  the self-test threw: ' + $_.Exception.Message); $bad++
+  }
+  # A literal case list knows its own number: a shortfall is a defect, never a smaller tree.
+  $want = 29
+  if ($ran -ne $want -and $bad -eq 0) { Write-Output ("  FAIL  ran {0} case(s), the list holds {1}" -f $ran, $want); $bad++ }
+  if ($bad -eq 0) { Write-Output ("match-lib SELF-TEST PASS ({0} cases: a timed-out look is could-not-look on both paths, the breaker holds at 3, ordinary names decide as before)" -f $ran); exit 0 }
+  Write-Output ("match-lib SELF-TEST FAIL ({0} problem(s) in {1} case(s))" -f $bad, $ran); exit 1
 }

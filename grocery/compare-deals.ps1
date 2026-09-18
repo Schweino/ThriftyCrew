@@ -2786,9 +2786,15 @@ $report = @($report | Sort-Object commodity)
 
 # ---------------------------------------------------------------- health + flagged (drive the automation alert)
 $flagPfx = if ($OutName -eq 'comparison') { 'flagged' } else { "$OutName-flagged" }
-(@{ week_of=$today; flagged_count=$flagged.Count; flagged=$flagged.ToArray(); multibuy_unpriced=$mbUnpriced.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir ("$flagPfx-"+$today+".json")) -Encoding UTF8
+# COULD-NOT-LOOK (2026-09-19, backlog I183/I209). A product name the matcher could not decide inside its regex
+# bound was left off the board exactly like an unmatched one - but it is NOT unmatched, and a missing cell nobody
+# can see is how a hang turns into a quietly thinner board. It rides the flagged file, which check-ad-cycles
+# pages as review flags, and the health block. Expected empty: the 2026-09-19 corpus of 42,753 names had none.
+$matchBlind = Get-CommodityMatcherBlind -Matcher $fastMatcher
+$matchBlindRows = @($matchBlind.could_not_look | ForEach-Object { [pscustomobject]@{ name = $_.name; commodity = $_.commodity; kind = $_.kind; looks = $_.looks } })
+(@{ week_of=$today; flagged_count=$flagged.Count; flagged=$flagged.ToArray(); multibuy_unpriced=$mbUnpriced.ToArray(); match_could_not_look=$matchBlindRows } | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir ("$flagPfx-"+$today+".json")) -Encoding UTF8
 $storesWithData = @($matched | Where-Object { $_.unit_price -ne $null } | ForEach-Object { $_.store } | Select-Object -Unique | Sort-Object)
-$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; expired_sale_rows_dropped=$script:ExpiredSaleRows; nameless_rows_dropped=$script:NamelessRows; nameless_rows_by_store=(Format-TcNamelessByStore $script:NamelessRowsByStore); sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated; sale_windows_from_store_countdown=$script:StoreCountdown }
+$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; match_could_not_look=$matchBlindRows.Count; match_timeouts=$matchBlind.timeouts; match_timeout_ms=$matchBlind.timeout_ms; expired_sale_rows_dropped=$script:ExpiredSaleRows; nameless_rows_dropped=$script:NamelessRows; nameless_rows_by_store=(Format-TcNamelessByStore $script:NamelessRowsByStore); sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated; sale_windows_from_store_countdown=$script:StoreCountdown }
 
 # ---------------------------------------------------------------- output
 $out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$today; source=$AdsFile; commodities_compared=$report.Count; health=$health; comparison=$report }
@@ -2821,6 +2827,12 @@ if ($mbUnpriced.Count -gt 0) {
   Write-Output ""
   Write-Output ("!! MULTIBUY UNPRICED: " + $mbUnpriced.Count + " Buy-N-Get-K deal(s) recognized but NOT priced - fix the capture, do not publish as-is:")
   foreach ($m in $mbUnpriced.ToArray()) { Write-Output ("   [" + $m.label + "] " + $m.store + ": '" + $m.price_text + "' - " + $m.reason) }
+}
+if ($matchBlindRows.Count -gt 0 -or $matchBlind.timeouts -gt 0) {
+  Write-Output ""
+  Write-Output ("!! MATCHER COULD-NOT-LOOK: " + $matchBlindRows.Count + " product name(s) left off the board UNDECIDED, " + $matchBlind.timeouts + " regex match(es) hit the " + $matchBlind.timeout_ms + " ms bound - NOT 'no commodity'. Fix the include named below (an ambiguous pattern backtracks):")
+  foreach ($q in @($matchBlind.quarantined)) { Write-Output ("   QUARANTINED  [" + $q.commodity + "/" + $q.kind + "] " + $q.pattern) }
+  foreach ($x in @($matchBlindRows | Select-Object -First 10)) { Write-Output ("   [" + $x.commodity + "/" + $x.kind + "] '" + ([string]$x.name).Substring(0, [Math]::Min(80, ([string]$x.name).Length)) + "'") }
 }
 Write-Output ""
 Write-Output ("Saved: " + $file)
@@ -2941,7 +2953,7 @@ if ($IDENT_ON) {
     $rowsByStore = @{}
     $seenByStore = @{}
     $reusedByStore = @{}
-    $reused = 0; $rematched = 0; $contested = 0
+    $reused = 0; $rematched = 0; $contested = 0; $identityBlind = 0
     foreach ($d in $identityRows) {
       $store = [string]$d.store
       if (-not $prevByStore.ContainsKey($store)) {
@@ -2977,6 +2989,10 @@ if ($IDENT_ON) {
         $tMatch += $swM.Elapsed.TotalSeconds
       }
       $det = $detailCache[$name]
+      # A COULD-NOT-LOOK IS NOT WRITTEN. A stored row with commodity = $null means "no commodity owns this under
+      # these rules" and is REUSED next run while the rules hash holds, so writing one here would settle the
+      # question nobody could answer. Left out, the key is simply matched again next run. (I183/I209)
+      if ($det.could_not_look) { $identityBlind++; continue }
       $cid = $(if ($det.commodity) { 'commodity:' + $IdentityNamespace + ':' + [string]$det.commodity.id } else { $null })
       if (@($det.candidates).Count) { $contested++ }
       [void]$rowsByStore[$store].Add([pscustomobject]@{
@@ -3027,6 +3043,7 @@ if ($IDENT_ON) {
     Write-Output ("identity[{0}]: {1} row(s) across {2} store file(s) ({3} changed) - {4} reused at rules_hash {5}, {6} re-matched, {7} contested, {8} ambiguous product id(s) demoted to name keys" -f `
       $IdentityNamespace, $idRowTotal, $storeSummary.Count, $changedFiles, $reused, $rulesHash.Substring(0, 12), $rematched, $contested, $ambiguous.Count)
     Write-Output ("identity[{0}]: {1:N1}s total - read {2:N1}s, match {3:N1}s, write {4:N1}s" -f $IdentityNamespace, $idSw.Elapsed.TotalSeconds, $tRead, $tMatch, $tWrite)
+    if ($identityBlind -gt 0) { Write-Output ("!! identity[{0}]: {1} product key(s) NOT written because the matcher could not decide them inside its bound - they are re-matched next run, never stored as unmatched" -f $IdentityNamespace, $identityBlind) }
   } catch {
     # LOUD, NOT FATAL. The board is already written and correct; what is now wrong is the table, and the
     # honest consequence is that it stays at its previous rules_hash - which is precisely the state the

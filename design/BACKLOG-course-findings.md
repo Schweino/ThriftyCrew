@@ -12262,7 +12262,7 @@ Measured by the first q7-plb lane on 2026-09-18 under PS 5.1.26100: a scriptbloc
 
 **First rung.** On one day's board, for each commodity with at least N priced observations (N stated before the run), test for two modes and list the commodities where the gap between modes falls inside the 4x to 5x factors' blind range. Report it as a count with its denominator. Touches nothing; reads a board.
 
-### I183 - the production commodity matcher runs catalogue regexes with no match timeout, though the same catalogue once hung the pipeline `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I183 - the production commodity matcher runs catalogue regexes with no match timeout, though the same catalogue once hung the pipeline `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-algo2-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -12305,6 +12305,34 @@ before deciding between (a) a per-regex timeout with the audit's circuit breaker
 rejects ambiguous includes at catalogue-edit time, or (c) nothing. Reversible: a timeout is a
 constructor argument.
 
+**Done 2026-09-19.** Rung 1 was measured first, with its bars written before the run (worktree base `8f01557b2`;
+scratch harness: `New-CommodityMatcher` + `Resolve-Commodity` timed per name with a Stopwatch, the slowest names
+then re-timed 5 times after a 200-name warm-up, and every regex timed alone on each). Corpus: 42,753 distinct
+names, built the way `test-match-lib` builds it, off the inputs of the 2026-09-17 board. Worst single Resolve
+15.1 ms in the cold pass (the first name in sort order; 0.09 to 1.99 ms re-timed), median 0.17 ms, p99 0.81 ms.
+The slowest single regex on a real name was keto-hamburger-buns' lookahead include, 6.3 ms on a 290-character
+name. Bar B1 (every real name under 25 ms, 10x under the bound) held. Adversarial: `boneless` + 250 / 500 / 1,000
+spaces + `x chicken breast` cost 118 / 914 / 7,354 ms per Resolve, all of it the chicken-breast include (I208);
+two 2,000-plus character names cost the keto-hamburger-buns include 370 to 384 ms on its own, though the
+prefilter kept it out of Resolve (1.7 to 8.6 ms). So option (a) was built. `grocery/match-lib.ps1` builds every
+include, special, exclude, global and per-pattern regex with a 250 ms `MatchTimeout`; the compiled core (renamed
+`BoundedMatchCore`, so a process still holding the old type cannot collide) and the PowerShell twin both catch
+`RegexMatchTimeoutException` and score the name COULD-NOT-LOOK, never no-match; a per-regex breaker quarantines
+after 3 timeouts. `Get-CommodityMatcherBlind` reads it back. `compare-deals` prints `!! MATCHER COULD-NOT-LOOK`,
+writes `match_could_not_look` and `match_timeouts` into the health block and the flagged file, and does not write
+an identity row for an undecided name (a stored null is reused next run as "no commodity owns this");
+`check-ad-cycles` pages one `MATCHBLIND` review flag per commodity and kind. Verified: bar B4, the new matcher
+over the same 42,753 names, 0 differences and 0 timeouts; `test-match-lib` (42,761 names, 6 workers) exit 0,
+0 divergences and 0 could-not-look, which it now counts and fails on; `match-lib.ps1 -SelfTest` 29 of 29, exit 0,
+every case on both paths. Four mutants each went red in named cases, original md5-identical afterwards: the
+core's catch scored as a miss (5 reds, the victim resolved to the LATER commodity), the twin's likewise (3), the
+bound removed (15), the core breaker never tripping (2, `timeouts=6`). End to end: `compare-deals` over the
+2026-09-17 ads file with a planted exponential include keyed on `chicken` finished in 7 s, recorded 3 timeouts,
+quarantined the include and surfaced 65 undecided names in its output, the health block and the flagged file;
+the `check-ad-cycles` block turned them into 1 review flag, and into 0 on a flagged file older than the field.
+Option (b) is I208's second half, recorded there. The twin keeps the pre-change loop as a fast path inside one
+try, because the per-look bookkeeping alone measured 8.0 to 8.4 s against 4.7 s over 2,000 names; with the fast
+path 5.2 to 5.5 s, answers identical.
 ### I184 - compare-deals redefines get-matchtexts and then dot-sources match-lib, which silently replaces it for the reference matcher `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
 
 **Merged from `design\backlog-inbox\q7-plc-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
@@ -13050,7 +13078,7 @@ measured; it needs the AST (callee's `throw` outside `try`, caller's argument), 
 and the estate mostly runs under `EAP = 'Stop'`, where the problem cannot occur. Brad decides whether the
 rule is worth stating before the join is measured.
 
-### I208 - one catalogue include is cubic on a whitespace run and an atomic group makes it linear with no answer changed `OPEN` `queue-8` `2-WAY` `RUNG1 MEASURE`
+### I208 - one catalogue include is cubic on a whitespace run and an atomic group makes it linear with no answer changed `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-regex-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13085,7 +13113,22 @@ the matcher over a real board (the answer-equality half needs the real names, no
 edit-time check refusing a new include with adjacent overlapping quantifiers, which is the class this
 shape belongs to.
 
-### I209 - adding the I183 timeout to match-lib also adds an uncaught exception to its C# core `OPEN` `queue-8` `2-WAY` `RUNG1 DOC`
+**Done 2026-09-19.** The chicken-breast include is now
+`(?:boneless|skinless)(?>\s*[,&/ ]+\s*)(?:boneless|skinless)[^,]*chicken\s+breast`, the only line changed in
+`grocery/commodities.json`. Before and after, the matcher over all 42,753 distinct names of the 2026-09-17 corpus
+(bar B3, written before the run): 0 differences in 42,753. The victim `boneless` + 250 / 500 / 1,000 spaces +
+`x chicken breast` went from 118 / 914 / 7,354 ms to 0.9 / 3.0 / 13.6 ms per Resolve. `audit-match-soundness`:
+MOVED=0 DROPPED=0. Its baseline was accepted at the new rules_hash (`cb830cc8e069`): 2,113 names first seen since
+the 2026-09-11 accept were added and 0 changed, and the 37 NEW-CONTESTED names were deliberately left OUT of the
+reviewed contested list so they keep reporting, because they predate this change and two of them hold a board
+cell by contest. `match-lib`'s self-test carries the rewrite as a CLEAN TWIN (same answer on the 5 probe names,
+0 timeouts on the victim). **The edit-time check was not built, on purpose.** The shape census that found this
+include is a text heuristic (unsound: it finds the spellings it knows), the class it names had one member and
+has none now, so a gate would be green on day one and prove nothing about the next ambiguous shape; the
+keto-hamburger-buns lookahead measured under I183 is already a different, quadratic one. The runtime bound and
+breaker (I183) catch every shape, including those no static check can spell, and turn the next one into a
+bounded, paged could-not-look instead of a stalled build.
+### I209 - adding the I183 timeout to match-lib also adds an uncaught exception to its C# core `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-regex-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13111,6 +13154,15 @@ regex cache (15 entries) is irrelevant because match-lib builds instances. Line 
 `[regex]` per winning pattern per name in the PowerShell fallback path, which the docs call the expensive
 pattern, but construction measured about 2 microseconds a pattern, so it is not worth a change on its own.
 
+**Done 2026-09-19**, in the same commit as I183, all three parts. The TimeSpan is on every regex construction in
+match-lib, including the fallback that built a fresh regex per winning pattern per name (both paths now share
+per-pattern regexes built once, `incEach`). The core catches `RegexMatchTimeoutException` in one place (`Look`)
+and scores could-not-look; the combined-include problem is answered by first-match-wins, so a commodity that
+cannot be decided makes the NAME undecidable and is recorded against that commodity and kind, and an undecidable
+commodity after the winner only leaves the contested set. The breaker is per regex, so per commodity for the
+combined include. `RegexOptions.Compiled` was not added. Cost on the compiled path: the 42,753-name corpus pass
+took 8.5 s against 9.0 s before (one run each, so no measurable change), and `test-match-lib`'s compiled pass
+14.0 s summed over 6 shards.
 ### I210 - probe-hostile-input prints a seed that replays only at the same commit, and says it replays anywhere `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\q8-scalagen-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.

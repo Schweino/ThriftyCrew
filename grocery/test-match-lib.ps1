@@ -164,6 +164,12 @@ if ($isShard) {
     elseif ($did -and -not $d.include_hit) { [void]$detailNoHit.Add([pscustomobject]@{ ix = $ix[$k]; name = $list[$ix[$k]] }) }
   }
   $tD = $sw.Elapsed.TotalSeconds
+  # COULD-NOT-LOOK ON THE REAL CORPUS (2026-09-19, I183/I209). match-lib now bounds every regex at 250 ms and
+  # scores a timed-out name could-not-look, which reads as "" here exactly like an unmatched name - so a blind
+  # name would AGREE with an original that also found nothing and pass as proven. Counted and failed instead:
+  # no real name has come near the bound (worst 15.1 ms over 42,753 names on 2026-09-19).
+  $blindC = @((Get-CommodityMatcherBlind -Matcher $matcher).could_not_look).Count
+  $blindP = @((Get-CommodityMatcherBlind -Matcher $psOnly).could_not_look).Count
   # key = ix*2 (+1 for the fallback entry) reproduces the single-threaded emission order exactly: one pass
   # over the names, and for each name the fast-path divergence before the powershell-fallback one.
   $diff = New-Object System.Collections.ArrayList
@@ -174,7 +180,7 @@ if ($isShard) {
     if ($orig[$k] -ne $newPs[$k]) { [void]$diff.Add([pscustomobject]@{ key = ($ix[$k] * 2 + 1); name = $list[$ix[$k]]; original = $orig[$k]; fast = $newPs[$k]; path = 'powershell-fallback' }) }
   }
   ([pscustomobject]@{
-    names = $n; core = $hasCore; matched = $matched; diff = @($diff.ToArray()); detailDiff = @($detailDiff.ToArray())
+    names = $n; core = $hasCore; matched = $matched; blind = ($blindC + $blindP); diff = @($diff.ToArray()); detailDiff = @($detailDiff.ToArray())
     detailNoHit = @($detailNoHit.ToArray()); tO = $tO; tN = $tN; tP = $tP; tD = $tD
   } | ConvertTo-Json -Depth 6 -Compress) | Set-Content -LiteralPath $OutFile -Encoding UTF8
   exit 0
@@ -275,6 +281,7 @@ $detailDiff  = @(Gather $results 'detailDiff'  | Sort-Object ix)
 $detailNoHit = @(Gather $results 'detailNoHit' | Sort-Object ix | ForEach-Object { $_.name })
 $diff        = @(Gather $results 'diff'        | Sort-Object key)
 $matched     = 0; foreach ($r in $results) { $matched += [int]$r.matched }
+$blindNames  = 0; foreach ($r in $results) { $blindNames += [int]$r.blind }
 
 if (-not $Quiet) {
   Write-Output ("match-lib identity: {0} distinct names ({1} matched by the original)" -f $list.Count, $matched)
@@ -284,13 +291,14 @@ if (-not $Quiet) {
   Write-Output ("  detail scan (identity)  : {0,7:N1}s   ({1} winner divergence(s), {2} matched name(s) with no include_hit)" -f $tD, $detailDiff.Count, $detailNoHit.Count)
   Write-Output ("  shards                  : {0,7:N1}s wall across {1} process(es)" -f $tWall, $W)
   Write-Output ("  divergences             : {0}" -f $diff.Count)
+  Write-Output ("  could-not-look          : {0} name look(s) hit the regex bound (compiled + fallback)" -f $blindNames)
   foreach ($d in ($diff | Select-Object -First 15)) { Write-Output ("     [{3}] '{0}'  original={1}  fast={2}" -f $d.name, $(if ($d.original) { $d.original } else { '<none>' }), $(if ($d.fast) { $d.fast } else { '<none>' }), $d.path) }
   foreach ($d in ($detailDiff | Select-Object -First 15)) { Write-Output ("     [detail] '{0}'  original={1}  detail={2}" -f $d.name, $(if ($d.original) { $d.original } else { '<none>' }), $(if ($d.detail) { $d.detail } else { '<none>' })) }
   foreach ($n in ($detailNoHit | Select-Object -First 10)) { Write-Output ("     [detail] '{0}' matched but named no include pattern" -f $n) }
 }
-if ($diff.Count -or $detailDiff.Count -or $detailNoHit.Count) {
-  $total = $diff.Count + $detailDiff.Count + $detailNoHit.Count
-  Write-Output ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit) - match-lib must not be used by the engine until it decides identically" -f $total, $diff.Count, $detailDiff.Count, $detailNoHit.Count)
+if ($diff.Count -or $detailDiff.Count -or $detailNoHit.Count -or $blindNames) {
+  $total = $diff.Count + $detailDiff.Count + $detailNoHit.Count + $blindNames
+  Write-Output ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit, {4} could-not-look) - match-lib must not be used by the engine until it decides identically" -f $total, $diff.Count, $detailDiff.Count, $detailNoHit.Count, $blindNames)
   Exit-Guard -Name 'match-lib' -Summary "names=$($list.Count) divergences=$total" -Code 1
 }
 Write-Output 'MATCH-LIB PASSED'

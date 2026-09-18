@@ -2458,6 +2458,18 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       if ($sanityQuiet -gt 0) { Log ("review flags: $sanityQuiet store-verified outlier(s) recorded in guards-*.json, not paged (the store's own published unit price reproduces ours)") }
       $ff = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
       if ($ff) { $mb = @((Read-JsonFile $ff.FullName).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label); $flagKeys += ('MULTIBUY|' + $m.store + '|' + $m.id) } }
+      # MATCHER COULD-NOT-LOOK (2026-09-19, backlog I183/I209): names compare-deals left off the board because a
+      # commodity's regex hit match-lib's time bound. Not unmatched - undecided - so it pages, ONE flag per commodity
+      # and kind (a quarantined include can blind hundreds of names, and the fix is the one pattern). Filtered for
+      # $null because a flagged file older than this field reads as @($null), one phantom row.
+      if ($ff) {
+        $mcl = @(@((Read-JsonFile $ff.FullName).match_could_not_look) | Where-Object { $null -ne $_ })
+        foreach ($grp in @($mcl | Group-Object { [string]$_.commodity + '|' + [string]$_.kind })) {
+          $s0 = @($grp.Group)[0]
+          $flagParts += ('MATCHBLIND|' + $s0.commodity + '|' + $s0.kind + '|' + @($grp.Group).Count + ' name(s) left off the board undecided by the regex time bound, e.g. ' + ([string]$s0.name).Substring(0, [Math]::Min(60, ([string]$s0.name).Length)))
+          $flagKeys += ('MATCHBLIND|' + $s0.commodity + '|' + $s0.kind)
+        }
+      }
       # ---- BASIS CHECKS (2026-07-28). Bands and freshness cannot see a basis error: the price is real and
       # only the arithmetic is wrong, which is precisely what wins a "cheapest store" verdict. Both audits
       # write their own report; their findings ride the same review-flag channel so they land in the triage
