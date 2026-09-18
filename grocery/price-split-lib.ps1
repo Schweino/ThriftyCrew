@@ -109,6 +109,14 @@ function Get-PriceSplit {
   $res.everyday_price = if ($null -ne $was) { $was } else { $cur }
 
   $f = [string]$Row.ad_from; $t = [string]$Row.ad_to
+  # A KROGER ROW WRITTEN BEFORE 2026-09-18 CARRIES THE UTC DATE OF AN END-OF-DAY-EASTERN INSTANT (queue
+  # 2026-09-18-b1d8e3 item 3; the measurement is on ConvertTo-KrogerStoreDay in pull-regular-bakers-api), so
+  # its last day in the store is the date before. A row the fixed puller wrote says so (ad_dates='store-local')
+  # and is read as written. The capture files keep their bytes, which is this library's own rule above.
+  if ($Store -eq "Baker's" -and ([string]$Row.source_ad) -eq 'kroger-api' -and $t -match '^\d{4}-\d{2}-\d{2}$' -and
+      -not ($Row.PSObject.Properties['ad_dates'] -and ([string]$Row.ad_dates) -eq 'store-local')) {
+    $t = ([datetime]::ParseExact($t, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)).AddDays(-1).ToString('yyyy-MM-dd')
+  }
   if ($f -match '^\d{4}-\d{2}-\d{2}$' -and $t -match '^\d{4}-\d{2}-\d{2}$') {
     $res.sale_from = $f; $res.sale_to = $t
     # A window we were GIVEN by the store is an ad; a window we derived ourselves (the Walmart/Sam's
@@ -156,6 +164,32 @@ function Get-StatedSaleWindow {
   } catch { return $null }
 }
 
+function Get-CellSaleWindow {
+  <#
+    .SYNOPSIS Which window a published SALE cell wears on the page: its own, or its store's weekly cycle.
+    .DESCRIPTION A window the store STATED FOR THIS ITEM (ad_basis 'store': Kroger's own promo dates, a
+      stated countdown) outranks the store-level cycle in ad-schedule.json. build-deals-page's SaleBadge used to
+      badge every sale cell with the cycle, so on 2026-09-18 Baker's coffee-pods read "Sale thru Sep 22" while
+      Kroger's own promo for that item ended Sunday 09-20 (queue 2026-09-18-b1d8e3 item 3). Every other basis
+      ('' flyer rows, 'ad' inherited, 'ttl' our own guess) keeps the cycle exactly as before. On the
+      2026-09-17 board the only ad_basis 'store' sale cells in a store that has a cycle were Baker's 48.
+      Pure, so the fixtures reach the real decision. Returns @{ from; to; own } with [datetime] values (from may
+      be $null), or $null when there is no window at all.
+  #>
+  param($Cell, $CycleFrom, $CycleTo)
+  $inv = [Globalization.CultureInfo]::InvariantCulture
+  if ($Cell -and ([string]$Cell.ad_basis) -eq 'store' -and ([string]$Cell.ad_to) -match '^\d{4}-\d{2}-\d{2}$') {
+    $own = @{ from = $null; to = [datetime]::ParseExact([string]$Cell.ad_to, 'yyyy-MM-dd', $inv); own = $true }
+    if (([string]$Cell.ad_from) -match '^\d{4}-\d{2}-\d{2}$') { $own.from = [datetime]::ParseExact([string]$Cell.ad_from, 'yyyy-MM-dd', $inv) }
+    return $own
+  }
+  $cf = $null; $ct = $null
+  try { if ($CycleFrom) { $cf = [datetime]$CycleFrom } } catch {}
+  try { if ($CycleTo) { $ct = [datetime]$CycleTo } } catch {}
+  if ($null -eq $ct) { return $null }
+  return @{ from = $cf; to = $ct; own = $false }
+}
+
 function Test-PriceSplitSelf {
   <# Frozen cases, one per store shape actually observed on 2026-08-21. Returns the failure count. #>
   $fail = 0
@@ -169,6 +203,32 @@ function Test-PriceSplitSelf {
   _C 'bakers.everyday' $r.everyday_price 4.99
   _C 'bakers.sale'     $r.sale_price     2.99
   _C 'bakers.kind'     $r.sale_kind      'ad'
+
+  # ---- Kroger's promo end is a Central DAY, not a UTC date (2026-09-18, queue 2026-09-18-b1d8e3 item 3) ----
+  # MUST FIRE, frozen from the live Baker's coffee-pods winner (bakers-regular-2026-09-18): the old puller wrote
+  # ad_to 2026-09-21 from expiration 2026-09-21T03:59:59.999Z, whose last day in Omaha is Sunday 09-20.
+  $r = Get-PriceSplit ([pscustomobject]@{ ad_price='$15.99'; base_price=17.49; marked_down=$true; ad_from='2026-09-16'; ad_to='2026-09-21'; source_ad='kroger-api' }) "Baker's"
+  _C 'kroger.legacy.sale_to'  $r.sale_to  '2026-09-20'
+  # CLEAN TWIN: a row the fixed puller wrote in store-local days is read exactly as written.
+  $r = Get-PriceSplit ([pscustomobject]@{ ad_price='$15.99'; base_price=17.49; marked_down=$true; ad_from='2026-09-16'; ad_to='2026-09-20'; source_ad='kroger-api'; ad_dates='store-local' }) "Baker's"
+  _C 'kroger.local.sale_to'   $r.sale_to  '2026-09-20'
+  # CLEAN TWIN: the correction is Kroger's alone - a Family Fare offer window keeps its bytes.
+  $r = Get-PriceSplit ([pscustomobject]@{ ad_price='$2.99'; base_price=3.99; marked_down=$true; ad_from='2026-09-16'; ad_to='2026-09-22' }) 'Family Fare'
+  _C 'familyfare.sale_to'     $r.sale_to  '2026-09-22'
+
+  # ---- which window a sale CELL wears on the page (Get-CellSaleWindow) -----------------------------------
+  # MUST FIRE: the store-stated window outranks the weekly cycle (the Baker's coffee-pods chip, 09-20 not 09-22).
+  $cw = Get-CellSaleWindow -Cell ([pscustomobject]@{ type='sale'; ad_basis='store'; ad_from='2026-09-16'; ad_to='2026-09-20' }) -CycleFrom '2026-09-16' -CycleTo '2026-09-22'
+  _C 'cellwin.store.to' $cw.to.ToString('yyyy-MM-dd') '2026-09-20'
+  # CLEAN TWIN: a flyer cell (ad_basis '') still wears its store's cycle, as every cell did before.
+  $cw = Get-CellSaleWindow -Cell ([pscustomobject]@{ type='sale'; ad_basis=''; ad_from='2026-09-14'; ad_to='2026-09-20' }) -CycleFrom '2026-09-14' -CycleTo '2026-09-20'
+  _C 'cellwin.flyer.to' $cw.to.ToString('yyyy-MM-dd') '2026-09-20'
+  _C 'cellwin.flyer.own' $cw.own 'False'
+  # CLEAN TWIN: our own TTL window is never shown as the store's date; the cycle speaks.
+  $cw = Get-CellSaleWindow -Cell ([pscustomobject]@{ type='sale'; ad_basis='ttl'; ad_from='2026-09-01'; ad_to='2026-10-01' }) -CycleFrom '2026-09-16' -CycleTo '2026-09-22'
+  _C 'cellwin.ttl.to' $cw.to.ToString('yyyy-MM-dd') '2026-09-22'
+  # MUST NOT FIRE: no own window and no cycle is no window at all, never a guessed one.
+  _C 'cellwin.none' ($null -eq (Get-CellSaleWindow -Cell ([pscustomobject]@{ type='sale'; ad_basis='' }) -CycleFrom $null -CycleTo $null)) 'True'
 
   # Fareway: original price present, NO window -> markdown
   $r = Get-PriceSplit ([pscustomobject]@{ ad_price='$1.88'; regular='$2.99' }) 'Fareway'

@@ -400,6 +400,29 @@ function Get-KrogerTaxonomy($p) {
 # and it collapsed that file to 7 rows for two days.
 # ============================================================================================
 
+# KROGER STATES A PROMO WINDOW AS TWO INSTANTS, AND A DAY IS WHERE THE STORE STANDS (2026-09-18, queue
+# 2026-09-18-b1d8e3 item 3). price.expirationDate is an end-of-day EASTERN instant written in UTC: read live
+# that day for the Baker's coffee-pods winner, Kroger 100% Colombian K-Cup 48 ct, promo $15.99 against
+# $17.49, effective 2026-09-16T10:55:01.953Z, expiration 2026-09-21T03:59:59.999Z, which is 22:59:59 on
+# Sunday 2026-09-20 in Omaha. Over three live searches the same day, 61 of 63 promo expirations ended
+# T03:59:59.999Z and 2 ended T04:59:59.999Z (the EST shape, after the clocks change), and the two archived
+# payloads in out\audit\price-fields carry 7 of 7 at T03:59:59.999Z. This file used to keep the first ten
+# characters, the UTC calendar date, so EVERY Kroger ad_to was one day late: a weekly ad that ends Tuesday
+# 09-22 read 09-23, and a promo that ended Sunday was still live on Monday's board. The day is now taken in
+# the store's own zone, and an end instant is exclusive at the millisecond, so an exact local midnight means
+# the day before. Rows written this way carry ad_dates='store-local'; price-split-lib reads a row WITHOUT it
+# as the old UTC date (the carried rows keep their bytes), so neither kind is read wrong.
+function ConvertTo-KrogerStoreDay([string]$Instant, [switch]$End, [string]$TimeZoneId = 'Central Standard Time') {
+  if ($Instant -notmatch '^\d{4}-\d{2}-\d{2}') { return $null }
+  $dto = [datetimeoffset]::MinValue
+  $styles = [Globalization.DateTimeStyles]::AssumeUniversal
+  if (-not [datetimeoffset]::TryParse($Instant, [Globalization.CultureInfo]::InvariantCulture, $styles, [ref]$dto)) { return $null }
+  $utc = $dto.UtcDateTime
+  if ($End -and $utc -gt [datetime]::MinValue.AddDays(1)) { $utc = $utc.AddMilliseconds(-1) }
+  try { $tz = [TimeZoneInfo]::FindSystemTimeZoneById($TimeZoneId) } catch { return $null }
+  return ([TimeZoneInfo]::ConvertTimeFromUtc([datetime]::SpecifyKind($utc, [DateTimeKind]::Utc), $tz)).Date
+}
+
 # EVERY PRICE FIELD THIS FILE'S ROWS CARRY, enumerated from the live capture
 # (out\regular\bakers-regular-2026-08-22.json, 7,287 rows) rather than from memory:
 #   on every row     store item ad_price size regular source_ad as_of current_price product_id
@@ -545,6 +568,15 @@ if ($SelfTest) {
     if ($g -eq $want) { Write-Output ("ok    " + $label + "  -> " + $g) }
     else { Write-Output ("FAIL  " + $label + "  got [" + $g + "] want [" + $want + "]"); $script:fail++ }
   }
+  # KROGER'S PROMO INSTANTS BECOME THE STORE'S OWN DAYS (2026-09-18, queue 2026-09-18-b1d8e3 item 3). Frozen from
+  # the live API read that day for the Baker's coffee-pods winner (product 0001111007632).
+  $kd = { param($i, [switch]$e) $d = ConvertTo-KrogerStoreDay $i -End:$e; if ($d) { $d.ToString('yyyy-MM-dd') } else { $null } }
+  T 'MUST FIRE  coffee-pods expiration 2026-09-21T03:59:59.999Z is Sunday 09-20 in Omaha, never the UTC date' (& $kd '2026-09-21T03:59:59.999Z' -e) '2026-09-20'
+  T 'CLEAN TWIN  the weekly ad end 2026-09-23T03:59:59.999Z is Tuesday 09-22, the ad list''s own ad_to' (& $kd '2026-09-23T03:59:59.999Z' -e) '2026-09-22'
+  T 'CLEAN TWIN  the EST shape 2026-11-11T04:59:59.999Z still ends the day before' (& $kd '2026-11-11T04:59:59.999Z' -e) '2026-11-10'
+  T 'CLEAN TWIN  effective 2026-09-16T10:55:01.953Z starts on its own date'         (& $kd '2026-09-16T10:55:01.953Z') '2026-09-16'
+  T 'CLEAN TWIN  an end at exact local midnight is exclusive (the day before)'        (& $kd '2026-09-23T05:00:00Z' -e) '2026-09-22'
+  T 'MUST NOT FIRE  a value with no date is refused, never guessed'                   (& $kd 'soon' -e) '<refused>'
   # the two live conventions of the SAME compound shape, both proven by netWeight
   T 'Kerrygold "4 ct / 16 oz" nw 1.0 lb (M=TOTAL)'    (Resolve-KrogerSize '4 ct / 16 oz' 'UNIT' '1.0 [lb_av]').size    '4 pk 4 oz'
   T 'string cheese "12 ct / 1 oz" nw 0.75 lb (M=EACH)' (Resolve-KrogerSize '12 ct / 1 oz' 'UNIT' '0.75 [lb_av]').size  '12 pk 1 oz'
@@ -1055,12 +1087,14 @@ foreach ($tp in $pending) {
       $eff = [string]$it.price.effectiveDate.value
       $exp = [string]$it.price.expirationDate.value
       if ($eff -match '^(\d{4}-\d{2}-\d{2})' -and $exp -match '^(\d{4}-\d{2}-\d{2})') {
-        $efd = $null; $exd = $null
-        try { $efd = [datetime]::ParseExact(([regex]::Match($eff,'^\d{4}-\d{2}-\d{2}').Value),'yyyy-MM-dd',$null) } catch {}
-        try { $exd = [datetime]::ParseExact(([regex]::Match($exp,'^\d{4}-\d{2}-\d{2}').Value),'yyyy-MM-dd',$null) } catch {}
-        if ($efd -and $exd -and $exd -gt $efd -and (($exd - $efd).TotalDays -le $script:PromoMaxDays)) {
+        # THE STORE'S OWN DAYS, not the UTC calendar date (ConvertTo-KrogerStoreDay, above). -ge, not -gt: in
+        # local days a one-day promo starts and ends on the same date.
+        $efd = ConvertTo-KrogerStoreDay $eff
+        $exd = ConvertTo-KrogerStoreDay $exp -End
+        if ($efd -and $exd -and $exd -ge $efd -and (($exd - $efd).TotalDays -le $script:PromoMaxDays)) {
           $row['ad_from'] = $efd.ToString('yyyy-MM-dd')
           $row['ad_to']   = $exd.ToString('yyyy-MM-dd')
+          $row['ad_dates'] = 'store-local'
           $stats.dated++
         } else {
           # Not a sale by our definition: undo the markdown flags so nothing downstream treats this

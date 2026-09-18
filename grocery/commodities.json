@@ -10754,6 +10754,8 @@
                         "tortillas?"
                     ],
         "exclude":  [
+                        "\\bcorn\\b",
+                        "\\bma[i\\u00ed]z\\b",
                         "\\d+\\s*ct\\.?\\s+or\\s+.{0,40}?\\d+\\s*ct",
                         "carb\\s+(balance|counter|advantage)\\b.*\\b(burrito|large|xl|grande)\\b.*\\btortillas?\\b",
                         "carb\\s+(balance|counter|advantage)\\b.*\\btortillas?\\b.*\\bburrito\\b",
@@ -37483,6 +37485,7 @@
         "unit":  "each",
         "band_min":  0.7,
         "band_max":  3,
+        "min_piece_oz":  2.5,
         "relax_global":  [
                              "\\bfrozen\\b",
                              "\\bmeal\\b",

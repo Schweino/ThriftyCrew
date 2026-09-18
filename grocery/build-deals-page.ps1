@@ -379,6 +379,8 @@ function HtmlEnc([string]$s) { if ($null -eq $s) { return '' }; return ($s -repl
 # "356&cent;/oz" no-rollover case and the "$0.00 each" sub-cent case - have a fixture that can actually
 # reach them. Behaviour at the call sites is unchanged; only the definition moved.
 . (Join-Path $root 'fmt-lib.ps1')
+# Get-CellSaleWindow: which window a sale chip's date comes from. One rule, fixtured in Test-PriceSplitSelf.
+. (Join-Path $root 'price-split-lib.ps1')
 # The design system (tokens, motion vocabulary, z-ladder, store accents, self-checks) is shared with the
 # meal-prep builders so the two surfaces cannot drift into two products.
 . (Join-Path $root '..\lib\design-tokens.ps1')
@@ -420,9 +422,11 @@ function SaleBadge($s, $store) {
   # "Hy-Vee $6.99/lb - Sale thru Jul 19". The store's real price that day was $11.99/lb. The invented date is
   # what made the wrong number look trustworthy. No date beats a date we made up.
   if (([string]$s.source_ad) -match '(?i)markdown|clearance|snapshot') { return '' }
+  # THE CELL'S OWN WINDOW WHEN THE STORE STATED ONE FOR THIS ITEM, the weekly cycle otherwise
+  # (price-split-lib Get-CellSaleWindow, 2026-09-18, queue 2026-09-18-b1d8e3 item 3).
   $wf = $null; $wt = $null
-  try { $wf = [datetime]$adWin[$store].from } catch {}
-  try { $wt = [datetime]$adWin[$store].to } catch {}
+  $cellWin = Get-CellSaleWindow -Cell $s -CycleFrom $adWin[$store].from -CycleTo $adWin[$store].to
+  if ($cellWin) { $wf = $cellWin.from; $wt = $cellWin.to }
   if ($null -eq $wt -or $wt.Date -lt $pgToday) { return '' }
   $flash = ParseFlashWindow (([string]$s.ad) + ' ' + ([string]$s.note)) $wf $wt
   if ($flash -and $flash.suppress) { return '' }   # "today only" with no date: no badge beats a wrong date

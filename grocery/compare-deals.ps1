@@ -231,13 +231,27 @@ function Test-PieceSize($id, $size, $name, $pieces) {
 # price may plausibly be), so a row that fails the definition is labelled by it whatever its price. The pack
 # rules keep their old place after the band: nothing measured them, and this change moves only what was.
 # Returned as a word so the self-test can reach the ORDER itself; the engine loop keeps every side effect.
-function Get-FirstRefusal($id, $unit, $up, $size, $name, $pieces) {
-  if (-not (Test-PieceSize $id $size $name $pieces)) { return 'piece' }
-  if (-not (Test-Band $id $up)) { return 'band' }
-  if (-not (Test-Floor $unit $up)) { return 'floor' }
-  if (-not (Test-PackSize $id $size $name)) { return 'pack-cap' }
-  if (-not (Test-PackSizeFloor $id $size $name)) { return 'pack-floor' }
-  return ''
+#
+# IDENTITY OUTRANKS BOTH (2026-09-18, queue 2026-09-18-b1d8e3). The same rule one step further up. A
+# known-wrong ruling is an IDENTITY refusal (Brad's T1: this is not the product), and it used to run only
+# AFTER this loop and only over PRICED rows, so a ruled row that the band had already refused was filed under
+# the band and audit-band-censorship counted it as a censored bargain. Measured on the 15:14 report over
+# flagged-2026-09-17: 3 of its 50 findings, 3 of its 31 cells, were rows a ruling already names (the Hy-Vee
+# corn tortilla on the flour cell, a Dole fruit-bowl cup on Walmart pineapple, an AriZona Arnold Palmer on
+# Walmart half-and-half), and 8 min-max rows in the whole flagged file. So a row that any check here refuses
+# AND a ruling names is labelled 'known-wrong'. A ruled row that no check refuses is untouched here and still
+# leaves at the known-wrong drop after the loop, exactly as before: this changes what a refusal is CALLED,
+# never whether a row is refused, so no cell can move. The ruling lookup is a hashtable probe, so asking it
+# only when something refused costs nothing measurable.
+function Get-FirstRefusal($id, $unit, $up, $size, $name, $pieces, $store = '', $KwBlocks = $null) {
+  $r = ''
+  if (-not (Test-PieceSize $id $size $name $pieces)) { $r = 'piece' }
+  elseif (-not (Test-Band $id $up)) { $r = 'band' }
+  elseif (-not (Test-Floor $unit $up)) { $r = 'floor' }
+  elseif (-not (Test-PackSize $id $size $name)) { $r = 'pack-cap' }
+  elseif (-not (Test-PackSizeFloor $id $size $name)) { $r = 'pack-floor' }
+  if ($r -and $KwBlocks -and $KwBlocks.Count -and (Test-KnownWrong -Blocks $KwBlocks -CommodityId ([string]$id) -Store ([string]$store) -ProductName ([string]$name))) { return 'known-wrong' }
+  return $r
 }
 function Test-PackSizeFloor($id, $size, $name) {
   if (-not $MINPACK.ContainsKey([string]$id)) { return $true }
@@ -901,6 +915,42 @@ if ($SelfTest) {
   $ordTony = Get-FirstRefusal '_selftest-pizza' 'each' 2.96 '18.56 oz' 'Tony''s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz' 1
   if ($ordTony -eq '') { Write-Output 'ok    CLEAN TWIN  refusal order: the Walmart Tony''s 18.56 oz at $2.96 (the live cell) is refused by nothing' } else { Write-Output ('FAIL  refusal order: the live Tony''s cell read [' + $ordTony + '] - a real pizza is refused'); $script:fail++ }
   $BANDS.Remove('_selftest-pizza')
+  # --- IDENTITY BEFORE SANITY (2026-09-18, queue 2026-09-18-b1d8e3) ------------------------------------------
+  # Frozen verbatim from flagged-2026-09-17.json: Hy-Vee's La Banderita Yellow Corn Tortilla 30 Ct at 0.0997
+  # against tortillas' real 0.1-1.2 band, a row the ruling tortillas|HyVee|la-banderita-yellow-corn-tortilla-30-ct
+  # already names. It read 'band' and audit-band-censorship counted it. The ruling goes through the REAL
+  # Get-KnownWrongBlocks from a per-run temp file, never a fixed name, so the parse is exercised too.
+  . (Join-Path $PSScriptRoot 'known-wrong-lib.ps1')
+  $kwTmp = Join-Path ([IO.Path]::GetTempPath()) ('cd-kw-' + [guid]::NewGuid().ToString('N') + '.json')
+  try {
+    [IO.File]::WriteAllText($kwTmp, '{"entries":[{"commodity":"_selftest-tortillas","store":"Hy-Vee","names":["La Banderita Yellow Corn Tortilla 30 Ct"]}]}', (New-Object System.Text.UTF8Encoding($false)))
+    $kwFix = Get-KnownWrongBlocks -Path $kwTmp
+  } finally { Remove-Item -LiteralPath $kwTmp -Force -ErrorAction SilentlyContinue }
+  $BANDS['_selftest-tortillas'] = [pscustomobject]@{ min = 0.1; max = 1.2 }
+  $kwGot = Get-FirstRefusal '_selftest-tortillas' 'each' 0.0997 '30 ea' 'La Banderita Yellow Corn Tortilla 30 Ct' 30 'Hy-Vee' $kwFix
+  if ($kwGot -eq 'known-wrong') { Write-Output 'ok    MUST FIRE  refusal order: the ruled Hy-Vee corn tortilla at 0.0997 is filed as known-wrong, not as a band the audit counts' } else { Write-Output ('FAIL  refusal order: the ruled Hy-Vee corn tortilla read [' + $kwGot + '] - an identity refusal is scored as band censorship again'); $script:fail++ }
+  # CLEAN TWIN: a real FLOUR tortilla just under the floor, named by no ruling, is still a BAND refusal, so a
+  # genuinely censored price still reaches the audit (Aldi's Pueblo Lindo Fajita Flour 20 CT, same file).
+  $kwFlour = Get-FirstRefusal '_selftest-tortillas' 'each' 0.0925 '23 oz' 'Pueblo Lindo Fajita Flour Tortillas 20 CT' 20 'Aldi' $kwFix
+  if ($kwFlour -eq 'band') { Write-Output 'ok    CLEAN TWIN  refusal order: Aldi''s unruled flour tortilla at 0.0925 is still a band refusal' } else { Write-Output ('FAIL  refusal order: an unruled flour tortilla read [' + $kwFlour + '] instead of band'); $script:fail++ }
+  # CLEAN TWIN: the SAME product at a store no ruling names keeps its band label (a ruling is per store).
+  $kwOther = Get-FirstRefusal '_selftest-tortillas' 'each' 0.0863 '30 pk 0.83 oz' 'La Banderita Yellow Corn Tortilla 30 Ct' 30 'Baker''s' $kwFix
+  if ($kwOther -eq 'band') { Write-Output 'ok    CLEAN TWIN  refusal order: the same product at Baker''s, where no ruling names it, is still a band refusal' } else { Write-Output ('FAIL  refusal order: an unruled store read [' + $kwOther + '] - a ruling leaked across stores'); $script:fail++ }
+  # MUST NOT FIRE: the ruled row at an IN-BAND price is refused by nothing here. The known-wrong drop after the
+  # loop removes it exactly as before, which is why this order change cannot move a cell.
+  $kwIn = Get-FirstRefusal '_selftest-tortillas' 'each' 0.15 '30 ea' 'La Banderita Yellow Corn Tortilla 30 Ct' 30 'Hy-Vee' $kwFix
+  if ($kwIn -eq '') { Write-Output 'ok    MUST NOT FIRE  refusal order: an in-band ruled row is left to the post-loop known-wrong drop' } else { Write-Output ('FAIL  refusal order: an in-band ruled row read [' + $kwIn + '] - the loop now refuses what only the drop should'); $script:fail++ }
+  $BANDS.Remove('_selftest-tortillas')
+  # --- THE PIECE DECLARATION ON breakfast-sandwiches REACHES ITS FOUNDING ROWS (2026-09-18, b1d8e3) ----------
+  # Read from the REAL commodities.json this run loaded, so deleting min_piece_oz there, or moving it out of
+  # the measured gap, turns these red. Brad's T2 (2026-09-06): an 'each' unit says the pieces are
+  # interchangeable, so a snack format is a different product. Measured over the 85 breakfast-sandwiches
+  # candidates of 2026-09-17: every priced piece is 3.4 to 9.24 oz, the only pieces under 3.4 are the two
+  # Odom's rows below (1.6, 1.45), and both were band-refused and counted as censorship.
+  if (-not (Test-PieceSize 'breakfast-sandwiches' '12 pk 1.6 oz' 'Odom''s Tennessee Pride Maple Sausage Buttermilk Biscuit Frozen Breakfast Sandwiches' 12)) { Write-Output 'ok    MUST FIRE  breakfast-sandwiches min_piece_oz refuses Baker''s 12 pk 1.6 oz Odom''s biscuit sandwich' } else { Write-Output 'FAIL  breakfast-sandwiches min_piece_oz admits a 1.6 oz snack-size sandwich against 3.4 to 9 oz pieces'; $script:fail++ }
+  if (-not (Test-PieceSize 'breakfast-sandwiches' '14.515 oz' 'Odoms Tennessee Pride Maple Pancake Sausage Sandwiches, Frozen Breakfast Sandwiches, 10 Count' 10)) { Write-Output 'ok    MUST FIRE  breakfast-sandwiches min_piece_oz refuses Walmart''s 10 ct 14.515 oz Odom''s (1.45 oz a piece)' } else { Write-Output 'FAIL  breakfast-sandwiches min_piece_oz admits a 1.45 oz piece'; $script:fail++ }
+  if (Test-PieceSize 'breakfast-sandwiches' '4 pk 3.5 oz' 'Kroger Bacon Egg and Cheese Croissant Breakfast Sandwich' 4) { Write-Output 'ok    CLEAN TWIN  breakfast-sandwiches min_piece_oz keeps the live Baker''s cell, a 3.5 oz croissant sandwich' } else { Write-Output 'FAIL  breakfast-sandwiches min_piece_oz refuses the live Baker''s croissant sandwich'; $script:fail++ }
+  if (Test-PieceSize 'breakfast-sandwiches' '27.2 oz' 'Jimmy Dean Frozen Breakfast Sandwich, Ham & Cheese Croissant, 27.2 oz, 8 Count' 8) { Write-Output 'ok    CLEAN TWIN  breakfast-sandwiches min_piece_oz keeps the smallest priced piece on the commodity (3.4 oz)' } else { Write-Output 'FAIL  breakfast-sandwiches min_piece_oz refuses a 3.4 oz full-size sandwich'; $script:fail++ }
   # THE COUNT-FIRST IDIOM, both directions. "16 pk 2.63 oz" is sixteen 2.63 oz corn dogs and must be read as
   # a 2.63 oz piece; halve the per-item size and the same grammar must refuse it. Without this the naive
   # Get-PackOz reading (2.63 total / 16 pieces = 0.16 oz) would refuse every real Baker's corn dog.
@@ -2563,6 +2613,10 @@ $mbUnpriced = New-Object System.Collections.Generic.List[object]   # Buy-N-Get-K
 # product owns a cell exist at all.
 . (Join-Path $PSScriptRoot 'match-lib.ps1')
 $fastMatcher = New-CommodityMatcher -Commodities $commodities -GlobalExclude $GLOBAL_EXCLUDE
+# THE RULINGS ARE LOADED BEFORE THE LOOP (2026-09-18, queue 2026-09-18-b1d8e3), because Get-FirstRefusal now
+# asks them which refusal a doubly-refused row is filed under. The drop after the loop reads this same table.
+. (Join-Path $PSScriptRoot 'known-wrong-lib.ps1')
+$KW_BLOCKS = Get-KnownWrongBlocks -Path (Join-Path $PSScriptRoot 'known-wrong.json')
 # THE CHANNEL INDEX (2026-09-01). Built from the rows already in memory - no capture file is read twice -
 # so it knows, per store and per item id, the freshest thing the store said about that listing's channel.
 # See instore-lib.ps1 for the rule and for the 21-cell browser probe that promoted it from a watcher to a
@@ -2589,8 +2643,14 @@ foreach ($d in $deals) {
     $uprice = [math]::Round($up.unit_price,4); $basis = $up.basis; $note = $up.note
     # ONE CALL DECIDES WHICH REFUSAL FIRES FIRST (Get-FirstRefusal, above): the piece rule, then the band, the
     # floor and the two pack rules. The branches below are the old chain's bodies, unchanged, keyed on its answer.
-    $refusal = Get-FirstRefusal $c.id $c.unit $uprice $d.size_text $d.name $up.pieces
-    if ($refusal -eq 'piece') {
+    $refusal = Get-FirstRefusal $c.id $c.unit $uprice $d.size_text $d.name $up.pieces ([string]$d.store) $KW_BLOCKS
+    if ($refusal -eq 'known-wrong') {
+      # AN ADJUDICATED WRONG PRODUCT that another check also refused (see Get-FirstRefusal). Filed under its
+      # identity refusal so no reader of flagged-*.json mistakes it for a price the band censored.
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band='known-wrong'; price_text=$d.price_text; size_text=$d.size_text })
+      $uprice = $null; $basis = 'KNOWN-WRONG'   # refused either way; the store falls through to its next real row
+    }
+    elseif ($refusal -eq 'piece') {
       # ONE PIECE is too small to be the thing the commodity names - a mini, a single-serve, a snack format.
       # Flagged rather than silently dropped, for the same reason as the two pack rules: a floor set too
       # high has to read as findings, not as a quietly emptier board. Tested FIRST since 2026-09-18 (f90ba6).
@@ -2725,9 +2785,7 @@ $candPfx = if ($OutName -eq 'comparison') { 'candidates' } else { "$OutName-cand
 # That made twenty-two accuracy findings into tripwires instead of fixes. Dropping the row here lets the
 # store fall through to its own next-best REAL row, which is what the shopper should have been seeing.
 # The matching lives in known-wrong-lib.ps1 and is shared with the audit, so the two can never disagree
-# about what a ruling covers.
-. (Join-Path $PSScriptRoot 'known-wrong-lib.ps1')
-$KW_BLOCKS = Get-KnownWrongBlocks -Path (Join-Path $PSScriptRoot 'known-wrong.json')
+# about what a ruling covers. $KW_BLOCKS is loaded above the matching loop (see Get-FirstRefusal).
 $kwDropped = 0
 if ($KW_BLOCKS.Count) {
   $kept = New-Object System.Collections.Generic.List[object]
