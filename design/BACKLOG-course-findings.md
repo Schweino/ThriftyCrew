@@ -12227,3 +12227,138 @@ The ruling needed: whether entry-point scripts (never libraries) adopt `Set-Stri
 Source: `programming-languages-part-b` (closures capture the environment where the function value was created).
 
 Measured by the first q7-plb lane on 2026-09-18 under PS 5.1.26100: a scriptblock returned from a function that set `$b = 3` read the CALLER'S `$b` (104 at top level with `$b = 100`, 1004 inside a function binding 1000) and read its own only through `.GetNewClosure()` (7 both times). Ten tracked `.ps1` call `.GetNewClosure()` at `59b7fefa5`. How many scriptblocks handed to something that runs them later (callbacks such as `-OnWait`, `-OnRefusal`, `FindAll` predicates, sort keys) read a free variable without it was NOT measured. The work: an AST census of scriptblock literals passed as arguments that reference a variable neither a parameter nor `$_`/automatic, then decide per site. Store side: `software-craft/language-semantics.md` section 2.
+
+### I181 - the computer vision course does not reach the nutrition-label workflow it was queued for `PARKED` `queue-6`
+
+**Merged from `design\backlog-inbox\q6-cv-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `introduction-computer-vision-watson-opencv` (queue 6 entry 4, also queue 5 entry 13), worked 2026-09-18 by lane q6-cv through the API; all 25 lectures and 11 readings read.
+
+**What was expected.** The queue entry admitted this course because the estate reads Nutrition Facts panels off product photos by hand, at five to eight browser round trips per label (memory `reading-a-nutrition-label-off-a-product-photo`; `meal-prep/db/food-label-captures.json` holds 14 captures: 7 LABEL, 4 UNFOUND, 2 CONFLICT, 1 PROXY).
+
+**What was measured.** Counted over the concatenated, whitespace-collapsed text of all 36 readable items: `ocr` 0, `optical character` 0, `character recognition` 0, `text recognition` 0, `tesseract` 0, `document` 0. `watson` appears 2 times, both in one IBM case study (ADNOC rock images); no Watson service is taught. The course is classical image processing (Pillow, OpenCV), KNN, logistic regression, SVM, HOG, CNNs, transfer learning, and object detection (sliding window, Haar cascades, Faster R-CNN).
+
+**Why it does not transfer.** The memory records where the five to eight round trips go: finding the panel in the Walmart image carousel (no fixed index, `img.src` blocked by the extension's own guard, render lag), not reading the characters once it is on screen. The transcription step is already done by the model's own vision. An image classifier that recognises "this is the nutrition panel" among carousel images is the one idea here that touches the bottleneck, and it cannot run where the cost is, because the page does not hand the image URLs to script.
+
+**Parked, not open,** because nothing here is work to do. What would reopen it: a label sweep wide enough that navigation cost matters, at which point the cheaper lever is the page's own image-list JSON (the `unrendered` rule in `.claude/rules/grocery.md`), not a classifier. The OCR course is queue 6 entry 5 (`googlecloud-optical-character-recognition-ocr-with-document-ai-python`); the dual-column and sodium open questions already recorded in `.claude/rules/meal-prep.md` (I145, I146) are unaffected by this course.
+
+### I182 - measure whether the basis-error rows flag_outliers hunts form a second mode per commodity `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q6-cv-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `introduction-computer-vision-watson-opencv` item 17 (thresholding and Otsu's method for a bimodal histogram), 2026-09-18.
+
+**What exists.** `graph/pipeline/flag_outliers.py` refuses a per-unit price more than a fixed `5.0x` BELOW the commodity median, and `grocery/audit-unit-basis-outlier.ps1` flags one at or above `4.0x` ABOVE it (both stated in `flag_outliers.py`'s own header, read 2026-09-18). The header already records one case both fixed factors miss (baby formula at 0.56x the median). A grep of tracked `.py` and `.ps1` on 2026-09-18 found no `otsu` and no `bimodal` anywhere in the estate.
+
+**The question, and it is a measurement, not a change.** A basis error (a per-pack price read as per-ounce, or the reverse) does not produce one outlier around a population; it produces a second population offset by roughly the pack size. If, per commodity, the per-unit prices on a real board are bimodal where basis errors exist, then the cut between the two groups can be DERIVED from that commodity's own histogram (Otsu's method is the standard way) rather than set as one factor for every commodity, which is the `no-hardcoded-bands` ruling applied to a cut. If they are not bimodal, the fixed-factor design is right and this closes.
+
+**First rung.** On one day's board, for each commodity with at least N priced observations (N stated before the run), test for two modes and list the commodities where the gap between modes falls inside the 4x to 5x factors' blind range. Report it as a count with its denominator. Touches nothing; reads a board.
+
+### I183 - the production commodity matcher runs catalogue regexes with no match timeout, though the same catalogue once hung the pipeline `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-algo2-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `algorithms-part2` (Princeton, Sedgewick and Wayne), regular-expressions module, worked
+2026-09-18 by queue 7 entry 10. The course's point: a backtracking engine's cost is set by the number
+of ways a pattern can match, so an ambiguous pattern (the slides' `(a|aa)*b`) takes about 2.5 times
+longer for every 2 characters on a failing match, and "typical implementations do not guarantee
+performance". The full account is `~/.claude/skills/algorithms-craft/algorithms-and-data-structures.md` 16.
+
+**What was measured, 2026-09-18, at `59b7fefa5`.**
+- `.NET` is backtracking here: under Windows PowerShell 5.1.26100 on .NET Framework 4.0.30319,
+  `RegexOptions` has no `NonBacktracking` member. `^(a|aa)*b$` against n a's and a `c`, one run per
+  length: 25 characters 11 ms, 27 characters 27 ms, 29 characters 71 ms (about 2.5x per 2 characters,
+  the course's Java ratio), against 0 ms for the control `^a*b$` at 29 and at 100,001 characters.
+- `grocery/match-lib.ps1` builds every include, special include, exclude and global-exclude regex with
+  `[regex]::new(pattern, IgnoreCase)`, **no timeout** (lines 273-336, 405). Its own header records
+  45.7 million include evaluations per run.
+- Over tracked `.ps1`, **3 files** name `MatchTimeout` or `RegexMatchTimeoutException`
+  (`grocery/audit-coverage-gaps.ps1`, `grocery/price-ingredient.ps1`, `meal-prep/pipeline/fetch-recipe.ps1`)
+  out of **588** that use a regex API or `-match`/`-replace` (grep for `[regex]::new`, `New-Object ... Regex(`,
+  `[regex]::Match|IsMatch|Matches|Replace`, `-match`, `-replace`; a line count, not a hot-path count).
+  42 tracked `.py` files use `re`, which has no timeout argument (not measured here).
+- `grocery/commodities.json`: 592 commodities, **71,129** include/exclude pattern instances,
+  **3,644** distinct. A heuristic for a quantified group containing a quantifier found **13** distinct
+  patterns; read by eye, every one is disjoint-token (`(?:\w+\s+){0,5}`, `(?:[^,]*,\s*)*`), which has
+  one way to split any text and is NOT the exponential shape. So no live catastrophic pattern was
+  found; the heuristic is unsound and a clean result proves nothing.
+
+**Why it matters here.** `audit-coverage-gaps.ps1`'s header records the estate's own incident: a
+machine-generated include for quinoa-uncooked, once its `\s` were loosened to `.{0,25}`, went
+exponential (396-405 ms to fail one name), one instance burned 829 CPU-minutes and blocked the daily
+pipeline for 11 hours. That script got a timeout plus a circuit breaker. The matcher that runs the
+same catalogue on every board build did not, and patterns there are machine-written as well as
+hand-written. The audit's loosening rewrite is not in `match-lib`, so the historical pattern does not
+transfer directly; the exposure is the NEXT ambiguous include.
+
+**First rung (MEASURE).** Time `New-CommodityMatcher` + `Resolve` per product name over one real board's
+names plus long adversarial names, record the worst single-name time and the pattern responsible,
+before deciding between (a) a per-regex timeout with the audit's circuit breaker, (b) a gate that
+rejects ambiguous includes at catalogue-edit time, or (c) nothing. Reversible: a timeout is a
+constructor argument.
+
+### I184 - compare-deals redefines get-matchtexts and then dot-sources match-lib, which silently replaces it for the reference matcher `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\q7-plc-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `programming-languages-part-c` (Grossman), section 8: dynamic dispatch versus closures. A
+method that calls another method by name picks up whatever override is current when it RUNS, not the
+one in scope where it was written. PowerShell function-name resolution behaves the same way: measured
+2026-09-18 under PS 5.1.26100 with a scratch probe, a dot-sourced library's `Test-Odd` returned a
+different answer, with no edit to it, once the caller defined its own `Test-Even`.
+
+**What was measured.** An AST sweep over the 785 tracked `.ps1` at 59b7fefa5, top-level function
+definitions only, looking for a file that both defines a function and dot-sources a library that
+defines the same name. 478 files dot-source something; exactly one pair was found:
+
+- `grocery/compare-deals.ps1:2385` defines `Get-MatchTexts`.
+- `grocery/compare-deals.ps1:2495` dot-sources `grocery/match-lib.ps1`, whose line 38 defines
+  `Get-MatchTexts` again.
+
+After line 2495, every call to `Get-MatchTexts` in compare-deals, including the one inside the
+reference implementation `Match-Category` (called by `-Explain` and the routing fixtures), resolves to
+match-lib's copy. The two bodies differ only in comments today (diffed 2026-09-18), so nothing is
+wrong NOW. The hazard: `test-match-lib.ps1` extracts `Match-Category` and its helpers verbatim from
+compare-deals to check that match-lib agrees with it. So an edit to compare-deals' `Get-MatchTexts`
+would be tested in the differential suite, and at run time it would never reach the reference matcher
+it was meant for.
+
+**First rung (READ).** Confirm which `Match-Category` calls run before line 2495 and which after, and
+whether `-Explain` runs after it. Then choose one: delete compare-deals' copy and dot-source match-lib
+earlier, so there is one definition, or record in both files that the second definition wins.
+
+**Possible second rung, not asked for.** The general shape (a top-level function that a later
+dot-source silently replaces) has one live site out of 478 dot-sourcing files. That is too few to
+justify a ratchet, which `ops-and-gates.md` says a one-site class does not earn. If it recurs, the
+natural home is an extension of `ops/audit-cmdlet-shadow.ps1` from built-in cmdlets to library
+functions. The census harness was a scratch script: the AST query is described here, and it was not
+committed.
+
+### I185 - seven of the eight switches that branch on store names end in a default, and none names all seven stores `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-plc-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `programming-languages-part-c`, section 9: the expression problem. When the code is
+organised as one function per operation, adding a variant means editing every function. A static
+language lists the places that need an edit (the non-exhaustive match warning), but only when no
+wildcard branch has swallowed the new case. A `default` sells that list for brevity.
+
+**What was measured.** An AST sweep over the 785 tracked `.ps1` at 59b7fefa5 for `switch` statements
+with two or more clause labels that are store names (the seven in `grocery/stores.json`: Hy-Vee,
+Aldi, Family Fare, Fareway, Baker's, Sam's Club, Walmart). Result: **8 such switches in 7 files, 7 of
+the 8 with a `default`, and none covering all seven stores** (label counts 2, 2, 3, 3, 3, 3, 4, 5).
+The files are `grocery/compare-deals.ps1`, `grocery/derive-links-from-prices.ps1`,
+`grocery/guards.ps1`, `grocery/import-instacart-batch.ps1` and `grocery/probe-ingredient.ps1`. The
+other two are `grocery/archive/one-off/import-browser-batch.ps1` and
+`grocery/out/r100/compare-debug.ps1`, which are archived or scratch. The sweep is unsound: it sees only
+`switch` with literal labels, so an `if`/`elseif` chain or a hashtable lookup over stores is invisible
+to it.
+
+**Why it matters here.** Adding an eighth store sends it to `default` in each of these switches, with
+no message and no list of the places that happen. Whether each `default` is correct for an unknown
+store (a safe refusal, a harmless no-op, or a silent wrong value) was not checked.
+
+**First rung (MEASURE).** Read the five live switches and classify each `default` as refuse, no-op or
+wrong-value for a store it has never seen. Only the wrong-value cases need a change: make that
+`default` throw on an unrecognised store. That is the closed-vocabulary check
+`type-driven-modelling.md` 1 says is the whole prevention in a language without one-of types.
