@@ -1901,6 +1901,71 @@ if ($SelfTest) {
     $script:fail++; Write-Output ("  FAIL split part: want 0.219/oz, got " + $(if ($null -eq $hv2Got) { 'null' } else { $hv2Got.unit_price }))
   } else { Write-Output '  ok  split part: the cereal half prices 4.49 / 20.5 oz = 0.219/oz and can never be 0.0976' }
 
+  # ---- ADD-NORM TAKES NAMED PARAMETERS ONLY (2026-09-19, backlog I191) ------------------------------------
+  # Add-Norm is defined below this block, so the REAL definition is taken from this file's own AST and run -
+  # parsed and executed, never grepped - against a private row list.
+  $anFile = [System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$null, [ref]$null)
+  $anDef = $anFile.Find({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -eq 'Add-Norm' }, $true)
+  $deals = New-Object System.Collections.Generic.List[object]
+  $anRan = 0
+  if (-not $anDef) { $script:fail++; Write-Output '  FAIL add-norm: no Add-Norm definition found in this file - nothing below could be asserted' }
+  else {
+    ${function:Add-Norm} = $anDef.Body.GetScriptBlock()
+    # MUST FIRE - a positional call. The founding shape: 16 slots padded with '' and $null, where one slip
+    # printed a plausible row with a field in the wrong column and nothing threw.
+    $anRan++; $anErr = ''
+    try { Add-Norm 'Aldi' 'Whole Milk' '$3.19' '1 gal' $null 'fixture' 'sale' '' '' '' '' 'P1' } catch { $anErr = $_.FullyQualifiedErrorId }
+    if ($anErr -like 'PositionalParameterNotFound*' -and $deals.Count -eq 0) { Write-Output '  ok  MUST FIRE add-norm: a positional call throws and emits no row' }
+    else { $script:fail++; Write-Output ("  FAIL MUST FIRE add-norm: a positional call was accepted (error='" + $anErr + "', rows=" + $deals.Count + ')') }
+    # MUST FIRE - a misspelt name. On a simple function it would land in $args and the field would stay blank.
+    $deals.Clear(); $anRan++; $anErr = ''
+    try { Add-Norm -Store 'Aldi' -Name 'Whole Milk' -PriceText '$3.19' -ProdId 'P1' } catch { $anErr = $_.FullyQualifiedErrorId }
+    if ($anErr -like 'NamedParameterNotFound*' -and $deals.Count -eq 0) { Write-Output '  ok  MUST FIRE add-norm: a misspelt parameter name throws and emits no row' }
+    else { $script:fail++; Write-Output ("  FAIL MUST FIRE add-norm: a misspelt -ProdId was accepted (error='" + $anErr + "', rows=" + $deals.Count + ')') }
+    # CLEAN TWIN - every one of the 16 fields, passed by name, lands in its own column. Distinct values, so a
+    # swap of any two reads as a wrong value rather than an agreeing one.
+    $deals.Clear(); $anRan++
+    $anSrc = [pscustomobject]@{ item = 'fixture row' }
+    Add-Norm -Store 'Aldi' -Name 'Whole Milk' -PriceText '$3.19' -SizeText '1 gal' -Regular '$3.49' -SourceAd 'fixture-ad' `
+      -PriceType 'everyday' -SrcDate '2026-09-01' -AdFrom '2026-09-02' -AdTo '2099-09-03' -AdBasis 'ttl' -ProductId 'P1' `
+      -Fulfillment 'in-store' -SrcFile 'aldi-regular-2026-09-01' -SrcRow $anSrc -SplitFrom 'whole line'
+    $anWant = [ordered]@{ store = 'Aldi'; name = 'Whole Milk'; price_text = '$3.19'; size_text = '1 gal'; regular = '$3.49'; source_ad = 'fixture-ad'
+      price_type = 'everyday'; src_date = '2026-09-01'; ad_from = '2026-09-02'; ad_to = '2099-09-03'; ad_basis = 'ttl'; product_id = 'P1'
+      fulfillment = 'in-store'; src_file = 'aldi-regular-2026-09-01'; split_from = 'whole line' }
+    $anBad = @()
+    if ($deals.Count -ne 1) { $anBad += ('rows=' + $deals.Count) }
+    else { foreach ($k in $anWant.Keys) { if (-not [string]::Equals([string]$deals[0].$k, [string]$anWant[$k], [StringComparison]::Ordinal)) { $anBad += ($k + "='" + $deals[0].$k + "'") } } }
+    if (-not $anBad.Count) { Write-Output '  ok  CLEAN TWIN add-norm: a named call puts each of the 15 carried fields in its own column' }
+    else { $script:fail++; Write-Output ('  FAIL CLEAN TWIN add-norm: wrong column(s): ' + ($anBad -join ', ')) }
+  }
+  # MUST FIRE / MUST NOT FIRE - no call site hands Add-Norm an AUTOMATIC variable. The founding slip was the
+  # supplement loop's -ProductId $pid: $pid is this process's id, reading it never throws, and every Sam's and
+  # Fareway ad row carried the build's PID as its store product id. Read from the AST, so the fixture text
+  # below is a string to this file and never a call.
+  $anAuto = @('pid', 'args', 'input', 'this', 'myinvocation', 'pscmdlet', 'psboundparameters', 'host', 'home')
+  $anScan = {
+    param($Ast)
+    $hits = @()
+    foreach ($c in $Ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.CommandAst] -and $n.GetCommandName() -eq 'Add-Norm' }, $true)) {
+      foreach ($v in $c.FindAll({ param($n) $n -is [System.Management.Automation.Language.VariableExpressionAst] }, $true)) {
+        if ($anAuto -contains ([string]$v.VariablePath.UserPath).ToLowerInvariant()) { $hits += ('line ' + $v.Extent.StartLineNumber + ' $' + $v.VariablePath.UserPath) }
+      }
+    }
+    , $hits
+  }
+  $anRan++
+  $anFix = [System.Management.Automation.Language.Parser]::ParseInput(('Add-Norm -Store $d.store -Name $pn' + ' -ProductId $' + 'pid -SrcRow $d'), [ref]$null, [ref]$null)
+  $anHits = & $anScan $anFix
+  if (@($anHits).Count -eq 1) { Write-Output '  ok  MUST FIRE add-norm: a call passing the automatic $pid is found' }
+  else { $script:fail++; Write-Output ('  FAIL MUST FIRE add-norm: the automatic-variable scan found ' + @($anHits).Count + ' hit(s) in the $pid fixture, want 1') }
+  $anRan++
+  $anHits = & $anScan $anFile
+  $anCalls = @($anFile.FindAll({ param($n) $n -is [System.Management.Automation.Language.CommandAst] -and $n.GetCommandName() -eq 'Add-Norm' }, $true)).Count
+  if (@($anHits).Count -eq 0 -and $anCalls -ge 9) { Write-Output ('  ok  MUST NOT FIRE add-norm: none of this file''s ' + $anCalls + ' Add-Norm calls passes an automatic variable') }
+  else { $script:fail++; Write-Output ('  FAIL MUST NOT FIRE add-norm: calls=' + $anCalls + ' (want at least 9); automatic variables passed: ' + (@($anHits) -join '; ')) }
+  if ($anRan -ne 5) { $script:fail++; Write-Output ("  FAIL add-norm: ran $anRan of 5 cases") }
+  Remove-Item function:Add-Norm -ErrorAction SilentlyContinue
+
   if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct, plus the format-layer nameless-row counter)'; exit 0 }
   else { Write-Output ("SELF-TEST FAIL: $script:fail case(s)"); exit 1 }
 }
@@ -1940,7 +2005,19 @@ function Get-RowProductId($row) {
 . (Join-Path $PSScriptRoot 'aisle-lib.ps1')
 $AisleShelf = New-AisleShelfIndex
 $AisleRefused = New-Object System.Collections.Generic.List[object]
-function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='',$ful='',$srcFile='',$srcRow=$null,$splitFrom='') {
+function Add-Norm {
+  # NAMED PARAMETERS ONLY (2026-09-19, backlog I191). This builds every board row, and it took 16 untyped
+  # positional parameters that its call sites padded with '' and $null to reach the slot they wanted: the
+  # capture row landed in slot 15 only because somebody counted, and a slip of one position printed a
+  # plausible row with a field in the wrong column. One slip had already happened - the Baker's/Fareway/Sam's
+  # supplement loop passed the automatic $pid (this PROCESS's id) in the product-id slot from 9c44c3a37, so
+  # every one of those rows carried the build's PID as its store product id and Select-FreshestCaptureRows
+  # treated all of a store's rows for a commodity as ONE product. PositionalBinding=$false makes a positional
+  # call throw, and [CmdletBinding()] makes a misspelt -Name throw instead of landing silently in $args. The
+  # -SelfTest block above holds both as a MUST FIRE and the named row as a CLEAN TWIN.
+  [CmdletBinding(PositionalBinding = $false)]
+  param($Store, $Name, $PriceText, $SizeText, $Regular, $SourceAd, $PriceType = 'sale', $SrcDate = '', $AdFrom = '',
+        $AdTo = '', $AdBasis = '', $ProductId = '', $Fulfillment = '', $SrcFile = '', $SrcRow = $null, $SplitFrom = '')
   # THE FORMAT LAYER, AND THE ONE DROP HERE THAT SAID NOTHING (2026-09-07, backlog E5). A row whose
   # name did not parse vanishes before any business rule runs, so a capture whose name field moved
   # would yield fewer rows and produce no signal at all - "silent by construction". It is still
@@ -1952,7 +2029,7 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   #
   # NULL-SAFE, because a $script: variable does not travel with a lifted function and three scripts
   # lift these ([[compare-deals-lifters-need-functions-not-variables]]).
-  if (-not $name) { $null = Add-TcNamelessRow $store; return }
+  if (-not $Name) { $null = Add-TcNamelessRow $Store; return }
   # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
   # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that
   # covers a commodity instead of letting an older capture's price compete with it.
@@ -1974,8 +2051,8 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   # regression run stays reproducible - the same rule Test-AdWindowClosed follows.
   # A row with no ad_to is NOT expired: absent evidence is not evidence, and an undated markdown is
   # handled by its own TTL rather than by being silently dropped here.
-  if ($ptype -eq 'sale' -and $adTo -match '^\d{4}-\d{2}-\d{2}$' -and $script:BoardToday) {
-    if ([string]$adTo -lt [string]$script:BoardToday) { $script:ExpiredSaleRows++; return }
+  if ($PriceType -eq 'sale' -and $AdTo -match '^\d{4}-\d{2}-\d{2}$' -and $script:BoardToday) {
+    if ([string]$AdTo -lt [string]$script:BoardToday) { $script:ExpiredSaleRows++; return }
   }
   # fulfillment: the store's own word on whether this row is sold on the shelf. Carried raw ('' when the
   # capture predates the field) so Test-InStore can tell "not in store" from "not stated".
@@ -1989,7 +2066,7 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   # it against the commodity's unit. Absent on every other store's rows, which is correct: they publish no
   # unit price and an absent proof must never read as an agreeing one.
   $nup = $null
-  if ($srcRow) { $nup = Get-DisplayedUnitPrice $srcRow }
+  if ($SrcRow) { $nup = Get-DisplayedUnitPrice $SrcRow }
   # pu_rounding_pct: THE ERROR BAR ON A SAM'S DERIVED SIZE (2026-09-11, queue 2026-09-10-c8eb72). Sam's prints
   # its unit price rounded to the CENT and build-sams-deals derives any pack size Sam's did not state as
   # linePrice / that rounded number, so the size - and therefore this row's per-unit - carries a relative error
@@ -1999,11 +2076,11 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   # quotient, and an absent error bar must never read as a measured zero.
   # The RULE is pricing-math-lib's, so the builder and the board compute the same number from the same fields.
   $purp = $null
-  if ($srcRow) { $purp = Get-DerivedRoundingPct ([string]$srcRow.qty_basis) ([string]$srcRow.sams_unit_price) }
+  if ($SrcRow) { $purp = Get-DerivedRoundingPct ([string]$SrcRow.qty_basis) ([string]$SrcRow.sams_unit_price) }
   # split_from: the WHOLE flyer line this row was cut out of, when Split-TwoProductAdLine cut it (queue
   # 2026-09-10-582032). Carried so audit-match-soundness and the identity table can show provenance, and so
   # Get-UnitPrice can tell a part whose size is its own from a two-size line nobody has split.
-  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId; fulfillment=[string]$ful; src_file=[string]$srcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$splitFrom })
+  $deals.Add([pscustomobject]@{ store=$Store; name=[string]$Name; price_text=[string]$PriceText; size_text=[string]$SizeText; regular=$Regular; source_ad=$SourceAd; price_type=$PriceType; src_date=[string]$SrcDate; ad_from=[string]$AdFrom; ad_to=[string]$AdTo; ad_basis=[string]$AdBasis; product_id=[string]$ProductId; fulfillment=[string]$Fulfillment; src_file=[string]$SrcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$SplitFrom })
 }
 $ads = Read-JsonFile $AdsFile
 $today = $ads.today
@@ -2035,10 +2112,10 @@ foreach ($d in $ads.deals) {                                                    
       # once), per ITEM for Aldi (flyerkit gives each product its own), per CIRCULAR for Family Fare.
       # Passing them through is the entire point of having captured them.
       # Aldi also now carries original_price as `regular`, so an Aldi ad row can state what it was cut from.
-      'Hy-Vee'      { Add-Norm $d.store $pn $pn $null $null $d.source_ad 'sale' '' $d.ad_from $d.ad_to '' '' '' '' $null $sf }      # price+size embedded in item text
-      'Aldi'        { Add-Norm $d.store $pn $d.ad_price $pSize $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to '' '' '' '' $null $sf }
-      'Family Fare' { Add-Norm $d.store $pn $d.ad_price $pSize $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to '' '' '' '' $null $sf }
-      default       { Add-Norm $d.store $pn ($d.ad_price + ' ' + $pn) $pSize $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to '' '' '' '' $null $sf }
+      'Hy-Vee'      { Add-Norm -Store $d.store -Name $pn -PriceText $pn -SizeText $null -Regular $null -SourceAd $d.source_ad -PriceType 'sale' -AdFrom $d.ad_from -AdTo $d.ad_to -SplitFrom $sf }      # price+size embedded in item text
+      'Aldi'        { Add-Norm -Store $d.store -Name $pn -PriceText $d.ad_price -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType 'sale' -AdFrom $d.ad_from -AdTo $d.ad_to -SplitFrom $sf }
+      'Family Fare' { Add-Norm -Store $d.store -Name $pn -PriceText $d.ad_price -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType 'sale' -AdFrom $d.ad_from -AdTo $d.ad_to -SplitFrom $sf }
+      default       { Add-Norm -Store $d.store -Name $pn -PriceText ($d.ad_price + ' ' + $pn) -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType 'sale' -AdFrom $d.ad_from -AdTo $d.ad_to -SplitFrom $sf }
     }
   }
 }
@@ -2156,11 +2233,14 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
         # part evict the other. A part of a split line therefore carries NO id - it is name-keyed, exactly as
         # every ad row without an id already is. Unsplit rows keep theirs.
         # NOT $pid: that is a READ-ONLY automatic variable in PowerShell and assigning it throws
-        # mid-ingest, which is how this line announced itself on its first run.
+        # mid-ingest, which is how this line announced itself on its first run. READING it does not throw,
+        # which is the half that bit: the rename reached this assignment but not the call below, so from
+        # 9c44c3a37 to 2026-09-19 the call passed $pid - the build process's id - as every one of these rows'
+        # product id, and every Sam's and Fareway ad row for a commodity read as ONE product (backlog I191).
         $partProdId = if ($adParts.Count -gt 1) { '' } else { (Get-RowProductId $d) }
-        # $d LAST: the capture row itself, so Add-Norm can read the store's own published unit price off it
+        # -SrcRow: the capture row itself, so Add-Norm can read the store's own published unit price off it
         # (out\sams\sams-deals-*.json carries sams_unit_price on every row). Passed, never re-parsed here.
-        Add-Norm $d.store $pn $d.ad_price $pSize $d.regular $d.source_ad $pt $sd $rFrom $rTo '' $pid '' '' $d $sf
+        Add-Norm -Store $d.store -Name $pn -PriceText $d.ad_price -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType $pt -SrcDate $sd -AdFrom $rFrom -AdTo $rTo -ProductId $partProdId -SrcRow $d -SplitFrom $sf
       }
     }
   }
@@ -2203,7 +2283,7 @@ if ($extraF) {
     $claimsDiscount = ($ap -gt 0 -and $rg -gt 0 -and $ap -lt $rg)
     $dated = [bool]$d.sale_end
     if ($claimsDiscount -and (-not $dated) -and ($exDate -ne $todayReal)) { $staleDiscount++; continue }
-    Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt '' '' '' '' (Get-RowProductId $d) '' '' $d
+    Add-Norm -Store $d.store -Name $d.item -PriceText $d.ad_price -SizeText $d.size -Regular $d.regular -SourceAd $d.source_ad -PriceType $pt -ProductId (Get-RowProductId $d) -SrcRow $d
   }
   if ($staleDiscount -gt 0) {
     Write-Warning ("extra-deals: skipped $staleDiscount undated discount row(s) from $exDate (captured before today, no end date - cannot be shown as a live sale). The board falls back to each store's everyday shelf price, which IS verified against its product link.")
@@ -2345,17 +2425,17 @@ if (Test-Path $regDir) {
         # / sams_unit_price describe the price the store is charging TODAY, which is this half. The everyday
         # half below is what the row was cut FROM, and pairing the store's sale unit price with it would
         # manufacture a disagreement out of a discount.
-        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName) $d
+        Add-Norm -Store $d.store -Name $d.item -PriceText ('$' + $spl.sale_price) -SizeText $d.size -Regular $d.regular -SourceAd $d.source_ad -PriceType 'sale' -SrcDate $rsd -AdFrom $spl.sale_from -AdTo $spl.sale_to -AdBasis $script:LastBasis -ProductId (Get-RowProductId $d) -Fulfillment ([string]$d.fulfillment) -SrcFile ([string]$rf.BaseName) -SrcRow $d
         # AND THE PRICE IT REVERTS TO. Without this row the everyday value disappears the moment a
         # store discounts an item, which is the other half of Brad's rule - everyday must not be
         # replaced by the ad. Only emitted when the store told us what it was cut FROM; a flagged row
         # with no was-price would otherwise publish the sale price twice under two labels.
         if ($spl.everyday_price -and $spl.everyday_price -gt $spl.sale_price) {
-          Add-Norm $d.store $d.item ('$' + $spl.everyday_price) $d.size $null $d.source_ad 'everyday' $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName)
+          Add-Norm -Store $d.store -Name $d.item -PriceText ('$' + $spl.everyday_price) -SizeText $d.size -Regular $null -SourceAd $d.source_ad -PriceType 'everyday' -SrcDate $rsd -ProductId (Get-RowProductId $d) -Fulfillment ([string]$d.fulfillment) -SrcFile ([string]$rf.BaseName)
         }
       } else {
         # not split: the row's own price IS what the store's published unit price describes, so carry $d.
-        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd '' '' '' (Get-RowProductId $d) ([string]$d.fulfillment) ([string]$rf.BaseName) $d
+        Add-Norm -Store $d.store -Name $d.item -PriceText $d.ad_price -SizeText $d.size -Regular $d.regular -SourceAd $d.source_ad -PriceType $pt -SrcDate $rsd -ProductId (Get-RowProductId $d) -Fulfillment ([string]$d.fulfillment) -SrcFile ([string]$rf.BaseName) -SrcRow $d
       }
     }
   }

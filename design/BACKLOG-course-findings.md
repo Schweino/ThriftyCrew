@@ -12519,7 +12519,7 @@ they only overlap. Brad to rule whether `CONSOLIDATE.md` should carry a one-line
 two say the same thing, keep both and cross-link when they only overlap. Filed for the course domain,
 not the estate code.
 
-### I191 - add-norm takes 16 positional parameters and its call sites pad them with empty strings `OPEN` `queue-6` `2-WAY` `RUNG1 READ`
+### I191 - add-norm takes 16 positional parameters and its call sites pad them with empty strings `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-smells-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -12549,6 +12549,27 @@ slot its author meant. Only then decide whether to move `Add-Norm` to named para
 `ops\count-source-lifters.ps1 -Script compare-deals.ps1` before changing the signature, because
 `grocery/pricing-math-lib.ps1` and `ops/audit-lift-completeness.ps1` also name `Add-Norm`.
 The scan is a scratch harness and was not committed; the counts are for this commit only.
+
+**Done 2026-09-19.** The READ found a live slip. Of the 9 calls, 8 had every argument in the slot its author
+meant; the supplement loop's call (Baker's ad, Fareway ad, Sam's) passed `$pid` in the product-id slot, where
+the line above it had computed `$partProdId`. `$pid` is PowerShell's automatic process id, so from `9c44c3a37`
+(2026-09-11) every row from those files carried the build's PID as its store product id, and
+`Select-FreshestCaptureRows` read all of one store's rows for a commodity as ONE product: supersession dropped
+every row from an older capture that the depth rule had kept (bug 2 in `capture-depth-lib.ps1`'s header, back
+again). Measured over the seeded 2026-09-17 inputs, the board built before and after the one-variable fix, both in
+a worktree at `3e5ee4b43`: 2,927 of 2,959 Sam's candidate rows and 118 of 1,158 Fareway rows carried the PID; 69
+of 3,189 store cells change (64 Sam's, 5 Fareway), 61 of them to a LOWER per-unit and none higher, and 26 of 572
+crowns move, e.g. Sam's rice from Mochiko sweet rice flour at 2.6133/oz to Member's Mark 50 lb long-grain at
+0.4396, the rice crown moving from Walmart 0.573. The live `comparison-2026-09-17` (built 2026-09-18 08:07)
+carries the defect cells, so the next daily build moves those 26 crowns. `Add-Norm` now takes named parameters only
+(`[CmdletBinding(PositionalBinding = $false)]`, so a positional call and a misspelt name both throw) and all 9 calls
+name every argument. The rename alone was proven a no-op first: old and new code built the same inputs into
+private `-OutName` outputs and all 5 output files were identical after masking only `built_at` and the PID (572 of
+572 board rows equal). `compare-deals -SelfTest` gained 5 cases: MUST FIRE a positional call throws, MUST FIRE a
+misspelt name throws, CLEAN TWIN a named call puts all 15 carried fields in their own columns, MUST FIRE an AST
+scan finds a call passing `$pid`, MUST NOT FIRE none of the file's Add-Norm calls passes an automatic variable.
+Three mutants, each in place and restored md5-identical: positional binding re-allowed (red, 1 case),
+`[CmdletBinding]` removed (red, 2 cases), `$pid` restored in the loop (red, 1 case); unmutated exit 0.
 
 ### I192 - 25 live scripts still hold their own copy of the board's store list `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
 
