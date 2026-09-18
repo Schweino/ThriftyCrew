@@ -41,7 +41,7 @@ import importers as I                                    # noqa: E402
 
 _fails: list[str] = []
 _ran = 0
-CASES = 27
+CASES = 32
 
 
 def T(label: str, ok: bool, got: str = "") -> None:
@@ -366,6 +366,87 @@ def run_supersede_guard() -> None:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def _write_identity(root: str, staple: list[dict], recipe: list[dict] | None) -> None:
+    for ns, rows in (("staple", staple), ("recipe", recipe)):
+        d = os.path.join(root, ns)
+        shutil.rmtree(d, ignore_errors=True)
+        if rows is None:
+            continue
+        os.makedirs(d)
+        with open(os.path.join(d, "walmart.jsonl"), "w", encoding="utf-8", newline="\n") as fh:
+            for r in rows:
+                fh.write(json.dumps(r) + "\n")
+
+
+def _instance_of(db) -> dict:
+    out = {}
+    for r in db.conn.execute(
+            "SELECT source_id, target_id, properties_json FROM edges WHERE predicate='instance_of'"):
+        out[(r["source_id"], r["target_id"])] = json.loads(r["properties_json"] or "{}").get("source")
+    return out
+
+
+def _identity_cases(db, tmp: str) -> None:
+    """I229: import_identity retracts the identity-table edges its files no longer assert."""
+    ts, run_id = "2026-09-19T00:00:00", "run:i229-selftest"
+    peas, corn = I.commodity_id("canned-peas", "staple"), I.commodity_id("frozen-peas", "staple")
+    other = I.commodity_id("rice", "staple")
+    sauce = I.commodity_id("fixture-sauce", "recipe")
+    for c in (peas, corn, other):
+        db.upsert_node(c, "Commodity", c, ts)
+    idroot = os.path.join(tmp, "identity")
+    saved = I.IDENTITY
+    I.IDENTITY = idroot
+    try:
+        row = {"store": "Walmart", "name": "Birds Eye Steamfresh Sweet Peas", "size": "10 oz"}
+        riceno = [dict(store="Walmart", name="Rice %d" % i, size="2 lb", commodity=other)
+                  for i in range(8)]
+        _write_identity(idroot, [dict(row, commodity=peas)] + riceno,
+                        [dict(row, name="Fixture Sauce Jar", commodity=sauce)])
+        r1 = I.import_identity(db, ts, run_id)
+        sku = I.sku_id("Walmart", row["name"], row["size"])
+        # the SAME product re-filed by the engine: canned-peas -> frozen-peas
+        _write_identity(idroot, [dict(row, commodity=corn)] + riceno,
+                        [dict(row, name="Fixture Sauce Jar", commodity=sauce)])
+        r2 = I.import_identity(db, ts, run_id)
+        e = _instance_of(db)
+        T("MUST FIRE a product the engine RE-FILED loses its old identity-table edge (canned-peas)",
+          (sku, peas) not in e and r2.get("identity_stale_edges_retracted") == 1,
+          "old edge present=%s res=%s" % ((sku, peas) in e, json.dumps(r2, sort_keys=True)))
+        T("CLEAN TWIN the new filing's edge is there, from the identity table (frozen-peas)",
+          e.get((sku, corn)) == "identity-table", repr(e.get((sku, corn))))
+        # an edge product-urls asserts is never touched by the identity pass
+        pu = I.sku_id("Walmart", "Fixture Linked Rice", "2 lb")
+        db.upsert_node(pu, "ProductSKU", "Fixture Linked Rice", ts)
+        db.upsert_edge(pu, "instance_of", other, ts, properties={"source": "product-urls"})
+        I.import_identity(db, ts, run_id)
+        T("CLEAN TWIN an instance_of edge another importer asserts (product-urls) survives the pass",
+          _instance_of(db).get((pu, other)) == "product-urls",
+          repr(_instance_of(db).get((pu, other))))
+        # a run that did not read every namespace retracts NOTHING - and the stale share here is 1
+        # of 10, UNDER the fraction bar, so only the completeness guard can be what keeps it (a case
+        # that also tripped the bar survived the mutant that deleted this guard)
+        _write_identity(idroot, [dict(row, commodity=corn)] + riceno, None)
+        r3 = I.import_identity(db, ts, run_id)
+        sauce_sku = I.sku_id("Walmart", "Fixture Sauce Jar", row["size"])
+        T("MUST FIRE a run missing a namespace retracts nothing and SAYS so (the recipe edge kept)",
+          r3.get("identity_stale_edges_retracted") == 0 and r3.get("identity_stale_edges_refused") == 1
+          and _instance_of(db).get((sauce_sku, sauce)) == "identity-table",
+          json.dumps(r3, sort_keys=True))
+        # a run that would retract more than the bar keeps every edge and says so
+        _write_identity(idroot, [dict(row, commodity=corn)],
+                        [dict(row, name="Fixture Sauce Jar", commodity=sauce)])
+        r4 = I.import_identity(db, ts, run_id)
+        e4 = _instance_of(db)
+        T("MUST FIRE a run that would drop 8 of 10 identity edges (over the %.0f%% bar) keeps them all"
+          % (100 * I.MAX_STALE_RETRACT_FRACTION),
+          r4.get("identity_stale_edges_retracted") == 0 and r4.get("identity_stale_edges_refused") == 8
+          and sum(1 for (s, c) in e4 if c == other) == 9, json.dumps(r4, sort_keys=True))
+        del r1
+    finally:
+        I.IDENTITY = saved
+
+
 def run() -> int:
     tmp = tempfile.mkdtemp(prefix="i200-imp-")
     saved_grocery = I.GROCERY
@@ -404,6 +485,7 @@ def run() -> int:
         T("CLEAN TWIN the run reports what it nulled (2) and wrote (3)",
           res.get("product_url_zero_price_nulled") == 2 and res.get("product_url_observations") == 3,
           json.dumps(res, sort_keys=True))
+        _identity_cases(db, tmp)
         # I235's two groups run here, inside the provenance stub, each on its own temp tree
         run_capture_terms()
         run_fareway_dates()
@@ -426,7 +508,8 @@ def run() -> int:
     print("SELF-TEST PASS: importers %d of %d cases - a zero product-urls price is stored NULL, "
           "a real one unchanged; a staple-id capture term resolves namespaced, an unknown one stays counted; "
           "a fareway-shop file is dated from the date in its name or refused; a re-import inserts 0 "
-          "rows the prune deletes, and a new or rewritten capture still lands" % (_ran, CASES))
+          "rows the prune deletes, and a new or rewritten capture still lands; "
+          "a re-filed product loses its stale identity edge" % (_ran, CASES))
     return 0
 
 

@@ -1,7 +1,9 @@
 """Seed importers — legacy JSON estate -> knowledge graph (Phase 2).
 
 Every importer is DETERMINISTIC and ADDITIVE: re-running it is a no-op, never a
-duplicate. Each writes a provenance row naming the exact source file, so any node
+duplicate. The one exception is import_identity, which retracts the identity-table
+instance_of edges its source files no longer assert (backlog I229), because an
+upsert-only mirror of a table that re-files products keeps every old filing. Each writes a provenance row naming the exact source file, so any node
 in the graph can be traced back to the file and line of the estate it came from.
 
 These run in DUAL-WRITE mode. The legacy PowerShell path stays fully
@@ -1220,6 +1222,7 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
         return {"identity_skus": 0, "identity_namespaces": 0}
 
     n_sku = n_edge = n_ns = n_unmatched = n_missing_commodity = 0
+    asserted: set[tuple[str, str]] = set()      # (sku, commodity) pairs THIS run asserted
     for ns in IDENTITY_NAMESPACES:
         nsdir = os.path.join(IDENTITY, ns)
         if not os.path.isdir(nsdir):
@@ -1292,6 +1295,7 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
                         "candidates": row.get("candidates") or [],
                         "rules_hash": row.get("rules_hash"),
                     })
+                asserted.add((skid, cid))
                 n_edge += 1
 
         # The manifest's own count against what was actually read. A mismatch
@@ -1305,13 +1309,76 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
                     f"identity[{ns}]: _manifest.json claims {claimed} rows, "
                     f"{ns_rows} were read from the .jsonl files")
 
+    retracted, refused = retract_stale_identity_edges(db, asserted, ts, run,
+                                                      complete=(n_ns == len(IDENTITY_NAMESPACES)))
     return {
         "identity_skus": n_sku,
         "identity_instance_of": n_edge,
         "identity_namespaces": n_ns,
         "identity_unmatched_products": n_unmatched,
         "identity_missing_commodity_node": n_missing_commodity,
+        "identity_stale_edges_retracted": retracted,
+        "identity_stale_edges_refused": refused,
     }
+
+
+# The largest share of the identity table's own instance_of edges one run may retract. FIRST PLAUSIBLE
+# NUMBER, NOT THE SURVIVOR OF A SWEEP (backlog I229, 2026-09-19): the only measurement is the first
+# cleanup itself, 3,596 of 38,905 identity edges (9.2%) stale on the 2026-09-18 graph.db, accumulated
+# since the table began. Day-over-day churn after that is unmeasured. The bar exists for the failure
+# where the READ was wrong rather than the world - an emitter that wrote one store's file short but
+# kept the manifest in step would otherwise delete that store's whole history in one pass.
+MAX_STALE_RETRACT_FRACTION = 0.25
+
+
+def retract_stale_identity_edges(db: GraphDB, asserted: set, ts: str, run: str, *,
+                                 complete: bool) -> tuple[int, int]:
+    """Delete identity-table instance_of edges this run did not assert. Returns (retracted, refused).
+
+    WHY (backlog I229). import_identity only ever UPSERTS, so when the engine re-files a product - Birds
+    Eye Steamfresh Sweet Peas moved off canned-peas - the old edge stayed forever beside the new one.
+    On the 2026-09-18 graph.db that was 3,596 of 38,905 identity edges, and emit_commodity_defs.py
+    drew 230 of its 3,822 exemplars from them (158 of 687 commodities' lists) for the sidecar sweep,
+    and sidecar/build_pair_corpus.py labelled every one a POSITIVE training pair.
+
+    ONLY THIS IMPORTER'S OWN EDGES: an edge whose `source` property is `identity-table`. product-urls
+    runs earlier in the same import and re-stamps any edge it still asserts with its own source, so an
+    edge both roads assert is never touched here.
+
+    REFUSED, KEPT AND SPOKEN, never partial: a run that did not read every namespace (`complete` is
+    False) retracts nothing, and a run that would retract more than MAX_STALE_RETRACT_FRACTION of the
+    identity edges keeps every one and reports the count in `identity_stale_edges_refused`. The
+    retraction is one logged decision carrying the count, a hash of the full sorted id list and the
+    first 50 ids; the identity files in git are the truth that re-derives the rest (graph.db is an
+    index, schema commitment 3).
+    """
+    ident = []
+    for r in db.conn.execute(
+            "SELECT id, source_id, target_id, properties_json FROM edges "
+            "WHERE predicate='instance_of'"):
+        try:
+            src = (json.loads(r["properties_json"] or "{}") or {}).get("source")
+        except (ValueError, AttributeError):
+            continue
+        if src == "identity-table":
+            ident.append((r["id"], r["source_id"], r["target_id"]))
+    stale = sorted(eid for eid, s, t in ident if (s, t) not in asserted)
+    if not stale:
+        return 0, 0
+    if not complete or len(stale) > MAX_STALE_RETRACT_FRACTION * len(ident):
+        db.log_event(run=run, timestamp=ts, etype="escalate", step_id="identity",
+                     decision="stale_instance_of_retraction_refused",
+                     detail={"stale": len(stale), "identity_edges": len(ident),
+                             "complete": complete,
+                             "max_fraction": MAX_STALE_RETRACT_FRACTION})
+        return 0, len(stale)
+    db.log_event(run=run, timestamp=ts, etype="state_transition", step_id="identity",
+                 decision="retract_stale_instance_of",
+                 detail={"retracted": len(stale), "identity_edges": len(ident),
+                         "ids_sha": hash_obj(stale), "first_ids": stale[:50],
+                         "reason": "no longer asserted by graph/identity/<ns>/*.jsonl"})
+    db.conn.executemany("DELETE FROM edges WHERE id=?", [(e,) for e in stale])
+    return len(stale), 0
 
 
 ALL_IMPORTERS: list[tuple[str, Callable]] = [
