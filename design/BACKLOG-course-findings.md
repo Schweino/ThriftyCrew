@@ -13435,7 +13435,7 @@ with the frozen fixture rewritten to pin BOTH branches to it. The first rung is 
 building it after that is small and reversible (a formatting change, no data rewritten). Whoever builds
 it should also check the Python side, where `round()` is half to even.
 
-### I187 - the estate's design plans rarely record the alternatives they rejected `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I187 - the estate's design plans rarely record the alternatives they rejected `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-modern-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13465,6 +13465,38 @@ option named and the line it sits on, so the verdict can be re-read. **Bar: 6 or
 confirms the gap and a template line is warranted; 7 or more says the habit is present in prose, the
 grep was a spelling artefact, and no fix is warranted.** The same three-spelling grep is also run over
 the 10 so the floor's undercount is measured on the same cases.
+
+**Done 2026-09-18. Measured: 10 of 10 counted, so the bar is cleared and no fix is warranted.**
+Harness: reading each file whole (brain-v2, 77 KB, read to line 300 and then at every line a search for
+`rejected|instead of|rather than|considered|alternative|refuted` hit), at bcd3dbdeb, the plans unchanged
+since. One row per plan, line numbers at that commit:
+
+| # | plan | counts | the rejected option, and the reason it lost |
+|---|---|---|---|
+| 0 | after-dedup-2026-09-04 | yes | :151 a third name-only dedup question: two were measured at scale, "a third ... is a guess" |
+| 5 | brain-v2-2026-09-09 | yes | :857-858 and :434 a global use-weight on the ranker, refuted 103 to 70; :238 a 200 ms hook gate, red on day one |
+| 10 | cheapest-store-selection | yes | :162-166 two server-side picks, wrong at a scaled serving count and a second copy of the rule |
+| 15 | gate-queue-2026-09-11 | yes | :221-223 raising `WaitSec` or the slot total: demand is twice service, and slots do not load the box |
+| 20 | hunter-judge-contract-2026-08-25 | yes | :258-259 shared-data repairs through the new patch road: "genuinely not patch-shaped" |
+| 25 | local-matching-2026-08-22 | yes | :143-145 fine-tuning the sweep's own model: a swap changes every score in the estate |
+| 30 | pipeline-committers-2026-09-07 | yes | :25-29 a sweeper committer, the 2026-09-05 325-file incident |
+| 35 | push-ref-race-2026-09-11 | yes | :56-73 Option 1's re-gate skip: cannot shrink the window, and ships an ungated combination |
+| 40 | review-followups-2026-08-20 | yes | :129-133 a sibling module: would duplicate every invariant and drift |
+| 45 | stranded-parks-repair-2026-08-26 | yes | :38-44 enqueueing the four terms: three were already priced on the board |
+
+**The grep over the same 10 hits 1** (`cheapest-store-selection`, "alternatives considered and
+rejected"), so on these cases it missed 9 of the 10 plans that do record one. The item's 2 of 54 was a
+spelling count, not a habit count. The habit lives under headings the grep never tried: "What this plan
+deliberately does NOT do", "The three options, judged", "Not recommended:", "NOT MOVING, restated so
+nobody relitigates".
+
+Two readings taken AFTER the count, so neither moves the verdict. By a stricter test (an alternative to
+the plan's MAIN approach, not to a sub-decision), rows 20 and 25 drop out and the tally is 8 of 10, still
+over the bar. And 6 of the 10 put their rejections under a heading or a bold-labelled block of their own (rows 0,
+5, 10, 15, 30, 35), 4 only in a clause of a paragraph about something else (rows 20, 25, 40, 45). What
+the sample does not cover: it is systematic rather than random, it is 10 of 52, and the 5 `PLAN-*` files
+outside `design/` were never read. **Nothing shipped**: no template line, because the plans already carry
+the habit, and no gate, which the item never asked for.
 
 ### I188 - a child's stdout is parsed as data without an exit-code or shape check `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
 
