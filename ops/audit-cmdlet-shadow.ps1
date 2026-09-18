@@ -15,7 +15,10 @@
   clean report means no such DEFINITION carries a listed name. It does not see a function made any other way:
   Set-Item or New-Item on function:, ${function:Name} = {...}, a name built at run time, Invoke-Expression text, or
   an alias. It does not see a module installed outside $PSHOME (see THE NAME LIST). Nor does it see the opposite
-  trap, an ALIAS that hides a function (the `R` helper recorded in ops-and-gates.md). A reported definition is real.
+  trap, an ALIAS that hides a function (the `R` helper recorded in ops-and-gates.md). A reported definition is real,
+  and that is COMPLETENESS, a separate property from the unsoundness above: here the match IS the defect, because a
+  definition carrying a listed name shadows that cmdlet wherever it is in scope. A deliberate one is still a real
+  shadow, which is why the Get-Date clock mock sits on the allowlist with its reason rather than going unreported.
 
   THE NAME LIST IS PINNED, NOT READ FROM Get-Command, AND THAT IS THE HERMETIC CHOICE. Get-Command answers from
   whatever modules this box has installed, so the same tree could be red on one machine and green on another.

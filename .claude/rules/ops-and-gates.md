@@ -159,13 +159,23 @@ everything else honest, so a defect here is silent by construction.
   bare `@{}` is case-insensitive and a bare `-ne` is culture-sensitive, and both defaults are wrong for
   data that arrived from outside.
 - **A detector's header says what its CLEAN report MEANS** (2026-09-08, backlog I66). A static analysis
-  must approximate, and the direction decides what a verdict is worth: a **sound** one never misses a
-  real defect, so a clean report is trustworthy; an **unsound** one stays quiet, so a reported defect is
-  real and **a clean report proves nothing**. Almost every detector in `ops/` is a pattern matcher over
-  source text and is therefore unsound by construction - it finds the spellings it knows. That is not a
-  defect in any of them; reading their clean reports as proofs is. Every `ops/audit-*.ps1` now carries a
-  `SCOPE OF A CLEAN REPORT:` line saying which it is (7 of 22 already did, in their own words; 15 were
-  silent). **A new detector owes that line the way it owes its `<NAME>-COMPLETE` marker.**
+  must approximate, and it can err in two INDEPENDENT directions, so there are four cases, not two. A
+  **sound** one never misses a real defect (no false negatives), so a clean report is trustworthy; an
+  **unsound** one can miss one, so **a clean report proves nothing**. A **complete** one never reports
+  a defect that is not there (no false positives), so a finding is real; an **incomplete** one can
+  report a harmless site, so a finding is a candidate to read. **Unsound says nothing about findings**:
+  "it is unsound, so what it reports is real" does not follow, and this bullet said exactly that until
+  backlog I178 (2026-09-18). Almost every detector in `ops/` is a pattern matcher over source text and
+  is therefore unsound by construction - it finds the spellings it knows - and a pattern matcher is
+  usually incomplete too, which is what an allow-marker (`# atomic-replace:allow`, the cmdlet-shadow
+  allowlist) exists to absorb. That is not a defect in any of them; reading their clean reports as
+  proofs, or their findings as verdicts, is. Every `ops/audit-*.ps1` carried a
+  `SCOPE OF A CLEAN REPORT:` line saying which it is on 2026-09-08 (7 of 22 already did, in their own
+  words; 15 were silent); on 2026-09-18, 41 of 47 did, and the six without one are
+  `arg-binding`, `fixture-vocabulary`, `run-log-claims`, `source-control-bytes`, `threshold-register`
+  and `write-only-reports`. **A new detector owes that line the way it owes its `<NAME>-COMPLETE` marker, and when the
+  line says a finding is real it gives the reason it is COMPLETE** (the match IS the defect, as in
+  `audit-cmdlet-shadow`), never the unsoundness.
 - **A git hook in a LINKED worktree exports `GIT_DIR`, and everything it spawns inherits it**
   (2026-09-10). From the main checkout it exports none, which is why nothing showed until the first push
   from a detached gate-check checkout: `run-gates`' hermetic git self-tests then ran their temp-repo

@@ -25,7 +25,9 @@
   Get-GitOut). A wrapper with another name (test-prepush-hook's `G init`), a command assembled from a string, a
   temp repo made by `git clone`, and .py or .sh files are not seen; on 2026-09-11 no .py, .sh or clone in the tree
   built one. It checks the call is PRESENT in the file, not that it runs before the first init. \out\, \archive\
-  and worktrees below the root are not scanned - run-gates' own discovery exclusions. A reported finding is real.
+  and worktrees below the root are not scanned - run-gates' own discovery exclusions. Whether a REPORTED finding is
+  real is a separate property (completeness) that the unsoundness says nothing about: text matching reports a `git
+  init` in a branch that never runs as readily as a live one, so a finding is a candidate to read.
 
   Exit 0 clean, 1 a script builds a repo without clearing, 2 self-test regression, 3 BLIND (no scripts, or no
   script that builds a repo - the matcher broken, not the tree clean).

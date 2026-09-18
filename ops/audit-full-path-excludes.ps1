@@ -4,7 +4,8 @@
   SCOPE OF A CLEAN REPORT: UNSOUND. It reads the PowerShell AST and Python text and finds the spellings
     listed under WHAT IT SEES. A clean report means none of those spellings is present. A full path reached
     another way - read from a file, set in another script, tested in a switch -regex, a pathlib .parts
-    check - is invisible to it. A reported site is real; silence is not proof. It is a RATCHET rather than
+    check - is invisible to it. Silence is not proof. Whether a REPORTED site is a defect is a separate
+    property (completeness) the unsoundness says nothing about, so a finding is a candidate to read. It is a RATCHET rather than
     a gate for the reason every ratchet here gives: the count it measured on its first day is not zero.
 
   WHY THIS EXISTS (2026-09-11). Nineteen walks in seventeen files excluded \worktrees\, two of them

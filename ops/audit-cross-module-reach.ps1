@@ -12,8 +12,11 @@
 # SCOPE OF A CLEAN REPORT: UNSOUND, so a clean report proves nothing. This is a pattern matcher over
 # source text and it finds the spellings it knows - a literal path with a module-internals prefix, in
 # either slash direction. It cannot see a path assembled at run time (`Join-Path $mp $sub`), one read
-# from config, or one reached through a variable set three files away. A reported reach is real; the
-# absence of one is not evidence there is none. The number it prints is a FLOOR, exactly as the
+# from config, or one reached through a variable set three files away. The absence of a reach is not
+# evidence there is none. Whether a REPORTED reach is real is a separate property (completeness), and it
+# does not follow from the above: a literal path in a message or in prose the scanner reads as code is
+# reported too (15 of its 133 code sites on 2026-09-11 were block-comment prose), so a finding is a
+# candidate to read. The number it prints is a FLOOR, exactly as the
 # founding grep's 36 was.
 #
 # WHAT IT IMPROVES ON THE FOUNDING MEASUREMENT. `grep -rl` counted a mention in a comment the same as a

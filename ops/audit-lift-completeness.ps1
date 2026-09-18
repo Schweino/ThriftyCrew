@@ -33,7 +33,9 @@
 # another grocery script by a literal filename within 120 characters. A lifter that builds its list some
 # other way, reads its source through a path variable, lifts a VARIABLE rather than a function (the
 # `$script:UnitFamily` import-walmart-batch.ps1 took until 2026-09-11 was one), or calls through
-# `&$name` is invisible to it. A finding it reports is real; silence is not proof there is none.
+# `&$name` is invisible to it. Silence is not proof there is none. Whether a finding it reports is real
+# is a separate property (completeness) that the unsoundness says nothing about; it reads source text,
+# so a finding is a candidate to read, not a verdict.
 #
 #   .\audit-lift-completeness.ps1
 #   .\audit-lift-completeness.ps1 -SelfTest

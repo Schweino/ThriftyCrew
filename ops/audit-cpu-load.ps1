@@ -19,7 +19,8 @@
   stripped before matching; in Python only whole-line comments are, so a docstring naming burners in a file that
   also launches processes can be a false finding. SCRATCH SCRIPTS OUTSIDE THE REPO, where every burner of
   2026-09-11 lived, are out of reach entirely - for those the CLAUDE.md rule is the whole prevention. \out\,
-  \archive\ and worktrees below the root are not scanned. A reported finding is real.
+  \archive\ and worktrees below the root are not scanned. It is not COMPLETE either (the docstring case above
+  is a false finding), so a reported finding is a candidate to read, not a verdict.
 
   Exit 0 clean, 1 a script starts burners outside the budget, 2 self-test regression, 3 BLIND (no scripts, or no
   burner-starting script at all - ops\cpu-load.ps1 is one, so zero is the matcher broken, not the tree clean).

@@ -13177,7 +13177,7 @@ Per the rule's own stated policy no detector is proposed until a second nesting 
 spelled another way, or a `Start-Process ... -Wait` or `WaitForExit()` held inside a lock, is not
 counted. Those were not searched.
 
-### I178 - The rules file reads "unsound" as "complete", so it calls an unsound detector's finding a real defect `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I178 - The rules file reads "unsound" as "complete", so it calls an unsound detector's finding a real defect `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-plb-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13188,6 +13188,20 @@ Source: `programming-languages-part-b` (Grossman, section 7), worked 2026-09-18.
 Sound (no false negatives) and complete (no false positives) are two independent properties, so there are four cases, not two. "Unsound" says nothing about false positives. The detectors that bullet describes are pattern matchers over source text, several with allow-markers (`# atomic-replace:allow`, the cmdlet-shadow allowlist): such a matcher is typically NEITHER sound nor complete, so a finding from it is a candidate, not proof of a defect.
 
 Proposed wording change only: "an unsound one can miss a real defect, so a clean report proves nothing; whether a REPORTED defect is real is a separate property (completeness), and a pattern matcher usually lacks that too." The `SCOPE OF A CLEAN REPORT:` lines in `ops/audit-*.ps1` were not re-read for the same two-case reading; a sweep of them is the second half of this item. Store side already corrected: `software-craft/test-design-and-oracles.md` section 5b, marked `[CORRECTED: 2026-09-18]`.
+
+**Done 2026-09-18.** Text only, no behaviour change. The I66 bullet in `.claude/rules/ops-and-gates.md` now names
+the four cases (sound = no false negatives, complete = no false positives, independent), says outright that
+"unsound, so what it reports is real" does not follow, and asks a header that calls a finding real to give its
+COMPLETENESS reason, never the unsoundness. Its stale "every audit carries the line" now reads 41 of 47 on
+2026-09-18 and names the six without one. The sweep over the 47 `ops/audit-*.ps1`: 15 `SCOPE OF A CLEAN REPORT:` blocks
+said a reported site "is real" (one of them, `audit-task-registration`, derived it with a "So" from the
+unsoundness; `audit-cpu-load`, `audit-selftest-fallthrough` and `audit-unread-wait` contradicted it in their own
+preceding sentence). 13 now call a finding a candidate and name the false positive they know of where they know
+one; `audit-cmdlet-shadow` keeps "real" and gives the completeness reason (the match IS the shadow). Left
+unswept on purpose: `audit-fixed-temp-names.ps1`, which carries the same sentence but is the named harness of the
+current `design/MEASURE-ratchet-plain-run-writes-2026-09-12.md`, so editing it would unqualify that document for a
+comment. Verified by parsing every edited script (0 errors), a CR count of 0 and no em dash in all 15 files,
+`ops/audit-conclusion-currency.ps1` after commit, and each edited audit's `-SelfTest`.
 
 ### I179 - Set-StrictMode is on in 3 of 785 tracked scripts, and two estate comments already blame its absence for a bug class `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
 

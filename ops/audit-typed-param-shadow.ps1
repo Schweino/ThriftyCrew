@@ -7,7 +7,8 @@
     that declares the parameter, Set-Variable and New-Variable, a foreach loop variable, a multiple assignment
     ($a, $b = ...), a compound one (+=), or a value whose kind is decided at run time - a command's output, a
     pipeline with no @() around it, a method call, another variable. Those are counted UNJUDGED and printed,
-    never passed. A reported site is real; silence is not proof. It is a RATCHET rather than a gate because the
+    never passed. Silence is not proof. Whether a REPORTED site is a defect is a separate property (completeness)
+    the unsoundness says nothing about, so a finding is a candidate to read. It is a RATCHET rather than a gate because the
     count it measured on its first day was not zero.
 
   THE TRAP. PowerShell variable names are case-insensitive, and a parameter declared with a type keeps that type

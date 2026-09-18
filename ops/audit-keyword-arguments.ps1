@@ -6,8 +6,9 @@
     shapes listed there. A clean report means none of those is present. A glued statement in any other shape - a
     `for` followed by a bare word, a `throw` right after a switch parameter - is invisible to it, and so is a
     statement that is wrong for any other reason. It also finds the operators under THE OPERATOR RULE in calls to a
-    simple function defined in the same file; a function from another file is out of its reach. A reported site is
-    real; silence is not proof.
+    simple function defined in the same file; a function from another file is out of its reach. Silence is not
+    proof. Whether a REPORTED site is a defect is a separate property (completeness) the unsoundness says nothing
+    about: a keyword passed as a bare word on purpose matches the same shape, so a finding is a candidate to read.
 
   WHY THIS EXISTS (2026-09-11). Commit 8253ded82 joined grocery\pull-grocery-ads.ps1's last self-test case and
   the suite's closing verdict onto ONE line, separated only by spaces:

@@ -21,8 +21,11 @@
   reason.
 
   SCOPE OF A CLEAN REPORT: UNSOUND. It finds literal paths it can parse. A path assembled with Join-Path,
-  named without a directory, or written as prose ("the hook installer") is invisible. A reported phantom
-  is real; a clean report proves only that no parseable citation dangles.
+  named without a directory, or written as prose ("the hook installer") is invisible, so a clean report
+  proves only that no parseable citation dangles. A reported phantom is a path that does not exist; whether
+  citing it is a DEFECT is a separate property (completeness) the unsoundness says nothing about - a line
+  recording a file that was deleted on purpose names a path that no longer exists too, and this audit's first
+  live run reported exactly that (the RUNTIME-MAP entry in $ALLOW below).
 
   EXIT CODES (lib\guard-contract.ps1): 0 clean, 2 a phantom path, 3 could not evaluate.
 #>

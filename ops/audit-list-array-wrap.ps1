@@ -5,7 +5,9 @@
     `@($v)` where the binding of $v it can see is a LITERAL `New-Object ...List[object]`. It sees literal
     assignments only: a list that arrives as a parameter, out of a hashtable or a property, through a second
     variable (`$b = $a`), from a function's return value, or built from a type name held in a variable is
-    invisible to it, and so is `@($h.rows)`. A reported site is real; silence is not proof.
+    invisible to it, and so is `@($h.rows)`. Silence is not proof. Whether a REPORTED site is a defect is a
+    separate property (completeness) the unsoundness says nothing about: the two fixtures that execute the wrap
+    on purpose match exactly, which is what `# list-array-wrap:allow` exists for, so a finding is a candidate.
 
   WHAT ACTUALLY THROWS, measured on PS 5.1.26100.9444 on 2026-09-17, one case per line. The brief for this
   gate described the trap as a CONCAT trap, `@($list) + @(...)`, and three of these say it is not:

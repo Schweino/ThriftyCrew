@@ -5,8 +5,10 @@
     the spellings it knows: a `Register-ScheduledTask` call whose `-TaskName` is a literal or a
     variable assigned a literal in the same file. A registrar that builds its task name from a
     config file, a loop variable or string arithmetic is INVISIBLE here and reports nothing. So a
-    reported finding is real, and a clean report proves only that no registrar it can read is
-    unwatched. The runtime backstop is health-heartbeat.ps1's TASK UNWATCHED and REGISTRY DRIFT
+    clean report proves only that no registrar it can read is unwatched. Whether a REPORTED finding
+    is real is a separate property (completeness), not a consequence of the unsoundness: it reads
+    source, so a call site in a branch that never runs is reported exactly like a live one, and a
+    finding is a candidate to read. The runtime backstop is health-heartbeat.ps1's TASK UNWATCHED and REGISTRY DRIFT
     lines, and neither is replaced by this.
 
   WHY THIS EXISTS (2026-09-09, queue 2026-09-09-d3e937). On 2026-09-08 the 21:30 graph nightly never

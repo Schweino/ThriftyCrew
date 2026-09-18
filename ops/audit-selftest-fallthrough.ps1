@@ -6,7 +6,8 @@
     report means no such block can reach the statements after it. A self-test gated inside a function, a try, a
     begin or process block, or on any other spelling is not read, and a block that does leave on every path can
     still do live work INSIDE itself. An exit inside a helper other than Exit-Guard is not credited, so that
-    direction is loud rather than silent. A reported site is real control flow; silence is not proof.
+    direction is loud rather than silent: it is NOT COMPLETE, because a block that leaves through such a helper is
+    reported although it cannot fall through. Silence is not proof, and a reported site is a candidate to read.
 
   WHY THIS EXISTS (2026-09-11). Commit 8253ded82 joined grocery\pull-grocery-ads.ps1's last self-test case and its
   verdict onto one line:

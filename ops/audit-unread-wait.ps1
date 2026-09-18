@@ -27,7 +27,9 @@
   variable read only in another file or in a string the caller expands; a handle waited on by WaitAny/WaitAll or
   by a .NET method other than WaitOne; or a variable that is read but read into another discard. It also cannot
   tell a READ from a CORRECT read - a caller that branches on the answer and then proceeds anyway is outside what
-  a static check can judge. A REPORTED site is real: the value is not used anywhere in its file.
+  a static check can judge. A REPORTED site is real in one sense only: the value is not used anywhere in its file.
+  Whether that is a DEFECT is a separate property (completeness): a value read only in another file, from the list
+  above, is reported too, so a finding is a candidate to read.
 
   EXIT CODES: 0 clean, 1 at least one discarded wait, 2 self-test regression, 3 BLIND (discovery resolved no
   tracked scripts, or the anchor file is missing from them, so its silence would mean nothing).

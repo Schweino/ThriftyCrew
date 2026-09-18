@@ -23,7 +23,9 @@
   SCOPE OF A CLEAN REPORT: UNSOUND. It reads the AST of tracked .ps1/.psm1 and reports a member ACCESS whose
   member name is on the pinned list. A clean report means no such access is spelled literally. It cannot see a
   member reached by a computed name ($ast.$prop), through Invoke-Expression, or by reflection; nor any internal
-  member not on the list. A REPORTED access is real.
+  member not on the list. Whether a REPORTED access is real is a separate property (completeness): it matches the
+  member NAME, so an object that is not an AST node but carries a member of that name would be reported too, and
+  a finding is a candidate to read.
 
   EXIT CODES: 0 clean, 1 at least one access, 2 self-test regression, 3 BLIND (discovery resolved nothing, or the
   anchor file is missing from what it resolved).
