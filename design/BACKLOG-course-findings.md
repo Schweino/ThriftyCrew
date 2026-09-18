@@ -14172,6 +14172,28 @@ against `CHECK`s on `decision_log` for that reason, so a read-time `price > 0` i
 importer-side refusal is the cheaper place. **No fix is proposed here**, because (1) is a question
 about the data and not the code.
 
+**Acceptance bar, written 2026-09-19 before any count was taken (RUNG1 MEASURE).** Every read of
+`graph.db` is against a byte copy in a temp path opened `mode=ro`; the live file is not opened for
+writing. The measurement answers question (1) row by row, one row per zero observation, over a
+denominator of every `price_observations` row with `price <= 0`:
+- **M1** recount the zero rows and their split by store, status and source file.
+- **M2** for each zero row, find the `product-urls.json` entry for its (commodity, store) in the
+  file as committed on the row's `observed_at` day and as it stands today, and classify it:
+  **(a)** the source carried a zero or empty price (an unknown written as zero), **(b)** the source
+  carried a positive price and the zero was made on the way in (a parser defect), **(c)** no entry
+  exists today (an orphan the importer's own supersede should have removed).
+- **M3** name the writer that gave these rows `no_include_hit` / `llm_match_unverified`, since
+  `import_product_url_prices` writes only `include_hit`.
+- **M4** name every path that can promote a row to `include_hit` or `llm_confirmed`, and whether it
+  rewrites the price when it does.
+
+**Decision rule, fixed now.** If every row is (a), `0.0` is an unknown and the upstream fix is the
+importer writing no observation (or `NULL`) for a price `<= 0`, landed with a MUST FIRE and a CLEAN
+TWIN only if it changes **0** `cell_state` prices on a copy rebuilt both ways. If **any** row is (b),
+that is a parser defect and the fix is the parser, not a guard. If rows are (c), the writer has
+already stopped and the remaining work is a rebuild of the copy, which is READY FOR BRAD and not
+landed. A mix is reported per class with its count; nothing is rounded to a majority.
+
 ### I201 - the course's two hash-drift implementations are both blind, measured, and nothing here copies them yet `OPEN` `queue-3` `2-WAY` `RUNG1 DOC`
 
 **Merged from `design\backlog-inbox\q3-sqlint-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
