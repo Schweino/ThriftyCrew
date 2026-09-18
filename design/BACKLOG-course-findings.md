@@ -15805,7 +15805,7 @@ md5-identical after restore.
    changed, that `source`; the diff is 1 line, and no macro moved.
 No behaviour changed, so no fixture was added: every edit is prose, a comment, a citation string or a file name.
 
-### I231 - Untracked and ungitignored files the bot could commit, and one the worktrees never get `OPEN` `run-0919` `2-WAY` `RUNG1 DOC`
+### I231 - Untracked and ungitignored files the bot could commit, and one the worktrees never get `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15813,6 +15813,35 @@ No behaviour changed, so no fixture was added: every edit is prose, a comment, a
 - `meal-prep/db/dedup-paired/cases.jsonl`, the frozen dedup cases (I48), fingerprint `34be0270169e593c`.
 - `TC_WRITE_JOURNAL` in the user environment points at the MAIN checkout's `ops/ghost-journal.jsonl`, so a
   shell test of ghost-lib from any worktree writes the live journal unless it clears the variable (I105).
+
+**Done 2026-09-18.** Measured at base `daa1698d8`, all three halves:
+- **The Friday records are now gitignored, not tracked.** `grocery/out` is on `Get-BotInputPaths` in
+  `lib/bot-paths.ps1` and capture-run stages it with `git add -A -- grocery/out`; with both files planted in a
+  worktree, `git add --dry-run -A -- grocery/out` listed 2 of 2 before the change and 0 of 2 after. They should
+  not be tracked: they record what THIS machine mailed, a tracked copy can be rewound to an older week by a
+  checkout, a restore or the bot's rebase (which re-arms a double send), and no cloud workflow sends the email
+  (no `friday` in `.github/workflows`). Ignored rather than left untracked so `git clean -fd` cannot delete them.
+  Neither file exists in the main checkout today, so nothing was untracked. `send-friday-email -SelfTest` gains
+  a MUST FIRE (both paths answer `git check-ignore` by FILE path) and a CLEAN TWIN (`friday-email.html` beside
+  them is still tracked): red before the `.gitignore` lines (exit 1, "ignored:" empty, 1 of 15 failed), green
+  after (exit 0, 15 of 15). A worktree still has neither record, so the script's header now says to run
+  `-Send` from the main checkout only.
+- **The frozen dedup cases are committed** as `meal-prep/db/dedup-paired/cases.jsonl`, copied read-only from the
+  main checkout: 40 rows (20 cases x arms `with` and `without`), every row `input_fingerprint`
+  `34be0270169e593c`, 100,607 bytes, 0 CR, SHA-256 `D056FC51...8885` identical in both copies, blob
+  `3d9ff385215af692104fcd6fb16f6025817917c0`. `report.json` beside it (a BLIND stub the probe rewrites) was
+  left uncommitted.
+- **A stubbed Ghost transport is never journalled.** `TC_WRITE_JOURNAL` is set in the user environment to
+  `C:\Codex\ThriftyCrew\ops\ghost-journal.jsonl` and every process here inherits it (read, not changed). The
+  live journal held 59 entries, all for `map-to-success.ghost.io`, 0 from a test host, so nothing had leaked
+  yet: every self-test that stubs the transport cleared the variable by habit. `lib/ghost-lib.ps1` now makes it
+  the lib's rule: `Test-TcGhostTransportIsReal` reads whether `Invoke-TcGhostTransport` still comes from
+  ghost-lib, and `Invoke-GhostApi` skips the journal gate when it does not, as it already did for a staged call.
+  The header documents the variable. `ops/review-staged.ps1 -SelfTest` gains two MUST FIRE cases (journal armed at
+  a temp path plus a stubbed PUT: no entry, 1 transport call, no before-GET; a redefined transport reads as a
+  stub) and a CLEAN TWIN (the restored original reads as real, so real writes still journal; the existing
+  invalid.invalid case still journals with the real transport). With the new condition removed: exit 1,
+  "journal=True calls=2". Restored md5-identical: exit 0.
 
 ### I232 - Cadence gaps: verification samples and Family Fare's cursor date `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
 

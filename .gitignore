@@ -238,6 +238,12 @@ __pycache__/
 # push-data's `git add -A`, so tracking it would commit a live lock (pid + 4h expiry) to the shared repo and
 # rebase-conflict with every other machine - the same reason triage-queue.json is ignored
 /grocery/out/weekly-run.lock
+# the Friday email's two week records (2026-09-18, backlog I231): what THIS machine mailed, written by
+# send-friday-email -Send. Never tracked: capture-run stages the whole of grocery/out, and a tracked copy can be
+# rewound to an older week by a checkout or the bot's rebase, which would re-arm a double send to the list.
+# Ignored rather than merely untracked so `git clean -fd` cannot delete them either.
+/grocery/out/friday-email.stamp
+/grocery/out/friday-email.invoking
 /grocery/out/smp-feed.json
 /grocery/out/recipe-board-everyday.bak-*.json
 # rolling local archive of aged out\ snapshots (run-daily-local.ps1 retention moves files in and later

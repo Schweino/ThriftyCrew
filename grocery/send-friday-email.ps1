@@ -25,7 +25,12 @@
   that proves nothing reached Ghost (the name did not resolve, the connection was refused) clears the
   marker, so an outage before the send never needs a human. lib\ghost-lib.ps1 carries the other half: it
   no longer replays a POST whose reply was lost.
-  Neither file is tracked or ignored, the same as before this change (git ls-files, check-ignore, 2026-09-19).
+  BOTH FILES ARE GITIGNORED, AND ON PURPOSE (2026-09-18, backlog I231). Until then neither was tracked or
+  ignored, and grocery/out is on the ~07:00 bot's staging list (lib\bot-paths.ps1), so the bot would have
+  committed them the morning after the first -Send. They record what THIS machine mailed: a tracked copy can
+  be rewound to an older week by a checkout, a restore or the bot's own rebase, which would re-arm a double
+  send, and an untracked-but-unignored one is deleted by `git clean -fd`. A worktree has neither record, so
+  run -Send from the main checkout only.
 
   Usage:
     powershell -File send-friday-email.ps1              # build + create draft (safe)
@@ -164,12 +169,27 @@ if ($SelfTest) {
     $script:transportCalls = 0; $script:transportPlan = @([pscustomobject]@{ posts = @([pscustomobject]@{ id = 'ok' }) })
     $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $realPost -Alert $countAlert
     Check 'CLEAN TWIN and the next run sends once and records sent W' (($script:transportCalls -eq 1) -and ($r.outcome -eq 'sent') -and ((Read-FridayWeekFile $stamp) -eq $W)) ("transport calls=" + $script:transportCalls + " outcome=" + $r.outcome)
+
+    # THE TWO RECORDS ARE MACHINE-LOCAL AND GITIGNORED (2026-09-18, backlog I231). grocery/out is on the bot's
+    # INPUTS list (lib\bot-paths.ps1), so capture-run's `git add -A -- grocery/out` would commit them the first
+    # morning after a -Send, and a tracked copy is one checkout, restore or `rebase -X theirs` away from being
+    # rewound to an older week, which re-arms a double mail. Asked of git by FILE path, never the directory form.
+    $repoRoot = Split-Path $here -Parent
+    $ignored = @()
+    foreach ($rel in @('grocery/out/friday-email.stamp', 'grocery/out/friday-email.invoking')) {
+      & git -C $repoRoot check-ignore -q --no-index $rel
+      if ($LASTEXITCODE -eq 0) { $ignored += $rel }
+    }
+    Check 'MUST FIRE  both week records are gitignored, so the bot''s grocery/out sweep cannot commit them' ($ignored.Count -eq 2) ("ignored: " + ($ignored -join ', '))
+    & git -C $repoRoot ls-files --error-unmatch 'grocery/out/friday-email.html' | Out-Null
+    $htmlTracked = ($LASTEXITCODE -eq 0)
+    Check 'CLEAN TWIN the built email beside them is still tracked, so the ignore rule is no wider than the two records' $htmlTracked ("ls-files rc=" + $LASTEXITCODE)
   } catch {
     $script:fails++; Write-Output ('FAIL  the suite threw: ' + $_.Exception.Message)
   } finally {
     Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $expected = 13
+  $expected = 15
   if ($script:cases -ne $expected) { $script:fails++; Write-Output ("FAIL  ran {0} of {1} cases" -f $script:cases, $expected) }
   if ($script:fails) { Write-Output ("send-friday-email self-test: FAIL ({0} of {1} cases failed)" -f $script:fails, $script:cases); exit 1 }
   Write-Output ("send-friday-email self-test: PASS ({0} of {0} cases)" -f $script:cases)

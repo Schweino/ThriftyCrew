@@ -94,6 +94,22 @@ function Get-GhostLexical([Parameter(Mandatory)][string]$Html) {
 # A lock and a spare key. BOTH ARE OFF BY DEFAULT, independently, so all 29 callers keep today's
 # behaviour until something arms one.
 #
+# ON THIS BOX THE JOURNAL IS ARMED FOR EVERY PROCESS (recorded 2026-09-18, backlog I231). TC_WRITE_JOURNAL
+# is set in the USER environment to the MAIN checkout's ops\ghost-journal.jsonl (gitignored), so every
+# shell, scheduled task and spawned session inherits it, from the main checkout and from every worktree
+# alike. For a real write that is the point: the journal is one per machine, whichever checkout sent the
+# PUT. For a TEST it is a hazard, because a test that drives Invoke-GhostApi with a mutating method would
+# append a before-image of a write that never reached Ghost to the live journal, and revert-ghost-write
+# would later offer to "restore" it. Two rules keep tests out of it, and neither changes the variable:
+#   - A STUBBED TRANSPORT IS NEVER JOURNALLED. When Invoke-TcGhostTransport has been redefined (its body
+#     no longer comes from this file), nothing can reach Ghost, so there is nothing to reverse, and the
+#     journal gate below is skipped exactly as a staged call skips it (Test-TcGhostTransportIsReal).
+#     This holds however the caller's environment is set, which is why it is the lib's rule and not each
+#     test's habit.
+#   - A test that uses the REAL transport (the invalid.invalid cases) sets or clears TC_WRITE_JOURNAL
+#     itself and restores it in a finally, as ops\review-staged.ps1, ops\revert-ghost-write.ps1,
+#     grocery\audit-ghost-drift.ps1, grocery\send-friday-email.ps1 and wave-publish.ps1 already do.
+#
 # THE ORDER OF THE TWO GATES BELOW IS LOAD-BEARING AND IS NOT A STYLE CHOICE. Staging is checked FIRST.
 # A staged call never goes out, so there is nothing to reverse and it must leave NO journal entry. Get
 # this backwards and the journal fills with before-images of writes that never happened - a drawer full
@@ -277,6 +293,19 @@ function Invoke-TcGhostTransport {
   return Invoke-RestMethod @CallArgs
 }
 
+function Test-TcGhostTransportIsReal {
+  <# Is the transport seam still the one defined in THIS file? A self-test redefines it after
+     dot-sourcing, and a redefinition carries its own file (or none, typed at a prompt), while a
+     Set-Item restore of the saved original carries this file again. Compared by file NAME, ordinal and
+     case-blind: the lib is dot-sourced from whichever checkout the caller lives in. Fixtures:
+     ops\review-staged.ps1 -SelfTest (backlog I231). #>
+  $cmd = Get-Command -Name 'Invoke-TcGhostTransport' -CommandType Function -ErrorAction SilentlyContinue
+  if (-not $cmd -or -not $cmd.ScriptBlock) { return $false }
+  $f = [string]$cmd.ScriptBlock.File
+  if (-not $f) { return $false }
+  return [string]::Equals([IO.Path]::GetFileName($f), 'ghost-lib.ps1', [StringComparison]::OrdinalIgnoreCase)
+}
+
 function Wait-TcGhostRetry {
   <# The backoff sleep, a seam for the same reason: a fixture of three retries should not cost 14 s. #>
   param([int]$Seconds)
@@ -334,8 +363,10 @@ function Invoke-GhostApi {
     return (Add-TcStagedCall -Queue $__tcQ -Method $Method -Uri $Uri -Headers $Headers -Body $Body)
   }
   # ---- E1 GATE 2 of 2: JOURNAL. We are actually about to send, so capture the inverse first. --------
+  # A STUBBED transport is never journalled (backlog I231): nothing it answers reached Ghost, so a
+  # before-image of it is a record of a write that did not happen - see the header.
   $__tcJ = Get-TcWriteJournal
-  if ($__tcJ -and (Test-TcMutatingMethod $Method)) {
+  if ($__tcJ -and (Test-TcMutatingMethod $Method) -and (Test-TcGhostTransportIsReal)) {
     $__before = $null; $__state = 'unknown'
     try {
       # A GET is not mutating, so this re-entry cannot recurse into either gate.

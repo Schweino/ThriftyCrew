@@ -220,11 +220,25 @@ if ($SelfTest) {
     T 'MUST NOT FIRE a timeout is not proof the request went unsent' (-not (Test-TcGhostNeverSent (New-StubTimeout))) 'a timeout read as never-sent'
     T 'MUST NOT FIRE a bare exception carrying a 503 is not proof either' (-not (Test-TcGhostNeverSent (New-Stub503))) 'a 503 read as never-sent'
     T 'MUST FIRE  an unresolvable name IS proof' (Test-TcGhostNeverSent (New-Object System.Net.WebException('x', [System.Net.WebExceptionStatus]::NameResolutionFailure))) 'NameResolutionFailure not read as never-sent'
+    # A STUBBED TRANSPORT IS NEVER JOURNALLED (2026-09-18, backlog I231). On this box TC_WRITE_JOURNAL is set
+    # in the USER environment to the main checkout's live journal, so a test that forgot to clear it would
+    # record a stubbed write that never reached Ghost. Armed here at a temp journal, as the environment arms it.
+    $j231 = Join-Path ([IO.Path]::GetTempPath()) ('tcj231-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.jsonl')
+    try {
+      $env:TC_WRITE_JOURNAL = $j231
+      $r = Invoke-Stubbed 'PUT' @([pscustomobject]@{ posts = @('put') })
+      T 'MUST FIRE  with the journal ARMED and the transport STUBBED, a PUT writes NO journal entry and sends no before-GET' ((-not (Test-Path -LiteralPath $j231)) -and ($r.Calls -eq 1) -and -not $r.Threw) ("journal=" + (Test-Path -LiteralPath $j231) + " calls=" + $r.Calls + " threw=" + $r.Threw)
+      T 'MUST FIRE  a redefined transport is recognised as a stub' (-not (Test-TcGhostTransportIsReal)) 'a stub read as the real transport'
+    } finally {
+      $env:TC_WRITE_JOURNAL = $null
+      if (Test-Path -LiteralPath $j231) { Remove-Item -LiteralPath $j231 -Force }
+    }
   } finally {
     Set-Item -Path function:Invoke-TcGhostTransport -Value $origTransport
     Set-Item -Path function:Wait-TcGhostRetry -Value $origWait
     $env:TC_STAGE_WRITES = $sq2; $env:TC_WRITE_JOURNAL = $sj2
   }
+  T 'CLEAN TWIN the restored original transport reads as REAL again, so a restored seam still journals real writes' (Test-TcGhostTransportIsReal) 'the restored original read as a stub'
 
   # --- A PAGED READ ENDS ON OUR COUNT, NOT ON GHOST'S SAY-SO (2026-09-19, backlog I197). grocery\ghost-export.ps1
   # followed meta.pagination.next until Ghost stopped sending one, so a next that repeated or rewound looped forever.
