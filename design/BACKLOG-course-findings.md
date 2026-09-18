@@ -14815,6 +14815,29 @@ under 2%. Assert `sqlite_stat1` exists in `graph/pipeline/audit_graph_durability
 drops it is seen. `thriftycrew.db` (7 tables, 1.8 MB, rebuilt in one pass by `meal-prep/db/build_db.py`)
 gains nothing measurable and could take the same one line at the end of its build.
 
+**Acceptance bar, written 2026-09-18 BEFORE any measurement (backlog E21).** Everything runs on
+backup-API copies of `graph/sqlite/graph.db` taken from a `mode=ro` connection into a per-run temp
+directory; the live file is never opened for writing. The case set is not hand-picked: it is every
+distinct statement the nightly import path actually executes (`import_all.py --observations`: the
+observation and lane importers, reapply patches, the known-wrong sweep, `resolve_pending`,
+`build_cell_state`, `build_question_verdicts`, `verify_against_matrix`, `supersede_prune`,
+`export_state`), captured with `set_trace_callback` while that path replays on a copy, plus the 4
+views. Three arms: NONE (no `sqlite_stat1`), OPT (`PRAGMA optimize` as a close would run it) and FULL
+(`ANALYZE` with `analysis_limit=0`). Two states: TODAY (the snapshot as it is, post-prune) and PEAK
+(the snapshot after one `import_observations` replay, before any prune, which is when the heavy
+statements run). One row per statement per arm per state, written to a JSONL file.
+- P1: a statement's plan CHANGES if its `EXPLAIN QUERY PLAN` text differs from NONE's.
+- P2: a changed statement is timed 5 times per arm, arms interleaved; HELP if its median is at least
+  20% under NONE's, HARM if at least 20% over, else NEUTRAL.
+- P3: the cost of `PRAGMA optimize` at a close, 10 closes on a copy whose statistics are current and
+  10 on one with none, median ms.
+- **FULL ANALYZE is WARRANTED** (READY FOR BRAD, with the code on a branch) if at least one statement
+  is HELP under FULL in either state and none is HARM. **NOT WARRANTED** if no statement's plan
+  changes under FULL in either state, or any is HARM: the item then closes DONE with the table recorded.
+- **`PRAGMA optimize` at close is WARRANTED** only if FULL is, OPT has no HARM statement in either
+  state, and P3's median with current statistics is at most 50 ms. Otherwise it is not built, whatever
+  FULL reads, because it would make every `open_db()` close a potential writer (see I213).
+
 ### I213 - SQLite's WAL-reset corruption bug: this machine's Python bundles 3.49.1, inside the affected range `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
