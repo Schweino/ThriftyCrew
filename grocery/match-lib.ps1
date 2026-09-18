@@ -764,13 +764,13 @@ if ($__matchLibSelfTest) {
     }
     foreach ($pp in (_Paths $mY)) {
       $c = Resolve-Commodity -Matcher $pp[1] -Name $VICTIM; $cl = @((Get-CommodityMatcherBlind -Matcher $pp[1]).could_not_look)
-      _MT ("CLEAN TWIN  [$($pp[0])] an exclude that FIRES excludes, whatever a timed-out sibling did, and the next commodity wins") ((_Id $c) -eq 'fixture-breast' -and $cl.Count -eq 0) ((_Id $c) + ' blind=' + $cl.Count)
+      _MT ("MUST NOT FIRE  [$($pp[0])] an exclude that FIRES excludes, whatever a timed-out sibling did, and the next commodity wins") ((_Id $c) -eq 'fixture-breast' -and $cl.Count -eq 0) ((_Id $c) + ' blind=' + $cl.Count)
     }
     # --- CLEAN TWIN: ordinary names decide exactly as before, with nothing recorded ---------------------
     foreach ($pp in (_Paths (New-CommodityMatcher -Commodities $cat -GlobalExclude $NOGLOBAL))) {
       $got = @(); foreach ($nm in @('Boneless, Skinless Chicken Breast 3 lb', 'Tyson chicken breast tenders', 'Great Value Quick Grits, 24 oz')) { $got += (_Id (Resolve-Commodity -Matcher $pp[1] -Name $nm)) }
       $b = Get-CommodityMatcherBlind -Matcher $pp[1]
-      _MT ("CLEAN TWIN  [$($pp[0])] ordinary names still resolve (redos, breast, none) with 0 timeouts") (($got -join ',') -eq 'fixture-redos,fixture-breast,<none>' -and $b.timeouts -eq 0 -and @($b.could_not_look).Count -eq 0) (($got -join ',') + ' timeouts=' + $b.timeouts)
+      _MT ("MUST NOT FIRE  [$($pp[0])] ordinary names still resolve (redos, breast, none) with 0 timeouts") (($got -join ',') -eq 'fixture-redos,fixture-breast,<none>' -and $b.timeouts -eq 0 -and @($b.could_not_look).Count -eq 0) (($got -join ',') + ' timeouts=' + $b.timeouts)
       $d = Resolve-CommodityDetail -Matcher $pp[1] -Name 'Boneless & Skinless Chicken Breast'
       _MT ("CLEAN TWIN  [$($pp[0])] the detail scan still names the include that fired") ($d.could_not_look -eq $false -and $d.include_hit -eq $FOUNDING -and (_Id $d.commodity) -eq 'fixture-redos') ($d.include_hit + ' / ' + (_Id $d.commodity))
     }
