@@ -4,7 +4,7 @@
   "developer_round1_outcome": "Money lane stopped at its 200-call run ceiling, 2026-09-18 12:12. All four items are implemented and verified LOCALLY on main (71d1e199f code, data and the feed-first public/board.json; 700eb6e79 smp-feed week_of 2026-09-17; both rebased onto f77b833e0): on the merged tree guards hard=0 warn=20, audit-food-category ok over 3,080 cells, unit-basis crown=0, band-censorship 29 of 29, match-soundness MOVED 0 DROPPED 1 (exactly the routing artifact B2 drop) accepted at rules_hash b933ddde0a70, run-gates 409 of 409, test-auditors 721 of 721 on three full runs. NOT PUSHED, NOT PUBLISHED: three gated pushes each lost the ref race (origin landed 63d9cbb8d, ad85f1a7f, f77b833e0 during the ~7 minute hook); ops/push-main.ps1 refuses this checkout because other sessions hold modified and untracked files in it; the fourth hook run failed ONE new test-auditors case, audit-script-census BLIND (772 scripts against 727 executable files), which passed on the three earlier runs with this lane's two new libraries present and was not re-run. The Ghost post was deliberately NOT republished: public/board.json must be live before the post. NEXT RUN: re-run grocery/test-auditors.ps1 to see whether the census case clears, push (the two commits carry the feed), run publish-deals-page, verify a live cell with a cache-busting query, then close f90ba6, 37ac63, de39ec and 61f76c with their resolution notes (residual owners 2026-09-18-55b7aa, watch:grocery/audit-semantic-identity.ps1, 2026-09-18-8491bf are already in place). If nothing lands first, the 08:00 chain builds from this working tree, where guards are green.",
   "board_week": "comparison-2026-09-17 (built 2026-09-18 08:07:34; triage-due printed BOARD comparison-2026-09-17 built 08:07:34)",
   "head_at_dispatch": "886796dff",
-  "queue_ids_seen": ["2026-09-18-f90ba6", "2026-09-18-61f76c", "2026-09-18-37ac63", "2026-09-18-de39ec", "2026-09-18-0ac1cb", "2026-09-18-35e0f5", "discovered:push-livelock-2026-09-18"],
+  "queue_ids_seen": ["2026-09-18-f90ba6", "2026-09-18-61f76c", "2026-09-18-37ac63", "2026-09-18-de39ec", "2026-09-18-0ac1cb", "2026-09-18-35e0f5", "discovered:push-livelock-2026-09-18", "2026-09-18-8491bf"],
   "routing_artifact": "plan-2026-09-18.routing.json",
   "queue_history_note": "triage-queue.json holds exactly 6 items, all dated 2026-09-18 and all open; it carries NO resolved item of any type, so the gate's RETURN derivation cannot name prior closes. The census (out\\alert-census.jsonl) shows every one of these six types fired on 3 or more days since 2026-08-22 (guards-failed 13 days, price-flags 20, semantic 15, FF pull-drop 8, Baker's window 5, recall 6). prior_closes below are therefore [] with the census dates recorded, and every code item still carries prevention with a code source, as a RETURN would.",
   "live_board_state": "The last publish with guards at hard=0 was the 2026-09-12 09:16 run. 09-13 (hard=1), 09-14 (hard=3), 09-17 (hard=3) and 09-18 (hard=4) were all HELD, and no pipeline run happened on 09-15 or 09-16 (0 ad-cycle-log lines those days). The live board, feed and recipe cards are therefore the 09-12 generation, six days old.",
@@ -227,7 +227,10 @@
       "root_cause": "out\\ff-carry-report.json is a snapshot overwritten by every ff-carry run, and each run re-probes only about a tenth of the 595 empty terms, so a victim seen by one run is erased by the next run that samples past it, before any pull has read it; the alert then re-fires when the sample lands on it again",
       "root_fix": {
         "what": "carry confirmed victims forward until a priced row lands",
-        "files": ["grocery/audit-ff-carry.ps1", "grocery/capture-policy-lib.ps1"],
+        "files": [
+          "grocery/audit-ff-carry.ps1",
+          "grocery/capture-policy-lib.ps1"
+        ],
         "exact_change": "audit-ff-carry.ps1 (report block at ~273): read the previous report's confirmed_victims, keep every one whose commodity STILL has no priced row in the current pull (drop it the moment a priced row exists, or after 14 days as the carry policy's horizon), and write them with a first_seen date; Get-FfVictimTerms (capture-policy-lib.ps1:569) keeps its 48h freshness on the report's generated stamp, which the carried-forward list satisfies because the file is rewritten every run. Alerting stays once per NEW victim-set (the sig at line 336), so a carried victim does not re-page."
       },
       "leaves_open": "nothing in this class; the 7-of-602 term budget is Brad's ruling (grocery-method-familyfare) and the missed 09-15/16 runs are item de39ec's leaves_open",
@@ -235,7 +238,9 @@
       "prior_closes": [],
       "prior_closes_note": "queue holds no resolved item of this type; census: 09-03, 09-05, 09-06, 09-07, 09-10, 09-12, 09-14, 09-18",
       "prevention": {
-        "source": ["grocery/audit-ff-carry.ps1"],
+        "source": [
+          "grocery/audit-ff-carry.ps1"
+        ],
         "what": "the emitting check keeps a victim until the pull proves it captured, instead of a snapshot the next sample can erase",
         "exact_change": "as root_fix"
       },
@@ -253,16 +258,24 @@
         "guard_or_fixture": "audit-ff-carry.ps1 -SelfTest and test-capture-policy.ps1 (Get-FfVictimTerms fixtures)",
         "must_fire_case": "a frozen previous report naming pie-pumpkins with a current pull that prices no pie pumpkin must write pie-pumpkins into confirmed_victims again (carried forward, first_seen preserved) without re-paging",
         "clean_twin": "a frozen previous report naming parsnips with a current pull that prices 'Fresh Parsnips, Michigan' must DROP parsnips (captured); the existing MUST-FIRE at line 205 (a victim at index 501 reads 'leads the next Family Fare window') stays green",
-        "commands": ["powershell -File grocery\\audit-ff-carry.ps1 -SelfTest", "powershell -File grocery\\test-capture-policy.ps1", "powershell -File grocery\\test-auditors.ps1"]
+        "commands": [
+          "powershell -File grocery\\audit-ff-carry.ps1 -SelfTest",
+          "powershell -File grocery\\test-capture-policy.ps1",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
       },
       "rollback": "revert the audit-ff-carry hunk; the report file regenerates every run",
-      "do_not_touch": ["the 7-term rotation budget and the 40 call cap (capture-policy)", "the 48h freshness in Get-FfVictimTerms", "the once-per-victim-set alert signature"],
+      "do_not_touch": [
+        "the 7-term rotation budget and the 40 call cap (capture-policy)",
+        "the 48h freshness in Get-FfVictimTerms",
+        "the once-per-victim-set alert signature"
+      ],
       "resolution_note": "Promotion works (5 of 5 earlier victims priced next window). Pie pumpkin was lost because the victim report is a snapshot that a later sample overwrote before any pull read it; it leads the 09-19 window now, and audit-ff-carry carries an unpriced victim forward until it is captured.",
       "publish_batch": "none",
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "done",
+      "premise_verified": "yes: audit-ff-carry.ps1:273-274 wrote ff-carry-report.json from this run's victims only (Set-Content over the previous file), so a victim found by one run was erased by the next run whose sample missed it; plan evidence (pie pumpkin 09-10 found, 09-11 pull read 0 terms) stands",
+      "deviation": "the alert signature stays on this run's fresh victims only, so a carried victim never re-pages; carried entries are written with carried=true and first_seen, and drop when this pull prices the commodity (Has-FeedCoverage) or after 14 days",
+      "shipped_commit": "the commit titled 'Triage 2026-09-18 ops lane: audit-ff-carry carries an unpriced victim forward until a pull prices it' (git log -1 --format=%H --grep='carries an unpriced victim forward' origin/main)"
     },    {
       "queue_id": "2026-09-18-35e0f5",
       "subject": "The knowledge store's nightly pass went RED",
@@ -275,13 +288,17 @@
       ],
       "surface_fix": {
         "what": "the report keeps the lines that say what failed",
-        "files": ["C:/Users/Owner/.claude/skills/recall-sleep.py"],
+        "files": [
+          "C:/Users/Owner/.claude/skills/recall-sleep.py"
+        ],
         "exact_change": "digest(): after a kept line matching ^\\s*FAIL \\(\\d+\\):$ keep every following line that starts with two spaces until a blank or unindented line, regardless of keywords (and the same under a kept 'VERDICT: FAIL' line); add a MUST FIRE case beside the existing digest cases (line ~472): a gate output 'FAIL (2):\\n  probe baseline: exit 1 - ...\\n  hook self-test x: FAIL exit 1' must keep both itemised lines, and a CLEAN TWIN that the prose line 'FROM RECORDED FAILURES' is still dropped."
       },
       "root_cause": "the sleep report is a keyword digest and the run log stores exit codes without output, so a failure's explanation survives only if it happens to contain a keyword and is otherwise gone by morning; separately, the 04:38 gate judges recognition floors on a store that the same pass just re-derived and that sessions move all day, so its floor verdict is not the verdict a re-run gives",
       "root_fix": {
         "what": "persist each failing step's tail with the run record, and ask Brad how the path floor should be judged",
-        "files": ["C:/Users/Owner/.claude/skills/recall-sleep.py"],
+        "files": [
+          "C:/Users/Owner/.claude/skills/recall-sleep.py"
+        ],
         "exact_change": "run_step(): when exit != 0 write the last 60 lines of stdout+stderr into the step's record in recall-sleep-log.jsonl (key 'tail'), so 'what failed last night' is a lookup; the floor question goes to Brad (Q3) because the calibrator's own text forbids moving the target and the honest options are a frozen snapshot for the gate, a minimum probe count per kind (path has 148 holdout probes against 300 for command and edit), or accepting TOO LOUD as advisory for a kind under that count"
       },
       "leaves_open": "the path recognition floor reading TOO LOUD at 04:38 on 6 consecutive nights and in band by 10:10 (Q3); and the approvals-server.py hook self-test that exits 1 with its last case reading ok, which is another session's in-flight work and is not touched here",
@@ -289,7 +306,9 @@
       "prior_closes": [],
       "prior_closes_note": "queue holds no resolved item of this type; census: 09-11, 09-12, 09-13, 09-14, 09-17, 09-18",
       "prevention": {
-        "source": ["C:/Users/Owner/.claude/skills/recall-sleep.py"],
+        "source": [
+          "C:/Users/Owner/.claude/skills/recall-sleep.py"
+        ],
         "what": "the emitter of the alert keeps and persists the failure lines it is reporting",
         "exact_change": "as surface_fix and root_fix"
       },
@@ -307,16 +326,23 @@
         "guard_or_fixture": "recall-sleep.py --selftest (the digest cases at lines ~440-512)",
         "must_fire_case": "a gate result whose output ends 'FAIL (2):' followed by two indented failure lines carrying no keyword must render both lines under the gate step; a failing step must leave a 'tail' in its log record",
         "clean_twin": "the existing MUST NOT FIRE 'the word FAILURES in prose does not read as a FAIL' and the CLEAN TWIN 'a real FAIL line is still kept' stay green; a passing step writes no tail",
-        "commands": ["C:\\Codex\\Python312\\python.exe C:\\Users\\Owner\\.claude\\skills\\recall-sleep.py --selftest"]
+        "commands": [
+          "C:\\Codex\\Python312\\python.exe C:\\Users\\Owner\\.claude\\skills\\recall-sleep.py --selftest"
+        ]
       },
       "rollback": "revert the recall-sleep.py hunk; the knowledge store is its own local git (memory-store-is-local-git)",
-      "do_not_touch": ["recall_floors.py TARGET_FIRE_RATE and RATE_BAND", "recall-hook-calibrate.py", "the approvals-server.py hook and its self-test (foreign in-flight work)"],
+      "do_not_touch": [
+        "recall_floors.py TARGET_FIRE_RATE and RATE_BAND",
+        "recall-hook-calibrate.py",
+        "the approvals-server.py hook and its self-test (foreign in-flight work)"
+      ],
       "resolution_note": "The report dropped its own failure lines (keyword digest) and the run log keeps no output, so the second failure of 04:38 cannot be recovered; the digest now keeps the itemised lines under FAIL (n): and failing steps persist a tail. The visible failure was the path recognition floor (37 of 148 holdout probes, 25%, band 3-20%), which read in band on a 10:10 re-run after the 09:18 index rebuild; how to judge that floor is Q3 for Brad.",
       "publish_batch": "none",
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "done",
+      "premise_verified": "yes: recall-sleep.py digest() kept a line only on a whole-word keyword, so the indented prose under 'FAIL (2):' was dropped, and append_log() wrote name/exit/ms only",
+      "deviation": "the knowledge store (C:/Users/Owner/.claude) is its own git repo with a remote; committed and pushed there. The approvals-server.py hook self-test half of leaves_open is another session's in-flight work and is not owned here beyond this note",
+      "shipped_commit": "claude-store 1fd6f85 (C:/Users/Owner/.claude, pushed to origin/main)",
+      "leaves_open_followup": "Q3-recall-path-floor"
     },
     {
       "queue_id": "discovered:push-livelock-2026-09-18",
@@ -341,6 +367,7 @@
         "exact_change": "PASS REUSE block: Get-TaInputKey hashes the checkout root, every tracked input (derivation plus dot-source closure), this script and every tracked lib/*.ps1 by index blob id or working-tree bytes when dirty, plus name/length/mtime of every board file; Read-TaPassRecord reuses only an exact key match under 6h whose mode covers this push, re-judged against the current known-failures record; anything else (missing, unreadable, mismatched, old, narrower) runs in full. A real pass is recorded only if the key is unchanged after the run; a non-pass withdraws the record. Only for -RefsFromStdin."
       },
       "leaves_open": "a retry whose rebase brought in a change to any test-auditors input (grocery/*.ps1 is a glob input, so most grocery commits) still pays the full run and can still lose the race; the lever for that is ops\\push-main.ps1 or a narrower selection, not this record",
+      "leaves_open_followup": "2026-09-18-1139a0",
       "leaves_open_occurrences": "not counted separately: the five rejections today were all this shape or the shape fixed here, and the transcripts do not say which rebases moved an input",
       "prior_closes": [],
       "prior_closes_note": "discovered in this run; no queue item of this type",
@@ -380,6 +407,28 @@
       "premise_verified": "yes: read .git/hooks/pre-push (run-gates, then prepush-test-auditors, then take_push_lock only on the passing path) and prepush-test-auditors.ps1 (no reuse path: every input-touching push reached Invoke-TaChild); the orchestrator's five rejected pushes are the measurement",
       "deviation": null,
       "shipped_commit": "the commit titled 'Triage 2026-09-18 ops lane: prepush-test-auditors reuses a pass across a rebase that moved no input' (git log -1 --format=%H --grep='reuses a pass across a rebase' origin/main)"
+    },
+    {
+      "queue_id": "2026-09-18-8491bf",
+      "subject": "Grocery: daily pipeline did not run on 2026-09-15 or 2026-09-16 (residual of 2026-09-18-de39ec)",
+      "classification": "needs-brad",
+      "evidence": [
+        "System log: Windows Update restarted the box 2026-09-14 22:29 to 22:32 (event 1074 MoUsoCoreWorker 'Service pack (Planned)', then TrustedInstaller 'Upgrade (Planned)' twice); nobody logged on again until 2026-09-17 05:06 (wake source: USB device).",
+        "TaskScheduler/Operational: event 332 'did not launch task \\TC Grocery Daily Capture 0800 because user DESKTOP-L652I1V\\Owner was not logged on' at 09-15 08:00:01, 09-16 06:59:34, 07:00:01 and 08:00:01 (twice), and 09-17 05:06:18 (twice). The first launch after logon was 09-17 06:00:01.",
+        "Power-Troubleshooter: the box DID wake for the tasks (09-15 and 09-16 06:59:37 for 'TC Grocery Ad Pulls 0700', 07:59:36 for 'TC Grocery Daily Capture 0800', WakeToRun=True) and went back to sleep about 2.5 minutes later each time (event 42 at 07:02:02 and 08:02:01), having launched nothing.",
+        "All 12 'TC *' scheduled tasks run as Owner with LogonType Interactive ('run only when user is logged on'), so every one of them, health-heartbeat's included, is dead after any reboot until Brad logs on. That is why nothing paged: the watcher is one of the watched. The cloud heartbeat.yml is workflow_dispatch-only since the Actions minutes ran out (CLAUDE.md).",
+        "2 skipped days in the last 16, both this cause; no other gap in capture-run-daily logs over 09-03..09-18 was checked beyond the item body's list."
+      ],
+      "root_cause": "every TC task is registered Interactive, so a Windows Update restart overnight leaves the box with no logged-on user and the scheduler refuses every launch (event 332) until someone logs on; the absence detector runs under the same condition and cannot page",
+      "resolution_note": "Measured, not fixed: the pipeline did not run on 09-15/16 because Windows Update restarted the box on 09-14 at 22:29 and Owner was not logged on until 09-17 05:06, and all 12 TC tasks are 'run only when user is logged on' (event 332 each morning). Which remedy is a machine-configuration ruling (Q4): auto-logon, Windows Update restart policy, or re-registering the tasks to run whether logged on or not, which changes what credentials (git, Chrome profile, DPAPI) the tasks can reach.",
+      "leaves_open": "the class stays live until Q4 is ruled: the next overnight Windows Update restart without a logon repeats it, silently",
+      "leaves_open_occurrences": 2,
+      "leaves_open_followup": "Q4-tasks-dead-after-reboot",
+      "freshness": "measured 2026-09-18 about 13:10 from the System and TaskScheduler/Operational event logs and Get-ScheduledTask",
+      "status": "needs-brad",
+      "premise_verified": "yes: capture-run-daily logs and ad-cycle-log lines are absent for 09-15/16 as the item says, and the scheduler's own event 332 names why",
+      "deviation": null,
+      "shipped_commit": null
     }
   ],
   "ship_sequence": [
@@ -398,6 +447,11 @@
   "open_questions_for_brad": [
     { "id": "Q1-bakers-flyer-lane", "question": "The Baker's weekly-ad flyer (out\\bakers\\bakers-deals-*.json) has had no scheduled producer since the Wednesday Chrome agent was retired on 08-22; it landed in 5 of the last 8 ad weeks by hand. Last week it supplied 17 Baker's sale cells and 3 crowns (clementines, coffee-pods, pasta-sauce) that the Kroger API's own promo rows did not. Options: (a) schedule it inside the 08:00 browser store driver (Baker's is a przone.net image read plus vision, not a bot-walled DOM sweep); (b) keep it manual and let audit-row-age's AD COVERAGE GONE be the weekly reminder (then the de39ec alert is by-design and its wording is the only fix); (c) retire the supplement and remove Baker's from $adSupplement, accepting the 3-crown loss. The plan implements the wording fix and the like-for-like check either way.", "item": "2026-09-18-de39ec" },
     { "id": "Q2-each-commodity-no-count", "status": "moot - answered in code, developer 2026-09-18: Get-UnitPrice already refuses a bare package price with no count on an each-commodity (pricing-math-lib.ps1:861-862), so after the parser fix both lines are UNPRICED, not $1.99/$3.98 each; the Hy-Vee donuts cell is gone and Hy-Vee protein-bars shows its own 5-bar box at 0.656. Nothing overstates, so there is nothing to rule.", "question": "After the parser fix, Hy-Vee 'mini donuts' and 'Quaker protein bars' publish at $1.99/each and $3.98/each because the ad line carries no pack count, against peers at $0.33-$0.94 per piece. They take no crown, but the cell overstates. Should an each-commodity refuse an ad row with no count when its peers price per piece (2 cells today), or is the pack-as-one-unit reading acceptable when it cannot win?", "item": "2026-09-18-f90ba6" },
-    { "id": "Q3-recall-path-floor", "question": "The knowledge store's path recognition floor read TOO LOUD (37 of 148 holdout probes, 25%, band 3-20%) at 04:38 on six nights and in band on a 10:10 re-run today after the index rebuilt. The calibrator forbids moving the target. Should the 04:38 gate judge floors on a frozen snapshot of the store, require a minimum holdout size per kind before it can fail (path has 148, command and edit have 300), or treat TOO LOUD as advisory for a kind under that size?", "item": "2026-09-18-35e0f5" }
+    { "id": "Q3-recall-path-floor", "question": "The knowledge store's path recognition floor read TOO LOUD (37 of 148 holdout probes, 25%, band 3-20%) at 04:38 on six nights and in band on a 10:10 re-run today after the index rebuilt. The calibrator forbids moving the target. Should the 04:38 gate judge floors on a frozen snapshot of the store, require a minimum holdout size per kind before it can fail (path has 148, command and edit have 300), or treat TOO LOUD as advisory for a kind under that size?", "item": "2026-09-18-35e0f5" },
+    {
+      "id": "Q4-tasks-dead-after-reboot",
+      "question": "All 12 TC scheduled tasks are 'run only when user is logged on', so after the 2026-09-14 22:29 Windows Update restart nothing ran for two days (09-15, 09-16) and nothing paged, because health-heartbeat is one of them. Which remedy: (A) Windows auto-logon for Owner, so a reboot returns to the same state (cheapest; the box logs itself in); (B) Windows Update active hours plus no automatic restart while a user is signed in (keeps Owner logged on, but does not cover a power cut); (C) re-register the tasks 'run whether user is logged on or not', which needs the Owner password stored in Task Scheduler and may lose access to git credentials and the Chrome profile the browser lanes use; or (D) accept it and add only a boot-time page. A and B together cover the measured cause.",
+      "item": "2026-09-18-8491bf"
+    }
   ]
 }

@@ -159,10 +159,74 @@ function Get-FfRotationDistance {
           $RotationTerms + ' term(s) per window')
 }
 
+# Merge this run's victims with the previous report's. $Fresh is an ARRAY (pass List.ToArray(), never the list: @()
+# around a New-Object List throws under PS 5.1). A fresh victim keeps the first_seen it already had; a previous
+# victim this run did not see is carried (carried=true) unless the current pull prices its commodity, or it was first
+# seen more than $HorizonDays ago. A report without first_seen dates its victims by its own 'generated' stamp.
+$script:FfVictimHorizonDays = 14   # the carry policy's horizon; first plausible value, no sweep
+function Merge-FfCarriedVictims($Fresh, $PrevReport, [scriptblock]$IsCovered, [datetime]$Now, [int]$HorizonDays = 14) {
+  $inv = [Globalization.CultureInfo]::InvariantCulture
+  $out = New-Object System.Collections.Generic.List[object]
+  $prevBy = @{}
+  $prevDay = $Now.ToString('yyyy-MM-dd')
+  if ($PrevReport) {
+    try { $prevDay = [datetime]::ParseExact(([string]$PrevReport.generated).Substring(0, 10), 'yyyy-MM-dd', $inv).ToString('yyyy-MM-dd') } catch {}
+    foreach ($p in @($PrevReport.confirmed_victims)) { if ($p -and [string]$p.commodity) { $prevBy[[string]$p.commodity] = $p } }
+  }
+  $seen = @{}
+  foreach ($v in @($Fresh)) {
+    if (-not $v) { continue }
+    $k = [string]$v.commodity
+    $fs = $Now.ToString('yyyy-MM-dd')
+    if ($prevBy.ContainsKey($k)) { $fs = if ([string]$prevBy[$k].first_seen) { [string]$prevBy[$k].first_seen } else { $prevDay } }
+    $out.Add([pscustomobject]@{ term = [string]$v.term; commodity = $k; product = [string]$v.product; first_seen = $fs; carried = $false })
+    $seen[$k] = $true
+  }
+  foreach ($k in @($prevBy.Keys | Sort-Object)) {
+    if ($seen.ContainsKey($k)) { continue }
+    $p = $prevBy[$k]
+    $fs = if ([string]$p.first_seen) { [string]$p.first_seen } else { $prevDay }
+    $age = 0
+    try { $age = ($Now.Date - [datetime]::ParseExact($fs, 'yyyy-MM-dd', $inv)).TotalDays } catch { continue }
+    if ($age -gt $HorizonDays) { continue }
+    if (& $IsCovered $k) { continue }
+    $out.Add([pscustomobject]@{ term = [string]$p.term; commodity = $k; product = [string]$p.product; first_seen = $fs; carried = $true })
+  }
+  return ,$out.ToArray()
+}
+
 if ($SelfTest) {
+  # ---- CARRY-FORWARD (2026-09-18, queue 2026-09-18-0ac1cb). Frozen from the founding case: pie-pumpkins found
+  # 2026-09-10 and erased by the next run's sample before any pull read it; parsnips priced on the next window.
+  $cfFails = New-Object System.Collections.Generic.List[string]
+  $cfPrev = ConvertFrom-Json '{"generated":"2026-09-10 11:31","empty_terms":594,"confirmed_victims":[{"term":"pie pumpkin","commodity":"pie-pumpkins","product":"Pie Pumpkin"},{"term":"parsnips","commodity":"parsnips","product":"Fresh Parsnips, Michigan"}]}'
+  $cfFeed = @([pscustomobject]@{ item = 'Fresh Parsnips, Michigan'; current_price = 4.49; regular = 4.49 })
+  $cfCov = { param($id) $cc = $byId[[string]$id]; [bool]($cc -and (Has-FeedCoverage $cc $cfFeed)) }
+  $script:covCache = @{}
+  $cf = Merge-FfCarriedVictims @() $cfPrev $cfCov ([datetime]'2026-09-11T08:03:00') 14
+  $cfPie = @($cf | Where-Object { $_.commodity -eq 'pie-pumpkins' })
+  # MUST FIRE: a run whose sample missed pie pumpkin, with a pull that prices none, still writes it, carried, first seen 09-10.
+  if (-not $byId['pie-pumpkins'] -or -not $byId['parsnips']) { $cfFails.Add('carry-forward fixture cannot run: pie-pumpkins or parsnips is gone from commodities.json') }
+  elseif ($cfPie.Count -ne 1 -or -not $cfPie[0].carried -or $cfPie[0].first_seen -ne '2026-09-10' -or $cfPie[0].term -ne 'pie pumpkin') { $cfFails.Add('MUST-FIRE: an unpriced victim the next sample missed must be carried forward with its term and first_seen 2026-09-10, got ' + ($cf | ConvertTo-Json -Compress)) }
+  # CLEAN TWIN: the pull that prices 'Fresh Parsnips, Michigan' DROPS parsnips - captured, no longer a victim.
+  if (@($cf | Where-Object { $_.commodity -eq 'parsnips' }).Count -ne 0) { $cfFails.Add('CLEAN-TWIN: parsnips is priced by this pull and must be dropped, got ' + ($cf | ConvertTo-Json -Compress)) }
+  # MUST FIRE: past the 14-day horizon a carried victim is dropped, so the list cannot grow without end.
+  $script:covCache = @{}
+  $cfOld = Merge-FfCarriedVictims @() $cfPrev $cfCov ([datetime]'2026-09-25T08:03:00') 14
+  if (@($cfOld | Where-Object { $_.commodity -eq 'pie-pumpkins' }).Count -ne 0) { $cfFails.Add('MUST-FIRE: a victim first seen 15 days ago must age out of the carry') }
+  # CLEAN TWIN: a victim this run found again keeps its first_seen and is NOT marked carried.
+  $script:covCache = @{}
+  $cfAgain = Merge-FfCarriedVictims @([pscustomobject]@{ term = 'pie pumpkin'; commodity = 'pie-pumpkins'; product = 'Pie Pumpkin' }) $cfPrev $cfCov ([datetime]'2026-09-18T08:05:00') 14
+  $cfA = @($cfAgain | Where-Object { $_.commodity -eq 'pie-pumpkins' })
+  if ($cfA.Count -ne 1 -or $cfA[0].carried -or $cfA[0].first_seen -ne '2026-09-10') { $cfFails.Add('CLEAN-TWIN: a re-found victim must keep first_seen 2026-09-10 and read carried=false, got ' + ($cfAgain | ConvertTo-Json -Compress)) }
+  # AND THE ALERT SIGNATURE STAYS ON THE FRESH SET, so a carried victim does not re-page. Needle assembled.
+  $sigLine = '$sig = (@($victims' + ' | ForEach-Object { $_.commodity } | Sort-Object) -join '';'')'
+  if (-not ([IO.File]::ReadAllText($PSCommandPath)).Contains($sigLine)) { $cfFails.Add('MUST-FIRE: the -Alert signature no longer reads the fresh $victims list, so a carried victim could re-page') }
+  $script:covCache = @{}
   # FROZEN FIXTURES - never regenerate these from the live pull. Each pair is one MUST-FIRE (the real bug)
   # and one CLEAN-TWIN (the case that must stay silent), taken from the 2026-07-31 adjudication.
   $fails = New-Object System.Collections.Generic.List[string]
+  foreach ($cfx in $cfFails) { $fails.Add($cfx) }
   $fx = @(
     [pscustomobject]@{ item = 'Our Family Chili Beans, In Mild Chili Sauce 15.5 Oz'; current_price = 0.99; regular = 0.99 },
     [pscustomobject]@{ item = 'Yellow Nectarines'; current_price = 4.29; regular = 4.29 }
@@ -270,7 +334,19 @@ foreach ($term in $emptyTerms) {
 # $probed counts probes that got a RESPONSE, not loop iterations: a run where Freshop refuses every call is
 # 0 examined of N eligible, which the ledger reports as BLIND - not as a clean bill of health.
 $null = Emit-Coverage $emptyTerms.Count $probed ('empty FF search terms re-probed against Freshop from ' + $ff.Name)
-$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); empty_terms = $emptyTerms.Count; confirmed_victims = $victims.ToArray() }
+# CARRY A CONFIRMED VICTIM FORWARD UNTIL A PRICED ROW LANDS (2026-09-18, queue 2026-09-18-0ac1cb). The report is what
+# pull-regular-familyfare reads to put victims at the FRONT of the next window, and it used to hold only THIS run's
+# victims. Each run re-probes a sample of the empty terms, so a victim one run found was erased by the next run whose
+# sample missed it, before any pull had read it: pie-pumpkins was found 09-10 11:31 and the 09-11 pull read a report
+# holding 0 terms. The alert signature below stays on this run's FRESH victims, so a carried victim never re-pages.
+$prevReport = $null
+$reportPath = Join-Path $OutDir 'ff-carry-report.json'
+if (Test-Path -LiteralPath $reportPath) { try { $prevReport = ConvertFrom-Json ([IO.File]::ReadAllText($reportPath)) } catch { $prevReport = $null } }
+$isCoveredNow = { param($id) $cc = $byId[[string]$id]; [bool]($cc -and (Has-FeedCoverage $cc $ffDeals)) }
+$reportVictims = Merge-FfCarriedVictims $victims.ToArray() $prevReport $isCoveredNow (Get-Date) $script:FfVictimHorizonDays
+$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); empty_terms = $emptyTerms.Count; confirmed_victims = $reportVictims }
+$carriedN = @($reportVictims | Where-Object { $_.carried }).Count
+if ($carriedN -gt 0) { Write-Output ("ff-carry: carried forward " + $carriedN + " unpriced victim(s) from the previous report: " + ((@($reportVictims | Where-Object { $_.carried } | ForEach-Object { $_.commodity + ' (first seen ' + $_.first_seen + ')' })) -join ', ')) }
 Set-Content (Join-Path $OutDir 'ff-carry-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8
 
 # SAY WHAT WAS SUPPRESSED. A filter that removes 15 of 24 findings and reports only the survivors is one
