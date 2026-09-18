@@ -12362,3 +12362,179 @@ store (a safe refusal, a harmless no-op, or a silent wrong value) was not checke
 wrong-value for a store it has never seen. Only the wrong-value cases need a change: make that
 `default` throw on an unrecognised store. That is the closed-vocabulary check
 `type-driven-modelling.md` 1 says is the whole prevention in a language without one-of types.
+
+### I186 - the price formatter applies two midpoint rounding rules, so d5's banker's-versus-half-up question rests on a wrong premise `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q6-modern-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Queue-6 entry 10, `ai-assisted-code-modernization` (IBM), module 4. Its founding story is a
+migration rolled back because the new code rounded money half to even while the business had always
+rounded half up, a rule "written down nowhere except in the behaviour of the old code". The course
+did not mention this estate; everything below was measured here.
+
+**What the record says.** `design/MASTER-PLAN-2026-08-01.md` item D5: *"Half-cent rounding (banker's
+vs half-up) - frozen in a fixture, documented, awaiting a call."* `grocery/fmt-lib.ps1` lines 117 to
+121 carry that frozen fixture and its comment: *"[math]::Round uses banker's rounding, so an exact half
+cent lands on the even digit (12.5 -> 12, not 13)."* Both read as though the estate applies one rule,
+banker's rounding.
+
+**What it actually does, measured 2026-09-18 under PowerShell 5.1.26100 by dot-sourcing
+`grocery/fmt-lib.ps1` and calling its real functions:**
+
+| call | output | rule |
+|---|---|---|
+| `Fmt-Price 1.125 'lb'` | `$1.13/lb` | half away from zero (the `'{0:N2}' -f` dollar branch) |
+| `Fmt-Price 2.125 'each'` | `$2.13 each` | half away from zero |
+| `Fmt-Price 0.125 'oz'` | `12&cent;/oz` | half to even (the `[math]::Round` cents branch) |
+| `Fmt-PriceBare 1.125` | `$1.12` | half to even (`'{0:N2}' -f [math]::Round($v,2)`) |
+
+The underlying cause is .NET: `[math]::Round(1.125,2)` is 1.12 while `'{0:N2}' -f 1.125` is 1.13.
+**So the estate already rounds half up on every dollar-branch price and half to even on every cents
+price and every trend-page price.** D5 is not "should we switch to half-up"; it is "which of the two
+rules we already run should be the one".
+
+**Callers, by `git grep -l -w`:** `Fmt-Price` is called by `grocery/build-deals-page.ps1`,
+`grocery/build-friday-email.ps1` and `grocery/build-store-guide.ps1`; `Fmt-PriceBare` by
+`grocery/build-trend-index.ps1`, `grocery/build-trend-pages.ps1` and `grocery/publish-trend-pages.ps1`.
+So one value at an exact half cent can read one cent differently on the deals page and on its trend
+page.
+
+**How often, measured on `grocery/out/comparison-2026-09-17.json`** with a scratch probe (Python walk of
+every numeric leaf whose key contains `price` or `unit`, then the two .NET paths run over the flagged
+values in PowerShell): **5,040** such leaves, **226** within 1e-9 of a half cent, and on **108 of those
+226** `[math]::Round($v,2)` and `'{0:F2}' -f $v` give different cents. Of the flagged values at or above
+$1, **35** render differently through `Fmt-Price` and `Fmt-PriceBare`. Leaves are FIELDS, not cells:
+one cell carries `cheapest_price`, `nomem_price`, `per_unit` and `native_unit_price`, so the cell count
+is lower and was not measured. The probe was scratch and is not committed; re-running it means
+rewriting it.
+
+**Why it matters here.** A cent is within the site's stated accuracy bar ("understating is exactly as
+wrong as overstating"), and the store's own shelf rounding is unknown to us, so neither rule is known to
+match what a reader sees in the store.
+
+**The ruling needed.** One money rounding rule for reader-facing prices, stated once in `fmt-lib.ps1`,
+with the frozen fixture rewritten to pin BOTH branches to it. The first rung is Brad's choice of rule;
+building it after that is small and reversible (a formatting change, no data rewritten). Whoever builds
+it should also check the Python side, where `round()` is half to even.
+
+### I187 - the estate's design plans rarely record the alternatives they rejected `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q6-modern-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same course, module 4: an architecture decision record has four parts (context, decision,
+alternatives, consequences), and the alternatives part is what stops the next person re-arguing a
+settled choice.
+
+**Measured 2026-09-18, and the measurement is weak on purpose-stated grounds.** `design/` holds 54
+`PLAN-*.md` files. `git grep -l -i -e "alternatives considered" -e "^## Alternatives" -e "Rejected:"`
+over them finds **2**. That is a pattern match on three spellings. It cannot see a rejected option
+written as prose, so it is a floor on how many record alternatives, not a count. The operative rules
+already carry this habit in places (`.claude/rules/ops-and-gates.md` asks that a tuning constant record
+"what ELSE was tried"), so the gap is in the plans, not in the principle.
+
+**The first rung** is to read a sample of ten plans and count, by reading, how many name at least one
+alternative and why it lost. Only if that confirms the grep is a template line worth proposing. This is
+filed as a measurement, not a demand for a new gate.
+
+### I188 - a child's stdout is parsed as data without an exit-code or shape check `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q6-sdp-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `software-design-principles-odc` (BITS Pilani), item 266, read by the triage pilot's arm A
+on 2026-09-18 and applied by lane q6-sdp. The course's cautionary case (an exception's diagnostic text
+consumed downstream as coordinates) is `[UNVERIFIED, SINGLE-SOURCED]`; the principle is stored in
+`skills/software-craft/language-semantics.md` 8c: an error must not travel on the channel the consumer
+reads as data.
+
+**Why it matters here.** It is the shape of three recorded estate incidents: an HTTP 200 carrying an
+HTML error page (`course/coursera-extract.md` trap 13), a self-test verdict glued onto a case line
+(`.claude/rules/ops-and-gates.md`, "A self-test's exit 0 is not its verdict"), and a native child's
+stderr folded into its output under `EAP=Stop` ("A catch around a native redirect is not a guard").
+
+**First rung.** Count call sites in tracked `.ps1` and `.py` where a child process's or a web call's
+output is piped into `ConvertFrom-Json`, `json.loads` or a split without reading `$LASTEXITCODE` or the
+status and without a shape check. The count decides whether this earns a ratchet (never a gate red on
+day one). Unmeasured today; no number is claimed.
+
+### I189 - commits that mix refactoring with behaviour change are not a stated rule `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q6-sdp-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same course, items 95 and 97, Fowler's two hats: refactoring adds no tests and adding
+function restructures nothing. Stored in `skills/software-craft/refactoring-judgment.md` 6b.
+
+**Why it matters here.** A commit that both restructures and adds behaviour cannot be reviewed as
+either, and a red after it cannot say which half broke it. No estate rule states the split.
+
+**First rung.** On the last 200 commits to `main`, count how many both add a `-SelfTest` case or
+fixture AND move or rename existing functions. If the rate is material, the rule belongs in the
+workspace `CLAUDE.md` working rules as one line. No number is claimed here.
+
+### I190 - merge duplicates but keep overlapping ideas apart, a test for the store's consolidation `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q6-sdp-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same course, item 86 `[SINGLE-SOURCED]`: merging two overlapping principles often breaks
+both. Stored in `skills/software-craft/design-patterns-and-principles.md` 5b.
+
+**Why it matters here.** The store's consolidation procedure (`skills/course/CONSOLIDATE.md`) merges
+duplicates by design. That does not conflict when the two sections say the same thing; it does when
+they only overlap. Brad to rule whether `CONSOLIDATE.md` should carry a one-line test: merge when the
+two say the same thing, keep both and cross-link when they only overlap. Filed for the course domain,
+not the estate code.
+
+### I191 - add-norm takes 16 positional parameters and its call sites pad them with empty strings `OPEN` `queue-6` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\q6-smells-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Coursera `packt-writing-clean-code-20-code-smells-how-to-avoid-them-g2oer` (Packt), module 7,
+"long parameter list": when parameters share a type, a caller that swaps two of them breaks nothing
+visibly, and making a middle parameter optional means reordering every call. The course's fix is one
+parameter object with named fields. In PowerShell that is a splatted hashtable or named parameters.
+
+**Measured 2026-09-18 at `0d88ee9c7`**, PowerShell AST over the 784 tracked `.ps1` outside
+`archive/` (every file parsed, 0 failures), 2,997 function definitions: 354 take 4 or more
+parameters, 96 take 6 or more, 38 take 8 or more, 9 take 10 or more, and 2 take 12 or more. Both of
+the 2 take **16**: `Add-Norm` in `grocery/compare-deals.ps1:1943` and `New-LaneLine` in
+`meal-prep/pipeline/hunt-run.ps1`.
+
+`Add-Norm` is the one that matters, because it builds every board row. Its parameters are all
+untyped, nearly all strings, and its 9 call sites in `compare-deals.ps1` (lines 2038 to 2041, 2163,
+2206, 2348, 2354, 2358) pass them positionally with padding, for example
+`... 'sale' '' $d.ad_from $d.ad_to '' '' '' '' $null $sf`. The call at 2206 passes 15 arguments and
+the one at 2163 passes 16, so the capture row `$d` lands in slot 15 (`$srcRow`) in both only because
+someone counted. A slip of one position there prints a plausible board row with a field in the wrong
+column, and nothing throws.
+
+**First rung (READ):** read the 9 calls against the signature and confirm each argument sits in the
+slot its author meant. Only then decide whether to move `Add-Norm` to named parameters.
+
+**Caution for whoever takes it:** `compare-deals.ps1` is lifted by other scripts. Run
+`ops\count-source-lifters.ps1 -Script compare-deals.ps1` before changing the signature, because
+`grocery/pricing-math-lib.ps1` and `ops/audit-lift-completeness.ps1` also name `Add-Norm`.
+The scan is a scratch harness and was not committed; the counts are for this commit only.
+
+### I192 - 25 live scripts still hold their own copy of the board's store list `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q6-smells-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same course, module 8, "knowledge duplication": the same knowledge in several places must
+be found and edited by hand each time it changes, and the copies drift apart.
+
+**Measured 2026-09-18 at `0d88ee9c7`**, same AST scan: an array literal naming at least 5 of the 7
+board stores appears at 47 sites in 40 tracked files. 15 of those files are under an
+`archive/one-off/` directory, which leaves **25 live files**, among them `build-deals-page.ps1`, `capture-run.ps1`,
+`capture-policy-lib.ps1`, `compare-deals.ps1`, `set-board-cell.ps1` and `lib/carriage-lib.ps1`.
+`grocery/build-trend-index.ps1:47` carries the comment *"keep in lockstep with $storeOrder
+(build-deals-page.ps1) / the audit store lists"*, which is the course's "a comment telling you to
+update another place is duplication written down instead of fixed".
+
+**The estate already made a choice here and it is a defensible one:** `grocery/stores.json` is the
+canonical registry, and `grocery/audit-store-registry.ps1` check 5 fails any live grocery statement
+that names 3 or more stores without naming all of them. That is DETECTING drift across the copies
+rather than REMOVING the copies, and it has an allowlist (`allowed_subsets`) and its own orphan check.
+
+**The ruling wanted:** is detection the intended end state, or should the 25 copies read
+`stores.json` so there is nothing to detect? Detection costs a guard and an allowlist forever;
+consolidation costs one edit per file, once, in scripts some of which are lifted. Nothing is broken
+today, which is why this is a ruling and not work.
