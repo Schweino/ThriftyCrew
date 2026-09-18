@@ -13224,6 +13224,14 @@ Measured by the first q7-plb lane on 2026-09-18 under PS 5.1.26100: a scriptbloc
 
 **First rung.** On one day's board, for each commodity with at least N priced observations (N stated before the run), test for two modes and list the commodities where the gap between modes falls inside the 4x to 5x factors' blind range. Report it as a count with its denominator. Touches nothing; reads a board.
 
+**Acceptance bar, written 2026-09-18 BEFORE any count was taken.** Harness: `graph/pipeline/probe_basis_modes.py` (committed with this item, read-only, opens a COPY of `graph/sqlite/graph.db`). Its rows and per-unit prices are exactly `flag_outliers.py`'s: `match_status IN ('include_hit','llm_confirmed')`, per-unit from its own `row_unit_price`, `pu > 0`, whatever `basis_flag` says today.
+- **Two arms.** POOL: every eligible row, which is the population `flag_outliers` takes its median over. DAY: only rows whose `observed_at` date is the date with the most eligible rows among the last 7 dates present, which is the "one day's board" the rung names.
+- **N = 8** priced rows per commodity. Below that a two-group split is two or three points against the rest.
+- **Two modes** = Otsu's split on log10(per-unit price), with the minority class holding at least 2 rows (one row is an outlier, not a mode) and Ashman's D of the two classes at least 2.0 (the standard bar for two cleanly separated groups).
+- **Blind** = a two-mode commodity where at least one minority-class row escapes the fixed factor on its own side: a LOW minority row not below median/5.0 (`flag_outliers`), or a HIGH minority row not at or above median x 4.0 (`audit-unit-basis-outlier`). Reported per side, with the denominator of commodities tested.
+- **Cause.** Every blind commodity's minority rows are hand-read (all of them if 40 or fewer commodities, else the first 40 by commodity id) and labelled BASIS (a size, unit or pack read wrongly), TIER (a genuine cheaper or dearer product or form the commodity legitimately admits) or WRONG (a matching error, not a basis one).
+- **A fix is warranted only if** at least 5 blind commodities are labelled BASIS **and** BASIS is at least half of the labelled blind commodities. Below either bar, a cut derived from each commodity's own histogram would refuse at least as many genuine tiers as it catches basis errors, the fixed-factor design stands and this closes DONE with the measurement. Either way nothing here changes a price; a fix would be READY FOR BRAD.
+
 ### I183 - the production commodity matcher runs catalogue regexes with no match timeout, though the same catalogue once hung the pipeline `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-algo2-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
