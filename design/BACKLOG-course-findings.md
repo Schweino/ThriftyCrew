@@ -9579,7 +9579,9 @@ is ordered against - the point writers, or nothing.
 - **Everything about Java.** `synchronized`, `ReentrantLock`, `AtomicInteger`, `ConcurrentHashMap`,
   the PCDP library, Maven and the four graded mini-projects were discarded per the queue entry.
 
-### I108 - the 52 money lessons have no risk-management lesson at all, and risk management is one eighth of the professional curriculum `OPEN` `queue-7` `2-WAY` `RUNG1 RULING`
+### I108 - the 52 money lessons have no risk-management lesson at all, and risk management is one eighth of the professional curriculum `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**The ruling asked for (backlog run 2026-09-19).** Nothing proceeds without a content decision, because any shape reaches paying readers. Question: do we add risk management and insurance to the lesson product, and in what shape? Options: (A) one normal-titled lesson outside the 52, covering what a policy, premium and deductible are, auto and renter's first, term versus permanent with no published price; (B) a short arc of two or three normal-titled lessons (auto, renter's, life); (C) fold it into the emergency-fund lesson I109 proposes, as its second half; (D) no change. **Recommendation: A**, written with the `lesson` skill, because it is the smallest reader-facing change that closes a zero-of-52 gap, and it can grow into B later without renumbering anything.
 
 **Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9621,7 +9623,9 @@ normal-titled lesson outside the 52, or a short arc. That choice is Brad's, whic
 
 ---
 
-### I109 - the curriculum teaches index funds and a custodial account before it ever teaches a buffer, and the emergency fund has no lesson `OPEN` `queue-7` `2-WAY` `RUNG1 RULING`
+### I109 - the curriculum teaches index funds and a custodial account before it ever teaches a buffer, and the emergency fund has no lesson `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**The ruling asked for (backlog run 2026-09-19).** Two questions, both reader-facing. (1) Do we add an emergency-fund lesson? (2) May PUBLISHED lessons gain a cross-reference line (Weeks 29 and 30 pointing at it)? Options: (A) new normal-titled lesson teaching the buffer with the course's honest range (three to six months, six to twelve on a single income, the driver is how replaceable the income is) AND a one-line cross-reference added to Weeks 29 and 30; (B) the new lesson only, published lessons untouched; (C) cross-references only, pointing at existing Week 42; (D) no change. **Recommendation: A**, because the gap is an ordering failure a new lesson alone does not repair: a reader working Weeks 29 and 30 never meets the buffer first unless those pages point at it.
 
 **Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -9694,7 +9698,9 @@ two scoring models. Nothing in code.
 
 ---
 
-### I111 - nothing in the 52 lessons teaches the personal balance sheet, which is the professional curriculum's first tool `OPEN` `queue-7` `2-WAY` `RUNG1 RULING`
+### I111 - nothing in the 52 lessons teaches the personal balance sheet, which is the professional curriculum's first tool `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**The ruling asked for (backlog run 2026-09-19).** Question: do we publish the personal balance sheet as an instrument? Options: (A) a normal-titled lesson with a parent-and-teen worksheet in the `Try this together` slot, and a link to it added to `net-worth-by-age`; (B) extend the `net-worth-by-age` page with a how-to-compute section only; (C) a downloadable worksheet only; (D) no change. **Recommendation: A**, since it makes the existing benchmark page actionable and uses the slot every lesson already has; B is the fallback if Brad wants no new lesson this quarter.
 
 **Merged from `design\backlog-inbox\q7-fpya-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -12163,7 +12169,9 @@ components, the union log must be kept so a merge can be replayed without it. We
 with path compression is the data structure, with near-constant cost per operation. Parked because
 nothing uses `same_as` today; it becomes OPEN the day a design for it is written.
 
-### I177 - The declared lock order covers locks, and the bounded-buffer deadlock is a lock held across a WAIT `OPEN` `queue-7` `2-WAY` `RUNG1 RULING`
+### I177 - The declared lock order covers locks, and the bounded-buffer deadlock is a lock held across a WAIT `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**The ruling asked for (backlog run 2026-09-19).** Question: does the declared lock order in `.claude/rules/ops-and-gates.md` extend to cover every blocking WAIT held under a lock (an event, a process, a gate slot, the remote), not only the four named locks? Options: (A) add the one-sentence scope rule and name the push-lock-over-gate-slots nesting as safe BECAUSE no slot holder ever waits for the push lock, no detector (the rule's own policy until a second nesting exists); (B) A plus an unsound grep detector as a ratchet at zero; (C) leave the rule as it is and record this finding only. **Recommendation: A.** It is text only, it writes down a safety reason that is true today and unrecorded, and B would be a detector with no production caller, which these rules already refuse.
 
 **Merged from `design\backlog-inbox\q7-os3-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
