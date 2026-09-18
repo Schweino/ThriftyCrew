@@ -388,6 +388,30 @@
       "contains": "\"stores\":[\"Aldi\",\"Walmart\"],\"owned\"",
       "reason": "FROZEN reproduction of the real out\\browser-capture-due-2026-09-09.flag as the 08:06 daily run left it, used by the ownership-expiry fixture for queue 2026-09-09-e60137. It names three stores because those are the three the 09-09 defect involved: the 07:02 ad run deferred Baker's, the 08:06 daily run overwrote the same file with Aldi and Walmart, and Baker's ownership record was erased 29 minutes before the alert that needed it. Test-BrowserCaptureOwned never branches on store - it normalises the name and compares - so the subset proves the contract for all seven. Registered HERE rather than with the new inline '# store-subset-ok:' marker because that marker is deliberately scoped to test-/measure- FILES and this fixture lives inside a guard's own -SelfTest block. Confirmed 2026-09-09.",
       "reviewed": "2026-09-09"
+    },
+    {
+      "file": "capture-policy-lib.ps1",
+      "contains": "$swStores = @('Hy-Vee'",
+      "reason": "Concurrency fixture in capture-policy-lib's own self-test (sale-windows.json, 2026-09-11): six lanes each mark their own store's windows while build-sale-windows rewrites the file, and Sam's Club is the seventh store as 300 filler windows, so all seven are present. What is under test is the ledger lock around the read-modify-write, which never branches on store. Not a string literal in a recognised fixture home, so the inline marker cannot reach it. Registered 2026-09-18, backlog I227.",
+      "reviewed": "2026-09-18"
+    },
+    {
+      "file": "capture-policy-lib.ps1",
+      "contains": "$stores = @('Hy-Vee', 'Aldi', \"Baker's\", 'Family Fare', 'Fareway', 'Walmart')",
+      "reason": "The same sale-windows concurrency fixture's writer script (a here-string written to a temp file): lane N marks $stores[N-1], one lane per store of the six above. The lock under test never branches on store. Registered 2026-09-18, backlog I227.",
+      "reviewed": "2026-09-18"
+    },
+    {
+      "file": "capture-policy-lib.ps1",
+      "contains": "$curStores = @('Family Fare'",
+      "reason": "Concurrency fixture in capture-policy-lib's own self-test (capture-cursor.json, 2026-09-11): six writers each save their own store's cursor key side by side, and the assertion is that no sibling's whole-file write puts a key back. Six keys prove it for seven; the lock is per file, never per store. Registered 2026-09-18, backlog I227.",
+      "reviewed": "2026-09-18"
+    },
+    {
+      "file": "capture-policy-lib.ps1",
+      "contains": "$store = @('Family Fare', 'Walmart', \"Sam's Club\"",
+      "reason": "The same capture-cursor concurrency fixture's writer script: writer N saves the key for store N of the six above. The lock under test never branches on store. Registered 2026-09-18, backlog I227.",
+      "reviewed": "2026-09-18"
     }
   ],
   "promoted_prefixes_readme": "out\\regular files whose prefix is NOT a store's regular_prefix because they are not a store PULL. They are one-shot promoted captures written by another lane, and check 3 of audit-store-registry.ps1 accepts them. Registered rather than deleted (2026-08-30, queue 2026-08-22-2c3e88): input-usage.json shows hunter-walmart-regular-2026-08-16.json first_used 08-21, last_used the 2026-08-26 build, uses=5, so deleting them would silently drop adjudicated cells from live builds. NOTE what registering here does NOT do: guard 6 in guards.ps1 enumerates prefixes from the FILES it finds, not from this registry, so its 'could NOT evaluate' warn for these seven stands - correctly. Each prefix holds exactly one capture, so there genuinely is no history to compare a thin file against, and silencing that warn from here would be dressing up an unwatched store as a watched one.",

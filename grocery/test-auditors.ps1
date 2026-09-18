@@ -1373,6 +1373,7 @@ if ($r.rc -eq 2 -and $r.text -match 'soup_carrier' -and $r.text -match 'sushi_ca
 # MUST NOT FIRE: the real raw shrimp that took both cells back, and the bisque on the commodity it IS (tomato-soup sits
 # outside both scoped blocks), are legal rows and the audit must stay silent on them. If this fires, a class token is
 # too broad or has leaked into a block that carries soups.
+# store-subset-ok: must-not-fire fixture for soup_carrier/sushi_carrier - audit-food-category judges the item NAME per cell and reads store only to match a food-class-allowlist entry, so the class verdict never branches on store
 $ssLegal = '{"week_of":"2026-09-09","comparison":[{"commodity":"Shrimp (frozen, raw)","id":"shrimp","unit":"lb","stores":[{"store":"Sam''s Club","per_unit":5.82,"item":"Member''s Mark Farm Raised Jumbo Raw EZ Peel Shrimp, Frozen, 21-30 ct. per pound, 3 lbs."},{"store":"Aldi","per_unit":8.3867,"item":"Fremont Fish Market Medium EZ Peel Raw Shrimp 12 OZ"}]},{"commodity":"Tomato Soup (canned)","id":"tomato-soup","unit":"oz","stores":[{"store":"Family Fare","per_unit":0.3431,"item":"Fresh & Finest Herbed Tomato Bisque"}]}]}'
 Set-Content (Join-Path $fxSs 'comparison-2026-09-09.json') $ssLegal -Encoding UTF8
 $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSs)
@@ -1402,6 +1403,7 @@ if ($r.rc -eq 2 -and $r.text -match 'pistachios' -and $r.text -match 'class=beve
 # after the fix), and the Gatorade protein bar on protein-bars. That last one is why variant B3 (all 21 non-drink
 # snacks) was measured and REJECTED: 'gatorade' is a beverage token, and protein-bars is not in apply_ids, so the
 # class must not reach it. per_unit is read here only as > 0; the guard judges the item NAME.
+# store-subset-ok: must-not-fire fixture for the id-scoped beverage class - audit-food-category judges the item NAME per cell and reads store only to match a food-class-allowlist entry, so the class verdict never branches on store
 $isLegal = '{"week_of":"2026-09-17","comparison":[{"commodity":"Pistachios","id":"pistachios","unit":"oz","stores":[{"store":"Aldi","per_unit":0.4056,"item":"Southern Grove Pistachios 16 OZ"},{"store":"Baker''s","per_unit":0.4684,"item":"Simple Truth Shelled Roasted & Salted Pistachios"}]},{"commodity":"Protein Bars","id":"protein-bars","unit":"each","stores":[{"store":"Walmart","per_unit":1.0,"item":"Gatorade Chocolate Chip Protein Bar 2.8 Oz"}]}]}'
 Set-Content (Join-Path $fxIs 'comparison-2026-09-17.json') $isLegal -Encoding UTF8
 $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxIs)
