@@ -13381,6 +13381,19 @@ wrong-value for a store it has never seen. Only the wrong-value cases need a cha
 `default` throw on an unrecognised store. That is the closed-vocabulary check
 `type-driven-modelling.md` 1 says is the whole prevention in a language without one-of types.
 
+**Acceptance bar, written 2026-09-18 before any count was taken (at `b736de988`).** The unit is one
+live store-name `switch` (a tracked `.ps1` outside `archive/` and `grocery/out/`, two or more literal
+clause labels that are board store names). Re-run the sweep at this commit first and read every
+switch it returns, not only the five named above. Each `default` (or a missing one) gets exactly one
+class, judged by what happens to a store name the switch has never seen: **REFUSE** (throws, exits,
+or drops the row with a message), **NO-OP** (the unknown store gets the neutral outcome the other
+stores that are not listed also get, and that outcome is correct for them), or **WRONG-VALUE** (the
+unknown store silently receives a value that is correct only for some listed or unlisted store, so a
+new store would be priced, labelled or linked wrongly with no message). **A fix is warranted only for
+a WRONG-VALUE switch.** Zero WRONG-VALUE means this item closes DONE with the table and no code
+change. Any fix that makes an eighth store throw must leave all seven current stores' output
+byte-identical, proven on a real board; if it cannot be proven, it is held READY FOR BRAD.
+
 ### I186 - the price formatter applies two midpoint rounding rules, so d5's banker's-versus-half-up question rests on a wrong premise `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q6-modern-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
