@@ -31,6 +31,12 @@
   be rewound to an older week by a checkout, a restore or the bot's own rebase, which would re-arm a double
   send, and an untracked-but-unignored one is deleted by `git clean -fd`. A worktree has neither record, so
   run -Send from the main checkout only.
+  AND THAT IS ENFORCED, NOT ONLY SAID (2026-09-18, backlog I198). A -Send from a LINKED worktree (its .git is
+  a file, lib\gate-leftovers.ps1's Get-TcCheckoutKind) reads that worktree's own grocery\out, which never holds
+  the main checkout's stamp or marker, so it could mail a week the main checkout already mailed. It is refused
+  before anything is written or posted: exit 1, no marker, no stamp, no POST, and -Force does not override it,
+  because no flag given in a worktree can make that worktree see the main checkout's records. A checkout whose
+  kind cannot be read is refused the same way. A draft run is unaffected and works from any checkout.
 
   Usage:
     powershell -File send-friday-email.ps1              # build + create draft (safe)
@@ -44,6 +50,7 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $here '..\lib\ghost-lib.ps1')
 . (Join-Path $here '..\lib\atomic-write.ps1')   # Write-TcAtomicFile: the two week records must never be half-written
+. (Join-Path $here '..\lib\gate-leftovers.ps1') # Get-TcCheckoutKind: main | linked | '' - a -Send runs in main only
 
 function Read-FridayWeekFile([string]$Path) {
   if (-not (Test-Path -LiteralPath $Path)) { return '' }
@@ -64,9 +71,18 @@ function Send-FridayPost([string]$Uri, [hashtable]$Headers, [byte[]]$Bytes) {
 function Invoke-FridayEmailPost {
   <# The once-per-week decision and the two week records around the POST. -Post makes the call and
      -Alert pages; both are passed in so the self-test can count them. Returns outcome
-     sent | draft | already-sent | refused, and the saved post for sent and draft. #>
+     sent | draft | already-sent | refused | wrong-checkout, and the saved post for sent and draft.
+     -CheckoutRoot is the checkout whose grocery\out holds the two records; a send runs only where it is 'main'. #>
   param([string]$Week, [bool]$IsSend, [bool]$IsForce, [string]$StampFile, [string]$MarkerFile,
-        [scriptblock]$Post, [scriptblock]$Alert)
+        [scriptblock]$Post, [scriptblock]$Alert, [string]$CheckoutRoot)
+  if ($IsSend) {
+    $kind = if ($CheckoutRoot) { Get-TcCheckoutKind -Root $CheckoutRoot } else { '' }
+    if ($kind -ne 'main') {
+      $shown = if ($kind) { $kind } else { 'unknown' }
+      $why = ("-Send refused: this checkout ({0}) is '{1}', not the main checkout. The once-a-week records (friday-email.stamp, friday-email.invoking) live only in the main checkout's grocery\out, so a send from here cannot see a week already mailed from there and could mail the list twice. Nothing was posted and no record was written. Run -Send from the main checkout; -Force does not override this. A draft (no -Send) works from any checkout." -f $CheckoutRoot, $shown)
+      return [pscustomobject]@{ outcome = 'wrong-checkout'; saved = $null; why = $why }
+    }
+  }
   $sentWeek = Read-FridayWeekFile $StampFile
   $invokingWeek = Read-FridayWeekFile $MarkerFile
   if ($IsSend -and ($sentWeek -eq $Week) -and -not $IsForce) {
@@ -123,51 +139,90 @@ if ($SelfTest) {
   try {
     $env:TC_STAGE_WRITES = $null; $env:TC_WRITE_JOURNAL = $null
 
+    # A REAL main checkout and a REAL linked worktree of it, built with git in this run's temp dir, so the
+    # checkout rule is asked of the shapes git makes and not of a hand-made .git file. The repository
+    # environment is cleared first: under a hook GIT_DIR would point these git calls at the shared repo.
+    . (Join-Path $here '..\lib\git-repo-env.ps1')
+    Clear-TcGitRepoEnv
+    $mainRoot = Join-Path $dir 'main'
+    $linkedRoot = Join-Path $dir 'wt'
+    New-Item -ItemType Directory -Path $mainRoot -ErrorAction Stop | Out-Null
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+      & git init -q $mainRoot 2>$null | Out-Null
+      [IO.File]::WriteAllText((Join-Path $mainRoot 'x.txt'), 'x', (New-Object Text.UTF8Encoding($false)))
+      & git -C $mainRoot add x.txt 2>$null | Out-Null
+      & git -C $mainRoot -c user.name=sfe -c user.email=sfe@invalid -c commit.gpgsign=false commit -q -m fixture 2>$null | Out-Null
+      & git -C $mainRoot worktree add -q $linkedRoot 2>$null | Out-Null
+    } finally { $ErrorActionPreference = $prevEap }
+    Check 'CLEAN TWIN the fixture is what git made: a main checkout and a linked worktree of it' (((Get-TcCheckoutKind -Root $mainRoot) -eq 'main') -and ((Get-TcCheckoutKind -Root $linkedRoot) -eq 'linked')) ("main=" + (Get-TcCheckoutKind -Root $mainRoot) + " linked=" + (Get-TcCheckoutKind -Root $linkedRoot))
+
+    # MUST FIRE: a -Send from a linked worktree, through the real Send-FridayPost and Invoke-GhostApi. Refused
+    # before the marker, the stamp or the transport, and -Force does not change that.
+    foreach ($forced in @($false, $true)) {
+      Reset-Case; $script:transportCalls = 0; $script:transportPlan = @([pscustomobject]@{ posts = @([pscustomobject]@{ id = 'wt' }) })
+      $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $forced -StampFile $stamp -MarkerFile $marker -CheckoutRoot $linkedRoot -Post $realPost -Alert $countAlert
+      Check ('MUST FIRE  -Send from a linked worktree is refused (Force=' + $forced + '): zero transport calls, no marker, no stamp') (($r.outcome -eq 'wrong-checkout') -and ($script:transportCalls -eq 0) -and -not (Test-Path -LiteralPath $marker) -and -not (Test-Path -LiteralPath $stamp)) ("outcome=" + $r.outcome + " transport calls=" + $script:transportCalls + " marker=" + (Test-Path -LiteralPath $marker) + " stamp=" + (Test-Path -LiteralPath $stamp))
+    }
+    Reset-Case; $script:transportCalls = 0
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $realPost -Alert $countAlert
+    Check 'MUST FIRE  -Send with no checkout named is refused too: zero transport calls' (($r.outcome -eq 'wrong-checkout') -and ($script:transportCalls -eq 0) -and -not (Test-Path -LiteralPath $marker)) ("outcome=" + $r.outcome + " transport calls=" + $script:transportCalls)
+
+    # CLEAN TWIN: the same -Send from the main checkout reaches the (stubbed) POST exactly once; a draft from the
+    # linked worktree still posts.
+    Reset-Case; $script:transportCalls = 0; $script:transportPlan = @([pscustomobject]@{ posts = @([pscustomobject]@{ id = 'main' }) })
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $realPost -Alert $countAlert
+    Check 'CLEAN TWIN -Send from the main checkout POSTs exactly once and records sent W' (($r.outcome -eq 'sent') -and ($script:transportCalls -eq 1) -and ((Read-FridayWeekFile $stamp) -eq $W)) ("outcome=" + $r.outcome + " transport calls=" + $script:transportCalls)
+    Reset-Case; $script:transportCalls = 0
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $false -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $linkedRoot -Post $realPost -Alert $countAlert
+    Check 'CLEAN TWIN a draft from a linked worktree still posts once and writes neither record' (($r.outcome -eq 'draft') -and ($script:transportCalls -eq 1) -and -not (Test-Path -LiteralPath $marker)) ("outcome=" + $r.outcome + " transport calls=" + $script:transportCalls)
+
     Reset-Case; Write-FridayWeekFile $marker $W
-    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $countPost -Alert $countAlert
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $countPost -Alert $countAlert
     Check 'MUST FIRE  invoking W without sent W REFUSES: zero POSTs, one alert, outcome refused' (($script:posts -eq 0) -and ($script:alerts -eq 1) -and ($r.outcome -eq 'refused')) ("posts=" + $script:posts + " alerts=" + $script:alerts + " outcome=" + $r.outcome)
     Check 'MUST FIRE  the refusal leaves both records as it found them' (((Read-FridayWeekFile $marker) -eq $W) -and -not (Test-Path -LiteralPath $stamp)) ("marker=" + (Read-FridayWeekFile $marker) + " stamp=" + (Read-FridayWeekFile $stamp))
 
     Reset-Case
-    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $countPost -Alert $countAlert
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $countPost -Alert $countAlert
     Check 'CLEAN TWIN a clean week sends EXACTLY ONCE and leaves sent W (and invoking W)' (($script:posts -eq 1) -and ($r.outcome -eq 'sent') -and ((Read-FridayWeekFile $stamp) -eq $W) -and ((Read-FridayWeekFile $marker) -eq $W) -and ($script:alerts -eq 0)) ("posts=" + $script:posts + " outcome=" + $r.outcome + " stamp=" + (Read-FridayWeekFile $stamp))
     Check 'CLEAN TWIN the stamp keeps its old bytes: the week, no BOM, no newline' ([IO.File]::ReadAllBytes($stamp).Length -eq 10) ("bytes=" + [IO.File]::ReadAllBytes($stamp).Length)
 
     Reset-Case; Write-FridayWeekFile $marker $prev; Write-FridayWeekFile $stamp $prev
-    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $countPost -Alert $countAlert
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $countPost -Alert $countAlert
     Check 'CLEAN TWIN last week finished cleanly, so this week sends once with no alert' (($script:posts -eq 1) -and ($script:alerts -eq 0) -and ($r.outcome -eq 'sent')) ("posts=" + $script:posts + " alerts=" + $script:alerts)
 
     Reset-Case; Write-FridayWeekFile $marker $W; Write-FridayWeekFile $stamp $W
-    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $countPost -Alert $countAlert
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $countPost -Alert $countAlert
     Check 'CLEAN TWIN the old stamp guard still holds: sent W is already-sent, no POST, no alert' (($script:posts -eq 0) -and ($script:alerts -eq 0) -and ($r.outcome -eq 'already-sent')) ("posts=" + $script:posts + " outcome=" + $r.outcome)
 
     Reset-Case; Write-FridayWeekFile $marker $W
-    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $true -StampFile $stamp -MarkerFile $marker -Post $countPost -Alert $countAlert
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $true -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $countPost -Alert $countAlert
     Check 'CLEAN TWIN -Force after a human checked Ghost sends once' (($script:posts -eq 1) -and ($r.outcome -eq 'sent')) ("posts=" + $script:posts + " outcome=" + $r.outcome)
 
     Reset-Case
-    $r = Invoke-FridayEmailPost -Week $W -IsSend $false -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $countPost -Alert $countAlert
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $false -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $countPost -Alert $countAlert
     Check 'CLEAN TWIN a draft run posts once and writes neither record' (($script:posts -eq 1) -and ($r.outcome -eq 'draft') -and -not (Test-Path -LiteralPath $marker) -and -not (Test-Path -LiteralPath $stamp)) ("posts=" + $script:posts + " outcome=" + $r.outcome)
 
     # END TO END through the real Invoke-GhostApi: Ghost takes the send and the reply times out.
     Reset-Case; $script:transportCalls = 0
     $script:transportPlan = @((New-Object System.Net.WebException('The operation has timed out', [System.Net.WebExceptionStatus]::Timeout)))
     $threw = $false
-    try { $null = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $realPost -Alert $countAlert } catch { $threw = $true }
+    try { $null = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $realPost -Alert $countAlert } catch { $threw = $true }
     Check 'MUST FIRE  a POST that times out is attempted EXACTLY ONCE, and the run throws' (($script:transportCalls -eq 1) -and $threw) ("transport calls=" + $script:transportCalls + " threw=" + $threw)
     Check 'MUST FIRE  the timeout leaves invoking W and no stamp, the crash window on disk' (((Read-FridayWeekFile $marker) -eq $W) -and -not (Test-Path -LiteralPath $stamp)) ("marker=" + (Read-FridayWeekFile $marker) + " stamp=" + (Read-FridayWeekFile $stamp))
     $script:transportCalls = 0; $script:transportPlan = @([pscustomobject]@{ posts = @([pscustomobject]@{ id = 'dup' }) })
-    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $realPost -Alert $countAlert
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $realPost -Alert $countAlert
     Check 'MUST FIRE  so the NEXT run refuses: zero transport calls, one alert' (($script:transportCalls -eq 0) -and ($r.outcome -eq 'refused') -and ($script:alerts -eq 1)) ("transport calls=" + $script:transportCalls + " outcome=" + $r.outcome + " alerts=" + $script:alerts)
 
     # CLEAN TWIN: an outage that provably stopped the request before Ghost clears the marker by itself.
     Reset-Case; $script:transportCalls = 0
     $script:transportPlan = @((New-Object System.Net.WebException('Unable to connect to the remote server', [System.Net.WebExceptionStatus]::ConnectFailure)))
     $threw = $false
-    try { $null = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $realPost -Alert $countAlert } catch { $threw = $true }
+    try { $null = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $realPost -Alert $countAlert } catch { $threw = $true }
     Check 'CLEAN TWIN a refused connection is retried (1 + 3 attempts), then clears invoking W' (($script:transportCalls -eq 4) -and $threw -and -not (Test-Path -LiteralPath $marker)) ("transport calls=" + $script:transportCalls + " marker present=" + (Test-Path -LiteralPath $marker))
     $script:transportCalls = 0; $script:transportPlan = @([pscustomobject]@{ posts = @([pscustomobject]@{ id = 'ok' }) })
-    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -Post $realPost -Alert $countAlert
+    $r = Invoke-FridayEmailPost -Week $W -IsSend $true -IsForce $false -StampFile $stamp -MarkerFile $marker -CheckoutRoot $mainRoot -Post $realPost -Alert $countAlert
     Check 'CLEAN TWIN and the next run sends once and records sent W' (($script:transportCalls -eq 1) -and ($r.outcome -eq 'sent') -and ((Read-FridayWeekFile $stamp) -eq $W)) ("transport calls=" + $script:transportCalls + " outcome=" + $r.outcome)
 
     # THE TWO RECORDS ARE MACHINE-LOCAL AND GITIGNORED (2026-09-18, backlog I231). grocery/out is on the bot's
@@ -189,7 +244,7 @@ if ($SelfTest) {
   } finally {
     Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $expected = 15
+  $expected = 21
   if ($script:cases -ne $expected) { $script:fails++; Write-Output ("FAIL  ran {0} of {1} cases" -f $script:cases, $expected) }
   if ($script:fails) { Write-Output ("send-friday-email self-test: FAIL ({0} of {1} cases failed)" -f $script:fails, $script:cases); exit 1 }
   Write-Output ("send-friday-email self-test: PASS ({0} of {0} cases)" -f $script:cases)
@@ -251,8 +306,12 @@ $liveAlert = {
   param($why)
   Send-Alert -Subject 'Friday email refused: a send for this week may already have gone out' -Body $why -What 'FRIDAY-EMAIL' | Out-Null
 }
-$res = Invoke-FridayEmailPost -Week $week -IsSend ([bool]$Send) -IsForce ([bool]$Force) -StampFile $stampFile -MarkerFile $markerFile -Post $livePost -Alert $liveAlert
+$res = Invoke-FridayEmailPost -Week $week -IsSend ([bool]$Send) -IsForce ([bool]$Force) -StampFile $stampFile -MarkerFile $markerFile -Post $livePost -Alert $liveAlert -CheckoutRoot (Split-Path $here -Parent)
 
+if ($res.outcome -eq 'wrong-checkout') {
+  Write-Host ("REFUSED week={0}: {1}" -f $week, $res.why) -ForegroundColor Red
+  exit 1
+}
 if ($res.outcome -eq 'already-sent') {
   Write-Host ("already sent for week {0} - nothing to do (use -Force to override)" -f $week) -ForegroundColor Yellow
   exit 0
