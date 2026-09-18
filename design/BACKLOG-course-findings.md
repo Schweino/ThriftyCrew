@@ -10119,9 +10119,65 @@ one-line rule handles more cheaply.
 
 ---
 
-### I119 - No cold corpus in this estate is ever re-read, and the 8-of-9 stale-harness finding is what that costs `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I119 - No cold corpus in this estate is ever re-read, and the 8-of-9 stale-harness finding is what that costs `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** One third already done: the EVAL/MEASURE corpus whose cost the item quotes has been scrubbed on every push since 2026-09-10. Run read-only, exit 0: 21 docs, 5 current, 4 unqualified, and **12 not qualifiable (57%)** - that hole is the honest gap. `graph/gold`, `graph/provenance` and `meal-prep/db` have no re-validation at all.
+
+**ACCEPTANCE BAR, written 2026-09-19 before the scrub was run.** Harness: `ops/probe_cold_corpus_scrub.py`
+(read-only, committed with this item so the question can be asked again). It reads every tracked file in
+the three remaining corpora and counts, per corpus, with the denominator beside each count:
+(1) PARSE - lines or files that are not valid JSON, or carry a NUL, a BOM past byte 0, or a CR in an LF blob;
+(2) DUP - a repeated `id` within a gold file, or a repeated `event_id` across the provenance trail;
+(3) MISFILED - a provenance record whose own timestamp day is not its file's day (the writer shards by
+record day, `graph/lib/graphdb.py` `_append_jsonl`); (4) REWRITTEN - a commit to a provenance file whose
+previous blob is not a byte prefix of the new one, i.e. an append-only log whose past was edited;
+(5) DANGLING - a gold row whose `commodity` is not a live id in `grocery/commodities.json` and not a recipe
+commodity. **The decision rule:** a scheduled scrub is warranted only for a class that reads at least 1 AND
+that no existing scheduled reader already reports. A class an existing reader already counts (for example
+`graph/eval/score.py`'s `missing_node`) is recorded and not re-scrubbed. If every class reads 0 or is already
+covered, the item closes with the numbers and no schedule is built, because a report that can only ever
+print zero is the dead detector `ops-and-gates.md` refuses.
+
+**Done 2026-09-19. Measured, and no scheduled scrub is warranted: nothing in the three corpora has decayed.**
+Run at 4d8192903 through `ops/probe_cold_corpus_scrub.py` (committed here; exit 0, `findings=24`), over the
+HEAD blobs so a CRLF checkout cannot read as rot:
+- **PARSE: 0** in every corpus. Gold 0 of 3,786 rows in 3 files; provenance 0 of 10,948 rows in 28 files;
+  `meal-prep/db` 0 of 617 tracked `.json`/`.jsonl` files (1,242 jsonl rows). No NUL, no mid-file BOM, no CR.
+- **MISFILED: 0 of 10,948** provenance records (0 undated). **REWRITTEN: 0 of 20** commit-to-commit
+  transitions across the 28 provenance files: every later blob extends the earlier one byte for byte.
+- **DUP: 1 of 10,948** provenance events, and it is not rot: `2026-08-23.jsonl` lines 1 and 2 are two
+  `resolve_pending` records 11 s apart under the literal run id `run:test`, and `event_id` hashes run, step,
+  kind and payload but not the clock (`graph/lib/ids.py:229`), so two runs of one test collide by design.
+  It is test output that reached the tracked trail - 4 `run:test` records in all, in `2026-08-20` (1) and
+  `2026-08-23` (3), none since; `ingest_hunter_events.py --provenance-dir` is the seam that now stops a drill
+  writing there. Gold DUP: 0.
+- **DANGLING: 23 of 3,786** gold rows, and the bar's decision rule reads this one literally as warranted,
+  so it is recorded rather than waved through. All 23 sit in `graph/gold/hunter-gold.jsonl` (23 of its 281
+  rows, blob 8c7cf6c26a), every one `kind: ingredient`, `label: MATCH`, naming an id the mapper PROPOSED
+  (`beef-stew-meat`, `pine-nuts`, `99-1-ground-turkey`, ...). **0 of 23 ever existed**:
+  `git log --all -G '"id":\s*"<id>"'` over `grocery/commodities.json` and `grocery/recipe-commodities.json`
+  finds none of them. So this is a never-minted proposal, fixed on the day each row was written, and not a
+  reference that rotted - a schedule would print 23 until someone mints them, which is a mint backlog and
+  not a scrub. Nothing scores these rows today (`score.py` scores `kind: match` only, and
+  `ingest_hunter_events.py`'s header says merging hunter gold into gold is a later human decision), so they
+  cost nothing now. **They are the precondition for that merge**: 23 of 281 labels would resolve to no node.
+  The gold rows that did read dangling on the first cut (42 more, in `gold.jsonl` and
+  `escalation-review.jsonl`) were the harness missing the third namespace - the recipe FLOOR ids on
+  `grocery/out/recipe-board-everyday.json` and `grocery/recipe-floor-id-map.json` - and all resolved once it
+  was added; `score.py`'s `missing_node` (10 of 2,094 on the 2026-09-11 nightly) already reports what the
+  scored gold cannot reach.
+
+So the premise holds only for the EVAL/MEASURE corpus the 2026-09-12 lane already covered: the other three
+are either re-read every night (`graph/gold/gold.jsonl` is rebuilt by `seed_gold.py` in `nightly.ps1`, which
+parses `escalation-review.jsonl` with a bare `json.loads` per line, so a bad line there fails that stage
+loudly) or append-only logs that have measurably not been touched. **One reader is quiet where it should not
+be, recorded and not fixed here because it guards nothing today:** `hunter-gold.jsonl`'s only parser is
+`ingest_hunter_events.py`'s `append_gold` (line 332), which loads the file to dedup and skips an unparseable
+line with `except ValueError: continue`, so a corrupt row there would be neither reported nor deduped against.
+It reads 0 bad lines of 281 today, which is why that is a note and not a change. The probe stays committed so the question
+can be asked again by one command. Its `--selftest` passes 15 of 15, and three single mutants run from a temp
+mirror each went red in their own named case (append-only check forced true: 2 MUST FIRE red; CR check
+removed: 1 red; record day forced to None: 1 red), with the original md5-identical afterwards.
 
 **Merged from `design\backlog-inbox\q7-os-persistence-2026-09-11.md` on 2026-09-11.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
