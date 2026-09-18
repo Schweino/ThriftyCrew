@@ -14489,7 +14489,7 @@ on a fresh guid turned "three offsets of an offset-blind kind are ONE input" red
 buckets on the offset turned "12 corrupt cases bucket to 2 distinct failures" red (12 buckets), each
 exit 2.
 
-### I204 - The hand-run mutation probes name their mutants but not their operators, and none has a committed harness `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+### I204 - The hand-run mutation probes name their mutants but not their operators, and none has a committed harness `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-proptest-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14524,6 +14524,32 @@ site, run the file's `-SelfTest`, record killed/survived per case, md5 the origi
 `ops\`, reporting `killed K of N non-equivalent, E judged equivalent` per the checklist. Never a gate:
 a bar on kill rate would be red on day one, and the survey's threshold finding says a score below
 some level carries no information about faults anyway.
+
+**Done 2026-09-18.** `ops\probe-mutants.ps1` is the committed harness. It takes a `.ps1` target and a JSON
+spec of named mutants, each a literal find/replace at one site with an operator from a CLOSED catalogue of
+nine (`-ListOperators`): the eight classes above plus `literal-value`; an operator outside it refuses the run.
+Each mutant runs the target's own `-SelfTest` in a fresh per-run mirror under `%TEMP%` (all of `lib\`, every
+file beside the target, `-Include` paths), one child at a time, at most 50 mutants a run, with a hang guard.
+The unmutated control runs first and a red control is exit 3; the original is MD5-hashed before and after
+and a change is exit 3. Outcomes are scored through `lib\selftest-verdict.ps1`: killed, killed-noverdict,
+killed-timeout, survived; judged-equivalent, stillborn (does not parse) and invalid (site absent or
+ambiguous) are printed and kept out of the denominator, and a judged-equivalent mutant that is killed is
+flagged. It reports `killed K of N non-equivalent, E judged equivalent` per operator class and overall,
+one JSONL row per mutant with `-OutFile`, and names its commit and its own blob. A report, never a gate.
+Verified at base a008cc503 under PS 5.1: `-SelfTest` 17 of 17, exit 0 (MUST FIRE: a boundary mutant with no
+case on the boundary is SURVIVED; CLEAN TWIN: the fixture is MD5-identical afterwards and the mirror is gone).
+The harness was then run over ITSELF with 9 mutants: first 5 of 8 non-equivalent killed, the 3 survivors
+naming 2 missing cases (a red-line regex anchor, the equivalence flag's connector), which were added; the
+re-run killed 7 of 8, 1 judged equivalent (`-ne 1` to `-gt 1` after a zero-count return), original
+identical. The one survivor left, deleting the `exit 1` after the self-test's own FAIL verdict, is not
+killable from inside the suite (that branch only runs when it is already red) and `selftest-verdict`
+scores the FAIL line red anyway. The first live run also hit `ps-json-array-collapse` (a 9-entry spec read
+as one mutant), now `Read-PmSpec` with its own MUST FIRE. Over `ops\audit-backlog-status.ps1`, 6 mutants:
+killed 5 of 6, and the I37 anchor survivor is now killed, by two MUST NOT FIRE cases (a heading quoted
+mid-line, and one in an indented code block); the survivor is new, see below. **Not done:** Python targets, generated mutants, and retro-labelling the 27 recorded probes.
+**Found, not fixed:** dropping the `\b` boundaries around `BLOCKED` in `audit-backlog-status.ps1`'s
+waits-on-something regex (line 168) survives, so no case pins that a word merely containing BLOCKED does
+not count.
 
 ### I205 - the data committer's source-path refusal has two dead branches, because TrimStart('./') strips the leading dot of .claude and .github `DONE` `queue-8`
 
