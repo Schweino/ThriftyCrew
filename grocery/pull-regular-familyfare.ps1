@@ -102,6 +102,44 @@ function Get-FfCursorCommit($nextIdx, [bool]$mergedOk) {
   return [int]$nextIdx
 }
 
+# WRITE THE COMMITTED CURSOR WITH ITS DATE (2026-09-18, backlog I232 / I161). This lane called
+# Save-CaptureCursor without -AdvancedOn, so capture-cursor.json carried a <store>_last date for the five other
+# rotation stores and none for Family Fare: nothing on disk said when its rotation last moved. The date is a
+# RECORD here, not a guard: Family Fare runs three shard windows a day by design (capture-watchdog's window 3
+# of 3), so the one-slice-per-day rule in Step-CaptureCursor must NOT apply to it, and this lane never calls
+# Step-CaptureCursor, the only reader of <store>_last. Only the new key is added; every existing key keeps its
+# value. Save-CaptureCursor and Write-CursorLog come from capture-policy-lib.ps1, which the caller dot-sources.
+function Save-FfCursorAdvance([int]$From, [int]$To, [string]$Today, [string]$OutDir) {
+  Save-CaptureCursor -Store 'Family Fare' -Next $To -OutDir $OutDir -AdvancedOn $Today
+  Write-CursorLog -Store 'Family Fare' -From $From -To $To -Today $Today -OutDir $OutDir
+}
+
+# WHAT DID FRESHOP SAY TO ONE REQUEST? (2026-09-18, backlog I232 / I132). Get-FreshopItems has tallied the
+# status and the body's error_code since 2026-08-20, but only as a run-wide count, so the per-term ledger
+# stamped every term that came back without rows with one sentence - "Freshop does not distinguish a true
+# empty from throttle refusal" - even when this very run had read error_code 429 off that term's response.
+# The key is the same string the run-wide tally uses, so the two cannot drift.
+function Get-FfApiAnswerKey([int]$StatusCode, [string]$ErrorCode) {
+  if ($StatusCode -and $ErrorCode) { return ("HTTP $StatusCode (error_code $ErrorCode" + $(if ($ErrorCode -eq '429') { ' = RATE LIMITED)' } else { ')' })) }
+  if ($StatusCode) { return "HTTP $StatusCode" }
+  return 'no response/timeout'
+}
+$script:FfEmpty200 = 'HTTP 200 with zero product rows'
+
+# THE LEDGER ENTRY FOR A TERM THAT WAS ASKED AND RETURNED NO ROWS. The OUTCOME stays 'rejected' in every case:
+# derive-not-carried reads outcome=empty as evidence a store does not carry a thing, so promoting an empty 200
+# to 'empty' would start writing not-carried entries - a decision about the board, not a logging fix. What
+# changes is that the entry now SAYS what the API answered (api_said) and gives the reason that answer
+# supports. With no recorded answer the entry is byte-identical to what this lane wrote before.
+function New-FfRejectedTermEntry([string]$Term, [int]$Ordinal, [string]$ApiSaid) {
+  $legacy = 'request returned no product rows; Freshop does not distinguish a true empty from throttle refusal'
+  if (-not $ApiSaid) { return [ordered]@{ term=$Term; ordinal=$Ordinal; outcome='rejected'; row_count=0; reason=$legacy } }
+  $why = if ($ApiSaid -match 'error_code 429') { 'refused: Freshop rate-limited this request (a 400 carrying error_code 429) - a throttle, not an answer about the term' }
+         elseif ($ApiSaid -eq $script:FfEmpty200) { 'answered empty: HTTP 200 with zero rows. Freshop''s throttle is a 400 carrying error_code 429, not an empty 200, so this is the store''s own search result; outcome stays rejected until empty-means-not-carried is ruled for this store' }
+         else { ('request failed (' + $ApiSaid + ') - no answer about the term') }
+  return [ordered]@{ term=$Term; ordinal=$Ordinal; outcome='rejected'; row_count=0; reason=$why; api_said=$ApiSaid }
+}
+
 # WHAT DOES ONE EXPIRY ACTUALLY MEAN? Three different things, and only one of them is news.
 #   starved - the row's own search term has not returned a single product inside the whole carry window. The
 #             sweep genuinely cannot replace this product. THIS is degradation, and it is directly actionable:
@@ -442,6 +480,39 @@ if ($SelfTest) {
     _T 'CLEAN-TWIN c2: a brand-new target is created (first write of a new day)' ($r3 -and (Test-Path $tf2))
   } finally { Remove-Item -LiteralPath $tdir -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # ---- THE REJECTED-TERM LEDGER SAYS WHAT FRESHOP SAID (2026-09-18, backlog I232 / I132) ------------------
+  # The key is built by the SAME function the run-wide tally uses; the 400-carrying-429 shape is the one
+  # measured on 2026-08-20 (status 400, body {"error_code":429}).
+  $k429 = Get-FfApiAnswerKey 400 '429'
+  _T 'MUST-FIRE: a 400 carrying error_code 429 is keyed as RATE LIMITED (the run-wide tally''s own spelling)' ($k429 -eq 'HTTP 400 (error_code 429 = RATE LIMITED)')
+  $rj429 = New-FfRejectedTermEntry 'ground coriander' 3 $k429
+  _T 'MUST-FIRE: a term the API rate-limited is recorded AS a throttle, with what the API said, not as the old could-be-either sentence' (($rj429.reason -match '^refused: Freshop rate-limited') -and ($rj429.api_said -eq $k429))
+  $rj200 = New-FfRejectedTermEntry 'ground coriander' 3 $script:FfEmpty200
+  _T 'MUST-FIRE: a term answered with an empty 200 is recorded as ANSWERED EMPTY, distinct from a throttle' (($rj200.reason -match '^answered empty') -and ($rj200.api_said -eq $script:FfEmpty200) -and ($rj200.reason -ne $rj429.reason))
+  _T 'CLEAN-TWIN: the OUTCOME stays rejected for every answer, so derive-not-carried reads no new not-carried evidence' (($rj429.outcome -eq 'rejected') -and ($rj200.outcome -eq 'rejected') -and ($rj200.row_count -eq 0))
+  $rjOld = New-FfRejectedTermEntry 'ground coriander' 3 ''
+  $rjOldJson = ($rjOld | ConvertTo-Json -Compress)
+  _T 'CLEAN-TWIN: with no recorded answer the entry is byte-identical to what this lane wrote before' ($rjOldJson -eq '{"term":"ground coriander","ordinal":3,"outcome":"rejected","row_count":0,"reason":"request returned no product rows; Freshop does not distinguish a true empty from throttle refusal"}')
+  _T 'CLEAN-TWIN: a timeout keeps its own words' (((New-FfRejectedTermEntry 'x' 0 (Get-FfApiAnswerKey 0 '')).reason) -match 'no response/timeout')
+
+  # ---- THE CURSOR COMMIT RECORDS ITS DATE (2026-09-18, backlog I232 / I161) -------------------------------
+  # Driven through the real Save-CaptureCursor against a TEMP cursor file seeded with the live file's other
+  # keys, so the MUST-FIRE is the date and the CLEAN TWIN is every other store's cursor surviving untouched.
+  $cdir = Join-Path ([IO.Path]::GetTempPath()) ('ff-cur-' + [guid]::NewGuid().ToString('N').Substring(0,12))
+  $null = New-Item -ItemType Directory -Path $cdir -Force
+  try {
+    . (Join-Path $root 'capture-policy-lib.ps1')
+    $seed = '{"FamilyFare":329,"Bakers":175,"Bakers_last":"2026-09-18","Walmart":119,"Walmart_last":"2026-09-17","Aldi":119,"Aldi_last":"2026-09-17"}'
+    [IO.File]::WriteAllText((Join-Path $cdir 'capture-cursor.json'), $seed)
+    Save-FfCursorAdvance -From 329 -To 336 -Today '2026-09-18' -OutDir $cdir
+    $cdoc = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $cdir 'capture-cursor.json')))
+    _T 'MUST-FIRE: a committed Family Fare advance writes FamilyFare_last (it wrote no date before, so nothing said when its rotation moved)' (([string]$cdoc.FamilyFare_last -eq '2026-09-18') -and ([int]$cdoc.FamilyFare -eq 336))
+    _T 'CLEAN-TWIN: every other store''s cursor and date keep their values' (([int]$cdoc.Bakers -eq 175) -and ([string]$cdoc.Bakers_last -eq '2026-09-18') -and ([int]$cdoc.Walmart -eq 119) -and ([string]$cdoc.Walmart_last -eq '2026-09-17') -and ([int]$cdoc.Aldi -eq 119) -and ([string]$cdoc.Aldi_last -eq '2026-09-17'))
+    $clog = @(Get-Content -LiteralPath (Join-Path $cdir 'capture-cursor-log.jsonl') -ErrorAction SilentlyContinue | Where-Object { $_ })
+    $cl = $null; if ($clog.Count -eq 1) { $cl = ConvertFrom-Json $clog[0] }
+    _T 'CLEAN-TWIN: the advance is still logged once, from and to, for the capture-watchdog cadence watcher' ($cl -and ($cl.store -eq 'Family Fare') -and ([int]$cl.from -eq 329) -and ([int]$cl.to -eq 336))
+  } finally { Remove-Item -LiteralPath $cdir -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
@@ -566,10 +637,16 @@ $FIELDS_RICH = 'id,name,size,price,base_price,unit_price,canonical_url'
 $FIELDS_MIN = 'name,size,price,base_price,unit_price'
 $script:fieldsMode = $FIELDS_RICH
 $script:fellBack = $false
+# query -> what Freshop last said to it when it brought back no rows (see Get-FfApiAnswerKey). Ordinal, because a
+# bare @{} is case-insensitive and two terms differing only in case are two different requests.
+$script:ffTermAnswer = New-Object 'System.Collections.Generic.Dictionary[string,string]' ([StringComparer]::Ordinal)
 function Get-FreshopItems($term) {
   for ($attempt = 1; $attempt -le 2; $attempt++) {
     try {
       $r = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString($term) + "&limit=25&fields=" + $script:fieldsMode) -Headers $UA -TimeoutSec 20
+      # The LAST answer per query wins: a term refused in the main pass and answered in recovery is judged on
+      # the answer. A row-bearing answer clears it, because a success is recorded as a success elsewhere.
+      if (@($r.items).Count -eq 0) { $script:ffTermAnswer[$term] = $script:FfEmpty200 } else { [void]$script:ffTermAnswer.Remove($term) }
       return @($r.items)   # may be empty (throttled or not-carried); caller queues empties for recovery
     }
     catch {
@@ -580,6 +657,7 @@ function Get-FreshopItems($term) {
         try {
           $r2 = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString($term) + "&limit=25&fields=" + $FIELDS_MIN) -Headers $UA -TimeoutSec 20
           $script:fieldsMode = $FIELDS_MIN; $script:fellBack = $true
+          if (@($r2.items).Count -eq 0) { $script:ffTermAnswer[$term] = $script:FfEmpty200 } else { [void]$script:ffTermAnswer.Remove($term) }
           Write-Warning 'Family Fare: Freshop rejected the canonical_url field whitelist - fell back to the minimal fields. Rows will carry NO product identity this run, so their links cannot be derived and must be searched. Check the Freshop field names.'
           return @($r2.items)
         }
@@ -606,11 +684,10 @@ function Get-FreshopItems($term) {
         $eb = [string]$_.ErrorDetails.Message
         if ($eb -match '"error_code"\s*:\s*(\d+)') { $ec = $Matches[1] }
       } catch {}
-      $key = if ($sc -and $ec) { "HTTP $sc (error_code $ec" + $(if ($ec -eq '429') { ' = RATE LIMITED)' } else { ')' }) }
-             elseif ($sc) { "HTTP $sc" }
-             else { 'no response/timeout' }
+      $key = Get-FfApiAnswerKey $sc $ec
       if (-not $script:apiStatus) { $script:apiStatus = @{} }
       $script:apiStatus[$key] = 1 + [int]$script:apiStatus[$key]
+      $script:ffTermAnswer[$term] = $key
       Start-Sleep -Milliseconds 400
     }
   }
@@ -1104,7 +1181,9 @@ for ($termOrdinal = 0; $termOrdinal -lt $termList.Count; $termOrdinal++) {
   if ($termSuccess.ContainsKey($ct)) {
     [void]$captureTerms.Add([ordered]@{ term=$ct; ordinal=$termOrdinal; outcome='success'; row_count=$rowCount })
   } elseif ($termAttempted.ContainsKey($ct)) {
-    [void]$captureTerms.Add([ordered]@{ term=$ct; ordinal=$termOrdinal; outcome='rejected'; row_count=0; reason='request returned no product rows; Freshop does not distinguish a true empty from throttle refusal' })
+    $ctSaid = ''
+    if ($script:ffTermAnswer.ContainsKey($ct)) { $ctSaid = [string]$script:ffTermAnswer[$ct] }
+    [void]$captureTerms.Add((New-FfRejectedTermEntry $ct $termOrdinal $ctSaid))
   } else {
     $reason = if ($termDeferred.ContainsKey($ct)) { [string]$termDeferred[$ct] } else { 'not reached in this bounded rotation window' }
     [void]$captureTerms.Add([ordered]@{ term=$ct; ordinal=$termOrdinal; outcome='not_attempted'; row_count=0; reason=$reason })
@@ -1138,7 +1217,9 @@ if ($null -ne $commitIdx) {
   # knowledge - and hands off only WHERE the number is stored.
   try {
     . (Join-Path $root 'capture-policy-lib.ps1')
-    Save-CaptureCursor -Store 'Family Fare' -Next $commitIdx -OutDir $OutDir
+    # Save-FfCursorAdvance (top of this file) writes the cursor WITH FamilyFare_last and logs the advance, so the
+    # self-test drives the same two calls this window makes.
+    Save-FfCursorAdvance -From $startIdx -To $commitIdx -Today $todayS -OutDir $OutDir
     # AND LOG THE ADVANCE (2026-09-01, queue 2026-09-01-056e6b). Save-CaptureCursor writes the cursor
     # FILE, which records only the latest value; Write-CursorLog is a separate call every other rotation
     # store makes and Family Fare never did. Measured that day: out\capture-cursor-log.jsonl held 17
@@ -1148,7 +1229,7 @@ if ($null -ne $commitIdx) {
     # gates-that-can-never-arm class. The MISSING-WINDOW watcher in capture-watchdog.ps1 reads exactly
     # this line, so it has to exist before that watcher means anything. Never fatal: Write-CursorLog
     # swallows its own errors, because a cursor that moves but cannot be logged is still a moved cursor.
-    Write-CursorLog -Store 'Family Fare' -From $startIdx -To $commitIdx -Today $todayS -OutDir $OutDir
+    # (Called inside Save-FfCursorAdvance above since 2026-09-18.)
     Write-Output ("Family Fare: term cursor advanced to #$commitIdx (this run bought terms #$startIdx..#$(($startIdx + $lastSuccessRot) % $termList.Count), merged catalog landed)")
   } catch {
     Write-Warning ('Family Fare: merged catalog landed but the shared term cursor could not be written (' + $_.Exception.Message + ') - next run restarts at #' + $startIdx + ' and re-buys this slice; no rows are lost.')

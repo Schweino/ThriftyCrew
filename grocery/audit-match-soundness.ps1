@@ -179,6 +179,15 @@ function Get-CandidateBasis {
   return 'not in the newest candidates file'
 }
 
+function Get-SoundnessItems {
+  # A report field as a plain object[], whatever shape it arrived in. Enumerates rather than wraps: see
+  # New-SoundnessAlertBody for why `@($field)` is not an option when the field is a New-Object List[object].
+  param($Value)
+  $a = New-Object System.Collections.ArrayList
+  if ($null -ne $Value) { foreach ($x in $Value) { [void]$a.Add($x) } }
+  return ,($a.ToArray())
+}
+
 function New-SoundnessAlertBody {
   <#
     THE ALERT BODY, AS A FUNCTION (2026-09-08, queue 2026-09-08-2e59b3).
@@ -192,14 +201,27 @@ function New-SoundnessAlertBody {
     Pure and parameterised so -SelfTest can assert the name is in the body without sending mail.
   #>
   param($Report)
+  # NEVER @() A REPORT FIELD HERE (2026-09-18, backlog I232). The live path fills moved, dropped and
+  # new_contested with `New-Object List[object]`, and under PS 5.1 `@($thatList)` THROWS "Argument types do
+  # not match" (ops\audit-list-array-wrap.ps1 has the table; it cannot see a wrap of a PROPERTY). The frozen
+  # fixture below used plain @() arrays, so it passed while every -Alert run with a NEW issue-set died here:
+  # the chain logged "match-soundness is BLIND (exited 1 without its completion marker)" on 09-09, 09-12,
+  # 09-13, 09-14, 09-17 and 09-18, and because the throw came before the signature write, it re-fired every
+  # day until the findings changed. Worse, an exit 1 from a throw is not the exit 2 that HOLDS publish, so a
+  # real MOVED/DROPPED on such a day would not have held the board. Get-SoundnessItems copies any shape
+  # (null, one object, array, List) into a plain array by enumeration, which never wraps the list.
+  $nc = Get-SoundnessItems $Report.new_contested
+  $mvs = Get-SoundnessItems $Report.moved
+  $drs = Get-SoundnessItems $Report.dropped
+  $dps = Get-SoundnessItems $Report.drift_products
+  $cbs = Get-SoundnessItems $Report.cell_by_contest
   $L = New-Object System.Collections.Generic.List[string]
-  $nc = @($Report.new_contested)
   [void]$L.Add('Matching soundness found changes:')
-  [void]$L.Add("MOVED=$(@($Report.moved).Count) DROPPED=$(@($Report.dropped).Count) new-contested=$($nc.Count) drift=$([int]$Report.drift_vs_engine)")
+  [void]$L.Add("MOVED=$($mvs.Count) DROPPED=$($drs.Count) new-contested=$($nc.Count) drift=$([int]$Report.drift_vs_engine)")
   [void]$L.Add('')
-  foreach ($d in @($Report.dropped)) { [void]$L.Add("DROPPED $($d.from): $($d.name)") }
-  foreach ($mv in @($Report.moved)) { [void]$L.Add("MOVED $($mv.from)->$($mv.to): $($mv.name)") }
-  foreach ($dr in (@($Report.drift_products) | Select-Object -First 25)) { [void]$L.Add("DRIFT engine=$($dr.engine) matcher=$($dr.matcher): $($dr.name)") }
+  foreach ($d in $drs) { [void]$L.Add("DROPPED $($d.from): $($d.name)") }
+  foreach ($mv in $mvs) { [void]$L.Add("MOVED $($mv.from)->$($mv.to): $($mv.name)") }
+  foreach ($dr in ($dps | Select-Object -First 25)) { [void]$L.Add("DRIFT engine=$($dr.engine) matcher=$($dr.matcher): $($dr.name)") }
   foreach ($n in $nc) {
     $tag = ''
     if ($n.form) { $tag = ' [FORM]' }
@@ -212,7 +234,7 @@ function New-SoundnessAlertBody {
       [void]$L.Add("    holds a $lbl : $($n.cell)")
     }
   }
-  foreach ($cb in @($Report.cell_by_contest)) {
+  foreach ($cb in $cbs) {
     $lbl = 'CELL'
     if ($cb.crown) { $lbl = 'CROWN' }
     [void]$L.Add("$lbl-BY-CONTEST $($cb.name)  cell $($cb.cell)  claimed by: $($cb.claimed_by)")
@@ -413,6 +435,33 @@ if ($SelfTest) {
   $abEmpty = New-SoundnessAlertBody ([ordered]@{ generated='x'; drift_vs_engine=0; drift_products=@(); moved=@(); dropped=@(); new_contested=@(); cell_by_contest=@() })
   T 'CLEAN TWIN  a report with no new-contested produces no NEW-CONTESTED entry lines but still carries its counts line, so ordinary alerts are unchanged' `
     (($abEmpty -cnotlike '*NEW-CONTESTED*') -and ($abEmpty -like '*new-contested=0*') -and ($abEmpty -like '*audit-match-soundness.ps1 -Accept*')) $abEmpty
+  # ---- THE ALERT BODY OVER THE LIVE PATH'S OWN SHAPES (2026-09-18, backlog I232) --------------------
+  # The two cases above feed plain @() arrays. The live path feeds New-Object List[object] for moved,
+  # dropped and new_contested, and the body builder wrapped them in @(), which THROWS under PS 5.1: every
+  # -Alert run with a new issue-set died in the chain as BLIND, six mornings between 09-09 and 09-18.
+  # Built here exactly as the live path builds them, so the fixture exercises the shape that failed.
+  $lvMoved = New-Object System.Collections.Generic.List[object]
+  $lvMoved.Add([pscustomobject]@{ name = 'Live Shape Moved Product'; from = 'honey'; to = 'jam' })
+  $lvDropped = New-Object System.Collections.Generic.List[object]
+  $lvDropped.Add([pscustomobject]@{ name = 'Live Shape Dropped Product'; from = 'bacon' })
+  $lvNc = New-Object System.Collections.Generic.List[object]
+  [void]$lvNc.Add([pscustomobject]@{ name = 'Dawn Ultra Strawberry Field Scent'; chain = 'strawberries (oz) > dish-soap (oz)'; form = $false
+                                     winner = 'strawberries'; verdict = 'size 18 oz = 0.1708/oz'; cell = 'strawberries @ Family Fare 0.1708/oz'; crown = $false })
+  $lvCb = New-Object System.Collections.Generic.List[object]
+  [void]$lvCb.Add([pscustomobject]@{ name = 'Dawn Ultra Strawberry Field Scent'; cell = 'strawberries @ Family Fare 0.1708/oz'; crown = $false; claimed_by = 'strawberries > dish-soap' })
+  $lvReport = [ordered]@{ generated = '2026-09-18 08:19'; drift_vs_engine = 0; drift_products = $null; moved = $lvMoved; dropped = $lvDropped
+                          new_contested = $lvNc; new_contested_names = @('Dawn Ultra Strawberry Field Scent'); cell_by_contest = $lvCb }
+  $lvBody = $null; $lvErr = ''
+  try { $lvBody = New-SoundnessAlertBody $lvReport } catch { $lvErr = $_.Exception.Message }
+  T 'MUST FIRE  the alert body builds from the LIVE path''s List[object] fields instead of throwing "Argument types do not match" (the 09-09..09-18 BLIND lane)' `
+    ((-not $lvErr) -and ($lvBody -like '*NEW-CONTESTED Dawn Ultra Strawberry Field Scent*')) ('threw: ' + $lvErr)
+  T 'MUST FIRE  the counts line reads the List fields, one of each (a count over a list must not collapse to 0 or 1 by accident)' `
+    ([string]$lvBody -like '*MOVED=1 DROPPED=1 new-contested=1 drift=0*') ([string]$lvBody)
+  T 'CLEAN TWIN  the MOVED, DROPPED and CELL-BY-CONTEST lines still render from List fields' `
+    (([string]$lvBody -like '*MOVED honey->jam: Live Shape Moved Product*') -and ([string]$lvBody -like '*DROPPED bacon: Live Shape Dropped Product*') -and ([string]$lvBody -like '*CELL-BY-CONTEST Dawn Ultra Strawberry Field Scent*')) ([string]$lvBody)
+  $gsEmpty = Get-SoundnessItems (New-Object System.Collections.Generic.List[object])
+  T 'CLEAN TWIN  an EMPTY List[object] field counts 0, and a $null field counts 0, not the PS 5.1 @($null) count of 1' `
+    (($gsEmpty.Count -eq 0) -and ((Get-SoundnessItems $null).Count -eq 0)) ("empty=$($gsEmpty.Count) null=$((Get-SoundnessItems $null).Count)")
   # ---- BASELINE CARRY-FORWARD -----------------------------------------------------------------------
   # Shapes match a real baseline read back through ConvertFrom-Json: names is an OBJECT, contested an array.
   $cfPrev = [pscustomobject]@{ generated='2026-09-07 15:38'; rules_hash='abc'

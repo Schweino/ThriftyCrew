@@ -15845,7 +15845,7 @@ No behaviour changed, so no fixture was added: every edit is prose, a comment, a
   invalid.invalid case still journals with the real transport). With the new condition removed: exit 1,
   "journal=True calls=2". Restored md5-identical: exit 0.
 
-### I232 - Cadence gaps: verification samples and Family Fare's cursor date `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+### I232 - Cadence gaps: verification samples and Family Fare's cursor date `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15864,6 +15864,81 @@ No behaviour changed, so no fixture was added: every edit is prose, a comment, a
   another store's sale can break and heal it (board agent).
 - Three recipe cards lose a structured-data block on rebuild, untraced: creamy-tuscan-chicken-skillet,
   scalloped-potato-turkey-casserole, turkey-alfredo-rotini-bake (I172).
+
+**Worked 2026-09-18 (run 0919), bullet by bullet, at base `493339c8f`.** The acceptance bars below were written
+in this session before each count was taken, but in the same commit as the counts, not committed ahead of them.
+
+**Household-in-food and band-censorship: covered elsewhere, not worked here.** They are I217 (the Dawn soap:
+no `scent` token, no ad-file sweep, no self-test) and I216 (the median-relative cutoff) word for word.
+
+**match-soundness BLIND in the chain: FOUND AND FIXED.** Bar: the cause is named by a line that throws, and a
+fixture on the live path's own shapes goes red when the fix is reverted. The chain's log
+(`grocery/ad-cycle-log.txt`) prints the child's stderr right after the BLIND line: `Argument types do not match`.
+It first appears 2026-09-09 (not 09-13), and the lane went BLIND on 6 runs (09-09, 09-12, 09-13, 09-14, 09-17,
+09-18 08:19) and ended with its marker on every other logged run from 09-01 on (09-15 and 09-16 have no chain
+lines in that log at all). Cause: `New-SoundnessAlertBody`
+wrapped `@($Report.new_contested)`, `@($Report.moved)` and `@($Report.dropped)`, and the live path fills those
+with `New-Object List[object]`, which under PS 5.1 throws on the wrap. It runs only under `-Alert` with a NEW
+issue-set, which is why standalone runs (no `-Alert`) always finished, and because the throw came before the
+signature write, the same issue-set re-fired every morning until the findings changed. Its fixture fed plain
+`@()` arrays. `ops/audit-list-array-wrap.ps1` states it cannot see a wrap of a property. **Worse than filed:** an
+exit 1 from a throw is not the exit 2 that holds publish, so a real MOVED/DROPPED on one of those mornings would
+not have held the board. Fix: `Get-SoundnessItems` copies any field shape into a plain array by enumeration, and
+the body builder uses it for all five fields. `audit-match-soundness.ps1 -SelfTest` exit 0 with 4 new cases (2
+MUST FIRE, 2 CLEAN TWIN) built as the live path builds them. With the two old wraps put back: 3 cases red, one
+naming `threw: Argument types do not match`, exit 2; restored md5-identical.
+
+**Family Fare's cursor date and refused terms: FIXED, no board number moves.** Bar: every existing cursor key keeps
+its value, and the `outcome` vocabulary is unchanged, so nothing reading outcomes (`derive-not-carried`,
+`audit-sale-fallback`) sees a different input. `Save-FfCursorAdvance` writes the cursor with
+`-AdvancedOn` and logs the advance, so `capture-cursor.json` gains `FamilyFare_last`. It is a record, not a guard:
+Family Fare runs three shard windows a day by design, and the only reader of `<store>_last` is
+`Step-CaptureCursor`, which this lane never calls, so no run is refused by it. The rejected-term entry now carries
+`api_said` and a reason naming what Freshop answered: `refused` for a 400 carrying `error_code 429`, `answered
+empty` for a 200 with no rows, `request failed` otherwise. With no recorded answer the entry is byte-identical to
+before. **The outcome stays `rejected` even for an empty 200**, because `derive-not-carried` reads
+`outcome=empty` as not-carried evidence; promoting it would write not-carried entries, which is a board decision
+and is not taken here. `pull-regular-familyfare.ps1 -SelfTest` exit 0 with 9 new cases (4 MUST FIRE, 5 CLEAN TWIN,
+one driving the real `Save-CaptureCursor` over a temp cursor file seeded with other stores' keys). Mutants: no
+`-AdvancedOn`, 1 red; entry always legacy, 3 red; restored md5-identical. The per-term recording inside
+`Get-FreshopItems` sits on the network path and has no fixture.
+
+**The daily-ratchets stamp: FIXED on the writer side.** Bar: git itself classifies the three shapes (at main,
+ahead of it, behind it). `run-daily-ratchets.ps1` now records `commit_full`, `origin_main` (the ref as this
+checkout last fetched it), `on_origin_main` and `contains_origin_main`, `$null` when either cannot be asked, and
+prints a NOTE before its marker when the judged commit is not origin/main. The stamp is still written on every
+green, and `health-heartbeat` still reads only its age: making the reader refuse a stamp not on main would turn
+the graph-nightly checkout's greens into pages, which is a separate decision. `-SelfTest` exit 0, 9 of 9, 4 new
+cases over a scratch git repository. Mutants: the ahead answer forced true, 1 red; the behind check pointed at
+itself, 1 red; restored md5-identical.
+
+**The three recipe cards: READ, no defect, nothing to hand Brad.** Bar: rebuild each card now and name the input
+that decides the block. `build-card2.ps1:557` emits the Article paywall node only when `recipes-db.json` says the
+recipe is not public. At base: creamy-tuscan-chicken-skillet and turkey-alfredo-rotini-bake are `public` (in the
+free rotation) and scalloped-potato-turkey-casserole is `paid`. Rebuilt into scratch: the two public cards carry
+no Article node (their `db\built` heads from 09-03 and 09-07 do, built while paid), and the paid one GAINS an
+Article node its 09-03 `db\built` head lacked. So I172's "lose" is right for two and backwards for one, and in
+every case the rebuild is the correct render. The live pages follow the rotation through
+`sync-paywall-schema.ps1`, which rewrites Ghost and never `db\built`, so the stale file is the old card, not the
+page. The probe called it "unnamed" because it strips the Recipe-node claim and not the Article node; naming a
+`visibility-flip` kind there is the cheap follow-up if the probe is run again.
+
+**Verification samples: MEASURED, and the remaining question is Brad's.** Bar: a cadence is being kept if at least
+one whole-board sample is verified per 14 days. `grocery/out/verification-history.json` holds 4 recorded runs
+(boards 07-30, 08-01, 08-08, 08-15, the last recorded 08-16T08:51); 7 worklists were drawn (07-30, 08-01, 08-05,
+08-06, 08-08, 08-15, 09-02), so 3 were drawn and never verified. On 2026-09-18 the newest verified board is 34 days
+old against the 14-day bar. The draw runs only inside `weekly-post-capture.ps1` (0 of 116 files in the main
+checkout's `grocery\out\logs` are its log), and the verifying step, an agent or person with a browser filling
+the blind worklist, has no scheduled owner at all. The pooled whole-board rate on record is 23.7% (95% CI 16.8%
+to 32.5%, 252 verified cells over boards 07-30, 08-08 and 08-15), which is a July and August number.
+
+**THE QUESTION FOR BRAD: what cadence should the out-of-band verification keep, and who does the verifying?**
+1. **A scheduled verification lane every 14 days**: draw n=100 and have a browser agent fill the blind worklist,
+   then `record-sample-verdict.ps1`. *Recommended*: it is the only measurement of the board the board does not
+   write about itself, and at n=100 it gives about +/-8 points per run.
+2. Draw weekly as now and verify by hand when Brad chooses; add a stamp to `expected-automations.json` so a
+   verified sample older than 14 days pages rather than going quiet.
+3. Retire the sample and rely on the internal guards, recording that the board's defect rate is no longer measured.
 
 ### I233 - wave-publish p5 could refuse nothing since 2026-08-15, and its allergen check sat where no wave card exists yet `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
 

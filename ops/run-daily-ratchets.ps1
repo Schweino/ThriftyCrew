@@ -43,6 +43,36 @@ function Get-TcDailyRatchets {
   return @($out)
 }
 
+function Get-TcJudgedCommit {
+  <# WHICH COMMIT DID THIS GREEN JUDGE, AND IS IT MAIN? (2026-09-18, backlog I232)
+     The 09-18 03:17 stamp was written at 59b7fefa5, a local graph-nightly commit that was not on origin/main, and
+     the stamp said only `commit`: a green from a checkout holding unpushed work, or one BEHIND main, read exactly
+     like a green of main. So the stamp now carries both directions against the checkout's own origin/main ref:
+       on_origin_main        HEAD is an ancestor of origin/main - everything judged is on main
+       contains_origin_main  origin/main is an ancestor of HEAD - the checkout was not behind main
+     Both true means the judged tree IS origin/main. $null means it could not be asked (no origin/main ref, or git
+     failed), never false: a could-not-look is not a finding. origin_main names the ref as this checkout last
+     fetched it, so a reader can tell a stale fetch from a stale checkout. Git only, no network. #>
+  param([string]$Repo)
+  $r = [ordered]@{ commit = ''; commit_full = ''; origin_main = ''; on_origin_main = $null; contains_origin_main = $null }
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $full = [string](& git -C $Repo rev-parse --verify -q HEAD)
+    if ($LASTEXITCODE -ne 0 -or -not $full.Trim()) { return [pscustomobject]$r }
+    $r.commit_full = $full.Trim()
+    $r.commit = $r.commit_full.Substring(0, [Math]::Min(9, $r.commit_full.Length))
+    $om = [string](& git -C $Repo rev-parse --verify -q 'refs/remotes/origin/main')
+    if ($LASTEXITCODE -ne 0 -or -not $om.Trim()) { return [pscustomobject]$r }
+    $r.origin_main = $om.Trim()
+    & git -C $Repo merge-base --is-ancestor $r.commit_full $r.origin_main
+    if ($LASTEXITCODE -eq 0) { $r.on_origin_main = $true } elseif ($LASTEXITCODE -eq 1) { $r.on_origin_main = $false }
+    & git -C $Repo merge-base --is-ancestor $r.origin_main $r.commit_full
+    if ($LASTEXITCODE -eq 0) { $r.contains_origin_main = $true } elseif ($LASTEXITCODE -eq 1) { $r.contains_origin_main = $false }
+  } catch { } finally { $ErrorActionPreference = $prevEap }
+  return [pscustomobject]$r
+}
+
 if ($SelfTest) {
   $f = 0; $cases = 0
   function T([string]$m, [bool]$c, [string]$got = '') {
@@ -71,6 +101,48 @@ if ($SelfTest) {
   $missing = @($live | Where-Object { -not (Test-Path -LiteralPath (Join-Path $repo $_)) })
   T ($kMF + '  every file run-gates defers actually exists, so a rename cannot leave a ratchet running nowhere') `
     ($missing.Count -eq 0) ($missing -join ',')
+
+  # WHICH COMMIT A GREEN JUDGED (2026-09-18, backlog I232). A real scratch repository per run, with origin/main as
+  # a plain ref, so the three shapes are git's own answers: ahead of main (the 09-18 59b7fefa5 shape, a local
+  # commit nobody pushed), behind main, and exactly main. No network, no remote.
+  $jr = Join-Path ([IO.Path]::GetTempPath()) ('drj-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  $null = [IO.Directory]::CreateDirectory($jr)
+  $prevEapJ = $ErrorActionPreference
+  try {
+    Clear-TcGitRepoEnv
+    $ErrorActionPreference = 'Continue'
+    $gid = @('-c', 'user.name=fixture', '-c', 'user.email=fixture@example.invalid', '-c', 'commit.gpgsign=false')
+    $null = & git -C $jr init -q
+    $null = & git -C $jr @gid commit -q --allow-empty -m a
+    $shaA = ([string](& git -C $jr rev-parse HEAD)).Trim()
+    $ErrorActionPreference = $prevEapJ
+    $none = Get-TcJudgedCommit -Repo $jr
+    T ($kMNF + '  with NO origin/main ref the answer is unknown ($null), never a false "not on main"') `
+      (($null -eq $none.on_origin_main) -and ($null -eq $none.contains_origin_main) -and ($none.commit_full -eq $shaA)) ("on=" + $none.on_origin_main + " contains=" + $none.contains_origin_main)
+    $ErrorActionPreference = 'Continue'
+    $null = & git -C $jr update-ref refs/remotes/origin/main $shaA
+    $ErrorActionPreference = $prevEapJ
+    $same = Get-TcJudgedCommit -Repo $jr
+    T ($kCT + '  a checkout AT origin/main is recorded as both on it and containing it') `
+      (($same.on_origin_main -eq $true) -and ($same.contains_origin_main -eq $true) -and ($same.origin_main -eq $shaA)) ("on=" + $same.on_origin_main + " contains=" + $same.contains_origin_main)
+    $ErrorActionPreference = 'Continue'
+    $null = & git -C $jr @gid commit -q --allow-empty -m local-nightly
+    $shaB = ([string](& git -C $jr rev-parse HEAD)).Trim()
+    $ErrorActionPreference = $prevEapJ
+    $ahead = Get-TcJudgedCommit -Repo $jr
+    T ($kMF + '  a green judged at a LOCAL commit not on origin/main (the 09-18 03:17 shape) says on_origin_main=false') `
+      (($ahead.on_origin_main -eq $false) -and ($ahead.contains_origin_main -eq $true) -and ($ahead.commit_full -eq $shaB)) ("on=" + $ahead.on_origin_main + " contains=" + $ahead.contains_origin_main)
+    $ErrorActionPreference = 'Continue'
+    $null = & git -C $jr update-ref refs/remotes/origin/main $shaB
+    $null = & git -C $jr checkout -q $shaA
+    $ErrorActionPreference = $prevEapJ
+    $behind = Get-TcJudgedCommit -Repo $jr
+    T ($kMF + '  a green judged in a checkout BEHIND origin/main says contains_origin_main=false') `
+      (($behind.on_origin_main -eq $true) -and ($behind.contains_origin_main -eq $false)) ("on=" + $behind.on_origin_main + " contains=" + $behind.contains_origin_main)
+  } finally {
+    $ErrorActionPreference = $prevEapJ
+    Remove-Item -LiteralPath $jr -Recurse -Force -ErrorAction SilentlyContinue
+  }
 
   if ($f) { Write-Output ("run-daily-ratchets self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("run-daily-ratchets self-test PASS: {0} cases - led by the live join against run-gates' own list, where an empty answer is a failure" -f $cases)
@@ -125,6 +197,11 @@ if ($fails.Count) {
   Write-Output ('  failed: ' + ($fails -join ', '))
   Write-Output '  These are the tree-wide ratchets a push no longer runs. Fix the cause; do not retrain a baseline to make a red go away.'
 }
+$judged = Get-TcJudgedCommit -Repo $repo
+if ($judged.on_origin_main -ne $true -or $judged.contains_origin_main -ne $true) {
+  Write-Output ("  NOTE  this run judged {0}, which is not origin/main as this checkout last fetched it ({1}; on_origin_main={2}, contains_origin_main={3}). A green stamp records that." -f `
+    $judged.commit, $judged.origin_main, $judged.on_origin_main, $judged.contains_origin_main)
+}
 Write-Output ("DAILY-RATCHETS-COMPLETE ratchets={0} failed={1} blind={2}" -f $names.Count, $fails.Count, $blind.Count)
 
 # THE STAMP IS WRITTEN ONLY ON A GREEN VERDICT, and that is deliberate. A stamp written on every path would let a RED
@@ -136,12 +213,14 @@ if (-not $blind.Count -and -not $fails.Count) {
   $stampDir = Join-Path $repo 'ops\out\logs'
   try {
     if (-not [IO.Directory]::Exists($stampDir)) { $null = [IO.Directory]::CreateDirectory($stampDir) }
-    $head = ''
-    try { $head = ([string](& git -C $repo rev-parse --short HEAD)).Trim() } catch { $head = '' }
     $stamp = [ordered]@{
-      written_utc = [DateTime]::UtcNow.ToString('o')
-      commit      = $head
-      ratchets    = $names.Count
+      written_utc          = [DateTime]::UtcNow.ToString('o')
+      commit               = $judged.commit
+      commit_full          = $judged.commit_full
+      origin_main          = $judged.origin_main
+      on_origin_main       = $judged.on_origin_main
+      contains_origin_main = $judged.contains_origin_main
+      ratchets             = $names.Count
       names       = @($names)
       seconds     = [int]($swAll.ElapsedMilliseconds / 1000)
     }
