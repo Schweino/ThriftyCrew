@@ -12054,7 +12054,7 @@ reason to sweep the 37 correct sites. No sweep under any option.
 
 ---
 
-### I161 - Four of five tracked state ledgers have no schema check, while `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I161 - Four of five tracked state ledgers have no schema check, while known-wrong.json has both a required-key list and a closed vocabulary `NEEDS A RULING - THE ROLLBACK GAP IS FIXED, THE ALERT-STATE FIX TOUCHES THE EMAIL PATH` `queue-7` `2-WAY` `RUNG1 RULING`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The item`s own table is WRONG on two of five rows. `cell-state.json` is the mirror of a SQLite table with a real DDL (3 NOT NULLs, a composite primary key), which is STRONGER enforcement than the `known-wrong.json` exemplar the item picked, because it happens at the write rather than post-hoc; and `capture-cursor.json` throws at its writer on a closed store list. The two real gaps are elsewhere, and one is proved: a rollback row missing `price` reads silently as 0.0.
 
@@ -12115,6 +12115,74 @@ deliberately not "add four audits"**: `ops-and-gates.md` forbids a gate that is 
 until the invariants are written down nobody knows whether the existing data satisfies them.
 
 **2-WAY** because the census writes nothing.
+
+**ACCEPTANCE BAR, written 2026-09-18 by the i161-work session BEFORE its probes and before the `cell-state.json`
+count.** Disclosure: the contents of `rollback-first-seen.json`, `alert-state.json` and `capture-cursor.json` were
+looked at minutes before this paragraph was written, so the bar is not blind to those three counts; the rule below
+turns on the readers' and writers' CODE and on the probes, not on the counts. For each ledger a boundary check is
+WORTH HAVING only if all three hold: (1) a reader turns a missing or mistyped required field into a value that
+changes a decision, SILENTLY, shown by a probe or a cited line; (2) no write path refuses that row, and a writer that
+reads it back and re-emits it in a well-formed-looking shape (launders it) counts as not refusing; (3) today's
+tracked content has 0 violating rows over its full denominator, so the check cannot be red on day one. A fix ships in
+THIS item only if a ledger passes all three AND the fix changes no ledger byte, no board number and no email on
+today's data; a ledger that passes but whose fix would change an email or a board number is handed back, not built.
+
+**MEASURED 2026-09-18 at f54b642d3** (blobs: rollback ledger `123ea72e679d`, alert-state `46fdd180ab59`, cursor
+`0c2f3195f21d`, cell-state `11275affe3ed`, `rollback-ttl-lib.ps1` `77a4f8e6eee6`, `send-price-alerts.ps1`
+`e5ffb8fa8be7`). Required keys and closed fields read from the WRITERS; counts over the full committed file.
+
+| Ledger | Required keys (from the writer) | Closed field | (1) silent misread | (2) writer refuses | (3) violating today | Verdict |
+|---|---|---|---|---|---|---|
+| `rollback-first-seen.json` | key, store, item_id, price, first_seen, last_seen, price_changed (`Save-RollbackLedger`) | store in Walmart / Sam's Club / Fareway | **yes, probed** | **no, and it launders** | 0 of 1,784 on every check below | **passes: fixed here** |
+| `alert-state.json` | per item id: price, date, store (`send-price-alerts.ps1:152`) | none | **yes, by the cited lines** | **no, and it launders** | 0 of 1 | **passes: handed back** |
+| `capture-cursor.json` | one int per store key, `<key>_last`, updated, note (`Save-CaptureCursor`) | store in `TermRotationStores` | a null reads as 0 (rotation restarts), a non-number throws | **yes**: typed `[int]$Next`, closed store list throws, other keys copied through verbatim | 6 of 6 store keys are integers | no check |
+| `cell-state.json` | the `cell_state` DDL: commodity_id, store_id NOT NULL, composite key | store_id | derived: `state.py` rebuilds it from observations | **yes**: SQLite refuses at the write | 0 of 3,223 null keys, 0 duplicate keys, 0 rows with no price | no check |
+
+Rollback checks, each 0 of 1,784: a required key missing or null (7 keys), price not a number, price at or below 0,
+first_seen or last_seen not `yyyy-MM-dd`, last_seen before first_seen, key not `store|item_id`, empty item_id,
+duplicate key. Stores 1,014 Walmart, 231 Sam's Club, 539 Fareway.
+
+**The rollback gap, probed.** An entry first seen 2026-08-10 with its `price` key missing, then seen again at $4.87 on
+2026-08-25: `Read-RollbackLedgerFile` read the price as 0, `Get-RollbackWindow` called 0 against 4.87 a new
+promotion, re-anchored first_seen to 2026-08-25 and returned ad_to **2026-09-24 against 2026-09-09**, 15 days of
+TTL the store never gave. The save then wrote `price: 4.87, price_changed: 1`, so the defect erased itself and left a
+price change that never happened. An entry nobody touched was saved back with `price: 0`, well-formed to any reader.
+
+**The alert-state gap, by the lines, not probed** (the script's only path to its verdict sends email).
+`send-price-alerts.ps1:85-87` reads a missing price as 0, so a price at a low is never below `0 - 0.005` nor within
+`0 + 0.005`: that item is **never alerted again** and nothing says so. `:53` catches an unreadable file as an EMPTY
+state, so every item at a low re-alerts every subscriber, and `:153` then overwrites the file with only today's sends,
+the replace-every-entry failure `rollback-ttl-lib.ps1` refuses in so many words. `:152` writes `[double]$v.price`, so
+a missing price is saved back as 0.
+
+**The two findings the census did not ask for.** `graph/lib/graphdb.py:492-494` restores `cell-state.json` with
+`INSERT OR IGNORE`, which in SQLite skips a NOT NULL violation silently, and counts it restored anyway: probed on an
+in-memory table, 3 rows counted and 1 in the table. Low stakes, because `state.py` rebuilds the table, but the count it
+prints after a `rm graph.db` restore overstates. And `capture-cursor.json` holds no `FamilyFare_last` while the five
+other stores each have one: `grocery/pull-regular-familyfare.ps1:1141` calls `Save-CaptureCursor` without
+`-AdvancedOn`, bypassing `Step-CaptureCursor`, so no one-slice-per-day date is recorded for it. Whether that lane
+enforces the rule another way was not checked.
+
+**Done 2026-09-18 (the rollback half).** `grocery/rollback-ttl-lib.ps1`: `ConvertTo-RollbackPrice` reads a missing,
+non-numeric or non-positive price as `$null` (unknown), never 0, and `Test-RollbackSamePrice` treats an unknown price
+as the SAME promotion, so the entry keeps its first_seen, takes the sighting's price and counts no change, and
+`Merge-RollbackEntry` does the same across two writers. An untouched unknown price is saved as `null`, not laundered
+into 0. Verified: `rollback-ttl-lib.ps1 -SelfTest` 17 of 17, exit 0, with 3 new MUST FIRE cases and 2 CLEAN TWINs
+(a well-formed entry at a different price still re-anchors, and is saved with one change counted);
+`test-rollback-ttl.ps1` exit 0. Mutant with the old coercion restored: 3 of 17 red, each in its own named case,
+exit 1, original md5-identical afterwards. Byte-neutral on today's data: the committed ledger round-tripped through
+Read and Save with every key forced dirty came out md5-identical under the old and the new library (699,826 bytes,
+`updated` normalised), and the committed ledger was not written.
+
+**THE RULING (alert-state).** The fix is small and is in the one script that emails members, so it is Brad's.
+- **A. Fix both reads (recommended).** An alert-state.json that exists and cannot be read REFUSES the run (sends
+  nothing, writes nothing, says so), and a missing or zero price reads as unknown, which alerts once and records the
+  real price. Behaviour changes only when the file is damaged; today 1 of 1 row is well-formed, so today's run is
+  unchanged. Tested with the Ghost calls stubbed.
+- **B. Refuse the unreadable file only.** Closes the mass re-send, leaves a lost price as a silent permanent mute.
+- **C. Leave it.** One row, one writer that always writes all three keys; the only producer of a bad row is a hand
+  edit or a torn write, and the file is 70 bytes.
+Recommendation A: the torn-write path emails every subscriber at a low twice, and the refusal costs one skipped day.
 
 ---
 

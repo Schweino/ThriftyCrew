@@ -107,11 +107,34 @@ function Read-RollbackLedgerFile([string]$Path) {
     if ($null -eq $e) { continue }
     $h[[string]$e.key] = [ordered]@{
       store = [string]$e.store; item_id = [string]$e.item_id
-      price = [double]$e.price; first_seen = [string]$e.first_seen
+      price = (ConvertTo-RollbackPrice $e.price); first_seen = [string]$e.first_seen
       last_seen = [string]$e.last_seen; price_changed = [int]$e.price_changed
     }
   }
   return $h
+}
+
+function ConvertTo-RollbackPrice($Value) {
+  <# A ledger price, or $null when the entry carries NO USABLE PRICE (backlog I161, 2026-09-18).
+     `[double]$e.price` read a missing price as 0.0, and 0.0 never equals the price the next capture shows, so the
+     next sighting RE-ANCHORED the entry as a new promotion: first_seen moved to that later capture, the 30-day window
+     ran long, price_changed counted a price change that never happened, and the save wrote the result back looking
+     well-formed. Probed that day: an entry first seen 2026-08-10 came back as first seen 2026-08-25 with ad_to
+     2026-09-24 instead of 2026-09-09. A rolled-back price is never 0 or below (Set-RollbackFields only records one
+     that is above zero), so those read as unknown too. Unknown is carried as $null - never as a number - so the
+     window keeps its anchor and the save writes `null` rather than laundering it into 0. #>
+  if ($null -eq $Value) { return $null }
+  $d = 0.0
+  if (-not [double]::TryParse([string]$Value, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$d)) { return $null }
+  if ($d -le 0) { return $null }
+  return [double]$Value
+}
+
+function Test-RollbackSamePrice($A, $B) {
+  <# One promotion or two. A price the ledger lost ($null) is NOT evidence of a different promotion: the entry's
+     first_seen is the only fact nothing can recompute, so it is kept rather than re-minted from a later capture. #>
+  if ($null -eq $A -or $null -eq $B) { return $true }
+  return ([math]::Abs([double]$A - [double]$B) -le 0.005)
 }
 
 function Import-RollbackLedger([string]$Root = '') {
@@ -177,13 +200,15 @@ function Get-RollbackWindow {
     $e = [ordered]@{ store = $Store; item_id = $ItemId; price = $Price; first_seen = $anchor; last_seen = $todayS; price_changed = 0 }
     $script:RbLedger[$key] = $e; Set-RollbackTouched $key; $isNew = $true
   }
-  elseif ([math]::Abs([double]$e.price - $Price) -gt 0.005) {
+  elseif (-not (Test-RollbackSamePrice $e.price $Price)) {
     # A DIFFERENT ROLLED-BACK PRICE IS A DIFFERENT PROMOTION. Re-anchor and say so.
     $e.price = $Price; $e.first_seen = $anchor; $e.price_changed = [int]$e.price_changed + 1
     $e.last_seen = $todayS; Set-RollbackTouched $key; $isNew = $true
   }
   else {
     # SAME ROLLBACK, SEEN AGAIN. last_seen moves; first_seen MUST NOT ADVANCE - that is the whole rule.
+    # An entry whose price was lost (I161) takes the price this sighting shows, and keeps its anchor.
+    if ($null -eq $e.price) { $e.price = $Price; Set-RollbackTouched $key }
     if ([string]$e.last_seen -ne $todayS) { $e.last_seen = $todayS; Set-RollbackTouched $key }
     # ...but it MAY move BACKWARD, to a capture that provably showed this price earlier than the ledger
     # knew. Earlier is the safe direction: it can only shorten the window, never extend it, so the
@@ -215,12 +240,13 @@ function Merge-RollbackEntry {
   param($Mine, $Theirs)
   if ($null -eq $Theirs) { return $Mine }
   $pc = [Math]::Max([int]$Mine.price_changed, [int]$Theirs.price_changed)
-  if ([math]::Abs([double]$Mine.price - [double]$Theirs.price) -le 0.005) {
+  if (Test-RollbackSamePrice $Mine.price $Theirs.price) {
     $fs = [string]$Mine.first_seen; $tf = [string]$Theirs.first_seen
     if ($tf -and (-not $fs -or [string]::CompareOrdinal($tf, $fs) -lt 0)) { $fs = $tf }
     $ls = [string]$Mine.last_seen; $tl = [string]$Theirs.last_seen
     if ($tl -and (-not $ls -or [string]::CompareOrdinal($tl, $ls) -gt 0)) { $ls = $tl }
-    return [ordered]@{ store = $Mine.store; item_id = $Mine.item_id; price = $Mine.price; first_seen = $fs; last_seen = $ls; price_changed = $pc }
+    $pr = if ($null -ne $Mine.price) { $Mine.price } else { $Theirs.price }
+    return [ordered]@{ store = $Mine.store; item_id = $Mine.item_id; price = $pr; first_seen = $fs; last_seen = $ls; price_changed = $pc }
   }
   $w = $Mine
   $c = [string]::CompareOrdinal([string]$Theirs.last_seen, [string]$Mine.last_seen)
@@ -398,6 +424,31 @@ if ($__rbSelfTest) {
     try { [void](Save-RollbackLedger $r4) } catch { $err4 = $_.Exception.Message }
     T 'MUST FIRE  an UNREADABLE ledger on disk is refused - the save throws rather than replace every entry with this build''s' ($err4 -match 'REFUSING') ("error=$err4")
     T 'CLEAN TWIN and the refused file still holds exactly the bytes it had' ($before4 -eq [Convert]::ToBase64String([IO.File]::ReadAllBytes($p4))) 'bytes changed'
+
+    # ---- 4b. An entry with NO USABLE PRICE keeps its anchor (backlog I161, 2026-09-18) ----
+    # Written as raw JSON because the defect is a MISSING key, which New-RbRow cannot express.
+    $r4b = New-RbRoot 'r4b'; $p4b = Get-RollbackLedgerPath $r4b
+    $j4b = '{"updated":"2026-08-01T00:00:00","ttl_days":30,"note":"fixture","entries":[' +
+      '{"key":"Walmart|np1","store":"Walmart","item_id":"np1","first_seen":"2026-08-10","last_seen":"2026-08-10","price_changed":0},' +
+      '{"key":"Walmart|np2","store":"Walmart","item_id":"np2","price":0,"first_seen":"2026-08-11","last_seen":"2026-08-11","price_changed":0},' +
+      '{"key":"Walmart|ok1","store":"Walmart","item_id":"ok1","price":5.0,"first_seen":"2026-08-10","last_seen":"2026-08-10","price_changed":0}]}'
+    [IO.File]::WriteAllText($p4b, $j4b, (New-Object Text.UTF8Encoding($false)))
+    Reset-RbMemory
+    $w4b = Get-RollbackWindow -Store 'Walmart' -ItemId 'np1' -Price 4.87 -Today '2026-08-25' -AsOf '2026-08-25' -Root $r4b
+    T 'MUST FIRE  an entry with NO price is the same rollback seen again: it keeps first_seen 2026-08-10 and ad_to 2026-09-09 (a missing price read as 0.0 re-anchored it to 2026-08-25)' `
+      ($w4b.first_seen -eq '2026-08-10' -and $w4b.ad_to -eq '2026-09-09' -and -not $w4b.is_new) ("first_seen=$($w4b.first_seen) ad_to=$($w4b.ad_to) is_new=$($w4b.is_new)")
+    $o4b = Get-RollbackWindow -Store 'Walmart' -ItemId 'ok1' -Price 4.00 -Today '2026-08-25' -AsOf '2026-08-25' -Root $r4b
+    T 'CLEAN TWIN a well-formed entry at a DIFFERENT price is still a new promotion and re-anchors to the capture that showed it' `
+      ($o4b.first_seen -eq '2026-08-25' -and $o4b.is_new) ("first_seen=$($o4b.first_seen) is_new=$($o4b.is_new)")
+    [void](Save-RollbackLedger $r4b)
+    $raw4b = ConvertFrom-Json ([IO.File]::ReadAllText($p4b))
+    $s4b = @{}; foreach ($x in @($raw4b.entries)) { $s4b[[string]$x.key] = $x }
+    T 'MUST FIRE  the save records the price that sighting showed, with the anchor kept and NO price change counted' `
+      ([double]$s4b['Walmart|np1'].price -eq 4.87 -and [string]$s4b['Walmart|np1'].first_seen -eq '2026-08-10' -and [int]$s4b['Walmart|np1'].price_changed -eq 0) ($s4b['Walmart|np1'] | ConvertTo-Json -Compress)
+    T 'MUST FIRE  an untouched entry whose price is 0 is saved as null - the save no longer launders an unusable price into a well-formed-looking number' `
+      ($null -eq $s4b['Walmart|np2'].price -and [string]$s4b['Walmart|np2'].first_seen -eq '2026-08-11') ($s4b['Walmart|np2'] | ConvertTo-Json -Compress)
+    T 'CLEAN TWIN and the re-anchored well-formed entry is saved at its new price with one price change counted' `
+      ([double]$s4b['Walmart|ok1'].price -eq 4.00 -and [int]$s4b['Walmart|ok1'].price_changed -eq 1) ($s4b['Walmart|ok1'] | ConvertTo-Json -Compress)
 
     # ---- 5. Four builders at once, each the way a real build runs: load early, observe its own, save late ----
     # BARRIERED INSIDE THE LOCK (lib\ledger-fixture.ps1; ops-and-gates.md: the barrier goes inside the writer). Each
