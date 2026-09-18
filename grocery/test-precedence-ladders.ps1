@@ -57,14 +57,73 @@ $failed = 0
 function Say($s) { if (-not $Quiet) { Write-Output $s } }
 
 # ---------------------------------------------------------------- the hermetic copy
-$dst = Join-Path $env:TEMP 'tc-precedence-fixture'
-# /XD out archive: out\ is 385 MB of capture data this fixture must never read (its whole point is a
-# corpus of exactly one row), and archive\ is frozen code.
-robocopy $root $dst /MIR /NFL /NDL /NJH /NJS /XD (Join-Path $root 'out') (Join-Path $root 'archive') /R:1 /W:1 | Out-Null
-if ($LASTEXITCODE -ge 8) {
+# THE SANDBOX HAS THE REPO'S SHAPE: <base>\grocery beside <base>\lib, with EVERY lib\*.ps1 (backlog I227,
+# 2026-09-18). It used to be a bare copy of grocery\ at the fixed %TEMP%\tc-precedence-fixture, so every
+# script in it that dot-sources ..\lib looked in %TEMP%\lib. When rollback-ttl-lib.ps1 began loading
+# lib\ledger-lock.ps1, compare-deals died on every case: measured at 4e087407d, 1 passed and 7 failed, each
+# red saying "compare-deals exited 1 - the case proved nothing". The whole-lib rule in
+# .claude\rules\ops-and-gates.md, one missed site. The base is named PER RUN, because check-ad-cycles and
+# a hand run can overlap and robocopy /MIR deletes whatever the other run just wrote.
+function New-PrecSandbox([string]$srcRoot, [string]$dropLib) {
+  # Returns the sandbox's grocery\ path, or $null when the copy failed. $dropLib names one library to
+  # leave out, which only the MUST FIRE below asks for.
+  $base = Join-Path $env:TEMP ('tcp-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  $g = Join-Path $base 'grocery'
+  $l = Join-Path $base 'lib'
+  New-Item -ItemType Directory -Path $l -Force -ErrorAction Stop | Out-Null
+  # /XD out archive: out\ is 385 MB of capture data this fixture must never read (its whole point is a
+  # corpus of exactly one row), and archive\ is frozen code.
+  robocopy $srcRoot $g /MIR /NFL /NDL /NJH /NJS /XD (Join-Path $srcRoot 'out') (Join-Path $srcRoot 'archive') /R:1 /W:1 | Out-Null
+  if ($LASTEXITCODE -ge 8) { return $null }
+  foreach ($libFile in @(Get-ChildItem -LiteralPath (Join-Path (Split-Path -Parent $srcRoot) 'lib') -Filter '*.ps1' -File)) {
+    if ($libFile.Name -ne $dropLib) { Copy-Item -LiteralPath $libFile.FullName -Destination (Join-Path $l $libFile.Name) -ErrorAction Stop }
+  }
+  return $g
+}
+function Test-PrecSandboxLoads([string]$g) {
+  # The SUBJECT: load the real rollback-ttl-lib.ps1 out of the sandbox, in its own process, under Stop, so a
+  # library it cannot find is a terminating error rather than a printed one. That file is the one whose
+  # ..\lib load broke this suite; compare-deals reaches it through its own dot-source.
+  $subject = Join-Path $g 'rollback-ttl-lib.ps1'
+  $cmd = "`$ErrorActionPreference = 'Stop'; try { . '" + $subject + "'; 'PREC-SANDBOX-LOADED' } catch { 'PREC-SANDBOX-LOAD-FAILED ' + `$_.Exception.Message; exit 1 }"
+  $out = @(& powershell -NoProfile -ExecutionPolicy Bypass -Command $cmd)
+  return [pscustomobject]@{ rc = $LASTEXITCODE; loaded = [bool](@($out) -contains 'PREC-SANDBOX-LOADED'); text = (@($out) -join ' | ') }
+}
+
+$dst = New-PrecSandbox $root ''
+if (-not $dst) {
   Write-Output ("test-precedence-ladders: hermetic copy FAILED (robocopy rc=" + $LASTEXITCODE + ") - nothing was proven")
   Exit-Guard -Name 'precedence-ladders' -Summary 'BLIND: fixture tree could not be built' -Code 3
 }
+$sbBase = Split-Path -Parent $dst
+$probeBase = $null
+try {
+# A SANDBOX IS PROVEN BY RUNNING A SUBJECT IN IT, never by path arithmetic (ops-and-gates.md, 2026-09-12).
+# A library the engine cannot load is exit 3: seven FAILs saying "compare-deals exited 1" is what this
+# looked like before, and not one of them was about the forbid ladder.
+$sbLoad = Test-PrecSandboxLoads $dst
+if (-not ($sbLoad.rc -eq 0 -and $sbLoad.loaded)) {
+  Write-Output ("test-precedence-ladders: the sandbox cannot load its libraries (rc=" + $sbLoad.rc + ") " + $sbLoad.text)
+  Remove-Item -LiteralPath $sbBase -Recurse -Force -ErrorAction SilentlyContinue
+  Exit-Guard -Name 'precedence-ladders' -Summary 'BLIND: the sandbox could not load lib\ - nothing was proven' -Code 3
+}
+Say ('  PASS  CLEAN TWIN sandbox: the real rollback-ttl-lib.ps1 loads its ..\lib out of the sandbox (' + @(Get-ChildItem -LiteralPath (Join-Path $sbBase 'lib') -Filter '*.ps1' -File).Count + ' lib\*.ps1 copied)')
+$pass++
+# MUST FIRE: the same sandbox with lib\ledger-lock.ps1 left out must FAIL the subject. Without this the
+# check above could pass because the subject stopped needing lib\, or because the load stopped being
+# terminating, and nothing would say so.
+$probeG = New-PrecSandbox $root 'ledger-lock.ps1'
+if ($probeG) { $probeBase = Split-Path -Parent $probeG }
+$probeLoad = if ($probeG) { Test-PrecSandboxLoads $probeG } else { $null }
+if ($probeLoad -and $probeLoad.rc -ne 0 -and -not $probeLoad.loaded) {
+  Say '  PASS  MUST FIRE sandbox: with lib\ledger-lock.ps1 left out, the subject fails to load'
+  $pass++
+} else {
+  $why = if ($probeLoad) { 'rc=' + $probeLoad.rc + ' ' + $probeLoad.text } else { 'the probe sandbox could not be built' }
+  Write-Output ('  FAIL  MUST FIRE sandbox: a sandbox missing lib\ledger-lock.ps1 still loaded the subject, so the load check above proves nothing (' + $why + ')')
+  $failed++
+}
+if ($probeBase) { Remove-Item -LiteralPath $probeBase -Recurse -Force -ErrorAction SilentlyContinue }
 $fxOut = Join-Path $dst 'out'
 New-Item -ItemType Directory -Force (Join-Path $fxOut 'regular') | Out-Null
 
@@ -180,7 +239,10 @@ if ($resolveSites -eq 1) {
   $failed++
 }
 
-Remove-Item $dst -Recurse -Force -ErrorAction SilentlyContinue
+} finally {
+  Remove-Item -LiteralPath $sbBase -Recurse -Force -ErrorAction SilentlyContinue
+  if ($probeBase) { Remove-Item -LiteralPath $probeBase -Recurse -Force -ErrorAction SilentlyContinue }
+}
 Write-Output ''
 Write-Output ("test-precedence-ladders: {0} passed, {1} failed" -f $pass, $failed)
 Write-GuardComplete -Name 'precedence-ladders' -Summary ("passed=" + $pass + " failed=" + $failed)

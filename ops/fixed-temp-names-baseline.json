@@ -1,6 +1,6 @@
 {
-    "generated":  "2026-09-12T10:19:27",
-    "sites":  7,
+    "generated":  "2026-09-18T16:23:21",
+    "sites":  6,
     "history":  [
                     {
                         "date":  "2026-09-11T14:56:47",
@@ -17,6 +17,10 @@
                     {
                         "date":  "2026-09-12T10:19:27",
                         "count":  7
+                    },
+                    {
+                        "date":  "2026-09-18T16:23:21",
+                        "count":  6
                     }
                 ],
     "note":  "HIGH-WATER MARK for paths built under %TEMP% from a FIXED leaf, which concurrent runs of one suite share. Absence probes passed straight to a Get-/Read-/Test- command are listed, not counted. It may only go DOWN, and a fall to zero or over 60% in one run is REFUSED as a probably-broken detector (lib\\ratchet.ps1)."
