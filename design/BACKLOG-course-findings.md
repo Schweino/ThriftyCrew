@@ -15600,7 +15600,7 @@ lines (549 to 553, none lost). Mutant (stamp detail put back to `"reviewed"`): 3
 `...and the gates BELOW those six`, is red at base 11278e27e with these changes removed, so it predates this
 work (see the item report).
 
-### I227 - Gate and audit machinery: six small defects found in passing `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+### I227 - Gate and audit machinery: six small defects found in passing `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15619,6 +15619,33 @@ work (see the item report).
 - Six audits lack a `SCOPE OF A CLEAN REPORT:` line (I178): arg-binding, fixture-vocabulary, run-log-claims,
   source-control-bytes, threshold-register, write-only-reports; `ops/audit-fixed-temp-names.ps1:7` still says
   "A reported site is real".
+
+**Done 2026-09-18.** One commit per bullet, each measured at base `4e087407d` first:
+1. `grocery/test-precedence-ladders.ps1` read 1 passed, 7 failed. Its sandbox now has the repo's shape
+   (`<base>\grocery` beside `<base>\lib` with every `lib\*.ps1`) under a per-run guid base, proven by loading the
+   real `rollback-ttl-lib.ps1` out of it in its own process (a load failure is exit 3 BLIND), with a MUST FIRE
+   sandbox missing `lib\ledger-lock.ps1` that must fail the same load. Now 10 passed, exit 0. Broken once (no
+   library copied): exit 3. The per-run name took `audit-fixed-temp-names` from 7 to 6, recorded with `-Tighten`.
+2. `grocery/audit-json-readers.ps1`: a fall on a plain run is spoken and the mark kept (`-Tighten` records it);
+   the tracked report carries no clock and goes through `lib\lf-write.ps1`, so an unchanged tree leaves it
+   untouched. Four live-path self-test cases (child runs over a temp tree); each of two single mutants turned
+   exit 2 in its own named case only.
+3. `grocery/audit-store-registry.ps1` exited 2 on 6 fixture subsets, not 2: the two in `test-auditors.ps1` now
+   carry `# store-subset-ok:` with reasons, and four 6-store lists in `grocery/capture-policy-lib.ps1`'s own
+   concurrency fixtures, which the inline marker cannot reach, are registered in `stores.json` allowed_subsets
+   with reasons. Audit unchanged; exit 0.
+4. The hand run and the gate disagreed because run-gates marks `audit-write-only-reports` `daily = $true` and
+   never runs it at push; no untracked file was involved (a fresh worktree read the same 42). The new family
+   `x` was a false positive: an I155 fixture in `ops/audit-cross-module-reach.ps1` wrote a temp SOURCE file whose
+   text named `out/x.json`. The fixture's line is now built by concatenation (same value); 41 families whose names
+   equal the baseline's list, exit 0.
+5. `find-similar` and `make-saturation` report a missing digest as BLIND on the marker (`blind=11` and `blind=1`,
+   beside `cases=`), scored on every case it suppresses, with a seeing-arm CLEAN TWIN holding find-similar's
+   constant. Unseeded: exit 0, 13 of 24 and 9 of 10 ran; seeded: 24 and 10. Broken once each: exit 2. NOT done:
+   push-main's pre-lock gate still does not seed first; the BLIND makes that harmless rather than fixing it.
+6. The six audits carry a SCOPE line (47 of 47 now), and `audit-fixed-temp-names.ps1`'s scope paragraph no longer
+   calls a finding real. `design\MEASURE-ratchet-plain-run-writes-2026-09-12.md` names that file as harness and
+   carries the Re-read line.
 
 ### I228 - A harness change a MEASURE doc names cannot land cleanly through push-main `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
 

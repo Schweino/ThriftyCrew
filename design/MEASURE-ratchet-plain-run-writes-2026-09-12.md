@@ -21,6 +21,12 @@ how it classifies a cited hash and in skipping 32-hex md5s. No baseline write, r
 plain run still writes nothing, and its three live-path cases (fall spoken and not written, `-Tighten` writes LF with
 no BOM, a rise exits 2) pass in its 24-case self-test at that commit.
 
+**Re-read at commit `e3c842676`: every figure below still holds.** `ops\audit-fixed-temp-names.ps1` moved only in
+its header's SCOPE paragraph (backlog I227: "a reported site is real" became "a finding is a candidate"). No code
+line changed: a plain run still writes nothing (exit 0, fixed=6 against a baseline of 6) and its self-test passes 35
+cases. The same item also closed "the one left standing" below: `grocery\audit-json-readers.ps1` now speaks a fall
+and keeps its mark, `-Tighten` records it, and its report goes through `lib\lf-write.ps1`.
+
 This document is in its own commit for the reason `design\MEASURE-gate-slot-admission-2026-09-11.md`
 gives: a document cannot carry the hash of the commit that adds it, and here the harness IS what moved,
 so the scripts land first and this cites them. The gate suite that ran over the whole tree is named in
