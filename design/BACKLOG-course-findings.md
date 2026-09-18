@@ -10560,7 +10560,7 @@ produces a list.
 Checked and not found: `vector clock`, `Lamport`, `happens-before`, `causal order` - zero hits in the
 tracked tree and zero in the skills store before this course.
 
-### I132 - A retry down the same path cannot tell "the subject is dead" from "the route to the subject is bad", and every capture retry here is a same-path retry `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I132 - A retry down the same path cannot tell "the subject is dead" from "the route to the subject is bad", and every capture retry here is a same-path retry `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Structural half SETTLED: every capture verdict here is same-path by construction. 0 sites can vary egress (`-Proxy`, `HTTPS_PROXY`, `proxy_url` all return 0 of 0) and 0 vary the HTTP session, so all 7 retry-carrying capture files retry temporally down the identical route. The design question is bigger than "add a proxy": `grocery/pull-browser-stores.py:17-27` uses ONE human-seeded persistent Chrome profile per store precisely because a fresh profile silently lands on a default store and returns a plausible price from the wrong one, so a second path is in direct tension with the store identity. The verdict DENOMINATOR the item asks for is not recoverable from disk - the ingredient queue is drained and `carriage.json` holds product-level verdicts with no probe-path evidence.
 
@@ -10588,6 +10588,51 @@ detector keeps completeness at 100% and spends accuracy - and why `UNCHECKED IS 
 **Rung 1:** count how many capture verdicts in the last N runs were reached on probes that all shared
 one session or one egress path. If the answer is "all of them", the follow-on is a design item about
 a second path, not a code change.
+
+**Done 2026-09-18. Measured: every recorded verdict is same-path, and no second-path design item is warranted.**
+The denominator the 2026-09-12 pass called unrecoverable IS on disk: `pull-regular-bakers-api`,
+`pull-regular-familyfare` and `pull-regular-hyvee` write a per-term `capture_terms` ledger into every tracked
+`grocery/out/regular/*-regular-<date>.json`. One file per store per day, so a day's LAST window is what survives.
+
+*Acceptance bar, written after reading the file shapes and before the tally.* (A) the share of non-success verdicts
+on an ASKED term that record a second session or egress. By the item's own rule, 100% same-path means no code
+change. (B) decides whether the follow-on design item is warranted: how many verdicts SETTLE a fact rather than
+defer it, and whether the path that could be wrong on those is the egress. B = 0 settled closes the item. B > 0
+opens a second-path design item only where a second EGRESS could tell route from subject for that store.
+
+*Harness.* A one-off inline Python read of `capture_terms` at worktree commit `ef4ba9c74`: 107 ledgers (Baker's 38,
+Family Fare 36, Hy-Vee 33), plus `grocery/not-carried.json` (blob `10e033870`), `derive-not-carried.ps1`
+(`eac30f0e8`) and `build-deals-page.ps1` (`e05ca7de3`). It is not committed because the question is closed. Rerun
+it by tallying `outcome` per file.
+
+*(A) Result.* Of **16,206 asked terms**, **4,284** ended in a non-success verdict: Baker's 357 `empty` + 1 `blocked`
+of 7,764 asked; Family Fare 3,697 `rejected` of 4,695; Hy-Vee 217 `rejected` + 12 `refused-below-shelf-tag` of
+3,747. **0 of 4,284** carry any session, egress or path field. No ledger has one (the keys are `term`,
+`term_key`, `ordinal`, `outcome`, `row_count`, `reason`). So it is "all of them", as the structural half said.
+Aldi, Fareway, Walmart and Sam's write no per-term ledger at all, so for **4 of 7 stores** the denominator is
+still unrecoverable.
+
+*(B) Result.* **86% of the route-class refusals (3,697 of 4,284) were Family Fare's Freshop throttle, and a
+TEMPORAL fix already removed them.** In the 18 ledgers before the per-window request cap (2026-08-12 to 08-30),
+3,697 of 4,570 asked terms were `rejected`. In the 18 since (2026-08-31 to 09-18), **0 of 125** were. That
+throttle is a rate limit keyed on our caller (`error_code 429`, `pull-regular-familyfare.ps1:597-601`), so a
+second egress there would be rate-limit circumvention, not diagnosis. `rejected`, `not_attempted` and `blocked`
+never settle anything: `derive-not-carried.ps1:24-25,121` writes nothing for them. **The ONE place a same-path
+zero-row verdict settles a fact is Baker's `empty`.** Of 24 `not-carried.json` entries, **12** rest on one,
+all from `bakers-regular-2026-08-21.json`. Every later re-ask is still empty for 11 of the 12 (8 to 14 asks
+each); `dried-arbol-chiles` came back non-empty in 2 of 13. But Baker's is the sanctioned Kroger API. A route
+failure there is an HTTP error that the ledger already names `blocked` (1 of 7,764, *"Kroger API request failed
+twice"*), not a 200 with zero rows. So the path that can be wrong on those 12 is the SEARCH TERM, which
+`derive-not-carried.ps1:119` already says. A second egress cannot re-ask a different term. The second chance
+those cells lack is a second QUERY, which is a different axis from SWIM's indirect ping, and a different item.
+Blast radius today: not reader-facing. The 12 entries silence `audit-coverage-gaps` for those cells until 90 days
+after 2026-08-21, and `build-deals-page.ps1:153` reads a `cells` key that `not-carried.json` does not have, so
+no "Doesn't carry" chip renders from this file at all.
+
+*Verdict against the bar.* A = 100% same-path, so no code change. B = 12 settled, 0 of them where a second
+egress could separate route from subject, so no second-path design item is opened. The store-identity tension
+recorded above (one seeded profile per browser store) stands as a further reason against building one. Nothing
+shipped except this record.
 
 ### I133 - Random selection gives fairness in expectation but no deadline, and round-robin with re-permutation gives both for free `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
