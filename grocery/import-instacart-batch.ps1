@@ -147,8 +147,11 @@ function GoodName([string]$n) { return ($n -and $n.Length -ge 3 -and ($n -match 
 # aldi 2 of 49, fareway 2 of 50. Walmart hits EVERY line because its unit price carries a cent glyph - so the
 # corruption lands in the PRICE field, not just the name.
 # Repair-Mojibake is applied per LINE rather than per parsed name: it is a no-op on clean text (it fires only
-# on a mojibake signature that round-trips through a THROWING UTF-8 decoder), so this is uniform across all
-# four importers and cannot damage good data.
+# on a mojibake signature that round-trips through a THROWING UTF-8 decoder), so it cannot damage good data.
+# "The four" above are the batch importers of 2026-07-29. Two remain (backlog I165, 2026-09-18): this file
+# and import-walmart-batch.ps1, which both repair. import-aldi-batch.ps1 is a shim onto this file, and
+# import-browser-batch.ps1 (the Baker's arm) was archived 2026-07-30. import-sams-prices.ps1 was never one of
+# them: it reads JSON through Read-JsonFile, not a text capture, and is superseded by build-sams-deals.ps1.
 . (Join-Path $PSScriptRoot 'capture-lib.ps1')
 $lines = @(Get-Content (Join-Path $root $Raw) -Encoding UTF8) | ForEach-Object { Repair-Mojibake $_ }
 $rows = New-Object System.Collections.ArrayList; $seen = @{}; $skip = 0

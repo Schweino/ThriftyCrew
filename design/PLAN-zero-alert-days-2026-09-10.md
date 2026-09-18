@@ -231,6 +231,11 @@ will say which part of it.
    share, run in shadow for 7 days per store, then enforced store by store in the census's order of returns.
    Bar per store: after enforcement, 0 basis-class guard hard fails from that store over 14 days, and every
    cell the contract empties is one the shadow report already named.
+   Input, not a change to the ruling (backlog I165, 2026-09-18): two BATCH IMPORTERS write the same regular
+   files these builders write, `import-walmart-batch.ps1` and `import-instacart-batch.ps1` (Aldi and Fareway),
+   and they decide 4 feed-independent row conditions differently from each other. I165 carries the table and
+   the reach measured that day (20 of 3,188 board entries, 0 violating a sibling's rule). The contract's
+   shadow run should cover both importers as well as the seven builders.
 9. **Ruling 3, two-signal identity.** First measure what share of each store's rows carries a usable category.
    Then 14 days of shadow on crowns. Enforce only if a hand-checked sample of at least 30 disagreements is at
    least 80% real wrong products, and enforcement would empty no more than 2% of live cells. Both numbers are

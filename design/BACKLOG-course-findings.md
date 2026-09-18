@@ -12369,7 +12369,7 @@ regardless of the count, because two instructions that cannot both be obeyed are
   status line into the ledger `detail` instead of the literal `reviewed`, with a daemon self-test case, and it
   belongs in `hunt-daemon.py`, which this item did not touch.
 
-### I165 - The four importers each decide feed-row validity for themselves, and only Walmart's was ever lifted into a library `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I165 - The four importers each decide feed-row validity for themselves, and only Walmart's was ever lifted into a library `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Structural claim partly REFUTED: there are THREE implementations, not four - `import-aldi-batch.ps1` is a 24-line shim onto the Instacart importer, converted 2026-07-30. The side-by-side the item asks for is built: **7 of 8 validity conditions have fewer than three importers agreeing**. Also found, and worth more than the count: a false statement in shipped source, where the Instacart importer`s comment claims mojibake repair is "uniform across all four importers" while Sam`s has zero calls and no `capture-lib` at all.
 
@@ -12408,6 +12408,71 @@ decide whether a shared library is worth the change; `walmart-row-lib.ps1` is th
 **Not claimed:** I did not read the four importers' bodies, so I am not asserting a specific
 divergence exists. The verified claim is the structural one - four independent implementations, one
 shared library covering one store - which is the condition under which divergence is the default.
+
+**ACCEPTANCE BAR, written 2026-09-18 before any count below was taken.** The 2026-09-12 rung said the
+side-by-side "is built", but no table reached this item or any file, so it is rebuilt here from the bodies
+at origin/main 8e61ca3fd. A divergence counts only if it is FEED-INDEPENDENT: a rule that needs a field one
+feed does not carry (Walmart's unit price, a seller field, a was-price) cannot be shared and is not a
+disagreement. A shared row validator is warranted UNDER THIS ITEM only if all three hold: (a) at least one
+feed-independent condition is decided differently by two importers that are still RUN; (b) at least 1 row
+those importers wrote into the NEWEST regular file of its store violates the stricter sibling's rule, so
+the divergence has reached a board input; (c) no ratified plan already owns the shared validator. If (a)
+or (b) fails, the item closes on the measurement. If (c) fails, the item folds into the owning plan with the
+table as its input, and only a divergence that meets (b) is repaired here.
+
+**Done 2026-09-18. Measured; no shared validator is warranted under this item, and the one that is wanted
+is already ratified as build step 8 of `design\PLAN-zero-alert-days-2026-09-10.md`.** Bar (a) holds, (b)
+fails, (c) fails.
+
+*How many importers there are.* Two, not four and not three. `import-aldi-batch.ps1` is a shim onto the
+Instacart importer (converted 2026-07-30, bbc1db1a2), and `import-sams-prices.ps1` is not a feed importer at
+all: its own header says SUPERSEDED by `build-sams-deals.ps1`, it re-prices rows already in a sams-regular
+file from a JSON API, and `git grep` finds no caller outside comments and one archived worklist. The
+2026-09-12 rung's "false statement in shipped source" is itself wrong: the "uniform across all four
+importers" comment meant the four BATCH importers of 2026-07-29 (Walmart, Baker's browser-batch, Aldi,
+Instacart; the lines above it measure exactly those four), so it was true when written and is now stale.
+The comment is corrected in this commit.
+
+*The side-by-side (a).* Read from the bodies at 8e61ca3fd. FEED-DEPENDENT, so not a disagreement: Walmart's
+unit-price invariant, seller/3P gate and was-price field; Instacart's mode proof and size-required rule
+(Walmart derives size from its unit price). Both agree on: price <= 0 or unparseable is rejected, an empty
+name is rejected, every line gets `Repair-Mojibake`, and NEITHER checks a `#tc-store` line (both disagree
+with their store's builder there, which is step 8's scope, not this item's). FEED-INDEPENDENT AND DECIDED
+DIFFERENTLY, 4 validity conditions and 2 lesser ones:
+
+| Condition | import-walmart-batch | import-instacart-batch |
+|---|---|---|
+| vendor test listing (`Test-PlaceholderProductName`) | drops | not checked, though it dot-sources the same `capture-lib.ps1` |
+| guard-5 multipack (`Test-MpClassify`) | rejects | not checked |
+| a name with no run of 3 letters | kept if non-empty | rejected (`GoodName`) |
+| a sale price with a was-price in the capture | stamped as a markdown (`Set-RollbackFields`) | `CleanName` strips "Original Price: $X" and the sale price is written as `regular` |
+| format drops (no tab, too few fields) | counted in an ingest ledger | dropped with no count |
+| two rows with one identity in one batch | last wins | first wins |
+
+*Reach (b).* Newest tracked regular files: 0 of 3,345 Aldi rows (2026-09-17), 0 of 837 Fareway (2026-09-12)
+and 0 of 485 Walmart (2026-09-17) were written by either importer. On the board (comparison-2026-09-17.json,
+built 2026-09-18 11:25): 20 of 3,188 store entries are Walmart batch rows, 12 of them crowns, carried forward
+from older files (the importer's newest `batch_imports` stamp is 2026-09-05); 0 are Instacart batch rows. The Instacart importer's rows last appear
+in aldi-regular-2026-07-29 (9) and fareway-regular-2026-08-22 (14), all as_of 2026-07-15, so it has not run
+since then. Every sibling rule applied to every row that could reach a board: of those 23 Instacart rows and
+the 20 Walmart board entries, 0 fail `GoodName`, 0 are placeholder names, 0 are guard-5 rejects. So no
+divergence has reached a board input. One historical instance of the was-price row did happen: of the 284
+products in `fareway-batch1-raw.txt`, 91 carry "Original Price" in the name field, and 1 of the 14 imported
+rows (Miracle Whip Dressing, $4.88 against a $4.99 was-price) was written as an everyday price. It left the
+board with the Fareway files that carried it.
+
+*Owner (c).* Brad's ruling 2 of 2026-09-10 is "a row contract at capture, all 7 stores", built as "one
+validator the seven builders share", shadow first. That is the shared validator this item asks about, and it
+names the BUILDERS, not these two importers. The one change it needs from here is scope: both importers
+write the same regular files the builders do, so the contract should cover them too, and the table above is
+its input. That pointer is added under step 8 in the plan.
+
+*Harness.* Scratch, one-off: a PowerShell pass dot-sourcing `capture-lib.ps1`, `pricing-math-lib.ps1` and
+`multipack-lib.ps1` over the rows named above (one row per case per arm, 43 rows), a Python census over
+every tracked aldi, fareway and walmart regular file (28, 38 and 35 files), and a Python match of the
+Fareway raw capture against its imported rows, all at origin/main 8e61ca3fd. The board read was the main
+checkout's gitignored copy, read-only. Not committed, because the question only recurs if the importers run
+again, and step 8's shadow report is what would answer it then.
 
 ### I166 - No gate reads a tracked file for a secret, and the only thing standing between the Ghost Admin key and a commit is one .gitignore line `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
