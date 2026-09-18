@@ -30,7 +30,7 @@
 
     blind=no-selftests / blind=selftest-discovery-collapsed - DISCOVERY is broken. The walk found no self-tests,
       or far fewer than this tree holds.
-    blind=no-gate-worker-slot - this run never got one of the 10 machine-wide worker slots and the queue did not
+    blind=no-gate-worker-slot - this run never got one of the 24 machine-wide worker slots and the queue did not
       move for the wait. CONTENTION on the box; nothing here was run and nothing here is wrong (lib\gate-slots.ps1).
     blind=push-cannot-land - the remote moved past this push while it waited, so no gate was run for it
       (lib\push-landable.ps1). Rebase and push again.

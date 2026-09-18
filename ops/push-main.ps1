@@ -410,7 +410,7 @@ if ($SelfTest) {
   $prefix = 'Local\tc-push-main-selftest-' + [guid]::NewGuid().ToString('N') + '-'
   $qroot = Join-Path $tmp 'q'
   # EVERY CASE INJECTS ITS GATE. Without this each fixture below would launch the real ops\run-gates.ps1 - hundreds of
-  # seconds, 10 machine-wide slots, from a suite that run-gates itself runs. The seam is what makes the ORDER
+  # seconds, the 24 machine-wide slots, from a suite that run-gates itself runs. The seam is what makes the ORDER
   # assertable at all: $gateSawLock records whether the push lock was free at the moment the gate ran, which is the
   # mechanism this change is about and cannot be read from a clock.
   #

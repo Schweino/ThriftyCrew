@@ -86,6 +86,11 @@ or `lib/gate-slots.ps1`. The one number it can move is each run's slot tenure, u
 of gate work inside a pool 24 wide, which is far below the per-run spread this file reports and in the same
 direction as the `53e1d65bf` and `1a97b53af` entries above. Every total below still reads as measured.
 
+**Re-read at harness blob `87c8fb25b01a` (`ops/run-gates.ps1`, `git rev-parse HEAD:<path>`):** backlog I230 changed
+one comment line in the script's header, the `blind=no-gate-worker-slot` description, from "10" to "24"
+machine-wide slots, to match the budget Brad raised in 39be9900e. No code, no gate entry, no pool or slot logic
+moved. Every total below still reads as measured.
+
 ## What was sampled
 
 Every 15 s from **16:48:33 to 18:18:23** (360 ticks). The totals count runs that STARTED in the first 60 minutes,

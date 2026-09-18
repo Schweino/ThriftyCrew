@@ -10,8 +10,8 @@
 
   UNCALLED IS NOT DEAD. Seven of these are launched by hand from a scheduled-agent SKILL, and the SKILLs live
   in ~\.claude\scheduled-tasks\, outside this repo - they are unreferenced here BY CONSTRUCTION and always
-  will be. familyfare-sweep.ps1 is launched by Windows Task Scheduler through the generic run-hidden.vbs, so
-  its name appears nowhere either. That is why this is a RATCHET against a recorded set, never a hard zero:
+  will be. familyfare-sweep.ps1 and send-friday-email.ps1 are run by hand (their scheduled tasks are gone), so
+  their names appear nowhere either. That is why this is a RATCHET against a recorded set, never a hard zero:
   $KNOWN is the written statement of which uncalled scripts are uncalled on purpose, and WHY. Adding a line
   to it is a decision someone has to defend in a diff. That is the entire mechanism.
 
@@ -104,9 +104,11 @@ $KNOWN = [ordered]@{
   #    line here too, or this table starts excusing a script that genuinely nothing runs.
   'grocery\capture-run.ps1'                  = 'scheduled tasks "TC Grocery Ad Pulls 0700" (-Kind ad) and "TC Grocery Daily Capture 0800" (-Kind daily) - the concurrent seven-store capture runner'
   'grocery\capture-watchdog.ps1'             = 'scheduled task "TC Grocery Capture Watchdog 1030" (-Alert; named 0930 until 2026-09-07, when ops\install-grocery-tasks.ps1 -FixName renamed it to match the 10:30 it has run at since 2026-08-31) - checks the 0700/0800 jobs actually captured AND published, rather than merely exiting 0'
-  # -- launched by Windows Task Scheduler through the GENERIC run-hidden.vbs, so no file names it
-  'grocery\familyfare-sweep.ps1'             = 'scheduled task "SMP Family Fare Term Sweep", every 3h via run-hidden.vbs'
-  'grocery\send-friday-email.ps1'            = 'scheduled task "SMP Friday Email (draft)", weekly via run-hidden.vbs; drafts unless -Send, and a week_of stamp stops a double-mail'
+  # -- BY HAND. These two said "scheduled task ... via run-hidden.vbs" until 2026-09-18 (backlog I230), and neither
+  #    was true: RUNTIME-MAP records SMP Friday Email deleted on 2026-08-20, run-hidden.vbs went to
+  #    grocery\archive\retired-2026-08-22\, and Get-ScheduledTask on 2026-09-18 listed no task naming either script.
+  'grocery\familyfare-sweep.ps1'             = 'BY HAND: one extra Family Fare term-budget sweep. No scheduled task runs it (Get-ScheduledTask, 2026-09-18; the SMP Family Fare Term Sweep task it was written for is gone, and TRIAL-familyfare-catalog-walk-2026-09-10 found it had no task of its own)'
+  'grocery\send-friday-email.ps1'            = 'BY HAND: no scheduled task runs it (SMP Friday Email was deleted 2026-08-20 per docs\RUNTIME-MAP.md, and Get-ScheduledTask on 2026-09-18 listed none). Drafts unless -Send, and a week_of stamp plus the I198 invoking marker stop a double-mail'
   # -- human entry points, run when a specific failure or a specific job shows up
   'grocery\ingredient-queue.ps1'             = 'Recipe Hunter Rule B queue (an ingredient is CARRIED once ANY of the 7 stores has it; NOT-CARRIED only when all 7 were CHECKED and none do). WIRED IN 2026-08-22: hunt-run.ps1 reads its verdicts, and -Promote writes settled ones into grocery\carriage.json where the cost engine and the publish gate read them through lib\carriage-lib.ps1. It was uncalled for a week, and in that week four recipes whose ingredient no Omaha store stocks reached live paid pages - the gate existed and nothing ran it.'
   'grocery\promote-ingredient-queue.ps1'     = 'by hand, and deliberately NOT on the daily chain: it writes engine inputs from ingredient-queue-map.json, which is a RULING about commodity identity that a human has to make. Auto-running it would let whatever is in the map file price the board unreviewed, and a careless id splits a commodity already priced under another name. Its fixtures DO run every suite (audit-graph-gates sits beside it in test-auditors); it is the -Apply that stays manual.'

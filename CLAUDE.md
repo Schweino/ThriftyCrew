@@ -49,9 +49,9 @@ pull and score ok for hours). `pre-push` reads that token and names the cause in
 that was fine. Never read 3 as a pass, whichever cause it names and even when it names none. (The recipe
 battery uses exit 2 for its own could-not-run - check which tool you actually ran.)
 
-**The 10 machine-wide gate worker slots are a QUEUE, served in arrival order** (`lib/gate-slots.ps1`, since
-2026-09-11): a refusal with 3 means the queue itself stopped moving for 20 minutes, never that your run lost a
-race. A run that exits 0 records its verdict for the exact content it judged, so **a manual `run-gates` followed
+**The 24 machine-wide gate worker slots are a QUEUE, served in arrival order** (`lib/gate-slots.ps1`, since
+2026-09-11; Brad set the budget at 10 that day and raised it to 24 on 2026-09-12 in 39be9900e): a refusal
+with 3 means the queue itself stopped moving for 20 minutes, never that your run lost a race. A run that exits 0 records its verdict for the exact content it judged, so **a manual `run-gates` followed
 by a push no longer pays twice** - the hook prints the recorded pass and dispatches nothing (`-NoReuse` runs them
 anyway, and a red run over that same content withdraws the pass). And a push the remote will reject anyway,
 because main moved while it waited, is refused in seconds instead of after the whole run: rebase and push again.
@@ -79,9 +79,9 @@ pushes queued, the oldest waiting 47 minutes, ZERO run-gates processes running o
 own log reading `RUN-GATES-COMPLETE pass=387 fail=0` then `push lock - held after waiting 1,002s` then *"cannot lock
 ref"* - it came out of a 17-minute queue holding a base main had moved seven commits past. The ref update itself
 takes **2 seconds**. Serialising the PUSH costs nothing because `refs/heads/main` is serialised already; serialising
-the GATE costs everything, because gating is the part that parallelises and `lib\gate-slots.ps1` already bounds it at
-10. So `push-main` gates first, unlocked, and the hook's run inside the lock is WARM - the whole verdict replays when
-the rebase changed nothing, and the per-gate input keys re-run only what the rebase actually touched. **A red gate
+the GATE costs everything, because gating is the part that parallelises and `lib\gate-slots.ps1` already bounds it (at
+24 since 2026-09-12, 10 when this was written). So `push-main` gates first, unlocked, and the hook's run inside
+the lock is WARM - the whole verdict replays when the rebase changed nothing, and the per-gate input keys re-run only what the rebase actually touched. **A red gate
 now never enters the queue at all**, where before it took the lock, ran its full set and blocked every other session
 before refusing. The ordering is fixtured on the MECHANISM: the self-test's gate probes the lock FROM ANOTHER PROCESS,
 because a Windows mutex is reentrant on its owning thread and the first version of that case, probing in-process,
@@ -141,7 +141,7 @@ for. Data-dependent audits stay in the daily chain against a real board.
 - **Deliberate CPU load goes through `ops/cpu-load.ps1`** - never hand-rolled burners, never `run-gates` in
   a loop (Brad, 2026-09-11). This 32-processor box is shared by every session and every push's gate, and on
   that day four sessions' own load tests held it at 100% for over an hour while each recorded a load level
-  it did not control. The tool takes its cores from the same machine-wide pool of 10 that `run-gates` uses
+  it did not control. The tool takes its cores from the same machine-wide pool of 24 that `run-gates` uses
   (`lib/gate-slots.ps1`), refuses more than that or longer than 15 minutes, and its burners die with it.
   `ops/audit-cpu-load.ps1` fails a committed script that starts burners any other way. A scratch script is
   out of any gate's reach, so there the rule is the whole prevention.

@@ -94,7 +94,9 @@ R4. IDENTITY BEFORE ANY VERDICT (E6, E7). Wrong store, wrong club, wrong fulfill
                amended 2026-09-10 - the OLA number is not asserted, 48 and 42 have both been live)
       Fareway: Apollo cache GetRetailerLocationAddress -> lineOneString == '17070 Audrey Street' (E6:
                retailerLocation 531573; shopId is REISSUABLE, never compare it), header reads In-Store
-      Sam's:   club header is an Omaha club (13130 L St 68137)
+      Sam's:   club header is an Omaha club (15429 Blackwell Dr 68116; amended 2026-09-18, backlog I230 - the
+               session moved there on 2026-08-15 and this line still named 13130 L St 68137 until today. The club
+               is not pinned; the capture's #tc-store line records the one read)
       Hy-Vee:  store selector names the store Get-HyVeeStore returns (grocery\hyvee-store-lib.ps1, from
                stores.json store_identity). Amended 2026-09-10: Brad moved the board to Omaha #02 on
                2026-08-21, and the selector then read 'Shopping Omaha #02, NE'

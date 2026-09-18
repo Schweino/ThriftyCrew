@@ -60,8 +60,9 @@ $OWNED = @(
   # 0930 as the primary with RenameTo pointing forward would have made a later -Install without
   # -FixName register a SECOND watchdog under the old name, and -Verify would have passed because
   # it falls back to RenameTo when the primary is missing. Legacy is kept so a machine that was
-  # never migrated is noticed rather than ignored.
-  [pscustomobject]@{ Name = 'TC Grocery Capture Watchdog 1030'; File = 'tc-grocery-capture-watchdog-0930.xml'; Legacy = 'TC Grocery Capture Watchdog 0930' }
+  # never migrated is noticed rather than ignored. The definition FILE kept the 0930 name until 2026-09-18 (backlog
+  # I230), when it was renamed to match; nothing keys on the file name but this line, since every audit reads <URI>.
+  [pscustomobject]@{ Name = 'TC Grocery Capture Watchdog 1030'; File = 'tc-grocery-capture-watchdog-1030.xml'; Legacy = 'TC Grocery Capture Watchdog 0930' }
 )
 
 function Get-XmlField {

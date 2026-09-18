@@ -15754,7 +15754,7 @@ md5-identical after restore.
 
 **What remains:** Brad's merge of bullet 1, and a measured item for the 237,937 Baker's slug-term rows (4).
 
-### I230 - Stale facts in standing guidance and data `OPEN` `run-0919` `2-WAY` `RUNG1 DOC`
+### I230 - Stale facts in standing guidance and data `PARTLY DONE` `run-0919` `2-WAY` `RUNG1 DOC`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15769,6 +15769,41 @@ md5-identical after restore.
   answer 200.
 - `meal-prep/food-macros-db.json` broccoli row cites an NDB number as an FDC id (I137); FDC's "full" format drops
   nutrient names on some Branded records, which `meal-prep/pipeline/fdc_lookup.py:149` would read as blank.
+
+**Partly done 2026-09-18.** Each fact was checked against its source of truth first, at base `fe6d409f5`:
+1. **Sam's club.** No capture yet carries I124's `#tc-store` line: the newest raw capture in the main checkout,
+   `out\captures\sams-capture-2026-09-17.csv`, opens with the bare header, and every built `sams-deals` file
+   still says 13130 L St from the old literal. The club the session READ is on record instead: four
+   `ingredient-queue.json` Sam's evidence rows checked 2026-08-16 quote the club header as 15429 Blackwell Dr,
+   and `pull-browser-stores.py`'s seed_hint names it. So the pricer agent (and its prompt-backup copy, byte-
+   identical) and the search-verdict PLAN now name 15429 Blackwell Dr, 68116, and say the capture's store line
+   records the club read. The other 13130 mentions left in the tree are histories of the defect.
+2. **Gate slots.** The code is right and the docs were stale: `$script:TcGateSlotTotal = 24` was raised from 10
+   by Brad on 2026-09-12 in 39be9900e (on origin/main), recorded in `docs\CONTROL-CONSTANTS.md`. CLAUDE.md (3
+   places), `ops-and-gates.md`, and the comments in `ops\cpu-load.ps1`, `ops\run-gates.ps1`, `ops\push-main.ps1`
+   and `lib\gate-slots.ps1` now say 24 (and when it was 10). Budget unchanged. Histories of 09-11 left as written.
+   **Remaining:** `ops\hooks\pre-push:339` still prints "The 10 machine-wide slots" in its refusal. Changing it
+   makes the installed hook stale, which `capture-watchdog` reports daily through `audit-hook-installed`, until
+   someone runs `ops\install-hooks.ps1` (a write to the shared `.git\hooks`). That wants doing as one step.
+3. **Watchdog definition file** renamed `tc-grocery-capture-watchdog-1030.xml` with `git mv`. Only
+   `ops\install-grocery-tasks.ps1:64` named the file (every audit keys on `<URI>`, and a registered task keeps
+   its own copy of the XML), and it now names the new file. `audit-task-registration` exit 0 (11 definitions,
+   11 rows), `audit-task-registry` exit 0, `install-grocery-tasks -SelfTest` exit 0 before and after. The
+   registered task was not touched. `install-grocery-tasks -Verify` exits 2 with 6 findings both BEFORE and after
+   the rename (the live tasks run through `conhost.exe --headless`, the committed XML does not); see the report.
+4. **Census.** `Get-ScheduledTask` lists no task naming `send-friday-email` (RUNTIME-MAP records SMP Friday
+   Email deleted 2026-08-20) and none naming `familyfare-sweep` either, whose "SMP Family Fare Term Sweep" line
+   in the same block was stale the same way; `run-hidden.vbs` is under `grocery\archive\retired-2026-08-22\`.
+   Both now read BY HAND. `audit-script-census` exit 0 before and after.
+5. **Ghost version.** Confirmed: a GET of the unauthenticated `/ghost/api/admin/site/` with Accept-Version v5.0
+   returned 200 and `Content-Version: v6.64`; `git grep` counts 135 v5.0 header sites in 72 files and no other
+   version. Recorded as an open question in `lib\ghost-lib.ps1`'s header. **No header changed.** Remaining: Brad
+   decides whether to move every caller to v6 in one reviewed change.
+6. **Broccoli citation.** FDC's API: food 170379 is "Broccoli, raw", SR Legacy, `ndbNumber` 11090, and FDC id
+   11090 returns 404. The Broccoli row's `source` now reads `USDA FDC 170379 (SR Legacy, NDB 11090) Broccoli,
+   raw`. A parse of the committed file against the edited one over 441 of 441 rows finds exactly 1 field
+   changed, that `source`; the diff is 1 line, and no macro moved.
+No behaviour changed, so no fixture was added: every edit is prose, a comment, a citation string or a file name.
 
 ### I231 - Untracked and ungitignored files the bot could commit, and one the worktrees never get `OPEN` `run-0919` `2-WAY` `RUNG1 DOC`
 

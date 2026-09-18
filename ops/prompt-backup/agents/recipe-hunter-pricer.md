@@ -246,7 +246,9 @@ defaulted to Des Moines once, with plausible-looking wrong prices.
 **Sam's Club** - PRE-GATHERED by the driver (rung 1), from a seeded member session. An UNUSABLE here often
   means NEEDS-SEEDING - the profile is logged out - which is a finding to report, not a shelf to rule on.
   https://www.samsclub.com/ .
-  - Club must be Omaha: "Omaha Sam's Club", 13130 L St, 68137. A non-Omaha club is not acceptable; switch
+  - Club must be Omaha: "Omaha Sam's Club", 15429 Blackwell Dr, 68116 (the club the member session has read since
+    2026-08-15; the 13130 L St, 68137 this line named until 2026-09-18 was stale). The capture's `#tc-store` line
+    records the club actually read, and `build-sams-deals` refuses a non-Omaha one. A non-Omaha club is not acceptable; switch
     clubs before reading anything. (The page may show "Omaha, 68144" for delivery zip; either is fine.)
   - In-page `fetch('/search?q=<term>')`, parse `<script id="__NEXT_DATA__">`.
   - Capture BOTH `linePrice` AND `unitPrice`. Taking unitPrice alone caused the 2026-07-15 quarantine.

@@ -12,8 +12,9 @@
   push's gate - sat at 100% for over an hour. Each harness also recorded a load level it did not control,
   because the others' load came and went underneath it.
 
-  WHAT THIS DOES. -Cores slots are taken ALL OR NOTHING from lib\gate-slots.ps1's machine-wide budget (10,
-  Brad's ruling), so load and gate workers together never exceed it: a load test holding 8 leaves gate runs 2.
+  WHAT THIS DOES. -Cores slots are taken ALL OR NOTHING from lib\gate-slots.ps1's machine-wide budget (24,
+  Brad's ruling: 10 on 2026-09-11, raised to 24 on 2026-09-12), so load and gate workers together never exceed it:
+  a load test holding 8 leaves gate runs 16.
   When they are not all free it waits, says so, and exits 3 after -WaitSec rather than burning fewer cores
   than it was asked for. It then starts exactly -Cores busy processes, writes -ReadyFile as JSON once they are
   up, and holds the slots until -Seconds pass or -StopFile appears.

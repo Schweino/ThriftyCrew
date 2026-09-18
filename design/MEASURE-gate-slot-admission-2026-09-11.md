@@ -114,6 +114,11 @@ CURRENT blob qualifies it, which is why this line cites a blob and not the commi
 rebased before it lands and would name nothing on main. The script is still named here as prose only, and nothing
 this file measured ran through it.
 
+**Re-read at harness blob `87c8fb25b01a` (`ops/run-gates.ps1`, `git rev-parse HEAD:<path>`): every verdict below
+stands as measured.** Backlog I230 changed one header comment, the `blind=no-gate-worker-slot` description, from
+"10" to "24" machine-wide slots to match the budget raised in 39be9900e. No code moved, so who wins a freed slot is
+unchanged.
+
 A READ-ONLY probe. It never calls `WaitOne` on a slot and never takes one. Once a second it reads the
 system handle table (`NtQuerySystemInformation`, extended handle information), duplicates only the
 mutant handles held by `run-gates.ps1` and `cpu-load.ps1` processes, reads each one's name and

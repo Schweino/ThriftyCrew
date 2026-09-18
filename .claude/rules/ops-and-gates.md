@@ -554,7 +554,8 @@ everything else honest, so a defect here is silent by construction.
   - **ORDER DECIDES WHICH PUSHES ARE REFUSED, NEVER HOW MANY.** A held slot is running a gate 99 to 100% of the
     time it is held, so this box does about **41 run-gates an hour**, and **a queue longer than about 14 cannot
     clear inside a 20-minute wait whatever the order**. No arrival-order change adds a run to that figure. The
-    levers on capacity are the gate work per run, the budget of 10, and how often sessions push, and the queue
+    levers on capacity are the gate work per run, the slot budget (10 when this was measured, 24 since 2026-09-12 in
+    39be9900e, so the 41 an hour is a figure at 10), and how often sessions push, and the queue
     touches none of them. `design\MEASURE-gate-queue-live-sampling-2026-09-11.md`, the best live sampling of the
     four. **State that bound beside any fairness fix**, or the fix reads as a throughput fix and the next person
     measures it against a number it was never going to move.

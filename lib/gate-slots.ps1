@@ -220,7 +220,7 @@ function New-TcGateTicket {
      where the queue root goes, a full disk, a permission change. The push lock already follows the estate rule that
      every lock path degrades to the behaviour of the day before and never to a refusal (ops\hold-push-lock.ps1); the
      queue had not. So the caller waits OUT OF TURN, exactly as it did before there was a queue, and says why. The
-     budget of 10 is enforced by the slot mutexes and is untouched by this, so the degraded run is gated no less.
+     machine-wide budget ($script:TcGateSlotTotal, 24 since 2026-09-12; 10 when this was written) is enforced by the slot mutexes and is untouched by this, so the degraded run is gated no less.
      Found by claude\gate-slot-fifo and folded in on 2026-09-12; driven with a FILE sitting where the queue root
      goes, which made CreateDirectory throw. #>
   param([string]$Prefix, [string]$Dir, [ref]$Why)
