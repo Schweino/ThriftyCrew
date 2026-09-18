@@ -105,6 +105,12 @@ class GraphDB:
         self.conn.commit()
 
     # -- lifecycle ---------------------------------------------------------
+    # ALL OR NOTHING IS A CLAIM ABOUT THE DATABASE, AND ITS UNIT IS THE UNIT OF CORRECTNESS (2026-09-18,
+    # code review against ~/.claude/skills/database-craft/transactions-and-recovery.md section 3).
+    # `close()` commits, which every explicit caller relies on. `__exit__` used to call it on the ERROR
+    # path too, so a `with open_db()` block that raised still committed whatever it had written before
+    # the raise: a half-applied write became the day's index, internally consistent and wrong, which is
+    # the failure row that section names as the dangerous one because nothing raises afterwards.
     def close(self) -> None:
         self.conn.commit()
         self.conn.close()
@@ -114,9 +120,29 @@ class GraphDB:
 
     def __exit__(self, *exc):
         if exc[0] is None:
-            self.conn.commit()
-        self.close()
+            self.close()
+        else:
+            self.conn.rollback()
+            self.conn.close()
         return False
+
+    def run_step(self, fn, *args, **kwargs):
+        """Run `fn(self, *args, **kwargs)` as ONE all-or-nothing unit: commit if it returns, roll back if
+        it raises. Returns (ok, result, error).
+
+        The unit of atomicity is the unit of correctness (`transactions-and-recovery.md` 3). For the graph
+        import that unit is ONE importer's data set: a known-wrong set loaded halfway is wrong, while
+        yesterday's full set left untouched is still right. Before this, graph/import/import_all.py logged
+        a failed importer and carried on without a rollback, so the NEXT importer's commit saved the failed
+        one's partial writes. A step that commits internally (importers.import_known_wrong's retro sweep
+        does, at its very end) is only as atomic as the writes after that commit."""
+        try:
+            result = fn(self, *args, **kwargs)
+        except Exception as e:                              # noqa: BLE001
+            self.conn.rollback()
+            return False, None, e
+        self.conn.commit()
+        return True, result, None
 
     @contextmanager
     def tx(self):
@@ -537,3 +563,95 @@ class GraphDB:
 def open_db(create: bool = True, allow_new: bool = False) -> GraphDB:
     """The live graph.db. Refuses a missing file unless `allow_new` (see GraphDB.__init__)."""
     return GraphDB(create=create, allow_new=allow_new)
+
+
+def _selftest() -> int:
+    """All-or-nothing at the unit of correctness (2026-09-18). Temp databases only, never graph.db."""
+    import shutil
+    import tempfile
+    root = tempfile.mkdtemp(prefix="gdb-st-")
+    fails = []
+    cases = 0
+
+    def check(label, cond, got):
+        nonlocal cases
+        cases += 1
+        print(("  ok    " if cond else "  FAIL  ") + label + ("" if cond else f"   got: {got!r}"))
+        if not cond:
+            fails.append(label)
+
+    def fresh(name):
+        p = os.path.join(root, name + ".db")
+        g = GraphDB(p, allow_new=True, restore_learning=False)
+        g.conn.execute("CREATE TABLE st_rows (x TEXT)")
+        g.conn.commit()
+        return g, p
+
+    def rows(p):
+        c = sqlite3.connect(p)
+        try:
+            return [r[0] for r in c.execute("SELECT x FROM st_rows ORDER BY x")]
+        finally:
+            c.close()
+
+    def boom(db, tag):
+        db.conn.execute("INSERT INTO st_rows VALUES (?)", (tag,))
+        raise RuntimeError("step failed after writing " + tag)
+
+    def write(db, tag):
+        db.conn.execute("INSERT INTO st_rows VALUES (?)", (tag,))
+        return tag
+
+    try:
+        # MUST FIRE, THE FOUNDING BUG (half 1): a `with` block that raises after a write must not keep it.
+        g, p = fresh("exit")
+        try:
+            with g:
+                g.conn.execute("INSERT INTO st_rows VALUES ('half')")
+                raise RuntimeError("fails after writing")
+        except RuntimeError:
+            pass
+        check("MUST FIRE  a with-block that raises keeps none of its writes", rows(p) == [], rows(p))
+
+        # CLEAN TWIN: a with-block that completes still commits.
+        g, p = fresh("exit-ok")
+        with g:
+            g.conn.execute("INSERT INTO st_rows VALUES ('kept')")
+        check("CLEAN TWIN a with-block that completes commits its writes", rows(p) == ["kept"], rows(p))
+
+        # MUST FIRE: a failed step rolls back its own writes and says so.
+        g, p = fresh("step")
+        ok, res, err = g.run_step(boom, "partial")
+        check("MUST FIRE  a failed step reports failure with its error",
+              ok is False and res is None and isinstance(err, RuntimeError), (ok, res, err))
+        check("MUST FIRE  a failed step leaves none of its writes", rows(p) == [], rows(p))
+
+        # MUST FIRE, THE FOUNDING BUG (half 2): the NEXT step's commit must not save the failed step's
+        # writes. This is what import_all did: log the failure, carry on, commit after the next importer.
+        ok2, res2, err2 = g.run_step(write, "next")
+        check("MUST FIRE  the next step's commit saves only its own writes", rows(p) == ["next"], rows(p))
+
+        # CLEAN TWIN: a step that returns is committed, visible from a second connection, result intact.
+        check("CLEAN TWIN a successful step returns its result and commits",
+              ok2 is True and res2 == "next" and err2 is None and rows(p) == ["next"], (ok2, res2, err2))
+
+        # CLEAN TWIN: an explicit close() still commits, which every existing caller relies on.
+        g.conn.execute("INSERT INTO st_rows VALUES ('closed')")
+        g.close()
+        check("CLEAN TWIN an explicit close() still commits", rows(p) == ["closed", "next"], rows(p))
+    except Exception as e:                                      # noqa: BLE001
+        fails.append("harness: " + repr(e))
+        print("  FAIL  harness raised " + repr(e))
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+    verdict = "fail" if fails else "pass"
+    print(f"GRAPHDB-SELFTEST-COMPLETE selftest={verdict} cases={cases} failures={len(fails)}")
+    return 1 if fails else 0
+
+
+if __name__ == "__main__":
+    import sys
+    if "--selftest" in sys.argv:
+        raise SystemExit(_selftest())
+    print("graphdb.py is a library; run it with --selftest")

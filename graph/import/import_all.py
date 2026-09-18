@@ -49,17 +49,23 @@ def main() -> int:
         db.log_event(run=run, timestamp=ts, etype="state_transition",
                      decision="import_start", detail={"observations": args.observations})
 
+        # EACH IMPORTER IS ONE ALL-OR-NOTHING UNIT (2026-09-18). This loop used to log a failure and carry
+        # on WITHOUT rolling back, so the next importer's commit saved the failed one's partial writes and
+        # the run still exited 0. GraphDB.run_step commits a step that returns and rolls back one that
+        # raises; `failed` makes the run exit 1, which audit-graph-gates reports as BLIND, never a pass.
+        # Unit of atomicity = unit of correctness: ~/.claude/skills/database-craft/transactions-and-recovery.md 3.
+        failed: list[str] = []
         for name, fn in importers.ALL_IMPORTERS:
             t0 = time.time()
-            try:
-                res = fn(db, ts, run)
-            except Exception as e:                      # noqa: BLE001
-                say(f"  {name:<20} FAILED: {e}")
+            ok, res, err = db.run_step(fn, ts, run)
+            if not ok:
+                failed.append(name)
+                say(f"  {name:<20} FAILED, rolled back: {err}")
                 db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
-                             decision="importer_failed", detail={"error": str(e)})
+                             decision="importer_failed", detail={"error": str(err)})
+                db.conn.commit()
                 continue
             totals.update(res)
-            db.conn.commit()
             say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
 
         if args.observations:
@@ -74,15 +80,15 @@ def main() -> int:
 
             for name, fn in importers.LANE_IMPORTERS:
                 t0 = time.time()
-                try:
-                    res = fn(db, ts, run, limit_files=args.limit_files)
-                except Exception as e:                  # noqa: BLE001
-                    say(f"  {name:<20} FAILED: {e}")
+                ok, res, err = db.run_step(fn, ts, run, limit_files=args.limit_files)
+                if not ok:
+                    failed.append(name)
+                    say(f"  {name:<20} FAILED, rolled back: {err}")
                     db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
-                                 decision="lane_importer_failed", detail={"error": str(e)})
+                                 decision="lane_importer_failed", detail={"error": str(err)})
+                    db.conn.commit()
                     continue
                 totals.update(res)
-                db.conn.commit()
                 say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
 
         # PHASE C: the answer is rebuilt and the evidence bounded as part of the
@@ -168,6 +174,10 @@ def main() -> int:
     say("\n--- graph stats ---")
     for k, v in stats.items():
         say(f"  {k:<14} {v}")
+    if failed:
+        say(f"\nIMPORT INCOMPLETE: {len(failed)} importer(s) failed and were rolled back, keeping their "
+            f"previous data: {', '.join(failed)}")
+        return 1
     return 0
 
 
