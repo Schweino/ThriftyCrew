@@ -15647,7 +15647,7 @@ work (see the item report).
    calls a finding real. `design\MEASURE-ratchet-plain-run-writes-2026-09-12.md` names that file as harness and
    carries the Re-read line.
 
-### I228 - A harness change a MEASURE doc names cannot land cleanly through push-main `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+### I228 - A harness change a MEASURE doc names cannot land cleanly through push-main `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15656,6 +15656,19 @@ at or after the harness change, which exists only locally until push-main's reba
 when no rebase happens. Since 7aeb653f0 the audit already classifies a cited BLOB id as content, so accepting a
 re-read that cites the harness blob would close this. Related: `ops/push-main.ps1:143` starts run-gates with an
 inherited console, so any gate's unredirected git error reaches the console and never the saved log.
+
+**Done 2026-09-18.** `ops/audit-conclusion-currency.ps1` now accepts a re-read line citing a harness's CURRENT blob
+(`Re-read at harness blob <git rev-parse HEAD:<path>> (<path>): ...`) as qualifying that harness exactly as a commit
+at or after its last change would; a blob from before the change qualifies nothing, one harness's blob never
+qualifies another, and the commit form still works. Lines saying "blob" are now read for hashes too. Seven new
+self-test cases (31 of 31 pass, exit 0), including a live-path case over a temp repository. Broken once two ways:
+with the blob match reverted 5 of 31 went red, with staleness ignored 7 of 31 went red (both exit 1); restored
+md5-identical. Live tree over 23 documents, base `846ede583`: before 4 UNQUALIFIED, 6 current, 13 not qualifiable;
+after the code change the same three counts, document by document (cited hashes 59 to 73 and content ids 1 to 11,
+which are listed and not ratcheted, because blob lines are now read). The two documents that name this script as a
+harness, `MEASURE-gate-slot-admission-2026-09-11.md` and `MEASURE-ratchet-plain-run-writes-2026-09-12.md`, carry
+their re-read by the new blob form, which is the proof it works. `.claude/rules/measurement.md` documents the form
+and the rule never to cite your own unlanded commit hash. The `push-main.ps1:143` console point is not addressed.
 
 ### I229 - Graph: stale filed-under edges are never removed, and a missing graph.db is silently recreated `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
 

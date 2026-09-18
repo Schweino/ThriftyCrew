@@ -82,6 +82,16 @@ carries all four rules in one file, and copying it is faster than re-deriving th
   (`git rev-parse <commit>:<path>`), because a rebase cannot move a blob, and after any rebase map old id
   to new and check the blobs match rather than assuming it. `design/MEASURE-sidecar-double-load-2026-09-11.md`
   is what that looks like.
+  **RE-QUALIFY A MOVED HARNESS BY ITS BLOB** (2026-09-18, backlog I228). `ops/audit-conclusion-currency.ps1` marks a
+  document UNQUALIFIED when a harness it names moved after its newest cited commit. The re-read line to write is
+      `Re-read at harness blob <id> (<path>): <what still holds>`
+  with `<id>` from `git rev-parse HEAD:<path>` (or `git hash-object <path>` before the commit), and the audit
+  accepts it exactly as it accepts a commit at or after the harness's last change. A blob from before that change
+  is not the harness's current blob and qualifies nothing, so a stale re-read stays stale. The older
+  `Re-read at commit <hash>` form still works when the hash is already on origin/main.
+  **Never cite your own unlanded commit hash, anywhere: cite a blob.** `ops/push-main.ps1` rebases before it
+  pushes, so the id you read in your worktree is not the id that lands, and a document, backlog entry or commit
+  message naming it points at nothing on main. Hit several times on 2026-09-18 before this form existed.
 
 Three more that live elsewhere and bite here:
 

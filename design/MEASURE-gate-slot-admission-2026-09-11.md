@@ -108,6 +108,12 @@ upward by that audit's own 24 to 33 s of gate work, as the `53e1d65bf` and `1a97
 and in skipping 32-hex md5s; it is named here as prose, as the `740c82af6` entry above says, and nothing this file
 measured ran through it.
 
+**Re-read at harness blob `5bc5aa67bb14` (`ops/audit-conclusion-currency.ps1`, `git rev-parse HEAD:<path>`): every
+verdict below stands as measured.** Backlog I228 changed that script only so that a re-read line citing a harness's
+CURRENT blob qualifies it, which is why this line cites a blob and not the commit that carries it: that commit is
+rebased before it lands and would name nothing on main. The script is still named here as prose only, and nothing
+this file measured ran through it.
+
 A READ-ONLY probe. It never calls `WaitOne` on a slot and never takes one. Once a second it reads the
 system handle table (`NtQuerySystemInformation`, extended handle information), duplicates only the
 mutant handles held by `run-gates.ps1` and `cpu-load.ps1` processes, reads each one's name and

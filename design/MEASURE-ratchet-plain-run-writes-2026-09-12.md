@@ -27,6 +27,12 @@ line changed: a plain run still writes nothing (exit 0, fixed=6 against a baseli
 cases. The same item also closed "the one left standing" below: `grocery\audit-json-readers.ps1` now speaks a fall
 and keeps its mark, `-Tighten` records it, and its report goes through `lib\lf-write.ps1`.
 
+**Re-read at harness blob `5bc5aa67bb14` (`ops/audit-conclusion-currency.ps1`, `git rev-parse HEAD:<path>`): every
+figure below still holds.** Backlog I228 changed that script only in what qualifies a harness: a cited blob that IS
+the harness's current blob now does, as a commit at or after its last change always did. No baseline write, record
+flag or rise branch changed: a plain run still writes nothing, and its three ratchet live-path cases pass in its
+31-case self-test. This line cites the blob because the commit carrying the change is rebased before it lands.
+
 This document is in its own commit for the reason `design\MEASURE-gate-slot-admission-2026-09-11.md`
 gives: a document cannot carry the hash of the commit that adds it, and here the harness IS what moved,
 so the scripts land first and this cites them. The gate suite that ran over the whole tree is named in

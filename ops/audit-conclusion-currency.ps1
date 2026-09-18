@@ -14,13 +14,17 @@
   WHAT IT READS. design\EVAL-*.md and design\MEASURE-*.md, the population the provenance audit owns.
     a HARNESS       a repo path to a .ps1 or .py on a line that says harness, measured through, ran
                     through, or generated ... by - and that exists.
-    a CITED COMMIT  a hash on a line that says commit, which git resolves to a commit.
+    a CITED COMMIT  a hash on a line that says commit or blob, which git resolves to a commit.
     a CONTENT ID    a hash on such a line that names a blob or tree: listed, never read as a commit.
     an UNRESOLVED   a hash on such a line that names no object: counted on the marker and listed, not ratcheted.
-  UNQUALIFIED when a named harness has a commit after the NEWEST cited commit. To re-qualify, re-read
-  the conclusion against the moved harness and add a line such as
-      Re-read at commit <hash>: <what still holds>
-  which becomes the newest cited commit.
+  UNQUALIFIED when a named harness has a commit after the NEWEST cited commit, unless the document cites
+  that harness's CURRENT blob. To re-qualify, re-read the conclusion against the moved harness and add
+      Re-read at harness blob <git rev-parse HEAD:<path>> (<path>): <what still holds>
+  THE BLOB FORM IS THE ONE TO USE (backlog I228, 2026-09-18). The older form, "Re-read at commit <hash>",
+  still qualifies a harness when the hash is a commit at or after its last change, but the commit you
+  would cite is your own, and ops\push-main.ps1 rebases it into a different id before it lands: the line
+  then cites a commit main never holds. A blob id is content, so no rebase can move it. A blob from
+  before the harness last changed is not its current blob and qualifies nothing.
 
   A RATCHET on the UNQUALIFIED count (lib\ratchet.ps1). The baseline was every qualifiable document on
   the day this shipped, so it fires only when a conclusion that WAS current goes stale in a push. A
@@ -58,7 +62,9 @@ $repo = Split-Path $here -Parent
 $treeRoot = if ($Root) { $Root } else { $repo }
 
 $script:HARNESS_LINE = '(?i)\b(harness|measured through|ran through|generated\b.{0,80}\bby)\b'
-$script:COMMIT_LINE  = '(?i)\bcommit\b'
+# A line that says BLOB is read too (backlog I228), because the rebase-proof re-read line cites a blob and need not
+# say "commit" at all.
+$script:COMMIT_LINE  = '(?i)\b(commit|blob)\b'
 $script:PATH_RX = '(?<![\w/\\.-])((?:ops|grocery|graph|meal-prep|sidecar|lib|tools)[\\/][A-Za-z0-9_.\\/-]+?\.(?:ps1|py))(?![\w])'
 $script:HASH_RX = '(?<![0-9A-Za-z])([0-9a-f]{7,40})(?![0-9A-Za-z])'
 
@@ -123,7 +129,13 @@ function Get-CurrencyVerdict {
      never qualifies a document; it is counted and listed. A hash that resolves to nothing is counted and listed
      too, and is NOT a gate: an unreachable commit leaves the object store on git's clock, not in the push that
      is being gated, so a red on it would refuse a push that did not cause it. #>
-  param([string[]]$Paths, [string[]]$Hashes, [scriptblock]$HashType, [scriptblock]$PathExists, [scriptblock]$After)
+  <# A CITED BLOB THAT IS THE HARNESS'S CURRENT CONTENT RE-QUALIFIES IT (2026-09-18, backlog I228). push-main rebases,
+     so a "Re-read at commit <X>" line written before the push cites a commit that never reaches main: the re-read
+     was real and the line naming it pointed at nothing. A blob id cannot be renamed by a rebase. -CurrentBlob answers
+     a harness path's blob at HEAD (git rev-parse HEAD:<path>), and a cited content id that the current blob starts
+     with qualifies THAT harness exactly as a cited commit at or after its last change would. A blob from before the
+     harness last changed matches nothing and qualifies nothing, so a stale re-read stays stale. #>
+  param([string[]]$Paths, [string[]]$Hashes, [scriptblock]$HashType, [scriptblock]$PathExists, [scriptblock]$After, [scriptblock]$CurrentBlob = { param($p) '' })
   $real = New-Object System.Collections.Generic.List[string]
   $content = New-Object System.Collections.Generic.List[string]
   $unres = New-Object System.Collections.Generic.List[string]
@@ -136,14 +148,25 @@ function Get-CurrencyVerdict {
   }
   $ca = $content.ToArray(); $ua = $unres.ToArray()
   $hp = @(@($Paths) | Where-Object { $_ -and (& $PathExists $_) })
-  if ($hp.Count -eq 0) { return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = 'names no harness that exists'; Content = $ca; Unresolved = $ua } }
+  if ($hp.Count -eq 0) { return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = 'names no harness that exists'; Content = $ca; Unresolved = $ua; BlobRead = @() } }
+  $blobRead = New-Object System.Collections.Generic.List[string]
+  foreach ($p in $hp) {
+    $cb = ([string](& $CurrentBlob $p)).Trim().ToLowerInvariant()
+    if (-not $cb) { continue }
+    foreach ($c in $ca) {
+      if ($cb.StartsWith($c.ToLowerInvariant(), [StringComparison]::Ordinal)) { [void]$blobRead.Add($p); break }
+    }
+  }
+  $ba = $blobRead.ToArray()
   if ($real.Count -eq 0) {
+    if ($ba.Count -eq $hp.Count) { return @{ Verdict = 'CURRENT'; Moved = @(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba } }
     $why = 'cites no commit git can resolve'
     if ($ca.Count -or $ua.Count) { $why += (' ({0} blob or tree id(s), {1} hash(es) naming no object)' -f $ca.Count, $ua.Count) }
-    return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = $why; Content = $ca; Unresolved = $ua }
+    return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = $why; Content = $ca; Unresolved = $ua; BlobRead = $ba }
   }
   $moved = New-Object System.Collections.Generic.List[object]
   foreach ($p in $hp) {
+    if ($blobRead.Contains($p)) { continue }
     $min = $null; $since = ''
     foreach ($h in $real) {
       $n = [int](& $After $h $p)
@@ -151,8 +174,8 @@ function Get-CurrencyVerdict {
     }
     if ($min -gt 0) { [void]$moved.Add(@{ Path = $p; After = $min; Since = $since }) }
   }
-  if ($moved.Count -gt 0) { return @{ Verdict = 'UNQUALIFIED'; Moved = $moved.ToArray(); Why = ''; Content = $ca; Unresolved = $ua } }
-  return @{ Verdict = 'CURRENT'; Moved = @(); Why = ''; Content = $ca; Unresolved = $ua }
+  if ($moved.Count -gt 0) { return @{ Verdict = 'UNQUALIFIED'; Moved = $moved.ToArray(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba } }
+  return @{ Verdict = 'CURRENT'; Moved = @(); Why = ''; Content = $ca; Unresolved = $ua; BlobRead = $ba }
 }
 
 if ($SelfTest) {
@@ -227,6 +250,25 @@ if ($SelfTest) {
   $hh15 = Get-CitedHashes -Text ("The old arm is base commit ``8253ded82``. The new arm is md5`n``" + $md5a + $md5b + "``: the fix.")
   $h15 = @($hh15)
   Case 'MUST NOT FIRE' 'a 32-hex md5 on a commit line is not a cited hash' ($h15.Count -eq 1 -and $h15[0] -eq '8253ded82') ($h15 -join ',')
+  # A RE-READ THAT CITES THE HARNESS'S BLOB (2026-09-18, backlog I228). The founding shape: a re-read line citing the
+  # session's own commit, which push-main's rebase renamed before it landed, so the line named nothing on main.
+  $nowBlob = 'c0de5eed00112233445566778899aabbccddeeff'
+  $blobKind = { param($x) if ($x -eq 'aaa1111') { 'commit' } else { 'content' } }
+  $curBlob = { param($p) $nowBlob }
+  $after17 = { param($h, $p) 3 }   # the cited commit is 3 changes behind the harness
+  $v17 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('aaa1111', 'b01d123') -HashType $blobKind -PathExists $yes -After $after17 -CurrentBlob $curBlob
+  Case 'MUST FIRE' 'a re-read citing a STALE blob of the harness leaves it UNQUALIFIED' ($v17.Verdict -eq 'UNQUALIFIED' -and @($v17.BlobRead).Count -eq 0) $v17.Verdict
+  $v18 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('b01d123') -HashType $blobKind -PathExists $yes -After $after17 -CurrentBlob $curBlob
+  Case 'MUST FIRE' 'a document citing ONLY a stale blob of its harness is never CURRENT' ($v18.Verdict -ne 'CURRENT') $v18.Verdict
+  $v19 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('aaa1111', 'c0de5eed00') -HashType $blobKind -PathExists $yes -After $after17 -CurrentBlob $curBlob
+  Case 'CLEAN TWIN' 'a re-read citing the harness''s CURRENT blob qualifies it past an older cited commit' ($v19.Verdict -eq 'CURRENT' -and @($v19.BlobRead).Count -eq 1) $v19.Verdict
+  $v20 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1', 'ops/h.ps1') -Hashes @('aaa1111', 'c0de5eed00') -HashType $blobKind -PathExists $yes -After $after17 -CurrentBlob { param($p) if ($p -eq 'ops/h.ps1') { 'fff0000111' } else { $nowBlob } }
+  Case 'MUST FIRE' 'a current blob of ONE harness does not qualify a second harness that moved' ($v20.Verdict -eq 'UNQUALIFIED' -and @($v20.Moved).Count -eq 1 -and $v20.Moved[0].Path -eq 'ops/h.ps1') $v20.Verdict
+  $v21 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('aaa1111', 'b01d123') -HashType $blobKind -PathExists $yes -After { param($h, $p) 0 } -CurrentBlob $curBlob
+  Case 'CLEAN TWIN' 'the commit form still qualifies: a cited commit at the harness''s last change is CURRENT beside a stale blob' ($v21.Verdict -eq 'CURRENT') $v21.Verdict
+  $hh22 = Get-CitedHashes -Text 'Re-read at harness blob `c0de5eed00` (ops/run-gates.ps1): every figure holds.'
+  $h22 = @($hh22)
+  Case 'CLEAN TWIN' 'a re-read line that says blob and not commit is read for its hash' ($h22.Count -eq 1 -and $h22[0] -eq 'c0de5eed00') ($h22 -join ',')
   $full16 = '679a1535661ad682dcdadb163c39c4057a1a7508'
   $hh16 = Get-CitedHashes -Text ('Commit it ran at: ' + $full16 + '.')
   $h16 = @($hh16)
@@ -264,6 +306,10 @@ if ($SelfTest) {
     $ltBlob = ([string](& git -C $ltTree rev-parse ($ltCited + ':ops/h.ps1'))).Trim().Substring(0, 10)
     $ltNone = 'fedcba9876'
     [IO.File]::WriteAllText((Join-Path $ltTree 'design\EVAL-fixture.md'), ("Harness: ops/h.ps1`nCommit it ran at: " + $ltCited + "`nThat commit held the harness as blob " + $ltBlob + ", and commit " + $ltNone + " names nothing.`n"), $ltUtf8)
+    # A second document re-read by the harness's CURRENT blob (backlog I228): same old commit, so only the blob can
+    # qualify it. It is CURRENT, so the unqualified count the ratchet cases below read is unchanged.
+    $ltNowBlob = ([string](& git -C $ltTree rev-parse 'HEAD:ops/h.ps1')).Trim().Substring(0, 10)
+    [IO.File]::WriteAllText((Join-Path $ltTree 'design\EVAL-reread.md'), ("Harness: ops/h.ps1`nCommit it ran at: " + $ltCited + "`n`nRe-read at harness blob " + $ltNowBlob + " (ops/h.ps1): it still holds.`n"), $ltUtf8)
     $ltBl = Join-Path $lt 'baseline.json'
     [IO.File]::WriteAllText($ltBl, "{`n    ""unqualified"":  2,`n    ""note"":  ""fixture""`n}`n", $ltUtf8)
     $ltSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl))
@@ -302,10 +348,12 @@ if ($SelfTest) {
     $mark4 = @(($out4 -split "`r?`n") | Where-Object { $_ -match '^CONCLUSION-CURRENCY-COMPLETE\b' })
     $markLine4 = $(if ($mark4.Count) { [string]$mark4[$mark4.Count - 1] } else { '' })
     Case 'LIVE PATH' 'a cited blob is read as content and a hash naming nothing is counted, with NOTHING on stderr' `
-      ($rc4 -eq 0 -and $err4 -eq '' -and $markLine4 -match '\bunresolved=1\b' -and $markLine4 -match '\bcontent_ids=1\b' -and $out4 -match ('blob or tree id ' + $ltBlob) -and $out4 -match ('names no object: ' + $ltNone)) `
+      ($rc4 -eq 0 -and $err4 -eq '' -and $markLine4 -match '\bunresolved=1\b' -and $markLine4 -match '\bcontent_ids=2\b' -and $out4 -match ('blob or tree id ' + $ltBlob) -and $out4 -match ('names no object: ' + $ltNone)) `
       ("rc=$rc4 stderr=[$err4] marker=[$markLine4]")
     Case 'CLEAN TWIN' 'the blob beside the cited commit leaves the verdict to the commit: the fixture document is still UNQUALIFIED' `
       ($out4 -match 'UNQUALIFIED\s+EVAL-fixture\.md') ($out4 -replace "`r?`n", ' | ')
+    Case 'LIVE PATH' 'a document whose re-read line cites the harness''s CURRENT blob (git rev-parse HEAD:<path>) is current against a real repository' `
+      ($out4 -match 'current\s+EVAL-reread\.md' -and $out4 -match 'ops/h\.ps1 re-read by its CURRENT blob') ($out4 -replace "`r?`n", ' | ')
   } finally {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
@@ -361,6 +409,20 @@ $hashType = {
 }
 $pathExists = { param($p) return (Test-Path -LiteralPath (Join-Path $treeRoot ($p -replace '/', '\'))) }
 $afterFn = { param($h, $p) $n = & git -C $treeRoot rev-list --count "$h..HEAD" -- $p; return [int]("$n".Trim()) }
+# The harness's blob at HEAD (backlog I228). Only an existing path reaches here, but a path that exists in the working
+# tree and not at HEAD (a new, uncommitted harness) makes rev-parse fail: that answers '' and matches nothing.
+$currentBlobFn = {
+  param($p)
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $bo = @(& git -C $treeRoot rev-parse --verify --quiet ('HEAD:' + $p) 2>$null)
+    if ($LASTEXITCODE -ne 0 -or $bo.Count -eq 0) { return '' }
+    return ([string]$bo[$bo.Count - 1]).Trim()
+  } finally {
+    $ErrorActionPreference = $prevEap
+  }
+}
 
 $unq = 0; $cur = 0; $nq = 0; $unres = 0; $cids = 0; $cited = 0
 Write-Output 'CONCLUSION CURRENCY - does each recorded conclusion still describe the harness it names?'
@@ -372,7 +434,8 @@ foreach ($d in $docs) {
   $hhR = Get-CitedHashes -Text $text
   $hashes = @($hhR)
   $cited += $hashes.Count
-  $v = Get-CurrencyVerdict -Paths $paths -Hashes $hashes -HashType $hashType -PathExists $pathExists -After $afterFn
+  $v = Get-CurrencyVerdict -Paths $paths -Hashes $hashes -HashType $hashType -PathExists $pathExists -After $afterFn -CurrentBlob $currentBlobFn
+  $vB = @($v.BlobRead | Where-Object { $_ })
   $vC = @($v.Content | Where-Object { $_ })
   $vU = @($v.Unresolved | Where-Object { $_ })
   $cids += $vC.Count; $unres += $vU.Count
@@ -388,13 +451,15 @@ foreach ($d in $docs) {
     'CURRENT' { $cur++; Write-Output ("  current          {0}" -f $d.Name) }
     default { $nq++; Write-Output ("  not qualifiable  {0} - {1}" -f $d.Name, $v.Why) }
   }
-  foreach ($c in $vC) { Write-Output ("                   cites blob or tree id {0} on a commit line: content, not a commit, so it qualifies nothing" -f $c) }
+  foreach ($b in $vB) { Write-Output ("                   {0} re-read by its CURRENT blob: qualified as a commit at or after its last change would be" -f $b) }
+  foreach ($c in $vC) { Write-Output ("                   cites blob or tree id {0} on a commit or blob line: content, not a commit; it qualifies a harness only when it IS that harness's current blob" -f $c) }
   foreach ($u in $vU) { Write-Output ("                   UNRESOLVED hash on a commit line, git names no object: {0} (missing, gc'd or ambiguous)" -f $u) }
 }
 Write-Output ''
 Write-Output ("  {0} of {1} document(s) UNQUALIFIED, {2} current, {3} not qualifiable (ops\audit-measurement-provenance.ps1's finding)" -f $unq, $docs.Count, $cur, $nq)
 Write-Output ("  of {0} cited hash(es): {1} blob or tree id(s) read as content, {2} naming no object - counted and listed, not ratcheted" -f $cited, $cids, $unres)
-Write-Output '  To re-qualify one: re-read it against the moved harness and add "Re-read at commit <hash>: <what still holds>".'
+Write-Output '  To re-qualify one: re-read it against the moved harness and add "Re-read at harness blob <git rev-parse HEAD:<path>> (<path>): <what still holds>".'
+Write-Output '  Cite the BLOB, not your own unlanded commit: push-main rebases and renames that commit, and it never reaches main.'
 
 $blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'conclusion-currency-baseline.json' }
 $base = $null
