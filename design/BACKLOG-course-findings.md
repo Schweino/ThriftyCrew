@@ -10802,7 +10802,7 @@ knowledge (`database-craft/analytical-stores.md`) and is a lens for a future dec
 to propose today. Proposing a warehouse, a cube or a document store against this data volume would
 be the course selling its own subject through me.
 
-### I137 - the food database cannot represent sodium, sugar or saturated fat, so three of the course's four checkable recommendations are unfalsifiable against anything we sell `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I137 - the food database cannot represent sodium, sugar or saturated fat, so three of the course's four checkable recommendations are unfalsifiable against anything we sell `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Two of the item`s own numbers are WRONG. "needs_verify is set on 117 of 441" conflates carrying the key with being true: 117 rows carry it, only **10 are true**. And its backfill question is answered - **165 of 441 rows name a USDA FDC id or the portal**, so they can be backfilled by API with no photograph needed. Worse than the item says in one respect: sugars and saturated fat are not even transcribed in the label captures (0 of 10 label blocks), while sodium IS captured (9 of 10) and then dropped on the way in.
 
@@ -10844,6 +10844,70 @@ over all 8,423 files `git ls-files` returns. `dietary guidelines`, `recommended 
 `World Health Organization` are also 0 of 8,423. All 30 `myplate` hits are source-blog domain names
 (`getonmyplate.com`, `dontmissmyplate.com`, `remakemyplate.com`), not the USDA guidance. **No
 dietary authority of any kind is cited anywhere in this repository.**
+
+**RUNG 1 RE-WORKED 2026-09-18: is the label still REACHABLE, and does what it reaches carry the three
+numbers.** The 2026-09-12 lane counted rows that NAME an FDC id; naming is not reaching, and an FDC
+record that answers can still lack sugars (Foundation records often do). **Acceptance bar, written
+before the run:** a row counts as BACKFILLABLE WITHOUT A PHOTOGRAPH only if its own text cites an FDC id,
+that id answers the live FDC `foods` endpoint today, and the answer carries all three of sodium,
+total sugars and saturated fat. If at least 221 of 441 rows (half) clear that bar, a backfill is an
+API job and the only open question is whether Brad wants the fields; below 221, the ruling must also
+price the photograph rounds for the remainder. Either way no field is added before a ruling, because
+I145 recorded "do we want sodium at all" as Brad's question and a new nutrient on a paid recipe page is
+a reader-facing claim.
+
+**Result: 190 of 441 rows (43.1%) clear the bar, so it is NOT met (221 needed).** Run 2026-09-18 at
+dc380c087 over `meal-prep/food-macros-db.json` blob 41f522d29 (sha256 prefix 7a5797e51c661eaa) and
+`meal-prep/db/food-label-captures.json` blob afcb22c5a. One row per food-DB row is in
+`design/MEASURE-i137-nutrient-reachability-2026-09-18.jsonl`. The harness was a one-off scratch
+script, described here: it classifies each row by the text of `source`, `verify_source`, `notes`,
+`note` and `needs_verify_note`, extracts FDC ids with `(?:FDC|fdc)(?!/SR)[^0-9\n]{0,40}?(\d{5,7})`,
+POSTs them in batches of 20 to `https://api.nal.usda.gov/fdc/v1/foods` with `format=abridged`, and
+counts a nutrient present when the record lists nutrient NUMBER 307 (sodium), 269 or 269.3 (total
+sugars) or 606 (saturated fat) with an amount, a declared 0 included. **Two runs preceded this one and
+both were wrong for stated reasons:** the first used DEMO_KEY, and 2 of its 11 batches came back 429,
+so 40 ids read as unreachable when nobody had looked; it also read NDB numbers written `FDC/SR 01056`
+as FDC ids. Both runs used `format=full`, where 42 Branded records return `foodNutrients` with no
+nutrient object at all, so every one of those rows read as having no sodium. The numbers below come
+from the third run only.
+
+| class (by what the row's own text cites) | rows of 441 | reachable today |
+|---|---|---|
+| an FDC id | 220 | 218 answer with readable nutrients; **190 carry all three**, 218 carry sodium, 196 sugars, 209 saturated fat |
+| an NDB number only (`FDC/SR 01056`) | 7 | needs an FDC search by NDB number; not tried |
+| the word USDA or FDC and no id | 88 | needs an FDC name search and a per-row identity check (`agreement-is-not-identity-in-fdc`) |
+| a third-party URL | 53 | 42 answer 200 with the word "sodium" in the body (a presence test, not a parsed value); 11 do not (a Walmart 404, a 403, a 406, image links) |
+| other text, mostly "from label" with no URL | 72 | a photograph |
+| nothing | 1 | a photograph |
+
+Of the 30 FDC-id rows that miss the bar, 19 lack only sugars (17 SR Legacy, 2 Foundation records,
+which often carry no sugars value), 6 lack only saturated fat, 3 lack both, and 2 answer nothing
+usable: **`USDA FDC 11090 (SR Legacy)` on the broccoli row is an NDB number written as an FDC id**, and
+FDC id 1249618 (Great Value hummus) 404s in the abridged format and returns 17 nutrient amounts with no
+nutrient identity in the full one. The label captures hold sodium for 9 of 441 rows, and none of the
+9 is one of the 190. So the costs are: an API job for 190 rows (218 if sodium alone), a search plus an
+identity check for 95, a page read for about 42, and a photograph for about 84 (73 with no pointer, 11
+whose page did not answer with sodium), at the five to eight round trips per label that
+`reading-a-nutrition-label-off-a-product-photo` records, a figure this run did not re-measure.
+
+**NEEDS A RULING, Brad.** Do we store any of sodium, sugars and saturated fat in the food DB, and if so which?
+
+- **A. Sodium only, stored internally, never shown until complete.** Add an optional `sodium_mg` per
+  serving to `food-macros-db.json`, backfill the 218 FDC rows by API and the 9 captured rows from the
+  captures, and publish no per-serving sodium on any page until every ingredient in that recipe has a
+  value. 2-WAY; no reader sees anything. How many of the 583 recipes would then be fully covered is
+  NOT measured yet and would be the next rung.
+- **B. All three, full backfill.** The API covers 190; the other 251 need searches, page reads and
+  roughly 84 photographs. Sugars is the weak one even from FDC (196 of 220).
+- **C. Decline and stop paying for it.** Write "we do not store sodium, sugars or saturated fat" into
+  the schema readme, drop `sodium_mg` from the capture procedure so the next label sweep stops
+  transcribing it, and close this item. The I138 forbidden-prose gate already stops us making a health
+  claim we cannot back.
+- **D. Defer** until a reader asks for any of the three.
+
+**Recommendation: A.** Sodium is the one of the three FDC reaches almost completely (218 of 220 cited
+rows), it is the one the captures already pay to transcribe, and storing it without rendering it is
+fully reversible. It also turns I145's "paying for it and discarding it" into neither.
 
 ### I138 - two recipes we sell carry "Healthy" in the title we publish, and one of them is 5.5% vegetable by weight `DONE` `queue-7`
 
