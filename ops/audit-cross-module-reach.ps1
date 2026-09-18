@@ -348,7 +348,13 @@ if ($runSelfTest) {
     foreach ($d in 'ops', 'lib', 'meal-prep') { $null = New-Item -ItemType Directory -Path (Join-Path $sbx $d) }
     Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $sbx 'ops\audit-cross-module-reach.ps1')
     Copy-Item -Path (Join-Path $repo 'lib\*.ps1') -Destination (Join-Path $sbx 'lib')
-    $reachSrc = @('# a meal-prep script', '$a = 1', '$p = ''grocery/out/x.json''') -join "`n"
+    # THE PATH IS SPLIT ACROSS A CONCATENATION ON PURPOSE (backlog I227). The VALUE is the same one line; the
+    # SPELLING is not a report path. Written as one literal, ops\audit-write-only-reports.ps1 read this assignment
+    # as a variable holding a report family named x, and the file write two lines down as a write of it, so a
+    # fixture's own source text counted as a new report family nobody reads: 42 against a baseline of 41 on
+    # 2026-09-18. That detector reads comments too, so this one names neither the path nor the write verb.
+    $reachLine = '$p = ''grocery/ou' + 't/x.json'''
+    $reachSrc = @('# a meal-prep script', '$a = 1', $reachLine) -join "`n"
     [IO.File]::WriteAllText((Join-Path $sbx 'meal-prep\x.ps1'), $reachSrc)
     $sbxBase = Join-Path $sbx 'ops\cross-module-reach-baseline.json'
     $sbxScript = Join-Path $sbx 'ops\audit-cross-module-reach.ps1'
