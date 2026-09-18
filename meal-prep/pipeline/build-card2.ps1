@@ -58,6 +58,21 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 # does, which is the whole reason the rule is not written inline here.
 . (Join-Path $here '..\lib\package-cost-lib.ps1')
 
+# ---- A RECIPE NODE NEVER SHIPS AN EMPTY IMAGE (2026-09-18, backlog I44) -----------------------------
+# Google's Recipe rich result REQUIRES `image`, and an empty string is an ERROR that voids the whole
+# item: low-carb-taco-cabbage-beef-skillet FAILed URL Inspection on `Missing field "image"` from its
+# 2026-08-17 crawl. 49 specs carried head.image = "" until d66dd9641 filled them by hand, and nothing
+# stops the 50th: build-run-specs.ps1 and build-intake-skeleton.ps1 both start every new spec with
+# image = '', and the fill that used to live in build-all.ps1 went to meal-prep\archive with it. So the
+# renderer, the one writer of the Recipe node, falls back to the site's own share image - the value all
+# 584 specs carry today and the one Ghost already serves as og:image on a post with no feature image.
+# A spec that names its own image is passed through byte for byte; only a blank one moves.
+$script:TcDefaultRecipeImage = 'https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png'
+function Resolve-RecipeImage($img){
+  if([string]::IsNullOrWhiteSpace([string]$img)){ return $script:TcDefaultRecipeImage }
+  return $img
+}
+
 if($SelfTest){
   # =================================================================================================
   # THE DATA-BLOCK BASIS, frozen from the rows that were actually wrong on 2026-09-02.
@@ -116,6 +131,33 @@ if($SelfTest){
   # ---- the zero guards: a covered line has no package and must not divide by anything -------------
   T 'a covered line (gpu 0) returns 0 rather than dividing' ((Get-ScalerGpu 0 298 432) -eq 0.0) ((Get-ScalerGpu 0 298 432))
   T 'a covered line (pkg_g 0) is not basis-checked at all' ($null -eq (Get-ScalerBasisMismatch 0 28.35 432 28.35)) 'the check ran on a line with no package'
+
+  # ---- THE RECIPE IMAGE (2026-09-18, backlog I44) -------------------------------------------------
+  # low-carb-taco-cabbage-beef-skillet's spec carried image = "" and Google FAILed its Recipe item on
+  # `Missing field "image"`. The frozen input is that empty string, not a live spec: all 584 specs
+  # carry an image today, so a fixture read from db\recipes would pass by finding nothing.
+  foreach($blank in @('', '   ', $null)){
+    $got = Resolve-RecipeImage $blank
+    T ('MUST FIRE  a blank spec image (' + $(if($null -eq $blank){'null'}else{"'" + $blank + "'"}) + ') renders the site share image, never an empty Recipe.image') `
+      ($got -eq $script:TcDefaultRecipeImage) ("got '" + $got + "'")
+  }
+  $own = 'https://example.test/content/images/own-photo.jpg'
+  T 'CLEAN TWIN a spec that names its own image keeps it byte for byte' `
+    ([string]::Equals((Resolve-RecipeImage $own), $own, [StringComparison]::Ordinal)) (Resolve-RecipeImage $own)
+  # THE WIRING, read from this file's AST: the Recipe node's `image` must be the resolver's answer.
+  # Without this a revert of the one call site leaves every case above green.
+  $astTokens = $null; $astErrs = $null
+  $ast = [System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$astTokens, [ref]$astErrs)
+  $recipeAssign = $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.AssignmentStatementAst] -and
+      $n.Left.Extent.Text -eq ('$' + 'recipe') }, $true) | Select-Object -First 1
+  $imgPair = $null
+  if($recipeAssign){
+    $ht = $recipeAssign.Right.Find({ param($n) $n -is [System.Management.Automation.Language.HashtableAst] }, $true)
+    if($ht){ $imgPair = $ht.KeyValuePairs | Where-Object { $_.Item1.Extent.Text -eq 'image' } | Select-Object -First 1 }
+  }
+  $imgText = if($imgPair){ $imgPair.Item2.Extent.Text } else { '(no image key found on the Recipe node)' }
+  T 'MUST FIRE  the Recipe node''s image is taken through Resolve-RecipeImage, not straight from the spec' `
+    ($imgText -match ('^Resolve-' + 'RecipeImage\b')) $imgText
 
   if($f -eq 0){ Write-Output 'build-card2 SELF-TEST PASS'; exit 0 }
   Write-Output "build-card2 SELF-TEST FAIL: $f case(s)"; exit 1
@@ -514,7 +556,7 @@ $recipe = [ordered]@{
   }
   recipeIngredient   = @($spec.head.recipeIngredient)
   recipeInstructions = @($steps)
-  image    = $spec.head.image
+  image    = Resolve-RecipeImage $spec.head.image
   prepTime = $spec.head.prepTime
   cookTime = $spec.head.cookTime
   totalTime= $spec.head.totalTime

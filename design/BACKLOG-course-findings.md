@@ -4611,7 +4611,58 @@ candidate) or *variable* (a buffering candidate), which is the split recorded as
 timing to them is a rung 2 and should not be started before rung 1 says a bottleneck read is worth
 having.
 
-### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `PARTLY DONE - THE FIX IS SHIPPED AND VERIFIED LIVE 2026-09-07; ONLY GOOGLE'S RE-CRAWL VERDICT IS OUTSTANDING` `b3a35c7cf` `be797a371` `seo` `2-WAY` `RUNG1 BLOCKED`
+### I44 - The Recipe rich result went from ~40 valid to 1, and the paywall claim is on the wrong node `DONE` `b3a35c7cf` `be797a371` `seo`
+
+**Done 2026-09-18. Google has now re-crawled paid pages after the fix, and every one PASSES.** Read with
+`ops/seo_url_inspect.py` (harness blob f9be47cc955a882220bfd1446d795bef0b251bcb, the same bytes in the main
+checkout it ran from and at base d9eaa12c3), plus a scratch per-URL print over the same `inspect()` call, because the tool prints only the
+aggregate. The fix landed 2026-09-07 12:23 CDT (17:23 UTC); every crawl time below is Google's own UTC stamp.
+
+| set | inspected | crawl dated | crawled AFTER the fix | of those, PASS with a Recipes item |
+|---|---|---|---|---|
+| the deterministic 14-URL stride | 14 | 13 | **3** (2026-09-08, 09-09, 09-14) | **3 of 3** |
+| the five recipes indexing was requested on 2026-09-07 | 5 | 5 | **5** (all 2026-09-08 01:00 to 01:06 UTC) | **5 of 5** |
+| **together** | 19 | 18 | **8** | **8 of 8** |
+
+All 8 post-fix crawls are `visibility: paid` in `recipes-db.json`, so every one is a page the fix changed (the
+Recipe node now carries `isAccessibleForFree=false` and `hasPart`), and not one came back INVALID. The
+aggregate of the stride today: coverage 13 of 14 indexed (1 discovered, not indexed), rich result PASS 12 of 14,
+NONE 1, FAIL 1, 94 WARNINGs and 1 ERROR. **Which pre-registered branch fired:** "all five re-crawl and still
+show a valid Recipe item" holds, 5 of 5, so the third branch (a re-crawled page reports INVALID) is ruled out
+and the fourth (not re-crawled) no longer applies. **Choosing between the first two needs the site-wide Recipes
+count, which has no API and was not read here**, so whether the fix CAUSED any recovery stays open, exactly as the
+"Stated as a hypothesis" paragraph below says. That does not keep the item open: the fix is correct on every
+post-fix crawl measured, and the causal question is a Search Console UI read, not work.
+
+**The one ERROR is the missing-image defect from BEFORE d66dd9641, and it is not live.** URL Inspection:
+`low-carb-taco-cabbage-beef-skillet` FAIL, `Missing field "image"`, last crawl **2026-08-17 20:46 UTC**. Its spec
+carried `head.image = ""` until d66dd9641 (2026-09-07 11:55 CDT) filled it - it is one of the 49. Today the live page
+fetched as Googlebot carries 3 JSON-LD nodes and the **Recipe** node's `image` is the site share image
+(`tc-og-1200x630.png`); the page has no Ghost feature image (og:image and twitter:image are that same site
+default). So Google is reporting a crawl a month old, and **nothing needs republishing**: the served page is
+already right. A Request Indexing on that one URL in Search Console would refresh the verdict sooner; it is
+optional, and it is Brad's account.
+
+**What was fixed so it cannot happen a 50th time.** Nothing in the live pipeline fills an empty image:
+`build-run-specs.ps1:406` and `build-intake-skeleton.ps1:332` start every new spec with `image = ''`,
+`build-v2-spec.ps1` copies it, and `build-card2.ps1` wrote it straight into the Recipe node. The fill that
+produced the other 535 lived in `build-all.ps1`, which is now under `meal-prep/archive/`. `build-card2.ps1` now
+takes the Recipe `image` through `Resolve-RecipeImage`: a blank, whitespace or null spec image renders the site
+share image, and a spec that names its own image passes through byte for byte.
+- **Changes no existing card:** all 584 specs rebuilt offline into two temp directories with the old and new
+  builder, `built 584/584 errors 0` both arms, and **1,168 of 1,168 output files md5-identical**. Measured on
+  the day, 0 of 584 specs carry a blank image, which is why.
+- **Moves the one it exists for:** a copy of `low-carb-taco-cabbage-beef-skillet`'s spec with `image` blanked
+  built with the old builder to `"image": ""` and with the new one to the share image, and the new arm's
+  head and body are md5-identical to the real card's.
+- **Fixtures** in `build-card2.ps1 -SelfTest` (now 14 cases, exit 0): three MUST FIRE for `''`, `'   '` and
+  null; a CLEAN TWIN that a named image survives byte for byte (ordinal compare); and a MUST FIRE read from the
+  file's own AST that the Recipe node's `image` value is a `Resolve-RecipeImage` call, because reverting the
+  one call site otherwise leaves every function-level case green. **Broken twice and watched red:** with the
+  fallback line removed, 3 cases FAIL and exit 1; with the call site reverted to `$spec.head.image`, the wiring
+  case FAILs and exit 1. Restored, md5 identical to the fixed file.
+
+The 584-share-one-image weakness is untouched and still blocked on photography, as recorded below.
 
 **RE-CHECK:** `python ops/seo_url_inspect.py` - it prints the last-crawl date per URL. **The block lifts the moment any sampled crawl date postdates 2026-09-07**, because only then is Google reporting on the fixed page rather than the old one. Until then the fourth pre-registered branch holds: not re-crawled, so no verdict.
 
