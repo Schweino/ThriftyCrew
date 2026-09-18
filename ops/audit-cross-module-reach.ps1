@@ -335,6 +335,44 @@ if ($runSelfTest) {
     T 'MUST NOT FIRE  a sibling worktree BELOW that root is still excluded' ($wtHits.Sibling -eq 0) ("sibling=" + $wtHits.Sibling)
   } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # ---- A RISE NAMES ITS SITES BY FILE AND LINE (2026-09-18, backlog I155) --------------------------
+  # Run as a CHILD over a sandbox tree with its own baseline, because the rise message is printed by the sweep,
+  # not by Get-ReachSites: the site list is only proved by running the script the gate runs. The sandbox gets the
+  # whole lib\ (a hand list of libraries is the blind kind), and one reach on line 3 of a meal-prep script.
+  $sbx = Join-Path $env:TEMP ('cmr-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    $null = New-Item -ItemType Directory -Path $sbx -ErrorAction Stop
+    foreach ($d in 'ops', 'lib', 'meal-prep') { $null = New-Item -ItemType Directory -Path (Join-Path $sbx $d) }
+    Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $sbx 'ops\audit-cross-module-reach.ps1')
+    Copy-Item -Path (Join-Path $repo 'lib\*.ps1') -Destination (Join-Path $sbx 'lib')
+    $reachSrc = @('# a meal-prep script', '$a = 1', '$p = ''grocery/out/x.json''') -join "`n"
+    [IO.File]::WriteAllText((Join-Path $sbx 'meal-prep\x.ps1'), $reachSrc)
+    $sbxBase = Join-Path $sbx 'ops\cross-module-reach-baseline.json'
+    $sbxScript = Join-Path $sbx 'ops\audit-cross-module-reach.ps1'
+    $wantRow = 'meal-prep\x.ps1:3  meal-prep -> grocery'
+
+    # MUST FIRE - the founding shape: the count rose, and the red names the site it counted, file and line.
+    [IO.File]::WriteAllText($sbxBase, '{ "code_sites": 0 }')
+    $roseOut = @(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $sbxScript)
+    $roseRc = $LASTEXITCODE
+    $roseRow = @($roseOut | Where-Object { $_.Contains($wantRow) })
+    T 'MUST FIRE  a ratchet rise exits 2 AND names the site as file:line' ($roseRc -eq 2 -and $roseRow.Count -eq 1) ("rc=$roseRc rows=$($roseRow.Count)")
+
+    # CLEAN TWIN - the list and the ratcheted count still agree: every code site counted is listed, no more.
+    # (The sandbox's lib\ copies carry real reaches of their own, so the count is read, never assumed to be 1.)
+    $nLine = @($roseOut | Where-Object { $_ -match '^\s+code sites\s+(\d+)\s' })
+    $n = if ($nLine.Count -eq 1 -and $nLine[0] -match '^\s+code sites\s+(\d+)\s') { [int]$Matches[1] } else { -1 }
+    $listed = @($roseOut | Where-Object { $_ -match '^    \S+:\d+  \S+ -> \S+  \(' })
+    T 'CLEAN TWIN  a rise lists exactly as many file:line rows as the code-site count it ratchets' ($n -ge 1 -and $listed.Count -eq $n) ("count=$n listed=$($listed.Count)")
+
+    # MUST NOT FIRE - at the mark, the site list is a red's explanation and is not printed.
+    [IO.File]::WriteAllText($sbxBase, ('{ "code_sites": ' + $n + ' }'))
+    $atOut = @(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $sbxScript)
+    $atRc = $LASTEXITCODE
+    $atRow = @($atOut | Where-Object { $_.Contains($wantRow) })
+    T 'MUST NOT FIRE  at the high-water mark it exits 0 and prints no site list' ($atRc -eq 0 -and $atRow.Count -eq 0) ("rc=$atRc rows=$($atRow.Count)")
+  } finally { Remove-Item -LiteralPath $sbx -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($bad -gt 0) { Write-Output ("cross-module-reach SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'cross-module-reach SELF-TEST PASS'
   Exit-Guard -Name 'cross-module-reach' -Summary 'selftest pass' -Code 0
@@ -352,6 +390,11 @@ $byPair = @{}
 $fileHits = @{}
 $filesBy = @{ token = 0; line = 0 }
 $reclassified = New-Object System.Collections.Generic.List[string]
+# EVERY CODE SITE BY FILE AND LINE (2026-09-18, backlog I155). Get-ReachSites has always carried the line, and
+# until this list the sweep dropped it: a rise printed "baseline 118, now 119" and eight top files, so the one
+# red this ratchet exists to raise could not say WHERE, and the pusher re-ran the search by hand. Measured that
+# day over all 47 ops\audit-*.ps1: this was the only source detector whose finding named neither file nor line.
+$codeRows = New-Object System.Collections.Generic.List[string]
 foreach ($f in $files) {
   $rel = $f.FullName.Substring($repo.Length).TrimStart('\','/')
   $own = Get-ModuleOfPath $rel
@@ -369,6 +412,7 @@ foreach ($f in $files) {
     }
     if ($s.comment) { $commentSites++ } else {
       $codeSites++
+      [void]$codeRows.Add(("{0}:{1}  {2} -> {3}  ({4})" -f $rel, $s.line, $own, $s.module, $s.target))
       $k = "$own -> $($s.module)"
       if (-not $byPair.ContainsKey($k)) { $byPair[$k] = 0 }
       $byPair[$k]++
@@ -419,6 +463,10 @@ $base = [int]((Get-Content $BASELINE -Raw | ConvertFrom-Json).code_sites)
 if ($codeSites -gt $base) {
   Write-Output ("cross-module-reach: RATCHET ROSE. baseline {0}, now {1}. A new cross-module reach was added." -f $base, $codeSites)
   Write-Output '  Read the published artefact (public/board.json) instead, or lower the baseline deliberately with a reason.'
+  # The baseline is a COUNT, so which site is new cannot be named - but every site can, and the new one sits in a
+  # file the change being pushed touched.
+  Write-Output ("  every code site, file:line ({0}) - the new reach is among them, in a file your change touched:" -f $codeRows.Count)
+  foreach ($r in $codeRows) { Write-Output ('    ' + $r) }
   Exit-Guard -Name 'cross-module-reach' -Summary ("ROSE base={0} now={1}" -f $base, $codeSites) -Code 2
 }
 if ($codeSites -lt $base) {

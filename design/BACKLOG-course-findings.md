@@ -11702,7 +11702,43 @@ Not proposing the change here. Proposing that if the item above is ruled in, the
 specified to blank comments **and** string-literal contents behind a switch, because retrofitting
 the second one later means re-fixturing every caller a second time.
 
-### I155 - Most `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I155 - Most detectors cannot say WHERE a finding is (measured: 1 of 38 could not name even the file) `DONE` `queue-7`
+
+**Done 2026-09-18.** The measurement refuted the item's premise and found one real case, which is fixed.
+
+*Bar, written before any detector was run or read:* classify each tracked `ops\audit-*.ps1` by what its
+production finding line names - LINE (file and line), FILE (file, no line), NONE (a count, or a name you must
+search the tree for), NOT-SOURCE (not a location in a source file). A retrofit is warranted for a NONE whose
+findings are about source text, fixed here if 3 or fewer and a ruling if more; FILE without LINE is not a
+retrofit and rides the item's own forward rule.
+
+*Measured at `782078ba1`, 47 detectors.* Each was run with no arguments from a worktree (width 4, 400 s cap;
+harness `run-all.ps1` in the session scratchpad, one-off, not committed); 44 exited 0, `fixture-inputs` 1,
+`cloudflare-estate` and `python-pins` 3 (no network lifecycle read, no venv in a worktree). Where the tree
+printed a live finding it was read; where it printed none, the detector's emit statement was read instead.
+
+| Class | Count | Detectors |
+|---|---|---|
+| LINE | 16 of 47 | 6 seen live (`bare-replace`, `cmdlet-shadow`, `fixed-temp-names`, `full-path-excludes`, `lesson-rate-claims`, `write-seam`); 10 from source (`fixture-vocabulary`, `git-sweepers`, `internal-ast-members`, `keyword-arguments`, `list-array-wrap`, `phantom-paths`, `selftest-fallthrough`, `source-control-bytes`, `threshold-register`, `unread-wait`) |
+| FILE plus the offending text, symbol or id | 6 of 47 | `cpu-load`, `git-fixture-env` (the line's text), `typed-param-shadow`, `ruling-drift`, `fixture-inputs`, `backlog-status` |
+| FILE, and the file is the finding's unit | 15 of 47 | the defect is a property of a whole script or document: `arg-binding`, `source-comment-strip`, `one-way-actuators`, `conclusion-currency`, `measurement-provenance`, `mustfire-census`, `write-only-reports`, `twin-drift`, and seven more |
+| NONE | **1 of 47** | `cross-module-reach`: a rise printed "baseline 118, now 119" and the top eight files, while `Get-ReachSites` carried each site's line and the sweep dropped it |
+| NOT-SOURCE | 9 of 47 | tasks, hooks, buckets, pins, backups, root entries |
+
+So **37 of 38** source detectors already name at least the file. The grep that founded this item (11 of 45)
+and a comment-free code-token recount at this commit (23 of 47 carry any position vocabulary) are both poor
+indicators, in both directions: the one NONE carried line vocabulary and discarded it, and `cpu-load`'s `Line`
+is text, not a number.
+
+*Fixed:* `ops\audit-cross-module-reach.ps1` now lists every code site as `file:line  own -> module  (target)`
+when the ratchet rises. The baseline is a count, so the new site cannot be singled out; it sits in a file the
+pushed change touched. Behaviour-neutral: the count, exit codes and baseline are unchanged (production run
+`code=118 comment=61 base=118`, exit 0). Three child-run cases in its `-SelfTest` over a sandbox with the whole
+`lib\`: MUST FIRE (a rise exits 2 and names `meal-prep\x.ps1:3`), CLEAN TWIN (the rise lists exactly as many
+rows as the count it ratchets), MUST NOT FIRE (at the mark, exit 0 and no list). With the listing line removed
+the self-test went red in its own two named cases (`rc=2 rows=0`, `count=29 listed=0`, exit 2); restored
+md5-identical (`7CC23284...`) and 32 of 32 cases pass, exit 0. No rules line was added: one detector in 47 does
+not earn a standing rule, and the forward rule in this item stays a habit.
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Reproduces at 11 of 45 by a strict token-reduced test that excludes comments, which is identical to the item`s own grep - so its number was not inflated. New fact that changes the shape of the fix: there is NO shared finding emitter in `lib/guard-contract.ps1`, so "position is free at the rung above" is true of the AST and false of the plumbing. Every detector would need its own emit change.
 
