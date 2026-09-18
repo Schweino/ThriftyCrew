@@ -12782,7 +12782,17 @@ commodity is structurally BLIND rather than slow, and the span is printed beside
 
 ---
 
-### I170 - brad's rate-of-return ruling is enforced at push time but is written down nowhere a lesson drafter reads `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+### I170 - brad's rate-of-return ruling is enforced at push time but is written down nowhere a lesson drafter reads `DONE` `queue-7`
+
+**Done 2026-09-18.** Both pastes landed, and the write that was refused on 2026-09-12 was permitted this
+time through the ordinary Edit tool, so nothing was routed around. `.claude/rules/site-and-publish.md` carries
+a bullet above its `Regime:` line with the ruling verbatim, its date and backlog id, the hedge-is-not-a-label
+distinction, the first-run measurement as the gate's own commit recorded it, and the detector's unsoundness;
+`.claude/skills/lesson/SKILL.md` carries one paragraph under `Step 1`, where a lesson is drafted. The skill
+lives in the repo, not in the user-level skills store, so no second repository was touched. The ruling's
+wording was taken from `ops/audit-lesson-rate-claims.ps1`'s header and checked by ordinal comparison after
+folding whitespace: 657 characters, identical in both new copies. Both files LF, 0 carriage returns. No lesson
+was edited. The gate itself, run at ffa5dc549: exit 0, `LESSON-RATE-CLAIMS-COMPLETE findings=6 baseline=6`.
 
 **Merged from `design\backlog-inbox\i112-ruling-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 

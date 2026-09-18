@@ -32,6 +32,22 @@ real cost to a real person, and understating is exactly as wrong as overstating.
   [[ghost-integration-token-limits]]
 - **Content workbooks are FORMULA-DRIVEN.** `content/workbooks/` carries 28,821 live formula cells; a
   values-only regeneration opens fine, looks right and is inert. [[workbooks-are-formula-driven]]
+- **A RATE OF RETURN IN A LESSON CARRIES FOUR THINGS NEXT TO THE NUMBER** (Brad's ruling, 2026-09-12,
+  backlog I112). Verbatim: *"A lesson may show a projected rate of return only when it carries, next to
+  the number: the source and the period it covers, whether it is nominal or after inflation, and that fees
+  are not included (or the fee assumed). Prefer a historical figure stated as history over a forward
+  projection, and pair any nominal figure with its after-inflation figure. No rate may be lifted from a
+  course or chart that does not name its source. Illustrations that are pure arithmetic (penny doubling, a
+  stated made-up rate labelled as an example) are fine and need none of this. Existing lessons that quote
+  a rate get checked against this rule the next time they are edited."* **A HEDGE is not a LABEL**: *"past
+  returns don't guarantee future results"* sources nothing, while *"let's say 7%"* exempts the number
+  because the lesson invented it. `ops/audit-lesson-rate-claims.ps1` holds it on every push over all
+  markdown under `content/`, a ratchet whose mark only falls. Its first run, at the commit that added it,
+  read 118 files, 5,271 paragraphs, 14 rate-of-return claims, 8 labelled illustrations, 0 fully qualified
+  and 6 unqualified; those six are the worklist it prints, fixed when each is next edited. The detector is
+  unsound (it finds the spellings it knows, and a rate reaching Ghost by another road is outside it), so
+  this line is the half that reaches the writer before the prose exists. The drafting step is `Step 1` of
+  `.claude/skills/lesson/SKILL.md`.
 
 Regime: this holds for reader-facing output. Internal data files under `grocery/` and `meal-prep/` have
 their own rules files.
