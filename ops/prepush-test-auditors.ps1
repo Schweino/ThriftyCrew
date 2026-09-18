@@ -1233,18 +1233,18 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
     Clear-TcGitRepoEnv
     $null = New-Item -ItemType Directory -Path $prDir -ErrorAction Stop
     $u8 = New-Object Text.UTF8Encoding($false)
-    foreach ($d in @('grocery', 'ops', 'lib', 'notes', 'grocery\out')) { $null = New-Item -ItemType Directory -Path (Join-Path $prDir $d) -Force }
+    foreach ($d in @('modz', 'ops', 'lib', 'notes', 'modz\boards')) { $null = New-Item -ItemType Directory -Path (Join-Path $prDir $d) -Force }
     $prTa = "`$x = RunPS 'modq-audit.ps1'`n'TEST-AUDITORS-COMPLETE'`n"
-    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\test-auditors.ps1'), $prTa, $u8)
-    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\modq-audit.ps1'), "'v1'`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'modz\test-auditors.ps1'), $prTa, $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'modz\modq-audit.ps1'), "'v1'`n", $u8)
     [IO.File]::WriteAllText((Join-Path $prDir 'ops\prepush-test-auditors.ps1'), "'harness v1'`n", $u8)
     [IO.File]::WriteAllText((Join-Path $prDir 'lib\modq-lib.ps1'), "'lib v1'`n", $u8)
     [IO.File]::WriteAllText((Join-Path $prDir 'notes\readme.txt'), "not an input`n", $u8)
-    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\out\comparison-2026-09-18.json'), "{}`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'modz\boards\comparison-2026-09-18.json'), "{}`n", $u8)
     $gq = { param([string[]]$A) $null = & git -C $prDir -c user.name=fixture -c user.email=fixture@example.invalid -c core.autocrlf=false @A 2>$null }
-    & $gq @('init', '-q'); & $gq @('add', 'grocery/test-auditors.ps1', 'grocery/modq-audit.ps1', 'ops/prepush-test-auditors.ps1', 'lib/modq-lib.ps1', 'notes/readme.txt'); & $gq @('commit', '-q', '-m', 'base')
-    $prBoards = @('grocery/out/comparison-*.json')
-    $kOf = { Get-TaInputKey $prDir (Get-AuditorInputs $prTa 'grocery/test-auditors.ps1') $prBoards }
+    & $gq @('init', '-q'); & $gq @('add', 'modz/test-auditors.ps1', 'modz/modq-audit.ps1', 'ops/prepush-test-auditors.ps1', 'lib/modq-lib.ps1', 'notes/readme.txt'); & $gq @('commit', '-q', '-m', 'base')
+    $prBoards = @('modz/boards/comparison-*.json')
+    $kOf = { Get-TaInputKey $prDir (Get-AuditorInputs $prTa 'modz/test-auditors.ps1') $prBoards }
     $k1 = & $kOf
     $recP = Join-Path $prDir 'pass.json'
     $now = [datetime]::UtcNow
@@ -1258,23 +1258,23 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
     $line2 = Format-ReuseLine $k2.key $p2 $k2
     Case 'CLEAN TWIN' 'pass reuse: only non-input files arrived, so the same key reuses the recorded pass, printed REUSED with the key' ($k1.ok -and $k2.ok -and $k1.inputs -ge 4 -and $k1.key -eq $k2.key -and $p2.reuse -and $line2.StartsWith('prepush-test-auditors: REUSED key=' + $k1.key)) "k1=$($k1.key)/$($k1.inputs) k2=$($k2.key) reuse=$($p2.reuse) why=$($p2.why)"
     # MUST FIRE: an input changed between the runs, so the key moves and the run is full.
-    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\modq-audit.ps1'), "'v2'`n", $u8)
-    & $gq @('add', 'grocery/modq-audit.ps1'); & $gq @('commit', '-q', '-m', 'input moved')
+    [IO.File]::WriteAllText((Join-Path $prDir 'modz\modq-audit.ps1'), "'v2'`n", $u8)
+    & $gq @('add', 'modz/modq-audit.ps1'); & $gq @('commit', '-q', '-m', 'input moved')
     $k3 = & $kOf
     $p3 = Read-TaPassRecord $recP $k3.key $now 6 'full' @()
     Case 'MUST FIRE' 'pass reuse: a test-auditors input changed between runs, so the key moves and the run is full' ($k3.ok -and $k3.key -ne $k1.key -and -not $p3.reuse -and $p3.why -match 'an input moved') "k1=$($k1.key) k3=$($k3.key) reuse=$($p3.reuse) why=$($p3.why)"
     Write-TaPassRecord $recP $k3.key 0 @() 'full' @() 700 $now
-    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\modq-audit.ps1'), "'v3 uncommitted'`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'modz\modq-audit.ps1'), "'v3 uncommitted'`n", $u8)
     $k4 = & $kOf
     Case 'MUST FIRE' 'pass reuse: an UNCOMMITTED edit to an input moves the key (the suite reads the working tree)' ($k4.ok -and $k4.dirty -eq 1 -and $k4.key -ne $k3.key -and -not (Read-TaPassRecord $recP $k4.key $now 6 'full' @()).reuse) "k3=$($k3.key) k4=$($k4.key) dirty=$($k4.dirty)"
-    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\modq-audit.ps1'), "'v2'`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'modz\modq-audit.ps1'), "'v2'`n", $u8)
     [IO.File]::WriteAllText((Join-Path $prDir 'ops\prepush-test-auditors.ps1'), "'harness v2'`n", $u8)
     $k5 = & $kOf
     [IO.File]::WriteAllText((Join-Path $prDir 'ops\prepush-test-auditors.ps1'), "'harness v1'`n", $u8)
     [IO.File]::WriteAllText((Join-Path $prDir 'lib\modq-lib.ps1'), "'lib v2'`n", $u8)
     $k6 = & $kOf
     [IO.File]::WriteAllText((Join-Path $prDir 'lib\modq-lib.ps1'), "'lib v1'`n", $u8)
-    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\out\comparison-2026-09-18.json'), "{`"rebuilt`":1}`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'modz\boards\comparison-2026-09-18.json'), "{`"rebuilt`":1}`n", $u8)
     $k7 = & $kOf
     Case 'MUST FIRE' 'pass reuse: a harness byte (this script or any lib) or a board rebuild moves the key' ($k5.key -ne $k3.key -and $k6.key -ne $k3.key -and $k7.key -ne $k3.key -and $k5.ok -and $k6.ok -and $k7.ok) "k3=$($k3.key) harness=$($k5.key) lib=$($k6.key) board=$($k7.key)"
     $old = Read-TaPassRecord $recP $k3.key $now.AddHours(7) 6 'full' @()
