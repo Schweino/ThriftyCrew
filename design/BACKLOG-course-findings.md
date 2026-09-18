@@ -12751,3 +12751,442 @@ shape (compare SETS keyed by primary key, sample deterministically by key), is
 `~/.claude/skills/data-quality-craft/checks-and-thresholds.md` 5c. The one rung is to cite that
 section from whatever design doc next proposes a board-level change detector, so the course's
 version is not the one that gets built.
+
+### I202 - I186 sharpened: the price formatter runs three rounding behaviours, not two, and throws away the exact decimal the board arrived as `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q8-money-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Queue-8 documentation read D1, `doc-dotnet-money-rounding` (Microsoft Learn `Math.Round`,
+`MidpointRounding`, `System.Decimal`, standard numeric format strings; Goldberg). This EXTENDS I186 and
+should be merged into it rather than stand as a sibling. Nothing in the estate was changed.
+
+**What I186 says.** `Fmt-Price`'s dollar branch rounds half away from zero (`'{0:N2}' -f`) and
+`Fmt-PriceBare` plus `Fmt-Price`'s oz and fl oz cents branch round half to even (`[math]::Round`), so one
+price can print a cent apart on two pages. That is right as far as it goes. Measured 2026-09-18 under
+`powershell.exe` 5.1.26100.9444 / CLR 4.0.30319.42000 by dot-sourcing `grocery/fmt-lib.ps1`:
+
+| value | `Fmt-Price v 'lb'` | `Fmt-Price v 'oz'` | `Fmt-PriceBare v` |
+|---|---|---|---|
+| 0.125 | $0.13/lb | 12&cent;/oz | $0.12 |
+| 1.005 | $1.01/lb | $1.01/oz | **$1.00** |
+| 0.145 | $0.15/lb | 14&cent;/oz | $0.14 |
+| 1.145 | $1.15/lb | $1.15/oz | $1.14 |
+| 4.435 | $4.44/lb | $4.44/oz | $4.43 |
+
+**What the read adds, all measured on this machine:**
+
+1. **The values are `[double]` when rounded, and that changes which values are midpoints.** Every
+   function in `fmt-lib.ps1` declares `[double]$v`. A double spelled 1.005 is 1.0049999999999999, not a
+   midpoint at all, yet the two paths still disagree on it, because neither rounds the binary value:
+   - `'{0:N2}' -f v` on .NET Framework rounds the double's **15-significant-digit decimal spelling**,
+     half away from zero. So it treats every `x.xx5` spelling as a midpoint and rounds it up.
+   - `[math]::Round(v, 2)` (and the oz branch's `[math]::Round(v*100)`) multiplies by 100 **in double**
+     and rounds the product half to even. The product's own rounding decides: `1.145*100` is exactly
+     114.5, so 1.145, which is stored ABOVE the midpoint, comes back 1.14; `1.005*100` is
+     100.49999999999999, so 1.00. **This path is not even a consistent half-to-even**: over the 10,000
+     computed doubles `i.5/100`, i = 0 to 9,999, it disagreed with a true decimal half-to-even on **573
+     of 10,000**.
+   So I186's framing "half up versus half to even" is one of three differences; the second is "decimal
+   spelling versus binary product", and it moves cents on values that are not midpoints at all.
+2. **The board arrives exact and the formatter discards it.** Under 5.1, `ConvertFrom-Json` returns
+   `System.Decimal` for every number with a fraction (`'{"a":1.005}'` -> Decimal 1.005, measured). The
+   `[double]` parameter is where the exact value becomes 1.0049999999999999. Whether every caller passes a
+   JSON-parsed value straight through, or one computed in double first, was NOT checked.
+3. **Framework has only `ToEven` and `AwayFromZero`** (`[enum]::GetNames([MidpointRounding])`, measured).
+   A directed rule ("never understate") would need `[math]::Ceiling` by hand; `ToPositiveInfinity` does not
+   exist on this runtime, and Learn's own samples call `ToZero`, so a copied sample throws here.
+4. **The same formatter would flip on a runtime move.** The format-strings page states .NET Core 2.1 and
+   later format midpoints ToEven, so the `'{0:N2}'` branch changes rule under PowerShell 7 with no code
+   change. A mode named explicitly in one helper does not.
+5. **Python is a third rule**: `round(1.145, 2)` is 1.15 (it rounds the exact binary value), where .NET's
+   `[math]::Round` gives 1.14 and `'{0:N2}'` gives 1.15. I186's closing line ("check the Python side")
+   stands; 50 lines under `grocery/` and `sidecar/` Python match `round(`, `:.2f` or `%.2f` by
+   `git grep`, NOT attributed to any published surface.
+
+**One helper that would serve every branch, measured in 5.1:**
+
+```powershell
+function Round-Money([double]$v, [MidpointRounding]$Mode) { [math]::Round([decimal]$v, 2, $Mode) }
+```
+
+`[decimal]` of a double keeps 15 significant digits, so it recovers the decimal spelling; the mode is then
+applied to a true decimal midpoint. With `AwayFromZero` it agreed with today's `'{0:N2}' -f` on 10,000 of
+10,000 of the sweep above; with `ToEven` it is a real banker's rounding. The result is formatted with
+`.ToString('N2', [Globalization.CultureInfo]::InvariantCulture)`, never re-formatted from the double. The
+oz rollover test (`$c -ge 100`) would then read the helper's cents, which keeps the half-cent-gap fixture's
+guarantee by construction. Full account: `~/.claude/skills/software-craft/language-semantics.md` 13.
+
+**The ruling, as options (not a decision).** In every option the fixture at `fmt-lib.ps1` lines 117 to
+121 and 171 to 175 is rewritten to pin EVERY branch to one rule, with a must-fire at 1.005, 0.145 and 1.145
+as well as the binary midpoint 0.125.
+
+- **A. Half away from zero on the decimal spelling** (`Round-Money ... AwayFromZero`). Changes nothing on
+  the deals page, the Friday email or the store guide's dollar prices (10,000 of 10,000 agree in the sweep); moves the
+  trend pages and the oz / fl oz cents branch UP a cent wherever they now round an `x.xx5` down (an even
+  cent before the 5, or a binary product that fell below the half). It is the rule a reader
+  checking by hand applies, and the one US shoppers learned.
+- **B. Half to even on the decimal spelling** (`Round-Money ... ToEven`). Moves the deals-page, email and
+  store-guide dollar prices DOWN a cent at `x.xx5` where the cent before is even; changes the trend pages
+  only where today's binary-product path was wrong (about 573 of 10,000 in the sweep). Its textbook
+  advantage, no drift, applies to rounded values fed back into sums; these are display-only, so that
+  advantage mostly does not apply here.
+- **C. Directed: round a price UP to the cent** (hand-built with `Ceiling`, since Framework lacks
+  `ToPositiveInfinity`). Never understates, but overstates by up to a cent on EVERY non-round value, not
+  only at halves, which cuts against "understating is exactly as wrong as overstating".
+- **D. Keep both rules and state them.** Cheapest; leaves one price reading a cent apart on two pages,
+  which is the defect.
+
+**First rung:** Brad picks A, B, C or D. Building A or B afterwards is one helper, the rounding calls in
+`fmt-lib.ps1`, and the fixture; no data is rewritten, so it is 2-WAY.
+
+### I203 - probe-hostile-input's "12 ACCEPTED CORRUPT" is 2 distinct inputs, because 10 of its 12 kinds ignore the drawn offset `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\q8-proptest-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Queue 8 entry D5, documentation read `doc-property-and-mutation-testing` (Hypothesis docs
+and hypothesis.works, 2026-09-18). Routed learning: `software-craft/test-design-and-oracles.md` 5.2b.
+Builds on the sibling finding in `q8-scalagen-2026-09-18.md` (a seed replays only at the same
+commit) and does not repeat it.
+
+**Measured 2026-09-18 at 574f6a380.** `ops\probe-hostile-input.ps1 -Seed 20260909` replays its
+founding run exactly (60 cases: 17 refused, 31 survived, 12 ACCEPTED-CORRUPT; exit 0), so the seed
+still holds at this commit because `$script:KINDS` has not changed since f1a23d662. But reading
+`New-TcHostileVariant`: only `truncated` and `byte-flipped` use `-Offset`; the other 10 kinds return
+one fixed text whatever the offset. So the 12 corrupt cases are **3 identical `nul-byte` inputs and 9
+identical `huge-field` inputs: 2 distinct inputs, 2 distinct failures**, and most of the 60 draws
+re-run a case already run. The report prints `offset=` beside each, which reads as 12 different
+cases.
+
+**What Hypothesis does about each half, and what it would buy here, concretely.**
+- **Distinct-failure bucketing** (Hypothesis keys a failure on exception type plus raising line and
+  reports each key once). Here the key is `kind + detail`, and the headline would read "12 cases, 2
+  distinct failures". Cheap, and it stops a count of duplicates reading as a count of bugs.
+- **"This argument can vary freely"** (the explain phase's `# or any other generated value`). For
+  the 10 offset-blind kinds, the report should say the offset did not matter, rather than print it.
+- **Promote a found failure to a VALUE, not a seed** (the docs: never rely on the database or a seed
+  for correctness; use `@example`). The two failures are `(nul-byte)` and `(huge-field)`: record
+  them as explicit cases so they survive any change to `KINDS` or the draw order, which the seed
+  does not.
+- **Shrinking buys almost nothing TODAY, and that is the honest answer.** A case is one kind and one
+  offset, already minimal. It starts paying the day a case COMPOSES several malformations over one
+  capture, or generates the capture's rows: then a failing case should be reduced by deleting
+  malformations and rows until one that still fails remains (the continue-flag list shape in 5.2b).
+  If the probe is ever widened, widen it that way, over a recorded list of choices, so that
+  reduction is possible.
+
+**What it would touch.** `ops\probe-hostile-input.ps1` only: dedupe inputs before running or report
+distinct inputs, bucket the corrupt outcomes, and a `-Kind/-Offset` single-case replay. It is a
+report, not a gate, so nothing reddens. Hardening `Import-CaptureCsv` remains the separate ruling
+f1a23d662 already named.
+
+### I204 - The hand-run mutation probes name their mutants but not their operators, and none has a committed harness `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\q8-proptest-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Queue 8 entry D5, Papadakis et al., "Mutation Testing Advances: An Analysis and Survey"
+(2019; read from the authors' 2017 preprint). Routed learning: `software-craft/test-design-and-
+oracles.md` 6, operators subsection.
+
+**Measured 2026-09-18 at 574f6a380**, by one extended regex over tracked `.ps1` and `.py`
+(`mutants? (from|in) a temp mirror|mutation[- ]probed|mutation probe|single compiling mutant|N of N
+mutants|mutants? (went red|survived|killed)`), which is UNSOUND - it finds the spellings it knows:
+**27 lines in 20 files record a hand-run mutation probe's result.** No tracked file has `mutat` in its
+name, so **no probe has a committed harness**; each was a temp mirror, run and described.
+`.claude\rules\measurement.md` already says a measurement that may recur COMMITS its harness, and
+`ops-and-gates.md` says a mutation probe is "worth running against a detector whose logic you have
+just rewritten" - so this one recurs by the estate's own rule. **One line names an equivalent
+mutant** (`lib\gate-slots.ps1:88`, a clamp the loop already enforced), and the response was to delete
+the clamp: the survey's "an equivalent mutant marks redundant code" reading, applied without the name.
+
+**What the survey changes about them.** Its seven-point checklist asks any claim made with mutants to
+name the operators, the tool and version, how redundancy was controlled, and the granularity.
+BACKLOG I37's table is the good case: eight mutants with the operator visible in each row. Most
+recorded probes name the mutant ("the `^` anchor dropped") and not the class it was drawn from, so a
+later probe cannot tell whether it covered the same ground, and "killed 9 of 9" has no stated
+population. A **PowerShell operator catalogue drawn from this estate's recorded scars** would fix the
+vocabulary: comparison boundary (`-gt`/`-ge`, the ROR analogue), connector (`-and`/`-or`, LCR),
+regex anchor or boundary deletion, `@()` wrap removed or added, `Ordinal` comparison replaced by the
+culture-sensitive default, `-ErrorAction Stop` or an `exit` deleted, a guard deleted (the survey
+reports deletion operators give fewest equivalent mutants). Each is already a scar in the rules files.
+
+**What it would touch.** A committed harness (temp mirror, apply one catalogued operator at a named
+site, run the file's `-SelfTest`, record killed/survived per case, md5 the original afterwards) under
+`ops\`, reporting `killed K of N non-equivalent, E judged equivalent` per the checklist. Never a gate:
+a bar on kill rate would be red on day one, and the survey's threshold finding says a score below
+some level carries no information about faults anyway.
+
+### I205 - the data committer's source-path refusal has two dead branches, because TrimStart('./') strips the leading dot of .claude and .github `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\q8-pwsh-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `packt-mastering-powershell-scripting-hhoce` (Dent, *Mastering PowerShell Scripting*), module 8
+reading "Trim, TrimStart, and TrimEnd": `Trim`/`TrimStart`/`TrimEnd` take a SET of characters, not a
+string (`'magnet.uk.net'.TrimEnd('.uk.net')` is `mag`). This is .NET's `Trim(params char[])` signature,
+so it holds in 5.1 and 7 alike.
+
+**What is wrong, measured 2026-09-18 on origin/main 3b0e4c59e under powershell.exe 5.1.** `lib/pipeline-commit.ps1:111`
+(`Assert-NoSourcePaths`, which its own header calls "THE SAFETY INVARIANT" a data committer must refuse
+on) normalises every path with `.Replace('\', '/').TrimStart('./')`. The intent is "drop a leading `./`";
+the effect is "drop every leading `.` and `/`". The regex it then applies, `$script:PC_SOURCE_RX` (line 54),
+has two branches that can therefore never match: `^\.claude/` and `^\.github/`. A scratch replay of that
+exact line and regex gave:
+
+| path | after TrimStart | flagged | flagged if untrimmed |
+|---|---|---|---|
+| `.claude/settings.json` | `claude/settings.json` | **False** | True |
+| `.github/CODEOWNERS` | `github/CODEOWNERS` | **False** | True |
+| `.claude/rules/x.md` | `claude/rules/x.md` | True (only via the `.md` extension branch) | True |
+
+So a `.claude` or `.github` file with an extension outside the list (`.json`, none) passes the invariant.
+The self-test's `.claude` MUST FIRE case (line 334) uses a `.md` path, which is why it stays green: it
+is satisfied by the extension branch, so it cannot see the directory branch is dead, the "two guards
+over one rule" shape `ops-and-gates.md` already records. `lib/bot-paths.ps1:157` (`Test-BotPathOwned`)
+normalises the same way, so any ownership entry that starts with `.` can never match either. Tracked
+paths starting with `.`: 70 (64 under `.claude`, 3 under `.github`, plus `.gitattributes`, `.gitignore`,
+`.worktreeinclude`).
+
+**Not checked:** whether any committer's declared path list currently contains a dot-path, i.e. whether
+this has ever let a file through. It is a latent hole, not an observed incident. `git log --all -S` on the
+two lines found no sibling branch holding a fix.
+
+**The fix, for whoever builds it:** strip the literal prefix (`if ($n.StartsWith('./')) { $n = $n.Substring(2) }`,
+repeated) instead of a character set, in both files; add a MUST FIRE for `.claude/settings.json` and for
+`.github/CODEOWNERS` to `Assert-NoSourcePaths`' self-test, and a mutation check that reverting to
+`TrimStart('./')` turns them red. A detector for the class (`.Trim*('` with a multi-character literal whose
+characters are not a deliberate set) would find 5 other non-archive sites today, all of which read as
+deliberate character sets (`Trim(' ,.')`, `Trim(' ,-/')`).
+
+### I206 - about 199 self-test case helpers are simple functions, which is exactly why the "concatenation is three arguments" trap is silent `OPEN` `queue-8` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q8-pwsh-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same course, modules 17 and 18: a function with no `[CmdletBinding()]` and no `[Parameter()]`
+puts arguments it cannot bind into `$args` silently; an advanced function refuses them. Measured
+2026-09-18 under 5.1: `T7s 'a' + 'b'` on a simple function bound `P1=a` with 2 unbound arguments; the
+identical call on an advanced function threw `PositionalParameterNotFound`.
+
+**The count, and the test that produced it.** Over the 651 tracked non-archive `.ps1` files, a grep for
+`^\s*function\s+(_?T|Check|Case)\s*[\{\(]` found **199 definitions**. The five read were all the inline
+form `function T([string]$n, [bool]$ok, ...)`, which cannot carry `[CmdletBinding()]`, so every one read
+is a simple function. The rules file records the trap (`Test-Thing "a" + "b"` binding three positionals)
+and `ops/audit-keyword-arguments.ps1` catches one spelling of it; neither names the binder behaviour that
+makes it silent.
+
+**Proposal, not decided:** measure how many of those helpers are ever called with an unparenthesised
+`+` or keyword in an argument position (the AST can answer it), and weigh a shared advanced helper in
+`lib/selftest-lib.ps1` that new suites use, so the next instance is a loud bind error instead of a case
+that ran on a fragment. No retro-fill proposed; a gate over 199 existing helpers would be red on day one.
+
+### I207 - `throw` in an estate function is switched off by a caller's -ErrorAction SilentlyContinue, and nothing here says so `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q8-pwsh-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same course, module 22 ("Throw and Error Action"). Measured 2026-09-18 under 5.1: a
+`[CmdletBinding()]` function doing `throw 'Err'; 'AFTER'`, called with `-ErrorAction SilentlyContinue`,
+**returned `AFTER`**. The documentation says preference variables do not affect terminating errors; for
+`throw` they do. Inside a `try`, `throw` still reaches the `catch`.
+
+**Exposure, partly measured:** 308 of 651 tracked non-archive `.ps1` files mention `SilentlyContinue`
+(any use, including on built-in cmdlets, so this is an upper bound on exposure, not a count of the bad
+shape), and **0** use `$PSCmdlet.ThrowTerminatingError`, the form that is immune. The shape that bites is
+narrower: an estate advanced function whose guard is a bare `throw`, called by estate code with
+`-ErrorAction SilentlyContinue` or under `$ErrorActionPreference = 'SilentlyContinue'`. That join was not
+measured; it needs the AST (callee's `throw` outside `try`, caller's argument), which is the first rung.
+
+**Why a ruling:** the course's recommendation is `throw` only inside `try`, and
+`$PSCmdlet.ThrowTerminatingError` everywhere else. That is a house-style decision over hundreds of files,
+and the estate mostly runs under `EAP = 'Stop'`, where the problem cannot occur. Brad decides whether the
+rule is worth stating before the join is measured.
+
+### I208 - one catalogue include is cubic on a whitespace run and an atomic group makes it linear with no answer changed `OPEN` `queue-8` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q8-regex-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Queue 8 entry D3 (`doc-dotnet-regex-engineering`), a documentation read of Microsoft Learn and
+regular-expressions.info, measured against `grocery/commodities.json` at 574f6a380 on 2026-09-18 under
+`powershell.exe` 5.1 (CLR 4.0.30319.42000). Extends I183.
+
+**What was measured.** 592 entries, 3,644 distinct include and exclude patterns (matches I183's count). A
+text-heuristic shape census (UNSOUND: it finds the spellings it knows) found:
+
+- 1 of 3,644 with adjacent quantifiers that overlap on a space:
+  `(?:boneless|skinless)\s*[,&/ ]+\s*(?:boneless|skinless)[^,]*chicken\s+breast` (the chicken-breast
+  entry). Near-miss victim `boneless` + N spaces + `x`: N=250 99 ms, 500 712 ms, 1,000 7,130 ms, 2,000
+  50,332 ms. Doubling N costs about 7 to 10 times, so it is **polynomial (about cubic), not exponential**.
+  Rewritten as `(?:boneless|skinless)(?>\s*[,&/ ]+\s*)(?:boneless|skinless)...` it took 0 ms at every N,
+  and gave the same answer on 5 of 5 probe names (`boneless, skinless`, `boneless & skinless`,
+  `skinless /  boneless`, a double space, and the no-separator negative). The rewrite is safe because the
+  token after the group (`boneless|skinless`) can never begin with a space, comma, ampersand or slash.
+- 27 of 3,644 with two or more unbounded wildcards (`.*` or `[^x]*`) in sequence, e.g. the carb-balance
+  tortilla patterns. One measured: 1,213 characters 7 ms, 2,413 21 ms, 4,813 83 ms, so about quadratic
+  and harmless at product-name length.
+- 0 alternations inside a quantified group, 0 back-references, 0 atomic groups already, 14 quantified
+  groups (the disjoint `(?:\w+\s+){0,N}` shape I183 already cleared), 146 bounded `.{0,N}`, 42 lookarounds.
+
+**Why it matters though no real name has 500 spaces.** Product names are short, so today's risk is low;
+but the victim needs no hostile author, only a scraped name with a padded whitespace run, and the matcher
+has no timeout (I183) and its C# core catches nothing around `IsMatch` (`grocery/match-lib.ps1` lines
+116 to 199), so one pathological name stalls the whole build rather than one cell.
+
+**The first rung.** Decide the chicken-breast rewrite as a catalogue edit with its own before/after run of
+the matcher over a real board (the answer-equality half needs the real names, not five probes). Then an
+edit-time check refusing a new include with adjacent overlapping quantifiers, which is the class this
+shape belongs to.
+
+### I209 - adding the I183 timeout to match-lib also adds an uncaught exception to its C# core `OPEN` `queue-8` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q8-regex-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same read. Microsoft Learn "Backtracking in .NET regular expressions" and "Best practices":
+a timed-out match throws `RegexMatchTimeoutException`, which does not say whether backtracking or load
+caused it.
+
+**What was measured, 2026-09-18, Framework 4.** Cost of a 250 ms timeout on ordinary matches: 2,000,000
+`IsMatch` calls of a catalogue-shaped pattern, 3 rounds, 1,516 to 1,528 ms without against 1,550 to 1,584
+ms with (about 2 to 4 percent). Construction of all 3,644 patterns: 7 to 26 ms interpreted either way.
+So the timeout is cheap; the real change is the exception. `grocery/match-lib.ps1`'s compiled C# loop
+(lines 116 to 199) calls `IsMatch` with no catch, and the include list is ONE combined alternation per
+commodity (line 287), so a single timeout would name a commodity, not a pattern, and would abort the
+whole call.
+
+**For whoever builds I183.** The fix is three parts, not one: the TimeSpan at lines 276, 287 to 289, 336
+and 405; a catch in the C# core that scores the cell as could-not-look (never as no-match, per
+`a-could-not-look-must-not-settle-the-question`); and a per-commodity breaker as
+`grocery/audit-coverage-gaps.ps1` has. Also: `RegexOptions.Compiled` should NOT be added on the way past
+without a measurement, because on one catalogue-shaped pattern it was SLOWER here (2,720 to 2,780 ms
+against 1,516 to 1,528 ms over 2,000,000 calls) and costs 89 to 125 ms more to build; and the static
+regex cache (15 entries) is irrelevant because match-lib builds instances. Line 405 builds a fresh
+`[regex]` per winning pattern per name in the PowerShell fallback path, which the docs call the expensive
+pattern, but construction measured about 2 microseconds a pattern, so it is not worth a change on its own.
+
+### I210 - probe-hostile-input prints a seed that replays only at the same commit, and says it replays anywhere `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\q8-scalagen-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `scala-functional-program-design` module 1 (Odersky, lecture 1.3 "Functional Random
+Generators"), read 2026-09-18 by lane q8-scalagen. The lecture builds every generator by composition
+over ONE random source; the estate's only seeded generator draws from PowerShell's session-global one.
+
+**What is wrong, measured.** `ops/probe-hostile-input.ps1` seeds with `Get-Random -SetSeed $Seed` (line
+185), then draws each case's kind as `Get-Random -Maximum $script:KINDS.Count` and its offset from the
+same global stream. Its header says "the same seed means the same bytes on any machine", and its output
+says "re-run with -Seed N to replay these exact cases". That holds only while `$script:KINDS` and the
+draw order are unchanged. Measured on this machine under PowerShell 5.1, 2026-09-18: after
+`Get-Random -SetSeed 12345`, eight draws of an index over 9 kinds against the same over 10 kinds
+differed at **2 of 8** positions (`4,7,0,6,2,2,8,2` against `4,8,0,6,2,2,9,2`). So adding one
+malformation kind silently changes what an old seed replays, and the run prints no commit or kind count
+beside the seed that would let a reader notice.
+
+**Why it matters here.** The probe is the estate's exemplar for generated input (`.claude/rules/ops-and-gates.md`,
+the `Get-Random` bullet), so its shape is what the next generated-input harness will copy.
+`measurement.md`'s "name the harness and the commit it ran at" rule is the same point, not yet applied
+to a seed.
+
+**What it would touch.** `ops/probe-hostile-input.ps1` only: print the commit (`git rev-parse --short
+HEAD`) and `$script:KINDS.Count` on the seed line and in the `-COMPLETE` summary, and draw from one
+`[System.Random]::new($Seed)` object rather than the session stream, so nothing else calling
+`Get-Random` in the same session can shift the cases. Forward rule for a SECOND generated-input
+harness: build it from composable generators (a constant, a range, a one-of, a list with a
+stop probability, and a size budget for any recursive shape) over that one passed-down object, as
+`software-craft/test-design-and-oracles.md` 5.2a describes, rather than copying this file's flat kind
+list. Not acted on during the course run, per the course procedure.
+
+### I211 - graph.db is half empty pages: 40,342 of 78,709 pages sit on the freelist `OPEN` `queue-8` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Measured 2026-09-18 at ThriftyCrew `574f6a380`, SQLite 3.49.1, `mode=ro`: `PRAGMA freelist_count` 40,342
+against `page_count` 78,709 at 4,096-byte pages, so **51% of `graph/sqlite/graph.db` (about 165 MB of
+322,392,064 B) holds no data**. `auto_vacuum` is 0. A `VACUUM` on a backup-API copy took it to
+137,703,424 B in 0.8 s; the copy was deleted.
+
+Why it matters: `database-craft/applies-here.md` records the file "growing fast" (126 MB on 09-07,
+299 MB on 09-12, 317 MB on 09-18) and the row counts did not grow in proportion. **Part of that growth
+is a delete-and-reload high-water mark, not data**, and any reading of file size as a growth signal
+(capacity, backup size, the durability audit's volume limb) is reading the freelist. Unmeasured: which
+writer churns the pages (a candidate is any importer that deletes and re-inserts rather than
+upserting), and whether the freelist keeps rising night over night.
+
+First rung: record `freelist_count` and `page_count` nightly for a week (read-only) to see whether it
+is a one-off or a trend, before deciding between an occasional `VACUUM` (needs the writer quiet and
+space for a full copy), `auto_vacuum=INCREMENTAL` (needs a rebuild to set), or fixing the churning
+writer. `graph.db` is a rebuildable index (`applies-here.md` 10), so a rebuild also resets it.
+Source: SQLite `pragma.html` (freelist_count, page_count) and the doc-sqlite-internals read.
+
+### I212 - Run statistics on graph.db: one full ANALYZE, then PRAGMA optimize at every connection close `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**The case is plan robustness, not speed, and the speed evidence stays negative.** `sqlite_stat1` is
+still absent on both databases (re-checked 2026-09-18). SQLite's own planner checklist
+(`queryplanner-ng.html` 6) says to avoid "low-quality" indexes, more than 10 to 20 rows per left-most
+value and especially an enum left-most column, and that **if you must keep one, run ANALYZE**, because
+without statistics the planner assumes every index is about equally selective. Measured 2026-09-18:
+**19 of `graph.db`'s 24 explicit indexes exceed 20 rows per left-most value**, 7 of them on 9 or fewer
+distinct values (`ix_nodes_type` 9 values over 50,618 rows; `ix_edges_pred` 8 over 89,971;
+`ix_cell_adto` 1 non-null value).
+
+What the docs recommend for short-lived connections, which is every `open_db()` here
+(`graph/lib/graphdb.py` `GraphDB`, closed per script): `PRAGMA optimize;` just before close. Measured
+on a backup-API copy: the first `optimize` analysed all 11 indexed tables in 0.05 s and the second was
+a no-op. **But its default approximate mode distorts exactly the enum indexes**: rows-per-key for
+`ix_nodes_type` recorded 251 against a full scan's 5,625, `ix_edges_pred` 501 against 11,247. A full
+`ANALYZE` with `analysis_limit=0` took 0.114 s. On the day, all 4 of 4 views planned identically with
+no statistics, with `optimize`'s and with full statistics, so neither arm changed a decision yet.
+
+Proposed, on a copy first: one full `ANALYZE` at the end of the nightly import (and after any
+rebuild, which loses `sqlite_stat1`), plus `PRAGMA optimize` in `GraphDB.close()` to maintain it on
+tenfold growth. **Do not claim a speed win**: the 2026-09-07 timings (`applies-here.md` 3.1) moved by
+under 2%. Assert `sqlite_stat1` exists in `graph/pipeline/audit_graph_durability.py` so a rebuild that
+drops it is seen. `thriftycrew.db` (7 tables, 1.8 MB, rebuilt in one pass by `meal-prep/db/build_db.py`)
+gains nothing measurable and could take the same one line at the end of its build.
+
+### I213 - SQLite's WAL-reset corruption bug: this machine's Python bundles 3.49.1, inside the affected range `OPEN` `queue-8` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+SQLite's `wal.html` section 11 (page updated 2026-08-25) records a data race present from 3.7.0 through
+3.51.2, fixed in 3.51.3 with backports 3.44.6 and 3.50.7. **`C:\Codex\Python312\python.exe` reports
+`sqlite3.sqlite_version` 3.49.1** (measured 2026-09-18), and `graph.db` is in WAL mode. The bug needs
+**two or more connections in separate threads or processes writing or checkpointing at the same
+instant**, and it can leave part of a committed transaction out of the database file. The developers
+rate it rare and not an emergency; a reproducer without their test hook was published in August 2026.
+
+Not measured: whether any two `graph.db` writers ever overlap. Every `open_db()` is a read-write
+connection, and a read-write connection's close checkpoints when it is the last one, so a reader
+script run beside the nightly import is also a checkpointer. The scheduled writers seen on 2026-09-18
+include `TC Graph Nightly Matching` and the daily capture chain's import; a `-shm` file was present
+with a 0-byte `-wal` at 2026-09-18 measurement time, meaning some connection was open or closed
+uncleanly. First rung: log connection open and close times for `graph.db` writers for a week and count
+overlaps. The cheap mitigations, in order: readers open `mode=ro` (most audits already do; the
+`open_db()` readers such as `graph/eval/status.py` do not), and a newer SQLite (a Python build or
+`pysqlite3` wheel carrying 3.50.7 or 3.51.3+). `graph/pipeline/audit_graph_durability.py`'s nightly
+`quick_check` is the detector that would see the result.
+
+### I214 - Constraints graph.db can gain for free at its next rebuild, and the one blocker (I200) `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+SQLite cannot add a `CHECK` to an existing column without a table rebuild (`changing-a-schema.md` 7b).
+**For `graph.db` that cost is zero**: it is an index rebuilt from tracked JSON, and
+`graph/sqlite/schema.sql` uses `CREATE TABLE IF NOT EXISTS`, so a `CHECK` added there arrives on the
+next rebuild and a violating source row fails the import loudly. Measured `mode=ro` 2026-09-18, the
+candidates that the data already satisfies:
+
+- `confidence BETWEEN 0 AND 1` on `edges`, `aliases`, `price_observations`, `learning_proposals`,
+  `question_verdicts`: **0 violations** in all five (observed ranges 0.2 to 1.0).
+- `cell_state` `everyday_price`, `ad_price` and both unit prices `> 0`: **0 violations**.
+- `learning_proposals.status IN (...)`: the column's own comment lists 8 values, 4 in use.
+
+The blocker: `price_observations.price > 0` has **34 violations**, every one exactly 0.0 (backlog I200;
+all from `grocery/product-urls.json` on 2026-08-29). SQLite's `CHECK` **passes on NULL**, so `price > 0`
+is exactly "unknown is NULL, never 0", but the importer must map a 0.0 to NULL first or the rebuild
+fails. The ruling needed: whether a closed vocabulary like `learning_proposals.status` belongs in DDL,
+given the estate already ruled that `decision_log.type` stays a comment because its vocabulary grows.
+
+Partial index, same rebuild: `ix_cell_adto` indexes a column that is NULL on 3,152 of 3,244 rows, and
+both readers (`graph/pipeline/state.py:425`, `graph/agentic/verifier.py:264`) filter
+`ad_to IS NOT NULL AND ad_to < ?`, the exact shape `partialindex.html` 3 rule 2 serves. A probe on
+3.49.1 confirmed a `WHERE ad_to IS NOT NULL` index serves that filter. The table is small, so this is
+tidiness and write cost, not a speed claim. Once a `CHECK` exists, the `quick_check` the durability
+audit already runs reports any row that violates it (measured).
