@@ -12,21 +12,21 @@
                          "score":  1
                      },
                      {
-                         "id":  "sliced-cheese",
-                         "fault":  "NO-LINK",
-                         "board":  "Kraft American Cheese Slices 24 Ea",
-                         "board_pu":  0.3744,
-                         "name":  "Kraft American Cheese Slices 24 Ea",
-                         "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/packaged_sliced/kraft_american_cheese_slices_24_ea/p/17691",
-                         "price":  "$5.99",
-                         "size":  "16 oz",
+                         "id":  "mouthwash",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Top Care Everyday Mouthwash, Freshening, Mint",
+                         "board_pu":  0.0885,
+                         "name":  "Top Care Everyday Mouthwash, Freshening, Mint",
+                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/top_care_everyday_mouthwash_freshening_mint/p/2346335",
+                         "price":  "$2.99",
+                         "size":  "33.8 oz",
                          "score":  1
                      }
                  ],
     "refused":  [
                     {
                         "id":  "ground-beef-8020",
-                        "why":  "match found but per-unit disagrees: board $6.49 vs link $7.99 (18.8%)"
+                        "why":  "no confident match (best 0.714)"
                     },
                     {
                         "id":  "aluminum-foil",
@@ -71,6 +71,10 @@
                     {
                         "id":  "cooked-shredded-chicken",
                         "why":  "no confident match (best 0)"
+                    },
+                    {
+                        "id":  "cookies",
+                        "why":  "match found but per-unit disagrees: board $0.2559 vs link $0.3072 (16.7%)"
                     },
                     {
                         "id":  "croissants",
@@ -118,7 +122,7 @@
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "no confident match (best 0)"
+                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
                     },
                     {
                         "id":  "protein-bars",
@@ -134,14 +138,14 @@
                     },
                     {
                         "id":  "maple-syrup",
-                        "why":  "match found but per-unit disagrees: board $0.1042 vs link $0.2246 (53.6%)"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "vegetable-soup",
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
-    "worked":  31,
-    "generated":  "2026-09-17 07:09",
+    "worked":  32,
+    "generated":  "2026-09-18 08:11",
     "board":  "comparison-2026-09-17.json"
 }

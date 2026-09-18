@@ -1,20 +1,20 @@
 ﻿{
-    "store":  "Family Fare",
+    "store":  "Sam\u0027s Club",
     "date":  "2026-09-18",
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
-    "ad_note":  "ad current until 2026-09-19; next_pull 2026-09-20",
-    "cursor_start":  321,
-    "cursor_next":  328,
+    "ad_note":  "no weekly ad cycle",
+    "cursor_start":  154,
+    "cursor_next":  161,
     "total_terms":  602,
     "rotation_terms":  [
-                           "hoisin sauce",
-                           "canned hominy",
-                           "honey",
-                           "honeydew melon",
-                           "honey mustard",
-                           "prepared horseradish",
-                           "horseradish sauce"
+                           "cod fillets",
+                           "ground coffee",
+                           "coffee creamer",
+                           "coffee k cups",
+                           "coleslaw mix",
+                           "collard greens",
+                           "sweetened condensed milk"
                        ],
     "sale_terms":  [
 
@@ -27,7 +27,7 @@
     "ruling_deferred":  0,
     "ruling_blind":  false,
     "ruling_blind_why":  "",
-    "call_cap":  40,
+    "call_cap":  30,
     "expiry_deferred":  0,
     "expiry_deferred_by_ruling":  0,
     "expiry_oldest_owed":  "",

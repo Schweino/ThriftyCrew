@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-17 21:32",
+    "generated":  "2026-09-18 08:19",
     "board":  "comparison-2026-09-17.json",
-    "sidecar_generated":  "2026-09-17 21:32:44",
+    "sidecar_generated":  "2026-09-18 08:18:58",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3184,
-                     "corpus":  41729,
-                     "rule_invisible":  7961
+                     "board_pairs":  3189,
+                     "corpus":  41745,
+                     "rule_invisible":  7963
                  },
     "identity_count":  0,
-    "coverage_count":  5,
+    "coverage_count":  7,
     "identity":  [
 
                  ],
@@ -61,12 +61,32 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Walmart",
+                         "product":  "Freshness Guaranteed Chicken Leg Quarters, 2.75 - 7.0 lb Tray",
+                         "cos":  0.6094,
+                         "score":  0.913274,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "ground-beef-8020",
                          "commodity":  "80/20 Ground Beef",
                          "store":  "Walmart",
                          "product":  "Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray",
-                         "cos":  0.6876,
-                         "score":  0.90091,
+                         "cos":  0.6977,
+                         "score":  0.912127,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "Family Pack 80 Lean 20 Fat Ground Beef Patties 2.5 LB",
+                         "cos":  0.7068,
+                         "score":  0.900264,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

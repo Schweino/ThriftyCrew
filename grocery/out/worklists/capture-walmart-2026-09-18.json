@@ -1,33 +1,33 @@
 ﻿{
-    "store":  "Family Fare",
+    "store":  "Walmart",
     "date":  "2026-09-18",
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
-    "ad_note":  "ad current until 2026-09-19; next_pull 2026-09-20",
-    "cursor_start":  321,
-    "cursor_next":  328,
+    "ad_note":  "no weekly ad cycle",
+    "cursor_start":  119,
+    "cursor_next":  126,
     "total_terms":  602,
     "rotation_terms":  [
-                           "hoisin sauce",
-                           "canned hominy",
-                           "honey",
-                           "honeydew melon",
-                           "honey mustard",
-                           "prepared horseradish",
-                           "horseradish sauce"
+                           "chayote",
+                           "cheese curds",
+                           "cheese crackers",
+                           "cheese tortellini",
+                           "fresh cherries",
+                           "cherry tomatoes",
+                           "boneless skinless chicken breast"
                        ],
     "sale_terms":  [
 
                    ],
     "ruling_terms":  [
-
+                         "fresh artichokes"
                      ],
-    "ruling_owed_total":  0,
-    "ruling_of":  0,
+    "ruling_owed_total":  1,
+    "ruling_of":  23,
     "ruling_deferred":  0,
     "ruling_blind":  false,
     "ruling_blind_why":  "",
-    "call_cap":  40,
+    "call_cap":  25,
     "expiry_deferred":  0,
     "expiry_deferred_by_ruling":  0,
     "expiry_oldest_owed":  "",

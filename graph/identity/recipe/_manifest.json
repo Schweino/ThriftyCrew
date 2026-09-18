@@ -3,47 +3,47 @@
     "namespace":  "recipe",
     "rules_hash":  "c077334f74e1a97316aadb09074baca3a481f42af606c9d995370806cf1dbeae",
     "board_date":  "2026-09-17",
-    "built_at":  "2026-09-17T07:07:51",
-    "rows_total":  40169,
-    "rows_reused_from_previous":  39700,
-    "rows_rematched":  469,
+    "built_at":  "2026-09-18T08:09:38",
+    "rows_total":  40493,
+    "rows_reused_from_previous":  39896,
+    "rows_rematched":  597,
     "rows_contested":  48,
-    "key_collisions_demoted_to_name":  730,
+    "key_collisions_demoted_to_name":  747,
     "stores":  [
                    {
                        "store":  "Aldi",
-                       "rows":  3473,
+                       "rows":  3471,
                        "changed":  true
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7296,
+                       "rows":  7292,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  6391,
+                       "rows":  6409,
                        "changed":  true
                    },
                    {
                        "store":  "Fareway",
-                       "rows":  842,
-                       "changed":  false
+                       "rows":  1057,
+                       "changed":  true
                    },
                    {
                        "store":  "Hy-Vee",
                        "rows":  2283,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "rows":  167,
-                       "changed":  false
+                       "rows":  187,
+                       "changed":  true
                    },
                    {
                        "store":  "Walmart",
-                       "rows":  19717,
-                       "changed":  false
+                       "rows":  19794,
+                       "changed":  true
                    }
                ]
 }

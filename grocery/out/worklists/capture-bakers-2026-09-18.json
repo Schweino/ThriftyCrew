@@ -1,20 +1,20 @@
 ﻿{
-    "store":  "Family Fare",
+    "store":  "Baker\u0027s",
     "date":  "2026-09-18",
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
-    "ad_note":  "ad current until 2026-09-19; next_pull 2026-09-20",
-    "cursor_start":  321,
-    "cursor_next":  328,
+    "ad_note":  "ad current until 2026-09-22; next_pull 2026-09-23",
+    "cursor_start":  168,
+    "cursor_next":  175,
     "total_terms":  602,
     "rotation_terms":  [
-                           "hoisin sauce",
-                           "canned hominy",
-                           "honey",
-                           "honeydew melon",
-                           "honey mustard",
-                           "prepared horseradish",
-                           "horseradish sauce"
+                           "corn dogs",
+                           "corned beef brisket",
+                           "corned beef hash",
+                           "cornmeal",
+                           "corn muffin mix",
+                           "corn starch",
+                           "cottage cheese"
                        ],
     "sale_terms":  [
 
@@ -27,7 +27,7 @@
     "ruling_deferred":  0,
     "ruling_blind":  false,
     "ruling_blind_why":  "",
-    "call_cap":  40,
+    "call_cap":  250,
     "expiry_deferred":  0,
     "expiry_deferred_by_ruling":  0,
     "expiry_oldest_owed":  "",

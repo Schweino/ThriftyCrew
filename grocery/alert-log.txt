@@ -173,3 +173,12 @@
 [2026-09-17T07:16:09] REVIEW 'Grocery: semantic sweep found 4 product(s) no rule can see - 2026-09-17' [type: grocery semantic sweep found product s no rule can see] - queued, NOT emailed (registry entry semantic-sweep)
 [2026-09-17T07:19:56] QUEUE ABSORBED into open item 2026-09-12-c424f3 (day 5 of this condition, count now 4) - no new id minted
 [2026-09-17T07:19:56] REVIEW 'Grocery: 3 NEW price flag(s) - 2026-09-17' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)
+[2026-09-18T04:39:01] SENT 'The knowledge store's nightly pass went RED' -> schweino68@gmail.com (id 1a0b3e22f25f3263)
+[2026-09-18T06:45:33] DIGEST 'Brain digest: the night, the weakest link, and what is waiting' [type: brain digest the night the weakest link and what is waiting] - registry entry brain-digest is digest class, so it is mailed and NOT queued
+[2026-09-18T06:45:34] SENT 'Brain digest: the night, the weakest link, and what is waiting' -> schweino68@gmail.com (id 1a0b4560be310fde)
+[2026-09-18T08:05:12] REVIEW 'Grocery: Family Fare pull dropped a carried item - review' [type: grocery family fare pull dropped a carried item review] - queued, NOT emailed (registry entry ff-carry)
+[2026-09-18T08:05:14] SENT 'Baker's ad window advanced with no capture behind it' -> schweino68@gmail.com (id 1a0b49ef93f35528)
+[2026-09-18T08:13:28] SENT 'Grocery: GUARDS FAILED - board not published - 2026-09-18' -> schweino68@gmail.com (id 1a0b4a682a5e3e3c)
+[2026-09-18T08:19:02] REVIEW 'Grocery: semantic sweep found 7 product(s) no rule can see - 2026-09-18' [type: grocery semantic sweep found product s no rule can see] - queued, NOT emailed (registry entry semantic-sweep)
+[2026-09-18T08:21:45] QUEUE ABSORBED BY INCIDENT guards-hold into 2026-09-18-f90ba6 (count now 2): 'Board prices aging inside a fresh file' - no new id, no mail
+[2026-09-18T08:22:42] REVIEW 'Grocery: 2 NEW price flag(s) - 2026-09-18' [type: grocery new price flag s] - queued, NOT emailed (registry entry new-price-flags)

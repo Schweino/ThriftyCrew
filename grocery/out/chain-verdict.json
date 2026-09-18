@@ -1,18 +1,18 @@
 ﻿{
-    "date":  "2026-09-17",
-    "written":  "2026-09-17T07:10:56",
+    "date":  "2026-09-18",
+    "written":  "2026-09-18T08:13:26",
     "written_by":  "check-ad-cycles",
     "guards_rc":  2,
     "guards_blocked":  true,
-    "inputs_fingerprint":  "fef8059c4ecaec74",
+    "inputs_fingerprint":  "f7dc1429c04da135",
     "inputs":  {
-                   "grocery\\out\\comparison-2026-09-17.json":  "ae54acbc186d4527bcb5c8b9ee698642463eccc823a2d887c0a4b005f26bc56e",
+                   "grocery\\out\\comparison-2026-09-17.json":  "6eab050d6ebdd9b5a07a6f07b611d8e15e750fcb67609c8dd708d4a457a7a5ca",
                    "grocery\\commodities.json":  "00443296b7b2d2a811bce9a990797e51dada93acbb3d0b46e2013fec77ddbb0d",
                    "grocery\\known-wrong.json":  "dc095f89b22c17c70484b03452ba11542540e92dc5b01e40fc0841aaeeb1826d",
-                   "grocery\\board-price-overrides.json":  "5b8d2870ccd2a28d04e33350cb0c8e6638d201aa3424057094a0856c0d11ba1f",
-                   "grocery\\product-urls.json":  "557ca7fada15ed08fc3335d32819996a5b08116488646a5a2cc2bb4747560121",
-                   "grocery\\out\\recipe-board.json":  "873d0197a2bc2d9474ac5520c4ccddc41bb2d4b0c5104b7bf6fa77f958839871",
-                   "grocery\\out\\name-drift.json":  "42774eed51928900b48418b40267c18c11acb1002b71ad1cb7a3fc58ce55b351"
+                   "grocery\\board-price-overrides.json":  "cc49210f8f5285da2706201f40f8497eb81a4affa4087bacf63f410b29adfa03",
+                   "grocery\\product-urls.json":  "6b3e7b85730ba8ead5e4fa1c6391a83dd9f776af40aefffb616c2d742c090f77",
+                   "grocery\\out\\recipe-board.json":  "8770d5dbb0d10a20fd0b968d7cd90ae2d01e56114c321e9a1eda820f798c2409",
+                   "grocery\\out\\name-drift.json":  "5ab276ac0497713f108a4fa18d79572af522a22cccb36bc145ca02f3ce554297"
                },
     "note":  "Written after guards ran. Readers must go through lib\\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\\** or meal-prep\\**."
 }

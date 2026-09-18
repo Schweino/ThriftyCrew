@@ -1,27 +1,14 @@
 {
-    "updated":  "2026-09-17T07:13:00",
+    "updated":  "2026-09-18T08:15:28",
     "board":  "comparison-2026-09-17.json",
     "week_of":  "2026-09-17",
     "note":  "Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway\u0027s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.",
-    "sale_cells":  320,
-    "dated_by_the_store":  176,
-    "traced_to_an_ad":  70,
-    "untraceable":  74,
-    "ad_rows_available":  "Aldi=131 Baker\u0027s=629 Family Fare=1016 Fareway=967 Hy-Vee=747",
+    "sale_cells":  362,
+    "dated_by_the_store":  250,
+    "traced_to_an_ad":  40,
+    "untraceable":  72,
+    "ad_rows_available":  "Aldi=131 Baker\u0027s=629 Family Fare=1016 Fareway=1184 Hy-Vee=747",
     "items":  [
-                  {
-                      "key":  "Fareway|baby-food",
-                      "id":  "baby-food",
-                      "store":  "Fareway",
-                      "item":  "Gerber Peaches 2nd Foods",
-                      "price":  "$1.88",
-                      "per_unit":  0.235,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3318406-gerber-peaches-2nd-foods-4-oz",
-                      "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-09-17",
-                      "days_unexplained":  27
-                  },
                   {
                       "key":  "Fareway|baby-formula",
                       "id":  "baby-formula",
@@ -317,19 +304,6 @@
                       "per_unit":  0.155,
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25105161-fareway-lasagna-16-oz",
-                      "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-09-17",
-                      "days_unexplained":  27
-                  },
-                  {
-                      "key":  "Fareway|fruit-cocktail",
-                      "id":  "fruit-cocktail",
-                      "store":  "Fareway",
-                      "item":  "Fareway In Heavy Syrup Fruit Cocktail",
-                      "price":  "$1.44",
-                      "per_unit":  0.0944,
-                      "unit":  "oz",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24072626-fareway-fruit-cocktail-in-heavy-syrup-1525-oz",
                       "first_seen":  "2026-08-21",
                       "last_seen":  "2026-09-17",
                       "days_unexplained":  27
@@ -907,19 +881,6 @@
                       "days_unexplained":  8
                   },
                   {
-                      "key":  "Fareway|coffee",
-                      "id":  "coffee",
-                      "store":  "Fareway",
-                      "item":  "Fareway Coffee, Ground, Medium Roast Style, Classic Roast",
-                      "price":  "$17.78",
-                      "per_unit":  0.4184,
-                      "unit":  "oz",
-                      "url":  "",
-                      "first_seen":  "2026-09-13",
-                      "last_seen":  "2026-09-17",
-                      "days_unexplained":  4
-                  },
-                  {
                       "key":  "Fareway|oranges",
                       "id":  "oranges",
                       "store":  "Fareway",
@@ -957,6 +918,19 @@
                       "first_seen":  "2026-09-14",
                       "last_seen":  "2026-09-17",
                       "days_unexplained":  3
+                  },
+                  {
+                      "key":  "Hy-Vee|crushed-tomatoes",
+                      "id":  "crushed-tomatoes",
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee Crushed Tomatoes in Puree",
+                      "price":  "$1.88",
+                      "per_unit":  0.0671,
+                      "unit":  "oz",
+                      "url":  "https://www.hy-vee.com/aisles-online/p/58132/hy-vee-crushed-tomatoes-in-puree",
+                      "first_seen":  "2026-09-17",
+                      "last_seen":  "2026-09-17",
+                      "days_unexplained":  0
                   },
                   {
                       "key":  "Hy-Vee|razors",

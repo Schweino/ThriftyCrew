@@ -179,3 +179,6 @@
 {"at":"2026-09-17T09:03:23","store":"Aldi","from":112,"to":119,"day":"2026-09-17","caller":"build-aldi-regular.ps1","pid":25188}
 {"at":"2026-09-17T09:06:26","store":"Sam\u0027s Club","from":147,"to":154,"day":"2026-09-17","caller":"commit-capture-cursor.ps1","pid":23312}
 {"at":"2026-09-18T07:01:20","store":"Family Fare","from":314,"to":321,"day":"2026-09-18","caller":"pull-regular-familyfare.ps1","pid":37280}
+{"at":"2026-09-18T08:00:21","store":"Baker\u0027s","from":168,"to":175,"day":"2026-09-18","caller":"pull-regular-bakers-api.ps1","pid":28052}
+{"at":"2026-09-18T08:00:33","store":"Hy-Vee (products)","from":554,"to":572,"day":"2026-09-18","caller":"pull-regular-hyvee.ps1","pid":37484}
+{"at":"2026-09-18T08:01:20","store":"Family Fare","from":321,"to":328,"day":"2026-09-18","caller":"pull-regular-familyfare.ps1","pid":26852}

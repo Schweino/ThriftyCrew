@@ -1,12 +1,12 @@
 {
-    "updated":  "2026-09-17T07:12:58",
-    "file":  "hyvee-regular-2026-09-17.json",
+    "updated":  "2026-09-18T08:15:26",
+    "file":  "hyvee-regular-2026-09-18.json",
     "board_speaks_for":  "Omaha #02 (storeId 1466)",
     "rows":  1541,
-    "on_target":  286,
-    "off_target":  992,
+    "on_target":  300,
+    "off_target":  978,
     "unstated":  263,
-    "migrated_pct":  18.6,
-    "by_store_id":  "1465=992 1466=286 unstated=263",
+    "migrated_pct":  19.5,
+    "by_store_id":  "1465=978 1466=300 unstated=263",
     "note":  "A row states its own store in source_ad. off_target rows were captured at a store the board no longer speaks for and are NOT wrong in themselves - they are simply another store\u0027s prices. Measured 2026-08-21: the two Omaha stores disagree on ~35% of everyday rows and most sale rows, so off_target is a direct count of how many cells are likely wrong for the claimed store. unstated rows predate source_ad carrying an id and cannot be attributed either way."
 }
