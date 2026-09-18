@@ -16,6 +16,11 @@ rise branch changed. Both self-tests still pass (35 and 22 cases), and each audi
 matched its output from before the change line for line, except that fixed-temp-names now also counts the walk
 helper's own per-run temp path (built 308 to 309; fixed names still 7).
 
+**Re-read at commit `7aeb653f0`: every figure below still holds.** `ops\audit-conclusion-currency.ps1` moved only in
+how it classifies a cited hash and in skipping 32-hex md5s. No baseline write, record flag or rise branch changed: a
+plain run still writes nothing, and its three live-path cases (fall spoken and not written, `-Tighten` writes LF with
+no BOM, a rise exits 2) pass in its 24-case self-test at that commit.
+
 This document is in its own commit for the reason `design\MEASURE-gate-slot-admission-2026-09-11.md`
 gives: a document cannot carry the hash of the commit that adds it, and here the harness IS what moved,
 so the scripts land first and this cites them. The gate suite that ran over the whole tree is named in

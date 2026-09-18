@@ -103,6 +103,11 @@ static audit entry, `ops\audit-list-array-wrap.ps1`, and touches no probe, no an
 `lib\gate-slots.ps1`, so who wins a freed slot is unchanged. The only number it can move is each run's slot tenure,
 upward by that audit's own 24 to 33 s of gate work, as the `53e1d65bf` and `1a97b53af` entries above moved it.
 
+**Re-read at commit `7aeb653f0`: every verdict below stands as measured.** That commit changed
+`ops\audit-conclusion-currency.ps1` only in how it classifies a cited hash (commit, blob or tree, or naming nothing)
+and in skipping 32-hex md5s; it is named here as prose, as the `740c82af6` entry above says, and nothing this file
+measured ran through it.
+
 A READ-ONLY probe. It never calls `WaitOne` on a slot and never takes one. Once a second it reads the
 system handle table (`NtQuerySystemInformation`, extended handle information), duplicates only the
 mutant handles held by `run-gates.ps1` and `cpu-load.ps1` processes, reads each one's name and
