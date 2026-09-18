@@ -15413,3 +15413,222 @@ both readers (`graph/pipeline/state.py:425`, `graph/agentic/verifier.py:264`) fi
 3.49.1 confirmed a `WHERE ad_to IS NOT NULL` index serves that filter. The table is small, so this is
 tidiness and write cost, not a speed claim. Once a `CHECK` exists, the `quick_check` the durability
 audit already runs reports any row that violates it (measured).
+
+### I215 - a scented household product can hold a fruit cell: dish soap priced as strawberries, and the class fix waits on branch claude/board-wrong-cells-0919 `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\run0919-board-wrong-cells.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**What was wrong.** "Dawn Ultra Strawberry Field Scent" (dish soap, $6.49 for 38 oz, Family Fare weekly ad 09-13 to 09-19) held Family Fare's STRAWBERRIES cell at $0.1708/oz on every board from comparison-2026-09-13 on. No rule changed: the product arrived in the ad, strawberries' include `strawberr` claims it, strawberries sits before dish-soap in commodities.json, and first-match-wins did the rest. It never held the crown (Aldi, $0.1431/oz). It is NOT on the page a reader sees today, only because guards has held every board since 09-13 and `public/board.json` on origin/main is still the 2026-09-12 09:46 commit (Family Fare strawberries there: $0.3119/oz).
+
+**The same shape was already in the corpus, unpublished.** Over 50,954 distinct capture names, 8 route out of a food commodity once scent is treated as non-food: the Dawn soap, five hand sanitizers (apples, pears, cherries, raspberries, watermelon), a shave gel (raspberries) and a tanning oil (coconut-oil). The per-cell known-wrong entry a triage session staged in the main checkout on 2026-09-18 (`strawberries|FamilyFare|dawn-ultra-strawberry-field-scent`) corrects the one cell and none of the other seven.
+
+**The prepared fix (branch `claude/board-wrong-cells-0919`, NOT landed).** A global exclude `\bscent(?:s|ed)?\b` in `grocery/global-exclude-lib.ps1`, declared in `relax_global` by all 59 non-food commodities (categories.json Household, Personal Care, Baby, Pet), the applesauce and baby-food shape one aisle over. `grocery/out/audit/match-baseline.json` re-points the two blessed names it moves (4bb2295e9 had accepted Dawn -> strawberries into the baseline that morning). Fixtures: compare-deals -SelfTest R20, 4 MUST FIRE and 3 CLEAN TWIN.
+
+**Verified.** Engine run over one input set (the main checkout's 2026-09-17 inputs): origin/main code reproduced the live board exactly (0 of 3,189 cells differ), and the branch changes 1 of 3,189 cells and 0 of 572 crowns (strawberries @ Family Fare 0.1708 Dawn -> 0.3119 Fresh Strawberries). Routing diff over the corpus: exactly the 8 names above, nothing else. compare-deals -SelfTest, match-lib -SelfTest, test-match-lib, test-commodity-rules all exit 0; reverting either half turns R20 red (4 and 6 cases), restored md5-identical. audit-match-soundness: MOVED=0 DROPPED=0 after the baseline edit.
+
+**The ruling.** It changes one live board cell, so it waits for Brad. Options: (a) land the branch as is (recommended: the class fix, and the known-wrong entry then becomes redundant but harmless); (b) keep only the triage known-wrong entry and close this; (c) land it but scope the token to produce commodities instead of global.
+
+### I216 - band-censorship's ratchet flaps with an unrelated store's sale price `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\run0919-board-wrong-cells.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+guards held the 2026-09-18 08:13 board on a fourth hard fail: band-censorship 32 cells against a baseline of 29. The 3 new cells were frozen-pizza at Aldi, Sam's Club and Walmart, refusing the SAME rows (Totino's party pizzas at $1.4925, a Red Baron 5.4 oz personal pizza at $1.4422, a Mama Cozzi 2-count at $1.495) that were refused on the 09-14 board too. What moved was the median: Fareway's Jack's pizza went on sale 4.49 -> 3.33, the frozen-pizza median fell from 3.99 to 3.33, and 1.4925 crossed the 0.4 median floor (0.374 -> 0.448). Nothing about censorship changed. On the main checkout's 11:00 rebuild the same rows carry band `min_piece_oz>=12` and the audit reads 29 of 29 again. A ratchet that counts cells whose classification depends on OTHER stores' prices can break and heal on nobody's change. Worth measuring how often across the flagged history before deciding anything.
+
+### I217 - audit-household-in-food could not have caught the Dawn soap `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\run0919-board-wrong-cells.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+guard 2 exists for exactly this class (its own header names household products sold by fruit SCENT), and it was silent for six boards for two reasons: its `$HOUSEHOLD_SIGNAL` has no `scent` token and no `dawn`, and it sweeps only `out\regular\*-regular-*.json`, never the weekly ad files, where this row came from (grocery/audit-household-in-food.ps1:51 and :54). The script has no -SelfTest, so adding either needs a suite first.
+
+### I218 - audit-fixture-inputs red on main: build-sams-deals' self-test child used the LIVE rollback ledger, and its verdict hashed that live file `DONE` `run-0919`
+
+**Merged from `design\backlog-inbox\run0919-fixture-inputs.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Symptom.** `powershell -NoProfile -File ops\audit-fixture-inputs.ps1` exits 1 at origin/main `5cf22db87`: 329 scripts with a self-test block, 2 NEW live-rulings dependencies against a baseline of 0, both in `grocery\build-sams-deals.ps1` case 11 (lines 632 and 634 at that commit): `sams-deals-1999-01-01.json` and `rollback-first-seen.json`. Both lines came in with `b7060307b` (2026-09-17, "Sam's builds with a reject reach their summary..."). That commit's message records its self-test and a mutation probe but not this audit, which is expected: the audit is `daily = $true` in `ops\run-gates.ps1:219`, so a push never runs it, and the baseline was not meant to move (it is 0 entries and may only shrink).
+
+**Which it was: one of each.**
+- `sams-deals-1999-01-01.json` was a FALSE POSITIVE. The variable is only ever handed to `Test-Path -LiteralPath`: an absence probe that the fixture child did not write into the live `out\sams`. No live content reaches the verdict.
+- `rollback-first-seen.json` was a REAL dependency, twice over. (1) `-OutDir` never redirected the ledger, so every self-test child ran with the live `grocery\rollback-first-seen.json` as its rollback ledger. It stayed untouched only because the fixture carried no was-price. Proven by a mutant: with the redirect removed, a fixture row with a was-price wrote `Sam's Club|FIXTURE3` into the checkout's tracked ledger (`git status` showed ` M grocery/rollback-first-seen.json`, restored with `git checkout`). (2) Case 11c hashed the live ledger before and after the children. That verdict rests on a file `build-walmart-deals` saves at any moment, so a concurrent Walmart build would read as "the fixture wrote live state".
+
+**Fix.**
+- `grocery\build-sams-deals.ps1` gains `-LedgerRoot` (default: its own folder, the live ledger, so production is unchanged), used by `Set-RollbackFields` and `Save-RollbackLedger`. Every case-11 child passes a per-run temp ledger directory. The live-ledger hash is gone. 11c now asserts the live deals path absent AND no temp ledger written (neither capture has a was-price). New case **11d MUST FIRE**: a capture row with a was-price above its price is dated, and its ledger entry lands in the TEMP ledger with exactly the key `Sam's Club|FIXTURE3`. That is a positive assertion that reads nothing live.
+- `ops\audit-fixture-inputs.ps1` learns a fourth lawful shape: a path assigned to a variable that is only ever handed to `Test-Path` afterwards is an absence probe. Any other use of that variable (a `Get-FileHash`, a read) makes it a read again. Fixtures: MUST NOT FIRE (Test-Path only), MUST FIRE (Test-Path plus Get-FileHash, the old 11c shape), MUST FIRE (assigned, then `Read-JsonFile`). The baseline was not touched.
+
+**Verified** in worktree `fixture-inputs-red` on base `5cf22db87`. `build-sams-deals -SelfTest`: exit 0, 36 ok, 0 FAIL. `audit-fixture-inputs -SelfTest`: exit 0. Live `audit-fixture-inputs`: exit 0, 0 dependencies, 0 new, over 329 scripts. Break-once, each restored md5-identical afterwards (bsd `47F8CBC5...`, audit `55767D64...`):
+- M1: the production redirect reverted to `$root`. Self-test exit 1, red only in 11d (`temp_ledger_keys=` empty), and the live ledger in the worktree was written.
+- M2: the absence-probe exemption removed. Audit self-test exit 2, red in the MUST NOT FIRE. The live audit is back to exit 1 with the deals line as NEW.
+- M3: the exemption widened to "any Test-Path use". Audit self-test exit 2, red in the hash MUST FIRE.
+
+**Has the daily chain been reporting it? Not yet.** `TC Daily Ratchets 0315` ran at 2026-09-18 03:15. `ops\out\logs\daily-ratchets-green.json` in the main checkout is GREEN, written 08:17:26Z, at commit `59b7fefa5`. That is a local graph-nightly commit on the main checkout and does NOT contain `b7060307b` (`git merge-base --is-ancestor` exit 1). The chain would have first gone red at the 2026-09-19 03:15 run. No `grocery\out\logs` file mentions this audit: those are capture logs, and the daily ratchets log to `ops\out\logs`.
+
+### I219 - two stderr lines on every push-main console: conclusion-currency dropped a cited blob as if it named nothing, and pipeline-commit's push fixture fails for real on purpose `DONE` `run-0919`
+
+**Merged from `design\backlog-inbox\run0919-gate-stderr.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Symptom.** Every `ops\push-main.ps1` run on 2026-09-18 printed two lines on the console that are in no saved run-gates log, while the gates passed and the push landed:
+`fatal: 'origin' does not appear to be a git repository` and `error: 1128546c^{commit}: expected commit type, but the object dereferences to blob type`. They reach the console and no log because push-main starts run-gates with an inherited console, and a native git call with no redirect inside any gate writes straight to it.
+
+**Where each comes from, reproduced standalone at base 63d9cbb8d with each child's whole stderr sent to a file.**
+- The blob line: `ops\audit-conclusion-currency.ps1:266` (its live `$hashExists`), exit 0, one stderr line on every run. It tested every cited hash with `git rev-parse --verify --quiet "<hash>^{commit}"`. `--quiet` hides "not a valid object name" but not the peel error. The hash is `design\MEASURE-event-bus-concurrent-append-2026-09-11.md:62`, "`lib\event-bus.ps1` blob `1128546c`", written that way because `.claude\rules\measurement.md` (2026-09-11) asks a document to cite each file's BLOB beside the commit. Over all 23 EVAL and MEASURE documents, 56 hash-shaped tokens sat on commit lines: 54 commits, 1 blob (that one), and 1 that names no object, the 32-hex md5 `b11149f3...` on line 64 of the same document.
+- The origin line: `lib\pipeline-commit.ps1 -SelfTest`, exit 0, stderr of 5 lines starting with that fatal. The CLEAN TWIN at lines 451-460 calls `Invoke-PipelineCommit -Push` in a temp repo that deliberately has no remote, so `git push origin HEAD:main` (line 273, no redirect) fails for real and the case asserts the "push failed, left local" verdict still classifies as committed.
+
+**Was anything mis-scored?** Not today, and that was luck. The audit dropped a blob exactly as it dropped a hash naming nothing, so the two were one case, but the only document citing a blob also names no existing harness, so it was NOT QUALIFIABLE either way. Per-document verdicts before and after the fix: 23 of 23 lines identical, unqualified 4 before and after against baseline 4, so the ratchet did not move and no baseline was touched.
+
+**What shipped (audit).** Every cited hash is now classified with `git cat-file -t` (stderr dropped under `Continue`, never a `2>` under `Stop`): `commit` (an annotated tag that peels to one counts), `content` (a blob or tree: listed, never read as a commit, never qualifies a document), or `none` (missing, gc'd or ambiguous: counted and listed). Exactly-32-hex tokens are skipped as md5s. The marker and the `-Json` line carry `unresolved=` and `content_ids=`; the live tree reads `docs=23 unqualified=4 unresolved=0 content_ids=1 baseline=4` with an empty stderr. An unresolved hash is deliberately NOT ratcheted: an unreachable commit leaves the object store on git's clock, not in the push being gated, so a red on it would refuse a push that did not cause it. Six new self-test cases (two MUST FIRE, one MUST NOT FIRE, two CLEAN TWIN, one LIVE PATH run as a child with its stderr to a file): 24 of 24 pass. Broken once by restoring the old `rev-parse ^{commit}` classifier: exit 1, the LIVE PATH case red with the founding stderr line and `unresolved=2 content_ids=0`; a second mutant dropping the md5 rule turned the MUST NOT FIRE case red; the file was md5-identical after each restore.
+
+**What did not ship (origin), and why.** The fixture is deliberate and its case is right, so it was left alone. Silencing it is not trivially safe: the only quiet route is to capture that push's streams in production, and `graph\pipeline\nightly.ps1:1236`, `grocery\check-ad-cycles.ps1:3516` and `meal-prep\pipeline\harvest-crawl.ps1:299` all push through it, so their transcripts would lose the pre-push hook's own output. It is not a silent pass either: a push that could not reach origin is still reported as "push failed, left local". If it is ever wanted, the change is to run that push through `Invoke-GitCaptured` (already used for the commit five lines above) and append `Format-GitRefusal`'s summary to the verdict, which also gives a failed push its reason; the cost is the hook transcript in three scheduled lanes' logs.
+
+### I220 - Reader-facing: 20 Walmart board entries rest on a store nobody sanctioned `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I165. `grocery/import-walmart-batch.ps1:168` stamps every row "Walmart Bellevue 68123" and never
+reads the capture's `#tc-store` line, which `build-walmart-deals` refuses a capture without. On
+`comparison-2026-09-17`, 20 of 3,188 store entries come from these batch rows, 12 of them cheapest-store
+picks, on a store basis Brad never ruled (the ruled store is 5361 / 68137). Fixing it changes live board
+cells, so the first rung is Brad's: retire the batch rows, re-stamp them, or give the importer the same
+store-line refusal the builder has.
+
+### I221 - Reader-facing: the deals page never shows "Doesn't carry" `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I132. `grocery/build-deals-page.ps1:153` reads not-carried as a `cells` list keyed `.id`, but
+`grocery/not-carried.json` holds an `entries` list keyed `.commodity`, so the label never renders and readers
+see "No price yet". Fixing it changes a page, so Brad's. Related: `grocery/derive-not-carried.ps1:116-120`
+turns ONE empty Baker's search into a not-carried entry (12 of 24 entries, written 2026-08-21, unscheduled);
+`pork-tenderloin` and `fresh-parsley` look doubtful for a Kroger store, and those entries hide the gaps from
+`audit-coverage-gaps` for 90 days. A second, differently worded search is the missing check.
+
+### I222 - Reader-facing: per-pound prices read as per-each, and multi-packs priced as one each `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I182. `graph/lib/units.py:496`: `per_unit(0.99, 'lb', 'each', ...)` returns `(0.99, 'each')`.
+Two Fareway cantaloupe rows sit at $0.99 "each" (0.289x the median), inside what `flag_outliers` misses; not
+the reader's cheapest on 2026-09-17 (Walmart $2.50). `bar-soap` and `bottled-water` price whole multi-packs as
+one each, inflating the median in the harmless direction. A fix changes which rows can price a cell.
+
+### I223 - Fareway's selector drops the sale end date, so sale dating never fires on the daily capture `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I124. `grocery/select-fareway-shop.ps1:429` drops `sale_ends_days` and `sale_note`: on 09-11, 143
+of 2,392 candidates carried a sale end and 0 of 44 selected rows kept it, so `build-fareway-regular.ps1:582`
+never fires. Fixing it changes sale dating on the board. Also: the newest Fareway storefront capture in the
+main checkout was from 2026-09-12 when read on 09-18.
+
+### I224 - The price-alert email leaves an orphan draft on every failed send, and the alert state is unguarded `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I105 and I161. `grocery/send-price-alerts.ps1:131`: when the PUT that publishes the alert fails,
+the draft POSTed a moment earlier is never deleted (lines 143-147 only print SEND FAILED), so each retry leaves
+another draft in Ghost. I161's held half is the same script: an unreadable state file is treated as empty
+(every subscriber re-alerted) and a missing price mutes an item forever. Both change what members are emailed.
+
+### I225 - The heartbeat's dedup signature changes every run, so a stale-task page repeats `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I125. `grocery/health-heartbeat.ps1:391` puts the task's age in hours into the TASK STALE text and
+`:519` hashes that text as the dedup signature, so the signature moves every run and the page can repeat at
+every heartbeat. The alert log shows silent-death pages on 09-12, 09-13, 09-14, 09-17 and 09-18.
+
+### I226 - post-publish review verdicts are thrown away by the daemon, and none has run since 2026-09-03 `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I164. `meal-prep/pipeline/hunt-daemon.py:7059` discards the reviewer's answer and writes the word
+"reviewed" into the ledger; its one live review (wave 8, 2026-08-27) lost its verdict. Fix: write the
+reviewer's status line, with a daemon self-test case.
+
+### I227 - Gate and audit machinery: six small defects found in passing `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+- `grocery/test-precedence-ladders.ps1` fails 7 of 8 at HEAD (found under I183): its `%TEMP%\tc-precedence-fixture`
+  sandbox has no `lib\`, so `rollback-ttl-lib.ps1:65` cannot load `lib\ledger-lock.ps1`. The whole-lib sandbox
+  rule, one missed site.
+- `grocery/audit-json-readers.ps1` rewrites the TRACKED `grocery/out/json-readers.json` on a plain run (I174),
+  against "a plain run of a ratchet never writes its mark".
+- `grocery/audit-store-registry.ps1` exits 2 on main (I185): two 3-store fixture strings in
+  `grocery/test-auditors.ps1` (line 1376 from 5d1968736, 1405 from 499c3fd0c6) are neither registered nor
+  marked `store-subset-ok`. Not in the pre-push gate.
+- `ops/audit-write-only-reports.ps1` exits 2 by hand (42 families against a baseline of 41, a new `out\x.json`)
+  while the pre-push gate passes (I156). Hand run and gate disagree, unexplained.
+- `meal-prep/pipeline/find-similar.ps1` and `make-saturation.ps1` self-tests FAIL (exit 2, "the digest exists")
+  in an unseeded worktree instead of reporting BLIND, and push-main's pre-lock gate does not seed first (I206).
+- Six audits lack a `SCOPE OF A CLEAN REPORT:` line (I178): arg-binding, fixture-vocabulary, run-log-claims,
+  source-control-bytes, threshold-register, write-only-reports; `ops/audit-fixed-temp-names.ps1:7` still says
+  "A reported site is real".
+
+### I228 - A harness change a MEASURE doc names cannot land cleanly through push-main `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Found under I171 and I187. `ops/audit-conclusion-currency.ps1` demands a "Re-read at commit" line citing a commit
+at or after the harness change, which exists only locally until push-main's rebase renames it; it works only
+when no rebase happens. Since 7aeb653f0 the audit already classifies a cited BLOB id as content, so accepting a
+re-read that cites the harness blob would close this. Related: `ops/push-main.ps1:143` starts run-gates with an
+inherited console, so any gate's unredirected git error reaches the console and never the saved log.
+
+### I229 - Graph: stale filed-under edges are never removed, and a missing graph.db is silently recreated `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+- `graph/import/importers.py` (~1098, found under I193) never removes an old "filed under" edge: 3,437 of
+  38,748 such links are no longer in the current identity files (Birds Eye Steamfresh Sweet Peas still filed as
+  canned peas).
+- `graph/lib/graphdb.py:64-79` (I213) creates graph.db when missing, so an `open_db()` script run in a
+  worktree (none of 66 has one) builds a fresh db and restores learning into it instead of failing. Inferred.
+- `graph/lib/graphdb.py:492-494` (I161): restoring `cell-state.json` skips bad rows silently but counts them
+  restored (probe: 3 counted, 1 in the table).
+- `graph/import/importers.py:848-851` (I211) reports 606,442 unresolvable rows per run against 310,447 resolved;
+  not checked whether that is expected.
+- `graph/learning/ingest_hunter_events.py:332` (I119) silently skips an unparseable hunter-gold line.
+
+### I230 - Stale facts in standing guidance and data `OPEN` `run-0919` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+- `.claude/agents/recipe-hunter-pricer.md:249` (+ its prompt-backup copy) and
+  `grocery/PLAN-search-verdict-contract-2026-08-15.md:97` name the Omaha Sam's as 13130 L St; the session has
+  read 15429 Blackwell Dr since 2026-08-15 (I124).
+- run-gates reports "24 slot(s) of a machine-wide 24" while CLAUDE.md and ops-and-gates.md say 10 (I160).
+- `ops/scheduled-tasks/tc-grocery-capture-watchdog-0930.xml` is still named 0930; the task fires at 10:30 (I45).
+- `grocery/audit-script-census.ps1:107` says send-friday-email runs as task "SMP Friday Email (draft)"; no such
+  task is registered (I198).
+- The live site runs Ghost v6.64; every repo script sends `Accept-Version: v5.0` (I167). Endpoints in use still
+  answer 200.
+- `meal-prep/food-macros-db.json` broccoli row cites an NDB number as an FDC id (I137); FDC's "full" format drops
+  nutrient names on some Branded records, which `meal-prep/pipeline/fdc_lookup.py:149` would read as blank.
+
+### I231 - Untracked and ungitignored files the bot could commit, and one the worktrees never get `OPEN` `run-0919` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+- `grocery/out/friday-email.stamp` and the new `friday-email.invoking` marker (I198).
+- `meal-prep/db/dedup-paired/cases.jsonl`, the frozen dedup cases (I48), fingerprint `34be0270169e593c`.
+- `TC_WRITE_JOURNAL` in the user environment points at the MAIN checkout's `ops/ghost-journal.jsonl`, so a
+  shell test of ghost-lib from any worktree writes the live journal unless it clears the variable (I105).
+
+### I232 - Cadence gaps: verification samples and Family Fare's cursor date `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+- No whole-board verification sample verified since 2026-08-15; the 09-02 sample was drawn and never verified
+  (I133).
+- `grocery/pull-regular-familyfare.ps1:1141` advances the shared cursor without a date, so
+  `capture-cursor.json` has no `FamilyFare_last` and the one-slice-per-day check reads nothing (I161); `:1107`
+  stamps every refused term as indistinguishable from throttling though 597-613 detects the throttle code (I132).
+- The daily-ratchets green stamp of 09-18 03:17 was written at `59b7fefa5`, a local graph-nightly commit not on
+  origin/main, so a green daily stamp can describe a stale checkout (fixture-inputs agent).
+- The daily chain has logged "match-soundness is BLIND (exited 1 without its completion marker)" since 09-13,
+  while standalone runs end with the marker (board agent).
+- `grocery/audit-household-in-food.ps1:51` has no "scent" word and `:54` sweeps only `out\regular`, never the ad
+  files, so it could not see the Dawn row; no self-test (board agent).
+- The band-censorship ratchet's cutoff is relative to the median (`grocery/audit-band-censorship.ps1:150`), so
+  another store's sale can break and heal it (board agent).
+- Three recipe cards lose a structured-data block on rebuild, untraced: creamy-tuscan-chicken-skillet,
+  scalloped-potato-turkey-casserole, turkey-alfredo-rotini-bake (I172).
