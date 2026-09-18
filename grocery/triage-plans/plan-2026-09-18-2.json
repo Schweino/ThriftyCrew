@@ -1,0 +1,76 @@
+{
+  "generated": "2026-09-18T16:45:00",
+  "round": 1,
+  "lane": "ops",
+  "board_week": "comparison-2026-09-17 (triage-due printed BOARD comparison-2026-09-17 built 15:46:51)",
+  "head_at_dispatch": "44282c75d",
+  "queue_ids_seen": ["2026-09-18-1dfd03", "2026-09-18-d23cfd"],
+  "routing_artifact": null,
+  "items": [
+    {
+      "queue_id": "2026-09-18-1dfd03",
+      "subject": "Automation silent-death: 3 issue(s)",
+      "classification": "infra",
+      "evidence": [
+        "health-heartbeat.ps1 run 2026-09-18 16:30 from the main checkout, exit 2, printed the same three issues the 10:30 page carried plus one that aged in after it (TC Recipe Harvest Crawl, 33.3h > 30h, not part of this alert):",
+        "(1) TASK STALE: 'TC Produce Intraday Probe' last ran 92.5h ago (> 14h). Bounded measurement, stale by design. grocery/out/produce-intraday-verdict.json: verdict CLOSE, moved 0 over 28 morning-vs-afternoon pairs (planned 30, bar 24), 15 products, 105 rows read, 2 unreadable (2026-09-13 morning spring-mix 503, broccoli 404); supplementary afternoon-vs-evening 0 moves over 30 pairs. The verdict was already written into design/MEASURE-produce-intraday-2026-09-12.md and I125 closed by 4d8192903; the removal sat prepared on origin branch claude/i125-probe-removal (b4619d425) waiting for the task to be unregistered.",
+        "(2) TASK UNWATCHED: 'TC Approvals Page'. Get-ScheduledTask: action C:\\Codex\\Python312\\pythonw.exe running approvals-server.py from the user profile's .claude-wt\\approvals (outside this repo), one MSFT_TaskLogonTrigger, LastRunTime 2026-09-17 05:09:11, LastTaskResult 267009 (running), State Running. No committed definition in ops/scheduled-tasks and no git history for the name (git log --all -S 'TC Approvals Page' is empty).",
+        "(3) OUTPUT NOT CURRENT: public/free-dinners.json week_of 2026-09-11 against board week 2026-09-17. ad-cycle-log: the rotation last ran 2026-09-12T09:23:06 (21 flips); every chain run since (09-13 08:11, 09-14 08:12, 09-17 07:11, 09-18 08:13 and 14:53) logged 'held: guards blocked - hub/rotation not republished from a refused board (top5-weekly, rotate-free-dinners, build-hub-grid -Publish all skipped)'. 09-15 and 09-16 had no run at all (queue 2026-09-18-8491bf)."
+      ],
+      "surface_fix": {
+        "what": "(1) unregister the one task and land the prepared removal together; (2) give the approvals server a watch row; (3) nothing: the rotation runs on the next chain run whose guards pass",
+        "files": ["grocery/probe-produce-intraday.ps1", "grocery/produce-intraday-panel.json", "ops/scheduled-tasks/tc-produce-intraday-probe.xml", "grocery/expected-automations.json", "grocery/audit-script-census.ps1", ".gitignore", "design/MEASURE-produce-intraday-2026-09-12.md", "design/BACKLOG-course-findings.md"],
+        "exact_change": "Unregister-ScheduledTask -TaskName 'TC Produce Intraday Probe' -Confirm:$false (that task only; Get-ScheduledTask afterwards finds none); cherry-pick b4619d425 (deletes the probe, panel, task XML, watch row, census entry and two .gitignore lines); MEASURE doc Status and backlog I125 rewritten to say the removal landed; expected-automations.json windows_tasks += 'TC Approvals Page' (max_age_hours 30, no proves, why records it is an at-logon server outside the repo)"
+      },
+      "root_cause": "(1) a bounded measurement whose last step needed a scheduled-task change that the lane which read the verdict would not make, so the stale page repeated daily while the removal sat on a branch; (2) a TC task registered on this box from outside the repo with no committed definition, which the change-time registry gates (audit-task-registry, audit-task-registration) structurally cannot see because they read ops/scheduled-tasks and the registrars; (3) rotate-free-dinners is deliberately skipped while guards hold, so its output goes stale for exactly as long as the board is held",
+      "root_fix_none_because": "(1) the class is one bounded probe and it is gone, removal complete in one commit; (2) the REGISTRY DRIFT check in health-heartbeat.ps1 IS the class fix for a task born outside the repo and it paged on the first morning, which is its job; a change-time gate cannot read a registration that never passes through a commit; (3) skipping the rotation on a refused board is the intended guard behaviour, and the page clears on the first green chain run with no code change",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule, commodity, band or board input changed; the edits are a scheduled task, a watch registry row and the removal of a probe nothing else calls (git grep after the cherry-pick: probe-produce-intraday and produce-intraday-panel are named only in design prose and in health-heartbeat's I225 signature fixtures, which use the task name as a literal)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "the approvals row pages TASK STALE if that server dies, which is the intent; it cannot page while the task reads Running",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-18 16:30 to 16:45 on the live Task Scheduler and origin/main 023af4103",
+      "proof": {
+        "guard_or_fixture": "grocery/health-heartbeat.ps1 (live run against the real scheduler) plus ops/audit-task-registry.ps1 and ops/audit-task-registration.ps1 (their frozen fixtures cover a definition with no row and a row with no registrar)",
+        "must_fire_case": "before: health-heartbeat from the main checkout exit 2 with TASK STALE 'TC Produce Intraday Probe' and TASK UNWATCHED 'TC Approvals Page' both printed",
+        "clean_twin": "after, from the worktree carrying the change: health-heartbeat printed 'TC Approvals Page currently running (OK)' and neither issue; audit-task-registry exit 0 (agree=yes), audit-task-registration exit 0 (10 definitions, 11 rows, findings=0), audit-script-census exit 0, health-heartbeat -SelfTest exit 0 (27 cases, 0 failed)",
+        "commands": ["powershell -NoProfile -File grocery\\health-heartbeat.ps1", "powershell -NoProfile -File ops\\audit-task-registry.ps1", "powershell -NoProfile -File ops\\audit-task-registration.ps1", "powershell -NoProfile -File grocery\\health-heartbeat.ps1 -SelfTest"]
+      },
+      "rollback": "git revert the commit; the probe task can be re-registered from ops/scheduled-tasks/tc-produce-intraday-probe.xml in git history (it has no future triggers, so there is no reason to)",
+      "do_not_touch": ["any other scheduled task", "health-heartbeat thresholds"],
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "resolution_note": "I125 verdict CLOSE (0 moves over 28 pairs, bar 24) was already recorded; the probe task is unregistered and the prepared removal landed (probe, panel, XML, watch row, census entry, gitignore lines). TC Approvals Page, an at-logon server registered outside the repo, now has a watch row. free-dinners.json is stale only because every chain run since 09-12 held on guards, which skips the rotation by design; it clears on the next green run.",
+      "publish_batch": null,
+      "status": "done",
+      "premise_verified": "true: verdict file read (CLOSE, 0 of 28), the task existed and was Ready with no future trigger, the branch diff was exactly the seven files the page names, and the other two issues were re-read live at 16:30",
+      "deviation": "the dispatch described the verdict and I125 close as still to do; both were already done by 4d8192903 (the MEASURE doc's Verdict section and backlog I125), so this item only corrected their Status lines to say the removal landed",
+      "shipped_commit": "the commit subject-lined 'Triage plan-2026-09-18-2' on main, with the removal cherry-picked from b4619d425 directly before it"
+    },
+    {
+      "queue_id": "2026-09-18-d23cfd",
+      "subject": "Grocery capture watchdog: AD STALE, 146 sale rows EXCLUDED",
+      "classification": "no-code-change",
+      "evidence": [
+        "before (alert 10:34): 'AD STALE: stores needing a pull: 1 of 7   sale rows currently EXCLUDED from the board: 146'. after (grocery/audit-ad-status.ps1 re-run 2026-09-18 16:40, exit 0): 'stores needing a pull: 0 of 7   sale rows currently EXCLUDED from the board: 0'; Baker's reads 'bakers-ad-list-2026-09-16.json live to 2026-09-22 - ad list with all 85 routed term(s) asked through the Kroger API'. capture-watchdog.ps1 itself is unchanged in git (neither b92c93874 nor 72cd626de touches it); what changed is the Baker's weekly-ad feed those commits shipped."
+      ],
+      "root_cause": "Baker's had no weekly-ad source, so its sale rows aged out of their window and were excluded until the rotation happened to reach them; b92c93874 (14:34) gave Baker's its own ad-list feed through the Kroger API",
+      "resolution_note": "Real at 10:34 (1 of 7 stores stale, 146 sale rows excluded), cleared at source by the Baker's weekly-ad feed b92c93874/72cd626de: re-measured 16:40 at 0 of 7 and 0 excluded.",
+      "status": "done",
+      "premise_verified": "true: audit-ad-status re-run from the main checkout, exit 0, verdict line quoted in evidence",
+      "deviation": null,
+      "shipped_commit": "the commit subject-lined 'Triage plan-2026-09-18-2' on main, with the removal cherry-picked from b4619d425 directly before it"
+    }
+  ],
+  "ship_sequence": [
+    "Unregister-ScheduledTask 'TC Produce Intraday Probe' (that task only)",
+    "cherry-pick b4619d425 + Status-line edits + TC Approvals Page watch row",
+    "audit-task-registry, audit-task-registration, audit-script-census, health-heartbeat -SelfTest, live health-heartbeat",
+    "commit, ops\\push-main.ps1 from the worktree, close both queue ids"
+  ],
+  "open_questions_for_brad": []
+}

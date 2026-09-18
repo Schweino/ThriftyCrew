@@ -10430,8 +10430,9 @@ readings, outside the verdict, moved 0 of 30 times as well. Every reading landed
 and all 90 scheduled readings ran through the same harness blob that scored them. The verdict block,
 the 28 pairs and what a CLOSE does not say (another banner, the shelf tag, after 20:00, and that a feed
 repeating one fixed price would look the same) are in `design\MEASURE-produce-intraday-2026-09-12.md`
-under `## Verdict`. **The probe's removal is prepared on branch `claude/i125-probe-removal` and held
-for Brad**, because it unregisters a Windows task; its watch row now says so in the page it sends.
+under `## Verdict`. **The probe is removed** (2026-09-18, triage plan-2026-09-18-2, queue
+2026-09-18-1dfd03, on Brad's direct ask): the task was unregistered and branch `claude/i125-probe-removal`
+landed, taking the harness, panel, task definition, watch row, census entry and `.gitignore` lines together.
 
 **BRAD RULED IT WORTH THE HOUR ON 2026-09-12, verbatim:** *"Yes, produce is compared store to store on
 the board, so this is worth the one hour. Run the cheap test once: one produce commodity at one chain

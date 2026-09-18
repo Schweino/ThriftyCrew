@@ -194,9 +194,11 @@ feed does not move on the board, whatever the shelf tag does. It is the reason t
 
 **2026-09-19: steps 1 to 3 below are done** (verdict above, I125 closed). **Step 4 is done too: the
 probe, its panel, its task definition, its watch row, its census entry and its two `.gitignore` lines
-were removed by the commit on branch `claude/i125-probe-removal`**, landed after Brad unregistered the
-task, because an agent does not change a Windows scheduled task on this box. The harness survives in
-git history as blob `3d87ef06f121` if the question is ever re-asked.
+were removed by the commit on branch `claude/i125-probe-removal`**, landed by triage plan-2026-09-18-2
+(queue 2026-09-18-1dfd03). Brad asked for it directly that day, so the triage lane ran
+`Unregister-ScheduledTask -TaskName 'TC Produce Intraday Probe'` for that one task on 2026-09-18, and
+`Get-ScheduledTask` then found no such task. The harness survives in git history as blob `3d87ef06f121`
+if the question is ever re-asked.
 
 **The stale page is not sent once.** health-heartbeat dedups on a signature of its issue text, and a
 TASK STALE line carries the task's age in hours (`last ran 87.5h ago` when read on 2026-09-19), so the
