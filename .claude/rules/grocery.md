@@ -39,7 +39,7 @@ is one copy of every rule and nothing here can drift from it.
   same file - so it named `test-auditors`, which only `-match`es compare-deals' text and runs text cut
   from OTHER files, and it could not see a `[scriptblock]::Create` at all. It now follows the text from
   the read to the call that runs it. Over 596 files on 2026-09-11 it read 57 NAME it, 8 READ its
-  source, and **1 EXECUTES: `test-match-lib.ps1:78`**, which runs the original matcher cut out of
+  source, and **1 EXECUTES: `test-match-lib.ps1`** (line 78 then, 96 since I184 on 2026-09-18), which runs the original matcher cut out of
   compare-deals so it can prove match-lib decides identically. That one is on purpose.
   **The live production lift was not from compare-deals at all.** `-Script build-walmart-deals.ps1`
   named `import-walmart-batch.ps1` (Build-Row, six helpers and `$script:UnitFamily`) until 2026-09-11,
