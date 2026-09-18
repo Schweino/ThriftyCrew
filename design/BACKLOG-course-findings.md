@@ -13352,7 +13352,7 @@ natural home is an extension of `ops/audit-cmdlet-shadow.ps1` from built-in cmdl
 functions. The census harness was a scratch script: the AST query is described here, and it was not
 committed.
 
-### I185 - seven of the eight switches that branch on store names end in a default, and none names all seven stores `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I185 - seven of the eight switches that branch on store names end in a default, and none names all seven stores `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-plc-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13419,6 +13419,23 @@ of the 7 current stores**: `Family Fare` gives `familyfare-regular` (registry `f
 `family-fare` one, and the importer's merge would look for a previous file under the wrong name and
 find none. It is latent today: the only callers are `import-aldi-batch.ps1` (Aldi) and hand runs for
 Fareway, and both of those names were already literal labels.
+
+**Done 2026-09-18.** The one WRONG-VALUE switch is gone: `grocery/import-instacart-batch.ps1` now reads
+the file prefix from `stores.json` (`Get-IbRegularPrefix`, the store's `regular_prefix` plus
+`-regular`) and throws on a store the registry does not hold, before anything is written. The five
+NO-OP and REFUSE switches were left as they are, as the bar says. Its `-SelfTest` gained two MUST
+FIRE cases (Family Fare and Sam's Club resolve to `family-fare-regular` and `sams-regular`; an unknown
+store throws) and a CLEAN TWIN (Aldi and Fareway still resolve to `aldi-regular` and
+`fareway-regular`): 10 of 10 ok, exit 0. With the function body put back to the old squashed-name
+default, it went red on exactly the 2 new MUST FIRE cases (exit 1, the CLEAN TWIN still ok), and the file
+was restored md5-identical. **Real-data proof:** the original and the fixed importer were each run in their
+own sandbox over the tracked real captures `out\staples500\aldi-batch1-raw.txt` and
+`fareway-batch1-raw.txt`, seeded with the same newest real `aldi-regular-2026-09-17.json` and
+`fareway-regular-2026-09-12.json`. The outputs were byte-identical: Aldi 2,005,845 bytes and Fareway
+583,740 bytes, both md5-equal. The same run for `Family Fare` shows the defect: the original wrote
+a 12-row `familyfare-regular-2026-09-18.json` beside the real file and merged nothing, and the fix
+merged into `family-fare-regular` (5,489 rows). No board file is produced by this script and
+`compare-deals.ps1` was not touched, so no board output moves.
 
 ### I186 - the price formatter applies two midpoint rounding rules, so d5's banker's-versus-half-up question rests on a wrong premise `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
 

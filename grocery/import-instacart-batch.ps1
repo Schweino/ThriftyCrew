@@ -18,7 +18,24 @@ $root = $PSScriptRoot
 $today = (Get-Date).ToString('yyyy-MM-dd')
 $regDir = Join-Path $root 'out\regular'
 if (-not $SourceLabel) { $SourceLabel = "$Store In-Store shelf price (batch capture)" }
-$prefix = switch ($Store) { 'Aldi' {'aldi-regular'} 'Fareway' {'fareway-regular'} default { ($Store.ToLower() -replace '[^a-z0-9]', '') + '-regular' } }
+# THE FILE PREFIX IS THE REGISTRY'S, AND AN UNKNOWN STORE IS REFUSED (2026-09-18, backlog I185). This was a
+# switch naming Aldi and Fareway whose default squashed the display name, so 'Family Fare' wrote
+# familyfare-regular-<date>.json and "Sam's Club" samsclub-regular-<date>.json: neither is the registry's
+# regular_prefix, Select-RegularFileSet groups out\regular files by that prefix, so such a file would be read
+# as a SEPARATE store beside the real one, and the merge below would find no previous file to merge. It was
+# wrong for 2 of the 7 stores and silent for an eighth. stores.json is where a store is added first, so the
+# prefix is read from there and a name it does not hold throws before anything is written.
+$IB_REGISTRY = Join-Path $root 'stores.json'
+function Get-IbRegularPrefix([string]$store, [string]$registryPath) {
+  $doc = ([IO.File]::ReadAllText($registryPath, [Text.Encoding]::UTF8) -replace '^﻿', '') | ConvertFrom-Json
+  foreach ($s in @($doc.stores)) {
+    if ([string]::Equals([string]$s.name, $store, [StringComparison]::OrdinalIgnoreCase) -and ([string]$s.regular_prefix)) {
+      return ([string]$s.regular_prefix + '-regular')
+    }
+  }
+  throw ("import-instacart-batch: unknown -Store '" + $store + "' - it is not a store in stores.json, so there is no registered file prefix to write under. Add it to grocery/stores.json first.")
+}
+if (-not $SelfTest) { $prefix = Get-IbRegularPrefix $Store $IB_REGISTRY }
 
 # ---- THE MODE GATE (2026-07-30). Aldi and Fareway are Instacart storefronts whose DEFAULT session serves a
 # marked-up DELIVERY price. build-fareway-regular.ps1 was rewritten on 2026-07-15 to demand -ModeVerified for
@@ -111,6 +128,22 @@ if ($SelfTest) {
   $mr2 = Merge-IwbRows $prevRows @()
   if ($mr2.merged.Count -eq 3 -and $mr2.added -eq 0 -and $mr2.replaced -eq 0) { Write-Output 'ok    CLEAN TWIN: uncorrected rows are preserved (no silent drops on a bare re-run)' }
   else { Write-Output "FAIL  merge altered rows with no corrections (total=$($mr2.merged.Count))"; $fail++ }
+  # MUST-FIRE (backlog I185): a store whose display name has a space or an apostrophe gets the REGISTRY prefix,
+  # not the squashed name the old default built (familyfare-regular, samsclub-regular).
+  $pf = Get-IbRegularPrefix 'Family Fare' $IB_REGISTRY
+  $ps = Get-IbRegularPrefix "Sam's Club" $IB_REGISTRY
+  if ($pf -ceq 'family-fare-regular' -and $ps -ceq 'sams-regular') { Write-Output 'ok    MUST-FIRE: Family Fare and Sam''s Club write under the registry prefix (family-fare-regular, sams-regular)' }
+  else { Write-Output ("FAIL  file prefix is not the registry's (Family Fare=$pf Sam's Club=$ps) - such a file is read as a separate store"); $fail++ }
+  # MUST-FIRE (backlog I185): a store the registry does not hold is refused before anything is written.
+  $unkThrew = $false
+  try { $null = Get-IbRegularPrefix 'Hy Vee Pharmacy' $IB_REGISTRY } catch { $unkThrew = ($_.Exception.Message -match 'unknown -Store') }
+  if ($unkThrew) { Write-Output 'ok    MUST-FIRE: an unknown store throws instead of getting a squashed-name prefix' }
+  else { Write-Output 'FAIL  an unknown store was given a file prefix - an eighth store would be written under a name nothing reads'; $fail++ }
+  # CLEAN TWIN (backlog I185): the two stores this importer is actually run for keep their exact prefixes.
+  $pa = Get-IbRegularPrefix 'Aldi' $IB_REGISTRY
+  $pw = Get-IbRegularPrefix 'Fareway' $IB_REGISTRY
+  if ($pa -ceq 'aldi-regular' -and $pw -ceq 'fareway-regular') { Write-Output 'ok    CLEAN TWIN: Aldi and Fareway still write aldi-regular and fareway-regular' }
+  else { Write-Output ("FAIL  a live caller's file prefix moved (Aldi=$pa Fareway=$pw)"); $fail++ }
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
