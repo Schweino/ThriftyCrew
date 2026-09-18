@@ -850,6 +850,8 @@ $rotationMode = 'full'
 $bkPlan = $null
 $script:BkCursorFrom = $null
 $script:BkCursorNext = $null
+$script:BkAd = $null       # Get-BakersAdOwed for today (2026-09-18): the weekly ad's routed terms still owed an ask
+$script:BkAsk = $null      # Get-BakersAskPlan: ad terms first, then the expiry-first rotation slice
 
 # TARGETED RE-PRICE. -Commodities takes specific commodity ids and pulls ONLY those.
 # The capture policy produces exactly this kind of list - the items whose sale ended
@@ -873,9 +875,16 @@ elseif (-not $Full -and $script:PolicyOk) {
   try {
     $bkPlan = Get-CapturePlan -Store "Baker's" -Today $today
     $bkCur = Get-CaptureCursor -Store "Baker's" -OutDir $out
-    $bkSlice = Select-ExpiryFirstSlice -Items $allTerms -Expiring @($bkPlan.SaleExpiries) `
-                 -Budget ([int]$bkPlan.TermBudget) -CursorStart $bkCur -KeyOf { param($t) @([string]$t.id) }
-    $sliceTerms = @($bkSlice.Items)
+    # THE WEEKLY AD LEADS (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md). This lane can price a
+    # sale only when it asks, and the rotation cannot know what newly went on sale. pull-bakers-ad-list.ps1 reads
+    # the ad's own list and routes it onto our terms; Get-BakersAdOwed says which of those no file inside the ad
+    # window has asked yet, and Get-BakersAskPlan puts them first, out of the allowance the expiries get (cap 250
+    # minus the 7-term drip = 243), so the rotation cursor below advances exactly as it would with no ad at all.
+    $bkAd = Get-BakersAdOwed -OutDir $out -Date $today
+    $bkAsk = Get-BakersAskPlan -AllTerms $allTerms -Plan $bkPlan -CursorStart $bkCur -AdOwed @($bkAd.Owed)
+    $bkSlice = $bkAsk.Slice
+    $script:BkAd = $bkAd; $script:BkAsk = $bkAsk
+    $sliceTerms = @($bkAsk.Terms)
     # ALL OF A COMMODITY'S TERMS OR NONE OF THEM. popsicles carries two search terms, and the rotation
     # walk is positional, so a slice boundary can fall between them. The carry discards a term's old
     # rows when that term was re-read, so half-asking a commodity would drop the rows its OTHER term
@@ -890,6 +899,15 @@ elseif (-not $Full -and $script:PolicyOk) {
       $fetchList.Count, $bkCur, $allTerms.Count, $bkPlan.RotationTerms, $bkSlice.Prepended, $bkPlan.QuarterDays, $bkPlan.CallCap)
     if ($bkSlice.Prepended -gt 0) {
       Write-Output ("bakers-api: expiring sale(s) re-priced FIRST: " + ((@($bkSlice.Items | Select-Object -First $bkSlice.Prepended) | ForEach-Object { $_.id }) -join ', '))
+    }
+    if ($bkAd.HasList) {
+      Write-Output ("bakers-api: weekly ad {0} ({1}..{2}): {3} of {4} routed term(s) still owed; asking {5} ad term(s) across {6} commodity(ies) AHEAD of the rotation (allowance {7}){8}" -f `
+        $bkAd.List, $bkAd.AdFrom, $bkAd.AdTo, @($bkAd.Owed).Count, @($bkAd.All).Count, @($bkAsk.AdTerms).Count, @($bkAsk.AdIds).Count, $bkAsk.Allowance,
+        $(if ($bkAsk.AdDeferred -gt 0) { "; $($bkAsk.AdDeferred) commodity(ies) did not fit and stay owed for tomorrow" } else { '' }))
+      if ($bkAsk.ExpiryDeferredByAd -gt 0) { Write-Output ("bakers-api: {0} expiring re-price(s) gave way to the ad and stay OWED in sale-windows.json" -f $bkAsk.ExpiryDeferredByAd) }
+      if ($bkAd.Blind) { Write-Output ("bakers-api: ad asks are BLIND here - " + $bkAd.Why) }
+    } else {
+      Write-Output ("bakers-api: no weekly ad list for today (" + $bkAd.Why + ") - the rotation alone; check-ad-cycles and audit-ad-status page on this")
     }
     if ($bkPlan.ExpiryDeferred -gt 0) {
       Write-Output ("bakers-api: {0} expiry(ies) did not fit today's cap - they stay OWED in sale-windows.json and lead tomorrow's slice (oldest {1})" -f $bkPlan.ExpiryDeferred, $bkPlan.ExpiryOldest)
@@ -1295,6 +1313,10 @@ $doc = [ordered]@{
   # Hy-Vee file for two days. Recorded in the FILE, not just on the console.
   terms_total = @($termList).Count; terms_asked = @($fetchList).Count
   cursor_from = $script:BkCursorFrom; cursor_next = $script:BkCursorNext
+  # The weekly ad's asks (2026-09-18). capture_terms below is the receipt Get-BakersAdOwed reads to discharge them.
+  ad_list = $(if ($script:BkAd) { [string]$script:BkAd.List } else { '' })
+  ad_terms_owed = $(if ($script:BkAd) { @($script:BkAd.Owed).Count } else { 0 })
+  ad_terms_asked = $(if ($script:BkAsk) { @($script:BkAsk.AdTerms).Count } else { 0 })
   fresh_rows = $deals.Count; carried_rows = $merge.Carried; not_reverified = $merge.Carried
   carry_expired = $merge.Expired; carry_days = $script:CarryDays
   carried_from = $prevName
@@ -1312,8 +1334,17 @@ Write-Output ("bakers-api: advanced ad schedule to {0}..{1}" -f $bakersWindow.fr
 # re-queued forever. Written only when the file landed, for the same reason the cursor is.
 if ((Test-Path $file) -and $script:PolicyOk -and $rotationMode -eq 'rotation') {
   try {
-    $mk = Set-SaleExpiryProcessed -Store "Baker's" -Today $today -OutDir $out -Landed $true
-    if ($mk.Marked -gt 0) { Write-Output ("bakers-api: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
+    # ONLY WHAT WAS ASKED IS MARKED (2026-09-18). When the weekly ad took part of the expiry allowance, the plan's
+    # default slice names expiries this run never fetched; marking those would drop a sale re-price that is still
+    # owed. Get-BakersAskPlan's ExpiringKept is exactly the expiries this run asked.
+    $mk = $null
+    if ($script:BkAsk -and $script:BkAsk.ExpiryDeferredByAd -gt 0) {
+      $kept = @($script:BkAsk.ExpiringKept)
+      if ($kept.Count -gt 0) { $mk = Set-SaleExpiryProcessed -Store "Baker's" -Today $today -OutDir $out -Landed $true -Ids $kept }
+    } else {
+      $mk = Set-SaleExpiryProcessed -Store "Baker's" -Today $today -OutDir $out -Landed $true
+    }
+    if ($mk -and $mk.Marked -gt 0) { Write-Output ("bakers-api: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
   } catch { Write-Warning ("bakers-api: sale-expiry ledger not updated (" + $_.Exception.Message + ") - those re-prices stay owed and lead tomorrow's slice") }
 }
 

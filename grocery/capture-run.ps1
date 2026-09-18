@@ -233,6 +233,41 @@ $lanes = if ($Kind -eq 'ad') { $AD_LANE } else { $DAILY_LANE }
 Write-Output ("capture-run [$Kind] $todayS  -  deciding per store from capture-policy")
 Write-Output ''
 
+# ---- BAKER'S WEEKLY AD LIST, ONCE PER AD WEEK (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md) ----------
+# BEFORE the lanes launch, so the Baker's API lane in THIS run asks the new ad's routed terms (capture-policy-lib's
+# Get-BakersAskPlan puts them ahead of the rotation) and the worklist below records them. A current list on disk
+# makes this a no-op, so it costs one file read on six days of seven. Without one: pull-bakers-ad-list.ps1 first
+# (a hand-supplied or already-verified id), and only when it says NO AD ID (exit 4) does the real Chrome load the
+# weekly-ad page ONCE to read the id the page itself requests. Never fatal and never silent: a list that did not
+# land is paged by check-ad-cycles, audit-ad-status and audit-row-age through Get-BakersAdCaptureState.
+if ($Kind -eq 'daily' -and -not $WhatIf) {
+  try {
+    $bkListNow = Get-BakersAdListCurrent -OutDir $OutDir -Date $todayS
+    if ($bkListNow.Doc) {
+      Write-Output ("baker's ad list: current - {0} ({1}..{2})" -f $bkListNow.Name, $bkListNow.AdFrom, $bkListNow.AdTo)
+    } else {
+      $bkPull = Join-Path $root 'pull-bakers-ad-list.ps1'
+      $bkOut1 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $bkPull -OutDir $OutDir -Today $todayS)
+      $bkRc = $LASTEXITCODE
+      foreach ($l in $bkOut1) { Write-Output ("  " + $l) }
+      if ($bkRc -eq 4) {
+        $bkPy = 'C:\Codex\Python312\python.exe'
+        $bkDriver = Join-Path $root 'pull-browser-stores.py'
+        $bkSeen = Join-Path $OutDir ('bakers\bakers-ad-id-seen-' + $todayS + '.json')
+        if ((Test-Path $bkPy) -and (Test-Path $bkDriver)) {
+          Write-Output "baker's ad list: no ad id for this week on disk - reading it from the weekly-ad page in Chrome (one page load)"
+          $bkDrv = @(& $bkPy $bkDriver '--bakers-ad-id-out' $bkSeen '--date' $todayS)
+          foreach ($l in $bkDrv) { Write-Output ("  " + $l) }
+          $bkOut2 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $bkPull -OutDir $OutDir -Today $todayS -SeenFile $bkSeen)
+          $bkRc = $LASTEXITCODE
+          foreach ($l in $bkOut2) { Write-Output ("  " + $l) }
+        } else { Write-Warning "baker's ad list: the browser driver is unavailable (python or pull-browser-stores.py missing), so this week's ad id cannot be read" }
+      }
+      if ($bkRc -ne 0) { Write-Output ("baker's ad list: NOT landed (rc=$bkRc) - the Baker's API lane asks its rotation only today; the ad-coverage checks page until a list lands (recover: pull-bakers-ad-list.ps1 -AdId <guid>)") }
+    }
+  } catch { Write-Output ("baker's ad list step threw (not fatal, and the ad-coverage checks will page): " + $_.Exception.Message) }
+}
+
 $toRun = @{}          # store -> script
 $browser = @()        # stores needing the Chrome agent
 $skipped = @()

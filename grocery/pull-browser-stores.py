@@ -271,6 +271,75 @@ ALDI_NOTE = ("Aldi is captured through Brad's own Chrome (attended, search sweep
              "scrolling) - see the note above for the method. Not drivable from here.")
 
 
+# BAKER'S WEEKLY-AD ID (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md). The Baker's ad is read as TEXT
+# from its own feed (pull-bakers-ad-list.ps1), headless, but the feed is keyed by an ad GUID that changes weekly and
+# bakersplus.com is Akamai-walled to a server-side fetch. The weekly-ad page, loaded in a real Chrome, requests
+# /api/dacs/<guid>?location=<store> itself, and performance.getEntriesByType('resource') shows it. So this is ONE
+# page load a week, never a sweep and never a vision read: it records the URLs the page asked for and nothing else.
+# Nothing here trusts the id: pull-bakers-ad-list.ps1 verifies it against the ad's own dates and store list, and a
+# page that makes no such request (a wall, no store chosen, a redesign) records an empty list and exits 1, which that
+# script turns into a loud NO AD ID. A CAPTCHA is never touched.
+BAKERS_WEEKLYAD_URL = "https://www.bakersplus.com/weeklyad"
+DACS_RE = re.compile(r"/api/dacs/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+
+
+def dacs_urls(names):
+    """The /api/dacs/<guid> requests among a page's resource URLs, in the order it made them. Pure."""
+    out = []
+    for n in names or []:
+        s = str(n)
+        if DACS_RE.search(s) and s not in out:
+            out.append(s)
+    return out
+
+
+def read_bakers_ad_id(out_path, date_s, timeout_s=90):
+    """Load the Baker's weekly-ad page ONCE and write the /api/dacs URLs it requested to out_path. (ok, note)."""
+    prof = profile_dir("bakers")
+    os.makedirs(prof, exist_ok=True)
+    release_profile(prof)
+    browser = Chrome(headless=False, width=1440, height=900, dsf=1.0, profile_dir=prof, mobile=False,
+                     browsing=True, window_position=(-2400, -2400))
+    try:
+        browser.start()
+    except Exception as e:
+        return False, f"could not start Chrome: {e}"
+    found, page_url = [], BAKERS_WEEKLYAD_URL
+    try:
+        browser.goto(BAKERS_WEEKLYAD_URL, wait_ms=6000)
+        deadline = time.time() + timeout_s
+        while time.time() < deadline:
+            raw = browser.js("JSON.stringify(performance.getEntriesByType('resource').map(function(e){return e.name;}))")
+            try:
+                names = json.loads(raw) if isinstance(raw, str) else (raw or [])
+            except Exception:
+                names = []
+            found = dacs_urls(names)
+            if found:
+                break
+            time.sleep(3)
+        try:
+            page_url = browser.js("location.href") or BAKERS_WEEKLYAD_URL
+        except Exception:
+            pass
+    finally:
+        try:
+            browser.close()
+        except Exception:
+            pass
+    doc = {"captured": datetime.datetime.now().isoformat(timespec="seconds"), "date": date_s,
+           "source_url": page_url, "urls": found,
+           "note": "the /api/dacs/<guid> requests the Baker's weekly-ad page made in a real Chrome; "
+                   "pull-bakers-ad-list.ps1 verifies the id against the ad's own dates before using it"}
+    os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(doc, fh, indent=2)
+    if not found:
+        return False, ("the weekly-ad page made no /api/dacs/<guid> request within %ds (a wall, no store chosen, "
+                       "or the page changed) - nothing to verify, pull-bakers-ad-list reports NO AD ID" % timeout_s)
+    return True, "%d /api/dacs request(s) seen on %s" % (len(found), page_url)
+
+
 def today_str(override=""):
     return override or datetime.date.today().strftime("%Y-%m-%d")
 
@@ -1357,6 +1426,32 @@ def lookup_self_test():
         for _n, _v in _saved.items():
             _g[_n] = _v
 
+    # ---- the Baker's weekly-ad id read (2026-09-18): one page load, the page's own request, nothing guessed ----
+    _dacs = ("https://oms-kroger-webapp-da-classic-api-prod.przone.net/api/dacs/"
+             "79d2baa2-eec6-4a91-9ffa-51c1c46fd2a4")
+    got = dacs_urls(["https://www.bakersplus.com/weeklyad/static/app.js", _dacs + "?location=61500319",
+                     _dacs + "/pages/6fe50a3f-93f6-46dc-bb53-a3ac28c06c4a?location=61500319",
+                     _dacs + "?location=61500319"])
+    T("MUST FIRE  the weekly-ad page's own /api/dacs/<guid> requests are recorded, once each",
+      len(got) == 2 and all("/api/dacs/79d2baa2" in u for u in got), got)
+    T("MUST NOT FIRE  a page with no /api/dacs/<guid> request records nothing - an id is never guessed",
+      dacs_urls(["https://www.bakersplus.com/weeklyad", _dacs[:-12] + "?location=61500319"]) == [], "")
+    _saved2 = {n: _g[n] for n in ("read_bakers_ad_id", "run_store", "find_chrome")}
+    calls = []
+    try:
+        _g["find_chrome"] = lambda: "chrome"
+        _g["read_bakers_ad_id"] = lambda out_path, date_s, timeout_s=90: (calls.append(("AD", date_s)) or (True, "1 seen"))
+        _g["run_store"] = lambda *a, **k: (calls.append(("STORE",)) or (True, "x"))
+        sys.argv = ["pull-browser-stores.py", "--bakers-ad-id-out",
+                    os.path.join(tempfile.gettempdir(), "tc-never-written.json"), "--date", "2026-09-18"]
+        rc_ad = main()
+        T("CLEAN TWIN  --bakers-ad-id-out reads the ad id ONCE and drives no store sweep",
+          rc_ad == 0 and calls == [("AD", "2026-09-18")], "rc=%r calls=%r" % (rc_ad, calls))
+    finally:
+        sys.argv = _argv
+        for _n, _v in _saved2.items():
+            _g[_n] = _v
+
     print(f"  LOOKUP-SELFTEST-COMPLETE checks={len(bad)}failed" if bad else
           "  LOOKUP-SELFTEST-COMPLETE failed=0")
     return len(bad)
@@ -1568,12 +1663,24 @@ def main():
     ap.add_argument("--preflight", action="store_true",
                     help="run the Chrome plumbing self-test FIRST and capture nothing if it fails. "
                          "capture-run passes this; a push runs --selftest-lookup instead.")
+    ap.add_argument("--bakers-ad-id-out", default="",
+                    help="load the Baker's weekly-ad page ONCE and write the /api/dacs/<guid> URLs it requested "
+                         "to this path (capture-run, once per ad week). Drives no store and reads no worklist.")
     args = ap.parse_args()
 
     if args.selftest_lookup:
         return 1 if lookup_self_test() else 0
     if args.selftest:
         return self_test(headless=args.headless)
+    if args.bakers_ad_id_out:
+        try:
+            find_chrome()
+        except Exception as e:
+            print(f"FATAL: {e}")
+            return 2
+        ok, note = read_bakers_ad_id(args.bakers_ad_id_out, today_str(args.date))
+        print("bakers ad id: " + note)
+        return 0 if ok else 1
 
     date_s = today_str(args.date)
     keys = args.store or list(STORES.keys())

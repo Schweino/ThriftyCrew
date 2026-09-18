@@ -438,7 +438,21 @@ foreach($s in ($profiles.Keys | Sort-Object)){
     $info.Add(("  {0,-14} rows {1,6}  over {2}d: {3,5} ({4}%)  oldest {5}d{6}" -f $s,$p.rows,$MaxDays,$p.over,$p.pct,$p.oldest,$undTxt))
   }
 }
+# BAKER'S WEEKLY AD IS ITS OWN LIST PLUS ITS ASKS (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md).
+# The retired flyer file (bakers-deals-*.json) is no longer expected, so its closure is not a coverage gap on its
+# own; the gap is the ad list not landing or its routed terms not being asked, which capture-policy-lib's
+# Get-BakersAdCaptureState decides for this check, check-ad-cycles and audit-ad-status alike. It still pages.
+$bkAdState = $null
+try { $bkAdState = Get-BakersAdCaptureState -OutDir $OutDir -Date $today.ToString('yyyy-MM-dd') } catch { $bkAdState = $null }
+if($bkAdState -and $bkAdState.Captured){
+  $info.Add(("  BAKER'S AD CAPTURED: {0}. Its retired flyer file is not expected." -f $bkAdState.Why))
+} elseif(Test-BrowserCaptureOwned -Store "Baker's" -OutDir $OutDir){
+  $info.Add(("  AD COVERAGE GONE (OWNED, not paged): Baker's weekly ad - {0}. " -f $(if($bkAdState){ $bkAdState.Why } else { 'its ad-list state could not be read' })) + (Get-BrowserOwnedNote -Store "Baker's"))
+} else {
+  $hard.Add(("AD COVERAGE GONE: Baker's weekly ad is not captured - {0}. The Kroger API prices a sale only when it asks the term, so this week's new Baker's sale items are off the board until the ad list lands (pull-bakers-ad-list.ps1) and its terms are asked (pull-regular-bakers-api.ps1)." -f $(if($bkAdState){ $bkAdState.Why } else { 'its ad-list state could not be read' })))
+}
 foreach($x in $expired){
+  if($x.store -eq "Baker's"){ continue }   # judged above on the ad list, never on the retired flyer
   # Wording matters here. compare-deals.ps1 now REFUSES to price from an expired ad, so this is no longer
   # "the board is publishing a dead sale" - that hole is closed. What it means now is that the store's ad
   # coverage is GONE until a pull lands: its {rows} sale rows are excluded, those cells fall back to

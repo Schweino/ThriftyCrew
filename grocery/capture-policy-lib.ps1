@@ -463,6 +463,225 @@ function Get-WalmartRulingOwed {
   }
 }
 
+# ---- BAKER'S WEEKLY AD, ASKED FROM ITS OWN LIST (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md) ----
+#
+# The Kroger API lane asks 7 of ~600 terms a day. It prices a sale correctly WHEN it asks, but it cannot
+# discover what newly went on sale, and the only discovery path was a vision read of the printed flyer by a
+# browser agent retired on 2026-08-22 (5 of 8 ad weeks landed, by hand). pull-bakers-ad-list.ps1 now reads the
+# ad's own text feed and routes every offer onto the engine's commodities and their Baker's search terms. These
+# functions are the other half: they turn that list into terms the API lane ASKS on ad day.
+#
+# THE SAME MECHANISM AS THE WALMART RULING ABOVE, for the same two reasons:
+#   1. OWED IS DERIVED. A term leaves the list when a bakers-regular file written INSIDE the ad window carries a
+#      receipt saying it was asked (capture_terms outcome 'success' or 'empty'). Nothing is edited by hand, and
+#      a new ad's list owes everything again on its own.
+#   2. THE ROTATION KEEPS ITS DRIP. Ad terms come out of the allowance the sale expiries get (the store's call
+#      cap minus the rotation's reserved drip), ahead of the expiries, so the quarterly cursor never advances
+#      over a term a prepend displaced. Baker's cap is 250 search terms a day (StoreCallCap above), so the ad
+#      allowance is 250 - 7 = 243 terms; the 2026-09-16 ad routed to ~100.
+# A 'blocked' receipt (the request failed twice) is NOT an ask: the term stays owed and is asked again tomorrow.
+# 'empty' IS one: the store answered and carries nothing for that term, and asking again changes nothing.
+$script:BakersAdAskedOutcomes = @('success', 'empty')
+
+function Get-BakersAdListCurrent {
+  <#
+    .SYNOPSIS The newest out\bakers\bakers-ad-list-<start>.json whose ad window contains -Date, or why none does.
+    .OUTPUTS @{ Doc; Name; AdFrom; AdTo; Newest; Why }
+  #>
+  [CmdletBinding()]
+  param([string]$OutDir = '', [string]$Date = '')
+  if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+  $dateS = if ($Date) { $Date } else { (Get-Date).ToString('yyyy-MM-dd') }
+  $res = [pscustomobject]@{ Doc = $null; Name = ''; AdFrom = ''; AdTo = ''; Newest = ''; Why = '' }
+  $dir = Join-Path $OutDir 'bakers'
+  $files = @()
+  if (Test-Path -LiteralPath $dir) {
+    $files = @(Get-ChildItem -LiteralPath $dir -Filter 'bakers-ad-list-*.json' -File -ErrorAction SilentlyContinue |
+               Where-Object { $_.BaseName -match '^bakers-ad-list-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)
+  }
+  if ($files.Count -eq 0) { $res.Why = "no Baker's ad list (out\bakers\bakers-ad-list-*.json) on disk at all"; return $res }
+  $res.Newest = $files[0].Name
+  foreach ($f in $files) {
+    $d = $null
+    try { $d = ConvertFrom-Json ([IO.File]::ReadAllText($f.FullName)) } catch { continue }
+    if (-not $d) { continue }
+    $from = [string]$d.ad_from; $to = [string]$d.ad_to
+    if ($from.Length -lt 10 -or $to.Length -lt 10) { continue }
+    $from = $from.Substring(0, 10); $to = $to.Substring(0, 10)
+    # ORDINAL on yyyy-MM-dd: a culture-sensitive compare is the wrong default for data.
+    if ([string]::CompareOrdinal($from, $dateS) -le 0 -and [string]::CompareOrdinal($to, $dateS) -ge 0) {
+      $res.Doc = $d; $res.Name = $f.Name; $res.AdFrom = $from; $res.AdTo = $to
+      return $res
+    }
+  }
+  $res.Why = ("no Baker's ad list covers " + $dateS + " (newest on disk: " + $files[0].Name + ")")
+  return $res
+}
+
+function Get-BakersRegularReceipts {
+  <#
+    .SYNOPSIS The asked-term receipts of one bakers-regular file, without parsing its ~8 MB of rows.
+    .DESCRIPTION capture_terms sits ahead of deals in the file the lane writes, so the array is cut out of the
+      text and parsed alone; if the markers are not where the writer puts them, the whole file is parsed.
+    .OUTPUTS @{ WeekOf; Receipts }
+  #>
+  param([Parameter(Mandatory)][string]$Path)
+  $txt = [IO.File]::ReadAllText($Path)
+  $wk = ''
+  $m = [regex]::Match($txt.Substring(0, [Math]::Min(4096, $txt.Length)), '"week_of"\s*:\s*"(\d{4}-\d{2}-\d{2})')
+  if ($m.Success) { $wk = $m.Groups[1].Value }
+  $a = $txt.IndexOf('"capture_terms"')
+  $b = if ($a -ge 0) { $txt.IndexOf('"deal_count"', $a) } else { -1 }
+  $rec = $null
+  if ($a -ge 0 -and $b -gt $a) {
+    $frag = $txt.Substring($a, $b - $a).TrimEnd()
+    if ($frag.EndsWith(',')) { $frag = $frag.Substring(0, $frag.Length - 1) }
+    try { $rec = (ConvertFrom-Json ('{' + $frag + '}')).capture_terms } catch { $rec = $null }
+  }
+  if ($null -eq $rec) {
+    $d = ConvertFrom-Json $txt
+    $rec = $d.capture_terms
+    if (-not $wk) { $wk = [string]$d.week_of }
+  }
+  return [pscustomobject]@{ WeekOf = $wk; Receipts = @($rec) }
+}
+
+function Get-BakersAdOwed {
+  <#
+    .SYNOPSIS Which of the current Baker's ad list's routed terms are still owed an ask through the Kroger API.
+    .DESCRIPTION
+      Pure read. Owed = the terms of the ad list covering -Date, minus terms a bakers-regular file written INSIDE
+      that ad window proves were asked (a receipt with outcome success or empty). The file's own week_of must be
+      inside the window too, because a targeted re-price writes today's name over an older file's receipts.
+      A COULD-NOT-LOOK IS NEVER A DISCHARGE: with no out\regular to read this says Blind and reports every term
+      as owed. No list at all owes nothing and says so in HasList/Why - the consumers page on that, not here.
+    .OUTPUTS @{ Owed; All; Proven; HasList; List; AdFrom; AdTo; Blind; Why }
+  #>
+  [CmdletBinding()]
+  param([string]$OutDir = '', [string]$Date = '')
+  if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+  $cur = Get-BakersAdListCurrent -OutDir $OutDir -Date $Date
+  $res = [pscustomobject]@{ Owed = @(); All = @(); Proven = @(); HasList = $false; List = ''; AdFrom = ''; AdTo = ''; Blind = $false; Why = $cur.Why }
+  if (-not $cur.Doc) { return $res }
+  $res.HasList = $true; $res.List = $cur.Name; $res.AdFrom = $cur.AdFrom; $res.AdTo = $cur.AdTo
+  # assign, THEN wrap - a one-element JSON array comes back unwrapped ([[ps-json-array-collapse]])
+  $rawTerms = $cur.Doc.terms
+  $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  $all = New-Object System.Collections.Generic.List[string]
+  foreach ($t in @($rawTerms)) {
+    $s = if ($t -is [string]) { $t } else { [string]$t.term }
+    $s = $s.Trim()
+    if ($s -and $seen.Add($s)) { [void]$all.Add($s) }
+  }
+  $allArr = $all.ToArray()
+  $res.All = $allArr
+  if ($allArr.Count -eq 0) { $res.Why = ($cur.Name + ' routed no offer onto a Baker''s search term, so nothing is owed'); return $res }
+  $proven = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  $regDir = Join-Path $OutDir 'regular'
+  if (-not (Test-Path -LiteralPath $regDir)) {
+    $res.Blind = $true
+    $res.Why = ('there is no ' + $regDir + ' to read, so which ad terms were already asked is unknown in this checkout')
+  } else {
+    foreach ($f in @(Get-ChildItem -LiteralPath $regDir -Filter 'bakers-regular-*.json' -File -ErrorAction SilentlyContinue)) {
+      $m = [regex]::Match($f.BaseName, '^bakers-regular-(\d{4}-\d{2}-\d{2})$')
+      if (-not $m.Success) { continue }
+      $nd = $m.Groups[1].Value
+      if ([string]::CompareOrdinal($nd, $cur.AdFrom) -lt 0 -or [string]::CompareOrdinal($nd, $cur.AdTo) -gt 0) { continue }
+      $r = $null
+      try { $r = Get-BakersRegularReceipts -Path $f.FullName } catch { continue }
+      if (-not $r.WeekOf -or [string]::CompareOrdinal($r.WeekOf, $cur.AdFrom) -lt 0 -or [string]::CompareOrdinal($r.WeekOf, $cur.AdTo) -gt 0) { continue }
+      foreach ($ct in @($r.Receipts)) {
+        if ($null -eq $ct) { continue }
+        if ($script:BakersAdAskedOutcomes -contains [string]$ct.outcome) {
+          $tt = ([string]$ct.term).Trim(); if ($tt) { [void]$proven.Add($tt) }
+        }
+      }
+    }
+  }
+  $res.Owed = @($allArr | Where-Object { -not $proven.Contains($_) })
+  $res.Proven = @($allArr | Where-Object { $proven.Contains($_) })
+  if (-not $res.Blind) { $res.Why = ('{0}: {1} of {2} routed term(s) asked inside {3}..{4}' -f $cur.Name, @($res.Proven).Count, $allArr.Count, $cur.AdFrom, $cur.AdTo) }
+  return $res
+}
+
+function Get-BakersAdCaptureState {
+  <#
+    .SYNOPSIS Is Baker's weekly ad for -Date CAPTURED: a list covers it AND every routed term was asked?
+    .DESCRIPTION The one rule check-ad-cycles, audit-ad-status and audit-row-age all read, so the three
+      alerts cannot disagree about what "the ad landed" means. Not captured has two named causes, and both
+      page: the list did not land, or its asks did not.
+    .OUTPUTS @{ Captured; HasList; List; AdFrom; AdTo; Owed; Total; Blind; Why }
+  #>
+  [CmdletBinding()]
+  param([string]$OutDir = '', [string]$Date = '')
+  $o = Get-BakersAdOwed -OutDir $OutDir -Date $Date
+  $owedN = @($o.Owed).Count; $allN = @($o.All).Count
+  $why = if (-not $o.HasList) { $o.Why }
+         elseif ($o.Blind) { $o.Why }
+         elseif ($owedN -gt 0) { ('{0} of {1} routed ad term(s) in {2} not yet asked through the Kroger API: {3}' -f $owedN, $allN, $o.List, ((@($o.Owed) | Select-Object -First 8) -join ', ')) }
+         else { ('{0} ({1}..{2}): all {3} routed ad term(s) asked' -f $o.List, $o.AdFrom, $o.AdTo, $allN) }
+  return [pscustomobject]@{
+    Captured = [bool]($o.HasList -and -not $o.Blind -and $owedN -eq 0)
+    HasList = [bool]$o.HasList; List = $o.List; AdFrom = $o.AdFrom; AdTo = $o.AdTo
+    Owed = $owedN; Total = $allN; Blind = [bool]$o.Blind; Why = $why
+  }
+}
+
+function Get-BakersAskPlan {
+  <#
+    .SYNOPSIS The Baker's API lane's whole ask list for today: owed ad terms first, then the expiry-first rotation slice.
+    .DESCRIPTION
+      Pure: no disk, no cursor write. Ad terms are taken whole-commodity (every term of the commodity, because the
+      lane's carry keys on the commodity id and half-asking one would drop the rows its other term found) while
+      they fit the allowance; the expiries share what is left, oldest first; the rotation keeps its full drip.
+      So CursorNext is exactly what it would be with no ad at all, and an expiry an ad term displaced is NOT
+      marked processed (ExpiringKept is what the lane passes to Set-SaleExpiryProcessed -Ids).
+    .OUTPUTS @{ AdTerms; AdIds; AdDeferred; AdUnknown; ExpiringKept; ExpiryDeferredByAd; Slice; CursorNext; Terms; Allowance }
+  #>
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][AllowEmptyCollection()]$AllTerms,
+    [Parameter(Mandatory)]$Plan,
+    [int]$CursorStart = 0,
+    [AllowEmptyCollection()][string[]]$AdOwed = @()
+  )
+  $all = @($AllTerms)
+  $allowance = [int]$Plan.CallCap - [int]$Plan.RotationTerms
+  if ($allowance -lt 0) { $allowance = 0 }
+  $adTerms = New-Object System.Collections.Generic.List[object]
+  $adIds = New-Object System.Collections.Generic.List[string]
+  $adDeferredIds = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $adUnknown = 0
+  foreach ($t in @($AdOwed)) {
+    if (-not $t) { continue }
+    $hit = @($all | Where-Object { [string]::Equals([string]$_.term, [string]$t, [StringComparison]::OrdinalIgnoreCase) })
+    if ($hit.Count -eq 0) { $adUnknown++; continue }       # a routed term the catalogue no longer carries
+    $id = [string]$hit[0].id
+    if ($adIds.Contains($id)) { continue }
+    $idTerms = @($all | Where-Object { [string]$_.id -eq $id })
+    if (($adTerms.Count + $idTerms.Count) -gt $allowance) { [void]$adDeferredIds.Add($id); continue }   # counted per COMMODITY
+    [void]$adIds.Add($id)
+    foreach ($x in $idTerms) { [void]$adTerms.Add($x) }
+  }
+  $room = $allowance - $adTerms.Count
+  if ($room -lt 0) { $room = 0 }
+  $exp = @(@($Plan.SaleExpiries) | Where-Object { $_ })
+  $keep = @($exp | Select-Object -First $room)
+  $slice = Select-ExpiryFirstSlice -Items $all -Expiring $keep -Budget ([int]$Plan.RotationTerms + $keep.Count) `
+             -CursorStart $CursorStart -KeyOf { param($x) @([string]$x.id) }
+  $terms = New-Object System.Collections.Generic.List[object]
+  $tk = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($x in @($adTerms.ToArray()) + @($slice.Items)) {
+    if ($null -eq $x) { continue }
+    if ($tk.Add(([string]$x.id + '|' + [string]$x.term))) { [void]$terms.Add($x) }
+  }
+  return [pscustomobject]@{
+    AdTerms = $adTerms.ToArray(); AdIds = $adIds.ToArray(); AdDeferred = $adDeferredIds.Count; AdUnknown = $adUnknown
+    ExpiringKept = $keep; ExpiryDeferredByAd = ($exp.Count - $keep.Count)
+    Slice = $slice; CursorNext = $slice.CursorNext; Terms = $terms.ToArray(); Allowance = $allowance
+  }
+}
+
 function Get-CaptureWorklist {
   <#
     .SYNOPSIS Today's terms for one store: rotation slice + sales reverting today.
@@ -529,6 +748,33 @@ function Get-CaptureWorklist {
     }
   }
 
+  # BAKER'S WEEKLY AD TERMS LEAD THE SAME WAY (2026-09-18). Derived from the current ad list minus what a
+  # bakers-regular file inside the window proves was asked (Get-BakersAdOwed), inside the same allowance, so the
+  # rotation keeps its drip. The Baker's lane itself composes its asks with Get-BakersAskPlan; this is the
+  # worklist file's view of the same owed list, so an audit reads what the store was owed that day.
+  $ad = if ($Store -eq "Baker's") { Get-BakersAdOwed -OutDir $OutDir -Date $plan.Today } else { $null }
+  $adTerms = New-Object System.Collections.Generic.List[object]
+  $adDeferred = 0
+  $saleDeferredByAd = 0
+  if ($ad -and @($ad.Owed).Count -gt 0) {
+    $adRoom = $allowance - $ruleTerms.Count
+    if ($adRoom -lt 0) { $adRoom = 0 }
+    foreach ($t in @($ad.Owed)) {
+      $hits = @($all | Where-Object { [string]$_.term -eq [string]$t })
+      if ($hits.Count -eq 0) { continue }
+      if (($adTerms.Count + $hits.Count) -gt $adRoom) { $adDeferred++; continue }
+      foreach ($hit in $hits) { [void]$adTerms.Add($hit) }
+    }
+    $saleRoom = $adRoom - $adTerms.Count
+    if ($saleRoom -lt 0) { $saleRoom = 0 }
+    if ($sale.Count -gt $saleRoom) {
+      $saleDeferredByAd = $sale.Count - $saleRoom
+      $keep = New-Object System.Collections.Generic.List[object]
+      for ($i = 0; $i -lt $saleRoom; $i++) { [void]$keep.Add($sale[$i]) }
+      $sale = $keep
+    }
+  }
+
   return [pscustomobject]@{
     Store         = $Store
     Today         = $plan.Today
@@ -551,13 +797,24 @@ function Get-CaptureWorklist {
     RulingBlind   = if ($rule) { [bool]$rule.Blind } else { $false }
     RulingWhy     = if ($rule) { [string]$rule.Why } else { '' }
     SaleDeferredByRuling = $saleDeferredByRuling
+    # Baker's weekly ad terms owed an ask (2026-09-18). Empty for every other store, and empty for Baker's
+    # once every routed term of the current ad list has a receipt inside the ad window.
+    AdTerms       = $adTerms.ToArray()
+    AdOwed        = if ($ad) { @($ad.Owed) } else { @() }
+    AdTotal       = if ($ad) { @($ad.All).Count } else { 0 }
+    AdDeferred    = $adDeferred
+    AdList        = if ($ad) { [string]$ad.List } else { '' }
+    AdBlind       = if ($ad) { [bool]$ad.Blind } else { $false }
+    AdWhy         = if ($ad) { [string]$ad.Why } else { '' }
+    SaleDeferredByAd = $saleDeferredByAd
     # Dedupe on the TERM STRING. Select-Object -Unique on PSCustomObjects compares
     # their ToString(), which is identical for every one of them, so it silently
     # collapsed a 13-term worklist to a single entry - a store would then be told to
     # fetch one term a day and the rotation would never complete.
     # THE RULING'S TERMS COME FIRST here, because Group-Object keeps first-seen order and this list is
-    # fetched in order: a run that is cut short must have spent its requests on the owed ones.
-    Terms         = @(@($ruleTerms.ToArray()) + @($rot.ToArray()) + @($sale.ToArray()) |
+    # fetched in order: a run that is cut short must have spent its requests on the owed ones. The ad terms
+    # come next for the same reason.
+    Terms         = @(@($ruleTerms.ToArray()) + @($adTerms.ToArray()) + @($rot.ToArray()) + @($sale.ToArray()) |
                       Group-Object -Property term | ForEach-Object { $_.Group[0] })
     QuarterDays   = $plan.QuarterDays
     MaxCarryDays  = $plan.MaxCarryDays
@@ -1279,6 +1536,16 @@ function Write-CaptureWorklist {
     ruling_deferred = $wl.RulingDeferred
     ruling_blind    = $wl.RulingBlind
     ruling_blind_why = $wl.RulingWhy
+    # BAKER'S WEEKLY AD TERMS, AT THE HEAD OF `terms` after any ruling (2026-09-18). Routed from the ad's own
+    # list (pull-bakers-ad-list.ps1) and derived: they leave on their own once asked inside the ad window.
+    ad_terms       = @($wl.AdTerms | ForEach-Object { $_.term })
+    ad_owed_total  = @($wl.AdOwed).Count
+    ad_of          = $wl.AdTotal
+    ad_deferred    = $wl.AdDeferred
+    ad_list        = $wl.AdList
+    ad_blind       = $wl.AdBlind
+    ad_why         = $wl.AdWhy
+    expiry_deferred_by_ad = $wl.SaleDeferredByAd
     call_cap       = $wl.CallCap
     expiry_deferred = $wl.ExpiryDeferred
     expiry_deferred_by_ruling = $wl.SaleDeferredByRuling

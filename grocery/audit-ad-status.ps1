@@ -38,15 +38,23 @@ function AsDate([string]$s) {
 
 # Where each store's ad rows actually live. The combined ads-<date>.json carries the
 # three server stores; the rest keep their own folder.
+#
+# BAKER'S IS NOT A DEALS FILE ANY MORE (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md). Its weekly ad
+# is its own offer list (out\bakers\bakers-ad-list-<start>.json) plus the Kroger API asking every term the list
+# routes; the retired flyer file (bakers-deals-*.json) is no longer expected, and reading it here reported the 146
+# expired rows of the 09-09 flyer as AD STALE every day. It is judged by capture-policy-lib's
+# Get-BakersAdCaptureState, the same rule check-ad-cycles and audit-row-age read, and it still flags when the list
+# did not land or its asks did not.
 $AD_SOURCES = @{
   'Hy-Vee'      = @('ads-*.json')
   'Aldi'        = @('ads-*.json')
   'Family Fare' = @('ads-*.json')
-  "Baker's"     = @('bakers\bakers-deals-*.json')
+  "Baker's"     = @()
   'Fareway'     = @('fareway\fareway-deals-*.json')
   "Sam's Club"  = @('sams\sams-deals-*.json')
   'Walmart'     = @()
 }
+. (Join-Path $root 'capture-policy-lib.ps1')   # Get-BakersAdCaptureState. Declares no param() block, so it cannot reset this script's switches
 
 $sched = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'ad-schedule.json')))
 $rows = New-Object System.Collections.Generic.List[object]
@@ -106,6 +114,15 @@ foreach ($s in $sched.stores) {
   }
 
   $bad = ($overdueDays -gt 0) -or ($fileTo -and $todayD -gt $fileTo)
+  if ($store -eq "Baker's") {
+    # The list prices nothing itself, so it excludes no rows; what it can lose is the new ad's sale items.
+    $bst = Get-BakersAdCaptureState -OutDir $OutDir -Date $todayS
+    $fileName = if ($bst.HasList) { $bst.List } else { '(no ad list)' }
+    if ($bst.Captured) { $fileState = ("live to {0} - ad list with all {1} routed term(s) asked through the Kroger API" -f $bst.AdTo, $bst.Total) }
+    elseif (-not $bst.HasList) { $fileState = ("NO AD LIST - " + $bst.Why + "; this week's new sale items are not being asked"); $bad = $true }
+    else { $fileState = ("live to {0} but {1}" -f $bst.AdTo, $bst.Why); $bad = $true }
+    $fileTo = $null
+  }
   [void]$rows.Add([pscustomobject]@{
       store = $store; method = [string]$s.method; cadence = $cadence
       schedule = $schedState; overdue_days = $overdueDays

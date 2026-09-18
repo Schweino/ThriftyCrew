@@ -148,13 +148,34 @@ if ($SelfTest) {
   # to 2026-11-18 (520 of 539 reach 09-22). The Fareway pair is the founding 2026-08-02 miss, 08-02..08-08
   # over a deals file that closed 08-01. Only the decision is exercised here; the live loop reads the files.
   . (Join-Path $PSScriptRoot 'ad-schedule-backing-lib.ps1')
-  Test-CacCase 'MUST FIRE  a Baker''s calendar 09-16..09-22 whose newest API capture carries no promo row to 09-22 still pages (calendar advanced with no API data behind it)' {
-    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22') -SupplementName 'bakers-deals-2026-09-09.json' -SupplementTo '2026-09-15' -ApiName 'bakers-regular-2026-09-18.json' -ApiAdTo @('2026-09-15', '2026-09-21')
+  # BAKER'S FOLLOWS ITS NEW PRODUCER (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md): backed = an ad
+  # list covering the window AND every routed term asked. 520 of 539 API promo rows reached 09-22 on 09-18 while
+  # pasta-sauce, coffee-pods and clementines had lost their sale cells, so API promo rows alone no longer back it.
+  Test-CacCase 'MUST FIRE  the ad rolled over (09-16..09-22) and NO ad list landed: pages, even though 520 API promo rows reach 09-22' {
+    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22') -ApiName 'bakers-regular-2026-09-18.json' -ApiAdTo @('2026-09-22', '2026-11-18', '2026-09-21')
+    $sb.page -and (-not $sb.backed_by) -and $sb.ad_list_gap -and ($sb.api_rows -eq 2)
+  }
+  Test-CacCase 'MUST FIRE  the list landed but its asks did not (12 of 85 routed terms owed): pages' {
+    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22') -AdListName 'bakers-ad-list-2026-09-16.json' -AdListTo '2026-09-22' -AdOwed 12 -AdTotal 85
+    $sb.page -and (-not $sb.backed_by) -and (-not $sb.ad_list_gap) -and ($sb.ad_owed -eq 12)
+  }
+  Test-CacCase 'MUST FIRE  a list for LAST week (window ends 09-15) does not back this week''s calendar: pages' {
+    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22') -AdListName 'bakers-ad-list-2026-09-09.json' -AdListTo '2026-09-15' -AdOwed 0 -AdTotal 70
+    $sb.page -and $sb.ad_list_gap
+  }
+  Test-CacCase 'MUST NOT FIRE  a list covering 09-22 with every routed term asked does not page, and is backed by the ad list' {
+    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22') -AdListName 'bakers-ad-list-2026-09-16.json' -AdListTo '2026-09-22' -AdOwed 0 -AdTotal 85
+    (-not $sb.page) -and ($sb.backed_by -eq 'ad-list') -and (-not $sb.ad_list_gap)
+  }
+  Test-CacCase 'MUST NOT FIRE  a BLIND ask count (no out\regular to read) is never read as asked' {
+    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22') -AdListName 'bakers-ad-list-2026-09-16.json' -AdListTo '2026-09-22' -AdOwed 0 -AdTotal 85 -AdBlind
     $sb.page -and (-not $sb.backed_by)
   }
-  Test-CacCase 'MUST NOT FIRE  a Baker''s calendar backed by API promo rows to 09-22 does not page from this check, and still reports the closed flyer as a gap to LOG' {
-    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22') -SupplementName 'bakers-deals-2026-09-09.json' -SupplementTo '2026-09-15' -ApiName 'bakers-regular-2026-09-18.json' -ApiAdTo @('2026-09-22', '2026-11-18', '2026-09-21')
-    (-not $sb.page) -and ($sb.backed_by -eq 'api') -and $sb.supplement_gap -and ($sb.api_rows -eq 2)
+  Test-CacCase 'WORDING  the Baker''s page names the recovery (pull-bakers-ad-list.ps1 -AdId, then the API lane) and neither the retired flyer agent nor a stale-price claim' {
+    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22')
+    $st = Get-AdScheduleAlertText -Backing $sb -SchedTo '2026-09-22' -Detected '2026-09-16'
+    ($st.body -match 'pull-bakers-ad-list\.ps1 -AdId') -and ($st.body -match 'pull-regular-bakers-api\.ps1') -and ($st.body -match 'no Baker''s weekly ad list covers it') -and
+      ($st.body -notmatch 'Wednesday Chrome agent') -and ($st.body -notmatch 'keeps pricing cells from the PREVIOUS ad')
   }
   Test-CacCase 'CLEAN TWIN  Fareway (calendar and deals file share one producer) still pages as before: 08-02..08-08 over a deals file that closed 08-01' {
     $sb = Get-AdScheduleBacking -Store 'Fareway' -SchedTo ([datetime]'2026-08-08') -SupplementName 'fareway-deals-2026-07-26.json' -SupplementTo '2026-08-01'
@@ -731,12 +752,21 @@ foreach ($s in $stores) {
 # It also could not self-heal: fareway-daily-due.ps1 fires on next_pull, and once next_pull had advanced to
 # 08-09 the missed 08-02 pull became unreachable. A gate that can only arm on a date already behind it is
 # the gates-that-can-never-arm shape, so the check has to be on the DATA, not on the calendar.
-$adSupplement = @{ "Baker's" = 'bakers\bakers-deals-*.json'; 'Fareway' = 'fareway\fareway-deals-*.json' }
+# BAKER'S FLYER DEPENDENCY RETIRED (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md). Baker's weekly ad is
+# now its own offer list (pull-bakers-ad-list.ps1) plus the Kroger API asking every term it routes, so Baker's is
+# judged on Get-BakersAdCaptureState below, never on out\bakers\bakers-deals-*.json. Old flyer files stay readable
+# (compare-deals still takes one through -BakersFile and refuses it once expired); nothing here expects a new one.
+$adSupplement = @{ 'Fareway' = 'fareway\fareway-deals-*.json' }
+$adListStores = @{ "Baker's" = $true }
 foreach ($rec in $newStores) {
   $g = $adSupplement[[string]$rec.store]
-  if (-not $g -or -not $rec.current -or -not $rec.current.to) { continue }
-  $newest = Get-ChildItem (Join-Path $OutDir $g) -ErrorAction SilentlyContinue |
-            Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  $isAdList = $adListStores.ContainsKey([string]$rec.store)
+  if ((-not $g -and -not $isAdList) -or -not $rec.current -or -not $rec.current.to) { continue }
+  $newest = $null
+  if ($g) {
+    $newest = Get-ChildItem (Join-Path $OutDir $g) -ErrorAction SilentlyContinue |
+              Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  }
   $fileTo = $null; $sdSupRows = 0
   if ($newest) { try { $j = Get-Content $newest.FullName -Raw -Encoding UTF8 | ConvertFrom-Json; if ($j.ad_to) { $fileTo = [datetime]$j.ad_to }; $sdSupRows = @($j.deals).Count } catch {} }
   $schedTo = $null; try { $schedTo = [datetime]$rec.current.to } catch {}
@@ -753,9 +783,16 @@ foreach ($rec in $newStores) {
       try { $sdApiDoc = Read-JsonFile $sdApiF.FullName; $sdApiAdTo = @(@($sdApiDoc.deals) | ForEach-Object { [string]$_.ad_to } | Where-Object { $_ }) } catch { $sdApiAdTo = @() }
     }
   }
-  $sdBack = Get-AdScheduleBacking -Store ([string]$rec.store) -SchedTo $schedTo -SupplementName $(if ($newest) { $newest.Name } else { '' }) -SupplementTo $fileTo -ApiName $sdApiName -ApiAdTo $sdApiAdTo
-  if (($sdBack.backed_by -eq 'api') -and $sdBack.supplement_gap) {
-    Log ("SCHEDULE-VS-DATA $($rec.store): current.to=$($rec.current.to) is backed by the API capture $($sdBack.api_name) ($($sdBack.api_rows) promo row(s) run to it); the flyer supplement is $($sdBack.have), so flyer coverage is lost until it lands. Not paged here: audit-row-age pages AD COVERAGE GONE under the 24h owned-gap rule (Q1-bakers-flyer-lane).")
+  # The ad list that covers the schedule's own window end, and how many of its routed terms are still owed an ask.
+  $bkState = $null
+  if ($isAdList) {
+    try { $bkState = Get-BakersAdCaptureState -OutDir $OutDir -Date $schedTo.ToString('yyyy-MM-dd') } catch { Log ("SCHEDULE-VS-DATA $($rec.store): the ad-list state could not be read (" + $_.Exception.Message + ") - judged as NOT backed"); $bkState = $null }
+  }
+  $sdBack = Get-AdScheduleBacking -Store ([string]$rec.store) -SchedTo $schedTo -SupplementName $(if ($newest) { $newest.Name } else { '' }) -SupplementTo $fileTo -ApiName $sdApiName -ApiAdTo $sdApiAdTo `
+              -AdListName $(if ($bkState -and $bkState.HasList) { [string]$bkState.List } else { '' }) -AdListTo $(if ($bkState) { [string]$bkState.AdTo } else { '' }) `
+              -AdOwed $(if ($bkState) { [int]$bkState.Owed } else { -1 }) -AdTotal $(if ($bkState) { [int]$bkState.Total } else { 0 }) -AdBlind:$(if ($bkState) { [bool]$bkState.Blind } else { $false })
+  if ($sdBack.backed_by -eq 'ad-list') {
+    Log ("SCHEDULE-VS-DATA $($rec.store): current.to=$($rec.current.to) is backed by the ad list $($sdBack.ad_list): all $($sdBack.ad_total) routed term(s) asked inside the window ($($sdBack.api_rows) API promo row(s) run to it).")
   }
   if ($sdBack.page) {
     $have = $sdBack.have
@@ -772,7 +809,7 @@ foreach ($rec in $newStores) {
     $sdDetected = [string](@(@($rec.history) | Where-Object { [string]$_.from -eq [string]$rec.current.from }) | Select-Object -Last 1).detected
     $sdText = Get-AdScheduleAlertText -Backing $sdBack -SchedTo ([string]$rec.current.to) -Detected $sdDetected -SupplementRows $sdSupRows
     $summary += $sdText.summary
-    Log ("SCHEDULE-AHEAD-OF-DATA $($rec.store): current.to=$($rec.current.to) but " + $(if ([string]$rec.store -eq "Baker's") { 'the API capture ' + $(if ($sdBack.api_name) { $sdBack.api_name + ' carries 0 promo rows to it' } else { 'is missing' }) + '; flyer ' } else { '' }) + "capture is $have")
+    Log ("SCHEDULE-AHEAD-OF-DATA $($rec.store): current.to=$($rec.current.to) but " + $(if ($isAdList) { $(if ($bkState) { [string]$bkState.Why } else { 'the ad-list state could not be read' }) + '; ad list ' } else { '' }) + "capture is $have")
     if (-not $NoAlert) { try { Send-Alert -Subject ("$($rec.store) ad window advanced with no capture behind it") -Body $sdText.body | Out-Null } catch {} }
   }
 }

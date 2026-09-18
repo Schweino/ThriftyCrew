@@ -381,6 +381,97 @@ try {
   if (-not $rJ.Blind -and @($rJ.Owed).Count -eq 0 -and @($wlJ.RulingTerms).Count -eq 0) {
     Ok 'a checkout with no ruling file at all owes nothing and does not throw'
   } else { Bad ("no-ruling case: blind=$($rJ.Blind) owed=$(@($rJ.Owed).Count) ruling=$(@($wlJ.RulingTerms).Count)") }
+
+  # ---- BAKER'S WEEKLY AD TERMS (2026-09-18, design\PLAN-bakers-weekly-ad-feed-2026-09-18.md) ------------------
+  # The ad list for 2026-09-16..09-22 routes three terms over two commodities (shredded-cheese carries two).
+  # Owed = those terms minus receipts (capture_terms success/empty) in a bakers-regular file written INSIDE the
+  # window. The shapes below are the lane's own: bakers-regular-<date>.json with week_of and capture_terms.
+  $bkOut = Join-Path $tmp 'bk-out'
+  New-Item -ItemType Directory -Path (Join-Path $bkOut 'bakers') -Force | Out-Null
+  New-Item -ItemType Directory -Path (Join-Path $bkOut 'regular') -Force | Out-Null
+  $bkList = [ordered]@{ store = "Baker's"; ad_id = '79d2baa2-eec6-4a91-9ffa-51c1c46fd2a4'; ad_from = '2026-09-16'; ad_to = '2026-09-22'
+                        terms = @([ordered]@{ id = 'apples'; term = 'apples' }, [ordered]@{ id = 'shredded-cheese'; term = 'shredded cheese' },
+                                  [ordered]@{ id = 'shredded-cheese'; term = 'shredded cheddar' }) }
+  [IO.File]::WriteAllText((Join-Path $bkOut 'bakers\bakers-ad-list-2026-09-16.json'), ($bkList | ConvertTo-Json -Depth 5))
+  function BkRegular([string]$name, [string]$weekOf, [object[]]$receipts) {
+    $doc = [ordered]@{ store = "Baker's"; week_of = $weekOf; rotation_mode = 'rotation'; pull_terms = 1; capture_terms = $receipts; deal_count = 0; deals = @() }
+    [IO.File]::WriteAllText((Join-Path $bkOut ('regular\bakers-regular-' + $name + '.json')), ($doc | ConvertTo-Json -Depth 6))
+  }
+  function BkReceipt([string]$id, [string]$term, [string]$outcome) { [ordered]@{ term_key = $id; term = $term; ordinal = 0; outcome = $outcome; row_count = 3 } }
+  $bkPlan0 = Get-CapturePlan -Store "Baker's" -Today '2026-09-18'
+  $bkAll = @(Get-AllTerms)
+  $noAd = Get-BakersAskPlan -AllTerms $bkAll -Plan $bkPlan0 -CursorStart 0 -AdOwed @()
+
+  # K. MUST FIRE - a current list with nothing asked owes every routed term, and they lead the ask list whole-
+  #    commodity, while the rotation keeps its drip: the cursor lands exactly where it would with no ad at all.
+  $oK = Get-BakersAdOwed -OutDir $bkOut -Date '2026-09-18'
+  $aK = Get-BakersAskPlan -AllTerms $bkAll -Plan $bkPlan0 -CursorStart 0 -AdOwed @($oK.Owed)
+  $tK = @($aK.Terms | ForEach-Object { $_.term })
+  if ($oK.HasList -and @($oK.Owed).Count -eq 3 -and $tK[0] -eq 'apples' -and ($tK[1..2] -contains 'shredded cheese') -and ($tK[1..2] -contains 'shredded cheddar') -and
+      $aK.CursorNext -eq $noAd.CursorNext -and @($aK.Slice.Items).Count -eq @($noAd.Slice.Items).Count) {
+    Ok "MUST FIRE  the weekly ad's 3 owed terms lead Baker's asks [$($tK -join ', ')] and the cursor still lands on #$($aK.CursorNext), the same as with no ad"
+  } else { Bad ("ad lead: hasList=$($oK.HasList) owed=$(@($oK.Owed).Count) asks=[$($tK -join ',')] cursor $($aK.CursorNext) vs $($noAd.CursorNext)") }
+  $wlK = Get-CaptureWorklist -Store "Baker's" -Today '2026-09-18' -OutDir $bkOut
+  $wtK = @($wlK.Terms | ForEach-Object { $_.term })
+  if (@($wlK.AdTerms).Count -eq 3 -and $wtK[0] -eq 'apples' -and $wlK.AdList -eq 'bakers-ad-list-2026-09-16.json') { Ok 'MUST FIRE  the Baker''s worklist file carries the owed terms as ad_terms at the head of terms' }
+  else { Bad ("worklist ad_terms=$(@($wlK.AdTerms).Count) terms=[$($wtK -join ',')] list=$($wlK.AdList)") }
+
+  # L. MUST FIRE - receipts that do not prove an ask INSIDE this window discharge nothing: a file from before the
+  #    window, a targeted merge named inside it that still carries an older file's receipts (week_of 09-14), and
+  #    a 'blocked' receipt (the request failed twice) are all still owed.
+  BkRegular '2026-09-14' '2026-09-14' @((BkReceipt 'apples' 'apples' 'success'))
+  BkRegular '2026-09-17' '2026-09-14' @((BkReceipt 'apples' 'apples' 'success'), (BkReceipt 'shredded-cheese' 'shredded cheese' 'success'))
+  BkRegular '2026-09-18' '2026-09-18' @((BkReceipt 'shredded-cheese' 'shredded cheddar' 'blocked'), (BkReceipt 'apples' 'apples' 'not_asked'))
+  $oL = Get-BakersAdOwed -OutDir $bkOut -Date '2026-09-18'
+  $sL = Get-BakersAdCaptureState -OutDir $bkOut -Date '2026-09-18'
+  if (@($oL.Owed).Count -eq 3 -and -not $sL.Captured -and $sL.HasList -and $sL.Owed -eq 3) { Ok 'MUST FIRE  a pre-window receipt, a targeted merge carrying old receipts, a blocked and a not_asked receipt discharge nothing; the ad is NOT captured' }
+  else { Bad ("owed=$(@($oL.Owed).Count) [$(@($oL.Owed) -join ',')] captured=$($sL.Captured)") }
+
+  # M. MUST FIRE - no list for the day is its own state (it pages downstream), and owes nothing to ask.
+  $sM = Get-BakersAdCaptureState -OutDir $bkOut -Date '2026-09-24'
+  $oM = Get-BakersAdOwed -OutDir $bkOut -Date '2026-09-24'
+  if (-not $sM.Captured -and -not $sM.HasList -and @($oM.Owed).Count -eq 0 -and $sM.Why -match 'no Baker''s ad list covers 2026-09-24') { Ok 'MUST FIRE  a day no ad list covers is NOT captured, and says which day' }
+  else { Bad ("no-list: captured=$($sM.Captured) hasList=$($sM.HasList) why=$($sM.Why)") }
+
+  # N. THE CAP HOLDS AND AN EXPIRY THE AD DISPLACED IS NOT MARKED. With Baker's cap at rotation + 1 the allowance
+  #    is ONE term: apples fits, shredded-cheese (two terms) waits for tomorrow, and a Baker's sale expiry gives way
+  #    to the ad - it is not in ExpiringKept, which is all the lane passes to Set-SaleExpiryProcessed.
+  $bkCapWas = $script:StoreCallCap["Baker's"].cap
+  $swBk = @{ windows = @(@{ store = "Baker's"; id = 'butter'; sale_end = '2026-09-17'; refresh_on = '2026-09-18' }) }
+  $swPath = Join-Path $tmp 'sale-windows.json'
+  $swWas = [IO.File]::ReadAllText($swPath)
+  try {
+    [IO.File]::WriteAllText($swPath, ($swBk | ConvertTo-Json -Depth 4))
+    $script:StoreCallCap["Baker's"].cap = $bkPlan0.RotationTerms + 1
+    $pN = Get-CapturePlan -Store "Baker's" -Today '2026-09-18'
+    $aN = Get-BakersAskPlan -AllTerms $bkAll -Plan $pN -CursorStart 0 -AdOwed @($oL.Owed)
+    $tN = @($aN.Terms | ForEach-Object { $_.term })
+    if (@($pN.SaleExpiries) -contains 'butter' -and @($aN.AdTerms).Count -eq 1 -and $aN.AdDeferred -eq 1 -and $aN.ExpiryDeferredByAd -eq 1 -and
+        @($aN.ExpiringKept).Count -eq 0 -and $tN -notcontains 'butter' -and $aN.CursorNext -eq $noAd.CursorNext -and @($tN).Count -le $pN.CallCap) {
+      Ok "the cap holds (asked $(@($tN).Count) of cap $($pN.CallCap)), the 2-term commodity waits, and the displaced butter expiry is NOT marked processed"
+    } else { Bad ("cap: expiries=[$(@($pN.SaleExpiries) -join ',')] ad=$(@($aN.AdTerms).Count) deferred=$($aN.AdDeferred) expDef=$($aN.ExpiryDeferredByAd) kept=[$(@($aN.ExpiringKept) -join ',')] asks=[$($tN -join ',')]") }
+  } finally {
+    $script:StoreCallCap["Baker's"].cap = $bkCapWas
+    [IO.File]::WriteAllText($swPath, $swWas)
+  }
+
+  # O. CLEAN TWIN - the plan's own: on a non-ad day with the current list already asked (a rotation file written
+  #    inside the window whose receipts cover every routed term, one of them 'empty'), Baker's asks are exactly the
+  #    normal rotation drip again, and the ad is captured.
+  BkRegular '2026-09-19' '2026-09-19' @((BkReceipt 'apples' 'apples' 'success'), (BkReceipt 'shredded-cheese' 'shredded cheese' 'empty'), (BkReceipt 'shredded-cheese' 'shredded cheddar' 'success'))
+  $oO = Get-BakersAdOwed -OutDir $bkOut -Date '2026-09-20'
+  $aO = Get-BakersAskPlan -AllTerms $bkAll -Plan (Get-CapturePlan -Store "Baker's" -Today '2026-09-20') -CursorStart 0 -AdOwed @($oO.Owed)
+  $sO = Get-BakersAdCaptureState -OutDir $bkOut -Date '2026-09-20'
+  $wlO = Get-CaptureWorklist -Store "Baker's" -Today '2026-09-20' -OutDir $bkOut
+  if (@($oO.Owed).Count -eq 0 -and @($aO.AdTerms).Count -eq 0 -and @($aO.Terms).Count -eq $bkPlan0.RotationTerms -and $sO.Captured -and
+      @($wlO.AdTerms).Count -eq 0 -and @($wlO.Terms).Count -eq @($wlO.RotationTerms).Count) {
+    Ok "CLEAN TWIN  once every routed term has a receipt inside the window, Baker's asks are the normal $($bkPlan0.RotationTerms)-term rotation and the ad reads CAPTURED"
+  } else { Bad ("asked list: owed=$(@($oO.Owed).Count) adTerms=$(@($aO.AdTerms).Count) terms=$(@($aO.Terms).Count) captured=$($sO.Captured) why=$($sO.Why)") }
+
+  # P. MUST NOT FIRE - the ad prepends nothing to any other store's worklist.
+  $wlP = Get-CaptureWorklist -Store 'Family Fare' -Today '2026-09-18' -OutDir $bkOut
+  if (@($wlP.AdTerms).Count -eq 0 -and $wlP.AdTotal -eq 0) { Ok 'MUST NOT FIRE  a Baker''s ad list prepends nothing to another store''s worklist' }
+  else { Bad ("Family Fare picked up ad terms: $(@($wlP.AdTerms | ForEach-Object { $_.term }) -join ',')") }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
