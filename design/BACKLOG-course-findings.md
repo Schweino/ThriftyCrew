@@ -12674,3 +12674,80 @@ delegated) and write the list down. Only after that, decide whether `ghost-expor
 delegated site get a cap and a strictly-increasing check. **Not a gate**: a detector cannot tell a
 measure from a delegated exit by reading text, and a ratchet over a count of `while ($true)` would
 count the safe ones too.
+
+### I198 - the friday email send retries a POST that mails the list, and writes its once-a-week stamp only after the call returns `OPEN` `queue-3` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\q3-distjava-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Packt, *Building Modern Distributed Systems with Java* (`packt-building-modern-distributed-systems-with-java-fpk3r`), lecture "Idempotent Service Design", worked 2026-09-18. Its second test of any service is: the call SUCCEEDED, the reply was lost, the caller retries - what happens? Its remedy for a callee that cannot be made idempotent is to durably record "invoking, key K" BEFORE the call and "invoked" after it, and to refuse to retry (raise it to a human) when "invoking" is found without "invoked".
+
+**What was read, at 574f6a380.** `grocery/send-friday-email.ps1:80` sends the list by `Invoke-GhostApi -Method POST` against `/ghost/api/admin/posts/?newsletter=...&email_segment=all` with `-TimeoutSec 60`. `lib/ghost-lib.ps1:262-269` retries ANY method, POST included, on a timeout, a 429, any 5xx or a status-0 socket error, up to `MaxRetries` 3 (so up to 4 POSTs). A Ghost POST to `/posts/` creates a new post each time; with `?newsletter=` and `status=published` each one is a send. The script's own once-per-week guard (`friday-email.stamp`, read at line 49) is written at line 83, AFTER the call returns. Its header (lines 12-13) says a double-run "cannot mail the list twice"; that holds for a clean second run, not for a timeout or crash between Ghost accepting the send and line 83.
+
+So two windows can each mail the list twice: (1) Ghost accepts the POST and sends, the reply exceeds 60 s or returns a 5xx after the effect, and `Invoke-GhostApi` POSTs again; (2) the process dies after the send and before the stamp, and the next scheduled or manual run finds no stamp. Neither has been observed; this is a reading of the code, not an incident.
+
+**The same shape, lower stakes:** `meal-prep/engine/publish.ps1:280` creates a new recipe post by POST through the same retry. A retried create after a lost reply makes a second post (Ghost de-duplicates the slug by suffixing, it does not refuse), so a paid recipe could exist twice. Not checked: whether a later step would notice the duplicate.
+
+**The proposed change, not made:** (a) `Invoke-GhostApi` retries a POST only when the failure proves the request was never accepted (a refused connection), never on a timeout or 5xx; (b) `send-friday-email` writes an "invoking week W" marker before the POST and "sent week W" after, and a run that finds "invoking" without "sent" refuses and alerts instead of sending. First rung is building (a) with a MUST FIRE fixture: a stubbed POST that times out is attempted exactly once.
+
+### I199 - the idempotency rule in ops-and-gates says no header states it, and one does `OPEN` `queue-3` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q3-distjava-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same course, 2026-09-18, measured against `.claude/rules/ops-and-gates.md`, section "The words these rules were written without", which says of the estate's retries that "none of them says which" (idempotent or not) and that "no header claims it".
+
+**Measured 2026-09-18 at 574f6a380**, over `git ls-files '*.ps1' '*.py'` minus `archive/` (912 files): 75 files use the word retry, retries or retried; 75 files mention `idempot`; 9 files do both, and a mention is not necessarily about that file's retry. Of the nine `lib\*.ps1` files that mention a retry, exactly one says whether its retried operation is idempotent: `lib/append-line.ps1:18` ("append is NOT idempotent: a retried write duplicates a line, which is why only the OPEN below is retried"). `lib/atomic-write.ps1`, whose idempotence the rules file cites as the example, does not use the word.
+
+So the rule's direction is right and its absolute is wrong in one place. The proposed change is a one-line correction to the rules text (name `append-line.ps1:18` as the one header that states it, and `atomic-write.ps1` as the one that should), and the first place to apply the rule is the Ghost retry in the finding above, which is the estate's one retry of an operation with an external, irreversible effect that was found in this pass.
+
+### I200 - price_observations holds 34 rows priced 0.0, and only a match-status filter keeps them off the board `OPEN` `queue-3` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q3-sqlint-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `sql-performance-testing-and-data-integrity` (queue 3 entry 4), whose integrity half asks
+which data-quality checks could be declared constraints instead. Measured read-only (`mode=ro`) on
+2026-09-18 against `graph/sqlite/graph.db`, ThriftyCrew at `574f6a380`, SQLite 3.49.1.
+
+**What is there.** `SELECT count(*) FROM price_observations WHERE price <= 0` returns **34 of 44,750**.
+All 34 are exactly `0.0`, all observed `2026-08-29`, all `source_file = grocery/product-urls.json`,
+all `price_type = everyday`, stores Aldi, Sam's and Walmart, match statuses `no_include_hit` and
+`llm_match_unverified` only. 11 of their (commodity, store) pairs also have a `cell_state` row, and
+`cell_state` itself carries **0** non-positive prices (`everyday_price <= 0` over 3,229 priced rows).
+
+**Why it is harmless today, and why that is incidental.** `graph/pipeline/state.py:93-99` selects
+observations `WHERE match_status IN ('include_hit','llm_confirmed') AND basis_flag IS NULL AND price
+IS NOT NULL`. The zeros are kept out by their match STATUS, not by any rule about the price: the
+`price IS NOT NULL` clause lets a `0.0` through. If any of those 34 is later confirmed (an
+`llm_match_unverified` row is exactly the kind a later verifier promotes), a zero-priced observation
+becomes eligible for the board with nothing to refuse it. Not checked: whether the verifier path
+rewrites the price on promotion.
+
+**The question, in order.** (1) Is `0.0` here a price or an "unknown" written in the price column
+(the importer at `graph/import/importers.py:471` reads `product-urls.json`, whose entries are links,
+and passes `v.get("price")` through)? (2) If unknown, the stored value should be `NULL`, which the
+existing `price IS NOT NULL` filter already handles. (3) Only then consider a declared guard:
+SQLite cannot add a `CHECK` to an existing column without a table rebuild (measured 2026-09-18,
+`database-craft/changing-a-schema.md` 7b), and `graph/sqlite/schema.sql` already records a ruling
+against `CHECK`s on `decision_log` for that reason, so a read-time `price > 0` in `state.py` or an
+importer-side refusal is the cheaper place. **No fix is proposed here**, because (1) is a question
+about the data and not the code.
+
+### I201 - the course's two hash-drift implementations are both blind, measured, and nothing here copies them yet `OPEN` `queue-3` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q3-sqlint-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `sql-performance-testing-and-data-integrity` module 9 and its project solution key.
+Measured 2026-09-18 in a scratch Python/SQLite probe (in-memory, nothing written to the estate).
+
+(1) The lecture alerts on the percentage change in the COUNT of distinct row hashes per group. 300
+rows with 100 values changed gave a distinct count of 300 before and after: **0%, "STABLE"**, while
+the set difference was 100 gone and 100 new. (2) The solution key samples with `ORDER BY random()
+LIMIT n` and compares the hash of the sample: on an UNCHANGED 5,000-row table, 10 runs gave 10
+distinct hashes, a false drift on **9 of 9** comparisons; a key-modulus sample gave 1 of 10.
+
+**Why file it for the estate.** Nothing in ThriftyCrew implements either today (checked by reading
+`data-quality-craft` and grepping for `ORDER BY random` over `git ls-files`, 0 hits in `.py`/`.ps1`/
+`.sql`), so this is a do-not-copy note rather than a defect. The written account, with the correct
+shape (compare SETS keyed by primary key, sample deterministically by key), is
+`~/.claude/skills/data-quality-craft/checks-and-thresholds.md` 5c. The one rung is to cite that
+section from whatever design doc next proposes a board-level change detector, so the course's
+version is not the one that gets built.
