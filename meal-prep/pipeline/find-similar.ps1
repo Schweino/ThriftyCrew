@@ -158,10 +158,18 @@ function Get-Matches {
 
 # ---- self-test -------------------------------------------------------------------------------------
 if ($runSelfTest) {
-  $bad = 0
+  $bad = 0; $script:cases = 0; $script:blindCases = 0
   function T([string]$n, [bool]$ok, [string]$got) {
+    $script:cases++
     if ($ok) { Write-Output ("  ok    " + $n) } else { Write-Output ("  X     " + $n + "   got: " + $got); $script:bad++ }
   }
+  # HOW MANY CASES A CHECKOUT WITHOUT THE DIGEST CANNOT RUN (backlog I227, 2026-09-18): the existence case, the
+  # nine cases over the live digest below, and the CLEAN TWIN that checks this number. The digest is gitignored
+  # and reaches a worktree only by ops\seed-worktree.ps1, and push-main's pre-lock gate does not seed first, so
+  # an unseeded worktree used to FAIL here (exit 2, "the digest exists") for a reason that says nothing about
+  # the change being pushed. A could-not-look is now counted BLIND on the marker, never a fail and never a pass,
+  # scored on the whole block it skips rather than the one case that noticed (wave-preaudit is the exemplar).
+  $DIGEST_BLIND_CASES = 11
 
   T 'stop-words are dropped so method words do not drive the match' ((Get-Tokens 'Slow Cooker Beef Stew') -notcontains 'slow') ((Get-Tokens 'Slow Cooker Beef Stew') -join ',')
   T 'significant words survive' ((Get-Tokens 'Slow Cooker Beef Stew') -contains 'beef') ((Get-Tokens 'Slow Cooker Beef Stew') -join ',')
@@ -181,7 +189,6 @@ if ($runSelfTest) {
   T 'the low-carb-korean-beef-bulgogi / beef-bulgogi-rice-bowls collision is caught' (
       (Get-Score (Get-Tokens 'Low Carb Korean Beef Bulgogi') (Get-Tokens 'Beef Bulgogi Rice Bowls') @() @()).score -ge 20
     ) ([string](Get-Score (Get-Tokens 'Low Carb Korean Beef Bulgogi') (Get-Tokens 'Beef Bulgogi Rice Bowls') @() @()).score)
-  T 'MUST FIRE  the digest exists where the sourcer prompts will point' (Test-Path $DigestFile) $DigestFile
 
   # ---- the ingredient channel, plugged in (D12 rung 1) --------------------------------------------
   T 'an item id and an ingredient word meet in the same namespace - `heavy cream` finds heavy-cream' (
@@ -210,7 +217,18 @@ if ($runSelfTest) {
   # wearing the first one's name. Asserted against the live digest, on the collision that founded this
   # file (two names for one bulgogi), because a fixture over a synthetic digest would prove nothing
   # about the shape harvest.py actually sends.
-  if (Test-Path $DigestFile) {
+  $casesBeforeDigest = $script:cases
+  $haveDigest = [bool](Test-Path -LiteralPath $DigestFile)
+  if ($haveDigest) {
+    T 'MUST FIRE  the digest exists where the sourcer prompts will point' (Test-Path -LiteralPath $DigestFile) $DigestFile
+  } else {
+    . (Join-Path $repo 'lib\seed-hint.ps1')
+    $digestHint = Get-TcMissingInputHintHere -Repo $repo -Missing $DigestFile
+    $script:blindCases += $DIGEST_BLIND_CASES
+    Write-Output ('  BLIND the digest exists where the sourcer prompts will point - could not look, NOT passed. The ' + $DIGEST_BLIND_CASES + ' case(s) that need it did not run. missing: ' + $DigestFile + $(if ($digestHint) { ' [' + $digestHint + ']' } else { '' }))
+  }
+
+  if ($haveDigest) {
     $dg = Get-Content $DigestFile -Raw -Encoding utf8 | ConvertFrom-Json
     $one = @(Get-Matches $dg 'Creamy Tuscan Chicken' 'chicken' @() 5)
     $bf = Join-Path $env:TEMP ('fs-batch-' + [guid]::NewGuid().ToString('N') + '.json')
@@ -272,11 +290,19 @@ if ($runSelfTest) {
     T 'MUST FIRE  with the channel unplugged - items empty, as score_pool sent for every candidate - the same pair is INVISIBLE' (
         @($blindTwin | Where-Object { $_.slug -eq 'creamy-tuscan-chicken-skillet' }).Count -eq 0
       ) (@($blindTwin | ForEach-Object { $_.slug }) -join ',')
+    # THE SEEING ARM KEEPS THE BLIND ARM'S NUMBER HONEST. $DIGEST_BLIND_CASES is what a checkout without the
+    # digest reports as not covered; only a checkout WITH it can count what that really is. The `+ 1` is this
+    # case, which a blind run never reaches either. Add a case above without moving the constant and this goes red.
+    T 'CLEAN TWIN the digest block ran exactly the case count a BLIND checkout reports as not covered ($DIGEST_BLIND_CASES)' (
+        ($script:cases - $casesBeforeDigest + 1) -eq $DIGEST_BLIND_CASES
+      ) ("ran {0} incl. this one; the constant says {1}" -f ($script:cases - $casesBeforeDigest + 1), $DIGEST_BLIND_CASES)
   }
 
-  if ($bad -gt 0) { Write-Output ("find-similar SELF-TEST FAIL ({0})" -f $bad); exit 2 }
-  Write-Output 'find-similar SELF-TEST PASS'
-  Exit-Guard -Name 'find-similar' -Summary 'selftest pass' -Code 0
+  if ($bad -gt 0) { Write-Output ("find-similar SELF-TEST FAIL ({0})" -f $bad); Exit-Guard -Name 'find-similar' -Summary ("failed={0} cases={1} blind={2}" -f $bad, $script:cases, $script:blindCases) -Code 2 }
+  # cases + blind is the whole suite, so the coverage is on the line (measurement.md: a rate carries its denominator).
+  if ($script:blindCases -gt 0) { Write-Output ("find-similar SELF-TEST PASS ({0} of {1} cases ran), {2} case(s) BLIND - could not look, NOT passed" -f $script:cases, ($script:cases + $script:blindCases), $script:blindCases) }
+  else { Write-Output ("find-similar SELF-TEST PASS ({0} cases)" -f $script:cases) }
+  Exit-Guard -Name 'find-similar' -Summary ("selftest pass cases={0} blind={1}" -f $script:cases, $script:blindCases) -Code 0
 }
 
 # ---- query -----------------------------------------------------------------------------------------

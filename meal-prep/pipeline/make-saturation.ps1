@@ -63,12 +63,24 @@ function Get-RowFamily { param($Row)
   return Get-Family ([string]$Row.name) }
 
 if ($runSelfTest) {
-  $bad=0
-  function T([string]$n,[bool]$ok,[string]$got){ if($ok){Write-Output ("  ok    "+$n)}else{Write-Output ("  X     "+$n+"   got: "+$got); $script:bad++} }
+  $bad=0; $script:cases=0; $script:blindCases=0
+  function T([string]$n,[bool]$ok,[string]$got){ $script:cases++; if($ok){Write-Output ("  ok    "+$n)}else{Write-Output ("  X     "+$n+"   got: "+$got); $script:bad++} }
   T 'family vocabulary matches considered-dishes (cream)' ((Get-Family 'Creamy Tuscan Chicken') -eq 'cream') (Get-Family 'Creamy Tuscan Chicken')
   T 'family vocabulary matches considered-dishes (soy)' ((Get-Family 'Beef Egg Roll in a Bowl') -eq 'soy') (Get-Family 'Beef Egg Roll in a Bowl')
   T 'an unmatched name is plain, not an error' ((Get-Family 'Roast Beef') -eq 'plain') (Get-Family 'Roast Beef')
-  T 'MUST FIRE  the digest exists to derive from' (Test-Path $DigestFile) $DigestFile
+  # A CHECKOUT WITHOUT THE DIGEST COULD NOT LOOK, and that is BLIND, never a fail (backlog I227, 2026-09-18). The
+  # digest is gitignored and reaches a worktree only by ops\seed-worktree.ps1, and push-main's pre-lock gate does
+  # not seed first, so an unseeded worktree failed this suite (exit 2) for a reason that says nothing about the
+  # change being pushed. Only this one case reads the digest, so a blind run skips exactly 1 case, and the marker's
+  # blind= says so on a green run instead of the run reading as fully covered.
+  if (Test-Path -LiteralPath $DigestFile) {
+    T 'MUST FIRE  the digest exists to derive from' (Test-Path -LiteralPath $DigestFile) $DigestFile
+  } else {
+    . (Join-Path $repo 'lib\seed-hint.ps1')
+    $digestHint = Get-TcMissingInputHintHere -Repo $repo -Missing $DigestFile
+    $script:blindCases += 1
+    Write-Output ('  BLIND the digest exists to derive from - could not look, NOT passed. missing: ' + $DigestFile + $(if ($digestHint) { ' [' + $digestHint + ']' } else { '' }))
+  }
 
   # ---- THE GARNISH CLEAN TWIN (D12's named fixture) ----------------------------------------------
   # A dinner with shredded cheese on top is not a cheese dish, and the sourcer map must never file it
@@ -96,9 +108,10 @@ if ($runSelfTest) {
   $fake = @([pscustomobject]@{protein='beef';family='plain';count=103}, [pscustomobject]@{protein='chicken';family='curry';count=15})
   $vis = @($fake | Where-Object { $_.count -ge $CrowdedAt -and [string]$_.family -ne 'plain' })
   T 'MUST FIRE  a huge `plain` region is NOT briefed as saturated' (@($vis).Count -eq 1 -and $vis[0].family -eq 'curry') (@($vis | ForEach-Object { $_.family }) -join ',')
-  if ($bad -gt 0) { Write-Output ("make-saturation SELF-TEST FAIL ({0})" -f $bad); exit 2 }
-  Write-Output 'make-saturation SELF-TEST PASS'
-  Exit-Guard -Name 'make-saturation' -Summary 'selftest pass' -Code 0
+  if ($bad -gt 0) { Write-Output ("make-saturation SELF-TEST FAIL ({0})" -f $bad); Exit-Guard -Name 'make-saturation' -Summary ("failed={0} cases={1} blind={2}" -f $bad, $script:cases, $script:blindCases) -Code 2 }
+  if ($script:blindCases -gt 0) { Write-Output ("make-saturation SELF-TEST PASS ({0} of {1} cases ran), {2} case(s) BLIND - could not look, NOT passed" -f $script:cases, ($script:cases + $script:blindCases), $script:blindCases) }
+  else { Write-Output ("make-saturation SELF-TEST PASS ({0} cases)" -f $script:cases) }
+  Exit-Guard -Name 'make-saturation' -Summary ("selftest pass cases={0} blind={1}" -f $script:cases, $script:blindCases) -Code 0
 }
 
 if ($runBrief -and (Test-Path $OutFile)) {
