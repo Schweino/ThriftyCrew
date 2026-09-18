@@ -1401,16 +1401,62 @@ if ($r.rc -eq 2 -and $r.text -match 'pistachios' -and $r.text -match 'class=beve
 }
 # MUST NOT FIRE: real pistachios (the Aldi row that takes the crown and the Baker's row that takes the cell
 # after the fix), and the Gatorade protein bar on protein-bars. That last one is why variant B3 (all 21 non-drink
-# snacks) was measured and REJECTED: 'gatorade' is a beverage token, and protein-bars is not in apply_ids, so the
-# class must not reach it. per_unit is read here only as > 0; the guard judges the item NAME.
+# snacks) was first measured and REJECTED: the bare 'gatorade' beverage token claimed Gatorade's own protein bars.
+# Since 2026-09-18 (queue 2026-09-18-55b7aa, plan-2026-09-18-4) protein-bars IS in apply_ids and the token is
+# gatorade(?!.*\bprotein\s+bars?\b), so this row stays silent because the token no longer claims a protein bar,
+# not because the class is kept away. per_unit is read here only as > 0; the guard judges the item NAME.
 # store-subset-ok: must-not-fire fixture for the id-scoped beverage class - audit-food-category judges the item NAME per cell and reads store only to match a food-class-allowlist entry, so the class verdict never branches on store
 $isLegal = '{"week_of":"2026-09-17","comparison":[{"commodity":"Pistachios","id":"pistachios","unit":"oz","stores":[{"store":"Aldi","per_unit":0.4056,"item":"Southern Grove Pistachios 16 OZ"},{"store":"Baker''s","per_unit":0.4684,"item":"Simple Truth Shelled Roasted & Salted Pistachios"}]},{"commodity":"Protein Bars","id":"protein-bars","unit":"each","stores":[{"store":"Walmart","per_unit":1.0,"item":"Gatorade Chocolate Chip Protein Bar 2.8 Oz"}]}]}'
 Set-Content (Join-Path $fxIs 'comparison-2026-09-17.json') $isLegal -Encoding UTF8
 $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxIs)
-if ($r.rc -eq 0) { Ok 'food-category MUST NOT FIRE: real pistachios at Aldi and Baker''s and a Gatorade protein bar on protein-bars stay silent - the id-scoped beverage class reaches only the listed nut ids' }
-else { Bad ('food-category flagged real pistachios or the Gatorade protein bar (rc=' + $r.rc + ') - apply_ids leaked past its listed ids, or a category block gained beverage: ' + ($r.text -replace "`n", ' ')) }
+if ($r.rc -eq 0) { Ok 'food-category MUST NOT FIRE: real pistachios at Aldi and Baker''s and a Gatorade protein bar on protein-bars stay silent - the beverage class judges a drink, and its gatorade token does not claim a protein bar' }
+else { Bad ('food-category flagged real pistachios or the Gatorade protein bar (rc=' + $r.rc + ') - the gatorade token claims a protein bar again, or a class token is too broad for the id-scoped block: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxIs -Recurse -Force -ErrorAction SilentlyContinue
 } # u143-d5c-must-fire-for-id-scoped-classes
+
+# (d5d) MUST-FIRE for the WIDENED id scope (2026-09-18, queue 2026-09-18-55b7aa, triage-plans\plan-2026-09-18-4.json).
+# apply_ids now reaches the 20 other non-drink 'Snacks & Drinks' commodities (chips, crackers, cookies, bars, jerky,
+# cups...) as well as the five nuts. The class's bare 'gatorade' token claimed Gatorade's own protein bars, which broke
+# the library rule that a token is wrong for EVERY commodity in scope, so it became gatorade(?!.*\bprotein\s+bars?\b),
+# and snack_carrier gained \bprotein\s+bars?\b so Fruit, Vegetables and Meat lose no reach on a Gatorade bar.
+# NO founding row exists on the 20 (0 beverage products in 134 cells of the 2026-09-18 15:46:51 board), so the
+# MUST FIRE places REAL corpus names, frozen verbatim, on commodities the widening added: a Gatorade DRINK on
+# protein-bars proves the narrowed token still catches a drink exactly where Gatorade's bars legitimately live, and one
+# on tortilla-chips proves a plain snack id is in scope. The snack_carrier token HAS a founding row: Sam's 'Special K
+# Protein Bars, Strawberry, 18 ct.' was a strawberries candidate on that board (candidates-2026-09-17) until the bake
+# moved it to protein-bars. per_unit is read only as > 0. Never regenerate these rows from the board: the fix moved
+# them, so a regenerated fixture would pass by finding nothing ([[guard-fixture-rule]]).
+if (Use-Unit 'u143b-d5d-must-fire-for-the-widened-beverage-scope') {
+$fxWs = NewFxDir 'afc-widescope'
+$wsRow = '{"week_of":"2026-09-17","comparison":[{"commodity":"Protein Bars","id":"protein-bars","unit":"each","stores":[{"store":"Family Fare","per_unit":1.0,"item":"Gatorade Advanced Rehydration Fruit Punch Thirst Quencher 28 Fl Oz"}]},{"commodity":"Tortilla Chips","id":"tortilla-chips","unit":"oz","stores":[{"store":"Baker''s","per_unit":1.0,"item":"Gatorade Cool Blue Sports Drink Bottle"}]},{"commodity":"Strawberries","id":"strawberries","unit":"lb","stores":[{"store":"Sam''s Club","per_unit":1.0,"item":"Special K Protein Bars, Strawberry, 18 ct."}]}]}'
+Set-Content (Join-Path $fxWs 'comparison-2026-09-17.json') $wsRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxWs)
+if ($r.rc -eq 2 -and $r.text -match 'protein-bars\s+\[[^\]]*\]\s+class=beverage' -and $r.text -match 'tortilla-chips\s+\[[^\]]*\]\s+class=beverage' -and $r.text -match 'strawberries\s+\[[^\]]*\]\s+class=snack_carrier') {
+  Ok 'food-category MUST-FIRE: a Gatorade drink on protein-bars and on tortilla-chips hard-fails as beverage through the widened apply_ids, and the Special K protein bar on strawberries as snack_carrier (exit 2)'
+} else {
+  Bad ('food-category did NOT catch a Gatorade drink on protein-bars/tortilla-chips or the Special K bar on strawberries (rc=' + $r.rc + ') - apply_ids lost the 20 snack ids, the narrowed gatorade token stopped matching a drink, or snack_carrier lost protein bars: ' + ($r.text -replace "`n", ' '))
+}
+# CLEAN TWIN: the OLD scope still catches both Gatorade shapes after the token was narrowed. A Gatorade drink on
+# blueberries fires as beverage, and a Gatorade protein bar on strawberries (which the bare token used to catch as
+# 'beverage') now fires as snack_carrier, so narrowing the token cost Fruit, Vegetables and Meat no reach.
+$wsOld = '{"week_of":"2026-09-17","comparison":[{"commodity":"Blueberries","id":"blueberries","unit":"lb","stores":[{"store":"Walmart","per_unit":1.0,"item":"Gatorade Cool Blue flavor Thirst Quencher, 28 fl. oz. Bottle"}]},{"commodity":"Strawberries","id":"strawberries","unit":"lb","stores":[{"store":"Walmart","per_unit":1.0,"item":"Gatorade Chocolate Chip Protein Bar 2.8 Oz"}]}]}'
+Set-Content (Join-Path $fxWs 'comparison-2026-09-17.json') $wsOld -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxWs)
+if ($r.rc -eq 2 -and $r.text -match 'blueberries\s+\[[^\]]*\]\s+class=beverage' -and $r.text -match 'strawberries\s+\[[^\]]*\]\s+class=snack_carrier') {
+  Ok 'food-category CLEAN TWIN: on the old Fruit scope a Gatorade drink still fires as beverage and a Gatorade protein bar as snack_carrier (exit 2)'
+} else {
+  Bad ('food-category lost reach on the OLD scope after the gatorade token was narrowed (rc=' + $r.rc + '): ' + ($r.text -replace "`n", ' '))
+}
+# MUST NOT FIRE: real cells on ten of the twenty, frozen verbatim off the 2026-09-18 15:46:51 board (comparison-2026-09-17),
+# plus the Special K bar where it now lands. If this fires, a beverage token is too broad for the snack scope.
+# store-subset-ok: must-not-fire fixture for the widened beverage scope - audit-food-category judges the item NAME per cell and reads store only to match a food-class-allowlist entry, so the class verdict never branches on store
+$wsLegal = '{"week_of":"2026-09-17","comparison":[{"commodity":"Beef Jerky","id":"beef-jerky","unit":"oz","stores":[{"store":"Aldi","per_unit":0.998,"item":"Original Beef Jerky"}]},{"commodity":"Cookies (packaged)","id":"cookies","unit":"oz","stores":[{"store":"Aldi","per_unit":0.1106,"item":"Benton S Family Size Iced Oatmeal Cookies 18 OZ"}]},{"commodity":"Crackers (saltine/buttery)","id":"crackers","unit":"oz","stores":[{"store":"Aldi","per_unit":0.1156,"item":"Savoritz Original Saltine Crackers"}]},{"commodity":"Fruit Cups","id":"fruit-cups","unit":"each","stores":[{"store":"Sam''s Club","per_unit":0.4575,"item":"Member''s Mark Diced Peach Cups, 4 oz., 24 ct."}]},{"commodity":"Gelatin (Jell-O)","id":"gelatin","unit":"each","stores":[{"store":"Walmart","per_unit":0.92,"item":"Great Value Cherry Gelatin Dessert, 3 oz"}]},{"commodity":"Granola Bars","id":"granola-bars","unit":"each","stores":[{"store":"Walmart","per_unit":0.1558,"item":"Great Value Chocolate Chip Chewy Granola Bars, Family Size, 0.84 oz Paper Box, 48 Count"}]},{"commodity":"Protein Bars","id":"protein-bars","unit":"each","stores":[{"store":"Fareway","per_unit":0.3817,"item":"Pure Protein Chocolate Peanut Caramel Protein Bar"},{"store":"Sam''s Club","per_unit":1.0,"item":"Special K Protein Bars, Strawberry, 18 ct."}]},{"commodity":"Pudding Cups","id":"pudding-cups","unit":"each","stores":[{"store":"Sam''s Club","per_unit":0.2411,"item":"Snack Pack Pudding Variety Pack, 3.25 oz., 36 pk."}]},{"commodity":"Toaster Pastries","id":"toaster-pastries","unit":"each","stores":[{"store":"Aldi","per_unit":0.1692,"item":"Millville Strawberry Toaster Tarts 12 CT"}]},{"commodity":"Tortilla Chips","id":"tortilla-chips","unit":"oz","stores":[{"store":"Walmart","per_unit":0.143,"item":"Mama Lupe''s White Corn Tortilla Chips, 10 Oz."}]}]}'
+Set-Content (Join-Path $fxWs 'comparison-2026-09-17.json') $wsLegal -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxWs)
+if ($r.rc -eq 0) { Ok 'food-category MUST NOT FIRE: ten real snack cells off the 2026-09-18 board and the Special K bar on protein-bars stay silent under the widened beverage scope' }
+else { Bad ('food-category flagged a REAL snack cell under the widened beverage scope (rc=' + $r.rc + ') - a beverage token is too broad for the snack commodities: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxWs -Recurse -Force -ErrorAction SilentlyContinue
+} # u143b-d5d-must-fire-for-the-widened-beverage-scope
 
 # THE FRESHOP PAGER AND THE CIRCULAR PICKER (2026-09-11, queue 2026-09-10-fa6ad6). Family Fare's weekly-ad pull asked
 # Freshop for limit=200&page=N; Freshop clamps limit to 100 and ignores page=, so every ad file from 09-02 to 09-09

@@ -1,0 +1,914 @@
+{
+    "generated":  "2026-09-18T17:27:35",
+    "board_week":  "comparison-2026-09-17 (built 2026-09-18 15:46:51)",
+    "harness":  "scratch route-diff.ps1: first-match-wins routing through grocery\\match-lib.ps1 New-CommodityMatcher/Resolve-Commodity (the engine\u0027s own matcher) + Get-TcGlobalExclude, run at origin/main bee961f35495a2550990e33cdb59d3a9964788c1, match-lib.ps1 blob d69a4823d6e6fa906bd0243728f2a08260601736; BEFORE = commodities.json at that commit, AFTER = the shipped commodities.json (items 2 and 3 include edits, then apply-category-excludes.ps1 baked the item 1 library change)",
+    "corpus":  {
+                   "files":  [
+                                 "comparison-2026-09-17.json",
+                                 "candidates-2026-09-17.json",
+                                 "ads-2026-09-17.json",
+                                 "aldi-regular-2026-09-17.json",
+                                 "bakers-regular-2026-09-18.json",
+                                 "family-fare-regular-2026-09-18.json",
+                                 "fareway-regular-2026-09-12.json",
+                                 "hunter-aldi-regular-2026-08-16.json",
+                                 "hunter-bakers-regular-2026-08-16.json",
+                                 "hunter-familyfare-regular-2026-08-16.json",
+                                 "hunter-fareway-regular-2026-08-16.json",
+                                 "hunter-hyvee-regular-2026-08-16.json",
+                                 "hunter-samsclub-regular-2026-08-16.json",
+                                 "hunter-walmart-regular-2026-08-16.json",
+                                 "hyvee-regular-2026-09-18.json",
+                                 "sams-regular-2026-08-01.json",
+                                 "walmart-regular-2026-07-05.json",
+                                 "walmart-regular-2026-07-06.json",
+                                 "walmart-regular-2026-07-08.json",
+                                 "walmart-regular-2026-07-12.json",
+                                 "walmart-regular-2026-07-14.json",
+                                 "walmart-regular-2026-07-15.json",
+                                 "walmart-regular-2026-07-18.json",
+                                 "walmart-regular-2026-07-23.json",
+                                 "walmart-regular-2026-07-25.json",
+                                 "walmart-regular-2026-07-29.json",
+                                 "walmart-regular-2026-07-30.json",
+                                 "walmart-regular-2026-07-31.json",
+                                 "walmart-regular-2026-08-01.json",
+                                 "walmart-regular-2026-08-05.json",
+                                 "walmart-regular-2026-08-06.json",
+                                 "walmart-regular-2026-08-11.json",
+                                 "walmart-regular-2026-08-22.json",
+                                 "walmart-regular-2026-08-25.json",
+                                 "walmart-regular-2026-08-26.json",
+                                 "walmart-regular-2026-08-29.json",
+                                 "walmart-regular-2026-08-30.json",
+                                 "walmart-regular-2026-08-31.json",
+                                 "walmart-regular-2026-09-01.json",
+                                 "walmart-regular-2026-09-02.json",
+                                 "walmart-regular-2026-09-03.json",
+                                 "walmart-regular-2026-09-04.json",
+                                 "walmart-regular-2026-09-05.json",
+                                 "walmart-regular-2026-09-06.json",
+                                 "walmart-regular-2026-09-07.json",
+                                 "walmart-regular-2026-09-08.json",
+                                 "walmart-regular-2026-09-09.json",
+                                 "walmart-regular-2026-09-10.json",
+                                 "walmart-regular-2026-09-11.json",
+                                 "walmart-regular-2026-09-12.json",
+                                 "walmart-regular-2026-09-17.json",
+                                 "sams-deals-2026-07-05.json",
+                                 "sams-deals-2026-07-06.json",
+                                 "sams-deals-2026-07-08.json",
+                                 "sams-deals-2026-07-15.json",
+                                 "sams-deals-2026-07-17.json",
+                                 "sams-deals-2026-07-18.json",
+                                 "sams-deals-2026-07-23.json",
+                                 "sams-deals-2026-07-29.json",
+                                 "sams-deals-2026-08-01.json",
+                                 "sams-deals-2026-08-05.json",
+                                 "sams-deals-2026-08-15.json",
+                                 "sams-deals-2026-08-22.json",
+                                 "sams-deals-2026-08-23.json",
+                                 "sams-deals-2026-08-24.json",
+                                 "sams-deals-2026-08-25.json",
+                                 "sams-deals-2026-08-26.json",
+                                 "sams-deals-2026-08-27.json",
+                                 "sams-deals-2026-08-28.json",
+                                 "sams-deals-2026-08-29.json",
+                                 "sams-deals-2026-08-30.json",
+                                 "sams-deals-2026-08-31.json",
+                                 "sams-deals-2026-09-01.json",
+                                 "sams-deals-2026-09-02.json",
+                                 "sams-deals-2026-09-03.json",
+                                 "sams-deals-2026-09-04.json",
+                                 "sams-deals-2026-09-05.json",
+                                 "sams-deals-2026-09-06.json",
+                                 "sams-deals-2026-09-07.json",
+                                 "sams-deals-2026-09-08.json",
+                                 "sams-deals-2026-09-09.json",
+                                 "sams-deals-2026-09-10.json",
+                                 "sams-deals-2026-09-11.json",
+                                 "sams-deals-2026-09-12.json",
+                                 "sams-deals-2026-09-17.json",
+                                 "sams-rejects-2026-09-11.json",
+                                 "bakers-deals-2026-09-09.json",
+                                 "fareway-deals-2026-09-17.json"
+                             ],
+                   "names":  42768,
+                   "names_added_per_file":  {
+                                                "comparison-2026-09-17.json":  3143,
+                                                "candidates-2026-09-17.json":  27662,
+                                                "ads-2026-09-17.json":  979,
+                                                "aldi-regular-2026-09-17.json":  1363,
+                                                "bakers-regular-2026-09-18.json":  1446,
+                                                "family-fare-regular-2026-09-18.json":  1037,
+                                                "fareway-regular-2026-09-12.json":  67,
+                                                "hunter-aldi-regular-2026-08-16.json":  0,
+                                                "hunter-bakers-regular-2026-08-16.json":  1,
+                                                "hunter-familyfare-regular-2026-08-16.json":  3,
+                                                "hunter-fareway-regular-2026-08-16.json":  0,
+                                                "hunter-hyvee-regular-2026-08-16.json":  0,
+                                                "hunter-samsclub-regular-2026-08-16.json":  1,
+                                                "hunter-walmart-regular-2026-08-16.json":  1,
+                                                "hyvee-regular-2026-09-18.json":  133,
+                                                "sams-regular-2026-08-01.json":  2,
+                                                "walmart-regular-2026-07-05.json":  1,
+                                                "walmart-regular-2026-07-06.json":  0,
+                                                "walmart-regular-2026-07-08.json":  1,
+                                                "walmart-regular-2026-07-12.json":  1,
+                                                "walmart-regular-2026-07-14.json":  0,
+                                                "walmart-regular-2026-07-15.json":  105,
+                                                "walmart-regular-2026-07-18.json":  20,
+                                                "walmart-regular-2026-07-23.json":  281,
+                                                "walmart-regular-2026-07-25.json":  5,
+                                                "walmart-regular-2026-07-29.json":  372,
+                                                "walmart-regular-2026-07-30.json":  262,
+                                                "walmart-regular-2026-07-31.json":  135,
+                                                "walmart-regular-2026-08-01.json":  5,
+                                                "walmart-regular-2026-08-05.json":  93,
+                                                "walmart-regular-2026-08-06.json":  1461,
+                                                "walmart-regular-2026-08-11.json":  1688,
+                                                "walmart-regular-2026-08-22.json":  15,
+                                                "walmart-regular-2026-08-25.json":  4,
+                                                "walmart-regular-2026-08-26.json":  24,
+                                                "walmart-regular-2026-08-29.json":  10,
+                                                "walmart-regular-2026-08-30.json":  19,
+                                                "walmart-regular-2026-08-31.json":  710,
+                                                "walmart-regular-2026-09-01.json":  9,
+                                                "walmart-regular-2026-09-02.json":  2,
+                                                "walmart-regular-2026-09-03.json":  7,
+                                                "walmart-regular-2026-09-04.json":  7,
+                                                "walmart-regular-2026-09-05.json":  5,
+                                                "walmart-regular-2026-09-06.json":  2,
+                                                "walmart-regular-2026-09-07.json":  4,
+                                                "walmart-regular-2026-09-08.json":  1,
+                                                "walmart-regular-2026-09-09.json":  5,
+                                                "walmart-regular-2026-09-10.json":  5,
+                                                "walmart-regular-2026-09-11.json":  3,
+                                                "walmart-regular-2026-09-12.json":  3,
+                                                "walmart-regular-2026-09-17.json":  27,
+                                                "sams-deals-2026-07-05.json":  0,
+                                                "sams-deals-2026-07-06.json":  0,
+                                                "sams-deals-2026-07-08.json":  0,
+                                                "sams-deals-2026-07-15.json":  83,
+                                                "sams-deals-2026-07-17.json":  303,
+                                                "sams-deals-2026-07-18.json":  0,
+                                                "sams-deals-2026-07-23.json":  17,
+                                                "sams-deals-2026-07-29.json":  547,
+                                                "sams-deals-2026-08-01.json":  1,
+                                                "sams-deals-2026-08-05.json":  39,
+                                                "sams-deals-2026-08-15.json":  333,
+                                                "sams-deals-2026-08-22.json":  0,
+                                                "sams-deals-2026-08-23.json":  0,
+                                                "sams-deals-2026-08-24.json":  3,
+                                                "sams-deals-2026-08-25.json":  0,
+                                                "sams-deals-2026-08-26.json":  2,
+                                                "sams-deals-2026-08-27.json":  0,
+                                                "sams-deals-2026-08-28.json":  7,
+                                                "sams-deals-2026-08-29.json":  8,
+                                                "sams-deals-2026-08-30.json":  17,
+                                                "sams-deals-2026-08-31.json":  0,
+                                                "sams-deals-2026-09-01.json":  0,
+                                                "sams-deals-2026-09-02.json":  1,
+                                                "sams-deals-2026-09-03.json":  3,
+                                                "sams-deals-2026-09-04.json":  0,
+                                                "sams-deals-2026-09-05.json":  0,
+                                                "sams-deals-2026-09-06.json":  0,
+                                                "sams-deals-2026-09-07.json":  0,
+                                                "sams-deals-2026-09-08.json":  2,
+                                                "sams-deals-2026-09-09.json":  2,
+                                                "sams-deals-2026-09-10.json":  5,
+                                                "sams-deals-2026-09-11.json":  5,
+                                                "sams-deals-2026-09-12.json":  5,
+                                                "sams-deals-2026-09-17.json":  1,
+                                                "sams-rejects-2026-09-11.json":  6,
+                                                "bakers-deals-2026-09-09.json":  145,
+                                                "fareway-deals-2026-09-17.json":  103
+                                            },
+                   "note":  "ONE corpus for every section. Broader than plan-2026-09-18.routing.json (18 files, 19,416 names): every walmart-regular and sams-deals file inside compare-deals\u0027 90-day union window, candidates-2026-09-17 and ads-2026-09-17 are routed as well, because the engine reads them. Older non-union captures under out\\regular were not routed (the engine prices from the newest file per other store family)."
+               },
+    "positive_control":  {
+                             "name":  "Entenmann\u0027s Classic Glazed Buttermilk Donuts",
+                             "expected":  "buttermilk",
+                             "observed":  "buttermilk",
+                             "after_expected":  "donuts",
+                             "after_observed":  "donuts"
+                         },
+    "could_not_look":  {
+                           "before":  0,
+                           "after":  0
+                       },
+    "variants":  {
+                     "all_three_items":  {
+                                             "changes":  [
+                                                             {
+                                                                 "name":  "Bigelow Assorted Tea Packs 168 ct.",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "tea-bags",
+                                                                 "after_index":  255,
+                                                                 "files":  [
+                                                                               "sams-deals-2026-07-17.json",
+                                                                               "sams-deals-2026-07-29.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Butter Country Rich and Creamy Buttermilk Syrup   Cinnamon Bun Flavor   16 fl oz Bottle",
+                                                                 "before":  "buttermilk",
+                                                                 "before_index":  165,
+                                                                 "after":  "",
+                                                                 "after_index":  null,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "walmart-regular-2026-08-06.json",
+                                                                               "walmart-regular-2026-08-31.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Butter Country Rich and Creamy Buttermilk Syrup   Original Buttermilk Flavor   16 fl oz Bottle",
+                                                                 "before":  "buttermilk",
+                                                                 "before_index":  165,
+                                                                 "after":  "",
+                                                                 "after_index":  null,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "walmart-regular-2026-08-06.json",
+                                                                               "walmart-regular-2026-08-31.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Butter Country Rich and Creamy Buttermilk Syrup Cinnamon Bun Flavor 16 fl oz Bottle",
+                                                                 "before":  "buttermilk",
+                                                                 "before_index":  165,
+                                                                 "after":  "",
+                                                                 "after_index":  null,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "walmart-regular-2026-07-30.json",
+                                                                               "walmart-regular-2026-07-31.json",
+                                                                               "walmart-regular-2026-08-01.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Butter Country Rich and Creamy Buttermilk Syrup Original Buttermilk Flavor 16 fl oz Bottle",
+                                                                 "before":  "buttermilk",
+                                                                 "before_index":  165,
+                                                                 "after":  "",
+                                                                 "after_index":  null,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "walmart-regular-2026-07-30.json",
+                                                                               "walmart-regular-2026-07-31.json",
+                                                                               "walmart-regular-2026-08-01.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Dasani Water",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "bottled-water",
+                                                                 "after_index":  94,
+                                                                 "files":  [
+                                                                               "bakers-deals-2026-09-09.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Diet Pepsi 12 fl. oz., 36 pk.",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "soda",
+                                                                 "after_index":  93,
+                                                                 "files":  [
+                                                                               "sams-deals-2026-08-15.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Doritos Dinamita Spicy Cool Ranch Tortilla Snack Chips, 10.75 oz",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "tortilla-chips",
+                                                                 "after_index":  91,
+                                                                 "files":  [
+                                                                               "walmart-regular-2026-08-11.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Doritos Nacho Cheese Tortilla Snack Chips,Party Size, 14.5 Ounce Bag",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "tortilla-chips",
+                                                                 "after_index":  91,
+                                                                 "files":  [
+                                                                               "walmart-regular-2026-08-06.json",
+                                                                               "walmart-regular-2026-08-11.json",
+                                                                               "walmart-regular-2026-08-31.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Doritos or Miss Vickie\u0027s Kettle Cooked Chips",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "tortilla-chips",
+                                                                 "after_index":  91,
+                                                                 "files":  [
+                                                                               "fareway-deals-2026-09-17.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Entenmann\u0027s Classic Glazed Buttermilk Donuts",
+                                                                 "before":  "buttermilk",
+                                                                 "before_index":  165,
+                                                                 "after":  "donuts",
+                                                                 "after_index":  173,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "bakers-regular-2026-09-18.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Entenmann\u0027s Classic Glazed Buttermilk Donuts, 8 count, Kosher Classic Doughnuts, 14.5 oz Bag",
+                                                                 "before":  "buttermilk",
+                                                                 "before_index":  165,
+                                                                 "after":  "donuts",
+                                                                 "after_index":  173,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "walmart-regular-2026-08-31.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Kraft Buttermilk Dressing",
+                                                                 "before":  "buttermilk",
+                                                                 "before_index":  165,
+                                                                 "after":  "",
+                                                                 "after_index":  null,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "walmart-regular-2026-08-06.json",
+                                                                               "walmart-regular-2026-09-07.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Pepsi Zero Sugar Mini Cans, 7.5 fl. oz., 30 pk.",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "soda",
+                                                                 "after_index":  93,
+                                                                 "files":  [
+                                                                               "sams-deals-2026-07-15.json",
+                                                                               "sams-deals-2026-08-15.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Pepsi Zero Sugar, 12 fl. oz., 36 pk.",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "soda",
+                                                                 "after_index":  93,
+                                                                 "files":  [
+                                                                               "sams-deals-2026-08-15.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Pillsbury Grands Southern Homestyle Buttermilk Refrigerated",
+                                                                 "before":  "buttermilk",
+                                                                 "before_index":  165,
+                                                                 "after":  "refrigerated-biscuits",
+                                                                 "after_index":  433,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "walmart-regular-2026-07-18.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Ruffles Cheddar \u0026 Sour Cream Potato Snack Chips, Party Size, 12.5 oz Bag",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "potato-chips",
+                                                                 "after_index":  92,
+                                                                 "files":  [
+                                                                               "walmart-regular-2026-07-29.json",
+                                                                               "walmart-regular-2026-07-30.json",
+                                                                               "walmart-regular-2026-07-31.json",
+                                                                               "walmart-regular-2026-08-01.json",
+                                                                               "walmart-regular-2026-08-06.json",
+                                                                               "walmart-regular-2026-08-11.json",
+                                                                               "walmart-regular-2026-08-31.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Ruffles Original Flavor Potato Snack Chips,Party Size, 13 oz Bag",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "potato-chips",
+                                                                 "after_index":  92,
+                                                                 "files":  [
+                                                                               "walmart-regular-2026-07-29.json",
+                                                                               "walmart-regular-2026-07-30.json",
+                                                                               "walmart-regular-2026-07-31.json",
+                                                                               "walmart-regular-2026-08-01.json",
+                                                                               "walmart-regular-2026-08-06.json",
+                                                                               "walmart-regular-2026-08-11.json",
+                                                                               "walmart-regular-2026-08-31.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Special K Protein Bars, Strawberry, 18 ct.",
+                                                                 "before":  "strawberries",
+                                                                 "before_index":  18,
+                                                                 "after":  "protein-bars",
+                                                                 "after_index":  237,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "sams-deals-2026-07-29.json",
+                                                                               "sams-deals-2026-08-05.json",
+                                                                               "sams-deals-2026-08-15.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "steep by Bigelow Lemon Ginger Herbal Tea  60 ct.",
+                                                                 "before":  "",
+                                                                 "before_index":  null,
+                                                                 "after":  "tea-bags",
+                                                                 "after_index":  255,
+                                                                 "files":  [
+                                                                               "sams-deals-2026-07-29.json",
+                                                                               "sams-deals-2026-08-15.json"
+                                                                           ]
+                                                             },
+                                                             {
+                                                                 "name":  "Wilton Gold Decorative Sanding Sugar Sprinkles Large Crystal Edible Sugar for Baking, Cookie Decorating \u0026 Drink Rims, 8oz Bottle",
+                                                                 "before":  "cookies",
+                                                                 "before_index":  234,
+                                                                 "after":  "",
+                                                                 "after_index":  null,
+                                                                 "files":  [
+                                                                               "candidates-2026-09-17.json",
+                                                                               "walmart-regular-2026-08-31.json"
+                                                                           ]
+                                                             }
+                                                         ],
+                                             "count":  21
+                                         },
+                     "item1_only":  {
+                                        "note":  "before = items 2+3 applied, after = + the category-excludes.json change baked; isolates queue 2026-09-18-55b7aa",
+                                        "changes":  [
+                                                        {
+                                                            "name":  "Special K Protein Bars, Strawberry, 18 ct.",
+                                                            "before":  "strawberries",
+                                                            "before_index":  18,
+                                                            "after":  "protein-bars",
+                                                            "after_index":  237,
+                                                            "files":  [
+                                                                          "candidates-2026-09-17.json",
+                                                                          "sams-deals-2026-07-29.json",
+                                                                          "sams-deals-2026-08-05.json",
+                                                                          "sams-deals-2026-08-15.json"
+                                                                      ]
+                                                        },
+                                                        {
+                                                            "name":  "Wilton Gold Decorative Sanding Sugar Sprinkles Large Crystal Edible Sugar for Baking, Cookie Decorating \u0026 Drink Rims, 8oz Bottle",
+                                                            "before":  "cookies",
+                                                            "before_index":  234,
+                                                            "after":  "",
+                                                            "after_index":  null,
+                                                            "files":  [
+                                                                          "candidates-2026-09-17.json",
+                                                                          "walmart-regular-2026-08-31.json"
+                                                                      ]
+                                                        }
+                                                    ],
+                                        "count":  2
+                                    },
+                     "item2_brand_words":  {
+                                               "changes":  [
+                                                               {
+                                                                   "name":  "Bigelow Assorted Tea Packs 168 ct.",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "tea-bags",
+                                                                   "after_index":  255,
+                                                                   "files":  [
+                                                                                 "sams-deals-2026-07-17.json",
+                                                                                 "sams-deals-2026-07-29.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "Dasani Water",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "bottled-water",
+                                                                   "after_index":  94,
+                                                                   "files":  [
+                                                                                 "bakers-deals-2026-09-09.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "Diet Pepsi 12 fl. oz., 36 pk.",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "soda",
+                                                                   "after_index":  93,
+                                                                   "files":  [
+                                                                                 "sams-deals-2026-08-15.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "Doritos Dinamita Spicy Cool Ranch Tortilla Snack Chips, 10.75 oz",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "tortilla-chips",
+                                                                   "after_index":  91,
+                                                                   "files":  [
+                                                                                 "walmart-regular-2026-08-11.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "Doritos Nacho Cheese Tortilla Snack Chips,Party Size, 14.5 Ounce Bag",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "tortilla-chips",
+                                                                   "after_index":  91,
+                                                                   "files":  [
+                                                                                 "walmart-regular-2026-08-06.json",
+                                                                                 "walmart-regular-2026-08-11.json",
+                                                                                 "walmart-regular-2026-08-31.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "Doritos or Miss Vickie\u0027s Kettle Cooked Chips",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "tortilla-chips",
+                                                                   "after_index":  91,
+                                                                   "files":  [
+                                                                                 "fareway-deals-2026-09-17.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "Pepsi Zero Sugar Mini Cans, 7.5 fl. oz., 30 pk.",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "soda",
+                                                                   "after_index":  93,
+                                                                   "files":  [
+                                                                                 "sams-deals-2026-07-15.json",
+                                                                                 "sams-deals-2026-08-15.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "Pepsi Zero Sugar, 12 fl. oz., 36 pk.",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "soda",
+                                                                   "after_index":  93,
+                                                                   "files":  [
+                                                                                 "sams-deals-2026-08-15.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "Ruffles Cheddar \u0026 Sour Cream Potato Snack Chips, Party Size, 12.5 oz Bag",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "potato-chips",
+                                                                   "after_index":  92,
+                                                                   "files":  [
+                                                                                 "walmart-regular-2026-07-29.json",
+                                                                                 "walmart-regular-2026-07-30.json",
+                                                                                 "walmart-regular-2026-07-31.json",
+                                                                                 "walmart-regular-2026-08-01.json",
+                                                                                 "walmart-regular-2026-08-06.json",
+                                                                                 "walmart-regular-2026-08-11.json",
+                                                                                 "walmart-regular-2026-08-31.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "Ruffles Original Flavor Potato Snack Chips,Party Size, 13 oz Bag",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "potato-chips",
+                                                                   "after_index":  92,
+                                                                   "files":  [
+                                                                                 "walmart-regular-2026-07-29.json",
+                                                                                 "walmart-regular-2026-07-30.json",
+                                                                                 "walmart-regular-2026-07-31.json",
+                                                                                 "walmart-regular-2026-08-01.json",
+                                                                                 "walmart-regular-2026-08-06.json",
+                                                                                 "walmart-regular-2026-08-11.json",
+                                                                                 "walmart-regular-2026-08-31.json"
+                                                                             ]
+                                                               },
+                                                               {
+                                                                   "name":  "steep by Bigelow Lemon Ginger Herbal Tea  60 ct.",
+                                                                   "before":  "",
+                                                                   "before_index":  null,
+                                                                   "after":  "tea-bags",
+                                                                   "after_index":  255,
+                                                                   "files":  [
+                                                                                 "sams-deals-2026-07-29.json",
+                                                                                 "sams-deals-2026-08-15.json"
+                                                                             ]
+                                                               }
+                                                           ],
+                                               "count":  11
+                                           },
+                     "item3_buttermilk":  {
+                                              "changes":  [
+                                                              {
+                                                                  "name":  "Butter Country Rich and Creamy Buttermilk Syrup   Cinnamon Bun Flavor   16 fl oz Bottle",
+                                                                  "before":  "buttermilk",
+                                                                  "before_index":  165,
+                                                                  "after":  "",
+                                                                  "after_index":  null,
+                                                                  "files":  [
+                                                                                "candidates-2026-09-17.json",
+                                                                                "walmart-regular-2026-08-06.json",
+                                                                                "walmart-regular-2026-08-31.json"
+                                                                            ]
+                                                              },
+                                                              {
+                                                                  "name":  "Butter Country Rich and Creamy Buttermilk Syrup   Original Buttermilk Flavor   16 fl oz Bottle",
+                                                                  "before":  "buttermilk",
+                                                                  "before_index":  165,
+                                                                  "after":  "",
+                                                                  "after_index":  null,
+                                                                  "files":  [
+                                                                                "candidates-2026-09-17.json",
+                                                                                "walmart-regular-2026-08-06.json",
+                                                                                "walmart-regular-2026-08-31.json"
+                                                                            ]
+                                                              },
+                                                              {
+                                                                  "name":  "Butter Country Rich and Creamy Buttermilk Syrup Cinnamon Bun Flavor 16 fl oz Bottle",
+                                                                  "before":  "buttermilk",
+                                                                  "before_index":  165,
+                                                                  "after":  "",
+                                                                  "after_index":  null,
+                                                                  "files":  [
+                                                                                "candidates-2026-09-17.json",
+                                                                                "walmart-regular-2026-07-30.json",
+                                                                                "walmart-regular-2026-07-31.json",
+                                                                                "walmart-regular-2026-08-01.json"
+                                                                            ]
+                                                              },
+                                                              {
+                                                                  "name":  "Butter Country Rich and Creamy Buttermilk Syrup Original Buttermilk Flavor 16 fl oz Bottle",
+                                                                  "before":  "buttermilk",
+                                                                  "before_index":  165,
+                                                                  "after":  "",
+                                                                  "after_index":  null,
+                                                                  "files":  [
+                                                                                "candidates-2026-09-17.json",
+                                                                                "walmart-regular-2026-07-30.json",
+                                                                                "walmart-regular-2026-07-31.json",
+                                                                                "walmart-regular-2026-08-01.json"
+                                                                            ]
+                                                              },
+                                                              {
+                                                                  "name":  "Entenmann\u0027s Classic Glazed Buttermilk Donuts",
+                                                                  "before":  "buttermilk",
+                                                                  "before_index":  165,
+                                                                  "after":  "donuts",
+                                                                  "after_index":  173,
+                                                                  "files":  [
+                                                                                "candidates-2026-09-17.json",
+                                                                                "bakers-regular-2026-09-18.json"
+                                                                            ]
+                                                              },
+                                                              {
+                                                                  "name":  "Entenmann\u0027s Classic Glazed Buttermilk Donuts, 8 count, Kosher Classic Doughnuts, 14.5 oz Bag",
+                                                                  "before":  "buttermilk",
+                                                                  "before_index":  165,
+                                                                  "after":  "donuts",
+                                                                  "after_index":  173,
+                                                                  "files":  [
+                                                                                "candidates-2026-09-17.json",
+                                                                                "walmart-regular-2026-08-31.json"
+                                                                            ]
+                                                              },
+                                                              {
+                                                                  "name":  "Kraft Buttermilk Dressing",
+                                                                  "before":  "buttermilk",
+                                                                  "before_index":  165,
+                                                                  "after":  "",
+                                                                  "after_index":  null,
+                                                                  "files":  [
+                                                                                "candidates-2026-09-17.json",
+                                                                                "walmart-regular-2026-08-06.json",
+                                                                                "walmart-regular-2026-09-07.json"
+                                                                            ]
+                                                              },
+                                                              {
+                                                                  "name":  "Pillsbury Grands Southern Homestyle Buttermilk Refrigerated",
+                                                                  "before":  "buttermilk",
+                                                                  "before_index":  165,
+                                                                  "after":  "refrigerated-biscuits",
+                                                                  "after_index":  433,
+                                                                  "files":  [
+                                                                                "candidates-2026-09-17.json",
+                                                                                "walmart-regular-2026-07-18.json"
+                                                                            ]
+                                                              }
+                                                          ],
+                                              "count":  8,
+                                              "stays_on_buttermilk":  14
+                                          }
+                 },
+    "item1_probe_gatorade_and_protein_bars":  {
+                                                  "note":  "every corpus name matching gatorade or protein bar(s), routed before and after item 1; none moves except the Special K bar",
+                                                  "by_route":  [
+                                                                   {
+                                                                       "route":  "protein-bars",
+                                                                       "names":  152
+                                                                   },
+                                                                   {
+                                                                       "route":  "(none)",
+                                                                       "names":  40
+                                                                   },
+                                                                   {
+                                                                       "route":  "sports-drinks",
+                                                                       "names":  153
+                                                                   },
+                                                                   {
+                                                                       "route":  "lemonade",
+                                                                       "names":  1
+                                                                   },
+                                                                   {
+                                                                       "route":  "sugar",
+                                                                       "names":  3
+                                                                   },
+                                                                   {
+                                                                       "route":  "chocolate-chips",
+                                                                       "names":  3
+                                                                   },
+                                                                   {
+                                                                       "route":  "oatmeal",
+                                                                       "names":  1
+                                                                   },
+                                                                   {
+                                                                       "route":  "butter",
+                                                                       "names":  1
+                                                                   },
+                                                                   {
+                                                                       "route":  "strawberries",
+                                                                       "names":  1
+                                                                   }
+                                                               ]
+                                              },
+    "cell_simulation":  {
+                            "method":  "THE OUTCOME IS THE CELL: the worktree\u0027s compare-deals.ps1 run twice over identical live inputs (main checkout out\\regular, every out\\sams\\sams-deals file, ads-2026-09-17, bakers-deals-2026-09-09, fareway-deals-2026-09-17; -MinStores 1, no -IdentityNamespace), once per commodities.json, each into its own scratch -OutDir, then diffed cell by cell (commodity|store -\u003e per_unit and item) and crown by crown",
+                            "control":  "live comparison-2026-09-17 (15:46:51) vs the BEFORE arm: 28 of 3,189 cells differ, all Fareway, every one dearer in the arm (sale rows the live build applied and the worktree\u0027s committed support files did not); 1 crown (balsamic-vinegar). The same gap sits in BOTH arms, so it cannot manufacture or hide an effect of the rule change except on a Fareway cell, and the only Fareway row the change routes (Doritos or Miss Vickie\u0027s, tortilla-chips, 0.3247/oz sale) is dearer than the LIVE Fareway tortilla-chips cell (0.2129).",
+                            "effect":  "BEFORE arm vs AFTER arm: 0 of 3,189 store cells differ, 0 of 572 crowns differ",
+                            "new_rows_cheaper_than_a_live_cell_but_not_selected":  [
+                                                                                       "soda @ Sam\u0027s Club: Diet Pepsi / Pepsi Zero Sugar 36 pk 0.0381/floz from sams-deals-2026-08-15 vs live 0.0468 (Manzanita Sol 24 pk); the engine\u0027s freshest-covering-capture rule keeps the newer Sam\u0027s capture, so the cell does not move",
+                                                                                       "protein-bars @ Sam\u0027s Club: Special K Protein Bars 18 ct 0.7767/each from sams-deals-2026-08-15 vs live 0.9362 (Larabar 16 pk); same rule, no move"
+                                                                                   ]
+                        },
+    "bakers_ad_list_frozen_2026_09_16":  {
+                                             "fixture":  "grocery\\regression-inputs\\bakers-ad-2026-09-16 (169 offers for Saddlecreek), routed by grocery\\pull-bakers-ad-list.ps1 -FixtureDir ... -Today 2026-09-18 into a temp out dir",
+                                             "before":  {
+                                                            "routed":  90,
+                                                            "unrouted":  79,
+                                                            "terms":  85
+                                                        },
+                                             "after":  {
+                                                           "routed":  96,
+                                                           "unrouted":  73,
+                                                           "terms":  88
+                                                       },
+                                             "newly_routed":  [
+                                                                  {
+                                                                      "id":  "1292703",
+                                                                      "headline":  "Pepsi",
+                                                                      "body":  "12-Pack, 12 fl oz Cans",
+                                                                      "commodities":  [
+                                                                                          "soda"
+                                                                                      ]
+                                                                  },
+                                                                  {
+                                                                      "id":  "1292643",
+                                                                      "headline":  "7UP",
+                                                                      "body":  "12-Pack, 12 fl oz Cans",
+                                                                      "commodities":  [
+                                                                                          "soda"
+                                                                                      ]
+                                                                  },
+                                                                  {
+                                                                      "id":  "1292615",
+                                                                      "headline":  "Doritos",
+                                                                      "body":  "9-10.75 oz or Ruffles, 7.25-10.25 oz or Sunchips, 7 oz; Select Varieties",
+                                                                      "commodities":  [
+                                                                                          "tortilla-chips",
+                                                                                          "potato-chips"
+                                                                                      ]
+                                                                  },
+                                                                  {
+                                                                      "id":  "1292573",
+                                                                      "headline":  "Bigelow Tea",
+                                                                      "body":  "Select Varieties, 18-20 ct",
+                                                                      "commodities":  [
+                                                                                          "tea-bags"
+                                                                                      ]
+                                                                  },
+                                                                  {
+                                                                      "id":  "1292695",
+                                                                      "headline":  "Big K",
+                                                                      "body":  "Select Varieties, 12-Pack, 12 fl oz Cans",
+                                                                      "commodities":  [
+                                                                                          "soda"
+                                                                                      ]
+                                                                  },
+                                                                  {
+                                                                      "id":  "1292747",
+                                                                      "headline":  "Dasani Water",
+                                                                      "body":  "24-Pack, 16.9 fl oz",
+                                                                      "commodities":  [
+                                                                                          "bottled-water"
+                                                                                      ]
+                                                                  }
+                                                              ],
+                                             "still_unrouted":  [
+                                                                    "Kroger Extra Large Cooked Shrimp || 26-30 ct, Sold in a 2 lb Bag for $13.98",
+                                                                    "Tito\u0027s, Captain Morgan or Jose Cuervo Gold Tequila || Select Varieties, 750 ml",
+                                                                    "Spindrift || 8-Pack, 12 fl oz Cans",
+                                                                    "Entenmann\u0027s Little Bites, Donuts or Cakes || Select Varieties, 7.5-16.7 oz",
+                                                                    "Bone-In Strip Steaks || USDA CHOICE Family Pack",
+                                                                    "Essentia Water || 6-Pack, 33.8 fl oz Bottles",
+                                                                    "Propel || 12-Pack, 16.9 fl oz Bottles",
+                                                                    "Pumpkin or Apple Pie || or Other Varieties, 8\", In the Bakery",
+                                                                    "Johnsonville Dinner Sausage || Select Varieties, 16-19 oz",
+                                                                    "Tide Laundry Detergent || Select Varieties, 117-132 fl oz",
+                                                                    "Tide Evo Tiles || Select Varieties, 42 ct",
+                                                                    "Tuscany Candles || Select Varieties, 18 oz",
+                                                                    "Dannon Oikos Protein Shake || Select Varieties, 12 fl oz",
+                                                                    "Smucker\u0027s Uncrustables || Select Varieties, 8-10 ct",
+                                                                    "Pringles || Select Varieties, 5.2-5.57 oz",
+                                                                    "Totino\u0027s Pizza Rolls || Select Varieties, 50 ct",
+                                                                    "Ken\u0027s or Kraft Salad Dressing || Select Varieties, 16 fl oz",
+                                                                    "Liquid I.V. || 6 ct or Bai Beverage, 6-Pack, 14 fl oz; Select Varieties",
+                                                                    "Oscar Mayer Lunchables Fun Pack || 8.8-10.7 oz or Oscar Mayer Bologna, 16 oz; Select Varieties",
+                                                                    "Tyson Frozen Chicken || Select Varieties, 23-29 oz",
+                                                                    "Private Selection Pumpkin Cake Roll || 18 oz or Cheesecake, Select Varieties, 6\"; In the Bakery",
+                                                                    "Simple Truth Natural Turkey Burgers || Frozen, 2 lb",
+                                                                    "Premier Protein Shakes || Select Varieties, 4-Pack, 11 fl oz",
+                                                                    "Kroger Veggie Chip Tray with Buffalo Dip || 16 oz",
+                                                                    "Fresh Baked Cookies || Select Varieties, 12 ct, In the Bakery",
+                                                                    "Kroger Salad Dressing || Select Varieties, 16 fl oz",
+                                                                    "Kroger Plastic Cups || Select Varieties, 100 ct",
+                                                                    "Totino\u0027s Pizza Rolls || Select Varieties, 130 ct",
+                                                                    "Kroger Family Size Appetizers || Select Varieties, 16-33 oz",
+                                                                    "Private Selection Buns || Select Varieties, 8 ct",
+                                                                    "Home Chef St. Louis Style Ribs || Fully Cooked, 2 lb, In the Deli",
+                                                                    "Kroger Cheese || Select Varieties, 12-16 oz",
+                                                                    "Nestlé Toll House Cookie Dough || Select Varieties, 14-16.5 oz",
+                                                                    "La Marca or Wairau River || 750 ml or Jose Cuervo Margarita, 1.75 Liter; Select Varieties",
+                                                                    "Barefoot or Woodbridge || 1.5 Liter or Stella Rosa, 750 ml; Select Varieties",
+                                                                    "Private Selection Angus Beef Patties || Frozen, 4 ct or Land O Frost Premium Lunch Meat, 22 oz; Select Varieties",
+                                                                    "Swanson Broth || Select Varieties, 32 oz",
+                                                                    "42 ct Frito-Lay Multipack || Select Varieties",
+                                                                    "Progresso Soup || Select Varieties, 18-19 oz",
+                                                                    "Spice Islands Spices || Select Varieties, 0.1-3.2 oz",
+                                                                    "Corona, White Claw or Modelo || Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                                                                    "Bud, Miller Lite or Coors Light || Select Varieties, 24-Pack, 12 fl oz Cans",
+                                                                    "Stok Cold Brew Coffee || Select Varieties, 48 fl oz",
+                                                                    "Play-Doh Single Can || Select Varieties",
+                                                                    "Kroger Supplements || 30-500 ct or Nature\u0027s Truth Supplements, 33-300 ct; Select Varieties",
+                                                                    "Command Hanging Solutions || Select Varieties",
+                                                                    "M\u0026M\u0027s Sharing Size Candy || Select Varieties, 7.4-10.1 oz",
+                                                                    "Lesser Evil Popcorn || Select Varieties, 4.6-6.4 oz",
+                                                                    "3M Filtrete Allergen Defense Furnace Filters || Select Varieties",
+                                                                    "Large or Medium Carving Pumpkins || ",
+                                                                    "Crock-Pot Slow Cooker || 4.5 Quart",
+                                                                    "Private Selection Pumpkin Spice Bundt Cake || 16 oz or Cupcakes, 4 ct; Select Varieties, In the Bakery",
+                                                                    "Bloom Haus Autumn Patch Bouquet || ",
+                                                                    "Little Debbie Snacks || Select Varieties, 5-10 ct",
+                                                                    "Private Selection Fall Variety Cheesecake || 40 oz, In the Bakery",
+                                                                    "Pumpkin Spice Cake || or Other Varieties, 6\" or Pudding Cake, 30 oz; Select Varieties",
+                                                                    "Kroger 96% Lean Ground Beef or Pre 95% Lean Ground Beef || 16 oz",
+                                                                    "Fresh In-Store Made Salad Bowls || Select Varieties, 9-12 oz, In the Produce Department",
+                                                                    "Private Selection Tin Pan Seafood || Select Varieties, 10-15 oz",
+                                                                    "Bloom Haus Golden Ray Bouquet || ",
+                                                                    "Kroger Salad Bowls || Select Varieties, 5.5-6.7 oz",
+                                                                    "Classic Fried or Baked Chicken || Fully Cooked, 8-Piece, Includes 2 Breasts, 2 Thighs, 2 Wings \u0026 2 Drumsticks",
+                                                                    "Angry Orchard, Leinenkugel\u0027s, Topo Chico or Simply Spiked || Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                                                                    "Carbliss or High Noon || 8-Pack, 12 fl oz Cans or Franzia, 5 Liter; Select Varieties",
+                                                                    "Apothic or Ménage à Trois || 750 ml or Sutter Home, 1.5 Liter; Select Varieties",
+                                                                    "Michelob Ultra or Garage Beer || Select Varieties, 12-Pack, 12 fl oz Bottles or Cans",
+                                                                    "Busch, Miller High Life or Keystone || Select Varieties, 30-Pack, 12 fl oz Cans",
+                                                                    "Kendall-Jackson, Josh Cellars or Kim Crawford || Select Varieties, 750 ml",
+                                                                    "Juanita\u0027s Menudo || Select Varieties, 25-30 oz",
+                                                                    "Del Real Tamales || Select Varieties, 6 ct, In the Deli",
+                                                                    "Guerrero Tostadas || Select Varieties, 22-30 ct",
+                                                                    "Boneless Seasoned Pork Chops || ",
+                                                                    "Goodcook Stock Pot with Lid || 8 Quart"
+                                                                ]
+                                         },
+    "match_soundness":  {
+                            "run":  "worktree audit-match-soundness.ps1 -OutDir \u003cscratch: the AFTER arm\u0027s candidates + comparison, live regular/sams/bakers/fareway/ads, the committed match-baseline.json\u003e",
+                            "report":  "MOVED=1 DROPPED=0 new-contested=0 drift-vs-engine=0",
+                            "reviewed":  [
+                                             "MOVED buttermilk -\u003e donuts \u0027Entenmann\u0027s Classic Glazed Buttermilk Donuts\u0027: intended (item 3), a donut leaves the dairy commodity for donuts"
+                                         ],
+                            "accepted":  "audit-match-soundness.ps1 -Accept (never -ForceAccept): 23,496 names, 404 contested; re-run MOVED=0 DROPPED=0",
+                            "baseline_semantic_diff":  "23,496 names before and after, 0 added, 0 removed, 3 changed: Doritos or Miss Vickie\u0027s Kettle Cooked Chips \u003cunmatched\u003e -\u003e tortilla-chips; Dasani Water \u003cunmatched\u003e -\u003e bottled-water; Entenmann\u0027s Classic Glazed Buttermilk Donuts buttermilk -\u003e donuts. The textual diff is larger because the accept rewrites the map in hashtable order."
+                        }
+}

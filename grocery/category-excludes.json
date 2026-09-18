@@ -15,7 +15,7 @@
       "kombucha",
       "energy\\s+drink",
       "\\bbai\\b",
-      "gatorade",
+      "gatorade(?!.*\\bprotein\\s+bars?\\b)",
       "powerade",
       "body\\s*armor",
       "antioxidant\\s+(beverage|infusion|water)",
@@ -45,7 +45,8 @@
       "rice\\s+cakes?",
       "\\bbreakfast\\s+bars?\\b",
       "\\bnutri[\\s-]*grain\\b",
-      "\\bcereal\\s+bars?\\b"
+      "\\bcereal\\s+bars?\\b",
+      "\\bprotein\\s+bars?\\b"
     ],
     "babyfood": [
       "beech\\s*nut",
@@ -338,7 +339,27 @@
         "peanuts",
         "almonds",
         "walnuts",
-        "mixed-nuts"
+        "mixed-nuts",
+        "tortilla-chips",
+        "potato-chips",
+        "crackers",
+        "cheese-crackers",
+        "pretzels",
+        "microwave-popcorn",
+        "cookies",
+        "sandwich-cookies",
+        "granola-bars",
+        "protein-bars",
+        "fruit-snacks",
+        "toaster-pastries",
+        "granola",
+        "rice-cakes",
+        "beef-jerky",
+        "fruit-cups",
+        "pudding-cups",
+        "gelatin",
+        "gingersnaps",
+        "corn-chips"
       ],
       "classes": [
         "beverage"

@@ -10,7 +10,7 @@
                         "boneless,?\\s*skinless\\b.{0,25}chicken\\s+breast",
                         "chicken\\s+breasts?,\\s*(?:boneless|skinless)",
                         "\\bchicken\\s+breasts?\\b",
-                        "(?:boneless|skinless)(?>\\s*[,\u0026/ ]+\\s*)(?:boneless|skinless)[^,]*chicken\\s+breast"
+                        "(?:boneless|skinless)(?\u003e\\s*[,\u0026/ ]+\\s*)(?:boneless|skinless)[^,]*chicken\\s+breast"
                     ],
         "exclude":  [
                         "\\bchunk\\b",
@@ -178,7 +178,9 @@
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
-                        "\\bpulled\\b"
+                        "\\bpulled\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -341,7 +343,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -514,7 +518,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bmeal\\b"
@@ -675,7 +681,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -849,7 +857,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -1178,7 +1188,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -2656,7 +2668,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -2899,7 +2913,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -3130,7 +3146,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -3354,7 +3372,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -3574,7 +3594,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -3799,7 +3821,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -4031,7 +4055,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -4252,7 +4278,8 @@
                         "\\bgumbo\\b",
                         "\\bsushi\\b",
                         "\\bcascade\\b",
-                        "\\boatmeal\\b"
+                        "\\boatmeal\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)"
                     ]
     },
     {
@@ -4484,7 +4511,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -4725,7 +4754,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -4954,7 +4985,8 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -5192,7 +5224,9 @@
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
-                        "\\boatmeal\\b"
+                        "\\boatmeal\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -5876,7 +5910,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -6050,7 +6086,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -6204,7 +6242,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -6373,7 +6413,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -6549,7 +6591,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -6719,7 +6763,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -6900,7 +6946,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -7031,7 +7079,8 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -7166,7 +7215,8 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -7528,7 +7578,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -7767,7 +7819,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -8009,7 +8063,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -8242,7 +8298,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -8465,7 +8523,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -8691,7 +8751,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -8928,7 +8990,9 @@
                         "\\blean\\s+cuisine\\b",
                         "\\bpasta\\s+roni\\b",
                         "\\blinguine\\b",
-                        "\\balfredo\\b"
+                        "\\balfredo\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -9149,7 +9213,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -9369,7 +9435,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -9587,7 +9655,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -9810,7 +9880,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -10053,7 +10125,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -10280,7 +10354,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -10516,7 +10592,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -10738,7 +10816,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -14708,7 +14788,8 @@
                              "flavored"
                          ],
         "include":  [
-                        "tortilla\\s+chips?"
+                        "tortilla\\s+chips?",
+                        "\\bdoritos\\b"
                     ],
         "exclude":  [
                         "\\bdip\\b",
@@ -14809,7 +14890,38 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bpotato\\s+(?:snack\\s+)?chips?\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -14824,7 +14936,8 @@
                          ],
         "include":  [
                         "potato\\s+chips?",
-                        "potato\\s+kettle\\s+chips?\\b"
+                        "potato\\s+kettle\\s+chips?\\b",
+                        "\\bruffles\\b"
                     ],
         "exclude":  [
                         "\\bdip\\b",
@@ -14925,7 +15038,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -14941,7 +15084,10 @@
         "include":  [
                         "\\bsoda\\b",
                         "\\bcola\\b",
-                        "\\bfridge\\s+pack\\b.{0,15}cans"
+                        "\\bfridge\\s+pack\\b.{0,15}cans",
+                        "\\bpepsi\\b",
+                        "\\b7[\\s-]?up\\b",
+                        "\\bbig\\s+k\\b"
                     ],
         "exclude":  [
                         "tarts?",
@@ -15044,7 +15190,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\brebate\\b"
                     ]
     },
     {
@@ -15060,7 +15207,8 @@
                         "purified\\s+(?:drinking\\s+)?water",
                         "spring\\s+water",
                         "drinking\\s+water",
-                        "bottled\\s+water"
+                        "bottled\\s+water",
+                        "\\bdasani\\b"
                     ],
         "exclude":  [
                         "sparkling",
@@ -16366,7 +16514,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -16619,7 +16769,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -16837,7 +16989,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -17054,7 +17208,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -17258,7 +17414,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -17493,7 +17651,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -17723,7 +17883,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -17945,7 +18107,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -18204,7 +18368,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -18421,7 +18587,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -18640,7 +18808,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -18868,7 +19038,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -19085,7 +19257,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -19307,7 +19481,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -19529,7 +19705,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -19745,7 +19923,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -19963,7 +20143,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -20179,7 +20361,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -20394,7 +20578,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -20627,7 +20813,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -20849,7 +21037,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -21082,7 +21272,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -21297,7 +21489,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -21519,7 +21713,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -21744,7 +21940,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -21875,7 +22073,8 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -22037,7 +22236,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -22198,7 +22399,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -22362,7 +22565,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -22517,7 +22722,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -22683,7 +22890,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -22843,7 +23052,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -23007,7 +23218,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -23168,7 +23381,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bbeer\\b"
@@ -23334,7 +23549,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -23498,7 +23715,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -23670,7 +23889,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "seasoned"
@@ -23836,7 +24057,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -24002,7 +24225,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -24172,7 +24397,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -24342,7 +24569,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -24504,7 +24733,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -24673,7 +24904,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -24831,7 +25064,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -25857,7 +26092,7 @@
         "band_min":  0.03,
         "band_max":  0.25,
         "include":  [
-                        "buttermilk"
+                        "\\bbuttermilk\\b(?=\\s*(?:$|[,;:()/-]|\\d|(?:half\\s+gallon|gallon|gal|quart|qt|pint|pt|fl|low[\\s-]*fat|lowfat|reduced|fat[\\s-]*free|non[\\s-]*fat|nonfat|whole|cultured)\\b))"
                     ],
         "exclude":  [
                         "pancake",
@@ -33044,7 +33279,8 @@
                         "\\bseltzer\\b",
                         "\\btea\\b",
                         "\\bcoffee\\b",
-                        "\\bv8\\b"
+                        "\\bv8\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)"
                     ]
     },
     {
@@ -33202,7 +33438,8 @@
                         "\\bseltzer\\b",
                         "\\btea\\b",
                         "\\bcoffee\\b",
-                        "\\bv8\\b"
+                        "\\bv8\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)"
                     ],
         "v4_store_taxonomy_allow":  {
                                         "sams-omaha":  [
@@ -33469,7 +33706,8 @@
                         "\\bseltzer\\b",
                         "\\btea\\b",
                         "\\bcoffee\\b",
-                        "\\bv8\\b"
+                        "\\bv8\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)"
                     ]
     },
     {
@@ -33592,7 +33830,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -33707,7 +33975,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -33826,7 +34124,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -33946,7 +34274,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -34072,7 +34430,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -34188,7 +34576,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -34302,7 +34720,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -34417,7 +34865,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -34536,7 +35014,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -34655,7 +35163,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -34769,7 +35307,37 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\braisin\\s+bran\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -34882,7 +35450,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -34999,7 +35597,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -35119,7 +35747,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -35238,7 +35896,37 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bpie\\s+filling\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ]
     },
     {
@@ -35355,7 +36043,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -36429,7 +37147,8 @@
         "include":  [
                         "tea\\s+bags?",
                         "black\\s+tea",
-                        "green\\s+tea\\b(?!.{0,15}(?:bottle|drink))"
+                        "green\\s+tea\\b(?!.{0,15}(?:bottle|drink))",
+                        "\\bbigelow\\b"
                     ],
         "exclude":  [
                         "iced",
@@ -40354,7 +41073,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -50046,7 +50767,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -52424,7 +53147,8 @@
                         "\\bseltzer\\b",
                         "\\btea\\b",
                         "\\bcoffee\\b",
-                        "\\bv8\\b"
+                        "\\bv8\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)"
                     ]
     },
     {
@@ -53551,7 +54275,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -53766,7 +54492,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -53987,7 +54715,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -54207,7 +54937,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -54409,7 +55141,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -54948,7 +55682,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bwater\\b"
@@ -55289,7 +56025,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -55581,7 +56319,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -56513,7 +57253,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -56801,7 +57543,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -57498,7 +58242,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -57723,7 +58469,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "pint_oz":  10
     },
@@ -57839,7 +58587,36 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bv8\\b"
                     ],
         "relax_global":  [
                              "\\bsnack\\b"
@@ -57959,7 +58736,37 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "electrolyte",
+                        "electrolit",
+                        "\\bsoda\\b",
+                        "kombucha",
+                        "energy\\s+drink",
+                        "\\bbai\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "powerade",
+                        "body\\s*armor",
+                        "antioxidant\\s+(beverage|infusion|water)",
+                        "\\bnectar\\b",
+                        "capri\\s*sun",
+                        "kool[\\s-]?aid",
+                        "frappuccino",
+                        "\\bmini\\s+cans?\\b",
+                        "lemon[\\s-]*lime",
+                        "\\bstarry\\b",
+                        "monster\\s+energy",
+                        "\\bcola\\b",
+                        "\\bseltzer\\b",
+                        "\\btea\\b",
+                        "\\bcoffee\\b",
+                        "\\bv8\\b"
                     ],
         "relax_global":  [
                              "\\bsnack\\b",
@@ -58135,7 +58942,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -58312,7 +59121,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -58487,7 +59298,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -58821,7 +59634,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -59048,7 +59863,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -59280,7 +60097,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -59505,7 +60324,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -59740,7 +60561,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -59959,7 +60782,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -60203,7 +61028,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -60422,7 +61249,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -60643,7 +61472,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -60856,7 +61687,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -61070,7 +61903,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -61293,7 +62128,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -61510,7 +62347,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -61727,7 +62566,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -61942,7 +62783,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -62181,7 +63024,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -62410,7 +63255,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -62625,7 +63472,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -62838,7 +63687,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -63051,7 +63902,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -63263,7 +64116,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -63483,7 +64338,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -63698,7 +64555,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -63913,7 +64772,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -64125,7 +64986,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -64341,7 +65204,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -64557,7 +65422,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -64770,7 +65637,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -64984,7 +65853,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -65205,7 +66076,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -65420,7 +66293,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -65640,7 +66515,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -65862,7 +66739,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -66080,7 +66959,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -66310,7 +67191,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -66535,7 +67418,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -66752,7 +67637,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -66966,7 +67853,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -67184,7 +68073,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -67395,7 +68286,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -67615,7 +68508,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -67828,7 +68723,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -68045,7 +68942,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -68266,7 +69165,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -68484,7 +69385,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -68685,7 +69588,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -68905,7 +69810,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -69126,7 +70033,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -69347,7 +70256,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -69563,7 +70474,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -69846,7 +70759,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "band_min":  0.04,
         "band_max":  0.65
@@ -70475,7 +71390,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "band_min":  0.14,
         "band_max":  22.44
@@ -70632,7 +71549,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "band_min":  0.05,
         "band_max":  14.97
@@ -70847,7 +71766,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "band_min":  1.39,
         "band_max":  14.95
@@ -73945,7 +74866,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "band_min":  0.15,
         "band_max":  1.32
@@ -74271,7 +75194,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ],
         "band_min":  0.42,
         "band_max":  5.97
@@ -74772,7 +75697,8 @@
                         "\\bseltzer\\b",
                         "\\btea\\b",
                         "\\bcoffee\\b",
-                        "\\bv8\\b"
+                        "\\bv8\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)"
                     ]
     },
     {
@@ -76241,7 +77167,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -76461,7 +77389,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -76840,7 +77770,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {
@@ -77835,7 +78767,9 @@
                         "\\bcascade\\b",
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
-                        "\\bcereal\\s+bars?\\b"
+                        "\\bcereal\\s+bars?\\b",
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\bprotein\\s+bars?\\b"
                     ]
     },
     {

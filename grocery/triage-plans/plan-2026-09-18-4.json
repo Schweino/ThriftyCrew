@@ -1,0 +1,205 @@
+{
+  "generated": "2026-09-18T17:40:00",
+  "round": 1,
+  "lane": "daily",
+  "author": "triage-developer (money lane), self-planned on the dispatch of 2026-09-18: three weekly-lane items the ops developer handed back in plan-2026-09-18-3.json, pulled forward because Brad asked for them today. No reviewer round; the measurements below were taken by this run and are in plan-2026-09-18-4.routing.json.",
+  "board_week": "2026-09-17",
+  "queue_ids_seen": ["2026-09-18-55b7aa", "2026-09-18-8491bf", "2026-09-18-2524ee", "2026-09-18-e6977b"],
+  "queue_ids_not_in_this_plan": {
+    "2026-09-18-8491bf": "daily pipeline did not run on 2026-09-15 or 2026-09-16: owned by plan-2026-09-18-3.json (blocked, needs-brad); no board or money effect, not this lane"
+  },
+  "routing_artifact": "plan-2026-09-18-4.routing.json",
+  "items": [
+    {
+      "queue_id": "2026-09-18-55b7aa",
+      "subject": "Grocery: beverage wrong-class guard still blind on 20 non-drink Snacks & Drinks commodities (residual of 2026-09-18-f90ba6)",
+      "classification": "wrong-product",
+      "evidence": [
+        "RE-MEASURED 2026-09-18 ~17:30 on comparison-2026-09-17 (built 15:46:51): all 20 named commodities present, 134 priced named cells, 0 beverage products. audit-food-category over that board: ok, 3,081 priced cells scanned, with the OLD library (main checkout) AND with the NEW one (this change).",
+        "category-excludes.json before this change: apply_ids = pistachios, peanuts, almonds, walnuts, mixed-nuts; the 20 other non-drink 'Snacks & Drinks' ids (tortilla-chips, potato-chips, crackers, cheese-crackers, pretzels, microwave-popcorn, cookies, sandwich-cookies, granola-bars, protein-bars, fruit-snacks, toaster-pastries, granola, rice-cakes, beef-jerky, fruit-cups, pudding-cups, gelatin, gingersnaps, corn-chips) fall to the shared ^(Dairy|Bread|Canned|Sauces|Baking|Pasta|Coffee|Frozen|Snacks) block, which carries no beverage class.",
+        "commodities.json: protein-bars is index 237, sports-drinks 251 with include 'gatorade'. So a bare 'gatorade' exclude baked into protein-bars sends 'Gatorade Chocolate Chip Protein Bar 2.8 Oz' and its Peanut Butter twin to sports-drinks (plan-2026-09-18.routing.json variant B3). That is the 'gatorade release' the hand-back asked for, and it is also a breach of the library's own rule: a class token belongs there only if it is wrong for EVERY commodity in scope, and protein-bars legitimately owns Gatorade's protein bars."
+      ],
+      "surface_fix": {
+        "what": "apply_ids reaches the other 20 non-drink Snacks & Drinks commodities, so the bake gives each the 30 beverage tokens and audit-food-category judges a beverage on them",
+        "files": ["grocery/category-excludes.json", "grocery/commodities.json"],
+        "exact_change": "category-excludes.json apply_ids[0].ids += the 20 ids above (25 in all); then powershell -File grocery\\apply-category-excludes.ps1 bakes the tokens into commodities.json (the bake reported +925 patterns across 188 commodities)"
+      },
+      "root_cause": "the food-class guard scopes the beverage class by display bucket, and 'Snacks & Drinks' mixes drinks with 21 non-drink commodities; apply_ids covered pistachios only of those 21, and the one token that stopped the widening (bare 'gatorade') was itself wrong for a commodity in the widened scope",
+      "root_fix": {
+        "what": "make the class token say what the class means (a Gatorade DRINK, never Gatorade's protein bar), and give Fruit, Vegetables and Meat the protein-bar reach the bare token used to lend them, so narrowing costs no scope anything",
+        "files": ["grocery/category-excludes.json", "grocery/commodities.json"],
+        "exact_change": "classes.beverage: 'gatorade' -> 'gatorade(?!.*\\bprotein\\s+bars?\\b)'; classes.snack_carrier += '\\bprotein\\s+bars?\\b'; re-bake. The bake is additive, so every commodity that already carried the bare 'gatorade' keeps it and also gains the narrowed form: their routing cannot change."
+      },
+      "leaves_open": "241 non-drink commodities in five other display buckets still carry no beverage class (Dairy & Eggs 25, Canned & Soup 59, Sauces & Condiments 61, Baking & Spices 78, Coffee, Oils & Spreads 14), so audit-food-category cannot see a beverage on them; the 30 beverage tokens have not been measured against those buckets' own products, so a widening there needs its own routing measurement per bucket",
+      "leaves_open_occurrences": "0 beverage-token hits in those 241 commodities' 1,284 priced cells on the 2026-09-18 15:46:51 board (this run's scan, the whole board). The class has happened once in this estate, on pistachios 2026-09-13..09-18, closed by f90ba6.",
+      "leaves_open_followup": "2026-09-18-a0c785",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "before/after first-match-wins routing of 42,768 distinct names across 88 files (plan-2026-09-18-4.routing.json variant item1_only: before = items 2 and 3 applied, after = plus this library change baked) through grocery\\match-lib.ps1, the engine's own matcher; then compare-deals run twice over identical live inputs for the cell outcome",
+        "affected_now": 2,
+        "names": [
+          "Special K Protein Bars, Strawberry, 18 ct. (Sam's Club): strawberries -> protein-bars (snack_carrier's new protein-bar token on a Fruit commodity)",
+          "Wilton Gold Decorative Sanding Sugar Sprinkles Large Crystal Edible Sugar for Baking, Cookie Decorating & Drink Rims, 8oz Bottle (Walmart 08-31): cookies -> (none) (the beverage class's \\bdrink\\b on cookies)"
+        ],
+        "risk": "both moves are wrong products leaving a commodity they were never; the two Gatorade protein bars stay on protein-bars (152 protein-bars names and 153 sports-drinks names in the gatorade/protein-bar probe, none moved), and the pistachio beverage move is already on main (f90ba6)",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured 2026-09-18 ~17:00-17:30 against comparison-2026-09-17 built 15:46:51 and the newest captures then on disk (bakers-regular-2026-09-18 14:40, family-fare-regular-2026-09-18 14:08, hyvee-regular-2026-09-18 08:30, walmart and sams inside their 90-day union). The FF sweep appends every 3 hours: re-run route-diff only if a Snacks & Drinks name is added.",
+      "proof": {
+        "guard_or_fixture": "grocery\\test-auditors.ps1 unit u143b-d5d-must-fire-for-the-widened-beverage-scope (new) beside u143-d5c (unchanged assertions); audit-food-category over the live board",
+        "must_fire_case": "frozen real corpus names placed on commodities the widening added: 'Gatorade Advanced Rehydration Fruit Punch Thirst Quencher 28 Fl Oz' on protein-bars and 'Gatorade Cool Blue Sports Drink Bottle' on tortilla-chips must make audit-food-category exit 2 as class=beverage, and the founding row of the snack_carrier token ('Special K Protein Bars, Strawberry, 18 ct.' on strawberries, a live strawberries candidate on comparison-2026-09-17) as class=snack_carrier",
+        "clean_twin": "on the OLD Fruit scope a Gatorade drink on blueberries still fires as beverage and 'Gatorade Chocolate Chip Protein Bar 2.8 Oz' on strawberries still fires (now as snack_carrier), so narrowing the token lost no reach; MUST NOT FIRE: ten real snack cells frozen off the 15:46:51 board plus the Special K bar on protein-bars stay at exit 0, and u143's Gatorade protein bar on protein-bars stays silent",
+        "commands": [
+          "powershell -File grocery\\apply-category-excludes.ps1",
+          "powershell -File grocery\\audit-food-category.ps1 -OutDir <copy of the live board>",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the category-excludes.json hunks and the commodities.json bake hunks (git revert of the commit); no data migration",
+      "do_not_touch": ["the exempt.beverage regex", "the category apply blocks", "any other beverage token", "u143's assertions (only its comment and messages change)"],
+      "resolution_note": "Beverage guard widened to all 20 non-drink Snacks & Drinks commodities (apply_ids), with the gatorade token narrowed to drinks so Gatorade's protein bars stay on protein-bars, and snack_carrier gaining protein bars so the old scope loses nothing. Routing over 42,768 names: 2 wrong products leave (a Special K bar off strawberries, sprinkles off cookies); 0 board cells move; guard green on today's board.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "true: re-read 2026-09-18 ~17:30 on comparison-2026-09-17 built 15:46:51 - 20 of 20 commodities present, 134 priced named cells, 0 beverage products; audit-food-category ok over 3,081 priced cells with the old library (main checkout) and with the new one; the bare gatorade token's only effect on the widened scope is B3's two Gatorade protein bars (protein-bars index 237 sits before sports-drinks 251)",
+      "deviation": "Two departures from the handed-back measurement, same gates. (1) The gatorade release is a narrowed class token, gatorade(?!.*\\bprotein\\s+bars?\\b), not an exclude: an exclude cannot un-bake a class token, and the library's own rule (a token must be wrong for every commodity in scope) made the bare token wrong once protein-bars joined. snack_carrier gained \\bprotein\\s+bars?\\b in the same change so Fruit, Vegetables and Meat keep their reach on a Gatorade bar (CLEAN TWIN in test-auditors u143b). (2) Two moves sit outside plan-2026-09-18.routing.json variant B3: 'Special K Protein Bars, Strawberry, 18 ct.' strawberries -> protein-bars (the new snack_carrier token; a protein bar leaving a fruit) and Wilton sanding sugar 'for Baking, Cookie Decorating & Drink Rims' cookies -> (none) (\\bdrink\\b on cookies; that name is in walmart-regular-2026-08-31 and candidates-2026-09-17, which B3's 18-file corpus did not route). Both reviewed as correct; 0 board cells move. guards.ps1 could not reach exit 0 in the seeded worktree for a reason this change does not touch: an A/B in that one checkout read GUARDS-COMPLETE hard=2 warn=25 with the ORIGINAL rules and hard=2 warn=25 with the new ones (tile-integrity links and a Baker's muffins pin factor, both reading committed pins and links older than the live board). No board was rebuilt or republished, so no guard stood between this change and a publish.",
+      "shipped_commit": "the commit titled 'Triage 2026-09-18-4 money lane: beverage guard reaches the snack shelf, brand-only Baker's offers route, buttermilk must be the product' on origin/main (its hash is fixed only when ops\\push-main.ps1 lands it after its rebase: git log -1 --format=%H --grep='Triage 2026-09-18-4 money lane' origin/main)"
+    },
+    {
+      "queue_id": "2026-09-18-2524ee",
+      "subject": "Baker's ad list: brand-only offers of tracked goods are unrouted (e.g. Pepsi, Tide, Doritos, Swanson)",
+      "classification": "capture-gap",
+      "evidence": [
+        "grocery\\pull-bakers-ad-list.ps1 over the FROZEN grocery\\regression-inputs\\bakers-ad-2026-09-16 (169 offers, Saddlecreek, -Today 2026-09-18), current rules: routed 90, unrouted 79, terms 85 (the dispatch's 90 of 169, reproduced). An offer is routed only when a phrase resolves through match-lib Resolve-Commodity to a commodity that has commodity-search.json terms.",
+        "Unrouted brand-only offers whose brand IS one commodity: 'Pepsi' / '7UP' / 'Big K' (12-Pack, 12 fl oz Cans) -> soda ('Soda (12-pack)', includes \\bsoda\\b, \\bcola\\b, fridge pack); 'Doritos' (body 'or Ruffles ... or Sunchips') -> tortilla-chips / potato-chips (includes need 'tortilla chip' / 'potato chip' adjacent); 'Dasani Water' (24-Pack, 16.9 fl oz) -> bottled-water ('Bottled Water (24-pack)', includes purified/spring/drinking/bottled water); 'Bigelow Tea' (18-20 ct) -> tea-bags.",
+        "Unrouted brand-only offers whose brand is NOT one commodity (left unrouted on purpose): 'Tide Laundry Detergent' (laundry-detergent is labelled 'Laundry Detergent (Arm & Hammer OxiClean)' and every include names Arm & Hammer), 'Swanson Broth' (chicken, beef and vegetable broth are three commodities, and Swanson also sells canned chicken), 'Progresso Soup' (no generic soup commodity; Progresso also sells bread crumbs), 'Kroger Cheese', 'Ken's or Kraft Salad Dressing', four wine offers (red and white are separate commodities)."
+      ],
+      "surface_fix": {
+        "what": "brand words on the commodities each brand genuinely is, with the two fences the first routing pass proved necessary",
+        "files": ["grocery/commodities.json"],
+        "exact_change": "soda.include += '\\bpepsi\\b', '\\b7[\\s-]?up\\b', '\\bbig\\s+k\\b'; tortilla-chips.include += '\\bdoritos\\b'; potato-chips.include += '\\bruffles\\b'; bottled-water.include += '\\bdasani\\b'; tea-bags.include += '\\bbigelow\\b'; soda.exclude += '\\brebate\\b'; tortilla-chips.exclude += '\\bpotato\\s+(?:snack\\s+)?chips?\\b'"
+      },
+      "root_cause": "the catalogue includes name kinds of product, not brands, so a brand-only offer headline has no include to hit; the matcher correctly does not guess",
+      "root_fix_none_because": "the root cause IS catalogue data and the surface fix is its fix: a brand word belongs in an include only where every product the brand sells is that commodity, a per-brand judgment the matcher cannot make for itself. The router-level alternative (infer the commodity from the store's own catalogue) was measured and rejected in plan-2026-09-18-3: 16 of 79 offers reachable, at least 4 of those wrong.",
+      "leaves_open": "15 of the 73 offers still unrouted on the frozen 09-16 ad name tracked goods only through a brand that spans several commodities or a commodity scoped to another brand: Tide Laundry Detergent, Swanson Broth, Progresso Soup, Kroger Cheese, Ken's or Kraft Salad Dressing, Kroger Salad Dressing, Tyson Frozen Chicken, Johnsonville Dinner Sausage, Spice Islands Spices, Oscar Mayer Lunchables or Bologna, Private Selection Angus Beef Patties or Land O Frost Lunch Meat, and four wine offers (Barefoot or Woodbridge, Apothic or Menage a Trois, Kendall-Jackson/Josh/Kim Crawford, La Marca or Wairau River)",
+      "leaves_open_occurrences": "15 offers on the one Baker's ad this run routed (2026-09-16..09-22); every weekly ad since the list went live carries the shape, uncounted",
+      "leaves_open_followup": "2026-09-18-ceab00",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "before/after first-match-wins routing of 42,768 distinct names across 88 files (plan-2026-09-18-4.routing.json variant item2_brand_words) through grocery\\match-lib.ps1, plus a probe of every corpus name carrying one of the seven brand words (188 names) with its route before and after; then compare-deals run twice over identical live inputs for the cell outcome",
+        "affected_now": 11,
+        "names": [
+          "Diet Pepsi 12 fl. oz., 36 pk. (Sam's 08-15): (none) -> soda",
+          "Pepsi Zero Sugar, 12 fl. oz., 36 pk. (Sam's 08-15): (none) -> soda",
+          "Pepsi Zero Sugar Mini Cans, 7.5 fl. oz., 30 pk. (Sam's 07-15, 08-15): (none) -> soda",
+          "Doritos Dinamita Spicy Cool Ranch Tortilla Snack Chips, 10.75 oz (Walmart 08-11): (none) -> tortilla-chips",
+          "Doritos Nacho Cheese Tortilla Snack Chips,Party Size, 14.5 Ounce Bag (Walmart): (none) -> tortilla-chips",
+          "Doritos or Miss Vickie's Kettle Cooked Chips (Fareway ad 09-17): (none) -> tortilla-chips",
+          "Ruffles Original Flavor Potato Snack Chips,Party Size, 13 oz Bag (Walmart): (none) -> potato-chips",
+          "Ruffles Cheddar & Sour Cream Potato Snack Chips, Party Size, 12.5 oz Bag (Walmart): (none) -> potato-chips",
+          "Dasani Water (Baker's ad 09-09): (none) -> bottled-water",
+          "Bigelow Assorted Tea Packs 168 ct. (Sam's 07-17, 07-29): (none) -> tea-bags",
+          "steep by Bigelow Lemon Ginger Herbal Tea  60 ct. (Sam's 07-29, 08-15): (none) -> tea-bags"
+        ],
+        "risk": "every admitted name is the commodity it lands on. The first pass admitted two wrong ones and both are fenced: a Hy-Vee rebate line ('BUD LIGHT, PEPSI AND, LAY'S OR TOSTITOS, GET $10 BACK VIA REBATE...') reached soda, and 'Ruffles Doritos Cool Ranch Flavored Potato Chips 8 Oz' left potato-chips for tortilla-chips. Ad routing on the frozen 09-16 fixture: 90 -> 96 of 169.",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [
+        { "name": "Ruffles Doritos Cool Ranch Flavored Potato Chips 8 Oz", "claimed_by": "tortilla-chips", "index": 91, "release_needed": "tortilla-chips.exclude += '\\bpotato\\s+(?:snack\\s+)?chips?\\b' so it stays on potato-chips (index 92); shipped" },
+        { "name": "BUD LIGHT, PEPSI AND, LAY'S OR TOSTITOS, GET $10 BACK VIA REBATE ON THE PURCHASE OF ... (ads-2026-09-17)", "claimed_by": "soda", "index": 93, "release_needed": "soda.exclude += '\\brebate\\b' so the promotion line stays unrouted; shipped" },
+        { "name": "Doritos, 9-10.75 oz or Fritos, 9.25-10 oz or Lay's Kettle Cooked Potato Chips, 5-8 oz", "claimed_by": "corn-chips", "index": 468, "release_needed": "none: tortilla-chips' own fences (corn chips, \\bfritos\\b) keep it off tortilla-chips, and it stays where it was" }
+      ],
+      "freshness": "ad fixture frozen (2026-09-16 ad); corpus as item 1 (measured ~17:00-17:30 on 2026-09-18). A new capture carrying one of the seven brand words would route by the new include; re-run route-diff with the brand probe if a Pepsi, 7UP, Big K, Doritos, Ruffles, Dasani or Bigelow name appears on a new store.",
+      "proof": {
+        "guard_or_fixture": "grocery\\pull-bakers-ad-list.ps1 -SelfTest (the frozen 09-16 ad) and the same router re-run over that fixture with the shipped rules",
+        "must_fire_case": "re-run over the frozen 09-16 fixture: offers 1292703 'Pepsi', 1292643 '7UP', 1292695 'Big K' route to soda, 1292615 'Doritos' to tortilla-chips and potato-chips, 1292747 'Dasani Water' to bottled-water and 1292573 'Bigelow Tea' to tea-bags (routed 90 -> 96)",
+        "clean_twin": "pull-bakers-ad-list -SelfTest keeps all 13 cases green, including the Tito's/Captain Morgan offer recorded in unrouted[] and the pasta-sauce / coffee-pods / chicken-breast terms; the rebate line and the Ruffles Doritos potato chip do not move",
+        "commands": [
+          "powershell -File grocery\\pull-bakers-ad-list.ps1 -SelfTest",
+          "powershell -File grocery\\pull-bakers-ad-list.ps1 -OutDir <temp> -FixtureDir grocery\\regression-inputs\\bakers-ad-2026-09-16 -AdId <fixture adId> -Today 2026-09-18"
+        ]
+      },
+      "rollback": "revert the soda, tortilla-chips, potato-chips, bottled-water and tea-bags include/exclude hunks in commodities.json",
+      "do_not_touch": ["laundry-detergent's Arm & Hammer scope (a ruling, not a routing fix)", "the broth, soup, cheese, dressing and wine commodities", "pull-bakers-ad-list.ps1's router"],
+      "resolution_note": "Brand-only Baker's offers now route where the brand IS the commodity: Pepsi, 7UP and Big K to soda, Doritos to tortilla-chips (Ruffles to potato-chips), Dasani to bottled-water, Bigelow to tea-bags. Frozen 09-16 ad: 90 -> 96 of 169 routed. 11 corpus names gain a route, all correct; 0 board cells move. Brands that span several commodities (Swanson, Progresso, Tide vs the Arm & Hammer commodity) stay unrouted on purpose and are owned separately.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "true: the frozen 09-16 fixture routes 90 of 169 offers with the pre-change rules (unrouted 79, terms 85); every brand-only offer the item names (Pepsi, 7UP, Big K, Doritos, Dasani, Bigelow, Tide, Swanson, Progresso) is in unrouted[] with its phrases; laundry-detergent's label and all five includes name Arm & Hammer",
+      "deviation": null,
+      "shipped_commit": "the commit titled 'Triage 2026-09-18-4 money lane: beverage guard reaches the snack shelf, brand-only Baker's offers route, buttermilk must be the product' on origin/main (its hash is fixed only when ops\\push-main.ps1 lands it after its rebase: git log -1 --format=%H --grep='Triage 2026-09-18-4 money lane' origin/main)"
+    },
+    {
+      "queue_id": "2026-09-18-e6977b",
+      "subject": "Grocery: buttermilk claims donuts, biscuits, syrup and dressing by a flavour word (found closing 2026-09-18-b1d8e3)",
+      "classification": "wrong-product",
+      "evidence": [
+        "commodities.json buttermilk (index 165, unit floz): include is the bare word 'buttermilk'; excludes pancake, biscuit, \\branch\\b, bread, fried, waffle, \\bmix\\b, powder. So any name carrying the word routes there unless one of those words is also present.",
+        "Routing over 42,768 names: 196 names carry 'buttermilk'; 22 route to buttermilk, 14 real (Hiland, Kemps, Kroger cultured buttermilk in pints, quarts and half gallons) and 8 not: Butter Country Rich and Creamy Buttermilk Syrup (4 listings, Walmart), Entenmann's Classic Glazed Buttermilk Donuts (Baker's; Walmart 8 count), Kraft Buttermilk Dressing (Walmart), Pillsbury Grands Southern Homestyle Buttermilk Refrigerated (Walmart 07-18). The ops lane's 8 of 22, reproduced.",
+        "Live buttermilk cells on the 15:46:51 board are real buttermilk (Walmart 'Hiland Cultured Low-Fat Buttermilk, Half Gallon' 0.054/floz; Hy-Vee Hiland, Fareway Kemps, Family Fare Kemps, Baker's Kroger), so 0 wrong-product cells today."
+      ],
+      "surface_fix": {
+        "what": "an identity requirement: buttermilk must be the HEAD NOUN of the name, followed only by a size, a fat level, 'cultured', punctuation, a digit or the end of the name",
+        "files": ["grocery/commodities.json"],
+        "exact_change": "buttermilk.include = ['\\bbuttermilk\\b(?=\\s*(?:$|[,;:()/-]|\\d|(?:half\\s+gallon|gallon|gal|quart|qt|pint|pt|fl|low[\\s-]*fat|lowfat|reduced|fat[\\s-]*free|non[\\s-]*fat|nonfat|whole|cultured)\\b))']"
+      },
+      "root_cause": "buttermilk's include matches the word anywhere in a name, so a flavour or style word routes baked goods, a syrup and a dressing to the dairy commodity when no earlier commodity claims them",
+      "root_fix_none_because": "the identity requirement IS the class fix for this commodity: it refuses every flavour or style use of the word (donuts, syrup, dressing, biscuits, pancakes, pie, chicken...), whatever the product, instead of fencing the four products found; each of the 14 real buttermilk names ends the name or is followed by a size or fat word",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "before/after first-match-wins routing of 42,768 distinct names across 88 files (plan-2026-09-18-4.routing.json variant item3_buttermilk) through grocery\\match-lib.ps1, with a probe of all 196 buttermilk-bearing names; then compare-deals run twice over identical live inputs for the cell outcome",
+        "affected_now": 8,
+        "names": [
+          "Butter Country Rich and Creamy Buttermilk Syrup (4 listings, Walmart): buttermilk -> (none)",
+          "Kraft Buttermilk Dressing (Walmart): buttermilk -> (none)",
+          "Entenmann's Classic Glazed Buttermilk Donuts (Baker's): buttermilk -> donuts",
+          "Entenmann's Classic Glazed Buttermilk Donuts, 8 count, Kosher Classic Doughnuts, 14.5 oz Bag (Walmart 08-31): buttermilk -> donuts",
+          "Pillsbury Grands Southern Homestyle Buttermilk Refrigerated (Walmart 07-18): buttermilk -> refrigerated-biscuits"
+        ],
+        "risk": "the 14 real buttermilk names keep routing to buttermilk; the donuts re-land on donuts as UNPRICED (Baker's) and NOT-IN-STORE (Walmart) candidates, and the Grands biscuits at 0.1822/oz are dearer than the live Walmart refrigerated-biscuits cell (0.1087), so no cell moves",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured ~17:00-17:30 on 2026-09-18 as item 1. A new real buttermilk name whose next word is not a size or fat word (e.g. 'Buttermilk Old Fashioned') would fall to no commodity: route-diff with the buttermilk probe names it before it matters.",
+      "proof": {
+        "guard_or_fixture": "audit-match-soundness.ps1 (reviewed MOVED line, -Accept) and the route-diff buttermilk probe; the audit baseline now records Entenmann's on donuts, so a regression back to buttermilk is a MOVED line again",
+        "must_fire_case": "the 8 wrong names leave buttermilk in the routing diff, and audit-match-soundness reports exactly 'MOVED buttermilk -> donuts Entenmann's Classic Glazed Buttermilk Donuts' against the committed baseline before the accept",
+        "clean_twin": "all 14 real buttermilk names (Hiland 1% Low Fat Cultured Buttermilk, 32 fl oz; Kemps Buttermilk; Kroger Cultured 1% Lowfat Buttermilk Half Gallon/Pint/Quart; ...) still route to buttermilk, and the 5 live buttermilk cells are unchanged in the simulated board",
+        "commands": [
+          "powershell -File grocery\\audit-match-soundness.ps1 -OutDir <scratch>",
+          "powershell -File grocery\\audit-match-soundness.ps1 -OutDir <scratch> -Accept"
+        ]
+      },
+      "rollback": "restore buttermilk.include to ['buttermilk'] and revert the match-baseline.json accept",
+      "do_not_touch": ["buttermilk's existing excludes", "the band 0.03-0.25", "donuts, refrigerated-biscuits and maple-syrup rules"],
+      "resolution_note": "Wrong product class: buttermilk's bare-word include let a flavour word claim a donut, a syrup, a dressing and a biscuit. The include now requires buttermilk to be the head noun (followed only by a size, fat level, 'cultured' or the end of the name). 8 wrong names leave, all 14 real ones stay; 0 board cells move. Soundness baseline accepted for the one reviewed move.",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "true: 22 names route to buttermilk over 42,768 corpus names, 14 real and the 8 wrong ones the ops lane named (4 Butter Country syrup listings, 2 Entenmann's donut listings, Kraft Buttermilk Dressing, Pillsbury Grands); the live buttermilk cells on the 15:46:51 board are all real buttermilk",
+      "deviation": null,
+      "shipped_commit": "the commit titled 'Triage 2026-09-18-4 money lane: beverage guard reaches the snack shelf, brand-only Baker's offers route, buttermilk must be the product' on origin/main (its hash is fixed only when ops\\push-main.ps1 lands it after its rebase: git log -1 --format=%H --grep='Triage 2026-09-18-4 money lane' origin/main)"
+    }
+  ],
+  "ship_sequence": [
+    "edit commodities.json (items 2, 3) and category-excludes.json (item 1), then powershell -File grocery\\apply-category-excludes.ps1 (the bake)",
+    "route-diff over the one corpus in plan-2026-09-18-4.routing.json: before = origin/main rules, after = the shipped rules; review every move",
+    "THE OUTCOME IS THE CELL: compare-deals.ps1 -MinStores 1 twice (before rules, after rules) over identical live inputs into scratch -OutDirs, diffed cell by cell",
+    "audit-food-category.ps1 over a copy of the live board with the new library (expect exit 0)",
+    "audit-match-soundness.ps1 -> review MOVED/DROPPED line by line -> -Accept (never -ForceAccept); commit out\\audit\\match-baseline.json",
+    "pull-bakers-ad-list.ps1 -SelfTest and the router re-run over the frozen 09-16 fixture",
+    "guards.ps1 A/B in one seeded checkout (original rules vs new rules) + test-auditors.ps1 (MUST be 0)",
+    "IF ANY CELL MOVED (the chain copied from check-ad-cycles.ps1): repair-multipack-sizes.ps1 -Apply, stamp-ad-as-of.ps1 -Apply, compare-deals.ps1 -MinStores 1 -IdentityNamespace staple -BakersFile <newest> -FarewayFile <newest>, audit-name-drift.ps1, prune-bad-links.ps1 -Tol 0.32, audit-name-drift.ps1 again, generate-board-overrides.ps1, guards.ps1 (MUST be 0), publish-deals-page.ps1, export-feed.ps1; measured 0 of 3,189 cells, so none of it runs and nothing is republished",
+    "commit with explicit paths from the clean worktree, land with ops\\push-main.ps1, then close the three queue ids with triage-close.ps1 after validate-triage-plan.ps1 -Closing exits 0"
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "q-2026-09-18-4-laundry-scope",
+      "from_item": "2026-09-18-2524ee",
+      "question": "laundry-detergent is 'Laundry Detergent (Arm & Hammer OxiClean)' and all five includes name Arm & Hammer, so Baker's 'Tide Laundry Detergent' offer (117-132 fl oz) routes nowhere and no other brand can ever hold that cell. Should it stay one brand line, or become any liquid laundry detergent priced per fl oz, where the cheapest per ounce wins as on every other commodity?",
+      "options": ["A: keep it Arm & Hammer OxiClean only (today; Tide stays unrouted by definition)", "B: widen to any liquid laundry detergent per fl oz, then add the brand words with a routing measurement (pods, sheets and powder stay excluded)"],
+      "the_rest_of_the_residual": "2026-09-18-ceab00"
+    }
+  ]
+}
