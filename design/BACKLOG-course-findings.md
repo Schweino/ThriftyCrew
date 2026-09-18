@@ -14286,7 +14286,7 @@ live index was not written: its 34 rows turn NULL through this same importer on 
 above. Left alone on purpose: the 53 `"price": 0` entries in `grocery/product-urls.json` itself, and
 `import_product_urls` still copies that raw 0 into the ProductSKU node's `price` property (line 495).
 
-### I201 - the course's two hash-drift implementations are both blind, measured, and nothing here copies them yet `OPEN` `queue-3` `2-WAY` `RUNG1 DOC`
+### I201 - the course's two hash-drift implementations are both blind, measured, and nothing here copies them yet `DONE` `queue-3`
 
 **Merged from `design\backlog-inbox\q3-sqlint-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14306,6 +14306,15 @@ shape (compare SETS keyed by primary key, sample deterministically by key), is
 `~/.claude/skills/data-quality-craft/checks-and-thresholds.md` 5c. The one rung is to cite that
 section from whatever design doc next proposes a board-level change detector, so the course's
 version is not the one that gets built.
+
+**Done 2026-09-18.** No design doc proposes a board-level change detector yet, so there was nothing to
+cite from; an intention to cite "whichever doc comes next" has no carrier. The pointer now lives where
+that author will be: `.claude/rules/measurement.md` (loaded for anything that scores or compares) gains
+a line saying a hash-based change detector compares SETS keyed by primary key, samples by key, cites
+`data-quality-craft/checks-and-thresholds.md` 5c, and fixtures both halves (silent on an unchanged
+board, loud on one changed value at a constant row count). Re-checked at a6a7714fc: `git grep -il
+"order by random"` over the 958 tracked `.py`/`.ps1`/`.sql`/`.js` files hits 0 (positive control:
+`order by` hits 21), so the do-not-copy claim still holds. Text only; no code, no fixture.
 
 ### I202 - I186 sharpened: the price formatter runs three rounding behaviours, not two, and throws away the exact decimal the board arrived as `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 

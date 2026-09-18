@@ -83,8 +83,16 @@ carries all four rules in one file, and copying it is faster than re-deriving th
   to new and check the blobs match rather than assuming it. `design/MEASURE-sidecar-double-load-2026-09-11.md`
   is what that looks like.
 
-Two more that live elsewhere and bite here:
+Three more that live elsewhere and bite here:
 
+- **A hash-based change detector compares SETS keyed by primary key, and samples by KEY, never at
+  random** (backlog I201). The `sql-performance-testing-and-data-integrity` course's two versions are
+  each blind: counting distinct row hashes cannot see a changed value (one hash replaces another, the
+  count holds), and an `ORDER BY random()` sample hashes differently on unchanged data. Nothing here
+  implements either yet. **Any design doc that proposes a board-level change or drift detector cites
+  `~/.claude/skills/data-quality-craft/checks-and-thresholds.md` section 5c**, which has the measured
+  account and the correct shape, and fixtures both halves: silent on an unchanged board, loud on one
+  changed value at a constant row count.
 - **Three score spaces do not share a scale** - bi-encoder cosine, cross-encoder sigmoid and BM25.
   `sidecar/THRESHOLDS.md` is the register and `ops/audit-threshold-register.ps1` gates it.
 - **A fixture's 50% base rate overstates precision enormously.** Live precision comes from
