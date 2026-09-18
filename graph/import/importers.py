@@ -1323,7 +1323,7 @@ def import_identity(db: GraphDB, ts: str, run: str) -> dict:
 
 
 # The largest share of the identity table's own instance_of edges one run may retract. FIRST PLAUSIBLE
-# NUMBER, NOT THE SURVIVOR OF A SWEEP (backlog I229, 2026-09-19): the only measurement is the first
+# NUMBER, NOT THE SURVIVOR OF A SWEEP (backlog I229, 2026-09-18): the only measurement is the first
 # cleanup itself, 3,596 of 38,905 identity edges (9.2%) stale on the 2026-09-18 graph.db, accumulated
 # since the table began. Day-over-day churn after that is unmeasured. The bar exists for the failure
 # where the READ was wrong rather than the world - an emitter that wrote one store's file short but

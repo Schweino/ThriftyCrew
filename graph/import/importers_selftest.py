@@ -388,7 +388,7 @@ def _instance_of(db) -> dict:
 
 def _identity_cases(db, tmp: str) -> None:
     """I229: import_identity retracts the identity-table edges its files no longer assert."""
-    ts, run_id = "2026-09-19T00:00:00", "run:i229-selftest"
+    ts, run_id = "2026-09-18T00:00:00", "run:i229-selftest"
     peas, corn = I.commodity_id("canned-peas", "staple"), I.commodity_id("frozen-peas", "staple")
     other = I.commodity_id("rice", "staple")
     sauce = I.commodity_id("fixture-sauce", "recipe")
