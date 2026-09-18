@@ -16066,7 +16066,7 @@ prices, so the first rung is to measure what they would change. Related: `import
 - Graph nightly repeats hourly 21:30 to 05:30 with a 3 h limit; only `-HardStop 06:30` keeps the 05:30 launch
   out of the 07:00 capture, and whether the in-flight stage actually stops is unchecked (I213).
 
-### I237 - Push and gate papercuts that cost every session a retry `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+### I237 - Push and gate papercuts that cost every session a retry `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings-2.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16079,6 +16079,24 @@ prices, so the first rung is to measure what they would change. Related: `import
   match-soundness on 6 chain runs (I232).
 - `ops/seo_url_inspect.py` prints only the earliest and latest crawl date, while I44's re-check needs the date
   per URL (I44).
+
+**Done 2026-09-18.** Four commits, one per bullet, each with its fixtures broken once and restored md5-identical.
+(1) Both halves of the cause. `grocery/test-auditors.ps1` u121 reads feed-covers-published's verdict three ways, and
+the unseeded one ("27 of 28 cases ran, 1 BLIND" at exit 0, ran + blind equal to the pinned 28) is now a counted
+SKIP, never a FAIL; `ops/push-main.ps1` seeds a checkout with no built card before its gate, with the hook's card
+test and seeder, best effort. Proved in a worktree with the boards seeded and the cards moved aside:
+`prepush-test-auditors -PathsFile meal-prep/pipeline/feed-covers-published.ps1` (9 units selected) REFUSED rc=1 on
+1 new failing case with the old test-auditors, SELECTED CASES PASSED rc=0 with the new one. push-main self-test 26
+-> 29 cases. (2) `ops/hooks/pre-push`'s slot refusal reads `$script:TcGateSlotTotal` out of `lib/gate-slots.ps1`
+instead of saying 10; `ops/test-prepush-hook.ps1` 46 -> 48 cases, one of them setting the sandbox library to 17 so a
+matching literal cannot pass. The installed copy in `.git\hooks` changes only when `ops\install-hooks.ps1` runs,
+and `audit-hook-installed` reports STALE until it does. (3) `ops/audit-list-array-wrap.ps1` now sees `@($v.name)`
+when $v's object got a New-Object List[object] in that field (its literal, a member assignment before the wrap, or
+one call hop into a parameter). Over 794 tracked scripts it reports 0 property sites against 2,142 `@($x.name)`
+spellings, and 6 on the pre-fix `audit-match-soundness.ps1` (c0de652aa^), every one a site c0de652aa repaired;
+two looser cuts (22 and 5 false sites) are in its header and fixtured as MUST NOT FIRE. Self-test 31 -> 40.
+(4) `ops/seo_url_inspect.py` prints one row per URL (last crawl, verdict, url), an uncrawled URL as `none`;
+self-test 9 -> 12 cases, now asserting its own count. The credential file was not touched.
 
 ### I238 - Unverified leftovers `OPEN` `run-0919` `2-WAY` `RUNG1 READ`
 

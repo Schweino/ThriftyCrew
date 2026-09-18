@@ -75,7 +75,7 @@ def inspect(token, url, site):
 def summarise(results):
     """(counters, lines) over [(url, inspectionResult)]. Pure, so the fixtures drive it exactly."""
     cov, rich, sev = collections.Counter(), collections.Counter(), collections.Counter()
-    crawls, errors = [], []
+    crawls, errors, per_url = [], [], []
     for url, res in results:
         idx = res.get("indexStatusResult", {}) or {}
         rr = res.get("richResultsResult", {}) or {}
@@ -84,8 +84,10 @@ def summarise(results):
                          for d in rr.get("detectedItems", []) or [])
         rich[(rr.get("verdict") or "NONE") + ("  with a Recipes item" if has_recipe
                                               else "  no Recipes item")] += 1
-        if idx.get("lastCrawlTime"):
-            crawls.append(str(idx["lastCrawlTime"])[:10])
+        crawl = str(idx["lastCrawlTime"])[:10] if idx.get("lastCrawlTime") else ""
+        if crawl:
+            crawls.append(crawl)
+        per_url.append((url, crawl, rr.get("verdict") or "NONE"))
         for d in rr.get("detectedItems", []) or []:
             for item in d.get("items", []) or []:
                 for iss in item.get("issues", []) or []:
@@ -105,17 +107,26 @@ def summarise(results):
                      % (len(crawls), n, min(crawls), max(crawls)))
     else:
         lines.append("  LAST CRAWL: none of the %d carries a crawl date" % n)
+    # ONE ROW PER URL (2026-09-18, backlog I237). A range says when the oldest and newest crawl were, not WHICH
+    # pages Google has re-read since a fix; I44's re-check needed that per URL and had to be read by hand. Input
+    # order is kept (the deterministic stride), and a page with no crawl date is listed as "none", never dropped.
+    if per_url:
+        lines.append("  PER URL (last crawl, rich-result verdict, url)")
+        for url, crawl, verdict in per_url:
+            lines.append("    %-10s  %-8s  %s" % (crawl or "none", verdict, url))
     lines.append("  ISSUES by severity: %s" % (dict(sev) or "none"))
     for url, kind, msg in errors:
         lines.append("    ERROR  %s  [%s]  %s" % (msg, kind, url))
     return {"n": n, "coverage": dict(cov), "rich": dict(rich), "crawls": crawls,
-            "severity": dict(sev), "errors": errors}, lines
+            "severity": dict(sev), "errors": errors, "per_url": per_url}, lines
 
 
 def selftest():
     bad = []
+    ran = []
 
     def T(label, name, ok, got=""):
+        ran.append(name)
         if not ok:
             bad.append(name)
         print("  %-14s %-58s %s" % (label, name, "ok" if ok else "FAIL " + str(got)))
@@ -155,6 +166,22 @@ def selftest():
     T("MUST NOT FIRE", "an empty result set does not invent a summary",
       summarise([])[0]["n"] == 0)
 
+    # ONE ROW PER URL (backlog I237): I44's re-check needed to know WHICH pages were re-crawled after a fix.
+    mixed = [("https://x/a/", res("Submitted and indexed", "PASS", crawl="2026-09-10T03:00:00Z")),
+             ("https://x/b/", res("Submitted and indexed", "FAIL", [("ERROR", "Missing field \"image\"")],
+                                  crawl="2026-08-30T00:00:00Z")),
+             ("https://x/c/", {"indexStatusResult": {"coverageState": "URL is unknown to Google"},
+                               "richResultsResult": {}})]
+    s5, l5 = summarise(mixed)
+    rows5 = [l for l in l5 if "https://x/" in l and "ERROR" not in l]
+    T("MUST FIRE", "each URL gets its own row with its own crawl date and verdict",
+      len(rows5) == 3 and "2026-09-10" in rows5[0] and "PASS" in rows5[0]
+      and "2026-08-30" in rows5[1] and "FAIL" in rows5[1], rows5)
+    T("MUST FIRE", "a URL with no crawl date is listed as none, never dropped",
+      len(rows5) == 3 and "none" in rows5[2] and "NONE" in rows5[2] and rows5[2].endswith("https://x/c/"), rows5)
+    T("CLEAN TWIN", "the earliest/latest range is still printed beside the table",
+      any("earliest 2026-08-30, latest 2026-09-10" in l for l in l5), l5)
+
     # THESE TWO ARE HERMETIC NOW (2026-09-11), and the reason is a push they blocked. They read the live
     # meal-prep/db/built, so their verdict depended on how many cards the checkout happened to hold: with
     # 1,168 they passed; with ZERO they passed on the `len(urls) < 2` guard without testing anything; and
@@ -179,10 +206,15 @@ def selftest():
 
     print("")
     if bad:
-        print("seo-url-inspect SELF-TEST: %d FAILED of 9" % len(bad))
+        print("seo-url-inspect SELF-TEST: %d FAILED of %d" % (len(bad), len(ran)))
         print("SEO-URL-INSPECT-COMPLETE selftest failed=%d" % len(bad))
         return 1
-    print("seo-url-inspect SELF-TEST PASS (9 cases)")
+    # A literal list of cases knows its own number, so a shortfall is a defect rather than a smaller run.
+    if len(ran) != 12:
+        print("seo-url-inspect SELF-TEST: ran %d case(s), expected 12 - a block of cases was skipped" % len(ran))
+        print("SEO-URL-INSPECT-COMPLETE selftest failed=count")
+        return 1
+    print("seo-url-inspect SELF-TEST PASS (%d cases)" % len(ran))
     print("SEO-URL-INSPECT-COMPLETE selftest ok")
     return 0
 
