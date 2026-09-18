@@ -12321,6 +12321,18 @@ checklist-based technique under another name. The course gives no measured numbe
 `defect density` all count 0 over its 222,844 characters of transcript - so nothing here can be
 cited as evidence for changing a threshold.
 
+**ACCEPTANCE BAR, written 2026-09-18 before any count in this pass was taken.** The question is whether a
+post-publish review run can be COUNTED, with what it found, from a durable record that a later session can
+read without the transcript that spawned it. Denominator: every dispatch of `post-publish-reviewer` found in
+this project's session transcripts (`~/.claude/projects/C--Codex-ThriftyCrew/**/*.jsonl`, an Agent/Task call
+whose `subagent_type` is `post-publish-reviewer`), counted by unique tool-use id. Numerator: dispatches whose
+verdict and findings reached a durable in-repo record (a committed file, a triage-queue row, or a commit
+message naming the review and its result). Bar: **if the numerator is at least 80% of the denominator, the
+record is adequate and no fix is warranted; below 80% the one-line brief fix is warranted** (append the
+per-category verdict and every finding to a dated JSONL beside the other findings corpora). The brief's
+self-contradiction (fix at line 45, never repair at lines 103-105) is judged separately and is warranted
+regardless of the count, because two instructions that cannot both be obeyed are a defect at any rate.
+
 ### I165 - The four importers each decide feed-row validity for themselves, and only Walmart's was ever lifted into a library `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Structural claim partly REFUTED: there are THREE implementations, not four - `import-aldi-batch.ps1` is a 24-line shim onto the Instacart importer, converted 2026-07-30. The side-by-side the item asks for is built: **7 of 8 validity conditions have fewer than three importers agreeing**. Also found, and worth more than the count: a false statement in shipped source, where the Instacart importer`s comment claims mojibake repair is "uniform across all four importers" while Sam`s has zero calls and no `capture-lib` at all.
