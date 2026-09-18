@@ -1,0 +1,176 @@
+{
+  "lane": "weekly",
+  "generated": "2026-09-18T17:20:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-17 (built 2026-09-18 15:46:51)",
+  "head_at_dispatch": "7f7af2e99",
+  "queue_ids_seen": ["2026-09-18-55b7aa", "2026-09-18-8491bf", "2026-09-18-1139a0", "2026-09-18-2524ee", "2026-09-18-e6977b"],
+  "routing_artifact": null,
+  "last_week_target_measured": "plan-2026-09-11-2.json target 'grocery new price flag s' recorded days_fired 12 over the 14 days ending 2026-09-11; its prevention item shipped 3e3969ec4 at 2026-09-11 21:42. Census since then: fired on 4 of the 7 days elapsed (09-12, 09-13, 09-14, 09-18), against 12 of the 14 days before the ship (09-02 to 09-11 inclusive of its window). The 14-day after-window is only half elapsed, so this is 4 of 7 against 12 of 14, stated as counts, not a rate comparison.",
+  "prevention_target": {
+    "type": "grocery capture watchdog issue s",
+    "window_days": 14,
+    "days_fired": 9,
+    "rank": 2,
+    "why_not_top": "rank 1 'grocery new price flag s' (10 days) already has prevention:grocery new price flag s, status done, shipped 3e3969ec4, in plan-2026-09-11-2.json"
+  },
+  "new_source_check": "no row contract exists yet (build step 8); went live since the last lane run (git log since the lane stamp 2026-09-11T21:43 over grocery/stores.json, grocery/commodities.json and the capture builders/pullers): the Baker's weekly-ad LIST feed, grocery/pull-bakers-ad-list.ps1 (b92c93874 2026-09-18 14:34, 72cd626de 14:58), which decides which Baker's terms the Kroger API asks; changes to existing sources in the same range are store-read stamps (Walmart a5bea95ed, Sam's 3ed74c31b, Fareway 4b8460e8f), import-instacart-batch store prefix (af28aa2b8) and the two-product ad-line split (9c44c3a37), none a new store or feed",
+  "items": [
+    {
+      "queue_id": "prevention:grocery capture watchdog issue s",
+      "subject": "Prevention: the capture watchdog pages on 9 of the last 14 days",
+      "classification": "capture-gap",
+      "evidence": [
+        "census window 2026-09-05..09-18: the type fired on 09-06, 09-07, 09-09, 09-10, 09-12, 09-13, 09-14, 09-17, 09-18 (9 days, rank 2 by Get-AlertCensusTypeDays)",
+        "FIND lines per day from grocery/out/logs/capture-watchdog-<date>.log. Since the one-incident fold (7dad4b07a) the HELD BY GUARDS symptoms go out on their own subject with -CausedBy guards-hold, so what made THIS type fire on a hold morning is the INDEPENDENT finding: 09-13 AD STALE 1 of 7 (238 rows) + RUN RECORD [ad] exit 1; 09-14 the same; 09-18 AD STALE 1 of 7 (146 rows); 09-17 the 2-day outage (DID NOT RUN, BOARD IS STALE, AD STALE 3 of 7, 522 rows); 09-12 RUN RECORD [daily] exit 1 + FF MISSING-WINDOW; 09-06/07/09 pipeline exit 1 and commit refused (pre-fold)",
+        "AD STALE is the most frequent independent finding: 4 of the 9 days. Its producers, from row-age's AD COVERAGE GONE lines and the ad runs: Fareway (09-06 244 rows; 09-13 and 09-14, where capture-run-ad logged 'Fareway rc=3 NOT TRANSCRIBED: weekly pages installed but no fareway-deals-*.json reaches the ad end') and Baker's (09-02 108, 09-09 83, 09-18 146 rows)",
+        "RUN RECORD [ad] exit 1 on 09-06, 09-13, 09-14 was the same Fareway rc=3 each time: grocery/pull-fareway-ads.ps1:257 exits 3 when the flyer JPGs are installed but nobody has vision-read them, and capture-run.ps1:341 counts any nonzero lane as FAILED",
+        "Baker's has had its source fix since 14:34 today: b92c93874 reads the ad's own offer list and asks the Kroger API, and audit-ad-status re-run at 16:40 reads Baker's 'ad list with all 85 routed term(s) asked through the Kroger API', 0 of 7 stores stale"
+      ],
+      "root_cause": "two of the seven stores' weekly ads reach the board only through a hand transcription with no scheduled producer: Baker's flyer (until b92c93874 today) and Fareway's flyer JPGs, which pull-fareway-ads installs at 07:00 but which only a vision-reading session turns into fareway-deals-<date>.json. Every rollover of either ad therefore excludes its sale rows until somebody transcribes, and the watchdog pages AD STALE (plus RUN RECORD for the Fareway rc=3) on each of those days",
+      "root_fix": {
+        "what": "give Fareway's weekly ad a scheduled, headless producer the way b92c93874 gave Baker's one, so a rollover is captured by the 07:00 ad task instead of waiting for a transcription",
+        "files": ["grocery/pull-fareway-ads.ps1", "grocery/capture-run.ps1"],
+        "exact_change": "NOT BUILT THIS RUN (status needs-more-time). Candidates, cheapest first, each to be measured before choosing: (a) Fareway's storefront capture (select-fareway-shop, JSONL, per-row store stamp since 4b8460e8f) already carries sale prices for what it reads, so ask it the ad's terms on rollover day the way Get-BakersAdOwed asks the Kroger API for Baker's; (b) a headless OCR/local-model read of the installed JPGs into fareway-deals-<date>.json, gated by the existing window and Omaha checks. Neither is a matching-rule change."
+      },
+      "prevention": {
+        "source": ["grocery/pull-fareway-ads.ps1", "grocery/capture-run.ps1"],
+        "what": "Fareway's weekly ad has no scheduled producer: the ad task installs the flyer pages and exits 3 NOT TRANSCRIBED, and the rows exist only after a hand vision read. Baker's, the other half of this class, got its producer today (b92c93874)",
+        "exact_change": "on an ad rollover, capture the Fareway ad's rows headlessly inside the 07:00 ad task (option (a) or (b) in root_fix), so pull-fareway-ads exits 0 with a fareway-deals file that reaches the ad's end and AD STALE does not fire for Fareway on rollover day"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "nothing shipped for this item this run; no rule, band, commodity or board input changed",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none from this run",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/pull-fareway-ads.ps1 -SelfTest and grocery/audit-ad-status.ps1, when the producer is built",
+        "must_fire_case": "frozen 2026-09-13 state: weekly pages for 09-13..09-19 installed, no fareway-deals file reaching 09-19 -> pull-fareway-ads exits 3 and audit-ad-status counts Fareway as needing a pull",
+        "clean_twin": "the same state after the headless producer writes fareway-deals-2026-09-13.json reaching 09-19 -> pull-fareway-ads exits 0 and audit-ad-status reads Fareway ok in window",
+        "commands": ["powershell -NoProfile -File grocery\\pull-fareway-ads.ps1 -SelfTest", "powershell -NoProfile -File grocery\\audit-ad-status.ps1"]
+      },
+      "rollback": "nothing shipped",
+      "freshness": "census and watchdog logs read 2026-09-18 17:00; Baker's measured after b92c93874 at 16:40",
+      "leaves_open": "the whole Fareway half of the class: Fareway ad rollovers without a same-day transcription, 3 watchdog days in this window (09-06, 09-13, 09-14)",
+      "leaves_open_occurrences": 3,
+      "leaves_open_followup": null,
+      "resolution_note": "Target named, measured and not built: AD STALE is the top independent watchdog finding (4 of 9 days). Baker's half fixed at source today by b92c93874; the Fareway half needs a headless producer for its weekly ad, left for next week with two candidates named and not yet measured.",
+      "status": "needs-more-time",
+      "premise_verified": "true: census recomputed through Get-AlertCensusTypeDays (9 days, rank 2), every firing day's FIND lines read from the watchdog logs",
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-18-55b7aa",
+      "subject": "Grocery: beverage wrong-class guard still blind on 20 non-drink Snacks & Drinks commodities",
+      "classification": "no-code-change",
+      "evidence": [
+        "RE-MEASURED 2026-09-18 17:05 on comparison-2026-09-17 (built 15:46:51): all 20 named commodities present, 134 store cells, 0 cell items matching the category-excludes beverage class (positive control: 'Gatorade Thirst Quencher' matches the same pattern set). Occurrences of the class on these 20: 0 now, 0 in the reviewer's 3,189-cell scan of the 08:07 build; the class has happened once, on pistachios 09-13..09-18, and that one is closed (apply_ids)."
+      ],
+      "root_cause": "the food-class guard scopes the beverage class by display bucket, and 'Snacks & Drinks' mixes drinks with 21 non-drink commodities; apply_ids covers pistachios only of those 21",
+      "resolution_note": "MONEY-LANE HAND-BACK: widening apply_ids changes a BLOCKING guard's scope (category-excludes.json, a file on this lane's line). Measurement handed back: 0 beverage products on the 20 today (134 cells); plan-2026-09-18.routing.json variant B3 already measured 19 of the 20 move 0 names, and protein-bars needs a 'gatorade' release first.",
+      "status": "bounced",
+      "premise_verified": "true: 0 of 134 cells, re-run on the 15:46 board",
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-18-8491bf",
+      "subject": "Grocery: daily pipeline did not run on 2026-09-15 or 2026-09-16",
+      "classification": "needs-brad",
+      "evidence": [
+        "plan-2026-09-18.json open_questions_for_brad Q4-tasks-dead-after-reboot: all 12 TC tasks are 'run only when user is logged on', so after the 2026-09-14 22:29 Windows Update restart nothing ran on 09-15 or 09-16 and nothing paged, because health-heartbeat runs inside one of those tasks. The remedy (auto-logon or a stored-credential task) needs Brad's own password, which no agent enters."
+      ],
+      "root_cause": "every TC task is logon-only, so a reboot with no logon stops the whole estate including the check that would page it",
+      "resolution_note": "Parked on Brad's ruling Q4-tasks-dead-after-reboot (plan-2026-09-18.json); left open, not attempted.",
+      "status": "blocked",
+      "premise_verified": "true: the ruling id exists in plan-2026-09-18.json with this diagnosis",
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-18-1139a0",
+      "subject": "Ops: test-auditors pre-push leg still loses the ref race when a rebase moves an input",
+      "classification": "infra",
+      "evidence": [
+        "queue body: push-main's outer gate ran run-gates only, so the full test-auditors leg (389 s) ran INSIDE the push lock on the landing f0d65b0d8, holding every other push on the box; plain git pushes 2, 4 and 5 each passed test-auditors in 422 to 451 s and lost the ref",
+        "ops/hooks/pre-push runs ops/prepush-test-auditors.ps1 -RefsFromStdin after run-gates; that script records a PASS keyed on its inputs' content (Get-TaInputKey, per checkout root) and prints REUSED key=... on a later run whose inputs did not move. push-main never ran it before taking the lock, so no pass was ever recorded for the in-lock run to reuse."
+      ],
+      "surface_fix": {
+        "what": "push-main's gate outside the lock runs both hook legs",
+        "files": ["ops/push-main.ps1"],
+        "exact_change": "new Invoke-TcWarmTestAuditors (runs prepush-test-auditors -RefsFromStdin with the ref line git will hand the hook, 'HEAD <head> refs/heads/<branch> <remote sha>', exit 1 refuses before the lock, 3 degrades to the hook, exit 0 counts only with the COMPLETE marker) and Get-TcWarmRefLine; the default gate runner runs it after run-gates passes, and the refusal line names which leg refused"
+      },
+      "root_cause": "the push-lock work moved run-gates out of the lock but not the hook's second leg, so the slowest gate still ran serialised",
+      "root_fix_none_because": "the surface fix is the class fix: both hook legs now run outside the lock with the same inputs the hook will see, and the in-lock run is a reuse whenever the in-lock rebase brought no test-auditors input",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule or board input changed; push-main's own behaviour only",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a push-main run now pays the test-auditors leg outside the lock (where it was paid inside before); a red test-auditors check now refuses before queueing instead of after taking the lock",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "ops/push-main.ps1 -SelfTest (4 new cases driving Invoke-TcWarmTestAuditors through fixture scripts) plus the live push of this plan through the new push-main",
+        "must_fire_case": "a fixture check that prints a refusal and exits 1 -> Code 1 with a test-auditors reason, so the push never queues; exit 0 with no completion marker -> 3; an unformable ref line -> 3 and the check is not run",
+        "clean_twin": "a fixture check that passes -> Code 0 AND it read on stdin exactly the ref line handed to it (the key the in-lock run looks up is the one recorded)",
+        "commands": ["powershell -NoProfile -File ops\\push-main.ps1 -SelfTest"]
+      },
+      "rollback": "revert the push-main hunk; the hook is unchanged",
+      "freshness": "measured 2026-09-18 17:00 on origin/main 7f7af2e99",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "resolution_note": "push-main now runs prepush-test-auditors outside the lock after run-gates, with the hook's own ref line, so the in-lock leg reuses the recorded pass unless the in-lock rebase moved an input. A moved input still runs the whole leg inside the lock, by design: that content has not been judged.",
+      "status": "done",
+      "premise_verified": "true: the hook's leg order and the keyed pass record read in ops/hooks/pre-push and ops/prepush-test-auditors.ps1 (Get-TaInputKey, Read-TaPassRecord)",
+      "deviation": "the default runner's composition (run-gates then the test-auditors leg) is reached by the live push only; the self-test reaches the new function through its -Script seam, not the composition, because the composition's default arm launches the real run-gates",
+      "shipped_commit": "the commit subject-lined 'Weekly lane 2026-09-18' on main"
+    },
+    {
+      "queue_id": "2026-09-18-2524ee",
+      "subject": "Baker's ad list: brand-only offers of tracked goods are unrouted",
+      "classification": "no-code-change",
+      "evidence": [
+        "the router already tries headline AND body: grocery/pull-bakers-ad-list.ps1 routes every phrase from Get-BkalPhrases (headline, and headline plus body) through match-lib Resolve-Commodity; the unrouted[] rows carry both, e.g. 'Pepsi' + '12-Pack, 12 fl oz Cans', 'Tide Laundry Detergent' + 'Select Varieties, 117-132 fl oz'. So 'route through the full matcher including body text' is what already runs.",
+        "router-only alternative measured 2026-09-18 17:10: infer an offer's commodity from the store's OWN catalogue, i.e. route every captured Baker's product name (out\\regular\\bakers-regular-*.json, last 20 files, 7,190 distinct names) that starts with the offer's brand and take the majority. Of 79 unrouted offers, 16 had any such name: right for Pepsi (soda 7 of 7), 7UP (soda 1), Big K (soda 8 of 10), Doritos (tortilla-chips 2), Barefoot/Apothic/Kendall-Jackson (wine); WRONG for Smucker's Uncrustables (peanut-butter 1 of 1), Kroger Cheese (cheese-tortellini 2, frozen-pizza 1), Carving Pumpkins (apples 8 of 11), Ken's or Kraft Salad Dressing (split over 3 dressings); 0 names at all for Tide, Swanson, Progresso, Dasani, because nobody asks those terms. The named residual is not reachable from the router."
+      ],
+      "root_cause": "the catalogue includes name kinds of product, not brands, so a brand-only offer headline has no include to hit; the matcher correctly does not guess",
+      "resolution_note": "MONEY-LANE HAND-BACK: the fix is catalogue data (brand tokens on soda, laundry detergent, chips, broth, canned soup, bottled water includes in commodities.json), a matching-rule change on this lane's line. Router-level inference measured and rejected: 16 of 79 offers reachable, at least 4 of those wrong, and 0 of Tide/Swanson/Progresso/Dasani.",
+      "status": "bounced",
+      "premise_verified": "true: router phrases read in the ad-list file; catalogue inference measured over 7,190 names",
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-18-e6977b",
+      "subject": "Grocery: buttermilk claims donuts, biscuits, syrup and dressing by a flavour word",
+      "classification": "no-code-change",
+      "evidence": [
+        "ROUTING RE-MEASURED 2026-09-18 17:12 through match-lib Resolve-Commodity over current commodities.json: 171 distinct names containing 'buttermilk' across 32 files (out\\regular\\*-regular-2026-09-1*.json plus candidates-2026-09-17.json). Destinations: pancake-mix 36, unrouted 34, refrigerated-biscuits 25, buttermilk 22, frozen-waffles 20, ranch-dressing 18, ranch-seasoning-mix 8, corn-muffin-mix 3, english-muffins 3, bread 1, breakfast-sandwiches 1. Of the 22 on buttermilk, 14 are real buttermilk and 8 are not: Entenmann's Classic Glazed Buttermilk Donuts (2 listings), Butter Country Buttermilk Syrup (4 listings), Kraft Buttermilk Dressing, Pillsbury Grands Southern Homestyle Buttermilk Refrigerated (biscuits). No board cell wrong today: the body records the donuts, syrup and dressing refused OUT-OF-BAND and the biscuits in band but not crowning."
+      ],
+      "root_cause": "buttermilk's include matches the word anywhere in a name, so a flavour or style word routes baked goods, a syrup and a dressing to the dairy commodity when no earlier commodity claims them",
+      "resolution_note": "MONEY-LANE HAND-BACK: a matching-rule change to commodities.json (buttermilk excludes or a donuts/biscuits/syrup/dressing claim ahead of it). Routing measurement: 8 wrong of 22 names routed to buttermilk (171 buttermilk-bearing names, 32 files).",
+      "status": "bounced",
+      "premise_verified": "true: the four products named in the item still route to buttermilk",
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "measure the prevention target (census, watchdog logs); leave it needs-more-time with the measurement",
+    "re-measure 55b7aa, 2524ee, e6977b and hand each back to the money lane",
+    "ops/push-main.ps1: Invoke-TcWarmTestAuditors + Get-TcWarmRefLine, default runner runs both legs; push-main -SelfTest",
+    "validate-triage-plan handoff, commit, ops\\push-main.ps1 from the worktree (the live proof of 1139a0), validate-triage-plan -Closing, triage-close 1139a0, write the lane stamp"
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q4-tasks-dead-after-reboot",
+      "question": "Carried from plan-2026-09-18.json unchanged: which remedy for TC tasks that stop after a reboot with no logon (auto-logon, or stored-credential tasks). Owns 2026-09-18-8491bf."
+    }
+  ]
+}

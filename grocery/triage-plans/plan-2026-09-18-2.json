@@ -49,7 +49,7 @@
       "status": "done",
       "premise_verified": "true: verdict file read (CLOSE, 0 of 28), the task existed and was Ready with no future trigger, the branch diff was exactly the seven files the page names, and the other two issues were re-read live at 16:30",
       "deviation": "the dispatch described the verdict and I125 close as still to do; both were already done by 4d8192903 (the MEASURE doc's Verdict section and backlog I125), so this item only corrected their Status lines to say the removal landed. SECOND DEVIATION: the first push-main was refused by run-gates (419 pass, 1 fail): ops/audit-task-registration -SelfTest case 'every watched task has a definition' named TC Approvals Page as undefined, because a watch row needs a committed definition too. The live task was exported to ops/scheduled-tasks/tc-approvals-page.xml (SID, logon account and profile path replaced by placeholders); audit-task-registration then read 11 definitions, 11 rows, 0 findings, and its self-test passed 20 of 20.",
-      "shipped_commit": "the commit subject-lined 'Triage plan-2026-09-18-2' on main, with the removal cherry-picked from b4619d425 directly before it"
+      "shipped_commit": "ed45e5cef (removal, cherry-picked from b4619d425), ca0625cd3, 7f7af2e99"
     },
     {
       "queue_id": "2026-09-18-d23cfd",
@@ -63,7 +63,7 @@
       "status": "done",
       "premise_verified": "true: audit-ad-status re-run from the main checkout, exit 0, verdict line quoted in evidence",
       "deviation": null,
-      "shipped_commit": "the commit subject-lined 'Triage plan-2026-09-18-2' on main, with the removal cherry-picked from b4619d425 directly before it"
+      "shipped_commit": "ed45e5cef (removal, cherry-picked from b4619d425), ca0625cd3, 7f7af2e99"
     }
   ],
   "ship_sequence": [

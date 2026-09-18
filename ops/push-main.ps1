@@ -152,6 +152,61 @@ function Invoke-TcWarmGate {
   }
 }
 
+function Invoke-TcWarmTestAuditors {
+  <# The hook's SECOND leg, run outside the lock too (2026-09-18, queue 2026-09-18-1139a0). The pre-push hook runs
+     ops\prepush-test-auditors.ps1 after run-gates, and when push-main holds the lock that leg ran INSIDE it: measured
+     2026-09-18 on the landing of the money lane's commits, a full test-auditors leg took 389 s under the lock (f0d65b0d8),
+     holding every other push on the box, because nothing had recorded a pass before the lock was taken.
+     prepush-test-auditors records a PASS keyed on the content of its inputs and reuses it across a rebase that moved
+     none (Get-TaInputKey), so running it here, with the same ref line the hook will hand it, makes the in-lock run a
+     REUSED line whenever the in-lock rebase brought in no test-auditors input. It weakens nothing: the hook still runs
+     the leg inside the lock, and a key that moved runs the whole suite there exactly as before.
+     Same contract as Invoke-TcWarmGate: Ran / Code / Why, 1 refuses before the lock, 3 degrades to the hook.
+     An exit 0 counts only with PREPUSH-TEST-AUDITORS-COMPLETE as the last line, as in the hook. -Script is the seam the
+     self-test drives a fixture through. #>
+  param([string]$Dir, [string]$RefLine, [string]$Script = '')
+  if (-not $Script) { $Script = Join-Path $Dir 'ops\prepush-test-auditors.ps1' }
+  if (-not (Test-Path -LiteralPath $Script)) {
+    return [pscustomobject]@{ Ran = $false; Code = 3; Why = 'this checkout has no ops\prepush-test-auditors.ps1' }
+  }
+  if (-not $RefLine) { return [pscustomobject]@{ Ran = $false; Code = 3; Why = 'the ref line for the test-auditors check could not be formed' } }
+  $stem = Join-Path $env:TEMP ('tc-pm-ta-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  $inF = $stem + '.in'; $outF = $stem + '.out'; $errF = $stem + '.err'
+  try {
+    [IO.File]::WriteAllText($inF, ($RefLine + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $p = Start-Process -FilePath 'powershell.exe' -WorkingDirectory $Dir -NoNewWindow -PassThru -ErrorAction Stop `
+      -RedirectStandardInput $inF -RedirectStandardOutput $outF -RedirectStandardError $errF `
+      -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $Script, '-RefsFromStdin')
+    $null = $p.Handle
+    $p.WaitForExit()
+    $code = $p.ExitCode
+    $lines = @()
+    if (Test-Path -LiteralPath $outF) { $lines = @([IO.File]::ReadAllLines($outF) | Where-Object { $_.Trim() }) }
+    foreach ($l in $lines) { if ($l -notmatch '^PREPUSH-TEST-AUDITORS-COMPLETE') { Say ('  ' + $l) } }
+    if ($null -eq $code) { return [pscustomobject]@{ Ran = $true; Code = 3; Why = 'the test-auditors check ran but its exit code could not be read' } }
+    $complete = ($lines.Count -gt 0) -and ([string]$lines[$lines.Count - 1] -match '^PREPUSH-TEST-AUDITORS-COMPLETE')
+    if ([int]$code -eq 0 -and -not $complete) { return [pscustomobject]@{ Ran = $true; Code = 3; Why = 'the test-auditors check exited 0 without its completion marker, so it decided nothing' } }
+    $why = $(if ([int]$code -eq 1) { 'the test-auditors check refused this push' } else { '' })
+    return [pscustomobject]@{ Ran = $true; Code = [int]$code; Why = $why }
+  } catch {
+    return [pscustomobject]@{ Ran = $false; Code = 3; Why = ('the test-auditors check could not be started: ' + $_.Exception.Message) }
+  } finally {
+    foreach ($x in @($inF, $outF, $errF)) { if (Test-Path -LiteralPath $x) { Remove-Item -LiteralPath $x -Force -ErrorAction SilentlyContinue } }
+  }
+}
+
+function Get-TcWarmRefLine {
+  <# The ref line git hands pre-push for this push, as push-main will make it: the local HEAD over the remote ref's
+     last-fetched sha. '' when either cannot be read, which the caller treats as could-not-evaluate. #>
+  param([string]$Dir, [string]$Remote, [string]$Branch)
+  $h = Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')
+  $b = Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', ('refs/remotes/' + $Remote + '/' + $Branch))
+  if ($h.Code -ne 0 -or $b.Code -ne 0) { return '' }
+  $hs = ([string]@($h.Out)[0]).Trim(); $bs = ([string]@($b.Out)[0]).Trim()
+  if (-not $hs -or -not $bs) { return '' }
+  return ('HEAD ' + $hs + ' refs/heads/' + $Branch + ' ' + $bs)
+}
+
 function Invoke-TcPushMain {
   param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '')
   # WHAT THE REMOTE HELD BEFORE THIS PUSH QUEUED. Read here and compared with what the fetch inside the lock returns,
@@ -186,10 +241,20 @@ function Invoke-TcPushMain {
   # blocked every other session on the box before refusing. It now refuses without ever entering the queue.
   # A 3 IS NOT A REFUSAL AND NOT A PASS. Exit 3 is could-not-evaluate, which on this box is usually slot contention,
   # so this degrades to exactly the behaviour of the day before: take the lock and let the hook be the gate.
-  $runner = $(if ($GateRunner) { $GateRunner } else { { param($d) Invoke-TcWarmGate -Dir $d } })
+  # The default runner is BOTH hook legs: run-gates, then (only on a pass) the test-auditors check with this push's own
+  # ref line, so its keyed pass is recorded before the lock and the in-lock leg can reuse it (queue 2026-09-18-1139a0).
+  $runner = $(if ($GateRunner) { $GateRunner } else { {
+    param($d)
+    $wg = Invoke-TcWarmGate -Dir $d
+    if (-not ($wg.Ran -and $wg.Code -eq 0)) { return $wg }
+    $wt = Invoke-TcWarmTestAuditors -Dir $d -RefLine (Get-TcWarmRefLine -Dir $d -Remote $Remote -Branch $Branch)
+    if ($wt.Code -ne 0) { return $wt }
+    return $wg
+  } })
   $g = & $runner $Dir
   if ($g.Ran -and $g.Code -eq 1) {
-    Say 'push-main: REFUSED - run-gates exited 1 before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again.'
+    $redWhy = $(if ($g.Why) { [string]$g.Why } else { 'run-gates exited 1' })
+    Say ("push-main: REFUSED - {0} before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again." -f $redWhy)
     $outcome = 'refused-gate-red'; $ledgerState = 'not-taken'
     & $writeRow
     return 1
@@ -308,6 +373,36 @@ if ($SelfTest) {
   $unrel = Get-TcPushPlan -Head $A -RemoteSha $B -MergeBase '' -Ahead 2 -Dirty $false
   T ($kMF + '  a branch sharing no ancestor with the remote is refused, and is never rebased onto it') `
     ((-not $unrel.Ready) -and (-not $unrel.NeedsRebase) -and $unrel.Reason -match 'no common ancestor') ("ready={0} needsRebase={1} reason={2}" -f $unrel.Ready, $unrel.NeedsRebase, $unrel.Reason)
+
+  # ---- the test-auditors leg outside the lock (queue 2026-09-18-1139a0), driven through fixture scripts ----
+  # Founding case: 2026-09-18, a 389 s test-auditors run held the push lock because no pass was recorded before it.
+  $taDir = Join-Path $env:TEMP ('tc-pm-ta-st-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  $null = New-Item -ItemType Directory -Force -ErrorAction Stop $taDir
+  try {
+    $taSeen = Join-Path $taDir 'stdin-seen.txt'
+    $taRed = Join-Path $taDir 'ta-red.ps1'
+    $taGreen = Join-Path $taDir 'ta-green.ps1'
+    $taBare = Join-Path $taDir 'ta-nomarker.ps1'
+    [IO.File]::WriteAllText($taRed, "Write-Output 'prepush-test-auditors: REFUSED - a new failing case'`nWrite-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=1'`nexit 1`n")
+    [IO.File]::WriteAllText($taGreen, ("`$in = [Console]::In.ReadToEnd()`n[IO.File]::WriteAllText('" + $taSeen + "', `$in)`nWrite-Output 'prepush-test-auditors: PASS'`nWrite-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=0'`nexit 0`n"))
+    [IO.File]::WriteAllText($taBare, "Write-Output 'prepush-test-auditors: started'`nexit 0`n")
+    $taLine = 'HEAD ' + $A + ' refs/heads/main ' + $B
+    $tr = Invoke-TcWarmTestAuditors -Dir $taDir -RefLine $taLine -Script $taRed
+    T ($kMF + '  a test-auditors check that refuses outside the lock refuses the push (Code 1), so it never queues') `
+      ($tr.Ran -and $tr.Code -eq 1 -and $tr.Why -match 'test-auditors') ("ran={0} code={1} why={2}" -f $tr.Ran, $tr.Code, $tr.Why)
+    $tg = Invoke-TcWarmTestAuditors -Dir $taDir -RefLine $taLine -Script $taGreen
+    $seen = if (Test-Path -LiteralPath $taSeen) { ([IO.File]::ReadAllText($taSeen)).Trim() } else { '<no stdin recorded>' }
+    T ($kCT + '  a passing check is Code 0 AND it was handed the exact ref line the hook will hand it, so its keyed pass is the one the in-lock run looks up') `
+      ($tg.Ran -and $tg.Code -eq 0 -and [string]::Equals($seen, $taLine, [StringComparison]::Ordinal)) ("ran={0} code={1} stdin='{2}'" -f $tg.Ran, $tg.Code, $seen)
+    $tb = Invoke-TcWarmTestAuditors -Dir $taDir -RefLine $taLine -Script $taBare
+    T ($kMF + '  an exit 0 with no completion marker is could-not-evaluate (3), never a pass') `
+      ($tb.Code -eq 3 -and $tb.Why -match 'marker') ("code={0} why={1}" -f $tb.Code, $tb.Why)
+    $tn = Invoke-TcWarmTestAuditors -Dir $taDir -RefLine '' -Script $taGreen
+    T ($kMF + '  a ref line that could not be formed is could-not-evaluate (3), and the check is not run on a guess') `
+      ($tn.Code -eq 3 -and -not $tn.Ran) ("ran={0} code={1}" -f $tn.Ran, $tn.Code)
+  } finally {
+    Remove-Item -LiteralPath $taDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
 
   # ---- the whole thing, against real repositories ----
   $tmp = Join-Path $env:TEMP ('tc-pm-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
