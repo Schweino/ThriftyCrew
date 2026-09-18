@@ -70,6 +70,28 @@ function Test-AdWindowLive {
   return ([string]$AdTo -ge [string]$Today)
 }
 
+function Select-PriceTableWinner {
+  <#
+    .SYNOPSIS The one row that represents a store's everyday half, or its live-ad half.
+    .DESCRIPTION This was `Sort-Object unit_price | Select-Object -First 1`. Windows PowerShell 5.1's
+                 Sort-Object is NOT stable, so when two rows tied on unit price the product the table named
+                 was chosen by the sort's internals (backlog I175). Measured on candidates-2026-09-17: 656 of
+                 3,879 per-store picks had two or more differently-named rows at the minimum price, and 451
+                 of them named a different product when the same rows arrived in reverse order.
+                 With -Pick (compare-deals passes the board's own Select-StoreWinner) the table resolves a tie
+                 exactly as the board does, which is the only answer that cannot drift from it. Without it
+                 (the fixtures, which load this library alone) the fallback is still a TOTAL order: price,
+                 then name, then size, so the same rows name the same product whatever order they arrive in.
+                 No key after the first can move a price.
+  #>
+  param([object[]]$Rows, [scriptblock]$Pick = $null)
+  $rs = @($Rows | Where-Object { $null -ne $_ })
+  if (-not $rs.Count) { return }
+  if ($Pick) { return (& $Pick $rs) }
+  $rs | Sort-Object @{Expression = { $_.unit_price }}, @{Expression = { [string]$_.name }}, @{Expression = { [string]$_.size_text }} |
+    Select-Object -First 1
+}
+
 function Build-PriceTableRow {
   <#
     .SYNOPSIS One wide row: an item, with every store's everyday and ad halves as columns.
@@ -81,7 +103,9 @@ function Build-PriceTableRow {
     [string]$Commodity = '',
     [string]$Unit = '',
     [object[]]$Rows = @(),
-    [string]$Today = ''
+    [string]$Today = '',
+    # The board's per-store rule (compare-deals passes Select-StoreWinner). See Select-PriceTableWinner.
+    [scriptblock]$Pick = $null
   )
   $stores = [ordered]@{}
   foreach ($g in (@($Rows) | Where-Object { $null -ne $_.unit_price } | Group-Object store | Sort-Object Name)) {
@@ -100,8 +124,8 @@ function Build-PriceTableRow {
     # which the closed price exists in the table at all.
     $adLive = @($adRows | Where-Object { Test-AdWindowLive -AdTo ([string]$_.ad_to) -AdFrom ([string]$_.ad_from) -Today $Today })
 
-    $ev = @($evRows | Sort-Object unit_price | Select-Object -First 1)
-    $ad = @($adLive | Sort-Object unit_price | Select-Object -First 1)
+    $ev = @(Select-PriceTableWinner $evRows $Pick)
+    $ad = @(Select-PriceTableWinner $adLive $Pick)
     if (-not $ev.Count -and -not $ad.Count) { continue }
 
     $evR = if ($ev.Count) { $ev[0] } else { $null }

@@ -286,6 +286,20 @@ function Select-StoreWinner($rows) {
                 @{Expression = { [string]$_.name }} |
     Select-Object -First 1
 }
+# WHICH STORE WEARS THE CROWN when two stores' winners cost the SAME per unit (2026-09-19, backlog I175).
+# This was `$byStore | Sort-Object unit_price`, and 5.1's Sort-Object is not stable, so a cross-store tie was
+# decided by the sort's internals. Measured on comparison-2026-09-17: 22 of 572 commodities had rank 1 and
+# rank 2 at an exactly equal per-unit price, and on 2 of them (collard-greens, rhubarb) reversing the input
+# order alone changed cheapest_store. Keys, in order:
+#   1. per-unit price  - unchanged, so no cell's price and no genuinely cheaper crown can move
+#   2. no membership   - a tie never sends a reader to a store they must pay to shop at
+#   3. store name      - a TOTAL order (store names are distinct), so the crown is reproducible
+function Select-CrossStoreRank($winners) {
+  @($winners |
+    Sort-Object @{Expression = { $_.unit_price }},
+                @{Expression = { if ($_.membership) { 1 } else { 0 } }},
+                @{Expression = { [string]$_.store }})
+}
 # bulk / non-single-unit heuristic on a size string (so the winner line can flag "10 lb pack" etc.)
 # THE PRICING MATH LIVES IN A LIBRARY NOW (2026-09-09, backlog I82). It used to be defined here and
 # LIFTED as source text by twelve other scripts, because this file runs a pipeline on load and could
@@ -1147,6 +1161,26 @@ if ($SelfTest) {
   $wA = (Select-StoreWinner $twinA).name
   $wB = (Select-StoreWinner @($twinA[1],$twinA[0])).name
   if ($wA -eq $wB -and $wA -eq 'Alpha brand, 10 oz') { Write-Output 'ok    rows equal on every real key resolve to ONE reproducible winner' } else { Write-Output ("FAIL  equal rows are order-dependent ('$wA' vs '$wB') - the board cell is not reproducible"); $script:fail++ }
+
+  # --- 11i: Select-CrossStoreRank - WHICH STORE WEARS A TIED CROWN (2026-09-19, backlog I175) --------------
+  # FROZEN FOUNDING CASE: collard-greens on comparison-2026-09-17, Hy-Vee and Baker's both $1.99/bunch, plus
+  # the rest of that cell's stores. Under the old `Sort-Object unit_price` reversing the input alone moved the
+  # crown between them. Every order of the same rows must give ONE crown, and it is the key-3 answer.
+  function _X($st, $up, $mem) { [pscustomobject]@{ store = $st; unit_price = $up; membership = $mem } }
+  $cgRows = @((_X 'Hy-Vee' 1.99 $false), (_X "Baker's" 1.99 $false), (_X 'Fareway' 2.49 $false), (_X 'Walmart' 2.78 $false), (_X 'Family Fare' 2.99 $false))
+  $cgOrders = @(@(0,1,2,3,4), @(4,3,2,1,0), @(1,0,2,3,4), @(2,4,1,3,0), @(3,0,4,1,2))
+  $cgCrowns = @($cgOrders | ForEach-Object { $ord = $_; $inRows = @($ord | ForEach-Object { $cgRows[$_] }); $rk = @(Select-CrossStoreRank $inRows); [string]$rk[0].store } | Select-Object -Unique)
+  # MUST FIRE: a tied crown is the same store in every input order, and it is the key-3 (store name) answer.
+  if ($cgCrowns.Count -eq 1 -and $cgCrowns[0] -eq "Baker's") { Write-Output 'ok    a tied crown is one reproducible store whatever the input order (the collard-greens case)' } else { Write-Output ('FAIL  a tied crown depends on input order: ' + ($cgCrowns -join ' | ')); $script:fail++ }
+  # MUST FIRE: a tie never crowns the membership store over one anybody can shop at, in either order.
+  $memTie = @((_X "Sam's Club" 0.10 $true), (_X 'Walmart' 0.10 $false))
+  $m1 = @(Select-CrossStoreRank $memTie)[0].store; $m2 = @(Select-CrossStoreRank @($memTie[1], $memTie[0]))[0].store
+  if ($m1 -eq 'Walmart' -and $m2 -eq 'Walmart') { Write-Output 'ok    a price tie goes to the store with no membership' } else { Write-Output ("FAIL  a tie crowned '$m1' / '$m2' - the membership store took a tied crown"); $script:fail++ }
+  # CLEAN TWIN: the tie-break never outranks price. A genuinely cheaper membership store still wears the crown,
+  #   and every row survives the rank (count in = count out).
+  $cheapMem = @((_X 'Walmart' 0.11 $false), (_X "Sam's Club" 0.10 $true), (_X 'Aldi' 0.12 $false))
+  $cmRank = @(Select-CrossStoreRank $cheapMem)
+  if ($cmRank.Count -eq 3 -and $cmRank[0].store -eq "Sam's Club" -and $cmRank[1].store -eq 'Walmart') { Write-Output 'ok    a cheaper membership store still wins, and the rank keeps every store' } else { Write-Output ('FAIL  the tie-break reordered unequal prices: ' + (($cmRank | ForEach-Object { $_.store }) -join ',')); $script:fail++ }
 
   # the 'snax' GLOBAL_EXCLUDE token (blocks snack TRAYS from winning real-commodity cells). $GLOBAL_EXCLUDE
   # is defined AFTER this block exits, so read the token from this script's own source (the extraction regex
@@ -2974,7 +3008,7 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
     # An unreadable size sorts last - we cannot claim a package is smaller when we cannot read it.
     Select-StoreWinner $rows
   }
-  $ranked = @($byStore | Sort-Object unit_price)
+  $ranked = @(Select-CrossStoreRank $byStore)
   if ($ranked.Count -lt $MinStores) { continue }
   $f = $priced[0]
   $nm = @($ranked | Where-Object { -not $_.membership } | Select-Object -First 1)
@@ -3105,7 +3139,9 @@ Write-Output ("Saved: " + $file)
 $ptRows = New-Object System.Collections.Generic.List[object]
 foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Object id)) {
   $f0 = $g.Group[0]
-  [void]$ptRows.Add((Build-PriceTableRow -Id $g.Name -Commodity ([string]$f0.label) -Unit ([string]$f0.unit) -Rows $g.Group -Today $today))
+  # -Pick is the board's OWN per-store rule, so a price-tie inside one store resolves to the product the board
+  # shows rather than to whatever 5.1's unstable sort yields (backlog I175).
+  [void]$ptRows.Add((Build-PriceTableRow -Id $g.Name -Commodity ([string]$f0.label) -Unit ([string]$f0.unit) -Rows $g.Group -Today $today -Pick ${function:Select-StoreWinner}))
 }
 $ptTable = @($ptRows | Sort-Object id)
 $ptStoreOrder = @('Hy-Vee', 'Aldi', 'Family Fare', 'Fareway', "Baker's", "Sam's Club", 'Walmart')

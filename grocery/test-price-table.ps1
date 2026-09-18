@@ -156,5 +156,30 @@ $dataLine = @($csv -split "`n")[1]
 if ($dataLine -eq 'rice,Rice,lb,0.42,,,,0.42') { Ok 'the CSV renders a null ad as an empty field, not a 0' }
 else { Bad "the CSV row is not what it should be: '$dataLine'" }
 
+# 13. MUST FIRE - A PRICE TIE INSIDE ONE STORE NAMES ONE PRODUCT (2026-09-19, backlog I175). Frozen from
+#     candidates-2026-09-17: Aldi frosting, three Baker's Corner 16 oz tubs at the same per-ounce price. The
+#     old `Sort-Object unit_price | Select-Object -First 1` is not stable under 5.1, so the product the table
+#     named followed the input order. Every order of the same rows must name the same product.
+$frost = @(
+  (PtRow 'Aldi' 0.1094 'everyday' 'Baker S Corner Vanilla Frosting 16 OZ'),
+  (PtRow 'Aldi' 0.1094 'everyday' 'Baker S Corner Chocolate Frosting 16 OZ'),
+  (PtRow 'Aldi' 0.1094 'everyday' 'Baker S Corner Cream Cheese Frosting 16 OZ'),
+  (PtRow 'Aldi' 0.1500 'everyday' 'Some Dearer Frosting 16 OZ')
+)
+$frostOrders = @(@(0,1,2,3), @(3,2,1,0), @(1,2,0,3), @(2,0,3,1), @(1,0,3,2), @(0,2,1,3))
+$named = @($frostOrders | ForEach-Object { $ord = $_; $inRows = @($ord | ForEach-Object { $frost[$_] })
+  [string](Build-PriceTableRow -Id 'frosting' -Commodity 'Frosting' -Unit 'oz' -Today $TODAY -Rows $inRows).stores['Aldi'].everyday_product } | Select-Object -Unique)
+if ($named.Count -eq 1 -and $named[0] -eq 'Baker S Corner Chocolate Frosting 16 OZ') { Ok 'a price tie names ONE product whatever the input order' }
+else { Bad ('a price tie named a different product per input order: ' + ($named -join ' | ')) }
+
+# 14. CLEAN TWIN - with -Pick, the table resolves a store exactly as the pick says, which is how compare-deals
+#     hands it the board's own Select-StoreWinner. The pick here deliberately chooses the LAST-named tied row,
+#     which the fallback order never would, so a -Pick that is ignored reads red.
+$pickLast = { param($rows) $min = ($rows | Measure-Object unit_price -Minimum).Minimum
+  @($rows | Where-Object { $_.unit_price -eq $min } | Sort-Object @{Expression = { [string]$_.name }} -Descending | Select-Object -First 1) }
+$pk = (Build-PriceTableRow -Id 'frosting' -Commodity 'Frosting' -Unit 'oz' -Today $TODAY -Rows $frost -Pick $pickLast).stores['Aldi']
+if ($pk.everyday_product -eq 'Baker S Corner Vanilla Frosting 16 OZ' -and $pk.everyday -eq 0.1094) { Ok 'with -Pick the table names the product the board''s own rule chose, at the same price' }
+else { Bad ("-Pick was not honoured: got '" + $pk.everyday_product + "' at " + $pk.everyday) }
+
 Write-Output ("PRICE-TABLE " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
 Exit-Guard -Name 'price-table' -Summary "failed=$fail" -Code $(if ($fail) { 1 } else { 0 })
