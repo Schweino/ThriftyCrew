@@ -13588,6 +13588,25 @@ either, and a red after it cannot say which half broke it. No estate rule states
 fixture AND move or rename existing functions. If the rate is material, the rule belongs in the
 workspace `CLAUDE.md` working rules as one line. No number is claimed here.
 
+**Acceptance bar, written 2026-09-18 before any count was taken.** Base: `origin/main` at
+`af28aa2b8`. Population: `git log --no-merges -200 af28aa2b8`, so the 200 newest non-merge
+commits (merges are excluded because their diff repeats their parents' work).
+- *Adds a fixture* (proxy, UNSOUND - finds only labelled cases): an added line in a `.ps1` or
+  `.py` file carries one of the estate's three labels, `MUST FIRE`, `MUST NOT FIRE` or `CLEAN TWIN`.
+- *Moves or renames an existing function* (proxy): a removed definition line (`function <Name>`
+  in `.ps1`, `def <name>` in `.py`) whose name is either added as a definition in a DIFFERENT file
+  in the same commit (MOVE), or is not re-defined anywhere in the commit while the same file gains
+  a definition of a new name (RENAME candidate). A same-name re-definition in the same file is a
+  signature edit and is NOT counted.
+- Every commit flagged by both proxies is then READ, up to 40 (a seeded first-40 by hash order if
+  more). It is CONFIRMED mixed only if the diff shows an existing function really moved to another
+  file or really renamed, AND a genuinely new fixture case (not a relabel or a moved case).
+- **Material = 10 or more of the 200 (5%) CONFIRMED mixed**, projected from the read sample when
+  the sample is partial. Under 10 is not material and closes the item DONE with no rule. The
+  fixture-adding denominator is reported beside it but does not decide.
+- A fix, if warranted, is one line in a versioned `.claude/rules/*.md` file; the workspace
+  `CLAUDE.md` line the item names is Brad's and would be a ruling.
+
 ### I190 - merge duplicates but keep overlapping ideas apart, a test for the store's consolidation `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q6-sdp-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
