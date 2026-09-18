@@ -2477,7 +2477,11 @@ if ($ffcThrows) { Ok 'PS 5.1 still throws on @(List[object]) - the founding haza
 else { Bad 'PS 5.1 no longer throws on @(List[object]) - this fixture no longer proves anything; re-derive it' }
 if ($ffcSrc -match 'confirmed_victims\s*=\s*@\(\$victims\)') { Bad 'audit-ff-carry wraps its List[object] in @( ) again - it will throw after all 464 probes and log nothing' }
 else { Ok 'audit-ff-carry builds its report without @(List[object]) (it can reach its own report line)' }
-if ($ffcSrc -notmatch 'confirmed_victims\s*=\s*\$victims\.ToArray\(\)') { Bad 'audit-ff-carry no longer uses .ToArray() - check the JSON shape stays [] at zero and [ {..} ] at one' }
+# Two shapes hold the array at 0, 1 and many: the plain .ToArray(), or (since 2026-09-18, carry-forward) the report
+# list built by Merge-FfCarriedVictims, which must itself return ,$out.ToArray(). Either one, never neither.
+$ffcPlain  = $ffcSrc -match 'confirmed_victims\s*=\s*\$victims\.ToArray\(\)'
+$ffcMerged = ($ffcSrc -match 'confirmed_victims\s*=\s*\$reportVictims\b') -and ($ffcSrc -match 'return\s*,\s*\$out\.ToArray\(\)')
+if (-not ($ffcPlain -or $ffcMerged)) { Bad 'audit-ff-carry no longer uses .ToArray() - check the JSON shape stays [] at zero and [ {..} ] at one' }
 else { Ok 'audit-ff-carry serialises its victims with .ToArray() (array shape holds at 0, 1 and many)' }
 } # u056-k1a-a-guard-that-cannot-finish-and-a
 # The CALLER must capture and check, not pipe-and-hope. Decision extracted from the real region.
