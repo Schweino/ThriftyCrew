@@ -13574,7 +13574,7 @@ output is piped into `ConvertFrom-Json`, `json.loads` or a split without reading
 status and without a shape check. The count decides whether this earns a ratchet (never a gate red on
 day one). Unmeasured today; no number is claimed.
 
-### I189 - commits that mix refactoring with behaviour change are not a stated rule `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I189 - commits that mix refactoring with behaviour change are not a stated rule `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-sdp-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13606,6 +13606,38 @@ commits (merges are excluded because their diff repeats their parents' work).
   fixture-adding denominator is reported beside it but does not decide.
 - A fix, if warranted, is one line in a versioned `.claude/rules/*.md` file; the workspace
   `CLAUDE.md` line the item names is Brad's and would be a ruling.
+
+**Done 2026-09-18. Not material: 2 of 200 commits (1.0%) are confirmed mixed, against a bar of 10,
+so no rule is added.** Measured at `af28aa2b8` over `git log --no-merges -200` (window 2026-09-12
+to 2026-09-18).
+- **By the bar's proxies: 0 of 200 flagged.** 68 of 200 (34%) add a labelled fixture line; 0 of 200
+  carry a MOVE or RENAME by the written definition, so nothing reached the read step.
+- **A zero from a proxy must prove itself, so a wider read was run after it, and it does not decide
+  anything the bar did not.** An independent grep found 7 commits removing a PowerShell
+  `function` line and 2 removing a Python `def`; the bar's proxy classified every one as a same-name
+  re-definition (a signature or body edit) and so excluded it. A second detector over the 68
+  fixture-adding commits listed 20 that either remove a definition or add a name already defined in
+  another file at the parent. 14 of the 20 are only common helper names in new probes (`case`,
+  `selftest`, `main`, `Assert-Case`). The other 6 were read:
+  - **CONFIRMED mixed, 2.** `499c3fd0c` moves `explain-coverage-gap.ps1`'s `Explain` body into the
+    new `coverage-explain-lib.ps1` as `Get-CoverageVerdict`, leaving a same-name one-line wrapper,
+    in the same commit that adds test-auditors cases and changes what the emitter pages on (a triage
+    commit touching 23 files). `4876c7244` renames `Get-PsCodeOnly` to `Get-PsCodeOnlyFallback` and
+    writes a new token-reading `Get-PsCodeOnly` with its fixtures. Both are the extract or rename
+    shape the bar's proxy was blind to, because each keeps the old name defined.
+  - **Not mixed, 4.** `4fea00111` rewrites `New-TcSandbox` and `Invoke-TcArm` in place with new
+    signatures; `95738617b` and `500b42169` add parameters to `Read-Store`; `32a035c34` changes
+    `Add-Norm` to a param block. Each is a behaviour or interface change, not a move or rename.
+- **Rate among fixture-adding commits: 2 of 68 (2.9%).** To reach the bar, 8 more confirmed commits
+  would have to hide from both detectors in this window; both are UNSOUND pattern matchers, so a
+  clean read does not prove zero, but nothing read suggests a hidden population of that size.
+- **What the read did show instead:** of the 2 confirmed, 1 is a triage bundle commit that mixes far
+  more than a refactor and a fixture. If the two-hats split is ever worth a rule here, the evidence
+  points at bundle size rather than at refactor-plus-test.
+- Harness: two scratch Python scripts, not committed, because the question is a one-off at this
+  rate. Their bodies are the bar's definitions above, run through `git show -M --unified=0`; the
+  second added a `git grep` of each added name at the commit's parent. Every number here was taken
+  by those scripts or by the read, at `af28aa2b8`.
 
 ### I190 - merge duplicates but keep overlapping ideas apart, a test for the store's consolidation `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
 
