@@ -14837,6 +14837,30 @@ overlaps. The cheap mitigations, in order: readers open `mode=ro` (most audits a
 `pysqlite3` wheel carrying 3.50.7 or 3.51.3+). `graph/pipeline/audit_graph_durability.py`'s nightly
 `quick_check` is the detector that would see the result.
 
+**Acceptance bar, written 2026-09-18 before any rung-1 measurement.** The bug's precondition is three facts
+at once, and the verdict is decided by counting them, not by judgement after the numbers are in:
+1. **Version.** For every runtime that opens `graph\sqlite\graph.db` or `meal-prep\db\thriftycrew.db`
+   (found by grepping tracked code for the file names and for `sqlite3`/`System.Data.SQLite`/`sqlite3.exe`),
+   the SQLite it actually loads, read from that runtime (`select sqlite_version()`), never from a doc. A
+   runtime is AFFECTED if its version is 3.7.0 to 3.51.2 and is not 3.44.6+ on the 3.44 line or 3.50.7+ on
+   the 3.50 line. The range and the fixed versions are cited from sqlite.org with the URL.
+2. **Mode.** Each database's `journal_mode`, read through a `mode=ro` URI connection (never a read-write
+   open, because I211 is working `graph.db` on a copy and a read-write close checkpoints). The bug is
+   WAL-only, so a DELETE-mode database is out of scope whatever its runtime.
+3. **Concurrency.** Whether two connections in separate threads or processes can write or checkpoint the
+   same WAL database at once, decided from the code: count the read-write opens (every `sqlite3.connect`
+   without `mode=ro`, and every `open_db()`/`GraphDB` caller), and list the scheduled tasks and daemons
+   that reach one, with their trigger times. "Possible" means two such opens are not serialised by any
+   lock and are reachable from two processes; it does not need an observed overlap.
+
+**Verdict rule.** If some database is WAL AND some runtime opening it read-write is AFFECTED AND fact 3 is
+possible, an upgrade is warranted: it changes a shared runtime, so it is prepared as a plan on a branch and
+reported READY FOR BRAD, never applied to `C:\Codex\Python312`. If any of the three is false for every
+database, the item closes DONE with the measurement as its reason. A runtime whose version cannot be read
+is counted AFFECTED (a could-not-look never settles the question). The week-long overlap log proposed
+above is NOT required to reach the verdict: the bar asks whether an overlap CAN happen, and the log would
+only measure how often.
+
 ### I214 - Constraints graph.db can gain for free at its next rebuild, and the one blocker (I200) `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
