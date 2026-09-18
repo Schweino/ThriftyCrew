@@ -12658,7 +12658,47 @@ compiled code), SQL injection against a database we do not own, the Therac-25 PD
 and four lectures reading Satoshi Nakamoto's Bitcoin abstract sentence by sentence. Those are routed
 as knowledge where they transfer and are named as out of scope here rather than filed for the tally.
 
-### I169 - per-commodity sale cadence is measured, spans 3.5 to 37 days, and nothing that schedules a capture or expects a sale window can read it `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I169 - per-commodity sale cadence is measured, spans 3.5 to 37 days, and nothing that schedules a capture or expects a sale window can read it `DONE` `queue-7`
+
+**Done 2026-09-18. The measurement says no fix is warranted: 4 shelf-found formable pairs against a bar of
+20, and all 4 are one Fareway artefact.** Harness `grocery\probe-sale-cadence.ps1`, committed (blob
+`8e27cc1fe`), run over the 34 gitignored boards in the main checkout (2026-08-04 to 2026-09-17, input
+fingerprint `9684bc4b659f1578`), exit 0. One row per (commodity, store) pair is
+`design\MEASURE-sale-cadence-2026-09-18.jsonl` (725 rows), because the boards roll off: I123 read 37 and
+34 are left, so the rows are the only durable copy of what was read.
+
+- **Denominators.** 576 commodities on any board; 399 carried at least one dated sale window; 303
+  (commodity, store) sale pairs carried NO window and were counted, not scored. 1,371 distinct windows
+  formed 725 pairs. By gap class: 586 formed no gap (one episode), 124 had exactly one gap and no
+  distribution, **15 were formable** (two or more gaps). Shelf-found: 380 pairs, 344 / 32 / **4**.
+  Ad-borne: 305 pairs, 239 / 61 / 5. Mixed or unknown source: 40 pairs, 3 / 31 / 6.
+- **B1 coverage FAILED**: 4 shelf-found formable pairs (bar 20), covering 4 of 399 commodities with a
+  dated window (1.0%, bar 10%).
+- **B2 predictability FAILED**: median absolute error 17.5 days (bar 3), 0 of 4 within 3 days. Over all
+  15 formable pairs of any class: median error 10.5 days, 4 of 15 within 3 days.
+- **The 4 are not cadence at all.** Bottled water, peanut butter, sour cream and taco seasoning, every one
+  at Fareway, every one with a last gap of exactly 7 days. Fareway's weekly ad runs Monday to Saturday, so
+  one promotion carried into the next week ends on a Saturday and restarts on a Monday, two days later,
+  and the bar's one-day merge reads it as a new promotion. At a two-day merge (`-MergeSlackDays 2`, same
+  boards) shelf-found formable pairs fall to **0** and all formable pairs to 5. The verdict is NOT
+  warranted at both settings; the bar's definition stays the default and the probe's header says why.
+- **The recorded I123 figure does not reproduce under written definitions**, and it was never the
+  question: all 155 gaps have median 21 days over 139 pairs, and per-commodity medians (store gaps
+  pooled) span 7 to 53 days over 117 commodities, against I123's 480 gaps, median 8, 3.5 to 37. I123 wrote
+  no definition, so the difference cannot be attributed; the likeliest cause is counting board-days or
+  unmerged weekly windows, which is what the probe's two MUST FIRE cases on dedupe and merge exist to stop.
+- **Why the data cannot answer it yet, which is the durable finding.** A pair is formable only with
+  three promotions inside the history, and episode starts span 2026-07-13 to 2026-09-16 (65 days), so
+  any cycle longer than about a month is structurally BLIND, not slow. Nothing short of more history can
+  change that, and the boards are gitignored and roll off.
+
+**Reopen trigger**: re-run `powershell -NoProfile -File grocery\probe-sale-cadence.ps1` from a checkout
+holding the boards. Its VERDICT line reads WARRANTED only when B1 and B2 both pass; until then nothing
+in `grocery\capture-policy-lib.ps1` changes. A clean checkout exits 3 BLIND: its one tracked board
+(`comparison-2026-08-08.json`) predates the `ad_from`/`ad_to` fields, so "a board resolved" is not
+enough and the probe refuses to print a zero. Verified: self-test 15 of 15, exit 0; three single mutants
+(no merge, a window counted per board, no BLIND on an undated board) each went red in their named case,
+original md5-identical afterwards.
 
 **Merged from `design\backlog-inbox\ruling-i123-2026-09-12.md` on 2026-09-12.** Written by the session applying Brad's approvals-page ruling on I123, not by a course lane; the merge's stamp says "a course agent" for every item because it is fixed text, and this one was not. Ids are allocated here because this is the only writer.
 
