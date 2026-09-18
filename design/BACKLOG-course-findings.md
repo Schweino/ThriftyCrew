@@ -14318,6 +14318,31 @@ could not have shown it. Options:
 every one of these was lost; a label records a class only after someone thought of the case, which is
 the step that did not happen. The remaining four detectors are then a sweep that rule makes routine.
 
+**The remaining four done, 2026-09-18** (base origin/main 44282c75d; the heading stays NEEDS A RULING,
+because the label question above is still Brad's). Each suite gained a MUST NOT FIRE exactly at its bar
+and a MUST FIRE one step past it, the bar named in the case text, and each detector was broken twice from
+the worktree copy: once across the boundary (the inclusive/exclusive flip) and once by moving the bar one
+step out. **8 of 8 mutants went red, each in exactly its own new case and no other**, every original
+restored md5-identical:
+- `ops/audit-rule-currency.ps1` (90 d, `-gt`): a claim exactly 90 days old is not stale, 91 is (14 of 14
+  cases). `-gt` to `-ge`: rc 1, the at-bar case (*"age=90 stale=True"*); bar plus one day: rc 1, the
+  one-past case.
+- `lib/ratchet.ps1` (60%, `-gt`): a fall of exactly 60 of 100 still tightens, 61 is refused and the
+  baseline kept (18 of 18). `-ge`: rc 1, *"implausible/100"*; bar plus one point: rc 1, *"tightened/39"*.
+- `grocery/notify-item-added.ps1` (180 d, `-ge` keeps): a row stamped exactly 180 days ago is kept, one a
+  minute older (the `yyyy-MM-dd HH:mm` stamp's resolution) is pruned (12 of 12). `-ge` to `-gt`: rc 1,
+  *"count=0 sent_at=2026-03-12 12:00"*; bar plus a minute: rc 1, *"count=1 sent_at=2026-03-12 11:59"*.
+- `ops/member-cohorts.ps1` (40 d, `-gt`): a newest snapshot exactly 40 days old is fresh, one minute older
+  is stale (29 of 29). `-ge`: rc 1, the at-bar case; bar plus 0.001 d: rc 1, *"fresh at 2026-10-19 00:01"*.
+  Its self-test is pure, as before: no Ghost call, live or stubbed, is reached from `-SelfTest`.
+
+The two new cases in `notify-item-added` and `member-cohorts` read the live constant rather than a
+literal, so they follow it if it moves. **No threshold was read wrong**: in all four the comparison agrees
+with its own comment and its `docs/CONTROL-CONSTANTS.md` row, and the live path passes the constant (not
+a hard-coded copy), so no behaviour changed and no output moved. With these, C5 (at the bar) is covered in
+10 of 10 of the sampled detectors and C6 (one past) in 8 of 10. **Still remaining** from the list above:
+the C1/C2 gaps and the C6 gaps in `check-ad-cycles` and `report-ratchet-trends`.
+
 ### I197 - 36 unbounded while-true loops, and at least one ends only when a remote server says so `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-scala-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.

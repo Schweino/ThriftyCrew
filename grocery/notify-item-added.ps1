@@ -152,6 +152,19 @@ if ($SelfTest) {
   $pruned2 = Remove-StaleNotifyRows -Log $old -Now ([datetime]'2026-09-08') -KeepDays 180
   T 'CLEAN TWIN a row past the keep window is dropped, and the window is WIDER than the 120-day draft expiry so nothing that can still fire is forgotten' `
     (@($pruned2).Count -eq 0 -and $SENT_LOG_KEEP_DAYS -gt 120) ("count=" + @($pruned2).Count + " keep=" + $SENT_LOG_KEEP_DAYS)
+  # THE BAR ITSELF (backlog I196). Rows OLDER than the keep window are pruned, so a row stamped exactly
+  # SENT_LOG_KEEP_DAYS (180) days ago is kept (-ge) and one a minute older, the stamp's own resolution,
+  # is not. 7 d and 615 d above cannot tell -ge from -gt; these two can. Both read the live constant and
+  # write the stamp in the production 'yyyy-MM-dd HH:mm' shape.
+  $barNow = [datetime]'2026-09-08 12:00'
+  $atBar = @([pscustomobject]@{ key = 'post-v|beans'; sent = $true; sent_at = $barNow.AddDays(-$SENT_LOG_KEEP_DAYS).ToString('yyyy-MM-dd HH:mm') })
+  $keptAt = Remove-StaleNotifyRows -Log $atBar -Now $barNow -KeepDays $SENT_LOG_KEEP_DAYS
+  T 'MUST NOT FIRE  a row exactly AT the 180-day SENT_LOG_KEEP_DAYS bar is KEPT, not pruned' `
+    (@($keptAt).Count -eq 1) ("count=" + @($keptAt).Count + " sent_at=" + $atBar[0].sent_at)
+  $pastBar = @([pscustomobject]@{ key = 'post-w|corn'; sent = $true; sent_at = $barNow.AddDays(-$SENT_LOG_KEEP_DAYS).AddMinutes(-1).ToString('yyyy-MM-dd HH:mm') })
+  $keptPast = Remove-StaleNotifyRows -Log $pastBar -Now $barNow -KeepDays $SENT_LOG_KEEP_DAYS
+  T 'MUST FIRE  a row one minute past the 180-day SENT_LOG_KEEP_DAYS bar is pruned' `
+    (@($keptPast).Count -eq 0) ("count=" + @($keptPast).Count + " sent_at=" + $pastBar[0].sent_at)
   $noDate = @([pscustomobject]@{ key = 'post-y|oats'; sent = $true })
   T 'CLEAN TWIN a row with no readable date is KEPT, not pruned - an unparseable stamp must not silently re-arm an email' `
     (@(Remove-StaleNotifyRows -Log $noDate -Now (Get-Date) -KeepDays 180).Count -eq 1) 'a dateless row was pruned'
@@ -160,7 +173,7 @@ if ($SelfTest) {
     (Get-EmailFingerprint 'a@b.com')
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 2 must-fire cases led by the founding bug (a successful send whose draft delete failed must still suppress tomorrow), 4 must-not-fire cases including the empty log and the pair-key boundary, and 4 clean twins over pruning and the address fingerprint'
+  Write-Output 'SELF-TEST PASS: 3 must-fire cases led by the founding bug (a successful send whose draft delete failed must still suppress tomorrow), 5 must-not-fire cases including the empty log, the pair-key boundary and the 180-day keep bar, and 4 clean twins over pruning and the address fingerprint'
   exit 0
 }
 

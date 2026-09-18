@@ -368,6 +368,16 @@ if ($SelfTest) {
   T 'MUST NOT FIRE  a snapshot taken this month is fresh' `
     ((Test-TcHistoryStale -Rows $hrows -Now ([datetime]'2026-09-20') -MaxAgeDays 40) -eq '') `
     (Test-TcHistoryStale -Rows $hrows -Now ([datetime]'2026-09-20') -MaxAgeDays 40)
+  # THE BAR ITSELF (backlog I196). Stale is age -gt HISTORY_MAX_AGE_DAYS, so a newest snapshot exactly
+  # 40 days old is still fresh and one a minute older (the 'yyyy-MM-dd HH:mm' stamp's resolution) is
+  # stale. 11 d and 83 d above cannot tell -gt from -ge; these two can. Both read the live constant.
+  $barAt = ([datetime]'2026-09-09').AddDays($HISTORY_MAX_AGE_DAYS)
+  T 'MUST NOT FIRE  a newest snapshot exactly AT the 40-day HISTORY_MAX_AGE_DAYS bar is fresh' `
+    ((Test-TcHistoryStale -Rows $hrows -Now $barAt -MaxAgeDays $HISTORY_MAX_AGE_DAYS) -eq '') `
+    (Test-TcHistoryStale -Rows $hrows -Now $barAt -MaxAgeDays $HISTORY_MAX_AGE_DAYS)
+  T 'MUST FIRE  a newest snapshot one minute past the 40-day HISTORY_MAX_AGE_DAYS bar is stale' `
+    ((Test-TcHistoryStale -Rows $hrows -Now $barAt.AddMinutes(1) -MaxAgeDays $HISTORY_MAX_AGE_DAYS) -like '*STOPPED*') `
+    ('fresh at ' + $barAt.AddMinutes(1).ToString('yyyy-MM-dd HH:mm'))
   T 'MUST FIRE  a history that has never been written says so, rather than reading as fresh' `
     ((Test-TcHistoryStale -Rows @() -Now ([datetime]'2026-09-20') -MaxAgeDays 40) -like '*has ever been taken*') `
     (Test-TcHistoryStale -Rows @() -Now ([datetime]'2026-09-20') -MaxAgeDays 40)
@@ -415,7 +425,7 @@ if ($SelfTest) {
     ($rowSum -eq $t.Total) ("rows sum=" + $rowSum + " table total=" + $t.Total)
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 27 case(s) resolved - 13 must-fire, 11 must-not-fire, 3 clean twins. Led by the founding privacy constraint (an input row carrying an email produces an aggregate that cannot contain one), the undated-signup count, the monthly idempotence guard, the series-has-stopped absence check, and the I99 boundary that no LABEL STRING reaches a history row. The must-not-fires include the empty membership, the empty history, and a member with no labels counting 0 rather than 1'
+  Write-Output 'SELF-TEST PASS: 29 case(s) resolved - 14 must-fire, 12 must-not-fire, 3 clean twins. Led by the founding privacy constraint (an input row carrying an email produces an aggregate that cannot contain one), the undated-signup count, the monthly idempotence guard, the series-has-stopped absence check, and the I99 boundary that no LABEL STRING reaches a history row. The must-not-fires include the empty membership, the empty history, and a member with no labels counting 0 rather than 1'
   exit 0
 }
 

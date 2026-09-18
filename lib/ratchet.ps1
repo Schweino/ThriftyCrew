@@ -153,6 +153,13 @@ if ($__ratchetSelfTest) {
   $r = Test-RatchetMove -Name 'probe' -Count 45 -Baseline 100
   T 'CLEAN TWIN a 55% fall is inside the bar and still tightens' ($r.Verdict -eq 'tightened' -and $r.NewBaseline -eq 45) ("{0}/{1}" -f $r.Verdict, $r.NewBaseline)
 
+  # THE BAR ITSELF (backlog I196). The refusal is for a fall LARGER than -MaxDropPct (-gt), so a fall of
+  # exactly 60% still tightens and 61% is refused. 55 and 85 above cannot tell -gt from -ge; these can.
+  $r = Test-RatchetMove -Name 'probe' -Count 40 -Baseline 100
+  T 'MUST NOT FIRE a fall of exactly 60%, AT the MaxDropPct bar, still tightens' ($r.Verdict -eq 'tightened' -and $r.NewBaseline -eq 40) ("{0}/{1}" -f $r.Verdict, $r.NewBaseline)
+  $r = Test-RatchetMove -Name 'probe' -Count 39 -Baseline 100
+  T 'MUST FIRE  a fall of 61%, one point past the 60% MaxDropPct bar, is refused and the baseline KEPT' ($r.Verdict -eq 'implausible' -and $r.NewBaseline -eq 100) ("{0}/{1}" -f $r.Verdict, $r.NewBaseline)
+
   $r = Test-RatchetMove -Name 'probe' -Count 0 -Baseline 17 -AcceptDrop
   T '-AcceptDrop records a genuine bulk migration' ($r.Verdict -eq 'tightened' -and $r.NewBaseline -eq 0) ("{0}/{1}" -f $r.Verdict, $r.NewBaseline)
 

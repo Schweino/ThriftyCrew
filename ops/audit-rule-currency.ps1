@@ -113,6 +113,14 @@ if ($SelfTest) {
   $cR3 = Get-DatedClaims -Text '(2026-09-03, backlog I72) twelve cases' -Today $today -StaleDays 90
   $c3 = @($cR3)
   Case 'MUST NOT FIRE' 'a claim 89 days old is not stale' ($c3.Count -eq 1 -and -not $c3[0].Stale) ("{0} {1}" -f $c3.Count, $c3[0].AgeDays)
+  # THE BAR ITSELF (backlog I196). "Older than 90 days" is -gt, so a claim exactly 90 days old is not yet
+  # stale and one day more is. 89 and 122 above cannot tell -gt from -ge; these two can.
+  $cR3a = Get-DatedClaims -Text '(2026-09-02, backlog I72) twelve cases' -Today $today -StaleDays 90
+  $c3a = @($cR3a)
+  Case 'MUST NOT FIRE' 'a claim exactly AT the 90-day StaleDays bar is not stale' ($c3a.Count -eq 1 -and $c3a[0].AgeDays -eq 90 -and -not $c3a[0].Stale) ("{0} age={1} stale={2}" -f $c3a.Count, $c3a[0].AgeDays, $c3a[0].Stale)
+  $cR3b = Get-DatedClaims -Text '(2026-09-01, backlog I72) twelve cases' -Today $today -StaleDays 90
+  $c3b = @($cR3b)
+  Case 'MUST FIRE' 'a claim 91 days old, one day past the 90-day StaleDays bar, is stale' ($c3b.Count -eq 1 -and $c3b[0].AgeDays -eq 91 -and $c3b[0].Stale) ("{0} age={1} stale={2}" -f $c3b.Count, $c3b[0].AgeDays, $c3b[0].Stale)
   $cR4 = Get-DatedClaims -Text "no dates here at all`nnor here, 42 of them" -Today $today -StaleDays 90
   $c4 = @($cR4)
   Case 'MUST NOT FIRE' 'a line with no date is no claim' ($c4.Count -eq 0) "$($c4.Count)"
