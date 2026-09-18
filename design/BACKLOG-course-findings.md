@@ -11521,7 +11521,45 @@ one-person estate should not carry one on the strength of a single candidate.
 
 ---
 
-### I159 -  `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+### I159 - A stated ordering precondition that no fixture names `DONE` `queue-7`
+
+**Done 2026-09-19. The read says no fix is warranted, and one claim below is corrected.** Re-read at 224f874b5
+over the five libraries' PRODUCTION code (their self-test blocks excluded), counting every comment that says one
+operation happens before another and that correctness depends on it. Idempotency claims (append-line's "the write
+is never retried") were left out, because that is I199's question. **14 stated orderings**: 10 are covered by a
+named case, either in the library's own self-test or in the caller's fixture its SCOPE line names (gate-slots:
+join after an empty pass, an EXACT waiter releasing before it waits, no top-up while a run is queued, release
+newest first; ledger-lock: read inside the lock, re-read and merge under it at save, barrier just before
+`WaitOne`; atomic-write: temp written before the move, `-OnRefusal` before the retry sleep; event-bus: reserved
+keys set before `Data`, covered in `ops/audit-event-bus.ps1`). One is declared and unexercised on purpose (the
+I104 lock order: nothing nests two locks yet). Three have no naming case: (a) gate-slots' **mutex before ticket
+file**, the item's own example; (b) atomic-write's **flush before the move**, which its SCOPE line already says
+only a power cut can prove; (c) atomic-write's **flush counter bumped after `Flush($true)` returns**. Those 10 are
+classified by reading, not by mutation, except for the two probed below.
+**Mutation probe of (a) and (c)**, each mutant MOVING the statement (never duplicating it), run from a temp mirror
+through the library's own `-SelfTest`, originals md5-identical afterwards (gate-slots 790C0A6F..., atomic-write
+0C57BD53...). The harness was a scratch script, `i159-mutants.ps1`, a one-off, so it is described here and not
+committed. (c) **SURVIVED**, 1 of 1 (26 cases, 0 failed): no hermetic case can make `Flush($true)` throw. It is a
+test seam, and a wrong count would only mislead a test, never a ledger. So it does not earn a case.
+(a) **was KILLED in 4 of 6 mutant runs, always in the same case**, `MUST FIRE deliberate load does not jump the
+gate queue` (got `queued=True timedOut=False got=2`). The original passed 6 of 6, with the arms alternated round
+by round. **So the 2026-09-12 claim that "there is no second process to drive it from" is WRONG.** That case's
+parent waits for the ticket FILE of a ticket holder in another process, then sweeps at once. When the file comes
+first, the sweep catches the gap before the mutex is taken, reads the live ticket as dead, deletes it, and the
+EXACT request jumps the queue. The window IS reached from a second process. It is just reached by luck, in a case
+named for something else.
+**Why no fix.** A reversed order costs FAIRNESS only: a waiter whose ticket is swept can be passed over, but the
+budget is enforced by the slot mutexes and is untouched. It is already caught 4 times in 6. A deterministic case
+would need a seam inside `New-TcGateTicket`, and five recorded measurements name `lib/gate-slots.ps1` as their
+harness (`design/MEASURE-gate-queue-live-sampling`, `-gate-queue-window`, `-gate-slot-admission`,
+`-gate-slot-starvation`, `-push-lock`, all 2026-09-11). Editing that file for a fairness-only window with partial
+cover already is the wrong trade. **Uncovered and undeclared: 1 of 14**, which confirms the class of one, so there
+is no gate. If `lib/gate-slots.ps1` is ever edited for another reason, that change could name this ordering in the
+case's title at little extra cost.
+**The 2026-09-12 side finding is overstated.** `lib/event-bus.ps1` has no `-SelfTest` of its own, but its
+behaviour is fixtured in `ops/audit-event-bus.ps1`'s self-test: round-trip, forged reserved keys, never throws,
+returns `$false` when an event does not land, loads without its appender, and concurrent producers all land. Its
+own header points there. A file with no self-test is not a behaviour with no fixture.
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Claim HOLDS at 0 of 37 cases (the file has grown from the 29 the item cites). A sweep of the 5 libraries found **1 genuinely uncovered ordering precondition out of 15 candidates across 51 production comment spans**, which is near a class of one and does not earn a gate. Side finding worth more than the item: `lib/event-bus.ps1` has NO self-test at all.
 
