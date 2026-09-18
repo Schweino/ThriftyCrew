@@ -12512,7 +12512,7 @@ it is not zero, that is an incident and not a backlog item.
 **Not claimed:** I did not run that scan. I am not asserting a secret is committed; I am asserting
 that nothing in the gate set would tell you.
 
-### I167 - Ghost's own surface is checked at two fixed lists, never censused `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I167 - Ghost's own surface is checked at two fixed lists, never censused `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The post half is partly REFUTED: `ops/audit-ghost-drift.ps1 -Discover` ALREADY paginates every post Ghost holds and then discards every unmatched one without listing it, so the census exists and throws away its own denominator. The manifest is 16 tools generated 2026-08-08, 35 days stale. The integrations and webhooks half genuinely needs one live Admin API GET, which was deliberately NOT made; the exact call is written out in the lane report. The item predicted a 403, and that prediction is unsupported - the memory it cites records 403 on `/stats/` and `/settings/` and says nothing about `/integrations/`.
 
@@ -12552,6 +12552,88 @@ needs Brad in a browser and cannot be automated - and it should be written down 
 "we cannot see this" is the honest state and is currently unrecorded.
 
 **Not claimed:** I did not call Ghost. No live probing was in scope for this run.
+
+**ACCEPTANCE BAR, written 2026-09-18 before any live call was made or any count taken** (rung 1 worked
+by a backlog-run subagent). Two READ-ONLY Admin API GETs through `lib/ghost-lib.ps1`, write journal
+cleared, no PUT, POST or DELETE.
+
+- **Integrations and webhooks.** `GET /ghost/api/admin/integrations/?include=api_keys,webhooks`.
+  A 401 or 403 is a complete answer: the integrations half cannot be censused with the estate's token,
+  it needs Brad in a browser, and that is recorded here and nothing is built. On a 200, **a follow-up is
+  warranted if and only if** at least one Admin API key exists whose id is not the estate's own key id
+  (the id half of `meal-prep\.ghostkey`), or at least one webhook exists whose target URL no tracked file
+  names. Zero of both means the live side matches what the repo knows and no fix is warranted. Any
+  follow-up that REMOVES an integration or webhook is 1-WAY and goes to Brad, never done here.
+- **Posts and pages.** Paginate `GET /posts/` and `GET /pages/` with `status=all` for slug, status and
+  visibility only. The denominator is every object Ghost returns. The test for "a local source produces
+  it" is stated because it is unsound: the slug appears as a literal in at least one tracked file
+  (`git grep -F`). A code change is warranted if and only if at least one PUBLISHED object's slug appears
+  in no tracked file, because then `-Discover`'s discarded remainder is hiding a live page nobody in the
+  repo can name. If every published slug is named somewhere, the census has nothing to report and no fix
+  is warranted. Unpublishing or deleting anything found is reader-facing and goes to Brad.
+
+**MEASURED 2026-09-18, against the bar above.** Every call was a GET, run from a worktree at
+237422ef6 with `lib/ghost-lib.ps1` at that commit, the write journal and staging cleared. The two
+harnesses are scratch (a PowerShell census and a Python slug matcher); why they were not committed is
+under the ruling below.
+
+- **Integrations: HTTP 403, and it is a permission refusal, not an auth failure.** Ghost's own words:
+  *"API tokens do not have permission to access this endpoint"*. In the same run, with the same key and
+  a fresh JWT per call, `GET /site/` and `GET /posts/` both answered 200, so the token is good and the
+  endpoint is closed to it. **Webhooks have no read endpoint at all**: `GET /webhooks/` answered 406
+  "endpoint was not found". So the integrations and webhooks half CANNOT be censused by automation with
+  the estate's token. It needs Brad in a browser at Settings, Integrations. Per the bar, nothing is built
+  for this half. The earlier lane report was right that the 403 was unsupported at the time; it is now
+  measured.
+- **Posts and pages: 1,585 objects** (1,566 posts, 19 pages). By status: 1,065 published posts, 496
+  draft posts, 5 sent posts (email-only), 19 published pages. **Live, meaning published or sent: 1,089.**
+- **Of those 1,089, 201 have a slug that appears in no tracked file** (8,543 tracked text files read at
+  237422ef6, 35 binary or unreadable skipped), by both the loose test (substring anywhere) and the
+  strict test (a whole hyphenated token). One more slug is named only loosely, inside a longer token.
+  - **5 are the sent-only price-alert emails** (paid, 2026-07-12 to 2026-09-11). Email-only by design,
+    not web pages, and not what this item is about.
+  - **196 are PUBLISHED and PUBLIC**: 195 posts and the `refunds` page. Every one of the 195 posts was
+    published on 2026-07-04 (93) or 2026-07-05 (102): money how-tos, calculators (`net-worth-calculator`,
+    `mortgage-payment-calculator`, `compound-growth-calculator`), a glossary (`wash-sale-rule`,
+    `sep-ira`, `coinsurance`) and meal-prep guides. **None of the 196 titles appears verbatim in any
+    tracked file either.** Of four slugs sampled with `git log --all -S`, two (`wash-sale-rule`,
+    `50-30-20-budget-calculator`) were never named by any commit on any branch, and the other two only
+    by a crawl-state commit and a daily-pipeline commit, not by a producer.
+- **Verdict against the bar: a follow-up IS warranted.** 196 live public pages, about 18% of the 1,089
+  live objects, are produced by nothing in this repo, so no audit here can read them: any number in
+  those calculators and glossary entries can go wrong and nothing will see it. That is the course's
+  uncalled-stored-procedure finding at the scale of the site, and `-Discover` discards exactly this
+  remainder. **But every useful next step either changes what a reader sees or decides what the estate
+  owns, so it stops here for Brad.**
+
+**THE RULING NEEDED.** What should the estate do about 196 live public pages that it did not produce
+and cannot audit?
+
+1. **Adopt them (recommended).** Export each body with a read-only GET into a tracked folder so every
+   live page has a local source, declare the set the way `ops/cloudflare-estate.json` declares the
+   Cloudflare estate, and commit a census audit that fails on any live slug that is neither produced
+   locally nor declared. Their numbers then come into reach of the fact and drift audits. Nothing a
+   reader sees changes at this step; any correction found afterwards goes through the normal gated path.
+   Cost: the largest of the four, and it will surface corrections in content nobody has read since July.
+2. **Declare them only.** The declared list and the census audit from option 1, without exporting the
+   bodies. Cheap, stops new unowned pages appearing unseen, and leaves the 196 exactly as unaudited as
+   they are today.
+3. **Retire them.** Unpublish or redirect the 196. Reader-facing and hard to undo for search traffic
+   (the 2026-08-31 SEO baseline records the silent pages as indexed), so it should follow a read of
+   what they say and what traffic they carry, never precede it.
+4. **Record and leave.** This measurement is the whole outcome.
+
+**Recommendation: option 1**, because it is the only one that lets the estate check the numbers on
+pages readers are already landing on, and it contains option 2's census as its first half. The same
+answer settles the integrations half: under any option, Brad reads Settings, Integrations once in the
+browser and the count of integrations, Admin API keys and webhooks gets written into this item beside
+the key id the repo uses, since no token can read it.
+
+**Why the harness was not committed here.** `.claude/rules/measurement.md` asks for a committed harness
+when the question can recur, and this one can. Under options 1 and 2 the census audit IS that harness,
+committed with its fixtures and run on a schedule, so a scratch copy committed today would be a second
+harness to retire. Under options 3 and 4 it should be committed as an `ops/` probe. Either way it waits
+for the ruling rather than guessing at its shape.
 
 ### I168 - Confirmed and NOT filed `DONE` `queue-7` `2-WAY` `RUNG1 DOC`
 
