@@ -69,6 +69,22 @@ from `performance.getEntriesByType('resource')`. One page load a week, no vision
 
 Remove `ad_terms` from the worklist and the two new scripts; the API lane returns to rotation-only. No data migration.
 
+## Built 2026-09-18 (landed b92c93874)
+
+- `grocery\pull-bakers-ad-list.ps1` (list + routing + refusals), `capture-policy-lib.ps1` (`Get-BakersAdOwed`,
+  `Get-BakersAskPlan`, `Get-BakersAdCaptureState`, worklist `ad_terms`), the API lane asking owed ad terms first,
+  `check-ad-cycles` / `ad-schedule-backing-lib` / `audit-ad-status` / `audit-row-age` judging Baker's on the list plus
+  its asks, and `capture-run` + `pull-browser-stores.py --bakers-ad-id-out` reading the id once per ad week.
+- Routing on the 09-16 ad: 169 offers, 90 routed onto 85 search terms, 79 unrouted (listed in the file). Brand-only
+  headlines of tracked goods (Pepsi, Tide, Doritos, Swanson, Progresso, Dasani...) are the main unrouted class; filed
+  to the weekly lane rather than widened here, because that is a catalogue change.
+- Cap used: Baker's 250 search terms a day (StoreCallCap, basis 'proposed'); the ad takes the expiry allowance,
+  250 - 7 = 243. The Kroger Products API's published daily limit was NOT confirmed on 2026-09-18 (its docs pages
+  render client-side); the claim above that it is thousands a day is the plan's, unverified here.
+- The Chrome read: the first live load from a brand-new profile saw no `/api/dacs` request in 90 s; a second load
+  minutes later (another fresh profile) saw 15, with Saddlecreek preselected. Cause of the first miss not
+  established, so the driver now reloads once on a miss and records the page's title, text and frames.
+
 ## Not in scope
 
 Pricing basket offers ("buy 5 save $1"), BOGO interpretation: the Kroger API's own promo price is what we record, the

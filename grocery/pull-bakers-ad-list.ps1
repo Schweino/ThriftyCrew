@@ -118,6 +118,11 @@ if ($SelfTest) {
     $unr = @(@($la.unrouted) | Where-Object { [string]$_.id -eq '1292580' })
     Test-BkalCase 'CLEAN TWIN  an offer the board does not track (1292580 Tito''s/Captain Morgan/Jose Cuervo) is RECORDED in unrouted[] with its phrases, never dropped' `
       (($unr.Count -eq 1) -and (@($unr[0].phrases).Count -ge 1)) ("unrouted 1292580 x$($unr.Count)")
+    $lf = @(Get-ChildItem -LiteralPath (Join-Path $a.Dir 'bakers') -Filter 'bakers-ad-list-*.json' -File -ErrorAction SilentlyContinue)
+    $lb = if ($lf.Count -eq 1) { [IO.File]::ReadAllBytes($lf[0].FullName) } else { [byte[]]@() }
+    $lnon = @($lb | Where-Object { $_ -gt 127 }).Count
+    Test-BkalCase 'MUST FIRE  the list carries non-ASCII offer names AND a byte-order mark, so audit-capture-encoding (a guards hard fail) reads it unambiguously' `
+      (($lb.Length -gt 3) -and ($lb[0] -eq 0xEF) -and ($lb[1] -eq 0xBB) -and ($lb[2] -eq 0xBF) -and ($lnon -gt 3)) ("bytes=$($lb.Length) non-ascii=$lnon bom=$(if ($lb.Length -gt 2) { '{0:X2}{1:X2}{2:X2}' -f $lb[0], $lb[1], $lb[2] })")
     $idf = @(Get-ChildItem -LiteralPath (Join-Path $a.Dir 'bakers') -Filter 'bakers-ad-id-2026-09-16.json' -File -ErrorAction SilentlyContinue)
     Test-BkalCase 'CLEAN TWIN  the verified ad id is written beside the list, named for the ad''s own start date' `
       (($idf.Count -eq 1) -and ([string](ConvertFrom-Json ([IO.File]::ReadAllText($idf[0].FullName))).ad_id -eq $FIXID)) ("id files: $($idf.Count)")
@@ -406,7 +411,9 @@ $listDoc = [ordered]@{
 $idPath = Join-Path $bkDir ('bakers-ad-id-' + $ad.from + '.json')
 $listPath = Join-Path $bkDir ('bakers-ad-list-' + $ad.from + '.json')
 [void](Write-TcAtomicFile -Path $idPath -Text ((($idDoc | ConvertTo-Json -Depth 6) -replace "`r`n", "`n") + "`n") -NoBom -NoNewline)
-[void](Write-TcAtomicFile -Path $listPath -Text ((($listDoc | ConvertTo-Json -Depth 8) -replace "`r`n", "`n") + "`n") -NoBom -NoNewline)
+# WITH A BOM (2026-09-18): offer names carry non-ASCII ("L'Oreal" with its accent, "Jalapeno" with its tilde), and a BOM-less
+# non-ASCII capture under out\bakers\ is a guards hard fail (audit-capture-encoding): PS 5.1's Get-Content reads it as cp1252.
+[void](Write-TcAtomicFile -Path $listPath -Text ((($listDoc | ConvertTo-Json -Depth 8) -replace "`r`n", "`n") + "`n") -NoNewline)
 
 Write-Output ("pull-bakers-ad-list: ad {0} week {1} {2}..{3} (id from {4}) - {5} page(s), {6} offer(s) for {7}" -f $ad.id, $adRoot.weekNumber, $ad.from, $ad.to, $ad.source, $pages.Count, $outOffers.Count, $Location)
 Write-Output ("pull-bakers-ad-list: routed {0} of {1} offer(s) onto {2} Baker's search term(s); {3} unrouted (listed in the file){4}" -f $routedN, $outOffers.Count, $termRows.Count, $unrouted.Count, $(if ($cnl) { "; matcher could not look at $cnl name(s)" } else { '' }))

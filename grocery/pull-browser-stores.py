@@ -304,31 +304,50 @@ def read_bakers_ad_id(out_path, date_s, timeout_s=90):
         browser.start()
     except Exception as e:
         return False, f"could not start Chrome: {e}"
-    found, page_url = [], BAKERS_WEEKLYAD_URL
+    found, page_url, names, diag = [], BAKERS_WEEKLYAD_URL, [], {}
     try:
-        browser.goto(BAKERS_WEEKLYAD_URL, wait_ms=6000)
-        deadline = time.time() + timeout_s
-        while time.time() < deadline:
-            raw = browser.js("JSON.stringify(performance.getEntriesByType('resource').map(function(e){return e.name;}))")
-            try:
-                names = json.loads(raw) if isinstance(raw, str) else (raw or [])
-            except Exception:
-                names = []
-            found = dacs_urls(names)
+        # AT MOST TWO LOADS (2026-09-18). Measured on the day this shipped: the first load from a brand-new profile
+        # saw no /api/dacs request in 90 s, and the next load (another fresh profile, minutes later) saw 15 and
+        # the Saddlecreek store preselected. Why the first missed was not established, so a miss gets ONE reload
+        # rather than a verdict - never a loop, and a CAPTCHA or wall is still never touched.
+        for attempt in (1, 2):
+            browser.goto(BAKERS_WEEKLYAD_URL, wait_ms=6000)
+            deadline = time.time() + (timeout_s / 2.0)
+            while time.time() < deadline:
+                raw = browser.js("JSON.stringify(performance.getEntriesByType('resource').map(function(e){return e.name;}))")
+                try:
+                    names = json.loads(raw) if isinstance(raw, str) else (raw or [])
+                except Exception:
+                    names = []
+                found = dacs_urls(names)
+                if found:
+                    break
+                time.sleep(3)
             if found:
                 break
-            time.sleep(3)
         try:
             page_url = browser.js("location.href") or BAKERS_WEEKLYAD_URL
         except Exception:
             pass
+        # WHY NOTHING WAS FOUND MUST BE ON DISK (2026-09-18). The first live read, from a fresh profile, saw no
+        # /api/dacs request in 90 s and recorded only that - a wall, no store chosen and an ad rendered inside a
+        # frame all look identical in an empty list. So the page states its own evidence: its title, the start
+        # of its text, its frames and how many resources it loaded. Read-only; it changes nothing on the page.
+        try:
+            rawd = browser.js("JSON.stringify({title: document.title, "
+                              "text: (document.body ? document.body.innerText : '').replace(/\\s+/g, ' ').slice(0, 600), "
+                              "frames: Array.prototype.map.call(document.querySelectorAll('iframe'), function(f){return f.src;}), "
+                              "resources: performance.getEntriesByType('resource').length})")
+            diag = json.loads(rawd) if isinstance(rawd, str) else (rawd or {})
+        except Exception as e:
+            diag = {"error": str(e)[:200]}
     finally:
         try:
             browser.close()
         except Exception:
             pass
     doc = {"captured": datetime.datetime.now().isoformat(timespec="seconds"), "date": date_s,
-           "source_url": page_url, "urls": found,
+           "source_url": page_url, "urls": found, "page": diag,
            "note": "the /api/dacs/<guid> requests the Baker's weekly-ad page made in a real Chrome; "
                    "pull-bakers-ad-list.ps1 verifies the id against the ad's own dates before using it"}
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
