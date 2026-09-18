@@ -152,6 +152,35 @@ function Invoke-TcWarmGate {
   }
 }
 
+function Invoke-TcSeedIfUnseeded {
+  <# SEED BEFORE THE GATE, AS THE HOOK DOES (2026-09-18, backlog I237). ops\hooks\pre-push seeds a checkout with no
+     built cards once, before its gate, because meal-prep\db\built is gitignored and a worktree has none until
+     ops\seed-worktree.ps1 copies it. push-main's gate runs OUTSIDE the lock and BEFORE git push, so it ran unseeded:
+     feed-covers-published reported BLIND, test-auditors' reading of that child printed FAIL, and the warm
+     test-auditors leg refused most first pushes from a fresh worktree for a reason unrelated to the change. The same
+     card the hook tests, the same seeder, the same best effort: a seed that cannot run is SAID and never refuses,
+     because seeding supplies inputs and decides nothing. Returns Ran / Code / Why. -Seeder is the self-test's seam. #>
+  param([string]$Dir, [string]$Seeder = '')
+  $card = Join-Path $Dir 'meal-prep\db\built\american-goulash-pasta.body.html'   # the card ops\hooks\pre-push tests
+  if (Test-Path -LiteralPath $card) { return [pscustomobject]@{ Ran = $false; Code = 0; Why = 'already seeded' } }
+  if (-not $Seeder) { $Seeder = Join-Path $Dir 'ops\seed-worktree.ps1' }
+  if (-not (Test-Path -LiteralPath $Seeder)) { return [pscustomobject]@{ Ran = $false; Code = 3; Why = 'no built card and no ops\seed-worktree.ps1 in this checkout' } }
+  Say 'push-main: this checkout has no built cards, so two gates would be BLIND - seeding once before the gate, as the hook does.'
+  try {
+    $p = Start-Process -FilePath 'powershell.exe' -WorkingDirectory $Dir -NoNewWindow -PassThru -ErrorAction Stop `
+      -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $Seeder + '"'), '-Target', ('"' + $Dir + '"'))
+    $null = $p.Handle
+    $p.WaitForExit()
+    $code = $p.ExitCode
+    if ($null -eq $code) { $code = 3 }
+    if ([int]$code -ne 0) { Say ("push-main: seeding did not complete (exit {0}); the gates will report BLIND rather than fail." -f $code) }
+    return [pscustomobject]@{ Ran = $true; Code = [int]$code; Why = '' }
+  } catch {
+    Say ('push-main: seeding could not be started (' + $_.Exception.Message + '); the gates will report BLIND rather than fail.')
+    return [pscustomobject]@{ Ran = $false; Code = 3; Why = $_.Exception.Message }
+  }
+}
+
 function Invoke-TcWarmTestAuditors {
   <# The hook's SECOND leg, run outside the lock too (2026-09-18, queue 2026-09-18-1139a0). The pre-push hook runs
      ops\prepush-test-auditors.ps1 after run-gates, and when push-main holds the lock that leg ran INSIDE it: measured
@@ -208,7 +237,7 @@ function Get-TcWarmRefLine {
 }
 
 function Invoke-TcPushMain {
-  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '')
+  param([string]$Dir, [string]$Remote, [string]$Branch, [int]$LockWaitSec, [bool]$DryRun, [string]$LockPrefix = '', [string]$LockQueueRoot = '', [scriptblock]$GateRunner = $null, [string]$LedgerRoot = '', [string]$SeedScript = '')
   # WHAT THE REMOTE HELD BEFORE THIS PUSH QUEUED. Read here and compared with what the fetch inside the lock returns,
   # it is this wrapper's own answer to "did the remote move while I waited" - the quantity that decides whether a
   # retry can ever converge, recorded per push in lib\push-ledger.ps1 rather than re-derived from %TEMP% afterwards.
@@ -251,6 +280,8 @@ function Invoke-TcPushMain {
     if ($wt.Code -ne 0) { return $wt }
     return $wg
   } })
+  # SEEDED FIRST, so neither leg of the gate below judges a checkout that has no built cards (backlog I237).
+  $null = Invoke-TcSeedIfUnseeded -Dir $Dir -Seeder $SeedScript
   $g = & $runner $Dir
   if ($g.Ran -and $g.Code -eq 1) {
     $redWhy = $(if ($g.Why) { [string]$g.Why } else { 'run-gates exited 1' })
@@ -492,6 +523,44 @@ $m.Dispose()
     # The bare repository's HEAD must name the branch it actually has, or every clone below comes up empty - see the
     # account in New-Clone.
     $null = & git -C $origin symbolic-ref HEAD refs/heads/main 2>$null
+
+    # ---- SEEDED BEFORE THE GATE (backlog I237) ----
+    # Founding case: 2026-09-18, a fresh worktree's first push-main was refused by the warm test-auditors leg over
+    # feed-covers-published's BLIND verdict, because nothing seeded the checkout before the gate outside the lock.
+    # The gate seam records whether the card was there when the gate ran: the ORDER, read from the mechanism.
+    $sdStub = Join-Path $tmp 'seed-stub.ps1'
+    $sdFail = Join-Path $tmp 'seed-fail.ps1'
+    [IO.File]::WriteAllText($sdStub, @'
+param([string]$Target)
+Add-Content -LiteralPath (Join-Path $Target 'seeded-for.txt') -Value $Target
+$d = Join-Path $Target 'meal-prep\db\built'
+$null = New-Item -ItemType Directory -Force $d
+[IO.File]::WriteAllText((Join-Path $d 'american-goulash-pasta.body.html'), 'card')
+exit 0
+'@)
+    [IO.File]::WriteAllText($sdFail, "param([string]`$Target)`nexit 1`n")
+    $script:cardAtGate = $null
+    $cardGate = { param($d) $script:cardAtGate = Test-Path -LiteralPath (Join-Path $d 'meal-prep\db\built\american-goulash-pasta.body.html'); return [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $s1 = New-Clone 's1'
+    Add-Content -LiteralPath (Join-Path $s1 '.git\info\exclude') -Value @('seeded-for.txt', 'meal-prep/') -Encoding ascii   # gitignored in the real repo
+    [IO.File]::WriteAllText((Join-Path $s1 's1.txt'), 's1')
+    $null = & git -C $s1 add -- s1.txt 2>$null; $null = & git -C $s1 commit -q -m s1 2>$null
+    $rS1 = Invoke-TcPushMain -Dir $s1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $cardGate -SeedScript $sdStub
+    $sFor = if (Test-Path -LiteralPath (Join-Path $s1 'seeded-for.txt')) { ([IO.File]::ReadAllText((Join-Path $s1 'seeded-for.txt'))).Trim() } else { '<not seeded>' }
+    T ($kMF + '  a checkout with no built card is seeded, with -Target naming that checkout, BEFORE the gate runs') `
+      ($rS1 -eq 0 -and $script:cardAtGate -eq $true -and [string]::Equals($sFor, $s1, [StringComparison]::OrdinalIgnoreCase)) ("rc={0} cardAtGate={1} seededFor={2}" -f $rS1, $script:cardAtGate, $sFor)
+    Remove-Item -LiteralPath (Join-Path $s1 'seeded-for.txt') -Force -ErrorAction SilentlyContinue
+    $rS2 = Invoke-TcSeedIfUnseeded -Dir $s1 -Seeder $sdStub
+    T ($kMNF + '  a checkout that already has the card is not seeded again') `
+      ((-not $rS2.Ran) -and -not (Test-Path -LiteralPath (Join-Path $s1 'seeded-for.txt'))) ("ran={0} why={1}" -f $rS2.Ran, $rS2.Why)
+    $s3 = New-Clone 's3'
+    Add-Content -LiteralPath (Join-Path $s3 '.git\info\exclude') -Value @('seeded-for.txt', 'meal-prep/') -Encoding ascii   # gitignored in the real repo
+    [IO.File]::WriteAllText((Join-Path $s3 's3.txt'), 's3')
+    $null = & git -C $s3 add -- s3.txt 2>$null; $null = & git -C $s3 commit -q -m s3 2>$null
+    $script:gateRuns = 0
+    $rS3 = Invoke-TcPushMain -Dir $s3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -SeedScript $sdFail
+    T ($kCT + '  a seed that fails is best effort: the gate still runs and the push still proceeds') `
+      ($rS3 -eq 0 -and $script:gateRuns -eq 1) ("rc={0} gateRuns={1}" -f $rS3, $script:gateRuns)
 
     $a = New-Clone 'a'
     [IO.File]::WriteAllText((Join-Path $a 'a.txt'), 'a')

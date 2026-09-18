@@ -6342,6 +6342,29 @@ else {
 # "Unavailable". 231 of 544 cards use an alias-spelling bid. Nothing failed at publish time; the pages were
 # simply wrong once a reader opened them, and it was found at post-publish review instead of at publish.
 if (Use-Unit 'u121-feed-coverage-of-what-is-published') {
+# The child's verdict read three ways (backlog I237): 'pass' only on exit 0 AND the pinned N/N; 'blind' only on
+# exit 0 AND "X of Y cases ran, Z BLIND" with X + Z = Y = the pin; everything else 'fail'.
+function Get-FeedCovSelfTestVerdict([int]$Rc, [string]$Text, [int]$Pinned) {
+  if ($Rc -eq 0 -and $Text -match ('SELFTEST: ' + $Pinned + '/' + $Pinned + ' pass')) { return [pscustomobject]@{ state = 'pass'; detail = '' } }
+  $bm = [regex]::Match([string]$Text, 'SELFTEST: (\d+) of (\d+) cases ran, (\d+) BLIND')
+  if ($Rc -eq 0 -and $bm.Success) {
+    $ran = [int]$bm.Groups[1].Value; $tot = [int]$bm.Groups[2].Value; $bl = [int]$bm.Groups[3].Value
+    if ($tot -eq $Pinned -and ($ran + $bl) -eq $tot -and $bl -gt 0) { return [pscustomobject]@{ state = 'blind'; detail = ('ran ' + $ran + ' of ' + $tot + ', ' + $bl + ' BLIND') } }
+  }
+  return [pscustomobject]@{ state = 'fail'; detail = '' }
+}
+$fcvBlind = 'SELFTEST: 27 of 28 cases ran, 1 BLIND - could not look, NOT passed'
+$fcvCases = @(
+  @('MUST NOT FIRE: an unseeded checkout''s blind verdict at exit 0 is a SKIP, not a failing case', 0, $fcvBlind, 'blind'),
+  @('CLEAN TWIN: the seeded verdict 28/28 at exit 0 still passes', 0, 'SELFTEST: 28/28 pass', 'pass'),
+  @('MUST FIRE: a failing child (exit 1) is a failure', 1, 'SELFTEST: 27/28 pass - 1 FAILED', 'fail'),
+  @('MUST FIRE: a blind verdict over a suite that lost cases (27 of 27) is still lost fixtures, not a skip', 0, 'SELFTEST: 26 of 27 cases ran, 1 BLIND - could not look, NOT passed', 'fail'),
+  @('MUST FIRE: a blind verdict at a non-zero exit is a failure', 1, $fcvBlind, 'fail')
+)
+foreach ($fc in $fcvCases) {
+  $got = (Get-FeedCovSelfTestVerdict -Rc $fc[1] -Text $fc[2] -Pinned 28).state
+  if ($got -eq $fc[3]) { Ok ('feed-covers-published verdict reader - ' + $fc[0]) } else { Bad ('feed-covers-published verdict reader - ' + $fc[0] + ' (got ' + $got + ', want ' + $fc[3] + ')') }
+}
 $fcp = Join-Path $mpPipe 'feed-covers-published.ps1'
 if (-not (Test-Path $fcp)) { Bad 'meal-prep\pipeline\feed-covers-published.ps1 is missing - nothing checks that the feed a published card FETCHES can actually price it, and a recipe can go live with an empty cost section again' }
 else {
@@ -6360,8 +6383,17 @@ else {
   # than as the wrapper being out of date, and it sends the next reader to debug the wrong file. Verified
   # before moving it: feed-covers-published.ps1 -SelfTest exits 0 and reports 28/28, and all nine new cases
   # are real UNBID_LINE assertions, not the old ones renamed.
-  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 28/28 pass') {
+  # A CHECKOUT WITHOUT A BUILT CARD IS COULD-NOT-LOOK, NEVER A FAILURE (2026-09-18, backlog I237). The child's own
+  # verdict there is "SELFTEST: 27 of 28 cases ran, 1 BLIND" at exit 0 (meal-prep\db\built is gitignored and a
+  # worktree has none until ops\seed-worktree.ps1 runs). This line used to read only '28/28 pass', so that verdict
+  # printed FAIL here, and ops\prepush-test-auditors.ps1 counted it as a NEW failing case and refused most first
+  # pushes from a fresh worktree for a reason unrelated to the change. A blind child is now a SKIP, counted as one,
+  # and only when its ran + blind still add to the pinned 28: a blind line over a smaller suite is still lost fixtures.
+  $fcV = Get-FeedCovSelfTestVerdict -Rc $LASTEXITCODE -Text $r -Pinned 28
+  if ($fcV.state -eq 'pass') {
     Ok 'feed-covers-published -SelfTest passes with its founding-bug fixtures armed (a published slug the feed does not carry, a bid in ingredients but not pricing_inputs, a present-but-zero-priced entry, and the allowlist pardoning only its own bid)'
+  } elseif ($fcV.state -eq 'blind') {
+    Skip ('feed-covers-published -SelfTest could not look: ' + $fcV.detail + ' - this checkout has no built card; run ops\seed-worktree.ps1 -Target <this checkout>. Not a pass')
   } else { Bad ('feed-covers-published -SelfTest failed or lost its founding-bug fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 
   # THE SEAL, asserted HERE so it is independent of the file being checked. The guard is worth nothing as a
