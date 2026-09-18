@@ -12707,6 +12707,39 @@ expiries their own allowance; if a commodity's own re-promotion cadence were kno
 window is about to turn over is a better recapture candidate than one drawn by rotation order. That
 is a hypothesis, not a design, and it wants the denominator above before anyone builds to it.
 
+**ACCEPTANCE BAR, written 2026-09-18 before any gap was counted** (a shape survey of cell `type` and
+`source_ad` values across the boards was read first, to know what a dated sale looks like; no episode,
+gap or cadence had been computed). Definitions first, because the recorded figure's were never written:
+
+- A **promotion episode** is a run of dated sale windows (`type` = `sale` with `ad_from` and `ad_to`) for
+  one commodity at ONE store, windows that overlap or touch (next start at most one day after the last
+  end) merged into one. Sale cells with no window are counted and NOT scored: their only date is the board
+  they were carried on, which measures the board, not the retailer.
+- A **re-promotion gap** is the days from one episode's START to the next's at the same store. A pair
+  (commodity, store) with 0 or 1 episode forms no gap; with exactly 1 gap it has no distribution; with 2
+  or more gaps it is FORMABLE. Every class is printed with its count, never only the formable one.
+- A window is **ad-borne** when its source names an ad and **shelf-found** when it came from a store's
+  search or shelf read (Fareway's shop, Kroger's API, Hy-Vee Aisles Online, a Walmart shelf price). The
+  classifier's rule is the probe's and its per-class source prefixes are printed.
+
+**Why only shelf-found promotions can warrant a scheduling change.** An ad-borne sale is caught by the
+policy's AD ROLLOVER event, which pulls the whole ad whatever the worklist holds, and its end by SALE
+EXPIRY. A cadence cannot make the worklist see those any sooner. A shelf-found sale starts unseen until
+the 90-day rotation happens to re-price that term, so that is the only place a predicted re-promotion
+could change what gets captured.
+
+**A worklist change is warranted only if BOTH hold over shelf-found pairs:**
+- **B1 coverage**: at least **20** formable pairs, covering at least **10%** of the commodities that
+  carried any dated sale window at all.
+- **B2 predictability**: predicting each formable pair's LAST gap as the median of its earlier gaps, the
+  median absolute error is at most **3 days** and at least half the pairs land within 3 days. Three days
+  is half a weekly ad cycle, the least a prediction must hit to name the right week; it is the first
+  plausible value and not the survivor of a sweep.
+
+If either fails, no fix: the probe is committed, the result is recorded here with its denominators, and
+the item closes on the measurement. The observable gap is capped by the history span, so a long-cycle
+commodity is structurally BLIND rather than slow, and the span is printed beside every figure.
+
 ---
 
 ### I170 - brad's rate-of-return ruling is enforced at push time but is written down nowhere a lesson drafter reads `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
