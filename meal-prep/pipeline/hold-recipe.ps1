@@ -274,5 +274,5 @@ if ($stateHit) {
 Say ''
 Say ('hold-recipe: ' + $Slug + ' HELD - ' + $Reason)
 Say '  The card, spec and feed rows are all untouched: this is a takedown, not a retirement.'
-Say '  Release it with:  hold-recipe.ps1 -Slug ' + $Slug + ' -Release -Reason "<why>" -Apply'
+Say ('  Release it with:  hold-recipe.ps1 -Slug ' + $Slug + ' -Release -Reason "<why>" -Apply')
 exit 0

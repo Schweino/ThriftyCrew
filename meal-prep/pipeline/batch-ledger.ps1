@@ -273,7 +273,7 @@ if($SelfTest){
     ((Get-AbandonRefusals $w11 @($w11,$w12) $liveOne 'superseded by w12').Count -eq 0) `
     ((Get-AbandonRefusals $w11 @($w11,$w12) $liveOne 'superseded by w12') -join ' | ')
   T 'MUST FIRE  with w12 absent the SAME row is refused - the recipe is live and nothing owns the publish' `
-    (@(Get-AbandonRefusals $w11 @($w11) $liveOne 'superseded') -join ' ') -match 'no batch records publishing' `
+    ((@(Get-AbandonRefusals $w11 @($w11) $liveOne 'superseded') -join ' ') -match 'no batch records publishing') `
     ((Get-AbandonRefusals $w11 @($w11) $liveOne 'superseded') -join ' | ')
   T 'MUST FIRE  and it NAMES the slug rather than refusing in the abstract' `
     ((Get-OrphanLiveSlugs $w11 @($w11) $liveOne) -contains 'honey-bbq-chicken-mac-and-cheese') `

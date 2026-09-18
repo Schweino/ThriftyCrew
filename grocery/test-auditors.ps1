@@ -2906,7 +2906,7 @@ $bsdSrcRb = Get-Content (Join-Path $root 'build-sams-deals.ps1') -Raw
 $iwbSrcRb = Get-Content (Join-Path $root 'import-walmart-batch.ps1') -Raw
 if (($bwdSrcRb -match 'Set-RollbackFields') -and ($bsdSrcRb -match 'Set-RollbackFields') -and ($iwbSrcRb -match 'Set-RollbackFields')) {
   Ok 'all three markdown callers (walmart builder, sams builder, walmart batch importer) go through Set-RollbackFields'
-} else { Bad 'a markdown caller no longer routes through Set-RollbackFields - walmart=' + [bool]($bwdSrcRb -match 'Set-RollbackFields') + ' sams=' + [bool]($bsdSrcRb -match 'Set-RollbackFields') + ' importer=' + [bool]($iwbSrcRb -match 'Set-RollbackFields') }
+} else { Bad ('a markdown caller no longer routes through Set-RollbackFields - walmart=' + [bool]($bwdSrcRb -match 'Set-RollbackFields') + ' sams=' + [bool]($bsdSrcRb -match 'Set-RollbackFields') + ' importer=' + [bool]($iwbSrcRb -match 'Set-RollbackFields')) }
 $copies = @(@($bwdSrcRb,$bsdSrcRb,$iwbSrcRb) | Where-Object { $_ -match "NotePropertyName 'marked_down'" }).Count
 if ($copies -eq 0) { Ok 'no caller carries its own inline marked_down stamp - the two hand-copies are gone, not just supplemented' }
 else { Bad ("$copies caller(s) still stamp marked_down inline - a second implementation of one fact, which is how the Sam's anchor bug shipped") }
@@ -3743,7 +3743,7 @@ if ($r.rc -eq 2 -and $r.text -match "ACCEPT REFUSED" -and $r.text -match "\[garl
 if ($r.text -notmatch "\[garlic\] 'Garlic'") { Ok "verdict identity: Aldi's real 'Garlic' is NOT blocked by a verdict that only mentioned garlic as a flavour (no false block)" }
 else { Bad "the -Accept gate blocked the innocent 'Garlic' row again - prose re-parsing is back, and a false block is what teaches people to reach for -ForceAccept" }
 if ($r.text -match "\[pinto-beans\] 'Member's Mark Pinto Beans 12 lbs\.'") { Ok 'verdict identity FALLBACK: a pre-2026-08-05 entry with no item field still keys off the quoted name, apostrophe intact' }
-else { Bad 'an entry with no item field no longer blocks - hoisting identity to the item field silently disarmed every legacy verdict file: ' + $r.text }
+else { Bad ('an entry with no item field no longer blocks - hoisting identity to the item field silently disarmed every legacy verdict file: ' + $r.text) }
 # CLEAN TWIN: the live 2026-08-15 situation - the naan is GLOBAL_EXCLUDEd (so the drop was already honoured)
 # and only the real Garlic remains. Nothing outstanding, so -Accept must go through at exit 0.
 Set-Content (Join-Path $fxVi 'global-exclude-lib.ps1') "function Get-TcGlobalExclude { @(`n  'naan'`n) }`n" -Encoding UTF8

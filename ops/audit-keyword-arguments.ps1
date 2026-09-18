@@ -5,7 +5,9 @@
     seventeen statement keywords listed under THE RULE when they appear unquoted as arguments of a command, in the
     shapes listed there. A clean report means none of those is present. A glued statement in any other shape - a
     `for` followed by a bare word, a `throw` right after a switch parameter - is invisible to it, and so is a
-    statement that is wrong for any other reason. A reported site is real; silence is not proof.
+    statement that is wrong for any other reason. It also finds the operators under THE OPERATOR RULE in calls to a
+    simple function defined in the same file; a function from another file is out of its reach. A reported site is
+    real; silence is not proof.
 
   WHY THIS EXISTS (2026-09-11). Commit 8253ded82 joined grocery\pull-grocery-ads.ps1's last self-test case and
   the suite's closing verdict onto ONE line, separated only by spaces:
@@ -31,6 +33,20 @@
   A command named cmd is never reported: every word after `cmd /c` belongs to cmd.exe, where exit and if are its
   own commands. One site per command, naming every keyword that command swallowed, so the founding line is one
   site carrying if and else.
+
+  THE OPERATOR RULE (backlog I206, 2026-09-18). The same binder, one step wider. A function with no [CmdletBinding()]
+  and no [Parameter()] is SIMPLE, and a simple function puts every argument it cannot bind into $args without a word,
+  so `T 'label' $a -match 'x' $got` binds $a as the condition and the -match never runs. An advanced function throws
+  PositionalParameterNotFound on the same call. So a CommandAst whose name is a SIMPLE function defined in the same
+  file is also reported when an element after the name is a bare + - * / % (a bare minus parses as a nameless
+  parameter), or a comparison, logical or type operator (-eq -match -ge -and -not -is and the rest in
+  KWA_PARAM_OPERATORS) naming no parameter the function declares by any prefix. The founding sites, measured at
+  845a2bd08 over 790 tracked non-archive scripts, 20,757 calls to same-file simple functions: five, all real.
+  batch-ledger's `with w12 absent` MUST FIRE passed on ANY non-empty refusal text, hold-recipe printed its release
+  instruction only up to "-Slug", two test-auditors failure messages lost their diagnostics, and one
+  reconcile-publish-journal case lost its got-message. All five were parenthesised in the same change, so the rule
+  starts at zero like the keyword rule above. UNSOUND in the same way: a function defined in another file, a call
+  through & or a variable, and a nested scope's shadowing are all out of its reach.
 
   WHAT IT DELIBERATELY DOES NOT FLAG.
     * A QUOTED word. Write-Output 'if' is a string its author meant. Quoting is also the fix when a bare word
@@ -85,6 +101,11 @@ $script:KWA_KEYWORDS = @('if', 'else', 'elseif', 'foreach', 'while', 'exit', 're
 $script:KWA_SHAPED_KEYWORDS = @('for', 'do', 'switch', 'try', 'catch', 'finally', 'trap', 'throw', 'break', 'continue')
 $script:KWA_FLOW_KEYWORDS = @('throw', 'break', 'continue')
 $script:KWA_WALK_EXCLUDE = '\\work' + 'trees\\|\\\.git\\|node_modules'
+# THE OPERATOR RULE (backlog I206): what a call to a same-file SIMPLE function must not carry unparenthesised.
+$script:KWA_BARE_OPERATORS = @('+', '-', '*', '/', '%')
+$script:KWA_PARAM_OPERATORS = @('eq', 'ne', 'gt', 'ge', 'lt', 'le', 'like', 'notlike', 'match', 'notmatch', 'contains',
+  'notcontains', 'in', 'notin', 'and', 'or', 'not', 'xor', 'band', 'bor', 'ieq', 'ine', 'ceq', 'cne', 'imatch', 'cmatch',
+  'replace', 'split', 'join', 'is', 'isnot', 'as')
 
 function Test-KwaSwallowed {
   <# Is element $Index of a command's $Elements a statement keyword that command swallowed? THE RULE, per element. #>
@@ -104,6 +125,57 @@ function Test-KwaSwallowed {
   return (-not ($prev -is [System.Management.Automation.Language.CommandParameterAst] -and $null -eq $prev.Argument))
 }
 
+function Get-KwaSimpleFunctions {
+  <# Every function defined anywhere in $Ast that is SIMPLE - no [CmdletBinding()] and no [Parameter()] on any
+     parameter - as a case-insensitive map of name -> its declared parameter names. A name defined twice in one file
+     counts as simple only when every definition is, so an advanced twin never produces a site. #>
+  param($Ast)
+  $map = New-Object 'System.Collections.Generic.Dictionary[string,object]' ([StringComparer]::OrdinalIgnoreCase)
+  $advanced = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  $defs = $Ast.FindAll({ param($x) $x -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true)
+  foreach ($fd in $defs) {
+    $params = New-Object System.Collections.ArrayList
+    if ($fd.Parameters) { foreach ($p in $fd.Parameters) { [void]$params.Add($p) } }
+    $adv = $false
+    if ($fd.Body.ParamBlock) {
+      foreach ($p in $fd.Body.ParamBlock.Parameters) { [void]$params.Add($p) }
+      foreach ($a in $fd.Body.ParamBlock.Attributes) { if ($a.TypeName.Name -ieq 'CmdletBinding') { $adv = $true } }
+    }
+    $names = New-Object System.Collections.ArrayList
+    foreach ($p in $params) {
+      foreach ($a in $p.Attributes) {
+        if ($a -is [System.Management.Automation.Language.AttributeAst] -and $a.TypeName.Name -ieq 'Parameter') { $adv = $true }
+      }
+      [void]$names.Add(([string]$p.Name.VariablePath.UserPath -replace '^.*:', ''))
+    }
+    if ($adv) { [void]$advanced.Add($fd.Name); continue }
+    if (-not $map.ContainsKey($fd.Name)) { $map[$fd.Name] = New-Object System.Collections.ArrayList }
+    foreach ($n in $names) { [void]$map[$fd.Name].Add($n) }
+  }
+  foreach ($n in $advanced) { [void]$map.Remove($n) }
+  return $map
+}
+
+function Get-KwaOperatorArgument {
+  <# THE OPERATOR RULE, per element: is element $Index of a call to a SIMPLE function an operator the binder will
+     hand over as an argument? A bare + - * / %, or a -eq / -match / -and style operator that names no parameter the
+     function declares (PowerShell binds a parameter by any unambiguous prefix, so -eq against a declared $equal is
+     a real binding and is not reported). Returns the operator's spelling, or $null. #>
+  param($Elements, [int]$Index, $Declared)
+  $e = $Elements[$Index]
+  if ($e -is [System.Management.Automation.Language.StringConstantExpressionAst] -and
+      $e.StringConstantType -eq [System.Management.Automation.Language.StringConstantType]::BareWord -and
+      $script:KWA_BARE_OPERATORS -contains [string]$e.Value) { return [string]$e.Value }
+  if ($e -is [System.Management.Automation.Language.CommandParameterAst]) {
+    $pn = [string]$e.ParameterName
+    if ($pn -eq '') { return '-' }   # a bare minus between two operands parses as a nameless parameter
+    if ($script:KWA_PARAM_OPERATORS -notcontains $pn) { return $null }
+    foreach ($d in $Declared) { if ($d -and ([string]$d).StartsWith($pn, [StringComparison]::OrdinalIgnoreCase)) { return $null } }
+    return ('-' + $pn.ToLowerInvariant())
+  }
+  return $null
+}
+
 function Get-KwaFindings {
   <# Pure over one file's text, so the self-test drives exactly what the live scan runs.
      Returns @{ Findings = @({Line; Command; Keywords; Text}); ParseErrors }. #>
@@ -113,6 +185,7 @@ function Get-KwaFindings {
   $parseErrors = if ($null -eq $err) { 0 } else { $err.Count }
   $src = ([string]$Text -replace "`r", '') -split "`n"
   $out = New-Object System.Collections.ArrayList
+  $simple = Get-KwaSimpleFunctions -Ast $ast
   $cmds = $ast.FindAll({ param($x) $x -is [System.Management.Automation.Language.CommandAst] }, $true)
   foreach ($c in $cmds) {
     # Every word after `cmd /c` belongs to cmd.exe, where exit and if are its own commands.
@@ -120,10 +193,21 @@ function Get-KwaFindings {
     $els = $c.CommandElements
     $kws = New-Object System.Collections.ArrayList
     $line = 0
+    $cn = [string]$c.GetCommandName()
+    $declared = $null
+    if ($cn -and $simple.ContainsKey($cn)) { $declared = $simple[$cn] }
     for ($i = 1; $i -lt $els.Count; $i++) {
       if (Test-KwaSwallowed -Elements $els -Index $i) {
         [void]$kws.Add(([string]$els[$i].Value).ToLowerInvariant())
         if (-not $line) { $line = $els[$i].Extent.StartLineNumber }
+        continue
+      }
+      if ($null -ne $declared) {
+        $op = Get-KwaOperatorArgument -Elements $els -Index $i -Declared $declared
+        if ($op) {
+          [void]$kws.Add($op)
+          if (-not $line) { $line = $els[$i].Extent.StartLineNumber }
+        }
       }
     }
     if ($kws.Count) {
@@ -195,6 +279,49 @@ if ($SelfTest) {
     KwaT 'MUST FIRE  a glued throw with a quoted message after it, no block needed' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq 'throw') (KwaGot $r)
     $r = Get-KwaFindings -Text 'foreach ($x in $xs) { Write-Output $x  continue }'
     KwaT 'MUST FIRE  a glued continue with NOTHING after it, the last element of the command' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq 'continue') (KwaGot $r)
+
+    # ---- THE OPERATOR RULE (backlog I206): MUST FIRE ---------------------------------------------------
+    $fxOpDef = 'function T7s([string]$P1) { $P1 }'
+    $fxOpCall = 'T7s ''a'' + ''b'''
+    $r = Get-KwaFindings -Text ($fxOpDef + "`n" + $fxOpCall)
+    KwaT 'MUST FIRE  the item''s own repro: T7s ''a'' + ''b'' against a simple T7s, one site on line 2 carrying +' ($r.Findings.Count -eq 1 -and $r.Findings[0].Line -eq 2 -and $r.Findings[0].Keywords -eq '+' -and $r.Findings[0].Command -eq 'T7s') (KwaGot $r)
+    $fxLedgerDef = 'function T($m,$c,$g){ if($c){ "ok" } else { "FAIL" } }'
+    $fxLedgerCall = 'T ''MUST FIRE  refused'' (@($refusals) -join '' '') -match ''no batch records publishing'' ($got)'
+    $r = Get-KwaFindings -Text ($fxLedgerDef + "`n" + $fxLedgerCall)
+    KwaT 'MUST FIRE  the batch-ledger case from 845a2bd08: an unparenthesised -match makes the condition any non-empty string' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq '-match') (KwaGot $r)
+    $fxJournalCall = 'T ''MUST FIRE  offered'' (@($heads) | Where-Object { $_ }).Count -ge 1 ''none offered'''
+    $r = Get-KwaFindings -Text ($fxLedgerDef + "`n" + $fxJournalCall)
+    KwaT 'MUST FIRE  the reconcile-publish-journal case: -ge 1 after the count goes to $args and the message to $got' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq '-ge') (KwaGot $r)
+    $fxSayDef = 'function Say([string]$s) { Write-Output $s }'
+    $fxSayCall = 'Say ''  Release it with:  hold-recipe.ps1 -Slug '' + $Slug + '' -Release -Apply'''
+    $r = Get-KwaFindings -Text ($fxSayDef + "`n" + $fxSayCall)
+    KwaT 'MUST FIRE  the hold-recipe line: an operator instruction that printed only up to -Slug, two + in one site' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq '+,+') (KwaGot $r)
+    $fxMinusCall = 'T ''x'' $a - 1 ''msg'''
+    $r = Get-KwaFindings -Text ($fxLedgerDef + "`n" + $fxMinusCall)
+    KwaT 'MUST FIRE  a bare minus between two operands, which parses as a nameless parameter' ($r.Findings.Count -eq 1 -and $r.Findings[0].Keywords -eq '-') (KwaGot $r)
+
+    # ---- THE OPERATOR RULE: MUST NOT FIRE --------------------------------------------------------------
+    $r = Get-KwaFindings -Text ($fxOpDef + "`n" + 'T7s (''a'' + ''b'')')
+    KwaT 'MUST NOT FIRE  the repair: the same concatenation in parens is one argument' ($r.Findings.Count -eq 0) (KwaGot $r)
+    $r = Get-KwaFindings -Text ('function T7a { [CmdletBinding()] param([string]$P1) $P1 }' + "`n" + 'T7a ''a'' + ''b''')
+    KwaT 'MUST NOT FIRE  an ADVANCED function refuses the extra arguments loudly, so it is not the silent class' ($r.Findings.Count -eq 0) (KwaGot $r)
+    $r = Get-KwaFindings -Text ('function T7p { param([Parameter(Position=0)][string]$P1) $P1 }' + "`n" + 'T7p ''a'' + ''b''')
+    KwaT 'MUST NOT FIRE  a [Parameter()] attribute alone makes it advanced too' ($r.Findings.Count -eq 0) (KwaGot $r)
+    $r = Get-KwaFindings -Text 'Write-Output ''a'' + ''b''; Get-Thing -Filter x -and y'
+    KwaT 'MUST NOT FIRE  a command that is not a function defined in this file (a cmdlet binds strictly, or is out of reach)' ($r.Findings.Count -eq 0) (KwaGot $r)
+    $r = Get-KwaFindings -Text ('function Pick($equal, $n) { }' + "`n" + 'Pick -eq 1 -n 2')
+    KwaT 'MUST NOT FIRE  -eq against a declared $equal is a real prefix binding, not an operator' ($r.Findings.Count -eq 0) (KwaGot $r)
+    $r = Get-KwaFindings -Text ('function T7s([string]$P1) { $P1 }' + "`n" + 'function T7s { [CmdletBinding()] param([string]$P1) $P1 }' + "`n" + 'T7s ''a'' + ''b''')
+    KwaT 'MUST NOT FIRE  a name with an advanced definition anywhere in the file is not treated as simple' ($r.Findings.Count -eq 0) (KwaGot $r)
+
+    # ---- THE OPERATOR RULE: CLEAN TWIN (the binder behaviour the rule rests on, run on this PowerShell) ------
+    function KwaSimpleProbe([string]$P1) { return ($P1 + '|args=' + $args.Count) }
+    function KwaAdvancedProbe { [CmdletBinding()] param([string]$P1) return $P1 }
+    $simpleGot = KwaSimpleProbe 'a' + 'b'
+    KwaT 'CLEAN TWIN  a simple function still binds the fragment and drops the rest into $args: a|args=2' ($simpleGot -eq 'a|args=2') ('got=' + $simpleGot)
+    $advErr = ''
+    try { $null = KwaAdvancedProbe 'a' + 'b' } catch { $advErr = [string]$_.FullyQualifiedErrorId }
+    KwaT 'CLEAN TWIN  the advanced twin of the same call still throws PositionalParameterNotFound' ($advErr -match 'PositionalParameterNotFound') ('err=' + $advErr)
 
     # ---- MUST NOT FIRE -------------------------------------------------------------------------------
     $r = Get-KwaFindings -Text 'Write-Output ''if''; Write-Host "return"; Set-Thing -Mode ''exit''; Write-Output ''throw'''
@@ -319,11 +446,13 @@ $summary = "listed={0} files={1} parse_error_files={2} sites={3}" -f $tracked.Co
 Write-Output ("keyword-arguments: git lists {0} tracked .ps1/.psm1; the walk resolved {1}, {2} with a parse error; {3} site(s)" -f $tracked.Count, $files.Count, $parseErrorFiles, $sites.Count)
 if ($sites.Count) {
   foreach ($s in $sites) { Write-Output ('  glued  ' + $s) }
-  Write-Output ("KEYWORD-ARGUMENTS AUDIT FAILED: {0} command(s) carry a statement keyword as a bare argument." -f $sites.Count)
+  Write-Output ("KEYWORD-ARGUMENTS AUDIT FAILED: {0} command(s) carry a statement keyword, or an operator handed to a simple function, as a bare argument." -f $sites.Count)
   Write-Output '  PowerShell does not end a command at whitespace, so the statement after it never runs as one: an if/else'
   Write-Output '  becomes arguments, an exit, return or throw never leaves. Put the statement on its own line or after a ;.'
   Write-Output '  If the word really is a value, quote it.'
+  Write-Output '  An operator (+, -, -match, -ge ...) in a call to a simple function is not evaluated either: the function binds'
+  Write-Output '  the fragment before it and drops the rest into $args. Put the whole expression in parentheses.'
   Exit-Guard -Name 'keyword-arguments' -Summary $summary -Code 1
 }
-Write-Output 'keyword-arguments: PASSED - no command carries a statement keyword as a bare argument in any shape the header''s RULE names.'
+Write-Output 'keyword-arguments: PASSED - no command carries a statement keyword, and no call to a simple function carries an operator, as a bare argument in any shape the header''s RULE and OPERATOR RULE name.'
 Exit-Guard -Name 'keyword-arguments' -Summary $summary -Code 0

@@ -14486,7 +14486,7 @@ ones are 2 deliberate sets (`build-deals-page.ps1:225`, `normalize-ingredients.p
 (`` "`r" ``, `` "`n" ``) the pattern misreads - zero true positives, so a gate would be an allowlist of its whole
 day-one output.
 
-### I206 - about 199 self-test case helpers are simple functions, which is exactly why the "concatenation is three arguments" trap is silent `OPEN` `queue-8` `2-WAY` `RUNG1 MEASURE`
+### I206 - about 199 self-test case helpers are simple functions, which is exactly why the "concatenation is three arguments" trap is silent `DONE`
 
 **Merged from `design\backlog-inbox\q8-pwsh-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14523,6 +14523,40 @@ at least one is a real case running on a fragment, the fix is warranted - repair
 the class with a ratchet over the AST at the post-repair count, never a gate red on day one. If zero real
 sites, no fix is warranted: the shared advanced helper is NOT built on this measurement, and the item closes
 DONE with the count recorded.
+
+**Measured 2026-09-18 at 845a2bd08**, through a scratch AST scanner that implemented the bar's unit exactly
+(it flagged `T7s 'a' + 'b'` and stayed silent on `T7s ('a' + 'b')` and on the advanced twin, so it was
+believed). Over **790** tracked non-archive `.ps1`/`.psm1`, **0** with a parse error: **20,757** call sites
+to a same-file simple function, **3,908** of them to a helper named `T`, `_T`, `Check` or `Case`, and **5
+sites** (2 of them in that helper subset). **All 5 were read by hand and all 5 are real**, so 5 of 5 cases
+ran on a fragment:
+- `meal-prep/pipeline/batch-ledger.ps1:275` - the MUST FIRE `with w12 absent the SAME row is refused` had an
+  unparenthesised `-match`, so the condition bound to the joined refusal text and passed on ANY non-empty
+  refusal, whatever it said. The one real weakened assertion.
+- `meal-prep/pipeline/hold-recipe.ps1:277` - `Say '...-Slug ' + $Slug + '...'` printed the operator's
+  release instruction only up to `-Slug`, with no slug. Operator-facing, not reader-facing.
+- `grocery/test-auditors.ps1:2909` and `:3746` - two `Bad` failure messages lost their diagnostics.
+- `meal-prep/pipeline/reconcile-publish-journal.ps1:90` - `(...).Count -ge 1` bound the count as the
+  condition (equivalent by luck for an integer) and the message as `$got`.
+
+**Done 2026-09-18.** The bar said fix, so all five were parenthesised, and the class is held by widening
+`ops/audit-keyword-arguments.ps1` rather than adding a sixth tree-wide pass: the same file already parses
+every tracked script's commands, and after the repair the count is zero, so the ratchet the bar asked for
+is a mark of 0, which is the gate at zero that file already is (still `daily` in `run-gates`). Its new
+OPERATOR RULE reports a call to a same-file simple function carrying a bare `+ - * / %` or an operator
+parameter (`-eq -match -ge -and -not -is` and the rest) that names no declared parameter by prefix. The
+shared advanced helper was NOT built: the detector turns the next instance into a red at the daily run,
+which is what the helper would have bought, without asking 199 suites to change. Verified: the audit's
+self-test 41 of 41, exit 0 (16 new cases: 5 MUST FIRE, the item's repro and all four founding shapes; 6
+MUST NOT FIRE; 2 CLEAN TWIN proving on this PowerShell that a simple function still binds `a|args=2` and
+the advanced twin still throws `PositionalParameterNotFound`). Break-once, from the worktree: neutering the
+operator check turned exactly the 5 new MUST FIRE cases red (exit 1, 5 of 41), and neutering the
+advanced-function exemption turned 3 MUST NOT FIRE red (3 of 41); the file was restored md5-identical after
+each. The live audit over the repaired tree read 792 listed, 791 walked, 0 parse errors, **0 sites**, exit
+0 (14 s, archive included and the operator list wider than the bar's); with the four repaired files put
+back to their 845a2bd08 content it exited 1 naming **exactly the same 5 sites**, and the repairs were
+restored md5-identical. The three repaired self-tests (`batch-ledger`, `reconcile-publish-journal`,
+`hold-recipe`) each exit 0, the `w12 absent` case now passing on the real match.
 
 ### I207 - `throw` in an estate function is switched off by a caller's -ErrorAction SilentlyContinue, and nothing here says so `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 MEASURE`
 

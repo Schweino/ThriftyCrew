@@ -88,7 +88,7 @@ if ($SelfTest) {
   T 'MUST FIRE  and it reproduces it to the BYTE - a near-miss hashes to nothing and the entry would be left stale forever' `
     ((Get-PublishedContentHash -Body 'b' -Head ((Get-TcCandidateOldHeads -LiveHead $paid -Slug 's' -Title 't')[0]) -Name 'n' -Desc 'd') -eq (Get-PublishedContentHash -Body 'b' -Head $bare -Name 'n' -Desc 'd')) 'the reconstructed head hashed differently'
   T 'MUST FIRE  a FREED card offers the head WITH its Article block back, because the caller removed that too' `
-    (@(Get-TcCandidateOldHeads -LiveHead $bare -Slug 'test-bowl' -Title 'Test Bowl') | Where-Object { $_ -match '"@type":"Article"' }).Count -ge 1 'no Article-bearing candidate was offered'
+    ((@(Get-TcCandidateOldHeads -LiveHead $bare -Slug 'test-bowl' -Title 'Test Bowl') | Where-Object { $_ -match '"@type":"Article"' }).Count -ge 1) 'no Article-bearing candidate was offered'
 
   # MUST NOT FIRE - the legal inputs, and the reason the proof is worth anything.
   T 'MUST NOT FIRE  THE PROTECTION THIS MUST NOT DESTROY - a body edited by hand in Ghost admin hashes to NO candidate, so its entry is left stale and reported rather than overwritten' `
