@@ -67,6 +67,7 @@
     { "id": "site-down", "match": "prefix", "key": "site down", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "agent (no call site in the tree)" },
     { "id": "paywall-leak", "match": "exact", "key": "paywall leak paid recipe s served free", "class": "review", "condition": "Brad ruling R14 (2026-09-10): a paid page served free goes to the review list, not email", "emitter": "meal-prep/pipeline/audit-paid-not-public.ps1", "note": "Recommended page because it loses money on a live page; Brad chose review." },
     { "id": "needs-brad", "match": "prefix", "key": "needs brad", "class": "page", "condition": "escalation", "emitter": "meal-prep/set-recipe-visibility.ps1 and triage agents" },
+    { "id": "friday-email-refused", "match": "exact", "key": "friday email refused a send for this week may already have gone out", "class": "page", "condition": "escalation", "emitter": "grocery/send-friday-email.ps1" },
     { "id": "your-call", "match": "prefix", "key": "your call", "class": "page", "condition": "escalation", "emitter": "triage agents (send-alert -Escalates)" },
     { "id": "grocery-your-call", "match": "prefix", "key": "grocery your call", "class": "page", "condition": "escalation", "emitter": "triage agents (send-alert -Escalates)" },
     { "id": "needs-elevation", "match": "prefix", "key": "needs elevation", "class": "page", "condition": "escalation", "emitter": "triage agents (send-alert -Escalates)" },

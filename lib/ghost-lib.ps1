@@ -47,6 +47,29 @@ function Get-GhostLexical([Parameter(Mandatory)][string]$Html) {
 # a 4xx other than 429 (a 404/401/400 is not transient) - those rethrow immediately so callers can still
 # distinguish "genuinely new post" (404) from "transient error" (retried, then thrown). The delays are fixed
 # (no Get-Random - that is unavailable in workflow scripts and needless here) using the attempt index as jitter.
+#
+# WHICH CALLS ARE IDEMPOTENT, AND SO WHICH MAY BE RETRIED BLIND (2026-09-19, backlog I198). A retry is only
+# safe when a duplicate is harmless, and "the reply was lost" (a timeout, a 5xx, a reset socket) says nothing
+# about whether Ghost already acted. Per method, in THIS estate:
+#   GET     idempotent: a read. Retried on every transient failure.
+#   PUT     idempotent in effect: it replaces a resource with the same body, so a second copy lands the same
+#           state. It is also guarded twice over here: Ghost's optimistic lock wants the updated_at the caller
+#           read, and all 11 files with a literal PUT call name updated_at (grep, 2026-09-19), so a retry
+#           after a lost success carries a stale updated_at and Ghost refuses it with a 409 (not
+#           transient, thrown, nothing applied twice); and Ghost mails a newsletter only on the draft-to-
+#           published TRANSITION, which a replayed PUT cannot make twice. Retried as before.
+#   DELETE  idempotent: a second delete of a deleted post is a 404, thrown, and deletes nothing. Retried as before.
+#   POST    NOT idempotent: every POST to /posts/ CREATES a post, and with ?newsletter= and status=published
+#           each one MAILS THE LIST (grocery\send-friday-email.ps1). So a POST is retried ONLY when the failure
+#           PROVES the request never reached Ghost - the name did not resolve, or the connection was refused
+#           before a byte was sent (Test-TcGhostNeverSent). A timeout, a 5xx, a 429, a reset or any other
+#           socket error is thrown on the FIRST attempt: an unknown outcome goes to a human, never to a replay.
+#   PATCH   treated as POST (Ghost's admin API has none; the conservative default for an unknown verb).
+# Callers that POST, measured 2026-09-19 over every tracked .ps1: grocery\send-friday-email.ps1 (the list
+# send), meal-prep\engine\publish.ps1 (creates a recipe post), grocery\publish-resource.ps1 and
+# grocery\publish-trend-pages.ps1 (create a post when the slug GET found none), and ops\review-staged.ps1
+# -Apply (replays a staged call of whatever method it was). Each now fails loud on an ambiguous POST
+# instead of possibly creating, or mailing, twice.
 # ---- E1: the safety layer for irreversible writes. TWO MECHANISMS, EACH WITH ITS OWN SWITCH. --------
 #
 # They solve DIFFERENT problems and are not rival designs (design\E1-comparison.md scored them as
@@ -212,6 +235,43 @@ function Write-TcJournalEntry {
   # attempted - the case an after-the-fact log cannot cover.
   [IO.File]::AppendAllText($Journal, (ConvertTo-Json $Entry -Depth 12 -Compress) + "`n", (New-Object System.Text.UTF8Encoding($false)))
 }
+
+function Test-TcIdempotentMethod {
+  <# May a failed call of this method be replayed without knowing whether the first one landed? See the
+     header's idempotency table. An unknown verb answers NO, because the cost of a wrong yes is a duplicate. #>
+  param([string]$Method)
+  return (@('GET', 'HEAD', 'OPTIONS', 'PUT', 'DELETE') -contains ([string]$Method).ToUpper())
+}
+
+function Test-TcGhostNeverSent {
+  <# Does this failure PROVE the request never reached the server? Only two answers are proofs, and both
+     are measured here (2026-09-19, PS 5.1): an unresolvable name is WebException status
+     NameResolutionFailure, a refused connection is ConnectFailure. Nothing was sent in either, so even a
+     POST may be tried again. A Timeout, ReceiveFailure, ConnectionClosed, KeepAliveFailure, a
+     ProtocolError (any HTTP status, 5xx and 429 included) and every non-WebException are NOT proofs:
+     the request may have been accepted and acted on before the failure. TLS failures (TrustFailure,
+     SecureChannelFailure) also precede the request bytes, but are left out until one is measured. #>
+  param($Exception)
+  if (-not ($Exception -is [System.Net.WebException])) { return $false }
+  return (@([System.Net.WebExceptionStatus]::NameResolutionFailure,
+            [System.Net.WebExceptionStatus]::ProxyNameResolutionFailure,
+            [System.Net.WebExceptionStatus]::ConnectFailure) -contains $Exception.Status)
+}
+
+function Invoke-TcGhostTransport {
+  <# The one line that talks to the network. A seam so a self-test can redefine it after dot-sourcing
+     this file and count attempts with no Ghost call at all (ops\review-staged.ps1, grocery\send-friday-email.ps1). #>
+  param([hashtable]$CallArgs, [switch]$Web)
+  if ($Web) { return Invoke-WebRequest @CallArgs }
+  return Invoke-RestMethod @CallArgs
+}
+
+function Wait-TcGhostRetry {
+  <# The backoff sleep, a seam for the same reason: a fixture of three retries should not cost 14 s. #>
+  param([int]$Seconds)
+  Start-Sleep -Seconds $Seconds
+}
+
 function Invoke-GhostApi {
   param(
     [string]$Method = 'GET',
@@ -253,8 +313,8 @@ function Invoke-GhostApi {
     try {
       $callArgs = @{ Method = $Method; Uri = $Uri; Headers = $Headers; TimeoutSec = $TimeoutSec }
       if ($null -ne $Body) { $callArgs['Body'] = $Body }
-      if ($Web) { if ($BasicParsing) { $callArgs['UseBasicParsing'] = $true }; return Invoke-WebRequest @callArgs }
-      return Invoke-RestMethod @callArgs
+      if ($Web -and $BasicParsing) { $callArgs['UseBasicParsing'] = $true }
+      return (Invoke-TcGhostTransport -CallArgs $callArgs -Web:$Web)
     } catch {
       $code = 0
       $resp = $_.Exception.Response
@@ -263,10 +323,13 @@ function Invoke-GhostApi {
       $transient = $isTimeout -or ($code -eq 429) -or ($code -ge 500 -and $code -le 599) -or ($code -eq 0)
       # $code -eq 0 covers DNS/connection-reset/socket errors with no HTTP status (also transient).
       # A definite non-429 4xx (404/401/400/403) is NOT transient - rethrow now.
+      # A NON-IDEMPOTENT call (POST) is replayed only on a failure that proves nothing was sent: see the
+      # header. Transient is not enough, because transient says the REPLY failed, not that the request did.
+      if ($transient -and -not (Test-TcIdempotentMethod $Method)) { $transient = (Test-TcGhostNeverSent $_.Exception) }
       if ((-not $transient) -or ($attempt -ge $MaxRetries)) { throw }
       $attempt++
       $delay = [math]::Min(30, [math]::Pow(2, $attempt))   # 2s, 4s, 8s...
-      Start-Sleep -Seconds $delay
+      Wait-TcGhostRetry -Seconds $delay
     }
   }
 }

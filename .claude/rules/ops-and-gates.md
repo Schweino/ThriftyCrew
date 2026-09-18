@@ -651,7 +651,10 @@ enumerated answers. None of the following is a gate, and none of it asks for a s
   is the pointed-to object, write it first, and say so in the commit.** A detector cannot see this;
   the habit is the whole prevention.
 - **State whether a retried operation is IDEMPOTENT, and what makes it so.** This is the estate's
-  cheapest concurrency fix and no header claims it. It is better than the delivery guarantee it
+  cheapest concurrency fix and almost no header claims it: of the nine `lib\*.ps1` that mention a retry
+  (measured 2026-09-18, backlog I199), only `lib/append-line.ps1:18` said which, and since 2026-09-19
+  `lib/ghost-lib.ps1`'s header does too, per HTTP method, because a replayed POST can mail the list
+  twice (backlog I198). `lib/atomic-write.ps1` is the one that should and does not yet. It is better than the delivery guarantee it
   replaces: make a duplicate harmless and a lost request, a lost reply and a crashed-then-restarted
   server become indistinguishable and need no distinguishing, because retrying is correct in all
   three. The property is invisible at the call site and turns on small details - NFS's `WRITE` is
@@ -660,7 +663,7 @@ enumerated answers. None of the following is a gate, and none of it asks for a s
   file with a whole text and is **idempotent**, which is exactly why its retry loop is safe;
   `Add-TcLine` appends and is **NOT**, so a retry duplicates a line - which is why only its OPEN is
   retried and never its write. Every other retry in the tree is safe or unsafe for this reason and
-  none of them says which.
+  almost none of them says which.
 - **The ledger WRITERS are serializable and the READERS are lock-free, and nothing says which
   decisions are safe at that level.** `lib/ledger-lock.ps1` puts the read inside the mutex, so a
   writer gets the strongest level there is and that is right for it. The readers get no level at all:

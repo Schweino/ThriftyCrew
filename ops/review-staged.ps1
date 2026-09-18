@@ -183,8 +183,51 @@ if ($SelfTest) {
     foreach ($x in @($bq, $bj)) { if (Test-Path -LiteralPath $x) { Remove-Item -LiteralPath $x -Force } }
   }
 
+  # --- WHICH METHODS INVOKE-GHOSTAPI REPLAYS (2026-09-19, backlog I198). A POST creates, and with
+  # ?newsletter= it MAILS THE LIST, so a POST whose reply was lost must not be sent again. The transport
+  # and the backoff sleep are seams in ghost-lib; these cases redefine both, so no case reaches a network.
+  $origTransport = ${function:Invoke-TcGhostTransport}; $origWait = ${function:Wait-TcGhostRetry}
+  $sq2 = $env:TC_STAGE_WRITES; $sj2 = $env:TC_WRITE_JOURNAL
+  $script:ghostCalls = 0; $script:ghostPlan = @()
+  function Invoke-TcGhostTransport { param([hashtable]$CallArgs, [switch]$Web)
+    $i = $script:ghostCalls; $script:ghostCalls++
+    $step = if ($i -lt $script:ghostPlan.Count) { $script:ghostPlan[$i] } else { $script:ghostPlan[-1] }
+    if ($step -is [Exception]) { throw $step }
+    return $step }
+  function Wait-TcGhostRetry { param([int]$Seconds) }
+  function New-StubTimeout { return (New-Object System.Net.WebException('The operation has timed out', [System.Net.WebExceptionStatus]::Timeout)) }
+  function New-Stub503 { $x = New-Object System.Exception 'The remote server returned an error: (503) Server Unavailable.'; $x | Add-Member -NotePropertyName Response -NotePropertyValue ([pscustomobject]@{ StatusCode = 503 }); return $x }
+  function New-StubRefused { return (New-Object System.Net.WebException('Unable to connect to the remote server', [System.Net.WebExceptionStatus]::ConnectFailure)) }
+  function Invoke-Stubbed([string]$Method, [object[]]$Plan) {
+    $script:ghostCalls = 0; $script:ghostPlan = $Plan; $threw = $false; $res = $null
+    try { $res = Invoke-GhostApi -Method $Method -Uri 'https://invalid.invalid/ghost/api/admin/posts/' -Headers @{} -Body '{}' -MaxRetries 3 } catch { $threw = $true }
+    return [pscustomobject]@{ Calls = $script:ghostCalls; Threw = $threw; Result = $res }
+  }
+  try {
+    $env:TC_STAGE_WRITES = $null; $env:TC_WRITE_JOURNAL = $null
+    $r = Invoke-Stubbed 'POST' @((New-StubTimeout))
+    T 'MUST FIRE  a POST that times out is attempted EXACTLY ONCE and thrown (Ghost may already have mailed the list)' (($r.Calls -eq 1) -and $r.Threw) ("calls=" + $r.Calls + " threw=" + $r.Threw)
+    $r = Invoke-Stubbed 'POST' @((New-Stub503))
+    T 'MUST FIRE  a POST answered 503 is attempted exactly once (a 5xx can follow the effect)' (($r.Calls -eq 1) -and $r.Threw) ("calls=" + $r.Calls + " threw=" + $r.Threw)
+    $r = Invoke-Stubbed 'POST' @((New-StubRefused), [pscustomobject]@{ posts = @('created') })
+    T 'CLEAN TWIN a POST whose connection was REFUSED is still retried, and the retry lands' (($r.Calls -eq 2) -and -not $r.Threw -and ($r.Result.posts[0] -eq 'created')) ("calls=" + $r.Calls + " threw=" + $r.Threw)
+    $r = Invoke-Stubbed 'GET' @((New-StubTimeout))
+    T 'CLEAN TWIN a GET that times out is still retried, 1 + MaxRetries = 4 attempts' (($r.Calls -eq 4) -and $r.Threw) ("calls=" + $r.Calls + " threw=" + $r.Threw)
+    $r = Invoke-Stubbed 'GET' @((New-StubTimeout), [pscustomobject]@{ posts = @('read') })
+    T 'CLEAN TWIN a GET that times out once then answers returns the answer' (($r.Calls -eq 2) -and -not $r.Threw -and ($r.Result.posts[0] -eq 'read')) ("calls=" + $r.Calls + " threw=" + $r.Threw)
+    $r = Invoke-Stubbed 'PUT' @((New-Stub503))
+    T 'CLEAN TWIN a PUT answered 503 keeps the old retry (updated_at makes a replay a 409, never a second write)' (($r.Calls -eq 4) -and $r.Threw) ("calls=" + $r.Calls + " threw=" + $r.Threw)
+    T 'MUST NOT FIRE a timeout is not proof the request went unsent' (-not (Test-TcGhostNeverSent (New-StubTimeout))) 'a timeout read as never-sent'
+    T 'MUST NOT FIRE a bare exception carrying a 503 is not proof either' (-not (Test-TcGhostNeverSent (New-Stub503))) 'a 503 read as never-sent'
+    T 'MUST FIRE  an unresolvable name IS proof' (Test-TcGhostNeverSent (New-Object System.Net.WebException('x', [System.Net.WebExceptionStatus]::NameResolutionFailure))) 'NameResolutionFailure not read as never-sent'
+  } finally {
+    Set-Item -Path function:Invoke-TcGhostTransport -Value $origTransport
+    Set-Item -Path function:Wait-TcGhostRetry -Value $origWait
+    $env:TC_STAGE_WRITES = $sq2; $env:TC_WRITE_JOURNAL = $sj2
+  }
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: the staging gate, off-by-default, credential redaction, queue round-trip, a half-parsing queue, the three set-level concerns, and the composition case (staging wins over the journal, with a clean twin proving the journal still works)'
+  Write-Output 'SELF-TEST PASS: the staging gate, off-by-default, credential redaction, queue round-trip, a half-parsing queue, the three set-level concerns, the composition case (staging wins over the journal, with a clean twin proving the journal still works), and which methods Invoke-GhostApi replays (a POST only when provably unsent)'
   exit 0
 }
 
