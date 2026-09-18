@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-17 07:16",
+    "generated":  "2026-09-17 21:32",
     "board":  "comparison-2026-09-17.json",
-    "sidecar_generated":  "2026-09-17 07:16:05",
+    "sidecar_generated":  "2026-09-17 21:32:44",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -10,15 +10,25 @@
                    },
     "examined":  {
                      "board_pairs":  3184,
-                     "corpus":  41611,
-                     "rule_invisible":  7921
+                     "corpus":  41729,
+                     "rule_invisible":  7961
                  },
     "identity_count":  0,
-    "coverage_count":  4,
+    "coverage_count":  5,
     "identity":  [
 
                  ],
     "coverage":  [
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Walmart",
+                         "product":  "Ground Beef 73% Lean/27% Fat, All Natural*, 4 lb Tray",
+                         "cos":  0.8113,
+                         "score":  0.987758,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
                      {
                          "kind":  "coverage",
                          "id":  "baby-formula",

@@ -60,6 +60,18 @@
     "target_id": "commodity:staple:jelly"
   },
   {
+    "confidence": 0.8,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:05543984d726d0bc2d8d",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dawn.*\\\\bplz\\\\s+ezs?\\\\b|dawn.*\\\\bfresh\\\\s+rain\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches Dawn dish soap variants listed. 'Plz' is likely a typo for 'Plus' or similar, but 'Fresh Rain' is a clear scent variant.",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:0697ab95602022685eca",
@@ -130,6 +142,18 @@
     "rationale": "escalation-review round 2: gallon jugs of ready-to-drink tea",
     "status": "applied",
     "target_id": "commodity:staple:iced-tea"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:09b12da56776aab4130f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"power\\\\s+force.*\\\\bdishwashing\\\\s+detergent\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches Power Force dishwashing detergent.",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
   },
   {
     "confidence": 0.9,
@@ -241,6 +265,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:15b86381b00f7df97f95",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dry\\\\s+doog\\\\s+food\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "'Premium Dry Doog Food' is dry dog food (typo 'Doog'). The pattern matches the typo specifically.",
+    "status": "proposed",
+    "target_id": "dog-food-dry"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:164ba3f65d8b971f5d7d",
     "kind": "add_alias",
@@ -286,6 +322,18 @@
     "rationale": "escalation-review round 2: widen: brand+attribute words sit between 'Singles' and 'Cheese'",
     "status": "applied",
     "target_id": "commodity:staple:sliced-cheese"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:1c8363a1e9097cbf7222",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dole.*\\\\bshredded\\\\s+carrot\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches Dole Shredded Carrots.",
+    "status": "proposed",
+    "target_id": "shredded-carrots"
   },
   {
     "confidence": 0.85,
@@ -361,6 +409,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:24152dd09974199a78cc",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"alani\\\\s+enrgy\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "'Alani Enrgy' is an energy drink brand (typo 'Enrgy'). The pattern matches the brand.",
+    "status": "proposed",
+    "target_id": "energy-drinks"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:2483ad8b20ce01a25236",
     "kind": "add_alias",
@@ -370,6 +430,18 @@
     "rationale": "escalation-review round 2: Velveeta's sliced pack",
     "status": "applied",
     "target_id": "commodity:staple:sliced-cheese"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:249146d0cf30a5565042",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"power\\\\s+force.*dishwashing\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "'Power Force Citrus/Original Blue Dishwashing Detergent' is dish soap. The pattern anchors on the brand and 'dishwashing'.",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
   },
   {
     "confidence": 0.9,
@@ -793,6 +865,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:45d0b76ded0d4cb7185e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"arizona.*\\\\bgreen\\\\s+tea\\\\b.*\\\\b1\\\\s+gal\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches Arizona Green Tea in the 1 Gallon size.",
+    "status": "proposed",
+    "target_id": "iced-tea-bottled-gallon"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:465180bc291ee51cdfd1",
     "kind": "add_alias",
@@ -908,6 +992,18 @@
     "payload_json": "{\"payload\": \"medium\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Buffalo Wild Wings Medium Sauce' by anchoring on the specific flavor descriptor 'Medium Sauce' in the context of Buffalo Wild Wings.",
+    "status": "proposed",
+    "target_id": "buffalo-wing-sauce"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:4a877708ced555455a0f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"buffalo\\\\s+wing.*sauce\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "'Sweet Baby Ray's Buffalo Wing Wing Sauce' is a buffalo wing sauce. The pattern anchors on 'Buffalo Wing' and 'Sauce'.",
     "status": "proposed",
     "target_id": "buffalo-wing-sauce"
   },
@@ -1032,6 +1128,18 @@
     "target_id": "commodity:staple:diced-tomatoes"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:5762e9cceb8ae91b6698",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"sweet\\\\s+baby\\\\s+ray.*\\\\bbuffalo\\\\s+wing\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches Sweet Baby Ray's Buffalo Wing Sauce specifically.",
+    "status": "proposed",
+    "target_id": "buffalo-wing-sauce"
+  },
+  {
     "confidence": 0.85,
     "created_at": "2026-08-20T06:57:51",
     "id": "lp:5847c91b404d83979442",
@@ -1066,6 +1174,18 @@
     "rationale": "the 'Condensed/Traditional Soup, Chicken Noodle' comma order; ramen/dry excludes guard the rest",
     "status": "applied",
     "target_id": "commodity:staple:chicken-noodle-soup"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:595d29c02c64c4355da3",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"shredded\\\\s+carrot\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "'Dole Shredded Carrot' is shredded carrots. The pattern is specific to the food item.",
+    "status": "proposed",
+    "target_id": "shredded-carrots"
   },
   {
     "confidence": 0.9,
@@ -1296,6 +1416,18 @@
     "target_id": "commodity:staple:shredded-cheese"
   },
   {
+    "confidence": 0.9,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:6aef002af3f3326cfc8b",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dr\\\\s?pepper.*\\\\bzero\\\\s+sugar\\\\b.*\\\\b2\\\\s*l\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches Dr Pepper Zero Sugar in the specific 2L size requested by the commodity.",
+    "status": "proposed",
+    "target_id": "zero-sugar-soda-2l"
+  },
+  {
     "confidence": 0.8,
     "created_at": "2026-08-21T01:00:34",
     "id": "lp:6c04fc395a7dd2e607e1",
@@ -1486,6 +1618,18 @@
     "rationale": "Matches multiple listings like 'Moore's Original Buffalo Wing Sauce' and 'Cookies Wings 'N Things Buffalo Wing Sauce' by anchoring on the core product name 'Buffalo Wing Sauce'.",
     "status": "proposed",
     "target_id": "buffalo-wing-sauce"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:7ad88c300eda8c079357",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"radiance.*\\\\bdishwashing\\\\s+gel\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches Radiance dishwashing gel.",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
   },
   {
     "confidence": 0.9,
@@ -1836,6 +1980,18 @@
     "target_id": "hot-honey"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:94e7e3d1272f39b469bf",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"pace.*\\\\bhot\\\\s+honey\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Pace Hot Honey is a specific brand of hot honey. The pattern anchors on the brand and the food name to avoid matching other Pace products or generic honey.",
+    "status": "proposed",
+    "target_id": "hot-honey"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T23:45:32",
     "id": "lp:95a2cd3c08798d9f9961",
@@ -1969,6 +2125,18 @@
   },
   {
     "confidence": 0.95,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:a0e5a3f7f7f3f04c2a8c",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"radiance.*dish\\\\s+pacs\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "'Radiance Triple Chamber Dish Pacs' are dishwasher detergent pacs. The pattern is specific.",
+    "status": "proposed",
+    "target_id": "dishwasher-detergent-pacs"
+  },
+  {
+    "confidence": 0.95,
     "created_at": "2026-08-27T21:32:30",
     "id": "lp:a19a1c027540449ec0b0",
     "kind": "add_alias",
@@ -2053,6 +2221,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:a74392700c8c5237fa95",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"radiance.*dishwashing\\\\s+gel\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "'Radiance Automatic Dishwashing Gel' is dish soap. The pattern anchors on the brand and 'dishwashing gel'.",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:55:57",
     "id": "lp:a9b99e3a580b57eb3d0d",
     "kind": "add_alias",
@@ -2062,6 +2242,18 @@
     "rationale": "the 'Tomatoes, [style,] Crushed' comma order; paste/sauce/juice/soup excludes guard the rest",
     "status": "applied",
     "target_id": "commodity:staple:crushed-tomatoes"
+  },
+  {
+    "confidence": 0.8,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:abbfb77313cfec362f2b",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"premium.*\\\\bdry\\\\s+doog?\\\\s+food\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches 'Premium Dry Doog Food'. 'Doog' is likely a typo for 'Dog', so the pattern accounts for both.",
+    "status": "proposed",
+    "target_id": "dog-food-dry"
   },
   {
     "confidence": 0.9,
@@ -2497,6 +2689,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:ccc728913d935266cff4",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dr\\\\s+pepper.*zero\\\\s+sugar.*2\\\\s*l\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "Matches Dr Pepper Zero Sugar in the 2L size specifically.",
+    "status": "proposed",
+    "target_id": "zero-sugar-soda-2l"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:ccd94ebd6670d3ddfba8",
     "kind": "add_alias",
@@ -2653,6 +2857,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:d9a3d4c07a3206664931",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"twin\\\\s+pops\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "'Budget $aver Assorted Twin Pops' are ice pops. 'Twin Pops' is a specific product type for ice pops.",
+    "status": "proposed",
+    "target_id": "popsicles-ice-pops"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-09-10T22:57:46",
     "id": "lp:da4edaa9b843203cddde",
     "kind": "add_alias",
@@ -2722,6 +2938,18 @@
     "rationale": "Matches various shredded cheddar cheeses (Sharp, Mild, Triple). Anchors on 'shredded' and 'cheddar' to exclude block cheese or other types.",
     "status": "held_for_human",
     "target_id": "cheddar-cheese-shredded"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-13T21:41:55",
+    "id": "lp:e03f68363bfe6b1eb6f7",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dawn.*dish\"}",
+    "queue_hash": "e016b4fcfba582008e8dbb15c8c830a0cdd47f3340844417a653e514b928c767",
+    "rationale": "'Dawn Plat Ezs Fresh Rain' is a Dawn dish soap. The pattern anchors on the brand 'Dawn' and the word 'dish' (implied by context, but 'Dawn' is strongly associated with dish soap). However, to be safer: 'dawn.*soap' or just 'dawn' might be a",
+    "status": "proposed",
+    "target_id": "dish-soap-liquid"
   },
   {
     "confidence": 0.9,
@@ -2868,6 +3096,18 @@
     "target_id": "commodity:staple:bratwurst"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:f16c7165062308010606",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"budget\\\\s+\\\\$aver.*\\\\bpops?\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches Budget $aver Pops. The pattern is specific to the brand and product type.",
+    "status": "proposed",
+    "target_id": "popsicles-ice-pops"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-22T21:41:16",
     "id": "lp:f2948717e287640a1ebe",
@@ -2950,6 +3190,30 @@
     "rationale": "escalation-review round 2: Chihuahua-style melting cheese",
     "status": "applied",
     "target_id": "commodity:staple:shredded-cheese"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:f731d96aa0ebaab2cceb",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"alani.*\\\\benrgy\\\\b|summit.*\\\\bgridlock\\\\b|summit.*\\\\braspberry\\\\s+lemon\\\\b|summit.*\\\\btropical\\\\b|summit.*\\\\bwatermelon\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches specific energy drink brands and flavors listed.",
+    "status": "proposed",
+    "target_id": "energy-drinks"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-09-17T05:23:54",
+    "id": "lp:f7fe0ca4b0e6d6465388",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"radiance.*\\\\bdish\\\\s+pacs?\\\\b\"}",
+    "queue_hash": "5ab52d8b486b507980303a4a70fcd24bd8147b70634a1bcdcefa3ab608318a18",
+    "rationale": "Matches Radiance Dish Pacs.",
+    "status": "proposed",
+    "target_id": "dishwasher-detergent-pacs"
   },
   {
     "confidence": 0.9,

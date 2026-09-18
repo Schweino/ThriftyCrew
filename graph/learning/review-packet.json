@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-11T21:49:47",
+  "generated_at": "2026-09-17T21:40:28",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -136,6 +136,90 @@
       "payload": "jasmine\\s+rice",
       "stage1_confidence": 0.95,
       "rationale": "Matches 'Mahatma Jasmine Rice' (2x)",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:4a877708ced555455a0f",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "buffalo\\s+wing.*sauce",
+      "stage1_confidence": 0.95,
+      "rationale": "'Sweet Baby Ray's Buffalo Wing Wing Sauce' is a buffalo wing sauce. The pattern anchors on 'Buffalo Wing' and 'Sauce'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:595d29c02c64c4355da3",
+      "kind": "add_alias",
+      "target": "shredded-carrots",
+      "target_label": null,
+      "payload": "shredded\\s+carrot",
+      "stage1_confidence": 0.95,
+      "rationale": "'Dole Shredded Carrot' is shredded carrots. The pattern is specific to the food item.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:a0e5a3f7f7f3f04c2a8c",
+      "kind": "add_alias",
+      "target": "dishwasher-detergent-pacs",
+      "target_label": null,
+      "payload": "radiance.*dish\\s+pacs",
+      "stage1_confidence": 0.95,
+      "rationale": "'Radiance Triple Chamber Dish Pacs' are dishwasher detergent pacs. The pattern is specific.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:94e7e3d1272f39b469bf",
+      "kind": "add_alias",
+      "target": "hot-honey",
+      "target_label": null,
+      "payload": "pace.*\\bhot\\s+honey\\b",
+      "stage1_confidence": 0.95,
+      "rationale": "Pace Hot Honey is a specific brand of hot honey. The pattern anchors on the brand and the food name to avoid matching other Pace products or generic honey.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:5762e9cceb8ae91b6698",
+      "kind": "add_alias",
+      "target": "buffalo-wing-sauce",
+      "target_label": null,
+      "payload": "sweet\\s+baby\\s+ray.*\\bbuffalo\\s+wing\\b",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches Sweet Baby Ray's Buffalo Wing Sauce specifically.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:1c8363a1e9097cbf7222",
+      "kind": "add_alias",
+      "target": "shredded-carrots",
+      "target_label": null,
+      "payload": "dole.*\\bshredded\\s+carrot\\b",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches Dole Shredded Carrots.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f7fe0ca4b0e6d6465388",
+      "kind": "add_alias",
+      "target": "dishwasher-detergent-pacs",
+      "target_label": null,
+      "payload": "radiance.*\\bdish\\s+pacs?\\b",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches Radiance Dish Pacs.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
@@ -682,6 +766,138 @@
       }
     },
     {
+      "proposal_id": "lp:ccc728913d935266cff4",
+      "kind": "add_alias",
+      "target": "zero-sugar-soda-2l",
+      "target_label": null,
+      "payload": "dr\\s+pepper.*zero\\s+sugar.*2\\s*l",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches Dr Pepper Zero Sugar in the 2L size specifically.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:d9a3d4c07a3206664931",
+      "kind": "add_alias",
+      "target": "popsicles-ice-pops",
+      "target_label": null,
+      "payload": "twin\\s+pops",
+      "stage1_confidence": 0.9,
+      "rationale": "'Budget $aver Assorted Twin Pops' are ice pops. 'Twin Pops' is a specific product type for ice pops.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:e03f68363bfe6b1eb6f7",
+      "kind": "add_alias",
+      "target": "dish-soap-liquid",
+      "target_label": null,
+      "payload": "dawn.*dish",
+      "stage1_confidence": 0.9,
+      "rationale": "'Dawn Plat Ezs Fresh Rain' is a Dawn dish soap. The pattern anchors on the brand 'Dawn' and the word 'dish' (implied by context, but 'Dawn' is strongly associated with dish soap). However, to be safer: 'dawn.*soap' or just 'dawn' might be a",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:249146d0cf30a5565042",
+      "kind": "add_alias",
+      "target": "dish-soap-liquid",
+      "target_label": null,
+      "payload": "power\\s+force.*dishwashing",
+      "stage1_confidence": 0.9,
+      "rationale": "'Power Force Citrus/Original Blue Dishwashing Detergent' is dish soap. The pattern anchors on the brand and 'dishwashing'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:a74392700c8c5237fa95",
+      "kind": "add_alias",
+      "target": "dish-soap-liquid",
+      "target_label": null,
+      "payload": "radiance.*dishwashing\\s+gel",
+      "stage1_confidence": 0.9,
+      "rationale": "'Radiance Automatic Dishwashing Gel' is dish soap. The pattern anchors on the brand and 'dishwashing gel'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:15b86381b00f7df97f95",
+      "kind": "add_alias",
+      "target": "dog-food-dry",
+      "target_label": null,
+      "payload": "dry\\s+doog\\s+food",
+      "stage1_confidence": 0.9,
+      "rationale": "'Premium Dry Doog Food' is dry dog food (typo 'Doog'). The pattern matches the typo specifically.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:24152dd09974199a78cc",
+      "kind": "add_alias",
+      "target": "energy-drinks",
+      "target_label": null,
+      "payload": "alani\\s+enrgy",
+      "stage1_confidence": 0.9,
+      "rationale": "'Alani Enrgy' is an energy drink brand (typo 'Enrgy'). The pattern matches the brand.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:6aef002af3f3326cfc8b",
+      "kind": "add_alias",
+      "target": "zero-sugar-soda-2l",
+      "target_label": null,
+      "payload": "dr\\s?pepper.*\\bzero\\s+sugar\\b.*\\b2\\s*l\\b",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches Dr Pepper Zero Sugar in the specific 2L size requested by the commodity.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:09b12da56776aab4130f",
+      "kind": "add_alias",
+      "target": "dish-soap-liquid",
+      "target_label": null,
+      "payload": "power\\s+force.*\\bdishwashing\\s+detergent\\b",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches Power Force dishwashing detergent.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:7ad88c300eda8c079357",
+      "kind": "add_alias",
+      "target": "dish-soap-liquid",
+      "target_label": null,
+      "payload": "radiance.*\\bdishwashing\\s+gel\\b",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches Radiance dishwashing gel.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:45d0b76ded0d4cb7185e",
+      "kind": "add_alias",
+      "target": "iced-tea-bottled-gallon",
+      "target_label": null,
+      "payload": "arizona.*\\bgreen\\s+tea\\b.*\\b1\\s+gal\\b",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches Arizona Green Tea in the 1 Gallon size.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:4a3463ec5779e1cce86a",
       "kind": "add_alias",
       "target": "buffalo-wing-sauce",
@@ -850,6 +1066,30 @@
       }
     },
     {
+      "proposal_id": "lp:f16c7165062308010606",
+      "kind": "add_alias",
+      "target": "popsicles-ice-pops",
+      "target_label": null,
+      "payload": "budget\\s+\\$aver.*\\bpops?\\b",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches Budget $aver Pops. The pattern is specific to the brand and product type.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f731d96aa0ebaab2cceb",
+      "kind": "add_alias",
+      "target": "energy-drinks",
+      "target_label": null,
+      "payload": "alani.*\\benrgy\\b|summit.*\\bgridlock\\b|summit.*\\braspberry\\s+lemon\\b|summit.*\\btropical\\b|summit.*\\bwatermelon\\b",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches specific energy drink brands and flavors listed.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:2c32a05694b0a1fe1fd6",
       "kind": "add_alias",
       "target": "red-bell-pepper",
@@ -905,6 +1145,30 @@
       "payload": "whitewater\\s+valley\\s+18",
       "stage1_confidence": 0.8,
       "rationale": "Whitewater Valley 18 is a specific brand/size of eggs. The pattern anchors on the brand and size to match the commodity.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:05543984d726d0bc2d8d",
+      "kind": "add_alias",
+      "target": "dish-soap-liquid",
+      "target_label": null,
+      "payload": "dawn.*\\bplz\\s+ezs?\\b|dawn.*\\bfresh\\s+rain\\b",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches Dawn dish soap variants listed. 'Plz' is likely a typo for 'Plus' or similar, but 'Fresh Rain' is a clear scent variant.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:abbfb77313cfec362f2b",
+      "kind": "add_alias",
+      "target": "dog-food-dry",
+      "target_label": null,
+      "payload": "premium.*\\bdry\\s+doog?\\s+food\\b",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Premium Dry Doog Food'. 'Doog' is likely a typo for 'Dog', so the pattern accounts for both.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
