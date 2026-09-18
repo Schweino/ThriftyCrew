@@ -14507,6 +14507,23 @@ makes it silent.
 `lib/selftest-lib.ps1` that new suites use, so the next instance is a loud bind error instead of a case
 that ran on a fragment. No retro-fill proposed; a gate over 199 existing helpers would be red on day one.
 
+**Acceptance bar, written 2026-09-18 before any count was taken (base 845a2bd08).** The keyword half of the
+proposal is already held at zero by `ops/audit-keyword-arguments.ps1` over EVERY command, so this rung
+measures the other half only. THE UNIT is a call site: a `CommandAst` whose name resolves to a function
+defined in the SAME file with no `[CmdletBinding()]` and no `[Parameter()]` on any parameter (a simple
+function), over every `git ls-files` `.ps1`/`.psm1` outside `archive/`. It is a SITE when an element after
+the name is (a) an unquoted bare word that is a binary operator (`+ - * / %`), the item's founding shape,
+or (b) a `CommandParameterAst` naming a comparison or logical operator (`-eq -ne -gt -ge -lt -le -like
+-notlike -match -notmatch -contains -notcontains -in -notin -and -or -not -xor -band -bor`) that the function
+declares no parameter for. THE DENOMINATOR is every call site to a same-file simple function, printed with
+the file count and the parse-error count; the 199-helper subset (`T`, `_T`, `Check`, `Case`) is printed
+beside the whole. The scanner is believed only if it flags the item's own repro (`T7s 'a' + 'b'` against a
+simple `T7s`) and stays silent on `T7s ('a' + 'b')`. **Decision rule:** each site found is read by hand; if
+at least one is a real case running on a fragment, the fix is warranted - repair every real site, and hold
+the class with a ratchet over the AST at the post-repair count, never a gate red on day one. If zero real
+sites, no fix is warranted: the shared advanced helper is NOT built on this measurement, and the item closes
+DONE with the count recorded.
+
 ### I207 - `throw` in an estate function is switched off by a caller's -ErrorAction SilentlyContinue, and nothing here says so `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\q8-pwsh-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
