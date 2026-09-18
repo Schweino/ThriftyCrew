@@ -482,7 +482,7 @@ CLEAN TWIN a clean precheck adds no lane line and no finding of its own
 CLEAN TWIN an unreadable battery report dispatches the auditor as before and holds nothing - could-not-look is not a refusal
 CLEAN TWIN ...and it SAYS SO in a finding, because a check that could not run must never read the same as a check that passed
 MUST FIRE  hunt_lib.P5_GATES is EXACTLY the first six labels in wave-publish.ps1's $gates array - a gate added, removed or reordered there turns this red rather than letting the daemon's copy drift into blocking or waving through the wrong wave
-MUST FIRE  ...and the gates BELOW those six are still the three the BATTERY does not run (so no report can carry a verdict for them). A new gate inserted into P5 turns this red and forces the ruling to be made rather than inherited
+MUST FIRE  ...and the gates BELOW those six are exactly the ones no battery report carries a verdict for under their P5 label, named in order. A gate added to, removed from or reordered in P5 turns this red and forces the ruling to be made rather than inherited
 MUST FIRE  recipes-db-dryrun is NOT in P5_GATES, and neither is any p8 check - the one discipline the measurement demanded
 MUST FIRE  every P5 gate has an owner in the daemon's P5_OWNERS map, so no red gate can route to the default by accident
 MUST FIRE  p5_red_gates treats an ABSENT check as not-red and a non-dict as no verdict at all - the battery not running a gate is announced elsewhere, never refused here
