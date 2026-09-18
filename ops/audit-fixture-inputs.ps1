@@ -30,6 +30,10 @@
 #      live data is broken. audit-price-mode, audit-food-category, audit-known-wrong and capture-evictions
 #      all have deliberate live twins, and removing them would be the wrong repair.
 #   3. the file is on the CONFIG allowlist below - a registry, not a ruling
+#   4. (2026-09-19) the path is assigned to a variable that is only ever handed to Test-Path afterwards - an
+#      ABSENCE probe ("the fixture child did not write here"), which reads no live content. Any other use of that
+#      variable, a Get-FileHash included, makes it a read again: a hash of a live file is a live dependency,
+#      because a sibling writing that file mid-run turns the verdict red.
 #
 # THE RATCHET IS BY NAME, NOT BY COUNT (see [[exit-code-first-tally-second]] and the daemon suite's
 # --names-diff). A baseline of 12 that becomes a different 12 is a regression a count cannot see. A NEW
@@ -95,6 +99,21 @@ function Get-UnpinnedReads {
       if ($lines[$j] -match 'LIVE-TWIN') { $declared = $true; break }
     }
     if ($declared) { continue }
+    # AN ABSENCE PROBE IS NOT A READ (2026-09-19). `$p = Join-Path $root 'out\x-1999-01-01.json'` whose every later use
+    # is `Test-Path [-LiteralPath] $p` asks only whether a fixture child wrote where it must not; no live CONTENT
+    # reaches the verdict. build-sams-deals' case 11 is the founding shape. A single other use of the variable - a
+    # Read-JsonFile, a Get-FileHash, anything - makes it a read again, so the exemption cannot hide one.
+    $am = [regex]::Match($l, '^\s*\$(\w+)\s*=\s*Join-Path\s')
+    if ($am.Success) {
+      $vn = [regex]::Escape($am.Groups[1].Value)
+      $uses = 0; $probes = 0
+      for ($k = $i + 1; $k -lt $lines.Count; $k++) {
+        if ($lines[$k].TrimStart().StartsWith('#')) { continue }
+        $uses   += [regex]::Matches($lines[$k], '\$' + $vn + '(?!\w)').Count
+        $probes += [regex]::Matches($lines[$k], '(?i)Test-Path\s+(?:-LiteralPath\s+|-Path\s+)?\$' + $vn + '(?!\w)').Count
+      }
+      if ($uses -gt 0 -and $uses -eq $probes) { continue }
+    }
     foreach ($m in [regex]::Matches($l, "Join-Path\s+\`$(?:root|repo|PSScriptRoot|OutDir|OutDirectory)\s+'([^']*\.json)'")) {
       $rel = $m.Groups[1].Value
       if ($rel -match '(?i)regression-inputs') { continue }
@@ -190,6 +209,19 @@ if ($SelfTest) {
   $srcH2 = "if (`$SelfTest) {`n  `$stub = @'`nWrite-Output 1`n'@`n  `$b = Read-JsonFile (Join-Path `$root 'known-wrong.json')`n}`n"
   FiT 'CLEAN TWIN: the same read as CODE right after a here-string closes is still found' `
       ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcH2)).Count -eq 1)
+
+  # THE ABSENCE PROBE (2026-09-19, build-sams-deals case 11). A live path handed only to Test-Path reads no content.
+  $srcP = "if (`$SelfTest) {`n  `$live = Join-Path `$root 'out\sams\sams-deals-1999-01-01.json'`n  if (-not (Test-Path -LiteralPath `$live)) { `$ok = 1 }`n  Write-Output ('present=' + (Test-Path -LiteralPath `$live))`n}`n"
+  FiT 'MUST NOT FIRE: a live path only ever handed to Test-Path is an absence probe, not a read' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcP)).Count -eq 0)
+  # ...but one other use of the same variable is a read, and a HASH is one: build-sams-deals' old before/after hash of
+  # the live rollback ledger rested its verdict on a file the Walmart builder saves at any moment.
+  $srcQ = "if (`$SelfTest) {`n  `$led = Join-Path `$root 'rollback-first-seen.json'`n  `$h = if (Test-Path -LiteralPath `$led) { (Get-FileHash -LiteralPath `$led).Hash } else { '' }`n}`n"
+  FiT 'MUST FIRE: a live path that is also hashed is a read, even beside a Test-Path' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcQ)).Count -eq 1)
+  $srcR = "if (`$SelfTest) {`n  `$kw = Join-Path `$root 'known-wrong.json'`n  `$b = Read-JsonFile `$kw`n}`n"
+  FiT 'MUST FIRE: a live path assigned to a variable and then read is still a finding' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcR)).Count -eq 1)
 
   # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
   # .claude\worktrees\<name> was excluded: no -SelfTest block was found anywhere and the audit exited 3.

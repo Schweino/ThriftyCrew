@@ -50,7 +50,11 @@ param(
   # -OutDir and -NoCursor exist for the self-test's end-to-end child ONLY (case 11): it builds a fixture capture
   # into a temp directory, and must neither write out\sams nor advance the live Sam's rotation cursor.
   [string]$OutDir = "",
-  [switch]$NoCursor
+  [switch]$NoCursor,
+  # -LedgerRoot is the same kind of parameter (2026-09-19): the directory holding rollback-first-seen.json. It
+  # defaults to this folder, the live ledger. The self-test child points it at a temp directory, because -OutDir
+  # never moved the ledger and a fixture row with a was-price would otherwise write the LIVE rollback ledger.
+  [string]$LedgerRoot = ""
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
@@ -620,8 +624,8 @@ if ($SelfTest) {
   # (2026-09-12) every real build with at least one reject died at the rejects-file merge with "Argument types
   # do not match" (`@(List[object]) + @(...)` under PS 5.1): the deals file was already written, but the rejects
   # file, the summary line and the cursor advance never ran, and the Sam's cursor sat still for six days.
-  # The child writes to a per-run temp -OutDir and passes -NoCursor, so it touches neither out\sams nor the live
-  # cursor. The fixture date 1999-01-01 is one no real capture carries, and the live path for it is asserted absent.
+  # The child writes to a per-run temp -OutDir and -LedgerRoot and passes -NoCursor, so it touches neither out\sams,
+  # the live rollback ledger nor the live cursor. The fixture date 1999-01-01 is one no real capture carries, and the live path for it is asserted absent.
   . (Join-Path $root 'native-lib.ps1')
   $bsdT = Join-Path $env:TEMP ('bsd-selftest-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
   New-Item -ItemType Directory -Path $bsdT -ErrorAction Stop | Out-Null
@@ -629,16 +633,21 @@ if ($SelfTest) {
     $bsdHead = 'q|n|lp|up|id'
     $bsdGood = 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|FIXTURE1'
     $bsdBad  = 'beans|Bogus Beans, 99 ct.|$3.27|$1.09/ea|FIXTURE2'
+    # An ABSENCE probe: the live path is only ever handed to Test-Path, so nothing here reads live content.
     $bsdLiveDeals = Join-Path $root 'out\sams\sams-deals-1999-01-01.json'
-    # The rollback ledger is NOT redirected by -OutDir. The fixture carries no was-price, so it must stay byte-identical.
-    $bsdLedger = Join-Path $root 'rollback-first-seen.json'
-    $bsdLedgerHash = if (Test-Path -LiteralPath $bsdLedger) { (Get-FileHash -LiteralPath $bsdLedger).Hash } else { '' }
+    # THE ROLLBACK LEDGER GOES TO TEMP TOO (2026-09-19). -OutDir never moved it, so until then every child ran with
+    # the LIVE rollback-first-seen.json as its ledger, and case 11c hashed that live file before and after. That hash
+    # made the verdict rest on a file the Walmart builder saves at any moment (a concurrent save read as "the fixture
+    # wrote live state"), and ops\audit-fixture-inputs.ps1 flagged it. Every child now passes -LedgerRoot, and case
+    # 11d proves the redirect by making a child WRITE a ledger and finding it in temp.
+    $bsdLedgerT = Join-Path $bsdT 'ledger'
+    New-Item -ItemType Directory -Path $bsdLedgerT -ErrorAction Stop | Out-Null
     # 11a MUST FIRE: one priced row and one reject. The build must reach its summary line, write the rejects file
     # holding exactly that reject, and exit 0.
     $csvA = Join-Path $bsdT 'sams-capture-a.csv'
     [IO.File]::WriteAllText($csvA, ($bsdHead + "`n" + $bsdGood + "`n" + $bsdBad + "`n"), (New-Object Text.UTF8Encoding($false)))
     $outA = Join-Path $bsdT 'a'
-    $runA = Invoke-NativeScript $PSCommandPath '-In' $csvA '-Date' '1999-01-01' '-OutDir' $outA '-NoCursor'
+    $runA = Invoke-NativeScript $PSCommandPath '-In' $csvA '-Date' '1999-01-01' '-OutDir' $outA '-NoCursor' '-LedgerRoot' $bsdLedgerT
     $linesA = @($runA.Lines | ForEach-Object { [string]$_ })
     $sumA = @($linesA | Where-Object { $_ -match '^build-sams-deals: 2 raw -> 1 priced \(1 after de-dupe\), 1 rejected -> sams-deals-1999-01-01\.json$' }).Count
     $rjA = Join-Path $outA 'sams-rejects-1999-01-01.json'
@@ -651,15 +660,30 @@ if ($SelfTest) {
     $csvB = Join-Path $bsdT 'sams-capture-b.csv'
     [IO.File]::WriteAllText($csvB, ($bsdHead + "`n" + $bsdGood + "`n"), (New-Object Text.UTF8Encoding($false)))
     $outB = Join-Path $bsdT 'b'
-    $runB = Invoke-NativeScript $PSCommandPath '-In' $csvB '-Date' '1999-01-01' '-OutDir' $outB '-NoCursor'
+    $runB = Invoke-NativeScript $PSCommandPath '-In' $csvB '-Date' '1999-01-01' '-OutDir' $outB '-NoCursor' '-LedgerRoot' $bsdLedgerT
     $linesB = @($runB.Lines | ForEach-Object { [string]$_ })
     $sumB = @($linesB | Where-Object { $_ -match '^build-sams-deals: 1 raw -> 1 priced \(1 after de-dupe\), 0 rejected -> sams-deals-1999-01-01\.json$' }).Count
     if ($runB.ExitCode -eq 0 -and $sumB -eq 1 -and -not (Test-Path -LiteralPath (Join-Path $outB 'sams-rejects-1999-01-01.json'))) { Write-Output 'ok    11b CLEAN TWIN  a build with no reject reaches its summary line, exits 0 and writes no rejects file' }
     else { Write-Output ("FAIL  11b clean build: exit=" + $runB.ExitCode + " summary_lines=" + $sumB + " | " + (($linesB | Select-Object -Last 4) -join ' / ')); $fail++ }
-    # 11c MUST NOT FIRE: the fixture children wrote nothing into the live out\sams.
-    $bsdLedgerAfter = if (Test-Path -LiteralPath $bsdLedger) { (Get-FileHash -LiteralPath $bsdLedger).Hash } else { '' }
-    if (-not (Test-Path -LiteralPath $bsdLiveDeals) -and $bsdLedgerAfter -eq $bsdLedgerHash) { Write-Output 'ok    11c MUST NOT FIRE  the fixture builds left out\sams and the rollback ledger untouched' }
-    else { Write-Output ('FAIL  11c a fixture build wrote live state: deals_present=' + (Test-Path -LiteralPath $bsdLiveDeals) + ' ledger_changed=' + ($bsdLedgerAfter -ne $bsdLedgerHash)); $fail++ }
+    # 11c MUST NOT FIRE: the fixture children wrote nothing into the live out\sams, and with no was-price in either
+    # capture they wrote no ledger either, so the temp ledger directory is still empty.
+    $bsdLedgerFileT = Join-Path $bsdLedgerT 'rollback-first-seen.json'
+    if (-not (Test-Path -LiteralPath $bsdLiveDeals) -and -not (Test-Path -LiteralPath $bsdLedgerFileT)) { Write-Output 'ok    11c MUST NOT FIRE  the fixture builds left out\sams alone and, with no was-price, wrote no ledger' }
+    else { Write-Output ('FAIL  11c a fixture build wrote state: live_deals_present=' + (Test-Path -LiteralPath $bsdLiveDeals) + ' temp_ledger_present=' + (Test-Path -LiteralPath $bsdLedgerFileT)); $fail++ }
+    # 11d MUST FIRE: a capture row WITH a was-price above its price is a rollback, so the child must date it and save
+    # the ledger - and the ledger it saves must be the one under -LedgerRoot. Asserted positively, in temp, so the
+    # verdict never reads the live ledger: without the redirect this entry lands in grocery\rollback-first-seen.json
+    # and the temp file is absent.
+    $csvD = Join-Path $bsdT 'sams-capture-d.csv'
+    [IO.File]::WriteAllText($csvD, ('q|n|lp|up|id|was' + "`n" + 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|FIXTURE3|$3.98' + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $outD = Join-Path $bsdT 'd'
+    $runD = Invoke-NativeScript $PSCommandPath '-In' $csvD '-Date' '1999-01-01' '-OutDir' $outD '-NoCursor' '-LedgerRoot' $bsdLedgerT
+    $linesD = @($runD.Lines | ForEach-Object { [string]$_ })
+    $rbLineD = @($linesD | Where-Object { $_ -match '^build-sams-deals: 1 rollback\(s\) dated from first detection' }).Count
+    $keysD = @()
+    if (Test-Path -LiteralPath $bsdLedgerFileT) { $ldD = Get-Content -LiteralPath $bsdLedgerFileT -Raw -Encoding UTF8 | ConvertFrom-Json; $keysD = @($ldD.entries | ForEach-Object { [string]$_.key }) }
+    if ($runD.ExitCode -eq 0 -and $rbLineD -eq 1 -and $keysD.Count -eq 1 -and $keysD[0] -eq "Sam's Club|FIXTURE3") { Write-Output 'ok    11d MUST FIRE  a was-price row is dated and its ledger entry lands under -LedgerRoot, not the live ledger' }
+    else { Write-Output ("FAIL  11d ledger redirect: exit=" + $runD.ExitCode + " rollback_lines=" + $rbLineD + " temp_ledger_keys=" + ($keysD -join ';') + " | " + (($linesD | Select-Object -Last 4) -join ' / ')); $fail++ }
   } finally { Remove-Item -LiteralPath $bsdT -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
@@ -688,13 +712,14 @@ $rejects = New-Object System.Collections.Generic.List[object]
 # consent related - so the anchor is the first sighting, and rollback-ttl-lib refuses to move it.
 # Inert until the capture carries a was-price, so an older CSV is unaffected.
 . (Join-Path $root 'rollback-ttl-lib.ps1')
+$ledgerRoot = if ($LedgerRoot) { $LedgerRoot } else { $root }
 $rollbacks = 0
 foreach ($r in $raw) {
   $b = Build-Row $r
   if ($b.row) {
     # ONE implementation, three callers (rollback-ttl-lib). The inline copy that used to live here read
     # $script:CaptureDate, which this file never assigns - see that function's header for what it cost.
-    if (Set-RollbackFields -Row $b.row -Was $r.was -Store "Sam's Club" -ItemId ([string]$r.id) -Date $Date -Root $root) { $rollbacks++ }
+    if (Set-RollbackFields -Row $b.row -Was $r.was -Store "Sam's Club" -ItemId ([string]$r.id) -Date $Date -Root $ledgerRoot) { $rollbacks++ }
     $rows.Add($b.row)
   } else { $rejects.Add([pscustomobject]@{ name=$r.n; lp=$r.lp; up=$r.up; reason=$b.err }) }
 }
@@ -707,7 +732,7 @@ if ($hintNotes.Count) { Write-Output ("build-sams-deals: $($hintNotes.Count) BAD
 # NEVER FATAL (2026-09-11). This save runs BEFORE the rows below are written, and it can now refuse - the ledger lock
 # not free within its budget, or a ledger on disk it cannot read and will not overwrite - so an uncaught throw here
 # would cost the whole capture over one ledger.
-try { [void](Save-RollbackLedger $root) } catch { Write-Warning ("build-sams-deals: rollback ledger NOT saved (" + $_.Exception.Message + ") - the first sightings this build dated are not recorded, and the next build that sees them anchors them to its own later capture") }
+try { [void](Save-RollbackLedger $ledgerRoot) } catch { Write-Warning ("build-sams-deals: rollback ledger NOT saved (" + $_.Exception.Message + ") - the first sightings this build dated are not recorded, and the next build that sees them anchors them to its own later capture") }
 if ($rollbacks -gt 0) { Write-Output ("build-sams-deals: $rollbacks rollback(s) dated from first detection (" + (Get-RollbackTtlDays) + "-day TTL; Sam's publishes no end date)") }
 # de-dupe identical products (the same SKU is returned by several search terms)
 $seen = @{}; $ded = New-Object System.Collections.Generic.List[object]
