@@ -12928,7 +12928,7 @@ working gate red for a reason unrelated to allergens. The refusal Brad asked for
 not depend on this; this is a cheapness improvement and should be done by somebody with that file
 already open, reading its blind-count rule first.
 
-### I174 - fareway builds copy taxonomy_path unrepaired, and it carries two-layer mojibake in every recent file `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I174 - fareway builds copy taxonomy_path unrepaired, and it carries two-layer mojibake in every recent file `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-netdata-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -12957,6 +12957,49 @@ matters.
 from the 09-12 raw capture), and whether the second layer is added by the builder's own read or
 comes from a carried-forward older row. Then decide: repair every string field on ingest, or stop
 writing `taxonomy_path` for Fareway, since it is not a taxonomy.
+
+**Acceptance bar, written 2026-09-18 before any count was taken (backlog run, worktree i174-work).**
+The hop is FOUND only when a named script, fed a one-layer string, is shown by a reproduction to write
+a two-layer one; a hop named by reasoning alone does not count. A fix is WARRANTED if that hop is ours
+and it can add a layer to ANY field (not only `taxonomy_path`). The fix may LAND only if, over every
+current `fareway-regular-*.json` rebuilt or re-run through the fixed hop, the only bytes that change are
+in fields no reader displays, proven by a field-by-field diff of old against new (count of changed
+`name`, `price`, `size` and `url` values must be 0). Any changed displayed field holds it as READY FOR
+BRAD with the list. If no hop of ours adds the layer (the damage arrives already doubled from outside),
+no fix is warranted and the item closes on that measurement.
+
+**Done 2026-09-18. Measured; no fix warranted, because the hop that added the layer was ours and was
+already fixed on 2026-09-05.** All counts at `ba5c5ef18`, over tracked files.
+- **When.** Of 38 tracked `fareway-regular-*.json`, the 15 from 07-12 to 08-20 hold 0 two-layer
+  sequences and the 23 from 08-21 to 09-12 hold 5 each (4 on 08-31). All 5 are `taxonomy_path` values
+  (`2 flavors` three times, `6 flavors`, `9 flavors`) on rows whose `as_of` is **2026-08-11**: carried
+  rows, not fresh ones, which is why the 09-06 to 09-12 raw captures could not show them.
+- **Where.** `fareway-shop-2026-08-11.json` (BOM) and `fareway-regular-2026-08-11.json` through
+  `-08-20.json` hold the same strings at ONE layer. At `81c260753`, the commit that wrote
+  `fareway-regular-2026-08-21.json`, the 08-20 blob had NO BOM (first bytes `{`, LF, space) and
+  `grocery/carry-forward-regular.ps1` read its previous files with a bare `Get-Content -Raw` (its lines
+  80 and 94 at that commit), which PS 5.1 decodes as cp1252 on a BOM-less file, then wrote the result
+  with a BOM. That is the second layer, and every later carry copied it verbatim.
+- **Reproduced, not reasoned** (harness: a scratch script, run once per arm from temp copies with the
+  worktree's `lib\`; one-layer bullet in a BOM-less previous file, a BOM'd newest file without that item).
+  The `81c260753` version of `carry-forward-regular.ps1` carried the row as TWO layers (17 characters, the
+  live bytes); the HEAD version carried it as ONE, unchanged (13 characters). 1 of 1 fixture per arm.
+- **Already closed and guarded.** `335eeabd5` (2026-09-05) moved `carry-forward-regular`,
+  `heal-degraded-sizes` and `repair-asof-evidence` to `Read-JsonFile` (`lib\json-io.ps1`), and
+  `grocery\audit-json-readers.ps1` holds the bare read at a ratchet of 0: run at `ba5c5ef18` it exited 0,
+  `319 script(s) scanned, 0 bare JSON read(s)`. So no hop of ours adds a layer today, and a revert of the
+  fix would be refused at push.
+- **Why the rest is not worth a change.** `taxonomy_path` has 0 readers: over tracked `.ps1`/`.py`/`.js`
+  outside `grocery/out/`, the 6 hits are copy lines in the Aldi, Fareway, Sam's and Walmart builders and
+`select-fareway-shop.ps1`, plus one self-test fixture, and the newest board
+  (`comparison-2026-09-17.json`) and `public/board.json` contain the word 0 times. The 5 damaged strings
+  expire with their rows 90 days after `as_of` (2026-11-09) or sooner when re-captured. Repairing every
+  string field on ingest, or dropping the field, would change only an internal field nobody displays and
+  is left for the day a Fareway taxonomy lane is actually built; that lane should repair on ingest.
+- **Not chased.** The FIRST layer is already in the raw capture on disk: 10 of 35 tracked
+  `fareway-shop-*.json` hold a one-layer `E2 20AC` sequence (25 occurrences), and one,
+  `fareway-shop-2026-08-05.json`, holds 2 two-layer sequences inside the capture itself. The three newest
+  captures (09-10 rescue, 09-11, 09-12) hold none. Which emitter wrote those was not measured.
 
 ### I175 - Windows PowerShell 5.1 Sort-Object is unstable, and 17 cheapest-row picks break price ties by the sort's internals `OPEN` `2-WAY` `RUNG1 MEASURE` `queue-7`
 
