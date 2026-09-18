@@ -1,6 +1,6 @@
 {
   "lane": "weekly",
-  "generated": "2026-09-18T17:20:00",
+  "generated": "2026-09-18T16:52:00",
   "round": 1,
   "board_week": "comparison-2026-09-17 (built 2026-09-18 15:46:51)",
   "head_at_dispatch": "7f7af2e99",
@@ -53,7 +53,7 @@
         "commands": ["powershell -NoProfile -File grocery\\pull-fareway-ads.ps1 -SelfTest", "powershell -NoProfile -File grocery\\audit-ad-status.ps1"]
       },
       "rollback": "nothing shipped",
-      "freshness": "census and watchdog logs read 2026-09-18 17:00; Baker's measured after b92c93874 at 16:40",
+      "freshness": "census and watchdog logs read 2026-09-18 before 16:52; Baker's measured after b92c93874 at 16:40",
       "leaves_open": "the whole Fareway half of the class: Fareway ad rollovers without a same-day transcription, 3 watchdog days in this window (09-06, 09-13, 09-14)",
       "leaves_open_occurrences": 3,
       "leaves_open_followup": null,
@@ -68,7 +68,7 @@
       "subject": "Grocery: beverage wrong-class guard still blind on 20 non-drink Snacks & Drinks commodities",
       "classification": "no-code-change",
       "evidence": [
-        "RE-MEASURED 2026-09-18 17:05 on comparison-2026-09-17 (built 15:46:51): all 20 named commodities present, 134 store cells, 0 cell items matching the category-excludes beverage class (positive control: 'Gatorade Thirst Quencher' matches the same pattern set). Occurrences of the class on these 20: 0 now, 0 in the reviewer's 3,189-cell scan of the 08:07 build; the class has happened once, on pistachios 09-13..09-18, and that one is closed (apply_ids)."
+        "RE-MEASURED 2026-09-18 before 16:52 on comparison-2026-09-17 (built 15:46:51): all 20 named commodities present, 134 store cells, 0 cell items matching the category-excludes beverage class (positive control: 'Gatorade Thirst Quencher' matches the same pattern set). Occurrences of the class on these 20: 0 now, 0 in the reviewer's 3,189-cell scan of the 08:07 build; the class has happened once, on pistachios 09-13..09-18, and that one is closed (apply_ids)."
       ],
       "root_cause": "the food-class guard scopes the beverage class by display bucket, and 'Snacks & Drinks' mixes drinks with 21 non-drink commodities; apply_ids covers pistachios only of those 21",
       "resolution_note": "MONEY-LANE HAND-BACK: widening apply_ids changes a BLOCKING guard's scope (category-excludes.json, a file on this lane's line). Measurement handed back: 0 beverage products on the 20 today (134 cells); plan-2026-09-18.routing.json variant B3 already measured 19 of the 20 move 0 names, and protein-bars needs a 'gatorade' release first.",
@@ -121,7 +121,7 @@
         "commands": ["powershell -NoProfile -File ops\\push-main.ps1 -SelfTest"]
       },
       "rollback": "revert the push-main hunk; the hook is unchanged",
-      "freshness": "measured 2026-09-18 17:00 on origin/main 7f7af2e99",
+      "freshness": "measured 2026-09-18 before 16:52 on origin/main 7f7af2e99",
       "leaves_open": "nothing",
       "leaves_open_occurrences": 0,
       "leaves_open_followup": null,
@@ -137,7 +137,7 @@
       "classification": "no-code-change",
       "evidence": [
         "the router already tries headline AND body: grocery/pull-bakers-ad-list.ps1 routes every phrase from Get-BkalPhrases (headline, and headline plus body) through match-lib Resolve-Commodity; the unrouted[] rows carry both, e.g. 'Pepsi' + '12-Pack, 12 fl oz Cans', 'Tide Laundry Detergent' + 'Select Varieties, 117-132 fl oz'. So 'route through the full matcher including body text' is what already runs.",
-        "router-only alternative measured 2026-09-18 17:10: infer an offer's commodity from the store's OWN catalogue, i.e. route every captured Baker's product name (out\\regular\\bakers-regular-*.json, last 20 files, 7,190 distinct names) that starts with the offer's brand and take the majority. Of 79 unrouted offers, 16 had any such name: right for Pepsi (soda 7 of 7), 7UP (soda 1), Big K (soda 8 of 10), Doritos (tortilla-chips 2), Barefoot/Apothic/Kendall-Jackson (wine); WRONG for Smucker's Uncrustables (peanut-butter 1 of 1), Kroger Cheese (cheese-tortellini 2, frozen-pizza 1), Carving Pumpkins (apples 8 of 11), Ken's or Kraft Salad Dressing (split over 3 dressings); 0 names at all for Tide, Swanson, Progresso, Dasani, because nobody asks those terms. The named residual is not reachable from the router."
+        "router-only alternative measured 2026-09-18 before 16:52: infer an offer's commodity from the store's OWN catalogue, i.e. route every captured Baker's product name (out\\regular\\bakers-regular-*.json, last 20 files, 7,190 distinct names) that starts with the offer's brand and take the majority. Of 79 unrouted offers, 16 had any such name: right for Pepsi (soda 7 of 7), 7UP (soda 1), Big K (soda 8 of 10), Doritos (tortilla-chips 2), Barefoot/Apothic/Kendall-Jackson (wine); WRONG for Smucker's Uncrustables (peanut-butter 1 of 1), Kroger Cheese (cheese-tortellini 2, frozen-pizza 1), Carving Pumpkins (apples 8 of 11), Ken's or Kraft Salad Dressing (split over 3 dressings); 0 names at all for Tide, Swanson, Progresso, Dasani, because nobody asks those terms. The named residual is not reachable from the router."
       ],
       "root_cause": "the catalogue includes name kinds of product, not brands, so a brand-only offer headline has no include to hit; the matcher correctly does not guess",
       "resolution_note": "MONEY-LANE HAND-BACK: the fix is catalogue data (brand tokens on soda, laundry detergent, chips, broth, canned soup, bottled water includes in commodities.json), a matching-rule change on this lane's line. Router-level inference measured and rejected: 16 of 79 offers reachable, at least 4 of those wrong, and 0 of Tide/Swanson/Progresso/Dasani.",
@@ -151,7 +151,7 @@
       "subject": "Grocery: buttermilk claims donuts, biscuits, syrup and dressing by a flavour word",
       "classification": "no-code-change",
       "evidence": [
-        "ROUTING RE-MEASURED 2026-09-18 17:12 through match-lib Resolve-Commodity over current commodities.json: 171 distinct names containing 'buttermilk' across 32 files (out\\regular\\*-regular-2026-09-1*.json plus candidates-2026-09-17.json). Destinations: pancake-mix 36, unrouted 34, refrigerated-biscuits 25, buttermilk 22, frozen-waffles 20, ranch-dressing 18, ranch-seasoning-mix 8, corn-muffin-mix 3, english-muffins 3, bread 1, breakfast-sandwiches 1. Of the 22 on buttermilk, 14 are real buttermilk and 8 are not: Entenmann's Classic Glazed Buttermilk Donuts (2 listings), Butter Country Buttermilk Syrup (4 listings), Kraft Buttermilk Dressing, Pillsbury Grands Southern Homestyle Buttermilk Refrigerated (biscuits). No board cell wrong today: the body records the donuts, syrup and dressing refused OUT-OF-BAND and the biscuits in band but not crowning."
+        "ROUTING RE-MEASURED 2026-09-18 before 16:52 through match-lib Resolve-Commodity over current commodities.json: 171 distinct names containing 'buttermilk' across 32 files (out\\regular\\*-regular-2026-09-1*.json plus candidates-2026-09-17.json). Destinations: pancake-mix 36, unrouted 34, refrigerated-biscuits 25, buttermilk 22, frozen-waffles 20, ranch-dressing 18, ranch-seasoning-mix 8, corn-muffin-mix 3, english-muffins 3, bread 1, breakfast-sandwiches 1. Of the 22 on buttermilk, 14 are real buttermilk and 8 are not: Entenmann's Classic Glazed Buttermilk Donuts (2 listings), Butter Country Buttermilk Syrup (4 listings), Kraft Buttermilk Dressing, Pillsbury Grands Southern Homestyle Buttermilk Refrigerated (biscuits). No board cell wrong today: the body records the donuts, syrup and dressing refused OUT-OF-BAND and the biscuits in band but not crowning."
       ],
       "root_cause": "buttermilk's include matches the word anywhere in a name, so a flavour or style word routes baked goods, a syrup and a dressing to the dairy commodity when no earlier commodity claims them",
       "resolution_note": "MONEY-LANE HAND-BACK: a matching-rule change to commodities.json (buttermilk excludes or a donuts/biscuits/syrup/dressing claim ahead of it). Routing measurement: 8 wrong of 22 names routed to buttermilk (171 buttermilk-bearing names, 32 files).",
