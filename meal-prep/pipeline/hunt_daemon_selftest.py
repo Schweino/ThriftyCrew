@@ -12285,14 +12285,14 @@ def _p5_gates_pinned_to_wave_publish():
                                                  json.dumps(list(hunt_lib.P5_GATES)))))
     # The list below is wave-publish's P5 table as it stands, gate for gate. audit-allergen-line joined
     # it at 384c94252 (2026-09-18) and nobody moved this case, so the nightly battery went red on it
-    # (backlog I233). wave-preaudit's own allergen check reports as 'allergen-line', not under this P5
-    # label, so p5_red_gates reads no verdict for it and it stays below the six.
+    # (backlog I233). This branch moves audit-allergen-line out of P5 and into propagate's
+    # Invoke-GatedPublish, after build-cards and before publish, so P5 is back to these three.
     res.append(("MUST FIRE  ...and the gates BELOW those six are exactly the ones no battery report "
                 "carries a verdict for under their P5 label, named in order. A gate added to, removed "
                 "from or reordered in P5 turns this red and forces the ruling to be made rather than "
                 "inherited",
                 labels[6:] == ["audit-ghost-field-limits", "audit-wave-blocker-headings",
-                               "audit-allergen-line", "test-guards"],
+                               "test-guards"],
                 json.dumps(labels[6:])))
     res.append(("MUST FIRE  recipes-db-dryrun is NOT in P5_GATES, and neither is any p8 check - the "
                 "one discipline the measurement demanded",
