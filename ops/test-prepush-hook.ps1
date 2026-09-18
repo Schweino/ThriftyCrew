@@ -362,6 +362,22 @@ exit $(if ($failed -gt 0) { 2 } else { 0 })
     (($slotPush.rc -ne 0) -and ($slotPush.remote -eq '') -and ($slotText -match 'CAUSE: no gate worker slot') -and ($slotText -notmatch '(?i)discovery')) `
     ("rc=" + $slotPush.rc + " ref=[" + $slotPush.remote + "] text=[" + $slotText + "]")
 
+  # THE BUDGET IT NAMES IS READ FROM lib\gate-slots.ps1 (backlog I237). The refusal said "The 10" for six days after
+  # the budget went to 24. CLEAN TWIN: it names the budget the library assigns. MUST FIRE: with the sandbox's copy of
+  # the library set to another number it names THAT number, so a literal that happens to match cannot pass.
+  $slotLibRx = '(?m)^\$script:TcGateSlotTotal = (\d+)'
+  $realBudget = [regex]::Match([IO.File]::ReadAllText((Join-Path $RepoRoot 'lib\gate-slots.ps1')), $slotLibRx).Groups[1].Value
+  Case 'CLEAN TWIN' 'the slot refusal names the budget lib\gate-slots.ps1 assigns' `
+    ([bool]$realBudget -and ($slotText -match ('The ' + $realBudget + ' machine-wide slots'))) ("budget=" + $realBudget + " text=[" + $slotText + "]")
+  $sbSlots = Join-Path $linked 'lib\gate-slots.ps1'
+  $sbSlotsBytes = [IO.File]::ReadAllBytes($sbSlots)
+  $sbSlotsText = [IO.File]::ReadAllText($sbSlots)
+  [IO.File]::WriteAllText($sbSlots, [regex]::Replace($sbSlotsText, $slotLibRx, '$script:TcGateSlotTotal = 17'), $utf8)
+  $slot17 = PushOut $linked 'slot-blind-17'
+  [IO.File]::WriteAllBytes($sbSlots, $sbSlotsBytes)
+  Case 'MUST FIRE' 'with the library assigning 17 the slot refusal names 17, so the number is read and not a literal' `
+    (($slot17.rc -ne 0) -and ($slot17.text -match 'The 17 machine-wide slots')) ("rc=" + $slot17.rc + " text=[" + $slot17.text + "]")
+
   # CLEAN TWIN: the cause this hook could already name still gets named. A discovery collapse is the same
   # exit code down the same branch, and the repair must not have traded one wrong cause for another.
   $discSay = 'run-gates: COULD NOT EVALUATE - PowerShell self-test DISCOVERY found only 12 suite(s); it found 201 on 2026-09-07 and 262 on 2026-09-11. That is the walk broken, not the tree clean.' +
@@ -745,7 +761,7 @@ $null = New-Item -ItemType Directory -Force (Split-Path -Parent $card)
 # writing its known-failures record: the stale-record step's ReadAllText threw, the try skipped the 15 cases after it,
 # and the tally read "7 FAILED of 16". Had those 7 been green it would have read "16 of 16 cases pass". Pinned, as
 # prepush-test-auditors -SelfTest pins its own count.
-$expectedCases = 46   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder
+$expectedCases = 48   # 31 until 2026-09-11, when the hook began handing the gate the refs this push updates; 36 with the seeding cases; 42 with THE EIGHTH's six push-lock cases; 45 with the three that read WHICH cause a 3 named (2026-09-12); 46 once an older checkout falls back to the main one's holder; 48 with the two that read the slot budget from lib\gate-slots.ps1 (2026-09-18, backlog I237)
 if ($ran.Count -ne $expectedCases) { $fails += "ran $($ran.Count) case(s), expected $expectedCases - a block of cases was skipped" }
 
 ''

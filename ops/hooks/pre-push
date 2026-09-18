@@ -336,7 +336,11 @@ if [ "$rc" -eq 3 ]; then
   echo "pre-push: BLOCKED - run-gates COULD NOT EVALUATE (exit 3). A 3 is NEVER a pass." >&2
   case "$blind" in
     no-gate-worker-slot)
-      echo "          CAUSE: no gate worker slot. The 10 machine-wide slots stayed held by other gate runs and" >&2
+      # THE BUDGET IS READ, NOT RESTATED (2026-09-18, backlog I237). This line said "The 10" for six days after
+      # 39be9900e raised the budget to 24. It now reads lib/gate-slots.ps1's own assignment, and says no number
+      # rather than a wrong one when it cannot.
+      slots="$(grep -oE '^\$script:TcGateSlotTotal = [0-9]+' "$repo/lib/gate-slots.ps1" 2>/dev/null | head -n 1 | grep -oE '[0-9]+$')"
+      echo "          CAUSE: no gate worker slot. The ${slots:+$slots }machine-wide slots stayed held by other gate runs and" >&2
       echo "          the queue did not move, so NOTHING was run. That is CONTENTION on this box, not a broken" >&2
       echo "          tree and nothing wrong with this checkout. Let the other runs drain and push again; the" >&2
       echo "          gate's own line below says how long it waited and how many runs were ahead of it." >&2
