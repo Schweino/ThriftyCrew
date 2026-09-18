@@ -20,3 +20,4 @@ Orchestration branch: `claude/backlog-run-0919`. Each item lands through its own
 | I109 | NEEDS A RULING | lesson content: emergency-fund lesson and cross-references to published Weeks 29-30 |
 | I111 | NEEDS A RULING | lesson content: balance-sheet lesson and worksheet |
 | I177 | NEEDS A RULING | rules text: does the lock order cover waits held under a lock |
+| I205 | DONE | b986423a3 + 8f01557b2: literal ./ prefix stripped in pipeline-commit and bot-paths, MUST FIREs red under the old TrimStart, 0 of 8,563 tracked paths change verdict |
