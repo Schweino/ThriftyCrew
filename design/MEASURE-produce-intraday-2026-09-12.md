@@ -192,11 +192,11 @@ feed does not move on the board, whatever the shelf tag does. It is the reason t
 
 ## Status
 
-**2026-09-19: steps 1 to 3 below are done** (verdict above, I125 closed). **Step 4 is prepared and held
-on branch `claude/i125-probe-removal`**, because it unregisters a Windows scheduled task, which an agent
-does not do on this box. Brad's action: `Unregister-ScheduledTask -TaskName 'TC Produce Intraday
-Probe' -Confirm:$false`, then land that branch the same day - in that order, because a watched row with
-no task pages TASK MISSING and a task with no row pages TASK UNWATCHED.
+**2026-09-19: steps 1 to 3 below are done** (verdict above, I125 closed). **Step 4 is done too: the
+probe, its panel, its task definition, its watch row, its census entry and its two `.gitignore` lines
+were removed by the commit on branch `claude/i125-probe-removal`**, landed after Brad unregistered the
+task, because an agent does not change a Windows scheduled task on this box. The harness survives in
+git history as blob `3d87ef06f121` if the question is ever re-asked.
 
 **The stale page is not sent once.** health-heartbeat dedups on a signature of its issue text, and a
 TASK STALE line carries the task's age in hours (`last ran 87.5h ago` when read on 2026-09-19), so the
