@@ -358,6 +358,12 @@ $m.Dispose()
   $prodLedger = Get-TcPushLedgerPath
   $ledgerRootWas = $env:TC_PUSH_LEDGER_ROOT
   $env:TC_PUSH_LEDGER_ROOT = Join-Path $tmp 'suite-ledger'
+  # AND EVERY ROW IT WRITES CARRIES THIS RUN'S ID, which is what the production check below filters on - never this
+  # process's pid, which Windows recycles within the day the production file covers (backlog I171). Exported, so a
+  # row written by a child of these cases carries it too.
+  $runWas = $env:TC_PUSH_LEDGER_RUN
+  $suiteRun = New-TcPushLedgerRunId
+  $env:TC_PUSH_LEDGER_RUN = $suiteRun
   try {
     Clear-TcGitRepoEnv
     $origin = Join-Path $tmp 'origin'
@@ -547,14 +553,29 @@ $m.Dispose()
     T ($kCT + '  every one of those runs handed the push lock back, including the refusals') ($freeNow.Held) ("held={0}" -f $freeNow.Held)
     Exit-TcPushLock $freeNow
 
-    # NOTHING THIS SUITE WROTE REACHED THE PRODUCTION LEDGER. Keyed on this process's pid, not on the file's size:
-    # a real push from another session may append to it while these cases run.
+    # NOTHING THIS SUITE WROTE REACHED THE PRODUCTION LEDGER. Keyed on this RUN's id, not on the file's size (a real
+    # push from another session may append while these cases run) and NOT on this process's pid: the production file
+    # is one per day for the whole box, pids recycle within it, and a stranger's row carrying this pid refused two of
+    # three unrelated pushes on 2026-09-12 (backlog I171). lib\push-ledger.ps1's suite holds the collision fixture.
     $prodRaw = Read-TcPushRows -Path $prodLedger
-    $prodMine = @(@($prodRaw) | Where-Object { -not $_.PSObject.Properties['malformed'] -and [int]$_.pid -eq $PID })
+    $prodMineRaw = Select-TcPushRowsOfRun -Rows $prodRaw -Run $suiteRun
+    $prodMine = @($prodMineRaw)
     T ($kMF + '  no row this suite wrote reached the production ledger, so the convergence report is never computed over temp clones') `
-      ($prodMine.Count -eq 0) ("rowsFromThisProcessInProduction={0}" -f $prodMine.Count)
+      ($prodMine.Count -eq 0) ("run={0} rowsFromThisRunInProduction={1}" -f $suiteRun, $prodMine.Count)
+    # THE CHECK ABOVE CAN SEE: the cases that pass no -LedgerRoot wrote into the suite's redirect, and those rows are
+    # found by the same run id. Without this, an id the rows never carried would make the zero above agree forever.
+    $suiteRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root (Join-Path $tmp 'suite-ledger'))
+    $suiteMineRaw = Select-TcPushRowsOfRun -Rows $suiteRaw -Run $suiteRun
+    $suiteMine = @($suiteMineRaw)
+    T ($kCT + '  the rows these cases wrote to the suite''s redirect are found by the run id the production check filters on') `
+      ($suiteMine.Count -ge 1 -and $suiteMine.Count -eq @($suiteRaw).Count) ("rowsInRedirect={0} rowsOfThisRun={1}" -f @($suiteRaw).Count, $suiteMine.Count)
   } finally {
     $ErrorActionPreference = $prev
+    if ($null -eq $runWas) {
+      Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_RUN -ErrorAction SilentlyContinue
+    } else {
+      $env:TC_PUSH_LEDGER_RUN = $runWas
+    }
     if ($null -eq $ledgerRootWas) {
       Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_ROOT -ErrorAction SilentlyContinue
     } else {

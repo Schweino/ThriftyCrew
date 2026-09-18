@@ -12899,7 +12899,7 @@ change that added the gate, plus the full account already in I112's own backlog 
 Either Brad pastes them, or a session with permission on `.claude/rules/` and `.claude/skills/` does. It
 needs no judgement and no measurement; it needs write access.
 
-### I171 - a push-ledger self-test says "this process" with a bare PID, and a day-long shared ledger makes that a coin flip that refuses unrelated pushes `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+### I171 - a push-ledger self-test says "this process" with a bare PID, and a day-long shared ledger makes that a coin flip that refuses unrelated pushes `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\approvals-i138-2026-09-12.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -12939,6 +12939,24 @@ filter and both want the same change; `ops\push-main.ps1`'s copy should be check
 
 **Not fixed here on purpose.** It is a different subsystem from the ruling that found it, and a repair to
 the push path made while trying to get a push out is the shape this estate has been bitten by.
+
+**Done 2026-09-18.** Every ledger row now carries a `run` field beside `pid`, and the "nothing this suite wrote
+reached the production ledger" check filters on it, never on `$PID`. `Get-TcPushLedgerRunId` in
+`lib\push-ledger.ps1` returns `TC_PUSH_LEDGER_RUN` when set, else `<pid>@<process start time, UTC>`, so a recycled
+pid gets a different id; each suite exports a fresh guid (`New-TcPushLedgerRunId`) for its whole run, which a child
+it spawns inherits and a pid filter could never have seen; `Select-TcPushRowsOfRun` matches ordinally and never
+matches a row with no `run` field, an empty id or a malformed line. The same pid filter stood in THREE suites, not
+two: `ops\hold-push-lock.ps1` carried it as well, and all three now use the run id, each with a CLEAN TWIN proving
+the rows its own cases wrote into its redirect ARE found by that id, so the production zero cannot agree forever.
+The collision fixture lives in `lib\push-ledger.ps1`'s suite: a MUST FIRE plants a stranger's row carrying this
+process's pid and a pre-run-id row with the same pid in a scratch ledger and asserts neither is read as the suite's.
+**Break-once:** with `Select-TcPushRowsOfRun` reverted to the old pid filter, `push-ledger -SelfTest` exited 1,
+`FAIL 2 of 18` (the MUST FIRE read `rowsWithThisPid=2 rowsReadAsThisRun=2`, the CLEAN TWIN read 3 for 1); restored
+md5-identical, exit 0, 18 cases. `push-ledger` 18, `hold-push-lock` 21 and `push-main` 22 cases all exit 0 at base
+0e13e7b4f, and exit 0 again driven as children of a process holding the REAL `Global\tc-push-lock-` with
+`TC_PUSH_LOCK_HOLDER` exported, as `ops\push-main.ps1` runs them. **Measured on the production ledger that day:**
+`pushes-2026-09-18.jsonl` held 200 rows over 197 distinct pids, 3 of them on more than one row; whether those were
+recycled pids or one process writing twice was not established, and with the run id it no longer matters.
 
 ### I172 - the 584 live recipe cards carry no allergen line, and the backfill is a republish of the whole catalogue `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
 

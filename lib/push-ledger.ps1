@@ -60,12 +60,66 @@ function Get-TcPushLedgerPath {
      temp-clone pushes from a self-test. A measurement whose corpus contains its own fixtures is worse than no
      measurement - the estate's rule is that when code under test writes a real path BY DEFAULT, the default is
      redirected SUITE-WIDE rather than per fixture, because the fixture that forgets is exactly the one that does
-     the damage. Each suite also asserts that no row carrying its own pid reached the production file. #>
+     the damage. Each suite also asserts that no row carrying its own RUN id reached the production file - its run
+     id, never its pid (backlog I171, Get-TcPushLedgerRunId below). #>
   param([string]$Root = '', [datetime]$Now = [datetime]::Now)
   $r = $Root
   if (-not $r) { $r = [string]$env:TC_PUSH_LEDGER_ROOT }
   if (-not $r) { $r = $script:TcPushLedgerRoot }
   return (Join-Path $r ('pushes-' + $Now.ToString('yyyy-MM-dd') + '.jsonl'))
+}
+
+$script:TcPushLedgerRunEnv = 'TC_PUSH_LEDGER_RUN'
+$script:TcPushLedgerProcRun = ''
+
+function Get-TcPushLedgerRunId {
+  <# WHO WROTE A ROW, as an identity the day cannot reuse (backlog I171, 2026-09-18).
+
+     A row's only identity used to be `pid = $PID`, and every suite that asserted "nothing I wrote reached the
+     production ledger" filtered that file on its own $PID. The production file is ONE PER DAY and collects every push
+     on this shared box: read at 2026-09-12 it held 142 rows over 140 distinct pids, and Windows RECYCLES pids within a
+     day. So a suite whose own $PID happened to match any pid already in the file read a stranger's row as its own and
+     failed a MUST FIRE, refusing an unrelated push - two of three push-main attempts were refused that way on the day
+     it was found, each passing standalone a minute later. A name alone is not an identity; lib\gate-slots.ps1 keys a
+     ticket on its MUTEX rather than its file for the same reason.
+
+     The answer, in order:
+       TC_PUSH_LEDGER_RUN, when set. A self-test sets it to New-TcPushLedgerRunId (a guid) for its whole run, so every
+         row the suite writes - in this process AND in every child it spawns, which a pid filter could never see -
+         carries one value no other run on any day can hold.
+       otherwise <pid>@<this process's start time, UTC>. A recycled pid gets a new start time, so two processes that
+         share a pid within a day never share this. Computed once per process.
+     A row written before this change carries no `run` field at all and is never matched by Select-TcPushRowsOfRun. #>
+  $r = [string](Get-Item -LiteralPath ('Env:' + $script:TcPushLedgerRunEnv) -ErrorAction SilentlyContinue).Value
+  if ($r) { return $r }
+  if (-not $script:TcPushLedgerProcRun) {
+    $start = 'start-unreadable'
+    try { $start = [Diagnostics.Process]::GetCurrentProcess().StartTime.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ss.fffffffZ') } catch { }
+    $script:TcPushLedgerProcRun = ('{0}@{1}' -f $PID, $start)
+  }
+  return $script:TcPushLedgerProcRun
+}
+
+function New-TcPushLedgerRunId {
+  <# A fresh run id for a suite to export as TC_PUSH_LEDGER_RUN. A guid, so it is unique across processes AND days. #>
+  return ('run-' + [guid]::NewGuid().ToString('N'))
+}
+
+function Select-TcPushRowsOfRun {
+  <# The rows a given run wrote, matched ORDINALLY on the `run` field and never on the pid. Returns an array wrapped so
+     that ASSIGN-THEN-WRAP reads 0 for none ([[ps-null-count-is-one]]). An empty run id matches nothing, a malformed
+     line matches nothing, and a row with no `run` field - one written before backlog I171 - matches nothing. #>
+  param($Rows, [string]$Run)
+  $out = [Collections.Generic.List[object]]::new()
+  if ($Run) {
+    foreach ($r in @($Rows)) {
+      if ($null -eq $r) { continue }
+      if ($r.PSObject.Properties['malformed']) { continue }
+      if (-not $r.PSObject.Properties['run']) { continue }
+      if ([string]::Equals([string]$r.run, $Run, [StringComparison]::Ordinal)) { $out.Add($r) }
+    }
+  }
+  return , ($out.ToArray())
 }
 
 function New-TcPushRowText {
@@ -83,11 +137,16 @@ function New-TcPushRowText {
     [string]$GrantSha = '',
     [string]$Outcome = '',
     [string]$Checkout = '',
-    [datetime]$Now = [datetime]::UtcNow
+    [datetime]$Now = [datetime]::UtcNow,
+    [string]$Run = ''
   )
+  # `pid` stays for a reader, but it is NOT an identity: `run` is (Get-TcPushLedgerRunId, backlog I171).
+  $runId = $Run
+  if (-not $runId) { $runId = Get-TcPushLedgerRunId }
   $row = [ordered]@{
     ts       = $Now.ToString('yyyy-MM-ddTHH:mm:ssZ')
     pid      = $PID
+    run      = [string]$runId
     event    = [string]$Event
     waitMs   = [math]::Round([double]$WaitMs)
     state    = [string]$State
@@ -249,6 +308,12 @@ if ($__pldSelfTest) {
   $prodPath = Get-TcPushLedgerPath
   $ledgerRootWas = $env:TC_PUSH_LEDGER_ROOT
   $env:TC_PUSH_LEDGER_ROOT = Join-Path $tmp 'suite'
+  # THE SUITE'S IDENTITY IS A RUN ID, NEVER ITS PID (backlog I171). Read the process default BEFORE exporting it.
+  $runWas = $env:TC_PUSH_LEDGER_RUN
+  Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_RUN -ErrorAction SilentlyContinue
+  $procRun = Get-TcPushLedgerRunId
+  $suiteRun = New-TcPushLedgerRunId
+  $env:TC_PUSH_LEDGER_RUN = $suiteRun
   try {
     # ---- the row, on fixed inputs ----
     $txt = New-TcPushRowText -Event 'hook-lock' -WaitMs 1130000 -State 'held' -BaseSha $A -GrantSha $B -Outcome 'landed' -Checkout 'wt'
@@ -332,12 +397,49 @@ if ($__pldSelfTest) {
     # catches the redirect being removed - the thing that put fixture rows into the first live report.
     $wDefault = Write-TcPushRow -Event 'hook-lock' -WaitMs 7 -State 'held' -BaseSha $A -GrantSha $B
     $prodRaw = Read-TcPushRows -Path $prodPath
-    $prodRows = @($prodRaw)
-    $mine = @($prodRows | Where-Object { -not $_.PSObject.Properties['malformed'] -and [int]$_.pid -eq $PID })
+    $mineRaw = Select-TcPushRowsOfRun -Rows $prodRaw -Run $suiteRun
+    $mine = @($mineRaw)
     T ($kMF + '  a write with no root given lands in this suite''s scratch, and NOTHING this suite wrote reached the production ledger') `
       ($wDefault.Written -and $wDefault.Path -notlike ($script:TcPushLedgerRoot + '*') -and $mine.Count -eq 0) `
-      ("path={0} rowsFromThisProcessInProduction={1}" -f $wDefault.Path, $mine.Count)
+      ("path={0} run={1} rowsFromThisRunInProduction={2}" -f $wDefault.Path, $suiteRun, $mine.Count)
+
+    # ---- WHO WROTE A ROW: a run id, never a recycled pid (backlog I171, 2026-09-18) ----
+    # The founding shape: the production ledger is one file per day for the whole box, and on 2026-09-12 it held 142
+    # rows over 140 distinct pids. A STRANGER whose pid Windows later handed to this suite, and a row written before
+    # rows carried a run id at all, both share this process's $PID. Neither is this suite's, and reading either as
+    # one refused an unrelated push. Planted in a scratch ledger, never the real one.
+    $collide = Join-Path $tmp 'collide'
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop $collide
+    $collidePath = Get-TcPushLedgerPath -Root $collide
+    $stranger = New-TcPushRowText -Event 'hook-lock' -WaitMs 5 -State 'held' -BaseSha $A -GrantSha $A -Run ('{0}@2026-09-12T04:00:00.0000000Z' -f $PID)
+    $legacy = '{"ts":"2026-09-12T05:00:00Z","pid":' + $PID + ',"event":"push-main","waitMs":3,"state":"held","base":"","grant":"","outcome":"landed","checkout":""}'
+    $null = Add-TcLine -Path $collidePath -Text $stranger
+    $null = Add-TcLine -Path $collidePath -Text $legacy
+    $colRaw = Read-TcPushRows -Path $collidePath
+    $colMineRaw = Select-TcPushRowsOfRun -Rows $colRaw -Run $suiteRun
+    $colMine = @($colMineRaw)
+    $colSamePid = @(@($colRaw) | Where-Object { -not $_.PSObject.Properties['malformed'] -and [int]$_.pid -eq $PID }).Count
+    T ($kMF + '  a stranger''s row carrying this process''s recycled pid, and a pre-run-id row with the same pid, are NOT read as this suite''s') `
+      ($colSamePid -eq 2 -and $colMine.Count -eq 0) ("rowsWithThisPid={0} rowsReadAsThisRun={1}" -f $colSamePid, $colMine.Count)
+    $w3 = Write-TcPushRow -Event 'hook-lock' -WaitMs 9 -State 'held' -BaseSha $A -GrantSha $A -Root $collide
+    $colRaw2 = Read-TcPushRows -Path $collidePath
+    $colMineRaw2 = Select-TcPushRowsOfRun -Rows $colRaw2 -Run $suiteRun
+    $colMine2 = @($colMineRaw2)
+    T ($kCT + '  a row this suite DID write, into that same ledger, is found by its run id - so the production check can still see a real leak') `
+      ($w3.Written -and $colMine2.Count -eq 1 -and [double]$colMine2[0].waitMs -eq 9) ("written={0} rowsReadAsThisRun={1}" -f $w3.Written, $colMine2.Count)
+    $noRunRaw = Select-TcPushRowsOfRun -Rows $colRaw2 -Run ''
+    T ($kMNF + '  an empty run id matches nothing, so a suite that never exported one cannot claim every unlabelled row') `
+      (@($noRunRaw).Count -eq 0) ("matched={0}" -f @($noRunRaw).Count)
+    # With nothing exported the id is this process's pid AND its start time, so a recycled pid gets a different one.
+    T ($kCT + '  with no run exported, a row''s run id names this process''s pid and its start time, and is stable within the process') `
+      ($procRun -match ('^' + $PID + '@\d{4}-\d\d-\d\dT') -and -not [string]::Equals($procRun, $suiteRun, [StringComparison]::Ordinal)) `
+      ("procRun={0}" -f $procRun)
   } finally {
+    if ($null -eq $runWas) {
+      Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_RUN -ErrorAction SilentlyContinue
+    } else {
+      $env:TC_PUSH_LEDGER_RUN = $runWas
+    }
     if ($null -eq $ledgerRootWas) {
       Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_ROOT -ErrorAction SilentlyContinue
     } else {

@@ -170,6 +170,10 @@ if ($SelfTest) {
   $prodLedger = Get-TcPushLedgerPath
   $ledgerRootWas = $env:TC_PUSH_LEDGER_ROOT
   $env:TC_PUSH_LEDGER_ROOT = Join-Path $tmp 'suite-ledger'
+  # And every row carries this RUN's id, which the production check filters on instead of a recyclable pid (I171).
+  $runWas = $env:TC_PUSH_LEDGER_RUN
+  $suiteRun = New-TcPushLedgerRunId
+  $env:TC_PUSH_LEDGER_RUN = $suiteRun
   try {
     # ---- THE END CONDITIONS, driven directly rather than by waiting on a clock ----
     $d = Join-Path $tmp 'd1'; $null = New-Item -ItemType Directory -Force $d
@@ -300,13 +304,26 @@ Exit-TcPushLock $lk
       ($free.Held) ("held={0}" -f $free.Held)
     Exit-TcPushLock $free
 
-    # NOTHING THIS SUITE WROTE REACHED THE PRODUCTION LEDGER. Keyed on this process's pid rather than on the file's
-    # size, because a real push from another session may append to it while these cases run.
+    # NOTHING THIS SUITE WROTE REACHED THE PRODUCTION LEDGER. Keyed on this RUN's id rather than on the file's size
+    # (a real push from another session may append while these cases run) and never on this process's pid, which
+    # Windows recycles within the day the production file covers (backlog I171).
     $prodRaw = Read-TcPushRows -Path $prodLedger
-    $prodMine = @(@($prodRaw) | Where-Object { -not $_.PSObject.Properties['malformed'] -and [int]$_.pid -eq $PID })
+    $prodMineRaw = Select-TcPushRowsOfRun -Rows $prodRaw -Run $suiteRun
+    $prodMine = @($prodMineRaw)
     T ($kMF + '  no row this suite wrote reached the production ledger, so the convergence report is never computed over fixtures') `
-      ($prodMine.Count -eq 0) ("rowsFromThisProcessInProduction={0}" -f $prodMine.Count)
+      ($prodMine.Count -eq 0) ("run={0} rowsFromThisRunInProduction={1}" -f $suiteRun, $prodMine.Count)
+    # THE CHECK ABOVE CAN SEE: the holds that passed no -LedgerRoot wrote into the suite's redirect under this run id.
+    $suiteRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root (Join-Path $tmp 'suite-ledger'))
+    $suiteMineRaw = Select-TcPushRowsOfRun -Rows $suiteRaw -Run $suiteRun
+    $suiteMine = @($suiteMineRaw)
+    T ($kCT + '  the rows these holds wrote to the suite''s redirect are found by the run id the production check filters on') `
+      ($suiteMine.Count -ge 1 -and $suiteMine.Count -eq @($suiteRaw).Count) ("rowsInRedirect={0} rowsOfThisRun={1}" -f @($suiteRaw).Count, $suiteMine.Count)
   } finally {
+    if ($null -eq $runWas) {
+      Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_RUN -ErrorAction SilentlyContinue
+    } else {
+      $env:TC_PUSH_LEDGER_RUN = $runWas
+    }
     foreach ($p in $kids) { try { if (-not $p.HasExited) { $p.Kill() } } catch { } }
     if ($null -eq $ledgerRootWas) {
       Remove-Item -LiteralPath Env:TC_PUSH_LEDGER_ROOT -ErrorAction SilentlyContinue
