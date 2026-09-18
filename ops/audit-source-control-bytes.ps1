@@ -1,6 +1,12 @@
 <#
   audit-source-control-bytes.ps1 - No tracked source file carries a raw control byte.
 
+  SCOPE OF A CLEAN REPORT: SOUND over its population and COMPLETE on it. It reads every BYTE of every file git
+    TRACKS with one of the source extensions in $EXT, so a clean report really does mean none of those files
+    carries a byte below 0x20 other than tab, LF and CR, or DEL; and a finding is real, because in those files no
+    such byte is ever legitimate. It says nothing about an untracked file, a working-tree edit git does not yet
+    track, or an extension outside the list.
+
   THE FOUNDING BUG (2026-09-07). A patch written through a bash heredoc turned `meal-prep\db\built\`
   into `meal-prep\db<0x08>uilt\`: the heredoc collapsed `\\b` to `\b`, and Python read that as a valid
   escape and wrote the BACKSPACE BYTE into a live PowerShell script. C:\Codex\CLAUDE.md already carries

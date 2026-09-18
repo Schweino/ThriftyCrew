@@ -1,6 +1,12 @@
 <#
   audit-arg-binding.ps1 - a CHECKING script must REFUSE an argument it does not understand.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND. It judges only the scripts whose NAME puts them in the class below, under
+    ops\ and grocery\, and a checking script named any other way, or living elsewhere, is not read at all. For
+    the ones it reads it uses the real parser, so a finding is real for a reason of its own (it is COMPLETE on
+    that set): a script param() block with no [CmdletBinding()] IS the defect, since the attribute is the only
+    thing that turns an unknown argument into an error. A clean report proves nothing about the rest of the tree.
+
   WHY THIS EXISTS (2026-09-07). During the 09-07 triage an operator ran
 
       ops\verify-bulk-edit.ps1 -Paths grocery\commodities.json

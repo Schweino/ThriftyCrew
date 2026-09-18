@@ -4,9 +4,11 @@
   SCOPE OF A CLEAN REPORT: UNSOUND. It reads the PowerShell AST and finds the spellings listed under WHAT IT
     SEES. A clean report means none of those spellings builds a fixed name under a temp root. A name built any
     other way - a helper that takes the leaf as a parameter, a temp root reached through an if-expression, a
-    script body held in a string and run later, a Python suite - is invisible to it. A reported site is real;
-    silence is not proof. It is a RATCHET rather than a gate because the count it measured on its first day is
-    not zero, and several of those sites are fixed on purpose.
+    script body held in a string and run later, a Python suite - is invisible to it, so silence is not proof.
+    Unsound says nothing about the findings (backlog I178): a reported site is a FIXED name under a temp root,
+    which is a collision only if two runs of that suite can overlap, and some are shared on purpose (the
+    test-guards journal below), so a finding is a candidate to read, not a verdict. It is a RATCHET rather than a
+    gate because the count it measured on its first day is not zero, and several of those sites are fixed on purpose.
 
   WHY THIS EXISTS (2026-09-11). ops\run-gates.ps1 runs every -SelfTest in the tree and the pre-push hook runs
   run-gates, so pushes from concurrent sessions run the SAME suites over each other in one %TEMP%. A suite that

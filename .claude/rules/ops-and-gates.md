@@ -177,9 +177,9 @@ everything else honest, so a defect here is silent by construction.
   allowlist) exists to absorb. That is not a defect in any of them; reading their clean reports as
   proofs, or their findings as verdicts, is. Every `ops/audit-*.ps1` carried a
   `SCOPE OF A CLEAN REPORT:` line saying which it is on 2026-09-08 (7 of 22 already did, in their own
-  words; 15 were silent); on 2026-09-18, 41 of 47 did, and the six without one are
-  `arg-binding`, `fixture-vocabulary`, `run-log-claims`, `source-control-bytes`, `threshold-register`
-  and `write-only-reports`. **A new detector owes that line the way it owes its `<NAME>-COMPLETE` marker, and when the
+  words; 15 were silent); on 2026-09-18, 41 of 47 did, and the six without one (`arg-binding`,
+  `fixture-vocabulary`, `run-log-claims`, `source-control-bytes`, `threshold-register` and
+  `write-only-reports`) got one the same day under backlog I227, so 47 of 47 do. **A new detector owes that line the way it owes its `<NAME>-COMPLETE` marker, and when the
   line says a finding is real it gives the reason it is COMPLETE** (the match IS the defect, as in
   `audit-cmdlet-shadow`), never the unsoundness.
 - **A git hook in a LINKED worktree exports `GIT_DIR`, and everything it spawns inherits it**

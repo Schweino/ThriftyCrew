@@ -1,6 +1,12 @@
 <#
   audit-threshold-register.ps1 - a similarity threshold must say which space it was tuned in.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND. It reads only the files in $SCAN, and in them only a constant or a CLI flag
+    whose NAME carries one of the words its two patterns know (COS, RERANK, SIM, MARGIN, RATIO, FLOOR, ABOVE;
+    margin, floor, sim, cos, thresh). A threshold named otherwise, or living in any other file, is not seen, so a
+    clean report means only that every threshold it recognised is named in sidecar\THRESHOLDS.md. It never
+    checks that the recorded space is CORRECT, which no static check can.
+
   WHY THIS EXISTS (2026-09-06, backlog E25). Two traps sit under every similarity number here and
   neither is visible in the code. Cosine and Euclidean answer different questions: on text of unequal
   length Euclidean calls two long strings similar for being long. And cosine's range depends on the

@@ -1,6 +1,13 @@
 <#
   audit-fixture-vocabulary.ps1 - a fixture label must not claim the opposite of what it asserts.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND. It reads a CLEAN TWIN label's assertion on the same line and knows a short
+    list of spellings that prove an absence (a count equal to 0, a -not, a $null test, len() == 0). A mislabelled
+    twin whose assertion is spelled any other way, split across lines, or whose sense lives only in its prose
+    (about 1,000 of them on the day it shipped, see below) is invisible, so a clean report proves nothing about
+    the estate's labels. It is also INCOMPLETE: a spelling on its list can sit in a positive assertion, which is
+    why exit-code tests are carved out by name; a finding is a label to read, not a verdict.
+
   WHY THIS EXISTS (2026-09-07, backlog I11). "CLEAN TWIN" labelled fixture cases in two conventions
   here and THE SIGN OF THE ASSERTION WAS OPPOSITE IN EACH:
 

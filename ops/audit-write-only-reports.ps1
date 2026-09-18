@@ -1,6 +1,13 @@
 <#
   audit-write-only-reports.ps1 - which out\*.json report families have a WRITER and no READER?
 
+  SCOPE OF A CLEAN REPORT: UNSOUND and INCOMPLETE, both measured. It reads source TEXT line by line, comments
+    included, and knows a family only from a literal out\ path or a Join-Path on a variable named like an out
+    directory: a report written or read through any other spelling is invisible (unsound), and a line that merely
+    MENTIONS such a path beside a write verb reads as a write (incomplete). On 2026-09-18 a fixture in
+    ops\audit-cross-module-reach.ps1 that wrote a temp SOURCE file whose text named a report path counted as a new
+    family nobody reads (backlog I227). So a clean count proves nothing, and a new family is a candidate to read.
+
   WHY THIS EXISTS (2026-09-07, queue 2026-09-07-72756b).
   audit-ff-carry.ps1 writes out\ff-carry-report.json with a `confirmed_victims` array, and the alert it
   sends says those victims "lead the next window's slice automatically". Nothing read that file. Repo-wide,

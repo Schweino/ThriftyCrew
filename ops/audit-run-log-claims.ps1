@@ -1,6 +1,12 @@
 <#
   audit-run-log-claims.ps1 - the run-record library must describe the conventions that actually exist.
 
+  SCOPE OF A CLEAN REPORT: UNSOUND, and the gap is named below. It reads the committed task definitions in
+    ops\scheduled-tasks\*.xml, never the live scheduler, so a hidden task registered on the box and absent from
+    that folder is not checked (install-grocery-tasks.ps1 -Verify is that check). It also reads a dot-source by
+    its spelling, so a target that loads run-log-lib some other way reads as missing it: a finding is a
+    candidate to read, and a clean report means only that every committed hidden task spells the load it knows.
+
   WHY THIS EXISTS (2026-09-06, backlog E29). grocery\run-log-lib.ps1 opened with "ONE copy of the
   'write this run down' rule" and it WAS one of three. Five scheduled tasks run -WindowStyle Hidden;
   only the three TC Grocery ones routed through that library, while the nightly matching chain wrote
