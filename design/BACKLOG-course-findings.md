@@ -4800,7 +4800,47 @@ the same account as the confirmation above. Worth doing in the same sitting; not
 
 ---
 
-### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `OPEN` `queue-4` `2-WAY` `RUNG1 READ`
+### I45 - no scheduled stage asserts its inputs; the 08:30 bug is one XML file away from returning `DONE` `queue-4`
+
+**Done 2026-09-19. The READ was re-run, because the 2026-09-12 line below says a remainder was established and
+never says what it was, and it found no fix warranted.** No code changed in any scheduled stage.
+
+*The edges, re-read against `Get-ScheduledTask` today (12 TC tasks, not the 5 this item was filed against).*
+Graph Nightly and the Capture Watchdog already assert their inputs (below). Brain Digest reports its queue ages
+with its own floors, the Produce Intraday Probe, Daemon Battery, Daily Ratchets, Recall Sleep, Sidecar
+Watchdog and Recipe Harvest read no other scheduled stage's output file, and the Approvals Page is a server.
+**One cross-task data edge is left: the 08:00 daily chain (`capture-run.ps1 -Kind daily` -> `check-ad-cycles
+-NoPull`) reads what the 07:00 ad run wrote.** It is still a clock gap, and both tasks re-fire hourly for six
+hours as catch-up, so a 07:00 run that failed can re-run after the day's one chain and its ad then waits a day.
+
+*The measurement.* `ops/probe-capture-stage-order.ps1` (committed, so the question can be asked again) reads
+the capture-run transcripts. Both kinds take `Global\tc-capture-run` before writing, so an ad occurrence that
+started before the chain's finished before the chain began, and only start times are needed. Run at 32a035c34
+over `grocery\out\logs`: **26 days read (2026-08-22 to 2026-09-18; 09-15 and 09-16 have no transcript
+because the box was asleep, System log event 42 at 09-16 08:02 to the resume at 09-17 05:06), 70 occurrences
+(34 ad, 36 daily), 4 refused the mutex. 14 of the 26 days pulled ad data, and in 0 of those 14 did the chain
+start before the ad data landed.** The closest day, 2026-09-14: the 07:00 run committed the Hy-Vee ad and died
+mid-rebase with no `End time`, its 08:00 catch-up was refused the mutex, and the 09:00 catch-up's only lane was
+Fareway's vision-read handoff, which exited 3 and wrote nothing.
+
+*Why that is enough and nothing is added to `capture-run`.* The content is already defended where it prices:
+`compare-deals` refuses an expired sale row by its own `ad_to` against the board date, so a missed ad pull can
+leave a new sale off the board (understating) but cannot price it with an expired one. Overlap is refused by
+the mutex. A failed ad run is reported at 10:30 by the watchdog's check 2b, from the status record `capture-run` writes at
+every stage, and a late one should read as closed in its check 5, which reads the ad windows only the chain
+records (read in the code, not exercised); that watchdog asserts its own inputs. A record-and-continue line in the
+08:00 run would say the same thing 2.5 hours earlier into a transcript nobody reads at 08:00, and a refusal
+would withhold a whole day's prices over a shape seen 0 times in 14. **Both scars in the title are gone**: the
+08:30 stage no longer exists as a task (check-ad-cycles runs inline, inside the 08:00 run's mutex), and the
+watchdog task is named `TC Grocery Capture Watchdog 1030` and fires at 10:30.
+
+**Reopen trigger:** `ops/probe-capture-stage-order.ps1` exits 1 (a `CHAIN-BEFORE-AD` day). The fix then is the
+Graph Nightly pattern in `capture-run -Kind daily`: `Assert-TcInputs` on the `ad` record of
+`out\logs\capture-run-status.json` (today, stage `complete`), RECORDED and never refusing. The probe's
+self-test: 7 of 7, exit 0; both single mutants (the late-start comparison neutered, failed lanes counted as
+data) went red in their own named case, exit 1, original md5 A9875A49BBAB8EC30E057EFC5D57BF0A afterwards.
+Found in passing and not this item's: `ops\scheduled-tasks\tc-grocery-capture-watchdog-0930.xml` still carries
+the old 0930 in its FILENAME while its trigger and task name say 10:30.
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Remainder established and it is SMALLER than filed.
 
