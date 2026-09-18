@@ -58,9 +58,12 @@
 #   .\audit-band-censorship.ps1 -NearFloor 0.5   widen to rows down to half the floor (noisier)
 #   .\audit-band-censorship.ps1 -MedianFloor 0.3 widen the SCALE test (Find-BandCensorship's own note)
 #   .\audit-band-censorship.ps1 -SelfTest        frozen founding-bug fixture + three clean twins
+#   .\audit-band-censorship.ps1 -Replay 14       READ-ONLY: replay the last 14 dated boards in -OutDir and
+#                                                count, per ratchet version, how often another store moved
+#                                                a cell (backlog I216). Writes nothing, not even a baseline.
 # Exit 0 = clean or advisory findings. Exit 2 = self-test regression. Exit 3 = BLIND (nothing to judge).
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [double]$MedianFloor = 0.4, [switch]$SelfTest)
+param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [double]$MedianFloor = 0.4, [switch]$SelfTest, [int]$Replay = 0, [string]$ReplayRows = '')
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -70,7 +73,7 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 # ONE implementation, driven by the self-test with frozen rows and by the live path with real ones. A guard
 # whose self-test exercises a different code path than production is [[fix-needs-reachable-selftest]].
 function Find-BandCensorship {
-  param([array]$Flagged, [hashtable]$Board, [double]$NearFloor, [double]$MedianFloor = 0.4)
+  param([array]$Flagged, [hashtable]$Board, [double]$NearFloor, [double]$MedianFloor = 0.4, [string]$ScaleRef = 'median')
   # A FLOOR IS A BAND EDGE, NOT A SCALE (2026-09-07, queue 2026-09-07-e9edb9). Distance-to-floor was this
   # guard's ONLY discriminator, and a floor carries no information about where a commodity's real prices
   # actually sit. So on a commodity whose prices are far above its floor, a 12x or 16x parse error can land
@@ -144,7 +147,8 @@ function Find-BandCensorship {
     # with no median (it has no priced cell at all) cannot reach here, because the $Board lookup above
     # already required one. A zero median is refused rather than divided by.
     $med = 0.0
-    if ($medianOf.ContainsKey([string]$r.id)) { $med = [double]$medianOf[[string]$r.id] }
+    if ($ScaleRef -eq 'cell') { $med = $pu }
+    elseif ($medianOf.ContainsKey([string]$r.id)) { $med = [double]$medianOf[[string]$r.id] }
     if ($med -le 0) { continue }
     $medRatio = $up / $med
     if ($medRatio -lt $MedianFloor) {
@@ -195,6 +199,51 @@ function Get-RatchetVerdict([int]$Cells, $Baseline) {
   if ($Cells -gt [int]$Baseline) { return 'break' }
   if ($Cells -lt [int]$Baseline) { return 'tighten' }
   return 'hold'
+}
+
+# WHAT THE RATCHET COUNTS, and why it is not simply the finding cells (2026-09-18, backlog I216).
+# Tests 1 to 3 of a finding read only the cell's OWN inputs: its refused rows, its band, and its own
+# published price. Test 4 divides by the commodity MEDIAN, which every OTHER store's price moves. So a cell
+# could leave the findings on nobody's change, the ratchet tightened over it, and the same row re-entered
+# when the median moved back and broke the ratchet on nobody's change either. It held the 2026-09-18 08:13
+# board: Fareway's Jack's pizza went 4.49 -> 3.33, the frozen-pizza median fell 3.99 -> 3.33, and Totino's
+# at 1.4925 crossed 0.4 of it (0.374 -> 0.448) at Aldi, Sam's Club and Walmart, refusing the same rows as on
+# 09-11, which had left on 09-13 when Fareway's sale ended. Replayed over the 14 boards to 2026-09-17, the
+# median moved 8 cells in or out with their own inputs byte-identical, across 13 transitions.
+# The findings are UNCHANGED - Brad ruled the 0.4-of-median test on 2026-09-07 and it still decides what is
+# reported. What changes is what the ratchet COUNTS: every finding cell, plus every cell it counted before
+# that is still a candidate on its own inputs (tests 1 to 3) but is retired today by the median alone. Such
+# a cell is PARKED: it stays counted until its own row stops being a near-floor refusal cheaper than its own
+# board price, so another store's price can no longer lower the mark or raise the count. Dividing by the
+# cell's own price instead was measured and rejected: on the 2026-09-17 board it dropped three real
+# censored cells (Sam's Alani Nu at 0.0768/fl oz, Hy-Vee's fold-close sandwich bags at 0.0086, Sam's Ricos
+# queso at 0.0839) and admitted a Walmart tissue row whose own published cell is itself a 16-pack misread.
+# RESIDUAL, stated: a candidate the ratchet has NEVER counted can still enter the findings on a median move
+# alone and break it once. `-Replay 14` over the boards 2026-08-25..09-17 read 8 outside moves across 13
+# transitions counting finding cells, and 3 counting with parking: all 3 first-time entries (canned-pineapple
+# at Aldi, pepperoni at Sam's, muffins at Walmart), none a re-entry. Those are dated files, one build per day,
+# so the intraday rebuilds that flapped on 09-10 and 09-18 are not in them and both counts are floors.
+function Get-RatchetCells([string[]]$FindingCells, [string[]]$CandidateCells, [string[]]$Known) {
+  $set = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($c in @($FindingCells)) { if ($c) { [void]$set.Add($c) } }
+  $knownSet = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($c in @($Known)) { if ($c) { [void]$knownSet.Add($c) } }
+  foreach ($c in @($CandidateCells)) { if ($c -and $knownSet.Contains($c)) { [void]$set.Add($c) } }
+  $out = @($set | Sort-Object)
+  return ,$out
+}
+
+# One call from findings to the counted set, shared by the live path, the self-test and -Replay, so none of
+# them can drift into a private copy of the parking rule.
+function Get-BandRatchetState([array]$Flagged, [hashtable]$Board, [double]$NearFloor, [double]$MedianFloor, [string[]]$Known, [string]$ScaleRef = 'median') {
+  $f = @(Find-BandCensorship -Flagged $Flagged -Board $Board -NearFloor $NearFloor -MedianFloor $MedianFloor -ScaleRef $ScaleRef)
+  $fc = @($f | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object -Unique)
+  $rc = @($script:bcRetired | ForEach-Object { $_.commodity + '|' + $_.store })
+  $cc = @(@($fc) + @($rc) | Sort-Object -Unique)
+  $countedArr = Get-RatchetCells -FindingCells $fc -CandidateCells $cc -Known $Known
+  $counted = @($countedArr)
+  return [pscustomobject]@{ findings = $f; finding_cells = $fc; candidate_cells = $cc; counted = $counted
+    parked = @($counted | Where-Object { $fc -notcontains $_ }); retired = @($script:bcRetired) }
 }
 
 if ($SelfTest) {
@@ -304,8 +353,140 @@ if ($SelfTest) {
   if ((Get-RatchetVerdict -Cells 34 -Baseline 33) -eq 'break') { Write-Output '  PASS  RATCHET at the tightened mark: 34 cells against a baseline of 33 still breaks' }
   else { Write-Output '  FAIL  RATCHET: the tightened baseline no longer breaks on a new censored cell'; $fail++ }
 
+  # (7) ANOTHER STORE'S SALE MUST NOT MOVE THE RATCHET (2026-09-18, backlog I216). Frozen off the boards of
+  #     2026-09-11 and 2026-09-13: seven frozen-pizza cells whose median is Fareway's Jack's, 3.33 on sale
+  #     and 4.49 off it, and three refused rows that never changed (Totino's 4-count at Walmart 1.4925,
+  #     Mama Cozzi's 2-count at Aldi 1.495, Red Baron 9-pack at Sam's 1.4422, all under a 1.5 floor).
+  function New-PizzaBoard([double]$fareway) {
+    $b = @{}
+    $b['frozen-pizza|Walmart'] = @{ per_unit = 2.96; item = "Tony's Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz" }
+    $b['frozen-pizza|Hy-Vee'] = @{ per_unit = 2.99; item = "Tony's pizza, 18.56 to 20.6 oz., `$2.99" }
+    $b['frozen-pizza|Aldi'] = @{ per_unit = 2.99; item = 'Mama Cozzi Original Thin Crust Cheese Pizza 13.8 OZ' }
+    $b['frozen-pizza|Fareway'] = @{ per_unit = $fareway; item = "Jack's Original Thin Supreme Pizza" }
+    $b["frozen-pizza|Baker's"] = @{ per_unit = 3.99; item = "Jack's Thin Crust Pepperoni Frozen Pizza" }
+    $b['frozen-pizza|Family Fare'] = @{ per_unit = 4.99; item = 'Red Baron Pizza, Pepperoni, Brick Oven Crust 17.89 Oz' }
+    $b['frozen-pizza|' + $sams] = @{ per_unit = 5.485; item = "Member's Mark Cauliflower Crust White Pizza" }
+    return $b
+  }
+  $pzRows = @(
+    [pscustomobject]@{ id='frozen-pizza'; label='Frozen Pizza'; store='Walmart'; unit='each'; unit_price=1.4925; band='1.5-14'; name="Totino's Party Pizza, Pepperoni, Thin Crust, 40.8 oz, 4 Count (Frozen)"; price_text='$5.97'; size_text='40.8 oz' },
+    [pscustomobject]@{ id='frozen-pizza'; label='Frozen Pizza'; store='Aldi'; unit='each'; unit_price=1.495; band='1.5-14'; name="Mama Cozzi's Pizza Kitchen French Bread Pepperoni Pizza, 2 Count"; price_text='$2.99'; size_text='11.25 oz' },
+    [pscustomobject]@{ id='frozen-pizza'; label='Frozen Pizza'; store=$sams; unit='each'; unit_price=1.4422; band='1.5-14'; name='Red Baron Pepperoni French Bread Frozen Personal Pizza, 5.40 oz., 9 pk.'; price_text='$12.98'; size_text='9 ct 5.40 oz' }
+  )
+  $pzSale = New-PizzaBoard 3.33
+  $pzFull = New-PizzaBoard 4.49
+  $s1 = Get-BandRatchetState -Flagged $pzRows -Board $pzSale -NearFloor 0.75 -MedianFloor 0.4 -Known @()
+  $s2old = Get-BandRatchetState -Flagged $pzRows -Board $pzFull -NearFloor 0.75 -MedianFloor 0.4 -Known @()
+  #     FIXTURE INTEGRITY: the frozen boards reproduce the incident under the OLD count, which was the finding
+  #     cells alone. On sale all three rows are findings; off sale none are; so the old ratchet tightened 3 -> 0
+  #     and then broke 3 against 0 when the sale came back, on nobody's change. Without this, the clean twin
+  #     below could hold for the boring reason that the rows never reached the median test at all.
+  $oldTighten = Get-RatchetVerdict -Cells $s2old.finding_cells.Count -Baseline $s1.finding_cells.Count
+  $oldBreak = Get-RatchetVerdict -Cells $s1.finding_cells.Count -Baseline $s2old.finding_cells.Count
+  if ($s1.finding_cells.Count -eq 3 -and $s2old.finding_cells.Count -eq 0 -and $s2old.candidate_cells.Count -eq 3 -and $oldTighten -eq 'tighten' -and $oldBreak -eq 'break') {
+    Write-Output '  PASS  FIXTURE INTEGRITY: the frozen pizza boards reproduce the flap under a count of finding cells (3 on sale, 0 off it, tighten then break)'
+  } else { Write-Output ('  FAIL  FIXTURE INTEGRITY: the frozen pizza boards no longer reproduce the 09-18 flap (sale ' + $s1.finding_cells.Count + ', off ' + $s2old.finding_cells.Count + ', candidates ' + $s2old.candidate_cells.Count + ', ' + $oldTighten + '/' + $oldBreak + ')'); $fail++ }
+  #     CLEAN TWIN: counted on sale, the three cells are PARKED when the sale ends (the count holds at 3, no
+  #     tighten), and when the sale returns the same rows count 3 again and the ratchet HOLDS.
+  $s2 = Get-BandRatchetState -Flagged $pzRows -Board $pzFull -NearFloor 0.75 -MedianFloor 0.4 -Known $s1.counted
+  $s3 = Get-BandRatchetState -Flagged $pzRows -Board $pzSale -NearFloor 0.75 -MedianFloor 0.4 -Known $s2.counted
+  $v2 = Get-RatchetVerdict -Cells $s2.counted.Count -Baseline $s1.counted.Count
+  $v3 = Get-RatchetVerdict -Cells $s3.counted.Count -Baseline $s1.counted.Count
+  if ($s2.counted.Count -eq 3 -and $s2.parked.Count -eq 3 -and $v2 -eq 'hold' -and $s3.counted.Count -eq 3 -and $v3 -eq 'hold') {
+    Write-Output '  PASS  CLEAN TWIN: Fareway''s pizza going 3.33 -> 4.49 -> 3.33 moves the median across 0.4 twice and the ratchet holds at 3 both times (3 parked, then 3 findings)'
+  } else { Write-Output ('  FAIL  CLEAN TWIN: another store''s sale moved the ratchet (off-sale counted ' + $s2.counted.Count + ' parked ' + $s2.parked.Count + ' ' + $v2 + '; back on sale counted ' + $s3.counted.Count + ' ' + $v3 + ')'); $fail++ }
+  #     MUST FIRE: a genuinely NEW censored cell on the same off-sale board still raises the count and breaks,
+  #     and it is the one named new. Parking must not become a place a regression can hide.
+  $boardNew = New-PizzaBoard 4.49
+  $boardNew['lettuce|' + $sams] = @{ per_unit = 1.0367; item = 'Romaine Hearts, 6 ct.' }
+  $rowsNew = @($pzRows) + @([pscustomobject]@{ id='lettuce'; label='Lettuce (head)'; store=$sams; unit='each'; unit_price=0.7783; band='0.8-4.5'; name='Romaine Hearts, 6 ct.'; price_text='$4.67'; size_text='6 ct' })
+  $s4 = Get-BandRatchetState -Flagged $rowsNew -Board $boardNew -NearFloor 0.75 -MedianFloor 0.4 -Known $s2.counted
+  $v4 = Get-RatchetVerdict -Cells $s4.counted.Count -Baseline $s1.counted.Count
+  $new4 = @($s4.counted | Where-Object { $s2.counted -notcontains $_ })
+  if ($v4 -eq 'break' -and $s4.counted.Count -eq 4 -and $new4.Count -eq 1 -and $new4[0] -eq ('lettuce|' + $sams)) {
+    Write-Output '  PASS  MUST FIRE: a new censored cell beside three parked ones counts 4 against 3 and breaks, naming lettuce'
+  } else { Write-Output ('  FAIL  MUST FIRE: a new censored cell did not break the parked ratchet (counted ' + $s4.counted.Count + ', ' + $v4 + ', new ' + ($new4 -join ',') + ')'); $fail++ }
+  #     CLEAN TWIN: parking is not forever. When a parked cell's OWN row goes (Walmart's Totino's leaves the
+  #     capture), it stops being a candidate, leaves the count, and the ratchet tightens as it always has.
+  $rowsGone = @($pzRows | Where-Object { $_.store -ne 'Walmart' })
+  $s5 = Get-BandRatchetState -Flagged $rowsGone -Board $pzFull -NearFloor 0.75 -MedianFloor 0.4 -Known $s2.counted
+  $v5 = Get-RatchetVerdict -Cells $s5.counted.Count -Baseline $s1.counted.Count
+  if ($v5 -eq 'tighten' -and $s5.counted.Count -eq 2 -and $s5.counted -notcontains 'frozen-pizza|Walmart') {
+    Write-Output '  PASS  CLEAN TWIN: a parked cell whose own row is gone leaves the count and the ratchet tightens 3 -> 2'
+  } else { Write-Output ('  FAIL  CLEAN TWIN: a resolved parked cell stayed counted (counted ' + $s5.counted.Count + ', ' + $v5 + ')'); $fail++ }
+
   if ($fail) { Write-Output ("SELF-TEST FAILED ($fail)"); exit 2 }
-  Write-Output 'SELF-TEST PASS - founding bug armed (floor AND scale), the case-pack parse error refused, three clean twins, the discrimination case and the ratchet hold'
+  Write-Output 'SELF-TEST PASS - founding bug armed (floor AND scale), the case-pack parse error refused, three clean twins, the discrimination case, the ratchet hold, and another store''s sale parked rather than counted'
+  exit 0
+}
+
+# ---- -Replay: how often does ANOTHER store move a cell? (backlog I216) ------------------------------------
+# READ-ONLY by construction: it never reaches the baseline code below and writes only -ReplayRows if given.
+# An OUTSIDE MOVE is a cell whose membership of the COUNTED set differs between two consecutive boards while
+# its OWN inputs are identical (the same multiset of flagged rows by name, unit_price and band, and the same
+# published per-unit), so nothing about the cell itself changed. The ratchet is simulated as the live path
+# runs it, with one modelling choice stated: a break is taken as triaged and accepted (mark and set reset to
+# that run), because otherwise a single break repeats on every later board and counts the same event again.
+function Get-BoardCells($cmp) {
+  $b = @{}
+  foreach ($r in @($cmp.comparison)) { foreach ($s in @($r.stores)) {
+    if ([double]$s.per_unit -le 0) { continue }
+    $b[([string]$r.id) + '|' + ([string]$s.store)] = @{ per_unit = [double]$s.per_unit; item = [string]$s.item } } }
+  return $b
+}
+if ($Replay -gt 0) {
+  $dates = @(Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue |
+    Where-Object { $_.BaseName -match '^flagged-\d{4}-\d{2}-\d{2}$' } | ForEach-Object { $_.BaseName.Substring(8) } |
+    Where-Object { Test-Path (Join-Path $OutDir ('comparison-' + $_ + '.json')) } | Sort-Object)
+  $dates = @($dates | Select-Object -Last $Replay)
+  if ($dates.Count -lt 2) { Write-Output ('BLIND: -Replay needs at least 2 dated flagged+comparison pairs in ' + $OutDir + ', found ' + $dates.Count); exit 3 }
+  $arms = @('finding-count', 'parked', 'own-cell')
+  $sim = @{}
+  foreach ($a in $arms) { $sim[$a] = @{ mark = $null; known = @(); prev = $null; outside = 0; ownMoves = 0; breaks = 0; falseBreaks = 0; tightens = 0 } }
+  $prevFp = $null; $prevBoard = $null; $rowsOut = New-Object System.Collections.ArrayList
+  foreach ($d in $dates) {
+    $fl = @((Read-JsonFile (Join-Path $OutDir ('flagged-' + $d + '.json'))).flagged)
+    $bd = Get-BoardCells (Read-JsonFile (Join-Path $OutDir ('comparison-' + $d + '.json')))
+    $acc = @{}
+    foreach ($r in $fl) {
+      $k = ([string]$r.id) + '|' + ([string]$r.store)
+      if (-not $acc.ContainsKey($k)) { $acc[$k] = New-Object System.Collections.ArrayList }
+      [void]$acc[$k].Add(([string]$r.name) + '~' + ([string]$r.unit_price) + '~' + ([string]$r.band))
+    }
+    $fp = @{}
+    foreach ($k in @($acc.Keys)) { $fp[$k] = (@($acc[$k] | Sort-Object) -join '||') }
+    $line = $d + ':'
+    foreach ($a in $arms) {
+      $S = $sim[$a]
+      if ($a -eq 'own-cell') { $st = Get-BandRatchetState -Flagged $fl -Board $bd -NearFloor $NearFloor -MedianFloor $MedianFloor -Known @() -ScaleRef 'cell'; $cnt = @($st.finding_cells) }
+      elseif ($a -eq 'finding-count') { $st = Get-BandRatchetState -Flagged $fl -Board $bd -NearFloor $NearFloor -MedianFloor $MedianFloor -Known @(); $cnt = @($st.finding_cells) }
+      else { $st = Get-BandRatchetState -Flagged $fl -Board $bd -NearFloor $NearFloor -MedianFloor $MedianFloor -Known $S.known; $cnt = @($st.counted) }
+      foreach ($c in $cnt) { [void]$rowsOut.Add([pscustomobject]@{ board = $d; arm = $a; cell = $c; finding = (@($st.finding_cells) -contains $c) }) }
+      $line += (' {0}={1}' -f $a, $cnt.Count)
+      if ($null -ne $S.prev) {
+        $newOutside = 0; $newReal = 0
+        foreach ($k in (@($S.prev) + @($cnt) | Sort-Object -Unique)) {
+          $was = @($S.prev) -contains $k; $is = @($cnt) -contains $k
+          if ($was -eq $is) { continue }
+          $same = [string]::Equals([string]$prevFp[$k], [string]$fp[$k], [StringComparison]::Ordinal) -and $prevBoard.ContainsKey($k) -and $bd.ContainsKey($k) -and ($prevBoard[$k].per_unit -eq $bd[$k].per_unit)
+          if ($same) { $S.outside++; if ($is) { $newOutside++ }; Write-Output ('  [{0}] OUTSIDE MOVE {1}: {2} {3}' -f $a, $d, $k, $(if ($is) { 'entered' } else { 'left' })) }
+          else { $S.ownMoves++; if ($is) { $newReal++ } }
+        }
+        $v = Get-RatchetVerdict -Cells $cnt.Count -Baseline $S.mark
+        if ($v -eq 'break') { $S.breaks++; if ($newReal -eq 0) { $S.falseBreaks++ }; Write-Output ('  [{0}] BREAK {1}: {2} over {3} (newly counted: {4} outside, {5} own-input)' -f $a, $d, $cnt.Count, $S.mark, $newOutside, $newReal) }
+        if ($v -eq 'tighten') { $S.tightens++ }
+      }
+      $S.mark = $cnt.Count; $S.known = @($cnt); $S.prev = @($cnt)
+    }
+    Write-Output $line
+    $prevFp = $fp; $prevBoard = $bd
+  }
+  if ($ReplayRows) { @($rowsOut | ForEach-Object { $_ | ConvertTo-Json -Compress }) | Set-Content $ReplayRows -Encoding UTF8 }
+  foreach ($a in $arms) {
+    $S = $sim[$a]
+    Write-Output ('REPLAY {0}: {1} boards, {2} transitions; {3} outside move(s), {4} own-input move(s); {5} break(s), {6} of them with no own-input cell newly counted; {7} tighten(s)' -f $a, $dates.Count, ($dates.Count - 1), $S.outside, $S.ownMoves, $S.breaks, $S.falseBreaks, $S.tightens)
+  }
+  Write-Output ('BAND-CENSORSHIP-REPLAY-COMPLETE boards=' + $dates.Count + ' first=' + $dates[0] + ' last=' + $dates[-1])
   exit 0
 }
 
@@ -344,8 +525,17 @@ foreach ($r in @($cmp.comparison)) {
 }
 if (-not $board.Count) { Write-Output 'BLIND: comparison carries no priced store cells'; exit 3 }
 
-$findings = @(Find-BandCensorship -Flagged $flagged -Board $board -NearFloor $NearFloor -MedianFloor $MedianFloor)
-$cells = @($findings | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object -Unique).Count
+# The ratchet's baseline is read BEFORE the findings, because what it counts depends on the cells it counted
+# last time (Get-RatchetCells). Its write side is at the end, after the report.
+$blF = Join-Path $OutDir 'band-censorship-baseline.json'
+$base = $null
+$known = @()
+if (Test-Path $blF) {
+  try { $bdoc = Read-JsonFile $blF; $base = [int]$bdoc.cells; if ($bdoc.PSObject.Properties['counted_cells']) { $known = @($bdoc.counted_cells | ForEach-Object { [string]$_ }) } } catch { $base = $null; $known = @() }
+}
+$state = Get-BandRatchetState -Flagged $flagged -Board $board -NearFloor $NearFloor -MedianFloor $MedianFloor -Known $known
+$findings = @($state.findings)
+$cells =@($findings | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object -Unique).Count
 $pct = [int]((1 - $NearFloor) * 100)
 Write-Output ("audit-band-censorship: $($board.Count) published cell(s), $banded banded rejection(s) in " + (Split-Path $FlaggedFile -Leaf) + "; $($findings.Count) rejected row(s) across $cells cell(s) sat within $pct% of the floor AND cheaper than what the board publishes")
 foreach ($f in ($findings | Select-Object -First 25)) {
@@ -359,7 +549,7 @@ if ($findings.Count -gt 25) { Write-Output ("  ... and " + ($findings.Count - 25
 # WHAT THE MEDIAN FLOOR RETIRED, NAMED. Brad ruled the discriminator at 0.4 on 2026-09-07 knowing it
 # drops four arguable-real rows. A trade nobody can see is a trade nobody can revisit, so the rows it
 # drops are counted and listed on every run - and the count is the evidence for or against 0.4.
-$retired = @($script:bcRetired)
+$retired = @($state.retired)
 Write-Output ("  median floor {0}: {1} further rejected row(s) were retired as a different ORDER of magnitude from the going rate (a parse error, not censorship)" -f $MedianFloor, $retired.Count)
 foreach ($rr in ($retired | Sort-Object -Property median_ratio -Descending | Select-Object -Last 200 | Sort-Object -Property median_ratio -Descending | Select-Object -First 12)) {
   Write-Output ("    retired  {0,-22} {1,-12} {2} at {3} of a {4} median" -f $rr.commodity, $rr.store, $rr.rejected, $rr.median_ratio, $rr.median_price)
@@ -382,27 +572,41 @@ Write-Output ("  -> $outFile")
 # So it is a RATCHET. The baseline is the cell count at the moment the class was found; the number may only
 # go DOWN. Today's 50 do not block. The 51st does, because a NEW censored cell is a live regression, and as
 # the backlog is ruled the baseline tightens itself with no one remembering to tighten it.
-$blF = Join-Path $OutDir 'band-censorship-baseline.json'
-$base = $null
-if (Test-Path $blF) { try { $base = [int]((Read-JsonFile $blF).cells) } catch { $base = $null } }
-$verdict = Get-RatchetVerdict -Cells $cells -Baseline $base
+# THE COUNTED SET, not the finding cells (backlog I216, Get-RatchetCells). A cell the median alone retired
+# today stays counted while its own row is still a candidate, so another store's sale cannot move the mark.
+$counted = @($state.counted)
+$parked = @($state.parked)
+$nCounted = $counted.Count
+Write-Output ("  ratchet counts $nCounted cell(s): $cells finding cell(s) + $($parked.Count) parked (counted before, still a candidate on its own row, retired today by the median alone)")
+foreach ($pc in $parked) { Write-Output ("    parked   $pc") }
+function Write-BandBaseline([int]$N, [string[]]$Set) {
+  @{ generated = (Get-Date).ToString('s'); cells = $N; counted_cells = @($Set); note = 'High-water mark for the band-censorship ratchet. This number may only go DOWN. A run above it is a NEW censored cell and hard-fails. counted_cells is the set behind the number: a cell in it stays counted while its own row is still a near-floor refusal, even when another store moves the commodity median (backlog I216).' } |
+    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+}
+$verdict = Get-RatchetVerdict -Cells $nCounted -Baseline $base
 if ($verdict -eq 'first') {
   # A BLIND run must never write the baseline: pinning a high-water mark from a run that saw nothing would
   # permanently disarm the ratchet, which is exactly how tile-integrity's -Baseline refusal came to exist.
   # Every BLIND path above exits 3 before reaching here, so arriving with a real board is the precondition.
-  @{ generated = (Get-Date).ToString('s'); cells = $cells; note = 'High-water mark for the band-censorship ratchet, set when the class was found on 2026-09-05. This number may only go DOWN. A run above it is a NEW censored cell and hard-fails.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
-  Write-Output ("  baseline written: $cells cell(s). From here the number may only go DOWN.")
-  $base = $cells
+  Write-BandBaseline -N $nCounted -Set $counted
+  Write-Output ("  baseline written: $nCounted cell(s). From here the number may only go DOWN.")
+  $base = $nCounted
 }
 if ($verdict -eq 'break') {
-  Write-Output ("band-censorship: RATCHET BROKEN - $cells cell(s) now, baseline $base. A cell that was not being censored yesterday is being censored today, which is a live regression rather than the known backlog.")
-  Exit-Guard -Name 'band-censorship' -Summary ("$cells cell(s) over a baseline of $base") -Code 2
+  $newCells = @($counted | Where-Object { $known -notcontains $_ })
+  Write-Output ("band-censorship: RATCHET BROKEN - $nCounted cell(s) now, baseline $base. A cell that was not being censored yesterday is being censored today, which is a live regression rather than the known backlog.")
+  if ($known.Count) { foreach ($nc in $newCells) { Write-Output ("    new      $nc") } }
+  Exit-Guard -Name 'band-censorship' -Summary ("$nCounted cell(s) over a baseline of $base") -Code 2
 }
 if ($verdict -eq 'tighten') {
-  @{ generated = (Get-Date).ToString('s'); cells = $cells; note = 'High-water mark for the band-censorship ratchet. This number may only go DOWN. A run above it is a NEW censored cell and hard-fails.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
-  Write-Output ("  ratchet tightened: $cells cell(s), was $base. New baseline written.")
+  Write-BandBaseline -N $nCounted -Set $counted
+  Write-Output ("  ratchet tightened: $nCounted cell(s), was $base. New baseline written.")
 }
-Write-Output ("band-censorship: $cells cell(s) against a baseline of $base - the known backlog, not a regression. Work it from $outFile (ranked: nearest the floor is likeliest to be a real price).")
-Exit-Guard -Name 'band-censorship' -Summary ("$($findings.Count) finding(s) across $cells cell(s), baseline $base") -Code 0
+if ($verdict -eq 'hold' -and -not [string]::Equals((@($known) -join ','), ($counted -join ','), [StringComparison]::Ordinal)) {
+  # Same count, different cells (or a baseline written before the set existed): record WHICH cells, so a
+  # cell counted today can be parked tomorrow. The number itself does not move.
+  Write-BandBaseline -N $base -Set $counted
+  Write-Output ("  counted set recorded at the same mark of $base.")
+}
+Write-Output ("band-censorship: $nCounted cell(s) against a baseline of $base - the known backlog, not a regression. Work it from $outFile (ranked: nearest the floor is likeliest to be a real price).")
+Exit-Guard -Name 'band-censorship' -Summary ("$($findings.Count) finding(s) across $cells cell(s), $nCounted counted, baseline $base") -Code 0
