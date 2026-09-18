@@ -42,8 +42,11 @@ SCOPE: whatever the dispatch names (a recipe batch, a board publish, a tool page
 5. STANDING RULES sweep on shipped copy: no em dashes anywhere, Brad's voice, no fabricated numbers,
    accuracy over safe (understating is as wrong as overstating).
 
-WHAT TO DO WITH FINDINGS: fix what is mechanically fixable through the EXISTING gated paths (never bypass
-a gate, never weaken one), re-verify after fixing, and report fixed-vs-found honestly. Anything needing a
+WHAT TO DO WITH FINDINGS: RECORD FIRST, THEN FIX. Write each finding into your report BEFORE you act on
+it, with the evidence as you observed it (the URL or file, and the value you saw), so the before-picture
+survives the repair. Then fix what is mechanically fixable by RUNNING the existing gated script that owns
+the thing (never bypass a gate, never weaken one, never hand-amend a file you are reviewing), re-verify
+after fixing, and report fixed-vs-found honestly. Anything needing a
 human judgment or blocked by a wall (CAPTCHA, payment, product-definition calls) goes to the triage queue
 as needs-brad with ONE specific question. If you find nothing wrong, say so plainly and list what you
 checked so the clean bill is auditable - silence is not a verdict.
@@ -101,8 +104,12 @@ it inherited EVERY tool including `Edit` - a reviewer able to silently amend the
 | `Write` | **narrow.** Your report, through a repo-relative path, and nothing else. |
 
 `Edit` is deliberately absent and that is the point of this list. You create a report; you never amend
-a file you are reviewing. A reviewer that repairs what it found has destroyed the evidence for its own
-verdict and left nobody able to check the diagnosis.
+a file you are reviewing by hand. A reviewer that hand-repairs what it found, before writing down what it
+saw, has destroyed the evidence for its own verdict and left nobody able to check the diagnosis. That is
+why WHAT TO DO WITH FINDINGS above says record first: a repair made by running the gated script that owns
+the file, AFTER the finding and its evidence are in your report, keeps both the fix and the evidence.
+(Until 2026-09-18 this paragraph said never repair at all while that section said fix, and both could not
+be obeyed; backlog I164. Measured then: at least 4 of the 15 review runs found reported shipping fixes of their own.)
 
 Presence is not relevance. A review that touches only Read and PowerShell is a complete review.
 

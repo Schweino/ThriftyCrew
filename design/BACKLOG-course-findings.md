@@ -12271,7 +12271,7 @@ writing and this closes.
 
 **2-WAY** because both the census and a rules line are trivially reversible.
 
-### I164 - post-publish-reviewer's findings are the one review output nobody can count `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I164 - post-publish-reviewer's findings are the one review output nobody can count `DONE` `queue-6`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Partly REFUTED and sharpened. The needs-Brad branch IS countable: 14 of 191 tracked triage-queue rows mention post-publish review (5 findings, 6 absent reviews, 0 open, nothing since 2026-09-03). The real defect is more specific than "writes nothing": the brief DOES license a report at line 101 but names no path and no committer, and 2 of the 4 comparison agents do not write at all - their orchestrator does. Separately, the brief CONTRADICTS ITSELF: line 45 tells the agent to fix, while lines 103-105 tell it that a reviewer which repairs has destroyed its own evidence.
 
@@ -12332,6 +12332,42 @@ record is adequate and no fix is warranted; below 80% the one-line brief fix is 
 per-category verdict and every finding to a dated JSONL beside the other findings corpora). The brief's
 self-contradiction (fix at line 45, never repair at lines 103-105) is judged separately and is warranted
 regardless of the count, because two instructions that cannot both be obeyed are a defect at any rate.
+
+**Done 2026-09-18.** Measured, bar MET (exactly), so the JSONL fix is NOT warranted; the contradiction is fixed.
+
+- **Denominator, and one deviation from the bar stated before judging.** The bar named this project's transcript
+  folder, which holds only 5 dispatches: much ThriftyCrew work ran from a session rooted at `C:\Codex`. The scan
+  was widened to every folder under `~/.claude/projects` (5,307 transcript files, 0 unreadable), which can only
+  add cases. It found 17 Agent dispatches with `subagent_type` `post-publish-reviewer`, 2 more inside a workflow
+  (2026-08-24, both one-question contract probes answering "is an 8-slug review enough", excluded as not reviews),
+  and the daemon's lane log adds 1 headless dispatch (wave 8, 2026-08-27). 18 dispatches; 3 died before reporting
+  (one interrupted, two on API limits) and were relaunched, so **15 review runs**, 2026-08-07 to 2026-09-03.
+- **Numerator: 12 of 15 (80.0%)** reached a durable in-repo record carrying both verdict and findings, almost all
+  as the `post-publish-review` stamp's `detail` in `meal-prep/db/batch-ledger.json`, plus commits such as
+  50ac76313 (the 2026-09-01 review of nine unreviewed recipes). Verdict alone: 13 of 15. The three short:
+  the 2026-08-07 burrito review (ledger says `FIXED-AND-CLEAN; 2 fixes shipped` and never names the two); the
+  2026-08-07 "adversarial review of tonight's changes", a code review with no record anywhere; and **the daemon's
+  wave-8 review, stamped `reviewed` because `hunt-daemon.py:7059` discards the reviewer's payload** - 0 of 1
+  on the only automatic road.
+- **What the count says beyond the bar.** The records exist because the stage around the reviewer writes
+  them (the ledger stamp, a closing commit); the brief never asks for one, and the wave-12 reviewer is the one
+  run seen committing its own (2a28e2952). Which session wrote each of the other 12 was not checked. A brief
+  line telling the agent to write a JSONL would duplicate a record that already exists 12 times in 15. The gap is on the daemon road, not in the brief. No
+  review has run since 2026-09-03 (15 days to this measurement), so the corpus is 15 runs and not growing.
+- **Fixed: the brief contradicted itself.** `WHAT TO DO WITH FINDINGS` said fix; `Your tool list` said a
+  reviewer that repairs has destroyed its evidence. At least 4 of the 15 runs reported shipping fixes of their
+  own, so the operative instruction was the first. Both now say the same thing: record each finding and its
+  observed evidence in the report FIRST, then fix only by running the gated script that owns the file, never
+  by hand-amending a reviewed file. `.claude/agents/post-publish-reviewer.md` and its mirror
+  `ops/prompt-backup/agents/post-publish-reviewer.md` (md5-identical). No fixture: the change is prose with
+  no executable behaviour. Verified with `ops/audit-agent-tools.ps1` exit 0 (`agents=13 writers=5`), its
+  `-SelfTest` exit 0, and `ops/audit-prompt-backup.ps1` exit 0.
+- **Harness (one-off, described, not committed):** a Python scan of every transcript `*.jsonl` for Agent/Task
+  `tool_use` blocks by `subagent_type`, keyed on tool-use id, with each result's tail; plus a walk of the
+  batch ledger for `post-publish` stages. Run at f590a38af; ledger blob f91808920, lane-log blob 04f57f433.
+- **Left open, for its own item:** the daemon road losing the verdict. The fix is to stamp the reviewer's
+  status line into the ledger `detail` instead of the literal `reviewed`, with a daemon self-test case, and it
+  belongs in `hunt-daemon.py`, which this item did not touch.
 
 ### I165 - The four importers each decide feed-row validity for themselves, and only Walmart's was ever lifted into a library `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
 
