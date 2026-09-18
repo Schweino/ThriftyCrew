@@ -12993,7 +12993,7 @@ md5-identical, exit 0, 18 cases. `push-ledger` 18, `hold-push-lock` 21 and `push
 `pushes-2026-09-18.jsonl` held 200 rows over 197 distinct pids, 3 of them on more than one row; whether those were
 recycled pids or one process writing twice was not established, and with the run id it no longer matters.
 
-### I172 - the 584 live recipe cards carry no allergen line, and the backfill is a republish of the whole catalogue `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+### I172 - the 584 live recipe cards carry no allergen line, and the backfill is a republish of the whole catalogue `PARTLY DONE - READY FOR BRAD ONCE I144 IS RULED: THE REPUBLISH IS FOUR COMMANDS` `queue-7` `2-WAY` `RUNG1 BLOCKED`
 
 **Merged from `design\backlog-inbox\approvals-i144-2026-09-12.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13034,7 +13034,61 @@ unreviewable live-site operation.
 exits 0. While it exits 1 it is a red REPORT on purpose and is wired into no gate, because a gate that
 is red on day one teaches people to ignore red.
 
-### I173 - the allergen line is checked at publish but not surfaced at pre-audit `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+**Progress 2026-09-18: everything short of the Ghost write is built and measured, and the republish is
+Brad's one action. It WAITS FOR THE I144 RULING.** I144 is `NEEDS A RULING` on two things that change the
+bytes every card carries: coconut (28 cards would say "Contains: tree nuts" for a food the FDA stopped
+listing in January 2025) and the line's size (`build-card2.ps1:367-370`, 12.5 px against 17 px body text).
+The command and the blast radius below ASSUME THAT RULING IS APPLIED AND COMMITTED FIRST. Republishing
+before it would ship the 28 false lines and then need a second catalogue republish to take them back.
+
+**The one action, in the main checkout, once the I144 ruling has landed:**
+```
+powershell -NoProfile -File meal-prep\pipeline\probe-allergen-backfill.ps1   # re-measure; exit 0, "agrees" on every rendered card
+powershell -NoProfile -File meal-prep\engine\build-cards.ps1                 # "built 584/584  errors 0", exit 0 (rewrites gitignored db\built only)
+powershell -NoProfile -File meal-prep\pipeline\audit-allergen-line.ps1      # THE FINISH CONDITION: exit 0
+powershell -NoProfile -File meal-prep\engine\publish.ps1 -All                # the only Ghost write: hash-gated, live-verified per slug
+```
+Read each exit code before running the next. The first three write nothing live.
+
+**Blast radius, measured 2026-09-18** with the committed harness `meal-prep\pipeline\probe-allergen-backfill.ps1`
+(blob `25d9cd57a95f`), at base `c79666e3f`, over the specs and `db\costed.json` committed there and a
+`db\built` seeded from the main checkout that day. It renders every spec through the real `build-card2.ps1`
+into a scratch directory, never into `db\built`, makes no network call, and recomputes `publish.ps1`'s
+change-gate hash against the publish journal. **Measured BEFORE the I144 ruling, so re-run it after.**
+- build-card2 rendered **584 of 584** specs, 0 errors, and **584 of 584 rebuilt cards carry exactly the line
+  `audit-allergen-line` derives** (0 unclassified). The finish condition holds on the rebuilt set.
+- `publish.ps1 -All` would **PUT 583** pages and refuse 1 as a create (`slow-cooker-boneless-beef-short-ribs`
+  has no journal entry). 0 held, 0 refused for carriage, 0 orphan cards, 0 skipped as unchanged.
+- **The republish ships more than the allergen line**, because `db\built` has not been rebuilt through several
+  earlier renderer and spec changes (the main checkout's cards date from 2026-09-07; publishing them as they
+  stand would already change 408 of 584 pages, the journal agreeing on only 176). Every change present, per
+  card, of 584: the allergen line 584; the rotating "Three more for this week" footer 391; backlog I44's paywall
+  claim on the Recipe JSON-LD node 405; the pre-hydration cost-composition bar 67 (shares and its one-line
+  verdict, which the widget redraws from the release once the feed loads); and **15 with a change the probe does
+  not name**, all 15 read at their first difference: 12 are the "healthy" wording removed from specs for the FDA
+  nutrient-claim rule, two of them live TITLES ("Healthy Hamburger Helper" becomes "Homemade Hamburger Helper",
+  "Healthy Chicken, Rice and Broccoli Skillet" loses "Healthy"), and 3 (`creamy-tuscan-chicken-skillet`,
+  `scalloped-potato-turkey-casserole`, `turkey-alfredo-rotini-bake`) lose the Article JSON-LD node the old
+  render carried, cause NOT traced. 91 cards change by the allergen line alone. On 569 of 584 nothing outside
+  those named regions moves; the 15 were read only to their first difference.
+- **Scope:** the probe predicts `publish.ps1`'s LOCAL decisions. Its live-drift pre-flight needs Ghost, so some
+  counted PUTs may be refused at run time as "the LIVE card no longer matches"; that is the designed refusal,
+  and the fix is to look first (`grocery\audit-ghost-drift.ps1 -Recipes`) before any `-Force`.
+
+**The two things this item owed, done.** (1) The 375px look: I144 injected the longest line into the LIVE page
+at 375 px on 2026-09-18 (no horizontal scroll, box 24 to 351 px). Repeated here on a rebuilt
+`american-goulash-pasta` card in a standalone page at 375 px: document 375 px wide, line box 16 to 359 px, no
+horizontal scroll, text read back correctly, font 12.5 px against 17 px body (the size question is I144's).
+(2) A reader's re-read of 8 derived lines (thai-turkey-larb-bowls, beef-chow-mein-noodles, carne-asada-burrito,
+chicken-and-potato-curry, baked-ziti-with-ground-beef, bangers-and-mash-onion-gravy, arroz-con-pollo-bowls,
+andong-jjimdak-braised-chicken) against their ingredient lists: 7 of 8 read right, and the 8th is the coconut
+line I144 is asking about. No other bad judgement found in that sample.
+
+**RE-CHECK:** after the I144 ruling is applied, re-run `probe-allergen-backfill.ps1`; when it exits 0, Brad runs
+the four commands above. Closed when `audit-allergen-line.ps1` exits 0 in the main checkout and `publish.ps1
+-All` reports every PUT verified.
+
+### I173 - the allergen line is checked at publish but not surfaced at pre-audit `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\approvals-i144-2026-09-12.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13054,6 +13108,33 @@ count on its completion marker that is asserted by a CLEAN TWIN in its seeing ar
 working gate red for a reason unrelated to allergens. The refusal Brad asked for is in place and does
 not depend on this; this is a cheapness improvement and should be done by somebody with that file
 already open, reading its blind-count rule first.
+
+**Done 2026-09-18.** `meal-prep\pipeline\wave-preaudit.ps1` now reports a per-slug `allergen-line` check that
+asks exactly what P5 asks: it derives the line from the spec's scaler ingredients through the one
+`allergen-lib.ps1` rule and compares it with the card in `db\built`, reporting `missing`, `disagrees`,
+`no-card`, `unclassified` or an unreadable table as a fail, and a spec with no scaler ingredients as skipped,
+as P5 skips it. The verdict moved into `meal-prep\lib\allergen-lib.ps1` as `Get-TcAllergenCardVerdict` and
+`audit-allergen-line.ps1` now delegates to it, so the pre-audit and the publish gate cannot drift apart. The
+check is per slug, not a shared gate, so the daemon's automated P5 precheck (`hunt_lib.P5_GATES`) does not
+act on it: it reaches the auditor's report and changes no page. **Verified:** `wave-preaudit.ps1 -SelfTest`
+exit 0, 74 of 74 cases (8 new unit cases: 5 MUST FIRE, 1 MUST NOT FIRE, 2 CLEAN TWIN; 2 new END-TO-END MUST
+FIRE in the drill, so `DRILL_BLIND_CASES` moved 14 to 16 and the seeing arm's CLEAN TWIN asserted it);
+`audit-allergen-line.ps1 -SelfTest` exit 0, 23 of 23. **Broken once each**, originals restored md5-identical:
+with the check's wiring removed the suite went red 2 of 74, both END-TO-END MUST FIREs; with the shared
+verdict made never to say `missing`, the pre-audit went red 2 of 74 and `audit-allergen-line` 1 of 23.
+
+**Found while doing it, NOT fixed, and it is bigger than this item: P5 cannot pass a real wave today.**
+`wave-publish.ps1` runs P5 (line 612 on), including `audit-allergen-line -Slugs <wave>`, BEFORE E4 builds any
+card (its `propagate` chain runs `build-cards`, line 894 on), and nothing earlier in the hunt flow writes a wave's card to
+`db\built` (the batch-ledger stage order puts `build-cards` after `audit`). So a NEW recipe has no card at P5
+(`no-card`) and a republished live recipe has a card from before I144 (`missing`), and P5 refuses either way.
+The P5 comment saying the gate is "green on a freshly built wave" does not hold. No wave has met it yet: the
+last hunt run is `hunt-2026-09-04-p3`, before I144 landed on 2026-09-12. The new pre-audit check predicts P5
+faithfully, so a new wave will now show `no-card` for every slug, and its detail says it is this defect and not
+the recipe's. Candidate repairs, for whoever takes it: build the wave's cards into `db\built` at P4, before P5,
+since the line depends only on the scaler ingredients and E4 rebuilds the card after E2 anyway; or split P5's
+allergen gate so P5 refuses only what a rebuild cannot fix (`unclassified`) and the card-agreement half runs
+between E4's build and its publish. Not built here because it changes when a wave can publish.
 
 ### I174 - fareway builds copy taxonomy_path unrepaired, and it carries two-layer mojibake in every recent file `DONE` `queue-6`
 

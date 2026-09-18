@@ -73,6 +73,7 @@ $repo = Split-Path -Parent $mp
 # root-relative for the older reason that the drill stages a copy of it; nothing new should be.
 . (Join-Path (Split-Path -Parent $here) 'lib\dash-sweep.ps1')   # DASH_SWEEP_SKIP - ONE skip list, shared with build-v2-spec
 . (Join-Path (Split-Path -Parent $here) 'lib\package-cost-lib.ps1')   # Get-ScalerGpu / Get-ScalerBasisMismatch - ONE copy of the data-block basis rule
+. (Join-Path (Split-Path -Parent $here) 'lib\allergen-lib.ps1')   # the ONE allergen rule and the ONE card verdict wave-publish P5 applies (backlog I173)
 
 $UTF8 = New-Object Text.UTF8Encoding($false)
 
@@ -414,6 +415,54 @@ function Get-DryRunNullIds {
   return -1
 }
 
+function Get-AllergenLineCheck {
+  <#
+    THE ALLERGEN LINE, ONE STAGE EARLY (2026-09-18, backlog I173). wave-publish.ps1's P5 gate table runs
+    audit-allergen-line scoped to the wave and refuses a card in db\built whose 'Contains' line is missing
+    or disagrees with its spec's ingredients (Brad's I144 ruling). Until this check, the auditor's machine
+    report never asked, so a wave with a stale card learned about it at the publish gate - after the
+    recipe-batch-auditor had already spent its judgement pass, which is the exact expense this battery
+    exists to remove.
+    SAME QUESTION, SAME ANSWER: the verdict is lib\allergen-lib.ps1's Get-TcAllergenCardVerdict, the one
+    audit-allergen-line now delegates to, over the same derivation (Get-TcRecipeAllergens then
+    Format-TcAllergenLine) and the same card (db\built\<slug>.body.html). It predicts P5; it does not
+    re-implement it. A spec with no scaler ingredients is skipped here because P5 skips it too - reporting
+    a refusal the publish gate would not make is a false alarm, not caution.
+    Pure: $CardHtml is $null when no card is on disk, so every founding case is pinned without a file.
+  #>
+  param($Spec, [string]$Slug, $CardHtml, $Items, [string]$CardPath = '', [string]$TableError = '')
+  $ing = @()
+  if ($Spec -and ($Spec.PSObject.Properties.Name -contains 'scaler') -and $Spec.scaler -and ($Spec.scaler.PSObject.Properties.Name -contains 'ing')) { $ing = @($Spec.scaler.ing) }
+  if (@($ing).Count -eq 0) {
+    return (New-Check 'allergen-line' $true ([ordered]@{ skipped = $true }) 'the spec carries no scaler ingredients, so wave-publish P5''s audit-allergen-line skips it too - nothing to compare')
+  }
+  if ($TableError) {
+    return (New-Check 'allergen-line' $false ([ordered]@{ kind = 'no-table' }) ('db\allergens.json could not be read, so the line could not be derived and P5 would refuse the wave: ' + $TableError))
+  }
+  $r = Get-TcRecipeAllergens $ing $Items
+  if (@($r.unknown).Count -gt 0) {
+    return (New-Check 'allergen-line' $false ([ordered]@{ kind = 'unclassified'; unknown = @($r.unknown) }) `
+      ('not in db\allergens.json, so no line can be derived and P5 would refuse the wave: ' + (@($r.unknown) -join ', ') + '. Classify them in pipeline\gen_allergen_table.py and rerun it.'))
+  }
+  $expected = Format-TcAllergenLine $r $Slug
+  if ($null -eq $CardHtml) {
+    return (New-Check 'allergen-line' $false ([ordered]@{ kind = 'no-card'; card = $CardPath }) `
+      ('no built card at ' + $CardPath + ', so P5''s audit-allergen-line would refuse the wave. For a NEW recipe this is expected today and is not the recipe''s defect: wave-publish builds cards at E4, after P5 (recorded 2026-09-18 under backlog I173).'))
+  }
+  $verdict = Get-TcAllergenCardVerdict ([string]$CardHtml) $expected
+  if ($verdict -eq 'missing') {
+    return (New-Check 'allergen-line' $false ([ordered]@{ kind = 'missing'; card = $CardPath; expected = $expected }) `
+      ('the built card carries no Contains line, so P5''s audit-allergen-line would refuse the wave. Rebuild the card (engine\build-cards.ps1 -Slugs ' + $Slug + '); the line is generated and never hand-written.'))
+  }
+  if ($verdict -eq 'disagrees') {
+    return (New-Check 'allergen-line' $false ([ordered]@{ kind = 'disagrees'; card = $CardPath; expected = $expected; found = (Get-TcCardAllergenLine ([string]$CardHtml)) }) `
+      ('the built card''s Contains line disagrees with what the spec''s current ingredients derive (a stale card), so P5 would refuse the wave. Rebuild the card (engine\build-cards.ps1 -Slugs ' + $Slug + ').'))
+  }
+  $named = @($r.present | ForEach-Object { $_.label })
+  return (New-Check 'allergen-line' $true ([ordered]@{ contains = $named; hidden = @($r.hidden).Count }) `
+    ('the built card carries exactly the Contains line its ingredients derive (' + $(if ($named.Count) { $named -join ', ' } else { 'none of the nine' }) + '), so P5''s allergen gate will pass it'))
+}
+
 function Get-SharedVerdict {
   <#
     A child gate is clean only when BOTH answers agree: rc 0 AND its own completion marker. The estate has
@@ -714,6 +763,54 @@ if ($runSelfTest) {
   try { $od.Add('slug-one', $lst.ToArray()); $odOk = ($od['slug-one'].Count -eq 2) } catch { $odOk = $false }
   T 'an ordered dictionary holds a slug''s checks and reads them back' $odOk ("ok=$odOk")
 
+  # ---- allergen-line (backlog I173): the refusal wave-publish P5 makes, surfaced one stage earlier ----
+  # A FROZEN table, never the live one: the live file moves whenever an ingredient is added, and a fixture
+  # that moves with its subject stops being a fixture. These run in every checkout, seeded or not.
+  $alFx = @{
+    'Worcestershire Sauce' = [pscustomobject]@{ contains = @('fish:anchovy'); hidden = @{ 'fish' = 'the anchovies in Worcestershire sauce' } }
+    'Penne Pasta'          = [pscustomobject]@{ contains = @('wheat'); hidden = @{} }
+    '93/7 Ground Beef'     = [pscustomobject]@{ contains = @(); hidden = @{} }
+  }
+  function AlSpec([object[]]$Rows) { return [pscustomobject]@{ scaler = [pscustomobject]@{ ing = $Rows } } }
+  $alSpec = AlSpec @([pscustomobject]@{ item = '93/7 Ground Beef'; grams = 900 }, [pscustomobject]@{ item = 'Penne Pasta'; grams = 450 }, [pscustomobject]@{ item = 'Worcestershire Sauce'; grams = 30 })
+  $alLine = Format-TcAllergenLine (Get-TcRecipeAllergens $alSpec.scaler.ing $alFx) 'fx'
+  $alGood = '<ul class="smp-ing"><li>x</li></ul>' + $alLine + '<!--TC-PAYWALL-->'
+  # The live catalogue's shape on 2026-09-18: 584 of 584 built cards, rendered before I144 landed.
+  $alNoLine = '<ul class="smp-ing"><li>x</li></ul><!--TC-PAYWALL-->'
+  # The stale card: built before Worcestershire was added to the recipe, so its line omits the fish.
+  $alStaleLine = Format-TcAllergenLine (Get-TcRecipeAllergens @($alSpec.scaler.ing | Where-Object { $_.item -ne 'Worcestershire Sauce' }) $alFx) 'fx'
+  $alStale = '<ul class="smp-ing"><li>x</li></ul>' + $alStaleLine + '<!--TC-PAYWALL-->'
+
+  $ac = Get-AllergenLineCheck $alSpec 'fx' $alNoLine $alFx 'db\built\fx.body.html'
+  T 'MUST FIRE  allergen-line: a built card with NO Contains line fails, as P5 would refuse it' `
+    ($ac.check -eq 'allergen-line' -and $ac.verdict -eq 'fail' -and $ac.numbers.kind -eq 'missing') ("verdict=" + $ac.verdict + " kind=" + $ac.numbers.kind)
+  $ac = Get-AllergenLineCheck $alSpec 'fx' $alStale $alFx 'db\built\fx.body.html'
+  T 'MUST FIRE  allergen-line: a STALE card whose line predates an added Worcestershire fails as disagreeing' `
+    ($ac.verdict -eq 'fail' -and $ac.numbers.kind -eq 'disagrees' -and $ac.numbers.expected -match 'fish \(anchovy\)') ("verdict=" + $ac.verdict + " kind=" + $ac.numbers.kind)
+  $ac = Get-AllergenLineCheck $alSpec 'fx' $null $alFx 'db\built\fx.body.html'
+  T 'MUST FIRE  allergen-line: NO built card at all fails, never a skip - could-not-look is not a clean bill' `
+    ($ac.verdict -eq 'fail' -and $ac.numbers.kind -eq 'no-card') ("verdict=" + $ac.verdict + " kind=" + $ac.numbers.kind)
+  $alUnk = AlSpec @([pscustomobject]@{ item = 'Penne Pasta'; grams = 450 }, [pscustomobject]@{ item = 'Something Nobody Classified'; grams = 10 })
+  $ac = Get-AllergenLineCheck $alUnk 'fx' $alGood $alFx 'db\built\fx.body.html'
+  T 'MUST FIRE  allergen-line: an unclassified ingredient fails and is NAMED, never rendered as contributing nothing' `
+    ($ac.verdict -eq 'fail' -and $ac.numbers.kind -eq 'unclassified' -and $ac.detail -match 'Something Nobody Classified') ("verdict=" + $ac.verdict + " detail=" + $ac.detail)
+  $ac = Get-AllergenLineCheck $alSpec 'fx' $alGood @{} 'db\built\fx.body.html' 'no allergen table at X'
+  T 'MUST FIRE  allergen-line: an unreadable allergen table fails, never passes on an empty lookup' `
+    ($ac.verdict -eq 'fail' -and $ac.numbers.kind -eq 'no-table') ("verdict=" + $ac.verdict)
+  $ac = Get-AllergenLineCheck $alSpec 'fx' $alGood $alFx 'db\built\fx.body.html'
+  T 'MUST NOT FIRE allergen-line: a card carrying exactly the derived line passes' `
+    ($ac.verdict -eq 'pass') ("verdict=" + $ac.verdict + " detail=" + $ac.detail)
+  # CLEAN TWIN: the verdict here IS audit-allergen-line's verdict, one function in allergen-lib, so the
+  # pre-audit cannot pass a card the publish gate refuses. Both halves read the same shared function on the
+  # same inputs; a re-implementation drifting away from it is the defect this pins.
+  T 'CLEAN TWIN allergen-line: the pre-audit and the P5 audit share ONE verdict function over the same card' `
+    ((Get-TcAllergenCardVerdict $alStale $alLine) -eq 'disagrees' -and (Get-TcAllergenCardVerdict $alGood $alLine) -eq '' -and `
+     (Get-Content -LiteralPath (Join-Path $here 'audit-allergen-line.ps1') -Raw) -match 'Get-TcAllergenCardVerdict') 'the verdicts differ, or audit-allergen-line no longer delegates'
+  # CLEAN TWIN: a spec P5 skips (no scaler ingredients) is predicted as P5 treats it, and says it was skipped.
+  $ac = Get-AllergenLineCheck ([pscustomobject]@{ name = 'no scaler' }) 'fx' $null $alFx 'db\built\fx.body.html'
+  T 'CLEAN TWIN allergen-line: a spec with no scaler ingredients passes as SKIPPED, exactly as P5 skips it' `
+    ($ac.verdict -eq 'pass' -and $ac.numbers.skipped -eq $true) ("verdict=" + $ac.verdict)
+
   # =================================================================================================
   # END-TO-END DRILL. The fixtures above pin the PREDICATES; these pin the SCRIPT, because two of the
   # three defects this file shipped with on its first day (an OrderedDictionary indexer and an @() over a
@@ -744,7 +841,8 @@ if ($runSelfTest) {
   # THE CONSTANT CANNOT DRIFT SILENTLY: the assertion after the else-branch runs in every SEEDED checkout -
   # the main one, the daily chain, any pusher who seeded - and goes RED naming this line the day the drill
   # gains or loses a case. The blind arm cannot check it, which is exactly why the seeing arm must.
-  $DRILL_BLIND_CASES = 14
+  # 14 -> 16 on 2026-09-18 (backlog I173): two END-TO-END MUST FIREs for the allergen-line check.
+  $DRILL_BLIND_CASES = 16
   $casesBeforeDrill = $cases
   $canDrill = ((Test-Path $srcSpec) -and (Test-Path $srcCost) -and (Test-Path $srcFood) -and (Test-Path $srcIng) -and (Test-Path $srcRef))
   if (-not $canDrill) {
@@ -780,6 +878,16 @@ if ($runSelfTest) {
     [IO.File]::WriteAllText($dSpecPath, $pristine, $UTF8)
     $manPathD = Join-Path $dRun 'waves\wave-1.json'
     [IO.File]::WriteAllText($manPathD, ('{"wave":1,"run":"drill","batch":"drill-w1","slugs":["' + $dSlug + '"]}'), $UTF8)
+    # A CURRENT BUILT CARD, planted where P5 reads it (backlog I173), so the clean-wave case below sees the
+    # allergen-line check PASS rather than no-card. Rendered by the real build-card2 against the drill's own
+    # spec - never copied from the live db\built, whose 584 cards all predate the allergen line. (Nothing in
+    # the hunt flow builds a wave's cards before wave-publish E4, which is the P5 ordering defect recorded
+    # under backlog I173; the drill plants the card that P5 needs, it does not claim the flow provides one.)
+    $dBuilt = Join-Path $dMp 'db\built'
+    New-Item -ItemType Directory -Force $dBuilt | Out-Null
+    & (Join-Path $here 'build-card2.ps1') -SpecFile $dSpecPath -CostedFile (Join-Path $dMp 'db\costed.json') -OutDir $dBuilt *>$null
+    $dCardPath = Join-Path $dBuilt ("{0}.body.html" -f $dSlug)
+    $dCardFresh = [IO.File]::ReadAllText($dCardPath, [Text.Encoding]::UTF8)
 
     $selfPath = $PSCommandPath
     # A DRILL CHILD'S STDERR IS TEXT, NEVER A THROW (2026-09-11). Both launches used to be
@@ -856,6 +964,23 @@ if ($runSelfTest) {
       ($null -ne $rep1 -and $null -ne $rep1.slug_checks -and $null -ne $rep1.shared_checks -and $null -ne $rep1.summary) 'a key is missing'
     T 'END-TO-END a run that SKIPPED the shared gates cannot read as clean' `
       ($r1.rc -ne 0) ("rc=" + $r1.rc)
+
+    # ---- MUST FIRE: the wave's built card is STALE, so P5's allergen gate would refuse it (I173) ------
+    # The founding shape: a card rendered before the allergen line existed - every one of the 584 live cards
+    # on 2026-09-18. Before this check the auditor's report was silent and the wave learned it at P5.
+    [IO.File]::WriteAllText($dCardPath, ([regex]::Replace($dCardFresh, '<p class="smp-allergen">.*?</p>', '', [Text.RegularExpressions.RegexOptions]::Singleline)), $UTF8)
+    $null = RunDrill $dMp $srcRef @()
+    $alc = DrillCheck (ReadDrillReport) 'allergen-line'
+    T 'END-TO-END MUST FIRE a wave whose built card carries no allergen line is caught at pre-audit, not at P5' `
+      ($null -ne $alc -and $alc.verdict -eq 'fail' -and $alc.numbers.kind -eq 'missing') `
+      $(if ($alc) { ("verdict=" + $alc.verdict + " kind=" + $alc.numbers.kind) } else { 'no allergen-line check in the report' })
+    Remove-Item -LiteralPath $dCardPath -Force
+    $null = RunDrill $dMp $srcRef @()
+    $alc = DrillCheck (ReadDrillReport) 'allergen-line'
+    T 'END-TO-END MUST FIRE a wave slug with NO built card in db\built fails as no-card' `
+      ($null -ne $alc -and $alc.verdict -eq 'fail' -and $alc.numbers.kind -eq 'no-card') `
+      $(if ($alc) { ("verdict=" + $alc.verdict + " kind=" + $alc.numbers.kind) } else { 'no allergen-line check in the report' })
+    [IO.File]::WriteAllText($dCardPath, $dCardFresh, $UTF8)
 
     # ---- MUST FIRE: a broken macro recompute --------------------------------------------------------
     # The founding shape of the wave-2 audit's category 1: the stat says one thing, the spec's own grams
@@ -1201,6 +1326,14 @@ $global:__tcCostedCache = @{}      # build-card2 fills it on the first parse; sh
 #   2. Assigning through an OrderedDictionary's indexer is fine, but .Add(key, value) says what is meant
 #      and refuses a duplicate key, which for a slug list is the behaviour we want.
 $slugChecks = [ordered]@{}
+# THE ALLERGEN TABLE, read once. Its path hangs off THIS FILE's location, not off -Root, because
+# build-card2.ps1 and audit-allergen-line.ps1 both read it code-relative: a line checked against any
+# other table would be checked against a rule the card was never rendered with. The CARDS are data, so
+# they come from the data root, exactly where P5 reads them.
+$allergenTablePath = Join-Path (Split-Path -Parent $here) 'db\allergens.json'
+$allergenItems = @{}; $allergenTableError = ''
+try { $allergenItems = (Get-TcAllergenTable -Path $allergenTablePath).Items } catch { $allergenTableError = $_.Exception.Message }
+$builtDir = Join-Path $mp 'db\built'
 foreach ($slug in $target) {
   $checks = New-Object System.Collections.Generic.List[object]
   $specPath = Join-Path $recipesDir ("{0}.json" -f $slug)
@@ -1365,6 +1498,15 @@ foreach ($slug in $target) {
       }
     }
   }
+
+  # --- allergen line: will P5's audit-allergen-line pass the card in db\built? (backlog I173) ---
+  # The card read is the one wave-publish P5 reads, under the data root; the scratch rebuild above is a
+  # fresh render and would always carry a fresh line, so it cannot see a STALE card, which is the failure
+  # P5 exists for.
+  $alCardPath = Join-Path $builtDir ("{0}.body.html" -f $slug)
+  $alCard = $null
+  if (Test-Path -LiteralPath $alCardPath) { $alCard = [IO.File]::ReadAllText($alCardPath, [Text.Encoding]::UTF8) }
+  $checks.Add((Get-AllergenLineCheck $spec $slug $alCard $allergenItems $alCardPath $allergenTableError))
 
   $slugChecks.Add($slug, $checks.ToArray())
 }

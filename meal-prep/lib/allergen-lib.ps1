@@ -178,3 +178,19 @@ function Get-TcCardAllergenLine {
   if (-not $m.Success) { return $null }
   return $m.Value
 }
+
+function Get-TcAllergenCardVerdict {
+  <#
+    THE ONE VERDICT on a built card against the line its spec derives: 'missing', 'disagrees', or '' when
+    the card agrees. Moved here from audit-allergen-line.ps1 on 2026-09-18 (backlog I173) because a
+    second caller arrived - wave-preaudit.ps1 surfaces the same refusal one stage before the publish gate
+    - and two copies of a three-line verdict are exactly the two-copies shape this file's header refuses.
+    ORDINAL, because this compares text that came off disk and may carry damage: PowerShell's default
+    string comparison is culture-sensitive, and a culture-sensitive compare IGNORES an embedded NUL.
+  #>
+  param([string]$CardHtml, [string]$Expected)
+  $found = Get-TcCardAllergenLine $CardHtml
+  if ($null -eq $found) { return 'missing' }
+  if (-not [string]::Equals($found, $Expected, [StringComparison]::Ordinal)) { return 'disagrees' }
+  return ''
+}

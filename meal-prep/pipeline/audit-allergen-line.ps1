@@ -61,13 +61,10 @@ if (-not $TablePath)  { $TablePath  = Join-Path $mp 'db\allergens.json' }
 # ---------------------------------------------------------------------------------------------------
 function Get-AllergenLineVerdict {
   param([string]$CardHtml, [string]$Expected)
-  $found = Get-TcCardAllergenLine $CardHtml
-  if ($null -eq $found) { return 'missing' }
-  # ORDINAL, because this compares text that came off disk and may carry damage. PowerShell's default
-  # string comparison is culture-sensitive and a culture-sensitive compare IGNORES an embedded NUL, so
-  # the default operator is blind to exactly the corruption a byte check exists to find.
-  if (-not [string]::Equals($found, $Expected, [StringComparison]::Ordinal)) { return 'disagrees' }
-  return ''
+  # The verdict itself lives in lib\allergen-lib.ps1 (Get-TcAllergenCardVerdict) since 2026-09-18, because
+  # wave-preaudit.ps1 asks the same question one stage earlier (backlog I173) and must get the same answer.
+  # It is ORDINAL there, for the reason its header gives.
+  return (Get-TcAllergenCardVerdict $CardHtml $Expected)
 }
 
 # ---- self-test ------------------------------------------------------------------------------------
