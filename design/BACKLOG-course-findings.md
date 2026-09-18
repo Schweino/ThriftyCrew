@@ -13911,6 +13911,45 @@ not. **Not a gate, and not a label change**: a bar on partition coverage would b
 if the sample shows it is worth one. If the sample finds every class covered, close this as DONE with
 the sample attached.
 
+**Acceptance bar, written 2026-09-19 before any class was counted** (base origin/main 777413873).
+
+*The sample is chosen by rule, not by suspicion.* Walk `docs/CONTROL-CONSTANTS.md`'s register top to
+bottom and take the FIRST constant of each distinct file until there are ten files. Every row there is
+threshold- or count-shaped by construction (that is what the register is for), and no row is skipped
+because of what its suite looks like: a file with no suite that exercises the constant is kept and
+scores zero covered classes. The ten, in register order: `grocery/capture-watchdog.ps1`
+(`BoardStaleHours`), `grocery/check-ad-cycles.ps1` (`REARM_DAYS`), `grocery/tune-alert-rearm.ps1`
+(`LOW_PRECISION`/`LOW_MIN_CASES`), `ops/brain-report.ps1` (`$script:FLOOR`),
+`ops/report-ratchet-trends.ps1` (`$StoppedRuns`), `ops/audit-rule-currency.ps1` (`$StaleDays`),
+`lib/ratchet.ps1` (`-MaxDropPct`), `grocery/notify-item-added.ps1` (`$SENT_LOG_KEEP_DAYS`),
+`graph/learning/promote_aliases.py` (`MAX_NEW_HOLDS_PER_RUN`), `ops/member-cohorts.ps1`
+(`HISTORY_MAX_AGE_DAYS`).
+
+*The classes are fixed before reading any suite*, from the four questions applied to the one input the
+constant is compared against:
+- **C1 empty** - no rows, no readings, or the file absent (size: empty; also the "producer stopped" case).
+- **C2 one** - exactly one row or reading. N/A where the compared input is a single scalar.
+- **C3 inside** - clearly on the silent side of the bar.
+- **C4 beyond** - clearly on the firing side.
+- **C5 at** - exactly AT the bar, which is where an inclusive-versus-exclusive comparison is decided.
+- **C6 one-past** - the smallest step past the bar (one day, one row, one percent).
+- **C7 order** - a case whose verdict depends on input order. N/A where the compared input is not a sequence.
+
+*Covered* means a self-test case (in the file's own `-SelfTest`, or a suite that runs it) whose INPUT
+lies in that class and whose assertion reads the verdict. A case label saying so without the input is
+not coverage; an input in the class under any label is. N/A classes leave the denominator, and the
+count is printed as covered of applicable, per detector and in total.
+
+*The bars, in the metric's own units:*
+- **DONE with no fix** if C5 (at the bar) is covered in at least 8 of the 10 detectors.
+- **Fix warranted** if C5 is uncovered in 3 or more of the 10. The fix is fixtures, not a gate and not a
+  label: add an at-the-bar case to the self-tests of up to three of the uncovered detectors in this item
+  (the first three in register order), each run red once by moving the comparison across the boundary
+  in a temp mirror, and list the rest as remaining. If an at-the-bar case exposes a comparison that
+  disagrees with its own comment or register row, that is a behaviour fix and is reported, not assumed.
+- **Raise the label question with Brad** only if C5 is uncovered in 5 or more of the 10: a gap that
+  common is one a label could have made visible. Below 5, no ruling is asked for.
+
 ### I197 - 36 unbounded while-true loops, and at least one ends only when a remote server says so `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\q7-scala-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
