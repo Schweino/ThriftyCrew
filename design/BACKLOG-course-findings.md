@@ -12538,3 +12538,139 @@ rather than REMOVING the copies, and it has an allowlist (`allowed_subsets`) and
 `stores.json` so there is nothing to detect? Detection costs a guard and an allowlist forever;
 consolidation costs one edit per file, once, in scripts some of which are lifted. Nothing is broken
 today, which is why this is a ruling and not work.
+
+### I193 - seven commodity pairs of different forms share most of their store listings, which a correct graph cannot hold `OPEN` `queue-6` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\q6-neo4j-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Packt "Neo4j: Cypher, GDS, GraphQL, LLM, Knowledge Graphs for RAG" (queue 6 entry 17), module 2's node-similarity lab: score two nodes by the Jaccard index of their neighbour sets. Routed to `rag-craft/graph-analytics.md` section 57.
+
+**Measured 2026-09-18**, read-only, over `C:\Codex\ThriftyCrew\graph\sqlite\graph.db` (newest node `updated_at` 2026-09-17T07:12:58), with a scratch Python probe that was not committed. Over the 39,144 `instance_of` edges (ProductSKU -> Commodity): **3,606 of 35,511 SKUs are `instance_of` more than one commodity**. Those SKUs link 346 commodity pairs. Scoring each pair by Jaccard over the SKUs pointing at each commodity gives **35 pairs at 0.5 or above, all 35 across the staple/recipe namespaces, and 0 of the 35 with a `do_not_merge` edge**. 28 of the 35 have the same legacy id on both sides (the next finding). The other 7 pair DIFFERENT forms:
+
+| Jaccard | recipe side | staple side |
+|---|---|---|
+| 0.546 | `olives` | `black-olives` |
+| 0.611 | `frozen-green-peas` | `canned-peas` |
+| 0.652 | `apple` | `apples` |
+| 0.657 | `fries` | `frozen-fries` |
+| 0.702 | `green-beans` | `canned-green-beans` |
+| 0.706 | `green-cabbage` | `cabbage` |
+| 0.721 | `white-mushrooms` | `mushrooms` |
+
+**Why it matters.** A frozen commodity and a canned one cannot legitimately share 61% of their product listings. Either SKUs are filed under the wrong form, or one commodity's include patterns are too broad. Either way a recipe costed off `frozen-green-peas` may be priced on canned peas. This is the form question the `[[form-rule-t1-t2-t3]]` memory rules on, surfaced from the graph's shape instead of from a row. No row-level check can see it, because each `instance_of` edge is valid on its own.
+
+**First rung.** READ the shared SKUs for the peas and green-beans pairs, and say whether they are misfiled. Nothing is changed by reading. The probe is about 20 lines. Commit it as a harness before anyone repeats the measurement, per `.claude/rules/measurement.md` ("naming a scratch harness is not naming a harness").
+
+### I194 - node similarity over instance_of names 28 staple/recipe twins with identical ids, which is the candidate list the reserved same_as predicate has never had `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q6-neo4j-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Same course and section as above, and the same measurement (2026-09-18, `graph.db` as of 2026-09-17T07:12:58).
+
+**Measured.** 28 commodity pairs have the same legacy id in both namespaces and Jaccard 0.5 or above over shared SKUs. The top of the list: `hoisin-sauce` 1.0 over 19 shared SKUs, `tomatillos` 1.0 over 11, `sesame-oil` 0.977 over 42, `bread-crumbs` 0.962 over 75, `soy-sauce` 0.886 over 78. `same_as` has **0 edges** (it is reserved in `graph/schema.md` and listed in `graph/lib/graphdb.py`'s `PREDICATES`), and `do_not_merge` has 18, none on these pairs.
+
+**Why it needs a ruling and not work.** `graph/schema.md` says the namespaces are kept apart ON PURPOSE (staple `ground-turkey` against recipe `93-7-ground-turkey` are different purchases). But that example has different ids. For a pair with the same id and identical listings, like `hoisin-sauce`, the schema's argument does not obviously apply. Brad's call, for each pair or as a rule: is a same-id twin that shares its listings a `same_as`, a `do_not_merge`, or deliberately neither? Whatever the answer, I176 (union-find, with `do_not_merge` checked across whole components) is the mechanism that would carry it out. This finding supplies the candidate list I176 assumes and does not have.
+
+**Forward note.** If `same_as` is ever built, node similarity with the `sold_at` edges left out is the cheap candidate generator. Every SKU is `sold_at` one of only 7 stores, so those edges would inflate every pair (`rag-craft/graph-analytics.md` 57, the hub caution).
+
+### I195 - the sidecar double-load lock was measured, confirmed and fixed a week ago and has never reached main `OPEN` `queue-6` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\q6-pyconc-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** packt-concurrent-and-parallel-programming-in-python-um1n1, lecture "Locking" (a check-then-act
+on shared state needs a lock), applied to the estate's Python by lane q6-pyconc on 2026-09-18.
+
+**What is live.** `sidecar/app.py` on `origin/main` (checked at 27e23a185 on 2026-09-18) still has the
+unlocked lazy load: `matcher()` tests `if _M is None:` and then runs `Matcher.load(...)`. Its endpoints
+are plain `def`, which FastAPI runs on a thread pool, so two first requests arriving together (the recall
+hook plus any other caller after a sidecar restart) can both see `None` and both load. `git show
+origin/main:sidecar/app.py | grep -n "Lock"` returns nothing.
+
+**What already exists, unpushed.** Three commits on branch `claude/youthful-mirzakhani-eef33c`, all dated
+2026-09-11 15:19 and none an ancestor of `origin/main` (checked with `git merge-base --is-ancestor`):
+`eb32b00b3` (acceptance bar, harness, a load counter on /health), `16ca1df7c` (the lock), `7f3c964f7`
+(results). Its own commit message records: the unlocked app.py loaded twice in **6 of 6** concurrent
+cold-start trials, holding a median **9,032 MiB against 4,621 MiB** for one load (1.95x, bar 1.6x); with the
+lock **6 of 6** loaded once, every request 200, median 4,606 MiB (2.4% drift, bar 15%); 0 of 18 trials
+invalid. The measurement doc is `design/MEASURE-sidecar-double-load-2026-09-11.md` on that branch. The
+worktree `.claude/worktrees/youthful-mirzakhani-eef33c` still exists.
+
+**Why it matters.** This is the `A SIBLING MAY ALREADY HOLD THE FIX` shape from ThriftyCrew's CLAUDE.md:
+the defect is measured at nearly double the VRAM on a shared GPU, the fix is written and accepted against
+a bar set before the run, and nobody landed it. It was found only because a course lane grepped the file.
+
+**First rung.** Read the three commits against current main (app.py has moved since 2026-09-11 if the
+recall-search endpoint landed after them), rebase onto origin/main, re-run the branch's own harness once,
+and land it through `ops\push-main.ps1`. Nothing here was changed by this lane.
+
+### I196 - fixture labels record the verdict and never the input class, so nobody can read partition coverage off a suite `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q6-quality-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Toronto, *Learn to Program: Crafting Quality Code* (`program-code`), module 2, "Choosing
+Test Cases": group inputs into classes the function treats alike, test one representative of each, and
+generate the classes from four questions - size (empty, one, smallest interesting, several),
+dichotomies, boundaries, order. Now held in `~/.claude/skills/software-craft/test-design-and-oracles.md`
+section 3b, which also closes the equivalence-partitioning gap recorded in its section 11.
+
+**What was measured, and how weak the measurement is.** The estate's three fixture labels (`MUST FIRE`,
+`MUST NOT FIRE`, `CLEAN TWIN`) partition cases by the VERDICT they assert. None of them names the INPUT
+CLASS a case represents, so "does this suite have an empty-input case, a one-row case, a case at the
+threshold" cannot be answered without reading every assertion. A label-word census on 2026-09-18 over
+every tracked `.ps1` and `.py` (915 files, 7,613 lines carrying one of the three labels, case-sensitive
+match on the label, then a case-insensitive word match on the same line): 689 mention an empty-like
+word (`empty`, `no row(s)`, `zero row(s)`, `nothing`, `none`), 75 a single-item word, **24 a boundary
+word** (`boundary`, `exactly at`, `at the bar/cap/threshold/limit`, `one past`, `off-by-one`), 36 an
+order word. **This is UNSOUND in both directions** - it reads labels, not assertions, so a boundary
+case described in other words is missed and a label that says "nothing" about something else is
+counted. It does not show the suites lack boundary cases. It shows that the labels cannot tell you.
+
+**Why it matters here.** The estate already has one recorded instance of a whole input class going
+untested behind a green suite: `grocery/ingredient-queue.ps1`'s `-Promote` fixture, whose "live ledger
+untouched" half could not fire for seventeen days (`.claude/rules/ops-and-gates.md`, the cmdlet-shadow
+entry). The course's own teaching code, run 2026-09-18, failed three of the four questions it teaches
+(`bubble_sort([])` hangs; `every_nth`'s stated precondition admits `n = 0`, which raises; the restaurant
+example's prescribed `list.sort()` returns the opposite order from its docstring) - each in code whose
+own doctests passed or never ran.
+
+**First rung, and what it is NOT.** Take ten detectors whose logic is threshold- or count-shaped (a
+ratchet, a band check, a staleness bar), write down the classes the four questions generate for each
+input, and count which classes have a representative case. That is a sound sample where the census is
+not. **Not a gate, and not a label change**: a bar on partition coverage would be red on day one, which
+`ops-and-gates.md` already forbids, and a fourth label is a vocabulary change that wants Brad's ruling
+if the sample shows it is worth one. If the sample finds every class covered, close this as DONE with
+the sample attached.
+
+### I197 - 36 unbounded while-true loops, and at least one ends only when a remote server says so `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\q7-scala-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** `scala-functional-programming` (EPFL, Odersky), lecture 3.1: a recursion is known to end
+only when you can name a quantity that is a natural number, strictly decreases on every call, and has
+an exit at its floor. Recorded in `~/.claude/skills/software-craft/language-semantics.md` 11.
+
+**Measured 2026-09-18 at `0d88ee9c7`, read-only over the main checkout's `git ls-files`** (786 `.ps1`,
+129 `.py`): `while ($true)` appears **19 times in 18 PowerShell files** (one of them is a comment in
+`ops/audit-cpu-load.ps1:16`, so 18 real loops) and `while True:` **17 times in 6 Python files** (10 of
+them in `meal-prep/pipeline/hunt-daemon.py`). A text match, so unsound: it does not see `do { } until`,
+`for (;;)` or a recursion, and a hit says nothing about whether the loop is safe.
+
+**Six were read, and they split three ways:**
+
+- **A measure the code controls, with an exit at its floor (safe):** `lib/ps-source.ps1:164` (`$ti++`
+  every pass, exits when `IndexOf` returns -1); `meal-prep/lib/json-db-io.ps1:119` (`$at` advances past
+  each match, and the regex begins with two literal quote characters so it can never match empty and
+  stall); `grocery/ff-price-lib.ps1:95` (`$requests -ge $MaxRequests` is checked first).
+- **A deadline or retry cap (safe, by the clock or a counter):** `lib/json-io.ps1:192` (`$WaitMs`),
+  `lib/ghost-lib.ps1:252` (`$attempt -ge $MaxRetries`).
+- **Termination delegated to the remote side:** `grocery/ghost-export.ps1:30` pages through the Ghost
+  Admin API and breaks only when `meta.pagination.next` is empty, then sets `$page = [int]$pg.next`.
+  There is no page cap and no check that `next` is greater than the page just read, so a response
+  that repeats or rewinds `next` loops forever against the live site. `ff-price-lib.ps1:95` is the
+  good twin of the same job: it carries `-MaxRequests`.
+
+**The ask, first rung READ:** classify the other 30 sites the same way (measure, deadline or cap, or
+delegated) and write the list down. Only after that, decide whether `ghost-export.ps1` and any other
+delegated site get a cap and a strictly-increasing check. **Not a gate**: a detector cannot tell a
+measure from a delegated exit by reading text, and a ratchet over a count of `while ($true)` would
+count the safe ones too.
