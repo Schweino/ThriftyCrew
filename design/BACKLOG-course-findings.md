@@ -13099,6 +13099,10 @@ differed in **0 of 3,189** price-table store cells and 0 board fields, so every 
   sizes, dates and sources with them), none a price. After it the table names the board's own product for that
   store in **3,189 of 3,189** cells; before it, **2,861 of 3,189**, so 328 cells disagreed with the board they are
   documented as derived from.
+- **The golden regression guard caught it, as it should**: on the frozen 2026-07-05 inputs, chicken-thighs
+  `nomem_store` moves Family Fare to Baker's (both $1.99/lb). The branch carries that ONE field edited by hand in
+  `grocery/regression-baseline.json` (no rebuild, no wholesale accept), and with it the branch push passed
+  `run-gates` 411 of 411 and its test-auditors selection. Landing the branch blesses that entry too.
 - Seen while measuring, not caused by it: the worktree rebuild and the live `comparison-2026-09-17.json` differ on
   2 of 572 crowns (pistachios, rice), neither a tie; the live board was built before later rule edits.
 
