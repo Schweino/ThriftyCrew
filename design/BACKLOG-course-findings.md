@@ -13574,6 +13574,32 @@ output is piped into `ConvertFrom-Json`, `json.loads` or a split without reading
 status and without a shape check. The count decides whether this earns a ratchet (never a gate red on
 day one). Unmeasured today; no number is claimed.
 
+**Acceptance bar, written 2026-09-19 before any site was counted** (backlog run, worktree `i188-work`, base
+`6693edb47`). The test, so the number means one thing:
+- **Population:** tracked `.ps1` and `.py` outside any `archive/` directory, parsed (PowerShell AST, Python `ast`).
+- **A SITE** is a `ConvertFrom-Json`, a `-split` / `.Split(` / `.splitlines()` / `.split(`, a `json.loads`, or a
+  `requests` `.json()`, whose input is the output of a NATIVE child process (a named executable such as `git`,
+  `python`, `powershell`, `node`, `curl.exe`, anything ending `.exe`, `Invoke-Native`, `subprocess.*`) or of a WEB
+  call (`Invoke-WebRequest` and its `curl`/`wget`/`iwr` aliases, `Invoke-RestMethod`, which parses implicitly,
+  `WebClient.DownloadString`, `urlopen`, `requests`), directly or through one assignment in the same scope. `S` is
+  every such site. A PowerShell script called in-process (`& $x.ps1`) returns objects, not a child's stdout, and is
+  not a site.
+- **EXIT/STATUS READ:** `$LASTEXITCODE`, `.ExitCode` or `.returncode` / `.status_code` / `raise_for_status` read in
+  the same scope; or a call that raises on failure by construction (`check_output`, `check=True`, `urlopen`, and
+  PowerShell 5.1's web cmdlets, which throw on a non-2xx), recorded as its own class because a 200 carrying an error
+  page still passes it.
+- **SHAPE CHECK:** the parsed value's variable appears in an `if` / `while` / `assert` / `throw` condition, an
+  `-is` / `isinstance` test, or a `.PSObject.Properties` / `in` membership test later in the same scope.
+- **`U` = sites with neither.** Printed as `U of S` with the split by class (native, web).
+- **Precision:** every `U` site is read by eye if `U <= 30`, else 20 of them chosen deterministically (every
+  `ceil(U/20)`th in path:line order). A read CONFIRMS a site only if no guard the scanner missed (a wrapper that
+  checks the exit code, a try that validates, a caller that checks) protects it. `P = confirmed / read`.
+- **Decision:** a ratchet is earned only if `U x P >= 10` AND `P >= 0.7` (a detector wrong three times in ten
+  teaches people to ignore its red). `1 <= U x P < 10`: no ratchet, the sites are listed here and none is changed in
+  this item unless a read shows a failed child's text actually reaching a tracked file, a board or a page. `U x P`
+  of 0: DONE with nothing shipped. `P < 0.7` with `U x P >= 10`: no ratchet, and the scanner's miss is named so a
+  sharper test can be written.
+
 ### I189 - commits that mix refactoring with behaviour change are not a stated rule `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-sdp-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
