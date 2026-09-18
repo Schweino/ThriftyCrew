@@ -1,0 +1,1965 @@
+{
+    "store":  "Fareway",
+    "ad_from":  "2026-09-14",
+    "ad_to":  "2026-09-19",
+    "captured":  "2026-09-17",
+    "pages_read":  20,
+    "pages_total":  20,
+    "source":  "Vision read of ALL 20 of the 20 flyer pages (weekly-1..20) installed by pull-fareway-ads.ps1 at 06:00 on 2026-09-17 (ad_group OmahaGroup (043); ad-window.json and fareway-ad-manifest-2026-09-17.json report 20/20 pages on disk, no gaps). Read by the grocery-browser-stores-refresh agent at 09:00-09:20. WINDOW TAKEN FROM THE AD\u0027S OWN PRINTED FOOTER on page 1, \u0027Prices good September 14 - 19, 2026\u0027. THE MANIFEST DISAGREES AND THE FOOTER WINS: the manifest and ad-window.json say from=2026-09-13, one day earlier than the printed start. LATE READ: this ad has been live since 2026-09-14 and the previous file (fareway-deals-2026-09-06.json) expired 2026-09-12, so Fareway ad rows were absent from the board 09-13 through 09-17; this file restores them for the last two days of the window. PAGES AND WHAT THEY HELD: 1 front page; 2 grocery; 3 grocery plus lifestyle \u0026 nutrition; 4 meat \u0026 seafood plus deli; 5 meat \u0026 deli, bread, bakery; 6 beverages \u0026 snacks; 7 frozen \u0026 dairy; 8 produce; 9 beer plus local selections; 10 spirits \u0026 wine; 11 Frank\u0027s Sizzling Deals; 12-14 football feature (wings, sourdough, flavor wins); 15 pantry; 16 beverages \u0026 snacks; 17 frozen \u0026 dairy plus meat \u0026 deli; 18 personal care / OTC; 19 personal care, baby, household; 20 household and pets. NOT RECORDED, DELIBERATELY: (a) every explicit \u0027WHEN YOU BUY N\u0027 conditional, BOGO, buy-2-get-1, SAVE-$N-when-you-buy and gift-card basket offer, whose per-unit price the board cannot verify - Fareway Cheese $1.88 WYB4, Nabisco Snack Crackers $2.99 WYB2, Dei Fratelli save $1 WYB4, Truly Yours pasta sauce BOGO, Campbell\u0027s Condensed $5 WYB2, Skittles/Starburst/M\u0026M\u0027s BOGO 50%, Kind Minis/Thins BOGO 50%, 1st Phorm bar 2/$4.99 WYB2, Hormel Marinated Pork Loins $5.99 WYB2, Coke/Sprite $6.99 WYB3, Pepsi/Mtn Dew 3/$11.88 WYB3, 7up/RC $5.99 WYB3, Mott\u0027s 2/$6 WYB2, Hawaiian Punch 2/$5 WYB2, Green Giant Simply Steam and Steamer vegetables $1.99 WYB2 (single $2.49), Pero Family Farms vegetables $2.48 WYB2 (single $3.48), Fareway Butter $2.48 WYB2 (single $3.48), Kinder\u0027s Wing Sauce + Tyson Wing Sections save $5, Yellowbird Hot Sauce B2G1, Sun Lovin\u0027 Date Bites BOGO, Spindrift $4.99 WYB2, the page 18-19 personal-care SAVE-$N blocks, Sundance vitamins BOGO penny, Air Wick BOGO, Method hand soap save $2, and the Bright Essentials/White Cloud gift-card offer; (b) King\u0027s Hawaiian Grab \u0026 Go Sandwich Trays, $9.99 Wednesdays only vs $19.99 other days - a day-of-week conditional; (c) the single-price fallbacks printed under WYB offers (Pero $3.48, Green Giant $2.49, Fareway Butter $3.48), which are the non-sale price and not an ad price; (d) pages 9-10 beer, spirits and wine, and page 18-19 OTC medicine and personal care, which are not board commodities. SIMPLE N/$X OFFERS carrying no \u0027when you buy\u0027 qualifier ARE recorded at their arithmetic unit price: pork loin slices 10/$10 -\u003e $1.00, Frank\u0027s RedHot 2/$6 -\u003e $3.00, Fareway manzanilla olives 2/$4.50 -\u003e $2.25, cube steak 2/$7 -\u003e $3.50, stuffed pork chops 2/$5 -\u003e $2.50, chicken fried chicken 2/$5 -\u003e $2.50, Lunchables 2/$5 -\u003e $2.50, Little Debbie 2/$6 -\u003e $3.00, Tony\u0027s pizza 3/$10 -\u003e $3.33, Fareway croutons 2/$3 -\u003e $1.50, Idahoan 3/$4 -\u003e $1.33, Ben\u0027s rice cups 2/$3.50 -\u003e $1.75, Bing 2/$3 -\u003e $1.50, Gold Peak 2/$5 -\u003e $2.50, Snak Saks 3/$10 -\u003e $3.33, Bellatoria 3/$9 -\u003e $3.00. Whole-dollar prices on pages 12-14 (e.g. \u0027$9\u0027, \u0027$3\u0027) recorded as $N.00. Fareway Fruit $1.44 appears on pages 3 and 11 and is recorded once.",
+    "deal_count":  217,
+    "deals":  [
+                  {
+                      "store":  "Fareway",
+                      "item":  "80% Lean 20% Fat Ground Beef",
+                      "ad_price":  "$3.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Family Tree Farms Jumbo Blueberries",
+                      "ad_price":  "$4.99",
+                      "size":  "9.8 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Boneless Ribeyes",
+                      "ad_price":  "$19.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Brew Pub Lotzza Motzza, MVP or Patriot Pizza",
+                      "ad_price":  "$4.99",
+                      "size":  "12 in",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Pork Loin Slices",
+                      "ad_price":  "$1.00",
+                      "size":  "4 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Entenmann\u0027s Little Bites",
+                      "ad_price":  "$3.48",
+                      "size":  "5 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Green Beans, Corn or Peas",
+                      "ad_price":  "$0.68",
+                      "size":  "14.5-15.25 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Barilla Chickpea, Red Lentil or Protein+ Pasta",
+                      "ad_price":  "$2.84",
+                      "size":  "8.8-14.5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Pasta Roni or Rice A Roni",
+                      "ad_price":  "$1.68",
+                      "size":  "4.3-7.2 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mezzetta Pasta Sauce",
+                      "ad_price":  "$5.99",
+                      "size":  "25 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Maruchan Ramen Noodles",
+                      "ad_price":  "$0.37",
+                      "size":  "3 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Kraft Original Mac \u0026 Cheese",
+                      "ad_price":  "$1.24",
+                      "size":  "7.25 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Goodles Macaroni",
+                      "ad_price":  "$2.79",
+                      "size":  "5.25-6 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Pace Chunky Salsa",
+                      "ad_price":  "$7.99",
+                      "size":  "64 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Ortega Refried Beans 16 oz, Taco Shells 12 ct, or Sauce 8 oz",
+                      "ad_price":  "$1.99",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Flavored Mustard",
+                      "ad_price":  "$1.88",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Heinz Ketchup",
+                      "ad_price":  "$11.98",
+                      "size":  "2 ct 50.5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Frank\u0027s Red Hot Sauce",
+                      "ad_price":  "$3.00",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mezzetta Peppers",
+                      "ad_price":  "$3.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Sweet Baby Ray\u0027s BBQ Sauce",
+                      "ad_price":  "$2.99",
+                      "size":  "28 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Kraft Miracle Whip",
+                      "ad_price":  "$5.98",
+                      "size":  "30 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Brianna\u0027s Dressing",
+                      "ad_price":  "$3.98",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Manzanilla Olives",
+                      "ad_price":  "$2.25",
+                      "size":  "5.75 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Jiffy Honey Corn Muffin Mix",
+                      "ad_price":  "$0.98",
+                      "size":  "7-8.5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Chunky Soup",
+                      "ad_price":  "$1.88",
+                      "size":  "18.6-18.8 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Chunk Chicken",
+                      "ad_price":  "$3.34",
+                      "size":  "12.5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Kellogg\u0027s Family Size Special K",
+                      "ad_price":  "$4.98",
+                      "size":  "family size",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Quaker Cap\u0027n Crunch or Life",
+                      "ad_price":  "$4.99",
+                      "size":  "13.8-18 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "NuTrail Nut Granola",
+                      "ad_price":  "$7.99",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Krusteaz Muffin Mix",
+                      "ad_price":  "$3.49",
+                      "size":  "17.1-20 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Fruit Cups",
+                      "ad_price":  "$7.48",
+                      "size":  "12 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Starbucks Coffee K-Cup Pods",
+                      "ad_price":  "$11.29",
+                      "size":  "10 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Black Rifle Coffee Company",
+                      "ad_price":  "$12.99",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "J. Skinner Cinnamon Rolls",
+                      "ad_price":  "$4.99",
+                      "size":  "8 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Fruit",
+                      "ad_price":  "$1.44",
+                      "size":  "15-15.25 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Musselman\u0027s Applesauce",
+                      "ad_price":  "$2.98",
+                      "size":  "6 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Smucker\u0027s Preserves",
+                      "ad_price":  "$3.99",
+                      "size":  "18 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Jif Peanut Butter",
+                      "ad_price":  "$5.96",
+                      "size":  "33.5-40 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Truly Yours Sandwich Cookies",
+                      "ad_price":  "$4.99",
+                      "size":  "12 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Jet-Puffed Marshmallows",
+                      "ad_price":  "$1.98",
+                      "size":  "10-12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Larabar Fruit \u0026 Nut Bars",
+                      "ad_price":  "$6.98",
+                      "size":  "6 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Premier Protein 100% Whey Protein Powder",
+                      "ad_price":  "$29.99",
+                      "size":  "17 servings",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Garden Of Life Organic Protein Powder",
+                      "ad_price":  "$19.97",
+                      "size":  "18 servings",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Premier Protein Shakes",
+                      "ad_price":  "$9.97",
+                      "size":  "4 pk 11 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Boneless Rump Roast",
+                      "ad_price":  "$6.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Stew Beef",
+                      "ad_price":  "$7.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Cube Steak",
+                      "ad_price":  "$3.50",
+                      "size":  "7 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bone-In Smoked Pork Chops",
+                      "ad_price":  "$4.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Whole Smoked Bone-In Pork Loin",
+                      "ad_price":  "$3.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Boneless Stuffed Pork Chops",
+                      "ad_price":  "$2.50",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Baby Back Ribs",
+                      "ad_price":  "$3.88",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "All-Natural Chicken Wings",
+                      "ad_price":  "$2.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Ocean Perch",
+                      "ad_price":  "$8.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Chicken Fried Chicken or Country Fried Steak",
+                      "ad_price":  "$2.50",
+                      "size":  "3-4 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Deli Sliced Beef Summer Sausage",
+                      "ad_price":  "$8.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Off-The-Bone Carver Ham",
+                      "ad_price":  "$6.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Deli Sliced Chicken Breast",
+                      "ad_price":  "$7.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Deli Sliced Swiss Cheese",
+                      "ad_price":  "$6.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mac \u0026 Pea Salad",
+                      "ad_price":  "$4.88",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "German Potato Salad",
+                      "ad_price":  "$4.88",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Ground Pork Patties",
+                      "ad_price":  "$14.99",
+                      "size":  "3 lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Webster City Bacon",
+                      "ad_price":  "$5.88",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Hillshire Farm Rope Sausage",
+                      "ad_price":  "$4.49",
+                      "size":  "12-14 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Oscar Mayer Beef, Cheese or Turkey Franks",
+                      "ad_price":  "$4.99",
+                      "size":  "15-16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Amylu Chicken Sausage or Mini Links",
+                      "ad_price":  "$4.99",
+                      "size":  "9-12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Johnsonville Brats",
+                      "ad_price":  "$5.49",
+                      "size":  "19 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bistro 28 Express Meal Kits",
+                      "ad_price":  "$9.99",
+                      "size":  "18.4-27 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Lunchables Fun Packs",
+                      "ad_price":  "$2.50",
+                      "size":  "8.9-10.7 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Shullsburg Sliced American Cheese",
+                      "ad_price":  "$14.99",
+                      "size":  "3 lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "BelGioioso Fresh Mozzarella",
+                      "ad_price":  "$3.88",
+                      "size":  "6-8 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Village Hearth Light 12 Grain or Italian Bread",
+                      "ad_price":  "$4.29",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Sara Lee Butter Bread",
+                      "ad_price":  "$2.88",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bubba\u0027s Bagels",
+                      "ad_price":  "$3.69",
+                      "size":  "6 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway All Butter Croissants",
+                      "ad_price":  "$4.99",
+                      "size":  "3 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bakery Fresh Hamburger or Hot Dog Buns",
+                      "ad_price":  "$3.49",
+                      "size":  "8 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Assorted Scones",
+                      "ad_price":  "$4.99",
+                      "size":  "6 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bakery Fresh Muffins",
+                      "ad_price":  "$4.99",
+                      "size":  "4 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bubbl\u0027r Sparkling Water",
+                      "ad_price":  "$5.99",
+                      "size":  "6 pk 12 oz cans",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Lipton Iced Tea 12 pk .5 L or Starbucks Frappuccino 4 pk 9.5 oz",
+                      "ad_price":  "$6.99",
+                      "size":  "pack",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Liquid I.V. Hydration Multiplier",
+                      "ad_price":  "$9.98",
+                      "size":  "6 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Gatorade Water or Life WTR",
+                      "ad_price":  "$9.99",
+                      "size":  "6 pk 1 L btls",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Purified or Spring Water",
+                      "ad_price":  "$5.29",
+                      "size":  "32 pk .5 L btls",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Boom Chicka Pop Popcorn",
+                      "ad_price":  "$3.99",
+                      "size":  "4.4-7 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Frito Lay Dip or Tostitos Salsa",
+                      "ad_price":  "$3.49",
+                      "size":  "10-15.5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Tostitos or Popcorners",
+                      "ad_price":  "$3.49",
+                      "size":  "7-12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Siete Chips",
+                      "ad_price":  "$4.99",
+                      "size":  "5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Doritos or Miss Vickie\u0027s Kettle Cooked Chips",
+                      "ad_price":  "$3.49",
+                      "size":  "6-10.75 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Zesta Crackers",
+                      "ad_price":  "$3.98",
+                      "size":  "7.5-16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Town House or Club Family Size Crackers",
+                      "ad_price":  "$5.99",
+                      "size":  "family size",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Cheez-It Family Size Crackers",
+                      "ad_price":  "$5.94",
+                      "size":  "family size",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Welch\u0027s Fruit Snacks",
+                      "ad_price":  "$3.29",
+                      "size":  "10 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Stauffer\u0027s Animal Crackers",
+                      "ad_price":  "$2.98",
+                      "size":  "14.5-16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Sandwich Cookies",
+                      "ad_price":  "$2.98",
+                      "size":  "25 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Oreo Family Size Cookies",
+                      "ad_price":  "$4.97",
+                      "size":  "family size",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Little Debbie Fall Cakes",
+                      "ad_price":  "$3.00",
+                      "size":  "6-13.13 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Jack\u0027s Original Pizza",
+                      "ad_price":  "$3.86",
+                      "size":  "12 in",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Tony\u0027s Pizzeria Style Pizza",
+                      "ad_price":  "$3.33",
+                      "size":  "12 in",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Totino\u0027s Pizza Rolls",
+                      "ad_price":  "$9.98",
+                      "size":  "100 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Garlic Bread",
+                      "ad_price":  "$3.99",
+                      "size":  "5-8 ct or 16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Tyson Family Pack Chicken",
+                      "ad_price":  "$13.94",
+                      "size":  "2-2.5 lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Vegetables",
+                      "ad_price":  "$2.94",
+                      "size":  "32 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Reames Egg Noodles",
+                      "ad_price":  "$6.49",
+                      "size":  "24 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Arby\u0027s, Checkers, Nathan\u0027s, Red Robin or Sonic Fries or Onion Rings",
+                      "ad_price":  "$5.88",
+                      "size":  "14-28 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Kemps Ice Cream or Sherbet 48-54 oz, or Novelties 12 ct",
+                      "ad_price":  "$4.98",
+                      "size":  "48-54 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Eggo Waffles or Pancakes",
+                      "ad_price":  "$3.27",
+                      "size":  "10-12 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Simply Orange Juice",
+                      "ad_price":  "$6.99",
+                      "size":  "76 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway 100% Orange Juice",
+                      "ad_price":  "$3.98",
+                      "size":  "52 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "International Delight Iced Coffee",
+                      "ad_price":  "$3.99",
+                      "size":  "64 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Coffee Toppers Cold Foam",
+                      "ad_price":  "$3.99",
+                      "size":  "15 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Truly Yours Pasture-Raised Organic Brown Eggs",
+                      "ad_price":  "$4.99",
+                      "size":  "dozen",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "OIKOS PRO Greek Yogurt",
+                      "ad_price":  "$5.98",
+                      "size":  "4 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fairlife Milk",
+                      "ad_price":  "$4.44",
+                      "size":  "52 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "AE Harvest Pumpkin Egg Nog",
+                      "ad_price":  "$4.44",
+                      "size":  "qt",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "AE Sour Cream or Dip",
+                      "ad_price":  "$2.48",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Cream Cheese",
+                      "ad_price":  "$2.77",
+                      "size":  "2 ct 8 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Frigo String Cheese",
+                      "ad_price":  "$7.99",
+                      "size":  "24 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Velveeta or Kraft Singles",
+                      "ad_price":  "$3.48",
+                      "size":  "16 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Dole Greener Selection, Classic Romaine or Spinach",
+                      "ad_price":  "$2.77",
+                      "size":  "8-11 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mini Cucumbers or Mucci Farms Cutecumber Poppers",
+                      "ad_price":  "$2.88",
+                      "size":  "9-16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Dole Baby Carrots",
+                      "ad_price":  "$2.77",
+                      "size":  "2 lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Grape Tomatoes",
+                      "ad_price":  "$2.48",
+                      "size":  "pint",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Summertime Farms Red or Gold Baby Potatoes",
+                      "ad_price":  "$2.99",
+                      "size":  "3 lb bag",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mini Sweet Peppers",
+                      "ad_price":  "$3.88",
+                      "size":  "16 oz bag",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "California Red Seedless Grapes",
+                      "ad_price":  "$1.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Washington Gala Apples",
+                      "ad_price":  "$1.48",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Dole Broccoli Crowns",
+                      "ad_price":  "$2.48",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Whole Cantaloupe or Honeydew Melons",
+                      "ad_price":  "$0.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Split Top, Sesame, or Corn Dusted Bakery Buns",
+                      "ad_price":  "$2.99",
+                      "size":  "12 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Cookie\u0027s BBQ Sauce",
+                      "ad_price":  "$2.99",
+                      "size":  "18 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Croutons",
+                      "ad_price":  "$1.50",
+                      "size":  "5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Dorothy Lynch Dressing",
+                      "ad_price":  "$2.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "All Natural Chicken Hindquarters",
+                      "ad_price":  "$0.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Hillshire Farm Lunch Meat",
+                      "ad_price":  "$5.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Swanson Broth",
+                      "ad_price":  "$1.98",
+                      "size":  "32 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Idahoan Instant Mashed Potatoes",
+                      "ad_price":  "$1.33",
+                      "size":  "4-4.1 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Wicked Minis",
+                      "ad_price":  "$3.99",
+                      "size":  "6 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "King\u0027s Hawaiian Pretzel Bites",
+                      "ad_price":  "$6.99",
+                      "size":  "10.2 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Izzio Sliced Sourdough",
+                      "ad_price":  "$4.99",
+                      "size":  "24 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Sargento Sliced Cheese",
+                      "ad_price":  "$3.49",
+                      "size":  "7-8 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "La Quercia Pancetta or Prosciutto",
+                      "ad_price":  "$5.99",
+                      "size":  "2 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Old Home Peanut Butter",
+                      "ad_price":  "$4.99",
+                      "size":  "14 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mucci Farms Butter or Trio Lettuce",
+                      "ad_price":  "$1.99",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "On-the-Vine Tomatoes",
+                      "ad_price":  "$2.49",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Werther\u0027s Original or Mamba",
+                      "ad_price":  "$9.00",
+                      "size":  "25-30 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Reese\u0027s Filled Pretzels",
+                      "ad_price":  "$4.00",
+                      "size":  "9 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Dot\u0027s Pretzels",
+                      "ad_price":  "$6.00",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Buffalo Wild Wings Sauce",
+                      "ad_price":  "$5.00",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Cholula Hot Sauce",
+                      "ad_price":  "$7.00",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "La Preferida Jalapeno Nacho Slices",
+                      "ad_price":  "$3.00",
+                      "size":  "11.5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Hidden Valley Dressing Mix",
+                      "ad_price":  "$2.00",
+                      "size":  "0.4-1 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Tillamook Cream Cheese",
+                      "ad_price":  "$3.00",
+                      "size":  "7 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mad Butcher\u0027s Salsa or Queso",
+                      "ad_price":  "$3.00",
+                      "size":  "15-16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Goodles Vegan is Believin\u0027",
+                      "ad_price":  "$3.49",
+                      "size":  "5.25 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mrs. Bonser\u0027s Egg Noodles",
+                      "ad_price":  "$2.99",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Rummo Pasta",
+                      "ad_price":  "$3.79",
+                      "size":  "8.82-16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Ragu Pasta Sauce",
+                      "ad_price":  "$5.99",
+                      "size":  "66 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bertolli Balsamic Glaze or Vinegar",
+                      "ad_price":  "$4.48",
+                      "size":  "6.8-16.9 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Ace Bakery Pull-Aparts",
+                      "ad_price":  "$2.99",
+                      "size":  "12.5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Canyon Bakehouse Gluten Free Bread 15 oz, Bagels or Buns 4 ct",
+                      "ad_price":  "$6.97",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Stonefire Naan Dippers",
+                      "ad_price":  "$4.49",
+                      "size":  "7.05 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Pretzilla Burger Buns",
+                      "ad_price":  "$3.99",
+                      "size":  "4 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mission Soft Taco Flour Tortillas",
+                      "ad_price":  "$2.99",
+                      "size":  "10 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Ben\u0027s Original Rice Cups",
+                      "ad_price":  "$1.75",
+                      "size":  "2.4 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Idahoan + Protein Mashed Potatoes",
+                      "ad_price":  "$1.99",
+                      "size":  "4.6 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "McCormick Grill Mates",
+                      "ad_price":  "$2.48",
+                      "size":  "2.5-3.5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bachan\u0027s Japanese Barbeque Sauce",
+                      "ad_price":  "$7.99",
+                      "size":  "17 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Vlasic Relish",
+                      "ad_price":  "$1.99",
+                      "size":  "10 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Shasta",
+                      "ad_price":  "$4.98",
+                      "size":  "12 pk 12 oz cans",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bing Energy Drink",
+                      "ad_price":  "$1.50",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Ghost Energy Drink",
+                      "ad_price":  "$4.99",
+                      "size":  "4 pk 8.4 oz cans",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Juice Cocktail",
+                      "ad_price":  "$2.98",
+                      "size":  "64 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Ocean Spray 100% Juice",
+                      "ad_price":  "$4.49",
+                      "size":  "64 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "V8 Vegetable Juice",
+                      "ad_price":  "$5.99",
+                      "size":  "6 pk 11.5 oz cans",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway 100% Tomato Juice",
+                      "ad_price":  "$4.19",
+                      "size":  "64 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Gatorade",
+                      "ad_price":  "$4.19",
+                      "size":  "6 pk 12 oz btls",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Propel",
+                      "ad_price":  "$8.48",
+                      "size":  "12 pk .5 L btls",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Gold Peak Tea",
+                      "ad_price":  "$2.50",
+                      "size":  "59 oz btls",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Stur Water Enhancer",
+                      "ad_price":  "$3.49",
+                      "size":  "1.4-1.62 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "True Citrus Crystallized Lemon or Lime",
+                      "ad_price":  "$2.99",
+                      "size":  "32 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Planters Cashews or Mixed Nuts",
+                      "ad_price":  "$6.99",
+                      "size":  "8-10.3 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Cashews",
+                      "ad_price":  "$11.99",
+                      "size":  "28 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Microwave Popcorn",
+                      "ad_price":  "$5.99",
+                      "size":  "12 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "General Mills Cheesy Mix Variety Pack",
+                      "ad_price":  "$11.99",
+                      "size":  "20 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Nabisco Snak Saks",
+                      "ad_price":  "$3.33",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bobo\u0027s Oat Bites",
+                      "ad_price":  "$3.99",
+                      "size":  "5 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Mother\u0027s or Sandies Cookies",
+                      "ad_price":  "$4.29",
+                      "size":  "9-11.3 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bellatoria Ultra Thin Crust Personal Size Pizza",
+                      "ad_price":  "$3.00",
+                      "size":  "5.67-7.8 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "White Castle Sliders",
+                      "ad_price":  "$5.99",
+                      "size":  "6 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Banquet Brown \u0027N Serve Sausage",
+                      "ad_price":  "$1.99",
+                      "size":  "6.4 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Milwaukee Pretzel Company Bavarian Soft Pretzels",
+                      "ad_price":  "$6.99",
+                      "size":  "6 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Northern Fisheries Sea Scallops",
+                      "ad_price":  "$12.49",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Supreme Choice Salad Shrimp",
+                      "ad_price":  "$8.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Smart Balance Buttery Spread",
+                      "ad_price":  "$3.99",
+                      "size":  "15 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Bag Full Of Cookies",
+                      "ad_price":  "$9.99",
+                      "size":  "36-48 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Oreo Ice Cream Novelties",
+                      "ad_price":  "$5.98",
+                      "size":  "4-6 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Halo Top Ice Cream",
+                      "ad_price":  "$3.99",
+                      "size":  "pint",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Isernio\u0027s Ground Chicken or Chicken Sausage",
+                      "ad_price":  "$5.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Frick\u0027s Diced or Cubed Ham",
+                      "ad_price":  "$4.99",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Columbus Paninos",
+                      "ad_price":  "$4.99",
+                      "size":  "3.9 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Buddig Lunchmeat",
+                      "ad_price":  "$0.85",
+                      "size":  "2 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Castello Gouda",
+                      "ad_price":  "$6.99",
+                      "size":  "7 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Shullsburg Cold Pack Cheese Spreads",
+                      "ad_price":  "$3.49",
+                      "size":  "7 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Reser\u0027s Dessert Parfaits",
+                      "ad_price":  "$3.49",
+                      "size":  "15-20 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Gerber Natural 1st or 2nd Foods",
+                      "ad_price":  "$1.88",
+                      "size":  "4 oz or 2 ct 4 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Gerber Graduate Puffs or Lil\u0027 Crunchies",
+                      "ad_price":  "$2.97",
+                      "size":  "1.48 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Gerber 100% Juice",
+                      "ad_price":  "$2.99",
+                      "size":  "32 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Huggies Little Snugglers Diapers",
+                      "ad_price":  "$9.99",
+                      "size":  "31-32 ct",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Meat Market Competition Blend BBQ Pellets",
+                      "ad_price":  "$8.88",
+                      "size":  "20 lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Arm \u0026 Hammer Detergent",
+                      "ad_price":  "$9.98",
+                      "size":  "96.2-110 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Quilted Northern Bath Tissue 12 ct mega rolls, or Brawny Paper Towels 8 ct double rolls",
+                      "ad_price":  "$10.88",
+                      "size":  "pack",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Arm \u0026 Hammer Clumping Cat Litter",
+                      "ad_price":  "$11.98",
+                      "size":  "20 lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Friskies Party Mix Cat Treats",
+                      "ad_price":  "$1.48",
+                      "size":  "2.1 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Purina One Smart Blend Dog Food",
+                      "ad_price":  "$31.98",
+                      "size":  "16.5 lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Kibbles \u0027N Bits Dog Food",
+                      "ad_price":  "$14.99",
+                      "size":  "16 lb",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Purina Beggin\u0027 Strips",
+                      "ad_price":  "$3.88",
+                      "size":  "6 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Redbarn Bully Slices 7 oz, or Peanut Butter Filled Bone 8 oz",
+                      "ad_price":  "$8.99",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Redbarn Peanut Butter Filled Bone",
+                      "ad_price":  "$5.49",
+                      "size":  "3.5 oz",
+                      "regular":  null,
+                      "source_ad":  "Fareway Weekly Ad 2026-09-14 to 2026-09-19",
+                      "as_of":  "2026-09-17"
+                  }
+              ]
+}
