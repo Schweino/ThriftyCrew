@@ -11284,7 +11284,42 @@ global list plus a check, not designing.
 **Marked 1-WAY because the first rung is the ruling itself and the obvious consequence is a sweep of
 330 live pages on a paid site.** That is not deletable.
 
-### I144 - Nothing in our own files carries any allergen information, and we sell recipes `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BUILD`
+### I144 - Nothing in our own files carries any allergen information, and we sell recipes `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**2026-09-18: THE LINE MAKES ONE FALSE FACTUAL CLAIM, AND IT SHOULD BE RULED ON BEFORE I172'S REPUBLISH
+SHIPS IT.** `meal-prep\db\allergens.json` (written by `pipeline\gen_allergen_table.py:107`) classes Coconut
+Milk as `tree_nuts:coconut` and every card that uses it says *"tree nuts, from coconut, which the FDA lists as
+a tree nut"*. **The FDA stopped listing it on 6 January 2025**: its final allergen
+labelling guidance cut the tree-nut list from 23 to 12 and took coconut off it (coconut is botanically a
+drupe); coconut must still appear in an ingredient list but not in a "Contains" statement. Checked against
+four independent write-ups of that guidance (FARE, the Academy of Nutrition and Dietetics, Allergic Living,
+the FDA Law Blog). The table's other tree-nut tags (almond on 3 rows, walnut, cashew, pine nut) are all on the
+12, so coconut is the only one affected. **Measured at 64e7fd1c0 over 584 of 584 specs through the live
+`Format-TcAllergenLine`: 41 lines name tree nuts, 30 name coconut, and in 28 coconut is the ONLY tree nut**, so
+28 cards would tell a reader "Contains: tree nuts" for a food the FDA no longer calls one. Nothing live says it
+yet: the 584 published cards carry no line at all (I172), so this costs nothing to fix now and a republish to
+fix later. The rest of the classification rule is not in question.
+
+**THE QUESTION FOR BRAD: what does a card say about coconut?**
+1. **Drop it.** Coconut Milk becomes no allergen; the 28 lose "tree nuts" entirely and the 2 others keep
+   their real nut. Matches the FDA exactly. The word "coconut" is still in the ingredient name above.
+2. **Keep naming it, outside the nine, and say why** (RECOMMENDED). Remove it from "Contains", and add a
+   hidden-source style clause such as *"Coconut: not one of the nine since the FDA's January 2025 guidance,
+   named here because some readers with a tree-nut allergy avoid it."* Nothing is understated and nothing
+   false is claimed; it costs one new clause type in `allergen-lib.ps1` and its fixtures.
+3. **Keep it under tree nuts and only fix the wording** (for example "which the FDA listed as a tree nut until
+   2025"). Cheapest, and still states "Contains: tree nuts" for 28 cards where the regulator says otherwise.
+
+**A second, smaller question, same look.** The 375px check (owed by I172 item 1) was done 2026-09-18: the
+Vietnamese chicken curry line (the longest in the catalogue, 411 characters of text) injected into the LIVE
+published page's DOM at 375px, theme CSS and all, then read. **No horizontal scroll** (document 375 px wide,
+box 24 to 351 px), nothing crushed, words read correctly, and it sits above the paywall as ruled. **But it
+renders at 12.5 px and its note at 10.8 px, against 17 px for the ingredient list above it** - the live theme's
+root is 10 px, so the `1.25rem` and `1.08rem` in `build-card2.ps1:367-370` come out small; only one element on
+the whole page is smaller than that note. A safety line smaller than the list it summarises reads as fine
+print. Recommendation: raise both to body size (`1.7rem` and `1.5rem`) in the same rebuild as the ruling above,
+since both are one I172 republish. This is a look taken on a DOM injection, not a published card, which is as
+close as possible without a Ghost write.
 
 **BRAD RULED ON IT 2026-09-12 AND THE MECHANISM SHIPPED THE SAME DAY. The ruling is
 `design\RULING-allergen-line-2026-09-12.md`**, which carries it verbatim, the four detail decisions it
