@@ -15,6 +15,8 @@
     a HARNESS       a repo path to a .ps1 or .py on a line that says harness, measured through, ran
                     through, or generated ... by - and that exists.
     a CITED COMMIT  a hash on a line that says commit, which git resolves to a commit.
+    a CONTENT ID    a hash on such a line that names a blob or tree: listed, never read as a commit.
+    an UNRESOLVED   a hash on such a line that names no object: counted on the marker and listed, not ratcheted.
   UNQUALIFIED when a named harness has a commit after the NEWEST cited commit. To re-qualify, re-read
   the conclusion against the moved harness and add a line such as
       Re-read at commit <hash>: <what still holds>
@@ -96,6 +98,10 @@ function Get-CitedHashes {
     if ($i + 1 -lt $all.Count) { $line = $line + ' ' + $all[$i + 1] }
     foreach ($m in [regex]::Matches($line, $script:HASH_RX)) {
       $h = $m.Groups[1].Value
+      # EXACTLY 32 HEX IS AN MD5, never a git id (2026-09-18). MEASURE-event-bus-concurrent-append-2026-09-11.md
+      # writes "The new arm is md5 `b11149f3...`" on the line after a commit line, and nobody abbreviates a git
+      # hash to 32 characters. Without this it would read as a cited hash git cannot resolve.
+      if ($h.Length -eq 32) { continue }
       if ($h -cmatch '[a-f]' -and $h -match '[0-9]' -and -not $out.Contains($h)) { [void]$out.Add($h) }
     }
   }
@@ -104,13 +110,38 @@ function Get-CitedHashes {
 }
 
 function Get-CurrencyVerdict {
-  <# @{ Verdict = CURRENT | UNQUALIFIED | NOT-QUALIFIABLE; Moved = @(@{Path; After; Since}); Why }.
-     Pure over its scriptblocks, so the fixtures never touch git. #>
-  param([string[]]$Paths, [string[]]$Hashes, [scriptblock]$HashExists, [scriptblock]$PathExists, [scriptblock]$After)
-  $real = @(@($Hashes) | Where-Object { $_ -and (& $HashExists $_) })
+  <# @{ Verdict = CURRENT | UNQUALIFIED | NOT-QUALIFIABLE; Moved = @(@{Path; After; Since}); Why; Content; Unresolved }.
+     Pure over its scriptblocks, so the fixtures never touch git.
+
+     EVERY CITED HASH IS CLASSIFIED, NOT ONLY TESTED FOR BEING A COMMIT (2026-09-18). -HashType answers 'commit',
+     'content' (a blob or tree id) or 'none' (git has no object by that name, or the short name is ambiguous).
+     Until then one rev-parse "<hash>^{commit}" answered yes or no, so the three cases were one: measurement.md
+     (2026-09-11) asks a document to cite each file's BLOB beside the commit, because a rebase cannot move a blob,
+     and a cited blob was dropped exactly like a hash that names nothing - with git's own "expected commit type,
+     but the object dereferences to blob type" on stderr as the only trace, printed to every push-main console and
+     into no log. A content id is deliberately NOT a commit citation (it says what a file held, not when), so it
+     never qualifies a document; it is counted and listed. A hash that resolves to nothing is counted and listed
+     too, and is NOT a gate: an unreachable commit leaves the object store on git's clock, not in the push that
+     is being gated, so a red on it would refuse a push that did not cause it. #>
+  param([string[]]$Paths, [string[]]$Hashes, [scriptblock]$HashType, [scriptblock]$PathExists, [scriptblock]$After)
+  $real = New-Object System.Collections.Generic.List[string]
+  $content = New-Object System.Collections.Generic.List[string]
+  $unres = New-Object System.Collections.Generic.List[string]
+  foreach ($h in @($Hashes)) {
+    if (-not $h) { continue }
+    $t = [string](& $HashType $h)
+    if ($t -ceq 'commit') { [void]$real.Add($h) }
+    elseif ($t -ceq 'content') { [void]$content.Add($h) }
+    else { [void]$unres.Add($h) }
+  }
+  $ca = $content.ToArray(); $ua = $unres.ToArray()
   $hp = @(@($Paths) | Where-Object { $_ -and (& $PathExists $_) })
-  if ($hp.Count -eq 0) { return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = 'names no harness that exists' } }
-  if ($real.Count -eq 0) { return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = 'cites no commit git can resolve' } }
+  if ($hp.Count -eq 0) { return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = 'names no harness that exists'; Content = $ca; Unresolved = $ua } }
+  if ($real.Count -eq 0) {
+    $why = 'cites no commit git can resolve'
+    if ($ca.Count -or $ua.Count) { $why += (' ({0} blob or tree id(s), {1} hash(es) naming no object)' -f $ca.Count, $ua.Count) }
+    return @{ Verdict = 'NOT-QUALIFIABLE'; Moved = @(); Why = $why; Content = $ca; Unresolved = $ua }
+  }
   $moved = New-Object System.Collections.Generic.List[object]
   foreach ($p in $hp) {
     $min = $null; $since = ''
@@ -120,8 +151,8 @@ function Get-CurrencyVerdict {
     }
     if ($min -gt 0) { [void]$moved.Add(@{ Path = $p; After = $min; Since = $since }) }
   }
-  if ($moved.Count -gt 0) { return @{ Verdict = 'UNQUALIFIED'; Moved = $moved.ToArray(); Why = '' } }
-  return @{ Verdict = 'CURRENT'; Moved = @(); Why = '' }
+  if ($moved.Count -gt 0) { return @{ Verdict = 'UNQUALIFIED'; Moved = $moved.ToArray(); Why = ''; Content = $ca; Unresolved = $ua } }
+  return @{ Verdict = 'CURRENT'; Moved = @(); Why = ''; Content = $ca; Unresolved = $ua }
 }
 
 if ($SelfTest) {
@@ -134,6 +165,8 @@ if ($SelfTest) {
   }
   $yes = { param($x) $true }
   $no = { param($x) $false }
+  $isCommit = { param($x) 'commit' }
+  $isNone = { param($x) 'none' }
 
   $t1 = 'Harness: grocery/guards.ps1, run three times.'
   $hp1 = Get-HarnessPaths -Text $t1
@@ -143,7 +176,7 @@ if ($SelfTest) {
   $hh2 = Get-CitedHashes -Text $t2
   $h2 = @($hh2)
   Case 'MUST FIRE' 'a hash on a commit line is a cited commit' ($h2.Count -eq 1 -and $h2[0] -eq '47150b330') ($h2 -join ',')
-  $v3 = Get-CurrencyVerdict -Paths @('grocery/guards.ps1') -Hashes @('47150b330') -HashExists $yes -PathExists $yes -After { param($h, $p) 2 }
+  $v3 = Get-CurrencyVerdict -Paths @('grocery/guards.ps1') -Hashes @('47150b330') -HashType $isCommit -PathExists $yes -After { param($h, $p) 2 }
   Case 'MUST FIRE' 'a harness with commits after the cited one is UNQUALIFIED' ($v3.Verdict -eq 'UNQUALIFIED' -and $v3.Moved[0].After -eq 2) $v3.Verdict
 
   $tw = "**Harness and commit** (per the rule): the snapshot producer is`n``ops/member-cohorts.ps1``, run nightly."
@@ -160,18 +193,18 @@ if ($SelfTest) {
   $hh6 = Get-CitedHashes -Text 'The commit landed on 2026-09-09 after 1630 seconds, and the fix was accede.'
   $h6 = @($hh6)
   Case 'MUST NOT FIRE' 'a date, a count and a hex-letter word on a commit line are not hashes' ($h6.Count -eq 0) ($h6 -join ',')
-  $v7 = Get-CurrencyVerdict -Paths @('grocery/guards.ps1') -Hashes @('abc1234') -HashExists $no -PathExists $yes -After { param($h, $p) 9 }
+  $v7 = Get-CurrencyVerdict -Paths @('grocery/guards.ps1') -Hashes @('abc1234') -HashType $isNone -PathExists $yes -After { param($h, $p) 9 }
   Case 'MUST NOT FIRE' 'a hash git cannot resolve leaves the document NOT QUALIFIABLE, not unqualified' ($v7.Verdict -eq 'NOT-QUALIFIABLE') $v7.Verdict
-  $v8 = Get-CurrencyVerdict -Paths @('grocery/gone.ps1') -Hashes @('abc1234') -HashExists $yes -PathExists $no -After { param($h, $p) 9 }
+  $v8 = Get-CurrencyVerdict -Paths @('grocery/gone.ps1') -Hashes @('abc1234') -HashType $isCommit -PathExists $no -After { param($h, $p) 9 }
   Case 'MUST NOT FIRE' 'a harness path that does not exist is not a harness' ($v8.Verdict -eq 'NOT-QUALIFIABLE') $v8.Verdict
   $hh9 = Get-CitedHashes -Text 'See commit deadbeef and commit 12345678.'
   $h9 = @($hh9)
   Case 'MUST NOT FIRE' 'all-letter and all-digit tokens are not taken as hashes' ($h9.Count -eq 0) ($h9 -join ',')
 
-  $v10 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('679a153') -HashExists $yes -PathExists $yes -After { param($h, $p) 0 }
+  $v10 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('679a153') -HashType $isCommit -PathExists $yes -After { param($h, $p) 0 }
   Case 'CLEAN TWIN' 'an unmoved harness is CURRENT' ($v10.Verdict -eq 'CURRENT') $v10.Verdict
   $after = { param($h, $p) if ($h -eq 'aaa1111') { 5 } else { 0 } }
-  $v11 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('aaa1111', 'bbb2222') -HashExists $yes -PathExists $yes -After $after
+  $v11 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('aaa1111', 'bbb2222') -HashType $isCommit -PathExists $yes -After $after
   Case 'CLEAN TWIN' 'a re-read line citing a NEWER commit re-qualifies the conclusion' ($v11.Verdict -eq 'CURRENT') $v11.Verdict
   $hp12 = Get-HarnessPaths -Text 'Measured through meal-prep\pipeline\hunt-run.ps1 at width 4.'
   $p12 = @($hp12)
@@ -179,6 +212,25 @@ if ($SelfTest) {
   $docs = @(Get-ChildItem (Join-Path $repo 'design') -File -Filter '*.md' -ErrorAction SilentlyContinue |
             Where-Object { $_.Name -like 'EVAL-*' -or $_.Name -like 'MEASURE-*' })
   Case 'CLEAN TWIN' 'the population is the EVAL-* and MEASURE-* documents, and it is not empty' ($docs.Count -gt 0) "$($docs.Count)"
+
+  # A CITED BLOB IS CONTENT, NOT A COMMIT, AND A HASH NAMING NOTHING IS COUNTED (2026-09-18). The founding line is
+  # MEASURE-event-bus-concurrent-append-2026-09-11.md:62, "blob `1128546c`" on a commit line.
+  $kind13 = { param($x) switch ($x) { 'b10b111' { 'content' } 'c0ffee1' { 'commit' } default { 'none' } } }
+  $v13 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('b10b111', 'c0ffee1', 'dead123') -HashType $kind13 -PathExists $yes -After { param($h, $p) if ($h -eq 'c0ffee1') { 0 } else { 7 } }
+  Case 'MUST FIRE' 'a cited blob id is listed as content and a hash naming no object is listed as unresolved' `
+    (@($v13.Content).Count -eq 1 -and $v13.Content[0] -eq 'b10b111' -and @($v13.Unresolved).Count -eq 1 -and $v13.Unresolved[0] -eq 'dead123') `
+    ("content=" + (@($v13.Content) -join ',') + " unresolved=" + (@($v13.Unresolved) -join ','))
+  Case 'CLEAN TWIN' 'the commit beside that blob still decides the verdict, and the blob is never read as the cited commit' ($v13.Verdict -eq 'CURRENT') $v13.Verdict
+  $v14 = Get-CurrencyVerdict -Paths @('ops/run-gates.ps1') -Hashes @('b10b111') -HashType $kind13 -PathExists $yes -After { param($h, $p) 0 }
+  Case 'MUST FIRE' 'a document citing ONLY a blob is not qualifiable, and its reason names the blob' ($v14.Verdict -eq 'NOT-QUALIFIABLE' -and $v14.Why -match '1 blob or tree id') ($v14.Verdict + ' / ' + $v14.Why)
+  $md5a = 'b11149f3e9bb71ef'; $md5b = '71628296fada6d27'
+  $hh15 = Get-CitedHashes -Text ("The old arm is base commit ``8253ded82``. The new arm is md5`n``" + $md5a + $md5b + "``: the fix.")
+  $h15 = @($hh15)
+  Case 'MUST NOT FIRE' 'a 32-hex md5 on a commit line is not a cited hash' ($h15.Count -eq 1 -and $h15[0] -eq '8253ded82') ($h15 -join ',')
+  $full16 = '679a1535661ad682dcdadb163c39c4057a1a7508'
+  $hh16 = Get-CitedHashes -Text ('Commit it ran at: ' + $full16 + '.')
+  $h16 = @($hh16)
+  Case 'CLEAN TWIN' 'a full 40-hex commit id is still cited after the md5 rule' ($h16.Count -eq 1 -and $h16[0] -eq $full16) ($h16 -join ',')
 
   # THE LIVE PATH, DRIVEN (2026-09-11). The founding shape is a pre-push run-gates pass whose count FELL: it rewrote
   # the tracked baseline and left the pushing checkout dirty. These run THIS script as a child against a temp git
@@ -207,7 +259,11 @@ if ($SelfTest) {
     [IO.File]::WriteAllText((Join-Path $ltTree 'ops\h.ps1'), 'Write-Output 2', $ltUtf8)
     $null = & git -C $ltTree add -- ops/h.ps1
     $null = & git -C $ltTree commit -q -m two   # the harness moves after the cited commit
-    [IO.File]::WriteAllText((Join-Path $ltTree 'design\EVAL-fixture.md'), ("Harness: ops/h.ps1`nCommit it ran at: " + $ltCited + "`n"), $ltUtf8)
+    # The document also cites the harness's BLOB at the cited commit, as measurement.md asks, and one hash that names
+    # nothing. Neither may move the verdict, and neither may reach stderr.
+    $ltBlob = ([string](& git -C $ltTree rev-parse ($ltCited + ':ops/h.ps1'))).Trim().Substring(0, 10)
+    $ltNone = 'fedcba9876'
+    [IO.File]::WriteAllText((Join-Path $ltTree 'design\EVAL-fixture.md'), ("Harness: ops/h.ps1`nCommit it ran at: " + $ltCited + "`nThat commit held the harness as blob " + $ltBlob + ", and commit " + $ltNone + " names nothing.`n"), $ltUtf8)
     $ltBl = Join-Path $lt 'baseline.json'
     [IO.File]::WriteAllText($ltBl, "{`n    ""unqualified"":  2,`n    ""note"":  ""fixture""`n}`n", $ltUtf8)
     $ltSeed = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ltBl))
@@ -234,6 +290,22 @@ if ($SelfTest) {
     $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ltTree -BaselineFile $ltRise
     $rc3 = $LASTEXITCODE
     Case 'CLEAN TWIN' 'a count that ROSE still fails the run with exit 2, so not writing on a fall did not disarm the ratchet' ($rc3 -eq 2) ("rc=$rc3")
+    # THE STDERR THIS WAS FOUND BY (2026-09-18). The whole child's stderr goes to a file, never a 2> on the native call.
+    $ltOut = Join-Path $lt 'rep.out'; $ltErr = Join-Path $lt 'rep.err'
+    $p4 = Start-Process -FilePath 'powershell.exe' -PassThru -NoNewWindow -RedirectStandardOutput $ltOut -RedirectStandardError $ltErr `
+      -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $PSCommandPath + '"'), '-Root', ('"' + $ltTree + '"'), '-ReportOnly')
+    $null = $p4.Handle
+    $p4.WaitForExit()
+    $rc4 = $p4.ExitCode
+    $err4 = ([IO.File]::ReadAllText($ltErr)).Trim()
+    $out4 = [IO.File]::ReadAllText($ltOut)
+    $mark4 = @(($out4 -split "`r?`n") | Where-Object { $_ -match '^CONCLUSION-CURRENCY-COMPLETE\b' })
+    $markLine4 = $(if ($mark4.Count) { [string]$mark4[$mark4.Count - 1] } else { '' })
+    Case 'LIVE PATH' 'a cited blob is read as content and a hash naming nothing is counted, with NOTHING on stderr' `
+      ($rc4 -eq 0 -and $err4 -eq '' -and $markLine4 -match '\bunresolved=1\b' -and $markLine4 -match '\bcontent_ids=1\b' -and $out4 -match ('blob or tree id ' + $ltBlob) -and $out4 -match ('names no object: ' + $ltNone)) `
+      ("rc=$rc4 stderr=[$err4] marker=[$markLine4]")
+    Case 'CLEAN TWIN' 'the blob beside the cited commit leaves the verdict to the commit: the fixture document is still UNQUALIFIED' `
+      ($out4 -match 'UNQUALIFIED\s+EVAL-fixture\.md') ($out4 -replace "`r?`n", ' | ')
   } finally {
     Remove-Item -LiteralPath $lt -Recurse -Force -ErrorAction SilentlyContinue
   }
@@ -263,11 +335,34 @@ if ($LASTEXITCODE -ne 0 -or -not $head) {
   Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 3 -Summary "docs=$($docs.Count) blind=1"
 }
 
-$hashExists = { param($h) $null = & git -C $treeRoot rev-parse --verify --quiet "$h^{commit}"; return ($LASTEXITCODE -eq 0) }
+# WHAT KIND OF OBJECT A CITED HASH NAMES (2026-09-18). `cat-file -t` answers without peeling, so a blob is a blob and
+# not "expected commit type, but the object dereferences to blob type" printed to stderr. A missing or ambiguous name
+# makes cat-file exit non-zero and print to stderr, so that stream is dropped here, under Continue: the answer 'none'
+# carries everything it said, and a 2>$null under this script's Stop would turn the first stderr line into a throw.
+# An annotated tag is a commit citation when it peels to one.
+$hashType = {
+  param($h)
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $to = @(& git -C $treeRoot cat-file -t $h 2>$null)
+    $trc = $LASTEXITCODE
+    $t = $(if ($to.Count) { ([string]$to[$to.Count - 1]).Trim() } else { '' })
+    if ($trc -ne 0 -or -not $t) { return 'none' }
+    if ($t -ceq 'commit') { return 'commit' }
+    if ($t -ceq 'tag') {
+      $null = & git -C $treeRoot rev-parse --verify --quiet ($h + '^{commit}') 2>$null
+      if ($LASTEXITCODE -eq 0) { return 'commit' }
+    }
+    return 'content'
+  } finally {
+    $ErrorActionPreference = $prevEap
+  }
+}
 $pathExists = { param($p) return (Test-Path -LiteralPath (Join-Path $treeRoot ($p -replace '/', '\'))) }
 $afterFn = { param($h, $p) $n = & git -C $treeRoot rev-list --count "$h..HEAD" -- $p; return [int]("$n".Trim()) }
 
-$unq = 0; $cur = 0; $nq = 0
+$unq = 0; $cur = 0; $nq = 0; $unres = 0; $cids = 0; $cited = 0
 Write-Output 'CONCLUSION CURRENCY - does each recorded conclusion still describe the harness it names?'
 Write-Output ''
 foreach ($d in $docs) {
@@ -276,7 +371,11 @@ foreach ($d in $docs) {
   $paths = @($hpR)
   $hhR = Get-CitedHashes -Text $text
   $hashes = @($hhR)
-  $v = Get-CurrencyVerdict -Paths $paths -Hashes $hashes -HashExists $hashExists -PathExists $pathExists -After $afterFn
+  $cited += $hashes.Count
+  $v = Get-CurrencyVerdict -Paths $paths -Hashes $hashes -HashType $hashType -PathExists $pathExists -After $afterFn
+  $vC = @($v.Content | Where-Object { $_ })
+  $vU = @($v.Unresolved | Where-Object { $_ })
+  $cids += $vC.Count; $unres += $vU.Count
   switch ($v.Verdict) {
     'UNQUALIFIED' {
       $unq++
@@ -289,9 +388,12 @@ foreach ($d in $docs) {
     'CURRENT' { $cur++; Write-Output ("  current          {0}" -f $d.Name) }
     default { $nq++; Write-Output ("  not qualifiable  {0} - {1}" -f $d.Name, $v.Why) }
   }
+  foreach ($c in $vC) { Write-Output ("                   cites blob or tree id {0} on a commit line: content, not a commit, so it qualifies nothing" -f $c) }
+  foreach ($u in $vU) { Write-Output ("                   UNRESOLVED hash on a commit line, git names no object: {0} (missing, gc'd or ambiguous)" -f $u) }
 }
 Write-Output ''
 Write-Output ("  {0} of {1} document(s) UNQUALIFIED, {2} current, {3} not qualifiable (ops\audit-measurement-provenance.ps1's finding)" -f $unq, $docs.Count, $cur, $nq)
+Write-Output ("  of {0} cited hash(es): {1} blob or tree id(s) read as content, {2} naming no object - counted and listed, not ratcheted" -f $cited, $cids, $unres)
 Write-Output '  To re-qualify one: re-read it against the moved harness and add "Re-read at commit <hash>: <what still holds>".'
 
 $blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here 'conclusion-currency-baseline.json' }
@@ -303,22 +405,22 @@ function Write-CcBaseline([int]$Count) {
   [IO.File]::WriteAllText($blF, ((($o | ConvertTo-Json) -replace "`r`n", "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
 }
 if ($Json) {
-  'conclusion-currency-json: ' + (([ordered]@{ known = $true; docs = $docs.Count; unqualified = $unq; current = $cur; not_qualifiable = $nq }) | ConvertTo-Json -Compress)
+  'conclusion-currency-json: ' + (([ordered]@{ known = $true; docs = $docs.Count; unqualified = $unq; current = $cur; not_qualifiable = $nq; cited_hashes = $cited; content_ids = $cids; unresolved = $unres }) | ConvertTo-Json -Compress)
 }
 if ($ReportOnly) {
   # ops\brain-report.ps1 reads and never writes. The ratchet's verdict is run-gates' to give, and a report that
   # could tighten a baseline as a side effect of being read would be a writer by accident.
-  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq report-only=1"
+  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq unresolved=$unres content_ids=$cids report-only=1"
 }
 if ($Accept -or $null -eq $base) {
   Write-CcBaseline $unq
   Write-Output "  baseline written: $unq of $($docs.Count). From here the number may only go DOWN."
-  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq baseline=$unq"
+  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq unresolved=$unres content_ids=$cids baseline=$unq"
 }
 $move = Test-RatchetMove -Name 'conclusion-currency' -Count $unq -Baseline $base
 if ($move.Verdict -eq 'rose') {
   Write-Output "conclusion-currency: RATCHET BROKEN - $unq unqualified, baseline $base. A conclusion that was current now names a harness changed after it. Re-read it and add a Re-read at commit line."
-  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 2 -Summary "docs=$($docs.Count) unqualified=$unq baseline=$base"
+  Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 2 -Summary "docs=$($docs.Count) unqualified=$unq unresolved=$unres content_ids=$cids baseline=$base"
 }
 if ($move.Verdict -eq 'tightened') {
   if ($Tighten) {
@@ -329,6 +431,6 @@ if ($move.Verdict -eq 'tightened') {
   }
 } elseif ($move.Verdict -eq 'implausible') {
   Write-Output ('  ' + $move.Message + ' - baseline kept at ' + $base + ' (-Accept is this script''s -AcceptDrop.)')
-  if ($Tighten) { Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 2 -Summary "docs=$($docs.Count) unqualified=$unq baseline=$base refused-to-lower" }
+  if ($Tighten) { Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 2 -Summary "docs=$($docs.Count) unqualified=$unq unresolved=$unres content_ids=$cids baseline=$base refused-to-lower" }
 }
-Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq baseline=$base"
+Exit-Guard -Name 'CONCLUSION-CURRENCY' -Code 0 -Summary "docs=$($docs.Count) unqualified=$unq unresolved=$unres content_ids=$cids baseline=$base"
