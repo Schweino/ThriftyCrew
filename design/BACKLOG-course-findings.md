@@ -16083,8 +16083,9 @@ prices, so the first rung is to measure what they would change. Related: `import
 **Done 2026-09-18.** Four commits, one per bullet, each with its fixtures broken once and restored md5-identical.
 (1) Both halves of the cause. `grocery/test-auditors.ps1` u121 reads feed-covers-published's verdict three ways, and
 the unseeded one ("27 of 28 cases ran, 1 BLIND" at exit 0, ran + blind equal to the pinned 28) is now a counted
-SKIP, never a FAIL; `ops/push-main.ps1` seeds a checkout with no built card before its gate, with the hook's card
-test and seeder, best effort. Proved in a worktree with the boards seeded and the cards moved aside:
+SKIP, never a FAIL; `ops/push-main.ps1` seeds a checkout before its gate when a directory `ops/seed-worktree.ps1`'s
+`$SEED_DIRS` names is empty (read through `lib/seed-hint.ps1`, so push-main spells no meal-prep path and
+`audit-cross-module-reach` stays at 118), best effort. Proved in a worktree with the boards seeded and the cards moved aside:
 `prepush-test-auditors -PathsFile meal-prep/pipeline/feed-covers-published.ps1` (9 units selected) REFUSED rc=1 on
 1 new failing case with the old test-auditors, SELECTED CASES PASSED rc=0 with the new one. push-main self-test 26
 -> 29 cases. (2) `ops/hooks/pre-push`'s slot refusal reads `$script:TcGateSlotTotal` out of `lib/gate-slots.ps1`

@@ -53,6 +53,7 @@ $repo = Split-Path -Parent $here
 . (Join-Path $repo 'lib\push-lock.ps1')
 . (Join-Path $repo 'lib\git-repo-env.ps1')
 . (Join-Path $repo 'lib\push-ledger.ps1')
+. (Join-Path $repo 'lib\seed-hint.ps1')     # Get-TcSeedDirs: which directories ops\seed-worktree.ps1 seeds, read off its own source
 
 function Invoke-TcGit {
   <# git, with its exit code and its TWO STREAMS KEPT APART: Out is stdout and is the only thing any caller parses,
@@ -158,14 +159,26 @@ function Invoke-TcSeedIfUnseeded {
      ops\seed-worktree.ps1 copies it. push-main's gate runs OUTSIDE the lock and BEFORE git push, so it ran unseeded:
      feed-covers-published reported BLIND, test-auditors' reading of that child printed FAIL, and the warm
      test-auditors leg refused most first pushes from a fresh worktree for a reason unrelated to the change. The same
-     card the hook tests, the same seeder, the same best effort: a seed that cannot run is SAID and never refuses,
-     because seeding supplies inputs and decides nothing. Returns Ran / Code / Why. -Seeder is the self-test's seam. #>
+     seeder and the same best effort as the hook: a seed that cannot run is SAID and never refuses, because seeding
+     supplies inputs and decides nothing. WHAT "UNSEEDED" MEANS IS READ FROM THE SEEDER, never restated here: a directory
+     its $SEED_DIRS names (lib\seed-hint.ps1 Get-TcSeedDirs) that is absent or holds no file. That keeps this file from
+     spelling another module's internals path, which ops\audit-cross-module-reach.ps1 ratchets, and a directory that
+     joins or leaves that list moves this check the same day. Returns Ran / Code / Why. -Seeder is the self-test's seam. #>
   param([string]$Dir, [string]$Seeder = '')
-  $card = Join-Path $Dir 'meal-prep\db\built\american-goulash-pasta.body.html'   # the card ops\hooks\pre-push tests
-  if (Test-Path -LiteralPath $card) { return [pscustomobject]@{ Ran = $false; Code = 0; Why = 'already seeded' } }
   if (-not $Seeder) { $Seeder = Join-Path $Dir 'ops\seed-worktree.ps1' }
-  if (-not (Test-Path -LiteralPath $Seeder)) { return [pscustomobject]@{ Ran = $false; Code = 3; Why = 'no built card and no ops\seed-worktree.ps1 in this checkout' } }
-  Say 'push-main: this checkout has no built cards, so two gates would be BLIND - seeding once before the gate, as the hook does.'
+  if (-not (Test-Path -LiteralPath $Seeder)) { return [pscustomobject]@{ Ran = $false; Code = 3; Why = 'no ops\seed-worktree.ps1 in this checkout' } }
+  $seedDirsRaw = Get-TcSeedDirs -Text ([IO.File]::ReadAllText($Seeder))   # comma-returned: assign, then wrap
+  $seedDirs = @($seedDirsRaw | Where-Object { $_ })
+  if ($seedDirs.Count -eq 0) {
+    Say 'push-main: the seeder''s directory list could not be read, so whether this checkout is seeded is unknown; the gates will say BLIND where it matters.'
+    return [pscustomobject]@{ Ran = $false; Code = 3; Why = 'seed list unreadable' }
+  }
+  $empty = @($seedDirs | Where-Object {
+    $sd = Join-Path $Dir $_
+    -not ((Test-Path -LiteralPath $sd -PathType Container) -and [IO.Directory]::EnumerateFiles($sd).GetEnumerator().MoveNext())
+  })
+  if ($empty.Count -eq 0) { return [pscustomobject]@{ Ran = $false; Code = 0; Why = 'already seeded' } }
+  Say ("push-main: this checkout has nothing in {0}, so gates that read it would be BLIND - seeding once before the gate, as the hook does." -f ($empty -join ', '))
   try {
     $p = Start-Process -FilePath 'powershell.exe' -WorkingDirectory $Dir -NoNewWindow -PassThru -ErrorAction Stop `
       -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $Seeder + '"'), '-Target', ('"' + $Dir + '"'))
@@ -527,34 +540,35 @@ $m.Dispose()
     # ---- SEEDED BEFORE THE GATE (backlog I237) ----
     # Founding case: 2026-09-18, a fresh worktree's first push-main was refused by the warm test-auditors leg over
     # feed-covers-published's BLIND verdict, because nothing seeded the checkout before the gate outside the lock.
-    # The gate seam records whether the card was there when the gate ran: the ORDER, read from the mechanism.
+    # The gate seam records whether the seed directory held a file when the gate ran: the ORDER, read from the
+    # mechanism. The stub seeder declares its own one-directory list, which is what push-main reads to decide.
+    $sdList = '$SEED' + '_DIRS = @( @{ p = ''seedfx\cards''; why = ''fixture'' } )'
     $sdStub = Join-Path $tmp 'seed-stub.ps1'
     $sdFail = Join-Path $tmp 'seed-fail.ps1'
-    [IO.File]::WriteAllText($sdStub, @'
-param([string]$Target)
-Add-Content -LiteralPath (Join-Path $Target 'seeded-for.txt') -Value $Target
-$d = Join-Path $Target 'meal-prep\db\built'
-$null = New-Item -ItemType Directory -Force $d
-[IO.File]::WriteAllText((Join-Path $d 'american-goulash-pasta.body.html'), 'card')
-exit 0
-'@)
-    [IO.File]::WriteAllText($sdFail, "param([string]`$Target)`nexit 1`n")
+    $sdBody = @(
+      'Add-Content -LiteralPath (Join-Path $Target ''seeded-for.txt'') -Value $Target',
+      '$d = Join-Path $Target ''seedfx\cards''',
+      '$null = New-Item -ItemType Directory -Force $d',
+      '[IO.File]::WriteAllText((Join-Path $d ''one.card''), ''card'')',
+      'exit 0') -join "`n"
+    [IO.File]::WriteAllText($sdStub, ("param([string]`$Target)`n" + $sdList + "`n" + $sdBody + "`n"))
+    [IO.File]::WriteAllText($sdFail, ("param([string]`$Target)`n" + $sdList + "`nexit 1`n"))
     $script:cardAtGate = $null
-    $cardGate = { param($d) $script:cardAtGate = Test-Path -LiteralPath (Join-Path $d 'meal-prep\db\built\american-goulash-pasta.body.html'); return [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
+    $cardGate = { param($d) $script:cardAtGate = Test-Path -LiteralPath (Join-Path $d 'seedfx\cards\one.card'); return [pscustomobject]@{ Ran = $true; Code = 0; Why = '' } }
     $s1 = New-Clone 's1'
-    Add-Content -LiteralPath (Join-Path $s1 '.git\info\exclude') -Value @('seeded-for.txt', 'meal-prep/') -Encoding ascii   # gitignored in the real repo
+    Add-Content -LiteralPath (Join-Path $s1 '.git\info\exclude') -Value @('seeded-for.txt', 'seedfx/') -Encoding ascii   # gitignored in the real repo
     [IO.File]::WriteAllText((Join-Path $s1 's1.txt'), 's1')
     $null = & git -C $s1 add -- s1.txt 2>$null; $null = & git -C $s1 commit -q -m s1 2>$null
     $rS1 = Invoke-TcPushMain -Dir $s1 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $true -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $cardGate -SeedScript $sdStub
     $sFor = if (Test-Path -LiteralPath (Join-Path $s1 'seeded-for.txt')) { ([IO.File]::ReadAllText((Join-Path $s1 'seeded-for.txt'))).Trim() } else { '<not seeded>' }
-    T ($kMF + '  a checkout with no built card is seeded, with -Target naming that checkout, BEFORE the gate runs') `
+    T ($kMF + '  a checkout with nothing in a directory the seeder seeds is seeded, with -Target naming it, BEFORE the gate runs') `
       ($rS1 -eq 0 -and $script:cardAtGate -eq $true -and [string]::Equals($sFor, $s1, [StringComparison]::OrdinalIgnoreCase)) ("rc={0} cardAtGate={1} seededFor={2}" -f $rS1, $script:cardAtGate, $sFor)
     Remove-Item -LiteralPath (Join-Path $s1 'seeded-for.txt') -Force -ErrorAction SilentlyContinue
     $rS2 = Invoke-TcSeedIfUnseeded -Dir $s1 -Seeder $sdStub
-    T ($kMNF + '  a checkout that already has the card is not seeded again') `
+    T ($kMNF + '  a checkout whose seed directories already hold files is not seeded again') `
       ((-not $rS2.Ran) -and -not (Test-Path -LiteralPath (Join-Path $s1 'seeded-for.txt'))) ("ran={0} why={1}" -f $rS2.Ran, $rS2.Why)
     $s3 = New-Clone 's3'
-    Add-Content -LiteralPath (Join-Path $s3 '.git\info\exclude') -Value @('seeded-for.txt', 'meal-prep/') -Encoding ascii   # gitignored in the real repo
+    Add-Content -LiteralPath (Join-Path $s3 '.git\info\exclude') -Value @('seeded-for.txt', 'seedfx/') -Encoding ascii   # gitignored in the real repo
     [IO.File]::WriteAllText((Join-Path $s3 's3.txt'), 's3')
     $null = & git -C $s3 add -- s3.txt 2>$null; $null = & git -C $s3 commit -q -m s3 2>$null
     $script:gateRuns = 0
