@@ -31,6 +31,13 @@ reports as `blind=push-cannot-land`. If that class is still being produced after
 landed this morning, the order is still wrong and the wrapper is not enough. If it stopped at the reorder,
 the order is already fixed and what is missing is the ability to SAY so without archaeology.
 
+**Re-read at commit `b4c4babf3`:** `lib\push-ledger.ps1` moved for backlog I171, and every number below still
+reads as measured. Each row gains one field, `run` (the exporting suite's guid, else `<pid>@<process start
+time>`), so a self-test's "nothing I wrote reached the production ledger" check stops mistaking a stranger's
+recycled pid for its own. Nothing that computes a figure here changed: `Measure-TcPushRows`, the percentile rule,
+the UNKNOWN handling, `Read-TcPushRows` and the file's location are byte-for-byte as they were, and a row written
+before the field existed is read exactly as before.
+
 ## What the push path actually did today
 
 Three commits changed it, all before this brief was written:
