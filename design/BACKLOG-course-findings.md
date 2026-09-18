@@ -14735,6 +14735,14 @@ from a `mode=ro` connection, never the live file:
 - **BLIND** if fewer than 3 recorded runs carry a `superseded` count: the item stays OPEN on its
   nightly-record rung.
 
+**A second bar, written AFTER M1 to M3 were read and BEFORE the replay ran.** The median above pools
+two regimes (16 runs on 2026-08-20 and 21 pruning about 104k rows each, 8 runs since 2026-09-10 pruning
+246k to 272k), so it is not trusted alone. The replay settles the question directly: VACUUM a second
+snapshot copy (P_v pages), then run `importers.import_observations` on it exactly as `import_all.py
+--observations` calls it, with capture files read from the main checkout and nothing written but the
+copy. **CYCLE is confirmed if that one import, before any prune, regrows the copy to at least P_v +
+80% of (78,709 - P_v) pages**; under that, ONE-OFF.
+
 ### I212 - Run statistics on graph.db: one full ANALYZE, then PRAGMA optimize at every connection close `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
