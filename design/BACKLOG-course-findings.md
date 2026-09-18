@@ -10450,7 +10450,7 @@ version, if this is ever picked up, is to let the board answer for itself: commo
 actually move together across the seven stores are the comparison-shopped set, and that is a query
 against history rather than a judgement call.
 
-### I129 - Every check in this estate is a SAFETY property and almost none is a LIVENESS property, and the vocabulary for saying so is missing `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I129 - Every check in this estate is a SAFETY property and almost none is a LIVENESS property, and the vocabulary for saying so is missing `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Quantified: 105 detectors (`ops/audit-*.ps1` 45, `ops/audit_*.py` 1, `grocery/audit-*.ps1` 59), of which **3 are liveness checks that can fire when the producer STOPS (2.9%)**, and one of those three is advisory and can never block. Method matters: 52 of 105 merely MENTION staleness vocabulary and that number is worthless, 19 contain real age arithmetic, and all 19 were hand-opened - 16 use age as a WINDOWING FILTER, which is the opposite of a liveness check. Scope: grocery and ops only; `meal-prep/` and `graph/` were excluded, so this is not an estate figure.
 
@@ -10488,6 +10488,41 @@ and a ruling, not this one.
 
 The theory is `~/.claude/skills/software-craft/distributed-correctness.md` 1 and
 `~/.claude/skills/reliability-craft/failure-detection-and-membership.md` 1a.
+
+**Acceptance bar, written 2026-09-18 BEFORE the re-run (the 2026-09-12 figure above committed no harness, named
+none of its three liveness checks, and excluded `meal-prep/` and `graph/`, so it cannot be repeated or extended).**
+Population: every tracked detector in the named families, now including `meal-prep/` and `graph/`, archive and
+`*-lib` excluded, counted by the harness and printed with the list. LIVENESS means the file has a path that fires
+when the producer it watches STOPS: an age of a watched artefact compared against a limit and failing when too
+old, or an expected artefact named for today and failing when absent. An age used only to window which records
+are read is SAFETY. Decision rule on the liveness share over that denominator: **at or under 10%** the portfolio is
+as lopsided as I80 implies, and choosing which two or three liveness checks to add is a ruling for Brad; **over
+25%** I80's implication is wrong and nothing follows; **between** the list is recorded and the follow-on is
+optional. Harness validity, also fixed now: the mechanical pre-pass must flag every file the hand verdicts call
+LIVENESS (a hand verdict on a file it did not flag is a harness defect), and a non-candidate reading staleness
+vocabulary is hand-opened before it is counted SAFETY.
+
+**Done 2026-09-18.** Measured at `ad85f1a7f` through the committed harness `ops/report-safety-liveness.ps1`
+with its hand verdicts in `ops/safety-liveness-register.json`: **9 of 132 detectors (6.8%) are LIVENESS**, 6 of
+132 whose finding can move their own exit and 3 of 132 that only print; 123 SAFETY; 0 unruled. By family: ops 2
+of 47, grocery 7 of 59, `ops/audit_*.py` 0 of 1, **meal-prep 0 of 22, graph 0 of 3**. The nine: `audit-ad-status`,
+`audit-row-age`, `audit-coverage-ledger`, `audit-coverage-gaps` (a not-carried entry past its recheck_days stops
+suppressing its gap), `audit-walmart-fullpull`, `ops/audit-event-bus` (its floor), and PRINT-only
+`audit-graph-gates`, `audit-ghost-drift` and `ops/audit-rule-currency`. The test is written in the harness header:
+freeze every input and advance the clock. 27 of 132 reach the clock and each was hand-ruled; the other 105 cannot
+pass that test by construction. Two harness defects were caught by the validity bar on the first runs and are
+fixtured: `[regex]::Matches` is case-sensitive where `-match` is not, so `[datetime]::Today` read SAFETY and
+`audit-walmart-fullpull` vanished; and graph-gates' and ghost-drift's liveness live inside library functions
+(`Test-TcInput`, `Test-LivePageStale`), so the harness now follows a call into `lib\*.ps1` and `*-lib.ps1` one
+level. Validity: every LIVENESS verdict is on a flagged file by construction; 25 of the 48 non-candidates that use
+staleness vocabulary were hand-opened and every one compares two artefacts (SAFETY). One subtle SAFETY worth
+knowing: `audit-sale-fallback` ages gaps on the board's own as-of, so a board that stops being built stops its
+clock. Self-test 28 of 28. **Not comparable with the 2026-09-12 figure** (3 of 105): that run named none of its
+three and used a narrower population. **Verdict against the bar: 6.8% is at or under 10%, so the portfolio is as
+lopsided as I80 implies** and choosing which liveness checks to add is a ruling for Brad, filed as a separate item
+as this item said it would be. Context for it: the liveness layer outside the detectors is
+`grocery/health-heartbeat.ps1`, which watches 11 tasks, 3 queues, 5 output files, 1 glob and 2 external files;
+meal-prep has two outputs there, and nothing outside the PRINT-only graph-gates watches the graph for a stop.
 
 ### I130 - A deletion merged from peers can resurrect itself, and the estate's merged ledgers have never been checked for it `DONE` `queue-7`
 
