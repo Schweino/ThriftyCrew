@@ -14787,7 +14787,7 @@ the VACUUM neutered, md5 restored identical). By the replay, the next 08:15 impo
 **Recommendation: 3, with 1 until it lands.** The freelist is the visible symptom of re-importing and
 re-pruning about 270k rows a day; 2 and 4 hide the symptom and keep the work.
 
-### I212 - Run statistics on graph.db: one full ANALYZE, then PRAGMA optimize at every connection close `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+### I212 - Run statistics on graph.db: one full ANALYZE, then PRAGMA optimize at every connection close `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14837,6 +14837,66 @@ statements run). One row per statement per arm per state, written to a JSONL fil
 - **`PRAGMA optimize` at close is WARRANTED** only if FULL is, OPT has no HARM statement in either
   state, and P3's median with current statistics is at most 50 ms. Otherwise it is not built, whatever
   FULL reads, because it would make every `open_db()` close a potential writer (see I213).
+
+**Measured 2026-09-18** by `graph/bench/probe_statistics.py` (blob `ea751083b`, committed so the
+question can be asked again after a rebuild), at base `e7288a1a8` (`graphdb.py` blob `13a20a894`,
+`importers.py` `939c365be`, `state.py` `d8fbcbadd`), SQLite 3.49.1. Snapshot of the live file (mtime
+08:16:50, 322,392,064 B, no `sqlite_stat1`) by the backup API from `mode=ro`; the live mtime was
+identical after the run and nothing in the repo was written. The capture replay took 165.7 s
+(observations 100.5 s, resolve 17.3 s, identity 14.6 s, prune 14.3 s; the prune examined 360,991 rows)
+and traced **45 distinct statement shapes** (31 SELECT, 8 INSERT, 3 DELETE, 1 UPDATE, 2 transaction).
+- P1: FULL changed the plan of **8 of 45 shapes at TODAY and 7 of 45 at PEAK**; OPT changed 4 and 5.
+  **None of the heavy statements changed plan under any arm**: the full scans behind `build_cell_state`
+  and `supersede_prune`, the observation upserts and the prune's deletes plan identically everywhere.
+  The changes are small reads choosing between near-equivalent indexes, and one real one.
+- P2, 5 interleaved runs per arm: **FULL had 0 HARM** in either state, and HELP on `SELECT node_id,
+  alias FROM aliases WHERE kind=?` (`importers.py:789`, once per import) in both, plus two smaller ones.
+  **OPT had 0 HARM.** Re-timed at 30 runs: that aliases read went from a scan of the whole covering
+  index to a **skip-scan of `ix_alias_kind`** (a plan SQLite only considers with statistics), **5.74 ms
+  to 2.75 ms at TODAY and 5.62 to 2.70 at PEAK**; OPT kept the scan (5.66 ms), because its approximate
+  pass recorded 81 rows per `node_id` against FULL's 116. The `kind='include' GROUP BY` twin moved
+  6.15 to 5.01 ms at 30 runs (19% under, below the bar; the 5-run read called it HELP at TODAY).
+- STALE (added after the bar): TODAY's FULL statistics carried to PEAK chose the same plan as PEAK's own
+  FULL statistics for 44 of 45 shapes and gave the same skip-scan (2.69 ms), so an ANALYZE at the end of
+  one import serves the next import's peak.
+- Cost: FULL `ANALYZE` 0.254 s at TODAY, 0.577 s at PEAK. P3: `PRAGMA optimize` at a close, 10 closes
+  each, **median 0.06 ms with current statistics** (it analyses nothing) and 73.47 ms with none (the
+  first close analyses every table once).
+
+**Both bars read WARRANTED, and the honest size of it is small.** FULL: one HELP, no HARM. OPT at
+close: no HARM, 0.06 ms. The win is about 3 ms once per import in a 165.7 s run; what is bought is
+the planner seeing that `aliases.kind` (4 values over 78,562 rows) is low-quality, which is the plan
+robustness this item argued for, not speed. The code is ready on two pushed branches, NOT on main,
+because both write `sqlite_stat1` into the live file:
+- **`claude/i212-analyze`** (the nightly ANALYZE only). `graph/lib/graphdb.py` (blob `b38df5322`) gains
+  `analyze_full()` (`analysis_limit=0; ANALYZE`, returns seconds and `stat1_rows`) and a `--selftest`, 4
+  of 4 on temp databases only: MUST FIRE `analyze_full` gives a never-analysed db `sqlite_stat1`, MUST
+  NOT FIRE a plain close analyses nothing (counted by an authorizer), CLEAN TWIN close still commits (and
+  `with GraphDB()`), CLEAN TWIN exact rows per value (`300 100`). With the ANALYZE neutered the suite
+  went red (exit 2, it died in `analyze_full`'s own count before a case could pass); md5-identical after.
+  `graph/import/import_all.py` (blob `512c00ea9`) runs it as step 6, after the state export, and logs
+  both numbers into the `import_complete` totals.
+- **`claude/i212-analyze-close`** (both halves, built on the first). `graphdb.py` (blob `48e065fa3`) adds
+  `optimize_before_close()`: `PRAGMA optimize` in `GraphDB.close()`, never failing a close (a
+  `query_only` connection or a busy writer makes it skip and return the reason). Self-test 6 of 6: MUST
+  FIRE a never-analysed db gains `sqlite_stat1` at close, MUST FIRE the close itself performs an ANALYZE,
+  MUST NOT FIRE a close with current statistics analyses nothing, MUST NOT FIRE a `query_only` close
+  raises nothing, and the two CLEAN TWINs. Neutering the close's optimize turned 3 of 6 red (exit 2);
+  neutering its exception guard turned the `query_only` case red; md5-identical after both.
+
+**Question for Brad: land graph.db statistics?**
+1. **Land both halves** (merge `claude/i212-analyze-close`): the next import writes full statistics and
+   every close keeps them from going stale. Every close then MAY write, but measured it analyses
+   nothing while statistics are current; it writes only when a table has moved about tenfold.
+2. **Land only the nightly full ANALYZE** (merge `claude/i212-analyze`): the one measured HELP needs
+   only this, since OPT never reproduced it, and no reader's close can ever write (the I213 concern).
+3. **Neither**: nothing measured is slow, and the heavy steps do not change plan.
+
+**Recommendation: 2.** It carries the whole measured benefit and keeps every reader a reader until I213
+has counted whether writers overlap. `PRAGMA optimize` at close adds nothing the nightly ANALYZE does
+not already do, and when it does act it writes the approximate statistics that lost the skip-scan.
+After it lands, `audit_graph_durability.py` should assert `sqlite_stat1` exists (not built here: it
+would be red until the first import ran with the change).
 
 ### I213 - SQLite's WAL-reset corruption bug: this machine's Python bundles 3.49.1, inside the affected range `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 
