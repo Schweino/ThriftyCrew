@@ -82,7 +82,7 @@ def drill() -> int:
             os.remove(p)
     print(f"  2. deleted         : {os.path.basename(DB_PATH)} (and -wal/-shm)")
 
-    with open_db() as db:             # auto-restore fires here
+    with open_db(allow_new=True) as db:   # auto-restore fires here; the file was just deleted
         after = db.learning_counts()
         v = verify(db)
     print(f"  3. after rebuild   : {after}")
@@ -137,10 +137,13 @@ def main() -> int:
     # the derived bulk. This file deliberately does NOT re-import the estate --
     # import_all.py owns that, and duplicating it here would create two
     # implementations of the same thing that drift.
-    with open_db() as db:
+    # allow_new: a plain rebuild is what the README sends you to after deleting graph.db (I229).
+    with open_db(allow_new=True) as db:
         restored = db.import_learning()
+        skipped = dict(db.restore_skipped)
         counts = db.learning_counts()
     print(f"  restored learning records: {restored}")
+    print(f"  already present / refused: {skipped}")
     print(f"  learning tables now      : {counts}")
     print("\n  For nodes/edges/aliases/observations run:")
     print("    python graph/import/import_all.py --observations")

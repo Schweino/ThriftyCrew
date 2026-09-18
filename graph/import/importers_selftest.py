@@ -83,7 +83,7 @@ def run() -> int:
         with open(os.path.join(gro, "product-urls.json"), "w", encoding="utf-8", newline="\n") as fh:
             json.dump(_fixture_doc(), fh)
         I.GROCERY = gro
-        db = graphdb.GraphDB(os.path.join(tmp, "g.db"), restore_learning=False)
+        db = graphdb.GraphDB(os.path.join(tmp, "g.db"), restore_learning=False, allow_new=True)
         ts = "2026-09-18T00:00:00"
         cid = I.commodity_id("fixture-sauce", "recipe")
         db.upsert_node(cid, "Commodity", "Fixture Sauce", ts)

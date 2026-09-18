@@ -43,7 +43,9 @@ def main() -> int:
     say("")
 
     totals: dict[str, int] = {}
-    with open_db() as db:
+    # allow_new: this is the road that builds graph.db from nothing (a fresh box, a CI clone, the
+    # README's delete-and-rebuild), so a missing file is expected here and nowhere else (I229).
+    with open_db(allow_new=True) as db:
         db.log_event(run=run, timestamp=ts, etype="state_transition",
                      decision="import_start", detail={"observations": args.observations})
 

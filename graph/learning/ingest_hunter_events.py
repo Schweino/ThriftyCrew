@@ -329,23 +329,39 @@ def append_queue(path, items):
     return len(items)
 
 
-def append_gold(path, rows):
-    """Append to hunter-gold.jsonl, deduped on the row's own content-addressed id."""
-    if not rows:
-        return 0
+def append_gold(path, rows, stats=None):
+    """Append to hunter-gold.jsonl, deduped on the row's own content-addressed id.
+
+    AN UNPARSEABLE LINE IS COUNTED, NEVER SILENTLY SKIPPED (2026-09-18, backlog I229). The dedupe set
+    is built from the lines already in the file, so a line that will not parse takes its id out of that
+    set: the row it held can be appended AGAIN, and the corrupt line stays behind with nothing saying
+    so. `stats["unparseable"]` carries the count (and `stats["unparseable_lines"]` the line numbers)
+    back to run_ingest, which reports it as a FINDING. The scan runs whether or not there is anything
+    to append, so a corrupt file is named on a night with no new rows too.
+    """
+    if stats is None:
+        stats = {}
+    stats["unparseable"] = 0
+    stats["unparseable_lines"] = []
     have = set()
     if os.path.exists(path):
         try:
             with io.open(path, "r", encoding="utf-8") as f:
-                for line in f:
+                for n, line in enumerate(f, 1):
                     line = line.strip()
                     if line:
                         try:
                             have.add(json.loads(line).get("id"))
-                        except ValueError:
+                        except (ValueError, AttributeError):
+                            # AttributeError: valid JSON that is not an object (a bare list or
+                            # number) has no .get, and is just as unusable as a torn line.
+                            stats["unparseable"] += 1
+                            stats["unparseable_lines"].append(n)
                             continue
         except OSError:
             pass
+    if not rows:
+        return 0
     fresh = [r for r in rows if r.get("id") not in have and not have.add(r.get("id"))]
     if not fresh:
         return 0
@@ -428,8 +444,15 @@ def run_ingest(a):
         # is tracked; a drill must not add a line to the estate's audit trail. Empty means the live
         # one, which is what a real night wants.
         graphdb.GRAPH_DIR = a.provenance_dir
-    db = GraphDB(path=(a.db or graphdb.DB_PATH), create=True,
-                 restore_learning=not bool(a.db))
+    # A MISSING graph.db IS BLIND, NOT A NEW ONE (2026-09-18, backlog I229). The live night never
+    # creates the index: that is the daily chain's import_all.py. A drill's scratch --db may be new.
+    try:
+        db = GraphDB(path=(a.db or graphdb.DB_PATH), create=True,
+                     restore_learning=not bool(a.db), allow_new=bool(a.db))
+    except graphdb.GraphDBMissing as e:
+        print("ingest_hunter_events: BLIND - %s" % e)
+        print(MARKER)
+        return EXIT_BLIND
     # ONE RUN ID PER NIGHT, stamped. `--run` overrides it for a drill, and that seam is not a
     # convenience: the run id feeds GraphDB.log_event's OWN primary key, so two ingests inside the
     # same SECOND collide there and ON CONFLICT DO NOTHING hides a missing dedupe. The double-ingest
@@ -456,7 +479,13 @@ def run_ingest(a):
         r = gold_row(e, db)
         if r:
             gold.append(r)
-    gold_added = append_gold(a.gold or HUNTER_GOLD, gold)
+    gstats = {}
+    gold_added = append_gold(a.gold or HUNTER_GOLD, gold, stats=gstats)
+    if gstats.get("unparseable"):
+        findings.append("%d unparseable line(s) in %s (line %s) - their ids are out of the dedupe "
+                        "set, so a row they held can be appended again"
+                        % (gstats["unparseable"], a.gold or HUNTER_GOLD,
+                           ", ".join(str(x) for x in gstats["unparseable_lines"][:10])))
 
     qpath = a.queue or QUEUE
     queued_ids = set()
@@ -595,6 +624,27 @@ def selftest():
           append_gold(gp, [g, g]) == 1 and append_gold(gp, [g]) == 0,
           str(len(io.open(gp, encoding="utf-8").read().strip().split("\n"))))
 
+        # ---- an unparseable gold line is COUNTED (2026-09-18, backlog I229) --------------------
+        torn = os.path.join(tmp, "torn-gold.jsonl")
+        with io.open(torn, "w", encoding="utf-8", newline="\n") as f:
+            f.write(json.dumps(g, sort_keys=True)[:40] + "\n")          # a torn copy of g's line
+            f.write("[1, 2]\n")                                         # JSON, but not an object
+        ts_ = {}
+        added = append_gold(torn, [g], stats=ts_)
+        T("MUST FIRE  a torn or non-object hunter-gold line is COUNTED (2, lines 1 and 2), never "
+          "skipped in silence", ts_.get("unparseable") == 2 and ts_.get("unparseable_lines") == [1, 2],
+          json.dumps(ts_))
+        T("  and the row the torn line held is appended again, which is why it has to be said",
+          added == 1, "added=%s" % added)
+        ts0 = {}
+        T("MUST FIRE  the scan runs on a night with NOTHING to append, so a corrupt file is still named",
+          append_gold(torn, [], stats=ts0) == 0 and ts0.get("unparseable") == 2, json.dumps(ts0))
+        tsc = {}
+        T("CLEAN TWIN  a clean gold file counts 0 unparseable and still dedupes by id (1 then 0)",
+          append_gold(os.path.join(tmp, "clean-gold.jsonl"), [g], stats=tsc) == 1
+          and append_gold(os.path.join(tmp, "clean-gold.jsonl"), [g], stats=tsc) == 0
+          and tsc.get("unparseable") == 0, json.dumps(tsc))
+
         # ---- END TO END, twice, against a scratch graph ------------------------------------------
         ev = os.path.join(tmp, "events.jsonl")
         allev = disagree + refute + [
@@ -660,6 +710,32 @@ def selftest():
               {"key": "apple", "term": "Apple", "item_id": "apples", "bid_exists": True,
                "evidence": "e", "by": "mapper", "at": "2026-08-20T00:00:00"}]}, sort_keys=True),
           "the ledger moved")
+
+        # ---- I229, end to end: a torn gold file is a FINDING, a missing graph.db is BLIND ----------
+        class G(A):
+            gold = torn
+            packet = os.path.join(tmp, "packet-g.json")
+            cursor = os.path.join(tmp, "cursor-g.json")
+            run = "run:hunter-ingest:NIGHT-THREE"
+        rcG = run_ingest(G())
+        T("MUST FIRE  a night whose hunter-gold holds an unparseable line exits FINDINGS (1), not clean",
+          rcG == EXIT_FINDINGS, "rc=%s" % rcG)
+
+        class M(A):
+            db = ""                                  # the LIVE road: path comes from graphdb.DB_PATH
+            packet = os.path.join(tmp, "packet-m.json")
+            cursor = os.path.join(tmp, "cursor-m.json")
+        saved_db_path = graphdb.DB_PATH
+        graphdb.DB_PATH = os.path.join(tmp, "no-live-graph", "graph.db")
+        try:
+            rcM = run_ingest(M())
+            made = os.path.exists(graphdb.DB_PATH)
+        finally:
+            graphdb.DB_PATH = saved_db_path
+        T("MUST FIRE  a MISSING live graph.db is BLIND (exit 3): the night neither creates an empty "
+          "index nor writes a packet computed against one",
+          rcM == EXIT_BLIND and not made and not os.path.exists(M.packet),
+          "rc=%s created=%s packet=%s" % (rcM, made, os.path.exists(M.packet)))
 
         # ---- the two absent/empty exits ------------------------------------------------------------
         class B(A):

@@ -58,13 +58,34 @@ def write_json(path: str, obj: Any) -> None:
         fh.write("\n")
 
 
+class GraphDBMissing(FileNotFoundError):
+    """The database file is not there and the caller did not say it may be created."""
+
+
 class GraphDB:
     """Thin, explicit wrapper over SQLite. No ORM, no magic."""
 
-    def __init__(self, path: str = DB_PATH, create: bool = True,
-                 restore_learning: bool = True):
+    def __init__(self, path: str | None = None, create: bool = True,
+                 restore_learning: bool = True, allow_new: bool = False):
+        # `path=None` reads the module's DB_PATH at CALL time rather than binding it at definition,
+        # so a harness can point the whole module at a copy by setting graphdb.DB_PATH.
+        path = path or DB_PATH
         self.path = path
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        self.restore_skipped: dict[str, int] = {}
+        # A MISSING DATABASE IS REFUSED UNLESS THE CALLER SAYS IT MAY BE CREATED (2026-09-18, backlog
+        # I229). sqlite3.connect() creates any path it is handed, so every open_db() script used to
+        # build a fresh, empty graph.db wherever it ran - a worktree has none - restore the learning
+        # records into it, and then answer every question from an index holding no nodes, no edges
+        # and no observations: an agreeing zero from a database nobody meant to make. `create` is
+        # NOT that flag; it re-runs the idempotent schema script on an existing file and has always
+        # defaulted True. Only the two roads that build the index from nothing pass allow_new:
+        # graph/import/import_all.py (the daily chain's graph-gates lane) and graph/lib/rebuild.py.
+        if not allow_new and not os.path.exists(path):
+            raise GraphDBMissing(
+                f"graph database not found at {path} - refusing to create an empty one. "
+                f"Build it with graph/import/import_all.py or graph/lib/rebuild.py, or pass "
+                f"allow_new=True for a scratch database.")
+        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
         fresh = not os.path.exists(path)
         self.conn = sqlite3.connect(path)
         self.conn.row_factory = sqlite3.Row
@@ -467,9 +488,16 @@ class GraphDB:
         return written
 
     def import_learning(self, out_dir: str | None = None) -> dict[str, int]:
-        """Restore learning records from tracked JSON into a fresh database."""
+        """Restore learning records from tracked JSON into a fresh database.
+
+        Returns the rows actually INSERTED per table. A row the table already holds, or one a
+        constraint refuses, is ignored by INSERT OR IGNORE and counted in `self.restore_skipped`
+        instead (backlog I229: it used to be counted as restored, so a restore that kept 1 row of 3
+        reported 3).
+        """
         out_dir = out_dir or GRAPH_DIR
         restored = {}
+        self.restore_skipped = {}
         for table, fname in self.LEARNING_TABLES:
             path = os.path.join(out_dir, fname)
             if not os.path.exists(path):
@@ -480,7 +508,7 @@ class GraphDB:
             except (json.JSONDecodeError, OSError):
                 restored[table] = 0
                 continue
-            n = 0
+            n = skipped = 0
             for row in rows or []:
                 cols = ", ".join(row.keys())
                 marks = ", ".join(f":{k}" for k in row)
@@ -489,10 +517,15 @@ class GraphDB:
                 # store_id) and question_verdicts (commodity_id, product_key), so
                 # naming a conflict column would raise on restore, which is the
                 # one moment this code exists for.
-                self.conn.execute(
+                cur = self.conn.execute(
                     f"INSERT OR IGNORE INTO {table} ({cols}) VALUES ({marks})", row)
-                n += 1
+                if cur.rowcount == 1:
+                    n += 1
+                else:
+                    skipped += 1
             restored[table] = n
+            if skipped:
+                self.restore_skipped[table] = skipped
         self.conn.commit()
         return restored
 
@@ -501,5 +534,6 @@ class GraphDB:
                 for t, _ in self.LEARNING_TABLES}
 
 
-def open_db(create: bool = True) -> GraphDB:
-    return GraphDB(create=create)
+def open_db(create: bool = True, allow_new: bool = False) -> GraphDB:
+    """The live graph.db. Refuses a missing file unless `allow_new` (see GraphDB.__init__)."""
+    return GraphDB(create=create, allow_new=allow_new)

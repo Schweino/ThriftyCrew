@@ -15670,7 +15670,7 @@ harness, `MEASURE-gate-slot-admission-2026-09-11.md` and `MEASURE-ratchet-plain-
 their re-read by the new blob form, which is the proof it works. `.claude/rules/measurement.md` documents the form
 and the rule never to cite your own unlanded commit hash. The `push-main.ps1:143` console point is not addressed.
 
-### I229 - Graph: stale filed-under edges are never removed, and a missing graph.db is silently recreated `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+### I229 - Graph: stale filed-under edges are never removed, and a missing graph.db is silently recreated `PARTLY DONE - 2, 3 AND 5 SHIPPED; THE STALE-EDGE RETRACTION IS READY FOR BRAD ON A BRANCH` `run-0919` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15684,6 +15684,75 @@ and the rule never to cite your own unlanded commit hash. The `push-main.ps1:143
 - `graph/import/importers.py:848-851` (I211) reports 606,442 unresolvable rows per run against 310,447 resolved;
   not checked whether that is expected.
 - `graph/learning/ingest_hunter_events.py:332` (I119) silently skips an unparseable hunter-gold line.
+
+**Measured and partly shipped 2026-09-18.** Every number below was read on a backup-API copy of the live
+`graph\sqlite\graph.db` (taken 17:00, 323,358,720 bytes, 90,330 edges, 3,246 cell_state rows); the live file was
+only ever opened `mode=ro`. Identity files are the ones at base 9146a625f (walmart staple blob `aa4a8367`), which
+the copy agrees with exactly: 0 current (sku, commodity) pairs are missing an edge. The probes are scratch and
+described here; the importer on the branch below reports the stale count itself on every run, so the question
+does not need a committed probe to recur.
+
+1. **Stale edges: CONFIRMED, READY FOR BRAD.** Bar: the finding stands if one or more identity-table
+   `instance_of` edges name a (sku, commodity) pair the identity files no longer assert; it reaches an output if a
+   reader of `instance_of` would emit something different without them. Measured: **3,596 of 38,905**
+   identity-table edges stale (the filing's 3,437 of 38,748 was an earlier day; it grows as products are
+   re-filed), Birds Eye Steamfresh Sweet Peas -> canned-peas among them. `graph/pipeline/state.py` reads no edge,
+   so **cell_state is not reached directly**. Two readers are: `emit_commodity_defs.py` takes 230 of its 3,822
+   exemplars (158 of 687 commodities' lists) from stale edges only, and those defs feed the sidecar sweep, whose
+   scores feed resolve's helper filter, so a verdict and then a cell can move downstream; and
+   `sidecar/build_pair_corpus.py` labels all 3,596 as positive training pairs (garlic <- diced tomatoes with
+   garlic). The fix deletes edges in the live index, so it is on branch **`claude/i229-stale-edges`**, not main:
+   `import_identity` retracts the identity-table edges it did not assert this run, as one logged decision (count,
+   sha of the id list, first 50 ids), refuses and keeps everything when a namespace was not read or more than
+   `MAX_STALE_RETRACT_FRACTION` (0.25, first plausible number; the only measurement is this 9.2%) would go, and never
+   touches an edge another importer asserts. On a copy: 3,596 retracted, 0 stale and 0 missing after, exemplars
+   3,822 -> 3,810 over 687 -> 686 commodities, and cell_state plus question_verdicts **sha256-identical** to the
+   untouched arm (`fcf3ee0a...`, 3,246 and 10,796 rows). importers_selftest 11 of 11; four single mutants (no
+   delete, no completeness guard, no fraction bar, no source filter) each red in a named case, originals
+   md5-identical. The first cut's completeness case also tripped the fraction bar and SURVIVED the mutant that
+   removed the completeness guard (two guards over one rule); it now sits under the bar. **Brad's one action:
+   merge `claude/i229-stale-edges` to main.** The next nightly import then deletes the 3,596 edges and 158
+   commodities' sidecar exemplar lists change.
+2. **A missing graph.db: CONFIRMED, FIXED.** Bar: `GraphDB()` on a missing path must raise and leave no file.
+   Confirmed in a temp dir (the pre-fix code, as mutant M1 below, "opened without raising exists=True"), and from
+   this worktree, which has no graph.db, `graph/eval/status.py` now exits 1 with the refusal and creates nothing.
+   `GraphDB` raises `GraphDBMissing` unless `allow_new=True`; `create` is not that flag (it re-runs the idempotent
+   schema and always defaulted True). Every caller was read: the two that build the index from nothing pass it,
+   `graph/import/import_all.py` (the daily chain's graph-gates lane, and the README's rebuild step) and
+   `graph/lib/rebuild.py` (the plain rebuild and the drill's post-delete open); there is no other bootstrap, and
+   no scheduled task or `.ps1` deletes graph.db. Scratch creators pass it too (`importers_selftest`, the ingest
+   drill's `--db`); a live `ingest_hunter_events` night with no graph.db is now BLIND (exit 3) instead of creating
+   one. `path=None` now reads `graphdb.DB_PATH` at call time, so a harness can point the module at a copy.
+3. **Restore count: CONFIRMED, FIXED.** Bar: 3 offered, 1 inserted must report 1. `import_learning` counts
+   `rowcount` and puts refused rows in `restore_skipped`, which `rebuild.py` prints.
+4. **606,442 unresolvable rows: EXPLAINED, and only partly expected.** Replaying `importers.py:835-851` over the
+   356 capture files with deals: 310,463 resolved, **606,418 unresolved** (the filing's figures were another
+   day). Two kinds. **361,906 carry no `found_by_term` at all** (Hy-Vee 90,968, Family Fare 75,844, Baker's
+   118,557, Walmart 34,095, Aldi 19,111, Fareway 15,102, Sam's 6,679, a `_bak` file 1,550): catalogue rows and
+   ad rows carried into the regular files (`source_ad`, `carried_forward`), which this term-keyed importer cannot
+   place by design; expected. **244,512 carry a term that is not a search-term alias, and those are NOT
+   expected**: 231,793 of them are a STAPLE COMMODITY ID written into `found_by_term` (5,699 a recipe id, 7,020
+   neither), and 237,937 are Baker's (`bakers-regular-*`, about 6,000 per daily file across 38 files). Sample of
+   50, every 12,128th row: 29 no-term catalogue rows (Colgate toothbrushes, Dixie plates, blackberries) and 21
+   slug-term rows ('pretzels', 'refried-beans', 'toilet-paper'). Resolving the slug rows would ADD observations
+   and could move graph cell_state, so it is not done here and needs its own measured item: which cells change.
+5. **Unparseable hunter-gold line: FIXED.** Bar: a torn line must be counted and reach the exit code.
+   `append_gold` counts torn and non-object lines (with line numbers) even on a night with nothing to append,
+   and `run_ingest` reports them as a FINDING (exit 1). The live file has 0 of 281 lines unparseable, so tonight's
+   nightly is unaffected.
+
+**No graph output moved (2, 3, 5).** Harness: a scratch `state_arm.py` loads a chosen `graphdb.py` into a mirror
+and rebuilds cell_state and question_verdicts on its own copy at a fixed timestamp. Old arm (origin blob
+`13a20a89`) and new arm (blob `bea230cb`): both 3,246 cell_state and 10,796 question_verdicts rows, sha256
+`fcf3ee0a8f838b60450f82e5c0ab70afe647a2d9d8ae54ee650370496fdc29ac` in both, dump files byte-identical.
+**Fixtures:** new `graph/lib/graphdb_selftest.py` (8 of 8; MUST FIRE missing path, missing `open_db()`, `create=True`
+still refusing, 1-of-3 restore reads 1, the 2 refused rows counted; CLEAN TWIN `allow_new` builds the schema, an
+existing file opens as before, the landed row is intact) and six new cases in `ingest_hunter_events --selftest`
+(34 ok, 0 red). Broken once each: removing the refusal turned 3 graphdb cases and the ingest BLIND case red;
+counting every offered row turned 2 red; skipping torn lines silently turned 3 ingest cases red; each file
+md5-identical after restore.
+
+**What remains:** Brad's merge of bullet 1, and a measured item for the 237,937 Baker's slug-term rows (4).
 
 ### I230 - Stale facts in standing guidance and data `OPEN` `run-0919` `2-WAY` `RUNG1 DOC`
 
