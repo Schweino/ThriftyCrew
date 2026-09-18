@@ -49,6 +49,9 @@ $allowPath     = Join-Path $root 'ghost-drift-allowlist.json'
 # to refuse a blind overwrite. One definition, two dot-sources: a shared-lib fix that ships nothing because
 # callers kept inline copies is a failure this estate has already paid for.
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ghost-drift-lib.ps1')
+# ghost-lib is loaded here rather than in the live section so the self-test can reach Invoke-TcGhostPaged.
+# Loading it makes no call; the self-test still clears TC_WRITE_JOURNAL before it drives anything.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ghost-lib.ps1')
 
 # ---------------------------------------------------------------- self-test: frozen fixtures, no network
 # The comparison fixtures live WITH the comparison, in lib\ghost-drift-lib.ps1, and this delegates to them
@@ -76,6 +79,38 @@ function Get-CommittedToolSource([string]$RepoRoot, [string]$FileName) {
     if ($proc.ExitCode -ne 0) { return $null }
     return $out
   } catch { return $null }
+}
+
+# ---- -Discover's read of every post (2026-09-19, backlog I197) -------------------------------------------
+# This paged Ghost with `do { ... $page++ } while ($r.meta.pagination.next)`: its own counter meant a rewound
+# next could not trap it, but nothing capped it, so a Ghost that always names a next read forever. And any
+# throw inside it escaped the script as exit 1, which this guard's contract reads as "drift found".
+# It now pages through Invoke-TcGhostPaged (lib\ghost-lib.ps1), which throws on a next that does not advance
+# and past -MaxPages, and a throw here is returned as a BLIND reason, never as bodies: the caller exits 3 and
+# does not rewrite the manifest. 40 pages of 100 is 4,000 posts; the 542 recipe slugs in the publish ledger
+# (counted 2026-08-08) plus the lessons and tools are well under half that, so the cap binds only on a Ghost that never runs out.
+# A read that returns no html card at all is blind too: a manifest built from nothing would map zero tools.
+# $Fetch takes a page number and returns the parsed response, so the fixtures drive this with no network.
+function Get-DiscoverBodies {
+  param([Parameter(Mandatory)][scriptblock]$Fetch, [int]$MaxPages = 40)
+  $bodies = @{}
+  $pages = $null
+  try { $pages = Invoke-TcGhostPaged -Fetch $Fetch -MaxPages $MaxPages }
+  catch { return [pscustomobject]@{ bodies = $null; blind = $_.Exception.Message; posts = 0 } }
+  $posts = 0
+  foreach ($r in @($pages)) {
+    foreach ($p in $r.posts) {
+      $posts++
+      if (-not $p.lexical) { continue }
+      try { $lex = $p.lexical | ConvertFrom-Json } catch { continue }
+      $h = Join-GhostLexicalBody -Root $lex.root
+      if ($h) { $bodies[$p.slug] = $h }
+    }
+  }
+  if ($bodies.Count -eq 0) {
+    return [pscustomobject]@{ bodies = $null; blind = ("Ghost returned {0} post(s) and none carried an html card, so there is nothing to map" -f $posts); posts = $posts }
+  }
+  return [pscustomobject]@{ bodies = $bodies; blind = $null; posts = $posts }
 }
 
 if ($SelfTest) {
@@ -123,11 +158,60 @@ if ($SelfTest) {
     T 'a clean tool source exists to pin the committed read against' $false 'every *-tool.html is dirty, so this case could not run - it proves nothing today'
   }
 
+  # ---- -Discover's pager (2026-09-19, backlog I197). A stubbed Ghost, no network, no key. The stub refuses
+  # past 50 fetches, so a pager that stopped ending on its own goes red here instead of hanging the gate.
+  # The journal is cleared first: nothing here writes, and nothing here may journal as if it had.
+  $savedJournal = $env:TC_WRITE_JOURNAL
+  $env:TC_WRITE_JOURNAL = $null
+  $calls = @{ n = 0 }
+  $stubNext = $null
+  $stubCards = $true
+  $stub = {
+    param($n)
+    $calls.n++
+    if ($calls.n -gt 50) { throw 'STUB-GUARD: more than 50 fetches, the pager is not ending on its own' }
+    $nx = & $stubNext $n
+    $mk = { param($s) if ($stubCards) { [pscustomobject]@{ slug = $s; lexical = (Get-GhostLexical -Html ('<p>' + $s + '</p>')) } } else { [pscustomobject]@{ slug = $s; lexical = $null } } }
+    [pscustomobject]@{
+      posts = @((& $mk ('p' + $n + 'a')), (& $mk ('p' + $n + 'b')))
+      meta  = [pscustomobject]@{ pagination = [pscustomobject]@{ page = $n; next = $nx } }
+    }
+  }
+  function Invoke-DiscCase([scriptblock]$NextOf, [int]$Max, [bool]$Cards = $true) {
+    $calls.n = 0; $script:stubNext = $NextOf; $script:stubCards = $Cards
+    try { return (Get-DiscoverBodies -Fetch $stub -MaxPages $Max) }
+    catch { return [pscustomobject]@{ bodies = $null; blind = ('ESCAPED: ' + $_.Exception.Message); posts = -1 } }
+  }
+  function Get-DiscGot($res) { "calls={0} blind=[{1}] bodies={2}" -f $calls.n, $res.blind, $(if ($res.bodies) { $res.bodies.Count } else { 'null' }) }
+
+  # MUST FIRE: a Ghost that never runs out of pages ends at the cap as a counted could-not-look, with no bodies.
+  $res = Invoke-DiscCase { param($n) $n + 1 } 5
+  T 'MUST FIRE discover: a Ghost whose next never runs out stops at the cap (5 fetches) and is BLIND, never bodies' `
+    ($calls.n -eq 5 -and $null -eq $res.bodies -and [string]$res.blind -match 'cap' -and [string]$res.blind -notmatch 'STUB-GUARD|ESCAPED') (Get-DiscGot $res)
+  # MUST FIRE: a Ghost that repeats the page it just served is refused on the first page.
+  $res = Invoke-DiscCase { param($n) 1 } 40
+  T 'MUST FIRE discover: a next that repeats the page just read is refused after 1 fetch and is BLIND' `
+    ($calls.n -eq 1 -and $null -eq $res.bodies -and [string]$res.blind -match 'did not advance' -and [string]$res.blind -notmatch 'ESCAPED') (Get-DiscGot $res)
+  # MUST FIRE: a read that finds posts but no html card maps nothing, and says so rather than writing an empty manifest.
+  $res = Invoke-DiscCase { param($n) $null } 40 $false
+  T 'MUST FIRE discover: posts with no html card are BLIND, never an empty body set' `
+    ($calls.n -eq 1 -and $null -eq $res.bodies -and [string]$res.blind -match 'none carried an html card' -and $res.posts -eq 2) (Get-DiscGot $res)
+  # CLEAN TWIN: an ordinary 3-page list is read whole: every post on every page comes back.
+  $res = Invoke-DiscCase { param($n) if ($n -lt 3) { $n + 1 } else { $null } } 40
+  $wantSlugs = 'p1a,p1b,p2a,p2b,p3a,p3b'
+  $gotSlugs = if ($res.bodies) { (@($res.bodies.Keys) | Sort-Object) -join ',' } else { '' }
+  T 'CLEAN TWIN discover: a normal 3-page list returns all 6 posts in 3 fetches with no blind reason' `
+    ($calls.n -eq 3 -and $null -eq $res.blind -and $gotSlugs -eq $wantSlugs -and $res.bodies['p2b'] -eq '<p>p2b</p>') ((Get-DiscGot $res) + " slugs=[$gotSlugs]")
+  # CLEAN TWIN: a single page with no next is read once.
+  $res = Invoke-DiscCase { param($n) $null } 40
+  T 'CLEAN TWIN discover: a one-page list is read once and both posts come back' `
+    ($calls.n -eq 1 -and $null -eq $res.blind -and $res.bodies.Count -eq 2) (Get-DiscGot $res)
+  $env:TC_WRITE_JOURNAL = $savedJournal
+
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
 # ---------------------------------------------------------------- live: fetch every mapped tool's card
-. (Join-Path $repo 'lib\ghost-lib.ps1')
 $key = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY } else {
   $kf = Join-Path $repo 'meal-prep\.ghostkey'
   if (Test-Path $kf) { (Get-Content $kf -Raw).Trim() } else { '' }
@@ -221,22 +305,19 @@ if ($Discover) {
   # Rebuild the manifest by CONTENT, because the slug is not derivable from the filename (leak-finder-tool
   # publishes to money-leak-finder). Fingerprints on slices spread through the file, so a partially drifted
   # page still matches - whole-file matching would only ever find the tools that have NOT drifted.
-  $bodies = @{}
-  $page = 1
-  do {
+  $fetch = {
+    param($n)
     $jwt = Get-GhostJWT -Key $key
-    $r = Invoke-RestMethod -Uri "$API/ghost/api/admin/posts/?limit=100&page=$page&formats=lexical&fields=id,slug,lexical" `
-          -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 90
-    foreach ($p in $r.posts) {
-      if (-not $p.lexical) { continue }
-      try { $lex = $p.lexical | ConvertFrom-Json } catch { continue }
-      $h = ''
-      $h = Join-GhostLexicalBody -Root $lex.root
-      if ($h) { $bodies[$p.slug] = $h }
-    }
-    $page++
-  } while ($r.meta.pagination.next)
-  Write-Output ("discover: {0} html-card post(s) fetched" -f $bodies.Count)
+    Invoke-RestMethod -Uri "$API/ghost/api/admin/posts/?limit=100&page=$n&formats=lexical&fields=id,slug,lexical" `
+      -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 90
+  }
+  $disc = Get-DiscoverBodies -Fetch $fetch -MaxPages 40
+  if ($disc.blind) {
+    Write-Output ("ghost-drift/discover: COULD NOT EVALUATE - {0}. The manifest was NOT rewritten." -f $disc.blind)
+    Exit-Guard -Name 'ghost-drift' -Summary 'discover blind=ghost-read' -Code 3
+  }
+  $bodies = $disc.bodies
+  Write-Output ("discover: {0} html-card post(s) fetched of {1} post(s)" -f $bodies.Count, $disc.posts)
 
   $map = @()
   foreach ($lf in (Get-ChildItem (Join-Path $repo 'site\tools\*-tool.html') -File | Sort-Object Name)) {

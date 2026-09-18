@@ -221,11 +221,31 @@ class Chrome:
 
     # ---------------------------------------------------------------- protocol
 
-    def send(self, method, **params):
+    # THE REPLY WAIT HAS A DEADLINE, because this client runs UNATTENDED (2026-09-19, backlog I197).
+    # It was first written for the hand-run reel, but grocery\pull-browser-stores.py imports it and drives
+    # the bot-walled stores from the 08:00 capture task and the hunt daemon. Each recv() has the socket's
+    # 60 s timeout, so a SILENT Chrome already raised; what never ended was a Chrome that keeps streaming
+    # events (Network.enable is on, and a store page is chatty) while the reply to OUR id never arrives:
+    # every recv() succeeds, none carries the id, and the loop spins forever with nobody at the keyboard.
+    # The measure is now the time left before the deadline, and it falls on every pass whatever Chrome
+    # sends. 120 s is the first plausible number, not a sweep: twice the socket's own silence timeout, so a
+    # silent Chrome still fails the old way first. No caller in the tree passes await_promise=True (grep,
+    # 2026-09-19), and pull-browser-stores says why it never will: every send here is a short request, and
+    # its long sweeps are polled with short js() calls. The longest legitimate send was not measured.
+    # A caller that needs longer passes _deadline_s. The clock is a seam so the fixture needs no clock bar.
+    send_deadline_s = 120.0
+    _clock = staticmethod(time.monotonic)
+
+    def send(self, method, _deadline_s=None, **params):
         self._id += 1
         mid = self._id
+        limit = self.send_deadline_s if _deadline_s is None else _deadline_s
+        deadline = self._clock() + limit
         self.ws.send(json.dumps({"id": mid, "method": method, "params": params}))
         while True:
+            if self._clock() >= deadline:
+                raise TimeoutError(f"{method}: no reply to id {mid} within {limit:g} s; Chrome kept "
+                                   "sending other messages, so the socket timeout could not fire")
             msg = json.loads(self.ws.recv())
             if msg.get("id") == mid:
                 if "error" in msg:
@@ -342,3 +362,121 @@ class Chrome:
         with open(path, "wb") as fh:
             fh.write(data)
         return path
+
+
+# ---------------------------------------------------------------- self-test (no Chrome, no network)
+# python cdp.py --selftest. Drives send() against a fake socket and a fake clock that advances one second
+# per read, so the deadline is decided by a count, never by timing. The fake socket refuses past 1,000
+# reads, so a send() that stopped ending on its own goes red here instead of hanging the gate.
+
+class _FakeWs:
+    def __init__(self, replies):
+        self.replies = list(replies)   # messages served in order, then events forever
+        self.reads = 0
+        self.sent = []
+
+    def send(self, raw):
+        self.sent.append(json.loads(raw))
+
+    def recv(self):
+        self.reads += 1
+        if self.reads > 1000:
+            raise AssertionError("STUB-GUARD: more than 1000 reads, send() is not ending on its own")
+        if self.replies:
+            return json.dumps(self.replies.pop(0))
+        return json.dumps({"method": "Network.dataReceived", "params": {}})
+
+
+def _fixture_chrome(replies, deadline_s=10.0):
+    c = Chrome()
+    c.ws = _FakeWs(replies)
+    tick = {"t": 0.0}
+
+    def clock():
+        tick["t"] += 1.0
+        return tick["t"]
+    c._clock = clock
+    c.send_deadline_s = deadline_s
+    return c
+
+
+def _selftest():
+    fails = 0
+    ran = 0
+
+    def check(label, ok, got):
+        nonlocal fails, ran
+        ran += 1
+        print(("ok    " if ok else "FAIL  ") + label + ("" if ok else f"   got: {got}"))
+        if not ok:
+            fails += 1
+
+    # MUST FIRE: Chrome streams events forever and never answers our id - send() raises at the deadline.
+    c = _fixture_chrome([], deadline_s=10.0)
+    err = None
+    try:
+        c.send("Runtime.evaluate", expression="1")
+    except Exception as e:
+        err = e
+    check("MUST FIRE send: an event stream that never carries our id ends in TimeoutError at the deadline, "
+          "never a hang",
+          isinstance(err, TimeoutError) and c.ws.reads < 20 and "no reply to id 1" in str(err),
+          f"err={err!r} reads={c.ws.reads}")
+
+    # MUST FIRE: a reply to SOMEBODY ELSE's id does not count as ours.
+    c = _fixture_chrome([{"id": 99, "result": {"value": 1}}], deadline_s=10.0)
+    err = None
+    try:
+        c.send("Page.enable")
+    except Exception as e:
+        err = e
+    check("MUST FIRE send: a reply carrying another id is not our reply, and the wait still ends",
+          isinstance(err, TimeoutError) and c.ws.reads < 20, f"err={err!r} reads={c.ws.reads}")
+
+    # CLEAN TWIN: our reply after a burst of events comes back, with its result, before the deadline.
+    evs = [{"method": "Network.requestWillBeSent", "params": {}}] * 5
+    c = _fixture_chrome(evs + [{"id": 1, "result": {"result": {"value": 42}}}], deadline_s=60.0)
+    got = None
+    try:
+        got = c.js("6*7")
+    except Exception as e:
+        got = e
+    check("CLEAN TWIN send: our reply after 5 events is returned (js() reads 42) in 6 reads",
+          got == 42 and c.ws.reads == 6 and c.ws.sent[0]["method"] == "Runtime.evaluate",
+          f"got={got!r} reads={c.ws.reads}")
+
+    # CLEAN TWIN: a per-call _deadline_s is honoured and never leaks into the CDP params sent to Chrome.
+    c = _fixture_chrome([], deadline_s=1000.0)
+    err = None
+    try:
+        c.send("Page.navigate", _deadline_s=5, url="about:blank")
+    except Exception as e:
+        err = e
+    sent = c.ws.sent[0] if c.ws.sent else {}
+    check("CLEAN TWIN send: _deadline_s=5 overrides the default and is not sent to Chrome as a param",
+          isinstance(err, TimeoutError) and c.ws.reads < 10 and sent.get("params") == {"url": "about:blank"},
+          f"err={err!r} reads={c.ws.reads} sent={sent}")
+
+    # CLEAN TWIN: Chrome's own error on our id is still raised as that error, not as a timeout.
+    c = _fixture_chrome([{"id": 1, "error": {"message": "No node with given id"}}])
+    err = None
+    try:
+        c.send("DOM.focus", nodeId=7)
+    except Exception as e:
+        err = e
+    check("CLEAN TWIN send: a CDP error reply on our id is raised as RuntimeError naming it",
+          isinstance(err, RuntimeError) and "No node with given id" in str(err), f"err={err!r}")
+
+    if ran != 5:
+        print(f"FAIL  the case list has 5 cases and {ran} ran")
+        fails += 1
+    print(f"cases={ran} failed={fails}")
+    print("cdp self-test " + ("PASS" if fails == 0 else "FAIL"))
+    return 0 if fails == 0 else 1
+
+
+if __name__ == "__main__":
+    if "--selftest" in sys.argv:
+        sys.exit(_selftest())
+    print("cdp.py is a library; run it with --selftest to check send()'s reply deadline.")
+    sys.exit(2)

@@ -14181,7 +14181,7 @@ could not have shown it. Options:
 every one of these was lost; a label records a class only after someone thought of the case, which is
 the step that did not happen. The remaining four detectors are then a sweep that rule makes routine.
 
-### I197 - 36 unbounded while-true loops, and at least one ends only when a remote server says so `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BUILD`
+### I197 - 36 unbounded while-true loops, and at least one ends only when a remote server says so `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-scala-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14270,6 +14270,26 @@ scratch harness against a stubbed `Invoke-RestMethod` (no network): a 3-page lis
 3 calls, and a rewind at page 2 threw after 2 calls. `reconcile-publish-journal.ps1 -SelfTest` and
 `sync-paywall-schema.ps1 -SelfTest` both rc 0 afterwards; neither suite reaches the paging block, so their wiring
 is checked by parse and by the same scriptblock shape `ghost-export` was driven through, not by a case.
+
+**Done 2026-09-19, the rest.** `grocery/audit-ghost-drift.ps1 -Discover` now pages through `Invoke-TcGhostPaged` at
+`-MaxPages 40` (pages of 100) inside a new `Get-DiscoverBodies`, which takes a `$Fetch` scriptblock. A paging
+throw, a network throw, or a read with no html card at all comes back as a BLIND reason: the run prints COULD NOT
+EVALUATE, exits 3 (`discover blind=ghost-read`) and does NOT rewrite the manifest. Before this any throw there left
+the script as exit 1, which this guard's contract reads as "drift found". Its `-SelfTest` gained 5 cases against a
+stubbed Ghost that refuses past 50 fetches (3 MUST FIRE: a next that never runs out stops at the cap after 5
+fetches, a next that repeats the page is refused after 1, posts with no html card are blind; 2 CLEAN TWIN: a 3-page
+list returns all 6 posts in 3 fetches, a one-page list is read once); rc 0, 9 lines ok. Broken once by putting the
+old uncapped `do { } while (next)` back: rc 1, both paging MUST FIREs red at calls=51 on the stub guard, the other
+three green; a second mutant dropping the no-card check turned that case red alone. File md5-identical after each.
+**`media/reels/cdp.py:228` got its deadline, because the premise for leaving it was wrong:** it is not only the
+hand-run reel's client. `grocery/pull-browser-stores.py:116` imports its `Chrome`, and that driver runs unattended
+from the capture task and the hunt daemon. `send()` now raises `TimeoutError` when no reply to its own id arrives
+within `send_deadline_s` (120 s, twice the socket's 60 s silence timeout, the first plausible number and not a
+sweep; a caller may pass `_deadline_s`). No caller in the tree passes `await_promise=True`, so no legitimate send
+is long; the longest real one was not measured. New `python cdp.py --selftest` (5 cases, fake socket and a fake
+clock ticking 1 s per read, so no wall-clock bar; the socket refuses past 1,000 reads): rc 0. Broken once by
+disabling the deadline check: rc 1, 3 of 5 red on the stub guard at 1,001 reads, the 2 that need no deadline
+green; md5-identical afterwards. `pull-browser-stores.py --selftest-lookup` rc 0 after. Both at base `b6e28fe62`.
 
 **What remains:** `grocery/audit-ghost-drift.ps1:226` (the `-Discover` path) should call `Invoke-TcGhostPaged` too.
 Left out of this change only because another session was working the grocery guards the same hour; it is a
