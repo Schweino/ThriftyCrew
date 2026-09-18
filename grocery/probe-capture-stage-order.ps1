@@ -37,8 +37,8 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
-$repo = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-if (-not $LogDir) { $LogDir = Join-Path $repo 'grocery\out\logs' }
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+if (-not $LogDir) { $LogDir = Join-Path $here 'out\logs' }   # grocery\out\logs: this probe lives beside the chain it reads
 
 function Get-CaptureOccurrences {
   <# One row per transcript occurrence in capture-run-{ad,daily}-<date>.log under $Dir. Reads files only. #>

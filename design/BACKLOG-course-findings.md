@@ -4813,7 +4813,7 @@ Watchdog and Recipe Harvest read no other scheduled stage's output file, and the
 -NoPull`) reads what the 07:00 ad run wrote.** It is still a clock gap, and both tasks re-fire hourly for six
 hours as catch-up, so a 07:00 run that failed can re-run after the day's one chain and its ad then waits a day.
 
-*The measurement.* `ops/probe-capture-stage-order.ps1` (committed, so the question can be asked again) reads
+*The measurement.* `grocery/probe-capture-stage-order.ps1` (committed, so the question can be asked again) reads
 the capture-run transcripts. Both kinds take `Global\tc-capture-run` before writing, so an ad occurrence that
 started before the chain's finished before the chain began, and only start times are needed. Run at 32a035c34
 over `grocery\out\logs`: **26 days read (2026-08-22 to 2026-09-18; 09-15 and 09-16 have no transcript
@@ -4834,11 +4834,11 @@ would withhold a whole day's prices over a shape seen 0 times in 14. **Both scar
 08:30 stage no longer exists as a task (check-ad-cycles runs inline, inside the 08:00 run's mutex), and the
 watchdog task is named `TC Grocery Capture Watchdog 1030` and fires at 10:30.
 
-**Reopen trigger:** `ops/probe-capture-stage-order.ps1` exits 1 (a `CHAIN-BEFORE-AD` day). The fix then is the
+**Reopen trigger:** `grocery/probe-capture-stage-order.ps1` exits 1 (a `CHAIN-BEFORE-AD` day). The fix then is the
 Graph Nightly pattern in `capture-run -Kind daily`: `Assert-TcInputs` on the `ad` record of
 `out\logs\capture-run-status.json` (today, stage `complete`), RECORDED and never refusing. The probe's
 self-test: 7 of 7, exit 0; both single mutants (the late-start comparison neutered, failed lanes counted as
-data) went red in their own named case, exit 1, original md5 A9875A49BBAB8EC30E057EFC5D57BF0A afterwards.
+data) went red in their own named case, exit 1, original md5 70BB2BCB4FEDC4938E51E443FB93EEEE afterwards.
 Found in passing and not this item's: `ops\scheduled-tasks\tc-grocery-capture-watchdog-0930.xml` still carries
 the old 0930 in its FILENAME while its trigger and task name say 10:30.
 
