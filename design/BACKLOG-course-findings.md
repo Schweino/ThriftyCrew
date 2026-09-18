@@ -14140,7 +14140,7 @@ So the rule's direction is right and its absolute is wrong in one place. The pro
 
 **Done 2026-09-19.** `.claude/rules/ops-and-gates.md`'s idempotency paragraph no longer says no header states it: it names `lib/append-line.ps1:18` as the one that did (re-read 2026-09-19, the line still says a retried append duplicates a line), `lib/ghost-lib.ps1` as the one that now does per HTTP method (I198, same commit), and `lib/atomic-write.ps1` as the one that should and does not (0 mentions of `idempot` in it on 2026-09-19). The closing "none of them says which" became "almost none". Shipped in the same commit as I198.
 
-### I200 - price_observations holds 34 rows priced 0.0, and only a match-status filter keeps them off the board `OPEN` `queue-3` `2-WAY` `RUNG1 MEASURE`
+### I200 - price_observations holds 34 rows priced 0.0, and only a match-status filter keeps them off the board `DONE` `queue-3`
 
 **Merged from `design\backlog-inbox\q3-sqlint-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14193,6 +14193,49 @@ TWIN only if it changes **0** `cell_state` prices on a copy rebuilt both ways. I
 that is a parser defect and the fix is the parser, not a guard. If rows are (c), the writer has
 already stopped and the remaining work is a rebuild of the copy, which is READY FOR BRAD and not
 landed. A mix is reported per class with its count; nothing is rounded to a majority.
+
+**Result (measured 2026-09-18, Get-Date's date, at base 73e2039ab; `graph.db` read as an md5-identical
+byte copy, `EA657B5A...`, SQLite 3.49.1, and the live file's md5 read the same after every run).**
+- **M1.** 34 of 44,750 rows have `price <= 0`, every one exactly 0.0; 8 more are NULL. All 34:
+  `source_file = grocery/product-urls.json`, `observed_at 2026-08-29`, `price_type everyday`; Aldi 10,
+  Sam's 8, Walmart 16; `no_include_hit` 31, `llm_match_unverified` 3. Unchanged from the item's count.
+- **M2. 34 of 34 are class (a), 0 are (b), 0 are (c).** Each row's entry carries a literal `"price": 0`
+  in `product-urls.json` both at d26e65928 (the file's last commit on 2026-08-29) and at the base, with
+  keys `name, price, recipe_pu, size, url` and no `verified`. The file holds **53** such entries over 26
+  commodities (of 3,352 store entries); the other 19 never became rows because their commodity has no
+  graph node. All 53 were written by cb1d66fa4 (2026-07-08, "Full 6-store backfill"): its expansion
+  captures (`grocery/out/expansion-*.json`) recorded only `per_unit`, and the integrator
+  (`meal-prep/integrate-expansion-stores.ps1`, deleted in 92dd24454 on 2026-07-26) wrote a zero beside
+  `recipe_pu`. So `0.0` is an unknown, and the writer that invented it has been gone since July.
+  `grocery/resolve-worklist.ps1:44` already reads a price `<= 0` as none.
+- **M3.** `import_product_url_prices` writes these rows `include_hit`; `resolve.py`'s deterministic pass
+  (`resolve.py:755-756`, called from `resolve_pending`) re-derives every `include_hit` row from the include rules on each
+  import, and these recipe-namespace names match no include pattern, so they settle `no_include_hit`.
+  The 3 `llm_match_unverified` are banked model verdicts that the resolver restores.
+- **M4.** Two ways to a pricing status: a rule edit in `commodities.json` that makes an include pattern
+  match (the deterministic pass re-runs every import), and `graph/pipeline/review_escalations.py:636`,
+  whose CONFIRM `UPDATE` sets `match_status` only and never touches the price. Probed on a throwaway
+  copy: CONFIRM on the 3 `llm_match_unverified` rows priced **0 of 3,245** cells at 0.0 as the rows
+  stand, because each zero is older than a sighting that beats it in `build_cell_state`; with the same
+  3 rows also re-dated 2026-09-18 (what a bump of the file's `updated` stamp does, since these entries
+  have no `verified`), **3 of 3,245** cells read 0.0. So the status was not the only thing keeping them
+  out: their age was too.
+
+**Done 2026-09-18.** The decision rule's first branch applies. `graph/import/importers.py`
+`import_product_url_prices` now stores a price `<= 0` as NULL, keeps the observation, and reports
+`product_url_zero_price_nulled`; `graph/pipeline/state.py`'s existing `price IS NOT NULL` does the rest.
+New suite `graph/import/importers_selftest.py --selftest` (discovered by run-gates): 3 MUST FIRE (a 0, a
+`"$0.00"`, and no `price <= 0` in the table) and 3 CLEAN TWIN (3.49 arrives unchanged, 3 of 3 evidence
+rows kept, the counters). With the fix reverted, 4 of 6 went red (exit 1) and the file came back
+md5-identical; restored, 6 of 6 (exit 0). **Both ways on copies**: the importer's own path
+(product-urls import, known-wrong sweep, deterministic resolve, `build_cell_state`) run once with the
+base blob `3c7c696b` and once with the fix: product-urls rows 3,232 positive in both, 34 zero before
+and 34 NULL after, statuses unchanged, and **0 of 3,244 `cell_state` rows differ**. The graph is a
+shadow estate nothing serves from (`docs/RUNTIME-MAP.md`), so no board number moves either way. The
+live index was not written: its 34 rows turn NULL through this same importer on the next
+`import_all.py --observations` run, and I214's `price > 0` CHECK then has 0 violations on the evidence
+above. Left alone on purpose: the 53 `"price": 0` entries in `grocery/product-urls.json` itself, and
+`import_product_urls` still copies that raw 0 into the ProductSKU node's `price` property (line 495).
 
 ### I201 - the course's two hash-drift implementations are both blind, measured, and nothing here copies them yet `OPEN` `queue-3` `2-WAY` `RUNG1 DOC`
 

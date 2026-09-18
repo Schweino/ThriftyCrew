@@ -666,7 +666,7 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
     data = read_json(path)
     prov = db.record_provenance(rel(path), "import:product-urls-prices", ts, run=run)
 
-    n_obs = n_skip = n_placeholder = 0
+    n_obs = n_skip = n_placeholder = n_zero = 0
     written: set[str] = set()          # every observation id this run asserts
     for cid_raw, entry in (data.get("items") or {}).items():
         cid = None
@@ -686,6 +686,19 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
             if price is None:
                 n_skip += 1
                 continue
+            # A ZERO HERE IS AN UNKNOWN, NOT A PRICE (backlog I200, measured
+            # 2026-09-18). The 2026-07-08 store backfill captured only a per-unit
+            # figure for 53 entries and wrote `"price": 0` beside `recipe_pu`;
+            # all 34 zero-priced rows graph.db held came from those entries.
+            # Stored as 0.0 they were kept out of cell_state only by their status
+            # and their age: state.py's `price IS NOT NULL` admits a zero, and on
+            # a copy a reviewer CONFIRM plus a current date priced 3 cells at 0.0.
+            # So an unknown is stored as NULL, which that filter already refuses.
+            # The row is kept: the link and its adjudication are evidence even
+            # without a price.
+            if price <= 0:
+                price = None
+                n_zero += 1
             name = v.get("name") or cid_raw
             # Curated file, but curated FROM captures - a test listing picked up
             # as a commodity's product URL would be priced with confidence 1.0
@@ -750,7 +763,8 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
 
     return {"product_url_observations": n_obs, "product_url_skipped": n_skip,
             "product_url_superseded": len(stale),
-            "product_url_placeholder_rows_dropped": n_placeholder}
+            "product_url_placeholder_rows_dropped": n_placeholder,
+            "product_url_zero_price_nulled": n_zero}
 
 
 # ---------------------------------------------------------------------------
