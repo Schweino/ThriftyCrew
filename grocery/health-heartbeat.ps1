@@ -54,6 +54,13 @@ if ($declared -eq 0) {
   exit 3
 }
 $issues = New-Object System.Collections.Generic.List[string]
+# Every issue is added through Add-HbIssue, which keeps its text in $issues (what the report and the email show) and its
+# stable class|subject KEY in $issueObjs (what the dedup signature hashes). See the ALERT-SIGNATURE block.
+$issueObjs = New-Object System.Collections.Generic.List[object]
+function Add-HbIssue([string]$Class, [string]$Subject, [string]$Text) {
+  $o = New-HbIssue $Class $Subject $Text
+  $issues.Add($o.text); $issueObjs.Add($o)
+}
 $okLines = New-Object System.Collections.Generic.List[string]
 $TASK_NOT_YET_RUN = 267011   # 0x00041303 SCHED_S_TASK_HAS_NOT_RUN
 $TASK_RUNNING     = 267009   # 0x00041301 SCHED_S_TASK_RUNNING (transient: reported as LastTaskResult while a run is in flight)
@@ -279,6 +286,33 @@ function Get-RunLogVerdict {
 }
 # <<< RUN-LOG-VERDICT
 
+# >>> ALERT-SIGNATURE  (2026-09-18, backlog I225)
+# THE DEDUP SIGNATURE IS BUILT FROM WHAT IS WRONG, NEVER FROM HOW LONG IT HAS BEEN WRONG. Until this block the -Alert
+# path hashed the issue TEXT, and most of those texts carry a number that moves every run: TASK STALE and OUTPUT STALE
+# print the age in hours, OUTPUT NOT CURRENT prints the mtime age and the board week, RUN DID NOT LAND prints the run's
+# start. So the signature moved at every heartbeat and "de-duped by signature so a persistent outage is one email" was
+# false: the alert log shows the same five conditions paged on 2026-09-13 and again on 2026-09-14.
+# Each issue now carries a KEY - its condition class and its subject (task name, output label, glob, queue) - and the
+# signature hashes the sorted distinct keys. The displayed text keeps every number. A new task, a new condition on
+# the same task, or a condition clearing still moves the signature and pages; the same outage an hour older does not.
+# A HEALTHY -Alert run clears the stored signature, so an outage that recovers and comes back pages again.
+function New-HbIssue([string]$Class, [string]$Subject, [string]$Text) {
+  return [pscustomobject]@{ key = ($Class + '|' + $Subject); text = $Text }
+}
+function Format-HbTaskStale($Name, $AgeH, $MaxH, $Why) {
+  return ("TASK STALE: '{0}' last ran {1}h ago (> {2}h) - did its trigger stop? {3}" -f $Name, $AgeH, $MaxH, $Why)
+}
+function Format-HbOutputStale($Label, $AgeH, $MaxH, $Why) {
+  return ("OUTPUT STALE: {0} is {1}h old (> {2}h) - the job that writes it stopped? {3}" -f $Label, $AgeH, $MaxH, $Why)
+}
+function Get-HeartbeatAlertSignature([object[]]$Issues) {
+  $set = New-Object 'System.Collections.Generic.SortedSet[string]' ([StringComparer]::Ordinal)
+  foreach ($i in $Issues) { [void]$set.Add([string]$i.key) }
+  $joined = ([string[]]@($set)) -join "`n"
+  return ([BitConverter]::ToString([Security.Cryptography.MD5]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($joined))) -replace '-', '')
+}
+# <<< ALERT-SIGNATURE
+
 if ($SelfTest) {
   # HERMETIC. Frozen transcripts under regression-inputs\, no scheduler, no mail. The two live reads at the end are
   # labelled. Every case runs under Stop inside a try whose catch is a counted failure.
@@ -356,6 +390,29 @@ if ($SelfTest) {
     $hbSrc = [IO.File]::ReadAllText($PSCommandPath)
     HbCase 'MUST FIRE  the task loop reads the run-log verdict for a row that declares one' ($hbSrc.Contains('Get-RunLog' + 'Verdict -RunLog $rlDecl'))
     HbCase 'MUST FIRE  a nonzero result whose run did not land is not excused as "work landed" by a fresh proves output' ($hbSrc.Contains('if ($rv -and ' + '-not $rv.landed)'))
+
+    # ---- ALERT SIGNATURE (backlog I225). The founding case is the 2026-09-17/18 page: 'TC Produce Intraday Probe'
+    #      stale at 57.2h and then older, and 2026-09-13/14, where five unchanged conditions paged on both days.
+    $why = 'BOUNDED, AND IT IS MEANT TO GO STALE.'
+    $run1 = @((New-HbIssue 'TASK STALE' 'TC Produce Intraday Probe' (Format-HbTaskStale 'TC Produce Intraday Probe' 57.2 14 $why)),
+              (New-HbIssue 'OUTPUT STALE' 'smp-feed.json' (Format-HbOutputStale 'smp-feed.json' 69.1 30 'public price feed')))
+    $run2 = @((New-HbIssue 'TASK STALE' 'TC Produce Intraday Probe' (Format-HbTaskStale 'TC Produce Intraday Probe' 58.2 14 $why)),
+              (New-HbIssue 'OUTPUT STALE' 'smp-feed.json' (Format-HbOutputStale 'smp-feed.json' 70.1 30 'public price feed')))
+    $s1 = Get-HeartbeatAlertSignature $run1; $s2 = Get-HeartbeatAlertSignature $run2
+    HbCase 'MUST FIRE  the texts DO differ between the two runs (57.2h vs 58.2h), so the case below is not vacuous' ($run1[0].text -ne $run2[0].text -and $run1[0].text -match '57\.2h') ($run1[0].text)
+    HbCase 'MUST FIRE  the same stale task and stale output an hour older give ONE signature, so they page once' ($s1 -eq $s2) ($s1 + ' vs ' + $s2)
+    $s3 = Get-HeartbeatAlertSignature @($run2[1], $run2[0])
+    HbCase 'MUST FIRE  the signature does not depend on the order the issues were found in' ($s3 -eq $s2) ($s3 + ' vs ' + $s2)
+    $otherTask = @($run2 + (New-HbIssue 'TASK STALE' 'TC Grocery Daily Capture 0800' (Format-HbTaskStale 'TC Grocery Daily Capture 0800' 63.2 30 'x')))
+    $s4 = Get-HeartbeatAlertSignature $otherTask
+    HbCase 'CLEAN TWIN a DIFFERENT task going stale still moves the signature, so it still pages' ($s4 -ne $s2 -and $s4.Length -eq 32) ($s4 + ' vs ' + $s2)
+    $otherCond = @((New-HbIssue 'TASK DISABLED' 'TC Produce Intraday Probe' "TASK DISABLED: 'TC Produce Intraday Probe' exists but is disabled - x"), $run2[1])
+    $s5 = Get-HeartbeatAlertSignature $otherCond
+    HbCase 'CLEAN TWIN a DIFFERENT condition on the same task still moves the signature, so it still pages' ($s5 -ne $s2 -and $s5.Length -eq 32) ($s5 + ' vs ' + $s2)
+    $s6 = Get-HeartbeatAlertSignature @($run2[0])
+    HbCase 'CLEAN TWIN a condition clearing moves the signature too (a new, smaller issue set pages)' ($s6 -ne $s2 -and $s6.Length -eq 32) ($s6 + ' vs ' + $s2)
+    HbCase 'MUST FIRE  the -Alert path hashes the issue KEYS through Get-HeartbeatAlertSignature, not the texts' ($hbSrc.Contains('$sig = Get-Heartbeat' + 'AlertSignature $issueObjs.ToArray()'))
+    HbCase 'MUST FIRE  a healthy -Alert run clears the stored signature, so an outage that recovers and returns pages again' ($hbSrc.Contains('if ($Alert -and ' + '(Test-Path $sigF)) { Remove-Item'))
   } catch { HbCase ('a case threw: ' + $_.Exception.Message) $false }
 
   Write-Output ("health-heartbeat self-test: {0} case(s), {1} failed" -f $hbCases, $hbFail)
@@ -367,14 +424,14 @@ if ($SelfTest) {
 foreach ($t in @($cfg.windows_tasks)) {
   $name = [string]$t.name
   $task = Get-ScheduledTask -TaskName $name -ErrorAction SilentlyContinue
-  if (-not $task) { $issues.Add("TASK MISSING: '$name' is not registered any more (deleted?) - $($t.why)"); continue }
-  if ([string]$task.State -eq 'Disabled') { $issues.Add("TASK DISABLED: '$name' exists but is disabled - $($t.why)"); continue }
+  if (-not $task) { Add-HbIssue 'TASK MISSING' $name ("TASK MISSING: '$name' is not registered any more (deleted?) - $($t.why)"); continue }
+  if ([string]$task.State -eq 'Disabled') { Add-HbIssue 'TASK DISABLED' $name ("TASK DISABLED: '$name' exists but is disabled - $($t.why)"); continue }
   $info = $task | Get-ScheduledTaskInfo -ErrorAction SilentlyContinue
   $res = if ($info) { [int64]$info.LastTaskResult } else { -1 }
   $last = if ($info -and $info.LastRunTime -and $info.LastRunTime.Year -gt 2000) { $info.LastRunTime } else { $null }
   if ($res -eq $TASK_NOT_YET_RUN -or -not $last) {
     if ($t.allow_pending) { $okLines.Add(("{0,-38} pending first run (OK)" -f $name)) }
-    else { $issues.Add("TASK NEVER RAN: '$name' is scheduled but has never run - $($t.why)") }
+    else { Add-HbIssue 'TASK NEVER RAN' $name ("TASK NEVER RAN: '$name' is scheduled but has never run - $($t.why)") }
     continue
   }
   $ageH = [math]::Round(($now - $last).TotalHours, 1)
@@ -388,7 +445,7 @@ foreach ($t in @($cfg.windows_tasks)) {
   # A task caught mid-run reports LastTaskResult 267009 (SCHED_S_TASK_RUNNING); that is alive, not failed.
   # This fires whenever the heartbeat's check races the watched task's own run (both scheduled 06:45).
   if ([string]$task.State -eq 'Running' -or $res -eq $TASK_RUNNING) { $okLines.Add(("{0,-38} currently running (OK)" -f $name)) }
-  elseif ($ageH -gt [double]$t.max_age_hours) { $issues.Add(("TASK STALE: '{0}' last ran {1}h ago (> {2}h) - did its trigger stop? {3}" -f $name, $ageH, $t.max_age_hours, $t.why)) }
+  elseif ($ageH -gt [double]$t.max_age_hours) { Add-HbIssue 'TASK STALE' $name (Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) }
   elseif ($res -ne 0 -and $t.allow_nonzero_exit) {
     # SOME TASKS REPORT FINDINGS THROUGH THEIR EXIT CODE (2026-08-22). capture-watchdog exits 1 whenever it
     # has findings - that is it working, not dying - and it is also the script that runs THIS heartbeat, so
@@ -409,7 +466,7 @@ foreach ($t in @($cfg.windows_tasks)) {
       $glob = if ($t.PSObject.Properties['proves'] -and $t.proves) { [string]$t.proves } else { '' }
       $v = Test-ProofLanded -ProvesGlob $glob -RepoRoot $repo -MaxAgeHours ([double]$t.max_age_hours) -LastRunTime $last -Now $now
       if ($v.fresh) { $okLines.Add(("{0,-38} result {1} BUT its output is {2}h fresh - work landed, not dead" -f $name, $res, $v.ageH)) }
-      else { $issues.Add(("TASK FAILED: '{0}' last result {1} (nonzero) - {2}{3}" -f $name, $res, $t.why, $v.why)) }
+      else { Add-HbIssue 'TASK FAILED' $name ("TASK FAILED: '{0}' last result {1} (nonzero) - {2}{3}" -f $name, $res, $t.why, $v.why) }
     }
   }
   else { $okLines.Add(("{0,-38} ran {1}h ago, result 0" -f $name, $ageH)) }
@@ -418,7 +475,7 @@ foreach ($t in @($cfg.windows_tasks)) {
     if ($rv.landed) { $okLines.Add(("{0,-38} run of {1} landed: commit {2}, rc=0 ({3})" -f $name, $rvWhen, $rv.outcome, $rv.file)) }
     else {
       $rvFile = if ($rv.file) { [string]$rv.file } else { 'no run transcript' }
-      $issues.Add(("RUN DID NOT LAND: '{0}' run of {1} ({2}) - {3}. The task's LastTaskResult cannot show this: later repetitions overwrite it." -f $name, $rvWhen, $rvFile, (@($rv.reasons) -join '; ')))
+      Add-HbIssue 'RUN DID NOT LAND' $name ("RUN DID NOT LAND: '{0}' run of {1} ({2}) - {3}. The task's LastTaskResult cannot show this: later repetitions overwrite it." -f $name, $rvWhen, $rvFile, (@($rv.reasons) -join '; '))
     }
   }
 }
@@ -430,7 +487,7 @@ foreach ($t in @($cfg.windows_tasks)) {
 $known = @(@($cfg.windows_tasks) | ForEach-Object { [string]$_.name })
 foreach ($wt in @(@(Get-ScheduledTask -TaskName 'SMP *' -ErrorAction SilentlyContinue) + @(Get-ScheduledTask -TaskName 'TC *' -ErrorAction SilentlyContinue))) {
   if ($known -notcontains [string]$wt.TaskName) {
-    $issues.Add(("TASK UNWATCHED: '{0}' is registered in Windows Task Scheduler but missing from expected-automations.json - nothing checks whether it still runs. Add it to windows_tasks." -f $wt.TaskName))
+    Add-HbIssue 'TASK UNWATCHED' ([string]$wt.TaskName) ("TASK UNWATCHED: '{0}' is registered in Windows Task Scheduler but missing from expected-automations.json - nothing checks whether it still runs. Add it to windows_tasks." -f $wt.TaskName)
   }
 }
 
@@ -445,28 +502,28 @@ foreach ($wt in @(@(Get-ScheduledTask -TaskName 'SMP *' -ErrorAction SilentlyCon
 if (@($cfg.queues).Count) {
   $qd = Join-Path $PSScriptRoot 'queue-depth.ps1'
   if (-not (Test-Path $qd)) {
-    $issues.Add('QUEUES UNWATCHED: expected-automations.json declares queues and grocery\queue-depth.ps1 is missing, so none of them was measured.')
+    Add-HbIssue 'QUEUES UNWATCHED' '' 'QUEUES UNWATCHED: expected-automations.json declares queues and grocery\queue-depth.ps1 is missing, so none of them was measured.'
   } else {
     try {
       $qrows = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $qd -Json | ConvertFrom-Json)
       foreach ($r in $qrows) {
         if ([string]$r.verdict -eq 'STUCK') {
-          $issues.Add(("QUEUE STUCK: {0} - {1}. What that costs: {2}" -f $r.name, $r.line, $r.cost_if_undrained))
+          Add-HbIssue 'QUEUE STUCK' ([string]$r.name) ("QUEUE STUCK: {0} - {1}. What that costs: {2}" -f $r.name, $r.line, $r.cost_if_undrained)
         } elseif ([string]$r.verdict -eq 'unknown') {
-          $issues.Add(("QUEUE UNMEASURED: {0} - {1}. An unmeasured queue is not an empty one." -f $r.name, $r.line))
+          Add-HbIssue 'QUEUE UNMEASURED' ([string]$r.name) ("QUEUE UNMEASURED: {0} - {1}. An unmeasured queue is not an empty one." -f $r.name, $r.line)
         }
       }
     } catch {
-      $issues.Add(("QUEUES UNMEASURED: queue-depth.ps1 could not be run ({0}) - no queue was checked, which is not the same as every queue being empty." -f $_.Exception.Message))
+      Add-HbIssue 'QUEUES UNMEASURED' '' ("QUEUES UNMEASURED: queue-depth.ps1 could not be run ({0}) - no queue was checked, which is not the same as every queue being empty." -f $_.Exception.Message)
     }
   }
 }
 
 # ---- critical output files (silent death = missing / stale) ----
-function Check-Age($path, $maxH, $why, $label) {
-  if (-not (Test-Path $path)) { $issues.Add("OUTPUT MISSING: $label ($path) does not exist - $why"); return }
+function Check-Age($path, $maxH, $why, $label, $subject = $label) {
+  if (-not (Test-Path $path)) { Add-HbIssue 'OUTPUT MISSING' $subject "OUTPUT MISSING: $label ($path) does not exist - $why"; return }
   $ageH = [math]::Round(($now - (Get-Item $path).LastWriteTime).TotalHours, 1)
-  if ($ageH -gt [double]$maxH) { $issues.Add(("OUTPUT STALE: {0} is {1}h old (> {2}h) - the job that writes it stopped? {3}" -f $label, $ageH, $maxH, $why)) }
+  if ($ageH -gt [double]$maxH) { Add-HbIssue 'OUTPUT STALE' $subject (Format-HbOutputStale $label $ageH $maxH $why) }
   else { $okLines.Add(("{0,-38} {1}h fresh" -f $label, $ageH)) }
 }
 # A row that declares currency_field proves its currency from its own CONTENT and the mtime rule is not
@@ -477,14 +534,14 @@ foreach ($f in @($cfg.output_files)) {
   $fPath  = Join-Path $repo ([string]$f.path)
   $fLabel = [IO.Path]::GetFileName([string]$f.path)
   $cc = Test-ContentCurrency -Row $f -Path $fPath -BoardWeek $boardWeek -Now $now
-  if (-not $cc.applies) { Check-Age $fPath $f.max_age_hours $f.why $fLabel; continue }
+  if (-not $cc.applies) { Check-Age $fPath $f.max_age_hours $f.why $fLabel ([string]$f.path); continue }
   if ($cc.current) { $okLines.Add(("{0,-38} {1}" -f $fLabel, $cc.detail)) }
-  else { $issues.Add(("OUTPUT NOT CURRENT: {0} {1} - {2}" -f $fLabel, $cc.detail, $f.why)) }
+  else { Add-HbIssue 'OUTPUT NOT CURRENT' ([string]$f.path) ("OUTPUT NOT CURRENT: {0} {1} - {2}" -f $fLabel, $cc.detail, $f.why) }
 }
 foreach ($g in @($cfg.output_globs)) {
   $newest = Get-ChildItem (Join-Path $repo ([string]$g.glob)) -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-  if (-not $newest) { $issues.Add("OUTPUT MISSING: no file matches $($g.glob) - $($g.why)") }
-  else { Check-Age $newest.FullName $g.max_age_hours $g.why $newest.Name }
+  if (-not $newest) { Add-HbIssue 'OUTPUT MISSING' ([string]$g.glob) "OUTPUT MISSING: no file matches $($g.glob) - $($g.why)" }
+  else { Check-Age $newest.FullName $g.max_age_hours $g.why $newest.Name ([string]$g.glob) }
 }
 
 # EXTERNAL_FILES - outputs of automations that run on this box but write OUTSIDE the repo (2026-09-08,
@@ -504,20 +561,26 @@ foreach ($x in @($cfg.external_files)) {
   $xPath  = [Environment]::ExpandEnvironmentVariables([string]$x.path)
   $xLabel = if ($x.label) { [string]$x.label } else { [IO.Path]::GetFileName($xPath) }
   if (-not (Test-Path -LiteralPath $xPath)) {
-    $issues.Add(("EXTERNAL OUTPUT MISSING: {0} does not exist at {1} - {2}" -f $xLabel, $xPath, $x.why))
+    Add-HbIssue 'EXTERNAL OUTPUT MISSING' ([string]$x.path) ("EXTERNAL OUTPUT MISSING: {0} does not exist at {1} - {2}" -f $xLabel, $xPath, $x.why)
     continue
   }
-  Check-Age $xPath $x.max_age_hours $x.why $xLabel
+  Check-Age $xPath $x.max_age_hours $x.why $xLabel ([string]$x.path)
 }
 
 # ---- report ----
 Write-Output ("health-heartbeat  " + $now.ToString('yyyy-MM-dd HH:mm'))
 $okLines | ForEach-Object { Write-Output ("  ok    " + $_) }
-if ($issues.Count -eq 0) { Write-Output ("HEALTHY: {0} automation(s)/output(s) all fresh." -f $okLines.Count); exit 0 }
+if ($issues.Count -eq 0) {
+  Write-Output ("HEALTHY: {0} automation(s)/output(s) all fresh." -f $okLines.Count)
+  # A healthy -Alert run forgets the last outage, so the same outage coming back later pages again (ALERT-SIGNATURE).
+  $sigF = Join-Path $root 'out\health-heartbeat.sig'
+  if ($Alert -and (Test-Path $sigF)) { Remove-Item -LiteralPath $sigF -Force -ErrorAction SilentlyContinue }
+  exit 0
+}
 Write-Output ("SILENT-DEATH / STALE: {0} issue(s):" -f $issues.Count)
 $issues | ForEach-Object { Write-Output ("  !! " + $_) }
 if ($Alert) {
-  $sig = [BitConverter]::ToString([Security.Cryptography.MD5]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes((($issues | Sort-Object) -join ';')))) -replace '-',''
+  $sig = Get-HeartbeatAlertSignature $issueObjs.ToArray()
   $sigF = Join-Path $root 'out\health-heartbeat.sig'
   $prev = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
   if ($sig -ne $prev) {

@@ -15552,13 +15552,30 @@ the draft POSTed a moment earlier is never deleted (lines 143-147 only print SEN
 another draft in Ghost. I161's held half is the same script: an unreadable state file is treated as empty
 (every subscriber re-alerted) and a missing price mutes an item forever. Both change what members are emailed.
 
-### I225 - The heartbeat's dedup signature changes every run, so a stale-task page repeats `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+### I225 - The heartbeat's dedup signature changes every run, so a stale-task page repeats `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 Found under I125. `grocery/health-heartbeat.ps1:391` puts the task's age in hours into the TASK STALE text and
 `:519` hashes that text as the dedup signature, so the signature moves every run and the page can repeat at
 every heartbeat. The alert log shows silent-death pages on 09-12, 09-13, 09-14, 09-17 and 09-18.
+
+**Done 2026-09-18.** Confirmed first, read-only, from the main checkout's `grocery\alert-log.txt` and the
+`heartbeat:` lines of `grocery\out\logs\capture-watchdog-*.log`: the 09-13 and 09-14 pages carried the SAME five
+conditions (RUN DID NOT LAND graph-nightly, TASK FAILED recall sleep, TASK FAILED daemon battery, TASK UNWATCHED
+approvals page, OUTPUT NOT CURRENT free-dinners) and paged on both days. The shape was wider than TASK STALE: four
+classes put a moving number in their text - TASK STALE and OUTPUT STALE (age in hours), OUTPUT NOT CURRENT (mtime
+age and board week), RUN DID NOT LAND (the run's start time). Fix in `grocery\health-heartbeat.ps1`'s new
+ALERT-SIGNATURE block: every issue goes through `Add-HbIssue`, which keeps the text for the report and email and a
+`class|subject` KEY (task name, output path, glob, queue) that `Get-HeartbeatAlertSignature` hashes, sorted and
+distinct, ordinal. A glob row's subject is the glob, never the newest file's dated name. A healthy `-Alert` run now
+clears `out\health-heartbeat.sig`, since with a stable key an outage that recovered and came back would otherwise
+never page again. The self-test grew from 19 to 27 cases: MUST FIRE the same stale task and stale output an hour
+older (57.2h vs 58.2h, texts asserted to differ) give one signature, and order does not matter; CLEAN TWIN a
+different task, a different condition on the same task, and a condition clearing each move it; two wiring cases.
+Broke once by hashing `.text` again: exit 1, the MUST FIRE named its two signatures; restored md5-identical, exit 0,
+27 of 27. No alert was sent in any test: the fixtures call only the signature function, and the one live run was
+without `-Alert`. The scheduled task was not touched.
 
 ### I226 - post-publish review verdicts are thrown away by the daemon, and none has run since 2026-09-03 `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
 
