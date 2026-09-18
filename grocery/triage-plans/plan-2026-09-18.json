@@ -4,7 +4,7 @@
   "developer_round1_outcome": "Money lane stopped at its 200-call run ceiling, 2026-09-18 12:12. All four items are implemented and verified LOCALLY on main (71d1e199f code, data and the feed-first public/board.json; 700eb6e79 smp-feed week_of 2026-09-17; both rebased onto f77b833e0): on the merged tree guards hard=0 warn=20, audit-food-category ok over 3,080 cells, unit-basis crown=0, band-censorship 29 of 29, match-soundness MOVED 0 DROPPED 1 (exactly the routing artifact B2 drop) accepted at rules_hash b933ddde0a70, run-gates 409 of 409, test-auditors 721 of 721 on three full runs. NOT PUSHED, NOT PUBLISHED: three gated pushes each lost the ref race (origin landed 63d9cbb8d, ad85f1a7f, f77b833e0 during the ~7 minute hook); ops/push-main.ps1 refuses this checkout because other sessions hold modified and untracked files in it; the fourth hook run failed ONE new test-auditors case, audit-script-census BLIND (772 scripts against 727 executable files), which passed on the three earlier runs with this lane's two new libraries present and was not re-run. The Ghost post was deliberately NOT republished: public/board.json must be live before the post. NEXT RUN: re-run grocery/test-auditors.ps1 to see whether the census case clears, push (the two commits carry the feed), run publish-deals-page, verify a live cell with a cache-busting query, then close f90ba6, 37ac63, de39ec and 61f76c with their resolution notes (residual owners 2026-09-18-55b7aa, watch:grocery/audit-semantic-identity.ps1, 2026-09-18-8491bf are already in place). If nothing lands first, the 08:00 chain builds from this working tree, where guards are green.",
   "board_week": "comparison-2026-09-17 (built 2026-09-18 08:07:34; triage-due printed BOARD comparison-2026-09-17 built 08:07:34)",
   "head_at_dispatch": "886796dff",
-  "queue_ids_seen": ["2026-09-18-f90ba6", "2026-09-18-61f76c", "2026-09-18-37ac63", "2026-09-18-de39ec", "2026-09-18-0ac1cb", "2026-09-18-35e0f5"],
+  "queue_ids_seen": ["2026-09-18-f90ba6", "2026-09-18-61f76c", "2026-09-18-37ac63", "2026-09-18-de39ec", "2026-09-18-0ac1cb", "2026-09-18-35e0f5", "discovered:push-livelock-2026-09-18"],
   "routing_artifact": "plan-2026-09-18.routing.json",
   "queue_history_note": "triage-queue.json holds exactly 6 items, all dated 2026-09-18 and all open; it carries NO resolved item of any type, so the gate's RETURN derivation cannot name prior closes. The census (out\\alert-census.jsonl) shows every one of these six types fired on 3 or more days since 2026-08-22 (guards-failed 13 days, price-flags 20, semantic 15, FF pull-drop 8, Baker's window 5, recall 6). prior_closes below are therefore [] with the census dates recorded, and every code item still carries prevention with a code source, as a RETURN would.",
   "live_board_state": "The last publish with guards at hard=0 was the 2026-09-12 09:16 run. 09-13 (hard=1), 09-14 (hard=3), 09-17 (hard=3) and 09-18 (hard=4) were all HELD, and no pipeline run happened on 09-15 or 09-16 (0 ad-cycle-log lines those days). The live board, feed and recipe cards are therefore the 09-12 generation, six days old.",
@@ -317,6 +317,69 @@
       "premise_verified": null,
       "deviation": null,
       "shipped_commit": null
+    },
+    {
+      "queue_id": "discovered:push-livelock-2026-09-18",
+      "subject": "The money lane's three commits could not land: five pushes rejected \"cannot lock ref\" behind a full test-auditors run each",
+      "classification": "infra",
+      "evidence": [
+        "Orchestrator log 2026-09-18: five consecutive `git push` attempts of 33193ea27/1a168bbc1/e981f86ff rejected \"! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at X but expected Y)\"; the last two passed test-auditors 721/0 after 436s, then \"push lock - held after waiting 83s\", then rejected.",
+        ".git/hooks/pre-push read 2026-09-18: run-gates (line ~275), then ops/prepush-test-auditors.ps1 -RefsFromStdin (line ~291), and take_push_lock only on the passing path after both (line ~301), per Brad's 2026-09-12 ruling that the gate must not run inside the lock. git fixes the expected remote sha when it connects, before the hook runs.",
+        "ops/prepush-test-auditors.ps1 before this change: the PRE-PUSH block always reached Invoke-TaChild once any pushed path was an input (lines 1261-1314); no record of a prior pass existed, so every retry after a rebase paid the full ~436s suite again, unlike run-gates, which reuses self-test results by input key (lib/gate-input-key.ps1). Input derivation over the tracked tree: 520 of 8,581 tracked files are test-auditors inputs (-ListInputs, 1s)."
+      ],
+      "surface_fix": {
+        "what": "land the three money-lane commits",
+        "files": [],
+        "exact_change": "git pull --rebase --autostash, then a normal gated git push origin main; a retry after a rebase that moved no input now reuses the pass"
+      },
+      "root_cause": "the pre-push test-auditors leg had no reuse across a rebase, so the longest push paid ~7 minutes per attempt inside a window that any other landing closes (the push livelock of design/PLAN-push-livelock-2026-09-11.md, returned through the one leg nobody made cheap)",
+      "root_fix": {
+        "what": "a per-checkout pass record keyed on the content of every test-auditors input, the harness and the boards",
+        "files": [
+          "ops/prepush-test-auditors.ps1"
+        ],
+        "exact_change": "PASS REUSE block: Get-TaInputKey hashes the checkout root, every tracked input (derivation plus dot-source closure), this script and every tracked lib/*.ps1 by index blob id or working-tree bytes when dirty, plus name/length/mtime of every board file; Read-TaPassRecord reuses only an exact key match under 6h whose mode covers this push, re-judged against the current known-failures record; anything else (missing, unreadable, mismatched, old, narrower) runs in full. A real pass is recorded only if the key is unchanged after the run; a non-pass withdraws the record. Only for -RefsFromStdin."
+      },
+      "leaves_open": "a retry whose rebase brought in a change to any test-auditors input (grocery/*.ps1 is a glob input, so most grocery commits) still pays the full run and can still lose the race; the lever for that is ops\\push-main.ps1 or a narrower selection, not this record",
+      "leaves_open_occurrences": "not counted separately: the five rejections today were all this shape or the shape fixed here, and the transcripts do not say which rebases moved an input",
+      "prior_closes": [],
+      "prior_closes_note": "discovered in this run; no queue item of this type",
+      "prevention": {
+        "source": [
+          "ops/prepush-test-auditors.ps1"
+        ],
+        "what": "the pre-push check itself reuses a pass for identical input content",
+        "exact_change": "as root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no grocery matching or pricing file touched; the change is confined to the pre-push test-auditors leg",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a reused pass over an input the derivation cannot see (a computed path, an ignored non-board file) could let a push out that a fresh run would refuse; bounded by the 6h age limit and identical to the derivation's existing unsoundness",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against .git/hooks/pre-push and ops/prepush-test-auditors.ps1 at 33193ea27 on 2026-09-18",
+      "proof": {
+        "guard_or_fixture": "ops/prepush-test-auditors.ps1 -SelfTest, PASS REUSE cases over a real temp git repo",
+        "must_fire_case": "an input committed between runs moves the key and Read-TaPassRecord refuses reuse (an input moved); also an uncommitted input edit, a harness or lib byte, a board rebuild, a too-old or narrower record, and an unreadable or missing record each run in full",
+        "clean_twin": "a commit of only non-input files leaves the key identical and the recorded pass is reused, printed as \"prepush-test-auditors: REUSED key=<key>\"",
+        "commands": [
+          "powershell -NoProfile -File ops\\prepush-test-auditors.ps1 -SelfTest  (exit 0, 77 of 77)"
+        ]
+      },
+      "rollback": "revert the prepush-test-auditors.ps1 hunks; pass records in the shared .git are then ignored (tc-test-auditors-pass-*.json can be deleted)",
+      "do_not_touch": [
+        "the push-lock ordering of Brad's 2026-09-12 ruling (gate outside the lock)",
+        "the known-failures record semantics"
+      ],
+      "resolution_note": "A retry after a rebase that moved no test-auditors input now reuses the prior pass for the same input content, printed REUSED with its key; any moved input runs in full, and a missing or bad record is a full run.",
+      "publish_batch": "none",
+      "status": "done",
+      "premise_verified": "yes: read .git/hooks/pre-push (run-gates, then prepush-test-auditors, then take_push_lock only on the passing path) and prepush-test-auditors.ps1 (no reuse path: every input-touching push reached Invoke-TaChild); the orchestrator's five rejected pushes are the measurement",
+      "deviation": null,
+      "shipped_commit": "the commit titled 'Triage 2026-09-18 ops lane: prepush-test-auditors reuses a pass across a rebase that moved no input' (git log -1 --format=%H --grep='reuses a pass across a rebase' origin/main)"
     }
   ],
   "ship_sequence": [

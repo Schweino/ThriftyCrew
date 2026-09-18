@@ -448,6 +448,113 @@ function Get-RecordPath([string]$Root) {
   return (Join-Path $common 'tc-test-auditors-known-failures.json')
 }
 
+# ============================================================================================ PASS REUSE
+# A RETRY AFTER A REBASE THAT MOVED NO INPUT REUSES THE PASS INSTEAD OF PAYING THE WHOLE SUITE AGAIN (2026-09-18,
+# queue discovered:push-livelock-2026-09-18). git fixes a push's expected remote sha when it connects; the hook then
+# runs run-gates and this check, and takes the machine-wide push lock only AFTER both (Brad, 2026-09-12). run-gates
+# reuses a self-test's result by input key after a rebase (lib\gate-input-key.ps1), so its re-gate is cheap. This
+# check had no such reuse: every retry of a push touching a test-auditors input paid a full ~7 minute run, any landing
+# by another session in those minutes doomed it, and the longest push starved. Measured 2026-09-18 on the money lane's
+# three commits: five consecutive pushes rejected "cannot lock ref", the last two after test-auditors PASS 721/0 in 436s.
+# THE KEY is SHA-256 over this checkout's root and, for every tracked file that is a test-auditors input (the derivation
+# above, after the dot-source closure), this script itself and every tracked lib\*.ps1 (test-auditors copies the whole
+# lib into its run root, a spelling the derivation cannot read): the index blob id, or the working-tree bytes' hash
+# when git status lists the path. Plus name, length and mtime of every board file the board test matches, because the
+# boards are gitignored and test-auditors reads them. So a rebase that brought in only non-input files leaves the key
+# unchanged, and any moved input, harness byte or board changes it.
+# FAIL CLOSED: a missing, unreadable, wrong-schema, mismatched, too-old or narrower (selective where this push needs
+# more) record is a full run, never a pass. Only a PASS is reused: the stored verdict is re-judged against the CURRENT
+# known-failures record, and anything but exit 0 runs the suite. A real run that is not a pass withdraws the record.
+# The key is taken again after the run and a pass is recorded only if nothing moved under it.
+# SCOPE: inherits the derivation's unsoundness (a file a unit reaches through a computed path is not keyed), and an
+# ignored non-board file test-auditors reads is not keyed; the age bound caps how long either can matter.
+$script:PassMaxAgeHours = 6   # first plausible value, no sweep: a retry follows its run by minutes; the key, not the clock, makes a reuse safe
+
+function Get-PassRecordPath([string]$Root) {
+  $rp = Get-RecordPath $Root
+  if (-not $rp) { return '' }
+  $sha = [Security.Cryptography.SHA256]::Create()
+  $bytes = $sha.ComputeHash([Text.Encoding]::UTF8.GetBytes(([IO.Path]::GetFullPath($Root)).TrimEnd('\').ToLowerInvariant()))
+  $h = -join ($bytes[0..5] | ForEach-Object { $_.ToString('x2') })
+  return (Join-Path (Split-Path -Parent $rp) ('tc-test-auditors-pass-' + $h + '.json'))
+}
+
+function Get-TaInputKey([string]$Root, $Inputs, [string[]]$BoardPatterns) {
+  $r = [pscustomobject]@{ ok = $false; key = ''; inputs = 0; dirty = 0; boards = 0; ms = 0; why = '' }
+  $sw = [Diagnostics.Stopwatch]::StartNew()
+  $ls = @(& git -C $Root -c core.quotepath=off ls-files -s 2>$null); $lsRc = $LASTEXITCODE
+  if ($lsRc -ne 0 -or $ls.Count -eq 0) { $r.why = "git ls-files rc=$lsRc listed $($ls.Count) file(s)"; return $r }
+  $st = @(& git -C $Root -c core.quotepath=off status --porcelain --untracked-files=no 2>$null); $stRc = $LASTEXITCODE
+  if ($stRc -ne 0) { $r.why = "git status rc=$stRc"; return $r }
+  $dirty = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  foreach ($s in $st) { $x = [string]$s; if ($x.Length -gt 3) { foreach ($part in ($x.Substring(3) -split ' -> ')) { [void]$dirty.Add($part.Trim().Trim('"')) } } }
+  $null = Add-DotSourceClosure $Inputs (Get-TrackedScriptReader $Root)
+  $sha = [Security.Cryptography.SHA256]::Create()
+  $rows = New-Object 'System.Collections.Generic.List[string]'
+  $rows.Add('root' + "`t" + ([IO.Path]::GetFullPath($Root)).TrimEnd('\').ToLowerInvariant())
+  foreach ($l in $ls) {
+    $t = [string]$l; $tab = $t.IndexOf("`t"); if ($tab -lt 0) { continue }
+    $p = $t.Substring($tab + 1); $meta = @($t.Substring(0, $tab) -split ' ')
+    $harness = [string]::Equals($p, $script:SelfRel, [StringComparison]::OrdinalIgnoreCase) -or ($p -match '^lib/[^/]+\.ps1$')
+    if (-not $harness -and (Test-GuardInput $p $Inputs) -eq '') { continue }
+    $id = $meta[1]
+    if ($dirty.Contains($p)) {
+      $f = Join-Path $Root $p.Replace('/', '\')
+      $id = if (Test-Path -LiteralPath $f) { 'wt:' + (-join ($sha.ComputeHash([IO.File]::ReadAllBytes($f)) | ForEach-Object { $_.ToString('x2') })) } else { 'deleted' }
+      $r.dirty++
+    }
+    $rows.Add($p + "`t" + $id); $r.inputs++
+  }
+  foreach ($bp in @($BoardPatterns | Where-Object { $_ })) {
+    foreach ($fi in @(Get-ChildItem (Join-Path $Root $bp.Replace('/', '\')) -File -ErrorAction SilentlyContinue)) {
+      $rows.Add('board:' + $bp + ':' + $fi.Name + "`t" + $fi.Length + ':' + $fi.LastWriteTimeUtc.Ticks); $r.boards++
+    }
+  }
+  if ($r.inputs -eq 0) { $r.why = 'no tracked file is a test-auditors input, so there is nothing to key on'; return $r }
+  $arr = $rows.ToArray(); [Array]::Sort($arr, [StringComparer]::Ordinal)
+  $r.key = -join (($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($arr -join "`n")))[0..7] | ForEach-Object { $_.ToString('x2') })
+  $r.ok = $true; $sw.Stop(); $r.ms = [int]$sw.Elapsed.TotalMilliseconds
+  return $r
+}
+
+# $Mode and $Selected are what THIS push needs. Returns .reuse, .why and the record.
+function Read-TaPassRecord([string]$Path, [string]$Key, [datetime]$NowUtc, [double]$MaxAgeHours, [string]$Mode, [string[]]$Selected) {
+  $r = [pscustomobject]@{ reuse = $false; why = ''; rec = $null }
+  if (-not $Key) { $r.why = 'no input key'; return $r }
+  if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { $r.why = ('no pass record at ' + $Path); return $r }
+  try {
+    $j = [IO.File]::ReadAllText($Path, [Text.Encoding]::UTF8) | ConvertFrom-Json
+    if ($null -eq $j -or [string]$j.schema -ne '1' -or -not [string]$j.key -or -not [string]$j.recorded_at -or -not [string]$j.mode -or $null -eq $j.rc) { throw 'the pass record is missing a field' }
+    if (-not [string]::Equals([string]$j.key, $Key, [StringComparison]::Ordinal)) { $r.why = ('an input moved since the recorded pass (recorded key ' + $j.key + ', now ' + $Key + ')'); return $r }
+    $at = [DateTimeOffset]::Parse([string]$j.recorded_at, [Globalization.CultureInfo]::InvariantCulture).UtcDateTime
+    $age = [math]::Round(($NowUtc - $at).TotalHours, 2)
+    if ($age -lt -0.1 -or $age -gt $MaxAgeHours) { $r.why = ('the recorded pass is ' + $age + 'h old, limit ' + $MaxAgeHours + 'h'); return $r }
+    if (@(0, 1, 2) -notcontains [int]$j.rc) { throw ('the recorded rc ' + $j.rc + ' is not a test-auditors verdict') }
+    if ([string]$j.mode -eq 'selective') {
+      if ($Mode -ne 'selective') { $r.why = 'the recorded pass ran selectively and this push needs a full run'; return $r }
+      $have = @($j.selected | ForEach-Object { [string]$_ })
+      $missing = @($Selected | Where-Object { $_ -and $have -notcontains $_ })
+      if ($missing.Count -gt 0) { $r.why = ('this push selects ' + $missing.Count + ' unit(s) the recorded pass did not run, first ' + $missing[0]); return $r }
+    } elseif ([string]$j.mode -ne 'full') { throw ('unknown mode ' + $j.mode) }
+    $r.reuse = $true; $r.rec = $j; $r.why = ('a ' + $j.mode + ' run recorded ' + $j.recorded_at + ' (' + $age + 'h ago) over identical input content')
+  } catch { $r.reuse = $false; $r.why = ('the pass record is unreadable: ' + $_.Exception.Message) }
+  return $r
+}
+
+function Write-TaPassRecord([string]$Path, [string]$Key, [int]$Rc, [string[]]$FailLines, [string]$Mode, [string[]]$Selected, [int]$Cases, [datetime]$NowUtc) {
+  $obj = [ordered]@{ schema = 1; key = $Key; recorded_at = $NowUtc.ToString('o'); rc = $Rc; mode = $Mode; selected = @($Selected | Where-Object { $_ }); cases = $Cases; fail_lines = @($FailLines | Where-Object { $_ }) }
+  $json = ConvertTo-Json -InputObject $obj -Depth 4
+  $tmp = $Path + '.' + $PID + '.tmp'
+  [IO.File]::WriteAllText($tmp, $json, (New-Object Text.UTF8Encoding($false)))
+  # Delete then move, as Write-KnownFailures: the instant between reads as a MISSING record, which runs rather than passes.
+  if (Test-Path -LiteralPath $Path) { [IO.File]::Delete($Path) }
+  [IO.File]::Move($tmp, $Path)
+}
+
+function Format-ReuseLine([string]$Key, $Pass, $KeyInfo) {
+  return ('prepush-test-auditors: REUSED key=' + $Key + ' - ' + $Pass.why + '; ' + $KeyInfo.inputs + ' input file(s) (' + $KeyInfo.dirty + ' uncommitted) and ' + $KeyInfo.boards + ' board file(s) hashed in ' + $KeyInfo.ms + 'ms, none moved since that pass, so test-auditors did not run again')
+}
+
 # ============================================================================================ UNITS
 $script:TIf  = [System.Management.Automation.Language.IfStatementAst]
 $script:TFn  = [System.Management.Automation.Language.FunctionDefinitionAst]
@@ -1117,6 +1224,73 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
     Case 'MUST FIRE' 'live: the real Use-Unit could be driven' $false 'not found'
   }
 
+  # ---- PASS REUSE ACROSS A REBASE (2026-09-18, discovered:push-livelock-2026-09-18) ----
+  # A real temp repo through the real key and the real record, in a directory of this run's own. The founding bug:
+  # a retry after a rebase that brought in only non-input files re-ran the full ~7 minute suite, and lost the ref
+  # race again. The must-fire is the other direction: any moved input, harness byte or board runs in full.
+  $prDir = Join-Path $env:TEMP ('tc-ptapr-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    Clear-TcGitRepoEnv
+    $null = New-Item -ItemType Directory -Path $prDir -ErrorAction Stop
+    $u8 = New-Object Text.UTF8Encoding($false)
+    foreach ($d in @('grocery', 'ops', 'lib', 'notes', 'grocery\out')) { $null = New-Item -ItemType Directory -Path (Join-Path $prDir $d) -Force }
+    $prTa = "`$x = RunPS 'modq-audit.ps1'`n'TEST-AUDITORS-COMPLETE'`n"
+    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\test-auditors.ps1'), $prTa, $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\modq-audit.ps1'), "'v1'`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'ops\prepush-test-auditors.ps1'), "'harness v1'`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'lib\modq-lib.ps1'), "'lib v1'`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'notes\readme.txt'), "not an input`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\out\comparison-2026-09-18.json'), "{}`n", $u8)
+    $gq = { param([string[]]$A) $null = & git -C $prDir -c user.name=fixture -c user.email=fixture@example.invalid -c core.autocrlf=false @A 2>$null }
+    & $gq @('init', '-q'); & $gq @('add', 'grocery/test-auditors.ps1', 'grocery/modq-audit.ps1', 'ops/prepush-test-auditors.ps1', 'lib/modq-lib.ps1', 'notes/readme.txt'); & $gq @('commit', '-q', '-m', 'base')
+    $prBoards = @('grocery/out/comparison-*.json')
+    $kOf = { Get-TaInputKey $prDir (Get-AuditorInputs $prTa 'grocery/test-auditors.ps1') $prBoards }
+    $k1 = & $kOf
+    $recP = Join-Path $prDir 'pass.json'
+    $now = [datetime]::UtcNow
+    Write-TaPassRecord $recP $k1.key 0 @() 'full' @() 700 $now
+    # CLEAN TWIN: a "rebase" that brings in only non-input files leaves the key, and the pass is REUSED with its key printed.
+    [IO.File]::WriteAllText((Join-Path $prDir 'notes\readme.txt'), "another session's note`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'notes\new.txt'), "arrived by rebase`n", $u8)
+    & $gq @('add', 'notes/readme.txt', 'notes/new.txt'); & $gq @('commit', '-q', '-m', 'foreign non-input')
+    $k2 = & $kOf
+    $p2 = Read-TaPassRecord $recP $k2.key $now 6 'full' @()
+    $line2 = Format-ReuseLine $k2.key $p2 $k2
+    Case 'CLEAN TWIN' 'pass reuse: only non-input files arrived, so the same key reuses the recorded pass, printed REUSED with the key' ($k1.ok -and $k2.ok -and $k1.inputs -ge 4 -and $k1.key -eq $k2.key -and $p2.reuse -and $line2.StartsWith('prepush-test-auditors: REUSED key=' + $k1.key)) "k1=$($k1.key)/$($k1.inputs) k2=$($k2.key) reuse=$($p2.reuse) why=$($p2.why)"
+    # MUST FIRE: an input changed between the runs, so the key moves and the run is full.
+    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\modq-audit.ps1'), "'v2'`n", $u8)
+    & $gq @('add', 'grocery/modq-audit.ps1'); & $gq @('commit', '-q', '-m', 'input moved')
+    $k3 = & $kOf
+    $p3 = Read-TaPassRecord $recP $k3.key $now 6 'full' @()
+    Case 'MUST FIRE' 'pass reuse: a test-auditors input changed between runs, so the key moves and the run is full' ($k3.ok -and $k3.key -ne $k1.key -and -not $p3.reuse -and $p3.why -match 'an input moved') "k1=$($k1.key) k3=$($k3.key) reuse=$($p3.reuse) why=$($p3.why)"
+    Write-TaPassRecord $recP $k3.key 0 @() 'full' @() 700 $now
+    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\modq-audit.ps1'), "'v3 uncommitted'`n", $u8)
+    $k4 = & $kOf
+    Case 'MUST FIRE' 'pass reuse: an UNCOMMITTED edit to an input moves the key (the suite reads the working tree)' ($k4.ok -and $k4.dirty -eq 1 -and $k4.key -ne $k3.key -and -not (Read-TaPassRecord $recP $k4.key $now 6 'full' @()).reuse) "k3=$($k3.key) k4=$($k4.key) dirty=$($k4.dirty)"
+    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\modq-audit.ps1'), "'v2'`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'ops\prepush-test-auditors.ps1'), "'harness v2'`n", $u8)
+    $k5 = & $kOf
+    [IO.File]::WriteAllText((Join-Path $prDir 'ops\prepush-test-auditors.ps1'), "'harness v1'`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'lib\modq-lib.ps1'), "'lib v2'`n", $u8)
+    $k6 = & $kOf
+    [IO.File]::WriteAllText((Join-Path $prDir 'lib\modq-lib.ps1'), "'lib v1'`n", $u8)
+    [IO.File]::WriteAllText((Join-Path $prDir 'grocery\out\comparison-2026-09-18.json'), "{`"rebuilt`":1}`n", $u8)
+    $k7 = & $kOf
+    Case 'MUST FIRE' 'pass reuse: a harness byte (this script or any lib) or a board rebuild moves the key' ($k5.key -ne $k3.key -and $k6.key -ne $k3.key -and $k7.key -ne $k3.key -and $k5.ok -and $k6.ok -and $k7.ok) "k3=$($k3.key) harness=$($k5.key) lib=$($k6.key) board=$($k7.key)"
+    $old = Read-TaPassRecord $recP $k3.key $now.AddHours(7) 6 'full' @()
+    Write-TaPassRecord $recP $k3.key 0 @() 'selective' @('u001-a') 40 $now
+    $nar = Read-TaPassRecord $recP $k3.key $now 6 'full' @()
+    $nar2 = Read-TaPassRecord $recP $k3.key $now 6 'selective' @('u001-a', 'u009-z')
+    Case 'MUST FIRE' 'pass reuse: a too-old record, or a selective pass where this push needs more units, is a full run' (-not $old.reuse -and -not $nar.reuse -and -not $nar2.reuse) "old=$($old.why) | full=$($nar.why) | wider=$($nar2.why)"
+    [IO.File]::WriteAllText($recP, '{"schema":1,"key":', $u8)
+    $bad = Read-TaPassRecord $recP $k3.key $now 6 'full' @()
+    $gone = Read-TaPassRecord (Join-Path $prDir 'absent.json') $k3.key $now 6 'full' @()
+    Case 'MUST FIRE' 'pass reuse: an unreadable or missing record is a full run, never a pass (fail closed)' (-not $bad.reuse -and -not $gone.reuse -and $bad.why -match 'unreadable') "bad=$($bad.why) | missing=$($gone.why)"
+  } catch {
+    $fails += ('pass-reuse cases THREW: ' + $_.Exception.Message)
+    "  pass-reuse cases THREW: $($_.Exception.Message)"
+  } finally { Remove-Item -LiteralPath $prDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   # ---- A CHILD'S FILES AFTER THE VERDICT (2026-09-11) ----
   # Real children through the real launcher and the real cleanup, in a directory of this run's own, so a
   # concurrent run of this suite can neither share nor delete them. The crash child is the founding shape: its
@@ -1150,7 +1324,7 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
 
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 71
+  $expectedCases = 77
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''
@@ -1299,6 +1473,35 @@ if ($ListUnits) {
   Exit-Guard -Name $script:GuardName -Code 0 -Summary "mode=$($sel.mode) selected=$($sel.selected.Count) skipped=$($sel.skipped.Count)"
 }
 
+# PASS REUSE (see the PASS REUSE block above): only for a real push, never for -PathsFile measurement.
+$passPath = ''; $passKey = $null
+if ($RefsFromStdin -and -not $PathsFile) {
+  $passPath = Get-PassRecordPath $RepoRoot
+  $passKey = Get-TaInputKey $RepoRoot $inputs $boardPatterns
+  if (-not $passKey.ok) {
+    "prepush-test-auditors: no pass can be reused - the input key could not be computed ($($passKey.why)); running"
+  } elseif (-not $passPath) {
+    "prepush-test-auditors: no pass can be reused - git could not resolve the shared git directory; running"
+  } else {
+    $pr = Read-TaPassRecord $passPath $passKey.key ([datetime]::UtcNow) $script:PassMaxAgeHours $sel.mode @($sel.selected)
+    if ($pr.reuse) {
+      $rKnown = Read-KnownFailures (Get-RecordPath $RepoRoot) ([datetime]::UtcNow) $script:MaxAgeHours
+      $rSel = ($sel.mode -eq 'selective')
+      $rFail = @($pr.rec.fail_lines | ForEach-Object { [string]$_ } | Where-Object { $_ })
+      $rv = Get-PushVerdict ([int]$pr.rec.rc) $true $rFail $rKnown $rSel $(if ($rSel) { 'selected cases of the recorded run' } else { 'full run' })
+      if ($rv.code -eq 0) {
+        Format-ReuseLine $passKey.key $pr $passKey
+        "prepush-test-auditors: $($rv.verdict) (reused) - $($rv.detail)."
+        foreach ($l in $rv.oldLines) { $s = $l -replace '^FAIL\s+', ''; '  ALREADY FAILING       ' + $(if ($s.Length -gt 300) { $s.Substring(0, 300) + '...' } else { $s }) }
+        Exit-Guard -Name $script:GuardName -Code 0 -Summary "pushed=$($paths.Count) inputs=$($hits.Count) mode=$($sel.mode) reused=$($passKey.key) failing=$($rFail.Count)"
+      }
+      "prepush-test-auditors: the recorded pass for key=$($passKey.key) no longer passes against the current known-failures record ($($rv.detail)); running"
+    } else {
+      "prepush-test-auditors: no pass reused (key=$($passKey.key)) - $($pr.why); running"
+    }
+  }
+}
+
 $stamp = [guid]::NewGuid().ToString('N').Substring(0, 8)
 $stem = Join-Path $env:TEMP ("tc-prepush-ta-$PID-$stamp")
 $skipF = ''
@@ -1341,6 +1544,21 @@ if ($isSelective -and $hs.found) {
 foreach ($l in $v.newLines) { $s = $l -replace '^FAIL\s+', ''; '  NEW FAILING CASE      ' + $(if ($s.Length -gt 300) { $s.Substring(0, 300) + '...' } else { $s }) }
 foreach ($l in $v.oldLines) { $s = $l -replace '^FAIL\s+', ''; '  ALREADY FAILING       ' + $(if ($s.Length -gt 300) { $s.Substring(0, 300) + '...' } else { $s }) }
 Complete-TaChildFiles $run $v.code
+
+if ($passPath -and $null -ne $passKey -and $passKey.ok) {
+  if ($v.code -eq 0) {
+    $after = Get-TaInputKey $RepoRoot $inputs $boardPatterns
+    if ($after.ok -and [string]::Equals($after.key, $passKey.key, [StringComparison]::Ordinal)) {
+      try { Write-TaPassRecord $passPath $passKey.key $rc $fl $(if ($isSelective) { 'selective' } else { 'full' }) @($sel.selected) $hs.cases ([datetime]::UtcNow); "prepush-test-auditors: pass recorded for key=$($passKey.key), so a retry over the same input content reuses it" }
+      catch { "prepush-test-auditors: the pass record could not be written: $($_.Exception.Message)" }
+    } else {
+      Remove-Item -LiteralPath $passPath -Force -ErrorAction SilentlyContinue
+      "prepush-test-auditors: pass NOT recorded - an input moved during the run (key before $($passKey.key), after $($after.key) $($after.why))"
+    }
+  } else {
+    Remove-Item -LiteralPath $passPath -Force -ErrorAction SilentlyContinue
+  }
+}
 
 if ($v.code -eq 0 -and $rp -and -not $PathsFile) {
   if ($isSelective) {
