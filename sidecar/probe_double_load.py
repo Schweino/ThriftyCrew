@@ -32,6 +32,19 @@ trial marks the row invalid, and the row is kept.
 ONE ROW PER TRIAL PER ARM (.claude\rules\measurement.md), carrying the harness commit, the commit and sha256
 of the arm's app.py, and the idle reading the trial ran against. The verdicts are derived from the rows
 file by --summarise, never from this process's memory.
+
+TWO FLAGS FOR A BOX THAT IS IN USE (added 2026-09-18, backlog I195). Both default off, so a run without them
+is the 2026-09-11 run exactly.
+
+    --leave-live-up  never stops the live service on 8077. The recall hook of every session on this box reads
+                     it, so a re-run must not take it away. The harness then never calls stop-sidecar.ps1,
+                     never waits out a watchdog mark (the watchdog only acts on a service that is DOWN), and
+                     a listener on 8077 is recorded in the row rather than invalidating it.
+    --cpu            hides the GPU from the probe server (CUDA_VISIBLE_DEVICES=-1), for a card with no room for
+                     one more load. A server whose /health does not say device cpu is REFUSED before any request
+                     is fired, so a flag that did not take can never load onto a full card. held_mib is then
+                     the PRIVATE BYTES of the probe server's process tree, not the card, and mem_basis says so.
+                     load_count, the primary metric, does not depend on the device.
 """
 from __future__ import annotations
 
@@ -176,11 +189,41 @@ def next_watchdog_mark(t):
     return base + dt.timedelta(minutes=WATCHDOG_EVERY_MIN - (t.minute % WATCHDOG_EVERY_MIN))
 
 
-def clear_the_schedule(log):
+def tree_private_mib(pid):
+    """Private bytes, in MiB, of pid and every descendant. The venv interpreter is a redirector whose CHILD
+    holds the models, so the parent alone would read the redirector's few MiB."""
+    rc, out = powershell(["-Command",
+                          "$all = @(Get-CimInstance Win32_Process); $ids = @(%d); $k = 0; "
+                          "while ($k -lt $ids.Count) { $c = @($all | Where-Object { $_.ParentProcessId -eq $ids[$k] } | "
+                          "ForEach-Object { $_.ProcessId }); if ($c.Count) { $ids += $c }; $k++ }; "
+                          "[long](($all | Where-Object { $ids -contains $_.ProcessId } | "
+                          "Measure-Object -Property PrivatePageCount -Sum).Sum)" % pid], 60)
+    if rc != 0 or not out.strip():
+        return None
+    return int(int(out.strip().splitlines()[-1]) / (1024 * 1024))
+
+
+def wait_mem(read, guard_s):
+    """Poll read() until two consecutive readings are within STABLE_MIB. Returns (value, settled)."""
+    end = time.monotonic() + guard_s
+    prev = None
+    while True:
+        v = read()
+        if v is not None and prev is not None and abs(v - prev) <= STABLE_MIB:
+            return v, True
+        if time.monotonic() >= end:
+            return v, False
+        prev = v
+        time.sleep(1.0)
+
+
+def clear_the_schedule(log, watchdog=True):
     """Refuse inside the GPU window; wait out a watchdog mark a trial would otherwise straddle."""
     now = dt.datetime.now()
     if in_gpu_window(now) or in_gpu_window(now + dt.timedelta(seconds=TRIAL_BUDGET_S)):
         raise SystemExit("REFUSED: a trial starting now could run into the %s-%s GPU window (ruling R1)" % GPU_WINDOW)
+    if not watchdog:
+        return False
     mark = next_watchdog_mark(now)
     if (mark - now).total_seconds() >= TRIAL_BUDGET_S:
         return False
@@ -268,16 +311,19 @@ def kill_tree(p, port):
 def trial(ctx, arm, shape, rnd, n):
     name, arm_dir, arm_commit = arm
     flags = []
-    waited = clear_the_schedule(ctx["log"])
-    stopped = ensure_live_stopped(ctx["service_dir"], ctx["log"])
-    if port_open(LIVE_PORT):
+    live_up = ctx["leave_live_up"]
+    waited = clear_the_schedule(ctx["log"], watchdog=not live_up)
+    stopped = None if live_up else ensure_live_stopped(ctx["service_dir"], ctx["log"])
+    live_at_start = port_open(LIVE_PORT)
+    if live_at_start and not live_up:
         flags.append("live-8077-at-start")
     if port_open(ctx["port"]):
         raise SystemExit("REFUSED: probe port %d is already held by something else" % ctx["port"])
     idle = ctx["idle_ref"]
     baseline, ok = wait_card(lambda u, prev: prev is not None and u <= idle + IDLE_SLACK_MIB
                              and abs(u - prev) <= STABLE_MIB, SETTLE_GUARD_S)
-    if not ok:
+    if not ok and not ctx["cpu"]:
+        # On --cpu the card is not what the trial loads onto, so its drift cannot invalidate one.
         flags.append("baseline-unsettled")
 
     row = {"trial": n, "round": rnd, "arm": name, "shape": shape, "started": now_iso(),
@@ -286,10 +332,14 @@ def trial(ctx, arm, shape, rnd, n):
            "arm_app_sha256": sha256(os.path.join(arm_dir, "app.py")),
            "lib_match_sha256": ctx["lib_match_sha256"], "port": ctx["port"],
            "card_total_mib": ctx["total"], "idle_ref_mib": idle, "baseline_mib": baseline,
-           "waited_for_watchdog": waited, "stopped_live_first": stopped is not None}
+           "waited_for_watchdog": waited, "stopped_live_first": stopped is not None,
+           "leave_live_up": live_up, "live_8077_at_start": live_at_start, "cpu": ctx["cpu"],
+           "mem_basis": "private-bytes" if ctx["cpu"] else "card"}
 
     log_path = os.path.join(ctx["log_dir"], "trial-%02d-%s-%s.log" % (n, name, shape))
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+    if ctx["cpu"]:
+        env["CUDA_VISIBLE_DEVICES"] = "-1"
     base = "http://127.0.0.1:%d" % ctx["port"]
     with open(log_path, "w", encoding="utf-8") as logf:
         p = subprocess.Popen([ctx["python"], "-c", SERVE, arm_dir, HERE, str(ctx["port"])], cwd=arm_dir,
@@ -315,6 +365,14 @@ def trial(ctx, arm, shape, rnd, n):
                 row["health_pre"] = {k: health_pre.get(k) for k in ("models_loaded", "load_count", "device", "gpu")}
                 if health_pre.get("models_loaded"):
                     flags.append("loaded-before-requests")
+                if ctx["cpu"] and health_pre.get("device") != "cpu":
+                    # Before any request, so a hidden GPU that was not hidden never takes a load onto the card.
+                    raise SystemExit("REFUSED: --cpu but the probe server reports device %r" % health_pre.get("device"))
+                if ctx["cpu"]:
+                    mem_before, mem_ok = wait_mem(lambda: tree_private_mib(p.pid), SETTLE_GUARD_S)
+                    row["mem_before_mib"] = mem_before
+                    if not mem_ok:
+                        flags.append("baseline-unsettled")
                 reqs, hung = fire(base, SHAPES[shape])
                 row["requests"] = reqs
                 if hung:
@@ -331,13 +389,23 @@ def trial(ctx, arm, shape, rnd, n):
                     flags.append("after-unstable")
                 row["after_mib"] = after
                 row["held_mib"] = after - baseline
+                if ctx["cpu"]:
+                    mem_after, mem_ok = wait_mem(lambda: tree_private_mib(p.pid), SETTLE_GUARD_S)
+                    row["card_held_mib"] = row["held_mib"]
+                    row["mem_after_mib"] = mem_after
+                    row["held_mib"] = (mem_after - row["mem_before_mib"]) if (
+                        mem_after is not None and row.get("mem_before_mib") is not None) else None
+                    if not mem_ok:
+                        flags.append("after-unstable")
         finally:
             sampler.done.set()
             sampler.join(10)
             row["peak_mib"] = sampler.peak or None
-            row["peak_held_mib"] = (sampler.peak - baseline) if sampler.peak else None
+            # The sampler reads the card, which a --cpu trial does not load onto.
+            row["peak_held_mib"] = (sampler.peak - baseline) if (sampler.peak and not ctx["cpu"]) else None
             row["port_released"] = kill_tree(p, ctx["port"])
-    if port_open(LIVE_PORT):
+    row["live_8077_at_end"] = port_open(LIVE_PORT)
+    if row["live_8077_at_end"] and not live_up:
         flags.append("live-8077-at-end")
     released, ok = wait_card(lambda u, prev: u <= idle + IDLE_SLACK_MIB, SETTLE_GUARD_S)
     row["released_mib"] = released
@@ -367,10 +435,14 @@ def run(a):
     def log(msg):
         print(msg, flush=True)
 
-    ensure_live_stopped(a.service_dir, log)
+    if a.port == LIVE_PORT:
+        raise SystemExit("REFUSED: the probe port may never be the live port %d" % LIVE_PORT)
+    if not a.leave_live_up:
+        ensure_live_stopped(a.service_dir, log)
     idle, ok = wait_card(lambda u, prev: prev is not None and abs(u - prev) <= STABLE_MIB, SETTLE_GUARD_S)
     _, total = card()
     ctx = {"log": log, "service_dir": a.service_dir, "port": a.port, "python": python, "log_dir": a.log_dir,
+           "leave_live_up": bool(a.leave_live_up), "cpu": bool(a.cpu),
            "idle_ref": idle, "total": total, "harness_commit": git("rev-parse", "HEAD"),
            "harness_dirty": bool(git("status", "--porcelain", "--", "sidecar/probe_double_load.py")),
            "lib_match_sha256": sha256(os.path.join(HERE, "lib_match.py"))}
@@ -486,6 +558,8 @@ def main():
     ap.add_argument("--shapes", default="single,pair0,hook")
     ap.add_argument("--rounds", type=int, default=3)
     ap.add_argument("--port", type=int, default=8079)
+    ap.add_argument("--leave-live-up", action="store_true", help="never stop the live service on 8077 (header)")
+    ap.add_argument("--cpu", action="store_true", help="hide the GPU from the probe server; held = private bytes")
     ap.add_argument("--out")
     ap.add_argument("--log-dir")
     a = ap.parse_args()

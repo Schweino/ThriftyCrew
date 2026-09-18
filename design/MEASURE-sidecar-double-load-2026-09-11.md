@@ -184,3 +184,35 @@ Restarted through `C:\Codex\ThriftyCrew\sidecar\start-sidecar.ps1` at 15:16:40: 
 that moment did not carry these commits (blob `460d827d31`, no `load_count` on `/health`), and `start-sidecar.ps1`
 warms with one request, so it is a single load either way. The guard is live from the first restart after the
 main checkout carries the locked arm's change, and `/health` says so itself: it reports `load_count` only then.
+
+## Re-run on 2026-09-18, when the fix was finally landed (backlog I195)
+
+**Why.** None of the commits above reached main for a week. On 2026-09-18 they were cherry-picked onto
+`origin/main` at `886796dff` in worktree `i195-sidecar-lock`, and this section re-runs the harness once against
+the rebased code. Every commit id this document cites above is from the ORIGINAL branch
+`claude/youthful-mirzakhani-eef33c` and none of them is on main: cite the blobs.
+
+**What the rebase put underneath, checked by blob before anything ran.** `origin/main:sidecar/app.py` is blob
+`460d827d31`, the same base the 2026-09-11 arms were cut from, and `sidecar/lib_match.py` is still `360c93b5ad`.
+The rebased unlocked arm's `app.py` is blob `12939f86bf` and the rebased locked `app.py` is `7b0fe948ad`, the
+comment-only successor of the `d6a5016a51` the locked arm ran. So app.py had NOT moved since 2026-09-11; the
+`/recall-search` endpoint was already in the base those trials ran.
+
+**Written before the run: what is different, and what that does to the bar.**
+
+- **The live service stays up.** It serves the recall hook for every session on the box, so this run passes
+  `--leave-live-up`: nothing stops or restarts 8077, and a listener there is recorded, not invalidating.
+- **The card had no room.** Read at 09:49: **14,468 of 16,303 MiB used**, about 1,835 MiB free, with the live
+  sidecar holding its one load and other GPU clients running. One more load is about 4,500 MiB. Neither arm fits,
+  so this run passes `--cpu`: the probe server sees no GPU, is refused before any request if its `/health` does
+  not say `cpu`, and `held_mib` is the private bytes of the probe server's process tree, not the card.
+- **B1 is unchanged and device-independent:** CONFIRMED if the unlocked arm reads `load_count` 2 or more in at
+  least 1 of its 6 concurrent trials.
+- **B3's load half is unchanged and device-independent:** the locked arm must read `load_count` 1 in 6 of 6
+  concurrent trials with every request 200. One `load_count` of 2 rejects the fix.
+- **B2 and B3's memory half are read in PRIVATE BYTES of host memory, with the same numbers (1.6x, 15%).** That is
+  an analogue of the VRAM bar, not the same measurement: it asks whether two loads hold about twice the memory of
+  one on the host. It says nothing about the card, and the 2026-09-11 VRAM verdicts above remain the only
+  measurement of the card. No threshold was moved for this run and none will be after it.
+- Harness: `sidecar/probe_double_load.py` at the commit named in the results, with the two flags above, which
+  are its only change; a run without them is the 2026-09-11 run exactly.
