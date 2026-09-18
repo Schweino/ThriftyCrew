@@ -14403,7 +14403,7 @@ as well as the binary midpoint 0.125.
 **First rung:** Brad picks A, B, C or D. Building A or B afterwards is one helper, the rounding calls in
 `fmt-lib.ps1`, and the fixture; no data is rewritten, so it is 2-WAY.
 
-### I203 - probe-hostile-input's "12 ACCEPTED CORRUPT" is 2 distinct inputs, because 10 of its 12 kinds ignore the drawn offset `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+### I203 - probe-hostile-input's "12 ACCEPTED CORRUPT" is 2 distinct inputs, because 10 of its 12 kinds ignore the drawn offset `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-proptest-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14442,6 +14442,23 @@ cases.
 distinct inputs, bucket the corrupt outcomes, and a `-Kind/-Offset` single-case replay. It is a
 report, not a gate, so nothing reddens. Hardening `Import-CaptureCsv` remains the separate ruling
 f1a23d662 already named.
+
+**Done 2026-09-18**, in one change with I210, `ops\probe-hostile-input.ps1` only (plus one rules line).
+Re-measured first at base 0cc1d9702: `-Seed 20260909` still gave 60 cases, 17 refused, 31 survived, 12
+ACCEPTED-CORRUPT, exit 0, the 12 being 3 nul-byte and 9 huge-field. Shipped: an input is keyed on the
+BYTES it feeds the parser (`Get-TcInputId`) and each distinct input runs once; a failure is keyed on kind
+plus reason (`Get-TcFailureBuckets`) and printed once with its case and input counts; `offset=any` is
+printed for a kind whose bytes the offset did not change, DERIVED by running the generator at three
+offsets (`Test-TcKindUsesOffset`, which reads 2 of 12 kinds as offset-sensitive: truncated, byte-flipped);
+the two found failures are recorded VALUES in `$script:RECORDED_CASES` that every run executes whatever
+the seed; and `-Kind <k> [-Offset n]` replays one case by value. Shrinking was not built, for the reason
+above, and the header says when it would start paying. After the change `-Seed 20260909` (now draw v2,
+see I210) reads 60 cases over 18 distinct inputs, 12 ACCEPTED-CORRUPT as 2 distinct inputs and 2
+distinct failures, recorded 2 of 2 still corrupt, exit 0. Still a report: exit 0 unless `-Strict`.
+Verified: `-SelfTest` 24 of 24 pass, exit 0. Broken once each and restored md5-identical: keying inputs
+on a fresh guid turned "three offsets of an offset-blind kind are ONE input" red (distinct=3), and keying
+buckets on the offset turned "12 corrupt cases bucket to 2 distinct failures" red (12 buckets), each
+exit 2.
 
 ### I204 - The hand-run mutation probes name their mutants but not their operators, and none has a committed harness `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
 
@@ -14722,7 +14739,7 @@ commodity after the winner only leaves the contested set. The breaker is per reg
 combined include. `RegexOptions.Compiled` was not added. Cost on the compiled path: the 42,753-name corpus pass
 took 8.5 s against 9.0 s before (one run each, so no measurable change), and `test-match-lib`'s compiled pass
 14.0 s summed over 6 shards.
-### I210 - probe-hostile-input prints a seed that replays only at the same commit, and says it replays anywhere `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+### I210 - probe-hostile-input prints a seed that replays only at the same commit, and says it replays anywhere `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-scalagen-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14753,6 +14770,20 @@ harness: build it from composable generators (a constant, a range, a one-of, a l
 stop probability, and a size budget for any recursive shape) over that one passed-down object, as
 `software-craft/test-design-and-oracles.md` 5.2a describes, rather than copying this file's flat kind
 list. Not acted on during the course run, per the course procedure.
+
+**Done 2026-09-18**, in one change with I203. `ops\probe-hostile-input.ps1` now draws every case from ONE
+`System.Random` built from the seed inside `Get-TcHostileCasePlan` (draw version 2), never from the
+session-global `Get-Random` stream, and prints beside the seed the draw version, the kind count, an
+8-hex fingerprint of the kind list and the commit (marked `+probe-modified` when the file differs from
+it), on the seed line and in the `-COMPLETE` summary. The header's "any machine" claim now says what a
+seed replays against. The v1 cases of seed 20260909 do NOT replay under v2, deliberately: that run's two
+failures are kept as recorded values (I203), which is what makes changing the draw safe. The forward rule
+for a second generated-input harness went into the `Get-Random` bullet of `.claude/rules/ops-and-gates.md`.
+Verified: `-SelfTest` 24 of 24 pass, exit 0, including a MUST FIRE that a plan leaves the session stream
+untouched and a MUST FIRE pinning seed 20260909's first four v2 cases and the kind fingerprint, whose
+message says a red means old seeds moved. Broken once by reverting the draw to `Get-Random -SetSeed`: both
+went red (stream before=819378 after=888550; the pin read the old v1 cases, `nul-byte@1601` third, as in
+the founding run), exit 2; restored md5-identical and green.
 
 ### I211 - graph.db is half empty pages: 40,342 of 78,709 pages sit on the freelist `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 

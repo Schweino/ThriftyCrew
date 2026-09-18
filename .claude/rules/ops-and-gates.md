@@ -149,6 +149,12 @@ everything else honest, so a defect here is silent by construction.
   generator**, because a seeded generator is reproducible by construction: print the seed, re-feed it,
   and every case replays byte for byte, which is the exact property the deterministic-sample rule was
   protecting. `ops/probe-hostile-input.ps1` is the exemplar. It is a REPORT, not a gate.
+  **A seed replays only against the same DRAW** (2026-09-18, backlog I210): the draw is an index into a
+  kind list, so one added kind moves every later case of an old seed. Print the draw version, a fingerprint
+  of the kind list and the commit beside the seed; draw from ONE `[System.Random]($Seed)` the generator
+  owns, never the session-global `Get-Random` stream; and keep a found failure as a recorded VALUE that
+  every run executes, never as a seed. **And count distinct INPUTS, not draws** (backlog I203): ten of that
+  probe's twelve kinds ignored the drawn offset, so its "12 ACCEPTED CORRUPT" was 2 inputs and 2 failures.
 - **PowerShell's `-ne` on strings is CULTURE-SENSITIVE, and culture-sensitive comparison IGNORES NUL**
   (2026-09-09, found by `probe-hostile-input.ps1`'s own must-fire). `('Bana' + [char]0 + 'nas') -ne
   'Bananas'` is **`$false`**, though the two differ in length. So the default operator is blind to
