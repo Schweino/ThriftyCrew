@@ -11797,7 +11797,7 @@ why.
 findings=3`). This is the same discipline one field further: a finding you cannot locate is a
 denominator without a numerator's address.
 
-### I156 - A staged fixture technique the estate does not use: manufacture a simplified corpus FROM the real tracked files `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+### I156 - A staged fixture technique the estate does not use: manufacture a simplified corpus FROM the real tracked files `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Premise HALF REFUTED: it proposes building a tokenizer-based source flattener, and `lib/ps-source.ps1` already IS one, shipped 2026-09-12 - the same day this item was filed - with measured costs in its header. It blanks comments and not string literals, so 1 of the 2 dimensions is already done and the remaining build is a string-literal blanking rung. Subject population for the differential: 28 of 45 `ops/audit-*.ps1` are plain text matchers (4 already reduce, 13 parse the AST and are immune).
 
@@ -11823,6 +11823,38 @@ were living in prose or in a literal. That is a **differential oracle over two v
 input** rather than two versions of the program, it needs no new gate, and it would put a number on
 how much of each detector's output is comment and literal noise. If the number is zero for a
 detector, that detector has earned the right to stay a regex.
+
+**Done 2026-09-18.** The first rung is built and run: `ops/probe-staged-corpus.ps1` (blob
+`ba78ef5f91ee8f85a86069b47a423f71a97726a0`), a probe and not a gate. It stages every tracked `.ps1`
+twice from ONE list - a byte copy, and a copy with every comment and every string-literal body blanked
+through `PSParser` - and runs an UNCHANGED detector over both, pairing findings by file:line (the
+staging keeps length and every line break, so no mapping is needed). **Each staged file is PROVED the
+same program**, not assumed: re-tokenized, its non-comment token stream must match the original's in
+type, offset, length and every non-string token's text. That proof earned its keep on the first run:
+blanking strings to spaces made **107 of 792** files unparseable, because equal-length hash keys became
+duplicate keys - the nand2tetris point exactly, the flattened program must stay VALID. Bodies are now
+filled with a per-length number, and the stager refuses (never guesses) a multi-line block comment with
+code beside it, whose kept line break could split a statement. It does not touch `lib\ps-source.ps1`, so
+Brad's I154 consolidation trigger is not pulled; its header says its string half should move into that
+reducer when the consolidation happens.
+
+**Measured at 3ed74c31b over 792 tracked `.ps1`, detector `ops/audit-write-seam.ps1` (blob
+`b6802d04f9a91a21fbd36e3788b2e5c132627c3b`):** 792 of 792 staged and proved, 0 unstageable, 0 structure
+failures; the real arm found **17** sites, identical site for site to a plain run of the audit on the
+tree; **2 of 17 survived** the flattening (`grocery\notify-item-added.ps1:210`, a bare `$apiUrl`, and
+`grocery\send-price-alerts.ps1:141`, `New-GhostJWT` as code) and **15 of 17 vanished, all 15 living in a
+string**, 0 in a comment, 0 found only on the staged arm. Rows, one per site per arm:
+`design/MEASURE-staged-corpus-write-seam-2026-09-18.jsonl`. **The reading is the opposite of "noise":**
+every one of the 15 is a real bypass whose Ghost URI is an expandable string, so write-seam's defect
+LIVES in literals, and a string-blanking reducer would blind it to 15 of 17. That is the fact the I154
+consolidation needs: write-seam must never be moved onto the string switch. Other detectors are one table
+entry away (`$script:DETECTORS`; `audit-write-only-reports` takes the same `-Root`/`-BaselineFile`).
+
+**Verified.** `-SelfTest` 13 of 13, exit 0; it runs the real audit-write-seam over a staged fixture tree
+and shows its structural MUST FIRE fires at the same file:line in both arms while the literal and the
+trailing-comment findings fire on the real arm only. Broken twice and restored md5-identical: neutering the
+structure proof turned its 2 MUST FIRE cases red (exit 1), and removing the key numbering turned the
+hash-key MUST FIRE and a CLEAN TWIN red (exit 1).
 
 ### I157 - Nothing else `DONE` `queue-7`
 
