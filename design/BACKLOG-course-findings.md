@@ -13554,7 +13554,7 @@ the sample does not cover: it is systematic rather than random, it is 10 of 52, 
 outside `design/` were never read. **Nothing shipped**: no template line, because the plans already carry
 the habit, and no gate, which the item never asked for.
 
-### I188 - a child's stdout is parsed as data without an exit-code or shape check `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I188 - a child's stdout is parsed as data without an exit-code or shape check `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-sdp-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13599,6 +13599,27 @@ day one). Unmeasured today; no number is claimed.
   this item unless a read shows a failed child's text actually reaching a tracked file, a board or a page. `U x P`
   of 0: DONE with nothing shipped. `P < 0.7` with `U x P >= 10`: no ratchet, and the scanner's miss is named so a
   sharper test can be written.
+
+**Done 2026-09-19. No ratchet: `U x P` is 0.** Measured by `ops\count-unchecked-child-parse.ps1` and its Python half
+`ops\count_unchecked_child_parse.py` (committed with this item; blobs `4b4c406ac` and `4551b7705`), run on the branch
+whose base is `6693edb47`, over 657 tracked `.ps1` and 134 `.py` outside `archive/`, every file parsed. **`U` = 4 of
+`S` = 195 sites.** By class: PowerShell native 17 sites (13 read the exit code, 8 shape-check, 3 neither), PowerShell
+web 166 (13 read the status, 153 rely on the 5.1 cmdlets' throw on a non-2xx, 0 neither), Python native 2 (1 neither),
+Python web 10 (0 neither). Every `U` site was read by eye, and **0 of 4 confirmed** (`P` = 0 of 4):
+`grocery/build-fareway-regular.ps1:210` and `:297` split a child's transcript inside the script's own `-SelfTest`
+and every piece feeds a `Chk` assertion, so a failed child reddens the suite rather than passing as data (the scanner
+reads `if`, not an assertion helper); `grocery/out/staples300/process-agents300.ps1:33` is a finished 2026-07-13
+one-off whose `git show` sends stderr to `$null` and whose empty stdout is caught by `if ($gitOld)` before the parse;
+`sidecar/probe_double_load.py:119` parses `nvidia-smi` output through `int()`, so an error printed on stdout raises
+instead of being read as a number. A sensitivity run at 4 assignment hops instead of the bar's 1 read `U` = 5 of 201,
+the extra site (`meal-prep/pipeline/map-preresolve.ps1:397`) guarded by `if (-not $line)` and `$doc.ok` a few lines
+on. The harness's 11 self-test cases pass (exit 0); breaking its `$LASTEXITCODE` read once turned the MUST NOT FIRE
+case red (10 of 11, exit 1), and the restore was md5-identical and green again.
+**Outside the bar, recorded so it is not lost:** 119 of 176 web sites (109 of them `Invoke-RestMethod`, 63 under
+`.claude/skills/`, 34 under `grocery/`) rely only on the non-2xx throw and never shape-check what came back, which
+is exactly the course's case of a 200 carrying an error page. The bar put that class outside `U` on purpose, none of
+the 119 was read, and no claim is made that any of them is wrong; if this is wanted, the next rung is a precision
+read of that class, not a ratchet.
 
 ### I189 - commits that mix refactoring with behaviour change are not a stated rule `DONE` `queue-6`
 
