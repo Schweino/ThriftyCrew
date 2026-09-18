@@ -24,3 +24,6 @@ Orchestration branch: `claude/backlog-run-0919`. Each item lands through its own
 | I198 | DONE | 886796dff: Ghost POST no longer replayed on a timeout or 5xx, Friday send writes an invoking marker before it mails and refuses plus alerts on invoking-without-sent; 3 mutants killed |
 | I199 | DONE | 886796dff: rules text names the headers that state idempotency |
 | I195 | DONE | 3e5ee4b43: the 2026-09-11 lock cherry-picked onto main, harness re-run beside the live sidecar (6 of 6 double loads unlocked, 6 of 6 single locked), app_selftest MUST FIRE red with the lock broken; takes effect at the next sidecar restart |
+| I183 | DONE | 4bb2295e9 + b262718d2: measured first (worst real name 15.1 ms over 42,753 names), then a 250 ms bound on every matcher regex, a timeout scored could-not-look and surfaced in the board health block and check-ad-cycles, 3-strike per-pattern breaker; 4 mutants red |
+| I208 | DONE | 4bb2295e9: chicken-breast include atomic, 42,753 names resolve identically before and after, victim 7,354 ms to 13.6 ms |
+| I209 | DONE | 4bb2295e9: the C# core catches the timeout; no RegexOptions.Compiled |
