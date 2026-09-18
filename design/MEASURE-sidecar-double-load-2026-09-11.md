@@ -216,3 +216,36 @@ comment-only successor of the `d6a5016a51` the locked arm ran. So app.py had NOT
   measurement of the card. No threshold was moved for this run and none will be after it.
 - Harness: `sidecar/probe_double_load.py` at the commit named in the results, with the two flags above, which
   are its only change; a run without them is the 2026-09-11 run exactly.
+
+### Results of the re-run - appended after it, nothing above edited
+
+**Run:** 2026-09-18, trials started 09:52:13 to 09:57:38. **Harness:** `sidecar/probe_double_load.py` blob
+`01f32dbe75`, committed as `caa6def7a` on the worktree branch (`harness_dirty` false in all 18 rows), run under
+`C:\Codex\ThriftyCrew\sidecar\.venv\Scripts\python.exe` (Python 3.12.10) with `--leave-live-up --cpu --port 8079`.
+**Arms:** `unlocked` = blob `12939f86bf`, `locked` = blob `7b0fe948ad`, each extracted copy checked with
+`git hash-object --no-filters`. **Rows:** `design/MEASURE-sidecar-double-load-2026-09-18.jsonl`. **Verdict read:**
+harness exit 0, `invalid trials: 0 of 18`. Every probe server reported `device: cpu` in 18 of 18, every request
+returned 200 in 30 of 30, `/recall-search` answered `ok: true` in 6 of 6 `hook` trials, and a listener was on 8077
+at the start and end of 18 of 18 trials: the live service was never stopped, and read `models_loaded: true`
+afterwards.
+
+- **B1 CONFIRMED.** `load_count` 2 in **6 of 6** unlocked concurrent trials (3 `pair0`, 3 `hook`), as on 2026-09-11.
+- **B2 CONFIRMED, in host private bytes.** Median held **9,991.5 MiB** over the 6 double loads against **5,005 MiB**
+  for the 3 unlocked single trials: **2.00x** against the 1.6x bar.
+- **B3 ACCEPTED.** `load_count` 1 in **6 of 6** locked concurrent trials, all requests 200 in **6 of 6**, median held
+  **5,043 MiB** against **5,006 MiB** single: **0.7%** drift against the 15% bar.
+
+| arm | shape | load_count | held MiB (private bytes), per trial | median |
+|---|---|---|---|---:|
+| unlocked | single | 1, 1, 1 | 5,007 / 5,005 / 5,004 | 5,005 |
+| unlocked | pair0 | 2, 2, 2 | 9,972 / 9,970 / 9,978 | 9,972 |
+| unlocked | hook | 2, 2, 2 | 10,019 / 10,005 / 10,019 | 10,019 |
+| locked | single | 1, 1, 1 | 5,006 / 5,008 / 5,006 | 5,006 |
+| locked | pair0 | 1, 1, 1 | 5,018 / 5,023 / 5,019 | 5,019 |
+| locked | hook | 1, 1, 1 | 5,063 / 5,069 / 5,064 | 5,064 |
+
+**What this re-run does not say.** It never touched the card, so the 2026-09-11 VRAM figures (9,032 against 4,621
+MiB, 1.95x) remain the only measurement of GPU memory; this run's 2.00x is the host-memory analogue. `load_seconds`
+ran 8.8 to 10.6 s in the 6 double loads against 6.2 to 7.1 s in the 12 single loads, on CPU, and no bar reads it.
+The comparison with 2026-09-11 is one run of 18 trials each, same harness logic, different device and memory basis;
+no other variant was tried.

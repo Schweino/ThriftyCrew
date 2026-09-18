@@ -12581,7 +12581,7 @@ today, which is why this is a ruling and not work.
 
 **Forward note.** If `same_as` is ever built, node similarity with the `sold_at` edges left out is the cheap candidate generator. Every SKU is `sold_at` one of only 7 stores, so those edges would inflate every pair (`rag-craft/graph-analytics.md` 57, the hub caution).
 
-### I195 - the sidecar double-load lock was measured, confirmed and fixed a week ago and has never reached main `OPEN` `queue-6` `2-WAY` `RUNG1 READ`
+### I195 - the sidecar double-load lock was measured, confirmed and fixed a week ago and has never reached main `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-pyconc-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -12610,6 +12610,22 @@ a bar set before the run, and nobody landed it. It was found only because a cour
 **First rung.** Read the three commits against current main (app.py has moved since 2026-09-11 if the
 recall-search endpoint landed after them), rebase onto origin/main, re-run the branch's own harness once,
 and land it through `ops\push-main.ps1`. Nothing here was changed by this lane.
+
+**Done 2026-09-18.** The five commits of `claude/youthful-mirzakhani-eef33c` that carry this work (`eb32b00b3`,
+`16ca1df7c`, `7f3c964f7`, and the two doc follow-ups `69c9c3069`, `1ad10dd67`) were cherry-picked onto
+`origin/main` at `886796dff` with no conflict; that branch's other five commits are unrelated and were left. The
+premise that app.py had moved was checked and is false: `origin/main:sidecar/app.py` is still blob `460d827d31`,
+the base the 2026-09-11 arms were cut from, and `/recall-search` was already in it. The harness stopped the live
+service before every trial and the card had about 1,835 MiB free, so it gained `--leave-live-up` and `--cpu`
+(both off by default), and the bar for the re-run was committed before it ran. Re-run once, 18 trials, 0 invalid,
+live 8077 up throughout: B1 CONFIRMED (unlocked loaded twice in 6 of 6 concurrent trials), B2 CONFIRMED in host
+private bytes (2.00x, bar 1.6x), B3 ACCEPTED (locked loaded once in 6 of 6, all requests 200, 0.7% drift, bar 15%);
+results appended to `design/MEASURE-sidecar-double-load-2026-09-11.md` beside the original VRAM run. Fixture:
+`sidecar/app_selftest.py --selftest` (discovered by run-gates) passes 9 of 9, rc 0; with the lock removed in place
+(`with _load_lock:` to `if True:`) it went red, 4 of 9 failing including the MUST FIRE "8 concurrent first callers
+enter Matcher.load ONCE" (entries=8), rc 1, and app.py was restored md5-identical. The running sidecar keeps the
+old code until its next restart after the main checkout carries this commit; `/health` reports `load_count` once
+it does.
 
 ### I196 - fixture labels record the verdict and never the input class, so nobody can read partition coverage off a suite `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
 
