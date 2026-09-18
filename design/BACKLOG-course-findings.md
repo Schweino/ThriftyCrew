@@ -13026,6 +13026,26 @@ board have a tie at the winning unit price, and whether the named winner has eve
 builds with the same prices. A single-line fix per site is to add an explicit tie-break key (a stable
 product id or the input index), but nothing should change until the tie count is known.
 
+**RUNG1 acceptance bar, written 2026-09-19 BEFORE any count was taken (backlog run, worktree i175-work).**
+Re-reading the sites first corrected the item's list: all 14 one-line hits in `grocery/compare-deals.ps1` are
+inside its `-SelfTest` (synthetic fixtures, lines 1159-1379), and the board's per-store pick is
+`Select-StoreWinner` (compare-deals.ps1:247), which already ends on a total order (price, linkability, package
+size, name). The one-line grep MISSED the site that decides the crown: `$ranked = @($byStore | Sort-Object
+unit_price)` (compare-deals.ps1:2726), whose first row is `cheapest_store` and whose first non-member row is
+`nomem_store`. So the production sites measured are (A) that cross-store rank and (B) `grocery/price-table-lib.ps1`
+103-104, the everyday and live-ad winner per store in the wide price table. `grocery/out/r100/compare-debug.ps1`
+is a debug script and is not measured. Metrics, on the newest real board (`comparison-2026-09-17.json` and its
+`candidates-2026-09-17.json`):
+- **A.** Commodities whose rank-1 and rank-2 store rows carry an exactly equal `per_unit`, over
+  `commodities_compared`; the same for the first two non-membership rows (`nomem`).
+- **B.** Per (commodity, store, half) picks after `Select-FreshestCaptureRows`: how many have two or more rows at
+  the minimum `unit_price` whose NAMES differ, over all picks; and of those, how many change winner when the
+  same rows are fed to 5.1's `Sort-Object unit_price` in reverse order.
+- **Bar.** A fix is warranted if A plus B is at least 1, because one tie means a shown store or product is chosen
+  by the sort's internals. If both are 0 the item closes with no fix and the numbers recorded. A tie-break that
+  moves any chosen row or price on this board is READY FOR BRAD on a branch with every changed cell listed; one
+  proven byte-identical on this board may land.
+
 ### I176 - When `same_as` is built, identity merging is union-find, and `do_not_merge` must be checked against whole components at union time `PARKED` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-algo1-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
