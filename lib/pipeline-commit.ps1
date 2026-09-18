@@ -342,7 +342,7 @@ if ($__pcSelfTest) {
   T 'MUST FIRE  .claude/settings.json is refused by the directory branch, not an extension' ((Assert-NoSourcePaths @('.claude/settings.json')).Count -eq 1)
   T 'MUST FIRE  .github/CODEOWNERS is refused by the directory branch, not an extension' ((Assert-NoSourcePaths @('.github/CODEOWNERS')).Count -eq 1)
   T 'CLEAN TWIN  a literal ./ prefix is still stripped, once or repeated, so ./ops and ././lib are still refused' ((Assert-NoSourcePaths @('./ops/hooks/pre-commit', '././lib/x')).Count -eq 2)
-  T 'MUST NOT FIRE ./grocery/out/x.json normalises to a data path and is accepted' ((Assert-NoSourcePaths @('./grocery/out/x.json')).Count -eq 0)
+  T 'MUST NOT FIRE ./fixture/out/x.json normalises to a data path and is accepted' ((Assert-NoSourcePaths @('./fixture/out/x.json')).Count -eq 0)
   T 'MUST FIRE  ops/ is refused even with no extension' ((Assert-NoSourcePaths @('ops/hooks/pre-commit')).Count -eq 1)
   T 'MUST FIRE  lib/ is refused' ((Assert-NoSourcePaths @('lib/pipeline-commit.ps1')).Count -eq 1)
   T 'MUST FIRE  a backslash path is normalised before matching, not missed' ((Assert-NoSourcePaths @('ops\audit-write-seam.ps1')).Count -eq 1)

@@ -241,11 +241,11 @@ if ($__botPathsSelfTest) {
   BpT 'MUST FIRE: a dot-leading owned entry owns its own path (TrimStart(''./'') stripped the dot)' `
       (Test-BotPathOwned -Path '.claude/bot-owned.json' -Owned @('.claude/bot-owned.json'))
   BpT 'MUST NOT FIRE: a dot-leading path does not lose its dot and match an undotted entry' `
-      (-not (Test-BotPathOwned -Path '.grocery/out/x.json' -Owned @('grocery/out')))
-  BpT 'MUST NOT FIRE: a path above the repo is not owned (the character set turned ../grocery/out into grocery/out)' `
-      (-not (Test-BotPathOwned -Path '../grocery/out/x.json'))
+      (-not (Test-BotPathOwned -Path '.fixture/out/x.json' -Owned @('fixture/out')))
+  BpT 'MUST NOT FIRE: a path above the repo is not owned (the character set turned ../fixture/out into fixture/out)' `
+      (-not (Test-BotPathOwned -Path '../fixture/out/x.json' -Owned @('fixture/out')))
   BpT 'CLEAN TWIN: a literal ./ prefix is still stripped, once or repeated' `
-      ((Test-BotPathOwned -Path './grocery/out/x.json') -and (Test-BotPathOwned -Path '././grocery/out/x.json'))
+      ((Test-BotPathOwned -Path './fixture/out/x.json' -Owned @('fixture/out')) -and (Test-BotPathOwned -Path '././fixture/out/x.json' -Owned @('fixture/out')))
 
   if ($fail) { Write-Output "BOT-PATHS SELF-TEST FAILED ($fail)"; exit 1 }
   Write-Output 'BOT-PATHS SELF-TEST PASSED (both lists array-shaped and complete, the sets disjoint, ownership bounded by the slash)'

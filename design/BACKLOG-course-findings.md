@@ -12968,10 +12968,12 @@ deliberate character sets (`Trim(' ,.')`, `Trim(' ,-/')`).
 `StartsWith` (`lib/pipeline-commit.ps1` `Assert-NoSourcePaths`, `lib/bot-paths.ps1` `Test-BotPathOwned`).
 New cases: in `pipeline-commit -SelfTest`, MUST FIRE `.claude/settings.json` and `.github/CODEOWNERS` (no listed
 extension, so only the directory branch can refuse them), a CLEAN TWIN that `./ops/...` and `././lib/...` are still
-refused, and a MUST NOT FIRE that `./grocery/out/x.json` is accepted; in `bot-paths -SelfTest`, a MUST FIRE that a
-dot-leading owned entry owns its own path, MUST NOT FIREs that `.grocery/out/x.json` does not match `grocery/out`
-and that `../grocery/out/x.json` is not owned (the character set turned it into `grocery/out/x.json`), and a CLEAN
-TWIN that `./` and `././` are still stripped. Mutant (both lines reverted to `TrimStart('./')`, in place, restored
+refused, and a MUST NOT FIRE that `./fixture/out/x.json` is accepted; in `bot-paths -SelfTest`, a MUST FIRE that a
+dot-leading owned entry owns its own path, MUST NOT FIREs that `.fixture/out/x.json` does not match `fixture/out`
+and that `../fixture/out/x.json` is not owned (the character set turned it into `fixture/out/x.json`), and a CLEAN
+TWIN that `./` and `././` are still stripped. The fixtures name a neutral `fixture/` directory, not `grocery/out`:
+spelled as `grocery/...` in `lib/` they raised `audit-cross-module-reach` from 118 to 127 and the first push-main
+was refused on it. Mutant (both lines reverted to `TrimStart('./')`, in place, restored
 md5-identical): pipeline-commit red 2 of 2 new MUST FIREs, exit 1; bot-paths red 3 of the 4 new cases, exit 1 (the
 CLEAN TWIN stays green, as it must: the character set strips `./` too). Fixed: both exit 0.
 **The "not checked" question, measured at 639975fca with both normalisations side by side:** 0 of 22 declared lane
