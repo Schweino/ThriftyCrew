@@ -20,14 +20,17 @@
 # correct for the real product on the shelf - that is a judgement recorded in that file's own `rule`
 # field, not something any detector here verifies.
 #
-# WIRED, DELIBERATELY, WHERE THE CARDS ARE FRESH. wave-publish.ps1's P5 gate table runs it scoped to the
-# wave's slugs, and those cards were built by the wave, so the gate is green on day one - the ops rule
-# against a gate that is red on its first run. An UNSCOPED run over the whole catalogue is a REPORT and
+# WIRED, DELIBERATELY, WHERE THE CARDS ARE FRESH. propagate-recipes.ps1 runs it scoped to the dirty slugs
+# AFTER build-cards has rendered them and BEFORE engine\publish.ps1 sends them (Invoke-GatedPublish), so it
+# judges the exact bytes that ship and is green on day one - the ops rule against a gate that is red on its
+# first run. Until 2026-09-18 it sat in wave-publish.ps1's P5 table, where no card of the wave had been
+# built yet, so it could not have passed a real wave; it was only green because P5 could not refuse at all
+# (see wave-publish.ps1 above Invoke-Gate). An UNSCOPED run over the whole catalogue is a REPORT and
 # is red today on purpose: the 584 cards built before this ruling carry no line, and republishing them
 # is its own tracked piece of work (backlog, I144 backfill), not something to smuggle into a gate.
 #
 #   .\audit-allergen-line.ps1                      report over every built card (red until the backfill)
-#   .\audit-allergen-line.ps1 -Slugs a,b,c         wave-publish preflight
+#   .\audit-allergen-line.ps1 -Slugs a,b,c         scoped, as propagate's pre-publish gate runs it
 #   .\audit-allergen-line.ps1 -Json                machine-readable
 #   .\audit-allergen-line.ps1 -SelfTest            frozen fixtures, hermetic
 # Exit 0 clean, 1 findings, 2 self-test failure.
@@ -209,9 +212,12 @@ if ($runSelfTest) {
   $idxWall = $bc.IndexOf("'<!--TC-PAYWALL-->'")
   T 'MUST FIRE  the line is rendered ABOVE the paywall cut, so it is free to read' `
     ($idxLine -gt 0 -and $idxWall -gt 0 -and $idxLine -lt $idxWall) ("line@$idxLine wall@$idxWall")
-  $wp = Get-Content -LiteralPath (Join-Path $here 'wave-publish.ps1') -Raw -Encoding utf8
-  T 'MUST FIRE  wave-publish.ps1 runs this check as a publish gate' `
-    ($wp -match 'audit-allergen-line') 'the publish gate is not wired'
+  # Wired in propagate-recipes.ps1 since 2026-09-18, between build-cards and engine\publish.ps1, which is
+  # the only place the card that ships exists and has not shipped. (It was in wave-publish's P5 before,
+  # where no card of the wave had been built yet.)
+  $pr = Get-Content -LiteralPath (Join-Path $here 'propagate-recipes.ps1') -Raw -Encoding utf8
+  T 'MUST FIRE  propagate-recipes.ps1 runs this check between the card build and the publish' `
+    ($pr -match "Join-Path \`$here 'audit-allergen-line\.ps1'" -and $pr -match '\$pubOut = Invoke-GatedPublish') 'the publish gate is not wired'
 
   # ---- MUST FIRE: the -Slugs comma-marshalling trap, in this script''s own interface ---------------
   # `powershell -File script.ps1 -Slugs a,b` hands this ONE element. A receiver that does not split

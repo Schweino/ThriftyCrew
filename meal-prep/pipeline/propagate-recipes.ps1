@@ -109,6 +109,34 @@ function Get-DirtySlugs { param([hashtable]$Stamps, $Files)
   return $d
 }
 
+# ---- THE ALLERGEN LINE, CHECKED ON THE CARD THAT SHIPS (2026-09-18) ------------------------------------
+# Brad's I144 ruling: no card publishes with a missing or wrong 'Contains' line. audit-allergen-line answers
+# that for a BUILT card, so it has to run where the card exists and before anything sends it: here, after
+# build-cards has rendered every dirty slug into db\built and before engine\publish.ps1 reads those bytes.
+# It was wired into wave-publish's P5 until this date, where no card of the wave had been built yet - so it
+# could never have passed a real wave, and it was only ever green because P5 could not refuse at all
+# (wave-publish.ps1, above Invoke-Gate). Here it covers every slug publish is about to send: a wave's new
+# recipes, the collateral dirty specs propagate carries with it, and a plain recost that never saw a wave.
+#
+# The publish call is a PARAMETER so the self-test can hand in a stub and prove the order on the real
+# function: a refused card throws BEFORE the publish block is ever invoked, so no Ghost call can follow
+# it. The throw is the refusal; it propagates out of this script before any stamp is advanced, exactly as
+# a failing stage does, so the refused slugs stay dirty and are retried.
+# IN-PROCESS, never `powershell -File`: -Slugs is [string[]] and the -File path passes only the first
+# element (the feed-covers-published note below records the measured case).
+function Invoke-GatedPublish {
+  param([string[]]$Slugs, [string]$RecipesDir, [string]$BuiltDir, [scriptblock]$Publish)
+  $alOut = & (Join-Path $here 'audit-allergen-line.ps1') -Slugs $Slugs -RecipesDir $RecipesDir -BuiltDir $BuiltDir
+  $alRc = $LASTEXITCODE
+  $alLines = @($alOut | ForEach-Object { [string]$_ })
+  if ($alRc -ne 0 -or -not (Test-GuardComplete -Output $alLines -Name 'audit-allergen-line')) {
+    $why = if ($alRc -ne 0) { "exited $alRc" } else { 'exited 0 without AUDIT-ALLERGEN-LINE-COMPLETE, so it did not finish' }
+    throw ("propagate: allergen-line gate REFUSED before publish ({0}) - nothing was sent, stamps NOT advanced.`n{1}" -f $why, (@($alLines | Select-Object -Last 30) -join "`n"))
+  }
+  Write-Host ('   allergen-line gate: ' + (@($alLines | Where-Object { $_ -match '^audit-allergen-line: examined' }) -join ''))
+  return (& $Publish)
+}
+
 if ($SelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
@@ -219,6 +247,60 @@ if ($SelfTest) {
     Set-Content (Join-Path $tmp 'c.json') '{"x":9}' -Encoding UTF8
     $d2 = Get-DirtySlugs $stamps @(Get-ChildItem "$tmp\*.json")
     T 'MUST FIRE  a brand-new spec is dirty (the silent-append class)' ($d2 -contains 'c') ($d2 -join ',')
+
+    # ---- THE ALLERGEN GATE SITS BETWEEN THE BUILT CARD AND THE PUBLISH (2026-09-18) ----------------
+    # Driven through the REAL Invoke-GatedPublish and the REAL audit-allergen-line.ps1 over files in a
+    # sandbox, with a STUB publish that only records that it was called - never engine\publish.ps1 and
+    # never Ghost. The expected line comes from the live table through the one Format-TcAllergenLine, the
+    # way build-card2 renders it, over two ingredients audit-allergen-line's own self-test pins in that
+    # table (Worcestershire: fish, Oyster Sauce: shellfish).
+    . (Join-Path $mp 'lib\allergen-lib.ps1')
+    $alRec = Join-Path $tmp 'al-recipes'; $alBuilt = Join-Path $tmp 'al-built'
+    New-Item -ItemType Directory -Force $alRec, $alBuilt | Out-Null
+    $alSlug = 'al-drill-slug'
+    Set-Content -LiteralPath (Join-Path $alRec ($alSlug + '.json')) -Encoding UTF8 -Value `
+      '{"slug":"al-drill-slug","scaler":{"ing":[{"item":"Worcestershire Sauce","grams":30},{"item":"Oyster Sauce","grams":40}]}}'
+    $alTable = (Get-TcAllergenTable -Path (Join-Path $mp 'db\allergens.json')).Items
+    $alSpecIng = @([pscustomobject]@{ item = 'Worcestershire Sauce'; grams = 30 }, [pscustomobject]@{ item = 'Oyster Sauce'; grams = 40 })
+    $alRight = Format-TcAllergenLine (Get-TcRecipeAllergens $alSpecIng $alTable) $alSlug
+    # the stale line: rendered before the Worcestershire was added, so it omits the fish
+    $alStale = Format-TcAllergenLine (Get-TcRecipeAllergens @($alSpecIng | Where-Object { $_.item -ne 'Worcestershire Sauce' }) $alTable) $alSlug
+    $alCard = Join-Path $alBuilt ($alSlug + '.body.html')
+    $script:alPublished = 0
+    $alStub = { $script:alPublished++; 'published+verified OK: 1 / 1'; 'PUBLISH-UNSTAMPABLE: ' }
+    # UNTYPED on purpose: a [string] parameter turns $null into '' and the no-card case would write an empty
+    # card and test 'missing' instead (it did, on the first run of these cases).
+    function AlRun($CardHtml) {
+      if ($null -eq $CardHtml) { Remove-Item -LiteralPath $alCard -Force -ErrorAction SilentlyContinue }
+      else { Set-Content -LiteralPath $alCard -Encoding UTF8 -Value $CardHtml }
+      $script:alPublished = 0
+      $threw = ''; $out = $null
+      try { $out = Invoke-GatedPublish -Slugs @($alSlug) -RecipesDir $alRec -BuiltDir $alBuilt -Publish $alStub } catch { $threw = $_.Exception.Message }
+      return [pscustomobject]@{ Threw = $threw; Out = @($out); Published = $script:alPublished }
+    }
+    $r = AlRun ('<ul class="smp-ing"><li>x</li></ul><!--TC-PAYWALL-->')
+    T 'MUST FIRE  a built card with NO allergen line is refused BEFORE publish, and publish is never called' `
+      ($r.Threw -match 'allergen-line gate REFUSED before publish' -and $r.Threw -match 'missing' -and $r.Published -eq 0) ("threw='" + $r.Threw.Split("`n")[0] + "' published=" + $r.Published)
+    $r = AlRun ('<ul class="smp-ing"><li>x</li></ul>' + $alStale + '<!--TC-PAYWALL-->')
+    T 'MUST FIRE  a built card whose line is WRONG (stale, omits the anchovy) is refused before publish' `
+      ($r.Threw -match 'REFUSED before publish' -and $r.Threw -match 'disagrees' -and $r.Published -eq 0) ("threw='" + $r.Threw.Split("`n")[0] + "' published=" + $r.Published)
+    $r = AlRun $null
+    T 'MUST FIRE  a dirty slug with NO built card is refused before publish, never skipped' `
+      ($r.Threw -match 'REFUSED before publish' -and $r.Threw -match 'no-card' -and $r.Published -eq 0) ("threw='" + $r.Threw.Split("`n")[0] + "' published=" + $r.Published)
+    $r = AlRun ('<ul class="smp-ing"><li>x</li></ul>' + $alRight + '<!--TC-PAYWALL-->')
+    T 'CLEAN TWIN a card carrying exactly its derived line passes the gate and REACHES the (stub) publish, whose output comes back' `
+      ($r.Threw -eq '' -and $r.Published -eq 1 -and (@($r.Out) -join '|') -match 'published\+verified OK') ("threw='" + $r.Threw + "' published=" + $r.Published + " out=" + (@($r.Out) -join '|'))
+
+    # ORDER, on the live path: publish.ps1 is reached ONLY through Invoke-GatedPublish, and that call comes
+    # after build-cards. Needles by concatenation so this block cannot match itself.
+    $pSrc = [IO.File]::ReadAllText($PSCommandPath)
+    $pubCall = "& '.\engine\" + "publish.ps1'"
+    $iB = $pSrc.IndexOf("& '.\engine\build-" + "cards.ps1' -Slugs `$dirty")
+    $iG = $pSrc.IndexOf('$pubOut = Invoke-Gated' + 'Publish')
+    $iP = $pSrc.IndexOf($pubCall)
+    T 'MUST FIRE  the live publish runs only inside the gated call, after build-cards' `
+      (($iB -ge 0) -and ($iG -gt $iB) -and ($iP -gt $iG) -and ([regex]::Matches($pSrc, [regex]::Escape($pubCall)).Count -eq 1)) `
+      ("build@{0} gated@{1} publish@{2} publishCalls={3}" -f $iB, $iG, $iP, [regex]::Matches($pSrc, [regex]::Escape($pubCall)).Count)
   } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
@@ -306,8 +388,10 @@ try {
     Write-Output ("   create authority: {0} slug(s) may be created; any other new slug is refused" -f $allowCreate.Count)
   }
   else { Write-Output '   create authority: NONE - every slug with no live post will be refused' }
-  # In-process call operator, so the array reaches publish.ps1 as an array.
-  $pubOut = & '.\engine\publish.ps1' -Slugs $dirty -AllowCreate $allowCreate
+  # In-process call operator, so the array reaches publish.ps1 as an array. Through Invoke-GatedPublish,
+  # which refuses (throws) before this block runs if any dirty slug's built card lacks its allergen line.
+  $pubOut = Invoke-GatedPublish -Slugs $dirty -RecipesDir (Join-Path $mp 'db\recipes') -BuiltDir (Join-Path $mp 'db\built') `
+    -Publish { & '.\engine\publish.ps1' -Slugs $dirty -AllowCreate $allowCreate }
   $pubOut | Select-Object -Last 2
   if (@($pubOut | Where-Object { $_ -match 'published\+verified OK' }).Count -eq 0) { throw 'propagate: publish did not report its verified-OK line - stamps NOT advanced' }
   # A STAMP IS A CLAIM THAT THE SPEC IS LIVE AS WRITTEN. publish.ps1 prints its verified-OK line whether or

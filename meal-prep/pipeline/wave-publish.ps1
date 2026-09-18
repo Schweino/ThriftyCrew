@@ -246,6 +246,58 @@ function Get-FeedcovFailedSlugs {
   return , @($scoped)
 }
 
+# THE P5 GATE RUNNER. Defined here, above the self-test, so the self-test can drive it; the P5 section
+# below calls it. rc=0 is the VERDICT and the completion marker is COMPLETION - see the P5 section.
+# P5 COULD NOT REFUSE ANYTHING FROM 2026-08-15 TO 2026-09-18 (found while repairing the allergen gate's
+# order, see Invoke-P5Gates below). Invoke-Gate wrote its two diagnostic lines with Write-Output and then
+# said `return $false`, so a RED gate handed its caller an ARRAY - the diagnostics plus the $false - and
+# `if (-not (Invoke-Gate ...))` negated a non-empty array, which is $false. The refusal never ran, the
+# diagnostics were swallowed by the `if`, and the loop printed "P5 <gate> clean" for a gate that had just
+# exited 1. Measured at 0465267ef on keto-cheeseburger-skillet: audit-allergen-line exited 1 with its
+# completion marker, Invoke-Gate returned 10 elements, and a -DryRun printed "P5 audit-allergen-line clean"
+# and "every gate above passed". The shape is [[ps-callback-output-joins-the-return]]: anything a function
+# writes to the output stream joins its return value.
+# So the verdict is now ONE object and nothing else is written: Ok, Reason and the Report lines, which
+# the caller prints. A function whose return value is a verdict must not also write to the pipeline.
+function Invoke-Gate {
+  param([string]$Label, [string]$Script, [string[]]$GateArgs = @(), [string]$Marker = '', [string]$MarkerText = '')
+  # Invoke-NativeScript, never `2>&1`: under EAP=Stop a gate's first stderr line is a terminating throw in
+  # PS 5.1, which kills the publish instead of letting this read the verdict (grocery\test-native-stderr-eap.ps1).
+  # .Lines keeps stdout and stderr in arrival order, as the redirect did.
+  $gateRes = Invoke-NativeScript $Script @GateArgs
+  $out = $gateRes.Lines
+  $rc = $gateRes.ExitCode
+  $lines = @($out | ForEach-Object { [string]$_ })
+  $reason = ''
+  if ($rc -ne 0) { $reason = "exited $rc" }
+  elseif ($Marker -and -not (Test-GuardComplete $lines $Marker)) { $reason = "exited 0 but never printed $($Marker.ToUpper())-COMPLETE, so it did not finish" }
+  elseif ($MarkerText -and -not (@($lines | Where-Object { $_ -match [regex]::Escape($MarkerText) }).Count)) { $reason = "exited 0 but never printed '$MarkerText', so it did not finish" }
+  $report = @()
+  if ($reason) {
+    $report += ("      ! {0} {1}:" -f $Label, $reason)
+    $report += @(@($lines | Select-Object -Last 25) | ForEach-Object { "        " + $_ })
+  }
+  return [pscustomobject]@{ Ok = (-not $reason); Reason = $reason; Report = $report }
+}
+
+# THE P5 LOOP, as a function so the self-test drives the REAL loop over real child scripts rather than
+# pinning Invoke-Gate alone: the founding bug above lived in the interaction between the function and its
+# call site, and a test of either half on its own passed. Returns ONE object: Refused is the first gate's
+# label that is not clean ('' when every gate passed), Report its diagnostics, Passed the labels that ran
+# clean before it. It writes nothing to the pipeline, for the reason above.
+function Invoke-P5Gates {
+  param($Gates)
+  $passed = @()
+  foreach ($g in @($Gates)) {
+    if (-not (Test-Path -LiteralPath $g.path)) {
+      return [pscustomobject]@{ Refused = [string]$g.label; Report = @("      ! gate script missing: " + $g.path); Passed = $passed }
+    }
+    $v = Invoke-Gate $g.label $g.path $g.args $g.marker $g.text
+    if (-not $v.Ok) { return [pscustomobject]@{ Refused = [string]$g.label; Report = @($v.Report); Passed = $passed } }
+    $passed += [string]$g.label
+  }
+  return [pscustomobject]@{ Refused = ''; Report = @(); Passed = $passed }
+}
 # ===================================================================================================
 # SELF-TEST
 # ===================================================================================================
@@ -519,6 +571,58 @@ var OTHER=1;
     (($slsBody -notmatch '\bFail\b') -and ($slsBody -notmatch '\bexit\s')) `
     'Save-LedgerState can now fail a publish whose recipes are live'
 
+  # ---- P5 MUST BE ABLE TO REFUSE (2026-09-18). From 2026-08-15 a red P5 gate read as clean: Invoke-Gate
+  # wrote its diagnostics to the output stream and returned $false, so its caller got an ARRAY and
+  # `-not (array)` is $false. These drive the REAL loop (Invoke-P5Gates) over real child scripts, so the
+  # function and its call site are tested together - the bug lived in neither half alone.
+  $p5Tmp = Join-Path ([IO.Path]::GetTempPath()) ("wp-p5-" + [Guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $p5Tmp -Force | Out-Null
+  try {
+    $u8 = New-Object Text.UTF8Encoding($false)
+    $redGate   = Join-Path $p5Tmp 'red-gate.ps1'
+    $cleanGate = Join-Path $p5Tmp 'clean-gate.ps1'
+    $halfGate  = Join-Path $p5Tmp 'half-gate.ps1'
+    # The founding shape, frozen: a gate that FINISHED (marker printed) and found something (exit 1), with
+    # several lines of findings - exactly what audit-allergen-line printed for keto-cheeseburger-skillet.
+    [IO.File]::WriteAllText($redGate, ("Write-Output 'red-gate: examined 1 of 1'`nWrite-Output '  1 of 1 card(s) do not carry the line'`nWrite-Output 'RED-GATE-COMPLETE findings=1 swept=1'`nexit 1`n"), $u8)
+    [IO.File]::WriteAllText($cleanGate, ("Write-Output 'clean-gate: examined 1 of 1'`nWrite-Output 'CLEAN-GATE-COMPLETE findings=0'`nexit 0`n"), $u8)
+    [IO.File]::WriteAllText($halfGate, ("Write-Output 'half-gate: working'`nexit 0`n"), $u8)
+    $gClean = @{ label = 'clean-gate'; path = $cleanGate; args = @(); marker = 'clean-gate'; text = '' }
+    $gRed   = @{ label = 'red-gate';   path = $redGate;   args = @(); marker = 'red-gate';   text = '' }
+    $gHalf  = @{ label = 'half-gate';  path = $halfGate;  args = @(); marker = 'half-gate';  text = '' }
+
+    $rRed = Invoke-P5Gates @($gClean, $gRed, $gClean)
+    T 'MUST FIRE  a P5 gate that exits 1 REFUSES the wave, and the refusal names it (it read "clean" from 2026-08-15)' `
+      (@($rRed).Count -eq 1 -and $rRed.Refused -eq 'red-gate') ("elements=" + @($rRed).Count + " refused='" + $rRed.Refused + "'")
+    T '   ...and its diagnostics reach the caller as a REPORT, not swallowed by the if' `
+      ((@($rRed.Report) -join ' ') -match 'red-gate exited 1' -and (@($rRed.Report) -join ' ') -match 'do not carry the line') (@($rRed.Report) -join ' | ')
+    T '   ...and nothing after the red gate ran' `
+      ((@($rRed.Passed) -join ',') -eq 'clean-gate') (@($rRed.Passed) -join ',')
+    $rHalf = Invoke-P5Gates @($gHalf)
+    T 'MUST FIRE  a P5 gate that exits 0 without its completion marker refuses - never ran is not clean' `
+      ($rHalf.Refused -eq 'half-gate' -and (@($rHalf.Report) -join ' ') -match 'HALF-GATE-COMPLETE') ("refused='" + $rHalf.Refused + "'")
+    $rMiss = Invoke-P5Gates @(@{ label = 'gone-gate'; path = (Join-Path $p5Tmp 'no-such-gate.ps1'); args = @(); marker = ''; text = '' })
+    T 'MUST FIRE  a P5 gate script that is missing refuses' ($rMiss.Refused -eq 'gone-gate') ("refused='" + $rMiss.Refused + "'")
+    $rOk = Invoke-P5Gates @($gClean, $gClean)
+    T 'CLEAN TWIN every clean gate passes, as ONE object whose Passed lists each, and the wave proceeds' `
+      (@($rOk).Count -eq 1 -and $rOk.Refused -eq '' -and @($rOk.Passed).Count -eq 2) ("elements=" + @($rOk).Count + " refused='" + $rOk.Refused + "' passed=" + @($rOk.Passed).Count)
+  } finally { Remove-Item -LiteralPath $p5Tmp -Recurse -Force -ErrorAction SilentlyContinue }
+  # ...and the live P5 section reads the loop's verdict object, not a boolean it negates.
+  T '   the live P5 section calls Invoke-P5Gates and reads .Refused' `
+    (($selfSrc -match ('(?m)^\$p5 = Invoke-P5' + 'Gates \$gates')) -and ($selfSrc -match ('(?m)^if \(\$p5\.Ref' + 'used\)'))) 'P5 no longer reads the loop verdict'
+
+  # ---- THE ALLERGEN LINE IS CHECKED WHERE THE CARD EXISTS (2026-09-18). At P5 no card of the wave has
+  # been built, so the check could never pass a real wave there. It runs in propagate, between
+  # build-cards and engine\publish.ps1. Needles by concatenation, so this block cannot match itself.
+  $alNeedle = "label = 'audit-" + "allergen-line'"
+  T 'MUST FIRE  the allergen-line check is NOT in the P5 table, where no card of the wave exists yet' `
+    (-not $selfSrc.Contains($alNeedle)) 'audit-allergen-line is back in the P5 gate table'
+  $propSrc = [IO.File]::ReadAllText((Join-Path $here 'propagate-recipes.ps1'))
+  $iBuild = $propSrc.IndexOf("& '.\engine\build-" + "cards.ps1' -Slugs `$dirty")
+  $iGated = $propSrc.IndexOf('$pubOut = Invoke-Gated' + 'Publish')
+  T 'MUST FIRE  propagate publishes ONLY through the allergen-gated call, and only after build-cards' `
+    (($iBuild -ge 0) -and ($iGated -gt $iBuild)) ("build-cards at {0}, gated publish at {1}" -f $iBuild, $iGated)
+
   if ($f -eq 0) { Write-Output 'wave-publish SELF-TEST PASS'; exit 0 }
   Write-Output ("wave-publish SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
 }
@@ -613,26 +717,6 @@ Write-Output ("  P4  v2 specs               {0}/{0} present in db\recipes" -f $s
 # rc=0 is the VERDICT; the completion marker is COMPLETION, and the estate has been bitten five times by
 # conflating them - a detector that dies mid-run is silent, because "no findings" and "never ran" look
 # identical from outside. So a clean bill here needs both: exit 0 AND the guard's own end-of-run line.
-function Invoke-Gate {
-  param([string]$Label, [string]$Script, [string[]]$GateArgs = @(), [string]$Marker = '', [string]$MarkerText = '')
-  # Invoke-NativeScript, never `2>&1`: under EAP=Stop a gate's first stderr line is a terminating throw in
-  # PS 5.1, which kills the publish instead of letting this read the verdict (grocery\test-native-stderr-eap.ps1).
-  # .Lines keeps stdout and stderr in arrival order, as the redirect did.
-  $gateRes = Invoke-NativeScript $Script @GateArgs
-  $out = $gateRes.Lines
-  $rc = $gateRes.ExitCode
-  $lines = @($out | ForEach-Object { [string]$_ })
-  $reason = ''
-  if ($rc -ne 0) { $reason = "exited $rc" }
-  elseif ($Marker -and -not (Test-GuardComplete $lines $Marker)) { $reason = "exited 0 but never printed $($Marker.ToUpper())-COMPLETE, so it did not finish" }
-  elseif ($MarkerText -and -not (@($lines | Where-Object { $_ -match [regex]::Escape($MarkerText) }).Count)) { $reason = "exited 0 but never printed '$MarkerText', so it did not finish" }
-  if ($reason) {
-    Write-Output ("      ! {0} {1}:" -f $Label, $reason)
-    @($lines | Select-Object -Last 25) | ForEach-Object { Write-Output ("        " + $_) }
-    return $false
-  }
-  return $true
-}
 # audit-unbid-ingredients is scoped to THIS wave's slugs, not the whole db: the 23 pre-existing
 # offenders found on 2026-08-16 must not block an unrelated wave from publishing, but no wave may add
 # to them. An unbid ingredient is costed at $0.00 by cost-recipes without failing, so the card claims a
@@ -674,24 +758,23 @@ $gates = @(
   # kindless one refuses in wording that reads like a verdict on the recipe. Eleven recipes sat terminal
   # on exactly that. Repo-wide rather than wave-scoped, and a no-op on a GO report with no blockers.
   @{ label = 'audit-wave-blocker-headings'; path = (Join-Path $here 'audit-wave-blocker-headings.ps1'); args = @(); marker = 'wave-blocker-headings'; text = '' },
-  # THE ALLERGEN LINE (Brad's ruling, 2026-09-12, backlog I144). Every card carries a generated
-  # 'Contains' line over the nine major US allergens; this refuses one that is missing or disagrees with
-  # the spec's current ingredients. It is the only gate here about reader SAFETY rather than money, and
-  # it is the one whose failure a reader cannot detect for themselves: 42 of 583 recipes contain
-  # Worcestershire sauce, which contains anchovy, and the ingredient list never said so.
-  # Wave-scoped, like the other spec gates, and the wave's cards were built by the wave, so it is green
-  # on a freshly built wave and red on a stale card - which is exactly the failure it exists for.
-  # Verified by its completion marker rather than a text line: a detector that dies mid-run is silent,
-  # and on this gate "no findings" must never read the same as "never ran".
-  @{ label = 'audit-allergen-line';       path = (Join-Path $here 'audit-allergen-line.ps1');       args = @('-Slugs', ($slugs -join ',')); marker = 'audit-allergen-line'; text = '' },
+  # THE ALLERGEN LINE IS NOT CHECKED HERE, and it used to be (2026-09-12 to 2026-09-18). It asks whether
+  # the BUILT card carries the line its ingredients derive, and at P5 no card of this wave has been built:
+  # nothing in the hunt flow builds one, and E4's propagate is what renders them. So here it read "no card"
+  # for every new recipe and "missing" for every republished pre-I144 card, and it could never have
+  # passed a real wave (it was only green because P5 could not refuse at all - see Invoke-Gate). It now
+  # runs inside propagate-recipes.ps1, AFTER build-cards and BEFORE engine\publish.ps1, over the exact
+  # bytes publish reads, for every slug publish is about to send - this wave's and any collateral dirty
+  # spec. That is the only place the guarantee "no card publishes with a wrong or missing allergen line"
+  # can be checked against the card that actually ships. The self-test below pins that it is absent here
+  # and wired there.
   @{ label = 'test-guards';               path = (Join-Path $here 'test-guards.ps1');               args = @();         marker = '';                    text = 'ALL GUARD PREDICATE TESTS PASS' }
 )
-foreach ($g in $gates) {
-  if (-not (Test-Path $g.path)) { Fail ("gate script missing: " + $g.path) }
-  if (-not (Invoke-Gate $g.label $g.path $g.args $g.marker $g.text)) {
-    Fail ("{0} is not clean. Fix it through the owning stage - never weaken a gate to pass a wave." -f $g.label)
-  }
-  Write-Output ("  P5  {0,-26} clean" -f $g.label)
+$p5 = Invoke-P5Gates $gates
+foreach ($lbl in @($p5.Passed)) { Write-Output ("  P5  {0,-26} clean" -f $lbl) }
+if ($p5.Refused) {
+  @($p5.Report) | ForEach-Object { Write-Output $_ }
+  Fail ("{0} is not clean. Fix it through the owning stage - never weaken a gate to pass a wave." -f $p5.Refused)
 }
 
 # ---- P6. THE DEDUP ESCAPE GUARD -------------------------------------------------------------------
@@ -790,7 +873,7 @@ if ($runDryRun) {
   Write-Output ("  E1  migrate-prose-tokens.ps1 -Slugs <{0} slugs> -Apply" -f $slugs.Count)
   Write-Output "  E2  compute-v2-perserving.ps1 + reanchor-machine-fields.ps1 (everyday cost basis)"
   Write-Output ("  E3  update-recipes-db.ps1 -SpecList {0}" -f (Split-Path $slugListPath -Leaf))
-  Write-Output '  E4  propagate-recipes.ps1  (recipes-db sync -> db-agreement gate -> planner -> cards -> publish)'
+  Write-Output '  E4  propagate-recipes.ps1  (recipes-db sync -> db-agreement gate -> planner -> cards -> allergen-line gate -> publish)'
   Write-Output '  E4b advance every wave slug to `published` (BEFORE E5, so the commit records it)'
   Write-Output '  E5  git add <scoped> && git commit && git push'
   Write-Output '  E6  top5-weekly -NoPublish + export-feed, then feed-covers-published scoped to this wave'
