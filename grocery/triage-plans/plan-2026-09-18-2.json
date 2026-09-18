@@ -19,7 +19,7 @@
       ],
       "surface_fix": {
         "what": "(1) unregister the one task and land the prepared removal together; (2) give the approvals server a watch row; (3) nothing: the rotation runs on the next chain run whose guards pass",
-        "files": ["grocery/probe-produce-intraday.ps1", "grocery/produce-intraday-panel.json", "ops/scheduled-tasks/tc-produce-intraday-probe.xml", "grocery/expected-automations.json", "grocery/audit-script-census.ps1", ".gitignore", "design/MEASURE-produce-intraday-2026-09-12.md", "design/BACKLOG-course-findings.md"],
+        "files": ["grocery/probe-produce-intraday.ps1", "grocery/produce-intraday-panel.json", "ops/scheduled-tasks/tc-produce-intraday-probe.xml", "grocery/expected-automations.json", "grocery/audit-script-census.ps1", ".gitignore", "design/MEASURE-produce-intraday-2026-09-12.md", "design/BACKLOG-course-findings.md", "ops/scheduled-tasks/tc-approvals-page.xml"],
         "exact_change": "Unregister-ScheduledTask -TaskName 'TC Produce Intraday Probe' -Confirm:$false (that task only; Get-ScheduledTask afterwards finds none); cherry-pick b4619d425 (deletes the probe, panel, task XML, watch row, census entry and two .gitignore lines); MEASURE doc Status and backlog I125 rewritten to say the removal landed; expected-automations.json windows_tasks += 'TC Approvals Page' (max_age_hours 30, no proves, why records it is an at-logon server outside the repo)"
       },
       "root_cause": "(1) a bounded measurement whose last step needed a scheduled-task change that the lane which read the verdict would not make, so the stale page repeated daily while the removal sat on a branch; (2) a TC task registered on this box from outside the repo with no committed definition, which the change-time registry gates (audit-task-registry, audit-task-registration) structurally cannot see because they read ops/scheduled-tasks and the registrars; (3) rotate-free-dinners is deliberately skipped while guards hold, so its output goes stale for exactly as long as the board is held",
@@ -48,7 +48,7 @@
       "publish_batch": null,
       "status": "done",
       "premise_verified": "true: verdict file read (CLOSE, 0 of 28), the task existed and was Ready with no future trigger, the branch diff was exactly the seven files the page names, and the other two issues were re-read live at 16:30",
-      "deviation": "the dispatch described the verdict and I125 close as still to do; both were already done by 4d8192903 (the MEASURE doc's Verdict section and backlog I125), so this item only corrected their Status lines to say the removal landed",
+      "deviation": "the dispatch described the verdict and I125 close as still to do; both were already done by 4d8192903 (the MEASURE doc's Verdict section and backlog I125), so this item only corrected their Status lines to say the removal landed. SECOND DEVIATION: the first push-main was refused by run-gates (419 pass, 1 fail): ops/audit-task-registration -SelfTest case 'every watched task has a definition' named TC Approvals Page as undefined, because a watch row needs a committed definition too. The live task was exported to ops/scheduled-tasks/tc-approvals-page.xml (SID, logon account and profile path replaced by placeholders); audit-task-registration then read 11 definitions, 11 rows, 0 findings, and its self-test passed 20 of 20.",
       "shipped_commit": "the commit subject-lined 'Triage plan-2026-09-18-2' on main, with the removal cherry-picked from b4619d425 directly before it"
     },
     {

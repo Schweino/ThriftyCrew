@@ -66,7 +66,7 @@
                           {
                               "name":  "TC Approvals Page",
                               "max_age_hours":  30,
-                              "why":  "at-logon server for Brad's approvals page (pythonw running approvals-server.py from outside this repo, under the user profile's .claude-wt\\approvals). Registered 2026-09-17 by another lane with no row here and no committed definition in ops/scheduled-tasks, so the change-time registry gate could not see it and the REGISTRY DRIFT check paged it as TASK UNWATCHED on 2026-09-18 (queue 2026-09-18-1dfd03). While the server is up the task reads Running (267009) and is OK at any age; if the server dies the task goes Ready with LastRunTime at the last logon, so this row pages TASK STALE once that logon is over 30h old. No proves: a long-running server writes no dated output."
+                              "why":  "at-logon server for Brad's approvals page (pythonw running approvals-server.py from outside this repo, under the user profile's .claude-wt\\approvals). Registered 2026-09-17 by another lane with no row here and no committed definition (it is now ops/scheduled-tasks/tc-approvals-page.xml), so the change-time registry gate could not see it and the REGISTRY DRIFT check paged it as TASK UNWATCHED on 2026-09-18 (queue 2026-09-18-1dfd03). While the server is up the task reads Running (267009) and is OK at any age; if the server dies the task goes Ready with LastRunTime at the last logon, so this row pages TASK STALE once that logon is over 30h old. No proves: a long-running server writes no dated output."
                           }
                       ],
     "startup_entries":  [
