@@ -1,7 +1,8 @@
 # Does a US chain's online produce price move between morning and afternoon?
 
 Backlog **I125**. Bar written **2026-09-12, before the first reading**. Readings **2026-09-13 and
-2026-09-14**. Verdict: **not in yet** (see [Status](#status)).
+2026-09-14**. Verdict: **CLOSE** - 0 moves over 28 morning-vs-afternoon pairs, read 2026-09-19 (see
+[Verdict](#verdict)).
 
 **Harness:** `grocery/probe-produce-intraday.ps1`, landed at **`62a2d10d0`**.
 **Panel and bar:** `grocery/produce-intraday-panel.json`, pinned at the same commit.
@@ -127,7 +128,80 @@ It would **not** say a different banner does not move, that the in-store shelf t
 reads the e-commerce price, which is what the board publishes), or that nothing moves after 20:00.
 The evening readings bound the third of those a little and are reported beside the verdict.
 
+## Verdict
+
+**CLOSE. At this banner, at this store, over these fifteen products, on 2026-09-13 and 2026-09-14,
+the online price did not move between morning and afternoon.** US chain online produce prices here do
+not move intraday on this evidence, and no capture schema changes.
+
+Read 2026-09-19 by `grocery/probe-produce-intraday.ps1 -Verdict` at `f092c8d57` (harness blob
+`3d87ef06f121`, panel blob `ae20203f7462`), over a copy of the main checkout's
+`grocery/out/produce-intraday.jsonl` (105 rows, sha256 `DD3376436B3F...`). Exit **0**, verbatim:
+
+```
+produce-intraday VERDICT: CLOSE - No intraday movement found. Record that US chain online produce prices here do not move intraday, close I125, change no capture schema.
+  deciding: 0 price move(s) of at least $0.01 over 28 morning-vs-afternoon pair(s) (planned 30, bar 24), 15 product(s) across 3 day(s)
+  supplementary (NOT in the verdict): 0 move(s) over 30 afternoon-vs-evening pair(s)
+  rows read 105, unreadable 2
+    could not look: 2026-09-13 morning spring-mix: error:The remote server returned an error: (503) Server Unavailable.
+    could not look: 2026-09-13 morning broccoli: error:The remote server returned an error: (404) Not Found.
+```
+
+**The readings happened when they were meant to.** Every one of the six scheduled readings is stamped
+at its trigger minute plus one second (08:30:01, 15:30:01, 20:00:01 -05:00 on both days), so no window
+label was manufactured by a late start. All 90 scheduled readings ran through the same harness blob
+`3d87ef06f121` that scored them, although the `harness_commit` field names three different commits
+(`18a19b5fe`, `f413337d2`, `560d7d133`) because it records the checkout's HEAD at read time. The pilot's
+15 rows ran at `62a2d10d0` (blob `c6eaa2485c1f`) and form no deciding pair. Every row carries the one
+panel sha256 `BBD767D385B8...`.
+
+**The two could-not-looks cost two pairs, both on 2026-09-13's morning, and neither is scored as "did
+not move".** 28 of the 30 planned pairs decided, against a bar of 24. Both products read cleanly at
+the other five scheduled readings.
+
+**The deciding pairs**, morning (08:30) against afternoon (15:30), in dollars. Every one has a delta of
+0.00:
+
+| Commodity | Kind | 2026-09-13 | 2026-09-14 |
+|---|---|---|---|
+| strawberries | perishable | 3.99 / 3.99 | 3.99 / 3.99 |
+| raspberries | perishable | 2.50 / 2.50 | 2.50 / 2.50 |
+| blueberries | perishable | 4.79 / 4.79 | 4.79 / 4.79 |
+| spring-mix | perishable | could not look (503) | 3.99 / 3.99 |
+| spinach | perishable | 2.49 / 2.49 | 2.49 / 2.49 |
+| lettuce | perishable | 2.79 / 2.79 | 2.79 / 2.79 |
+| asparagus | perishable | 3.69 / 3.69 | 3.69 / 3.69 |
+| fresh-green-beans | perishable | 2.19 / 2.19 | 2.19 / 2.19 |
+| broccoli | perishable | could not look (404) | 2.19 / 2.19 |
+| cherry-tomatoes | perishable | 2.99 / 2.99 | 2.99 / 2.99 |
+| mushrooms | perishable | 2.39 / 2.39 | 2.39 / 2.39 |
+| avocados | perishable | 1.00 / 1.00 | 1.00 / 1.00 |
+| bananas | control | 0.55 / 0.55 | 0.55 / 0.55 |
+| russet-potatoes | control | 0.89 / 0.89 | 0.89 / 0.89 |
+| onions | control | 1.19 / 1.19 | 1.19 / 1.19 |
+
+**The evening readings (outside the verdict) did not move either:** 0 of 30 afternoon-vs-evening pairs.
+
+**One thing the data shows that the bar did not ask, and what it limits.** Every product read the
+SAME price at every one of its 103 readable readings across all three dates, the pilot included, so
+there was no day-to-day move either. That is consistent with prices that simply held for the
+weekend (Saturday 2026-09-12 to Monday 2026-09-14), and it is also what a feed that republished one
+fixed daily or weekly price would look like. This measurement cannot tell those two apart, and it
+does not need to: the board publishes this same e-commerce price, so a price that does not move in the
+feed does not move on the board, whatever the shelf tag does. It is the reason the CLOSE says "online".
+
 ## Status
+
+**2026-09-19: steps 1 to 3 below are done** (verdict above, I125 closed). **Step 4 is prepared and held
+on branch `claude/i125-probe-removal`**, because it unregisters a Windows scheduled task, which an agent
+does not do on this box. Brad's action: `Unregister-ScheduledTask -TaskName 'TC Produce Intraday
+Probe' -Confirm:$false`, then land that branch the same day - in that order, because a watched row with
+no task pages TASK MISSING and a task with no row pages TASK UNWATCHED.
+
+**The stale page is not sent once.** health-heartbeat dedups on a signature of its issue text, and a
+TASK STALE line carries the task's age in hours (`last ran 87.5h ago` when read on 2026-09-19), so the
+signature changes every run and the page can repeat at every heartbeat until the task is gone. The paragraph below
+assumed it would page once.
 
 Readings are driven by a **bounded** Windows task, `TC Produce Intraday Probe`: six one-time triggers
 and then it is inert, so nothing permanent is added to this box. It is watched in

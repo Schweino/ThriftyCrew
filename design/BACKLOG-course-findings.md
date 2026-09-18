@@ -10273,7 +10273,20 @@ an older Aldi feed's store identity was a typed literal rather than captured dat
 builder already does. Today a store swap underneath a feed is invisible rather than merely
 unrecorded, and no historical row can be re-checked against the shelf it came from.
 
-### I125 - Produce prices may move within a single day, and nothing here records an hour `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 READ`
+### I125 - Produce prices may move within a single day, and nothing here records an hour `DONE` `queue-7`
+
+**Done 2026-09-19. The verdict is CLOSE: US chain online produce prices here do not move intraday, and
+no capture schema changes.** `grocery\probe-produce-intraday.ps1 -Verdict`, run at `f092c8d57` over a
+copy of the main checkout's readings, exited 0 with **0 moves of at least $0.01 over 28
+morning-vs-afternoon pairs** (planned 30, bar 24, both written before the first reading), 15 products
+at Baker's Saddlecreek on 2026-09-13 and 2026-09-14. The 2 pairs short are two 2026-09-13 morning
+could-not-looks (a 503 and a 404), counted and named, never scored as "did not move". The 20:00
+readings, outside the verdict, moved 0 of 30 times as well. Every reading landed at its trigger minute,
+and all 90 scheduled readings ran through the same harness blob that scored them. The verdict block,
+the 28 pairs and what a CLOSE does not say (another banner, the shelf tag, after 20:00, and that a feed
+repeating one fixed price would look the same) are in `design\MEASURE-produce-intraday-2026-09-12.md`
+under `## Verdict`. **The probe's removal is prepared on branch `claude/i125-probe-removal` and held
+for Brad**, because it unregisters a Windows task; its watch row now says so in the page it sends.
 
 **BRAD RULED IT WORTH THE HOUR ON 2026-09-12, verbatim:** *"Yes, produce is compared store to store on
 the board, so this is worth the one hour. Run the cheap test once: one produce commodity at one chain
