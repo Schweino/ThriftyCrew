@@ -14815,7 +14815,7 @@ under 2%. Assert `sqlite_stat1` exists in `graph/pipeline/audit_graph_durability
 drops it is seen. `thriftycrew.db` (7 tables, 1.8 MB, rebuilt in one pass by `meal-prep/db/build_db.py`)
 gains nothing measurable and could take the same one line at the end of its build.
 
-### I213 - SQLite's WAL-reset corruption bug: this machine's Python bundles 3.49.1, inside the affected range `OPEN` `queue-8` `2-WAY` `RUNG1 MEASURE`
+### I213 - SQLite's WAL-reset corruption bug: this machine's Python bundles 3.49.1, inside the affected range `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14860,6 +14860,62 @@ database, the item closes DONE with the measurement as its reason. A runtime who
 is counted AFFECTED (a could-not-look never settles the question). The week-long overlap log proposed
 above is NOT required to reach the verdict: the bar asks whether an overlap CAN happen, and the log would
 only measure how often.
+
+**Rung 1 measured 2026-09-18, read-only, at base 239134013. All three facts hold, so by the bar above an
+upgrade is warranted, and because it changes a shared runtime it waits for Brad.**
+- **Source.** https://sqlite.org/wal.html (page updated 2026-08-25 19:42:39Z): affected "3.7.0 (2010-07-21)
+  through 3.51.2 (2026-01-09)", fixed in 3.51.3 (2026-03-13) with backports 3.44.6 and 3.50.7; it needs
+  WAL, two or more connections on one file in separate threads or processes, and a write or checkpoint by
+  both "at the same instant". https://sqlite.org/download.html lists 3.53.4 as current.
+- **Fact 1, version: 5 of 5 interpreters AFFECTED.** Only Python opens either database (no
+  `System.Data.SQLite`, `Microsoft.Data.Sqlite`, `sqlite3.exe` or node SQLite in tracked code). Every Python
+  on the box, read with `select sqlite_version()` from that interpreter: `C:\Codex\Python312\python.exe`,
+  `sidecar\.venv`, `C:\Codex\llm\.venv-train`, and the WindowsApps `python.exe` and `py.exe`. All five are
+  Python 3.12.10 with SQLite 3.49.1, and all three venvs load `_sqlite3.pyd` from `C:\Codex\Python312\DLLs`,
+  so **ONE file, `C:\Codex\Python312\DLLs\sqlite3.dll`** (3.49.1.0, 1,583,608 bytes, md5
+  8748951063B31A52634AC22D77072B1F, signed by the Python Software Foundation), is the SQLite of every runtime.
+- **Fact 2, mode.** Through a `mode=ro` connection: `graph\sqlite\graph.db` is `wal` (322,392,064 bytes, `-wal`
+  0 bytes, `-shm` 32,768), and `meal-prep\db\thriftycrew.db` is `delete`, so it is OUT of scope.
+- **Fact 3, concurrency: POSSIBLE.** `GraphDB.__init__` (`graph/lib/graphdb.py:69`) is a plain read-write
+  `sqlite3.connect`, with no lock anywhere in the file, and no mutex anywhere in the tree names the graph. 42
+  `open_db(`/`GraphDB(` call sites in 27 `.py` files outside graphdb.py use it (a few are self-tests on
+  temp files), among them readers such as
+  `graph/eval/status.py`, `board_parity.py` and `score.py`. The two SCHEDULED writers are serial inside
+  themselves: `TC Graph Nightly Matching` runs its stages one after another (21:30, repeating hourly to 05:30,
+  `-HardStop 06:30`), and the daily chain's graph-gates lane (`grocery/check-ad-cycles.ps1:1630`) runs
+  `import_all.py --observations` and then `status.py`. `resolve.py`'s thread pools share its ONE connection,
+  so they are not a second connection. What keeps nightly apart from the 07:00 and 08:00 capture tasks is the
+  clock alone: capture-run's `Global\tc-capture-run` mutex stops only a second capture-run, and nightly takes no
+  lock. **A hand run of any `open_db()` script from the main checkout is unserialised against both, at any
+  hour.** None of the 66 worktrees holds a `graph.db`, so the main checkout's copy is the only live one. No
+  overlap was observed and none was looked for: the bar asks whether one can happen.
+
+**The item's two proposed routes do not reach a fixed version on this box.** Python 3.13.6's Windows
+installer ships SQLite 3.50.4 (https://docs.python.org/release/3.13.6/whatsnew/changelog.html), which is still
+inside the range because the 3.50 backport is 3.50.7. `pysqlite3-binary` publishes Linux wheels only. The route
+that works is replacing that one DLL. **Smart App Control reads 0 (off) today**
+(`HKLM\...\CI\Policy\VerifiedAndReputablePolicyState`), where the memory
+`smart-app-control-blocks-unsigned-binaries` recorded 1 (enforcing) from 2026-06-23. That matters because
+sqlite.org's DLL is unsigned: if SAC is turned back on, an unsigned `sqlite3.dll` would stop every Python that
+imports `sqlite3`.
+
+**The question for Brad: which, if any, of these do we do about a rare race that can corrupt `graph.db`?**
+1. **Swap the DLL** (recommended). Put sqlite.org's `sqlite-dll-win-x64-3530400.zip` `sqlite3.dll` into
+   `C:\Codex\Python312\DLLs`, keeping the PSF 3.49.1 copy beside it as the rollback. One file closes the bug
+   for all five interpreters. It can be undone by copying one file back. The cost is an unsigned DLL under
+   every Python, which matters only if SAC is switched back on. The steps and the checks are in
+   `design/PLAN-sqlite-wal-reset-dll-2026-09-18.md` on branch `claude/i213-sqlite-plan`.
+2. **Shrink the exposure in code, with no runtime change.** Give `open_db()` a read-only form and move the
+   readers (`status.py` first) onto it, so only the real writers can checkpoint. It can be built without a
+   ruling, but it leaves hand-run WRITERS unserialised, so it narrows the window without closing it.
+3. **Accept it and watch.** The developers call it rare and not an emergency. `audit_graph_durability.py`'s
+   nightly `quick_check` would see the damage, and `graph.db` rebuilds from tracked files apart from the
+   mirrored learning tables. Nothing changes.
+4. **Upgrade Python** to a release whose installer bundles 3.50.7 or 3.51.3+. None was confirmed today, and
+   the sidecar and training venvs (torch, numpy) would have to be rebuilt. Not recommended.
+
+**Recommendation: 1, then 2 as an ordinary build.** 1 is the only option that closes the bug, and it is one
+reversible file. 2 costs nothing and narrows the window if 1 is ever rolled back.
 
 ### I214 - Constraints graph.db can gain for free at its next rebuild, and the one blocker (I200) `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 
