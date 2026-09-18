@@ -226,8 +226,45 @@ if ($SelfTest) {
     $env:TC_STAGE_WRITES = $sq2; $env:TC_WRITE_JOURNAL = $sj2
   }
 
+  # --- A PAGED READ ENDS ON OUR COUNT, NOT ON GHOST'S SAY-SO (2026-09-19, backlog I197). grocery\ghost-export.ps1
+  # followed meta.pagination.next until Ghost stopped sending one, so a next that repeated or rewound looped forever.
+  # Every $Fetch here is a stub, so no case reaches a network. The stub itself refuses past 50 calls: a neutered
+  # loop must END and read red with its call count, never hang the suite into run-gates' job timeout.
+  function New-PagedStub([object[]]$NextByPage) {
+    $script:pagedCalls = 0
+    $script:pagedNext = $NextByPage
+    return {
+      param($page)
+      $script:pagedCalls++
+      if ($script:pagedCalls -gt 50) { throw 'stub: fetched past 50 pages - the loop did not stop' }
+      $nx = if ($page -le $script:pagedNext.Count) { $script:pagedNext[$page - 1] } else { $script:pagedNext[-1] }
+      [pscustomobject]@{ posts = @('p' + $page); meta = [pscustomobject]@{ pagination = [pscustomobject]@{ page = $page; next = $nx } } }
+    }
+  }
+  function Invoke-PagedCase([scriptblock]$Fetch, [int]$Max) {
+    $threw = ''; $res = $null
+    try { $res = Invoke-TcGhostPaged -Fetch $Fetch -MaxPages $Max } catch { $threw = $_.Exception.Message }
+    return [pscustomobject]@{ Calls = $script:pagedCalls; Threw = $threw; Pages = @($res).Count; Items = (@($res) | ForEach-Object { $_.posts }) -join ',' }
+  }
+  # Every page answers next=1: page 1 names itself as the next page.
+  $pc = Invoke-PagedCase (New-PagedStub @(1)) 1000
+  T 'MUST FIRE  a next that REPEATS the page just read is refused after ONE fetch, not followed forever' (($pc.Calls -eq 1) -and ($pc.Threw -like '*did not advance*')) ("calls=" + $pc.Calls + " threw=" + $pc.Threw)
+  # Page 1 says 2, page 2 rewinds to 1.
+  $pc = Invoke-PagedCase (New-PagedStub @(2, 1)) 1000
+  T 'MUST FIRE  a next that REWINDS is refused on the page that rewound' (($pc.Calls -eq 2) -and ($pc.Threw -like '*did not advance*')) ("calls=" + $pc.Calls + " threw=" + $pc.Threw)
+  # Always advancing, never ending: next = page + 1 on every page.
+  $adv = @(); for ($k = 2; $k -le 60; $k++) { $adv += $k }
+  $pc = Invoke-PagedCase (New-PagedStub $adv) 5
+  T 'MUST FIRE  a next that advances forever stops at the page cap and THROWS rather than returning a partial list' (($pc.Calls -eq 5) -and ($pc.Threw -like '*the cap*')) ("calls=" + $pc.Calls + " threw=" + $pc.Threw)
+  $pc = Invoke-PagedCase (New-PagedStub @(2, 3, $null)) 1000
+  T 'CLEAN TWIN three pages ending in an empty next are all read, in order, with no throw' (($pc.Calls -eq 3) -and -not $pc.Threw -and ($pc.Items -eq 'p1,p2,p3')) ("calls=" + $pc.Calls + " items=" + $pc.Items + " threw=" + $pc.Threw)
+  $pc = Invoke-PagedCase (New-PagedStub @(2, 3, $null)) 3
+  T 'CLEAN TWIN a list exactly as long as the cap is read whole - the cap refuses a FOURTH page, never the third' (($pc.Calls -eq 3) -and -not $pc.Threw -and ($pc.Pages -eq 3)) ("calls=" + $pc.Calls + " pages=" + $pc.Pages + " threw=" + $pc.Threw)
+  $pc = Invoke-PagedCase { param($page) $script:pagedCalls = 1; [pscustomobject]@{ posts = @('only') } } 1000
+  T 'CLEAN TWIN a response with no pagination block at all is one page, read once' (($pc.Pages -eq 1) -and -not $pc.Threw -and ($pc.Items -eq 'only')) ("pages=" + $pc.Pages + " items=" + $pc.Items + " threw=" + $pc.Threw)
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: the staging gate, off-by-default, credential redaction, queue round-trip, a half-parsing queue, the three set-level concerns, the composition case (staging wins over the journal, with a clean twin proving the journal still works), and which methods Invoke-GhostApi replays (a POST only when provably unsent)'
+  Write-Output 'SELF-TEST PASS: the staging gate, off-by-default, credential redaction, queue round-trip, a half-parsing queue, the three set-level concerns, the composition case (staging wins over the journal, with a clean twin proving the journal still works), which methods Invoke-GhostApi replays (a POST only when provably unsent), and a paged read that ends on its own count'
   exit 0
 }
 

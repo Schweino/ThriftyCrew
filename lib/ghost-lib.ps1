@@ -272,6 +272,38 @@ function Wait-TcGhostRetry {
   Start-Sleep -Seconds $Seconds
 }
 
+function Invoke-TcGhostPaged {
+  <# Read every page of a Ghost Admin list, and END on our own count, never only on Ghost's say-so
+     (2026-09-19, backlog I197). $Fetch takes a page number and returns the parsed response; the result is
+     every response in page order. A loop that stops only when meta.pagination.next is empty hands its
+     termination to the remote side: a response that repeats or rewinds `next` re-reads the same pages
+     forever against the live site. Two rules make it end whatever Ghost says:
+       - `next` must be an integer STRICTLY GREATER than the page just read, or this throws at once;
+       - at most $MaxPages pages are read, and a next beyond that throws rather than truncating quietly.
+     So the pages still allowed (MaxPages minus pages read) is a natural number that falls on every pass,
+     with an exit at zero. A throw, never a partial list: every caller is a backup or a reconciliation,
+     where a silently short read is a wrong answer that looks right.
+     Fixtures: ops\review-staged.ps1 -SelfTest (stubbed $Fetch, no network). #>
+  param([Parameter(Mandatory)][scriptblock]$Fetch, [int]$MaxPages = 1000)
+  $out = New-Object System.Collections.ArrayList
+  $page = 1
+  while ($true) {
+    $r = & $Fetch $page
+    [void]$out.Add($r)
+    $pg = $r.meta.pagination
+    if (-not $pg -or -not $pg.next) { break }
+    $next = 0
+    if (-not [int]::TryParse([string]$pg.next, [ref]$next) -or $next -le $page) {
+      throw ("Ghost pagination did not advance: page {0} answered next={1}. Refusing to follow it, because a next that does not move forward loops forever." -f $page, [string]$pg.next)
+    }
+    if ($out.Count -ge $MaxPages) {
+      throw ("Ghost pagination still says next={0} after {1} page(s), the cap. Refusing to go on, and refusing to return a partial list as if it were whole." -f $next, $out.Count)
+    }
+    $page = $next
+  }
+  return $out.ToArray()
+}
+
 function Invoke-GhostApi {
   param(
     [string]$Method = 'GET',

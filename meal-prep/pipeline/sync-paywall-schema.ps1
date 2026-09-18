@@ -167,14 +167,15 @@ if (@($Slugs).Count) { $want = @{}; foreach ($s in $Slugs) { $want[[string]$s] =
 $jwt = Get-GhostJWT -Key (Get-GhostKey -Root $repo)
 $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
 $live = @{}
-$page = 1
-while ($true) {
-  $u = "$apiUrl/ghost/api/admin/posts/?limit=100&page=$page&fields=id,slug,title,visibility,updated_at,codeinjection_head"
-  $res = Invoke-GhostApi -Uri $u -Headers $hdr
+# PAGED THROUGH Invoke-TcGhostPaged (2026-09-19, backlog I197). The old cap here was `$page -gt 40` on the page
+# number GHOST sent back as next, so a next that repeated or rewound never exceeded 40 and looped forever, and a
+# real 41st page was dropped without a word. The lib caps the pages READ and throws on either.
+$resps = Invoke-TcGhostPaged -MaxPages 40 -Fetch {
+  param($page)
+  Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/?limit=100&page=$page&fields=id,slug,title,visibility,updated_at,codeinjection_head" -Headers $hdr
+}
+foreach ($res in @($resps)) {
   foreach ($p in $res.posts) { if ($want.ContainsKey([string]$p.slug)) { $live[[string]$p.slug] = $p } }
-  if (-not $res.meta.pagination.next) { break }
-  $page = [int]$res.meta.pagination.next
-  if ($page -gt 40) { break }
 }
 Write-Output ("read {0} of {1} recipe post(s) from Ghost" -f $live.Count, $want.Count)
 

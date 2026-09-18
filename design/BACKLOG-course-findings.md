@@ -12817,7 +12817,7 @@ not. **Not a gate, and not a label change**: a bar on partition coverage would b
 if the sample shows it is worth one. If the sample finds every class covered, close this as DONE with
 the sample attached.
 
-### I197 - 36 unbounded while-true loops, and at least one ends only when a remote server says so `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+### I197 - 36 unbounded while-true loops, and at least one ends only when a remote server says so `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\q7-scala-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -12850,6 +12850,66 @@ delegated) and write the list down. Only after that, decide whether `ghost-expor
 delegated site get a cap and a strictly-increasing check. **Not a gate**: a detector cannot tell a
 measure from a delegated exit by reading text, and a ratchet over a count of `while ($true)` would
 count the safe ones too.
+
+**Read 2026-09-19 at `57b807ae1`** (`git grep -n -E 'while \(\$true\)|while True:' -- '*.ps1' '*.py'`, 919
+tracked files). The tree moved since the first count: 43 hits, of which 4 are the comment and fixture strings
+in `ops/audit-cpu-load.ps1` and 1 is a Python burner inside a here-string in `ops/cpu-load.ps1:89` (a real
+loop, counted as one). So **38 real loops: 18 PowerShell, 20 Python** (`sidecar/probe_double_load.py` is new,
+2). Every one was read; they split five ways, 38 of 38 placed:
+
+- **A measure the code controls, exit at its floor (8):** `lib/ps-source.ps1:164` and `:283` (`$ti` advances,
+  `IndexOf` -1 exits); `lib/selftest-lib.ps1:81` (every `continue` strips one AST layer); `ops/audit-list-array-wrap.ps1:213`
+  (walks up the function-scope chain to `$null`); `meal-prep/lib/json-db-io.ps1:119`; `grocery/ff-price-lib.ps1:95`;
+  `meal-prep/pipeline/hunt-daemon.py:1024` (the pool lane: `seen_candidates` grows each pop, so the unseen pool
+  shrinks, plus the target); `meal-prep/pipeline/hunt_lib.py:1894` (a fixture consumer over a closed channel).
+- **A deadline or a counter cap (16):** `lib/ghost-lib.ps1:312` (`MaxRetries`); `lib/json-io.ps1:192`;
+  `lib/concurrency-probe.ps1:90`; `lib/gate-slots.ps1:322` (`WaitSec`, or the queue not moving for `WaitSec`: a
+  queue that keeps moving is waited out by design, see its header); `ops/cpu-load.ps1:162` and its burner at `:89`
+  (`-Seconds` <= 900, heartbeat older than 5 s); `ops/hold-push-lock.ps1:140` (`MaxHoldSec`);
+  `ops/probe-gate-slot-admission.ps1:238` (`-Minutes`); `ops/probe-gate-slot-fairness.ps1:389` (180 s);
+  `ops/member-cohorts.ps1:479` (its OWN `$page++` capped at 200); `graph/learning/ingest_hunter_events.py:134` and
+  `hunt_lib.py:67` (`wait_ms`); `hunt-daemon.py:814` (`MAX_STAGE_RETRIES` per slug, plus the breaker);
+  `media/reels/capture-demo.py:318` (`guard > 40`); `sidecar/probe_double_load.py:127` and `:210` (`guard_s`).
+- **Ends when an in-process producer closes its channel, or the run cancels the task (9):** `hunt_lib.py:819`
+  (`Chan.take`) and the daemon lanes that read it, `hunt-daemon.py:1208`, `1494`, `1560`, `3244`, `4374`, `5695`,
+  `6133`, each also leaving on `halted()`; `hunt-daemon.py:8219` is the heartbeat, cancelled by `run()`. The
+  producers close in `finally` blocks (the B9 comments at `1035` and `1214`). Termination is the daemon's own
+  lanes, not a remote server, so this is not the delegated class.
+- **Delegated to the remote side (4):** `grocery/ghost-export.ps1:30`, as the first read found; and
+  **`meal-prep/pipeline/reconcile-publish-journal.ps1:134` and `sync-paywall-schema.ps1:171`, which LOOKED
+  capped and were not**: `$page = [int]$res.meta.pagination.next; if ($page -gt 40) { break }` caps the page
+  NUMBER Ghost sent back, so a next that repeats or rewinds never exceeds 40 and loops forever, and a real 41st
+  page was dropped without a word. `media/reels/cdp.py:228` waits for Chrome's reply to its own message id; each
+  `recv` has a 60 s socket timeout, but an event stream that never carries the id loops forever. That remote is a
+  local Chrome started by the same hand-run reel tool, so it was left alone.
+- **Infinite by design (1):** `meal-prep/pipeline/browser_price_work.py:356`, the `--watch` stream Brad ruled on
+  2026-09-04 must not become a scheduled task; the operator ends it.
+
+**Outside the text match, as the first read predicted:** `grocery/audit-ghost-drift.ps1:226` pages Ghost with a
+`do { } while ($r.meta.pagination.next)`. It advances its OWN `$page++`, so a rewind cannot trap it, but it has no
+cap, so a Ghost that always sends a next reads forever. Found by `git grep` for `pagination.next`, which also
+found nothing else live (one archive one-off).
+
+**Done 2026-09-19, three of the four delegated sites.** `lib/ghost-lib.ps1` gained `Invoke-TcGhostPaged`: it
+takes a `$Fetch` scriptblock per page and throws when `next` is not an integer strictly greater than the page just
+read, or when `-MaxPages` pages have been read and Ghost still names a next. It throws rather than returning a
+partial list, because every caller is a backup or a reconciliation. `ghost-export.ps1` uses it at `-MaxPages 400`
+(pages of 50; about 1,100 docs exist, per that file's own header), the two meal-prep scripts at `-MaxPages 40`
+(pages of 100, the old number, now counting pages READ). Verified: `ops/review-staged.ps1 -SelfTest` rc 0 with 6
+new cases (3 MUST FIRE: a repeating next refused after 1 fetch, a rewind refused on the page that rewound, an
+always-advancing next stopped at a cap of 5; 3 CLEAN TWIN: a 3-page list read whole and in order, a list exactly
+as long as the cap read whole, a response with no pagination block read once). The stub refuses past 50 fetches,
+so a neutered loop ends red instead of hanging. Three mutants of `Invoke-TcGhostPaged`, each run once: advance
+check removed, 2 red (calls=51 each); cap removed, 1 red (calls=51); both removed, 3 red; `lib/ghost-lib.ps1`
+md5-identical afterwards (E4EB43FB5A2BD7CB1F9F8B9C74B2556E). `ghost-export.ps1`'s `Get-AllGhost` was driven from a
+scratch harness against a stubbed `Invoke-RestMethod` (no network): a 3-page list returned all 6 items in order in
+3 calls, and a rewind at page 2 threw after 2 calls. `reconcile-publish-journal.ps1 -SelfTest` and
+`sync-paywall-schema.ps1 -SelfTest` both rc 0 afterwards; neither suite reaches the paging block, so their wiring
+is checked by parse and by the same scriptblock shape `ghost-export` was driven through, not by a case.
+
+**What remains:** `grocery/audit-ghost-drift.ps1:226` (the `-Discover` path) should call `Invoke-TcGhostPaged` too.
+Left out of this change only because another session was working the grocery guards the same hour; it is a
+six-line swap. `media/reels/cdp.py:228` needs a deadline only if the reel tool ever runs unattended.
 
 ### I198 - the friday email send retries a POST that mails the list, and writes its once-a-week stamp only after the call returns `DONE` `queue-3`
 

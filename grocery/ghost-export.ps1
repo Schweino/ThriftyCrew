@@ -26,17 +26,19 @@ function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 function Get-AllGhost([string]$resource) {
   $all = New-Object System.Collections.Generic.List[object]
-  $page = 1
-  while ($true) {
+  # PAGED THROUGH Invoke-TcGhostPaged (2026-09-19, backlog I197). This loop used to end only when Ghost's
+  # meta.pagination.next came back empty and then followed whatever next said, so a response that repeated or
+  # rewound it looped forever against the live site inside the daily chain. The lib refuses a next that does not
+  # move forward and caps the read at 400 pages of 50 (20,000 items; about 1,100 docs exist today). 400 is the
+  # first plausible value, not a sweep: far above any real export, low enough that a runaway ends in minutes.
+  $resps = Invoke-TcGhostPaged -MaxPages 400 -Fetch {
+    param($page)
+    if ($page -gt 1) { Start-Sleep -Milliseconds 300 }
     $jwt = New-GhostJWT $adminKey   # fresh token per page; 5-min expiry never bites a long export
-    $r = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/$resource/?formats=lexical,html&limit=50&page=$page&include=tags" `
+    Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/$resource/?formats=lexical,html&limit=50&page=$page&include=tags" `
       -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45
-    foreach ($item in $r.$resource) { $all.Add($item) }
-    $pg = $r.meta.pagination
-    if (-not $pg -or -not $pg.next) { break }
-    $page = [int]$pg.next
-    Start-Sleep -Milliseconds 300
   }
+  foreach ($r in @($resps)) { foreach ($item in $r.$resource) { $all.Add($item) } }
   return $all
 }
 
