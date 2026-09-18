@@ -28,3 +28,4 @@ Orchestration branch: `claude/backlog-run-0919`. Each item lands through its own
 | I208 | DONE | 4bb2295e9: chicken-breast include atomic, 42,753 names resolve identically before and after, victim 7,354 ms to 13.6 ms |
 | I209 | DONE | 4bb2295e9: the C# core catches the timeout; no RegexOptions.Compiled |
 | I191 | NEEDS A RULING / READY FOR BRAD | built and landed as 32a035c34, then REVERTED on main because it moves 69 live prices and 26 cheapest-store verdicts; intact on branch claude/i191-add-norm-pid-fix. Found a live bug: the build's process id stored as the product id for Sam's and Fareway ad rows since 9c44c3a37 |
+| I45 | DONE | 025584405 + f36e8fd4c: re-read over 12 TC tasks; the one scheduled data edge (07:00 ads -> 08:00 chain) held order on 14 of 14 ad days over 26 days; no capture-run fix warranted; probe committed as the reopen trigger |
