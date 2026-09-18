@@ -19,6 +19,15 @@
   16,811 candidates) 71 candidates across 28 commodities pass on the name and trip on the slug, and two of them
   are legitimate ('uncooked' matched by chicken-breast's 'cooked'; 'litter box 20 lb' by cat-litter's box rule).
 
+  THE STORE EVERY CANDIDATE WAS READ AT IS RULED ON HERE (2026-09-18, backlog I124). Fareway's store is Instacart
+  SESSION state and a fresh session sits plausibly on Des Moines. farewayShopExtract stamps each candidate with the
+  retailerLocation its page's cache named (`loc`), and this is the one place that stamp is judged, BEFORE a row is
+  selected. The capture is REFUSED, and no shop file is written, when it has: no stamp at all (it predates the stamp;
+  -WaiveMissingStoreStamp re-reads such a capture and records the store as UNRECORDED), a candidate with no stamp
+  beside stamped ones, loc="UNRECORDED", two stores, or any store but stores.json -> Fareway -> store_identity. The
+  store IS pinned, unlike Aldi's and Sam's: pull-fareway-instore.js has refused anything but 531573 since before this
+  file existed. Every selected row carries `store_loc`, which build-fareway-regular writes as `store_location`.
+
     .\select-fareway-shop.ps1 -In <capture.jsonl> -Today 2026-09-10
     .\select-fareway-shop.ps1 -SelfTest          frozen coconut fixture + clean twins, no data read
 #>
@@ -26,6 +35,11 @@ param(
   [string]$In = "",
   [string]$Out = "",
   [string]$Today = "",
+  # For RE-SELECTING a capture written before farewayShopExtract stamped `loc` (2026-09-18), and nothing else. It
+  # waives the no-stamp refusal only, when NO candidate carries a stamp: a stamp that is present and wrong (another
+  # store, UNRECORDED, two stores, a stamped/unstamped mix) is refused exactly as without it. Its rows say
+  # store_loc "UNRECORDED", never a store. capture-run never passes it.
+  [switch]$WaiveMissingStoreStamp,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -209,9 +223,66 @@ function Select-ShopCandidate {
   return @{ best = $best; demoted = $demoted }
 }
 
+# ---- THE STORE A CAPTURE WAS READ AT (2026-09-18, backlog I124) - see the header ----------------------------------
+# The sanctioned retailerLocation, from the registry. '' when stores.json names none, which Get-FarewayCaptureStore
+# refuses: a store we cannot rule on is not a store we may assume.
+function Get-FarewaySanctionedLocation([string]$Root) {
+  $f = Join-Path $Root 'stores.json'
+  if (-not (Test-Path -LiteralPath $f)) { return '' }
+  $doc = Read-JsonFile $f
+  foreach ($s in @($doc.stores)) {
+    if ([string]::Equals([string]$s.name, 'Fareway', [StringComparison]::Ordinal) -and $s.store_identity) {
+      return [string]$s.store_identity.retailer_location
+    }
+  }
+  return ''
+}
+
+# Rules on every candidate's `loc` across a whole capture. $Lines are the parsed {id,term,candidates[]} objects.
+# Returns @{ loc; total; refuse; nostamp } and prints nothing. ORDINAL throughout: this text came off a web page
+# (ops-and-gates.md, -ne ignores NUL). The refusal text 'carries no store stamp' is what -WaiveMissingStoreStamp keys
+# on, and the self-test pins it.
+function Get-FarewayCaptureStore {
+  param($Lines, [string]$Sanctioned)
+  $total = 0; $unstamped = 0; $unrec = 0
+  $distinct = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  foreach ($ln in @($Lines)) {
+    if ($null -eq $ln) { continue }
+    foreach ($c in @($ln.candidates)) {
+      if ($null -eq $c) { continue }
+      $total++
+      $l = if ($c.PSObject.Properties['loc']) { ([string]$c.loc).Trim() } else { '' }
+      if (-not $l) { $unstamped++; continue }
+      if ([string]::Equals($l, 'UNRECORDED', [StringComparison]::Ordinal)) { $unrec++; continue }
+      [void]$distinct.Add($l)
+    }
+  }
+  $why = ''
+  $stamped = $total - $unstamped
+  if ($total -eq 0) {
+    $why = ''
+  } elseif ($stamped -eq 0) {
+    $why = ('the capture carries no store stamp on any of its ' + $total + ' candidate(s), so it cannot say which Fareway it read. Re-capture through farewayShopExtract in pull-fareway-shop.js, which stamps every row with loc; never strip it or hand-assemble the file.')
+  } elseif ($unstamped -gt 0) {
+    $why = ('{0} of {1} candidate(s) carry no store stamp beside stamped ones - rows from another capture were merged in, and they cannot be attributed to any store.' -f $unstamped, $total)
+  } elseif ($unrec -gt 0) {
+    $why = ('{0} of {1} candidate(s) were read on a page whose cache named no retailerLocation (loc="UNRECORDED"), so they cannot be attributed to any store.' -f $unrec, $total)
+  } elseif ($distinct.Count -gt 1) {
+    $why = ('the sweep straddles {0} stores (retailerLocation {1}) - the session moved mid-sweep, and one file names one store.' -f $distinct.Count, ((@($distinct) | Sort-Object) -join ', '))
+  } elseif (-not $Sanctioned) {
+    $why = 'stores.json names no Fareway store_identity.retailer_location, so there is nothing to rule this capture against.'
+  } elseif (-not [string]::Equals(@($distinct)[0], $Sanctioned, [StringComparison]::Ordinal)) {
+    $why = ('retailerLocation {0} is not the sanctioned Fareway {1} (stores.json). 513473 is Des Moines - Euclid, the plausible store a fresh session defaults to.' -f @($distinct)[0], $Sanctioned)
+  }
+  $loc = ''
+  if (-not $why -and $distinct.Count -eq 1) { $loc = @($distinct)[0] }
+  return @{ loc = $loc; total = $total; refuse = $why; nostamp = ($total -gt 0 -and $stamped -eq 0) }
+}
+
 if ($SelfTest) {
   $script:stFail = 0
-  function T($label, $cond, $got) { if ($cond) { Write-Output ('ok    ' + $label) } else { Write-Output ('FAIL  ' + $label + '  got: ' + $got); $script:stFail++ } }
+  $script:stRan = 0
+  function T($label, $cond, $got) { $script:stRan++; if ($cond) { Write-Output ('ok    ' + $label) } else { Write-Output ('FAIL  ' + $label + '  got: ' + $got); $script:stFail++ } }
   # FROZEN, never regenerated from a live capture: out\fareway\fareway-shop-2026-09-10.jsonl, term 'whole
   # coconut' (commodity coconut, unit each) - the two candidates that decided the 2026-09-10 cell. The exclude
   # slice carries the word that matters, '\bbars?\b', beside neighbours from commodities.json index 479.
@@ -240,8 +311,76 @@ if ($SelfTest) {
   $s4 = Select-ShopCandidate -Candidates @($noUrl) -Include $cocoInc -Exclude $cocoExc -Unit 'each'
   T 'MUST NOT FIRE  a candidate with no url is scored on its name alone and never demoted' (([string]$s4.best.name -eq 'Coconut') -and (@($s4.demoted).Count -eq 0)) ('' + @($s4.demoted).Count)
   T 'CLEAN TWIN  the slug words are the last path segment, query dropped, id stripped' ((Get-SlugWords 'https://shop.fareway.com/store/fareway-meat-grocery/products/20002358-kind-bars-almond-coconut-6-ea?x=1') -eq 'kind bars almond coconut 6 ea') (Get-SlugWords 'https://shop.fareway.com/store/fareway-meat-grocery/products/20002358-kind-bars-almond-coconut-6-ea?x=1')
-  if ($script:stFail) { Write-Output ('select-fareway-shop SELF-TEST FAIL (' + $script:stFail + ' of 8)'); exit 1 }
-  Write-Output 'select-fareway-shop SELF-TEST PASS (8 of 8: slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse)'
+  # ---- THE STORE A CAPTURE WAS READ AT (2026-09-18, backlog I124) -------------------------------------------------
+  # The same two frozen coconut candidates, each carrying the loc farewayShopExtract now stamps. The founding shape
+  # is a capture read on the plausible wrong store: a fresh session sits on Des Moines (513473) and every price in it
+  # is real, so nothing downstream could tell until this ruling existed.
+  $stSan = '531573'
+  function _FwLine($loc1, $loc2) {
+    $a = $kindBar.PSObject.Copy(); $b = $coconut.PSObject.Copy()
+    if ($null -ne $loc1) { $a | Add-Member -NotePropertyName loc -NotePropertyValue $loc1 -Force }
+    if ($null -ne $loc2) { $b | Add-Member -NotePropertyName loc -NotePropertyValue $loc2 -Force }
+    return [pscustomobject]@{ id = 'coconut'; term = 'whole coconut'; candidates = @($a, $b) }
+  }
+  $tblS = @(
+    @{ l = 'MUST FIRE  a capture read at Des Moines 513473 is refused, and the refusal names both stores'; lines = @((_FwLine '513473' '513473')); want = 'retailerLocation 513473 is not the sanctioned Fareway 531573' },
+    @{ l = 'MUST FIRE  a capture with NO stamp on any candidate is refused';                                lines = @((_FwLine $null $null)); want = 'carries no store stamp' },
+    @{ l = 'MUST FIRE  loc="UNRECORDED" is refused, never folded into the store beside it';                 lines = @((_FwLine '531573' 'UNRECORDED')); want = 'loc="UNRECORDED"' },
+    @{ l = 'MUST FIRE  a sweep whose session moved mid-sweep (two stores) is refused';                       lines = @((_FwLine '531573' '531573'), (_FwLine '513473' '513473')); want = 'straddles 2 stores' },
+    @{ l = 'MUST FIRE  unstamped rows merged beside stamped ones are refused';                               lines = @((_FwLine '531573' $null)); want = 'carry no store stamp beside stamped ones' },
+    @{ l = 'MUST FIRE  a registry with no Fareway store_identity cannot sanction anything';                  lines = @((_FwLine '531573' '531573')); want = 'names no Fareway store_identity'; san = '' }
+  )
+  foreach ($c in $tblS) {
+    $san = if ($c.ContainsKey('san')) { $c.san } else { $stSan }
+    $rs = Get-FarewayCaptureStore -Lines $c.lines -Sanctioned $san
+    T $c.l ([bool]$rs.refuse -and $rs.refuse.Contains($c.want) -and -not $rs.loc) ('refuse=[' + $rs.refuse + '] loc=[' + $rs.loc + ']')
+  }
+  $empty = [pscustomobject]@{ id = 'kale'; term = 'kale'; candidates = @() }
+  $rOk = Get-FarewayCaptureStore -Lines @((_FwLine '531573' '531573'), $empty) -Sanctioned $stSan
+  T 'MUST NOT FIRE  every candidate read at 531573 (and a term with no candidates) is ruled 531573' ((-not $rOk.refuse) -and $rOk.loc -eq '531573' -and $rOk.total -eq 2) ('refuse=[' + $rOk.refuse + '] loc=' + $rOk.loc + ' total=' + $rOk.total)
+  $rNo = Get-FarewayCaptureStore -Lines @((_FwLine $null $null)) -Sanctioned $stSan
+  T '...and only the no-stamp-at-all shape is marked waivable' ($rNo.nostamp -and -not (Get-FarewayCaptureStore -Lines @((_FwLine '531573' $null)) -Sanctioned $stSan).nostamp) ('nostamp=' + $rNo.nostamp)
+  # THE MIRROR. farewayIdentity() cannot read stores.json from a browser console, so it carries the id as a literal;
+  # the two must name one store or the driver and this ruling disagree about what "Omaha" is.
+  $regLoc = Get-FarewaySanctionedLocation $root
+  $instSrc = [IO.File]::ReadAllText((Join-Path $root 'pull-fareway-instore.js'))
+  $mirM = [regex]::Match($instSrc, "if \(loc !== '(\d+)'\)")
+  T 'CLEAN TWIN  stores.json''s Fareway retailer_location equals farewayIdentity()''s literal' ($regLoc -and $mirM.Success -and [string]::Equals($regLoc, $mirM.Groups[1].Value, [StringComparison]::Ordinal)) ('stores.json=' + $regLoc + ' js=' + $(if ($mirM.Success) { $mirM.Groups[1].Value } else { '<no literal found>' }))
+
+  # END TO END, through this script as a child over a frozen capture in a per-run temp directory: the path capture-run
+  # takes. commodities.json and stores.json are READ from the checkout; nothing under out\ is touched.
+  . (Join-Path $root 'native-lib.ps1')
+  $stT = Join-Path $env:TEMP ('sfs-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  New-Item -ItemType Directory -Path $stT -Force -ErrorAction Stop | Out-Null
+  try {
+    $selfP = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $root 'select-fareway-shop.ps1' }
+    function _FwRun([string]$name, $line, [string[]]$extra) {
+      $inP = Join-Path $stT ($name + '.jsonl'); $outP = Join-Path $stT ($name + '.json')
+      [IO.File]::WriteAllText($inP, (($line | ConvertTo-Json -Depth 6 -Compress) + "`n"), (New-Object Text.UTF8Encoding($false)))
+      $argv = @('-In', $inP, '-Out', $outP, '-Today', '1999-01-01') + @($extra)
+      $run = Invoke-NativeScript $selfP @argv
+      $doc = $null
+      if (Test-Path -LiteralPath $outP) { $doc = @(Get-Content -LiteralPath $outP -Raw -Encoding UTF8 | ConvertFrom-Json) }
+      return @{ rc = $run.ExitCode; lines = @($run.Lines | ForEach-Object { [string]$_ }); doc = $doc }
+    }
+    $e1 = _FwRun 'ok' (_FwLine '531573' '531573') @()
+    $e1Row = if ($e1.doc) { @($e1.doc)[0] } else { $null }
+    T 'CLEAN TWIN  a capture read at 531573 still selects the real Coconut at 3.99 and every row says store_loc 531573' ($e1.rc -eq 0 -and $e1Row -and [string]$e1Row.name -eq 'Coconut' -and [string]$e1Row.price -eq '3.99' -and [string]$e1Row.store_loc -eq '531573') ('rc=' + $e1.rc + ' row=' + ($e1Row | ConvertTo-Json -Compress) + ' | ' + ($e1.lines -join ' / '))
+    $e2 = _FwRun 'dsm' (_FwLine '513473' '513473') @()
+    T 'MUST FIRE  the Des Moines capture exits 1 with a REFUSED line and writes NO shop file' ($e2.rc -eq 1 -and $null -eq $e2.doc -and (@($e2.lines | Where-Object { $_ -like 'REFUSED:*513473*' }).Count -eq 1)) ('rc=' + $e2.rc + ' doc=' + [bool]$e2.doc + ' | ' + ($e2.lines -join ' / '))
+    $e3 = _FwRun 'old' (_FwLine $null $null) @()
+    T 'MUST FIRE  an unstamped capture exits 1 and writes nothing' ($e3.rc -eq 1 -and $null -eq $e3.doc) ('rc=' + $e3.rc + ' | ' + ($e3.lines -join ' / '))
+    $e4 = _FwRun 'waived' (_FwLine $null $null) @('-WaiveMissingStoreStamp')
+    $e4Row = if ($e4.doc) { @($e4.doc)[0] } else { $null }
+    T 'CLEAN TWIN  -WaiveMissingStoreStamp re-selects an old capture and says store_loc UNRECORDED, never a store' ($e4.rc -eq 0 -and $e4Row -and [string]$e4Row.store_loc -eq 'UNRECORDED' -and [string]$e4Row.price -eq '3.99') ('rc=' + $e4.rc + ' row=' + ($e4Row | ConvertTo-Json -Compress) + ' | ' + ($e4.lines -join ' / '))
+    $e5 = _FwRun 'waivewrong' (_FwLine '513473' '513473') @('-WaiveMissingStoreStamp')
+    T 'MUST FIRE  the waiver does not waive a WRONG store' ($e5.rc -eq 1 -and $null -eq $e5.doc) ('rc=' + $e5.rc + ' | ' + ($e5.lines -join ' / '))
+  } finally { Remove-Item -LiteralPath $stT -Recurse -Force -ErrorAction SilentlyContinue }
+
+  $stTotal = 8 + $tblS.Count + 3 + 5
+  if ($script:stRan -ne $stTotal) { Write-Output ('FAIL  the suite ran ' + $script:stRan + ' case(s), not the ' + $stTotal + ' it lists'); $script:stFail++ }
+  if ($script:stFail) { Write-Output ('select-fareway-shop SELF-TEST FAIL (' + $script:stFail + ' of ' + $stTotal + ')'); exit 1 }
+  Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, store ruling x' + ($tblS.Count + 3) + ', end to end x5)')
   exit 0
 }
 
@@ -260,6 +399,19 @@ foreach ($line in (Get-Content $In)) {
   $line = $line.Trim(); if (-not $line) { continue }
   try { $rows += (ConvertFrom-Json $line) } catch { Write-Warning "bad JSONL line skipped" }
 }
+# THE STORE FIRST, before a single row is selected (see the header). A refusal writes nothing, so yesterday's shop
+# files keep pricing and the day's capture is repeated rather than published in an unknown basis.
+$fwSanctioned = Get-FarewaySanctionedLocation $root
+$fwStore = Get-FarewayCaptureStore -Lines $rows -Sanctioned $fwSanctioned
+$fwWaived = [bool]($WaiveMissingStoreStamp -and $fwStore.nostamp)
+if ($fwStore.refuse -and -not $fwWaived) {
+  Write-Output ('REFUSED: ' + (Split-Path $In -Leaf) + ' - ' + $fwStore.refuse + ' No shop file was written.')
+  exit 1
+}
+$storeLoc = if ($fwWaived) { 'UNRECORDED' } else { [string]$fwStore.loc }
+if ($fwWaived) { Write-Output ('store: NOT RECORDED - ' + $fwStore.total + ' candidate(s) predate the loc stamp; selected under -WaiveMissingStoreStamp, so every row says store_loc UNRECORDED') }
+elseif ($storeLoc) { Write-Output ('store: retailerLocation ' + $storeLoc + ' read on all ' + $fwStore.total + ' candidate(s)') }
+
 # dedupe by id: last capture wins
 $byIdRaw = [ordered]@{}
 foreach ($r in $rows) { $byIdRaw[[string]$r.id] = $r }
@@ -276,7 +428,8 @@ foreach ($id in $byIdRaw.Keys) {
   [void]$outRows.Add([ordered]@{
     id=$id; name=[string]$best.name; price=[string]$best.price; per=[string]$best.per;
     orig=[string]$best.orig; unit=[string]$best.unit; size=[string]$best.size; url=[string]$best.url;
-    term=[string]$byIdRaw[$id].term; taxonomy_path=[string]$best.taxonomy_path
+    term=[string]$byIdRaw[$id].term; taxonomy_path=[string]$best.taxonomy_path;
+    store_loc=$storeLoc
   })
 }
 $outDir = Split-Path $Out -Parent; New-Item -ItemType Directory -Force -Path $outDir | Out-Null

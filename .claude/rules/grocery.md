@@ -73,6 +73,12 @@ is one copy of every rule and nothing here can drift from it.
   naming the club each row was read at, and `build-sams-deals` writes the file's `club` and every row's
   `store_location` from it, refusing the same four shapes Aldi does. Until then it stamped "13130 L St" from a
   literal while the session sat at 15429 Blackwell Dr. The club is NOT pinned: no ruling names one.
+  **Fareway joined them the same day**, as a per-row stamp rather than a line because its capture is JSONL:
+  every `farewayShopExtract` row carries the retailerLocation its own page's cache named (`loc`), and
+  `select-fareway-shop` refuses a capture with no stamp, an UNRECORDED one, two stores, or any store but
+  `stores.json` -> Fareway -> `store_identity` (531573, pinned like Walmart's). Post the rows unaltered.
+  **Hy-Vee, Family Fare and Baker's need no line**: their store is a request parameter on a sessionless API,
+  so it cannot drift under a sweep, and Hy-Vee already keeps only rows whose echoed storeId matches.
 - **A STANDING RULING'S OWED TERMS ARE DERIVED AND LEAD THE WORKLIST**, never hand-picked and never
   hand-discharged (2026-09-12). Brad's store-drift ruling named 23 terms to recapture and said to put
   them at the head of the next Walmart worklist; nothing carried that anywhere for a fortnight, because

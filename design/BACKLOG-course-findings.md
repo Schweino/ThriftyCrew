@@ -10310,7 +10310,63 @@ Note `.claude/rules/ops-and-gates.md` already names `$REARM_DAYS = 14` as a cons
 what it means but not whether it was the first plausible number or the survivor of a sweep. This adds
 a second, different question about the same constant: whether it should be one number at all.
 
-### I124 - Six of seven store feeds do not record which physical store the price came from `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BUILD`
+### I124 - Six of seven store feeds do not record which physical store the price came from `DONE` `queue-7`
+
+**Done 2026-09-18. Fareway now records the store every row was read at; Hy-Vee, Family Fare and Baker's needed
+nothing, for the reason below.** Read first, per store, how the capture learns its store:
+- **Fareway: built.** The store is Instacart SESSION state. `farewayIdentity()` asserted retailerLocation 531573 once
+  before a driver sweep and nothing kept what any later page said, so a session that moved mid-sweep, or the
+  attended rescue in Brad's Chrome (which calls `farewayShopExtract` and never `farewayIdentity`), wrote rows no file
+  could attribute, and `build-fareway-regular` stamped "Omaha" as a literal. Now `farewayShopExtract`
+  (`pull-fareway-shop.js`) reads retailerLocation out of the same cache extract its rows come from, with
+  `farewayIdentity()`'s own regex, and stamps each row `loc` (UNRECORDED when the cache names none; it records and
+  never refuses, so the hunter lookup lane is unchanged). `select-fareway-shop.ps1` rules on the stamp before any
+  row is selected and REFUSES (exit 1, no shop file) a capture with no stamp, a stamped/unstamped mix, UNRECORDED,
+  two stores, or any store but `stores.json` -> Fareway -> `store_identity` (new, 531573; pinned, unlike Aldi and
+  Sam's, because the agent has refused anything else since August). `-WaiveMissingStoreStamp` re-selects an old
+  capture and records UNRECORDED; it does not waive a wrong store. Selected rows carry `store_loc`,
+  `build-fareway-regular` writes it LAST on each row as `store_location` (UNRECORDED for older shop files) and
+  counts them in a file-level `store_locations`. capture-run already treats a selector exit 1 as a failed build and
+  skips the second stage, so a refusal publishes nothing and yesterday's shop files keep pricing.
+  **Board-neutral, measured** by a scratch A/B harness (both arms in temp mirrors, base `origin/main` at `0465267ef`;
+  blobs base/new: select `634843f23` / `b287ea6d7`, builder `640ab5a57` / `e4a5e7544`, extractor `35e338b74` /
+  `d2f4c9640`): over the four newest real captures (2026-09-09, 09-10, 09-11, 09-12) the base selector and the new
+  one gave identical rows once `store_loc` was removed, 97 of 97, both with every candidate stamped 531573 and under
+  the waiver on the unstamped originals; the unwaived new selector refused all four originals (none carries a
+  stamp, correctly) and wrote nothing. The builder over all 35 real shop files at one build date wrote 470 deals in
+  both arms, identical once `store_location` was removed, and a byte-identical `store-fareway1-urls.json`.
+  **Verified:** `select-fareway-shop -SelfTest` exit 0, 22 of 22 (14 new: the store ruling table, the mirror check
+  between `stores.json` and `farewayIdentity()`'s literal, five end-to-end child runs, and a ran-count assertion);
+  `build-fareway-regular -SelfTest` exit 0, SELF-TEST PASS with four new (w) cases; `test-pull-agent-lib -SelfTest`
+  exit 0, 84 ok (section 8, six new, including that the two copies of the retailerLocation regex are identical text).
+  Five mutants, each red in its named case and each file restored md5-identical: the JS stamp removed (3 red), the
+  sanctioned-store check removed (3), the no-stamp refusal removed (1), the builder's `store_location` removed (4,
+  after the file-level count was made to read a missing field as UNRECORDED: the first run of that mutant crashed
+  the suite on an empty JSON key instead of naming a case), and the selector dropping `store_loc` (2).
+  **The attended runbook is NOT updated in the repo**, because `audit-prompt-backup` fails every push while the
+  live `~\.claude\scheduled-tasks` SKILL and its mirror differ, and this change may not write the live one. The
+  paragraph for the runbook's FAREWAY section is prepared for Brad (see the report of this change); until it is
+  copied, the selector's own refusal line says what to do.
+- **Hy-Vee: sufficient, nothing built.** storeId is a request variable on a sessionless API (`pull-regular-hyvee.ps1`
+  header), and the puller already READS IT BACK: `:729` keeps only the `storeProducts` entry whose echoed `storeId`
+  equals the one it asked for, so a response for any other store yields no row (the 2026-09-18 file holds 1,541
+  deals, so the echo is live). The flyer is gated on the store's own postal code in `pull-grocery-ads`.
+- **Family Fare: sufficient, nothing built.** `store_id=6401` is a query parameter on every Freshop request, with
+  no session to drift, and `:528-534` asks `/1/stores/6401` on every run and exits 2 on a non-Omaha city. Probed
+  read-only 2026-09-18: `/1/stores/6401` answered Omaha 68106, 5019 Grover St, and a products query asking for the
+  `store_id` field returned it on 2 of 2 items as "6401". The puller does not request that field, so reading it back
+  would only catch Freshop serving another store's catalogue under our id, which nothing has ever shown. One small
+  declared-versus-captured copy remains: the file-level `source` spells "store_id 6401" as its own literal beside
+  `$sid` (`:1114`), so the two could part if `$sid` were ever edited.
+- **Baker's: sufficient, nothing built.** `filter.locationId=$LocationId` is on every Kroger API request (`:962`) and
+  the file records `location_id = $LocationId` from the same variable (`:1308`). Its `store_label` is a literal
+  ("Saddlecreek") that would mislabel a run passed another `-LocationId`, but no caller passes one (searched the
+  tree). Not checked: whether a Kroger product record echoes its location; that needs the OAuth credentials and no
+  call was made.
+**What the item's original count got wrong, restated so it is not re-derived:** the store drift this estate has paid
+for is SESSION state in a browser (Walmart 3153, Aldi's OLA, Sam's club, Fareway's Des Moines default). A
+sessionless API whose store is a parameter on each request cannot drift under a sweep; all four browser stores now
+carry a read store and refuse a capture that cannot name one.
 
 **Partly done 2026-09-18: Sam's Club, the one true zero, now records the club it was read at.** The rung-1
 lane read Sam's as "no store identity in any form", and that was half right in a worse way: `build-sams-deals.ps1`

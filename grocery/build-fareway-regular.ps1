@@ -171,7 +171,8 @@ if ($SelfTest) {
       #     where the builder expects it. The repair must not change this one by a byte.
       @{ id = 'serrano-peppers'; name = 'Green Serrano Pepper'; price = '0.21'; per = ''; orig = ''; unit = '$4.99/lb'; size = 'About 0.04 lb each'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb' },
       # (f) CLEAN TWIN: a real captured size with an AGREEING slug passes through untouched
-      @{ id = 'tomatoes'; name = 'NatureSweet Cherubs Tomatoes'; price = '3.99'; per = ''; orig = ''; unit = ''; size = '10 oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/20337467-naturesweet-salad-tomatoes-heavenly-10-oz' },
+      #     It also carries the store_loc select-fareway-shop writes (2026-09-18, backlog I124) - see (w).
+      @{ id = 'tomatoes'; name = 'NatureSweet Cherubs Tomatoes'; price = '3.99'; per = ''; orig = ''; unit = ''; size = '10 oz'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/20337467-naturesweet-salad-tomatoes-heavenly-10-oz'; store_loc = '531573' },
       # (g) MUST FIRE: the pack trap WITHOUT a "- Pack" suffix. $8.48 is a multipack price, the slug names one
       #     20 fl oz bottle, and only the volume refusal stops a 4x-wrong per-unit here.
       @{ id = 'sports-drinks'; name = 'Gatorade Orange Thirst Quencher, Sports Drink'; price = '8.48'; per = ''; orig = '8.99'; unit = ''; size = ''; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/224714-gatorade-orange-thirst-quencher-sports-drink-20-fl-oz' },
@@ -242,6 +243,16 @@ if ($SelfTest) {
     Chk '(o) 18-ct read from the slug, priced per dozen -> $1.45 / "dozen"' ($o1 -and $o1.ad_price -eq '$1.45' -and $o1.size -eq 'dozen') ("$($o1.ad_price) / $($o1.size)")
     $p1 = $byid['Fareway All Butter Croissants']
     Chk '(p) weight on a per-item commodity -> slug count wins  "3 ct"' ($p1 -and $p1.size -eq '3 ct') ("$($p1.size)")
+    # (w) THE STORE A ROW WAS READ AT (2026-09-18, backlog I124). Until then every row's store was the file-level
+    #     literal "Omaha" whatever page it was read on. MUST FIRE: the store_loc select-fareway-shop ruled on reaches
+    #     the row. MUST FIRE: a row from a shop file with no stamp says UNRECORDED, never a store. CLEAN TWIN: the
+    #     stamp is the LAST field, so the priced fields ahead of it are exactly what they were.
+    Chk '(w) MUST FIRE  the store_loc a shop row carries is written as store_location  531573' ($f -and [string]$f.store_location -eq '531573') ("store_location=$($f.store_location)")
+    Chk '(w) MUST FIRE  a shop row with no stamp says store_location UNRECORDED, never a store' ($e -and [string]$e.store_location -eq 'UNRECORDED') ("store_location=$($e.store_location)")
+    $fNames = if ($f) { @($f.PSObject.Properties.Name) } else { @() }
+    Chk '(w) CLEAN TWIN  store_location is the row''s last field, after every priced one' ($fNames.Count -gt 0 -and $fNames[-1] -eq 'store_location' -and ($fNames -join ',') -like 'store,item,ad_price,size,regular,source_ad,as_of,found_by_term,*') ($fNames -join ',')
+    $slDoc = $doc.store_locations
+    Chk '(w) the file counts its rows by store: 1 at 531573, the rest UNRECORDED' ($slDoc -and [int]$slDoc.'531573' -eq 1 -and ([int]$slDoc.'531573' + [int]$slDoc.UNRECORDED) -eq @($doc.deals).Count) ("store_locations=" + ($slDoc | ConvertTo-Json -Compress))
     # CLEAN TWINS for (n)/(o), in their own child run because deals are keyed by commodity id and only one
     # milk row can survive a single pass. A gallon-unit row with NO usable volume must STILL be relabelled,
     # and a dozen-unit row with no count anywhere must still fall back to the undivided pack price.
@@ -597,6 +608,11 @@ foreach ($f in $In) {
     [void][double]::TryParse((([string]$r.orig) -replace '[^0-9.]',''), [ref]$origNum)
     if (($origNum -gt 0) -and ($sz -ne 'lb')) { $row['base_price'] = $origNum }
     if (($origNum -gt 0) -and ($sz -ne 'lb') -and ($curNum -lt ($origNum - 0.005))) { $row['marked_down'] = $true }
+    # THE STORE THE ROW WAS READ AT (2026-09-18, backlog I124). select-fareway-shop rules on the retailerLocation every
+    # candidate was read at and writes it as store_loc; this carries it, LAST, so every priced field above is written
+    # exactly as before. A shop file from before the stamp, or one written by hand, has none and says UNRECORDED -
+    # never "Omaha", which is what the file-level `source` has always asserted without reading it.
+    $row['store_location'] = if ($r.PSObject.Properties['store_loc'] -and ([string]$r.store_loc).Trim()) { ([string]$r.store_loc).Trim() } else { 'UNRECORDED' }
 
     $byId[$id] = $row
     # emit the product-URL input using the SAME price+size the board uses, so the "See item" link's per-unit
@@ -614,7 +630,13 @@ $deals = @($byId.Values)
 # proof we emit price_mode='unverified' (no mode_verified) so audit-price-mode fails AND compare-deals drops the
 # file - the marked-up prices can never silently reach the board again.
 $pmode = if ($ModeVerified) { 'in-store' } else { 'unverified' }
-$doc = [ordered]@{ store='Fareway'; price_type='everyday'; price_mode=$pmode; mode_verified=$ModeVerified; source='shop.fareway.com (Instacart Storefront, Omaha); mode proven at capture only'; generated=$asofS; deals=$deals }
+# How many of this build's rows name each store they were read at (retailerLocation, or UNRECORDED). Counted over
+# the rows written here, before carry-forward copies older rows in.
+$storeLocs = [ordered]@{}
+# A row with no store_location counts as UNRECORDED: an empty key here would write "" into the JSON, which
+# ConvertFrom-Json then refuses to read back.
+foreach ($g in @($deals | Group-Object { $v = [string]$_.store_location; if ($v) { $v } else { 'UNRECORDED' } } | Sort-Object Name)) { $storeLocs[[string]$g.Name] = $g.Count }
+$doc = [ordered]@{ store='Fareway'; price_type='everyday'; price_mode=$pmode; mode_verified=$ModeVerified; source='shop.fareway.com (Instacart Storefront, Omaha); mode proven at capture only'; store_locations=$storeLocs; generated=$asofS; deals=$deals }
 if (-not $ModeVerified) { Write-Warning "build-fareway-regular: no -ModeVerified passed -> price_mode='unverified'. The capture MUST set In-Store fulfilment and pass -ModeVerified <date>, or Fareway is (correctly) excluded from the board." }
 $regDir = Join-Path $OutDir 'regular'
 New-Item -ItemType Directory -Force -Path $regDir | Out-Null

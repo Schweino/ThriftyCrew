@@ -35,11 +35,28 @@
   day" -> 2026-08-22, and out\fareway\fareway-deals-2026-08-20.json independently states the weekly ad
   runs 2026-08-17 to 2026-08-22.
 
+  EVERY ROW CARRIES THE STORE IT WAS READ AT (2026-09-18, backlog I124). Fareway is an Instacart
+  storefront whose store is SESSION state, and a fresh session sits plausibly on Des Moines
+  (retailerLocation 513473). farewayIdentity() in pull-fareway-instore.js asserts 531573 ONCE, before a
+  driver sweep - and nothing kept what any later page said, so a session that moved mid-sweep, or a
+  rescue run in Brad's Chrome that never called farewayIdentity() at all, produced rows no file could
+  attribute. This reads retailerLocation out of the SAME cache extract the rows come from, with the same
+  regex farewayIdentity() uses, and stamps it on every row as `loc` ('UNRECORDED' when the cache names
+  none). It records and never refuses: select-fareway-shop.ps1 is where a capture is ruled on (no stamp,
+  UNRECORDED, two stores, or any store but the sanctioned one in stores.json), so the hunter's lookup lane,
+  which also calls this, behaves exactly as before.
+
   USAGE (in Brad's Chrome, on a shop.fareway.com search results page):
       farewayShopExtract('pork ribs')        -> [{ id, term, name, price, per, orig, unit, size, url,
-                                                   sale_ends_days, sale_note }, ...]
+                                                   sale_ends_days, sale_note, loc }, ...]
   Window functions do NOT survive navigation - re-inline this after every navigate.
 */
+
+/** The retailerLocation a cache blob names, by farewayIdentity()'s own regex: the first match, or ''. */
+function farewayReadLocation(blob) {
+  const m = String(blob || '').match(/"retailerLocation(?:Id)?":"?(\d+)"?/);
+  return m ? m[1] : '';
+}
 
 /** Parse "Sale ends in 3 days" / "Sale ends in 1 day" / "Sale ends today" -> integer days, else null. */
 function farewaySaleEndsDays(s) {
@@ -79,11 +96,14 @@ function farewayShopExtract(term) {
     throw new Error('REFUSING TO EXTRACT: no __APOLLO_CLIENT__ on this page. This is blindness, not an ' +
                     'empty result - do not record it as "no products found".');
   }
-  const nodes = farewayItemNodes(c.cache.extract());
+  const cache = c.cache.extract();
+  const nodes = farewayItemNodes(cache);
   if (!nodes.length) {
     throw new Error('REFUSING TO EXTRACT: the Apollo cache holds no priced item nodes. Either the results ' +
                     'have not hydrated yet (scroll/wait and retry) or the cache shape moved.');
   }
+  // The store, read from the very object the rows are read from - never from an earlier page.
+  const loc = farewayReadLocation(JSON.stringify(cache)) || 'UNRECORDED';
 
   const rows = [];
   const seenId = new Set();
@@ -126,7 +146,9 @@ function farewayShopExtract(term) {
       sale_ends_days: days,
       // Kept verbatim even when it parses to nothing, so a disclaimer shape we do not handle yet is
       // visible in the capture instead of silently dropped.
-      sale_note: disc || ''
+      sale_note: disc || '',
+      // The retailerLocation this page's cache named when the row was read. See the header.
+      loc: loc
     });
   }
   return rows;
@@ -134,5 +156,5 @@ function farewayShopExtract(term) {
 
 /* Node/test surface. In the browser these are just globals; the PowerShell self-test requires the file. */
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { farewaySaleEndsDays, farewayShopExtract, farewayItemNodes };
+  module.exports = { farewaySaleEndsDays, farewayShopExtract, farewayItemNodes, farewayReadLocation };
 }

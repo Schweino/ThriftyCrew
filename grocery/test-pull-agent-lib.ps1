@@ -620,5 +620,51 @@ try {
   if ($LASTEXITCODE -ne 0) { $bad++ }
 } finally { Remove-Item $tmpS -Force -ErrorAction SilentlyContinue }
 
+# --- 8. the FAREWAY capture must carry the store it was READ at ---------------------------------------
+# 2026-09-18, backlog I124. farewayIdentity() asserted retailerLocation 531573 once before a driver sweep and
+# nothing kept what any later page said, so a session that moved mid-sweep, or a rescue in Brad's Chrome that
+# never called it, produced rows no file could attribute. farewayShopExtract now reads retailerLocation out of
+# the same cache extract its rows come from and stamps every row `loc`; select-fareway-shop.ps1 rules on it.
+# pull-fareway-shop.js loads UNTOUCHED; only window (its Apollo client) and module are supplied.
+$jsF = @'
+const fs = require('fs');
+const src = fs.readFileSync(process.argv[2], 'utf8');
+const inst = fs.readFileSync(process.argv[3], 'utf8');
+let bad = 0;
+function T(n, ok, got) { if (ok) console.log('  ok    ' + n); else { console.log('  X     ' + n + '   got: ' + got); bad++; } }
+function load(cache) {
+  const window = { __APOLLO_CLIENT__: { cache: { extract: () => cache } } };
+  return new Function('window', 'module', src + '\nreturn { farewayShopExtract, farewayReadLocation };')(window, undefined);
+}
+const item = { evergreenUrl: '3402271-coconut-each', viewSection: { itemName: 'Coconut' },
+  price: { viewSection: { itemDetails: { priceString: '$3.99', fullPriceString: '', pricingUnitString: '1 each' } } } };
+const at = loc => Object.assign({ 'Item:3402271': item }, loc ? { 'RetailerLocation:x': { retailerLocationId: loc, lineOneString: 'somewhere' } } : {});
+try {
+  const om = load(at('531573')).farewayShopExtract('whole coconut');
+  T('MUST FIRE  every row carries the retailerLocation its own cache named (loc)', om.length === 1 && om[0].loc === '531573', JSON.stringify(om));
+  T('CLEAN TWIN  the priced fields are read exactly as before the stamp', om[0].id === '3402271' && om[0].name === 'Coconut' && om[0].price === '3.99' && om[0].size === '1 each' && om[0].orig === '', JSON.stringify(om[0]));
+  const dm = load(at('513473')).farewayShopExtract('whole coconut');
+  T('MUST FIRE  a page on Des Moines is RECORDED as 513473 - the extractor records, select-fareway-shop refuses', dm.length === 1 && dm[0].loc === '513473', JSON.stringify(dm));
+  const none = load(at('')).farewayShopExtract('whole coconut');
+  T('MUST FIRE  a cache that names no store stamps UNRECORDED, never a guess', none.length === 1 && none[0].loc === 'UNRECORDED', JSON.stringify(none));
+  let threw = '';
+  try { load({ 'RetailerLocation:x': { retailerLocationId: '531573' } }).farewayShopExtract('t'); } catch (e) { threw = String(e.message || e); }
+  T('CLEAN TWIN  a cache with no priced item still THROWS (blindness, not an empty shelf)', /no priced item nodes/.test(threw), threw);
+  // ONE RULE, TWO COPIES: this regex and farewayIdentity()'s must be the same text, or the store the driver
+  // asserted and the store every row records are read two different ways.
+  const reOf = s => (s.match(/\/"retailerLocation\(\?:Id\)\?":"\?\(\\d\+\)"\?\//) || [])[0];
+  T('the two copies of the retailerLocation regex are identical text', !!reOf(src) && reOf(src) === reOf(inst), reOf(src) + ' vs ' + reOf(inst));
+} catch (e) { console.log('  X     the Fareway store test threw: ' + (e && e.stack)); bad++; }
+process.exit(bad === 0 ? 0 : 1);
+'@
+$fws = Join-Path $here 'pull-fareway-shop.js'
+$fwi = Join-Path $here 'pull-fareway-instore.js'
+$tmpF = Join-Path ([IO.Path]::GetTempPath()) ('fareway-' + [guid]::NewGuid().ToString('N') + '.js')
+[IO.File]::WriteAllText($tmpF, $jsF, (New-Object System.Text.UTF8Encoding($false)))
+try {
+  & $node $tmpF $fws $fwi
+  if ($LASTEXITCODE -ne 0) { $bad++ }
+} finally { Remove-Item $tmpF -Force -ErrorAction SilentlyContinue }
+
 if ($bad -eq 0) { Write-Output 'test-pull-agent-lib SELF-TEST PASS'; exit 0 }
 Write-Output ("test-pull-agent-lib SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1

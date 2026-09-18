@@ -123,6 +123,12 @@
           "unusual traffic",
           "px-captcha"
         ]
+      },
+      "store_identity": {
+        "retailer_location": "531573",
+        "postal_code": "68136",
+        "label": "Fareway Omaha, 17070 Audrey Street",
+        "note": "Fareway's store is Instacart SESSION state, so this is the basis every Fareway price is read in. pull-fareway-instore.js's farewayIdentity() mirrors it as its literal 531573 (a browser console cannot read a file) and select-fareway-shop.ps1's self-test fails when the two disagree. Every farewayShopExtract row carries the retailerLocation its page named as `loc`, and select-fareway-shop REFUSES a capture that carries none, an UNRECORDED one, two stores, or any store but this one. 513473 is Des Moines - Euclid, the plausible wrong store a fresh session defaults to. Added 2026-09-18, backlog I124."
       }
     },
     {
