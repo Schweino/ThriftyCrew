@@ -13001,7 +13001,19 @@ already fixed on 2026-09-05.** All counts at `ba5c5ef18`, over tracked files.
   `fareway-shop-2026-08-05.json`, holds 2 two-layer sequences inside the capture itself. The three newest
   captures (09-10 rescue, 09-11, 09-12) hold none. Which emitter wrote those was not measured.
 
-### I175 - Windows PowerShell 5.1 Sort-Object is unstable, and 17 cheapest-row picks break price ties by the sort's internals `OPEN` `2-WAY` `RUNG1 MEASURE` `queue-7`
+### I175 - Windows PowerShell 5.1 Sort-Object is unstable, and 17 cheapest-row picks break price ties by the sort's internals `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**The ruling asked for (backlog run 2026-09-19).** The measurement below found real ties on the real board, and a
+fix is built and held on branch `claude/i175-tie-break`, because it changes which store a reader sees crowned on 8
+cells (no price moves). Question: how should an EXACT cross-store price tie choose its crown? Options: (A) land the
+branch as built: price, then a store with no membership, then store name, which crowns Aldi or Baker's on most of
+today's ties; (B) land only the price-table half (internal, no reader-visible change) and leave the crown as it is;
+(C) replace key 3 with "everyday before sale, then store name", so a tie goes to the price that outlasts an ad (not
+built or measured); (D) A plus flag an exact tie the way `cheapest_within_rounding` flags a rounding tie, and let
+the still-open `brad-2026-09-11-rounding-tie` ruling decide how a page shows it. **Recommendation: A now.** The
+crown on those 8 cells is already arbitrary (chosen by the sort, and 2 of them move on input order alone), A makes
+it reproducible and moves no price, and the price-table half fixes a disagreement with the board on 328 cells. D is
+the honest follow-up and belongs with the rounding-tie ruling rather than here.
 
 **Merged from `design\backlog-inbox\q7-algo1-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13045,6 +13057,50 @@ is a debug script and is not measured. Metrics, on the newest real board (`compa
   by the sort's internals. If both are 0 the item closes with no fix and the numbers recorded. A tie-break that
   moves any chosen row or price on this board is READY FOR BRAD on a branch with every changed cell listed; one
   proven byte-identical on this board may land.
+
+**Measured 2026-09-19 against that bar (the bar was committed first, as `a19998c5a` on the worktree branch).**
+Inputs READ from the main checkout: `comparison-2026-09-17.json` (sha256 `30504c17...dc4c3`) and
+`candidates-2026-09-17.json` (sha256 `4829aedb...15eae`); code at `82472f90c` (blobs `compare-deals.ps1`
+`241575ab`, `price-table-lib.ps1` `c247e50f`, `capture-depth-lib.ps1` `74b202df`). Harness: a scratch probe that
+runs 5.1's real `Sort-Object unit_price` over each pick forward and reversed, and the real
+`Select-FreshestCaptureRows`; not committed, because the arm diff below answers the recurring question.
+- **A (the crown). 22 of 572 commodities** have rank 1 and rank 2 at an exactly equal `per_unit` (543 of the 572
+  have two or more stores), and 25 have a tie between the first two non-membership stores. Reversing the input
+  order alone moved `cheapest_store` on **2 of the 22** (collard-greens, rhubarb) and `nomem_store` on the same 2.
+  No Sam's Club row is in any of the 22.
+- **B (the price table). 656 of 3,879** per-(commodity, store, half) picks over the candidate pool have two or
+  more differently-named rows at the minimum price (535 everyday, 121 sale), and **451 of them** name a different
+  product when the same rows arrive reversed. This is the candidate pool, so it slightly over-counts the board
+  (known-wrong, aisle and channel refusals act after it).
+- **Bar verdict: 22 + 656 is at least 1, so a fix is warranted.**
+
+**The fix, held on `claude/i175-tie-break` (not on main).** `compare-deals.ps1` ranks stores through a new
+`Select-CrossStoreRank` (price, then no membership, then store name), and `price-table-lib.ps1` picks each store's
+everyday and ad row through `Select-PriceTableWinner`, which compare-deals hands the board's own
+`Select-StoreWinner` (without it, the fixtures' fallback is price, name, size). Fixtures: compare-deals `-SelfTest`
+11i (MUST FIRE the frozen collard-greens tie in five input orders, MUST FIRE a Sam's/Walmart tie, CLEAN TWIN a
+genuinely cheaper membership store still wins) and `test-price-table.ps1` 13 (MUST FIRE the frozen Aldi frosting
+tie in six orders) and 14 (CLEAN TWIN, `-Pick` is honoured). With the fix reverted all four went red (compare-deals
+exit 1, `SELF-TEST FAIL: 2 case(s)`; test-price-table exit 1, `PRICE-TABLE FAILED (2)`); restored, both exit 0 and
+the files were md5-identical to the fixed versions.
+
+**What landing it changes, measured by building the board three times in the seeded worktree** (`compare-deals.ps1
+-MinStores 1 -OutName <arm>`, same seeded inputs, board date 2026-09-17). A control pair of two unchanged builds
+differed in **0 of 3,189** price-table store cells and 0 board fields, so every difference below is the change:
+- **Prices: 0 moved**, on the board or in the table.
+- **`cheapest_store` changes on 8 of 572**: collard-greens Hy-Vee to Baker's, cream-of-mushroom-soup Hy-Vee to
+  Aldi, egg-noodles Walmart to Aldi, powdered-sugar Hy-Vee to Aldi, refried-beans Hy-Vee to Aldi, rhubarb Fareway to
+  Baker's, stuffing-mix Hy-Vee to Aldi, tomatoes-green-chilies Hy-Vee to Family Fare (and its `cheapest_type` sale
+  to everyday).
+- **`nomem_store` changes on 10**: the same 8, plus chuck-roast Family Fare to Aldi (sale to everyday) and
+  pita-bread Hy-Vee to Baker's.
+- **72 commodities** list their tied stores in a different order further down the `stores` array.
+- **Price table: 384 of 3,189 store cells** change a product field (324 `everyday_product`, 83 `ad_product`, and
+  sizes, dates and sources with them), none a price. After it the table names the board's own product for that
+  store in **3,189 of 3,189** cells; before it, **2,861 of 3,189**, so 328 cells disagreed with the board they are
+  documented as derived from.
+- Seen while measuring, not caused by it: the worktree rebuild and the live `comparison-2026-09-17.json` differ on
+  2 of 572 crowns (pistachios, rice), neither a tie; the live board was built before later rule edits.
 
 ### I176 - When `same_as` is built, identity merging is union-find, and `do_not_merge` must be checked against whole components at union time `PARKED` `queue-7`
 
