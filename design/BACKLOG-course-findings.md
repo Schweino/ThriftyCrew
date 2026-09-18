@@ -11958,7 +11958,7 @@ whether this is one instance or a class. **It is explicitly NOT a proposal to ad
 of these windows are unreachable by any fixture, and a check that cannot be satisfied is the "red on
 day one" shape the ops rules already forbid.
 
-### I160 -  `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I160 -  `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** 13 of 40 sampled sites (33%) use `$null` to answer a presence question. Not near zero, so the one-line rule the item proposes is earned rather than ceremonial - but a sweep is not, because the recount is 1,465 sites across 353 of 777 files.
 
@@ -12016,6 +12016,41 @@ count, so it cannot be re-read or checked. It is re-taken here under these terms
   reported beside (b) and not folded into either side; if (c) is 10 or more of 40 the sample is too
   ambiguous to decide and the verdict is UNDECIDED rather than either answer.
 - One row per site goes to `design/MEASURE-null-presence-sample-2026-09-18.jsonl`.
+
+**RESULT 2026-09-18.** Population at origin/main `8e487807b` (the bar commit touched no `.ps1`): **1,528 sites in
+364 of 788 tracked `.ps1`**, stride 38.2. Of the 40 sampled sites: **(a) 37, (b) 3, (c) 0**. The bar says 3 or
+more earns the rule, so **it is met, at its floor**, and (c) is nowhere near the 10 that would make it UNDECIDED.
+- The three (b): `grocery/validate-triage-plan.ps1:425` (was an `after` price WRITTEN on a cell effect - its own
+  fixture removes the property), `meal-prep/pipeline/wave-preaudit.ps1:856` (a fixture whose failure text is
+  literally "a key is missing", asked with `$null` on three report keys), and `meal-prep/pipeline/hunt-run.ps1:1274`
+  (`@(filter)[0]` read as "no qa lane row"). **Only the first two are KEY or PROPERTY presence**, the kind
+  `ContainsKey` / `PSObject.Properties` can answer; the third is element presence, where `$null` is the idiom and
+  is unambiguous unless the list holds a null. So the verdict turns on one classification: without it (b) is 2 of 40
+  and the bar says close. Stated so nobody reads 3 as comfortable.
+- **Not one of the 40 gives a SILENTLY wrong answer.** Both key-presence sites err in the loud direction: a key
+  present with a null value reads as missing, a false red, never a false green.
+- Beside the classes: **7 of 40** read a field of outside data (JSON, an API) where an ABSENT field and a NULL one
+  read alike. Every one is a VALUE question ("is there a usable price") where the two genuinely mean the same, so
+  they are (a) under the bar as written; the one worth naming is `ops/brain-report.ps1:110`, where schema drift
+  would read RED with a misleading "proposed nothing" reason.
+- **The 2026-09-12 figure (13 of 40) is NOT reproduced.** 13 is inside reach only if the absent-collapses sites
+  are counted as (b) (3 + 7 = 10) and a few more generous calls are added; with no rows kept, which it did cannot
+  be known. Wilson 95% interval on 3 of 40: roughly 3% to 20%.
+- Harness: the sample is the bar's procedure run as `git grep -n -P '<the regex>' HEAD -- '*.ps1'`, sorted by path
+  then line, index floor(19.1 + 38.2 i); every row in the jsonl carries its index, so it replays from the commit.
+
+**The step the bar earns is one line in `C:\Codex\CLAUDE.md`**, which sits outside every git repo and is Brad's
+instruction file, so it is not written by an agent. **NEEDS A RULING.** The line, drafted:
+> - **A presence question is asked with `.ContainsKey()` or `$o.PSObject.Properties['name']`, never inferred from
+>   `-eq $null` or a count.** A key present with a null value and an absent key read alike, and `@($null).Count` is 1.
+>   Where absent and null genuinely mean the same thing ("no usable price"), `$null` is the right test.
+
+Options: **(1)** add that line to `C:\Codex\CLAUDE.md` beside the `@($null).Count` rule, as the item proposed;
+**(2)** add it to `.claude/rules/ops-and-gates.md` instead, versioned but loaded only for `ops/` and `lib/`, which
+holds neither key-presence site found; **(3)** add nothing and close, on the grounds that the bar was met by one
+contested call and none of the 40 was silently wrong. **Recommendation (1)**: it is one versionless line whose cost is
+a few tokens a turn, the bar written before the count says earned, and its last sentence stops it being read as a
+reason to sweep the 37 correct sites. No sweep under any option.
 
 ---
 
