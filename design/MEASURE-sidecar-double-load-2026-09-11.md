@@ -249,3 +249,7 @@ MiB, 1.95x) remain the only measurement of GPU memory; this run's 2.00x is the h
 ran 8.8 to 10.6 s in the 6 double loads against 6.2 to 7.1 s in the 12 single loads, on CPU, and no bar reads it.
 The comparison with 2026-09-11 is one run of 18 trials each, same harness logic, different device and memory basis;
 no other variant was tried.
+
+Re-read at commit caa6def7a: the harness's only change after the 2026-09-11 run is the two flags above, both off by
+default, so a plain run takes the 2026-09-11 code path and every verdict of that run still holds; the re-run results
+above ran at this commit.
