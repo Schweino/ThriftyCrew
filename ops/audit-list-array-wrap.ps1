@@ -2,11 +2,21 @@
   audit-list-array-wrap.ps1 - @() around a New-Object List[object] THROWS under PS 5.1.
 
   SCOPE OF A CLEAN REPORT: UNSOUND. It reads the PowerShell AST of every tracked .ps1 and .psm1 and reports
-    `@($v)` where the binding of $v it can see is a LITERAL `New-Object ...List[object]`. It sees literal
-    assignments only: a list that arrives as a parameter, out of a hashtable or a property, through a second
-    variable (`$b = $a`), from a function's return value, or built from a type name held in a variable is
-    invisible to it, and so is `@($h.rows)`. Silence is not proof. Whether a REPORTED site is a defect is a
-    separate property (completeness) the unsoundness says nothing about: the two fixtures that execute the wrap
+    `@($v)` where the binding of $v it can see is a LITERAL `New-Object ...List[object]`, and since backlog I237
+    `@($v.name)` where the object in $v got such a list in its `name` field: from a hashtable literal it was
+    assigned (`[ordered]@{ name = $list }`, `[pscustomobject]@{...}`), from a member assignment `$v.name = $list`
+    placed after that binding and before the wrap, or - when $v is a parameter - from any call of that function
+    in the same file whose argument for it is such an object (one hop). It sees literal assignments only: a list
+    that arrives through a second variable (`$b = $a`), from a function's return value, from another file, through
+    two calls, or built from a type name held in a variable is invisible to it, and so is a wrap of a property of
+    anything but a variable (`@((Get-Thing).rows)`). Silence is not proof. MEASURED 2026-09-18 on its first run
+    (git listed 795 tracked .ps1/.psm1, the walk resolved 794): 0 property sites on the live tree, against 2,142
+    `@($x.name)` spellings by a plain regex over those files; the pre-fix audit-match-soundness.ps1
+    (c0de652aa^) reports its six wraps, every one a site c0de652aa repaired. A first cut keyed on the field NAME
+    alone reported 22 sites over 7 files, the ones read (carry-forward-regular.ps1, repair-asof-evidence.ps1) each
+    a JSON object sharing a field name with a list the file writes elsewhere; a second cut that ignored ORDER
+    reported 5 in those two files, a field filled with a list only AFTER the reads, to write it back. Both shapes
+    are fixtured as MUST NOT FIRE. Whether a REPORTED site is a defect is a separate property (completeness) the unsoundness says nothing about: the two fixtures that execute the wrap
     on purpose match exactly, which is what `# list-array-wrap:allow` exists for, so a finding is a candidate.
 
   WHAT ACTUALLY THROWS, measured on PS 5.1.26100.9444 on 2026-09-17, one case per line. The brief for this
@@ -180,21 +190,22 @@ function Get-LawBinders {
     [void]$out.Add([pscustomobject]@{
       Name = (Get-LawVarName $left); Qualified = (Test-LawScriptQualified $left); Scope = (Get-LawScope $a)
       Start = $a.Extent.StartOffset; End = $a.Extent.EndOffset; IsList = [bool]$isList
-      Line = $a.Extent.StartLineNumber })
+      Line = $a.Extent.StartLineNumber; Kind = 'assign'; Rhs = $(if ($converted) { $null } else { $a.Right }); Fn = $null; Pos = -1 })
   }
   $params = $Ast.FindAll({ param($x) $x -is [System.Management.Automation.Language.ParameterAst] }, $true)
   foreach ($p in $params) {
     if (-not ($p.Name -is [System.Management.Automation.Language.VariableExpressionAst])) { continue }
     [void]$out.Add([pscustomobject]@{
       Name = (Get-LawVarName $p.Name); Qualified = $false; Scope = (Get-LawScope $p)
-      Start = $p.Extent.StartOffset; End = $p.Extent.EndOffset; IsList = $false; Line = $p.Extent.StartLineNumber })
+      Start = $p.Extent.StartOffset; End = $p.Extent.EndOffset; IsList = $false; Line = $p.Extent.StartLineNumber
+      Kind = 'param'; Rhs = $null; Fn = (Get-LawScope $p); Pos = (Get-LawParamPosition $p) })
   }
   $loops = $Ast.FindAll({ param($x) $x -is [System.Management.Automation.Language.ForEachStatementAst] }, $true)
   foreach ($f in $loops) {
     if (-not ($f.Variable -is [System.Management.Automation.Language.VariableExpressionAst])) { continue }
     [void]$out.Add([pscustomobject]@{
       Name = (Get-LawVarName $f.Variable); Qualified = $false; Scope = (Get-LawScope $f)
-      Start = $f.Extent.StartOffset; End = $f.Extent.EndOffset; IsList = $false; Line = $f.Extent.StartLineNumber })
+      Start = $f.Extent.StartOffset; End = $f.Extent.EndOffset; IsList = $false; Line = $f.Extent.StartLineNumber; Kind = 'loop'; Rhs = $null; Fn = $null; Pos = -1 })
   }
   return $out.ToArray()
 }
@@ -225,13 +236,183 @@ function Resolve-LawBinding {
     $cands = @($g | Where-Object { -not ($_.Start -le $Use.Start -and $_.End -ge $Use.End) })
     if (-not $cands.Count) { continue }
     $prior = @($cands | Where-Object { $_.Start -lt $Use.Start } | Sort-Object Start)
-    if ($prior.Count) { return [pscustomobject]@{ IsList = $prior[$prior.Count - 1].IsList; Line = $prior[$prior.Count - 1].Line } }
+    if ($prior.Count) { return [pscustomobject]@{ IsList = $prior[$prior.Count - 1].IsList; Line = $prior[$prior.Count - 1].Line; Binder = $prior[$prior.Count - 1] } }
     # Nothing precedes it textually - a function defined above the assignment that fills its variable. Then the
     # honest answer is only yes when EVERY binding of the name is the list, and no otherwise.
     $notList = @($cands | Where-Object { -not $_.IsList })
-    return [pscustomobject]@{ IsList = ($notList.Count -eq 0); Line = $cands[0].Line }
+    return [pscustomobject]@{ IsList = ($notList.Count -eq 0); Line = $cands[0].Line; Binder = $(if ($cands.Count -eq 1) { $cands[0] } else { $null }) }
   }
   return $null
+}
+
+# ------------------------------------------------------------------ wraps of a PROPERTY (backlog I237)
+# `@($x.name)` where $x is an object this file builds with a New-Object List[object] in its `name` field. The
+# founding site (grocery\audit-match-soundness.ps1 before c0de652aa) built `$report = [ordered]@{ moved = $moved }`
+# with `$moved = New-Object ...List[object]`, passed it as `New-SoundnessAlertBody $report`, and the function wrapped
+# `@($Report.moved)` through its parameter: six chain runs died on it. So the object is followed from its literal
+# into the wrap in the same scope, and through ONE call into a function this file defines, never further.
+
+function Get-LawCached {
+  <# One FindAll per file, not one per property wrap: the tree holds about two thousand `@($x.name)` spellings and
+     searching the whole AST for each tripled the gate's run time (24 s to 74 s on 794 files, measured 2026-09-18).
+     With this cache 41 s, and with the no-List[object] file skip in Get-LawFindings 30 s: one run of each on a
+     shared box whose load nobody controlled, so read them as sizes, not as a benchmark. #>
+  param($Ast, [string]$Kind, [scriptblock]$Make)
+  if (-not [object]::ReferenceEquals($script:LawCacheAst, $Ast)) { $script:LawCacheAst = $Ast; $script:LawCache = @{} }
+  if (-not $script:LawCache.ContainsKey($Kind)) { $script:LawCache[$Kind] = @(& $Make $Ast) }
+  return $script:LawCache[$Kind]
+}
+
+function Get-LawParamPosition {
+  <# Pure. The 0-based position of a function parameter among its function's parameters, or -1. #>
+  param($P)
+  $fn = Get-LawScope $P
+  if ($null -eq $fn) { return -1 }
+  $ps = if ($fn.Parameters) { @($fn.Parameters) } elseif ($fn.Body.ParamBlock) { @($fn.Body.ParamBlock.Parameters) } else { @() }
+  for ($i = 0; $i -lt $ps.Count; $i++) { if ([object]::ReferenceEquals($ps[$i], $P)) { return $i } }
+  return -1
+}
+
+function Get-LawHashtableOf {
+  <# Pure. The HashtableAst a value evaluates to - through parens, a one-element pipeline and a cast such as
+     [ordered] or [pscustomobject] - or $null. #>
+  param($Node)
+  $n = $Node
+  for ($hop = 0; $hop -lt 8 -and $null -ne $n; $hop++) {
+    if ($n -is [System.Management.Automation.Language.HashtableAst]) { return $n }
+    if ($n -is [System.Management.Automation.Language.PipelineAst]) {
+      if ($n.PipelineElements.Count -ne 1) { return $null }
+      $n = $n.PipelineElements[0]; continue
+    }
+    if ($n -is [System.Management.Automation.Language.CommandExpressionAst]) { $n = $n.Expression; continue }
+    if ($n -is [System.Management.Automation.Language.ParenExpressionAst]) { $n = $n.Pipeline; continue }
+    if ($n -is [System.Management.Automation.Language.ConvertExpressionAst]) { $n = $n.Child; continue }
+    return $null
+  }
+  return $null
+}
+
+function Get-LawUseOf {
+  param($V)
+  return [pscustomobject]@{ Name = (Get-LawVarName $V); Qualified = (Test-LawScriptQualified $V); Scope = (Get-LawScope $V)
+                            Start = $V.Extent.StartOffset; End = $V.Extent.EndOffset }
+}
+
+function Test-LawValueIsList {
+  <# Pure. Does this value hold a New-Object List[object]: the New-Object itself, or one bare variable whose binding
+     at that point is one? #>
+  param($Node, $Binders)
+  if (Test-LawListRhs $Node) { return $true }
+  $n = $Node
+  for ($hop = 0; $hop -lt 8 -and $null -ne $n; $hop++) {
+    if ($n -is [System.Management.Automation.Language.PipelineAst]) {
+      if ($n.PipelineElements.Count -ne 1) { return $false }
+      $n = $n.PipelineElements[0]; continue
+    }
+    if ($n -is [System.Management.Automation.Language.CommandExpressionAst]) { $n = $n.Expression; continue }
+    if ($n -is [System.Management.Automation.Language.ParenExpressionAst]) { $n = $n.Pipeline; continue }
+    break
+  }
+  if (-not ($n -is [System.Management.Automation.Language.VariableExpressionAst])) { return $false }
+  $b = Resolve-LawBinding -Binders $Binders -Use (Get-LawUseOf $n)
+  return ($null -ne $b -and $b.IsList)
+}
+
+function Get-LawListKeyLine {
+  <# Pure. The line of the entry `Key = <list>` in the hashtable a value evaluates to, or 0. #>
+  param($Value, [string]$Key, $Binders)
+  $h = Get-LawHashtableOf $Value
+  if ($null -eq $h) { return 0 }
+  foreach ($kv in $h.KeyValuePairs) {
+    if (-not ($kv.Item1 -is [System.Management.Automation.Language.StringConstantExpressionAst])) { continue }
+    if (-not [string]::Equals([string]$kv.Item1.Value, $Key, [StringComparison]::OrdinalIgnoreCase)) { continue }
+    if (Test-LawValueIsList $kv.Item2 $Binders) { return $kv.Item1.Extent.StartLineNumber }
+  }
+  return 0
+}
+
+function Get-LawObjectListLine {
+  <# Pure. Does the variable $V, at its own position, hold an object whose $Key field is a New-Object List[object]?
+     Its binding is a hashtable literal with that entry, or a member assignment `$V.Key = <list>` in its scope. Returns
+     the line of that binding, or 0. #>
+  param($V, [string]$Key, $Binders, $Ast)
+  $use = Get-LawUseOf $V
+  $b = Resolve-LawBinding -Binders $Binders -Use $use
+  if ($null -ne $b -and $null -ne $b.Binder -and $b.Binder.Kind -eq 'assign' -and $null -ne $b.Binder.Rhs) {
+    $ln = Get-LawListKeyLine $b.Binder.Rhs $Key $Binders
+    if ($ln) { return $ln }
+  }
+  $fills = Get-LawCached $Ast 'fills' { param($a) $a.FindAll({ param($x) $x -is [System.Management.Automation.Language.AssignmentStatementAst] -and
+                                    $x.Left -is [System.Management.Automation.Language.MemberExpressionAst] -and
+                                    -not ($x.Left -is [System.Management.Automation.Language.InvokeMemberExpressionAst]) }, $true) }
+  foreach ($a in $fills) {
+    $l = $a.Left
+    if (-not ($l.Expression -is [System.Management.Automation.Language.VariableExpressionAst])) { continue }
+    if (-not ($l.Member -is [System.Management.Automation.Language.StringConstantExpressionAst])) { continue }
+    if (-not [string]::Equals([string]$l.Member.Value, $Key, [StringComparison]::OrdinalIgnoreCase)) { continue }
+    if ((Get-LawVarName $l.Expression) -ne $use.Name) { continue }
+    if (-not [object]::ReferenceEquals((Get-LawScope $a), $use.Scope)) { continue }
+    if ($a.Operator -ne [System.Management.Automation.Language.TokenKind]::Equals) { continue }
+    # ORDER: the fill must come BEFORE the use and AFTER the binding the use reads. carry-forward-regular.ps1 reads
+    # `@($new.deals)` from a JSON file four times and only then sets `$new.deals = $outDeals` (a list) to write it
+    # back; without this the first measurement reported all four reads (2026-09-18).
+    if ($a.Extent.StartOffset -ge $use.Start) { continue }
+    if ($null -ne $b -and $null -ne $b.Binder -and $a.Extent.StartOffset -le $b.Binder.Start) { continue }
+    if (Test-LawValueIsList $a.Right $Binders) { return $a.Extent.StartLineNumber }
+  }
+  return 0
+}
+
+function Get-LawCallArgument {
+  <# Pure. The argument a call hands to the parameter at $Pos named $Name, or $null: `-Name v`, `-Name:v`, or the
+     $Pos-th positional argument. A named argument to any OTHER parameter is assumed to take one value. #>
+  param($Cmd, [string]$Name, [int]$Pos)
+  $els = $Cmd.CommandElements
+  $k = 0
+  for ($i = 1; $i -lt $els.Count; $i++) {
+    $e = $els[$i]
+    if ($e -is [System.Management.Automation.Language.CommandParameterAst]) {
+      $pn = ([string]$e.ParameterName).ToLowerInvariant()
+      if ($pn.Length -gt 0 -and $Name.StartsWith($pn)) {
+        if ($null -ne $e.Argument) { return $e.Argument }
+        if ($i + 1 -lt $els.Count) { return $els[$i + 1] }
+        return $null
+      }
+      if ($null -eq $e.Argument) { $i++ }
+      continue
+    }
+    if ($k -eq $Pos) { return $e }
+    $k++
+  }
+  return $null
+}
+
+function Get-LawPropertyWrapLine {
+  <# Pure. For a wrap `@($V.Key)`: the line where the object in $V got a New-Object List[object] in its Key field, or
+     0. Followed in $V's own scope, and when $V is a parameter of a function this file defines, through every call of
+     that function in this file whose argument for it is such an object - one hop, never further. #>
+  param($V, [string]$Key, $Binders, $Ast)
+  $ln = Get-LawObjectListLine $V $Key $Binders $Ast
+  if ($ln) { return $ln }
+  $b = Resolve-LawBinding -Binders $Binders -Use (Get-LawUseOf $V)
+  if ($null -eq $b -or $null -eq $b.Binder -or $b.Binder.Kind -ne 'param' -or $null -eq $b.Binder.Fn -or $b.Binder.Pos -lt 0) { return 0 }
+  $fnName = [string]$b.Binder.Fn.Name
+  $pName = $b.Binder.Name
+  $calls = Get-LawCached $Ast 'calls' { param($a) $a.FindAll({ param($x) $x -is [System.Management.Automation.Language.CommandAst] }, $true) }
+  foreach ($c in $calls) {
+    if (-not [string]::Equals([string]$c.GetCommandName(), $fnName, [StringComparison]::OrdinalIgnoreCase)) { continue }
+    $arg = Get-LawCallArgument $c $pName $b.Binder.Pos
+    if ($null -eq $arg) { continue }
+    $hl = Get-LawListKeyLine $arg $Key $Binders
+    if ($hl) { return $hl }
+    $av = $arg
+    if ($av -is [System.Management.Automation.Language.ParenExpressionAst]) { $av = $av.Pipeline.PipelineElements[0].Expression }
+    if ($av -is [System.Management.Automation.Language.VariableExpressionAst]) {
+      $al = Get-LawObjectListLine $av $Key $Binders $Ast
+      if ($al) { return $al }
+    }
+  }
+  return 0
 }
 
 function Get-LawFindings {
@@ -244,6 +425,7 @@ function Get-LawFindings {
   $src = ([string]$Text -replace "`r", '') -split "`n"
   $out = New-Object System.Collections.ArrayList
   $binders = Get-LawBinders $ast
+  $fileHasList = $null
   $wraps = $ast.FindAll({ param($x) $x -is [System.Management.Automation.Language.ArrayExpressionAst] }, $true)
   foreach ($w in $wraps) {
     $stmts = $w.SubExpression.Statements
@@ -254,6 +436,25 @@ function Get-LawFindings {
     $el = $st.PipelineElements[0]
     if (-not ($el -is [System.Management.Automation.Language.CommandExpressionAst])) { continue }
     $v = $el.Expression
+    # A WRAP OF A PROPERTY, `@($x.name)` (backlog I237). Not an invoke (`@($x.ToArray())` is the repair), not a
+    # computed member name, and only on a variable: `@((Get-Thing).rows)` reads an object this file did not build.
+    if (($v -is [System.Management.Automation.Language.MemberExpressionAst]) -and
+        -not ($v -is [System.Management.Automation.Language.InvokeMemberExpressionAst]) -and
+        ($v.Member -is [System.Management.Automation.Language.StringConstantExpressionAst]) -and
+        ($v.Expression -is [System.Management.Automation.Language.VariableExpressionAst])) {
+      # Every property rule needs a New-Object List[object] somewhere in this file; most files have none, so they
+      # are not searched at all (the rule is unchanged by this, only its cost).
+      if ($null -eq $fileHasList) { $fileHasList = ([string]$Text -match '(?i)list\[\s*(system\.)?object\s*\]') }
+      if (-not $fileHasList) { continue }
+      $pl = Get-LawPropertyWrapLine $v.Expression ([string]$v.Member.Value) $binders $ast
+      if (-not $pl) { continue }
+      $line = $w.Extent.StartLineNumber
+      $t = $src[$line - 1].Trim()
+      if ($t -match $script:LAW_ALLOW_RE) { continue }
+      if ($t.Length -gt 160) { $t = $t.Substring(0, 160) + '...' }
+      [void]$out.Add([pscustomobject]@{ Line = $line; Var = $v.Extent.Text; BoundAt = $pl; Text = $t })
+      continue
+    }
     if (-not ($v -is [System.Management.Automation.Language.VariableExpressionAst])) { continue }
     $use = [pscustomobject]@{
       Name = (Get-LawVarName $v); Qualified = (Test-LawScriptQualified $v); Scope = (Get-LawScope $w)
@@ -340,6 +541,39 @@ if ($SelfTest) {
     $r = Get-LawFindings -Text $fxScript
     LawT 'MUST FIRE  a $script:-qualified list wrapped inside a function - the Sam''s hint-notes shape' ($r.Findings.Count -eq 1 -and $r.Findings[0].Line -eq 2) (LawGot $r)
 
+    # ---- WRAPS OF A PROPERTY (backlog I237) ------------------------------------------------------------
+    # The founding shape, as grocery\audit-match-soundness.ps1 carried it before c0de652aa: the report is built with
+    # List fields at top level, handed POSITIONALLY to a function, and wrapped through the parameter. A fixture call
+    # with plain @() fields sits beside the live one, as it did there, and must not hide it.
+    $mkMoved = '$moved = ' + $nw + ' ' + $ty
+    $fxProp = @('function New-Body {', '  param($Report)', '  foreach ($m in @($Report.moved)) { $m }', '}',
+                '$fx = New-Body ([ordered]@{ moved = @() })', $mkMoved,
+                '$report = [ordered]@{ generated = 1; moved = $moved }', '$body = New-Body $report') -join "`n"
+    $r = Get-LawFindings -Text $fxProp
+    LawT 'MUST FIRE  the match-soundness shape: @($Report.moved) through a parameter, the report built with a List field (line 3, bound on line 7)' ($r.Findings.Count -eq 1 -and $r.Findings[0].Line -eq 3 -and $r.Findings[0].BoundAt -eq 7) (LawGot $r)
+    $fxPropNamed = @('function New-Body { param($Other, $Report) $n = @($Report.moved).Count }', $mkMoved,
+                     '$report = [pscustomobject]@{ moved = $moved }', '$b = New-Body -Other 1 -Report $report') -join "`n"
+    $r = Get-LawFindings -Text $fxPropNamed
+    LawT 'MUST FIRE  the same through a NAMED argument to a second parameter, the object a [pscustomobject]' ($r.Findings.Count -eq 1 -and $r.Findings[0].Line -eq 1) (LawGot $r)
+    $fxPropInline = @(('$r = [pscustomobject]@{ rows = (' + $nw + ' ' + $ty + ') }'), '$n = @($r.rows).Count') -join "`n"
+    $r = Get-LawFindings -Text $fxPropInline
+    LawT 'MUST FIRE  a List made inline in the literal and wrapped in the same scope' ($r.Findings.Count -eq 1 -and $r.Findings[0].Line -eq 2) (LawGot $r)
+    $fxPropFill = @('$doc = ConvertFrom-Json $j', $mk, '$doc.deals = $rejects', 'foreach ($d in @($doc.deals)) { $d }') -join "`n"
+    $r = Get-LawFindings -Text $fxPropFill
+    LawT 'MUST FIRE  a member assignment `$doc.deals = <list>` BEFORE the wrap' ($r.Findings.Count -eq 1 -and $r.Findings[0].Line -eq 4 -and $r.Findings[0].BoundAt -eq 3) (LawGot $r)
+    # MUST NOT FIRE: carry-forward-regular.ps1's shape, which the first cut of this rule reported four times - the
+    # wraps read the JSON the file was loaded from, and the List is put in the field only AFTER them, to write it back.
+    $fxPropAfter = @('$new = ConvertFrom-Json $j', 'foreach ($d in @($new.deals)) { $d }', $mk, '$new.deals = $rejects') -join "`n"
+    $r = Get-LawFindings -Text $fxPropAfter
+    LawT 'MUST NOT FIRE  a field filled with a List only AFTER the wraps that read it' ($r.Findings.Count -eq 0) (LawGot $r)
+    $fxPropOther = @($mkMoved, '$report = [ordered]@{ moved = $moved }', '$old = ConvertFrom-Json $j', '$n = @($old.moved).Count') -join "`n"
+    $r = Get-LawFindings -Text $fxPropOther
+    LawT 'MUST NOT FIRE  the same field NAME on a different object, read from a file' ($r.Findings.Count -eq 0) (LawGot $r)
+    $r = Get-LawFindings -Text (@($mkMoved, '$report = [ordered]@{ moved = $moved }', '$a = @($report.moved.ToArray())') -join "`n")
+    LawT 'MUST NOT FIRE  the repair on a property: .ToArray() inside the wrap' ($r.Findings.Count -eq 0) (LawGot $r)
+    $r = Get-LawFindings -Text (@('function New-Body { param($Report) @($Report.moved) }', '$b = New-Body ([ordered]@{ moved = @() })') -join "`n")
+    LawT 'MUST NOT FIRE  a function whose only caller hands it plain @() fields' ($r.Findings.Count -eq 0) (LawGot $r)
+
     # ---- MUST NOT FIRE -------------------------------------------------------------------------------
     $r = Get-LawFindings -Text (@($mk, '$rjRows = @($rejects.ToArray()) + @($hintNotes)') -join "`n")
     LawT 'MUST NOT FIRE  the repair b7060307b shipped: .ToArray() inside the wrap' ($r.Findings.Count -eq 0) (LawGot $r)
@@ -394,6 +628,7 @@ if ($SelfTest) {
       '$n.Add(''a''); $n.Add(''b'')',
       'try { $m = @($n) + $arr; Write-Output ("NEW-OK " + $m.Count) } catch { Write-Output ("NEW-THREW " + $_.Exception.Message) }',
       'try { $t = @($l.ToArray()) + $arr; Write-Output ("TOARRAY-OK " + $t.Count) } catch { Write-Output ("TOARRAY-THREW " + $_.Exception.Message) }',
+      'try { $o = [ordered]@{ f = $l }; $pw = @($o.f); Write-Output ("PROP-OK " + $pw.Count) } catch { Write-Output ("PROP-THREW " + $_.Exception.Message) }',
       'exit 0'
     ) -join "`n"
     $childPath = Join-Path $sbDir 'hazard.ps1'
@@ -405,6 +640,7 @@ if ($SelfTest) {
     LawT 'CLEAN TWIN  the BARE variable still concatenates in the same child, count 3 - which is why it is not reported' ($joined -match 'BARE-OK 3') ('out=' + $joined)
     LawT 'CLEAN TWIN  the ::new() list still wraps and concatenates, count 3 - the creation form is half the rule' ($joined -match 'NEW-OK 3') ('out=' + $joined)
     LawT 'CLEAN TWIN  the .ToArray() repair still concatenates, count 3' ($joined -match 'TOARRAY-OK 3') ('out=' + $joined)
+    LawT 'MUST FIRE  the PROPERTY wrap throws too: @($o.f) where the field holds that List (backlog I237, the match-soundness crash)' ($joined -match 'PROP-THREW.*Argument types do not match') ('out=' + $joined)
 
     # ---- THE WALK, FROM A WORKTREE ROOT (lib\tree-walk.ps1) -------------------------------------------
     $wtFx = New-TcWorktreeFixture -Files @{ 'grocery\bad.ps1' = $fxFounding; 'ops\good.ps1' = (@($mkNew, '$out = @($rows)') -join "`n")
