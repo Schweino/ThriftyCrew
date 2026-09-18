@@ -83,6 +83,20 @@ function Get-AgeDays {
   try { return [math]::Round(($Now - [datetime]$Iso).TotalDays, 1) } catch { return $null }
 }
 
+function Get-BusCounts {
+  <# Events on the bus in the last 24 h and in the last BusSilentDays, as { Bus24; Bus72 }.
+     The window READS $script:FLOOR.BusSilentDays (2026-09-19, backlog I196). Until then the live read
+     hard-coded `3 * 86400` beside a constant of 3 that only ever reached the message, so moving the
+     constant would have changed what the RED line SAID and not what it measured. An event exactly
+     BusSilentDays old is inside the window, because Read-TcEvents keeps t -ge SinceEpoch. #>
+  param([long]$NowEpoch, [string]$Path = '')
+  $since = $NowEpoch - [long]$script:FLOOR.BusSilentDays * 86400
+  $r = if ($Path) { Read-TcEvents -Path $Path -SinceEpoch $since } else { Read-TcEvents -SinceEpoch $since }
+  $all = @($r)
+  $day = @($all | Where-Object { [long]$_.t -ge ($NowEpoch - 86400) })
+  return [pscustomobject]@{ Bus24 = $day.Count; Bus72 = $all.Count }
+}
+
 function New-Stage {
   param([string]$Stage, [string]$Does, [string]$Owner, [string]$Live, [int]$Evidence, [string]$Floor, [string]$Why = '')
   return [pscustomobject]@{ stage = $Stage; does = $Does; owner = $Owner; live = $Live; evidence = $Evidence; floor = $Floor; why = $Why }
@@ -274,6 +288,34 @@ if ($SelfTest) {
   $s12 = Get-EstateStages -S $h12 -Bus24 1 -Bus72 1 -Now $now
   Case 'MUST NOT FIRE' 'a source that could not run reads NO EVIDENCE, never ok' ((StageOf $s12 'propose').floor -eq 'NO EVIDENCE' -and (StageOf $s12 'score').floor -eq 'NO EVIDENCE')
 
+  # THE BUS WINDOW AT ITS BAR (2026-09-19, backlog I196). The perceive cases above hand Get-EstateStages a
+  # count, so the BusSilentDays boundary lived only in the live read and no case could see it. These drive
+  # the real Read-TcEvents over a frozen bus file in a per-run temp directory.
+  $busDir = Join-Path $env:TEMP ('br-bus-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  New-Item -ItemType Directory -Path $busDir -ErrorAction Stop | Out-Null
+  try {
+    $bNowE = [long]1789000000
+    $win = [long]$script:FLOOR.BusSilentDays * 86400
+    $atBar = Join-Path $busDir 'at.jsonl'; $past = Join-Path $busDir 'past.jsonl'
+    [IO.File]::WriteAllLines($atBar, [string[]]@('{"t":' + ($bNowE - $win) + ',"kind":"fixture"}'))
+    [IO.File]::WriteAllLines($past, [string[]]@('{"t":' + ($bNowE - $win - 1) + ',"kind":"fixture"}'))
+    $nAt = Get-BusCounts -NowEpoch $bNowE -Path $atBar
+    $sAt = Get-EstateStages -S (Healthy) -Bus24 $nAt.Bus24 -Bus72 $nAt.Bus72 -Now $now
+    # MUST NOT FIRE: one event exactly BusSilentDays old is inside the window, so the bus is not silent.
+    Case 'MUST NOT FIRE' 'perceive: one event exactly AT the silent-days bar keeps the bus ok' ($nAt.Bus72 -eq 1 -and (StageOf $sAt 'perceive').floor -eq 'ok') "bus72=$($nAt.Bus72) floor=$((StageOf $sAt 'perceive').floor)"
+    $nPast = Get-BusCounts -NowEpoch $bNowE -Path $past
+    $sPast = Get-EstateStages -S (Healthy) -Bus24 $nPast.Bus24 -Bus72 $nPast.Bus72 -Now $now
+    # MUST FIRE: the same event one second older is outside it, and the bus reads silent.
+    Case 'MUST FIRE' 'perceive: the only event one second past the silent-days bar is RED' ($nPast.Bus72 -eq 0 -and (StageOf $sPast 'perceive').floor -eq 'RED') "bus72=$($nPast.Bus72) floor=$((StageOf $sPast 'perceive').floor)"
+    # CLEAN TWIN: the window is the CONSTANT, not a second copy of it - widen the floor and the older event counts.
+    $keepDays = $script:FLOOR.BusSilentDays
+    try {
+      $script:FLOOR.BusSilentDays = $keepDays + 1
+      $nWide = Get-BusCounts -NowEpoch $bNowE -Path $past
+    } finally { $script:FLOOR.BusSilentDays = $keepDays }
+    Case 'CLEAN TWIN' 'the bus window follows FLOOR.BusSilentDays rather than a hard-coded 3' ($nWide.Bus72 -eq 1) "bus72=$($nWide.Bus72)"
+  } finally { Remove-Item -LiteralPath $busDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   $w1 = Get-WeakestLink -Stages $hs
   # tune at 1, derived from the fixture: perceive 12, propose 6, review 4, apply 2, score 3, generalise 2,
   # correct 5, tune 1, forget 9. The first draft expected generalise, which was my reading, not the code.
@@ -325,10 +367,8 @@ $S = @{
   incidents   = Get-JsonLine -Out $res[5].Out -Prefix 'incident-json:'
 }
 $nowE = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-$b72R = Read-TcEvents -SinceEpoch ($nowE - 3 * 86400)
-$b72 = @($b72R)
-$b24 = @($b72 | Where-Object { [long]$_.t -ge ($nowE - 86400) })
-$stR = Get-EstateStages -S $S -Bus24 $b24.Count -Bus72 $b72.Count -Now $now
+$busN = Get-BusCounts -NowEpoch $nowE
+$stR = Get-EstateStages -S $S -Bus24 $busN.Bus24 -Bus72 $busN.Bus72 -Now $now
 $stages = @($stR)
 $weakest = Get-WeakestLink -Stages $stages
 $known = @($S.Values | Where-Object { $null -ne $_ }).Count

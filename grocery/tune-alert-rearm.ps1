@@ -141,6 +141,13 @@ if ($SelfTest) {
   $m10 = Get-RearmMove -Current 400 -Judged 5 -Rate 20.0 -LastMove '' -LastClose $recent -Now $now
   Case 'MUST NOT FIRE' 'an out-of-range stored value is not trusted - it restarts from 14' ($m10.Next -eq 28) "$($m10.Next)"
 
+  # AT THE BAR (2026-09-19, backlog I196). m1 and m9 sit 20 points either side of LOW_PRECISION, so both
+  # pass under -lt and -le alike. "Under 40%" doubles; exactly 40% does not, and one point under does.
+  $m12 = Get-RearmMove -Current 14 -Judged 5 -Rate $script:LOW_PRECISION -LastMove '' -LastClose $recent -Now $now
+  Case 'MUST NOT FIRE' 'precision exactly AT the low bar does not double' ($m12.Action -eq 'hold' -and $m12.Next -eq 14) "$($m12.Action) $($m12.Next)"
+  $m13 = Get-RearmMove -Current 14 -Judged 5 -Rate ($script:LOW_PRECISION - 1) -LastMove '' -LastClose $recent -Now $now
+  Case 'MUST FIRE' 'precision one point under the low bar doubles' ($m13.Action -eq 'double' -and $m13.Next -eq 28) "$($m13.Action) $($m13.Next)"
+
   $m11 = Get-RearmMove -Current 14 -Judged 5 -Rate 20.0 -LastMove '2026-09-30' -LastClose $recent -Now $now
   Case 'CLEAN TWIN' 'a move 15 days after the last one is allowed' ($m11.Action -eq 'double' -and $m11.Next -eq 28) "$($m11.Action) $($m11.Next)"
   $items = @(

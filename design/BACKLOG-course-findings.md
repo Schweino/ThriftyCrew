@@ -13873,7 +13873,7 @@ enter Matcher.load ONCE" (entries=8), rc 1, and app.py was restored md5-identica
 old code until its next restart after the main checkout carries this commit; `/health` reports `load_count` once
 it does.
 
-### I196 - fixture labels record the verdict and never the input class, so nobody can read partition coverage off a suite `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+### I196 - fixture labels record the verdict and never the input class, so nobody can read partition coverage off a suite `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q6-quality-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13949,6 +13949,74 @@ count is printed as covered of applicable, per detector and in total.
   disagrees with its own comment or register row, that is a behaviour fix and is reported, not assumed.
 - **Raise the label question with Brad** only if C5 is uncovered in 5 or more of the 10: a gap that
   common is one a label could have made visible. Below 5, no ruling is asked for.
+
+**Measured 2026-09-19 at origin/main 777413873**, by reading each constant's comparison and every case in
+the suite that reaches it (a one-off reading, so no committed harness; the rule and classes above are the
+whole method). One row per detector; `y` covered, `-` uncovered, `n/a` out of the denominator.
+
+| Detector (constant, comparison) | C1 empty | C2 one | C3 inside | C4 beyond | C5 at | C6 one-past | C7 order | Covered |
+|---|---|---|---|---|---|---|---|---|
+| `capture-watchdog` (`BoardStaleHours` 26, age `-gt`) | - | n/a | y (18.8 h) | y (27.3 h) | - | - (27.3 h is 1.3 h past) | n/a | 2 of 5 |
+| `check-ad-cycles` (`REARM_DAYS` 14, days `-ge`) | - (no usable clock) | n/a | y (1 to 12 d) | y (30 d) | y (the ride case's key B is exactly 14.0 d on day 3) | - | n/a | 3 of 5 |
+| `tune-alert-rearm` (`LOW_PRECISION` 40, rate `-lt`) | y (no rate) | n/a | y (60%) | y (20%) | - | - | n/a | 3 of 5 |
+| `brain-report` (`BusSilentDays` 3, bus window) | y (0 events) | - | y (40) | y (0) | - (the window lived only in the live read) | - | n/a | 3 of 6 |
+| `report-ratchet-trends` (`$StoppedRuns` 30, flat days) | - | - | y (29) | - (30 is the bar itself) | y (30) | - | y (oldest-first order) | 3 of 7 |
+| `audit-rule-currency` (`$StaleDays` 90, age `-gt`) | y (no date) | n/a | y (89 d) | y (122 d) | - | - | n/a | 3 of 5 |
+| `lib/ratchet` (`-MaxDropPct` 60, fall `-gt`) | y (0 of 0) | n/a | y (55%) | y (85%) | - | - | n/a | 3 of 5 |
+| `notify-item-added` (`$SENT_LOG_KEEP_DAYS` 180, age `-ge` keep) | y (dateless row) | n/a | y (7 d) | y (615 d) | - | - | n/a | 3 of 5 |
+| `promote_aliases.py` (`MAX_NEW_HOLDS_PER_RUN` 10, count `<=`) | - (0 new) | - (1 new) | y (3) | y (25) | y (10) | y (11) | n/a | 4 of 6 |
+| `member-cohorts` (`HISTORY_MAX_AGE_DAYS` 40, age `-gt`) | y (no rows) | n/a | y (11 d) | y (83 d) | - | - | n/a | 3 of 5 |
+
+**Totals: 30 of 54 applicable classes covered.** By class: C1 empty 6 of 10, C2 one 0 of 3, C3 inside
+10 of 10, C4 beyond 9 of 10, **C5 at the bar 3 of 10**, **C6 one-past 1 of 10**, C7 order 1 of 1. The
+shape is one finding, not seven: every suite sampled pins the two comfortable sides of its bar and almost
+none pins the bar, so in 7 of 10 an inclusive-versus-exclusive flip (`-gt` to `-ge`) passes the whole
+suite. Two of the three that do cover C5 say so on purpose (`promote_aliases.py`'s "exactly AT the limit",
+`report-ratchet-trends`' 29 and 30); `check-ad-cycles`' is incidental to a case about something else.
+**The census number was not a bad guess**: its 24 boundary-word lines over 7,613 read as rare, and the
+sound sample agrees that boundary cases are rare. UNSOUND caveat on this table too: it is one reader's
+reading of ten suites, and "covered" was decided by input value, never by label.
+
+**Against the bar: C5 is uncovered in 7 of 10, so a fix is warranted (3 or more) AND the label question
+goes to Brad (5 or more).**
+
+**Fix shipped for the first three in register order** (each a MUST NOT FIRE exactly at the bar and a MUST
+FIRE one step past it, each killed once by a mutant with the original restored md5-identical):
+- `grocery/capture-watchdog.ps1`: a board exactly 26.0 h old is fresh, 26 h 1 min is a finding. Mutant
+  `-gt` to `-ge`: rc 1, *"a board exactly 26.0 h old read as stale"*; restored rc 0.
+- `grocery/tune-alert-rearm.ps1`: precision exactly 40% holds, 39% doubles (15 of 15 cases). Mutant `-lt`
+  to `-le`: rc 1, 1 FAILED of 15, the at-the-bar case; restored rc 0.
+- `ops/brain-report.ps1`: **this one was a real defect as well as a gap.** The live read hard-coded
+  `3 * 86400` beside `$script:FLOOR.BusSilentDays = 3`, which reached only the RED message, so moving the
+  constant would have changed what the line SAID and not what it measured (the register row describes the
+  constant as controlling the floor). The window is now `Get-BusCounts`, which reads the constant; three
+  cases drive the real `Read-TcEvents` over a frozen bus file in a per-run temp directory: one event exactly
+  3 days old keeps perceive ok, one second older is RED, and a CLEAN TWIN widens the constant and sees the
+  older event counted (22 of 22). Mutant `+ 1` on the window start: rc 1, the at-the-bar case; mutant back
+  to the hard-coded `3 * 86400`: rc 1, the CLEAN TWIN. Value-neutral on the live bus: the old expression and
+  `Get-BusCounts` both read 15 events in 72 h and 11 in 24 h over `ops\out\events.jsonl` on 2026-09-19.
+
+**Remaining (not done here, by the bar's own cap of three):** at-the-bar and one-past cases for
+`ops/audit-rule-currency.ps1` (90 d, `-gt`), `lib/ratchet.ps1` (60%, `-gt`),
+`grocery/notify-item-added.ps1` (180 d, `-ge` keeps) and `ops/member-cohorts.ps1` (40 d, `-gt`); and the
+C1/C2 gaps in the table (`capture-watchdog`'s null write time, `check-ad-cycles`' clockless key,
+`report-ratchet-trends`' empty and one-reading series, `promote_aliases.py`'s zero and one new hold).
+
+**The ruling asked for.** C5 was missed in 7 of 10 suites whose labels all read correctly, so the labels
+could not have shown it. Options:
+1. **A habit line, no vocabulary change.** One line in `.claude/rules/ops-and-gates.md`: a threshold or
+   count detector's self-test carries a case exactly AT its bar and one a step past it, and names the bar
+   in the case text (as the three added here do). No gate: it would be red on day one.
+2. **A fourth label, `AT THE BAR`,** beside `MUST FIRE` and `MUST NOT FIRE`, so boundary coverage is one
+   grep. Costs a change to `ops/audit-fixture-vocabulary.ps1` and to every reader of the three-label rule.
+3. **An input-class tag on the existing labels** (`MUST NOT FIRE [at-bar]`, from a closed set: empty, one,
+   at-bar, one-past, order). Answers the item's original question for every class, at the highest cost.
+4. **Nothing further**: the three fixes and the remaining list stand, no rule.
+
+**Recommendation: 1.** The gap is concentrated in one class (C5 3 of 10, C6 1 of 10, against C3 10 of
+10), and a rule naming that class reaches the next suite at the moment it is written, which is where
+every one of these was lost; a label records a class only after someone thought of the case, which is
+the step that did not happen. The remaining four detectors are then a sweep that rule makes routine.
 
 ### I197 - 36 unbounded while-true loops, and at least one ends only when a remote server says so `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BUILD`
 

@@ -339,6 +339,18 @@ if ($SelfTest) {
     Write-Output 'FAIL  comparison-2026-08-26 rebuilt 18.8 h ago was called stale - the ad-cycle false positive is back'; $fail++
   } else { Write-Output 'ok    a 4-day-old FILENAME with an 18.8 h-old rebuild stays silent' }
 
+  # AT THE BAR (2026-09-19, backlog I196). The two cases above sit 7.2 h inside and 1.3 h past the bar, so
+  # neither could see whether the comparison is inclusive: -gt and -ge passed them both. The bar is how
+  # old a board MAY be, so a board exactly $BoardStaleHours old is still fresh and one minute more is not.
+  # MUST NOT FIRE: exactly at the bar.
+  if (Test-BoardStale -BoardWritten $bNow.AddHours(-$script:BoardStaleHours) -Now $bNow) {
+    Write-Output "FAIL  a board exactly $($script:BoardStaleHours).0 h old read as stale - the bar is inclusive of the age it allows"; $fail++
+  } else { Write-Output "ok    a board exactly $($script:BoardStaleHours).0 h old is still fresh (at the bar)" }
+  # MUST FIRE: one minute past the bar.
+  if (-not (Test-BoardStale -BoardWritten $bNow.AddHours(-$script:BoardStaleHours).AddMinutes(-1) -Now $bNow)) {
+    Write-Output "FAIL  a board one minute past the $($script:BoardStaleHours) h bar read as fresh"; $fail++
+  } else { Write-Output "ok    a board one minute past the $($script:BoardStaleHours) h bar is a finding" }
+
   # The bar sits under two cadences, so a dead day cannot hide behind yesterday's output.
   if ($script:BoardStaleHours -ge 48) {
     Write-Output 'FAIL  the staleness window is at least two capture cadences wide - a skipped day would be alibied by the previous one'; $fail++
