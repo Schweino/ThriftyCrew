@@ -14718,6 +14718,23 @@ space for a full copy), `auto_vacuum=INCREMENTAL` (needs a rebuild to set), or f
 writer. `graph.db` is a rebuildable index (`applies-here.md` 10), so a rebuild also resets it.
 Source: SQLite `pragma.html` (freelist_count, page_count) and the doc-sqlite-internals read.
 
+**Acceptance bar, written 2026-09-18 BEFORE the measurement (backlog E21).** The question the week of
+nightly readings was meant to answer is whether the freelist is a ONE-OFF high-water mark (a VACUUM
+fixes it for good) or a PER-RUN CYCLE (every import regrows it, so a VACUUM is undone by the next
+import). It can be answered from what the database already records, on a backup-API snapshot taken
+from a `mode=ro` connection, never the live file:
+- M1: `freelist_count` and `page_count` on today's snapshot.
+- M2: rows each recorded import run pruned, read from the `superseded` total in every
+  `import_complete` event in `decision_log`, with the count of runs that carry one.
+- M3: bytes one `price_observations` row costs, table plus its index entries, from `dbstat` (or the
+  pages those b-trees hold divided by the row count, if `dbstat` is not compiled in).
+- **CYCLE** if the median run's `superseded` x M3 is at least 50% of the freelist's bytes: a VACUUM is
+  NOT warranted, and the item closes DONE with that reason and the rule for reading the file size.
+- **ONE-OFF** if it is under 50%: a one-time VACUUM is READY FOR BRAD, proven on a copy first (bytes
+  before and after, `integrity_check` ok, every table's row count identical, time taken).
+- **BLIND** if fewer than 3 recorded runs carry a `superseded` count: the item stays OPEN on its
+  nightly-record rung.
+
 ### I212 - Run statistics on graph.db: one full ANALYZE, then PRAGMA optimize at every connection close `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
