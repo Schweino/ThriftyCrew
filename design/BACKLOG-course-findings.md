@@ -13454,6 +13454,18 @@ already carry this habit in places (`.claude/rules/ops-and-gates.md` asks that a
 alternative and why it lost. Only if that confirms the grep is a template line worth proposing. This is
 filed as a measurement, not a demand for a new gate.
 
+**Acceptance bar, written 2026-09-18 at bcd3dbdeb BEFORE any plan was read.** Population: the 52 files
+`git ls-files 'design/PLAN-*.md'` returns at that commit (the 54 above was a different count; the 5
+`PLAN-*` files outside `design/` are out of scope). Sample, fixed before reading: sort those 52 names
+ordinally and take every fifth from the first, indices 0, 5, 10 ... 45, which is 10 files. A plan
+**counts** when, by reading, it names at least one concrete option for a decision it makes that it did
+NOT take AND gives a reason that option lost (one clause is enough; "we could also X" with no reason
+does not count, and a list of future work does not count). Each plan is recorded as one row with the
+option named and the line it sits on, so the verdict can be re-read. **Bar: 6 or fewer of 10 counting
+confirms the gap and a template line is warranted; 7 or more says the habit is present in prose, the
+grep was a spelling artefact, and no fix is warranted.** The same three-spelling grep is also run over
+the 10 so the floor's undercount is measured on the same cases.
+
 ### I188 - a child's stdout is parsed as data without an exit-code or shape check `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
 
 **Merged from `design\backlog-inbox\q6-sdp-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
