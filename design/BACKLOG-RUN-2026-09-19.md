@@ -23,3 +23,4 @@ Orchestration branch: `claude/backlog-run-0919`. Each item lands through its own
 | I205 | DONE | b986423a3 + 8f01557b2: literal ./ prefix stripped in pipeline-commit and bot-paths, MUST FIREs red under the old TrimStart, 0 of 8,563 tracked paths change verdict |
 | I198 | DONE | 886796dff: Ghost POST no longer replayed on a timeout or 5xx, Friday send writes an invoking marker before it mails and refuses plus alerts on invoking-without-sent; 3 mutants killed |
 | I199 | DONE | 886796dff: rules text names the headers that state idempotency |
+| I195 | DONE | 3e5ee4b43: the 2026-09-11 lock cherry-picked onto main, harness re-run beside the live sidecar (6 of 6 double loads unlocked, 6 of 6 single locked), app_selftest MUST FIRE red with the lock broken; takes effect at the next sidecar restart |
