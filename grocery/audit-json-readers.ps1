@@ -32,12 +32,25 @@
 # day one and a gate that fails from day one is a gate that gets switched off. The baseline may only go
 # DOWN. A NEW bare reader hard-fails, because that is a regression rather than the known backlog.
 #
-#   .\audit-json-readers.ps1              audit and compare against the ratchet
+#   .\audit-json-readers.ps1              audit and compare against the ratchet; never lowers the mark
+#   .\audit-json-readers.ps1 -Tighten     the same, and record a believable FALL as the new high-water mark
 #   .\audit-json-readers.ps1 -Baseline    (re-)write the high-water mark from the current count
-#   .\audit-json-readers.ps1 -SelfTest    frozen must-fire + clean twins
+#   .\audit-json-readers.ps1 -SelfTest    frozen must-fire + clean twins, plus the live path against a temp tree
 # Exit 0 = at or below the baseline. Exit 2 = ratchet broken, or a self-test regression. Exit 3 = BLIND.
+#
+# A PLAIN RUN WRITES NEITHER THE MARK NOR A CHANGED-NOTHING REPORT (backlog I227, 2026-09-18). The tighten
+# branch lowered the tracked baseline on every plain run, against "a plain run of a ratchet never writes its
+# mark" (.claude\rules\ops-and-gates.md; design\MEASURE-ratchet-plain-run-writes-2026-09-12.md named this file
+# as the one left standing). A fall is now SPOKEN and the mark KEPT; -Tighten records it. And the tracked
+# report out\json-readers.json was rewritten on EVERY run, with a fresh `generated` time and in CRLF over an
+# eol=lf blob, so a hand run left the checkout ` M` even when nothing changed. It now carries no clock and goes
+# through lib\lf-write.ps1, which keeps the committed BOM and skips identical bytes: an unchanged tree leaves
+# it untouched, and a changed finding still lands in it for the daily commit.
+# SCOPE OF A CLEAN REPORT: UNSOUND. A line-level text scan of grocery\*.ps1 and lib\*.ps1 for the spellings
+# under WHAT IT FLAGS; a clean report means none of those spellings is present, not that every JSON read in
+# the estate states its encoding.
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([string]$Root = '', [string]$OutDir = '', [switch]$Baseline, [switch]$SelfTest, [switch]$AcceptDrop)
+param([string]$Root = '', [string]$OutDir = '', [switch]$Baseline, [switch]$SelfTest, [switch]$AcceptDrop, [switch]$Tighten)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 # THIS GUARD READ ITS OWN BASELINE THROUGH A FUNCTION IT NEVER LOADED (found 2026-09-05). The baseline read
@@ -49,6 +62,7 @@ $ErrorActionPreference = 'Stop'
 # run rather than a crash, but it must no longer be able to swallow a missing dependency.
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not (Get-Command Read-JsonFile -ErrorAction SilentlyContinue)) { throw 'audit-json-readers: Read-JsonFile is not loaded, so the baseline read would fail-open and re-baseline the ratchet.' }
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')   # Write-TcLfFile: the report and baseline are tracked, stored eol=lf with a BOM
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $Root)   { $Root = $here }
 if (-not $OutDir) { $OutDir = Join-Path $here 'out' }
@@ -134,8 +148,52 @@ if ($SelfTest) {
     Write-Output '  PASS  RATCHET: one more is a break, equal holds, fewer tightens, no baseline is a first run'
   } else { Write-Output '  FAIL  the ratchet verdict is wrong'; $fail++ }
 
+  # THE LIVE PATH, run as a child against a temp tree and a temp out\ (backlog I227). The founding defect is
+  # a PLAIN run lowering the tracked mark and rewriting the tracked report, so only a real run can show it.
+  $ajrTmp = Join-Path $env:TEMP ('ajr-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+  $ajrG = Join-Path $ajrTmp 'g'; $ajrO = Join-Path $ajrTmp 'o'
+  try {
+    New-Item -ItemType Directory -Path $ajrG, $ajrO -Force -ErrorAction Stop | Out-Null
+    $ajrBad = '$d = Get-Content $p -Raw ' + '|' + ' ConvertFrom' + '-Json'    # built from pieces, as above
+    [IO.File]::WriteAllText((Join-Path $ajrG 'fx.ps1'), ($ajrBad + "`n" + $ajrBad + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $ajrBl = Join-Path $ajrO 'json-readers-baseline.json'
+    $ajrRep = Join-Path $ajrO 'json-readers.json'
+    function AjrBase([int]$n) { $null = Write-TcLfFile -Path $ajrBl -Text (([ordered]@{ generated = 'fixture'; count = $n; note = 'fixture' }) | ConvertTo-Json) }
+    function AjrRun([string[]]$extra) {
+      $o = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $ajrG -OutDir $ajrO @extra)
+      return [pscustomobject]@{ rc = $LASTEXITCODE; text = (@($o) -join "`n") }
+    }
+    # MUST FIRE (the defect): a FALL, 2 sites against a mark of 3, on a PLAIN run. The mark stays byte-identical.
+    AjrBase 3
+    $before = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ajrBl))
+    $r = AjrRun @()
+    $same = [string]::Equals($before, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ajrBl)), [StringComparison]::Ordinal)
+    if ($r.rc -eq 0 -and $same -and $r.text -match 'CAN tighten') { Write-Output '  PASS  MUST FIRE live: a fall on a PLAIN run is spoken ("CAN tighten") and the mark is left byte-identical' }
+    else { Write-Output ('  FAIL  MUST FIRE live: a plain run moved the mark or did not speak the fall (rc=' + $r.rc + ' markUnchanged=' + $same + ')'); $fail++ }
+    # CLEAN TWIN: -Tighten still records that fall, in the bytes git stores (BOM, no CR).
+    $r = AjrRun @('-Tighten')
+    $blB = [IO.File]::ReadAllBytes($ajrBl); $cr = @($blB | Where-Object { $_ -eq 13 }).Count
+    $newCount = [int]((Read-JsonFile $ajrBl).count)
+    if ($r.rc -eq 0 -and $newCount -eq 2 -and $cr -eq 0 -and $blB[0] -eq 0xEF) { Write-Output '  PASS  CLEAN TWIN live: -Tighten records the fall (3 -> 2) with the BOM and no CR' }
+    else { Write-Output ('  FAIL  CLEAN TWIN live: -Tighten did not record the fall cleanly (rc=' + $r.rc + ' count=' + $newCount + ' cr=' + $cr + ')'); $fail++ }
+    # MUST FIRE (the report half): the tree has not changed since the last run, so the report must not be rewritten.
+    $repT = (Get-Item -LiteralPath $ajrRep).LastWriteTimeUtc
+    $repB = [Convert]::ToBase64String([IO.File]::ReadAllBytes($ajrRep))
+    Start-Sleep -Milliseconds 50
+    $r = AjrRun @()
+    $repSame = ((Get-Item -LiteralPath $ajrRep).LastWriteTimeUtc -eq $repT) -and [string]::Equals($repB, [Convert]::ToBase64String([IO.File]::ReadAllBytes($ajrRep)), [StringComparison]::Ordinal)
+    if ($r.rc -eq 0 -and $repSame -and $r.text -match 'unchanged, not rewritten') { Write-Output '  PASS  MUST FIRE live: a run over an unchanged tree leaves the report untouched (no clock, identical bytes skipped)' }
+    else { Write-Output ('  FAIL  MUST FIRE live: an unchanged tree rewrote the report (rc=' + $r.rc + ' untouched=' + $repSame + ')'); $fail++ }
+    # CLEAN TWIN: a RISE still hard-fails - 2 sites against a mark of 1.
+    AjrBase 1
+    $r = AjrRun @()
+    if ($r.rc -eq 2 -and $r.text -match 'RATCHET BROKEN') { Write-Output '  PASS  CLEAN TWIN live: a rise over the mark still exits 2' }
+    else { Write-Output ('  FAIL  CLEAN TWIN live: a rise did not exit 2 (rc=' + $r.rc + ')'); $fail++ }
+  } catch { Write-Output ('  FAIL  the live-path cases threw: ' + $_.Exception.Message); $fail++ }
+  finally { Remove-Item -LiteralPath $ajrTmp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail) { Write-Output "SELF-TEST FAILED ($fail)"; exit 2 }
-  Write-Output 'SELF-TEST PASS - founding bug armed, four clean twins and the ratchet hold'
+  Write-Output 'SELF-TEST PASS - founding bug armed, four clean twins, the ratchet hold, and four live-path cases'
   exit 0
 }
 
@@ -176,12 +234,14 @@ $base = $null
 if ((Test-Path $blF) -and -not $Baseline) { try { $base = [int]((Read-JsonFile $blF).count) } catch { $base = $null } }
 $verdict = Get-RatchetVerdict $count $base
 if ($Baseline -or $verdict -eq 'first') {
-  @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the bare-JSON-reader ratchet, set 2026-09-05 when PS 5.1 codepage decoding was found corrupting live board names. This number may only go DOWN. A run above it is a NEW bare reader and hard-fails.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+  $null = Write-TcLfFile -Path $blF -Text (([ordered]@{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the bare-JSON-reader ratchet, set 2026-09-05 when PS 5.1 codepage decoding was found corrupting live board names. This number may only go DOWN. A run above it is a NEW bare reader and hard-fails.' }) | ConvertTo-Json -Depth 3)
   Write-Output ("  baseline written: $count site(s). From here the number may only go DOWN.")
   Exit-Guard -Name 'json-readers' -Summary "baseline $count" -Code 0
 }
-@{ generated = (Get-Date).ToString('s'); count = $count; findings = @($findings) } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'json-readers.json') -Encoding UTF8
+# NO CLOCK IN THE REPORT: a `generated` time made every run a rewrite of a tracked file. The commit that
+# carries a change is its timestamp.
+$reportWritten = Write-TcLfFile -Path (Join-Path $OutDir 'json-readers.json') -Text (([ordered]@{ count = $count; findings = @($findings) }) | ConvertTo-Json -Depth 5)
+Write-Output ('  report out\json-readers.json: ' + $(if ($reportWritten) { 'written (its findings changed)' } else { 'unchanged, not rewritten' }))
 if ($verdict -eq 'break') {
   Write-Output ("audit-json-readers: RATCHET BROKEN - $count site(s) now, baseline $base. A NEW bare JSON read has been added. On a BOM-less file it will silently mangle every non-ASCII character and bake the damage into the bytes. Use Read-JsonFile from lib\json-io.ps1.")
   Exit-Guard -Name 'json-readers' -Summary "$count over a baseline of $base" -Code 2
@@ -192,6 +252,12 @@ if ($verdict -eq 'tighten') {
   # built for and which this file never adopted: a run that scanned fewer files, or matched nothing
   # because the pattern rotted, would write its own blindness in as a permanent ceiling and print a
   # pass forever afterwards. Found by ops\audit-one-way-actuators.ps1 on its first sweep.
+  # AND A PLAIN RUN DOES NOT RECORD IT (backlog I227): the fall is spoken, the committed mark kept, and
+  # -Tighten is the deliberate record. Same rule and wording as ops\audit-write-only-reports.ps1.
+  if (-not $Tighten) {
+    Write-Output ("  ratchet CAN tighten: $count site(s), baseline $base. NOT written: a rewrite here dirties the checkout that ran it and rides no commit. Record it with -Tighten and commit out\json-readers-baseline.json.")
+    Exit-Guard -Name 'json-readers' -Summary "$count site(s), baseline $base, can-tighten" -Code 0
+  }
   . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ratchet.ps1')
   $move = Test-RatchetMove -Name 'json-readers' -Count $count -Baseline ([int]$base) -AcceptDrop:$AcceptDrop
   Write-Output ("  " + $move.Message)
@@ -199,9 +265,8 @@ if ($verdict -eq 'tighten') {
     Write-Output '  Baseline KEPT. Check the scan actually ran over the same tree before accepting this.'
     Exit-Guard -Name 'json-readers' -Summary "implausible fall $count from $base, baseline kept" -Code 2
   }
-  @{ generated = (Get-Date).ToString('s'); count = $move.NewBaseline; note = 'High-water mark for the bare-JSON-reader ratchet. This number may only go DOWN, and a fall to zero or over -MaxDropPct is refused rather than recorded (backlog I93).' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
-  Write-Output ("  ratchet tightened: $($move.NewBaseline) site(s), was $base. New baseline written.")
+  $null = Write-TcLfFile -Path $blF -Text (([ordered]@{ generated = (Get-Date).ToString('s'); count = $move.NewBaseline; note = 'High-water mark for the bare-JSON-reader ratchet. This number may only go DOWN, and a fall to zero or over -MaxDropPct is refused rather than recorded (backlog I93).' }) | ConvertTo-Json -Depth 3)
+  Write-Output ("  ratchet tightened: $($move.NewBaseline) site(s), was $base. New baseline written - commit it, or it protects only this checkout.")
 }
 Write-Output ("audit-json-readers: $count site(s) against a baseline of $base - the known backlog, not a regression. Convert them with Read-JsonFile (lib\json-io.ps1).")
 Exit-Guard -Name 'json-readers' -Summary "$count site(s), baseline $base" -Code 0
