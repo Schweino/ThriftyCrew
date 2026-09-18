@@ -14696,7 +14696,7 @@ stop probability, and a size budget for any recursive shape) over that one passe
 `software-craft/test-design-and-oracles.md` 5.2a describes, rather than copying this file's flat kind
 list. Not acted on during the course run, per the course procedure.
 
-### I211 - graph.db is half empty pages: 40,342 of 78,709 pages sit on the freelist `OPEN` `queue-8` `2-WAY` `RUNG1 MEASURE`
+### I211 - graph.db is half empty pages: 40,342 of 78,709 pages sit on the freelist `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14742,6 +14742,50 @@ snapshot copy (P_v pages), then run `importers.import_observations` on it exactl
 --observations` calls it, with capture files read from the main checkout and nothing written but the
 copy. **CYCLE is confirmed if that one import, before any prune, regrows the copy to at least P_v +
 80% of (78,709 - P_v) pages**; under that, ONE-OFF.
+
+**Measured 2026-09-18**, on backup-API snapshots of the live file (mtime 08:16:50, last written by that
+morning's import; SQLite 3.49.1; code at base `e9fe8ee1e`, `importers.py` blob `939c365be`, `graphdb.py`
+blob `13a20a894`). The live file was only ever opened `mode=ro`.
+- M1: `page_count` 78,709, `freelist_count` 40,342 (51%), `auto_vacuum` 0, unchanged from the finding.
+- M2: 82 `import_complete` events, **24 of 82 carry a `superseded` count** (the other 58, 2026-08-21 to
+  09-09, recorded none). Median 104,523 rows; the 8 runs since 2026-09-10 pruned 245,908 to 271,668.
+- M3: `dbstat` is not compiled into this Python's SQLite, so by the fallback: `price_observations` and
+  its 5 indexes rebuilt alone hold 44,750 rows in 27,348,992 B, **611.2 B a row**.
+- **First bar, as written: 104,523 x 611.2 B = 63.9 MB, 39% of the freelist's 165.2 MB, so ONE-OFF.**
+  The last run alone (271,668 rows) is 166.0 MB, 100% of it, and the 8-run median since 09-10 is 95%.
+- **Replay bar, as written: the vacuumed copy (P_v 33,619 pages) regrew to 67,489 pages from one
+  `import_observations` (356 capture files, 21.0 s, 268,112 rows added to 44,750), 75.1% of what the
+  VACUUM removed, under the 80% bar, so ONE-OFF again.** The other 24.9% was not replayed: the lane
+  importers, the resolver's updates and the prune were not run on the copy.
+
+**Both pre-registered bars read ONE-OFF, and the mechanism they measured says the opposite, so this is
+Brad's call and not a verdict.** The churning writer is found: `import_observations` re-reads every
+capture file in `grocery/out/{regular,throttled,sams}` on every run, re-inserts every row the last prune
+deleted, and `supersede_prune` deletes them again. The identity is exact on the 09-18 run: 316,418
+examined minus 271,668 superseded is 44,750, the live table's row count. So the file's size is the
+import's PEAK, which climbs with capture history (examined 287,807 on 09-10, 316,418 on 09-18), not with
+the kept data. A VACUUM is proven safe on a copy (`graph/pipeline/vacuum_graph_db.py` on branch
+`claude/i211-vacuum`, blob `7b2cc0753`: 322,392,064 B to 137,703,424 B in 0.76 s, `integrity_check` ok,
+11 of 11 tables' row counts identical, freelist 0; self-test 5 of 5, and 2 of its 5 cases go red with
+the VACUUM neutered, md5 restored identical). By the replay, the next 08:15 import takes back at least
+75.1% of it.
+
+**Question for Brad: what to do about the freelist?**
+1. **Nothing now, and read the size as the import's peak** (the rule already in
+   `database-craft/applies-here.md`). Costs nothing; the file keeps climbing with capture history.
+2. **One VACUUM now**: `C:\Codex\Python312\python.exe graph\pipeline\vacuum_graph_db.py --apply` from
+   a checkout of `claude/i211-vacuum`, between the 08:15 import and 21:30, with no python.exe holding
+   graph.db. A writer in flight makes it refuse and change nothing. It is a reset: the next import
+   regrows at least 75.1% of what it frees.
+3. **Fix the writer, then VACUUM once**: make `import_observations` skip rows a newer sighting already
+   superseded (or read only capture files newer than the last import), so each run inserts the new
+   rows instead of about 268k. It also cuts the resolve and prune work each import repeats. It needs a
+   `cell_state`-identical check before and after, because the prune's keep rules decide what survives.
+4. **`auto_vacuum=INCREMENTAL`** (needs one VACUUM to set it) plus `PRAGMA incremental_vacuum` after
+   the prune: the file shrinks after every run, but the churn and its I/O stay.
+
+**Recommendation: 3, with 1 until it lands.** The freelist is the visible symptom of re-importing and
+re-pruning about 270k rows a day; 2 and 4 hide the symptom and keep the work.
 
 ### I212 - Run statistics on graph.db: one full ANALYZE, then PRAGMA optimize at every connection close `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
 
