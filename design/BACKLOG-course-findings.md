@@ -13315,7 +13315,7 @@ the `check-ad-cycles` block turned them into 1 review flag, and into 0 on a flag
 Option (b) is I208's second half, recorded there. The twin keeps the pre-change loop as a fast path inside one
 try, because the per-look bookkeeping alone measured 8.0 to 8.4 s against 4.7 s over 2,000 names; with the fast
 path 5.2 to 5.5 s, answers identical.
-### I184 - compare-deals redefines get-matchtexts and then dot-sources match-lib, which silently replaces it for the reference matcher `OPEN` `queue-7` `2-WAY` `RUNG1 READ`
+### I184 - compare-deals redefines get-matchtexts and then dot-sources match-lib, which silently replaces it for the reference matcher `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-plc-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13351,6 +13351,28 @@ justify a ratchet, which `ops-and-gates.md` says a one-site class does not earn.
 natural home is an extension of `ops/audit-cmdlet-shadow.ps1` from built-in cmdlets to library
 functions. The census harness was a scratch script: the AST query is described here, and it was not
 committed.
+
+**Done 2026-09-18.** The READ moved the defect. **In the engine it is not live:** at 1e6248e6c every
+`Match-Category` call in compare-deals (the routing fixtures, which lift their own copy from source, and
+`-Explain`, which exits) runs BEFORE its `. match-lib.ps1` line, so the reference there always used its own
+`Get-MatchTexts`; the two calls after that line are the name-key cache, which is production and should use
+match-lib's. **It was live in the equivalence proof.** `grocery/test-match-lib.ps1` extracted the original
+pair, then dot-sourced match-lib, and every corpus pass called the extracted `Match-Category`, whose
+`Get-MatchTexts` resolved at run time to match-lib's copy: the reference compared match-lib's normalisation
+with itself, and only a one-name spot check ran compare-deals' own. Measured with a scratch probe: poisoning
+the current `Get-MatchTexts` moved the reference's answer on a chicken-breast name from `chicken-breast` to
+none. And with a planted divergence in compare-deals' `Get-MatchTexts` (`' & '` read as `' and '` in the raw
+name), the unchanged harness printed MATCH-LIB PASSED, exit 0, 0 divergences over 42,761 names.
+**Fix, in the harness only** (compare-deals and match-lib untouched, so neither sibling branch conflicts): the
+extracted block's `Get-MatchTexts` is renamed `Get-MatchTextsReference` before it is run, so the reference
+calls a name nothing else defines (exit 3 BLIND if the block stops defining and calling it); a MUST FIRE
+poisons the current `Get-MatchTexts` and requires the reference's answer not to move; and every shard now
+compares the two normalisations name by name, ordinally, reporting `Get-MatchTexts: N of M`.
+**Verified**, all on the seeded corpus: fixed harness over the clean engine, exit 0, 0 divergences and 0 of
+42,761 names normalised differently, so the fix changes no match. Fixed harness over the planted divergence,
+exit 1: 3,909 divergences (26 fast-path, 13 detail-winner, 3,870 Get-MatchTexts). Rename reverted once with
+the rest of the fix in place: exit 1 on `FAIL  reference not insulated ... original='chicken-breast' with it
+poisoned=''`; restored md5-identical. The engine's own file was restored md5-identical after each plant.
 
 ### I185 - seven of the eight switches that branch on store names end in a default, and none names all seven stores `DONE` `queue-7`
 

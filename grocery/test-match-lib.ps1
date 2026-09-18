@@ -74,12 +74,28 @@ if ($a -lt 0 -or $b -lt 0 -or $b -le $a) {
 }
 $block = $src.Substring($a, $b - $a)
 $block = ($block -split "`n" | Where-Object { $_ -notmatch '\$GEX_OVERRIDE' }) -join "`n"
+# THE REFERENCE CALLS ITS OWN Get-MatchTexts, NOT WHICHEVER ONE IS CURRENT (2026-09-18, backlog I184).
+# PowerShell resolves a function NAME when the call runs, not where the caller was written. match-lib, loaded
+# below, defines Get-MatchTexts again, so until this rename the extracted Match-Category called match-lib's copy
+# on every corpus name: the corpus passes compared match-lib's normalisation with ITSELF, and only the one-name
+# check under section 2 ever ran compare-deals' own. A divergence on any name that one did not exercise ('&' in
+# place of 'and', say) went green over all 42,761 names. Renaming the lifted definition and its call site gives
+# the reference a name nothing else defines. (The engine itself is not affected: its only Match-Category calls,
+# the routing fixtures and -Explain, both run before its own `. match-lib.ps1` line.)
+$refTextsName = 'Get-MatchTextsReference'
+$refTextsRx = '(?<![\w-])Get-MatchTexts(?![\w-])'
+if (([regex]::Matches($block, $refTextsRx)).Count -lt 2) {
+  Write-Output 'match-lib: BLIND - the extracted block no longer defines AND calls Get-MatchTexts, so the reference cannot be insulated from match-lib; nothing proven'
+  if (-not $isShard) { Write-GuardComplete -Name 'match-lib' -Summary 'BLIND: reference texts not found' }
+  exit 3
+}
+$block = [regex]::Replace($block, $refTextsRx, $refTextsName)
 # LIVE-TWIN on purpose (ops\audit-fixture-inputs.ps1, 2026-09-11): both matchers are handed this one copy of today's
 # rules, and the contract is that they decide identically on them.
 $commodities = Read-JsonFile (Join-Path $root 'commodities.json')
-. ([scriptblock]::Create($block))      # defines $GLOBAL_EXCLUDE, Get-MatchTexts, Match-Category (original)
+. ([scriptblock]::Create($block))      # defines $GLOBAL_EXCLUDE, Get-MatchTextsReference, Match-Category (original)
 $origMatch = ${function:Match-Category}
-$origTexts = ${function:Get-MatchTexts}
+$origTexts = ${function:Get-MatchTextsReference}
 
 # ---- 2. the NEW one --------------------------------------------------------------------------------
 . (Join-Path $root 'match-lib.ps1')    # redefines Get-MatchTexts identically; adds New-CommodityMatcher/Resolve-Commodity
@@ -89,6 +105,25 @@ $matcher = New-CommodityMatcher -Commodities $commodities -GlobalExclude $GLOBAL
 $t1 = & $origTexts 'Member''s Mark Boneless and Skinless Chicken Breast, priced per pound'
 $t2 = Get-MatchTexts 'Member''s Mark Boneless and Skinless Chicken Breast, priced per pound'
 if (($t1 -join '|') -ne ($t2 -join '|')) { Write-Output "FAIL  Get-MatchTexts diverged: '$($t1 -join '|')' vs '$($t2 -join '|')'"; if (-not $isShard) { Write-GuardComplete -Name 'match-lib' -Summary 'failed=1 (texts)' }; exit 1 }
+
+# MUST FIRE (I184): the reference must be INSULATED from the Get-MatchTexts that is current. Poison the current
+# one (match-lib's) and the original's answer on a name it matches must not move. Before the rename above it
+# moved - chicken-breast to <none> - because the reference was calling match-lib's copy. Asserted on the
+# mechanism, every run, so a future edit that re-couples the two goes red here and not only on a lucky corpus name.
+$insName = 'Member''s Mark Boneless and Skinless Chicken Breast, priced per pound'
+$insBefore = & $origMatch $insName
+$libTexts = ${function:Get-MatchTexts}
+function Get-MatchTexts([string]$name) { return ,@('i184-poison', 'i184-poison') }
+$insPoisoned = & $origMatch $insName
+${function:Get-MatchTexts} = $libTexts
+$insRestored = ((Get-MatchTexts $insName)[0] -ne 'i184-poison')
+$insB = $(if ($insBefore) { [string]$insBefore.id } else { '' })
+$insP = $(if ($insPoisoned) { [string]$insPoisoned.id } else { '' })
+if (-not $insB -or -not $insRestored -or -not [string]::Equals($insB, $insP, [StringComparison]::Ordinal)) {
+  Write-Output ("FAIL  reference not insulated from match-lib's Get-MatchTexts: original='{0}' with it poisoned='{1}' (restored={2}) - the corpus passes would compare match-lib with itself" -f $insB, $insP, $insRestored)
+  if (-not $isShard) { Write-GuardComplete -Name 'match-lib' -Summary 'failed=1 (reference not insulated)' }
+  exit 1
+}
 
 # ---- 3. the corpus: every distinct name the engine feeds the matcher today -------------------------
 # A SHARD DOES NOT REBUILD THE CORPUS, IT IS HANDED ONE. Rebuilding it per process would be both slower
@@ -164,6 +199,16 @@ if ($isShard) {
     elseif ($did -and -not $d.include_hit) { [void]$detailNoHit.Add([pscustomobject]@{ ix = $ix[$k]; name = $list[$ix[$k]] }) }
   }
   $tD = $sw.Elapsed.TotalSeconds
+  # THE NORMALISATION ITSELF, ON EVERY NAME (I184). Get-MatchTexts' [1] is also the engine's name key, so two
+  # copies that disagree on a name nobody's winner turns on are still two rules. Compared ordinally: a bare -ne
+  # is culture-sensitive and ignores a NUL.
+  $textDiff = New-Object System.Collections.ArrayList
+  for ($k = 0; $k -lt $n; $k++) {
+    $nm = $list[$ix[$k]]
+    $tr = (& $origTexts $nm) -join [char]1
+    $tl = (Get-MatchTexts $nm) -join [char]1
+    if (-not [string]::Equals($tr, $tl, [StringComparison]::Ordinal)) { [void]$textDiff.Add([pscustomobject]@{ ix = $ix[$k]; name = $nm; original = ($tr -replace [char]1, ' | '); lib = ($tl -replace [char]1, ' | ') }) }
+  }
   # COULD-NOT-LOOK ON THE REAL CORPUS (2026-09-19, I183/I209). match-lib now bounds every regex at 250 ms and
   # scores a timed-out name could-not-look, which reads as "" here exactly like an unmatched name - so a blind
   # name would AGREE with an original that also found nothing and pass as proven. Counted and failed instead:
@@ -181,7 +226,7 @@ if ($isShard) {
   }
   ([pscustomobject]@{
     names = $n; core = $hasCore; matched = $matched; blind = ($blindC + $blindP); diff = @($diff.ToArray()); detailDiff = @($detailDiff.ToArray())
-    detailNoHit = @($detailNoHit.ToArray()); tO = $tO; tN = $tN; tP = $tP; tD = $tD
+    detailNoHit = @($detailNoHit.ToArray()); textDiff = @($textDiff.ToArray()); tO = $tO; tN = $tN; tP = $tP; tD = $tD
   } | ConvertTo-Json -Depth 6 -Compress) | Set-Content -LiteralPath $OutFile -Encoding UTF8
   exit 0
 }
@@ -280,6 +325,7 @@ function Gather($rs, $prop) {
 $detailDiff  = @(Gather $results 'detailDiff'  | Sort-Object ix)
 $detailNoHit = @(Gather $results 'detailNoHit' | Sort-Object ix | ForEach-Object { $_.name })
 $diff        = @(Gather $results 'diff'        | Sort-Object key)
+$textDiff    = @(Gather $results 'textDiff'    | Sort-Object ix)
 $matched     = 0; foreach ($r in $results) { $matched += [int]$r.matched }
 $blindNames  = 0; foreach ($r in $results) { $blindNames += [int]$r.blind }
 
@@ -291,14 +337,16 @@ if (-not $Quiet) {
   Write-Output ("  detail scan (identity)  : {0,7:N1}s   ({1} winner divergence(s), {2} matched name(s) with no include_hit)" -f $tD, $detailDiff.Count, $detailNoHit.Count)
   Write-Output ("  shards                  : {0,7:N1}s wall across {1} process(es)" -f $tWall, $W)
   Write-Output ("  divergences             : {0}" -f $diff.Count)
+  Write-Output ("  Get-MatchTexts          : {0} of {1} name(s) normalised differently by the reference and match-lib" -f $textDiff.Count, $list.Count)
   Write-Output ("  could-not-look          : {0} name look(s) hit the regex bound (compiled + fallback)" -f $blindNames)
   foreach ($d in ($diff | Select-Object -First 15)) { Write-Output ("     [{3}] '{0}'  original={1}  fast={2}" -f $d.name, $(if ($d.original) { $d.original } else { '<none>' }), $(if ($d.fast) { $d.fast } else { '<none>' }), $d.path) }
   foreach ($d in ($detailDiff | Select-Object -First 15)) { Write-Output ("     [detail] '{0}'  original={1}  detail={2}" -f $d.name, $(if ($d.original) { $d.original } else { '<none>' }), $(if ($d.detail) { $d.detail } else { '<none>' })) }
   foreach ($n in ($detailNoHit | Select-Object -First 10)) { Write-Output ("     [detail] '{0}' matched but named no include pattern" -f $n) }
+  foreach ($d in ($textDiff | Select-Object -First 10)) { Write-Output ("     [texts] '{0}'  original='{1}'  match-lib='{2}'" -f $d.name, $d.original, $d.lib) }
 }
-if ($diff.Count -or $detailDiff.Count -or $detailNoHit.Count -or $blindNames) {
-  $total = $diff.Count + $detailDiff.Count + $detailNoHit.Count + $blindNames
-  Write-Output ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit, {4} could-not-look) - match-lib must not be used by the engine until it decides identically" -f $total, $diff.Count, $detailDiff.Count, $detailNoHit.Count, $blindNames)
+if ($diff.Count -or $detailDiff.Count -or $detailNoHit.Count -or $blindNames -or $textDiff.Count) {
+  $total = $diff.Count + $detailDiff.Count + $detailNoHit.Count + $blindNames + $textDiff.Count
+  Write-Output ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit, {4} could-not-look, {5} Get-MatchTexts) - match-lib must not be used by the engine until it decides identically" -f $total, $diff.Count, $detailDiff.Count, $detailNoHit.Count, $blindNames, $textDiff.Count)
   Exit-Guard -Name 'match-lib' -Summary "names=$($list.Count) divergences=$total" -Code 1
 }
 Write-Output 'MATCH-LIB PASSED'
