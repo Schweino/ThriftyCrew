@@ -27,3 +27,4 @@ Orchestration branch: `claude/backlog-run-0919`. Each item lands through its own
 | I183 | DONE | 4bb2295e9 + b262718d2: measured first (worst real name 15.1 ms over 42,753 names), then a 250 ms bound on every matcher regex, a timeout scored could-not-look and surfaced in the board health block and check-ad-cycles, 3-strike per-pattern breaker; 4 mutants red |
 | I208 | DONE | 4bb2295e9: chicken-breast include atomic, 42,753 names resolve identically before and after, victim 7,354 ms to 13.6 ms |
 | I209 | DONE | 4bb2295e9: the C# core catches the timeout; no RegexOptions.Compiled |
+| I191 | NEEDS A RULING / READY FOR BRAD | built and landed as 32a035c34, then REVERTED on main because it moves 69 live prices and 26 cheapest-store verdicts; intact on branch claude/i191-add-norm-pid-fix. Found a live bug: the build's process id stored as the product id for Sam's and Fareway ad rows since 9c44c3a37 |

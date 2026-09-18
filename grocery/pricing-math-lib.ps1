@@ -763,7 +763,7 @@ function Get-UnitPrice($deal, $cat) {
     # THE REFUSAL HAS TO COVER price_text TOO (2026-08-31, queue 2026-08-31-8018b5). It used to guard only
     # the NAME fallback, on the reasoning that "the price and the size field are the store's own statements
     # about the priced unit". That reasoning does not hold for Hy-Vee: its loader passes the WHOLE ad line as
-    # price_text (`Add-Norm -Store $d.store -Name $pn -PriceText $pn ...`), so price_text IS the ambiguous prose, and the
+    # price_text (`Add-Norm $d.store $d.item $d.item ...`), so price_text IS the ambiguous prose, and the
     # count was read out of it before the name guard was ever consulted. Live consequence:
     #     "Bud by Dole romaine hearts 3 ct. pkg. or cauliflower each, $3.48"
     # took "3 ct" from price_text, divided, and crowned cauliflower at $1.16 against a real $3.48.
