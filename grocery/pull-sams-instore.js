@@ -28,8 +28,9 @@
          await pullSamsInStore(WORKLIST)     // WORKLIST = ["milk gallon", "sour cream", ...]
   3. Re-running the SAME worklist resumes: settled terms are skipped, UNUSABLE ones retried. That is
      how the walled tail from 2026-08-15 gets finished.
-  4. Export: samsSweepToCsv() -> q|n|lp|up|id. That column order is what build-sams-deals expects;
-     changing it silently mis-parses the capture.
+  4. Export: samsSweepToCsv() -> a #tc-store line naming the club read, then q|n|lp|up|id|was. That
+     column order is what build-sams-deals expects; changing it silently mis-parses the capture, and
+     stripping the store line gets the capture refused.
 */
 
 const SAMS_STORAGE_KEY = 'TC_SAMS_SWEEP';
@@ -136,6 +137,20 @@ async function samsProbe(term) {
   })(data, 0);
 
   if (rows.length) assertSamsRowContract(rows[0]);
+  /*
+    THE CLUB TRAVELS WITH EVERY ROW (2026-09-18, backlog I124). samsIdentity() has always READ the club
+    off the page and nothing kept it, so build-sams-deals stamped every file "13130 L St" from a literal
+    while the session had moved to 15429 Blackwell Dr on 2026-08-15 (pull-browser-stores.py's seed_hint
+    says so). The club is re-read here, per term, from the same page the sweep is fetching from, and put
+    on each row as `cl`; samsSweepToCsv counts rows by it into the #tc-store line. A page that no longer
+    names an Omaha club keeps NO rows: that is our blindness, never evidence about Sam's shelf.
+  */
+  if (rows.length) {
+    let club;
+    try { club = samsIdentity().club; }
+    catch (e) { return { state: 'UNUSABLE', rows: [], why: 'club not readable at probe time: ' + String((e && e.message) || e).slice(0, 120) }; }
+    for (const row of rows) row.cl = club;
+  }
   return rows.length ? { state: 'MATCHES', rows } : { state: 'EMPTY', rows: [], why: 'store returned no products' };
 }
 
@@ -182,7 +197,40 @@ const samsAgent = {
 };
 
 const pullSamsInStore    = (worklist, opts) => runPacedSweep(samsAgent, worklist, opts);
-// q|n|lp|up|id|was - the first five are build-sams-deals' long-standing positional contract.
-const samsSweepToCsv     = () => sweepToCsv(SAMS_STORAGE_KEY, p => [p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '']);
+/*
+  q|n|lp|up|id|was - the first five are build-sams-deals' long-standing positional contract.
+
+  THE CLUB TRAVELS WITH THE CAPTURE (2026-09-18, backlog I124; the Aldi and Walmart emitters did this
+  first). The output OPENS with one line per distinct club the rows were read at, counted off each
+  row's `cl`, then the column header, then the rows:
+      #tc-store store="15429 Blackwell Dr, Omaha, NE 68116" read="page" rows=152
+      q|n|lp|up|id|was
+  A row with no `cl` (persisted by an agent older than this) is counted as store="UNRECORDED" and is
+  never folded into a club it was not read at. build-sams-deals refuses a capture with no store line,
+  an UNRECORDED one, a non-Omaha one or more than one club. The line carries no '|'. Post this output
+  UNCHANGED: it already has its header, and pull-browser-stores.py prepends nothing to a body that
+  opens with it. An empty sweep still returns '' so the driver's BLOCKED-versus-EMPTY branch fires.
+*/
+const SAMS_CAPTURE_COLUMNS = 'q|n|lp|up|id|was';
+const samsStoreField = s => String(s == null ? '' : s).replace(/["|\r\n]/g, ' ').replace(/\s+/g, ' ').trim();
+const samsSweepToCsv = () => {
+  const res = JSON.parse(localStorage.getItem(SAMS_STORAGE_KEY) || '{}');
+  const out = [];
+  const clubs = new Map();           // club -> row count, in the order first read
+  for (const [term, r] of Object.entries(res)) {
+    if (r.v !== 'MATCHES') continue;
+    for (const p of r.rows) {
+      const k = samsStoreField(p.cl) || 'UNRECORDED';
+      clubs.set(k, (clubs.get(k) || 0) + 1);
+      out.push([term, p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? ''].join('|'));
+    }
+  }
+  if (!out.length) return '';
+  const head = [];
+  for (const [club, n] of clubs.entries()) {
+    head.push('#tc-store store="' + club + '" read="' + (club === 'UNRECORDED' ? 'UNRECORDED' : 'page') + '" rows=' + n);
+  }
+  return head.concat([SAMS_CAPTURE_COLUMNS], out).join('\n');
+};
 const samsSweepVerdicts  = () => sweepVerdicts(SAMS_STORAGE_KEY);
 const samsSweepRemaining = wl => sweepRemaining(SAMS_STORAGE_KEY, wl);

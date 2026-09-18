@@ -77,11 +77,11 @@ real one, which is both fuller and more restricted.
      through the tool output either: it truncates around 1 KB, so a 40-60 KB sweep would need ~60
      round trips per store and still risk a partial read. That is what the sink is for.
 Also: sweepToCsv does not emit a header row and every builder needs one - q|n|lp|up|id|was for Sam's.
-ALDI AND WALMART NOW WRITE THEIR OWN (aldiSearchToCsv since 2026-09-10, walmartSweepToCsv since
-2026-09-12): their output opens with a #tc-store line naming the store each row was READ at, then its
-own copy of the column header. POST BOTH UNALTERED. Keep prepending Aldi's header anyway - the builder
+ALDI, WALMART AND SAM'S NOW WRITE THEIR OWN (aldiSearchToCsv since 2026-09-10, walmartSweepToCsv since
+2026-09-12, samsSweepToCsv since 2026-09-18): their output opens with a #tc-store line naming the store
+or club each row was READ at, then its own copy of the column header. POST ALL THREE UNALTERED. Keep prepending Aldi's header anyway - the builder
 drops the duplicate and an older copy of the emitter writes none - but never prepend anything ABOVE a
-#tc-store line and never strip one: both builders REFUSE a capture that cannot name its store.
+#tc-store line and never strip one: all three builders REFUSE a capture that cannot name its store.
 
 STEP ZERO - MAKE SURE THE 0800 CHAIN HAS FINISHED. You run at 09:00, and the 0800 task's downstream
 chain (compare -> guards -> publish -> commit) measured 08:12-08:43 on 2026-08-22 - 31 minutes. It
@@ -281,9 +281,16 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     stores. Never hand-assemble this file or strip that line.
     Then: build-walmart-deals.ps1 -In <that> -Date <date>
 
-  SAM'S CLUB (everyday, only if 0800 failed). fetch('/s/<term>'), same __NEXT_DATA__ approach.
-    Capture BOTH linePrice AND unitPrice. Pace 2600ms +/- 1400.
-    Emit q|n|lp|up|id|was -> out\captures\sams-capture-<date>.csv
+  SAM'S CLUB (everyday, only if 0800 failed). Paste grocery\pull-agent-lib.js, then
+    grocery\pull-sams-instore.js, then pullSamsInStore(<terms>) - the same fetch('/s/<term>') and
+    __NEXT_DATA__ read, capturing BOTH linePrice AND unitPrice, paced 2600ms +/- 1400.
+    Post samsSweepToCsv()'s output UNALTERED -> out\captures\sams-capture-<date>.csv. It opens with
+    #tc-store store="<the club the page names>" read="page" rows=<n> and its own q|n|lp|up|id|was header.
+    build-sams-deals writes the file's `club` and every row's store_location from that line (until
+    2026-09-18 it stamped "13130 L St" from a literal while the session sat at 15429 Blackwell Dr), and
+    REFUSES a capture with no store line, an UNRECORDED one, a non-Omaha club, or one that straddles two
+    clubs. A RESCUE appended to the morning capture must be samsSweepToCsv output too, line and all:
+    rows pasted without a line are FLAGGED as attributed to a club they were not read at.
     Then: build-sams-deals.ps1 -In <that> -Date <date>
 
   FAREWAY (everyday, only if 0800 failed). Navigate per term to

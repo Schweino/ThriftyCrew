@@ -543,5 +543,82 @@ try {
   if ($LASTEXITCODE -ne 0) { $bad++ }
 } finally { Remove-Item $tmpWS -Force -ErrorAction SilentlyContinue }
 
+# --- 7. the SAM'S capture must carry the club it was READ at -----------------------------------------
+# 2026-09-18, backlog I124. samsIdentity() read the club off the page and nothing kept it, so every
+# sams-deals file said club "13130 L St" from a literal in build-sams-deals.ps1 while the session had
+# moved to 15429 Blackwell Dr on 2026-08-15. samsProbe now re-reads the club per term and puts it on each
+# row (cl), and samsSweepToCsv opens the capture with a #tc-store line; the builder refuses a capture
+# without one. The agent file loads UNTOUCHED; only document, fetch, localStorage and wallWhy are supplied.
+$jsS = @'
+const fs = require('fs');
+const lib = fs.readFileSync(process.argv[2], 'utf8');
+const src = fs.readFileSync(process.argv[3], 'utf8');
+const wm = lib.match(/function wallWhy\(html, phrases\) \{[\s\S]*?\n\}/);
+if (!wm) { console.log('  X     wallWhy is not defined in pull-agent-lib.js'); process.exit(1); }
+eval(wm[0]);
+
+let bad = 0;
+function T(n, ok, got) { if (ok) console.log('  ok    ' + n); else { console.log('  X     ' + n + '   got: ' + got); bad++; } }
+
+const BLK = '15429 Blackwell Dr, Omaha, NE 68116';
+const item = (id, name) => ({ productId: id, name, priceInfo: { linePrice: '$3.27', unitPrice: '$1.09/ea' } });
+const html = items => '<html><body><script id="__NEXT_DATA__" type="application/json">' +
+  JSON.stringify({ props: { pageProps: { initialData: { items } } } }) + '</scr' + 'ipt></body></html>';
+function load(bodyText, pageHtml, kv) {
+  const doc = { body: { innerText: bodyText } };
+  const fetchStub = async () => ({ status: 200, text: async () => pageHtml });
+  const ls = { getItem: k => (k in kv ? kv[k] : null), setItem: (k, v) => { kv[k] = String(v); } };
+  return new Function('wallWhy', 'fetch', 'document', 'localStorage',
+    src + '\nreturn { samsIdentity, samsProbe, samsSweepToCsv };')(wallWhy, fetchStub, doc, ls);
+}
+
+(async () => {
+  const HEAD = 'Sam\'s Club\nMy club: ' + BLK + '\nSearch';
+  const two = html([item('A1', 'Seedless English Cucumbers, 3 ct.'), item('A2', 'Mini Cucumbers, 2 lbs.')]);
+  const a = load(HEAD, two, {});
+  T('samsIdentity reads the club off the page', a.samsIdentity().club === BLK, JSON.stringify(a.samsIdentity()));
+
+  const r = await a.samsProbe('cucumber');
+  T('MUST FIRE  every row the probe keeps carries the club it read (cl)', r.state === 'MATCHES' && r.rows.length === 2 && r.rows.every(x => x.cl === BLK), r.state + ' ' + JSON.stringify(r.rows));
+
+  const off = await load('Sam\'s Club\nSign in to choose a club', two, {}).samsProbe('cucumber');
+  T('MUST FIRE  a page that names no Omaha club at probe time keeps NO rows, and says it could not look', off.state === 'UNUSABLE' && off.rows.length === 0 && /club not readable/.test(off.why || ''), off.state + ' / ' + off.why);
+
+  const KEY = 'TC_SAMS_SWEEP';
+  const kv = {};
+  kv[KEY] = JSON.stringify({ cucumber: { v: 'MATCHES', why: null, rows: r.rows }, kale: { v: 'EMPTY', why: 'none', rows: [] } });
+  const csv = load(HEAD, '', kv).samsSweepToCsv().split('\n');
+  T('CLEAN TWIN  the capture OPENS with the club line, counted', csv[0] === '#tc-store store="' + BLK + '" read="page" rows=2', csv[0]);
+  T('...then the six-column header, so the driver prepends nothing', csv[1] === 'q|n|lp|up|id|was', csv[1]);
+  T('...then exactly the rows, term first, in the builder\'s positional order', csv.length === 4 && csv[2] === 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|A1|', csv.join(' / '));
+  T('the club line carries no pipe', csv[0].indexOf('|') < 0, csv[0]);
+
+  const mixed = {};
+  mixed[KEY] = JSON.stringify({ cucumber: { v: 'MATCHES', rows: [r.rows[0], { n: 'old row', lp: '$1.00', up: '$1.00/ea', id: 'OLD' }] } });
+  const m = load(HEAD, '', mixed).samsSweepToCsv().split('\n');
+  T('MUST FIRE  a row with no club read gets its own UNRECORDED line, never folded into its neighbour',
+    m[0] === '#tc-store store="' + BLK + '" read="page" rows=1' && m[1] === '#tc-store store="UNRECORDED" read="UNRECORDED" rows=1', m.slice(0, 2).join(' / '));
+
+  const hostile = {};
+  hostile[KEY] = JSON.stringify({ t: { v: 'MATCHES', rows: [Object.assign({}, r.rows[0], { cl: '15429 "Blackwell|Dr"\n, Omaha' })] } });
+  const h = load(HEAD, '', hostile).samsSweepToCsv().split('\n');
+  T('a club string carrying a quote, pipe or newline cannot break its line', h[0] === '#tc-store store="15429 Blackwell Dr , Omaha" read="page" rows=1', h[0]);
+
+  const none = {};
+  none[KEY] = JSON.stringify({ kale: { v: 'EMPTY', rows: [] }, milk: { v: 'UNUSABLE', why: 'bot-wall', rows: [] } });
+  const e = load(HEAD, '', none).samsSweepToCsv();
+  T('CLEAN TWIN  a sweep with no priced row still exports "" so the driver can say BLOCKED or EMPTY', e === '', JSON.stringify(e));
+
+  process.exit(bad === 0 ? 0 : 1);
+})().catch(e => { console.log('  X     the Sam\'s club test threw: ' + (e && e.stack)); process.exit(1); });
+'@
+$sam = Join-Path $here 'pull-sams-instore.js'
+$tmpS = Join-Path ([IO.Path]::GetTempPath()) ('samsclub-' + [guid]::NewGuid().ToString('N') + '.js')
+[IO.File]::WriteAllText($tmpS, $jsS, (New-Object System.Text.UTF8Encoding($false)))
+try {
+  & $node $tmpS $lib $sam
+  if ($LASTEXITCODE -ne 0) { $bad++ }
+} finally { Remove-Item $tmpS -Force -ErrorAction SilentlyContinue }
+
 if ($bad -eq 0) { Write-Output 'test-pull-agent-lib SELF-TEST PASS'; exit 0 }
 Write-Output ("test-pull-agent-lib SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1

@@ -54,7 +54,12 @@ param(
   # -LedgerRoot is the same kind of parameter (2026-09-19): the directory holding rollback-first-seen.json. It
   # defaults to this folder, the live ledger. The self-test child points it at a temp directory, because -OutDir
   # never moved the ledger and a fixture row with a was-price would otherwise write the LIVE rollback ledger.
-  [string]$LedgerRoot = ""
+  [string]$LedgerRoot = "",
+  # -WaiveMissingStoreLine (2026-09-18, backlog I124) is for RE-BUILDING a capture written BEFORE the #tc-store line
+  # existed, and nothing else. It waives the no-store-line refusal only: a store line that is present and wrong
+  # (another city, UNRECORDED, two clubs, unparseable) is refused exactly as without it. The file it writes says
+  # the club was NOT RECORDED, never a club. The daily build never passes it.
+  [switch]$WaiveMissingStoreLine
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
@@ -426,6 +431,108 @@ function Build-Row($raw) {
   return @{ err=("INVARIANT: no shape reproduces Sam's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
 }
 
+# ---- THE CLUB A CAPTURE WAS READ AT (2026-09-18, backlog I124) -------------------------------------------------
+# Sam's prices are per-club. samsIdentity() in pull-sams-instore.js has always READ the club off the page and nothing
+# kept it, so this file stamped every sams-deals file club="Omaha Sam's Club, 13130 L St, 68137" from a LITERAL -
+# while the session had moved to 15429 Blackwell Dr on 2026-08-15 (pull-browser-stores.py's seed_hint). The feed
+# declared a club it never read, the aldi-store-is-ola-42 shape, and nothing on disk could say which club a price
+# came from. samsSweepToCsv now opens the capture with one line per distinct club the rows were read at:
+#     #tc-store store="15429 Blackwell Dr, Omaha, NE 68116" read="page" rows=152
+# and this is the one place that line is ruled on. The capture is REFUSED, and nothing is written, when it has:
+#   no store line                 it cannot say which club it read (unless -WaiveMissingStoreLine, see param)
+#   a store line that won't parse a club we cannot read is a club we did not read
+#   store="UNRECORDED"            some rows were persisted by an agent that did not keep the club
+#   a store without "Omaha"       another city's club
+#   more than one store           one file names one club, and a sweep that straddled two cannot
+# THE CLUB IS NEVER PINNED. There are two Omaha clubs and no ruling names one, so the club is RECORDED, which is the
+# whole point, and never required - the same call build-aldi-regular makes about the OLA number. Walmart's store is
+# pinned because Brad RULED one; Sam's has no ruling, and pinning prose here would refuse a correct capture.
+# The read is page text: samsIdentity() falls back to any "Omaha..." line when no street number renders, so a club
+# that reads only "Omaha, NE" is recorded as exactly that and names no specific club. That is honest and weaker.
+# WHY REFUSE RATHER THAN BUILD AND FLAG: compare-deals unions Sam's slices across 14 days and the cursor advances only
+# on a written file, so a refused capture costs one repeated slice; a file written anyway carries a club nobody read.
+# Both copies of the line's text live in this file and in pull-sams-instore.js, and test-pull-agent-lib.ps1 pins the
+# emitter's exact bytes while this file's self-test pins the parser.
+function Split-SamsCaptureStore {
+  param([string[]]$Lines)
+  $cols = 'q|n|lp|up|id|was'
+  $kept   = New-Object System.Collections.ArrayList
+  $stores = New-Object System.Collections.ArrayList
+  $bad    = New-Object System.Collections.ArrayList
+  $sawColumns = $false
+  foreach ($ln in $Lines) {
+    $s = [string]$ln
+    if ($s -match '^\s*#tc-store\b') {
+      $m = [regex]::Match($s, '^\s*#tc-store\s+store="([^"]*)"\s+read="([^"]*)"\s+rows=(\d+)\s*$')
+      if ($m.Success) { [void]$stores.Add([pscustomobject]@{ store = $m.Groups[1].Value.Trim(); read = $m.Groups[2].Value.Trim(); rows = [int]$m.Groups[3].Value }) }
+      else { [void]$bad.Add($s.Trim()) }
+      continue
+    }
+    # A same-day rescue appends a second sweep's output to a copy of the morning capture, header and all
+    # ([[same-day-rescue-rebuilds-per-store]]). The second header is not a record. Both the six-column header and the
+    # older five-column one are recognised; only an EXACT copy of the first header seen is dropped.
+    $t = $s.Trim()
+    if ([string]::Equals($t, $cols, [StringComparison]::Ordinal) -or [string]::Equals($t, 'q|n|lp|up|id', [StringComparison]::Ordinal)) {
+      if ($sawColumns) { continue }
+      $sawColumns = $true
+    }
+    [void]$kept.Add($s)
+  }
+  # ORDINAL throughout: this text arrived from a web page (ops-and-gates.md, -ne ignores NUL).
+  $distinct = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $total = 0
+  $unrec = New-Object System.Collections.ArrayList
+  $notOmaha = New-Object System.Collections.ArrayList
+  foreach ($x in $stores) {
+    [void]$distinct.Add($x.store)
+    $total += $x.rows
+    if (-not $x.store -or [string]::Equals($x.store, 'UNRECORDED', [StringComparison]::Ordinal)) { [void]$unrec.Add($x) }
+    elseif ($x.store -notmatch '(?i)\bOmaha\b') { [void]$notOmaha.Add($x) }
+  }
+  $why = ''
+  if ($bad.Count) {
+    $why = ('a store line does not parse: [' + $bad[0] + '] - a club we cannot read is a club we did not read.')
+  } elseif ($stores.Count -eq 0) {
+    $why = 'the capture carries no #tc-store line, so it cannot say which Sam''s Club it read. Re-capture through samsSweepToCsv in pull-sams-instore.js, which writes one; never hand-assemble this file.'
+  } elseif ($unrec.Count) {
+    $n = 0; foreach ($x in $unrec) { $n += $x.rows }
+    $why = ('{0} row(s) were captured with no club read (store="UNRECORDED"), so they cannot be attributed to any club.' -f $n)
+  } elseif ($notOmaha.Count) {
+    $why = ('club "{0}" is not an Omaha club.' -f $notOmaha[0].store)
+  } elseif ($distinct.Count -gt 1) {
+    $why = ('the sweep straddles {0} clubs ({1}) - one file names one club.' -f $distinct.Count, (@($distinct) -join '; '))
+  }
+  $store = ''; $read = ''
+  if (-not $why) { $store = $stores[0].store; $read = $stores[0].read }
+  return @{ lines = $kept.ToArray(); store = $store; read = $read; rows = $total; refuse = $why }
+}
+
+# The capture exactly as the build consumes it: the store line ruled on FIRST, then the rows read through capture-lib
+# from a per-run temp copy holding only the kept lines. One function, so the self-test drives the path the build runs.
+# Returns data and prints NOTHING (Import-CaptureCsv's rule); a refusal comes back in .refuse with no row read.
+function Read-SamsCapture {
+  param([string]$Path, [switch]$WaiveMissingStoreLine)
+  $lines = @(Get-Content -LiteralPath $Path -Encoding UTF8)
+  $cs = Split-SamsCaptureStore $lines
+  # Waives the MISSING line only, and only when there is no store line at all to disagree with. The text it keys on
+  # is pinned by this file's own self-test ('carries no #tc-store line').
+  $waived = [bool]($WaiveMissingStoreLine -and $cs.refuse -and $cs.rows -eq 0 -and $cs.refuse.Contains('carries no #tc-store line'))
+  if ($cs.refuse -and -not $waived) { return @{ refuse = $cs.refuse; cs = $cs; raw = @(); waived = $false } }
+  $tmp = Join-Path $env:TEMP ('sams-capture-clean-' + [guid]::NewGuid().ToString('N') + '.csv')
+  try {
+    [IO.File]::WriteAllText($tmp, (($cs.lines -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $read = Import-CaptureCsv -Path $tmp -Delimiter '|'
+  } finally { Remove-Item -LiteralPath $tmp -Force -ErrorAction SilentlyContinue }
+  $raw = @($read)
+  return @{ refuse = ''; cs = $cs; raw = $raw; waived = $waived }
+}
+
+# What the doc-level `club` says. The club READ when there is one; an explicit NOT RECORDED under the waiver.
+function Get-SamsClubLabel($cs, [bool]$waived) {
+  if ($waived) { return 'club NOT RECORDED in the capture - it predates the #tc-store line, built under -WaiveMissingStoreLine, so the basis of these rows rests on whoever captured them' }
+  return [string]$cs.store
+}
+
 if ($SelfTest) {
   $fail = 0
   function _R($n,$lp,$up) { [pscustomobject]@{ q='t'; n=$n; lp=$lp; up=$up; id='1' } }
@@ -633,6 +740,10 @@ if ($SelfTest) {
     $bsdHead = 'q|n|lp|up|id'
     $bsdGood = 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|FIXTURE1'
     $bsdBad  = 'beans|Bogus Beans, 99 ct.|$3.27|$1.09/ea|FIXTURE2'
+    # Every capture below opens with the club line samsSweepToCsv writes (backlog I124), because a capture without
+    # one is refused; case 12 is where that refusal is proven.
+    $bsdClub = 'Fixture Club 99999, Omaha, NE 68000'
+    $bsdStore = '#tc-store store="' + $bsdClub + '" read="page" rows=2'
     # An ABSENCE probe: the live path is only ever handed to Test-Path, so nothing here reads live content.
     $bsdLiveDeals = Join-Path $root 'out\sams\sams-deals-1999-01-01.json'
     # THE ROLLBACK LEDGER GOES TO TEMP TOO (2026-09-19). -OutDir never moved it, so until then every child ran with
@@ -645,7 +756,7 @@ if ($SelfTest) {
     # 11a MUST FIRE: one priced row and one reject. The build must reach its summary line, write the rejects file
     # holding exactly that reject, and exit 0.
     $csvA = Join-Path $bsdT 'sams-capture-a.csv'
-    [IO.File]::WriteAllText($csvA, ($bsdHead + "`n" + $bsdGood + "`n" + $bsdBad + "`n"), (New-Object Text.UTF8Encoding($false)))
+    [IO.File]::WriteAllText($csvA, ($bsdStore + "`n" + $bsdHead + "`n" + $bsdGood + "`n" + $bsdBad + "`n"), (New-Object Text.UTF8Encoding($false)))
     $outA = Join-Path $bsdT 'a'
     $runA = Invoke-NativeScript $PSCommandPath '-In' $csvA '-Date' '1999-01-01' '-OutDir' $outA '-NoCursor' '-LedgerRoot' $bsdLedgerT
     $linesA = @($runA.Lines | ForEach-Object { [string]$_ })
@@ -658,7 +769,7 @@ if ($SelfTest) {
     else { Write-Output ("FAIL  11a build with a reject: exit=" + $runA.ExitCode + " summary_lines=" + $sumA + " reject_names=" + ($rjNames -join ';') + " | " + (($linesA | Select-Object -Last 4) -join ' / ')); $fail++ }
     # 11b CLEAN TWIN: the same build with no reject still reaches its summary line, exits 0 and writes no rejects file.
     $csvB = Join-Path $bsdT 'sams-capture-b.csv'
-    [IO.File]::WriteAllText($csvB, ($bsdHead + "`n" + $bsdGood + "`n"), (New-Object Text.UTF8Encoding($false)))
+    [IO.File]::WriteAllText($csvB, ($bsdStore + "`n" + $bsdHead + "`n" + $bsdGood + "`n"), (New-Object Text.UTF8Encoding($false)))
     $outB = Join-Path $bsdT 'b'
     $runB = Invoke-NativeScript $PSCommandPath '-In' $csvB '-Date' '1999-01-01' '-OutDir' $outB '-NoCursor' '-LedgerRoot' $bsdLedgerT
     $linesB = @($runB.Lines | ForEach-Object { [string]$_ })
@@ -675,7 +786,7 @@ if ($SelfTest) {
     # verdict never reads the live ledger: without the redirect this entry lands in grocery\rollback-first-seen.json
     # and the temp file is absent.
     $csvD = Join-Path $bsdT 'sams-capture-d.csv'
-    [IO.File]::WriteAllText($csvD, ('q|n|lp|up|id|was' + "`n" + 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|FIXTURE3|$3.98' + "`n"), (New-Object Text.UTF8Encoding($false)))
+    [IO.File]::WriteAllText($csvD, ($bsdStore + "`n" + 'q|n|lp|up|id|was' + "`n" +'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|FIXTURE3|$3.98' + "`n"), (New-Object Text.UTF8Encoding($false)))
     $outD = Join-Path $bsdT 'd'
     $runD = Invoke-NativeScript $PSCommandPath '-In' $csvD '-Date' '1999-01-01' '-OutDir' $outD '-NoCursor' '-LedgerRoot' $bsdLedgerT
     $linesD = @($runD.Lines | ForEach-Object { [string]$_ })
@@ -684,6 +795,106 @@ if ($SelfTest) {
     if (Test-Path -LiteralPath $bsdLedgerFileT) { $ldD = Get-Content -LiteralPath $bsdLedgerFileT -Raw -Encoding UTF8 | ConvertFrom-Json; $keysD = @($ldD.entries | ForEach-Object { [string]$_.key }) }
     if ($runD.ExitCode -eq 0 -and $rbLineD -eq 1 -and $keysD.Count -eq 1 -and $keysD[0] -eq "Sam's Club|FIXTURE3") { Write-Output 'ok    11d MUST FIRE  a was-price row is dated and its ledger entry lands under -LedgerRoot, not the live ledger' }
     else { Write-Output ("FAIL  11d ledger redirect: exit=" + $runD.ExitCode + " rollback_lines=" + $rbLineD + " temp_ledger_keys=" + ($keysD -join ';') + " | " + (($linesD | Select-Object -Last 4) -join ' / ')); $fail++ }
+
+    # ---- case 12: THE CLUB A CAPTURE WAS READ AT (2026-09-18, backlog I124) -----------------------------------
+    # The founding defect: every sams-deals file said club "13130 L St" from a literal while the session read 15429
+    # Blackwell Dr. 12a is that defect as a MUST FIRE, run through the real build as a child: a capture read at a
+    # club that is NOT the old literal must write the club it was read at, on the file and on every row.
+    $csvE = Join-Path $bsdT 'sams-capture-e.csv'
+    $blk  = '15429 Blackwell Dr, Omaha, NE 68116'
+    [IO.File]::WriteAllText($csvE, ('#tc-store store="' + $blk + '" read="page" rows=1' + "`n" + 'q|n|lp|up|id|was' + "`n" + $bsdGood + '|' + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $outE = Join-Path $bsdT 'e'
+    $runE = Invoke-NativeScript $PSCommandPath '-In' $csvE '-Date' '1999-01-01' '-OutDir' $outE '-NoCursor' '-LedgerRoot' $bsdLedgerT
+    $docE = $null
+    $fE = Join-Path $outE 'sams-deals-1999-01-01.json'
+    if (Test-Path -LiteralPath $fE) { $docE = Get-Content -LiteralPath $fE -Raw -Encoding UTF8 | ConvertFrom-Json }
+    $eClub = if ($docE) { [string]$docE.club } else { '<no file>' }
+    $eRead = if ($docE) { [string]$docE.club_read } else { '' }
+    $eRows = @(); if ($docE) { $eRows = @($docE.deals) }
+    $eStamped = @($eRows | Where-Object { [string]::Equals([string]$_.store_location, $blk, [StringComparison]::Ordinal) }).Count
+    if ($runE.ExitCode -eq 0 -and [string]::Equals($eClub, $blk, [StringComparison]::Ordinal) -and $eRead -eq 'page' -and $eRows.Count -eq 1 -and $eStamped -eq 1) {
+      Write-Output 'ok    12a MUST FIRE  a capture read at Blackwell Dr writes club "15429 Blackwell Dr..." (not the old 13130 L St literal) and stamps it on every row'
+    } else { Write-Output ("FAIL  12a club read: exit=" + $runE.ExitCode + " club='" + $eClub + "' read='" + $eRead + "' rows=" + $eRows.Count + " stamped=" + $eStamped + " | " + (($runE.Lines | Select-Object -Last 3) -join ' / ')); $fail++ }
+
+    # 12b CLEAN TWIN: the stamp is ADDITIVE. Built through Build-Row alone, the same raw row carries every priced
+    # field the build wrote, byte for byte - the club touches nothing the engine reads.
+    $bare12 = (Build-Row ([pscustomobject]@{ q='cucumber'; n='Seedless English Cucumbers, 3 ct.'; lp='$3.27'; up='$1.09/ea'; id='FIXTURE1' })).row
+    $pricedSame = ($null -ne $bare12) -and ($eRows.Count -eq 1)
+    if ($pricedSame) {
+      foreach ($pn in @('ad_price', 'size', 'current_price', 'source_checkout_price', 'sams_unit_price', 'qty_basis', 'engine_check', 'source_ad', 'store')) {
+        if (-not [string]::Equals([string]$bare12.$pn, [string]$eRows[0].$pn, [StringComparison]::Ordinal)) { $pricedSame = $false }
+      }
+    }
+    if ($pricedSame) { Write-Output 'ok    12b CLEAN TWIN  the club-stamped row carries every priced field exactly as Build-Row writes it' }
+    else { Write-Output ('FAIL  12b the club stamp moved a priced field: built=' + ($eRows | ConvertTo-Json -Compress -Depth 3) + ' bare=' + ($bare12 | ConvertTo-Json -Compress -Depth 3)); $fail++ }
+
+    # 12c MUST FIRE, the whole refusal table, through Split-SamsCaptureStore (the function the build path runs).
+    $S12 = '#tc-store store="' + $blk + '" read="page" rows=2'
+    $C12 = 'q|n|lp|up|id|was'
+    $R12 = $bsdGood + '|'
+    # Each concatenated line is its own variable: inside @(...) the comma binds tighter than +, so an inline
+    # concatenation becomes ONE string holding every line (ops-and-gates.md; this table hit it on first run).
+    $S12one = '#tc-store store="' + $blk + '" read="page" rows=1'
+    $S12lst = '#tc-store store="13130 L St, Omaha, NE 68137" read="page" rows=1'
+    $tbl12 = @(
+      @{ l = 'MUST FIRE  a capture with NO store line is refused';                     lines = @($C12, $R12); want = 'carries no #tc-store line' },
+      @{ l = 'MUST FIRE  a non-Omaha club is refused';                                 lines = @('#tc-store store="4550 N 27th St, Lincoln, NE 68521" read="page" rows=1', $C12, $R12); want = 'not an Omaha club' },
+      @{ l = 'MUST FIRE  rows with no club read are refused, never folded into the club beside them'; lines = @($S12one, '#tc-store store="UNRECORDED" read="UNRECORDED" rows=1', $C12, $R12); want = 'no club read' },
+      @{ l = 'MUST FIRE  a sweep that straddled two Omaha clubs is refused';           lines = @($S12one, $S12lst, $C12, $R12); want = 'straddles 2 clubs' },
+      @{ l = 'MUST FIRE  a store line that does not parse is refused';                 lines = @('#tc-store 15429 Blackwell Dr, Omaha', $C12, $R12); want = 'does not parse' },
+      @{ l = 'MUST NOT FIRE  a rescue: the same club twice and a second header is one club'; lines = @($S12, $C12, $R12, $S12, $C12, $R12); want = '' }
+    )
+    foreach ($c in $tbl12) {
+      $cs12 = Split-SamsCaptureStore $c.lines
+      $ok12 = if ($c.want) { [bool]$cs12.refuse -and $cs12.refuse.Contains($c.want) } else { (-not $cs12.refuse) -and ($cs12.lines.Count -eq 3) -and [string]::Equals([string]$cs12.store, $blk, [StringComparison]::Ordinal) }
+      if ($ok12) { Write-Output ('ok    12c ' + $c.l) }
+      else { Write-Output ('FAIL  12c ' + $c.l + ' - refusal was: ' + $(if ($cs12.refuse) { $cs12.refuse } else { '<none>' }) + ' kept=' + $cs12.lines.Count); $fail++ }
+    }
+
+    # 12d MUST FIRE through the build itself: a store-less capture exits non-zero and writes nothing at all.
+    $csvF = Join-Path $bsdT 'sams-capture-f.csv'
+    [IO.File]::WriteAllText($csvF, ($bsdHead + "`n" + $bsdGood + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $outF = Join-Path $bsdT 'f'
+    $runF = Invoke-NativeScript $PSCommandPath '-In' $csvF '-Date' '1999-01-01' '-OutDir' $outF '-NoCursor' '-LedgerRoot' $bsdLedgerT
+    $fWrote = Test-Path -LiteralPath (Join-Path $outF 'sams-deals-1999-01-01.json')
+    $fSaid = @($runF.Lines | Where-Object { ([string]$_) -match 'REFUSING .* carries no #tc-store line' }).Count
+    if ($runF.ExitCode -ne 0 -and -not $fWrote -and $fSaid -ge 1) { Write-Output 'ok    12d MUST FIRE  the build refuses a store-less capture, exits non-zero and writes no deals file' }
+    else { Write-Output ("FAIL  12d store-less build: exit=" + $runF.ExitCode + " wrote=" + $fWrote + " refusal_lines=" + $fSaid + " | " + (($runF.Lines | Select-Object -Last 3) -join ' / ')); $fail++ }
+
+    # 12e CLEAN TWIN: -WaiveMissingStoreLine re-builds that same capture, says the club was NOT RECORDED and stamps
+    # no row with a club nobody read.
+    $outG = Join-Path $bsdT 'g'
+    $runG = Invoke-NativeScript $PSCommandPath '-In' $csvF '-Date' '1999-01-01' '-OutDir' $outG '-NoCursor' '-LedgerRoot' $bsdLedgerT '-WaiveMissingStoreLine'
+    $docG = $null
+    $fG = Join-Path $outG 'sams-deals-1999-01-01.json'
+    if (Test-Path -LiteralPath $fG) { $docG = Get-Content -LiteralPath $fG -Raw -Encoding UTF8 | ConvertFrom-Json }
+    $gRows = @(); if ($docG) { $gRows = @($docG.deals) }
+    $gStamped = @($gRows | Where-Object { $_.PSObject.Properties['store_location'] }).Count
+    if ($runG.ExitCode -eq 0 -and $docG -and ([string]$docG.club) -like 'club NOT RECORDED*' -and ([string]$docG.club_read) -eq 'NOT RECORDED' -and $gRows.Count -eq 1 -and $gStamped -eq 0) {
+      Write-Output 'ok    12e CLEAN TWIN  -WaiveMissingStoreLine builds a store-less capture and says the club was NOT RECORDED'
+    } else { Write-Output ("FAIL  12e waived build: exit=" + $runG.ExitCode + " club='" + $(if ($docG) { $docG.club }) + "' rows=" + $gRows.Count + " stamped=" + $gStamped); $fail++ }
+
+    # 12f MUST FIRE: the waiver waives the MISSING line only - a line naming another city is refused with it too.
+    $capW = Join-Path $bsdT 'sams-capture-w.csv'
+    [IO.File]::WriteAllText($capW, ('#tc-store store="4550 N 27th St, Lincoln, NE 68521" read="page" rows=1' + "`n" + $C12 + "`n" + $R12 + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $rdW = Read-SamsCapture -Path $capW -WaiveMissingStoreLine
+    if ($rdW.refuse -and $rdW.refuse.Contains('not an Omaha club') -and @($rdW.raw).Count -eq 0) { Write-Output 'ok    12f MUST FIRE  -WaiveMissingStoreLine still refuses a store line that names another city' }
+    else { Write-Output ('FAIL  12f the waiver waived a non-Omaha club: rows=' + @($rdW.raw).Count + ' refusal [' + $rdW.refuse + ']'); $fail++ }
+
+    # 12g MUST FIRE: a row pasted under a club line that did not count it (a hand-rolled rescue) is said out loud -
+    # FLAGGED, never refused, so the build still exits 0 and writes its file.
+    $csvH = Join-Path $bsdT 'sams-capture-h.csv'
+    $H1 = '#tc-store store="' + $blk + '" read="page" rows=1'
+    $H2 = 'beans|Bush''s Best Black Beans, 15 oz., 8 pk.|$7.48|$0.06/oz|FIXTURE4|'
+    [IO.File]::WriteAllText($csvH, (($H1, $C12, $R12, $H2) -join "`n") + "`n", (New-Object Text.UTF8Encoding($false)))
+    $runH = Invoke-NativeScript $PSCommandPath '-In' $csvH '-Date' '1999-01-01' '-OutDir' (Join-Path $bsdT 'h') '-NoCursor' '-LedgerRoot' $bsdLedgerT
+    $hWarn = @($runH.Lines | Where-Object { ([string]$_) -match '^build-sams-deals: WARNING the #tc-store line\(s\) count 1 row\(s\) but the capture holds 2' }).Count
+    if ($runH.ExitCode -eq 0 -and $hWarn -eq 1) { Write-Output 'ok    12g MUST FIRE  a row the club line did not count is flagged, and the build still completes' }
+    else { Write-Output ("FAIL  12g uncounted row: exit=" + $runH.ExitCode + " warnings=" + $hWarn + " | " + (($runH.Lines | Select-Object -Last 3) -join ' / ')); $fail++ }
+    # ...MUST NOT FIRE: case 12a's line counted its one row exactly, so it printed no such warning.
+    $eWarn = @($runE.Lines | Where-Object { ([string]$_) -match 'WARNING the #tc-store line' }).Count
+    if ($eWarn -eq 0) { Write-Output 'ok    12g MUST NOT FIRE  a capture whose club line counts its rows exactly prints no row-count warning' }
+    else { Write-Output ('FAIL  12g a matching count still warned ' + $eWarn + ' time(s)'); $fail++ }
   } finally { Remove-Item -LiteralPath $bsdT -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
@@ -697,9 +908,25 @@ if (-not $In -or -not (Test-Path $In)) { throw "build-sams-deals: -In not found:
 # over-fresh stamp keeps a stale slice alive past its cliff. Same order build-walmart-deals.ps1 uses.
 if (-not $Date -and $In) { $m = [regex]::Match($In, '\d{4}-\d{2}-\d{2}'); if ($m.Success) { $Date = $m.Value } }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
-$raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
-# Assign, THEN wrap: a one-row capture comes back as a lone PSCustomObject, which under PS 5.1 has no .Count, so the
-# summary line printed " raw" with no number (found by self-test 11b, 2026-09-17).
+# THE CLUB IS RULED ON BEFORE A SINGLE ROW IS READ (backlog I124; see Split-SamsCaptureStore).
+$cap = Read-SamsCapture -Path $In -WaiveMissingStoreLine:$WaiveMissingStoreLine
+if ($cap.refuse) {
+  throw ('build-sams-deals: REFUSING ' + (Split-Path $In -Leaf) + ' - ' + $cap.refuse + ' Nothing was written and the cursor did not advance, so the older Sam''s slices stand.')
+}
+if ($cap.waived) { Write-Warning 'build-sams-deals: -WaiveMissingStoreLine - this capture names no club, and the file will say so rather than name one.' }
+# FLAGGED, NOT REFUSED: the store line counts the rows the emitter wrote under it. Rows appended by hand below a line
+# they were not counted in (a hand-rolled rescue sweep pasted under the morning capture) would otherwise ride on that
+# club silently, so a mismatch is said out loud. Not a refusal: a blank or duplicate line moves the count too.
+$capHeld = @($cap.raw).Count + [int]$script:CapturePlaceholderCount   # a placeholder row dropped at ingest was still counted by the emitter
+if (-not $cap.waived -and $capHeld -ne [int]$cap.cs.rows) {
+  Write-Output ("build-sams-deals: WARNING the #tc-store line(s) count {0} row(s) but the capture holds {1} - rows added outside samsSweepToCsv are attributed to '{2}' without having been read there" -f $cap.cs.rows, $capHeld, $cap.cs.store)
+}
+$clubLabel = Get-SamsClubLabel $cap.cs ([bool]$cap.waived)
+$storeLocation = if ($cap.waived) { '' } else { [string]$cap.cs.store }
+# Read-SamsCapture reads through Import-CaptureCsv (UTF-8 + repairs names mangled by an upstream ANSI read), so the
+# repair and placeholder counters below are that call's. Assign, THEN wrap: a one-row capture comes back as a lone
+# PSCustomObject, which under PS 5.1 has no .Count, so the summary line printed " raw" with no number (self-test 11b).
+$raw = $cap.raw
 $raw = @($raw)
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled field(s) on ingest (UTF-8 read as ANSI upstream)") }
 if ($script:CapturePlaceholderCount -gt 0) { Write-Output ("  dropped $($script:CapturePlaceholderCount) vendor placeholder row(s) at ingest ($($script:CapturePlaceholderPct)% of what was read)") }
@@ -720,6 +947,9 @@ foreach ($r in $raw) {
     # ONE implementation, three callers (rollback-ttl-lib). The inline copy that used to live here read
     # $script:CaptureDate, which this file never assigns - see that function's header for what it cost.
     if (Set-RollbackFields -Row $b.row -Was $r.was -Store "Sam's Club" -ItemId ([string]$r.id) -Date $Date -Root $ledgerRoot) { $rollbacks++ }
+    # The club each row was READ at (backlog I124), the field build-aldi-regular stamps. Added AFTER Build-Row, so
+    # every priced field is exactly what it was; compare-deals reads no field of this name. A waived build stamps none.
+    if ($storeLocation) { Add-Member -InputObject $b.row -NotePropertyName 'store_location' -NotePropertyValue $storeLocation -Force }
     $rows.Add($b.row)
   } else { $rejects.Add([pscustomobject]@{ name=$r.n; lp=$r.lp; up=$r.up; reason=$b.err }) }
 }
@@ -744,7 +974,10 @@ $outFile = Join-Path $outDir ("sams-deals-$Date.json")
 [ordered]@{
   store      = "Sam's Club"
   price_type = 'everyday'
-  club       = "Omaha Sam's Club, 13130 L St, 68137"
+  # READ from the capture's #tc-store line (backlog I124). Until 2026-09-18 this was the literal
+  # "Omaha Sam's Club, 13130 L St, 68137", a club the session had left on 2026-08-15. No script reads this key.
+  club       = $clubLabel
+  club_read  = $(if ($cap.waived) { 'NOT RECORDED' } else { [string]$cap.cs.read })
   captured   = $Date
   shape      = 'PACKAGE price + pack size (ad_price = price of ONE size). Built by build-sams-deals.ps1; every row verified to reproduce Sam''s own unitPrice through compare-deals'' real Get-UnitPrice.'
   # HOW COMPREHENSIVE was this slice? Sam's is CAPTCHA-walled and pulled in slices; compare-deals unions every

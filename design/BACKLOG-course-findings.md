@@ -10310,7 +10310,36 @@ Note `.claude/rules/ops-and-gates.md` already names `$REARM_DAYS = 14` as a cons
 what it means but not whether it was the first plausible number or the survivor of a sweep. This adds
 a second, different question about the same constant: whether it should be one number at all.
 
-### I124 - Six of seven store feeds do not record which physical store the price came from `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+### I124 - Six of seven store feeds do not record which physical store the price came from `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BUILD`
+
+**Partly done 2026-09-18: Sam's Club, the one true zero, now records the club it was read at.** The rung-1
+lane read Sam's as "no store identity in any form", and that was half right in a worse way: `build-sams-deals.ps1`
+DID write a doc-level `club`, and it was the literal `"Omaha Sam's Club, 13130 L St, 68137"`, while
+`pull-browser-stores.py`'s own seed_hint records the session moving to 15429 Blackwell Dr on 2026-08-15. So every
+Sam's file since then declared a club nobody read, the `aldi-store-is-ola-42` shape. `samsIdentity()` in
+`pull-sams-instore.js` always read the club and nothing kept it. Now `samsProbe` re-reads it per term and stamps
+each row (`cl`), `samsSweepToCsv` opens the capture with `#tc-store store="<club>" read="page" rows=N` plus its own
+header, and `build-sams-deals` writes `club`, `club_read` and every row's `store_location` from that line, refusing
+a capture with no line, an UNRECORDED one, a non-Omaha club, two clubs or an unparseable line (the Aldi set), with
+`-WaiveMissingStoreLine` for re-reading an old capture and a spoken warning when the line's row count and the
+capture disagree (a hand-pasted rescue). The club is NOT pinned: no ruling names one of the two Omaha clubs.
+**Board-neutral, measured:** the base builder (`origin/main` at `72cd626de`) and this one over the four newest real
+captures (2026-09-10, 09-11, 09-12, 09-17; 461 priced rows in total) wrote byte-identical `deals` arrays once the
+added `store_location` field was removed, identical rejects files and identical `pull_terms`; only `club` changed.
+No script reads `club` or `store_location` (searched `grocery`, `ops`, `lib`, `graph`, `meal-prep`, `site`,
+`worker`). **Verified:** `build-sams-deals -SelfTest` exit 0, 49 ok, 0 FAIL (case 12, 13 new cases);
+`test-pull-agent-lib -SelfTest` exit 0, 78 ok (section 7, 10 new cases). Four mutants, each killed and each file
+restored md5-identical: the club put back to the literal (12a, 12e red), the no-store-line refusal removed (12c,
+12d, 12e red), the row-count flag removed (12g red), and the JS row stamp removed (3 section-7 cases red). The 09:00
+runbook (`grocery-browser-stores-refresh`, live SKILL and its mirror), `grocery/README.md`'s store table and
+`.claude/rules/grocery.md` say so.
+**What remains, in the lane report's order:** (2) **Fareway**, whose `build-fareway-regular.ps1` writes `source`
+"shop.fareway.com" with no store; `farewayIdentity()` already reads `retailerLocation` from the Apollo cache, so
+the capture needs a store line the same way. (3) **Hy-Vee, Family Fare and Baker's**, whose store ids are literals
+in the pullers (`pull-grocery-ads.ps1`, `pull-regular-familyfare.ps1`, `hyvee-store-lib.ps1`,
+`pull-regular-bakers-api.ps1`): the puller should read the id back from the API response rather than assert it.
+Not checked: whether the live Sam's page renders a street number (when it does not, `samsIdentity()` falls back to
+any "Omaha..." line and the file records exactly that, which names no specific club).
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The COUNT is REFUTED: "six of seven" holds under no test. Four different tests give 1, 1, 4 and 2 of 7, and the item`s own `git grep store_location` returned exactly one file, which is what produced the wrong number. Walmart gained a `#tc-store` gate on 2026-09-12 and is now the best-gated store of the seven; Baker`s carries a structured `location_id`; Hy-Vee and Family Fare carry their store id in prose. **The true gaps are Sam`s Club (nothing, under any test) and Fareway**, and the real defect is declared-versus-captured store ids rather than absent ones. Build described with files and lines in the lane report, deliberately not written.
 

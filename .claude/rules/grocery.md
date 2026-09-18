@@ -69,6 +69,10 @@ is one copy of every rule and nothing here can drift from it.
   **Aldi's OLA number is deliberately NOT pinned** and Walmart's storeId deliberately IS: that session
   legitimately moves between Omaha Aldis, where one Walmart is ruled. What neither may do is claim a
   store nobody read. [[walmart-session-store-3153-drift]], [[aldi-store-is-ola-42]]
+  **Sam's Club joined them on 2026-09-18 (backlog I124)**: `samsSweepToCsv` opens with a `#tc-store` line
+  naming the club each row was read at, and `build-sams-deals` writes the file's `club` and every row's
+  `store_location` from it, refusing the same four shapes Aldi does. Until then it stamped "13130 L St" from a
+  literal while the session sat at 15429 Blackwell Dr. The club is NOT pinned: no ruling names one.
 - **A STANDING RULING'S OWED TERMS ARE DERIVED AND LEAD THE WORKLIST**, never hand-picked and never
   hand-discharged (2026-09-12). Brad's store-drift ruling named 23 terms to recapture and said to put
   them at the head of the next Walmart worklist; nothing carried that anywhere for a fortnight, because
