@@ -11345,7 +11345,7 @@ with no enforcement is a hope. **The ruling wanted:** whether to record `-Want` 
 actually used in `gate-readings.jsonl` (detective, cheap, no red on day one), or to leave it, on the
 grounds that four in-house callers is not a multi-tenant system and never will be.
 
-### I148 -  `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I148 -  `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Premise REFUTED: the history the item wants to schedule on does not exist. `gate-readings.jsonl` holds 5,099 rows over 128 runs with NO duration field, and `t` is written once per run so per-gate time is not recoverable; the timings live only in memory at `run-gates.ps1:165` and are printed, never stored. The file is also gitignored. The build is one field at line 839. Payoff is capped by the already-recorded bound: this box does ~41 run-gates an hour, so order decides WHO is refused and never HOW MANY.
 
@@ -11377,6 +11377,39 @@ order of magnitude, a priority queue over an estimate from history would cut the
 **the estimate is available here in a way it is not in Hadoop**. Any such change must keep the
 arrival-order guarantee as a floor, because shortest-first starves the longest job by construction -
 which is precisely the failure the ticket queue was built to fix.
+
+**RUNG 1 RE-OPENED 2026-09-18 on a different road, because the 2026-09-12 refutation was about the HISTORY, not
+the question.** Since that day run-gates keys each self-test on its inputs (`lib\gate-input-key.ps1`) and reuses a
+pass, so gate cost per push now genuinely depends on what the push touched, and the spread can be measured
+directly without any stored history.
+**ACCEPTANCE BAR, written 2026-09-18 before either run.** A shortest-first order over the slot queue is worth
+building only if BOTH hold: (1) the gate WORK run-gates prints (`Ns of gate work`, the quantity that occupies
+slots) for a cold run (`-NoReuse`, which is what any push touching a runner file gets) is at least **10x** a warm
+run over a markdown-only change, both in one checkout within one hour; and (2) of the last **100** non-bot,
+non-merge commits on origin/main, at least **20** re-run under 25% of the keyable self-tests AND at least **20**
+re-run over 75% of them, i.e. the population really holds both short and long jobs for an order to exploit. If
+either fails the item closes DONE with no fix.
+
+**Done 2026-09-18. Measured, and no fix is warranted: condition (2) fails, so condition (1) was not run.** Over the
+last 100 non-bot, non-merge commits on origin/main at 9b8c85073, reading each commit's changed files against the
+input set `Get-TcGateInputKey` returns for every self-test run-gates discovers (lib\gate-input-key.ps1 blob
+a5f0315bc9ff): of 301 self-tests, 255 are keyable and 46 always run. **93 of 100 commits re-run under 25% of the 255
+keyable self-tests (34 of 100 re-run none, median 2, p90 12, and the largest non-runner commit 13), and 7 of 100
+re-run all 255** - exactly the 7 that touched a runner file (`ops\run-gates.ps1`, `lib\parallel-run.ps1` or
+`lib\gate-input-key.ps1`), which re-keys every gate by design. Nothing sits between 13 and 255. So the population
+is not a spread for an order to exploit: it is a large block of cheap jobs and a 7% tail of full re-runs, and the
+bar asked for at least 20 of each. Two things make even that 7% weaker than it looks. Every "cheap" push still runs
+the fixed floor (the 46 unkeyable self-tests, every static detector and every undeclared Python suite), so the
+cheap and full jobs differ by the keyable part only, not by the whole set. And shortest-first would put exactly
+those 7 runner changes, which are the changes to the gate itself, at the back of a moving line, which is the
+starvation the ticket queue was built to end; the 2026-09-11 bound still holds that order decides WHO is refused and
+never HOW MANY. Caveats stated with the number: a commit is not a push (a push that bundles several commits takes
+their union, which only moves pushes toward the full end), each commit was scored against TODAY's dependency graph
+rather than its own, and 9 input paths could not be normalised by `GetFullPath` and were compared as written, so
+those gates can be under-counted for a hit. Harness: a one-off scratch script (run-gates `-ListOnly` for the gate
+list, `Get-TcGateInputKey -RunnerFiles @()` per gate, `git diff-tree --name-only -r` per commit, a runner-file hit
+counting every keyable gate); not committed, because the question only recurs if the keying changes and the
+description above is enough to rebuild it. One row per commit was written; the totals above are derived from it.
 
 ### I149 - Nothing in the estate backs off when it retries a repair, and the class was not swept `DONE` `queue-7`
 
