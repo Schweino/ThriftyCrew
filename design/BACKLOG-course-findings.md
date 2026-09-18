@@ -11983,3 +11983,247 @@ change that added the gate, plus the full account already in I112's own backlog 
 
 Either Brad pastes them, or a session with permission on `.claude/rules/` and `.claude/skills/` does. It
 needs no judgement and no measurement; it needs write access.
+
+### I171 - a push-ledger self-test says "this process" with a bare PID, and a day-long shared ledger makes that a coin flip that refuses unrelated pushes `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\approvals-i138-2026-09-12.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Found 2026-09-12 while landing backlog I138.** Two of three `ops\push-main.ps1` attempts from one
+session were refused by `run-gates` exit 1, on two different suites and the same single case shape:
+
+- `ops\push-main.ps1 -SelfTest`, *"MUST FIRE no row this suite wrote reached the production ledger, so
+  the convergence report is never computed over temp clones"*, `got: rowsFromThisProcessInProduction=1`.
+- `lib\push-ledger.ps1 -SelfTest`, *"MUST FIRE a write with no root given lands in this suite's scratch,
+  and NOTHING this suite wrote reached the production ledger"*, `got: rowsFromThisProcessInProduction=1`
+  with the scratch path correct.
+
+**Both passed standalone, exit 0, immediately after the refusal that named them** (push-main 0 failures,
+push-ledger `PASS: 14 cases`). Neither run had anything to do with the change being pushed, which touches
+no lock, no ledger and no push path.
+
+**The mechanism, and it is a measurement not a guess.** `lib\push-ledger.ps1:336` decides which rows in
+the PRODUCTION ledger this suite wrote with
+`@($prodRows | Where-Object { ... -and [int]$_.pid -eq $PID })`. The row's only identity is
+`pid = $PID` (`lib\push-ledger.ps1:90`). The production ledger is ONE FILE PER DAY, under
+`%LOCALAPPDATA%\ThriftyCrew\push-ledger\pushes-<date>.jsonl`, accumulating every push on this shared box.
+**Read at 2026-09-12: 142 rows, 140 distinct pids, max pid 163,236.** Windows recycles pids within a day,
+so a self-test whose own `$PID` happens to match any pid already in that file reads a stranger's row as
+its own and fails a MUST FIRE. The collision probability grows all day as the file fills, and it is reset
+only by the date rolling over.
+
+**Why it matters more than a flake.** The case it breaks is a good one - it exists because fixture rows
+once reached the first live report - and it fails in the direction that refuses an innocent push. The ops
+rules already name that as the red that teaches `--no-verify`. It also cannot be told apart from the real
+defect by reading the output: the message is identical whether the redirect was removed or a pid collided.
+
+**The fix is small and is a BUILD, not a measurement.** Give the row an identity the day cannot reuse -
+the process start time beside the pid, or a per-run guid the suite generates and filters on - and filter
+on that. The estate already has the pattern: `lib\gate-slots.ps1` keys a ticket's liveness on its MUTEX
+rather than its file, for the same reason a name alone is not an identity. Both suites carry the same
+filter and both want the same change; `ops\push-main.ps1`'s copy should be checked for the same spelling.
+
+**Not fixed here on purpose.** It is a different subsystem from the ruling that found it, and a repair to
+the push path made while trying to get a push out is the shape this estate has been bitten by.
+
+### I172 - the 584 live recipe cards carry no allergen line, and the backfill is a republish of the whole catalogue `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\approvals-i144-2026-09-12.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source: carrying out Brad's I144 ruling, 2026-09-12.** The mechanism landed that day - the
+classification (`meal-prep\db\allergens.json`, 353 food rows), the derivation and the only spelling of
+the line (`meal-prep\lib\allergen-lib.ps1`), the renderer (`build-card2.ps1`, above the paywall), and
+the publish check that refuses a missing or disagreeing line (`pipeline\audit-allergen-line.ps1`,
+wired into `wave-publish.ps1`'s P5 gate table). What did NOT land is the cards.
+
+**Measured on the day the mechanism landed:** `audit-allergen-line.ps1` with no `-Slugs` reports
+**584 of 584 built cards missing the line**, exit 1, zero `unclassified` findings. Zero unclassified is
+the useful half of that number: every one of the 314 distinct ingredients the live catalogue uses is
+classified, so the backfill is a rebuild and a republish and NOT a data-gathering exercise.
+
+**What the reader is missing while it waits. 217 of 584 recipes (37.2%) carry at least one of the nine
+that cannot be got from the ingredient NAMES** - wheat 132, soy 45, fish 42, tree nuts 32, shellfish
+24, milk 18, sesame 2, eggs 1. 484 of 584 carry at least one of the nine at all. The 42 fish are the
+Worcestershire recipes that started I144.
+
+**Why it was not done in the same change, and this is the reversibility argument rather than an
+excuse.** A republish of the catalogue is a Ghost operation against a live paid site, it is the
+expensive part of any card change (`build-card2.ps1`'s own header records a 513-post republish as the
+thing whole waves are batched around), and it needs a green board and a live admin key. Bundling it
+into the change that built the mechanism would have made a reviewable data-and-code change into an
+unreviewable live-site operation.
+
+**Two things this item owes that the mechanism change deliberately did not claim.**
+1. **The 375px mobile check, which has NOT been done.** The session that built the line had no browser
+   tool, took no screenshot and read no rendered page. The line is one `<p>` with no fixed width, no
+   `white-space: nowrap` and no unbreakable token, so there is no mechanism in it for a horizontal
+   scroll - but that is reasoning about CSS, not a look, and the estate's rule is that a measurement is
+   not a look. Do it before the republish ships, not after.
+2. **Re-read a sample of the rendered lines as a reader.** The classification rule in
+   `allergens.json`'s `rule` field is a judgement about food, and the cheapest place to catch a bad
+   judgement is a handful of real cards rather than a fixture.
+
+**The finish condition is a command, not an opinion:** `audit-allergen-line.ps1` with no arguments
+exits 0. While it exits 1 it is a red REPORT on purpose and is wired into no gate, because a gate that
+is red on day one teaches people to ignore red.
+
+### I173 - the allergen line is checked at publish but not surfaced at pre-audit `OPEN` `queue-7` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\approvals-i144-2026-09-12.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source: the same change, 2026-09-12, and recorded because it was a deliberate omission rather than an
+oversight.** Brad's ruling asks for a publish check and that is what was built: `wave-publish.ps1`'s P5
+gate table runs `audit-allergen-line` scoped to the wave's slugs and refuses the wave. It was NOT added
+to `pipeline\wave-preaudit.ps1`, which is the machine report the recipe-batch-auditor reads one stage
+earlier.
+
+**The cost of the omission** is that a wave with a stale card learns about it at the publish gate, after
+the auditor has already spent its judgement pass, rather than in the report that pass is built on. That
+is a wasted audit, which is the exact expense wave-preaudit was written to remove.
+
+**Why it was left.** `wave-preaudit.ps1` is 1,438 lines with its own check vocabulary and a `blind=`
+count on its completion marker that is asserted by a CLEAN TWIN in its seeing arm (`14 of 64` as of
+2026-09-12). Adding a check there means moving that constant correctly, and getting it wrong turns a
+working gate red for a reason unrelated to allergens. The refusal Brad asked for is in place and does
+not depend on this; this is a cheapness improvement and should be done by somebody with that file
+already open, reading its blind-count rule first.
+
+### I174 - fareway builds copy taxonomy_path unrepaired, and it carries two-layer mojibake in every recent file `OPEN` `queue-6` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q6-netdata-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Queue 6 entry 3, `python-network-data` (Severance): decode once at the boundary. Mojibake
+depth counts how many decodes went wrong.
+
+**What was measured, 2026-09-18.** `grocery\build-fareway-regular.ps1:366` runs `Repair-Mojibake` on
+`name` only, and line 557 copies `taxonomy_path` onto the row as it arrived. Every recent
+`grocery\out\regular\fareway-regular-*.json` (2026-09-05 to 09-12 checked, same count each day) holds 5
+`taxonomy_path` values of the form bullet-plus-"2 flavors", where the bullet is UTF-8 read as
+Windows-1252 TWICE: seven characters starting with A-tilde, not one. The raw
+`grocery\out\fareway\fareway-shop-*.json` captures for 2026-09-06 to 09-12 hold no two-layer sequence.
+So a second layer is added somewhere between capture and build that this check did not find. Across
+all 8,545 tracked files, 23 hold a two-layer bullet and 20 a two-layer apostrophe.
+
+**Why it is not urgent.** Nothing reads Fareway `taxonomy_path`. `audit-store-taxonomy.ps1` reads
+Hy-Vee `store_department` and Baker's `store_category`, and the value is a tile subtitle, not a
+category. So today the damage is inert.
+
+**Why file it at all.** A field nobody reads yet is where a repaired pipeline keeps its damage. The
+day a taxonomy lane is added for Fareway, it reads junk that looks like data. The two-layer depth
+also says one of OUR hops decodes wrong, and the name repair is hiding that on the field that
+matters.
+
+**First rung (MEASURE).** Find which input carries the "flavors" rows into the build (they are absent
+from the 09-12 raw capture), and whether the second layer is added by the builder's own read or
+comes from a carried-forward older row. Then decide: repair every string field on ingest, or stop
+writing `taxonomy_path` for Fareway, since it is not a taxonomy.
+
+### I175 - Windows PowerShell 5.1 Sort-Object is unstable, and 17 cheapest-row picks break price ties by the sort's internals `OPEN` `2-WAY` `RUNG1 MEASURE` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-algo1-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Source: `algorithms-part1` (Sedgewick and Wayne), the stability lecture, plus a measurement made here.
+
+**Measured 2026-09-18** with a scratch probe under PowerShell 5.1.26100: 50 rows over 5 key values,
+200 seeded trials, `Sort-Object k` reordered rows with EQUAL keys in **200 of 200** trials. The output
+is deterministic for identical input, and 5.1's `Sort-Object` has no `-Stable` switch (it arrived in
+PowerShell 7). Adding the input index as a second sort key made the sort stable in the same probe.
+
+**Where it lands.** Over `git ls-files '*.ps1'` = 785 files at `59b7fefa5`, **314 lines in 184 files**
+pipe `Sort-Object` straight into `Select-Object -First 1` on one line. 245 of those sort file names by
+`Name`, where ties cannot occur. **17 sort on `unit_price`**: 14 in `grocery/compare-deals.ps1` (some
+inside its self-test), 2 in `grocery/price-table-lib.ps1` lines 103-104 (the everyday and live-ad
+winner per cell), and 1 in `grocery/out/r100/compare-debug.ps1`. Where two rows tie on unit price, the
+row that wins, and so the product NAME a page shows, is chosen by the sort's internals rather than by
+any rule, and can change when the input order changes (for example a capture file written in a
+different order) with no price moving.
+
+**Not measured, and it is the number that decides whether this matters:** how many cells on a real
+board have a tie at the winning unit price, and whether the named winner has ever flipped between two
+builds with the same prices. A single-line fix per site is to add an explicit tie-break key (a stable
+product id or the input index), but nothing should change until the tie count is known.
+
+### I176 - When `same_as` is built, identity merging is union-find, and `do_not_merge` must be checked against whole components at union time `PARKED` `queue-7`
+
+**Merged from `design\backlog-inbox\q7-algo1-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Source: `algorithms-part1`, union-find lectures.
+
+`graph/schema.md` lists `same_as` as a RESERVED predicate and `do_not_merge` as live
+(`graph/import/importers.py:370-394` imports `commodity-dupe-allowlist.json` as symmetric
+`do_not_merge` edges). Checked 2026-09-18 over 831 tracked `.py`/`.ps1` under `graph/`, `grocery/`,
+`meal-prep/`, `ops/`, `lib/` and `sidecar/`: no union-find or disjoint-set code exists;
+`graph/audit_graph_shape.py` computes weakly connected components with an iterative flood fill for a
+one-shot audit, which is correct for that job.
+
+The forward rule for whoever builds `same_as`: an equivalence merge is TRANSITIVE and has no undo. A
+`same_as` B plus B `same_as` C makes A the same as C without anybody reviewing that pair, so a
+`do_not_merge` between A and C must be checked at the moment of the second union against every member
+of both components, not only against the pair being merged; and because one bad union merges two whole
+components, the union log must be kept so a merge can be replayed without it. Weighted quick-union
+with path compression is the data structure, with near-constant cost per operation. Parked because
+nothing uses `same_as` today; it becomes OPEN the day a design for it is written.
+
+### I177 - The declared lock order covers locks, and the bounded-buffer deadlock is a lock held across a WAIT `OPEN` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-os3-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**What the course shows.** The classic bounded-buffer deadlock (OSTEP chapter 31) has no second lock
+in it: a consumer takes the buffer mutex and then waits on the `full` semaphore while holding it, and
+the producer that would post `full` needs that mutex first. The fix is not an order but a scope rule:
+never block on a semaphore, an event or another process while holding a lock the thing you wait for
+may need.
+
+**What was measured in the estate, 2026-09-18.** `.claude/rules/ops-and-gates.md`, "THE LOCK ORDER IS
+DECLARED", names four mechanisms and orders them, and its deadlock-freedom argument is about
+acquiring two of THOSE at once. A tracked-file grep over `lib/*.ps1` and `ops/*.ps1` for
+`EventWaitHandle|ManualResetEvent|AutoResetEvent|Semaphore|WaitAny|WaitAll` found one further
+blocking-wait primitive the rule does not mention: `lib/ledger-fixture.ps1:86` and `:131` create a
+named `EventWaitHandle`, and `lib/ledger-lock.ps1:130` waits on it (`Wait-TcLedgerFixtureGate`) inside
+`Enter-TcLedgerLock`, immediately before the ledger mutex `WaitOne`. It runs only under a ledger
+self-test, and it sits BEFORE the ledger lock is taken, so it holds nothing of its own. But a caller
+that already holds an outer lock (level 3, an `Invoke-Locked` mutex, which the rule declares may sit
+over a ledger lock) would wait on that event while holding it. Nothing does that today; the rule
+itself records 3-over-4 as "declared and unexercised". The one live nesting, `ops\push-main.ps1`
+holding the push lock across `git push` whose hook takes gate slots, is a lock held across a wait on a
+counting resource, which is exactly the course's shape, and it is safe only because no gate-slot
+holder ever waits for the push lock. That reason is true and is not written down.
+
+**Proposed, one sentence, no gate.** Add to the lock-order rule: *the order covers every blocking
+wait, not only the four locks - a wait on an event, a process, a slot or the remote while holding one
+of them is a nesting, and it is safe only if the thing waited on can never need the lock held.* And
+name the push-lock-over-gate-slots nesting as safe FOR THAT REASON rather than only as "1 over 2".
+Per the rule's own stated policy no detector is proposed until a second nesting exists.
+
+**Scope of this finding.** The grep is a pattern match over two directories and is unsound: a wait
+spelled another way, or a `Start-Process ... -Wait` or `WaitForExit()` held inside a lock, is not
+counted. Those were not searched.
+
+### I178 - The rules file reads "unsound" as "complete", so it calls an unsound detector's finding a real defect `OPEN` `queue-7` `2-WAY` `RUNG1 DOC`
+
+**Merged from `design\backlog-inbox\q7-plb-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Source: `programming-languages-part-b` (Grossman, section 7), worked 2026-09-18.
+
+`.claude/rules/ops-and-gates.md` lines 150 to 152 (the backlog I66 bullet, read 2026-09-18) say a sound detector never misses a real defect "so a clean report is trustworthy; an **unsound** one stays quiet, so a reported defect is real and a clean report proves nothing".
+
+Sound (no false negatives) and complete (no false positives) are two independent properties, so there are four cases, not two. "Unsound" says nothing about false positives. The detectors that bullet describes are pattern matchers over source text, several with allow-markers (`# atomic-replace:allow`, the cmdlet-shadow allowlist): such a matcher is typically NEITHER sound nor complete, so a finding from it is a candidate, not proof of a defect.
+
+Proposed wording change only: "an unsound one can miss a real defect, so a clean report proves nothing; whether a REPORTED defect is real is a separate property (completeness), and a pattern matcher usually lacks that too." The `SCOPE OF A CLEAN REPORT:` lines in `ops/audit-*.ps1` were not re-read for the same two-case reading; a sweep of them is the second half of this item. Store side already corrected: `software-craft/test-design-and-oracles.md` section 5b, marked `[CORRECTED: 2026-09-18]`.
+
+### I179 - Set-StrictMode is on in 3 of 785 tracked scripts, and two estate comments already blame its absence for a bug class `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\q7-plb-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Source: `programming-languages-part-b` section 7 (what a language does about an error it did not prevent statically: raise it, or return a default).
+
+Measured by the first q7-plb lane on 2026-09-18 at `59b7fefa5` with a scratch probe under PS 5.1.26100: with no strict mode, an unset variable, a missing property on a `[pscustomobject]` and a property read on `$null` all yield an empty value silently; under `Set-StrictMode -Version Latest` all three throw. `Set-StrictMode` appears in 3 of 785 tracked `.ps1`, all under `media/reels`, all `-Version 2.0`. `grocery/guards.ps1` and `meal-prep/engine/cost-recipes.ps1` carry comments naming exactly this silent-default class as the cause of a bug. `lib/chain-verdict-lib.ps1` records why a dot-sourced library must not set it (the mode follows the caller).
+
+The ruling needed: whether entry-point scripts (never libraries) adopt `Set-StrictMode -Version Latest`, starting where? It would turn silent wrong answers into throws, which on a daily chain means a red run where there used to be a quietly wrong board, so it is a decision, not a sweep. Not re-measured by this lane; the counts are the first lane's.
+
+### I180 - Scriptblocks run later are dynamically scoped unless they call GetNewClosure, and nobody has counted the ones that need it `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\q7-plb-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Source: `programming-languages-part-b` (closures capture the environment where the function value was created).
+
+Measured by the first q7-plb lane on 2026-09-18 under PS 5.1.26100: a scriptblock returned from a function that set `$b = 3` read the CALLER'S `$b` (104 at top level with `$b = 100`, 1004 inside a function binding 1000) and read its own only through `.GetNewClosure()` (7 both times). Ten tracked `.ps1` call `.GetNewClosure()` at `59b7fefa5`. How many scriptblocks handed to something that runs them later (callbacks such as `-OnWait`, `-OnRefusal`, `FindAll` predicates, sort keys) read a free variable without it was NOT measured. The work: an AST census of scriptblock literals passed as arguments that reference a variable neither a parameter nor `$_`/automatic, then decide per site. Store side: `software-craft/language-semantics.md` section 2.
