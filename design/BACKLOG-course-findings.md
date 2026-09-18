@@ -12793,6 +12793,9 @@ lives in the repo, not in the user-level skills store, so no second repository w
 wording was taken from `ops/audit-lesson-rate-claims.ps1`'s header and checked by ordinal comparison after
 folding whitespace: 657 characters, identical in both new copies. Both files LF, 0 carriage returns. No lesson
 was edited. The gate itself, run at ffa5dc549: exit 0, `LESSON-RATE-CLAIMS-COMPLETE findings=6 baseline=6`.
+The skill's mirror `ops/prompt-backup/skills/lesson/SKILL.md` moved with it: the first gated push was refused
+by `audit-prompt-backup` alone (416 passed, 1 failed, `STALE BACKUP skills\lesson\SKILL.md`), so **an edit to a
+project skill owes its mirror in the same commit**.
 
 **Merged from `design\backlog-inbox\i112-ruling-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
