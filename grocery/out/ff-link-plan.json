@@ -1,6 +1,28 @@
 ﻿{
     "resolved":  [
                      {
+                         "id":  "baby-formula",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Tippy Toes Sensitivity Premium 0 12 Months Infant Formula With Iron 33.2 Oz",
+                         "board_pu":  1.1533,
+                         "name":  "Tippy Toes Sensitivity Premium 0 12 Months Infant Formula With Iron 33.2 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/formula/tippy_toes_sensitivity_premium_0_12_months_infant_formula_with_iron_33_2_oz/p/1564405684713134699",
+                         "price":  "$38.29",
+                         "size":  "33.2 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "deodorant",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Brut Antiperspirant \u0026 Deodorant, Classic 6 Oz",
+                         "board_pu":  0.7317,
+                         "name":  "Brut Antiperspirant \u0026 Deodorant, Classic 6 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/deodorant_personal_scents/brut_antiperspirant_deodorant_classic_6_oz/p/528031",
+                         "price":  "$4.39",
+                         "size":  "6 oz",
+                         "score":  1
+                     },
+                     {
                          "id":  "eggs",
                          "fault":  "NO-LINK",
                          "board":  "Large Grade A Eggs Our Family (30 Ct)",
@@ -9,17 +31,6 @@
                          "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
                          "price":  "$2.39",
                          "size":  "12 ct",
-                         "score":  1
-                     },
-                     {
-                         "id":  "mouthwash",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Top Care Everyday Mouthwash, Freshening, Mint",
-                         "board_pu":  0.0885,
-                         "name":  "Top Care Everyday Mouthwash, Freshening, Mint",
-                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/top_care_everyday_mouthwash_freshening_mint/p/2346335",
-                         "price":  "$2.99",
-                         "size":  "33.8 oz",
                          "score":  1
                      }
                  ],
@@ -134,7 +145,7 @@
                     },
                     {
                         "id":  "strawberries",
-                        "why":  "match found but per-unit disagrees: board $0.1708 vs link $0.2103 (18.8%)"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "maple-syrup",
@@ -145,7 +156,7 @@
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
-    "worked":  32,
-    "generated":  "2026-09-18 08:11",
+    "worked":  33,
+    "generated":  "2026-09-18 14:51",
     "board":  "comparison-2026-09-17.json"
 }

@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-18 08:19",
+    "generated":  "2026-09-18 15:00",
     "board":  "comparison-2026-09-17.json",
-    "sidecar_generated":  "2026-09-18 08:18:58",
+    "sidecar_generated":  "2026-09-18 15:00:06",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -10,84 +10,51 @@
                    },
     "examined":  {
                      "board_pairs":  3189,
-                     "corpus":  41745,
-                     "rule_invisible":  7963
+                     "corpus":  41828,
+                     "rule_invisible":  7978
                  },
     "identity_count":  0,
-    "coverage_count":  7,
+    "coverage_count":  1,
     "identity":  [
 
                  ],
     "coverage":  [
                      {
                          "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "Ground Beef 73% Lean/27% Fat, All Natural*, 4 lb Tray",
-                         "cos":  0.8113,
-                         "score":  0.987758,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "baby-formula",
-                         "commodity":  "Baby Formula",
+                         "id":  "pie-pumpkins",
+                         "commodity":  "Pie Pumpkins",
                          "store":  "Family Fare",
-                         "product":  "Similac Infant Formula, With Iron, Hypoallergenic, Ready To Feed, 0 12 Months 6 Ea",
-                         "cos":  0.6881,
-                         "score":  0.932382,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "tilapia",
-                         "commodity":  "Tilapia Fillets",
-                         "store":  "Walmart",
-                         "product":  "Great Value Frozen Skinless \u0026 Boneless Swai Fish Fillets Value Bag, 4 lb",
-                         "cos":  0.6396,
-                         "score":  0.92059,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "breakfast-sandwiches",
-                         "commodity":  "Frozen Breakfast Sandwiches",
-                         "store":  "Family Fare",
-                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
-                         "cos":  0.7192,
-                         "score":  0.916499,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Walmart",
-                         "product":  "Freshness Guaranteed Chicken Leg Quarters, 2.75 - 7.0 lb Tray",
-                         "cos":  0.6094,
-                         "score":  0.913274,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray",
-                         "cos":  0.6977,
-                         "score":  0.912127,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "Family Pack 80 Lean 20 Fat Ground Beef Patties 2.5 LB",
-                         "cos":  0.7068,
-                         "score":  0.900264,
+                         "product":  "Jj\u0027s Bakery Pie, Pumpkin Spice, Ligthly Glazed 4 Oz",
+                         "cos":  0.682,
+                         "score":  0.908096,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
-                 ]
+                 ],
+    "coverage_excluded_count":  2,
+    "coverage_excluded":  [
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "baby-formula",
+                                  "commodity":  "Baby Formula",
+                                  "store":  "Family Fare",
+                                  "product":  "Similac Infant Formula, With Iron, Hypoallergenic, Ready To Feed, 0 12 Months 6 Ea",
+                                  "cos":  0.6843,
+                                  "score":  0.93355,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027(?:infant|baby)\\s+formula\u0027 matched, exclude \u0027ready[\\s-]?to[\\s-]?feed\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "ground-beef-8020",
+                                  "commodity":  "80/20 Ground Beef",
+                                  "store":  "Aldi",
+                                  "product":  "Family Pack 80 Lean 20 Fat Ground Beef Patties 2.5 LB",
+                                  "cos":  0.7068,
+                                  "score":  0.900264,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u002780%?\\s*lean[^.]*20%?\\s*fat\u0027 matched, exclude \u0027patties\u0027 killed it"
+                              }
+                          ]
 }

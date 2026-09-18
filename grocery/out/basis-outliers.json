@@ -1023,20 +1023,6 @@
                               "agrees_with_engine_divisor":  true
                           },
                           {
-                              "id":  "pistachios",
-                              "commodity":  "Pistachios",
-                              "unit":  "oz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.1426,
-                              "size":  "42 fl oz",
-                              "item":  "Whole Moon Pistachio Plant Beverage Whole Protein",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  true,
-                              "unit_kind":  "weight",
-                              "agrees_with_engine_divisor":  false
-                          },
-                          {
                               "id":  "ranch-dressing",
                               "commodity":  "Ranch Dressing",
                               "unit":  "floz",
@@ -1444,20 +1430,6 @@
                                                      "row_kind":  "volume",
                                                      "holds_crown":  true,
                                                      "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
-                                                     "id":  "pistachios",
-                                                     "commodity":  "Pistachios",
-                                                     "unit":  "oz",
-                                                     "store":  "Baker\u0027s",
-                                                     "per_unit":  0.1426,
-                                                     "size":  "42 fl oz",
-                                                     "item":  "Whole Moon Pistachio Plant Beverage Whole Protein",
-                                                     "kind":  "volume",
-                                                     "row_kind":  "weight",
-                                                     "holds_crown":  true,
-                                                     "unit_kind":  "weight",
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
@@ -2606,23 +2578,10 @@
                      }
                  ],
     "kind_mismatch_crown":  [
-                                {
-                                    "id":  "pistachios",
-                                    "commodity":  "Pistachios",
-                                    "unit":  "oz",
-                                    "store":  "Baker\u0027s",
-                                    "per_unit":  0.1426,
-                                    "size":  "42 fl oz",
-                                    "item":  "Whole Moon Pistachio Plant Beverage Whole Protein",
-                                    "kind":  "volume",
-                                    "row_kind":  "weight",
-                                    "holds_crown":  true,
-                                    "unit_kind":  "weight",
-                                    "agrees_with_engine_divisor":  false
-                                }
+
                             ],
     "ratio":  4,
-    "generated":  "2026-09-18T08:12:20",
+    "generated":  "2026-09-18T17:48:19",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",

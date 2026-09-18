@@ -39,19 +39,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "air-freshener",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.2452,
-        "link":  0.2041,
-        "ratio":  0.83,
-        "price":  1.49,
-        "size":  "7.3 oz",
-        "boardItem":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener, Apple Cinnamon, 7.3oz, 1 count",
-        "linkItem":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener, Apple Cinnamon, 7.3oz, 1 count",
-        "board_src":  "main"
-    },
-    {
         "id":  "alfredo-sauce",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -312,19 +299,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "fresh-basil",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  3.2,
-        "link":  3.032,
-        "ratio":  0.95,
-        "price":  3.79,
-        "size":  "1.25 oz",
-        "boardItem":  "Gotham Greens Fresh Basil",
-        "linkItem":  "Gotham Greens Fresh Basil",
-        "board_src":  "main"
-    },
-    {
         "id":  "bbq-sauce",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -377,19 +351,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "bell-peppers",
-        "store":  "Baker\u0027s",
-        "unit":  "each",
-        "board":  0.89,
-        "link":  0.99,
-        "ratio":  1.11,
-        "price":  0.99,
-        "size":  "1 ct",
-        "boardItem":  "Fresh Large Green Bell Pepper",
-        "linkItem":  "Fresh Large Green Bell Pepper",
-        "board_src":  "main"
-    },
-    {
         "id":  "blackberries",
         "store":  "Aldi",
         "unit":  "oz",
@@ -413,19 +374,6 @@
         "size":  "128 fl oz",
         "boardItem":  "Sun Brite Ultra Bleach",
         "linkItem":  "Sun Brite Ultra Bleach",
-        "board_src":  "main"
-    },
-    {
-        "id":  "blueberries",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.3883,
-        "link":  0.3606,
-        "ratio":  0.93,
-        "price":  6.49,
-        "size":  "18 oz",
-        "boardItem":  "Fresh Blueberries - 18 OZ - Clamshell",
-        "linkItem":  "Fresh Blueberries - 18 OZ - Clamshell",
         "board_src":  "main"
     },
     {
@@ -543,19 +491,6 @@
         "size":  "lb",
         "boardItem":  "Broccoli Crowns Per LB",
         "linkItem":  "Broccoli Crowns",
-        "board_src":  "main"
-    },
-    {
-        "id":  "broccoli",
-        "store":  "Baker\u0027s",
-        "unit":  "lb",
-        "board":  2.19,
-        "link":  1.99,
-        "ratio":  0.91,
-        "price":  1.99,
-        "size":  "lb",
-        "boardItem":  "Broccoli Crown",
-        "linkItem":  "Broccoli Crown",
         "board_src":  "main"
     },
     {
@@ -923,19 +858,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "charcoal",
-        "store":  "Baker\u0027s",
-        "unit":  "lb",
-        "board":  0.5838,
-        "link":  0.5188,
-        "ratio":  0.89,
-        "price":  7.99,
-        "size":  "15.4 lb",
-        "boardItem":  "Kroger Ridged Charcoal Briquettes - Original 15.4 LB",
-        "linkItem":  "Kroger Ridged Charcoal Briquettes - Original 15.4 LB",
-        "board_src":  "main"
-    },
-    {
         "id":  "cheese-crackers",
         "store":  "Fareway",
         "unit":  "oz",
@@ -972,19 +894,6 @@
         "size":  "lb",
         "boardItem":  "Fresh Red Cherries",
         "linkItem":  "Fresh Red Cherries",
-        "board_src":  "main"
-    },
-    {
-        "id":  "chicken-noodle-soup",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.081,
-        "link":  0.0752,
-        "ratio":  0.93,
-        "price":  0.79,
-        "size":  "10.5 oz",
-        "boardItem":  "Kroger Condensed Chicken Noodle Soup",
-        "linkItem":  "Kroger Condensed Chicken Noodle Soup",
         "board_src":  "main"
     },
     {
@@ -1037,32 +946,6 @@
         "size":  "lb",
         "boardItem":  "Hy Vee Choice Reserve Boneless Chuck Roast",
         "linkItem":  "Hy-Vee Choice Reserve Boneless Chuck Roast",
-        "board_src":  "main"
-    },
-    {
-        "id":  "chuck-roast",
-        "store":  "Baker\u0027s",
-        "unit":  "lb",
-        "board":  9.99,
-        "link":  10.99,
-        "ratio":  1.1,
-        "price":  10.99,
-        "size":  "lb",
-        "boardItem":  "Choice Beef Chuck Roast",
-        "linkItem":  "Choice Beef Chuck Roast",
-        "board_src":  "main"
-    },
-    {
-        "id":  "clam-chowder",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.159,
-        "link":  0.1324,
-        "ratio":  0.83,
-        "price":  2.49,
-        "size":  "18.8 oz",
-        "boardItem":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Can",
-        "linkItem":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Can",
         "board_src":  "main"
     },
     {
@@ -1314,19 +1197,6 @@
     },
     {
         "id":  "deodorant",
-        "store":  "Family Fare",
-        "unit":  "oz",
-        "board":  0.7317,
-        "link":  0.665,
-        "ratio":  0.91,
-        "price":  3.99,
-        "size":  "6 oz",
-        "boardItem":  "Brut Antiperspirant \u0026 Deodorant, Classic 6 Oz",
-        "linkItem":  "Brut Antiperspirant \u0026 Deodorant, Classic 6 Oz",
-        "board_src":  "main"
-    },
-    {
-        "id":  "deodorant",
         "store":  "Aldi",
         "unit":  "oz",
         "board":  1.3133,
@@ -1470,19 +1340,6 @@
     },
     {
         "id":  "energy-drinks",
-        "store":  "Baker\u0027s",
-        "unit":  "floz",
-        "board":  0.1248,
-        "link":  0.104,
-        "ratio":  0.83,
-        "price":  4.99,
-        "size":  "6 pk 8 fl oz",
-        "boardItem":  "V8 Energy Strawberry Banana Energy Drink Cans",
-        "linkItem":  "V8 Energy Strawberry Banana Energy Drink Cans",
-        "board_src":  "main"
-    },
-    {
-        "id":  "energy-drinks",
         "store":  "Hy-Vee",
         "unit":  "floz",
         "board":  0.1744,
@@ -1573,19 +1430,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "floor-cleaner",
-        "store":  "Baker\u0027s",
-        "unit":  "floz",
-        "board":  0.1666,
-        "link":  0.1509,
-        "ratio":  0.91,
-        "price":  14.49,
-        "size":  "96 fl oz",
-        "boardItem":  "Bona Hardwood Floor Cleaner Refill",
-        "linkItem":  "Bona Hardwood Floor Cleaner Refill",
-        "board_src":  "main"
-    },
-    {
         "id":  "storage-bags",
         "store":  "Fareway",
         "unit":  "each",
@@ -1622,19 +1466,6 @@
         "size":  "each",
         "boardItem":  "Freshness Guaranteed Wheat Bakery French Bread Loaf, 13 oz, 1 Loaf",
         "linkItem":  "Freshness Guaranteed French Bakery Bread Loaf",
-        "board_src":  "main"
-    },
-    {
-        "id":  "frosting",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.1244,
-        "link":  0.1119,
-        "ratio":  0.9,
-        "price":  1.79,
-        "size":  "16 oz",
-        "boardItem":  "Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
-        "linkItem":  "Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
         "board_src":  "main"
     },
     {
@@ -1703,19 +1534,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "frozen-cauliflower-florets",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.212,
-        "link":  0.1852,
-        "ratio":  0.87,
-        "price":  2,
-        "size":  "10.8 oz",
-        "boardItem":  "Birds Eye Steamfresh Cauliflower Florets, Frozen Vegetables",
-        "linkItem":  "Birds Eye Steamfresh Cauliflower Florets, Frozen Vegetables",
-        "board_src":  "main"
-    },
-    {
         "id":  "chicken-nuggets",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -1739,32 +1557,6 @@
         "size":  "48 oz",
         "boardItem":  "Kirkwood Family Size Chicken Nuggets 48 OZ",
         "linkItem":  "Kirkwood Family Pack Chicken Nuggets",
-        "board_src":  "main"
-    },
-    {
-        "id":  "chicken-nuggets",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.1873,
-        "link":  0.1717,
-        "ratio":  0.92,
-        "price":  10.99,
-        "size":  "64 oz",
-        "boardItem":  "Kroger Frozen Fully Cooked Crispy Chicken Nuggets BIG DEAL!",
-        "linkItem":  "Kroger Frozen Fully Cooked Crispy Chicken Nuggets BIG DEAL!",
-        "board_src":  "main"
-    },
-    {
-        "id":  "frozen-fries",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.0911,
-        "link":  0.0811,
-        "ratio":  0.89,
-        "price":  6.49,
-        "size":  "5 lb",
-        "boardItem":  "Kroger Crinkle-Cut Frozen French Fries BIG Deal!",
-        "linkItem":  "Kroger Crinkle-Cut Frozen French Fries BIG Deal!",
         "board_src":  "main"
     },
     {
@@ -1833,19 +1625,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "gingersnaps",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.2492,
-        "link":  0.2083,
-        "ratio":  0.84,
-        "price":  2.5,
-        "size":  "12 oz",
-        "boardItem":  "Kroger Ginger Snaps Cookies",
-        "linkItem":  "Kroger Ginger Snaps Cookies",
-        "board_src":  "main"
-    },
-    {
         "id":  "glass-cleaner",
         "store":  "Fareway",
         "unit":  "floz",
@@ -1882,19 +1661,6 @@
         "size":  "14.4 oz",
         "boardItem":  "Fareway Honey Graham Crackers",
         "linkItem":  "Fareway Honey Graham Crackers",
-        "board_src":  "main"
-    },
-    {
-        "id":  "granola",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.2718,
-        "link":  0.2273,
-        "ratio":  0.84,
-        "price":  2.5,
-        "size":  "11 oz",
-        "boardItem":  "Kroger French Vanilla Almond Granola",
-        "linkItem":  "Kroger French Vanilla Almond Granola",
         "board_src":  "main"
     },
     {
@@ -2639,19 +2405,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "pita-bread",
-        "store":  "Baker\u0027s",
-        "unit":  "each",
-        "board":  0.4983,
-        "link":  0.415,
-        "ratio":  0.83,
-        "price":  2.49,
-        "size":  "6 ct",
-        "boardItem":  "Joseph\u0027s Flax Oat Bran \u0026 Whole Wheat Pita Bread",
-        "linkItem":  "Joseph\u0027s Flax Oat Bran \u0026 Whole Wheat Pita Bread",
-        "board_src":  "main"
-    },
-    {
         "id":  "pizza-sauce",
         "store":  "Fareway",
         "unit":  "oz",
@@ -2870,19 +2623,6 @@
         "size":  "3 ct",
         "boardItem":  "Venus Tropical Women\u0027s Disposable Razor",
         "linkItem":  "Venus Tropical Women\u0027s Disposable Razor",
-        "board_src":  "main"
-    },
-    {
-        "id":  "red-wine-vinegar",
-        "store":  "Baker\u0027s",
-        "unit":  "floz",
-        "board":  0.1869,
-        "link":  0.1681,
-        "ratio":  0.9,
-        "price":  2.69,
-        "size":  "16 fl oz",
-        "boardItem":  "Pompeian Gourmet Red Wine Vinegar",
-        "linkItem":  "Pompeian Gourmet Red Wine Vinegar",
         "board_src":  "main"
     },
     {
@@ -3247,19 +2987,6 @@
         "size":  "14 oz",
         "boardItem":  "Baker S Corner Sweetened Condensed Milk 14 FL OZ",
         "linkItem":  "Baker\u0027s Corner Sweetened Condensed Milk",
-        "board_src":  "main"
-    },
-    {
-        "id":  "condensed-milk",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.185,
-        "link":  0.1707,
-        "ratio":  0.92,
-        "price":  2.39,
-        "size":  "14 oz",
-        "boardItem":  "Kroger Fat Free Sweetened Condensed Milk",
-        "linkItem":  "Kroger Fat Free Sweetened Condensed Milk",
         "board_src":  "main"
     },
     {
@@ -3936,19 +3663,6 @@
         "size":  "16 fl oz",
         "boardItem":  "Sweet Baby Ray\u0027s Mild Buffalo Wing Sauce",
         "linkItem":  "Sweet Baby Ray\u0027s Mild Buffalo Wing Sauce",
-        "board_src":  "recipe"
-    },
-    {
-        "id":  "buffalo-wing-sauce",
-        "store":  "Baker\u0027s",
-        "unit":  "floz",
-        "board":  0.27,
-        "link":  0.2083,
-        "ratio":  0.77,
-        "price":  2.5,
-        "size":  "12 fl oz",
-        "boardItem":  "Kroger® Mild Buffalo Wing Sauce",
-        "linkItem":  "Kroger Mild Buffalo Wing Sauce",
         "board_src":  "recipe"
     },
     {

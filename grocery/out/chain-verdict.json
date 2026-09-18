@@ -1,18 +1,18 @@
 ﻿{
     "date":  "2026-09-18",
-    "written":  "2026-09-18T08:13:26",
+    "written":  "2026-09-18T14:53:41",
     "written_by":  "check-ad-cycles",
     "guards_rc":  2,
     "guards_blocked":  true,
-    "inputs_fingerprint":  "f7dc1429c04da135",
+    "inputs_fingerprint":  "2e274a96ba3c9d05",
     "inputs":  {
-                   "grocery\\out\\comparison-2026-09-17.json":  "6eab050d6ebdd9b5a07a6f07b611d8e15e750fcb67609c8dd708d4a457a7a5ca",
-                   "grocery\\commodities.json":  "00443296b7b2d2a811bce9a990797e51dada93acbb3d0b46e2013fec77ddbb0d",
-                   "grocery\\known-wrong.json":  "dc095f89b22c17c70484b03452ba11542540e92dc5b01e40fc0841aaeeb1826d",
+                   "grocery\\out\\comparison-2026-09-17.json":  "9736c6f253383418196035409598d2e9c4510bc5cbe55e01156ccc44afd78340",
+                   "grocery\\commodities.json":  "e09eba73487a953b9a90701bbad66a8d614e5247ef4763835b721276fcb6e9dc",
+                   "grocery\\known-wrong.json":  "f5a7f42cd9c4a5bcab288958cda8394cc3491eccdc75e401dfb4dc7f89dd8769",
                    "grocery\\board-price-overrides.json":  "cc49210f8f5285da2706201f40f8497eb81a4affa4087bacf63f410b29adfa03",
-                   "grocery\\product-urls.json":  "6b3e7b85730ba8ead5e4fa1c6391a83dd9f776af40aefffb616c2d742c090f77",
-                   "grocery\\out\\recipe-board.json":  "8770d5dbb0d10a20fd0b968d7cd90ae2d01e56114c321e9a1eda820f798c2409",
-                   "grocery\\out\\name-drift.json":  "5ab276ac0497713f108a4fa18d79572af522a22cccb36bc145ca02f3ce554297"
+                   "grocery\\product-urls.json":  "e21ee2f53e65207be6ab6526e54eab95eed662840e2763dac2bb5a0d5618e3b4",
+                   "grocery\\out\\recipe-board.json":  "b5d51d33e93f460411d7cbe3e92e4f39c4bbbf10673ea71bc3af3e063b3b95bd",
+                   "grocery\\out\\name-drift.json":  "ba4cc3cadc83d63f8027ef955e8f07dc379c93c75233445db6d656cb5d6bd48a"
                },
     "note":  "Written after guards ran. Readers must go through lib\\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\\** or meal-prep\\**."
 }

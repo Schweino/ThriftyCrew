@@ -2,19 +2,19 @@
     "store":  "Family Fare",
     "date":  "2026-09-13",
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
-    "ad_rollover":  true,
-    "ad_note":  "ad pull DUE (next_pull 2026-09-13)",
-    "cursor_start":  248,
-    "cursor_next":  255,
+    "ad_rollover":  false,
+    "ad_note":  "ad current until 2026-09-19; next_pull 2026-09-20",
+    "cursor_start":  256,
+    "cursor_next":  263,
     "total_terms":  602,
     "rotation_terms":  [
-                           "fresh sage",
-                           "fresh stir fry vegetables",
-                           "sweet Italian turkey sausage",
-                           "fresh thyme",
-                           "whole nutmeg",
-                           "vanilla frosting",
-                           "frozen broccoli florets"
+                           "frozen burritos",
+                           "frozen cauliflower florets",
+                           "frozen sweet corn",
+                           "frozen french fries",
+                           "frozen mixed berries",
+                           "frozen cut green beans",
+                           "frozen lasagna"
                        ],
     "sale_terms":  [
 

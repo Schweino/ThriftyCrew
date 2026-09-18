@@ -1,108 +1,6 @@
 ﻿{
     "findings":  [
                      {
-                         "commodity":  "tortillas",
-                         "label":  "Tortillas (flour)",
-                         "store":  "Hy-Vee",
-                         "unit":  "each",
-                         "board_price":  0.199,
-                         "board_item":  "Hy Vee Flour Tortilla Great For Fajitas 10Ct",
-                         "rejected":  0.0997,
-                         "band_min":  0.1,
-                         "floor_ratio":  0.997,
-                         "median_price":  0.1681,
-                         "median_ratio":  0.5931,
-                         "save_pct":  49.9,
-                         "name":  "La Banderita Yellow Corn Tortilla 30 Ct",
-                         "price_text":  "$2.99",
-                         "size_text":  "30 ea"
-                     },
-                     {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
-                         "store":  "Aldi",
-                         "unit":  "each",
-                         "board_price":  2.99,
-                         "board_item":  "Mama Cozzimama Cozzi S Pizza Kitchen S Pizza Kitchen Original Thin Crust Cheese Pizza 13.8 OZ",
-                         "rejected":  1.495,
-                         "band_min":  1.5,
-                         "floor_ratio":  0.9967,
-                         "median_price":  3.33,
-                         "median_ratio":  0.4489,
-                         "save_pct":  50,
-                         "name":  "Mama Cozzi\u0027s Pizza Kitchen French Bread Pepperoni Pizza, 2 Count",
-                         "price_text":  "$2.99",
-                         "size_text":  "11.25 oz"
-                     },
-                     {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  2.96,
-                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
-                         "rejected":  1.4925,
-                         "band_min":  1.5,
-                         "floor_ratio":  0.995,
-                         "median_price":  3.33,
-                         "median_ratio":  0.4482,
-                         "save_pct":  49.6,
-                         "name":  "Totino\u0027s Party Pizza, Triple Meat, Thin Crust, 19g Protein, 42 oz, 4 Count (Frozen)",
-                         "price_text":  "$5.97",
-                         "size_text":  "42 oz"
-                     },
-                     {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  2.96,
-                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
-                         "rejected":  1.4925,
-                         "band_min":  1.5,
-                         "floor_ratio":  0.995,
-                         "median_price":  3.33,
-                         "median_ratio":  0.4482,
-                         "save_pct":  49.6,
-                         "name":  "Totino\u0027s Party Pizza, Pepperoni, Thin Crust, 17g Protein, 40.8 oz, 4 Count (Frozen)",
-                         "price_text":  "$5.97",
-                         "size_text":  "40.8 oz"
-                     },
-                     {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  2.96,
-                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
-                         "rejected":  1.4925,
-                         "band_min":  1.5,
-                         "floor_ratio":  0.995,
-                         "median_price":  3.33,
-                         "median_ratio":  0.4482,
-                         "save_pct":  49.6,
-                         "name":  "Totino\u0027s Party Pizza, Triple Cheese, Thin Crust, 14g Protein, 39.2 oz, 4 Count (Frozen)",
-                         "price_text":  "$5.97",
-                         "size_text":  "39.2 oz"
-                     },
-                     {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  2.96,
-                         "board_item":  "Tony\u0027s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz",
-                         "rejected":  1.4925,
-                         "band_min":  1.5,
-                         "floor_ratio":  0.995,
-                         "median_price":  3.33,
-                         "median_ratio":  0.4482,
-                         "save_pct":  49.6,
-                         "name":  "Totino\u0027s Party Pizza, Combination, Thin Crust, 20g Protein, 42.8 oz, 4 Count (Frozen)",
-                         "price_text":  "$5.97",
-                         "size_text":  "42.8 oz"
-                     },
-                     {
                          "commodity":  "rotisserie-chicken",
                          "label":  "Rotisserie Chicken",
                          "store":  "Walmart",
@@ -154,23 +52,6 @@
                          "size_text":  "150 ct"
                      },
                      {
-                         "commodity":  "breakfast-sandwiches",
-                         "label":  "Frozen Breakfast Sandwiches",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  1.2462,
-                         "board_item":  "Great Value Sausage Egg and Cheese Croissant Sandwiches, 4.4 oz, 8 Count (Frozen)",
-                         "rejected":  0.688,
-                         "band_min":  0.7,
-                         "floor_ratio":  0.9829,
-                         "median_price":  1.3738,
-                         "median_ratio":  0.5008,
-                         "save_pct":  44.8,
-                         "name":  "Odoms Tennessee Pride Maple Pancake Sausage Sandwiches, Frozen Breakfast Sandwiches, 10 Count",
-                         "price_text":  "$6.88",
-                         "size_text":  "14.515 oz"
-                     },
-                     {
                          "commodity":  "hot-sauce",
                          "label":  "Hot Sauce",
                          "store":  "Walmart",
@@ -200,9 +81,9 @@
                          "median_price":  0.0186,
                          "median_ratio":  0.5269,
                          "save_pct":  2,
-                         "name":  "Great Value Sandwich Bags, Fold Top, 200 Count",
-                         "price_text":  "$1.97",
-                         "size_text":  "200 ct"
+                         "name":  "(3 pack) Great Value Sandwich Bags, Fold Top, 200 Count",
+                         "price_text":  "$5.91",
+                         "size_text":  "600 ct"
                      },
                      {
                          "commodity":  "sandwich-bags",
@@ -217,9 +98,9 @@
                          "median_price":  0.0186,
                          "median_ratio":  0.5269,
                          "save_pct":  2,
-                         "name":  "(3 pack) Great Value Sandwich Bags, Fold Top, 200 Count",
-                         "price_text":  "$5.91",
-                         "size_text":  "600 ct"
+                         "name":  "Great Value Sandwich Bags, Fold Top, 200 Count",
+                         "price_text":  "$1.97",
+                         "size_text":  "200 ct"
                      },
                      {
                          "commodity":  "toothpaste",
@@ -237,23 +118,6 @@
                          "name":  "Crest Plus Cavity Protection Toothpaste Regular Paste, 3 Pack, 5.7 oz Each",
                          "price_text":  "$4.97",
                          "size_text":  "17.1 oz"
-                     },
-                     {
-                         "commodity":  "frozen-pizza",
-                         "label":  "Frozen Pizza",
-                         "store":  "Sam\u0027s Club",
-                         "unit":  "each",
-                         "board_price":  5.485,
-                         "board_item":  "Member\u0027s Mark Cauliflower Crust White Pizza, 15.5 oz.,  2 pk.",
-                         "rejected":  1.4422,
-                         "band_min":  1.5,
-                         "floor_ratio":  0.9615,
-                         "median_price":  3.33,
-                         "median_ratio":  0.4331,
-                         "save_pct":  73.7,
-                         "name":  "Red Baron Pepperoni French Bread Frozen Personal Pizza, 5.40 oz., 9 pk.",
-                         "price_text":  "$12.98",
-                         "size_text":  "9 ct 5.40 oz"
                      },
                      {
                          "commodity":  "energy-drinks",
@@ -319,9 +183,9 @@
                          "median_price":  0.0467,
                          "median_ratio":  0.6124,
                          "save_pct":  20.3,
-                         "name":  "Lysol Disinfecting Wipes, All Purpose Cleaner, Multi Surface Antibacterial Cleaning Wipes, Cleaning Supplies, Lemon + Mango \u0026 Hibiscus + Crisp Linen Scent, 35 Count Each (Pack of 3)",
-                         "price_text":  "$3",
-                         "size_text":  "105 ct"
+                         "name":  "(2 pack) Lysol Disinfecting Wipes, All Purpose Cleaner, Multi Surface Antibacterial Cleaning Wipes, Cleaning Supplies, Lemon + Mango \u0026 Hibiscus + Crisp Linen Scent, 35 Count Each (Pack of 3)",
+                         "price_text":  "$6.00",
+                         "size_text":  "210 ct"
                      },
                      {
                          "commodity":  "disinfecting-wipes",
@@ -336,9 +200,9 @@
                          "median_price":  0.0467,
                          "median_ratio":  0.6124,
                          "save_pct":  20.3,
-                         "name":  "(2 pack) Lysol Disinfecting Wipes, All Purpose Cleaner, Multi Surface Antibacterial Cleaning Wipes, Cleaning Supplies, Lemon + Mango \u0026 Hibiscus + Crisp Linen Scent, 35 Count Each (Pack of 3)",
-                         "price_text":  "$6.00",
-                         "size_text":  "210 ct"
+                         "name":  "Lysol Disinfecting Wipes, All Purpose Cleaner, Multi Surface Antibacterial Cleaning Wipes, Cleaning Supplies, Lemon + Mango \u0026 Hibiscus + Crisp Linen Scent, 35 Count Each (Pack of 3)",
+                         "price_text":  "$3",
+                         "size_text":  "105 ct"
                      },
                      {
                          "commodity":  "queso",
@@ -384,8 +248,8 @@
                          "rejected":  0.56,
                          "band_min":  0.6,
                          "floor_ratio":  0.9333,
-                         "median_price":  1.1031,
-                         "median_ratio":  0.5076,
+                         "median_price":  1.0625,
+                         "median_ratio":  0.5271,
                          "save_pct":  23.4,
                          "name":  "Nutramigen Hypoallergenic Liquid Baby Formula, Colic Relief from Cow\u0027s Milk Allergy Starts in 24h, 32 fl oz Bottle",
                          "price_text":  "$17.92",
@@ -438,9 +302,9 @@
                          "median_price":  0.2463,
                          "median_ratio":  0.5587,
                          "save_pct":  67.6,
-                         "name":  "Febreze Odor Eliminating Air Freshener Gain Original Scent 0 25 OZ",
+                         "name":  "Febreze Air Freshener Linen Sky 0 25 OZ",
                          "price_text":  "$3.44",
-                         "size_text":  "1 ct"
+                         "size_text":  "7.5 ml"
                      },
                      {
                          "commodity":  "air-freshener",
@@ -455,9 +319,9 @@
                          "median_price":  0.2463,
                          "median_ratio":  0.5587,
                          "save_pct":  67.6,
-                         "name":  "Febreze Air Freshener Linen Sky 0 25 OZ",
+                         "name":  "Febreze Odor Eliminating Air Freshener Gain Original Scent 0 25 OZ",
                          "price_text":  "$3.44",
-                         "size_text":  "7.5 ml"
+                         "size_text":  "1 ct"
                      },
                      {
                          "commodity":  "toothpaste",
@@ -560,23 +424,6 @@
                          "name":  "Dawn EZ-Squeeze Platinum Liquid Dish Soap, Fresh Rain Scent, 4 pk., 97.2 fl. oz.",
                          "price_text":  "$16.88",
                          "size_text":  "4 ct 97.2 fl oz"
-                     },
-                     {
-                         "commodity":  "pineapple",
-                         "label":  "Pineapple (whole)",
-                         "store":  "Walmart",
-                         "unit":  "each",
-                         "board_price":  1.88,
-                         "board_item":  "Fresh Pineapple, Each",
-                         "rejected":  0.8675,
-                         "band_min":  1,
-                         "floor_ratio":  0.8675,
-                         "median_price":  1.89,
-                         "median_ratio":  0.459,
-                         "save_pct":  53.9,
-                         "name":  "Dole Fruit Bowls Pineapple and Mango in Tropical Gel, 4.3 oz cups (4 pack)",
-                         "price_text":  "$3.47",
-                         "size_text":  "17.2 oz"
                      },
                      {
                          "commodity":  "rotisserie-chicken",
@@ -744,7 +591,7 @@
                          "median_price":  0.2463,
                          "median_ratio":  0.4921,
                          "save_pct":  40.2,
-                         "name":  "Great Value Twilight Woods Aerosol Air Freshener, 8 oz",
+                         "name":  "Great Value Blooming Lavender Aerosol Air Freshener, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -778,23 +625,6 @@
                          "median_price":  0.2463,
                          "median_ratio":  0.4921,
                          "save_pct":  40.2,
-                         "name":  "Great Value Aerosol Air Freshener, Tranquil Ocean Waves, 8 oz",
-                         "price_text":  "$0.97",
-                         "size_text":  "8 oz"
-                     },
-                     {
-                         "commodity":  "air-freshener",
-                         "label":  "Air Freshener",
-                         "store":  "Walmart",
-                         "unit":  "oz",
-                         "board_price":  0.2027,
-                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
-                         "rejected":  0.1212,
-                         "band_min":  0.15,
-                         "floor_ratio":  0.808,
-                         "median_price":  0.2463,
-                         "median_ratio":  0.4921,
-                         "save_pct":  40.2,
                          "name":  "Great Value Aerosol Air Freshener, Hawaiian, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
@@ -812,7 +642,7 @@
                          "median_price":  0.2463,
                          "median_ratio":  0.4921,
                          "save_pct":  40.2,
-                         "name":  "Great Value Blooming Lavender Aerosol Air Freshener, 8 oz",
+                         "name":  "Great Value Aerosol Air Freshener, Tranquil Ocean Waves, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -830,6 +660,23 @@
                          "median_ratio":  0.4921,
                          "save_pct":  40.2,
                          "name":  "Great Value Citrus Sunrise Shores Aerosol Air Freshener, 8 oz",
+                         "price_text":  "$0.97",
+                         "size_text":  "8 oz"
+                     },
+                     {
+                         "commodity":  "air-freshener",
+                         "label":  "Air Freshener",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board_price":  0.2027,
+                         "board_item":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener Cashmere Woods 7.3oz",
+                         "rejected":  0.1212,
+                         "band_min":  0.15,
+                         "floor_ratio":  0.808,
+                         "median_price":  0.2463,
+                         "median_ratio":  0.4921,
+                         "save_pct":  40.2,
+                         "name":  "Great Value Twilight Woods Aerosol Air Freshener, 8 oz",
                          "price_text":  "$0.97",
                          "size_text":  "8 oz"
                      },
@@ -868,23 +715,6 @@
                          "size_text":  "46 ct"
                      },
                      {
-                         "commodity":  "half-and-half",
-                         "label":  "Half \u0026 Half",
-                         "store":  "Walmart",
-                         "unit":  "floz",
-                         "board_price":  0.0775,
-                         "board_item":  "Great Value Fat-Free Half and Half, 32 fl oz Carton",
-                         "rejected":  0.039,
-                         "band_min":  0.05,
-                         "floor_ratio":  0.78,
-                         "median_price":  0.078,
-                         "median_ratio":  0.5,
-                         "save_pct":  49.7,
-                         "name":  "AriZona Arnold Palmer Half and Half - 16 fl oz (pack of 12)",
-                         "price_text":  "$7.48",
-                         "size_text":  "191.795 fl oz"
-                     },
-                     {
                          "commodity":  "dinner-rolls",
                          "label":  "Dinner Rolls",
                          "store":  "Sam\u0027s Club",
@@ -911,8 +741,8 @@
                          "rejected":  0.459,
                          "band_min":  0.6,
                          "floor_ratio":  0.765,
-                         "median_price":  1.1031,
-                         "median_ratio":  0.4161,
+                         "median_price":  1.0625,
+                         "median_ratio":  0.432,
                          "save_pct":  37.2,
                          "name":  "Similac Advance Concentrated Liquid Baby Formula With Iron, Has DHA \u0026 Lutein, 13-fl-oz Can",
                          "price_text":  "$5.97",
@@ -922,7 +752,7 @@
     "compare_file":  "comparison-2026-09-17.json",
     "near_floor":  0.75,
     "median_floor":  0.4,
-    "cells":  32,
-    "generated":  "2026-09-18T08:12:20",
+    "cells":  25,
+    "generated":  "2026-09-18T17:48:19",
     "flagged_file":  "flagged-2026-09-17.json"
 }

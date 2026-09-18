@@ -1,4 +1,12 @@
 ﻿{
+    "baked-beans|Hy-Vee":  {
+                               "first_seen":  "2026-09-14",
+                               "owner":  "weekly-browser-agent"
+                           },
+    "bar-soap|Hy-Vee":  {
+                            "first_seen":  "2026-09-17",
+                            "owner":  "weekly-browser-agent"
+                        },
     "canned-pumpkin|Hy-Vee":  {
                                   "first_seen":  "2026-09-02",
                                   "owner":  "weekly-browser-agent"
@@ -7,10 +15,22 @@
                                      "first_seen":  "2026-09-11",
                                      "owner":  "NONE"
                                  },
-    "frozen-cauliflower-rice|Hy-Vee":  {
-                                           "first_seen":  "2026-09-07",
-                                           "owner":  "weekly-browser-agent"
-                                       },
+    "frozen-fries|Family Fare":  {
+                                     "first_seen":  "2026-09-13",
+                                     "owner":  "NONE"
+                                 },
+    "pecorino-romano|Hy-Vee":  {
+                                   "first_seen":  "2026-09-14",
+                                   "owner":  "weekly-browser-agent"
+                               },
+    "pork-shoulder|Hy-Vee":  {
+                                 "first_seen":  "2026-09-14",
+                                 "owner":  "weekly-browser-agent"
+                             },
+    "maple-syrup|Family Fare":  {
+                                    "first_seen":  "2026-09-13",
+                                    "owner":  "NONE"
+                                },
     "vegetable-soup|Family Fare":  {
                                        "first_seen":  "2026-09-11",
                                        "owner":  "NONE"
@@ -18,9 +38,5 @@
     "white-wine|Hy-Vee":  {
                               "first_seen":  "2026-09-07",
                               "owner":  "weekly-browser-agent"
-                          },
-    "yukon-gold-potatoes|Family Fare":  {
-                                            "first_seen":  "2026-09-06",
-                                            "owner":  "NONE"
-                                        }
+                          }
 }

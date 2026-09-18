@@ -1,12 +1,12 @@
 {
     "readme":  "Product identity table, one current row per (store, product key) in this namespace. Truth is the .jsonl files beside this manifest; graph.db is a rebuildable index of them (graph/schema.md commitment 3). History is git: the files are tracked and sorted, so an assignment change is a commit diff. Written by compare-deals.ps1 -IdentityNamespace; never hand-edit.",
     "namespace":  "recipe",
-    "rules_hash":  "c077334f74e1a97316aadb09074baca3a481f42af606c9d995370806cf1dbeae",
+    "rules_hash":  "7a0dd9970ab0b3e00c7d8a82b2e1e8fe42e94c9f4517ad71649ac7997f0e77ba",
     "board_date":  "2026-09-17",
-    "built_at":  "2026-09-18T08:09:38",
-    "rows_total":  40493,
-    "rows_reused_from_previous":  39896,
-    "rows_rematched":  597,
+    "built_at":  "2026-09-18T15:49:29",
+    "rows_total":  40500,
+    "rows_reused_from_previous":  0,
+    "rows_rematched":  40500,
     "rows_contested":  48,
     "key_collisions_demoted_to_name":  747,
     "stores":  [
@@ -17,12 +17,12 @@
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7292,
+                       "rows":  7284,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  6409,
+                       "rows":  6424,
                        "changed":  true
                    },
                    {
@@ -33,7 +33,7 @@
                    {
                        "store":  "Hy-Vee",
                        "rows":  2283,
-                       "changed":  false
+                       "changed":  true
                    },
                    {
                        "store":  "Sam\u0027s Club",

@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-18T08:08:14",
+    "generated":  "2026-09-18T14:47:39",
     "note":  "winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared",
     "cells":  [
                   {
@@ -52,6 +52,13 @@
                       "is_record_low":  true
                   },
                   {
+                      "id":  "pineapple",
+                      "store":  "Fareway",
+                      "week":  "2026-08-03",
+                      "price":  1.68,
+                      "is_record_low":  false
+                  },
+                  {
                       "id":  "raspberries",
                       "store":  "Baker\u0027s",
                       "week":  "2026-07-25",
@@ -69,6 +76,13 @@
                       "id":  "spinach",
                       "store":  "Walmart",
                       "week":  "2026-07-20",
+                      "price":  0.2,
+                      "is_record_low":  false
+                  },
+                  {
+                      "id":  "spinach",
+                      "store":  "Walmart",
+                      "week":  "2026-08-03",
                       "price":  0.2,
                       "is_record_low":  false
                   }

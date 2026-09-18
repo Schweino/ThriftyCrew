@@ -4,17 +4,17 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-19; next_pull 2026-09-20",
-    "cursor_start":  321,
-    "cursor_next":  328,
+    "cursor_start":  328,
+    "cursor_next":  335,
     "total_terms":  602,
     "rotation_terms":  [
-                           "hoisin sauce",
-                           "canned hominy",
-                           "honey",
-                           "honeydew melon",
-                           "honey mustard",
-                           "prepared horseradish",
-                           "horseradish sauce"
+                           "hot cocoa mix",
+                           "hot dog buns",
+                           "hot dogs",
+                           "hot honey",
+                           "hot italian sausage",
+                           "hot sauce",
+                           "pepitas"
                        ],
     "sale_terms":  [
 

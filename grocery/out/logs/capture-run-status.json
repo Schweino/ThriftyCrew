@@ -3,9 +3,9 @@
                   "date":  "2026-09-18",
                   "pid":  29396,
                   "started":  "2026-09-18T08:00:01",
-                  "updated":  "2026-09-18T08:29:50",
-                  "stage":  "publishing",
-                  "exit_code":  null,
+                  "updated":  "2026-09-18T08:31:37",
+                  "stage":  "complete",
+                  "exit_code":  1,
                   "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-18.log",
                   "dirty_at_start":  [
                                          "graph/provenance/2026-09-12.jsonl",

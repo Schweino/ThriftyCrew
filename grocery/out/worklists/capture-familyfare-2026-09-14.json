@@ -4,17 +4,17 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-19; next_pull 2026-09-20",
-    "cursor_start":  277,
-    "cursor_next":  284,
+    "cursor_start":  285,
+    "cursor_next":  292,
     "total_terms":  602,
     "rotation_terms":  [
-                           "fresh garlic",
-                           "frozen garlic bread",
-                           "garlic herb seasoning",
-                           "garlic infused oil",
-                           "garlic powder",
-                           "gelatin cups",
-                           "ginger snaps"
+                           "gochujang",
+                           "graham crackers",
+                           "granola",
+                           "chewy granola bars",
+                           "grapefruit",
+                           "grape juice",
+                           "grapes"
                        ],
     "sale_terms":  [
 

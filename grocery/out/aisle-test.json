@@ -99,6 +99,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "baby-formula",
+        "store":  "Family Fare",
+        "product":  "Tippy Toes Sensitivity Premium 0 12 Months Infant Formula With Iron 33.2 Oz",
+        "dept":  "health_beauty",
+        "aisle":  "health_beauty/baby_child",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027baby\u0027"
+    },
+    {
         "id":  "baby-potatoes",
         "store":  "Family Fare",
         "product":  "Our Family Potatoes Red Baby Dutch",
@@ -106,6 +115,15 @@
         "aisle":  "fresh_fruits_vegetables/potatoes",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "baby-wipes",
+        "store":  "Family Fare",
+        "product":  "Huggies Disney Baby Fragrance Free Wipes Huge Value 704 Ea",
+        "dept":  "health_beauty",
+        "aisle":  "health_beauty/baby_child",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027baby\u0027"
     },
     {
         "id":  "bagels",
@@ -360,6 +378,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
+        "id":  "canned-pumpkin",
+        "store":  "Family Fare",
+        "product":  "Our Family 100% Pure Pumpkin 15 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "canned-salmon",
         "store":  "Family Fare",
         "product":  "Deming\u0027s Pink Salmon, Wild Caught Alaskan 14.75 Oz",
@@ -385,6 +412,24 @@
         "aisle":  "fresh_fruits_vegetables/carrots",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "cat-food",
+        "store":  "Family Fare",
+        "product":  "Meow Mix Complete Original Choice Cat Food 16 Lb",
+        "dept":  "pets_wildlife",
+        "aisle":  "pets_wildlife/cat",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pets_wildlife\u0027 is an allowed department for category \u0027pet\u0027"
+    },
+    {
+        "id":  "cat-litter",
+        "store":  "Family Fare",
+        "product":  "Tidy Cats Instant Action Non Clumping Litter 20 Lb",
+        "dept":  "pets_wildlife",
+        "aisle":  "pets_wildlife/cat",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pets_wildlife\u0027 is an allowed department for category \u0027pet\u0027"
     },
     {
         "id":  "cauliflower",
@@ -664,6 +709,15 @@
         "aisle":  "household/cleaners_air_fresheners",
         "verdict":  "ALLOW",
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "dog-food",
+        "store":  "Family Fare",
+        "product":  "Dog Chow Purina Dog Chow Complete Adult Dry Dog Food Kibble With Chicken Flavor 40 Lb",
+        "dept":  "pets_wildlife",
+        "aisle":  "pets_wildlife/dog",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pets_wildlife\u0027 is an allowed department for category \u0027pet\u0027"
     },
     {
         "id":  "dog-treats",
