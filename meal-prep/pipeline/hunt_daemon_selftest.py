@@ -12638,6 +12638,65 @@ def _rd_the_call_site():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def _rd_review_verdict_reaches_the_ledger():
+    """Backlog I226. run_wave threw the reviewer's answer away and stamped the ledger's
+    post-publish-review stage with the word "reviewed", so a NEEDS-BRAD review and a CLEAN one left
+    the same row. Driven through run_wave with the reviewer STUBBED (no agent, no publish): what the
+    stub answers must be what the batch-ledger -Stamp call carries."""
+    res = []
+
+    def stamp_for(answer):
+        tmp, tri, db = _rd_scratch(db_slugs=("z",))
+        try:
+            ps = FakePS({"hunt-run.ps1": lambda a: (0, "hunt-run: wave 1 closed with 3 recipe(s)", ""),
+                         "wave-publish.ps1": lambda a: (0, "published: a", "")})
+            _preaudited(tmp, slugs=["a", "b", "c"])
+            fg = FakeGit([(0, "aaaaaaaaaaaa\n", ""), (0, "bbbbbbbbbbbb\n", "")])
+            fd = FakeDispatch({"recipe-batch-auditor": [{"verdict": "GO"}],
+                               "post-publish-reviewer": [answer]})
+            d = daemon(run_dir=tmp, dispatcher=fd, ps=ps, git=fg, triage_path=tri,
+                       recipes_db_path=db, dry_run_publish=False)
+            arun(d.run_wave(1))
+            details = [FakePS.value_after(c["args"], "-Detail")
+                       for c in ps.find("batch-ledger.ps1", "-Stamp")
+                       if FakePS.value_after(c["args"], "-Stage") == "post-publish-review"]
+            return details, list(d.findings)
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    nb_text = ("LIVE: 3 pages checked, one renders Make It as a single step.\n"
+               "STATUS: NEEDS-BRAD findings=2")
+    got, finds = stamp_for({"text": nb_text})
+    res.append(("MUST FIRE  a reviewer answer whose verdict is NEEDS-BRAD lands in the batch ledger "
+                "as NEEDS-BRAD with its findings count, not as the word 'reviewed' - the one live "
+                "review (wave 8, 2026-08-27) lost its verdict that way",
+                len(got) == 1 and (got[0] or "").startswith("NEEDS-BRAD findings=2")
+                and any("did not come back clean" in f for f in finds),
+                "stamps=%r" % got))
+    got, finds = stamp_for({"text": "Checked 3 live pages, commits and gates; nothing wrong.\n"
+                                    "STATUS: CLEAN findings=0"})
+    res.append(("CLEAN TWIN a reviewer answer whose verdict is CLEAN still stamps the stage and "
+                "lands as CLEAN, and files no finding",
+                len(got) == 1 and (got[0] or "").startswith("CLEAN findings=0")
+                and not any("did not come back clean" in f for f in finds),
+                "stamps=%r" % got))
+    got, finds = stamp_for({"text": "I looked at some pages and they seemed fine."})
+    res.append(("MUST FIRE  an answer with no CLEAN / FIXED-AND-CLEAN / NEEDS-BRAD status line is "
+                "NO-VERDICT in the ledger and a finding - never a stamp that reads as a review",
+                len(got) == 1 and (got[0] or "").startswith("NO-VERDICT")
+                and any("did not come back clean" in f for f in finds),
+                "stamps=%r" % got))
+    res.append(("CLEAN TWIN the reader keeps FIXED-AND-CLEAN whole rather than reading its tail as "
+                "CLEAN, falls back to the LAST contract word when there is no STATUS line, and "
+                "ignores lower-case prose",
+                HD.review_status({"text": "STATUS: FIXED-AND-CLEAN findings=1"})[0] == "FIXED-AND-CLEAN"
+                and HD.review_status({"text": "was NEEDS-BRAD, then fixed.\nFinal: CLEAN"})[0] == "CLEAN"
+                and HD.review_status({"text": "the page was clean"})[0] == "NO-VERDICT"
+                and HD.review_status(None)[0] == "NO-VERDICT",
+                "review_status"))
+    return res
+
+
 def _rd_pure_readers():
     res = []
     res.append(("MUST FIRE  triage_ids reads ids off the queue's real shape and returns EMPTY for a "
@@ -12893,7 +12952,8 @@ WC_SECTIONS = (_wc_priced_terms, _wc_force_drain, _wc_published_slugs, _wc_probe
 RD_SECTIONS = (_rd_the_prepublish_facts, _rd_never_carries_the_numbers,
                _rd_could_not_look_is_never_a_clean_bill, _rd_empty_queue_is_a_fact,
                _rd_git_silence_invents_nothing, _rd_no_commit_is_itself_a_finding,
-               _rd_dropped_row_is_a_finding, _rd_the_call_site, _rd_pure_readers)
+               _rd_dropped_row_is_a_finding, _rd_the_call_site,
+               _rd_review_verdict_reaches_the_ledger, _rd_pure_readers)
 
 
 P5_SECTIONS = (_p5_repair_clears_the_gate, _p5_hold_when_the_repair_does_not_clear,

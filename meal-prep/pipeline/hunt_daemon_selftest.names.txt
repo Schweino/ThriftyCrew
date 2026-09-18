@@ -509,6 +509,10 @@ MUST FIRE  a row that DISAPPEARED from recipes-db across a publish is named and 
 MUST FIRE  run_wave actually HANDS the reviewer the dossier - the predicate being right while the call site passes nothing is the trap this estate has a scar from, and every dossier case above would still read green
 MUST FIRE  the SNAPSHOT is taken before wave-publish runs and the second git read after it - a snapshot taken afterwards would record the world the publish already changed, which is the same as having no snapshot
 CLEAN TWIN the reviewer's existing prompt is intact underneath it - the wave slugs, the collateral count and the batch stamp all still there
+MUST FIRE  a reviewer answer whose verdict is NEEDS-BRAD lands in the batch ledger as NEEDS-BRAD with its findings count, not as the word 'reviewed' - the one live review (wave 8, 2026-08-27) lost its verdict that way
+CLEAN TWIN a reviewer answer whose verdict is CLEAN still stamps the stage and lands as CLEAN, and files no finding
+MUST FIRE  an answer with no CLEAN / FIXED-AND-CLEAN / NEEDS-BRAD status line is NO-VERDICT in the ledger and a finding - never a stamp that reads as a review
+CLEAN TWIN the reader keeps FIXED-AND-CLEAN whole rather than reading its tail as CLEAN, falls back to the LAST contract word when there is no STATUS line, and ignores lower-case prose
 MUST FIRE  triage_ids reads ids off the queue's real shape and returns EMPTY for a doc it does not recognise - an unreadable queue must reach the dossier as could-not-look, never as a queue that had nothing in it
 MUST FIRE  db_slugs reads slugs off recipes-db's real shape and tolerates a row without one, so a malformed row cannot make the whole count read as zero
 MUST FIRE  the terms this run sent the pricer are written to disk - the set was per-PROCESS, and one term was dispatched 19 times across 17 restarts because of it (54% of the price lane's turns)

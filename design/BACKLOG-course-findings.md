@@ -15578,13 +15578,27 @@ Broke once by hashing `.text` again: exit 1, the MUST FIRE named its two signatu
 27 of 27. No alert was sent in any test: the fixtures call only the signature function, and the one live run was
 without `-Alert`. The scheduled task was not touched.
 
-### I226 - post-publish review verdicts are thrown away by the daemon, and none has run since 2026-09-03 `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+### I226 - post-publish review verdicts are thrown away by the daemon, and none has run since 2026-09-03 `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 Found under I164. `meal-prep/pipeline/hunt-daemon.py:7059` discards the reviewer's answer and writes the word
 "reviewed" into the ledger; its one live review (wave 8, 2026-08-27) lost its verdict. Fix: write the
 reviewer's status line, with a daemon self-test case.
+
+**Done 2026-09-18.** `run_wave` now keeps the reviewer's answer and `review_status()` in
+`meal-prep/pipeline/hunt-daemon.py` reads it against the reviewer's own contract
+(`.claude/agents/post-publish-reviewer.md`: a final CLEAN / FIXED-AND-CLEAN / NEEDS-BRAD status line). The
+review prompt asks for `STATUS: <verdict> findings=<n>` as its last line; the reader takes that line first and
+otherwise the last upper-case contract word. The ledger stamp's detail is that verdict, its findings count and
+the line itself. An empty answer or one with no contract word stamps `NO-VERDICT`, and anything but CLEAN or
+FIXED-AND-CLEAN is also filed as a run finding. The contract has no PASS or FAIL, so NEEDS-BRAD stands in for
+the brief's FAIL and CLEAN for its PASS. Four cases were added to `hunt_daemon_selftest.py`, driven through
+`run_wave` with the reviewer stubbed (no agent, no publish), and the pinned names file gained exactly those 4
+lines (549 to 553, none lost). Mutant (stamp detail put back to `"reviewed"`): 3 of the 4 cases went red with
+`stamps=['reviewed']`. Restored md5-identical: 4 of 4 green. The battery's one other red,
+`...and the gates BELOW those six`, is red at base 11278e27e with these changes removed, so it predates this
+work (see the item report).
 
 ### I227 - Gate and audit machinery: six small defects found in passing `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
 

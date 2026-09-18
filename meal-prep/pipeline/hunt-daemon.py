@@ -347,6 +347,70 @@ def cap_accepts_to_target(payload, already_accepted, target):
     return dict(payload, decisions=out), deferred
 
 
+# ---------------------------------------------------------------------------------------------------
+# THE REVIEWER'S VERDICT GOES IN THE LEDGER (2026-09-18, backlog I226).
+#
+# THE DEFECT. run_wave dispatched the post-publish reviewer, threw its answer away, and stamped the
+# batch ledger's post-publish-review stage with the literal word "reviewed". So a review that said
+# NEEDS-BRAD and a review that said CLEAN left identical rows, and a dispatch that returned NOTHING (B5,
+# no verdict) left that same row too - a stamp claiming a review nobody could read. The one live review
+# the daemon ever ran (wave 8, 2026-08-27) lost its verdict exactly that way; every other
+# post-publish-review row in meal-prep\db\batch-ledger.json carrying a verdict was typed by hand.
+#
+# THE CONTRACT READ HERE is .claude\agents\post-publish-reviewer.md's own REPORT line: a final
+# CLEAN / FIXED-AND-CLEAN / NEEDS-BRAD status line. review_prompt asks for it in one machine-readable
+# form, `STATUS: <verdict> findings=<n>`, and this reads that line first; an answer without one falls
+# back to the LAST contract word in the text, because the contract puts the status line last. Only the
+# upper-case words count, so prose that says "the page was clean" is not a verdict.
+#
+# NO VERDICT IS SAID IN THOSE WORDS, never defaulted to a pass: a None payload or an answer carrying no
+# contract word is NO-VERDICT, and the caller files it as a finding.
+# ---------------------------------------------------------------------------------------------------
+
+REVIEW_VERDICTS = ("FIXED-AND-CLEAN", "NEEDS-BRAD", "CLEAN")
+REVIEW_PASSING = ("CLEAN", "FIXED-AND-CLEAN")
+_REVIEW_WORD_RX = re.compile(r"(?<![A-Z-])(FIXED-AND-CLEAN|NEEDS-BRAD|CLEAN)(?![A-Z-])")
+_REVIEW_STATUS_RX = re.compile(r"^\W*STATUS\W*:", re.I)
+_REVIEW_COUNT_RX = re.compile(r"findings?\s*[=:]\s*(\d+)|(\d+)\s+findings?\b", re.I)
+
+
+def review_status(payload):
+    """Read the post-publish reviewer's answer into (verdict, ledger_detail).
+
+    `payload` is what dispatch returns for a schema-less agent: {"text": <the answer>} or None.
+    verdict is one of REVIEW_VERDICTS or "NO-VERDICT"; ledger_detail is the one line the ledger keeps,
+    free of newlines and double quotes (a native exe loses double quotes on the way in)."""
+    text = ""
+    if isinstance(payload, dict):
+        text = str(payload.get("text") or "")
+    if not text.strip():
+        return "NO-VERDICT", "NO-VERDICT - the reviewer returned no answer, so nobody ruled on this wave"
+    lines = [ln.strip() for ln in text.replace("\r", "").split("\n") if ln.strip()]
+    line, verdict = None, None
+    for ln in reversed(lines):
+        if _REVIEW_STATUS_RX.match(ln):
+            words = _REVIEW_WORD_RX.findall(ln)
+            if words:
+                line, verdict = ln, words[-1]
+                break
+    if verdict is None:
+        for ln in reversed(lines):
+            words = _REVIEW_WORD_RX.findall(ln)
+            if words:
+                line, verdict = ln, words[-1]
+                break
+    if verdict is None:
+        tail = lines[-1] if lines else ""
+        return "NO-VERDICT", ("NO-VERDICT - the reviewer answered without a CLEAN / FIXED-AND-CLEAN / "
+                              "NEEDS-BRAD status line; last line: %s"
+                              % tail.replace('"', "'")[:200])
+    m = _REVIEW_COUNT_RX.search(line)
+    count = (m.group(1) or m.group(2)) if m else None
+    detail = "%s%s - %s" % (verdict, (" findings=%s" % count) if count is not None else "",
+                            line.replace('"', "'")[:300])
+    return verdict, detail
+
+
 # =====================================================================================================
 # The daemon
 # =====================================================================================================
@@ -7056,16 +7120,24 @@ class Daemon(object):
                                       "would_publish": published})
             return
 
-        await self.dispatch("post-publish-reviewer",
-                            self.review_prompt(wk, published, held, collateral, batch,
-                                               await self.review_dossier(wk, published,
-                                                                         review_before)),
-                            "review", "wave-%d:review" % wk, published, stage="reviewer")
+        review = await self.dispatch("post-publish-reviewer",
+                                     self.review_prompt(wk, published, held, collateral, batch,
+                                                        await self.review_dossier(wk, published,
+                                                                                  review_before)),
+                                     "review", "wave-%d:review" % wk, published, stage="reviewer")
+        # I226: the stamp carries what the reviewer SAID. It used to be the word "reviewed" whatever
+        # came back, including nothing. See review_status.
+        review_verdict, review_detail = review_status(review)
+        self.log("WAVE %d: post-publish review %s" % (wk, review_detail[:200]))
+        if review_verdict not in REVIEW_PASSING:
+            self.findings.append("wave %d: post-publish review did not come back clean - %s"
+                                 % (wk, review_detail))
         await self.ledger(["-Stamp", "-Batch", batch, "-Stage", "post-publish-review",
-                           "-Detail", "reviewed"])
+                           "-Detail", review_detail])
         await self.ledger(["-Close", "-Batch", batch])
         self.wave_results.append({"wave": wk, "slugs": slugs, "published": published, "held": held,
-                                  "verdict": "GO", "collateral": collateral})
+                                  "verdict": "GO", "collateral": collateral,
+                                  "review": review_verdict})
 
     async def rebuild_repaired_specs(self, wk, slugs, before):
         """Rebuild (and therefore RECOST) the specs an agent repair actually edited. Returns them.
@@ -7733,6 +7805,8 @@ class Daemon(object):
             "the wave alone samples a fraction of what actually shipped.\n%s"
             "Check live pages, pushed commits, data integrity and gates. Report bugs with fixes.\n"
             "The orchestrator stamps batch %s and advances the verified slugs.\n"
+            "End your answer with ONE line of exactly this form, which the orchestrator writes into the\n"
+            "batch ledger: `STATUS: CLEAN|FIXED-AND-CLEAN|NEEDS-BRAD findings=<number of bugs found>`\n"
             "%s"
             % (self.run_id, wk, len(published), ", ".join(published), collateral,
                ("Serveability-held: %s - confirm these are DRAFTS, not live, and recorded held.\n"
