@@ -12001,6 +12001,22 @@ and it retires the question permanently.
 
 **2-WAY** because a sample is read-only and a rules line is one edit.
 
+**RE-MEASURE 2026-09-18, ACCEPTANCE BAR WRITTEN AND COMMITTED BEFORE ANY SITE IS READ.** The 2026-09-12
+figure above (13 of 40) left no sample list, no per-site rows, no harness and no bar written before the
+count, so it cannot be re-read or checked. It is re-taken here under these terms, fixed before the run:
+- **Population:** every line matching `(-eq|-ne)\s+\$null|\$null\s+(-eq|-ne)` (the item's own regex) in
+  `git ls-files '*.ps1'` at the commit named in the result, via `git grep -n -P`, sorted by path then line.
+- **Sample:** 40 sites, deterministic: with N sites, stride s = N/40, take index floor(s/2 + i*s) for i = 0..39.
+  No seed, no hand-picking; the list reproduces from the commit alone.
+- **Classes:** (a) genuinely asks "is this value null" (a variable assigned from a call, a parse, a
+  lookup already guarded, a parameter default); (b) asks "did this key, property, element or file exist"
+  and uses `$null` as the proxy; (c) cannot tell from the site and its surrounding function.
+- **Bar:** (b) **at most 2 of 40** is "near zero": close the item with no rule. (b) **3 or more of 40**
+  earns the one-line rule the item proposes. Either way no sweep, as the item already rules. (c) is
+  reported beside (b) and not folded into either side; if (c) is 10 or more of 40 the sample is too
+  ambiguous to decide and the verdict is UNDECIDED rather than either answer.
+- One row per site goes to `design/MEASURE-null-presence-sample-2026-09-18.jsonl`.
+
 ---
 
 ### I161 - Four of five tracked state ledgers have no schema check, while `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
