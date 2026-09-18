@@ -119,6 +119,37 @@ function Get-TcGlobalExclude {
     # cannot touch "Go Raw Organic SPROUTED Pumpkin Seeds with Sea Salt" (sprouted, not sprouting - that row
     # is sea-salt's own '\bseeds?\b' fence) nor "Fresh Bean Sprouts", which is a real produce row.
     # No commodity needs relax_global: nothing on the board sells seed for planting.
-    'sprout(?:ing)?\s+seeds?'
+    'sprout(?:ing)?\s+seeds?',
+    # '\bscent(?:s|ed)?\b' added 2026-09-19 (board-wrong-cells-0919): A SCENT IS A FOOD WORD ON A THING NOBODY
+    # EATS. "Dawn Ultra Strawberry Field Scent" (dish soap, $6.49 for 38 oz, Family Fare weekly ad 09-13 to
+    # 09-19) held Family Fare's STRAWBERRIES cell at $0.1708/oz from the 2026-09-13 board on: the strawberries
+    # include 'strawberr' claims it, strawberries sits before dish-soap in the file, and first-match-wins did the
+    # rest. No rule changed; the product simply arrived in the ad. The same shape was already sitting in the
+    # corpus unpublished: hand sanitizers routed to apples, pears, cherries, raspberries and watermelon, a shave
+    # gel to raspberries, a tanning oil to coconut-oil.
+    # WHY GLOBAL AND NOT A strawberries EXCLUDE: the flavour words are the whole produce aisle, so a per-fruit
+    # fence is the applesauce note above one aisle over - fence one fruit and the next scent re-opens it.
+    # EVERY NON-FOOD COMMODITY (categories.json: Household, Personal Care, Baby, Pet - 59 of them) declares this
+    # exact token in relax_global, so the scented products they own keep routing to them; measured over the
+    # worktree corpus before shipping, only the wrong-product names moved (the commit names every one).
+    # THE \b IS LOAD-BEARING: 'crescent' and 'unscented' must not match - no boundary sits before their 'scent'.
+    '\bscent(?:s|ed)?\b',
+    # '(?:\bdawn\b|nail\s+polish|styling\s+gel)' added 2026-09-18 (backlog I215 + I217): THE SAME CLASS, SPELLED
+    # WITHOUT 'scent'. Once audit-household-in-food began reading the ad files and knew these words, the seeded
+    # 2026-09-17/18 inputs held four more non-food rows in food cells that the scent token cannot see:
+    # "Dawn Plat Ba Clean Lemon" (Family Fare weekly ad, dish soap) in lemons, "Eco Style Coconut Oil Styling
+    # Gel" in coconut-oil, and two Sally Hansen nail polishes named as puns ("Can't Beet Royalty", "Thyme Off")
+    # in canned-beets and dried-thyme, all three Baker's regular. The shapes are a product TYPE (nail polish,
+    # styling gel) and one brand that sells nothing edible: of 51,843 distinct names under a seeded grocery\out,
+    # 87 spell 'dawn' and every one is a dish soap, a dish spray, a sponge or a degreaser, and a Family Fare
+    # ad names it by brand alone ("Dawn Plat Ba Clean Lemon") with no 'soap' to fence on. Routing over those
+    # 51,843 names moved 12 when this and the scent token landed together: these four, the eight scent names
+    # above, and nothing else.
+    # Same reasoning as scent: a per-fruit fence re-opens at the next flavour. The 59 non-food commodities
+    # relax_global this exact token beside the scent one, so dish-soap, sponges and the cleaners keep their Dawn
+    # rows. The words are the audit's own (audit-household-in-food's $HOUSEHOLD_SIGNAL), so the rule that routes
+    # and the guard that checks it name one class. Deliberately NOT here: 'polish' and 'gel' alone (Polish
+    # kielbasa, fruit gel bowls) - measured by I217 before choosing its words.
+    '(?:\bdawn\b|nail\s+polish|styling\s+gel)'
   )
 }

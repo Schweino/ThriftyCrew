@@ -1766,6 +1766,37 @@ if ($SelfTest) {
     _Route 'R18 twin: plain applesauce keeps its commodity' 'Great Value Unsweetened Applesauce, 46 oz Jar' 'applesauce'
     _Route 'R18 twin: the SPACED spelling still routes'    'Tree Top Apple Sauce Pouches, No Sugar Added, 3.2 Oz, 12 Count' 'applesauce'
     _Route 'R18 twin: pineapple sauce is not applesauce'   '12 ct 3.17 oz Golden Farms Organic Pineapple Sauce, Unsweetened, 3.17 oz., 12 pk.' '<unmatched>'
+
+    # --- R20, 2026-09-19: A SCENT IS A FOOD WORD ON A THING NOBODY EATS (board-wrong-cells-0919) -----------
+    # THE FOUNDING BUG: "Dawn Ultra Strawberry Field Scent" (Family Fare weekly ad, $6.49 / 38 oz) held Family
+    # Fare's STRAWBERRIES cell at 0.1708/oz from the 2026-09-13 board on. strawberries' include claims it and
+    # sits before dish-soap, so first-match-wins priced dish soap as fruit. No rule changed; the product arrived.
+    # The fix is the global '\bscent(?:s|ed)?\b', relaxed by every non-food commodity. Measured over 50,954
+    # corpus names before shipping: 8 names moved, every one a scented non-food product leaving a food row.
+    _Route 'R20 MUST FIRE the Dawn soap leaves strawberries'  'Dawn Ultra Strawberry Field Scent' 'dish-soap'
+    _Route 'R20 MUST FIRE a scented sanitizer leaves apples'  'Germ-X Subtle Green Apple Scented Hand Sanitizer, Vitamin E & Plant-Based Alcohol, {8 fl oz}' 'hand-sanitizer'
+    _Route 'R20 MUST FIRE a shave gel leaves raspberries'     'Skintimate Signature Scents Shave Gel for Women Moisturizing Raspberry Rain Scent' 'shaving-cream'
+    _Route 'R20 MUST FIRE a tanning oil leaves coconut-oil'   'Hawaiian Tropic Dark Tanning Oil Iconic Tropical Scent With Coconut Oil Enhances Tan + Moisturizes' '<unmatched>'
+    # CLEAN TWINS: the relax_global half. A scented product a non-food commodity owns keeps its cell, and the
+    # real fruit is untouched - the eviction the serenity\s*kids note warns about, checked in both directions.
+    _Route 'R20 twin: scented wipes keep their cell'          'Kroger Lemon Scent Disinfecting Wipes' 'disinfecting-wipes'
+    _Route 'R20 twin: scented dish soap keeps its cell'       'Kroger Ultra Concentrated Liquid Dish Soap Clean Scent' 'dish-soap'
+    _Route 'R20 twin: real strawberries are untouched'        'Fresh Strawberries' 'strawberries'
+    # --- R21, 2026-09-18: THE SAME CLASS SPELLED WITHOUT 'scent' (backlog I215 + I217) --------------------
+    # Once audit-household-in-food read the ad files, the seeded 2026-09-17/18 inputs held these four in food
+    # cells, verbatim: a Family Fare ad row naming Dawn by brand alone, and three Baker's regular rows. The
+    # styling gel held Baker's coconut-oil cell at 0.2806/oz on the published board. Global token
+    # '(?:\bdawn\b|nail\s+polish|styling\s+gel)', relaxed by every non-food commodity beside the scent one.
+    _Route 'R21 MUST FIRE a Dawn ad row leaves lemons'        'Dawn Plat Ba Clean Lemon' '<unmatched>'
+    _Route 'R21 MUST FIRE a styling gel leaves coconut-oil'   'Eco Style Coconut Oil Styling Gel' '<unmatched>'
+    _Route 'R21 MUST FIRE a nail polish leaves canned-beets'  'Sally Hansen Miracle Gel Nail Polish 474 Can''t Beet Royalty' '<unmatched>'
+    _Route 'R21 MUST FIRE a nail polish leaves dried-thyme'   'Sally Hansen Nail Polish - Thyme Off' '<unmatched>'
+    # CLEAN TWINS: the relax_global half (Dawn's own soap and sponge rows stay where they belong) and the food
+    # half (real coconut oil and real lemons still route).
+    _Route 'R21 twin: a Dawn dish soap keeps dish-soap'       'Dawn Platinum EZ- Squeeze Liquid Dish Soap, Lemon, 3 ct., 61.5 fl. oz.' 'dish-soap'
+    _Route 'R21 twin: a Dawn sponge keeps sponges'            'Dawn Foam Sponge, Non-Scratch, Blue, 2-Pack' 'sponges'
+    _Route 'R21 twin: real coconut oil still routes'          'Kroger Pure Refined Coconut Oil' 'coconut-oil'
+    _Route 'R21 twin: real lemons still route'                'Fresh Lemons' 'lemons'
   }
 
   # ---- 29. EITHER/OR ADS (2026-08-29). One price, two different packages, size field "each". Reading a

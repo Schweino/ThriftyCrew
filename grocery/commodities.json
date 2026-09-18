@@ -5744,7 +5744,11 @@
                         "\\bdish\\b",
                         "unit\\s*dose",
                         "\\btabs?\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "whole-chicken",
@@ -16072,7 +16076,11 @@
         "exclude":  [
                         "holder",
                         "dispenser"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "toilet-paper",
@@ -16088,7 +16096,11 @@
                         "holder",
                         "cleaner",
                         "\\bwand\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "dish-soap",
@@ -16110,7 +16122,11 @@
                         "\\bwand\\b",
                         "sponge",
                         "brush"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "dishwasher-detergent",
@@ -16129,7 +16145,11 @@
                         "\\bsalt\\b",
                         "magnet",
                         "dish\\s+soap"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "trash-bags",
@@ -16149,7 +16169,11 @@
                         "\\blawn\\b",
                         "yard",
                         "\\b([2-9]|1[0-2])[\\s-]?gallon\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "aluminum-foil",
@@ -16174,7 +16198,9 @@
                         "balloon"
                     ],
         "relax_global":  [
-                             "\\bwrap\\b"
+                             "\\bwrap\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -16199,7 +16225,11 @@
                         "\\bquart\\b",
                         "\\bpint\\b",
                         "half\\s+gallon"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "quart-storage-bags",
@@ -16223,7 +16253,11 @@
                         "trash",
                         "mylar",
                         "dehydrated"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "all-purpose-cleaner",
@@ -16241,7 +16275,11 @@
         "exclude":  [
                         "wipes",
                         "eraser"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "bleach",
@@ -16266,7 +16304,11 @@
                         "all[\\s-]*purpose",
                         "cleaner\\s*\\+\\s*bleach",
                         "cleaner\\s+with\\s+bleach"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "hand-soap",
@@ -16284,7 +16326,11 @@
                         "\\bbar\\b",
                         "dispenser",
                         "\\bbody\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "pears",
@@ -39485,7 +39531,11 @@
         "exclude":  [
                         "liquid",
                         "\\bballs?\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "fabric-softener",
@@ -39501,7 +39551,11 @@
                         "\\bballs?\\b",
                         "\\bbeads\\b",
                         "crystals"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "laundry-pods",
@@ -39522,7 +39576,11 @@
         "exclude":  [
                         "dishwasher",
                         "\\bdish\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "stain-remover",
@@ -39531,7 +39589,9 @@
         "band_min":  0.08,
         "band_max":  0.6,
         "relax_global":  [
-                             "\\bspray\\b"
+                             "\\bspray\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ],
         "include":  [
                         "stain\\s+remover",
@@ -39573,7 +39633,11 @@
                         "\\bbath\\b",
                         "makeup",
                         "\\bmop\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "paper-plates",
@@ -39588,7 +39652,11 @@
                     ],
         "exclude":  [
                         "\\bplastic\\s+plates\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "paper-napkins",
@@ -39602,7 +39670,11 @@
         "exclude":  [
                         "cloth",
                         "dispenser"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "sandwich-bags",
@@ -39619,7 +39691,9 @@
                         "reusable"
                     ],
         "relax_global":  [
-                             "\\bsnack\\b"
+                             "\\bsnack\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -39629,7 +39703,9 @@
         "band_min":  1,
         "band_max":  8,
         "relax_global":  [
-                             "\\bwrap\\b"
+                             "\\bwrap\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ],
         "include":  [
                         "plastic\\s+wrap",
@@ -39650,7 +39726,9 @@
         "band_max":  8,
         "relax_global":  [
                              "\\bbake\\b",
-                             "\\bbaked\\b"
+                             "\\bbaked\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ],
         "include":  [
                         "parchment"
@@ -39674,7 +39752,11 @@
                         "\\bwand\\b",
                         "\\bbrush\\b",
                         "tablets"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "glass-cleaner",
@@ -39683,7 +39765,9 @@
         "band_min":  0.05,
         "band_max":  0.35,
         "relax_global":  [
-                             "\\bspray\\b"
+                             "\\bspray\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ],
         "include":  [
                         "glass\\s+cleaner",
@@ -39711,7 +39795,11 @@
                         "makeup",
                         "flushable",
                         "\\bhand\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "disinfectant-spray",
@@ -39722,7 +39810,9 @@
         "band_min":  0.15,
         "band_max":  0.8,
         "relax_global":  [
-                             "\\bspray\\b"
+                             "\\bspray\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ],
         "include":  [
                         "disinfectant\\s+spray",
@@ -39747,7 +39837,9 @@
         "band_min":  0.15,
         "band_max":  1.5,
         "relax_global":  [
-                             "\\bspray\\b"
+                             "\\bspray\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ],
         "include":  [
                         "air\\s+freshener",
@@ -39783,7 +39875,11 @@
                         "lithium\\s+3v",
                         "charger",
                         "rechargeable"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "charcoal",
@@ -39803,7 +39899,11 @@
                         "lighter\\s+fluid",
                         "\\bgrill\\b(?!.{0,15}charcoal)",
                         "activated"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "toothpaste",
@@ -39820,7 +39920,9 @@
                         "charcoal"
                     ],
         "relax_global":  [
-                             "\\bsoda\\b"
+                             "\\bsoda\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -39839,7 +39941,11 @@
                         "\\bdog\\b",
                         "\\bholder\\b",
                         "battery"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "mouthwash",
@@ -39856,7 +39962,11 @@
         "exclude":  [
                         "\\bkids\\b",
                         "whitening\\s+pen"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "shampoo",
@@ -39876,7 +39986,11 @@
                         "\\bkids\\b",
                         "\\bbaby\\b",
                         "\\bdry\\s+shampoo\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "conditioner",
@@ -39895,7 +40009,11 @@
                         "\\bair\\b",
                         "leave-?in",
                         "\\bfabric\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "body-wash",
@@ -39911,7 +40029,9 @@
                         "\\bkids\\b"
                     ],
         "relax_global":  [
-                             "\\bwater\\b"
+                             "\\bwater\\b",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -39933,7 +40053,11 @@
                         "\\bdish\\b",
                         "\\bhand\\s+soap\\b",
                         "shave"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "deodorant",
@@ -39953,7 +40077,11 @@
                         "carpet",
                         "\\bbar\\s+soap\\b",
                         "\\bbody\\s+wash\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "razors",
@@ -39968,7 +40096,11 @@
                         "electric",
                         "\\bblades\\s+only\\b",
                         "\\bscraper\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "shaving-cream",
@@ -39981,7 +40113,11 @@
                     ],
         "exclude":  [
 
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "lotion",
@@ -40001,7 +40137,11 @@
                         "\\btanning\\b",
                         "calamine",
                         "body\\s*wash"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "hand-sanitizer",
@@ -40015,7 +40155,11 @@
         "exclude":  [
                         "\\bwipes\\b",
                         "\\bholder\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "facial-tissues",
@@ -40033,7 +40177,11 @@
                         "toilet",
                         "paper\\s+towel",
                         "\\bgift\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "cotton-swabs",
@@ -40049,7 +40197,11 @@
                         "\\bballs\\b",
                         "\\brounds\\b",
                         "makeup"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "feminine-pads",
@@ -40072,7 +40224,11 @@
                         "incontinence",
                         "\\bbed\\b",
                         "liners"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "tampons",
@@ -40085,7 +40241,11 @@
                     ],
         "exclude":  [
 
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "diapers",
@@ -40106,7 +40266,9 @@
                         "overnight\\s+pants"
                     ],
         "relax_global":  [
-                             "little\\s+journey"
+                             "little\\s+journey",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -40126,7 +40288,9 @@
                     ],
         "relax_global":  [
                              "\\bwater\\b",
-                             "little\\s+journey"
+                             "little\\s+journey",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -40145,7 +40309,9 @@
                         "ready[\\s-]?to[\\s-]?feed"
                     ],
         "relax_global":  [
-                             "little\\s+journey"
+                             "little\\s+journey",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -40187,7 +40353,9 @@
                              "little\\s+journey",
                              "once\\s+upon\\s+a\\s+farm",
                              "plum\\s+organics",
-                             "happy\\s*tot"
+                             "happy\\s*tot",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -40209,7 +40377,9 @@
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)",
-                             "dog\\s+food"
+                             "dog\\s+food",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -40229,7 +40399,9 @@
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)",
-                             "cat\\s+food"
+                             "cat\\s+food",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -40250,7 +40422,9 @@
                     ],
         "relax_global":  [
                              "\\bsoda\\b",
-                             "cat\\s+litter"
+                             "cat\\s+litter",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -40271,7 +40445,9 @@
                     ],
         "relax_global":  [
                              "dog\\s+treats?",
-                             "dog\\s+biscuits?"
+                             "dog\\s+biscuits?",
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
                          ]
     },
     {
@@ -40299,7 +40475,11 @@
                         "\\bbathroom\\b",
                         "\\btoilet\\b",
                         "\\bglass\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "drain-cleaner",
@@ -40319,7 +40499,11 @@
                         "hair\\s+catcher",
                         "\\bstrainer\\b",
                         "\\btool\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "oven-cleaner",
@@ -40338,7 +40522,11 @@
                         "\\bscraper\\b",
                         "\\bmitt\\b",
                         "easy[\\s-]*off.*\\bdegreaser\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "shower-cleaner",
@@ -40361,7 +40549,11 @@
                         "\\bwand\\b",
                         "\\bbrush\\b",
                         "refill\\s+pad"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "furniture-polish",
@@ -40384,7 +40576,11 @@
                         "\\bduster\\b",
                         "\\brefill\\b",
                         "murphy.*oil\\s+soap|wood\\s+soap"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "insect-spray",
@@ -40407,7 +40603,11 @@
                         "sunscreen",
                         "\\bfogger\\b",
                         "personal"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bscent(?:s|ed)?\\b",
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                         ]
     },
     {
         "id":  "cornstarch",

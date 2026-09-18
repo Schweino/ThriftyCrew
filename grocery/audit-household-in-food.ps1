@@ -6,7 +6,8 @@
   ("Lemon Scent Furniture Polish", "Lavender Floor Cleaner", "Orange Degreaser"). A cleaner landing in
   a produce row is always wrong and is invisible to a per-unit sanity band.
 
-  This sweeps EVERY row of EVERY store regular file: any product whose name is unmistakably a
+  This sweeps EVERY row of EVERY store regular file, and since 2026-09-18 the weekly-ad and deals files
+  compare-deals reads too (Get-HifInputFiles names which): any product whose name is unmistakably a
   household/cleaning item but which resolves to a commodity OUTSIDE the Household category is a bug.
 
   This is guard 2 in guards.ps1, a HARD check: exit 2 holds the board. So a finding here is not
@@ -62,7 +63,16 @@ function Match-Category($name) {
 }
 
 # names that can only be a household/cleaning product
-$HOUSEHOLD_SIGNAL = '(?i)(cleaner|detergent|\bbleach\b|disinfect|degreaser|furniture\s+polish|air\s+freshener|insecticide|roach|drain\s+opener|laundry|dish\s*soap|fabric\s+softener|dryer\s+sheet|toilet|scrubbing\s+bubbles|\blysol\b|\bdrano\b|\bpledge\b|\bwindex\b|\bclorox\b|\bfebreze\b|\bswiffer\b|\bcomet\b|\bajax\b)'
+# 2026-09-18 (backlog I217): + scent, dawn, dishwash, sanitiz, shave/shaving, tanning, nail polish, styling gel.
+# "Dawn Ultra Strawberry Field Scent" held Family Fare's strawberries cell for six boards and spelled none of
+# the old words. Measured before adding them, over 51,892 distinct item names in grocery\out: the new words
+# match 1,411 names, 18 of those route to an EDIBLE commodity, and all 18 are non-food (hand sanitizers in
+# apples/pears/cherries/raspberries/watermelon, shave butters in butter, nail polish in beets and thyme, a
+# tanning oil and a styling gel in coconut-oil, the two Dawn soaps). 0 food names. The old words matched
+# 2,304 names and routed 0 to food. Candidates dropped for firing on food: spray (Ocean Spray, cooking
+# spray), polish (Polish kielbasa, Polish dill), gel (fruit gel bowls), fragran (fragrant rice), meyer
+# (Otis Spunkmeyer). \bscent keeps its left boundary so Crescent Rolls never fire.
+$HOUSEHOLD_SIGNAL = '(?i)(cleaner|detergent|\bbleach\b|disinfect|degreaser|furniture\s+polish|air\s+freshener|insecticide|roach|drain\s+opener|laundry|dish\s*soap|fabric\s+softener|dryer\s+sheet|toilet|scrubbing\s+bubbles|\blysol\b|\bdrano\b|\bpledge\b|\bwindex\b|\bclorox\b|\bfebreze\b|\bswiffer\b|\bcomet\b|\bajax\b|\bscent(?:s|ed)?\b|\bdawn\b|dishwash|sanitiz|\bshav(?:e|ing)\b|\btanning\b|nail\s+polish|styling\s+gel)'
 
 # The files the sweep reads, under a root, so the self-test can point it at a temp tree.
 function Get-HifInputFiles([string]$Root) {
@@ -75,6 +85,17 @@ function Get-HifInputFiles([string]$Root) {
     if ($f.FullName -ne $newest.FullName) { continue }
     $files += $f
   }
+  # THE AD FILES (2026-09-18, backlog I217). Until then this read out\regular only, and the Dawn soap came
+  # from the Family Fare weekly ad in out\ads-*.json, so it could not have been seen whatever the words were.
+  # The choice per family follows what compare-deals reads: the newest ads and Baker's file, every Fareway
+  # file (the engine loads them all and each self-gates on its own window), and every Sam's capture (the
+  # engine unions them inside -SamsMaxAgeDays, 90).
+  foreach ($g in @('out\ads-*.json', 'out\bakers\bakers-deals-*.json')) {
+    $f = Get-ChildItem (Join-Path $Root $g) -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+    if ($f) { $files += $f }
+  }
+  foreach ($f in Get-ChildItem (Join-Path $Root 'out\fareway\fareway-deals-*.json') -ErrorAction SilentlyContinue) { $files += $f }
+  foreach ($f in Get-ChildItem (Join-Path $Root 'out\sams\sams-deals-*.json') -ErrorAction SilentlyContinue) { $files += $f }
   return ,$files
 }
 
@@ -105,16 +126,16 @@ if ($SelfTest) {
   # a change to commodities.json cannot quietly turn a case into one that can no longer form.
   $tmp = Join-Path ([IO.Path]::GetTempPath()) ('hif-st-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
   New-Item -ItemType Directory -Path $tmp -ErrorAction Stop | Out-Null
-  $pass = 0; $fail = 0; $ran = 0; $EXPECTED = 6   # a literal list knows its own number
+  $pass = 0; $fail = 0; $ran = 0; $EXPECTED = 10  # a literal list knows its own number
   function Check([string]$label, [bool]$ok) {
     $script:ran++
     if ($ok) { $script:pass++; Write-Output ('  ok    ' + $label) } else { $script:fail++; Write-Output ('  FAIL  ' + $label) }
   }
-  function Write-HifFixture([string]$rel, $rows, [string]$store) {
+  function Write-HifFixture([string]$rel, $rows, [string]$store, [switch]$RowStoreOnly) {
     $p = Join-Path $tmp $rel
     New-Item -ItemType Directory -Force -Path (Split-Path $p -Parent) | Out-Null
     $doc = [ordered]@{ deals = @($rows | ForEach-Object { [ordered]@{ item = $_; store = $store } }) }
-    if ($store) { $doc.store = $store }
+    if (-not $RowStoreOnly) { $doc.store = $store }
     [IO.File]::WriteAllText($p, ($doc | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($false)))
   }
   try {
@@ -146,6 +167,21 @@ if ($SelfTest) {
     Check 'MUST NOT FIRE: a cleaner that lands in a NON-food commodity is not flagged' (@($r.findings | Where-Object { $_.name -like 'Lysol Lemon*' }).Count -eq 0)
     Check 'MUST NOT FIRE: an older file for the same store is not read (newest per store only)' (@($r.findings | Where-Object { $_.name -like '*OLD FILE*' }).Count -eq 0)
     Check 'exactly one finding over the fixture tree' (@($r.findings).Count -eq 1)
+
+    # I217's founding row, as it arrived: a weekly-ad row carrying its own store, no top-level store,
+    # spelling no pre-2026-09-18 household word. Plus one Sam's capture, the other file family added.
+    Write-HifFixture 'out\ads-2026-01-02.json' @(
+      'Dawn Ultra Strawberry Field Scent',
+      'Dawn Ultra Classic',
+      'Fresh Strawberries 1 lb'
+    ) 'Family Fare' -RowStoreOnly
+    Write-HifFixture 'out\sams\sams-deals-2026-01-02.json' @('Germ-X Subtle Green Apple Scented Hand Sanitizer 8 fl oz') "Sam's Club"
+    $r2 = Invoke-HifSweep $tmp
+    $dawn = @($r2.findings | Where-Object { $_.name -eq 'Dawn Ultra Strawberry Field Scent' })
+    Check 'MUST FIRE: the Dawn Ultra Strawberry Field Scent row in an AD file is flagged in strawberries, at Family Fare' ($dawn.Count -eq 1 -and $dawn[0].owner -eq 'strawberries' -and $dawn[0].store -eq 'Family Fare' -and $dawn[0].file -like 'ads-*')
+    Check 'MUST FIRE: a scented hand sanitizer in a Sam''s deals file is flagged in apples' (@($r2.findings | Where-Object { $_.name -like 'Germ-X*' -and $_.owner -eq 'apples' }).Count -eq 1)
+    Check 'MUST NOT FIRE: a Dawn soap that lands in dish-soap is not flagged' (@($r2.findings | Where-Object { $_.name -eq 'Dawn Ultra Classic' }).Count -eq 0)
+    Check 'CLEAN TWIN: the ad file''s real strawberries row is scanned and still routes to strawberries' ($r2.scanned -eq 8 -and (Match-Category 'Fresh Strawberries 1 lb') -eq 'strawberries')
   } catch {
     $fail++; Write-Output ('  FAIL  the self-test threw: ' + $_.Exception.Message)
   } finally {
