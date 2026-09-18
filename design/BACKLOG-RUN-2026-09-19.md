@@ -96,3 +96,8 @@ Orchestration branch: `claude/backlog-run-0919`. Each item lands through its own
 | I198 follow-up | DONE | d9eaa12c3: send-friday-email -Send refuses outside the main checkout (a linked worktree cannot see the week's records), -Force does not override; 3 of 21 red with the refusal disabled |
 | I232 | NEEDS A RULING (mostly built) | c0de652aa: match-soundness's alert email crashed on 6 chain runs since 09-09 and exited 1 instead of 2 (a real moved product would not have held the publish) - fixed; Family Fare cursor records its date and refused terms name the real cause; the daily-ratchets stamp records the commit it judged and whether it was on main; the three 'lost block' cards are correct. Ruling: verification-sample cadence (newest verified 08-15; last measured defect rate 23.7%, 95% CI 16.8-32.5%, over 252 cells) |
 | I44 | DONE | 15755eaae: Google re-crawled after the fix: 8 of 8 post-fix crawls PASS (3 of the 14-URL sample, 5 requested pages); the one missing-image ERROR is an 08-17 crawl; the card builder now falls back to the share image for a blank image (584 of 584 cards byte-identical) |
+| inbox 2 | merged | 5 findings merged as I234 to I238 |
+
+## Run finished 2026-09-18
+
+Every in-scope OPEN and PARTLY DONE item has a final state above. Left for Brad: the NEEDS A RULING items and the READY FOR BRAD branches named in their rows; I77 re-runs when its cases reach 30; I55 and I60 are Brad's spend and republish calls, unchanged by this run.
