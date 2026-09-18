@@ -12923,7 +12923,7 @@ site, run the file's `-SelfTest`, record killed/survived per case, md5 the origi
 a bar on kill rate would be red on day one, and the survey's threshold finding says a score below
 some level carries no information about faults anyway.
 
-### I205 - the data committer's source-path refusal has two dead branches, because TrimStart('./') strips the leading dot of .claude and .github `OPEN` `queue-8` `2-WAY` `RUNG1 BUILD`
+### I205 - the data committer's source-path refusal has two dead branches, because TrimStart('./') strips the leading dot of .claude and .github `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-pwsh-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -12963,6 +12963,28 @@ repeated) instead of a character set, in both files; add a MUST FIRE for `.claud
 `TrimStart('./')` turns them red. A detector for the class (`.Trim*('` with a multi-character literal whose
 characters are not a deliberate set) would find 5 other non-archive sites today, all of which read as
 deliberate character sets (`Trim(' ,.')`, `Trim(' ,-/')`).
+
+**Done 2026-09-19.** Both normalisations now strip the literal `./` prefix, repeatedly, with an ordinal
+`StartsWith` (`lib/pipeline-commit.ps1` `Assert-NoSourcePaths`, `lib/bot-paths.ps1` `Test-BotPathOwned`).
+New cases: in `pipeline-commit -SelfTest`, MUST FIRE `.claude/settings.json` and `.github/CODEOWNERS` (no listed
+extension, so only the directory branch can refuse them), a CLEAN TWIN that `./ops/...` and `././lib/...` are still
+refused, and a MUST NOT FIRE that `./grocery/out/x.json` is accepted; in `bot-paths -SelfTest`, a MUST FIRE that a
+dot-leading owned entry owns its own path, MUST NOT FIREs that `.grocery/out/x.json` does not match `grocery/out`
+and that `../grocery/out/x.json` is not owned (the character set turned it into `grocery/out/x.json`), and a CLEAN
+TWIN that `./` and `././` are still stripped. Mutant (both lines reverted to `TrimStart('./')`, in place, restored
+md5-identical): pipeline-commit red 2 of 2 new MUST FIREs, exit 1; bot-paths red 3 of the 4 new cases, exit 1 (the
+CLEAN TWIN stays green, as it must: the character set strips `./` too). Fixed: both exit 0.
+**The "not checked" question, measured at 639975fca with both normalisations side by side:** 0 of 22 declared lane
+paths and 0 of 56 bot ownership entries (inputs, served, globs, lanes) start with `.` or `/`. Over all 8,563 tracked
+files the normalised form changed for 70 (the dot-leading ones), and the verdict changed for **0 of 8,563** under
+`Assert-NoSourcePaths` and **0 of 8,563** under `Test-BotPathOwned` over the full ownership set; over the 2,112
+tracked files under lane-owned paths (the committer's staged-set arm) the refusal count is 57 before and 57 after.
+So no currently-passing real commit is refused by the fix: it was a latent hole, and every tracked `.claude` and
+`.github` file happens to carry a listed extension. **The detector was not built:** after the fix, a grep for
+`.Trim`/`.TrimStart`/`.TrimEnd` with a 2+ character quoted literal finds 7 sites, 3 in `archive/`, and the 4 live
+ones are 2 deliberate sets (`build-deals-page.ps1:225`, `normalize-ingredients.ps1:40`) and 2 one-character escapes
+(`` "`r" ``, `` "`n" ``) the pattern misreads - zero true positives, so a gate would be an allowlist of its whole
+day-one output.
 
 ### I206 - about 199 self-test case helpers are simple functions, which is exactly why the "concatenation is three arguments" trap is silent `OPEN` `queue-8` `2-WAY` `RUNG1 MEASURE`
 

@@ -108,7 +108,11 @@ function Assert-NoSourcePaths {
   param([string[]]$Paths)
   $bad = @()
   foreach ($p in @($Paths)) {
-    $n = ([string]$p).Replace('\', '/').TrimStart('./')
+    # Strip the literal './' PREFIX, repeatedly. Never TrimStart('./'): that takes a CHARACTER SET and
+    # dropped every leading '.' and '/', so '.claude/settings.json' became 'claude/settings.json' and the
+    # ^\.claude/ and ^\.github/ branches below could never match (backlog I205, 2026-09-19).
+    $n = ([string]$p).Replace('\', '/')
+    while ($n.StartsWith('./', [StringComparison]::Ordinal)) { $n = $n.Substring(2) }
     if ($n -match $script:PC_SOURCE_RX) { $bad += $p }
   }
   return $bad
@@ -332,6 +336,13 @@ if ($__pcSelfTest) {
   T 'MUST FIRE  a .ps1 path is refused' ((Assert-NoSourcePaths @('grocery/out', 'grocery/capture-run.ps1')).Count -eq 1)
   T 'MUST FIRE  a .py path is refused' ((Assert-NoSourcePaths @('meal-prep/pipeline/harvest.py')).Count -eq 1)
   T 'MUST FIRE  the agent prompts are refused' ((Assert-NoSourcePaths @('.claude/agents/recipe-writer.md')).Count -eq 1)
+  # I205 (2026-09-19): the case above is satisfied by the .md EXTENSION branch, so it could not see that the
+  # ^\.claude/ and ^\.github/ DIRECTORY branches were dead under TrimStart('./'). These two carry no listed
+  # extension, so only the directory branch can refuse them.
+  T 'MUST FIRE  .claude/settings.json is refused by the directory branch, not an extension' ((Assert-NoSourcePaths @('.claude/settings.json')).Count -eq 1)
+  T 'MUST FIRE  .github/CODEOWNERS is refused by the directory branch, not an extension' ((Assert-NoSourcePaths @('.github/CODEOWNERS')).Count -eq 1)
+  T 'CLEAN TWIN  a literal ./ prefix is still stripped, once or repeated, so ./ops and ././lib are still refused' ((Assert-NoSourcePaths @('./ops/hooks/pre-commit', '././lib/x')).Count -eq 2)
+  T 'MUST NOT FIRE ./grocery/out/x.json normalises to a data path and is accepted' ((Assert-NoSourcePaths @('./grocery/out/x.json')).Count -eq 0)
   T 'MUST FIRE  ops/ is refused even with no extension' ((Assert-NoSourcePaths @('ops/hooks/pre-commit')).Count -eq 1)
   T 'MUST FIRE  lib/ is refused' ((Assert-NoSourcePaths @('lib/pipeline-commit.ps1')).Count -eq 1)
   T 'MUST FIRE  a backslash path is normalised before matching, not missed' ((Assert-NoSourcePaths @('ops\audit-write-seam.ps1')).Count -eq 1)
@@ -452,6 +463,6 @@ if ($__pcSelfTest) {
   }
 
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); exit 1 }
-  Write-Output 'SELF-TEST PASS: the source-path refusal in eight shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, and a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0)'
+  Write-Output 'SELF-TEST PASS: the source-path refusal in eleven shapes, every real path list proved data-only and non-empty, no path owned twice, the committer refusing before it touches git, and a lane''s exit code earned from its verdict (a refused commit exits 1, a landed one whose push failed exits 0)'
   exit 0
 }
