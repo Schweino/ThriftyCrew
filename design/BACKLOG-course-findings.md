@@ -5133,7 +5133,22 @@ question is answerable without archaeology.
 **What it is not.** Not a proposal to adopt propensity scores or IPTW. This estate mostly compares
 two configurations it controls, where the repair is a paired design (I48), not an adjustment.
 
-### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `OPEN` `queue-4` `2-WAY` `RUNG1 MEASURE`
+### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `NEEDS A RULING` `queue-4` `2-WAY` `RUNG1 RULING`
+
+**RE-WORKED 2026-09-19 (worktree i48-work, at f092c8d57). Stopped at the ruling, because the only step left spends money on Opus calls.** The bars were not moved: they were written into `dedup_paired_probe.py` on 2026-09-09, before any decider ran, and this pass ran no decider. Measured, all read-only:
+
+- **The harness still holds.** `--selftest` exit 0, 11 of 11. `--score` exit 3, BLIND, 0 of 12 needed pairs, no `verdicts.jsonl`.
+- **The frozen case set is still the population, so nothing needs re-emitting.** The main checkout's `meal-prep/db/dedup-paired/cases.jsonl` holds 40 rows (20 cases x 2 arms, fingerprint `34be0270169e593c`, generated 2026-09-09T10:26:57). Arm `with` carries 15 neighbours on 20 of 20 rows and arm `without` carries 0 on 20 of 20. **All 20 of 20 cases are still `available` in the pool**, none has entered the catalog digest (0 of 20), and the digest still counts **562** live recipes, the same 562 the dossiers' `catalog_checked` recorded. So the risk that a without-arm decider would find a case matching its own later-published recipe is measured absent. **16 of today's first 20** available candidates in `dossier_rank` order are the frozen ones (1,555 available). Read against the main checkout's working pool, which had local edits at 57b807ae1.
+- **THE HARNESS ASKS FOR A NUMBER A PRODUCTION-SHAPED CALL CANNOT GIVE, and that is the ruling.** `--score` wants `output_tokens` PER CASE PER ARM, but the daemon dispatches the decider in batches (`hunt_lib.DECIDE_BATCH = 10`), and one call bills one output total for all of its candidates. Over the 41 decider calls in the 17 lane logs (2026-08-24 to 2026-09-04, `claude-opus-4-8`): **median 10 candidates per call, and only 1 of the 41 was a single-candidate call**. Median input per call 33,268 tokens (10,310 to 125,519), median output 9,285 (942 to 15,236), median output per candidate 989, which agrees with the 2026-09-04 estimate of about 1,000. The one single-candidate call read 10,310 in and wrote 942 out, and one call is too few to price the other 39 from.
+
+**The question for Brad: do we pay for the decider calls, and in which shape?**
+
+1. **Production shape, bar 1 only, 4 calls** (two 10-candidate batches per arm). Verdict agreement is per case whatever the batch, so bar 1 reads over all 20 pairs. Bar 2 gets 2 batch-level pairs, under the floor of 12, so it stays BLIND and says so. At the logged medians that is about 4 x 33k tokens in and 4 x 9k out.
+2. **Single-candidate calls, both bars, 40 calls.** This is what the harness assumes. It pairs tokens per case but measures a shape production does not use: 1 of 41 logged calls, and it loses the decider's view across the candidates in one batch.
+3. **Option 1, then option 2 only if bar 1 holds.** The bars already say bar 2 is not read when bar 1 fails, so this spends the 36 extra calls only if they can matter.
+4. **Close it unmeasured.** The neighbour block stays, and its cost stays unjustified.
+
+**Recommendation: option 3.** It follows the harness's own bar order, and if the arms disagree it costs 4 calls, not 40. Whichever option is chosen, someone still has to build a runner, because nothing yet dispatches `cases.jsonl` and writes `verdicts.jsonl` back. It has to build its prompt through the daemon's own `decide_prompt` so the calls see what production sees. That build spends nothing and can land before the calls.
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Unchanged and blocked on exactly what it says: `--score` exits 3, 0 of 20 pairs, `verdicts.jsonl` absent. 40 decider calls are the remaining cost.
 
