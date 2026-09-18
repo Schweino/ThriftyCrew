@@ -13394,6 +13394,32 @@ a WRONG-VALUE switch.** Zero WRONG-VALUE means this item closes DONE with the ta
 change. Any fix that makes an eighth store throw must leave all seven current stores' output
 byte-identical, proven on a real board; if it cannot be proven, it is held READY FOR BRAD.
 
+**Measured 2026-09-18 at `72455a103`** (harness: a scratch AST sweep over `git ls-files '*.ps1'`, store
+tokens read from `grocery/stores.json` as each row's `name`, `regular_prefix`, `urlkey` and
+`urlkey_aliases`, lower-cased with non-alphanumerics stripped; literal `StringConstantExpression`
+labels only, so unsound for an `if` chain, a hashtable or a regex label). **Scanned 791 tracked `.ps1`:
+8 switches in 7 files, 7 of 8 with a `default`, 0 of 8 naming all seven stores** - the original count
+reproduced exactly. 2 of the 8 are archive or scratch (`grocery/archive/one-off/import-browser-batch.ps1:33`,
+`grocery/out/r100/compare-debug.ps1:370`) and were not classified. The **6 live switches in 5 files**:
+
+| Switch | Labels | Unknown store gets | Class |
+|---|---|---|---|
+| `grocery/compare-deals.ps1:2102` ad-row ingest | Hy-Vee, Aldi, Family Fare | the generic parse of `ad_price + ' ' + item` as one price text, with the row's size and regular passed through; reached by **0 of 1,894** rows in `ads-2026-09-17.json` (747 Hy-Vee, 131 Aldi, 1,016 Family Fare), and a new flyer store needs `pull-grocery-ads` code first | NO-OP |
+| `grocery/derive-links-from-prices.ps1:78` `Get-StoreFiles` | Sam's Club, Baker's, Fareway, Walmart | the newest `out\regular` file, exactly what Hy-Vee, Aldi and Family Fare get; a store with a second feed would get FEWER links (a "no matching row" report), never a wrong one | NO-OP |
+| `grocery/derive-links-from-prices.ps1:128` `Get-RowUrl` (no default) | Hy-Vee, Walmart, Sam's Club | `$null`: no URL is built from an id whose shape is unproven for that store | REFUSE |
+| `grocery/guards.ps1:1193` alt-glob | Sam's Club, Baker's, Fareway | `''`: the store's own `out\regular` file is measured, as for Hy-Vee, Aldi, Family Fare and Walmart | NO-OP |
+| `grocery/probe-ingredient.ps1:233` | bakers, family-fare | cannot arrive: `-Store` is `[ValidateSet('all','bakers','family-fare')]`, so binding refuses it; `default` is the `all` branch | REFUSE |
+| `grocery/import-instacart-batch.ps1:21` file prefix | Aldi, Fareway | a prefix squashed from the display name, `($Store.ToLower() -replace '[^a-z0-9]','') + '-regular'`, which is NOT the registry's `regular_prefix` whenever the name has a space or apostrophe | **WRONG-VALUE** |
+
+**1 of 6 live switches is WRONG-VALUE, so the bar says fix that one only.** It is already wrong for **2
+of the 7 current stores**: `Family Fare` gives `familyfare-regular` (registry `family-fare`) and
+`Sam's Club` gives `samsclub-regular` (registry `sams`); the other 5 agree. The harm is silent:
+`Select-RegularFileSet` groups `out\regular` files by the name before `-regular-`, so a
+`familyfare-regular-<date>.json` would be read as a SEPARATE store group beside the real
+`family-fare` one, and the importer's merge would look for a previous file under the wrong name and
+find none. It is latent today: the only callers are `import-aldi-batch.ps1` (Aldi) and hand runs for
+Fareway, and both of those names were already literal labels.
+
 ### I186 - the price formatter applies two midpoint rounding rules, so d5's banker's-versus-half-up question rests on a wrong premise `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q6-modern-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
