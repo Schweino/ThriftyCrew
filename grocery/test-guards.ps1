@@ -813,6 +813,15 @@ if ($g8dCells.Count -lt 2) {
   Set-G8dCell $g8dCells[0] $g8dLine 0.1 'per-each'
   ($g8dDoc | ConvertTo-Json -Depth 8) | Set-Content $g8dCmpF -Encoding UTF8
   Check 'ad-line provenance: a fuel-saver reward published as the price ($0.10 a pod against a $12.94 line)' 2 'ad-line price provenance'
+  # MUST FIRE - the SECOND founding row (2026-09-18, queue 2026-09-18-f90ba6), frozen verbatim off
+  # comparison-2026-09-17 as the OLD engine published it: a "SAVE 50c" savings read as the price, Hy-Vee
+  # donuts at $0.50/each against the line's own $1.99. It and its protein-bars twin held the board from 09-14
+  # to 09-18. The parser now strips SAVE-cents and coupon clauses and never reads a cents token beside a $
+  # amount, so today's board no longer carries it; planted, the guard must still name it.
+  $g8dLine2 = 'Hy-Vee mini donuts, SAVE 50' + $g8dCent + ', $1.99'
+  Set-G8dCell $g8dCells[0] $g8dLine2 0.5 'per-each'
+  ($g8dDoc | ConvertTo-Json -Depth 8) | Set-Content $g8dCmpF -Encoding UTF8
+  Check 'ad-line provenance: a SAVE-cents savings published as the price ($0.50 a donut against a $1.99 line)' 2 'ad-line price provenance'
   # MUST NOT FIRE and CLEAN TWIN in one run, because each of these costs a full guards pass.
   #   MUST NOT FIRE - a real cents PRICE. "Bananas, 49c lb." IS quoted in cents and the cents token IS the
   #                   line's last money token, so a guard that simply distrusted cent signs would cry wolf

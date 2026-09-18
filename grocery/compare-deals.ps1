@@ -219,6 +219,26 @@ function Test-PieceSize($id, $size, $name, $pieces) {
   $n = if ($pieces -and [double]$pieces -ge 1) { [double]$pieces } else { 1 }
   return (($oz / $n) -ge $MINPIECE[[string]$id])
 }
+# THE ORDER OF THE REFUSALS IS A RULE: DEFINITION BEFORE SANITY (2026-09-18, queue 2026-09-18-f90ba6).
+# A row can fail more than one check, and flagged-*.json records only the FIRST one that refuses it, so the
+# order decides what the refusal is CALLED. Until today the price band ran first and the piece rule last, so
+# a 4-count box of 10.2 oz party pizzas at $1.49 each was filed as '1.5-14' (a price censored by the band)
+# instead of 'min_piece_oz>=12' (not the product, Brad's T2 ruling). audit-band-censorship reads only min-max
+# band labels, so it counted definitional refusals as price censorship, and its ratchet broke (29 -> 32) on
+# 09-17 when a PEER's sale moved frozen-pizza's median, with nothing new refused. Measured over
+# flagged-2026-09-17: 21 price-banded rows on the two min_piece commodities, 14 of them fail the piece rule.
+# The piece rule is definitional (what the commodity IS), the band and the floor are sanity nets (what a
+# price may plausibly be), so a row that fails the definition is labelled by it whatever its price. The pack
+# rules keep their old place after the band: nothing measured them, and this change moves only what was.
+# Returned as a word so the self-test can reach the ORDER itself; the engine loop keeps every side effect.
+function Get-FirstRefusal($id, $unit, $up, $size, $name, $pieces) {
+  if (-not (Test-PieceSize $id $size $name $pieces)) { return 'piece' }
+  if (-not (Test-Band $id $up)) { return 'band' }
+  if (-not (Test-Floor $unit $up)) { return 'floor' }
+  if (-not (Test-PackSize $id $size $name)) { return 'pack-cap' }
+  if (-not (Test-PackSizeFloor $id $size $name)) { return 'pack-floor' }
+  return ''
+}
 function Test-PackSizeFloor($id, $size, $name) {
   if (-not $MINPACK.ContainsKey([string]$id)) { return $true }
   $oz = Get-PackOz $size $name
@@ -615,6 +635,28 @@ if ($SelfTest) {
   # CLEAN TWIN: the Hy-Vee storage-bags row from the same ad, no fuel-saver clause, unchanged at 0.0299.
   _Near 'CLEAN TWIN  Hy-Vee storage bags 75 to 100 ct., $2.99' (Get-UnitPrice (_D 'Hy-Vee storage bags, 75 to 100 ct., $2.99' 'Hy-Vee storage bags' $null '') (_C 'each')).unit_price 0.0299 0.001
 
+  # --- 11c-quater: A SAVINGS CLAUSE IS NOT A PRICE EITHER (2026-09-18, queue 2026-09-18-f90ba6) ------------
+  # The two rows that held the board from 09-14 to 09-18, frozen verbatim off comparison-2026-09-17 (Hy-Vee,
+  # 0.5/each, note 'cents', guard 8d HARD FAIL). Both are each-commodities whose line states no count. The
+  # 50 cents was accepted as a per-each RATE only because a cents read is not a plain package price; once the
+  # line reads its own dollar, the existing "bare package price with unknown count -> drop" rule in the each
+  # branch of Get-UnitPrice refuses it, exactly as it refuses Gain Flings above. So the honest answer is
+  # UNPRICED (the cell falls to a store we can divide), and the price the line DOES carry is proven separately.
+  # Literals and the concatenated cent sign follow the 11c-ter rules above.
+  _Null 'MUST FIRE  Hy-Vee mini donuts, SAVE 50 cents, $1.99 no longer prices as 50 cents (no count: UNPRICED)' (Get-UnitPrice (_D ('Hy-Vee mini donuts, SAVE 50' + [char]0x00A2 + ', $1.99') ('Hy-Vee mini donuts, SAVE 50' + [char]0x00A2 + ', $1.99') $null '') (_C 'each'))
+  _Null 'MUST FIRE  Quaker protein bars, SAVE 50 cents, $3.98 no longer prices as 50 cents (no count: UNPRICED)' (Get-UnitPrice (_D ('Quaker protein bars, SAVE 50' + [char]0x00A2 + ', $3.98') ('Quaker protein bars, SAVE 50' + [char]0x00A2 + ', $3.98') $null '') (_C 'each'))
+  _Near 'the donuts line reads its own $1.99 as the price' (Get-ItemPrice ('Hy-Vee mini donuts, SAVE 50' + [char]0x00A2 + ', $1.99') 'Hy-Vee mini donuts' $null).per_item 1.99 0.001
+  _Near 'the protein-bars line reads its own $3.98 as the price' (Get-ItemPrice ('Quaker protein bars, SAVE 50' + [char]0x00A2 + ', $3.98') 'Quaker protein bars' $null).per_item 3.98 0.001
+  _Near 'MUST FIRE  the mojibake twin (U+00C2 U+00A2) of the donuts line reads 1.99' (Get-ItemPrice ('Hy-Vee mini donuts, SAVE 50' + [char]0x00C2 + [char]0x00A2 + ', $1.99') 'Hy-Vee mini donuts' $null).per_item 1.99 0.001
+  _Near 'MUST FIRE  SAVE with the bang (Zevia soda, SAVE! 50 cents, $5.99) reads 5.99' (Get-ItemPrice ('Zevia soda, SAVE! 50' + [char]0x00A2 + ', $5.99') 'Zevia soda' $null).per_item 5.99 0.001
+  _Near 'MUST FIRE  the coupon shape (pickles, - 50 cents off with digital coupon, $1.99) reads 1.99' (Get-ItemPrice ('Hy-Vee pickles, - 50' + [char]0x00A2 + ' off with digital coupon, $1.99') 'Hy-Vee pickles' $null).per_item 1.99 0.001
+  # THE STRUCTURAL RULE, ALONE: the donuts line reworded so NEITHER strip matches ("SAVE UP TO"). Only the
+  # cents-beside-a-dollar rule in the cents branch stands between this line and 50 cents, which is what proves
+  # that rule is load-bearing on its own and not a restatement of the two strips.
+  _Near 'MUST FIRE  a savings wording no strip knows (SAVE UP TO 50 cents, $1.99) still reads 1.99' (Get-ItemPrice ('Hy-Vee mini donuts, SAVE UP TO 50' + [char]0x00A2 + ', $1.99') 'Hy-Vee mini donuts' $null).per_item 1.99 0.001
+  # MUST NOT FIRE: a cents price on a line with no dollar amount anywhere still prices off its cents.
+  _Near 'MUST NOT FIRE  "Limes, 25 cents each" (no dollar amount) still reads 0.25' (Get-ItemPrice ('Limes, 25' + [char]0x00A2 + ' each') 'Limes' $null).per_item 0.25 0.001
+
   # --- 11d: SIZE-PARSER DIVERGENCE FIXES (2026-07-30) - the engine vs pu-lib split, closed --------------
   # Every case is a REAL row from 2026-07-29: Bush's beans band-flagged at $0.3988/oz, Hy-Vee Cola flagged
   # at $0.3933/floz, Sam's grits PUBLISHED at $0.1049/oz (".98 oz" read as 98 oz), Kemps OJ band-dropped
@@ -832,6 +874,33 @@ if ($SelfTest) {
   if (Test-PieceSize 'undeclared-commodity' '4.2 oz' 'Great Value Pepperoni Pizza Snack Builders, 4.20 oz' 1) { Write-Output 'ok    min_piece_oz: undeclared commodity untouched' } else { Write-Output 'FAIL  min_piece_oz fired on a commodity that never declared it'; $script:fail++ }
   # a missing/zero pieces count must degrade to 1, never to a divide-by-zero or a silent pass
   if (-not (Test-PieceSize '_selftest-pizza' '4.2 oz' 'Great Value Pepperoni Pizza Snack Builders, 4.20 oz' $null)) { Write-Output 'ok    min_piece_oz treats an absent piece count as 1 rather than passing blind' } else { Write-Output 'FAIL  min_piece_oz passed a row whose piece count it could not read'; $script:fail++ }
+  # --- THE REFUSAL ORDER (2026-09-18, queue 2026-09-18-f90ba6): the definition is tested before the band ------
+  # Frozen verbatim from flagged-2026-09-17.json, where each was filed as band '1.5-14' and counted by
+  # audit-band-censorship as a price the band censored (the ratchet read 32 against 29). Each fails the piece
+  # rule too, and a row that fails BOTH is the only case where the order shows, so the fixture band is
+  # frozen-pizza's real 1.5-14. Never regenerate these from a board built after the reorder: it files them
+  # as min_piece_oz already, so a regenerated fixture would pass by finding nothing.
+  $BANDS['_selftest-pizza'] = [pscustomobject]@{ min = 1.5; max = 14 }
+  $ordCases = @(
+    @('Totino''s Party Pizza, Pepperoni, Thin Crust, 17g Protein, 40.8 oz, 4 Count (Frozen)', '40.8 oz', 1.4925, 4),
+    @('Mama Cozzi''s Pizza Kitchen French Bread Pepperoni Pizza, 2 Count', '11.25 oz', 1.495, 2),
+    @('Red Baron Pepperoni French Bread Frozen Personal Pizza, 5.40 oz., 9 pk.', '9 ct 5.40 oz', 1.4422, 9)
+  )
+  foreach ($oc in $ordCases) {
+    $ordGot = Get-FirstRefusal '_selftest-pizza' 'each' $oc[2] $oc[1] $oc[0] $oc[3]
+    if ($ordGot -eq 'piece') { Write-Output ('ok    MUST FIRE  refusal order: ' + $oc[0] + ' at ' + $oc[2] + ' is refused by the PIECE rule, not the band') }
+    else { Write-Output ('FAIL  refusal order: ' + $oc[0] + ' read [' + $ordGot + '] - the band runs before the piece rule again, so audit-band-censorship counts a definitional refusal as price censorship'); $script:fail++ }
+  }
+  # CLEAN TWIN: a real full-size pizza ABOVE the band max still reads as a BAND refusal (the piece rule passes
+  # it, so the sanity net is still the one that speaks), and the single 10.2 oz party pizza at an in-band price
+  # still reads as a piece refusal, as it did before the reorder.
+  $ordRao = Get-FirstRefusal '_selftest-pizza' 'each' 14.99 '18.3 oz' 'Rao''s Uncured Pepperoni Pizza 18.3 oz' 1
+  if ($ordRao -eq 'band') { Write-Output 'ok    CLEAN TWIN  refusal order: Rao''s 18.3 oz at $14.99 passes the piece rule and is still refused by the band' } else { Write-Output ('FAIL  refusal order: Rao''s 18.3 oz at $14.99 read [' + $ordRao + '] instead of band'); $script:fail++ }
+  $ordOne = Get-FirstRefusal '_selftest-pizza' 'each' 1.99 '10.2 oz' 'Totino''s Party Pizza, Pepperoni and Cheese, Thin Crust, 10.2 oz' 1
+  if ($ordOne -eq 'piece') { Write-Output 'ok    CLEAN TWIN  refusal order: the single 10.2 oz party pizza at an in-band $1.99 is still a piece refusal' } else { Write-Output ('FAIL  refusal order: the single 10.2 oz party pizza read [' + $ordOne + '] instead of piece'); $script:fail++ }
+  $ordTony = Get-FirstRefusal '_selftest-pizza' 'each' 2.96 '18.56 oz' 'Tony''s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz' 1
+  if ($ordTony -eq '') { Write-Output 'ok    CLEAN TWIN  refusal order: the Walmart Tony''s 18.56 oz at $2.96 (the live cell) is refused by nothing' } else { Write-Output ('FAIL  refusal order: the live Tony''s cell read [' + $ordTony + '] - a real pizza is refused'); $script:fail++ }
+  $BANDS.Remove('_selftest-pizza')
   # THE COUNT-FIRST IDIOM, both directions. "16 pk 2.63 oz" is sixteen 2.63 oz corn dogs and must be read as
   # a 2.63 oz piece; halve the per-item size and the same grammar must refuse it. Without this the naive
   # Get-PackOz reading (2.63 total / 16 pieces = 0.16 oz) would refuse every real Baker's corn dog.
@@ -2518,7 +2587,17 @@ foreach ($d in $deals) {
   $uprice = $null; $basis = 'UNPRICED'; $note = ''
   if ($up) {
     $uprice = [math]::Round($up.unit_price,4); $basis = $up.basis; $note = $up.note
-    if (-not (Test-Band $c.id $uprice)) {
+    # ONE CALL DECIDES WHICH REFUSAL FIRES FIRST (Get-FirstRefusal, above): the piece rule, then the band, the
+    # floor and the two pack rules. The branches below are the old chain's bodies, unchanged, keyed on its answer.
+    $refusal = Get-FirstRefusal $c.id $c.unit $uprice $d.size_text $d.name $up.pieces
+    if ($refusal -eq 'piece') {
+      # ONE PIECE is too small to be the thing the commodity names - a mini, a single-serve, a snack format.
+      # Flagged rather than silently dropped, for the same reason as the two pack rules: a floor set too
+      # high has to read as findings, not as a quietly emptier board. Tested FIRST since 2026-09-18 (f90ba6).
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("min_piece_oz>=$($MINPIECE[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
+      $uprice = $null; $basis = 'WRONG-PIECE-FORM'   # drop from ranking; board still ships via runner-up
+    }
+    elseif ($refusal -eq 'band') {
       $bn = $BANDS[$c.id]
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("$($bn.min)-$($bn.max)"); price_text=$d.price_text; size_text=$d.size_text })
       # if the out-of-band price came from a multibuy, it's a bad multibuy parse - reflect it in the multibuy
@@ -2528,31 +2607,24 @@ foreach ($d in $deals) {
       }
       $uprice = $null; $basis = 'OUT-OF-BAND'   # bad parse -> drop from ranking
     }
-    elseif (-not (Test-Floor $c.unit $uprice)) {
+    elseif ($refusal -eq 'floor') {
       # in-band (or band-less) but below the universal per-unit floor -> a dropped-decimal / unit error.
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("floor>=$($FLOOR[[string]$c.unit])"); price_text=$d.price_text; size_text=$d.size_text })
       $uprice = $null; $basis = 'IMPLAUSIBLE-LOW'   # drop from ranking; board still ships via runner-up
     }
-    elseif (-not (Test-PackSize $c.id $d.size_text $d.name)) {
+    elseif ($refusal -eq 'pack-cap') {
       # right contents, WRONG PACK FORM for a commodity that is defined by its form (see Test-PackSize).
       # Flagged rather than silently dropped, so a cap set too tight shows up as findings instead of as a
       # quietly emptier board.
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("max_pack_oz<=$($MAXPACK[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
       $uprice = $null; $basis = 'WRONG-PACK-FORM'   # drop from ranking; board still ships via runner-up
     }
-    elseif (-not (Test-PackSizeFloor $c.id $d.size_text $d.name)) {
+    elseif ($refusal -eq 'pack-floor') {
       # The same rule from below: a package too SMALL to be the thing the commodity names. FLAGGED, not
       # silently dropped, for the same reason the cap is - a floor set too high must show up as findings
       # rather than as a quietly emptier board.
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("min_pack_oz>=$($MINPACK[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
       $uprice = $null; $basis = 'WRONG-PACK-FORM'   # drop from ranking; board still ships via runner-up
-    }
-    elseif (-not (Test-PieceSize $c.id $d.size_text $d.name $(if ($up) { $up.pieces } else { $null }))) {
-      # ONE PIECE is too small to be the thing the commodity names - a mini, a single-serve, a snack format.
-      # Flagged rather than silently dropped, for the same reason as the two pack rules: a floor set too
-      # high has to read as findings, not as a quietly emptier board.
-      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("min_piece_oz>=$($MINPIECE[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
-      $uprice = $null; $basis = 'WRONG-PIECE-FORM'   # drop from ranking; board still ships via runner-up
     }
     elseif ((-not $NoAisleAdmission) -and ([string]$d.store -eq 'Family Fare') -and ($aisleNo = Get-AisleAdmissionRefusal -CatMap $AisleCatMap -Store ([string]$d.store) -CommodityId ([string]$c.id) -Dept (Get-AisleShelfDept $AisleShelf ([string]$d.product_id) ([string]$d.name)))) {
       # WRONG AISLE (2026-09-11, queue 2026-09-11-62b248). Family Fare itself shelves this product in a department

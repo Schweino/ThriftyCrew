@@ -27,38 +27,17 @@ if (-not (Test-Path $FindingsFile)) { Write-Output 'BLIND: no findings file - ru
 $coms = Read-JsonFile (Join-Path $root 'commodities.json')
 $find = Read-JsonFile $FindingsFile
 
-# compile once, in ENGINE ORDER, because first-match-wins is the whole point of the CLAIMED verdict
-$rx = New-Object System.Collections.Generic.List[object]
-$exc = @{}
-foreach ($c in $coms) {
-  foreach ($p in @($c.include)) { if ($p) { $rx.Add([pscustomobject]@{ id = [string]$c.id; pat = [string]$p; r = [regex]::new([string]$p, 'IgnoreCase,Compiled') }) } }
-  $l = New-Object System.Collections.Generic.List[object]
-  foreach ($p in @($c.exclude)) { if ($p) { $l.Add([pscustomobject]@{ pat = [string]$p; r = [regex]::new([string]$p, 'IgnoreCase,Compiled') }) } }
-  $exc[[string]$c.id] = $l
-}
+# THE CLASSIFIER LIVES IN coverage-explain-lib.ps1 SINCE 2026-09-18 (queue 2026-09-18-37ac63): the alert's emitter,
+# audit-semantic-identity.ps1, now asks it the same question before it pages, so there is ONE copy of the rule.
+# Compiled once, in ENGINE ORDER, because first-match-wins is the whole point of the CLAIMED verdict.
+. (Join-Path $root 'coverage-explain-lib.ps1')
+$explainer = New-CoverageExplainer -Commodities $coms
+function Explain([string]$name, [string]$wantId) { return (Get-CoverageVerdict -Explainer $explainer -Name $name -WantId $wantId) }
 
-function Explain([string]$name, [string]$wantId) {
-  # what the engine would actually do, in order
-  $claimedBy = ''
-  foreach ($e in $rx) {
-    if (-not $e.r.IsMatch($name)) { continue }
-    $killed = $false
-    foreach ($x in $exc[$e.id]) { if ($x.r.IsMatch($name)) { $killed = $true; break } }
-    if (-not $killed) { $claimedBy = $e.id; break }
-  }
-  # what the INTENDED commodity thinks of it
-  $incHit = ''
-  foreach ($e in $rx) { if ($e.id -eq $wantId -and $e.r.IsMatch($name)) { $incHit = $e.pat; break } }
-  $excHit = ''
-  if ($exc.ContainsKey($wantId)) { foreach ($x in $exc[$wantId]) { if ($x.r.IsMatch($name)) { $excHit = $x.pat; break } } }
-
-  if ($claimedBy -and $claimedBy -ne $wantId) { return [pscustomobject]@{ verdict = 'CLAIMED'; detail = "claimed first by '$claimedBy'" } }
-  if ($incHit -and $excHit) { return [pscustomobject]@{ verdict = 'EXCLUDED'; detail = "include '$incHit' matched, exclude '$excHit' killed it" } }
-  if ($incHit) { return [pscustomobject]@{ verdict = 'MATCHES'; detail = "include '$incHit' already matches - the sweep's premise is wrong for this row" } }
-  return [pscustomobject]@{ verdict = 'NO-INCLUDE'; detail = 'no include pattern matches' }
-}
-
+# The emitter keeps the findings it suppressed as EXCLUDED under coverage_excluded, so this tool still lists
+# every finding the sweep made. Guarded on the property: @($null) is ONE element in PS 5.1.
 $rows = @($find.coverage)
+if ($find.PSObject.Properties['coverage_excluded'] -and $find.coverage_excluded) { $rows = @($rows) + @($find.coverage_excluded) }
 if ($Id) { $rows = @($rows | Where-Object { $_.id -eq $Id }) }
 $out = New-Object System.Collections.Generic.List[object]
 foreach ($r in $rows) {

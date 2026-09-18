@@ -78,6 +78,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if (-not $ContestedDefs) { $ContestedDefs = Join-Path (Split-Path $root -Parent) 'sidecar\data\commodity-defs-graph.json' }
 if (-not $Helper)        { $Helper        = Join-Path (Split-Path $root -Parent) 'sidecar\models\resolve-ce-v1' }
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is a TERMINATING error, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
+. (Join-Path $root 'coverage-explain-lib.ps1')   # Split-CoverageFindings: the explain-coverage-gap classifier, so a refusal a rule MADE is not paged as a product no rule can SEE (2026-09-18, 37ac63)
 $OutDir  = Join-Path $root 'out'
 $sidecar = Join-Path (Split-Path $root -Parent) 'sidecar'
 $py      = if ($Python) { $Python } else { Join-Path $sidecar '.venv\Scripts\python.exe' }
@@ -194,6 +195,31 @@ if ($SelfTest) {
   # at exactly the 60-char cap qualify, or every terse product name would be suppressed.
   if (-not (Test-Actionable -Kind 'coverage' -Id 'walnuts' -Store 'Walmart' -Product 'Fisher' -Blocks $blocks -BoardItems $wBoard)) {
     Write-Output '  X CLEAN TWIN: a short name is not a truncation artefact and must stay actionable'; $bad++
+  }
+  # EXCLUDED IS NOT INVISIBLE (2026-09-18, queue 2026-09-18-37ac63). Two findings frozen verbatim off the
+  # 2026-09-18 08:19 sweep, judged against ground-beef-8020's and tilapia's include/exclude patterns frozen from
+  # commodities.json at 886796dff (only the patties fence of ground-beef-8020's 158 excludes is needed to decide
+  # the verdict, and plan-2026-08-06-3 lists it under do_not_touch). No live data file.
+  $fxComs = @(
+    [pscustomobject]@{ id = 'ground-beef-8020'; include = @('ground\s+beef[^.]*80', '80%?\s*lean[^.]*20%?\s*fat', '80/20\s+ground', 'ground\s+chuck', '80\s*%?\s*lean[^.]*ground\s+beef', '80\s*%?\s*/\s*20[^.]*ground\s+beef'); exclude = @('patty', 'patties') },
+    [pscustomobject]@{ id = 'tilapia'; include = @('tilapia'); exclude = @() }
+  )
+  $fxExplainer = New-CoverageExplainer -Commodities $fxComs
+  $fxPatties = [pscustomobject]@{ kind = 'coverage'; id = 'ground-beef-8020'; store = 'Walmart'; product = 'Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray' }
+  $fxSwai    = [pscustomobject]@{ kind = 'coverage'; id = 'tilapia'; store = 'Walmart'; product = 'Great Value Frozen Skinless & Boneless Swai Fish Fillets Value Bag, 4 lb' }
+  $fxSplit = Split-CoverageFindings -Rows @($fxPatties, $fxSwai) -Explainer $fxExplainer
+  $fxAlertIds = @($fxSplit.alert | ForEach-Object { [string]$_.id })
+  $fxExclIds  = @($fxSplit.excluded | ForEach-Object { [string]$_.id })
+  # MUST FIRE: the 4-count patties were refused by the 'patties' exclude, so they are EXCLUDED and not alerted.
+  if (($fxExclIds -notcontains 'ground-beef-8020') -or ($fxAlertIds -contains 'ground-beef-8020')) {
+    Write-Output '  X MUST-FIRE: the 4-count Walmart patties (killed by the patties exclude) were not classified EXCLUDED, so the sweep would page a deliberate refusal as a product no rule can see'; $bad++
+  }
+  if (@($fxSplit.excluded).Count -eq 1 -and ([string]$fxSplit.excluded[0].detail) -notmatch "exclude 'patties' killed it") {
+    Write-Output ("  X MUST-FIRE: the EXCLUDED row must name the exclude that killed it, got: " + [string]$fxSplit.excluded[0].detail); $bad++
+  }
+  # CLEAN TWIN: the swai fillets match no tilapia include at all (NO-INCLUDE), so they must STILL be alerted.
+  if (($fxAlertIds -notcontains 'tilapia') -or ($fxExclIds -contains 'tilapia')) {
+    Write-Output '  X CLEAN TWIN: the swai fillets (NO-INCLUDE) must stay in the alerted set - only a refusal a rule made is suppressed'; $bad++
   }
   # VRAM GUARD, fixtured. MUST-FIRE: llama-server up and the card nearly full -> BLIND, naming the holder.
   $why = Test-SweepBlocked -FreeMiB 1092 -LlamaRunning $true
@@ -344,6 +370,19 @@ $idRows = @(@($find.identity) | Where-Object { Test-Actionable -Kind 'identity' 
 $cvRows = @(@($find.coverage) | Where-Object { Test-Actionable -Kind 'coverage' -Id ([string]$_.id) -Store ([string]$_.store) -Product ([string]$_.product) -Blocks $blocks -BoardItems $boardItems })
 $cvTrunc = @($find.coverage).Count - $cvRows.Count - @(@($find.coverage) | Where-Object { $blocks -and (Test-KnownWrong -Blocks $blocks -CommodityId ([string]$_.id) -Store ([string]$_.store) -ProductName ([string]$_.product)) }).Count
 if ($cvTrunc -gt 0) { Write-Output ("semantic-identity: {0} coverage finding(s) suppressed as TRUNCATION ARTEFACTS - the corpus name is cut at the 60-char cap and the board already prices that exact product under its full name" -f $cvTrunc) }
+# EXCLUDED IS NOT INVISIBLE (2026-09-18, queue 2026-09-18-37ac63). "No rule can see it" is false for a product an
+# include matched and an exclude then refused: the rule SAW it. On 2026-09-18 three of seven findings were that
+# shape (a ready-to-feed formula, two sets of pre-formed patties) and all three were re-paged, two of them after
+# a ruling. Classified here with the same function explain-coverage-gap.ps1 uses, and KEPT in the findings file
+# under coverage_excluded so that tool still lists them; only the alerted set (coverage) loses them. A classifier
+# that cannot run leaves every finding alerted, which is the loud direction.
+$cvExcluded = @()
+try {
+  $cvExplainer = New-CoverageExplainer -Commodities (Read-JsonFile (Join-Path $root 'commodities.json'))
+  $cvSplit = Split-CoverageFindings -Rows $cvRows -Explainer $cvExplainer
+  $cvRows = @($cvSplit.alert); $cvExcluded = @($cvSplit.excluded)
+} catch { Write-Output ('semantic-identity: could not classify coverage findings (' + $_.Exception.Message + ') - every finding stays alerted') }
+if ($cvExcluded.Count -gt 0) { Write-Output ("semantic-identity: {0} finding(s) suppressed as EXCLUDED (a rule saw and refused them; explain-coverage-gap lists them)" -f $cvExcluded.Count) }
 
 Write-Output ''
 Write-Output ("semantic-identity: examined {0} shipped pair(s) and {1} rule-invisible product(s) in {2}s on {3}" -f $find.examined.board_pairs, $find.examined.rule_invisible, $find.elapsed_sec, $find.device)
@@ -385,6 +424,7 @@ $report = [ordered]@{
   thresholds = $find.thresholds; examined = $find.examined
   identity_count = $idRows.Count; coverage_count = $cvRows.Count
   identity = $idRows; coverage = $cvRows
+  coverage_excluded_count = $cvExcluded.Count; coverage_excluded = $cvExcluded
 }
 $rp = Join-Path $OutDir 'semantic-findings.json'
 ($report | ConvertTo-Json -Depth 6) | Set-Content $rp -Encoding UTF8

@@ -1024,7 +1024,10 @@
                         "seen_on_board":  "yes - on the newest board when this ruling was made",
                         "ruled_on":  "2026-08-06",
                         "ruled_by":  "triage-developer (plan-2026-08-06)",
-                        "retire_when":  "ruling-reversed"
+                        "retire_when":  "ruling-reversed",
+                        "reversed_on":  "2026-09-18",
+                        "reversed_by":  "triage-developer (plan-2026-09-18 item 2026-09-18-37ac63)",
+                        "reversal_reason":  "INERT SINCE 2026-08-06: names held ONE string, the two product names joined by a space-less comma (the PS 5.1 -File comma-list trap), which can never equal either product under Test-KnownWrong, so this ruling blocked nothing and the semantic sweep re-paged the Roll Ups on 2026-09-18. Superseded by key breakfast-sandwiches|FamilyFare|jimmy-dean-biscuit-roll-ups-8ct-and-maple-2ct, which carries the two names as separate elements."
                     },
                     {
                         "key":  "storage-bags|Aldi|boulder-quart-storage-twin-lock-bags-50-ct",
@@ -4557,6 +4560,112 @@
                         "seen_on_board":  "yes - on the newest board when this ruling was made",
                         "ruled_on":  "2026-09-11",
                         "ruled_by":  "triage-developer 2026-09-11",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "breakfast-sandwiches|FamilyFare|jimmy-dean-biscuit-roll-ups-8ct-and-maple-2ct",
+                        "commodity":  "breakfast-sandwiches",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
+                                      "Jimmy Dean Maple Biscuit Roll Ups, Sausage, Frozen Breakfast 2 Ct"
+                                  ],
+                        "product_id":  "1564405684704362719",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: Jimmy Dean BISCUIT ROLL UPS, a rolled sausage-in-biscuit, not a breakfast sandwich (ruled 2026-08-06, plan-2026-08-06 item 2026-08-03-0d3bb1, whose record says at 8 Ct it prices to $0.999/each and would take the crown from Sam\u0027s Club at $1.165/each). Re-recorded 2026-09-18 with the two names as separate elements because the 08-06 entry had joined them into one inert string.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-18",
+                        "ruled_by":  "triage-developer (plan-2026-09-18 item 2026-09-18-37ac63)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Walmart|ground-beef-73-lean-27-fat-all-natural-4-lb-tray",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Ground Beef 73% Lean/27% Fat, All Natural*, 4 lb Tray"
+                                  ],
+                        "product_id":  "43999646",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: 73% lean / 27% fat ground beef, not 93/7. Semantic sweep 2026-09-18 08:19 (NO-INCLUDE: no 93/7 include can or should match 73/27). Ruled so the sweep stops re-paging it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-18",
+                        "ruled_by":  "triage-developer (plan-2026-09-18 item 2026-09-18-37ac63)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "tilapia|Walmart|great-value-frozen-skinless-boneless-swai-fish-f",
+                        "commodity":  "tilapia",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Frozen Skinless \u0026 Boneless Swai Fish Fillets Value Bag, 4 lb"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different species: swai (pangasius) fillets, not tilapia. The board tracks tilapia per lb, so a swai bag is a different fish at a different price. Semantic sweep 2026-09-18 08:19 (NO-INCLUDE).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-18",
+                        "ruled_by":  "triage-developer (plan-2026-09-18 item 2026-09-18-37ac63)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-breast|Walmart|freshness-guaranteed-chicken-leg-quarters-2-75-7",
+                        "commodity":  "chicken-breast",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Freshness Guaranteed Chicken Leg Quarters, 2.75 - 7.0 lb Tray"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different cut: bone-in chicken leg quarters, not boneless skinless chicken breast. Semantic sweep 2026-09-18 08:19 (NO-INCLUDE).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-18",
+                        "ruled_by":  "triage-developer (plan-2026-09-18 item 2026-09-18-37ac63)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Walmart|fresh-all-natural-ground-beef-chuck-patties-80-l",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray"
+                                  ],
+                        "product_id":  "167493782",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pre-formed PATTIES (4 count, 1.33 lb tray), a different product from bulk 80/20 ground beef. The standing patties exclude refuses it correctly (plan-2026-08-06-3 do_not_touch) and the 12-count SKU of the same patties is already ruled (key ground-beef-8020|Walmart|80-lean-20-fat-ground-beef-chuck-patties-12-coun). Semantic sweep 2026-09-18 08:19 (EXCLUDED).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-18",
+                        "ruled_by":  "triage-developer (plan-2026-09-18 item 2026-09-18-37ac63)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|FamilyFare|dawn-ultra-strawberry-field-scent",
+                        "commodity":  "strawberries",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Dawn Ultra Strawberry Field Scent"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: Dawn Ultra dish soap in a strawberry SCENT, not strawberries. Held the Family Fare strawberries cell at 0.1708/oz on comparison-2026-09-14 and on the 2026-09-18 rebuild (no crown; Aldi holds it at 0.1431). Flagged by audit-match-soundness CELL-BY-CONTEST: strawberries \u003e dish-soap, array order picked the wrong rule.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-18",
+                        "ruled_by":  "triage-developer (plan-2026-09-18, found while shipping 2026-09-18-37ac63)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "rice|SamsClub|koda-farms-blue-star-mochiko-sweet-rice-flour-16",
+                        "commodity":  "rice",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Koda Farms Blue Star Mochiko Sweet Rice Flour 16 oz., 6 ct."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: mochiko sweet RICE FLOUR (6 x 16 oz), not rice. Held the Sam\u0027s Club rice cell at 2.6133/lb on comparison-2026-09-14 and on the 2026-09-18 rebuild (no crown; Walmart holds it at 0.573). Flagged by audit-match-soundness CELL-BY-CONTEST: rice \u003e flour, array order picked the wrong rule.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-18",
+                        "ruled_by":  "triage-developer (plan-2026-09-18, found while shipping 2026-09-18-37ac63)",
                         "retire_when":  "ruling-reversed"
                     }
                 ]

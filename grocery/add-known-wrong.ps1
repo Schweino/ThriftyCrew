@@ -42,7 +42,10 @@ param(
   [switch]$Reverse,
   [switch]$DryRun,
   [string]$Root,
-  [string]$ListFile
+  [string]$ListFile,
+  [string[]]$AlsoName,
+  [switch]$AllowCommaInName,
+  [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
@@ -51,6 +54,60 @@ if (-not $ListFile) { $ListFile = Join-Path $Root 'known-wrong.json' }
 $outDir = Join-Path $Root 'out'
 
 function Die([string]$m) { Write-Output ('add-known-wrong: ' + $m); exit 1 }
+
+# THE -File COMMA TRAP (2026-09-18, queue 2026-09-18-37ac63). -Name is [string[]], and in-process
+# (`& .\add-known-wrong.ps1 -Name 'A','B'`) it binds two names. Under `powershell -File` it does not: the
+# comma list arrives as ONE string, 'A,B', with the quotes gone and no space after the comma. That string can
+# never equal either product under Test-KnownWrong's normalised match, so the ruling is written, reads as done,
+# and blocks nothing. It happened to the 2026-08-06 Jimmy Dean Biscuit Roll Ups ruling, inert for six weeks
+# while the sweep re-paged the product (1 of 302 entries had the shape on 2026-09-18). A real name keeps a
+# space after its commas ("Roll Ups, Sausage, Frozen"); a digit either side is a thousands separator
+# ("1,000 ct"), never a join. -AllowCommaInName is the reviewed exit for a genuine name that has the shape.
+function Get-JoinedNameTrap([string[]]$Names) {
+  foreach ($n in @($Names)) {
+    $s = [string]$n
+    if ($s -match '(?<!\d),(?=[^\s\d])|(?<=\D),(?=\d)' -and $s -match ',\S') { return $s }
+  }
+  return ''
+}
+
+if ($SelfTest) {
+  $bad = 0; $ran = 0
+  function _Ok([string]$label, [bool]$cond) { $script:ran++; if ($cond) { Write-Output ('  ok   ' + $label) } else { Write-Output ('  FAIL ' + $label); $script:bad++ } }
+  # MUST FIRE, the founding value frozen verbatim from known-wrong.json key
+  # breakfast-sandwiches|FamilyFare|jimmy-dean-biscuit-roll-ups-sausage-frozen-break (ruled 2026-08-06).
+  $joined = 'Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct,Jimmy Dean Maple Biscuit Roll Ups, Sausage, Frozen Breakfast 2 Ct'
+  _Ok 'MUST FIRE  the joined Roll Ups name is recognised as the -File comma trap' ((Get-JoinedNameTrap @($joined)) -eq $joined)
+  _Ok 'MUST FIRE  the minimal shape A 8 Ct,B 2 Ct is recognised' ((Get-JoinedNameTrap @('A 8 Ct,B 2 Ct')) -ne '')
+  # CLEAN TWIN: a real name with commas followed by spaces is accepted, and so is each half on its own.
+  _Ok 'CLEAN TWIN  a real name with ", " inside is accepted' ((Get-JoinedNameTrap @('Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct', 'Jimmy Dean Maple Biscuit Roll Ups, Sausage, Frozen Breakfast 2 Ct')) -eq '')
+  # MUST NOT FIRE: a thousands separator is not a join (a synthetic parser input, not a product claim).
+  _Ok 'MUST NOT FIRE  "Cotton Swabs, 1,000 Count" (a thousands separator) is accepted' ((Get-JoinedNameTrap @('Cotton Swabs, 1,000 Count')) -eq '')
+  # END TO END, THROUGH -File, which is where the trap lives: a child run in a per-run temp root must REFUSE the
+  # comma list and leave the ledger byte-identical, and the same run with one real name must be accepted.
+  $stRoot = Join-Path $env:TEMP ('akw-st-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  try {
+    New-Item -ItemType Directory -Path $stRoot -ErrorAction Stop | Out-Null
+    $stList = Join-Path $stRoot 'known-wrong.json'
+    [IO.File]::WriteAllText($stList, '{"entries":[]}', (New-Object System.Text.UTF8Encoding($false)))
+    $me = $MyInvocation.MyCommand.Path
+    if (-not $me) { $me = Join-Path $PSScriptRoot 'add-known-wrong.ps1' }
+    $ev = 'self-test evidence string, long enough to pass the 20-char bar'
+    # 'A 8 Ct,B 2 Ct' as ONE argument is exactly what -File receives when a shell hands it -Name "A 8 Ct","B 2 Ct".
+    # (Passing a PowerShell array here would NOT reproduce it: a native call splits an array into separate args.)
+    $o1 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $me -Root $stRoot -Commodity 'breakfast-sandwiches' -Store 'Family Fare' -Name 'A 8 Ct,B 2 Ct' -Evidence $ev -RuledBy 'selftest' -DryRun)
+    $rc1 = $LASTEXITCODE
+    _Ok ('MUST FIRE  under -File, -Name "A 8 Ct","B 2 Ct" is REFUSED naming the comma trap (rc=' + $rc1 + ')') (($rc1 -eq 1) -and ((($o1 -join ' ')) -match 'comma'))
+    _Ok 'MUST FIRE  the refused run left the ledger untouched' (([IO.File]::ReadAllText($stList)) -eq '{"entries":[]}')
+    $o2 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $me -Root $stRoot -Commodity 'breakfast-sandwiches' -Store 'Family Fare' -Name 'Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct' -AlsoName 'Jimmy Dean Maple Biscuit Roll Ups, Sausage, Frozen Breakfast 2 Ct' -Evidence $ev -RuledBy 'selftest' -DryRun)
+    $rc2 = $LASTEXITCODE
+    $j2 = ($o2 -join "`n")
+    _Ok ('CLEAN TWIN  under -File, one real name plus -AlsoName is accepted with TWO names (rc=' + $rc2 + ')') (($rc2 -eq 0) -and ($j2 -match 'ADDING') -and ($j2 -match 'Maple Biscuit Roll Ups') -and ($j2 -match 'Frozen Breakfast 8 Ct"'))
+  } catch { Write-Output ('  FAIL end-to-end cases could not run: ' + $_.Exception.Message); $bad++ }
+  finally { if (Test-Path -LiteralPath $stRoot) { Remove-Item -LiteralPath $stRoot -Recurse -Force -ErrorAction SilentlyContinue } }
+  if ($bad -eq 0) { Write-Output ("add-known-wrong SELF-TEST PASS ($ran cases)") } else { Write-Output ("add-known-wrong SELF-TEST FAIL ($bad of $ran cases)") }
+  exit $(if ($bad -eq 0) { 0 } else { 1 })
+}
 
 if (-not (Test-Path $ListFile)) { Die ("blocklist file not found: " + $ListFile) }
 $raw = ((Get-Content $ListFile -Raw -Encoding UTF8) + '').Trim()
@@ -97,7 +154,12 @@ if ($Reverse) {
 
   # -Name omitted: read the product the board is CURRENTLY publishing in that cell, so the ruling is
   # recorded against the exact spelling the pipeline produced rather than one a human retyped.
-  $useNames = @($Name | Where-Object { ($_ + '').Trim() })
+  $useNames = @(@($Name) + @($AlsoName) | Where-Object { ($_ + '').Trim() })
+  # the -File comma trap (see Get-JoinedNameTrap above): refuse a joined name BEFORE anything is written
+  $trap = Get-JoinedNameTrap $useNames
+  if ($trap -and -not $AllowCommaInName) {
+    Die ("name '" + $trap + "' carries a comma with no space after it - the PS 5.1 -File comma trap: -Name ""A"",""B"" under powershell -File arrives as ONE string 'A,B', which can never equal either product, so the ruling would block nothing (the 2026-08-06 Roll Ups ruling was inert for six weeks this way). Pass the second name with -AlsoName, or call in-process: & .\add-known-wrong.ps1 -Name 'A','B'. If this really is ONE product's name, pass -AllowCommaInName.")
+  }
   $foundPid = ''
   $cmpF = @(Get-ChildItem (Join-Path $outDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
   $boardItem = ''

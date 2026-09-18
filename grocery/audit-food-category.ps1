@@ -37,10 +37,22 @@ $af = Join-Path $root 'food-class-allowlist.json'
 # PS 5.1 (one element = the whole array), which would make every allowlist entry invisible once populated.
 if (Test-Path $af) { $parsedAllow = Read-JsonFile $af; foreach ($a in $parsedAllow) { $allow += $a } }
 
-function ClassesFor([string]$label) {
-  if (-not $label) { return @($lib.universal_for_unknown) }
-  foreach ($a in $lib.apply) { if ($label -match [string]$a.categories) { return @($a.classes) } }
-  return @()   # Household / Personal Care / Baby / Pet: the category IS the class - never scanned
+function ClassesFor([string]$label, [string]$id = '') {
+  $base = @()
+  if (-not $label) { $base = @($lib.universal_for_unknown) }
+  else { foreach ($a in $lib.apply) { if ($label -match [string]$a.categories) { $base = @($a.classes); break } } }
+  # (no category block matched: Household / Personal Care / Baby / Pet, the category IS the class - never scanned)
+  # ID-SCOPED CLASSES (2026-09-18, queue 2026-09-18-f90ba6). THIS GUARD WAS BLIND TO ITS OWN FOUNDING CLASS: a
+  # pistachio MILK crowned pistachios for four board builds and this audit read OK, because pistachios sits in
+  # the 'Snacks & Drinks' display bucket beside soda and coffee pods, so no category block can carry beverage for
+  # it. category-excludes.json apply_ids names the commodities a class reaches by ID; union them in here exactly
+  # as apply-category-excludes.ps1 bakes them, or the guard and the engine's rules disagree about what is wrong.
+  if ($id -and $lib.PSObject.Properties['apply_ids']) {
+    foreach ($b in @($lib.apply_ids)) {
+      if (@($b.ids) -contains $id) { foreach ($cl in @($b.classes)) { if ($base -notcontains $cl) { $base += $cl } } }
+    }
+  }
+  return $base
 }
 
 $files = @()
@@ -61,7 +73,7 @@ $eligible = 0; $skipNoClass = 0; $skipNoName = 0
 foreach ($f in $files) {
   foreach ($it in (Read-JsonFile $f).comparison) {
     $id = [string]$it.id
-    $classes = ClassesFor $cat[$id]
+    $classes = ClassesFor $cat[$id] $id
     # WAS: if (-not $classes -or @($classes).Count -eq 0) { continue }  - a whole-COMMODITY skip that hid its
     # cells from every count. Identical decision, moved one level in so each cell is counted before it is
     # skipped. The findings loop below is unchanged and still runs only for a classed, named, priced cell.

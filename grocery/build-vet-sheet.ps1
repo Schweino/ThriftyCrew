@@ -32,10 +32,18 @@ $labelOf = @{}
 foreach ($cm in (Read-JsonFile (Join-Path $root 'commodities.json'))) { $labelOf[[string]$cm.id] = [string]$cm.label }
 $pd = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 
-function ClassesFor([string]$label) {
-  if (-not $label) { return @($lib.universal_for_unknown) }
-  foreach ($a in $lib.apply) { if ($label -match [string]$a.categories) { return @($a.classes) } }
-  return @()
+function ClassesFor([string]$label, [string]$id = '') {
+  $base = @()
+  if (-not $label) { $base = @($lib.universal_for_unknown) }
+  else { foreach ($a in $lib.apply) { if ($label -match [string]$a.categories) { $base = @($a.classes); break } } }
+  # ID-SCOPED CLASSES (2026-09-18, queue 2026-09-18-f90ba6): category-excludes.json apply_ids, unioned exactly as
+  # apply-category-excludes.ps1 bakes them and audit-food-category.ps1 guards them, so the sheet flags the same set.
+  if ($id -and $lib.PSObject.Properties['apply_ids']) {
+    foreach ($b in @($lib.apply_ids)) {
+      if (@($b.ids) -contains $id) { foreach ($cl in @($b.classes)) { if ($base -notcontains $cl) { $base += $cl } } }
+    }
+  }
+  return $base
 }
 $STOP = @('fresh','whole','large','small','organic','the','and','with','pack','bag','each')
 
@@ -48,7 +56,7 @@ foreach ($it in (Read-JsonFile $cmpF).comparison) {
   $pus = @($it.stores | Where-Object { [double]$_.per_unit -gt 0 } | ForEach-Object { [double]$_.per_unit } | Sort-Object)
   $median = 0.0
   if ($pus.Count) { $median = $pus[[int][math]::Floor(($pus.Count - 1) / 2)] }
-  $classes = ClassesFor $catOf[$id]
+  $classes = ClassesFor $catOf[$id] $id
   $labelWords = @(((([string]$labelOf[$id]).ToLower() -replace '[^a-z0-9 ]',' ') -split '\s+') | Where-Object { $_.Length -ge 4 -and ($STOP -notcontains $_) })
 
   foreach ($s in $it.stores) {

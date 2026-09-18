@@ -1381,6 +1381,35 @@ else { Bad ('food-category flagged REAL raw shrimp or a bisque on tomato-soup (r
 Remove-Item $fxSs -Recurse -Force -ErrorAction SilentlyContinue
 } # u140-d5-must-fire-for-the-soup-and-sushi-carriers
 
+# (d5c) MUST-FIRE for ID-SCOPED classes, category-excludes.json apply_ids (2026-09-18, queue 2026-09-18-f90ba6).
+# THE FOUNDING ROW, frozen verbatim off comparison-2026-09-17 (built 2026-09-18 08:07:34), the fourth board in a
+# row that guards HELD: Baker's pistachios cell was a pistachio MILK at 0.1426/oz. THIS GUARD READ OK OVER IT,
+# because pistachios sits in the 'Snacks & Drinks' display bucket beside soda and coffee pods, so no category
+# block could ever give it the beverage class - the guard was structurally blind to its own founding class
+# there. apply_ids names the five nut ids the class reaches by ID. Never regenerate this row from the board:
+# the bake excludes the beverage, so a regenerated fixture would pass by finding nothing ([[guard-fixture-rule]]).
+if (Use-Unit 'u143-d5c-must-fire-for-id-scoped-classes') {
+$fxIs = NewFxDir 'afc-idscope'
+$isRow = '{"week_of":"2026-09-17","comparison":[{"commodity":"Pistachios","id":"pistachios","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.1426,"item":"Whole Moon Pistachio Plant Beverage Whole Protein"}]}]}'
+Set-Content (Join-Path $fxIs 'comparison-2026-09-17.json') $isRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxIs)
+if ($r.rc -eq 2 -and $r.text -match 'pistachios' -and $r.text -match 'class=beverage') {
+  Ok 'food-category MUST-FIRE: the pistachio beverage on pistachios hard-fails as beverage through the id-scoped apply_ids block (exit 2)'
+} else {
+  Bad ('food-category did NOT catch the pistachio beverage on pistachios (rc=' + $r.rc + ') - apply_ids is gone from category-excludes.json, no longer lists pistachios, or audit-food-category stopped unioning it, so the guard is blind to a drink on a nut again: ' + ($r.text -replace "`n", ' '))
+}
+# MUST NOT FIRE: real pistachios (the Aldi row that takes the crown and the Baker's row that takes the cell
+# after the fix), and the Gatorade protein bar on protein-bars. That last one is why variant B3 (all 21 non-drink
+# snacks) was measured and REJECTED: 'gatorade' is a beverage token, and protein-bars is not in apply_ids, so the
+# class must not reach it. per_unit is read here only as > 0; the guard judges the item NAME.
+$isLegal = '{"week_of":"2026-09-17","comparison":[{"commodity":"Pistachios","id":"pistachios","unit":"oz","stores":[{"store":"Aldi","per_unit":0.4056,"item":"Southern Grove Pistachios 16 OZ"},{"store":"Baker''s","per_unit":0.4684,"item":"Simple Truth Shelled Roasted & Salted Pistachios"}]},{"commodity":"Protein Bars","id":"protein-bars","unit":"each","stores":[{"store":"Walmart","per_unit":1.0,"item":"Gatorade Chocolate Chip Protein Bar 2.8 Oz"}]}]}'
+Set-Content (Join-Path $fxIs 'comparison-2026-09-17.json') $isLegal -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxIs)
+if ($r.rc -eq 0) { Ok 'food-category MUST NOT FIRE: real pistachios at Aldi and Baker''s and a Gatorade protein bar on protein-bars stay silent - the id-scoped beverage class reaches only the listed nut ids' }
+else { Bad ('food-category flagged real pistachios or the Gatorade protein bar (rc=' + $r.rc + ') - apply_ids leaked past its listed ids, or a category block gained beverage: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxIs -Recurse -Force -ErrorAction SilentlyContinue
+} # u143-d5c-must-fire-for-id-scoped-classes
+
 # THE FRESHOP PAGER AND THE CIRCULAR PICKER (2026-09-11, queue 2026-09-10-fa6ad6). Family Fare's weekly-ad pull asked
 # Freshop for limit=200&page=N; Freshop clamps limit to 100 and ignores page=, so every ad file from 09-02 to 09-09
 # held the same 100 rows of a ~1,045-row circular, recorded as 1,100 deals. pull-grocery-ads.ps1 -SelfTest drives

@@ -30,10 +30,19 @@ $commods = Get-Content (Join-Path $root 'commodities.json') -Raw -Encoding UTF8 
 $added = 0; $touched = 0
 foreach ($cm in $commods) {
   $label = $cat[[string]$cm.id]
-  if (-not $label) { continue }
-  $classes = $null
-  foreach ($a in $lib.apply) { if ($label -match [string]$a.categories) { $classes = @($a.classes); break } }
-  if (-not $classes) { continue }
+  $classes = @()
+  if ($label) { foreach ($a in $lib.apply) { if ($label -match [string]$a.categories) { $classes = @($a.classes); break } } }
+  # ID-SCOPED CLASSES UNION IN (2026-09-18, queue 2026-09-18-f90ba6). A display category can mix foods with
+  # drinks (pistachios shares 'Snacks & Drinks' with soda), so category-excludes.json apply_ids names the
+  # commodities a class reaches by ID, on top of whatever the first matching category block gave them. It is a
+  # separate key because the loop above stops at the FIRST match and an entry with no regex matches everything.
+  # audit-food-category.ps1 and build-vet-sheet.ps1 read apply_ids the same way, so bake, guard and sheet agree.
+  if ($lib.PSObject.Properties['apply_ids']) {
+    foreach ($b in @($lib.apply_ids)) {
+      if (@($b.ids) -contains [string]$cm.id) { foreach ($cl in @($b.classes)) { if ($classes -notcontains $cl) { $classes += $cl } } }
+    }
+  }
+  if ($classes.Count -eq 0) { continue }
   $have = @($cm.exclude)
   $new = @()
   foreach ($cl in $classes) {

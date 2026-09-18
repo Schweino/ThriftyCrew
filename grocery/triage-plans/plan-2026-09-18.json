@@ -1,0 +1,339 @@
+{
+  "generated": "2026-09-18T10:40:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-17 (built 2026-09-18 08:07:34; triage-due printed BOARD comparison-2026-09-17 built 08:07:34)",
+  "head_at_dispatch": "886796dff",
+  "queue_ids_seen": ["2026-09-18-f90ba6", "2026-09-18-61f76c", "2026-09-18-37ac63", "2026-09-18-de39ec", "2026-09-18-0ac1cb", "2026-09-18-35e0f5"],
+  "routing_artifact": "plan-2026-09-18.routing.json",
+  "queue_history_note": "triage-queue.json holds exactly 6 items, all dated 2026-09-18 and all open; it carries NO resolved item of any type, so the gate's RETURN derivation cannot name prior closes. The census (out\\alert-census.jsonl) shows every one of these six types fired on 3 or more days since 2026-08-22 (guards-failed 13 days, price-flags 20, semantic 15, FF pull-drop 8, Baker's window 5, recall 6). prior_closes below are therefore [] with the census dates recorded, and every code item still carries prevention with a code source, as a RETURN would.",
+  "live_board_state": "The last publish with guards at hard=0 was the 2026-09-12 09:16 run. 09-13 (hard=1), 09-14 (hard=3), 09-17 (hard=3) and 09-18 (hard=4) were all HELD, and no pipeline run happened on 09-15 or 09-16 (0 ad-cycle-log lines those days). The live board, feed and recipe cards are therefore the 09-12 generation, six days old.",
+  "items": [
+    {
+      "queue_id": "2026-09-18-f90ba6",
+      "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-18",
+      "classification": "parse-basis-bug",
+      "same_condition_as": "the x2 count is a recurrence absorbed from 'Board prices aging inside a fresh file' (caused_by guards-hold, 08:21:45); it is this condition, not a second one",
+      "evidence": [
+        "ad-cycle-log 08:13:26: GUARDS FAILED: 4 hard invariant(s) violated. Board NOT safe to publish. GUARDS-COMPLETE hard=4 warn=19",
+        "HARD FAIL (a1): ad-line price provenance [Hy-Vee] donuts: we publish 0.5/each but the line's own last price is $1.99. line: 'Hy-Vee mini donuts, SAVE 50\u00a2, $1.99'. Board row: donuts | Hy-Vee | 0.5/each | sale | basis per-each | Weekly Ad 09-14..09-20 | crown Fareway 0.3325 (Entenmann's 12 ct $3.99)",
+        "HARD FAIL (a2): ad-line price provenance [Hy-Vee] protein-bars: we publish 0.5/each but the line's own last price is $3.98. line: 'Quaker protein bars, SAVE 50\u00a2, $3.98'. Board row: protein-bars | Hy-Vee | 0.5/each | sale | crown Fareway 0.3817 (Pure Protein 6 ct $2.29)",
+        "(a) fired identically on 09-14 08:12 and 09-17 07:10 (same two lines, same 0.5); the lines entered ads-2026-09-14.json on 09-14. pricing-math-lib.ps1 Get-ItemPrice: the PERKS branch (line 338) only protects lines carrying 'PERKS PRICE'; the fuel-saver strip (line 306) only removes '<n>\u00a2 OFF PER GALLON'; the cents branch (line 378) then reads the FIRST cents token anywhere in the line, so 'SAVE 50\u00a2' becomes the price.",
+        "HARD FAIL (b): no cell wins a row while measured in a different KIND of quantity than the row. out\\basis-outliers.json kind_mismatch_crown = pistachios | Baker's | 'Whole Moon Pistachio Plant Beverage Whole Protein' | $5.99 | 42 fl oz | 0.1426/oz | holds_crown true | source kroger-api. Peers: Aldi Southern Grove Pistachios 16 oz 0.4056/oz, Walmart Great Value 24 oz 0.4567, Family Fare Planters 12.75 oz 0.4698, Sam's Wonderful 24 oz 0.6658. A pistachio MILK holds the pistachios crown at a third of the real nut price.",
+        "(b) 'Whole Moon Pistachio Plant Beverage' is in bakers-regular-2026-08-01..08-13 and again 09-13, 09-14, 09-17, 09-18; the unit-basis guard has failed 09-13, 09-14, 09-17, 09-18 (its 09-03/09-06/09-10 failures were other crowns). commodities.json pistachios (index 564) has 114 excludes and NOT ONE beverage token; the guard 'no food commodity matched a wrong-class product (beverage...)' read OK because category-excludes.json scopes the beverage class on categories.json's DISPLAY taxonomy (apply blocks: ^(Fruit|Vegetables)$ and ^Meat get beverage; the shared ^(Dairy|Bread|Canned|Sauces|Baking|Pasta|Coffee|Frozen|Snacks) block gets 8 classes with no beverage) and pistachios sits in 'Snacks & Drinks', a bucket that also holds soda, coffee-pods and iced-tea, so no beverage class can ever be applied to it. audit-food-category.ps1:41-43 confirms: only a labelled category's class list is scanned.",
+        "HARD FAIL (c): band-censorship RATCHET: 32 cell(s) against baseline 29 (out\\band-censorship.json generated 08:12:20; baseline set 09-13). Re-running audit-band-censorship.ps1 in scratch against comparison-2026-09-14 + flagged-2026-09-14 gives 29 cells; the 3 NEW cells are all frozen-pizza: Aldi (board 2.99 'Mama Cozzi ... Thin Crust Cheese Pizza 13.8 OZ' vs refused 1.495 'Mama Cozzi's Pizza Kitchen French Bread Pepperoni Pizza, 2 Count' $2.99 11.25 oz), Sam's Club (board 5.485 vs refused 1.4422 'Red Baron ... French Bread ... Personal Pizza, 5.40 oz., 9 pk.' $12.98), Walmart (board 2.96 Tony's 18.56 oz vs refused 1.4925 'Totino's Party Pizza ... 40.8 oz, 4 Count' $5.97, four flavours). Band 1.5-14 refused them.",
+        "(c) those refused rows are IDENTICAL in flagged-2026-09-14 and flagged-2026-09-17 (same prices, same band). What changed is the audit's median filter: frozen-pizza's board median moved 3.99 -> 3.33 when Fareway's Jack's went $4.49 -> $3.33 (sale), so 1.4925/3.33 = 0.448 crossed the 0.4 median floor that had retired these rows at 0.374 on 09-14. And every one of these rows fails the commodity's OWN piece rule (min_piece_oz 12, Brad's T2 ruling 2026-09-06): 40.8 oz / 4 = 10.2 oz, 11.25 / 2 = 5.6, 5.4 oz each. compare-deals.ps1 tests the price band FIRST (line 2522) and Test-PieceSize LAST (line 2550), so a row that fails both is labelled '1.5-14' and the censorship audit, which only reads min-max bands, counts a definitional refusal as price censorship. Measured over flagged-2026-09-17: 21 price-banded rows on the two min_piece commodities, 14 of them fail the piece rule (12 frozen-pizza, 2 garlic-bread), 4 pass, 3 unreadable.",
+        "Live board: NOT republished since the 09-12 09:16 run (09-13, 09-14, 09-17, 09-18 all HELD; no run 09-15/16)."
+      ],
+      "surface_fix": {
+        "what": "(a) strip the SAVE-cents savings clause before extraction so the last dollar wins; (b) exclude the beverage class from pistachios; (c) test the piece rule before the price band so a piece-failing row is labelled by its definitional refusal",
+        "files": ["grocery/pricing-math-lib.ps1", "grocery/commodities.json", "grocery/compare-deals.ps1"],
+        "exact_change": "(a) pricing-math-lib.ps1 Get-ItemPrice, immediately after the OFF PER GALLON strip at line 306: $p = [regex]::Replace($p, '(?i)\\bSAVE!?\\s*\\.?\\d+\\s*(?:\\u00C2?\\u00A2|cents?)\\s*,?', ' ') and $p = [regex]::Replace($p, '(?i)-?\\s*\\d+\\s*(?:\\u00C2?\\u00A2|cents?)\\s+off\\s+with\\s+(?:manufacturer.s\\s+)?digital\\s+coupon\\s*,?', ' ') (glyph as \\u00XX escapes, never a literal). (b) commodities.json pistachios.exclude += the 30 tokens of category-excludes.json classes.beverage (routing artifact variant B1: exactly 1 name moves). (c) compare-deals.ps1 lines 2522-2554: move the elseif (-not (Test-PieceSize ...)) branch (2550-2554) ABOVE the min-max band check (2522) so band='min_piece_oz>=N' is written for a row that fails the piece rule whatever its price."
+      },
+      "root_cause": "Three mechanisms, one per failure. (a) Get-ItemPrice's cents branch reads the first cents-shaped token anywhere in an ad line and the parser only knows the savings shapes it has been taught one at a time (PERKS, FUEL SAVER on 09-07, SAVE 50c today): measured over every ads-*.json on disk, 145 distinct lines carry a cents token AND a dollar token and in ALL 145 the cents token is a reward or a savings, never the price (139 fuel-saver, 4 SAVE-cents, 2 '50c off with digital coupon'), while the 60 cents-only lines are all fuel-saver lines with no price. (b) The wrong-class library scopes on the deals page's display taxonomy, so a display bucket that mixes nuts with drinks ('Snacks & Drinks', 39 commodities, 21 non-drink) can never carry the beverage class, and audit-food-category is structurally blind to a beverage crowning any of those 21; 400 of 592 commodities carry no per-commodity beverage exclude at all. (c) compare-deals refuses on price before it refuses on definition, so the band-censorship ratchet counts definitional refusals as price censorship, and its cell count moves when a PEER's sale moves the median, not when anything new is refused.",
+      "root_fix": {
+        "what": "(a) make the cents branch structural: a cents token is never the price when the line also carries a $ amount; (b) let category-excludes.json scope a class by commodity id, not only by display category, and apply the beverage class to the nut commodities through that block; (c) definitional refusals (piece size) run before sanity refusals (band) in the engine",
+        "files": ["grocery/pricing-math-lib.ps1", "grocery/category-excludes.json", "grocery/apply-category-excludes.ps1", "grocery/audit-food-category.ps1", "grocery/compare-deals.ps1"],
+        "exact_change": "(a) in the cents branch at line 378 add a guard: if ($p -match '\\$\\s*\\d') skip the cents branch and fall through to the N-for-$M / last-dollar branches (145 of 145 corpus lines agree; 0 legitimate counter-examples; 'Bananas, 49c lb.' and '88c' carry no $ and keep pricing). Keep the clause strips from the surface fix as a second line of defence. (b) category-excludes.json apply gains an id-scoped block {\"ids\": [\"pistachios\",\"peanuts\",\"almonds\",\"walnuts\",\"mixed-nuts\"], \"classes\": [\"beverage\"], \"note\": \"nuts share the Snacks & Drinks display bucket with real beverages, so the category scope cannot express this\"}; apply-category-excludes.ps1:34 (first-block-wins by category regex) and audit-food-category.ps1:41 (class list by label) both learn to union an ids block's classes for a commodity whose id is listed; the surface-fix exclude on pistachios becomes the baked output of that block. Routing artifact variant B2 (five nut commodities): 162 names owned, exactly 1 changes (the beverage). Variant B3 (all 21 non-drink snacks) is REJECTED: it re-routes 'Gatorade Chocolate Chip Protein Bar 2.8 Oz' and 'Gatorade Peanut Butter Chocolate Protein Bar 2.8 Oz' from protein-bars to sports-drinks via the 'gatorade' token, a wrong product on a drinks commodity. (c) as the surface fix; it IS the class fix for the engine."
+      },
+      "leaves_open": "(b) 20 of the 21 non-drink 'Snacks & Drinks' commodities (chips, crackers, cookies, bars, jerky, cups...) still carry no beverage class, so audit-food-category cannot see a beverage on them: apply_ids reaches pistachios only in that bucket, because peanuts, almonds, walnuts and mixed-nuts sit in 'Coffee, Oils & Spreads' (the reviewer's 16 assumed all five nuts were in the bucket). The widening is already measured in the routing artifact (variant B3): the 19 that are not protein-bars move 0 names; protein-bars needs a 'gatorade' release first. [developer 2026-09-18: clause (a) of the reviewer's text is CLOSED, not open (a no-count each-line is UNPRICED by the existing rule, see deviation), and clause (c) was the ratchet working as written, not a residual]",
+      "leaves_open_occurrences": "(b) 1 in the window this plan measured: the pistachio beverage on the 4 held boards 09-13..09-18, closed by this item. 0 beverage products on the other 20 commodities on comparison-2026-09-17 at 08:07 (reviewer's 3,189-cell scan) and on the 10:52 rebuild (developer's scan: 5 regex hits, all 'Mandarin Oranges in 100% Juice' fruit cups, a real fruit cup and not a beverage).",
+      "prior_closes": [],
+      "leaves_open_followup": "2026-09-18-55b7aa",
+      "prior_closes_note": "queue holds no resolved item of this type; census days for 'grocery guards failed board not published': 08-22, 08-27, 08-28, 08-29, 08-31, 09-03, 09-06, 09-07, 09-10, 09-13, 09-14, 09-17, 09-18",
+      "prevention": {
+        "source": ["grocery/pricing-math-lib.ps1", "grocery/apply-category-excludes.ps1", "grocery/audit-food-category.ps1", "grocery/compare-deals.ps1"],
+        "what": "the ingest parser stops reading any cents token as a price when a dollar amount is present; the class library can scope a class by commodity id so the wrong-class guard can see a beverage on a nut commodity; the engine orders definitional refusals before sanity refusals",
+        "exact_change": "as root_fix (a), (b), (c)"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "before/after first-match-wins routing of 19,416 distinct names across 18 files (comparison-2026-09-17 + the newest file per store family under out\\regular, the newest out\\sams, out\\bakers and out\\fareway deals files) through grocery\\match-lib.ps1 New-CommodityMatcher/Resolve-Commodity, the engine's own matcher; ad-line parse change measured over every ads-*.json on disk (145 both-token lines, 60 cents-only lines); engine reorder measured over flagged-2026-09-17.json (21 price-banded rows on the two min_piece commodities)",
+        "affected_now": 1,
+        "names": ["Whole Moon Pistachio Plant Beverage Whole Protein"],
+        "risk": "(b) B1 and B2 move exactly one name (the beverage) and leave the other 26 pistachio names and 161 nut names where they are; B3 was measured and rejected (2 Gatorade protein bars would re-land on sports-drinks). (a) the two board cells that move are the two failing rows; Zevia soda and party cups (the other two SAVE-cents lines) route to no commodity (0 hits on the board); the two coupon-shaped lines (pickles, purified water) are not on the board either. (c) 14 flagged rows change LABEL from a price band to min_piece_oz; 0 cells change, because every one of them is refused either way.",
+        "cell_effects": [
+          { "commodity": "pistachios", "store": "Baker's", "before": 0.1426, "after": 0.4684, "note": "next-cheapest Baker's pistachio row after the beverage leaves: Simple Truth Shelled Roasted & Salted Pistachios 32 oz $14.99 (bakers-regular-2026-09-18); the crown moves to Aldi Southern Grove 16 oz at 0.4056/oz" },
+          { "commodity": "donuts", "store": "Hy-Vee", "before": 0.5, "after": 1.99, "note": "per-each of a no-count bag; crown stays Fareway 0.3325" },
+          { "commodity": "protein-bars", "store": "Hy-Vee", "before": 0.5, "after": 3.98, "note": "per-each of a no-count box; crown stays Fareway 0.3817" }
+        ]
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against comparison-2026-09-17 built 2026-09-18 08:07:34, flagged-2026-09-17.json, out\\basis-outliers.json and out\\band-censorship.json of 08:12:20, and a routing corpus whose newest files are bakers-regular-2026-09-18 (06:00 API scan) and family-fare-regular-2026-09-18 (the FF sweep appends every 3 hours, so the 11:00 and 14:00 sweeps will have added names by the time this is implemented; re-run the simulation only if a pistachio or nut name is added). If the board has rebuilt, re-read the three cells above before accepting.",
+      "proof": {
+        "guard_or_fixture": "compare-deals.ps1 -SelfTest (_Near cases beside lines 539/605/614), test-guards.ps1 guard 8d (line 815), test-auditors.ps1 cases for audit-unit-basis-outlier, audit-food-category and audit-band-censorship",
+        "must_fire_case": "(a) compare-deals -SelfTest: 'Hy-Vee mini donuts, SAVE 50\u00a2, $1.99' -> 1.99, 'Quaker protein bars, SAVE 50\u00a2, $3.98' -> 3.98, 'Hy-Vee pickles, - 50\u00a2 off with digital coupon, $1.99' -> 1.99 (all three glyphs as [char]0x00A2, the mojibake twin with [char]0x00C2 too); test-guards guard 8d: a second frozen fixture built from TODAY's donuts row (Hy-Vee, 0.5/each, that item text) must make guards.ps1 exit 2 naming 'ad-line price provenance' on the OLD engine output. (b) test-auditors: the frozen pistachios crown row (Baker's, 42 fl oz, 0.1426/oz, row_kind weight) must make audit-unit-basis-outlier exit 2 as kind_mismatch_crown, and 'Whole Moon Pistachio Plant Beverage Whole Protein' on pistachios must make audit-food-category exit 2 once the ids block exists (today it exits 0 on that row: the blind guard's founding bug). (c) audit-band-censorship: with the four Totino's 4-count rows, the Mama Cozzi 2 Count row and the Red Baron 9 pk row frozen from flagged-2026-09-17, the engine after the reorder must write band 'min_piece_oz>=12' for each and the audit must count 0 frozen-pizza cells; compare-deals -SelfTest cases at lines 823-825 (Test-PieceSize refuses the 4-count and the 9-pack) stay green.",
+        "clean_twin": "(a) line 614 'Bananas, 49\u00a2 lb.' -> 0.49/lb and line 647 '88\u00a2' -> 0.88 keep pricing (cents with no $), line 539 PERKS -> 3.49 and line 605 Gain Flings -> 12.94 / 42 unchanged. (b) 'Southern Grove Pistachios 16 OZ' still routes to pistachios (26 of 27 pistachio names unmoved; routing artifact), 'Gatorade Chocolate Chip Protein Bar 2.8 Oz' still routes to protein-bars (which is why B3 is refused). (c) Rao's Uncured Pepperoni Pizza 18.3 oz $14.99 (passes the piece rule, above the band max) keeps band '1.5-14'; the single 10.2 oz Totino's keeps 'min_piece_oz>=12'; the 29 baseline cells still count 29 so the ratchet neither breaks nor loosens.",
+        "commands": ["powershell -File grocery\\compare-deals.ps1 -SelfTest", "powershell -File grocery\\test-guards.ps1", "powershell -File grocery\\test-auditors.ps1", "powershell -File grocery\\audit-food-category.ps1", "powershell -File grocery\\audit-unit-basis-outlier.ps1", "powershell -File grocery\\audit-band-censorship.ps1", "powershell -File grocery\\guards.ps1"]
+      },
+      "rollback": "revert the pricing-math-lib, compare-deals, commodities.json, category-excludes.json and the two apply/audit script hunks; no data migration; band-censorship-baseline.json is never touched",
+      "do_not_touch": ["out\\band-censorship-baseline.json (no -Accept, no raise to 32)", "frozen-pizza band 1.5-14 and min_piece_oz 12 (Brad's T2 ruling)", "the PERKS branch and the OFF PER GALLON strip", "guard 8d's threshold", "the pistachios include ^(?=.*\\bpistachios?\\b).*$"],
+      "resolution_note": "Guards held the board 4 days on three defects: Hy-Vee 'SAVE 50c' lines priced at $0.50 (the parser now strips SAVE and coupon clauses and never reads a cents token beside a $ amount; both lines carry no pack count, so the existing no-count rule leaves them UNPRICED and each Hy-Vee cell falls to a real row, crowns unchanged), a pistachio MILK crowning pistachios (the beverage class now reaches the five nut ids through an id-scoped apply_ids block in category-excludes.json, read by the bake, the food-category guard and the vet sheet; the crown is back on Aldi at 0.4056/oz), and a ratchet counting piece-size refusals as band censorship (the engine refuses on piece size before price; 29 cells against a baseline of 29). Board republished.",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "true, with two premise errors recorded. Checked 2026-09-18 10:40-10:55 against the pinned comparison-2026-09-17 (built 08:07:34). (a) ads-2026-09-14.json carries 'Hy-Vee mini donuts, SAVE 50c, $1.99' and 'Quaker protein bars, SAVE 50c, $3.98'; the board published both at 0.5/each with note 'cents'; the cents regex's only lookahead was OFF PER GALLON. (b) out\\basis-outliers.json (08:30:32) kind_mismatch_crown = pistachios | Baker's | Whole Moon Pistachio Plant Beverage Whole Protein | 42 fl oz | 0.1426; audit-food-category over that same board exited 0 before the change and 2 (class=beverage, the row named) after the apply_ids bake, before any rebuild. (c) out\\band-censorship.json read 32 against baseline 29, and its 3 extra cells are the frozen-pizza Aldi, Walmart and Sam's rows the plan names; compare-deals tested the band at line 2521 and the piece rule at 2550. FALSE: the cell_effects expected Hy-Vee donuts 1.99/each and protein-bars 3.98/each after the fix, but Get-UnitPrice already refuses a bare package price with no count on an each-commodity (pricing-math-lib.ps1:861-862, the Gain Flings rule), so both rows are UNPRICED. FALSE: 'all five nut ids share the Snacks & Drinks bucket' - only pistachios does; peanuts, almonds, walnuts and mixed-nuts are in 'Coffee, Oils & Spreads' (the shared ^Coffee block, also without beverage).",
+      "deviation": "Five departures, same gates. (1) Hy-Vee donuts and protein-bars do not publish at $1.99 and $3.98 each: the lines now read their own dollar and the existing no-count drop refuses them, so the Hy-Vee donuts cell is gone and Hy-Vee protein-bars fell to its own everyday 'Hy-Vee Chewy Protein Bars Peanut Butter & Dark Chocolate 5-1.42 oz Bars' at 0.656; both crowns stay Fareway (0.3325, 0.3817). That answers Q2 in code (nothing overstates) and CLOSES leaves_open (a). (2) The id-scoped block ships as a separate top-level key, apply_ids, not as an element of apply: every reader of apply takes the FIRST block whose categories regex matches, and an entry with no regex reads as the empty pattern, which matches every label, so an ids element appended to apply would have handed beverage to every Household/Pet/Baby commodity in the two readers the plan names and in a third it did not, build-vet-sheet.ps1, which now unions apply_ids too. (3) The reorder is a small function, Get-FirstRefusal (piece, band, floor, pack cap, pack floor), called by the engine loop with the old branch bodies and labels unchanged, so compare-deals -SelfTest reaches the ORDER with the frozen flagged-2026-09-17 rows (3 MUST FIRE, 3 twins). (4) The frozen pistachio kind-mismatch crown lives in audit-unit-basis-outlier's own -SelfTest (run by test-auditors u111), not a test-auditors -CompareFile case, because a -CompareFile run writes the LIVE out\\basis-outliers.json. (5) Reviewer clause (c) is dropped from leaves_open: the plan itself calls it the ratchet working as written. Measured on the rebuild: audit-food-category ok over 3,080 priced cells, unit-basis crown=0, band-censorship 29 against 29 (baseline untouched), match-soundness moved 0 dropped 0 drift 0 (the beverage was never in match-baseline.json, which is why its move shows as neither), and all 12 piece-failing frozen-pizza rows in flagged-2026-09-17 now read 'min_piece_oz>=12'.",
+      "shipped_commit": null
+    },    {
+      "queue_id": "2026-09-18-61f76c",
+      "subject": "Grocery: 2 NEW price flag(s) - 2026-09-18",
+      "classification": "no-code-change",
+      "price_verdict": "real-economics (both flagged prices verified in the raw captures; no owner needs to act)",
+      "evidence": [
+        "apples | wow +45% | crown Aldi 'Gala Apple Bag 3 Lbs' $2.89 / 3 lb = 0.9633/lb everyday (as_of 2026-09-17); last week the same bag was $1.99 = 0.6633/lb (aldi-regular 09-09, 09-10, 09-11 all $1.99; 09-05..09-08 $2.99). A shelf price that dropped to $1.99 for a week and went back up to $2.89. Runner-up Baker's Kroger Pink Lady 5 lb $5.00 = 1.00/lb, Fareway Washington Gala $1.48/lb sale.",
+        "baby-potatoes | outlier | Fareway 'Summertime Farms Red or Gold Baby Potatoes' $2.99 / '3 lb bag' = 0.9967/lb, sale, Fareway Weekly Ad 2026-09-14 to 2026-09-19 (fareway-deals-2026-09-17.json, as_of 09-17); last week Fareway's everyday 'Summertime Farms Baby Red Potatoes' $4.99 / 3 lb = 1.6633/lb. Runner-up Baker's 'Private Selection Petite Gold Gourmet Potatoes' $6.00 / 3 lb = 2.00/lb (a premium store brand at everyday). The size parse '3 lb bag' -> 3 lb is right; a $2.99 3-lb ad bag of baby potatoes is a real sale."
+      ],
+      "root_cause": "both flags are the wow/outlier watcher doing its job on real moves: a shelf price rose after a one-week dip and an ad sale landed against a premium-brand runner-up",
+      "root_fix_none_because": "no code, rule or basis is wrong; both prices are verified in the raw captures",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "prior_closes": [],
+      "prior_closes_note": "queue holds no resolved item of this type; census: 20 days since 08-22",
+      "prevention_none_because": "a by-design review flag on large moves that were real; recalibrating its bands is Phase 2 work, not a code fix",
+      "resolution_note": "Both real: Aldi Gala 3 lb went $1.99 -> $2.89 on the shelf (capture-verified), and Fareway's $2.99/3 lb Red or Gold Baby Potatoes is a real ad sale against Baker's $6.00 premium bag. No change.",
+      "publish_batch": "none",
+      "status": "done",
+      "premise_verified": "true, checked in the raw captures 2026-09-18 10:57. Aldi 'Gala Apple Bag 3 Lbs': aldi-regular 09-05..09-08 $2.99 (as_of 09-05), 09-09 and 09-10 $1.99 (as_of 09-09), 09-11 $1.99 (as_of 09-11), 09-17 $2.89 (as_of 09-17); the rebuilt board crowns apples Aldi 0.9633. Fareway: fareway-deals-2026-09-17.json, window 09-14..09-19, 'Summertime Farms Red or Gold Baby Potatoes' $2.99 size '3 lb bag' as_of 09-17; the rebuilt board crowns baby-potatoes Fareway 0.9967 over Baker's 2.00. One detail differs from the evidence and not the verdict: the newest fareway-regular (09-12) carries 'Summertime Farms Baby Red Potatoes' at $2.99 for 3 lb as_of 2026-08-09, not the $4.99 the evidence quotes as last week's everyday.",
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-18-37ac63",
+      "subject": "Grocery: semantic sweep found 7 product(s) no rule can see - 2026-09-18",
+      "classification": "wrong-product",
+      "evidence": [
+        "explain-coverage-gap.ps1 over out\\semantic-findings.json (board comparison-2026-09-17, generated 08:19): NO-INCLUDE 4, EXCLUDED 3.",
+        "EXCLUDED (the rule saw it and refused it, correctly): baby-formula | Family Fare | 'Similac Infant Formula, With Iron, Hypoallergenic, Ready To Feed, 0 12 Months 6 Ea' - killed by ready[\\s-]?to[\\s-]?feed, the liquid-vs-powder exclude the unit-basis guard was founded on; ground-beef-8020 | Aldi | 'Family Pack 80 Lean 20 Fat Ground Beef Patties 2.5 LB' and | Walmart | 'Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray' - killed by 'patties' (plan-2026-08-06-3 lists that exclude under do_not_touch).",
+        "NO-INCLUDE, all different products: ground-beef-93-7 | Walmart | 'Ground Beef 73% Lean/27% Fat, All Natural*, 4 lb Tray' (73/27 is not 93/7); tilapia | Walmart | 'Great Value Frozen Skinless & Boneless Swai Fish Fillets Value Bag, 4 lb' (swai is a different species; the BOARD does track tilapia, commodities.json index 149 unit lb, so the recipe seafood ban is irrelevant here and the answer is a ruling, not a removal); chicken-breast | Walmart | 'Freshness Guaranteed Chicken Leg Quarters, 2.75 - 7.0 lb Tray' (leg quarters); breakfast-sandwiches | Family Fare | 'Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct' (a rolled sausage biscuit, ruled wrong-product on 2026-08-06).",
+        "TWO of the seven already carry known-wrong rulings and were re-paged anyway. (1) known-wrong.json key breakfast-sandwiches|FamilyFare|jimmy-dean-biscuit-roll-ups-sausage-frozen-break has names = ONE element: 'Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct,Jimmy Dean Maple Biscuit Roll Ups, Sausage, Frozen Breakfast 2 Ct' - two product names joined with a space-less comma, the PS 5.1 -File comma-list trap (add-known-wrong.ps1 declares [string[]]$Name at line 36); Test-KnownWrong (known-wrong-lib.ps1:103) matches the normalised full name or its unit-stripped core, so the joined string can never equal either product and the ruling has been inert since 08-06. Measured: 1 of 299 active entries has this shape. (2) key ground-beef-8020|Walmart|80-lean-20-fat-ground-beef-chuck-patties-12-coun rules the 12-count SKU; today's finding is the 4-count SKU of the same patties, so a per-name ruling cannot suppress the next SKU of the same shape.",
+        "audit-semantic-identity.ps1 Test-Actionable (lines 88-96) filters only known-wrong and truncation artefacts; it does not run the EXCLUDED test explain-coverage-gap.ps1 runs, so a product a rule deliberately refuses is alerted as 'no rule can see it' every sweep."
+      ],
+      "surface_fix": {
+        "what": "rulings, not rules: block the four NO-INCLUDE wrong products and rewrite the inert Roll Ups ruling as two names",
+        "files": ["grocery/known-wrong.json"],
+        "exact_change": "add-known-wrong.ps1 for: ground-beef-93-7 | Walmart | 'Ground Beef 73% Lean/27% Fat, All Natural*, 4 lb Tray' (wrong-product: 73/27); tilapia | Walmart | 'Great Value Frozen Skinless & Boneless Swai Fish Fillets Value Bag, 4 lb' (wrong-product: swai); chicken-breast | Walmart | 'Freshness Guaranteed Chicken Leg Quarters, 2.75 - 7.0 lb Tray' (wrong-product: leg quarters); ground-beef-8020 | Walmart | 'Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray' (wrong-product: patties, same ruling as the 12-count). Repair the breakfast-sandwiches|FamilyFare entry so names holds TWO elements ('...8 Ct' and 'Jimmy Dean Maple Biscuit Roll Ups, Sausage, Frozen Breakfast 2 Ct'). Pass names one per -Name argument, never as a comma list under -File."
+      },
+      "root_cause": "the sweep's alert cannot tell 'no include matches' from 'an exclude refused it', so every product a rule correctly refuses is re-paged as invisible; and the only suppressor it honours is a per-name ruling, which a store defeats by listing the next SKU (4-count after 12-count) and which the -File comma trap can silently turn into a ruling that matches nothing",
+      "root_fix": {
+        "what": "the emitting check classifies each coverage finding the way explain-coverage-gap does and reports EXCLUDED as an advisory count, not an alert line; add-known-wrong refuses a name element that carries a space-less comma join",
+        "files": ["grocery/audit-semantic-identity.ps1", "grocery/add-known-wrong.ps1", "grocery/explain-coverage-gap.ps1"],
+        "exact_change": "lift the Explain classifier out of explain-coverage-gap.ps1 into a shared function (or dot-source it), call it in audit-semantic-identity.ps1 after Test-Actionable, and drop verdict EXCLUDED from the alerted set while printing 'N finding(s) suppressed as EXCLUDED (a rule saw and refused them; explain-coverage-gap lists them)'. In add-known-wrong.ps1 after line 100: refuse any $useNames element matching ',\\S' with a message naming the -File comma trap, and accept repeated -Name arguments. Measured today: 3 of 7 findings suppressed; the Roll Ups entry repaired; the four NO-INCLUDE products ruled."
+      },
+      "leaves_open": "a NO-INCLUDE wrong product whose store lists a new SKU still needs a new per-name ruling (the ruling is keyed on commodity|store|normalised name), and the sweep pages each such SKU on its first sighting, which is the intended intake; 27 of 299 active known-wrong entries carry a key slug that matches none of their names (hand-written keys; 28 with the Roll Ups key re-recorded today), which the matcher ignores because it matches on names, so none is inert",
+      "leaves_open_occurrences": 0,
+      "leaves_open_occurrences_note": "developer 2026-09-18: 0 NO-INCLUDE findings in the 08:19 sweep were a new SKU of an already-ruled product. The one new-SKU case the reviewer counted (Walmart's 4-count patties after the 12-count ruling) is EXCLUDED, which the emitter now suppresses without any ruling (Split-CoverageFindings), and the swai was a first sighting of an unruled product, which is what the sweep exists to page. Measured over that one sweep only; the older sweeps were not re-classified.",
+      "leaves_open_followup": "watch:grocery/audit-semantic-identity.ps1",
+      "prior_closes": [],
+      "prior_closes_note": "queue holds no resolved item of this type; census: 15 days since 08-22",
+      "prevention": {
+        "source": ["grocery/audit-semantic-identity.ps1", "grocery/add-known-wrong.ps1"],
+        "what": "the emitter stops alerting on refusals it can classify as deliberate, and the ruling writer refuses the malformed name shape",
+        "exact_change": "as root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no include or exclude changes in this item, so routing before == after over the same 19,416-name corpus (plan-2026-09-18.routing.json, matcher A); rulings only remove a row from a cell, never move a name",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none of the five ruled products holds a cell today (each is a coverage finding, i.e. unmatched); suppressing EXCLUDED findings hides nothing the explain tool does not still list",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against out\\semantic-findings.json generated 2026-09-18 08:19 over comparison-2026-09-17 (built 08:07:34) and known-wrong.json at HEAD 886796dff",
+      "proof": {
+        "guard_or_fixture": "audit-semantic-identity.ps1 -SelfTest (frozen fixture ledger regression-inputs\\guard-fixtures\\known-wrong-fixture.json) and add-known-wrong.ps1 -SelfTest; test-auditors.ps1",
+        "must_fire_case": "audit-semantic-identity -SelfTest: a frozen coverage finding for ground-beef-8020 | Walmart | 'Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray' must be classified EXCLUDED (exclude 'patties') and NOT appear in the alerted set; add-known-wrong -SelfTest: -Name 'A 8 Ct,B 2 Ct' (one element) must be refused with the comma-trap message",
+        "clean_twin": "the frozen finding tilapia | Walmart | 'Great Value ... Swai Fish Fillets ...' (NO-INCLUDE) must still be alerted; -Name 'Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct' (a real name with ', ' inside) must still be accepted; after the ruling repair, Test-KnownWrong on breakfast-sandwiches | Family Fare | 'Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct' returns true",
+        "commands": ["powershell -File grocery\\audit-semantic-identity.ps1 -SelfTest", "powershell -File grocery\\add-known-wrong.ps1 -SelfTest", "powershell -File grocery\\explain-coverage-gap.ps1", "powershell -File grocery\\test-auditors.ps1"]
+      },
+      "rollback": "revert the known-wrong.json entries and the two script hunks; rulings are additive",
+      "do_not_touch": ["baby-formula.exclude ready-to-feed", "ground-beef-8020.exclude patties", "any include on the six commodities"],
+      "resolution_note": "All 7 findings are correct refusals: 3 killed by deliberate excludes (RTF formula, patties x2) and 4 different products (73/27 beef, swai, leg quarters, biscuit roll-ups). Ruled the NO-INCLUDE products via known-wrong (4 rulings incl. the 4-count patties, plus the Roll Ups re-recorded as two names after reversing the 08-06 entry the -File comma trap had made inert); the sweep now classifies each finding with explain-coverage-gap's own classifier and pages no EXCLUDED one (kept in the findings file as coverage_excluded), and add-known-wrong refuses the joined-name shape and takes -AlsoName under -File. Two pre-existing wrong products found while shipping were ruled too (Dawn dish soap on strawberries, mochiko rice flour on rice).",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "true. out\\semantic-findings.json (sweep 08:19, rewritten 08:30:32) holds exactly the 7 coverage findings listed; explain-coverage-gap reproduces NO-INCLUDE 4 / EXCLUDED 3 before and after its classifier moved into coverage-explain-lib.ps1. known-wrong.json key breakfast-sandwiches|FamilyFare|jimmy-dean-biscuit-roll-ups-sausage-frozen-break held ONE names element joining both products with a space-less comma, and it was the only one of 302 entries with that shape; the 12-count patties ruling cannot match the 4-count name. add-known-wrong.ps1 declares [string[]]$Name (line 36) and had no -SelfTest. audit-semantic-identity's Test-Actionable filtered only known-wrong and truncation.",
+      "deviation": "(1) The inert Roll Ups ruling was not edited in place: add-known-wrong deliberately supports no edit of a stored name (its header: that is how a gate gets quietly made green), so the 08-06 key was REVERSED on the record with the comma-trap reason and the ruling re-recorded under key breakfast-sandwiches|FamilyFare|jimmy-dean-biscuit-roll-ups-8ct-and-maple-2ct with two names; Test-KnownWrong now returns true for both products. (2) The classifier moved to a new grocery\\coverage-explain-lib.ps1 (New-CoverageExplainer, Get-CoverageVerdict, Split-CoverageFindings) that explain-coverage-gap and audit-semantic-identity both dot-source; EXCLUDED findings stay in semantic-findings.json under coverage_excluded, because explain-coverage-gap reads that file and would otherwise stop listing them, and the alert (check-ad-cycles reads only .coverage) stops paging them. (3) PowerShell cannot bind a repeated -Name, so the -File-safe second name is -AlsoName, with -AllowCommaInName as the reviewed exit for a real name of that shape; digit,digit is never read as a join. (4) The 4-count patties were ruled as the plan says even though the classifier now suppresses them anyway. (5) FOUND WHILE SHIPPING, same class, fixed in the same publish: audit-match-soundness's advisory CELL-BY-CONTEST named two wrong products holding cells since at least comparison-2026-09-14: 'Dawn Ultra Strawberry Field Scent' (dish soap) on strawberries at Family Fare 0.1708/oz and 'Koda Farms Blue Star Mochiko Sweet Rice Flour 16 oz., 6 ct.' on rice at Sam's Club 2.6133/lb, neither a crown. Ruled through add-known-wrong and the board rebuilt before guards. What each cell fell to on the rebuild, checked for a second wrong product behind the first: Family Fare strawberries is now 'Fresh Strawberries' at 0.3119/oz (crown unchanged, Aldi 0.1431); Sam's Club rice is now 'Member's Mark Long Grain White Rice, 50 lbs.' at 0.4396/lb, a real rice at a bulk membership price that guard 10 verified against Sam's own current_price, and it TAKES the rice crown from Walmart (0.573). audit-match-soundness after the rebuild: MOVED 0, DROPPED 0, drift 0, no CELL-BY-CONTEST.",
+      "shipped_commit": null
+    },    {
+      "queue_id": "2026-09-18-de39ec",
+      "subject": "Baker's ad window advanced with no capture behind it",
+      "classification": "infra",
+      "evidence": [
+        "(a) WHICH STEP: pull-regular-bakers-api.ps1 Update-BakersAdSchedule (line 143, called at line 1307) advances ad-schedule.json from the promo ad_from/ad_to dates Kroger's API returns on its own rows; bakers-regular-2026-09-17.json landed (7296 rows) and the commit 872795d65 (09-17 07:20, daily pipeline) carries current 09-09..09-15 -> 09-16..09-22 with the history entry appended. That IS the 'successful store-scoped API capture' the file's note names, so the calendar did not break its contract: the contract is about the API lane, and the check that paged compares the calendar against a DIFFERENT producer, the browser flyer capture out\\bakers\\bakers-deals-*.json (check-ad-cycles.ps1:705 $adSupplement).",
+        "(b) MONEY QUESTION - NO expired-ad cell is priced. comparison-2026-09-17 Baker's cells: 526; source_ad kroger-api 513, Recipe Hunter 13, flyer 0; 38 sale cells, every one with an API ad_to of 09-21 or later. compare-deals.ps1:379 Test-AdWindowClosed refuses an ad file whose window closed before the board date, and audit-row-age's recurrence body at 08:21 says exactly that ('its 146 sale row(s) are now excluded from the board (compare-deals refuses expired ads)'). The alert's own sentence 'the board keeps pricing cells from the PREVIOUS ad' is false for this estate since that refusal shipped; the loss is COVERAGE, and it is real: on the 09-14 board (flyer still valid) the flyer supplied 17 Baker's sale cells and 3 crowns (clementines 1.00/lb Kroger Adorbs, coffee-pods 0.2706, pasta-sauce 0.0538 Ragu).",
+        "(c) WHY NO 09-16 CAPTURE: no pipeline run at all on 09-15 or 09-16 (0 ad-cycle-log lines), and the flyer lane has NO scheduled producer: bakers-deals files landed 08-05, 08-20, 08-26, 09-02, 09-09 (10:05, a hand-driven browser capture the 09-09 plan records), while out\\browser-capture-due-*.flag has been raised for Baker's on 09-12, 09-13, 09-14, 09-17 (owned since 06:01:41) and 09-18 with nothing acting on it; the Wednesday Chrome agent that owned it was retired 08-22 (check-ad-cycles.ps1:736-737: 'that agent is disabled (Brad: the three TC tasks are the only routines)'). Not a wall: the API lane authenticates fine daily; the flyer is a browser/vision read of przone.net page images (grocery-method-bakers).",
+        "Census: fired 08-26, 08-29, 09-02, 09-09, 09-18 - every Baker's ad turnover (Wednesdays) plus 24h of owned deferral."
+      ],
+      "surface_fix": {
+        "what": "make the alert say what is true: the calendar was advanced by the API lane, no cell is priced from the expired ad, and the loss is flyer coverage",
+        "files": ["grocery/check-ad-cycles.ps1"],
+        "exact_change": "line 729 body: replace 'until a pull lands the board keeps pricing cells from the PREVIOUS ad - a sale that is over' with 'compare-deals refuses the closed ad, so its N sale rows are DROPPED from the board (coverage lost, prices not stale) until the flyer capture lands; the calendar itself was advanced by <producer> on <date>' and name the producer from the schedule's history entry."
+      },
+      "root_cause": "the schedule-vs-data check compares a calendar that one producer advances (the daily Kroger API scan, bakers-daily-scan 06:00) against a supplement that a different, unscheduled producer writes (a browser flyer read that no task has owned since the Wednesday agent was retired on 08-22), so it pages on every Baker's ad turnover whether or not the board is harmed, and its remedy line ('run the browser agent') names a routine that does not exist",
+      "root_fix": {
+        "what": "one condition, one owner: the schedule-vs-data check for Baker's compares the calendar with the capture that advanced it, and the flyer gap is reported only by the watcher that measures the board (audit-row-age AD COVERAGE GONE, owned/unowned), pending Brad's ruling on the flyer lane",
+        "files": ["grocery/check-ad-cycles.ps1"],
+        "exact_change": "in the $adSupplement loop (lines 705-731) resolve Baker's 'data' as the newest bakers-regular-<date>.json whose promo rows carry ad_to >= current.to (the API rows that Update-BakersAdSchedule read), and keep the flyer comparison only as a Log line, since audit-row-age.ps1:455-458 already pages AD COVERAGE GONE for the flyer with the 24h owned-gap rule; Fareway keeps today's behaviour (its calendar and its deals file share one producer)."
+      },
+      "leaves_open": "(1) the flyer lane itself: 17 sale cells and 3 crowns per week come from a capture nobody is scheduled to make; OWNER Q1-bakers-flyer-lane (schedule it, fold it into the 08:00 browser store driver, or retire the supplement and remove Baker's from $adSupplement). (2) the 09-15/09-16 missed pipeline runs, which no item here explains; OWNER the weekly queue item named in leaves_open_followup, minted by the money lane because de39ec closes before the ops lane runs (the dispatch's stated exception; if the ops lane diagnoses it this run, that item closes as its duplicate)",
+      "leaves_open_occurrences": "flyer captures landed in 5 of the 8 Baker's ad weeks since 08-05; the alert fired 5 times since 08-26; the pipeline skipped 2 days (09-15, 09-16) in the last 16 (developer re-measured: 0 ad-cycle-log lines and no capture-run-daily log on either day, logs present 09-10..09-14, 09-17, 09-18)",
+      "leaves_open_followup": "2026-09-18-8491bf",
+      "prior_closes": [],
+      "prior_closes_note": "queue holds no resolved item of this type; census: 08-26, 08-29, 09-02, 09-09, 09-18",
+      "prevention": {
+        "source": ["grocery/check-ad-cycles.ps1"],
+        "what": "the emitting check compares like with like (calendar vs the capture that advanced it) and stops naming a retired routine as the fix",
+        "exact_change": "as root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changes; routing before == after over the 19,416-name corpus (matcher A); the change is to an alert's condition and wording only",
+        "affected_now": 0,
+        "names": [],
+        "risk": "the Fareway branch of the same loop is untouched; the flyer's absence is still paged by audit-row-age (owned/unowned) so nothing goes quiet",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against ad-schedule.json at HEAD 886796dff, comparison-2026-09-17 (built 08:07:34) and comparison-2026-09-14, out\\bakers\\ listing at 10:00 on 09-18",
+      "proof": {
+        "guard_or_fixture": "check-ad-cycles.ps1 -SelfTest (the SCHEDULE-AHEAD-OF-DATA fixtures) and audit-row-age.ps1 -SelfTest (lines 176-226, AD COVERAGE GONE owned/unowned)",
+        "must_fire_case": "a frozen Baker's schedule with current 09-16..09-22 whose newest bakers-regular file carries no promo ad_to >= 09-22 must still page (calendar advanced with no API data behind it); a frozen schedule whose newest bakers-regular carries promo ad_to 09-22 and whose newest bakers-deals closed 09-15 must NOT page from this check and must Log the flyer gap, while audit-row-age's existing fixture keeps paging AD COVERAGE GONE for the flyer",
+        "clean_twin": "the Fareway fixture (schedule advanced 08-02..08-08 with a deals file that closed 08-01) still pages exactly as today",
+        "commands": ["powershell -File grocery\\check-ad-cycles.ps1 -SelfTest", "powershell -File grocery\\audit-row-age.ps1 -SelfTest", "powershell -File grocery\\test-auditors.ps1"]
+      },
+      "rollback": "revert the check-ad-cycles hunk; ad-schedule.json is not edited",
+      "do_not_touch": ["ad-schedule.json", "Update-BakersAdSchedule in pull-regular-bakers-api.ps1", "compare-deals' Test-AdWindowClosed refusal", "the 24h owned-gap rule in audit-row-age"],
+      "resolution_note": "Not a stale-price condition: the Kroger API lane advanced the calendar (as the schedule file says it should) and compare-deals refuses the closed 09-09 flyer, so 0 Baker's cells price from it; what is lost is flyer coverage (17 sale cells, 3 crowns last week) because the flyer capture has no scheduled producer since the Wednesday agent was retired. The check now compares the Baker's calendar with the API capture that moved it (today: 520 promo rows in bakers-regular-2026-09-18 run to 09-22, so no page, and the flyer gap is logged), Fareway keeps its old comparison, the page says the closed ad's rows DROP (coverage, not a stale price) and no longer names the retired browser agent; the flyer gap stays with audit-row-age. Brad to rule on the flyer lane (Q1).",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": "true on the money question, with two premise errors recorded. comparison-2026-09-17 (08:07:34): 526 Baker's cells, source_ad kroger-api 513, Recipe Hunter 13, flyer 0; 38 sale cells, earliest ad_to 2026-09-21, none blank. ad-schedule.json Baker's current 09-16..09-22; newest out\\bakers\\bakers-deals is 09-09 (window 09-09..09-15, 146 rows); bakers-regular-2026-09-18 carries 539 promo rows with ad_to, 520 of them on or after 09-22. FALSE: Update-BakersAdSchedule does not read the promo ad_from/ad_to rows; it derives the window from the detection DATE (Get-BakersAdWindow([datetime]$DetectedOn)) after a store-scoped API capture - which makes checking the calendar against the capture's own promo rows more useful, not less. FALSE: check-ad-cycles -SelfTest had no SCHEDULE-AHEAD-OF-DATA fixtures (its 10 cases all test the commit verdict); they were written here.",
+      "deviation": "The decision and the alert text moved into a new pure grocery\\ad-schedule-backing-lib.ps1 (Get-AdScheduleBacking, Get-AdScheduleAlertText) that the $adSupplement loop and the -SelfTest both dot-source, because the self-test must stay the file's first statement and cannot reach a function defined further down; the plan listed check-ad-cycles.ps1 only. Five new cases (15 of 15 pass): MUST FIRE Baker's calendar with no API promo to 09-22 pages; MUST NOT FIRE the same calendar backed by API promo rows does not page and reports the flyer gap to Log; CLEAN TWIN the 2026-08-02 Fareway miss still pages; MUST NOT FIRE a covered Fareway window; WORDING. The REVIEW summary line was corrected along with the alert body (it made the same stale-price claim), and the remedy names out\\browser-capture-due-<date>.flag and capture-watchdog instead of the retired Wednesday agent. Against today's real files the decision reads: not paged, backed by the API capture (520 rows), flyer gap logged.",
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-18-0ac1cb",
+      "subject": "Grocery: Family Fare pull dropped a carried item - review",
+      "classification": "infra",
+      "evidence": [
+        "The promotion mechanism works, measured: capture-run-ad logs show victims moved to the FRONT of the next slice on 09-08 (turkey gravy jar, 15 bean soup mix), 09-10 (parsnips), 09-13 (quinoa), 09-14 (ground coriander); family-fare-regular-2026-09-18.json prices all five (Heinz Turkey Gravy $3.19 as_of 09-08, Hurst's 15 Bean $3.99 09-08, Fresh Parsnips $4.49 09-10, Full Circle Bulgur & Quinoa $3.59 09-13, Spice Islands Ground Coriander $6.79 09-14) and none re-fired. 5 of 5 promoted victims priced on the next window.",
+        "pie-pumpkins is the exception and it was never promoted: found 09-10 11:31 by an out-of-band ff-carry rerun (the 08:05 run that day found parsnips); the 09-11 pull read a report '18 h old, 0 term(s)' (capture-run-ad-2026-09-11.log:36), i.e. a later 09-10 run overwrote the snapshot with an empty victim set; ff-carry re-probes only a sample of the empty terms per run ('42 of 594 empty term(s) re-probed', 80-90 rate-limited), so the term was simply not in the next sample. 09-17: 'no pull-drop victim promoted (stale: 70 h old)' because no run happened 09-15/16. 09-18 08:05:12 re-found it, after today's pull had already read the 09-17 report ('fresh: 24 h old, 0 term(s)' at 08:03), so it leads the 09-19 window; term index 528, cursor 328 (314 after wrap), 7 terms a window is the deliberate budget.",
+        "family-fare-regular-2026-09-18.json has 0 'Pie Pumpkin' rows; the product is carried (the audit priced it in its probe)."
+      ],
+      "surface_fix": {
+        "what": "nothing to do by hand: pie pumpkin leads tomorrow's Family Fare window by the existing promotion",
+        "files": [],
+        "exact_change": "none today; verify on 09-19 that capture-run-ad-2026-09-19.log shows 'pie pumpkin' moved to the FRONT and family-fare-regular-2026-09-19.json prices it"
+      },
+      "root_cause": "out\\ff-carry-report.json is a snapshot overwritten by every ff-carry run, and each run re-probes only about a tenth of the 595 empty terms, so a victim seen by one run is erased by the next run that samples past it, before any pull has read it; the alert then re-fires when the sample lands on it again",
+      "root_fix": {
+        "what": "carry confirmed victims forward until a priced row lands",
+        "files": ["grocery/audit-ff-carry.ps1", "grocery/capture-policy-lib.ps1"],
+        "exact_change": "audit-ff-carry.ps1 (report block at ~273): read the previous report's confirmed_victims, keep every one whose commodity STILL has no priced row in the current pull (drop it the moment a priced row exists, or after 14 days as the carry policy's horizon), and write them with a first_seen date; Get-FfVictimTerms (capture-policy-lib.ps1:569) keeps its 48h freshness on the report's generated stamp, which the carried-forward list satisfies because the file is rewritten every run. Alerting stays once per NEW victim-set (the sig at line 336), so a carried victim does not re-page."
+      },
+      "leaves_open": "nothing in this class; the 7-of-602 term budget is Brad's ruling (grocery-method-familyfare) and the missed 09-15/16 runs are item de39ec's leaves_open",
+      "leaves_open_occurrences": 0,
+      "prior_closes": [],
+      "prior_closes_note": "queue holds no resolved item of this type; census: 09-03, 09-05, 09-06, 09-07, 09-10, 09-12, 09-14, 09-18",
+      "prevention": {
+        "source": ["grocery/audit-ff-carry.ps1"],
+        "what": "the emitting check keeps a victim until the pull proves it captured, instead of a snapshot the next sample can erase",
+        "exact_change": "as root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changes; routing before == after over the 19,416-name corpus; the change adds at most the carried victims (1 today) to the FRONT of a Family Fare slice inside the existing 40-call cap",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a carried victim costs one term slot per window until captured, the same cost the promotion already pays for a fresh victim",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against out\\ff-carry-report.json 08:05 on 09-18, out\\logs\\capture-run-ad-2026-09-08..18.log and capture-watchdog-*.log, family-fare-regular-2026-09-18.json as of 10:00 (the FF sweep appends every 3 hours)",
+      "proof": {
+        "guard_or_fixture": "audit-ff-carry.ps1 -SelfTest and test-capture-policy.ps1 (Get-FfVictimTerms fixtures)",
+        "must_fire_case": "a frozen previous report naming pie-pumpkins with a current pull that prices no pie pumpkin must write pie-pumpkins into confirmed_victims again (carried forward, first_seen preserved) without re-paging",
+        "clean_twin": "a frozen previous report naming parsnips with a current pull that prices 'Fresh Parsnips, Michigan' must DROP parsnips (captured); the existing MUST-FIRE at line 205 (a victim at index 501 reads 'leads the next Family Fare window') stays green",
+        "commands": ["powershell -File grocery\\audit-ff-carry.ps1 -SelfTest", "powershell -File grocery\\test-capture-policy.ps1", "powershell -File grocery\\test-auditors.ps1"]
+      },
+      "rollback": "revert the audit-ff-carry hunk; the report file regenerates every run",
+      "do_not_touch": ["the 7-term rotation budget and the 40 call cap (capture-policy)", "the 48h freshness in Get-FfVictimTerms", "the once-per-victim-set alert signature"],
+      "resolution_note": "Promotion works (5 of 5 earlier victims priced next window). Pie pumpkin was lost because the victim report is a snapshot that a later sample overwrote before any pull read it; it leads the 09-19 window now, and audit-ff-carry carries an unpriced victim forward until it is captured.",
+      "publish_batch": "none",
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },    {
+      "queue_id": "2026-09-18-35e0f5",
+      "subject": "The knowledge store's nightly pass went RED",
+      "classification": "infra",
+      "evidence": [
+        "recall-sleep-latest.md 04:38: gate (check-skills.py) exit 1 in 132 s; report lines 'VERDICT: FAIL - ... 1 recognition floor(s) adrift.' and 'FAIL (2):' with nothing under it. derive floors (exit 0, same pass) printed 'path holdout 37 of 148 fired 25.0% TOO LOUD' against TARGET_FIRE_RATE 0.10 and RATE_BAND (0.03, 0.20) (recall_floors.py:64, 224).",
+        "WHY THE LINES ARE MISSING: recall-sleep.py digest() (line 247) keeps a line only if it carries a KEEP_MECHANICAL keyword as a whole word (FAIL, WARN, WARNINGS, TOO QUIET, TOO LOUD, holdout, BAR, wrote, harvested, passed, COULD NOT). 'FAIL (2):' matches; the itemised failure lines under it are check-skills' prose ('probe baseline: exit 1 - a probe fell below MIN_SCORE unrecorded, a baseline line went loose or stale, or a recognition floor is adrift; see the lines above...', check-skills.py:2164-2171) and carry none of those words, so they are dropped. recall-sleep-log.jsonl records name/exit/ms per step and NO output, so the second failure of the 04:38 run is unrecoverable from disk.",
+        "WHAT THEY WERE, as far as it can be proven: (1) the probe-baseline verdict on the path floor (the derive step's own TOO LOUD line at 04:38). A read-only re-run of check-skills.py at about 10:10 from C:\\Codex\\ThriftyCrew (the cwd the floors were derived in) printed 'VERDICT: PASS - all 182 probes at or above MIN_SCORE 8.5 ... Recognition floors within their band' and ONE failure: 'hook self-test approvals-server.py: FAIL exit 1 MUST FIRE the feed reports the oldest question's age ok' - a self-test whose last case reads ok yet exits 1 (the lost-exit / verdict shape), belonging to the untracked approvals-page work (design\\PLAN-approvals-page-2026-09-12.md) the dispatch lists as foreign in-flight. (2) is therefore most likely that hook self-test, unproven. The index was rebuilt at 09:18 (recall-index-stamp.json), so the floor verdict moved between 04:38 and 10:10 on the same day.",
+        "Fired 09-11, 09-12, 09-13, 09-14, 09-17, 09-18 (gate exit 1 each night per recall-sleep-log.jsonl); re-deriving the floors inside the same pass did not bring path into band at 04:38 on any night this report can see."
+      ],
+      "surface_fix": {
+        "what": "the report keeps the lines that say what failed",
+        "files": ["C:/Users/Owner/.claude/skills/recall-sleep.py"],
+        "exact_change": "digest(): after a kept line matching ^\\s*FAIL \\(\\d+\\):$ keep every following line that starts with two spaces until a blank or unindented line, regardless of keywords (and the same under a kept 'VERDICT: FAIL' line); add a MUST FIRE case beside the existing digest cases (line ~472): a gate output 'FAIL (2):\\n  probe baseline: exit 1 - ...\\n  hook self-test x: FAIL exit 1' must keep both itemised lines, and a CLEAN TWIN that the prose line 'FROM RECORDED FAILURES' is still dropped."
+      },
+      "root_cause": "the sleep report is a keyword digest and the run log stores exit codes without output, so a failure's explanation survives only if it happens to contain a keyword and is otherwise gone by morning; separately, the 04:38 gate judges recognition floors on a store that the same pass just re-derived and that sessions move all day, so its floor verdict is not the verdict a re-run gives",
+      "root_fix": {
+        "what": "persist each failing step's tail with the run record, and ask Brad how the path floor should be judged",
+        "files": ["C:/Users/Owner/.claude/skills/recall-sleep.py"],
+        "exact_change": "run_step(): when exit != 0 write the last 60 lines of stdout+stderr into the step's record in recall-sleep-log.jsonl (key 'tail'), so 'what failed last night' is a lookup; the floor question goes to Brad (Q3) because the calibrator's own text forbids moving the target and the honest options are a frozen snapshot for the gate, a minimum probe count per kind (path has 148 holdout probes against 300 for command and edit), or accepting TOO LOUD as advisory for a kind under that count"
+      },
+      "leaves_open": "the path recognition floor reading TOO LOUD at 04:38 on 6 consecutive nights and in band by 10:10 (Q3); and the approvals-server.py hook self-test that exits 1 with its last case reading ok, which is another session's in-flight work and is not touched here",
+      "leaves_open_occurrences": "6 nights (09-11, 12, 13, 14, 17, 18) for the floor; 1 observed run (10:10 today) for the hook self-test",
+      "prior_closes": [],
+      "prior_closes_note": "queue holds no resolved item of this type; census: 09-11, 09-12, 09-13, 09-14, 09-17, 09-18",
+      "prevention": {
+        "source": ["C:/Users/Owner/.claude/skills/recall-sleep.py"],
+        "what": "the emitter of the alert keeps and persists the failure lines it is reporting",
+        "exact_change": "as surface_fix and root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no grocery matching rule changes; routing before == after over the 19,416-name corpus; the change is confined to the knowledge store's report and run log",
+        "affected_now": 0,
+        "names": [],
+        "risk": "the digest grows by the itemised failure lines only when a step fails; the run log grows by up to 60 lines per failing step",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured against recall-sleep-latest.md and recall-sleep-log.jsonl of 04:38 on 09-18 and a read-only check-skills.py run at about 10:10 whose output is in the reviewer scratch (check-skills.txt, 273 lines); the store moves continuously, so the 10:10 floor verdict is not evidence about 04:38",
+      "proof": {
+        "guard_or_fixture": "recall-sleep.py --selftest (the digest cases at lines ~440-512)",
+        "must_fire_case": "a gate result whose output ends 'FAIL (2):' followed by two indented failure lines carrying no keyword must render both lines under the gate step; a failing step must leave a 'tail' in its log record",
+        "clean_twin": "the existing MUST NOT FIRE 'the word FAILURES in prose does not read as a FAIL' and the CLEAN TWIN 'a real FAIL line is still kept' stay green; a passing step writes no tail",
+        "commands": ["C:\\Codex\\Python312\\python.exe C:\\Users\\Owner\\.claude\\skills\\recall-sleep.py --selftest"]
+      },
+      "rollback": "revert the recall-sleep.py hunk; the knowledge store is its own local git (memory-store-is-local-git)",
+      "do_not_touch": ["recall_floors.py TARGET_FIRE_RATE and RATE_BAND", "recall-hook-calibrate.py", "the approvals-server.py hook and its self-test (foreign in-flight work)"],
+      "resolution_note": "The report dropped its own failure lines (keyword digest) and the run log keeps no output, so the second failure of 04:38 cannot be recovered; the digest now keeps the itemised lines under FAIL (n): and failing steps persist a tail. The visible failure was the path recognition floor (37 of 148 holdout probes, 25%, band 3-20%), which read in band on a 10:10 re-run after the 09:18 index rebuild; how to judge that floor is Q3 for Brad.",
+      "publish_batch": "none",
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "batch 1 edits: grocery/pricing-math-lib.ps1 (a), grocery/compare-deals.ps1 (c reorder), grocery/category-excludes.json + apply-category-excludes.ps1 + audit-food-category.ps1 (b ids block) and bake it so commodities.json pistachios (and the four other nut ids) carry the beverage tokens, grocery/known-wrong.json rulings via add-known-wrong.ps1 (item 37ac63), grocery/audit-semantic-identity.ps1 + add-known-wrong.ps1 hunks, grocery/check-ad-cycles.ps1 hunk (de39ec), grocery/audit-ff-carry.ps1 hunk (0ac1cb); recall-sleep.py in the knowledge store is a separate commit in that repo",
+    "self-tests that must reach the new code first: compare-deals.ps1 -SelfTest, audit-band-censorship.ps1 -SelfTest, audit-semantic-identity.ps1 -SelfTest, add-known-wrong.ps1 -SelfTest, check-ad-cycles.ps1 -SelfTest, audit-row-age.ps1 -SelfTest, audit-ff-carry.ps1 -SelfTest, test-capture-policy.ps1, test-guards.ps1 (guard 8d must fire on the frozen donuts row against the OLD engine output)",
+    "the chain, copied from check-ad-cycles.ps1 by line: repair-multipack-sizes.ps1 -Apply (757), stamp-ad-as-of.ps1 -Apply (774), compare-deals.ps1 -MinStores 1 -IdentityNamespace staple plus whatever -BakersFile/-FarewayFile the chain resolves at 786",
+    "audit-food-category.ps1 (expect 0, and it must now SEE 'Whole Moon Pistachio Plant Beverage' if it is ever re-admitted), audit-unit-basis-outlier.ps1 (expect kind_mismatch_crown empty), audit-band-censorship.ps1 (expect 29 cells or fewer, baseline untouched)",
+    "audit-tile-integrity.ps1 -Quiet (1143), audit-name-drift.ps1 (1158), prune-bad-links.ps1 -Tol 0.32 (1165), audit-name-drift.ps1 AGAIN because prune-bad-links rewrote product-urls.json (1184), generate-board-overrides.ps1 (1207)",
+    "guards.ps1 (1210; MUST be hard=0)",
+    "publish-deals-page.ps1 (1272)",
+    "INSPECT fanout as the chain runs it: audit-match-soundness.ps1 -OutDir out (1578; review any drop line by line before -Accept), audit-basis-reconcile.ps1 (1612), audit-pack-basis.ps1 (1613)",
+    "test-auditors.ps1 (MUST be 0) and ops/run-gates.ps1 through the pre-push hook",
+    "commit with -F and push via ops\\push-main.ps1; then verify on the live board with a cache-busting query: pistachios crown Aldi 0.4056/oz, donuts Hy-Vee 1.99/each, protein-bars Hy-Vee 3.98/each, frozen-pizza Walmart 2.96 unchanged",
+    "next morning (09-19): confirm capture-run-ad-2026-09-19.log promotes 'pie pumpkin' and family-fare-regular-2026-09-19.json prices it; confirm recall-sleep-latest.md shows itemised failure lines if the gate is red"
+  ],
+  "open_questions_for_brad": [
+    { "id": "Q1-bakers-flyer-lane", "question": "The Baker's weekly-ad flyer (out\\bakers\\bakers-deals-*.json) has had no scheduled producer since the Wednesday Chrome agent was retired on 08-22; it landed in 5 of the last 8 ad weeks by hand. Last week it supplied 17 Baker's sale cells and 3 crowns (clementines, coffee-pods, pasta-sauce) that the Kroger API's own promo rows did not. Options: (a) schedule it inside the 08:00 browser store driver (Baker's is a przone.net image read plus vision, not a bot-walled DOM sweep); (b) keep it manual and let audit-row-age's AD COVERAGE GONE be the weekly reminder (then the de39ec alert is by-design and its wording is the only fix); (c) retire the supplement and remove Baker's from $adSupplement, accepting the 3-crown loss. The plan implements the wording fix and the like-for-like check either way.", "item": "2026-09-18-de39ec" },
+    { "id": "Q2-each-commodity-no-count", "status": "moot - answered in code, developer 2026-09-18: Get-UnitPrice already refuses a bare package price with no count on an each-commodity (pricing-math-lib.ps1:861-862), so after the parser fix both lines are UNPRICED, not $1.99/$3.98 each; the Hy-Vee donuts cell is gone and Hy-Vee protein-bars shows its own 5-bar box at 0.656. Nothing overstates, so there is nothing to rule.", "question": "After the parser fix, Hy-Vee 'mini donuts' and 'Quaker protein bars' publish at $1.99/each and $3.98/each because the ad line carries no pack count, against peers at $0.33-$0.94 per piece. They take no crown, but the cell overstates. Should an each-commodity refuse an ad row with no count when its peers price per piece (2 cells today), or is the pack-as-one-unit reading acceptable when it cannot win?", "item": "2026-09-18-f90ba6" },
+    { "id": "Q3-recall-path-floor", "question": "The knowledge store's path recognition floor read TOO LOUD (37 of 148 holdout probes, 25%, band 3-20%) at 04:38 on six nights and in band on a 10:10 re-run today after the index rebuilt. The calibrator forbids moving the target. Should the 04:38 gate judge floors on a frozen snapshot of the store, require a minimum holdout size per kind before it can fail (path has 148, command and edit have 300), or treat TOO LOUD as advisory for a kind under that size?", "item": "2026-09-18-35e0f5" }
+  ]
+}

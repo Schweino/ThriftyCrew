@@ -331,6 +331,21 @@
       "note": "dried/flake spice-jar forms are wrong for every FRESH-produce commodity, but Fruit is excluded from scope on purpose: dried-cranberries and raisins are Fruit rows whose own products carry the word dried. Born from the 2026-08-20 contested review: Dan's Pantry Rosemary, Gourmet Garden basil paste, freeze-dried red onion and McCormick celery flakes were all pricing fresh rows."
     }
   ],
+  "apply_ids": [
+    {
+      "ids": [
+        "pistachios",
+        "peanuts",
+        "almonds",
+        "walnuts",
+        "mixed-nuts"
+      ],
+      "classes": [
+        "beverage"
+      ],
+      "note": "ID-SCOPED CLASSES (2026-09-18, queue 2026-09-18-f90ba6, triage-plans\\plan-2026-09-18.json). The apply blocks above scope a class by the deals page's DISPLAY category, and a display bucket can mix foods with drinks: pistachios sits in 'Snacks & Drinks' beside soda, coffee pods and iced tea, and peanuts, almonds, walnuts and mixed-nuts sit in 'Coffee, Oils & Spreads' beside coffee, so no category block can ever give a nut the beverage class. A pistachio MILK ('Whole Moon Pistachio Plant Beverage Whole Protein', Baker's, 42 fl oz, $5.99) held the pistachios crown at 0.1426/oz against real nuts at 0.4056 while audit-food-category read OK. A block here is UNIONED into whatever the category pass gave each listed id, by apply-category-excludes.ps1, audit-food-category.ps1 and build-vet-sheet.ps1 alike. It lives under its own key and NOT inside apply because every reader of apply takes the FIRST block whose categories regex matches, and a block with no regex reads as the empty pattern, which matches every label. Measured over 19,416 corpus names (plan-2026-09-18.routing.json variant B2): the five nut ids own 162 names and exactly 1 moves (the beverage, to no commodity). Widening to all 21 non-drink Snacks & Drinks commodities (variant B3) was measured and REJECTED: the gatorade token re-routes two Gatorade protein bars from protein-bars to sports-drinks."
+    }
+  ],
   "exempt": {
     "beverage": "juice|soda|drink|water|tea|coffee|lemonade|punch|cider|kombucha|milk",
     "babyfood": "baby|formula|infant",

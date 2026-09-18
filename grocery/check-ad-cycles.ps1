@@ -142,6 +142,34 @@ if ($SelfTest) {
     ($cacCommit.Count -eq 1) -and (Test-CacUnderNoCommitGuard $cacCommit[0])
   }
 
+  # ---- SCHEDULE vs DATA, LIKE FOR LIKE (2026-09-18, queue 2026-09-18-de39ec) ------------------------------
+  # Frozen from the 2026-09-18 state: ad-schedule.json Baker's current 09-16..09-22, the newest flyer
+  # bakers-deals-2026-09-09.json closed 09-15 (146 rows), and bakers-regular-2026-09-18.json whose promo rows run
+  # to 2026-11-18 (520 of 539 reach 09-22). The Fareway pair is the founding 2026-08-02 miss, 08-02..08-08
+  # over a deals file that closed 08-01. Only the decision is exercised here; the live loop reads the files.
+  . (Join-Path $PSScriptRoot 'ad-schedule-backing-lib.ps1')
+  Test-CacCase 'MUST FIRE  a Baker''s calendar 09-16..09-22 whose newest API capture carries no promo row to 09-22 still pages (calendar advanced with no API data behind it)' {
+    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22') -SupplementName 'bakers-deals-2026-09-09.json' -SupplementTo '2026-09-15' -ApiName 'bakers-regular-2026-09-18.json' -ApiAdTo @('2026-09-15', '2026-09-21')
+    $sb.page -and (-not $sb.backed_by)
+  }
+  Test-CacCase 'MUST NOT FIRE  a Baker''s calendar backed by API promo rows to 09-22 does not page from this check, and still reports the closed flyer as a gap to LOG' {
+    $sb = Get-AdScheduleBacking -Store "Baker's" -SchedTo ([datetime]'2026-09-22') -SupplementName 'bakers-deals-2026-09-09.json' -SupplementTo '2026-09-15' -ApiName 'bakers-regular-2026-09-18.json' -ApiAdTo @('2026-09-22', '2026-11-18', '2026-09-21')
+    (-not $sb.page) -and ($sb.backed_by -eq 'api') -and $sb.supplement_gap -and ($sb.api_rows -eq 2)
+  }
+  Test-CacCase 'CLEAN TWIN  Fareway (calendar and deals file share one producer) still pages as before: 08-02..08-08 over a deals file that closed 08-01' {
+    $sb = Get-AdScheduleBacking -Store 'Fareway' -SchedTo ([datetime]'2026-08-08') -SupplementName 'fareway-deals-2026-07-26.json' -SupplementTo '2026-08-01'
+    $sb.page -and ($sb.have -match 'window ends 2026-08-01')
+  }
+  Test-CacCase 'MUST NOT FIRE  Fareway with a deals file covering its window does not page, whatever API rows are passed' {
+    $sb = Get-AdScheduleBacking -Store 'Fareway' -SchedTo ([datetime]'2026-09-19') -SupplementName 'fareway-deals-2026-09-17.json' -SupplementTo '2026-09-19' -ApiName 'bakers-regular-2026-09-18.json' -ApiAdTo @()
+    -not $sb.page
+  }
+  Test-CacCase 'WORDING  the page says the closed ad DROPS its rows, counts them, and names neither the PREVIOUS-ad claim nor the retired browser agent as the fix' {
+    $sb = Get-AdScheduleBacking -Store 'Fareway' -SchedTo ([datetime]'2026-08-08') -SupplementName 'fareway-deals-2026-07-26.json' -SupplementTo '2026-08-01'
+    $st = Get-AdScheduleAlertText -Backing $sb -SchedTo '2026-08-08' -Detected '2026-08-03' -SupplementRows 146
+    ($st.body -match 'DROP off it') -and ($st.body -match '146 sale row') -and ($st.body -match 'advanced on 2026-08-03') -and ($st.body -notmatch 'keeps pricing cells from the PREVIOUS ad') -and ($st.body -notmatch 'run the browser agent')
+  }
+
   if ($script:cacCases -eq 0) { Write-Output 'check-ad-cycles SELF-TEST FAILED (ran zero cases)'; exit 1 }
   if ($script:cacFail) { Write-Output ("check-ad-cycles SELF-TEST FAILED ({0} of {1} case(s))" -f $script:cacFail, $script:cacCases); exit 1 }
   Write-Output ("check-ad-cycles SELF-TEST PASSED ({0} of {0} case(s): the 2026-09-10 refused commit exits 1, a landed commit with a failed push exits 0, and this file's own tail wires that verdict only without -NoCommit)" -f $script:cacCases)
@@ -243,6 +271,7 @@ if (-not $NoCommit) {
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
 . (Join-Path $root 'capture-policy-lib.ps1')   # Test-BrowserCaptureOwned: a store deferred to a browser owner under 24h ago is an OWNED gap, not an unowned one (2026-09-09-e60137). Declares no param() block, so it cannot reset this script's switches
 . (Join-Path $root 'fanout-lib.ps1')   # Invoke-Fanout / Get-FanoutRecord / Test-FanoutComplete: the inspect fan-out
+. (Join-Path $root 'ad-schedule-backing-lib.ps1')   # Get-AdScheduleBacking / Get-AdScheduleAlertText: schedule vs the capture that ADVANCED it (2026-09-18, de39ec)
 
 # ---- THE CADENCE GATE, WHICH WAS CALLED EIGHT TIMES AND NEVER EXISTED (2026-08-23) --------------------
 # Test-CadenceDue / Set-CadenceRan / Get-CadenceLast were designed, documented, given a self-test
@@ -708,12 +737,28 @@ foreach ($rec in $newStores) {
   if (-not $g -or -not $rec.current -or -not $rec.current.to) { continue }
   $newest = Get-ChildItem (Join-Path $OutDir $g) -ErrorAction SilentlyContinue |
             Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-  $fileTo = $null
-  if ($newest) { try { $j = Get-Content $newest.FullName -Raw -Encoding UTF8 | ConvertFrom-Json; if ($j.ad_to) { $fileTo = [datetime]$j.ad_to } } catch {} }
+  $fileTo = $null; $sdSupRows = 0
+  if ($newest) { try { $j = Get-Content $newest.FullName -Raw -Encoding UTF8 | ConvertFrom-Json; if ($j.ad_to) { $fileTo = [datetime]$j.ad_to }; $sdSupRows = @($j.deals).Count } catch {} }
   $schedTo = $null; try { $schedTo = [datetime]$rec.current.to } catch {}
   if (-not $schedTo) { continue }
-  if ((-not $newest) -or ($fileTo -and $fileTo -lt $schedTo)) {
-    $have = if ($newest) { $newest.Name + ' (window ends ' + $(if($fileTo){$fileTo.ToString('yyyy-MM-dd')}else{'undeclared'}) + ')' } else { 'no deals file at all' }
+  # LIKE FOR LIKE (2026-09-18, queue 2026-09-18-de39ec; ad-schedule-backing-lib.ps1 has the account). Baker's
+  # calendar is advanced by the Kroger API lane, so ITS data is the newest API capture's promo rows, never the
+  # unscheduled flyer read. Fareway's calendar and deals file share a producer and keep the old comparison.
+  $sdApiName = ''; $sdApiAdTo = @()
+  if ([string]$rec.store -eq "Baker's") {
+    $sdApiF = Get-ChildItem (Join-Path $OutDir 'regular\bakers-regular-*.json') -ErrorAction SilentlyContinue |
+              Where-Object { $_.BaseName -match '^bakers-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+    if ($sdApiF) {
+      $sdApiName = $sdApiF.Name
+      try { $sdApiDoc = Read-JsonFile $sdApiF.FullName; $sdApiAdTo = @(@($sdApiDoc.deals) | ForEach-Object { [string]$_.ad_to } | Where-Object { $_ }) } catch { $sdApiAdTo = @() }
+    }
+  }
+  $sdBack = Get-AdScheduleBacking -Store ([string]$rec.store) -SchedTo $schedTo -SupplementName $(if ($newest) { $newest.Name } else { '' }) -SupplementTo $fileTo -ApiName $sdApiName -ApiAdTo $sdApiAdTo
+  if (($sdBack.backed_by -eq 'api') -and $sdBack.supplement_gap) {
+    Log ("SCHEDULE-VS-DATA $($rec.store): current.to=$($rec.current.to) is backed by the API capture $($sdBack.api_name) ($($sdBack.api_rows) promo row(s) run to it); the flyer supplement is $($sdBack.have), so flyer coverage is lost until it lands. Not paged here: audit-row-age pages AD COVERAGE GONE under the 24h owned-gap rule (Q1-bakers-flyer-lane).")
+  }
+  if ($sdBack.page) {
+    $have = $sdBack.have
     # AN OWNED GAP IS NOT AN UNOWNED ONE (2026-09-09, queue 2026-09-09-e60137). This decided "the window
     # advanced without the data" from the newest ad file alone, never reading the pending-browser-work flag
     # that capture-run had written 29 minutes earlier in the SAME morning's run. On 09-09 it paged Baker's
@@ -724,9 +769,11 @@ foreach ($rec in $newStores) {
       Log ("SCHEDULE-AHEAD-OF-DATA $($rec.store) NOT PAGED - " + (Get-BrowserOwnedNote -Store ([string]$rec.store)) + " capture on disk: $have")
       continue
     }
-    $summary += ("REVIEW    {0}'s schedule says its ad runs to {1}, but the newest ad capture is {2} - the window advanced without the data. Its board prices come from the OLD ad until a pull lands." -f $rec.store, $rec.current.to, $have)
-    Log ("SCHEDULE-AHEAD-OF-DATA $($rec.store): current.to=$($rec.current.to) but capture is $have")
-    if (-not $NoAlert) { try { Send-Alert -Subject ("$($rec.store) ad window advanced with no capture behind it") -Body ("ad-schedule.json records $($rec.store)'s current ad window ending $($rec.current.to), but the newest ad capture on disk is $have.`n`nThese are written by two different steps and only one ran. The ad supplement OVERRIDES the everyday storefront price whenever it is cheaper, so until a pull lands the board keeps pricing cells from the PREVIOUS ad - a sale that is over. That is how Fareway published `$1.99/lb pork chops for six days after the sale ended.`n`nFix: run the browser agent for this store so the ad capture catches up.") | Out-Null } catch {} }
+    $sdDetected = [string](@(@($rec.history) | Where-Object { [string]$_.from -eq [string]$rec.current.from }) | Select-Object -Last 1).detected
+    $sdText = Get-AdScheduleAlertText -Backing $sdBack -SchedTo ([string]$rec.current.to) -Detected $sdDetected -SupplementRows $sdSupRows
+    $summary += $sdText.summary
+    Log ("SCHEDULE-AHEAD-OF-DATA $($rec.store): current.to=$($rec.current.to) but " + $(if ([string]$rec.store -eq "Baker's") { 'the API capture ' + $(if ($sdBack.api_name) { $sdBack.api_name + ' carries 0 promo rows to it' } else { 'is missing' }) + '; flyer ' } else { '' }) + "capture is $have")
+    if (-not $NoAlert) { try { Send-Alert -Subject ("$($rec.store) ad window advanced with no capture behind it") -Body $sdText.body | Out-Null } catch {} }
   }
 }
 

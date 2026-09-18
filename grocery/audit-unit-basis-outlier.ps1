@@ -320,6 +320,30 @@ if ($SelfTest) {
     if ($kh[0].unit_kind -ne 'weight') { Write-Output ("  X MUST-FIRE: baby-formula unit_kind should be weight (unit 'oz'), got '" + $kh[0].unit_kind + "'"); $bad++ }
     if ($kh[0].agrees_with_engine_divisor) { Write-Output '  X MUST-FIRE: baby-formula ready-to-feed liquid must NOT agree with its engine divisor - the new field has inverted the founding class'; $bad++ }
   }
+  # MUST FIRE, frozen by hand from comparison-2026-09-17 (built 2026-09-18 08:07:34), the board guards HELD on
+  # 09-13, 14, 17 and 18 (queue 2026-09-18-f90ba6): a pistachio MILK, 42 fl oz, crowned pistachios at 0.1426/oz
+  # against real nuts at 0.4056 to 0.6658. NEVER regenerated from the board: the fix excludes the beverage, so
+  # a regenerated fixture would carry the Simple Truth bag below and pass by finding nothing.
+  $kindPist = @(
+    [pscustomobject]@{ id='pistachios'; commodity='Pistachios'; unit='oz'; stores=@(
+      [pscustomobject]@{ store="Baker's";     per_unit=0.1426; size='42 fl oz'; item='Whole Moon Pistachio Plant Beverage Whole Protein' }
+      [pscustomobject]@{ store='Aldi';        per_unit=0.4056; size='16 oz';    item='Southern Grove Pistachios 16 OZ' }
+      [pscustomobject]@{ store='Walmart';     per_unit=0.4567; size='24 oz';    item='Great Value Roasted and Salted Pistachios, 24 oz' }
+      [pscustomobject]@{ store='Family Fare'; per_unit=0.4698; size='12.75 oz'; item='Planters Dry Roasted Pistachios 12.75 Oz' }
+      [pscustomobject]@{ store="Sam's Club";  per_unit=0.6658; size='24 oz';    item="Wonderful Lightly Salted Pistachios, No Shells, 24 oz." }
+    )}
+  )
+  $kpAll = Find-MeasureKindMismatch -Rows $kindPist
+  $kp = @($kpAll | Where-Object { $_.id -eq 'pistachios' -and $_.store -eq "Baker's" })
+  if (@($kp).Count -ne 1 -or -not $kp[0].holds_crown -or $kp[0].kind -ne 'volume' -or $kp[0].row_kind -ne 'weight') {
+    Write-Output ("  X MUST-FIRE: the 42 fl oz pistachio beverage crowning pistachios was not flagged as a volume crown on a weight row (found " + @($kp).Count + ")"); $bad++
+  }
+  # MUST NOT FIRE: the same row after the fix, with Baker's real nuts back in the cell (Simple Truth 32 oz,
+  # $14.99 = 0.4684, the next-cheapest Baker's pistachio row in bakers-regular-2026-09-18).
+  $kindPist[0].stores[0] = [pscustomobject]@{ store="Baker's"; per_unit=0.4684; size='32 oz'; item='Simple Truth Shelled Roasted & Salted Pistachios' }
+  $kp2All = Find-MeasureKindMismatch -Rows $kindPist
+  $kp2 = @($kp2All | Where-Object { $_ -and $_.id -eq 'pistachios' })
+  if (@($kp2).Count -ne 0) { Write-Output ("  X MUST NOT FIRE: pistachios measured all by weight still reported " + @($kp2).Count + " kind mismatch(es)"); $bad++ }
 
   # ---- kind_equivalent: A COMMODITY MAY DECLARE ITS UNITS INTERCHANGEABLE ------------------------
   # (2026-09-06, queue 2026-09-06-79fe01) FROZEN BY HAND from the real comparison-2026-09-06 row that
@@ -509,7 +533,7 @@ if ($SelfTest) {
     $bad += @($b2).Count
   }
 
-  if ($bad -eq 0) { Write-Output 'audit-unit-basis-outlier SELF-TEST PASS (10 must-fire, 9 clean twins, three tails, both references, allowlist keyed to the size, kind_equivalent scoped)'; exit 0 }
+  if ($bad -eq 0) { Write-Output 'audit-unit-basis-outlier SELF-TEST PASS (11 must-fire, 10 clean twins, three tails, both references, allowlist keyed to the size, kind_equivalent scoped)'; exit 0 }
   Write-Output ("audit-unit-basis-outlier SELF-TEST FAIL ($bad)"); exit 2
 }
 

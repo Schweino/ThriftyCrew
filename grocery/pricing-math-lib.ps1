@@ -304,6 +304,16 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   # for the same reason: a literal cent sign in this source has been re-encoded by an editor before now.
   # The leading U+00C2 stays optional so a mojibaked capture still inside the carry window is stripped too.
   $p = [regex]::Replace($p, '(?i)(?:\bFUEL\s+SAVE[RD]?\b[,\s]*)?(?:\bEARN\s+)?\d+\s*(?:\u00C2?\u00A2|cents?)\s*OFF\s+PER\s+GALLON\s*,?', ' ')
+  # A SAVINGS CLAUSE IS NOT A PRICE EITHER (2026-09-18, queue 2026-09-18-f90ba6, triage-plans\plan-2026-09-18.json).
+  # The fuel-saver strip above taught the parser ONE savings shape. Hy-Vee's 09-14 ad carried the next two:
+  #     "Hy-Vee mini donuts, SAVE 50<cent>, $1.99"      -> published at $0.50 a donut
+  #     "Quaker protein bars, SAVE 50<cent>, $3.98"     -> published at $0.50 a bar
+  # and guards held the whole board from 09-14 to 09-18 on them (guard 8d, ad-line price provenance). The
+  # coupon shape "- 50<cent> off with digital coupon, $1.99" is the same class and was on disk too. Strip both
+  # before ANY extraction, exactly as the fuel clause is stripped, so every branch below reads the line the ad
+  # actually prices. Same glyph rule as above: \u00XX escapes, never a literal, and U+00C2 optional.
+  $p = [regex]::Replace($p, '(?i)\bSAVE!?\s*\.?\d+\s*(?:\u00C2?\u00A2|cents?)\s*,?', ' ')
+  $p = [regex]::Replace($p, '(?i)-?\s*\d+\s*(?:\u00C2?\u00A2|cents?)\s+off\s+with\s+(?:manufacturer.s\s+)?digital\s+coupon\s*,?', ' ')
   $note = ''
   # PACKAGE SIZE vs PER-LB PRICE. This string is priceText + nameText, so a product NAMED
   # "Yellow Onions, 3 lb Bag" used to trip the per-lb marker and its $2.39 BAG price got published
@@ -375,8 +385,16 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   # function removes the shapes Hy-Vee writes today; the lookahead refuses the READING regardless of how the
   # clause is worded around it, so a fuel-saver line the strip has not learned yet goes UNPRICED instead of
   # publishing a reward as a price. Understating is wrong, but a $0.10 laundry pod is wrong AND believable.
+  # AND THE STRUCTURAL RULE UNDER BOTH STRIPS (2026-09-18, f90ba6): A CENTS TOKEN IS NEVER THE PRICE WHEN THE
+  # LINE ALSO CARRIES A DOLLAR AMOUNT. Each strip above knows one wording, and the parser has been taught the
+  # savings shapes one incident at a time (PERKS, then FUEL SAVER on 09-07, then SAVE 50c today). Measured by
+  # the reviewer over every ads-*.json on disk: 145 distinct lines carry a cents token AND a $ token, and in all
+  # 145 the cents token is a reward or a savings, never the price (139 fuel-saver, 4 SAVE-cents, 2 coupon);
+  # the 60 cents-only lines carry no $ at all. So a line with a $ amount skips this branch and falls through to
+  # the last-dollar read below, and a wording no strip has learned yet prices off its dollar instead of its
+  # savings. "Bananas, 49<cent> lb." and a bare "88<cent>" carry no $ and keep pricing here.
   $m = [regex]::Match($p, '(\d+)\s*(?:\u00C2?\u00A2|cents?)(?!\s*OFF\s*PER\s*GALLON)')
-  if ($m.Success) { return @{ per_item = ([double]$m.Groups[1].Value)/100.0; kind=@{perlb=$perlb;pereach=$pereach}; note='cents' } }
+  if ($m.Success -and ($p -notmatch '\$\s*\d')) { return @{ per_item = ([double]$m.Groups[1].Value)/100.0; kind=@{perlb=$perlb;pereach=$pereach}; note='cents' } }
   # plain dollar amount (take the LAST one, which is usually the sale/ad price)
   $dm = [regex]::Matches($p, '\$\s*([\d]+(?:\.\d{1,2})?)')
   if ($dm.Count -gt 0) {
