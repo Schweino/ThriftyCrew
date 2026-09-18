@@ -10669,7 +10669,7 @@ egress could separate route from subject, so no second-path design item is opene
 recorded above (one seeded profile per browser store) stands as a further reason against building one. Nothing
 shipped except this record.
 
-### I133 - Random selection gives fairness in expectation but no deadline, and round-robin with re-permutation gives both for free `OPEN` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I133 - Random selection gives fairness in expectation but no deadline, and round-robin with re-permutation gives both for free `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** CONFIRMED and worse than filed. `build-verification-sample.ps1` seeds on the board date, so each day is an independent draw of 100 from 3,179 priced cells - unbounded worst case, against 63 runs if wrapped and permuted. But two other sites are deterministically NEVER: `harvest.py:2266` (`random.seed(11)`, the same 1,200 files forever) and `seo_reach_diagnosis.py:92` (sorted then strided, the same indices forever). The I38 ruling reads as though determinism is the safe property; these are its counterexample.
 
@@ -10693,6 +10693,67 @@ report says "sampled k of N" with no statement about how long the unlucky item h
 worst-case number of runs before a given item is examined?* If the answer is "unbounded" or "nobody
 knows", wrap-and-permute converts it to a stated bound at the cost of one persisted cursor. Whether to
 adopt it anywhere is a later call; this rung produces the list and the answer.
+
+**Done 2026-09-18. The list and the answer, and one sampler turned into a census because the measurement said its sample could not see most of what it guards.**
+
+*Acceptance bar, written in the session before any count was taken (not committed ahead of the run, so it rests on
+this record).* For each sampler: (1) the worst case in runs before a given item is examined - bounded (with the
+bound), unbounded, or never while the population holds still. (2) A change is warranted only where the sampler
+runs on a SCHEDULE, its answer to (1) is unbounded or never, AND over its ACTUAL run history its distinct items
+examined fall below 80% of what wrap-and-permute would have examined in the same runs (`min(N, runs x n)`).
+Manual samplers are listed and never changed, because the person running one chooses its input.
+
+*The list.* Found by grepping `random.seed`, `random.sample`, `Get-Random`, `sample`, `stride` and `round robin`
+over first-party `.ps1` and `.py` and reading each hit; one-off bench shuffles in `graph/bench/`, `sidecar/` and
+`tools/` build training or eval splits rather than choose what gets checked, and are left out.
+
+| Sampler | Runs | Rule | Worst case for one item | Realized vs wrap-and-permute |
+|---|---|---|---|---|
+| `grocery/build-verification-sample.ps1` (blob `db23b81a3`) | weekly draw, verified by hand | SHA-256 of seed + cell, seed = board date: independent draws | unbounded (geometric) | crown 168 of 180, non-crown 117 of 120 over the 3 verified whole-board runs |
+| `grocery/test-matcher-parity.ps1 -Sample 400` in the chain (blob `10316ed46`) | 7 days or on a matcher edit | sorted then strided | never, while the corpus holds still | **2,214 of 2,800 (79.1%)** over its 7 stride runs |
+| `graph/learning/local_triage.py --limit 600` (blob `3902ea2c3`) | weekly nightly stage | sorted then strided | never, while the corpus holds still | 600 of 600 over its 1 run to date |
+| `ops/seo_url_inspect.py` (blob `f9be47cc9`) | manual | sorted then strided, n=14 | never | not scheduled |
+| `ops/seo_reach_diagnosis.py` (blob `f5654a4ee`) | manual | sorted then strided | never | not scheduled |
+| `meal-prep/pipeline/harvest.py` `mine_link_domains` (blob `b32584ff7`) | manual (`--probe-domains`) | `random.seed(11)`, 1,200 of 52,180 cached pages | never, while the cache holds still | not scheduled |
+| `graph/eval/smoke_test.py` | manual | seeded, default seed 20260820, n=10 | never at the default seed | not scheduled |
+
+*Harness.* Three scratch probes at worktree commit `f77b833e0`, read-only against the main checkout: a Python read
+of the 7 tracked `verification-sample-*.json` keys and `verification-history.json` (blob `17b4e3a64`); a
+PowerShell re-run of matcher-parity's own load and stride over the corpus rebuilt per run date from each file's
+dated name (462 files, 4 undated counted as always present; the rebuilt corpora sit within 1.4% of the sizes the
+chain logged, 48,516 against 49,191 on 09-06 and 50,286 against 49,981 on 09-12, so the 79.1% carries that much
+slack); and a Python stride over `question_verdicts` rebuilt by `decided_at` from a copy of `graph.db`. Not
+committed: the matcher-parity question is closed by the census below, and the other two are re-run by counting
+distinct keys per run.
+
+*Verdict against the bar.*
+- **verification-sample: no change.** 93.3% and 97.5% realized against wrap. Its job is a defect RATE, for which
+  independent draws are the intended design, and the bound wrap-and-permute would give is `2 x ceil(N/n) - 1`:
+  17 runs for crowns (533 / 60) and **121 runs for non-crowns (2,435 / 40)**, which at the realized cadence
+  (3 verified whole-board runs between 07-30 and 08-15, none since, and 09-02 drawn but never verified) is years.
+  The exposure there is cadence, which the script already names on every draw, not the selection rule.
+- **matcher-parity: warranted, and the fix is a census rather than a cursor.** 79.1% sits under the bar by less
+  than the reconstruction's slack, so on coverage alone the call is close. What settled it was the defence the
+  sample was chosen on, that "a copy drifts for a whole rule, not one unlucky name". Measured over the 51,766-name
+  corpus with the engine's own matcher: **the 400-name stride reached 188 of the 583 commodities that own any name**
+  (median 41 names per commodity, 130 with 10 or fewer), so a drift in any of the other 395 rules was invisible to
+  it. A wrap-and-permute cursor would still take `2 x ceil(51,766 / 400) - 1 = 259` runs to promise a name. The
+  census bounds it at 1 run and took **309.5 s against 43.2 s** for the sample (both exit 0, 51,766 and 400 names,
+  0 disagreements), once a week or on a matcher edit.
+- **local_triage: no change today.** Its one actual run passes trivially. A forward simulation of four weekly
+  runs over the same rebuilt corpora reads 1,601 of 2,400 (66.7%), and the week with no new rows re-picks the
+  identical 600 (0 new), so it will cross the bar once it has run a few times. It labels rejections with the
+  local model rather than passing or failing anything, so nothing is built until that history exists.
+- **The four manual samplers: no change**, by the bar's own rule.
+
+*Shipped.* `grocery/check-ad-cycles.ps1`'s matcher-parity lane drops `-Sample 400` and takes `-TimeoutSec 900`
+(a lane that overruns reports BLIND and the board still ships). `grocery/test-auditors.ps1` keeps its own
+`-Sample 400`, because it runs on every push, and unit u139 gains four cases through `Get-ParityLaneShape`: a
+MUST FIRE (a lane passing `-Sample` reads SAMPLED), a MUST NOT FIRE (a census lane whose comment names `-Sample`
+is still a census), the live check that the chain lane is a census, and a CLEAN TWIN that the lane kept its
+`MATCHER-PARITY-COMPLETE` marker and its 7-day cadence. Driven in isolation: 4 pass, exit 0; with the lane
+reverted to `-Sample 400`, the live case went red (3 pass, 1 fail, exit 1); restored md5-identical
+(`CA71F1705DBCCA8B5BC413B891051F30`). No reader-facing number moves: the lane is advisory.
 
 ### I134 - the restore drill exists, is the only thing that would prove `DONE` `queue-7`
 

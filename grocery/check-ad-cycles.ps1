@@ -1581,7 +1581,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         New-FanoutLane -Name 'hyvee-store-blend'   -File (Join-Path $root 'audit-hyvee-store-blend.ps1') -Marker 'HYVEE-STORE-BLEND-COMPLETE'
         New-FanoutLane -Name 'price-capture-reach' -File (Join-Path $root 'audit-price-capture-reach.ps1') -Marker 'PRICE-CAPTURE-REACH-COMPLETE'
         New-FanoutLane -Name 'graph-gates'         -File (Join-Path $root 'audit-graph-gates.ps1')          -TimeoutSec 600 -Marker 'GRAPH-GATES-COMPLETE'
-        New-FanoutLane -Name 'matcher-parity'      -File (Join-Path $root 'test-matcher-parity.ps1')        -Arguments @('-Sample','400') -Due $cadDue['matcher-parity'] -Marker 'MATCHER-PARITY-COMPLETE'
+        New-FanoutLane -Name 'matcher-parity'      -File (Join-Path $root 'test-matcher-parity.ps1')        -TimeoutSec 900 -Due $cadDue['matcher-parity'] -Marker 'MATCHER-PARITY-COMPLETE'   # a CENSUS, no -Sample: backlog I133
         New-FanoutLane -Name 'precedence-ladders'  -File (Join-Path $root 'test-precedence-ladders.ps1')    -Arguments @('-Quiet')        -Due $cadDue['precedence-ladders'] -Marker 'PRECEDENCE-LADDERS-COMPLETE'
         New-FanoutLane -Name 'category-coverage'   -File (Join-Path $root 'audit-category-coverage.ps1')    -Arguments (@('-OutDir', $OutDir) + $(if (-not $NoAlert) { @('-Alert') } else { @() })) -Marker 'CATEGORY-COVERAGE-COMPLETE'
         New-FanoutLane -Name 'store-registry'      -File (Join-Path $root 'audit-store-registry.ps1')       -Arguments (@() + $(if (-not $NoAlert) { @('-Alert') } else { @() })) -Due $cadDue['store-registry'] -Marker 'STORE-REGISTRY-COMPLETE'
@@ -1855,8 +1855,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # all; wiring it into test-auditors alone would NOT have fixed that, because test-auditors is a
       # TESTER_FILE and the chain does not run it - naming a guard in a test proves it is tested, not that
       # it runs, which is the audit-unit-basis-outlier lesson this contract exists to enforce. So it runs
-      # HERE, against live product names. Sampled (the full sweep is ~28.5k names); a copy that drifts does
-      # so for a whole rule, not one unlucky name. Advisory: it reports, the board still ships.
+      # HERE, against live product names. Advisory: it reports, the board still ships.
+      # A CENSUS HERE, NOT A SAMPLE (2026-09-18, backlog I133). This lane ran -Sample 400, a sorted stride that
+      # is a fixed function of the corpus, on the argument that a copy drifts for a whole rule and not one
+      # unlucky name. Measured over the 51,766-name corpus: the stride's 400 names reached 188 of the 583
+      # commodities that own any name, so a drift in any of the other 395 rules was invisible to it, and a
+      # name off the stride waited for the corpus to shift before it was ever looked at. The full sweep took
+      # 309.5 s against 43.2 s for the sample, once a week or on a matcher edit. test-auditors keeps -Sample
+      # 400 because it runs on every push; this lane is the one that owes the census.
       # CADENCE (7d): compares auditor COPIES of Match-Category against the engine; only a code or rule edit can change the answer.
       if (-not $cadDue['matcher-parity']) {
         Log ('matcher-parity: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'matcher-parity') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")

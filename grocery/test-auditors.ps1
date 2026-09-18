@@ -7259,6 +7259,33 @@ $r = Get-Early 'early:matcher-parity' (Join-Path $root 'test-matcher-parity.ps1'
 if ($r.rc -eq 0 -and $r.text -match 'MATCHER-PARITY OK') { Ok 'matcher parity: every auditor copy of Match-Category still assigns names exactly as the engine does' }
 elseif ($r.rc -eq 3 -or $r.text -match 'FATAL') { Bad ('matcher parity could not evaluate (rc=' + $r.rc + ') - it proved nothing, which is not the same as agreement') }
 else { Bad ('matcher parity FAILED (rc=' + $r.rc + ') - an auditor no longer describes the engine that builds the board; audit-household-in-food is a HARD guard, so it may be judging cells under the wrong commodity') }
+# THE CHAIN LANE IS A CENSUS, NOT THIS SAMPLE (2026-09-18, backlog I133). The 400 above stays because this
+# suite runs on every push. The daily chain's lane ran the same -Sample 400, a sorted stride that is a fixed
+# function of the corpus: over 51,766 names it reached 188 of the 583 commodities that own any name, so a
+# drift in the other 395 rules was invisible, and "a copy drifts for a whole rule" did not cover them. The
+# census took 309.5 s against 43.2 s, weekly or on a matcher edit. A lane that goes back to -Sample is red here.
+function Get-ParityLaneShape([string]$src) {
+  # 'missing' = no single matcher-parity lane; 'sampled' = its code passes -Sample; 'census' = it does not.
+  $lane = @(($src -split "`n") | Where-Object { $_ -match "New-FanoutLane\s+-Name\s+'matcher-parity'" })
+  if ($lane.Count -ne 1) { return 'missing' }
+  $code = ($lane[0] -split '#', 2)[0]
+  if ($code -match '-Sample\b') { return 'sampled' }
+  return 'census'
+}
+$fxLanePre = "        New-FanoutLane -Name 'matcher-parity' -File x.ps1 "
+$fxLaneSampled = $fxLanePre + "-Arguments @('-Sample','400') -Marker 'M'"
+$fxLaneCensus = $fxLanePre + "-TimeoutSec 900 -Marker 'M'   # a census, no -Sample"
+$shapeS = Get-ParityLaneShape $fxLaneSampled
+if ($shapeS -eq 'sampled') { Ok 'MUST FIRE  a matcher-parity chain lane that passes -Sample is read as SAMPLED' } else { Bad ('MUST FIRE  a sampled matcher-parity lane was read as ' + $shapeS) }
+$shapeC = Get-ParityLaneShape $fxLaneCensus
+if ($shapeC -eq 'census') { Ok 'MUST NOT FIRE  a census lane whose trailing comment names -Sample is still a census' } else { Bad ('MUST NOT FIRE  a census lane was read as ' + $shapeC) }
+$cadSrcI133 = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
+$shapeLive = Get-ParityLaneShape $cadSrcI133
+if ($shapeLive -eq 'census') { Ok 'the daily chain runs matcher parity as a CENSUS over every product name (I133)' }
+else { Bad ('the daily chain matcher-parity lane is ' + $shapeLive + ', not a census - a stride of 400 reached 188 of 583 commodities (backlog I133)') }
+$liveLane = @(($cadSrcI133 -split "`n") | Where-Object { $_ -match "New-FanoutLane\s+-Name\s+'matcher-parity'" })
+if ($liveLane.Count -eq 1 -and $liveLane[0] -match "-Marker\s+'MATCHER-PARITY-COMPLETE'" -and $liveLane[0] -match "-Due\s+\`$cadDue\['matcher-parity'\]") { Ok 'CLEAN TWIN  the census lane still declares its completion marker and its 7-day cadence' }
+else { Bad 'CLEAN TWIN  the matcher-parity lane lost its MATCHER-PARITY-COMPLETE marker or its cadence' }
 } # u139-matcher-parity-wired-2026-08-21
 
 # COMPLETION MARKER (2026-08-08). This file is the founding case for the whole contract: on 2026-08-08 it
