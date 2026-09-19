@@ -1351,6 +1351,12 @@ def retract_stale_identity_edges(db: GraphDB, asserted: set, ts: str, run: str, 
     retraction is one logged decision carrying the count, a hash of the full sorted id list and the
     first 50 ids; the identity files in git are the truth that re-derives the rest (graph.db is an
     index, schema commitment 3).
+
+    IT DEPENDS ON A FULL READ (reconciled with I211, 2026-09-19). I211's incremental guard
+    (graph/lib/supersede.py) skips observation ROWS in the price importers only; import_identity still
+    reads every namespace's files on every run, so `asserted` is the whole table. Any future skip of an
+    unchanged identity file must still add that file's pairs to `asserted`, or pass complete=False,
+    or this function will read every edge from the skipped file as stale.
     """
     ident = []
     for r in db.conn.execute(

@@ -16893,7 +16893,7 @@ harness, `MEASURE-gate-slot-admission-2026-09-11.md` and `MEASURE-ratchet-plain-
 their re-read by the new blob form, which is the proof it works. `.claude/rules/measurement.md` documents the form
 and the rule never to cite your own unlanded commit hash. The `push-main.ps1:143` console point is not addressed.
 
-### I229 - Graph: stale filed-under edges are never removed, and a missing graph.db is silently recreated `PARTLY DONE - 2, 3 AND 5 SHIPPED; THE STALE-EDGE RETRACTION IS READY FOR BRAD ON A BRANCH` `run-0919` `2-WAY` `RUNG1 MEASURE`
+### I229 - Graph: stale filed-under edges are never removed, and a missing graph.db is silently recreated `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16976,6 +16976,29 @@ counting every offered row turned 2 red; skipping torn lines silently turned 3 i
 md5-identical after restore.
 
 **What remains:** Brad's merge of bullet 1, and a measured item for the 237,937 Baker's slug-term rows (4).
+
+**Done 2026-09-19.** Stale-edge retraction landed on Brad's approval 2026-09-19. Branch `claude/i229-stale-edges`
+was rebased onto main AFTER I211 landed (e92d64fee), so the two changes to `graph/import/importers.py` were
+reconciled rather than raced. They do not overlap in behaviour: I211's incremental guard skips observation ROWS
+in the price importers only, and `import_identity` still reads every namespace's files on every run, so the
+retraction's `asserted` set is the whole identity table and `complete` is still true exactly when every namespace
+was read. `retract_stale_identity_edges`' docstring now says so, and says what a future skip of an unchanged
+identity file must do (add its pairs to `asserted`, or pass `complete=False`). The only textual conflict was
+`importers_selftest.py`, where I235's and I211's cases and this item's five sit side by side.
+Verified: `importers_selftest --selftest` exit 0, 32 of 32 (27 from main plus the 5 retraction cases);
+`graphdb_selftest --selftest` exit 0, 13 of 13. Broken once: with the `DELETE` replaced by `pass`, 3 of 32 went red
+(the re-filed MUST FIRE and both refusal cases, whose edge counts moved), exit 1; restored md5-identical.
+On a backup-API copy of the live graph.db (323,358,720 bytes, written 2026-09-18 21:41, opened `mode=ro` for the
+backup only), all 12 non-observation importers ran twice from one base copy, arm A with the retraction disabled
+and arm B as landed: **3,615 of 38,905** identity-table edges retracted in B (9.3%, under the 0.25 bar; the 3,596
+on 2026-09-18 grew as products were re-filed), 0 refused, `complete` true, 0 of 35,293 asserted pairs left without
+an `instance_of` edge, 0 identity edges left unasserted. cell_state (3,232 rows) and question_verdicts (11,347
+rows), rebuilt on both arms at a fixed timestamp, were sha256-identical (`76b3b5c5...` and `934f01c9...`). The
+harness is scratch (`i229_copy_arm.py`: backup, two copies, the importer loop, spy on the retraction's `asserted`
+set, sha of each table's rows sorted in Python). Its first cut hashed `sqlite3.Row` objects by repr, which prints
+a memory address, and read the identical arms as different; the row sets were compared directly and matched.
+The next nightly import deletes about 3,600 stale edges in the live graph.db, and commodities' sidecar exemplar
+lists change (158 on the 2026-09-18 measurement, not re-counted today); graph prices do not. Bullet 4's Baker's slug-term rows were resolved by I235.
 
 ### I230 - Stale facts in standing guidance and data `DONE` `run-0919`
 
