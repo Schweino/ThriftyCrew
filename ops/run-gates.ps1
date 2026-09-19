@@ -536,7 +536,10 @@ $pyStatic = @(
   # a mechanism nobody saw until the denominator was printed. This prints it per corpus and ratchets
   # the checkable half: a corpus whose rows do not say where they came from cannot answer the
   # question even in principle. A gitignored corpus that is absent reads as not-read, never repaired.
-  @{ f = 'ops\audit_corpus_provenance.py'; n = 'no NEW test corpus loses track of where its cases came from' }
+  @{ f = 'ops\audit_corpus_provenance.py'; n = 'no NEW test corpus loses track of where its cases came from' },
+  # A design plan dated after this landed names what the knowledge store told it (Brad, 2026-09-18). Older
+  # plans are not judged, so it starts at zero. The commit half of the same rule is the commit-msg hook.
+  @{ f = 'ops\store_citation.py'; n = 'every NEW design plan carries a Knowledge consulted section' }
 )
 $pyStaticJobs = [Collections.Generic.List[object]]::new(); $pyStaticKeys = [Collections.Generic.List[string]]::new()
 foreach ($g in $pyStatic) {

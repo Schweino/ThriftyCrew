@@ -40,4 +40,14 @@ if [ "$first3" = "efbbbf" ]; then
   echo "            File: $msg" >&2
   exit 1
 fi
+
+# STORE CITATION (Brad, 2026-09-18). A Claude session's commit that changes code names the knowledge-store
+# files it used, or says what it searched and found nothing. ops/store_citation.py holds the rule, its
+# warn-then-refuse date and its fixtures; this only calls it. A human or the bot (no CLAUDE_CODE_SESSION_ID)
+# is not judged, and a missing interpreter or script is never a refusal.
+py="/c/Codex/Python312/python.exe"
+top="$(git rev-parse --show-toplevel 2>/dev/null)"
+if [ -n "${CLAUDE_CODE_SESSION_ID:-}" ] && [ -x "$py" ] && [ -f "$top/ops/store_citation.py" ]; then
+  "$py" "$top/ops/store_citation.py" --commit-msg "$msg" || exit 1
+fi
 exit 0
