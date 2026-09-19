@@ -140,6 +140,9 @@ if (-not $isShard) {
   }
   # MUST FIRE - the founding names, each verified on the store's page on 2026-09-19.
   _RT 'MUST FIRE  D1 an Aldi aioli leaves the fresh green-chilli cell (condiment_carrier class)' 'Burman S Green Chili Squeeze Aioli 10 OZ' '<none>'
+  # D4 (2026-09-19 verification): Fareway's canned "La Choy Bean Sprouts" held the FRESH cell; its name never says canned
+  # and Fareway rows carry no department. Every La Choy product in the captures is shelf-stable, so the brand is fenced.
+  _RT 'MUST FIRE  D4 Fareway''s canned La Choy sprouts leave the FRESH bean-sprouts cell' 'La Choy Bean Sprouts' '<none>'
   _RT 'MUST FIRE  D2 an Aldi half & half named "creamer" prices half-and-half, not coffee-creamer' 'Friendly Farms Half & Half Creamer' 'half-and-half'
   _RT 'MUST FIRE  D2 a half & half single named "coffee creamer" prices half-and-half' 'Nestle Carnation Half & Half Creamers, Half and Half Coffee Creamer Singles, 360 Ct' 'half-and-half'
   _RT 'MUST FIRE  D2 a half and half single named "coffee" leaves the coffee cell' '0.38 oz. Coffee House Inspirations Half and Half (180/Carton)' 'half-and-half'
@@ -180,7 +183,7 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  canned diced green chiles still price canned-green-chilies' '(2 pack) Ortega Mild Fire Roasted Diced Green Chiles, Kosher, 7 oz Can' 'canned-green-chilies'
   _RT 'CLEAN TWIN  unwrapped sponges still price sponges' 'Scotch-Brite Heavy Duty Scrub Sponges' 'sponges'
   _RT 'CLEAN TWIN  plain coconut aminos still price coconut-aminos' 'Big Tree Farms Organic Coconut Aminos Original, 10 oz Bottle' 'coconut-aminos'
-  $rtWant = 19
+  $rtWant = 20   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), 2026-09-19
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)
