@@ -1,18 +1,18 @@
 ﻿{
     "date":  "2026-09-19",
-    "written":  "2026-09-19T16:36:36",
+    "written":  "2026-09-19T17:22:52",
     "written_by":  "check-ad-cycles",
-    "guards_rc":  2,
-    "guards_blocked":  true,
-    "inputs_fingerprint":  "b98367747f8fd02e",
+    "guards_rc":  0,
+    "guards_blocked":  false,
+    "inputs_fingerprint":  "3d17e9cf8f49564b",
     "inputs":  {
-                   "grocery\\out\\comparison-2026-09-17.json":  "5c10f84cce0f3c746146f4b2b437602f05567b98762cd6f67b3c0e4499121111",
-                   "grocery\\commodities.json":  "aa57ab1817cc63a55fce988bd36b8769bf6b7d9b56a074001f420feaa066552d",
+                   "grocery\\out\\comparison-2026-09-17.json":  "19aef9a357438aced41ad1f82d0a06648fff977aebea35b2166f5b7bc18d439c",
+                   "grocery\\commodities.json":  "493b1a518ac6ed9c203f9eac698869d4016fbd28cde9c3ecbeb5c92be16a9c79",
                    "grocery\\known-wrong.json":  "7bcf233f021b8c436f0f4723879637859532f379f6c4143b2948905f2396017a",
                    "grocery\\board-price-overrides.json":  "6f28d78f61054212173a0736fef0ee18e8a686c292b500dece86299203798d16",
-                   "grocery\\product-urls.json":  "b3d3c366d8f348cad71c632dd447c50bad8d7930584dc0155e97ad989a271004",
-                   "grocery\\out\\recipe-board.json":  "b014b37b0af18fb66fdd2446a393cc56ba2d9a391eb6d9ae6cd5f70fbafa0867",
-                   "grocery\\out\\name-drift.json":  "b3317e2609f1a458943fe3ea1046c86d267c51f4371f6aae24671cd2a4f4ab04"
+                   "grocery\\product-urls.json":  "9af3db1c14e78d00dfecd9f717c2a62b7fa16bea40fa7fd0426e09a12a55b768",
+                   "grocery\\out\\recipe-board.json":  "95e33d6636a3b2ee6a96cab2c69ee572497fc6b7e7a23f02c515e137a1a5c061",
+                   "grocery\\out\\name-drift.json":  "bea4c1d94c900b963294fdd9d5b2b9231561f39742cdc45686b1cdad5b1a509f"
                },
     "note":  "Written after guards ran. Readers must go through lib\\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\\** or meal-prep\\**."
 }

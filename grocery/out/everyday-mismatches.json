@@ -429,19 +429,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "cereal",
-        "store":  "Family Fare",
-        "unit":  "oz",
-        "board":  0.1684,
-        "link":  0.1772,
-        "ratio":  1.05,
-        "price":  3.19,
-        "size":  "18 oz",
-        "boardItem":  "Our Family Magic Shapes Cereal With Marshmallows 32 Oz",
-        "linkItem":  "Our Family Cereal, Corn Flakes 18 Oz",
-        "board_src":  "main"
-    },
-    {
         "id":  "broccoli",
         "store":  "Aldi",
         "unit":  "lb",
@@ -1106,15 +1093,15 @@
     },
     {
         "id":  "energy-drinks",
-        "store":  "Family Fare",
+        "store":  "Aldi",
         "unit":  "floz",
-        "board":  0.1353,
-        "link":  0.1744,
-        "ratio":  1.29,
-        "price":  2.79,
+        "board":  0.0763,
+        "link":  0.0931,
+        "ratio":  1.22,
+        "price":  1.49,
         "size":  "16 fl oz",
-        "boardItem":  "V8® Pomegranate Blueberry Energy Drink 96.000 Fl Oz",
-        "linkItem":  "Rockstar Fruit Punch Energy Drink 16 Fl Oz",
+        "boardItem":  "Summit Berry Waves Blue Raspberry Energy Drink",
+        "linkItem":  "Summit Ultra Parade Gridlock Energy Drink 16 FL OZ",
         "board_src":  "main"
     },
     {
@@ -1141,19 +1128,6 @@
         "size":  "92 ct",
         "boardItem":  "Always Ultra Thin Long Super Pads with Wings, Size 2, 92 ct.",
         "linkItem":  "Always Ultra Thin Long Super Pads with Wings, Size 2, 92 ct.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "feta",
-        "store":  "Family Fare",
-        "unit":  "oz",
-        "board":  1.1238,
-        "link":  1.2475,
-        "ratio":  1.11,
-        "price":  4.99,
-        "size":  "4 oz",
-        "boardItem":  "Athenos Traditional Feta Cheese Chunk 8 Oz",
-        "linkItem":  "Athenos Feta Traditional Cheese Crumbles 4 Oz",
         "board_src":  "main"
     },
     {

@@ -910,9 +910,9 @@
         "cost_first_run":  56.34,
         "lines_priced":  16,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -956,7 +956,7 @@
                           "grams":  11,
                           "util_cost":  0.32,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -5212,10 +5212,9 @@
         "cost_first_run":  69.56,
         "lines_priced":  14,
         "lines_unpriced":  0,
-        "lines_uncarried":  2,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Guajillo Chiles [UNKNOWN]",
-                          "Dried Ancho Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -5277,7 +5276,7 @@
                           "grams":  21,
                           "util_cost":  0.45,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -5295,7 +5294,7 @@
                           "grams":  14,
                           "util_cost":  0.28,
                           "basis":  "board:dried-ancho-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -5483,11 +5482,9 @@
         "cost_first_run":  101.57,
         "lines_priced":  18,
         "lines_unpriced":  0,
-        "lines_uncarried":  3,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Guajillo Chiles [UNKNOWN]",
-                          "Dried Ancho Chiles [UNKNOWN]",
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -5567,7 +5564,7 @@
                           "grams":  124,
                           "util_cost":  2.64,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -5585,7 +5582,7 @@
                           "grams":  99,
                           "util_cost":  1.96,
                           "basis":  "board:dried-ancho-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -5603,7 +5600,7 @@
                           "grams":  5,
                           "util_cost":  0.15,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -10777,9 +10774,9 @@
         "cost_first_run":  56.6,
         "lines_priced":  13,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Caraway Seeds [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -10895,7 +10892,7 @@
                           "grams":  12,
                           "util_cost":  2.16,
                           "basis":  "board:caraway-seeds:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -19075,9 +19072,9 @@
         "cost_first_run":  53.59,
         "lines_priced":  14,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Ancho Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -19211,7 +19208,7 @@
                           "grams":  14,
                           "util_cost":  0.28,
                           "basis":  "board:dried-ancho-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -21703,9 +21700,9 @@
         "cost_first_run":  48.91,
         "lines_priced":  18,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Guajillo Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -21965,7 +21962,7 @@
                           "grams":  21,
                           "util_cost":  0.45,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -26203,9 +26200,9 @@
         "cost_first_run":  92.43,
         "lines_priced":  15,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Guajillo Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -26429,7 +26426,7 @@
                           "grams":  94,
                           "util_cost":  2,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -28525,9 +28522,9 @@
         "cost_first_run":  61.23,
         "lines_priced":  17,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Guajillo Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -28535,7 +28532,7 @@
                           "grams":  70,
                           "util_cost":  1.49,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -28849,11 +28846,9 @@
         "cost_first_run":  75.61,
         "lines_priced":  15,
         "lines_unpriced":  0,
-        "lines_uncarried":  3,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Guajillo Chiles [UNKNOWN]",
-                          "Dried Ancho Chiles [UNKNOWN]",
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -28861,7 +28856,7 @@
                           "grams":  112,
                           "util_cost":  2.38,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -28879,7 +28874,7 @@
                           "grams":  79,
                           "util_cost":  1.57,
                           "basis":  "board:dried-ancho-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -28897,7 +28892,7 @@
                           "grams":  2,
                           "util_cost":  0.06,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -33819,9 +33814,9 @@
         "cost_first_run":  51.99,
         "lines_priced":  19,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Guajillo Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -34045,7 +34040,7 @@
                           "grams":  14,
                           "util_cost":  0.3,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -47013,9 +47008,9 @@
         "cost_first_run":  60.94,
         "lines_priced":  20,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -47167,7 +47162,7 @@
                           "grams":  6,
                           "util_cost":  0.18,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -60783,9 +60778,9 @@
         "cost_first_run":  97.8,
         "lines_priced":  15,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Caraway Seeds [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -60973,7 +60968,7 @@
                           "grams":  15,
                           "util_cost":  2.7,
                           "basis":  "board:caraway-seeds:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -62367,9 +62362,9 @@
         "cost_first_run":  40.31,
         "lines_priced":  13,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -62503,7 +62498,7 @@
                           "grams":  5,
                           "util_cost":  0.15,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -67173,9 +67168,9 @@
         "cost_first_run":  46.56,
         "lines_priced":  18,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Guajillo Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -67273,7 +67268,7 @@
                           "grams":  42,
                           "util_cost":  0.89,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -75399,9 +75394,9 @@
         "cost_first_run":  105.49,
         "lines_priced":  24,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -75427,7 +75422,7 @@
                           "grams":  15,
                           "util_cost":  0.44,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -79521,9 +79516,9 @@
         "cost_first_run":  50.12,
         "lines_priced":  15,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -79675,7 +79670,7 @@
                           "grams":  3,
                           "util_cost":  0.09,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -80871,10 +80866,9 @@
         "cost_first_run":  51.65,
         "lines_priced":  16,
         "lines_unpriced":  0,
-        "lines_uncarried":  2,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Ancho Chiles [UNKNOWN]",
-                          "Dried Guajillo Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -80882,7 +80876,7 @@
                           "grams":  238,
                           "util_cost":  4.72,
                           "basis":  "board:dried-ancho-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -80900,7 +80894,7 @@
                           "grams":  126,
                           "util_cost":  2.68,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -85174,9 +85168,9 @@
         "cost_first_run":  56.58,
         "lines_priced":  18,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -85220,7 +85214,7 @@
                           "grams":  47,
                           "util_cost":  1.38,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -91438,11 +91432,9 @@
         "cost_first_run":  47.57,
         "lines_priced":  15,
         "lines_unpriced":  0,
-        "lines_uncarried":  3,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Guajillo Chiles [UNKNOWN]",
-                          "Dried Ancho Chiles [UNKNOWN]",
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -91450,7 +91442,7 @@
                           "grams":  50,
                           "util_cost":  1.06,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -91468,7 +91460,7 @@
                           "grams":  95,
                           "util_cost":  1.88,
                           "basis":  "board:dried-ancho-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -91486,7 +91478,7 @@
                           "grams":  2,
                           "util_cost":  0.06,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -101268,9 +101260,9 @@
         "cost_first_run":  82.66,
         "lines_priced":  20,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Ancho Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -101476,7 +101468,7 @@
                           "grams":  30,
                           "util_cost":  0.59,
                           "basis":  "board:dried-ancho-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -122562,9 +122554,9 @@
         "cost_first_run":  52.98,
         "lines_priced":  15,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Caraway Seeds [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -122734,7 +122726,7 @@
                           "grams":  9,
                           "util_cost":  1.62,
                           "basis":  "board:caraway-seeds:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -123120,9 +123112,9 @@
         "cost_first_run":  67,
         "lines_priced":  13,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -123220,7 +123212,7 @@
                           "grams":  11,
                           "util_cost":  0.32,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -137934,10 +137926,9 @@
         "cost_first_run":  86.36,
         "lines_priced":  18,
         "lines_unpriced":  0,
-        "lines_uncarried":  2,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Ancho Chiles [UNKNOWN]",
-                          "Dried Guajillo Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -137999,7 +137990,7 @@
                           "grams":  173,
                           "util_cost":  3.43,
                           "basis":  "board:dried-ancho-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -138017,7 +138008,7 @@
                           "grams":  61,
                           "util_cost":  1.3,
                           "basis":  "board:dried-guajillo-chiles:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -138889,9 +138880,9 @@
         "cost_first_run":  62.91,
         "lines_priced":  13,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Caraway Seeds [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -138989,7 +138980,7 @@
                           "grams":  3,
                           "util_cost":  0.54,
                           "basis":  "board:caraway-seeds:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -150589,9 +150580,9 @@
         "cost_first_run":  57.94,
         "lines_priced":  17,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Dried Arbol Chiles [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -150779,7 +150770,7 @@
                           "grams":  44,
                           "util_cost":  1.29,
                           "basis":  "board:dried-arbol-chiles:nomem:Family Fare",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,

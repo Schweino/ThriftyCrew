@@ -463,34 +463,6 @@
                               "agrees_with_engine_divisor":  false
                           },
                           {
-                              "id":  "honey-mustard",
-                              "commodity":  "Honey Mustard",
-                              "unit":  "oz",
-                              "store":  "Aldi",
-                              "per_unit":  0.1242,
-                              "size":  "12 oz",
-                              "item":  "Burmans Honey Dijon Mustard 12 OZ",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  true,
-                              "unit_kind":  "weight",
-                              "agrees_with_engine_divisor":  true
-                          },
-                          {
-                              "id":  "honey-mustard",
-                              "commodity":  "Honey Mustard",
-                              "unit":  "oz",
-                              "store":  "Walmart",
-                              "per_unit":  0.1475,
-                              "size":  "12 oz",
-                              "item":  "Great Value Honey Dijon Mustard, 12 oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "weight",
-                              "agrees_with_engine_divisor":  true
-                          },
-                          {
                               "id":  "horseradish-sauce",
                               "commodity":  "Horseradish Sauce (creamy)",
                               "unit":  "oz",
@@ -1868,23 +1840,10 @@
                      }
                  ],
     "kind_mismatch_crown":  [
-                                {
-                                    "id":  "honey-mustard",
-                                    "commodity":  "Honey Mustard",
-                                    "unit":  "oz",
-                                    "store":  "Aldi",
-                                    "per_unit":  0.1242,
-                                    "size":  "12 oz",
-                                    "item":  "Burmans Honey Dijon Mustard 12 OZ",
-                                    "kind":  "weight",
-                                    "row_kind":  "volume",
-                                    "holds_crown":  true,
-                                    "unit_kind":  "weight",
-                                    "agrees_with_engine_divisor":  true
-                                }
+
                             ],
     "ratio":  4,
-    "generated":  "2026-09-19T16:35:09",
+    "generated":  "2026-09-19T17:21:55",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "coconut-oil",
@@ -1894,20 +1853,6 @@
                                                        "per_unit":  0.1961,
                                                        "size":  "56 oz",
                                                        "item":  "Member\u0027s Mark Organic Virgin Coconut Oil, 56oz.",
-                                                       "kind":  "weight",
-                                                       "row_kind":  "volume",
-                                                       "holds_crown":  true,
-                                                       "unit_kind":  "weight",
-                                                       "agrees_with_engine_divisor":  true
-                                                   },
-                                                   {
-                                                       "id":  "honey-mustard",
-                                                       "commodity":  "Honey Mustard",
-                                                       "unit":  "oz",
-                                                       "store":  "Aldi",
-                                                       "per_unit":  0.1242,
-                                                       "size":  "12 oz",
-                                                       "item":  "Burmans Honey Dijon Mustard 12 OZ",
                                                        "kind":  "weight",
                                                        "row_kind":  "volume",
                                                        "holds_crown":  true,
@@ -2006,20 +1951,6 @@
                                                        "per_unit":  0.3207,
                                                        "size":  "14 oz",
                                                        "item":  "Refined Coconut Oil Our Family",
-                                                       "kind":  "weight",
-                                                       "row_kind":  "volume",
-                                                       "holds_crown":  false,
-                                                       "unit_kind":  "weight",
-                                                       "agrees_with_engine_divisor":  true
-                                                   },
-                                                   {
-                                                       "id":  "honey-mustard",
-                                                       "commodity":  "Honey Mustard",
-                                                       "unit":  "oz",
-                                                       "store":  "Walmart",
-                                                       "per_unit":  0.1475,
-                                                       "size":  "12 oz",
-                                                       "item":  "Great Value Honey Dijon Mustard, 12 oz",
                                                        "kind":  "weight",
                                                        "row_kind":  "volume",
                                                        "holds_crown":  false,

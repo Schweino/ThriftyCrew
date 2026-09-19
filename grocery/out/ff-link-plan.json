@@ -1,69 +1,69 @@
 ﻿{
     "resolved":  [
                      {
-                         "id":  "apples",
+                         "id":  "lotion",
                          "fault":  "NO-LINK",
-                         "board":  "Gala Apples",
-                         "board_pu":  1.79,
-                         "name":  "Gala Apples",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/apples/gala_apples/p/78538",
-                         "price":  "$1.79",
-                         "size":  "lb",
+                         "board":  "Jergens Moisturizer, Extra Dry Skin, Ultra Healing 21 Fl Oz",
+                         "board_pu":  0.4757,
+                         "name":  "Jergens Moisturizer, Extra Dry Skin, Ultra Healing 21 Fl Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/skin_care/hand_body_lotion/jergens_moisturizer_extra_dry_skin_ultra_healing_21_fl_oz/p/545405",
+                         "price":  "$9.99",
+                         "size":  "21 fl oz",
                          "score":  1
                      },
                      {
-                         "id":  "blueberries",
+                         "id":  "cereal",
                          "fault":  "PRICE-DRIFT",
-                         "board":  "Flavor Ripe Blueberries 18 Oz",
-                         "board_pu":  0.3883,
-                         "name":  "Flavor Ripe Blueberries 18 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/berries/flavor_ripe_blueberries_18_oz/p/2341070",
-                         "price":  "$6.99",
-                         "size":  "18 oz",
+                         "board":  "Our Family Magic Shapes Cereal With Marshmallows 32 Oz",
+                         "board_pu":  0.1684,
+                         "name":  "Our Family Magic Shapes Cereal With Marshmallows 32 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/breakfast/cold_cereals/our_family_magic_shapes_cereal_with_marshmallows_32_oz/p/7195564",
+                         "price":  "$5.39",
+                         "size":  "32 oz",
                          "score":  1
                      },
                      {
-                         "id":  "corn-muffin-mix",
+                         "id":  "cottage-cheese",
                          "fault":  "NO-LINK",
-                         "board":  "Jiffy Corn Muffin Mix 8.5 Oz",
-                         "board_pu":  0.0882,
-                         "name":  "Jiffy Corn Muffin Mix 8.5 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/bread_muffin_mixes/jiffy_corn_muffin_mix_8_5_oz/p/8934",
-                         "price":  "$0.75",
-                         "size":  "8.5 oz",
+                         "board":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
+                         "board_pu":  0.1538,
+                         "name":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_large_curd_4_milkfat_minimum_24_oz/p/1564405684702751833",
+                         "price":  "$3.69",
+                         "size":  "24 oz",
                          "score":  1
                      },
                      {
-                         "id":  "eggs",
-                         "fault":  "NO-LINK",
-                         "board":  "Large Grade A Eggs Our Family (30 Ct)",
-                         "board_pu":  2.356,
-                         "name":  "Large Eggs, Grade A Our Family",
-                         "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
-                         "price":  "$2.39",
-                         "size":  "12 ct",
+                         "id":  "energy-drinks",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "V8® Pomegranate Blueberry Energy Drink 96.000 Fl Oz",
+                         "board_pu":  0.1353,
+                         "name":  "V8® Pomegranate Blueberry Energy Drink 96.000 Fl Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/juice_boxes_pouches/v8_pomegranate_blueberry_energy_drink_96_000_fl_oz/p/8134906",
+                         "price":  "$12.99",
+                         "size":  "96.000 fl oz",
                          "score":  1
                      },
                      {
-                         "id":  "milk",
-                         "fault":  "NO-LINK",
-                         "board":  "Our Family Lowfat Milk 1 Gal",
-                         "board_pu":  3.49,
-                         "name":  "Our Family Lowfat Milk 1 Gal",
-                         "url":  "https://www.shopfamilyfare.com/shop/dairy/milk/dairy_gallon/our_family_lowfat_milk_1_gal/p/7081908",
-                         "price":  "$3.49",
-                         "size":  "1 gal",
+                         "id":  "feta",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Athenos Traditional Feta Cheese Chunk 8 Oz",
+                         "board_pu":  1.1238,
+                         "name":  "Athenos Traditional Feta Cheese Chunk 8 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/athenos_traditional_feta_cheese_chunk_8_oz/p/36780",
+                         "price":  "$8.99",
+                         "size":  "8 oz",
                          "score":  1
                      },
                      {
-                         "id":  "pepperoni",
+                         "id":  "frozen-fruit",
                          "fault":  "NO-LINK",
-                         "board":  "Armour Family Pack Pepperoni Slices 12 Oz",
-                         "board_pu":  0.4992,
-                         "name":  "Armour Family Pack Pepperoni Slices 12 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_sausage/armour_family_pack_pepperoni_slices_12_oz/p/1564405684689262102",
-                         "price":  "$5.99",
-                         "size":  "12 oz",
+                         "board":  "Our Family Blueberries, Fresh Frozen 40 Oz",
+                         "board_pu":  0.2748,
+                         "name":  "Our Family Blueberries, Fresh Frozen 40 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_fruit/our_family_blueberries_fresh_frozen_40_oz/p/1564405684702407372",
+                         "price":  "$10.99",
+                         "size":  "40 oz",
                          "score":  1
                      }
                  ],
@@ -73,8 +73,16 @@
                         "why":  "no confident match (best 0.714)"
                     },
                     {
+                        "id":  "flour",
+                        "why":  "match found but per-unit disagrees: board $0.5596 vs link $0.598 (6.4%)"
+                    },
+                    {
                         "id":  "aluminum-foil",
                         "why":  "match found but its size \"1 ea\" gives no per-unit in sq_ft"
+                    },
+                    {
+                        "id":  "dried-basil",
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "block-cheese",
@@ -89,24 +97,36 @@
                         "why":  "match found but its size \"10.25 oz\" gives no per-unit in each"
                     },
                     {
-                        "id":  "butter",
-                        "why":  "match found but per-unit disagrees: board $4.49 vs link $5.39 (16.7%)"
-                    },
-                    {
                         "id":  "caesar-dressing",
                         "why":  "match found but per-unit disagrees: board $0.1744 vs link $0.1869 (6.7%)"
+                    },
+                    {
+                        "id":  "caesar-salad-kit",
+                        "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
                     },
                     {
                         "id":  "cake-mix",
                         "why":  "match found but its size \"9 oz\" gives no per-unit in each"
                     },
                     {
+                        "id":  "cantaloupe",
+                        "why":  "no confident match (best 0)"
+                    },
+                    {
                         "id":  "clam-chowder",
                         "why":  "match found but per-unit disagrees: board $0.1081 vs link $0.1724 (37.3%)"
                     },
                     {
+                        "id":  "cooked-shredded-chicken",
+                        "why":  "no confident match (best 0)"
+                    },
+                    {
                         "id":  "cookies",
                         "why":  "match found but per-unit disagrees: board $0.2559 vs link $0.3072 (16.7%)"
+                    },
+                    {
+                        "id":  "corn-dogs",
+                        "why":  "match found but per-unit disagrees: board $0.6244 vs link $0.8725 (28.4%)"
                     },
                     {
                         "id":  "croissants",
@@ -118,11 +138,11 @@
                     },
                     {
                         "id":  "dinner-rolls",
-                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "donuts",
-                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "french-bread",
@@ -133,36 +153,60 @@
                         "why":  "match found but per-unit disagrees: board $0.1607 vs link $0.2496 (35.6%)"
                     },
                     {
+                        "id":  "hash-browns",
+                        "why":  "no confident match (best 0.375)"
+                    },
+                    {
                         "id":  "frozen-lasagna",
                         "why":  "match found but per-unit disagrees: board $0.2629 vs link $0.2892 (9.1%)"
                     },
                     {
                         "id":  "frozen-pizza",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"17.89 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "garlic-bread",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "gelatin",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "ground-cumin",
-                        "why":  "match found but per-unit disagrees: board $1.145 vs link $1.295 (11.6%)"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "eggs",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "oat-milk",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "onion-soup-mix",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "pesto",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "popsicles",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "protein-bars",
-                        "why":  "match found but per-unit disagrees: board $0.915 vs link $1.165 (21.5%)"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "queso",
-                        "why":  "match found but per-unit disagrees: board $0.1993 vs link $0.3993 (50.1%)"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "smoked-turkey-sausage",
@@ -181,11 +225,19 @@
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
+                        "id":  "teriyaki-sauce",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "toothpaste",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
                         "id":  "vegetable-soup",
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
-    "worked":  35,
-    "generated":  "2026-09-19 16:34",
+    "worked":  48,
+    "generated":  "2026-09-19 17:21",
     "board":  "comparison-2026-09-17.json"
 }

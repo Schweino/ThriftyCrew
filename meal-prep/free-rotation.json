@@ -1,84 +1,84 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
     "week_of":  "2026-09-17",
-    "rotated_at":  "2026-09-19T08:22:09",
+    "rotated_at":  "2026-09-19T17:23:52",
     "free":  [
                  {
                      "slug":  "chicken-pot-pie-biscuit-casserole",
                      "protein":  "chicken",
                      "rank":  1,
                      "name":  "Chicken Pot Pie Casserole with Biscuits",
-                     "per_serving":  1.84
+                     "per_serving":  1.96
                  },
                  {
-                     "slug":  "buffalo-chicken-pasta-bake",
+                     "slug":  "chicken-bulgogi-rice-bowls",
                      "protein":  "chicken",
                      "rank":  2,
-                     "name":  "Buffalo Chicken Pasta Bake",
-                     "per_serving":  1.98
-                 },
-                 {
-                     "slug":  "poppy-seed-chicken-and-rice-casserole",
-                     "protein":  "chicken",
-                     "rank":  3,
-                     "name":  "Poppy Seed Chicken and Rice Casserole",
+                     "name":  "Chicken Bulgogi Rice Bowls",
                      "per_serving":  1.99
                  },
                  {
                      "slug":  "chicken-fried-rice-skillet",
                      "protein":  "chicken",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Chicken Fried Rice",
+                     "per_serving":  1.99
+                 },
+                 {
+                     "slug":  "buffalo-chicken-pasta-bake",
+                     "protein":  "chicken",
+                     "rank":  4,
+                     "name":  "Buffalo Chicken Pasta Bake",
                      "per_serving":  2
                  },
                  {
-                     "slug":  "chicken-bulgogi-rice-bowls",
+                     "slug":  "slow-cooker-salsa-chicken-bowl",
                      "protein":  "chicken",
                      "rank":  5,
-                     "name":  "Chicken Bulgogi Rice Bowls",
-                     "per_serving":  2.02
+                     "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
+                     "per_serving":  2.05
                  },
                  {
                      "slug":  "turkey-biscuit-pot-pie-casserole",
                      "protein":  "turkey",
                      "rank":  1,
                      "name":  "Turkey Biscuit Pot Pie Casserole",
-                     "per_serving":  1.88
-                 },
-                 {
-                     "slug":  "turkey-huevos-rancheros-rice-bowls",
-                     "protein":  "turkey",
-                     "rank":  2,
-                     "name":  "Turkey Huevos Rancheros Rice Bowls",
-                     "per_serving":  1.96
+                     "per_serving":  2.12
                  },
                  {
                      "slug":  "haluski-and-kielbasa-cabbage-noodles",
                      "protein":  "turkey",
-                     "rank":  3,
+                     "rank":  2,
                      "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
-                     "per_serving":  2.04
+                     "per_serving":  2.14
                  },
                  {
                      "slug":  "turkey-alfredo-rotini-bake",
                      "protein":  "turkey",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Turkey Alfredo Rotini Bake",
-                     "per_serving":  2.06
+                     "per_serving":  2.18
+                 },
+                 {
+                     "slug":  "turkey-maqluba-upside-down-rice-bake",
+                     "protein":  "turkey",
+                     "rank":  4,
+                     "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
+                     "per_serving":  2.2
                  },
                  {
                      "slug":  "scalloped-potato-turkey-casserole",
                      "protein":  "turkey",
                      "rank":  5,
                      "name":  "Scalloped Potato Turkey Casserole",
-                     "per_serving":  2.1
+                     "per_serving":  2.33
                  },
                  {
                      "slug":  "low-carb-taco-cabbage-beef-skillet",
                      "protein":  "beef",
                      "rank":  1,
                      "name":  "Low Carb Taco Cabbage Beef Skillet",
-                     "per_serving":  2.01
+                     "per_serving":  1.98
                  },
                  {
                      "slug":  "beef-potato-au-gratin-casserole",
@@ -92,7 +92,7 @@
                      "protein":  "beef",
                      "rank":  3,
                      "name":  "Keto Cheeseburger Casserole Skillet",
-                     "per_serving":  2.33
+                     "per_serving":  2.36
                  },
                  {
                      "slug":  "million-dollar-baked-spaghetti",
@@ -102,46 +102,46 @@
                      "per_serving":  2.41
                  },
                  {
-                     "slug":  "lebanese-hashweh",
+                     "slug":  "pakistani-chapli-kebab-rice-bowls",
                      "protein":  "beef",
                      "rank":  5,
-                     "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.42
+                     "name":  "Pakistani Chapli Kebab Rice Bowls",
+                     "per_serving":  2.41
                  },
                  {
                      "slug":  "orecchiette-italian-sausage-broccoli",
                      "protein":  "pork",
                      "rank":  1,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
-                     "per_serving":  1.57
+                     "per_serving":  1.56
                  },
                  {
                      "slug":  "bratwurst-sauerkraut-potatoes-bake",
                      "protein":  "pork",
                      "rank":  2,
                      "name":  "Bratwurst and Sauerkraut with Potatoes",
-                     "per_serving":  1.7
+                     "per_serving":  1.61
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
                      "rank":  3,
                      "name":  "Slow Cooker Kalua Pork Bowls",
-                     "per_serving":  1.7
+                     "per_serving":  1.81
+                 },
+                 {
+                     "slug":  "no-peek-pork-chop-rice-casserole",
+                     "protein":  "pork",
+                     "rank":  4,
+                     "name":  "No-Peek Pork Chop and Rice Casserole",
+                     "per_serving":  1.89
                  },
                  {
                      "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
                      "protein":  "pork",
-                     "rank":  4,
-                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
-                     "per_serving":  1.87
-                 },
-                 {
-                     "slug":  "pork-egg-roll-in-a-bowl",
-                     "protein":  "pork",
                      "rank":  5,
-                     "name":  "Pork Egg Roll in a Bowl",
-                     "per_serving":  1.91
+                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
+                     "per_serving":  1.97
                  }
              ]
 }

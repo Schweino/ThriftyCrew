@@ -1100,7 +1100,7 @@
                     {
                         "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
                         "slug":  "slow-cooker-salsa-chicken-bowl",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "Mexican",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -18845,7 +18845,7 @@
                     {
                         "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
                         "slug":  "lebanese-hashweh",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Middle Eastern",
                         "servings":  14,
                         "ingredients":  [
@@ -20427,7 +20427,7 @@
                     {
                         "name":  "Poppy Seed Chicken and Rice Casserole",
                         "slug":  "poppy-seed-chicken-and-rice-casserole",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "American Southern",
                         "servings":  14,
                         "ingredients":  [
@@ -40712,7 +40712,7 @@
                     {
                         "name":  "No-Peek Pork Chop and Rice Casserole",
                         "slug":  "no-peek-pork-chop-rice-casserole",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -41598,7 +41598,7 @@
                     {
                         "name":  "Pakistani Chapli Kebab Rice Bowls",
                         "slug":  "pakistani-chapli-kebab-rice-bowls",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "Pakistani",
                         "servings":  14,
                         "ingredients":  [
@@ -43137,7 +43137,7 @@
                     {
                         "name":  "Pork Egg Roll in a Bowl",
                         "slug":  "pork-egg-roll-in-a-bowl",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Chinese-American",
                         "servings":  14,
                         "ingredients":  [
@@ -51191,7 +51191,7 @@
                     {
                         "name":  "Turkey Huevos Rancheros Rice Bowls",
                         "slug":  "turkey-huevos-rancheros-rice-bowls",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Tex-Mex",
                         "servings":  14,
                         "ingredients":  [
@@ -51807,7 +51807,7 @@
                     {
                         "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
                         "slug":  "turkey-maqluba-upside-down-rice-bake",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "palestinian",
                         "servings":  14,
                         "ingredients":  [
