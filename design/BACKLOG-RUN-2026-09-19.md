@@ -171,3 +171,4 @@ Every new item from the first pass has a state. Landed: I216, I225 to I238 (wher
 | I194 | not answered | left open |
 | public repo | survey first | agent surveying |
 | Worker deploy 0a488c1f9 | Brad had approved it at 20:33 on 09-18 | no action; I252 text stale |
+| I232 | registered | Desktop scheduled task verify-board-sample registered by the orchestrator on Brad's approval (Sundays 10:30, gated 14 days), prompt backed up; step 3 (heartbeat row) waits for the first recorded sample |

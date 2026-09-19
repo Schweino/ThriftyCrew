@@ -1,6 +1,6 @@
 ---
 name: verify-board-sample
-description: Every 14 days (weekly trigger, gated on record-sample-verdict.ps1 -Due), check a 100-cell sample of the grocery board against the stores' own pages in Brad's Chrome, record a verdict per cell (match / wrong-price / wrong-product / could-not-look, never a guess), report the whole-board defect rate with its denominator and 95% interval, and alert Brad when it is above the last measured rate. Brad's ruling of 2026-09-19 (backlog I232). Supersedes the disabled grocery-accuracy-sample prompt.
+description: Every 14 days (weekly trigger, gated on record-sample-verdict.ps1 -Due), check a 100-cell sample of the grocery board against the stores' own pages in Brad's Chrome, record a verdict per cell (match / wrong-price / wrong-product / could-not-look, never a guess), report the whole-board defect rate with its denominator and 95% interval, and alert Brad when it is above the last measured rate. Brad's ruling of 2026-09-19 (backlog I232).
 ---
 
 You are the 14-day out-of-band verification of the Thrifty Crew grocery board.
