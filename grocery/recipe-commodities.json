@@ -101,9 +101,105 @@
       "id": "apple-cider",
       "label": "Apple Cider",
       "unit": "floz",
-      "include": [],
-      "exclude": [],
+      "include": [
+        "\\bapple\\s+cider\\b(?!\\s+vinegar)"
+      ],
+      "exclude": [
+        "vinegar",
+        "\\bvin\\b",
+        "dressi",
+        "\\bsoap\\b",
+        "scent",
+        "\\bcakes?\\b",
+        "donuts?",
+        "doughnuts?",
+        "cashew",
+        "cleaner",
+        "seasoning",
+        "candle",
+        "gumm",
+        "\\btea\\b",
+        "spice",
+        "cinnamon",
+        "caramel",
+        "\\bpie\\b",
+        "\\bpopz\\b"
+      ],
+      "min_pack_oz": 32,
       "note": "Brad 2026-08-23: STILL cider only, not sparkling. No custom exclude is needed - 'sparkling' is already in global_exclude, and this entry is what subjects the commodity to it. The recipe using this braises pork in 12 oz, where carbonation is beside the point and Martinelli's costs several times more per fl oz. No band: this commodity has no priced rows to derive one from, and inventing a price gate is not what this ruling was."
+    },
+    {
+      "id": "au-jus-gravy-mix",
+      "label": "Au Jus Gravy Mix",
+      "unit": "oz",
+      "include": [
+        "\\bau\\s+jus\\b"
+      ],
+      "exclude": [
+        "roast",
+        "sandwich",
+        "worcestershire",
+        "squeeze",
+        "\\bmeal\\b",
+        "entree",
+        "simmered",
+        "\\bbeef\\b",
+        "frozen",
+        "\\bkit\\b",
+        "\\bcase\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "relax_global": [
+        "\\bmix\\b(?!\\s*(?:&|and)\\s*match)",
+        "\\bdip\\b"
+      ],
+      "note": "Dry au jus gravy mix, the ~1 oz packet. Relaxes the mix token (every one is named 'Gravy Mix') and the dip token ('French Dip Au Jus Gravy Mix' is the same packet). Excludes ready-made roasts and sandwiches sold 'au jus'. Minted 2026-09-19: no staple or recipe id prices au jus (brown-gravy-mix is a different gravy)."
+    },
+    {
+      "id": "beef-base",
+      "label": "Beef Base",
+      "unit": "oz",
+      "include": [
+        "\\bbeef\\b[^,]{0,25}\\bbase\\b",
+        "\\bbase,?\\s+beef\\b",
+        "paste\\s+beef\\s+bouillon",
+        "beef\\s+bouillon\\s+paste"
+      ],
+      "exclude": [
+        "corned",
+        "plant[\\s-]*based",
+        "impossible",
+        "beyond",
+        "\\bmeat\\s*less",
+        "vegetable",
+        "chicken",
+        "\\bcubes?\\b",
+        "granul",
+        "powder",
+        "\\bsoup\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Concentrated beef base / bouillon paste (Better Than Bouillon, Member's Mark Beef Base, Knorr paste). Cubes and granules are a different product and are excluded. Minted 2026-09-19: staple bouillon mixes chicken granules with beef base, so its cheapest cell is not this purchase."
+    },
+    {
+      "id": "boneless-beef-short-ribs",
+      "label": "Boneless Beef Short Ribs",
+      "unit": "lb",
+      "include": [
+        "^(?=.*\\bboneless\\b)(?=.*\\bshort\\s+(?:beef\\s+)?ribs?\\b)"
+      ],
+      "exclude": [
+        "bone[\\s-]?in",
+        "cooked",
+        "braised",
+        "sauce",
+        "\\bmeal\\b",
+        "\\bkit\\b",
+        "frozen",
+        "pork",
+        "plant[\\s-]*based"
+      ],
+      "note": "Raw boneless beef short ribs, per lb. Bone-in short ribs (staple beef-short-ribs' shape) are a different purchase. Minted 2026-09-19."
     },
     {
       "id": "boneless-skinless-chicken-thigh",
@@ -289,6 +385,43 @@
                     ]
     },
     {
+      "id": "buffalo-wing-sauce",
+      "label": "Buffalo Wing Sauce",
+      "unit": "floz",
+      "include": [
+        "buffalo(?!\\s+wild\\s+wings)[^,]{0,30}\\bsauce\\b",
+        "buffalo\\s+wings?\\s+(?:hot\\s+)?sauce"
+      ],
+      "exclude": [
+        "creamy",
+        "ranch",
+        "blue\\s+cheese",
+        "\\bmini\\b",
+        "dipping",
+        "\\bcups?\\b",
+        "dressing",
+        "seasoning",
+        "garlic",
+        "parmesan",
+        "honey",
+        "\\bbbq\\b",
+        "barbecue",
+        "zing",
+        "mango",
+        "teriyaki",
+        "chicken",
+        "cauliflower",
+        "\\bbites\\b",
+        "tenders",
+        "\\bmayo",
+        "\\bdip\\b",
+        "\\bdog\\b",
+        "\\bcat\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Buffalo wing sauce. The include skips the brand words 'Buffalo Wild Wings' so that brand's non-buffalo flavours (Asian Zing, Honey BBQ, Parmesan Garlic) never match on the brand, while its Medium Buffalo Sauce still does on its own second 'buffalo'. Minted 2026-09-19: staple hot-sauce is a different condiment."
+    },
+    {
       "id": "butter",
       "label": "Butter",
       "unit": "oz",
@@ -354,6 +487,145 @@
       "note": "Requires a reduced-fat/Neufchatel signal so it does not steal full-fat cream cheese from the generic staple; excludes fat-free (different product) and flavored/whipped tubs."
     },
     {
+      "id": "canned-sweet-corn",
+      "label": "Canned Sweet Corn",
+      "unit": "each",
+      "include": [
+        "^(?=.*\\bwhole\\s+kernel\\b)(?=.*\\bcorn\\b)"
+      ],
+      "exclude": [
+        "cream",
+        "frozen",
+        "steam",
+        "\\bcups?\\b",
+        "\\d+\\s*ea\\b",
+        "roasted",
+        "mexicorn",
+        "pepper",
+        "poblano",
+        "southwest",
+        "fiesta",
+        "\\bbaby\\b",
+        "\\bbag\\b",
+        "seasoned",
+        "butter",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "weight_is_one_unit": true,
+      "min_piece_oz": 14,
+      "max_pack_oz": 16,
+      "note": "One standard ~15.25 oz can of whole kernel corn, priced per CAN (each) because the recipe costs it per drained can. weight_is_one_unit prices a '15.25 oz' row as one can; min_piece_oz/max_pack_oz keep it to the standard can so a 29 oz or 106 oz can is never priced as 'one can'. Kept separate from staple canned-corn (per oz) on purpose: recipe-floor-id-map.json round 3 records the drained-can calibration issue that makes a map unsafe. Minted 2026-09-19."
+    },
+    {
+      "id": "capers",
+      "label": "Capers",
+      "unit": "floz",
+      "include": [
+        "\\bcapers\\b"
+      ],
+      "exclude": [
+        "berries",
+        "stuffed",
+        "olives?\\b",
+        "salad",
+        "sauce",
+        "tapenade",
+        "chicken",
+        "pasta",
+        "\\bmeal\\b"
+      ],
+      "note": "Jarred capers in brine. Minted 2026-09-19: no other id prices capers."
+    },
+    {
+      "id": "celery-salt",
+      "label": "Celery Salt",
+      "unit": "oz",
+      "include": [
+        "celery\\s+salt"
+      ],
+      "exclude": [
+        "\\bblend\\b",
+        "seasoning\\s+salt",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Celery salt spice. Minted 2026-09-19: the salt staples (salt, sea-salt, kosher-salt) are plain salt."
+    },
+    {
+      "id": "colby-jack-cheese",
+      "label": "Colby Jack Cheese",
+      "unit": "oz",
+      "include": [
+        "^(?=.*\\bcolby\\b)(?=.*\\bjack\\b)(?=.*\\bshred)"
+      ],
+      "exclude": [
+        "mexican",
+        "fiesta",
+        "taco",
+        "reduced\\s+fat",
+        "\\b2\\s*%?\\s*milk\\b",
+        "fat[\\s-]*free",
+        "\\blight\\b",
+        "string",
+        "\\bstick",
+        "snack",
+        "sandwich",
+        "breakfast",
+        "frozen",
+        "cracker",
+        "\\bslice"
+      ],
+      "note": "Shredded colby jack (colby and monterey jack). Every snapshot cell was shredded; the block is a different purchase. Excludes Mexican/taco blends, which carry colby jack among four cheeses. Minted 2026-09-19: staple shredded-cheese is ANY shredded cheese, so its cheapest cell is not this purchase."
+    },
+    {
+      "id": "condensed-french-onion-soup",
+      "label": "Condensed French Onion Soup",
+      "unit": "each",
+      "include": [
+        "french\\s+onion\\s+soup"
+      ],
+      "exclude": [
+        "\\bdip\\b",
+        "chips",
+        "ready\\s+to",
+        "chunky",
+        "microwav",
+        "\\bcups?\\b",
+        "\\bbowl\\b",
+        "homestyle",
+        "frozen",
+        "cheese",
+        "\\bkit\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "relax_global": [
+        "\\bsoup\\b"
+      ],
+      "weight_is_one_unit": true,
+      "min_piece_oz": 10,
+      "max_pack_oz": 11,
+      "note": "One 10.5 oz can of condensed French onion soup, priced per can (each). weight_is_one_unit prices a '10.5 oz' row as one can; the piece and pack bounds keep it to the condensed can. Relaxes the soup token for this entry only. Minted 2026-09-19: staple onion-soup-mix is the dry mix."
+    },
+    {
+      "id": "corn-tortillas",
+      "label": "Corn Tortillas",
+      "unit": "each",
+      "include": [
+        "corn\\s+tortillas?\\b"
+      ],
+      "exclude": [
+        "chips?\\b",
+        "flour",
+        "taco\\s+shells?",
+        "tostada",
+        "strips",
+        "\\bmasa\\b",
+        "\\bkit\\b",
+        "frozen",
+        "\\bmeal\\b"
+      ],
+      "note": "Corn tortillas, per tortilla. Minted 2026-09-19: staple tortillas is flour (recipe-floor-id-map round 3 rejected the map)."
+    },
+    {
         "id":  "cotija-cheese",
         "label":  "Cotija Cheese",
         "unit":  "oz",
@@ -376,6 +648,153 @@
                         "garlic",
                         "jalapeno"
                     ]
+    },
+    {
+      "id": "dried-rosemary",
+      "label": "Dried Rosemary",
+      "unit": "oz",
+      "include": [
+        "rosemary\\s+(?:leaves|leaf)",
+        "(?:dried|crushed|ground|whole)\\s+rosemary",
+        "rosemary,?\\s+(?:dried|crushed|ground|whole)\\b",
+        "rosemary[^,]{0,40}\\bspice\\b"
+      ],
+      "exclude": [
+        "\\bfresh\\b",
+        "clamshell",
+        "garlic",
+        "lemon",
+        "\\bsalt\\b",
+        "\\bblend\\b",
+        "seasoning",
+        "\\boil\\b",
+        "chicken",
+        "pork",
+        "cracker",
+        "\\bcrisps?\\b",
+        "\\btea\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Dried rosemary leaves (whole or crushed). The include requires a dried-form word (leaves, dried, crushed, ground, whole, spice) because a bare 'Rosemary' at Baker's is the FRESH produce clamshell (its store category reads Produce). Minted 2026-09-19: staple fresh-rosemary is the fresh herb."
+    },
+    {
+      "id": "fajita-seasoning",
+      "label": "Fajita Seasoning Packet",
+      "unit": "each",
+      "include": [
+        "\\bfajitas?\\s+(?:spices?\\s+(?:&|and)\\s+)?seasoning"
+      ],
+      "exclude": [
+        "tortilla",
+        "chicken",
+        "beef",
+        "steak",
+        "\\bkit\\b",
+        "dinner",
+        "\\bbowl\\b",
+        "\\bveg",
+        "\\bmeal\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "relax_global": [
+        "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+      ],
+      "weight_is_one_unit": true,
+      "max_pack_oz": 2,
+      "note": "Fajita seasoning, the single-use packet (~1-1.5 oz), priced per packet. max_pack_oz 2 keeps a bulk canister (Bolner's 30 oz, Lawry's 8.9 oz) off the packet cell, the taco-seasoning 'packet means packet' ruling. Relaxes the mix token: every packet is named 'Seasoning Mix'. Minted 2026-09-19."
+    },
+    {
+      "id": "fat-free-cheddar",
+      "label": "Fat-Free Cheddar Cheese",
+      "unit": "oz",
+      "include": [
+        "fat[\\s-]*free[^,]{0,40}\\bcheddar\\b",
+        "\\bcheddar\\b[^,]{0,40}fat[\\s-]*free"
+      ],
+      "exclude": [
+        "cracker",
+        "\\bchips?\\b",
+        "popcorn",
+        "\\bmac\\b",
+        "macaroni",
+        "string",
+        "\\bstick",
+        "cream\\s+cheese",
+        "cottage"
+      ],
+      "note": "Fat-free cheddar (shredded in every capture). cheddar-cheese-shredded and reduced-fat-cheddar both exclude fat free, so this entry owns them. Minted 2026-09-19."
+    },
+    {
+      "id": "fat-free-mozzarella",
+      "label": "Fat Free Mozzarella",
+      "unit": "oz",
+      "include": [
+        "fat[\\s-]*free[^,]{0,40}\\bmozzarella\\b",
+        "\\bmozzarella\\b[^,]{0,40}fat[\\s-]*free"
+      ],
+      "exclude": [
+        "string",
+        "\\bstick",
+        "snack",
+        "pizza"
+      ],
+      "note": "Fat-free shredded mozzarella. Minted 2026-09-19; mozzarella-cheese and reduced-fat-mozzarella exclude fat free."
+    },
+    {
+      "id": "frozen-broccoli-florets",
+      "label": "Frozen Broccoli Florets",
+      "unit": "oz",
+      "include": [
+        "^(?=.*\\bbroccoli\\s+florets?\\b)(?=.*(?:\\bfrozen\\b|\\bsteam))"
+      ],
+      "exclude": [
+        "parmesan",
+        "garlic",
+        "herb",
+        "cheese",
+        "sauce",
+        "ranch",
+        "carrot",
+        "cauliflower",
+        "\\bmix\\b",
+        "blend",
+        "medley",
+        "\\bfresh\\b",
+        "seasoned",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Frozen broccoli FLORETS (the name must say frozen or steam). Florets, not cuts: recipe-floor-id-map round 2 rejected frozen-broccoli because that board's cheapest rows are cuts. Fresh florets are a different purchase. Minted 2026-09-19."
+    },
+    {
+      "id": "frozen-green-beans",
+      "label": "Frozen Cut Green Beans",
+      "unit": "oz",
+      "include": [
+        "^(?=.*\\bgreen\\s+beans?\\b)(?=.*(?:\\bfrozen\\b|\\bsteam))"
+      ],
+      "exclude": [
+        "\\bfresh\\b(?!\\s+(?:frozen|steam))",
+        "french",
+        "italian",
+        "potato",
+        "crispy",
+        "\\bwhole\\b",
+        "casserole",
+        "almond",
+        "seasoned",
+        "garlic",
+        "butter",
+        "sauce",
+        "mushroom",
+        "\\bmix\\b",
+        "blend",
+        "medley",
+        "\\bcarrots?\\b",
+        "\\bcorn\\b",
+        "canned",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Frozen cut green beans (the name must say frozen or steam; 'Fresh Frozen' and Hy-Vee's 'Fresh Steam' are frozen). green-beans (the canned entry) now excludes frozen and steam so it cannot take these first. Minted 2026-09-19: staple has fresh and canned green beans only."
     },
     {
         "id":  "garlic-herb-cheese-spread",
@@ -450,7 +869,8 @@
         "\\bpeeled\\b",
         "toddler",
         "once\\s+upon\\s+a\\s+farm",
-        "crunch\\s*pak"
+        "crunch\\s*pak",
+        "cheese"
       ],
       "band_min": 0.2,
       "band_max": 3,
@@ -547,7 +967,9 @@
         "muffin",
         "raisin",
         "dried",
-        "hot\\s*dog"
+        "hot\\s*dog",
+        "shred",
+        "matchstick"
       ],
       "band_min": 0.3,
       "band_max": 2.5,
@@ -642,6 +1064,333 @@
       "band_min": 0.08,
       "band_max": 0.7,
       "note": "Requires BOTH 'cheddar' and 'shred' in either order. Place this rule BEFORE the generic 'shredded-cheese' staple so specific cheddar wins the first-match; otherwise the generic one will absorb it."
+    },
+    {
+      "id": "ground-mustard",
+      "label": "Ground Mustard",
+      "unit": "oz",
+      "include": [
+        "ground\\s+mustard",
+        "mustard,?\\s+ground",
+        "dry\\s+mustard",
+        "mustard\\s+powder"
+      ],
+      "exclude": [
+        "stone[\\s-]*ground",
+        "coarse",
+        "dijon",
+        "squeeze",
+        "honey",
+        "spicy\\s+brown",
+        "\\bdeli\\b",
+        "whole\\s+grain",
+        "seeds?\\b",
+        "yellow\\s+mustard"
+      ],
+      "note": "Ground mustard, the dry spice (mustard powder). Excludes stone-ground and coarse PREPARED mustards, which the words 'ground mustard' also name. Minted 2026-09-19: staple mustard is the yellow condiment."
+    },
+    {
+      "id": "gruyere-cheese",
+      "label": "Gruyere Cheese",
+      "unit": "oz",
+      "include": [
+        "gruy[e\\u00e8]re"
+      ],
+      "exclude": [
+        "cheddar",
+        "gouda",
+        "swiss\\s*(?:&|and)",
+        "alpine",
+        "\\bblend\\b",
+        "smoked",
+        "shred",
+        "\\bslice",
+        "\\bmac\\b",
+        "macaroni",
+        "sausage",
+        "\\bnotes\\b",
+        "bacon"
+      ],
+      "note": "Plain Gruyere, block or wedge. Staple gruyere is not this purchase: its cells on the 2026-09-17 board are SHREDDED and include cheddar-gouda-gruyere and Swiss-gruyere blends. Excludes blends, smoked Gruyere and shreds. Minted 2026-09-19."
+    },
+    {
+      "id": "hot-honey",
+      "label": "Hot Honey",
+      "unit": "oz",
+      "include": [
+        "hot\\s+honey",
+        "honey[^,]{0,30}(?:habanero|\\bchil(?:i|e)s?\\b)"
+      ],
+      "exclude": [
+        "carrot",
+        "hummus",
+        "\\bdip\\b",
+        "boursin",
+        "seasoning",
+        "almond",
+        "cracker",
+        "pizza",
+        "\\bham\\b",
+        "peanut",
+        "pepperoni",
+        "sausage",
+        "glaze",
+        "\\bbeans?\\b",
+        "hot\\s+honey\\s+(?:habanero|chipotle|jalapen)",
+        "gouda",
+        "bacon",
+        "salmon",
+        "juice",
+        "ranch",
+        "dressing",
+        "jerky",
+        "ketchup",
+        "tortilla",
+        "\\bchips?\\b",
+        "southern\\s+grove",
+        "cheese",
+        "salsa",
+        "biscuit",
+        "muffin",
+        "cornbread",
+        "\\bmix\\b",
+        "pistachio",
+        "\\bnuts?\\b",
+        "minis?\\b",
+        "packets?",
+        "chicken",
+        "\\bwings?\\b",
+        "sauce",
+        "mustard",
+        "\\bbbq\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "min_pack_oz": 9,
+      "note": "Chili-infused honey, the bottle. min_pack_oz 9 keeps 1.55 oz mini jars, single-serve packets and 6-8.25 oz flavoured snacks off the cell (the smallest real bottle seen is Local Hive 9 oz). Southern Grove is excluded by name because it is Aldi's nut line: its Hot Honey is a can of nuts and the name says nothing else. The recipe honey entry now excludes hot honey so it cannot take these first. Minted 2026-09-19: staple honey is plain honey."
+    },
+    {
+      "id": "hot-italian-sausage",
+      "label": "Hot Italian Sausage",
+      "unit": "lb",
+      "include": [
+        "^(?=.*\\bsausage)(?=.*(?:\\bhot\\s+italian\\b|\\bitalian\\s+hot\\b|\\bspicy\\s+italian\\b))"
+      ],
+      "exclude": [
+        "plant[\\s-]*based",
+        "beyond",
+        "impossible",
+        "meatless",
+        "vegan",
+        "turkey",
+        "chicken",
+        "pizza",
+        "ravioli",
+        "frozen",
+        "\\bcase\\b",
+        "cooked",
+        "smoked",
+        "pasta",
+        "soup",
+        "\\bmild\\b",
+        "\\bsweet\\b"
+      ],
+      "note": "Raw hot (spicy) Italian pork sausage, links or bulk ground. Staple italian-sausage mixes mild and sweet rows (its Baker's cell on 2026-09-17 is Sweet Italian), so it is not this purchase. Minted 2026-09-19."
+    },
+    {
+      "id": "jerk-seasoning",
+      "label": "Jerk Seasoning",
+      "unit": "oz",
+      "include": [
+        "jerk\\s+seasoning",
+        "jamaican\\s+jerk\\b",
+        "jerk\\s+rub"
+      ],
+      "exclude": [
+        "marinade",
+        "sauce",
+        "chicken",
+        "pork",
+        "\\bwings?\\b",
+        "jerky",
+        "\\bmeal\\b",
+        "\\bbowl\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Jerk seasoning, dry blend or the wet seasoning paste the Jamaican brands sell under the same name. Excludes jerk marinades and sauces. Minted 2026-09-19."
+    },
+    {
+      "id": "liquid-smoke",
+      "label": "Liquid Smoke",
+      "unit": "floz",
+      "include": [
+        "liquid\\s+smoke"
+      ],
+      "exclude": [
+        "bbq\\s+sauce",
+        "barbecue\\s+sauce",
+        "\\bsalt\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Liquid smoke flavoring. Minted 2026-09-19."
+    },
+    {
+      "id": "mexican-cheese-blend",
+      "label": "Mexican Cheese Blend",
+      "unit": "oz",
+      "include": [
+        "\\bmexican\\b[^,]{0,40}\\b(?:blend|shred\\w*|cheeses?)\\b",
+        "\\bfiesta\\s+(?:blend|cheese)",
+        "four\\s+cheese\\s+mexican|4\\s+cheese\\s+mexican"
+      ],
+      "exclude": [
+        "tortilla",
+        "reduced\\s+fat",
+        "\\b2\\s*%?\\s*milk\\b",
+        "fat[\\s-]*free",
+        "\\blight\\b",
+        "taco",
+        "queso",
+        "quesadilla",
+        "cotija",
+        "vanilla",
+        "string",
+        "\\bstick",
+        "\\bdip\\b",
+        "sauce",
+        "(?<!off\\s+the\\s)\\bblock\\b",
+        "\\bslice",
+        "\\bchips?\\b",
+        "\\bkit\\b",
+        "\\bmeal\\b",
+        "\\bmac\\b"
+      ],
+      "note": "Shredded Mexican-style cheese blend (the four-cheese / fiesta blend). Excludes reduced-fat, taco-seasoned blends and single Mexican cheeses (cotija, queso quesadilla). Minted 2026-09-19: staple shredded-cheese is any shredded cheese."
+    },
+    {
+      "id": "monterey-jack-cheese",
+      "label": "Monterey Jack Cheese",
+      "unit": "oz",
+      "include": [
+        "monterey\\s+jack"
+      ],
+      "exclude": [
+        "colby",
+        "pepper",
+        "jalapen",
+        "mexican",
+        "\\bblend\\b",
+        "cheddar",
+        "shred",
+        "\\bslice",
+        "string",
+        "\\bstick",
+        "snack",
+        "sausage",
+        "cracker",
+        "\\bmac\\b",
+        "macaroni",
+        "\\bmeal\\b",
+        "frozen",
+        "mozzarella"
+      ],
+      "note": "Plain monterey jack, block. Every snapshot cell was a block; shredded and sliced are different purchases. Minted 2026-09-19: staple block-cheese is any block cheese."
+    },
+    {
+      "id": "mozzarella-cheese",
+      "label": "Mozzarella Cheese",
+      "unit": "oz",
+      "include": [
+        "shred\\w*[^,]{0,40}\\bmozzarella\\b",
+        "\\bmozzarella\\b[^,]{0,40}shred"
+      ],
+      "exclude": [
+        "reduced\\s+fat",
+        "fat[\\s-]*free",
+        "\\b2\\s*%?\\s*milk\\b",
+        "\\blight\\b",
+        "\\bfresh\\b",
+        "\\bblend\\b",
+        "italian",
+        "pizza",
+        "provolone",
+        "parmesan",
+        "string",
+        "\\bstick",
+        "vegan",
+        "dairy[\\s-]*free",
+        "plant[\\s-]*based",
+        "daiya",
+        "\\bcase\\b",
+        "cheddar"
+      ],
+      "note": "Shredded mozzarella (low-moisture, part-skim or whole milk). Every snapshot cell was shredded. Excludes the reduced-fat and fat-free forms, which have their own entries, and Italian blends. Minted 2026-09-19: staple shredded-cheese is any shredded cheese (its Aldi cell is cheddar)."
+    },
+    {
+      "id": "pepper-jack-cheese",
+      "label": "Pepper Jack Cheese",
+      "unit": "oz",
+      "include": [
+        "pepper\\s*jack"
+      ],
+      "exclude": [
+        "colby",
+        "shred",
+        "\\bslice",
+        "string",
+        "\\bstick",
+        "snack",
+        "sausage",
+        "brat",
+        "burger",
+        "\\bchips?\\b",
+        "cracker",
+        "\\bdip\\b",
+        "sauce",
+        "frank",
+        "\\bbites\\b",
+        "pretzel",
+        "popcorn",
+        "chicken",
+        "patt",
+        "peanut",
+        "raisin",
+        "\\bmac\\b"
+      ],
+      "note": "Pepper jack, block. Every snapshot cell was a block. Minted 2026-09-19: staple block-cheese is any block cheese."
+    },
+    {
+      "id": "pork-loin",
+      "label": "Pork Loin",
+      "unit": "lb",
+      "include": [
+        "\\bpork\\s+(?:top\\s+)?loin\\b(?!\\s+(?:chops?|slices?|cutlets?|filets?))",
+        "\\bpork\\s+half\\s+loin\\b",
+        "\\bloin\\s+roast\\b"
+      ],
+      "exclude": [
+        "bone[\\s-]*in",
+        "chops?\\b",
+        "tenderloin",
+        "smoked",
+        "\\bdeli\\b",
+        "slices?\\b",
+        "cutlet",
+        "filet",
+        "medallion",
+        "bacon",
+        "canadian",
+        "stuffed",
+        "cooked",
+        "\\bmeal\\b",
+        "\\bkit\\b",
+        "back\\s+ribs?",
+        "country",
+        "sirloin",
+        "sandwich",
+        "\\bbites\\b",
+        "beef"
+      ],
+      "note": "Boneless pork loin, whole, half or roast, per lb. Bone-in loin, chops, slices and tenderloin are different purchases (staple pork-tenderloin and pork-chops). Minted 2026-09-19."
     },
     {
         "id":  "reduced-fat-cheddar",
@@ -1053,7 +1802,9 @@
         "coffee\\s+bean",
         "dried",
         "\\bseed",
-        "\\bfresh\\b"
+        "\\bfresh\\b",
+        "\\bfrozen\\b",
+        "\\bsteam"
       ],
       "band_min": 0.03,
       "band_max": 0.2,
@@ -1181,7 +1932,9 @@
         "loops",
         "\\bbuns?\\b",
         "little\\s+debbie",
-        "oat"
+        "oat",
+        "hot\\s+honey",
+        "habanero"
       ],
       "band_min": 0.1,
       "band_max": 1.2,
@@ -1217,10 +1970,29 @@
       "id": "jasmine-rice",
       "label": "Jasmine Rice (Dry)",
       "unit": "oz",
-      "include": [],
-      "exclude": [
-        "\\binstant\\b"
+      "include": [
+        "\\bjasmine\\b[^,]{0,40}\\brice\\b",
+        "hom\\s+mali"
       ],
+      "exclude": [
+        "\\binstant\\b",
+        "\\bbrown\\b",
+        "jasmati",
+        "cilantro",
+        "\\blime\\b",
+        "boil[\\s-]*in[\\s-]*bag",
+        "\\bready\\b",
+        "microwav",
+        "\\bcups?\\b",
+        "\\bbowl\\b",
+        "pouch",
+        "cooked",
+        "seasoned",
+        "\\bmeal\\b",
+        "\\bkit\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)"
+      ],
+      "min_pack_oz": 16,
       "note": "Brad 2026-08-23: DRY raw jasmine only. Instant is parboiled then dehydrated - it neither cooks nor yields like raw jasmine at the same weight and costs more per oz - and 82 recipes buy against '3.5 cups dry jasmine' at 700 g on this per-oz basis. Ready-to-eat cups and frozen pouches are already caught by the global excludes."
     },
     {
@@ -1819,7 +2591,8 @@
         "\\bblend\\b",
         "\\brub\\b",
         "chicken",
-        "goulash"
+        "goulash",
+        "smoked"
       ],
       "band_min": 0.2,
       "band_max": 3.5,
@@ -1919,9 +2692,29 @@
       "id": "pineapple-juice",
       "label": "Pineapple Juice",
       "unit": "floz",
-      "include": [],
+      "include": [
+        "\\bpineapple\\s+juice\\b"
+      ],
       "exclude": [
-        "juice\\s*drink"
+        "juice\\s*drink",
+        "\\bfrozen\\b",
+        "\\bpunch\\b",
+        "\\bcran",
+        "mango",
+        "papaya",
+        "orange",
+        "teriyaki",
+        "marinade",
+        "\\bin\\s+pineapple\\s+juice",
+        "\\blight\\b",
+        "zero\\s+sugar",
+        "refresher",
+        "peach",
+        "chunks?\\b",
+        "tidbits",
+        "slices",
+        "crushed",
+        "\\bdrink\\b"
       ],
       "note": "Brad 2026-08-23: 100% juice only. 'Juice Drink' is the label wording for a diluted or sweetened blend, normally CHEAPER per oz - so it would win the crown while being the weaker ingredient. 'Cocktail' is already caught by global_exclude."
     },
@@ -2015,7 +2808,8 @@
       "unit": "each",
       "include": [
         "\\bred\\b[^.]*bell\\s+pepper",
-        "bell\\s+pepper[^.]*\\bred\\b"
+        "bell\\s+pepper[^.]*\\bred\\b",
+        "^(?:fresh\\s+)?(?:organic\\s+)?(?:large\\s+)?red\\s+peppers?\\b"
       ],
       "exclude": [
         "roasted",
@@ -2031,7 +2825,18 @@
         "pickled",
         "frozen",
         "\\bsauce\\b",
-        "hummus"
+        "hummus",
+        "\\bcorn\\b",
+        "paste",
+        "jalapen",
+        "\\bchil",
+        "\\bhot\\b",
+        "\\bcherry\\b",
+        "seeds?\\b",
+        "jelly",
+        "relish",
+        "spread",
+        "\\bsoup\\b"
       ],
       "band_min": 0.25,
       "band_max": 3,
@@ -2061,6 +2866,25 @@
       "band_min": 0.05,
       "band_max": 0.6,
       "note": "Excludes red-wine vinaigrette/dressing and other vinegar types (balsamic/white-wine/rice/cider)."
+    },
+    {
+      "id": "reduced-fat-mozzarella",
+      "label": "Reduced Fat Mozzarella",
+      "unit": "oz",
+      "include": [
+        "reduced[\\s-]+fat[^,]{0,40}\\bmozzarella\\b",
+        "\\bmozzarella\\b[^,]{0,40}reduced[\\s-]+fat",
+        "\\bmozzarella\\b[^,]{0,40}\\b2\\s*%\\s*milk\\b"
+      ],
+      "exclude": [
+        "fat[\\s-]*free",
+        "string",
+        "\\bstick",
+        "snack",
+        "pizza",
+        "\\bblend\\b"
+      ],
+      "note": "Reduced-fat shredded mozzarella, including the '2% milk' spelling. Excludes string cheese and fat free. Minted 2026-09-19."
     },
     {
       "id": "roasted-red-peppers",
@@ -2170,6 +2994,67 @@
                     ]
     },
     {
+      "id": "salsa-verde",
+      "label": "Salsa Verde",
+      "unit": "oz",
+      "include": [
+        "salsa\\s+verde",
+        "verde\\s+salsa",
+        "tomatillo\\s+salsa",
+        "green\\s+salsa"
+      ],
+      "exclude": [
+        "\\bchips\\b",
+        "tortilla\\s+style",
+        "chicken",
+        "enchilada",
+        "\\bbowl\\b",
+        "burrito",
+        "\\bmeal\\b",
+        "seasoning",
+        "cheese",
+        "queso",
+        "\\bkit\\b",
+        "pork",
+        "beef",
+        "patt",
+        "creamy",
+        "cremosa",
+        "avocado",
+        "guacamole",
+        "pickle",
+        "pouch"
+      ],
+      "relax_global": [
+        "\\bdip\\b"
+      ],
+      "note": "Jarred salsa verde (tomatillo). Minted 2026-09-19: staple salsa is red salsa (recipe-floor-id-map round 2 rejected the map, 1 of 5 stores agreeing)."
+    },
+    {
+      "id": "seasoned-black-beans",
+      "label": "Seasoned Black Beans (Canned)",
+      "unit": "oz",
+      "include": [
+        "^(?=.*\\bseasoned\\b)(?=.*\\bblack\\s+beans?\\b)"
+      ],
+      "exclude": [
+        "refried",
+        "\\brice\\b",
+        "dried",
+        "\\bsoup\\b",
+        "salsa",
+        "\\bdip\\b",
+        "\\bchips?\\b",
+        "burrito",
+        "frozen",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "relax_global": [
+        "seasoned"
+      ],
+      "note": "Canned seasoned black beans (Bush's Seasoned Recipe and the like). Relaxes the 'seasoned' global token for this entry ONLY, which is why 2026-08-23's exclude-only entry was left out: the global would have dropped every product it names. Minted 2026-09-19: staple canned-black-beans is plain (round 2 rejected the map)."
+    },
+    {
       "id": "sesame-oil",
       "label": "Sesame Oil",
       "unit": "oz",
@@ -2193,6 +3078,45 @@
       "band_min": 0.2,
       "band_max": 2.5,
       "note": "Sesame oil (often toasted); small bottles run high per oz, hence the wide top band. Critical exclude 'seed' so it can't steal the toasted-sesame-seeds commodity."
+    },
+    {
+      "id": "shredded-carrots",
+      "label": "Shredded Carrots",
+      "unit": "oz",
+      "include": [
+        "shredded\\s+carrots?",
+        "carrots?,?\\s+shredded",
+        "matchstick\\s+carrots?"
+      ],
+      "exclude": [
+        "broccoli",
+        "cabbage",
+        "slaw",
+        "salad",
+        "cake",
+        "\\bkit\\b",
+        "frozen",
+        "dried"
+      ],
+      "note": "Bagged fresh shredded carrots, per oz. The recipe carrots entry (whole, per lb) now excludes shred so it cannot take these first. Minted 2026-09-19: staple carrots is whole carrots per lb."
+    },
+    {
+      "id": "smoked-paprika",
+      "label": "Smoked Paprika",
+      "unit": "oz",
+      "include": [
+        "smoked\\s+paprika",
+        "paprika,?\\s+smoked"
+      ],
+      "exclude": [
+        "garlic",
+        "\\bblend\\b",
+        "\\brub\\b",
+        "chicken",
+        "\\bchips?\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Smoked paprika spice. The recipe paprika entry now excludes smoked, so a recipe that asks for paprika is priced by paprika and one that asks for smoked paprika by this. Minted 2026-09-19."
     },
     {
       "id": "soy-sauce",
@@ -2220,6 +3144,73 @@
       "note": "Soy sauce / tamari / shoyu. Excludes teriyaki and soy-based non-sauce products (soy milk/beans/nuts). Heads-up: GLOBAL_EXCLUDE '\\bsauce\\b' would currently drop this entirely - orchestrator must relax that exclusion for the sauce commodities."
     },
     {
+      "id": "sriracha",
+      "label": "Sriracha",
+      "unit": "floz",
+      "include": [
+        "sriracha"
+      ],
+      "exclude": [
+        "gouda",
+        "cheese",
+        "tomatillo",
+        "mayo",
+        "ketchup",
+        "\\bchips?\\b",
+        "seasoning",
+        "peanut",
+        "\\bnuts?\\b",
+        "almond",
+        "popcorn",
+        "noodle",
+        "ramen",
+        "dressing",
+        "aioli",
+        "mustard",
+        "honey",
+        "\\blime\\b",
+        "chicken",
+        "\\bsalt\\b",
+        "seeds?\\b",
+        "\\bkit\\b",
+        "hummus",
+        "cream\\s+cheese",
+        "jerky",
+        "\\bstick",
+        "pretzel",
+        "cracker",
+        "tortilla",
+        "vinegar",
+        "\\brub\\b",
+        "\\bmix\\b",
+        "\\bmini\\b",
+        "garlic",
+        "\\bpacket",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Sriracha hot chili sauce, the bottle. Excludes sriracha-flavoured mayo, ketchup, snacks and seasonings. Minted 2026-09-19: staple hot-sauce is generic hot sauce."
+    },
+    {
+      "id": "sugar-free-bbq-sauce",
+      "label": "Sugar-Free BBQ Sauce",
+      "unit": "oz",
+      "include": [
+        "^(?=.*(?:sugar[\\s-]*free|no\\s+sugar\\s+added|zero\\s+sugar|\\bketo\\b))(?=.*(?:\\bbbq\\b|barbe))"
+      ],
+      "exclude": [
+        "\\brub\\b",
+        "seasoning",
+        "\\bchips?\\b",
+        "jerky",
+        "chicken",
+        "pork",
+        "beef",
+        "pouch",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Sugar-free / no-sugar-added barbecue sauce. Excludes rubs and multipack resale listings. Minted 2026-09-19: staple bbq-sauce is regular sauce."
+    },
+    {
       "id": "sugar-free-maple-syrup",
       "label": "Sugar-Free Maple Syrup",
       "unit": "oz",
@@ -2245,6 +3236,71 @@
       "band_min": 0.05,
       "band_max": 0.7,
       "note": "Must be sugar-free/zero-sugar; plain full-sugar maple/pancake syrup is a different (excluded) product."
+    },
+    {
+      "id": "sweet-chili-sauce",
+      "label": "Sweet Chili Sauce",
+      "unit": "floz",
+      "include": [
+        "sweet\\s+chil+i\\s+sauce",
+        "thai\\s+(?:style\\s+)?sweet\\s+chil+i"
+      ],
+      "exclude": [
+        "sugar[\\s-]*free",
+        "reduced\\s+sugar",
+        "zero\\s+calorie",
+        "\\bchips?\\b",
+        "doritos",
+        "\\bwings?\\b",
+        "chicken",
+        "shrimp",
+        "noodle",
+        "dressing",
+        "mayo",
+        "\\bkit\\b",
+        "\\bmeal\\b",
+        "cracker",
+        "popcorn",
+        "\\bbowl\\b",
+        "seasoning",
+        "\\brub\\b",
+        "pretzel",
+        "tortilla",
+        "\\bdip\\b",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Sweet chili sauce (Thai style). Minted 2026-09-19: staple chili-garlic-sauce is a different condiment."
+    },
+    {
+      "id": "swiss-cheese",
+      "label": "Swiss Cheese",
+      "unit": "oz",
+      "include": [
+        "\\bswiss\\b[^,]{0,30}\\bcheese\\b",
+        "\\bcheese\\b[^,]{0,30}\\bswiss\\b"
+      ],
+      "exclude": [
+        "spreadable",
+        "spread",
+        "wedge",
+        "creamy",
+        "\\bcups?\\b",
+        "almond",
+        "ice\\s+cream",
+        "singles",
+        "gruy",
+        "alpine",
+        "\\bblend\\b",
+        "shred",
+        "sandwich",
+        "\\bham\\b",
+        "turkey",
+        "\\bmeal\\b",
+        "\\bkit\\b",
+        "cracker",
+        "snack"
+      ],
+      "note": "Swiss cheese, sliced or block, as the snapshot cells were. Excludes spreadable wedges, processed singles and Swiss-Gruyere blends. Minted 2026-09-19: staple sliced-cheese is American singles (round 3 rejected the map)."
     },
     {
       "id": "tahini",
@@ -2372,6 +3428,29 @@
       "note": "Jarred red pasta/spaghetti sauce; marinara and alfredo are separate/other commodities and excluded."
     },
     {
+      "id": "turkey-pepperoni",
+      "label": "Turkey Pepperoni",
+      "unit": "oz",
+      "include": [
+        "turkey\\s+pepperoni",
+        "pepperoni[^,]{0,20}\\bturkey\\b"
+      ],
+      "exclude": [
+        "\\bpizza\\b(?!\\s+topping)",
+        "\\bsticks?\\b",
+        "snack",
+        "\\bbites\\b",
+        "\\btray\\b",
+        "\\bkit\\b",
+        "cracker",
+        "\\bmini\\b",
+        "wrapped",
+        "pouch",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "note": "Sliced turkey pepperoni. Minted 2026-09-19: staple pepperoni is pork/beef pepperoni."
+    },
+    {
       "id": "white-mushrooms",
       "label": "White Mushrooms",
       "unit": "oz",
@@ -2425,6 +3504,78 @@
       "band_min": 0.01,
       "band_max": 0.2,
       "note": "Distilled white vinegar is very cheap per oz; 'wine' excludes white/red wine vinegar."
+    },
+    {
+      "id": "white-wine-vinegar",
+      "label": "White Wine Vinegar",
+      "unit": "floz",
+      "include": [
+        "white\\s+wine\\s+vinegar"
+      ],
+      "exclude": [
+        "balsamic",
+        "vinaigrette",
+        "dressing",
+        "marinade",
+        "red\\s+wine",
+        "\\brice\\b",
+        "cider",
+        "cooking\\s+wine",
+        "tarragon",
+        "herb"
+      ],
+      "relax_global": [
+        "\\bwine\\b"
+      ],
+      "note": "White wine vinegar. Relaxes the wine token for this entry only, as red-wine-vinegar does. Minted 2026-09-19."
+    },
+    {
+      "id": "zero-sugar-soda-2l",
+      "label": "Zero-Sugar Soda (2 L)",
+      "unit": "floz",
+      "include": [
+        "^(?=.*(?:zero\\s+sugar|\\bdiet\\b|sugar[\\s-]*free|\\bzero\\b))(?=.*(?:\\bsoda\\b|\\bcola\\b|\\bcoke\\b|pepsi|dr\\.?\\s*pepper|dr\\s+thunder|sprite|7\\s*up|mountain\\s+dew|mtn\\s+dew|root\\s+beer|sunkist|fanta|big\\s+k|squirt|crush|lemon[\\s-]*lime|\\bpop\\b))"
+      ],
+      "exclude": [
+        "\\bcans?\\b",
+        "mini",
+        "energy",
+        "gatorade",
+        "thirst\\s+quencher",
+        "\\bsports?\\b",
+        "electrolyte",
+        "ice\\s+pops?",
+        "\\bpops\\b",
+        "jell",
+        "gelatin",
+        "\\bgels?\\b",
+        "drink\\s+mix",
+        "powder",
+        "\\bea\\b",
+        "\\d+\\s*pk\\b",
+        "\\b1(?:\\.\\d+)?\\s*(?:l|liters?)\\b",
+        "\\b3\\s*(?:l|liters?)\\b",
+        "\\btea\\b",
+        "juice",
+        "syrup",
+        "drops",
+        "\\bgum\\b",
+        "candy",
+        "\\bpacks?\\b",
+        "\\bpk\\b",
+        "\\bct\\b",
+        "\\d+\\s*count",
+        "bbq",
+        "barbecue",
+        "sauce",
+        "\\(\\s*\\d+\\s*pack\\s*\\)|\\bpack\\s+of\\s+\\d+"
+      ],
+      "relax_global": [
+        "\\bsoda\\b"
+      ],
+      "min_pack_oz": 60,
+      "max_pack_oz": 70,
+      "note": "Zero-sugar or diet soda in the 2 L bottle (67.6 fl oz), per fl oz. The pack bounds keep 12 oz cans, 1 L and 3 L bottles and 12-packs off the cell (recipe-floor-id-map round 2 rejected soda because 2 L and 12-pack economics differ). Relaxes the soda token for this entry only. Minted 2026-09-19."
     }
   ]
 }
