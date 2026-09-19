@@ -217,6 +217,22 @@ function Test-TcStaged {
   return [bool]$Response.__tc_staged
 }
 
+function Get-TcQueueTargetKey {
+  <# What makes two queued calls "the same write" for Get-TcQueueConcerns. A PUT, DELETE or PATCH names ONE
+     resource in its uri, so the uri is the key. A POST names a COLLECTION and creates in it, so its key is the
+     uri plus the exact bytes it would send (body_b64 when staged from a byte[], else body): three different
+     lessons POSTed to /posts/ are three keys, and one lesson POSTed twice is one. Ordinal, never culture-aware. #>
+  param($Entry)
+  $uri = [string]$Entry.uri
+  if (([string]$Entry.method).ToUpper() -ne 'POST') { return ('uri ' + $uri) }
+  $payload = ''
+  if ($Entry.PSObject.Properties['body_b64'] -and $Entry.body_b64) { $payload = 'b64 ' + [string]$Entry.body_b64 }
+  elseif ($Entry.PSObject.Properties['body'] -and $null -ne $Entry.body) { $payload = 'txt ' + [string]$Entry.body }
+  $sha = [System.Security.Cryptography.SHA256]::Create()
+  try { $h = [BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($payload))).Replace('-', '') } finally { $sha.Dispose() }
+  return ('post ' + $uri + ' ' + $h)
+}
+
 function Get-TcQueueConcerns {
   <# The whole argument for staging over an undo log lives in this function: it looks at the SET.
      An undo log sees one call at a time and cannot ask any of these questions.
@@ -231,9 +247,19 @@ function Get-TcQueueConcerns {
   param([object[]]$Entries)
   $c = @()
   $mutating = @($Entries | Where-Object { Test-TcMutatingMethod $_.method })
-  $dupes = @($mutating | Group-Object -Property uri | Where-Object { $_.Count -gt 1 })
+  # A POST CREATES, so two POSTs to one COLLECTION uri (/posts/) are two different posts, not one resource
+  # written twice: keyed on uri alone, a queue that publishes three new lessons read "3 calls target the same
+  # uri" on a set with nothing wrong in it (2026-09-19). A POST is keyed on its uri AND its body, so the
+  # duplicate that matters here - the SAME create queued twice, which makes the same post twice - still fires.
+  # Every other verb keeps the uri key: two PUTs to one post are one resource written twice whatever they carry.
+  $dupes = @($mutating | Group-Object -Property { Get-TcQueueTargetKey $_ } | Where-Object { $_.Count -gt 1 })
   foreach ($d in $dupes) {
-    $c += ("{0} calls target the same uri ({1}) - the later one wins and the earlier is wasted, or they disagree" -f $d.Count, $d.Name)
+    $first = $d.Group[0]
+    if (([string]$first.method).ToUpper() -eq 'POST') {
+      $c += ("{0} POST calls carry the SAME body to {1} - each POST creates, so this makes the same thing {0} times" -f $d.Count, $first.uri)
+    } else {
+      $c += ("{0} calls target the same uri ({1}) - the later one wins and the earlier is wasted, or they disagree" -f $d.Count, $first.uri)
+    }
   }
   $deletes = @($mutating | Where-Object { $_.method -eq 'DELETE' })
   if ($deletes.Count) { $c += ("{0} DELETE call(s) queued - a delete has no restore in this design, only a re-create" -f $deletes.Count) }

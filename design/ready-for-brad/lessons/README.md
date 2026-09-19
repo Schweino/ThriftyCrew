@@ -1,5 +1,11 @@
 # Three lesson drafts for Brad's approval (backlog I108, I109, I111)
 
+**2026-09-19: Brad ruled "Publish all three". The publish is STAGED, NOT SENT**, as three queues under `staged\`
+(`new-lessons.jsonl`, `new-lessons-links.jsonl`, `new-lessons-oldpage-links.jsonl`). The apply order, the fields
+each post carries and the checks to run afterwards are in `new-lessons-publish.md`, which replaces the
+`publish-lesson.ps1` commands and step 4 below. Steps 2 (hubs) and 3 (sources into `content\lessons\`) still apply
+after the posts are live; the hub arrays already carry the three slugs.
+
 Ruled by Brad in chat on 2026-09-19: draft three new normal-titled lessons outside the closed Week 1-52
 series. **Nothing here is published.** No Ghost write of any kind was made to prepare them: the only calls
 were public page loads (slugs, links, the sitemap) and read-only Admin API GETs of eight live lessons for the voice. Each lesson is here twice: the `.md` source in the

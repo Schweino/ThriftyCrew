@@ -30,7 +30,7 @@ $hubs = @(
     metaDesc='Money skill is really habit and mindset in disguise. The lessons that build the foundation: future thinking, spending psychology, and the small habits that compound.';
     lead='Money skill is really habit and mindset wearing a disguise.';
     body='Before budgets and index funds, there is the quieter stuff: how you picture the future, why you buy what you buy, and the small daily habits that compound into a whole different life. This track builds that foundation.';
-    lessons=@('week-1-future-you-is-a-real-person','week-2-the-compounding-secret','week-3-win-the-first-five-minutes','week-4-the-gap-is-the-score','week-14-no-one-is-coming-to-save-you-and-thats-good-news','week-40-want-less-win-more','week-44-what-are-you-really-buying','week-48-the-few-expensive-mistakes','week-43-the-highlight-reel','week-49-taming-the-need-to-fit-in','week-47-choose-your-crowd','week-45-borrow-other-peoples-hindsight','week-46-how-to-spot-good-advice-from-bad','week-12-talking-about-money-without-fighting','week-51-your-kids-first-five-year-plan','week-52-a-letter-to-future-you') }
+    lessons=@('week-1-future-you-is-a-real-person','week-2-the-compounding-secret','week-3-win-the-first-five-minutes','week-4-the-gap-is-the-score','week-14-no-one-is-coming-to-save-you-and-thats-good-news','week-40-want-less-win-more','week-44-what-are-you-really-buying','week-48-the-few-expensive-mistakes','week-43-the-highlight-reel','week-49-taming-the-need-to-fit-in','week-47-choose-your-crowd','week-45-borrow-other-peoples-hindsight','week-46-how-to-spot-good-advice-from-bad','week-12-talking-about-money-without-fighting','week-51-your-kids-first-five-year-plan','week-52-a-letter-to-future-you','personal-balance-sheet') }
   [ordered]@{ slug='budgeting-and-spending'; title='Budgeting & Spending';
     metaTitle='Budgeting & Spending: A Budget That Sticks';
     metaDesc='A budget is not about spending less, it is about knowing where it goes. Lessons on your first budget, tracking spending, needs vs wants, and beating lifestyle creep.';
@@ -42,7 +42,7 @@ $hubs = @(
     metaDesc='Saving is a habit before it is an amount. Lessons on pay-yourself-first, opening a real account, earning vs allowance, and the money case for generosity.';
     lead='Pay yourself first &mdash; then make it automatic.';
     body='Saving is a habit long before it is an amount. This track covers the pay-yourself-first rule, opening a real bank account, the difference between earning and an allowance, and the surprising money case for giving.';
-    lessons=@('week-9-pay-yourself-first','week-10-opening-the-first-account','week-11-allowance-vs-earning','week-50-the-gift-of-giving') }
+    lessons=@('week-9-pay-yourself-first','week-10-opening-the-first-account','week-11-allowance-vs-earning','week-50-the-gift-of-giving','how-much-emergency-fund','insurance-basics') }
   [ordered]@{ slug='earning-and-first-jobs'; title='Earning & First Jobs';
     metaTitle='Earning & First Jobs: Land It, Build a Reputation';
     metaDesc='Money gets easier when you are good at making it. Lessons on finding work you care about, landing and nailing a first job, and building skills and a reputation that follow you.';

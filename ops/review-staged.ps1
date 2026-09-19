@@ -150,6 +150,37 @@ if ($SelfTest) {
   $cleanCon = Get-TcQueueConcerns -Entries $clean
   T 'MUST NOT FIRE one PUT from one caller raises nothing' (@($cleanCon).Count -eq 0) (@($cleanCon) -join ' | ')
 
+  # --- A POST CREATES, so a queue of different creates on ONE collection uri is not a duplicate (2026-09-19).
+  # Keyed on uri alone, the three new lessons' queue (three POSTs to /posts/?source=html, one per lesson)
+  # read "3 calls target the same uri" with nothing wrong in it. The duplicate that matters for a POST is the
+  # SAME body queued twice, which would create the same post twice, and that must still fire.
+  $postUri = 'https://h/ghost/api/admin/posts/?source=html'
+  $threeCreates = @(
+    [pscustomobject]@{ method = 'POST'; uri = $postUri; body_b64 = 'QUFB'; caller = 'stage.ps1' },
+    [pscustomobject]@{ method = 'POST'; uri = $postUri; body_b64 = 'QkJC'; caller = 'stage.ps1' },
+    [pscustomobject]@{ method = 'POST'; uri = $postUri; body_b64 = 'Q0ND'; caller = 'stage.ps1' }
+  )
+  $conCreates = Get-TcQueueConcerns -Entries $threeCreates
+  T 'MUST NOT FIRE three POSTs to one collection uri with three DIFFERENT bodies raise nothing - they create three things' (@($conCreates).Count -eq 0) (@($conCreates) -join ' | ')
+  $sameCreate = @(
+    [pscustomobject]@{ method = 'POST'; uri = $postUri; body_b64 = 'QUFB'; caller = 'stage.ps1' },
+    [pscustomobject]@{ method = 'POST'; uri = $postUri; body_b64 = 'QUFB'; caller = 'stage.ps1' }
+  )
+  $conSame = Get-TcQueueConcerns -Entries $sameCreate
+  T 'MUST FIRE  the SAME POST body queued twice is flagged, because it would create the same post twice' (@($conSame | Where-Object { $_ -like '*SAME body*' }).Count -eq 1) (@($conSame) -join ' | ')
+  $sameText = @(
+    [pscustomobject]@{ method = 'POST'; uri = $postUri; body = '{"posts":[{"title":"a"}]}'; caller = 'stage.ps1' },
+    [pscustomobject]@{ method = 'POST'; uri = $postUri; body = '{"posts":[{"title":"a"}]}'; caller = 'stage.ps1' }
+  )
+  $conText = Get-TcQueueConcerns -Entries $sameText
+  T 'MUST FIRE  the same STRING body POSTed twice is flagged too, not only a byte[] one' (@($conText | Where-Object { $_ -like '*SAME body*' }).Count -eq 1) (@($conText) -join ' | ')
+  $twoPuts = @(
+    [pscustomobject]@{ method = 'PUT'; uri = 'https://h/posts/a/'; body_b64 = 'QUFB'; caller = 'stage.ps1' },
+    [pscustomobject]@{ method = 'PUT'; uri = 'https://h/posts/a/'; body_b64 = 'QkJC'; caller = 'stage.ps1' }
+  )
+  $conPuts = Get-TcQueueConcerns -Entries $twoPuts
+  T 'CLEAN TWIN two PUTs to ONE post are still flagged when their bodies DIFFER - a PUT names one resource, so the body never splits it' (@($conPuts | Where-Object { $_ -like '*same uri*' }).Count -eq 1) (@($conPuts) -join ' | ')
+
   # --- THE COMPOSITION CASE. The one thing having BOTH mechanisms can get wrong, and the reason the
   # order of the two gates in ghost-lib is load-bearing rather than stylistic.
   #
