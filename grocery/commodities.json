@@ -180,7 +180,8 @@
                         "\\bcereal\\s+bars?\\b",
                         "\\bpulled\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -345,7 +346,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -520,7 +522,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "relax_global":  [
                              "\\bmeal\\b"
@@ -683,7 +686,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -859,7 +863,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -1190,7 +1195,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -2677,7 +2683,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -2928,7 +2936,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -3167,7 +3177,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -3399,7 +3411,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -3627,7 +3641,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -3860,7 +3876,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -4100,7 +4118,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -4328,7 +4348,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -4568,7 +4590,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -4817,7 +4841,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -5053,7 +5079,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -5299,7 +5327,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -5990,7 +6020,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -6166,7 +6197,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -6322,7 +6354,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -6493,7 +6526,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -6671,7 +6705,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -6843,7 +6878,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -7026,7 +7062,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -7158,7 +7195,8 @@
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -7294,7 +7332,8 @@
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -7664,7 +7703,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -7911,7 +7952,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -8161,7 +8204,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -8402,7 +8447,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -8633,7 +8680,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -8867,7 +8916,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -9112,7 +9163,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -9341,7 +9394,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -9569,7 +9624,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -9795,7 +9852,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -10026,7 +10085,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -10277,7 +10338,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -10512,7 +10575,8 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -10756,7 +10820,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -10986,7 +11052,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -16735,7 +16803,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -16996,7 +17066,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -17222,7 +17294,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -17447,7 +17521,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -17659,7 +17735,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -17902,7 +17980,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -18139,7 +18219,9 @@
                         "\\bsqueeze\\b",
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
-                        "\\bdressings?\\b"
+                        "\\bdressings?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -18368,7 +18450,9 @@
                         "\\bsqueeze\\b",
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
-                        "\\bdressings?\\b"
+                        "\\bdressings?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -18635,7 +18719,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -18860,7 +18946,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -19087,7 +19175,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -19323,7 +19413,8 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -19548,7 +19639,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -19778,7 +19871,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -20008,7 +20103,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -20232,7 +20329,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -20458,7 +20557,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -20682,7 +20783,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -20905,7 +21008,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -21146,7 +21251,8 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -21376,7 +21482,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -21616,7 +21724,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -21839,7 +21949,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -22069,7 +22181,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -22302,7 +22416,8 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -22434,7 +22549,8 @@
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -22598,7 +22714,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -22761,7 +22878,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -22927,7 +23045,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -23084,7 +23203,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -23252,7 +23372,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -23414,7 +23535,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -23580,7 +23702,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -23743,7 +23866,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "relax_global":  [
                              "\\bbeer\\b"
@@ -23911,7 +24035,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -24077,7 +24202,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -24251,7 +24377,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "relax_global":  [
                              "seasoned"
@@ -24419,7 +24546,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -24587,7 +24715,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -24759,7 +24888,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -24931,7 +25061,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -25095,7 +25226,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -25266,7 +25398,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -25426,7 +25559,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -30966,6 +31100,7 @@
                     ],
         "exclude":  [
                         "\\bfrozen\\b",
+                        "\\bcarrots?\\b",
                         "^\\s*fareway\\s+green\\s+peas\\s*$",
                         "snap",
                         "black-?eyed",
@@ -41271,6 +41406,7 @@
         "exclude":  [
                         "^simple\\s+truth\\s+organic\\s+oregano$",
                         "tomatoes?|canned",
+                        "\\btomato\\s+paste\\b",
                         "\\bfresh\\b",
                         "\\bplant\\b",
                         "\\boil\\b",
@@ -41605,7 +41741,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -51303,7 +51441,9 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -54818,7 +54958,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -55041,7 +55183,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -55270,7 +55414,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -55498,7 +55644,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -55702,7 +55850,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -56243,7 +56392,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "relax_global":  [
                              "\\bwater\\b"
@@ -56592,7 +56742,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -56886,7 +57038,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -57826,7 +57979,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -58116,7 +58271,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -58821,7 +58977,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -59054,7 +59212,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ],
         "pint_oz":  10
     },
@@ -59527,7 +59687,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -59706,7 +59867,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -59883,7 +60045,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -60225,7 +60388,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -60460,7 +60625,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -60700,7 +60867,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -60933,7 +61102,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -61176,7 +61347,8 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -61403,7 +61575,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -61656,7 +61830,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -61883,7 +62059,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -62112,7 +62290,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -62333,7 +62513,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -62555,7 +62737,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -62786,7 +62970,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -63011,7 +63197,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -63236,7 +63424,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -63459,7 +63649,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -63706,7 +63898,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -63943,7 +64137,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -64166,7 +64362,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -64387,7 +64585,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -64608,7 +64808,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -64828,7 +65030,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -65056,7 +65260,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -65279,7 +65485,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -65502,7 +65710,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -65722,7 +65932,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -65946,7 +66158,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -66170,7 +66384,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -66391,7 +66607,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -66613,7 +66831,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -66842,7 +67062,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -67065,7 +67287,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -67293,7 +67517,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -67523,7 +67749,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -67743,7 +67971,9 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -67981,7 +68211,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -68214,7 +68446,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -68440,7 +68674,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -68662,7 +68898,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -68888,7 +69126,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -69107,7 +69347,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -69335,7 +69577,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -69556,7 +69800,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -69781,7 +70027,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -70010,7 +70258,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -70236,7 +70486,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -70445,7 +70697,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -70673,7 +70927,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -70902,7 +71158,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -71131,7 +71389,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -71355,7 +71615,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -71640,7 +71902,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "band_min":  0.04,
         "band_max":  0.65
@@ -72271,7 +72534,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "band_min":  0.14,
         "band_max":  22.44
@@ -72430,7 +72694,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "band_min":  0.05,
         "band_max":  14.97
@@ -72653,7 +72918,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ],
         "band_min":  1.39,
         "band_max":  14.95
@@ -75753,7 +76020,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ],
         "band_min":  0.15,
         "band_max":  1.32
@@ -76087,7 +76355,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ],
         "band_min":  0.42,
         "band_max":  5.97
@@ -78063,7 +78333,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -78291,7 +78562,9 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b",
+                        "\\bcans?\\b"
                     ]
     },
     {
@@ -78672,7 +78945,8 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {
@@ -79675,7 +79949,8 @@
                         "\\bmayo(?:nnaise)?\\b",
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
-                        "\\bspreads?\\b"
+                        "\\bspreads?\\b",
+                        "\\bstews?\\b"
                     ]
     },
     {

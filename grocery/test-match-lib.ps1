@@ -194,7 +194,31 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  fresh jalapenos still price jalapenos' 'Fresh Jalapeno Peppers' 'jalapenos'
   _RT 'CLEAN TWIN  fresh basil still prices fresh-basil' 'Gotham Greens Fresh Basil' 'fresh-basil'
   _RT 'CLEAN TWIN  fresh green chiles still price green-chilli' 'Fresh Green Chiles, per lb' 'green-chilli'
-  $rtWant = 26   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, 2026-09-19
+  # BRAD'S RULING 2026-09-19 "Fence stews and cans off produce". Walmart's canned Stokes stew was the cheapest
+  # green-chilli cell on the 2026-09-17 board: the fresh fence had \bcanned\b but not the word Can, and soup_carrier
+  # named soup, chowder, bisque and gumbo but not stew. soup_carrier gains \bstews?\b (produce and Meat, where it moves
+  # only stews), and the can word is its own class, canned_carrier, scoped to Fruit and Vegetables ONLY: in soup_carrier
+  # it would also reach Meat, where canned-tuna, canned-chicken and canned-salmon price real cans (measured over 77,482
+  # names that day: 198 moved with it in soup_carrier, 70 with it produce-only, every one of the 70 a non-fresh product).
+  _RT 'MUST FIRE  the Walmart canned green chile stew leaves the fresh green-chilli cell' 'Stokes Green Chile Stew with Pork and Potatoes, Medium, 15 oz Can' '<none>'
+  _RT 'MUST FIRE  a canned carrot named only by the word Can leaves the fresh carrots cell' 'Great Value Sliced Carrots, 14.5 oz Can' '<none>'
+  _RT 'MUST FIRE  canned peas and carrots do not re-land on canned-peas once they leave carrots' 'Kroger Sweet Peas & Carrots - 15oz can' '<none>'
+  # MUST FIRE on the MECHANISM, as for condiment_carrier above: both new tokens reach every produce commodity.
+  $script:rtRan++
+  $stewRx = '\bstews?\b'
+  $canCls = @($ceLib.classes.canned_carrier)
+  $canMiss = @()
+  foreach ($pid_ in $produce) {
+    $ex = @($cmById[[string]$pid_].exclude)
+    if (($ex -notcontains $stewRx) -or @($canCls | Where-Object { $ex -notcontains $_ }).Count -gt 0) { $canMiss += [string]$pid_ }
+  }
+  if (@($ceLib.classes.soup_carrier) -notcontains $stewRx -or $canCls -notcontains '\bcans?\b' -or $produce.Count -eq 0 -or $canMiss.Count -gt 0) { Write-Output ("  FAIL  MUST FIRE  stew and can reach {0} of {1} produce commodities; missing: {2}" -f ($produce.Count - $canMiss.Count), $produce.Count, ($canMiss -join ',')); $rtBad++ }
+  _RT 'MUST NOT FIRE  a cantaloupe (the letters c-a-n, not the word) still prices cantaloupe' 'Large Cantaloupe, 1 ct.' 'cantaloupe'
+  _RT 'MUST NOT FIRE  Mexican papayas (the letters c-a-n inside a word) still price papaya' 'Mexican Papayas' 'papaya'
+  _RT 'CLEAN TWIN  a can of tuna still prices canned-tuna (the can word never reached Meat)' 'StarKist Chunk Light Tuna in Water Can' 'canned-tuna'
+  _RT 'CLEAN TWIN  a can of mixed nuts with pecans still prices mixed-nuts (the can word never left produce)' 'Planters Lightly Salted Deluxe Mixed Nuts with Cashews, Almonds, Brazil Nuts, Pistachios, Pecans. 5g Protein (6% DV) per serving, 15.25 oz Can' 'mixed-nuts'
+  _RT 'CLEAN TWIN  a canned garlic tomato paste leaves garlic for tomato-paste, not dried-oregano' 'Hunts Tomato Paste with Basil, Garlic and Oregano, Perfect for Chili & Soups, 6 oz. Can' 'tomato-paste'
+  $rtWant = 35   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)

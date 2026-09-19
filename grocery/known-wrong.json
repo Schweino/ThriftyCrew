@@ -4832,6 +4832,37 @@
                         "ruled_on":  "2026-09-19",
                         "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "green-chilli|Aldi|burman-s-green-chili-squeeze-aioli-10-oz",
+                        "commodity":  "green-chilli",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Burman S Green Chili Squeeze Aioli 10 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A squeeze aioli (condiment), not a fresh green chile. Held Aldi\u0027s green-chilli cell at 3.92/lb on the 2026-09-17 board. Brad ruled it off on 2026-09-19 so no rebuild can put it back; the condiment_carrier class (ee218cf06) also fences it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "Brad (via orchestrator, 2026-09-19)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "green-chilli|Walmart|stokes-green-chile-stew-with-pork-and-potatoes-m",
+                        "commodity":  "green-chilli",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Stokes Green Chile Stew with Pork and Potatoes, Medium, 15 oz Can",
+                                      "Stokes Green Chile Stew with Pork and Potatoes, 15 oz Can"
+                                  ],
+                        "product_id":  "35230539",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A canned prepared stew (pork and potatoes), not a fresh green chile. Held Walmart\u0027s green-chilli cell, cheapest on the 2026-09-17 board at 3.07/lb (Walmart item 35230539). Brad ruled it off on 2026-09-19 so no rebuild can put it back; the stew/can fence landed the same day also fences it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "Brad (via orchestrator, 2026-09-19)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
