@@ -39,23 +39,46 @@
   rate (could-not-evaluate - the house code for "this examined too little to mean anything"). 1 = bad input.
   It NEVER exits 2: this is bookkeeping about the board, not a gate on it, and must not be able to stop a
   publish on its own bug.
+
+  THE 14-DAY SCHEDULED AGENT (Brad's ruling, 2026-09-19, backlog I232). A scheduled agent with a browser verifies
+  a 100-cell sample every 14 days (design\ready-for-brad\verify-board-sample.SKILL.md). Three additions serve it:
+    * The ruling's own words are accepted: `match` records as ok, `could-not-look` records as unverifiable.
+    * A CLAIMED PASS WITH NO PRICE THE VERIFIER SAW IS A COULD-NOT-LOOK, NEVER A MATCH. An ok/match row whose
+      found_price is blank is recorded as unverifiable and counted aloud. A verdict nobody backed with a number
+      read off the store's page is a guess, and a guessed pass is the worst outcome this file can record.
+      Measured before the rule, at base cbf146ee8: 0 of 146 ok verdicts in the two adjudicated whole-board runs
+      (2026-08-08, 2026-08-15) lacked a price, so the adjudicated flow never trips it. The 2026-07-30 run (57 of
+      57 ok without a price, a sighted run before adjudicate-blind-findings existed) is history and is not
+      re-derived; the rule applies only to what is recorded from now on.
+    * -CompareLast states this run's whole-board rate against the LAST measured one (the previous run of the same
+      scope, each run alone, never pooled), with both denominators and both intervals, and -Alert mails Brad when
+      the new point estimate is higher. -Due answers whether a verification is owed (13+ days since the newest
+      run that verified at least -MinSamples cells), so a weekly trigger keeps a 14-day cadence and catches up
+      after a missed week.
+  -HistoryFile moves the history (default out\verification-history.json) so -SelfTest never touches the live one.
 #>
 param(
   [string]$VerdictFile = '',
   [string]$SampleFile = '',
+  [string]$HistoryFile = '',
   [int]$PoolWeeks = 4,
   [int]$MinSamples = 30,
   [double]$TargetHalfWidth = 0.01,
+  [int]$DueDays = 13,
   [switch]$Report,
+  [switch]$CompareLast,
+  [switch]$Alert,
+  [switch]$Due,
+  [switch]$SelfTest,
   [switch]$Quiet
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $outDir = Join-Path $root 'out'
-$histPath = Join-Path $outDir 'verification-history.json'
+$histPath = if ($HistoryFile) { $HistoryFile } else { Join-Path $outDir 'verification-history.json' }
 function Say([string]$s) { if (-not $Quiet) { Write-Output $s } }
 $DEFECT = @('wrong-product', 'wrong-price', 'wrong-size', 'missing')
-$VALID  = @('ok', 'wrong-product', 'wrong-price', 'wrong-size', 'missing', 'unverifiable')
+$VALID  = @('ok', 'wrong-product', 'wrong-price', 'wrong-size', 'missing', 'unverifiable', 'match', 'could-not-look')
 
 # ---------------------------------------------------------------------------------------------------------
 # BEGIN-SAMPLE-STATS  (extracted and executed verbatim by test-auditors.ps1 - do not rename these sentinels)
@@ -161,6 +184,268 @@ function Test-CanQuoteRate([int]$verified, [int]$minSamples) {
 # END-SAMPLE-STATS
 # ---------------------------------------------------------------------------------------------------------
 
+# ---- the 14-day scheduled agent's additions (backlog I232, 2026-09-19) ----------------------------------
+function ConvertTo-RecordedVerdict([string]$verdict, [string]$foundPrice) {
+  # The ruling's words map onto the recorded vocabulary, and a pass nobody backed with a price is not a pass.
+  $v = ([string]$verdict).Trim().ToLower()
+  if ($v -eq 'match') { $v = 'ok' }
+  elseif ($v -eq 'could-not-look') { $v = 'unverifiable' }
+  $demoted = $false
+  if ($v -eq 'ok' -and ([string]$foundPrice).Trim() -eq '') { $v = 'unverifiable'; $demoted = $true }
+  return [pscustomobject]@{ verdict = $v; demoted = $demoted }
+}
+
+function Get-VerifyRunScope($r) {
+  if ($r.PSObject.Properties['store_scope'] -and [string]$r.store_scope) { return [string]$r.store_scope }
+  return 'whole-board'
+}
+
+function Get-RunEstimate($run, [int]$minSamples) {
+  # ONE run alone: its own verdicts (a cell verified twice inside it counts once, at its last verdict) and its
+  # own stratum populations. Never pooled, because "the last measured rate" is one run's statement.
+  $latest = @{}
+  foreach ($v in @($run.verdicts)) { $latest[([string]$v.id) + '|' + ([string]$v.store)] = $v }
+  $nC = 0; $xC = 0; $nN = 0; $xN = 0; $unv = 0
+  foreach ($v in $latest.Values) {
+    $vd = [string]$v.verdict
+    if ($vd -eq 'unverifiable') { $unv++; continue }
+    $isDef = ($DEFECT -contains $vd)
+    if (([string]$v.stratum) -eq 'crown') { $nC++; if ($isDef) { $xC++ } } else { $nN++; if ($isDef) { $xN++ } }
+  }
+  $popC = 0; $popN = 0
+  if ($run.strata) {
+    if ($run.strata.crown)    { $popC = [int]$run.strata.crown.population }
+    if ($run.strata.noncrown) { $popN = [int]$run.strata.noncrown.population }
+  }
+  $sC = [pscustomobject]@{ name = 'crown'; population = $popC; n = $nC; x = $xC }
+  $sN = [pscustomobject]@{ name = 'noncrown'; population = $popN; n = $nN; x = $xN }
+  $st = Get-StratifiedEstimate @($sC, $sN)
+  $n = $nC + $nN
+  return [pscustomobject]@{
+    board_date = [string]$run.board_date; scope = (Get-VerifyRunScope $run); n = $n; x = ($xC + $xN); unverifiable = $unv
+    p = $st.p; lo = $st.lo; hi = $st.hi
+    quotable = (($n -ge $minSamples) -and (($popC + $popN) -gt 0) -and $st.usable)
+  }
+}
+
+function Format-RunRate($e) {
+  return ($e.board_date + ' ' + ('{0:N1}%' -f (100.0 * $e.p)) + ' (95% CI ' + ('{0:N1}%' -f (100.0 * $e.lo)) + ' to ' +
+    ('{0:N1}%' -f (100.0 * $e.hi)) + '; ' + $e.x + ' defect(s) in ' + $e.n + ' verified, ' + $e.unverifiable + ' could-not-look)')
+}
+
+function Get-RateVsLast($runs, [int]$minSamples) {
+  # The newest run against the LAST MEASURED rate: the newest earlier run of the SAME scope that verified enough
+  # cells to quote one. An earlier run that could not quote a rate measured nothing and is stepped over.
+  $sorted = @(@($runs) | Where-Object { ([string]$_.board_date) -match '^\d{4}-\d{2}-\d{2}$' } | Sort-Object { [string]$_.board_date })
+  if ($sorted.Count -eq 0) { return [pscustomobject]@{ verdict = 'no-run'; new = $null; last = $null; overlap = $false; line = 'RATE-VS-LAST verdict=no-run' } }
+  $newRun = $sorted[$sorted.Count - 1]
+  $eN = Get-RunEstimate $newRun $minSamples
+  if (-not $eN.quotable) {
+    return [pscustomobject]@{ verdict = 'not-quotable'; new = $eN; last = $null; overlap = $false
+      line = ('RATE-VS-LAST verdict=not-quotable scope=' + $eN.scope + ' new=' + $eN.board_date + ' verified=' + $eN.n + ' (under the floor of ' + $minSamples + '; no rate, so nothing to compare)') }
+  }
+  $eP = $null
+  for ($i = $sorted.Count - 2; $i -ge 0; $i--) {
+    if ((Get-VerifyRunScope $sorted[$i]) -ne $eN.scope) { continue }
+    $cand = Get-RunEstimate $sorted[$i] $minSamples
+    if ($cand.quotable) { $eP = $cand; break }
+  }
+  if ($null -eq $eP) {
+    return [pscustomobject]@{ verdict = 'no-previous'; new = $eN; last = $null; overlap = $false
+      line = ('RATE-VS-LAST verdict=no-previous scope=' + $eN.scope + ' new=' + (Format-RunRate $eN)) }
+  }
+  $overlap = -not (($eN.lo -gt $eP.hi) -or ($eN.hi -lt $eP.lo))
+  $verdict = if ($eN.p -gt $eP.p) { 'worse' } else { 'not-worse' }
+  return [pscustomobject]@{ verdict = $verdict; new = $eN; last = $eP; overlap = $overlap
+    line = ('RATE-VS-LAST verdict=' + $verdict + ' scope=' + $eN.scope + ' new=' + (Format-RunRate $eN) + ' last=' + (Format-RunRate $eP) +
+            ' intervals=' + $(if ($overlap) { 'overlap' } else { 'disjoint' })) }
+}
+
+function Invoke-RateAlert($cmp, [scriptblock]$Sender) {
+  # Brad's rule: alert when the rate exceeds the last measured one. The mail says whether the two intervals
+  # overlap, because a higher point inside overlapping intervals is not evidence the board got worse.
+  if ($null -eq $cmp -or $cmp.verdict -ne 'worse') { return $false }
+  $subj = 'Board verification: defect rate ' + ('{0:N1}%' -f (100.0 * $cmp.new.p)) + ' is above the last measured ' + ('{0:N1}%' -f (100.0 * $cmp.last.p))
+  $body = @(
+    'The 14-day out-of-band verification measured a higher whole-board defect rate than the last run.',
+    '',
+    ('  this run : ' + (Format-RunRate $cmp.new)),
+    ('  last run : ' + (Format-RunRate $cmp.last)),
+    '',
+    $(if ($cmp.overlap) { 'The two 95% intervals OVERLAP, so this is not evidence on its own that the board got worse; it is a higher point estimate.' }
+      else { 'The two 95% intervals do NOT overlap: the board measured worse than last time beyond sampling noise.' }),
+    '',
+    'Scope: ' + $cmp.new.scope + '. Source: grocery\record-sample-verdict.ps1 -CompareLast over grocery\out\verification-history.json.'
+  ) -join "`n"
+  & $Sender $subj $body
+  return $true
+}
+
+function Get-VerifyDue($runs, [int]$minSamples, [int]$dueDays, [datetime]$now) {
+  # A verification is owed when the newest WHOLE-BOARD run that could quote a rate was recorded $dueDays or more
+  # days ago. A run that could not look (under the floor) does NOT reset the clock: a browser that was not there
+  # must never buy two weeks of silence.
+  $best = $null; $bestAt = [datetime]::MinValue
+  foreach ($r in @($runs)) {
+    if ((Get-VerifyRunScope $r) -ne 'whole-board') { continue }
+    $e = Get-RunEstimate $r $minSamples
+    if (-not $e.quotable) { continue }
+    $at = [datetime]::MinValue
+    if (-not [datetime]::TryParse([string]$r.recorded_at, [ref]$at)) { continue }
+    if ($at -gt $bestAt) { $bestAt = $at; $best = $r }
+  }
+  if ($null -eq $best) { return [pscustomobject]@{ due = $true; age_days = -1; line = 'VERIFY-DUE due=yes reason=no-quotable-whole-board-run-on-record' } }
+  $age = ($now - $bestAt).TotalDays
+  $isDue = ($age -ge $dueDays)
+  return [pscustomobject]@{ due = $isDue; age_days = $age
+    line = ('VERIFY-DUE due=' + $(if ($isDue) { 'yes' } else { 'no' }) + ' newest_quotable_board=' + [string]$best.board_date + ' recorded_at=' + [string]$best.recorded_at +
+            ' age_days=' + ('{0:N1}' -f $age) + ' due_after_days=' + $dueDays) }
+}
+
+# ---- SELF-TEST ------------------------------------------------------------------------------------------
+if ($SelfTest) {
+  $stPass = 0; $stFail = 0
+  function RsvCase([string]$label, [bool]$cond, [string]$detail) {
+    if ($cond) { $script:stPass++; Write-Output ('  PASS ' + $label) }
+    else { $script:stFail++; Write-Output ('  FAIL ' + $label + ' :: ' + $detail) }
+  }
+  $liveHist = Join-Path $outDir 'verification-history.json'
+  $liveHash = if (Test-Path -LiteralPath $liveHist) { (Get-FileHash -LiteralPath $liveHist -Algorithm SHA256).Hash } else { 'absent' }
+  $stDir = Join-Path $env:TEMP ('rsv-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  New-Item -ItemType Directory -Path $stDir -ErrorAction Stop | Out-Null
+  try {
+    # --- pure: the verdict mapping -----------------------------------------------------------------------
+    $m1 = ConvertTo-RecordedVerdict 'could-not-look' ''
+    RsvCase 'MUST FIRE could-not-look records as unverifiable, never ok' ($m1.verdict -eq 'unverifiable' -and -not $m1.demoted) ('got ' + $m1.verdict + ' demoted=' + $m1.demoted)
+    # A could-not-look that still carries a price (a delivery-mode price the verifier could not use) must not
+    # lean on the no-price rule: two guards over one rule leave each unfixtured, so this case has no blank.
+    $m1b = ConvertTo-RecordedVerdict 'could-not-look' '3.99'
+    RsvCase 'MUST FIRE could-not-look with a price on the row still records as unverifiable' ($m1b.verdict -eq 'unverifiable') ('got ' + $m1b.verdict)
+    $m2 = ConvertTo-RecordedVerdict 'match' ''
+    RsvCase 'MUST FIRE a match with no price the verifier saw records as unverifiable' ($m2.verdict -eq 'unverifiable' -and $m2.demoted) ('got ' + $m2.verdict + ' demoted=' + $m2.demoted)
+    $m3 = ConvertTo-RecordedVerdict 'ok' '  '
+    RsvCase 'MUST FIRE a legacy ok with a blank price records as unverifiable' ($m3.verdict -eq 'unverifiable') ('got ' + $m3.verdict)
+    $m4 = ConvertTo-RecordedVerdict 'match' '2.49'
+    RsvCase 'CLEAN TWIN a match with a seen price records as ok' ($m4.verdict -eq 'ok' -and -not $m4.demoted) ('got ' + $m4.verdict)
+    $m5 = ConvertTo-RecordedVerdict 'wrong-price' ''
+    RsvCase 'CLEAN TWIN a defect verdict is kept as written' ($m5.verdict -eq 'wrong-price') ('got ' + $m5.verdict)
+
+    # --- end to end: the real recorder over a sealed key, into a temp history --------------------------
+    $cells = @()
+    for ($i = 0; $i -lt 40; $i++) {
+      $cells += [pscustomobject]@{ ticket = ('T{0:D2}' -f $i); seq = ($i + 1); id = ('c{0:D2}' -f $i); label = 'Fixture'; unit = 'lb'; store = 'Fixture-Mart'
+        stratum = $(if ($i -lt 20) { 'crown' } else { 'noncrown' }); board_item = 'Fixture item'; board_size = '1 lb'; board_ad = ''; board_per_unit = 2.49; board_type = 'regular' }
+    }
+    $keyObj = [pscustomobject]@{ schema = 1; board_date = '2099-01-01'; board_file = 'comparison-2099-01-01.json'; drawn_at = '2099-01-01T00:00:00'; seed = '2099-01-01'
+      crown_share = 0.5; n_requested = 40; n_drawn = 40; store_scope = 'whole-board'; population = 2000
+      strata = [pscustomobject]@{ crown = [pscustomobject]@{ population = 400; sampled = 20 }; noncrown = [pscustomobject]@{ population = 1600; sampled = 20 } }
+      cells = $cells }
+    $keyPath = Join-Path $stDir 'verification-sample-2099-01-01.json'
+    [IO.File]::WriteAllText($keyPath, ($keyObj | ConvertTo-Json -Depth 6 -Compress), (New-Object System.Text.UTF8Encoding($false)))
+    function FxVerdictFile([string]$path, [scriptblock]$rowFor) {
+      $ls = New-Object System.Collections.ArrayList
+      [void]$ls.Add('# fixture verdict file')
+      [void]$ls.Add('ticket,seq,commodity,unit,store,verdict,found_product,found_price,note')
+      for ($i = 0; $i -lt 40; $i++) {
+        $vp = & $rowFor $i
+        [void]$ls.Add('"' + ('T{0:D2}' -f $i) + '",' + ($i + 1) + ',"Fixture","lb","Fixture-Mart",' + $vp[0] + ',"Fixture item","' + $vp[1] + '",')
+      }
+      [IO.File]::WriteAllText($path, (($ls.ToArray()) -join "`r`n") + "`r`n", (New-Object System.Text.UTF8Encoding($false)))
+    }
+    # 30 matches with a seen price, 5 matches with NO price, 5 could-not-look.
+    $vf1 = Join-Path $stDir 'verification-worklist-2099-01-01.csv'
+    FxVerdictFile $vf1 { param($i) if ($i -lt 30) { ,@('match', '2.49') } elseif ($i -lt 35) { ,@('match', '') } else { ,@('could-not-look', '') } }
+    $h1 = Join-Path $stDir 'hist-1.json'
+    $o1 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -VerdictFile $vf1 -SampleFile $keyPath -HistoryFile $h1 | ForEach-Object { [string]$_ })
+    $rc1 = $LASTEXITCODE
+    $hj1 = $null
+    if (Test-Path -LiteralPath $h1) { $hj1 = (Get-Content -LiteralPath $h1 -Raw -Encoding UTF8) | ConvertFrom-Json }
+    $rec1 = @(); if ($hj1) { $rec1 = @(@($hj1.runs)[0].verdicts) }
+    $okT = @($rec1 | Where-Object { $_.verdict -eq 'ok' } | ForEach-Object { [string]$_.ticket } | Sort-Object)
+    $badOk = @($rec1 | Where-Object { $_.verdict -eq 'ok' -and ([int]($_.ticket.Substring(1))) -ge 30 })
+    RsvCase 'MUST FIRE end to end: no could-not-look and no unpriced match is recorded as ok' ($rec1.Count -eq 40 -and $badOk.Count -eq 0) ('recorded=' + $rec1.Count + ' wrongly-ok=' + $badOk.Count + ' rc=' + $rc1)
+    RsvCase 'MUST FIRE end to end: the 10 that could not look leave the denominator' ((($o1 -join "`n") -match 'verified rows   : 30 ') -and @($rec1 | Where-Object { $_.verdict -eq 'unverifiable' }).Count -eq 10) ('out: ' + (($o1 | Where-Object { $_ -match 'verified rows' }) -join ' | '))
+    RsvCase 'MUST FIRE end to end: the demotion is spoken, not silent' ((($o1 -join "`n") -match '5 match/ok verdict\(s\) carried no price')) ('out: ' + ($o1 -join ' | '))
+    RsvCase 'CLEAN TWIN end to end: the 30 priced matches are recorded as ok and a rate is quoted (exit 0)' ($rc1 -eq 0 -and $okT.Count -eq 30 -and ($okT[0] -eq 'T00') -and ($okT[29] -eq 'T29')) ('rc=' + $rc1 + ' ok=' + $okT.Count)
+    # every row a match with no price: nothing verified, nothing quoted, exit 3
+    $vf2 = Join-Path $stDir 'verification-worklist-2099-01-01-b.csv'
+    FxVerdictFile $vf2 { param($i) ,@('match', '') }
+    $h2 = Join-Path $stDir 'hist-2.json'
+    $o2 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -VerdictFile $vf2 -SampleFile $keyPath -HistoryFile $h2 | ForEach-Object { [string]$_ })
+    $rc2 = $LASTEXITCODE
+    $hj2 = $null; if (Test-Path -LiteralPath $h2) { $hj2 = (Get-Content -LiteralPath $h2 -Raw -Encoding UTF8) | ConvertFrom-Json }
+    $ok2 = 0; if ($hj2) { $ok2 = @(@(@($hj2.runs)[0].verdicts) | Where-Object { $_.verdict -eq 'ok' }).Count }
+    RsvCase 'MUST FIRE forty unpriced matches quote no rate (exit 3) and record zero ok' ($rc2 -eq 3 -and $ok2 -eq 0 -and $null -ne $hj2) ('rc=' + $rc2 + ' ok=' + $ok2)
+
+    # --- rate against the last measured one ------------------------------------------------------------
+    function New-FxRun([string]$date, [string]$scope, [int]$nC, [int]$xC, [int]$nN, [int]$xN, [int]$unv, [string]$recordedAt) {
+      $vs = @(); $k = 0
+      for ($i = 0; $i -lt $nC; $i++) { $k++; $vs += [pscustomobject]@{ id = ('r' + $k); store = 'S'; stratum = 'crown'; verdict = $(if ($i -lt $xC) { 'wrong-price' } else { 'ok' }) } }
+      for ($i = 0; $i -lt $nN; $i++) { $k++; $vs += [pscustomobject]@{ id = ('r' + $k); store = 'S'; stratum = 'noncrown'; verdict = $(if ($i -lt $xN) { 'wrong-product' } else { 'ok' }) } }
+      for ($i = 0; $i -lt $unv; $i++) { $k++; $vs += [pscustomobject]@{ id = ('r' + $k); store = 'S'; stratum = 'noncrown'; verdict = 'unverifiable' } }
+      return [pscustomobject]@{ board_date = $date; store_scope = $scope; recorded_at = $recordedAt
+        strata = [pscustomobject]@{ crown = [pscustomobject]@{ population = 500 }; noncrown = [pscustomobject]@{ population = 1500 } }; verdicts = $vs }
+    }
+    $rA = New-FxRun '2099-01-01' 'whole-board' 50 5 50 5 0 '2099-01-02T08:00:00'
+    $rWorse = New-FxRun '2099-01-15' 'whole-board' 50 15 50 15 0 '2099-01-16T08:00:00'
+    $rBetter = New-FxRun '2099-01-15' 'whole-board' 50 1 50 1 0 '2099-01-16T08:00:00'
+    $rScoped = New-FxRun '2099-01-08' 'Aldi' 50 1 50 1 0 '2099-01-09T08:00:00'
+    $rThin = New-FxRun '2099-01-10' 'whole-board' 5 0 5 0 90 '2099-01-11T08:00:00'
+    $cW = Get-RateVsLast @($rA, $rScoped, $rThin, $rWorse) 30
+    RsvCase 'MUST FIRE a higher rate than the last measured run reads worse' ($cW.verdict -eq 'worse' -and $cW.last.board_date -eq '2099-01-01') ($cW.line)
+    RsvCase 'MUST FIRE the last measured run skips another scope and a run that could not quote' ($cW.last.board_date -eq '2099-01-01') ($cW.line)
+    $cB = Get-RateVsLast @($rA, $rBetter) 30
+    RsvCase 'MUST NOT FIRE a lower rate than the last measured run reads not-worse' ($cB.verdict -eq 'not-worse') ($cB.line)
+    $c1 = Get-RateVsLast @($rA) 30
+    RsvCase 'MUST NOT FIRE one run alone has nothing to compare against' ($c1.verdict -eq 'no-previous') ($c1.line)
+    $cT = Get-RateVsLast @($rA, $rThin) 30
+    RsvCase 'MUST NOT FIRE a newest run under the floor quotes no comparison' ($cT.verdict -eq 'not-quotable') ($cT.line)
+    $sent = New-Object System.Collections.ArrayList
+    $sender = { param($s, $b) [void]$sent.Add($s + '|' + $b) }
+    $a1 = Invoke-RateAlert $cW $sender
+    RsvCase 'MUST FIRE a worse rate sends exactly one alert naming both rates' ($a1 -and $sent.Count -eq 1 -and $sent[0] -match '2099-01-15' -and $sent[0] -match '2099-01-01') ('sent=' + $sent.Count)
+    $a2 = Invoke-RateAlert $cB $sender
+    RsvCase 'MUST NOT FIRE a not-worse rate sends nothing' ((-not $a2) -and $sent.Count -eq 1) ('sent=' + $sent.Count)
+
+    # --- is a verification owed? -------------------------------------------------------------------------
+    $now = [datetime]'2099-01-20T08:00:00'
+    $d1 = Get-VerifyDue @($rA) 30 13 $now
+    RsvCase 'CLEAN TWIN a quotable run 18 days old makes a verification due' ($d1.due) ($d1.line)
+    $d2 = Get-VerifyDue @($rA, $rBetter) 30 13 $now
+    RsvCase 'MUST NOT FIRE a quotable run 4 days old is not due' (-not $d2.due) ($d2.line)
+    $rThinNew = New-FxRun '2099-01-19' 'whole-board' 5 0 5 0 90 '2099-01-19T12:00:00'
+    $d3 = Get-VerifyDue @($rA, $rThinNew) 30 13 $now
+    RsvCase 'MUST FIRE a run that could not look does not reset the clock' ($d3.due) ($d3.line)
+    $d4 = Get-VerifyDue @() 30 13 $now
+    RsvCase 'MUST FIRE an empty history is due' ($d4.due) ($d4.line)
+
+    $liveAfter = if (Test-Path -LiteralPath $liveHist) { (Get-FileHash -LiteralPath $liveHist -Algorithm SHA256).Hash } else { 'absent' }
+    RsvCase 'the live verification history is byte-identical after the self-test' ($liveAfter -eq $liveHash) ('before=' + $liveHash + ' after=' + $liveAfter)
+  } catch {
+    $stFail++
+    Write-Output ('  FAIL self-test threw: ' + $_.Exception.Message)
+  } finally {
+    Remove-Item -LiteralPath $stDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
+  $stTotal = $stPass + $stFail
+  if ($stFail -eq 0 -and $stTotal -eq 23) { Write-Output ('record-sample-verdict self-test: PASS (' + $stPass + ' of ' + $stTotal + ' cases)'); exit 0 }
+  Write-Output ('record-sample-verdict self-test: FAIL (' + $stFail + ' failed, ' + $stPass + ' passed, ' + $stTotal + ' ran; 23 expected)')
+  exit 1
+}
+
+# ---- is a verification owed? (read-only) -----------------------------------------------------------------
+if ($Due) {
+  $dh = $null
+  if (Test-Path -LiteralPath $histPath) {
+    $dt = ((Get-Content -LiteralPath $histPath -Raw -Encoding UTF8) + '')
+    if ($dt.Trim().Length -gt 0) { $dh = $dt | ConvertFrom-Json }
+  }
+  $druns = @(); if ($null -ne $dh -and $null -ne $dh.runs) { $druns = @($dh.runs) }
+  $dv = Get-VerifyDue $druns $MinSamples $DueDays (Get-Date)
+  Write-Output $dv.line
+  exit 0
+}
+
 function ReadJsonFile([string]$path) {
   # ((Get-Content -Raw) + '') because [string]$null is $null in 5.1 and .Trim() would throw on a zero-byte
   # file; and '' | ConvertFrom-Json returns $null WITHOUT throwing, so emptiness is tested by hand.
@@ -206,6 +491,7 @@ if (-not $Report) {
 
   $recorded = New-Object System.Collections.ArrayList
   $bad = New-Object System.Collections.ArrayList
+  $demotedT = New-Object System.Collections.ArrayList
   $blank = 0
   foreach ($v in $vrows) {
     $t = ([string]$v.ticket).Trim()
@@ -215,6 +501,9 @@ if (-not $Report) {
     if ($VALID -notcontains $verd) { [void]$bad.Add($t + ' -> "' + $verd + '"'); continue }
     $c = $byTicket[$t]
     if ($null -eq $c) { [void]$bad.Add($t + ' -> not in the sealed key for this board'); continue }
+    $canon = ConvertTo-RecordedVerdict $verd ([string]$v.found_price)
+    if ($canon.demoted) { [void]$demotedT.Add($t) }
+    $verd = $canon.verdict
     [void]$recorded.Add([pscustomobject]@{
       ticket = $t; id = [string]$c.id; label = [string]$c.label; store = [string]$c.store
       stratum = [string]$c.stratum; verdict = $verd
@@ -231,6 +520,10 @@ if (-not $Report) {
   }
   if ($recorded.Count -eq 0) { Say 'record-sample-verdict: ZERO usable verdicts in that file - nothing recorded, nothing proved.'; exit 1 }
   if ($blank -gt 0) { Say ('record-sample-verdict: ' + $blank + ' row(s) left blank - recorded as NOT YET VERIFIED, not as ok.') }
+  if ($demotedT.Count -gt 0) {
+    Say ('record-sample-verdict: ' + $demotedT.Count + ' match/ok verdict(s) carried no price the verifier saw - recorded as COULD-NOT-LOOK (unverifiable), never as a match: ' +
+      ((@($demotedT.ToArray()) | Sort-Object) -join ', '))
+  }
 
   $newRun = [pscustomobject]@{
     board_date  = [string]$key.board_date
@@ -262,6 +555,20 @@ if (-not $Report) {
 }
 
 if ($runs.Count -eq 0) { Say 'record-sample-verdict: verification history is EMPTY - no sample has ever been verified, so there is NO out-of-band statement about this board. That is not a clean bill of health.'; exit 3 }
+
+# ---- 1b. this run against the LAST measured rate (I232) -------------------------------------------------
+# Printed before the pooled report so an exit 3 there cannot swallow it; -Alert mails Brad only on 'worse'.
+if ($CompareLast) {
+  $cmpLast = Get-RateVsLast $runs $MinSamples
+  Say ''
+  Say $cmpLast.line
+  if ($Alert -and $cmpLast.verdict -eq 'worse') {
+    . (Join-Path $root 'alert-lib.ps1')
+    $liveSender = { param($s, $b) Send-Alert -Subject $s -Body $b -What 'VERIFY-RATE' | Out-Null }
+    [void](Invoke-RateAlert $cmpLast $liveSender)
+    Say '  ALERT sent to Brad: the defect rate is above the last measured one.'
+  }
+}
 
 # ---- 2. pool the last K weeks ---------------------------------------------------------------------------
 $dates = @($runs | ForEach-Object { [string]$_.board_date } | Where-Object { $_ -match '^\d{4}-\d{2}-\d{2}$' })

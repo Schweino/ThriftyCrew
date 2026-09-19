@@ -17132,7 +17132,7 @@ the hundredth, 44 lessons from now; they should page through `Invoke-TcGhostPage
   invalid.invalid case still journals with the real transport). With the new condition removed: exit 1,
   "journal=True calls=2". Restored md5-identical: exit 0.
 
-### I232 - Cadence gaps: verification samples and Family Fare's cursor date `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
+### I232 - Cadence gaps: verification samples and Family Fare's cursor date `PARTLY DONE - RULED 2026-09-19: SCHEDULED AGENT EVERY 14 DAYS; PREPARED, BRAD REGISTERS` `run-0919` `2-WAY` `RUNG1 BLOCKED`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -17226,6 +17226,51 @@ to 32.5%, 252 verified cells over boards 07-30, 08-08 and 08-15), which is a Jul
 2. Draw weekly as now and verify by hand when Brad chooses; add a stamp to `expected-automations.json` so a
    verified sample older than 14 days pages rather than going quiet.
 3. Retire the sample and rely on the internal guards, recording that the board's defect rate is no longer measured.
+
+**Ruled 2026-09-19 (Brad, in chat): scheduled agent every 14 days; prepared, Brad registers.** Every 14 days a
+scheduled agent with a browser checks a 100-cell sample of the board against the stores' own pages and records
+the verdicts. Prepared 2026-09-19 at base `cbf146ee8`; nothing is registered.
+- **Which browser, plainly.** Only a Claude Desktop scheduled task can do this unattended: it has the
+  claude-in-chrome extension, which drives Brad's own Chrome through `chrome.debugger` (agents it spawns inherit
+  it). A headless `claude -p` has no browser tools, and PowerShell or Python cannot reach Brad's Chrome (the debug
+  port is ignored on the default profile since Chrome 136). "Unattended" therefore means the PC is on, the Desktop
+  app is open and Chrome is connected, not that Brad is present.
+- **The prompt** is `design\ready-for-brad\verify-board-sample.SKILL.md`, not `ops\prompt-backup`, because
+  `audit-prompt-backup` fails while the live copy is absent. It reuses the estate's existing blind two-phase flow
+  (draw with `build-verification-sample.ps1 -N 100`, one blind agent per store, findings frozen in a commit before
+  the key is opened, `adjudicate-blind-findings.ps1`, sighted review of the rest), maps the ruling's four words onto
+  the recorded vocabulary, refuses to verify a sample drawn for an older board, files nothing to `known-wrong.json`,
+  and lands through `ops\push-main.ps1`. It supersedes the `grocery-accuracy-sample` prompt disabled 2026-08-22.
+- **The code, on main.** `grocery\record-sample-verdict.ps1` accepts `match` (recorded ok) and `could-not-look`
+  (recorded unverifiable), and records an ok or match whose row carries no price the verifier read as
+  could-not-look, saying so aloud. Bar, measured before the rule at `cbf146ee8`: 0 of 146 ok verdicts in the two
+  adjudicated whole-board runs (08-08, 08-15) lacked a price, so the adjudicated flow never trips it; the 07-30 run
+  (57 of 57 ok unpriced, before adjudication existed) is history and is not re-derived. `-CompareLast` prints the
+  newest run against the last measured one (the previous same-scope run that verified 30 or more cells, each run
+  alone, both denominators and 95% intervals, and whether they overlap), and `-Alert` mails Brad through
+  `alert-lib.ps1` when the new point estimate is higher. `-Due` answers whether a run is owed: 13 or more days
+  since the newest whole-board run that verified 30 or more cells, so a weekly trigger keeps a 14-day cadence and a
+  run that could not look never resets the clock. `-HistoryFile` keeps the self-test off the live history. Read
+  live at `cbf146ee8`: `VERIFY-DUE due=yes newest_quotable_board=2026-08-15 age_days=33.8`, and the last measured
+  rate is the 2026-08-15 board, 18.2% (95% CI 9.5% to 32.2%, 20 defects in 100 verified) against 08-08's 33.1%
+  (20.7% to 48.5%, 29 in 95), intervals overlapping.
+- **Verified.** `record-sample-verdict.ps1 -SelfTest` exit 0, 23 of 23 (13 MUST FIRE, 5 MUST NOT FIRE, 4 CLEAN
+  TWIN, 1 live-history-untouched), two of them end to end through the real recorder over a sealed key. Four single
+  mutants from a temp mirror, original md5-identical afterwards: demotion removed, 7 red; could-not-look mapped to
+  ok, 3 red (the first cut of the fixture had 1, because the demotion rule masked it, so a could-not-look case that
+  carries a price was added); worse never reported, 3 red; the due clock counting a run under the floor, 1 red.
+  `test-auditors.ps1` unit u105 exit 0, 20 of 20: its recorder fixture now writes a found_price on its ok rows,
+  since an unpriced ok is now a could-not-look.
+- **What remains is Brad's**, in `design\ready-for-brad\verify-board-sample.REGISTER.md`: register the Desktop task
+  (`create_scheduled_task`, taskId `verify-board-sample`, cron `30 10 * * 0`, prompt = the SKILL body) and press Run
+  now once; adopt the prompt into `ops\prompt-backup` with `audit-prompt-backup.ps1 -Adopt`; and after the first
+  recorded run, add the prepared `output_files` row for `grocery/out/verification-history.json` (408 hours) to
+  `grocery\expected-automations.json`. Adding that row today would page at once, because the file was last written
+  for the 2026-08-15 board.
+
+**RE-CHECK:** `list_scheduled_tasks` (a Claude Desktop session's scheduled-tasks tool) shows a `verify-board-sample`
+entry, enabled; and `powershell -NoProfile -File grocery\record-sample-verdict.ps1 -Due` reads `due=no` within 14
+days of it being registered, which only happens once a run has verified 30 or more cells.
 
 ### I233 - wave-publish p5 could refuse nothing since 2026-08-15, and its allergen check sat where no wave card exists yet `DONE` `run-0919`
 

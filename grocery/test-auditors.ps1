@@ -5631,7 +5631,9 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
         $seen++
         $tk = [regex]::Match($ln, '^"([0-9A-F]+)"').Groups[1].Value
         $v = if ($seen -le $howMany) { $verdict } else { '' }
-        [void]$acc.Add('"' + $tk + '",' + $seen + ',"x","lb","ZZZ-Mart",' + $v + ',,,')
+        # found_price is filled (2026-09-19, I232): the recorder now records an ok with NO price the verifier
+        # saw as could-not-look, so an unpriced 'ok' fixture would test that rule instead of the interval.
+        [void]$acc.Add('"' + $tk + '",' + $seen + ',"x","lb","ZZZ-Mart",' + $v + ',,"1.00",')
       }
       [IO.File]::WriteAllText($dst, (($acc.ToArray()) -join "`r`n") + "`r`n", (New-Object System.Text.UTF8Encoding($false)))
     }
