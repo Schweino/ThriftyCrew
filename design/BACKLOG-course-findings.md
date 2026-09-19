@@ -6072,6 +6072,15 @@ off a public page.
 
 **`[2026-09-19. The republish is prepared and rehearsed; it waits for Brad. Read design\ready-for-brad\I60-lesson-republish.md.]`**
 
+**Brad's feedback, 2026-09-19: "It MUST be in my own voice."** The first corrected passages read like an
+analyst. All eleven replacement paragraphs (lessons 30, 31 and both lesson 37 passages) were rewritten off his
+own live sentences, read by GET that day from lessons 2, 9, 28, 29, 30, 31, 33, 36, 37, 41 and 42, and each
+passage in the file now names the line it was modelled on. No fact or number moved. Re-checked on the new text:
+the rate audit in a temp tree read 11 paragraphs, 2 claims, 1 labelled illustration, 1 fully qualified, 0
+unqualified, exit 0; the staged rehearsal queued 3 PUTs sending only `html` and `updated_at`, each changing
+only the intended blocks (lesson 37's first passage is now 5 paragraphs), no em dash, queue deleted, and a
+fresh GET showed all three posts still at their July `updated_at`. Still waiting on the ruling below.
+
 **Brad asked on 2026-09-19 to see the diffs before any republish.** They are in
 `design\ready-for-brad\I60-lesson-republish.md`, with the command. Three findings changed the plan:
 

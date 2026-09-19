@@ -4,6 +4,14 @@ Backlog I60. Prepared 2026-09-19 at base commit ceed001cc. Nothing was sent to G
 GET, and the republish below was rehearsed with writes STAGED (queued, never sent), then the queue was
 discarded.
 
+**Rewritten in your voice, 2026-09-19.** You read the first version and said *"It MUST be in my own voice."*
+It read like an analyst. Every replacement paragraph below is now rewritten off your own live sentences
+(lessons 2, 9, 28, 29, 33, 36, 41 and 42 plus the live 30, 31 and 37, all read by GET that day, and lesson
+35 from the July rewrite in `archive/ghost-config/voice-rewrite/rewrites/`). No fact or
+number moved: every figure is the one re-derived below, and the lesson 30 paragraph still carries the source,
+the years, after-inflation and fees your I112 ruling asks for, just said plainly. Under each passage is the
+line of yours it was modelled on. The rehearsal and the rate audit were both re-run on this text.
+
 ## The short version
 
 1. **Do not republish from the lesson files in `content/lessons/`.** They are an OLDER draft than what is
@@ -22,7 +30,7 @@ discarded.
    - Lesson 37 said paying "$4,800 of interest" in school keeps a $27,000 loan at $27,000. It does not: that
      takes about $7,020 (the interest is $146.25 a month). It also compounded the interest yearly, which is
      not how federal student loans work. Fixed, and every number re-derived.
-   - Lesson 31's arithmetic checks out exactly. Only the em dash was taken out.
+   - Lesson 31's arithmetic checks out exactly. The em dash was taken out and the wording is now yours.
 
 ## Lesson 30: Boring Wins: Index Funds 101
 
@@ -37,19 +45,24 @@ Live post: `week-30-boring-wins-index-funds-101`, paid.
 **After (two paragraphs):**
 
 > Some of those companies will have a bad year. Some will have a great year. But you're not betting on any
-> single one. You own all of them. What matters is how the whole group does. From 1928 through 2025,
-> large-company U.S. stocks as a group grew about 10% a year, compounded, with dividends reinvested, or closer
-> to 7% a year after inflation. Those are S&P 500 figures compiled by Professor Aswath Damodaran at NYU Stern,
-> and they come before any fund fees, which come out of what you actually keep.
+> single one. You own all of them. What matters is how the whole group does. So how has the whole group done?
+> From 1928 through 2025, the S&P 500 grew about 10% a year, with the dividends put back in. After inflation,
+> it's closer to 7%. Those aren't my numbers. They come from Professor Aswath Damodaran at NYU Stern, who keeps
+> the year-by-year record. And they're before fees. Whatever a fund charges you comes out of that.
 >
-> That average is worth reading carefully, because it's not what any single year looks like. Of those 98
-> years, 26 finished down. That's about one year in four. The 10% is what showed up across decades, not what
-> shows up on a Tuesday.
+> Now, that doesn't mean 10% every year. Not even close. Of those 98 years, 26 finished down. That's about
+> one year in four. The 10% is what showed up across decades, not what shows up on a Tuesday.
+
+**Modelled on:** your lesson 28 habit of a short flat line right after a claim, *"That's not opinion. It's
+arithmetic."*, your lesson 28 question-and-answer *"Most people assume... But it doesn't win."*, and your own
+lesson 30 line *"They're not trying to get rich by Tuesday."* The fee
+sentence hands straight to your next live paragraph, which already opens on index funds being cheap to own.
 
 **How the numbers were checked.** The yearly S&P 500 returns (dividends included) were read off Damodaran's
 own page (pages.stern.nyu.edu/~adamodar, histretSP) on 2026-09-19: 98 years, 1928 through 2025. From those,
 the compound average is 10.02% a year and 26 of the 98 years are negative (26.5%). The simple (arithmetic)
-average is 11.86%, which is why the text says "compounded". The "closer to 7% after inflation" figure is
+average is 11.86%, which is why the text says "grew about 10% a year" (the steady yearly pace that lands on
+the same total) and never "on average". The "closer to 7% after inflation" figure is
 Damodaran's 6.9% real as quoted by secondary sites that cite his data; I did not recompute it from CPI myself.
 
 **What changed from the repo's fix and why.** The repo version said "about a third finished down" (wrong, it
@@ -69,21 +82,25 @@ Live post: `week-31-the-401-k-and-free-money`, paid.
 
 **After (three paragraphs):**
 
-> Take two people who each put $3,000 a year into a 401(k) and never raise it. One starts at 22. The other
-> waits until 32. Assume a 7% average annual return, and both stop at 65.
+> Take two people. Both put $3,000 a year into a 401(k) and never raise it. One starts at 22. The other waits
+> until 32. Let's say both earn 7% a year on average, and both stop at 65.
 >
 > The early starter ends up with about $743,000. The late starter ends up with about $357,000. Same yearly
-> amount, same finish line, and a gap of roughly $386,000. The early starter has more than double. She put in
-> $30,000 more over her life and ended up with $386,000 more. That extra decade of compound growth did the
-> rest.
+> amount. Same finish line. The early starter has more than double. She put in $30,000 more and walked away
+> with about $386,000 more. Read that again. $30,000 more in. $386,000 more out. That extra decade of compound
+> growth did the heavy lifting.
 >
-> (Those numbers assume a steady 7% every single year, which no real market delivers. They show the shape of
-> the gap, not a promise about your account.)
+> (Quick reality check: no real market hands you a steady 7% every single year. These numbers show the shape
+> of the gap, not a promise about anybody's account.)
+
+**Modelled on:** your lesson 28, *"The second person contributed six times more money and ended up behind.
+Read that again. Six times more money. Still behind."* The caveat copies the shape of your lesson 28 aside,
+*"(Quick reminder: these examples are illustrative...)"*, and "heavy lifting" is kept from your live lesson 31.
 
 **How the numbers were checked.** $3,000 deposited at the end of each year at 7%: 43 years (22 to 65) gives
 $743,329, 33 years (32 to 65) gives $356,800, a gap of $386,529, a ratio of 2.08, and $30,000 more paid in.
-Every figure in the text matches. The 7% is a made-up rate labelled "Assume", which your I112 ruling exempts.
-The only change from the repo's fix is the em dash, now a full stop, and two words matched to the live voice.
+Every figure in the text matches. The 7% is a made-up rate labelled "Let's say", which your I112 ruling
+exempts. The arithmetic is the repo's fix; the wording is new.
 
 ## Lesson 37: Student Loans Without the Panic
 
@@ -96,22 +113,31 @@ Live post: `week-37-student-loans-without-the-panic`, paid. Two passages change.
 > original amount from swelling. It's the compounding principle in reverse. Stop the interest from stacking,
 > and the payoff timeline shrinks dramatically.
 
-**Passage 1, after (three paragraphs):**
+**Passage 1, after (five paragraphs):**
 
 > Not making full payments. Not heroic sacrifice. Just paying the interest as it builds, or more when they
-> can, so the balance doesn't quietly balloon. Here's what that's worth. Take $27,000 in federal unsubsidized
-> loans at 6.5%, left alone through four years of school. About $7,020 of interest piles up, and it gets added
-> to the balance when repayment starts, so your kid starts paying on roughly $34,000 instead of $27,000.
-> (That leaves out the six-month grace period after graduation, which adds about $880 more.)
+> can, so the balance doesn't quietly balloon.
 >
-> Now pay it off at $300 a month. From $34,000 that takes about 14 years and 9 months. From $27,000 it takes
-> about 10 years and 4 months. Keeping the balance at $27,000 means paying the interest as it builds, about
-> $146 a month, or roughly $7,020 over the four years. Do that, and your kid pays about $15,800 less after
-> graduation, and about $8,800 less all in. Even $50 or $100 a month toward that interest keeps the balance
-> from swelling as far.
+> Here's what that's actually worth. Say your kid borrows $27,000 in federal unsubsidized loans at 6.5% and
+> leaves them alone for four years of school. About $7,020 of interest piles up. The day repayment starts,
+> that interest gets added to the balance. So your kid isn't paying back $27,000. They're paying back about
+> $34,000. (That's not counting the six-month grace period after graduation, which adds about $880 more.)
 >
-> It's the compounding principle in reverse. Stop the interest from stacking, and the payoff timeline gets
-> shorter.
+> Now pay it back at $300 a month. Starting from $34,000, that takes about 14 years and 9 months. Starting
+> from $27,000, it takes about 10 years and 4 months. That's more than four extra years of payments.
+>
+> How do you keep it at $27,000? Pay the interest as it shows up. That's about $146 a month, or roughly $7,020
+> over the four years. Do that, and your kid pays about $15,800 less after graduation. Even counting what they
+> paid during school, they come out about $8,800 ahead.
+>
+> Can't swing $146 a month? Even $50 or $100 keeps the balance from swelling as far. It's the compounding
+> principle in reverse. Stop the interest from stacking, and the payoff timeline gets shorter.
+
+**Modelled on:** your lesson 33, *"Here's what that actually costs. A $500 balance at 25% interest, paid off
+at only the minimum payment, takes roughly three years to clear. And your kid ends up paying somewhere around
+$640..."*, and your lesson 35 opener *"Say your teen has $300 in their account..."*. The question-then-answer
+lines follow your lesson 2, *"Reasonable, right? Wrong."* "More than four extra years" is 177 minus 124
+months, 53 months, so 4 years 5 months.
 
 **Passage 2, now (live):**
 
@@ -121,12 +147,15 @@ Live post: `week-37-student-loans-without-the-panic`, paid. Two passages change.
 
 **Passage 2, after:**
 
-> Scholarships, grants, community college for the first two years, in-state tuition, and living at home each
-> cut the amount that has to be borrowed in the first place. How much depends entirely on the schools in front
-> of you, so price the specific combination rather than trusting a rule of thumb. These options aren't
-> consolation prizes. They're smart moves that Future You will appreciate enormously.
+> Scholarships, grants, community college for the first two years, in-state tuition, and living at home all
+> cut how much has to be borrowed in the first place. How much each one saves depends on the schools you're
+> actually looking at, so price your kid's real options. Don't guess. These options aren't consolation prizes.
+> They're smart moves that Future You will appreciate enormously.
 
-Passage 2 is the repo's fix unchanged: no number was invented, the magnitude word was cut.
+**Modelled on:** your own live sentence it replaces (the list and the last two sentences are yours, kept
+word for word), and your lesson 37 exercise, *"You can find both with a basic search."* No number was
+invented and "dramatically" was cut. The first version said "rather than trusting a rule of thumb", which
+read oddly one paragraph after your own rule of thumb, so it is gone.
 
 **How the numbers were checked.** Federal loans add interest as simple interest and capitalise it when
 repayment starts: $27,000 x 6.5% x 4 years = $7,020, so repayment starts on $34,020. The six-month grace
@@ -144,9 +173,10 @@ month gives 139 months (11 years 7 months) of repayment, not 10 years 4 months.
 
 ## Checks on the corrected text
 
-- **Rate-of-return ruling (I112):** all seven replacement paragraphs, run through
-  `ops/audit-lesson-rate-claims.ps1` in a temp tree: 10 paragraphs, 2 rate claims, 1 labelled illustration
-  (lesson 31's "Assume a 7%"), 1 fully qualified (lesson 30), 0 unqualified, exit 0. The repo's own lesson 30
+- **Rate-of-return ruling (I112):** all eleven replacement paragraphs of the voice rewrite, run through
+  `ops/audit-lesson-rate-claims.ps1` in a temp tree with a temp baseline on 2026-09-19: 11 paragraphs, 2 rate
+  claims, 1 labelled illustration (lesson 31's "Let's say ... 7%"), 1 fully qualified (lesson 30: source,
+  1928 through 2025, after inflation, fees, all in the one paragraph), 0 unqualified, exit 0. The repo's own lesson 30
   fix is on that audit's worklist today as missing a source and fees (`lesson-30...md:33`, and its substack
   mirror), and so is its own must-fire fixture. Lesson 37 is about borrowing, which the ruling does not cover.
 - **No em dashes** in any replacement paragraph.
@@ -155,10 +185,13 @@ month gives 139 months (11 years 7 months) of repayment, not 10 years 4 months.
   Ghost uses to refuse a stale write, so visibility, tags, excerpt, meta and SEO fields, the code injection
   and the publish date are not sent and cannot change. The script also refuses to run if a post is not
   `paid` when it starts.
-- **Rehearsed, not sent.** The script ran with writes staged; the three queued requests were decoded and
-  compared with the live bodies. Each changes only the intended blocks (lesson 30: 1 block becomes 2;
-  lesson 31: 1 becomes 3; lesson 37: 1 becomes 3, plus 1 replaced) and nothing else. The queue was then
-  discarded.
+- **Rehearsed, not sent.** The script below was re-run on the voice rewrite on 2026-09-19 from the main
+  checkout with writes staged to a scratch queue and the journal cleared: 3 PUTs queued, each sending only
+  `html` and `updated_at`. Decoded and compared block by block with the live bodies, each changes only the
+  intended blocks (lesson 30: 1 block becomes 2; lesson 31: 1 becomes 3; lesson 37: 1 becomes 5, plus 1
+  replaced) and nothing else, with no em dash in any new body. The queue was then deleted, and a fresh GET
+  showed all three posts still at their July `updated_at` (30: 2026-07-03T11:28:13, 31: 2026-07-05T11:02:38,
+  37: 2026-07-03T11:28:09), so nothing reached Ghost.
 
 ## What else differs between live and the repo (a whole-file republish would ship all of it)
 
@@ -214,28 +247,28 @@ $swaps = @(
 <p>Some of those companies will have a bad year. Some will have a great year. But you're not betting on any single one. You own all of them. What matters is how the whole group does, and historically, large-company U.S. stocks as a group have grown significantly over long time periods.</p>
 '@
      New  = @'
-<p>Some of those companies will have a bad year. Some will have a great year. But you're not betting on any single one. You own all of them. What matters is how the whole group does. From 1928 through 2025, large-company U.S. stocks as a group grew about 10% a year, compounded, with dividends reinvested, or closer to 7% a year after inflation. Those are S&amp;P 500 figures compiled by Professor Aswath Damodaran at NYU Stern, and they come before any fund fees, which come out of what you actually keep.</p><p>That average is worth reading carefully, because it's not what any single year looks like. Of those 98 years, 26 finished down. That's about one year in four. The 10% is what showed up across decades, not what shows up on a Tuesday.</p>
+<p>Some of those companies will have a bad year. Some will have a great year. But you're not betting on any single one. You own all of them. What matters is how the whole group does. So how has the whole group done? From 1928 through 2025, the S&amp;P 500 grew about 10% a year, with the dividends put back in. After inflation, it's closer to 7%. Those aren't my numbers. They come from Professor Aswath Damodaran at NYU Stern, who keeps the year-by-year record. And they're before fees. Whatever a fund charges you comes out of that.</p><p>Now, that doesn't mean 10% every year. Not even close. Of those 98 years, 26 finished down. That's about one year in four. The 10% is what showed up across decades, not what shows up on a Tuesday.</p>
 '@ },
   @{ Slug = 'week-31-the-401-k-and-free-money'
      Old  = @'
 <p>Take two people. One starts contributing to a 401(k) at 22 and never bumps her contributions past what captures the full match. The other waits until 32 to start. By retirement, the early starter, even though she contributed the same annual amount, can end up with dramatically more money, simply because she started 10 years sooner. That extra decade of compound growth does a lot of heavy lifting.</p>
 '@
      New  = @'
-<p>Take two people who each put $3,000 a year into a 401(k) and never raise it. One starts at 22. The other waits until 32. Assume a 7% average annual return, and both stop at 65.</p><p>The early starter ends up with about $743,000. The late starter ends up with about $357,000. Same yearly amount, same finish line, and a gap of roughly $386,000. The early starter has more than double. She put in $30,000 more over her life and ended up with $386,000 more. That extra decade of compound growth did the rest.</p><p>(Those numbers assume a steady 7% every single year, which no real market delivers. They show the shape of the gap, not a promise about your account.)</p>
+<p>Take two people. Both put $3,000 a year into a 401(k) and never raise it. One starts at 22. The other waits until 32. Let's say both earn 7% a year on average, and both stop at 65.</p><p>The early starter ends up with about $743,000. The late starter ends up with about $357,000. Same yearly amount. Same finish line. The early starter has more than double. She put in $30,000 more and walked away with about $386,000 more. Read that again. $30,000 more in. $386,000 more out. That extra decade of compound growth did the heavy lifting.</p><p>(Quick reality check: no real market hands you a steady 7% every single year. These numbers show the shape of the gap, not a promise about anybody's account.)</p>
 '@ },
   @{ Slug = 'week-37-student-loans-without-the-panic'
      Old  = @'
 <p>Not making full payments. Not heroic sacrifice. Just paying the interest as it builds, or more when they can, so the balance doesn't quietly balloon. Even $50 or $100 a month during the school years keeps the original amount from swelling. It's the compounding principle in reverse. Stop the interest from stacking, and the payoff timeline shrinks dramatically.</p>
 '@
      New  = @'
-<p>Not making full payments. Not heroic sacrifice. Just paying the interest as it builds, or more when they can, so the balance doesn't quietly balloon. Here's what that's worth. Take $27,000 in federal unsubsidized loans at 6.5%, left alone through four years of school. About $7,020 of interest piles up, and it gets added to the balance when repayment starts, so your kid starts paying on roughly $34,000 instead of $27,000. (That leaves out the six-month grace period after graduation, which adds about $880 more.)</p><p>Now pay it off at $300 a month. From $34,000 that takes about 14 years and 9 months. From $27,000 it takes about 10 years and 4 months. Keeping the balance at $27,000 means paying the interest as it builds, about $146 a month, or roughly $7,020 over the four years. Do that, and your kid pays about $15,800 less after graduation, and about $8,800 less all in. Even $50 or $100 a month toward that interest keeps the balance from swelling as far.</p><p>It's the compounding principle in reverse. Stop the interest from stacking, and the payoff timeline gets shorter.</p>
+<p>Not making full payments. Not heroic sacrifice. Just paying the interest as it builds, or more when they can, so the balance doesn't quietly balloon.</p><p>Here's what that's actually worth. Say your kid borrows $27,000 in federal unsubsidized loans at 6.5% and leaves them alone for four years of school. About $7,020 of interest piles up. The day repayment starts, that interest gets added to the balance. So your kid isn't paying back $27,000. They're paying back about $34,000. (That's not counting the six-month grace period after graduation, which adds about $880 more.)</p><p>Now pay it back at $300 a month. Starting from $34,000, that takes about 14 years and 9 months. Starting from $27,000, it takes about 10 years and 4 months. That's more than four extra years of payments.</p><p>How do you keep it at $27,000? Pay the interest as it shows up. That's about $146 a month, or roughly $7,020 over the four years. Do that, and your kid pays about $15,800 less after graduation. Even counting what they paid during school, they come out about $8,800 ahead.</p><p>Can't swing $146 a month? Even $50 or $100 keeps the balance from swelling as far. It's the compounding principle in reverse. Stop the interest from stacking, and the payoff timeline gets shorter.</p>
 '@ },
   @{ Slug = 'week-37-student-loans-without-the-panic'
      Old  = @'
 <p>Scholarships, grants, community college for the first two years, in-state tuition, and living at home can all dramatically cut the total borrowed. These options aren't consolation prizes. They're smart moves that Future You will appreciate enormously.</p>
 '@
      New  = @'
-<p>Scholarships, grants, community college for the first two years, in-state tuition, and living at home each cut the amount that has to be borrowed in the first place. How much depends entirely on the schools in front of you, so price the specific combination rather than trusting a rule of thumb. These options aren't consolation prizes. They're smart moves that Future You will appreciate enormously.</p>
+<p>Scholarships, grants, community college for the first two years, in-state tuition, and living at home all cut how much has to be borrowed in the first place. How much each one saves depends on the schools you're actually looking at, so price your kid's real options. Don't guess. These options aren't consolation prizes. They're smart moves that Future You will appreciate enormously.</p>
 '@ }
 )
 
