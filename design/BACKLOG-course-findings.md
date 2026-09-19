@@ -16062,7 +16062,7 @@ and that path bypasses `propagate-recipes.ps1`, so the allergen check I233's bra
 never runs there. The strongest repair (a per-recipe allergen refusal inside `engine\publish.ps1`) changes the
 engine the daily chain runs, which is why it is a ruling. Read with I233.
 
-### I235 - The graph importer drops about 238,000 Baker's rows every run because their search term is a commodity id `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+### I235 - The graph importer drops about 238,000 Baker's rows every run because their search term is a commodity id `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings-2.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16082,6 +16082,49 @@ not resolve a row to a node that does not exist (0 allowed); (2) every changed `
 commodity, store, old and new price; (3) the fix LANDS only if nothing a reader sees reads `cell_state` or graph
 prices (RUNTIME-MAP plus a grep of every serving path), whatever the cell count; if anything does, it is held on
 a branch as READY FOR BRAD with the cell list.
+
+**Done 2026-09-18.** The id is there ON PURPOSE, so the fix is in the importer, not the writer:
+`grocery/pull-regular-bakers-api.ps1` writes `found_by_term = $id`, and its carry-merge (rule 2) keys on that id,
+with 90 days of carried rows in the same shape. `_resolve_capture_term` in `graph/import/importers.py` now tries
+the search-term alias first (unchanged), then `commodity:staple:<term>` only when that node exists, and counts the
+rest (`resolved_by_staple_id_rows`, `unresolved_unknown_term_rows`). **Nothing a reader sees reads graph prices:**
+RUNTIME-MAP says no serving path reads `graph/`, and a grep of every `cell_state`, `graph.db` and `graph\state`
+reference outside `graph/` found only audits, the watchdog, the brain report, the sidecar's read-only corpus
+builders and the board WRITING `graph\identity\` (never reading a graph price), so it landed.
+**Measured** (paired arms of `import_all.py --observations`, each on a backup-API copy of the live graph.db taken
+at 19:10, md5 `310d8225...` for all three copies, over the tracked captures at 97668e17d; scratch harness
+`measure.py`, git blob `17738b6e65ff`, which monkeypatches `_resolve_by_term` and was not committed because the
+question does not recur once the code lands; a third arm ran the landed code itself). Of 916,881 capture rows the base arm met: 310,463 resolved by alias
+in both arms (bar 1: identical), 361,906 carry NO term at all, and 244,512 carry a term that is no alias. Of those
+244,512 the candidate resolved **231,792** (Baker's 229,788, Aldi 1,383, Fareway 591, Sam's 24, Family Fare 6),
+every one to an existing staple node by construction (bar 1: 0 to a missing node); 12,720 stay unresolved (5,699
+Baker's recipe-only ids such as `hot-honey`, 7,021 words that are neither). After resolve and prune the copy holds
+52,697 observations against 44,810. **`cell_state` moved on 36 of 3,275 cells**: 29 added (Baker's 26, Family Fare
+2, Fareway 1) and 7 changed. Changed (old -> new everyday price): bagels Aldi 1.99 -> 1.99 (unit price 1.99 ->
+0.3317 each, a 6-count product replacing a 20 oz one); beef-jerky Baker's 10.49 -> 4.19; bread Sam's 3.52 -> 2.98
+(Rotella's Vienna Bread replacing a Bimbo 2-pack); cauliflower Fareway 2.99 -> 1.98; corn-dogs Baker's 7.99 ->
+14.99 (an 84-count pack, unit 0.4994 -> 0.1785); hot-sauce Baker's 3.69 -> 1.79; peanuts Baker's 4.99 -> 2.69.
+Added (new price): Baker's aluminum-foil 6.99, baby-formula 31.99, bread 1.19, brown-lentils 1.99, brownie-mix
+1.99, cake-mix 1.59, chipotle-powder 14.49, coconut 3.49, cumin-seeds 1.69, disinfectant-spray 4.99,
+dried-ancho-chiles 6.99, fennel 3.99, frozen-lima-beans 1.59, frozen-mixed-peppers 6.29, frozen-pizza 1.25,
+garlic-bread 3.79, ground-sumac 12.79, horseradish-sauce 3.79, lasagna-noodles 3.19, onion-soup-mix 1.19, pesto
+2.79, pineapple 3.00, relish 3.49, sofrito-cooking-base 2.99, sponges 4.79, tater-tots 7.99; Family Fare
+bean-sprouts 2.79, dried-guajillo-chiles 2.49; Fareway peanuts 3.29. At least three new cells are the WRONG
+product, crowned by the deterministic resolver's include rules, not by this change: dried-ancho-chiles is a
+"Street Corn Kit", sponges is dishwand replacement heads, pineapple is fresh-cut cubes. They are the shadow
+graph's resolver quality, now visible because it has the rows to judge. The copy's file grew 323.8 MB -> 446.5 MB
+(pages freed by the prune stay in the freelist; no VACUUM was run and none is needed for correctness).
+**The fareway-shop date:** `_fareway_shop_observed` takes the ISO date out of the file name, refuses a name with
+none (`fareway_files_undated_refused`), and deletes the rows the old rule wrote for that same file under the
+non-date (`fareway_nondate_rows_replaced`), because the corrected rows get new ids and the old `rescue-...` string
+would otherwise sort as the newest sighting. On the third copy, running the landed code: 8 rows with a non-date
+`observed_at` before, 0 after, and `cell_state` identical to the candidate arm on all 3,275 cells.
+**Verified:** `graph/import/importers_selftest.py --selftest` 19 of 19, exit 0 (6 I200 cases plus 13 new: MUST FIRE
+a staple-id term resolves to `commodity:staple:bread` and is counted; MUST NOT FIRE an unknown id, a recipe-only id
+and a bare-id key stay out and are counted; CLEAN TWIN an alias resolves as before and wins over a same-named id;
+the rescue file dates 2026-09-10, its old row is replaced, an undated name is refused, a dated file keeps its date).
+Broken once (staple branch disabled and the old date rule put back): 7 of 19 red, exit 1; restored md5-identical,
+19 of 19, exit 0.
 
 ### I236 - Committed task XML disagrees with the registered tasks, and one live task is not in the automation registry `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
 

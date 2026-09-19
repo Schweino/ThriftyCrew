@@ -1,4 +1,5 @@
-"""importers_selftest.py - the product-urls importer's price boundary (backlog I200, 2026-09-18).
+"""importers_selftest.py - the product-urls importer's price boundary (backlog I200, 2026-09-18), the capture
+lanes' commodity-id search terms and the fareway-shop observed_at (backlog I235, same day).
 
     python graph/import/importers_selftest.py --selftest
 
@@ -38,7 +39,7 @@ import importers as I                                    # noqa: E402
 
 _fails: list[str] = []
 _ran = 0
-CASES = 6
+CASES = 19
 
 
 def T(label: str, ok: bool, got: str = "") -> None:
@@ -69,6 +70,150 @@ def _fixture_doc() -> dict:
             }
         },
     }
+
+
+def _fresh(tmp: str) -> "graphdb.GraphDB":
+    return graphdb.GraphDB(os.path.join(tmp, "g.db"), restore_learning=False, allow_new=True)
+
+
+def _write(path: str, doc) -> None:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(doc, fh)
+
+
+def _deal(item: str, term: str, price: float) -> dict:
+    return {"store": "Baker's", "item": item, "current_price": price, "size": "16 oz",
+            "as_of": "2026-09-18", "found_by_term": term}
+
+
+def run_capture_terms() -> None:
+    """Backlog I235: a capture whose found_by_term is a commodity ID, not a search term.
+
+    grocery/pull-regular-bakers-api.ps1 writes `found_by_term = $id` on purpose (its carry-merge
+    keys on it), and only search-term aliases resolved, so 229,788 Baker's rows per run were
+    dropped. The id resolves only as the NAMESPACED node `commodity:staple:<id>`, only when that
+    node exists, and only after the alias lookup has had its turn.
+    """
+    tmp = tempfile.mkdtemp(prefix="i235-imp-")
+    saved_grocery = I.GROCERY
+    db = None
+    try:
+        gro = os.path.join(tmp, "grocery")
+        I.GROCERY = gro
+        db = _fresh(tmp)
+        ts = "2026-09-18T00:00:00"
+        db.upsert_node(I.store_id("Baker's"), "Store", "Baker's", ts)
+        almonds = I.commodity_id("almonds", "staple")
+        nuts = I.commodity_id("mixed-nuts", "staple")
+        bread = I.commodity_id("bread", "staple")
+        for nid, label in ((almonds, "Almonds"), (nuts, "Mixed Nuts"), (bread, "Bread")):
+            db.upsert_node(nid, "Commodity", label, ts)
+        # an id that exists ONLY in the recipe namespace
+        db.upsert_node(I.commodity_id("hot-honey", "recipe"), "Commodity", "Hot Honey", ts)
+        # the alias path: "sandwich bread" is bread's search term, and "almonds" is (in this
+        # fixture) the search term of a DIFFERENT node than its id-namesake, so alias-first shows
+        db.add_alias(bread, "sandwich bread", "fixture", ts, kind="search_term")
+        db.add_alias(nuts, "almonds", "fixture", ts, kind="search_term")
+
+        _write(os.path.join(gro, "out", "regular", "bakers-regular-2026-09-18.json"), {
+            "store": "Baker's", "captured": "2026-09-18", "price_type": "everyday",
+            "deals": [
+                _deal("Fixture Bread Loaf", "bread", 1.19),               # staple id, not an alias
+                _deal("Fixture Sandwich Bread", "sandwich bread", 2.49),  # alias
+                _deal("Fixture Almonds", "almonds", 10.99),               # alias AND an id
+                _deal("Fixture Unknown", "no-such-commodity", 3.00),      # neither
+                _deal("Fixture Hot Honey", "hot-honey", 6.49),            # recipe-only id
+                _deal("Fixture No Term", "", 1.00),                       # no term
+            ]})
+        res = I.import_observations(db, ts, "run:i235-selftest", dirs=("regular",))
+        by_item = {r["product_name"]: r["commodity_id"] for r in db.conn.execute(
+            "SELECT product_name, commodity_id FROM price_observations")}
+
+        T("MUST FIRE a found_by_term that is a staple id resolves to commodity:staple:bread",
+          by_item.get("Fixture Bread Loaf") == bread, repr(by_item.get("Fixture Bread Loaf")))
+        T("MUST FIRE the run counts the row it resolved by staple id (1)",
+          res.get("resolved_by_staple_id_rows") == 1, json.dumps(res, sort_keys=True))
+        T("MUST NOT FIRE an id with no commodity:staple node stays unresolved (no row written)",
+          "Fixture Unknown" not in by_item, repr(by_item.get("Fixture Unknown")))
+        T("MUST NOT FIRE a recipe-only id is not resolved, bare or namespaced",
+          "Fixture Hot Honey" not in by_item, repr(by_item.get("Fixture Hot Honey")))
+        n_bare = db.conn.execute("SELECT count(*) FROM price_observations "
+                                 "WHERE commodity_id NOT LIKE 'commodity:%'").fetchone()[0]
+        T("MUST NOT FIRE no observation is keyed on a bare id", n_bare == 0, str(n_bare))
+        T("MUST NOT FIRE the unknown term is counted (unknown 2, unresolved 3 with the empty term)",
+          res.get("unresolved_unknown_term_rows") == 2 and res.get("unresolved_rows") == 3,
+          json.dumps(res, sort_keys=True))
+        T("CLEAN TWIN an alias term resolves to its node as before (sandwich bread -> bread)",
+          by_item.get("Fixture Sandwich Bread") == bread, repr(by_item.get("Fixture Sandwich Bread")))
+        T("CLEAN TWIN the alias wins over a same-named id (almonds -> mixed-nuts, not almonds)",
+          by_item.get("Fixture Almonds") == nuts, repr(by_item.get("Fixture Almonds")))
+        T("CLEAN TWIN the run writes the 3 resolvable rows", res.get("observations") == 3,
+          json.dumps(res, sort_keys=True))
+    except Exception as e:                                # noqa: BLE001
+        _fails.append("capture-terms suite raised: %r" % (e,))
+        print("  FAILED capture-terms suite raised: %r" % (e,))
+    finally:
+        I.GROCERY = saved_grocery
+        if db is not None:
+            db.conn.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def run_fareway_dates() -> None:
+    """Backlog I235: import_fareway_shop built observed_at from the file NAME, so
+    fareway-shop-rescue-2026-09-10.json stored observed_at='rescue-2026-09-10' on 8 rows."""
+    tmp = tempfile.mkdtemp(prefix="i235-fw-")
+    saved_grocery = I.GROCERY
+    db = None
+    try:
+        gro = os.path.join(tmp, "grocery")
+        I.GROCERY = gro
+        db = _fresh(tmp)
+        ts = "2026-09-18T00:00:00"
+        db.upsert_node(I.store_id("Fareway"), "Store", "Fareway", ts)
+        cid = I.commodity_id("cauliflower", "staple")
+        db.upsert_node(cid, "Commodity", "Cauliflower", ts)
+        fw = os.path.join(gro, "out", "fareway")
+        _write(os.path.join(fw, "fareway-shop-rescue-2026-09-10.json"),
+               [{"id": "cauliflower", "name": "Fixture Rescue Cauliflower", "price": 1.98}])
+        _write(os.path.join(fw, "fareway-shop-2026-09-11.json"),
+               [{"id": "cauliflower", "name": "Fixture Dated Cauliflower", "price": 2.29}])
+        _write(os.path.join(fw, "fareway-shop-rescue.json"),
+               [{"id": "cauliflower", "name": "Fixture Undated Cauliflower", "price": 2.99}])
+        # the row the OLD rule left behind for the rescue file
+        prov = db.record_provenance("grocery/out/fareway/fareway-shop-rescue-2026-09-10.json",
+                                    "import:fareway-shop", ts, run="run:old")
+        db.add_observation({"id": "obs:fixture-legacy", "commodity_id": cid,
+                            "store_id": I.store_id("Fareway"),
+                            "product_name": "Fixture Rescue Cauliflower", "price": 1.98,
+                            "provenance_id": prov, "observed_at": "rescue-2026-09-10",
+                            "source_file": I.rel(os.path.join(fw, "fareway-shop-rescue-2026-09-10.json")),
+                            "match_status": "include_hit"})
+        res = I.import_fareway_shop(db, ts, "run:i235-fw-selftest")
+        got = {r["product_name"]: r["observed_at"] for r in db.conn.execute(
+            "SELECT product_name, observed_at FROM price_observations")}
+        n_nondate = db.conn.execute("SELECT count(*) FROM price_observations "
+                                    "WHERE observed_at NOT GLOB '[0-9][0-9][0-9][0-9]-*'").fetchone()[0]
+
+        T("MUST FIRE a 'rescue-2026-09-10' file name dates its rows 2026-09-10",
+          got.get("Fixture Rescue Cauliflower") == "2026-09-10", repr(got.get("Fixture Rescue Cauliflower")))
+        T("MUST FIRE the row the old rule wrote with a non-date is replaced (1), none remain",
+          res.get("fareway_nondate_rows_replaced") == 1 and n_nondate == 0,
+          "replaced=%r nondate=%d" % (res.get("fareway_nondate_rows_replaced"), n_nondate))
+        T("MUST FIRE a file name with no date is refused and counted (1), no row written",
+          res.get("fareway_files_undated_refused") == 1 and "Fixture Undated Cauliflower" not in got,
+          json.dumps(res, sort_keys=True))
+        T("CLEAN TWIN a dated file keeps its date (2026-09-11)",
+          got.get("Fixture Dated Cauliflower") == "2026-09-11", repr(got.get("Fixture Dated Cauliflower")))
+    except Exception as e:                                # noqa: BLE001
+        _fails.append("fareway-dates suite raised: %r" % (e,))
+        print("  FAILED fareway-dates suite raised: %r" % (e,))
+    finally:
+        I.GROCERY = saved_grocery
+        if db is not None:
+            db.conn.close()
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def run() -> int:
@@ -109,6 +254,9 @@ def run() -> int:
         T("CLEAN TWIN the run reports what it nulled (2) and wrote (3)",
           res.get("product_url_zero_price_nulled") == 2 and res.get("product_url_observations") == 3,
           json.dumps(res, sort_keys=True))
+        # I235's two groups run here, inside the provenance stub, each on its own temp tree
+        run_capture_terms()
+        run_fareway_dates()
     except Exception as e:                                # noqa: BLE001
         _fails.append("suite raised: %r" % (e,))
         print("  FAILED suite raised: %r" % (e,))
@@ -125,7 +273,8 @@ def run() -> int:
         print("SELF-TEST FAIL: %d of %d case(s) failed, %d ran" % (len(_fails), CASES, _ran))
         return 1
     print("SELF-TEST PASS: importers %d of %d cases - a zero product-urls price is stored NULL, "
-          "a real one unchanged" % (_ran, CASES))
+          "a real one unchanged; a staple-id capture term resolves namespaced, an unknown one stays counted; "
+          "a fareway-shop file is dated from the date in its name or refused" % (_ran, CASES))
     return 0
 
 

@@ -575,6 +575,7 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
         files = files[-limit_files:]
 
     n_obs = n_files = n_skipped = n_worklist = n_placeholder = 0
+    n_undated = n_legacy_rows = 0
     for fp in files:
         try:
             rows = read_json(fp)
@@ -584,7 +585,19 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
             n_worklist += 1
             continue
 
-        observed = os.path.basename(fp).replace("fareway-shop-", "").replace(".json", "")
+        observed, legacy_observed = _fareway_shop_observed(fp)
+        if observed is None:
+            # A capture whose name carries no date has no observed_at to give its rows,
+            # and inventing one (today, the mtime) would date a price nobody dated.
+            n_undated += 1
+            continue
+        if legacy_observed != observed:
+            # The rows the old name-stripping rule wrote for THIS file carry the non-date
+            # (observation ids hash the date, so the corrected rows are new ids and the old
+            # ones would otherwise stand beside them, sorting as the newest sighting).
+            n_legacy_rows += db.conn.execute(
+                "DELETE FROM price_observations WHERE source_file=? AND observed_at=?",
+                (rel(fp), legacy_observed)).rowcount
         prov = db.record_provenance(rel(fp), "import:fareway-shop", ts,
                                     raw_output_hash=hash_obj(len(rows)), run=run)
         n_files += 1
@@ -640,7 +653,21 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
 
     return {"fareway_observations": n_obs, "fareway_files": n_files,
             "fareway_worklists_skipped": n_worklist, "fareway_rows_skipped": n_skipped,
-            "fareway_placeholder_rows_dropped": n_placeholder}
+            "fareway_placeholder_rows_dropped": n_placeholder,
+            "fareway_files_undated_refused": n_undated,
+            "fareway_nondate_rows_replaced": n_legacy_rows}
+
+
+def _fareway_shop_observed(fp: str) -> tuple[str | None, str]:
+    """(observed_at, the value the old rule wrote) for a fareway-shop capture file.
+
+    The old rule stripped the prefix and extension off the file name, so
+    `fareway-shop-rescue-2026-09-10.json` stored `observed_at='rescue-2026-09-10'` on
+    8 rows (backlog I235). The date is taken from the name with the same ISO pattern
+    the product-urls lane uses; a name with no date returns None and the file is refused.
+    """
+    legacy = os.path.basename(fp).replace("fareway-shop-", "").replace(".json", "")
+    return _leading_date(legacy), legacy
 
 
 def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
@@ -778,9 +805,37 @@ def _resolve_by_term(db: GraphDB, term: str | None, term_index: dict) -> str | N
     it for backfill means the graph starts from the legacy system's own answers,
     which is what makes the Phase 2 parity comparison meaningful.
     """
-    if not term:
-        return None
-    return term_index.get(term.strip().lower())
+    return _resolve_capture_term(db, term, term_index)[0]
+
+
+def _resolve_capture_term(db: GraphDB, term: str | None,
+                          term_index: dict) -> tuple[str | None, str]:
+    """(commodity node id, how) for a capture row's `found_by_term`.
+
+    `how` is 'alias', 'staple_id', 'no_term' or 'unknown_term'.
+
+    A SEARCH TERM FIRST, THEN A STAPLE COMMODITY ID (backlog I235, 2026-09-18). Several
+    writers put the commodity ID in `found_by_term` rather than the words they searched:
+    grocery/pull-regular-bakers-api.ps1 writes `found_by_term = $id` on purpose, because its
+    carry-merge keys on it, and Aldi, Fareway, Sam's and Family Fare rows carry a few. Only
+    search-term aliases resolved here, so every such row was dropped as unresolved. Measured
+    on a backup copy of graph.db over the captures at 97668e17d: 244,512 rows with a non-empty
+    term that is no alias, 231,792 of them a staple id (229,788 Baker's).
+    The id is honoured only as `commodity:staple:<id>` and only when that node EXISTS: the
+    bare id is never a node id (.claude/rules/graph.md), and an id nobody defined is left
+    unresolved and counted rather than guessed at. Recipe-namespace ids are NOT resolved
+    here - an id can live in both namespaces, and a staple capture says nothing about which.
+    """
+    t = (term or "").strip()
+    if not t:
+        return None, "no_term"
+    cid = term_index.get(t.lower())
+    if cid:
+        return cid, "alias"
+    cand = commodity_id(t, "staple")
+    if db.get_node(cand):
+        return cand, "staple_id"
+    return None, "unknown_term"
 
 
 def _build_term_index(db: GraphDB) -> dict:
@@ -807,6 +862,7 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
     """
     term_index = _build_term_index(db)
     n_obs = n_files = n_unresolved = n_placeholder = 0
+    n_by_staple_id = n_unknown_term = 0
 
     for lane in dirs:
         files = sorted(glob.glob(os.path.join(GROCERY, "out", lane, "*.json")))
@@ -845,10 +901,14 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                 if is_placeholder_name(name):
                     n_placeholder += 1
                     continue
-                cid = _resolve_by_term(db, d.get("found_by_term"), term_index)
+                cid, how = _resolve_capture_term(db, d.get("found_by_term"), term_index)
                 if not cid:
                     n_unresolved += 1
+                    if how == "unknown_term":
+                        n_unknown_term += 1
                     continue
+                if how == "staple_id":
+                    n_by_staple_id += 1
                 price = _money(d.get("current_price") or d.get("ad_price"))
                 as_of = d.get("as_of") or observed
                 oid = observation_id(cid, dstore, as_of, rel(fp), name)
@@ -883,6 +943,10 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                 n_obs += 1
     return {"observations": n_obs, "capture_files": n_files,
             "unresolved_rows": n_unresolved,
+            # of unresolved_rows, those whose term is neither an alias nor a staple id
+            # (the rest carry no term at all)
+            "unresolved_unknown_term_rows": n_unknown_term,
+            "resolved_by_staple_id_rows": n_by_staple_id,
             "placeholder_rows_dropped": n_placeholder}
 
 
