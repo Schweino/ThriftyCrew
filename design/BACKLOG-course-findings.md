@@ -12776,6 +12776,30 @@ writing and this closes.
 
 **2-WAY** because both the census and a rules line are trivially reversible.
 
+**Brad's ruling, 2026-09-19:** measure first, with the bar written here before any count is taken.
+If more than 5 data-driven switches lack a default that refuses loudly, add the one-line rule for NEW
+code to `ops-and-gates.md` and close DONE; if 5 or fewer, fix those few directly (a MUST FIRE and a
+break-once each) and close DONE without a rule.
+
+**Acceptance bar and test, written 2026-09-19 before the census ran, at base d335a9a3f.** Denominator: every `SwitchStatementAst` the PowerShell 5.1 parser
+finds in every tracked `.ps1` at the base (so a `switch` that does not start its line is counted too;
+the item's line-start grep is reported beside it only for comparison), `archive/` reported apart.
+One row per switch. Each is classed by its SUBJECT:
+- **FILE** - `switch -File`: data.
+- **PREDICATE** - `switch ($true)` or `($false)`: the subject is a literal and each branch is a test.
+  Reported, NOT counted toward the bar (its subject cannot come from data); if counting it would move
+  the result across 5, that is said.
+- **LITERAL** - the subject is a constant, or a variable whose every assignment in the file is a
+  constant (or an array of constants), or a parameter declared with `[ValidateSet(...)]` or an enum
+  type: a literal set in the same file bounds it.
+- **DATA** - everything else: a parameter with no set, a property of an object read from JSON or a
+  board row, a function's return, `$_`, a variable with any non-constant assignment.
+
+A DATA or FILE switch **lacks a loud refusal** when it has no `default`, or its `default` contains none
+of `throw`, `Write-Error`, `exit` with a non-zero literal, or `ThrowTerminatingError`. The two halves
+(no default at all, a default that does something else) are counted separately. **The decision uses
+DATA + FILE lacking a loud refusal, compared with 5**, exactly as ruled.
+
 ### I164 - post-publish-reviewer's findings are the one review output nobody can count `DONE` `queue-6`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Partly REFUTED and sharpened. The needs-Brad branch IS countable: 14 of 191 tracked triage-queue rows mention post-publish review (5 findings, 6 absent reviews, 0 open, nothing since 2026-09-03). The real defect is more specific than "writes nothing": the brief DOES license a report at line 101 but names no path and no committer, and 2 of the 4 comparison agents do not write at all - their orchestrator does. Separately, the brief CONTRADICTS ITSELF: line 45 tells the agent to fix, while lines 103-105 tell it that a reviewer which repairs has destroyed its own evidence.
