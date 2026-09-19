@@ -161,12 +161,34 @@ It prints:
 estimate is above the last measured one, and the mail says whether the two intervals overlap. Do not send a
 second alert of your own.
 
+From your worktree the alert goes out through the MAIN checkout's `grocery\send-alert.ps1` (alert-lib routes
+it there since 2026-09-19): the mail credential, the triage queue, the once-a-day gate and `alert-log.txt`
+all live in the main checkout, and none of them is in your worktree. You do not seed or copy the credential,
+and you do not `cd` to the main checkout to send.
+
+Exit 4 = recorded and reported, but the alert Brad is owed did NOT send. The recorder prints `ALERT NOT SENT`
+and the sender's own reason. Re-send it ONCE with
+`powershell -NoProfile -File grocery\record-sample-verdict.ps1 -Report -CompareLast -Alert` (`-Report`
+records nothing), and read that exit code too. If it is still 4, carry on to Step 5 anyway, and put
+`ALERT NOT SENT` and the reason at the TOP of your report to Brad. Never write that the alert was sent unless
+the recorder printed `ALERT accepted by send-alert`.
+
 ## Step 5: land it
 
 Stage explicit paths only (never `git add -A`): the sample key, worklist, findings, review, decisions, notes
 and `grocery/out/verification-history.json`. Commit with a message written to a file (`[IO.File]::WriteAllText`
-with `New-Object Text.UTF8Encoding($false)`, then `git commit -F`), ending with the Co-Authored-By line, and land
-it with:
+with `New-Object Text.UTF8Encoding($false)`, then `git commit -F`), ending with the Co-Authored-By line.
+
+Before landing, run `git status --short`. It must be EMPTY, because `push-main` refuses a worktree with
+uncommitted changes. The alerter's own files are the known leftovers: `grocery/alert-log.txt` modified and
+`grocery/alert-sent-<date>.txt` deleted. They appear only when an alert was sent from inside this worktree:
+a checkout older than the 2026-09-19 routing, or an alert-lib that said "the main checkout has no
+send-alert.ps1". They are main-checkout state and never belong in your commit. Quote any new
+`alert-log.txt` lines in your report first, then put both paths back with
+`git checkout -- grocery/alert-log.txt grocery/alert-sent-<date>.txt`. Anything else left in the status is
+not yours to discard: stop, and report it instead of landing.
+
+Then land it with:
 
 ```
 powershell -NoProfile -File ops\push-main.ps1
@@ -187,6 +209,7 @@ Short, plain language, lead with the interval:
   to 32.2%"), and the crown rate separately
 - the RATE-VS-LAST verdict, and whether the intervals overlap. If they overlap, say plainly that the board
   cannot be said to have changed
+- whether the alert went out, in the recorder's own words (`ALERT accepted by send-alert` or `ALERT NOT SENT`)
 - every wrong-product and missing verdict, named with its store, as candidates for Brad's known-wrong ruling
 - the landed commit hash from `git log origin/main --oneline -3`
 

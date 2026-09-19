@@ -17313,6 +17313,19 @@ the verdicts. Prepared 2026-09-19 at base `cbf146ee8`; nothing is registered.
   recorded run, add the prepared `output_files` row for `grocery/out/verification-history.json` (408 hours) to
   `grocery\expected-automations.json`. Adding that row today would page at once, because the file was last written
   for the 2026-08-15 board.
+- **The first run (2026-09-19) surfaced three delivery defects, fixed the same day.** (1) `record-sample-verdict.ps1
+  -Alert` discarded Send-Alert's result and printed "ALERT sent to Brad" over a send that FAILED at 05:49; it now reads
+  the exit code, prints `ALERT NOT SENT` with the sender's words and exits 4 (self-test 30 of 30, 7 new cases, 2 of
+  them end to end through a fixture alert-lib). (2) The subject had no registry entry and paged as UNREGISTERED; it is
+  `verify-rate-above-last` (page, condition 1). `audit-alert-registry` lists this call site UNREADABLE, which is why
+  the source half never caught it. (3) The send failed because the Gmail client file is gitignored and not in a
+  worktree. The fix is NOT seeding it: `alert-lib.ps1`'s Send-Alert now runs the MAIN checkout's `send-alert.ps1`
+  from any linked worktree, so the credential, queue, once-a-day gate and log are the ones triage reads, and the
+  worktree is left with no alert-log or alert-sent churn for push-main to refuse on. The same change fixed a latent
+  defect its own end-to-end case found: an empty `-Emitter` reached powershell.exe as a bare switch and send-alert
+  died "Missing an argument" (any Send-Alert whose call stack names no script). The task prompt's Steps 4 and 5 say
+  what exit 4 means and require an empty `git status` before landing. The 2026-09-19 alert itself was delivered by
+  hand from the main checkout at 05:54 (mail id 1a0b94d6ac19d554).
 
 **RE-CHECK:** `list_scheduled_tasks` (a Claude Desktop session's scheduled-tasks tool) shows a `verify-board-sample`
 entry, enabled; and `powershell -NoProfile -File grocery\record-sample-verdict.ps1 -Due` reads `due=no` within 14

@@ -38,7 +38,8 @@
   Exit codes: 0 = recorded and a rate was quotable. 3 = recorded, but NOT enough verified rows to quote a
   rate (could-not-evaluate - the house code for "this examined too little to mean anything"). 1 = bad input.
   It NEVER exits 2: this is bookkeeping about the board, not a gate on it, and must not be able to stop a
-  publish on its own bug.
+  publish on its own bug. 4 = -Alert owed Brad a mail about a higher rate and the send FAILED; the whole report
+  still prints, and 4 outranks the 0 or 3 it would otherwise have exited (2026-09-19).
 
   THE 14-DAY SCHEDULED AGENT (Brad's ruling, 2026-09-19, backlog I232). A scheduled agent with a browser verifies
   a 100-cell sample every 14 days (design\ready-for-brad\verify-board-sample.SKILL.md). Three additions serve it:
@@ -56,6 +57,11 @@
       run that verified at least -MinSamples cells), so a weekly trigger keeps a 14-day cadence and catches up
       after a missed week.
   -HistoryFile moves the history (default out\verification-history.json) so -SelfTest never touches the live one.
+  -AlertLib replaces alert-lib.ps1 with a fixture that defines Send-Alert, so -SelfTest can drive the -Alert path
+  end to end against a sender that fails and one that succeeds, and mail nobody.
+  AN ALERT IS SAID TO BE SENT ONLY WHEN THE SEND SAYS SO (2026-09-19). Send-Alert's exit code is read: a failure
+  prints "ALERT NOT SENT" with the sender's own words and exits 4. Until then the result was discarded and "ALERT
+  sent to Brad" printed regardless, which is what the 2026-09-19 05:49 run said over a failed send.
 #>
 param(
   [string]$VerdictFile = '',
@@ -65,6 +71,7 @@ param(
   [int]$MinSamples = 30,
   [double]$TargetHalfWidth = 0.01,
   [int]$DueDays = 13,
+  [string]$AlertLib = '',
   [switch]$Report,
   [switch]$CompareLast,
   [switch]$Alert,
@@ -264,7 +271,7 @@ function Get-RateVsLast($runs, [int]$minSamples) {
 function Invoke-RateAlert($cmp, [scriptblock]$Sender) {
   # Brad's rule: alert when the rate exceeds the last measured one. The mail says whether the two intervals
   # overlap, because a higher point inside overlapping intervals is not evidence the board got worse.
-  if ($null -eq $cmp -or $cmp.verdict -ne 'worse') { return $false }
+  if ($null -eq $cmp -or $cmp.verdict -ne 'worse') { return [pscustomobject]@{ attempted = $false; sent = $false; rc = $null; detail = ''; subject = '' } }
   $subj = 'Board verification: defect rate ' + ('{0:N1}%' -f (100.0 * $cmp.new.p)) + ' is above the last measured ' + ('{0:N1}%' -f (100.0 * $cmp.last.p))
   $body = @(
     'The 14-day out-of-band verification measured a higher whole-board defect rate than the last run.',
@@ -277,8 +284,26 @@ function Invoke-RateAlert($cmp, [scriptblock]$Sender) {
     '',
     'Scope: ' + $cmp.new.scope + '. Source: grocery\record-sample-verdict.ps1 -CompareLast over grocery\out\verification-history.json.'
   ) -join "`n"
-  & $Sender $subj $body
-  return $true
+  # THE SEND'S OWN ANSWER DECIDES WHAT IS SAID (2026-09-19). The sender's LAST output is its exit code; everything
+  # before it is what the sender said (alert-lib's ALERT FAILED TO SEND line). Until this date the result was piped
+  # to Out-Null and the caller printed "ALERT sent" regardless: on 2026-09-19 at 05:49 the mail failed for want of
+  # the OAuth client file in a worktree, and this script said sent and exited 0. A sender that answers nothing, or
+  # throws, has not sent, because nothing says it did.
+  $rc = 9; $detail = ''
+  try {
+    $got = @(& $Sender $subj $body)
+    $last = $null; if ($got.Count -gt 0) { $last = $got[$got.Count - 1] }
+    $parsed = 0
+    if ($null -ne $last -and [int]::TryParse(([string]$last).Trim(), [ref]$parsed)) {
+      $rc = $parsed
+      if ($got.Count -gt 1) { $detail = ((@($got[0..($got.Count - 2)]) | ForEach-Object { [string]$_ }) -join ' | ') }
+    } else {
+      $detail = 'the sender answered no exit code' + $(if ($got.Count -gt 0) { ': ' + ((@($got) | ForEach-Object { [string]$_ }) -join ' | ') } else { '' })
+    }
+  } catch {
+    $detail = 'the sender threw: ' + ((([string]$_.Exception.Message) -split "`r?`n")[0]).Trim()
+  }
+  return [pscustomobject]@{ attempted = $true; sent = ($rc -eq 0); rc = $rc; detail = $detail; subject = $subj }
 }
 
 function Get-VerifyDue($runs, [int]$minSamples, [int]$dueDays, [datetime]$now) {
@@ -401,11 +426,42 @@ if ($SelfTest) {
     $cT = Get-RateVsLast @($rA, $rThin) 30
     RsvCase 'MUST NOT FIRE a newest run under the floor quotes no comparison' ($cT.verdict -eq 'not-quotable') ($cT.line)
     $sent = New-Object System.Collections.ArrayList
-    $sender = { param($s, $b) [void]$sent.Add($s + '|' + $b) }
+    $sender = { param($s, $b) [void]$sent.Add($s + '|' + $b); 0 }
     $a1 = Invoke-RateAlert $cW $sender
-    RsvCase 'MUST FIRE a worse rate sends exactly one alert naming both rates' ($a1 -and $sent.Count -eq 1 -and $sent[0] -match '2099-01-15' -and $sent[0] -match '2099-01-01') ('sent=' + $sent.Count)
+    RsvCase 'MUST FIRE a worse rate sends exactly one alert naming both rates' ($a1.attempted -and $a1.sent -and $sent.Count -eq 1 -and $sent[0] -match '2099-01-15' -and $sent[0] -match '2099-01-01') ('sent=' + $sent.Count + ' res.sent=' + $a1.sent)
     $a2 = Invoke-RateAlert $cB $sender
-    RsvCase 'MUST NOT FIRE a not-worse rate sends nothing' ((-not $a2) -and $sent.Count -eq 1) ('sent=' + $sent.Count)
+    RsvCase 'MUST NOT FIRE a not-worse rate sends nothing' ((-not $a2.attempted) -and $sent.Count -eq 1) ('sent=' + $sent.Count)
+
+    # --- the send's own answer decides what is said (2026-09-19) ----------------------------------------
+    # The failing sender speaks exactly as alert-lib's Send-Alert does on a failed send: its line, then its code.
+    $failSender = { param($s, $b) 'ALERT FAILED TO SEND [VERIFY-RATE] - send-alert.ps1 exited 1.'; 1 }
+    $f1 = Invoke-RateAlert $cW $failSender
+    RsvCase 'MUST FIRE a sender that exits 1 reads NOT sent, with its own words carried' ($f1.attempted -and -not $f1.sent -and $f1.rc -eq 1 -and $f1.detail -match 'ALERT FAILED TO SEND') ('sent=' + $f1.sent + ' rc=' + $f1.rc + ' detail=' + $f1.detail)
+    $f2 = Invoke-RateAlert $cW { param($s, $b) throw 'Cannot find path google-oauth-client.json' }
+    RsvCase 'MUST FIRE a sender that throws reads NOT sent, naming the throw' ((-not $f2.sent) -and $f2.detail -match 'google-oauth-client') ('sent=' + $f2.sent + ' detail=' + $f2.detail)
+    $f3 = Invoke-RateAlert $cW { param($s, $b) }
+    RsvCase 'MUST FIRE a sender that answers nothing reads NOT sent, never sent' ((-not $f3.sent) -and $f3.detail -match 'no exit code') ('sent=' + $f3.sent + ' detail=' + $f3.detail)
+    $f4 = Invoke-RateAlert $cW { param($s, $b) 'alert emailed'; 0 }
+    RsvCase 'CLEAN TWIN a sender that exits 0 reads sent' ($f4.sent -and $f4.rc -eq 0) ('sent=' + $f4.sent + ' rc=' + $f4.rc)
+
+    # --- the -Alert path end to end, through the real script and a fixture alert-lib -------------------
+    $hAl = Join-Path $stDir 'hist-alert.json'
+    [IO.File]::WriteAllText($hAl, ([pscustomobject]@{ schema = 1; runs = @($rA, $rWorse) } | ConvertTo-Json -Depth 7 -Compress), (New-Object System.Text.UTF8Encoding($false)))
+    function New-FxAlertLib([string]$path, [int]$code) {
+      $src = 'function Send-Alert { param([string]$Subject, [string]$Body, [string]$What)' + "`r`n" +
+             $(if ($code -ne 0) { '  Write-Output ''ALERT FAILED TO SEND [fixture] - send-alert.ps1 exited ' + $code + '.''' + "`r`n" } else { '' }) +
+             '  $global:LASTEXITCODE = ' + $code + '; return ' + $code + ' }' + "`r`n"
+      [IO.File]::WriteAllText($path, $src, (New-Object System.Text.UTF8Encoding($false)))
+    }
+    $libFail = Join-Path $stDir 'alert-lib-fail.ps1'; New-FxAlertLib $libFail 1
+    $libOk = Join-Path $stDir 'alert-lib-ok.ps1'; New-FxAlertLib $libOk 0
+    $oF = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Report -CompareLast -Alert -HistoryFile $hAl -AlertLib $libFail | ForEach-Object { [string]$_ })
+    $rcF = $LASTEXITCODE; $jF = $oF -join "`n"
+    RsvCase 'MUST FIRE end to end: a failed send prints ALERT NOT SENT, never "sent", and exits 4' ($rcF -eq 4 -and $jF -match 'ALERT NOT SENT' -and $jF -notmatch 'ALERT sent' -and $jF -notmatch 'ALERT accepted') ('rc=' + $rcF + ' out: ' + (($oF | Where-Object { $_ -match 'ALERT' }) -join ' | '))
+    RsvCase 'MUST FIRE end to end: the report still prints in full after a failed send' ($jF -match 'WHOLE BOARD') ('no WHOLE BOARD line, rc=' + $rcF)
+    $oS = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Report -CompareLast -Alert -HistoryFile $hAl -AlertLib $libOk | ForEach-Object { [string]$_ })
+    $rcS = $LASTEXITCODE; $jS = $oS -join "`n"
+    RsvCase 'CLEAN TWIN end to end: a send that exits 0 is reported accepted and the run exits 0' ($rcS -eq 0 -and $jS -match 'ALERT accepted by send-alert' -and $jS -notmatch 'NOT SENT') ('rc=' + $rcS + ' out: ' + (($oS | Where-Object { $_ -match 'ALERT' }) -join ' | '))
 
     # --- is a verification owed? -------------------------------------------------------------------------
     $now = [datetime]'2099-01-20T08:00:00'
@@ -428,8 +484,8 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $stDir -Recurse -Force -ErrorAction SilentlyContinue
   }
   $stTotal = $stPass + $stFail
-  if ($stFail -eq 0 -and $stTotal -eq 23) { Write-Output ('record-sample-verdict self-test: PASS (' + $stPass + ' of ' + $stTotal + ' cases)'); exit 0 }
-  Write-Output ('record-sample-verdict self-test: FAIL (' + $stFail + ' failed, ' + $stPass + ' passed, ' + $stTotal + ' ran; 23 expected)')
+  if ($stFail -eq 0 -and $stTotal -eq 30) { Write-Output ('record-sample-verdict self-test: PASS (' + $stPass + ' of ' + $stTotal + ' cases)'); exit 0 }
+  Write-Output ('record-sample-verdict self-test: FAIL (' + $stFail + ' failed, ' + $stPass + ' passed, ' + $stTotal + ' ran; 30 expected)')
   exit 1
 }
 
@@ -556,6 +612,11 @@ if (-not $Report) {
 
 if ($runs.Count -eq 0) { Say 'record-sample-verdict: verification history is EMPTY - no sample has ever been verified, so there is NO out-of-band statement about this board. That is not a clean bill of health.'; exit 3 }
 
+# THE ALERT OUTRANKS THE REPORT'S OWN EXIT (2026-09-19). A rise Brad is owed a mail about and did not get is exit 4,
+# whatever the pooled report below would have exited: 0 and 3 both read as 'nothing to do' to the scheduled agent.
+$script:alertNotSent = $false
+function Exit-Rsv([int]$code) { if ($script:alertNotSent) { exit 4 }; exit $code }
+
 # ---- 1b. this run against the LAST measured rate (I232) -------------------------------------------------
 # Printed before the pooled report so an exit 3 there cannot swallow it; -Alert mails Brad only on 'worse'.
 if ($CompareLast) {
@@ -563,16 +624,26 @@ if ($CompareLast) {
   Say ''
   Say $cmpLast.line
   if ($Alert -and $cmpLast.verdict -eq 'worse') {
-    . (Join-Path $root 'alert-lib.ps1')
-    $liveSender = { param($s, $b) Send-Alert -Subject $s -Body $b -What 'VERIFY-RATE' | Out-Null }
-    [void](Invoke-RateAlert $cmpLast $liveSender)
-    Say '  ALERT sent to Brad: the defect rate is above the last measured one.'
+    . $(if ($AlertLib) { $AlertLib } else { Join-Path $root 'alert-lib.ps1' })
+    # Send-Alert's output ends with its exit code; Invoke-RateAlert reads it rather than trusting the call.
+    $liveSender = { param($s, $b) Send-Alert -Subject $s -Body $b -What 'VERIFY-RATE' }
+    $alertRes = Invoke-RateAlert $cmpLast $liveSender
+    if ($alertRes.sent) {
+      # exit 0 from send-alert means the alert is durable in the triage queue and was mailed unless today's
+      # once-per-type gate, a mute or its registry class held the mail back; its log says which.
+      Say ('  ALERT accepted by send-alert (exit 0): "' + $alertRes.subject + '". The mail line is in grocery\alert-log.txt.')
+    } else {
+      $script:alertNotSent = $true
+      Say ('  ALERT NOT SENT (send exit ' + $alertRes.rc + '): "' + $alertRes.subject + '". Brad has NOT been told the rate rose.')
+      if ($alertRes.detail) { Say ('    ' + $alertRes.detail) }
+      Say '    Send it by hand from the MAIN checkout, then read grocery\alert-log.txt there. This run exits 4.'
+    }
   }
 }
 
 # ---- 2. pool the last K weeks ---------------------------------------------------------------------------
 $dates = @($runs | ForEach-Object { [string]$_.board_date } | Where-Object { $_ -match '^\d{4}-\d{2}-\d{2}$' })
-if ($dates.Count -eq 0) { Say 'record-sample-verdict: history holds no run with a usable board_date - cannot pool.'; exit 3 }
+if ($dates.Count -eq 0) { Say 'record-sample-verdict: history holds no run with a usable board_date - cannot pool.'; Exit-Rsv 3 }
 $newest = [datetime]($dates | Sort-Object -Descending | Select-Object -First 1)
 $cutoff = $newest.AddDays(-7 * $PoolWeeks)
 $pool = @($runs | Where-Object { $_.board_date -match '^\d{4}-\d{2}-\d{2}$' -and ([datetime]$_.board_date) -gt $cutoff })
@@ -620,7 +691,7 @@ if ($newestRun.strata) {
   if ($newestRun.strata.noncrown) { $popNon   = [int]$newestRun.strata.noncrown.population }
 }
 $popAll = $popCrown + $popNon
-if ($popAll -le 0) { Say 'record-sample-verdict: the newest run records no stratum populations - cannot reweight to a whole-board rate.'; exit 3 }
+if ($popAll -le 0) { Say 'record-sample-verdict: the newest run records no stratum populations - cannot reweight to a whole-board rate.'; Exit-Rsv 3 }
 
 function Tally($rows, [string]$stratum) {
   $n = 0; $x = 0; $unv = 0
@@ -662,7 +733,7 @@ if (-not (Test-CanQuoteRate $tAll.n $MinSamples)) {
     Say '  Not one row was verifiable. This run proved NOTHING about the board.'
   }
   Say ('  Verify at least ' + ($MinSamples - $tAll.n) + ' more cell(s) from the current worklist, then re-run.')
-  exit 3
+  Exit-Rsv 3
 }
 
 $strata = @(
@@ -717,5 +788,5 @@ if ($defRows.Count -gt 0) {
     Say ('    [' + $d.verdict + '] ' + $d.id + ' @ ' + $d.store + ' (' + $d.stratum + ') - board says: ' + $d.board_item)
   }
 }
-exit 0
+Exit-Rsv 0
 

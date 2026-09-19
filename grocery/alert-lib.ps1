@@ -38,6 +38,21 @@
        burn a .sig / marker file `if ($LASTEXITCODE -eq 0)` keep working unchanged - and a send that never
        launched now reads as a failure there instead of inheriting a stale 0 from an earlier command.
 
+    4. FROM A LINKED WORKTREE IT SENDS THROUGH THE MAIN CHECKOUT'S send-alert.ps1 (2026-09-19, backlog I232).
+       Everything an alert touches is main-checkout state: the Gmail credential (.claude\skills\lesson\
+       google-oauth-client.json and its token, gitignored and never seeded into a worktree), the triage queue
+       the triage agent drains, the once-per-type-per-day sent-file and alert-log.txt. Sent from a worktree, the
+       mail failed for want of the credential (2026-09-19 05:49, the verify-board-sample agent), the queue item
+       landed in a file triage never reads, and the worktree was left with alert-log.txt modified and the
+       tracked alert-sent-<date>.txt deleted by the purge, which made push-main refuse "uncommitted changes".
+       Copying the credential into every worktree was the other fix on offer and is refused: it multiplies a
+       secret into 100+ directories, each refreshing its own copy of the token, and fixes the mail while
+       leaving the queue, the gate and the log split. The main checkout is found by reading the worktree's own
+       .git pointer and its commondir, never by running git (a hook's GIT_DIR would answer for another tree).
+       Anything that is not a linked worktree - the main checkout, a clone, a test-auditors fixture copied into
+       %TEMP% - sends through its own send-alert.ps1 exactly as before, and so does a worktree whose main
+       checkout has no send-alert.ps1, which the failure line then names.
+
   Do NOT go back to calling send-alert.ps1 through `powershell -File` with a -Body argument. Calling it
   IN-PROCESS (`& (Join-Path $root 'send-alert.ps1') -Subject $s -Body $b`, as notify-desktop.ps1 does) is
   also safe - there is no command line in that form - but this helper is preferred because it is the only
@@ -48,6 +63,47 @@
 # caller's, and stashing it here keeps it correct for callers that live in another folder entirely
 # (meal-prep\pipeline\compute-v2-perserving.ps1 reaches across the tree for the same mailer).
 $script:ALERT_LIB_DIR = $PSScriptRoot
+# The self-test gate, in the dot-sourced form: this file has no param() block because, dot-sourced under PS 5.1, one
+# would reset the caller's own switches. Run it with: powershell -File grocery\alert-lib.ps1 -SelfTest
+$__alertLibSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
+
+function Get-AlertMainCheckoutRoot {
+  # The main checkout behind $RepoRoot when $RepoRoot is a LINKED worktree, else $null. Reads files only: a linked
+  # worktree's .git is a FILE saying `gitdir: <main>\.git\worktrees\<name>`, and that directory's `commondir` names
+  # the shared .git (git writes `../..`). $null for a .git directory (the main checkout itself), for no .git at all,
+  # and for anything that does not resolve to a directory named .git with a checkout around it.
+  param([string]$RepoRoot)
+  if (-not $RepoRoot) { return $null }
+  $dotGit = Join-Path $RepoRoot '.git'
+  if (-not [IO.File]::Exists($dotGit)) { return $null }
+  $lines = @([IO.File]::ReadAllLines($dotGit))
+  if ($lines.Count -eq 0) { return $null }
+  $m = [regex]::Match([string]$lines[0], '^gitdir:\s*(.+?)\s*$')
+  if (-not $m.Success) { return $null }
+  $gd = $m.Groups[1].Value.Replace('/', '\')
+  if (-not [IO.Path]::IsPathRooted($gd)) { $gd = Join-Path $RepoRoot $gd }
+  $cdFile = Join-Path $gd 'commondir'
+  if (-not [IO.File]::Exists($cdFile)) { return $null }
+  $cd = ([IO.File]::ReadAllText($cdFile)).Trim().Replace('/', '\')
+  if (-not $cd) { return $null }
+  if (-not [IO.Path]::IsPathRooted($cd)) { $cd = Join-Path $gd $cd }
+  $cd = ([IO.Path]::GetFullPath($cd)).TrimEnd('\')
+  if ([IO.Path]::GetFileName($cd) -ine '.git') { return $null }
+  if (-not [IO.Directory]::Exists($cd)) { return $null }
+  return [IO.Path]::GetDirectoryName($cd)
+}
+
+function Get-AlertSenderPath {
+  # Which send-alert.ps1 Send-Alert runs, for the lib living in $LibDir. { Path; Routed = 'main' | 'local'; Why }.
+  param([string]$LibDir)
+  $local = Join-Path $LibDir 'send-alert.ps1'
+  $main = Get-AlertMainCheckoutRoot -RepoRoot (Split-Path -Parent $LibDir)
+  if (-not $main) { return [pscustomobject]@{ Path = $local; Routed = 'local'; Why = '' } }
+  $cand = Join-Path (Join-Path $main (Split-Path -Leaf $LibDir)) 'send-alert.ps1'
+  if ([IO.File]::Exists($cand)) { return [pscustomobject]@{ Path = $cand; Routed = 'main'; Why = '' } }
+  return [pscustomobject]@{ Path = $local; Routed = 'local'
+    Why = ('sent from a linked worktree through its own send-alert.ps1, because the main checkout has no ' + $cand + ', so the credential, queue and log are this worktree''s') }
+}
 
 function Send-Alert {
   param(
@@ -91,14 +147,20 @@ function Send-Alert {
       $frames = @(Get-PSCallStack | Where-Object { $_.ScriptName -and ($_.ScriptName -notmatch '[\\/]alert-lib\.ps1$') })
       if ($frames.Count) { $emitter = [string]$frames[0].ScriptName }
     } catch { $emitter = '' }
-    $sa = Join-Path $script:ALERT_LIB_DIR 'send-alert.ps1'
+    # From a linked worktree this is the MAIN checkout's send-alert.ps1 (Get-AlertSenderPath says why).
+    $saPick = Get-AlertSenderPath -LibDir $script:ALERT_LIB_DIR
+    $sa = $saPick.Path
     $incArgs = @()
     if ($CausedBy) { $incArgs = @('-CausedBy', $CausedBy) }
-    if ($Force) { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Emitter $emitter -Force @incArgs | Out-Null }
-    else        { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Emitter $emitter @incArgs | Out-Null }
+    # -Emitter only when there is one (2026-09-19). powershell.exe drops an EMPTY native argument, so `-Emitter ''`
+    # arrived as a bare -Emitter and send-alert.ps1 died "Missing an argument for parameter 'Emitter'" before it
+    # queued or mailed anything: every Send-Alert whose call stack named no script (a console, this self-test).
+    if ($emitter) { $incArgs = @('-Emitter', $emitter) + $incArgs }
+    if ($Force) { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf -Force @incArgs | Out-Null }
+    else        { & powershell -ExecutionPolicy Bypass -File $sa -Subject $Subject -BodyFile $bf @incArgs | Out-Null }
     $rc = $LASTEXITCODE
     if ($rc -ne 0) {
-      Write-AlertLog ('ALERT FAILED TO SEND [' + $tag + '] "' + $Subject + '" - send-alert.ps1 exited ' + $rc + '. See alert-log.txt. The condition it describes is real and UNPAGED.')
+      Write-AlertLog ('ALERT FAILED TO SEND [' + $tag + '] "' + $Subject + '" - send-alert.ps1 exited ' + $rc + '. See the alert-log.txt beside ' + $sa + '. The condition it describes is real and UNPAGED.' + $(if ($saPick.Why) { ' (' + $saPick.Why + ')' } else { '' }))
     }
     $global:LASTEXITCODE = $rc
     return $rc
@@ -120,4 +182,87 @@ function Write-AlertLog([string]$m) {
     try { Log $m; return } catch {}
   }
   try { Write-Output $m } catch {}
+}
+
+# ---- SELF-TEST: which send-alert.ps1 runs (2026-09-19, backlog I232) ---------------------------------------------
+# Fixture checkouts in a per-run temp directory. The stub senders record that they ran and exit with a code of their
+# own, so the end-to-end cases prove WHICH sender Send-Alert launched and that its exit code comes back, and nothing
+# real is ever mailed, queued or logged.
+if ($__alertLibSelfTest) {
+  $alPass = 0; $alFail = 0
+  function AlCase([string]$label, [bool]$cond, [string]$detail) {
+    if ($cond) { $script:alPass++; Write-Output ('  PASS ' + $label) }
+    else { $script:alFail++; Write-Output ('  FAIL ' + $label + ' :: ' + $detail) }
+  }
+  $alDir = Join-Path $env:TEMP ('alib-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  New-Item -ItemType Directory -Path $alDir -ErrorAction Stop | Out-Null
+  $alSavedLibDir = $script:ALERT_LIB_DIR
+  try {
+    $enc = New-Object System.Text.UTF8Encoding($false)
+    function New-AlStub([string]$dir, [int]$code) {
+      New-Item -ItemType Directory -Force -Path $dir | Out-Null
+      $stub = 'param([string]$Subject, [string]$BodyFile, [string]$Emitter, [switch]$Force, [string]$CausedBy)' + "`r`n" +
+              '[IO.File]::WriteAllText((Join-Path $PSScriptRoot ''ran.txt''), $Subject)' + "`r`n" + 'exit ' + $code + "`r`n"
+      [IO.File]::WriteAllText((Join-Path $dir 'send-alert.ps1'), $stub, $enc)
+    }
+    function New-AlLinked([string]$wt, [string]$main, [string]$name) {
+      $wd = Join-Path $main ('.git\worktrees\' + $name)
+      New-Item -ItemType Directory -Force -Path $wd | Out-Null
+      [IO.File]::WriteAllText((Join-Path $wd 'commondir'), "../..`n", $enc)
+      New-Item -ItemType Directory -Force -Path $wt | Out-Null
+      [IO.File]::WriteAllText((Join-Path $wt '.git'), ('gitdir: ' + $wd.Replace('\', '/') + "`n"), $enc)
+    }
+    # main + a linked worktree, both carrying a sender; main's exits 7, the worktree's 0
+    $mainA = Join-Path $alDir 'main'; $wtA = Join-Path $alDir 'wt'
+    New-Item -ItemType Directory -Force -Path (Join-Path $mainA '.git') | Out-Null
+    New-AlLinked $wtA $mainA 'wt'
+    New-AlStub (Join-Path $mainA 'grocery') 7
+    New-AlStub (Join-Path $wtA 'grocery') 0
+    # a linked worktree whose main checkout has NO sender
+    $mainB = Join-Path $alDir 'main2'; $wtB = Join-Path $alDir 'wt2'
+    New-Item -ItemType Directory -Force -Path (Join-Path $mainB '.git') | Out-Null
+    New-AlLinked $wtB $mainB 'wt2'
+    New-AlStub (Join-Path $wtB 'grocery') 0
+    # no .git at all: the test-auditors fixture shape, a lib copied into %TEMP%
+    $plain = Join-Path $alDir 'plain'
+    New-AlStub (Join-Path $plain 'grocery') 0
+    # a .git FILE that is not a gitdir pointer
+    $odd = Join-Path $alDir 'odd'
+    New-AlStub (Join-Path $odd 'grocery') 0
+    [IO.File]::WriteAllText((Join-Path $odd '.git'), "not a pointer`n", $enc)
+
+    $pA = Get-AlertSenderPath -LibDir (Join-Path $wtA 'grocery')
+    AlCase 'MUST FIRE a linked worktree sends through the main checkout''s send-alert.ps1' ($pA.Routed -eq 'main' -and $pA.Path -eq (Join-Path $mainA 'grocery\send-alert.ps1')) ('got ' + $pA.Routed + ' ' + $pA.Path)
+    $pM = Get-AlertSenderPath -LibDir (Join-Path $mainA 'grocery')
+    AlCase 'CLEAN TWIN the main checkout still sends through its own send-alert.ps1' ($pM.Routed -eq 'local' -and $pM.Path -eq (Join-Path $mainA 'grocery\send-alert.ps1') -and -not $pM.Why) ('got ' + $pM.Routed + ' ' + $pM.Path)
+    $pP = Get-AlertSenderPath -LibDir (Join-Path $plain 'grocery')
+    AlCase 'MUST NOT FIRE a directory that is no checkout at all sends through its own sender' ($pP.Routed -eq 'local' -and $pP.Path -eq (Join-Path $plain 'grocery\send-alert.ps1')) ('got ' + $pP.Routed + ' ' + $pP.Path)
+    $pB = Get-AlertSenderPath -LibDir (Join-Path $wtB 'grocery')
+    AlCase 'MUST NOT FIRE a worktree whose main checkout has no sender keeps its own, and says why' ($pB.Routed -eq 'local' -and $pB.Path -eq (Join-Path $wtB 'grocery\send-alert.ps1') -and $pB.Why -match 'main checkout has no') ('got ' + $pB.Routed + ' why=' + $pB.Why)
+    $pO = Get-AlertSenderPath -LibDir (Join-Path $odd 'grocery')
+    AlCase 'MUST NOT FIRE a .git file that is not a gitdir pointer is not routed anywhere' ($pO.Routed -eq 'local') ('got ' + $pO.Routed + ' ' + $pO.Path)
+
+    # end to end through the real Send-Alert
+    $script:ALERT_LIB_DIR = Join-Path $wtA 'grocery'
+    $outA = @(Send-Alert -Subject 'fixture alert A' -Body 'body' -What 'ALIB-FIXTURE')
+    $rcA = $outA[$outA.Count - 1]
+    $mainRan = Test-Path -LiteralPath (Join-Path $mainA 'grocery\ran.txt')
+    $wtRan = Test-Path -LiteralPath (Join-Path $wtA 'grocery\ran.txt')
+    AlCase 'MUST FIRE Send-Alert from a linked worktree runs the main checkout''s sender, never the worktree''s' ($mainRan -and -not $wtRan) ('main ran=' + $mainRan + ' worktree ran=' + $wtRan)
+    AlCase 'MUST FIRE the main sender''s failing exit code comes back to the caller, and the failure is spoken' ("$rcA" -eq '7' -and $global:LASTEXITCODE -eq 7 -and (($outA -join ' ') -match 'ALERT FAILED TO SEND')) ('rc=' + $rcA + ' out=' + ($outA -join ' | '))
+    $script:ALERT_LIB_DIR = Join-Path $plain 'grocery'
+    $outP = @(Send-Alert -Subject 'fixture alert P' -Body 'body' -What 'ALIB-FIXTURE')
+    $rcP = $outP[$outP.Count - 1]
+    AlCase 'CLEAN TWIN Send-Alert from a plain fixture runs its own sender and returns its 0' ("$rcP" -eq '0' -and (Test-Path -LiteralPath (Join-Path $plain 'grocery\ran.txt'))) ('rc=' + $rcP)
+  } catch {
+    $alFail++
+    Write-Output ('  FAIL self-test threw: ' + $_.Exception.Message)
+  } finally {
+    $script:ALERT_LIB_DIR = $alSavedLibDir
+    Remove-Item -LiteralPath $alDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
+  $alTotal = $alPass + $alFail
+  if ($alFail -eq 0 -and $alTotal -eq 8) { Write-Output ('alert-lib self-test: PASS (' + $alPass + ' of ' + $alTotal + ' cases)'); exit 0 }
+  Write-Output ('alert-lib self-test: FAIL (' + $alFail + ' failed, ' + $alPass + ' passed, ' + $alTotal + ' ran; 8 expected)')
+  exit 1
 }
