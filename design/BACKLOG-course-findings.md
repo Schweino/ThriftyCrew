@@ -13894,7 +13894,7 @@ a 12-row `familyfare-regular-2026-09-18.json` beside the real file and merged no
 merged into `family-fare-regular` (5,489 rows). No board file is produced by this script and
 `compare-deals.ps1` was not touched, so no board output moves.
 
-### I186 - the price formatter applies two midpoint rounding rules, so d5's banker's-versus-half-up question rests on a wrong premise `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
+### I186 - the price formatter applies two midpoint rounding rules, so d5's banker's-versus-half-up question rests on a wrong premise `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-modern-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -13947,6 +13947,35 @@ match what a reader sees in the store.
 with the frozen fixture rewritten to pin BOTH branches to it. The first rung is Brad's choice of rule;
 building it after that is small and reversible (a formatting change, no data rewritten). Whoever builds
 it should also check the Python side, where `round()` is half to even.
+
+**Done 2026-09-19: ruled half-up on exact decimal 2026-09-19.** Brad ruled in chat (with I202, which carries the
+option table): every displayed price is converted to an exact decimal from its shortest round-trip spelling, then
+rounded half up (away from zero) to cents, through one path. `grocery/fmt-lib.ps1` now does that in two helpers
+(`Format-TcMoney2`, `Get-TcMoneyCents`: `[decimal]::Parse` of the invariant `'R'` spelling, then
+`[decimal]::Round(v, 2 or 0, AwayFromZero)`), and `Fmt-Price` (dollar branch and oz / fl oz cents branch) and
+`Fmt-PriceBare` call only those; every caller's signature is unchanged. The two frozen banker's fixtures now pin
+half up (`0.125` -> `13&cent;/fl oz` and `$0.13`), and `design/MASTER-PLAN-2026-08-01.md` D5 records the ruling.
+New fixtures in the same `-SelfTest`: MUST FIRE the I202 table (0.125, 1.005, 0.145, 1.145, 4.435) prints
+identically, half up, on `Fmt-Price 'lb'`, `Fmt-Price 'oz'` and `Fmt-PriceBare`; MUST FIRE 1.005 prints `$1.01`
+(the binary-product bug); CLEAN TWIN three non-midpoints print as before; MUST FIRE a sweep of i.5 cents for
+i = 1 to 9,999 (i = 0 takes the sub-cent branch), as the double the JSON parses to, on those three paths.
+**Verified:** self-test exit 0, `fmt-lib SELF-TEST PASS (80 frozen cases)`, sweep 0 of 29,997 disagree. Broken once
+(the three rounding calls reverted to the origin/main code in a temp mirror, fixtures kept): exit 2, 12 of 80 cases
+red, and the sweep read **5,047 of 29,997** disagreeing with half up (a different test from I202's 573, which
+compared against half to even over computed doubles); original md5-identical afterwards.
+**Reader-visible effect, measured at ceed001cc on `grocery/out/comparison-2026-09-17.json`** (the newest board;
+sha256 prefix 6B20E403AB4134F8) with a scratch harness that built the deals page (`public/board.json` and
+`price-history.json` captured, then restored from git), store guide, 573 trend pages, trend index and Friday email
+HTML once with origin/main's fmt-lib (blob 34e666195) and once with this one, into a per-run temp dir, and logged
+every formatter call under both rules. Of 580 output files, 70 changed: **416 displayed price strings moved**
+(355 on 67 trend pages, 46 in `board.json`, 9 in the store guide, 7 on the deals page, 0 in the Friday email and
+the trend index), plus the deals page's `board.json?v=` content hash, and no other text. Every one moved UP
+exactly one cent. At the call level: 23,769 calls, 4,543 distinct (function, value, unit), **65 of which moved,
+and all 65 are an exact decimal ending in 5 at the third place moving up one cent** (48 `Fmt-PriceBare`, 14 oz,
+3 fl oz); 0 moved any other way. Sample: trend `cumin-seeds` $1.14 -> $1.15, `salmon` $5.42 -> $5.43,
+`frozen-peas` $0.06 -> $0.07, board.json oz chip 42 -> 43 cents (value 0.425), store guide 26 -> 27 cents.
+Not in the ruling and left alone: `Fmt-Diff` (a price DIFFERENCE, still rounded on the double) and the Python
+side's `round()` (I202 item 5).
 
 ### I187 - the estate's design plans rarely record the alternatives they rejected `DONE` `queue-6`
 
@@ -14775,7 +14804,7 @@ board, loud on one changed value at a constant row count). Re-checked at a6a7714
 "order by random"` over the 958 tracked `.py`/`.ps1`/`.sql`/`.js` files hits 0 (positive control:
 `order by` hits 21), so the do-not-copy claim still holds. Text only; no code, no fixture.
 
-### I202 - I186 sharpened: the price formatter runs three rounding behaviours, not two, and throws away the exact decimal the board arrived as `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
+### I202 - I186 sharpened: the price formatter runs three rounding behaviours, not two, and throws away the exact decimal the board arrived as `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-money-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14861,6 +14890,12 @@ as well as the binary midpoint 0.125.
 
 **First rung:** Brad picks A, B, C or D. Building A or B afterwards is one helper, the rounding calls in
 `fmt-lib.ps1`, and the fixture; no data is rewritten, so it is 2-WAY.
+
+**Done 2026-09-19: ruled half-up on exact decimal 2026-09-19.** Brad chose option A, sharpened: the exact decimal is
+taken from the shortest round-trip spelling (`'R'`), not from `[decimal]` of the double, then rounded
+`AwayFromZero`, on every path in `grocery/fmt-lib.ps1`. Built, fixtured and measured under I186, which carries the
+counts: 416 displayed price strings moved on the 2026-09-17 board, every one up one cent, and all 65 moved
+formatter calls are exact x.xx5 midpoints; the i.5-cent sweep went from 5,047 of 29,997 disagreeing to 0.
 
 ### I203 - probe-hostile-input's "12 ACCEPTED CORRUPT" is 2 distinct inputs, because 10 of its 12 kinds ignore the drawn offset `DONE` `queue-8`
 

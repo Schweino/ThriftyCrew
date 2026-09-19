@@ -275,7 +275,12 @@ Portal accent pass, photo program cap. Defaults were stated in the design doc; s
 the de-Ghost frame and Portal pass genuinely need your eyes before build.
 **D4. Google Ads hygiene**: negative keywords, sitelinks, demote the auto-created Page-views goal.
 Fifteen minutes in the Ads UI, real Quality-Score money.
-**D5. Half-cent rounding** (banker's vs half-up) - frozen in a fixture, documented, awaiting a call.
+**D5. Half-cent rounding** (banker's vs half-up) - **RULED by Brad 2026-09-19 (backlog I186, I202): half up on
+the exact decimal.** Every displayed price is converted to an exact decimal from its shortest round-trip spelling
+(the decimal the board JSON carries, never the binary double's product) and rounded half up, away from zero, to
+cents: 1.125 -> $1.13, 0.125 -> 13 cents, 1.005 -> $1.01. One path for every page: `grocery/fmt-lib.ps1`
+(`Fmt-Price`, `Fmt-PriceBare`, the oz / fl oz cents branch), whose fixtures pin it. Until then the file ran three
+behaviours while this line and its fixture said one (banker's).
 
 ## Section 4: CAPTURE SESSIONS (browser work, not code - NOT blocked on Brad; Claude drives his Chrome)
 
