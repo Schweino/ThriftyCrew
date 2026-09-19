@@ -565,9 +565,20 @@ try {
     Ok ("LIVE  every store in stores.json (" + $liveStores.Count + ") re-reads its rotation inside RotationDays=$($script:RotationDays) (publish limit $($script:MaxPublishAgeDays)), " + $liveBlind.Count + " unmeasured: " + (($liveCap | ForEach-Object { "$($_.Store) $($_.NeedPerRun)/$($_.Cap) of $($_.Terms)" }) -join ', '))
   } else { Bad ("LIVE capacity: $($liveBad.Count) of $($liveCap.Count) store(s) (stores.json has $($liveStores.Count)) cannot be re-read in time: " + (($liveBad | ForEach-Object { "$($_.Store): $($_.Why)" }) -join ' | ')) }
 
+  # BRAD'S STANDING RULE, ASSERTED ON THE LIVE VALUES (2026-09-19): an everyday price is re-read about once every
+  # 90 days at every store, so the rotation and the publish limit ARE the quarter. A session shortened both to 14
+  # that day without the rule in front of it and Brad reversed it; this case makes the next shortening fail at push.
+  if ($script:RotationDays -eq $script:QuarterDays -and $script:MaxPublishAgeDays -eq $script:QuarterDays) {
+    Ok "LIVE  RotationDays ($($script:RotationDays)) and MaxPublishAgeDays ($($script:MaxPublishAgeDays)) are the quarter ($($script:QuarterDays)), Brad's standing everyday-price rule"
+  } else { Bad "LIVE  RotationDays=$($script:RotationDays) MaxPublishAgeDays=$($script:MaxPublishAgeDays), but Brad's standing rule makes both the quarter ($($script:QuarterDays)): an everyday price is re-read about once every 90 days. Changing that is his decision, not a diff." }
+
+  # The capacity MECHANICS below run in a FIXTURE regime of 14 days on both constants, so their arithmetic (at the
+  # bar, one past it, runs per window) stays exactly as written whatever the live window is. Both are restored.
   $rdSave = $script:RotationDays
+  $mpSave = $script:MaxPublishAgeDays
   try {
-    # MUST FIRE: the 2026-08-20 regime. A 90-day rotation against a 14-day publish limit is refused by name.
+    $script:MaxPublishAgeDays = 14
+    # MUST FIRE: a rotation slower than the publish limit (90 against 14) is refused by name.
     $script:RotationDays = 90
     $old = @(Test-CaptureCapacity -Stores @('Walmart') -TermCounts @{ 'Walmart' = 602 })
     if (-not $old[0].Ok -and $old[0].Why -match 'exceeds MaxPublishAgeDays') { Ok "MUST FIRE  the 2026-08-20 regime (RotationDays 90, publish limit $($script:MaxPublishAgeDays)) is refused: $($old[0].Why)" }
@@ -601,7 +612,7 @@ try {
     $hvBlind = @(Test-CaptureCapacity -Stores @('Hy-Vee') -TermCounts @{ 'Hy-Vee' = -1 })
     if ($null -eq $hvBlind[0].Ok -and $hvBlind[0].Measured -eq $false) { Ok 'MUST FIRE  an unreadable product-id count is UNMEASURED, never read as ok' }
     else { Bad "Hy-Vee unmeasured read as ok=$($hvBlind[0].Ok)" }
-  } finally { $script:RotationDays = $rdSave }
+  } finally { $script:RotationDays = $rdSave; $script:MaxPublishAgeDays = $mpSave }
 
   # ---- THE FULL RECAPTURE (2026-09-19): every term, capped at the store's largest clean run on record ------------
   $fOut = Join-Path $tmp 'out'

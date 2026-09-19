@@ -91,6 +91,11 @@ is one copy of every rule and nothing here can drift from it.
   cursor can never advance over a term a prepend displaced. A file built under `-WaiveMissingStoreLine`
   discharges NOTHING - its own stamp says the store was never recorded.
 - **No hard-coded bands** (Brad, 2026-09-04). [[no-hardcoded-bands]]
+- **AN EVERYDAY PRICE IS RE-READ ABOUT ONCE EVERY 90 DAYS, AT EVERY STORE** (Brad's standing rule, restated
+  2026-09-19). The rotation and the publish limit are both the quarter (`capture-policy-lib.ps1`,
+  `RotationDays = MaxPublishAgeDays = QuarterDays`); sale prices follow their ad windows instead. A session
+  shortened both to 14 days on 2026-09-19 because this rule sat only in the graph rules, and Brad reversed it.
+  `test-capture-policy.ps1` fails a push that moves either off the quarter. [[graph-time-gates-decision]]
 - **A script you edit that holds its own copy of the store list reads `stores.json` instead, in the same change** (Brad, 2026-09-19, backlog I192: convert on touch, no sweep). `audit-store-registry.ps1` check 5 stays the guard for the copies nobody has touched yet.
 - **The boards are gitignored**, so a worktree, a CI runner or a clean checkout is BLIND here and the
   engines exit 0 having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them.

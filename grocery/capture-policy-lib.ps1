@@ -67,38 +67,28 @@ $script:PolicyRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Par
 # because this file declares no parameters - see the header.
 $__cplSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
-# The quarter. Change it HERE and nowhere else; MaxCarryDays must move with it.
-# SINCE 2026-09-19 IT NO LONGER SETS HOW OFTEN A PRICE IS RE-READ - RotationDays below does. It survives as the
-# history window: how long a row may be KEPT (trend, graph time gates, carry), which is a different question from
-# how long a row may be PUBLISHED.
+# The quarter. Change it HERE and nowhere else; MaxCarryDays, RotationDays and MaxPublishAgeDays all read it.
 $script:QuarterDays = 90
 
 # ---------------------------------------------------------------------------
-# THE FRESHNESS RULE (Brad, 2026-09-19, after the verification of the 2026-09-17 board read 36 defects in 100
-# verified, whole-board 37.1%, 95% CI 24.2% to 52.0%, against 18.2% on the 2026-08-15 board).
+# THE FRESHNESS RULE. Every store re-reads its whole term list within RotationDays, and compare-deals' provenance
+# contract (provenance-contract-lib.ps1) withholds an everyday price read more than MaxPublishAgeDays before the
+# board, rather than publishing it: a gap is a smaller board, a stale price is a wrong number. Both windows are the
+# quarter by Brad's standing rule (below). The 2026-09-17 board's verified defect rate by read age (6 of 26 at 0-7
+# days, 15 of 44 at 8-30, 13 of 27 at 31-60, 2 of 2 past 60) is in design\PLAN-board-accuracy-2026-09-19.md.
 #
-# WHAT WENT WRONG. From 2026-08-20 the daily drip was total terms / QuarterDays = 7 terms a store, an 86-day cycle,
-# and rows lived 90 days to cover it. Nothing measured what that did to accuracy. On the 09-17 board 25% of the
-# 3,189 priced cells had been read in the last 7 days and the median was 17 days old; in the verified sample the
-# defect rate climbed with age: 6 of 26 at 0-7 days, 15 of 44 at 8-30, 13 of 27 at 31-60, 2 of 2 past 60.
-# design\PLAN-board-accuracy-2026-09-19.md has every defect and its cause.
+# THE INVARIANT. RotationDays <= MaxPublishAgeDays, and every store's call cap covers
+# ceil(terms / RotationDays / runs a day). test-capture-policy.ps1 asserts both with the arithmetic in the message.
 #
-# THE RULE. Every store re-reads its whole term list within RotationDays, and no everyday price older than
-# MaxPublishAgeDays is to reach the board. The FIRST half is live with this file. The SECOND half is compare-deals'
-# provenance contract (provenance-contract-lib.ps1, on branch claude/board-accuracy-0919), which lands only AFTER a
-# full recapture and the recipe-side fixes in design\PLAN-board-accuracy-2026-09-19.md section 5: switched on over
-# today's aged captures it would hold every publish and bring back the frozen July recipe baseline. Until then the
-# board still publishes carried rows up to MaxCarryDays; this rule shortens how long they wait to be re-read.
-# Once live: a price that could not be re-read in time is WITHHELD and queued, never published stale, because a gap
-# is a smaller board, a stale price is a wrong number, and understating is exactly as wrong as overstating.
-#
-# THE INVARIANT THAT WOULD HAVE STOPPED 2026-08-20. RotationDays <= MaxPublishAgeDays, and every store's call cap
-# covers ceil(terms / RotationDays / runs a day). test-capture-policy.ps1 asserts both with the arithmetic in the
-# message, so a policy change that makes the rotation slower than the publish limit fails at push instead of going
-# live and being found by a reader. 14 is the window the 2026-08-15 board measured under (18.2%): the first plausible
-# number with a measurement behind it, not the survivor of a sweep. Tighten it only with a verification run behind it.
-$script:RotationDays = 14
-$script:MaxPublishAgeDays = 14
+# BOTH ARE THE QUARTER, BY BRAD'S STANDING RULE (restated 2026-09-19): an EVERYDAY price does not need frequent
+# re-reading; it is re-read about once every 90 days, at every store. Sale prices are governed by their ad windows,
+# not by this. A session set both to 14 on 2026-09-19 without that rule in front of it - the graph rules and
+# [[graph-time-gates-decision]] held it, the grocery rules did not - and Brad reversed it the same day. The
+# measured age curve that session acted on (defects 6 of 26 at 0-7 days, 15 of 44 at 8-30, 13 of 27 at 31-60) is in
+# design\PLAN-board-accuracy-2026-09-19.md; it does not override the ruling. test-capture-policy.ps1 now FAILS a
+# push that sets either constant to anything but QuarterDays, so the next shortening is a conversation, not a diff.
+$script:RotationDays = $script:QuarterDays
+$script:MaxPublishAgeDays = $script:QuarterDays
 
 # Rows carried longer than this expire. It MUST be >= QuarterDays or a term's rows die
 # before the rotation comes back to them - at 90-day rotation with a 14-day carry, ~85%
