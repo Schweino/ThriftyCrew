@@ -12258,7 +12258,7 @@ reason to sweep the 37 correct sites. No sweep under any option.
 
 ---
 
-### I161 - Four of five tracked state ledgers have no schema check, while known-wrong.json has both a required-key list and a closed vocabulary `PARTLY DONE - THE ROLLBACK GAP IS FIXED; THE ALERT-STATE HALF (OPTION A) IS READY FOR BRAD ON BRANCH claude/i224-price-alerts` `queue-7` `2-WAY` `RUNG1 RULING`
+### I161 - Four of five tracked state ledgers have no schema check, while known-wrong.json has both a required-key list and a closed vocabulary `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** The item`s own table is WRONG on two of five rows. `cell-state.json` is the mirror of a SQLite table with a real DDL (3 NOT NULLs, a composite primary key), which is STRONGER enforcement than the `known-wrong.json` exemplar the item picked, because it happens at the write rather than post-hoc; and `capture-cursor.json` throws at its writer on a closed store list. The two real gaps are elsewhere, and one is proved: a rollback row missing `price` reads silently as 0.0.
 
@@ -12399,6 +12399,12 @@ missing file still sends, MUST NOT FIRE a well-formed row at the same price insi
 invalid JSON read as empty (1 red), a non-object read as empty (2 red), a missing price read as 0 (2 red), each
 restored md5-identical. Today's file (1 row, 70 bytes) round-trips byte-identical through the old and the new writer,
 so today's run is unchanged.
+
+**Done 2026-09-19: the alert-state half (option A) landed on Brad's approval given in chat that day**, with I224, on
+the same commit (see I224 for the verification). Both ledgers the census said were worth a check are now fixed and the
+other two needed none, so nothing in this item's scope remains. The two side findings are not closed by it: the
+`FamilyFare_last` cursor gap is carried by its own item further down this file, and the `graphdb.py` restore that
+counts an `INSERT OR IGNORE` skip as restored is recorded above and nowhere else.
 
 ---
 
@@ -15877,7 +15883,7 @@ terms) REPLACED the `terms` and `commodities` lines in `Write-CaptureWorklist` (
 `ruling_terms`: the 09-12 worklist has `terms` and `commodities`, every worklist from 09-13 on has only
 `rotation_terms`/`sale_terms`/`ruling_terms`. Filed as a separate finding; nothing was changed here.
 
-### I224 - The price-alert email leaves an orphan draft on every failed send, and the alert state is unguarded `PARTLY DONE - BUILT AND TESTED ON BRANCH claude/i224-price-alerts, READY FOR BRAD TO MERGE` `run-0919` `1-WAY` `RUNG1 RULING`
+### I224 - The price-alert email leaves an orphan draft on every failed send, and the alert state is unguarded `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15912,6 +15918,14 @@ its cooldown, and `price-history.json` puts its 08-03 week at 2.19, not a low, w
 on 08-11 without a failure. `send-price-alerts` never went through `Invoke-GhostApi`, so the Ghost journal (59
 lines) holds none of its calls. **To check in Ghost admin:** Posts, filter Drafts, tag `#price-alerts`; any draft
 titled "Price alert: ..." is an orphan and can be deleted.
+
+**Done 2026-09-19, landed on Brad's approval given in chat that day.** Branch `claude/i224-price-alerts` was rebased
+onto origin/main at f4e50313b with no conflict and landed through `ops\push-main.ps1` on the first attempt, gates
+`pass=428 fail=0`. Re-verified in the rebased worktree with `TC_WRITE_JOURNAL` and `TC_STAGE_WRITES` cleared and the
+Ghost transport stubbed (no live send, no Ghost call): `send-price-alerts.ps1 -SelfTest` 25 of 25, exit 0;
+`ops\review-staged.ps1 -SelfTest` exit 0; `check-ad-cycles.ps1 -SelfTest` 19 of 19, exit 0; `audit-write-seam` exit
+0 (15 bypasses against a mark of 17, can tighten, mark left alone). The branch was deleted from origin once on main.
+Still worth doing by hand in Ghost admin: the drafts check above.
 
 ### I225 - The heartbeat's dedup signature changes every run, so a stale-task page repeats `DONE` `run-0919`
 
