@@ -5,7 +5,8 @@
 # Checks: slug sets match both ways; protein agrees; the COST BLOCK agrees; the two masters list the SAME
 # INGREDIENTS (count and canonical names); spec scaler bids exist in
 # db\ingredients.json (a gpu/bid recalibration must reach both, or cheapest_ps diverges from cost basis).
-# Exit 0 clean, 1 drift found (caller alerts; non-fatal in the daily chain).
+# Exit 0 clean, 1 drift found (caller alerts; non-fatal in the daily chain), 3 could not evaluate: nothing
+# else is wrong but no grocery\out\smp-feed.json was loaded, so the gpu check could not look (Get-GpuVerdict).
 #
 # COST-DRIFT was added 2026-08-04 after this guard read CLEAN over a ten-day-old defect. The 2026-07-25
 # R300 merge stamped one recipe's entire cost block (1.83 / 25.67 / 31.57 / 2.26 / 18.75 / 50.32) across
@@ -83,6 +84,31 @@ function Get-CostDrift {
     return @($out.ToArray())
 }
 
+function Get-GpuVerdict {
+    <# Pure, so both halves of the GPU-DRIFT rule are pinned by -SelfTest without a live feed.
+       Returns 'drift', 'agree', 'converted' (a unit conversion applies, so a difference is legitimate and
+       this guard stays silent) or 'blind' (no feed was loaded, so the guard cannot tell which).
+
+       BLIND IS NOT DRIFT (2026-09-19). The spec's gpu is grams per the unit the FEED quotes: build-v2-spec's
+       Resolve-ScalerGpu rescales db gpu 28.3495 g/oz to 29.57 for a feed that prices soy sauce per floz and
+       to 453.592 for one that prices brown sugar per lb. This guard used to treat a checkout with NO
+       grocery\out\smp-feed.json (gitignored, and not seeded into worktrees) exactly like "the feed has no
+       row for this bid", fell back to the map unit, and so compared 29.57 with 28.3495 as if both were per
+       oz. A propagate run from a worktree then refused on 189 GPU-DRIFT lines over 150 recipes (5 items:
+       Soy Sauce 101, Brown Sugar 48, White Vinegar 20, Red Wine Vinegar 14, Balsamic Vinegar 6), every one
+       identical on main since at least 2026-09-01 and every one CLEAN with the feed present - the daily
+       chain read "db-agreement guard: clean" every day that fortnight. "Rebuild the spec" was the remedy
+       the line printed, and following it would have priced brown sugar at 16x on the live cards.
+       A missing FEED is could-not-look; a feed with no ROW for a bid is still compared, as before. #>
+    param([double]$SpecGpu, [double]$DbGpu, [string]$MapUnit, [bool]$FeedLoaded, [string]$FeedUnit)
+    if (-not $MapUnit -or $DbGpu -le 0 -or $SpecGpu -le 0) { return 'agree' }
+    if (-not $FeedLoaded) { return 'blind' }
+    $fu = if ($FeedUnit) { $FeedUnit } else { $MapUnit }   # a feed with no row for this bid: units cannot differ
+    if ($fu -ne $MapUnit) { return 'converted' }
+    if ([Math]::Abs($SpecGpu / $DbGpu - 1) -gt 0.005) { return 'drift' }
+    return 'agree'
+}
+
 if($SelfTest){
     # FROZEN FIXTURE - the founding bug, 2026-08-04. The MUST-FIRE row is soto-betawi's real numbers as
     # the index held them (panang's block) against its real spec: the worst of the 403. The CLEAN TWIN is
@@ -126,6 +152,32 @@ if($SelfTest){
     $m4 = @(Get-MacroDrift -Row ([pscustomobject]@{ per_serving = [pscustomobject]@{ calories=567 } }) -Spec ([pscustomobject]@{ stat = [pscustomobject]@{ cal=567.4 } }) -Slug 'rounding')
     T 'a half-unit gap is rounding, not drift' ($m4.Count -eq 0) ("issues=" + $m4.Count)
     T 'MUST FIRE  a one-cent disagreement IS drift (the copy has exactly one right value)' ($d5.Count -eq 1) ($d5 -join '|')
+
+    # ---- GPU-DRIFT (2026-08-06) and its blind half (2026-09-19) ---------------------------------------
+    # MUST FIRE: the founding case - the shared Tortilla row recalibrated 45 -> 36.85 while specs kept 45,
+    # both units 'each', feed loaded. No conversion applies, so the spec is on a stale basis.
+    $g1 = Get-GpuVerdict -SpecGpu 45 -DbGpu 36.85 -MapUnit 'each' -FeedLoaded $true -FeedUnit 'each'
+    T 'MUST FIRE  a stale gpu with no conversion between map and feed unit is drift' ($g1 -eq 'drift') $g1
+    # MUST FIRE: the 2026-09-19 refusal. Soy sauce spec 29.57 (per floz) against db 28.3495 (per oz) in a
+    # checkout with no feed file: the guard cannot see the unit, so it must say BLIND, never drift.
+    $g2 = Get-GpuVerdict -SpecGpu 29.57 -DbGpu 28.3495 -MapUnit 'oz' -FeedLoaded $false -FeedUnit ''
+    T 'MUST FIRE  no feed file loaded is BLIND for the gpu check, not drift (soy sauce 29.57 vs 28.3495)' ($g2 -eq 'blind') $g2
+    $g3 = Get-GpuVerdict -SpecGpu 453.592 -DbGpu 28.3495 -MapUnit 'oz' -FeedLoaded $false -FeedUnit ''
+    T 'MUST FIRE  no feed file loaded is BLIND for a per-lb spec gpu too (brown sugar 453.592 vs 28.3495)' ($g3 -eq 'blind') $g3
+    # MUST NOT FIRE: the same two lines with the real feed units loaded are a legitimate conversion.
+    $g4 = Get-GpuVerdict -SpecGpu 29.57 -DbGpu 28.3495 -MapUnit 'oz' -FeedLoaded $true -FeedUnit 'floz'
+    T 'MUST NOT FIRE a floz feed unit over an oz map unit is a conversion, silent' ($g4 -eq 'converted') $g4
+    $g5 = Get-GpuVerdict -SpecGpu 453.592 -DbGpu 28.3495 -MapUnit 'oz' -FeedLoaded $true -FeedUnit 'lb'
+    T 'MUST NOT FIRE a lb feed unit over an oz map unit is a conversion, silent' ($g5 -eq 'converted') $g5
+    # CLEAN TWIN: a LOADED feed with no row for this bid still compares, so the fix did not make every
+    # off-feed item blind. This is the half the founding rule named ("the feed has no row").
+    $g6 = Get-GpuVerdict -SpecGpu 45 -DbGpu 36.85 -MapUnit 'each' -FeedLoaded $true -FeedUnit ''
+    T 'CLEAN TWIN a loaded feed with no row for the bid still reports drift' ($g6 -eq 'drift') $g6
+    # The bar is a ratio gap of 0.005 (-gt). AT the bar is agreement; one step past (0.0051) is drift.
+    $g7 = Get-GpuVerdict -SpecGpu 100.5 -DbGpu 100 -MapUnit 'each' -FeedLoaded $true -FeedUnit 'each'
+    T 'MUST NOT FIRE a ratio gap AT the 0.005 bar is agreement' ($g7 -eq 'agree') $g7
+    $g8 = Get-GpuVerdict -SpecGpu 100.51 -DbGpu 100 -MapUnit 'each' -FeedLoaded $true -FeedUnit 'each'
+    T 'MUST FIRE  a ratio gap one step past the 0.005 bar (0.0051) is drift' ($g8 -eq 'drift') $g8
     if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -203,11 +255,12 @@ foreach($row in (Get-Content (Join-Path $mp 'db\ingredients.json') -Raw | Conver
 # So: compare gpu whenever no conversion applies (map unit == feed unit, or the feed has no row and
 # the units cannot differ). Where a conversion DOES apply, stay silent - recomputing the expected
 # value here would duplicate Resolve-ScalerGpu and drift from it.
-$feedUnitById=@{}
+$feedUnitById=@{}; $fuLoaded=$false
 $fuPath = Join-Path (Split-Path $mp -Parent) 'grocery\out\smp-feed.json'
 if(Test-Path $fuPath){
   try { $fu=(Get-Content $fuPath -Raw -Encoding utf8 | ConvertFrom-Json).ingredients
-        foreach($p in $fu.PSObject.Properties){ $feedUnitById[$p.Name]=[string]$p.Value.unit } } catch {}
+        foreach($p in $fu.PSObject.Properties){ $feedUnitById[$p.Name]=[string]$p.Value.unit }
+        $fuLoaded = ($feedUnitById.Count -gt 0) } catch {}
 }
 $bidOverrides=@{}
 $boF = Join-Path $mp 'db\spec-bid-overrides.json'
@@ -227,7 +280,7 @@ $noPriceOk=@{}
 $npF = Join-Path $mp 'db\no-board-price-ok.json'
 if(Test-Path $npF){ try { $npObj=(Get-Content $npF -Raw|ConvertFrom-Json); $npList=if($npObj.PSObject.Properties.Name -contains 'bids'){ $npObj.bids } else { $npObj }; foreach($x in $npList){ $noPriceOk[[string]$x]=1 } } catch {} }
 
-$bidMiss=0; $fallback=@(); $bidDrift=0; $gpuDrift=0
+$bidMiss=0; $fallback=@(); $bidDrift=0; $gpuDrift=0; $gpuBlind=0
 $costDriftRows=0; $costDriftFields=0
 foreach($s in $specSlugs.Keys){
   if(-not $idxBySlug.ContainsKey($s)){ continue }
@@ -286,13 +339,13 @@ foreach($s in $specSlugs.Keys){
       # GPU-DRIFT: only where no unit conversion can apply (see the header note above).
       if($sb -and $sb -eq $dbb -and ($ing.PSObject.Properties.Name -contains 'gpu')){
         $mapUnit  = if($items[$key].PSObject.Properties.Name -contains 'unit'){ [string]$items[$key].unit } else { '' }
-        $feedUnit = if($feedUnitById.ContainsKey($sb)){ $feedUnitById[$sb] } else { $mapUnit }
-        if($mapUnit -and $feedUnit -eq $mapUnit){
-          $sg = [double]$ing.gpu; $dg = [double]$items[$key].gpu
-          if($dg -gt 0 -and $sg -gt 0 -and [Math]::Abs($sg/$dg - 1) -gt 0.005){
-            $gpuDrift++
-            if($gpuDrift -le $CAP8){ $issues.Add("GPU-DRIFT: $s '$key' spec gpu $sg != db gpu $dg (unit '$mapUnit' both sides, so nothing reconciled it; the card prices grams/gpu * cheapest, so the spec is costing on a stale basis - rebuild the spec or revert the map)") }
-          }
+        $feedUnit = if($feedUnitById.ContainsKey($sb)){ $feedUnitById[$sb] } else { '' }
+        $sg = [double]$ing.gpu; $dg = [double]$items[$key].gpu
+        $gv = Get-GpuVerdict -SpecGpu $sg -DbGpu $dg -MapUnit $mapUnit -FeedLoaded $fuLoaded -FeedUnit $feedUnit
+        if($gv -eq 'blind'){ $gpuBlind++ }
+        elseif($gv -eq 'drift'){
+          $gpuDrift++
+          if($gpuDrift -le $CAP8){ $issues.Add("GPU-DRIFT: $s '$key' spec gpu $sg != db gpu $dg (unit '$mapUnit' both sides, so nothing reconciled it; the card prices grams/gpu * cheapest, so the spec is costing on a stale basis - rebuild the spec or revert the map)") }
         }
       }
     }
@@ -347,11 +400,19 @@ if($fallback.Count){
   if($fallback.Count -gt $CAP8){ $issues.Add("... plus $($fallback.Count-8) more cheapest-fallback lines (unmapped bid -> add to no-board-price-ok.json if intentional, else fix the bid)") }
 }
 
+# A CHECKOUT WITH NO FEED CANNOT JUDGE GPU, and says so (2026-09-19, see Get-GpuVerdict). Printed in both
+# branches below; with nothing else wrong it is exit 3, could-not-evaluate, never a pass - so propagate
+# still stops in a feedless checkout, but on a line that names the cause instead of 189 false drifts.
+$blindLine = if($gpuBlind -gt 0){ "db-agreement: BLIND - no feed at $fuPath in this checkout, so $gpuBlind gpu comparison(s) could not be made (the spec gpu is grams per FEED unit) and CHEAPEST-FALLBACK was skipped. Run from a checkout with the feed, or copy it in; this is not drift." } else { '' }
 if($issues.Count -eq 0){
   # Reported, never silent. An in-flight spec is expected, but a growing pile of them is how twelve
   # never-audited specs sat unnoticed until a publish tried to create them as live posts.
   if($inFlight.Count){
     Write-Output ("db-agreement: {0} spec(s) built but never published - in flight, not drift: {1}" -f $inFlight.Count, (($inFlight | Sort-Object) -join ', '))
+  }
+  if($gpuBlind -gt 0){
+    Write-Output $blindLine
+    Exit-Guard -Name 'db-agreement' -Summary ("recipes={0} issues=0 blind={1} could not evaluate: no feed" -f $specSlugs.Count, $gpuBlind) -Code 3
   }
   Write-Output ("db-agreement: CLEAN ({0} recipes, index==specs)" -f $specSlugs.Count)
   Exit-Guard -Name 'db-agreement' -Summary ("recipes={0} issues=0" -f $specSlugs.Count) -Code 0
@@ -373,4 +434,5 @@ Write-Output ("db-agreement: {0} drift issue(s){1}" -f ($issues.Count + $suppres
 $cap = if($ShowAll){ $issues.Count } else { 25 }
 $issues | Select-Object -First $cap | ForEach-Object { Write-Output ("  ! " + $_) }
 if($issues.Count -gt $cap){ Write-Output ("  ... {0} more not shown - rerun with -ShowAll" -f ($issues.Count - $cap)) }
-Exit-Guard -Name 'db-agreement' -Summary ("issues=" + $issues.Count) -Code 1
+if($blindLine){ Write-Output $blindLine }
+Exit-Guard -Name 'db-agreement' -Summary ("issues=" + $issues.Count + $(if($gpuBlind -gt 0){ " blind=$gpuBlind" } else { '' })) -Code 1

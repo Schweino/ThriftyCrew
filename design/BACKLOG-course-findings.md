@@ -13657,6 +13657,23 @@ line I144 is asking about. No other bad judgement found in that sample.
 the four commands above. Closed when `audit-allergen-line.ps1` exits 0 in the main checkout and `publish.ps1
 -All` reports every PUT verified.
 
+**2026-09-19: the `propagate -AllowCatalogue` refusal was the checkout, not the data. Run it from the main
+checkout.** Brad approved the catalogue republish and `propagate` stopped at its hard gate,
+`meal-prep\engine\audit-db-agreement.ps1`: exit 1, `issues=9` (8 printed GPU-DRIFT lines plus one "plus 181 more"
+line; `-ShowAll` gives 189 GPU-DRIFT lines and nothing else), over 150 recipes and 5 items (Soy Sauce 101, Brown
+Sugar 48, White Vinegar 20, Red Wine Vinegar 14, Balsamic Vinegar 6). Nothing drifted. The spec's `gpu` is grams per
+the unit the FEED quotes (29.57 per floz, 453.592 per lb) and `db\ingredients.json` holds grams per its own map unit
+(28.3495 per oz); the gate knows that, but it read `grocery\out\smp-feed.json` for the feed unit, and that file is
+gitignored and not seeded, so in a worktree (on 2026-09-19, 0 of the other 76 held one) it fell back to "same unit" and compared the two as
+if both were per oz. Evidence: all 189 spec values are identical at `c79930a3a` (2026-09-01); the five
+`ingredients.json` rows are unchanged since at least `292ba6073` (2026-08-09); with the main checkout's feed copied
+in, the same gate at base `774a92d73` reads `DB-AGREEMENT-COMPLETE recipes=584 issues=0`, exit 0; and the daily
+chain's `ad-cycle-log.txt` reads "db-agreement guard: clean" on all 14 runs from 2026-09-05 to 2026-09-18. The
+gate's own remedy ("rebuild the spec") would have priced brown sugar at 16x on 48 live cards. **Fix landed from
+`claude/gpu-drift`** (gate blob `57a13729253e`): `Get-GpuVerdict` makes a missing feed BLIND, so a feedless run with
+nothing else wrong exits 3 with one line naming the cause, and a run with the feed is judged exactly as before.
+It changes no number anywhere. Brad's command is unchanged; it only has to run where the feed is.
+
 ### I173 - the allergen line is checked at publish but not surfaced at pre-audit `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\approvals-i144-2026-09-12.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
