@@ -61,3 +61,24 @@ a stranger's (the enumeration case, as a MUST FIRE); the 375px check on the boar
 
 Approve the design, then I build it on a branch, verify against the live site in the browser, and ask
 again before the Worker deploy and the board publish.
+
+## As built, 2026-09-18 (branch claude/member-token-gate, not deployed)
+
+Brad approved the build, and ruled the same day that the planner's ingredients and amounts are paid
+content, so one mechanism now covers both routes.
+
+- **Changed from the plan: no one-day dual path.** Accepting a typed email for a day keeps the leak for a
+  day. A request with no token now gets one identical "please sign in" answer whatever email it carries.
+  The only cost: a paid member on a cached old board sees that message until the board is republished,
+  which is the next step after the Worker deploy.
+- **The planner data** is answered by the Worker itself on any path spelling containing `planner-data`,
+  served only to a paid or comped member's token, `Cache-Control: private, no-store`, readable by the
+  site origin only. The builder page fetches the token first and says "sign in" when there is none.
+- **Not changed, and flagged for Brad:** the public price feed still carries each recipe's weekly cost and
+  cost per serving (no ingredients or amounts). The hub pages show cost publicly by design.
+- **Tests:** 19 token cases and 20 route cases, run by the gate through `worker/test_member_token.py`.
+  Mutants: 4 of 4 on the token module and 5 of 5 on the routes went red in their own named case, files
+  restored byte-identical. A flaky forged-token fixture was found and fixed on the way (the last
+  base64url character of a signature carries padding bits, so flipping it could change nothing).
+- **Still to do before deploy:** check a real member sign-in's token on the live site (claims, algorithm,
+  issuer) in the browser, and the 375px check on the board's alert box and the planner's sign-in message.

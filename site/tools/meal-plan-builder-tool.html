@@ -555,9 +555,15 @@ function boot(){
   fetch(FEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(f){ feedData=f; if(picks.length)renderPlan(); });
 }
 if(rc){ rc.textContent='Loading recipes...'; }
-fetch(PDATA).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}).then(function(d){
+// The recipe data is members-only (Brad, 2026-09-18): the Worker serves it only to a paid member proved by
+// Ghost's signed identity token. /members/api/session is same-origin and answers 204 when nobody is signed in.
+var SIGNIN=false;
+fetch('/members/api/session',{credentials:'include'}).then(function(r){return r.status===200?r.text():'';}).catch(function(){return '';}).then(function(tok){
+  if(!tok){ SIGNIN=true; return []; }
+  return fetch(PDATA,{headers:{'Authorization':'Bearer '+tok.trim()}}).then(function(r){ if(r.status===401||r.status===403){SIGNIN=true;} return r.ok?r.json():[]; });
+}).catch(function(){return [];}).then(function(d){
   MPP=d||[];
-  if(!MPP.length){ if(rc){ rc.textContent='Could not load recipes. Refresh to try again.'; } return; }
+  if(!MPP.length){ if(rc){ rc.textContent=SIGNIN?'Sign in to your membership to use the planner.':'Could not load recipes. Refresh to try again.'; } return; }
   boot();
 });
 })();

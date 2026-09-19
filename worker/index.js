@@ -12,11 +12,18 @@
 //   Optional var: NOTIFY_TO (defaults to admin@thriftycrew.com)
 //   Optional field: email (requester wants to be notified when the item is added; included in
 //   the notification body + set as Reply-To so Brad can just hit Reply when it goes live)
-// - POST /alert: price-alert signup {email, item, weekly} -> EXISTING PAID/comped Ghost member gets
+// - POST /alert: price-alert signup {item, weekly} + member token -> EXISTING PAID/comped Ghost member gets
 //   label alert-<item> + the "Price Alerts" newsletter (plus the default newsletter when weekly=true).
 //   NEVER creates a member and refuses free/non-members server-side - hitting the endpoint directly
 //   must not grant the paid feature. The daily pipeline emails label segments on record lows.
 //   Extra secret required: GHOST_ADMIN_KEY (same id:hexsecret Admin API key the pipeline uses)
+//   Since 2026-09-18 the member is identified by the Ghost identity token in the Authorization header
+//   (worker/member-token.js), never by an email in the body: a typed email let a stranger learn who pays.
+// - GET /planner-data.json: every recipe's cost and ingredient amounts, for the members-only Meal Plan
+//   Builder. Served ONLY to a paid or comped member proved by the same token (Brad, 2026-09-18: the
+//   ingredients and the planner are paid content). It was a public static file until then.
+
+import { verifyMemberToken, bearer } from "./member-token.js";
 
 // The feed is a static asset written by the daily pipeline and deployed with the repo.
 // No upstream fetch, no release pointer, no fallback branch that can silently become the norm.
@@ -45,8 +52,8 @@ function corsHeaders(origin) {
   const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allow,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin",
   };
@@ -138,6 +145,22 @@ async function ghostFetch(env, path, opts) {
     headers: { Authorization: "Ghost " + token, "Accept-Version": "v5.0", "Content-Type": "application/json", ...(opts && opts.headers) },
   });
   return r;
+}
+
+// The paid or comped member behind the request's identity token, else { refuse: <Response> }.
+// Every refusal before the status check reads the same, so no answer distinguishes "not a member" from
+// "bad token" from "no token". A signed-in member who does not pay is told so: that is their own status.
+async function paidMemberFromToken(env, request, origin) {
+  const email = await verifyMemberToken(bearer(request));
+  if (!email) return { refuse: json({ ok: false, error: "Please sign in as a member, then try again.", needsSignin: true }, 401, origin) };
+  let member = null;
+  try { member = await findMemberByEmail(env, email); } catch (e) {
+    return { refuse: json({ ok: false, error: "Could not verify your membership right now. Please try again later." }, 502, origin) };
+  }
+  if (!member || (member.status !== "paid" && member.status !== "comped")) {
+    return { refuse: json({ ok: false, error: "This is a members-only perk. Join for $1/month to switch it on.", needsUpgrade: true }, 403, origin) };
+  }
+  return { member };
 }
 
 // find the member by email; returns the member (with labels,newsletters) or null. NEVER creates.
@@ -304,10 +327,8 @@ export default {
       try { data = await request.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400, origin); }
       // honeypot: silently accept bots
       if (data && typeof data.website === "string" && data.website.trim() !== "") return json({ ok: true }, 200, origin);
-      const email = (data.email || "").toString().trim().toLowerCase();
       const item = (data.item || "").toString().trim();
       const weekly = data.weekly === true;
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 200) return json({ ok: false, error: "Please enter a valid email address." }, 400, origin);
       if (!/^[a-z0-9-]{2,60}$/.test(item)) return json({ ok: false, error: "Unknown item." }, 400, origin);
       // item must be something we actually track (guards junk labels)
       try {
@@ -318,16 +339,12 @@ export default {
       } catch (e) {
         return json({ ok: false, error: "Could not verify the item right now." }, 502, origin);
       }
-      // PAID-ONLY GATE (server-side; the board's client-side check is UX, not security). Price alerts are a
-      // paid perk, so the email must belong to an existing PAID or comped member. A free member, or an email
-      // that is not a member at all, is refused - hitting this endpoint directly must not grant the feature.
-      let member = null;
-      try { member = await findMemberByEmail(env, email); } catch (e) {
-        return json({ ok: false, error: "Could not verify your membership right now. Please try again later." }, 502, origin);
-      }
-      if (!member || (member.status !== "paid" && member.status !== "comped")) {
-        return json({ ok: false, error: "Price alerts are a members-only perk. Join for $1/month to switch them on.", needsUpgrade: true }, 403, origin);
-      }
+      // PAID-ONLY GATE (server-side; the board's client-side check is UX, not security). The member is the one
+      // the Ghost identity token proves, never an email in the body: until 2026-09-18 the body's email was looked
+      // up and answered 200 or 403, which told anyone who pays and let them sign up someone else's inbox.
+      const who = await paidMemberFromToken(env, request, origin);
+      if (who.refuse) return who.refuse;
+      const member = who.member;
       try {
         await subscribeAlert(env, member, item, weekly);
         return json({ ok: true }, 200, origin);
@@ -445,6 +462,19 @@ export default {
       } catch (e) {
         return json({ ok: false, error: "Could not send right now. Please try again later." }, 502, origin);
       }
+    }
+
+    if (url.pathname.toLowerCase().replace(/\/+$/, "").includes("planner-data")) {
+      if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(origin) });
+      if (request.method !== "GET") return json({ ok: false, error: "method not allowed" }, 405, origin);
+      const who = await paidMemberFromToken(env, request, origin);
+      if (who.refuse) return who.refuse;
+      const res = await env.ASSETS.fetch(new Request(new URL("/planner-data.json", request.url)));
+      const headers = new Headers(res.headers);
+      for (const [k, v] of Object.entries(corsHeaders(origin))) headers.set(k, v);
+      headers.set("Cache-Control", "private, no-store");
+      headers.set("Content-Type", "application/json; charset=utf-8");
+      return new Response(res.body, { status: res.status, headers });
     }
 
     // everything else: static assets (smp-feed.json, etc.)

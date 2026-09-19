@@ -2224,6 +2224,7 @@ if ($histDoc) {
 .pg-al-msg.err{color:#b23b2e;font-weight:600}
 .pg-al-fine{font-size:.75em;color:#8a94a6;margin:10px 0 0;line-height:1.5}
 .pg-al-hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+.pg-al-to{font-size:.9em;color:#3a4658;margin:0 0 4px;overflow-wrap:anywhere}
 .pg-gate{text-align:center;padding:2px 4px 2px}
 .pg-gate-ic{font-size:2.1em;line-height:1;margin:0 0 6px}
 .pg-gate h3{font-size:1.28em;color:#16263F;margin:0 0 8px}
@@ -2381,7 +2382,7 @@ if ($histDoc) {
     close();
     var h = '<div class="pg-hx" style="max-width:480px"><div class="pg-hx-top"><h3>Price alerts: ' + esc(name) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
     h += '<p class="pg-hx-sub">One short email when ' + esc(name.toLowerCase()) + ' hits the lowest price we have tracked in Omaha. No spam, no daily digests, just the good news.</p>';
-    h += '<div class="pg-al-form"><input type="email" id="pg-al-email" placeholder="you@email.com" maxlength="200" autocomplete="email">';
+    h += '<div class="pg-al-form"><p class="pg-al-to" id="pg-al-to">Alerts go to the email on your membership.</p>';
     h += '<input type="text" class="pg-al-hp" id="pg-al-web" tabindex="-1" autocomplete="off" aria-hidden="true">';
     h += '<label class="pg-al-week"><input type="checkbox" id="pg-al-week" checked> Also send me the weekly cheapest-groceries roundup (you can turn either off anytime)</label>';
     h += '<button type="button" class="pg-al-btn" id="pg-al-go" data-aid="' + esc(id) + '">Alert me on low prices</button>';
@@ -2393,23 +2394,29 @@ if ($histDoc) {
     ov.innerHTML = h;
     document.body.appendChild(ov);
     ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
-    setTimeout(function(){ var inp = document.getElementById('pg-al-email'); if (inp){ if (TC_MEMBER && TC_MEMBER.email) inp.value = TC_MEMBER.email; inp.focus(); } }, 50);
+    setTimeout(function(){ var to = document.getElementById('pg-al-to'); if (to && TC_MEMBER && TC_MEMBER.email) to.textContent = 'Alerts go to ' + TC_MEMBER.email + '.'; var b = document.getElementById('pg-al-go'); if (b) b.focus(); }, 50);
   }
   function submitAlert(btn){
     var id = btn.getAttribute('data-aid');
-    var email = (document.getElementById('pg-al-email') || {value:''}).value.trim();
     var weekly = !!(document.getElementById('pg-al-week') || {}).checked;
     var hp = (document.getElementById('pg-al-web') || {value:''}).value;
     var msg = document.getElementById('pg-al-msg');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ msg.className = 'pg-al-msg err'; msg.textContent = 'That email does not look right.'; return; }
     btn.disabled = true; msg.className = 'pg-al-msg'; msg.textContent = 'Signing you up...';
-    fetch(ALERT_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ email: email, item: id, weekly: weekly, website: hp }) })
+    // The Worker takes the member from Ghost's signed identity token, never from a typed email (2026-09-18:
+    // a typed email let anyone learn who pays). /members/api/session is same-origin and answers 204 when
+    // nobody is signed in.
+    fetch('/members/api/session', { credentials: 'include' })
+      .then(function(r){ return r.status === 200 ? r.text() : ''; })
+      .then(function(tok){
+        if (!tok){ throw { signin: true }; }
+        return fetch(ALERT_URL, { method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok.trim()}, body: JSON.stringify({ item: id, weekly: weekly, website: hp }) });
+      })
       .then(function(r){ return r.json(); })
       .then(function(j){
         if (j && j.ok){ msg.className = 'pg-al-msg ok'; msg.textContent = 'Done. We will email you when it hits a low.'; btn.textContent = 'You are on the list'; }
         else { msg.className = 'pg-al-msg err'; msg.textContent = (j && j.error) || 'Could not sign you up right now.'; btn.disabled = false; }
       })
-      .catch(function(){ msg.className = 'pg-al-msg err'; msg.textContent = 'Could not reach the sign-up service. Try again in a minute.'; btn.disabled = false; });
+      .catch(function(e){ msg.className = 'pg-al-msg err'; msg.textContent = (e && e.signin) ? 'Please sign in to your membership, then try again.' : 'Could not reach the sign-up service. Try again in a minute.'; btn.disabled = false; });
   }
   document.addEventListener('click', function(e){
     var b = e.target.closest('.pg-hist'); if (b){ open(b.getAttribute('data-hid')); return; }
