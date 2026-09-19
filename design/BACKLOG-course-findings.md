@@ -15666,7 +15666,7 @@ holds 6,570 such rows across seven files (2026-07-15 to 2026-09-05).
   shape as the 2026-08-28 ruling ("leave the existing rows, recapture forward").
 - **C. Leave them**: land part 1 only; the batch rows age out of the union by 2026-12-04.
 
-### I221 - Reader-facing: the deals page never shows "Doesn't carry" `NEEDS A RULING` `run-0919` `1-WAY` `RUNG1 RULING`
+### I221 - Reader-facing: the deals page never shows "Doesn't carry" `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15741,6 +15741,17 @@ still silence their gaps until 2026-11-19; moving it onto the lib would reopen 2
 3. **Land only the six "plausibly true" entries as declared.** 6 labels appear; each rests on Brad's say-so rather
    than on a second search.
 4. **Leave it all off main.** Readers keep "No price yet" everywhere, which is honest but tells them nothing.
+
+**Done 2026-09-19.** Landed on Brad's approval 2026-09-19 (option 1, the two-search rule); 0 cells changed. The branch
+was rebased onto `f4e50313b` with no conflict and landed as it stood: `not-carried-lib.ps1`, `build-deals-page.ps1` and
+`derive-not-carried.ps1`. Re-verified in a fresh seeded worktree: `not-carried-lib -NotCarriedLibSelfTest` exit 0, 12 of
+12; `derive-not-carried -SelfTest` exit 0, 8 of 8 (`build-deals-page` has no self-test). The deals page was built from
+`comparison-2026-09-17.json` with the `origin/main` script and with the branch's into separate temp dirs: `deals-page.html`,
+`public/board.json` and `public/price-history.json` are byte-identical across the two arms (572 commodities, 3,189 prices
+each), and the branch build logs `not-carried: 0 of 24 entr(y/ies) trusted and shown; not shown: 24 single-search`.
+`public/` was restored from git afterwards. The approved follow-up, a second differently worded search in the Baker's and
+Family Fare regular pulls, and moving `audit-coverage-gaps.ps1:319` onto the lib, is filed through the inbox as
+`design\backlog-inbox\run0919-second-wording.md`.
 
 ### I222 - Reader-facing: per-pound prices read as per-each, and multi-packs priced as one each `NEEDS A RULING` `run-0919` `1-WAY` `RUNG1 RULING`
 

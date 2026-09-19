@@ -146,16 +146,27 @@ if (Test-Path $purlFile) {
     $purls[[string]$p.Name] = $sm
   }
 }
-# "Does not carry" cells: commodity x store confirmed absent (manual verification). Rendered as a muted chip
-# with a "See it? Let us know!" link to the suggest-an-item form, so a genuine gap reads as intentional.
-$notCarry = @{}
-$ncFile = Join-Path $root 'not-carried.json'
-if (Test-Path $ncFile) { $ncd = Read-JsonFile $ncFile; foreach ($e in @($ncd.cells)) { $ncid = [string]$e.id; if (-not $notCarry.ContainsKey($ncid)) { $notCarry[$ncid] = @{} }; $notCarry[$ncid][[string]$e.store] = $true } }
+# "Does not carry" cells: commodity x store confirmed absent. Rendered as a muted chip with a "See it? Let us
+# know!" link to the suggest-an-item form, so a genuine gap reads as intentional.
+# READ THROUGH not-carried-lib.ps1 (backlog I221, 2026-09-18). This used to read a `cells` list keyed `.id`, a
+# shape the file had not held since derive-not-carried started writing an `entries` list keyed `.commodity`, so
+# no label ever rendered. The lib is the one reading, and it shows only an entry the writer's own rule trusts
+# (two differently worded searches, or a human's declaration, inside recheck_days). A PRICE BEATS AN ENTRY: a
+# store priced on the row is ranked and shown with its price whatever the file says; a wrong product there is
+# known-wrong.json's job.
+. (Join-Path $root 'not-carried-lib.ps1')
+$ncRead = Read-TcNotCarriedMap (Join-Path $root 'not-carried.json')
+$notCarry = $ncRead.Map
+if ($ncRead.Found) {
+  Write-Output ("not-carried: {0} of {1} entr(y/ies) trusted and shown{2}" -f $ncRead.Shown, $ncRead.Read,
+    $(if ($ncRead.Refused.Count) { '; not shown: ' + (($ncRead.Refused.Keys | ForEach-Object { [string]$ncRead.Refused[$_] + ' ' + $_ }) -join ', ') } else { '' }))
+}
 function IsNoneCarry([string]$id, [string]$store) { return ($notCarry.ContainsKey($id) -and $notCarry[$id].ContainsKey($store)) }
-function NoneCells([string]$id) {
-  if (-not $notCarry.ContainsKey($id)) { return '' }
+function NoneCells([string]$id, $pricedStores) {
+  $ncStores = @(Get-TcNotCarriedStores $notCarry $id $pricedStores)
+  if ($ncStores.Count -eq 0) { return '' }
   $out = ''
-  foreach ($st in ($notCarry[$id].Keys | Sort-Object)) {
+  foreach ($st in $ncStores) {
     $out += "<div class='pg-chip pg-chip-none' data-store=`"" + (HtmlEnc $st) + "`"><span class='pg-store'>" + (HtmlEnc $shortName[$st]) + "</span><span class='pg-none'>Doesn&rsquo;t carry</span><a class='pg-see pg-see-none' href='/suggest-an-item/'>See it? Let us know! &rarr;</a></div>"
   }
   return $out
@@ -708,7 +719,7 @@ function RowStruct([string]$id, [string]$unit, $ranked, [string]$mode) {
   if ($mode -eq 'all') {
     foreach ($st in $storeOrder) { if (-not $have.ContainsKey($st)) { $x += , @($storeIx[$st], $(if (IsNoneCarry $id $st) { 1 } else { 0 })) } }
   } else {
-    if ($notCarry.ContainsKey($id)) { foreach ($st in ($notCarry[$id].Keys | Sort-Object)) { if (-not $have.ContainsKey($st)) { $x += , @($storeIx[$st], 1) } } }
+    foreach ($st in (Get-TcNotCarriedStores $notCarry $id @($have.Keys))) { $x += , @($storeIx[$st], 1) }
   }
   # [ordered] is not a real type accelerator: PS 5.1 only honours it on the right of an ASSIGNMENT, and
   # `return [ordered]@{...}` throws "Argument types do not match". Assign first, then return.
@@ -768,7 +779,7 @@ foreach ($c in $cats) {
   foreach ($cid in $c.commodities) {
     $r = $byId[[string]$cid]
     if (-not $r) { continue }
-    $ranked = @($r.stores | Where-Object { -not (IsNoneCarry ([string]$r.id) ([string]$_.store)) } | Sort-Object per_unit)
+    $ranked = @($r.stores | Sort-Object per_unit)   # a price beats a not-carried entry (not-carried-lib.ps1)
     if ($ranked.Count -eq 0) { continue }
     # 7-STORE GUARANTEE: every priced store MUST be a known store in $storeOrder, else MissingCells would ALSO
     # emit a "No price yet" card for it (a duplicate/wrong-name store on the row). Fail the build before publish.
@@ -843,7 +854,7 @@ foreach ($c in $cats) {
   # weekly staple with a DIFFERENT unit) and carry a per-row "shelf price" marker because the old separate
   # section's honesty note no longer sits above them; the dated explanation lives in "How this board works".
   foreach ($r in @($(if ($riByCat.ContainsKey([string]$c.label)) { $riByCat[[string]$c.label] } else { @() }))) {
-    $ranked = @($r.stores | Where-Object { -not (IsNoneCarry ([string]$r.id) ([string]$_.store)) } | Sort-Object per_unit)
+    $ranked = @($r.stores | Sort-Object per_unit)   # a price beats a not-carried entry (not-carried-lib.ps1)
     if ($ranked.Count -eq 0) { $riRendered[[string]$r.id] = $true; continue }
     $totalCommodities++
     $riRendered[[string]$r.id] = $true
@@ -879,7 +890,7 @@ foreach ($c in $cats) {
       [void]$cb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
       $riMode = 'all'
     } else {
-      [void]$cb.Append((NoneCells ([string]$r.id)))
+      [void]$cb.Append((NoneCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
       $riMode = 'none'
     }
     $boardChips[([string]$r.id + '::r')] = $cb.ToString()
