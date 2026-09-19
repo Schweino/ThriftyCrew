@@ -22,6 +22,9 @@ the named memory or file.
 - **Recost aftercare:** `sync-recipesdb-cost` BEFORE `propagate`, and `-Slugs` has two different shapes.
   `propagate` itself has no `-Slugs` at all - it publishes the whole dirty set, and dirty is
   spec-hash-versus-stamps. [[recost-needs-sync-recipesdb-cost-and-the-slugs-trap]], [[propagate-has-no-slugs]]
+  **Since 2026-09-19 (Brad's ruling) a hand run REFUSES** (exit 2, `PROPAGATE-SCOPE-REFUSED` and the list) when
+  any dirty spec is not named: pass `-SlugsFile <file, one slug per line>` naming what you meant to ship, or
+  `-AllowCatalogue` when republishing everything dirty is the decision. `-DryRun` prints the scope line first.
 - **A spec's bid is not a pricing input.** An unbid scaler line blacks out the card's live scaler.
   [[spec-bid-is-not-a-pricing-input]]
 - **A publish crash loses the journal** unless the journal is written per slug, and `-All` iterates

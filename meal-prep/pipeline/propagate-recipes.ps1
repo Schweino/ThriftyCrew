@@ -38,7 +38,15 @@
 # ledger row listing a single slug. An array parameter here would silently collapse the create-authority
 # list to one unmatched name and refuse every legitimate create. A newline-delimited file crosses the
 # process boundary intact.
-param([switch]$DryRun, [switch]$Full, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "")
+#
+# -SlugsFile, -MaxUnnamed and -AllowCatalogue are the SCOPE GUARD (2026-09-19). propagate still carries the
+# whole dirty set - the 2026-08-15 decision in design\PLAN-recipe-hunter-v2.1-2026-08-15.md section 4 stands,
+# and nothing here scopes it - but it no longer does so SILENTLY. A dirty slug the caller did not name (in
+# -SlugsFile or -AllowCreateFile, both newline files for the -File reason above) is "unnamed", and a live
+# run with more than -MaxUnnamed of them is REFUSED before any stage runs, printing every one, unless the
+# caller passes -AllowCatalogue. See Test-PropagateScope below for why.
+param([switch]$DryRun, [switch]$Full, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "",
+      [string]$SlugsFile = "", [int]$MaxUnnamed = 0, [switch]$AllowCatalogue)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
@@ -107,6 +115,35 @@ function Get-DirtySlugs { param([hashtable]$Stamps, $Files)
     if (-not $Stamps.ContainsKey($f.BaseName) -or $Stamps[$f.BaseName] -ne $h) { $d.Add($f.BaseName) }
   }
   return $d
+}
+
+# ---- THE SCOPE GUARD: A CATALOGUE REPUBLISH IS A DECISION, NEVER A SIDE EFFECT (2026-09-19) -------------
+# Measured at 372d8cc47: 447 of 584 specs dirty, carrying renderer and spec changes Brad has not approved
+# shipping (the allergen line on every card, backlog I172, which is his step; the related-recipes footer;
+# I44's paywall claim; cost bars; the "healthy" wording, two of them live titles). propagate-recipes would
+# have PUT 446 live paid pages on the next run of EITHER road: a hand run after one spec edit, or the E4 of
+# ANY wave, where wave-publish only printed a NOTE about the collateral and the one check between it and
+# Ghost was an agent reviewing a 446-call queue. The 2026-08-15 decision (keep propagate whole-dirty) was
+# about a 359-recipe carry that shipped a real, wanted fix; it never said an unrelated catalogue change
+# may ride a two-recipe wave unasked.
+# So: a dirty slug nobody named is counted, and a live run over more than $Max of them is refused before
+# the first stage, with the list, unless the caller says -AllowCatalogue. It does NOT scope the carry: with
+# consent it still carries everything dirty, so there is still one rule for what "dirty" means.
+# THE BAR: -MaxUnnamed defaults to 0, the strictest value, chosen as a policy and not from a sweep - no other
+# value was tried. A positive value lets that much unnamed drift ride; nothing measured says what size is safe.
+# WHAT IT DOES WHEN THE PRODUCER STOPS: nothing dirty means nothing unnamed, so it is silent, as it should be.
+function Test-PropagateScope {
+  param($Dirty, $Named, [int]$Max = 0, [bool]$AllowCatalogue = $false)
+  $namedSet = @{}
+  foreach ($n in @($Named)) { if ($n) { $namedSet[[string]$n] = $true } }
+  $unnamed = @(@($Dirty) | Where-Object { $_ -and -not $namedSet.ContainsKey([string]$_) })
+  $refuse = ($unnamed.Count -gt $Max) -and (-not $AllowCatalogue)
+  return [pscustomobject]@{ Refuse = $refuse; Unnamed = $unnamed; Named = $namedSet.Count; Max = $Max; Consented = $AllowCatalogue }
+}
+function Read-SlugFile([string]$Path, [string]$Label) {
+  if (-not $Path) { return @() }
+  if (-not (Test-Path -LiteralPath $Path)) { throw "propagate: $Label named $Path but it does not exist - refusing, because an unreadable scope is not an empty one" }
+  return @(Get-Content -LiteralPath $Path -Encoding UTF8 | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 }
 
 # ---- THE ALLERGEN LINE, CHECKED ON THE CARD THAT SHIPS (2026-09-18) ------------------------------------
@@ -301,6 +338,53 @@ if ($SelfTest) {
     T 'MUST FIRE  the live publish runs only inside the gated call, after build-cards' `
       (($iB -ge 0) -and ($iG -gt $iB) -and ($iP -gt $iG) -and ([regex]::Matches($pSrc, [regex]::Escape($pubCall)).Count -eq 1)) `
       ("build@{0} gated@{1} publish@{2} publishCalls={3}" -f $iB, $iG, $iP, [regex]::Matches($pSrc, [regex]::Escape($pubCall)).Count)
+
+    # ---- THE SCOPE GUARD (2026-09-19). The founding case: a two-recipe wave whose E4 would have carried
+    # 445 unnamed dirty specs to live pages. Scaled down to 2 named and 3 unnamed; the rule is the same.
+    $wave = @('wave-one', 'wave-two'); $foreign = @('other-a', 'other-b', 'other-c')
+    $sc = Test-PropagateScope -Dirty ($wave + $foreign) -Named $wave -Max 0 -AllowCatalogue $false
+    T 'MUST FIRE  a run whose dirty set exceeds the slugs its caller named is REFUSED, and the refusal lists exactly the unnamed ones' `
+      ($sc.Refuse -and $sc.Unnamed.Count -eq 3 -and (($sc.Unnamed | Sort-Object) -join ',') -eq 'other-a,other-b,other-c') ("refuse=" + $sc.Refuse + " unnamed=" + ($sc.Unnamed -join ','))
+    $sc = Test-PropagateScope -Dirty $wave -Named $wave -Max 0 -AllowCatalogue $false
+    T 'CLEAN TWIN a wave naming its own slugs is NOT refused, and what it carries is exactly those slugs' `
+      ((-not $sc.Refuse) -and $sc.Unnamed.Count -eq 0 -and $sc.Named -eq 2) ("refuse=" + $sc.Refuse + " unnamed=" + ($sc.Unnamed -join ','))
+    $sc = Test-PropagateScope -Dirty @('wave-one') -Named $wave -Max 0 -AllowCatalogue $false
+    T 'MUST NOT FIRE a named slug that is not dirty is no reason to refuse (a resume where one slug already shipped)' ((-not $sc.Refuse) -and $sc.Unnamed.Count -eq 0) ("refuse=" + $sc.Refuse)
+    $sc = Test-PropagateScope -Dirty ($wave + @('other-a', 'other-b')) -Named $wave -Max 2 -AllowCatalogue $false
+    T 'MUST NOT FIRE AT the bar: 2 unnamed with -MaxUnnamed 2 is allowed' ((-not $sc.Refuse) -and $sc.Unnamed.Count -eq 2) ("refuse=" + $sc.Refuse + " unnamed=" + $sc.Unnamed.Count)
+    $sc = Test-PropagateScope -Dirty ($wave + $foreign) -Named $wave -Max 2 -AllowCatalogue $false
+    T 'MUST FIRE  one step PAST the bar: 3 unnamed with -MaxUnnamed 2 is refused' ($sc.Refuse -and $sc.Unnamed.Count -eq 3) ("refuse=" + $sc.Refuse + " unnamed=" + $sc.Unnamed.Count)
+    $sc = Test-PropagateScope -Dirty ($wave + $foreign) -Named $wave -Max 0 -AllowCatalogue $true
+    T 'CLEAN TWIN -AllowCatalogue carries the unnamed slugs, and still counts them so the run can say so' ((-not $sc.Refuse) -and $sc.Unnamed.Count -eq 3) ("refuse=" + $sc.Refuse + " unnamed=" + $sc.Unnamed.Count)
+    $sc = Test-PropagateScope -Dirty @() -Named @() -Max 0 -AllowCatalogue $false
+    T 'MUST NOT FIRE nothing dirty is nothing unnamed' ((-not $sc.Refuse) -and $sc.Unnamed.Count -eq 0) ("refuse=" + $sc.Refuse + " unnamed=" + $sc.Unnamed.Count)
+    $threw = $false
+    try { $null = Read-SlugFile (Join-Path $tmp 'no-such-scope.txt') '-SlugsFile' } catch { $threw = $true }
+    T 'MUST FIRE  a -SlugsFile that is not there throws rather than naming nothing' $threw 'silent'
+
+    # THE WIRING, END TO END ACROSS THE -File BOUNDARY, through -DryRun only (it exits before every stage, so
+    # this child can never sync, render or send anything whatever the guard does). -Root points the specs at a
+    # sandbox with no stamps, so all three are dirty; the sandbox carries the whole lib\ this script loads.
+    $sbx = Join-Path $tmp 'scope-sbx'; $sbxMp = Join-Path $sbx 'mp'
+    New-Item -ItemType Directory -Force (Join-Path $sbxMp 'db\recipes'), (Join-Path $sbx 'lib') | Out-Null
+    Copy-Item (Join-Path (Split-Path $mp -Parent) 'lib\*.ps1') (Join-Path $sbx 'lib')
+    foreach ($s in @('wave-one', 'wave-two', 'other-a')) { Set-Content (Join-Path $sbxMp ("db\recipes\{0}.json" -f $s)) ('{"slug":"' + $s + '"}') -Encoding UTF8 }
+    $scopeFile = Join-Path $tmp 'scope.txt'
+    Set-Content $scopeFile "wave-one`nwave-two" -Encoding UTF8
+    $dr = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $sbxMp -DryRun -SlugsFile $scopeFile)
+    $drLine = @($dr | Where-Object { $_ -match '^propagate scope:' }) -join ''
+    T 'MUST FIRE  through the real -File call, a two-slug -SlugsFile names TWO slugs and the third dirty spec is reported as refusable' `
+      ($drLine -match '^propagate scope: 1 of 3 dirty' -and $drLine -match 'REFUSES without -AllowCatalogue') ("line='" + $drLine + "' rc=" + $LASTEXITCODE)
+    # THE ORDER, on the live path: the refusal exits before the first stage runs. Needles by concatenation.
+    # The needle is the whole refusal BLOCK up to its exit, not the condition: the scope line above it spells
+    # the same condition inside a subexpression, and the first version of this pin matched that and SURVIVED
+    # the mutant that turned the real refusal off.
+    $mScope = [regex]::Match($pSrc, '(?m)^if \(\$scope\.Refuse\) \{\s*\r?\n\s*Write-Output \("PROPAGATE-SCOPE-' + 'REFUSED[^\r\n]*[\s\S]*?\r?\n\s*exit 2\s*\r?\n\}')
+    $iScope = if ($mScope.Success) { $mScope.Index } else { -1 }
+    $iStage = $pSrc.IndexOf("Invoke-Stage 'sync-" + "recipesdb-buy'")
+    $iCalc = $pSrc.IndexOf('$scope = Test-Propagate' + 'Scope')
+    T 'MUST FIRE  the live scope check is computed from Test-PropagateScope and refuses BEFORE the first stage' `
+      (($iCalc -ge 0) -and ($iScope -gt $iCalc) -and ($iStage -gt $iScope)) ("calc@{0} refuse@{1} firstStage@{2}" -f $iCalc, $iScope, $iStage)
   } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
@@ -322,6 +406,10 @@ if ($Baseline) {
 
 $dirty = @(Get-DirtySlugs $stamps $files)
 Write-Output ("propagate: {0} dirty spec(s) of {1}" -f $dirty.Count, $files.Count)
+$scopeA = Read-SlugFile $SlugsFile '-SlugsFile'; $scopeB = Read-SlugFile $AllowCreateFile '-AllowCreateFile'
+$scopeNamed = @(@($scopeA) + @($scopeB) | Where-Object { $_ })
+$scope = Test-PropagateScope -Dirty $dirty -Named $scopeNamed -Max $MaxUnnamed -AllowCatalogue ([bool]$AllowCatalogue)
+Write-Output ("propagate scope: {0} of {1} dirty spec(s) were not named by the caller (bar {2}){3}" -f $scope.Unnamed.Count, $dirty.Count, $MaxUnnamed, $(if ($scope.Refuse) { ' - a live run REFUSES without -AllowCatalogue' } elseif ($AllowCatalogue -and $scope.Unnamed.Count) { ' - carried on -AllowCatalogue' } else { '' }))
 # -DryRun's WHOLE JOB is to answer "what would this publish?", and it capped the list at 30 with no
 # remainder line - so a 91-slug set printed 30 names ending at 'h' and looked complete. The count on the
 # line above is right, but a reader checking the list against it has to notice a number they were not
@@ -333,6 +421,13 @@ if ($DryRun) {
   exit 0
 }
 if (-not $dirty.Count) { Write-Output 'nothing to propagate'; exit 0 }
+# THE SCOPE GUARD, before the first stage: nothing has been synced, rendered, sent or stamped when it refuses.
+if ($scope.Refuse) {
+  Write-Output ("PROPAGATE-SCOPE-REFUSED: {0} dirty spec(s) the caller did not name would be REPUBLISHED to live pages, over the bar of {1}. Nothing ran and no stamp moved." -f $scope.Unnamed.Count, $MaxUnnamed)
+  Write-Output '  Name them in -SlugsFile, or pass -AllowCatalogue if republishing all of them is the decision. The unnamed slugs:'
+  $scope.Unnamed | ForEach-Object { Write-Output ('    ' + $_) }
+  exit 2
+}
 
 # each stage runs as a child so its exit code is its verdict; a failure stops the chain BEFORE the stamp.
 function Invoke-Stage { param([string]$Label, [scriptblock]$Run)

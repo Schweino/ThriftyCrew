@@ -622,6 +622,12 @@ var OTHER=1;
   $iGated = $propSrc.IndexOf('$pubOut = Invoke-Gated' + 'Publish')
   T 'MUST FIRE  propagate publishes ONLY through the allergen-gated call, and only after build-cards' `
     (($iBuild -ge 0) -and ($iGated -gt $iBuild)) ("build-cards at {0}, gated publish at {1}" -f $iBuild, $iGated)
+  # A SCOPE REFUSAL IS NAMED, NOT READ AS A RETRYABLE FAILURE (2026-09-19). The propRc branch looks for
+  # propagate's own marker BEFORE the generic "the next run retries" message. Needles by concatenation.
+  $iScopeChk = $selfSrc.IndexOf("'^PROPAGATE-SCOPE-" + "REFUSED:'")
+  $iGeneric = $selfSrc.IndexOf("Fail 'propagate-recipes failed - nothing was stamped" + ", the next run retries")
+  T 'MUST FIRE  a propagate scope refusal is reported as a refusal (not "retries the same slugs"), checked before the generic failure' `
+    (($iScopeChk -ge 0) -and ($iGeneric -gt $iScopeChk) -and $propSrc.Contains('PROPAGATE-SCOPE-' + 'REFUSED:')) ("scope check at {0}, generic at {1}" -f $iScopeChk, $iGeneric)
 
   if ($f -eq 0) { Write-Output 'wave-publish SELF-TEST PASS'; exit 0 }
   Write-Output ("wave-publish SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
@@ -967,9 +973,10 @@ $dirtySample = @($pdLines | Where-Object { $_ -match '^\s{2}\S' } | ForEach-Obje
 $foreignSample = @(Get-ForeignDirty $dirtySample $slugs)
 $foreignTotal = [Math]::Max(0, $dirtyTotal - @($slugs).Count)
 if ($foreignTotal -gt 0) {
-  Write-Output ("  E4  NOTE propagate reports {0} dirty spec(s) in total, so about {1} OUTSIDE this wave will be" -f $dirtyTotal, $foreignTotal)
-  Write-Output ("        carried and republished with it. That is propagate's design (it is the one command after")
-  Write-Output ("        any spec edit), but this wave's ledger should not be read as having shipped only {0}." -f @($slugs).Count)
+  Write-Output ("  E4  NOTE propagate reports {0} dirty spec(s) in total, so about {1} OUTSIDE this wave are dirty." -f $dirtyTotal, $foreignTotal)
+  Write-Output ("        Since 2026-09-19 propagate REFUSES to republish specs its caller did not name (this wave names")
+  Write-Output ("        only its own {0}), so E4 will stop with PROPAGATE-SCOPE-REFUSED and the list. Shipping them is" -f @($slugs).Count)
+  Write-Output ("        a decision: run propagate-recipes.ps1 -AllowCatalogue by hand first, then re-run this wave.")
   @($foreignSample | Select-Object -First 10) | ForEach-Object { Write-Output ("        " + $_) }
   if ($foreignSample.Count -lt $foreignTotal) { Write-Output ("        ... listing truncated by propagate at 30; {0} more not shown" -f ($foreignTotal - $foreignSample.Count)) }
 }
@@ -1068,7 +1075,15 @@ $propRes = Invoke-NativeScript (Join-Path $here 'propagate-recipes.ps1') '-Allow
 $prop = $propRes.Lines
 $propRc = $propRes.ExitCode
 @($prop | ForEach-Object { Write-Output ("    " + [string]$_) })
-if ($propRc -ne 0) { Fail 'propagate-recipes failed - nothing was stamped, the next run retries the same slugs' }
+if ($propRc -ne 0) {
+  # A SCOPE REFUSAL IS NOT A FAILURE TO RETRY (2026-09-19). propagate refused before any stage because specs
+  # outside this wave are dirty; re-running the wave refuses again identically until somebody decides about them.
+  $scopeRef = @($prop | Where-Object { [string]$_ -match '^PROPAGATE-SCOPE-REFUSED:' } | Select-Object -First 1)
+  if ($scopeRef.Count) {
+    Fail ('propagate REFUSED before any stage: specs outside this wave are dirty and nobody named them (' + ([string]$scopeRef[0] -replace '^PROPAGATE-SCOPE-REFUSED:\s*', '') + ') Nothing was synced, built, published or stamped. Retrying this wave will refuse again: republishing those specs is Brad''s decision (propagate-recipes.ps1 -AllowCatalogue, run by hand), after which this wave can be re-run.')
+  }
+  Fail 'propagate-recipes failed - nothing was stamped, the next run retries the same slugs'
+}
 # A WAVE SLUG THAT DID NOT PUBLISH IS A FAILED WAVE, not a retry. propagate withholds its stamp so it stays
 # dirty, which is right for collateral - but this wave is about to stamp the ledger and advance these slugs
 # to `published`. Doing that for a slug that was refused or failed would assert a live page that is not
