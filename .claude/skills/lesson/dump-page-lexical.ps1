@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -11,7 +12,7 @@ function New-GhostJWT { param($key)
   $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
 }
 $jwt = New-GhostJWT $adminKey
-$H = @{ Authorization="Ghost $jwt"; 'Accept-Version'='v5.0' }
+$H = @{ Authorization="Ghost $jwt"; 'Accept-Version'=(Get-GhostAcceptVersion) }
 $sp = "C:\Users\Owner\AppData\Local\Temp\claude\C--Codex\f3644374-5e4d-4c5e-a7e6-7ac3b89873f9\scratchpad"
 foreach($slug in @("membership","welcome","welcome-all-access")){
   $p = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/$slug/?formats=lexical" -Headers $H).pages[0]

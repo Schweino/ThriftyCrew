@@ -8,16 +8,25 @@
 # Get-GhostKey [-Root <repo-root>]   -> reads the estate's key: $env:GHOST_ADMIN_KEY, else
 #                                       meal-prep\.ghostkey under the given root (default: this lib's repo)
 #
-# THE API VERSION WE ASK FOR IS NOT THE ONE THE SITE RUNS - AN OPEN QUESTION FOR BRAD, NOT A FIX (2026-09-18,
-# backlog I230, found under I167). Every Ghost call in this repo sends `Accept-Version: v5.0`: 135 header
-# sites in 72 tracked files, every one v5.0 (git grep, excluding grocery\out and archive). This lib sets
-# no version itself; its callers pass the header. The live site answers `Content-Version: v6.64` (a GET of
-# the unauthenticated /ghost/api/admin/site/ on 2026-09-18, sent with Accept-Version v5.0, returned 200 and
-# that header), and the endpoints in use still answer 200. Accept-Version tells Ghost which API contract
-# the client expects, so moving it can change what live reads and writes return or accept: it is a
-# behaviour change to the live site, and it is deliberately NOT changed here. The question is whether to
-# move all callers to v6 together (one reviewed change, with a read-only drill of each endpoint first) or
-# to keep v5.0 while Ghost still honours it and note the date it stops.
+# Get-GhostAcceptVersion             -> THE Accept-Version every Ghost caller in this repo sends. ONE place.
+#
+# THE API VERSION LIVES HERE AND NOWHERE ELSE (Brad's ruling 2026-09-19, backlog I230). Until then every
+# caller wrote the header inline as a literal v5.0 (135 sites in 72 files) while the site ran v6.64. Every
+# live caller now sends `'Accept-Version' = (Get-GhostAcceptVersion)`, so the next major is a one-line
+# change to the function below, and worker\index.js carries its own GHOST_ACCEPT_VERSION constant (a
+# separate runtime) that ops\review-staged.ps1 -SelfTest holds equal to it. The move from v5.0 to v6.0 was
+# made only after ops\probe-ghost-version-shape.ps1 called every GET shape the callers use at both
+# versions and found the same key paths in 25 of 25 (Ghost 5+ serves one API; the header is the client's
+# minimum, answered with Content-Version), and Ghost's 6.0 breaking-change list names no request-shape
+# change to posts, pages, members, newsletters, tiers, tags or settings. Before moving it again, run that
+# probe with -From <old> -To <new>. The same self-test fails any tracked live script that writes a literal
+# version again. Retired scripts under archive\ keep their v5.0: they are history and nothing runs them.
+#
+# A v6 FACT THAT HOLDS WHATEVER THIS HEADER SAYS: `limit=all` returns at most 100 rows (Ghost 6.0 breaking
+# changes). The probe read 100 of 1,566 posts for `posts/?limit=all&fields=id` at BOTH versions. A caller
+# that wants every row pages with Invoke-TcGhostPaged; see I230 for the callers that still ask for all.
+function Get-GhostAcceptVersion { return 'v6.0' }
+
 $script:GhostApiUrl = 'https://map-to-success.ghost.io'
 
 function Get-GhostKey([string]$Root = '') {

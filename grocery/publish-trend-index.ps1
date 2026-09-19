@@ -38,7 +38,7 @@ $metaDesc  = ("Week-by-week price history for {0} grocery staples across seven O
 
 $key = Get-GhostKey -Root (Split-Path $here -Parent)
 $jwt = Get-GhostJWT -Key $key
-$h   = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+$h   = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) }
 
 $cur = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,title,status,updated_at" -Headers $h).posts[0]
 if (-not $cur) { throw "post /$slug/ not found" }

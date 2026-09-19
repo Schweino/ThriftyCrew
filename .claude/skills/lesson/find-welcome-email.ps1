@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -11,7 +12,7 @@ function New-GhostJWT { param($key)
   $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
 }
 $jwt = New-GhostJWT $adminKey
-$H = @{ Authorization="Ghost $jwt"; 'Accept-Version'='v5.0' }
+$H = @{ Authorization="Ghost $jwt"; 'Accept-Version'=(Get-GhostAcceptVersion) }
 
 Write-Host "===== SETTINGS matching welcome-email text =====" -ForegroundColor Cyan
 $s = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/settings/" -Headers $H).settings

@@ -4,6 +4,7 @@
 #>
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $sh=$p[1]
   $sb=New-Object byte[] ($sh.Length/2)
@@ -25,7 +26,7 @@ $excerpt = "List every subscription once. This tool shows the real yearly total,
 # Guard: does a post already exist at this slug?
 $jwt = New-GhostJWT $adminKey
 $exists = $null
-try { $exists = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0] } catch {}
+try { $exists = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0] } catch {}
 if ($exists) { Write-Host "A post already exists at /$slug/ (id=$($exists.id)). Aborting create to avoid a duplicate." -ForegroundColor Yellow; exit 1 }
 
 $lexObj = @{ root = [ordered]@{ children=@([ordered]@{ type='html'; version=1; html=[string]$html }); direction=$null; format=''; indent=0; type='root'; version=1 } }
@@ -39,6 +40,6 @@ $postObj = [ordered]@{
 }
 $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{ posts=@($postObj) } -Depth 16))
 $jwt2 = New-GhostJWT $adminKey
-$res = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/" -Method Post -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes
+$res = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/" -Method Post -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes
 $p = $res.posts[0]
 Write-Host ("CREATED /{0}/  status={1}  visibility={2}  url={3}" -f $p.slug, $p.status, $p.visibility, $p.url) -ForegroundColor Green

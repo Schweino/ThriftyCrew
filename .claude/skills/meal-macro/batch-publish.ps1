@@ -7,6 +7,7 @@
 param([Parameter(Mandatory=$true)][string]$GenDir)
 $ErrorActionPreference='Stop'
 . "C:\Codex\ThriftyCrew\.claude\skills\lesson\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -36,14 +37,14 @@ foreach($mf in (Get-ChildItem "$GenDir\mf-*.json")){
       }
       $jwt=New-GhostJWT $adminKey
       $existing=$null
-      try{ $existing=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$($it.slug)/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0] }catch{}
+      try{ $existing=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$($it.slug)/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0] }catch{}
       $lexObj=@{root=[ordered]@{children=@([ordered]@{type='html';version=1;html=[string]$html});direction=$null;format='';indent=0;type='root';version=1}}
       $lex=ConvertTo-Json $lexObj -Depth 12 -Compress
       $postObj=[ordered]@{title=$it.title;slug=$it.slug;lexical=$lex;status='published';visibility=$vis;custom_excerpt=$it.excerpt;tags=@(@{name=$tag});meta_title=$it.metaTitle;meta_description=$it.metaDesc;og_title=$it.metaTitle;og_description=$it.metaDesc;twitter_title=$it.metaTitle;twitter_description=$it.metaDesc;codeinjection_head=$cih}
       if($existing){ $postObj.updated_at=$existing.updated_at;$method='Put';$uri="$apiUrl/ghost/api/admin/posts/$($existing.id)/" } else { $method='Post';$uri="$apiUrl/ghost/api/admin/posts/" }
       $bytes=[Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{posts=@($postObj)} -Depth 14))
       $jwt=New-GhostJWT $adminKey
-      $r=Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes -TimeoutSec 30
+      $r=Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes -TimeoutSec 30
       $ok++; Write-Output ("OK   [$tag] $($it.slug)")
     } catch { $fail++; Write-Output ("FAIL $($it.slug) :: "+$_.Exception.Message) }
   }

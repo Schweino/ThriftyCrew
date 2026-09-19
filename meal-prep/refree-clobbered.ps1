@@ -8,6 +8,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $apiUrl='https://map-to-success.ghost.io'
 $adminKey=(Get-Content (Join-Path $here '.ghostkey') -Raw).Trim()
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 
 function JWT { $p=$adminKey -split ':'; $sb=New-Object byte[] ($p[1].Length/2); for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($p[1].Substring($i*2,2),16) }; $now=[DateTimeOffset]::UtcNow.ToUnixTimeSeconds(); $h='{"alg":"HS256","typ":"JWT","kid":"'+$p[0]+'"}'; $pl='{"iat":'+$now+',"exp":'+($now+300)+',"aud":"/admin/"}'; $b={param($b)[Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_')}; $si=(& $b ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b ([Text.Encoding]::UTF8.GetBytes($pl))); $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); $si+'.'+(& $b ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si)))) }
 
@@ -17,10 +18,10 @@ foreach($f in $fr.free){
   $slug=[string]$f.slug
   try{
     $jwt=JWT
-    $p=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,visibility,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
+    $p=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,visibility,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 30).posts[0]
     if([string]$p.visibility -eq 'public'){ $already+=$slug; continue }
     $body=@{ posts=@(@{ visibility='public'; updated_at=[string]$p.updated_at }) } | ConvertTo-Json -Depth 4
-    [void](Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Method Put -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $body -TimeoutSec 60)
+    [void](Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Method Put -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $body -TimeoutSec 60)
     $flipped+=$slug
     Write-Output ("  freed: {0}  (was {1})" -f $slug, $p.visibility)
   } catch { $failed+=$slug; Write-Output ("  FAIL: {0} :: {1}" -f $slug, $_.Exception.Message) }

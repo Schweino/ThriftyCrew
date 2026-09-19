@@ -16580,7 +16580,7 @@ md5-identical after restore.
 
 **What remains:** Brad's merge of bullet 1, and a measured item for the 237,937 Baker's slug-term rows (4).
 
-### I230 - Stale facts in standing guidance and data `PARTLY DONE` `run-0919` `2-WAY` `RUNG1 DOC`
+### I230 - Stale facts in standing guidance and data `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16630,6 +16630,49 @@ md5-identical after restore.
    raw`. A parse of the committed file against the edited one over 441 of 441 rows finds exactly 1 field
    changed, that `source`; the diff is 1 line, and no macro moved.
 No behaviour changed, so no fixture was added: every edit is prose, a comment, a citation string or a file name.
+
+**Done 2026-09-19.** Item 2's remainder (the pre-push refusal saying 10 slots) was closed by I237, which reads the
+budget from `lib\gate-slots.ps1`. Item 5 was closed on **Brad's ruling of 2026-09-19**: move every Ghost caller from
+`Accept-Version: v5.0` to the live site's version after a read-only trial of every endpoint the repo uses, writes
+tested stubbed only. Worked at base `cbf146ee8`, in this order:
+1. **Census.** At that base `git grep -i accept-version` read 138 lines in 75 files: **104 literal `v5.0` header sites
+   in 55 live `.ps1`** (25 under `.claude\skills\lesson` and `meal-macro`, the rest in `grocery\`, `meal-prep\`,
+   `site\build\`, `ops\` and `lib\`), 1 in `worker\index.js`, 28 in 17 retired files under `archive\` directories,
+   and 5 prose lines. Resources and methods the live callers use: `posts` (GET by slug, by id and browse, PUT, POST
+   including `?newsletter=` and `email_segment`, DELETE), `pages` (GET, PUT, POST), `members` (GET; PUT and POST in
+   `grant-founder` and the worker), `settings` (GET), `tiers` (GET, PUT), `newsletters` (GET), `tags` (GET) and `site`
+   (GET). Five callers send NO version header at all and so already get Ghost's current API (`meal-prep\rotate-free-dinners.ps1`,
+   `meal-prep\top5-weekly.ps1`, `meal-prep\pipeline\audit-paid-not-public.ps1`, `ops\revert-ghost-write.ps1`,
+   `.claude\skills\lesson\get-routes.ps1`); left as they were.
+2. **Read-only trial.** `ops\probe-ghost-version-shape.ps1` (committed, GET only, refuses any other method before a
+   request is built; compares key PATHS, never values; members reduced to the collection and `meta`, so no member field
+   was read) called 25 GET shapes covering every resource above at `v5.0` and at `v6.0`, with `TC_WRITE_JOURNAL`
+   cleared: **25 of 25 same shape**, every call 200 at both versions, every answer `Content-Version: v6.64`. Ghost 5+
+   serves one API and treats the header as the client's minimum
+   (https://docs.ghost.org/faq/api-versioning, https://docs.ghost.org/changes), which is what the trial shows.
+3. **Writes, not called.** Ghost 6.0's breaking changes (https://docs.ghost.org/changes,
+   https://github.com/TryGhost/Ghost/issues/23924, https://ghost.org/changelog/6/) are: `limit=all` capped at 100
+   rows, `GET /admin/session/` removed, `created_by`/`updated_by` removed, AMP removed, the first user no longer id 1,
+   theme assets without an extension 404, Node 22. None changes a request shape for posts, pages, newsletters/email,
+   members, tiers or tags, and the current send-by-email doc (https://docs.ghost.org/admin-api/posts/sending-a-post)
+   still documents `?newsletter=`, `email_segment` and `updated_at` on the PUT as the callers use them. `git grep`
+   finds no live caller using the session endpoint, `created_by`, `updated_by`, AMP or mobiledoc.
+4. **The switch, in one place.** `lib\ghost-lib.ps1` gains `Get-GhostAcceptVersion` (returns `v6.0`); all 104 sites
+   now send `'Accept-Version' = (Get-GhostAcceptVersion)`, and the 31 scripts that did not load ghost-lib now
+   dot-source it (each path checked to resolve to the lib: 31 of 31). `worker\index.js` (a separate runtime) sends its
+   own `GHOST_ACCEPT_VERSION = "v6.0"`. Archive scripts keep `v5.0`: nothing runs them. `ops\review-staged.ps1
+   -SelfTest` gains 6 cases: a MUST FIRE that a header built the callers' way SENDS `v6.0` through a stubbed transport,
+   a MUST FIRE and a MUST NOT FIRE on the literal-version detector, a MUST NOT FIRE that no tracked live `.ps1` writes
+   its own version (0 of 662), a CLEAN TWIN that the worker's constant equals the lib's, and a MUST NOT FIRE that the
+   worker writes no literal. **Broken once**: with the lib reverted to `v5.0` and one caller
+   (`grocery\get-tiers.ps1`) reverted to a literal, the suite exited 1 with 3 cases red (`got: v5.0`,
+   `got: grocery/get-tiers.ps1 scanned=662`, `worker=v6.0 lib=v5.0`); restored md5-identical, exit 0. The 15 self-tests
+   of every changed script that has one exit 0, and all 58 changed `.ps1` parse clean.
+**Found on the way, not fixed:** `limit=all` now returns at most 100 rows whatever the header says (the probe read 100
+of 1,566 for `posts/?limit=all&fields=id` at both versions). No live caller is truncated today: the lesson listings
+read 56 of 56, tiers 2 of 2, newsletters 2 of 2, the request-queue drafts 0 of 0. The lesson listings in
+`.claude\skills\lesson\build-hubs.ps1`, `build-series-page.ps1` and `publish-lesson.ps1` will silently drop lessons past
+the hundredth, 44 lessons from now; they should page through `Invoke-TcGhostPaged` before then.
 
 ### I231 - Untracked and ungitignored files the bot could commit, and one the worktrees never get `DONE` `run-0919`
 

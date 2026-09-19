@@ -36,7 +36,7 @@ function Get-AllGhost([string]$resource) {
     if ($page -gt 1) { Start-Sleep -Milliseconds 300 }
     $jwt = New-GhostJWT $adminKey   # fresh token per page; 5-min expiry never bites a long export
     Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/$resource/?formats=lexical,html&limit=50&page=$page&include=tags" `
-      -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45
+      -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) } -TimeoutSec 45
   }
   foreach ($r in @($resps)) { foreach ($item in $r.$resource) { $all.Add($item) } }
   return $all

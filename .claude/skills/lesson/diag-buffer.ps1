@@ -1,6 +1,7 @@
 $ErrorActionPreference = "Stop"
 Write-Host "STEP 1: dot-sourcing config" -ForegroundColor Cyan
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 Write-Host "STEP 2: config loaded, apiUrl=$apiUrl" -ForegroundColor Cyan
 
 function New-GhostJWT { param($key)
@@ -19,7 +20,7 @@ Write-Host "STEP 4: JWT built, length=$($jwt.Length)" -ForegroundColor Cyan
 
 Write-Host "STEP 5: GET existing buffer post (TimeoutSec 15)" -ForegroundColor Cyan
 try {
-  $r = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/zz-inject-buffer/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 15
+  $r = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/zz-inject-buffer/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 15
   Write-Host "STEP 6: GET succeeded, found post id=$($r.posts[0].id)" -ForegroundColor Green
 } catch {
   Write-Host "STEP 6: GET failed/404 (expected if none exists): $($_.Exception.Message)" -ForegroundColor Yellow

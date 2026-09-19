@@ -88,7 +88,7 @@ foreach ($id in $retired) {
   $i++
   $slug = $id + '-price-omaha'
   # Mint a fresh JWT periodically: the token is only valid for 5 minutes and this loop runs far longer.
-  if ($i % 40 -eq 1) { $jwt = Get-GhostJWT -Key $key; $h = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } }
+  if ($i % 40 -eq 1) { $jwt = Get-GhostJWT -Key $key; $h = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) } }
 
   $post = $null
   try { $post = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,status,updated_at" -Headers $h).posts[0] }

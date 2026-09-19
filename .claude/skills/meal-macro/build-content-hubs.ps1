@@ -7,6 +7,7 @@
 #>
 $ErrorActionPreference='Stop'
 . "C:\Codex\ThriftyCrew\.claude\skills\lesson\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -21,7 +22,7 @@ function Get-PostsByTag { param($tagSlug)
   $jwt=New-GhostJWT $adminKey; $all=@(); $page=1
   do {
     $u="$apiUrl/ghost/api/admin/posts/?filter=tag:$tagSlug%2Bstatus:published&limit=100&page=$page&fields=title,slug,custom_excerpt"
-    $r=Invoke-RestMethod -Uri $u -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}
+    $r=Invoke-RestMethod -Uri $u -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}
     $all += $r.posts; $page++
   } while ($r.posts.Count -eq 100)
   return $all
@@ -186,14 +187,14 @@ $glossHtml += '<script type="application/ld+json">{"@context":"https://schema.or
 # ---------- UPSERT PAGES ----------
 function Upsert-Page { param($slug,$title,$html,$excerpt,$metaTitle,$metaDesc)
   $jwt=New-GhostJWT $adminKey; $existing=$null
-  try{ $existing=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/$slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).pages[0] }catch{}
+  try{ $existing=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/$slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).pages[0] }catch{}
   $lexObj=@{root=[ordered]@{children=@([ordered]@{type='html';version=1;html=[string]$html});direction=$null;format='';indent=0;type='root';version=1}}
   $lex=ConvertTo-Json $lexObj -Depth 12 -Compress
   $obj=[ordered]@{title=$title;slug=$slug;lexical=$lex;status='published';visibility='public';custom_excerpt=$excerpt;meta_title=$metaTitle;meta_description=$metaDesc;og_title=$metaTitle;og_description=$metaDesc;twitter_title=$metaTitle;twitter_description=$metaDesc;show_title_and_feature_image=$false}
   if($existing){ $obj.updated_at=$existing.updated_at;$method='Put';$uri="$apiUrl/ghost/api/admin/pages/$($existing.id)/" } else { $method='Post';$uri="$apiUrl/ghost/api/admin/pages/" }
   $bytes=[Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{pages=@($obj)} -Depth 14))
   $jwt=New-GhostJWT $adminKey
-  $r=Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes -TimeoutSec 40
+  $r=Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes -TimeoutSec 40
   return $r.pages[0].url
 }
 $u1=Upsert-Page 'money-glossary' 'The Money Glossary' $glossHtml 'Every money term you keep hearing, explained in plain English with real dollar examples.' 'The Money Glossary: Every Term in Plain English | Thrifty Crew' 'Confused by money jargon? Our free glossary explains every term in plain English with a real dollar example. Search it or browse by topic.'

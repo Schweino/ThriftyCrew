@@ -128,7 +128,7 @@ if (@($Slugs).Count) { foreach ($s in $Slugs) { $want[[string]$s] = $true } }
 else { foreach ($k in $journal.Keys) { $want[[string]$k] = $true } }
 
 $jwt = Get-GhostJWT -Key (Get-GhostKey -Root $repo)
-$hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+$hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) }
 $live = @{}
 # PAGED THROUGH Invoke-TcGhostPaged (2026-09-19, backlog I197). The old cap here was `$page -gt 40` on the page
 # number GHOST sent back as next, so a next that repeated or rewound never exceeded 40 and looped forever, and a

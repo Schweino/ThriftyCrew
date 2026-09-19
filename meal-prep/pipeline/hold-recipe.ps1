@@ -221,7 +221,7 @@ else {
   $key = Get-GhostKey -Root $repo
   if (-not $key) { Die 'no Ghost admin key - refusing to record a hold locally while the page would stay live' }
   $jwt = Get-GhostJWT $key
-  $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0'; 'Content-Type' = 'application/json' }
+  $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion); 'Content-Type' = 'application/json' }
   try { $post = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,status,updated_at" -Headers $hdr).posts[0] }
   catch { Die ('ghost lookup failed - refusing to act on a page whose state is unknown: ' + $_.Exception.Message) }
   if (-not $post) { Die ("ghost has no post with slug '{0}' - there is nothing live to hold" -f $Slug) }
@@ -238,7 +238,7 @@ if (-not $SkipGhost) {
   catch { Die ('the draft PUT failed - the page is STILL LIVE and nothing local was changed: ' + $_.Exception.Message) }
 
   $jwt2 = Get-GhostJWT $key
-  $hdr2 = @{ Authorization = "Ghost $jwt2"; 'Accept-Version' = 'v5.0' }
+  $hdr2 = @{ Authorization = "Ghost $jwt2"; 'Accept-Version' = (Get-GhostAcceptVersion) }
   $check = $null
   try { $check = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,status" -Headers $hdr2).posts[0] } catch {}
   if (-not $check -or [string]$check.status -ne 'draft') {

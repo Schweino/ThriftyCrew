@@ -571,7 +571,7 @@ $memberLimit = 100
 $fetchMembers = {
   param($page)
   $jwt = Get-GhostJWT -Key $adminKey
-  $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+  $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) }
   $uri = ($apiUrl + '/ghost/api/admin/members/?limit=' + $memberLimit + '&page=' + $page +
           '&fields=' + ($ALLOWED_MEMBER_FIELDS -join ',') +
           '&include=' + ($ALLOWED_MEMBER_INCLUDES -join ','))

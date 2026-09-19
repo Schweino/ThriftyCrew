@@ -15,6 +15,7 @@ param(
 )
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -27,7 +28,7 @@ function New-GhostJWT { param($key)
 }
 # All Access (the paid tier) id
 $jwt=New-GhostJWT $adminKey
-$tier=((Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/tiers/?limit=all" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).tiers | Where-Object { $_.type -eq 'paid' } | Select-Object -First 1)
+$tier=((Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/tiers/?limit=all" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).tiers | Where-Object { $_.type -eq 'paid' } | Select-Object -First 1)
 if (-not $tier) { throw "No paid tier found." }
 $note = "Founding Member - one-time lifetime purchase" + $(if($Amount){" (`$$Amount)"}) + " - granted " + (Get-Date -Format 'yyyy-MM-dd')
 $memberObj = [ordered]@{
@@ -39,13 +40,13 @@ if ($Name) { $memberObj.name = $Name }
 # upsert by email
 $jwt=New-GhostJWT $adminKey
 $existing=$null
-try { $flt=[uri]::EscapeDataString("email:'$Email'"); $existing=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/members/?filter=$flt&limit=1&fields=id,email" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).members[0] } catch {}
+try { $flt=[uri]::EscapeDataString("email:'$Email'"); $existing=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/members/?filter=$flt&limit=1&fields=id,email" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).members[0] } catch {}
 if ($existing) { $method='Put'; $uri="$apiUrl/ghost/api/admin/members/$($existing.id)/" }
 else { $memberObj.email=$Email; $method='Post'; $uri="$apiUrl/ghost/api/admin/members/" }
 $body=[Text.Encoding]::UTF8.GetBytes((@{ members=@($memberObj) } | ConvertTo-Json -Depth 8))
 $jwt=New-GhostJWT $adminKey
 try {
-  $r=(Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $body).members[0]
+  $r=(Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $body).members[0]
   Write-Host ("GRANTED lifetime All Access (comp) to {0}" -f $r.email) -ForegroundColor Green
   Write-Host ("  tiers={0}  status={1}  label=Founding Member" -f (($r.tiers | ForEach-Object {$_.name}) -join ','), $r.status)
 } catch { Write-Host ("FAILED: {0}" -f $_.ErrorDetails.Message) -ForegroundColor Red }

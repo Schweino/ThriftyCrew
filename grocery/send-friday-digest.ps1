@@ -40,7 +40,7 @@ $slug = 'friday-board-' + $dateS
 # ---- idempotence: already sent this week? ----
 $jwt = New-GhostJWT $adminKey
 try {
-  $ex = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
+  $ex = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 30).posts[0]
   if ($ex) { Write-Output 'digest: already sent this week - skipping'; exit 0 }
 } catch {}   # 404 = not sent yet, proceed
 
@@ -83,12 +83,12 @@ $html = '<p>Here is where Omaha grocery prices stand this week, checked against 
 
 # ---- newsletter + send ----
 $jwt = New-GhostJWT $adminKey
-$nl = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/newsletters/?filter=status:active&limit=1" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).newsletters[0]
+$nl = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/newsletters/?filter=status:active&limit=1" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 30).newsletters[0]
 if (-not $nl) { Write-Output 'digest REFUSED: no active newsletter'; exit 1 }
 
 $title = 'Omaha grocery prices this week (' + (Get-Date -Format 'MMM d') + ')'
 $body = @{ posts = @(@{ title = $title; slug = $slug; html = $html; status = 'published'; email_only = $true; tags = @(@{ name = '#friday-digest' }) }) } | ConvertTo-Json -Depth 6
 $jwt = New-GhostJWT $adminKey
 $uri = "$apiUrl/ghost/api/admin/posts/?source=html&newsletter=" + $nl.slug + "&email_segment=all"
-$res = Invoke-RestMethod -Method POST -Uri $uri -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0';'Content-Type'='application/json'} -Body $body -TimeoutSec 60
+$res = Invoke-RestMethod -Method POST -Uri $uri -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion);'Content-Type'='application/json'} -Body $body -TimeoutSec 60
 Write-Output ('digest SENT: "' + $title + '" via newsletter ' + $nl.slug + ' (post ' + $res.posts[0].id + ')')

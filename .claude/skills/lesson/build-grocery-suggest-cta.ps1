@@ -5,6 +5,7 @@
 #>
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -17,7 +18,7 @@ function New-GhostJWT { param($key)
 }
 $slug = 'omaha-grocery-prices'
 $jwt = New-GhostJWT $adminKey
-$page = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?formats=lexical" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0]
+$page = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?formats=lexical" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0]
 $lexObj = $page.lexical | ConvertFrom-Json
 
 $cta = '<!--SMP-SUGGEST-CTA--><div style="max-width:720px;margin:2.4rem auto 0;text-align:center;background:#f6f1e7;border:1px solid #e2e8f0;border-radius:14px;padding:24px 20px;">' +
@@ -39,5 +40,5 @@ $lex = ConvertTo-Json $lexObj -Depth 20 -Compress
 $payload = @{ posts=@([ordered]@{ lexical=$lex; updated_at=$page.updated_at }) }
 $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $payload -Depth 20))
 $jwt2 = New-GhostJWT $adminKey
-Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($page.id)/" -Method Put -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes | Out-Null
+Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($page.id)/" -Method Put -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes | Out-Null
 Write-Host ("CTA added to /$slug/  (cards now: " + $kept.Count + ")") -ForegroundColor Green

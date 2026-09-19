@@ -417,7 +417,7 @@ if ($SelfTest) {
   function Get-Calls([string]$Method) { return ,@($script:calls | Where-Object { $_.method -eq $Method }) }
   $script:alerts = New-Object System.Collections.ArrayList
   $countAlert = { param($s, $w) [void]$script:alerts.Add([pscustomobject]@{ subject = $s; body = $w }) }
-  $hdr = { @{ Authorization = 'Ghost stub'; 'Accept-Version' = 'v5.0' } }
+  $hdr = { @{ Authorization = 'Ghost stub'; 'Accept-Version' = (Get-GhostAcceptVersion) } }
   $api = 'https://invalid.invalid'
   $Now = [datetime]'2026-09-18T08:00:00'
   # one item at a record low: 1.89 against prior lows of 1.99 and 2.49, runner-up 2.10 (inside the outlier guard)
@@ -552,7 +552,7 @@ $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
   elseif (Test-Path (Join-Path (Split-Path $root -Parent) 'meal-prep\.ghostkey')) { (Get-Content (Join-Path (Split-Path $root -Parent) 'meal-prep\.ghostkey') -Raw).Trim() }
   else { throw 'Ghost admin key missing' }
 $apiUrl = 'https://map-to-success.ghost.io'
-$liveHeaders = { @{ Authorization = ('Ghost ' + (Get-GhostJWT -Key $adminKey)); 'Accept-Version' = 'v5.0'; 'Content-Type' = 'application/json' } }
+$liveHeaders = { @{ Authorization = ('Ghost ' + (Get-GhostJWT -Key $adminKey)); 'Accept-Version' = (Get-GhostAcceptVersion); 'Content-Type' = 'application/json' } }
 
 # ---- boards + history ----
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)

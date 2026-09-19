@@ -240,6 +240,45 @@ if ($SelfTest) {
   }
   T 'CLEAN TWIN the restored original transport reads as REAL again, so a restored seam still journals real writes' (Test-TcGhostTransportIsReal) 'the restored original read as a stub'
 
+  # --- ONE ACCEPT-VERSION, AND IT IS v6.0 (Brad's ruling 2026-09-19, backlog I230). Every live caller builds its
+  # header as 'Accept-Version' = (Get-GhostAcceptVersion); the stubbed transport below records what would have
+  # gone out, so no case reaches a network. The needles are built by concatenation so this file cannot match
+  # itself ([[selftest-greps-its-own-source]]).
+  $origT3 = ${function:Invoke-TcGhostTransport}; $sq3 = $env:TC_STAGE_WRITES; $sj3 = $env:TC_WRITE_JOURNAL
+  $script:sentVersion = '<none>'
+  function Invoke-TcGhostTransport { param([hashtable]$CallArgs, [switch]$Web)
+    $script:sentVersion = [string]$CallArgs['Headers']['Accept-Version']
+    return [pscustomobject]@{ posts = @('v') } }
+  try {
+    $env:TC_STAGE_WRITES = $null; $env:TC_WRITE_JOURNAL = $null
+    [void](Invoke-GhostApi -Method 'GET' -Uri 'https://invalid.invalid/ghost/api/admin/site/' -Headers @{ Authorization = 'Ghost stub'; 'Accept-Version' = (Get-GhostAcceptVersion) })
+    T 'MUST FIRE  a header built the way every live caller builds it SENDS Accept-Version v6.0' ([string]::Equals($script:sentVersion, 'v6.0', [StringComparison]::Ordinal)) $script:sentVersion
+  } finally {
+    Set-Item -Path function:Invoke-TcGhostTransport -Value $origT3
+    $env:TC_STAGE_WRITES = $sq3; $env:TC_WRITE_JOURNAL = $sj3
+  }
+  $avName = "'Accept-" + "Version'"
+  $avLiteral = [regex]("(?i)" + [regex]::Escape($avName) + "\s*=\s*'v\d")
+  $avJsLiteral = [regex]('(?i)"Accept-' + 'Version"\s*:\s*"v\d')
+  $avSample = $avName + " = 'v" + "5.0'"
+  T 'MUST FIRE  the literal-version detector sees a hand-written version in a header' ($avLiteral.IsMatch($avSample)) $avSample
+  T 'MUST NOT FIRE the detector is silent on the one-place form' (-not $avLiteral.IsMatch($avName + ' = (Get-GhostAcceptVersion)')) 'the function form read as a literal'
+  $repoRoot = Split-Path -Parent $PSScriptRoot
+  $avFiles = @(& git -C $repoRoot ls-files -- '*.ps1')
+  $avLive = @($avFiles | Where-Object { $_ -notmatch '(^|/)archive/' })
+  $avHits = @()
+  foreach ($rel in $avLive) {
+    $full = Join-Path $repoRoot ($rel -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $full)) { continue }
+    if ($avLiteral.IsMatch([IO.File]::ReadAllText($full))) { $avHits += $rel }
+  }
+  T ('MUST NOT FIRE no tracked live .ps1 writes its own Accept-Version: 0 hand-written versions over ' + $avLive.Count + ' files (archive excluded)') (($avLive.Count -gt 100) -and ($avHits.Count -eq 0)) (($avHits -join ', ') + ' scanned=' + $avLive.Count)
+  $wjs = Join-Path $repoRoot 'worker\index.js'
+  $wtext = if (Test-Path -LiteralPath $wjs) { [IO.File]::ReadAllText($wjs) } else { '' }
+  $wm = [regex]::Match($wtext, 'GHOST_ACCEPT_VERSION\s*=\s*"([^"]+)"')
+  T 'CLEAN TWIN the worker (a separate runtime) asks for the same version as ghost-lib, through its one constant' ($wm.Success -and [string]::Equals($wm.Groups[1].Value, (Get-GhostAcceptVersion), [StringComparison]::Ordinal)) ("worker=" + $wm.Groups[1].Value + " lib=" + (Get-GhostAcceptVersion))
+  T 'MUST NOT FIRE the worker writes no version literal into its header' (-not $avJsLiteral.IsMatch($wtext)) 'a literal version in worker\index.js'
+
   # --- A PAGED READ ENDS ON OUR COUNT, NOT ON GHOST'S SAY-SO (2026-09-19, backlog I197). grocery\ghost-export.ps1
   # followed meta.pagination.next until Ghost stopped sending one, so a next that repeated or rewound looped forever.
   # Every $Fetch here is a stub, so no case reaches a network. The stub itself refuses past 50 calls: a neutered
@@ -278,7 +317,7 @@ if ($SelfTest) {
   T 'CLEAN TWIN a response with no pagination block at all is one page, read once' (($pc.Pages -eq 1) -and -not $pc.Threw -and ($pc.Items -eq 'only')) ("pages=" + $pc.Pages + " items=" + $pc.Items + " threw=" + $pc.Threw)
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: the staging gate, off-by-default, credential redaction, queue round-trip, a half-parsing queue, the three set-level concerns, the composition case (staging wins over the journal, with a clean twin proving the journal still works), which methods Invoke-GhostApi replays (a POST only when provably unsent), and a paged read that ends on its own count'
+  Write-Output 'SELF-TEST PASS: the staging gate, off-by-default, credential redaction, queue round-trip, a half-parsing queue, the three set-level concerns, the composition case (staging wins over the journal, with a clean twin proving the journal still works), which methods Invoke-GhostApi replays (a POST only when provably unsent), the one Accept-Version (v6.0, sent by every live caller and the worker), and a paged read that ends on its own count'
   exit 0
 }
 

@@ -47,7 +47,7 @@ if($missing.Count){ throw ("minification dropped load-bearing tokens: " + ($miss
 # ---- BUDGET. Ghost rejects an over-length settings value with a 422; nothing is lost, but the deploy
 # silently does not happen. Measure against the LIVE foot before anyone pastes anything.
 $jwt = Get-GhostJWT -Key (Get-GhostKey)
-$s = Invoke-GhostApi -Uri 'https://map-to-success.ghost.io/ghost/api/admin/settings/' -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}
+$s = Invoke-GhostApi -Uri 'https://map-to-success.ghost.io/ghost/api/admin/settings/' -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}
 $foot = ($s.settings | Where-Object { $_.key -eq 'codeinjection_foot' }).value
 $A='<!-- tc-join-interstitial'; $B='<!-- /tc-join-interstitial -->'
 $si=$foot.IndexOf($A); $ei=$foot.IndexOf($B)

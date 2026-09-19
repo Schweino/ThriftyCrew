@@ -43,7 +43,7 @@ $status = if ($Draft) { 'draft' } else { 'published' }
 
 $jwt = New-GhostJWT $adminKey
 $existing = $null
-try { $existing = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0] } catch {}
+try { $existing = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0] } catch {}
 
 $lexObj = @{ root = [ordered]@{ children=@([ordered]@{ type='html'; version=1; html=[string]$html }); direction=$null; format=''; indent=0; type='root'; version=1 } }
 $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
@@ -62,7 +62,7 @@ else { $method='Post'; $uri="$apiUrl/ghost/api/admin/posts/" }
 $payload = @{ posts = @($postObj) }
 $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $payload -Depth 14))
 $jwt = New-GhostJWT $adminKey
-$r = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes -TimeoutSec 120
+$r = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes -TimeoutSec 120
 $saved = $r.posts[0]
 $verb = if ($existing) { "UPDATED" } else { "CREATED" }
 Write-Host ("{0}: {1}" -f $verb, $postUrl) -ForegroundColor Green

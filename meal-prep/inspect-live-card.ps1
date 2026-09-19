@@ -15,7 +15,7 @@ function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 foreach($slug in $Slugs){
   $jwt = New-GhostJWT $adminKey
-  $post = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?formats=html" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 40).posts[0]
+  $post = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?formats=html" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 40).posts[0]
   $html = [string]$post.html
   # Ingredients-list items: <li><strong>Name...</strong> that are NOT the cost/total lines
   $liItems = [regex]::Matches($html, '<li>\s*<strong>([^:<]+?)\s*:?\s*</strong>') | ForEach-Object { $_.Groups[1].Value.Trim() }

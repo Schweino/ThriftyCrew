@@ -280,7 +280,7 @@ if ($NeverPublished) {
     $apiUrl0 = 'https://map-to-success.ghost.io'
     $key0 = Get-GhostKey -Root $repo
     if (-not $key0) { Die 'no Ghost admin key - refusing to abandon a recipe without first proving it has no live page' }
-    $hdr0 = @{ Authorization = ('Ghost ' + (Get-GhostJWT $key0)); 'Accept-Version' = 'v5.0' }
+    $hdr0 = @{ Authorization = ('Ghost ' + (Get-GhostJWT $key0)); 'Accept-Version' = (Get-GhostAcceptVersion) }
     $post0 = $null
     try { $post0 = (Invoke-GhostApi -Uri "$apiUrl0/ghost/api/admin/posts/slug/$Slug/?fields=id,status" -Headers $hdr0).posts[0] }
     catch {
@@ -384,7 +384,7 @@ else {
   $key = Get-GhostKey -Root $repo
   if (-not $key) { Die 'no Ghost admin key - refusing to retire locally while the page would stay live' }
   $jwt = Get-GhostJWT $key
-  $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+  $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) }
   $post = $null
   try { $post = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,status" -Headers $hdr).posts[0] }
   catch {

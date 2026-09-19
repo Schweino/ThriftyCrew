@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -13,7 +14,7 @@ function New-GhostJWT { param($key)
 function JStr($s){ $sb=New-Object System.Text.StringBuilder; [void]$sb.Append('"'); foreach($ch in $s.ToCharArray()){ switch($ch){ '"'{[void]$sb.Append('\"');break} '\'{[void]$sb.Append('\\');break} "`n"{[void]$sb.Append('\n');break} "`r"{[void]$sb.Append('\r');break} "`t"{[void]$sb.Append('\t');break} default{ if([int]$ch -lt 0x20){[void]$sb.AppendFormat('\u{0:x4}',[int]$ch)}else{[void]$sb.Append($ch)} } } }; [void]$sb.Append('"'); return $sb.ToString() }
 
 $jwt = New-GhostJWT $adminKey
-$H = @{ Authorization="Ghost $jwt"; 'Accept-Version'='v5.0' }
+$H = @{ Authorization="Ghost $jwt"; 'Accept-Version'=(Get-GhostAcceptVersion) }
 $p = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/membership/?formats=lexical" -Headers $H).pages[0]
 $lex = $p.lexical
 $old = 'Budget templates &amp; trackers'
@@ -29,5 +30,5 @@ Write-Host "JSON validates OK." -ForegroundColor DarkGray
 $body = '{"pages":[{"lexical":' + (JStr $newLex) + ',"updated_at":' + (JStr $p.updated_at) + '}]}'
 $bytes = [Text.Encoding]::UTF8.GetBytes($body)
 $jwt2 = New-GhostJWT $adminKey
-$r = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/$($p.id)/" -Method Put -Headers @{ Authorization="Ghost $jwt2"; 'Accept-Version'='v5.0' } -ContentType 'application/json' -Body $bytes -TimeoutSec 30
+$r = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/$($p.id)/" -Method Put -Headers @{ Authorization="Ghost $jwt2"; 'Accept-Version'=(Get-GhostAcceptVersion) } -ContentType 'application/json' -Body $bytes -TimeoutSec 30
 Write-Host ("UPDATED /membership/ (replaced {0} occurrences)." -f $count) -ForegroundColor Green

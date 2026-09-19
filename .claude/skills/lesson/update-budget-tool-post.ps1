@@ -7,6 +7,7 @@
 #>
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $sh=$p[1]
   $sb=New-Object byte[] ($sh.Length/2)
@@ -24,7 +25,7 @@ $metaDesc  = "See your whole month on one page: money in, money out, and the gap
 $excerpt   = "Money in, money out, and the gap. Your bills sorted by paycheck and a debt plan, all on one page. Your numbers never leave your device."
 
 $jwt = New-GhostJWT $adminKey
-$po = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/budget-tracker/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0]
+$po = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/budget-tracker/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0]
 
 $lexObj = @{ root = [ordered]@{ children=@([ordered]@{ type='html'; version=1; html=[string]$html }); direction=$null; format=''; indent=0; type='root'; version=1 } }
 $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
@@ -33,5 +34,5 @@ $postObj = [ordered]@{ lexical=$lex; custom_excerpt=$excerpt; meta_title=$metaTi
 $payload = @{ posts=@($postObj) }
 $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $payload -Depth 16))
 $jwt2 = New-GhostJWT $adminKey
-$res = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($po.id)/" -Method Put -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes
+$res = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($po.id)/" -Method Put -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes
 Write-Host ("Updated POST /{0}/  visibility={1}" -f $res.posts[0].slug, $res.posts[0].visibility) -ForegroundColor Green

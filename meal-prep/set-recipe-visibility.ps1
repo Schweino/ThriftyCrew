@@ -98,7 +98,7 @@ function Get-Recorded([string]$s) {
 function Get-Live([string]$s) {
   $jwt = Get-GhostJWT -Key $adminKey
   return (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$s/?fields=id,slug,visibility,updated_at,status" `
-            -Headers @{Authorization="Ghost $jwt"; 'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
+            -Headers @{Authorization="Ghost $jwt"; 'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 30).posts[0]
 }
 
 if ($Audit) {
@@ -156,7 +156,7 @@ if (-not $Apply) { Say '  DRY RUN - nothing written. Re-run with -Apply.'; exit 
 $body = @{ posts = @(@{ visibility = $want; updated_at = [string]$post.updated_at }) } | ConvertTo-Json -Depth 4
 $jwt = Get-GhostJWT -Key $adminKey
 [void](Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($post.id)/" -Method Put `
-        -Headers @{Authorization="Ghost $jwt"; 'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $body -TimeoutSec 60)
+        -Headers @{Authorization="Ghost $jwt"; 'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $body -TimeoutSec 60)
 $after = Get-Live $Slug
 Say ("  RESULT     : live is now " + $after.visibility)
 if ([string]$after.visibility -ne $want) { Say '  FAILED - Ghost did not take the change'; exit 2 }

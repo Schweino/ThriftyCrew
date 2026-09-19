@@ -795,7 +795,7 @@ if ($runSkipGhost) {
     $jwt = Get-GhostJWT -Key $adminKey
     $exists = $false
     try {
-      $r = Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$s/?fields=id,slug,visibility" -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+      $r = Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$s/?fields=id,slug,visibility" -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) }
       $exists = [bool]$r.posts[0]
     } catch {
       $code = 0; try { $code = [int]$_.Exception.Response.StatusCode } catch {}
@@ -1269,7 +1269,7 @@ if (-not $rollback.Count) {
   foreach ($s in $rollback) {
     try {
       $jwt = Get-GhostJWT -Key $adminKey
-      $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0'; 'Content-Type' = 'application/json' }
+      $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion); 'Content-Type' = 'application/json' }
       $r = Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$s/?fields=id,updated_at" -Headers $hdr
       $p = $r.posts[0]
       if (-not $p) { $stuck += ("{0}: not found live" -f $s); continue }

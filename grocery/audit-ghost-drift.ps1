@@ -252,7 +252,7 @@ if ($Recipes) {
     try {
       $jwt = Get-GhostJWT -Key $key
       $p = (Invoke-RestMethod -Uri "$API/ghost/api/admin/posts/slug/$slug/?formats=lexical&fields=id,slug,title,custom_excerpt,codeinjection_head,lexical" `
-            -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45).posts[0]
+            -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) } -TimeoutSec 45).posts[0]
     } catch { $rBlind += ("{0}: {1}" -f $slug, $_.Exception.Message); continue }
     if (-not $p) { $rBlind += ("{0}: no live post" -f $slug); continue }
     if (-not $p.lexical) { $rBlind += ("{0}: live post has no lexical body" -f $slug); continue }
@@ -309,7 +309,7 @@ if ($Discover) {
     param($n)
     $jwt = Get-GhostJWT -Key $key
     Invoke-RestMethod -Uri "$API/ghost/api/admin/posts/?limit=100&page=$n&formats=lexical&fields=id,slug,lexical" `
-      -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 90
+      -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) } -TimeoutSec 90
   }
   $disc = Get-DiscoverBodies -Fetch $fetch -MaxPages 40
   if ($disc.blind) {

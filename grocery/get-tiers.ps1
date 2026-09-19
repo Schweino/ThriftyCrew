@@ -1,4 +1,5 @@
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 $here='C:\Codex\ThriftyCrew\grocery'
 $adminKey = if (Test-Path (Join-Path $here '.ghostkey')) { (Get-Content (Join-Path $here '.ghostkey') -Raw).Trim() } else { (Get-Content 'C:\Codex\ThriftyCrew\meal-prep\.ghostkey' -Raw).Trim() }
 $apiUrl='https://map-to-success.ghost.io'
@@ -9,7 +10,7 @@ $h='{"alg":"HS256","typ":"JWT","kid":"'+$id+'"}'; $pl='{"iat":'+$now+',"exp":'+(
 $b64={param($b)[Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_')}
 $si=(& $b64 ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b64 ([Text.Encoding]::UTF8.GetBytes($pl)))
 $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); $jwt=$si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
-$r=Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/tiers/?include=monthly_price,yearly_price&limit=all" -Headers @{Authorization="Ghost $jwt"; 'Accept-Version'='v5.0'} -TimeoutSec 30
+$r=Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/tiers/?include=monthly_price,yearly_price&limit=all" -Headers @{Authorization="Ghost $jwt"; 'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 30
 foreach($t in $r.tiers){
   Write-Output ("tier: name='"+$t.name+"' id="+$t.id+" type="+$t.type+" active="+$t.active+" visibility="+$t.visibility+" monthly="+$t.monthly_price+" yearly="+$t.yearly_price+" currency="+$t.currency)
 }

@@ -206,7 +206,7 @@ $newIds = @($boardIds.Keys | Where-Object { -not $known.ContainsKey($_) })
 
 # ---- read the queue (Ghost drafts tagged #item-request-queue) ----
 $jwt = New-GhostJWT
-$hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+$hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) }
 $queue = @()
 try {
   $qres = Invoke-RestMethod -Uri ($apiUrl + '/ghost/api/admin/posts/?filter=' + [uri]::EscapeDataString("tag:hash-item-request-queue+status:draft") + '&limit=all&fields=id,title,custom_excerpt,created_at') -Headers $hdr -TimeoutSec 30
@@ -220,7 +220,7 @@ if (-not $newIds.Count -and -not $queue.Count) { Write-Output 'notify-item-added
 
 function Remove-QueueDraft([string]$postId) {
   $j2 = New-GhostJWT
-  Invoke-RestMethod -Uri ($apiUrl + '/ghost/api/admin/posts/' + $postId + '/') -Method Delete -Headers @{ Authorization = "Ghost $j2"; 'Accept-Version' = 'v5.0' } -TimeoutSec 30 | Out-Null
+  Invoke-RestMethod -Uri ($apiUrl + '/ghost/api/admin/posts/' + $postId + '/') -Method Delete -Headers @{ Authorization = "Ghost $j2"; 'Accept-Version' = (Get-GhostAcceptVersion) } -TimeoutSec 30 | Out-Null
 }
 
 # ---- expire stale requests (item never got added; don't hold addresses forever) ----

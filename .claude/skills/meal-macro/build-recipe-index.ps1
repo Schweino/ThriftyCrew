@@ -5,6 +5,7 @@
 #>
 $ErrorActionPreference='Stop'
 . "C:\Codex\ThriftyCrew\.claude\skills\lesson\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -206,7 +207,7 @@ $html=$sb.ToString()
 $jwt=New-GhostJWT $adminKey
 $slug='meal-prep-recipes'
 $existing=$null
-try{ $existing=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/$slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).pages[0] }catch{}
+try{ $existing=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/$slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).pages[0] }catch{}
 $lexObj=@{root=[ordered]@{children=@([ordered]@{type='html';version=1;html=[string]$html});direction=$null;format='';indent=0;type='root';version=1}}
 $lex=ConvertTo-Json $lexObj -Depth 12 -Compress
 $mt='Cheap High-Protein Meal Prep Recipes | Thrifty Crew'
@@ -215,5 +216,5 @@ $obj=[ordered]@{title='Meal Prep Recipes';slug=$slug;lexical=$lex;status='publis
 if($existing){ $obj.updated_at=$existing.updated_at;$method='Put';$uri="$apiUrl/ghost/api/admin/pages/$($existing.id)/" } else { $method='Post';$uri="$apiUrl/ghost/api/admin/pages/" }
 $bytes=[Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{pages=@($obj)} -Depth 14))
 $jwt=New-GhostJWT $adminKey
-$r=Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes -TimeoutSec 30
+$r=Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes -TimeoutSec 30
 Write-Output ("RECIPE INDEX: "+$r.pages[0].url+"  ("+$sorted.Count+" recipes)")

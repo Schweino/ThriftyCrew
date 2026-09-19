@@ -277,7 +277,7 @@ $week = [string]$meta.week
 
 $key = Get-GhostKey -Root (Split-Path $here -Parent)
 $jwt = Get-GhostJWT -Key $key
-$h   = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0'; 'Content-Type' = 'application/json' }
+$h   = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion); 'Content-Type' = 'application/json' }
 
 $title  = [string]$meta.subject
 $lex    = Get-GhostLexical -Html $html

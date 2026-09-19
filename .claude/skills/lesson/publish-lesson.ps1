@@ -32,6 +32,7 @@ param(
 )
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"   # -> $adminKey, $apiUrl
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
@@ -50,13 +51,13 @@ if ([string]::IsNullOrWhiteSpace($html)) { throw "HtmlFile is empty: $HtmlFile" 
 
 # --- financial-lessons tag (reference by id so we never create a duplicate) ---
 $jwt = New-GhostJWT $adminKey
-$tag = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/tags/slug/financial-lessons/?fields=id,name" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).tags[0]
+$tag = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/tags/slug/financial-lessons/?fields=id,name" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).tags[0]
 if (-not $tag) { throw "Could not find the 'financial-lessons' tag." }
 
 # --- existing lessons -> compute the correct published_at for archive ordering ---
 # Archive is newest-first and lessons are dated so Week 1 = newest (top) ... higher weeks = older (down).
 $jwt = New-GhostJWT $adminKey
-$existingLessons = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/?limit=all&filter=tag:financial-lessons&fields=title,published_at&formats=" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts
+$existingLessons = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/?limit=all&filter=tag:financial-lessons&fields=title,published_at&formats=" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts
 $weekDates = @{}
 foreach ($p in $existingLessons) { if ($p.title -match 'Week\s+(\d+)') { $weekDates[[int]$Matches[1]] = [datetime]$p.published_at } }
 
@@ -86,7 +87,7 @@ $status = if ($Draft) { 'draft' } else { 'published' }
 # --- upsert by slug (so re-running edits the same lesson instead of duplicating) ---
 $jwt = New-GhostJWT $adminKey
 $existing = $null
-try { $existing = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0] } catch {}
+try { $existing = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0] } catch {}
 
 $postObj = [ordered]@{
   title=$Title; slug=$Slug; html=$html; status=$status; visibility=$Visibility;
@@ -104,7 +105,7 @@ else { $method='Post'; $uri="$apiUrl/ghost/api/admin/posts/?source=html" }
 $payload = @{ posts = @($postObj) }
 $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $payload -Depth 12))
 $jwt = New-GhostJWT $adminKey
-$r = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes
+$r = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes
 $saved = $r.posts[0]
 $verb = if ($existing) { "UPDATED" } else { "CREATED" }
 Write-Host ("{0}: {1}" -f $verb, $postUrl) -ForegroundColor Green

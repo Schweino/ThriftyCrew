@@ -6,6 +6,7 @@
 #>
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -46,7 +47,7 @@ $jwt = New-GhostJWT $adminKey
 $existingId = $null
 $existingUpdatedAt = $null
 try {
-  $r = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/zz-inject-buffer/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 20
+  $r = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/zz-inject-buffer/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 20
   $existingId = $r.posts[0].id
   $existingUpdatedAt = $r.posts[0].updated_at
   Write-Host "  found existing post id=$existingId" -ForegroundColor DarkGray
@@ -77,5 +78,5 @@ else { $method='Post'; $uri="$apiUrl/ghost/api/admin/posts/" }
 $bytes = [Text.Encoding]::UTF8.GetBytes($bodyJson)
 Write-Host "Sending $method to Ghost, bodyBytes=$($bytes.Length)..." -ForegroundColor DarkGray
 $jwt2 = New-GhostJWT $adminKey
-$result = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes -TimeoutSec 30
+$result = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes -TimeoutSec 30
 Write-Host ("Buffer stored. contentLength={0}  postId={1}" -f $content.Length, $result.posts[0].id) -ForegroundColor Green

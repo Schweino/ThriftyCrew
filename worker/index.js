@@ -120,6 +120,9 @@ async function sendEmail(env, { store, item, url, notifyEmail, queued }) {
 
 // ---- Ghost Admin API helpers (for /alert) ----
 const GHOST_API = "https://map-to-success.ghost.io";
+// The Admin API version this worker asks for. It mirrors Get-GhostAcceptVersion in lib/ghost-lib.ps1, and
+// ops/review-staged.ps1 -SelfTest fails when the two differ (backlog I230, Brad's ruling 2026-09-19).
+const GHOST_ACCEPT_VERSION = "v6.0";
 
 async function ghostJwt(env) {
   const [id, secretHex] = (env.GHOST_ADMIN_KEY || "").split(":");
@@ -142,7 +145,7 @@ async function ghostFetch(env, path, opts) {
   const token = await ghostJwt(env);
   const r = await fetch(GHOST_API + path, {
     ...opts,
-    headers: { Authorization: "Ghost " + token, "Accept-Version": "v5.0", "Content-Type": "application/json", ...(opts && opts.headers) },
+    headers: { Authorization: "Ghost " + token, "Accept-Version": GHOST_ACCEPT_VERSION, "Content-Type": "application/json", ...(opts && opts.headers) },
   });
   return r;
 }

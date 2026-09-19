@@ -1,4 +1,5 @@
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot '..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 $adminKey=(Get-Content 'C:\Codex\ThriftyCrew\meal-prep\.ghostkey' -Raw).Trim()
 $apiUrl='https://map-to-success.ghost.io'
 $p=$adminKey -split ':'; $id=$p[0]; $secretHex=$p[1]
@@ -8,7 +9,7 @@ $h='{"alg":"HS256","typ":"JWT","kid":"'+$id+'"}'; $pl='{"iat":'+$now+',"exp":'+(
 $b64={param($b)[Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_')}
 $si=(& $b64 ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b64 ([Text.Encoding]::UTF8.GetBytes($pl)))
 $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); $jwt=$si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
-$hdr=@{ Authorization="Ghost $jwt"; 'Accept-Version'='v5.0' }
+$hdr=@{ Authorization="Ghost $jwt"; 'Accept-Version'=(Get-GhostAcceptVersion) }
 $r=Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/start-here/?formats=html,lexical" -Headers $hdr -TimeoutSec 30
 $post=$r.posts[0]
 Write-Output ("id: "+$post.id)

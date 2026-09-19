@@ -5,6 +5,7 @@
 #>
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"   # -> $adminKey, $apiUrl
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -25,7 +26,7 @@ $metaDesc  = "Found a grocery deal we should be tracking? Send us the store, ite
 
 $jwt = New-GhostJWT $adminKey
 $existing = $null
-try { $existing = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/$slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).pages[0] } catch {}
+try { $existing = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/$slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).pages[0] } catch {}
 
 $lexObj = @{ root = [ordered]@{ children=@([ordered]@{ type='html'; version=1; html=[string]$html }); direction=$null; format=''; indent=0; type='root'; version=1 } }
 $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
@@ -36,6 +37,6 @@ else { $method='Post'; $uri="$apiUrl/ghost/api/admin/pages/" }
 $payload = @{ pages=@($pageObj) }
 $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $payload -Depth 16))
 $jwt2 = New-GhostJWT $adminKey
-$res = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes
+$res = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes
 $verb = if ($existing) { 'Updated' } else { 'Created' }
 Write-Host ("{0}: {1}/{2}/  (url: https://www.simplemoneyplaybook.com/{2}/)" -f $verb, $apiUrl, $slug) -ForegroundColor Green

@@ -16,6 +16,7 @@ param(
 )
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $sh=$p[1]
   $sb=New-Object byte[] ($sh.Length/2)
@@ -28,11 +29,11 @@ function New-GhostJWT { param($key)
 }
 $html = Get-Content $HtmlFile -Raw
 $jwt = New-GhostJWT $adminKey
-$po = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0]
+$po = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0]
 $lexObj = @{ root = [ordered]@{ children=@([ordered]@{ type='html'; version=1; html=[string]$html }); direction=$null; format=''; indent=0; type='root'; version=1 } }
 $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
 $postObj = [ordered]@{ lexical=$lex; custom_excerpt=$Excerpt; meta_title=$MetaTitle; meta_description=$MetaDesc; og_title=$MetaTitle; og_description=$MetaDesc; twitter_title=$MetaTitle; twitter_description=$MetaDesc; updated_at=$po.updated_at }
 $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{ posts=@($postObj) } -Depth 16))
 $jwt2 = New-GhostJWT $adminKey
-$res = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($po.id)/" -Method Put -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes
+$res = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($po.id)/" -Method Put -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes
 Write-Host ("Updated POST /{0}/  visibility={1}" -f $res.posts[0].slug, $res.posts[0].visibility) -ForegroundColor Green

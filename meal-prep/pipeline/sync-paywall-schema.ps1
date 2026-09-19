@@ -165,7 +165,7 @@ if (@($Slugs).Count) { $want = @{}; foreach ($s in $Slugs) { $want[[string]$s] =
 
 # ---- read every post once, rather than one call per slug --------------------------------------------
 $jwt = Get-GhostJWT -Key (Get-GhostKey -Root $repo)
-$hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+$hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) }
 $live = @{}
 # PAGED THROUGH Invoke-TcGhostPaged (2026-09-19, backlog I197). The old cap here was `$page -gt 40` on the page
 # number GHOST sent back as next, so a next that repeated or rewound never exceeded 40 and looped forever, and a
@@ -237,13 +237,13 @@ foreach ($slug in (@($toRemove) + @($toAdd))) {
 
   try {
     $jwt2 = Get-GhostJWT -Key (Get-GhostKey -Root $repo)
-    $h2 = @{ Authorization = "Ghost $jwt2"; 'Accept-Version' = 'v5.0'; 'Content-Type' = 'application/json' }
+    $h2 = @{ Authorization = "Ghost $jwt2"; 'Accept-Version' = (Get-GhostAcceptVersion); 'Content-Type' = 'application/json' }
     # Ghost's optimistic concurrency: the PUT must carry the post's own updated_at or it 409s.
     $body = (@{ posts = @(@{ id = $p.id; updated_at = $p.updated_at; codeinjection_head = $new }) } | ConvertTo-Json -Depth 6 -Compress)
     Invoke-GhostApi -Method Put -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Headers $h2 -Body ([Text.Encoding]::UTF8.GetBytes($body)) | Out-Null
 
     # "did not throw" is not "Ghost took it" - re-read, the same way the rotation's flip does.
-    $chk = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/?formats=lexical&fields=id,visibility,codeinjection_head,title,custom_excerpt,lexical" -Headers @{ Authorization = "Ghost " + (Get-GhostJWT -Key (Get-GhostKey -Root $repo)); 'Accept-Version' = 'v5.0' }).posts[0]
+    $chk = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/?formats=lexical&fields=id,visibility,codeinjection_head,title,custom_excerpt,lexical" -Headers @{ Authorization = "Ghost " + (Get-GhostJWT -Key (Get-GhostKey -Root $repo)); 'Accept-Version' = (Get-GhostAcceptVersion) }).posts[0]
     $nowHas = [bool]([regex]::IsMatch([string]$chk.codeinjection_head, $PAYWALL_RX))
     $nowFree = ([string]$chk.visibility -eq 'public')
     if ($nowFree -eq $nowHas) { $errors += ("{0}: after the write Ghost still reports free={1} claim={2}" -f $slug, $nowFree, $nowHas); continue }

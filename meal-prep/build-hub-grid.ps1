@@ -190,7 +190,7 @@ try {
   foreach($f in $fr.free){
     $sl=[string]$f.slug
     try {
-      $p=(Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$sl/?fields=id,visibility" -Headers @{Authorization="Ghost $jwtF";'Accept-Version'='v5.0'}).posts[0]
+      $p=(Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$sl/?fields=id,visibility" -Headers @{Authorization="Ghost $jwtF";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0]
       if([string]$p.visibility -eq 'public'){ $freeSet[$sl]=$true } else { $skew += ($sl + '=' + [string]$p.visibility) }
     } catch {
       # cannot confirm -> no badge. An unverified promise is not a promise worth printing.
@@ -743,7 +743,7 @@ $jsBlock = '<!--TC-HUB-JS-START-->' + $hubJs + '<!--TC-HUB-JS-END-->'
 # fetch live page + splice
 # ---------------------------------------------------------------------------------------------------
 $jwt=New-GhostJWT
-$g=Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/pages/slug/meal-prep-recipes/?formats=html&fields=id,html,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}
+$g=Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/pages/slug/meal-prep-recipes/?formats=html&fields=id,html,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}
 $page=$g.pages[0]; $html=[string]$page.html
 $orig=$html
 $bakDir = Join-Path (Split-Path $root -Parent) 'site-backups'
@@ -885,7 +885,7 @@ if($Publish){
   $lex=ConvertTo-Json $lexObj -Depth 12 -Compress
   $body=[Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{pages=@(@{lexical=$lex;updated_at=$page.updated_at})} -Depth 6))
   $jwt=New-GhostJWT
-  Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/pages/$($page.id)/" -Method Put -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0';'Content-Type'='application/json'} -Body $body | Out-Null
+  Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/pages/$($page.id)/" -Method Put -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion);'Content-Type'='application/json'} -Body $body | Out-Null
   Start-Sleep -Seconds 2
   $pub=(Invoke-WebRequest -Uri 'https://www.thriftycrew.com/meal-prep-recipes/' -UseBasicParsing -TimeoutSec 30).Content
   $liveCards=([regex]::Matches($pub,'<a class="mpr-card"')).Count

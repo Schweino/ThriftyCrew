@@ -1,4 +1,5 @@
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot '..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 $adminKey=(Get-Content 'C:\Codex\ThriftyCrew\meal-prep\.ghostkey' -Raw).Trim()
 $apiUrl='https://map-to-success.ghost.io'
 $p=$adminKey -split ':'; $id=$p[0]; $secretHex=$p[1]
@@ -11,14 +12,14 @@ function New-Jwt {
   $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb)
   $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
 }
-$hdr=@{ Authorization=("Ghost "+(New-Jwt)); 'Accept-Version'='v5.0' }
+$hdr=@{ Authorization=("Ghost "+(New-Jwt)); 'Accept-Version'=(Get-GhostAcceptVersion) }
 # fresh GET for current updated_at
 $cur=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/start-here/" -Headers $hdr -TimeoutSec 30).posts[0]
 $postId=$cur.id; $updatedAt=$cur.updated_at
 Write-Output ("target post: "+$postId+"  updated_at: "+$updatedAt)
 $html=[IO.File]::ReadAllText('C:\Codex\ThriftyCrew\site\pages\start-here.new.html')
 $body=@{ posts=@(@{ updated_at=$updatedAt; html=$html }) } | ConvertTo-Json -Depth 6 -Compress
-$hdr2=@{ Authorization=("Ghost "+(New-Jwt)); 'Accept-Version'='v5.0' }
+$hdr2=@{ Authorization=("Ghost "+(New-Jwt)); 'Accept-Version'=(Get-GhostAcceptVersion) }
 $res=Invoke-RestMethod -Method Put -Uri "$apiUrl/ghost/api/admin/posts/$postId/?source=html" -Headers $hdr2 -ContentType 'application/json' -Body $body -TimeoutSec 60
 $out=$res.posts[0]
 Write-Output ("PUT ok. status: "+$out.status+"  new updated_at: "+$out.updated_at)

@@ -248,7 +248,7 @@ try {
   # live" from the signature plus [bool]$ex, and a DRAFT post returns a perfectly good $ex - so a -Draft run
   # followed by a normal run reported CURRENT and skipped the upsert forever, leaving the board permanently
   # unpublished. A post that is not status=published is NOT the page we would ship, whatever its bytes say.
-  $ex = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,visibility,status" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
+  $ex = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,visibility,status" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 30).posts[0]
   if ($ex -and $ex.visibility) { $vis = [string]$ex.visibility }
   if ($ex -and ([string]$ex.status) -ne 'published') {
     Write-Output ("live post status is '" + [string]$ex.status + "', not 'published' - the change gate will NOT skip (a draft is not a live board)")
@@ -306,10 +306,10 @@ try {
   if (Test-Path $ogPng) {
     $ogUrl = 'https://feed.thriftycrew.com/share/omaha-drops.png?w=' + [string]$doc.week_of
     $jwt2 = New-GhostJWT $adminKey
-    $cur = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,updated_at,og_image" -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
+    $cur = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,updated_at,og_image" -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 30).posts[0]
     if ($cur -and ([string]$cur.og_image) -ne $ogUrl) {
       $body = @{ posts = @(@{ og_image = $ogUrl; updated_at = [string]$cur.updated_at }) } | ConvertTo-Json -Depth 4
-      Invoke-RestMethod -Method PUT -Uri "$apiUrl/ghost/api/admin/posts/$($cur.id)/" -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0';'Content-Type'='application/json'} -Body $body -TimeoutSec 30 | Out-Null
+      Invoke-RestMethod -Method PUT -Uri "$apiUrl/ghost/api/admin/posts/$($cur.id)/" -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion);'Content-Type'='application/json'} -Body $body -TimeoutSec 30 | Out-Null
       Write-Output ("og:image set to this week's drops graphic (?w=" + [string]$doc.week_of + ")")
     }
   }

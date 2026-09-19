@@ -222,7 +222,7 @@ function Get-GhostPostUpdatedAt { param([string]$Api, [string]$Key, [string]$Slu
   try {
     $jwt = Get-GhostJWT -Key $Key
     $p = (Invoke-RestMethod -Uri "$Api/ghost/api/admin/posts/slug/$Slug/?fields=id,slug,updated_at" `
-          -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45).posts[0]
+          -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) } -TimeoutSec 45).posts[0]
     if (-not $p -or -not $p.updated_at) { return $null }
     return [datetime]$p.updated_at
   } catch { return $null }
@@ -233,7 +233,7 @@ function Get-GhostCardBody { param([string]$Api, [string]$Key, [string]$Slug)
      returns $null when there is no card at all, which callers must treat as BLIND, never as clean. #>
   $jwt = Get-GhostJWT -Key $Key
   $p = (Invoke-RestMethod -Uri "$Api/ghost/api/admin/posts/slug/$Slug/?formats=lexical&fields=id,slug,lexical" `
-        -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45).posts[0]
+        -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = (Get-GhostAcceptVersion) } -TimeoutSec 45).posts[0]
   if (-not $p -or -not $p.lexical) { return $null }
   $lex = $p.lexical | ConvertFrom-Json
   $html = Join-GhostLexicalBody -Root $lex.root

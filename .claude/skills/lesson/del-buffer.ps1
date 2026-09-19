@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)
@@ -12,10 +13,10 @@ function New-GhostJWT { param($key)
 }
 $jwt = New-GhostJWT $adminKey
 $existing = $null
-try { $existing = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/zz-inject-buffer/?fields=id" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0] } catch {}
+try { $existing = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/zz-inject-buffer/?fields=id" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0] } catch {}
 if ($existing) {
   $jwt2 = New-GhostJWT $adminKey
-  Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($existing.id)/" -Method Delete -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'}
+  Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($existing.id)/" -Method Delete -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion)}
   Write-Host "Buffer post deleted." -ForegroundColor Green
 } else {
   Write-Host "No buffer post found (already clean)." -ForegroundColor Yellow

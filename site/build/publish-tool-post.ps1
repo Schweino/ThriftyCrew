@@ -17,7 +17,7 @@ $adminKey= if($env:GHOST_ADMIN_KEY){ $env:GHOST_ADMIN_KEY } else { (Get-Content 
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 $body=[IO.File]::ReadAllText((Resolve-Path $File),[Text.Encoding]::UTF8)
 $jwt=New-GhostJWT
-$post=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at,visibility,title" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
+$post=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at,visibility,title" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)} -TimeoutSec 30).posts[0]
 if(-not $post){ throw "post not found: $Slug (this script only updates existing posts)" }
 
 # ---- PRE-FLIGHT: never blind-overwrite a live body nobody looked at (2026-08-08) -------------------------
@@ -55,5 +55,5 @@ $lexObj=@{root=[ordered]@{children=@([ordered]@{type='html';version=1;html=$body
 $lex=ConvertTo-Json $lexObj -Depth 12 -Compress
 $payload=@{posts=@(@{lexical=$lex;updated_at=$post.updated_at})} | ConvertTo-Json -Depth 8
 $jwt=New-GhostJWT
-Invoke-RestMethod -Method PUT -Uri "$apiUrl/ghost/api/admin/posts/$($post.id)/" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0';'Content-Type'='application/json'} -Body ([Text.Encoding]::UTF8.GetBytes($payload)) -TimeoutSec 60 | Out-Null
+Invoke-RestMethod -Method PUT -Uri "$apiUrl/ghost/api/admin/posts/$($post.id)/" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion);'Content-Type'='application/json'} -Body ([Text.Encoding]::UTF8.GetBytes($payload)) -TimeoutSec 60 | Out-Null
 Write-Output ("updated '{0}' ({1}) from {2} - visibility untouched ({3})" -f $post.title,$Slug,(Split-Path $File -Leaf),$post.visibility)

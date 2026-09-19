@@ -158,7 +158,7 @@ foreach($slug in $Slugs){
     # POST (that would risk a duplicate <slug>-2) - skip the slug and report it.
     try {
       $jwt = New-GhostJWT
-      $existing = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,updated_at,visibility" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0]
+      $existing = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,updated_at,visibility" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0]
     } catch {
       $code = 0; try { $code = [int]$_.Exception.Response.StatusCode } catch {}
       if($code -eq 404){ $existing = $null }
@@ -187,7 +187,7 @@ foreach($slug in $Slugs){
     if($existing -and -not $Force -and $pubHashes.ContainsKey($slug) -and $pubHashes[$slug]){
       try {
         $jwt = New-GhostJWT
-        $liveP = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($existing.id)/?formats=lexical&fields=id,title,custom_excerpt,codeinjection_head,lexical" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0]
+        $liveP = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($existing.id)/?formats=lexical&fields=id,title,custom_excerpt,codeinjection_head,lexical" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0]
         if($liveP -and $liveP.lexical){
           $liveLex = $liveP.lexical | ConvertFrom-Json
           $liveBody = ''
@@ -244,7 +244,7 @@ foreach($slug in $Slugs){
     $lexObj = @{ root = [ordered]@{ children=$children; direction=$null; format=''; indent=0; type='root'; version=1 } }
     $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
     $jwt = New-GhostJWT
-    $hdr = @{ Authorization="Ghost $jwt"; 'Accept-Version'='v5.0'; 'Content-Type'='application/json' }
+    $hdr = @{ Authorization="Ghost $jwt"; 'Accept-Version'=(Get-GhostAcceptVersion); 'Content-Type'='application/json' }
     # PRESERVE visibility on update (owned by rotate-free-dinners, not the content publisher). New post -> paid.
     $vis = if($existing -and $existing.visibility){ [string]$existing.visibility } else { 'paid' }
     $postObj = [ordered]@{

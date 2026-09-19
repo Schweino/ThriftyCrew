@@ -13,6 +13,7 @@ param(
 )
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\ghost-config.ps1"
+. (Join-Path $PSScriptRoot '..\..\..\lib\ghost-lib.ps1')   # Get-GhostAcceptVersion: the one Accept-Version (I230)
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $sh=$p[1]
   $sb=New-Object byte[] ($sh.Length/2)
@@ -27,7 +28,7 @@ $html = [IO.File]::ReadAllText($HtmlFile, [Text.Encoding]::UTF8)
 if ($html -notmatch '</script>\s*</div>\s*$') { Write-Host "WARNING: $HtmlFile does not end with </script></div>" -ForegroundColor Yellow }
 $jwt = New-GhostJWT $adminKey
 $exists = $null
-try { $exists = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0] } catch {}
+try { $exists = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id" -Headers @{Authorization="Ghost $jwt";'Accept-Version'=(Get-GhostAcceptVersion)}).posts[0] } catch {}
 if ($exists) { Write-Host "A post already exists at /$Slug/ (id=$($exists.id)). Aborting." -ForegroundColor Yellow; exit 1 }
 $lexObj = @{ root = [ordered]@{ children=@([ordered]@{ type='html'; version=1; html=[string]$html }); direction=$null; format=''; indent=0; type='root'; version=1 } }
 $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
@@ -39,6 +40,6 @@ $postObj = [ordered]@{
 }
 $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{ posts=@($postObj) } -Depth 16))
 $jwt2 = New-GhostJWT $adminKey
-$res = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/" -Method Post -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes
+$res = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/" -Method Post -Headers @{Authorization="Ghost $jwt2";'Accept-Version'=(Get-GhostAcceptVersion)} -ContentType 'application/json' -Body $bytes
 $p = $res.posts[0]
 Write-Host ("CREATED /{0}/  status={1}  visibility={2}  url={3}" -f $p.slug, $p.status, $p.visibility, $p.url) -ForegroundColor Green
