@@ -191,6 +191,8 @@ chicken-bacon-ranch-burrito,chicken-refried-bean-burrito,green-chile-turkey-burr
 ```
 
 
+**APPLIED 2026-09-19 on Brad's go-ahead in chat.** The branch patch no longer applied cleanly, so the 13 edits in the table above were applied as exact replacements, each matched exactly once and each identical to the text on claude/i143-sweep; landed at fb2e5eb9b. probe-allergen-backfill exit 0, build-cards 11/11, audit-allergen-line clean over 11, publish.ps1 -Slugs published and verified 11 of 11; ghost-drift 583 match, 0 drift. A logged-out fetch of the 11 pages reads no cost section and the allergen line on each. audit-nutrient-claims afterwards: exit 0, 709 uses, 670 pass, 0 fail, 39 not computable (batches 3 to 5). Remaining words on those pages are not claims the audit fails: 'lean turkey' and 'lean chicken breast' describe the meat, and 'low calorie' in three head.keywords passes its bar.
+
 ## Batch 3: 11 recipes, 13 uses (0 fail their bar, 13 cannot be computed)
 
 | Recipe | Field | Old phrase | New phrase |
