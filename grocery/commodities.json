@@ -33411,6 +33411,7 @@
         "unit":  "oz",
         "band_min":  0.04,
         "band_max":  0.3,
+        "_note_cup_packs":  "2026-09-19: single-serve fruit-cup multipacks are excluded below. They are the fruit-cups commodity's form, and Aldi's card states the PACK TOTAL for them ('4 pack' + card '16 oz') while stating ONE CUP for the sibling mandarin pack ('4 pack' + card '4 oz'), so build-aldi-regular's name-pack-count rule multiplies the pineapple one to 64 oz and prices it at 0.0342/oz against a real 2.19/16 = 0.1369 (checked on aldi.us, 'Aldi Pineapple Tidbits in 100% Fruit Juice, 4 pack', 16 oz, Canned Fruit). The size bug itself is filed separately; this keeps the 4x-cheap row out of the row it was censored from.",
         "relax_global":  [
                              "\\bcanned\\b",
                              "(?\u003c!orange\\s)\\bjuice\\b"
@@ -33421,6 +33422,8 @@
                         "canned\\s+pineapple"
                     ],
         "exclude":  [
+                        "\\bfruit\\s+bowls?\\b",
+                        "\\bin\\s+100%\\s+(?:fruit\\s+)?juice,?\\s*\\d+\\s*(?:pk|pack)\\b",
                         "fresh",
                         "\\bfrozen\\b",
                         "\\bcup\\b",
@@ -37289,7 +37292,8 @@
         "id":  "energy-drinks",
         "label":  "Energy Drinks",
         "unit":  "floz",
-        "band_min":  0.08,
+        "_note_band_min":  "2026-09-19: floor lowered 0.08 -> 0.07. The old floor censored a real cheapest: 'Summit Berry Waves Blue Raspberry Energy Drink' 30 fl oz at $2.29 = 0.0763/fl oz, refused at 95% of the floor while the board published Aldi's own 16 fl oz can at 0.0931. Read live on aldi.us on 2026-09-19 (30 fl oz, $2.29, filed by Aldi under Functional Drinks & Ice Tea) and captured twice, 2026-08-15 and 2026-09-19, at the same price and size. 0.07 keeps a floor under the parse errors this band exists for (a 4x size slip on a 16 fl oz can reads 0.023) while admitting Aldi's large bottle, which is the cheapest energy drink in Omaha. First value tried; no sweep.",
+        "band_min":  0.07,
         "band_max":  0.4,
         "relax_global":  [
                              "energy\\s*drink",
@@ -47276,11 +47280,14 @@
         "id":  "honey-mustard",
         "label":  "Honey Mustard",
         "unit":  "oz",
+        "_note_dressings":  "2026-09-19: salad dressings are excluded below. This commodity is the MUSTARD, priced in weight ounces beside mustard and dijon-mustard, and the dressings are their own floz commodities (ranch, italian, caesar, blue-cheese). Mixing them put 12 oz jars (Aldi, Walmart) on the same row as 16-24 fl oz bottles (Baker's, Hy-Vee, Family Fare) and audit-unit-basis-outlier hard-failed the crown: Aldi 0.1242 led Baker's 0.1244 by 0.16%, while reading the jar's 12 oz as weight rather than volume moves it about 10% (mustard is denser than water), so the cheapest verdict flipped on the label alone. Not allowlistable - that file is for a number that is right, and this margin is thinner than the question. Splitting the forms leaves two 12 oz jars, like for like, Aldi ahead of Walmart by 16%.",
         "include":  [
                         "honey\\s+mustard",
                         "honey\\s+dijon"
                     ],
         "exclude":  [
+                        "\\bdressing\\b",
+                        "\\bvinaigrette\\b",
                         "pretzel",
                         "\\bchips\\b",
                         "cracker",

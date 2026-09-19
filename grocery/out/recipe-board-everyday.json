@@ -9812,8 +9812,33 @@
                                               "size":  "8 ct"
                                           }
                                       ]
-                       }
-                   ],
+                       },
+        {
+            "id":  "boneless-pork-chops",
+            "commodity":  "Boneless Pork Chops",
+            "category":  "Meat \u0026 Poultry",
+            "unit":  "lb",
+            "cheapest_store":  "Sam\u0027s Club",
+            "stores":  [
+                           {
+                               "store":  "Sam\u0027s Club",
+                               "per_unit":  2.98,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Member\u0027s Mark Boneless Center Cut Pork Loin Chops, priced per pound",
+                               "size":  "lb"
+                           },
+                           {
+                               "store":  "Aldi",
+                               "per_unit":  2.99,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Thin Sliced Boneless Pork Chops Family Pack Per LB",
+                               "size":  "lb"
+                           }
+                       ]
+        }
+    ],
     "built_at":  "2026-08-29T04:31:48",
     "reverified":  "2026-07-07 (monthly floor re-verify: Sam\u0027s+Walmart full re-pull; Aldi/Hy-Vee/Baker\u0027s spot-confirmed)"
 }

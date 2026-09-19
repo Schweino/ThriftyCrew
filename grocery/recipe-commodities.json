@@ -2632,6 +2632,13 @@
                         "almond\\s+butter"
                     ],
         "exclude":  [
+                        "baby\\s+food",
+                        "\\bstage\\s*[1-3]\\b",
+                        "puree\\s+pouch",
+                        "beech\\s*nut",
+                        "\\bgerber\\b",
+                        "little\\s+journey",
+                        "parent.?s\\s+choice",
                         "cookie\\s+butter",
                         "body\\s+butter",
                         "\\bpowdered\\b",

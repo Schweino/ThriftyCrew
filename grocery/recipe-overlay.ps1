@@ -155,6 +155,24 @@ if ($salesFile) {
 $srcBuild = New-Object System.Collections.Generic.List[string]
 $srcWithheld = New-Object System.Collections.Generic.List[string]
 $srcSnapshot = New-Object System.Collections.Generic.List[string]
+$srcUnplaced = New-Object System.Collections.Generic.List[string]
+
+# categories.json maps a display section to the commodity ids that belong in it. It is the same file
+# build-deals-page renders from, so a category resolved here is one that file can place by construction.
+$script:CategoryById = @{}
+try {
+  $catDoc = Read-JsonFile (Join-Path $root 'categories.json')
+  foreach ($sec in @($catDoc.categories)) {
+    foreach ($cid in @($sec.commodities)) { $script:CategoryById[[string]$cid] = [string]$sec.label }
+  }
+} catch { Write-Output ('recipe-overlay: WARNING - categories.json unreadable (' + $_.Exception.Message + '); build-only rows cannot be placed and will be reported unplaced') }
+
+function Get-CategoryForId([string]$id) {
+  if ($script:CategoryById.ContainsKey($id)) { return $script:CategoryById[$id] }
+  # a recipe id often mirrors a staple one (idMap); borrow that twin's section rather than inventing one
+  if ($idMap.ContainsKey($id) -and $script:CategoryById.ContainsKey([string]$idMap[$id])) { return $script:CategoryById[[string]$idMap[$id]] }
+  return $null
+}
 $kept = New-Object System.Collections.Generic.List[object]
 $seenIds = @{}
 foreach ($row in @($base.comparison)) {
@@ -179,14 +197,31 @@ foreach ($bid in @($builtRows.Keys)) {
   if ($seenIds.ContainsKey($bid) -or $stapleIds.ContainsKey($bid)) { continue }
   if ($idMap.ContainsKey($bid) -and $stapleIds.ContainsKey($idMap[$bid])) { continue }
   $nr = $builtRows[$bid]
+  # EVERY ROW NEEDS A HOME, AND A ROW WITH NONE MUST NOT COST THE WHOLE BOARD (2026-09-19).
+  # A row the snapshot never listed arrives here with no `category`: the merge above copies one from the OLD
+  # row, and there is no old row. build-deals-page renders recipe rows INTO categories.json's sections and
+  # THROWS on any row it cannot place, so one unplaceable row refused every publish - boneless-pork-chops did
+  # exactly that on the 2026-09-19 rebuild, after guards had already passed. So resolve the category here,
+  # from categories.json by id, and when that cannot answer, SKIP the row and NAME it rather than either
+  # publishing it homeless (the throw) or dropping it silently (a real price disappearing with no line in the
+  # log). The skipped ids ride in recipe_price_source so a caller can page on a count above zero.
+  if (-not $nr.PSObject.Properties['category'] -or -not ([string]$nr.category).Trim()) {
+    $cat = Get-CategoryForId $bid
+    if ($cat) { $nr | Add-Member -NotePropertyName category -NotePropertyValue $cat -Force }
+    else { $srcUnplaced.Add($bid); continue }
+  }
   $nr | Add-Member -NotePropertyName price_source -NotePropertyValue 'recipe-build' -Force
   $kept.Add($nr); $srcBuild.Add($bid)
 }
 $base.comparison = $kept.ToArray()
 $base | Add-Member -NotePropertyName recipe_price_source -NotePropertyValue ([ordered]@{
   recipe_build = $srcBuild.Count; withheld = $srcWithheld.ToArray(); snapshot_undated = $srcSnapshot.ToArray()
+  unplaced = $srcUnplaced.ToArray()
   build_file = $(if ($salesFile) { $salesFile.Name } else { $null })
 }) -Force
+if ($srcUnplaced.Count) {
+  Write-Output ("recipe-overlay: UNPLACED " + $srcUnplaced.Count + " build-only row(s) have no section in categories.json and were left OFF the board: " + (($srcUnplaced.ToArray()) -join ', ') + " - register each id under a category in categories.json to publish it")
+}
 Write-Output ("recipe-overlay: RECIPE-PRICE-SOURCE recipe_build=$($srcBuild.Count) withheld=$($srcWithheld.Count) snapshot_undated=$($srcSnapshot.Count)" + $(if ($srcSnapshot.Count) { ' - still priced from the undated snapshot: ' + (($srcSnapshot | Select-Object -First 12) -join ', ') } else { '' }))
 
 $overlaid = 0
