@@ -1718,6 +1718,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         New-FanoutLane -Name 'batch-ledger'        -File (Join-Path $mealPrep 'pipeline\batch-ledger.ps1')      -Arguments @('-Verify') -Marker 'BATCH-LEDGER-COMPLETE'
         New-FanoutLane -Name 'count-gpu'           -File (Join-Path $mealPrep 'pipeline\audit-count-gpu.ps1') -Marker 'COUNT-GPU-COMPLETE'
         New-FanoutLane -Name 'row-age'             -File (Join-Path $root 'audit-row-age.ps1')              -Arguments @('-OutDir', $OutDir) -Marker 'ROW-AGE-COMPLETE'
+        # THE PRODUCER-STOPS FLOOR (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md): per store, when was the newest
+        # price READ and what share did the provenance contract withhold for age. Every cause behind the 37.1% board
+        # was a producer that stopped or slowed while every job read green; this is the one check that sees that.
+        New-FanoutLane -Name 'board-freshness'     -File (Join-Path $root 'audit-board-freshness.ps1')      -Arguments @('-OutDir', $OutDir) -Marker 'BOARD-FRESHNESS-COMPLETE'
         New-FanoutLane -Name 'sanity-check'        -File (Join-Path $root 'sanity-check.ps1') -Marker 'SANITY-CHECK-COMPLETE'
         New-FanoutLane -Name 'basis-reconcile'     -File (Join-Path $root 'audit-basis-reconcile.ps1') -Marker 'BASIS-RECONCILE-COMPLETE'
         New-FanoutLane -Name 'pack-basis'          -File (Join-Path $root 'audit-pack-basis.ps1') -Marker 'PACK-BASIS-COMPLETE'
@@ -2490,6 +2494,28 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Board prices aging inside a fresh file" -CausedBy 'guards-hold' -Body ("audit-row-age.ps1 found rows aging past the window, or a store that stopped stamping as_of. The FILE dates look fine either way, which is why guard 9 stays quiet. These prices are what 542 live recipe pages quote.`n`n" + ($raBad -join "`n")) | Out-Null } catch {} }
         } else { Log ('row-age: no findings (' + (@($ra | Where-Object { $_ -match 'rows' }).Count) + ' store(s) profiled)') }
       } catch { Log ('audit-row-age threw: ' + $_.Exception.Message) }
+      # ---- BOARD FRESHNESS: a store that stopped being re-read, or whose prices aged past the publish limit ----
+      # (2026-09-19). Zero output is a failure, like every lane above. A stopped producer is scheduled work that did
+      # not land (the 2026-09-13 walled-store stop ran four days unseen); aging is the board losing cells to age.
+      try {
+        $bfR  = Get-FanoutRecord 'board-freshness' $fanRecs
+        $bfOut = @($bfR.Output)
+        $bfStop = @($bfOut | Where-Object { $_ -match '^! (PRODUCER STOPPED|BLIND)' })
+        $bfAge  = @($bfOut | Where-Object { $_ -match '^! AGING' })
+        if ($bfOut.Count -eq 0 -or -not ($bfOut | Where-Object { $_ -match '^BOARD-FRESHNESS-COMPLETE' })) {
+          Log ("board-freshness DID NOT COMPLETE - exit $($bfR.ExitCode); how old each store's prices are was not measured this cycle")
+          $summary += 'REVIEW    audit-board-freshness did not complete - per-store price freshness was not measured'
+        } else {
+          foreach ($l in $bfOut) { if ($l -match '^\s{2}\S') { Log ('board-freshness:' + $l) } }
+          if ($bfStop.Count) {
+            $summary += "ERROR     $($bfStop.Count) store(s) stopped being re-read - their prices are aging out of the board (grocery\audit-board-freshness.ps1)"
+            if (-not $NoAlert) { try { Send-Alert -Subject "Board freshness: a store stopped refreshing" -Body ("audit-board-freshness.ps1: a store's newest price read is older than the producer-stop floor, or the board could not be judged. Its capture is not landing, whatever the job logs say; its cells will be withheld as they pass the publish limit.`n`n" + (($bfStop + $bfAge) -join "`n")) | Out-Null } catch {} }
+          } elseif ($bfAge.Count) {
+            $summary += "REVIEW    $($bfAge.Count) store(s) had more than the allowed share of rows withheld for age (grocery\audit-board-freshness.ps1)"
+            if (-not $NoAlert) { try { Send-Alert -Subject "Board freshness: prices aging past the publish limit" -Body ("audit-board-freshness.ps1: the rotation is not re-reading these stores inside the publish limit, so the provenance contract is withholding their cells for age.`n`n" + ($bfAge -join "`n")) | Out-Null } catch {} }
+          } else { Log 'board-freshness: every store re-read inside the floor, age withholding under the ceiling' }
+        }
+      } catch { Log ('audit-board-freshness threw: ' + $_.Exception.Message) }
       # ---- THE ZERO-ALERT-DAYS SCOREBOARD (2026-09-10, plan Phase 0) -------------------------------------------
       # A measurement, never an alert: its numbers go to the log every day, and only a census that could not
       # read the queue reaches the summary, because a blind scoreboard would report quiet days that never happened.

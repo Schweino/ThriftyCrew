@@ -17,6 +17,8 @@
     { "id": "store-dropped-off-tile", "match": "exact", "key": "grocery a store dropped off a commodity tile", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
     { "id": "board-names-mangled", "match": "exact", "key": "grocery board product name s are mangled encoding", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/audit-board-mojibake.ps1" },
     { "id": "board-prices-aging", "match": "exact", "key": "board prices aging inside a fresh file", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
+    { "id": "board-freshness-store-stopped", "match": "exact", "key": "board freshness a store stopped refreshing", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/check-ad-cycles.ps1" },
+    { "id": "board-freshness-aging", "match": "exact", "key": "board freshness prices aging past the publish limit", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/check-ad-cycles.ps1" },
     { "id": "feed-edge-stale", "match": "exact", "key": "smp feed edge did not pick up today s push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-run.ps1" },
     { "id": "feed-edge-bytes", "match": "exact", "key": "smp feed edge bytes do not match the push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-run.ps1" },
     { "id": "board-edge-stale", "match": "exact", "key": "board json edge did not pick up today s push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-run.ps1" },
