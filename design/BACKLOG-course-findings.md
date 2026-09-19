@@ -16073,6 +16073,16 @@ prices, so the first rung is to measure what they would change. Related: `import
 `observed_at` from the file name, so `fareway-shop-rescue-2026-09-10.json` stored 8 rows with
 `observed_at='rescue-2026-09-10'` (the freshness clock already treats it as future, so it is not fooled).
 
+**Acceptance bar, written 2026-09-18 before the measurement ran.** The candidate: a `found_by_term` that is not
+a search-term alias resolves to `commodity:staple:<term>` only when that node exists; alias resolution runs first
+and is unchanged; anything else stays unresolved and counted. Measured as two arms of the full
+`import_all.py --observations` over two backup-API copies of the live graph.db, same captures, run back to back:
+(1) the candidate may not change the commodity of any row the alias path already resolved (0 allowed), and may
+not resolve a row to a node that does not exist (0 allowed); (2) every changed `cell_state` cell is listed with
+commodity, store, old and new price; (3) the fix LANDS only if nothing a reader sees reads `cell_state` or graph
+prices (RUNTIME-MAP plus a grep of every serving path), whatever the cell count; if anything does, it is held on
+a branch as READY FOR BRAD with the cell list.
+
 ### I236 - Committed task XML disagrees with the registered tasks, and one live task is not in the automation registry `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings-2.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
