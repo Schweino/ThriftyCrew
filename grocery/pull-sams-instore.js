@@ -28,7 +28,7 @@
          await pullSamsInStore(WORKLIST)     // WORKLIST = ["milk gallon", "sour cream", ...]
   3. Re-running the SAME worklist resumes: settled terms are skipped, UNUSABLE ones retried. That is
      how the walled tail from 2026-08-15 gets finished.
-  4. Export: samsSweepToCsv() -> a #tc-store line naming the club read, then q|n|lp|up|id|was. That
+  4. Export: samsSweepToCsv() -> a #tc-store line naming the club read, then q|n|lp|up|id|was|ful. That
      column order is what build-sams-deals expects; changing it silently mis-parses the capture, and
      stripping the store line gets the capture refused.
 */
@@ -129,6 +129,7 @@ async function samsProbe(term) {
           up: pi.unitPrice ?? null,  // "$0.09/ea" - unit of measure must survive
           id: String(id),
           was: (typeof wasRaw === 'object' && wasRaw) ? (wasRaw.amount ?? null) : wasRaw,
+          ful: samsFulfillment(node),
         });
       }
       return;                        // do not descend into a priced item and re-match its children
@@ -152,6 +153,42 @@ async function samsProbe(term) {
     for (const row of rows) row.cl = club;
   }
   return rows.length ? { state: 'MATCHES', rows } : { state: 'EMPTY', rows: [], why: 'store returned no products' };
+}
+
+/*
+  HOW THE ITEM CAN BE BOUGHT AT THIS CLUB (2026-09-19, PLAN-board-accuracy-2026-09-19 section 4e).
+  Until this date the capture kept no channel at all, so ship-only products held in-club board cells:
+  Member's Mark Foodservice Honey Mustard 128 oz, Member's Mark White Sesame Seed 20.5 oz, Magnolia
+  Sweetened Condensed Milk 6 pk and Gerber 2nd Foods 30 ct were all pickup NOT_AVAILABLE at the Omaha club.
+
+  THE FIELD, read live in Brad's Chrome on 2026-09-19 from the same __NEXT_DATA__ item nodes this probe
+  walks (search "honey mustard", 24 items; club shown as "Omaha Sam's Club, Omaha, 68144"):
+    item.fulfillmentSummary = [ { fulfillment: "PICKUP"|"DELIVERY"|"SHIPPING", storeId: "<id>", ... }, ... ]
+  Values seen, per item, reduced to fulfillment@storeId:
+    SHIPPING@6279                                 9 of 24  (the honey mustard 128 oz among them)
+    PICKUP@8146,DELIVERY@8146,SHIPPING@6279       8 of 24
+    PICKUP@8146,DELIVERY@8146                     3 of 24  (eggs, 3 of 3 on the "eggs" search)
+    PICKUP@8146,SHIPPING@6279                     1 of 24
+    [] (empty array)                              3 of 24  (all three availabilityStatusV2.value OUT_OF_STOCK)
+  8146 is the selected club (PICKUP and DELIVERY carry it); 6279 is the ship-from node. Cross-checked on
+  the founding products: White Sesame Seed 20.5 oz, Magnolia condensed milk 6 pk and Gerber 2nd Foods 30 ct
+  each read SHIPPING@6279 alone, while Nestle La Lechera 6 pk read PICKUP@8146,DELIVERY@8146,SHIPPING@6279.
+  Fields that were NOT used, and why: fulfillmentBadges ("Pickup ", "Shipping ") mirrors the summary as
+  display text; fulfillmentType ("FC", "STORE" or empty) was empty on 11 of 24 including the honey mustard;
+  availabilityStatusV2 says IN_STOCK on ship-only items, so it is stock, not channel.
+
+  Emitted RAW as the `ful` column, so the builder rules on it and the evidence survives on disk:
+    "PICKUP@8146,DELIVERY@8146,SHIPPING@6279"   the summary, in payload order
+    "NONE"                                       the payload carried the array and it was EMPTY
+    ""                                           the item carried no fulfillmentSummary at all (unknown)
+*/
+function samsFulfillment(node) {
+  const fs = node && node.fulfillmentSummary;
+  if (!Array.isArray(fs)) return '';
+  if (!fs.length) return 'NONE';
+  return fs.map(f => String((f && f.fulfillment) || '?').replace(/[^A-Za-z_]/g, '').toUpperCase() +
+                     '@' + String((f && f.storeId) == null ? '' : f.storeId).replace(/[^A-Za-z0-9_-]/g, ''))
+           .join(',');
 }
 
 /*
@@ -198,20 +235,25 @@ const samsAgent = {
 
 const pullSamsInStore    = (worklist, opts) => runPacedSweep(samsAgent, worklist, opts);
 /*
-  q|n|lp|up|id|was - the first five are build-sams-deals' long-standing positional contract.
+  q|n|lp|up|id|was|ful - the first five are build-sams-deals' long-standing positional contract.
 
   THE CLUB TRAVELS WITH THE CAPTURE (2026-09-18, backlog I124; the Aldi and Walmart emitters did this
   first). The output OPENS with one line per distinct club the rows were read at, counted off each
   row's `cl`, then the column header, then the rows:
       #tc-store store="15429 Blackwell Dr, Omaha, NE 68116" read="page" rows=152
-      q|n|lp|up|id|was
+      q|n|lp|up|id|was|ful
   A row with no `cl` (persisted by an agent older than this) is counted as store="UNRECORDED" and is
   never folded into a club it was not read at. build-sams-deals refuses a capture with no store line,
   an UNRECORDED one, a non-Omaha one or more than one club. The line carries no '|'. Post this output
   UNCHANGED: it already has its header, and pull-browser-stores.py prepends nothing to a body that
   opens with it. An empty sweep still returns '' so the driver's BLOCKED-versus-EMPTY branch fires.
 */
-const SAMS_CAPTURE_COLUMNS = 'q|n|lp|up|id|was';
+/*
+  `ful` (2026-09-19) is the SEVENTH column: the item's fulfillmentSummary reduced to fulfillment@storeId
+  (see samsFulfillment). Appended, never inserted, so the first six keep their positions; a row persisted by
+  an agent older than this has no `ful` and exports it blank, which the builder reads as channel unknown.
+*/
+const SAMS_CAPTURE_COLUMNS = 'q|n|lp|up|id|was|ful';
 const samsStoreField = s => String(s == null ? '' : s).replace(/["|\r\n]/g, ' ').replace(/\s+/g, ' ').trim();
 const samsSweepToCsv = () => {
   const res = JSON.parse(localStorage.getItem(SAMS_STORAGE_KEY) || '{}');
@@ -222,7 +264,7 @@ const samsSweepToCsv = () => {
     for (const p of r.rows) {
       const k = samsStoreField(p.cl) || 'UNRECORDED';
       clubs.set(k, (clubs.get(k) || 0) + 1);
-      out.push([term, p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? ''].join('|'));
+      out.push([term, p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '', p.ful ?? ''].join('|'));
     }
   }
   if (!out.length) return '';

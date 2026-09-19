@@ -1,11 +1,14 @@
 <#
   build-sams-deals.ps1 - turn a RAW Sam's browser capture into out\sams\sams-deals-<date>.json.
 
-  Input CSV (pipe-delimited, from the in-page pull): q|n|lp|up|id
+  Input CSV (pipe-delimited, from the in-page pull): q|n|lp|up|id|was|ful, opened by a #tc-store line
      q  = the search term        n  = product name
      lp = priceInfo.linePrice    ("$3.27")  - the price of the whole pack
      up = priceInfo.unitPrice    ("$1.09/ea") - Sam's OWN price per unit of measure
      id = usItemId
+     was = the strikethrough price, when there is one (rollback TTL)
+     ful = the item's fulfillmentSummary as fulfillment@storeId (2026-09-19; see Get-SamsChannel). Optional:
+           a capture older than it has no column and every row's channel is '' (unknown).
 
   *** WHY THIS SCRIPT EXISTS ***
   The 2026-07-15 capture was QUARANTINED (see out\sams\quarantine\README.md). It wrote Sam's per-unit price
@@ -248,8 +251,68 @@ function Get-SamsSizeHints($rootDir) {
 # Which hint field belongs to which priced unit. A hint stated in a unit Sam's did not price by cannot be
 # checked against Sam's arithmetic at all, so it is reported rather than silently ignored.
 $script:SamsHintFieldUnit = @{ 'net_oz' = 'oz'; 'net_floz' = 'fl oz'; 'net_lb' = 'lb'; 'net_ct' = 'ct' }
+# ---- HOW THE ROW CAN BE BOUGHT AT THE CLUB (2026-09-19, PLAN-board-accuracy-2026-09-19 section 4e) -------------
+# The founding bug: Sam's captures recorded NO fulfilment at all, so ship-only products held in-club board cells -
+# Member's Mark Foodservice Honey Mustard 128 oz, Member's Mark White Sesame Seed 20.5 oz, Magnolia Sweetened
+# Condensed Milk 6 pk and Gerber 2nd Foods 30 ct were each "pickup NOT_AVAILABLE" at the Omaha club on 2026-09-19.
+# The `ful` column is the search payload's item.fulfillmentSummary reduced to fulfillment@storeId, in payload order
+# (pull-sams-instore.js samsFulfillment, which records the live values seen). The ruling, per row:
+#   any PICKUP@<club>                     -> channel 'in-store',  fulfillment 'STORE'
+#   every entry SHIPPING@<node>           -> channel 'ship-only', fulfillment 'FC'
+#   anything else                         -> channel '' (unknown), no fulfillment field
+# "Anything else" is: no column (a capture older than the field), '' (the item carried no summary), 'NONE' (an empty
+# summary - every one seen was OUT_OF_STOCK), and DELIVERY without PICKUP (club delivery, which proves a club source
+# but not a shopper's in-club purchase; never seen on its own in the 24-item sample, so not ruled on).
+# WHY `fulfillment` TOO: it is the word compare-deals' channel gate (instore-lib.ps1 Get-ChannelVerdict) already
+# reads for every store - STORE admits, any other word refuses - so a ship-only Sam's row is refused on the board by
+# the gate that refuses Walmart's FC rows, with no engine change. 'FC' because that is the gate's word for "shipped
+# from a fulfilment centre", which is what SHIPPING@6279 is. A row with channel '' gets NO fulfillment field, so a
+# capture older than `ful` stays exactly as it was (the gate's NO-SIGNAL); inside a capture that DOES carry the
+# field, the gate refuses a blank as BLANK-IN-FIELD-BEARING-CAPTURE, which for an out-of-stock row is the truth.
+# The raw summary rides on the row as sams_fulfillment, so the evidence behind every verdict stays on disk.
+function Get-SamsChannel([string]$ful) {
+  $f = ('' + $ful).Trim()
+  $none = @{ channel = ''; fulfillment = '' }
+  if (-not $f -or [string]::Equals($f, 'NONE', [StringComparison]::Ordinal)) { return $none }
+  $kinds = @()
+  foreach ($tok in ($f -split ',')) {
+    $k = (($tok -split '@')[0]).Trim().ToUpperInvariant()
+    if ($k) { $kinds += $k }
+  }
+  if ($kinds.Count -eq 0) { return $none }
+  if ($kinds -contains 'PICKUP') { return @{ channel = 'in-store'; fulfillment = 'STORE' } }
+  $allShip = $true
+  foreach ($k in $kinds) { if ($k -ne 'SHIPPING') { $allShip = $false } }
+  if ($allShip) { return @{ channel = 'ship-only'; fulfillment = 'FC' } }
+  return $none
+}
+
+# ---- A TOTAL COUNT THE NAME STATES OUTRIGHT (2026-09-19) --------------------------------------------------------
+# The founding row: "Clorox Disinfecting Cleaning Wipes ... Pack of 5, 425 Wipes Total" at $18.78, $0.04/ea was
+# sized 470 ct. "Pack of 5" is not a count Get-NameQtyCandidates reads and "425 Wipes Total" names its unit as a
+# product word, so the name looked SILENT and the cent-rounded quotient 18.78/0.04 = 469.5 stood. A name that says
+# "<N> <word> Total" (or "<N> ct total", "<N> total") is stating the pack's total count outright, so for a
+# count-priced row it is the ONLY candidate: it still has to reproduce Sam's own unit price (18.78/425 = 0.0442,
+# which displays as $0.04), and a total that does not is a NAME CONFLICT reject like any other, never published.
+# A measure word before "total" ("64 oz total") is a weight, not a count, and is ignored here. And "total" must END
+# the phrase: "Similac 360 Total Care" is a brand. Over the 3,632 distinct names in the 34 sams-deals files on disk
+# on 2026-09-19 the unanchored form matched 9: the Clorox founding row, two Kleenex "... 867 Tissues total" (sized
+# 999 ct from the rounded $0.02/ea; 19.98/867 displays as $0.02, so 867 is the better reading) and six Similac
+# "360 Total Care" names. The anchor keeps the first three and drops the six (all six are priced per oz, so the
+# count-only rule would not have reached them today; a per-each Similac listing would have been a false reject).
+function Get-NameStatedTotal([string]$name) {
+  if (-not $name) { return $null }
+  $m = [regex]::Match($name.ToLowerInvariant(), '(?<![\d.])(\d[\d,]*)\s*(?:(?:ct|count)\.?|(?!(?:fl|oz|ounces?|lbs?|pounds?|gal|gallons?|ml|l|liters?|g|grams?|kg|pk|packs?|qt|pt)\b)[a-z][a-z''-]*)?\s+total\b(?!\s*[a-z0-9&])')
+  if (-not $m.Success) { return $null }
+  $v = 0.0
+  if (-not [double]::TryParse(($m.Groups[1].Value -replace ',', ''), [ref]$v) -or $v -le 0) { return $null }
+  return $v
+}
+
 # Build ONE engine-shaped row from a raw capture row. Returns @{row=..; err=..}
-function Build-Row($raw) {
+# $Club is the club the capture's #tc-store line says the rows were read at (Read-SamsCapture); '' only under
+# -WaiveMissingStoreLine. It names the row's store_id and source_ad - never a literal (2026-09-19).
+function Build-Row($raw, [string]$Club = '') {
   $lpm = [regex]::Match(("" + $raw.lp), '\$\s*([\d,]+(?:\.\d{1,2})?)')
   $upm = [regex]::Match(("" + $raw.up), '\$\s*([\d,]+(?:\.\d{1,3})?)\s*/\s*(.+)$')
   if (-not $lpm.Success) { return @{ err='no linePrice' } }
@@ -315,13 +378,19 @@ function Build-Row($raw) {
     $basis = 'name hint (reproduces Sam''s unit price)'
   }
   $cands = if ($null -ne $hintQty) { @() } else { Get-NameQtyCandidates $raw.n $u.tok }
+  # A stated total ("425 Wipes Total") replaces every other count reading for a count-priced row (see
+  # Get-NameStatedTotal). Assigned, then wrapped: the function returns a bare double or $null.
+  $statedTotal = $null
+  if ($null -eq $hintQty -and $u.tok -eq 'ct') { $statedTotal = Get-NameStatedTotal ([string]$raw.n) }
+  if ($null -ne $statedTotal) { $cands = @($statedTotal) }
   $best = $null; $bestErr = [double]::MaxValue
   foreach ($c in $cands) {
     if ($c -le 0) { continue }
     $err = [math]::Abs(($lp / $c) - $up)
     if ($err -le 0.005001 -and $err -lt $bestErr) { $best = $c; $bestErr = $err }   # would display as Sam's up
   }
-  if ($best) { $qty = $best; $basis = 'name (reproduces Sam''s unit price)' }
+  if ($best -and $null -ne $statedTotal) { $qty = $best; $basis = 'name stated total (reproduces Sam''s unit price)' }
+  elseif ($best) { $qty = $best; $basis = 'name (reproduces Sam''s unit price)' }
   elseif ($cands.Count) {
     # THE SAZON RULE (2026-07-29). The name STATES a quantity in the very unit Sam's priced by, and NO reading
     # of it reproduces Sam's own unit price. One of the two store numbers is wrong and we cannot tell which:
@@ -396,13 +465,21 @@ function Build-Row($raw) {
     # without re-deriving the rule. ONE copy of the arithmetic: pricing-math-lib owns it.
     # Absent on a row whose size is not a quotient - a name-stated or hinted size has no rounding in it.
     $szRound = Get-DerivedRoundingPct ($t.shape + '; qty ' + $basis) ($upm.Groups[0].Value.Trim())
+    $chan = Get-SamsChannel ([string]$raw.ful)
     return @{ row = [pscustomobject]@{
       store     = "Sam's Club"
       item      = [string]$raw.n
       ad_price  = $t.ad
       size      = $t.size
       regular   = $null
-      source_ad = 'everyday club price (Omaha 68137)'
+      # THE CLUB THE ROW WAS READ AT, never a literal (2026-09-19). This said 'everyday club price (Omaha 68137)'
+      # on every row from a literal while the session sat at another club; nothing reads the value, but it is the
+      # provenance a reader of the file sees first.
+      source_ad = $(if ($Club) { 'everyday club price (' + $Club + ')' } else { 'everyday club price (club NOT RECORDED)' })
+      store_id  = $Club
+      # HOW IT CAN BE BOUGHT AT THAT CLUB - see Get-SamsChannel. '' is unknown, never in-store.
+      channel   = [string]$chan.channel
+      sams_fulfillment = [string]$raw.ful
       # PER-ROW as_of (2026-08-07). Sam's rows shipped with no date at all - 1,808 of them - so the whole
       # store opted out of every staleness check silently: the FILE was rewritten each pull while the rows
       # inside aged independently, and audit-row-age.ps1 could not measure a single one. The header's
@@ -426,7 +503,7 @@ function Build-Row($raw) {
       taxonomy_path   = [string]$raw.taxonomy_path
       link_url        = [string]$raw.url
       image_url       = [string]$raw.image_url
-    } | ForEach-Object { if ($null -ne $nameVolFloz) { Add-Member -InputObject $_ -NotePropertyName 'name_volume_floz' -NotePropertyValue ([math]::Round([double]$nameVolFloz, 3)) }; if ($null -ne $szRound) { Add-Member -InputObject $_ -NotePropertyName 'size_rounding_pct' -NotePropertyValue ([double]$szRound) }; $_ } }   # name_volume_floz: see THE NAME'S VOLUME above; size_rounding_pct: see BELT AND BRACES above
+    } | ForEach-Object { if ($chan.fulfillment) { Add-Member -InputObject $_ -NotePropertyName 'fulfillment' -NotePropertyValue ([string]$chan.fulfillment) }; if ($null -ne $nameVolFloz) { Add-Member -InputObject $_ -NotePropertyName 'name_volume_floz' -NotePropertyValue ([math]::Round([double]$nameVolFloz, 3)) }; if ($null -ne $szRound) { Add-Member -InputObject $_ -NotePropertyName 'size_rounding_pct' -NotePropertyValue ([double]$szRound) }; $_ } }   # name_volume_floz: see THE NAME'S VOLUME above; size_rounding_pct: see BELT AND BRACES above
   }
   return @{ err=("INVARIANT: no shape reproduces Sam's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
 }
@@ -472,7 +549,8 @@ function Split-SamsCaptureStore {
     # ([[same-day-rescue-rebuilds-per-store]]). The second header is not a record. Both the six-column header and the
     # older five-column one are recognised; only an EXACT copy of the first header seen is dropped.
     $t = $s.Trim()
-    if ([string]::Equals($t, $cols, [StringComparison]::Ordinal) -or [string]::Equals($t, 'q|n|lp|up|id', [StringComparison]::Ordinal)) {
+    # 'q|n|lp|up|id|was|ful' is the seven-column header samsSweepToCsv writes since 2026-09-19 (the `ful` channel).
+    if ([string]::Equals($t, 'q|n|lp|up|id|was|ful', [StringComparison]::Ordinal) -or [string]::Equals($t, $cols, [StringComparison]::Ordinal) -or [string]::Equals($t, 'q|n|lp|up|id', [StringComparison]::Ordinal)) {
       if ($sawColumns) { continue }
       $sawColumns = $true
     }
@@ -818,7 +896,7 @@ if ($SelfTest) {
 
     # 12b CLEAN TWIN: the stamp is ADDITIVE. Built through Build-Row alone, the same raw row carries every priced
     # field the build wrote, byte for byte - the club touches nothing the engine reads.
-    $bare12 = (Build-Row ([pscustomobject]@{ q='cucumber'; n='Seedless English Cucumbers, 3 ct.'; lp='$3.27'; up='$1.09/ea'; id='FIXTURE1' })).row
+    $bare12 = (Build-Row ([pscustomobject]@{ q='cucumber'; n='Seedless English Cucumbers, 3 ct.'; lp='$3.27'; up='$1.09/ea'; id='FIXTURE1' }) $blk).row
     $pricedSame = ($null -ne $bare12) -and ($eRows.Count -eq 1)
     if ($pricedSame) {
       foreach ($pn in @('ad_price', 'size', 'current_price', 'source_checkout_price', 'sams_unit_price', 'qty_basis', 'engine_check', 'source_ad', 'store')) {
@@ -895,6 +973,94 @@ if ($SelfTest) {
     $eWarn = @($runE.Lines | Where-Object { ([string]$_) -match 'WARNING the #tc-store line' }).Count
     if ($eWarn -eq 0) { Write-Output 'ok    12g MUST NOT FIRE  a capture whose club line counts its rows exactly prints no row-count warning' }
     else { Write-Output ('FAIL  12g a matching count still warned ' + $eWarn + ' time(s)'); $fail++ }
+
+    # ---- case 13: CHANNEL, CLUB STAMP AND STATED TOTAL (2026-09-19, PLAN-board-accuracy-2026-09-19 section 4e) ----
+    # 13a MUST FIRE, through the build as a child: a row whose payload says SHIPPING only is 'ship-only' and carries
+    # the channel gate's refusal word, and the in-club row beside it is 'in-store'. Names are the founding products;
+    # the prices are illustrative (the verification recorded channel, not price), and the ful values are the ones read
+    # live on 2026-09-19 (pull-sams-instore.js samsFulfillment).
+    $csvJ = Join-Path $bsdT 'sams-capture-j.csv'
+    $J0 = '#tc-store store="' + $blk + '" read="page" rows=3'
+    $J1 = 'q|n|lp|up|id|was|ful'
+    $J2 = 'honey mustard|Member''s Mark Foodservice Honey Mustard, 128 oz.|$10.98|$0.09/oz|FIXTURE5||SHIPPING@6279'
+    $J3 = 'eggs|Member''s Mark Cage Free Grade AA Large White Eggs, 2 dozen|$4.82|$2.41/dz|FIXTURE6||PICKUP@8146,DELIVERY@8146'
+    $J4 = 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|FIXTURE1||PICKUP@8146,DELIVERY@8146,SHIPPING@6279'
+    [IO.File]::WriteAllText($csvJ, (($J0, $J1, $J2, $J3, $J4) -join "`n") + "`n", (New-Object Text.UTF8Encoding($false)))
+    $runJ = Invoke-NativeScript $PSCommandPath '-In' $csvJ '-Date' '1999-01-01' '-OutDir' (Join-Path $bsdT 'j') '-NoCursor' '-LedgerRoot' $bsdLedgerT
+    $fJ = Join-Path $bsdT 'j\sams-deals-1999-01-01.json'
+    $jRows = @()
+    if (Test-Path -LiteralPath $fJ) { $jDoc = Get-Content -LiteralPath $fJ -Raw -Encoding UTF8 | ConvertFrom-Json; $jRows = @($jDoc.deals) }
+    $jHm = @($jRows | Where-Object { [string]$_.sams_item_id -eq 'FIXTURE5' })
+    $jEg = @($jRows | Where-Object { [string]$_.sams_item_id -eq 'FIXTURE6' })
+    $jCu = @($jRows | Where-Object { [string]$_.sams_item_id -eq 'FIXTURE1' })
+    if ($runJ.ExitCode -eq 0 -and $jHm.Count -eq 1 -and [string]$jHm[0].channel -eq 'ship-only' -and [string]$jHm[0].fulfillment -eq 'FC' -and [string]$jHm[0].sams_fulfillment -eq 'SHIPPING@6279') {
+      Write-Output 'ok    13a MUST FIRE  a SHIPPING@6279-only row (honey mustard 128 oz) is channel ship-only with fulfillment FC'
+    } else { Write-Output ('FAIL  13a ship-only row: exit=' + $runJ.ExitCode + ' rows=' + $jRows.Count + ' got=' + ($jHm | ConvertTo-Json -Compress -Depth 3) + ' | ' + (($runJ.Lines | Select-Object -Last 3) -join ' / ')); $fail++ }
+    # 13b MUST NOT FIRE: an in-club row (PICKUP at the club) is in-store, never refused.
+    if ($jEg.Count -eq 1 -and [string]$jEg[0].channel -eq 'in-store' -and [string]$jEg[0].fulfillment -eq 'STORE') { Write-Output 'ok    13b MUST NOT FIRE  a PICKUP@8146 row (eggs 2 dozen) is channel in-store with fulfillment STORE' }
+    else { Write-Output ('FAIL  13b in-club row: ' + ($jEg | ConvertTo-Json -Compress -Depth 3)); $fail++ }
+    # 13c MUST FIRE, on the MECHANISM the board uses: compare-deals' channel gate (instore-lib.ps1) refuses the built
+    # ship-only row and admits the built in-club row, read from the files the child wrote.
+    . (Join-Path $root 'instore-lib.ps1')
+    $vHm = if ($jHm.Count) { Get-ChannelVerdict -Index $null -Store "Sam's Club" -SrcFile 'sams-deals-1999-01-01' -ItemId '' -Fulfillment $jHm[0].fulfillment } else { $null }
+    $vEg = if ($jEg.Count) { Get-ChannelVerdict -Index $null -Store "Sam's Club" -SrcFile 'sams-deals-1999-01-01' -ItemId '' -Fulfillment $jEg[0].fulfillment } else { $null }
+    if ($vHm -and -not $vHm.in_store -and $vEg -and $vEg.in_store) { Write-Output ('ok    13c MUST FIRE  the board''s channel gate refuses the ship-only row (' + $vHm.why + ') and admits the in-club row (' + $vEg.why + ')') }
+    else { Write-Output ('FAIL  13c channel gate: ship-only=' + ($vHm | ConvertTo-Json -Compress) + ' in-club=' + ($vEg | ConvertTo-Json -Compress)); $fail++ }
+    # 13d MUST NOT FIRE: every shape that proves nothing is channel '' and carries NO fulfillment field, so a capture
+    # older than `ful` builds exactly as before. Includes the empty summary (out of stock) and delivery alone.
+    $unk = @(@{ f = ''; l = 'no ful column value' }, @{ f = 'NONE'; l = 'an empty summary (NONE)' }, @{ f = 'DELIVERY@8146'; l = 'club delivery without pickup' }, @{ f = 'SHIPPING@6279,?@'; l = 'a shipping entry beside an unreadable one' })
+    foreach ($x in $unk) {
+      $ru = (Build-Row ([pscustomobject]@{ q='t'; n='Seedless English Cucumbers, 3 ct.'; lp='$3.27'; up='$1.09/ea'; id='U'; ful=$x.f }) $blk).row
+      if ($ru -and [string]$ru.channel -eq '' -and -not $ru.PSObject.Properties['fulfillment']) { Write-Output ('ok    13d MUST NOT FIRE  ' + $x.l + ' -> channel unknown, no fulfillment field') }
+      else { Write-Output ('FAIL  13d ' + $x.l + ' -> ' + ($ru | ConvertTo-Json -Compress -Depth 3)); $fail++ }
+    }
+    # 13e MUST FIRE: every row carries the club its capture was READ at as store_id and in source_ad - and the old
+    # literal "Omaha 68137" appears on none of them. Case 12a's child read Blackwell Dr; case 13a's did too.
+    $clubRows = @($eRows) + @($jRows)
+    $clubOk = @($clubRows | Where-Object { [string]::Equals([string]$_.store_id, $blk, [StringComparison]::Ordinal) -and [string]::Equals([string]$_.source_ad, ('everyday club price (' + $blk + ')'), [StringComparison]::Ordinal) }).Count
+    $lit = @($clubRows | Where-Object { ([string]$_.source_ad).Contains('Omaha 68137') }).Count
+    if ($clubRows.Count -eq 4 -and $clubOk -eq 4 -and $lit -eq 0) { Write-Output 'ok    13e MUST FIRE  4 of 4 built rows name the club read (store_id and source_ad), none the "Omaha 68137" literal' }
+    else { Write-Output ('FAIL  13e club stamp: rows=' + $clubRows.Count + ' stamped=' + $clubOk + ' literal=' + $lit); $fail++ }
+    #     ...CLEAN TWIN: the waived build (12e) names no club rather than inventing one.
+    if ($gRows.Count -eq 1 -and [string]$gRows[0].store_id -eq '' -and [string]$gRows[0].source_ad -eq 'everyday club price (club NOT RECORDED)') { Write-Output 'ok    13e CLEAN TWIN  a -WaiveMissingStoreLine row says club NOT RECORDED and has an empty store_id' }
+    else { Write-Output ('FAIL  13e waived club: ' + ($gRows | ConvertTo-Json -Compress -Depth 3)); $fail++ }
+    # 13f MUST FIRE: the founding Clorox row, in both spellings. "Pack of 5, 425 Wipes Total" derived 470 ct from the
+    # cent-rounded $0.04/ea; "5 pk., 425 Wipes Total" (the live spelling on 2026-09-19) had no reading of 5 that
+    # reproduced $0.04 and was rejected as a NAME CONFLICT. The stated total wins in both, and still reproduces Sam's price.
+    foreach ($cn in @('Clorox Disinfecting Cleaning Wipes, Bleach Free, Fresh Scent and Crisp Lemon, Pack of 5, 425 Wipes Total', 'Clorox Disinfecting Cleaning Wipes, Bleach Free, Fresh Scent and Crisp Lemon, 5 pk., 425 Wipes Total')) {
+      $rc = Build-Row ([pscustomobject]@{ q='clorox wipes'; n=$cn; lp='$18.78'; up='$0.04/ea'; id='CLX' }) $blk
+      if ($rc.row -and [string]$rc.row.size -eq '425 ct' -and ([string]$rc.row.qty_basis) -like '*name stated total*') { Write-Output ('ok    13f MUST FIRE  "' + $cn.Substring(76) + '" sizes 425 ct (' + $rc.row.qty_basis + ')') }
+      else { Write-Output ('FAIL  13f clorox "' + $cn + '": err=' + $rc.err + ' size=' + $rc.row.size); $fail++ }
+    }
+    #     ...MUST FIRE: the second real name the scan found, lower-case "total" after three counts (was 999 ct).
+    $rck = Build-Row ([pscustomobject]@{ q='tissues'; n='Kleenex Ultra Soft Tissues Combo Pack, 3 Snap N'' Go packs, 11 boxes, 867 Tissues total'; lp='$19.98'; up='$0.02/ea'; id='KLX' }) $blk
+    if ($rck.row -and [string]$rck.row.size -eq '867 ct') { Write-Output 'ok    13f MUST FIRE  "11 boxes, 867 Tissues total" sizes 867 ct, not the derived 999' }
+    else { Write-Output ('FAIL  13f kleenex: err=' + $rck.err + ' size=' + $rck.row.size); $fail++ }
+    #     ...MUST FIRE: a stated total that does NOT reproduce Sam's unit price is a reject, never a published guess.
+    $rcx = Build-Row ([pscustomobject]@{ q='t'; n='Bogus Wipes, 900 Wipes Total'; lp='$18.78'; up='$0.04/ea'; id='CLY' }) $blk
+    if ($rcx.err -and $rcx.err -match 'NAME CONFLICT') { Write-Output 'ok    13f MUST FIRE  a stated total that does not reproduce $0.04/ea is rejected' }
+    else { Write-Output ('FAIL  13f lying total published size=' + $rcx.row.size); $fail++ }
+    # 13g MUST NOT FIRE: a measure before "total" is not a count, a count with no "total" is not a stated total, and a
+    # total with no number is nothing.
+    foreach ($nt in @('Similac 360 Total Care Infant Formula, Ready to Feed, 8 fl. oz., 24 ct.', 'Gatorade Thirst Quencher Variety Pack, 20 fl. oz., 24 pk., 480 oz Total','Q-tips Cotton Swabs, 1750 ct., 3 pk.', 'Total Cereal, 18 oz.', 'Kirkland Paper Towels, 12 rolls')) {
+      $gt = Get-NameStatedTotal $nt
+      if ($null -eq $gt) { Write-Output ('ok    13g MUST NOT FIRE  no stated total in "' + $nt + '"') }
+      else { Write-Output ('FAIL  13g read a stated total ' + $gt + ' from "' + $nt + '"'); $fail++ }
+    }
+    # 13h CLEAN TWIN: an ordinary row still builds byte-identically in every field the channel and club work did not
+    # set. The expected values are FROZEN from the committed builder (blob of HEAD before this change) run as a child
+    # on the same cucumber row on 2026-09-19; only source_ad was meant to move, and it is asserted in 13e.
+    $frozen = [ordered]@{ store="Sam's Club"; item='Seedless English Cucumbers, 3 ct.'; ad_price='$3.27'; size='3 ct'; regular=$null; as_of='1999-01-01'; current_price='$3.27'; source_checkout_price='$3.27'; sams_unit_price='$1.09/ea'; sams_item_id='FIXTURE1'; found_by_term='cucumber'; qty_basis='package; qty name (reproduces Sam''s unit price)'; engine_check='1.09/each [per-3-pack]'; taxonomy_path=''; link_url=''; image_url=''; store_location=$blk }
+    $twinBad = @()
+    foreach ($tr in @(@{ l = 'no ful (12a)'; r = $eRows }, @{ l = 'ful PICKUP (13a)'; r = $jCu })) {
+      if (@($tr.r).Count -ne 1) { $twinBad += ($tr.l + ': rows=' + @($tr.r).Count); continue }
+      foreach ($k in $frozen.Keys) {
+        $got = @($tr.r)[0].$k
+        if (-not [string]::Equals([string]$got, [string]$frozen[$k], [StringComparison]::Ordinal) -or (($null -eq $got) -ne ($null -eq $frozen[$k]))) { $twinBad += ($tr.l + ' ' + $k + '=' + [string]$got) }
+      }
+    }
+    if ($twinBad.Count -eq 0) { Write-Output 'ok    13h CLEAN TWIN  the ordinary cucumber row keeps all 17 pre-change fields byte-identical, with and without a ful column' }
+    else { Write-Output ('FAIL  13h fields moved: ' + ($twinBad -join '; ')); $fail++ }
   } finally { Remove-Item -LiteralPath $bsdT -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
@@ -942,7 +1108,7 @@ $rejects = New-Object System.Collections.Generic.List[object]
 $ledgerRoot = if ($LedgerRoot) { $LedgerRoot } else { $root }
 $rollbacks = 0
 foreach ($r in $raw) {
-  $b = Build-Row $r
+  $b = Build-Row $r $storeLocation
   if ($b.row) {
     # ONE implementation, three callers (rollback-ttl-lib). The inline copy that used to live here read
     # $script:CaptureDate, which this file never assigns - see that function's header for what it cost.

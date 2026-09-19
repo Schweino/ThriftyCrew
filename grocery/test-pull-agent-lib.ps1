@@ -561,7 +561,10 @@ let bad = 0;
 function T(n, ok, got) { if (ok) console.log('  ok    ' + n); else { console.log('  X     ' + n + '   got: ' + got); bad++; } }
 
 const BLK = '15429 Blackwell Dr, Omaha, NE 68116';
-const item = (id, name) => ({ productId: id, name, priceInfo: { linePrice: '$3.27', unitPrice: '$1.09/ea' } });
+// fulfillmentSummary shapes as read live on 2026-09-19 (pull-sams-instore.js samsFulfillment records them).
+const INCLUB = [{ fulfillment: 'PICKUP', storeId: '8146' }, { fulfillment: 'DELIVERY', storeId: '8146' }, { fulfillment: 'SHIPPING', storeId: '6279' }];
+const item = (id, name, fs) => Object.assign({ productId: id, name, priceInfo: { linePrice: '$3.27', unitPrice: '$1.09/ea' } },
+  fs === undefined ? { fulfillmentSummary: INCLUB } : (fs === null ? {} : { fulfillmentSummary: fs }));
 const html = items => '<html><body><script id="__NEXT_DATA__" type="application/json">' +
   JSON.stringify({ props: { pageProps: { initialData: { items } } } }) + '</scr' + 'ipt></body></html>';
 function load(bodyText, pageHtml, kv) {
@@ -589,8 +592,26 @@ function load(bodyText, pageHtml, kv) {
   kv[KEY] = JSON.stringify({ cucumber: { v: 'MATCHES', why: null, rows: r.rows }, kale: { v: 'EMPTY', why: 'none', rows: [] } });
   const csv = load(HEAD, '', kv).samsSweepToCsv().split('\n');
   T('CLEAN TWIN  the capture OPENS with the club line, counted', csv[0] === '#tc-store store="' + BLK + '" read="page" rows=2', csv[0]);
-  T('...then the six-column header, so the driver prepends nothing', csv[1] === 'q|n|lp|up|id|was', csv[1]);
-  T('...then exactly the rows, term first, in the builder\'s positional order', csv.length === 4 && csv[2] === 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|A1|', csv.join(' / '));
+  T('...then the seven-column header (ful appended), so the driver prepends nothing', csv[1] === 'q|n|lp|up|id|was|ful', csv[1]);
+  T('...then exactly the rows, term first, in the builder\'s positional order', csv.length === 4 && csv[2] === 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|A1||PICKUP@8146,DELIVERY@8146,SHIPPING@6279', csv.join(' / '));
+
+  // THE CHANNEL (2026-09-19, PLAN-board-accuracy section 4e): the payload's fulfillmentSummary travels raw as `ful`.
+  const chan = html([
+    item('S1', 'Member\'s Mark Foodservice Honey Mustard, 128 oz.', [{ fulfillment: 'SHIPPING', storeId: '6279' }]),
+    item('P1', 'Member\'s Mark Cage Free Grade AA Large White Eggs, 2 dozen', [{ fulfillment: 'PICKUP', storeId: '8146' }, { fulfillment: 'DELIVERY', storeId: '8146' }]),
+    item('O1', 'Grey Poupon Dijon Mustard, 16 oz., 2 pk.', []),
+    item('U1', 'Item With No Summary', null),
+  ]);
+  const cr = await load(HEAD, chan, {}).samsProbe('mustard');
+  const by = {}; for (const x of (cr.rows || [])) by[x.id] = x.ful;
+  T('MUST FIRE  a ship-only item carries ful=SHIPPING@6279 (the honey mustard 128 oz shape)', by.S1 === 'SHIPPING@6279', JSON.stringify(by));
+  T('MUST NOT FIRE  an in-club item carries its PICKUP entry at the club', by.P1 === 'PICKUP@8146,DELIVERY@8146', JSON.stringify(by));
+  T('an EMPTY summary (out of stock) is recorded NONE, never blank', by.O1 === 'NONE', JSON.stringify(by));
+  T('an item with no summary at all is recorded blank (unknown), never guessed', by.U1 === '', JSON.stringify(by));
+  T('a row persisted before ful existed exports ful blank, keeping seven columns', (() => {
+    const o = {}; o['TC_SAMS_SWEEP'] = JSON.stringify({ t: { v: 'MATCHES', rows: [{ n: 'x', lp: '$1.00', up: '$1.00/ea', id: 'X', was: null, cl: BLK }] } });
+    const l = load(HEAD, '', o).samsSweepToCsv().split('\n')[2]; return l === 't|x|$1.00|$1.00/ea|X||';
+  })(), 'see line');
   T('the club line carries no pipe', csv[0].indexOf('|') < 0, csv[0]);
 
   const mixed = {};
