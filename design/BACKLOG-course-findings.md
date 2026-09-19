@@ -15118,7 +15118,7 @@ back to their 845a2bd08 content it exited 1 naming **exactly the same 5 sites**,
 restored md5-identical. The three repaired self-tests (`batch-ledger`, `reconcile-publish-journal`,
 `hold-recipe`) each exit 0, the `w12 absent` case now passing on the real match.
 
-### I207 - `throw` in an estate function is switched off by a caller's -ErrorAction SilentlyContinue, and nothing here says so `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 MEASURE`
+### I207 - `throw` in an estate function is switched off by a caller's -ErrorAction SilentlyContinue, and nothing here says so `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-pwsh-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15187,6 +15187,39 @@ site (a MUST FIRE fixture of the swallow, broken once), and a rule for new code 
 that sets `SilentlyContinue` at file scope and calls a library function that calls a callee is not joined, so
 file-scope swallowing assignments are counted and listed beside the join. Dynamic calls (`& $name`,
 `Invoke-Expression`) and `$PSDefaultParameterValues` are not seen.
+
+**Done 2026-09-19. RESULT: 0 real sites, because there are 0 candidate sites on every arm.** Run at the bar
+commit (the bar's own commit, whose only change was this file; base origin/main d335a9a3f):
+- **Population: 662 tracked non-archive `.ps1`, 0 parse errors, 3,045 function definitions.** 120 of them hold a
+  bare `throw` outside every `try`; 40 of those 120 are advanced (1 by `[CmdletBinding()]`, 39 by `[Parameter()]`
+  alone).
+- **arg arm: 0 rows.** The AST finds **955 commands passing a swallowing `-ErrorAction` (`SilentlyContinue`,
+  `Ignore`, `0` or `4`) over 22 distinct command names, and all 22 are built-in cmdlets** (`Remove-Item` 518,
+  `Get-ChildItem` 332, `Get-Command` 30, `Get-Content` 20, then 18 more with 9 or fewer); **0 of the 22 names is
+  defined as a function anywhere in the estate**, advanced or not. A text grep of the same files for the
+  argument reads 964 lines in 323 files, so the AST is seeing the calls, not missing them (the 9-line gap is
+  the text regex's `0` alternative matching non-argument text).
+- **eap arm: 0 rows**, because **no tracked non-archive `.ps1` assigns `SilentlyContinue` or `Ignore` to
+  `$ErrorActionPreference` at all**: 0 by the AST, 0 by an independent line regex over the same 662 files. So the
+  dynamic-scope blind spot stated in the bar has nothing to propagate from either.
+- **splat arm: 0 rows.** `$PSDefaultParameterValues` appears once, in `grocery/capture-sink.ps1`'s scheduled-task
+  command string, setting `Out-File:Encoding`, not ErrorAction.
+- **Hits read: 0 of 0**, so there is nothing to fix and, by the bar, no rule is added.
+
+**Harness, one-off and scratch, described so it can be rewritten:** a PowerShell script that walks every
+`FunctionDefinitionAst`, keeps those whose own `ThrowStatementAst`s sit outside every `TryStatementAst.Body`,
+then joins `CommandAst.GetCommandName()` against them on the three arms, with a second script that counts every
+swallowing `-ErrorAction` by command name and a line-regex cross-check. Before the real run it was driven over a
+fixture repo holding every shape the bar names (bare and try-wrapped callees, `-EA 0`, `-ErrorAction:Ignore`,
+`-ErrorAction Stop`, a `[Parameter()]`-only callee, a call under a `try`, an in-function EAP assignment and a
+sibling function outside its scope, a splat, and an `archive/` file): 7 rows, exactly the 7 expected. Not committed:
+nothing in the estate is exposed today, and a detector over a shape with 0 members would be green on day one.
+
+**Worth knowing, from the premise probe:** the course's remedy, `$PSCmdlet.ThrowTerminatingError`, is NOT immune
+from the caller's side under PS 5.1. It stops its own function, but a caller passing `-ErrorAction
+SilentlyContinue` still carries on silently, rc 0, exactly as `-ErrorAction Ignore` does with a bare `throw`. So if
+this shape is ever written, the protection is the caller not passing a swallowing `-ErrorAction` to an estate
+function, not a change of spelling in the callee.
 
 ### I208 - one catalogue include is cubic on a whitespace run and an atomic group makes it linear with no answer changed `DONE` `queue-8`
 
