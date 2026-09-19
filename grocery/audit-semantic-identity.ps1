@@ -221,6 +221,28 @@ if ($SelfTest) {
   if (($fxAlertIds -notcontains 'tilapia') -or ($fxExclIds -contains 'tilapia')) {
     Write-Output '  X CLEAN TWIN: the swai fillets (NO-INCLUDE) must stay in the alerted set - only a refusal a rule made is suppressed'; $bad++
   }
+  # REFUSED-BY-EXCLUDE (2026-09-19, queue 2026-09-19-4f01f6, a RETURN of 2026-09-18-37ac63). The founding row frozen
+  # verbatim off the 2026-09-19 08:30 sweep, against pie-pumpkins' admits and its 'spice' exclude as commodities.json
+  # held them at fe2ad786e: the comma in 'Pie, Pumpkin' defeats every admit, and 'spice' refuses it on sight.
+  $fxPieComs = @(
+    [pscustomobject]@{ id = 'pie-pumpkins'; include = @('pie\s+pumpkins?', 'sugar\s+pumpkins?', 'baking\s+pumpkins?'); exclude = @('spice') },
+    [pscustomobject]@{ id = 'ground-beef-93-7'; include = @('93\s*%?\s*lean', '93\s*/\s*7'); exclude = @('patty', 'patties') }
+  )
+  $fxPieExplainer = New-CoverageExplainer -Commodities $fxPieComs
+  $fxPie  = [pscustomobject]@{ kind = 'coverage'; id = 'pie-pumpkins'; store = 'Family Fare'; product = 'Jj''s Bakery Pie, Pumpkin Spice, Ligthly Glazed 4 Oz' }
+  $fxBeef = [pscustomobject]@{ kind = 'coverage'; id = 'ground-beef-93-7'; store = 'Walmart'; product = 'Ground Beef 73% Lean/27% Fat, All Natural*, 4 lb Tray' }
+  $fxPieSplit = Split-CoverageFindings -Rows @($fxPie, $fxBeef) -Explainer $fxPieExplainer
+  $fxPieAlert = @($fxPieSplit.alert | ForEach-Object { [string]$_.id })
+  $fxPieExcl  = @($fxPieSplit.excluded | ForEach-Object { [string]$_.id })
+  $fxPieRow   = @($fxPieSplit.excluded | Where-Object { [string]$_.id -eq 'pie-pumpkins' })
+  # MUST FIRE: the glazed snack pie is REFUSED-BY-EXCLUDE, naming 'spice', and leaves the alerted set.
+  if (($fxPieExcl -notcontains 'pie-pumpkins') -or ($fxPieAlert -contains 'pie-pumpkins') -or $fxPieRow.Count -ne 1 -or [string]$fxPieRow[0].verdict -ne 'REFUSED-BY-EXCLUDE' -or ([string]$fxPieRow[0].detail) -notmatch "exclude 'spice' would refuse it") {
+    Write-Output '  X MUST-FIRE: the 2026-09-19 glazed pumpkin-spice pie (no admit, killed on sight by the spice exclude) was not REFUSED-BY-EXCLUDE outside the alerted set'; $bad++
+  }
+  # CLEAN TWIN: the 73/27 ground beef hits no ground-beef-93-7 exclude, so it stays NO-INCLUDE and STAYS alerted.
+  if (($fxPieAlert -notcontains 'ground-beef-93-7') -or ($fxPieExcl -contains 'ground-beef-93-7') -or [string](Get-CoverageVerdict -Explainer $fxPieExplainer -Name ([string]$fxBeef.product) -WantId 'ground-beef-93-7').verdict -ne 'NO-INCLUDE') {
+    Write-Output '  X CLEAN TWIN: the 73/27 ground beef (no admit, no exclude hit) must stay NO-INCLUDE in the alerted set'; $bad++
+  }
   # VRAM GUARD, fixtured. MUST-FIRE: llama-server up and the card nearly full -> BLIND, naming the holder.
   $why = Test-SweepBlocked -FreeMiB 1092 -LlamaRunning $true
   if (-not $why) { Write-Output '  X MUST-FIRE: llama-server holding the card with 1092 MiB free must block the sweep'; $bad++ }

@@ -152,7 +152,7 @@
         "files": ["grocery/audit-store-registry.ps1", "ops/run-gates.ps1", "grocery/alert-lib.ps1", "grocery/send-alert.ps1"],
         "exact_change": "(a) audit-store-registry.ps1 -CodeOnly runs checks 5 (rosters) and 6 (orphaned exemptions) and skips the out\\ data checks with a counted SKIP, so it is hermetic on a bare checkout; ops/run-gates.ps1 $static += an entry for grocery\\audit-store-registry.ps1 -CodeOnly named 'no tracked grocery script holds its own copy of the store list without a registered reason' (follow the list's convention for arguments), at ZERO because this plan takes the live count to 0 first; (b) Send-Alert (alert-lib.ps1) appends one footer line 'graded at <short HEAD>, <N> commit(s) behind origin/main as of the last fetch' from git rev-parse --short HEAD and git rev-list --count HEAD..origin/main (local refs only, no fetch, blank when git is unavailable), so a stale-tree verdict is legible in the alert itself"
       },
-      "leaves_open": "the 2026-09-19 convert-on-touch rule (Brad, I192) has no mechanical check: a roster edited without being converted still passes when it names all seven stores; and root fix (b) makes staleness LEGIBLE without making the chain rebase before it grades, so a chain that cannot rebase still grades a stale tree (today that was every check between 07:01 and 09:20)",
+      "leaves_open": "root_fix (a) and (b) are unbuilt: nothing runs the store-roster scan at push time (it runs only in check-ad-cycles' 7-day fan-out lane), so a new roster can still ship and page later; and alerts still do not name the tree they graded. Plus the plan's original residual: convert-on-touch (I192) has no mechanical check, and a chain that cannot rebase still grades a stale tree.",
       "leaves_open_occurrences": 4,
       "leaves_open_followup": null,
       "blast_radius": {
@@ -175,9 +175,9 @@
       "do_not_touch": ["stores.json store entries and store_identity blocks", "the frozen fixture literals themselves (register them, never edit them)", "any lane's call cap"],
       "resolution_note": "Twelve sites, not two: the 08:32 audit graded a main tree that could not rebase and lacked six worktree commits. Three were real rosters and are converted to read stores.json: the 2026-09-19 capacity invariant omitted Hy-Vee, the store nearest its cap (1,554 ids / 14 days = 111 of 120 a day), and now checks every store in its own rotation unit; the watchdog derives its browser stores from pull_profile.surface. Nine fixture literals and the measured full-run cap table are registered with store-subset-ok lines. The code-scan half of the audit now runs at push time in run-gates, and every alert footer names the commit it graded and how far behind origin/main it was.",
       "publish_batch": 0,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "needs-more-time",
+      "premise_verified": "yes, and one more site: audit-store-registry read 13 code findings at 71731da8d (the plan's 12 plus provenance-contract-lib.ps1:204, a PREMISE case added since). Hy-Vee's rotation unit confirmed from the list itself: hyvee-regular-2026-09-19.json capture_terms holds 1,549 work items (not 1,554; 1,541 deal rows, 475 distinct product_id), so 1,549 / 14 days / 1 run = 111 a run against the 120 cap: inside the invariant, no breach.",
+      "deviation": "SURFACE FIX SHIPPED, ROOT FIX NOT (item budget spent). The three real rosters read stores.json: Test-CaptureCapacity defaults to Get-CapacityStores and counts Hy-Vee in product ids through Get-StoreRotationUnitCount (UNMEASURED, never ok, when no regular file exists); test-capture-policy's LIVE case builds from the live stores.json and asserts all 7; capture-watchdog drives Get-BrowserSurfaceStores (pull_profile.surface '^browser'), asserted LIVE in test-capture-policy rather than the watchdog self-test. Registrations: the audit honours an inline store-subset-ok marker only on a string literal in a test-/measure- file or a -SelfTest body, so only test-capture-policy.ps1:503 and test-auditors.ps1:1444 took inline markers; the other eight (including capture-policy-lib FullRunCap, which is production code, and both compare-deals.ps1 fixtures, which this lane may not edit) are stores.json allowed_subsets entries with reasons. audit-store-registry.ps1 exit 0 (13 -> 0). NOT DONE: root_fix (a) audit-store-registry -CodeOnly plus its run-gates $static entry, and (b) the Send-Alert footer naming the graded HEAD and its distance behind origin/main.",
       "shipped_commit": null
     },    {
       "queue_id": "2026-09-19-4f01f6",
@@ -202,7 +202,7 @@
         "files": ["grocery/check-ad-cycles.ps1", "grocery/audit-semantic-identity.ps1", "grocery/coverage-explain-lib.ps1"],
         "exact_change": "the coverage-findings alert in check-ad-cycles.ps1 is sent with -Lane weekly (send-alert.ps1 already mints weekly-lane items; triage-due.ps1 lists them for pull-forward only), while IDENTITY findings (a wrong product holding a live cell) stay daily; audit-semantic-identity.ps1 writes the day's findings to out\\semantic-findings-<date>.json as well as the latest file so the weekly item carries every day's findings, and a (commodity|store|normalised product) already present in an earlier dated file inside 30 days is counted as 'seen' and not re-paged"
       },
-      "leaves_open": "a NO-INCLUDE lookalike that hits no exclude (5 of the 6 recent findings) still needs a person, now once a week instead of daily; that is the intended intake and the residual is the cadence, not a defect",
+      "leaves_open": "the root fix is unbuilt: the coverage alert still pages every NO-INCLUDE lookalike through the DAILY lane on its first sighting (18 of the last 29 days), with no cross-day dedupe; only the refused-on-sight subset (1 of the 6 findings of 2026-09-18 and 2026-09-19) now leaves the alerted set",
       "leaves_open_occurrences": 18,
       "leaves_open_followup": null,
       "prior_closes": ["2026-09-18-37ac63"],
@@ -232,9 +232,9 @@
       "do_not_touch": ["commodities.json", "known-wrong.json", "the sidecar thresholds (identity_peer_ratio, coverage_cos_floor, coverage_rerank_floor)"],
       "resolution_note": "A 4 oz pumpkin-spice snack pie read as a pie pumpkin. No rule can see it and none should; pie-pumpkins' own exclude 'spice' would refuse it, but the classifier only asks excludes after an admit hit, so it paged as invisible. The classifier now reports REFUSED-BY-EXCLUDE and suppresses it, and coverage findings (which by the alert's own words can move no cell) now mint weekly-lane items with same-product de-duplication, while identity findings stay daily. No ruling filed: a ruling for a name that cannot reach the commodity is inert.",
       "publish_batch": 0,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "needs-more-time",
+      "premise_verified": "yes: Get-CoverageVerdict consulted the intended commodity's excludes only after an admit hit, so the 2026-09-19 glazed pumpkin-spice pie (no admit, pie-pumpkins exclude 'spice' matches) returned NO-INCLUDE and paged. Not mis-laned: coverage-explain-lib is read only by the coverage alert and explain-coverage-gap, never by the matcher, so no cell can move.",
+      "deviation": "SURFACE FIX SHIPPED, ROOT FIX NOT (run budget). REFUSED-BY-EXCLUDE is a verdict in coverage-explain-lib.ps1 and Split-CoverageFindings keeps it under coverage_excluded; audit-semantic-identity -SelfTest carries the founding pie row (MUST FIRE) and the 73/27 ground beef (CLEAN TWIN, stays NO-INCLUDE and alerted), exit 0. NOT DONE: the coverage alert moving to -Lane weekly with dated findings files and 30-day cross-day dedupe.",
       "shipped_commit": null
     },
     {
@@ -290,9 +290,9 @@
       "do_not_touch": ["UNRULED_MARK and CROSS_UNRULED_MARK (a mark moves only on a ruling)", "any memory file under projects/*/memory (outside this task's worktree)", "recall-weights.json"],
       "resolution_note": "Three different failures from the 09-18 close. Gate: the two indexes hold different corpora (2206 vs 1988) because the corpus moved since the last joint rebuild; the pass named its own remedy and now runs it before grading. Reflex concurrent-publish-shared-tree at 2.86% over a 2% cap: the log records fires by hash only, so the eight fires are read from transcripts and the pattern tightened or the cap raised with its reason, and the log now keeps the command text. Memory clusters (1 and 10 unruled over marks 0 and 9) is a ruling for Brad, parked as q-2026-09-19-clusters.",
       "publish_batch": 0,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "needs-more-time",
+      "premise_verified": "not verified: the run ceiling was spent on the four items ahead of it in ship_sequence before this one was opened",
+      "deviation": "not started; nothing was committed to the knowledge store repo for this item",
       "shipped_commit": null
     },    {
       "queue_id": "2026-09-19-b1d371",
@@ -366,8 +366,8 @@
       "root_fix_none_because": "the finding is already false at HEAD: the backup was adopted and committed at 0a53a0452 before the alert fired, and the audit exits 0 in main now; the orchestrator's transcription verdict (adopt with -Adopt) is overtaken by that commit and running -Adopt again would change nothing",
       "resolution_note": "Already resolved before it paged: ops/prompt-backup/scheduled-tasks/verify-board-sample/SKILL.md was adopted in 0a53a0452 (04:58) on origin/main; the 07:xx test-auditors run graded a main tree that could not rebase (c7c57d). audit-prompt-backup exits 0 at fe2ad786e. No change.",
       "publish_batch": 0,
-      "status": "planned",
-      "premise_verified": null,
+      "status": "done",
+      "premise_verified": "yes: 0a53a0452 (verify-board-sample prompt backed up) is an ancestor of HEAD; the plan's audit-prompt-backup exit 0 at fe2ad786e holds because fe2ad786e is an ancestor too",
       "deviation": null,
       "shipped_commit": null
     },
@@ -390,8 +390,8 @@
       },
       "resolution_note": "Closed, confirmed: fixed at fe2ad786e (09:21) by another session and the three stuck commits are on origin/main. Recorded for the record: the two-hour stale main tree it caused is the shared mechanism behind three other alerts in this run (641ec6 live cells, 405c73's under-count, 064845).",
       "publish_batch": 0,
-      "status": "planned",
-      "premise_verified": null,
+      "status": "done",
+      "premise_verified": "yes: fe2ad786e (the pipeline moves an untracked file out of its rebase's way) is an ancestor of HEAD",
       "deviation": null,
       "shipped_commit": "fe2ad786e"
     }

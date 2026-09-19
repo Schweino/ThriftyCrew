@@ -52,6 +52,11 @@ function Get-CoverageVerdict {
   if ($claimedBy -and $claimedBy -ne $WantId) { return [pscustomobject]@{ verdict = 'CLAIMED'; detail = "claimed first by '$claimedBy'" } }
   if ($incHit -and $excHit) { return [pscustomobject]@{ verdict = 'EXCLUDED'; detail = "include '$incHit' matched, exclude '$excHit' killed it" } }
   if ($incHit) { return [pscustomobject]@{ verdict = 'MATCHES'; detail = "include '$incHit' already matches - the sweep's premise is wrong for this row" } }
+  # REFUSED-BY-EXCLUDE (2026-09-19, queue 2026-09-19-4f01f6). No admit pattern matches, but the intended commodity's own
+  # exclude matches the name, so the rule would refuse it on sight even if an admit were widened to reach it: 'Jj's
+  # Bakery Pie, Pumpkin Spice' on pie-pumpkins hits the 'spice' exclude. That is a refusal the rule already made,
+  # not a product no rule can see. Classification only: nothing here is read by the matcher, so no cell moves.
+  if ($excHit) { return [pscustomobject]@{ verdict = 'REFUSED-BY-EXCLUDE'; detail = "no admit pattern matches, and exclude '$excHit' would refuse it anyway" } }
   return [pscustomobject]@{ verdict = 'NO-INCLUDE'; detail = 'no include pattern matches' }
 }
 
@@ -66,7 +71,7 @@ function Split-CoverageFindings {
   foreach ($r in @($Rows)) {
     if (-not $r) { continue }
     $v = Get-CoverageVerdict -Explainer $Explainer -Name ([string]$r.product) -WantId ([string]$r.id)
-    if ($v.verdict -eq 'EXCLUDED') {
+    if ($v.verdict -eq 'EXCLUDED' -or $v.verdict -eq 'REFUSED-BY-EXCLUDE') {
       $copy = [ordered]@{}
       foreach ($p in $r.PSObject.Properties) { $copy[$p.Name] = $p.Value }
       $copy['verdict'] = $v.verdict; $copy['detail'] = $v.detail
