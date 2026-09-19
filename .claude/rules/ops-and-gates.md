@@ -44,6 +44,13 @@ everything else honest, so a defect here is silent by construction.
   `ops/audit-fixture-vocabulary.ps1` fails a `CLEAN TWIN` whose assertion proves an absence. It reads
   the ASSERTION and never the prose, so labels whose sense lives only in their wording are out of its
   reach - it does not claim to have swept the estate.
+- **A threshold or count detector's self-test carries a case exactly AT its bar and one a step PAST it,
+  and names the bar in the case text** (Brad's ruling, 2026-09-19, backlog I196). The labels record the
+  verdict, never the input class: sampled over ten detectors from `docs/CONTROL-CONSTANTS.md`, the case
+  at the bar was missing in 7 of 10 suites whose labels all read correctly, so a `-gt` to `-ge` flip
+  passed the whole suite. The step past is one unit of the comparison's own resolution (a day, a
+  minute, a row, a point). This is a habit for the next suite, **not a gate**: a bar on it would be
+  red on day one.
 - **A fixture built by string concatenation is not one argument.** `Test-Thing "a" + "b"` passes
   THREE positional arguments; a simple function binds the first and drops the rest into `$args`, so
   the case runs against a truncated line. Two must-not-fire cases passed that way on 2026-09-07 while
@@ -284,6 +291,15 @@ everything else honest, so a defect here is silent by construction.
   lock and then runs `git push` inside it, whose `pre-push` hook runs the warm `run-gates`, which takes gate worker
   slots at `ops\run-gates.ps1:594`. That is (1) over (2). Nothing takes two ledger locks, and nothing takes a ledger
   lock under an `Invoke-Locked` mutex, so 3-over-4 and 4-over-4 are declared and unexercised.
+
+  **The order covers every BLOCKING WAIT, not only the four locks** (Brad's ruling, 2026-09-19, backlog I177). A wait
+  on an event, a process, a slot or the remote while holding one of these locks is a nesting, and it is safe only if
+  the thing waited on can never need the lock held. The classic bounded-buffer deadlock has no second lock in it at
+  all: a consumer waits on a semaphore while holding the mutex the producer needs to post it. **The one live nesting
+  is safe for exactly that reason**, not merely because it is (1) over (2): `push-main` holds the push lock across a
+  `git push` whose hook waits for gate slots, and no gate-slot holder ever waits for the push lock. A change that makes
+  anything under a gate slot wait on the push lock, or on a process that takes it, turns that nesting into a cycle.
+  No detector, for the reason the next paragraph gives.
 
   **Why write an order nobody needs yet, and why it is not a gate.** **No gate is added until a second lock is
   actually nested** - a detector over a case that cannot occur is the shape these rules already refuse, and it would

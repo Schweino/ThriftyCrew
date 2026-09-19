@@ -12162,7 +12162,7 @@ whether this is one instance or a class. **It is explicitly NOT a proposal to ad
 of these windows are unreachable by any fixture, and a check that cannot be satisfied is the "red on
 day one" shape the ops rules already forbid.
 
-### I160 -  `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+### I160 -  `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** 13 of 40 sampled sites (33%) use `$null` to answer a presence question. Not near zero, so the one-line rule the item proposes is earned rather than ceremonial - but a sweep is not, because the recount is 1,465 sites across 353 of 777 files.
 
@@ -12255,6 +12255,10 @@ holds neither key-presence site found; **(3)** add nothing and close, on the gro
 contested call and none of the 40 was silently wrong. **Recommendation (1)**: it is one versionless line whose cost is
 a few tokens a turn, the bar written before the count says earned, and its last sentence stops it being read as a
 reason to sweep the 37 correct sites. No sweep under any option.
+
+**Done 2026-09-19, ruled 2026-09-19.** Brad chose option (1). The orchestrator added the line to
+`C:\Codex\CLAUDE.md` beside the `@($null).Count` rule; that file sits outside every git repo, so no commit
+carries it, and it was read back on 2026-09-19 at its line 35. No sweep, as every option ruled.
 
 ---
 
@@ -13461,7 +13465,7 @@ components, the union log must be kept so a merge can be replayed without it. We
 with path compression is the data structure, with near-constant cost per operation. Parked because
 nothing uses `same_as` today; it becomes OPEN the day a design for it is written.
 
-### I177 - The declared lock order covers locks, and the bounded-buffer deadlock is a lock held across a WAIT `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 RULING`
+### I177 - The declared lock order covers locks, and the bounded-buffer deadlock is a lock held across a WAIT `DONE` `queue-7`
 
 **The ruling asked for (backlog run 2026-09-19).** Question: does the declared lock order in `.claude/rules/ops-and-gates.md` extend to cover every blocking WAIT held under a lock (an event, a process, a gate slot, the remote), not only the four named locks? Options: (A) add the one-sentence scope rule and name the push-lock-over-gate-slots nesting as safe BECAUSE no slot holder ever waits for the push lock, no detector (the rule's own policy until a second nesting exists); (B) A plus an unsound grep detector as a ratchet at zero; (C) leave the rule as it is and record this finding only. **Recommendation: A.** It is text only, it writes down a safety reason that is true today and unrecorded, and B would be a detector with no production caller, which these rules already refuse.
 
@@ -13497,6 +13501,8 @@ Per the rule's own stated policy no detector is proposed until a second nesting 
 **Scope of this finding.** The grep is a pattern match over two directories and is unsound: a wait
 spelled another way, or a `Start-Process ... -Wait` or `WaitForExit()` held inside a lock, is not
 counted. Those were not searched.
+
+**Done 2026-09-19, ruled 2026-09-19.** Brad chose option (A). `.claude/rules/ops-and-gates.md`'s "THE LOCK ORDER IS DECLARED" section now says the order covers every blocking wait (an event, a process, a slot or the remote) held under one of the four locks, that such a wait is safe only if the thing waited on can never need the lock held, and names the push-lock-over-gate-slots nesting as safe BECAUSE no gate-slot holder ever waits for the push lock. Text only, no detector, as ruled.
 
 ### I178 - The rules file reads "unsound" as "complete", so it calls an unsound detector's finding a real defect `DONE` `queue-7`
 
@@ -14243,7 +14249,7 @@ enter Matcher.load ONCE" (entries=8), rc 1, and app.py was restored md5-identica
 old code until its next restart after the main checkout carries this commit; `/health` reports `load_count` once
 it does.
 
-### I196 - fixture labels record the verdict and never the input class, so nobody can read partition coverage off a suite `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
+### I196 - fixture labels record the verdict and never the input class, so nobody can read partition coverage off a suite `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-quality-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14412,6 +14418,8 @@ with its own comment and its `docs/CONTROL-CONSTANTS.md` row, and the live path 
 a hard-coded copy), so no behaviour changed and no output moved. With these, C5 (at the bar) is covered in
 10 of 10 of the sampled detectors and C6 (one past) in 8 of 10. **Still remaining** from the list above:
 the C1/C2 gaps and the C6 gaps in `check-ad-cycles` and `report-ratchet-trends`.
+
+**Done 2026-09-19, ruled 2026-09-19.** Brad chose option 1. `.claude/rules/ops-and-gates.md` now carries, beside the three-label rule, one line: a threshold or count detector's self-test carries a case exactly at its bar and one a step past it, and names the bar in the case text. Not a gate, and no label change. The C1/C2 and C6 gaps listed just above stay as recorded; they were not part of the ruling.
 
 ### I197 - 36 unbounded while-true loops, and at least one ends only when a remote server says so `DONE` `queue-7`
 
