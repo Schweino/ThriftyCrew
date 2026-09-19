@@ -317,7 +317,7 @@
         "files": ["grocery/health-heartbeat.ps1"],
         "exact_change": "(a) at start: if (git rev-parse --git-common-dir) differs from (git rev-parse --git-dir) the script is in a linked worktree; resolve $root's out\\ paths against the common dir's parent (the main checkout) and say so in the first output line, or, when that path does not exist, exit 3 BLIND with 'linked worktree, no main checkout found' and send nothing; (b) for each watched task read Get-ScheduledTask Triggers: when every enabled trigger has StartBoundary after LastRunTime and after now, report 'ok dormant until <earliest StartBoundary>' instead of STALE; when a trigger's EndBoundary has passed and no future trigger exists, still page (and say 'trigger window expired')"
       },
-      "leaves_open": "the heartbeat is one emitter; other checks that resolve out\\ against $PSScriptRoot from a worktree copy (and 405c73 and 064845 show the same shape from the MAIN checkout when it lags origin) are covered only by the alert footer proposed in 405c73 root_fix (b), which makes the tree legible but does not stop a worktree emitter from sending",
+      "leaves_open": "other emitters that resolve out\\ against their own $PSScriptRoot can still page from a linked-worktree copy; this change fixes the heartbeat only. The alert footer in 405c73 root_fix (b) makes the graded tree legible on every Send-Alert but does not stop a worktree emitter from sending.",
       "leaves_open_occurrences": 2,
       "leaves_open_followup": null,
       "prior_closes": ["2026-09-18-1dfd03"],
@@ -347,9 +347,9 @@
       "do_not_touch": ["the TC Recipe Harvest Crawl trigger (Brad's ruling 4d5d96b43)", "any task registration"],
       "resolution_note": "False alarm in three parts and a dormancy in the fourth: the alert was emitted from the ba-land worktree copy of health-heartbeat, which audited that worktree's stale out\\ (in main the graph log landed rc=0, smp-feed.json was 1.6h fresh, free-dinners.json is week_of 2026-09-17); the harvest crawl is future-dated to 2026-09-20T18:00 by Brad's 4d5d96b43. The heartbeat now resolves outputs against the main checkout from a linked worktree (or refuses to send) and reads triggers, so a ruled dormancy reads 'dormant until' and a real stall still pages.",
       "publish_batch": 0,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "done",
+      "premise_verified": "yes: health-heartbeat.ps1 resolved every output against $PSScriptRoot and aged a task from LastRunTime only, reading no trigger. Live from the main checkout after the fix: exit 0, HEALTHY 20, and 'TC Recipe Harvest Crawl ok dormant until 2026-09-20T18:00 (53h ago)'.",
+      "deviation": "The linked-worktree test uses git rev-parse --path-format=absolute --git-dir --git-common-dir in the live path and a pure Get-HbProductionRoot over those two paths in the self-test, so the fixture needs no real git worktree (temp directories in the linked shape). queue-depth.ps1 is also resolved against the re-rooted $root so it audits the main checkout's queues too.",
       "shipped_commit": null
     },
     {

@@ -33,6 +33,26 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
 . (Join-Path $root 'alert-lib.ps1')
 $repo = Split-Path $root -Parent
+# THE PRODUCTION TREE ONLY (2026-09-19, queue 2026-09-19-b1d371): see Get-HbProductionRoot below. The self-test
+# stays on this copy's own frozen fixtures; the live run re-roots $root and $repo at the main checkout.
+function Get-HbProductionRoot {
+  param([string]$RepoRoot, [string]$GitDir, [string]$CommonDir)
+  $norm = { param($p) if (-not $p) { return '' } ; return ([IO.Path]::GetFullPath($p)).TrimEnd('\', '/') }
+  $gd = & $norm $GitDir; $cd = & $norm $CommonDir
+  if (-not $gd -or -not $cd) { return [pscustomobject]@{ linked = $false; blind = $true; repo = $RepoRoot; why = 'git could not name this checkout''s git dir' } }
+  if ([string]::Equals($gd, $cd, [StringComparison]::OrdinalIgnoreCase)) { return [pscustomobject]@{ linked = $false; blind = $false; repo = $RepoRoot; why = '' } }
+  $main = Split-Path $cd -Parent
+  if (-not (Test-Path -LiteralPath (Join-Path $main 'grocery\expected-automations.json'))) {
+    return [pscustomobject]@{ linked = $true; blind = $true; repo = $main; why = ('linked worktree, no main checkout found at ' + $main) }
+  }
+  return [pscustomobject]@{ linked = $true; blind = $false; repo = $main; why = ('linked worktree ' + $RepoRoot + ': grading the main checkout ' + $main) }
+}
+if (-not $SelfTest) {
+  $hbGit = @(& git -C $repo rev-parse --path-format=absolute --git-dir --git-common-dir)
+  $hbPr = Get-HbProductionRoot -RepoRoot $repo -GitDir ([string]$hbGit[0]) -CommonDir ([string]$(if ($hbGit.Count -gt 1) { $hbGit[1] } else { '' }))
+  if ($hbPr.blind) { Write-Output ('health-heartbeat: BLIND - ' + $hbPr.why + '. Exit 3 (could-not-evaluate); nothing sent.'); exit 3 }
+  if ($hbPr.linked) { Write-Output ('health-heartbeat: ' + $hbPr.why); $repo = $hbPr.repo; $root = Join-Path $repo 'grocery' }
+}
 # lib\pipeline-commit.ps1 for Get-PipelineCommitOutcome, the classifier that sits beside the commit sentences it reads
 # (RUN-LOG-VERDICT below). Loaded under Stop inside a try because this file runs under Continue, and swallowed on
 # failure because the verdict reader checks for the classifier itself: a library that did not load becomes a NAMED
@@ -343,6 +363,36 @@ function Format-HbTaskStale($Name, $AgeH, $MaxH, $Why) {
 function Format-HbOutputStale($Label, $AgeH, $MaxH, $Why) {
   return ("OUTPUT STALE: {0} is {1}h old (> {2}h) - the job that writes it stopped? {3}" -f $Label, $AgeH, $MaxH, $Why)
 }
+# ---- WHICH TREE, AND WAS THE TASK DUE (2026-09-19, queue 2026-09-19-b1d371, a RETURN of 2026-09-18-1dfd03) ----
+# (a) Every output path resolved against this script's own root, so a copy run from a LINKED WORKTREE
+# (.claude\worktrees\ba-land that day) audited that worktree's stale out\ and paged "silent death" three times over
+# for files that were fresh in the main checkout. From a linked worktree the heartbeat now grades the MAIN checkout
+# (the parent of git's common dir) and says so; with no main checkout to find it is BLIND, exit 3, and sends nothing.
+# (b) A task was aged from LastRunTime alone, so 'TC Recipe Harvest Crawl', future-dated to 2026-09-20T18:00 by
+# Brad's ruling (4d5d96b43), read as silent death. A task whose EVERY enabled trigger starts after its last run and
+# after now was not due: 'dormant until <earliest start>'. A task whose every enabled trigger has an EndBoundary in
+# the past and none starts in the future still PAGES, with 'trigger window expired' in the text. Anything else,
+# including a trigger that is unreadable, is aged exactly as before.
+function Get-HbTriggerVerdict {
+  param($Triggers, $LastRunTime, [datetime]$Now)
+  $on = @(@($Triggers) | Where-Object { $_ -and ($_.Enabled -ne $false) })
+  if ($on.Count -eq 0) { return [pscustomobject]@{ state = 'normal'; until = $null; ended = $null } }
+  $starts = @(); $ends = @()
+  foreach ($tr in $on) {
+    $sb = $null; $eb = $null
+    if ([string]$tr.StartBoundary) { try { $sb = [datetime]::Parse([string]$tr.StartBoundary, [Globalization.CultureInfo]::InvariantCulture) } catch { $sb = $null } }
+    if ([string]$tr.EndBoundary) { try { $eb = [datetime]::Parse([string]$tr.EndBoundary, [Globalization.CultureInfo]::InvariantCulture) } catch { $eb = $null } }
+    $starts += , $sb; $ends += , $eb
+  }
+  $futureAll = $true
+  foreach ($sb in $starts) { if (-not $sb -or $sb -le $Now -or ($LastRunTime -and $sb -le [datetime]$LastRunTime)) { $futureAll = $false } }
+  if ($futureAll) { return [pscustomobject]@{ state = 'dormant'; until = (@($starts | Sort-Object)[0]); ended = $null } }
+  $anyFuture = @($starts | Where-Object { $_ -and $_ -gt $Now }).Count -gt 0
+  $endedAll = $true
+  foreach ($eb in $ends) { if (-not $eb -or $eb -ge $Now) { $endedAll = $false } }
+  if ($endedAll -and -not $anyFuture) { return [pscustomobject]@{ state = 'expired'; until = $null; ended = (@($ends | Sort-Object -Descending)[0]) } }
+  return [pscustomobject]@{ state = 'normal'; until = $null; ended = $null }
+}
 function Get-HeartbeatAlertSignature([object[]]$Issues) {
   $set = New-Object 'System.Collections.Generic.SortedSet[string]' ([StringComparer]::Ordinal)
   foreach ($i in $Issues) { [void]$set.Add([string]$i.key) }
@@ -451,6 +501,35 @@ if ($SelfTest) {
     HbCase 'CLEAN TWIN a condition clearing moves the signature too (a new, smaller issue set pages)' ($s6 -ne $s2 -and $s6.Length -eq 32) ($s6 + ' vs ' + $s2)
     HbCase 'MUST FIRE  the -Alert path hashes the issue KEYS through Get-HeartbeatAlertSignature, not the texts' ($hbSrc.Contains('$sig = Get-Heartbeat' + 'AlertSignature $issueObjs.ToArray()'))
     HbCase 'MUST FIRE  a healthy -Alert run clears the stored signature, so an outage that recovers and returns pages again' ($hbSrc.Contains('if ($Alert -and ' + '(Test-Path $sigF)) { Remove-Item'))
+    # ---- b1d371: trigger-aware ageing and the production tree ----
+    $tNow = [datetime]'2026-09-19T09:53:00'
+    $tLast = $tNow.AddHours(-50)
+    $trPast = [pscustomobject]@{ Enabled = $true; StartBoundary = $tNow.AddHours(-10).ToString('s'); EndBoundary = '' }
+    $trFuture = [pscustomobject]@{ Enabled = $true; StartBoundary = $tNow.AddHours(30).ToString('s'); EndBoundary = $tNow.AddDays(6).ToString('s') }
+    $trExpired = [pscustomobject]@{ Enabled = $true; StartBoundary = $tNow.AddDays(-9).ToString('s'); EndBoundary = $tNow.AddHours(-5).ToString('s') }
+    $tv1 = Get-HbTriggerVerdict -Triggers @($trPast) -LastRunTime $tLast -Now $tNow
+    HbCase 'MUST FIRE  last run 50h ago with a trigger that started 10h ago is still aged (STALE), not dormant' ($tv1.state -eq 'normal') ($tv1.state)
+    $tv2 = Get-HbTriggerVerdict -Triggers @($trFuture) -LastRunTime $tLast -Now $tNow
+    HbCase 'CLEAN TWIN last run 50h ago with its only trigger starting 30h ahead reads dormant until that start (the 2026-09-19 harvest crawl)' ($tv2.state -eq 'dormant' -and $tv2.until -eq $tNow.AddHours(30)) ($tv2.state + ' ' + $tv2.until)
+    $tv3 = Get-HbTriggerVerdict -Triggers @($trExpired) -LastRunTime $tLast -Now $tNow
+    HbCase 'MUST FIRE  an EndBoundary 5h past with no future trigger reads expired, and expired still pages' ($tv3.state -eq 'expired') ($tv3.state)
+    $tv4 = Get-HbTriggerVerdict -Triggers @($trFuture, $trPast) -LastRunTime $tLast -Now $tNow
+    HbCase 'MUST FIRE  one due trigger beside a future one is not dormant' ($tv4.state -eq 'normal') ($tv4.state)
+    $wtBase = Join-Path $env:TEMP ('hb-wt-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+    try {
+      $wtMain = Join-Path $wtBase 'main'; $wtLinked = Join-Path $wtMain '.claude\worktrees\ba-land'
+      New-Item -ItemType Directory -Path (Join-Path $wtMain '.git\worktrees\ba-land') -Force -ErrorAction Stop | Out-Null
+      New-Item -ItemType Directory -Path (Join-Path $wtLinked 'grocery') -Force -ErrorAction Stop | Out-Null
+      $pr1 = Get-HbProductionRoot -RepoRoot $wtLinked -GitDir (Join-Path $wtMain '.git\worktrees\ba-land') -CommonDir (Join-Path $wtMain '.git')
+      HbCase 'MUST FIRE  a linked worktree with no main checkout present is BLIND (exit 3, nothing sent)' ($pr1.linked -and $pr1.blind) ($pr1.why)
+      New-Item -ItemType Directory -Path (Join-Path $wtMain 'grocery') -Force -ErrorAction Stop | Out-Null
+      [IO.File]::WriteAllText((Join-Path $wtMain 'grocery\expected-automations.json'), '{}')
+      $pr2 = Get-HbProductionRoot -RepoRoot $wtLinked -GitDir (Join-Path $wtMain '.git\worktrees\ba-land') -CommonDir (Join-Path $wtMain '.git')
+      HbCase 'CLEAN TWIN a linked worktree with the main checkout present grades the MAIN checkout' ($pr2.linked -and -not $pr2.blind -and $pr2.repo -eq $wtMain) ($pr2.repo)
+      $pr3 = Get-HbProductionRoot -RepoRoot $wtMain -GitDir (Join-Path $wtMain '.git') -CommonDir (Join-Path $wtMain '.git')
+      HbCase 'CLEAN TWIN the main checkout grades itself' ((-not $pr3.linked) -and (-not $pr3.blind) -and $pr3.repo -eq $wtMain) ($pr3.repo)
+    } finally { Remove-Item -LiteralPath $wtBase -Recurse -Force -ErrorAction SilentlyContinue }
+    HbCase 'MUST FIRE  the live task loop ages a stale task through Get-HbTriggerVerdict' ($hbSrc.Contains('$tv = Get-Hb' + 'TriggerVerdict -Triggers $task.Triggers'))
   } catch { HbCase ('a case threw: ' + $_.Exception.Message) $false }
 
   Write-Output ("health-heartbeat self-test: {0} case(s), {1} failed" -f $hbCases, $hbFail)
@@ -483,7 +562,12 @@ foreach ($t in @($cfg.windows_tasks)) {
   # A task caught mid-run reports LastTaskResult 267009 (SCHED_S_TASK_RUNNING); that is alive, not failed.
   # This fires whenever the heartbeat's check races the watched task's own run (both scheduled 06:45).
   if ([string]$task.State -eq 'Running' -or $res -eq $TASK_RUNNING) { $okLines.Add(("{0,-38} currently running (OK)" -f $name)) }
-  elseif ($ageH -gt [double]$t.max_age_hours) { Add-HbIssue 'TASK STALE' $name (Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) }
+  elseif ($ageH -gt [double]$t.max_age_hours) {
+    $tv = Get-HbTriggerVerdict -Triggers $task.Triggers -LastRunTime $last -Now $now
+    if ($tv.state -eq 'dormant') { $okLines.Add(("{0,-38} ok dormant until {1} (every enabled trigger starts after its last run, {2}h ago)" -f $name, ([datetime]$tv.until).ToString('yyyy-MM-ddTHH:mm'), $ageH)) }
+    elseif ($tv.state -eq 'expired') { Add-HbIssue 'TASK STALE' $name ((Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) + (' - trigger window expired ' + ([datetime]$tv.ended).ToString('yyyy-MM-ddTHH:mm') + ' and no trigger starts in the future')) }
+    else { Add-HbIssue 'TASK STALE' $name (Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) }
+  }
   elseif ($res -ne 0 -and $t.allow_nonzero_exit) {
     # SOME TASKS REPORT FINDINGS THROUGH THEIR EXIT CODE (2026-08-22). capture-watchdog exits 1 whenever it
     # has findings - that is it working, not dying - and it is also the script that runs THIS heartbeat, so
@@ -538,7 +622,7 @@ foreach ($wt in @(@(Get-ScheduledTask -TaskName 'SMP *' -ErrorAction SilentlyCon
 # grocery\queue-depth.ps1 owns the per-queue probes so this stays generic and the registry stays data.
 # A queue that could not be measured is UNKNOWN and is reported; it is never allowed to read as empty.
 if (@($cfg.queues).Count) {
-  $qd = Join-Path $PSScriptRoot 'queue-depth.ps1'
+  $qd = Join-Path $root 'queue-depth.ps1'   # $root is the MAIN checkout's grocery\ when run from a linked worktree
   if (-not (Test-Path $qd)) {
     Add-HbIssue 'QUEUES UNWATCHED' '' 'QUEUES UNWATCHED: expected-automations.json declares queues and grocery\queue-depth.ps1 is missing, so none of them was measured.'
   } else {
