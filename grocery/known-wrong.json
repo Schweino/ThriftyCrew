@@ -4667,6 +4667,171 @@
                         "ruled_on":  "2026-09-18",
                         "ruled_by":  "triage-developer (plan-2026-09-18, found while shipping 2026-09-18-37ac63)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "brussels-sprouts|HyVee|thats-smart-brussels-sprouts",
+                        "commodity":  "brussels-sprouts",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "That\u0027s Smart! Brussels Sprouts"
+                                  ],
+                        "product_id":  "2969859",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Frozen 12 oz bag: the 2026-09-19 verifier found it in the FROZEN aisle at $1.29 (board $1.39). The name never says frozen, so the fresh commodity\u0027s exclude \\bfrozen\\b cannot see it; frozen-brussels-sprouts is its own commodity. It held the fresh brussels-sprouts CROWN on comparison-2026-09-17 at $1.8533/lb against Sam\u0027s Club 2.46. Scoped to brussels-sprouts at Hy-Vee only.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 (plan-2026-09-19, reviewer-adjudicated; verifier sighting)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cherries|Fareway|betty-crocker-rich-and-creamy-cherry-frosting",
+                        "commodity":  "cherries",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Betty Crocker Rich and Creamy Cherry Frosting"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Cherry-flavoured cake FROSTING in a 16 oz tub, not cherries. Surfaced by the 2026-09-19 triage rebuild from the 09:51 Fareway capture: cherries and frosting both admit the name and array order gave it to cherries, where it took the cherries CROWN at 1.99/lb.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dried-oregano|Bakers|simple-truth-organic-sliced-kalamata-olives-with",
+                        "commodity":  "dried-oregano",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Simple Truth Organic Sliced Kalamata Olives with Oregano"
+                                  ],
+                        "product_id":  "0001111004063",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 10.2 oz jar of sliced KALAMATA OLIVES seasoned with oregano, not dried oregano. Surfaced by the 2026-09-19 triage rebuild from the 09:59 Baker\u0027s capture, where it took the dried-oregano CROWN at 0.3912/oz against 1.6959 for Kroger Oregano Leaves Shaker.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-cinnamon|Fareway|country-hearth-breads-cinnamon-raisin-breakfast",
+                        "commodity":  "ground-cinnamon",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Country Hearth Breads, Cinnamon Raisin, Breakfast"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 22 oz loaf of cinnamon-raisin BREAD, not ground cinnamon. Surfaced by the 2026-09-19 triage rebuild from the 09:51 Fareway capture, where it took the ground-cinnamon CROWN at 0.1995/oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-meatballs|Fareway|chef-boyardee-mini-spaghetti-rings-meatballs",
+                        "commodity":  "frozen-meatballs",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Chef Boyardee Mini Spaghetti Rings \u0026 Meatballs"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 7.5 oz CAN of Chef Boyardee pasta rings with meatballs, shelf-stable canned pasta, not frozen meatballs. Surfaced by the 2026-09-19 triage rebuild from the 09:51 Fareway capture at 0.20/oz; frozen-meatballs and canned-pasta both admit the name.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "peaches|Walmart|great-value-diced-peaches-mandarin-segments-cher",
+                        "commodity":  "peaches",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Diced Peaches, Mandarin Segments \u0026 Cherry Mixed Fruits Variety Pack, 4 oz, 24 Count"
+                                  ],
+                        "product_id":  "5316226322",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 24-count variety pack of 4 oz FRUIT CUPS (diced peaches, mandarin segments and cherries), not fresh peaches priced per lb. Surfaced by the 2026-09-19 triage rebuild from the 09:59 Walmart capture at 2.29/lb.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fresh-green-beans|Walmart|libbys-whole-green-beans",
+                        "commodity":  "fresh-green-beans",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Libby\u0027s Whole Green Beans"
+                                  ],
+                        "product_id":  "10312181",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 14.5 oz CAN (row sizes 14.476 and 14.554 oz) of Libby\u0027s canned whole green beans, not fresh green beans. fresh-green-beans and canned-green-beans both admit the name and array order gave it to fresh. Surfaced by the 2026-09-19 triage rebuild at 1.68/lb.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fresh-green-beans|Aldi|season-s-choice-extra-fine-green-beans-16-oz",
+                        "commodity":  "fresh-green-beans",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Season S Choice Extra Fine Green Beans 16 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Season\u0027s Choice is Aldi\u0027s FROZEN vegetable brand: a 16 oz frozen bag of extra fine green beans, not fresh. Surfaced by the 2026-09-19 triage rebuild from the 09:48 Aldi capture at 2.59/lb, under French Green Beans 1 LB at 2.99.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fresh-green-beans|Fareway|fareway-whole-green-beans",
+                        "commodity":  "fresh-green-beans",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Fareway Whole Green Beans"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 14.5 oz CAN of Fareway whole green beans (the standard can size; fresh beans sell loose or in 12 oz and 2 lb bags), not fresh green beans. fresh-green-beans and canned-green-beans both admit the name and array order gave it to fresh, where it took the CROWN at 1.589/lb. Surfaced by the 2026-09-19 triage rebuild.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|Aldi|summit-strawberry-watermelon-12-fl-oz",
+                        "commodity":  "strawberries",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Summit Strawberry Watermelon 12 FL OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Summit is Aldi\u0027s soft-drink brand: a 12 fl oz strawberry-watermelon DRINK, not strawberries. Surfaced by the 2026-09-19 triage rebuild from the 09:48 Aldi capture, where it took the strawberries CROWN at 0.1242/oz, measured in fluid ounces among weight-sized fruit (the unit-basis kind guard fired on it).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-pizza|SamsClub|red-baron-pepperoni-four-cheese-deep-dish-single",
+                        "commodity":  "frozen-pizza",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Red Baron Pepperoni \u0026 Four Cheese Deep Dish Singles Frozen Personal Pizza Combo, 69.60 oz., 12 PK"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Twelve PERSONAL deep-dish singles, 69.60 oz in all = 5.8 oz each, under frozen-pizza\u0027s 12 oz piece floor (Brad\u0027s T2 ruling), so not the commodity. Test-PieceSize read the pack TOTAL 69.60 oz as the per-piece weight and passed it, so the band refused it instead and audit-band-censorship counted it as censorship (ratchet 25 -\u003e 26, new frozen-pizza|Sam\u0027s Club) on the 2026-09-19 triage rebuild of the 09:47 Sam\u0027s capture.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-19",
+                        "ruled_by":  "triage-developer, queue 2026-09-19-641ec6 deviation (rebuild surfaced it; name and size prove it)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

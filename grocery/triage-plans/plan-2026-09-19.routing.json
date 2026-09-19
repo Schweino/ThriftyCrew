@@ -1,0 +1,59 @@
+{
+  "plan": "plan-2026-09-19.json",
+  "generated": "2026-09-19T10:20:00",
+  "board": "comparison-2026-09-17.json built 2026-09-19 08:12:33 from main HEAD b7b059f85",
+  "change_under_test": {
+    "kind": "known-wrong ruling (name-exact, scoped to commodity+store), not a regex change",
+    "key": "brussels-sprouts|Hy-Vee|thats-smart-brussels-sprouts",
+    "names": ["That's Smart! Brussels Sprouts"],
+    "normalised_name": "thats smart brussels sprouts",
+    "normalisation": "known-wrong.json matching_key: lower-case, delete apostrophes, every other non-alphanumeric byte to a space, stranded possessive s re-joined"
+  },
+  "corpus": {
+    "files": ["grocery/out/candidates-2026-09-17.json (built 08:12:22; commodities[].candidates[], 3,189 board pairs)", "grocery/out/comparison-2026-09-17.json (built 08:12:33)"],
+    "also_scanned_for_the_name": "195 files under out/regular, out/sams, out/bakers, out/fareway modified in the last 16 days: 0 rows named 'That's Smart! Brussels Sprouts'",
+    "skipped_files": ["the Hy-Vee lane's own capture files (not under those four directories) were NOT scanned; the candidates file is the one corpus every section of this artifact reads"],
+    "method": "a ruling can move only rows whose normalised name equals the ruling's name at the ruling's commodity and store; every candidate row of brussels-sprouts at Hy-Vee was read and normalised; rows at other stores and other commodities cannot be touched by construction"
+  },
+  "before": [
+    { "commodity": "brussels-sprouts", "store": "Hy-Vee", "name": "That's Smart! Brussels Sprouts", "size": "12 oz", "price": "$1.39", "unit_price": 1.8533, "routes_to": "brussels-sprouts", "wins_cell": true, "crown": true },
+    { "commodity": "brussels-sprouts", "store": "Hy-Vee", "name": "Brussels Sprouts", "size": "lb", "price": "$2.68", "unit_price": 2.68, "type": "sale", "routes_to": "brussels-sprouts", "wins_cell": false },
+    { "commodity": "brussels-sprouts", "store": "Hy-Vee", "name": "Brussels Sprouts", "size": "lb", "price": "$2.99", "unit_price": 2.99, "type": "everyday", "routes_to": "brussels-sprouts", "wins_cell": false }
+  ],
+  "after": [
+    { "commodity": "brussels-sprouts", "store": "Hy-Vee", "name": "That's Smart! Brussels Sprouts", "routes_to": "BLOCKED by ruling brussels-sprouts|Hy-Vee|thats-smart-brussels-sprouts", "wins_cell": false },
+    { "commodity": "brussels-sprouts", "store": "Hy-Vee", "name": "Brussels Sprouts", "unit_price": 2.68, "routes_to": "brussels-sprouts", "wins_cell": true, "crown": false },
+    { "commodity": "brussels-sprouts", "store": "Hy-Vee", "name": "Brussels Sprouts", "unit_price": 2.99, "routes_to": "brussels-sprouts", "wins_cell": false }
+  ],
+  "routing_changes": 1,
+  "positive_control": {
+    "name": "That's Smart! Brussels Sprouts",
+    "commodity": "brussels-sprouts",
+    "store": "Hy-Vee",
+    "expected": "BLOCKED:brussels-sprouts@Hy-Vee",
+    "observed": "BLOCKED:brussels-sprouts@Hy-Vee",
+    "how_observed": "normalised 'That's Smart! Brussels Sprouts' -> 'thats smart brussels sprouts' equals the ruling's normalised name at the same commodity and store"
+  },
+  "negative_control": {
+    "name": "That's Smart! Brussels Sprouts",
+    "commodity": "frozen-brussels-sprouts",
+    "store": "Hy-Vee",
+    "expected": "unchanged (ruling is scoped to brussels-sprouts)",
+    "observed": "unchanged"
+  },
+  "cell_effects": [
+    { "commodity": "brussels-sprouts", "store": "Hy-Vee", "before": 1.8533, "after": 2.68, "crown_before": "Hy-Vee 1.8533", "crown_after": "Sam's Club 2.46 (membership); first no-membership row Aldi 2.99" }
+  ],
+  "board_rows_for_the_commodity_before": [
+    "Hy-Vee 1.8533 (That's Smart! 12 oz)", "Sam's Club 2.46 (Taylor Farms 2 lbs.)", "Aldi 2.99 (Brussels Sprouts 1 LB)", "Walmart 3.02 (Fresh Whole 1lb Bag)", "Fareway 3.0743 (Fareway Brussels Sprouts 14 oz)", "Baker's 3.99 (lb)", "Family Fare 3.99 (lb)"
+  ],
+  "expected_from_commits_already_on_origin_main_not_this_plan": [
+    { "commit": "ee218cf06", "commodity": "green-chilli", "store": "Aldi", "before": 3.92, "after": null, "note": "the aioli is the only Aldi candidate; cell drops" },
+    { "commit": "ee218cf06", "commodity": "coffee-creamer", "store": "Aldi", "before": 0.0747, "after": 0.0841, "note": "fourteen 32 fl oz creamers at $2.69 behind it" },
+    { "commit": "117315d9c", "commodity": "bean-sprouts", "store": "Fareway", "before": 0.1421, "after": null, "note": "La Choy is the only Fareway candidate; cell drops" }
+  ],
+  "caveats": [
+    "candidates-2026-09-17.json was built from main HEAD b7b059f85, a tree without ee218cf06, 117315d9c, af5e22baf, 2502e2b3a, 9d61d10f5 and 8b51ba94a; the developer's first rebuild will already carry those commits, so re-read the Hy-Vee brussels-sprouts candidates before ruling",
+    "the ruling's effect on the CROWN depends on Sam's Club 2.46 still holding its row at rebuild time (Sam's captures are unioned over 14 days)"
+  ]
+}

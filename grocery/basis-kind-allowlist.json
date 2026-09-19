@@ -97,6 +97,54 @@
       "reviewed": "2026-09-03",
       "reviewed_by": "claude (grocery triage, plan-2026-09-03)",
       "reason": "The size names a VOLUME on a row the guard scored as weight, but the row's OWN declared unit is floz per the commodity rule file, so this is the one cell on the row whose label matches the divisor compare-deals used. 2.48 / 15 fl oz = 0.16533, the published 0.1653, taken verbatim from walmart-regular-2026-08-31.json (current_price 2.48, size 15 fl oz). The flag exists because 4 of 6 sized peers label their bottles by net weight oz, which flipped the peer majority from 3-3 to 2-4 when Baker's cell changed from Subway Sweet Onion (16 fl oz) to Kikkoman Gochujang (21.5 oz) on 09-02; the same crown was green on 08-30 and 08-31, re-run hermetically to prove it. Crown checked for robustness both ways across the whole plausible density range 1.00 to 1.16 oz-weight per fl oz: per weight-oz Walmart is 0.1425 to 0.1653 against Sam's Club 0.1738, and per fl oz Walmart is 0.1653 against Sam's Club 0.1738 to 0.2017. Walmart is cheapest at every point, so no published verdict changes. Same shape and same argument as the pickles at Sam's Club 126.8 oz entry of 2026-08-08. NOT an exclude, because the product IS teriyaki sauce and its number is exact."
+    },
+    {
+      "id": "banana-peppers",
+      "store": "Sam's Club",
+      "size": "128.286 oz",
+      "reviewed": "2026-09-19",
+      "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6, money lane)",
+      "reason": "'Mt. Olive Mild Banana Pepper Rings, 1 gal. jar': the size names ounces on a commodity whose peers label jars by fluid ounce, and 128.286 is the store's own price quotient (8.98 / 0.07). The NUMBER is right by the product name: 1 gal is 128 fl oz and $8.98 / 128 = 0.0702 against the published 0.0700, a 0.3% difference. Peppers in brine sit near water density, so no reading of the unit moves it further. The crown survives every reading: the runner-up is Aldi at 0.1556 on 16 fl oz, more than twice the price. Surfaced by the 09:47 Sam's capture on the 2026-09-19 rebuild."
+    },
+    {
+      "id": "coffee-creamer",
+      "store": "Aldi",
+      "size": "32 oz.",
+      "reviewed": "2026-09-19",
+      "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6, money lane)",
+      "reason": "'Barissimo Assorted Seasonal Coffee Creamer': Aldi writes '32 oz.' for a liquid, and a coffee creamer bottle is a quart, 32 FLUID ounces. The engine divided $2.69 by 32 fl oz (basis 'size 32 floz'), giving the published 0.0841, the same figure the 2026-09-19 plan measured for the fourteen 32 fl oz Aldi creamers behind the ruled half & half. The margin is THIN: Sam's Club is 0.0861 on 66 fl oz. If the 32 were net WEIGHT (creamer is about 1.03 g/ml, so about 31.1 fl oz), the per-fl-oz would be 0.0866 and the crown would pass to Sam's. Allowed because a liquid creamer's '32 oz.' is its fluid volume, not because the flag was inconvenient. A different size string voids this and the guard speaks again."
+    },
+    {
+      "id": "insect-spray",
+      "store": "Walmart",
+      "size": "22 fl oz",
+      "reviewed": "2026-09-19",
+      "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6, money lane)",
+      "reason": "'Raid MAX Perimeter Protection ... Multi Insect Killer Spray, 22 fl oz' is a water-based trigger spray sold by fluid ounce among aerosols sold by net weight. The engine divided $5.47 by 22 (basis 'size 22 oz'), giving 0.2486. At about 1.04 g/ml the 22 fl oz weighs about 22.9 oz, so the true per-oz is about 0.239. Reading fl oz as oz therefore OVERSTATES our figure, the safe direction for a crown holder. It keeps the crown both ways against Baker's 0.2654 (2 pk 17.5 oz). Surfaced by the 09:59 Walmart capture on the 2026-09-19 rebuild."
+    },
+    {
+      "id": "pickles",
+      "store": "Sam's Club",
+      "size": "119.6 oz",
+      "reviewed": "2026-09-19",
+      "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6, money lane)",
+      "reason": "'Best Maid Dill Pickles, 1 gal.': the size is the jar's weight label, 119.6 oz, on a commodity whose peers label jars by fluid ounce. The engine divided $5.98 by 119.6, giving 0.0500. Read by the name's 1 gal (128 fl oz), the jar is 0.0467 per fl oz, so our figure OVERSTATES, the safe direction for a crown holder. It keeps the crown either way against Walmart at 0.0745 on 80 fl oz. Surfaced by the 09:47 Sam's capture on the 2026-09-19 rebuild."
+    },
+    {
+      "id": "soy-sauce",
+      "store": "Sam's Club",
+      "size": "41.633 lb",
+      "reviewed": "2026-09-19",
+      "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6, money lane)",
+      "reason": "'Lee Kum Kee Chef's Select Soy Sauce, 5 Gal.': the size field carries the store's weight, 41.633 lb, but the engine priced by the NAME (basis 'size 640 floz': 5 gal = 640 fl oz), and the product name wins over a store field. $24.98 / 640 = 0.0390, which is the published number. The crown holds by a factor of about 2.8 against Aldi at 0.11 on 15 fl oz, so no density reading of the weight field changes it. NOT a statement that a 5-gallon pail is sold in-club at Omaha: that is the channel question, which this basis review does not answer. Surfaced by the 09:47 Sam's capture on the 2026-09-19 rebuild."
+    },
+    {
+      "id": "teriyaki-sauce",
+      "store": "Baker's",
+      "size": "12 fl oz",
+      "reviewed": "2026-09-19",
+      "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6, money lane)",
+      "reason": "'Kroger Teriyaki Pineapple Marinade' is sized in fl oz, the commodity's DECLARED unit, and is accused only by a weight-labelled peer majority (Sam's 27.5 oz), the inverted-reference case. The engine divided $2.00 by 12 fl oz (basis 'size 12 floz'), giving 0.1667, which is right as printed. The runner-up, Walmart at 0.1687 on 15 fl oz, is in the same unit, so the thin 1.2% margin compares like with like. Surfaced on the 2026-09-19 rebuild."
     }
   ]
 }

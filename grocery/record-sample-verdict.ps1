@@ -62,6 +62,26 @@
   AN ALERT IS SAID TO BE SENT ONLY WHEN THE SEND SAYS SO (2026-09-19). Send-Alert's exit code is read: a failure
   prints "ALERT NOT SENT" with the sender's own words and exits 4. Until then the result was discarded and "ALERT
   sent to Brad" printed regardless, which is what the 2026-09-19 05:49 run said over a failed send.
+
+  A RATE IS COMPARED ONLY WITH A RATE MEASURED BY THE SAME RULES (2026-09-19, queue 2026-09-19-641ec6). The
+  2026-09-17 run alerted "37.1% is above the last measured 18.2%", and the two numbers were not measuring the same
+  thing: its adjudicator applied five rules the 2026-08-15 notes do not state, and they account for 24 of its 36
+  defects (under the shared rules it read 12 in 100 against 20 in 100). Nothing in the history could say so,
+  because a run recorded its verdicts and never the rules that produced them. So now:
+    * a run records rubric = { notes, rules_sha, version, counts }: the sha256 of the BODY of its notes' section
+      headed exactly "## Adjudication standard" (the heading line is not hashed, lines are trimmed and
+      LF-joined), plus the "Rubric version: <n>" and "Counted subclasses: <list>" lines read out of it.
+      -RubricNotes names the notes (default: verification-decisions-<D>-notes.md beside the verdict file). Notes
+      with no such section record rubric = null, said aloud, and such a run is never compared like for like.
+    * every DEFECT row records a subclass from a closed vocabulary (drift, channel, not-listed, not-cheapest,
+      identity, size, multi-buy, other), read from the verdict file's own subclass column or from the decisions
+      CSV (-DecisionsFile, default verification-decisions-<D>.csv beside the verdict file). A defect row with no
+      subclass, or a word outside the vocabulary, REFUSES the whole recording (exit 1, nothing written): dropping
+      the row would understate the rate, and an unknown word would fall out of every like-for-like rate.
+    * -CompareLast compares the whole-board rates only when both runs carry the SAME rules_sha. Otherwise the
+      verdict is rubric-changed: both rates, plus this run's rate counting only the subclasses the last rubric
+      counted (like for like), and the alert subject says "rubric changed" (or "rubric not recorded") instead of
+      "is above the last measured". Every alert body carries the defects by subclass with their denominator.
 #>
 param(
   [string]$VerdictFile = '',
@@ -72,6 +92,8 @@ param(
   [double]$TargetHalfWidth = 0.01,
   [int]$DueDays = 13,
   [string]$AlertLib = '',
+  [string]$DecisionsFile = '',
+  [string]$RubricNotes = '',
   [switch]$Report,
   [switch]$CompareLast,
   [switch]$Alert,
@@ -86,6 +108,12 @@ $histPath = if ($HistoryFile) { $HistoryFile } else { Join-Path $outDir 'verific
 function Say([string]$s) { if (-not $Quiet) { Write-Output $s } }
 $DEFECT = @('wrong-product', 'wrong-price', 'wrong-size', 'missing')
 $VALID  = @('ok', 'wrong-product', 'wrong-price', 'wrong-size', 'missing', 'unverifiable', 'match', 'could-not-look')
+# The upstream cause of a defect, a CLOSED vocabulary (the known-wrong retire_when shape): drift = the board's
+# product at another shelf price with no sale either way; channel = not buyable in store there (ship-only, out of
+# stock); not-listed = the store does not list the board's product while it sells the commodity; not-cheapest =
+# a cheaper qualifying product is on the shelf; identity = the board's product is not the commodity; size = the
+# size or pack basis is wrong; multi-buy = a multi-buy offer read as (or not as) the unit price; other = say why.
+$SUBCLASS = @('drift', 'channel', 'not-listed', 'not-cheapest', 'identity', 'size', 'multi-buy', 'other')
 
 # ---------------------------------------------------------------------------------------------------------
 # BEGIN-SAMPLE-STATS  (extracted and executed verbatim by test-auditors.ps1 - do not rename these sentinels)
@@ -207,9 +235,11 @@ function Get-VerifyRunScope($r) {
   return 'whole-board'
 }
 
-function Get-RunEstimate($run, [int]$minSamples) {
+function Get-RunEstimate($run, [int]$minSamples, [string[]]$countOnly = $null) {
   # ONE run alone: its own verdicts (a cell verified twice inside it counts once, at its last verdict) and its
   # own stratum populations. Never pooled, because "the last measured rate" is one run's statement.
+  # -countOnly (2026-09-19): count a defect only when its subclass is in the list, the like-for-like rate under an
+  # older rubric. A defect outside the list stays in the denominator as a cell that rubric would have passed.
   $latest = @{}
   foreach ($v in @($run.verdicts)) { $latest[([string]$v.id) + '|' + ([string]$v.store)] = $v }
   $nC = 0; $xC = 0; $nN = 0; $xN = 0; $unv = 0
@@ -217,6 +247,10 @@ function Get-RunEstimate($run, [int]$minSamples) {
     $vd = [string]$v.verdict
     if ($vd -eq 'unverifiable') { $unv++; continue }
     $isDef = ($DEFECT -contains $vd)
+    if ($isDef -and $null -ne $countOnly) {
+      $sc = ''; if ($v.PSObject.Properties['subclass']) { $sc = [string]$v.subclass }
+      $isDef = ($countOnly -contains $sc)
+    }
     if (([string]$v.stratum) -eq 'crown') { $nC++; if ($isDef) { $xC++ } } else { $nN++; if ($isDef) { $xN++ } }
   }
   $popC = 0; $popN = 0
@@ -251,33 +285,148 @@ function Get-RateVsLast($runs, [int]$minSamples) {
     return [pscustomobject]@{ verdict = 'not-quotable'; new = $eN; last = $null; overlap = $false
       line = ('RATE-VS-LAST verdict=not-quotable scope=' + $eN.scope + ' new=' + $eN.board_date + ' verified=' + $eN.n + ' (under the floor of ' + $minSamples + '; no rate, so nothing to compare)') }
   }
-  $eP = $null
+  $eP = $null; $pRun = $null
   for ($i = $sorted.Count - 2; $i -ge 0; $i--) {
     if ((Get-VerifyRunScope $sorted[$i]) -ne $eN.scope) { continue }
     $cand = Get-RunEstimate $sorted[$i] $minSamples
-    if ($cand.quotable) { $eP = $cand; break }
+    if ($cand.quotable) { $eP = $cand; $pRun = $sorted[$i]; break }
   }
   if ($null -eq $eP) {
-    return [pscustomobject]@{ verdict = 'no-previous'; new = $eN; last = $null; overlap = $false
+    return [pscustomobject]@{ verdict = 'no-previous'; new = $eN; last = $null; overlap = $false; newRun = $newRun; lastRun = $null
       line = ('RATE-VS-LAST verdict=no-previous scope=' + $eN.scope + ' new=' + (Format-RunRate $eN)) }
   }
   $overlap = -not (($eN.lo -gt $eP.hi) -or ($eN.hi -lt $eP.lo))
-  $verdict = if ($eN.p -gt $eP.p) { 'worse' } else { 'not-worse' }
-  return [pscustomobject]@{ verdict = $verdict; new = $eN; last = $eP; overlap = $overlap
-    line = ('RATE-VS-LAST verdict=' + $verdict + ' scope=' + $eN.scope + ' new=' + (Format-RunRate $eN) + ' last=' + (Format-RunRate $eP) +
-            ' intervals=' + $(if ($overlap) { 'overlap' } else { 'disjoint' })) }
+  # ONE RUBRIC OR NO COMPARISON (2026-09-19, queue 2026-09-19-641ec6). Two whole-board rates are compared only
+  # when both runs recorded the SAME rules_sha; anything else is rubric-changed, with the like-for-like rate.
+  $rN = Get-RunRubric $newRun; $rP = Get-RunRubric $pRun
+  $shaN = ''; if ($rN) { $shaN = [string]$rN.rules_sha }
+  $shaP = ''; if ($rP) { $shaP = [string]$rP.rules_sha }
+  $rubTxt = ' new_rubric=' + $(if ($shaN) { $shaN.Substring(0, [Math]::Min(12, $shaN.Length)) } else { 'none' }) +
+            ' last_rubric=' + $(if ($shaP) { $shaP.Substring(0, [Math]::Min(12, $shaP.Length)) } else { 'none' })
+  $ovTxt = ' intervals=' + $(if ($overlap) { 'overlap' } else { 'disjoint' })
+  if ($shaN -ne '' -and $shaN -eq $shaP) {
+    $verdict = if ($eN.p -gt $eP.p) { 'worse' } else { 'not-worse' }
+    return [pscustomobject]@{ verdict = $verdict; new = $eN; last = $eP; overlap = $overlap; newRun = $newRun; lastRun = $pRun
+      rubric_why = 'same'; restricted = $null; restricted_why = ''; counted_last = $null
+      line = ('RATE-VS-LAST verdict=' + $verdict + ' scope=' + $eN.scope + ' new=' + (Format-RunRate $eN) + ' last=' + (Format-RunRate $eP) + $ovTxt + $rubTxt) }
+  }
+  $why = if ($shaN -eq '' -or $shaP -eq '') { 'not-recorded' } else { 'differs' }
+  $lc = $null
+  if ($rP -and $rP.PSObject.Properties['counts'] -and $null -ne $rP.counts) { $lc = [string[]]@(@($rP.counts) | ForEach-Object { [string]$_ }) }
+  $eR = $null; $rWhy = ''
+  if ($null -eq $lc -or $lc.Count -eq 0) {
+    $rWhy = $(if ($shaP -eq '') { 'the last run recorded no rubric, so which subclasses it counted is unknown' } else { 'the last rubric names no counted subclasses' })
+  } else {
+    $noSub = @(@($newRun.verdicts) | Where-Object { ($DEFECT -contains [string]$_.verdict) -and -not ($_.PSObject.Properties['subclass'] -and [string]$_.subclass) }).Count
+    if ($noSub -gt 0) { $rWhy = ([string]$noSub + ' defect row(s) of this run carry no subclass') }
+    else { $eR = Get-RunEstimate $newRun $minSamples $lc }
+  }
+  $lfl = if ($eR) { (Format-RunRate $eR) + ' counting only ' + ($lc -join '/') } else { 'not-computable (' + $rWhy + ')' }
+  return [pscustomobject]@{ verdict = 'rubric-changed'; new = $eN; last = $eP; overlap = $overlap; newRun = $newRun; lastRun = $pRun
+    rubric_why = $why; restricted = $eR; restricted_why = $rWhy; counted_last = $lc
+    line = ('RATE-VS-LAST verdict=rubric-changed why=' + $why + ' scope=' + $eN.scope + ' new=' + (Format-RunRate $eN) + ' last=' + (Format-RunRate $eP) +
+            ' like_for_like=' + $lfl + $ovTxt + $rubTxt + ' (measured under different rules: the two whole-board rates are NOT compared)') }
+}
+
+function Get-RunRubric($run) {
+  # The rubric a run recorded, or $null: every run recorded before 2026-09-19, and a run whose notes had no section.
+  if ($null -eq $run -or -not $run.PSObject.Properties['rubric']) { return $null }
+  $r = $run.rubric
+  if ($null -eq $r -or -not $r.PSObject.Properties['rules_sha'] -or -not ([string]$r.rules_sha)) { return $null }
+  return $r
+}
+
+function Get-RubricFromText([string]$text, [string]$notesName) {
+  # The rubric is the BODY of the section headed exactly "Adjudication standard" (any level): from that heading to
+  # the next heading of the same or a higher level, each line trimmed (a copy indented inside a list hashes the
+  # same), LF-joined, outer blank lines dropped. The heading line is not hashed, and a heading that says more
+  # ("Adjudication standard applied, <date> sample") is not the section, so run-specific text (dates, coverage,
+  # examples) cannot move the sha of unchanged rules.
+  $lines = @(([string]$text) -split "`r?`n")
+  $start = -1; $level = 0
+  for ($i = 0; $i -lt $lines.Count; $i++) {
+    $m = [regex]::Match($lines[$i], '^\s{0,3}(#{1,6})\s*Adjudication standard\s*:?\s*$', 'IgnoreCase')
+    if ($m.Success) { $start = $i; $level = $m.Groups[1].Value.Length; break }
+  }
+  if ($start -lt 0) { return $null }
+  $body = New-Object System.Collections.ArrayList
+  for ($j = $start + 1; $j -lt $lines.Count; $j++) {
+    $h = [regex]::Match($lines[$j], '^\s{0,3}(#{1,6})\s')
+    if ($h.Success -and $h.Groups[1].Value.Length -le $level) { break }
+    [void]$body.Add($lines[$j].Trim())
+  }
+  $norm = (($body.ToArray()) -join "`n").Trim()
+  if ($norm.Length -eq 0) { return $null }
+  $hasher = [Security.Cryptography.SHA256]::Create()
+  $sha = ([BitConverter]::ToString($hasher.ComputeHash([Text.Encoding]::UTF8.GetBytes($norm)))).Replace('-', '').ToLower()
+  $ver = 0
+  $mv = [regex]::Match($norm, '(?im)^[\s*_]*Rubric version[\s*_]*:[\s*_]*(\d+)')
+  if ($mv.Success) { $ver = [int]$mv.Groups[1].Value }
+  $counts = $null
+  $mc = [regex]::Match($norm, '(?im)^[\s*_]*Counted subclasses[\s*_]*:(.+)$')
+  if ($mc.Success) {
+    $counts = [string[]]@((($mc.Groups[1].Value) -replace '[`*_.]', '') -split ',' | ForEach-Object { $_.Trim().ToLower() } | Where-Object { $_ })
+  }
+  return [pscustomobject]@{ notes = $notesName; rules_sha = $sha; version = $ver; counts = $counts }
+}
+
+function Get-SubclassBreakdown($run) {
+  # "channel 15, identity 15 (30 defect(s) in 100 verified)": the defects by subclass WITH their denominator, one
+  # cell once at its last verdict as Get-RunEstimate counts it. A run recorded before subclasses says so.
+  $latest = @{}
+  foreach ($v in @($run.verdicts)) { $latest[([string]$v.id) + '|' + ([string]$v.store)] = $v }
+  $n = 0; $x = 0; $none = 0; $by = @{}
+  foreach ($v in $latest.Values) {
+    $vd = [string]$v.verdict
+    if ($vd -eq 'unverifiable') { continue }
+    $n++
+    if ($DEFECT -notcontains $vd) { continue }
+    $x++
+    $sc = ''; if ($v.PSObject.Properties['subclass']) { $sc = [string]$v.subclass }
+    if ($sc -eq '') { $none++; continue }
+    if ($by.ContainsKey($sc)) { $by[$sc]++ } else { $by[$sc] = 1 }
+  }
+  $parts = @($by.Keys | Sort-Object @{ Expression = { $by[$_] }; Descending = $true }, @{ Expression = { $_ } } | ForEach-Object { $_ + ' ' + $by[$_] })
+  if ($none -gt 0) { $parts += ('no subclass recorded ' + $none) }
+  $lead = if ($parts.Count -gt 0) { $parts -join ', ' } else { 'none' }
+  return ($lead + ' (' + $x + ' defect(s) in ' + $n + ' verified)')
+}
+
+function Test-RateAlertOwed($cmp) {
+  # Brad's trigger is unchanged (this run's point estimate above the last one); a changed rubric changes what the
+  # mail SAYS, never whether it is sent.
+  if ($null -eq $cmp) { return $false }
+  if ($cmp.verdict -eq 'worse') { return $true }
+  if ($cmp.verdict -eq 'rubric-changed' -and $null -ne $cmp.new -and $null -ne $cmp.last -and $cmp.new.p -gt $cmp.last.p) { return $true }
+  return $false
 }
 
 function Invoke-RateAlert($cmp, [scriptblock]$Sender) {
   # Brad's rule: alert when the rate exceeds the last measured one. The mail says whether the two intervals
-  # overlap, because a higher point inside overlapping intervals is not evidence the board got worse.
-  if ($null -eq $cmp -or $cmp.verdict -ne 'worse') { return [pscustomobject]@{ attempted = $false; sent = $false; rc = $null; detail = ''; subject = '' } }
-  $subj = 'Board verification: defect rate ' + ('{0:N1}%' -f (100.0 * $cmp.new.p)) + ' is above the last measured ' + ('{0:N1}%' -f (100.0 * $cmp.last.p))
+  # overlap, because a higher point inside overlapping intervals is not evidence the board got worse. Under a
+  # changed or unrecorded rubric the subject says so instead of "is above the last measured" (2026-09-19).
+  if (-not (Test-RateAlertOwed $cmp)) { return [pscustomobject]@{ attempted = $false; sent = $false; rc = $null; detail = ''; subject = '' } }
+  $pN = '{0:N1}%' -f (100.0 * $cmp.new.p); $pL = '{0:N1}%' -f (100.0 * $cmp.last.p)
+  $isRub = ($cmp.verdict -eq 'rubric-changed')
+  if ($isRub) {
+    $lead = if ($cmp.rubric_why -eq 'differs') { 'rubric changed' } else { 'rubric not recorded' }
+    $subj = 'Board verification: ' + $lead + '; ' + $pN + ' this run against ' + $pL + ' last run, ' +
+      $(if ($cmp.restricted) { ('{0:N1}%' -f (100.0 * $cmp.restricted.p)) + ' like for like' } else { 'no like-for-like rate' })
+  } else {
+    $subj = 'Board verification: defect rate ' + $pN + ' is above the last measured ' + $pL
+  }
+  $bNew = 'not available'; if ($cmp.PSObject.Properties['newRun'] -and $cmp.newRun) { $bNew = Get-SubclassBreakdown $cmp.newRun }
+  $bLast = 'not available'; if ($cmp.PSObject.Properties['lastRun'] -and $cmp.lastRun) { $bLast = Get-SubclassBreakdown $cmp.lastRun }
   $body = @(
-    'The 14-day out-of-band verification measured a higher whole-board defect rate than the last run.',
+    $(if ($isRub) { 'The 14-day out-of-band verification adjudicated this run under a different rubric from the last run (' + $cmp.rubric_why + '), so the two whole-board rates are NOT like for like and are not compared.' }
+      else { 'The 14-day out-of-band verification measured a higher whole-board defect rate than the last run.' }),
     '',
     ('  this run : ' + (Format-RunRate $cmp.new)),
     ('  last run : ' + (Format-RunRate $cmp.last)),
+    $(if ($isRub) { '  like for like (this run, counting only the subclasses the last rubric counted): ' + $(if ($cmp.restricted) { Format-RunRate $cmp.restricted } else { 'not computable: ' + $cmp.restricted_why }) } else { '' }),
+    '',
+    ('Defects by subclass, this run: ' + $bNew),
+    ('Defects by subclass, last run: ' + $bLast),
     '',
     $(if ($cmp.overlap) { 'The two 95% intervals OVERLAP, so this is not evidence on its own that the board got worse; it is a higher point estimate.' }
       else { 'The two 95% intervals do NOT overlap: the board measured worse than last time beyond sampling noise.' }),
@@ -403,12 +552,19 @@ if ($SelfTest) {
     RsvCase 'MUST FIRE forty unpriced matches quote no rate (exit 3) and record zero ok' ($rc2 -eq 3 -and $ok2 -eq 0 -and $null -ne $hj2) ('rc=' + $rc2 + ' ok=' + $ok2)
 
     # --- rate against the last measured one ------------------------------------------------------------
-    function New-FxRun([string]$date, [string]$scope, [int]$nC, [int]$xC, [int]$nN, [int]$xN, [int]$unv, [string]$recordedAt) {
+    # Every fixture run carries rubric 'fx-rubric-a' unless told otherwise, so the cases written before rubrics
+    # existed keep asking what they always asked: one rubric, compare the rates.
+    function New-FxRun([string]$date, [string]$scope, [int]$nC, [int]$xC, [int]$nN, [int]$xN, [int]$unv, [string]$recordedAt, [string]$Sha = 'fx-rubric-a', [string]$CrownSub = 'drift') {
       $vs = @(); $k = 0
-      for ($i = 0; $i -lt $nC; $i++) { $k++; $vs += [pscustomobject]@{ id = ('r' + $k); store = 'S'; stratum = 'crown'; verdict = $(if ($i -lt $xC) { 'wrong-price' } else { 'ok' }) } }
-      for ($i = 0; $i -lt $nN; $i++) { $k++; $vs += [pscustomobject]@{ id = ('r' + $k); store = 'S'; stratum = 'noncrown'; verdict = $(if ($i -lt $xN) { 'wrong-product' } else { 'ok' }) } }
-      for ($i = 0; $i -lt $unv; $i++) { $k++; $vs += [pscustomobject]@{ id = ('r' + $k); store = 'S'; stratum = 'noncrown'; verdict = 'unverifiable' } }
-      return [pscustomobject]@{ board_date = $date; store_scope = $scope; recorded_at = $recordedAt
+      for ($i = 0; $i -lt $nC; $i++) { $k++; $vs += [pscustomobject]@{ id = ('r' + $k); store = 'S'; stratum = 'crown'; verdict = $(if ($i -lt $xC) { 'wrong-price' } else { 'ok' }); subclass = $(if ($i -lt $xC) { $CrownSub } else { '' }) } }
+      for ($i = 0; $i -lt $nN; $i++) { $k++; $vs += [pscustomobject]@{ id = ('r' + $k); store = 'S'; stratum = 'noncrown'; verdict = $(if ($i -lt $xN) { 'wrong-product' } else { 'ok' }); subclass = $(if ($i -lt $xN) { 'identity' } else { '' }) } }
+      for ($i = 0; $i -lt $unv; $i++) { $k++; $vs += [pscustomobject]@{ id = ('r' + $k); store = 'S'; stratum = 'noncrown'; verdict = 'unverifiable'; subclass = '' } }
+      $rub = $null
+      if ($Sha) {
+        $cnt = if ($Sha -eq 'fx-rubric-a') { [string[]]@('drift', 'identity', 'not-cheapest', 'size') } else { [string[]]@('drift', 'channel', 'not-listed', 'not-cheapest', 'identity', 'size', 'multi-buy', 'other') }
+        $rub = [pscustomobject]@{ notes = 'fixture'; rules_sha = $Sha; version = 1; counts = $cnt }
+      }
+      return [pscustomobject]@{ board_date = $date; store_scope = $scope; recorded_at = $recordedAt; rubric = $rub
         strata = [pscustomobject]@{ crown = [pscustomobject]@{ population = 500 }; noncrown = [pscustomobject]@{ population = 1500 } }; verdicts = $vs }
     }
     $rA = New-FxRun '2099-01-01' 'whole-board' 50 5 50 5 0 '2099-01-02T08:00:00'
@@ -443,6 +599,61 @@ if ($SelfTest) {
     RsvCase 'MUST FIRE a sender that answers nothing reads NOT sent, never sent' ((-not $f3.sent) -and $f3.detail -match 'no exit code') ('sent=' + $f3.sent + ' detail=' + $f3.detail)
     $f4 = Invoke-RateAlert $cW { param($s, $b) 'alert emailed'; 0 }
     RsvCase 'CLEAN TWIN a sender that exits 0 reads sent' ($f4.sent -and $f4.rc -eq 0) ('sent=' + $f4.sent + ' rc=' + $f4.rc)
+
+    # --- a rate is compared only with a rate adjudicated under the same rubric (2026-09-19, queue 641ec6) ----
+    # Founding case: 2026-09-17 read 37.1% against 2026-08-15's 18.2% and mailed "is above the last measured",
+    # while 24 of its 36 defects came from five rules the older notes never stated.
+    RsvCase 'CLEAN TWIN one rubric on both runs keeps the comparison and its "is above the last measured" subject' ($cW.verdict -eq 'worse' -and $sent[0] -match 'is above the last measured' -and $cW.line -match 'new_rubric=fx-rubric-a') ($cW.line)
+    $rB = New-FxRun '2099-01-15' 'whole-board' 50 15 50 15 0 '2099-01-16T08:00:00' -Sha 'fx-rubric-b' -CrownSub 'channel'
+    $cR = Get-RateVsLast @($rA, $rB) 30
+    RsvCase 'MUST FIRE a higher rate under a DIFFERENT rubric reads rubric-changed, never worse' ($cR.verdict -eq 'rubric-changed' -and $cR.rubric_why -eq 'differs') ($cR.line)
+    $rx = -1; if ($cR.restricted) { $rx = [int]$cR.restricted.x }
+    RsvCase 'MUST FIRE the like-for-like rate counts only the subclasses the last rubric counted (15 identity of 30 defects; channel is not one)' ($rx -eq 15 -and $cR.new.x -eq 30 -and $cR.restricted.n -eq 100) ('restricted.x=' + $rx + ' new.x=' + $cR.new.x)
+    $sentR = New-Object System.Collections.ArrayList
+    $aR = Invoke-RateAlert $cR { param($s, $b) [void]$sentR.Add($s + '|' + $b); 0 }
+    $jR = ''; if ($sentR.Count -gt 0) { $jR = [string]$sentR[0] }
+    RsvCase 'MUST FIRE a rubric change mails "rubric changed" with both rates and the like-for-like rate, never "is above the last measured"' ($aR.sent -and $sentR.Count -eq 1 -and $aR.subject -match 'rubric changed' -and $aR.subject -match 'like for like' -and $jR -notmatch 'is above the last measured' -and $jR -match '2099-01-15' -and $jR -match '2099-01-01') ('sent=' + $sentR.Count + ' subject=' + $aR.subject)
+    RsvCase 'MUST FIRE the mail body carries the defects by subclass with their denominator' ($jR -match 'channel 15' -and $jR -match 'identity 15' -and $jR -match '30 defect\(s\) in 100 verified') ('body=' + $jR)
+    $rNone = New-FxRun '2099-01-15' 'whole-board' 50 15 50 15 0 '2099-01-16T08:00:00' -Sha ''
+    $cN = Get-RateVsLast @($rA, $rNone) 30
+    RsvCase 'MUST FIRE a run with no recorded rubric is never compared like for like (rubric-changed, not-recorded)' ($cN.verdict -eq 'rubric-changed' -and $cN.rubric_why -eq 'not-recorded') ($cN.line)
+    # the rubric is the BODY of "## Adjudication standard" and nothing else: not the H1 that carries the date, not
+    # the coverage section, not trailing blanks, not the line endings
+    $nt1 = "# Adjudication standard applied, 2099-01-01 sample`n`n## Adjudication standard`nRubric version: 2`nCounted subclasses: identity, size, not-cheapest`n- not-cheapest is wrong-price   `n`n## Coverage`n40 of 40 answered.`n"
+    $nt2 = "# Adjudication standard applied, 2099-01-15 sample`r`n`r`n   ## Adjudication standard`r`n   Rubric version: 2`r`n   Counted subclasses: identity, size, not-cheapest`r`n   - not-cheapest is wrong-price`r`n`r`n## Coverage`r`n12 of 40 answered on another day.`r`n"
+    $nt3 = $nt1.Replace('- not-cheapest is wrong-price', ('- not-cheapest is wrong-price' + "`n" + '- a drifted price is wrong-price'))
+    $g1 = Get-RubricFromText $nt1 'n1'; $g2 = Get-RubricFromText $nt2 'n2'; $g3 = Get-RubricFromText $nt3 'n3'
+    $g1s = 'null'; if ($g1) { $g1s = [string]$g1.rules_sha + ' v' + $g1.version + ' counts=' + (@($g1.counts) -join ',') }
+    RsvCase 'CLEAN TWIN the same standard under another date, other coverage and CRLF reads the same sha, version and counts' ($null -ne $g1 -and $null -ne $g2 -and $g1.rules_sha -eq $g2.rules_sha -and $g1.version -eq 2 -and (@($g1.counts) -join ',') -eq 'identity,size,not-cheapest') ('g1=' + $g1s)
+    RsvCase 'MUST FIRE one added rule changes the rubric sha' ($null -ne $g3 -and $null -ne $g1 -and $g3.rules_sha -ne $g1.rules_sha) ('g1=' + $g1s)
+    $g4 = Get-RubricFromText "# Adjudication standard applied, 2099-01-01 sample`n`n## Coverage`nall answered`n" 'n4'
+    RsvCase 'MUST FIRE notes whose only match is the dated H1 record no rubric' ($null -eq $g4) ('got a rubric from notes with no section')
+    # end to end through the real recorder: a defect needs a subclass, and the run records its rubric
+    $notesFx = Join-Path $stDir 'fx-notes.md'
+    [IO.File]::WriteAllText($notesFx, $nt1, (New-Object System.Text.UTF8Encoding($false)))
+    $vf3 = Join-Path $stDir 'verification-worklist-2099-01-01-c.csv'
+    FxVerdictFile $vf3 { param($i) if ($i -lt 30) { ,@('match', '2.49') } elseif ($i -lt 35) { ,@('wrong-price', '2.99') } else { ,@('wrong-product', '1.99') } }
+    $h3 = Join-Path $stDir 'hist-3.json'
+    $o3 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -VerdictFile $vf3 -SampleFile $keyPath -HistoryFile $h3 -RubricNotes $notesFx | ForEach-Object { [string]$_ })
+    $rc3 = $LASTEXITCODE
+    RsvCase 'MUST FIRE end to end: ten defect rows with no subclass are REFUSED (exit 1) and nothing is written' ($rc3 -eq 1 -and -not (Test-Path -LiteralPath $h3) -and (($o3 -join "`n") -match '10 defect row\(s\) carry no subclass')) ('rc=' + $rc3 + ' out: ' + ($o3 -join ' | '))
+    $dl = @('ticket,verdict,subclass')
+    for ($i = 30; $i -lt 40; $i++) { $dl += ('T{0:D2},{1},{2}' -f $i, $(if ($i -lt 35) { 'wrong-price' } else { 'wrong-product' }), $(if ($i -lt 35) { 'drift' } else { 'identity' })) }
+    $dec4 = Join-Path $stDir 'fx-decisions.csv'
+    [IO.File]::WriteAllText($dec4, (($dl -join "`r`n") + "`r`n"), (New-Object System.Text.UTF8Encoding($false)))
+    $h4 = Join-Path $stDir 'hist-4.json'
+    $o4 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -VerdictFile $vf3 -SampleFile $keyPath -HistoryFile $h4 -RubricNotes $notesFx -DecisionsFile $dec4 | ForEach-Object { [string]$_ })
+    $rc4 = $LASTEXITCODE
+    $run4 = $null; if (Test-Path -LiteralPath $h4) { $run4 = @(((Get-Content -LiteralPath $h4 -Raw -Encoding UTF8) | ConvertFrom-Json).runs)[0] }
+    $sub4 = @(); $sha4 = ''
+    if ($run4) { $sub4 = @(@($run4.verdicts) | Where-Object { [string]$_.subclass -ne '' } | ForEach-Object { [string]$_.subclass }); if ($run4.rubric) { $sha4 = [string]$run4.rubric.rules_sha } }
+    RsvCase 'CLEAN TWIN end to end: with a decisions subclass column each defect records its subclass and the run records its rubric sha' ($rc4 -eq 0 -and $sub4.Count -eq 10 -and @($sub4 | Where-Object { $_ -eq 'identity' }).Count -eq 5 -and $null -ne $g1 -and $sha4 -eq $g1.rules_sha) ('rc=' + $rc4 + ' subclasses=' + $sub4.Count + ' sha=' + $sha4 + ' out: ' + (($o4 | Select-Object -Last 3) -join ' | '))
+    $dec5 = Join-Path $stDir 'fx-decisions-bad.csv'
+    [IO.File]::WriteAllText($dec5, (((@($dl[0..9]) + @('T39,wrong-product,mystery')) -join "`r`n") + "`r`n"), (New-Object System.Text.UTF8Encoding($false)))
+    $h5 = Join-Path $stDir 'hist-5.json'
+    $o5 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -VerdictFile $vf3 -SampleFile $keyPath -HistoryFile $h5 -RubricNotes $notesFx -DecisionsFile $dec5 | ForEach-Object { [string]$_ })
+    $rc5 = $LASTEXITCODE
+    RsvCase 'MUST FIRE end to end: a subclass outside the vocabulary is REFUSED (exit 1), never recorded' ($rc5 -eq 1 -and -not (Test-Path -LiteralPath $h5) -and (($o5 -join "`n") -match 'mystery')) ('rc=' + $rc5 + ' out: ' + ($o5 -join ' | '))
 
     # --- the -Alert path end to end, through the real script and a fixture alert-lib -------------------
     $hAl = Join-Path $stDir 'hist-alert.json'
@@ -484,8 +695,8 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $stDir -Recurse -Force -ErrorAction SilentlyContinue
   }
   $stTotal = $stPass + $stFail
-  if ($stFail -eq 0 -and $stTotal -eq 30) { Write-Output ('record-sample-verdict self-test: PASS (' + $stPass + ' of ' + $stTotal + ' cases)'); exit 0 }
-  Write-Output ('record-sample-verdict self-test: FAIL (' + $stFail + ' failed, ' + $stPass + ' passed, ' + $stTotal + ' ran; 30 expected)')
+  if ($stFail -eq 0 -and $stTotal -eq 42) { Write-Output ('record-sample-verdict self-test: PASS (' + $stPass + ' of ' + $stTotal + ' cases)'); exit 0 }
+  Write-Output ('record-sample-verdict self-test: FAIL (' + $stFail + ' failed, ' + $stPass + ' passed, ' + $stTotal + ' ran; 42 expected)')
   exit 1
 }
 
@@ -545,6 +756,28 @@ if (-not $Report) {
   $byTicket = @{}
   foreach ($c in @($key.cells)) { $byTicket[[string]$c.ticket] = $c }
 
+  # ---- where each defect's subclass and the run's rubric come from (2026-09-19, queue 2026-09-19-641ec6) ----
+  # Both default to the adjudicator's own files beside the verdict file, named for the board date in its name.
+  $vDate = ''
+  $mV = [regex]::Match([IO.Path]::GetFileNameWithoutExtension($VerdictFile), '(\d{4}-\d{2}-\d{2})$')
+  if ($mV.Success) { $vDate = $mV.Groups[1].Value }
+  $vDir = Split-Path -Parent $VerdictFile
+  if (-not $vDir) { $vDir = '.' }
+  if (-not $DecisionsFile -and $vDate) { $DecisionsFile = Join-Path $vDir ('verification-decisions-' + $vDate + '.csv') }
+  if (-not $RubricNotes -and $vDate) { $RubricNotes = Join-Path $vDir ('verification-decisions-' + $vDate + '-notes.md') }
+  $vHasSub = ($vrows[0].PSObject.Properties.Name -contains 'subclass')
+  $subByTicket = @{}
+  if (-not $vHasSub -and $DecisionsFile -and (Test-Path -LiteralPath $DecisionsFile)) {
+    $dtx = ((Get-Content -LiteralPath $DecisionsFile -Raw -Encoding UTF8) + '')
+    $dls = @($dtx -split "`r?`n" | Where-Object { -not ($_ -match '^\s*#') -and $_.Trim().Length -gt 0 })
+    if ($dls.Count -ge 2) {
+      $drs = @($dls | ConvertFrom-Csv)
+      if ($drs.Count -gt 0 -and ($drs[0].PSObject.Properties.Name -contains 'subclass')) {
+        foreach ($d in $drs) { $dt = ([string]$d.ticket).Trim(); if ($dt) { $subByTicket[$dt] = ([string]$d.subclass).Trim().ToLower() } }
+      }
+    }
+  }
+
   $recorded = New-Object System.Collections.ArrayList
   $bad = New-Object System.Collections.ArrayList
   $demotedT = New-Object System.Collections.ArrayList
@@ -567,6 +800,7 @@ if (-not $Report) {
       found_price = ([string]$v.found_price).Trim()
       note = ([string]$v.note).Trim()
       board_item = [string]$c.board_item; board_per_unit = $c.board_per_unit
+      subclass = $(if ($vHasSub) { ([string]$v.subclass).Trim().ToLower() } elseif ($subByTicket.ContainsKey($t)) { [string]$subByTicket[$t] } else { '' })
     })
   }
   if ($bad.Count -gt 0) {
@@ -575,6 +809,37 @@ if (-not $Report) {
     Say ('  valid verdicts: ' + ($VALID -join ' | '))
   }
   if ($recorded.Count -eq 0) { Say 'record-sample-verdict: ZERO usable verdicts in that file - nothing recorded, nothing proved.'; exit 1 }
+  # THE SUBCLASS IS A CLOSED VOCABULARY AND EVERY DEFECT CARRIES ONE. The whole recording is refused rather than
+  # the row dropped: a dropped defect understates the rate, and an unknown word falls out of every like-for-like rate.
+  $noSub = New-Object System.Collections.ArrayList
+  $badSub = New-Object System.Collections.ArrayList
+  foreach ($rr in $recorded.ToArray()) {
+    $sc = [string]$rr.subclass
+    if ($sc -ne '' -and $SUBCLASS -notcontains $sc) { [void]$badSub.Add(([string]$rr.ticket) + ' -> "' + $sc + '"'); continue }
+    if ($sc -eq '' -and $DEFECT -contains ([string]$rr.verdict)) { [void]$noSub.Add([string]$rr.ticket) }
+  }
+  if ($noSub.Count -gt 0 -or $badSub.Count -gt 0) {
+    if ($noSub.Count -gt 0) { Say ('record-sample-verdict: REFUSED - ' + $noSub.Count + ' defect row(s) carry no subclass: ' + ((@($noSub.ToArray()) | Sort-Object) -join ', ')) }
+    if ($badSub.Count -gt 0) { Say ('record-sample-verdict: REFUSED - ' + $badSub.Count + ' row(s) carry a subclass outside the vocabulary: ' + ((@($badSub.ToArray())) -join '; ')) }
+    Say ('  vocabulary: ' + ($SUBCLASS -join ' | ') + '. Give every defect row one, in a subclass column on the verdict file or on the decisions file (' + $(if ($DecisionsFile) { $DecisionsFile } else { 'none named or derivable' }) + ').')
+    Say '  Nothing was recorded: a defect with no subclass cannot be compared across rubrics, and dropping it would understate the rate.'
+    exit 1
+  }
+  $rubric = $null
+  if ($RubricNotes -and (Test-Path -LiteralPath $RubricNotes)) {
+    $rubric = Get-RubricFromText ((Get-Content -LiteralPath $RubricNotes -Raw -Encoding UTF8) + '') ([IO.Path]::GetFileName($RubricNotes))
+  }
+  if ($null -ne $rubric -and $null -ne $rubric.counts) {
+    $badC = @(@($rubric.counts) | Where-Object { $SUBCLASS -notcontains [string]$_ })
+    if ($badC.Count -gt 0) { Say ('record-sample-verdict: REFUSED - the rubric''s Counted subclasses line names word(s) outside the vocabulary: ' + ($badC -join ', ') + ' (vocabulary: ' + ($SUBCLASS -join ' | ') + '). Nothing was recorded.'); exit 1 }
+  }
+  if ($null -eq $rubric) {
+    $why = if (-not $RubricNotes) { 'no notes file was named or derivable from the verdict file name' } elseif (-not (Test-Path -LiteralPath $RubricNotes)) { $RubricNotes + ' does not exist' } else { $RubricNotes + ' has no section headed exactly "## Adjudication standard"' }
+    Say ('record-sample-verdict: NO RUBRIC RECORDED - ' + $why + '. This run will never be compared like for like with any other.')
+  } else {
+    Say ('record-sample-verdict: rubric ' + $rubric.rules_sha.Substring(0, 12) + ' (version ' + $rubric.version + ', from ' + $rubric.notes + ')' +
+      $(if ($null -eq $rubric.counts) { ' - it names no Counted subclasses, so no later run can compute a like-for-like rate against it' } else { ', counting ' + (@($rubric.counts) -join '/') }))
+  }
   if ($blank -gt 0) { Say ('record-sample-verdict: ' + $blank + ' row(s) left blank - recorded as NOT YET VERIFIED, not as ok.') }
   if ($demotedT.Count -gt 0) {
     Say ('record-sample-verdict: ' + $demotedT.Count + ' match/ok verdict(s) carried no price the verifier saw - recorded as COULD-NOT-LOOK (unverifiable), never as a match: ' +
@@ -591,6 +856,7 @@ if (-not $Report) {
     # A run older than the -Store flag has no scope recorded; it was necessarily a whole-board draw.
     store_scope = $(if ($key.PSObject.Properties['store_scope'] -and [string]$key.store_scope) { [string]$key.store_scope } else { 'whole-board' })
     strata      = $key.strata
+    rubric      = $rubric
     verdicts    = $recorded.ToArray()
   }
   $keep = New-Object System.Collections.ArrayList
@@ -623,7 +889,9 @@ if ($CompareLast) {
   $cmpLast = Get-RateVsLast $runs $MinSamples
   Say ''
   Say $cmpLast.line
-  if ($Alert -and $cmpLast.verdict -eq 'worse') {
+  if ($cmpLast.PSObject.Properties['newRun'] -and $cmpLast.newRun) { Say ('  defects by subclass, this run: ' + (Get-SubclassBreakdown $cmpLast.newRun)) }
+  if ($cmpLast.PSObject.Properties['lastRun'] -and $cmpLast.lastRun) { Say ('  defects by subclass, last run: ' + (Get-SubclassBreakdown $cmpLast.lastRun)) }
+  if ($Alert -and (Test-RateAlertOwed $cmpLast)) {
     . $(if ($AlertLib) { $AlertLib } else { Join-Path $root 'alert-lib.ps1' })
     # Send-Alert's output ends with its exit code; Invoke-RateAlert reads it rather than trusting the call.
     $liveSender = { param($s, $b) Send-Alert -Subject $s -Body $b -What 'VERIFY-RATE' }
