@@ -163,24 +163,115 @@ function Repair-SlugDecimals([string]$name, [string]$cardSize) {
   return $name
 }
 
+# THE PACK BASIS IS A FACT THE CARD DOES NOT RECORD (2026-09-19, replacing rule 1b).
+#
+# When the NAME states a pack count N > 1 and the card states one bare measure S, the card is EITHER the
+# size of one unit (pack total = N x S) or the pack TOTAL (pack total = S). The two readings differ by a
+# factor of N in the per-unit price, and the first of them is the CHEAP direction, so reading a total as a
+# unit is how this feed crowns a phantom cheapest.
+#
+# THE OLD RULE ASSUMED THE CARD WAS ALWAYS ONE UNIT and multiplied. That assumption is false, and Aldi is
+# inconsistent between siblings in one capture and over time on one product:
+#   aldi-capture-2026-08-15  Lunch Buddies Fruit Bowls Mandarin Oranges ... 4 pack   $2.19  card 4 oz
+#   aldi-capture-2026-08-15  Lunch Buddies Pineapple Tidbits ... 4 pack              $2.19  card 16 oz
+# Verified live on aldi.us 2026-09-19: "Aldi Pineapple Tidbits in 100% Fruit Juice, 4 pack" is 16 oz, $2.19,
+# so its true per-unit is $0.1369/oz and the old rule published $0.0342/oz, FOUR TIMES too cheap. It stayed
+# off the board only because canned-pineapple's band floor refused it, and audit-band-censorship counted it
+# as censorship (ratchet 13 -> 15) and blocked the publish. A four-times-cheap figure that lands INSIDE its
+# band is crowned CHEAPEST instead, which is the exposure this replaces.
+#
+# MEASURED BEFORE CHOOSING, over the 22 aldi-capture-*.csv on this box (2026-08-05 to 2026-09-19, 24,262
+# records). The old rule fires on 30 rows, 23 distinct (name, card, price):
+#   * ALDI'S OWN PER-UNIT RATE IS NOT AVAILABLE. The capture's `unit` column is populated on 0 of the 30, and
+#     the live search CARD carries no rate either (checked 2026-09-19). The rate exists only on the product
+#     PAGE ("Hot Pockets Pepperoni Pizza - 4 Pack, 18 oz, $0.26/oz"), which the sweep never opens. So the
+#     cheapest possible oracle is real but out of this builder's reach until the sweep fetches product pages.
+#   * 20 of the 30 rows are pre-2026-08-25 and say nothing about Aldi. No capture before that date carries a
+#     single "N x M" card (0 of 5,542 records in 08-05, 08-15 and 08-22) while every capture after the
+#     committed search agent landed does (301 rows), so a bare card size in an old capture may be a TRUNCATED
+#     "N x M" rather than anything Aldi printed.
+#   * The 10 rows the modern extractor produced are 4 distinct cases, and they split 1 against 3:
+#       12 pack apple squeezies    card 3.2 oz   (4 rows)  true total 38.4 oz  -> card was ONE UNIT
+#       12 pack apple squeezies    card 38.4 oz  (1 row)   true total 38.4 oz  -> card was the TOTAL
+#       hot pockets pep 4 pack     card 18 oz    (4 rows)  Aldi's page: 18 oz, $0.26/oz -> card was the TOTAL
+#       summit mai tai 4pk         card 48 fl oz (1 row)   name says 12 fl oz   -> card was the TOTAL
+#     The first two are the SAME product id (63924817) at the SAME price on different days, so no rule that
+#     reads the card alone can be right for both, and four distinct cases cannot fit a plausibility bar
+#     without selecting on noise. That is why "divide by the count and see whether it looks single-serve" was
+#     measured and rejected rather than tuned.
+#
+# SO THE BASIS IS RESOLVED BY PROOF OR NOT AT ALL, and there is exactly one proof the row carries: the NAME
+# stating a size of its own in the same unit, whose arithmetic settles which of the two readings is live.
+#   P1  name size = N x card   -> the card is ONE UNIT   ("6 PK 13.5 OZ" + card 2.25 oz, 13.5 = 6 x 2.25)
+#   P2  card = N x name size   -> the card is the TOTAL   ("4pk 12 fl oz" + card 48 fl oz, 48 = 4 x 12)
+# They cannot both hold: P1 with P2 needs S = N^2 x S, impossible for N > 1. A name size EQUAL to the card
+# proves nothing, and both readings of that shape are real - "Gatorade Thirst Quencher 18 Pack 12 fl oz" with
+# card 12 fl oz is 216 fl oz of drink, while "hot pockets pep 4 pack 18 oz" with card 18 oz is 18 oz of
+# sandwich. With no proof the row gets NO SIZE and is rejected, naming this reason rather than "no size":
+# a missing cell falls through to a product we can price, and a four-times-cheap cell wins.
+#
+# THE TOLERANCE IS RELATIVE AND CANNOT CONFUSE THE TWO READINGS, which stand a factor of N >= 2 apart, so it
+# only absorbs Aldi's own rounding and the binary representation of a number like 3.2.
+$PACK_BASIS_TOL = 0.02
+function Resolve-PackBasis([string]$name, [string]$cardSize) {
+  # .applies  the shape is present at all (name pack count N > 1, card ONE bare measure)
+  # .size     what to emit when a proof settled it; '' when nothing did
+  # .why      the reject reason to report when nothing did
+  $out = @{ applies = $false; size = ''; why = '' }
+  $pk = [regex]::Match($name, '(?i)\b(\d+)\s*(?:pk|pack)\b')
+  if (-not ($pk.Success -and [int]$pk.Groups[1].Value -gt 1 -and $cardSize)) { return $out }
+  $one = [regex]::Match($cardSize, '(?i)^\s*(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lb|lbs|ml|liter|qt|pt)\b')
+  if (-not $one.Success) { return $out }
+  $out.applies = $true
+  $n = [int]$pk.Groups[1].Value
+  $s = [double]$one.Groups[1].Value
+  $u = ($one.Groups[2].Value.ToLower() -replace '\s+', ' ') -replace '^floz$', 'fl oz'
+  if ($u -eq 'lbs') { $u = 'lb' }
+
+  # every size the NAME states in the SAME unit. All of them, because a slug prints its size twice and a
+  # variety pack names a pouch size as well ("12pk apple squeezies varie 3 2 oz pouch").
+  $unitAlt = switch ($u) {
+    'fl oz' { 'fl\s*oz|floz' }
+    'oz'    { 'oz|ounces?' }
+    'lb'    { 'lbs?|pounds?' }
+    'qt'    { 'qt|quarts?' }
+    'pt'    { 'pt|pints?' }
+    'liter' { 'liters?|litres?' }
+    'ml'    { 'ml' }
+    default { [regex]::Escape($u) }
+  }
+  $unitOk = $false
+  $provesUnit = $false   # P1: the card is one unit
+  $provesTotal = $false  # P2: the card is the pack total
+  foreach ($m in [regex]::Matches($name, '(?i)(\d+(?:\.\d+)?)\s*(' + $unitAlt + ')\b')) {
+    $ns = [double]$m.Groups[1].Value
+    if ($ns -le 0) { continue }
+    $unitOk = $true
+    if ([math]::Abs($ns - ($n * $s)) -le ($PACK_BASIS_TOL * $n * $s)) { $provesUnit = $true }
+    if ([math]::Abs($s - ($n * $ns)) -le ($PACK_BASIS_TOL * $s))      { $provesTotal = $true }
+  }
+  # TWO WITNESSES THAT DISAGREE ARE NOT A WITNESS. A name carrying sizes that prove both readings at once is
+  # refused rather than resolved by whichever matched first.
+  if ($provesUnit -and -not $provesTotal) { $out.size = ('{0} pk {1} {2}' -f $n, $one.Groups[1].Value, $u); return $out }
+  if ($provesTotal -and -not $provesUnit) { $out.size = ('{0} {1}' -f $one.Groups[1].Value, $u); return $out }
+  $out.why = if ($provesUnit -and $provesTotal) {
+    ("pack basis unproved: the name states {0} pack and sizes that prove both readings of the tile's {1}" -f $n, $cardSize.Trim())
+  } elseif ($unitOk) {
+    ("pack basis unproved: the name states {0} pack and a size the tile's {1} neither multiplies nor divides, so the tile is either one unit or the pack total" -f $n, $cardSize.Trim())
+  } else {
+    ("pack basis unproved: the name states {0} pack and the tile states {1}, which is either one unit or the pack total, and nothing here says which" -f $n, $cardSize.Trim())
+  }
+  return $out
+}
+
 function Get-Size([string]$name, [string]$cardSize, [string]$unit) {
   # 1) weighted goods: the unit price is per pound, so the basis IS the pound
   if ($unit -match '(?i)/\s*lb') { return 'lb' }
 
-  # 1b) MULTIPACK: the pack COUNT only ever appears in the name, while the storefront card shows the size of
-  # ONE unit ("Maruchan Ramen 6 PK 13.5 OZ" -> card says 2.25 oz; "Gatorade 18 Pack 12 FL OZ" -> card 12 fl oz).
-  # Preferring the card blindly records one unit as the whole pack, which is guards.ps1 hard-fail #5 (the Sam's
-  # 2-pack bug) - it shipped 3 Aldi rows on 2026-07-29 and blocked the daily publish. So when the NAME states a
-  # pack count, emit the engine's "N pk M unit" form, which multiplies them back into the pack total.
-  $pk = [regex]::Match($name, '(?i)\b(\d+)\s*(?:pk|pack)\b')
-  if ($pk.Success -and [int]$pk.Groups[1].Value -gt 1 -and $cardSize) {
-    $one = [regex]::Match($cardSize, '(?i)^\s*(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lb|lbs|ml|liter|qt|pt)\b')
-    if ($one.Success) {
-      $u = ($one.Groups[2].Value.ToLower() -replace '\s+', ' ') -replace '^floz$', 'fl oz'
-      if ($u -eq 'lbs') { $u = 'lb' }
-      return ($pk.Groups[1].Value + ' pk ' + $one.Groups[1].Value + ' ' + $u)
-    }
-  }
+  # 1b) MULTIPACK: see Resolve-PackBasis above. This RETURNS whatever it decided, including its refusal - the
+  # scans below would read the card at face value, which is one of the two readings it declined to pick.
+  $pb = Resolve-PackBasis $name $cardSize
+  if ($pb.applies) { return [string]$pb.size }
 
   # 1b-ii) THE CARD STATES THE MULTIPLICATION ITSELF: "12 x 12 fl oz", "6 x 4 oz", "4 x 4.3 oz".
   # 1b only fires when the pack count is in the NAME. This storefront also prints the pack on the CARD in
@@ -332,7 +423,13 @@ function Invoke-Build([object[]]$raw, [string]$date, [string]$storeLocation = ''
     # wearing the shape of a price ([[label-scales-wrong-was-already-wrong]]).
     # Compared in the SAME unit only: "1 OZ" vs "2.7 oz" is a real disagreement, "1 OZ" vs "6 ct" is
     # two different facts about one pack and not a contradiction.
-    if ($size) {
+    # A PROVED PACK BASIS IS NOT A CONTRADICTION, IT IS THE PROOF (2026-09-19). When Resolve-PackBasis
+    # settled the basis, the name's size and the emitted size stand in a KNOWN relationship: exactly the pack
+    # count apart, which is the whole content of the proof. The check below reads that factor as two
+    # witnesses disagreeing and rejects the row, so every P2 row ("4pk 12 fl oz" carded 48 fl oz) died here.
+    # Caught by this change's own CLEAN TWIN rather than in a build, which is what the twin is for.
+    $pb = Resolve-PackBasis $name ([string]$r.size)
+    if ($size -and -not ($pb.applies -and $pb.size)) {
       $nm = [regex]::Match($name, '(?i)(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|lbs|ct|count|each|ea)\s*$')
       $sm = [regex]::Match([string]$size, '(?i)^\s*(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|lbs|ct|count|each|ea)\b')
       if ($nm.Success -and $sm.Success) {
@@ -348,7 +445,13 @@ function Invoke-Build([object[]]$raw, [string]$date, [string]$storeLocation = ''
       }
     }
 
-    if (-not $size) { [void]$rejects.Add([pscustomobject]@{ item = $name; why = 'no size' }); continue }
+    # A REFUSAL MUST SAY WHICH REFUSAL IT IS. "no size" covers a tile that stated nothing; a multipack whose
+    # basis could not be proved is a different thing, and the daily reject report is the only place anybody
+    # would ever see it. Asked of the same function Get-Size asked, so the two can never drift apart.
+    if (-not $size) {
+      $why = if ($pb.applies -and $pb.why) { $pb.why } else { 'no size' }
+      [void]$rejects.Add([pscustomobject]@{ item = $name; why = $why }); continue
+    }
 
     $key = ($name + '|' + $size).ToLower()
     if ($seen.ContainsKey($key)) { continue }
@@ -554,11 +657,49 @@ if ($SelfTest) {
     @{ n = 'purified water 24 pk 16.9 fl oz';             s = '';       u = '';          want = '24 pk 16.9 fl oz' }
     @{ n = 'countryside creamery butter quarters 16 oz';  s = '';       u = '';          want = '16 oz' }
     @{ n = 'mystery item with no size at all';            s = '';       u = '';          want = '' }
-    # guards.ps1 hard-fail #5: a NAME saying "N pack" must never record ONE unit as the size
+    # ---- THE PACK BASIS (2026-09-19) - see Resolve-PackBasis --------------------------------------------
+    # The card is either ONE UNIT or the PACK TOTAL and Aldi prints both ways, so the only cases that keep a
+    # size are the ones the NAME's own arithmetic settles. The two proofs, then the two refusals.
+    #
+    # P1 / CLEAN TWIN: guards.ps1 hard-fail #5 still holds. 13.5 = 6 x 2.25, so the card is one unit and the
+    # engine's multiplying form is still what comes out. This is the behaviour the refusal below was most
+    # likely to have broken on its way past.
     @{ n = 'maruchan ramen noodle soup chicken 6 pk 13.5 oz'; s = '2.25 oz';  u = ''; want = '6 pk 2.25 oz' }
-    @{ n = 'gatorade thirst quencher 18 pack 12 fl oz';       s = '12 fl oz'; u = ''; want = '18 pk 12 fl oz' }
-    @{ n = 'breakfast best breakfast pizza 2pk 11.2 oz';      s = '11.2 oz';  u = ''; want = '2 pk 11.2 oz' }
+    # P2 / MUST FIRE: verbatim from aldi-capture-2026-09-19. 48 = 4 x 12, so the card is the PACK TOTAL and
+    # the old rule multiplied it again into 192 fl oz, four times too cheap.
+    @{ n = 'summit mai tai mocktails 4pk 12 fl oz';           s = '48 fl oz'; u = ''; want = '48 fl oz' }
+    # MUST FIRE, THE FOUNDING BUG: no size in the name at all, so nothing proves the basis. The old rule
+    # emitted '4 pk 16 oz' = 64 oz and published $0.0342/oz against a true $0.1369/oz. Verified live on
+    # aldi.us 2026-09-19: this product is 16 oz for $2.19.
+    @{ n = 'lunch buddies pineapple tidbits in 100% fruit juice, 4 pack'; s = '16 oz'; u = ''; want = '' }
+    # ...and its SIBLING in the same capture, at the same price, whose card really was one cup. Unprovable in
+    # the same direction, refused for the same reason: the estate cannot tell these two apart from the row.
+    @{ n = 'lunch buddies fruit bowls mandarin oranges in 100% juice, 4 pack'; s = '4 oz'; u = ''; want = '' }
+    # MUST FIRE: a name size EQUAL to the card proves nothing, and BOTH readings of that shape are real.
+    # Aldi's own product page says the hot pockets 4-pack is 18 oz at $0.26/oz, so 18 oz is the total here
+    # and '4 pk 18 oz' was four times too cheap. The gatorade line below is the identical shape whose truth
+    # runs the other way (18 x 12 fl oz of drink), which is exactly why neither may be guessed.
+    @{ n = 'hot pockets hot pockets pep 4 pack 18 oz';        s = '18 oz';    u = ''; want = '' }
+    @{ n = 'gatorade thirst quencher 18 pack 12 fl oz';       s = '12 fl oz'; u = ''; want = '' }
+    @{ n = 'breakfast best breakfast pizza 2pk 11.2 oz';      s = '11.2 oz';  u = ''; want = '' }
+    # MUST NOT FIRE: "1 pk" is not a multipack, so the card is read as the plain size it is.
     @{ n = 'single item 1 pk 16 oz';                          s = '16 oz';    u = ''; want = '16 oz' }
+    # MUST NOT FIRE: the card's unit is not one this can measure against, so the pack rule never applies and
+    # the ordinary count scan answers.
+    @{ n = 'party cups 4 pack';                               s = '12 ct';    u = ''; want = '12 ct' }
+    # CLEAN TWIN: the name states the pack and the size and there is NO card at all, so nothing is being
+    # chosen between two readings and rule 4 answers exactly as it always has.
+    @{ n = 'purified water 24 pk 16.9 fl oz';                 s = '';         u = ''; want = '24 pk 16.9 fl oz' }
+    # CLEAN TWIN: a tolerance that cannot confuse the two readings. 13.4 against 6 x 2.25 = 13.5 is inside
+    # the 2% band and still proves ONE UNIT; the rival reading would need 6 x 13.4 = 80.4.
+    @{ n = 'ramen value pack 6 pk 13.4 oz';                   s = '2.25 oz';  u = ''; want = '6 pk 2.25 oz' }
+    # THE BAR ITSELF, and one step past it. $PACK_BASIS_TOL is 2%: against 4 x 12.5 = 50 the band reaches
+    # exactly 51, and a hundredth of an ounce further is outside it. Without the pair, a -le that became a
+    # -lt would pass every case above. The numbers are binary-exact on purpose - the first version of this
+    # pair used 48.96 against 4 x 12, where the difference and the band agree to fifteen decimal places and
+    # the double representation, not the rule, decides which is larger.
+    @{ n = 'mocktail value pack 4 pk 51 fl oz';               s = '12.5 fl oz'; u = ''; want = '4 pk 12.5 fl oz' }
+    @{ n = 'mocktail value pack 4 pk 51.01 fl oz';            s = '12.5 fl oz'; u = ''; want = '' }
     # 2026-09-09: the CARD states the multiplication and the name need not mention a pack at all. Frozen
     # verbatim from that morning's capture - the LaCroix is the row guards caught, the two below it are
     # rows guards could NOT see, because its check keys on a pack count in the NAME.
@@ -605,6 +746,28 @@ if ($SelfTest) {
   $t = Invoke-Build @([pscustomobject]@{ name = 'fresh ground beef'; prices = '$11.97'; unit = '$3.99/lb'; size = ''; href = '' }) '2026-01-01'
   if ($t.rows.Count -eq 1 -and $t.rows[0].current_price -eq 3.99 -and $t.rows[0].size -eq 'lb') { Write-Output "ok    weighted row publishes the per-lb rate, not the pack estimate" }
   else { Write-Output "FAIL  weighted row basis"; $fail++ }
+
+  # ---- THE REFUSAL REACHES THE REJECT REPORT (2026-09-19) - see Resolve-PackBasis ------------------------
+  # A row dropped for an unproved pack basis is the only trace anybody gets of a product this feed cannot
+  # price, so it must not arrive wearing "no size", which means the tile stated nothing at all.
+  $pcases = @(
+    @{ label = 'MUST FIRE  an unproved pack basis is rejected and the reason names the pack, not "no size"'
+       name = 'lunch buddies pineapple tidbits in 100% fruit juice, 4 pack'; size = '16 oz'
+       rows = 0; why = 'pack basis unproved' }
+    # MUST NOT FIRE: a tile that stated nothing is still the ordinary no-size reject, unchanged.
+    @{ label = 'MUST NOT FIRE  a row with no size at all keeps the plain "no size" reason'
+       name = 'mystery item with no size at all'; size = ''; rows = 0; why = 'no size' }
+    # CLEAN TWIN: a PROVED pack basis is not a reject at all, it is a built row carrying the pack total.
+    @{ label = 'CLEAN TWIN  a proved pack basis still builds a row'
+       name = 'summit mai tai mocktails 4pk 12 fl oz'; size = '48 fl oz'; rows = 1; why = '' }
+  )
+  foreach ($c in $pcases) {
+    $b = Invoke-Build @([pscustomobject]@{ term = 't'; name = $c.name; prices = '$2.19'; unit = ''; size = $c.size; href = '' }) '2026-01-01'
+    $gotWhy = if ($b.rejects.Count -eq 1) { [string]$b.rejects[0].why } else { '' }
+    if ($b.rows.Count -eq $c.rows -and $gotWhy.StartsWith($c.why, [StringComparison]::Ordinal) -and
+        ($c.why -or $b.rejects.Count -eq 0)) { Write-Output ('ok    ' + $c.label) }
+    else { Write-Output ("FAIL  {0} - rows {1} want {2}, reject reason [{3}] want [{4}...]" -f $c.label, $b.rows.Count, $c.rows, $gotWhy, $c.why); $fail++ }
+  }
 
   # ---- THE PRODUCT URL (2026-09-11) - see Resolve-AldiProductUrl ------------------------------------------
   # Every case drives Invoke-Build, the function the build runs, and reads link_url off the one row it returns.

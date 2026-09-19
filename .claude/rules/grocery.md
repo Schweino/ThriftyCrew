@@ -79,6 +79,21 @@ is one copy of every rule and nothing here can drift from it.
   `stores.json` -> Fareway -> `store_identity` (531573, pinned like Walmart's). Post the rows unaltered.
   **Hy-Vee, Family Fare and Baker's need no line**: their store is a request parameter on a sessionless API,
   so it cannot drift under a sweep, and Hy-Vee already keeps only rows whose echoed storeId matches.
+- **AN ALDI MULTIPACK CARD IS EITHER ONE UNIT OR THE PACK TOTAL, AND THE ROW USUALLY CANNOT SAY WHICH**
+  (2026-09-19). `build-aldi-regular`'s `Resolve-PackBasis` used to assume the card showed one unit whenever
+  the NAME stated a pack count, and multiplied. Aldi prints it both ways, between siblings in one capture and
+  over time on ONE product id: `Lunch Buddies Pineapple Tidbits ... 4 pack` carded 16 oz, the pack TOTAL, and
+  published $0.0342/oz against a true $0.1369/oz, four times too cheap. It stayed off the board only because
+  canned-pineapple's band floor refused it. **The basis is now resolved by arithmetic proof or not at all**:
+  the name states a size that is N times the card (the card is one unit) or a size the card is N times (the
+  card is the total). A name size EQUAL to the card proves NOTHING, and both readings of that shape are real,
+  so it is refused. Everything else gets no size and a reject reason that names the pack. **Do not add a
+  plausibility bar here** - "divide by the count and see whether it looks single-serve" was measured over the
+  whole capture set and rejected, because four distinct modern cases cannot establish one and it would be a
+  hard-coded band. **The cheapest real oracle is Aldi's own per-unit rate, which the sweep does not collect**:
+  it is on the product PAGE (`18 oz | $0.26/oz`) and on 0 of the 30 affected rows' cards.
+  **Rule 4 has the same ambiguity and is NOT fixed**: `Puraqua Water 40pk 676 FL OZ` still builds 27,040 fl oz.
+  `design/MEASURE-aldi-pack-basis-2026-09-19.md` has every count and what was deliberately not done.
 - **A STANDING RULING'S OWED TERMS ARE DERIVED AND LEAD THE WORKLIST**, never hand-picked and never
   hand-discharged (2026-09-12). Brad's store-drift ruling named 23 terms to recapture and said to put
   them at the head of the next Walmart worklist; nothing carried that anywhere for a fortnight, because
