@@ -11832,7 +11832,7 @@ is re-photographing labels at five to eight round trips each.
 as-prepared column is never the row's source without the basis going in the name.** No existing row
 changes and no page changes.
 
-### I147 - The gate slot pool is not strategy-proof, and over-declaring `-Want` pays `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 READ`
+### I147 - The gate slot pool is not strategy-proof, and over-declaring `-Want` pays `PARKED` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-cloud2-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11856,6 +11856,17 @@ about behaviour rather than a property of the mechanism** - and the estate's own
 with no enforcement is a hope. **The ruling wanted:** whether to record `-Want` against slots
 actually used in `gate-readings.jsonl` (detective, cheap, no red on day one), or to leave it, on the
 grounds that four in-house callers is not a multi-tenant system and never will be.
+
+**Parked 2026-09-19 on Brad's ruling in chat** (he asked for the smartest recommendation and accepted
+it): leave the pool as it is. **Reopen if a gate-slot caller not written by this estate ever appears.**
+Why: strategy-proofness is a defence against a tenant who gains by lying, and every caller here is ours.
+Re-checked the same day with `git grep -l Enter-TcGateSlots` over tracked `.ps1` and `.py` at base
+d335a9a3f: the production callers are still the four named above (`ops/run-gates.ps1`,
+`ops/cpu-load.ps1`, `ops/run-daemon-battery.ps1`, `lib/push-lock.ps1`), plus one measurement
+harness that calls it (`ops/probe-gate-slot-fairness.ps1`) and three files that only mention it
+(`lib/ledger-lock.ps1`, `ops/audit-cpu-load.ps1`, `ops/measure-gate-width.ps1`), all in-house. And the arrival-order ticket queue
+already keeps service fair: only the oldest live ticket may take slots, so an over-declared `-Want`
+can take more of what is free but cannot jump anyone waiting. No code changed.
 
 ### I148 -  `DONE` `queue-7`
 
@@ -12733,7 +12744,7 @@ form, so the replacement idiom is known-good here.
 
 ---
 
-### I163 - The estate's `switch` statements silently do nothing when nothing matches, and there is no register of which ones should `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I163 - The estate's `switch` statements silently do nothing when nothing matches, and there is no register of which ones should `DONE` `queue-7`
 
 **Merged from `design\backlog-inbox\q7-proglang-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -12799,6 +12810,28 @@ A DATA or FILE switch **lacks a loud refusal** when it has no `default`, or its 
 of `throw`, `Write-Error`, `exit` with a non-zero literal, or `ThrowTerminatingError`. The two halves
 (no default at all, a default that does something else) are counted separately. **The decision uses
 DATA + FILE lacking a loud refusal, compared with 5**, exactly as ruled.
+
+**Done 2026-09-19. Result: 113, far over the bar of 5, so the rule was added and nothing was swept.**
+Census over 797 tracked `.ps1` at d335a9a3f, 0 parse failures, one row per switch (scratch harness: a
+PowerShell AST walk that classes each `SwitchStatementAst` by the test above, not committed because the
+rule asks for no re-count):
+- **120 switches** by the AST against **85** by the item's line-start grep (it read 82 on 2026-09-12),
+  so the grep missed 35. 34 of the 120 sit under an `archive/` directory.
+- By subject: **DATA 114**, LITERAL 5 (three `[ValidateSet]` parameters, one constant-only variable,
+  one in an archive), PREDICATE 1 (`switch ($true)` in `meal-prep/pipeline/audit-store-integrity.ps1`,
+  not counted), FILE 0.
+- DATA with no loud refusal: **113 of 114** (37 with no `default` at all, 76 with a default that does
+  something else, typically a fallback value); outside `archive/`, 80 of 81 (27 no default, 53 other).
+  The one that refuses is `grocery/queue-depth.ps1:100`. Even the narrowest reading, no default at all
+  outside `archive/`, is 27.
+- The classifier is unsound in the safe direction for this bar: it calls a variable DATA unless every
+  assignment in the file is a constant, so a few DATA rows are computed from literals. None of that can
+  bring 113, or 27, down to 5.
+
+So `.claude/rules/ops-and-gates.md` gains one bullet, for NEW code only: a `switch` on data carries a
+`default` that refuses loudly (`throw`, `Write-Error` or a non-zero `exit`), and a deliberate fallback
+says in a comment why unmatched is safe. No sweep and no gate, because a bar on the 113 would be red on
+day one.
 
 ### I164 - post-publish-reviewer's findings are the one review output nobody can count `DONE` `queue-6`
 
@@ -14466,7 +14499,7 @@ to 2026-09-18).
   second added a `git grep` of each added name at the commit's parent. Every number here was taken
   by those scripts or by the read, at `af28aa2b8`.
 
-### I190 - merge duplicates but keep overlapping ideas apart, a test for the store's consolidation `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
+### I190 - merge duplicates but keep overlapping ideas apart, a test for the store's consolidation `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-sdp-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14478,6 +14511,21 @@ duplicates by design. That does not conflict when the two sections say the same 
 they only overlap. Brad to rule whether `CONSOLIDATE.md` should carry a one-line test: merge when the
 two say the same thing, keep both and cross-link when they only overlap. Filed for the course domain,
 not the estate code.
+
+**Done 2026-09-19, on Brad's ruling in chat to add the test.** `~/.claude/skills/course/CONSOLIDATE.md`
+gains **step 3a**, a three-box checklist run before every merge: write each section's claim in one
+sentence and merge only when the two sentences are the same claim; otherwise name one case where they
+give different advice, or one only one of them covers, and if you can, keep both and cross-link them
+with that case in the link line; and overlap is not disagreement, so it never goes through 12.4c. Its
+worked example is `software-craft/design-patterns-and-principles.md` 5b, which keeps modularity and the
+separation of interface from implementation apart (the case that separates them: a well-modularised
+system whose every interface still leaks its how), beside the course's item 86 warning in the same
+section. Committed in the skills store (`~/.claude`, branch main) as `5a06bda`, file blob `80520625`,
+and NOT pushed: nothing in that store's rules says to push. Its gate, `check-skills.py`, exits 1 both
+before and after the edit on the same three FAILs, none from this change (the lexical and semantic
+recall indexes hold different corpora, 2,206 chunks against 1,988 vectors; one unruled
+recall-consolidate cluster; `MEMORY.md` links an untracked memory file). Store-wide lowest clearing
+probe 8.81, margin +0.31 over 182 probes, VERDICT PASS.
 
 ### I191 - add-norm takes 16 positional parameters and its call sites pad them with empty strings `DONE` `queue-6`
 
@@ -16036,7 +16084,7 @@ imports `sqlite3`.
 **Recommendation: 1, then 2 as an ordinary build.** 1 is the only option that closes the bug, and it is one
 reversible file. 2 costs nothing and narrows the window if 1 is ever rolled back.
 
-### I214 - Constraints graph.db can gain for free at its next rebuild, and the one blocker (I200) `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
+### I214 - Constraints graph.db can gain for free at its next rebuild, and the one blocker (I200) `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16063,6 +16111,60 @@ both readers (`graph/pipeline/state.py:425`, `graph/agentic/verifier.py:264`) fi
 3.49.1 confirmed a `WHERE ad_to IS NOT NULL` index serves that filter. The table is small, so this is
 tidiness and write cost, not a speed claim. Once a `CHECK` exists, the `quick_check` the durability
 audit already runs reports any row that violates it (measured).
+
+**Done 2026-09-19, on Brad's ruling in chat.** `graph/sqlite/schema.sql` (blob `1c7d3caa`) now declares:
+- `price_observations.price REAL CHECK (price IS NULL OR price > 0)`. The blocker is gone on current
+  main: `import_product_url_prices` stores a price `<= 0` as NULL (`graph/import/importers.py:726`,
+  I200), and the live index has taken it (below).
+- `learning_proposals.status ... CHECK (status IN (<the eight words>))`. **Decided on the history, and
+  the history says CHECK.** The vocabulary has not grown once: the eight-word comment is byte-identical
+  to the one the table was born with (eff8d3012, 2026-08-20; the only commits ever to touch the file
+  are six, none changing that line), every writer in `git log -p` sets one of the eight
+  (`stage2_review.py`'s verdict map, `held_for_human`, `applied`, `proposed`; `stage1_analyze.py` and
+  `review_escalations.py` insert `proposed`), and the 15 committed versions of
+  `graph/learning/proposals.json` hold five of them (proposed, accepted, rejected, held_for_human,
+  applied). `decision_log.type` stays a comment for the reason recorded beside it: an append-only
+  trail that new writers keep joining. A ninth proposal status is a state-machine change and should
+  cost a deliberate edit. One limit, written into the schema comment: the restore road
+  (`GraphDB.import_learning`) inserts OR IGNORE, so a refused row there is counted in
+  `restore_skipped` (I229), not raised.
+- `ix_cell_adto ... WHERE ad_to IS NOT NULL`, same name on purpose: on the existing live file `CREATE
+  INDEX IF NOT EXISTS` keeps the old full index, so like the CHECKs it arrives only when graph.db is
+  next built from nothing. Verified: the new schema re-run on a copy of the live file (what every
+  `open_db()` does) leaves all 47 tables and indexes byte-identical in `sqlite_master`.
+
+**Proof, on copies only.** The live `graph.db` was copied with the backup API from a `mode=ro`
+connection (md5 `e3c9338f...` before and after, unchanged), SQLite 3.49.1. Live copy: 44,796
+observations, **0** priced `<= 0`, 42 NULL (the 34 zeros I200 named are NULL now); 3,246 cell_state
+rows, 3,154 with NULL `ad_to`; 281 proposals, all in the vocabulary. Then two arms into temp dirs, OLD =
+origin/main's schema (blob `b7609551`), NEW = this one, each through the estate's rebuild road
+(`GraphDB(allow_new=True)` plus `import_learning()` from the tracked JSON, which is `rebuild.py`'s path),
+then the derived tables copied from the backup with plain INSERTs so any CHECK violation raises:
+- **0 CHECK violations** in either arm: provenance 8,067, nodes 50,815, edges 90,330, aliases 78,713,
+  price_observations 44,796 and decision_log 7,286 rows, each copied in full; learning tables restored
+  277 / 186 / 48 / 3,246 / 10,796 with `restore_skipped` empty in both arms; `integrity_check` ok.
+- **cell_state and question_verdicts sha256-identical**: old arm, new arm and the live copy all read
+  cell_state `a0c2171d...` (3,246 rows) and question_verdicts `93c4037a...` (10,796 rows).
+- **EXPLAIN QUERY PLAN** of both readers' exact queries (`state.py` `ad_reversions_owed`, `verifier.py`
+  `check_ad_reversion_owed`) on the new arm: `SEARCH cell_state USING INDEX ix_cell_adto (ad_to>? AND
+  ad_to<?)`, the same plan as the full index in the old arm.
+The derived tables came from the backup rather than a re-run of `import_all.py --observations`, because
+that road reads gitignored capture files and writes tracked provenance and state files; the CHECK is on
+what the index holds, and it holds 0 violators.
+
+**Fixtures** in `graph/lib/graphdb_selftest.py` (blob `b5dac3fc`), 8 to 13 cases: MUST FIRE a 0.0 price
+is refused by the CHECK; CLEAN TWIN a NULL price still inserts; MUST FIRE status `approved` is refused;
+CLEAN TWIN `held_for_human` still inserts; CLEAN TWIN `ix_cell_adto` is partial and the readers' filter
+still searches it. Exit 0, 13 of 13. **Broken once each** from the schema (restored md5-identical,
+`FABD9F56...`): price CHECK removed, exit 1, only the 0.0 MUST FIRE red ("got: accepted"); status CHECK
+removed, exit 1, only the status MUST FIRE red; index back to full, exit 1, only the partial-index
+twin red. All 21 graph Python `--selftest` suites exit 0 with the change.
+
+**Owed at the next build from nothing, not done here:** `graph/audit_schema_change.py` compares the
+live `sqlite_master` with its baseline, so the rebuild will read 4 moved objects (the three above plus
+`table:decision_log`, whose live CREATE text predates the 2026-08-25 `hunter_identity` comment) and exit
+2 until someone runs its `--accept --note` naming this item and a backup. That is the audit doing its
+job; it is BLIND (exit 3) in a worktree, which has no graph.db.
 
 ### I215 - a scented household product can hold a fruit cell: dish soap priced as strawberries, and the class fix lands with I217 from branch claude/nonfood-bundle `DONE` `run-0919`
 

@@ -95,7 +95,13 @@ CREATE TABLE IF NOT EXISTS price_observations (
     commodity_id  TEXT NOT NULL,
     store_id      TEXT NOT NULL,
     product_name  TEXT,                    -- the raw store string this came from
-    price         REAL,
+    -- A price is positive or it is NULL ("unknown"); a 0.0 is never a price (Brad's ruling
+    -- 2026-09-19, backlog I214). SQLite's CHECK passes on NULL, so this says exactly that.
+    -- The 34 zeros that once sat here (I200) are mapped to NULL by import_product_url_prices.
+    -- SQLite cannot add a CHECK to an existing table, so like every constraint in this file it
+    -- takes effect when graph.db is next built from nothing (import_all.py / rebuild.py); a
+    -- violating row then fails its INSERT loudly, which is the point.
+    price         REAL CHECK (price IS NULL OR price > 0),
     unit_price    REAL,
     unit          TEXT,
     size_text     TEXT,
@@ -190,7 +196,18 @@ CREATE TABLE IF NOT EXISTS learning_proposals (
     confidence   REAL NOT NULL,
     rationale    TEXT,
     status       TEXT NOT NULL DEFAULT 'proposed'
-                 -- proposed|accepted|rejected|modified|deferred|held_for_human|applied|reverted
+                 CHECK (status IN ('proposed','accepted','rejected','modified','deferred',
+                                   'held_for_human','applied','reverted'))
+                 -- A CHECK and not a comment, unlike decision_log.type above (Brad's ruling
+                 -- 2026-09-19, backlog I214, decided on the history): decision_log's vocabulary
+                 -- GROWS as new writers join an append-only trail, so a CHECK there would cost a
+                 -- rebuild per writer. This one has not grown once: the list above is byte-identical
+                 -- to the one this table was born with (eff8d3012, 2026-08-20), every writer in
+                 -- git history sets one of these eight (stage2_review.py, stage1_analyze.py,
+                 -- review_escalations.py), and the 15 committed versions of learning/proposals.json
+                 -- hold five of them. A ninth status is a state-machine change and should cost a
+                 -- deliberate edit here. Note the restore path (GraphDB.import_learning) inserts
+                 -- OR IGNORE, so a refused row there is counted in restore_skipped, not raised.
 );
 CREATE INDEX IF NOT EXISTS ix_lp_status ON learning_proposals(status, created_at);
 
@@ -293,7 +310,12 @@ CREATE TABLE IF NOT EXISTS cell_state (
 );
 CREATE INDEX IF NOT EXISTS ix_cell_store  ON cell_state(store_id);
 CREATE INDEX IF NOT EXISTS ix_cell_asof   ON cell_state(everyday_asof);
-CREATE INDEX IF NOT EXISTS ix_cell_adto   ON cell_state(ad_to);
+-- PARTIAL (backlog I214): ad_to is NULL on ~97% of rows (3,154 of 3,246 on 2026-09-19) and both
+-- readers (pipeline/state.py ad_reversions_owed, agentic/verifier.py check_ad_reversion_owed) filter
+-- `ad_to IS NOT NULL AND ad_to < ?`, the shape a partial index serves. Same name on purpose: on an
+-- existing graph.db IF NOT EXISTS keeps the old full index, so nothing changes until the next
+-- build from nothing, exactly like the CHECKs above.
+CREATE INDEX IF NOT EXISTS ix_cell_adto   ON cell_state(ad_to) WHERE ad_to IS NOT NULL;
 
 -- ---------------------------------------------------------------------------
 -- question_verdicts — adjudication memory, one row per QUESTION.

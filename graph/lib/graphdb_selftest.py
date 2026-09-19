@@ -1,4 +1,4 @@
-"""graphdb_selftest.py - the store layer's two I229 boundaries (backlog I229, 2026-09-18).
+"""graphdb_selftest.py - the store layer's two I229 boundaries (backlog I229, 2026-09-18) and I214's constraints.
 
     python graph/lib/graphdb_selftest.py --selftest
 
@@ -13,6 +13,10 @@ WHAT IT GUARDS.
 2. A RESTORE COUNTS WHAT IT INSERTED. import_learning() used INSERT OR IGNORE and counted every row it
    OFFERED, so a cell-state.json whose rows were refused (a NULL key, a duplicate key) reported them as
    restored: 3 counted, 1 in the table. It now counts rowcount and puts the rest in restore_skipped.
+
+3. A FRESH BUILD DECLARES ITS CONSTRAINTS (backlog I214, 2026-09-19). price_observations.price is positive or
+   NULL (a 0.0 is refused), learning_proposals.status is one of its eight words, and ix_cell_adto is partial
+   (WHERE ad_to IS NOT NULL) and still serves the ad-reversion readers' filter.
 
 HERMETIC. Every database is a fresh file in a per-run temp directory; graphdb.DB_PATH is pointed there
 for the open_db() case and restored in a finally. Nothing reads or writes graph/sqlite/graph.db or any
@@ -35,7 +39,7 @@ import graphdb                                           # noqa: E402
 
 _fails: list[str] = []
 _ran = 0
-CASES = 8
+CASES = 13
 
 
 def T(label: str, ok: bool, got: str = "") -> None:
@@ -57,6 +61,15 @@ def _raises_missing(fn) -> tuple[bool, str]:
         return False, "raised %r instead" % (e,)
     db.conn.close()
     return False, "opened without raising"
+
+
+def _refused(fn) -> tuple[bool, str]:
+    """True when fn raises sqlite3.IntegrityError naming a CHECK constraint."""
+    try:
+        fn()
+    except graphdb.sqlite3.IntegrityError as e:
+        return "CHECK" in str(e), str(e)[:80]
+    return False, "accepted"
 
 
 def run() -> int:
@@ -118,6 +131,48 @@ def run() -> int:
           skipped.get("cell_state") == 2, json.dumps(skipped))
         T("CLEAN TWIN  the row that did land is the first one offered, value intact (1.0)",
           price == 1.0, repr(price))
+
+        # ---- 3. the constraints a fresh build declares (backlog I214) ---------------------------
+        cdb = graphdb.GraphDB(os.path.join(tmp, "checks.db"), restore_learning=False,
+                              allow_new=True)
+        cdb.record_provenance("fixture", "selftest", "2026-09-19T00:00:00")
+        prov = cdb.conn.execute("SELECT id FROM provenance").fetchone()[0]
+
+        def obs(oid, price):
+            return {"id": oid, "commodity_id": "commodity:staple:eggs", "store_id": "store:aldi",
+                    "provenance_id": prov, "observed_at": "2026-09-19", "price": price}
+
+        refused, got = _refused(lambda: cdb.add_observation(obs("po:zero", 0.0)))
+        T("MUST FIRE  a price_observations row priced 0.0 is REFUSED by the CHECK (a zero is an "
+          "unknown written as a price, I200)", refused, got)
+        refused, got = _refused(lambda: cdb.add_observation(obs("po:null", None)))
+        n_null = cdb.conn.execute(
+            "SELECT count(*) FROM price_observations WHERE id='po:null' AND price IS NULL").fetchone()[0]
+        T("CLEAN TWIN  a NULL price (unknown) still inserts - the CHECK passes NULL", not refused and
+          n_null == 1, got + " rows=%d" % n_null)
+
+        def lp(lid, status):
+            cdb.conn.execute(
+                "INSERT INTO learning_proposals (id, created_at, model, kind, payload_json, "
+                "confidence, status) VALUES (?, '2026-09-19', 'fixture', 'add_alias', '{}', 0.5, ?)",
+                (lid, status))
+
+        refused, got = _refused(lambda: lp("lp:bogus", "approved"))
+        T("MUST FIRE  a learning_proposals status outside its eight-word vocabulary ('approved') is "
+          "REFUSED", refused, got)
+        refused, got = _refused(lambda: lp("lp:ok", "held_for_human"))
+        T("CLEAN TWIN  a status in the vocabulary ('held_for_human') still inserts", not refused, got)
+
+        plan = " ".join(r[3] for r in cdb.conn.execute(
+            "EXPLAIN QUERY PLAN SELECT commodity_id, store_id, ad_to FROM cell_state "
+            "WHERE ad_to IS NOT NULL AND ad_to < ? AND reverted_checked_at IS NULL ORDER BY ad_to",
+            ("2026-09-19",)))
+        isql = cdb.conn.execute(
+            "SELECT sql FROM sqlite_master WHERE name='ix_cell_adto'").fetchone()[0] or ""
+        cdb.close()
+        T("CLEAN TWIN  ix_cell_adto is PARTIAL (WHERE ad_to IS NOT NULL) and the readers' filter "
+          "still searches it", "WHERE ad_to IS NOT NULL" in isql and "ix_cell_adto" in plan,
+          "plan=%s sql=%s" % (plan, isql))
     except Exception as e:                                # noqa: BLE001
         _fails.append("suite raised: %r" % (e,))
         print("  FAILED suite raised: %r" % (e,))
@@ -131,7 +186,7 @@ def run() -> int:
         print("SELF-TEST FAIL: graphdb %d of %d case(s) failed, %d ran" % (len(_fails), CASES, _ran))
         return 1
     print("SELF-TEST PASS: graphdb %d of %d cases - a missing graph.db is refused unless allow_new, "
-          "and a restore counts only the rows it inserted" % (_ran, CASES))
+          "a restore counts only the rows it inserted, and a fresh build refuses a 0.0 price and an unknown proposal status" % (_ran, CASES))
     return 0
 
 

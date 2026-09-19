@@ -120,6 +120,13 @@ everything else honest, so a defect here is silent by construction.
   mention it - different test, stated), 151 of 180 already print a case count, and of the 143 whose
   target set is discovered only 23 print nothing.** So this is a line for the next suite, not a
   sweep, and **never a threshold**: a bar on resolved counts would be red on day one.
+- **A `switch` on DATA carries a `default` that REFUSES loudly** (Brad's ruling, 2026-09-19, backlog
+  I163), in NEW code: with no `default` an unmatched value falls through silently, so "matched nothing"
+  and "matched a branch that does nothing" are the same bytes. Data is a subject read from JSON, a board
+  row, a function's return or a parameter with no `[ValidateSet]`; write `default { throw "unknown
+  <what>: $x" }` (or `Write-Error`, or a non-zero `exit`), and a deliberate fallback says in a comment
+  why unmatched is safe. A switch over a literal set in the same file needs none. Census at d335a9a3f:
+  120 switches, 114 on data, 1 refusing default. For new code only: no sweep, and never a gate.
 - **A survivor from a mutation probe names the exact missing case** (2026-09-09, backlog I37). Eight
   single compiling mutations across three detectors killed 7 times; the survivor was
   `audit-backlog-status.ps1`'s heading regex losing its `^` anchor, which left twenty-one cases green
