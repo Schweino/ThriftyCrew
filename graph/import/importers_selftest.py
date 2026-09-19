@@ -1,5 +1,6 @@
 """importers_selftest.py - the product-urls importer's price boundary (backlog I200, 2026-09-18), the capture
-lanes' commodity-id search terms and the fareway-shop observed_at (backlog I235, same day).
+lanes' commodity-id search terms and the fareway-shop observed_at (backlog I235, same day), and the
+supersede guard that stops every import re-inserting what the last prune deleted (backlog I211, 2026-09-19).
 
     python graph/import/importers_selftest.py --selftest
 
@@ -32,6 +33,7 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.normpath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(REPO, "graph", "pipeline"))
 sys.path.insert(0, os.path.join(REPO, "graph", "lib"))
 
 import graphdb                                           # noqa: E402
@@ -39,7 +41,7 @@ import importers as I                                    # noqa: E402
 
 _fails: list[str] = []
 _ran = 0
-CASES = 19
+CASES = 27
 
 
 def T(label: str, ok: bool, got: str = "") -> None:
@@ -216,6 +218,154 @@ def run_fareway_dates() -> None:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def _pb(item: str, price, as_of: str, size: str = "16 oz") -> dict:
+    return {"store": "Baker's", "item": item, "current_price": price, "size": size,
+            "as_of": as_of, "found_by_term": "peanut butter"}
+
+
+def _cycle(db, ts: str, run: str) -> tuple[dict, dict, set]:
+    """One import_all --observations pass over the regular lane: import, resolve, state, prune."""
+    import state as S                                              # noqa: PLC0415
+    from resolve import Resolver                                   # noqa: PLC0415
+    before = {r[0] for r in db.conn.execute("SELECT id FROM price_observations")}
+    res = I.import_observations(db, ts, run, dirs=("regular",))
+    after = {r[0] for r in db.conn.execute("SELECT id FROM price_observations")}
+    Resolver(db, use_llm=False).resolve_pending(run=run, ts=ts, allow_llm=False)
+    S.build_cell_state(db, ts)
+    S.build_question_verdicts(db, ts)
+    pr = S.supersede_prune(db, ts)
+    return res, pr, after - before
+
+
+def run_supersede_guard() -> None:
+    """Backlog I211: the importer re-inserted every row the last prune deleted, every run.
+
+    Measured on a backup-API copy of the live graph.db over the captures at f4e50313b: 477,950
+    rows inserted and 477,950 pruned by one import, so the file's size was the import's peak. The
+    guard (graph/lib/supersede.py) leaves out an absent row the prune would delete, and only when
+    nothing tonight reads it; a present row is always upserted, and files are never skipped.
+    """
+    tmp = tempfile.mkdtemp(prefix="i211-imp-")
+    saved_grocery = I.GROCERY
+    db = None
+    try:
+        gro = os.path.join(tmp, "grocery")
+        I.GROCERY = gro
+        db = _fresh(tmp)
+        ts0 = "2026-09-02T00:00:00"
+        db.upsert_node(I.store_id("Baker's"), "Store", "Baker's", ts0)
+        pb = I.commodity_id("peanut-butter", "staple")
+        db.upsert_node(pb, "Commodity", "Peanut Butter", ts0, properties={"unit_basis": "oz"})
+        db.add_alias(pb, "peanut butter", "fixture", ts0, kind="search_term")
+        db.add_alias(pb, "peanut butter", "fixture", ts0, kind="include", is_regex=True)
+        reg = os.path.join(gro, "out", "regular")
+
+        def cap(day: str, deals: list) -> None:
+            _write(os.path.join(reg, "bakers-regular-%s.json" % day),
+                   {"store": "Baker's", "captured": day, "price_type": "everyday", "deals": deals})
+
+        # Three sightings of two products. "Peanut Butter" matches the include pattern and prices
+        # the cell, so the prune keeps its evidence (09-02) and newest other row (09-01) and deletes
+        # 08-31. "Almond Butter" matches nothing (no_include_hit), so only its 09-02 row survives.
+        pbn, abn = "Fixture Peanut Butter 16 oz", "Fixture Almond Butter 16 oz"
+        cap("2026-08-31", [_pb(pbn, 1.90, "2026-08-31"), _pb(abn, 4.00, "2026-08-31")])
+        cap("2026-09-01", [_pb(pbn, 2.00, "2026-09-01"), _pb(abn, 4.10, "2026-09-01")])
+        cap("2026-09-02", [_pb(pbn, 2.10, "2026-09-02"), _pb(abn, 4.20, "2026-09-02")])
+        _res1, pr1, new1 = _cycle(db, ts0, "run:i211-1")
+        # Run 2, the SAME captures: the founding defect re-inserted the 3 rows run 1 pruned.
+        res2, pr2, new2 = _cycle(db, "2026-09-02T01:00:00", "run:i211-2")
+        T("MUST FIRE a re-import of unchanged captures inserts 0 rows (run 1 inserted %d, pruned %d)"
+          % (len(new1), pr1["superseded"]),
+          len(new1) == 6 and pr1["superseded"] == 3 and not new2,
+          "run1 new=%d pruned=%d run2 new=%s" % (len(new1), pr1["superseded"], sorted(new2)))
+        T("MUST FIRE ... and the prune after it deletes 0, the guard counting the 3 rows it left out",
+          pr2["superseded"] == 0 and res2.get("skipped_already_superseded_rows") == 3,
+          "pruned=%d %s" % (pr2["superseded"], json.dumps(res2, sort_keys=True)))
+
+        cap("2026-09-03", [_pb(pbn, 2.20, "2026-09-03"), _pb(abn, 4.30, "2026-09-03")])
+        _res3, pr3, new3 = _cycle(db, "2026-09-03T00:00:00", "run:i211-3")
+        left = {r["observed_at"]: r["price"] for r in db.conn.execute(
+            "SELECT observed_at, price FROM price_observations WHERE product_name=?", (pbn,))}
+        ev = db.conn.execute("SELECT everyday_asof, everyday_price FROM cell_state "
+                             "WHERE commodity_id=?", (pb,)).fetchone()
+        T("CLEAN TWIN a new capture's row is inserted, prices the cell, and the prune moves up one "
+          "(09-01 superseded; 09-03 evidence and 09-02 kept)",
+          left == {"2026-09-03": 2.20, "2026-09-02": 2.10}
+          and ev is not None and tuple(ev) == ("2026-09-03", 2.20),
+          "new=%d pruned=%d left=%r cell=%r" % (len(new3), pr3["superseded"], left,
+                                                 None if ev is None else tuple(ev)))
+        # The same, for a row that prices nothing: nothing tonight READS it, but it is the newest
+        # sighting, so it is the prune's survivor and tomorrow's reason to leave the older ones out.
+        # Rule 2 cannot rescue it, so this is the case that sees rule 1's ORDER (09-03 is ahead).
+        ab = {r["observed_at"]: r["match_status"] for r in db.conn.execute(
+            "SELECT observed_at, match_status FROM price_observations WHERE product_name=?", (abn,))}
+        T("CLEAN TWIN a new capture's row that prices nothing is inserted too, and supersedes 09-02 "
+          "(2 new, 2 pruned in all)",
+          ab == {"2026-09-03": "no_include_hit"} and len(new3) == 2 and pr3["superseded"] == 2,
+          "almond=%r new=%d pruned=%d" % (ab, len(new3), pr3["superseded"]))
+
+        # The 09-03 capture is rebuilt under the SAME name: a new price, and a product it lacked.
+        cap("2026-09-03", [_pb(pbn, 2.30, "2026-09-03"), _pb(abn, 4.30, "2026-09-03"),
+                           _pb("Fixture Crunchy Peanut Butter 16 oz", 2.25, "2026-09-03")])
+        _res4, _pr4, new4 = _cycle(db, "2026-09-03T06:00:00", "run:i211-4")
+        got = {r["product_name"]: r["price"] for r in db.conn.execute(
+            "SELECT product_name, price FROM price_observations WHERE observed_at='2026-09-03'")}
+        T("MUST FIRE a capture rewritten under the same name is re-read: its new price lands (2.30) "
+          "and its new product is inserted",
+          got.get("Fixture Peanut Butter 16 oz") == 2.30
+          and got.get("Fixture Crunchy Peanut Butter 16 oz") == 2.25 and len(new4) == 1,
+          "got=%r new=%d" % (got, len(new4)))
+
+        # Rules 2 and 3 on the guard alone, with the resolver's prediction stubbed. The founding
+        # shapes are the paired run's: a newer sighting that cannot be priced (price None here, a
+        # `24 fl oz` against an `oz` basis there) left the older sighting as the cell's price; and a
+        # known-wrong ruling reached a question only through a re-inserted row.
+        from supersede import SupersedeGuard                         # noqa: PLC0415
+        prov = db.record_provenance("fixture", "fixture", ts0, run="run:i211-g")
+        st = I.store_id("Baker's")
+        db.conn.execute("DELETE FROM price_observations")
+        for oid, name, price, day, status in (
+                ("po:g-newer-unpriced", "Fixture Jar", None, "2026-09-03", "include_hit"),
+                ("po:g-other", "Fixture Other Jar", 3.20, "2026-09-03", "include_hit"),
+                ("po:g-reviewed", "Fixture Ruled Jar", 3.10, "2026-09-03", "llm_rejected")):
+            db.add_observation({"id": oid, "commodity_id": pb, "store_id": st, "product_name": name,
+                                "price": price, "size_text": "16 oz", "price_type": "everyday",
+                                "provenance_id": prov, "observed_at": day, "source_file": "fixture",
+                                "match_status": status})
+        db.conn.execute("DELETE FROM cell_state")
+        db.conn.execute("INSERT INTO cell_state (commodity_id, store_id, everyday_evidence, updated_at) "
+                        "VALUES (?,?,?,?)", (pb, st, "po:g-other", ts0))
+        verdict = {"Fixture Ruled Jar": "known_wrong"}
+        g = SupersedeGuard(db, "2026-09-03T00:00:00",
+                           lambda cid, name: verdict.get(name, "include_hit"))
+
+        def absent(oid, name, price, day="2026-09-02"):
+            row = {"price": price, "unit_price": None, "unit": None, "size_text": "16 oz",
+                   "product_name": name, "price_type": "everyday", "ad_cycle_id": None,
+                   "source_file": "fixture"}
+            return g.already_superseded(oid, pb, st, name, "everyday", day, row=row)
+
+        T("MUST FIRE an absent row whose only newer sighting cannot be priced, and that would beat "
+          "the cell's best, is inserted (rule 2)",
+          absent("po:g-cheap", "Fixture Jar", 1.00) is False
+          and g.inserted_because.get("may_price_becomes_best") == 1, repr(g.inserted_because))
+        T("CLEAN TWIN the same shape priced ABOVE the cell's best is still left out",
+          absent("po:g-dear", "Fixture Jar", 4.00) is True and g.skipped == 1,
+          repr(g.inserted_because))
+        T("MUST FIRE an absent row predicted known_wrong, where the present one is only a reviewer "
+          "rejection, is inserted (rule 3: it moves the verdict bank)",
+          absent("po:g-kw", "Fixture Ruled Jar", 3.10, "2026-09-02") is False
+          and g.inserted_because.get("may_bank") == 1, repr(g.inserted_because))
+    except Exception as e:                                # noqa: BLE001
+        _fails.append("supersede-guard suite raised: %r" % (e,))
+        print("  FAILED supersede-guard suite raised: %r" % (e,))
+    finally:
+        I.GROCERY = saved_grocery
+        if db is not None:
+            db.conn.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def run() -> int:
     tmp = tempfile.mkdtemp(prefix="i200-imp-")
     saved_grocery = I.GROCERY
@@ -257,6 +407,7 @@ def run() -> int:
         # I235's two groups run here, inside the provenance stub, each on its own temp tree
         run_capture_terms()
         run_fareway_dates()
+        run_supersede_guard()
     except Exception as e:                                # noqa: BLE001
         _fails.append("suite raised: %r" % (e,))
         print("  FAILED suite raised: %r" % (e,))
@@ -274,7 +425,8 @@ def run() -> int:
         return 1
     print("SELF-TEST PASS: importers %d of %d cases - a zero product-urls price is stored NULL, "
           "a real one unchanged; a staple-id capture term resolves namespaced, an unknown one stays counted; "
-          "a fareway-shop file is dated from the date in its name or refused" % (_ran, CASES))
+          "a fareway-shop file is dated from the date in its name or refused; a re-import inserts 0 "
+          "rows the prune deletes, and a new or rewritten capture still lands" % (_ran, CASES))
     return 0
 
 

@@ -19,6 +19,7 @@ import glob
 import json
 import os
 import re
+import sys
 from typing import Callable
 
 from graphdb import GraphDB, read_json, REPO_ROOT
@@ -26,6 +27,7 @@ from ids import (adcycle_id, category_id, catexclude_id, commodity_id,
                  known_wrong_id, mapping_id, norm_store, observation_id,
                  override_id, sku_id, store_id, store_label, hash_obj, slug)
 from placeholder_names import is_placeholder_name
+from supersede import SupersedeGuard, stored_rows
 from units import parse_engine_unit_price
 
 GROCERY = os.path.join(REPO_ROOT, "grocery")
@@ -576,6 +578,8 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
 
     n_obs = n_files = n_skipped = n_worklist = n_placeholder = 0
     n_undated = n_legacy_rows = 0
+    # I211. The legacy rows deleted below are already absent to it (_rows_this_run_deletes).
+    guard = _supersede_guard(db, ts)
     for fp in files:
         try:
             rows = read_json(fp)
@@ -602,6 +606,7 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
                                     raw_output_hash=hash_obj(len(rows)), run=run)
         n_files += 1
 
+        file_obs: list[dict] = []
         for r in rows:
             legacy = r.get("id")
             name = r.get("name")
@@ -627,7 +632,8 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
             estimated = "estimat" in str(r.get("per", "")).lower()
 
             oid = observation_id(cid, "Fareway", observed, rel(fp), name)
-            db.add_observation({
+            ptype = "sale" if (orig and price and orig > price) else "everyday"
+            file_obs.append({
                 "id": oid,
                 "commodity_id": cid,
                 "store_id": store_id("Fareway"),
@@ -639,7 +645,7 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
                 "unit": unit,
                 "size_text": r.get("size"),
                 "is_sale": 1 if (orig and price and orig > price) else 0,
-                "price_type": "sale" if (orig and price and orig > price) else "everyday",
+                "price_type": ptype,
                 "ad_cycle_id": None,
                 "provenance_id": prov,
                 "confidence": 1.0,
@@ -649,13 +655,14 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
                 "match_status": "include_hit",
                 "match_reason": "fareway shop capture is keyed by commodity id",
             })
-            n_obs += 1
+        n_obs += _add_unless_superseded(db, guard, file_obs)     # I211
 
     return {"fareway_observations": n_obs, "fareway_files": n_files,
             "fareway_worklists_skipped": n_worklist, "fareway_rows_skipped": n_skipped,
             "fareway_placeholder_rows_dropped": n_placeholder,
             "fareway_files_undated_refused": n_undated,
-            "fareway_nondate_rows_replaced": n_legacy_rows}
+            "fareway_nondate_rows_replaced": n_legacy_rows,
+            "fareway_skipped_already_superseded_rows": guard.skipped}
 
 
 def _fareway_shop_observed(fp: str) -> tuple[str | None, str]:
@@ -693,8 +700,45 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
     data = read_json(path)
     prov = db.record_provenance(rel(path), "import:product-urls-prices", ts, run=run)
 
-    n_obs = n_skip = n_placeholder = n_zero = 0
-    written: set[str] = set()          # every observation id this run asserts
+    obs, counts = _product_url_rows(db, data, prov, ts)
+    written = {o["id"] for o in obs}   # every observation id this run asserts
+    # I211: a curated row a newer sighting of the same product superseded was deleted by the prune
+    # and re-inserted every night (516 a run at f4e50313b). The guard leaves it out; it stays in
+    # `written`, so the stale-entry delete below never reads a skip as an entry removed upstream.
+    guard = _supersede_guard(db, ts)
+    n_obs = _add_unless_superseded(db, guard, obs)
+
+    # SUPERSEDE. This importer mirrors ONE file; an observation sourced from it
+    # that this run did not re-assert corresponds to an entry that was edited or
+    # deleted. Before this, removed entries were immortal: the daiquiri-mixer
+    # link stripped from product-urls.json on 2026-08-20 kept pricing the
+    # graph's fareway strawberries cell from its orphaned observation. Curated
+    # rows are the one lane where deletion upstream must mean deletion here:
+    # the file IS the curation.
+    stale = [r["id"] for r in db.conn.execute(
+        "SELECT id FROM price_observations WHERE source_file=?", (rel(path),))
+        if r["id"] not in written]
+    if stale:
+        db.conn.executemany("DELETE FROM price_observations WHERE id=?",
+                            [(i,) for i in stale])
+        db.log_event(run=run, timestamp=ts, etype="resolve",
+                     decision="curated_supersede",
+                     detail={"stale_curated_rows_deleted": len(stale)})
+
+    return {"product_url_observations": n_obs, "product_url_skipped": counts["skip"],
+            "product_url_superseded": len(stale),
+            "product_url_placeholder_rows_dropped": counts["placeholder"],
+            "product_url_zero_price_nulled": counts["zero"],
+            "product_url_skipped_already_superseded_rows": guard.skipped}
+
+
+def _product_url_rows(db: GraphDB, data: dict, prov: str | None, ts: str) -> tuple[list, dict]:
+    """The observation rows product-urls.json asserts, WRITING NOTHING, and the counts of what it
+    left out. import_product_url_prices writes them; _rows_this_run_deletes reads their ids to know
+    which curated rows this run's stale-entry delete will remove (I211)."""
+    path = os.path.join(GROCERY, "product-urls.json")
+    n_skip = n_placeholder = n_zero = 0
+    out: list[dict] = []
     for cid_raw, entry in (data.get("items") or {}).items():
         cid = None
         for ns in ("staple", "recipe"):
@@ -741,9 +785,8 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
             # 37 days stale. Take the leading ISO date and nothing else.
             observed = _leading_date(v.get("verified")) or data.get("updated") or ts[:10]
 
-            oid = observation_id(cid, store, observed, rel(path), name)
-            db.add_observation({
-                "id": oid,
+            out.append({
+                "id": observation_id(cid, store, observed, rel(path), name),
                 "commodity_id": cid,
                 "store_id": store_id(store),
                 "product_name": name,
@@ -768,35 +811,79 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
                 "match_reason": "curated product-urls entry, keyed by commodity id"
                                 + (f"; shelf-verified {v['verified']}" if v.get("verified") else ""),
             })
-            written.add(oid)
-            n_obs += 1
+    return out, {"skip": n_skip, "placeholder": n_placeholder, "zero": n_zero}
 
-    # SUPERSEDE. This importer mirrors ONE file; an observation sourced from it
-    # that this run did not re-assert corresponds to an entry that was edited or
-    # deleted. Before this, removed entries were immortal: the daiquiri-mixer
-    # link stripped from product-urls.json on 2026-08-20 kept pricing the
-    # graph's fareway strawberries cell from its orphaned observation. Curated
-    # rows are the one lane where deletion upstream must mean deletion here —
-    # the file IS the curation.
-    stale = [r["id"] for r in db.conn.execute(
-        "SELECT id FROM price_observations WHERE source_file=?", (rel(path),))
-        if r["id"] not in written]
-    if stale:
-        db.conn.executemany("DELETE FROM price_observations WHERE id=?",
-                            [(i,) for i in stale])
-        db.log_event(run=run, timestamp=ts, etype="resolve",
-                     decision="curated_supersede",
-                     detail={"stale_curated_rows_deleted": len(stale)})
 
-    return {"product_url_observations": n_obs, "product_url_skipped": n_skip,
-            "product_url_superseded": len(stale),
-            "product_url_placeholder_rows_dropped": n_placeholder,
-            "product_url_zero_price_nulled": n_zero}
+def _rows_this_run_deletes(db: GraphDB, ts: str) -> set:
+    """Ids of present rows a lane importer will DELETE later in this same run, before the prune:
+    import_fareway_shop's non-date legacy rows and import_product_url_prices' stale curated rows.
+    A SupersedeGuard treats them as already gone, so a row about to be deleted is never counted as
+    the newer sighting that makes an older one safe to leave out (I211)."""
+    doomed: set = set()
+    for fp in glob.glob(os.path.join(GROCERY, "out", "fareway", "fareway-shop-*.json")):
+        observed, legacy = _fareway_shop_observed(fp)
+        if observed is None or legacy == observed:
+            continue
+        try:
+            if not _is_capture(read_json(fp)):
+                continue
+        except Exception:                                       # noqa: BLE001
+            continue
+        doomed |= {r[0] for r in db.conn.execute(
+            "SELECT id FROM price_observations WHERE source_file=? AND observed_at=?",
+            (rel(fp), legacy))}
+    path = os.path.join(GROCERY, "product-urls.json")
+    if os.path.exists(path):
+        asserted = {o["id"] for o in _product_url_rows(db, read_json(path), None, ts)[0]}
+        doomed |= {r[0] for r in db.conn.execute(
+            "SELECT id FROM price_observations WHERE source_file=?", (rel(path),))
+            if r[0] not in asserted}
+    return doomed
 
 
 # ---------------------------------------------------------------------------
 # Price observations — the high-volume backfill
 # ---------------------------------------------------------------------------
+
+def _supersede_guard(db: GraphDB, ts: str) -> SupersedeGuard:
+    """A SupersedeGuard (graph/lib/supersede.py) that predicts a new row's status with the resolver
+    import_all runs after the lanes: Resolver(db, use_llm=False).resolve(..., allow_llm=False), which
+    graph/pipeline/resolve.py documents as a pure function of (commodity, product name). Cached per
+    question, as resolve_pending groups them. Rows a lane deletes later in this run are absent to it."""
+    pipeline = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pipeline")
+    if pipeline not in sys.path:
+        sys.path.insert(0, pipeline)
+    from resolve import Resolver                               # noqa: PLC0415
+    resolver = Resolver(db, use_llm=False)
+    cache: dict[tuple[str, str], str] = {}
+
+    def predict(cid: str, name: str) -> str:
+        k = (cid, name or "")
+        if k not in cache:
+            try:
+                cache[k] = resolver.resolve(cid, k[1], allow_llm=False).status
+            except KeyError:
+                cache[k] = "escalated"                         # resolve_pending's own answer
+        return cache[k]
+    return SupersedeGuard(db, ts, predict, doomed=_rows_this_run_deletes(db, ts))
+
+
+def _add_unless_superseded(db: GraphDB, guard: SupersedeGuard, observations: list[dict]) -> int:
+    """Write `observations` in order, leaving out each absent row the guard shows would change
+    nothing tonight but the freelist (graph/lib/supersede.py, backlog I211). A row already present is
+    always upserted. The guard judges each oid as the upsert will STORE it: two rows in one file can
+    share an oid (same name, same date), and the second only replaces the first's price. Returns the
+    number written."""
+    stored = stored_rows(observations)
+    n = 0
+    for o in observations:
+        if guard.already_superseded(o["id"], o["commodity_id"], o["store_id"], o["product_name"],
+                                    o.get("price_type"), o["observed_at"], row=stored[o["id"]]):
+            continue
+        db.add_observation(o)
+        n += 1
+    return n
+
 
 def _resolve_by_term(db: GraphDB, term: str | None, term_index: dict) -> str | None:
     """Map a capture's `found_by_term` back to a commodity via commodity-search.
@@ -859,8 +946,17 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
     exactly like regular/throttled; its `price_type` lives at FILE level
     ("everyday" for the club-price sweeps), and its sams-rejects-*.json
     siblings are bare lists, which the isinstance(dict) guard already skips.
+
+    INCREMENTAL, NOT A RE-INSERT OF HISTORY (backlog I211, 2026-09-19). Every capture file is still
+    read on every run, and every row is still resolved, but a row that is not in the table and that
+    tonight's supersede-prune would delete is not inserted (SupersedeGuard, graph/lib/supersede.py).
+    Before this, each run re-inserted every row the last prune had deleted (477,950 on one pass over
+    the captures at f4e50313b) and the prune deleted them again, so graph.db's size tracked the
+    import's peak. Files are deliberately NOT skipped by name or date: a capture is rebuilt under the
+    same dated name several times a day, and its new rows and new prices must land.
     """
     term_index = _build_term_index(db)
+    guard = _supersede_guard(db, ts)
     n_obs = n_files = n_unresolved = n_placeholder = 0
     n_by_staple_id = n_unknown_term = 0
 
@@ -888,6 +984,7 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
             if progress:
                 progress(f"  {rel(fp)}  ({len(deals)} deals)")
 
+            file_obs: list[dict] = []
             for d in deals:
                 dstore = d.get("store") or store
                 if not dstore:
@@ -909,19 +1006,19 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                     continue
                 if how == "staple_id":
                     n_by_staple_id += 1
-                price = _money(d.get("current_price") or d.get("ad_price"))
                 as_of = d.get("as_of") or observed
                 oid = observation_id(cid, dstore, as_of, rel(fp), name)
+                # Row-level price_type wins; the sams sweep declares it once
+                # at file level instead.
+                ptype = d.get("price_type") or data.get("price_type")
+                price = _money(d.get("current_price") or d.get("ad_price"))
 
                 # Prefer the LEGACY ENGINE's own verified unit price over
                 # re-deriving one here. See parse_engine_unit_price for why.
                 upx, unit = parse_engine_unit_price(
                     d.get("engine_check") or d.get("wm_unit_price"))
 
-                # Row-level price_type wins; the sams sweep declares it once
-                # at file level instead.
-                ptype = d.get("price_type") or data.get("price_type")
-                db.add_observation({
+                file_obs.append({
                     "id": oid,
                     "commodity_id": cid,
                     "store_id": store_id(dstore),
@@ -940,14 +1037,20 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                     "observed_at": as_of,
                     "source_file": rel(fp),
                 })
-                n_obs += 1
+            # A row tonight's prune would delete, and that nothing tonight would read, is not
+            # re-inserted (I211; graph/lib/supersede.py). A row already present is always upserted.
+            n_obs += _add_unless_superseded(db, guard, file_obs)
     return {"observations": n_obs, "capture_files": n_files,
             "unresolved_rows": n_unresolved,
             # of unresolved_rows, those whose term is neither an alias nor a staple id
             # (the rest carry no term at all)
             "unresolved_unknown_term_rows": n_unknown_term,
             "resolved_by_staple_id_rows": n_by_staple_id,
-            "placeholder_rows_dropped": n_placeholder}
+            "placeholder_rows_dropped": n_placeholder,
+            # absent rows the prune would delete, so not inserted (I211)
+            "skipped_already_superseded_rows": guard.skipped,
+            # absent rows written anyway, by the supersede.py rule that kept them
+            "new_rows_kept_because": dict(sorted(guard.inserted_because.items()))}
 
 
 def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None = None,
@@ -989,6 +1092,7 @@ def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None =
             matchers.append((row["node_id"], pats))
 
     n_obs = n_files = n_unplaced = n_placeholder = 0
+    guard = _supersede_guard(db, ts)                # I211: never re-insert what the prune deleted
     for lane in dirs:
         files = sorted(glob.glob(os.path.join(GROCERY, "out", lane, "*-deals-*.json")))
         if limit_files:
@@ -1011,6 +1115,7 @@ def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None =
             if progress:
                 progress(f"  {rel(fp)}  ({len(data['deals'])} ad rows)")
 
+            file_obs: list[dict] = []
             for d in data["deals"]:
                 dstore = d.get("store") or store
                 name = d.get("item")
@@ -1026,7 +1131,7 @@ def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None =
                     n_unplaced += 1
                     continue
                 for cid in hits:
-                    db.add_observation({
+                    file_obs.append({
                         "id": observation_id(cid, dstore, observed, rel(fp), name),
                         "commodity_id": cid,
                         "store_id": store_id(dstore),
@@ -1042,10 +1147,11 @@ def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None =
                         "observed_at": observed,
                         "source_file": rel(fp),
                     })
-                    n_obs += 1
+            n_obs += _add_unless_superseded(db, guard, file_obs)     # I211
     return {"ad_deal_observations": n_obs, "ad_deal_files": n_files,
             "ad_rows_unplaced": n_unplaced,
-            "ad_placeholder_rows_dropped": n_placeholder}
+            "ad_placeholder_rows_dropped": n_placeholder,
+            "ad_skipped_already_superseded_rows": guard.skipped}
 
 
 # ---------------------------------------------------------------------------

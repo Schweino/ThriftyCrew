@@ -15809,7 +15809,7 @@ message says a red means old seeds moved. Broken once by reverting the draw to `
 went red (stream before=819378 after=888550; the pin read the old v1 cases, `nul-byte@1601` third, as in
 the founding run), exit 2; restored md5-identical and green.
 
-### I211 - graph.db is half empty pages: 40,342 of 78,709 pages sit on the freelist `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
+### I211 - graph.db is half empty pages: 40,342 of 78,709 pages sit on the freelist `PARTLY DONE - WRITER FIXED; THE ONE-TIME VACUUM IS BRAD'S STEP` `queue-8` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15899,6 +15899,61 @@ the VACUUM neutered, md5 restored identical). By the replay, the next 08:15 impo
 
 **Recommendation: 3, with 1 until it lands.** The freelist is the visible symptom of re-importing and
 re-pruning about 270k rows a day; 2 and 4 hide the symptom and keep the work.
+
+**Brad ruled option 3 on 2026-09-19: fix the writer, then one VACUUM that he runs.**
+
+**Partly done 2026-09-19: the writer is fixed; the one-time compaction is Brad's step.** New
+`graph/lib/supersede.py` holds the prune's key, the open statuses, the evidence set and cell_state's per-row
+pricing filter in one copy (state.py now imports them), plus `SupersedeGuard`. Every importer that feeds
+`price_observations` (`import_observations`, `import_fareway_shop`, `import_ad_deals`,
+`import_product_url_prices`) still reads every capture file and resolves every row, but leaves out an ABSENT
+row only when all three hold: the prune would delete it (a non-evidence, non-open row of the same key sorts
+ahead of it, and the resolver's own deterministic answer for it is not open); cell_state's answer would not
+move (it cannot be priced, cannot take its product's slot, or takes a slot that neither was nor becomes its
+group's best); and the verdict bank would not move. A present row is always upserted and no file is skipped by
+name, so a capture rebuilt under the same dated name still lands. Rows a lane deletes later in the same run
+(fareway-shop legacy rows, stale product-urls rows) count as already gone. The first cut skipped on the prune
+rule alone and moved 2 cells and 2 verdicts on the paired run below (a `24 fl oz` newer sighting that cannot be
+priced in an `oz` basis, a duplicate-named Baker's row carrying a second listing's price, and a known-wrong
+ruling that reached two questions only through re-inserted rows); a second cut moved 1 cell per run through a
+bug in the group-best check (peanuts at Walmart, then corn dogs at Baker's). The shipped rules are the third.
+
+**Measured** on backup-API copies of the live graph.db (snapshot md5 `cc93bf8b...`, 323,358,720 B, taken from a
+`mode=ro` connection; the live file was never opened for writing), old arm the code at base `f4e50313b` in a
+detached worktree, new arm this change, both over the same tracked captures with a fixed clock per run,
+through `graph/bench/import_churn_harness.py` (blob `1ad6bb96`) and `graph/bench/import_churn_diff.py` (blob
+`678e845a`). One row per run, rows inserted / pruned, file bytes, page_count, freelist:
+- old r1: 485,986 / 478,085, 446,967,808 B, 109,123 pages, 68,721 free. new r1: 213,907 / 206,012,
+  323,358,720 B, 78,945 pages, 38,687 free (213,566 of the new rows are I235's first import of Baker's
+  staple-id rows, which the old arm also inserted).
+- old r2: 477,950 / 477,950, 451,543,040 B, 110,240, 69,807. new r2: 303 / 297, 323,358,720 B, 78,945, 38,642.
+- old r3: 477,950 / 477,950, 451,657,728 B, 110,268, 69,770. new r3: 187 / 187, 323,358,720 B, 78,945, 38,599.
+- **cell_state and question_verdicts sha256-identical between the arms after every run**: r1 `4945ff1b` and
+  `c23bea4e`, r2 `e8bc7f64` and `f585195d`, r3 `61f8f25b` and `f585195d` (3,261 cells, 11,181 verdicts).
+  price_observations identical after r2 and r3 (52,689 rows); after r1 the old arm held 6 superseded rows the
+  new one did not, and r2 restored them.
+- The 187 rows a steady-state run still inserts and prunes are rows whose insert DOES move tonight's answer
+  (89 become their group's best, 71 replace it, 13 move the bank, 14 are lane rows): the old pipeline builds
+  cell_state from rows its own prune then deletes. Taking them to 0 means changing which row cell_state or
+  the prune prefers, which moves prices, so it is not done here.
+- Compaction on a copy carrying the new importer's steady state: `vacuum_graph_db.py --apply` took it from
+  323,358,720 B to 143,343,616 B in 1.11 s (integrity_check ok, 11 of 11 tables identical, freelist 0), and two
+  more full imports left it at 145,444,864 and 145,637,376 B. The old importer regrew a vacuumed copy by 75.1%.
+- Full import pass time: old 149.7 to 208.2 s, new 60.4 to 95.5 s (one box, runs not interleaved, so a
+  description and not a benchmark).
+
+**Fixtures** in `graph/import/importers_selftest.py`, 27 of 27 (8 new): MUST FIRE a re-import of unchanged
+captures inserts 0 rows and the prune after it deletes 0; CLEAN TWIN a new capture's row is inserted, prices the
+cell and supersedes correctly, and so is a new row that prices nothing; MUST FIRE a capture rewritten under the
+same name is re-read (new price lands, new product inserted); MUST FIRE rules 2 and 3 on the guard alone. Broken
+once each from a temp mirror, originals md5-identical afterwards: never skip (the founding behaviour) 7 red;
+skip ignoring order 1 red; skip a file already imported by name 2 red; rule 2 off 2 red; rule 3 off 1 red;
+unmutated control 27 of 27. The code measured is this change's before two comment-only edits; final blobs
+`graph/lib/supersede.py` `b4211a4e` and `graph/import/importers.py` `86a220d7`.
+
+**What remains, Brad's one step:** `graph/pipeline/vacuum_graph_db.py` is on main in this change (from branch
+`claude/i211-vacuum`, which is deleted), and `design/ready-for-brad/README.md` carries the command, the quiet
+window and the expected sizes. Run it once after the new importer has done one daily import.
 
 ### I212 - Run statistics on graph.db: one full ANALYZE, then PRAGMA optimize at every connection close `DONE` `queue-8`
 

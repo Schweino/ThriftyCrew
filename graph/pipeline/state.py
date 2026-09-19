@@ -39,16 +39,19 @@ sys.path.insert(0, os.path.join(HERE, "..", "lib"))
 from authority import decided_by_stamp                          # noqa: E402
 from graphdb import open_db, write_json, GRAPH_DIR, REPO_ROOT   # noqa: E402
 from ids import norm_text                                       # noqa: E402
-from units import per_unit, reconcile_unit, names_multiple_products  # noqa: E402
+# The per-row pricing filter, the prune's key and the verdict bank's precedence live in
+# graph/lib/supersede.py since backlog I211 (2026-09-19): the importers read the same rules to
+# decide, before they insert, whether a row would change anything but the freelist. One copy.
+from supersede import (OPEN_STATUSES, PRICING_STATUSES, BANKABLE, VERDICT_RANK,  # noqa: E402,F401
+                       cell_candidate, cell_context, evidence_ids, is_curated, resolve_pu,
+                       supersede_key)
 
 STATE_DIR = os.path.join(GRAPH_DIR, "state")
 CELL_STATE_JSON = os.path.join(STATE_DIR, "cell-state.json")
 VERDICTS_JSON = os.path.join(STATE_DIR, "question-verdicts.json")
 
-# Only these two may price a cell — the same whitelist v_current_cell enforces
-# and verifier.check_no_unresolved_pricing re-checks. llm_match_unverified is
-# deliberately absent: a local-model MATCH is a lead for the reviewer, not a price.
-PRICING_STATUSES = ("include_hit", "llm_confirmed")
+# PRICING_STATUSES (only include_hit and llm_confirmed may price a cell - the same whitelist
+# v_current_cell enforces and verifier.check_no_unresolved_pricing re-checks) is imported above.
 
 
 def _days_between(older: str, newer: str) -> int | None:
@@ -60,15 +63,7 @@ def _days_between(older: str, newer: str) -> int | None:
         return None
 
 
-def _resolve_pu(row, basis):
-    """Per-unit price in the board's declared basis, or None. Mirrors the
-    derivation board_parity uses, so state and parity cannot disagree."""
-    pu, unit = reconcile_unit(row["unit_price"], row["unit"], basis)
-    if pu is None:
-        derived, derived_unit = per_unit(row["price"], row["size_text"], basis,
-                                         row["product_name"])
-        pu, unit = reconcile_unit(derived, derived_unit, basis)
-    return pu, unit
+_resolve_pu = resolve_pu          # the old private name, kept for any caller outside this file
 
 
 def build_cell_state(db, ts: str) -> dict:
@@ -79,15 +74,7 @@ def build_cell_state(db, ts: str) -> dict:
     on its cycle window. Merging them is how an expired sale price goes on
     looking like a shelf price — the failure this whole table exists to end.
     """
-    props = {r["id"]: json.loads(r["properties_json"] or "{}")
-             for r in db.conn.execute(
-                 "SELECT id, properties_json FROM nodes WHERE type='Commodity'")}
-    cycles = {}
-    for c in db.conn.execute(
-            "SELECT id, properties_json FROM nodes WHERE type='AdCycle'"):
-        p = json.loads(c["properties_json"] or "{}")
-        if p.get("from") and p.get("to"):
-            cycles[c["id"]] = (p["from"], p["to"])
+    basis_of, cycles = cell_context(db)
 
     today = ts[:10]
     rows = db.conn.execute(
@@ -102,21 +89,12 @@ def build_cell_state(db, ts: str) -> dict:
     # product is superseded by its latest one.
     newest: dict[tuple, dict] = {}
     for r in rows:
-        # An "A or B" ad line names two products and one price; neither can be
-        # priced from it. See units.names_multiple_products.
-        if names_multiple_products(r["product_name"]):
+        # The per-row half of the filter (an "A or B" line, a unit price that will not
+        # convert, an ad outside its window) is supersede.cell_candidate.
+        cand = cell_candidate(r, basis_of.get(r["commodity_id"]), cycles, today)
+        if cand is None:
             continue
-        basis = (props.get(r["commodity_id"]) or {}).get("unit_basis")
-        pu, unit = _resolve_pu(r, basis)
-        if pu is None:
-            continue
-        kind = "ad" if (r["price_type"] or "").lower() in ("ad", "sale") else "everyday"
-        if kind == "ad":
-            win = cycles.get(r["ad_cycle_id"] or "")
-            # An ad price with no resolvable window can never be shown to be
-            # current, so it is not one. Missed-over-false, again.
-            if not win or not (win[0] <= today <= win[1]):
-                continue
+        kind, pu, unit = cand
         key = (r["commodity_id"], r["store_id"], kind,
                norm_text(r["product_name"]))
         prev = newest.get(key)
@@ -125,7 +103,7 @@ def build_cell_state(db, ts: str) -> dict:
                 obs == prev["observed_at"] and pu < prev["pu"]):
             newest[key] = {"row": r, "pu": pu, "unit": unit,
                            "observed_at": obs,
-                           "curated": "product-urls" in (r["source_file"] or ""),
+                           "curated": is_curated(r["source_file"]),
                            "window": cycles.get(r["ad_cycle_id"] or "")}
 
     # PRECEDENCE, mirroring what the live board renders — the same rule
@@ -223,14 +201,11 @@ def build_question_verdicts(db, ts: str) -> dict:
     known_wrong anywhere is known_wrong everywhere — that is what makes an
     absolute ruling absolute.
     """
-    rank = {"known_wrong": 0, "category_excluded": 1, "excluded": 2,
-            # helper_rejected sits BELOW llm_rejected (plan §2 step 2, 2026-08-23): where both
-            # exist for one pair, the model's answer is the more expensive and the more
-            # examined of the two, and the helper's is the cheap pre-filter. Neither is
-            # precedent - authority.py rules both single_model.
-            "llm_rejected": 3, "helper_rejected": 3.5, "escalated": 4,
-            "llm_match_unverified": 5,
-            "no_include_hit": 6, "llm_confirmed": 7, "include_hit": 8}
+    # The table is supersede.VERDICT_RANK (one copy, I211). helper_rejected sits BELOW
+    # llm_rejected (plan §2 step 2, 2026-08-23): where both exist for one pair, the model's
+    # answer is the more expensive and the more examined of the two, and the helper's is the
+    # cheap pre-filter. Neither is precedent - authority.py rules both single_model.
+    rank = VERDICT_RANK
     # Only EXPENSIVE verdicts are banked. A deterministic one (include_hit,
     # excluded, category_excluded, no_include_hit) is re-derived from the rules
     # in ~1.5s for 100k rows, the resolver's bank never reads it, and banking it
@@ -238,8 +213,7 @@ def build_question_verdicts(db, ts: str) -> dict:
     # Banking all of them also made the tracked export 11.5 MB of daily churn to
     # store answers nobody consults. What IS banked: model calls (55 GPU-minutes
     # to reproduce), reviewer rulings (human time), and known-wrong (absolute).
-    BANKABLE = ("llm_rejected", "llm_confirmed", "llm_match_unverified",
-                "escalated", "known_wrong", "helper_rejected")
+    # BANKABLE is supersede.BANKABLE (one copy, I211).
     rows = db.conn.execute(
         f"""SELECT commodity_id, product_name, match_status, match_reason, confidence
             FROM price_observations
@@ -382,12 +356,13 @@ def supersede_prune(db, ts: str, dry_run: bool = False) -> dict:
         because those are questions in flight, not stale data.
     Adjudication is not lost either: it lives in question_verdicts, one row per
     question, so deleting the 39 duplicate askers destroys no work.
+
+    The key, the open statuses and the evidence set live in graph/lib/supersede.py (backlog I211,
+    2026-09-19), because the importers now predict this rule before they insert and must not
+    re-insert, every night, a row this prune deleted the night before. Change the rule THERE.
     """
-    evidence = {r[0] for r in db.conn.execute(
-        "SELECT everyday_evidence FROM cell_state WHERE everyday_evidence IS NOT NULL")}
-    evidence |= {r[0] for r in db.conn.execute(
-        "SELECT ad_evidence FROM cell_state WHERE ad_evidence IS NOT NULL")}
-    open_statuses = ("unadjudicated", "escalated", "llm_match_unverified")
+    evidence = evidence_ids(db)
+    open_statuses = OPEN_STATUSES
 
     rows = db.conn.execute(
         """SELECT id, commodity_id, store_id, product_name, price_type,
@@ -399,8 +374,7 @@ def supersede_prune(db, ts: str, dry_run: bool = False) -> dict:
     for r in rows:
         if r["id"] in evidence or r["match_status"] in open_statuses:
             continue
-        key = (r["commodity_id"], r["store_id"], norm_text(r["product_name"]),
-               (r["price_type"] or "").lower())
+        key = supersede_key(r["commodity_id"], r["store_id"], r["product_name"], r["price_type"])
         if key in seen:
             doomed.append(r["id"])          # an older sighting of the same thing
         else:
