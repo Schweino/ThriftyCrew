@@ -1,4 +1,27 @@
-# Subtitle and search-text fixes for six live pages (drafted 2026-09-19, NOT applied)
+# Subtitle and search-text fixes for six live pages (drafted 2026-09-19, APPLIED 2026-09-19)
+
+## APPLIED
+
+Brad approved this queue and it was applied on 2026-09-19 with `ops\review-staged.ps1 -Apply`. All 6 PUTs went
+out. Their write-journal ids are `145c1330f136`, `1ad25062578f`, `3b443f4e4b8f`, `5ab25918e665`,
+`a6745443b873` and `f86e3b6b09ec`. All 6 pages were read back afterwards and every sent field matched the
+draft, and the renters card html is byte-identical to the staged one.
+
+A later read-only GET the same morning (05:35, for `subtitle-fixes-2.md`) shows the same thing on the four of
+these pages that carry the Money Hacks tag: renters and car insurance carry the new subtitle and search text,
+savings by age and the emergency fund carry the new search text, and the renters body has "The math, with your
+own numbers" once and "real-dollar" nowhere.
+
+Two things the apply did not reach, both written up in `subtitle-fixes-2.md` under "Anything odd":
+
+- **The Money Hacks hub still shows the old subtitles** for renters (*"For about 15 dollars a month"*) and car
+  insurance (*"Cut $300 to $600 a year"*). The hub page copies every card's subtitle into its own html when it
+  is built, so it only changes when the hub is rebuilt.
+- On savings by age and the emergency fund, where only the search text changed, Ghost left `updated_at` where
+  it was (09:59:04 and 09:59:03). Renters and car insurance, whose subtitle changed too, moved to 10:33. So on
+  a search-text-only change, `updated_at` does not show the write happened; the field values do.
+
+The rest of this file is the draft as it was approved, kept as the record.
 
 The overlap body fixes went live on 2026-09-19 (`overlap-review.md`, "Left standing"). They changed each page's
 body card only, so the subtitle under the title and the text search engines and link previews show still carry
@@ -138,3 +161,6 @@ They weren't in the overlap review and aren't drafted here:
 
 Whether their bodies back those figures up wasn't checked. They are listed so they can be looked at on purpose,
 not found by accident.
+
+**Followed up in `subtitle-fixes-2.md`** (drafted 2026-09-19): each of those pages checked against its own body,
+seven more search lines staged, and every live Money Hacks post swept.
