@@ -1102,10 +1102,32 @@ try {
       # captures succeeded, the commit landed, and then fetch's first stderr line threw out of the whole
       # try block, so push was NEVER ATTEMPTED and the run exited 1 with FAILED LANES: push.
       & git -C $repo fetch origin main | ForEach-Object { Write-Output ("fetch[$attempt]: " + $_) }
-      & git -C $repo -c rebase.autoStash=true rebase -X theirs origin/main | ForEach-Object { Write-Output ("rebase[$attempt]: " + $_) }
-      if ($LASTEXITCODE -ne 0) {
+      # Invoke-Native (native-lib.ps1): git prints the untracked-file refusal on STDERR, and reading stderr under this
+      # script's EAP=Stop by any redirect would make its first line a terminating throw. Invoke-Native never throws.
+      if (-not (Get-Command Invoke-Native -ErrorAction SilentlyContinue)) { . (Join-Path $root 'native-lib.ps1') }
+      $rbRes = Invoke-Native git -C $repo -c rebase.autoStash=true rebase -X theirs origin/main
+      $rbLines = @($rbRes.Lines | ForEach-Object { [string]$_ })
+      $rbRc = [int]$rbRes.ExitCode
+      foreach ($l in $rbLines) { Write-Output ("rebase[$attempt]: " + $l) }
+      if ($rbRc -ne 0) {
         Write-Output "rebase attempt $attempt conflicted; aborting (never detached)"
         & git -C $repo rebase --abort | ForEach-Object { Write-Output ("abort[$attempt]: " + $_) }   # no redirect: same EAP=Stop rule
+        # AN UNTRACKED FILE IN THE WAY IS NOT A CONFLICT A RETRY CAN CLEAR (2026-09-19, Get-RebaseUntrackedBlockers).
+        # Move exactly the files git named into a dated quarantine (kept, never deleted), say so, and retry.
+        $blockers = Get-RebaseUntrackedBlockers $rbLines
+        if (@($blockers).Count) {
+          $qDir = Join-Path $root ("out\untracked-quarantine\" + $today)
+          foreach ($b in @($blockers)) {
+            $src = Join-Path $repo $b
+            if (-not (Test-Path -LiteralPath $src)) { continue }
+            $dst = Join-Path $qDir $b
+            New-Item -ItemType Directory -Force -Path (Split-Path $dst -Parent) | Out-Null
+            Move-Item -LiteralPath $src -Destination $dst -Force   # atomic-replace:allow a move of an untracked stray into a fresh dated quarantine, not a replace of a file anything reads
+            Write-Output ("rebase[$attempt]: moved untracked '" + $b + "' aside to " + $dst + " - it blocked the rebase; upstream now tracks that path")
+          }
+          try { Send-Alert -Subject "Grocery pipeline moved an untracked file out of the rebase's way - $today" -Body ("capture-run.ps1 [$Kind]: the rebase onto origin/main was refused because untracked file(s) in $repo would be overwritten by files upstream now tracks: " + (@($blockers) -join ', ') + ". They were moved (not deleted) to $qDir and the push retried. Check whether anything in them is worth keeping.") | Out-Null } catch {}
+          continue
+        }
         Start-Sleep -Seconds 10; continue
       }
       & git -C $repo push origin HEAD:main | ForEach-Object { Write-Output ("push[$attempt]: " + $_) }

@@ -1724,6 +1724,27 @@ function Get-BrowserStoresToDrive {
   return [pscustomobject]@{ Drive = $drive.ToArray(); AlreadyCaptured = $have.ToArray() }
 }
 
+# ---- AN UNTRACKED FILE IN THE WAY OF THE BOT'S REBASE (2026-09-19) ---------------------------------------------
+# A sibling committed the paired-dedup report (a meal-prep db file) from a worktree at 03:33 while a different, UNTRACKED copy
+# sat in the main checkout. git refuses a rebase that would overwrite an untracked file, so capture-run's four
+# identical retries all failed and the 07:00 and 08:00 runs (and the night's graph commit) never reached main: the live
+# board did not refresh that day. The retry could never succeed because nothing changed between attempts.
+# This reads git's own message and returns the paths it named, so capture-run can move exactly those aside (kept,
+# never deleted) and retry once. Returns an empty array for any other failure, which keeps today's behaviour.
+function Get-RebaseUntrackedBlockers([string[]]$Lines) {
+  $out = New-Object System.Collections.Generic.List[string]
+  $in = $false
+  foreach ($l in @($Lines)) {
+    $t = [string]$l
+    if ($t -match 'untracked working tree files would be (overwritten|removed) by') { $in = $true; continue }
+    if (-not $in) { continue }
+    if ($t -match '^\s*(Please move or remove|Aborting|error:|hint:)') { $in = $false; continue }
+    $p = $t.Trim()
+    if ($p) { [void]$out.Add($p) }
+  }
+  return ,$out.ToArray()
+}
+
 function Test-BrowserCaptureOwned {
   <# .SYNOPSIS  Is <Store> currently deferred to a browser owner, with the deferral still inside its
                 expiry window? .DESCRIPTION Reads out\browser-capture-due-*.flag. Returns $false for

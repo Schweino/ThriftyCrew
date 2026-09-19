@@ -605,6 +605,15 @@ try {
   $bc2 = Get-BrowserStoresToDrive -Stores @("Sam's Club") -CaptureFiles @{ "Sam's Club" = $bcHdr }
   if ((@($bc2.Drive) -join ',') -eq "Sam's Club") { Ok 'MUST FIRE  a capture holding only its store line and header is not a landed capture, so the fallback still drives it' }
   else { Bad "header-only capture counted as landed: drive=[$(@($bc2.Drive) -join ',')]" }
+
+  # ---- AN UNTRACKED FILE IN THE REBASE'S WAY (2026-09-19): git's own words, frozen from that morning -----------
+  $rbMsg = @('error: The following untracked working tree files would be overwritten by checkout:', "`tshared/paired/report.json", "`tgrocery/out/x.json", 'Please move or remove them before you switch branches.', 'Aborting')
+  $rbB0 = Get-RebaseUntrackedBlockers $rbMsg; $rbB = @($rbB0)
+  if ($rbB.Count -eq 2 -and $rbB[0] -eq 'shared/paired/report.json' -and $rbB[1] -eq 'grocery/out/x.json') { Ok 'MUST FIRE  the untracked files git names as blocking the rebase are read out exactly (the 2026-09-19 dedup report)' }
+  else { Bad "untracked blockers read as [$($rbB -join ', ')]" }
+  $rbC0 = Get-RebaseUntrackedBlockers @('CONFLICT (content): Merge conflict in grocery/x.json', 'error: could not apply abc123... msg'); $rbC = @($rbC0)
+  if ($rbC.Count -eq 0) { Ok 'MUST NOT FIRE  an ordinary content conflict names no untracked blocker, so nothing is moved' }
+  else { Bad "content conflict read as blockers [$($rbC -join ', ')]" }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

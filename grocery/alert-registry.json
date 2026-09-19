@@ -22,6 +22,7 @@
     { "id": "board-edge-stale", "match": "exact", "key": "board json edge did not pick up today s push", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-run.ps1" },
     { "id": "feed-not-refreshed", "match": "exact", "key": "grocery pipeline feed did not truly refresh", "class": "page", "condition": "1 board-or-feed-wrong-or-held", "emitter": "grocery/capture-run.ps1" },
     { "id": "pipeline-could-not-push", "match": "exact", "key": "grocery pipeline could not push", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/capture-run.ps1" },
+    { "id": "pipeline-moved-untracked-blocker", "match": "exact", "key": "grocery pipeline moved an untracked file out of the rebase s way", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/capture-run.ps1" },
     { "id": "commit-refused", "match": "exact", "key": "daily pipeline commit refused", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/capture-run.ps1" },
     { "id": "served-files-uncommitted", "match": "exact", "key": "daily chain left served files uncommitted", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "grocery/capture-run.ps1" },
     { "id": "pipeline-did-not-commit", "match": "prefix", "key": "daily pipeline ran but did not commit", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "none in the tree on 2026-09-10 (fired 2026-08-24; kept so the queue history maps)" },
