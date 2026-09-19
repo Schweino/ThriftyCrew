@@ -144,3 +144,7 @@ that a healthy 35-year-old "can often buy a 20-year, $500,000 term policy for ar
 no source. `/is-renters-insurance-worth-it/` states "about 15 dollars a month", with no source, and
 `/how-to-build-an-emergency-fund/` states an online-bank savings rate "as of 2025" and a set of repair costs, with
 no source. The drafts deliberately do not link to those pages. That is a separate question for you.
+
+**Reviewed page by page in `overlap-review.md`** (2026-09-19): all 22 live pages on these topics, with a
+recommendation for each, drafted sentence fixes in your voice, and the small changes worth making to the three
+lessons before they publish.
