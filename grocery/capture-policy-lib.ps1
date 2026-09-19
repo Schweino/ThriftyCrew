@@ -1255,8 +1255,35 @@ function Test-CaptureLanded {
   if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
   $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 
-  # regular_prefix is stores.json's own name for the store's everyday file, so the
-  # mapping is not duplicated here.
+  # Neither helper comma-returns, so wrapping the call is safe and an empty answer counts 0.
+  $paths = @(Get-CaptureLandingPaths -Store $Store -Today $todayS -OutDir $OutDir)
+  foreach ($f in $paths) {
+    $rows = @(Get-CaptureLandedRows $f)
+    if ($rows.Count -gt 0) { return $true }
+  }
+  return $false
+}
+
+function Get-CaptureLandingPaths {
+  <#
+    .SYNOPSIS The files that can prove a store's capture landed on $Today, in the order they are asked.
+    .DESCRIPTION
+      regular_prefix is stores.json's own name for the store's everyday file, so the mapping is not
+      duplicated here.
+
+      NOT EVERY STORE HAS AN out\regular FILE, AND SAM'S NEVER HAS (fixed 2026-08-22).
+      This asked only about regular\<prefix>-regular-<date>.json. Sam's Club does not produce one -
+      build-sams-deals writes out\sams\sams-deals-<date>.json, which is the contract compare-deals
+      reads it through (-SamsFile). So the answer for Sam's was ALWAYS $false, which meant its
+      rotation cursor could never advance: a landed capture of 100 priced rows still reported
+      "no fresh rows landed - the slice is re-attempted tomorrow", forever, on slice #0.
+      A gate that can never arm ([[gates-that-can-never-arm]]) - and a silent one, because
+      "re-attempt tomorrow" is the SAFE-sounding branch, so it reads as caution rather than a defect.
+      stores.json already declares deals_glob for exactly these stores; consult it rather than
+      inventing a second mapping here.
+  #>
+  [CmdletBinding()]
+  param([Parameter(Mandatory)][string]$Store, [Parameter(Mandatory)][string]$Today, [Parameter(Mandatory)][string]$OutDir)
   $prefix = $null
   $dealsGlob = $null
   try {
@@ -1265,10 +1292,19 @@ function Test-CaptureLanded {
       if ([string]$s.name -eq $Store) { $prefix = [string]$s.regular_prefix; $dealsGlob = [string]$s.deals_glob; break }
     }
   } catch { }
-  if (-not $prefix -and -not $dealsGlob) { return $false }
+  $paths = New-Object System.Collections.Generic.List[string]
+  if ($prefix) { [void]$paths.Add((Join-Path $OutDir ("regular\{0}-regular-{1}.json" -f $prefix, $Today))) }
+  if ($dealsGlob) {
+    $rel = ($dealsGlob -replace '^out[\\/]', '') -replace '/', '\'
+    # The glob names the SHAPE; only today's file counts, so the date is substituted in.
+    [void]$paths.Add((Join-Path $OutDir ($rel -replace '\*', $Today)))
+  }
+  return $paths.ToArray()
+}
 
-  function Test-RowsDated([string]$Path) {
-    if (-not (Test-Path $Path)) { return $false }
+function Get-CaptureLandedRows([string]$Path) {
+    # The rows of one landing file, or none for a file that is absent or unreadable.
+    if (-not (Test-Path -LiteralPath $Path)) { return @() }
     try {
       $doc = ConvertFrom-Json ([IO.File]::ReadAllText($Path))
       # AN EMPTY deals ARRAY IS FALSY, AND THAT INVERTED THIS TEST (fixed 2026-08-22).
@@ -1276,37 +1312,76 @@ function Test-CaptureLanded {
       # contained `"deals": []` fell through to the `@($doc)` branch, which wraps the whole document
       # object and counts 1 - reporting LANDED for a capture that priced nothing.
       # Measured: build-walmart-deals wrote 333 raw -> 0 priced, and the cursor still advanced
-      # #0 -> #7, skipping that slice for a full quarter. The function's own docstring says the
+      # #0 -> #7, skipping that slice for a full quarter. Test-CaptureLanded's docstring says the
       # opposite ("a run that fetched nothing must re-attempt the same slice tomorrow, never skip
       # it"), so this was a silent inversion of the stated rule, in the safe-sounding direction.
       # Ask whether the PROPERTY EXISTS, then count it - never lean on array truthiness.
       $rows = if ($doc.PSObject.Properties['deals']) { @($doc.deals) } else { @($doc) }
-      return (@($rows).Count -gt 0)
-    } catch { return $false }
-  }
+      return @($rows | Where-Object { $null -ne $_ })
+    } catch { return @() }
+}
 
-  if ($prefix) {
-    $f = Join-Path $OutDir ("regular\{0}-regular-{1}.json" -f $prefix, $todayS)
-    if (Test-RowsDated $f) { return $true }
-  }
+function Test-CaptureSliceLanded {
+  <#
+    .SYNOPSIS Did today's landed capture cover TODAY'S ROTATION SLICE, not merely land?
+    .DESCRIPTION
+      WHY "ROWS LANDED" IS NOT ENOUGH TO MOVE THE CURSOR (2026-09-19). Test-CaptureLanded asks whether
+      the store's file for today holds rows. Two shapes pass that with the slice uncaptured:
+        - the file is CUMULATIVE. aldi-regular-2026-09-17.json holds 3,345 rows and only 436 are dated
+          that day; walmart, fareway and bakers carry earlier terms forward the same way. A rebuild with
+          nothing new still "lands".
+        - the capture asked OTHER terms. The worklist leads with owed ruling terms and sale expiries,
+          and a sweep that stops after those, or a worklist that lost its `terms` (2026-09-13..18 for
+          Fareway and Sam's, 7e1c7d94e), lands real rows for none of the rotation. The cursor then
+          walks past seven terms nobody asked, and they wait a full quarter.
+      So the cursor moves only when at least one row was FOUND BY a slice term and is dated today.
+      One, not all: a term the store does not carry legitimately returns nothing (Sam's "coconut milk
+      canned" dedupes to zero on 2026-09-17), and demanding every term would freeze a rotation on the
+      first gap - the Hy-Vee deadlock of 2026-08-22 in another coat.
 
-  # NOT EVERY STORE HAS AN out\regular FILE, AND SAM'S NEVER HAS (fixed 2026-08-22).
-  # This asked only about regular\<prefix>-regular-<date>.json. Sam's Club does not produce one -
-  # build-sams-deals writes out\sams\sams-deals-<date>.json, which is the contract compare-deals
-  # reads it through (-SamsFile). So the answer for Sam's was ALWAYS $false, which meant its
-  # rotation cursor could never advance: a landed capture of 100 priced rows still reported
-  # "no fresh rows landed - the slice is re-attempted tomorrow", forever, on slice #0.
-  # A gate that can never arm ([[gates-that-can-never-arm]]) - and a silent one, because
-  # "re-attempt tomorrow" is the SAFE-sounding branch, so it reads as caution rather than a defect.
-  # stores.json already declares deals_glob for exactly these stores; consult it rather than
-  # inventing a second mapping here.
-  if ($dealsGlob) {
-    $rel = ($dealsGlob -replace '^out[\\/]', '') -replace '/', '\'
-    # The glob names the SHAPE; only today's file counts, so the date is substituted in.
-    $dated = $rel -replace '\*', $todayS
-    if (Test-RowsDated (Join-Path $OutDir $dated)) { return $true }
+      A FILE WHOSE ROWS NAME NO TERM IS A COULD-NOT-LOOK, AND IT HOLDS. Every file that reaches this
+      today carries found_by_term (walmart, aldi, fareway, sams, measured 2026-09-19), so the hold
+      costs nothing now; a future producer that drops the field repeats a slice rather than skipping one.
+      Repeating costs a few requests and skipping costs a quarter, the same trade the day guard makes.
+
+      Measured over the last real advance of each store that reaches this (2026-09-19): walmart 192 slice
+      rows dated today of 485, aldi 149 of 3,345, fareway 6 of 837, sams 101 of 121. Every one passes.
+    .OUTPUTS @{ Landed; SliceRows; SliceTerms; Reason }
+  #>
+  [CmdletBinding()]
+  param([Parameter(Mandatory)][string]$Store, [Parameter(Mandatory)][string]$Today, [Parameter(Mandatory)][string]$OutDir,
+        [Parameter(Mandatory)][int]$From, [Parameter(Mandatory)][int]$Count)
+  # Get-AllTerms unrolls its list into the pipeline (no comma return), so wrapping the call is safe.
+  $all = @(Get-AllTerms)
+  $slice =New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  for ($k = 0; $k -lt $Count -and $all.Count -gt 0; $k++) { [void]$slice.Add(([string]$all[(($From + $k) % $all.Count)].term).Trim()) }
+  $named = 0
+  $hits = 0
+  $terms = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  $seen = 0
+  $paths = @(Get-CaptureLandingPaths -Store $Store -Today $Today -OutDir $OutDir)
+  foreach ($f in $paths) {
+    $rows = @(Get-CaptureLandedRows $f)
+    foreach ($r in $rows) {
+      $seen++
+      if (-not $r.PSObject.Properties['found_by_term']) { continue }
+      $named++
+      $t = ([string]$r.found_by_term).Trim()
+      if (-not $slice.Contains($t)) { continue }
+      # A row with no as_of cannot be carried from an earlier day by a builder that stamps one, so it is
+      # counted; a row dated any other day is a carry-forward and proves nothing about today.
+      if ($r.PSObject.Properties['as_of'] -and [string]$r.as_of -and ([string]$r.as_of -ne $Today)) { continue }
+      $hits++
+      [void]$terms.Add($t)
+    }
   }
-  return $false
+  $res = [pscustomobject]@{ Landed = $false; SliceRows = $hits; SliceTerms = $terms.Count; Reason = '' }
+  if ($seen -eq 0)       { $res.Reason = "no fresh rows landed for $Today"; return $res }
+  if ($named -eq 0)      { $res.Reason = "$seen row(s) landed for $Today but none names the term that found it (found_by_term), so whether slice #$From was captured cannot be seen"; return $res }
+  if ($hits -eq 0)       { $res.Reason = "$seen row(s) landed for $Today but none was found by a term of slice #$From ($($slice.Count) term(s)) and dated $Today"; return $res }
+  $res.Landed = $true
+  $res.Reason = "$hits row(s) from $($terms.Count) of $($slice.Count) slice term(s) landed for $Today"
+  return $res
 }
 
 function Step-CaptureCursor {
@@ -1377,12 +1452,22 @@ function Step-CaptureCursor {
         Reason = "already advanced for $todayS - one rotation slice per day, no matter how many times the builder runs" }
     }
 
+    $plan = Get-CapturePlan -Store $Store -Today $todayS
+
+    # JUDGED FROM THE DATA, THE SLICE MUST HAVE LANDED, NOT JUST SOME ROWS (2026-09-19). See
+    # Test-CaptureSliceLanded. A caller's -Landed is still taken as given: Baker's passes it because its
+    # file carries every term forward, and it knows what it asked.
+    $why = "no fresh rows landed for $todayS"
+    if ($null -eq $Landed -and $did) {
+      $sl = Test-CaptureSliceLanded -Store $Store -Today $todayS -OutDir $OutDir -From $from -Count $plan.RotationTerms
+      $did = $sl.Landed
+      $why = $sl.Reason
+    }
     if (-not $did -and -not $Force) {
       return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from
-        Reason = "no fresh rows landed for $todayS - the slice is re-attempted tomorrow, not skipped" }
+        Reason = "$why - the slice is re-attempted tomorrow, not skipped" }
     }
 
-    $plan = Get-CapturePlan -Store $Store -Today $todayS
     $all = Get-AllTerms
     if ($all.Count -le 0) {
       return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $from; To = $from; Reason = 'no terms' }

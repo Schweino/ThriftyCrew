@@ -26,6 +26,11 @@
   Landing is judged from the DATA, not an exit code: Test-CaptureLanded asks whether the
   store's out\regular\<prefix>-regular-<date>.json exists and holds rows. A lane that
   exits 0 having bought nothing must re-attempt the same slice tomorrow, never skip it.
+  Since 2026-09-19 holding rows is not enough: Test-CaptureSliceLanded also needs at least one
+  row FOUND BY a term of the store's current slice and dated today, because the files are
+  cumulative and a capture can bring back only owed terms. Replayed over the cursor log that
+  day, it would have held three real advances that skipped their slice (Sam's 08-22 #0,
+  Fareway 08-22 #14, Walmart 08-30 #28) and passed every advance since 2026-09-01.
 
   Usage:
       .\commit-capture-cursor.ps1 -Store Walmart -Date 2026-08-21
@@ -60,10 +65,78 @@ if ($SelfTest) {
   if ($r1.Advanced) { Write-Output 'FAIL  a store with no landed capture advanced its cursor - that is the skip-the-slice bug'; $fail++ }
   else { Write-Output 'ok    no landed capture -> cursor held' }
 
-  # CLEAN TWIN: a real capture landed -> the cursor must move by the rotation size.
-  $prefix = 'walmart'
-  @(@{ item = 'x'; ad_price = '$1.00' }) | ConvertTo-Json |
-    Set-Content (Join-Path $tmp ("regular\{0}-regular-{1}.json" -f $prefix, (Get-Date).ToString('yyyy-MM-dd'))) -Encoding UTF8
+  # THE SLICE HAS TO BE IN THE ROWS (2026-09-19). A landed file only moves the cursor when at least one
+  # row was found by a term of the store's CURRENT slice and is dated today; see Test-CaptureSliceLanded.
+  # So every fixture that means "a real capture landed" writes a row the slice would have produced.
+  $ccTerms = @(Get-AllTerms)
+  $ccToday = (Get-Date).ToString('yyyy-MM-dd')
+  function Write-CcRows([string]$Rel, [object[]]$Rows) {
+    $doc = @{ deals = @($Rows) } | ConvertTo-Json -Depth 4
+    $path = Join-Path $tmp $Rel
+    New-Item -ItemType Directory -Path (Split-Path -Parent $path) -Force | Out-Null
+    [IO.File]::WriteAllText($path, $doc, (New-Object System.Text.UTF8Encoding($false)))
+  }
+  function New-CcRow([string]$Term, [string]$AsOf) {
+    return @{ item = 'x'; ad_price = '$1.00'; found_by_term = $Term; as_of = $AsOf }
+  }
+  function Get-CcSliceTerm([string]$Store) { return [string]$ccTerms[(Get-CaptureCursor -Store $Store -OutDir $tmp) % $ccTerms.Count].term }
+  $wmRel = "regular\walmart-regular-$ccToday.json"
+  # Each MUST FIRE starts from a fresh ledger. Without this, the first case a mutant lets through sets
+  # Walmart_last to today and the day guard holds every later case for the wrong reason, so they pass
+  # over a broken check and the probe cannot see which half failed.
+  function Reset-CcCursor { Remove-Item -LiteralPath (Join-Path $tmp 'capture-cursor.json') -Force -ErrorAction SilentlyContinue }
+
+  # MUST FIRE: ZERO CAPTURED ROWS. The builder wrote today's file and it holds nothing - the 333 raw -> 0
+  # priced day of 2026-08-22, and the shape a sweep with no terms to ask leaves behind.
+  Write-CcRows $wmRel @()
+  Reset-CcCursor
+  $rz = Step-CaptureCursor -Store 'Walmart' -Today $ccToday -OutDir $tmp
+  if ($rz.Advanced) { Write-Output "FAIL  zero captured rows advanced the cursor $($rz.From) -> $($rz.To) - the slice is skipped for a quarter"; $fail++ }
+  else { Write-Output "ok    zero captured rows -> cursor held ($($rz.Reason))" }
+
+  # MUST FIRE: rows landed today, but from terms OUTSIDE the slice - an owed ruling term or a sale expiry
+  # only, which is what a sweep that lost the rotation half of its worklist brings back.
+  $offTerm = [string]$ccTerms[((Get-CaptureCursor -Store 'Walmart' -OutDir $tmp) + 300) % $ccTerms.Count].term
+  Write-CcRows $wmRel @((New-CcRow $offTerm $ccToday), (New-CcRow $offTerm $ccToday))
+  Reset-CcCursor
+  $ro = Step-CaptureCursor -Store 'Walmart' -Today $ccToday -OutDir $tmp
+  if ($ro.Advanced) { Write-Output "FAIL  rows found only by a term outside the slice ('$offTerm') advanced the cursor - the slice was never asked"; $fail++ }
+  else { Write-Output "ok    rows from outside the slice only -> cursor held ($($ro.Reason))" }
+
+  # MUST FIRE: a CUMULATIVE file carrying the slice from an EARLIER day. aldi-regular holds 3,345 rows of
+  # which 436 were read on 2026-09-17; a rebuild with nothing new still writes today's file full of rows.
+  Write-CcRows $wmRel @((New-CcRow (Get-CcSliceTerm 'Walmart') '2026-08-15'))
+  Reset-CcCursor
+  $rc = Step-CaptureCursor -Store 'Walmart' -Today $ccToday -OutDir $tmp
+  if ($rc.Advanced) { Write-Output 'FAIL  slice rows carried forward from 2026-08-15 advanced the cursor - a carry-forward is not a capture'; $fail++ }
+  else { Write-Output "ok    slice rows dated an earlier day -> cursor held ($($rc.Reason))" }
+
+  # MUST FIRE: rows that name no term are a could-not-look, and a could-not-look repeats rather than skips.
+  Write-CcRows $wmRel @(@{ item = 'x'; ad_price = '$1.00'; as_of = $ccToday })
+  Reset-CcCursor
+  $rn = Step-CaptureCursor -Store 'Walmart' -Today $ccToday -OutDir $tmp
+  if ($rn.Advanced) { Write-Output 'FAIL  rows naming no found_by_term advanced the cursor - whether the slice landed could not be seen'; $fail++ }
+  else { Write-Output "ok    rows naming no term -> cursor held ($($rn.Reason))" }
+
+  # MUST FIRE, SAM'S CLUB, THE STORE THIS WAS ASKED ABOUT: its deals file lives under out\sams, not
+  # out\regular. An empty one must hold the Sam's cursor.
+  $samsRel = "sams\sams-deals-$ccToday.json"
+  Write-CcRows $samsRel @()
+  Reset-CcCursor
+  $rs0 = Step-CaptureCursor -Store "Sam's Club" -Today $ccToday -OutDir $tmp
+  if ($rs0.Advanced) { Write-Output "FAIL  an empty Sam's deals file advanced the Sam's cursor $($rs0.From) -> $($rs0.To)"; $fail++ }
+  else { Write-Output "ok    empty Sam's deals file -> Sam's cursor held" }
+
+  # CLEAN TWIN, SAM'S: the 2026-09-17 shape - one owed term plus the slice, all read today - still advances.
+  Write-CcRows $samsRel @((New-CcRow $offTerm $ccToday), (New-CcRow (Get-CcSliceTerm "Sam's Club") $ccToday))
+  $rs1 = Step-CaptureCursor -Store "Sam's Club" -Today $ccToday -OutDir $tmp
+  if (-not $rs1.Advanced) { Write-Output "FAIL  a real Sam's capture of its slice did NOT advance ($($rs1.Reason))"; $fail++ }
+  else { Write-Output "ok    Sam's capture of its slice -> cursor $($rs1.From) -> $($rs1.To)" }
+
+  # CLEAN TWIN: a real capture landed -> the cursor must move by the rotation size. The file is cumulative
+  # on purpose, as the real ones are: carried rows beside one slice row read today.
+  Reset-CcCursor
+  Write-CcRows $wmRel @((New-CcRow $offTerm '2026-08-15'), (New-CcRow (Get-CcSliceTerm 'Walmart') $ccToday))
   $r2 = Step-CaptureCursor -Store 'Walmart' -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp
   if (-not $r2.Advanced) { Write-Output "FAIL  a landed capture did NOT advance the cursor ($($r2.Reason))"; $fail++ }
   elseif ($r2.To -le $r2.From) { Write-Output "FAIL  cursor went backwards or nowhere: $($r2.From) -> $($r2.To)"; $fail++ }
@@ -86,8 +159,7 @@ if ($SelfTest) {
   # Fareway seven slices. What the day-guard actually keys on is <store>_last, so rolling that back a
   # day is what "a new day" genuinely means to it, and the run still carries today's real date.
   $realToday = (Get-Date).ToString('yyyy-MM-dd')
-  @(@{ item = 'x'; ad_price = '$1.00' }) | ConvertTo-Json |
-    Set-Content (Join-Path $tmp ("regular\walmart-regular-$realToday.json")) -Encoding UTF8
+  Write-CcRows $wmRel @((New-CcRow (Get-CcSliceTerm 'Walmart') $realToday))
   $cf = Join-Path $tmp 'capture-cursor.json'
   $cj = ConvertFrom-Json ([IO.File]::ReadAllText($cf))
   $cj.Walmart_last = (Get-Date).AddDays(-1).ToString('yyyy-MM-dd')
