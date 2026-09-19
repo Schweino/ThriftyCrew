@@ -13544,7 +13544,35 @@ md5-identical, exit 0, 18 cases. `push-ledger` 18, `hold-push-lock` 21 and `push
 `pushes-2026-09-18.jsonl` held 200 rows over 197 distinct pids, 3 of them on more than one row; whether those were
 recycled pids or one process writing twice was not established, and with the run id it no longer matters.
 
-### I172 - the 584 live recipe cards carry no allergen line, and the backfill is a republish of the whole catalogue `PARTLY DONE - READY FOR BRAD: I144 IS RULED AND APPLIED, THE REPUBLISH IS FOUR COMMANDS` `queue-7` `2-WAY` `RUNG1 BLOCKED`
+### I172 - the 584 live recipe cards carry no allergen line, and the backfill is a republish of the whole catalogue `PARTLY DONE - THE REPUBLISH RAN: 449 OF 583 LIVE CARDS CARRY THE LINE, 134 NEED ONE MORE PUBLISH` `queue-7` `2-WAY` `RUNG1 BLOCKED`
+
+**2026-09-19, 06:18: the catalogue republish RAN on Brad's go-ahead, and landed at `3371c6df5`.** It ran as
+`propagate-recipes.ps1 -AllowCatalogue`, not as the four commands below. What it did:
+- **450 dirty specs**, **438 PUTs** sent and verified, **11 skipped as unchanged**. db-agreement read clean over 584.
+- **`slow-cooker-boneless-beef-short-ribs` has no live post**, so publish refused it as a create and its propagate
+  stamp was withheld. It is a built-but-never-published spec, not a live page missing a line.
+- Afterwards: **ghost-drift 583 match, 0 drift**. **All 563 paid recipes fetched logged-out: 0 served their cost
+  section, and 563 of 563 showed the upgrade prompt**; the control found the cost section on 5 of 5 public recipes.
+- The planner moved onto the current feed: **314 of 583 per-serving costs moved, largest 0.20, 228 up and 86 down**.
+
+**Why PARTLY DONE and not DONE (measured 2026-09-19, after the run).** propagate publishes only what it counts as
+dirty (spec hash against its stamps), so the **134 specs it did not count as dirty were never rebuilt and never
+republished**. They are live and still carry no allergen line:
+- `audit-allergen-line.ps1` over the rebuilt cards, in the checkout the republish ran from, at origin/main
+  `3371c6df5`: `AUDIT-ALLERGEN-LINE-COMPLETE findings=134 swept=584`, exit 1, all 134 `missing`. The finish condition
+  below does not hold.
+- A logged-out GET of every one of the 584 specs' pages on thriftycrew.com, counting `class="smp-allergen"`:
+  **449 of 583 live pages carry the line** (the 438 PUTs plus the 11 already current) and **134 do not**. Those 134
+  are exactly the audit's 134 (134 of 134 overlap). The 584th, the short ribs, answers 404.
+- So the gap the item exists for is closed on 449 of 583 live recipes and open on 134. Not closing it as DONE,
+  because a reader of those 134 still sees no "Contains" line, which is the defect this item names.
+
+**What is left is one Ghost write, Brad's.** Rebuild every card and publish the whole set; publish is hash-gated, so
+the 449 already current skip as unchanged and only the 134 are PUT: `build-cards.ps1`, then
+`audit-allergen-line.ps1` (must exit 0), then `publish.ps1 -All`, each exit code read before the next. Run it where
+the feed and the current publish journal both are: the republish above ran from a worktree, and the gitignored
+`published-hashes.json` had to be copied in and back by hand (filed separately on 2026-09-19). The short ribs stays
+refused as a create until someone decides to publish or retire it.
 
 **2026-09-19: I144 IS RULED AND APPLIED, so this is Brad's one action now.** Coconut is out of "Contains" with a
 separate note, and the line is body size (see I144's Done paragraph). The four commands below are unchanged.
@@ -18015,3 +18043,462 @@ differ on 3: a missing worklist and a worklist with no `terms` and empty parts r
 and BLIND here, and a non-JSON worklist throws out of the sibling's reader (scored FAIL, exit 1) and reads BLIND
 here. This lane landed under the orchestrator's instruction that restoring the pipeline changes no price by
 itself; the sibling branch can be retired.
+
+### I264 - ghost callers: `limit=all` stops at 100 in three lesson scripts, and six live callers send no accept-version `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Re-checked at `3371c6df5`.** Two defects on the Ghost read and write path, both left behind by I230.
+
+1. **`limit=all` returns at most 100 rows under Ghost 6** (I230 measured 100 of 1,566 for `posts/?limit=all`, and
+   `lib\ghost-lib.ps1:25` says so). Three lesson scripts list lessons that way:
+   `.claude\skills\lesson\build-hubs.ps1:21`, `build-series-page.ps1:20` and `publish-lesson.ps1:60`. Nothing is
+   truncated today (56 lessons), but past the hundredth lesson the hubs, the series page and the duplicate check in
+   publish-lesson silently drop lessons. I230 recorded this as "found on the way, not fixed". Fix: page through
+   `Invoke-TcGhostPaged`.
+2. **Accept-Version.** I230 says every live caller sends `(Get-GhostAcceptVersion)`. A file-level grep for any
+   Accept-Version spelling over every tracked non-archive script that names `ghost/api` finds five live callers that
+   send none: `.claude\skills\lesson\get-routes.ps1:14`, `meal-prep\pipeline\audit-paid-not-public.ps1:203`,
+   `meal-prep\rotate-free-dinners.ps1:138,143,160`, `meal-prep\top5-weekly.ps1:169,203` and
+   `ops\revert-ghost-write.ps1:249,265`. And `ops\review-staged.ps1 -Apply` builds its replay header at line 368 with
+   Authorization and Content-Type only, so every staged write Brad applies goes out with no Accept-Version. I230's
+   detector looks for hand-written version LITERALS, so a caller that sends no header at all passes it. Fix: add the
+   header at each site, and extend the review-staged self-test so a header with NO Accept-Version is a MUST FIRE.
+
+### I265 - two capture rows with the same name and date in one file get one observation id, so size and price come from different products `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the 2026-09-19 graph agent; the id function was read here. `graph\lib\ids.py:182`
+`observation_id` hashes commodity, store, observed date, source file and product name. Two rows in one capture with
+the same name and date therefore collide, and the stored row keeps the first row's size with the second row's price.
+Reported example: Baker's "Kroger Classic Corn Dogs" in `bakers-regular-2026-09-18.json`, stored at the 16-pack size
+with the 6-pack's $3.99. Called from `graph\import\importers.py` at lines 636, 791, 1012 and 1137. The graph is a
+shadow copy, so no reader sees it today. Fix: put something that separates the two rows (the size, the product key or
+the row index) into the id basis, with a MUST FIRE of two same-name rows and a CLEAN TWIN of one. Changing the basis
+renames existing observations, so measure how many ids move first.
+
+### I266 - audit-store-registry exits 2 on main again, six drift issues `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Re-checked at `3371c6df5`**: a plain `grocery\audit-store-registry.ps1` exits 2 with 6 drift issues:
+`compare-deals.ps1:1170` (5 stores, missing Aldi and Sam's Club), `compare-deals.ps1:1181` (3 stores),
+`derive-not-carried.ps1:76` (3 stores), `not-carried-lib.ps1:193` (3 stores), and two it names as unregistered
+fixtures, `test-auditors.ps1:1442` and `test-capture-policy.ps1:503`. I227 fixed the same exit 2 on 2026-09-19 and
+I192 ruled "convert on touch", so these are new or re-grown sites. The two compare-deals lines are on the pricing
+engine's path; the not-carried ones came in with I221. Each needs either conversion to the registry or a
+`# store-subset-ok:` line with its reason, and whatever lets a new site land without the gate going red needs finding
+too.
+
+### I267 - compare-deals writes a different `prod_key` into the candidates file on identical runs `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from I220's verification (recorded in I220's own entry): compare-deals run twice on the same seeded
+2026-09-17 inputs produced candidates files that differ in `prod_key` on 3,051 of 449,490 lines, the board and price
+tables identical apart from `built_at`. Nothing reads it as a verdict today, but a key that moves between identical
+runs defeats any diff, reuse or dedup keyed on it (`capture-depth-lib.ps1:98` reads `prod_key` to keep rows apart).
+First rung: find which of the 3,051 move and why (an unstable sort, hashtable order, or a tie), per the I175 Sort-Object
+finding.
+
+### I268 - two live money pages still carry wording the overlap review flagged `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the overlap-apply agent, 2026-09-19. Neither was in the approved text, so neither was changed.
+- `/umbrella-insurance/` still says "Here is a real-dollar example." over made-up figures, the same mislabel the
+  approved fixes took off the premium and deductible pages. Its bottom line also calls the cost "small" with no source.
+- `/emergency-fund-calculator/` still says the savings account "earns a few percent" and calls it high-yield; the
+  review flagged it and drafted no fix.
+First rung: draft both in Brad's voice from the live pages and stage them for his review.
+
+### I269 - 15 price-table cells show the ad half where the board shows the everyday half at the same price `OPEN` `run-0919` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from I175's measurement (its entry says so and leaves it): after I175 the price table's shown product
+matches the board's item in 3,172 of 3,187 cells. The 15 left are all a cell with an everyday row and an ad row at the
+same price, where the table shows the ad row (`shown_kind`) and the board shows the everyday row. No price differs. First
+rung: read the `shown_kind` rule and decide which half both should show, since a reader who compares the two sees two
+different products for one cell.
+
+### I270 - capture-depth-lib reads `prod_key` without checking it exists, which blocks strict mode for compare-deals `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the I179 strict-mode agent; the line was read here. `grocery\capture-depth-lib.ps1:98` is
+`$pk = ('' + $r.prod_key).Trim()`, a bare read of an optional field. Under `Set-StrictMode` it throws, which is why
+I179 ruled `audit-capture-eviction` out of its pilot, and the same library is dot-sourced by `compare-deals.ps1`.
+Fix: `Get-TcField` (`lib\strict-read.ps1`), with the fixture shape I179 used. It is on the pricing engine's path, so
+prove the board byte-identical before and after. Also reported: a strict throw inside a catch-all `try` is turned into
+the fallback answer rather than a failure, for example `audit-row-age`'s `Get-BakersAdCaptureState` call.
+
+### I271 - two python writers write crlf over lf-stored files `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Re-checked at `3371c6df5`.** `meal-prep\pipeline\retire_food_db_row.py:143` opens its temp file with
+`open(tmp, "w", encoding="utf-8")` and no `newline="\n"`, then `os.replace`s it over the food DB, and
+`meal-prep\pipeline\food_provenance.py` does the same at lines 452, 466 and 468 (its `--freeze` and `--report`
+writers). On Windows that writes CRLF over files stored LF, the same class as the fixed `fdc_lookup.cache_write`
+(ops-and-gates.md). `count-tracked-writers` does not read Python, so no census has these. Fix: `newline="\n"`, and a
+round-trip fixture that the written bytes carry no CR.
+
+### I272 - 52 of 56 live lessons carry paywall structured data naming the old domain `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from I60 (its entry says "Its own item" and none was filed): a GET on 2026-09-19 found the paywall
+structured data on 52 of 56 posts tagged financial-lessons naming `simplemoneyplaybook.com`. That is what search
+engines read for the paywall, so it names a domain the site no longer uses. First rung: confirm the count, find where
+the schema is written (the lesson skill's publish path or a code injection) so new lessons stop carrying it, and stage
+the fix to the 52 for Brad.
+
+### I273 - the free lesson free-basics-of-investing states an unsourced 10 percent return `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the I60 agent: the free lesson `free-basics-of-investing` says "roughly 10% a year on average" with no
+source, no period, no nominal-or-real label and no fees, which is what Brad's 2026-09-12 rate-of-return ruling asks
+for. Its copy lives in `archive\ghost-config\voice-rewrite\current\free-basics-of-investing.html`, outside `content\`,
+so `ops\audit-lesson-rate-claims.ps1` cannot see it. First rung: read the live post, draft the qualified sentence in
+Brad's voice, stage it.
+
+### I274 - the rate-of-return audit cannot read the adopted ghost pages `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the overlap-review agent. `ops\audit-lesson-rate-claims.ps1` reads markdown under `content\` only, so
+it cannot see the exported HTML in `content\ghost-adopted\` (197 pages since I167). It misses at least the unlabelled
+7 percent returns in `good-net-worth-by-age.html` and `how-much-should-i-have-in-savings-by-age.html`. The
+`run0919-ghost-pages` inbox file notes the same limit in one sentence of its calculators finding; this is the audit
+change itself. Fix: read the adopted HTML too, as a ratchet whose first run prints its worklist, never red on day one.
+
+### I275 - the skills store's check-skills.py exits 1 on three failures nobody owns `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the I190 agent (its entry records the same three): `check-skills.py` in `C:\Users\Owner\.claude`
+exits 1 before and after unrelated edits on the same three FAILs: the lexical and semantic recall indexes hold
+different corpora (2,206 chunks against 1,988 vectors; `recall-reindex.py` would fix it but the index is shared),
+one recall-consolidate cluster is unruled, and `MEMORY.md` links a memory file git does not track
+(`reader-copy-must-be-brads-voice-from-live-posts.md`). A gate that is red for everyone reddens nothing, so each new
+failure hides behind these three. First rung: reindex at a quiet moment, rule the cluster, commit the memory file.
+
+### I276 - the unlanded approvals-i143 branch must never land `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Re-checked at `3371c6df5`.** A local branch `approvals-i143` (tip `159602869`, worktree
+`.claude\worktrees\approvals-i143`, not on origin) implements the older 2026-09-12 wording of I143 and sweeps 34
+live specs. Brad's later ruling was "rule for new, measure old", and I143's partly-done entry took only the carve-out
+design from it. Landing it, or a session pushing from that worktree, would rewrite 34 live recipes' prose against
+the ruling. First rung: delete the branch and its worktree, or rename it so no push can carry it
+(`claude/DO-NOT-LAND-approvals-i143`).
+
+### I277 - published-hashes, recipe-board and recipe-costs are not seeded, so a worktree cannot publish or pass feed-covers-published `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the I172 republish agent, and recorded in I172's own entry. `meal-prep\db\published-hashes.json`,
+`grocery\out\recipe-board.json` and `grocery\out\recipe-costs.json` are gitignored and not in `.worktreeinclude`,
+so a seeded worktree lacks them: `feed-covers-published` exits 3 there (`no published set`), and `cost-recipes`,
+`export-feed`, `top5-weekly` and `wave-publish` read them. The journal is the hard one, because `publish.ps1` WRITES
+it: the 2026-09-19 catalogue republish ran from a worktree and the journal had to be copied in before and back after
+by hand, and a copy that is not copied back forks the ledger from main's and the next publish re-PUTs or skips the
+wrong set.
+
+**The question for Brad: where may a catalogue publish run?**
+- **A. Only from the main checkout.** Seed the two board files (read-only copies, refreshed like the boards); make
+  `publish.ps1` refuse to write the journal from a linked worktree. Simple, and it is what the ledger's one-writer
+  shape wants.
+- **B. From anywhere, with the journal copied in and back by the tool.** `publish.ps1` takes a lock on the MAIN
+  checkout's journal, reads and merges it under the lock, and writes back there. More code, and a lock order to
+  declare (ops-and-gates.md).
+- **C. Leave it**, and keep the by-hand copy in the runbook.
+
+**Recommendation: A.** A publish is a live-site write, and the rule "run it from main" already holds for the feed;
+seeding the two boards fixes `feed-covers-published` for every push without making a forkable ledger portable.
+
+### I278 - test-scale-hardening's off-feed negative case can no longer fire `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Re-checked at `3371c6df5`.** `meal-prep\test-scale-hardening.ps1:84` removes `doubanjiang` from
+`db\no-board-price-ok.json`'s `bids` and expects `audit-db-agreement` to exit 1. doubanjiang was taken off that list on
+2026-08-22 (the file's own `_removed_2026_08_22` note): `bids` now holds 1 entry, not doubanjiang; 0 specs under
+`db\recipes` name it; the feed does not carry it. So the mutation changes nothing and the case asserts a red that
+cannot happen. It also writes the tracked file with `Set-Content -Encoding UTF8` (CRLF) before restoring the bytes.
+Fix: mutate a bid that exists, or build a temp spec and allowlist, and write the fixture in a temp directory rather
+than over the tracked file.
+
+### I279 - audit-db-agreement prints clean and exits 0 with no feed when there is nothing for the gpu check to compare `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the gpu-drift agent; the lines were read here. The 2026-09-19 fix makes a missing feed BLIND only
+through the gpu check (`if($gpuBlind -gt 0)` at `meal-prep\engine\audit-db-agreement.ps1:413`). The CHEAPEST-FALLBACK
+guard treats the feed as optional (lines 274 to 278, "skip if not built yet"). So a feedless run whose specs make no
+gpu comparison prints clean and exits 0 with CHEAPEST-FALLBACK never run: a could-not-look scored as a pass. Fix: a
+missing feed makes the run BLIND whenever CHEAPEST-FALLBACK had rows to judge, with a MUST FIRE of that shape.
+
+### I280 - test-scale-hardening's live-estate cases fail in a worktree `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the gpu-drift agent. `meal-prep\test-scale-hardening.ps1`'s cases that run `audit-store-registry` and
+`health-heartbeat` against the live estate fail in a worktree, because the worktree lacks the estate those two read
+(and the store registry is red on main anyway, see the finding above). The CHEAPEST-FALLBACK cases were made BLIND-aware
+on 2026-09-19; these two were not. Fix: the same BLIND treatment, so a worktree run exits 3 naming them rather than 1.
+
+### I281 - agents keep calling staged queue ids write-journal ids `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source: this run's handovers.** In subtitle-fix rounds 1, 2 and 3 the agent's handover named the STAGED queue ids
+as journal ids, and in round 3 the hub rebuild's journal id was given as `411043b13e2b`, which is a PUT to a recipe
+post 0.3 seconds later; the real hub id was `40464623a91a` (`subtitle-fixes-3.md`, APPLIED). Round 4's ids were
+matched by post id and time for the same reason. The cause is visible in `ops\review-staged.ps1:380`: `-Apply` prints
+`sent [<queue id>] PUT <uri>` and never the journal id `revert-ghost-write` needs. Fix: have `Invoke-GhostApi` return
+(or expose) the journal id it wrote, and print `sent [queue <id>] journal <id> PUT <uri>` in `-Apply`, with a self-test
+over a stubbed transport that the printed journal id is the one in the journal.
+
+### I282 - agents write into another worktree through the .net current directory `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source: this run, hit twice on 2026-09-19.** In PowerShell `Set-Location` does not move the process's .NET current
+directory, so `[IO.File]::WriteAllText('lib\x.ps1', ...)` with a relative path resolves against the directory the
+process started in, which can be another session's worktree. A sibling agent wrote into another worktree that way
+twice in one run; the preamble now warns about it, and a warning is a reminder, not a mechanism. Options for a
+mechanism: (1) `push-main` checks something about the other worktrees, which cannot tell whose edit is whose and
+fires after the damage; (2) a Claude Code PreToolUse hook
+that refuses a PowerShell command using `[IO.File]::` or `[IO.Directory]::` with a relative path; (3) set
+`[Environment]::CurrentDirectory` in the shell profile's prompt so it follows `Set-Location`. **(2) is the cheapest
+that blocks**, and it can be fixtured with a must-fire command string.
+
+### I283 - the daily chain has logged "no card cost moved today" on every run since 2026-09-10 `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the I234 agent, which recorded 45 of 58 close-the-loop outcomes as "no card cost moved today" in
+I234's entry and did not question them. Since card prices load live from the feed that may be correct, but nobody
+has checked it: `reanchor-all.ps1 -VerifyOnly` in a worktree reported "across 0 spec(s)" and could not tell either way.
+If the check is comparing against the wrong baseline, the card's pre-hydration costs never move and nothing says so,
+the shape of the upper-bound rule in ops-and-gates.md (a check that cannot fire on nothing happening). First rung: in
+the main checkout, pick one card whose ingredient moved on the board this week and follow it through the chain's
+cost-moved test by hand.
+
+### I284 - soy sauce is priced at water density `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the gpu-drift agent; the density line was read here. The feed quotes soy sauce per fluid ounce and
+the spec's `gpu` converts at 29.57 g per fl oz, which is water (the pantry size is 444 g per 15 fl oz). The recipe grams
+use soy sauce's real density: `meal-prep\db\densities.json:145` gives 255 g per cup, about 31.9 g per fl oz, and the
+agent measured 193 g for 0.75 cup (about 257 g per cup). So a fl-oz-priced soy line bills about 8 to 9 percent more
+volume than the recipe uses, about $0.06 on the bulgogi batch. The same shape may hold for the other liquids the gpu
+check names (vinegars at 20, 14 and 6 recipes). This moves a price a reader sees, so a fix is prepared on a branch
+with the count of cards that change and held for Brad.
+
+### I285 - money hacks pages still carry figures and wording the rounds did not draft `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source: `design\ready-for-brad\lessons\subtitle-fixes-4.md`, "Anything odd", and the round agents.** Not drafted:
+- `/best-side-hustles-to-pay-off-debt/`: "more than five years" is 73 months, just over six. True as written; the
+  subtitle's "five-year payoff" rests on it.
+- `/when-should-i-start-investing/`: "a gap of nearly $280,000" is $280,968 at the page's own inputs, so "nearly" is
+  $968 on the wrong side. The same page calls 7 percent "a reasonable long-run assumption ... after inflation" with no
+  source, under Brad's rate-of-return ruling.
+- `/how-to-catch-up-on-retirement-savings/` quotes 2025 limits ($31,000 401(k), $8,000 IRA at 50 or older); the IRS
+  gives $8,600 for the IRA in 2026. The 401(k) figure was not checked.
+- 21 posts say "real per-serving costs", "real costs" or "real prices" in a subtitle or search text, and the bodies of
+  new-vs-used cars, Roth, and false-frugal traps, plus the debt-or-save page's heading, use "real" wording the rounds
+  took off elsewhere.
+First rung: draft them as a round 5 in the same shape (staged queue, read back after).
+
+### I286 - the cash-back page's bottom line: the page's own inputs sum to $871 to $1,360 `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source: subtitle-fix round 3's cash-back proposal**, applied 2026-09-19 (`/best-cash-back-apps/`, journal
+`acba615d9f04`). The page's three layers add to $871 to $1,360 a year (card $375 to $500, browser extension $80, store
+app $416 to $780), and its bottom line said "$300 to $600". Round 3 replaced the total with "a few hundred dollars a
+year or more", the subtitle's and intro's own phrase, and fixed the store-app line to $416 to $780.
+
+**The question for Brad: is the applied wording the one he wants?**
+- **A. Keep "a few hundred dollars a year or more"** (live now). True at the page's inputs, and it does not raise
+  the promise on three unsourced spending assumptions.
+- **B. State the sum, "$871 to $1,360 a year"**, in the bottom line, and change the subtitle, the intro and the hub
+  card to match.
+
+**Recommendation: A**, for the reason round 3 gave: B more than doubles the promise and rests every dollar of it on
+spending assumptions nobody sourced.
+
+### I287 - the recipe index keeps labels the specs have dropped, and 12 wait on a person `OPEN` `run-0919` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Relayed** from the I172 republish agent. `honey-bbq-chicken-mac-and-cheese`'s entry in `recipes-db.json` says
+"about 10 cups elbow macaroni" where its spec, since `59831927d` (2026-09-02), buys Ziti, because Ziti is the priced
+item. `sync-recipesdb-buy` reports it as one of 12 standing label differences where "a person decides" and exits 0, so
+it blocks nothing and nobody decides. First rung: list the 12, rule each (the index is the stale side in this one), and
+make the report say how long each has stood so a standing difference cannot sit forever at exit 0.
+
+### I288 - the heartbeat paged a board hold as a dead free-dinner rotation, four mornings running `DONE` `run-0919`
+
+**Merged from `design\backlog-inbox\run0919-free-dinners.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Symptom.** `public/free-dinners.json` says `week_of=2026-09-11` and was last committed 2026-09-12, while the newest
+board is `comparison-2026-09-17.json`. `grocery/health-heartbeat.ps1` paged OUTPUT NOT CURRENT for it in the capture
+watchdog logs of 2026-09-13, 09-14, 09-17 and 09-18, each time saying "the job that writes it has not run for this
+week".
+
+**What actually happened (read-only, from `grocery/ad-cycle-log.txt` and `grocery/out/chain-verdict.json` in the main
+checkout).** Nothing is wrong with the rotation or its week arithmetic. `rotate-free-dinners.ps1` last ran at
+2026-09-12 09:23 against the 2026-09-11 board, flipped one recipe each way and wrote the file. From then on every
+`check-ad-cycles` run logged `held: guards blocked - hub/rotation not republished from a refused board` (09-13 08:11,
+09-14 08:12, 09-17 07:11, 09-18 08:13 and 14:53), which is the rule written after the 2026-09-07 incident: a held
+board holds `top5-weekly`, the rotation and the hub publish with it. The rotation and the heartbeat both take "this
+week" the same way (the newest `comparison-<date>.json` by name), so the page was true and named the wrong cause. The
+capture watchdog already pages the hold itself (`HELD BY GUARDS` in the same 09-18 log).
+
+**What readers saw.** The free list is not shown by its date. Two places read it: the join interstitial
+(`site/pages/join-interstitial.html:127`, it decides whether a recipe page is one of the free ones) and the hub's
+remove-only badge refresh (`meal-prep/build-hub-grid.ps1:724`). Both read the 2026-09-12 set: the 20 posts that run
+confirmed public in Ghost (its log reads 21 flips, 0 errors), so the list and the paywall agreed. No error was shown. Since triage
+republished the board at 13:11 and 16:07 on 2026-09-18, the board is the 09-17 one while the free set and the hub Top 5
+still rank off 09-11 costs. That lag ends at the next `check-ad-cycles` run whose guards pass.
+
+**Shipped.** `health-heartbeat.ps1` now reports a week-behind row as HELD WITH THE BOARD, and does not page it, only when
+all four hold: the file was read and names an older week (never missing or unreadable); a chain verdict was recorded
+TODAY; it says `guards_blocked`; and the board it judged is the board week the row is behind. Anything else pages
+exactly as before, so a chain that stopped (no verdict today) or a rotation that does not move on a green day still
+pages. Fixtures in `grocery/test-auditors.ps1` unit u138: one MUST FIRE, five MUST NOT FIRE, two CLEAN TWIN. With the
+fix taken out the MUST FIRE went red (19 of 20 passed, exit 2); restored, 20 of 20 passed and the file md5 matched.
+Replayed on the real 2026-09-18 verdict and the real file: HELD with today set to 2026-09-18, pages with today set to
+2026-09-19 (no verdict yet that day).
+
+**The one action, and it is not a code change.** Nothing is republished by this fix and no free-dinners.json was
+written. Let the next `check-ad-cycles` run publish the rotation: if its guards pass, the rotation re-ranks, flips
+posts in Ghost, rewrites `public/free-dinners.json` and republishes the hub, as designed. If Brad wants it sooner, it
+is a hand run of `meal-prep/rotate-free-dinners.ps1` after a green guard run, and that changes which recipes are free.
+
+**Left as it is, on purpose.** When triage republishes a held board by hand, nothing re-runs the three Ghost-side
+steps the hold skipped; they wait for the next chain run, about 16 hours on 2026-09-18. Not built here: re-running
+them from the triage lane would publish to Ghost from a lane that does not own that decision.
+
+### I289 - The adopted calculators have never been checked against a known answer `OPEN` `run-0919` `2-WAY` `RUNG1 READ`
+
+**Merged from `design\backlog-inbox\run0919-ghost-pages.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+15 of the 197 adopted pages carry a calculator script (counted 2026-09-19 as the files under
+`content\ghost-adopted\` whose html contains a script tag): 50-30-20-budget-calculator, 52-week-savings-challenge,
+compound-growth-calculator, debt-payoff-calculator, debt-payoff-tracker, emergency-fund-calculator,
+hourly-to-salary-calculator, monthly-budget-worksheet, mortgage-payment-calculator, net-worth-calculator,
+no-spend-challenge-calendar, savings-goal-calculator, true-cost-of-a-car, unit-price-comparison-calculator,
+weekly-meal-prep-planner. Read by eye only, the first obvious checks are:
+
+- mortgage-payment-calculator: the standard amortising payment with property tax and insurance added monthly.
+  Check one textbook case (for example 300,000 at 6% over 30 years is about 1,798.65 a month principal and interest)
+  and that the default inputs a reader first sees give a sensible number.
+- compound-growth-calculator: monthly compounding with deposits at the END of each month. Say so on the page, or
+  check the copy does not promise start-of-month deposits.
+- debt-payoff-calculator: a month-by-month simulation capped at 1,200 months that reports "payment too low" when the
+  payment does not cover the interest. Check the months and total interest against one worked case.
+- hourly-to-salary-calculator: defaults of 40 hours and 52 weeks, no unpaid time off. Check the copy says so.
+- true-cost-of-a-car: depreciation is price minus resale, running costs are monthly insurance and gas times 12 plus
+  yearly maintenance, times years. No financing cost. Check the page does not call it the full cost of a financed car.
+- Every page with a dollar limit, a tax figure or a year in its prose (for example sep-ira says "For 2026 you can put
+  in up to 25 percent"): a dated figure goes stale every January. List them and pick an owner.
+
+The rate-of-return rule (`.claude\rules\site-and-publish.md`, Brad 2026-09-12) is checked by
+`ops\audit-lesson-rate-claims.ps1` over markdown under `content\` only, so it does not read these html pages.
+
+### I290 - The other half of the July 2026 bulk post set counts as produced only because something mentions it `OPEN` `run-0919` `2-WAY` `RUNG1 MEASURE`
+
+**Merged from `design\backlog-inbox\run0919-ghost-pages.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+Measured 2026-09-19 against live Ghost: 391 posts were published on 2026-07-04 and 2026-07-05. 196 are adopted under
+I167. The other 195 pass the census because their slug appears as a whole token in some tracked file, and for 47 of
+them no file under a producer-shaped path names it (the paths tried: `site\`, `content\lessons\`, `content\substack\`,
+`meal-prep\db\recipes\`, `meal-prep\engine\`, `meal-prep\pipeline\`, `grocery\*.ps1`, `.claude\skills\`; a rough cut,
+stated as such). Examples: `fsa`, `joint-bank-account`, `how-much-house-can-i-afford`, `how-to-max-out-your-roth-ira`.
+They are named in backlog text, meal-prep archives, crawl state and similar, which is the census's stated weakness
+(a mention counts as produced). By 2026-09-19 nine of the 196 adopted posts and the refunds page were already
+"named" that way, by the backlog's own text about I167 (checked at d5f567178). Worth deciding whether the rest of the July set should be adopted the same way, so its numbers come
+into reach too.
+
+### I291 - the baker's and family fare regular pulls ask each term one way, so no derived not-carried entry can ever qualify `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\run0919-second-wording.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Brad's approval of I221 on 2026-09-19, which landed the two-search rule: `grocery/not-carried-lib.ps1`
+trusts a `derived` not-carried entry only when at least two DIFFERENTLY WORDED searches, each empty or with no
+matching row, sit inside `recheck_days`. Brad approved this follow-up in the same message.
+
+**What is wrong.** `grocery/pull-regular-bakers-api.ps1` and `grocery/pull-regular-familyfare.ps1` ask each term with
+one wording, so a term that comes back empty or with rows our matcher rejects is never asked a second way. Under the
+new rule that means no derived entry can qualify: on 2026-09-19 the branch build of the deals page from
+`comparison-2026-09-17.json` logged `not-carried: 0 of 24 entr(y/ies) trusted and shown; not shown: 24 single-search`,
+and I221's dry run of `derive-not-carried` over that day's captures refused 63 candidates on one wording (58 Family
+Fare, 5 Baker's). The "Doesn't carry" label therefore reaches a reader only by a hand declaration.
+
+**The build.** When a term comes back empty or unmatched, ask one more, differently worded search in the same pull
+and record its term text in the capture. `grocery/search-verdict-lib.ps1`'s `Get-RetryLadder` (line 89) already
+produces the second wording, and its header has the measured case for why: four of ten terms in the 2026-08-15 trial
+would have been mis-ruled on their first query. Captures must keep the `term` text for both searches, or
+`derive-not-carried` cannot tell the wordings apart. The wording test is `Get-TcNotCarriedSearchKey` (case,
+punctuation, word order and a plural `s` do not count as a new wording), so the ladder's second rung must differ by
+that test. Fixture: a MUST FIRE where the first wording is empty and the pull records a second search, and a CLEAN
+TWIN where a first-wording match asks nothing more.
+
+**Reader effect, so it is Brad's to see before it lands.** Once captures carry two wordings, `derive-not-carried
+-Apply` can write entries that pass the rule and the deals page will show "Doesn't carry" for them. That is a page
+change: prepare it, count the cells that would change, and hold it for Brad.
+
+**Also.** `grocery/audit-coverage-gaps.ps1:319` still reads `not-carried.json` for itself and honours every unexpired
+entry, single-search or not, so the 24 entries still silence their coverage gaps until 2026-11-19. It should read
+through `not-carried-lib.ps1` like the page and the writer do. Moving it would reopen those 24 gaps in that audit, which
+is the honest answer, but say so in the change.
+
+### I292 - build-content-hubs.ps1 writes to ghost unjournalled, always rewrites both hubs, and freezes subtitles at build time `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\subtitle-fixes-0919.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** Read at the base of this branch, 2026-09-19 (`.claude\skills\meal-macro\build-content-hubs.ps1`, 203
+lines). It builds the two public directory pages, `/money-glossary/` and `/money-hacks/`, from live Ghost data.
+
+**What is wrong, three things:**
+
+1. **It writes to Ghost with a raw `Invoke-RestMethod`** (`Upsert-Page`, line 197), not through `lib\ghost-lib.ps1`'s
+   `Invoke-GhostApi`. So a hub write gets no write-journal entry and no before-image (nothing
+   `revert-ghost-write` can undo), and `TC_STAGE_WRITES` cannot stage it for review. It dot-sources `ghost-lib`
+   only for `Get-GhostAcceptVersion`. Its existing-page lookup (line 190) is a GET inside `try { } catch { }`, so
+   if that GET fails for any reason the script falls through to a **POST** of a new page with the same slug.
+2. **It always rewrites BOTH hubs** (lines 200 and 201), with no switch to build one. It also rewrites each hub's
+   own title, subtitle and meta every run, from literals in the script, and those literals still say *"real
+   dollar examples"* (glossary subtitle and meta) and *"real numbers"* (money-hacks meta).
+3. **It copies every card's subtitle into the hub's html at build time** (line 151 for Money Hacks, line 180 for
+   the glossary), so any subtitle edit on a Money Hacks or glossary post leaves the hub showing the old line
+   until somebody rebuilds it. This bit once already: round 1 went live on 2026-09-19 and the hub kept showing
+   the renters and car-insurance lines it had just taken figures off (*"For about 15 dollars a month"*, *"Cut
+   $300 to $600 a year"*) until a hand rebuild at 05:47 that morning (write-journal `897631adc2e8`). That rebuild
+   had to be done from an offline copy of the script, edited so it wrote the money-hacks body only and left the
+   glossary alone, because the script itself could do neither. Round 3's queue changes two more Money Hacks
+   subtitles, so the same gap opens again the moment it is applied.
+
+**Suggested fix:**
+
+- Route its writes through `ghost-lib` (`Invoke-GhostApi`) so every hub write is journalled and can be staged,
+  and make a failed lookup a refusal rather than a POST.
+- Add a `-Only <slug>` switch (`money-hacks` or `money-glossary`), and leave the hub's own title, subtitle and meta
+  alone unless asked, so a rebuild changes the card grid and nothing else.
+- Have the subtitle-fix flow rebuild the hub: when a staged queue changes `custom_excerpt` on a post tagged
+  Money Hacks or Glossary, the same apply (or the step right after it) rebuilds that one hub, staged like every
+  other write. A reminder in a runbook is what we have today and it is why the gap happened.
+
+**Check once built:** a rebuild with `-Only money-hacks` against a stubbed transport should leave the glossary
+page's request count at zero, and the diff against the live hub on a day with no subtitle change should be empty.

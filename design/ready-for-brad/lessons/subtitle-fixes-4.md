@@ -1,4 +1,35 @@
-# Body math fixes, round 4: the problems round 3 found (drafted 2026-09-19, NOT applied)
+# Body math fixes, round 4: the problems round 3 found (drafted and applied 2026-09-19)
+
+## APPLIED
+
+Brad gave the go-ahead and the queue was applied on 2026-09-19. **7 PUTs were sent**, 06:23:08 to 06:23:11 local
+that morning (`-05:00` in the journal).
+
+- **Queue ids** are the `id` on each line of `staged/subtitle-fixes-4.jsonl` and are listed per page below.
+- **JOURNAL ids** (the main checkout's `ops\ghost-journal.jsonl`, one PUT per post, in queue order), matched by the
+  post id in each entry's `uri` and its time. These are not the queue ids.
+
+  | Page | Queue id | Journal id |
+  |---|---|---|
+  | `/best-side-hustles-to-pay-off-debt/` | `1b9be688586f` | `41128f061164` |
+  | `/how-to-make-a-grocery-budget/` | `48985fd8886b` | `dd3fe29d7417` |
+  | `/monthly-bills-you-can-lower/` | `726f6c2d0f1b` | `5f0adbf057ee` |
+  | `/when-should-i-start-investing/` | `eb8488a79279` | `d78d742f63cb` |
+  | `/high-protein-breakfast-meal-prep/` | `7543ad48dd02` | `548caf4e6ec4` |
+  | `/kid-friendly-meal-prep/` | `da3b81747993` | `32719d0fcae6` |
+  | `/should-i-pay-off-my-mortgage-early/` | `3a43c2eb9aa3` | `9ebe193a42d7` |
+
+  Each of these seven posts has exactly one journal PUT on 2026-09-19 after round 3's sends (06:04:23 to 06:04:35),
+  so the match is unambiguous. The handover for this step said the sends were after 06:30; the journal puts them at
+  06:23, and the hub rebuild below at 06:23:51, which is the order the apply and the rebuild ran in.
+- **Every page was read back: 7 of 7, 0 mismatches**, every sent field compared (the lexical by its html card).
+
+**The Money Hacks hub was rebuilt right after, body only.** Journal id `a5eca70c4b85` (06:23:51, a PUT to the hub
+page `6a498e4950682b0001cd3f3f`). The diff against the live hub was exactly the monthly-bills subtitle plus the signup
+link written relative. **The glossary was not touched.** The live hub reads *"about 250 dollars a month"* and
+*"182 guides"*.
+
+The rest of this file is the draft as it was approved, kept as the record.
 
 Round 3 (`subtitle-fixes-3.md`, applied 2026-09-19) ended with a list of body problems under "Anything odd": numbers
 on a page that its own inputs do not support. Brad ruled "Draft fixes". This file is that draft.
