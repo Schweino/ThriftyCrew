@@ -58,6 +58,25 @@ def write_json(path: str, obj: Any) -> None:
         fh.write("\n")
 
 
+def analyze_full(conn: sqlite3.Connection) -> dict:
+    """One FULL `ANALYZE` (analysis_limit=0), for the end of the nightly import (backlog I212).
+
+    Full, not `PRAGMA optimize`'s approximate pass, and the difference is measured, not assumed:
+    on a copy of graph.db (2026-09-18) the approximate pass recorded 81 rows per node_id for
+    `ix_alias_kind` against the full scan's 116, which is the difference between the planner
+    choosing a skip-scan of that index for `aliases WHERE kind=?` (median 2.75 ms over 30 runs)
+    and scanning the whole covering index (5.74 ms). It took 0.25 s post-prune and 0.58 s at the
+    import's peak. Returns the seconds and the sqlite_stat1 row count so the caller can log both.
+    """
+    import time
+    t0 = time.perf_counter()
+    conn.execute("PRAGMA analysis_limit=0")
+    conn.execute("ANALYZE").fetchall()
+    conn.commit()
+    n = conn.execute("SELECT COUNT(*) FROM sqlite_stat1").fetchone()[0]
+    return {"analyze_s": round(time.perf_counter() - t0, 3), "stat1_rows": n}
+
+
 class GraphDBMissing(FileNotFoundError):
     """The database file is not there and the caller did not say it may be created."""
 
@@ -639,12 +658,74 @@ def _selftest() -> int:
         g.conn.execute("INSERT INTO st_rows VALUES ('closed')")
         g.close()
         check("CLEAN TWIN an explicit close() still commits", rows(p) == ["closed", "next"], rows(p))
+
+        # ---- statistics after the import, and none written by a plain close (backlog I212) ----
+        def fresh_nodes(tag):
+            g = GraphDB(os.path.join(root, f"{tag}.db"), allow_new=True, restore_learning=False)
+            ts = "2026-09-18T00:00:00"
+            # An enum-shaped index, the kind the statistics exist for: 3 types over 300 nodes.
+            for i in range(300):
+                g.upsert_node(f"n{i:04d}", ("Store", "Commodity", "Category")[i % 3], f"name {i}", ts)
+            g.conn.commit()
+            return g
+
+        def analyses_during(conn, fn):
+            seen = []
+            conn.set_authorizer(lambda action, *a: (seen.append(action), sqlite3.SQLITE_OK)[1])
+            try:
+                fn()
+            finally:
+                try:
+                    conn.set_authorizer(None)
+                except sqlite3.ProgrammingError:
+                    pass                                         # fn closed the connection
+            return sum(1 for x in seen if x == sqlite3.SQLITE_ANALYZE)
+
+        def stat1(path):
+            c = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+            try:
+                has = c.execute("SELECT COUNT(*) FROM sqlite_master WHERE name='sqlite_stat1'").fetchone()[0]
+                return {f"{r[0]}.{r[1]}": r[2] for r in c.execute(
+                    "SELECT tbl, idx, stat FROM sqlite_stat1")} if has else {}
+            finally:
+                c.close()
+
+        # MUST FIRE: a never-analysed database gains statistics from analyze_full. This is the founding
+        # gap - sqlite_stat1 was absent on graph.db, and nothing would ever write it.
+        g = fresh_nodes("full-fire")
+        p = g.path
+        analyze_full(g.conn)
+        g.close()
+        s = stat1(p)
+        check("MUST FIRE  analyze_full on a never-analysed db writes sqlite_stat1 (ix_nodes_type present)",
+              "nodes.ix_nodes_type" in s, sorted(s)[:4])
+
+        # MUST NOT FIRE: a plain close analyses nothing, so every reader stays a reader (I213).
+        g = fresh_nodes("reader")
+        p = g.path
+        g.conn.execute("SELECT COUNT(*) FROM nodes WHERE type='Store'").fetchone()
+        n = analyses_during(g.conn, g.close)
+        s = stat1(p)
+        check("MUST NOT FIRE a plain close analyses nothing and leaves no sqlite_stat1",
+              n == 0 and not s, (n, sorted(s)[:4]))
+
+        # CLEAN TWIN: analyze_full is a FULL pass: rows per type is exactly 300/3 = 100.
+        g = fresh_nodes("full")
+        out = analyze_full(g.conn)
+        s = {f"{r[0]}.{r[1]}": r[2] for r in g.conn.execute("SELECT tbl, idx, stat FROM sqlite_stat1")}
+        g.close()
+        check("CLEAN TWIN analyze_full records the exact rows per type (300 100) and counts its rows",
+              s.get("nodes.ix_nodes_type") == "300 100" and out["stat1_rows"] >= 1,
+              (s.get("nodes.ix_nodes_type"), out))
     except Exception as e:                                      # noqa: BLE001
         fails.append("harness: " + repr(e))
         print("  FAIL  harness raised " + repr(e))
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
+    if cases != 10:
+        fails.append(f"ran {cases} of 10 case(s)")
+        print(f"  FAIL  ran {cases} of 10 case(s)")
     verdict = "fail" if fails else "pass"
     print(f"GRAPHDB-SELFTEST-COMPLETE selftest={verdict} cases={cases} failures={len(fails)}")
     return 1 if fails else 0

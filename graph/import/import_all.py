@@ -163,6 +163,16 @@ def main() -> int:
             say(f"  {'prune':<20} {out}   ({time.time()-t0:.1f}s)")
             say(f"  {'state export':<20} {export_state(db)}")
 
+            # 6. statistics - one FULL ANALYZE of what survived the prune (backlog I212). Without
+            #    sqlite_stat1 the planner treats every index as equally selective, and it cannot
+            #    use a skip-scan at all. Post-prune statistics also serve tomorrow's peak: measured
+            #    on a copy (2026-09-18), carried to the peak they chose the same plan as statistics
+            #    taken there for 44 of 45 traced statements, and gave the same aliases skip-scan.
+            from graphdb import analyze_full                  # noqa: PLC0415
+            res = analyze_full(db.conn)
+            totals.update(res)
+            say(f"  {'analyze':<20} {res}")
+
         stats = db.stats()
         db.log_event(run=run, timestamp=ts, etype="state_transition",
                      decision="import_complete", detail={"totals": totals, "stats": stats})

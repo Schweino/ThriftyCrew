@@ -15270,7 +15270,7 @@ the VACUUM neutered, md5 restored identical). By the replay, the next 08:15 impo
 **Recommendation: 3, with 1 until it lands.** The freelist is the visible symptom of re-importing and
 re-pruning about 270k rows a day; 2 and 4 hide the symptom and keep the work.
 
-### I212 - Run statistics on graph.db: one full ANALYZE, then PRAGMA optimize at every connection close `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
+### I212 - Run statistics on graph.db: one full ANALYZE, then PRAGMA optimize at every connection close `DONE` `queue-8`
 
 **Merged from `design\backlog-inbox\q8-sqlite-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15380,6 +15380,36 @@ has counted whether writers overlap. `PRAGMA optimize` at close adds nothing the
 not already do, and when it does act it writes the approximate statistics that lost the skip-scan.
 After it lands, `audit_graph_durability.py` should assert `sqlite_stat1` exists (not built here: it
 would be red until the first import ran with the change).
+
+**Done 2026-09-19: option 2 landed on Brad's approval 2026-09-19** (the nightly full ANALYZE only; the
+close-time `PRAGMA optimize` was not chosen). `claude/i212-analyze` was rebased onto main, where
+`graphdb.py` had since gained the I229 missing-database refusal and the all-or-nothing `run_step`; the
+conflict was resolved by keeping both, and the branch's 4 cases folded into main's `graphdb.py
+--selftest` (scratch databases now pass `allow_new=True`). Blobs as landed: `graph/lib/graphdb.py`
+`5fd672fd3`, `graph/import/import_all.py` `d6cb8cd89` (step 6, after the state export),
+`graph/pipeline/audit_graph_durability.py` `5df6feb5e`. **The next import of the daily chain's
+graph-gates lane (`import_all.py --observations`) is the first write of `sqlite_stat1` into the live
+graph.db; nothing in this change wrote it.**
+- Verified: `graphdb.py --selftest` 10 of 10 (exit 0), `graphdb_selftest.py --selftest` 8 of 8,
+  `importers_selftest.py --selftest` 19 of 19, `nightly.ps1 -SelfTest` exit 0. With the `ANALYZE`
+  statement neutered the graphdb suite went red (exit 1, 7 of 10 ran, `no such table: sqlite_stat1`);
+  md5-identical after restore.
+- On a backup-API copy of the live file (taken from `mode=ro`; live sha256 and mtime unchanged after):
+  no `sqlite_stat1` before, `analyze_full` took 0.318 s and wrote 36 `sqlite_stat1` rows, and
+  `cell_state` (3,246 rows) and `question_verdicts` (10,796 rows) hashed sha256-identical, row for row
+  in full-column order, before and after.
+- **The durability check (check 4, STATISTICS) arms itself.** `judge_statistics` reads an absent or
+  empty `sqlite_stat1` as a WARN (the audit still passes) until the database's own `decision_log` holds
+  an `import_complete` event whose totals carry `stat1_rows`, which only an import that ran the ANALYZE
+  writes; from the first such event on, absence is a hard finding (exit 2). So it becomes a hard check
+  with no edit: the first analysing nightly import is the switch. Read-only against the live file at the
+  time of landing: 0 `sqlite_stat1` rows and 0 of 83 `import_complete` events carrying `stat1_rows`, so
+  it reads WARN today. A rebuild from JSON starts a fresh `decision_log`, so it is a WARN again until the
+  next import analyses it. Self-test 25 of 25 (5 new cases, two of them driving the SQL against a temp
+  database); two single mutants (the judgement never arming; the LIKE keyed on a wrong name) each went
+  red in their own named cases, 2 of 25 each, md5-identical after.
+- `origin/claude/i212-analyze` and `origin/claude/i212-analyze-close` deleted after landing; the only
+  references to either were this item and `design/BACKLOG-RUN-2026-09-19.md`'s run row, both historical.
 
 ### I213 - SQLite's WAL-reset corruption bug: this machine's Python bundles 3.49.1, inside the affected range `NEEDS A RULING` `queue-8` `2-WAY` `RUNG1 RULING`
 

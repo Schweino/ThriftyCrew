@@ -31,6 +31,16 @@ THREE CHECKS, AND EACH ONE GROWS IN VALUE AS THE GRAPH GROWS:
                data-quality checks; I12 established freshness, schema and null-rate elsewhere and
                this is where the graph gets the fourth.
 
+  4. STATISTICS `sqlite_stat1` is present and non-empty (backlog I212, 2026-09-19). The nightly import
+               ends with one full ANALYZE (`graphdb.analyze_full`); without its statistics the planner
+               treats every index as equally selective and cannot skip-scan. This check ARMS ITSELF:
+               until the database's own decision_log holds an `import_complete` event whose totals
+               carry `stat1_rows` - which only an import that ran the ANALYZE writes - an absent
+               sqlite_stat1 is a WARN and the audit still passes. From the first such event on, it is
+               a hard finding. Nobody edits a date or a flag to make it hard; the first analysing
+               import does. A rebuild from JSON starts a fresh decision_log, so it is a WARN again
+               until the next import analyses it, which is the truth about that file.
+
 THE VOLUME ASYMMETRY IS THE OPPOSITE WAY UP FROM lib/ratchet.ps1, and mixing them up would make this
 useless. There, a count that FELL is the suspicious direction because it counts FINDINGS. Here it
 counts ROWS: growth is the steady state, and a fall is either a deliberate prune or a load that
@@ -126,6 +136,35 @@ def judge_integrity(result: str) -> str:
             % (result,))
 
 
+def judge_statistics(stat1_rows: int, analysed_imports: int) -> tuple:
+    """(level, message) for the planner statistics. level is '' (present), 'warn' or 'finding'.
+
+    Absent statistics are a WARN until an import has been SEEN to run the ANALYZE (an import_complete
+    event carrying stat1_rows), and a finding from then on: before that, their absence is the expected
+    state of a database no analysing import has touched yet, and a gate red on day one is a gate
+    somebody learns to ignore.
+    """
+    if stat1_rows > 0:
+        return "", "sqlite_stat1 present, %d row(s)" % stat1_rows
+    if analysed_imports <= 0:
+        return "warn", ("sqlite_stat1 is absent, and no import_complete event in decision_log carries "
+                        "stat1_rows yet, so no analysing import has run on this file. WARN only: this "
+                        "becomes a finding on its own once the first nightly import runs ANALYZE (I212).")
+    return "finding", ("sqlite_stat1 is absent although %d import(s) logged running ANALYZE. Something "
+                       "removed the statistics after the import (a VACUUM INTO, a copy, a hand edit), and "
+                       "the planner is back to treating every index as equally selective." % analysed_imports)
+
+
+def _statistics_state(con: sqlite3.Connection) -> tuple:
+    """(sqlite_stat1 row count, count of import_complete events that logged an ANALYZE). Read-only."""
+    has = con.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' "
+                      "AND name='sqlite_stat1'").fetchone()[0]
+    stat1 = con.execute("SELECT COUNT(*) FROM sqlite_stat1").fetchone()[0] if has else 0
+    analysed = con.execute("SELECT COUNT(*) FROM decision_log WHERE decision='import_complete' "
+                           "AND detail_json LIKE '%\"stat1_rows\"%'").fetchone()[0]
+    return stat1, analysed
+
+
 # --------------------------------------------------------------------------- live helpers
 def _learning_tables():
     """The (table, mirror-file) pairs, READ FROM graphdb rather than restated.
@@ -199,8 +238,10 @@ def save_baseline(tables: dict, path: str = None, keep: int = 120) -> dict:
 def selftest() -> int:
     import tempfile                                                # noqa: PLC0415
     bad = []
+    ran = []
 
     def T(name, ok, got=""):
+        ran.append(name)
         if ok:
             print("  ok    " + name)
         else:
@@ -282,15 +323,63 @@ def selftest() -> int:
         import shutil                                              # noqa: PLC0415
         shutil.rmtree(os.path.dirname(tmp), ignore_errors=True)
 
+    # STATISTICS (backlog I212). The judgement, then the SQL that feeds it, driven against a temp
+    # database, because the LIKE over detail_json is the part most likely to be quietly wrong.
+    T("MUST FIRE  absent sqlite_stat1 after an import logged running ANALYZE is a hard finding",
+      judge_statistics(0, 1)[0] == "finding", judge_statistics(0, 1))
+    T("MUST NOT FIRE  absent sqlite_stat1 before any analysing import is a WARN, never a finding",
+      judge_statistics(0, 0)[0] == "warn", judge_statistics(0, 0))
+    sdir = tempfile.mkdtemp(prefix="graphdur-st-")
+    try:
+        sp = os.path.join(sdir, "g.db")
+        w = sqlite3.connect(sp)
+        w.execute("CREATE TABLE decision_log (event_id TEXT, decision TEXT, detail_json TEXT)")
+        w.execute("CREATE TABLE nodes (id TEXT, type TEXT)")
+        w.execute("CREATE INDEX ix_nodes_type ON nodes(type)")
+        w.executemany("INSERT INTO nodes VALUES (?,?)", [("n%d" % i, "T%d" % (i % 3)) for i in range(30)])
+        # An import from before I212 landed: totals with no stat1_rows. Must not arm the check.
+        w.execute("INSERT INTO decision_log VALUES ('e1','import_complete',?)",
+                  (json.dumps({"totals": {"resolved_rows": 5}, "stats": {}}, sort_keys=True),))
+        w.commit()
+        r = _open_ro(sp)
+        got_old = _statistics_state(r)
+        r.close()
+        T("MUST NOT FIRE  an import_complete without stat1_rows does not arm the check (live SQL)",
+          got_old == (0, 0) and judge_statistics(*got_old)[0] == "warn", got_old)
+        # The first analysing import logs stat1_rows; the file then loses its statistics.
+        w.execute("INSERT INTO decision_log VALUES ('e2','import_complete',?)",
+                  (json.dumps({"totals": {"analyze_s": 0.3, "stat1_rows": 36}, "stats": {}},
+                              sort_keys=True),))
+        w.commit()
+        r = _open_ro(sp)
+        got_armed = _statistics_state(r)
+        r.close()
+        T("MUST FIRE  once an import logged stat1_rows, an absent sqlite_stat1 is a finding (live SQL)",
+          got_armed == (0, 1) and judge_statistics(*got_armed)[0] == "finding", got_armed)
+        w.execute("ANALYZE")
+        w.commit()
+        w.close()
+        r = _open_ro(sp)
+        got_ok = _statistics_state(r)
+        r.close()
+        T("CLEAN TWIN after a real ANALYZE the live read counts the statistics and the check is silent",
+          got_ok[0] >= 1 and got_ok[1] == 1 and judge_statistics(*got_ok)[0] == "", got_ok)
+    finally:
+        import shutil                                              # noqa: PLC0415
+        shutil.rmtree(sdir, ignore_errors=True)
+
+    # A literal case list knows its own number, so a shortfall is a defect, not a smaller tree.
+    if len(ran) != 25:
+        bad.append("ran %d of 25 case(s)" % len(ran))
     if bad:
         print("")
-        print("SELF-TEST FAIL: %d check(s)" % len(bad))
+        print("SELF-TEST FAIL: %d check(s), %d of 25 case(s) ran" % (len(bad), len(ran)))
         print("GRAPH-DURABILITY-SELFTEST-COMPLETE")
         return 1
     print("")
-    print("SELF-TEST PASS: 7 must-fire cases led by the founding rows-with-no-mirror shape, 7 "
-          "must-not-fire cases led by growth being the steady state, and 6 clean twins including a "
-          "real baseline round trip")
+    print("SELF-TEST PASS: 25 of 25 cases - 9 must-fire led by the founding rows-with-no-mirror shape, 9 "
+          "must-not-fire led by growth being the steady state, and 7 clean twins including a real "
+          "baseline round trip and a real ANALYZE read back")
     print("GRAPH-DURABILITY-SELFTEST-COMPLETE")
     return 0
 
@@ -350,6 +439,15 @@ def main() -> int:
         for t in gone:
             findings.append("%s: the table is in the baseline and NOT in the database. A table that "
                             "vanished is not a table that passed." % t)
+
+        # 4. STATISTICS (I212). A WARN until an analysing import has been logged, a finding after.
+        level, msg = judge_statistics(*_statistics_state(con))
+        if level == "finding":
+            findings.append(msg)
+        elif level == "warn":
+            notes.append("  WARN        " + msg)
+        else:
+            notes.append("  statistics  " + msg)
     finally:
         con.close()
 
