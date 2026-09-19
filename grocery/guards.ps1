@@ -588,6 +588,16 @@ $cmpF = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Na
 $cmp  = Read-JsonFile $cmpF.FullName
 $pu   = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 
+# ---------------------------------------------------------------- 0p: the board was built UNDER the provenance contract
+# compare-deals' -NoProvenanceContract is a MEASUREMENT arm (what the board would be without the contract), and the
+# board it writes says provenance_contract OFF. Such a board carries stale, wrong-store and ship-only prices by
+# construction (2026-09-17 verification: 36 defects in 100), so it must never be the one published. A board with NO
+# field predates the contract (2026-09-19) and is refused the same way: nothing on it proves the contract ran.
+$pcState = if ($cmp.PSObject.Properties['provenance_contract']) { [string]$cmp.provenance_contract } else { '' }
+if ($pcState -ne 'on') {
+  [void]$fail.Add(("HARD FAIL: {0} was not built under the provenance contract (provenance_contract='{1}') - it can publish stale, wrong-store and ship-only prices; rebuild it with compare-deals and no -NoProvenanceContract" -f $cmpF.Name, $pcState))
+}
+
 # ---------------------------------------------------------------- 13: BOARD vs PRODUCT IDENTITY TABLE
 <#
   THE PARITY GATE (2026-08-22, PLAN-product-identity step 1).
