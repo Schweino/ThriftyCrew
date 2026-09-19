@@ -243,6 +243,15 @@
         "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "bread-crumbs",
+        "store":  "Family Fare",
+        "product":  "Our Family Bread Crumbs, Italian Style 15 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "brown-rice",
         "store":  "Family Fare",
         "product":  "Long Grain Brown Rice Our Family",
@@ -486,6 +495,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "chickpeas",
+        "store":  "Family Fare",
+        "product":  "Our Family Beans, Garbanzo 15.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "chili-beans",
         "store":  "Family Fare",
         "product":  "Our Family Chili Beans, In Mild Chili Sauce 15.5 Oz",
@@ -581,6 +599,15 @@
         "product":  "Spice Islands Ground Coriander 1.7 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "cornstarch",
+        "store":  "Family Fare",
+        "product":  "100% Pure Corn Starch Our Family",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
@@ -736,6 +763,15 @@
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "drain-cleaner",
+        "store":  "Family Fare",
+        "product":  "Drano Drain Cleaner, Liquid 32 Fl Oz",
+        "dept":  "household",
+        "aisle":  "household/cleaners_air_fresheners",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
         "id":  "dryer-sheets",
@@ -936,6 +972,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "furniture-polish",
+        "store":  "Family Fare",
+        "product":  "Pledge Furniture Polish, Wood Oil, Amber \u0026 Argan Scent 9.7 Oz",
+        "dept":  "household",
+        "aisle":  "household/cleaners_air_fresheners",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
         "id":  "fresh-ginger",
         "store":  "Family Fare",
         "product":  "Ginger Root",
@@ -1015,6 +1060,24 @@
         "aisle":  "fresh_fruits_vegetables/onions",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "ground-cinnamon",
+        "store":  "Family Fare",
+        "product":  "That\u0027s Smart! Ground Cinnamon",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "ground-turmeric",
+        "store":  "Family Fare",
+        "product":  "Sugar \u0027N Spice Turmeric Ground Pp",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027ground-turmeric\u0027"
     },
     {
         "id":  "conditioner",
@@ -1314,6 +1377,24 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
     },
     {
+        "id":  "dried-oregano",
+        "store":  "Family Fare",
+        "product":  "Our Family Oregano Leaves 0.75 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "oven-cleaner",
+        "store":  "Family Fare",
+        "product":  "Easy Off Fume Free Lemon Scent Oven Cleaner 14.5 Oz",
+        "dept":  "household",
+        "aisle":  "household/cleaners_air_fresheners",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
         "id":  "pancake-mix",
         "store":  "Family Fare",
         "product":  "Mrs. Butter Worth\u0027s Pancake \u0026 Waffle Mix, Complete 32 Oz",
@@ -1350,6 +1431,15 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "paprika",
+        "store":  "Family Fare",
+        "product":  "Paprika Our Family",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "parchment-paper",
         "store":  "Family Fare",
         "product":  "Our Family Parchment Paper 1 Ea",
@@ -1366,6 +1456,15 @@
         "aisle":  "pantry/crackers",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is a reviewed exception department for \u0027parmesan\u0027"
+    },
+    {
+        "id":  "dried-parsley",
+        "store":  "Family Fare",
+        "product":  "Mc Cormick Parsley Flakes 0.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "parsnips",
@@ -1537,6 +1636,15 @@
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
         "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027personal\u0027"
+    },
+    {
+        "id":  "red-pepper-flakes",
+        "store":  "Family Fare",
+        "product":  "Our Family Red Pepper, Crushed 1.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "red-potatoes",
@@ -1951,6 +2059,15 @@
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "smoked-paprika",
+        "store":  "Family Fare",
+        "product":  "Sugar N Spice Paprika Smoked Pp",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027smoked-paprika\u0027"
     },
     {
         "id":  "mozzarella-cheese",

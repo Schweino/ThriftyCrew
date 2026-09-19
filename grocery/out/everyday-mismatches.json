@@ -728,19 +728,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "canned-pinto-beans",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.0865,
-        "link":  0.0639,
-        "ratio":  0.74,
-        "price":  0.99,
-        "size":  "15.5 oz",
-        "boardItem":  "Fareway Pinto Beans",
-        "linkItem":  "Fareway Pinto Beans",
-        "board_src":  "main"
-    },
-    {
         "id":  "canned-pumpkin",
         "store":  "Fareway",
         "unit":  "oz",
@@ -897,6 +884,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "chicken-thighs",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  1.99,
+        "link":  1.39,
+        "ratio":  0.7,
+        "price":  1.39,
+        "size":  "lb",
+        "boardItem":  "Chicken Drumsticks",
+        "linkItem":  "Chicken Drumsticks",
+        "board_src":  "main"
+    },
+    {
         "id":  "chocolate-chips",
         "store":  "Fareway",
         "unit":  "oz",
@@ -946,6 +946,19 @@
         "size":  "lb",
         "boardItem":  "Hy Vee Choice Reserve Boneless Chuck Roast",
         "linkItem":  "Hy-Vee Choice Reserve Boneless Chuck Roast",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chuck-roast",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  8.99,
+        "link":  7.88,
+        "ratio":  0.88,
+        "price":  7.88,
+        "size":  "lb",
+        "boardItem":  "USDA Choice Boneless Chuck Roast",
+        "linkItem":  "USDA Choice Boneless Chuck Roast",
         "board_src":  "main"
     },
     {
@@ -1069,13 +1082,13 @@
         "id":  "corn-dogs",
         "store":  "Fareway",
         "unit":  "each",
-        "board":  0.8317,
-        "link":  0.795,
-        "ratio":  0.96,
-        "price":  4.77,
-        "size":  "6 ct",
-        "boardItem":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
-        "linkItem":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
+        "board":  1.3725,
+        "link":  1.245,
+        "ratio":  0.91,
+        "price":  4.98,
+        "size":  "4 ct",
+        "boardItem":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
+        "linkItem":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
         "board_src":  "main"
     },
     {
@@ -1430,6 +1443,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "floor-cleaner",
+        "store":  "Hy-Vee",
+        "unit":  "floz",
+        "board":  0.3316,
+        "link":  0.3196,
+        "ratio":  0.96,
+        "price":  7.99,
+        "size":  "25 fl oz",
+        "boardItem":  "Method Squirt + Mop Hard Floor Cleaner, Spearmint Sage, 25 fl oz",
+        "linkItem":  "Method Squirt + Mop Hard Floor Cleaner, Spearmint Sage, 25 fl oz",
+        "board_src":  "main"
+    },
+    {
         "id":  "storage-bags",
         "store":  "Fareway",
         "unit":  "each",
@@ -1440,19 +1466,6 @@
         "size":  "20 ct",
         "boardItem":  "Bright Essentials Storage Bags, Double Zipper, 20 Gallon",
         "linkItem":  "Bright Essentials Storage Bags, Double Zipper, 20 Gallon",
-        "board_src":  "main"
-    },
-    {
-        "id":  "quart-storage-bags",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  0.2495,
-        "link":  0.1995,
-        "ratio":  0.8,
-        "price":  3.99,
-        "size":  "20 ct",
-        "boardItem":  "Hefty Quart Storage Slider Bags",
-        "linkItem":  "Hefty Quart Storage Slider Bags",
         "board_src":  "main"
     },
     {
@@ -1495,19 +1508,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "breakfast-sandwiches",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  1.8225,
-        "link":  1.7475,
-        "ratio":  0.96,
-        "price":  6.99,
-        "size":  "each",
-        "boardItem":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count",
-        "linkItem":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count",
-        "board_src":  "main"
-    },
-    {
         "id":  "frozen-broccoli",
         "store":  "Fareway",
         "unit":  "oz",
@@ -1518,19 +1518,6 @@
         "size":  "52 oz",
         "boardItem":  "Birds Eye Broccoli Florets, Frozen Vegetables",
         "linkItem":  "Birds Eye Broccoli Florets, Frozen Vegetables",
-        "board_src":  "main"
-    },
-    {
-        "id":  "frozen-burritos",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  1.99,
-        "link":  1.67,
-        "ratio":  0.84,
-        "price":  1.67,
-        "size":  "each",
-        "boardItem":  "Tina\u0027s Big Burrito Beef \u0026 Bean Green Chili, Quick Meal",
-        "linkItem":  "Tina\u0027s Big Burrito Beef \u0026 Bean Green Chili, Quick Meal",
         "board_src":  "main"
     },
     {
@@ -1717,19 +1704,6 @@
     },
     {
         "id":  "conditioner",
-        "store":  "Fareway",
-        "unit":  "floz",
-        "board":  0.1107,
-        "link":  0.0876,
-        "ratio":  0.79,
-        "price":  1.97,
-        "size":  "22.5 fl oz",
-        "boardItem":  "Suave Essentials Ocean Breeze Conditioner for Dry Hair, 22.5 fl oz, 1-Count",
-        "linkItem":  "Suave Essentials Ocean Breeze Conditioner for Dry Hair, 22.5 fl oz, 1-Count",
-        "board_src":  "main"
-    },
-    {
-        "id":  "conditioner",
         "store":  "Aldi",
         "unit":  "floz",
         "board":  0.4775,
@@ -1833,19 +1807,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "hot-dogs",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.12,
-        "link":  0.1119,
-        "ratio":  0.93,
-        "price":  1.79,
-        "size":  "16 oz",
-        "boardItem":  "Bar-S Classic Franks Hot Dogs",
-        "linkItem":  "Bar-S Classic Jumbo Franks",
-        "board_src":  "main"
-    },
-    {
         "id":  "hot-sauce",
         "store":  "Aldi",
         "unit":  "floz",
@@ -1856,19 +1817,6 @@
         "size":  "12 fl oz",
         "boardItem":  "Burman S Hot Sauce 12 FL OZ",
         "linkItem":  "Burman\u0027s Hot Sauce",
-        "board_src":  "main"
-    },
-    {
-        "id":  "hummus",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.4362,
-        "link":  0.3738,
-        "ratio":  0.86,
-        "price":  2.99,
-        "size":  "8 oz",
-        "boardItem":  "Sabra Hummus Garlic",
-        "linkItem":  "Sabra Hummus Garlic",
         "board_src":  "main"
     },
     {
@@ -2249,6 +2197,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "oven-cleaner",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.4476,
+        "link":  0.4131,
+        "ratio":  0.92,
+        "price":  5.99,
+        "size":  "14.5 oz",
+        "boardItem":  "Easy-Off Fume Free Lemon Scent Oven Cleaner Spray 14.5 oz",
+        "linkItem":  "Easy-Off Fume Free Lemon Scent Oven Cleaner Spray 14.5 oz",
+        "board_src":  "main"
+    },
+    {
         "id":  "oyster-sauce",
         "store":  "Fareway",
         "unit":  "floz",
@@ -2259,32 +2220,6 @@
         "size":  "12.6 oz",
         "boardItem":  "Kikkoman Oyster Sauce Red",
         "linkItem":  "Kikkoman Oyster Sauce Red",
-        "board_src":  "main"
-    },
-    {
-        "id":  "pancake-mix",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.0934,
-        "link":  0.0841,
-        "ratio":  0.9,
-        "price":  2.69,
-        "size":  "32 oz",
-        "boardItem":  "Fareway Complete Buttermilk Pancake \u0026 Waffle Mix",
-        "linkItem":  "Fareway Complete Buttermilk Pancake \u0026 Waffle Mix",
-        "board_src":  "main"
-    },
-    {
-        "id":  "parchment-paper",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  3.99,
-        "link":  2.99,
-        "ratio":  0.75,
-        "price":  2.99,
-        "size":  "each",
-        "boardItem":  "Bright Essentials Parchment Paper",
-        "linkItem":  "Bright Essentials Parchment Paper",
         "board_src":  "main"
     },
     {

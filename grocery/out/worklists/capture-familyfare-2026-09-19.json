@@ -4,38 +4,38 @@
     "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-19; next_pull 2026-09-20",
-    "cursor_start":  336,
-    "cursor_next":  343,
+    "cursor_start":  343,
+    "cursor_next":  350,
     "total_terms":  602,
     "rotation_terms":  [
-                           "vanilla ice cream",
-                           "iced tea gallon",
-                           "ant roach killer spray",
-                           "instant coffee",
-                           "instant mashed potatoes",
-                           "italian dressing",
-                           "italian sausage"
+                           "italian seasoning",
+                           "jalapeno peppers",
+                           "golden curry",
+                           "turkey gravy jar",
+                           "jasmine rice dry",
+                           "grape jelly",
+                           "jicama"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "vanilla ice cream",
-                  "iced tea gallon",
-                  "ant roach killer spray",
-                  "instant coffee",
-                  "instant mashed potatoes",
-                  "italian dressing",
-                  "italian sausage"
+                  "italian seasoning",
+                  "jalapeno peppers",
+                  "golden curry",
+                  "turkey gravy jar",
+                  "jasmine rice dry",
+                  "grape jelly",
+                  "jicama"
               ],
     "commodities":  [
-                        "ice-cream",
-                        "iced-tea",
-                        "insect-spray",
-                        "instant-coffee",
-                        "instant-mashed-potatoes",
-                        "italian-dressing",
-                        "italian-sausage"
+                        "italian-seasoning",
+                        "jalapenos",
+                        "japanese-curry-roux",
+                        "jarred-gravy",
+                        "jasmine-rice",
+                        "jelly",
+                        "jicama"
                     ],
     "ruling_terms":  [
 

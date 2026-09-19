@@ -1,38 +1,6 @@
 ﻿{
     "resolved":  [
-                     {
-                         "id":  "baby-formula",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Tippy Toes Sensitivity Premium 0 12 Months Infant Formula With Iron 33.2 Oz",
-                         "board_pu":  1.1533,
-                         "name":  "Tippy Toes Sensitivity Premium 0 12 Months Infant Formula With Iron 33.2 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/formula/tippy_toes_sensitivity_premium_0_12_months_infant_formula_with_iron_33_2_oz/p/1564405684713134699",
-                         "price":  "$38.29",
-                         "size":  "33.2 oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "deodorant",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Brut Antiperspirant \u0026 Deodorant, Classic 6 Oz",
-                         "board_pu":  0.7317,
-                         "name":  "Brut Antiperspirant \u0026 Deodorant, Classic 6 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/deodorant_personal_scents/brut_antiperspirant_deodorant_classic_6_oz/p/528031",
-                         "price":  "$4.39",
-                         "size":  "6 oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "eggs",
-                         "fault":  "NO-LINK",
-                         "board":  "Large Grade A Eggs Our Family (30 Ct)",
-                         "board_pu":  2.356,
-                         "name":  "Large Eggs, Grade A Our Family",
-                         "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
-                         "price":  "$2.39",
-                         "size":  "12 ct",
-                         "score":  1
-                     }
+
                  ],
     "refused":  [
                     {
@@ -70,10 +38,6 @@
                     {
                         "id":  "cantaloupe",
                         "why":  "no confident match (best 0)"
-                    },
-                    {
-                        "id":  "cat-food",
-                        "why":  "match found but per-unit disagrees: board $1.1869 vs link $2.2825 (48%)"
                     },
                     {
                         "id":  "clam-chowder",
@@ -121,15 +85,19 @@
                     },
                     {
                         "id":  "frozen-pizza",
-                        "why":  "match found but its size \"17.89 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "garlic-bread",
-                        "why":  "match found but per-unit disagrees: board $2.89 vs link $0.3612 (700%)"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "gelatin",
-                        "why":  "match found but its size \"0.3 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                    },
+                    {
+                        "id":  "eggs",
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "orange-juice",
@@ -145,18 +113,18 @@
                     },
                     {
                         "id":  "strawberries",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.3119 vs link $0.4369 (28.6%)"
                     },
                     {
                         "id":  "maple-syrup",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.1042 vs link $0.2246 (53.6%)"
                     },
                     {
                         "id":  "vegetable-soup",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.1053 vs link $0.1784 (41%)"
                     }
                 ],
-    "worked":  33,
-    "generated":  "2026-09-18 14:51",
+    "worked":  30,
+    "generated":  "2026-09-19 08:17",
     "board":  "comparison-2026-09-17.json"
 }

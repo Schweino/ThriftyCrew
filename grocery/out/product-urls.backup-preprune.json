@@ -1422,7 +1422,14 @@
                                                      "price":  10,
                                                      "size":  "36 oz",
                                                      "verified":  "2026-09-18"
-                                                 }
+                                                 },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2693854-farmland-bacon-rtc-16-oz",
+                                                "name":  "Farmland Hickory Smoked Classic Cut Bacon",
+                                                "price":  "$4.99",
+                                                "size":  "16 oz",
+                                                "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
+                                            }
                             },
                   "bacon-bits":  {
                                      "commodity":  "Bacon Bits",
@@ -2949,20 +2956,20 @@
                                                                    "size":  "8 ct",
                                                                    "verified":  "2026-09-13 DERIVED from the price row (same record the board priced)"
                                                                },
-                                               "Fareway":  {
-                                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42274-jimmy-dean-sausage-egg-cheese-croissant-breakfast-sandwiches-4-5-oz",
-                                                               "name":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count",
-                                                               "price":  "$6.99",
-                                                               "size":  "each",
-                                                               "verified":  "2026-09-13 DERIVED from the price row (same record the board priced)"
-                                                           },
                                                "Baker\u0027s":  {
                                                                     "url":  "https://www.bakersplus.com/p/kroger-bacon-egg-and-cheese-croissant-breakfast-sandwich/0001111009680",
                                                                     "name":  "Kroger Bacon Egg and Cheese Croissant Breakfast Sandwich",
                                                                     "price":  "$5.49",
                                                                     "size":  "4 pk 3.5 oz",
                                                                     "verified":  "2026-09-18 DERIVED from the price row (same record the board priced)"
-                                                                }
+                                                                },
+                                               "Fareway":  {
+                                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17445601-jimmy-dean-bacon-egg-cheese-croissant-sandwiches-frozen-1-8-lb",
+                                                               "name":  "Jimmy Dean Bacon, Egg \u0026 Cheese Croissant Sandwiches, Frozen",
+                                                               "price":  "$9.99",
+                                                               "size":  "8 ct",
+                                                               "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
+                                                           }
                                            },
                   "breakfast-sausage":  {
                                             "commodity":  "breakfast-sausage",
@@ -4447,20 +4454,20 @@
                                                              "size":  "15.5 oz",
                                                              "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
                                                          },
-                                             "Fareway":  {
-                                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068984-fareway-pinto-beans-155-oz",
-                                                             "name":  "Fareway Pinto Beans",
-                                                             "price":  "$0.99",
-                                                             "size":  "15.5 oz",
-                                                             "verified":  "2026-09-06 DERIVED from the price row (same record the board priced)"
-                                                         },
                                              "Family Fare":  {
                                                                  "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_beans_no_salt_added_pinto_15_5_oz/p/7081230",
                                                                  "name":  "Our Family Beans, No Salt Added, Pinto 15.5 Oz",
                                                                  "price":  "$0.99",
                                                                  "size":  "15.5 oz",
                                                                  "verified":  "2026-09-10 DERIVED from the price row (same record the board priced)"
-                                                             }
+                                                             },
+                                             "Fareway":  {
+                                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3240907-browns-best-pinto-beans-10-oz",
+                                                             "name":  "Browns Best Pinto Beans",
+                                                             "price":  "$9.99",
+                                                             "size":  "10 lb",
+                                                             "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
+                                                         }
                                          },
                   "canned-potatoes":  {
                                           "commodity":  "Canned Potatoes",
@@ -7108,13 +7115,6 @@
                                                       "size":  "16.8 fl oz",
                                                       "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
                                                   },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91212795-suave-ess-refrsh-cond-ocean-br",
-                                                      "name":  "Suave Essentials Ocean Breeze Conditioner for Dry Hair, 22.5 fl oz, 1-Count",
-                                                      "price":  "$1.97",
-                                                      "size":  "22.5 fl oz",
-                                                      "verified":  "2026-09-13 DERIVED from the price row (same record the board priced)"
-                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/13889470246",
                                                               "name":  "Shea Moisture 100% Virgin Coconut Oil Daily Hydration Conditioner, 34 fl. oz.",
@@ -7128,7 +7128,14 @@
                                                            "price":  1.39,
                                                            "size":  "15 fl oz",
                                                            "verified":  "2026-09-18"
-                                                       }
+                                                       },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/90978016-sve-cd-ess-dlyclf-225z",
+                                                      "name":  "Suave Daily Clarifying Conditioner, Hydrate \u0026 Shine For All Hair Types, 22.5 FL OZ",
+                                                      "price":  "$1.97",
+                                                      "size":  "22.5 oz",
+                                                      "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
+                                                  }
                                   },
                   "cooked-shredded-chicken":  {
                                                   "commodity":  "Cooked Shredded Chicken",
@@ -7328,11 +7335,11 @@
                                                             "board_pu":  0.449
                                                         },
                                     "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73335-state-fair-classic-corn-dogs-frozen-16-onz",
-                                                    "name":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
-                                                    "price":  "$4.77",
-                                                    "size":  "6 ct",
-                                                    "verified":  "2026-09-07 DERIVED from the price row (same record the board priced)"
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/76294-morning-star-farms-meatless-corn-dogs-plant-based-protein-vegan-meat-original-10-oz",
+                                                    "name":  "Morning Star Farms Classic Plant Based Corn Dogs, Vegan Snacks",
+                                                    "price":  "$4.98",
+                                                    "size":  "4 ct",
+                                                    "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                 }
                                 },
                   "corned-beef-brisket":  {
@@ -7470,20 +7477,20 @@
                                                           "size":  "8.5 oz",
                                                           "verified":  "2026-09-06 DERIVED from the price row (same record the board priced)"
                                                       },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/38638-jiffy-corn-muffin-mix-8-5-oz",
-                                                          "name":  "Jiffy® Corn Muffin Mix",
-                                                          "price":  "$0.72",
-                                                          "size":  "8.5 oz",
-                                                          "verified":  "2026-09-18 DERIVED from the price row (same record the board priced)"
-                                                      },
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/corn-muffin-mix/0007248600220",
                                                                "name":  "Corn Muffin Mix",
                                                                "price":  0.79,
                                                                "size":  "8.5 oz",
                                                                "verified":  "2026-09-18"
-                                                           }
+                                                           },
+                                          "Fareway":  {
+                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/163716-jiffy-corn-muffin-mix-6-ea",
+                                                          "name":  "Jiffy® Corn Muffin Mix 6 Pack",
+                                                          "price":  "$4.29",
+                                                          "size":  "6 x 8.5 oz",
+                                                          "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
+                                                      }
                                       },
                   "cornstarch":  {
                                      "commodity":  "Cornstarch",
@@ -10837,11 +10844,11 @@
                                                                "verified":  "2026-09-18"
                                                            },
                                           "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2133850-tina-s-burrito-beef-bean-green-chili-big-10-oz",
-                                                          "name":  "Tina\u0027s Big Burrito Beef \u0026 Bean Green Chili, Quick Meal",
-                                                          "price":  "$1.67",
-                                                          "size":  "each",
-                                                          "verified":  "2026-09-13 DERIVED from the price row (same record the board priced)"
+                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19334069-tina-s-chimchangas-beef-and-bean-value-pack-14-ea",
+                                                          "name":  "Tina\u0027s Beef \u0026 Bean Burritos, Family Value Pack, Hearty Protein",
+                                                          "price":  "$8.99",
+                                                          "size":  "14 ct",
+                                                          "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "frozen-chopped-spinach":  {
@@ -14030,12 +14037,6 @@
                                                        "size":  "1 lb",
                                                        "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
                                                    },
-                                   "Fareway":  {
-                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3304127-bar-s-classic-jumbo-franks-16-oz",
-                                                   "price":  1.79,
-                                                   "size":  "16 oz",
-                                                   "name":  "Bar-S Classic Jumbo Franks"
-                                               },
                                    "Sam\u0027s Club":  {
                                                            "url":  "https://www.samsclub.com/ip/13857369106",
                                                            "price":  6.68,
@@ -14063,7 +14064,14 @@
                                                         "price":  "$1.50",
                                                         "size":  "8 pk 2 oz",
                                                         "verified":  "2026-09-18 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                   "Fareway":  {
+                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16376939-bar-s-classic-franks-340-0-g",
+                                                   "name":  "Bar-S Classic Franks Hot Dogs",
+                                                   "price":  "$1.44",
+                                                   "size":  "12 oz",
+                                                   "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
+                                               }
                                },
                   "hot-honey":  {
                                     "commodity":  "Hot Honey",
@@ -15347,7 +15355,14 @@
                                                             "price":  "$24.99",
                                                             "size":  "102 ct",
                                                             "verified":  "2026-09-18 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                        },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387495-bright-essentials-laundry-power-pacs-free-clear-42-each",
+                                                       "name":  "Bright Essentials Laundry Power Pacs, Free \u0026 Clear",
+                                                       "price":  "$9.94",
+                                                       "size":  "42 ct",
+                                                       "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "leeks":  {
                                 "commodity":  "Leeks",
@@ -17352,11 +17367,11 @@
                                                           "verified":  "2026-09-13 DERIVED from the price row (same record the board priced)"
                                                       },
                                       "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20601338-fareway-pancake-waffle-mix-buttermilk-complete-32-oz",
-                                                      "name":  "Fareway Complete Buttermilk Pancake \u0026 Waffle Mix",
-                                                      "price":  "$2.69",
-                                                      "size":  "32 oz",
-                                                      "verified":  "2026-09-13 DERIVED from the price row (same record the board priced)"
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/31878-krusteaz-light-fluffy-buttermilk-complete-pancake-mix-4-53-kg",
+                                                      "name":  "Krusteaz Buttermilk Pancake \u0026 Waffle Mix",
+                                                      "price":  "$9.97",
+                                                      "size":  "10 lb",
+                                                      "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                   }
                                   },
                   "paper-napkins":  {
@@ -17384,12 +17399,6 @@
                                                             "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                             "board_pu":  0.0214
                                                         },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387419-everyday-napkins",
-                                                        "price":  1.99,
-                                                        "size":  "100 ct",
-                                                        "name":  "Bright Essentials 2-Ply Everyday Napkins"
-                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/13888320805",
                                                                 "price":  17.78,
@@ -17403,6 +17412,13 @@
                                                         "price":  "$3.48",
                                                         "size":  "500 ct",
                                                         "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388899-everyday-napkins",
+                                                        "name":  "Bright Essentials 1-Ply Everyday Napkins",
+                                                        "price":  "$2.99",
+                                                        "size":  "200 ct",
+                                                        "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "paper-plates":  {
@@ -17450,6 +17466,13 @@
                                                        "size":  "24 ct",
                                                        "name":  "Way To Celebrate White Disposable Paper Dessert Plates, 7 in, 24 Count",
                                                        "verified":  "2026-08-31 price-pull self-capture"
+                                                   },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36076852-bright-essentials-paper-plates-super-strong-heavyduty-white-300-each",
+                                                       "name":  "Bright Essentials Paper Plates, Super Strong, Heavy-Duty, White",
+                                                       "price":  "$12.88",
+                                                       "size":  "300 ct",
+                                                       "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "paper-towels":  {
@@ -19503,12 +19526,6 @@
                                                                  "size":  "40 ea",
                                                                  "verified":  "2026-08-07 DERIVED from the price row (same record the board priced)"
                                                              },
-                                             "Fareway":  {
-                                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16756902-hefty-quart-storage-slider-bags-20-0-ct",
-                                                             "price":  3.99,
-                                                             "size":  "20 ct",
-                                                             "name":  "Hefty Quart Storage Slider Bags"
-                                                         },
                                              "Sam\u0027s Club":  {
                                                                      "url":  "https://www.samsclub.com/ip/2570014879",
                                                                      "name":  "Ziploc Brand Quart Freezer Storage Bags, Stay Open Design, Easy to Fill, 216 ct.",
@@ -19522,6 +19539,13 @@
                                                              "price":  "$7.34",
                                                              "size":  "150 ct",
                                                              "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
+                                                         },
+                                             "Fareway":  {
+                                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34274270-bright-essentials-storage-bags-double-zipper-quart-size-25-each",
+                                                             "name":  "Bright Essentials Storage Bags, Double Zipper, Quart Size",
+                                                             "price":  "$2.48",
+                                                             "size":  "25 ct",
+                                                             "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
                                                          }
                                          },
                   "queso":  {
@@ -19688,12 +19712,6 @@
                               },
                   "ramen":  {
                                 "commodity":  "ramen",
-                                "Fareway":  {
-                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16697906-maruchan-beef-flavor-ramen-noodle-soup-85-0-g",
-                                                "price":  0.5,
-                                                "size":  "each",
-                                                "name":  "Maruchan Ramen Noodle Soup, Beef"
-                                            },
                                 "Family Fare":  {
                                                     "url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/asian_soups/maruchan_beef_flavor_ramen_noodle_soup_12_ea/p/30209",
                                                     "name":  "Maruchan Beef Flavor Ramen Noodle Soup 12 Ea",
@@ -19721,7 +19739,14 @@
                                              "price":  "$3.85",
                                              "size":  "12 pk 3 oz",
                                              "verified":  "2026-09-18 DERIVED from the price row (same record the board priced)"
-                                         }
+                                         },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/37321-maruchan-beef-flavor-ramen-noodle-soup-12-ea",
+                                                "name":  "Maruchan Ramen Noodle Soup, Beef Flavor",
+                                                "price":  "$3.99",
+                                                "size":  "12 ct",
+                                                "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
+                                            }
                             },
                   "ranch-dressing":  {
                                          "commodity":  "ranch-dressing",

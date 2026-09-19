@@ -536,6 +536,20 @@
                               "id":  "conditioner",
                               "commodity":  "Hair Conditioner",
                               "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0876,
+                              "size":  "22.5 oz",
+                              "item":  "Suave Daily Clarifying Conditioner, Hydrate \u0026 Shine For All Hair Types, 22.5 FL OZ",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "volume",
+                              "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "conditioner",
+                              "commodity":  "Hair Conditioner",
+                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.3167,
                               "size":  "12.6 oz",
@@ -1909,6 +1923,20 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
+                                                     "id":  "conditioner",
+                                                     "commodity":  "Hair Conditioner",
+                                                     "unit":  "floz",
+                                                     "store":  "Fareway",
+                                                     "per_unit":  0.0876,
+                                                     "size":  "22.5 oz",
+                                                     "item":  "Suave Daily Clarifying Conditioner, Hydrate \u0026 Shine For All Hair Types, 22.5 FL OZ",
+                                                     "kind":  "weight",
+                                                     "row_kind":  "volume",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "volume",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
                                                      "id":  "half-and-half",
                                                      "commodity":  "Half \u0026 Half",
                                                      "unit":  "floz",
@@ -2551,6 +2579,19 @@
                          "size_shape_mismatch":  false
                      },
                      {
+                         "id":  "ramen",
+                         "commodity":  "Ramen Noodles",
+                         "unit":  "each",
+                         "store":  "Sam\u0027s Club",
+                         "per_unit":  1.63,
+                         "median":  0.3742,
+                         "mult":  4.36,
+                         "size":  "6 ct",
+                         "item":  "Samyang MEP Ramen Bowl, Red Pepper and Chicken \u0026 Cilantro, 6 pk.",
+                         "peers_packed":  "3 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
                          "id":  "shampoo",
                          "commodity":  "Shampoo",
                          "unit":  "floz",
@@ -2581,7 +2622,7 @@
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-18T17:48:19",
+    "generated":  "2026-09-19T08:17:56",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "pickles",
