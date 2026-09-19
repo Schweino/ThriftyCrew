@@ -16328,7 +16328,7 @@ to 32.5%, 252 verified cells over boards 07-30, 08-08 and 08-15), which is a Jul
 
 **2026-09-18: the nightly daemon battery was red on main over this, and is fixed; the branch was rebased and kept consistent.** 384c94252 added `audit-allergen-line` to the P5 table without moving `hunt_daemon_selftest.py`'s pin on it, so `hunt-daemon.py --selftest --names-diff` (what `TC Daemon Battery 0230` runs through `ops\run-daemon-battery.ps1`) exited 2 at e76f16d27 with 1 red of 553 cases, `...and the gates BELOW those six`, and 0 names removed or added. The case now names the four gates below the six as main has them (ghost-field-limits, wave-blocker-headings, allergen-line, test-guards) and its name no longer carries a count, so the branch can change the list without changing a pinned name; `hunt_daemon_selftest.names.txt` moves that one name. After it: exit 0, 553 of 553. Broken once against a temp copy of `wave-publish.ps1`: dropping `audit-wave-blocker-headings`, and separately `audit-allergen-line`, each turned that case red (1 of the 5 cases in its function), and the real file was md5-identical afterwards. `claude/wave-p5-order` is rebased onto the main carrying this, with the same case set back to the three its P5 table keeps, so landing option 1 does not turn the battery red the other way.
 
-### I234 - The daily chain's recipe republish ships a stale card when its rebuild fails, and skips the allergen check `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+### I234 - The daily chain's recipe republish ships a stale card when its rebuild fails, and skips the allergen check `PARTLY DONE - BUILT AND TESTED ON BRANCH claude/i234-republish, READY FOR BRAD TO MERGE WITH OR AFTER I233` `run-0919` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings-2.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16337,6 +16337,52 @@ Found by the agent that repaired wave-publish's P5 (I233). `grocery/check-ad-cyc
 and that path bypasses `propagate-recipes.ps1`, so the allergen check I233's branch moves in front of publish
 never runs there. The strongest repair (a per-recipe allergen refusal inside `engine\publish.ps1`) changes the
 engine the daily chain runs, which is why it is a ruling. Read with I233.
+
+**Prepared 2026-09-18, not landed: branch `claude/i234-republish`, based on `claude/wave-p5-order` (I233) so the two
+compose.** It takes the middle road rather than option 4 of I233: it does not touch `engine\publish.ps1`, it
+changes only the daily chain's call into it.
+- `meal-prep\lib\gated-republish-lib.ps1` (new; blob `ad1b994178aa`): `Invoke-TcGatedRepublish` holds a slug with
+  no spec, runs build-cards, keeps only the slugs build-cards reports as built (its `  X <slug> :: <why>` lines; a
+  run with no summary line, a summary that does not add up, or a throw counts as rebuilding nothing), runs the same
+  `audit-allergen-line` (`-Json`) that I233 puts in propagate over those cards as they sit on disk, and publishes
+  the survivors once. It is PER SLUG, where propagate refuses the whole set: the daily republish carries every card
+  whose cost moved overnight, and one bad card should not hold every other live page on yesterday's cost.
+- `grocery\check-ad-cycles.ps1` (blob `bb81328af67a`): the close-the-loop block goes through it. Each held slug is
+  logged by name with its stage and reason, counted in a `REVIEW` summary line, alerted, and kept in
+  `meal-prep\pipeline\republish-pending.txt`, which after a good publish now holds only the held slugs, so they are
+  retried and re-reported every run. It names no meal-prep path; the lib defaults to meal-prep's own directories.
+- `grocery\alert-registry.json`: the new alert type `cards-held-from-republish` (page, condition 3), beside
+  `cards-publish-failed`.
+The branch carries I233's two commits rebased onto origin/main at `d3e317a2d`, so it composes with I233 and
+landing it lands both.
+
+**Verified on the branch.** `gated-republish-lib -SelfTest` exit 0, 11 of 11 (MUST FIRE: a failed rebuild is not
+published though its old card is on disk and would pass the allergen check; a card whose line disagrees is held
+before publish; a card with no line is held and publish is never called; a slug with no spec is held; a build with
+no summary line and a build that throws each count as rebuilding nothing; an allergen check that cannot be read
+holds the card. CLEAN TWIN: a good rebuild publishes exactly once and its output comes back; the neighbour of a
+failed rebuild still publishes. Two source pins: build-cards' output shape, and check-ad-cycles reaching
+`publish.ps1` only as this call's Publish block). Ghost is never reachable (stub publish, `TC_WRITE_JOURNAL` and
+`TC_STAGE_WRITES` cleared). Broken once each, file md5-identical after every restore: failed build kept as built,
+2 red; allergen step skipped, 2 red; publish never reached, 2 CLEAN TWINs red; the chain calling publish directly
+again, 1 red, after the pin's first version SURVIVED that mutant because it checked position only (it now checks
+the block itself). `check-ad-cycles -SelfTest` exit 0, 19 of 19; `propagate-recipes -SelfTest` exit 0. The
+branch push was gated: `RUN-GATES-COMPLETE pass=427 fail=0 noverdict=0`, and prepush-test-auditors passed the
+200 cases its pushed paths selected.
+
+**Measured, read-only, from the main checkout's chain logs** (`grocery\ad-cycle-log.txt` plus
+`grocery\logs-archive\ad-cycle-log-2026-07.txt` and `-2026-08.txt`, 52,838 lines, through 2026-09-18 15:13): 58
+close-the-loop outcomes over 39 days from 2026-08-08, and **0 of 58 reached build-cards** (45 "no card cost moved
+today", 11 compute-v2 failed, 1 over the 150 cap at 489 cards on 2026-08-12, 1 reanchor incomplete on
+2026-08-08). So build-cards has failed 0 times on this path because it has never run on it, and **no stale card
+was published this way**; the defect is latent. A scratch render of all 584 specs through build-card2 into a temp
+OutDir (seeded worktree, `db\built` untouched): 584 rendered, 0 threw, so on today's catalogue the change would
+hold nothing.
+
+**The one action for Brad:** if I233 option 1 is ruled yes, land `claude/i234-republish` through `ops\push-main.ps1`
+from a checkout of it, which lands I233 and this together. If I233 is ruled some other way, this change still
+stands alone (it calls only `audit-allergen-line.ps1`, which main already has), and it can be cherry-picked on its
+own.
 
 ### I235 - The graph importer drops about 238,000 Baker's rows every run because their search term is a commodity id `DONE` `run-0919`
 
