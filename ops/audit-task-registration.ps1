@@ -299,8 +299,9 @@ if ($SelfTest) {
           -Definitions @() -RegistryNames @()
   T 'MUST NOT FIRE a file that registers nothing produces no findings' ($f6.Count -eq 0) ($f6 -join '; ')
 
-  # ---- MUST NOT FIRE against the REAL tree. The half a frozen fixture cannot prove: that the four
-  #      registrars shipped in this tree today are each defined, watched and refusing.
+  # ---- MUST NOT FIRE against the REAL tree. The half a frozen fixture cannot prove: that the
+  #      registrars shipped in this tree today are each defined, watched and refusing. Three since the harvest
+  #      registrar was retired with its task (Brad's ruling 2026-09-19, backlog I254).
   $liveDefs = @()
   if (Test-Path $XMLDIR) {
     $xmlFiles = @(Get-ChildItem -Path $XMLDIR -Filter '*.xml' -File -ErrorAction SilentlyContinue)
@@ -337,7 +338,6 @@ if ($SelfTest) {
   $liveFindings = @()
   $scanned = 0
   foreach ($rel in @('graph\pipeline\install-nightly-task.ps1',
-                     'meal-prep\pipeline\install-harvest-task.ps1',
                      'ops\install-grocery-tasks.ps1',
                      'media\reels\install-daily-task.ps1')) {
     $p = Join-Path $repo $rel
@@ -352,7 +352,7 @@ if ($SelfTest) {
     foreach ($x in $one) { $liveFindings += [string]$x }
   }
   T ("MUST NOT FIRE the {0} registrar(s) shipped in this tree are each defined, watched and refusing" -f $scanned) `
-    ($scanned -eq 4 -and $liveFindings.Count -eq 0) ("scanned=" + $scanned + " " + ($liveFindings -join '; '))
+    ($scanned -eq 3 -and $liveFindings.Count -eq 0) ("scanned=" + $scanned + " " + ($liveFindings -join '; '))
 
   # ---- THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). The sibling exclusion the scan note
   #      defends must hold, AND the root itself must be scanned: on the full path it walked 0 files and exited 3.
@@ -369,7 +369,7 @@ if ($SelfTest) {
     Write-GuardComplete -Name 'task-registration' -Summary ("selftest-fail={0}/{1}" -f $fail, $ran)
     exit 2
   }
-  Write-Output ("SELF-TEST PASS: {0} case(s) - the call-site parser (literal, variable, unresolved, commented out), the frozen 2026-08-22 registrar with no definition and no registry row, its fixed twin, a defined-and-watched registrar with no refusal, both allowlists with their reasons, an unresolvable name, a file that registers nothing, the four real registrars in this tree, and the walk from a worktree root with a sibling below it" -f $ran)
+  Write-Output ("SELF-TEST PASS: {0} case(s) - the call-site parser (literal, variable, unresolved, commented out), the frozen 2026-08-22 registrar with no definition and no registry row, its fixed twin, a defined-and-watched registrar with no refusal, both allowlists with their reasons, an unresolvable name, a file that registers nothing, the three real registrars in this tree, and the walk from a worktree root with a sibling below it" -f $ran)
   Exit-Guard -Name 'task-registration' -Summary ("selftest=pass cases={0}" -f $ran) -Code 0
 }
 

@@ -98,11 +98,11 @@ function Test-TaskWatched {
                  human typing an entry - and the harvest crawl was hand-added the same way two days
                  later, so it is a class and not an incident.
 
-                 A SECOND, IDENTICAL COPY LIVES IN meal-prep\pipeline\install-harvest-task.ps1, on
-                 purpose: the two registrars own different lanes and must not take a dependency on
-                 each other. The two cannot drift apart silently because
-                 ops\audit-task-registration.ps1 fails the push when a registrar with a committed
-                 definition does not carry the refusal.
+                 A SECOND, IDENTICAL COPY LIVED IN meal-prep\pipeline\install-harvest-task.ps1 until
+                 that task was retired on Brad's 2026-09-19 ruling (backlog I254), on purpose: the two
+                 registrars owned different lanes and must not take a dependency on each other.
+                 ops\audit-task-registration.ps1 fails the push when any registrar with a committed
+                 definition does not carry the refusal, so a future copy cannot drift silently.
 
                  Pure over its arguments. $Registry is the parsed registry document, or $null.
   #>
