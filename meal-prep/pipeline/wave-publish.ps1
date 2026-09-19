@@ -967,9 +967,10 @@ $dirtySample = @($pdLines | Where-Object { $_ -match '^\s{2}\S' } | ForEach-Obje
 $foreignSample = @(Get-ForeignDirty $dirtySample $slugs)
 $foreignTotal = [Math]::Max(0, $dirtyTotal - @($slugs).Count)
 if ($foreignTotal -gt 0) {
-  Write-Output ("  E4  NOTE propagate reports {0} dirty spec(s) in total, so about {1} OUTSIDE this wave will be" -f $dirtyTotal, $foreignTotal)
-  Write-Output ("        carried and republished with it. That is propagate's design (it is the one command after")
-  Write-Output ("        any spec edit), but this wave's ledger should not be read as having shipped only {0}." -f @($slugs).Count)
+  Write-Output ("  E4  NOTE propagate reports {0} dirty spec(s) in total, so about {1} OUTSIDE this wave are dirty." -f $dirtyTotal, $foreignTotal)
+  Write-Output ("        Since 2026-09-19 propagate REFUSES to republish specs its caller did not name (this wave names")
+  Write-Output ("        only its own {0}), so E4 will stop with PROPAGATE-SCOPE-REFUSED and the list. Shipping them is" -f @($slugs).Count)
+  Write-Output ("        a decision: run propagate-recipes.ps1 -AllowCatalogue by hand first, then re-run this wave.")
   @($foreignSample | Select-Object -First 10) | ForEach-Object { Write-Output ("        " + $_) }
   if ($foreignSample.Count -lt $foreignTotal) { Write-Output ("        ... listing truncated by propagate at 30; {0} more not shown" -f ($foreignTotal - $foreignSample.Count)) }
 }
