@@ -23,6 +23,10 @@
   local, with NO REMOTE, and this guard exists as much to keep it out of the public repo as to keep it
   backed up. Those are the same job: "memory and git must not drift" cuts both ways.
 
+  2026-09-19: Brad made the ThriftyCrew repo PRIVATE. Check 3 stands unchanged: the repo is pushed by several
+  sessions and a daily bot, and was public for its first two months, so memory stays out of it whatever its
+  visibility is today. The self-test no longer uses this repo as its known-public control (see the self-test).
+
   Seven checks:
     1. HISTORY EXISTS   - the memory directory is a git repository at all
     2. NO REMOTE        - it has no push target, so it cannot leak to a public host
@@ -75,13 +79,27 @@ function Get-AllowedRemote {
   return $null
 }
 
+function Resolve-RemoteVisibility {
+  <# The probe's DECISION TABLE, with no network in it, so the self-test can drive every row offline.
+     $Code is the HTTP status an anonymous info/refs GET got back, or $null when no response arrived at
+     all (DNS failure, timeout, proxy). 200 is public; 401, 403 and 404 are how a git host refuses a
+     stranger; everything else, and no answer, is UNVERIFIED, because the one answer this must never
+     invent is "safe". #>
+  param($Code, [string]$Probe = '', [string]$Reason = '')
+  if ($null -eq $Code) { return @{ State = 'unverified'; Detail = ('the probe could not reach the host: ' + $Reason) } }
+  $c = [int]$Code
+  if ($c -eq 200) { return @{ State = 'public'; Detail = "anonymous GET $Probe returned HTTP 200" } }
+  if ($c -eq 401 -or $c -eq 403 -or $c -eq 404) { return @{ State = 'private'; Detail = "anonymous GET returned HTTP $c" } }
+  return @{ State = 'unverified'; Detail = "anonymous GET $Probe returned HTTP $c, which this check does not recognise" }
+}
+
 function Test-RemoteIsPrivate {
   <# Ask the host, anonymously, whether it will serve this repository to a stranger.
 
      Returns State = private | public | unverified, and Detail saying how it knows. A git HTTP host
      answers an unauthenticated info/refs with 200 when the repository is public and 401 (GitHub) or
      404 when it is not. Anything else - DNS failure, a timeout, a proxy - is UNVERIFIED, because the
-     one answer this must never invent is "safe".
+     one answer this must never invent is "safe". The table itself is Resolve-RemoteVisibility.
 
      NO CREDENTIALS ARE SENT, deliberately. A probe carrying the operator's token would get 200 for a
      private repository and report it public, which is the failure mode that would make everyone stop
@@ -98,18 +116,13 @@ function Test-RemoteIsPrivate {
     $resp = $req.GetResponse()
     $code = [int]$resp.StatusCode
     $resp.Close()
-    if ($code -eq 200) { return @{ State = 'public'; Detail = "anonymous GET $probe returned HTTP 200" } }
-    return @{ State = 'unverified'; Detail = "anonymous GET $probe returned HTTP $code, which this check does not recognise" }
+    return (Resolve-RemoteVisibility -Code $code -Probe $probe)
   } catch [Net.WebException] {
     $we = $_.Exception
     if ($we.Response) {
-      $code = [int]([Net.HttpWebResponse]$we.Response).StatusCode
-      if ($code -eq 401 -or $code -eq 403 -or $code -eq 404) {
-        return @{ State = 'private'; Detail = "anonymous GET returned HTTP $code" }
-      }
-      return @{ State = 'unverified'; Detail = "anonymous GET returned HTTP $code" }
+      return (Resolve-RemoteVisibility -Code ([int]([Net.HttpWebResponse]$we.Response).StatusCode) -Probe $probe)
     }
-    return @{ State = 'unverified'; Detail = ('the probe could not reach the host: ' + $we.Message) }
+    return (Resolve-RemoteVisibility -Code $null -Probe $probe -Reason $we.Message)
   } catch {
     return @{ State = 'unverified'; Detail = ('the probe threw: ' + $_.Exception.Message) }
   }
@@ -224,7 +237,12 @@ function Get-ReachabilityRegressions {
 }
 
 function Test-MemoryStore {
-  param([string]$Dir)
+  # -AllowFile and -VisibilityProbe are SEAMS for the self-test, and the live run passes neither: it reads
+  # ops\memory-remote-allowlist.json and asks the real host through Test-RemoteIsPrivate. The seam exists so
+  # "a reviewed remote that answers PUBLIC is refused" can be fixtured offline, without borrowing some real
+  # repository's visibility (until 2026-09-19 the control was ThriftyCrew itself, which Brad then made private).
+  param([string]$Dir, [string]$AllowFile = '', [scriptblock]$VisibilityProbe = $null)
+  if ($null -eq $VisibilityProbe) { $VisibilityProbe = { param($u) Test-RemoteIsPrivate -Url $u } }
   $issues = New-Object System.Collections.Generic.List[string]
   # SEPARATE FROM $issues ON PURPOSE. A remote whose visibility could not be PROVEN is not a finding -
   # nothing is known to be wrong - but it is emphatically not clean either. Folding it into $issues
@@ -272,7 +290,7 @@ function Test-MemoryStore {
     if ($parts.Count -ge 2) { $seenUrls[$parts[1]] = $true }
   }
   foreach ($u in @($seenUrls.Keys)) {
-    $entry = Get-AllowedRemote -Url $u
+    $entry = Get-AllowedRemote -Url $u -AllowFile $AllowFile
     # 'EXPOSURE: ' TAGS A FINDING WHERE IT IS BORN (Brad ruling R16, 2026-09-10): memory that can leave this
     # machine, or already has, emails; the hygiene findings do not. check-ad-cycles routes on this tag rather
     # than re-matching the wording, so the rule and the text it keys on cannot drift apart.
@@ -280,7 +298,7 @@ function Test-MemoryStore {
       $issues.Add('EXPOSURE: the memory store has an UNREVIEWED git REMOTE configured, so it can be pushed off this machine: ' + $u + ' - memory carries cost, revenue and account notes. Remove it, or add it to ops\memory-remote-allowlist.json with evidence that it is private.')
       continue
     }
-    $vis = Test-RemoteIsPrivate -Url $u
+    $vis = & $VisibilityProbe $u
     if ($vis.State -eq 'public') {
       $issues.Add('EXPOSURE: the memory store pushes to ' + $u + ', which is REVIEWED but is answering anonymously (' + $vis.Detail + '). It is PUBLIC. Memory carries cost, revenue and account notes - remove the remote or make the repository private now.')
     } elseif ($vis.State -eq 'unverified') {
@@ -295,7 +313,7 @@ function Test-MemoryStore {
   if (Test-Path (Join-Path $REPO '.git')) {
     $tracked = Get-GitOut $REPO 'ls-files'
     $leak = @(($tracked.Text -split "`r?`n") | Where-Object { $_ -match 'projects/C--Codex/memory/' })
-    if ($leak.Count) { $issues.Add(("EXPOSURE: $($leak.Count) memory file(s) are TRACKED BY THE PUBLIC ThriftyCrew REPO, e.g. " + ($leak[0]))) }
+    if ($leak.Count) { $issues.Add(("EXPOSURE: $($leak.Count) memory file(s) are TRACKED BY THE ThriftyCrew REPO (public until 2026-09-19, and shared by every session and the bot), e.g." + ($leak[0]))) }
   }
 
   # 4. HISTORY CURRENT
@@ -476,20 +494,55 @@ if ($SelfTest) {
     T 'MUST-FIRE a MISSING allowlist allows nothing (it must not read as permission)' ($null -eq $e4) 'a missing file granted permission'
   } finally { Remove-Item -LiteralPath $allowFx -Force -ErrorAction SilentlyContinue }
 
-  # The probe's own decision table, exercised through a real HTTP call to hosts that cannot change
-  # meaning under us. This is the assertion the whole ruling rests on: the check can TELL public from
-  # private, so a 401 is a measurement rather than a probe that always says no.
-  $pubProbe = Test-RemoteIsPrivate -Url 'https://github.com/Schweino/ThriftyCrew.git'
-  $privProbe = Test-RemoteIsPrivate -Url 'https://github.com/Schweino/codex-memory.git'
-  if ($pubProbe.State -eq 'unverified' -and $privProbe.State -eq 'unverified') {
-    # No network. Say so - a skipped case must never read as a passed one.
-    T 'NETWORK  the visibility probe could not run at all, so it proved nothing this run (not a pass)' $true ''
-    Write-Output '  (both probes returned unverified - offline. The live path treats that as BLIND, never clean.)'
+  # ---- THE VISIBILITY DECISION, OFFLINE (2026-09-19) -------------------------------------------------
+  # This is the assertion the whole ruling rests on: the check can TELL public from private, so a 401 is a
+  # measurement rather than a probe that always says no. Until 2026-09-19 it was proven by a live GET against
+  # github.com/Schweino/ThriftyCrew as the known-PUBLIC control, so the suite depended on the visibility of
+  # the very repo it runs in, and Brad making that repo private would have turned this red on every push on
+  # the box. Now the decision table is driven directly, and the audit's own remote check is driven end to end
+  # through its -VisibilityProbe seam with a stubbed answer, so none of it touches the network.
+  $vt = Resolve-RemoteVisibility -Code 200 -Probe 'x'
+  T 'MUST-FIRE  decision table: HTTP 200 to an anonymous info/refs GET is PUBLIC' ($vt.State -eq 'public') ("got " + $vt.State)
+  foreach ($pc in @(401, 403, 404)) {
+    $vt = Resolve-RemoteVisibility -Code $pc -Probe 'x'
+    T ("CLEAN TWIN decision table: HTTP $pc is PRIVATE") ($vt.State -eq 'private') ("got " + $vt.State)
+  }
+  $vt = Resolve-RemoteVisibility -Code 500 -Probe 'x'
+  T 'MUST-FIRE  decision table: an unrecognised status (500) is UNVERIFIED, never private' ($vt.State -eq 'unverified') ("got " + $vt.State)
+  $vt = Resolve-RemoteVisibility -Code $null -Probe 'x' -Reason 'offline'
+  T 'MUST-FIRE  decision table: no response at all is UNVERIFIED, never private' ($vt.State -eq 'unverified') ("got " + $vt.State)
+
+  # End to end through Test-MemoryStore: a store whose remote IS on a (temp) allowlist, with the host's answer
+  # stubbed. The URL is under .invalid on purpose: if the seam were ever bypassed, the real probe would get no
+  # answer, every case below would read UNVERIFIED, and the must-fire and the clean twin would both go red.
+  $seamUrl = 'https://memaudit-fixture.invalid/owner/memory.git'
+  $seamAllow = Join-Path $env:TEMP ('memallow-seam-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.json')
+  try {
+    ('{ "remotes": [ { "url": "' + $seamUrl + '", "approved_by": "fixture" } ] }') | Set-Content -LiteralPath $seamAllow -Encoding UTF8
+    NewStore; $null = Get-GitOut $fx ('remote add origin ' + $seamUrl)
+    $r = Test-MemoryStore $fx -AllowFile $seamAllow -VisibilityProbe { param($u) @{ State = 'public'; Detail = 'stub: HTTP 200' } }
+    $pubTagged = @($r.issues | Where-Object { ([string]$_).StartsWith('EXPOSURE: ') -and ([string]$_) -match 'It is PUBLIC' })
+    T 'MUST-FIRE  a REVIEWED remote that answers anonymously is refused as PUBLIC and tagged EXPOSURE' `
+      (($r.rc -eq 2) -and ($pubTagged.Count -eq 1)) ("rc=$($r.rc) " + ($r.issues -join '; ') + ' ' + ($r.blind -join '; '))
+    $r = Test-MemoryStore $fx -AllowFile $seamAllow -VisibilityProbe { param($u) @{ State = 'private'; Detail = 'stub: HTTP 401' } }
+    T 'CLEAN TWIN a REVIEWED remote that refuses a stranger is accepted as still private' `
+      (($r.rc -eq 0) -and ((@($r.notes) -join ' ') -match 'still private')) ("rc=$($r.rc) " + ($r.issues -join '; ') + ' ' + ($r.blind -join '; '))
+    $r = Test-MemoryStore $fx -AllowFile $seamAllow -VisibilityProbe { param($u) @{ State = 'unverified'; Detail = 'stub: no answer' } }
+    T 'MUST-FIRE  a REVIEWED remote whose visibility cannot be proven is BLIND (rc 3), never clean' `
+      (($r.rc -eq 3) -and (@($r.blind).Count -eq 1)) ("rc=$($r.rc)")
+  } finally { Remove-Item -LiteralPath $seamAllow -Force -ErrorAction SilentlyContinue }
+
+  # ONE OPTIONAL LIVE PROBE, against a repository that is public by design and is not Brad's: GitHub's own
+  # github/gitignore. It checks the real HTTP path still reads 200 as public. Without a network it is BLIND
+  # and counted apart, never a pass and never a red: the offline cases above carry the verdict.
+  $liveBlind = 0
+  $live = Test-RemoteIsPrivate -Url 'https://github.com/github/gitignore.git' -TimeoutSec 10
+  if ($live.State -eq 'unverified') {
+    $liveBlind = 1
+    Write-Output ('BLIND live probe of a known-public repository could not run (' + $live.Detail + ') - it proved nothing this run')
   } else {
-    T 'MUST-FIRE  a PUBLIC repository is detected as public (the control - without this a 401 proves nothing)' `
-      ($pubProbe.State -eq 'public') ("got " + $pubProbe.State + ': ' + $pubProbe.Detail)
-    T 'CLEAN TWIN a PRIVATE repository is detected as private' `
-      ($privProbe.State -eq 'private') ("got " + $privProbe.State + ': ' + $privProbe.Detail)
+    T 'MUST-FIRE  live: a known-PUBLIC repository (github/gitignore) reads as public over the real HTTP path' `
+      ($live.State -eq 'public') ("got " + $live.State + ': ' + $live.Detail)
   }
   $bad = Test-RemoteIsPrivate -Url 'https://no-such-host-thriftycrew-probe.invalid/x.git' -TimeoutSec 5
   T 'MUST-FIRE an unreachable host is UNVERIFIED, never private - a could-not-look must not settle it' `
@@ -629,7 +682,7 @@ if ($SelfTest) {
 
   if (Test-Path $fx) { Remove-Item $fx -Recurse -Force -ErrorAction SilentlyContinue }
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output "SELF-TEST PASS ($cases memory-store cases)"
+  Write-Output "SELF-TEST PASS ($cases memory-store cases, live probe blind=$liveBlind)"
   exit 0
 }
 
@@ -662,7 +715,7 @@ if ($res.rc -eq 3) {
   Exit-Guard -Name 'memory-backup' -Summary 'blind' -Code 3
 }
 if ($res.issues.Count -eq 0) {
-  Write-Output '  ok - the memory store is versioned locally, has no remote this run could not account for, is absent from the public repo, is fully committed, its index agrees with the files on disk, and nothing is mojibaked'
+  Write-Output '  ok - the memory store is versioned locally, has no remote this run could not account for, is absent from the ThriftyCrew repo, is fully committed, its index agrees with the files on disk, and nothing is mojibaked'
   Exit-Guard -Name 'memory-backup' -Summary ("files={0} clean" -f [int]$res.files) -Code 0
 }
 foreach ($i in $res.issues) { Write-Output ('  ' + $i) }
@@ -670,5 +723,5 @@ foreach ($i in $res.issues) { Write-Output ('  ' + $i) }
 # untracking for every finding this guard can produce, which meant the two INDEX arms - unreachability
 # and reachability regression - were told to run a command that does nothing for them. Those two carry
 # their own FIX sentence inside the finding.
-Write-Output '  Fix: run this with -Sync to commit pending memory changes. An UNREVIEWED remote, or a memory file tracked by ThriftyCrew, must be removed by hand - that repo is PUBLIC. A remote that is a deliberate private backup goes in ops\memory-remote-allowlist.json with its evidence, and is re-proven private on every run. An unreachability or REACHABILITY REGRESSION finding is a ROUTING problem and carries its own fix above: -Sync will not clear either one.'
+Write-Output '  Fix: run this with -Sync to commit pending memory changes. An UNREVIEWED remote, or a memory file tracked by ThriftyCrew, must be removed by hand - that repo is shared by every session and the bot, and was public until 2026-09-19. A remote that is a deliberate private backup goes in ops\memory-remote-allowlist.json with its evidence, and is re-proven private on every run. An unreachability or REACHABILITY REGRESSION finding is a ROUTING problem and carries its own fix above: -Sync will not clear either one.'
 Exit-Guard -Name 'memory-backup' -Summary ("files={0} issues={1}" -f [int]$res.files, $res.issues.Count) -Code 2
