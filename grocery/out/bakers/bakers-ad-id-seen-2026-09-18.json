@@ -1,0 +1,7 @@
+{
+  "captured": "2026-09-18T14:38:49",
+  "date": "2026-09-18",
+  "source_url": "https://www.bakersplus.com/weeklyad",
+  "urls": [],
+  "note": "the /api/dacs/<guid> requests the Baker's weekly-ad page made in a real Chrome; pull-bakers-ad-list.ps1 verifies the id against the ad's own dates before using it"
+}
