@@ -593,6 +593,18 @@ try {
     if (@($fCap.terms).Count -eq 5 -and [int]$fCap.call_cap -eq 5) { Ok 'MUST FIRE  a full recapture never asks past the store''s clean-run cap (cap 5: exactly 5 terms)' }
     else { Bad "full cap: terms=$(@($fCap.terms).Count) call_cap=$($fCap.call_cap) (want 5/5)" }
   } finally { $script:FullRunCap['Walmart'] = $fcSave }
+
+  # ---- BRAD'S CHROME FIRST, THE SCRIPT DRIVER AS FALLBACK (2026-09-19) ------------------------------------------
+  $bcDir = Join-Path $tmp 'bc'; [void][IO.Directory]::CreateDirectory($bcDir)
+  $bcSams = Join-Path $bcDir 'sams.csv'; [IO.File]::WriteAllText($bcSams, "#tc-store store=`"Omaha`" read=`"page`" rows=1`nq|n|lp|up|id|was|ful`neggs|Large Eggs|`$2.38|`$0.20|1||PICKUP@8146`n")
+  $bcFw = Join-Path $bcDir 'fw.jsonl'; [IO.File]::WriteAllText($bcFw, '')
+  $bcHdr = Join-Path $bcDir 'hdr.csv'; [IO.File]::WriteAllText($bcHdr, "#tc-store store=`"Omaha`" read=`"page`" rows=0`nq|n|lp|up|id|was|ful`n")
+  $bc = Get-BrowserStoresToDrive -Stores @("Sam's Club", 'Fareway', 'Walmart') -CaptureFiles @{ "Sam's Club" = $bcSams; 'Fareway' = $bcFw; 'Walmart' = (Join-Path $bcDir 'none.csv') }
+  if ((@($bc.AlreadyCaptured) -join ',') -eq "Sam's Club" -and (@($bc.Drive) -join ',') -eq 'Fareway,Walmart') { Ok 'MUST FIRE  a store Brad''s Chrome already captured today is NOT driven again; an empty file and a missing file are driven' }
+  else { Bad "browser fallback: captured=[$(@($bc.AlreadyCaptured) -join ',')] drive=[$(@($bc.Drive) -join ',')]" }
+  $bc2 = Get-BrowserStoresToDrive -Stores @("Sam's Club") -CaptureFiles @{ "Sam's Club" = $bcHdr }
+  if ((@($bc2.Drive) -join ',') -eq "Sam's Club") { Ok 'MUST FIRE  a capture holding only its store line and header is not a landed capture, so the fallback still drives it' }
+  else { Bad "header-only capture counted as landed: drive=[$(@($bc2.Drive) -join ',')]" }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

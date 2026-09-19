@@ -1,9 +1,37 @@
 ---
 name: grocery-browser-stores-refresh
-description: STAGE TWO of the daily grocery pipeline, 9:00am - the browser work a scheduled script physically cannot do. The three TC Windows tasks own the pipeline but run PowerShell, which can never reach Brad Chrome; some stores answer his real browser and refuse an automated one. Scope - everyday rotation for Walmart and Aldi (always) plus Fareway/Sams only when the 0800 driver failed, the Bakers weekly ad vision-read on rollover, the FAREWAY weekly ad vision-read (its pages arrive server-side every morning but only a read produces fareway-deals, and pull-fareway-ads.ps1 now exits 3 until it happens), rescue terms, sale-fallback research, and a bounded batch of product-URL chips. Works out what is outstanding FROM THE DATA, not from the flag. A weekly ad that is DUE outranks everything else that day - it is the only work with a hard deadline, and Bakers is the only ad nothing else in the estate can pull. Captures and builds only - never publishes, compares or pushes; 0800 owns the one chain a day.
+description: STAGE ONE of the daily grocery pipeline, 06:15 - Walmart, Sam's Club, Aldi and Fareway captured in Brad's own Chrome, one tab per store, all four concurrently, then built. The 08:00 driver covers Fareway/Sam's only on a day this did not land them; the 10:30 watchdog pages any browser store with no capture today. Brad's ruling 2026-09-19.
 ---
 
+THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026-09-19).
+"All browser-needed stores should be using my Chrome... each store gets its own tab and it's running concurrently."
+  - You run at 06:15, BEFORE the 07:00 ad pull and the 08:00 chain, so your captures are what 08:00 builds the board
+    from. The 08:00 driver now drives Fareway or Sam's ONLY when you left no capture dated today with a data row
+    (Get-BrowserStoresToDrive in grocery\capture-policy-lib.ps1). Walmart and Aldi have no fallback at all.
+  - ALL FOUR STORES ARE YOURS EVERY DAY: Walmart, Sam's Club, Aldi, Fareway. "Fareway/Sam's only when 0800 failed"
+    below is retired.
+  - ONE TAB PER STORE, CONCURRENTLY. Do the setup yourself, then spawn one Agent per store in ONE message:
+      1. powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\chain-idle.ps1   (must print FREE)
+      2. powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\capture-policy.ps1 -Emit
+         (today's worklists; on a FULL RECAPTURE day, Brad asks for it: add -Full)
+      3. start grocery\capture-sink.ps1 ONCE, in the background (see constraint 2 below); every store posts to it.
+      4. Spawn the four store agents together. Give each ONLY its own store's section of PER-STORE METHOD below,
+         the three constraints of running in Brad's real profile, and these rules: call tabs_context_mcp, create
+         its OWN tab with tabs_create_mcp, work only in that tab, never touch another tab, close its tab at the end;
+         assert its store and In-Store/pickup mode before trusting a price; post the emitter's output UNALTERED to
+         the sink under the file name its builder reads; report rows captured, terms UNUSABLE and why.
+         Keep them mechanical and cheap: inject the committed pull agent, start the sweep as a background
+         promise, poll it, post the CSV. Never read product pages as text. A usage limit is what stopped this
+         task on 2026-09-13, and the stores went unread for six days.
+      5. When all four have reported, run the builders yourself, one store at a time (build-walmart-deals,
+         build-sams-deals, build-aldi-regular, select-fareway-shop then build-fareway-regular -ModeVerified):
+         they write out\regular and advance the shared cursor, so they do not run side by side.
+      6. Then the ad reads and the other items below, in their stated order, with what time is left.
+  - IF CHROME OR THE EXTENSION IS NOT CONNECTED: capture nothing, say so. The 08:00 driver covers Fareway and Sam's,
+    and the 10:30 watchdog pages "BROWSER CAPTURE MISSING TODAY" for the rest. Never launch an automated Chrome.
+
 STAGE TWO of the daily grocery pipeline: the browser work that a scheduled script physically cannot do.
+(Written when this task ran at 09:00, after the chain. The timing and scope in THE SHAPE above now win.)
 
 WHY YOU EXIST, IN ONE PARAGRAPH. Three Windows tasks own the pipeline (TC Grocery Ad Pulls 0700,
 Daily Capture 0800, Capture Watchdog 0930). They run PowerShell, and PowerShell can never reach

@@ -397,10 +397,22 @@ if ($browser.Count) {
       Write-Warning "browser driver unavailable (python or pull-browser-stores.py missing) - these stores fall back to the flag"
       $browserUndone += $drivable
     } else {
+      # BRAD'S CHROME FIRST (his ruling, 2026-09-19; Get-BrowserStoresToDrive in capture-policy-lib). The morning
+      # Claude task captures these stores in his own Chrome before this run; this driver only covers a store that
+      # task did not land today, and never overwrites its capture. The builders below still run for every store.
+      $capFiles = @{}
+      foreach ($s in $drivable) {
+        $k = $BROWSER_DRIVER_KEYS[$s]
+        $rel = if ($BROWSER_BUILDERS.ContainsKey($k)) { $BROWSER_BUILDERS[$k].In -f $todayS } else { "out\captures\$k-capture-$todayS.csv" }
+        $capFiles[$s] = Join-Path $root $rel
+      }
+      $chromePlan = Get-BrowserStoresToDrive -Stores $drivable -CaptureFiles $capFiles
+      foreach ($s in @($chromePlan.AlreadyCaptured)) { Write-Output ("browser: {0} already captured today in Brad's Chrome - not driven again" -f $s) }
       $storeArgs = @()
-      foreach ($s in $drivable) { $storeArgs += @('--store', $BROWSER_DRIVER_KEYS[$s]) }
+      foreach ($s in @($chromePlan.Drive)) { $storeArgs += @('--store', $BROWSER_DRIVER_KEYS[$s]) }
       Write-Output ''
-      Write-Output ("browser: driving " + ($drivable -join ', ') + " in Chrome")
+      if (@($chromePlan.Drive).Count -eq 0) { Write-Output "browser: every browser store was captured in Brad's Chrome today - the fallback driver is not needed" }
+      else { Write-Output ("browser: FALLBACK - driving " + (@($chromePlan.Drive) -join ', ') + " in the driver's own Chrome (not captured in Brad's Chrome today)") }
       # No 2>&1 - same EAP=Stop rule as the downstream call below.
       # TIMEOUT SIZED TO THE BIGGEST SLICE, NOT THE TYPICAL ONE (raised 10 -> 20, 2026-08-22).
       # "~7 terms a day" is the QUARTERLY ROTATION only. Expiring sales ride on top of it, and
@@ -416,8 +428,11 @@ if ($browser.Count) {
       # browser that no push can change; here it is asked right before the browser is relied on. A failed preflight
       # exits 2 with no capture file, and the per-store "did the capture land?" pass below already reports each store
       # as still outstanding - no new branch, the existing fallback.
-      $bpOut = & $py $driver @storeArgs '--date' $todayS '--timeout-min' '20' '--preflight'
-      $bpRc = $LASTEXITCODE
+      # No store left to drive means NO driver call: with no --store the driver would drive them all.
+      if ($storeArgs.Count) {
+        $bpOut = & $py $driver @storeArgs '--date' $todayS '--timeout-min' '20' '--preflight'
+        $bpRc = $LASTEXITCODE
+      } else { $bpOut = @(); $bpRc = 0 }
       foreach ($l in @($bpOut)) { Write-Output ("  " + $l) }
       Write-Output ("browser driver rc=$bpRc")
 

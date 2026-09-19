@@ -1697,6 +1697,33 @@ function Write-CaptureWorklist {
 # an `owned` map of store -> when it was first deferred TODAY, and this reads that. A flag with no
 # `owned` map (every flag written before this change) falls back to the file's mtime, which is the best
 # evidence those files carry and is never treated as newer than it is.
+# ---- BRAD'S CHROME FIRST, THE SCRIPT DRIVER ONLY AS A SAME-DAY FALLBACK (Brad's ruling, 2026-09-19) ------------
+# "All browser-needed stores should be using my Chrome": the grocery-browser-stores-refresh Claude task captures
+# Walmart, Sam's Club, Aldi and Fareway in Brad's own Chrome every morning, one tab per store, concurrently, BEFORE
+# the 08:00 chain. The 08:00 script driver (pull-browser-stores.py, its own Chrome profile) drives a store ONLY when
+# that store has no capture for today with at least one data row - so it never overwrites Brad's-Chrome capture with
+# its own smaller slice, and a day the Claude task missed (a usage limit, the app closed) still gets Fareway and
+# Sam's. Walmart and Aldi have no working fallback: they refuse the script driver.
+# A capture with no DATA row (only #tc-store / header lines, or empty) is not a landed capture.
+function Get-BrowserStoresToDrive {
+  param([string[]]$Stores, [hashtable]$CaptureFiles)
+  $drive = New-Object System.Collections.Generic.List[string]
+  $have = New-Object System.Collections.Generic.List[string]
+  foreach ($s in @($Stores)) {
+    $p = if ($CaptureFiles -and $CaptureFiles.ContainsKey($s)) { [string]$CaptureFiles[$s] } else { '' }
+    $rows = 0
+    if ($p -and (Test-Path -LiteralPath $p)) {
+      foreach ($ln in [IO.File]::ReadAllLines($p)) {
+        $t = $ln.Trim()
+        if (-not $t -or $t.StartsWith('#') -or $t -match '^q\|n\|') { continue }
+        $rows++; break
+      }
+    }
+    if ($rows -gt 0) { [void]$have.Add($s) } else { [void]$drive.Add($s) }
+  }
+  return [pscustomobject]@{ Drive = $drive.ToArray(); AlreadyCaptured = $have.ToArray() }
+}
+
 function Test-BrowserCaptureOwned {
   <# .SYNOPSIS  Is <Store> currently deferred to a browser owner, with the deferral still inside its
                 expiry window? .DESCRIPTION Reads out\browser-capture-due-*.flag. Returns $false for

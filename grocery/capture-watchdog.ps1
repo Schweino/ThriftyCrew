@@ -1046,6 +1046,24 @@ foreach ($f in ($flags | Where-Object { ((Get-Date) - $_.LastWriteTime).TotalDay
   try { Remove-Item $f.FullName -Force -ErrorAction SilentlyContinue } catch { }
 }
 
+# ---- 6a. DID EACH BROWSER STORE'S CAPTURE LAND TODAY? (2026-09-19, Brad's ruling) ------------------------------
+# Brad's own Chrome captures Walmart, Sam's Club, Aldi and Fareway every morning (the grocery-browser-stores-refresh
+# Claude task, one tab per store, concurrently), and the 08:00 driver falls back for Fareway and Sam's only. That task
+# stopped on 2026-09-13 on a usage limit and nothing noticed for six days; the board's defect rate doubled over the
+# same stretch. A same-morning check turns that into hours: at 10:30 every one of the four must have a capture DATED
+# TODAY holding at least one data row, or it is scheduled work that did not land. One finding naming the stores.
+if (-not (Get-Command Get-BrowserStoresToDrive -ErrorAction SilentlyContinue)) { . (Join-Path $root 'capture-policy-lib.ps1') }
+$bcFiles = @{
+  'Walmart'    = Join-Path $OutDir "captures\walmart-capture-$todayS.csv"
+  "Sam's Club" = Join-Path $OutDir "captures\sams-capture-$todayS.csv"
+  'Aldi'       = Join-Path $OutDir "captures\aldi-capture-$todayS.csv"
+  'Fareway'    = Join-Path $OutDir "fareway\fareway-shop-$todayS.jsonl"
+}
+$bcToday = Get-BrowserStoresToDrive -Stores @('Walmart', "Sam's Club", 'Aldi', 'Fareway') -CaptureFiles $bcFiles
+if (@($bcToday.Drive).Count) {
+  [void]$findings.Add(("BROWSER CAPTURE MISSING TODAY: " + (@($bcToday.Drive) -join ', ') + " - no capture dated $todayS with a data row. The morning Chrome task (grocery-browser-stores-refresh, Brad's Chrome) did not land them, and for Walmart and Aldi nothing else can. Check the task's last run in Claude Desktop, that Chrome is open with the extension connected, and the usage limit."))
+}
+
 
 # ---- 6b. IS ANYTHING STILL HOLDING THE RUN LOG MUTE? (2026-08-25) ------------------------------------
 # check-ad-cycles.ps1 already survives a locked ad-cycle-log.txt: it diverts the run's trail to a dated
