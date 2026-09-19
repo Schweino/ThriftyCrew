@@ -117,8 +117,9 @@ powershell -NoProfile -File grocery\adjudicate-blind-findings.ps1 -Findings groc
 It opens the key, auto-scores `match` only where the names agree AND the price is inside 3%, routes
 `reachable=no` and priceless rows to could-not-look and `not-sold` to missing, and writes every other row to
 `grocery\out\verification-review-D.csv`. For each review row, open the store's page for the BOARD's product
-(`board_item`) and decide, using the standard recorded in
-`grocery\out\verification-decisions-2026-08-15-notes.md` so this run's rate is comparable with the last:
+(`board_item`) and decide, using the rubric in the `## Adjudication standard` section of the newest
+`grocery\out\verification-decisions-*-notes.md` that has one (the seed below if none does yet), so this run's
+rate is comparable with the last:
 
 | Brad's word | Write in the decisions file | When |
 |---|---|---|
@@ -132,9 +133,51 @@ It opens the key, auto-scores `match` only where the names agree AND the price i
 A `match` or `ok` whose row carries no price the verifier read is RECORDED AS COULD-NOT-LOOK by the recorder
 (backlog I232): if you did not see a number, do not claim a pass.
 
-Write `grocery\out\verification-decisions-D.csv` (columns `ticket,verdict`) and a short
-`grocery\out\verification-decisions-D-notes.md` naming any rule you applied that the 2026-08-15 notes do not
-already state, then:
+**THE RUBRIC AND THE SUBCLASS ARE RECORDED, AND A RUN WITHOUT THEM CANNOT BE COMPARED** (2026-09-19, queue
+2026-09-19-641ec6). The 2026-09-17 run mailed "37.1% is above the last measured 18.2%" when 24 of its 36
+defects came from five rules the 2026-08-15 notes never stated: two numbers measured by different rules. So:
+
+1. Write `grocery\out\verification-decisions-D.csv` with columns `ticket,verdict,subclass`. EVERY defect row
+   (`wrong-price`, `wrong-size`, `wrong-product`, `missing`) carries a subclass, INCLUDING the rows the script
+   auto-scored `missing`: add those tickets to the file with verdict `missing` and their subclass (a decision
+   overrides an auto-score, so this changes nothing else). The recorder REFUSES the whole recording (exit 1,
+   nothing written) when a defect row has no subclass or one outside this list:
+
+   | subclass | when |
+   |---|---|
+   | `drift` | the board's product, at a different shelf price today, with no sale either way (price aging) |
+   | `channel` | the board's product cannot be bought in store there: ship-only, delivery-only, out of stock at the store |
+   | `not-listed` | the store does not list the board's product, while it sells the commodity |
+   | `not-cheapest` | a cheaper product that genuinely is the commodity is on the shelf |
+   | `identity` | the board's product is not the commodity (including a `missing` whose board row is another product) |
+   | `size` | the size or pack basis makes the per-unit wrong |
+   | `multi-buy` | a multi-buy offer read as the unit price, or not |
+   | `other` | anything else, and say what in the notes |
+
+2. Write `grocery\out\verification-decisions-D-notes.md`. Its rules live in ONE section headed exactly
+   `## Adjudication standard`: the rules only (no dates, no counts, no row examples), a `Rubric version: <n>`
+   line and a `Counted subclasses: <comma list>` line. COPY that section VERBATIM from the newest notes file
+   that has one. If you applied a rule it does not state, add the rule, add any subclass it counts, and raise the
+   version by one. The recorder hashes the body of that section: unchanged rules read the same hash, and that is
+   the only way two runs are compared as like for like. Coverage, row-by-row reasoning and anything dated go in
+   OTHER sections of the same file. If no notes file has the section yet, start from this seed (the 2026-08-15
+   rules plus the five the 2026-09-17 run stated):
+
+   ```
+   ## Adjudication standard
+   Rubric version: 1
+   Counted subclasses: drift, channel, not-listed, not-cheapest, identity, size, multi-buy, other
+   - ok: the board's product is the commodity, is the cheapest qualifying one, and its price is right. A live markdown the board does not carry, a flavour sibling at the identical size and price, and a near-tie inside 1% are all ok.
+   - not-cheapest: a cheaper product that genuinely is the commodity is on the shelf: wrong-price.
+   - drift: the board's product at a different shelf price today, with no sale either way: wrong-price.
+   - channel: a product that cannot be bought in store at that store is not its shelf price: missing when no in-store product of the commodity exists, wrong-price when the commodity is sold in store but the board's product is not.
+   - not-listed: a board product the store does not list, while the commodity is sold: wrong-price.
+   - size: a size the store does not sell (including the size of a different product in the same multi-product ad), or an online multipack: wrong-size.
+   - multi-buy: a multi-buy with no stated minimum counts as the unit price.
+   - identity: the board's product is not the commodity: wrong-product, or missing when the store sells no product of the commodity at all.
+   ```
+
+Then:
 
 ```
 powershell -NoProfile -File grocery\adjudicate-blind-findings.ps1 -Findings grocery\out\verification-findings-D.csv -Date D -Decisions grocery\out\verification-decisions-D.csv -Write
@@ -148,18 +191,28 @@ powershell -NoProfile -File grocery\record-sample-verdict.ps1 -VerdictFile groce
 
 Read the EXIT CODE first. 0 = recorded and a rate was quotable. 3 = recorded, but fewer than 30 cells were
 verified, so NO rate exists: say so, and do not invent one. 1 = bad input: fix the file and re-run (a
-re-record for the same board replaces the earlier one).
+re-record for the same board replaces the earlier one). A defect row with no subclass, or a subclass outside
+the list above, is exit 1 with the tickets named and NOTHING recorded: add the subclasses and re-run. The
+recorder also prints `rubric <hash> (version <n>, ...)`, or `NO RUBRIC RECORDED` when the notes have no
+`## Adjudication standard` section: fix the notes and re-run rather than record a run that can never be compared.
 
 It prints:
 - the `RATE-VS-LAST` line: this run's whole-board rate against the LAST MEASURED one (the previous
   whole-board run that verified 30 or more cells, each run alone, never pooled), each with its defects,
-  its verified denominator, its could-not-look count and its 95% interval. The last measured rate before
-  your first run is the 2026-08-15 board: 18.2% (95% CI 9.5% to 32.2%; 20 defects in 100 verified).
+  its verified denominator, its could-not-look count and its 95% interval, then the defects by subclass. The
+  last measured rate before your next run is the 2026-09-17 board: 37.1% (95% CI 24.2% to 52.0%; 36 defects
+  in 100 verified), recorded before rubrics existed.
+- `verdict=worse` or `not-worse` ONLY when both runs recorded the SAME rubric hash. Otherwise
+  `verdict=rubric-changed` (`why=differs`, or `why=not-recorded` when either run has no rubric, which is what
+  your first run after 2026-09-19 will read): the two whole-board rates are NOT compared, and `like_for_like=`
+  gives this run's rate counting only the subclasses the last rubric counted, or says why it cannot.
 - then the pooled report: crown rate, non-crown rate, and the population-reweighted WHOLE-BOARD rate.
 
 `-Alert` mails Brad (through `alert-lib.ps1`, which also files it in the triage queue) when this run's point
-estimate is above the last measured one, and the mail says whether the two intervals overlap. Do not send a
-second alert of your own.
+estimate is above the last measured one, and the mail says whether the two intervals overlap. Under a changed
+or unrecorded rubric the subject says `rubric changed` or `rubric not recorded` instead of "is above the last
+measured", and every mail carries the defects by subclass with their denominator. Do not send a second alert
+of your own.
 
 From your worktree the alert goes out through the MAIN checkout's `grocery\send-alert.ps1` (alert-lib routes
 it there since 2026-09-19): the mail credential, the triage queue, the once-a-day gate and `alert-log.txt`
@@ -208,7 +261,9 @@ Short, plain language, lead with the interval:
 - the whole-board defect rate AS AN INTERVAL with its denominator ("20 defects in 100 verified, 95% CI 9.5%
   to 32.2%"), and the crown rate separately
 - the RATE-VS-LAST verdict, and whether the intervals overlap. If they overlap, say plainly that the board
-  cannot be said to have changed
+  cannot be said to have changed. If it reads `rubric-changed`, say that first, give the like-for-like rate,
+  and name the rules that changed
+- the defects by subclass, with the verified denominator
 - whether the alert went out, in the recorder's own words (`ALERT accepted by send-alert` or `ALERT NOT SENT`)
 - every wrong-product and missing verdict, named with its store, as candidates for Brad's known-wrong ruling
 - the landed commit hash from `git log origin/main --oneline -3`

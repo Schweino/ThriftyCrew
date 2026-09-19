@@ -6439,6 +6439,10 @@ else {
       $fcRc = $LASTEXITCODE
       if ($fcRc -eq 1 -and $fcOut -match 'FEEDCOV-COMPLETE') {
         Ok 'feed-covers-published REFUSES a feed with pricing_inputs stripped end to end (exit 1) and still reports completion'
+      } elseif ($fcRc -eq 3 -and $fcOut -match 'FEEDCOV-COMPLETE could not evaluate') {
+        # A could-not-look is never a pass and never a failure (2026-09-19): a checkout with the feed and no published
+        # set cannot ask the question, and the guard says so in its own marker. Counted, named, and not a pass.
+        Skip ('feed-covers-published end-to-end refusal (the guard could not evaluate here: ' + (($fcOut -split "`n" | Where-Object { $_ -match 'FEEDCOV' } | Select-Object -Last 1) -replace '\s+$', '') + ')')
       } else { Bad ("feed-covers-published did NOT refuse a feed stripped of pricing_inputs (exit $fcRc) - the check that a live card can be priced is not actually firing") }
     } catch { Bad ('feed-covers-published end-to-end refusal could not be evaluated: ' + $_.Exception.Message) }
     finally { Remove-Item $fcTmp -Force -ErrorAction SilentlyContinue }

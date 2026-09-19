@@ -80,6 +80,12 @@ grocery/out/capture-evictions-stamp.json
 # 2026-09-19: 1 of 76 worktrees under .claude\worktrees held a copy. About 800 KB. Rebuilt in place under
 # the same name by grocery\export-feed.ps1, so a re-seed REFRESHES a copy the source has rewritten since.
 grocery/out/smp-feed.json
+# AND THE PUBLISHED SET IT IS JUDGED AGAINST (2026-09-19, the same day). feed-covers-published asks whether every
+# PUBLISHED card can be priced from that feed, so a checkout holding the feed and not the published set exits 3
+# ("no published set") - and test-auditors' stripped-feed live twin, which runs whenever the feed is present, read
+# that 3 as the guard not firing and refused every worktree push seeded after the entry above. Gitignored, small,
+# and rewritten by every publish, so a re-seed refreshes it.
+meal-prep/db/published-hashes.json
 
 # ---- WHAT THIS FILE CANNOT FIX ------------------------------------------------------------------
 # Two of the six worktree failures are not missing data and no entry here will help, because both are
