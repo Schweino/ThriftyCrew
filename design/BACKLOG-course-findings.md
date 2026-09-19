@@ -15798,7 +15798,7 @@ each), and the branch build logs `not-carried: 0 of 24 entr(y/ies) trusted and s
 Family Fare regular pulls, and moving `audit-coverage-gaps.ps1:319` onto the lib, is filed through the inbox as
 `design\backlog-inbox\run0919-second-wording.md`.
 
-### I222 - Reader-facing: per-pound prices read as per-each, and multi-packs priced as one each `NEEDS A RULING` `run-0919` `1-WAY` `RUNG1 RULING`
+### I222 - Reader-facing: per-pound prices read as per-each, and multi-packs priced as one each `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15868,6 +15868,18 @@ entries and 0 of 572 cheapest-store verdicts**:
 - **B. Land it and pin the Aldi pudding row** first by reading Aldi's page for its real pack, so the rule's one
   uncertain casualty is settled either way before it ships.
 - **C. Leave it**: the eggplant entry keeps publishing $1.82 each from a $1.82/lb capture; it is not a crown today.
+
+**Done 2026-09-19.** Board half landed on Brad's approval 2026-09-19 (option A, given in chat). The held branch
+was rebased onto origin/main at f4e50313b with no conflict and re-verified there before landing (the commits main gained after that,
+up to cbf146ee8, touch neither `pricing-math-lib.ps1` nor `compare-deals.ps1`):
+`compare-deals -SelfTest` exit 0 with all 7 I222 cases ok, `test-match-lib` exit 0 (`MATCH-LIB-COMPLETE
+names=42777 divergences=0`). Both arms rebuilt again on the seeded 2026-09-17 inputs (`-OutName`, `-NoIdentity`,
+old arm on origin/main's `pricing-math-lib.ps1`, restored md5-identical after): the old arm matches the live
+`comparison-2026-09-17.json` in 0 changed of 3,189 store entries and 0 of 572 verdict fields; the new arm drops
+exactly the two approved entries (eggplant | Walmart $1.82 and pudding-cups | Aldi $0.98, both `per-each marker`
+over a weight-only size), adds 0, changes 0 other entries, and moves 0 of 572 cheapest-store or no-membership
+verdicts. Landed blobs: `grocery/pricing-math-lib.ps1` `8c8aa5f524f8`, `grocery/compare-deals.ps1`
+`23af39363f81`. The effect reaches readers at the next board build.
 
 ### I223 - Fareway's selector drops the sale end date, so sale dating never fires on the daily capture `DONE` `run-0919`
 

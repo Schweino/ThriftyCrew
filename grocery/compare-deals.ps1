@@ -747,6 +747,16 @@ if ($SelfTest) {
   _Near 'per-each marker + "24 Pack" in NAME -> /24'    (Get-UnitPrice (_D '$3.87 each' 'Bottled Water 24 Pack' $null 'each') (_C 'each')).unit_price 0.16125 0.0005
   _Near 'per-each marker + "24 ct" in SIZE -> /24'      (Get-UnitPrice (_D '$3.87 each' 'Bottled Water' $null '24 ct') (_C 'each')).unit_price 0.16125 0.0005
   _Near 'per-each marker, no pack anywhere -> per-each' (Get-UnitPrice (_D '$3.87 each' 'Bottled Water' $null 'each') (_C 'each')).unit_price 3.87 0.001
+  # --- 11d3: A PER-EACH MARKER IN THE NAME DOES NOT MAKE A PER-POUND PRICE PER EACH (2026-09-18, backlog I222) --
+  # The founding row, frozen from walmart-capture-2026-08-31.csv: "Fresh Purple Eggplant, Each | $1.82 | $1.82/lb",
+  # reaching the builder's output as size "lb". The marker came from the NAME and priced $1.82 each.
+  _Null 'MUST FIRE  Walmart "Fresh Purple Eggplant, Each" $1.82 size lb is UNPRICED, not $1.82 each' (Get-UnitPrice (_D '$1.82' 'Fresh Purple Eggplant, Each' $null 'lb') (_C 'each'))
+  _Null 'MUST FIRE  the 2026-07-25 sighting of the same eggplant, size "1 lb", is UNPRICED too'      (Get-UnitPrice (_D '$1.82' 'Fresh Purple Eggplant, Each' $null '1 lb') (_C 'each'))
+  _Null 'MUST FIRE  Walmart "Fresh Pickling Cucumbers, Each" $1.56 size lb is UNPRICED'             (Get-UnitPrice (_D '$1.56' 'Fresh Pickling Cucumbers, Each' $null 'lb') (_C 'each'))
+  _Near 'CLEAN TWIN  a weight_is_one_unit loaf named "..., Each" at 14 oz still prices one loaf'     (Get-UnitPrice (_D '$1.47' 'French Bread Loaf, Each' $null '14 oz') (_CW 'each')).unit_price 1.47 0.001
+  _Near 'CLEAN TWIN  Walmart "Fresh Cantaloupe, Each" $2.50 size each still prices $2.50 each'       (Get-UnitPrice (_D '$2.5' 'Fresh Cantaloupe, Each' $null 'each') (_C 'each')).unit_price 2.5 0.001
+  _Near 'CLEAN TWIN  a price text that itself says each ("$2.99 each") still wins over a lb size'   (Get-UnitPrice (_D '$2.99 each' 'Cantaloupe' $null 'lb') (_C 'each')).unit_price 2.99 0.001
+  _Near 'CLEAN TWIN  the same "$1.82" row on a POUND commodity still prices $1.82/lb'                (Get-UnitPrice (_D '$1.82 lb' 'Fresh Purple Eggplant, Each' $null 'lb') (_C 'lb')).unit_price 1.82 0.001
   # the decimal in "$3.87 each" must never be read as an 87-pack (Get-PackCount's lookbehind)
   if ($null -eq (Get-PackCount '$3.87 each')) { Write-Output 'ok    "$3.87 each" is not an 87-pack' } else { Write-Output 'FAIL  Get-PackCount read "$3.87 each" as a pack count'; $script:fail++ }
   # a pack_is_package commodity keeps the package price even with the marker (the garlic-bread ruling)

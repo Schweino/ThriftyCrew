@@ -648,7 +648,24 @@ function Get-UnitPrice($deal, $cat) {
   # $3.87/each against a true $0.161 (pu-lib step 5 already divided the same row by the name's pack count,
   # so the two copies of this math disagreed - the parity test's whole reason to exist). Plain prices only,
   # and never for a pack_is_package commodity, exactly as the plain path below decides it.
+  # A PER-EACH MARKER IN THE NAME DOES NOT MAKE A PER-POUND PRICE PER EACH (2026-09-18, backlog I222).
+  # Walmart sells weighed produce under names ending ", Each" and writes the size as a weight when its own
+  # unit price is the shelf price per pound: "Fresh Purple Eggplant, Each | $1.82 | $1.82/lb"
+  # (walmart-capture-2026-08-31.csv) reached the board as $1.82 EACH with size "lb", and the 2026-07-25
+  # sighting of the same product carries "1 lb". The marker was read out of the NAME and returned before
+  # anything looked at the size. The same shape as the per-lb rule above: the NAME says one thing, the size
+  # field says a weight, and the price text says neither. So a name-only marker over a WEIGHT-ONLY size does
+  # not take this branch: the row falls to the plain each branch below, which prices a weight as one unit only
+  # for a commodity that declares weight_is_one_unit (Brad's 2026-09-06 ruling: a 14 oz loaf is one loaf, a
+  # pound of produce is an unknown number of items) and otherwise refuses it. A price text that itself says
+  # each ("$2.99 each") is the store's own statement about the priced unit and still takes this branch.
+  $nameOnlyEachOverWeight = $false
   if ($unit -eq 'each' -and $pr.kind.pereach) {
+    $weightOnlySize = [regex]::IsMatch(("" + $deal.size_text), '(?i)^\s*(?:/|per|a)?\s*(?:\d+(?:\.\d+)?\s*)?(?:lbs?|pounds?|oz|ounces?|kg)\.?\s*$')
+    $eachInPrice = ((ConvertTo-DigitNumerals ("" + $deal.price_text)) -match '(?i)(per\s*ea|/\s*ea|\bea\.?\b|\beach\b)')
+    $nameOnlyEachOverWeight = ($weightOnlySize -and -not $eachInPrice)
+  }
+  if ($unit -eq 'each' -and $pr.kind.pereach -and -not $nameOnlyEachOverWeight) {
     if ($pr.note -eq '' -and -not ($cat.PSObject.Properties['pack_is_package'] -and $cat.pack_is_package)) {
       # SAME EITHER/OR REFUSAL AS THE BRANCH BELOW (2026-08-31, queue 2026-08-31-8018b5). This was the THIRD
       # place in this function that reads a pack count and the only one with no guard at all, so the whole
