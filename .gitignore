@@ -244,6 +244,9 @@ __pycache__/
 # Ignored rather than merely untracked so `git clean -fd` cannot delete them either.
 /grocery/out/friday-email.stamp
 /grocery/out/friday-email.invoking
+# the price-alert send's invoking marker (2026-09-18, backlog I224): the items whose publish PUT went out and
+# never recorded that it finished. Machine-local for the same reason as the two Friday records above.
+/grocery/out/price-alerts.invoking.json
 /grocery/out/smp-feed.json
 /grocery/out/recipe-board-everyday.bak-*.json
 # rolling local archive of aged out\ snapshots (run-daily-local.ps1 retention moves files in and later
