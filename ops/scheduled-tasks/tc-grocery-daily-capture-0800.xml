@@ -39,8 +39,8 @@
   </Triggers>
   <Actions Context="Author">
     <Exec>
-      <Command>C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
-      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-run.ps1" -Kind daily</Arguments>
+      <Command>C:\WINDOWS\System32\conhost.exe</Command>
+      <Arguments>--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-run.ps1" -Kind daily</Arguments>
     </Exec>
   </Actions>
 </Task>

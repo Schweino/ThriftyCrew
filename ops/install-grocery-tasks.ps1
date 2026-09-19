@@ -115,6 +115,32 @@ function Test-NameMatchesTime {
   return ("named {0} but its trigger is {1}" -f $claimed, $actual)
 }
 
+function Test-HeadlessDefinition {
+  <# Does a committed task definition launch its console program through `conhost.exe --headless`? Returns ''
+     when it does or when it runs no console program at all (pythonw.exe), or the reason it does not.
+
+     WHY (2026-09-18, backlog I236). Brad saw a console flash every 15 minutes: `powershell.exe -WindowStyle
+     Hidden` under an Interactive logon still shows a window for about a second before it hides. That day every
+     PowerShell TC task was rewrapped ON THE SCHEDULER as Execute = conhost.exe, Arguments = `--headless
+     "<powershell.exe>" <the original arguments>`, and the committed XML was not touched, so -Verify went red on
+     all three tasks this file owns, and a registrar re-run from its old definition would have silently brought the
+     flash back (memory scheduled-tasks-run-under-headless-conhost). This check reads the FILES, so it runs in the
+     gate on a bare checkout and fails the push that commits an unwrapped definition, whoever exported it.
+     The console programs named here are the ones a TC task has launched; a new one is added here, not guessed. #>
+  param([Parameter(Mandatory=$true)][string]$Xml)
+  $cmd  = [System.Net.WebUtility]::HtmlDecode((Get-XmlField -Xml $Xml -Tag 'Command'))
+  $argText = [System.Net.WebUtility]::HtmlDecode((Get-XmlField -Xml $Xml -Tag 'Arguments'))
+  $leaf = ([IO.Path]::GetFileName($cmd.Trim('"'))).ToLowerInvariant()
+  if ($leaf -eq 'conhost.exe') {
+    if ($argText -match '^--headless\s+"[^"]+"\s') { return '' }
+    return ("runs conhost.exe without '--headless ""<program>""' first, so it opens a console: '{0}'" -f $argText)
+  }
+  if (@('powershell.exe', 'pwsh.exe', 'python.exe', 'cmd.exe') -contains $leaf) {
+    return ("launches {0} directly, which flashes a console window even with -WindowStyle Hidden; wrap it: Command conhost.exe, Arguments --headless ""{1}"" <arguments>" -f $leaf, $cmd)
+  }
+  return ''
+}
+
 $REGISTRY = Join-Path $repo 'grocery\expected-automations.json'
 
 function Get-CommittedTaskNames {
@@ -372,8 +398,43 @@ if ($SelfTest) {
     T 'MUST NOT FIRE every committed definition in this tree is named in expected-automations.json' ($lf.Count -eq 0) ($lf -join '; ')
   }
 
+  # ---- the conhost --headless wrapper (2026-09-18, backlog I236) -----------------------------------------------
+  # MUST FIRE, FROZEN FROM THE COMMITTED 0800 DEFINITION AS IT STOOD ON 2026-09-18 while the live task had been
+  # rewrapped: powershell.exe launched directly, the shape that flashed a console every run.
+  $unwrapped = '<Task><Actions><Exec><Command>C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe</Command><Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-run.ps1" -Kind daily</Arguments></Exec></Actions></Task>'
+  $h1 = Test-HeadlessDefinition -Xml $unwrapped
+  T 'MUST FIRE  a definition launching powershell.exe directly is reported (the pre-wrap 0800 file)' ($h1 -like '*launches powershell.exe directly*') $h1
+  $bareNightly = '<Task><Actions><Exec><Command>powershell.exe</Command><Arguments>-WindowStyle Hidden -File "x.ps1"</Arguments></Exec></Actions></Task>'
+  $h2 = Test-HeadlessDefinition -Xml $bareNightly
+  T 'MUST FIRE  a bare powershell.exe with no path (the pre-wrap nightly file) is reported too' ($h2 -like '*launches powershell.exe directly*') $h2
+  $noFlag = '<Task><Actions><Exec><Command>C:\WINDOWS\System32\conhost.exe</Command><Arguments>"powershell.exe" -File "x.ps1"</Arguments></Exec></Actions></Task>'
+  $h3 = Test-HeadlessDefinition -Xml $noFlag
+  T 'MUST FIRE  conhost.exe without --headless opens a console and is reported' ($h3 -like '*without*--headless*') $h3
+  $wrapped = '<Task><Actions><Exec><Command>C:\WINDOWS\System32\conhost.exe</Command><Arguments>--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-run.ps1" -Kind daily</Arguments></Exec></Actions></Task>'
+  $h4 = Test-HeadlessDefinition -Xml $wrapped
+  T 'MUST NOT FIRE  the wrapped 0800 definition as the live scheduler runs it is silent' ($h4 -ceq '') $h4
+  $pyw = '<Task><Actions><Exec><Command>C:\Codex\Python312\pythonw.exe</Command><Arguments>"x.py"</Arguments></Exec></Actions></Task>'
+  $h5 = Test-HeadlessDefinition -Xml $pyw
+  T 'MUST NOT FIRE  pythonw.exe has no console, so an unwrapped pythonw definition is silent' ($h5 -ceq '') $h5
+  # MUST NOT FIRE: the drift check this file already did still reads a wrapped definition - the wrapper moves the
+  # -WindowStyle Hidden flag behind --headless "<exe>", and the lost-Hidden check must still see it there.
+  $wLive = [pscustomobject]@{
+    Actions  = @([pscustomobject]@{ Execute = 'C:\WINDOWS\System32\conhost.exe'; Arguments = '--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\grocery\capture-run.ps1" -Kind daily' })
+    Triggers = @()
+  }
+  $wd = Compare-TaskToXml $wLive $wrapped
+  T 'MUST NOT FIRE  a live wrapped task matching its wrapped file compares equal, Hidden flag and all' ($wd.Count -eq 0) ($wd -join '; ')
+  # MUST NOT FIRE against the REAL committed directory: every definition shipped in this tree is headless.
+  $hFiles = @(Get-ChildItem -Path $XMLDIR -Filter '*.xml' -File -ErrorAction SilentlyContinue)
+  $hFind = @()
+  foreach ($hf in $hFiles) {
+    $r = Test-HeadlessDefinition -Xml ([IO.File]::ReadAllText($hf.FullName))
+    if ($r) { $hFind += ($hf.Name + ': ' + $r) }
+  }
+  T ('MUST NOT FIRE  every committed definition in this tree runs headless (' + $hFiles.Count + ' read)') (($hFiles.Count -ge 5) -and ($hFind.Count -eq 0)) ('read=' + $hFiles.Count + ' ' + ($hFind -join '; '))
+
   if ($fail -gt 0) { Write-Output ("SELF-TEST FAIL: {0} case(s)" -f $fail); Write-GuardComplete -Name 'grocery-tasks' -Summary ("selftest-fail={0}" -f $fail); exit 2 }
-  Write-Output 'SELF-TEST PASS: drift on arguments and on time, the lost-Hidden case, the 0930 name lie and its twins, the committed definitions, the registrar-vs-registry agreement (frozen half-applied rename + the live tables), and the WIDENED set - a committed definition from another lane''s registrar that the registry does not name, frozen from the estate''s real 2026-08-22..08-25 state'
+  Write-Output 'SELF-TEST PASS: drift on arguments and on time, the lost-Hidden case, the conhost --headless wrapper on every committed definition, the 0930 name lie and its twins, the committed definitions, the registrar-vs-registry agreement (frozen half-applied rename + the live tables), and the WIDENED set - a committed definition from another lane''s registrar that the registry does not name, frozen from the estate''s real 2026-08-22..08-25 state'
   Exit-Guard -Name 'grocery-tasks' -Summary 'selftest=pass' -Code 0
 }
 

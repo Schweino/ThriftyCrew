@@ -16073,7 +16073,7 @@ prices, so the first rung is to measure what they would change. Related: `import
 `observed_at` from the file name, so `fareway-shop-rescue-2026-09-10.json` stored 8 rows with
 `observed_at='rescue-2026-09-10'` (the freshness clock already treats it as future, so it is not fooled).
 
-### I236 - Committed task XML disagrees with the registered tasks, and one live task is not in the automation registry `OPEN` `run-0919` `2-WAY` `RUNG1 READ`
+### I236 - Committed task XML disagrees with the registered tasks, and one live task is not in the automation registry `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings-2.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16084,6 +16084,49 @@ prices, so the first rung is to measure what they would change. Related: `import
   `grocery/expected-automations.json` (I225).
 - Graph nightly repeats hourly 21:30 to 05:30 with a 3 h limit; only `-HardStop 06:30` keeps the 05:30 launch
   out of the 07:00 capture, and whether the in-flight stage actually stops is unchecked (I213).
+
+**Worked 2026-09-18; bullets 1 and 2 are done, bullet 3 is answered and leaves one question for Brad.**
+(1) The XML was not wrong on three tasks but on TEN: every PowerShell definition in `ops/scheduled-tasks` still
+launched `powershell.exe` directly while the live task ran `conhost.exe --headless "<powershell.exe>" <args>` (read
+with `Get-ScheduledTask`, nothing registered or changed). Each file's `<Command>` and `<Arguments>` were rewritten from
+the live action and nothing else moved (10 files, 2 lines each; `tc-approvals-page.xml` runs pythonw and was left
+alone). `ops/install-grocery-tasks.ps1 -Verify` went from exit 2, 6 findings, to exit 0, 0 findings over its 3 tasks.
+The process half: `Test-HeadlessDefinition` in that script, and its self-test now fails any committed definition that
+launches powershell.exe, pwsh.exe, python.exe or cmd.exe directly, or conhost without `--headless` (3 MUST FIRE,
+3 MUST NOT FIRE, one of them that the wrapped file still compares equal to the live task, and a case over the real
+directory, 11 read). The two registrars that build their own action, `graph/pipeline/install-nightly-task.ps1` and
+`meal-prep/pipeline/install-harvest-task.ps1`, now build the wrapped one, so a re-run cannot bring the flash back;
+`ops/run-once-a-day.ps1`'s binding case peels the wrapper before it binds, as conhost does. Broken once each: the
+0800 file reverted to its committed shape turned the real-directory case red (exit 2, 1 case); the check neutered
+turned the 3 MUST FIRE red; the peel removed turned run-once-a-day red (6 of 23). Restored md5-identical, all green:
+install-grocery-tasks 39 lines exit 0, run-once-a-day 23 of 23, install-nightly-task 11, install-harvest-task 10,
+audit-task-registration 20, install-ops-tasks 28, audit-run-log-claims exit 0.
+(2) Already shipped before this run: the row and the committed definition landed in ca0625cd3 and 7f7af2e99. A
+heartbeat run without `-Alert` from this worktree reads `ok TC Approvals Page currently running (OK)` and no TASK
+UNWATCHED line (it exited 2 on worktree-only outputs and on `TC Recipe Harvest Crawl` 35.7 h stale, none of them this).
+(3) **A stage in flight at the deadline IS stopped.** `Invoke-Stage` waits with a timeout and then kills the whole
+process tree (`Stop-Tree`), and every stage after `serve` takes its timeout from what is left of the window: stage1,
+the packet, gold, the score, lint and rejection-families are gated on 120 s to 1,200 s left and budgeted at most
+`Remaining - 60`, and ml-eval at `Min(1800, Remaining)`. The worst card-holding overrun is resolve's 60 s floor
+(`Max(60, Remaining - 240)`) plus `Stop-Llama`'s 45 s wait, so well inside 07:00. The seven stages before the sweep
+have fixed budgets (120 + 180 + 300 + 300 + 300 + 300 + 120 = 1,620 s) but hold no card. Nothing was changed.
+**The hole is a start AFTER 06:30, not a stage.** `Resolve-Deadline` reads a HardStop already past as TOMORROW's, so a
+launch at 07:12 gets `start + 150 min` = 09:42, through the 07:00 ad pull and the 08:00 capture, holding 13 GB of
+card. It happens: of 67 transcript starts from 2026-09-06 to 2026-09-18, 9 began between 06:30 and 21:30 (07:31 and
+08:03 on 09-09, hand `-WhatIfOnly` and `-StopOnly`; 07:12 to 13:12 hourly on 09-17, the repetition re-anchored at a 05:12 StartWhenAvailable
+catch-up). All nine were skipped or no-op only because that night's resolve had already completed; a night that
+refused or crashed before resolve would have run at 07:12 for 150 minutes. Fixing this changes when graph verdicts
+are produced, so it was recorded and not fixed.
+
+**RULING NEEDED: what should a nightly launch between 06:30 and 21:30 do?**
+- (a) Refuse it: a start inside the daytime gap records `window REFUSED` and exits, and the night is picked up at
+  21:30. One pure branch in `Resolve-Deadline`/`Test-WindowUsable`, fixtured with a 07:12 MUST FIRE and a 05:12
+  CLEAN TWIN. **Recommended**: it makes the header's promise ("it will not run past its deadline") true for every
+  start, and a lost night already costs only one day of verdicts.
+- (b) Allow a daytime run only between 09:00 and 21:30, after both captures, with the same 150-minute budget.
+  Recovers a lost night the same day, at the cost of a second protected window to keep correct.
+- (c) Leave it: a daytime run happens only on a night whose resolve never completed, which the record shows 0 times
+  so far: of the 9 daytime starts, 2 were those hand verbs and 7 were skipped.
 
 ### I237 - Push and gate papercuts that cost every session a retry `DONE` `run-0919`
 

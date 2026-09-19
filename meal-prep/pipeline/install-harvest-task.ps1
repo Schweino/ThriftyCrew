@@ -177,8 +177,12 @@ if ($notWatched) {
 }
 Write-Output ("install-harvest-task: watch entry OK for '{0}'" -f $TASK)
 
-$action  = New-ScheduledTaskAction -Execute 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe' `
-                                   -Argument ('-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}"' -f $script)
+# THROUGH conhost.exe --headless (2026-09-18, backlog I236): powershell.exe -WindowStyle Hidden still flashes a console
+# for about a second under an Interactive logon. The live task was rewrapped that day; ops\install-grocery-tasks.ps1's
+# self-test fails any committed definition that launches powershell.exe directly, so a re-run exporting the old shape
+# cannot be pushed.
+$action  = New-ScheduledTaskAction -Execute 'C:\WINDOWS\System32\conhost.exe' `
+                                   -Argument ('--headless "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{0}"' -f $script)
 $trigger = New-ScheduledTaskTrigger -Daily -At $At
 # HOURLY CATCH-UP INSIDE A 6-HOUR WINDOW (2026-09-10, queue 2026-09-10-2b79d3). A one-occurrence daily trigger on an
 # Interactive task is unrunnable when a Windows Update restart lands before a sign-in, and StartWhenAvailable does not

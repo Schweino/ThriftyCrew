@@ -221,7 +221,12 @@ if ($SelfTest) {
       'param([string]$Key = '''', [string]$Exe = '''', [string]$ArgLine = '''', [string]$StampDir = '''', [string]$Today = '''')' + "`r`n" +
       '[Console]::Out.Write((ConvertTo-Json -Compress -InputObject ([ordered]@{ Key = $Key; Exe = $Exe; ArgLine = $ArgLine })))' + "`r`n"), $utf8)
     function Get-EchoedBinding([string]$Arguments) {
-      $swapped = [regex]::Replace($Arguments, '-File\s+"[^"]*\\run-once-a-day\.ps1"', ('-File "' + $echoPs1.Replace('$', '$$') + '"'))
+      # THE CONHOST WRAPPER IS PEELED FIRST (2026-09-18, backlog I236). Every definition now runs as conhost.exe
+      # --headless "<powershell.exe>" <arguments>, and conhost hands powershell.exe exactly the <arguments> part, so
+      # that part is what gets bound here. Only a wrapper naming a powershell.exe is peeled: anything else is left
+      # whole and fails to bind, which is the red a definition wrapping some other program should get.
+      $Arguments = [regex]::Replace($Arguments, '^--headless\s+"[^"]*\\?powershell\.exe"\s+', '')
+      $swapped = [regex]::Replace($Arguments,'-File\s+"[^"]*\\run-once-a-day\.ps1"', ('-File "' + $echoPs1.Replace('$', '$$') + '"'))
       $e = Invoke-Hidden $psExe $swapped
       try { return ($e.out | ConvertFrom-Json) } catch { return $null }
     }

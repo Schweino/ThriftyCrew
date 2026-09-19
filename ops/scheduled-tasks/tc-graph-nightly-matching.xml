@@ -38,8 +38,8 @@
   </Triggers>
   <Actions Context="Author">
     <Exec>
-      <Command>powershell.exe</Command>
-      <Arguments>-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\graph\pipeline\nightly.ps1" -HardStop 06:30 -MaxMinutes 150</Arguments>
+      <Command>C:\WINDOWS\System32\conhost.exe</Command>
+      <Arguments>--headless "powershell.exe" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Codex\ThriftyCrew\graph\pipeline\nightly.ps1" -HardStop 06:30 -MaxMinutes 150</Arguments>
     </Exec>
   </Actions>
 </Task>
