@@ -259,6 +259,51 @@
   ],
   "allowed_subsets": [
     {
+      "file": "test-capture-policy.ps1",
+      "contains": "-eq \"Aldi,Fareway,Sam's Club,Walmart\"",
+      "reason": "the LIVE assertion that stores.json's browser surfaces derive exactly the four stores capture-watchdog used to name by hand; it pins today's expected answer on purpose. Queue 2026-09-19-405c73"
+    },
+    {
+      "file": "capture-policy-lib.ps1",
+      "contains": "'Walmart' = 487; \"Sam's Club\" = 388; 'Fareway' = 144; \"Baker's\" = 598",
+      "reason": "measured full-run caps for the four stores that have completed one clean full run; Get-FullRunCap falls back to Get-StoreCallCap for every other store (Aldi and Family Fare never finished a clean run; Hy-Vee rotates by product id). Queue 2026-09-19-405c73"
+    },
+    {
+      "file": "compare-deals.ps1",
+      "contains": "(_X 'Hy-Vee' 1.99 $false), (_X \"Baker's\" 1.99 $false)",
+      "reason": "frozen collard-greens founding case in the -SelfTest: Select-CrossStoreRank orders by price, then membership, then store NAME as a string; it never branches on which store. Registered here because compare-deals.ps1 is a money-lane file. Queue 2026-09-19-405c73"
+    },
+    {
+      "file": "compare-deals.ps1",
+      "contains": "(_X 'Walmart' 0.11 $false), (_X \"Sam's Club\" 0.10 $true), (_X 'Aldi' 0.12 $false)",
+      "reason": "frozen membership tie-break clean twin in the -SelfTest: the rank reads price and the membership flag, never the store. Registered here because compare-deals.ps1 is a money-lane file. Queue 2026-09-19-405c73"
+    },
+    {
+      "file": "derive-not-carried.ps1",
+      "contains": "{\"id\":\"achiote-paste\",\"stores\":[{\"store\":\"Hy-Vee\"}]}",
+      "reason": "fixture board JSON in the -SelfTest: the derivation asks whether Baker's priced each commodity and never branches on the other stores named. Queue 2026-09-19-405c73"
+    },
+    {
+      "file": "not-carried-lib.ps1",
+      "contains": "Get-TcNotCarriedStores $m.Map 'pork-tenderloin' @('Walmart', 'Hy-Vee')",
+      "reason": "Get-TcNotCarriedStores self-test case: the priced-store list is the input the lookup subtracts, and the lookup never branches on store name. Queue 2026-09-19-405c73"
+    },
+    {
+      "file": "provenance-contract-lib.ps1",
+      "contains": "stores.json pins Hy-Vee 1466, Walmart 5361",
+      "reason": "a PREMISE case asserting the three PINNED store identities (Hy-Vee, Walmart, Fareway); only pinned stores have an id to assert, so the other four have nothing to name. Queue 2026-09-19-405c73"
+    },
+    {
+      "file": "test-capture-policy.ps1",
+      "contains": "Get-BrowserStoresToDrive -Stores @(\"Sam's Club\", 'Fareway', 'Walmart')",
+      "reason": "already-captured fixture for Get-BrowserStoresToDrive: one captured store, one empty file, one missing file; the function reads the file per store and never branches on which store. Queue 2026-09-19-405c73"
+    },
+    {
+      "file": "test-capture-policy.ps1",
+      "contains": "-eq 'Fareway,Walmart'",
+      "reason": "the assertion of the same already-captured fixture (the expected drive list). Queue 2026-09-19-405c73"
+    },
+    {
       "file": "audit-sale-fallback.ps1",
       "contains": "$browser = @(",
       "reason": "deliberately excludes Family Fare - the only store whose gaps self-heal headless"

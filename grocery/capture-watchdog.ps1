@@ -1059,7 +1059,9 @@ $bcFiles = @{
   'Aldi'       = Join-Path $OutDir "captures\aldi-capture-$todayS.csv"
   'Fareway'    = Join-Path $OutDir "fareway\fareway-shop-$todayS.jsonl"
 }
-$bcToday = Get-BrowserStoresToDrive -Stores @('Walmart', "Sam's Club", 'Aldi', 'Fareway') -CaptureFiles $bcFiles
+# The four stores come from stores.json (pull_profile.surface 'browser...'), never a copy here (queue 2026-09-19-405c73).
+$bcStores = Get-BrowserSurfaceStores -Root $root
+$bcToday = Get-BrowserStoresToDrive -Stores $bcStores -CaptureFiles $bcFiles
 if (@($bcToday.Drive).Count) {
   [void]$findings.Add(("BROWSER CAPTURE MISSING TODAY: " + (@($bcToday.Drive) -join ', ') + " - no capture dated $todayS with a data row. The morning Chrome task (grocery-browser-stores-refresh, Brad's Chrome) did not land them, and for Walmart and Aldi nothing else can. Check the task's last run in Claude Desktop, that Chrome is open with the extension connected, and the usage limit."))
 }

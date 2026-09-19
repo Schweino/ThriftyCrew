@@ -500,6 +500,7 @@ try {
       'print(json.dumps(out))'
     )
     [IO.File]::WriteAllText($rtProbe, ($rtLines -join "`n"), (New-Object Text.UTF8Encoding($false)))
+    # store-subset-ok: rotation-probe store-to-slug table; the probe drives Get-CaptureWorklist per store and never branches on which store
     $rtStores = [ordered]@{ 'Fareway' = 'fareway'; "Sam's Club" = 'samsclub'; 'Family Fare' = 'familyfare' }
     # A sale expiry per store, so each list is longer than one pair and Fareway's carries both terms of ONE
     # commodity: a reader that paired by the wrong index could not pass on a single pair.
@@ -548,12 +549,21 @@ try {
   $liveCs = Join-Path $root 'commodity-search.json'
   $liveN = 0
   foreach ($p in (ConvertFrom-Json ([IO.File]::ReadAllText($liveCs))).terms.PSObject.Properties) { if ($p.Value -is [array]) { $liveN += @($p.Value).Count } else { $liveN++ } }
-  $liveCounts = @{}; foreach ($s in @('Aldi', "Baker's", 'Family Fare', 'Fareway', 'Walmart', "Sam's Club")) { $liveCounts[$s] = $liveN }
-  $liveCap = @(Test-CaptureCapacity -TermCounts $liveCounts)
-  $liveBad = @($liveCap | Where-Object { -not $_.Ok })
-  if ($liveN -gt 0 -and $liveCap.Count -eq 6 -and $liveBad.Count -eq 0) {
-    Ok ("LIVE  every term-rotation store re-reads all $liveN live terms inside RotationDays=$($script:RotationDays) (publish limit $($script:MaxPublishAgeDays)): " + (($liveCap | ForEach-Object { "$($_.Store) $($_.NeedPerRun)/$($_.Cap)" }) -join ', '))
-  } else { Bad ("LIVE capacity: $($liveBad.Count) of $($liveCap.Count) store(s) cannot be re-read in time over $liveN terms: " + (($liveBad | ForEach-Object { "$($_.Store): $($_.Why)" }) -join ' | ')) }
+  # EVERY store in the LIVE stores.json (2026-09-19, queue 2026-09-19-405c73): the six-name literal here mirrored the lib's
+  # and left out Hy-Vee. A product-id store is counted in its own unit from this checkout's newest regular file.
+  $liveStores = Get-CapacityStores -Root $root
+  $liveCounts = @{}
+  foreach ($s in $liveStores) {
+    if ($script:StoreCallCap.ContainsKey($s) -and [string]$script:StoreCallCap[$s].unit -eq 'product ids') { $liveCounts[$s] = Get-StoreRotationUnitCount -Store $s -Root $root }
+    else { $liveCounts[$s] = $liveN }
+  }
+  $liveCap = @(Test-CaptureCapacity -Stores $liveStores -TermCounts $liveCounts)
+  $liveBad = @($liveCap | Where-Object { $_.Ok -eq $false })
+  $liveBlind = @($liveCap | Where-Object { $_.Measured -eq $false })
+  foreach ($lb in $liveBlind) { Write-Output ("  SKIP  LIVE capacity " + $lb.Store + ": " + $lb.Why) }
+  if ($liveN -gt 0 -and $liveStores.Count -gt 0 -and $liveCap.Count -eq $liveStores.Count -and $liveBad.Count -eq 0) {
+    Ok ("LIVE  every store in stores.json (" + $liveStores.Count + ") re-reads its rotation inside RotationDays=$($script:RotationDays) (publish limit $($script:MaxPublishAgeDays)), " + $liveBlind.Count + " unmeasured: " + (($liveCap | ForEach-Object { "$($_.Store) $($_.NeedPerRun)/$($_.Cap) of $($_.Terms)" }) -join ', '))
+  } else { Bad ("LIVE capacity: $($liveBad.Count) of $($liveCap.Count) store(s) (stores.json has $($liveStores.Count)) cannot be re-read in time: " + (($liveBad | ForEach-Object { "$($_.Store): $($_.Why)" }) -join ' | ')) }
 
   $rdSave = $script:RotationDays
   try {
@@ -575,6 +585,22 @@ try {
     $ff = @(Test-CaptureCapacity -Stores @('Family Fare') -TermCounts @{ 'Family Fare' = 602 })
     if ($ff[0].Ok -and $ff[0].RunsPerDay -eq 3 -and $ff[0].NeedPerRun -eq 15) { Ok 'CLEAN TWIN  Family Fare covers 602 terms in 14 days at 15 a run across 3 runs, inside its measured 40 a window' }
     else { Bad "Family Fare runs: runs=$($ff[0].RunsPerDay) need=$($ff[0].NeedPerRun) ok=$($ff[0].Ok) (want 3 runs, 15 a run)" }
+    # THE BROWSER ROSTER IS DERIVED (queue 2026-09-19-405c73): the live stores.json's browser surfaces are exactly the
+    # four stores capture-watchdog used to name by hand.
+    $liveBrowser = Get-BrowserSurfaceStores -Root $root
+    if ((@($liveBrowser | Sort-Object) -join ',') -eq "Aldi,Fareway,Sam's Club,Walmart") { Ok ('LIVE  stores.json browser surfaces are exactly Aldi, Fareway, Sam''s Club, Walmart (' + $liveBrowser.Count + ')') }
+    else { Bad ('LIVE browser surfaces drifted: [' + ($liveBrowser -join ',') + '] - capture-watchdog''s same-morning check now drives from this list') }
+    # HY-VEE IN ITS OWN UNIT (2026-09-19, queue 2026-09-19-405c73). Cap 120 product ids a run, 14 days: 1,680 is
+    # exactly 120 and passes; ONE PRODUCT PAST IT, 1,694 (14 x 120 + 14) needs 121 and is refused.
+    $hvAt = @(Test-CaptureCapacity -Stores @('Hy-Vee') -TermCounts @{ 'Hy-Vee' = 1680 })
+    if ($hvAt[0].Ok -and $hvAt[0].NeedPerRun -eq 120 -and $hvAt[0].Cap -eq 120) { Ok 'MUST NOT FIRE  at the bar: 1,680 Hy-Vee product ids / 14 days = 120 a run against its cap of 120 is accepted' }
+    else { Bad "Hy-Vee at the bar: need=$($hvAt[0].NeedPerRun) cap=$($hvAt[0].Cap) ok=$($hvAt[0].Ok) (want 120/120 accepted)" }
+    $hvPast = @(Test-CaptureCapacity -Stores @('Hy-Vee') -TermCounts @{ 'Hy-Vee' = 1694 })
+    if ($hvPast[0].Ok -eq $false -and $hvPast[0].NeedPerRun -eq 121 -and $hvPast[0].Why -match 'product ids') { Ok 'MUST FIRE  past the bar: 1,694 Hy-Vee product ids / 14 days = 121 a run over its cap of 120 is refused, in product ids' }
+    else { Bad "Hy-Vee past the bar: need=$($hvPast[0].NeedPerRun) ok=$($hvPast[0].Ok) why='$($hvPast[0].Why)' (want 121 refused)" }
+    $hvBlind = @(Test-CaptureCapacity -Stores @('Hy-Vee') -TermCounts @{ 'Hy-Vee' = -1 })
+    if ($null -eq $hvBlind[0].Ok -and $hvBlind[0].Measured -eq $false) { Ok 'MUST FIRE  an unreadable product-id count is UNMEASURED, never read as ok' }
+    else { Bad "Hy-Vee unmeasured read as ok=$($hvBlind[0].Ok)" }
   } finally { $script:RotationDays = $rdSave }
 
   # ---- THE FULL RECAPTURE (2026-09-19): every term, capped at the store's largest clean run on record ------------

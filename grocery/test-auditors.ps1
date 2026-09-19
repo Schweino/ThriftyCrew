@@ -1441,6 +1441,7 @@ Remove-Item $fxIs -Recurse -Force -ErrorAction SilentlyContinue
 # them, so a regenerated fixture would pass by finding nothing ([[guard-fixture-rule]]).
 if (Use-Unit 'u143b-d5d-must-fire-for-the-widened-beverage-scope') {
 $fxWs = NewFxDir 'afc-widescope'
+# store-subset-ok: u143b food-class fixture board; the widened beverage-scope audit judges the product name against the commodity and never branches on which store
 $wsRow = '{"week_of":"2026-09-17","comparison":[{"commodity":"Protein Bars","id":"protein-bars","unit":"each","stores":[{"store":"Family Fare","per_unit":1.0,"item":"Gatorade Advanced Rehydration Fruit Punch Thirst Quencher 28 Fl Oz"}]},{"commodity":"Tortilla Chips","id":"tortilla-chips","unit":"oz","stores":[{"store":"Baker''s","per_unit":1.0,"item":"Gatorade Cool Blue Sports Drink Bottle"}]},{"commodity":"Strawberries","id":"strawberries","unit":"lb","stores":[{"store":"Sam''s Club","per_unit":1.0,"item":"Special K Protein Bars, Strawberry, 18 ct."}]}]}'
 Set-Content (Join-Path $fxWs 'comparison-2026-09-17.json') $wsRow -Encoding UTF8
 $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxWs)

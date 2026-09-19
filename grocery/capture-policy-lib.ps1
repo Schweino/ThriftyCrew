@@ -196,19 +196,64 @@ function Get-RotationTermsPerRun([int]$Terms, [string]$Store) {
 # THE CAPACITY INVARIANT (2026-09-19). One row per store: can its lane re-read every term inside RotationDays without
 # asking for more than its call cap, and is RotationDays inside the publish limit at all? test-capture-policy.ps1 fails
 # on any ok=$false, which is what makes a slower rotation a push-time refusal instead of a stale board.
+# EVERY STORE, FROM stores.json (2026-09-19, queue 2026-09-19-405c73). The default roster was a six-name literal
+# that left out Hy-Vee, the store nearest its cap, so the invariant never checked it. -Root lets a caller whose
+# PolicyRoot is a synthetic tree (test-capture-policy) read the live registry.
+function Get-CapacityStores {
+  param([string]$Root = $script:PolicyRoot)
+  $p = Join-Path $Root 'stores.json'
+  if (-not (Test-Path -LiteralPath $p)) { return @() }
+  try { $sj = ConvertFrom-Json ([IO.File]::ReadAllText($p)) } catch { return @() }
+  return @(@($sj.stores) | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
+}
+# THE BROWSER STORES, FROM stores.json (2026-09-19, queue 2026-09-19-405c73): pull_profile.surface starting 'browser'.
+# capture-watchdog's same-morning check held its own four-name copy of this list.
+function Get-BrowserSurfaceStores {
+  param([string]$Root = $script:PolicyRoot)
+  $p = Join-Path $Root 'stores.json'
+  if (-not (Test-Path -LiteralPath $p)) { return @() }
+  try { $sj = ConvertFrom-Json ([IO.File]::ReadAllText($p)) } catch { return @() }
+  return @(@($sj.stores) | Where-Object { $_.pull_profile -and ([string]$_.pull_profile.surface) -match '^browser' } | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
+}
+# THE STORE'S OWN ROTATION UNIT. A term-rotation store rotates over commodity-search TERMS; a store whose cap is in
+# 'product ids' (Hy-Vee) rotates over its work list, which each run records whole in its newest regular file's
+# capture_terms (one row per product, asked or carried; 1,549 on 2026-09-19). -1 = UNMEASURED (no such file, e.g. a
+# worktree with no out\regular), which Test-CaptureCapacity reports as unmeasured, never as ok.
+function Get-StoreRotationUnitCount {
+  param([string]$Store, [string]$Root = $script:PolicyRoot)
+  if (-not ($script:StoreCallCap.ContainsKey($Store) -and [string]$script:StoreCallCap[$Store].unit -eq 'product ids')) { return (Get-StoreTermCount $Store) }
+  $prefix = ''
+  try { $sj = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $Root 'stores.json'))); $prefix = [string](@($sj.stores | Where-Object { [string]$_.name -eq $Store })[0].regular_prefix) } catch { $prefix = '' }
+  if (-not $prefix) { return -1 }
+  $f = @(Get-ChildItem (Join-Path $Root ('out\regular\' + $prefix + '-regular-*.json')) -ErrorAction SilentlyContinue |
+         Where-Object { $_.BaseName -match '-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)
+  if ($f.Count -eq 0) { return -1 }
+  try { $d = ConvertFrom-Json ([IO.File]::ReadAllText($f[0].FullName)) } catch { return -1 }
+  $n = @($d.capture_terms).Count
+  if ($null -eq $d.capture_terms -or $n -eq 0) { return -1 }
+  return $n
+}
 function Test-CaptureCapacity {
-  param([string[]]$Stores = @('Aldi', "Baker's", 'Family Fare', 'Fareway', 'Walmart', "Sam's Club"), [hashtable]$TermCounts = $null)
+  param([string[]]$Stores = $null, [hashtable]$TermCounts = $null)
+  if (-not $Stores) { $Stores = Get-CapacityStores }
   foreach ($s in $Stores) {
-    $terms = if ($TermCounts -and $TermCounts.ContainsKey($s)) { [int]$TermCounts[$s] } else { Get-StoreTermCount $s }
+    $terms = if ($TermCounts -and $TermCounts.ContainsKey($s)) { [int]$TermCounts[$s] } else { Get-StoreRotationUnitCount $s }
+    $unit = if ($script:StoreCallCap.ContainsKey($s)) { [string]$script:StoreCallCap[$s].unit } else { 'search terms' }
+    if ($terms -lt 0) {
+      [pscustomobject]@{ Store = $s; Terms = $terms; RunsPerDay = (Get-StoreRunsPerDay $s); NeedPerRun = $null; Cap = (Get-StoreCallCap $s)
+        RotationDays = $script:RotationDays; MaxPublishAgeDays = $script:MaxPublishAgeDays; Ok = $null; Measured = $false
+        Why = "UNMEASURED: no $unit count could be read for $s, so its capacity was not checked (never read as ok)" }
+      continue
+    }
     $need = Get-RotationTermsPerRun $terms $s
     $cap = Get-StoreCallCap $s
     $windowOk = ($script:RotationDays -le $script:MaxPublishAgeDays)
     [pscustomobject]@{
       Store = $s; Terms = $terms; RunsPerDay = (Get-StoreRunsPerDay $s); NeedPerRun = $need; Cap = $cap
       RotationDays = $script:RotationDays; MaxPublishAgeDays = $script:MaxPublishAgeDays
-      Ok = ($windowOk -and $need -le $cap)
+      Ok = ($windowOk -and $need -le $cap); Measured = $true
       Why = if (-not $windowOk) { "RotationDays $($script:RotationDays) exceeds MaxPublishAgeDays $($script:MaxPublishAgeDays): a price would age out of publication before its turn comes round" }
-            elseif ($need -gt $cap) { "$terms terms / $($script:RotationDays) days / $(Get-StoreRunsPerDay $s) run(s) = $need a run, over the $cap cap: this store cannot be re-read inside the publish limit" }
+            elseif ($need -gt $cap) { "$terms $unit / $($script:RotationDays) days / $(Get-StoreRunsPerDay $s) run(s) = $need a run, over the $cap cap: this store cannot be re-read inside the publish limit" }
             else { '' }
     }
   }
