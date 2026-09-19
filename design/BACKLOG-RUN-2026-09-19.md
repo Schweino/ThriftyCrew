@@ -127,3 +127,4 @@ Every in-scope OPEN and PARTLY DONE item has a final state above. Left for Brad:
 ## Second pass finished 2026-09-18
 
 Every new item from the first pass has a state. Landed: I216, I225 to I238 (where 2-WAY), the nightly and worklist fixes. Held for Brad on branches: I215+I217 (nonfood-bundle), I220, I221, I222 board half, I223, I224, I233, I234.
+| I220 note | - | Brad's I251 ruling (Bellevue still OK) supersedes I220 part 2; part 1 must also accept the Bellevue store before it lands. Noted on the item |

@@ -15600,6 +15600,8 @@ guard 2 exists for exactly this class (its own header names household products s
 
 ### I220 - Reader-facing: 20 Walmart board entries rest on a store nobody sanctioned `NEEDS A RULING` `run-0919` `1-WAY` `RUNG1 RULING`
 
+**Superseded in part by Brad's ruling I251 (2026-09-18, 'Bellevue still OK').** Branch `claude/i220-walmart-batch` part 2 (retire the batch rows) contradicts that ruling and should NOT land. Part 1 (the importer refuses a capture with no store line) still stands on the separate store-line rule, but as built it accepts only store 5361, so before it lands it must also accept the Bellevue 68123 store Brad's 07-15 approval covers, or a Bellevue batch capture would be refused. Noted by the backlog-run orchestrator.
+
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
 Found under I165. `grocery/import-walmart-batch.ps1:168` stamps every row "Walmart Bellevue 68123" and never
