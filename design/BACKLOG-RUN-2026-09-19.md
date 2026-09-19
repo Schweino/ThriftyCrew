@@ -101,3 +101,14 @@ Orchestration branch: `claude/backlog-run-0919`. Each item lands through its own
 ## Run finished 2026-09-18
 
 Every in-scope OPEN and PARTLY DONE item has a final state above. Left for Brad: the NEEDS A RULING items and the READY FOR BRAD branches named in their rows; I77 re-runs when its cases reach 30; I55 and I60 are Brad's spend and republish calls, unchanged by this run.
+
+## Second pass: the new items (Brad, 2026-09-18: continue fixing the new problems)
+
+| Item | State | Landed / reason |
+|---|---|---|
+| I217 | NEEDS A RULING (half landed) | 248ea6baa + 00219b6db: household-in-food gets a 6-case self-test; the widened sweep and word list (branch claude/i217-household-extend) would find 6 real non-food rows and hold today's board, so held |
+| I237 | DONE + READY FOR BRAD | ab61ed67f .. 2c250d017: a BLIND case is no longer scored a new failure and push-main seeds before gating (an unseeded push that was refused now passes); pre-push reads the slot budget from gate-slots; list-array-wrap sees @($x.field) (6 of 6 historical wraps found, 0 live); seo_url_inspect prints per-URL crawl dates. Brad: run install-hooks from the main checkout once it has 2c250d017 |
+| I215 + I217 | READY FOR BRAD | branch claude/nonfood-bundle: scent + dawn/nail-polish/styling-gel excludes (12 of 51,843 names move, all non-food) plus the widened household audit (0 findings on it); changes 1 of 3,189 cells: Baker's coconut oil, today a hair styling gel at 28c/oz, becomes Kroger refined coconut oil 0.3263/oz; 0 cheapest-store changes. Action: push-main from that branch |
+| I216 | DONE | 00d5596ce (bar) + 22a9b219c: band-censorship's ratchet keeps a counted cell 'parked' while only the median retires it, so another store's sale no longer flaps it (replay over 14 boards: 8 median-driven moves before, 3 first-time entries after); reported findings and Brad's 0.4-of-median rule unchanged |
+| I236 | NEEDS A RULING (mostly done) | 3e203a3de: 10 task XMLs now match the live headless-conhost registrations (-Verify 6 findings -> 0) and a self-test refuses an unwrapped definition; both self-building installers build the wrapped task; TC Approvals Page already watched. Graph nightly's in-flight stop works; ruling: what a launch after 06:30 should do (9 of 67 launches were daytime) |
+| I238 | DONE | 97668e17d: the three branch commits are superseded on main (345a515be, 8bc6bf576; the third would roll a data file back a week); Ghost caps a member page at 100 (one read-only GET, pagination only), so member-cohorts now follows next and throws on a short read (3 mutants red) |
