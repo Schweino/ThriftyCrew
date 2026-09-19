@@ -16106,7 +16106,7 @@ guard 2 exists for exactly this class (its own header names household products s
 
 **What did not ship (origin), and why.** The fixture is deliberate and its case is right, so it was left alone. Silencing it is not trivially safe: the only quiet route is to capture that push's streams in production, and `graph\pipeline\nightly.ps1:1236`, `grocery\check-ad-cycles.ps1:3516` and `meal-prep\pipeline\harvest-crawl.ps1:299` all push through it, so their transcripts would lose the pre-push hook's own output. It is not a silent pass either: a push that could not reach origin is still reported as "push failed, left local". If it is ever wanted, the change is to run that push through `Invoke-GitCaptured` (already used for the commit five lines above) and append `Format-GitRefusal`'s summary to the verdict, which also gives a failed push its reason; the cost is the hook transcript in three scheduled lanes' logs.
 
-### I220 - Reader-facing: 20 Walmart board entries rest on a store nobody sanctioned `NEEDS A RULING` `run-0919` `1-WAY` `RUNG1 RULING`
+### I220 - Reader-facing: 20 Walmart board entries rest on a store nobody sanctioned `DONE` `run-0919`
 
 **Superseded in part by Brad's ruling I251 (2026-09-18, 'Bellevue still OK').** Branch `claude/i220-walmart-batch` part 2 (retire the batch rows) contradicts that ruling and should NOT land. Part 1 (the importer refuses a capture with no store line) still stands on the separate store-line rule, but as built it accepts only store 5361, so before it lands it must also accept the Bellevue 68123 store Brad's 07-15 approval covers, or a Bellevue batch capture would be refused. Noted by the backlog-run orchestrator.
 
@@ -16167,6 +16167,39 @@ holds 6,570 such rows across seven files (2026-07-15 to 2026-09-05).
   each cell on freshness), fix harissa-paste's Hy-Vee match, then land part 2 so the fallback is sanctioned. Same
   shape as the 2026-08-28 ruling ("leave the existing rows, recapture forward").
 - **C. Leave them**: land part 1 only; the batch rows age out of the union by 2026-12-04.
+
+**Done 2026-09-19.** Part 2 dropped by I251; part 1 landed accepting both approved stores, 2026-09-19. Brad
+ruled the Bellevue store id that day: the 07-15 approval means Walmart Supercenter #2847, 10504 S 15th St,
+Bellevue 68123, read from walmart.com's store finder for 68123 in his Chrome (the other 68123 store,
+Neighborhood Market #3154, he did not choose). `import-walmart-batch.ps1` now rules on the capture's `#tc-store`
+line with the builder's own `Split-WalmartCaptureStore` before parsing a row, writes nothing on a refusal, and
+stamps `source_ad` from the id and zip it read. The accepted set is data, not code: `stores.json` -> Walmart ->
+`batch_accepted_stores` = {5361 L St, 08-28 ruling; 2847 Bellevue Supercenter, 07-15 approval as clarified},
+each entry citing its ruling, read by `Get-WalmartBatchAcceptedStores` (`walmart-row-lib.ps1`).
+`build-walmart-deals` keeps its single sanctioned store: `Split-WalmartCaptureStore` takes an optional
+`-Accepted` list, and the builder's self-test output is byte-identical (58 of 58 lines) with the old and new
+lib. `walmart-capture-reducer.js` now writes the store line when called as `f(patterns, cap, term)`: id and
+zip from the page's own `__NEXT_DATA__` through `walmartStoreFromData`, the same text as
+`pull-walmart-instore.js`'s copy (asserted identical), and no line at all when the page names no store or
+two at equal confidence. Called without a term it returns the old products string unchanged. The 09:00
+browser runbook does not paste the reducer (it only names it), so no live-copy step was needed.
+*Verified.* `import-walmart-batch -SelfTest` exit 0: CLEAN TWIN L St 5361 and CLEAN TWIN Bellevue 2847
+import; MUST FIRE no store line, 3153, 3154, a straddle of the two accepted stores, UNRECORDED, a mixed
+straddle and an unparseable line all refuse; the registry case asserts exactly {2847, 5361}.
+`test-pull-agent-lib -SelfTest` exit 0 with nine new reducer cases (MUST FIRE the line from the page's
+store; MUST NOT FIRE on a storeless or ambiguous page). Broken once each, four mutants, all red, all
+restored md5-identical: accepting any id (3153 and 3154 MUST FIRE red, exit 1); 2847 dropped from the
+registry (registry case and Bellevue twin red, exit 1); the reducer never writing the line (4 cases red,
+exit 1); the reducer assuming L St on a storeless page (MUST NOT FIRE red, exit 1). End to end, reducer
+output into the importer with a temp `-OutRoot`: 2847 and 5361 import 2 of 2 rows each, stamped with the
+store read; 3154 and a storeless page exit 1 with nothing written. **Board byte-identical:** compare-deals
+run twice on the seeded 2026-09-17 inputs (ads-2026-09-17, fareway-deals-2026-09-17) from base
+`d5f567178`, once with this change's `stores.json` (blob `08aeaafb2c34`) and once with origin/main's:
+the board, flagged file and both price tables are identical apart from `built_at` (4,390,802 bytes). The
+candidates file differs in `prod_key` on 3,051 of 449,490 lines, and a control rerun with the SAME
+`stores.json` differs on the same 3,051, so that is run-to-run order in the candidates file and not this
+change. Existing rows are untouched: nothing here rewrites a walmart-regular file. Importer blob
+`f00fbb99d2e4`, lib blob `5f5276d4f2f8`, reducer blob `ed18e32f7bfa`, harness blob `0815ed505f17`.
 
 ### I221 - Reader-facing: the deals page never shows "Doesn't carry" `DONE` `run-0919`
 

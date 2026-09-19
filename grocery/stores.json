@@ -237,6 +237,23 @@
           ],
           "closed": "2026-09-12 - the agent reads the store and refuses to sweep at 3153; the capture carries a #tc-store line and the builder refuses a file it cannot attribute"
         }
+      },
+      "batch_accepted_stores": {
+        "note": "The stores import-walmart-batch.ps1 (the walmart-capture-reducer.js lane) admits a capture from, read by Get-WalmartBatchAcceptedStores in walmart-row-lib.ps1. It is WIDER than store_identity on purpose and ONLY for that lane: build-walmart-deals.ps1 and pull-walmart-instore.js keep the single sanctioned store above. The id discriminates, as above. Anything not listed here is refused, including 3153 (the drifted S 167th St Neighborhood Market) and 3154 (the Bellevue Neighborhood Market at 2109 Towne Center Dr, which Brad did not choose). Backlog I220, I251.",
+        "stores": [
+          {
+            "store_id": 5361,
+            "postal_code": "68137",
+            "label": "Omaha L St Supercenter",
+            "ruled": "2026-08-28 Brad: L St 68137 is the board's canonical Walmart (store_identity above)."
+          },
+          {
+            "store_id": 2847,
+            "postal_code": "68123",
+            "label": "Bellevue Supercenter, 10504 S 15th St",
+            "ruled": "2026-07-15 Brad OK'd the Bellevue 68123 store for batch captures; 2026-09-18 'Bellevue still OK' (backlog I251); 2026-09-19 Brad clarified the 07-15 approval means Walmart Supercenter #2847, 10504 S 15th St, Bellevue NE 68123, as read from walmart.com's store finder for 68123 in his Chrome."
+          }
+        ]
       }
     }
   ],

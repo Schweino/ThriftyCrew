@@ -23,10 +23,13 @@
 #     sets it from -Date or the input filename. import-walmart-batch.ps1 does NOT set it: its rows come back
 #     with as_of $null and its import loop stamps the run date itself.
 # WHAT IT PROVIDES: Resolve-Unit, Get-NameQtyCandidates, Get-NamePackMultipliers, Get-SameFamilyNameQty,
-# Get-NamePack, Format-Qty, Build-Row, and the $script:UnitFamily constant the helpers read.
+# Get-NamePack, Format-Qty, Build-Row, and the $script:UnitFamily constant the helpers read. Since
+# 2026-09-18 (backlog I220) also the store ruling both Walmart writers apply to a capture:
+# Get-WalmartSanctionedStore, Split-WalmartCaptureStore and $script:WM_CAPTURE_COLUMNS, at the end.
 #
 # THE RULES THAT KEEP IT DOT-SOURCEABLE:
-#   - NO WORK ON LOAD. It defines seven functions and assigns one constant, and must keep it that way. A
+#   - NO WORK ON LOAD. It defines nine functions, assigns two constants and dot-sources lib\json-io.ps1 (more
+#     definitions), and must keep it that way. A
 #     line here that does work at import re-creates the exact obstacle that produced the lift.
 #   - NO param() BLOCK. Dot-sourcing runs a script's param block in the CALLER's scope, which is how a
 #     library's -SelfTest once reset build-walmart-deals' own $SelfTest to $false (see capture-lib.ps1).
@@ -536,4 +539,170 @@ function Build-Row($raw) {
     } }
   }
   return @{ err=("INVARIANT: no shape reproduces Walmart's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
+}
+
+# ===================================================================================================
+# THE STORE A CAPTURE WAS READ AT. Moved here from build-walmart-deals.ps1 on 2026-09-18 (backlog I220),
+# code unchanged, so the batch importer applies the builder's own #tc-store refusals instead of stamping
+# a store nobody read. Until then import-walmart-batch.ps1 wrote "Walmart Bellevue 68123" onto every row
+# as a literal. "This builder" below means either caller: both refuse through Split-WalmartCaptureStore.
+# Get-WalmartSanctionedStore reads stores.json through Read-JsonFile, so this file dot-sources lib\json-io.ps1
+# itself: a library of definitions with no param() block, which both callers already load, so it adds no work.
+# ===================================================================================================
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')
+# ---- WHICH WALMART THESE PRICES ARE FOR (2026-09-12) ----------------------------------------------
+# THE STAMP USED TO BE A LITERAL, AND THAT IS THE WHOLE DEFECT. Line 403 of this file read
+# '...(Omaha L St Supercenter 68137)...' and this builder read NO store from the capture, so it was
+# structurally incapable of noticing a capture taken somewhere else. Brad's session drifted to storeId
+# 3153 ("Omaha S 167th St Neighborhood Market") and the agent brought back clean, plausible prices from
+# it TWICE - 414 rows on 2026-08-27, 380 on 2026-09-12. Both were caught by a human reading the page
+# header against a memory, and both were quarantined by hand. Real prices in the wrong basis are the
+# hardest error to find later, because every number still looks fine.
+#
+# pull-walmart-instore.js now opens the capture with one line per distinct store it actually read:
+#     #tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=774
+# and this is the one place that line is ruled on. The capture is REFUSED, and nothing is written, when:
+#   a store line does not parse   a store we cannot read is a store we did not read
+#   no store line                 it cannot say which Walmart it read
+#   id="UNRECORDED"               rows persisted by an agent that did not keep the store
+#   not the sanctioned store      3153 and anything else: right prices, wrong basis
+#   more than one store           one file names one store, and a sweep that straddled two cannot
+# This is build-aldi-regular.ps1's Split-CaptureStore arriving at the store that needed it most; that
+# file's header explains each decision and this is deliberately the same shape.
+#
+# THE SANCTIONED STORE IS NOT A LITERAL HERE EITHER. It is read from stores.json -> Walmart ->
+# store_identity, which carries Brad's 2026-08-28 ruling. Aldi's builder deliberately does NOT pin its
+# OLA number, because that session legitimately moves between Omaha stores and a pinned number would
+# refuse a correct capture; Walmart is the opposite case - one store is RULED, and the drift is the
+# defect. What both refuse to do is claim a store nobody read.
+$script:WM_CAPTURE_COLUMNS = 'q|n|lp|up|id|was|rb|sel|ff'
+
+function Get-WalmartSanctionedStore {
+  <# The board's Walmart basis, from the registry. Returns @{ id; zip; label } or @{ refuse } - never
+     a default: a builder that cannot learn which store is sanctioned must not stamp one. #>
+  param([string]$Root)
+  $reg = Join-Path $Root 'stores.json'
+  if (-not (Test-Path $reg)) { return @{ refuse = "stores.json is missing at $reg, so the sanctioned Walmart store cannot be read and no capture can be attributed." } }
+  $doc = Read-JsonFile $reg
+  $w = @($doc.stores | Where-Object { [string]$_.name -eq 'Walmart' })
+  if ($w.Count -ne 1) { return @{ refuse = ("stores.json names {0} stores called Walmart; exactly one must carry store_identity." -f $w.Count) } }
+  $si = $w[0].store_identity
+  if (-not $si -or -not $si.store_id) {
+    return @{ refuse = 'stores.json -> Walmart has no store_identity.store_id, so there is no sanctioned store to check a capture against. Add it (see the Hy-Vee entry for the shape) rather than letting this builder assume one.' }
+  }
+  return @{ id = ([string]$si.store_id).Trim(); zip = ([string]$si.postal_code).Trim(); label = ([string]$si.label).Trim() }
+}
+
+function Get-WalmartBatchAcceptedStores {
+  <# The stores the BATCH lane (import-walmart-batch.ps1) admits, from stores.json -> Walmart ->
+     batch_accepted_stores. Returns @{ stores = @(@{ id; zip; label }, ...) } or @{ refuse } - never a
+     default. This set is wider than Get-WalmartSanctionedStore on purpose (backlog I220, I251: Brad's
+     07-15 Bellevue approval, clarified 2026-09-19 as Supercenter #2847, stands beside the 08-28 L St
+     ruling) and only that lane reads it; build-walmart-deals keeps the single sanctioned store. #>
+  param([string]$Root)
+  $reg = Join-Path $Root 'stores.json'
+  if (-not (Test-Path $reg)) { return @{ refuse = "stores.json is missing at $reg, so the batch lane's accepted Walmart stores cannot be read and no capture can be attributed." } }
+  $doc = Read-JsonFile $reg
+  $w = @($doc.stores | Where-Object { [string]$_.name -eq 'Walmart' })
+  if ($w.Count -ne 1) { return @{ refuse = ("stores.json names {0} stores called Walmart; exactly one must carry batch_accepted_stores." -f $w.Count) } }
+  $ba = $w[0].batch_accepted_stores
+  $list = @()
+  if ($ba -and $ba.stores) { $list = @($ba.stores) }
+  $out = New-Object System.Collections.ArrayList
+  foreach ($s in $list) {
+    if (-not $s -or -not $s.store_id -or -not $s.ruled) {
+      return @{ refuse = 'stores.json -> Walmart -> batch_accepted_stores has an entry with no store_id or no ruled citation; every accepted store must name the ruling that admits it.' }
+    }
+    [void]$out.Add(@{ id = ([string]$s.store_id).Trim(); zip = ([string]$s.postal_code).Trim(); label = ([string]$s.label).Trim() })
+  }
+  if ($out.Count -eq 0) { return @{ refuse = 'stores.json -> Walmart has no batch_accepted_stores, so the batch lane has no store it may admit a capture from.' } }
+  return @{ stores = $out.ToArray() }
+}
+
+function Split-WalmartCaptureStore {
+  <# Split the #tc-store lines off a capture and rule on them. Returns the remaining lines, the store,
+     the counts, and .refuse - data only, no output (Import-CaptureCsv's rule; the caller reports).
+     -Accepted (optional) is a LIST of @{ id; zip; label } any one of which a capture may be read at; the
+     batch lane passes Get-WalmartBatchAcceptedStores' list. Without it the one -Sanctioned store is the
+     whole accepted set, exactly as build-walmart-deals has always called this. #>
+  param([string[]]$Lines, $Sanctioned, [object[]]$Accepted)
+  if (-not $Accepted -or $Accepted.Count -eq 0) { $Accepted = @($Sanctioned) }
+  $kept   = New-Object System.Collections.ArrayList
+  $stores = New-Object System.Collections.ArrayList
+  $bad    = New-Object System.Collections.ArrayList
+  $sawColumns = $false
+  foreach ($ln in $Lines) {
+    $s = [string]$ln
+    if ($s -match '^\s*#tc-store\b') {
+      $m = [regex]::Match($s, '^\s*#tc-store\s+store="([^"]*)"\s+id="([^"]*)"\s+zip="([^"]*)"\s+read="([^"]*)"\s+rows=(\d+)\s*$')
+      if ($m.Success) {
+        [void]$stores.Add([pscustomobject]@{
+          store = $m.Groups[1].Value.Trim(); id = $m.Groups[2].Value.Trim(); zip = $m.Groups[3].Value.Trim()
+          read  = $m.Groups[4].Value.Trim(); rows = [int]$m.Groups[5].Value })
+      } else { [void]$bad.Add($s.Trim()) }
+      continue
+    }
+    # An operator following the pre-2026-09-12 runbook prepends a column header to output that now
+    # carries its own. The second copy is not a record. (build-aldi-regular carries the same guard.)
+    if ([string]::Equals($s.Trim(), $script:WM_CAPTURE_COLUMNS, [StringComparison]::Ordinal)) {
+      if ($sawColumns) { continue }
+      $sawColumns = $true
+    }
+    [void]$kept.Add($s)
+  }
+
+  # ORDINAL throughout: this text arrived from a web page, and PowerShell's default string comparison
+  # is culture-sensitive - which ignores a NUL outright (see .claude/rules/ops-and-gates.md).
+  $distinct = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  $total = 0; $pageRows = 0
+  $unrec = New-Object System.Collections.ArrayList
+  $wrong = New-Object System.Collections.ArrayList
+  foreach ($x in $stores) {
+    [void]$distinct.Add($x.id)
+    $total += $x.rows
+    if (-not [string]::Equals($x.read, 'response', [StringComparison]::Ordinal)) { $pageRows += $x.rows }
+    if (-not $x.id -or [string]::Equals($x.id, 'UNRECORDED', [StringComparison]::Ordinal)) { [void]$unrec.Add($x) }
+    else {
+      $ok = $false
+      foreach ($acc in $Accepted) {
+        if (-not $acc) { continue }
+        if ([string]::Equals($x.id, [string]$acc.id, [StringComparison]::Ordinal) -and
+            -not ($acc.zip -and $x.zip -and -not [string]::Equals($x.zip, [string]$acc.zip, [StringComparison]::Ordinal))) { $ok = $true; break }
+      }
+      if (-not $ok) { [void]$wrong.Add($x) }
+    }
+  }
+
+  $why = ''
+  if ($bad.Count) {
+    $why = ('a store line does not parse: [' + $bad[0] + '] - a store we cannot read is a store we did not read.')
+  } elseif ($stores.Count -eq 0) {
+    $why = 'the capture carries no #tc-store line, so it cannot say which Walmart it read. Re-capture through walmartSweepToCsv in pull-walmart-instore.js, which writes one; never hand-assemble this file.'
+  } elseif ($unrec.Count) {
+    $n = 0; foreach ($x in $unrec) { $n += $x.rows }
+    $why = ('{0} row(s) were captured with no store read (id="UNRECORDED"), so they cannot be attributed to any Walmart.' -f $n)
+  } elseif ($distinct.Count -gt 1) {
+    # AHEAD OF THE WRONG-STORE CHECK, and that ordering is load-bearing rather than cosmetic.
+    # build-aldi-regular tests its straddle LAST because several Aldi stores are legitimate, so a
+    # two-store file can be all-legal. Here exactly ONE id is sanctioned, so a straddling file always
+    # contains a non-sanctioned group - put the wrong-store check first and this branch can never fire
+    # for any input, which is a guard that cannot arm and a fixture that proves nothing. It also names
+    # the better diagnosis: a straddle means the session flipped mid-sweep (re-capture the affected
+    # terms), where a single wrong store means the whole sweep was in the wrong basis.
+    # The batch lane's -Accepted set holds TWO ids (backlog I220), so there a straddle of two ACCEPTED
+    # stores is possible and is still refused: one file names one store whichever stores are allowed.
+    $why = ('the sweep straddles {0} stores (ids {1}) - one file names one store, and a session that flipped mid-sweep has some rows in each basis.' -f $distinct.Count, (@($distinct) -join '; '))
+  } elseif ($wrong.Count -and $Accepted.Count -gt 1) {
+    $accText = (@($Accepted | Where-Object { $_ } | ForEach-Object { ('{0} "{1}" {2}' -f $_.id, $_.label, $_.zip) }) -join ' or ')
+    $why = ('the rows were read at storeId {0} ("{1}"{2}), not an accepted store ({3}). These are real prices in the WRONG BASIS. Quarantine this file, switch the store, and re-capture.' -f
+      $wrong[0].id, $wrong[0].store, $(if ($wrong[0].zip) { ' ' + $wrong[0].zip } else { '' }), $accText)
+  } elseif ($wrong.Count) {
+    $why = ('the rows were read at storeId {0} ("{1}"{2}), not the sanctioned {3} "{4}" {5}. These are real prices in the WRONG BASIS - the 2026-08-27 and 2026-09-12 quarantines are both this shape. Quarantine this file, switch the store, and re-capture.' -f
+      $wrong[0].id, $wrong[0].store, $(if ($wrong[0].zip) { ' ' + $wrong[0].zip } else { '' }), $Accepted[0].id, $Accepted[0].label, $Accepted[0].zip)
+  }
+
+  $store = ''; $id = ''; $zip = ''
+  if (-not $why) { $store = $stores[0].store; $id = $stores[0].id; $zip = $stores[0].zip }
+  return @{ lines = $kept.ToArray(); store = $store; id = $id; zip = $zip
+            rows = $total; page_rows = $pageRows; groups = $stores.ToArray(); refuse = $why }
 }

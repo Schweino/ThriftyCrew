@@ -24,8 +24,20 @@
   file gets a batch_imports stamp - so a divergent row can be traced to its writer instead of hiding under
   the builder's "every row verified" header.
 
-  NOTE: store is Bellevue 68123 (Omaha metro, Brad OK'd 2026-07-15 - Walmart zone-prices are uniform across the
-  metro). Usage: .\import-walmart-batch.ps1 [-TrustNoSeller] ; then compare-deals -> diff-board -> vet.
+  THE STORE IS READ FROM THE CAPTURE, NEVER STAMPED (2026-09-19, backlog I220). Until then every row was stamped
+  "Walmart Bellevue 68123 shelf price (batch capture)" from a literal, and nothing read which store the capture
+  was taken at. The batch capture now carries a `#tc-store` line (walmart-capture-reducer.js writes it from the
+  store the page itself reports) and is ruled on by the SAME function the builder uses
+  (Split-WalmartCaptureStore, walmart-row-lib.ps1): no line, a line that does not parse, id="UNRECORDED", a
+  store outside the accepted set, or two stores in one file, and NOTHING is written. source_ad is then written
+  from the line that was read.
+  THIS LANE ACCEPTS TWO STORES, the builder ONE. The accepted set is stores.json -> Walmart ->
+  batch_accepted_stores, read by Get-WalmartBatchAcceptedStores, never a literal here: 5361 (Omaha L St
+  Supercenter 68137, Brad's 2026-08-28 ruling) and 2847 (Bellevue Supercenter, 10504 S 15th St, 68123 - the
+  2026-07-15 approval, which Brad's I251 ruling "Bellevue still OK" keeps and which he clarified on
+  2026-09-19 as Supercenter #2847). 3153 (the drifted S 167th St Neighborhood Market) and 3154 (the Bellevue
+  Neighborhood Market) are refused. build-walmart-deals keeps its single sanctioned store.
+  Usage: .\import-walmart-batch.ps1 [-TrustNoSeller] ; then compare-deals -> diff-board -> vet.
   -OutRoot writes out\regular + the itemid map under a different root (sandbox testing; default = live).
 #>
 param([string]$Raw = 'out\staples500\walmart-batch1-raw.txt', [switch]$SelfTest, [switch]$TrustNoSeller, [string]$OutRoot = '',
@@ -118,7 +130,11 @@ function Test-IwbSeller($fields, [bool]$trust) {
 
 # One raw batch product -> a fully verified board row (or @{err=..}). This is the whole point of the file:
 # a row this returns is a row build-walmart-deals would have emitted, plus the fish-sauce name override.
-function Convert-BatchRow($raw, [System.Collections.ArrayList]$log) {
+function Convert-BatchRow($raw, [System.Collections.ArrayList]$log, [string]$SourceAd) {
+  # FAIL CLOSED ON THE STORE (backlog I220). The stamp is the store the capture's #tc-store line named
+  # (Get-IwbSourceAd) or, under -Reheal, the row's own recorded stamp. A row with neither is refused here
+  # rather than handed a default, because a default is exactly the literal this parameter replaced.
+  if (-not $SourceAd) { throw 'Convert-BatchRow: no source stamp - a batch row must carry the store its capture was read at' }
   $b = Build-Row $raw
   if ($b.err) {
     # THE FISH-SAUCE CLASS NOW ARRIVES ONE LAYER EARLIER (2026-09-05). Build-Row itself refuses a row whose
@@ -165,9 +181,36 @@ function Convert-BatchRow($raw, [System.Collections.ArrayList]$log) {
     return @{ err = 'multipack: pack priced as a single board unit (guard 5) - not a shopper single-buy unit' }
   }
   # writer provenance: visible in the file, per row
-  $row.source_ad = 'Walmart Bellevue 68123 shelf price (batch capture)'
+  $row.source_ad = $SourceAd
   $row | Add-Member -NotePropertyName written_by -NotePropertyValue 'import-walmart-batch.ps1' -Force
   return @{ row = $row }
+}
+
+# The batch capture as the import consumes it: the #tc-store line split off and ruled on FIRST, by the builder's
+# own Split-WalmartCaptureStore, then the stamp written from what was read. Returns data only; a refusal comes
+# back in .refuse and the caller writes nothing. One function, so the self-test drives the path the import runs.
+function Get-IwbSourceAd([string]$Id, [string]$Store, [string]$Zip) {
+  return ('Walmart storeId {0} {1}{2} shelf price (batch capture, store read from the capture)' -f $Id, $Store, $(if ($Zip) { ' ' + $Zip } else { '' }))
+}
+function Read-IwbCapture([string[]]$Lines, $Accepted) {
+  # $Accepted is Get-WalmartBatchAcceptedStores' answer: @{ stores = @(...) } or @{ refuse }.
+  if (-not $Accepted -or $Accepted.refuse) { return @{ refuse = $(if ($Accepted) { $Accepted.refuse } else { 'no accepted-store set was supplied' }); lines = @(); source_ad = '' } }
+  $accList = $Accepted.stores
+  $cs = Split-WalmartCaptureStore -Lines $Lines -Sanctioned $accList[0] -Accepted $accList
+  if ($cs.refuse) {
+    $why = $cs.refuse
+    # The builder's no-line text points at walmartSweepToCsv, which is not this lane's emitter; say what is true here.
+    if ($why.Contains('carries no #tc-store line')) { $why += ' (For a batch capture: call the reducer f(patterns, cap, term) with the term, so its output opens with the #tc-store line the page reported, and post it unaltered.)' }
+    return @{ refuse = $why; lines = @(); source_ad = '' }
+  }
+  # Walmart's /search payload carries the storeId and zip but no display NAME (measured 2026-09-12, see
+  # pull-walmart-instore.js), so the reducer writes "name not in payload". The ID and ZIP in the stamp are
+  # always the ones READ; only the display name is borrowed from the registry entry the read id matched.
+  $label = $cs.store
+  if (-not $label -or [string]::Equals($label, 'name not in payload', [StringComparison]::Ordinal)) {
+    foreach ($a in $accList) { if ([string]::Equals([string]$a.id, [string]$cs.id, [StringComparison]::Ordinal) -and $a.label) { $label = $a.label; break } }
+  }
+  return @{ refuse = ''; lines = $cs.lines; source_ad = (Get-IwbSourceAd $cs.id $label $cs.zip) }
 }
 
 # REPLACE-by-identity merge, one home, self-tested. EVERY slot per identity is tracked, not just the
@@ -213,6 +256,58 @@ if ($SelfTest) {
   $fail = 0
   $log = New-Object System.Collections.ArrayList
   function _R($n, $lp, $up) { [pscustomobject]@{ q = 't'; n = $n; lp = $lp; up = $up; id = '1' } }
+  # ---- THE STORE THE CAPTURE WAS READ AT (backlog I220) -------------------------------------------------
+  # Driven through Read-IwbCapture, the function the import itself calls, against the LIVE registry
+  # (stores.json -> Walmart -> store_identity, read-only). Store lines are the builder's own fixtures' shape.
+  $stAcc   = Get-WalmartBatchAcceptedStores $root
+  $stRow1  = "cantaloupe`tFresh Cantaloupe, Each~~`$2.50~~`$2.50/ea~~44390974~~Walmart.com~~STORE"
+  $stRow2  = "limes`tFresh Lime, Each~~`$0.25~~`$0.25/ea~~44391008~~Walmart.com~~STORE"
+  $stLSt   = '#tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="page" rows=2'
+  $stBlv   = '#tc-store store="name not in payload" id="2847" zip="68123" read="page" rows=2'
+  $st3153  = '#tc-store store="Omaha S 167th St Neighborhood Market" id="3153" zip="68135" read="page" rows=2'
+  $st3154  = '#tc-store store="name not in payload" id="3154" zip="68123" read="page" rows=2'
+  $stUnrec = '#tc-store store="UNRECORDED" id="UNRECORDED" zip="" read="UNRECORDED" rows=2'
+  $stHalfA = '#tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="page" rows=1'
+  $stHalfB = '#tc-store store="Omaha S 167th St Neighborhood Market" id="3153" zip="68135" read="page" rows=1'
+  $stHalfC = '#tc-store store="name not in payload" id="2847" zip="68123" read="page" rows=1'
+  # The accepted set is read from the LIVE registry and must be exactly {5361, 2847}: a third id appearing there,
+  # or either one vanishing, changes which captures this lane admits, so it is a case and not an assumption.
+  $stIds = @(); if (-not $stAcc.refuse) { $stIds = @($stAcc.stores | ForEach-Object { [string]$_.id } | Sort-Object) }
+  if ($stAcc.refuse -or ($stIds -join ',') -ne '2847,5361') { Write-Output ("FAIL  stores.json -> Walmart -> batch_accepted_stores did not resolve to exactly 2847 and 5361: [" + ($stIds -join ',') + "] " + $stAcc.refuse); $fail++ }
+  else { Write-Output 'ok    the batch lane accepts exactly storeIds 2847 and 5361, read from stores.json' }
+  # CLEAN TWIN: a capture read at L St (the 08-28 ruling) is admitted whole, and its stamp names the store READ.
+  $stOk = Read-IwbCapture -Lines @($stLSt, $stRow1, $stRow2) -Accepted $stAcc
+  $stSrc = $stOk.source_ad
+  if (-not $stOk.refuse -and @($stOk.lines).Count -eq 2 -and $stSrc -match 'storeId 5361 ' -and $stSrc -match '68137' -and $stSrc -match 'batch capture' -and $stSrc -notmatch 'Bellevue') {
+    Write-Output ('ok    CLEAN TWIN  a capture read at L St storeId 5361 imports both rows, stamped [' + $stSrc + ']')
+  } else { Write-Output ("FAIL  an L St capture was not admitted as read: refuse=[" + $stOk.refuse + "] lines=" + @($stOk.lines).Count + " stamp=[" + $stSrc + "]"); $fail++ }
+  # CLEAN TWIN: a capture read at the Bellevue Supercenter (the 07-15 approval, #2847) is admitted too - the
+  # store Brad's I251 ruling keeps. Its stamp names 2847, never the old literal.
+  $stBv = Read-IwbCapture -Lines @($stBlv, $stRow1, $stRow2) -Accepted $stAcc
+  if (-not $stBv.refuse -and @($stBv.lines).Count -eq 2 -and $stBv.source_ad -match 'storeId 2847 Bellevue Supercenter' -and $stBv.source_ad -match '68123' -and $stBv.source_ad -match 'store read from the capture') {
+    Write-Output ('ok    CLEAN TWIN  a capture read at the Bellevue Supercenter storeId 2847 imports both rows, stamped [' + $stBv.source_ad + ']')
+  } else { Write-Output ("FAIL  a Bellevue 2847 capture was not admitted as read: refuse=[" + $stBv.refuse + "] lines=" + @($stBv.lines).Count + " stamp=[" + $stBv.source_ad + "]"); $fail++ }
+  # MUST FIRE, THE FOUNDING BUG: the 2026-09-05 capture, exactly as it was written - rows, no store line. The
+  # importer stamped it "Walmart Bellevue 68123" and 20 cells on comparison-2026-09-17 still rested on it.
+  $stCases = @(
+    @{ l = @($stRow1, $stRow2);                  want = 'no #tc-store line';  name = 'MUST FIRE  a batch capture with no store line (the 2026-09-05 shape)' }
+    @{ l = @($st3153, $stRow1, $stRow2);         want = 'WRONG BASIS';        name = 'MUST FIRE  a batch capture read at the drifted 3153 Neighborhood Market' }
+    @{ l = @($st3154, $stRow1, $stRow2);         want = 'WRONG BASIS';        name = 'MUST FIRE  a batch capture read at the Bellevue Neighborhood Market 3154 (68123, not the store Brad chose)' }
+    @{ l = @($stHalfA, $stHalfC, $stRow1, $stRow2); want = 'straddles';       name = 'MUST FIRE  a batch capture that straddles the two ACCEPTED stores' }
+    @{ l = @($stUnrec, $stRow1, $stRow2);        want = 'UNRECORDED';         name = 'MUST FIRE  a batch capture whose store was not recorded' }
+    @{ l = @($stHalfA, $stHalfB, $stRow1, $stRow2); want = 'straddles';       name = 'MUST FIRE  a batch capture that straddles two stores' }
+    @{ l = @('#tc-store Omaha L St Supercenter 5361', $stRow1); want = 'does not parse'; name = 'MUST FIRE  a store line that does not parse' }
+  )
+  foreach ($sc in $stCases) {
+    $got = Read-IwbCapture -Lines $sc.l -Accepted $stAcc
+    if ($got.refuse -and $got.refuse.Contains($sc.want) -and @($got.lines).Count -eq 0 -and -not $got.source_ad) { Write-Output ('ok    ' + $sc.name) }
+    else { Write-Output ("FAIL  " + $sc.name + " was admitted: refuse=[" + $got.refuse + "] lines=" + @($got.lines).Count); $fail++ }
+  }
+  # MUST FIRE: a row can no longer be converted without the store it was read at - no default to fall back on.
+  $stThrew = $false
+  try { [void](Convert-BatchRow (_R 'Fresh Lime, Each' '$0.25' '$0.25/ea') $log '') } catch { $stThrew = $_.Exception.Message -match 'no source stamp' }
+  if ($stThrew) { Write-Output 'ok    MUST FIRE  Convert-BatchRow refuses a row with no store stamp instead of writing a literal one' }
+  else { Write-Output 'FAIL  Convert-BatchRow converted a row with no store stamp'; $fail++ }
   $cases = @(
     # THE FOUNDING BUG (live on the 2026-07-29 board as the brown-gravy-mix CROWN): old path rounded the
     # backed-out 0.8696 oz to "0.9 oz" and published $0.5333/oz vs Walmart's real $0.552/oz.
@@ -252,7 +347,7 @@ if ($SelfTest) {
     @{ n='Great Value Uncoated White Paper Plates, 6 Inch, Pack of 50'; lp='$2.12'; up='$4.24/100 ct'; e='50 ct'; ad='$2.12' }
   )
   foreach ($c in $cases) {
-    $r = Convert-BatchRow (_R $c.n $c.lp $c.up) $log
+    $r = Convert-BatchRow (_R $c.n $c.lp $c.up) $log $stSrc
     if ($r.err) { Write-Output "FAIL  [$($c.n)] -> $($r.err)"; $fail++; continue }
     if ($r.row.size -ne $c.e -or $r.row.ad_price -ne $c.ad) { Write-Output "FAIL  [$($c.n)] got ad=$($r.row.ad_price) size='$($r.row.size)' want ad=$($c.ad) size='$($c.e)'"; $fail++ }
     elseif ([string]$r.row.qty_basis -match 'OVERRIDDEN by name') { Write-Output "FAIL  [$($c.n)] still carries a silent name override - the rule is REJECT now, not override"; $fail++ }
@@ -273,7 +368,7 @@ if ($SelfTest) {
     @{ n='Almond Breeze Almondmilk, Unsweetened Original 32 oz (Pack of 12)'; lp='$54.47'; up='$1.65/ea'; want='name/unit-price divergence' }
   )
   foreach ($c in $rejCases) {
-    $r = Convert-BatchRow (_R $c.n $c.lp $c.up) $log
+    $r = Convert-BatchRow (_R $c.n $c.lp $c.up) $log $stSrc
     if ($r.err -and $r.err -match $c.want) { Write-Output "ok    rejects [$($c.n)] -> $($r.err)" }
     else { Write-Output "FAIL  [$($c.n)] should have been rejected ($($c.want)), got $(if($r.err){$r.err}else{'size '+$r.row.size})"; $fail++ }
   }
@@ -284,7 +379,7 @@ if ($SelfTest) {
   if ($old -and (([math]::Abs($old.unit_price - $wm) / $wm) -gt $tol)) { Write-Output ("ok    MUST-FIRE: the shipped 0.9-oz shape fails the builder tolerance (engine " + [math]::Round($old.unit_price,4) + " vs Walmart 0.552, tol " + [math]::Round($tol*100,1) + "%)") }
   else { Write-Output 'FAIL  the founding-bug shape passed the tolerance - the invariant went blind'; $fail++ }
   # writer provenance is stamped on every emitted row
-  $p = (Convert-BatchRow (_R 'Great Value Poultry Seasoning, 1.5 oz' '$1.97' '$1.31/oz') $log).row
+  $p = (Convert-BatchRow (_R 'Great Value Poultry Seasoning, 1.5 oz' '$1.97' '$1.31/oz') $log $stSrc).row
   if ($p.written_by -eq 'import-walmart-batch.ps1' -and $p.source_ad -match 'batch capture' -and $p.engine_check) { Write-Output 'ok    provenance: written_by + batch source_ad + engine_check on every row' }
   else { Write-Output 'FAIL  provenance fields missing'; $fail++ }
   # seller gate
@@ -350,7 +445,7 @@ if ($Reheal) {
     if (([string]$r.qty_basis) -notmatch '^package') {
       Write-Output ("  skip (per-unit shape, linePrice not recoverable from the row): " + $r.item); $skipped++; [void]$kept.Add($r); continue
     }
-    $res = Convert-BatchRow ([pscustomobject]@{ q=''; n=[string]$r.item; lp=[string]$r.ad_price; up=[string]$r.wm_unit_price; id=[string]$r.item_id }) $log2
+    $res = Convert-BatchRow ([pscustomobject]@{ q=''; n=[string]$r.item; lp=[string]$r.ad_price; up=[string]$r.wm_unit_price; id=[string]$r.item_id }) $log2 ([string]$r.source_ad)
     if ($res.err) {
       Write-Output ("  REJECT " + $r.item + "`n         was size='" + $r.size + "' -> " + $res.err)
       [void]$rejR.Add([pscustomobject]@{ name=[string]$r.item; lp=[string]$r.ad_price; up=[string]$r.wm_unit_price; was_size=[string]$r.size; reason=$res.err; removed_from=$prevR.Name })
@@ -409,6 +504,15 @@ if ($Reheal) {
 # so the corruption lands in the PRICE field, not just the name. Repair-Mojibake is a no-op on clean text.
 . (Join-Path $root 'capture-lib.ps1')
 $lines = @(Get-Content (Join-Path $root $Raw) -Encoding UTF8) | ForEach-Object { Repair-Mojibake $_ }   # test-auditors.ps1 greps this exact read shape - keep it verbatim
+# WHICH WALMART THIS CAPTURE WAS READ AT, ruled on BEFORE any row is parsed and before anything is written
+# (backlog I220). A refusal writes nothing: no deals, no rejects, no itemId map, no ingest ledger.
+$cap = Read-IwbCapture -Lines @($lines) -Accepted (Get-WalmartBatchAcceptedStores $root)
+if ($cap.refuse) {
+  Write-Output ("Walmart batch import REFUSED, nothing written: " + $cap.refuse)
+  exit 1
+}
+$lines = @($cap.lines)
+Write-Output ("Walmart batch capture read at: " + $cap.source_ad)
 $rows = New-Object System.Collections.ArrayList
 $ids = @{}
 $markdowns = 0
@@ -448,7 +552,7 @@ foreach ($ln in $lines) {
     if ($sv.drop3p) { Add-IngestDrop $ledger 'third-party-seller' $nm; [void]$dropped3P.Add(("{0}  [seller={1}, fulfill={2}]" -f $nm, $sv.seller, $sv.fulfill)); continue }
     if ($sv.quarantine) { Add-IngestDrop $ledger 'quarantined-no-seller-fields' $nm; [void]$quarantined.Add([pscustomobject]@{ name = $nm; lp = [string]$f[1]; up = [string]$f[2]; id = $itemId; reason = 'no seller/fulfillment fields - marketplace filter cannot run; re-capture with the 6-field reducer, or hand-verify sellers and re-run with -TrustNoSeller' }); continue }
     $wasPx = ''; if ($f.Count -ge 7) { $wasPx = ($f[6]).Trim() }
-    $res = Convert-BatchRow ([pscustomobject]@{ q = ''; n = $nm; lp = [string]$f[1]; up = [string]$f[2]; id = $itemId; was = $wasPx }) $overrides
+    $res = Convert-BatchRow ([pscustomobject]@{ q = ''; n = $nm; lp = [string]$f[1]; up = [string]$f[2]; id = $itemId; was = $wasPx }) $overrides $cap.source_ad
     if ($res.err) { Add-IngestDrop $ledger 'row-rejected' $nm; [void]$rejects.Add([pscustomobject]@{ name = $nm; lp = [string]$f[1]; up = [string]$f[2]; reason = $res.err }); continue }
     $row = $res.row
     $row | Add-Member -NotePropertyName as_of -NotePropertyValue $today -Force

@@ -73,7 +73,7 @@ if (-not (Test-Path $lib)) { Write-Output 'test-pull-agent-lib: pull-agent-lib.j
 
 # --- 1. every file in the lane must at least PARSE -------------------------------------------------
 $bad = 0
-$lane = @('pull-agent-lib.js', 'pull-walmart-instore.js', 'pull-sams-instore.js', 'pull-fareway-instore.js', 'pull-aldi-instore.js')
+$lane = @('pull-agent-lib.js', 'pull-walmart-instore.js', 'pull-sams-instore.js', 'pull-fareway-instore.js', 'pull-aldi-instore.js', 'walmart-capture-reducer.js')
 foreach ($f in $lane) {
   $p = Join-Path $here $f
   if (-not (Test-Path $p)) { Write-Output ("  X     " + $f + " is missing from the lane"); $bad++; continue }
@@ -665,6 +665,65 @@ try {
   & $node $tmpF $fws $fwi
   if ($LASTEXITCODE -ne 0) { $bad++ }
 } finally { Remove-Item $tmpF -Force -ErrorAction SilentlyContinue }
+
+# --- 9. the Walmart BATCH reducer must carry the store its page was READ at -----------------------------
+# 2026-09-19, backlog I220. import-walmart-batch.ps1 refuses a capture with no #tc-store line and admits only
+# stores.json -> Walmart -> batch_accepted_stores (5361 L St, 2847 Bellevue Supercenter). walmart-capture-reducer.js
+# wrote no line, so the lane could not produce an importable capture at all. It now reads the store off its own
+# page's __NEXT_DATA__ with walmartStoreFromData, the same text as pull-walmart-instore.js's, and writes the line
+# only when the page named a store. The reducer file loads UNTOUCHED; only `document` is supplied.
+$jsR = @'
+const fs = require('fs');
+const src = fs.readFileSync(process.argv[2], 'utf8');
+const inst = fs.readFileSync(process.argv[3], 'utf8');
+let bad = 0;
+function T(n, ok, got) { if (ok) console.log('  ok    ' + n); else { console.log('  X     ' + n + '   got: ' + got); bad++; } }
+const item = (id, name, lp) => ({ name, usItemId: String(id), sellerName: 'Walmart.com', fulfillmentType: 'STORE', priceInfo: { linePrice: lp, unitPrice: lp + '/ea' } });
+function page(location, items) {
+  const data = { props: { pageProps: { initialData: { searchResult: { itemStacks: [{ items }] },
+    pageMetadata: location ? { location } : {} } } } };
+  return { getElementById: id => (id === '__NEXT_DATA__' ? { textContent: JSON.stringify(data) } : null) };
+}
+function load(doc) { return new Function('document', src + '\nreturn { f, walmartStoreFromData };')(doc); }
+const two = [item(44390974, 'Fresh Cantaloupe, Each', '$2.50'), item(44391008, 'Fresh Lime, Each', '$0.25')];
+try {
+  // MUST FIRE: the page names Bellevue Supercenter 2847 (no display name, as Walmart serves it), and the block
+  // opens with a store line carrying the id and zip the PAGE reported, counted, then the term and its rows.
+  const blv = load(page({ storeId: 2847, postalCode: '68123' }, two)).f(['cantaloupe', 'lime'], 5, 'melons').split('\n');
+  T('MUST FIRE  the reducer emits the #tc-store line from the store the page reports',
+    blv[0] === '#tc-store store="name not in payload" id="2847" zip="68123" read="page" rows=2', blv[0]);
+  T('...then exactly one term line in the importer\'s <term><TAB>products shape',
+    blv.length === 2 && blv[1].indexOf('melons\tFresh Cantaloupe, Each~~$2.50~~$2.50/ea~~44390974~~Walmart.com~~STORE|Fresh Lime') === 0, JSON.stringify(blv));
+  const lst = load(page({ storeId: '5361', postalCode: '68137', displayName: 'Omaha L St Supercenter' }, two)).f(['lime'], 5, 'limes').split('\n');
+  T('CLEAN TWIN  an L St page names L St, with the display name when the page carries one',
+    lst[0] === '#tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="page" rows=1', lst[0]);
+  // MUST NOT FIRE: a page that names no store gets NO line, never an assumed one - the rows still come back so the
+  // importer refuses the capture loudly.
+  const none = load(page(null, two)).f(['cantaloupe'], 5, 'melons');
+  T('MUST NOT FIRE  a page that names no store gets no #tc-store line', none.indexOf('#tc-store') < 0 && none.indexOf('melons\tFresh Cantaloupe') === 0, JSON.stringify(none));
+  const amb = { getElementById: () => ({ textContent: JSON.stringify({ props: { pageProps: { initialData: {
+    searchResult: { itemStacks: [{ items: two }] }, a: { store: { storeId: 5361 } }, b: { store: { storeId: 3153 } } } } } }) }) };
+  const ambOut = load(amb).f(['lime'], 5, 'limes');
+  T('MUST NOT FIRE  a page naming two stores at equal confidence gets no line', ambOut.indexOf('#tc-store') < 0, JSON.stringify(ambOut));
+  const legacy = load(page({ storeId: 2847, postalCode: '68123' }, two)).f(['lime'], 5);
+  T('CLEAN TWIN  called without a term, the products string is exactly the old output', legacy === 'Fresh Lime, Each~~$0.25~~$0.25/ea~~44391008~~Walmart.com~~STORE', JSON.stringify(legacy));
+  T('CLEAN TWIN  no matching row still says EMPTY with the item count', load(page({ storeId: 2847, postalCode: '68123' }, two)).f(['zzz'], 5, 't') === 'EMPTY:2', 'x');
+  const hostile = load(page({ storeId: 2847, postalCode: '68123', displayName: 'Bell"evue|x\nY' }, two)).f(['lime'], 5, 'li\tmes').split('\n');
+  T('a store name or term carrying a quote, pipe, tab or newline cannot break the block',
+    hostile.length === 2 && hostile[0] === '#tc-store store="Bell evue x Y" id="2847" zip="68123" read="page" rows=1' && hostile[1].indexOf('li mes\t') === 0, JSON.stringify(hostile));
+  // ONE RULE, TWO COPIES: the reducer's store read and the in-store agent's must be the same text.
+  const fnOf = s => (s.match(/function walmartStoreFromData\(data\) \{[\s\S]*?\n\}/) || [])[0];
+  T('the reducer\'s walmartStoreFromData is identical text to pull-walmart-instore.js\'s', !!fnOf(src) && fnOf(src) === fnOf(inst), (fnOf(src) || 'none').length + ' vs ' + (fnOf(inst) || 'none').length);
+} catch (e) { console.log('  X     the Walmart reducer test threw: ' + (e && e.stack)); bad++; }
+process.exit(bad === 0 ? 0 : 1);
+'@
+$red = Join-Path $here 'walmart-capture-reducer.js'
+$tmpR = Join-Path ([IO.Path]::GetTempPath()) ('wmreducer-' + [guid]::NewGuid().ToString('N') + '.js')
+[IO.File]::WriteAllText($tmpR, $jsR, (New-Object System.Text.UTF8Encoding($false)))
+try {
+  & $node $tmpR $red $wal
+  if ($LASTEXITCODE -ne 0) { $bad++ }
+} finally { Remove-Item $tmpR -Force -ErrorAction SilentlyContinue }
 
 if ($bad -eq 0) { Write-Output 'test-pull-agent-lib SELF-TEST PASS'; exit 0 }
 Write-Output ("test-pull-agent-lib SELF-TEST FAIL: {0} case(s)" -f $bad); exit 1
