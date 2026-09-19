@@ -15,6 +15,12 @@ its repo copy differ, so both copies must change together. From the main checkou
 then commit the prompt-backup copy and delete this file. Until then an attended Fareway rescue that uses an old
 in-page copy of the extractor is refused with a message telling the operator to reload pull-fareway-shop.js.
 
+## produce-condiment-exclusion.md (Brad's "Fix all produce" ruling, 2026-09-19)
+
+The condiment class (aioli, mayo, squeeze, dip, dressing, spread) is already on main for 114 of 116 produce
+commodities; the live board was built ten minutes before it landed. The file has the paired diff (1 cell is this
+rule), the full rebuild diff (80 cells), and the one command that rebuilds the live board.
+
 ## I60-lesson-republish.md (backlog I60, 2026-09-19)
 
 The before and after of the three finance lessons (30, 31, 37), the checks, and the commands that swap only the
