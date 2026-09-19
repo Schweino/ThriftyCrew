@@ -10697,6 +10697,19 @@ as this item said it would be. Context for it: the liveness layer outside the de
 `grocery/health-heartbeat.ps1`, which watches 11 tasks, 3 queues, 5 output files, 1 glob and 2 external files;
 meal-prep has two outputs there, and nothing outside the PRINT-only graph-gates watches the graph for a stop.
 
+**Ruled 2026-09-19 (Brad, in chat): sort what the heartbeat watches BY PRODUCT and add a liveness check only to a
+product that has none.** Products: the grocery board, meal prep and recipes, the graph, the site and lessons.
+**Acceptance bar, written 2026-09-19 before the per-product table below was compiled** (after reading
+`grocery/expected-automations.json` and one live heartbeat run, so not blind to the registry). A product HAS a
+liveness check when at least one check that pages (a `grocery/health-heartbeat.ps1` row, or the capture watchdog
+that runs it) fires when that product's SCHEDULED producer stops running entirely, and that is SHOWN, not read off a
+row: by a self-test MUST FIRE, by a live read with its inputs frozen and the clock advanced, or by a page it actually
+sent when the producer stopped. A product with NO scheduled producer is out of scope and recorded as such, because
+nothing is expected to happen there and an absence check would page on its normal state (red on day one). A product
+with a scheduled producer and no shown check is BARE and gets the cheapest check that fires on nothing happening, with
+its max age derived from its schedule, a MUST FIRE and a CLEAN TWIN, broken once. A row that would page TODAY for a
+known, ruled reason is not added.
+
 ### I130 - A deletion merged from peers can resurrect itself, and the estate's merged ledgers have never been checked for it `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Answer is NO, established by opening all three merge paths rather than grepping for a concept. Two of the three never delete a key at all (0 `.Remove(` calls), so they cannot resurrect a deletion. The third, `sale-windows`, prunes only when `repriced_for` equals the exact `refresh_on` the PEER wrote after a landed capture - the acknowledgement IS the tombstone - and it re-reads inside the same lock the peers write under.
