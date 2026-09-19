@@ -15646,7 +15646,7 @@ holds 6,570 such rows across seven files (2026-07-15 to 2026-09-05).
   shape as the 2026-08-28 ruling ("leave the existing rows, recapture forward").
 - **C. Leave them**: land part 1 only; the batch rows age out of the union by 2026-12-04.
 
-### I221 - Reader-facing: the deals page never shows "Doesn't carry" `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+### I221 - Reader-facing: the deals page never shows "Doesn't carry" `NEEDS A RULING` `run-0919` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15656,6 +15656,71 @@ see "No price yet". Fixing it changes a page, so Brad's. Related: `grocery/deriv
 turns ONE empty Baker's search into a not-carried entry (12 of 24 entries, written 2026-08-21, unscheduled);
 `pork-tenderloin` and `fresh-parsley` look doubtful for a Kroger store, and those entries hide the gaps from
 `audit-coverage-gaps` for 90 days. A second, differently worded search is the missing check.
+
+**Worked 2026-09-18; the code is held on branch `claude/i221-notcarried`, not on main.** Base commit `6e236133d`.
+
+*What the branch does.* One new lib, `grocery/not-carried-lib.ps1` (blob `88f9699bd6`), is now the only reading of
+`not-carried.json` and the only rule for what it may say. `build-deals-page.ps1` (blob `df865af52f`) reads the real
+shape (`entries` keyed `.commodity`) through it, and a store priced on the row now keeps its price whatever the file
+says (the old ranking filter would have dropped the price). `derive-not-carried.ps1` (blob `030eb940e0`) now REFUSES,
+counts and lists any candidate resting on one wording, reads every capture inside `recheck_days` instead of only the
+newest, and writes the tracked file LF. The rule the page and the writer share: a `declared` entry, or a `derived`
+entry with at least two DIFFERENTLY WORDED searches (case, punctuation, word order and a plural `s` do not count),
+each empty or with no matching row, inside `recheck_days`. Fixtures: `not-carried-lib -NotCarriedLibSelfTest` 12 of 12,
+`derive-not-carried -SelfTest` 8 of 8 (it runs the script as a child over a temp tree). Broken once each: the old
+`cells`/`.id` reader turned 7 of 12 red; the refusal loosened to one wording turned 2 of 12 and 2 of 8 red; md5
+identical after restore.
+
+*The 24 entries, re-read (blob `10e0338705`, all derived from `bakers-regular-2026-08-21.json`).* Every one rests on
+ONE wording. Asked 8 to 14 times each across the 63 Baker's captures from 2026-07-05 to 2026-09-18, always with the
+same term (captures before mid-September record no `term` text at all). 12 are `empty` and 12 are `success` with rows
+our matcher rejected. The 2026-08-21 capture keeps the rows those searches returned, and they settle several:
+
+- **Would drop, the store returned the product itself (4):** `pesto` (9 rows incl. Private Selection Basil Pesto,
+  Barilla, DeLallo), `lasagna-noodles` (Barilla Wavy and Oven-Ready Lasagne), `onion-soup-mix` (Lipton Recipe Secrets,
+  Kroger Onion Soup and Dip Mix), `fresh-rosemary` (Simple Truth Organic Rosemary, Rosemary Bunch).
+- **Would drop, contradicted by the store's own history (1):** `dried-arbol-chiles` (recorded empty, yet 2 of its 13 asks
+  returned a row).
+- **Would drop, the TERM is the likely defect (6):** `pork-tenderloin` ('pork tenderloin whole boneless'),
+  `fresh-parsley` ('fresh parsley bunch'), `fresh-sweet-italian-turkey-sausage` ('sweet Italian turkey sausage'),
+  `green-chilli` ('fresh green chilli', British spelling), `cooked-jasmine-rice` ('cooked jasmine rice'), and `gelatin`
+  ('gelatin cups' returned Jell-O cups for what may be a different product). Over-qualified terms shrink a result to
+  zero, which is `search-verdict-lib.ps1`'s own measured finding.
+- **Doubtful, rows returned but not the product, a second wording would settle it (7):** `dried-ancho-chiles` (1 row,
+  a street-corn kit, and 2 of 13 asks came back empty), `jicama` (1 row, taco
+  shells), `portobello-mushrooms` (1 row, a pork loin), `snow-peas` (3 rows, all sugar snap peas), `wild-rice` (14
+  rows, soups and pet food), `fresh-thyme` and `ground-beef-93-7` (the capture kept none of the 4 and 2 rows).
+- **Plausibly true, still one wording (6):** `achiote-paste`, `berbere-seasoning`, `caraway-seeds`,
+  `five-spice-powder`, `harissa-paste`, `pomegranate-molasses`.
+
+No entry was deleted. `derive-not-carried` run dry over today's captures: 0 written, **63 REFUSED** on one wording
+(58 Family Fare, 5 Baker's, among them 4 of the 24: berbere, caraway, cooked jasmine rice, pork tenderloin). The
+other 20 of the 24 now count as inconclusive, because every Baker's capture that asked them kept no search
+text. So under the new rule nothing is written until a capture asks a second wording (`search-verdict-lib`'s
+`Get-RetryLadder` produces one).
+
+*What a reader would see (board `comparison-2026-09-17`, 572 rows; old code vs branch built into temp, `public/`
+restored).* **Branch as it stands: 0 cells change; `deals-page.html` and `public/board.json` are byte-identical to
+the old build**, because all 24 entries fail the rule. **With the rule neutered** (every entry believed): 24 cells
+change, every one `Baker's`, "No price yet" -> "Doesn't carry": fresh-sweet-italian-turkey-sausage, ground-beef-93-7,
+pork-tenderloin, fresh-parsley, fresh-rosemary, fresh-thyme, green-chilli, jicama, portobello-mushrooms, snow-peas,
+onion-soup-mix, achiote-paste, harissa-paste, pesto, pomegranate-molasses, berbere-seasoning, caraway-seeds,
+dried-ancho-chiles, dried-arbol-chiles, five-spice-powder, lasagna-noodles, wild-rice, cooked-jasmine-rice, gelatin.
+0 of 572 rows changed a priced chip in either arm. Looked at at 375 px in the neutered arm: Pork Tenderloin's Baker's cell reads
+"Doesn't carry / See it? Let us know!", no horizontal scroll (scrollWidth 375).
+
+*Not done here.* `audit-coverage-gaps.ps1:319` still honours every unexpired entry, single-search or not, so the 24
+still silence their gaps until 2026-11-19; moving it onto the lib would reopen 24 gaps in that audit.
+
+*The question for Brad:* land the branch as it is, and on what terms may a "Doesn't carry" label reach a reader?
+1. **Land the branch as it is (recommended).** Nothing changes on the page today (byte-identical build). A label
+   appears only once a capture has asked two wordings, or Brad declares one by hand. Follow-on: give the Baker's and
+   Family Fare pulls a second wording on an empty or unmatched result.
+2. **Land it and trust today's entries.** 24 labels appear at once, and at least 4 are wrong (pesto, lasagna noodles,
+   onion soup mix, rosemary are on the Baker's shelf).
+3. **Land only the six "plausibly true" entries as declared.** 6 labels appear; each rests on Brad's say-so rather
+   than on a second search.
+4. **Leave it all off main.** Readers keep "No price yet" everywhere, which is honest but tells them nothing.
 
 ### I222 - Reader-facing: per-pound prices read as per-each, and multi-packs priced as one each `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
 
