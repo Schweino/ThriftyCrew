@@ -625,6 +625,18 @@ everything else honest, so a defect here is silent by construction.
   pool changed a file there; the main checkout, where capture lanes write, prints REVIEW. It watches that pool only:
   `prepush-test-auditors` runs after it and outside it.
 
+- **A RULING PUSH IS RED ON PURPOSE, AND THE GATE ACCEPTS THAT RED ONLY WHEN THE PUSH CAUSES IT** (Brad's ruling,
+  2026-09-19, "Teach the gate"). `ops/prepush-test-auditors.ps1` refuses a new failing test-auditors case, and the
+  food-category and known-wrong live twins go red whenever a push adds a ruling against a product still on the board,
+  which is the intended red. The next build, the only thing that clears it, builds from origin/main, which cannot get
+  the ruling: a deadlock (found on `claude/gc-fence`, refused with exactly those two cases at run-gates pass=441 fail=0).
+  So a new failing case whose Bad line carries `# live-board-ruling-case audit=<script>` gets a PAIRED RUN: the same
+  audit on the same board (hardlinked into throwaway arms), rule files at the push's base, then at its tip, then
+  ruling files at the tip over the rest at the base when a non-ruling rule file also moved. Accepted, and printed as
+  `EXPECTED-LIVE-RED`, only when base is exit 0, tip is exit 2, and every tip finding is one the ruling files alone
+  flag. Any exit 3, a base already red, an unrelated new case or an uncommitted rule edit refuses as before. Compare a
+  working-tree file with a blob through `git hash-object`, never by bytes: a fresh checkout is CRLF over LF blobs. A
+  stale worktree board is judged as it stands, so re-seed before pushing a ruling.
 - **A PUSH IS A COMPARE-AND-SWAP WHOSE CRITICAL SECTION IS THE WHOLE HOOK, so the SLOWEST push converges on never
   landing** (2026-09-11). git fixes a push's refs when it connects and the remote updates a ref only if it still
   holds the sha the hook was handed. Measured across 11 consecutive attempts from one session: the hook took 577 to

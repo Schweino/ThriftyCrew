@@ -989,6 +989,244 @@ function Get-Selection([string[]]$Paths, [string[]]$GuardPaths, $Model, $Inputs,
   return $s
 }
 
+# ============================================================================================ EXPECTED LIVE RED
+# A RULING PUSH IS RED ON PURPOSE, AND THIS CHECK USED TO MAKE THAT A DEADLOCK (Brad's ruling, 2026-09-19, "Teach the
+# gate"). Two test-auditors cases read the LIVE board: the food-category live twin and the known-wrong live clean twin.
+# A push that ADDS a ruling (a known-wrong.json entry, a category-excludes.json class) against a wrong product that is
+# still on the board turns them red, and the estate says that red is intended: add-known-wrong's header says a new
+# finding is EXPECTED to turn the gate red, and CLAUDE.md says a fresh correction is red on purpose until the next
+# build. But the case was new, so this check refused the push, and the next build, which builds from origin/main,
+# never saw the ruling: the loop could not end. Found on claude/gc-fence (green-chilli: a Burman aioli at Aldi and a
+# Stokes canned stew at Walmart), refused with exactly those two cases while run-gates read pass=441 fail=0.
+# THE RULING: accept a NEW failing live-board case ONLY when the push itself causes it by adding a ruling. Every other
+# new failure is refused exactly as before.
+# THE MECHANISM IS A PAIRED RUN, NOT A READING OF THE DIFF. For each such case, the SAME audit (the working tree's copy,
+# which is what test-auditors ran) runs against the SAME live board in throwaway arms that differ only in the rule
+# files the audit reads, enumerated from the audit's own `Join-Path $root '<x>.json'` literals:
+#   arm 1  every rule file at the push's BASE (merge-base of the pushed tip and the remote ref, else origin/main)
+#   arm 2  every rule file at the pushed TIP
+#   arm 3  the RULING files at the tip and every other rule file at the base; run only when a non-ruling rule file
+#          differs between base and tip, because otherwise it is arm 2 (added to the two-arm design for a stated
+#          reason: arm 1 green and arm 2 red proves the push's rule files caused the red, not that a RULING did. A
+#          removed food-class-allowlist exception or a categories.json relabel is not a ruling, and telling which
+#          finding each produced by re-implementing the audits' matching here would be a second copy of their rules)
+# A case is EXPECTED only when test-auditors itself saw exit 2, arm 1 exits 0, arm 2 exits 2 with at least one finding
+# that names a (commodity, store, product), every arm-2 finding is absent from arm 1 AND present in arm 3, and the
+# working tree's rule files are the tip's (the red came from the working tree), compared as git blob ids. An exit 3 in
+# any arm is never accepted. Red on arm 1 too is a live defect this push did not cause: refused unless the record
+# holds it.
+# SCOPE: only the cases test-auditors marks `# live-board-ruling-case audit=<script>` on their Bad line, and only when
+# the known-failures record is fresh and EVERY new failing case is one of them; a single other new case refuses the
+# push with no paired run at all, byte for byte as before. The board is hardlinked into each arm (the same files, not a
+# copy): the audits' board globs, comparison-*.json, recipe-board.json and regular\*-regular-*.json. coverage-lib.ps1 is
+# deliberately NOT placed in an arm, so an arm writes no coverage record into the live out\.
+# SCOPE OF AN ACCEPTANCE: it proves the push's ruling files flag exactly these products on this checkout's board. It
+# does not prove the ruling is right, and the board keeps showing the product until the next build. A STALE board
+# is judged as it stands: gc-fence's first dry run read its 08:12 seed, which still carried a product main's own
+# rules already flag, and was refused as red at the base; re-seed a worktree before pushing a ruling.
+$script:RulingFiles = @('known-wrong.json', 'category-excludes.json', 'commodities.json')
+$script:LiveCaseRx = "Bad\s+\(\s*'((?:[^']|'')+)'.*#\s*live-board-ruling-case\s+audit=([\w.\-]+\.ps1)\s*$"
+$script:ArmBoardGlobs = @('comparison-*.json', 'recipe-board.json', 'regular\*-regular-*.json')
+
+# The live-board ruling cases test-auditors declares, as { prefix; audit }: the Bad message's leading literal, which a
+# FAIL line starts with, and the audit script that case runs against the live board.
+function Get-LiveRulingCases([string]$TaText) {
+  $out = @()
+  foreach ($ln in ($TaText -split "`r?`n")) {
+    $m = [regex]::Match($ln, $script:LiveCaseRx)
+    if ($m.Success) { $out += [pscustomobject]@{ prefix = $m.Groups[1].Value.Replace("''", "'"); audit = $m.Groups[2].Value } }
+  }
+  return ,$out
+}
+
+# The rule files an audit reads beside itself, read from its own `Join-Path $root '<x>.json'` literals.
+function Get-AuditRuleFiles([string]$AuditText) {
+  $set = New-Object 'System.Collections.Generic.List[string]'
+  foreach ($m in [regex]::Matches($AuditText, "Join-Path\s+\`$root\s+'([\w.\-]+\.json)'", 'IgnoreCase')) {
+    $n = $m.Groups[1].Value
+    if (-not $set.Contains($n)) { $set.Add($n) }
+  }
+  return ,($set.ToArray())
+}
+
+# The (commodity, store, product) findings an audit printed: food-category's BUG lines, known-wrong's BLOCKED and
+# BLOCKED-LINK lines, each as 'commodity|store|product'.
+function Get-AuditFindings($Lines) {
+  $out = New-Object 'System.Collections.Generic.List[string]'
+  foreach ($l in @($Lines)) {
+    $t = [string]$l
+    foreach ($rx in @("^\s+BUG\s+(?<c>\S+)\s+\[(?<s>.*?)\s*\]\s+class=\S+\s+'(?<p>.*)'\s*$",
+                      "^\s+BLOCKED\s+\[(?<s>[^\]]*)\]\s+(?<c>\S+)\s+'(?<p>.*)'\s.*per_unit=",
+                      "^\s+BLOCKED-LINK\s+\[(?<s>[^\]]*)\]\s+(?<c>\S+) curated link points at '(?<p>.*)', which is adjudicated wrong\s*$")) {
+      $m = [regex]::Match($t, $rx)
+      # one finding per product: food-category prints a BUG line per CLASS, so a stew in a can is two lines, one product
+      if ($m.Success) { $fk = $m.Groups['c'].Value + '|' + $m.Groups['s'].Value + '|' + $m.Groups['p'].Value; if (-not $out.Contains($fk)) { $out.Add($fk) }; break }
+    }
+  }
+  return ,($out.ToArray())
+}
+
+# git cat-file into a file, byte for byte (PowerShell's own capture of native output re-encodes it). $false when the
+# blob is absent at that revision or git fails.
+function Save-GitBlob([string]$Root, [string]$Spec, [string]$Dest) {
+  $null = & git -C $Root cat-file -e $Spec 2>$null
+  if ($LASTEXITCODE -ne 0) { return $false }
+  $psi = New-Object Diagnostics.ProcessStartInfo 'git'
+  $psi.Arguments = ('-C "' + $Root + '" cat-file blob "' + $Spec + '"')
+  $psi.UseShellExecute = $false; $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true; $psi.CreateNoWindow = $true
+  $p = [Diagnostics.Process]::Start($psi)
+  $fs = [IO.File]::Create($Dest)
+  try { $p.StandardOutput.BaseStream.CopyTo($fs) } finally { $fs.Close() }
+  $null = $p.StandardError.ReadToEnd()
+  $p.WaitForExit()
+  if ($p.ExitCode -ne 0) { Remove-Item -LiteralPath $Dest -Force -ErrorAction SilentlyContinue; return $false }
+  return $true
+}
+
+# The blob id at <rev>:<path>, or 'absent' when that revision has no such file.
+function Get-BlobId([string]$Root, [string]$Spec) {
+  $id = (@(& git -C $Root rev-parse --verify -q $Spec 2>$null) -join '').Trim()
+  if ($LASTEXITCODE -ne 0 -or $id -notmatch '^[0-9a-f]{40}$') { return 'absent' }
+  return $id
+}
+
+# The base a push's rule change is measured from: the merge-base of the tip and the remote ref's old sha when git has
+# it, else of the tip and origin/main. '' when neither resolves.
+function Get-PushBase([string]$Root, [string]$Tip, [string]$Remote) {
+  $cands = @()
+  if ($Remote -and $Remote -match '[^0]') { $cands += $Remote }
+  $cands += 'refs/remotes/origin/main'
+  foreach ($c in $cands) {
+    $mb = (@(& git -C $Root merge-base $Tip $c 2>$null) -join '').Trim()
+    if ($LASTEXITCODE -eq 0 -and $mb -match '^[0-9a-f]{40}$') { return $mb }
+  }
+  return ''
+}
+
+# One arm: <ArmDir>\grocery\<audit> (the working tree's copy), every lib\*.ps1, each rule file from the revision its
+# spec names (absent there = absent here), and the live board hardlinked under grocery\out. Runs the audit with no
+# arguments, exactly as the live case does. Returns rc, lines, findings; rc -1 when the arm could not be built.
+function Invoke-AuditArm([string]$ArmDir, [string]$Root, [string]$AuditDirRel, [string]$Audit, [hashtable]$RuleRevs, [string]$LiveOut) {
+  $r = [pscustomobject]@{ rc = -1; lines = @(); findings = @(); why = '' }
+  try {
+    $g = Join-Path $ArmDir $AuditDirRel.Replace('/', '\')
+    $null = New-Item -ItemType Directory -Path (Join-Path $ArmDir 'lib'), $g, (Join-Path $g 'out\regular') -Force -ErrorAction Stop
+    foreach ($lf in @(Get-ChildItem (Join-Path $Root 'lib\*.ps1') -File)) { Copy-Item -LiteralPath $lf.FullName -Destination (Join-Path $ArmDir 'lib') -ErrorAction Stop }
+    Copy-Item -LiteralPath (Join-Path (Join-Path $Root $AuditDirRel.Replace('/', '\')) $Audit) -Destination $g -ErrorAction Stop
+    foreach ($f in @($RuleRevs.Keys)) {
+      $rev = [string]$RuleRevs[$f]
+      if ($rev) { $null = Save-GitBlob $Root ($rev + ':' + $AuditDirRel.TrimEnd('/') + '/' + $f) (Join-Path $g $f) }
+    }
+    $linked = 0
+    foreach ($glob in $script:ArmBoardGlobs) {
+      $sub = Split-Path $glob -Parent
+      foreach ($bf in @(Get-ChildItem (Join-Path $LiveOut $glob) -File -ErrorAction SilentlyContinue)) {
+        $dst = if ($sub) { Join-Path (Join-Path $g 'out') (Join-Path $sub $bf.Name) } else { Join-Path (Join-Path $g 'out') $bf.Name }
+        $null = New-Item -ItemType HardLink -Path $dst -Target $bf.FullName -ErrorAction Stop
+        $linked++
+      }
+    }
+    if ($linked -eq 0) { $r.why = ('no board file under ' + $LiveOut + ' matched ' + ($script:ArmBoardGlobs -join ', ')); return $r }
+    $run = Invoke-TaChild (Join-Path $g $Audit) @() (Join-Path $ArmDir 'run') 300
+    $r.rc = $run.rc; $r.lines = $run.lines; $r.findings = Get-AuditFindings $run.lines
+    if ($run.startError) { $r.rc = -1; $r.why = ('the audit could not be started: ' + $run.startError) }
+  } catch { $r.rc = -1; $r.why = ('the arm could not be built: ' + $_.Exception.Message) }
+  return $r
+}
+
+# The decision. $V is Get-PushVerdict's result; returns { v; lines; accepted; findings; arms }. $V comes back
+# untouched (the same object, no field changed, no line printed, no arm run) unless the verdict is a refusal over a
+# fresh record whose every new line is a declared live-board ruling case.
+function Resolve-ExpectedLiveReds($V, $Known, [object[]]$Cases, [string]$Root, [string]$AuditDirRel, [string]$Base, [string]$Tip, [string]$LiveOut) {
+  $res = [pscustomobject]@{ v = $V; lines = @(); accepted = 0; findings = 0; arms = 0 }
+  if ($V.code -ne 1 -or $Known.state -ne 'fresh' -or @($V.newLines).Count -eq 0 -or @($Cases).Count -eq 0) { return $res }
+  $byLine = @{}
+  foreach ($l in @($V.newLines)) {
+    $t = ([string]$l) -replace '^FAIL\s+', ''
+    $hit = $null
+    foreach ($c in @($Cases)) { if ($t.StartsWith($c.prefix, [StringComparison]::Ordinal)) { $hit = $c; break } }
+    if ($null -eq $hit) { return $res }   # a new failure that is not a live-board ruling case: refused exactly as before
+    $byLine[$l] = $hit
+  }
+  if (-not $Base -or -not $Tip) {
+    $res.lines += ('prepush-test-auditors: NOT EXPECTED - the new failing case(s) are live-board ruling cases, but the push''s base or tip could not be resolved (base=' + $Base + ' tip=' + $Tip + '), so no paired run could say whether this push caused them')
+    return $res
+  }
+  $b8 = $Base.Substring(0, [Math]::Min(9, $Base.Length)); $t8 = $Tip.Substring(0, [Math]::Min(9, $Tip.Length))
+  $scratch = Join-Path $env:TEMP ('tc-ptaer-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  $verdicts = @{}   # audit -> { ok; why; findings }
+  try {
+    $null = New-Item -ItemType Directory -Path $scratch -ErrorAction Stop
+    foreach ($audit in @($byLine.Values | ForEach-Object { $_.audit } | Sort-Object -Unique)) {
+      $vd = [pscustomobject]@{ ok = $false; why = ''; findings = @() }
+      $verdicts[$audit] = $vd
+      $auditPath = Join-Path (Join-Path $Root $AuditDirRel.Replace('/', '\')) $audit
+      if (-not (Test-Path -LiteralPath $auditPath)) { $vd.why = ($audit + ' is not in this checkout'); continue }
+      $rules = Get-AuditRuleFiles ([IO.File]::ReadAllText($auditPath))
+      if ($rules.Count -eq 0) { $vd.why = ('no rule file could be read from ' + $audit + '''s source'); continue }
+      # The red test-auditors saw came from the working tree, so the tip's rule files must BE the working tree's. Compared
+      # as BLOB IDS through git's own clean filter (hash-object), never as bytes: a fresh checkout is CRLF over LF blobs,
+      # and a byte compare called gc-fence's untouched known-wrong.json an uncommitted edit (found on its dry run).
+      $dirty = @(); $nonRulingMoved = $false
+      foreach ($f in $rules) {
+        $rel = $AuditDirRel.TrimEnd('/') + '/' + $f
+        $tipId = Get-BlobId $Root ($Tip + ':' + $rel); $baseId = Get-BlobId $Root ($Base + ':' + $rel)
+        $wtF = Join-Path (Join-Path $Root $AuditDirRel.Replace('/', '\')) $f
+        $wtId = 'absent'
+        if (Test-Path -LiteralPath $wtF) { $wtId = (@(& git -C $Root hash-object -- $rel 2>$null) -join '').Trim(); if ($LASTEXITCODE -ne 0 -or -not $wtId) { $wtId = 'unhashable' } }
+        if (-not [string]::Equals($tipId, $wtId, [StringComparison]::Ordinal)) { $dirty += $f }
+        if ($script:RulingFiles -notcontains $f -and -not [string]::Equals($tipId, $baseId, [StringComparison]::Ordinal)) { $nonRulingMoved = $true }
+      }
+      if ($dirty.Count -gt 0) { $vd.why = ('the working tree''s ' + ($dirty -join ', ') + ' differs from the pushed tip, so the red test-auditors saw is not the push''s'); continue }
+      $revs1 = @{}; $revs2 = @{}; $revs3 = @{}
+      foreach ($f in $rules) { $revs1[$f] = $Base; $revs2[$f] = $Tip; $revs3[$f] = $(if ($script:RulingFiles -contains $f) { $Tip } else { $Base }) }
+      $a1 = Invoke-AuditArm (Join-Path $scratch ('a1-' + $audit)) $Root $AuditDirRel $audit $revs1 $LiveOut; $res.arms++
+      $a2 = Invoke-AuditArm (Join-Path $scratch ('a2-' + $audit)) $Root $AuditDirRel $audit $revs2 $LiveOut; $res.arms++
+      if ($a1.rc -lt 0 -or $a2.rc -lt 0) { $vd.why = ('an arm could not run: ' + $a1.why + $a2.why); continue }
+      if ($a1.rc -eq 3 -or $a2.rc -eq 3) { $vd.why = ('the audit could not look (exit 3) at the base (arm 1 rc=' + $a1.rc + ') or the tip (arm 2 rc=' + $a2.rc + '); a could-not-look is never accepted'); continue }
+      if ($a1.rc -ne 0) { $vd.why = ('it is red at the base ' + $b8 + ' too (arm 1 rc=' + $a1.rc + ', first finding ' + $(if ($a1.findings.Count) { $a1.findings[0] } else { 'none named' }) + '), so this push did not cause it: a live defect the known-failures record does not hold'); continue }
+      if ($a2.rc -ne 2) { $vd.why = ('with the tip''s rule files the audit exits ' + $a2.rc + ', not 2, so the paired run does not reproduce the red test-auditors saw'); continue }
+      if ($a2.findings.Count -eq 0) { $vd.why = 'arm 2 is red but names no (commodity, store, product), so nothing says what the ruling flags'; continue }
+      $f3 = $a2.findings
+      if ($nonRulingMoved) {
+        $a3 = Invoke-AuditArm (Join-Path $scratch ('a3-' + $audit)) $Root $AuditDirRel $audit $revs3 $LiveOut; $res.arms++
+        if ($a3.rc -lt 0 -or $a3.rc -eq 3) { $vd.why = ('the ruling-only arm could not look (rc=' + $a3.rc + ') ' + $a3.why); continue }
+        $f3 = $a3.findings
+      }
+      $unexplained = @($a2.findings | Where-Object { ($a1.findings -contains $_) -or ($f3 -notcontains $_) })
+      if ($unexplained.Count -gt 0) { $vd.why = ('' + $unexplained.Count + ' of ' + $a2.findings.Count + ' finding(s) are not flagged by this push''s ruling files alone (first: ' + $unexplained[0] + '), so something other than a ruling made the board red'); continue }
+      $vd.ok = $true; $vd.findings = $a2.findings
+    }
+  } catch {
+    # Anything thrown refuses every case: an audit whose arms did not finish is overwritten, not trusted.
+    $thrown = ('the paired run threw: ' + $_.Exception.Message)
+    foreach ($k in @($byLine.Values | ForEach-Object { $_.audit } | Sort-Object -Unique)) { $verdicts[$k] = [pscustomobject]@{ ok = $false; why = $thrown; findings = @() } }
+  } finally { Remove-Item -LiteralPath $scratch -Recurse -Force -ErrorAction SilentlyContinue }
+  $okLines = @(); $allOk = $true; $out = @()
+  foreach ($l in @($V.newLines)) {
+    $c = $byLine[$l]; $vd = $verdicts[$c.audit]; $key = Get-CaseKey $l
+    $rcm = [regex]::Match((([string]$l) -replace '^FAIL\s+', '').Substring($c.prefix.Length), '^(\d+)\)')
+    if ($null -ne $vd -and $vd.ok -and -not ($rcm.Success -and $rcm.Groups[1].Value -eq '2')) { $vd = [pscustomobject]@{ ok = $false; why = ('test-auditors saw this case exit ' + $(if ($rcm.Success) { $rcm.Groups[1].Value } else { 'an unreadable code' }) + ', not 2'); findings = @() } }
+    if ($null -eq $vd -or -not $vd.ok) {
+      $allOk = $false
+      $out += ('  NOT EXPECTED          ' + $key + ': ' + $(if ($null -ne $vd) { $vd.why } else { 'no paired run' }))
+      continue
+    }
+    $okLines += $l
+    foreach ($fd in $vd.findings) {
+      $p = $fd -split '\|', 3
+      $out += ('  EXPECTED-LIVE-RED     ' + $key + ': [' + $p[1] + '] ' + $p[0] + ' ''' + $p[2] + ''' - this push adds the ruling that flags it (same audit, same live board: green with the rule files at ' + $b8 + ', red at ' + $t8 + '); the next board build clears it. Until that build the live board still shows this product.')
+      $res.findings++
+    }
+  }
+  $res.lines = $out
+  if (-not $allOk) { return $res }
+  $nv = [pscustomobject]@{ code = 0; verdict = 'ALLOWED'; detail = ''; newLines = @(); oldLines = @($V.oldLines); expectedLines = $okLines }
+  $nv.detail = ('this push adds ' + $okLines.Count + ' failing live-board case(s), ' + $okLines.Count + ' accepted as expected (' + $res.findings + ' finding(s)): each is red only because this push adds the ruling that flags a product still on the live board, proven by a paired run of the same audit on the same board, green with the rule files at ' + $b8 + ' and red at ' + $t8 + '. That is not a pass: those cases stay red until the next board build' + $(if (@($V.oldLines).Count -gt 0) { ', and ' + @($V.oldLines).Count + ' other failing case(s) are already in the known-failures record' } else { '' }))
+  $res.v = $nv; $res.accepted = $okLines.Count
+  return $res
+}
+
 # ============================================================================================ SELF-TEST
 if ($SelfTest) {
   $fails = @(); $ran = 0
@@ -1322,9 +1560,118 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
     "  child-file cases THREW: $($_.Exception.Message)"
   } finally { Remove-Item -LiteralPath $chDir -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # ---- EXPECTED LIVE RED (Brad's ruling 2026-09-19, "Teach the gate") ----
+  # The founding deadlock: a push adding a ruling against a product still on the live board turns the live-board cases
+  # red on purpose, and this check refused it forever. A sandbox git repo holds the REAL audits (copied from this
+  # checkout, with every lib), rule files committed at a base and at several tips, and an untracked fixture board, so
+  # each case drives the real paired run through the real audits. Synthetic commodity and store names throughout.
+  $liveCases = Get-LiveRulingCases $taText
+  Case 'MUST FIRE' 'live: test-auditors marks exactly the food-category and known-wrong live-board cases' (@($liveCases).Count -eq 2 -and (@($liveCases | ForEach-Object { $_.audit } | Sort-Object) -join ',') -eq 'audit-food-category.ps1,audit-known-wrong.ps1') "got=$(@($liveCases | ForEach-Object { $_.audit + ' <' + $_.prefix + '>' }) -join '; ')"
+  $auditTexts = @{}
+  foreach ($an in @('audit-food-category.ps1', 'audit-known-wrong.ps1')) { $ap = Join-Path $RepoRoot ('grocery\' + $an); $auditTexts[$an] = $(if (Test-Path -LiteralPath $ap) { [IO.File]::ReadAllText($ap) } else { '' }) }
+  $fcRules = Get-AuditRuleFiles $auditTexts['audit-food-category.ps1']; $kwRules = Get-AuditRuleFiles $auditTexts['audit-known-wrong.ps1']
+  $globsNamed = @($script:ArmBoardGlobs | Where-Object { $leaf = ($_ -split '\\')[-1].Replace('*-regular-*', '-regular-*'); -not (($auditTexts['audit-food-category.ps1'] + $auditTexts['audit-known-wrong.ps1']).Contains($leaf)) })
+  Case 'MUST FIRE' 'live: each audit''s rule files are read from its own source, and the arms'' board globs are the ones they read' ($fcRules.Count -ge 3 -and $kwRules.Count -ge 3 -and @($fcRules + $kwRules | Where-Object { $script:RulingFiles -contains $_ }).Count -ge 2 -and $globsNamed.Count -eq 0) "fc=$($fcRules -join ',') kw=$($kwRules -join ',') unnamed-globs=$($globsNamed -join ',')"
+  $rn = @{}; foreach ($x in @($fcRules + $kwRules)) { $rn[($x -replace '\.json$', '')] = $x }
+  $caseFc = @($liveCases | Where-Object { $_.audit -eq 'audit-food-category.ps1' })
+  $caseKw = @($liveCases | Where-Object { $_.audit -eq 'audit-known-wrong.ps1' })
+  $fcLine = 'FAIL  ' + $(if ($caseFc.Count) { $caseFc[0].prefix } else { 'unmarked food-category case (rc=' }) + '2) - fixture'
+  $kwLine = 'FAIL  ' + $(if ($caseKw.Count) { $caseKw[0].prefix } else { 'unmarked known-wrong case (rc=' }) + '2) - fixture'
+  $freshX = [pscustomobject]@{ state = 'fresh'; keys = @((Get-CaseKey $hyA)); lines = @($hyA); recordedAt = 'x'; ageHours = 2.0; detail = 'recorded x'; totalCases = 702 }
+  $exDir = Join-Path $env:TEMP ('tc-ptaex-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    Clear-TcGitRepoEnv
+    $null = New-Item -ItemType Directory -Path $exDir -ErrorAction Stop
+    $u8x = New-Object Text.UTF8Encoding($false)
+    foreach ($d in @('lib', 'modg', 'modg\out\regular')) { $null = New-Item -ItemType Directory -Path (Join-Path $exDir $d) -Force }
+    foreach ($lf in @(Get-ChildItem (Join-Path $RepoRoot 'lib\*.ps1') -File)) { Copy-Item -LiteralPath $lf.FullName -Destination (Join-Path $exDir 'lib') }
+    foreach ($an in $auditTexts.Keys) { [IO.File]::WriteAllText((Join-Path $exDir ('modg\' + $an)), $auditTexts[$an], $u8x) }
+    $gx = { param([string[]]$A) $null = & git -C $exDir -c user.name=fixture -c user.email=fixture@example.invalid -c core.autocrlf=false @A 2>$null }
+    $putRule = { param([string]$Stem, [string]$Json, [string]$Eol = "`n") [IO.File]::WriteAllText((Join-Path $exDir ('modg\' + $rn[$Stem])), ($Json + $Eol), $u8x) }
+    $commitX = { param([string]$Msg) & $gx @('add', '-A', '--', '.gitignore', '.gitattributes', 'modg', 'lib'); & $gx @('commit', '-q', '-m', $Msg); return ((@(& git -C $exDir rev-parse HEAD) -join '').Trim()) }
+    [IO.File]::WriteAllText((Join-Path $exDir '.gitignore'), "modg/out/`n", $u8x)
+    # text=auto as the real repo has it, so a CRLF working copy of an LF blob hashes to that blob, as it does in a fresh checkout
+    [IO.File]::WriteAllText((Join-Path $exDir '.gitattributes'), "* text=auto`n", $u8x)
+    $kwOld = '{"key":"fx-pear|StoreB|old-wrong-pear","commodity":"fx-pear","store":"StoreB","names":["Old Wrong Pear"],"retire_when":"ruling-reversed","evidence":"fixture","ruled_on":"2026-01-01","ruled_by":"fixture"}'
+    $kwNew = '{"key":"fx-apple|StoreB|apple-fizz-soda-12-oz","commodity":"fx-apple","store":"StoreB","names":["Apple Fizz Soda 12 oz"],"retire_when":"ruling-reversed","evidence":"fixture","ruled_on":"2026-01-02","ruled_by":"fixture"}'
+    $ceBase = '{"classes":{"beverage":["\\bcola\\b","\\bdrink\\b"]},"apply":[{"categories":"^Produce$","classes":["beverage"]}],"exempt":{"beverage":""},"universal_for_unknown":[]}'
+    $ceSoda = $ceBase.Replace('"\\bdrink\\b"]', '"\\bdrink\\b","\\bsoda\\b"]')
+    & $putRule 'category-excludes' $ceBase
+    & $putRule 'categories' '{"categories":[{"label":"Produce","commodities":["fx-apple","fx-pear"]}]}'
+    & $putRule 'food-class-allowlist' '[{"id":"fx-pear","store":"StoreA","pattern":"nectar","reason":"fixture exception"}]'
+    & $putRule 'known-wrong' ('{"entries":[' + $kwOld + ']}')
+    & $putRule 'commodities' '[{"id":"fx-apple"},{"id":"fx-pear"}]'
+    & $putRule 'stores' '{"stores":[{"name":"StoreA","regular_prefix":"storea"},{"name":"StoreB","regular_prefix":"storeb"}]}'
+    [IO.File]::WriteAllText((Join-Path $exDir 'modg\out\comparison-2026-01-01.json'), '{"comparison":[{"id":"fx-apple","cheapest_store":"StoreB","stores":[{"store":"StoreA","item":"Gala Apples 3 lb","per_unit":1.0},{"store":"StoreB","item":"Apple Fizz Soda 12 oz","per_unit":0.5}]},{"id":"fx-pear","cheapest_store":"StoreA","stores":[{"store":"StoreA","item":"Pear Nectar Drink","per_unit":0.7},{"store":"StoreB","item":"Bosc Pears","per_unit":0.9}]}]}', $u8x)
+    & $gx @('init', '-q')
+    $shaB = & $commitX 'base'
+    & $putRule 'category-excludes' $ceSoda; & $putRule 'known-wrong' ('{"entries":[' + $kwOld + ',' + $kwNew + ']}')
+    $shaA = & $commitX 'tip A: a ruling in each file'
+    & $gx @('checkout', '-q', $shaB); & $putRule 'known-wrong' '{"entries":[]}'
+    $shaC = & $commitX 'tip C: the blocklist emptied'
+    & $gx @('checkout', '-q', $shaB); & $putRule 'category-excludes' $ceSoda; & $putRule 'food-class-allowlist' '[]'
+    $shaD = & $commitX 'tip D: a ruling and a removed exception'
+    & $gx @('checkout', '-q', $shaB); & $putRule 'category-excludes' $ceSoda
+    $shaB2 = & $commitX 'base B2: already red'
+    & $putRule 'known-wrong' ('{"entries":[' + $kwOld + ',' + $kwNew + ']}')
+    $shaTB = & $commitX 'tip B: a ruling over an already-red base'
+    $exOut = Join-Path $exDir 'modg\out'
+    $runEx = { param([string]$Base, [string]$Tip, [string[]]$Lines, $Known)
+      & $gx @('checkout', '-q', $Tip)
+      Resolve-ExpectedLiveReds (Get-PushVerdict 2 $true $Lines $Known) $Known $liveCases $exDir 'modg/' $Base $Tip $exOut }
+    $shas = @($shaB, $shaA, $shaC, $shaD, $shaB2, $shaTB) | Where-Object { $_ -match '^[0-9a-f]{40}$' }
+    if (@($shas | Sort-Object -Unique).Count -ne 6) { throw ('the sandbox repo made ' + @($shas | Sort-Object -Unique).Count + ' of 6 distinct commits') }
+
+    # MUST FIRE: the founding push. A known-wrong entry and a category-excludes class, each against a product on the
+    # board, base green: both new live cases are ACCEPTED, and each finding is printed as EXPECTED-LIVE-RED.
+    $eA = & $runEx $shaB $shaA @($fcLine, $kwLine) $freshX
+    $eAl = @($eA.lines | Where-Object { $_ -match '^\s+EXPECTED-LIVE-RED\s' })
+    Case 'MUST FIRE' 'a push adding a ruling against a product on the board, base green, is ACCEPTED with EXPECTED-LIVE-RED lines' ($eA.v.code -eq 0 -and $eA.accepted -eq 2 -and $eAl.Count -eq 2 -and ($eAl -join '|').Contains('[StoreB] fx-apple ''Apple Fizz Soda 12 oz''') -and ($eAl -join '|').Contains('next board build clears it') -and $eA.v.detail.Contains('2 accepted as expected')) "code=$($eA.v.code) accepted=$($eA.accepted) arms=$($eA.arms) lines=$($eA.lines -join ' || ')"
+    # MUST FIRE: the same ruling pushed over a base where the food-category audit is ALREADY red. That red is a live
+    # defect this push did not cause, so the push is refused and the reason says so.
+    $eB = & $runEx $shaB2 $shaTB @($fcLine, $kwLine) $freshX
+    Case 'MUST FIRE' 'a live case red on BOTH arms (red at the base too) is still REFUSED, and says it was red at the base' ($eB.v.code -eq 1 -and $eB.accepted -eq 0 -and (@($eB.lines) -join '|') -match 'NOT EXPECTED.*red at the base') "code=$($eB.v.code) lines=$($eB.lines -join ' || ')"
+    # MUST FIRE: one new failure that is not a live-board ruling case refuses the push exactly as before, with no
+    # paired run and no line added.
+    $eU = & $runEx $shaB $shaA @($fcLine, $newL) $freshX
+    Case 'MUST FIRE' 'a push adding an unrelated failing case beside a live one is REFUSED as before, with no paired run' ($eU.v.code -eq 1 -and $eU.arms -eq 0 -and @($eU.lines).Count -eq 0 -and @($eU.v.newLines).Count -eq 2) "code=$($eU.v.code) arms=$($eU.arms) lines=$(@($eU.lines).Count)"
+    # MUST NOT FIRE: the tip's audit could not look (an emptied blocklist is exit 3). Never accepted, and said so.
+    $eC = & $runEx $shaB $shaC @($kwLine) $freshX
+    Case 'MUST NOT FIRE' 'arm 2 exits 3 (blind) and is NOT accepted, naming the could-not-look' ($eC.v.code -eq 1 -and $eC.accepted -eq 0 -and (@($eC.lines) -join '|') -match 'could not look \(exit 3\)') "code=$($eC.v.code) lines=$($eC.lines -join ' || ')"
+    # EDGE: two findings, one flagged by the ruling (the new soda class) and one by a removed allowlist exception,
+    # which is not a ruling. The ruling-only arm flags just the first, so the push is refused.
+    $eD = & $runEx $shaB $shaD @($fcLine) $freshX
+    Case 'MUST FIRE' 'two findings, one explained by the ruling and one not, is REFUSED and names the unexplained one' ($eD.v.code -eq 1 -and $eD.accepted -eq 0 -and $eD.arms -eq 3 -and (@($eD.lines) -join '|') -match '1 of 2 finding.*Pear Nectar Drink') "code=$($eD.v.code) arms=$($eD.arms) lines=$($eD.lines -join ' || ')"
+    # MUST NOT FIRE: a stale record is refused as before; the paired run never reaches a push the record cannot judge.
+    $staleX = [pscustomobject]@{ state = 'stale'; keys = @(); lines = @(); recordedAt = 'x'; ageHours = 240.0; detail = '240h old'; totalCases = -1 }
+    $eS = & $runEx $shaB $shaA @($fcLine) $staleX
+    Case 'MUST NOT FIRE' 'with a stale known-failures record a live-case red is refused as before, with no paired run' ($eS.v.code -eq 1 -and $eS.arms -eq 0 -and @($eS.lines).Count -eq 0) "code=$($eS.v.code) arms=$($eS.arms)"
+    # The tip's rule files must be the working tree's, compared as git blob ids. Found on gc-fence's dry run: a fresh
+    # checkout is CRLF over LF blobs, and a byte compare called its untouched known-wrong.json an uncommitted edit.
+    & $gx @('checkout', '-q', '-f', $shaA)
+    & $putRule 'known-wrong' ('{"entries":[' + $kwOld + ',' + $kwNew + ']}') "`r`n"
+    $eW = & $runEx $shaB $shaA @($kwLine) $freshX
+    Case 'MUST NOT FIRE' 'a CRLF working copy of the tip''s LF rule file is not an uncommitted edit, and the ruling is still accepted' ($eW.v.code -eq 0 -and $eW.accepted -eq 1) "code=$($eW.v.code) lines=$($eW.lines -join ' || ')"
+    & $putRule 'known-wrong' ('{"entries":[' + $kwOld + ',' + $kwNew + ',' + $kwNew.Replace('apple-fizz', 'apple-fuzz') + ']}')
+    $eE = & $runEx $shaB $shaA @($kwLine) $freshX
+    Case 'MUST FIRE' 'an uncommitted edit to a rule file refuses: the red test-auditors saw is not the pushed tip''s' ($eE.v.code -eq 1 -and $eE.arms -eq 0 -and (@($eE.lines) -join '|') -match 'differs from the pushed tip') "code=$($eE.v.code) arms=$($eE.arms) lines=$($eE.lines -join ' || ')"
+    & $gx @('checkout', '-q', '-f', $shaA)
+  } catch {
+    $fails += ('expected-live-red cases THREW: ' + $_.Exception.Message)
+    "  expected-live-red cases THREW: $($_.Exception.Message)"
+  } finally { Remove-Item -LiteralPath $exDir -Recurse -Force -ErrorAction SilentlyContinue }
+  # CLEAN TWIN: an ordinary push (only failures the record already holds, or none) comes back byte-identical: the same
+  # verdict object, every field unchanged, no line, no arm.
+  $v0 = Get-PushVerdict 2 $true @($hyB) $fresh
+  $j0 = $v0 | ConvertTo-Json -Depth 4 -Compress
+  $e0 = Resolve-ExpectedLiveReds $v0 $fresh $liveCases $RepoRoot 'grocery/' 'b' 't' $env:TEMP
+  $vP = Get-PushVerdict 0 $true @() $fresh
+  $eP = Resolve-ExpectedLiveReds $vP $fresh $liveCases $RepoRoot 'grocery/' 'b' 't' $env:TEMP
+  Case 'MUST NOT FIRE' 'an ordinary push with no new failure keeps its verdict byte-identical (ALLOWED over a recorded case, and PASS)' ([object]::ReferenceEquals($e0.v, $v0) -and ($e0.v | ConvertTo-Json -Depth 4 -Compress) -eq $j0 -and $e0.v.code -eq 0 -and @($e0.lines).Count -eq 0 -and $e0.arms -eq 0 -and [object]::ReferenceEquals($eP.v, $vP) -and $eP.v.verdict -eq 'PASS' -and @($eP.lines).Count -eq 0) "code=$($e0.v.code) lines=$(@($e0.lines).Count) arms=$($e0.arms) pass=$($eP.v.verdict)"
+
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 77
+  $expectedCases = 88
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''
@@ -1414,7 +1761,7 @@ if (-not $RefsFromStdin -and -not $PathsFile) {
 
 # ============================================================================================ PRE-PUSH
 $paths = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
-$unknown = ''; $refCount = 0
+$unknown = ''; $refCount = 0; $pushTips = @()
 if ($PathsFile) {
   if (-not (Test-Path -LiteralPath $PathsFile)) { "prepush-test-auditors: COULD NOT EVALUATE - no paths file at '$PathsFile'"; Exit-Guard -Name $script:GuardName -Code 3 -Summary 'blind=no-paths-file' }
   foreach ($ln in [IO.File]::ReadAllLines($PathsFile)) { $t = $ln.Trim().Replace('\', '/'); if ($t -and -not $t.StartsWith('#')) { [void]$paths.Add($t) } }
@@ -1425,6 +1772,7 @@ if ($PathsFile) {
     $f = @(([string]$ln).Trim() -split '\s+')
     if ($f.Count -lt 4 -or $f[1] -notmatch '[^0]') { continue }
     $refCount++
+    $pushTips += ,@($f[1], $f[3])
     # Commits being pushed that no remote-tracking ref already holds. A stale tracking ref only widens this.
     $out = @(& git -C $RepoRoot -c core.quotepath=off log --format= --name-only --no-renames -m $f[1] --not --remotes 2>$null)
     if ($LASTEXITCODE -ne 0) { $unknown = "git could not list the commits of $($f[1])"; continue }
@@ -1534,6 +1882,17 @@ if ($isSelective -and $complete -and -not $hs.selective) {
 }
 $v = Get-PushVerdict $rc $complete $fl $known $isSelective $ranNote
 $secs = $run.secs
+# EXPECTED LIVE RED (see its block above): a real push only, and only one pushed tip, since a paired run measures one
+# rule change. Otherwise $v is untouched.
+$expected = [pscustomobject]@{ v = $v; lines = @(); accepted = 0; findings = 0; arms = 0 }
+if ($RefsFromStdin -and -not $PathsFile -and $v.code -eq 1) {
+  $tipSet = @($pushTips | ForEach-Object { $_[0] } | Sort-Object -Unique)
+  $eTip = ''; $eBase = ''
+  if ($tipSet.Count -eq 1) { $eTip = [string]$tipSet[0]; $eRemote = [string](@($pushTips | Where-Object { $_[0] -eq $eTip })[0][1]); $eBase = Get-PushBase $RepoRoot $eTip $eRemote }
+  $selfDirE = $script:AuditorsRel.Substring(0, $script:AuditorsRel.LastIndexOf('/') + 1)
+  $expected = Resolve-ExpectedLiveReds $v $known (Get-LiveRulingCases $taText) $RepoRoot $selfDirE $eBase $eTip (Join-Path $RepoRoot ($selfDirE.Replace('/', '\') + 'out'))
+  $v = $expected.v
+}
 
 if ($isSelective -and $hs.found) {
   "prepush-test-auditors: ran $($hs.cases) of $totalText cases ($($hs.unitsRan) of $($hs.unitsRan + $hs.unitsSkipped) units), selected by $($paths.Count) pushed path(s)."
@@ -1543,10 +1902,13 @@ if ($isSelective -and $hs.found) {
 "prepush-test-auditors: $($v.verdict) after ${secs}s - $($v.detail)."
 foreach ($l in $v.newLines) { $s = $l -replace '^FAIL\s+', ''; '  NEW FAILING CASE      ' + $(if ($s.Length -gt 300) { $s.Substring(0, 300) + '...' } else { $s }) }
 foreach ($l in $v.oldLines) { $s = $l -replace '^FAIL\s+', ''; '  ALREADY FAILING       ' + $(if ($s.Length -gt 300) { $s.Substring(0, 300) + '...' } else { $s }) }
+foreach ($l in @($expected.lines)) { $l }
 Complete-TaChildFiles $run $v.code
 
 if ($passPath -and $null -ne $passKey -and $passKey.ok) {
-  if ($v.code -eq 0) {
+  # An expected live red is never recorded as a pass: a reuse re-judges only against the known-failures record, which
+  # does not hold these cases, so a retry pays the paired run again rather than replaying an acceptance.
+  if ($v.code -eq 0 -and $expected.accepted -eq 0) {
     $after = Get-TaInputKey $RepoRoot $inputs $boardPatterns
     if ($after.ok -and [string]::Equals($after.key, $passKey.key, [StringComparison]::Ordinal)) {
       try { Write-TaPassRecord $passPath $passKey.key $rc $fl $(if ($isSelective) { 'selective' } else { 'full' }) @($sel.selected) $hs.cases ([datetime]::UtcNow); "prepush-test-auditors: pass recorded for key=$($passKey.key), so a retry over the same input content reuses it" }
@@ -1571,4 +1933,4 @@ if ($v.code -eq 0 -and $rp -and -not $PathsFile) {
     }
   }
 }
-Exit-Guard -Name $script:GuardName -Code $v.code -Summary "pushed=$($paths.Count) inputs=$($hits.Count) mode=$($sel.mode) units=$($sel.selected.Count) rc=$rc cases=$($hs.cases) failing=$($fl.Count) new=$($v.newLines.Count) seconds=$secs"
+Exit-Guard -Name $script:GuardName -Code $v.code -Summary ("pushed=$($paths.Count) inputs=$($hits.Count) mode=$($sel.mode) units=$($sel.selected.Count) rc=$rc cases=$($hs.cases) failing=$($fl.Count) new=$($v.newLines.Count) seconds=$secs" + $(if ($expected.accepted -gt 0) { " expected=$($expected.accepted)" } else { '' }))

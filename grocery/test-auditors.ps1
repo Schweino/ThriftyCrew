@@ -1271,9 +1271,11 @@ if (-not $HasBoard) { Skip 'food-category clean twin: NO live board in grocery\o
 else {
   # LIVE-TWIN, DELIBERATELY (labelled 2026-09-06, PLAN-top5 area 4 §4.4): no -OutDir, so this is the real
   # board. A red here is about the board, not about this harness.
+  # The marker on the Bad line is how ops\prepush-test-auditors.ps1 knows this case may be red ON PURPOSE for a push that
+  # adds a ruling (Brad, 2026-09-19): it pair-runs the named audit at the push's base and tip and accepts only that red.
   $r = RunPS 'audit-food-category.ps1' @()
   if ($r.rc -eq 0 -and $r.text -match 'priced cells scanned') { Ok 'LIVE-TWIN food-category: the live board still scans and passes' }
-  else { Bad ('LIVE-TWIN food-category failed (rc=' + $r.rc + ') - this case reads the LIVE board, so open the board before the code: either a live cell is miscategorised (page-worthy) or the edit broke the healthy path') }
+  else { Bad ('LIVE-TWIN food-category failed (rc=' + $r.rc + ') - this case reads the LIVE board, so open the board before the code: either a live cell is miscategorised (page-worthy) or the edit broke the healthy path') }  # live-board-ruling-case audit=audit-food-category.ps1
 }
 Remove-Item $fxAfc -Recurse -Force -ErrorAction SilentlyContinue
 } # u029-d-audit-food-category-blind-at-zero
@@ -5119,9 +5121,10 @@ else { Bad ('known-wrong counted an unevaluable entry as a pass (rc=' + $r.rc + 
 # every seeded case is already fixed - so a red here means a fixed defect came back, which is page-worthy.
 if (-not $HasBoard) { Skip 'known-wrong live clean twin: NO live board in grocery\out - the regression blocklist was not evaluated here' }
 else {
+  # The Bad line is marked for ops\prepush-test-auditors.ps1's expected-live-red pairing, as the food-category twin is.
   $r = RunPS 'audit-known-wrong.ps1' @()
   if ($r.rc -eq 0 -and $r.text -match 'KNOWN-WRONG AUDIT OK') { Ok 'known-wrong live clean twin: the real blocklist is green on the real board' }
-  else { Bad ('known-wrong is RED on the live board (rc=' + $r.rc + ') - an adjudicated-wrong product is published again: ' + $r.text) }
+  else { Bad ('known-wrong is RED on the live board (rc=' + $r.rc + ') - an adjudicated-wrong product is published again: ' + $r.text) }  # live-board-ruling-case audit=audit-known-wrong.ps1
 }
 } # u101-24-known-wrong-blocklist-component-2
 # ---- UNFIRABLE vs KEY-COLLISION: two shapes of the SAME 48-char key, needing OPPOSITE actions ---------
