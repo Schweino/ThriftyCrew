@@ -95,8 +95,9 @@ LOOKUP MODE (added 2026-08-24, PLAN-recipe-hunter-v3 D10 - the price-evidence pr
   never reads as EMPTY, and the caller is never handed silence.
 
 EXIT CODES  0 = every requested store captured. 1 = at least one store failed or was walled.
-            2 = nothing could run (no Chrome, no worklists). Unchanged by lookup mode - existing
-            scripts keep their own exit codes, in both directions.
+            2 = nothing could run (no Chrome). 3 = BLIND: at least one store's worklist was missing or
+            could not be read, so nothing it owed was looked at (never "nothing owed"). Unchanged by
+            lookup mode - existing scripts keep their own exit codes, in both directions.
 """
 import argparse
 import datetime
@@ -373,14 +374,62 @@ def profile_dir(store_key):
     return os.path.join(ROOT, "out", "browser-profiles", store_key)
 
 
-def read_worklist(store_key, date_s):
-    p = os.path.join(ROOT, "out", "worklists", f"capture-{store_key}-{date_s}.json")
+# ---- READING THE WORKLIST: EMPTY IS AN ANSWER, UNREADABLE IS NOT (2026-09-18) -------------------------------
+# 7e1c7d94e (2026-09-12) dropped `terms` and `commodities` from Write-CaptureWorklist, and both readers below
+# read the missing field as an empty list and returned "nothing owed today". run_store turned that into
+# `ok skipped`, the driver exited 0, and Fareway and Sam's captured nothing on 09-13, 09-14, 09-17 and 09-18
+# while capture-run's own log queued 42 Fareway and 7 Sam's terms each of those days. "Nothing owed" and "I could not read
+# what is owed" were the same bytes. They are not any more: a worklist that is missing, not JSON, has no
+# `terms` list, has an empty `terms` over non-empty part lists, or cannot be paired with its `commodities`,
+# raises WorklistUnreadable, which run_store reports as a FAIL starting BLIND_WORKLIST and main() exits 3.
+# Only a `terms` list that is present and empty, with every part list empty too, says nothing is owed.
+BLIND_WORKLIST = "BLIND - could not read the worklist"
+WORKLIST_PART_KEYS = ("ruling_terms", "ad_terms", "rotation_terms", "sale_terms")
+
+
+class WorklistUnreadable(Exception):
+    """The day's worklist exists (or must) but what it owes cannot be read. Never 'nothing owed'."""
+
+
+def worklist_path(store_key, date_s):
+    return os.path.join(ROOT, "out", "worklists", f"capture-{store_key}-{date_s}.json")
+
+
+def load_worklist_terms(store_key, date_s):
+    """(doc, terms, rel) for a worklist whose shape can be trusted; raises WorklistUnreadable otherwise.
+
+    `terms` is returned exactly as written (no blanks dropped), so its indices still line up with
+    `commodities`. It is [] only on a genuinely empty day.
+    """
+    p = worklist_path(store_key, date_s)
+    rel = os.path.relpath(p, ROOT)
     if not os.path.exists(p):
-        return None, f"no worklist at {os.path.relpath(p, ROOT)} - run capture-policy.ps1 -Emit first"
-    with open(p, "r", encoding="utf-8-sig") as fh:
-        doc = json.load(fh)
-    terms = doc.get("terms") or doc.get("Terms") or []
-    terms = [str(t) for t in terms if str(t).strip()]
+        raise WorklistUnreadable(f"no worklist at {rel} - capture-run emits one before it drives a store "
+                                 "(capture-policy.ps1 -Emit)")
+    try:
+        with open(p, "r", encoding="utf-8-sig") as fh:
+            doc = json.load(fh)
+    except (OSError, ValueError) as e:
+        raise WorklistUnreadable(f"{rel} is not readable JSON ({str(e)[:120]})")
+    if not isinstance(doc, dict):
+        raise WorklistUnreadable(f"{rel} is a JSON {type(doc).__name__}, not a worklist object")
+    raw = doc["terms"] if "terms" in doc else doc.get("Terms")
+    parts = {k: len([t for t in doc[k] if str(t).strip()]) for k in WORKLIST_PART_KEYS
+             if isinstance(doc.get(k), list)}
+    owed = {k: n for k, n in parts.items() if n}
+    if not isinstance(raw, list):
+        raise WorklistUnreadable(f"{rel} has no `terms` list (part lists: {owed or 'none'}) - the writer's shape "
+                                 "changed, so what is owed today cannot be read")
+    terms = [str(t) for t in raw]
+    if not any(t.strip() for t in terms) and owed:
+        raise WorklistUnreadable(f"{rel} has an empty `terms` list but its part lists name "
+                                 f"{sum(owed.values())} term(s) {owed} - that is a writer defect, not a quiet day")
+    return doc, terms, rel
+
+
+def read_worklist(store_key, date_s):
+    _doc, terms, _rel = load_worklist_terms(store_key, date_s)
+    terms = [t for t in terms if t.strip()]
     if not terms:
         return None, "worklist is empty - nothing owed today"
     return terms, None
@@ -392,21 +441,31 @@ def read_worklist_pairs(store_key, date_s):
     The worklist carries `terms` and `commodities` as PARALLEL arrays, and select-fareway-shop.ps1
     keys each JSONL line on the commodity id (it dedupes by it, last capture wins). Pairing by index
     is what the file's own shape intends - but a length mismatch would silently shift every id by
-    one, filing pork prices under the previous commodity, so that is checked rather than assumed.
+    one, filing pork prices under the previous commodity, so that is checked rather than assumed,
+    and a mismatch is BLIND (it used to be a quiet skip too).
     """
-    p = os.path.join(ROOT, "out", "worklists", f"capture-{store_key}-{date_s}.json")
-    if not os.path.exists(p):
-        return None, f"no worklist at {os.path.relpath(p, ROOT)}"
-    with open(p, "r", encoding="utf-8-sig") as fh:
-        doc = json.load(fh)
-    terms = [str(t) for t in (doc.get("terms") or [])]
-    cids = [str(c) for c in (doc.get("commodities") or [])]
-    if not terms:
+    doc, terms, rel = load_worklist_terms(store_key, date_s)
+    if not any(t.strip() for t in terms):
         return None, "worklist is empty - nothing owed today"
-    if len(cids) != len(terms):
-        return None, (f"worklist is malformed: {len(terms)} terms but {len(cids)} commodities. "
-                      "Pairing them by index would file every price under the wrong commodity.")
+    raw = doc.get("commodities")
+    if not isinstance(raw, list) or len(raw) != len(terms):
+        n = len(raw) if isinstance(raw, list) else "no"
+        raise WorklistUnreadable(f"{rel} is malformed: {len(terms)} terms but {n} commodities. "
+                                 "Pairing them by index would file every price under the wrong commodity.")
+    cids = [str(c) for c in raw]
+    blank = [i for i, (t, c) in enumerate(zip(terms, cids)) if not t.strip() or not c.strip()]
+    if blank:
+        raise WorklistUnreadable(f"{rel} has {len(blank)} blank term or commodity entr(ies), first at index "
+                                 f"{blank[0]} - a pair with a missing half cannot be filed")
     return list(zip(terms, cids)), None
+
+
+def worklist_exit_code(results):
+    """3 when any store could not read its worklist (BLIND outranks a failure: nothing was looked at), 1 when
+    any store failed, else 0."""
+    if any((not ok) and str(note).startswith(BLIND_WORKLIST) for ok, note in results.values()):
+        return 3
+    return 1 if any(not ok for ok, _ in results.values()) else 0
 
 
 def notify_wall(store_name, detail, also_email=True):
@@ -1018,11 +1077,16 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
         # fell back to the worklist would sweep today's capture terms and file them as hunter
         # evidence, and one that WROTE one would destroy the day's real worklist.
         terms, why = list(lookup["terms"]), None
-    elif navigate_lane:
-        pairs, why = read_worklist_pairs(store_key, date_s)
-        terms = [t for t, _ in pairs] if pairs else None
     else:
-        terms, why = read_worklist(store_key, date_s)
+        # A worklist that cannot be read is a FAIL that says BLIND, never `ok skipped` - see WorklistUnreadable.
+        try:
+            if navigate_lane:
+                pairs, why = read_worklist_pairs(store_key, date_s)
+                terms = [t for t, _ in pairs] if pairs else None
+            else:
+                terms, why = read_worklist(store_key, date_s)
+        except WorklistUnreadable as e:
+            return False, f"{BLIND_WORKLIST}: {e}"
     if not seed and terms is None:
         return True, f"skipped: {why}"
 
@@ -1271,6 +1335,110 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
             pass
 
 
+def worklist_shape_self_test(T):
+    """The worklist readers, driven through run_store() and main() on a temp ROOT. HERMETIC: Chrome is a stub that
+    throws if anything tries to start it, and a BLIND or empty worklist must end the lane before it would.
+
+    The MUST FIRE shape is the real one: capture-fareway-2026-09-13.json as 7e1c7d94e's writer left it - part
+    lists naming 7 rotation and 37 sale terms, and no `terms` or `commodities` at all.
+    """
+    import shutil
+    import tempfile
+    global ROOT, profile_dir, Chrome, find_chrome
+    saved = (ROOT, profile_dir, Chrome, find_chrome)
+    argv = sys.argv
+    tmp = tempfile.mkdtemp(prefix="wl-selftest-")
+    prof = os.path.join(tmp, "profile")
+    os.makedirs(os.path.join(tmp, "out", "worklists"))
+    os.makedirs(prof)
+    with open(os.path.join(prof, ".tc-seeded"), "w", encoding="utf-8") as fh:
+        fh.write("fixture\n")
+
+    class _NoChrome(object):
+        def __init__(self, *a, **k):
+            raise AssertionError("a Chrome was started for a worklist that should have ended the lane")
+
+    def put(store_key, doc):
+        with open(worklist_path(store_key, "2026-01-01"), "w", encoding="utf-8") as fh:
+            json.dump(doc, fh)
+
+    def run_main():
+        # main()'s own summary is swallowed: its "FAILED: ..." line is the fixture working, and run-gates scores a
+        # suite that prints a line starting FAIL as failed, whatever its exit code.
+        import contextlib
+        import io
+        sys.argv = ["pull-browser-stores.py", "--sequential", "--store", "fareway", "--store", "samsclub",
+                    "--date", "2026-01-01"]
+        with contextlib.redirect_stdout(io.StringIO()):
+            return main()
+
+    def raises(fn):
+        try:
+            fn("fareway", "2026-01-01")
+            return ""
+        except WorklistUnreadable as e:
+            return str(e)
+
+    rot = ["apples", "bacon", "bananas", "bread", "butter", "carrots", "eggs"]
+    try:
+        ROOT = tmp
+        profile_dir = lambda k: prof                                       # noqa: E731
+        Chrome = _NoChrome
+        find_chrome = lambda: "chrome"                                     # noqa: E731
+
+        # MUST FIRE: the 2026-09-13 shape, no `terms`, owed part lists. Both readers, both lanes, and main()'s code.
+        stalled = {"store": "Fareway", "date": "2026-01-01", "rotation_terms": rot,
+                   "sale_terms": ["sale %d" % i for i in range(37)], "ruling_terms": [], "ad_terms": []}
+        put("fareway", stalled)
+        put("samsclub", dict(stalled, store="Sam's Club", sale_terms=[]))
+        why_p, why_t = raises(read_worklist_pairs), raises(read_worklist)
+        T("MUST FIRE  a worklist with NO `terms` over owed part lists is unreadable to BOTH readers, never empty",
+          "no `terms` list" in why_p and "no `terms` list" in why_t, "pairs=%r terms=%r" % (why_p, why_t))
+        ok_f, note_f = run_store("fareway", "2026-01-01")
+        ok_s, note_s = run_store("samsclub", "2026-01-01")
+        T("MUST FIRE  run_store reports that worklist as a FAIL that says BLIND, on the navigate AND sweep lanes",
+          (not ok_f) and (not ok_s) and note_f.startswith(BLIND_WORKLIST) and note_s.startswith(BLIND_WORKLIST),
+          "fareway=%r samsclub=%r" % ((ok_f, note_f), (ok_s, note_s)))
+        rc = run_main()
+        T("MUST FIRE  main() exits 3 (BLIND) for it - the 09-13..09-18 runs exited 0 saying nothing was owed",
+          rc == 3, "rc=%r" % rc)
+
+        # MUST FIRE: the other ways a worklist can lose what it owes.
+        put("fareway", dict(stalled, terms=[], commodities=[]))
+        why = raises(read_worklist_pairs)
+        T("MUST FIRE  an EMPTY `terms` over owed part lists is a writer defect, not a quiet day",
+          "empty `terms` list" in why, why)
+        put("fareway", {"terms": rot, "commodities": rot[:-1], "rotation_terms": rot})
+        why = raises(read_worklist_pairs)
+        T("MUST FIRE  terms and commodities of different lengths are BLIND (this used to be a quiet skip)",
+          "7 terms but 6 commodities" in why, why)
+        os.remove(worklist_path("fareway", "2026-01-01"))
+        why = raises(read_worklist_pairs)
+        T("MUST FIRE  a MISSING worklist is BLIND - capture-run always writes one before it drives a store",
+          "no worklist at" in why, why)
+
+        # CLEAN TWIN: a genuinely empty day still says so and still exits 0.
+        quiet = {"store": "Fareway", "terms": [], "commodities": [], "rotation_terms": [], "sale_terms": [],
+                 "ruling_terms": [], "ad_terms": []}
+        put("fareway", quiet)
+        put("samsclub", dict(quiet, store="Sam's Club"))
+        ok_q, note_q = run_store("fareway", "2026-01-01")
+        rc_q = run_main()
+        T("CLEAN TWIN  a genuinely empty day is still `ok skipped: ... nothing owed today`, and main() exits 0",
+          ok_q and "nothing owed today" in note_q and rc_q == 0, "note=%r rc=%r" % (note_q, rc_q))
+
+        # CLEAN TWIN: a well-formed worklist pairs every term with its own commodity, in order.
+        put("fareway", {"terms": ["pork chops", "ground beef", "eggs"],
+                        "commodities": ["pork-chops", "ground-beef", "eggs"], "rotation_terms": ["eggs"]})
+        pairs, why = read_worklist_pairs("fareway", "2026-01-01")
+        T("CLEAN TWIN  a well-formed worklist reads as its own pairs, in the order written",
+          pairs == [("pork chops", "pork-chops"), ("ground beef", "ground-beef"), ("eggs", "eggs")], repr((pairs, why)))
+    finally:
+        ROOT, profile_dir, Chrome, find_chrome = saved
+        sys.argv = argv
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def lookup_self_test():
     """LOOKUP MODE's own fixtures. HERMETIC: no Chrome, no network, no capture file, no profile.
 
@@ -1367,6 +1535,9 @@ def lookup_self_test():
     T("MUST FIRE  and never as EMPTY - could-not-look is not an empty shelf",
       not any(r["state"] == "EMPTY" for r in doc["results"]))
     T("the lookup file names the ladder it did NOT walk", "rung 1 only" in doc["ladder"], doc["ladder"])
+
+    # ---- an unreadable worklist is BLIND, a genuinely empty one is "nothing owed" (2026-09-18) --------
+    worklist_shape_self_test(T)
 
     # ---- lookup mode reads no worklist -------------------------------------------------------
     global read_worklist, read_worklist_pairs, profile_dir, Chrome
@@ -1805,10 +1976,11 @@ def main():
         print(f"  {STORES[k]['name']:<12} {'ok  ' if ok else 'FAIL'} {note}")
 
     failed = [k for k, (ok, _) in results.items() if not ok]
-    print("\nBROWSER-PULL-COMPLETE stores={} failed={}".format(len(keys), len(failed)))
+    blind = [k for k in failed if str(results[k][1]).startswith(BLIND_WORKLIST)]
+    print("\nBROWSER-PULL-COMPLETE stores={} failed={} blind={}".format(len(keys), len(failed), len(blind)))
     if failed:
         print("FAILED: " + ", ".join(f"{k} ({results[k][1]})" for k in failed))
-    return 1 if failed else 0
+    return worklist_exit_code(results)
 
 
 if __name__ == "__main__":

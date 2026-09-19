@@ -1527,6 +1527,15 @@ function Write-CaptureWorklist {
     total_terms    = $wl.TotalTerms
     rotation_terms = @($wl.RotationTerms | ForEach-Object { $_.term })
     sale_terms     = @($wl.SaleTerms | ForEach-Object { $_.term })
+    # `terms` AND `commodities` ARE THE CONTRACT EVERY READER USES, and they are the MERGED list (ruling, then ad,
+    # then rotation, then sale), capped at call_cap, as PARALLEL arrays: commodities[i] is the id terms[i] prices.
+    # The part lists around them are evidence of WHY a term is here; nothing captures from them. 7e1c7d94e
+    # (2026-09-12) replaced these two lines with ruling_terms, and from 09-13 pull-browser-stores.py read a file
+    # with no `terms` as "nothing owed today": Fareway and Sam's captured nothing for four chain runs. The driver
+    # now calls a worklist without `terms` BLIND, and test-capture-policy.ps1 round-trips this writer through
+    # the driver's own readers, so removing either line again goes red in both places.
+    terms          = @($wl.Terms | ForEach-Object { $_.term })
+    commodities    = @($wl.Terms | ForEach-Object { $_.id })
     # A STANDING RULING'S OWED TERMS, AT THE HEAD OF `terms` (2026-09-12). Walmart's store-drift
     # ruling of 2026-08-28 named terms priced at the wrong store; these are the ones not yet proven
     # recaptured at the sanctioned store. Derived, so the list empties itself and then disappears.

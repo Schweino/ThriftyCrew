@@ -472,6 +472,73 @@ try {
   $wlP = Get-CaptureWorklist -Store 'Family Fare' -Today '2026-09-18' -OutDir $bkOut
   if (@($wlP.AdTerms).Count -eq 0 -and $wlP.AdTotal -eq 0) { Ok 'MUST NOT FIRE  a Baker''s ad list prepends nothing to another store''s worklist' }
   else { Bad ("Family Fare picked up ad terms: $(@($wlP.AdTerms | ForEach-Object { $_.term }) -join ',')") }
+
+  # Q. MUST FIRE - THE WRITER AND ITS READERS AGREE (2026-09-18). 7e1c7d94e dropped `terms` and `commodities` from
+  #    Write-CaptureWorklist, and pull-browser-stores.py, which reads exactly those two, read every worklist from
+  #    09-13 on as "nothing owed today": Fareway and Sam's captured nothing for four chain runs. So the file this
+  #    writer emits is read back through the driver's OWN readers (read_worklist_pairs for the navigate lane,
+  #    read_worklist for the sweep lane), in a child python, and must return every (term, commodity) pair
+  #    Get-CaptureWorklist chose, in order. Family Fare carries the two-term commodity and its sale expiry.
+  $py = 'C:\Codex\Python312\python.exe'
+  $driverPy = Join-Path $root 'pull-browser-stores.py'
+  if (-not (Test-Path -LiteralPath $py)) { Bad "round-trip: no python at $py, so the writer/reader contract was NOT checked" }
+  else {
+    $rtProbe = Join-Path $tmp 'rt-probe.py'
+    $rtLines = @(
+      'import importlib.util, json, sys',
+      'spec = importlib.util.spec_from_file_location("pbs", sys.argv[1])',
+      'm = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)',
+      'm.ROOT = sys.argv[2]',
+      'out = {}',
+      'for key in sys.argv[4:]:',
+      '    try:',
+      '        pairs, why = m.read_worklist_pairs(key, sys.argv[3])',
+      '        terms, why2 = m.read_worklist(key, sys.argv[3])',
+      '        out[key] = {"pairs": [list(p) for p in (pairs or [])], "terms": terms or [], "why": why or why2 or ""}',
+      '    except m.WorklistUnreadable as e:',
+      '        out[key] = {"pairs": [], "terms": [], "why": "UNREADABLE " + str(e)}',
+      'print(json.dumps(out))'
+    )
+    [IO.File]::WriteAllText($rtProbe, ($rtLines -join "`n"), (New-Object Text.UTF8Encoding($false)))
+    $rtStores = [ordered]@{ 'Fareway' = 'fareway'; "Sam's Club" = 'samsclub'; 'Family Fare' = 'familyfare' }
+    # A sale expiry per store, so each list is longer than one pair and Fareway's carries both terms of ONE
+    # commodity: a reader that paired by the wrong index could not pass on a single pair.
+    $swRt = @{ windows = @(@{ store = 'Fareway';     id = 'shredded-cheese'; sale_end = '2026-08-29'; refresh_on = '2026-08-30' },
+                           @{ store = "Sam's Club";  id = 'butter';          sale_end = '2026-08-29'; refresh_on = '2026-08-30' },
+                           @{ store = 'Family Fare'; id = 'rice';            sale_end = '2026-08-29'; refresh_on = '2026-08-30' }) }
+    $swPathRt = Join-Path $tmp 'sale-windows.json'
+    $swWasRt = [IO.File]::ReadAllText($swPathRt)
+    $want = @{}
+    try {
+      [IO.File]::WriteAllText($swPathRt, ($swRt | ConvertTo-Json -Depth 4))
+      foreach ($s in $rtStores.Keys) {
+        $wlQ = Get-CaptureWorklist -Store $s -Today '2026-08-30' -OutDir (Join-Path $tmp 'out')
+        $want[$rtStores[$s]] = @($wlQ.Terms | ForEach-Object { "$($_.term)=$($_.id)" })
+        $null = Write-CaptureWorklist -Store $s -Today '2026-08-30' -OutDir (Join-Path $tmp 'out')
+      }
+    } finally { [IO.File]::WriteAllText($swPathRt, $swWasRt) }
+    if (@($want['fareway']) -notcontains 'shredded cheese=shredded-cheese' -or @($want['fareway']) -notcontains 'shredded cheddar=shredded-cheese') {
+      Bad "round-trip fixture: Fareway's list lost its two-term commodity, so the pairing is no longer tested: [$(@($want['fareway']) -join ', ')]"
+    }
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try { $rtRaw = & $py $rtProbe $driverPy $tmp '2026-08-30' @($rtStores.Values); $rtRc = $LASTEXITCODE }
+    finally { $ErrorActionPreference = $prevEap }
+    $rtDoc = $null
+    try { $rtDoc = (@($rtRaw) -join "`n") | ConvertFrom-Json } catch { }
+    if ($rtRc -ne 0 -or -not $rtDoc) { Bad "round-trip: the driver's readers could not be run (rc=$rtRc): $(@($rtRaw) -join ' | ')" }
+    else {
+      foreach ($k in @($rtStores.Values)) {
+        $r = $rtDoc.$k
+        $gotPairs = @(@($r.pairs) | Where-Object { $_ } | ForEach-Object { "$($_[0])=$($_[1])" })
+        $gotTerms = @(@($r.terms) | Where-Object { $_ })
+        $w = @($want[$k])
+        if ($w.Count -gt 0 -and ($gotPairs -join '|') -ceq ($w -join '|') -and $gotTerms.Count -eq $w.Count) {
+          Ok "MUST FIRE  a $k worklist written by Write-CaptureWorklist reads back through the driver as the same $($w.Count) (term, commodity) pairs, in order"
+        } else { Bad ("round-trip $k : wrote $($w.Count) [$($w -join ', ')] read $($gotPairs.Count) [$($gotPairs -join ', ')] why=$($r.why)") }
+      }
+    }
+  }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
