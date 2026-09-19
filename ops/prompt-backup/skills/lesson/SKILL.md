@@ -69,7 +69,7 @@ Ask Brad and keep asking until you can write it truthfully:
 - <2–4 questions tuned to this lesson>
 ```
 
-Save the source to **`C:\Codex\ThriftyCrew\lessons\<slug>.md`**. Then **show Brad the draft and iterate until he approves.**
+Save the source to **`content\lessons\<slug>.md`** (repo-relative; that is where the published standalone lessons live, and `ops/audit-lesson-rate-claims.ps1` scans it on every push). This line named `C:\Codex\ThriftyCrew\lessons\` until 2026-09-19, a directory that does not exist. A draft that is committed BEFORE Brad approves it goes in **`design\ready-for-brad\lessons\<slug>.md`** instead, beside its HTML body and a README with the exact publish commands, and moves to `content\lessons\` when it goes live. Then **show Brad the draft and iterate until he approves.**
 
 ## Step 2.5 — SEO pass (do this every time, before publishing)
 
@@ -77,6 +77,7 @@ The tag already handles the *mechanical* SEO (structured data, breadcrumb, paywa
 
 1. **Find the search phrases.** Name the ONE primary phrase a real person would type, plus 2–3 secondary ones. Reason it out; optionally WebSearch to sanity-check the wording people actually use. (e.g. topic "saving on vacations" → primary `how to save money on vacation`; secondary `when to book flights for the best price`, `hotel dynamic pricing`.)
 2. **Keyword-led title tag + slug — separate from the display title.** Brad's display H1 stays creative/voicey. But the **MetaTitle** must LEAD with the primary phrase then the brand (under ~60 chars), and the **Slug** IS the primary phrase, short. Never derive either from a long creative title.
+   **Check the slug is FREE before using it: `publish-lesson.ps1` upserts by slug, so a slug a live post already holds OVERWRITES that post** (and retags it `financial-lessons`). Load `https://www.thriftycrew.com/<slug>/`: a 200 means it is taken. On 2026-09-19 `emergency-fund` was a live Glossary post. And read the sitemap before writing: the site carried 1,098 URLs that day, most of them Glossary and Money Hacks pages outside the lessons, so "no lesson covers X" does not mean the site is silent on X. Link to what is sound, pick a slug that does not compete with it, and never link a page that states an unsourced number.
 3. **Put the primary phrase in the first paragraph and at least one H2** — naturally, never stuffed. The words a searcher types should actually appear in the lesson; keep the voice, just make the vocabulary overlap.
 4. **Answer the obvious question directly (featured-snippet bait).** If the topic has a clear "when / how much / how many / what" (e.g. *when to book flights*), give a crisp one-sentence or tight-list answer Google can lift verbatim.
 5. **1–3 in-body internal links** to relevant existing lessons (beyond the auto Keep-going block) — deepens topical authority and crawl paths. Use real slugs and verify them.
