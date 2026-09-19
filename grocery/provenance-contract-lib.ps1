@@ -48,7 +48,10 @@ $script:PclChannelStores = @('Walmart', "Sam's Club")
 # Form words a store department can state, tested against the commodity's own excludes.
 $script:PclFormWords = @('frozen', 'canned')
 
-# The pinned identity per store, read once from stores.json: store_id / retailer_location, plus the retired ids.
+# The stores each pinned store's prices may be READ at, from stores.json: the pinned store_identity plus any store
+# Brad has ruled acceptable beside it (Walmart's batch_accepted_stores: Supercenter #2847, Bellevue 68123, ruled
+# 2026-07-15 and "Bellevue still OK" 2026-09-18, backlog I251). Read from the registry, never typed here, so a new
+# ruling moves this gate without an edit to it. Anything else is refused, including the drifted 3153.
 function Get-PclPinnedStores([string]$StoresJson = '') {
   if (-not $StoresJson) { $StoresJson = Join-Path $script:PclRoot 'stores.json' }
   $pins = @{}
@@ -56,10 +59,19 @@ function Get-PclPinnedStores([string]$StoresJson = '') {
   foreach ($s in $doc.stores) {
     $si = $s.store_identity
     if (-not $si) { continue }
-    $id = if ($si.store_id) { [string]$si.store_id } elseif ($si.retailer_location) { [string]$si.retailer_location } else { '' }
-    if (-not $id) { continue }
-    $zip = if ($si.postal_code) { [string]$si.postal_code } elseif ($si.flyer_postal_code) { [string]$si.flyer_postal_code } else { '' }
-    $pins[[string]$s.name] = [pscustomobject]@{ id = $id; zip = $zip }
+    $ids = New-Object System.Collections.Generic.List[string]
+    $zips = New-Object System.Collections.Generic.List[string]
+    # batch_accepted_stores is a SIBLING of store_identity on the store entry, holding a `stores` list.
+    $accepted = @(); if ($s.PSObject.Properties['batch_accepted_stores'] -and $s.batch_accepted_stores.stores) { $accepted = @($s.batch_accepted_stores.stores) }
+    $entries = @($si) + $accepted
+    foreach ($e in $entries) {
+      $id = if ($e.store_id) { [string]$e.store_id } elseif ($e.retailer_location) { [string]$e.retailer_location } else { '' }
+      if ($id) { [void]$ids.Add($id) }
+      $zip = if ($e.postal_code) { [string]$e.postal_code } elseif ($e.flyer_postal_code) { [string]$e.flyer_postal_code } else { '' }
+      if ($zip) { [void]$zips.Add($zip) }
+    }
+    if ($ids.Count -eq 0) { continue }
+    $pins[[string]$s.name] = [pscustomobject]@{ id = $ids[0]; ids = $ids.ToArray(); zips = $zips.ToArray() }
   }
   return $pins
 }
@@ -129,16 +141,17 @@ function Test-CellProvenance {
   # WHERE
   if ($Pins -and $Pins.ContainsKey($Store)) {
     $pin = $Pins[$Store]
+    $okIds = @($pin.ids); $okZips = @($pin.zips)
     $st = Get-PclStatedStores $Row $FileSource
-    $other = @($st.ids | Where-Object { $_ -and $_ -ne $pin.id })
-    if ($other.Count) { return (& $no 'WRONG-STORE' ("read at store " + ($other -join ',') + ", pinned store is " + $pin.id)) }
-    # A text that names a DIFFERENT town or postal code than the pinned one is the Bellevue shape: no id at all,
-    # only a place. Postal codes are compared, never town names (3153 is an Omaha address too).
+    $other = @($st.ids | Where-Object { $_ -and ($okIds -notcontains $_) })
+    if ($other.Count) { return (& $no 'WRONG-STORE' ("read at store " + ($other -join ',') + ", accepted: " + ($okIds -join ','))) }
+    # A text that names a place but no id: compare POSTAL CODES, never town names (3153 is an Omaha address too).
     $zips = @([regex]::Matches($st.text, '\b(68\d{3})\b') | ForEach-Object { $_.Groups[1].Value } | Select-Object -Unique)
-    $otherZip = @($zips | Where-Object { $pin.zip -and $_ -ne $pin.zip })
-    if ($otherZip.Count -and -not (@($st.ids) -contains $pin.id)) { return (& $no 'WRONG-STORE' ("read at postal code " + ($otherZip -join ',') + ", pinned store is " + $pin.id + " (" + $pin.zip + ")")) }
-    if (-not (@($st.ids) -contains $pin.id) -and -not ($pin.zip -and (@($zips) -contains $pin.zip))) {
-      return (& $no 'UNPROVEN-STORE' ("nothing on the row or its file names the store it was read at (pinned " + $pin.id + ")"))
+    $idProven = @($st.ids | Where-Object { $okIds -contains $_ }).Count -gt 0
+    $otherZip = @($zips | Where-Object { $okZips -notcontains $_ })
+    if ($otherZip.Count -and -not $idProven) { return (& $no 'WRONG-STORE' ("read at postal code " + ($otherZip -join ',') + ", accepted: " + ($okZips -join ','))) }
+    if (-not $idProven -and -not (@($zips | Where-Object { $okZips -contains $_ }).Count)) {
+      return (& $no 'UNPROVEN-STORE' ("nothing on the row or its file names the store it was read at (accepted " + ($okIds -join ',') + ")"))
     }
   }
 
@@ -182,7 +195,7 @@ if ($__pclSelfTest) {
   function _R([hashtable]$h) { return [pscustomobject]$h }
   try {
     $pins = Get-PclPinnedStores
-    _P 'PREMISE  stores.json pins Hy-Vee 1466, Walmart 5361 and Fareway 531573' ($pins['Hy-Vee'].id -eq '1466' -and $pins['Walmart'].id -eq '5361' -and $pins['Fareway'].id -eq '531573') (($pins.Keys | ForEach-Object { "$_=$($pins[$_].id)" }) -join ',')
+    _P 'PREMISE  stores.json pins Hy-Vee 1466, Walmart 5361 (plus the ruled #2847) and Fareway 531573' ($pins['Hy-Vee'].id -eq '1466' -and $pins['Walmart'].id -eq '5361' -and (@($pins['Walmart'].ids) -contains '2847') -and $pins['Fareway'].id -eq '531573') (($pins.Keys | ForEach-Object { "$_=$(@($pins[$_].ids) -join '/')" }) -join ',')
     $B = '2026-09-17'; $M = 14
     $sprouts = _R @{ id = 'brussels-sprouts'; exclude = @('\bfrozen\b', 'shaved\s+blend') }
     $frozenSprouts = _R @{ id = 'frozen-brussels-sprouts'; exclude = @('\bfresh\b') }
@@ -209,7 +222,11 @@ if ($__pclSelfTest) {
     $hvNone = Test-CellProvenance -Store 'Hy-Vee' -Row (_R @{ as_of = '2026-09-10'; source_ad = 'everyday shelf price' }) -BoardDate $B -MaxAgeDays $M -Pins $pins
     _P 'MUST FIRE  a Hy-Vee row that names no store at all is UNPROVEN-STORE' (-not $hvNone.ok -and $hvNone.why -eq 'UNPROVEN-STORE') "$($hvNone.why) $($hvNone.detail)"
     $wmBell = Test-CellProvenance -Store 'Walmart' -Row (_R @{ source_ad = 'Walmart Bellevue 68123 shelf price (batch capture)'; fulfillment = 'STORE' }) -FileDate '2026-09-05' -BoardDate $B -MaxAgeDays $M -Pins $pins
-    _P 'MUST FIRE  the founding Walmart Bellevue 68123 row is WRONG-STORE (by postal code, not town name)' (-not $wmBell.ok -and $wmBell.why -eq 'WRONG-STORE') "$($wmBell.why) $($wmBell.detail)"
+    _P 'MUST NOT FIRE  a Walmart Bellevue 68123 row is admitted: Brad ruled #2847 acceptable beside L St (I251), and the gate reads that from stores.json' ($wmBell.ok) "$($wmBell.why) $($wmBell.detail)"
+    $wm3153 = Test-CellProvenance -Store 'Walmart' -Row (_R @{ source_ad = 'Walmart S 167th St 68135 shelf price'; fulfillment = 'STORE' }) -FileDate '2026-09-05' -BoardDate $B -MaxAgeDays $M -Pins $pins
+    _P 'MUST FIRE  a Walmart row read at the drifted Neighborhood Market (68135) is WRONG-STORE, by postal code and not town name' (-not $wm3153.ok -and $wm3153.why -eq 'WRONG-STORE') "$($wm3153.why) $($wm3153.detail)"
+    $wm3153id = Test-CellProvenance -Store 'Walmart' -Row (_R @{ store_id = '3153'; fulfillment = 'STORE' }) -FileDate '2026-09-05' -BoardDate $B -MaxAgeDays $M -Pins $pins
+    _P 'MUST FIRE  a Walmart row stamped store_id 3153 is WRONG-STORE' (-not $wm3153id.ok -and $wm3153id.why -eq 'WRONG-STORE') "$($wm3153id.why) $($wm3153id.detail)"
     $wmOk = Test-CellProvenance -Store 'Walmart' -Row (_R @{ source_ad = 'everyday shelf price'; fulfillment = 'STORE' }) -FileDate '2026-09-12' -FileSource 'walmart.com store 5361 (68137)' -BoardDate $B -MaxAgeDays $M -Pins $pins
     _P 'MUST NOT FIRE  a Walmart row whose capture file names store 5361 with fulfillment STORE is admitted' ($wmOk.ok) "$($wmOk.why) $($wmOk.detail)"
     $wmWaived = Test-CellProvenance -Store 'Walmart' -Row (_R @{ source_ad = 'everyday shelf price'; fulfillment = 'STORE' }) -FileDate '2026-09-12' -FileSource 'store NOT RECORDED (-WaiveMissingStoreLine)' -BoardDate $B -MaxAgeDays $M -Pins $pins
