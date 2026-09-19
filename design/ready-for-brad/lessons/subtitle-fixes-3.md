@@ -1,4 +1,58 @@
-# Subtitle and search-text fixes, round 3: the rest of the Money Hacks sweep (drafted 2026-09-19, NOT applied)
+# Subtitle and search-text fixes, round 3: the rest of the Money Hacks sweep (drafted and applied 2026-09-19)
+
+## APPLIED
+
+Brad gave the go-ahead and the queue was applied on 2026-09-19. `review-staged -Apply` printed `APPLIED sent=25`;
+the sends are 06:04:23 to 06:04:35 that morning.
+
+- **Queue ids** are the `id` on each line of `staged/subtitle-fixes-3.jsonl` and are listed per page below.
+- **JOURNAL ids** (the main checkout's `ops\ghost-journal.jsonl`, one PUT per post, in queue order). These are not
+  the queue ids: none of the 25 queue ids appears in the journal.
+
+  | Page | Queue id | Journal id |
+  |---|---|---|
+  | `/monthly-bills-you-can-lower/` | `141e091e4210` | `1f059d081693` |
+  | `/what-to-do-with-a-tax-refund/` | `1cd176072e91` | `2ae84373f224` |
+  | `/when-should-i-start-investing/` | `7d1b747f9fc1` | `7a22e75bf8d4` |
+  | `/should-i-pay-off-debt-or-save/` | `3e5d525c07e6` | `863c28fe20d1` |
+  | `/online-bank-vs-traditional-bank/` | `19c76e28afb7` | `e5bb1bcf5d6a` |
+  | `/lease-vs-buy-a-car/` | `632cc6607f46` | `567b908de396` |
+  | `/things-frugal-people-dont-buy/` | `e11746de655c` | `79df0836cdd9` |
+  | `/renting-vs-buying-a-home/` | `66649a40fd49` | `473587a19ba0` |
+  | `/new-vs-used-cars/` | `f6833d4d1de9` | `27af39b4a96c` |
+  | `/roth-ira-vs-401k/` | `3a8c071809c1` | `4eee5e044927` |
+  | `/how-to-make-a-budget-that-actually-works/` | `1130c782bb8a` | `cf983c713072` |
+  | `/how-to-lower-your-electric-bill/` | `191a0e1b60ba` | `1679464e10d5` |
+  | `/credit-union-vs-bank/` | `bab05a44828d` | `f154f0c0bb06` |
+  | `/whats-a-good-credit-score/` | `2efef17b815b` | `3ad5c895eb43` |
+  | `/pay-off-debt-vs-invest/` | `a4ba8b1e62fe` | `e8a9251acdea` |
+  | `/15-vs-30-year-mortgage/` | `9638e112b910` | `6a3e037283b3` |
+  | `/high-protein-breakfast-meal-prep/` | `3a7950e3bbbb` | `8fe7389eeda4` |
+  | `/best-side-hustles-to-pay-off-debt/` | `c8262fa50bfd` | `bf00a1008a69` |
+  | `/grocery-bill-hacks/` | `cf90073d39ce` | `892f7c3c4aa5` |
+  | `/false-frugal-traps/` | `81e07b451a74` | `94487117f626` |
+  | `/batch-cooking-chicken-guide/` | `094d33509ff4` | `76279285d04b` |
+  | `/budget-breakfast-ideas/` | `a03e53a576cc` | `b03d6d60d8ff` |
+  | `/kid-friendly-meal-prep/` | `5411ea2d145c` | `2f0c299197d1` |
+  | `/best-cash-back-apps/` | `878eab5afffc` | `acba615d9f04` |
+  | `/should-i-pay-off-my-mortgage-early/` | `af935dafed70` | `57f6920c95f7` |
+
+  The 25 are not the journal's last 25 lines: another session's recipe republish wrote its own PUTs into the same
+  journal from 06:05 onward, so the ids above were matched by post id and time, not by position.
+- **Every page was read back: 25 of 25, 0 mismatches**, every sent field compared (the lexical by its html card),
+  and all 25 still published. A second read-only GET at the start of round 4 (`subtitle-fixes-4.md`) found the same
+  25 of 25.
+
+**The Money Hacks hub was rebuilt right after, body only.** Journal id `40464623a91a` (06:05:33, a PUT to the hub
+page `6a498e4950682b0001cd3f3f`). The diff against the live hub was exactly the two changed subtitles
+(high-protein breakfast and false-frugal traps) plus the signup link written relative. **The glossary was not
+touched.** The live hub (read-only GET at the start of round 4, hub `updated_at` 11:05:31 UTC) reads *"$25 or more a
+week"* once, *"real dollar numbers"* nowhere, *"$30 a week"* nowhere, and *"182 guides"*. The handover for this
+step named journal id `411043b13e2b`; that entry is a PUT to a recipe post (Marry Me Pork Chops, 0.3 seconds later),
+not to the hub, so the hub's id is `40464623a91a`.
+
+The rest of this file is the draft as it was approved, kept as the record. Round 4 (`subtitle-fixes-4.md`) drafts
+the body fixes listed under "Anything odd" at the end.
 
 Round 2 (`subtitle-fixes-2.md`, applied 2026-09-19) ended with a sweep of all 182 live Money Hacks posts and three
 lists it did not draft: twelve more pages whose search text says "real-dollar", nine that say "real dollar(s)", and
