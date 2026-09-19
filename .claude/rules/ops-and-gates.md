@@ -51,6 +51,14 @@ everything else honest, so a defect here is silent by construction.
   passed the whole suite. The step past is one unit of the comparison's own resolution (a day, a
   minute, a row, a point). This is a habit for the next suite, **not a gate**: a bar on it would be
   red on day one.
+  **AND THE CASE AT THE BAR IS BUILT FROM BINARY-EXACT NUMBERS, or the double decides it and the rule does
+  not** (2026-09-19). `build-aldi-regular`'s pack-basis tolerance is 2%, and the first at-the-bar case put
+  48.96 against 4 x 12: the difference and the band agree to fifteen decimal places, `48.96 - 48` rounds up
+  and `0.02 * 4 * 12` rounds down, so the case failed by 8e-16 and said nothing whatever about the
+  comparison. **The red is loud, and the trap is the fix it invites** - widening the tolerance to make it
+  pass would move a real control constant to satisfy a fixture's arithmetic. Choose numbers the format
+  represents exactly (halves, quarters, integers): 4 x 12.5 = 50 with a band of exactly 1.0 puts the case ON
+  the bar for real, and 51.01 is the step past it.
 - **A fixture built by string concatenation is not one argument.** `Test-Thing "a" + "b"` passes
   THREE positional arguments; a simple function binds the first and drops the rest into `$args`, so
   the case runs against a truncated line. Two must-not-fire cases passed that way on 2026-09-07 while
