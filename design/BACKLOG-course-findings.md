@@ -9876,7 +9876,7 @@ is ordered against - the point writers, or nothing.
 - **Everything about Java.** `synchronized`, `ReentrantLock`, `AtomicInteger`, `ConcurrentHashMap`,
   the PCDP library, Maven and the four graded mini-projects were discarded per the queue entry.
 
-### I108 - the 52 money lessons have no risk-management lesson at all, and risk management is one eighth of the professional curriculum `PARTLY DONE - PUBLISH APPROVED 2026-09-19; STAGED, NOT SENT` `queue-7` `1-WAY` `RUNG1 BLOCKED`
+### I108 - the 52 money lessons have no risk-management lesson at all, and risk management is one eighth of the professional curriculum `DONE` `queue-7`
 
 **Ruled 2026-09-19; drafted, awaiting Brad's approval to publish.** Brad ruled option A in chat on 2026-09-19. The draft is `design\ready-for-brad\lessons\insurance-basics.md` (slug `insurance-basics`, with its HTML body beside it): policy, premium and deductible with a labelled made-up deductible example; auto (liability, collision, comprehensive) and renter's (personal property, liability, additional living expenses, against the landlord's cover of the structure), each sourced to an NAIC consumer page linked in the text; term versus permanent with NO price anywhere, so the course's single-sourced $20 a month does not appear. `ops\audit-lesson-rate-claims.ps1` over the three drafts: 3 files, 118 paragraphs, 0 rate claims, exit 0. Rewritten the same day on Brad's feedback that lesson copy must be in his own voice, modelled on eight LIVE posts (read by GET only) because the repo's lesson files predate the July voice rewrite; the README names the posts behind each draft. Nothing was published. What remains is Brad's: approve, then the publish and hub steps in `design\ready-for-brad\lessons\README.md`. Found while drafting: the live site already has Glossary and Money Hacks pages on insurance outside the 52 lessons, and `/life-insurance/` states an unsourced term-policy price, the exact thing this ruling keeps out of the lesson; the README records it.
 
@@ -9930,9 +9930,11 @@ normal-titled lesson outside the 52, or a short arc. That choice is Brad's, whic
 
 **RE-CHECK:** `curl -s -o NUL -w "%{http_code}" https://www.thriftycrew.com/insurance-basics/` answers 404 while the queue waits and 200 once it is applied; then run the checklist in `design/ready-for-brad/lessons/new-lessons-publish.md`.
 
+**Done 2026-09-19.** The lesson is live at https://www.thriftycrew.com/insurance-basics/: sent at 07:18 US Central from the main checkout with `ops/review-staged.ps1 -Apply` at the orchestrator's hand on Brad's "Publish all three" (staged id `7cd3ae161fa6`, write-journal id `98f2aa18b54d`, new post id `6aae7d8ea443720001d02434`). A read-only GET reads it `published` and `paid`, tag exactly `financial-lessons`, author exactly `brad`, no newsletter and no email, and its paywall JSON-LD names its own thriftycrew.com URL; logged out it shows the paid box and none of the sampled body sentences (the orchestrator's check). The cross-links are applied too: `/insurance-premium/`, `/insurance-deductible/` and `/liability-coverage/` each carry a link line to it. Its listing on the `saving-and-banking` hub is STAGED, NOT SENT, in `design/ready-for-brad/lessons/staged/lesson-hubs.jsonl`, because `.claude/skills/lesson/build-hubs.ps1` would put em dashes back on all six live hubs. **The journal id does not undo this POST** (the journal recorded the collection, not the new id): the undo is a draft or a delete in Ghost Admin, Brad's call. Every id, the ten PUTs' journal ids and the census result (1,086 live pages, 196 declared, 0 findings, exit 0) are in the APPLIED section at the top of `design/ready-for-brad/lessons/new-lessons-publish.md`.
+
 ---
 
-### I109 - the curriculum teaches index funds and a custodial account before it ever teaches a buffer, and the emergency fund has no lesson `PARTLY DONE - PUBLISH APPROVED 2026-09-19; STAGED, NOT SENT` `queue-7` `1-WAY` `RUNG1 BLOCKED`
+### I109 - the curriculum teaches index funds and a custodial account before it ever teaches a buffer, and the emergency fund has no lesson `DONE` `queue-7`
 
 **Ruled 2026-09-19; drafted, awaiting Brad's approval to publish.** Brad ruled option A in chat on 2026-09-19. The draft is `design\ready-for-brad\lessons\how-much-emergency-fund.md` (slug `how-much-emergency-fund`; `emergency-fund` is already a live Glossary post, and `publish-lesson.ps1` upserts by slug, so it would have overwritten it). It gives the honest range as ruled, three to six months and six to twelve on a single income with replaceability as the driver, the buffer-before-investing reason linked to Weeks 29 and 30, and a worked example whose every figure is labelled made up. Its two sourced figures are the Federal Reserve's report on 2025 (published May 2026): 63 percent would cover a $400 surprise with cash or its equivalent, 55 percent have three months set aside. The one-line cross-references for Weeks 29 and 30 are DRAFTED in the README only; neither published week was edited, and the README notes that editing Week 30 obliges fixing its unqualified historical rate under I112. Nothing was published.
 
@@ -9987,6 +9989,8 @@ cross-reference at all.
 
 **RE-CHECK:** `curl -s -o NUL -w "%{http_code}" https://www.thriftycrew.com/how-much-emergency-fund/` answers 404 while the queue waits and 200 once it is applied; then run the checklist in `design/ready-for-brad/lessons/new-lessons-publish.md`.
 
+**Done 2026-09-19.** The lesson is live at https://www.thriftycrew.com/how-much-emergency-fund/: sent at 07:18 US Central from the main checkout with `ops/review-staged.ps1 -Apply` at the orchestrator's hand on Brad's "Publish all three" (staged id `c589a2ce1031`, write-journal id `bb48e74dcc65`, new post id `6aae7d8da443720001d0242e`). A read-only GET reads it `published` and `paid`, tag exactly `financial-lessons`, author exactly `brad`, no newsletter and no email, and its paywall JSON-LD names its own thriftycrew.com URL; logged out it shows the paid box and none of the sampled body sentences (the orchestrator's check). The cross-links are applied too: Week 29 and Week 30 link to it from under their disclaimers, `/emergency-fund/` and `/how-to-build-an-emergency-fund/` each carry a link line to it. Its listing on the `saving-and-banking` hub is STAGED, NOT SENT, in `design/ready-for-brad/lessons/staged/lesson-hubs.jsonl`, because `.claude/skills/lesson/build-hubs.ps1` would put em dashes back on all six live hubs. **The journal id does not undo this POST** (the journal recorded the collection, not the new id): the undo is a draft or a delete in Ghost Admin, Brad's call. Every id, the ten PUTs' journal ids and the census result (1,086 live pages, 196 declared, 0 findings, exit 0) are in the APPLIED section at the top of `design/ready-for-brad/lessons/new-lessons-publish.md`.
+
 ---
 
 ### I110 -  `DONE` `queue-7`
@@ -10019,7 +10023,7 @@ two scoring models. Nothing in code.
 
 ---
 
-### I111 - nothing in the 52 lessons teaches the personal balance sheet, which is the professional curriculum's first tool `PARTLY DONE - PUBLISH APPROVED 2026-09-19; STAGED, NOT SENT` `queue-7` `1-WAY` `RUNG1 BLOCKED`
+### I111 - nothing in the 52 lessons teaches the personal balance sheet, which is the professional curriculum's first tool `DONE` `queue-7`
 
 **Ruled 2026-09-19; drafted, awaiting Brad's approval to publish.** Brad ruled option A in chat on 2026-09-19. The draft is `design\ready-for-brad\lessons\personal-balance-sheet.md` (slug `personal-balance-sheet`, chosen so it does not compete with the live `/how-to-track-your-net-worth/`): assets minus liabilities, write it once a year, and the new graduate at minus $8,000 rebuilt from stated made-up line items and labelled as an example, with a year-later page at minus $4,500 to show the direction is the point. The parent-and-teen worksheet sits in the `Try this together` slot. The link line for `net-worth-by-age` is DRAFTED in the README only; that page was not edited. Nothing was published.
 
@@ -10052,6 +10056,8 @@ actionable instead of merely reassuring. The reassurance that a young person's n
 **Publish approved and staged, not sent, 2026-09-19.** Brad ruled "Publish all three" in chat. The POST for `personal-balance-sheet` is staged in `design/ready-for-brad/lessons/staged/new-lessons.jsonl` (staged id `609c8bc1cdfa`) with the other two lessons, built field for field as `publish-lesson.ps1` and the live lessons build one (tag `financial-lessons`, paid, Brad as author, excerpt, meta, OG and Twitter fields, the paywall JSON-LD, no newsletter parameter so nothing is mailed). The cross-links are two more queues: `new-lessons-links.jsonl` (Week 29, Week 30 and Net Worth by Age, lexical PUTs) and `new-lessons-oldpage-links.jsonl` (the seven older-page lines `overlap-review.md` held until the lessons are live). `ops/review-staged.ps1` lists all three with 0 concerns, exit 0, after `lib/ghost-lib.ps1` stopped reading three different POSTs to `/posts/` as one resource written three times. The hub arrays in `.claude/skills/lesson/build-hubs.ps1` carry the three slugs. A delegated agent staged it and may not write to the live site, so what remains is the apply, in the order and with the checks (the logged-out paywall check first) in `design/ready-for-brad/lessons/new-lessons-publish.md`. The worksheet is part of the lesson body (plain HTML lists in Try This Together), not a file, so nothing needs an upload.
 
 **RE-CHECK:** `curl -s -o NUL -w "%{http_code}" https://www.thriftycrew.com/personal-balance-sheet/` answers 404 while the queue waits and 200 once it is applied; then run the checklist in `design/ready-for-brad/lessons/new-lessons-publish.md`.
+
+**Done 2026-09-19.** The lesson is live at https://www.thriftycrew.com/personal-balance-sheet/: sent at 07:18 US Central from the main checkout with `ops/review-staged.ps1 -Apply` at the orchestrator's hand on Brad's "Publish all three" (staged id `609c8bc1cdfa`, write-journal id `4dddd26544a8`, new post id `6aae7d8fa443720001d0243a`). A read-only GET reads it `published` and `paid`, tag exactly `financial-lessons`, author exactly `brad`, no newsletter and no email, and its paywall JSON-LD names its own thriftycrew.com URL; logged out it shows the paid box and none of the sampled body sentences (the orchestrator's check). The cross-links are applied too: Net Worth by Age links to it, `/net-worth/` and `/how-to-track-your-net-worth/` each carry a link line to it. Its listing on the `money-mindset-and-habits` hub is STAGED, NOT SENT, in `design/ready-for-brad/lessons/staged/lesson-hubs.jsonl`, because `.claude/skills/lesson/build-hubs.ps1` would put em dashes back on all six live hubs. **The journal id does not undo this POST** (the journal recorded the collection, not the new id): the undo is a draft or a delete in Ghost Admin, Brad's call. Every id, the ten PUTs' journal ids and the census result (1,086 live pages, 196 declared, 0 findings, exit 0) are in the APPLIED section at the top of `design/ready-for-brad/lessons/new-lessons-publish.md`.
 
 ---
 
@@ -18169,6 +18175,16 @@ engines read for the paywall, so it names a domain the site no longer uses. Firs
 the schema is written (the lesson skill's publish path or a code injection) so new lessons stop carrying it, and stage
 the fix to the 52 for Brad.
 
+**The publish-path half, found while staging I108, I109 and I111 (merged here 2026-09-19, same defect).**
+`.claude\skills\lesson\publish-lesson.ps1:76` sets `$postUrl = "$apiUrl/$Slug/"` and writes it as the JSON-LD
+`mainEntityOfPage`, and `$apiUrl` is the Ghost ADMIN host (`map-to-success.ghost.io`, the same variable its API calls at
+:54, :60, :90 and :102 use). So a lesson published with the skill today names neither the old domain nor the site: it
+names the admin host. The three new lessons did not go through it; their queue wrote the thriftycrew.com URL by hand.
+Counted by a read-only GET of all 59 posts tagged financial-lessons (one page, total 59): 52 name
+`simplemoneyplaybook.com`, 3 name `https://www.thriftycrew.com/<slug>/` (the three new ones), 0 name the ghost.io host
+and 4 carry no `mainEntityOfPage`. The fix to the skill is one line (the site URL, not `$apiUrl`); it belongs with
+the 52, so a lesson published next week does not become the 53rd.
+
 ### I273 - the free lesson free-basics-of-investing states an unsourced 10 percent return `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
 
 **Merged from `design\backlog-inbox\i143b1-findings-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
@@ -18516,3 +18532,40 @@ lines). It builds the two public directory pages, `/money-glossary/` and `/money
 
 **Check once built:** a rebuild with `-Only money-hacks` against a stubbed transport should leave the glossary
 page's request count at zero, and the diff against the live hub on a day with no subtitle change should be empty.
+
+### I293 - the write journal cannot undo a ghost post it created, and the reverter would offer a put of the post list instead `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i108-lessons-applied-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Measured 2026-09-19** on the three lessons published for I108, I109 and I111. `Invoke-GhostApi` in
+`lib\ghost-lib.ps1` journals every mutating call by GETting its uri first. For a POST that uri is the collection
+(`/ghost/api/admin/posts/?source=html`), so the GET succeeds, the entry is written with `before_state` `captured`
+and the post LIST as its before-image, and the new post's id is never recorded anywhere. All three of today's POST
+entries (`bb48e74dcc65`, `98f2aa18b54d`, `4dddd26544a8` in `ops\ghost-journal.jsonl`) have that shape. In
+`ops\revert-ghost-write.ps1`, `Get-TcInverse` turns `captured` into a PUT of the before-image, so pointed at one of
+those ids it would plan a PUT of a list of posts to the collection uri, when the real inverse is a DELETE (or a move
+to draft) of an id the journal never learned. The new ids had to be read back by a GET by slug and written into
+`design\ready-for-brad\lessons\new-lessons-publish.md` by hand. Fix shape: journal a POST as `created` with the id
+taken from Ghost's response after the send (an after-write entry, since the id does not exist before it), have
+`Get-TcInverse` refuse any `captured` entry whose method is POST, and add a MUST FIRE for that refusal plus a CLEAN
+TWIN proving a PUT entry still inverts to a PUT. First rung: build it in `lib\ghost-lib.ps1` and
+`ops\revert-ghost-write.ps1 -SelfTest` with the transport stubbed.
+
+### I294 - the lesson hub builder is stale against the six live hubs and would put em dashes back on every one `OPEN` `run-0919` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\i108-lessons-applied-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Measured 2026-09-19.** `.claude\skills\lesson\build-hubs.ps1` rebuilds the six topic-hub pages and writes them
+straight to Ghost. Built offline (a scratch copy with its write cut out) and compared with a read-only GET of each
+live hub, its output differs from all 6 of 6 beyond the lesson lists: it writes `&mdash;` into each hub's lead
+line and into the membership box ("All 52 weeks and every recipe &mdash; and it pays for itself"), where the live
+hubs read "Pay yourself first. Then make it automatic." and "All 52 weeks and every recipe. And it pays for
+itself"; it writes relative links where every live link is `https://www.thriftycrew.com/...`; and it writes
+"Week 9: Pay Yourself First" where the live list reads "Week 9. Pay Yourself First". Title, meta, OG and Twitter
+fields match on all 6. The live hubs were last edited 2026-07-03, so anyone following the lesson skill's own
+instruction ("add its slug ... then run this script") would undo that edit and put an em dash on six public pages.
+The new lessons' hub listing was staged instead as a splice of the live lexical
+(`design\ready-for-brad\lessons\staged\lesson-hubs.jsonl`). Fix: bring the script's `lead`, `body` and CTA strings
+and its link and title format to what is live, add a check that its built html equals the live html card for a hub
+whose list did not change (read-only, runnable offline), and make it stage through `TC_STAGE_WRITES` rather than
+call `Invoke-RestMethod` directly. It also still lists lessons with `limit=all` (I230's finding, 59 lessons today).

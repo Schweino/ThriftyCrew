@@ -1,7 +1,114 @@
-# Publishing the three new lessons: staged, not sent
+# Publishing the three new lessons
+
+## Where this stands: APPLIED (2026-09-19)
+
+All three lessons are live and the ten cross-link PUTs are applied. They were sent from the main checkout with
+`ops\review-staged.ps1 -Apply` at the orchestrator's hand on Brad's "Publish all three" in chat, 07:18 US Central.
+Everything below the APPLIED record is the plan as it was staged, kept as the record of what was approved.
+
+**Two id spaces, and only one of them undoes a PUT.** Each call carries a STAGED id (its line in the queue file)
+and a separate WRITE-JOURNAL id (its entry in `ops\ghost-journal.jsonl`, holding the before-copy).
+`ops\revert-ghost-write.ps1` takes the journal id. The journal ids below were matched to the staged calls by method,
+uri and request byte length (13 of 13 matched, each exactly once), and they are the last 13 entries written after
+the I143 batch-2 publish.
+
+### Queue 1, the three POSTs: APPLIED 07:18:22 to 07:18:24
+
+**A journal id does NOT undo a POST.** The journal read the collection (`/posts/`) before each create and recorded
+that list as its before-copy; it never learns the new post's id. So the new ids below come from a read-only GET by
+slug. To undo one of these lessons, set it to draft or delete it in Ghost Admin (Posts, the lesson, Settings): that
+is Brad's call, and `revert-ghost-write.ps1` must not be pointed at these three journal ids.
+
+| Lesson | Staged id | Journal id (not an undo) | New post id | created and published_at |
+|---|---|---|---|---|
+| `/how-much-emergency-fund/` | `c589a2ce1031` | `bb48e74dcc65` | `6aae7d8da443720001d0242e` | 2026-09-19T12:18:21.000Z |
+| `/insurance-basics/` | `7cd3ae161fa6` | `98f2aa18b54d` | `6aae7d8ea443720001d02434` | 2026-09-19T12:18:22.000Z |
+| `/personal-balance-sheet/` | `609c8bc1cdfa` | `4dddd26544a8` | `6aae7d8fa443720001d0243a` | 2026-09-19T12:18:23.000Z |
+
+Read back by GET (`include=tags,authors,newsletter,email`): all three `published` and `paid`, tags exactly
+`financial-lessons` (id `6a43b3cd5e9f16000182e8b5`, the tag itself public), primary tag the same, author exactly
+`brad` (id `6a436289e02523000897527f`), no newsletter and no email on any of them, so nothing was mailed. The same
+GET of the live lessons `save-money-on-vacation` and `net-worth-by-age` returns the same one tag and the same author.
+Each post's paywall JSON-LD names its own `https://www.thriftycrew.com/<slug>/` (the other 52 lessons with one still
+name `simplemoneyplaybook.com`: backlog I272). The orchestrator's checks at apply time: logged out, each shows the
+paid box and 0 of 7 sampled body sentences; the admin copy holds all 7; the FAQ html card survived.
+
+**A later edit to `/insurance-basics/`, APPLIED 08:02:59 (journal id `4993b9062ebc`, a PUT, so this one does undo).**
+On Brad's go-ahead the orchestrator added the two links held back from the lesson as drafted (see "Not staged, a
+decision for Brad" below): "Term life", the bold lead-in of the life section, now links to `/term-vs-whole-life/`,
+and a new line closes the renter's section, *"Wondering if it's worth the money? Here's the math."*, with "Here's
+the math" linking to `/is-renters-insurance-worth-it/`. Removing just those two edits gives back the prior lexical
+exactly, the read-back lexical equals what was sent, the post is still published and paid, both link targets
+answer 200, and logged out the page still shows the paid box and not the new line.
+
+### Queue 2, the three lesson link lines: APPLIED 07:18:50 to 07:18:51
+
+| Page | Staged id | Journal id | updated_at now | Status, visibility |
+|---|---|---|---|---|
+| Week 29, The Custodial Account Conversation | `40d5f2c275f2` | `4f0257828b1e` | 2026-09-19T12:18:49.000Z | published, paid |
+| Week 30, Boring Wins: Index Funds 101 | `1331a6a32726` | `7c84d6691b74` | 2026-09-19T12:18:49.000Z | published, paid |
+| Net Worth by Age | `d79b03e3a6ce` | `aa69c6bee292` | 2026-09-19T12:18:50.000Z | published, public |
+
+### Queue 3, the seven older pages: APPLIED 07:18:52 to 07:18:55
+
+| Page | Staged id | Journal id | updated_at now | Status, visibility |
+|---|---|---|---|---|
+| `/emergency-fund/` | `2b96e009bed1` | `5dc53d4a6834` | 2026-09-19T12:18:50.000Z | published, public |
+| `/insurance-premium/` | `11e7dcf9e38a` | `5ae475ffac5b` | 2026-09-19T12:18:51.000Z | published, public |
+| `/insurance-deductible/` | `0fe6e779b654` | `0f27eadbe155` | 2026-09-19T12:18:51.000Z | published, public |
+| `/liability-coverage/` | `4737e830e9df` | `fa5741866d54` | 2026-09-19T12:18:52.000Z | published, public |
+| `/net-worth/` | `2fe9f41bf4ee` | `3a610a989ec7` | 2026-09-19T12:18:52.000Z | published, public |
+| `/how-to-build-an-emergency-fund/` | `c9ffa50d93c3` | `d7018545f0ff` | 2026-09-19T12:18:53.000Z | published, public |
+| `/how-to-track-your-net-worth/` | `9631dee15cfa` | `f7d751b7892e` | 2026-09-19T12:18:53.000Z | published, public |
+
+The orchestrator read all ten PUTs back with lexical equal to what was sent; the `updated_at` and status columns
+above are a later read-only GET, and each page's `updated_at` is still the one its PUT set.
+
+### The census export
+
+`ops\audit-ghost-page-census.ps1 -Export` refreshed `content\ghost-adopted\` afterwards: 196 of 196 declared pages
+read, 33 files changed. Four of them are the two declared pages queue 3 moved (`liability-coverage` and
+`how-to-track-your-net-worth`, `.html` and `.json` each). The other 29 files are 24 declared pages edited live by
+other work since the last export (the meta description on all 24, the excerpt on 3, the body on 5), which the
+export now matches.
+The census then read 1,086 live web pages (1,083 at the last run, plus these three lessons), 890 named by a tracked
+file, 196 declared, 0 findings, exit 0. The three lessons need no declaration: their slugs are named in tracked files
+(the drafts in this folder and `.claude\skills\lesson\build-hubs.ps1`), and lessons are not in
+`ops\ghost-page-estate.json`.
+
+### The lesson hubs: STAGED, NOT SENT (`staged\lesson-hubs.jsonl`)
+
+**`build-hubs.ps1` must not be run as it stands.** Built offline (a scratch copy with its one write cut out) and
+compared with the six live hub pages, its output differs from every one of them beyond the new lessons: it would put
+`&mdash;` back into each hub's lead line and the membership box (the live hubs read "Pay yourself first. Then make it
+automatic." and "All 52 weeks and every recipe. And it pays for itself"), turn every absolute
+`https://www.thriftycrew.com/` link into a relative one, and change each "Week 9. Pay Yourself First" to "Week 9: Pay
+Yourself First". The live hubs were last edited on 2026-07-03 and the script never caught up. Titles, meta, OG and
+Twitter fields match the script exactly on all six.
+
+So the hub update is staged as a splice instead: two body-only PUTs (`updated_at` and `lexical`), each the LIVE
+lexical string with the new list items inserted before its one `</ul>`, in the live page's own convention (absolute
+URL, the post's title as Ghost holds it, no "free" badge because all three are paid). Cutting the inserted text back
+out gives the live lexical byte for byte, and the parsed html equals the live html with only those items added
+(both checked in the staging script). `review-staged` lists 2 calls, 0 concerns, exit 0.
+
+| Hub page (id) | updated_at read at staging | Adds | Staged id | New html sha256 (first 16) |
+|---|---|---|---|---|
+| `/saving-and-banking/` (`6a44cd01cc3094000187b7ad`) | 2026-07-03T10:53:40.000Z | The Money That Sits There on Purpose; What You're Really Buying When You Buy Insurance | `22c59a96bcd2` | `2fad35442f679299` |
+| `/money-mindset-and-habits/` (`6a44cd00cc3094000187b7a3`) | 2026-07-03T10:53:40.000Z | The One Page That Shows Where You Really Stand | `a7d3d8eeb4ac` | `2d85c25972adb6bf` |
+
+Apply from the main checkout, copying the queue first because `-Apply` deletes what it sends:
+
+    Copy-Item design\ready-for-brad\lessons\staged\lesson-hubs.jsonl $env:TEMP\lesson-hubs.jsonl
+    powershell -NoProfile -File ops\review-staged.ps1 -Queue $env:TEMP\lesson-hubs.jsonl -Apply
+
+A page edited since staging answers 409 and nothing stale lands. The hub titles in the list are the post titles, so
+if a lesson title changes, re-stage. Neither hub page is declared in the census estate.
+
+## As staged (the approved plan)
 
 Brad ruled on 2026-09-19, "Publish all three": the drafts in this folder for backlog I108, I109 and I111, with
-their cross-links from existing lessons. **Nothing has been sent to Ghost.** Every live read was a GET (write
+their cross-links from existing lessons. **Nothing had been sent to Ghost when this was written.** Every live read was a GET (write
 journal cleared in that process); every write is queued in the estate's staging format (`lib\ghost-lib.ps1`
 `TC_STAGE_WRITES`) and waits for `ops\review-staged.ps1 -Apply`.
 
@@ -149,9 +256,9 @@ and nothing stale lands: re-run the staging read, never edit the timestamp by ha
 Then the hubs. This commit already adds `how-much-emergency-fund` and `insurance-basics` to the `saving-and-banking`
 hub and `personal-balance-sheet` to `money-mindset-and-habits` in `.claude\skills\lesson\build-hubs.ps1` (a slug
 not yet live is skipped with a MISSING line, so the edit is safe before the posts exist). It writes to Ghost
-directly and is not staged, so run it by hand after the posts are live:
-
-    powershell -ExecutionPolicy Bypass -File .claude\skills\lesson\build-hubs.ps1
+directly and is not staged, so run it by hand after the posts are live. **SUPERSEDED: do not run it.** Its output
+would put em dashes back on all six live hubs; the hub update is staged as a splice instead (see the APPLIED record
+at the top).
 
 ## Verification checklist (after applying)
 
@@ -185,6 +292,9 @@ directly and is not staged, so run it by hand after the posts are live:
    the live lessons from then on, and record the applied ids and `updated_at` values at the top of this file.
 
 ## Findings made while staging (not fixed here)
+
+Filed 2026-09-19: the first is merged into backlog I272 (the same defect: the 52 old lessons and the skill that would
+write a 53rd), the second is I293, and the stale hub builder found while applying is I294.
 
 - `.claude\skills\lesson\publish-lesson.ps1` writes the paywall JSON-LD's `mainEntityOfPage` as
   `$apiUrl/<slug>/`, which is the ghost.io admin host, not the site. And every live paid lesson read

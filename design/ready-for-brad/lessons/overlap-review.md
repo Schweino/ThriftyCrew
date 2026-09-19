@@ -84,6 +84,28 @@ their slugs in tracked files: the glossary hub list in `.claude\skills\meal-macr
 redirect files, the new lesson drafts, this review and the backlog. None of those holds the page body, so the
 census cannot see what changed on those 9; this review and the write journal are the record.
 
+### The held link lines: APPLIED 2026-09-19 07:18 (US Central), once the lessons were live
+
+The seven link lines this review held "once each new lesson is live" (section near the end) went out with the three
+new lessons, staged in `new-lessons-oldpage-links.jsonl` and applied from the main checkout with
+`ops\review-staged.ps1 -Apply`. Each is one paragraph inserted after the page's "Bottom line" paragraph; the full
+record, with the three POSTs and the staged ids, is the APPLIED section at the top of `new-lessons-publish.md`.
+
+| Page | Staged id | Journal id | updated_at now |
+|---|---|---|---|
+| `/emergency-fund/` | `2b96e009bed1` | `5dc53d4a6834` | 2026-09-19T12:18:50.000Z |
+| `/insurance-premium/` | `11e7dcf9e38a` | `5ae475ffac5b` | 2026-09-19T12:18:51.000Z |
+| `/insurance-deductible/` | `0fe6e779b654` | `0f27eadbe155` | 2026-09-19T12:18:51.000Z |
+| `/liability-coverage/` | `4737e830e9df` | `fa5741866d54` | 2026-09-19T12:18:52.000Z |
+| `/net-worth/` | `2fe9f41bf4ee` | `3a610a989ec7` | 2026-09-19T12:18:52.000Z |
+| `/how-to-build-an-emergency-fund/` | `c9ffa50d93c3` | `d7018545f0ff` | 2026-09-19T12:18:53.000Z |
+| `/how-to-track-your-net-worth/` | `9631dee15cfa` | `f7d751b7892e` | 2026-09-19T12:18:53.000Z |
+
+All seven are still published and public (read-only GET). The orchestrator read each back with lexical equal to what
+was sent. `liability-coverage` and `how-to-track-your-net-worth` are declared, so `ops\audit-ghost-page-census.ps1
+-Export` refreshed their copies in `content\ghost-adopted\`, and the census then read 1,086 live web pages, 196
+declared, 0 findings, exit 0.
+
 ## As staged (the approved plan)
 
 Brad approved the whole plan as drafted on 2026-09-19 and ruled that **$1,000 stays the site's starter
