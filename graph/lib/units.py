@@ -493,6 +493,59 @@ def names_single_whole_item(product_name: str | None) -> bool:
                for m in _WHOLE_ITEM.finditer(name))
 
 
+_RATE_UNIT = r"(?:lbs?|pounds?|oz|ounces?|kg|kilograms?|g|grams?|fl\.?\s*oz)"
+_RATE_BARE = re.compile(rf"^\s*(?:/|per|a|each)?\s*{_RATE_UNIT}\.?\s*$", re.IGNORECASE)
+_RATE_PER = re.compile(rf"(?:/|\bper)\s*{_RATE_UNIT}(?![a-z])", re.IGNORECASE)
+
+
+def is_rate_size(size_text: str | None) -> bool:
+    """True when a SIZE field states a price RATE rather than a package.
+
+    "lb", "lb.", "/lb", "per lb" and "$0.99/lb" all say the sticker is per
+    pound (or ounce, or gram). parse_size reads a bare unit as a quantity of
+    one, which is correct for a commodity priced in that unit and wrong for one
+    priced per item. A real package size ("3 lb", "20 oz", "1 lb/bag") has its
+    own number in front of the unit and is not a rate.
+    """
+    if not size_text:
+        return False
+    t = str(size_text).strip()
+    return bool(_RATE_BARE.match(t) or _RATE_PER.search(t))
+
+
+# A pack count for an each-basis row whose size is a weight or volume total.
+# count_from_name demands "N ct/count/pk/pack" with only spaces between, so it
+# misses the spellings the multi-pack soap and water rows actually carry:
+# "3.75 oz 8 Bars", "4 oz (12 Bars)", "( Pack of 24 )", "35-pack", "24/Carton",
+# "24 Bottles", and the Fareway size field "32 pk .5 L btls". Plural container
+# nouns only: "3 in 1 Bar" is one bar, and a singular noun after a number is
+# far more often a description than a count.
+_EACH_PACK = re.compile(
+    r"(?<![\d.])(\d{1,3})\s*-?\s*(?:ct|count|pk|pack|bars|bottles|cans)\b"
+    r"|\bpack\s+of\s+(\d{1,3})\b"
+    r"|(?<![\d.])(\d{1,3})\s*/\s*(?:carton|case)\b",
+    re.IGNORECASE)
+
+
+def each_pack_count(size_text: str | None, product_name: str | None) -> int | None:
+    """Pack count for an each-priced row, read from the size field first (the
+    store's own statement about the priced unit) and the name second. A name
+    offering a CHOICE of products is never read: its counts belong to two
+    different packs. Bounded like count_from_name, 2 to 144."""
+    sources = [size_text]
+    if not names_multiple_products(product_name):
+        sources.append(product_name)
+    for text in sources:
+        if not text:
+            continue
+        m = _EACH_PACK.search(str(text))
+        if m:
+            v = int(next(g for g in m.groups() if g))
+            if 1 < v <= 144:
+                return v
+    return None
+
+
 def per_unit(price, size_text: str | None,
              commodity_unit: str | None = None,
              product_name: str | None = None) -> tuple[float | None, str | None]:
@@ -527,6 +580,16 @@ def per_unit(price, size_text: str | None,
     # an each-priced commodity into a per-ounce one.
     if (commodity_unit or "").lower() in ("each", "ea"):
         n = 1.0
+        # A RATE IS NOT A PACKAGE (backlog I222). A size of "lb", "/lb" or
+        # "per lb" says the sticker is per POUND; parse_size reads it as one
+        # pound, which is right for a pound-basis commodity and wrong here.
+        # Fareway's "Whole Cantaloupe or Honeydew Melons, $0.99 lb" priced
+        # cantaloupe at $0.99 EACH, 0.29x the median and inside flag_outliers'
+        # 5x blind range: the false-cheap direction. Converting needs a known
+        # weight per item and nothing here holds one, so refuse. The board
+        # already does: compare-deals writes that row UNPRICED.
+        if is_rate_size(size_text):
+            return None, None
         if names_single_whole_item(product_name):
             # The name already declared the package to be one item; any count
             # in the size field or the name is a case pack or a piece count.
@@ -540,7 +603,7 @@ def per_unit(price, size_text: str | None,
             # 18-count box of ice pops at the full $5.99 per pop.
             n = float(s.multiplier)
         else:
-            c = count_from_name(product_name)
+            c = count_from_name(product_name) or each_pack_count(size_text, product_name)
             if c:
                 n = float(c)
         return round(float(price) / n, 4), "each"

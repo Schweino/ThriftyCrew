@@ -15734,7 +15734,7 @@ still silence their gaps until 2026-11-19; moving it onto the lib would reopen 2
    than on a second search.
 4. **Leave it all off main.** Readers keep "No price yet" everywhere, which is honest but tells them nothing.
 
-### I222 - Reader-facing: per-pound prices read as per-each, and multi-packs priced as one each `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
+### I222 - Reader-facing: per-pound prices read as per-each, and multi-packs priced as one each `NEEDS A RULING` `run-0919` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -15742,6 +15742,68 @@ Found under I182. `graph/lib/units.py:496`: `per_unit(0.99, 'lb', 'each', ...)` 
 Two Fareway cantaloupe rows sit at $0.99 "each" (0.289x the median), inside what `flag_outliers` misses; not
 the reader's cheapest on 2026-09-17 (Walmart $2.50). `bar-soap` and `bottled-water` price whole multi-packs as
 one each, inflating the median in the harmless direction. A fix changes which rows can price a cell.
+
+**Worked 2026-09-18 (base 445b03fc5). Which path matters:** `graph/lib/units.py` is the graph's, and
+`docs/RUNTIME-MAP.md` says nothing in any serving path reads `graph/`; a grep of `grocery/`, `meal-prep/`,
+`site/`, `public/`, `worker/` and `content/` found no reader of `graph/lib`, `graph.db` or `cell_state`. The
+BOARD does not have the item's defect for its rows: on the main checkout's `candidates-2026-09-17.json` both
+Fareway $0.99 "lb" melon rows are `UNPRICED`, and the board already divides bar soap and bottled water per bar and
+per bottle (Walmart Ivory 12 ct $0.6642, Sam's water 40 pk $0.0995). Of 76 each-basis candidates on that file
+whose size or price states a weight rate, 58 are `UNPRICED`, 11 are refused by the band and 1 as not-in-store;
+of the 6 priced, 4 divide a real pack count and 2 are the same defect in another spelling, Walmart pickling
+cucumbers (not on the board) and the one that reaches a board entry: Walmart "Fresh Purple Eggplant, Each" $1.82,
+size "lb", priced `per-each marker` because the NAME says Each, while Walmart's own capture reads
+`$1.82 | $1.82/lb` (`walmart-capture-2026-08-31.csv`). Not a crown (Baker's $1.69).
+
+**Graph half, landed.** `per_unit` under an each basis now refuses a size that is a price RATE (`is_rate_size`:
+"lb", "/lb", "per lb", "$0.99/lb", bare "oz"), since converting needs a known weight per item and the graph holds
+none; and it divides a multi-pack by the count spellings those rows carry (`each_pack_count`: "8 Bars",
+"(12 Bars)", "Pack of 24", "35-pack", "24/Carton", "32 pk .5 L btls"), size field first, never a choice-ad name.
+Fixtures: `graph/lib/units_selftest.py --selftest`, 14 cases (7 MUST FIRE on the real rows, 2 MUST NOT FIRE, 5
+CLEAN TWIN including the same "lb" row under a pound basis), exit 0. Broken once each: rate refusal removed, 4 MUST
+FIRE red (exit 1); pack reader removed, 3 MUST FIRE red (exit 1); restored md5-identical, exit 0. `units.py` blob
+`b323d324e475`, self-test blob `a29f6dc4dc98`.
+**cell_state on sqlite backup-API copies** of the live `graph/sqlite/graph.db` (md5 `09192398a838...`), each arm
+running `flag_outliers.flag` then `state.build_cell_state` at one fixed timestamp, old arm on the pre-fix
+`units.py` (blob `47ce83da8688`): **34 of 3,239 (commodity, store) cells change**, 3,234 cells to 3,225, and
+`basis_flag` falls 217 to 167 (50 rows unflagged, 0 newly flagged: bar-soap 23, bottled-water 20, hot-cocoa 3,
+garlic 2, kiwi 2), because the multi-pack median no longer holds true per-bottle prices below its cut. (The live
+table differs from the old arm in 52 of 3,246 cells: it was built at 14:55 over 55 flags, not a fresh flag pass.)
+- A per-pound rate stops pricing an each cell (15): apple at Baker's, Family Fare, Fareway (ad) and Hy-Vee, Hy-Vee
+  bell-peppers and cauliflower, chayote at Baker's and Family Fare, Family Fare collard-greens, pie-pumpkins and
+  plantains, Baker's leeks leave; the Fareway $0.99 melon ad leaves cantaloupe and honeydew (their everyday $3.33
+  and $1.49 stay); Walmart eggplant falls from the $1.82/lb row to "Melis World Roasted Eggplant" $9.51, a jarred
+  wrong product the refusal EXPOSES.
+- A per-ounce unit price stored as the price stops pricing (4): Walmart fajita-seasoning $0.94 -> $1.77, Walmart
+  ramen $0.17 -> $0.3225; Walmart swiss-chard (garden seeds) and Sam's garlic (a salmon fillet) leave.
+- Multi-packs divided (13): bar-soap Sam's $3.08 -> $0.549, Walmart $0.9925 -> $0.5975, Baker's new at $0.7075;
+  bottled-water Family Fare $0.2412 -> $0.1663, Fareway ad $5.29 -> $0.1653 (plus an everyday $0.1653), Sam's
+  $0.2399 -> $0.0995, Walmart $0.2334 -> $0.1367, Baker's and Hy-Vee new; Sam's parchment-paper $15.52 -> $7.76
+  and plastic-wrap $6.98 -> $3.49 (2 pk); hot-cocoa Walmart $0.3463 -> $0.299, Baker's new.
+- Knock-on through the median (2): Fareway garlic $0.99 -> $0.6633, Fareway kiwi new at $0.79.
+Every number in this list was read from the two arms' own output; nothing here reaches a reader.
+
+**Board half, prepared and HELD on branch `claude/i222-units`.** `Get-UnitPrice` (`grocery/pricing-math-lib.ps1`)
+no longer lets a per-each marker found only in the NAME price a row whose size is a weight alone ("lb", "1 lb");
+the row falls to the plain each branch, which prices a weight as one unit only for a `weight_is_one_unit`
+commodity (Brad's 2026-09-06 ruling) and otherwise refuses it. A price text that itself says each still wins.
+Fixtures in `compare-deals -SelfTest`: 3 MUST FIRE (the 08-31 eggplant row, its 07-25 "1 lb" sighting, Walmart
+pickling cucumbers) and 4 CLEAN TWIN; broken once, the 3 MUST FIRE went red (exit 1), restored md5-identical,
+exit 0. **Rebuilt both arms on the seeded 2026-09-17 inputs** (compare-deals `-OutName`, `-NoIdentity`): the old
+arm reproduces the live board exactly (0 of 3,189 store entries differ); the new arm changes **2 of 3,189 store
+entries and 0 of 572 cheapest-store verdicts**:
+- eggplant | Walmart: $1.82 "Fresh Purple Eggplant, Each" (size lb) leaves; the cell keeps Baker's $1.69,
+  Fareway $1.99 and Family Fare $2.49. (With the first cut of the rule, bare "lb" only, the 07-25 "1 lb" sighting
+  took the entry at the same $1.82, which is why the rule reads any weight-only size.)
+- pudding-cups | Aldi: $0.98 "Baker S Corner Pudding Vanilla Each" (size "1 oz") leaves. Whether $0.98 is one cup
+  or a pack cannot be told from the row, so this is the refusal working as written, not a proven correction.
+
+**RULING NEEDED: land the board half?**
+- **A. Land it** (recommended): 2 store entries leave the 2026-09-17 board, no cheapest-store verdict moves, and
+  the next weighed-produce row named "..., Each" cannot publish a per-pound price as a per-item one.
+- **B. Land it and pin the Aldi pudding row** first by reading Aldi's page for its real pack, so the rule's one
+  uncertain casualty is settled either way before it ships.
+- **C. Leave it**: the eggplant entry keeps publishing $1.82 each from a $1.82/lb capture; it is not a crown today.
 
 ### I223 - Fareway's selector drops the sale end date, so sale dating never fires on the daily capture `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
 
