@@ -95,6 +95,11 @@ one comment line in the script's header, the `blind=no-gate-worker-slot` descrip
 machine-wide slots, to match the budget Brad raised in 39be9900e. No code, no gate entry, no pool or slot logic
 moved. Every total below still reads as measured.
 
+**Re-read at harness blob `97c0f6d6d9ed` (`ops/run-gates.ps1`, `git rev-parse HEAD:<path>`):** backlog I166 adds one
+static audit entry, the secret scan, on every push (about 20 s of git grep over the tracked tree). It is one more
+unit of gate work per run, the same direction as the earlier single-entry additions recorded above; no pool, slot or
+queue logic moved, so every total below still reads as measured at the harness it ran through.
+
 ## What was sampled
 
 Every 15 s from **16:48:33 to 18:18:23** (360 ticks). The totals count runs that STARTED in the first 60 minutes,
