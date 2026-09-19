@@ -458,7 +458,10 @@
     "fresh-basil": "fresh basil",
     "fresh-mint": "fresh mint",
     "turkey-breast": "turkey breast",
-    "dried-arbol-chiles": "chile de arbol",
+    "dried-arbol-chiles": [
+      "chile de arbol",
+      "chili de arbol"
+    ],
     "dried-guajillo-chiles": "guajillo chiles",
     "dried-ancho-chiles": "ancho chiles",
     "diced-ham": "diced ham",

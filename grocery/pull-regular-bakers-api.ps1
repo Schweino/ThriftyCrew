@@ -369,6 +369,34 @@ function Clean-Name([string]$s) {
   return (($t -replace '\s{2,}', ' ').Trim())
 }
 
+function Get-BakersFallbackTerm([string]$Term) {
+  # A SECOND WORDING FOR A TERM KROGER ANSWERED WITH NOTHING (2026-09-19). commodity-search.json is shared by
+  # every store, and its terms carry qualifiers some stores need. Kroger's product search is literal about
+  # them: on 2026-09-19, 30 of 602 terms came back empty at Saddle Creek, and a hand probe the same afternoon
+  # found the product on the shelf for several once the qualifier went - "beef chuck roast boneless" 0 rows,
+  # "beef chuck roast" 6; "pork tenderloin whole boneless" 0, "pork tenderloin" 18; "minced garlic jar" 0,
+  # "minced garlic" 13; "fajita seasoning packet" 0, "fajita seasoning" 5; "jasmine rice dry" 0, "jasmine
+  # rice" 25; and "guajillo chiles" 0 where "guajillo chile" found Tampico Guajillo Chili Pods, 2 oz, sold in
+  # store - the one Baker's price for the one guajillo cell the provenance contract did not withhold.
+  #
+  # ONLY PACKAGING WORDS GO, AND THE LAST WORD IS MADE SINGULAR. A FORM word is never dropped - fresh, frozen,
+  # canned, dried, ground, whole, cooked - because it is what separates two different foods: the same probe
+  # asked "nutmeg" for "whole nutmeg" and got ground nutmeg, and "green chilli" for "fresh green chilli" and
+  # got diced canned chiles. The commodity's include/exclude rules still judge every row this returns; this
+  # only decides what is ASKED. Returns '' when there is no different wording to ask.
+  $pack = '^(?i)(jar|jars|packet|packets|bunch|bunches|boneless|dry|bag|bags|box|boxes|pkg|package)$'
+  $words = @(($Term -split '\s+') | Where-Object { $_ -and $_ -notmatch $pack })
+  if (-not $words.Count) { return '' }
+  $last = [string]$words[-1]
+  if ($last -match '(?i)ies$') { $last = $last.Substring(0, $last.Length - 3) + 'y' }
+  elseif ($last -match '(?i)oes$') { $last = $last.Substring(0, $last.Length - 2) }
+  elseif ($last -match '(?i)[^s]s$') { $last = $last.Substring(0, $last.Length - 1) }
+  $words[-1] = $last
+  $alt = ($words -join ' ').Trim()
+  if ([string]::Equals($alt.ToLowerInvariant(), $Term.Trim().ToLowerInvariant(), [StringComparison]::Ordinal)) { return '' }
+  return $alt
+}
+
 function Get-KrogerTaxonomy($p) {
   # THE STORE'S OWN CLAIM ABOUT WHAT THIS PRODUCT IS - the one thing the estate has never recorded.
   # Every check we run inherits ONE premise: that the include regex in commodities.json identified the
@@ -599,6 +627,19 @@ if ($SelfTest) {
   T 'CLEAN TWIN  effective 2026-09-16T10:55:01.953Z starts on its own date'         (& $kd '2026-09-16T10:55:01.953Z') '2026-09-16'
   T 'CLEAN TWIN  an end at exact local midnight is exclusive (the day before)'        (& $kd '2026-09-23T05:00:00Z' -e) '2026-09-22'
   T 'MUST NOT FIRE  a value with no date is refused, never guessed'                   (& $kd 'soon' -e) '<refused>'
+  # THE SECOND WORDING (2026-09-19). Frozen from that day's 30 empty terms and the hand probe that followed.
+  T 'MUST FIRE  "guajillo chiles" is asked again singular: Kroger had Tampico Guajillo Chili Pods'  (Get-BakersFallbackTerm 'guajillo chiles') 'guajillo chile'
+  T 'MUST FIRE  "beef chuck roast boneless" drops the packaging word'                               (Get-BakersFallbackTerm 'beef chuck roast boneless') 'beef chuck roast'
+  T 'MUST FIRE  "minced garlic jar" drops the packaging word'                                       (Get-BakersFallbackTerm 'minced garlic jar') 'minced garlic'
+  T 'MUST FIRE  "fajita seasoning packet" drops the packaging word'                                 (Get-BakersFallbackTerm 'fajita seasoning packet') 'fajita seasoning'
+  T 'CLEAN TWIN  "jasmine rice dry" becomes "jasmine rice", which found 25 rows'                     (Get-BakersFallbackTerm 'jasmine rice dry') 'jasmine rice'
+  T 'CLEAN TWIN  a trailing -ies becomes -y ("chia berries" -> "chia berry")'                       (Get-BakersFallbackTerm 'chia berries') 'chia berry'
+  T 'CLEAN TWIN  a trailing -oes loses its es ("roma tomatoes" -> "roma tomato")'                   (Get-BakersFallbackTerm 'roma tomatoes') 'roma tomato'
+  T 'MUST NOT FIRE  a FORM word is never dropped: "whole nutmeg" asked as "nutmeg" found GROUND nutmeg' (Get-BakersFallbackTerm 'whole nutmeg') ''
+  T 'MUST NOT FIRE  "fresh green chilli" keeps fresh ("green chilli" found diced canned chiles)'    (Get-BakersFallbackTerm 'fresh green chilli') ''
+  T 'MUST NOT FIRE  "cooked quinoa" keeps cooked, so dry quinoa is never asked for it'             (Get-BakersFallbackTerm 'cooked quinoa') ''
+  T 'MUST NOT FIRE  a double s is not a plural ("swiss chard" stays, and so does "sea bass")'       (Get-BakersFallbackTerm 'sea bass') ''
+  T 'MUST NOT FIRE  a term that is all packaging asks nothing'                                      (Get-BakersFallbackTerm 'jar bag') ''
   # the two live conventions of the SAME compound shape, both proven by netWeight
   T 'Kerrygold "4 ct / 16 oz" nw 1.0 lb (M=TOTAL)'    (Resolve-KrogerSize '4 ct / 16 oz' 'UNIT' '1.0 [lb_av]').size    '4 pk 4 oz'
   T 'string cheese "12 ct / 1 oz" nw 0.75 lb (M=EACH)' (Resolve-KrogerSize '12 ct / 1 oz' 'UNIT' '0.75 [lb_av]').size  '12 pk 1 oz'
@@ -1082,6 +1123,33 @@ foreach ($tp in $pending) {
     outcome = $(if ($responseRows.Count -gt 0) { 'success' } else { 'empty' })
     row_count = $responseRows.Count
   }
+  # AN EMPTY ANSWER GETS ONE DIFFERENTLY WORDED QUESTION (2026-09-19) - see Get-BakersFallbackTerm. The first
+  # receipt stays 'empty', because that wording did find nothing; the second is its own receipt under the same
+  # commodity, so derive-not-carried reads two wordings where it used to read one, and a double miss is the
+  # stronger not-carried evidence it asks for. A fallback that errors is dropped: the first receipt stands.
+  if ($responseRows.Count -eq 0) {
+    $altTerm = Get-BakersFallbackTerm $term
+    # A wording the commodity already searches as its own term gets its own receipt there; never ask it twice.
+    if ($altTerm -and $termOrdinals.ContainsKey($id + '|' + $altTerm)) { $altTerm = '' }
+    if ($altTerm) {
+      Start-Sleep -Milliseconds $PaceMs
+      $altUrl = 'https://api.kroger.com/v1/products?filter.term={0}&filter.locationId={1}&filter.limit={2}' -f [uri]::EscapeDataString($altTerm), $LocationId, $ResultsPerTerm
+      $altR = $null
+      try { $altR = Get-KrogerJson $altUrl } catch { Write-Warning ("fallback term '$altTerm' for '$term' failed: " + $_.Exception.Message) }
+      if ($null -ne $altR) {
+        $stats.terms++
+        $responseRows = @(@($altR.data) | Where-Object { $null -ne $_ })   # an absent data field is @($null), Count 1
+        $termReceipts[($id + '|' + $altTerm)] = [ordered]@{
+          term_key = $id
+          term = $altTerm
+          ordinal = [int]$termOrdinals[(Get-TermKey $tp)]
+          outcome = $(if ($responseRows.Count -gt 0) { 'success' } else { 'empty' })
+          row_count = $responseRows.Count
+          fallback_of = $term
+        }
+      }
+    }
+  }
   foreach ($p in $responseRows) {
     $it = @($p.items)[0]
     if (-not $it -or -not $it.price) { $stats.nopriced++; continue }
@@ -1207,7 +1275,13 @@ if ($pending.Count -gt 0) {
 $captureTerms = New-Object System.Collections.Generic.List[object]
 foreach ($tp in $termList) {
   $tk = Get-TermKey $tp
-  if ($termReceipts.ContainsKey($tk)) { $captureTerms.Add([pscustomobject]$termReceipts[$tk]); continue }
+  if ($termReceipts.ContainsKey($tk)) {
+    $captureTerms.Add([pscustomobject]$termReceipts[$tk])
+    # The second wording's receipt rides directly after the first, under the same commodity and ordinal.
+    $altTk = Get-BakersFallbackTerm ([string]$tp.term)
+    if ($altTk -and -not $termOrdinals.ContainsKey(([string]$tp.id + '|' + $altTk)) -and $termReceipts.ContainsKey(([string]$tp.id + '|' + $altTk))) { $captureTerms.Add([pscustomobject]$termReceipts[([string]$tp.id + '|' + $altTk)]) }
+    continue
+  }
   # NOT-ASKED AND BLOCKED ARE DIFFERENT THINGS, AND MUST NEVER SHARE A NUMBER. "not present" vs "not
   # asked" being the same value is exactly what hid the Hy-Vee freeze for two days. A term outside
   # today's slice says so, and says its rows were carried.
