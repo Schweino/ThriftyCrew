@@ -12,7 +12,8 @@
       silent death; LastTaskResult "not yet run" is OK only when allow_pending);
     - each critical output file / glob exists and is fresher than max_age_hours, EXCEPT an output_files row
       that declares currency_field: that one is rewritten only when it changes, so its mtime proves nothing
-      and it is judged on the currency stamp inside it instead (see the CONTENT-CURRENCY block);
+      and it is judged on the currency stamp inside it instead (see the CONTENT-CURRENCY block). A row that is a
+      week behind only because guards refused today's board is reported HELD, not dead (Test-HeldWithBoard);
     - each task row that declares run_log is judged on its RUN'S OWN TRANSCRIPT, whatever LastTaskResult says: the
       last session of the newest <name>-<date>.log must carry rc=0, a committed or nothing-changed commit verdict in
       that name, and a start inside max_age_hours (see the RUN-LOG-VERDICT block).
@@ -140,7 +141,10 @@ function Get-BoardWeek {
 function Test-ContentCurrency {
   param($Row, [string]$Path, [string]$BoardWeek, [datetime]$Now)
   # applies=$false means "this row is not on the content form" and the caller uses the plain mtime rule.
-  $r = @{ applies = $false; current = $false; detail = '' }
+  # week_behind is set on ONE path only: the file was read and names an older week than the board. Every
+  # other not-current answer (missing, unreadable, no stamp, no board) leaves it false, so Test-HeldWithBoard
+  # below can never excuse them.
+  $r = @{ applies = $false; current = $false; detail = ''; week_behind = $false }
   if (-not $Row) { return $r }
   $field = if ($Row.PSObject.Properties['currency_field']) { [string]$Row.currency_field } else { '' }
   if (-not $field) { return $r }
@@ -168,11 +172,45 @@ function Test-ContentCurrency {
   if (-not $stamp) { $r.detail = "has no $field field, so nothing in it says which week it describes (mtime ${ageH}h)"; return $r }
   if ($stamp -ne $BoardWeek) {
     $r.detail = "carries $field=$stamp but the current board week is $BoardWeek, so the job that writes it has not run for this week (mtime ${ageH}h, which is NOT the tell here)"
+    $r.week_behind = $true
     return $r
   }
   $r.current = $true
   $r.detail  = "$field=$stamp matches the board week (mtime ${ageH}h, not gated: this output is rewritten only when it changes)"
   return $r
+}
+# A ROTATION HELD WITH A REFUSED BOARD IS NOT A DEAD ROTATION (2026-09-19, backlog inbox run0919-free-dinners).
+# check-ad-cycles.ps1 skips rotate-free-dinners (and top5-weekly and the hub publish) whenever guards refuse the
+# board, on purpose: a free set ranked off a board readers cannot see is the 2026-09-07 incident. So while the
+# board is held, week_of falls behind the newest comparison file BY DESIGN. From 2026-09-13 to 2026-09-18 guards
+# refused every morning's board, the rotation was skipped each time exactly as written, and this check paged
+# "the job that writes it has not run" on 09-13, 09-14, 09-17 and 09-18 - true, and pointing at the wrong cause:
+# the reader is sent to debug a rotation that was fine, and the hold is already paged as its own incident.
+# So a week-behind row is reported HELD, not dead, only when ALL of these hold, and anything else pages as before:
+#   * the reason it failed is week_behind (the file was read and names an older week), never missing/unreadable;
+#   * a chain verdict was RECORDED TODAY - the chain ran today and made the decision. A verdict from another day
+#     says nothing about today's run, so a chain that stopped still pages here;
+#   * that verdict says guards_blocked;
+#   * the board it judged IS the board week this row is behind (its inputs name comparison-<BoardWeek>.json). A
+#     board rebuilt after the verdict, that no guard has seen, does not borrow an older board's hold.
+# WHEN THE PRODUCER STOPS: the day the chain passes a board and the rotation still does not move, the verdict is
+# not blocked and this pages exactly as it did. When the CHAIN stops, today's verdict is absent and it pages.
+function Test-HeldWithBoard {
+  param($Cc, $Verdict, [string]$BoardWeek, [string]$Today)
+  $h = @{ held = $false; detail = '' }
+  if (-not $Cc -or -not $Cc.week_behind) { return $h }
+  if ($null -eq $Verdict -or -not $BoardWeek -or -not $Today) { return $h }
+  if ([string]$Verdict.date -ne $Today) { return $h }
+  if (-not ($Verdict.PSObject.Properties['guards_blocked'] -and $Verdict.guards_blocked -eq $true)) { return $h }
+  $names = @()
+  if ($Verdict.PSObject.Properties['inputs'] -and $Verdict.inputs) { $names = @($Verdict.inputs.PSObject.Properties.Name) }
+  $want = 'comparison-' + $BoardWeek + '.json'
+  $judged = @($names | Where-Object { [string]::Equals([IO.Path]::GetFileName([string]$_), $want, [StringComparison]::OrdinalIgnoreCase) })
+  if ($judged.Count -eq 0) { return $h }
+  $h.held = $true
+  $h.detail = ($Cc.detail + ' - HELD WITH THE BOARD, not dead: guards refused the ' + $BoardWeek + ' board today (chain verdict written ' +
+               [string]$Verdict.written + ', guards_rc=' + [string]$Verdict.guards_rc + '), and check-ad-cycles skips this job on a refused board by design. The hold is its own incident; this pages again if a board passes and the job still does not move')
+  return $h
 }
 # <<< CONTENT-CURRENCY
 
@@ -530,12 +568,20 @@ function Check-Age($path, $maxH, $why, $label, $subject = $label) {
 # applied to it; every other row takes exactly the path it always took. See the CONTENT-CURRENCY block above
 # for why this is opt-in and why widening max_age_hours or touching the file are both the wrong answer.
 $boardWeek = Get-BoardWeek $repo
+# Today's guard verdict, read through its own library (Read-ChainVerdictRecord). Loaded under Stop inside a try for
+# the same reason as pipeline-commit above; a library or file that cannot be read leaves $hbVerdict null, and a null
+# verdict excuses nothing, so every week-behind row pages exactly as it did before (Test-HeldWithBoard).
+$hbVerdict = $null
+try { $ErrorActionPreference = 'Stop'; . (Join-Path $repo 'lib\chain-verdict-lib.ps1'); $hbVerdict = Read-ChainVerdictRecord -Repo $repo } catch { $hbVerdict = $null } finally { $ErrorActionPreference = 'Continue' }
+$heldLines = New-Object System.Collections.Generic.List[string]
 foreach ($f in @($cfg.output_files)) {
   $fPath  = Join-Path $repo ([string]$f.path)
   $fLabel = [IO.Path]::GetFileName([string]$f.path)
   $cc = Test-ContentCurrency -Row $f -Path $fPath -BoardWeek $boardWeek -Now $now
   if (-not $cc.applies) { Check-Age $fPath $f.max_age_hours $f.why $fLabel ([string]$f.path); continue }
-  if ($cc.current) { $okLines.Add(("{0,-38} {1}" -f $fLabel, $cc.detail)) }
+  if ($cc.current) { $okLines.Add(("{0,-38} {1}" -f $fLabel, $cc.detail)); continue }
+  $hw = Test-HeldWithBoard -Cc $cc -Verdict $hbVerdict -BoardWeek $boardWeek -Today $now.ToString('yyyy-MM-dd')
+  if ($hw.held) { $heldLines.Add(("{0,-38} {1}" -f $fLabel, $hw.detail)) }
   else { Add-HbIssue 'OUTPUT NOT CURRENT' ([string]$f.path) ("OUTPUT NOT CURRENT: {0} {1} - {2}" -f $fLabel, $cc.detail, $f.why) }
 }
 foreach ($g in @($cfg.output_globs)) {
@@ -570,8 +616,10 @@ foreach ($x in @($cfg.external_files)) {
 # ---- report ----
 Write-Output ("health-heartbeat  " + $now.ToString('yyyy-MM-dd HH:mm'))
 $okLines | ForEach-Object { Write-Output ("  ok    " + $_) }
+$heldLines | ForEach-Object { Write-Output ("  held  " + $_) }
 if ($issues.Count -eq 0) {
-  Write-Output ("HEALTHY: {0} automation(s)/output(s) all fresh." -f $okLines.Count)
+  $heldNote = if ($heldLines.Count) { " {0} more held with a board guards refused today (not dead; see the held lines)." -f $heldLines.Count } else { '' }
+  Write-Output ("HEALTHY: {0} automation(s)/output(s) all fresh.{1}" -f $okLines.Count, $heldNote)
   # A healthy -Alert run forgets the last outage, so the same outage coming back later pages again (ALERT-SIGNATURE).
   $sigF = Join-Path $root 'out\health-heartbeat.sig'
   if ($Alert -and (Test-Path $sigF)) { Remove-Item -LiteralPath $sigF -Force -ErrorAction SilentlyContinue }

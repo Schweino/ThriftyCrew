@@ -7338,6 +7338,47 @@ if (-not $hbM.Success) {
   if ($cc6.applies -and (-not $cc6.current) -and $cc6.detail -match 'does not exist') { Ok 'heartbeat content-currency: a missing output is still reported under the content form' }
   else { Bad 'heartbeat content-currency: a deleted output went unreported under the content form' }
 
+  # ---- HELD WITH THE BOARD (2026-09-19, inbox run0919-free-dinners). guards refused every board 09-13..09-18,
+  #      check-ad-cycles skipped the rotation by design each morning, and this check paged it as a dead job four
+  #      times. A week-behind row is HELD only on TODAY's blocked verdict over THIS board week; all else pages.
+  $ccToday = $ccNow.ToString('yyyy-MM-dd')
+  function CcVerdict([string]$date, $blocked, [string]$board) {
+    [pscustomobject]@{ date = $date; written = ($date + 'T08:11:59'); guards_rc = 2; guards_blocked = $blocked
+      inputs = [pscustomobject]@{ ('grocery\out\' + $board) = 'x'; 'grocery\commodities.json' = 'y' } }
+  }
+  [IO.File]::WriteAllText($ccFd, '{"week_of":"2026-08-26","updated":"2026-08-26T08:09:12","free":[]}', (New-Object Text.UTF8Encoding($false)))
+  $cc7 = Test-ContentCurrency -Row $ccRow -Path $ccFd -BoardWeek $ccWeek -Now $ccNow
+  $hw1 = Test-HeldWithBoard -Cc $cc7 -Verdict (CcVerdict $ccToday $true 'comparison-2026-09-02.json') -BoardWeek $ccWeek -Today $ccToday
+  if ($cc7.week_behind -and $hw1.held -and $hw1.detail -match 'HELD WITH THE BOARD' -and $hw1.detail -match 'guards_rc=2') {
+    Ok 'heartbeat held-with-board: MUST FIRE - a rotation one board behind while guards refused THAT board today reads HELD, not "has not run" (the 09-13..09-18 page)'
+  } else { Bad ('heartbeat held-with-board: a rotation skipped by the board hold still reads as a dead job (week_behind=' + $cc7.week_behind + ' held=' + $hw1.held + ' detail=' + $hw1.detail + ')') }
+  $hw2 = Test-HeldWithBoard -Cc $cc7 -Verdict (CcVerdict $ccToday $false 'comparison-2026-09-02.json') -BoardWeek $ccWeek -Today $ccToday
+  if ($hw2.held -eq $false) { Ok 'heartbeat held-with-board: MUST NOT FIRE - guards PASSED today and the rotation did not move, so it still pages as dead' }
+  else { Bad 'heartbeat held-with-board: a dead rotation on a green day was excused as held' }
+  $hw3 = Test-HeldWithBoard -Cc $cc7 -Verdict (CcVerdict '2026-09-03' $true 'comparison-2026-09-02.json') -BoardWeek $ccWeek -Today $ccToday
+  if ($hw3.held -eq $false) { Ok 'heartbeat held-with-board: MUST NOT FIRE - a blocked verdict from YESTERDAY says nothing about today, so a chain that stopped still pages' }
+  else { Bad 'heartbeat held-with-board: yesterday''s hold excused today, so a chain that stopped running would never page here' }
+  $hw4 = Test-HeldWithBoard -Cc $cc7 -Verdict (CcVerdict $ccToday $true 'comparison-2026-08-26.json') -BoardWeek $ccWeek -Today $ccToday
+  if ($hw4.held -eq $false) { Ok 'heartbeat held-with-board: MUST NOT FIRE - a hold on an OLDER board does not excuse a newer board no guard has seen' }
+  else { Bad 'heartbeat held-with-board: a verdict about another board excused this one' }
+  $hw5 = Test-HeldWithBoard -Cc $cc7 -Verdict $null -BoardWeek $ccWeek -Today $ccToday
+  if ($hw5.held -eq $false) { Ok 'heartbeat held-with-board: MUST NOT FIRE - no verdict at all excuses nothing' }
+  else { Bad 'heartbeat held-with-board: an absent verdict read as a hold' }
+  $hw6 = Test-HeldWithBoard -Cc $cc6 -Verdict (CcVerdict $ccToday $true 'comparison-2026-09-02.json') -BoardWeek $ccWeek -Today $ccToday
+  if ($cc6.week_behind -eq $false -and $hw6.held -eq $false) { Ok 'heartbeat held-with-board: MUST NOT FIRE - a MISSING output is never excused by a hold, only a week-behind one' }
+  else { Bad 'heartbeat held-with-board: a hold excused a missing output' }
+  [IO.File]::WriteAllText($ccFd, '{"week_of":"2026-09-02","updated":"2026-09-02T08:10:35","free":[]}', (New-Object Text.UTF8Encoding($false)))
+  $cc8 = Test-ContentCurrency -Row $ccRow -Path $ccFd -BoardWeek $ccWeek -Now $ccNow
+  if ($cc8.current -eq $true -and $cc8.detail -match 'matches the board week') { Ok 'heartbeat held-with-board: CLEAN TWIN - a current rotation still reads current, whatever the verdict says' }
+  else { Bad ('heartbeat held-with-board: a current rotation stopped reading current (detail=' + $cc8.detail + ')') }
+  # WIRED, NOT ONLY AVAILABLE: the live path reads today's verdict and routes a not-current row through the hold
+  # test. Needles split so this suite cannot match its own text.
+  $nHw = 'Test-HeldWith' + 'Board -Cc $cc -Verdict $hbVerdict'
+  $nRv = '$hbVerdict = Read-ChainVerdict' + 'Record -Repo $repo'
+  if ($hbSrc.Contains($nHw) -and $hbSrc.Contains($nRv)) { Ok 'heartbeat held-with-board: CLEAN TWIN - the live output loop reads today''s verdict and routes a not-current row through the hold test' }
+  else { Bad 'heartbeat held-with-board: the live loop no longer consults the verdict, so a board hold pages as a dead rotation again' }
+  Remove-Item $ccFd -Force -ErrorAction SilentlyContinue
+
   # ---- IT IS OPT-IN, AND THAT IS THE BLAST RADIUS. The other four output_files rows are rewritten on EVERY
   #      run and their mtime IS a real liveness signal; a default-on content check would silently disarm all
   #      four. This arm reads the LIVE registry, so adding currency_field to one of them fires here.
