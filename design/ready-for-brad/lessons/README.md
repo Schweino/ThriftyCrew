@@ -50,6 +50,10 @@ opinion ("Here's the parent move I'd make"), never for something Brad did.
   May 2026, Savings and Investments section. The "37 percent" is 100 minus 63.
 - **Emergency fund range:** three to six months, six to twelve on a single income, stated as the range
   planners quote with how replaceable the income is as the driver, exactly as ruled. No single number.
+- **Emergency fund first stop, $1,000:** Brad's ruling of 2026-09-19 keeps $1,000 as the site's starter number,
+  so the lesson's first milestone matches every older page. It is a convention the site teaches, not a sourced
+  figure, and the lesson states it as a first stop, not as a statistic. "Two and a half months" is $1,000
+  divided by the example's $400 a month.
 - **Insurance:** definitions of liability, collision, comprehensive; what renter's covers (personal
   property, liability, and on some policies additional living expenses) versus the landlord's (the
   building's structure); actual cash value versus replacement cost; term versus permanent. All from NAIC

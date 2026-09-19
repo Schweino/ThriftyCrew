@@ -72,7 +72,7 @@ Pull out one real policy you already have. Auto or renter's, either one. Find th
 
 1. The **premium**, and how often you pay it.
 2. The **deductible** for each kind of coverage.
-3. The **liability limits**, the most the policy will pay for damage you cause to someone else.
+3. The **liability limits**, the most the policy will pay for damage you cause to someone else. They're often written as three numbers, like 100/300/100. [Here's how to read them](/liability-coverage/).
 4. One thing the policy says it does **not** cover.
 
 Then ask one question out loud: *If we had to pay that deductible tomorrow, could we do it without borrowing?* If the answer is yes, celebrate that. It's a real win. If it's no, you just found the first thing to fix, and it isn't the insurance.

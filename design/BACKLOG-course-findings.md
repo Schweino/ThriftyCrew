@@ -9922,6 +9922,8 @@ series without renumbering, which the `lesson` skill's own rule forbids; the rea
 normal-titled lesson outside the 52, or a short arc. That choice is Brad's, which is why this is
 `RUNG1 RULING` rather than a build.
 
+**Overlap review approved and staged, 2026-09-19.** Brad approved `design/ready-for-brad/lessons/overlap-review.md` as drafted and ruled that $1,000 stays the site's starter emergency-fund number. The insurance draft now links step 3 of Try This Together to `/liability-coverage/`. The fixes to the older live pages are STAGED, NOT SENT: 14 pages and 37 sentence replacements in `staged/overlap-fixes.jsonl`, and the retirement of `/good-net-worth-by-age/` in `staged/overlap-retire.jsonl`, which runs only after the redirect line added to `grocery/redirects-base.yaml` answers 301 live. A delegated agent prepared them and may not write to the live site on a relayed approval, so Brad applies them with `ops/review-staged.ps1 -Apply`; the order, the checks and the per-page Ghost ids are at the top of the review. No write-journal entry exists yet because no write was made. Link lines from the old pages to the new lessons are held until each lesson is live.
+
 ---
 
 ### I109 - the curriculum teaches index funds and a custodial account before it ever teaches a buffer, and the emergency fund has no lesson `PARTLY DONE - RULED 2026-09-19; DRAFTED, AWAITING BRAD'S APPROVAL TO PUBLISH` `queue-7` `2-WAY` `RUNG1 RULING`
@@ -9970,6 +9972,8 @@ time, which is the exact mechanism item 100 names for why the buffer does not go
 reordering them is not on the table; a lesson outside the series plus a cross-reference added to
 Weeks 29 and 30 is the cheap shape. Ruling needed on whether published lessons may gain a
 cross-reference at all.
+
+**Overlap review approved and staged, 2026-09-19.** Brad approved `design/ready-for-brad/lessons/overlap-review.md` as drafted and ruled that $1,000 stays the site's starter emergency-fund number. The emergency-fund draft's first milestone is now $1,000, linked to `/how-to-build-an-emergency-fund/`, and step 2 links `/emergency-fund-calculator/`. The fixes to the older live pages are STAGED, NOT SENT: 14 pages and 37 sentence replacements in `staged/overlap-fixes.jsonl`, and the retirement of `/good-net-worth-by-age/` in `staged/overlap-retire.jsonl`, which runs only after the redirect line added to `grocery/redirects-base.yaml` answers 301 live. A delegated agent prepared them and may not write to the live site on a relayed approval, so Brad applies them with `ops/review-staged.ps1 -Apply`; the order, the checks and the per-page Ghost ids are at the top of the review. No write-journal entry exists yet because no write was made. Link lines from the old pages to the new lessons are held until each lesson is live.
 
 ---
 
@@ -10028,6 +10032,8 @@ their own. So the estate publishes the benchmark without publishing the instrume
 is exactly the `Try this together` slot every lesson already has, and it makes `net-worth-by-age.md`
 actionable instead of merely reassuring. The reassurance that a young person's net worth is
 *supposed* to be negative is also directly on the voice these lessons already use.
+
+**Overlap review approved and staged, 2026-09-19.** Brad approved `design/ready-for-brad/lessons/overlap-review.md` as drafted and ruled that $1,000 stays the site's starter emergency-fund number. The balance-sheet draft now has the "Rather do it on a screen?" line under its worksheet, linking `/net-worth-calculator/` and `/where-do-you-stand/`. The fixes to the older live pages are STAGED, NOT SENT: 14 pages and 37 sentence replacements in `staged/overlap-fixes.jsonl`, and the retirement of `/good-net-worth-by-age/` in `staged/overlap-retire.jsonl`, which runs only after the redirect line added to `grocery/redirects-base.yaml` answers 301 live. A delegated agent prepared them and may not write to the live site on a relayed approval, so Brad applies them with `ops/review-staged.ps1 -Apply`; the order, the checks and the per-page Ghost ids are at the top of the review. No write-journal entry exists yet because no write was made. Link lines from the old pages to the new lessons are held until each lesson is live.
 
 ---
 

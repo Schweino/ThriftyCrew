@@ -42,7 +42,9 @@ If it's two steady incomes, both easy to replace, three months is **$9,600** and
 
 That can feel like a mountain. So don't try to climb it in one day.
 
-Say this family can set aside **$400 a month**. One month of essentials, $3,200, takes **8 months**. Three months, $9,600, takes **24 months**. That's two years. But it's two years where every surprise along the way gets a little easier, because the fund is doing its job long before it's "done." Celebrate that first month like it's a big deal. Because it is.
+Your first stop is **$1,000**. It won't cover every disaster. But it covers a lot of the everyday ones, like a tire or a vet visit, the kind that usually end up on a credit card. [Here's how to build it fast](/how-to-build-an-emergency-fund/).
+
+Say this family can set aside **$400 a month**. The first $1,000 takes **two and a half months**. One month of essentials, $3,200, takes **8 months**. Three months, $9,600, takes **24 months**. That's two years. But it's two years where every surprise along the way gets a little easier, because the fund is doing its job long before it's "done." Celebrate that first $1,000 like it's a big deal. Because it is.
 
 And when you do have to use it, that's not failure. That's the fund working. Pay the bill, then refill it the same way you built it.
 
@@ -53,7 +55,7 @@ And when you do have to use it, that's not failure. That's the fund working. Pay
 Grab last month's bank and card statements and sit down together. Three steps.
 
 1. **Find the essentials.** Circle only the must-pay bills and add them up. That's one month.
-2. **Pick your number.** Ask the one question that matters: *If our main paycheck stopped tomorrow, how long would it honestly take to replace?* A few weeks points you toward three months. A long search, one income or pay that bounces around points you toward six or more.
+2. **Pick your number.** Ask the one question that matters: *If our main paycheck stopped tomorrow, how long would it honestly take to replace?* A few weeks points you toward three months. A long search, one income or pay that bounces around points you toward six or more. Then let [the emergency fund calculator](/emergency-fund-calculator/) do the multiplying, and show you how long it takes at what you can set aside each month.
 3. **Give the money a home and a name.** Open or rename a separate savings account. "Emergency Fund" works. "Do Not Touch" works better. Set up an automatic transfer on payday, even a small one.
 
 Then run the same thing at your teen's size. What are *their* must-pays? A phone bill, gas, their share of the car insurance? One month of that is their first emergency fund. Building it teaches the whole idea in miniature, and it's a lot more fun to learn at $150 than at $15,000.

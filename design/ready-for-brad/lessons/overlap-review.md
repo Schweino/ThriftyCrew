@@ -5,6 +5,111 @@ BEFORE the three drafts in this folder go live. This is that review. **Nothing w
 unpublished.** Every page was read from Ghost with read-only Admin API GETs (write journal cleared), and search
 numbers came from a read-only Search Console query.
 
+## Where this stands: approved, STAGED, NOT YET SENT (2026-09-19)
+
+Brad approved the whole plan as drafted on 2026-09-19 and ruled that **$1,000 stays the site's starter
+emergency-fund number**. Everything below is prepared. **No Ghost write has been made and no redirect uploaded:**
+the session that prepared it was a delegated agent, which may read Ghost but may not change the live site on a
+relayed approval, so the writes wait in two queues in the estate's own staging format (`lib\ghost-lib.ps1`
+`TC_STAGE_WRITES`, applied by `ops\review-staged.ps1`). Each queued PUT carries the `updated_at` read on
+2026-09-19, so if any page changes before it is applied, Ghost refuses that one call with a 409 and nothing
+stale lands.
+
+**What was checked before staging (read-only GETs, write journal cleared).** All 22 pages still had the
+`updated_at` the review read (none changed after 2026-07-05). The 7 staged pages that have an I167 export in
+`content\ghost-adopted\` match it exactly (updated_at, lexical, html sha256). Every staged page is ONE html card,
+and re-wrapping its live html with `Get-GhostLexical` reproduces its live lexical, so a PUT changes the card text
+and nothing else. Each fix's old text occurs exactly once on its page; outside the fixed spans the new body is
+byte-identical to the live one; no new body carries an em or en dash; and none still carries any of the removed
+figures (for example `$25 to $35`, `15 dollars`, `24 percent`, `10 to 40 percent`, `every few months`). The new
+bodies were read in full at 375px in the built-in browser (rendered locally, not live): no horizontal scroll.
+
+### Queue 1: the sentence fixes, 14 pages, 37 replacements
+
+`staged\overlap-fixes.jsonl`. Body sent per page: `lexical` and `updated_at` only (status, visibility, tags and
+meta are not in the request, so Ghost leaves them as they are). The last column is the first 16 hex digits of the
+sha256 of the new html card, to check each page against after the write.
+
+| Page | Ghost id | Fixes | updated_at read | new html sha256 |
+|---|---|---|---|---|
+| `/life-insurance/` | `6a49916350682b0001cd4050` | 3 | 2026-07-04T23:04:03.000Z | `b5045843b8c07c5c` |
+| `/term-vs-whole-life/` | `6a498d9c50682b0001cd3ec2` | 2 | 2026-07-04T22:47:56.000Z | `9086a009a48133fe` |
+| `/is-renters-insurance-worth-it/` | `6a499cc750682b0001cd434d` | 7 | 2026-07-04T23:52:39.000Z | `bf996281c510feba` |
+| `/homeowners-insurance/` | `6a49916550682b0001cd4062` | 1 | 2026-07-04T23:04:05.000Z | `674b8f02823c53b3` |
+| `/umbrella-insurance/` | `6a49916350682b0001cd404a` | 1 | 2026-07-04T23:04:03.000Z | `5a580eccc5013554` |
+| `/insurance-premium/` | `6a498d9b50682b0001cd3eb0` | 1 | 2026-07-04T22:47:55.000Z | `ae8667c0818d9e6d` |
+| `/insurance-deductible/` | `6a498d9b50682b0001cd3eb6` | 1 | 2026-07-04T22:47:55.000Z | `f29267d4cab58634` |
+| `/how-to-build-an-emergency-fund/` | `6a498da350682b0001cd3f22` | 6 | 2026-07-04T22:48:03.000Z | `68337fb18f9ad596` |
+| `/emergency-fund-calculator/` | `6a498f9b50682b0001cd3f4a` | 1 | 2026-07-04T22:56:27.000Z | `675e9ab5f8b602e7` |
+| `/how-much-should-i-have-in-savings-by-age/` | `6a49a57950682b0001cd45b6` | 2 | 2026-07-05T00:29:45.000Z | `87e5a07678e87f9b` |
+| `/how-to-save-on-car-insurance/` | `6a498da450682b0001cd3f34` | 7 | 2026-07-04T22:48:04.000Z | `00143dcc19dce255` |
+| `/how-to-track-your-net-worth/` | `6a4994d850682b0001cd41bc` | 3 | 2026-07-04T23:18:48.000Z | `cae643bbadc91819` |
+| `/net-worth-calculator/` | `6a49943b50682b0001cd40f6` | 1 | 2026-07-04T23:16:11.000Z | `bdbb51296d31ff3c` |
+| `/net-worth/` | `6a498b7250682b0001cd3dbe` | 1 | 2026-07-04T22:38:42.000Z | `6a28c26221f60e9f` |
+
+**Three places where the applied text differs from the drafts below, and why:**
+
+1. `/is-renters-insurance-worth-it/`: the live paragraph just above the drafted span, *"Let me show you why 15
+   dollars a month is one of the best deals in personal finance."*, carries the same unsourced price. The drafted
+   two paragraphs (labelled inventory, then the cost side) replace it together with the old inventory, cost and
+   ratio paragraphs, so the section now opens on the labelled example.
+2. `/how-to-build-an-emergency-fund/`: the draft said *"37 percent said they couldn't cover it all"*. The Fed
+   reports that 63 percent WOULD cover it with cash or its equivalent; the 37 percent is the complement and said
+   nothing as a group, so the sentence reads *"37 percent wouldn't cover it all with cash or something just as
+   good"*, linked to the Fed report as the new lesson links it.
+3. `/how-to-save-on-car-insurance/`: the bottom-line sentence's closing *"their finances"* follows the drafted
+   new subject (*"you'll often pay less"*) and becomes *"your finances"*.
+
+**Held, not staged: every link line that points at one of the three new lessons.** The plan's own heading says
+*"once each new lesson is live"*, and all three are unpublished drafts, so a link today is a 404. That is the
+italic lines for `/emergency-fund/`, `/insurance-premium/`, `/insurance-deductible/`, `/liability-coverage/` and
+`/net-worth/`, the closing lines of the `/how-to-build-an-emergency-fund/` and `/how-to-track-your-net-worth/`
+fixes, and the `/net-worth-by-age/` line in `README.md`. Add them when each target lesson goes live (a fresh GET,
+because queue 1 will have moved every page's `updated_at`).
+
+### Queue 2: retire `/good-net-worth-by-age/`, 2 calls, ONLY after the redirect answers 301
+
+`staged\overlap-retire.jsonl`: the post to `status: draft` (body `status` and `updated_at` only), and the Money
+Hacks hub with that one guide's card removed and its two "183 guides" counts set to 182 (the hub's own item list
+then parses to 182 entries, none of them the retired slug).
+
+The redirect line is in `grocery\redirects-base.yaml`:
+
+    ^/good-net-worth-by-age/?$: /net-worth-by-age/
+
+The redirect cannot go through the API: the integration key gets a 403 on `/ghost/api/admin/redirects/download/`
+(checked 2026-09-19), as it does on every settings write. And an upload REPLACES the whole redirect set. So the
+safe order is:
+
+1. Ghost Admin, Settings, Advanced, Redirects: **download** the current file, add the one line above under `301:`,
+   upload it back. (Do not upload a regenerated file: the live set may hold rules the repo does not.)
+2. Check `/good-net-worth-by-age/` answers **301 to `/net-worth-by-age/`** while the post is still published
+   (Ghost checks uploaded redirects before its own routes; this step is what confirms it here). On 2026-09-19 it
+   answered 200. If it still answers 200 after the upload, stop: queue 2 must not run.
+3. Only then apply queue 2. At no point does a reader get a 404.
+
+### Commands, from the main checkout once this is on main
+
+    Copy-Item design\ready-for-brad\lessons\staged\overlap-fixes.jsonl $env:TEMP\overlap-fixes.jsonl
+    powershell -NoProfile -File ops\review-staged.ps1 -Queue $env:TEMP\overlap-fixes.jsonl          # list
+    powershell -NoProfile -File ops\review-staged.ps1 -Queue $env:TEMP\overlap-fixes.jsonl -Apply   # send
+
+(`-Apply` deletes the queue file it sends, hence the copy. `TC_WRITE_JOURNAL` is armed for every process on this
+box, so each PUT's before-image lands in the journal and `ops\revert-ghost-write.ps1` can undo it.) Then the
+redirect steps above, then the same two commands on `overlap-retire.jsonl`. Afterwards:
+`ops\audit-ghost-page-census.ps1 -Export` refreshes `content\ghost-adopted\` for the declared pages that moved
+(so the daily census does not report EDITED-SINCE-EXPORT), and `good-net-worth-by-age` comes out of
+`ops\ghost-page-estate.json` and the export, or the census reports DECLARED-NOT-LIVE.
+
+### The three drafts, changed the same day (nothing published)
+
+- `how-much-emergency-fund`: the first milestone is now **$1,000** (*"Your first stop is $1,000..."*, linking to
+  `/how-to-build-an-emergency-fund/`), and the $400-a-month worked example starts there (2.5 months to $1,000,
+  $1,000 divided by $400). "Try This Together" step 2 sends the reader to `/emergency-fund-calculator/`.
+- `insurance-basics`: step 3 of "Try This Together" links `/liability-coverage/`. The renters and term-life links
+  wait for queue 1, as drafted below.
+- `personal-balance-sheet`: the "Rather do it on a screen?" line under the worksheet.
+
 ## The short version
 
 - **22 live pages** sit on these topics. Every one is **public**, every one was published between 2026-07-02 and
@@ -110,7 +215,8 @@ parent works through with a teen has to stand on its own. Three changes worth ma
    `/how-to-build-an-emergency-fund/` is fixed, one line under "don't try to climb it in one day" joins them:
    > If even one month feels far off, a first $1,000 is a great first stop. [Here's how to build it fast](/how-to-build-an-emergency-fund/).
 3. **Question for Brad:** is $1,000 still the starter number you want the site to teach? It's not sourced
-   anywhere, and it's the one thing the old pages and the new lesson say differently.
+   anywhere, and it's the one thing the old pages and the new lesson say differently. **Answered 2026-09-19:**
+   keep $1,000. The old pages keep their $1,000 starter, and the lesson's first milestone is now $1,000.
 
 **Balance sheet (`personal-balance-sheet`).** It already links `/net-worth-by-age/`. Two changes worth making:
 
@@ -125,7 +231,7 @@ parent works through with a teen has to stand on its own. Three changes worth ma
 
 Each fix is written in Brad's voice: contractions, short sentences, no invented prices, no em dashes, and no
 story about something Brad did. Every figure that stays is either an example labelled as one or a figure with its
-source named in the sentence. **These are drafts. None was applied.**
+source named in the sentence. **Approved 2026-09-19 and staged, not yet sent: see the top of this file.**
 
 Where each fix lands: twelve of the 22 pages have no source in this repo at all (nine Glossary pages,
 `/how-to-build-an-emergency-fund/`, `/is-renters-insurance-worth-it/` and `/where-do-you-stand/`), so a fix is an

@@ -83,6 +83,8 @@ This is a one-evening worksheet for you and your teen. Each of you fills out you
 
 **One thing I'll do this year to move it up:** ____
 
+Rather do it on a screen? [The net worth calculator](/net-worth-calculator/) adds it up for you. Then [Where Do You Stand?](/where-do-you-stand/) shows where your number sits next to the Fed's numbers for your age.
+
 When you're both done, fold the pages up and seal them in an envelope with next year's date on the front. A year from now, open it, fill out a new one, and compare. That envelope is one of the best gifts Future You will ever get.
 
 ## Questions to Sit With
