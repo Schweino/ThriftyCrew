@@ -1525,6 +1525,14 @@ function Write-CaptureWorklist {
     cursor_start   = $wl.CursorStart
     cursor_next    = $wl.CursorNext
     total_terms    = $wl.TotalTerms
+    # `terms` AND `commodities` ARE WHAT THE LANES FETCH - parallel arrays, the whole capped slice in
+    # order (ruling, ad, rotation, sale). The parts below are its breakdown and nothing reads them to
+    # decide what to fetch. 7e1c7d94e (2026-09-12) replaced these two lines with ruling_terms instead
+    # of adding it beside them, and from 2026-09-13 pull-browser-stores read every Fareway and Sam's
+    # worklist as "empty - nothing owed today" and captured nothing. test-capture-policy case Q reads
+    # the WRITTEN file, which no case did before.
+    terms          = @($wl.Terms | ForEach-Object { $_.term })
+    commodities    = @($wl.Terms | ForEach-Object { $_.id })
     rotation_terms = @($wl.RotationTerms | ForEach-Object { $_.term })
     sale_terms     = @($wl.SaleTerms | ForEach-Object { $_.term })
     # A STANDING RULING'S OWED TERMS, AT THE HEAD OF `terms` (2026-09-12). Walmart's store-drift

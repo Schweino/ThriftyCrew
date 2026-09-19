@@ -373,14 +373,49 @@ def profile_dir(store_key):
     return os.path.join(ROOT, "out", "browser-profiles", store_key)
 
 
+class WorklistMalformed(Exception):
+    """A worklist that cannot be read as written. run_store turns it into a FAILED store, never a skip."""
+
+
+# The parts Write-CaptureWorklist breaks `terms` down into. None of them is read to decide what to
+# fetch - `terms` is - but together they say whether anything was queued at all.
+WORKLIST_PARTS = ("ruling_terms", "ad_terms", "rotation_terms", "sale_terms")
+
+
+def worklist_terms(doc, where):
+    """The terms a worklist asks for, or [] when it genuinely asks for none.
+
+    AN EMPTY `terms` BESIDE A NON-EMPTY PART IS NOT "NOTHING OWED" (2026-09-18). 7e1c7d94e dropped
+    `terms` and `commodities` from the written worklist, and from 2026-09-13 both readers here
+    answered "worklist is empty - nothing owed today", which run_store scores ok: capture-run logged
+    "42 term(s) queued" and "ok skipped" on consecutive lines for six days and Fareway and Sam's
+    captured nothing. A file whose own parts queue terms that `terms` does not carry is malformed.
+    """
+    terms = doc.get("terms") or doc.get("Terms") or []
+    terms = [str(t) for t in terms if str(t).strip()]
+    if not terms:
+        queued = {}
+        for k in WORKLIST_PARTS:
+            v = doc.get(k) or []
+            v = [v] if isinstance(v, str) else v
+            n = len([t for t in v if str(t).strip()])
+            if n:
+                queued[k] = n
+        if queued:
+            parts = ", ".join(f"{k}={n}" for k, n in queued.items())
+            raise WorklistMalformed(
+                f"worklist is malformed: {where} queues terms ({parts}) but carries no `terms` to fetch. "
+                "It is not empty; the writer (Write-CaptureWorklist) lost the field.")
+    return terms
+
+
 def read_worklist(store_key, date_s):
     p = os.path.join(ROOT, "out", "worklists", f"capture-{store_key}-{date_s}.json")
     if not os.path.exists(p):
         return None, f"no worklist at {os.path.relpath(p, ROOT)} - run capture-policy.ps1 -Emit first"
     with open(p, "r", encoding="utf-8-sig") as fh:
         doc = json.load(fh)
-    terms = doc.get("terms") or doc.get("Terms") or []
-    terms = [str(t) for t in terms if str(t).strip()]
+    terms = worklist_terms(doc, os.path.relpath(p, ROOT))
     if not terms:
         return None, "worklist is empty - nothing owed today"
     return terms, None
@@ -399,13 +434,14 @@ def read_worklist_pairs(store_key, date_s):
         return None, f"no worklist at {os.path.relpath(p, ROOT)}"
     with open(p, "r", encoding="utf-8-sig") as fh:
         doc = json.load(fh)
-    terms = [str(t) for t in (doc.get("terms") or [])]
+    terms = worklist_terms(doc, os.path.relpath(p, ROOT))
     cids = [str(c) for c in (doc.get("commodities") or [])]
     if not terms:
         return None, "worklist is empty - nothing owed today"
     if len(cids) != len(terms):
-        return None, (f"worklist is malformed: {len(terms)} terms but {len(cids)} commodities. "
-                      "Pairing them by index would file every price under the wrong commodity.")
+        # Raised, not returned: a returned reason is scored "ok skipped" by run_store.
+        raise WorklistMalformed(f"worklist is malformed: {len(terms)} terms but {len(cids)} commodities. "
+                                "Pairing them by index would file every price under the wrong commodity.")
     return list(zip(terms, cids)), None
 
 
@@ -1018,11 +1054,15 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
         # fell back to the worklist would sweep today's capture terms and file them as hunter
         # evidence, and one that WROTE one would destroy the day's real worklist.
         terms, why = list(lookup["terms"]), None
-    elif navigate_lane:
-        pairs, why = read_worklist_pairs(store_key, date_s)
-        terms = [t for t, _ in pairs] if pairs else None
     else:
-        terms, why = read_worklist(store_key, date_s)
+        try:
+            if navigate_lane:
+                pairs, why = read_worklist_pairs(store_key, date_s)
+                terms = [t for t, _ in pairs] if pairs else None
+            else:
+                terms, why = read_worklist(store_key, date_s)
+        except WorklistMalformed as e:
+            return False, f"FAILED: {e}"
     if not seed and terms is None:
         return True, f"skipped: {why}"
 
@@ -1409,6 +1449,54 @@ def lookup_self_test():
               True)
     finally:
         read_worklist, read_worklist_pairs, profile_dir, Chrome = _rw, _rwp, _pd, _ch
+
+    # ---- a worklist that queues terms but carries no `terms` FAILS the store (2026-09-18) --------
+    # 7e1c7d94e dropped `terms`/`commodities` from the written worklist and both readers answered
+    # "empty - nothing owed today", scored ok, for six days. Driven through run_store and the REAL
+    # readers over files in the shape the broken writer produced, with ROOT pointed at scratch.
+    global ROOT
+    _root = ROOT
+    wroot = tempfile.mkdtemp(prefix="worklist-selftest-")
+    os.makedirs(os.path.join(wroot, "out", "worklists"))
+
+    def _wl(store_key, doc):
+        with open(os.path.join(wroot, "out", "worklists", f"capture-{store_key}-2026-09-13.json"),
+                  "w", encoding="utf-8") as fh:
+            json.dump(doc, fh)
+    broken = {"store": "x", "rotation_terms": ["pork chops", "ham"], "sale_terms": [],
+              "ruling_terms": [], "ad_terms": []}
+    empty = {"store": "x", "terms": [], "commodities": [], "rotation_terms": [], "sale_terms": [],
+             "ruling_terms": [], "ad_terms": []}
+    good = {"store": "x", "terms": ["pork chops", "ham"], "commodities": ["pork-chops", "ham"],
+            "rotation_terms": ["pork chops", "ham"], "sale_terms": [], "ruling_terms": [], "ad_terms": []}
+    global js_file
+    _js = js_file
+    ROOT = wroot
+    js_file = lambda name: open(os.path.join(_root, name), encoding="utf-8").read()   # noqa: E731
+    profile_dir = lambda k: prof                                          # noqa: E731
+    Chrome = _DeadChrome
+    try:
+        for sk in ("fareway", "samsclub"):              # the navigate lane and the paced lane: both readers
+            _wl(sk, broken)
+            ok3, note3 = run_store(sk, "2026-09-13")
+            T(f"MUST FIRE  {sk}: queued parts with no `terms` FAIL the store, never 'ok skipped'",
+              (not ok3) and "malformed" in note3 and "rotation_terms=2" in note3, "ok=%r %s" % (ok3, note3))
+            _wl(sk, empty)
+            ok4, note4 = run_store(sk, "2026-09-13")
+            T(f"MUST NOT FIRE  {sk}: a worklist that genuinely queues nothing is still an ok skip",
+              ok4 and "nothing owed today" in note4, "ok=%r %s" % (ok4, note4))
+            _wl(sk, good)
+            ok5, note5 = run_store(sk, "2026-09-13")
+            T(f"CLEAN TWIN  {sk}: a well-formed worklist is read and goes on to open the browser",
+              (not ok5) and "could not start Chrome" in note5, "ok=%r %s" % (ok5, note5))
+        _wl("fareway", dict(good, commodities=["pork-chops"]))
+        ok6, note6 = run_store("fareway", "2026-09-13")
+        T("MUST FIRE  fareway: terms and commodities of different lengths FAIL the store, never 'ok skipped'",
+          (not ok6) and "2 terms but 1 commodities" in note6, "ok=%r %s" % (ok6, note6))
+    finally:
+        ROOT, js_file, profile_dir, Chrome = _root, _js, _pd, _ch
+        import shutil
+        shutil.rmtree(wroot, ignore_errors=True)
 
     # ---- --preflight: the Chrome check runs BEFORE a capture, and a failure drives no store (2026-09-12) ----
     # Driven through main() itself with the browser, the capture lane and Chrome discovery swapped out, so what is

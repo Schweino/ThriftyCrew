@@ -472,6 +472,42 @@ try {
   $wlP = Get-CaptureWorklist -Store 'Family Fare' -Today '2026-09-18' -OutDir $bkOut
   if (@($wlP.AdTerms).Count -eq 0 -and $wlP.AdTotal -eq 0) { Ok 'MUST NOT FIRE  a Baker''s ad list prepends nothing to another store''s worklist' }
   else { Bad ("Family Fare picked up ad terms: $(@($wlP.AdTerms | ForEach-Object { $_.term }) -join ',')") }
+
+  # ---- THE WRITTEN WORKLIST FILE CARRIES WHAT THE LANES FETCH (2026-09-18) ------------------------------------
+  # THE FOUNDING BUG: 7e1c7d94e replaced `terms` and `commodities` in Write-CaptureWorklist with ruling_terms, and
+  # every case above read Get-CaptureWorklist IN MEMORY, where Terms was still right. The lanes read the FILE, so
+  # from 2026-09-13 pull-browser-stores found no `terms` and skipped Fareway and Sam's every day as "nothing
+  # owed". These cases read the file back, the way the lanes do.
+  $qOut = Join-Path $tmp 'q-out'
+  # A Walmart day with two ruling terms owed, so the written slice has parts from two sources in a known order.
+  New-Item -ItemType Directory -Path (Join-Path $qOut 'regular') -Force | Out-Null
+  [IO.File]::WriteAllText((Join-Path $qOut 'walmart-store-ruling-2026-08-28.json'),
+    (@{ ruled = '2026-08-28'; terms_to_recapture_first = @('rice', 'bacon') } | ConvertTo-Json -Depth 4))
+  $qWl = Get-CaptureWorklist -Store 'Walmart' -Today '2026-09-13' -OutDir $qOut
+  $qFile = Write-CaptureWorklist -Store 'Walmart' -Today '2026-09-13' -OutDir $qOut
+  $qDoc = [IO.File]::ReadAllText($qFile) | ConvertFrom-Json
+  $qWant = @($qWl.Terms | ForEach-Object { $_.term })
+  # An absent field is an EMPTY list here, never @($null), which counts 1.
+  $qTerms = if ($qDoc.PSObject.Properties['terms']) { @($qDoc.terms) } else { @() }
+  $qIds = if ($qDoc.PSObject.Properties['commodities']) { @($qDoc.commodities) } else { @() }
+
+  # Q. MUST FIRE - a worklist whose Get-CaptureWorklist has terms writes a non-empty `terms`, in the same order,
+  #    and a `commodities` of the same length whose ids are the ids of those terms.
+  $qIdsOk = ($qIds -join ',') -eq (@($qWl.Terms | ForEach-Object { $_.id }) -join ',')
+  if ($qDoc.PSObject.Properties['terms'] -and $qDoc.PSObject.Properties['commodities'] -and $qWant.Count -ge 3 -and
+      $qTerms[0] -eq 'rice' -and $qTerms[1] -eq 'bacon' -and
+      ($qTerms -join '|') -eq ($qWant -join '|') -and $qIds.Count -eq $qTerms.Count -and $qIdsOk) {
+    Ok "MUST FIRE  the WRITTEN worklist carries terms [$($qTerms -join ', ')] and $($qIds.Count) parallel commodities"
+  } else { Bad ("written worklist: terms field=$([bool]$qDoc.PSObject.Properties['terms']) commodities field=$([bool]$qDoc.PSObject.Properties['commodities']) want=[$($qWant -join ',')] terms=[$($qTerms -join ',')] ids=[$($qIds -join ',')]") }
+
+  # R. CLEAN TWIN - the breakdown still ships beside it: ruling_terms (the field 7e1c7d94e added) and the other
+  #    parts are present, and the parts account for every term in `terms`.
+  $qParts = @(@($qDoc.ruling_terms) + @($qDoc.ad_terms) + @($qDoc.rotation_terms) + @($qDoc.sale_terms) | Select-Object -Unique)
+  $qMissing = @($qTerms | Where-Object { $qParts -notcontains $_ })
+  if ((@($qDoc.ruling_terms) -join ',') -eq 'rice,bacon' -and $qDoc.PSObject.Properties['rotation_terms'] -and
+      $qDoc.PSObject.Properties['sale_terms'] -and $qDoc.PSObject.Properties['ad_terms'] -and $qMissing.Count -eq 0) {
+    Ok 'CLEAN TWIN  ruling_terms, ad_terms, rotation_terms and sale_terms still ship, and between them name every term in terms'
+  } else { Bad ("breakdown fields: ruling=$([bool]$qDoc.PSObject.Properties['ruling_terms']) rotation=$([bool]$qDoc.PSObject.Properties['rotation_terms']) unaccounted=[$($qMissing -join ',')]") }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
