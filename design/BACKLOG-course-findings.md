@@ -10710,6 +10710,23 @@ with a scheduled producer and no shown check is BARE and gets the cheapest check
 its max age derived from its schedule, a MUST FIRE and a CLEAN TWIN, broken once. A row that would page TODAY for a
 known, ruled reason is not added.
 
+**Done 2026-09-19: 0 of 4 products are bare, so no row was added.** Measured from the main checkout at `cbf146ee8`
+(read-only: a heartbeat run without `-Alert`, the alert log, the capture-watchdog logs and `Get-ScheduledTask`).
+
+| Product | Scheduled producer | What pages when it stops | Shown by |
+|---|---|---|---|
+| Grocery board | `TC Grocery Ad Pulls 0700`, `TC Grocery Daily Capture 0800` | TASK STALE / MISSING / DISABLED on both (30 h); OUTPUT STALE on `grocery/out/comparison-*.json`, `grocery/out/smp-feed.json`, `public/smp-feed.json` (30 h); the capture watchdog's run-record and board checks | a page actually sent: the box ran nothing on 09-15 and 09-16, and the 2026-09-17 05:12 silent-death page (10 issues) carried both tasks at 64.2 h and 63.2 h, both feeds at 69.1 h and 68.2 h, and the board at 69.1 h |
+| Meal prep / recipes | the recipes step of the 0800 chain, the free rotation, the propagate drain, `TC Recipe Harvest Crawl` | OUTPUT STALE on `meal-prep/pipeline/v2-perserving.json` and `meal-prep/ingredient-map.json` (30 h); OUTPUT NOT CURRENT on `public/free-dinners.json` (week_of against the board week); QUEUE STUCK on `recipe-specs-awaiting-propagate` (72 h); TASK STALE on the harvest task (30 h) | the same 09-17 page: both meal-prep outputs at 68.2 h and free-dinners not current. The harvest row is paging TODAY (44 h at 03:11) for the ruled pause, which is I254's, so nothing is added for it |
+| Graph | `TC Graph Nightly Matching` | TASK STALE / MISSING / DISABLED (30 h), and RUN DID NOT LAND when the newest real `graph-nightly-<date>.log` began over 30 h ago, which fires on absence and not only on a bad verdict (the run_log check, 2026-09-11) | the heartbeat self-test's MUST FIRE (a clean night read 37 h later pages), and a live read: the RUN-LOG-VERDICT block run over the main checkout's real `graph-nightly-2026-09-18.log` with the clock advanced read landed at +0, +12 and +24 h (5.7, 17.7, 29.7 h old) and paged at +31 h (36.7 h, "the chain has not run since") and +40 h |
+| Site / lessons | lessons: none. 0 of the 11 registered `TC *` tasks and 0 of the 11 committed definitions touch `content/`, and `content/` took 2 commits on origin/main since 2026-08-20, both by hand. The site's scheduled deliveries are the served files under `public/`, written by the 0800 chain | `public/smp-feed.json` and `public/free-dinners.json` (rows above), and the capture watchdog's PUBLISHED check (`public/board.json` newer than the board) | out of scope for lessons: nothing is scheduled to happen, so an absence check would page on the normal state. The served half is shown by the 09-17 page above |
+
+**The 2026-09-18 context line above was wrong about the graph.** "Nothing outside the PRINT-only graph-gates watches
+the graph for a stop" missed the heartbeat's own `TC Graph Nightly Matching` row: the harness counted detectors, and
+the row is registry data read by the heartbeat, not a detector. What that row cannot see, recorded and not added: a
+nightly that runs and lands `nothing changed` while a stage inside it has stopped producing. That is a volume check on
+the graph's output (ops-and-gates.md keeps volume and liveness apart on purpose), and no reader sees graph prices.
+No script changed, so nothing was fixtured or broken; `grocery/health-heartbeat.ps1 -SelfTest` was run for the record: exit 0, 27 of 27.
+
 ### I130 - A deletion merged from peers can resurrect itself, and the estate's merged ledgers have never been checked for it `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Answer is NO, established by opening all three merge paths rather than grepping for a concept. Two of the three never delete a key at all (0 `.Remove(` calls), so they cannot resurrect a deletion. The third, `sale-windows`, prunes only when `repriced_for` equals the exact `refresh_on` the PEER wrote after a landed capture - the acknowledgement IS the tombstone - and it re-reads inside the same lock the peers write under.
@@ -16781,7 +16798,7 @@ the rescue file dates 2026-09-10, its old row is replaced, an undated name is re
 Broken once (staple branch disabled and the old date rule put back): 7 of 19 red, exit 1; restored md5-identical,
 19 of 19, exit 0.
 
-### I236 - Committed task XML disagrees with the registered tasks, and one live task is not in the automation registry `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
+### I236 - Committed task XML disagrees with the registered tasks, and one live task is not in the automation registry `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings-2.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16835,6 +16852,10 @@ are produced, so it was recorded and not fixed.
   Recovers a lost night the same day, at the cost of a second protected window to keep correct.
 - (c) Leave it: a daytime run happens only on a night whose resolve never completed, which the record shows 0 times
   so far: of the 9 daytime starts, 2 were those hand verbs and 7 were skipped.
+
+**Done 2026-09-19: ruled 2026-09-19, leave as is (option c).** Brad chose to leave the graph nightly's daytime-launch
+behaviour unchanged. Nothing was built; the measurement above stands as the record of what a daytime start does and
+how often one has happened (9 of 67 transcript starts from 2026-09-06 to 2026-09-18, 0 of them a real daytime run).
 
 ### I237 - Push and gate papercuts that cost every session a retry `DONE` `run-0919`
 
@@ -17101,7 +17122,7 @@ runs `hardeval.py --stage score --tag weekly` on the frozen defs within min(1800
 `ml-eval OK` with the `hardeval:` summary in the status file, and writes `ml-eval-last.txt`. It changes no price and
 nothing on the board.
 
-### I254 - TC Recipe Harvest Crawl reads stale because it is paused by ruling until 2026-09-20, and its registrar would have undone that ruling `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
+### I254 - TC Recipe Harvest Crawl reads stale because it is paused by ruling until 2026-09-20, and its registrar would have undone that ruling `OPEN - BLOCKED UNTIL 2026-09-25` `run-0919` `2-WAY` `RUNG1 BLOCKED`
 
 **Merged from `design\backlog-inbox\run0919-nightly-mleval.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -17132,6 +17153,26 @@ will page TASK STALE for this task every morning, permanently. Options:
 **Recommendation: 1**, done by whoever reads the 09-24 run's result, because the ruling already says the crawl
 stops at 09-25 and a paging row for a retired task is exactly the ignored-red the rules warn about. Option 2 is
 worth it only if a second task gets a bounded schedule.
+
+**Ruled 2026-09-19 (Brad, in chat): option 1, RETIRE the task after its retry window closes on 2026-09-25.** Blocked
+until 2026-09-25, and the order is load-bearing: removing the watch row while the task is still registered makes the
+heartbeat page TASK UNWATCHED, so the repo half lands only after the scheduler half.
+1. **Brad** unregisters the task on or after 2026-09-25 (the window's last run is the 09-24 evening one):
+   `Unregister-ScheduledTask -TaskName 'TC Recipe Harvest Crawl' -Confirm:$false`.
+2. **The same day**, land branch `claude/i254-retire-harvest` (pushed to origin, prepared 2026-09-19 on base
+   `d335a9a3f`): it drops the `windows_tasks` row from `grocery/expected-automations.json`, removes
+   `ops/scheduled-tasks/tc-recipe-harvest-crawl.xml`, and removes the registrar `meal-prep/pipeline/install-harvest-task.ps1`
+   (a registrar for a retired task can only re-register it, and `ops/audit-task-registration.ps1` fails one that names
+   a task with no definition and no row). Its seven must-fire assertions go with it, so only that one entry leaves
+   `ops/mustfire-census-baseline.json`; the audit's literal registrar list and its asserted count move from four to
+   three. `meal-prep/pipeline/harvest-crawl.ps1` stays, so a hand crawl still works. Rebase it onto main and run
+   `ops\push-main.ps1`.
+3. Then mark this item DONE.
+Until step 1, the heartbeat keeps paging TASK STALE for this task on every morning its last run is over 30 h old
+(today, 44 h at 03:11), which is the known, ruled page and not a new fault.
+
+**RE-CHECK:** `Get-ScheduledTask -TaskName 'TC Recipe Harvest Crawl' -ErrorAction SilentlyContinue` returns nothing
+(Brad has unregistered it) and today is 2026-09-25 or later; then land the branch.
 
 ### I255 - Reader-facing: Walmart artichokes is a canned 12-pack divided by 8, and Hy-Vee harissa is a dry spice blend `OPEN` `run-0919` `1-WAY` `RUNG1 RULING`
 
