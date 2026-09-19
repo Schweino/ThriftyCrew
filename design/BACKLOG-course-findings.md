@@ -18569,3 +18569,25 @@ The new lessons' hub listing was staged instead as a splice of the live lexical
 and its link and title format to what is live, add a check that its built html equals the live html card for a hub
 whose list did not change (read-only, runnable offline), and make it stage through `TC_STAGE_WRITES` rather than
 call `Invoke-RestMethod` directly. It also still lists lessons with `limit=all` (I230's finding, 59 lessons today).
+
+### I295 - a staged ghost write can be queued with no content-type, and review-staged lists it with 0 concerns then ghost refuses it with a 400 `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\orchestrator-2026-09-19.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** 2026-09-19, the orchestrator applying `design/ready-for-brad/lessons/staged/lesson-hubs.jsonl`
+(two body-only page PUTs). `review-staged` without `-Apply` listed both with `concerns=0`, exit 0. With
+`-Apply` both came back `(400) Bad Request` and `REVIEW-STAGED-COMPLETE sent=0 failed=2`, exit 2. Nothing
+changed on either page.
+
+**Cause.** The queue's `header_names` read `Accept-Version,Authorization`. Every queue that applied cleanly
+that day read `Accept-Version,Authorization,Content-Type`. The staging script that wrote the hub queue built
+its headers without `Content-Type: application/json`, and nothing between staging and sending looks for it.
+The same bodies, resent through `Invoke-GhostApi` with `Content-Type: application/json` added, landed
+(journal `4b6506c3602f` saving-and-banking, `349fc7d8459f` money-mindset-and-habits), read back
+html-identical, and both hubs list the new lessons.
+
+**Fix.** `review-staged` should report a PUT or POST with a body and no `Content-Type` as a concern, so it
+is caught at list time instead of at send time, with a MUST FIRE (a queue line with no Content-Type) and a
+CLEAN TWIN (a line that has it still lists clean). Better still, the staging seam in `lib/ghost-lib.ps1`
+should add the header itself when a body is JSON, so a hand-written staging script cannot leave it out.
+Reversible: a check and a default header; neither changes what any correct queue sends.

@@ -105,6 +105,14 @@ Apply from the main checkout, copying the queue first because `-Apply` deletes w
 A page edited since staging answers 409 and nothing stale lands. The hub titles in the list are the post titles, so
 if a lesson title changes, re-stage. Neither hub page is declared in the census estate.
 
+**Hub update APPLIED 2026-09-19.** The queue as staged was refused: `review-staged -Apply` sent both PUTs and Ghost
+answered `(400) Bad Request` to each, `sent=0 failed=2`, and neither page changed. The staged lines carried no
+`Content-Type` header (every queue that applied cleanly that day carried `application/json`). The same bodies were
+resent through `Invoke-GhostApi` with `Content-Type: application/json` added: journal `4b6506c3602f`
+(saving-and-banking) and `349fc7d8459f` (money-mindset-and-habits). Both read back with html identical to what
+was sent, both still published, and the live pages link the emergency-fund and insurance lessons (saving and
+banking) and the balance-sheet lesson (money mindset). The missing-header defect is filed through the backlog inbox.
+
 ## As staged (the approved plan)
 
 Brad ruled on 2026-09-19, "Publish all three": the drafts in this folder for backlog I108, I109 and I111, with
