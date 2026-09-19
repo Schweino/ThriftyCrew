@@ -383,6 +383,17 @@ else { Bad ('basis-reconcile false-positived on a clean board: ' + $r.text) }
 $r = $br[2]
 if ($r.text -match 'ok - every checkable cell agrees') { Ok 'basis-reconcile ignores whole-cent rounding noise' }
 else { Bad ('basis-reconcile tripped on cent rounding: ' + $r.text) }
+# STRICT MODE PILOT (backlog I179, 2026-09-19). audit-basis-reconcile runs under Set-StrictMode -Version Latest,
+# so a board cell that has LOST a field it must carry (here `item`) throws and names the field. Unstrict the read
+# was '' and the cell was checked against nothing under an empty name. MUST FIRE: the throw, and the field named.
+# The three cases above are the CLEAN TWIN half: the real frozen boards still run clean under the mode.
+$smBoard = Join-Path $fixRep 'br-strict-noitem-board.json'
+[IO.File]::WriteAllText($smBoard, '{"comparison":[{"id":"corned-beef-brisket","commodity":"Corned Beef Brisket","unit":"lb","stores":[{"store":"Hy-Vee","per_unit":3.15,"size":"2.85 lbs ($8.99/lb)","ad":"$8.98","basis":"lb"}]}]}', (New-Object Text.UTF8Encoding($false)))
+$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', $smBoard, '-ReportDir', $fixRep)
+# The child's error record is wrapped at its console width, so the words are matched with whitespace collapsed.
+$smText = ($r.text -replace '\s+', ' ')
+if ($r.rc -ne 0 -and $smText -match 'PropertyNotFoundStrict' -and $smText -match "property 'item' cannot be found") { Ok 'basis-reconcile runs STRICT: a board cell missing its item field throws and names the field (backlog I179 pilot)' }
+else { Bad ('basis-reconcile read a missing item field quietly - Set-StrictMode is not in force (rc=' + $r.rc + '): ' + $r.text) }
 } # u001-1-basis-reconciler
 
 # ---------------------------------------------------------------- 1b. Baker's netWeight source

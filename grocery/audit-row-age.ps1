@@ -27,6 +27,12 @@
 #       .\audit-row-age.ps1 -SelfTest
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest,[switch]$Baseline,[int]$MaxDays=0,[double]$Tolerance=2.0,[string]$OutDir)
+# STRICT MODE PILOT (Brad's ruling on backlog I179, 2026-09-19). An unset variable, a missing property and a
+# property read on $null THROW here instead of reading as empty. Set at the ENTRY script, never in a library: the
+# mode follows the caller (lib\chain-verdict-lib.ps1 says why), so the libraries this dot-sources run strict under
+# this script and stay unstrict under every other caller. Above the -SelfTest branch on purpose: the fixtures then
+# prove the functions work in the mode the live run uses. Remove this line to leave the pilot.
+Set-StrictMode -Version Latest
 # MaxDays defaults to the capture policy's carry (90) - Brad 2026-08-22: no 14-day window anywhere. The
 # self-test passes 14 explicitly because it tests the profiler's arithmetic, not the policy.
 # UNCONDITIONAL NOW (2026-09-09): the AD COVERAGE GONE branch below needs Test-BrowserCaptureOwned, and
@@ -40,6 +46,7 @@ if (-not $MaxDays) {
 }
 $ErrorActionPreference='Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\strict-read.ps1')   # Get-TcField: the strict-mode read of an OPTIONAL field
 $root = if($PSScriptRoot){ $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if(-not $OutDir){ $OutDir = Join-Path $root 'out' }
 $baselinePath = Join-Path $OutDir 'row-age-baseline.json'
@@ -76,8 +83,9 @@ $script:STORE_FILES = @{
 # builder wrote to be true. An ad price's honest expiry is the day its window closes, which is a sharper
 # test than "capture + 14 days" and is already on disk.
 function Test-AdWindowExpired { param($Header,[datetime]$Today)
-  if(-not $Header.ad_to){ return $false }
-  try { return ([datetime]$Header.ad_to -lt $Today) } catch { return $false }
+  $to = Get-TcField $Header 'ad_to'   # optional: only an ad capture carries a window
+  if(-not $to){ return $false }
+  try { return ([datetime]$to -lt $Today) } catch { return $false }
 }
 
 # ---- AN AD IN HAND IS NOT A FAILED PULL (2026-09-06, queue 2026-09-06-6e08ed) --------------------------
@@ -95,8 +103,9 @@ function Test-AdWindowExpired { param($Header,[datetime]$Today)
 #   GONE          the newest window has closed and NO file anywhere holds a future one. That is a failed or
 #                 missing pull and it stays a hard finding.
 function Test-AdWindowNotYetOpen { param($Header,[datetime]$Today)
-  if(-not $Header.ad_from){ return $false }
-  try { return ([datetime]$Header.ad_from -gt $Today) } catch { return $false }
+  $from = Get-TcField $Header 'ad_from'   # optional: only an ad capture carries a window
+  if(-not $from){ return $false }
+  try { return ([datetime]$from -gt $Today) } catch { return $false }
 }
 
 # Does ANY dated ad file under these globs hold a window that opens after today? Read separately from the
@@ -140,7 +149,8 @@ function Test-RowIsWindowDated { param($Row,$Header)
 # above ("the whole store opts out of every staleness check") still fires for a store whose only source is
 # an ad file. A window is an expiry, not a capture stamp, and Test-AdWindowExpired owns it wholesale.
 function Get-AgeProfile { param($Rows,[datetime]$Today,[int]$MaxDays,[int]$WindowDated=0)
-  $all = @($Rows); $dated = @($all | Where-Object { $_.as_of })
+  # as_of is OPTIONAL by design: an ad row never carries one (see audit-asof-evidence), so it is read as such.
+  $all = @($Rows); $dated = @($all | Where-Object { Get-TcField $_ 'as_of' })
   $ages = @($dated | ForEach-Object { ($Today - [datetime]$_.as_of).Days })
   $over = @($ages | Where-Object { $_ -gt $MaxDays }).Count
   $und = $all.Count - $dated.Count - $WindowDated
@@ -278,14 +288,14 @@ if($SelfTest){
   # a baseline frozen when Baker's flyer had 39 rows.
   $bakersAd = @(1..108 | ForEach-Object { [pscustomobject]@{ item="b$_"; ad_price='$1.99' } })
   $bakersHdr = [pscustomobject]@{ store="Baker's"; ad_from='2026-08-26'; ad_to='2026-09-01' }
-  $winCount = @($bakersAd | Where-Object { -not $_.as_of -and (Test-RowIsWindowDated $_ $bakersHdr) }).Count
+  $winCount = @($bakersAd | Where-Object { -not (Get-TcField $_ 'as_of') -and (Test-RowIsWindowDated $_ $bakersHdr) }).Count
   $pb = Get-AgeProfile $bakersAd $today 14 $winCount
   T 'CLEAN TWIN a header-windowed ad capture (Baker''s 108 rows) reports 0 undated' ($pb.undated -eq 0 -and $pb.windowDated -eq 108) "undated=$($pb.undated) windowDated=$($pb.windowDated)"
   # CLEAN TWIN: ads-2026-08-30 as it really shipped - NO header window, ad_from/ad_to on every ROW. This is
   # the shape behind the Hy-Vee 682 / Aldi 86 / Family Fare 1400 counts in the alert.
   $ffAd = @(1..1400 | ForEach-Object { [pscustomobject]@{ item="f$_"; store='Family Fare'; ad_from='2026-08-03'; ad_to='2026-08-30' } })
   $ffHdr = [pscustomobject]@{ pulled_at='2026-08-30'; deal_count=2168 }
-  $winFF = @($ffAd | Where-Object { -not $_.as_of -and (Test-RowIsWindowDated $_ $ffHdr) }).Count
+  $winFF = @($ffAd | Where-Object { -not (Get-TcField $_ 'as_of') -and (Test-RowIsWindowDated $_ $ffHdr) }).Count
   $pf = Get-AgeProfile $ffAd $today 14 $winFF
   T 'CLEAN TWIN a row-windowed ads file (Family Fare 1400 rows) reports 0 undated' ($pf.undated -eq 0 -and $pf.windowDated -eq 1400) "undated=$($pf.undated) windowDated=$($pf.windowDated)"
   # CLEAN TWIN: a BIGGER flyer than the baseline is not a stopped writer. 1400 window-dated rows against a
@@ -298,7 +308,7 @@ if($SelfTest){
   # A HALF-STAMPED row keeps its own date: as_of wins over the window, so a real capture stamp is never
   # reclassified away.
   $mixed = @([pscustomobject]@{ as_of='2026-08-07'; ad_to='2026-09-01' })
-  $winMix = @($mixed | Where-Object { -not $_.as_of -and (Test-RowIsWindowDated $_ $null) }).Count
+  $winMix = @($mixed | Where-Object { -not (Get-TcField $_ 'as_of') -and (Test-RowIsWindowDated $_ $null) }).Count
   $pm = Get-AgeProfile $mixed $today 14 $winMix
   T 'CLEAN TWIN a row carrying BOTH as_of and a window is counted dated, not window-dated' ($pm.dated -eq 1 -and $pm.windowDated -eq 0) "dated=$($pm.dated) windowDated=$($pm.windowDated)"
   # DRIFT CHECK, not a frozen copy. $STORE_FILES is duplicated from build-deals-page.ps1's $storeFiles, and a
@@ -333,6 +343,18 @@ if($SelfTest){
   } else {
     T 'the authority build-deals-page.ps1 is readable for the drift check' $false 'not found'
   }
+  # ---- STRICT MODE PILOT (backlog I179, 2026-09-19) -------------------------------------------------
+  # MUST FIRE: the mode is really on in this script. If the Set-StrictMode line below param() is removed, a
+  # misspelt field reads as empty again and every case above still passes, so this is the only case that sees it.
+  $smThrew = $false
+  try { $null = ([pscustomobject]@{ as_of = '2026-09-19' }).asof } catch { $smThrew = $true }
+  T 'MUST FIRE  strict mode is ON here: a read of a field the row does not have (asof for as_of) THROWS' $smThrew 'the misspelt read returned quietly - Set-StrictMode is not in force'
+  # CLEAN TWIN: the optional-field read still answers exactly what the bare read answered before the pilot.
+  $gtAd = [pscustomobject]@{ item = 'x'; ad_to = '2026-09-01' }
+  $gtArr = [pscustomobject]@{ deals = @(1, 2) }
+  $gtOne = Get-TcField $gtArr 'deals'
+  T 'CLEAN TWIN Get-TcField reads an ABSENT field as $null, a present one as its value, a hashtable key the same way' `
+    (($null -eq (Get-TcField $gtAd 'as_of')) -and ((Get-TcField $gtAd 'ad_to') -eq '2026-09-01') -and ((Get-TcField @{ store = 'Aldi' } 'store') -eq 'Aldi') -and ($null -eq (Get-TcField $null 'as_of')) -and (@($gtOne).Count -eq 2)) 'the optional read disagrees with the unstrict bare read'
   if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -358,11 +380,12 @@ foreach($store in ($script:STORE_FILES.Keys | Sort-Object)){
     # where the Hy-Vee 682 / Aldi 86 / Family Fare 1400 counts come from), while bakers-deals and
     # fareway-deals carry the window in the HEADER and nothing on the row.
     foreach($r in @($j.deals)){
-      $rs = [string]$r.store
+      $rs = [string](Get-TcField $r 'store')   # optional: per-store files may omit it (see above)
       if($rs -and $rs -ne $store){ continue }
-      if(-not $rs -and [string]$j.store -and [string]$j.store -ne $store){ continue }
+      $js = [string](Get-TcField $j 'store')    # optional: ads-*.json carries no header store
+      if(-not $rs -and $js -and $js -ne $store){ continue }
       $rows.Add($r)
-      if(-not $r.as_of -and (Test-RowIsWindowDated $r $j)){ $winDated++ }
+      if(-not (Get-TcField $r 'as_of') -and (Test-RowIsWindowDated $r $j)){ $winDated++ }
     }
     # an ad file past its window is stale WHOLESALE - every row in it, regardless of as_of
     if(Test-AdWindowExpired $j $today){

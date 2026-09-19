@@ -42,6 +42,12 @@
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = '', [switch]$Quiet, [switch]$SelfTest)
+# STRICT MODE PILOT (Brad's ruling on backlog I179, 2026-09-19). An unset variable, a missing property and a
+# property read on $null THROW here instead of reading as empty. Set at the ENTRY script, never in a library: the
+# mode follows the caller (lib\chain-verdict-lib.ps1 says why), so the libraries this dot-sources run strict under
+# this script and stay unstrict under every other caller. Above the -SelfTest branch on purpose: the fixtures then
+# prove the functions work in the mode the live run uses. Remove this line to leave the pilot.
+Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -140,6 +146,12 @@ if ($SelfTest) {
   $obs2 = @([pscustomobject]@{ key = 'cumin-seeds'; store = "Baker's"; price = 1.69; size = '1 oz'; item = 'Tampico' })
   $m3 = Measure-CaptureReach -Observations $obs2 -TableKeys $keys -TableIds $ids
   T ($m3.missing.Count -eq 1 -and $m3.missing[0].commodity_known) 'reach is measured per CELL - a known commodity at an unpriced store still counts as missing'
+
+  # STRICT MODE PILOT (backlog I179, 2026-09-19). MUST FIRE: the mode is really on in this script. Without the
+  # Set-StrictMode line a misspelt field reads as empty again and no other case here can tell.
+  $smThrew = $false
+  try { $null = ([pscustomobject]@{ price = 2.29 }).prices } catch { $smThrew = $true }
+  T $smThrew 'MUST FIRE  strict mode is ON here: a read of a field the row does not have (prices for price) THROWS'
 
   Write-Output ("PRICE-CAPTURE-REACH " + $(if ($f) { "SELF-TEST FAILED ($f)" } else { 'SELF-TEST PASS' }))
   Exit-Guard -Name 'price-capture-reach' -Summary "selftest failed=$f" -Code $(if ($f) { 2 } else { 0 })

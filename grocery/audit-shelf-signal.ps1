@@ -54,8 +54,18 @@
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Root,
-  [switch]$SelfTest
+  [switch]$SelfTest,
+  # -ReportDir: where shelf-signal.json is written. Defaults to <Root>\out, the live daily behaviour, unchanged.
+  # Added 2026-09-19 (backlog I179) so a hand run against the real board can park its report outside the tracked
+  # out\shelf-signal.json, the same reason audit-basis-reconcile and audit-pack-basis carry one.
+  [string]$ReportDir = ''
 )
+# STRICT MODE PILOT (Brad's ruling on backlog I179, 2026-09-19). An unset variable, a missing property and a
+# property read on $null THROW here instead of reading as empty. Set at the ENTRY script, never in a library: the
+# mode follows the caller (lib\chain-verdict-lib.ps1 says why), so the libraries this dot-sources run strict under
+# this script and stay unstrict under every other caller. Above the -SelfTest branch on purpose: the fixtures then
+# prove the functions work in the mode the live run uses. Remove this line to leave the pilot.
+Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
@@ -102,6 +112,11 @@ if ($SelfTest) {
   # BOTH SPELLINGS (2026-09-09, backlog I86 turned `exit N` into `Exit-Guard -Code N` estate-wide).
   T (($reportHalf -notmatch 'exit 2') -and ($reportHalf -notmatch '-Code 2')) 'the REPORT path has no exit-2 - it is advisory and cannot gate a publish'
   T (($reportHalf -match 'exit 3') -or ($reportHalf -match '-Code 3')) 'the report path CAN exit 3 (blind), because "could not measure" must not read as "clean"'
+  # STRICT MODE PILOT (backlog I179, 2026-09-19). MUST FIRE: the mode is really on in this script. Without the
+  # Set-StrictMode line a misspelt field reads as empty again and no other case here can tell.
+  $smThrew = $false
+  try { $null = ([pscustomobject]@{ fulfillment = 'STORE' }).fulfilment } catch { $smThrew = $true }
+  T $smThrew 'MUST FIRE  strict mode is ON here: a read of a field the row does not have (fulfilment for fulfillment) THROWS'
   if ($fail -gt 0) { Say ("audit-shelf-signal SELFTEST: $fail FAILED"); exit 2 }
   Say ("audit-shelf-signal SELFTEST: all $pass passed"); exit 0
 }
@@ -169,7 +184,7 @@ if ($counts['SHIP-ONLY'] -gt 0) {
   Say '  SHIP-ONLY is a QUESTION, not a verdict: nobody has yet checked what fulfillmentType a KNOWN-SHELF'
   Say '  item reports. Confirm that against one before anything is ruled or gated on it.'
 }
-$rep = Join-Path $outDir 'shelf-signal.json'
+$rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $outDir }) 'shelf-signal.json'
 # Built key by key into an ordered dictionary. The one-shot [pscustomobject]@{...} form threw
 # "Argument types do not match" on PS 5.1 with a nested hashtable in it - and it threw AFTER the report
 # had already printed, so the finding was on screen and the file was never written.

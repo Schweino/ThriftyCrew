@@ -57,6 +57,11 @@
 # harness run replaced the real board's reconciliation with a fixture's.
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = "", [string]$RawDir = "", [double]$Factor = 1.5, [switch]$Strict, [string]$ReportDir = "")
+# STRICT MODE PILOT (Brad's ruling on backlog I179, 2026-09-19). An unset variable, a missing property and a
+# property read on $null THROW here instead of reading as empty. Set at the ENTRY script, never in a library: the
+# mode follows the caller (lib\chain-verdict-lib.ps1 says why), so the libraries this dot-sources run strict under
+# this script and stay unstrict under every other caller. Remove this line to leave the pilot.
+Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
