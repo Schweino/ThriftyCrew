@@ -1166,11 +1166,15 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             # never ran here. Invoke-TcGatedRepublish (meal-prep\lib\gated-republish-lib.ps1) builds, keeps only
             # what build-cards reports as built, runs the same audit-allergen-line over those cards, and publishes
             # the survivors once. What it holds stays pending, by name, and is re-reported every run.
+            # COST-ONLY (Brad, 2026-09-19): on a card whose cost moved, the page changes ONLY in its cost block. The lib
+            # ships the live card with that block swapped, and HOLDS (stage drift) any card whose live bytes it cannot
+            # prove from the publish journal, so the allergen line, I44's claim, footers and retitles wait for the
+            # catalogue republish Brad approves instead of riding a price move.
             $pubOk = $false; $rp = $null
             try {
               Push-Location (Join-Path $mp 'meal-prep')
               try {
-                $rp = Invoke-TcGatedRepublish -Slugs $stale `
+                $rp = Invoke-TcGatedRepublish -Slugs $stale -CostOnly `
                   -Build { param($s) & '.\engine\build-cards.ps1' -Slugs $s } -Publish { param($s) & '.\engine\publish.ps1' -Slugs $s }
                 foreach ($l in (@($rp.BuildLines) | Select-Object -Last 1)) { Log ('build-cards: ' + $l) }
                 foreach ($l in (@($rp.PublishOut) | Select-Object -Last 1)) { Log ('publish: ' + $l) }
@@ -1182,11 +1186,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             if ($heldRows.Count) {
               $heldBuild = @($heldRows | Where-Object { $_.stage -eq 'build' })
               $heldAllergen = @($heldRows | Where-Object { $_.stage -eq 'allergen' })
+              $heldDrift = @($heldRows | Where-Object { $_.stage -eq 'drift' })
               foreach ($h in $heldRows) { Log ("republish HELD $($h.slug) ($($h.stage)): $($h.why)") }
               $heldNames = ((@($heldRows | ForEach-Object { $_.slug }) | Select-Object -First 12) -join ', ') + $(if ($heldRows.Count -gt 12) { ", and $($heldRows.Count - 12) more" } else { '' })
-              Log ("republish held $($heldRows.Count) of $($stale.Count) card(s) back from publish: build failed $($heldBuild.Count), allergen line refused $($heldAllergen.Count)")
-              $summary += "REVIEW    $($heldRows.Count) of $($stale.Count) recipe card(s) were NOT republished because they did not rebuild ($($heldBuild.Count)) or their allergen line was wrong ($($heldAllergen.Count)): $heldNames - the live pages keep their previous version (meal-prep\pipeline\republish-pending.txt)"
-              if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards held back from republish: $($heldRows.Count)" -Body ("The daily loop did not republish $($heldRows.Count) of $($stale.Count) re-anchored card(s), because publishing them would have sent a card that did not rebuild (its OLD version) or one whose allergen line disagrees with its ingredients. They stay in meal-prep\pipeline\republish-pending.txt and are retried every run.`n`n" + ((@($heldRows | ForEach-Object { $_.slug + ' (' + $_.stage + '): ' + $_.why }) | Select-Object -First 40) -join "`n")) | Out-Null } catch {} }
+              Log ("republish held $($heldRows.Count) of $($stale.Count) card(s) back from publish: build failed $($heldBuild.Count), allergen line refused $($heldAllergen.Count), not provably cost-only $($heldDrift.Count)")
+              $summary += "REVIEW    $($heldRows.Count) of $($stale.Count) recipe card(s) were NOT republished because they did not rebuild ($($heldBuild.Count)), their allergen line was wrong ($($heldAllergen.Count)) or the update could not be shown to change only the cost ($($heldDrift.Count)): $heldNames - the live pages keep their previous version (meal-prep\pipeline\republish-pending.txt)"
+              if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards held back from republish: $($heldRows.Count)" -Body ("The daily loop did not republish $($heldRows.Count) of $($stale.Count) re-anchored card(s), because publishing them would have sent a card that did not rebuild (its OLD version), one whose allergen line disagrees with its ingredients, or one that would change more than the cost (pending changes such as the allergen line wait for the catalogue republish). They stay in meal-prep\pipeline\republish-pending.txt and are retried every run.`n`n" + ((@($heldRows | ForEach-Object { $_.slug + ' (' + $_.stage + '): ' + $_.why }) | Select-Object -First 40) -join "`n")) | Out-Null } catch {} }
             }
             if ($pubOk) {
               # Only the held slugs stay pending: everything else just published.

@@ -55,6 +55,69 @@ function Read-TcBuildCardsReport {
   return [pscustomobject]@{ Complete = $true; Built = $b; Total = $t; Failed = $failed; Why = '' }
 }
 
+# ---- COST-ONLY (Brad's ruling, 2026-09-19) -------------------------------------------------------------
+# On a page whose cost moved, the daily update changes ONLY the cost. Every other pending change a rebuild
+# would carry (the allergen line, I44's paywall claim, the rotating footer, retitled specs, anything later)
+# waits for the catalogue republish Brad approves, never rides a price move.
+#
+# WHAT MOVES WHEN ONLY COST MOVES, measured 2026-09-19 through the real build-card2.ps1 on three specs
+# (chicken-rice-and-broccoli, healthy-hamburger-helper, al-pastor-pork-taco-bowl-with-cilantro-lime-rice):
+# every costed price scaled, and the first line's prices x1.5 on their own, with the spec's two re-anchored
+# machine fields moved to match. With the cost-composition block masked, body and head were byte-identical
+# in all 6 of 6 comparisons. Prose prices are hydrated live (lib\render-tokens.ps1), so the block is the only
+# baked cost a card carries. That made a cost-only card BUILDABLE: the live card with its cost block swapped.
+#
+# THE LIVE CARD IS KNOWN ONLY WHEN THE JOURNAL SAYS SO. db\published-hashes.json holds, per slug, the hash
+# engine\publish.ps1 computed over body, head, name and description when it last PUT the page, and those are
+# every field it sends. So the card on disk before the rebuild IS the live card exactly when that hash,
+# computed over it and today's name and description, equals the journal. Then the cost-only card is that
+# card with its one cost block replaced by the rebuild's. When it is not provable (no journal entry, a card
+# on disk that is not the one live, a retitled spec, a cost block that is not exactly one), the slug is HELD:
+# never published, named with its reason, and kept pending. A could-not-look is never a pass.
+function Get-TcCostBlockMatch([string]$Body) {
+  return [regex]::Matches($Body, "<div class='smp-comp'>.*?<p class='smp-comp-pay'>.*?</p></div>", [Text.RegularExpressions.RegexOptions]::Singleline)
+}
+# engine\publish.ps1's change-gate hash, COPIED (its body/head/name/description order and its SHA1 over the
+# UTF-8 bytes). The self-test pins both spellings against publish.ps1's source.
+function Get-TcPublishHash([string]$Body, [string]$Head, [string]$Name, [string]$Desc) {
+  $sha = [System.Security.Cryptography.SHA1]::Create()
+  return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($Body + "`0" + $Head + "`0" + $Name + "`0" + $Desc))) -replace '-', '')
+}
+function Get-TcPublishedNameDesc([string]$SpecPath) {
+  # The name and description exactly as publish.ps1 sends them: tokens expanded, then the card's own price
+  # moved to live hydration. Dot-sourced HERE so render-tokens' param() block binds in this function's scope.
+  . (Join-Path $script:GatedRepublishHere 'render-tokens.ps1')
+  $spec = [IO.File]::ReadAllText($SpecPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+  $spec = Expand-SpecProse $spec
+  $spec = Move-SpecPriceToReleaseHydration $spec
+  return [pscustomobject]@{ Name = [string]$spec.name; Desc = [string]$spec.head.description }
+}
+function Get-TcCostOnlyCard {
+  <# PURE apart from reading one spec. Returns { Ok; Body; Head; Why }. Ok means Body/Head is the live card with
+     only its cost block replaced; otherwise Why says why the live card could not be proven or spliced. #>
+  param([string]$Slug, $Prior, [string]$NewBody, [string]$SpecPath, $Journal)
+  $no = { param($w) [pscustomobject]@{ Ok = $false; Body = $null; Head = $null; Why = $w } }
+  if ($null -eq $Prior) { return (& $no 'no card was on disk before the rebuild, so the live page cannot be shown') }
+  if ($null -eq $Journal) { return (& $no 'the publish journal could not be read, so the live page cannot be shown') }
+  $jp = $Journal.PSObject.Properties[$Slug]
+  if ($null -eq $jp) { return (& $no 'the publish journal has no entry for this slug') }
+  $nd = Get-TcPublishedNameDesc $SpecPath
+  $h = Get-TcPublishHash $Prior.Body $Prior.Head $nd.Name $nd.Desc
+  if (-not [string]::Equals($h, [string]$jp.Value, [StringComparison]::Ordinal)) {
+    return (& $no 'the card on disk plus today''s title and description is not what the publish journal says is live, so a rebuild would carry every change made since, not only the cost')
+  }
+  $pm = Get-TcCostBlockMatch $Prior.Body; $nm = Get-TcCostBlockMatch $NewBody
+  if ($pm.Count -ne 1 -or $nm.Count -ne 1) { return (& $no ("expected exactly one cost block in each card, found {0} live and {1} rebuilt" -f $pm.Count, $nm.Count)) }
+  $body = $Prior.Body.Substring(0, $pm[0].Index) + $nm[0].Value + $Prior.Body.Substring($pm[0].Index + $pm[0].Length)
+  return [pscustomobject]@{ Ok = $true; Body = $body; Head = $Prior.Head; Why = '' }
+}
+function Write-TcCardText([string]$Path, [string]$Text) {
+  # keep the file's own BOM choice: build-card2 decides it, and the hash reads decoded text either way
+  $bom = $false
+  if (Test-Path -LiteralPath $Path) { $b = [IO.File]::ReadAllBytes($Path); $bom = ($b.Length -ge 3 -and $b[0] -eq 0xEF -and $b[1] -eq 0xBB -and $b[2] -eq 0xBF) }
+  [IO.File]::WriteAllText($Path, $Text, (New-Object System.Text.UTF8Encoding($bom)))
+}
+
 function Invoke-TcGatedRepublish {
   param(
     [string[]]$Slugs,
@@ -62,13 +125,16 @@ function Invoke-TcGatedRepublish {
     [string]$BuiltDir,
     [scriptblock]$Build,
     [scriptblock]$Publish,
-    [string]$AuditScript
+    [string]$AuditScript,
+    [switch]$CostOnly,
+    [string]$JournalPath
   )
   # Defaults are meal-prep's own live directories, so a caller in another module names no path inside this one.
   $mpRoot = Split-Path $script:GatedRepublishHere -Parent
   if (-not $AuditScript) { $AuditScript = Join-Path $mpRoot 'pipeline\audit-allergen-line.ps1' }
   if (-not $RecipesDir)  { $RecipesDir  = Join-Path $mpRoot 'db\recipes' }
   if (-not $BuiltDir)    { $BuiltDir    = Join-Path $mpRoot 'db\built' }
+  if (-not $JournalPath) { $JournalPath = Join-Path $mpRoot 'db\published-hashes.json' }
   $want = @($Slugs | Where-Object { $_ } | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ } | Select-Object -Unique)
   $held = New-Object System.Collections.Generic.List[object]
 
@@ -77,6 +143,17 @@ function Invoke-TcGatedRepublish {
   foreach ($s in $want) {
     if (Test-Path -LiteralPath (Join-Path $RecipesDir ($s + '.json'))) { $toBuild += $s }
     else { $held.Add([pscustomobject]@{ slug = $s; stage = 'build'; why = 'no spec in db\recipes' }) }
+  }
+
+  # 1b. COST-ONLY: remember the card each slug had on disk BEFORE the rebuild overwrites it
+  $prior = @{}
+  if ($CostOnly) {
+    foreach ($s in $toBuild) {
+      $pb = Join-Path $BuiltDir ($s + '.body.html'); $ph = Join-Path $BuiltDir ($s + '.head.html')
+      if ((Test-Path -LiteralPath $pb) -and (Test-Path -LiteralPath $ph)) {
+        $prior[$s] = [pscustomobject]@{ Body = [IO.File]::ReadAllText($pb, [Text.Encoding]::UTF8); Head = [IO.File]::ReadAllText($ph, [Text.Encoding]::UTF8) }
+      }
+    }
   }
 
   # 2. build, and keep only what build-cards says it built
@@ -98,6 +175,32 @@ function Invoke-TcGatedRepublish {
         else { $built += $s }
       }
     }
+  }
+
+  # 2b. COST-ONLY: the card that ships is the live card with its cost block swapped, or nothing at all
+  $costOnlyWritten = @()
+  if ($CostOnly -and $built.Count) {
+    $journal = $null
+    try { $journal = [IO.File]::ReadAllText($JournalPath, [Text.Encoding]::UTF8) | ConvertFrom-Json } catch { $journal = $null }
+    $keep = @()
+    foreach ($s in $built) {
+      $nbPath = Join-Path $BuiltDir ($s + '.body.html'); $nhPath = Join-Path $BuiltDir ($s + '.head.html')
+      $r = $null
+      try {
+        $newBody = [IO.File]::ReadAllText($nbPath, [Text.Encoding]::UTF8)
+        $r = Get-TcCostOnlyCard -Slug $s -Prior $prior[$s] -NewBody $newBody -SpecPath (Join-Path $RecipesDir ($s + '.json')) -Journal $journal
+      } catch { $r = [pscustomobject]@{ Ok = $false; Why = ('cost-only check threw: ' + $_.Exception.Message) } }
+      if ($r.Ok) {
+        Write-TcCardText $nbPath $r.Body
+        Write-TcCardText $nhPath $r.Head
+        $costOnlyWritten += $s; $keep += $s
+      } else {
+        # put the card that was on disk back, so db\built does not carry a render nobody published
+        if ($null -ne $prior[$s]) { Write-TcCardText $nbPath $prior[$s].Body; Write-TcCardText $nhPath $prior[$s].Head }
+        $held.Add([pscustomobject]@{ slug = $s; stage = 'drift'; why = ('not provably cost-only: ' + $r.Why) })
+      }
+    }
+    $built = $keep
   }
 
   # 3. the allergen line, on the card that is about to ship
@@ -133,6 +236,7 @@ function Invoke-TcGatedRepublish {
   return [pscustomobject]@{
     Requested       = $want
     Built           = $built
+    CostOnly        = $costOnlyWritten
     Eligible        = $eligible
     Held            = @($held.ToArray())
     BuildLines      = $bLines
@@ -259,6 +363,104 @@ if ($__gatedRepublishSelfTest) {
       ($script:grPublishCalls -eq 0 -and @($r.Held | Where-Object { $_.stage -eq 'allergen' -and $_.why -match 'could not look' }).Count -eq 1) `
       ('calls=' + $script:grPublishCalls + ' held=' + (@($r.Held | ForEach-Object { $_.why }) -join ' ; '))
 
+    # ---- COST-ONLY (Brad's ruling, 2026-09-19): a cost move ships the cost and nothing else ---------------
+    # A live card (proven by a journal entry hashed the way publish.ps1 hashes it), a rebuild that also carries
+    # pending drift (a footer here, standing for the allergen line, the I44 claim or anything else), and a stub
+    # publish that records the exact bytes it would have sent. Ghost is never reachable.
+    $coRec = Join-Path $tmp 'co-recipes'; $coBlt = Join-Path $tmp 'co-built'; $coJournal = Join-Path $tmp 'co-journal.json'
+    New-Item -ItemType Directory -Force $coRec, $coBlt | Out-Null
+    function New-CoSpec([string]$Slug, [string]$Name) {
+      $j = '{"slug":"SLUG","name":"NAME","stat":{"cost_ps":"2.10"},"head":{"description":"A fixture bowl for the week."},"scaler":{"ing":[{"item":"Worcestershire Sauce","grams":30},{"item":"Oyster Sauce","grams":40}]}}'
+      Set-Content -LiteralPath (Join-Path $coRec ($Slug + '.json')) -Encoding UTF8 -Value ($j.Replace('SLUG', $Slug).Replace('NAME', $Name))
+    }
+    function Get-CoBlock([string]$Pct) { "<div class='smp-comp'><i style='width:" + $Pct + "%' title='Beef: " + $Pct + "%'></i><p class='smp-comp-pay'>Beef is the bill.</p></div>" }
+    function Get-CoBody([string]$Slug, [string]$Pct, [string]$Extra) { '<ul class="smp-ing"><li>x</li></ul>' + (Format-TcAllergenLine (Get-TcRecipeAllergens $ing $table) $Slug) + '<!--TC-PAYWALL-->' + (Get-CoBlock $Pct) + $Extra }
+    $coHead = '<script type="application/ld+json">{"@type":"Recipe"}</script>'
+    $script:coPlan = @{}
+    $coBuild = {
+      param($s)
+      $ok = 0
+      foreach ($x in $s) {
+        [IO.File]::WriteAllText((Join-Path $coBlt ($x + '.body.html')), $script:coPlan[$x].Body, (New-Object System.Text.UTF8Encoding($false)))
+        [IO.File]::WriteAllText((Join-Path $coBlt ($x + '.head.html')), $script:coPlan[$x].Head, (New-Object System.Text.UTF8Encoding($false)))
+        $ok++
+      }
+      Write-Output ('built {0}/{1}  errors 0' -f $ok, @($s).Count)
+    }
+    $script:coSent = @{}
+    $coPublish = { param($s) foreach ($x in $s) { $script:coSent[$x] = [IO.File]::ReadAllText((Join-Path $coBlt ($x + '.body.html')), [Text.Encoding]::UTF8) }; 'published+verified OK: ' + @($s).Count + ' / ' + @($s).Count; 'PUBLISH-UNSTAMPABLE: ' }
+    function Set-CoLive([string]$Slug, [string]$Body, [hashtable]$Journal, [string]$JournalName) {
+      # the card on disk IS the live card, and the journal says so under the name publish sent
+      [IO.File]::WriteAllText((Join-Path $coBlt ($Slug + '.body.html')), $Body, (New-Object System.Text.UTF8Encoding($false)))
+      [IO.File]::WriteAllText((Join-Path $coBlt ($Slug + '.head.html')), $coHead, (New-Object System.Text.UTF8Encoding($false)))
+      $Journal[$Slug] = Get-TcPublishHash $Body $coHead $JournalName 'A fixture bowl for the week.'
+    }
+    function Invoke-CoRun([string[]]$Slugs, [hashtable]$Journal) {
+      [IO.File]::WriteAllText($coJournal, ($Journal | ConvertTo-Json), (New-Object System.Text.UTF8Encoding($false)))
+      $script:coSent = @{}
+      return (Invoke-TcGatedRepublish -Slugs $Slugs -RecipesDir $coRec -BuiltDir $coBlt -Build $coBuild -Publish $coPublish -CostOnly -JournalPath $coJournal)
+    }
+    $footer = "<div class='smp-rel'><h2>Three more</h2><div class='smp-rel-grid'><a href='/b/'>B</a></div></div>"
+
+    # MUST FIRE: the founding case. The rebuild carries drift beside the cost; only the cost may ship.
+    New-CoSpec 'co-drift' 'Fixture Drift Bowl'
+    $jr = @{}
+    $liveBody = Get-CoBody 'co-drift' '63.269' ''
+    Set-CoLive 'co-drift' $liveBody $jr 'Fixture Drift Bowl'
+    $script:coPlan = @{ 'co-drift' = [pscustomobject]@{ Body = (Get-CoBody 'co-drift' '70.100' $footer); Head = ($coHead + '<!-- I44 claim -->') } }
+    $r = Invoke-CoRun @('co-drift') $jr
+    $sent = [string]$script:coSent['co-drift']
+    Test-GrCase 'MUST FIRE  a cost-moved card whose rebuild also carries other changes ships ONLY the new cost block: the live card, cost swapped, no footer, head untouched' `
+      ($sent -eq (Get-CoBody 'co-drift' '70.100' '') -and $sent -notmatch 'smp-rel' -and ([IO.File]::ReadAllText((Join-Path $coBlt 'co-drift.head.html'), [Text.Encoding]::UTF8)) -eq $coHead -and @($r.Held).Count -eq 0 -and (@($r.CostOnly) -join ',') -eq 'co-drift') `
+      ('sent-has-footer=' + ($sent -match 'smp-rel') + ' sent-has-new-cost=' + ($sent -match '70\.100') + ' held=' + (@($r.Held | ForEach-Object { $_.slug + '/' + $_.why }) -join ' ; '))
+
+    # CLEAN TWIN: a pure cost move still publishes, and what it sends is exactly the rebuild.
+    New-CoSpec 'co-clean' 'Fixture Clean Bowl'
+    $jr = @{}
+    Set-CoLive 'co-clean' (Get-CoBody 'co-clean' '40.000' '') $jr 'Fixture Clean Bowl'
+    $script:coPlan = @{ 'co-clean' = [pscustomobject]@{ Body = (Get-CoBody 'co-clean' '44.500' ''); Head = $coHead } }
+    $r = Invoke-CoRun @('co-clean') $jr
+    Test-GrCase 'CLEAN TWIN a card whose rebuild differs only in cost publishes, and sends exactly the rebuilt card' `
+      (([string]$script:coSent['co-clean']) -eq (Get-CoBody 'co-clean' '44.500' '') -and @($r.Held).Count -eq 0 -and (@($r.Eligible) -join ',') -eq 'co-clean') `
+      ('eligible=' + (@($r.Eligible) -join ',') + ' held=' + (@($r.Held | ForEach-Object { $_.why }) -join ' ; '))
+
+    # MUST FIRE: the card on disk is not the one live, so nothing can prove what else would change: HELD.
+    New-CoSpec 'co-unknown' 'Fixture Unknown Bowl'
+    $jr = @{}
+    Set-CoLive 'co-unknown' (Get-CoBody 'co-unknown' '50.000' '') $jr 'Fixture Unknown Bowl'
+    $jr['co-unknown'] = 'DEADBEEF'   # the journal names some other page
+    $priorBody = Get-CoBody 'co-unknown' '50.000' ''
+    $script:coPlan = @{ 'co-unknown' = [pscustomobject]@{ Body = (Get-CoBody 'co-unknown' '55.000' $footer); Head = $coHead } }
+    $r = Invoke-CoRun @('co-unknown') $jr
+    Test-GrCase 'MUST FIRE  a card whose live bytes cannot be proven is HELD, named with its reason, never published, and the card on disk is put back' `
+      (-not $script:coSent.ContainsKey('co-unknown') -and -not $r.PublishInvoked -and @($r.Held | Where-Object { $_.slug -eq 'co-unknown' -and $_.stage -eq 'drift' -and $_.why -match 'not what the publish journal says is live' }).Count -eq 1 -and ([IO.File]::ReadAllText((Join-Path $coBlt 'co-unknown.body.html'), [Text.Encoding]::UTF8)) -eq $priorBody) `
+      ('invoked=' + $r.PublishInvoked + ' held=' + (@($r.Held | ForEach-Object { $_.slug + '/' + $_.stage + '/' + $_.why }) -join ' ; '))
+
+    # MUST FIRE: a retitled spec. The card is unchanged but publish would send a new title: HELD.
+    New-CoSpec 'co-title' 'Homemade Fixture Bowl'
+    $jr = @{}
+    Set-CoLive 'co-title' (Get-CoBody 'co-title' '30.000' '') $jr 'Healthy Fixture Bowl'
+    $script:coPlan = @{ 'co-title' = [pscustomobject]@{ Body = (Get-CoBody 'co-title' '31.000' ''); Head = $coHead } }
+    $r = Invoke-CoRun @('co-title') $jr
+    Test-GrCase 'MUST FIRE  a spec retitled since its last publish is HELD, because publish would ship the new title with the cost' `
+      (-not $script:coSent.ContainsKey('co-title') -and @($r.Held | Where-Object { $_.slug -eq 'co-title' -and $_.stage -eq 'drift' }).Count -eq 1) `
+      ('held=' + (@($r.Held | ForEach-Object { $_.slug + '/' + $_.why }) -join ' ; '))
+
+    # MUST FIRE: never published (no journal entry) is not provable either.
+    New-CoSpec 'co-new' 'Fixture New Bowl'
+    $script:coPlan = @{ 'co-new' = [pscustomobject]@{ Body = (Get-CoBody 'co-new' '31.000' ''); Head = $coHead } }
+    [IO.File]::WriteAllText((Join-Path $coBlt 'co-new.body.html'), (Get-CoBody 'co-new' '30.000' ''), (New-Object System.Text.UTF8Encoding($false)))
+    [IO.File]::WriteAllText((Join-Path $coBlt 'co-new.head.html'), $coHead, (New-Object System.Text.UTF8Encoding($false)))
+    $r = Invoke-CoRun @('co-new') @{ 'someone-else' = 'X' }
+    Test-GrCase 'MUST FIRE  a slug with no publish-journal entry is HELD, not published' `
+      (-not $script:coSent.ContainsKey('co-new') -and @($r.Held | Where-Object { $_.slug -eq 'co-new' -and $_.why -match 'no entry' }).Count -eq 1) `
+      ('held=' + (@($r.Held | ForEach-Object { $_.slug + '/' + $_.why }) -join ' ; '))
+
+    # PIN: the copied hash and the name/description road are publish.ps1's own. Needles by concatenation.
+    $pubSrc = [IO.File]::ReadAllText((Join-Path $mp 'engine\publish.ps1'))
+    Test-GrCase 'MUST FIRE  publish.ps1 still hashes body, head, name and description in the order Get-TcPublishHash copies, after the same two spec passes' `
+      ($pubSrc.Contains('$contentHash = Get-' + 'ContentHash ($body + "`0" + $head + "`0" + [string]$spec.name + "`0" + $desc)') -and $pubSrc.Contains('$spec = Expand-' + 'SpecProse $spec') -and $pubSrc.Contains('$spec = Move-SpecPrice' + 'ToReleaseHydration $spec') -and $pubSrc.Contains('$desc = [string]$spec.head.' + 'description')) 'publish.ps1 moved its hash or its name/description road'
+
     # ---- SOURCE PINS: the parser reads build-cards' real output shape, and the chain uses this path ---------
     # Needles by concatenation, so this file cannot satisfy them by quoting them.
     $bcSrc = [IO.File]::ReadAllText((Join-Path $mp 'engine\build-cards.ps1'))
@@ -274,11 +476,13 @@ if ($__gatedRepublishSelfTest) {
     $nPub = [regex]::Matches($cacSrc, [regex]::Escape($pubNeedle)).Count
     Test-GrCase 'MUST FIRE  grocery\check-ad-cycles.ps1 reaches publish.ps1 only as the Publish block of this gated call' `
       ($iGate -ge 0 -and $nPub -eq 1 -and $iPub -gt $iGate -and ($iPub - $iGate) -lt 600) ("gate@{0} publishBlock@{1} publishRefs={2}" -f $iGate, $iPub, $nPub)
+    $coCall = [regex]::Match($cacSrc, 'Invoke-TcGated' + 'Republish -Slugs \$stale -CostOnly\b')
+    Test-GrCase 'MUST FIRE  the daily chain asks for the cost-only republish (Brad, 2026-09-19)' $coCall.Success 'check-ad-cycles calls the gated republish without -CostOnly'
   } finally {
     $env:TC_WRITE_JOURNAL = $savedJournal; $env:TC_STAGE_WRITES = $savedStage
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
-  if ($script:grCases -lt 11) { Write-Output ("GATED-REPUBLISH SELF-TEST FAIL: ran {0} of 11 case(s)" -f $script:grCases); exit 1 }
+  if ($script:grCases -lt 18) { Write-Output ("GATED-REPUBLISH SELF-TEST FAIL: ran {0} of 18 case(s)" -f $script:grCases); exit 1 }
   if ($script:grFail) { Write-Output ("GATED-REPUBLISH SELF-TEST FAIL: {0} of {1} case(s)" -f $script:grFail, $script:grCases); exit 1 }
   Write-Output ("GATED-REPUBLISH SELF-TEST PASS: {0} of {0} case(s)" -f $script:grCases)
   exit 0
