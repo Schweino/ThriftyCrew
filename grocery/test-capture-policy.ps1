@@ -539,6 +539,43 @@ try {
       }
     }
   }
+
+  # ---- THE CAPACITY INVARIANT (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md) --------------------------------
+  # From 2026-08-20 the rotation took 86 days to come round while nothing stopped a price being published at any age,
+  # and the 2026-09-17 board verified at 36 defects in 100. These cases make that a push-time refusal.
+  # LIVE: the REAL term list (read from this checkout's commodity-search.json, never the temp fixture) must fit every
+  # store's cap inside RotationDays, and RotationDays must sit inside the publish limit.
+  $liveCs = Join-Path $root 'commodity-search.json'
+  $liveN = 0
+  foreach ($p in (ConvertFrom-Json ([IO.File]::ReadAllText($liveCs))).terms.PSObject.Properties) { if ($p.Value -is [array]) { $liveN += @($p.Value).Count } else { $liveN++ } }
+  $liveCounts = @{}; foreach ($s in @('Aldi', "Baker's", 'Family Fare', 'Fareway', 'Walmart', "Sam's Club")) { $liveCounts[$s] = $liveN }
+  $liveCap = @(Test-CaptureCapacity -TermCounts $liveCounts)
+  $liveBad = @($liveCap | Where-Object { -not $_.Ok })
+  if ($liveN -gt 0 -and $liveCap.Count -eq 6 -and $liveBad.Count -eq 0) {
+    Ok ("LIVE  every term-rotation store re-reads all $liveN live terms inside RotationDays=$($script:RotationDays) (publish limit $($script:MaxPublishAgeDays)): " + (($liveCap | ForEach-Object { "$($_.Store) $($_.NeedPerRun)/$($_.Cap)" }) -join ', '))
+  } else { Bad ("LIVE capacity: $($liveBad.Count) of $($liveCap.Count) store(s) cannot be re-read in time over $liveN terms: " + (($liveBad | ForEach-Object { "$($_.Store): $($_.Why)" }) -join ' | ')) }
+
+  $rdSave = $script:RotationDays
+  try {
+    # MUST FIRE: the 2026-08-20 regime. A 90-day rotation against a 14-day publish limit is refused by name.
+    $script:RotationDays = 90
+    $old = @(Test-CaptureCapacity -Stores @('Walmart') -TermCounts @{ 'Walmart' = 602 })
+    if (-not $old[0].Ok -and $old[0].Why -match 'exceeds MaxPublishAgeDays') { Ok "MUST FIRE  the 2026-08-20 regime (RotationDays 90, publish limit $($script:MaxPublishAgeDays)) is refused: $($old[0].Why)" }
+    else { Bad "the 90-day rotation was accepted against a $($script:MaxPublishAgeDays)-day publish limit (ok=$($old[0].Ok) why='$($old[0].Why)')" }
+    $script:RotationDays = 14
+    # AT THE BAR (cap 45, 14 days): 630 terms is exactly 45 a run and passes. ONE TERM PAST IT, 631 is 46 and fails.
+    $at = @(Test-CaptureCapacity -Stores @('Walmart') -TermCounts @{ 'Walmart' = 630 })
+    if ($at[0].Ok -and $at[0].NeedPerRun -eq 45 -and $at[0].Cap -eq 45) { Ok 'MUST NOT FIRE  at the bar: 630 terms / 14 days = 45 a run against the Walmart cap of 45 is accepted' }
+    else { Bad "at the bar: need=$($at[0].NeedPerRun) cap=$($at[0].Cap) ok=$($at[0].Ok) (want 45/45 accepted)" }
+    $past = @(Test-CaptureCapacity -Stores @('Walmart') -TermCounts @{ 'Walmart' = 631 })
+    if (-not $past[0].Ok -and $past[0].NeedPerRun -eq 46) { Ok 'MUST FIRE  one term past the bar: 631 terms / 14 days = 46 a run over the Walmart cap of 45 is refused' }
+    else { Bad "past the bar: need=$($past[0].NeedPerRun) ok=$($past[0].Ok) (want 46 refused)" }
+    # CLEAN TWIN: a per-window limit is covered across its runs. Family Fare's 40 a window cannot take 43 in one run,
+    # and 3 runs a day make it 15 a run. Get-CapturePlan asks for the per-run figure.
+    $ff = @(Test-CaptureCapacity -Stores @('Family Fare') -TermCounts @{ 'Family Fare' = 602 })
+    if ($ff[0].Ok -and $ff[0].RunsPerDay -eq 3 -and $ff[0].NeedPerRun -eq 15) { Ok 'CLEAN TWIN  Family Fare covers 602 terms in 14 days at 15 a run across 3 runs, inside its measured 40 a window' }
+    else { Bad "Family Fare runs: runs=$($ff[0].RunsPerDay) need=$($ff[0].NeedPerRun) ok=$($ff[0].Ok) (want 3 runs, 15 a run)" }
+  } finally { $script:RotationDays = $rdSave }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

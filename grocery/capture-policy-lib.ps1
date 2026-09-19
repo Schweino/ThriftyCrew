@@ -68,7 +68,33 @@ $script:PolicyRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Par
 $__cplSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # The quarter. Change it HERE and nowhere else; MaxCarryDays must move with it.
+# SINCE 2026-09-19 IT NO LONGER SETS HOW OFTEN A PRICE IS RE-READ - RotationDays below does. It survives as the
+# history window: how long a row may be KEPT (trend, graph time gates, carry), which is a different question from
+# how long a row may be PUBLISHED.
 $script:QuarterDays = 90
+
+# ---------------------------------------------------------------------------
+# THE FRESHNESS RULE (Brad, 2026-09-19, after the verification of the 2026-09-17 board read 36 defects in 100
+# verified, whole-board 37.1%, 95% CI 24.2% to 52.0%, against 18.2% on the 2026-08-15 board).
+#
+# WHAT WENT WRONG. From 2026-08-20 the daily drip was total terms / QuarterDays = 7 terms a store, an 86-day cycle,
+# and rows lived 90 days to cover it. Nothing measured what that did to accuracy. On the 09-17 board 25% of the
+# 3,189 priced cells had been read in the last 7 days and the median was 17 days old; in the verified sample the
+# defect rate climbed with age: 6 of 26 at 0-7 days, 15 of 44 at 8-30, 13 of 27 at 31-60, 2 of 2 past 60.
+# design\PLAN-board-accuracy-2026-09-19.md has every defect and its cause.
+#
+# THE RULE. Every store re-reads its whole term list within RotationDays, and no everyday price older than
+# MaxPublishAgeDays reaches the board (compare-deals' provenance contract, provenance-contract-lib.ps1). A price
+# that could not be re-read in time is WITHHELD and queued, never published stale: a gap is a smaller board, a
+# stale price is a wrong number, and understating is exactly as wrong as overstating.
+#
+# THE INVARIANT THAT WOULD HAVE STOPPED 2026-08-20. RotationDays <= MaxPublishAgeDays, and every store's call cap
+# covers ceil(terms / RotationDays / runs a day). test-capture-policy.ps1 asserts both with the arithmetic in the
+# message, so a policy change that makes the rotation slower than the publish limit fails at push instead of going
+# live and being found by a reader. 14 is the window the 2026-08-15 board measured under (18.2%): the first plausible
+# number with a measurement behind it, not the survivor of a sweep. Tighten it only with a verification run behind it.
+$script:RotationDays = 14
+$script:MaxPublishAgeDays = 14
 
 # Rows carried longer than this expire. It MUST be >= QuarterDays or a term's rows die
 # before the rotation comes back to them - at 90-day rotation with a 14-day carry, ~85%
@@ -120,16 +146,23 @@ $script:MaxCarryDays = 90
 #                   "Robot or human?" wall (2026-08-15) at a rate nobody recorded. The store
 #                   we know least about gets the smallest slice.
 #
+# RAISED 2026-09-19 FOR THE FRESHNESS RULE, and only where a clean run is on record: at 602 terms a
+# 14-day rotation needs 43 terms a day, above Sam's 30 and Walmart's 25. Sam's Club 30 -> 45 is 12% of
+# the 388-term sweep that completed clean at 2600ms; Walmart 25 -> 45 is 9% of the 487-term full pull
+# that completed clean on 2026-08-11 (memory walmart-full-pull-takes-75-minutes). Both stay under a
+# third of a known-clean run, the rule every other proposed cap here already follows. Family Fare keeps
+# its measured 40 per window and gets three windows a day (runs = 3), because its limit is per window.
+#
 # RAISE A NUMBER ONLY WITH EVIDENCE, and move its basis to 'measured' in the same edit. An
 # unmeasured ceiling raised on a hunch is how the 2026-08-20 throttle happened.
 $script:StoreCallCap = @{
-  'Family Fare' = @{ cap = 40;  basis = 'measured'; unit = 'search terms' }
+  'Family Fare' = @{ cap = 40;  basis = 'measured'; unit = 'search terms'; runs = 3 }
   'Hy-Vee'      = @{ cap = 120; basis = 'proposed'; unit = 'product ids' }
   "Baker's"     = @{ cap = 250; basis = 'proposed'; unit = 'search terms' }
   'Fareway'     = @{ cap = 45;  basis = 'proposed'; unit = 'search terms' }
   'Aldi'        = @{ cap = 45;  basis = 'proposed'; unit = 'search terms' }
-  "Sam's Club"  = @{ cap = 30;  basis = 'proposed'; unit = 'search terms' }
-  'Walmart'     = @{ cap = 25;  basis = 'proposed'; unit = 'search terms' }
+  "Sam's Club"  = @{ cap = 45;  basis = 'measured-clean'; unit = 'search terms' }
+  'Walmart'     = @{ cap = 45;  basis = 'measured-clean'; unit = 'search terms' }
 }
 # An unknown store gets the tightest cap in the table, never the loosest: a store nobody has
 # characterised is the one most likely to be walled by the request we have not thought about.
@@ -142,6 +175,39 @@ function Get-StoreCallCap([string]$Store) {
 function Get-StoreCallCapBasis([string]$Store) {
   if ($script:StoreCallCap.ContainsKey($Store)) { return [string]$script:StoreCallCap[$Store].basis }
   return 'default'
+}
+# How many capture runs a store's lane makes a day. The call cap is PER RUN, so a store whose limit is per window
+# (Family Fare) covers its daily rotation across several runs. Absent means one run a day.
+function Get-StoreRunsPerDay([string]$Store) {
+  if ($script:StoreCallCap.ContainsKey($Store) -and $script:StoreCallCap[$Store].ContainsKey('runs')) { return [int]$script:StoreCallCap[$Store].runs }
+  return 1
+}
+# Rotation terms ONE run asks for: the store's whole list inside RotationDays, spread over its runs a day.
+function Get-RotationTermsPerRun([int]$Terms, [string]$Store) {
+  if ($Terms -le 0) { return 0 }
+  $n = [int][math]::Ceiling($Terms / [double]$script:RotationDays / [double](Get-StoreRunsPerDay $Store))
+  if ($n -lt 1) { $n = 1 }
+  return $n
+}
+# THE CAPACITY INVARIANT (2026-09-19). One row per store: can its lane re-read every term inside RotationDays without
+# asking for more than its call cap, and is RotationDays inside the publish limit at all? test-capture-policy.ps1 fails
+# on any ok=$false, which is what makes a slower rotation a push-time refusal instead of a stale board.
+function Test-CaptureCapacity {
+  param([string[]]$Stores = @('Aldi', "Baker's", 'Family Fare', 'Fareway', 'Walmart', "Sam's Club"), [hashtable]$TermCounts = $null)
+  foreach ($s in $Stores) {
+    $terms = if ($TermCounts -and $TermCounts.ContainsKey($s)) { [int]$TermCounts[$s] } else { Get-StoreTermCount $s }
+    $need = Get-RotationTermsPerRun $terms $s
+    $cap = Get-StoreCallCap $s
+    $windowOk = ($script:RotationDays -le $script:MaxPublishAgeDays)
+    [pscustomobject]@{
+      Store = $s; Terms = $terms; RunsPerDay = (Get-StoreRunsPerDay $s); NeedPerRun = $need; Cap = $cap
+      RotationDays = $script:RotationDays; MaxPublishAgeDays = $script:MaxPublishAgeDays
+      Ok = ($windowOk -and $need -le $cap)
+      Why = if (-not $windowOk) { "RotationDays $($script:RotationDays) exceeds MaxPublishAgeDays $($script:MaxPublishAgeDays): a price would age out of publication before its turn comes round" }
+            elseif ($need -gt $cap) { "$terms terms / $($script:RotationDays) days / $(Get-StoreRunsPerDay $s) run(s) = $need a run, over the $cap cap: this store cannot be re-read inside the publish limit" }
+            else { '' }
+    }
+  }
 }
 
 function Get-PolicyJson([string]$name) {
@@ -245,10 +311,9 @@ function Get-CapturePlan {
   }
   $ordered = @($pending | Sort-Object @{e = { [string]$_.refresh_on }}, @{e = { [string]$_.id }})
 
-  # --- 3. quarterly rotation ------------------------------------------------
+  # --- 3. the rotation: the whole list inside RotationDays (the FRESHNESS RULE above), per run ---------
   $terms = Get-StoreTermCount $Store
-  $rotation = [int][math]::Ceiling($terms / [double]$script:QuarterDays)
-  if ($rotation -lt 1 -and $terms -gt 0) { $rotation = 1 }
+  $rotation = Get-RotationTermsPerRun $terms $Store
 
   # --- 4. the cap -----------------------------------------------------------
   # Expiries come FIRST, but they may not eat the whole run: the rotation is reserved its
@@ -283,6 +348,8 @@ function Get-CapturePlan {
     RotationTerms = $rotation
     QuarterDays   = $script:QuarterDays
     MaxCarryDays  = $script:MaxCarryDays
+    RotationDays  = $script:RotationDays
+    MaxPublishAgeDays = $script:MaxPublishAgeDays
     # What the pull should actually ask for today: the daily drip plus today's capped
     # slice of expiring sales, and never more than the store's call cap. An ad rollover
     # is a separate pull (the ad feed), not extra search terms.
