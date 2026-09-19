@@ -44,6 +44,16 @@ THE COST FORM (`--form single`, one candidate per call, 40 calls) IS BUILT BUT N
 still bound by the same cap, so one invocation sends at most 4 calls and a re-run skips every case
 already written. Brad approved the 4-call batched form only.
 
+A NO VERDICT CAN BE READ BACK WITHOUT PAYING AGAIN (`--recover`). Found on the first paid run,
+2026-09-19: the with-arm batch-2 decider wrote a complete, schema-valid DECIDE object, and then a
+user-level Stop hook (~/.claude/skills/recall-consulted-hook.py, which asks for a `Checked:` line under
+an absence claim) sent it a second turn. The CLI's envelope `result` is the LAST text block only, so
+the adapter read a one-paragraph `Checked:` trailer, found no JSON, and the cap refused the re-ask.
+The verdict was paid for and is in the session transcript. `--recover` reads that transcript, takes
+the LAST assistant text block whose payload passes the SAME schema and validate_decide the dispatch
+applies, and writes its rows marked `source: transcript-recovered` with the session named. It makes
+no call. A transcript with no conforming payload recovers nothing and says so.
+
 THE ACCEPTANCE BAR IS NOT RESTATED HERE. It is `AGREEMENT_BAR` in dedup_paired_probe.py, written on
 2026-09-09 before any decider ran, and `--score` reads it. This file imports nothing it could move.
 
@@ -276,6 +286,7 @@ def run(rows, form="batched", max_calls=PAID_CALL_CAP, dispatch=None, real_runne
                     "cost_usd_cli": round(res.cost_usd, 6), "seconds": res.seconds,
                     "model_usage": res.model_usage, "findings": list(res.findings),
                     "denials": list(res.denials), "missing_cases": missing,
+                    "session_id": res.session_id,
                     "note": (res.payload or {}).get("note") if res.payload else None,
                     "blobs": blobs}
         _append(calls_path, call_row)
@@ -312,6 +323,117 @@ def _append(path, row):
         os.makedirs(d)
     with io.open(path, "a", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def _texts(content):
+    if isinstance(content, str):
+        return [content]
+    out = []
+    for c in content or []:
+        if isinstance(c, dict) and c.get("type") == "text":
+            out.append(str(c.get("text") or ""))
+    return out
+
+
+def read_session(path):
+    """(first user text, [assistant text blocks in order]) of one CLI transcript."""
+    first_user, texts = None, []
+    with io.open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+            except ValueError:
+                continue
+            m = r.get("message") or {}
+            if r.get("type") == "user" and first_user is None:
+                t = _texts(m.get("content"))
+                if t:
+                    first_user = t[0]
+            elif r.get("type") == "assistant":
+                texts.extend(_texts(m.get("content")))
+    return first_user, texts
+
+
+def find_session(call_row, base):
+    """The transcript that answered this call: by the recorded session id, else by the prompt's hash."""
+    sid = str(call_row.get("session_id") or "").strip()
+    if sid:
+        p = os.path.join(base, sid + ".jsonl")
+        return p if os.path.isfile(p) else None
+    if not os.path.isdir(base):
+        return None
+    n = int(call_row.get("prompt_chars") or 0)
+    for fn in sorted(os.listdir(base)):
+        if not fn.endswith(".jsonl"):
+            continue
+        try:
+            first, _t = read_session(os.path.join(base, fn))
+        except OSError:
+            continue
+        if first and n and hashlib.sha256(first[:n].encode("utf-8")).hexdigest()[:16] == call_row.get("prompt_sha256"):
+            return os.path.join(base, fn)
+    return None
+
+
+def recover(calls_path=CALLS, verdicts_path=probe.VERDICTS, base=None, methods=None, log=print):
+    """Write rows for NO VERDICT calls from their own transcripts. Makes no call. Returns cases written."""
+    base = base or os.path.join(hunt_dispatch.TRANSCRIPT_BASE, hunt_dispatch.project_dir_name(REPO))
+    if methods is None:
+        import harvest                                            # noqa: PLC0415
+        methods, _u = harvest.load_methods()
+    allowed = set(methods) | {"any"}
+    calls = []
+    if os.path.isfile(calls_path):
+        with io.open(calls_path, encoding="utf-8") as fh:
+            calls = [json.loads(x) for x in fh if x.strip()]
+    done = done_cases(verdicts_path)
+    written = 0
+    for row in calls:
+        cases = row.get("cases") or []
+        arm = row.get("arm")
+        if row.get("ok") or all((c, arm) in done for c in cases):
+            continue
+        path = find_session(row, base)
+        if not path:
+            log("  recover %s batch %s: no transcript found - nothing written" % (arm, row.get("batch")))
+            continue
+        _first, texts = read_session(path)
+        chosen = None
+        for t in reversed(texts):
+            pl = hunt_dispatch.extract_payload(t)
+            if pl is None:
+                continue
+            probs = hunt_lib.validate_schema(pl, hunt_lib.DECIDE) + hunt_lib.validate_decide(pl, methods=allowed)
+            if not probs:
+                chosen = pl
+                break
+        if chosen is None:
+            log("  recover %s batch %s: the transcript holds no conforming DECIDE object - nothing written"
+                % (arm, row.get("batch")))
+            continue
+        sid = os.path.basename(path)[:-len(".jsonl")]
+        by = dict((d.get("slug"), d) for d in chosen.get("decisions") or [] if isinstance(d, dict))
+        n = 0
+        for c in cases:
+            d = by.get(c)
+            if not d or (c, arm) in done:
+                continue
+            _append(verdicts_path, {
+                "case": c, "arm": arm, "verdict": d.get("verdict"), "output_tokens": None,
+                "batch": row.get("batch"), "batch_size": len(cases), "form": row.get("form"),
+                "batch_input_tokens": row.get("tokens_in"), "batch_output_tokens": row.get("tokens_out"),
+                "reason": d.get("reason"), "dupe_of": d.get("dupe_of") or [],
+                "precedents": d.get("precedents") or [], "generated": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                "input_fingerprint": row.get("input_fingerprint"),
+                "source": "transcript-recovered", "recovered_session": sid})
+            n += 1
+        written += n
+        log("  recover %s batch %s: %d of %d case(s) read back from session %s, no call made"
+            % (arm, row.get("batch"), n, len(cases), sid))
+    return written
 
 
 def dry_run(rows, form, log=print):
@@ -494,6 +616,45 @@ def selftest():
           len(sent) - n5 == 4 and s5["paid_calls"] == 4 and len(rows5) == 4
           and all(r["output_tokens"] == 900 for r in rows5), (len(sent) - n5, len(rows5)))
 
+        # MUST FIRE: the Stop-hook shape. A conforming answer followed by a `Checked:` trailer is
+        # read back from the transcript, and it costs nothing.
+        tx = os.path.join(tmp, "tx")
+        os.makedirs(tx)
+        good = _fake_env([("c10", "accepted"), ("c11", "rejected-dupe")])["result"]
+        prompt6 = "Rule on 2 candidate dossier(s) for run x."
+        with io.open(os.path.join(tx, "sess-a.jsonl"), "w", encoding="utf-8") as fh:
+            fh.write(json.dumps({"type": "user", "message": {"content": prompt6 + " CONTRACT"}}) + "\n")
+            fh.write(json.dumps({"type": "assistant", "message": {"content": [
+                {"type": "text", "text": "Consulted: nothing.\n\n" + good}]}}) + "\n")
+            fh.write(json.dumps({"type": "assistant", "message": {"content": [
+                {"type": "text", "text": "Checked: not checked - no live twin claim rests on the shortlist."}]}}) + "\n")
+        cp6, vp6 = os.path.join(tmp, "c6.jsonl"), os.path.join(tmp, "v6.jsonl")
+        _append(cp6, {"arm": "with", "batch": 2, "form": "batched", "cases": ["c10", "c11"], "ok": False,
+                      "prompt_sha256": hashlib.sha256(prompt6.encode("utf-8")).hexdigest()[:16],
+                      "prompt_chars": len(prompt6), "tokens_in": 5, "tokens_out": 7,
+                      "input_fingerprint": FROZEN_FINGERPRINT})
+        n_before = len(sent)
+        got6 = recover(cp6, vp6, base=tx, methods=["skillet"], log=lambda *_: None)
+        r6 = probe.load_verdicts(vp6)
+        T("MUST FIRE", "a verdict hidden behind a Checked trailer is read back from the transcript",
+          got6 == 2 and sorted((r["case"], r["verdict"]) for r in r6) == [("c10", "accepted"), ("c11", "rejected-dupe")]
+          and all(r["source"] == "transcript-recovered" and r["recovered_session"] == "sess-a" for r in r6)
+          and len(sent) == n_before, (got6, r6))
+        T("CLEAN TWIN", "a second recover over the same rows writes nothing more",
+          recover(cp6, vp6, base=tx, methods=["skillet"], log=lambda *_: None) == 0
+          and len(probe.load_verdicts(vp6)) == 2)
+        # MUST NOT FIRE: an answer that never conformed is not rescued into a verdict.
+        with io.open(os.path.join(tx, "sess-a.jsonl"), "w", encoding="utf-8") as fh:
+            fh.write(json.dumps({"type": "user", "message": {"content": prompt6}}) + "\n")
+            fh.write(json.dumps({"type": "assistant", "message": {"content": [
+                {"type": "text", "text": '{"decisions": [{"slug": "c10", "verdict": "maybe"}]}'}]}}) + "\n")
+        vp7 = os.path.join(tmp, "v7.jsonl")
+        T("MUST NOT FIRE", "a non-conforming answer recovers nothing",
+          recover(cp6, vp7, base=tx, methods=["skillet"], log=lambda *_: None) == 0
+          and not probe.load_verdicts(vp7))
+        os.remove(os.path.join(tx, "sess-a.jsonl"))
+        os.rmdir(tx)
+
         # The real frozen file is the approved one.
         if os.path.isfile(probe.CASES):
             T("CLEAN TWIN", "the committed cases.jsonl is the approved frozen set",
@@ -517,6 +678,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--dry-run", action="store_true", help="build every prompt, send nothing")
+    ap.add_argument("--recover", action="store_true",
+                    help="read a NO VERDICT call's answer back from its own transcript; makes no call")
     ap.add_argument("--form", choices=("batched", "single"), default="batched",
                     help="batched = the approved 4 calls; single = the unapproved cost form")
     ap.add_argument("--max-calls", type=int, default=PAID_CALL_CAP,
@@ -524,6 +687,10 @@ def main(argv=None):
     a = ap.parse_args(argv)
     if a.selftest:
         return selftest()
+    if a.recover:
+        n = recover()
+        print("DEDUP-PAIRED-RUN-COMPLETE recover rows=%d paid_calls=0" % n)
+        return EXIT_OK if n else EXIT_NO_VERDICT
     rows = load_cases()
     if a.dry_run:
         return dry_run(rows, a.form)

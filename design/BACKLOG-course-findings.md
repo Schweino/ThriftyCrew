@@ -5184,7 +5184,99 @@ question is answerable without archaeology.
 **What it is not.** Not a proposal to adopt propensity scores or IPTW. This estate mostly compares
 two configurations it controls, where the repair is a paired design (I48), not an adjustment.
 
-### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `NEEDS A RULING` `queue-4` `2-WAY` `RUNG1 RULING`
+### I48 - comparisons here are between-runs when a within-pairs design is available and cheaper `DONE - THE ARMS RULE DIFFERENTLY: 13 OF 20 AGREE AGAINST A BAR OF 18, SO THE NEIGHBOUR BLOCK CHANGES VERDICTS AND BAR 2 IS NOT READ` `queue-4`
+
+**Done 2026-09-19.** Brad approved exactly 4 paid Opus decider calls in the production batched form (two
+batches of 10 per arm) to answer the safety question only. **The answer is no: the arms disagree on 7 of
+the 20 cases.** `dedup_paired_probe.py --score` exits 2 with `VERDICTS DIFFER`, agreement **13 of 20 =
+0.65** against the bar of 0.90 (18 of 20). The bar was not moved. It is `AGREEMENT_BAR` in
+`dedup_paired_probe.py`, committed 2026-09-09 in 65b97d0c8 (blob `4a35dfdf8ee9`) before any decider ran,
+and the runner was committed before the first call. As the bars require, bar 2 (cost) was not read, and
+the 40-call cost measurement was not run.
+
+**The 7 cases where the arms disagree** (the `with` arm has the neighbour block, the `without` arm does not):
+
+| batch | case | with | without |
+|---|---|---|---|
+| 1 | chicken-corn-chowder-soup | rejected-dupe of live `turkey-corn-chowder` | accepted |
+| 1 | chicken-gnocchi-soup | rejected-dupe of live `creamy-turkey-gnocchi-soup` | accepted |
+| 1 | air-fryer-chicken-bites-and-broccoli | rejected-dupe of live `hot-honey-chicken-bowls` | accepted |
+| 1 | chicken-white-bean-soup | rejected-dupe of live `tuscan-white-bean-sausage-soup` and `turkey-sausage-kale-white-bean-soup` | accepted |
+| 2 | grilled-cilantro-lime-chicken | rejected-not-fit (thin protein prep, flavour carried by a live bowl) | accepted |
+| 2 | lemon-pepper-chicken-skewers-air-fryer-recipe | rejected-not-fit | rejected-dupe of this run's own `air-fryer-chicken-bites-and-broccoli` |
+| 2 | sheet-pan-bbq-meatballs | rejected-dupe of live `sheet-pan-bbq-turkey-meatballs-over-rice` (bge 0.929) | rejected-not-fit (carb load) |
+
+**What it means.** Without the evidence the decider accepted **16 of 20**, against **11 of 20** with it.
+Of the 5 live-catalog duplicates the `with` arm caught, the `without` arm accepted 4 and rejected the
+fifth for a different reason. Every one of the 6 dupes the `with` arm named was in that case's neighbour
+block, each found by BOTH signals (`word-overlap` and `bge-m3`, cosine 0.795 to 0.929). Four of the five
+are cross-protein twins (the same dinner in chicken and in turkey), which is exactly the collision the
+agent definition says the scores alone can miss. Batch 1 is the cleanest read because it involves no
+transcript recovery: **6 of 10 agree**, and all 4 disagreements are the same shape, a named live twin in
+the `with` arm and an acceptance in the `without` arm. **The harness's premise was that the evidence
+had "never been observed to change a verdict, only the cost". On these 20 cases it changes the verdict
+more often than anything else does.** So the neighbour block is carrying accuracy, and removing it to
+save tokens is not on the table. That settles the cost question without the 40 calls.
+
+**How far to trust this.** 20 cases, one run per arm, and the decider's own run-to-run variance was not
+measured (nobody ruled the same arm twice). Variance can explain some disagreement. It cannot easily
+explain 5 disagreements all in one direction, each citing a live twin that is shown in the evidence and
+absent from the other arm's prompt. Nobody has checked the `with` arm's dupe rulings by hand. Their
+reasons name the shared ingredients, and all six cited recipes are in the neighbour block, but "the
+`with` arm is right" is a reading of those reasons, not something this run measured.
+
+**The run.** `meal-prep/pipeline/dedup_paired_run.py` (new). It builds each prompt with the daemon's own
+`Daemon.decide_prompt` and sends it through `hunt_dispatch.dispatch` to `recipe-dedup-selector`, which is
+pinned to `claude-opus-4-8` at effort high, with `hunt_lib.DECIDE` and `validate_decide`, in the daemon's
+`DECIDE_BATCH` of 10. The batches are in the frozen `dossier_rank` order (fingerprint `34be0270169e593c`,
+cases blob `3d9ff385215a`). The in-flight side is held empty for both arms, and so is the precedent
+window (`blind`, the same bytes in both). Both arms use one run id, and batch 2 carries that arm's own
+batch-1 acceptances, as the daemon does. It applies nothing and writes only
+`meal-prep/db/dedup-paired/{verdicts,calls}.jsonl`, one row per case per arm and one row per call.
+**Hard cap of 4 billed CLI invocations per run.** A schema re-ask counts as one, and it is refused
+whenever it would starve a later batch. The calls ran at runner blob `843d67fec9d4`, `hunt-daemon.py` blob
+`016df9d084ea`, `hunt_dispatch.py` blob `1fd2720d1b80`, and agent blob `ecba937917dd`, on base cbf146ee8.
+
+**Tokens and cost, per call, as the CLI envelope reports them** (in = input + cache read + cache write):
+
+| call | in | out | turns | cost (CLI) |
+|---|---|---|---|---|
+| with, batch 1 | 86,577 | 13,330 | 1 | $1.1990 |
+| without, batch 1 | 144,929 | 6,690 | 2 | $0.8886 |
+| with, batch 2 | 185,694 | 11,646 | 2 | $1.2613 |
+| without, batch 2 | 70,020 | 12,489 | 1 | $0.9521 |
+| **total, 4 paid calls** | **487,220** | **44,155** | | **$4.3010** |
+
+These are batch totals and not a bar-2 reading, and they cannot become one. One call bills one output
+total for ten candidates, so `output_tokens` is null on every row and `--score` would say BLIND ON TOKENS
+even if bar 1 had held.
+
+**ONE CALL CAME BACK NO VERDICT, AND ITS VERDICT WAS READ BACK WITHOUT A FIFTH CALL.** The `with` batch-2
+decider wrote a complete DECIDE object that conforms to the schema. Then the user-level Stop hook
+`~/.claude/skills/recall-consulted-hook.py` (registered in `~/.claude/settings.json`) saw an absence
+claim ("no enchilada exists in the catalog") with no `Checked:` line and gave the decider a second turn.
+The CLI envelope's `result` holds only the LAST text block, so `hunt_dispatch.py:622` read a
+one-paragraph `Checked: not checked` trailer and found no JSON. The cap then refused the re-ask, as it
+was built to. The runner's new `--recover` mode reads that call's own session transcript, takes the last
+assistant text block that passes the SAME schema and `validate_decide`, and writes its 10 rows marked
+`source: transcript-recovered` with the session named. It makes no call. Of the 20 pairs, 10 came through
+the pipeline path end to end on both sides. The other 10 (batch 2) carry a recovered `with` verdict, and
+3 of the 7 disagreements are in them.
+
+**Verified.** `dedup_paired_run.py --selftest` exit 0, 18 of 18, zero tokens (the dispatch is injected).
+Five single mutants, each run from the file and restored md5-identical afterwards, went red in a named
+case: in-flight not held out, cap removed, re-ask reserve removed, recover reading only the last block,
+and recover skipping validation. `--dry-run` printed the four prompt sizes (50,082 / 15,014 / 48,776 /
+13,926 chars) and showed that `catalog_checked` and `neighbours` are the only fields that differ between
+the arms. One thing the arm definition did not anticipate is also printed: `decide_prompt` always writes
+`catalog_checked`, so the `without` arm as production would send it carries
+`{"in_flight_recipes_searched": 0, "in_flight_matches": 0}` and none of the live-catalog counts.
+`dedup_paired_probe.py --selftest` exit 0, 11 of 11.
+
+**RE-CHECK:** `python meal-prep/pipeline/dedup_paired_probe.py --score` reads the committed
+`verdicts.jsonl` and exits 2, `VERDICTS DIFFER`, 13 of 20.
+
+**The earlier passes, kept for the record:**
 
 **RE-WORKED 2026-09-19 (worktree i48-work, at f092c8d57). Stopped at the ruling, because the only step left spends money on Opus calls.** The bars were not moved: they were written into `dedup_paired_probe.py` on 2026-09-09, before any decider ran, and this pass ran no decider. Measured, all read-only:
 
@@ -5579,7 +5671,15 @@ what it says would produce two round-trip numbers and call them decode.
 
 **Constraint acknowledged.** Nothing in `serve.ps1`, `sidecar/` or any model artefact was changed.
 
-### I55 - two courses ruled "no motive for LoRA here" against the reranker, while a measured QLoRA plan for the local 27B sat unread `PARTLY DONE - THE QUESTION IS ANSWERABLE NOW; THE SPEND DECISION IS STILL BRAD'S` `queue-4` `1-WAY` `RUNG1 RULING`
+### I55 - two courses ruled "no motive for LoRA here" against the reranker, while a measured QLoRA plan for the local 27B sat unread `PARKED - BRAD RULED NOT YET, 2026-09-19: NO GPU HOURS UNTIL THERE IS A CONCRETE ACCURACY TARGET THE FINE-TUNE MUST BEAT` `queue-4`
+
+**`[PARKED 2026-09-19. Brad ruled NOT YET on the 17 to 25 h GPU fine-tune.]`** The holdout split and
+the scorer below stay built and unused. **THE TRIGGER THAT REOPENS THIS:** a concrete accuracy target
+the fine-tuned 27B must beat, stated as a number on a named case set before any training run - for
+example a cold-start false-MATCH rate on `split_holdout.py`'s holdout that some decision downstream
+actually needs, below the stock-27B 29% baseline that `eval_holdout.py` already reads. Until someone
+can name that target and the decision it would change, no GPU time is spent. Nothing was run or
+changed for this ruling.
 
 **`[2026-09-09. Brad ruled: build the holdout and the eval first, decide after. No GPU time was spent.]`**
 
