@@ -18593,3 +18593,27 @@ is caught at list time instead of at send time, with a MUST FIRE (a queue line w
 CLEAN TWIN (a line that has it still lists clean). Better still, the staging seam in `lib/ghost-lib.ps1`
 should add the header itself when a body is JSON, so a hand-written staging script cannot leave it out.
 Reversible: a check and a default header; neither changes what any correct queue sends.
+
+### I296 - add-known-wrong -AlsoName without -Name writes a ruling against the alias only, which blocks nothing `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\orchestrator-2026-09-19b.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** 2026-09-19, the green-chilli known-wrong rulings (landed e438ce71f). The agent running
+`grocery/add-known-wrong.ps1` with `-AlsoName` and no `-Name` found the script discards the name it reads off the
+board (around lines 157 and 174) and writes the entry against the alias alone. That entry matches no board cell, so
+`audit-known-wrong` never fires on it: a ruling that looks recorded and enforces nothing. The agent reverted it before
+committing and re-ran with `-Name`, so no such entry is on main.
+
+**Fix.** When `-AlsoName` is given without `-Name`, keep the board-read name and ADD the alias, never replace it. A
+MUST FIRE: an entry written that way still blocks the board product. A CLEAN TWIN: `-Name` plus `-AlsoName` writes
+both, as today.
+
+### I297 - test-match-lib reads categories.json and category-excludes.json undeclared, so audit-fixture-inputs is red on main `OPEN` `queue-6` `2-WAY` `RUNG1 BUILD`
+
+**Merged from `design\backlog-inbox\orchestrator-2026-09-19b.md` on 2026-09-19.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
+
+**Source.** 2026-09-19, found by the agent building the prepush live-red rule. `ops/audit-fixture-inputs.ps1` is red
+on origin/main and runs daily only, so pushes do not see it: two new undeclared dependencies,
+`grocery/test-match-lib.ps1` reading `categories.json` and `category-excludes.json`, which arrived with the 08:22
+commits ee218cf06 and 117315d9c (the condiment class fixtures). Declare them the way the audit expects (read its
+header), or read them through a declared input, and confirm the audit exits 0.
