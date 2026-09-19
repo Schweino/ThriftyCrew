@@ -405,6 +405,37 @@ $cases = @(
      why='THE SECOND LANDING released from pasta, the frozen meal fell onto frozen-meatballs; measured and refused before the write' }
   @{ id='alfredo-sauce'; name='Pasta Roni Fettuccine Alfredo 4.7 Oz'; expect='excluded'
      why='THE SECOND LANDING released from pasta, the side mix fell onto alfredo-sauce; measured and refused before the write' }
+
+  # ---- frozen-peas: an unlabelled 15 oz CAN held the frozen cell (backlog I193, Brad's approval 2026-09-19) ----
+  # frozen-peas carried two no-form includes, bare green\s+peas and sweet\s+green\s+peas, so a can whose name
+  # says only "Green Peas" priced frozen peas: Fareway Corner Store 0.0513/oz on comparison-2026-09-17, about
+  # 37% under the cheapest real frozen cell. Brad's ruling: frozen peas must see a frozen word, and canned peas
+  # take the plain green-peas spelling. Measured over 44,821 corpus names (match baseline keys plus the
+  # identity files), 5 change route: 4 cans to canned-peas, and one frozen kids' meal to nowhere.
+  @{ id='frozen-peas'; name='Great Value No Salt Added Green Peas, 15 oz'; expect='no-include-match'
+     why='MUST FIRE an unlabelled 15 oz can held the Walmart frozen-peas cell at 0.0547/oz (walmart-regular-2026-09-17)' }
+  @{ id='frozen-peas'; name='Corner Store Green Peas, Sweet'; expect='no-include-match'
+     why='FOUNDING CASE the 15 oz can Fareway shelves in Canned Goods held the cheapest frozen-peas cell at 0.0513/oz (fareway-regular-2026-09-12)' }
+  @{ id='canned-peas'; name='Great Value No Salt Added Green Peas, 15 oz'; expect='included'
+     why='CLEAN TWIN released from frozen, the can lands on canned-peas through the plain green-peas spelling' }
+  @{ id='canned-peas'; name='Libby''s Kosher Sweet Green Peas, 15 Oz'; expect='included'
+     why='CLEAN TWIN the Libby''s 15 oz can, which sweet\s+green\s+peas had sent to frozen, lands on canned-peas' }
+  @{ id='frozen-peas'; name='Birds Eye Baby Sweet Peas, Frozen Vegetables'; expect='included'
+     why='CLEAN TWIN a real frozen bag that names its form still routes to frozen-peas' }
+  @{ id='frozen-peas'; name='Kroger Frozen Sweet Green Peas'; expect='included'
+     why='CLEAN TWIN "frozen sweet green peas" needed sweet\s+green\s+peas until frozen\s+ took both adjectives; the first cut of this fix dropped it to nothing' }
+  @{ id='canned-peas'; name='Kroger Frozen Sweet Green Peas'; expect='excluded'
+     why='and the new canned spelling does not claim a frozen bag, the pre-existing frozen exclude holds it out' }
+  @{ id='frozen-peas'; name='Fareway Green Peas'; expect='included'
+     why='CLEAN TWIN the Fareway 32 oz store-brand bag names no form but is the frozen line: $3.99 regular beside Fareway Cut Corn 32 oz (frozen-corn) and Fareway Mixed Vegetables 32 oz (frozen-vegetables), found by the term frozen peas (fareway-regular-2026-09-12)' }
+  @{ id='canned-peas'; name='Fareway Green Peas'; expect='excluded'
+     why='canned-peas is earlier in file order, so without this exclude its new green-peas spelling would take the bag' }
+  @{ id='frozen-peas'; name='Comfort Cravers Spider-Man Spiral Pasta & Meatballs with Green Peas and Chocolate Brownie, 9 oz (Frozen)'; expect='no-include-match'
+     why='a frozen kids'' meal is not frozen peas, and only the bare green\s+peas include let it in (walmart identity file, 2026-09-18)' }
+  @{ id='frozen-meatballs'; name='Comfort Cravers Spider-Man Spiral Pasta & Meatballs with Green Peas and Chocolate Brownie, 9 oz (Frozen)'; expect='excluded'
+     why='THE SECOND LANDING released from frozen-peas, the meal fell onto frozen-meatballs; the pasta-and-meatballs meal fence, beside the spaghetti one, sends it nowhere' }
+  @{ id='frozen-meatballs'; name='Bremer Italian Style Meatballs 32 OZ'; expect='included'
+     why='CLEAN TWIN a real bag of frozen meatballs is untouched by the meal fence' }
 )
 
 $bad = 0

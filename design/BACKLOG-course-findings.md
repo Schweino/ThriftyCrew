@@ -14433,7 +14433,7 @@ rather than REMOVING the copies, and it has an allowlist (`allowed_subsets`) and
 consolidation costs one edit per file, once, in scripts some of which are lifted. Nothing is broken
 today, which is why this is a ruling and not work.
 
-### I193 - seven commodity pairs of different forms share most of their store listings, which a correct graph cannot hold `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
+### I193 - seven commodity pairs of different forms share most of their store listings, which a correct graph cannot hold `DONE` `queue-6`
 
 **Merged from `design\backlog-inbox\q6-neo4j-2026-09-18.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -14469,6 +14469,25 @@ today, which is why this is a ruling and not work.
 - **B. Two `known-wrong.json` entries** (the Fareway and Walmart listings on `frozen-peas`). Immediate and reversible, but brand-shaped (`[[wrong-product-class-is-a-seller-shape]]`), so the next unlabelled can takes the cell.
 - **C. Leave it.** Frozen peas stay advertised at a canned price, about 37% under the cheapest honest cell (0.0513 against Aldi's 0.0808).
 - **Recommendation: B now, then A.** Under B `frozen-peas` cheapest moves off 0.0513 on the next build, to Aldi 0.0808 on the 2026-09-17 board unless Fareway's 32 oz bag undercuts it, and the 28 recipes that name `frozen-peas` recost. Do A once the concurrent `commodities.json` work lands. Adding a can exclude to `recipe-commodities.json` `frozen-green-peas` is optional hygiene: it reaches no recipe cost today.
+
+**Done 2026-09-19. Rule fix landed on Brad's approval 2026-09-19** (option A: frozen peas must see a frozen word, canned peas take the plain "green peas" spelling). In `grocery/commodities.json`: `frozen-peas` loses the two no-form includes (bare `green\s+peas\b` and `sweet\s+green\s+peas`), and its `frozen\s+` include now takes both adjectives, so "Kroger Frozen Sweet Green Peas" stays (the first cut dropped it to nothing, caught by the measurement below). `canned-peas` gains `green\s+peas\b`; its existing `\bfrozen\b` and `steamable` excludes keep the bags out. Two named decisions, each with its evidence:
+- **"Fareway Green Peas" 32 oz stays `frozen-peas`**, by an anchored exact-name include there and the same exclude on `canned-peas` (which is earlier in file order). It names no form, but it is Fareway's frozen store-brand bag: 32 oz at $3.99 regular ($2.94 sale, 0.0919/oz), priced and sized exactly like "Fareway Cut Corn" 32 oz (`frozen-corn`) and "Fareway Mixed Vegetables" 32 oz (`frozen-vegetables`), found by the term "frozen peas" (`fareway-regular-2026-09-12`). No can of peas is sold at 32 oz. The product page (UPC 0002133399007) shows no breadcrumb, so the page itself does not settle it.
+- **The Comfort Cravers Spider-Man pasta-and-meatballs kids' meal leaves peas for nowhere.** Released from `frozen-peas` it fell onto `frozen-meatballs` (it was already eligible there), so that commodity gains `pasta\s+(?:&|and)\s+meatballs?` beside its existing `spaghetti\s+(?:&|and)` meal fence.
+
+**Moved names, measured over 44,821 names** (every key in `grocery/out/audit/match-baseline.json` plus every name in `graph/identity/*/*.jsonl`), old rules = `commodities.json` at 42056585e (the non-food bundle, which this change waited for), new = this change, same first-match replica as `audit-match-soundness`. Every changed pattern needs the literal "peas" or "meatball" to match, so the 329 names carrying either were evaluated and the rest cannot move. 5 changed route, and no other name's eligible set changed:
+- `Great Value No Salt Added Green Peas, 15 oz`: frozen-peas to canned-peas
+- `Corner Store Green Peas, Sweet` (15 oz, Fareway "Canned Goods & Soups"): frozen-peas to canned-peas
+- `Libby's Kosher Sweet Green Peas, 15 Oz`: frozen-peas to canned-peas
+- `(24 pack) Libby's Kosher Sweet Green Peas, 15 Oz`: frozen-peas to canned-peas
+- `Comfort Cravers Spider-Man Spiral Pasta & Meatballs with Green Peas and Chocolate Brownie, 9 oz (Frozen)`: frozen-peas to unmatched
+
+**Board, rebuilt twice from the same inputs** (`ads-2026-09-17`, `bakers-deals-2026-09-09`, `fareway-deals-2026-09-17`, every `sams-deals`, the main checkout's `out/regular`; board week 2026-09-17), old rules against new, on the 42056585e engine: 572 commodities and 3,761 cells compared, 4 changed, all on the two peas commodities. The old arm reproduces the live `comparison-2026-09-17.json` peas cells exactly.
+- `frozen-peas` cheapest: Fareway 0.0513 (the can) to **Walmart 0.0612, "Great Value Frozen Sweet Peas, Steamable Bag, 16 oz"**, a real frozen bag the can had been hiding. That is lower than the ~0.0808 the ruling expected, because the Walmart cell was also a can.
+- `frozen-peas` Fareway: 0.0513 Corner Store can to 0.0919 Fareway Green Peas 32 oz.
+- `frozen-peas` Walmart: 0.0547 GV No Salt Added can to 0.0612 GV Frozen Sweet Peas 16 oz.
+- `canned-peas` Walmart: same 0.0547, the holder changes from "(12 pack) Great Value Sweet Peas" to the GV No Salt Added 15 oz can at the same unit price. `canned-peas` cheapest is unchanged (Fareway 0.0453).
+
+The 28 recipes that name `frozen-peas` recost through the normal daily chain. `grocery/out/audit/match-baseline.json` re-points only the 4 baseline names above plus `rules_hash`; no wholesale accept. **Fixtures:** 12 cases in `grocery/test-commodity-rules.ps1` (MUST FIRE: the unlabelled GV 15 oz can gets no `frozen-peas` include; CLEAN TWIN: "Birds Eye Baby Sweet Peas, Frozen Vegetables" and "Kroger Frozen Sweet Green Peas" still route to `frozen-peas`, and the can lands on `canned-peas`). Broken once by pointing the suite at the pre-change rules: exit 1, 8 of 132 cases red, every one a new case; on the change, exit 0, 132 of 132. Harnesses were scratch and are described here, not committed: the question is one-off.
 
 ### I194 - node similarity over instance_of names 28 staple/recipe twins with identical ids, which is the candidate list the reserved same_as predicate has never had `NEEDS A RULING` `queue-6` `2-WAY` `RUNG1 RULING`
 

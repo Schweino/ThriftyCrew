@@ -30642,10 +30642,12 @@
                         "sweet\\s+peas\\b",
                         "early\\s+(?:june\\s+)?peas",
                         "canned\\s+peas",
-                        "\\bpeas\\s+sweet\\b"
+                        "\\bpeas\\s+sweet\\b",
+                        "green\\s+peas\\b"
                     ],
         "exclude":  [
                         "\\bfrozen\\b",
+                        "^\\s*fareway\\s+green\\s+peas\\s*$",
                         "snap",
                         "black-?eyed",
                         "chick",
@@ -38014,12 +38016,11 @@
                          ],
         "include":  [
                         "\\bfrozen\\s+(?:sweet\\s+)?garden\\s+peas\\b",
-                        "frozen\\s+(?:sweet\\s+|green\\s+)?peas",
+                        "frozen\\s+(?:sweet\\s+)?(?:green\\s+)?peas",
                         "steamable\\s+peas",
                         "(?:sweet|green)\\s+peas\\b.{0,20}\\b(?:frozen|bag|steam)",
                         "steamables?\\b.{0,20}peas",
-                        "sweet\\s+green\\s+peas",
-                        "green\\s+peas\\b"
+                        "^\\s*fareway\\s+green\\s+peas\\s*$"
                     ],
         "exclude":  [
                         "\\bcanned\\b",
@@ -38495,6 +38496,7 @@
                     ],
         "exclude":  [
                         "spaghetti\\s+(?:\u0026|and)",
+                        "pasta\\s+(?:\u0026|and)\\s+meatballs?",
                         "\\bsoup\\b",
                         "\\bsub\\b",
                         "sauce\\s+jar",
