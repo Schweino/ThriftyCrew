@@ -12351,6 +12351,7 @@
                         "\\bsugar\\b"
                     ],
         "exclude":  [
+                        "\\bblood\\s+sugar\\b",
                         "\\bcurd\\b",
                         "\\bgranola\\b",
                         "brown",
@@ -41267,6 +41268,7 @@
                         "\\boregano\\b"
                     ],
         "exclude":  [
+                        "^simple\\s+truth\\s+organic\\s+oregano$",
                         "tomatoes?|canned",
                         "\\bfresh\\b",
                         "\\bplant\\b",
@@ -41380,7 +41382,8 @@
         "band_min":  1,
         "band_max":  12,
         "include":  [
-                        "fresh\\s+oregano"
+                        "fresh\\s+oregano",
+                        "^simple\\s+truth\\s+organic\\s+oregano$"
                     ],
         "exclude":  [
                         "dried",
@@ -46784,9 +46787,11 @@
                         "onion\\s+soup\\b.{0,15}\\bmix\\b",
                         "onion\\s+recipe\\s+soup\\b.{0,20}\\bmix\\b",
                         "onion\\s+dip\\s+mix",
-                        "recipe\\s+soup\\s*\u0026\\s*dip\\s+mix,\\s*(?:\\w+\\s+)?onion"
+                        "recipe\\s+soup\\s*\u0026\\s*dip\\s+mix,\\s*(?:\\w+\\s+)?onion",
+                        "onion\\s+recipe\\s+secrets\\s+soup\\b.{0,20}\\bmix\\b"
                     ],
         "exclude":  [
+                        "\\bbeefy\\b",
                         "ranch",
                         "powder",
                         "\\bflakes?\\b",
@@ -46890,6 +46895,7 @@
                     ],
         "relax_global":  [
                              "\\bsoup\\b",
+                             "\\bdip\\b",
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
                          ]
     },
@@ -52088,7 +52094,8 @@
         "label":  "Chinese Five Spice",
         "unit":  "oz",
         "include":  [
-                        "five\\s*spice"
+                        "five\\s*spice",
+                        "\\b5[\\s-]*spice\\b"
                     ],
         "exclude":  [
                         "beech\\s*nut",
@@ -61408,6 +61415,7 @@
                         "coconuts?\\b"
                     ],
         "exclude":  [
+                        "\\bchunks?\\b",
                         "\\bmilk\\b",
                         "\\bcream\\b",
                         "\\bwater\\b",

@@ -1315,7 +1315,71 @@
                                            "as_of":  "2026-09-04",
                                            "source":  "promoted from ingredient-queue term \u0027shredded low-moisture mozzarella\u0027",
                                            "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
-                                       }
+                                       },
+                 "berbere-seasoning":  {
+                     "verdict": "UNKNOWN",
+                     "as_of": "2026-09-19",
+                     "why": "NOT ESTABLISHED EITHER WAY, and deliberately not recorded NOT-CARRIED. Three stores answered on two or more wordings and none carry it; four answered on ONE wording only ('berbere seasoning', the commodity-search term), and one wording is never enough (derive-not-carried.ps1, backlog I221). No store was found carrying it in store. The second wording 'berbere' was added to commodity-search.json the same day, so the rotation asks the four stores again and derive-not-carried can settle it from their own captures.",
+                     "stores": {
+                         "Baker's": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "berbere seasoning",
+                                 "berbere",
+                                 "ethiopian spice"
+                             ],
+                             "evidence": "2026-09-19, Kroger product API filter.locationId=61500319. Daily pull receipt 'berbere seasoning' outcome empty, 0 rows (bakers-regular-2026-09-19.json capture_terms). Hand probe 'berbere' -> 5 rows, all berberine supplements (Kroger Berberine HCl 500mg, Force Factor Ultra Berberine, Nature's Truth Berberine, Irwin Naturals, Force Factor chews); 'ethiopian spice' -> 0 rows."
+                         },
+                         "Hy-Vee": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "berbere",
+                                 "berbere seasoning",
+                                 "ethiopian"
+                             ],
+                             "evidence": "2026-09-19, POST https://www.hy-vee.com/aisles-online/api/search/products storeId 1466. 'berbere' -> 3 rows, all berberine supplements; 'berbere seasoning' -> 5 rows (Yellowstone Skillet rub, Nature's Bounty Berberine, Zatarain's Creole, Patak's BBQ Tandoori rub, Rib Rack rub), no berbere; 'ethiopian' -> 6 rows, all coffee."
+                         },
+                         "Family Fare": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "berbere"
+                             ],
+                             "evidence": "2026-09-19, GET https://api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&q=berbere -> HTTP 200 with no items. Not a throttle: the next request in the same run, q=caraway, answered 3 items (Mc Cormick Whole Caraway Seed 0.9 Oz $4.59). One wording only."
+                         },
+                         "Walmart": {
+                             "state": "not-carried",
+                             "terms_tried": [
+                                 "berbere seasoning"
+                             ],
+                             "evidence": "Walmart store 5361 captures under the exact term 'berbere seasoning': walmart-capture-2026-08-31.csv 29 rows (18 berbere products) and walmart-capture-2026-09-02.csv 27 rows (17 berbere products). Every berbere row is fulfilment MARKETPLACE (The Spice Way, Frontier Co-op via Cozy Farm, Spice Hut, NY Spice Shop, Birch & Meadow, Bart). None is STORE, so Walmart ships it and does not shelve it. One wording, but the search demonstrably reached the product class."
+                         },
+                         "Sam's Club": {
+                             "state": "unchecked-second-wording",
+                             "terms_tried": [
+                                 "berbere seasoning"
+                             ],
+                             "evidence": "sams-capture-2026-08-15.csv 21 rows and sams-capture-2026-08-28.csv 20 rows under 'berbere seasoning', no berbere product in either. One wording only."
+                         },
+                         "Aldi": {
+                             "state": "unchecked-second-wording",
+                             "terms_tried": [
+                                 "berbere seasoning"
+                             ],
+                             "evidence": "aldi-capture-2026-08-05.csv 9 rows and aldi-capture-2026-09-01.csv 50 rows under 'berbere seasoning' (In-Store, OLA 42), no berbere product. One wording only."
+                         },
+                         "Fareway": {
+                             "state": "unchecked-second-wording",
+                             "terms_tried": [
+                                 "berbere seasoning"
+                             ],
+                             "evidence": "fareway-shop-2026-08-26.jsonl, term 'berbere seasoning', 72 candidate rows, no berbere product. One wording only."
+                         }
+                     },
+                     "terms_never_tried": [
+                         "berbere (at Sam's Club, Aldi, Fareway, Walmart)"
+                     ],
+                     "recheck": "Promote to NOT-CARRIED only when Sam's Club, Aldi, Fareway and Walmart have each answered a second wording ('berbere'). A CARRIED row anywhere ends this entry."
+                 }
              },
     "_parked_doc":  "parked_recipes lists slugs held out of the catalogue by this ingredient. They were unpublished to DRAFT on Ghost, not deleted, precisely so a CARRIED verdict can bring them back. audit-carriage.ps1 -Revivable reads this field; without it, reviving a recipe means reconstructing from commit messages."
 }

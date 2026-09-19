@@ -425,7 +425,10 @@
     "pomegranate-molasses": "pomegranate molasses",
     "lemongrass-paste": "lemongrass paste",
     "japanese-curry-roux": "golden curry",
-    "berbere-seasoning": "berbere seasoning",
+    "berbere-seasoning": [
+      "berbere seasoning",
+      "berbere"
+    ],
     "cajun-seasoning": "cajun seasoning",
     "taco-seasoning": "taco seasoning",
     "ranch-seasoning-mix": "ranch seasoning mix",
@@ -527,7 +530,10 @@
     "fresh-stir-fry-blend": "fresh stir fry vegetables",
     "bean-sprouts": "fresh bean sprouts",
     "broccolini": "broccolini",
-    "fennel": "fennel bulb",
+    "fennel": [
+      "fennel bulb",
+      "fresh fennel"
+    ],
     "chayote": "chayote",
     "yuca-root": "yuca root",
     "jicama": "jicama",
@@ -590,13 +596,19 @@
     "avocado-oil": "avocado oil",
     "white-miso-paste": "white miso paste",
     "shawarma-spice-blend": "shawarma spice blend",
-    "cumin-seeds": "cumin seeds",
+    "cumin-seeds": [
+      "cumin seeds",
+      "whole cumin"
+    ],
     "mace-spice": "mace spice",
     "fresh-whole-nutmeg": "whole nutmeg",
     "lamb-shoulder": "lamb shoulder",
     "green-chilli": "fresh green chilli",
     "peanut-oil": "peanut oil",
-    "chipotle-powder": "chipotle powder",
+    "chipotle-powder": [
+      "chipotle powder",
+      "ground chipotle"
+    ],
     "salt-pork": "salt pork",
     "wild-rice-blend": "wild rice blend",
     "saffron": "saffron threads",
@@ -607,6 +619,11 @@
     "black-peppercorns": "black peppercorns",
     "portobello-mushrooms": "portobello mushrooms",
     "phyllo-dough": "phyllo dough",
-    "sea-salt": "sea salt"
+    "sea-salt": "sea salt",
+    "beef-short-ribs": "beef short ribs",
+    "cardamom": "ground cardamom",
+    "fresh-oregano": "fresh oregano",
+    "tandoori-seasoning": "tandoori seasoning",
+    "crushed-thai-chili": "crushed thai chili"
   }
 }
