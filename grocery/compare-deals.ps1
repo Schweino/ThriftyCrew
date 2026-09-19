@@ -64,12 +64,25 @@ param(
   # Brad, and until then step 1 must be revertible without a code revert. It wins over the namespace.
   [switch]$NoAisleAdmission,   # dry-run arm only: admit Family Fare rows the store shelves outside their commodity's departments (aisle-lib.ps1)
   [string]$IdentityNamespace = "",
-  [switch]$NoIdentity
+  [switch]$NoIdentity,
+  # THE PROVENANCE CONTRACT (2026-09-19, provenance-contract-lib.ps1). A captured price publishes only when it
+  # proves when it was read (within the policy's MaxPublishAgeDays), where (the pinned store), that it is buyable
+  # there, that it is a store read and not our own board, and that the store's own department does not name a form
+  # its commodity excludes. 0 = read the limit from capture-policy-lib. -NoProvenanceContract is a MEASUREMENT arm
+  # only (what the board would be without it); the board it writes says so in `provenance_contract`, and
+  # guards.ps1 refuses to publish one.
+  [int]$MaxPublishAgeDays = 0,
+  [switch]$NoProvenanceContract
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # The one place that decides what is EVERYDAY and what is a SALE on a captured row. See its header.
 . (Join-Path $root 'price-split-lib.ps1')
+# What a captured price must prove before it may publish (see the -MaxPublishAgeDays parameter above).
+. (Join-Path $root 'provenance-contract-lib.ps1')
+. (Join-Path $root 'capture-policy-lib.ps1')
+if ($MaxPublishAgeDays -le 0) { $MaxPublishAgeDays = Get-PolicyMaxPublishAgeDays }
+$PROV_PINS = Get-PclPinnedStores
 if (-not $OutDir)  { $OutDir  = Join-Path $root 'out' }
 if (-not $AdsFile) { $AdsFile = (Get-ChildItem (Join-Path $OutDir 'ads-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
 # WHICH FILES THIS BUILD ACTUALLY OPENS (2026-08-21). grocery\out holds 870 tracked files, and the ones
@@ -2211,7 +2224,11 @@ function Add-Norm {
   # -SelfTest block above holds both as a MUST FIRE and the named row as a CLEAN TWIN.
   [CmdletBinding(PositionalBinding = $false)]
   param($Store, $Name, $PriceText, $SizeText, $Regular, $SourceAd, $PriceType = 'sale', $SrcDate = '', $AdFrom = '',
-        $AdTo = '', $AdBasis = '', $ProductId = '', $Fulfillment = '', $SrcFile = '', $SrcRow = $null, $SplitFrom = '')
+        $AdTo = '', $AdBasis = '', $ProductId = '', $Fulfillment = '', $SrcFile = '', $SrcRow = $null, $SplitFrom = '',
+        # THE PROVENANCE CONTRACT'S INPUTS (2026-09-19): the capture row as read ($ProvRow - separate from $SrcRow,
+        # which some call sites withhold on purpose), whether it is a CAPTURE (judged) or an AD-flyer row (judged by
+        # its own window), and what the capture FILE says about the store it was read at.
+        $ProvRow = $null, $ProvKind = 'ad', $FileSource = '')
   # THE FORMAT LAYER, AND THE ONE DROP HERE THAT SAID NOTHING (2026-09-07, backlog E5). A row whose
   # name did not parse vanishes before any business rule runs, so a capture whose name field moved
   # would yield fewer rows and produce no signal at all - "silent by construction". It is still
@@ -2274,7 +2291,7 @@ function Add-Norm {
   # split_from: the WHOLE flyer line this row was cut out of, when Split-TwoProductAdLine cut it (queue
   # 2026-09-10-582032). Carried so audit-match-soundness and the identity table can show provenance, and so
   # Get-UnitPrice can tell a part whose size is its own from a two-size line nobody has split.
-  $deals.Add([pscustomobject]@{ store=$Store; name=[string]$Name; price_text=[string]$PriceText; size_text=[string]$SizeText; regular=$Regular; source_ad=$SourceAd; price_type=$PriceType; src_date=[string]$SrcDate; ad_from=[string]$AdFrom; ad_to=[string]$AdTo; ad_basis=[string]$AdBasis; product_id=[string]$ProductId; fulfillment=[string]$Fulfillment; src_file=[string]$SrcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$SplitFrom })
+  $deals.Add([pscustomobject]@{ store=$Store; name=[string]$Name; price_text=[string]$PriceText; size_text=[string]$SizeText; regular=$Regular; source_ad=$SourceAd; price_type=$PriceType; src_date=[string]$SrcDate; ad_from=[string]$AdFrom; ad_to=[string]$AdTo; ad_basis=[string]$AdBasis; product_id=[string]$ProductId; fulfillment=[string]$Fulfillment; src_file=[string]$SrcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$SplitFrom; prov_row=$ProvRow; prov_kind=[string]$ProvKind; file_source=[string]$FileSource })
 }
 $ads = Read-JsonFile $AdsFile
 $today = $ads.today
@@ -2403,6 +2420,10 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'sale' }
     $sd = ''
     if ([IO.Path]::GetFileNameWithoutExtension($extra) -match '(\d{4}-\d{2}-\d{2})$') { $sd = $Matches[1] }
+    # A Sam's club capture is a SHELF READ and answers to the provenance contract; the Baker's and Fareway files in
+    # this loop are weekly FLYERS, judged by their own window above.
+    $extraKind = if ($samsFiles -contains $extra) { 'capture' } else { 'ad' }
+    $extraFileSource = if ($extraKind -eq 'capture') { (@([string]$ex.source, [string]$ex.club, [string]$ex.store_label) | Where-Object { $_ }) -join ' | ' } else { '' }
     # A FLYER FILE DECLARES ITS WINDOW AT THE DOCUMENT LEVEL, and Test-AdWindowClosed above has already
     # refused the whole file if today falls outside it. Carry that window down onto each row so a cell
     # can be dated individually - and let a row that states its OWN window win, because Fareway runs a
@@ -2434,7 +2455,7 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
         $partProdId = if ($adParts.Count -gt 1) { '' } else { (Get-RowProductId $d) }
         # -SrcRow: the capture row itself, so Add-Norm can read the store's own published unit price off it
         # (out\sams\sams-deals-*.json carries sams_unit_price on every row). Passed, never re-parsed here.
-        Add-Norm -Store $d.store -Name $pn -PriceText $d.ad_price -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType $pt -SrcDate $sd -AdFrom $rFrom -AdTo $rTo -ProductId $partProdId -SrcRow $d -SplitFrom $sf
+        Add-Norm -Store $d.store -Name $pn -PriceText $d.ad_price -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType $pt -SrcDate $sd -AdFrom $rFrom -AdTo $rTo -ProductId $partProdId -SrcRow $d -SplitFrom $sf -ProvRow $d -ProvKind $extraKind -FileSource $extraFileSource
       }
     }
   }
@@ -2537,6 +2558,11 @@ if (Test-Path $regDir) {
       continue
     }
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'everyday' }
+    # WHAT THIS FILE SAYS ABOUT THE STORE IT WAS READ AT, for the provenance contract. Only for the stores whose
+    # files are NEVER carried forward (Walmart, Sam's): there the file's store line describes every row in it. A
+    # carry lane's file holds rows read on other days, possibly at another store (Hy-Vee's 1465 rows sat inside
+    # files whose own header was current), so there only the ROW's own stamp can prove where it was read.
+    $regFileSource = if (@('Walmart', "Sam's Club") -contains [string]$ex.store) { (@([string]$ex.source, [string]$ex.club, [string]$ex.store_label) | Where-Object { $_ }) -join ' | ' } else { '' }
     # WHICH out\regular rows carry their capture date: see Get-RegularSrcDate. Walmart unions captures, and
     # Sam's has a SECOND everyday source (out\sams) that its out\regular copy has to be ranked against; every
     # other store's out\regular file is its only everyday source and stays date-less.
@@ -2619,17 +2645,17 @@ if (Test-Path $regDir) {
         # / sams_unit_price describe the price the store is charging TODAY, which is this half. The everyday
         # half below is what the row was cut FROM, and pairing the store's sale unit price with it would
         # manufacture a disagreement out of a discount.
-        Add-Norm -Store $d.store -Name $d.item -PriceText ('$' + $spl.sale_price) -SizeText $d.size -Regular $d.regular -SourceAd $d.source_ad -PriceType 'sale' -SrcDate $rsd -AdFrom $spl.sale_from -AdTo $spl.sale_to -AdBasis $script:LastBasis -ProductId (Get-RowProductId $d) -Fulfillment ([string]$d.fulfillment) -SrcFile ([string]$rf.BaseName) -SrcRow $d
+        Add-Norm -Store $d.store -Name $d.item -PriceText ('$' + $spl.sale_price) -SizeText $d.size -Regular $d.regular -SourceAd $d.source_ad -PriceType 'sale' -SrcDate $rsd -AdFrom $spl.sale_from -AdTo $spl.sale_to -AdBasis $script:LastBasis -ProductId (Get-RowProductId $d) -Fulfillment ([string]$d.fulfillment) -SrcFile ([string]$rf.BaseName) -ProvRow $d -ProvKind 'capture' -FileSource $regFileSource -SrcRow $d
         # AND THE PRICE IT REVERTS TO. Without this row the everyday value disappears the moment a
         # store discounts an item, which is the other half of Brad's rule - everyday must not be
         # replaced by the ad. Only emitted when the store told us what it was cut FROM; a flagged row
         # with no was-price would otherwise publish the sale price twice under two labels.
         if ($spl.everyday_price -and $spl.everyday_price -gt $spl.sale_price) {
-          Add-Norm -Store $d.store -Name $d.item -PriceText ('$' + $spl.everyday_price) -SizeText $d.size -Regular $null -SourceAd $d.source_ad -PriceType 'everyday' -SrcDate $rsd -ProductId (Get-RowProductId $d) -Fulfillment ([string]$d.fulfillment) -SrcFile ([string]$rf.BaseName)
+          Add-Norm -Store $d.store -Name $d.item -PriceText ('$' + $spl.everyday_price) -SizeText $d.size -Regular $null -SourceAd $d.source_ad -PriceType 'everyday' -SrcDate $rsd -ProductId (Get-RowProductId $d) -Fulfillment ([string]$d.fulfillment) -SrcFile ([string]$rf.BaseName) -ProvRow $d -ProvKind 'capture' -FileSource $regFileSource
         }
       } else {
         # not split: the row's own price IS what the store's published unit price describes, so carry $d.
-        Add-Norm -Store $d.store -Name $d.item -PriceText $d.ad_price -SizeText $d.size -Regular $d.regular -SourceAd $d.source_ad -PriceType $pt -SrcDate $rsd -ProductId (Get-RowProductId $d) -Fulfillment ([string]$d.fulfillment) -SrcFile ([string]$rf.BaseName) -SrcRow $d
+        Add-Norm -Store $d.store -Name $d.item -PriceText $d.ad_price -SizeText $d.size -Regular $d.regular -SourceAd $d.source_ad -PriceType $pt -SrcDate $rsd -ProductId (Get-RowProductId $d) -Fulfillment ([string]$d.fulfillment) -SrcFile ([string]$rf.BaseName) -ProvRow $d -ProvKind 'capture' -FileSource $regFileSource -SrcRow $d
       }
     }
   }
@@ -2781,6 +2807,9 @@ $CHANNEL_ALLOW = Get-ChannelAllowlist -Path $(if ($ChannelAllowlistFile) { $Chan
 $CHANNEL_INDEX = New-ChannelIndex -Rows $deals -Allowlist $CHANNEL_ALLOW
 $channelRefused = @{}
 $channelAllowed = 0
+# Every row the provenance contract withheld, one row each, so the totals below derive from the rows (measurement.md).
+$ProvWithheld = New-Object System.Collections.ArrayList
+$ProvJudged = @{}
 # THE IDENTITY TABLE COLLECTS EVERY ROW, INCLUDING THE UNMATCHED ONES. "No commodity owns this product
 # under today's rules" is an answer, and it is the answer audit-coverage-gaps spends 100 seconds a day
 # recomputing. Collected as references to rows already in memory, so this costs nothing here; the actual
@@ -2796,6 +2825,22 @@ foreach ($d in $deals) {
   $uprice = $null; $basis = 'UNPRICED'; $note = ''
   if ($up) {
     $uprice = [math]::Round($up.unit_price,4); $basis = $up.basis; $note = $up.note
+    # THE PROVENANCE CONTRACT FIRST (2026-09-19, provenance-contract-lib.ps1). A captured row that cannot prove
+    # when, where and that it is buyable is WITHHELD before any price rule looks at it: its store falls through to
+    # its next row that CAN prove it, or the cell is empty. Flagged and counted, never silent, like every refusal
+    # below, so a contract that is too tight reads as findings and a smaller board rather than as nothing.
+    $provV = $null
+    if (-not $NoProvenanceContract) {
+      $provV = Test-CellProvenance -Store ([string]$d.store) -Row $d.prov_row -Kind $(if ($d.prov_kind) { [string]$d.prov_kind } else { 'ad' }) `
+        -FileDate ([string]$d.src_date) -SrcFile ([string]$d.src_file) -FileSource ([string]$d.file_source) -Commodity $c `
+        -BoardDate ([string]$today) -MaxAgeDays $MaxPublishAgeDays -Pins $PROV_PINS
+      if ([string]$d.prov_kind -eq 'capture') { $ProvJudged[[string]$d.store] = 1 + $(if ($ProvJudged.ContainsKey([string]$d.store)) { $ProvJudged[[string]$d.store] } else { 0 }) }
+    }
+    if ($provV -and -not $provV.ok) {
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("provenance=" + $provV.why + ": " + $provV.detail); price_text=$d.price_text; size_text=$d.size_text })
+      [void]$ProvWithheld.Add([pscustomobject]@{ id=[string]$c.id; store=[string]$d.store; name=[string]$d.name; why=[string]$provV.why; detail=[string]$provV.detail; as_of=[string]$provV.as_of; unit_price=$uprice; price_type=[string]$d.price_type })
+      $uprice = $null; $basis = ('WITHHELD-' + $provV.why)   # the store falls through to a row that can prove itself
+    } else {
     # ONE CALL DECIDES WHICH REFUSAL FIRES FIRST (Get-FirstRefusal, above): the piece rule, then the band, the
     # floor and the two pack rules. The branches below are the old chain's bodies, unchanged, keyed on its answer.
     $refusal = Get-FirstRefusal $c.id $c.unit $uprice $d.size_text $d.name $up.pieces ([string]$d.store) $KW_BLOCKS
@@ -2867,6 +2912,7 @@ foreach ($d in $deals) {
         $uprice = $null; $basis = 'NOT-IN-STORE'   # drop from ranking; board still ships via runner-up
       }
     }
+    }   # end of the provenance contract's else: the price rules above run only on a row that proved itself
   }
   # SAFETY NET: a recognized multibuy that came back UNPRICED means the capture is incomplete
   # (this is exactly how the Baker's chicken-thighs Buy-1-Get-2 was lost). Surface it loudly.
@@ -2909,6 +2955,10 @@ foreach ($d in $deals) {
     # the crown step can ask whether a winner's margin is thinner than its own size's precision.
     # split_from: the whole flyer line this row was cut out of, or '' - provenance for the soundness audit.
     pu_rounding_pct=$d.pu_rounding_pct; split_from=$d.split_from
+    # as_of: THE DAY THIS PRICE WAS READ AT THE STORE, as the provenance contract established it (2026-09-19). The
+    # board carries it per cell so the page, the audits and the next verifier can see how old a price is instead of
+    # inferring it from a file date. '' for flyer rows, which carry their window in ad_from/ad_to instead.
+    as_of=$(if ($provV -and [string]$d.prov_kind -eq 'capture') { [string]$provV.as_of } else { '' })
     unit_price=$uprice; basis=$basis; note=$note })
 }
 
@@ -2928,7 +2978,7 @@ foreach ($g in ($matched | Group-Object id)) {
   # prod_key added 2026-09-05, for the same reason src_date was added 2026-08-06: it is a field the
   # per-store ranking turns on (Select-FreshestCaptureRows supersedes an older row by the same product's
   # newer one), so an artifact without it cannot be audited against the rule the engine actually ran.
-  $candList.Add([pscustomobject]@{ id=$g.Name; label=$f.label; unit=$f.unit; candidates=@($g.Group | Select-Object store,name,price_text,size_text,regular,unit_price,basis,price_type,src_date,prod_key) })
+  $candList.Add([pscustomobject]@{ id=$g.Name; label=$f.label; unit=$f.unit; candidates=@($g.Group | Select-Object store,name,price_text,size_text,regular,unit_price,basis,price_type,src_date,prod_key,as_of) })
 }
 $candPfx = if ($OutName -eq 'comparison') { 'candidates' } else { "$OutName-candidates" }
 (@{ week_of=$today; commodities=$candList } | ConvertTo-Json -Depth 8) | Set-Content (Join-Path $OutDir ("$candPfx-"+$today+".json")) -Encoding UTF8
@@ -2964,6 +3014,20 @@ if ($channelRefused.Count) {
   Write-Output ("in-store channel: " + (($channelRefused.Values | Measure-Object -Sum).Sum) + " priced row(s) refused as not-on-the-shelf (" + ($parts -join ', ') + "); " + $channelAllowed + " row(s) kept by a reviewed exception in instore-channel-allowlist.json")
 } else {
   Write-Output "in-store channel: no priced row refused (every matched row either records a shelf channel or has no capture that ever recorded one)"
+}
+# THE PROVENANCE CONTRACT, COUNTED OUT LOUD, PER STORE AND REASON, WITH ITS DENOMINATOR (measurement.md): rows withheld
+# of the captured rows judged. Written to provenance-withheld-<date>.json, one row per withheld row, so what the next
+# capture owes is readable rather than inferred from a smaller board.
+if ($NoProvenanceContract) {
+  Write-Output "provenance contract: OFF (-NoProvenanceContract, a measurement arm) - this board is NOT publishable"
+} else {
+  foreach ($s in ($ProvJudged.Keys | Sort-Object)) {
+    $wh = @($ProvWithheld | Where-Object { $_.store -eq $s })
+    $by = @($wh | Group-Object why | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join ', '
+    Write-Output ("provenance contract: {0,-12} withheld {1,5} of {2,5} captured row(s) judged (max age {3} d){4}" -f $s, $wh.Count, $ProvJudged[$s], $MaxPublishAgeDays, $(if ($by) { " - $by" } else { '' }))
+  }
+  $pwPath = Join-Path $OutDir ("provenance-withheld-" + $today + ".json")
+  (@{ board = $today; max_publish_age_days = $MaxPublishAgeDays; judged = $ProvJudged; withheld = @($ProvWithheld) } | ConvertTo-Json -Depth 5) | Set-Content -LiteralPath $pwPath -Encoding UTF8
 }
 
 # ---------------------------------------------------------------- rank: cheapest per store, then across stores
@@ -3053,7 +3117,7 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
     # unit price, so their outliers stay ordinary outliers and keep paging.
     stores = @($ranked | ForEach-Object {
       $nat = Resolve-NativeUnitPrice $_.native_up ([string]$_.native_up_unit) ([string]$f.unit)
-      $row = [ordered]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to; ad_basis=$_.ad_basis }
+      $row = [ordered]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to; ad_basis=$_.ad_basis; as_of=[string]$_.as_of }
       if ($nat) { $row['native_unit_price'] = $nat.price; $row['native_unit'] = $nat.unit }
       # pu_rounding_pct: this cell's per-unit was divided by a size Sam's cent rounding produced, so it is
       # only exact to +/- this percent. Emitted ONLY where it is true of the number shown (see
@@ -3082,7 +3146,9 @@ $storesWithData = @($matched | Where-Object { $_.unit_price -ne $null } | ForEac
 $health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; match_could_not_look=$matchBlindRows.Count; match_timeouts=$matchBlind.timeouts; match_timeout_ms=$matchBlind.timeout_ms; expired_sale_rows_dropped=$script:ExpiredSaleRows; nameless_rows_dropped=$script:NamelessRows; nameless_rows_by_store=(Format-TcNamelessByStore $script:NamelessRowsByStore); sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated; sale_windows_from_store_countdown=$script:StoreCountdown }
 
 # ---------------------------------------------------------------- output
-$out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$today; source=$AdsFile; commodities_compared=$report.Count; health=$health; comparison=$report }
+# provenance_contract / max_publish_age_days: whether this board was built under the provenance contract, and at what
+# age limit. guards.ps1 refuses to publish a board that says OFF (the -NoProvenanceContract measurement arm).
+$out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$today; source=$AdsFile; commodities_compared=$report.Count; provenance_contract=$(if ($NoProvenanceContract) { 'OFF' } else { 'on' }); max_publish_age_days=$MaxPublishAgeDays; health=$health; comparison=$report }
 $file = Join-Path $OutDir ($OutName + "-" + $today + ".json")
 ($out | ConvertTo-Json -Depth 8) | Set-Content $file -Encoding UTF8
 
