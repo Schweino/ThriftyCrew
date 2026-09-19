@@ -84,9 +84,13 @@ $script:QuarterDays = 90
 # design\PLAN-board-accuracy-2026-09-19.md has every defect and its cause.
 #
 # THE RULE. Every store re-reads its whole term list within RotationDays, and no everyday price older than
-# MaxPublishAgeDays reaches the board (compare-deals' provenance contract, provenance-contract-lib.ps1). A price
-# that could not be re-read in time is WITHHELD and queued, never published stale: a gap is a smaller board, a
-# stale price is a wrong number, and understating is exactly as wrong as overstating.
+# MaxPublishAgeDays is to reach the board. The FIRST half is live with this file. The SECOND half is compare-deals'
+# provenance contract (provenance-contract-lib.ps1, on branch claude/board-accuracy-0919), which lands only AFTER a
+# full recapture and the recipe-side fixes in design\PLAN-board-accuracy-2026-09-19.md section 5: switched on over
+# today's aged captures it would hold every publish and bring back the frozen July recipe baseline. Until then the
+# board still publishes carried rows up to MaxCarryDays; this rule shortens how long they wait to be re-read.
+# Once live: a price that could not be re-read in time is WITHHELD and queued, never published stale, because a gap
+# is a smaller board, a stale price is a wrong number, and understating is exactly as wrong as overstating.
 #
 # THE INVARIANT THAT WOULD HAVE STOPPED 2026-08-20. RotationDays <= MaxPublishAgeDays, and every store's call cap
 # covers ceil(terms / RotationDays / runs a day). test-capture-policy.ps1 asserts both with the arithmetic in the
@@ -366,6 +370,9 @@ function Get-SaleWindowRepricedFor($w) {
 
 function Get-PolicyMaxCarryDays { return $script:MaxCarryDays }
 function Get-PolicyQuarterDays { return $script:QuarterDays }
+# The publish limit compare-deals' provenance contract enforces (the FRESHNESS RULE in this file's header).
+function Get-PolicyMaxPublishAgeDays { return $script:MaxPublishAgeDays }
+function Get-PolicyRotationDays { return $script:RotationDays }
 
 # ---------------------------------------------------------------------------
 # ROTATION CURSOR + DAILY WORKLIST
@@ -1571,14 +1578,48 @@ function Step-HyVeeProductCursor {
   return [pscustomobject]@{ Advanced = $true; From = $From; To = $Next; Reason = $d.Reason }
 }
 
+# ---- THE FULL RECAPTURE (2026-09-19) ---------------------------------------------------------------------------
+# The daily drip re-reads a store's whole list inside RotationDays. Two events need MORE than the drip: a store whose
+# pinned identity changed (every row read at the old store is now WRONG-STORE), and an outage that let the list age
+# past the publish limit (the 2026-09-13..09-18 walled-store stop). -Full asks for every term at once, starting at the
+# cursor, capped at the largest run each store has COMPLETED CLEAN on record, never at a guess:
+#   Walmart 487   the 487-term full pull of 2026-08-11 (memory walmart-full-pull-takes-75-minutes)
+#   Sam's   388   the 388-term sweep at 2600 ms pacing (StoreCallCap's own note)
+#   Fareway 144   the 144-term sweep of 2026-08-15, zero empties, no wall (stores.json pull_profile)
+#   Baker's 598   it walked all 598 terms every day until 2026-08-22
+#   Aldi and Family Fare: no clean full run recorded (Aldi 403s "after a few hundred"; Freshop throttles at ~40 a
+#   window), so -Full asks them for their normal call cap and the oldest-first drip does the rest.
+# A store not finished in one run is finished by the next, because every lane resumes from what landed.
+$script:FullRunCap = @{ 'Walmart' = 487; "Sam's Club" = 388; 'Fareway' = 144; "Baker's" = 598 }
+function Get-FullRunCap([string]$Store) {
+  if ($script:FullRunCap.ContainsKey($Store)) { return [int]$script:FullRunCap[$Store] }
+  return (Get-StoreCallCap $Store)
+}
+
 function Write-CaptureWorklist {
   <#
-    .SYNOPSIS Emit today's worklist file for a store (what the browser agent reads).
+    .SYNOPSIS Emit today's worklist file for a store (what the browser agent reads). -Full: every term, capped at the
+              store's largest clean run on record (see THE FULL RECAPTURE above).
   #>
   [CmdletBinding()]
-  param([Parameter(Mandatory)][string]$Store, [string]$Today = '', [string]$OutDir = '')
+  param([Parameter(Mandatory)][string]$Store, [string]$Today = '', [string]$OutDir = '', [switch]$Full)
   if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
   $wl = Get-CaptureWorklist -Store $Store -Today $Today -OutDir $OutDir
+  if ($Full) {
+    $all = Get-AllTerms
+    $cap = Get-FullRunCap $Store
+    $fullTerms = New-Object System.Collections.Generic.List[object]
+    $seen = @{}
+    # the day's owed work first (ruling, ad, sale expiries: what the normal list leads with), then the whole list from the cursor
+    foreach ($t in @($wl.Terms)) { $k = $t.id + '|' + $t.term; if (-not $seen.ContainsKey($k)) { $seen[$k] = 1; [void]$fullTerms.Add($t) } }
+    for ($k = 0; $k -lt $all.Count -and $fullTerms.Count -lt $cap; $k++) {
+      $t = $all[(([int]$wl.CursorStart + $k) % $all.Count)]
+      $kk = $t.id + '|' + $t.term
+      if (-not $seen.ContainsKey($kk)) { $seen[$kk] = 1; [void]$fullTerms.Add($t) }
+    }
+    $wl | Add-Member -NotePropertyName Terms -NotePropertyValue @($fullTerms | Select-Object -First $cap) -Force
+    $wl | Add-Member -NotePropertyName CallCap -NotePropertyValue $cap -Force
+  }
   $slug = ($Store -replace "[^A-Za-z0-9]", '').ToLower()
   $dir = Join-Path $OutDir 'worklists'
   if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
@@ -1586,7 +1627,8 @@ function Write-CaptureWorklist {
   $doc = [ordered]@{
     store          = $wl.Store
     date           = $wl.Today
-    policy         = "ad-rollover + sale-expiry + quarterly rotation ($($wl.QuarterDays)d)"
+    policy         = $(if ($Full) { "FULL RECAPTURE: every term from the cursor, capped at this store's largest clean run on record ($(Get-FullRunCap $Store))" } else { "ad-rollover + sale-expiry + rotation (whole list inside $($script:RotationDays)d)" })
+    full_recapture = [bool]$Full
     ad_rollover    = $wl.AdRollover
     ad_note        = $wl.AdNote
     cursor_start   = $wl.CursorStart
@@ -1940,6 +1982,10 @@ exit 0
     for ($n = 0; $n -lt 180; $n++) { $stTerms[('c' + $n.ToString('000'))] = ('term ' + $n) }
     [IO.File]::WriteAllText((Join-Path $stRoot 'commodity-search.json'), (@{ terms = $stTerms } | ConvertTo-Json -Depth 4))
     $stToday = (Get-Date).ToString('yyyy-MM-dd')
+    # ONE day's slice over these 180 terms, from the rule itself: 2 under the 90-day quarter, 13 under the 14-day
+    # rotation (2026-09-19). A literal here went red the day the rotation moved, and would have gone quietly wrong
+    # the day it matched by accident; what the case proves is "exactly one slice", whatever a slice is.
+    $stWant = Get-RotationTermsPerRun 180 'Walmart'
     $stWriter = Join-Path $cplDir 'step-writer.ps1'
     Write-CplWriter $stWriter @'
 param([string]$Lib, [string]$Root, [string]$Today)
@@ -1978,7 +2024,7 @@ exit 0
     Write-Output ('  info  step barrier: {0} of 4 writers were at the barrier when released ({1} ms)' -f $st.ready_at_go, $st.go_ms)
     Test-CplCase 'PREMISE    every run of the store''s builder RAN - launched, at the barrier when the four were released together, and exited' ($stRan -eq 4) ("ran $stRan of 4" + $stWhy)
     Test-CplCase 'MUST FIRE  exactly ONE of four same-day advances moves the cursor and logs it - the one-slice-per-day guard holds under a race' `
-      ($stAdvanced -eq 1 -and $stRefused -eq 0 -and $stCursor -eq 2 -and $stLog -eq 1) ("advanced=$stAdvanced of 4, cursor=$stCursor (want 2), log lines=$stLog (want 1), refusals=$stRefused" + $stWhy)
+      ($stAdvanced -eq 1 -and $stRefused -eq 0 -and $stCursor -eq $stWant -and $stLog -eq 1) ("advanced=$stAdvanced of 4, cursor=$stCursor (want $stWant, ONE day's slice), log lines=$stLog (want 1), refusals=$stRefused" + $stWhy)
   } catch {
     Test-CplCase 'the self-test ran to its end with no unexpected error' $false ($_.Exception.Message + ' (line ' + $_.InvocationInfo.ScriptLineNumber + ')')
   } finally {

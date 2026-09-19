@@ -115,13 +115,15 @@ function Join-FfFront {
   return [pscustomobject]@{ Items = (@($head.ToArray()) + $rest); Prepended = $head.Count; Front = $head.ToArray() }
 }
 
-# A MULTI-BUY IS A PRICE EACH (2026-09-19). Freshop sends an offer as text, "4 for $5.00". Stripping non-digits
-# read it as "45.00", which is how "Pampa Pickles, Sweet Relish 12 Oz" reached a board at $45 (ad_price "$45",
-# current_price 45, captured 2026-07-30), and since 2026-07-31 Get-FfPrice (ff-price-lib.ps1) drops such rows
-# instead, which made every multi-buy product a blank cell. Ruled for the board-accuracy fix: "N for $X" is X/N
-# each, rounded to the cent, and the row SAYS it came from a multi-buy (multi_buy, multi_buy_qty, multi_buy_total)
-# so a reader of the file and the board can see the basis. Returns $null for anything that is not that shape -
-# a plain "$4.50" is not a multi-buy, and a quantity below 2 is not one either.
+# A MULTI-BUY HAS NO HONEST SINGLE PRICE, SO IT PRICES NOTHING (2026-09-19). Freshop sends an offer as text,
+# "4 for $5.00". Stripping non-digits read it as "45.00", which is how "Pampa Pickles, Sweet Relish 12 Oz" reached
+# a board at $45 (captured 2026-07-30). ff-price-lib.ps1's Get-FfPrice has dropped such rows since 2026-07-31 for
+# a reason that still stands: "4 for $5.00" is very often must-buy-four, so neither $1.25 nor $5.00 is what ONE jar
+# costs a shopper, and a divided price would be a guess published as a fact. This parser exists only to RECOGNISE
+# the offer, so the lane can count and name what it refused (multi_buy_refused) instead of dropping it silently,
+# and so the $45 misread can never come back. If a later pass proves Family Fare honours the single price, the rule
+# changes in ff-price-lib ONE place (read unit_price, reconcile n * unit_price with base_price), never here.
+# Returns $null for anything that is not that shape: a plain "$4.50" is not a multi-buy, nor is a quantity below 2.
 function ConvertFrom-FfMultiBuy([string]$PriceText) {
   if (-not $PriceText) { return $null }
   $m = [regex]::Match($PriceText, '^\s*(\d{1,3})\s+for\s+\$?\s*(\d{1,6}(?:\.\d{1,2})?)\s*$', [Text.RegularExpressions.RegexOptions]::IgnoreCase)
@@ -142,7 +144,11 @@ function Get-FfRowPrice($Item) {
   if (-not $Item) { return $null }
   $base = 0.0; [void][double]::TryParse((([string]$Item.base_price) -replace '[^0-9.]', ''), [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$base)
   $mb = ConvertFrom-FfMultiBuy ([string]$Item.price)
-  if ($mb) { return [pscustomobject]@{ price = [double]$mb.each; current = [double]$mb.each; base = $base; multi = $mb } }
+  if ($mb) {
+    # REFUSED, AND SAID (see ConvertFrom-FfMultiBuy's header): no single price is proven, so no row.
+    $script:FfMultiBuyRefused = 1 + $(if ($script:FfMultiBuyRefused) { [int]$script:FfMultiBuyRefused } else { 0 })
+    return $null
+  }
   $val = Get-FfPrice $Item
   if ($null -eq $val) { return $null }
   return [pscustomobject]@{ price = [double]$val; current = [double]$val; base = $base; multi = $null }
@@ -724,21 +730,20 @@ if ($SelfTest) {
   $askedNone = Get-FfExpiryIdsAsked -ExpiryIds @('eggs') -TermPairs $tpFix -Attempted @{}
   _T 'MUST-NOT-FIRE a window that attempted nothing marks nothing' (@($askedNone).Count -eq 0)
 
-  # ---- 3. "N for $X" IS X/N EACH ----------------------------------------------------------------------------
+  # ---- 3. "N for $X" IS RECOGNISED AND REFUSED: NO SINGLE PRICE IS PROVEN (ff-price-lib's rule) ----------------
   # Founding row: "Pampa Pickles, Sweet Relish 12 Oz", captured 2026-07-30 as ad_price "$45" / current_price 45.
   $pampa = [pscustomobject]@{ name = 'Pampa Pickles, Sweet Relish 12 Oz'; size = '12 oz'; price = '4 for $5.00'; base_price = 5.0; id = '777' }
-  $pr4 = Get-FfRowPrice $pampa
-  _T 'MUST-FIRE "4 for $5.00" prices at $1.25 each, never $45 (Pampa sweet relish, 2026-07-30)' (($null -ne $pr4) -and ([math]::Abs($pr4.price - 1.25) -lt 0.0001) -and ($pr4.price -ne 45))
-  $pr2 = Get-FfRowPrice ([pscustomobject]@{ name = 'x'; price = '2 for $3'; base_price = 3.0 })
-  _T 'MUST-FIRE "2 for $3" prices at $1.50 each' (($null -ne $pr2) -and ([math]::Abs($pr2.price - 1.5) -lt 0.0001))
-  $pr10 = Get-FfRowPrice ([pscustomobject]@{ name = 'x'; price = '10 for $10'; base_price = 10.0 })
-  _T 'MUST-FIRE "10 for $10" prices at $1.00 each, not $1010' (($null -ne $pr10) -and ([math]::Abs($pr10.price - 1.0) -lt 0.0001))
+  $mb4 = ConvertFrom-FfMultiBuy '4 for $5.00'
+  _T 'MUST-FIRE "4 for $5.00" is RECOGNISED as a 4-unit, $5.00 offer, never read as $45 (Pampa sweet relish, 2026-07-30)' (($null -ne $mb4) -and ($mb4.qty -eq 4) -and ([math]::Abs($mb4.total - 5.0) -lt 0.0001))
+  $script:FfMultiBuyRefused = 0
+  _T 'MUST-FIRE a multi-buy row prices NOTHING (no $45, and no guessed $1.25: must-buy-four is common)' ($null -eq (Get-FfRowPrice $pampa))
+  _T 'MUST-FIRE the refusal is COUNTED, never silent' ([int]$script:FfMultiBuyRefused -eq 1)
+  _T 'MUST-FIRE "10 for $10" is recognised (qty 10, total 10), not $1010' ((ConvertFrom-FfMultiBuy '10 for $10').qty -eq 10)
   _T 'MUST-NOT-FIRE a plain "$4.50" is not a multi-buy' ($null -eq (ConvertFrom-FfMultiBuy '$4.50'))
   $pr45 = Get-FfRowPrice ([pscustomobject]@{ name = 'x'; price = '$4.50'; base_price = 4.5 })
   _T 'CLEAN-TWIN a plain "$4.50" still prices at 4.50 with no multi-buy basis' (($null -ne $pr45) -and ([math]::Abs($pr45.price - 4.5) -lt 0.0001) -and ($null -eq $pr45.multi))
   _T 'MUST-NOT-FIRE "1 for $3" is not a multi-buy (a quantity under 2)' ($null -eq (ConvertFrom-FfMultiBuy '1 for $3'))
-  $rowMb = New-FfRow $pampa 'relish' '2026-09-19' '6401' @{}
-  _T 'MUST-FIRE the multi-buy row says its basis and records no invented was-price (base_price 5.00 is the offer total)' (($rowMb.ad_price -eq '$1.25') -and ($rowMb.current_price -eq 1.25) -and ($rowMb.multi_buy -eq '4 for $5.00') -and ($rowMb.multi_buy_qty -eq 4) -and (-not $rowMb.Contains('base_price')) -and (-not $rowMb.Contains('marked_down')))
+  _T 'MUST-FIRE the multi-buy row is NO ROW' ($null -eq (New-FfRow $pampa 'relish' '2026-09-19' '6401' @{}))
 
   # ---- THE CONTRACT FIELD THAT WAS NEVER WRITTEN: current_price (0 of 5,486 rows on 2026-09-18) ---------------
   $rowPlain = New-FfRow ([pscustomobject]@{ name = 'Our Family Sour Cream 16 Oz'; size = '16 oz'; price = '$2.29'; base_price = 2.89; id = '4411'; canonical_url = 'https://x/p/4411' }) 'sour cream' '2026-09-19' '6401' @{}
@@ -751,7 +756,7 @@ if ($SelfTest) {
   # ---- 5. EVERY ROW SAYS WHEN AND WHERE IT WAS READ ------------------------------------------------------------
   _T 'MUST-FIRE a fresh row carries as_of (the read date) and store_id (the location the request named)' (($rowPlain.as_of -eq '2026-09-19') -and ($rowPlain.store_id -eq '6401'))
   $nrStamp = Norm-Row ([pscustomobject]$rowPlain) '2026-09-19' $true
-  _T 'CLEAN-TWIN Norm-Row keeps store_id and the multi-buy basis on a carried row (the normalizer-drops-the-contract class)' (($nrStamp.store_id -eq '6401') -and ((Norm-Row ([pscustomobject]$rowMb) '2026-09-19' $true).multi_buy -eq '4 for $5.00'))
+  _T 'CLEAN-TWIN Norm-Row keeps store_id on a carried row (the normalizer-drops-the-contract class)' ($nrStamp.store_id -eq '6401')
 
   # ---- 4. THE CARRY READS MaxCarryDays FROM THE POLICY, AND CARRIES ONLY WHAT IT CAN DATE AND PLACE ----------
   $mcd = [int](Get-PolicyMaxCarryDays)
@@ -1359,7 +1364,8 @@ if ($prevF) {
   }
 }
 if ($carryUndated -or $carryWrongStore) { Write-Warning ("Family Fare: not carried - " + $carryUndated + " row(s) with no as_of (no proof of when the price was read), " + $carryWrongStore + " row(s) stamped with a store other than " + $sid) }
-if ($carryUnstamped) { Write-Output ("Family Fare: " + $carryUnstamped + " carried row(s) predate the store_id stamp and are carried UNSTAMPED - the board's provenance contract decides them; each is re-stamped when its term is re-read inside the " + $plan.RotationDays + "-day rotation") }
+if ($carryUnstamped) { Write-Output ("Family Fare: " + $carryUnstamped + " carried row(s) predate the store_id stamp and are carried UNSTAMPED - the board's provenance contract (once it lands) decides them; each is re-stamped when its term is re-read inside the " + $plan.RotationDays + "-day rotation") }
+if ([int]$script:FfMultiBuyRefused -gt 0) { Write-Output ("Family Fare: " + [int]$script:FfMultiBuyRefused + " multi-buy offer row(s) (""N for `$X"") priced NOTHING - no single price is proven (ff-price-lib's rule)") }
 $deals = $rows.ToArray()
 
 # AUTHORITATIVE WORKLIST LEDGER. This is the actual rotated search worklist, not buckets inferred from

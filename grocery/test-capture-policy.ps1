@@ -576,6 +576,23 @@ try {
     if ($ff[0].Ok -and $ff[0].RunsPerDay -eq 3 -and $ff[0].NeedPerRun -eq 15) { Ok 'CLEAN TWIN  Family Fare covers 602 terms in 14 days at 15 a run across 3 runs, inside its measured 40 a window' }
     else { Bad "Family Fare runs: runs=$($ff[0].RunsPerDay) need=$($ff[0].NeedPerRun) ok=$($ff[0].Ok) (want 3 runs, 15 a run)" }
   } finally { $script:RotationDays = $rdSave }
+
+  # ---- THE FULL RECAPTURE (2026-09-19): every term, capped at the store's largest clean run on record ------------
+  $fOut = Join-Path $tmp 'out'
+  $fNorm = ConvertFrom-Json ([IO.File]::ReadAllText((Write-CaptureWorklist -Store 'Walmart' -Today '2026-08-30' -OutDir $fOut)))
+  $fFull = ConvertFrom-Json ([IO.File]::ReadAllText((Write-CaptureWorklist -Store 'Walmart' -Today '2026-08-30' -OutDir $fOut -Full)))
+  $fAll = @(Get-AllTerms).Count   # 13: twelve commodities, shredded-cheese carrying two terms
+  if ($fAll -eq 13 -and @($fFull.terms).Count -eq $fAll -and [bool]$fFull.full_recapture -and @($fFull.commodities).Count -eq $fAll) { Ok "MUST FIRE  -Full asks for every one of the $fAll fixture terms, with commodities in step, and says it is a full recapture" }
+  else { Bad "full worklist: terms=$(@($fFull.terms).Count) commodities=$(@($fFull.commodities).Count) full=$($fFull.full_recapture) (want $fAll/$fAll/true, all terms 13)" }
+  if (-not [bool]$fNorm.full_recapture -and @($fNorm.terms).Count -lt $fAll) { Ok "CLEAN TWIN  the normal worklist is still the drip ($(@($fNorm.terms).Count) term(s)) and does not claim to be full" }
+  else { Bad "normal worklist changed: terms=$(@($fNorm.terms).Count) full=$($fNorm.full_recapture)" }
+  $fcSave = $script:FullRunCap['Walmart']
+  try {
+    $script:FullRunCap['Walmart'] = 5
+    $fCap = ConvertFrom-Json ([IO.File]::ReadAllText((Write-CaptureWorklist -Store 'Walmart' -Today '2026-08-30' -OutDir $fOut -Full)))
+    if (@($fCap.terms).Count -eq 5 -and [int]$fCap.call_cap -eq 5) { Ok 'MUST FIRE  a full recapture never asks past the store''s clean-run cap (cap 5: exactly 5 terms)' }
+    else { Bad "full cap: terms=$(@($fCap.terms).Count) call_cap=$($fCap.call_cap) (want 5/5)" }
+  } finally { $script:FullRunCap['Walmart'] = $fcSave }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

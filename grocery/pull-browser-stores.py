@@ -201,10 +201,12 @@ STORES = {
         # derived handle that misses does not fail loudly, it substitutes something harmless-looking
         # and the guard quietly stops guarding (see _identity_call).
         "lookup_agent": "samsAgent",
-        # samsSweepToCsv emits [term, n, lp, up, id, was] - six columns. The captures before
-        # 2026-08-21 had five (no `was`); `was` arrived with the rollback-TTL work. A stale
-        # five-name header over six-column data does not error, it SHIFTS every field one place.
-        "csv_header": "q|n|lp|up|id|was",
+        # samsSweepToCsv emits [term, n, lp, up, id, was, ful] - seven columns since 2026-09-19, when
+        # `ful` (the item's fulfillmentSummary: PICKUP at the club vs SHIPPING only) arrived so the board
+        # can refuse a ship-only listing (board-accuracy plan 4e). Six before that (`was`, 2026-08-21,
+        # rollback TTL), five before that. A stale header over wider data does not error, it SHIFTS every
+        # field one place, which is why check_capture_shape refuses the mismatch.
+        "csv_header": "q|n|lp|up|id|was|ful",
         "capture": os.path.join("out", "captures", "sams-capture-{date}.csv"),
         "never_headless": True,
         # 15429 Blackwell Dr, NOT the 13130 L St in the older runbooks. The live session moved on
@@ -1496,6 +1498,13 @@ def lookup_self_test():
                                        "samsSweepToCsv")
     T("MUST FIRE  seven columns under a six-name header is refused as shape drift, never written shifted",
       (not ok) and "emits 7 columns" in why and "names 6" in why, why)
+    # CLEAN TWIN: the header the driver DECLARES for Sam's matches what samsSweepToCsv emits since 2026-09-19
+    # (its own seven-column header line), so a real Sam's capture is written rather than refused.
+    sams_hdr = STORES["samsclub"]["csv_header"]
+    ok, why, own = check_capture_shape("#tc-store store=\"x\" read=\"page\" rows=1\nq|n|lp|up|id|was|ful\n"
+                                       "eggs|Large Eggs|2.38|0.20|123|x|PICKUP@8146\n", sams_hdr, "samsSweepToCsv")
+    T("CLEAN TWIN  the declared Sam's header accepts samsSweepToCsv's own seven-column output",
+      ok and own, "%s (declared %s)" % (why, sams_hdr))
 
     # ---- the flag contract -------------------------------------------------------------------
     ok, why = validate_lookup_args(["fareway"], "t.json", "")

@@ -29,7 +29,10 @@
   it entirely and the ledger simply keeps growing, which is also safe. The unsafe ordering
   is the one that no longer exists: pruning by date, with nothing recording the work.
 #>
-param([switch]$Report, [switch]$Emit, [switch]$Reconcile, [string]$Store = '', [string]$Today = '', [string]$OutDir = '')
+param([switch]$Report, [switch]$Emit, [switch]$Reconcile, [string]$Store = '', [string]$Today = '', [string]$OutDir = '',
+  # -Emit -Full: a FULL RECAPTURE worklist (every term, capped at the store's largest clean run on record) - after a
+  # pinned-store change or an outage, never as the daily drip. See THE FULL RECAPTURE in capture-policy-lib.ps1.
+  [switch]$Full)
 $ErrorActionPreference = 'Stop'
 $script:PolicyRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $script:PolicyRoot 'capture-policy-lib.ps1')
@@ -53,10 +56,11 @@ if ($Emit) {
   # Emit today's worklist for every store. The three walled stores (Walmart, Sam's,
   # Fareway) have no other way to be told what to fetch - their capture happens in a
   # real logged-in Chrome, so a file is the only handoff that works.
-  foreach ($s in $script:AllStores) {
-    $f = Write-CaptureWorklist -Store $s -Today $Today -OutDir $OutDir
-    $wl = Get-CaptureWorklist -Store $s -Today $Today -OutDir $OutDir
-    Write-Output ("{0,-13} {1,3} term(s)  ad_rollover={2,-5}  -> {3}" -f $s, @($wl.Terms).Count, $wl.AdRollover, (Split-Path $f -Leaf))
+  $emitStores = if ($Store) { @($Store) } else { $script:AllStores }
+  foreach ($s in $emitStores) {
+    $f = Write-CaptureWorklist -Store $s -Today $Today -OutDir $OutDir -Full:$Full
+    $doc = ConvertFrom-Json ([IO.File]::ReadAllText($f))
+    Write-Output ("{0,-13} {1,3} term(s)  ad_rollover={2,-5} full={3,-5} -> {4}" -f $s, @($doc.terms).Count, $doc.ad_rollover, [bool]$doc.full_recapture, (Split-Path $f -Leaf))
   }
   return
 }
