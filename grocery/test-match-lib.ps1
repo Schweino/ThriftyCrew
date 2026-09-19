@@ -125,6 +125,71 @@ if (-not $insB -or -not $insRestored -or -not [string]::Equals($insB, $insP, [St
   exit 1
 }
 
+# ---- 2b. ROUTING FIXTURES on today's rules (2026-09-19, design\PLAN-board-accuracy-2026-09-19.md 4f) ------------
+# The corpus passes below prove the two matchers AGREE; they cannot say either one is RIGHT. These cases pin the
+# answer itself for the identity defects a blind verification found on the store's own pages that day, each run
+# through match-lib over the live commodities.json and global excludes, so a later rule edit that re-opens one
+# goes red here by name. Parent only: a shard is handed names, not cases.
+if (-not $isShard) {
+  $rtBad = 0; $rtRan = 0
+  function _RT([string]$label, [string]$name, [string]$want) {
+    $script:rtRan++
+    $c = Resolve-Commodity -Matcher $matcher -Name $name
+    $got = $(if ($c) { [string]$c.id } else { '<none>' })
+    if (-not [string]::Equals($got, $want, [StringComparison]::Ordinal)) { Write-Output ("  FAIL  {0}   '{1}' routed to {2}, want {3}" -f $label, $name, $got, $want); $script:rtBad++ }
+  }
+  # MUST FIRE - the founding names, each verified on the store's page on 2026-09-19.
+  _RT 'MUST FIRE  D1 an Aldi aioli leaves the fresh green-chilli cell (condiment_carrier class)' 'Burman S Green Chili Squeeze Aioli 10 OZ' '<none>'
+  _RT 'MUST FIRE  D2 an Aldi half & half named "creamer" prices half-and-half, not coffee-creamer' 'Friendly Farms Half & Half Creamer' 'half-and-half'
+  _RT 'MUST FIRE  D2 a half & half single named "coffee creamer" prices half-and-half' 'Nestle Carnation Half & Half Creamers, Half and Half Coffee Creamer Singles, 360 Ct' 'half-and-half'
+  _RT 'MUST FIRE  D2 a half and half single named "coffee" leaves the coffee cell' '0.38 oz. Coffee House Inspirations Half and Half (180/Carton)' 'half-and-half'
+  _RT 'MUST FIRE  D3 the Baker''s coconut aminos "Seasoning Sauce" is no longer hidden by the global sauce token' 'Simple Truth Organic Coconut Aminos All-Purpose Seasoning Sauce' 'coconut-aminos'
+  _RT 'MUST FIRE  D3 a coconut aminos "Soy Sauce Replacement" leaves the soy-sauce cell' 'BetterBody Foods Organic Coconut Aminos Soy Sauce Replacement, 16.9 fl oz' 'coconut-aminos'
+  _RT 'MUST FIRE  D4 the Sam''s individually wrapped sponges are no longer hidden by the global wrapped token' 'Scotch-Brite Heavy Duty Scrub Sponges, Individually Wrapped 24 ct.' 'sponges'
+  # teriyaki-sauce sits earlier in the file and wins this name either way, so the route alone cannot see the
+  # coconut-aminos fence: the detail scan's contested set can, because it lists every commodity that also wanted it.
+  $script:rtRan++
+  $tdet = Resolve-CommodityDetail -Matcher $matcher -Name 'Coconut Aminos Teriyaki Sauce 10 fl oz'
+  $tid = $(if ($tdet.commodity) { [string]$tdet.commodity.id } else { '<none>' })
+  if ($tid -ne 'teriyaki-sauce' -or @($tdet.candidates) -contains 'coconut-aminos') { Write-Output ("  FAIL  MUST FIRE  D3 the teriyaki fence still holds after coconut-aminos relaxes sauce   got {0}, contested by {1}" -f $tid, (@($tdet.candidates) -join ',')); $rtBad++ }
+  # MUST FIRE on the MECHANISM: the class reaches every produce commodity outside its exempt, so the next fresh
+  # commodity is born fenced. An aggregate route count could not see one commodity quietly missing it.
+  $ceLib = Read-JsonFile (Join-Path $root 'category-excludes.json')
+  $ceCls = @($ceLib.classes.condiment_carrier)
+  $ceEx = [string]$ceLib.exempt.condiment_carrier
+  $produce = @(); foreach ($cc in (Read-JsonFile (Join-Path $root 'categories.json')).categories) { if ([string]$cc.label -match '^(Fruit|Vegetables)$') { $produce += @($cc.commodities) } }
+  $cmById = @{}; foreach ($cm in $commodities) { $cmById[[string]$cm.id] = $cm }
+  $reach = 0; $want = 0; $missing = @()
+  foreach ($pid_ in $produce) {
+    if ($ceEx -and ([string]$pid_ -match $ceEx)) { continue }
+    $want++
+    $ex = @($cmById[[string]$pid_].exclude)
+    if (@($ceCls | Where-Object { $ex -notcontains $_ }).Count -eq 0) { $reach++ } else { $missing += [string]$pid_ }
+  }
+  $script:rtRan++
+  if ($ceCls.Count -lt 6 -or $want -eq 0 -or $reach -ne $want) { Write-Output ("  FAIL  MUST FIRE  condiment_carrier reaches {0} of {1} non-exempt produce commodities ({2} patterns); missing: {3}" -f $reach, $want, $ceCls.Count, ($missing -join ',')); $rtBad++ }
+  # MUST NOT FIRE - legal inputs the new fences and relaxes must leave where they are.
+  _RT 'MUST NOT FIRE  a fresh green chili still prices green-chilli' 'Fresh Green Chili Peppers, per lb' 'green-chilli'
+  _RT 'MUST NOT FIRE  plain half & half still prices half-and-half' 'Great Value Half & Half, 32 fl oz' 'half-and-half'
+  _RT 'MUST NOT FIRE  a real soy sauce still prices soy-sauce' 'Kikkoman Traditionally Brewed Soy Sauce, 64 oz.' 'soy-sauce'
+  _RT 'MUST NOT FIRE  fresh avocados still price avocados' 'Fresh Large Hass Avocado Bag, 3-4 Count' 'avocados'
+  _RT 'MUST NOT FIRE  the exempt lemongrass-paste keeps its squeeze paste' 'Gourmet Garden Lemongrass Stir-In Paste, 4.0 oz' 'lemongrass-paste'
+  # CLEAN TWIN - the neighbours each fix was most likely to break on its way past.
+  _RT 'CLEAN TWIN  a flavoured coffee creamer still prices coffee-creamer' 'Nestle Coffee mate Liquid Non-Dairy Refrigerated Coffee Creamer, French Vanilla, 66 fl. oz' 'coffee-creamer'
+  _RT 'CLEAN TWIN  real mayonnaise still prices mayonnaise' 'Kraft Real Mayo Mayonnaise, 30 fl. oz. jars, 2 pk.' 'mayonnaise'
+  _RT 'CLEAN TWIN  canned diced green chiles still price canned-green-chilies' '(2 pack) Ortega Mild Fire Roasted Diced Green Chiles, Kosher, 7 oz Can' 'canned-green-chilies'
+  _RT 'CLEAN TWIN  unwrapped sponges still price sponges' 'Scotch-Brite Heavy Duty Scrub Sponges' 'sponges'
+  _RT 'CLEAN TWIN  plain coconut aminos still price coconut-aminos' 'Big Tree Farms Organic Coconut Aminos Original, 10 oz Bottle' 'coconut-aminos'
+  $rtWant = 19
+  if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
+  if ($rtBad -gt 0) {
+    Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)
+    Write-GuardComplete -Name 'match-lib' -Summary ("routing fixtures failed=" + $rtBad)
+    exit 1
+  }
+  if (-not $Quiet) { Write-Output ("match-lib routing fixtures: {0} of {1} pass (condiment_carrier reaches {2} of {3} non-exempt produce commodities)" -f $rtRan, $rtWant, $reach, $want) }
+}
+
 # ---- 3. the corpus: every distinct name the engine feeds the matcher today -------------------------
 # A SHARD DOES NOT REBUILD THE CORPUS, IT IS HANDED ONE. Rebuilding it per process would be both slower
 # and unsound: the capture files underneath are live, so two shards started a second apart could enumerate

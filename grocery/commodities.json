@@ -2670,7 +2670,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -2915,7 +2921,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -3148,7 +3160,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -3374,7 +3392,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -3596,7 +3620,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -3823,7 +3853,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -4057,7 +4093,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -4279,7 +4321,13 @@
                         "\\bsushi\\b",
                         "\\bcascade\\b",
                         "\\boatmeal\\b",
-                        "gatorade(?!.*\\bprotein\\s+bars?\\b)"
+                        "gatorade(?!.*\\bprotein\\s+bars?\\b)",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -4513,7 +4561,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -4756,7 +4810,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -4986,7 +5046,13 @@
                         "\\bbreakfast\\s+bars?\\b",
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -5226,7 +5292,13 @@
                         "\\bcereal\\s+bars?\\b",
                         "\\boatmeal\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -5717,7 +5789,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "half\\s*(?:\u0026|and)\\s*half"
                     ]
     },
     {
@@ -7584,7 +7657,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -7825,7 +7904,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -8069,7 +8154,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -8304,7 +8395,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -8529,7 +8626,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -8757,7 +8860,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -8996,7 +9105,13 @@
                         "\\blinguine\\b",
                         "\\balfredo\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -9219,7 +9334,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -9441,7 +9562,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -9661,7 +9788,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -9886,7 +10019,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -10131,7 +10270,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -10360,7 +10505,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -10598,7 +10749,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -10822,7 +10979,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -14149,7 +14312,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\blim(?:e|a)\\b"
                     ]
     },
     {
@@ -14266,7 +14430,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?:cucumbers?|celery|carrots?)\\b"
                     ]
     },
     {
@@ -16562,7 +16727,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -16817,7 +16988,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -17037,7 +17214,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -17256,7 +17439,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -17462,7 +17651,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -17699,7 +17894,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -17931,7 +18132,12 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b"
                     ]
     },
     {
@@ -18155,7 +18361,12 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b"
                     ]
     },
     {
@@ -18416,7 +18627,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -18635,7 +18852,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -18856,7 +19079,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -19086,7 +19315,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -19305,7 +19540,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -19529,7 +19770,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -19753,7 +20000,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -19971,7 +20224,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -20191,7 +20450,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -20409,7 +20674,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -20626,7 +20897,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -20861,7 +21138,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -21085,7 +21368,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -21320,7 +21609,12 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -21537,7 +21831,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -21761,7 +22061,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -21988,7 +22294,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -25334,8 +25646,12 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
-                    ]
+                        "\\bcascade\\b",
+                        "arnold\\s+palmer"
+                    ],
+        "relax_global":  [
+                             "\\bcreamer\\b"
+                         ]
     },
     {
         "id":  "whipped-cream",
@@ -26356,7 +26672,8 @@
                         "\\bpotato(?:es)?\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "half\\s*(?:\u0026|and)\\s*half"
                     ]
     },
     {
@@ -39638,7 +39955,8 @@
                     ],
         "relax_global":  [
                              "\\bscent(?:s|ed)?\\b",
-                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)"
+                             "(?:\\bdawn\\b|nail\\s+polish|styling\\s+gel)",
+                             "wrapped"
                          ]
     },
     {
@@ -41277,7 +41595,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -43331,7 +43655,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bcoconut\\s+(?:liquid\\s+)?aminos?\\b"
                     ],
         "relax_global":  [
                              "\\bsauce\\b"
@@ -54479,7 +54804,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -54696,7 +55027,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -54919,7 +55256,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -55141,7 +55484,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -56229,7 +56578,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -57457,7 +57812,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -58446,7 +58807,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -58673,7 +59040,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ],
         "pint_oz":  10
     },
@@ -59838,7 +60211,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -60067,7 +60446,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -60301,7 +60686,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -60528,7 +60919,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -60765,7 +61162,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -60986,7 +61389,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -61232,7 +61641,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -61453,7 +61868,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -61676,7 +62097,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -61891,7 +62318,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -62107,7 +62540,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -62332,7 +62771,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -62551,7 +62996,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -62770,7 +63221,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -62987,7 +63444,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -63228,7 +63691,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -63459,7 +63928,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -63676,7 +64151,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -63891,7 +64372,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -64106,7 +64593,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -64320,7 +64813,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -64542,7 +65041,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -64759,7 +65264,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -64976,7 +65487,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -65190,7 +65707,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -65408,7 +65931,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -65626,7 +66155,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -65841,7 +66376,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -66057,7 +66598,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -66280,7 +66827,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -66497,7 +67050,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -66719,7 +67278,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -66943,7 +67508,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -67395,7 +67966,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -67622,7 +68199,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -67841,7 +68424,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -68057,7 +68646,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -68277,7 +68872,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -68490,7 +69091,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -68712,7 +69319,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -68927,7 +69540,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -69146,7 +69765,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -69369,7 +69994,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -69589,7 +70220,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -69792,7 +70429,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -70014,7 +70657,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -70237,7 +70886,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -70460,7 +71115,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -70678,7 +71339,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -71970,7 +72637,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ],
         "band_min":  1.39,
         "band_max":  14.95
@@ -75398,7 +76071,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ],
         "band_min":  0.42,
         "band_max":  5.97
@@ -76466,7 +77145,7 @@
                         "\\bcoconut\\s+liquid\\s+aminos?\\b"
                     ],
         "exclude":  [
-                        "\\b(?:tamari|soy\\s+sauce|teriyaki|marinade|seasoning\\s+mix|powder|capsules?|supplement)\\b",
+                        "\\b(?:tamari|soy\\s+sauce(?!\\s+(?:replacement|alternative|substitute))|teriyaki|marinade|seasoning\\s+mix|powder|capsules?|supplement)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -76562,7 +77241,10 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bcascade\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsauce\\b"
+                         ]
     },
     {
         "id":  "avocado-oil",
@@ -77593,7 +78275,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -78971,7 +79659,13 @@
                         "\\bnutri[\\s-]*grain\\b",
                         "\\bcereal\\s+bars?\\b",
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
-                        "\\bprotein\\s+bars?\\b"
+                        "\\bprotein\\s+bars?\\b",
+                        "\\baioli\\b",
+                        "\\bsqueeze\\b",
+                        "\\bmayo(?:nnaise)?\\b",
+                        "\\bdips?\\b",
+                        "\\bdressings?\\b",
+                        "\\bspreads?\\b"
                     ]
     },
     {
@@ -79208,7 +79902,9 @@
                         "\\bstraws?\\b",
                         "\\bedamame\\b",
                         "\\bblack\\s+pepper\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bavocados?\\b",
+                        "\\bsqueeze\\b"
                     ]
     }
 ]
