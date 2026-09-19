@@ -1,4 +1,28 @@
-# Subtitle and search-text fixes, round 2: seven more Money Hacks pages (drafted 2026-09-19, NOT applied)
+# Subtitle and search-text fixes, round 2: seven more Money Hacks pages (drafted 2026-09-19, APPLIED 2026-09-19)
+
+## APPLIED
+
+Brad gave the go-ahead and the queue was applied on 2026-09-19. All 7 PUTs were sent, at 05:46 that morning.
+
+- **Queue ids** (the `id` on each line of `staged/subtitle-fixes-2.jsonl`): `5f6e422e6b37`, `d8173f3624a6`,
+  `e29a8e280639`, `bcf0ba701a60`, `d9d16403e71f`, `721ac633c03a` and `5df6ff240633`.
+- **Write-journal entries** for the same seven sends (the main checkout's `ops\ghost-journal.jsonl`, one per post,
+  05:46:40 to 05:46:42): `3d30b02498cc`, `c7807a9e8609`, `72ca4c983bef`, `3c4b3bbb1891`, `18c59ef93af3`,
+  `2e1cef6df0e2` and `1a0cd3ff8e2c`. The queue ids are not journal ids: none of the seven appears in the journal.
+- All 7 pages were read back after the apply and all 3 sent fields (meta, OG and Twitter description) matched the
+  draft on every page. A second read-only GET at the start of round 3 (`subtitle-fixes-3.md`) found the same 7 of 7.
+  As predicted below, `updated_at` did not move on any of them, because the change was search text only.
+
+**The Money Hacks hub was rebuilt the same morning, body only.** Write-journal entry `897631adc2e8` (05:47:59, a
+PUT to the hub page `6a498e4950682b0001cd3f3f`). The html was built offline from a copy of
+`.claude\skills\meal-macro\build-content-hubs.ps1`, and the diff against the live hub was exactly two cards'
+subtitles (renters and car insurance, round 1's new lines) plus the signup link written relative. **The glossary hub
+was deliberately NOT rebuilt**, although that script always rewrites both. The live hub now reads the new renters
+and car-insurance subtitles, neither old line ("For about 15 dollars" / "Cut $300 to $600 a year") appears, and it
+says "182 guides" (read-only GET at the start of round 3; the hub's `updated_at` is 10:47:58 UTC). That closes the first item under
+"Anything odd" below. The builder's own problems are filed in `design\backlog-inbox\subtitle-fixes-0919.md`.
+
+The rest of this file is the draft as it was approved, kept as the record.
 
 `subtitle-fixes.md` (applied 2026-09-19) ended with a list of other live Money Hacks pages carrying the same
 leftovers: "real-dollar" in six pages' search text, and dollar ranges on four. Brad asked to check and draft
