@@ -16353,7 +16353,7 @@ to 32.5%, 252 verified cells over boards 07-30, 08-08 and 08-15), which is a Jul
    verified sample older than 14 days pages rather than going quiet.
 3. Retire the sample and rely on the internal guards, recording that the board's defect rate is no longer measured.
 
-### I233 - wave-publish p5 could refuse nothing since 2026-08-15, and its allergen check sat where no wave card exists yet `NEEDS A RULING` `run-0919` `2-WAY` `RUNG1 RULING`
+### I233 - wave-publish p5 could refuse nothing since 2026-08-15, and its allergen check sat where no wave card exists yet `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-wave-p5-order.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16385,7 +16385,22 @@ to 32.5%, 252 verified cells over boards 07-30, 08-08 and 08-15), which is a Jul
 
 **2026-09-18: the nightly daemon battery was red on main over this, and is fixed; the branch was rebased and kept consistent.** 384c94252 added `audit-allergen-line` to the P5 table without moving `hunt_daemon_selftest.py`'s pin on it, so `hunt-daemon.py --selftest --names-diff` (what `TC Daemon Battery 0230` runs through `ops\run-daemon-battery.ps1`) exited 2 at e76f16d27 with 1 red of 553 cases, `...and the gates BELOW those six`, and 0 names removed or added. The case now names the four gates below the six as main has them (ghost-field-limits, wave-blocker-headings, allergen-line, test-guards) and its name no longer carries a count, so the branch can change the list without changing a pinned name; `hunt_daemon_selftest.names.txt` moves that one name. After it: exit 0, 553 of 553. Broken once against a temp copy of `wave-publish.ps1`: dropping `audit-wave-blocker-headings`, and separately `audit-allergen-line`, each turned that case red (1 of the 5 cases in its function), and the real file was md5-identical afterwards. `claude/wave-p5-order` is rebased onto the main carrying this, with the same case set back to the three its P5 table keeps, so landing option 1 does not turn the battery red the other way.
 
-### I234 - The daily chain's recipe republish ships a stale card when its rebuild fails, and skips the allergen check `PARTLY DONE - BUILT AND TESTED ON BRANCH claude/i234-republish, READY FOR BRAD TO MERGE WITH OR AFTER I233` `run-0919` `1-WAY` `RUNG1 RULING`
+**Done 2026-09-19: landed on Brad's approval 2026-09-19** (option 1), through `claude/i234-republish`, which carries
+this item's two commits and I234's one, rebased onto origin/main at `f4e50313b` with no conflict. Its inbox file
+`design\backlog-inbox\run0919-wave-p5-order.md`, already merged above, is removed in the same commit. Re-run in a
+seeded worktree after the rebase, before the push: `wave-publish -SelfTest` exit 0 (68 ok, 0 red),
+`propagate-recipes -SelfTest` exit 0 (24 ok, 0 red), `gated-republish-lib -SelfTest` exit 0 (11 of 11),
+`check-ad-cycles -SelfTest` exit 0 (19 of 19), `audit-allergen-line -SelfTest` exit 0 (23 of 23),
+`wave-preaudit -SelfTest` exit 0 (75 cases, blind=0), and the daemon battery as `ops\run-daemon-battery.ps1` runs it
+(`hunt-daemon.py --selftest --names-diff hunt_daemon_selftest.names.txt`) exit 0, 553 cases, 0 names removed, 0
+added. The P5 drill (`-DryRun -SkipGhostCheck -SkipGit`, scratch run dir and scratch ledger, `TC_WRITE_JOURNAL` and
+`TC_STAGE_WRITES` cleared, slug `keto-cheeseburger-skillet`), two arms: as committed, exit 0 with all 9 P5 gates
+clean; with the slug's `head.description` lengthened in the worktree only (322 characters expanded), exit 1,
+`REFUSED - audit-ghost-field-limits is not clean`, the gate's own finding printed above the refusal and nothing
+after P5 run. The spec was restored from git, md5-identical, `git status` clean. (The before arm was not re-run here;
+the drill above, at 0465267ef, is the record that a red P5 gate printed `clean`.)
+
+### I234 - The daily chain's recipe republish ships a stale card when its rebuild fails, and skips the allergen check `DONE` `run-0919`
 
 **Merged from `design\backlog-inbox\run0919-orchestrator-findings-2.md` on 2026-09-18.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -16440,6 +16455,10 @@ hold nothing.
 from a checkout of it, which lands I233 and this together. If I233 is ruled some other way, this change still
 stands alone (it calls only `audit-allergen-line.ps1`, which main already has), and it can be cherry-picked on its
 own.
+
+**Done 2026-09-19: landed on Brad's approval 2026-09-19**, together with I233 (option 1), as one landing of
+`claude/i234-republish` rebased onto origin/main at `f4e50313b`. Nothing live changed: no publish, recost or Ghost
+call was run. See I233's Done paragraph for the verification, which covers both.
 
 ### I235 - The graph importer drops about 238,000 Baker's rows every run because their search term is a commodity id `DONE` `run-0919`
 
