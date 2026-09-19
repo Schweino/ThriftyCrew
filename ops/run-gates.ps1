@@ -392,6 +392,10 @@ $static = @(
   # It sits in meal-prep\pipeline rather than ops\ because its population IS meal-prep\db\recipes, and an ops\
   # detector reading that is the coupling audit-cross-module-reach ratchets: its first draft moved 118 to 120.
   @{ f = 'meal-prep\pipeline\audit-forbidden-prose.ps1'; n = 'no recipe title and no reader-facing prose carries a globally forbidden health word - a gate at ZERO over the 584 committed specs, with the source attribution line exempt by Brad''s ruling; hermetic, reads tracked data only' }
+  # Brad's ruling, 2026-09-19, backlog I166: the .gitignore allow-list protects a NEW secret file, and nothing read a key pasted into an
+  # already-tracked file or a commit message. ON EVERY PUSH, because a secret is exposed the moment it leaves the box and no later
+  # morning can take it back. Hermetic (git grep over tracked files plus the unpushed messages), about 20 s on 8,625 files.
+  @{ f = 'ops\audit-secrets.ps1';              n = 'no tracked file and no unpushed commit message carries a secret - a Ghost Admin key, a private key or service-account JSON, a Cloudflare, FDC or Anthropic key, or a random value assigned to a key/token/secret/password name - a gate at ZERO with one allowlisted public flyer token (file + name + fingerprint + Brad''s reason)' }
   @{ f = 'ops\audit-unread-wait.ps1';          n = 'every TIMED WaitOne has its answer read on some path - a timed-out wait returns $false and the caller holds nothing, which rewrote the triage queue unlocked on 2026-09-11; hermetic, AST, reads source only' }
   @{ f = 'ops\audit-internal-ast-members.ps1'; n = 'no script reads an AST member that is INTERNAL under PS 5.1 (VariablePath.UnqualifiedPath reads as $null, so a name walk returns an agreeing empty) - hermetic, AST, reads source only' }
   # Brad's ruling (2026-09-12, backlog I112): a lesson may state a rate of return only beside its source, the

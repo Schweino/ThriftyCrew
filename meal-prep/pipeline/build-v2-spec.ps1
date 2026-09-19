@@ -87,6 +87,7 @@ $mp   = Split-Path -Parent $here                            # ...\meal-prep
 . (Join-Path $here 'friendly-amt-lib.ps1')                  # THE buy-label deriver - see the block comment below
 . (Join-Path $mp 'lib\dash-sweep.ps1')                      # Test-Dashes - shared with spec-guards, fixtured in -SelfTest
 . (Join-Path $here 'forbidden-prose-lib.ps1')               # Get-TcForbiddenProseHit - the GLOBAL health-word ban (Brad, I138)
+. (Join-Path $here 'nutrient-claim-lib.ps1')                # Get-TcNutrientClaimFinding - FDA claim words need their bar on a NEW recipe (Brad, I143)
 
 # ---- SELF-TEST. This script had none, which is how a dash sweep that reads its own ban list shipped.
 # No file is read or written and nothing is dispatched; it exists so these guards cannot regress quietly.
@@ -156,6 +157,26 @@ if($SelfTest){
   T '   ...and THROWS on a finding rather than warning' `
     ($__bvsSrc -match '(?s)if\(\$fpHits\.Count\)\{[\s\S]{0,500}?throw') 'a forbidden term would only warn'
 
+  # ---- FDA NUTRIENT CONTENT CLAIM WORDS AT THE IMPORT DOOR (Brad's ruling, 2026-09-19, backlog I143) ----
+  # "Rule for new, measure old": a NEW spec may carry a claim word only where its own per-serving macros
+  # clear that claim's FDA bar. A rebuild of an EXISTING spec is warned, never refused - the live uses are
+  # measured (design\ready-for-brad\I143-claim-words.md) and await Brad's ruling on a sweep.
+  $ncBad = [pscustomobject]@{ name='Fixture Burrito'; servings=14; stat=[pscustomobject]@{ cal=679; protein=50; fat=23 }
+    ingredients_grams=@([pscustomobject]@{ item='Chicken Breast'; grams=5600 }); head=[pscustomobject]@{ keywords='high protein meal prep, low calorie burrito, budget dinner' } }
+  $ncHitsBad = @(Get-TcNutrientClaimFinding -Spec $ncBad)
+  T 'MUST FIRE  a new spec whose keywords say "low calorie" at 170 calories per 100 g is refused at the write boundary' ($ncHitsBad.Count -eq 1 -and $ncHitsBad[0].ClaimId -eq 'low-calorie') ('hits=' + $ncHitsBad.Count)
+  $ncOk = [pscustomobject]@{ name='Fixture Bowl'; servings=14; stat=[pscustomobject]@{ cal=520; protein=41; fat=14 }
+    ingredients_grams=@([pscustomobject]@{ item='Chicken Breast'; grams=5600 }); head=[pscustomobject]@{ keywords='high protein meal prep, budget dinner' } }
+  $ncHitsOk = @(Get-TcNutrientClaimFinding -Spec $ncOk)
+  T 'MUST NOT FIRE  "high protein" at 41 g a serving clears its 10 g bar and is written' ($ncHitsOk.Count -eq 0) ('hits=' + $ncHitsOk.Count)
+  T 'the live write path runs the claim rule' `
+    ($__bvsSrc -match '(?m)^\s*\$ncHits\s*=\s*@\(Get-TcNutrientClaimFinding') 'the claim rule is not wired into Write-Spec'
+  T '   ...THROWS for a NEW spec' `
+    ($__bvsSrc -match '(?s)if\(\$ncHits\.Count\)\{[\s\S]{0,400}?if\(\$script:specIsNew\)\{[\s\S]{0,300}?throw') 'a new spec would only warn'
+  T '   ...and only WARNS for an existing one, which is what keeps the live catalogue unchanged' `
+    ($__bvsSrc -match '(?s)if\(\$script:specIsNew\)\{[\s\S]{0,400}?\}\s*else\s*\{[^}]{0,200}?WARNING') 'an existing spec would be refused'
+  T 'newness is read BEFORE anything is written, or the -RunCost second write would see its own first' `
+    ($__bvsSrc -match '(?m)^\$script:specIsNew\s*=\s*-not\s*\(Test-Path \$outFile\)') 'specIsNew is not captured at the existence check'
   if($script:f -eq 0){ Write-Output 'build-v2-spec SELF-TEST PASS'; exit 0 }
   Write-Output ("build-v2-spec SELF-TEST FAIL: " + $script:f + " case(s)"); exit 1
 }
@@ -185,6 +206,9 @@ $srcSite = if($intake.PSObject.Properties.Name -contains 'source_site' -and $int
 $visibility = if($intake.PSObject.Properties.Name -contains 'visibility' -and $intake.visibility){ [string]$intake.visibility } else { 'paid' }
 $outFile = Join-Path $OutDir ($slug + '.json')
 if((Test-Path $outFile) -and -not $Force -and -not $RunCost){ throw ("spec already exists: $outFile (pass -Force to rebuild it from the intake file)") }
+# Read ONCE, before any write: the -RunCost flow writes a structural spec first, and a check made at the second
+# write would find that file and call a brand-new recipe an existing one. Consumed by Write-Spec's claim rule (I143).
+$script:specIsNew = -not (Test-Path $outFile)
 
 function IProp($o,[string]$p){ $o.PSObject.Properties.Name -contains $p -and $null -ne $o.$p }
 
@@ -568,6 +592,16 @@ function Write-Spec($spec,[string]$path){
   if($fpHits.Count){
     $lines = @($fpHits | ForEach-Object { Format-TcForbiddenProseHit -Hit $_ })
     throw ("FORBIDDEN PROSE: " + ($lines -join ' | ') + " A title or a sentence we publish is OUR claim whatever blog it came from, and none of these words has a written bar behind it (Brad, 2026-09-12, I138). Reword it. The source attribution line is exempt and is not what this found.")
+  }
+  # FDA NUTRIENT CONTENT CLAIM WORDS (Brad's ruling, 2026-09-19, backlog I143: "rule for new, measure old").
+  # A NEW spec is refused a claim word its own per-serving macros do not clear; an existing spec being
+  # rebuilt is warned, because the live uses are measured and await Brad's ruling on a sweep.
+  $ncHits = @(Get-TcNutrientClaimFinding -Spec $spec)
+  if($ncHits.Count){
+    $ncLines = @($ncHits | ForEach-Object { Format-TcNutrientClaimFinding -Hit $_ })
+    if($script:specIsNew){
+      throw ("NUTRIENT CLAIM: " + ($ncLines -join ' | ') + " " + (Get-TcNutrientClaimRefusal))
+    } else { foreach($x in $ncLines){ Write-Output ("  WARNING existing spec, not refused (I143 measures old uses): " + $x) } }
   }
   if(-not (Test-Path (Split-Path -Parent $path))){ New-Item -ItemType Directory (Split-Path -Parent $path) -Force | Out-Null }
   $json = ConvertTo-Json -InputObject $spec -Depth 8

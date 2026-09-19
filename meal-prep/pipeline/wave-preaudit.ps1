@@ -74,6 +74,7 @@ $repo = Split-Path -Parent $mp
 . (Join-Path (Split-Path -Parent $here) 'lib\dash-sweep.ps1')   # DASH_SWEEP_SKIP - ONE skip list, shared with build-v2-spec
 . (Join-Path (Split-Path -Parent $here) 'lib\package-cost-lib.ps1')   # Get-ScalerGpu / Get-ScalerBasisMismatch - ONE copy of the data-block basis rule
 . (Join-Path (Split-Path -Parent $here) 'lib\allergen-lib.ps1')   # the ONE allergen rule and the ONE card verdict propagate's pre-publish gate applies (backlog I173)
+. (Join-Path $here 'nutrient-claim-lib.ps1')   # Get-TcNutrientClaimFinding - the ONE FDA claim-word rule, shared with build-v2-spec's import door (backlog I143)
 
 $UTF8 = New-Object Text.UTF8Encoding($false)
 
@@ -470,6 +471,27 @@ function Get-AllergenLineCheck {
     ('the built card carries exactly the Contains line its ingredients derive (' + $(if ($named.Count) { $named -join ', ' } else { 'none of the nine' }) + '), so propagate''s pre-publish allergen gate will pass it'))
 }
 
+function Get-NutrientClaimCheck {
+  <#
+  FDA NUTRIENT CONTENT CLAIM WORDS ON A NEW RECIPE (Brad's ruling, 2026-09-19, backlog I143: "rule for new,
+  measure old"). Every slug in a wave is a NEW recipe on its way to its first publish, so this is where the
+  estate checks new recipes before they go live: a claim word ("high protein", "low fat", "light", "lean"...)
+  passes only where the spec's own per-serving macros clear that claim's FDA bar. A claim whose bar needs a
+  number the spec does not carry is not-computable and FAILS, because a claim we cannot show is a claim we
+  cannot make. The rule is nutrient-claim-lib's Get-TcNutrientClaimFinding, the same function build-v2-spec's
+  Write-Spec refuses a new spec with, so this predicts that door rather than re-implementing it.
+  #>
+  param($Spec)
+  $hits = @(Get-TcNutrientClaimFinding -Spec $Spec)
+  if (-not $hits.Count) {
+    $passed = @(Get-TcNutrientClaimUse -Spec $Spec)
+    return (New-Check 'nutrient-claims' $true ([ordered]@{ uses = $passed.Count; failing = 0 }) `
+      $(if ($passed.Count) { ('every FDA claim word clears its bar: ' + ((@($passed | ForEach-Object { $_.Matched + ' (' + $_.Shown + ')' }) | Select-Object -First 4) -join '; ')) } else { 'no FDA nutrient content claim word in reader-facing prose' }))
+  }
+  $lines = @($hits | ForEach-Object { Format-TcNutrientClaimFinding -Hit $_ })
+  return (New-Check 'nutrient-claims' $false ([ordered]@{ failing = $hits.Count; claims = @($hits | ForEach-Object { $_.ClaimId + '=' + $_.Verdict }) }) `
+    (($lines -join ' | ') + ' ' + (Get-TcNutrientClaimRefusal)))
+}
 function Get-SharedVerdict {
   <#
     A child gate is clean only when BOTH answers agree: rc 0 AND its own completion marker. The estate has
@@ -817,6 +839,24 @@ if ($runSelfTest) {
   $ac = Get-AllergenLineCheck ([pscustomobject]@{ name = 'no scaler' }) 'fx' $null $alFx 'db\built\fx.body.html'
   T 'CLEAN TWIN allergen-line: a spec with no scaler ingredients passes as SKIPPED, exactly as the gate skips it' `
     ($ac.verdict -eq 'pass' -and $ac.numbers.skipped -eq $true) ("verdict=" + $ac.verdict)
+
+  # ---- nutrient-claims (backlog I143): a NEW recipe's FDA claim words must clear their bar ----
+  $ncBase = @{ name = 'Fixture Burrito'; servings = 14; stat = [pscustomobject]@{ cal = 679; protein = 50; fat = 23 }
+    ingredients_grams = @([pscustomobject]@{ item = 'Chicken Breast'; grams = 5600 }) }
+  $ncBad = [pscustomobject]($ncBase + @{ head = [pscustomobject]@{ keywords = 'high protein meal prep, low calorie burrito' } })
+  $nc = Get-NutrientClaimCheck $ncBad
+  T 'MUST FIRE  nutrient-claims: "low calorie burrito" at 170 calories per 100 g fails and names the claim and its number' `
+    ($nc.check -eq 'nutrient-claims' -and $nc.verdict -eq 'fail' -and $nc.numbers.failing -eq 1 -and $nc.detail -match 'low calorie' -and $nc.detail -match '169\.8 calories per 100 g') ("verdict=" + $nc.verdict + " detail=" + $nc.detail)
+  $ncNc = [pscustomobject]($ncBase + @{ intro_html = 'Low sodium and big on flavor.' })
+  $nc = Get-NutrientClaimCheck $ncNc
+  T 'MUST FIRE  nutrient-claims: a claim whose bar needs a number the spec does not carry (sodium) fails as not-computable' `
+    ($nc.verdict -eq 'fail' -and (@($nc.numbers.claims) -contains 'sodium=not-computable')) ("verdict=" + $nc.verdict + " claims=" + (@($nc.numbers.claims) -join ','))
+  $ncOk = [pscustomobject]($ncBase + @{ head = [pscustomobject]@{ keywords = 'high protein meal prep, budget dinner' } })
+  $nc = Get-NutrientClaimCheck $ncOk
+  T 'MUST NOT FIRE nutrient-claims: "high protein" at 50 g a serving clears the 10 g bar and passes, showing the number' `
+    ($nc.verdict -eq 'pass' -and $nc.numbers.uses -eq 1 -and $nc.detail -match '50 g protein per serving') ("verdict=" + $nc.verdict + " detail=" + $nc.detail)
+  $nc = Get-NutrientClaimCheck ([pscustomobject]$ncBase)
+  T 'CLEAN TWIN nutrient-claims: a spec with no claim word passes and says so' ($nc.verdict -eq 'pass' -and $nc.numbers.uses -eq 0) ("verdict=" + $nc.verdict)
 
   # =================================================================================================
   # END-TO-END DRILL. The fixtures above pin the PREDICATES; these pin the SCRIPT, because two of the
@@ -1438,6 +1478,9 @@ foreach ($slug in $target) {
   $dh = Get-DashHits $spec
   $checks.Add((New-Check 'voice-sweep' ($dh.Count -eq 0) ([ordered]@{ hits = $dh.Count }) `
     $(if ($dh.Count -eq 0) { 'no em or en dash anywhere in the spec' } else { ($dh -join ' | ') })))
+
+  # --- FDA nutrient content claim words (backlog I143): a NEW recipe carries one only where its macros clear the bar ---
+  $checks.Add((Get-NutrientClaimCheck $spec))
 
   # --- card rebuild + structural compare ---
   $slugScratch = Join-Path $scratchRoot $slug

@@ -11602,7 +11602,7 @@ CONFLICT / UNFOUND) and a free-text note, which is provenance, not precision. Th
 prove the capture process already refuses to write on disagreement, so the discipline exists; it just
 has no notion of a number being rounded rather than wrong.
 
-### I143 - Reader-facing recipe prose uses FDA-defined nutrient content claim terms 767 times with no numeric bar behind any of them `NEEDS A RULING` `queue-7` `1-WAY` `RUNG1 RULING`
+### I143 - Reader-facing recipe prose uses FDA-defined nutrient content claim terms 767 times with no numeric bar behind any of them `PARTLY DONE` `queue-7` `1-WAY` `RUNG1 RULING`
 
 **Merged from `design\backlog-inbox\q7-foodlabel-2026-09-12.md` on 2026-09-12.** Written by a course agent during a parallel run; ids are allocated here because this is the only writer.
 
@@ -11643,6 +11643,15 @@ global list plus a check, not designing.
 
 **Marked 1-WAY because the first rung is the ruling itself and the obvious consequence is a sweep of
 330 live pages on a paid site.** That is not deletable.
+
+**Partly done 2026-09-19: new-recipe rule landed; old uses measured, awaiting Brad on a sweep.** Brad ruled in chat: "rule for new, measure old". What shipped:
+
+- **One closed list, on the I138 file.** `meal-prep\pipeline\forbidden-prose-global.json` gains a `nutrient_claims` block: 19 claims, each with its spellings, its 21 CFR citation (101.13(m), 101.9(c)(7) and (c)(9), 101.54, 101.56, 101.60, 101.61, 101.62, read on law.cornell.edu because ecfr.gov refused the fetch) and a bar from a closed vocabulary. Computable from the spec's own `stat` block: high protein (10 g, 20% of the 50 g DRV), good source of protein (5 g), fat free (under 0.5 g), calorie free (under 5), low fat and low calorie (main dish per 100 g when a serving weighs 6 oz or more, else per serving), light (main dish: low fat or low calorie). Everything needing sodium, sugars, fibre, saturated fat, cholesterol or a reference food is NOT-COMPUTABLE, and a not-computable claim is refused on a new recipe.
+- **The rule is one function**, `Get-TcNutrientClaimFinding` in the new `meal-prep\pipeline\nutrient-claim-lib.ps1`, and two doors call it for NEW recipes only: `build-v2-spec.ps1`'s `Write-Spec` throws when the spec did not exist before the run (a rebuild of an existing spec only warns), and `wave-preaudit.ps1` carries a `nutrient-claims` check on every wave slug. A manufacturer's product name is not our claim: ingredient-rendered fields are not read, a word beside a product whose own name carries it is exempt, a store-variant word (fat free, low sodium, less fat...) directly before a product word is exempt, and `lean on` / `93/7 lean` / `lean ground turkey` are listed non-claim contexts. The carve-out design was taken from the unlanded `approvals-i143` branch, which implemented the older 2026-09-12 wording and swept 34 live specs; that sweep is NOT carried here, because this ruling changes no live page.
+- **Measured, not swept:** `design\ready-for-brad\I143-claim-words.md`, written by `meal-prep\pipeline\audit-nutrient-claims.ps1 -ReportFile` at base 42056585e over all 584 specs. **746 uses in 336 recipes: 670 pass, 21 fail, 55 not computable; 53 of 584 recipes carry at least one use that does not pass.** "high protein" is 653 of the 746 and every one passes. The item's 767 was a different test (12 spellings over 10 named fields, no product carve-out); the report says why the two differ.
+- **Verified:** `audit-nutrient-claims -SelfTest` 26 of 26, exit 0. Broken once by neutering the protein bar: 2 MUST FIREs went red, exit 2; restored md5-identical, 26 of 26. `build-v2-spec -SelfTest` PASS with 6 new cases; `wave-preaudit -SelfTest` 79 cases exit 0 blind=0 with 4 new; `audit-forbidden-prose` self-test 24 of 24 and live 0 findings, unchanged by the walker's new `-Skip` parameter.
+
+**What remains is Brad's:** whether to sweep the 76 non-passing live uses, and in what order. The report lists each with its number; a sweep goes through the normal publish gates.
 
 ### I144 - Nothing in our own files carries any allergen information, and we sell recipes `DONE` `queue-7`
 
@@ -13036,7 +13045,7 @@ Fareway raw capture against its imported rows, all at origin/main 8e61ca3fd. The
 checkout's gitignored copy, read-only. Not committed, because the question only recurs if the importers run
 again, and step 8's shadow report is what would answer it then.
 
-### I166 - No gate reads a tracked file for a secret, and the only thing standing between the Ghost Admin key and a commit is one .gitignore line `NEEDS A RULING` `queue-7` `2-WAY` `RUNG1 MEASURE`
+### I166 - No gate reads a tracked file for a secret, and the only thing standing between the Ghost Admin key and a commit is one .gitignore line `DONE` `queue-7`
 
 **RUNG 1 WORKED 2026-09-12 by the course-orchestrating session, six parallel measurement lanes.** Premise CONFIRMED: 0 of 8,477 tracked files and 0 of 2,881 commits carry a secret-scan gate. But the proposed rung would have been useless - the Ghost-key regex returns 0 of 0 and the Cloudflare token shape returns 653 false positives, so a naive scanner is not the answer. **The question for Brad, and it is the reason this is a ruling: a generic named-secret regex found exactly ONE hit across 8,477 files - a committed 32-hex value assigned to a field named `token` at `grocery/pull-grocery-ads.ps1:22`, beside the Aldi merchant store code.** It is used as a `?access_token=` query parameter against `dam.flippenterprise.net/flyerkit`, which is the public flyer API a retailer widget calls, so it is very likely a shared public key rather than a credential. It was not printed, not tested, and not rotated. Brad rules whether it is a credential or a public retailer identifier.
 
@@ -13073,6 +13082,8 @@ it is not zero, that is an incident and not a backlog item.
 
 **Not claimed:** I did not run that scan. I am not asserting a secret is committed; I am asserting
 that nothing in the gate set would tell you.
+
+**Done 2026-09-19.** Brad ruled the 32-hex `token` at `grocery\pull-grocery-ads.ps1` a PUBLIC retailer identifier (the flyerkit widget's own access_token), so it stays, with the ruling written as a comment beside it. `ops\audit-secrets.ps1` is new and runs on every push from `run-gates`' static list: named shapes (Ghost Admin key `id:secret`, PEM private key, Google service-account JSON, Anthropic key, api.data.gov key in a URL, bearer token) plus any random-looking value (a digit, a letter, entropy of 3.3 bits a character or more) ASSIGNED to a key/token/secret/password name, with Cloudflare and FDC named from the variable. It reads every tracked text file through `git grep -I` (skipping itself) and the messages of the commits between origin/main and HEAD, and it never prints a value, only kind, place and a SHA-256 fingerprint. The naive shape's 653 false positives are designed out by requiring a name or a secret-only shape: at base 42056585e it read 8,625 tracked files, 15 prefilter candidate lines, **0 findings and 1 allowlisted** (the flyer token, keyed on file + name + fingerprint + Brad's reason; a different value there, or the same value elsewhere, is refused, and an unused entry fails as STALE). With the entropy bar removed it was still 0 findings, so the bar is not what holds it at zero. `-SelfTest` 18 of 18, exit 0, with a planted Ghost key as MUST FIRE and the flyer token and a sha in a doc as MUST NOT FIRE. Broken once by removing the Ghost shape: both Ghost MUST FIREs went red, exit 2; restored md5-identical, 18 of 18. About 20 s a run.
 
 ### I167 - Ghost's own surface is checked at two fixed lists, never censused `PARTLY DONE` `queue-7` `2-WAY` `RUNG1 BLOCKED`
 

@@ -19,6 +19,10 @@ $TODAY = (Get-Date).Date
 
 $EXPECT = @{
   hyvee       = @{ collection = '' }   # the store's own id, set below from hyvee-store-lib (HY-VEE STORE)
+  # THE ALDI token BELOW IS NOT A SECRET (Brad's ruling, 2026-09-19, backlog I166). It is the public access_token the
+  # retailer's own flyer widget sends to dam.flippenterprise.net/flyerkit, a shared retailer identifier, so it stays
+  # committed. ops\audit-secrets.ps1 allowlists exactly this file + the name `token` with this reason; any OTHER
+  # value assigned to a key/token/secret/password name anywhere in the tree is refused at push time.
   aldi        = @{ merchant_store_code = '446-048'; token = '29d9bfdcf546dc601c10c64ed1e932f5' }
   family_fare = @{ app_key = 'family_fare'; store_id = '6401' }
 }

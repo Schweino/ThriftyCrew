@@ -79,7 +79,10 @@ function Get-TcForbiddenProsePattern {
 # Every (field path, string) pair a reader can get out of this spec. Walks the whole object so a field
 # added tomorrow is swept by default; see the skip list above for the six that are not.
 function Get-TcReaderProseString {
-  param($Spec)
+  # -Skip replaces the health-word skip list for a caller with a different one (nutrient-claim-lib adds the
+  # five ingredient-rendered fields). Omitted, it is the health-word list, so every existing caller is unchanged.
+  param($Spec, $Skip = $null)
+  if ($null -eq $Skip) { $Skip = $script:TC_FORBIDDEN_PROSE_SKIP }
   $out = New-Object System.Collections.Generic.List[object]
   $q = New-Object System.Collections.Generic.Queue[object]
   $q.Enqueue([pscustomobject]@{ Path = ''; Value = $Spec })
@@ -90,7 +93,7 @@ function Get-TcReaderProseString {
     if ($v -is [string]) { $out.Add([pscustomobject]@{ Field = $node.Path; Text = $v }); continue }
     if ($v -is [System.Collections.IDictionary]) {
       foreach ($k in @($v.Keys)) {
-        if ($script:TC_FORBIDDEN_PROSE_SKIP -contains [string]$k) { continue }
+        if ($Skip -contains [string]$k) { continue }
         $p = if ($node.Path) { $node.Path + '.' + [string]$k } else { [string]$k }
         $q.Enqueue([pscustomobject]@{ Path = $p; Value = $v[$k] })
       }
@@ -103,7 +106,7 @@ function Get-TcReaderProseString {
     }
     if ($v -is [psobject] -and $v.PSObject.Properties.Count -gt 0) {
       foreach ($p in $v.PSObject.Properties) {
-        if ($script:TC_FORBIDDEN_PROSE_SKIP -contains [string]$p.Name) { continue }
+        if ($Skip -contains [string]$p.Name) { continue }
         $path = if ($node.Path) { $node.Path + '.' + [string]$p.Name } else { [string]$p.Name }
         $q.Enqueue([pscustomobject]@{ Path = $path; Value = $p.Value })
       }
